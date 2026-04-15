@@ -1,60 +1,67 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BED3714AD20;
-	Wed, 15 Apr 2026 05:40:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 703323803CB
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 Apr 2026 05:41:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776231610; cv=none; b=b3+qsVUd0LjHZgAWviAPR3bBmH03KDdiwRYFVec4CpabMPj08U5Zj7U55Tu4D5wq+eymgwzKDgODlJehGkt1pPyqMIV4UaJn/mfCLS2PySkvADHbt80bpUhUkITFf+hFXgzcnt55v24OR+DtWwT7LTDWZNc8LZk0j4Or1MUnDz8=
+	t=1776231671; cv=none; b=jqcwg8iJvlu+xtjb4R98qruiRSJDaFxFgQxD+b5gikPoj+EjcovTumSHd+9yVpmGSfANLaXeoIz0VhXUGdjoOEiXk6FAOisXfO2//tdGeUGFeP17QyPFT0mVX/q/k8kxAvw3uHReinnPWDmpgp65o6wSDIIrpoCES8A67NW0JfU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776231610; c=relaxed/simple;
-	bh=dNICcBHvo/hqaxUPytkCNFCE5CoQVqMer91nE3fZCdY=;
+	s=arc-20240116; t=1776231671; c=relaxed/simple;
+	bh=eCKwA+qiIqZQlfpRKzHylf5F6sp/2pJwdf1EC9B0u+0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LJUg+yC60aZRQY8822sYC4scAM9tiB9AaLaPddts+q6InStwxUICEltcXlSt4Av9mT0V6SVsHNePPmw5/v01xuhFgkHgthqCtl9j2VLGOSWsPhzCbcMCyR4l4xFTnW4Sed+aXUCGWaTuP+4zoKqttxSXBH5+DNhFlWbekUFzlm0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=TJmXuBSr; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	 In-Reply-To:Content-Type; b=bgdAcN6ELh18/7JsOwHVuY+Spxdz297dkFnxOfImHyDA729pwZlTpTpV07z2MCdmfqbOt9U17OsLa4P9SKZEUYVRjtltWk3YM8wWNeeeY4QWevDzCOuf2emnSqRWjBdbiU+pyKyZVrFf0EBUPcRv207kEHXe4BzPHa/vot3Qts4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IvFZqfAV; arc=none smtp.client-ip=209.85.210.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="TJmXuBSr"
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63EGH51a2451334;
-	Wed, 15 Apr 2026 05:39:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=0n6HTL
-	G7e9ILzs+XjWC2pf1cq5ZuUAOHbj2wjvUJB/U=; b=TJmXuBSr0craOeSZoNVOF2
-	WIXP+BbTWB3/xzA36zyRvOtFKOEbNTM5ZEHRJsyjZiwMo00Zi7r561neZ5duSl68
-	zwqA1Wv5Nga0p3LCNmALKtz7tx5V0opzVM+7ngmxz5zrvQXoxWzHh8NJBElpx8ah
-	fQv4Z1fAjUs9f9lim2O8yeAQKgSY345nILQjEjxqECk98uHrTpjzwmxZwaG8QI7P
-	tal2DT8c1Srjpf96HA+BNHIjsnGR17RHGCSfmigI3ZlCYTmM72Ulq9UPNo0RJDRw
-	WX5mpOk5ifxdtf2Ta93ZRLSxmbRvlb/mVq+EPD3J1KSvYuzzgjWlk/EVNg1hBpfw
-	==
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4dh89m644j-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 15 Apr 2026 05:39:52 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 63F4XdgK025841;
-	Wed, 15 Apr 2026 05:39:52 GMT
-Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4dg3b1mkf1-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 15 Apr 2026 05:39:52 +0000
-Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
-	by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 63F5dphZ36176138
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 15 Apr 2026 05:39:51 GMT
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 54D0C5804B;
-	Wed, 15 Apr 2026 05:39:51 +0000 (GMT)
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C3A4D58059;
-	Wed, 15 Apr 2026 05:39:41 +0000 (GMT)
-Received: from [9.124.217.38] (unknown [9.124.217.38])
-	by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 15 Apr 2026 05:39:41 +0000 (GMT)
-Message-ID: <b1fc0aac-9619-4240-86f7-abe0d68f2798@linux.ibm.com>
-Date: Wed, 15 Apr 2026 11:09:40 +0530
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IvFZqfAV"
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-82f344e880bso2059439b3a.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Apr 2026 22:41:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776231670; x=1776836470; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NuVV5te/UoQgVIHGlgzu/ETtLjtQKCtAInlwfOwxg8w=;
+        b=IvFZqfAV0u8C0uYS9jKNSXCreVAWAAFQCZJX0tQgJDf8LcFHgAJIt6Z19sfS98Ad/A
+         nB+0ACgV4lmQ2E8D8w4DBjZn5Q0NIngalv1ilTxKWUqtadFxw8IE2+M6TuDiYMTWXAib
+         DIZszUgghkSocQH/LLY6Z19FednB+KIEkgQ6/giNb9Xvgpd4B6LMnVaVnQLRzjmRwGvF
+         n6emK7gp0Scw4/lTknO+FgcfyC945VDnGvm16dd7OyXKcsFPurHogI/vPlCDpfp8iPAX
+         Iyx2c6Ab3x7D7Pqa1LPdbwSfCnAGbSZfb73MPqrTEPokitgHGIy3M79MJvWFAAtzFvF2
+         22Kg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776231670; x=1776836470;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NuVV5te/UoQgVIHGlgzu/ETtLjtQKCtAInlwfOwxg8w=;
+        b=JfozVFp2+mO506wp40KGyQbxQv/dONrZZPMEeu77IADZ/ETf23/3oVyLQlp/yMAsif
+         OvhlZxj1/VB8D4rY6MDBUgqujHJOrrzpRanNpViQsBlnQuVs3Wq2Na3BVCvMHiPdNtNg
+         qqD079FNcNho26WhbLHOTWLXIz4XCr8DEoZiZ6xE4jby2Xi8gV+KuGsLEgkgtp+RVqsF
+         YzOAWy1BX827HxETm4PEbQWk09bBgbsbuU2DEdTleFee+YnUZEKemxyOIEAmq8K07gd5
+         WCk6pgi51zaWx1eNbyASfBXtu0Npj9a2QxLyDMdomVsC1HYkyYtdcDGTv4uARUQV0HOz
+         Ee0g==
+X-Forwarded-Encrypted: i=1; AFNElJ+4tgwg42Yjb+M0GfU3tLV8K7ulRx2sPdouGtxHdJlZOzikWRbQFXpDyMw7IU0jP1yK4DZ8yHK//GCYLcRhOHE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz+6YDZoyji2ssY8LoV8cZJTznEVhAycK+nMmd8IM4pkJII77ek
+	HxnRmDWpzv8X/w2u73x4CSXA3DDbQT0JpouRXZ/bkYfbobTb810+qZyY
+X-Gm-Gg: AeBDievFF9IwiED0er0Z5aXqbQ11amOQvhMtjzA9RkAY56Sy7OW5f83lW5R7pNC+qpU
+	1dJmrAids9r/RQEGwFDS3R64/VXUlr/0Ga44ArdTFNRzXKUsHq+XMn7XePg5Nkdj6cXJ3rsgNVB
+	mDTQMVP7gQ7LNSSq7Zj1qtPkPjPJY7i0qwkmO2GyzTewXaBoK6/+mbTXcsM5X2wL+4rhh8iKNNm
+	k0n09A/6020PrObgQamYA6R1WXkNrMJ1dNuDunhv6I9qayBH7X04h66dcwe3UKhWrPG5wiFfv1U
+	IAzXBa9pTy+uXqeU4wHY0Zq5ni/EqDlF5T0FEFLOyi1+ieWBJkyTTaLP/d8Q9x8Qt7uI/eJuAxA
+	k3EZxztsVQM7w4/iF7g21wzi7IFcR6hKrLsYWxc11r+ZmM/1vWhJ7QCpieO8GUCmsrkwdJS+l+R
+	kha+ptKNMnTgQT190Q3KOwrpSjdPB8+fD78MksuHWZAIlz9P/6pHB2CLOlrb9XcUAYpPoJ7jTtj
+	jZ02j0YxslJH91iWk/N
+X-Received: by 2002:a05:6a00:1947:b0:82c:70a8:faee with SMTP id d2e1a72fcca58-82f0c1d9e1dmr19993166b3a.6.1776231669692;
+        Tue, 14 Apr 2026 22:41:09 -0700 (PDT)
+Received: from ?IPV6:2405:6e00:634:7891:2b45:7371:96b8:aba1? ([2405:6e00:634:7891:2b45:7371:96b8:aba1])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82f67411135sm804502b3a.42.2026.04.14.22.41.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Apr 2026 22:41:09 -0700 (PDT)
+Message-ID: <d525b70d-ada5-45a9-be5d-2377a1707aef@gmail.com>
+Date: Wed, 15 Apr 2026 15:40:58 +1000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -62,156 +69,85 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 12/53] selftests/mm: khugepaged: group tests in an array
-To: Mike Rapoport <rppt@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@kernel.org>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Barry Song <baohua@kernel.org>, Dev Jain <dev.jain@arm.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
-        "Liam R. Howlett"
- <Liam.Howlett@oracle.com>,
-        Lance Yang <lance.yang@linux.dev>, Leon Romanovsky <leon@kernel.org>,
-        Lorenzo Stoakes <ljs@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Michal Hocko <mhocko@suse.com>, Nico Pache <npache@redhat.com>,
-        Peter Xu <peterx@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
-        Shuah Khan <shuah@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@kernel.org>, Zi Yan <ziy@nvidia.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org
-References: <20260406141735.2179309-1-rppt@kernel.org>
- <20260406141735.2179309-13-rppt@kernel.org>
- <1524b172-a5f7-4fe0-9bb4-29287762dbff@linux.ibm.com>
- <ad5kXC-F_YyWD590@kernel.org>
-Content-Language: en-US
-From: Donet Tom <donettom@linux.ibm.com>
-In-Reply-To: <ad5kXC-F_YyWD590@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Authority-Analysis: v=2.4 cv=I/dVgtgg c=1 sm=1 tr=0 ts=69df24a9 cx=c_pps
- a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
- a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=V8glGbnc2Ofi9Qvn3v5h:22 a=xH5FL6UbJZk6oSiiWT0A:9
- a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: p8gPax9qbfzKNyrdtcYTznrGJBiguDjm
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDE1MDA0NyBTYWx0ZWRfX0QNXQu2az0po
- QJumG+aWfNLS+XCDj+rXLMGOMe6w+46T2Knu1R/znRaeDfJguPdioqbuFQ5fbUhFeH6xHbTPh50
- SmoqjBCEHVQzLcSQlN8gxJS8xkYTE5pEfoSM+5DIh8qE5YGtTgD0YTombZ/Ama3MhKouwv5LBmW
- eI+EbCeBrqWVM/0teamekQG1Z/sK8rMHrsHfxP+Ven1BXhJNFzK0CGGeen4adRBnnFV9vfRUWeQ
- NgKhn0sOd75YpDsSw3MCOYGg4D7HmN6vn+xCQzt7/W7b1cTD1cSt12G4SQmCwquPiMkDjtOKOtW
- AKOBVWwU7rnUt3l0OJftsqQwpiT/WPGOEHAdGfRIIYFCmoCCC1tUyBSENBL727Z3LaDdinJJgL8
- AVKbu1Q1Ib3oPmcXBLQNYeyM+1uEZhE2/UuaT3rLlZZUf4ugmcwWf55VZ/CHX4YCLxDnxiGkuA6
- F0VvY8VejlTmzvkYjig==
-X-Proofpoint-ORIG-GUID: tVSaGMBHpoh9ki9OrGwK4cAX9J672Sit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-04-14_04,2026-04-13_04,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 bulkscore=0 clxscore=1015 adultscore=0 lowpriorityscore=0
- suspectscore=0 impostorscore=0 phishscore=0 spamscore=0 priorityscore=1501
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2604070000 definitions=main-2604150047
+Subject: Re: [RFC net-next 1/3] net/tls_sw: support randomized zero padding
+To: Alistair Francis <Alistair.Francis@wdc.com>,
+ Wilfred Mallawa <wilfred.mallawa@wdc.com>, "kuba@kernel.org"
+ <kuba@kernel.org>
+Cc: "corbet@lwn.net" <corbet@lwn.net>, "dlemoal@kernel.org"
+ <dlemoal@kernel.org>, "davem@davemloft.net" <davem@davemloft.net>,
+ "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+ "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
+ "sd@queasysnail.net" <sd@queasysnail.net>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+ "pabeni@redhat.com" <pabeni@redhat.com>,
+ "skhan@linuxfoundation.org" <skhan@linuxfoundation.org>,
+ "edumazet@google.com" <edumazet@google.com>,
+ "horms@kernel.org" <horms@kernel.org>,
+ "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+References: <20260309054837.2299732-2-wilfred.opensource@gmail.com>
+ <20260309054837.2299732-3-wilfred.opensource@gmail.com>
+ <abQOGm6BqAE5eEln@krikkit> <20260314073919.2f92b966@kernel.org>
+ <9e9f6eb89ba95e9fbb764e2807420e98b566bf37.camel@wdc.com>
+ <20260316180355.37d45785@kernel.org>
+ <8f29d43fc1fd7e6feec4c24131eb2c0292a8c0fd.camel@wdc.com>
+ <20260316183023.2fb38d84@kernel.org>
+ <64cb821cc09226155059807cb0bcdbc51ae8d0d6.camel@wdc.com>
+ <49513ee4347536e7c8419e9e65b8c619a8c665bb.camel@wdc.com>
+Content-Language: en-US, en-ZM
+From: Wilfred Mallawa <wilfred.opensource@gmail.com>
+In-Reply-To: <49513ee4347536e7c8419e9e65b8c619a8c665bb.camel@wdc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-
-On 4/14/26 9:29 PM, Mike Rapoport wrote:
-> Hi Donet,
+>>> Sorry, I realized when i hit "send" that I phrased my previous
+>>> message
+>>> poorly. When I say "potential" I mean someone actually presenting a
+>>> PoC
+>>> and a CVE is issued for it. Have we seen any of those?
+> In 2014 a group at UC Berkeley used HTTPS traffic analysis to identify:
 >
-> On Tue, Apr 14, 2026 at 12:32:48PM +0530, Donet Tom wrote:
->> Hi Mike
->>
->> On 4/6/26 7:46 PM, Mike Rapoport wrote:
->>              get_finfo(argv[1]);
->>       }
->>
->>      +typedef void (*test_fn)(struct collapse_context *c, struct mem_ops *ops);
->>      +
->>      +struct test_case {
->>      +       struct collapse_context *ctx;
->>      +       struct mem_ops *ops;
->>      +       const char *desc;
->>      +       test_fn fn;
->>      +};
->>      +
->>      +#define MAX_TEST_CASES 45
->>
->> I see 48 tests in khugepaged.c, and running khugepaged all:all results in the
->> error below. Should MAX_TEST_CASES be updated to 48 instead?
-> I'm going to bump it to 64 to accommodate potential future tests.
->   
->> ./khugepaged all:all .
->> TAP version 13
->> # Save THP and khugepaged settings... OK
->> Bail out! MAX_ADD_CASES is too small
->> # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
->> # Restore THP and khugepaged settings... OK
->> # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
->>
->>
->>      +static struct test_case test_cases[MAX_TEST_CASES];
->>      +static int nr_test_cases;
->>      +
->>      +#define TEST(t, c, o) do {                                             \
->>      +       if (c && o) {                                                   \
->>      +               if (nr_test_cases >= MAX_TEST_CASES) {                  \
->>
->>
->> I had a small question—since the number of tests is fixed, would this check
->> still be necessary?
->   
-> If we add too much tests without updating the maximum we get a nice "Bail
-> out" rather than SIGSEGV :)
+> "individual pages in the same web-site with 90% accuracy, exposing
+> personal details including medical conditions, financial and legal
+> affairs and sexual orientation."
+>
+> They used machine learning to help and that was over 10 years ago. So I
+> suspect modern day machine learning would make this even easier to do
+> today.
+>
+> Obviously that is HTTP traffic, which is different to the NVMe-TCP
+> traffic this series is targeting, but it does still seem like a real
+> concern.
+>
+> They talk about a range of defences in the paper, with tradeoffs
+> between all of them. But the linear defence seems like the one that is
+> applicable here:
+>
+> "linear defense pads all packet sizes up to multiples of 128"
+>
+> The linear defence seems to reduce the Pan attack from 60% to around
+> 25% and the BoG attack from 90% to around 60%.
+>
+> On top of that the
+>
+> "Burst defense offers greater protection, operating between the TCP
+> layer and application layer to pad contiguous bursts of traffic up to 
+> predefined thresholds uniquely determined for each website"
+>
+> Which to me sounds like the random padding proposed in this series
+> would provide more protection then the basic linear padding used in the
+> paper.
+>
+> To me analysing TLS traffic does seem like a plausible threat and
+> something that randomised padding would help with. Leaving it up to
+> userspace to decide based on their threat model seems like a good
+> approach as well.
+>
+> 1: https://secml.cs.berkeley.edu/pets2014/
+>
+> Alistair
 
+gentle ping. Are there any further thoughts on adding this support?
 
-Thanks for the clarification. It’s good to include this change.
+Wilfred
 
-
->   
->>      +                       printf("MAX_ADD_CASES is too small\n");         \
->>      +                       exit(EXIT_FAILURE);                             \
->>      +               }                                                       \
->>      +               test_cases[nr_test_cases++] = (struct test_case){       \
->>      +                       .ctx    = c,                                    \
->>      +                       .ops    = o,                                    \
->>      +                       .desc   = #t,                                   \
->>      +                       .fn     = t,                                    \
->>      +               };                                                      \
->>      +       }                                                               \
->>      +       } while (0)
->>      +
->>       int main(int argc, char **argv)
->>       {
->>              int hpage_pmd_order;
->>      @@ -1216,13 +1244,6 @@ int main(int argc, char **argv)
->>
->>              alloc_at_fault();
->>
->>      -#define TEST(t, c, o) do { \
->>      -       if (c && o) { \
->>      -               printf("\nRun test: " #t " (%s:%s)\n", c->name, o->name); \
->>      -               t(c, o); \
->>      -       } \
->>      -       } while (0)
->>      -
->>              TEST(collapse_full, khugepaged_context, anon_ops);
->>              TEST(collapse_full, khugepaged_context, file_ops);
->>              TEST(collapse_full, khugepaged_context, shmem_ops);
->>      @@ -1284,5 +1305,13 @@ int main(int argc, char **argv)
->>              TEST(madvise_retracted_page_tables, madvise_context, file_ops);
->>              TEST(madvise_retracted_page_tables, madvise_context, shmem_ops);
->>
->>      +       for (int i = 0; i < nr_test_cases; i++) {
->>      +               struct test_case *t = &test_cases[i];
->>      +
->>      +               exit_status = KSFT_PASS;
->>      +               printf("\nRun test: %s: (%s:%s)\n", t->desc, t->ctx->name, t->ops->name);
->>      +               t->fn(t->ctx, t->ops);
->>      +       }
->>      +
->>              restore_settings(0);
->>       }
->>
->>
->> -Donet
->>
