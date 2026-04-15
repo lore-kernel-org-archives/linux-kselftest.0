@@ -1,103 +1,68 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2CB039FD4;
-	Wed, 15 Apr 2026 10:02:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78B12314B9D;
+	Wed, 15 Apr 2026 10:26:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776247369; cv=none; b=rRfCiuESSENvcp4H+LSSbmz5N8sddPRznfijS2E1BieaDz01xYNoRpH33mnEukPQKm8Rhp1Fh1xZImTO9AlWHKDI9cM8+a8EGuNnAi/dKPChBsYMPTZOfmb9bW48KJoF8ZmELTunr/9rACj9pGTeSiIPGbShOE3H+sIvfLvWdX0=
+	t=1776248777; cv=none; b=u6jkHrnyS513l274F9wJLNL5cdLQ9a/d7/vM6bgZ0081K81ujqFU6aVA465mY/byqNWRccZ+SpUSsSj22eVUhDiP0sd8J+sVZHmqnXud4Gij1mWMpA2nK4iXukOVtwwx4355Mgz/o9XhQgUmNsO0R07Kj0O+BhIyxqwJoLcdrmU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776247369; c=relaxed/simple;
-	bh=PiXJdW3kZWWKz5fjJpgKb9m4Wz+/cknIAv+flbdQIuw=;
+	s=arc-20240116; t=1776248777; c=relaxed/simple;
+	bh=WUnFtqMqBwiQmUTfjICkfjVtSGlHuFpTjc9sHdxlaxs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qaGv1etRnk6K/37xxL8W7qqz/LEmmmtebj8TnQVaV9ygBgzUIV5QE38GPOAqmLAa7nF20OYzHEsaf2qw+HYobdPxHmNKrBetfkaUxqfSYJ8d0OE0GToYb1MYGSXaNRxKvZQFRkiNbmoFNHTVSMNicxTKMTFBowcyAUKJ+nnGmkk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gQhxAiKe; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=JpGDAS/i1z+tp6g5eil1jR0NGU8WtKI35t18KnRlUc7iVviKnw+Z24Vy6Q38OCPJNl2148TO/C1j/+yXcqGeRPlr88nFUaJYsDp++fzbvRsZO11yRFIWYpOuGPdIEAfbRmbLyI5xfKyoaLSHcs1YxL85HKkvFU94f6VOoImiOYo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=OU3amlUQ; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gQhxAiKe"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20ECEC19424;
-	Wed, 15 Apr 2026 10:02:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776247368;
-	bh=PiXJdW3kZWWKz5fjJpgKb9m4Wz+/cknIAv+flbdQIuw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gQhxAiKeGXat7xSllrdQgMuU3NlrY5J4zXg7WbTjtLVim6Pa+EFRh5ab5us4ML0tb
-	 YB6BVgh5tuDWN+LUkb9oK6q+8zti+kGwuWOROVuxvpib5nOIJ47auNzzZK9vvOJeYK
-	 iLfjRw7PwWfxmE6JpftYw8riHE5Gp1jIAQKtFWQlMvDvxfPL7FTNZGFQDOS23p4Y66
-	 c45Y/UE6uE1WWgq2oWcsxXBgEbThqAE9D3xfvpPJ12JKymhYypKk4jcuDt5TWKYOOv
-	 TtA0pFuBoSlaORK0YghptTx42cO1k6TPIF7P3/+ZMviNa2UfliakbM+aV29yJ98xyG
-	 /NWLvUBGTJRCQ==
-Date: Wed, 15 Apr 2026 12:02:46 +0200
-From: Frederic Weisbecker <frederic@kernel.org>
-To: Waiman Long <longman@redhat.com>
-Cc: Qiliang Yuan <realwujing@gmail.com>, Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Boqun Feng <boqun@kernel.org>, Uladzislau Rezki <urezki@gmail.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang@linux.dev>,
-	Anna-Maria Behnsen <anna-maria@linutronix.de>,
-	Ingo Molnar <mingo@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
-	Tejun Heo <tj@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Brendan Jackman <jackmanb@google.com>,
-	Johannes Weiner <hannes@cmpxchg.org>, Zi Yan <ziy@nvidia.com>,
-	Chen Ridong <chenridong@huaweicloud.com>,
-	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-	rcu@vger.kernel.org, linux-mm@kvack.org, cgroups@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 01/12] sched/isolation: Separate housekeeping types in
- enum hk_type
-Message-ID: <ad9iRi7xrX89nbFV@localhost.localdomain>
-References: <20260413-wujing-dhm-v2-0-06df21caba5d@gmail.com>
- <20260413-wujing-dhm-v2-1-06df21caba5d@gmail.com>
- <fd77bca8-bee8-4997-a11a-932a1693edf7@redhat.com>
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="OU3amlUQ"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=mrD7p6MJhVAVx6u8xXz0QG9VMVnUTAIfPFAq0M1Vv6Q=; b=OU3amlUQTKjS37WD9mYssvvkZZ
+	0+9Cv+jy23UrYrkx53/mISbJpY1iSgsdXrU/d+uXN5Bs00FM8Wp4pcvSiIXPMqKCCJXJOZyFU7rFD
+	3ZUWmXD3pbIK74+VfbdF4dZmXXpfpqPyeGPAG2AMBSk98MKQk/RvQEU5w/laMhI/JwtU56PojDrXF
+	NVGiUR/KBSZHYzhlczDkA0zE3NdWbANIYQ99GVohe7hTuOIDH3PbUiXur1cr2B0MuAZ6dvSMQccpM
+	t+ofSABY8r/rU+u6vP09RTYh9sT9e50PuAxQZdpbWE/98aVZV0RvgaiXyLN5B7DGxscjEm2UG8k7i
+	Xi9yrgoQ==;
+Received: from authenticated user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1wCxRd-00DlvM-0M;
+	Wed, 15 Apr 2026 10:26:05 +0000
+Date: Wed, 15 Apr 2026 03:25:59 -0700
+From: Breno Leitao <leitao@debian.org>
+To: Anton Danilov <littlesmilingcloud@gmail.com>
+Cc: netdev@vger.kernel.org, willemdebruijn.kernel@gmail.com, 
+	davem@davemloft.net, dsahern@kernel.org, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, 
+	linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH net-next 2/2] selftests: net: add FOU multicast
+ encapsulation resubmit test
+Message-ID: <ad9hkJXAnlv2ZUm6@gmail.com>
+References: <ad7MsSJOuUU6EGwS@dau-home-pc>
+ <ad7NhoxmrFJAsXe7@dau-home-pc>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <fd77bca8-bee8-4997-a11a-932a1693edf7@redhat.com>
+In-Reply-To: <ad7NhoxmrFJAsXe7@dau-home-pc>
+X-Debian-User: leitao
 
-Le Mon, Apr 13, 2026 at 03:25:46PM -0400, Waiman Long a écrit :
-> On 4/13/26 3:43 AM, Qiliang Yuan wrote:
-> > Most kernel noise types (TICK, TIMER, RCU, etc.) are currently aliased
-> > to a single HK_TYPE_KERNEL_NOISE enum value. This prevents fine-grained
-> > runtime isolation control as all masks are forced to be identical.
-> > 
-> > Un-alias service-specific housekeeping types in enum hk_type. This
-> > separation provides the necessary granularity for DHM subsystems to
-> > subscribe to and maintain independent affinity masks.
-> 
-> Usually, if we want to run a latency sensitive workload like DPDK, we try to
-> minimize all sorts of kernel noises or interference as much as possible. Do
-> you have a good use case where it is advantageous to remove some types of
-> kernel noises from a given set of CPUs but not the others?
+On Wed, Apr 15, 2026 at 02:28:06AM +0300, Anton Danilov wrote:
+> +send_fou_gre_packets() {
+> +	local count=$1
+> +
+> +	ip netns exec "$NSENDER" python3 -c "
 
-Right what we want to do here is to remove the aliases (HK_TYPE_TIMER,
-HK_TYPE_WQ, ...) and rename them to HK_TYPE_KERNEL_NOISE.
+Having Python code embedded directly in the shell function makes this
+difficult to review and maintain. Could you extract the Python script to
+a separate file? This would simplify the code to just:
 
-Thanks.
-
--- 
-Frederic Weisbecker
-SUSE Labs
+	ip netns exec "$NSENDER" python3 my_python_script.py
