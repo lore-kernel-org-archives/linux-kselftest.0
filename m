@@ -1,114 +1,134 @@
-Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FEE930EF6C;
-	Wed, 15 Apr 2026 09:22:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.99
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15566342524
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 Apr 2026 09:53:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776244928; cv=none; b=K+OaBEpGKEv7JkhLOCfJbluqtRLu+nXuVQ0UCDE17S/Y1v/GmMSd0KP2dlD1VQdf5MzMUH6MkDWon99l+hx70uhGqKoKLIbNTevuO8ivTytULL7lXUP/m2YZN2vTxNrb6sb3UkTG6EtzunZO11hinx4uGVM9BEyxiZ3/PiuqfW0=
+	t=1776246798; cv=none; b=t+GNIOFqrmjprKBT7bCmMzOHSD0RTwRVjW5ygyfq+9InannGnB/zWGxMWLt6THy4IDo5Molnk/ljTvX0+dcPsUbcBGbM9w1689XLQQ0MATj5AZar4KFLR9nadj/skH0kW6onlFL4QenXZLtfc+Tw8rTpfF6I9G8GrQ9b+iUD/ME=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776244928; c=relaxed/simple;
-	bh=jSXUuO7MB0ozSTHA0qbNnvDU+pBKa0kbvrLqzmCTy3w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZQ3wmj4TWQMMD9ZE76bOojdeU0SOCsvrHrWZXQKTFrI0N+x5Dr4x6QHlbaioYFXMr0KSc55V0uTKA8QU5A93prjA25R9OnjY2Tgfqiwp4Ixzr+gPZ2+9fGUKo0SuiJkOxsYjaBNbBnztObD26IXO7bWq/l45h9MwXtZgYJF9rBg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=KG1zE8Ix; arc=none smtp.client-ip=115.124.30.99
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1776246798; c=relaxed/simple;
+	bh=jl2opwE1RDHcRGVmWLd07hWifPyRG0CM/7HsKxadKT4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kfnLlvQqfCGp2fNEuIUiaOuSy1hYUStiBbNt+sGagw2fQcfPVJ+QhxgynxAxe2hMHXTULYSDJhHcqTrF6D8VkwKcIkJmorZRGWDe8GK32eS0gK8bY73JPVwKP4YVd81MPy8XyP0MdYATb+WFjcg32ssDlU+SNAy6YMcg9DryCPU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=HexxN16u; arc=none smtp.client-ip=209.85.221.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="KG1zE8Ix"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1776244921; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=k50XcOiZunNGbhAMmY/+OGWwibmB7NY3ZE/wH+AVnkA=;
-	b=KG1zE8Ix/+6YPKirWQJuwrYwdCLHIk1PEZafvAvrp2aCheunNxIFWvlQT1r9xCNAcOoC7nioQo5ldJxxlxweRB24yO0br3Y8O1ZhajwPBH38sh7TrJ48FoZULrOVzIzlY2uOpWdR+bnIrErOULipp6fcGQVNPVgnUJtKDCh3lJ4=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R571e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033032089153;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=27;SR=0;TI=SMTPD_---0X14F.Ps_1776244917;
-Received: from 30.74.144.121(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0X14F.Ps_1776244917 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Wed, 15 Apr 2026 17:21:58 +0800
-Message-ID: <38697379-cbba-4c64-ae65-6774b01021d9@linux.alibaba.com>
-Date: Wed, 15 Apr 2026 17:21:57 +0800
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="HexxN16u"
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-43d77f60944so2150655f8f.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Apr 2026 02:53:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1776246795; x=1776851595; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jl2opwE1RDHcRGVmWLd07hWifPyRG0CM/7HsKxadKT4=;
+        b=HexxN16uJzerrXVZn/UT5Vy/WanNqoe5X3yuVo4nk5bK6vn6qLGyekstClLVumKpOQ
+         NFcSiDG3AEJIfWwyCa0ayE+ZaaBtkUgLg+Qvvmge8c1sacX+OYmVYhswCLKW7nA7NrNP
+         nf64DqzR1IQJL/klp5pEWLHxnNKJ2EeVqfgHtpTlIF7p73EkN9Ez46RmKey0+DPt5SfG
+         w1fmYtZVpELDNoSQfUSKZHB9vguo+2ZLxjSBsgeqyIbB+o3/mEkddGuMOdrqwGD7SGi/
+         E82U4OTjiYtG5v2YqoZk2OWHfJBXEwO4Y3EyVbaEftgUpZvSO6sh+LSIrU7Nq71dDi50
+         g8Tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776246795; x=1776851595;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jl2opwE1RDHcRGVmWLd07hWifPyRG0CM/7HsKxadKT4=;
+        b=H1JcirbwxAE2e6W5vN3m5Nj1ThfwvW8wozkA/Y1ATBFzsaZUEF2T4bpQC+U0MgSOJ4
+         ZuBkWA1n789ShAkch7R7Mbpbz5ztWL0wgFDE+p2Ez4izm0j8fD9V1t1iZPjwZfFyhINk
+         ZWCSgi3exUa86SdkiAcSwMycqeLdY0BfBSmHZZXnk349hiX+mihZTeE8oFq39zj7CCP/
+         yOXvuna4JUssTBIZkWxxpB+sNmFLu7f6Gyn0xI7h+K597V1klvLuQUTNKDvQBPErqZYH
+         ZAOxW9duVB8+LDxEwaseDYDpNEcIqzELOI8g/MwSAX8nTVdSEcnZkFdocx+SoaNNcLjo
+         y2oQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/n2g5huSXKT2R8nk6L23Mt+Oj3lHusqRdiMY7Z+s6E8p+qX8cYG4DMthhmljVohUDXE6zsYhGwisKtVXaz1xw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywp82yVz8u3WkzwWCIeVU6G38ssQlc7yXWDo5wG42NAr4IYUZ/t
+	71rHWTQ1xPuty10t/unVDZKenOtiEQJEcd18FODOd7QvrtwUh53gmI1bCcvyAyzbUlY=
+X-Gm-Gg: AeBDiesBh+czOrTZwS1SkR2ZVNxR9nC+WYqSSCPG3/ImI/NbTPIvwCPYOlfQ6MR/TS2
+	OiFVd7uSt8slcEs9ssXnl34kn2N6iyRNApnBA6ZpAbFF4H225+SsmpwyF6aU8MZCysCDSPGBEto
+	yxZ1+4feKs4dp1p4T7dCij4RD2z8zOHcd3iqLParOj/BqZqU2w8h/qTN2NcGZQLHu7Qdc8x/x+I
+	1K1ulTlZerOAZFy78u9e2DTbRT6uE63Fw+K0P7dvHmgECO1eNNyNSSYUJUicUMxVK75rQMGn42/
+	MbniHh1YZcQnhgXsghwDfeK+jpLCf1s18gKTM8bxGyUQynM/Cc14smSCb0MG+RIqlZzKaleolqd
+	TQE1enuIDPv1fM8utdPWA4eU3HY2ggk+scbau7nO66YrFowqgCyrh2l8OeM+GcOrkuSXI6C7rnp
+	yMEL5gBS6o+QtwReYTX53d2SrHIWfEYOtmoMbYV7pHgZOsKifLvjx8Hg==
+X-Received: by 2002:a05:6000:2010:b0:437:711c:8754 with SMTP id ffacd0b85a97d-43d642978e4mr31875774f8f.7.1776246795396;
+        Wed, 15 Apr 2026 02:53:15 -0700 (PDT)
+Received: from blackdock.suse.cz (nat2.prg.suse.com. [195.250.132.146])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43ead3d6409sm3838343f8f.23.2026.04.15.02.53.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Apr 2026 02:53:14 -0700 (PDT)
+Date: Wed, 15 Apr 2026 11:53:13 +0200
+From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+To: ranxiaokai627@163.com
+Cc: hannes@cmpxchg.org, mhocko@kernel.org, roman.gushchin@linux.dev, 
+	shakeel.butt@linux.dev, muchun.song@linux.dev, tj@kernel.org, shuah@kernel.org, 
+	kuba@kernel.org, hughd@google.com, akpm@linux-foundation.org, 
+	cgroups@vger.kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, ran.xiaokai@zte.com.cn
+Subject: Re: [PATCH 1/2] kselftests: cgroup: update kmem test tolerance for
+ multi-memcg stock
+Message-ID: <vjhou23d62pvtdqsan2nrlldkwf27qchpfmzf4yoetqn2gdhbj@cfiuqzzotbxf>
+References: <20260414110524.2414-1-ranxiaokai627@163.com>
+ <20260414110524.2414-2-ranxiaokai627@163.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 7.2 v2 05/12] mm/khugepaged: remove READ_ONLY_THP_FOR_FS
- check in hugepage_pmd_enabled()
-To: "David Hildenbrand (Arm)" <david@kernel.org>, Zi Yan <ziy@nvidia.com>
-Cc: Matthew Wilcox <willy@infradead.org>, Nico Pache <npache@redhat.com>,
- Song Liu <songliubraving@fb.com>, Chris Mason <clm@fb.com>,
- David Sterba <dsterba@suse.com>, Alexander Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
- Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
- Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Shuah Khan <shuah@kernel.org>, linux-btrfs@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-References: <20260413192030.3275825-1-ziy@nvidia.com>
- <20260413192030.3275825-6-ziy@nvidia.com>
- <ad1TMjF1L3usYIC5@casper.infradead.org>
- <05F00072-7E06-47C9-BC26-FE3736F557FC@nvidia.com>
- <a4d477a8-71d8-4219-9cb3-153f2c01e184@kernel.org>
- <84B8F641-A3DF-4219-AA57-6BA48E9B4998@nvidia.com>
- <998c02b6-2612-42c1-8099-d65ae275d1a2@kernel.org>
- <7468C68E-FB09-4714-94A3-4BED63453295@nvidia.com>
- <b7aa5515-6908-4ec6-91e9-eb79d5ef70b4@linux.alibaba.com>
- <afe0dfb9-feeb-4243-bc4b-305e5e33b581@kernel.org>
-From: Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <afe0dfb9-feeb-4243-bc4b-305e5e33b581@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="k3iorpsupp5gfcn2"
+Content-Disposition: inline
+In-Reply-To: <20260414110524.2414-2-ranxiaokai627@163.com>
 
 
+--k3iorpsupp5gfcn2
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH 1/2] kselftests: cgroup: update kmem test tolerance for
+ multi-memcg stock
+MIME-Version: 1.0
 
-On 4/15/26 4:00 PM, David Hildenbrand (Arm) wrote:
-> On 4/15/26 08:36, Baolin Wang wrote:
->>
->>
->> On 4/15/26 2:25 AM, Zi Yan wrote:
->>> On 14 Apr 2026, at 14:14, David Hildenbrand (Arm) wrote:
->>>
->>>>
->>>> Yeah, it would be better if we could avoid it. But the dependency on the
->>>> global toggle as it is today is a bit weird.
->>>>
->>>>
->>>> I don't think there is other interaction with FS and the global toggle
->>>> besides this and the one you are adjusting, right?
->>>>
->>
->> I'm afraid not. Please also consider the per-size mTHP interfaces. It's
->> possible that hugepage_global_enabled() returns false, but
->> hugepages-2048kB/enabled is set to "always", which would still allow
->> khugepaged to collapse folios.
+Hello Xiaokai.
 
-My comments are in reply to Zi’s comment:
+On Tue, Apr 14, 2026 at 11:05:23AM +0000, ranxiaokai627@163.com wrote:
+> Fixes: f735eebe55f8 ("memcg: multi-memcg percpu charge cache")
 
-"I think hugepage_global_enabled() should be enough to decide whether 
-khugepaged should run or not. "
+An interesting catch.
 
-I’m concerned that only relying on hugepage_global_enabled() to decide 
-whether khugepaged should run would cause a regression for anonymous and 
-shmem memory collapse, as it ignores per-size mTHP configuration.
+> -#define MAX_VMSTAT_ERROR (4096 * 64 * get_nprocs())
+> +#define NR_MEMCG_STOCK 7
+> +#define MAX_VMSTAT_ERROR (4096 * 64 * NR_MEMCG_STOCK * get_nprocs())
 
-> The question is really which semantics we want.
-> 
-> Right now, there is no way to disable khugepaged for anon pages, to just
-> get them during page faults.
+When you touch this, I think this could be factored into it too:
 
-Right.
++#define MAX_VMSTAT_ERROR (sysconf(_SC_PAGESIZE) * 64 * NR_MEMCG_STOCK * ge=
+t_nprocs())
 
-> And we are now talking about the same problem for FS: to only get them
-> during page faults (like we did so far without CONFIG_READ_ONLY_THP_FOR_FS).
+And given how much the selftest depends in this implementation
+detail(?), I see that there are other selftests that include directly
+=66rom the tree, I'd suggest also
+#include "../../../../include/linux/memcontrol.h"
 
-OK. I’m fine with using hugepage_global_enabled() to determine whether 
-khugepaged scans file folios.
+and use the constant from there (i.e. move NR_MEMCG_STOCK to there too).
 
-My concern is that for anonymous memory and shmem, the per-size mTHP 
-settings should be considered.
+That should make the selftest more flexible, resilient to future changes
+and it'd document ramification of these constants too.
+
+Thanks,
+Michal
+
+--k3iorpsupp5gfcn2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iJEEABYKADkWIQRCE24Fn/AcRjnLivR+PQLnlNv4CAUCad9f8hsUgAAAAAAEAA5t
+YW51MiwyLjUrMS4xMiwyLDIACgkQfj0C55Tb+Ah09wEA3WEcFRBjif8H4jLqnOLn
+ZwnKif6bna2CGogxl/N556kBAND7SAIiWdZTXcOAME4PmEgfWjWiWRDi1KSjBeeX
+qmQK
+=LmmD
+-----END PGP SIGNATURE-----
+
+--k3iorpsupp5gfcn2--
