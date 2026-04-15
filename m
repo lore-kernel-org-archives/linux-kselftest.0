@@ -1,101 +1,232 @@
-Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FBAB308F3B
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 Apr 2026 02:22:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77C8118AFE;
+	Wed, 15 Apr 2026 04:45:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776219761; cv=none; b=Brjw1/XMF8eP+AkrR0B7TnBfAmUPl2KQMuJqW2zFEKWKMHgIhutxZ1IdskZyXNEktOPTA6BY1l1OidGerxSSGJczgE9cHeQROy9RMFZ6t6TmN6pjd/dF7vlWZ+H0K6FW3HQ1yZ/E8SOV02fD5Lxjn+8bGqbhRO8KUQ0dwb07JCQ=
+	t=1776228335; cv=none; b=RH/GnMRwpYG/8ZfkU+gEoISO8E1k6FZf/cZ8obWW5wXEQPY9hCqQS5a/mJF9sGbSjOv8QgQ3M2+xeFjcwFRnoroha3UoepmbNzfvhGIoT8nv8+FWBhiG5mrr5OPWmEXcLaEdwZF40gGi6vjas3SIKfiSdRVe8Wl2CXDWxs7f8bg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776219761; c=relaxed/simple;
-	bh=ZnAgyefV7j+HdWbSCjRgUnb9/TLI4F5WnQl6jhsgORs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uxnSNpe+FEjbIwk3Mm37gLbOeM7u7yfoCN4GR5ObNezkjtQCDIMiEvSuL6+6W/gIgq79M+WbTqet/XdJ5jVyap14kCbAlQl7fni09ASev778nUZyM1nnaKIsofCV5NOSjVcMoAH0hhGisV2QMwm9fnLE+bHz0dfwD/AD0aoB5bI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=EaYSXFOx; arc=none smtp.client-ip=95.215.58.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1776228335; c=relaxed/simple;
+	bh=TVMWKdtf33Q9VHYtStDLDAKGyqg5Xckzkj5HLoa3F8Y=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=uD48+jpKLulcG9KtqRArGXYGhGCHUONOTikfuktAkQygyYjzfuxenBSHOf7TdvePgaxKLKnEd0dqyiHU92XZj5NQ0jJ8CuiuZt42GTHnPJyugqS3Zu8lDMq7kO4jwuB8/qptT9Hlj3QpSemaG4tnwckvQ4tLuA0vXM9xPSdiEIU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=eokLRvAh; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="EaYSXFOx"
-Message-ID: <a6e657bb-4022-4ec6-b634-0e70285d0d6a@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1776219746;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=07Gfmo26p9pCjh0thm2aRrhY2n676z8s90wlwpR7FPY=;
-	b=EaYSXFOxCL205YA7CSKMd++RZoIHr5LukZc0e4S1OIuc+mO7Xxsp/zJu/Cqh3WirkjH/os
-	Gt21pp+e1VJQr32QcI7cLhYIkERIMTRKENQ5NMgbxd+Hb79Ir4BSY1AUnUcTklfivPa5Zl
-	aFnpur4yr+VgNMbCQqGpjBAaPyNn75c=
-Date: Wed, 15 Apr 2026 10:22:04 +0800
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="eokLRvAh"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A4367337D;
+	Tue, 14 Apr 2026 21:45:25 -0700 (PDT)
+Received: from a080796.blr.arm.com (a080796.arm.com [10.164.21.51])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 6C49F3F86F;
+	Tue, 14 Apr 2026 21:45:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1776228331; bh=TVMWKdtf33Q9VHYtStDLDAKGyqg5Xckzkj5HLoa3F8Y=;
+	h=From:To:Cc:Subject:Date:From;
+	b=eokLRvAhysbewSW5m115UvHQa/oTGWnuc2hWGGfJOzYWG52ay0ijHPROZOs+7SGan
+	 hamk5wRE2pc8Xzo3uyO0dVXgLvGZrFm/fCgig5wtgQidr6r+syLzNqjnrADTRGFAIT
+	 aagjGFwbMioNfJPt0FyqbUQdTNEv2EsBwWBPD9Os=
+From: Dev Jain <dev.jain@arm.com>
+To: akpm@linux-foundation.org,
+	david@kernel.org,
+	shuah@kernel.org
+Cc: ljs@kernel.org,
+	Liam.Howlett@oracle.com,
+	vbabka@kernel.org,
+	rppt@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	ryan.roberts@arm.com,
+	anshuman.khandual@arm.com,
+	Dev Jain <dev.jain@arm.com>,
+	Sarthak Sharma <sarthak.sharma@arm.com>
+Subject: [PATCH v2] selftests/mm: Simplify byte pattern checking in mremap_test
+Date: Wed, 15 Apr 2026 10:15:09 +0530
+Message-Id: <20260415044509.579428-1-dev.jain@arm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH net-next v2 2/2] selftests/bpf: verify syncookie
- statistics in tcp_custom_syncookie
-To: Martin KaFai Lau <martin.lau@linux.dev>, Paolo Abeni <pabeni@redhat.com>
-Cc: Kuniyuki Iwashima <kuniyu@google.com>, Eric Dumazet
- <edumazet@google.com>, Daniel Borkmann <daniel@iogearbox.net>,
- netdev@vger.kernel.org, Neal Cardwell <ncardwell@google.com>,
- "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Simon Horman <horms@kernel.org>, David Ahern <dsahern@kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260411013211.225834-1-jiayuan.chen@linux.dev>
- <20260411013211.225834-2-jiayuan.chen@linux.dev>
- <CAAVpQUCCZVogDUUTfr3k-JxV52kpVvdYzqFC68-J3n6_ugd4Uw@mail.gmail.com>
- <6b22a595-cd65-42ec-b332-c835273bc174@redhat.com>
- <04cafd50-7af5-4835-b0df-67393d9f5a51@redhat.com>
- <2026414195145.Ur8-.martin.lau@linux.dev>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <2026414195145.Ur8-.martin.lau@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
+The original version of mremap_test (7df666253f26: "kselftests: vm: add
+mremap tests") validated remapped contents byte-by-byte and printed a
+mismatch index in case the bytes streams didn't match. That was rather
+inefficient, especially also if the test passed.
 
-On 4/15/26 4:02 AM, Martin KaFai Lau wrote:
-> On Tue, Apr 14, 2026 at 11:17:39AM +0200, Paolo Abeni wrote:
->> On 4/14/26 11:08 AM, Paolo Abeni wrote:
->>> On 4/14/26 7:50 AM, Kuniyuki Iwashima wrote:
->>>> On Fri, Apr 10, 2026 at 6:32 PM Jiayuan Chen <jiayuan.chen@linux.dev> wrote:
->>>>> Add read_tcpext_snmp() helper to network_helpers which reads a
->>>>> TcpExt SNMP counter via nstat, and use it in the tcp_custom_syncookie
->>>>> test to verify that LINUX_MIB_SYNCOOKIESRECV is incremented and
->>>>> LINUX_MIB_SYNCOOKIESFAILED stays unchanged across a successful
->>>>> BPF custom syncookie validation.
->>>>>
->>>>> The delta is captured between start_server() and accept(), which
->>>>> covers the full SYN/ACK/cookie-check path for one connection.
->>>>>
->>>>> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
->>>>> ---
->>>>>   tools/testing/selftests/bpf/network_helpers.c | 22 +++++++++++++++++++
->>>>>   tools/testing/selftests/bpf/network_helpers.h |  1 +
->>>>>   .../bpf/prog_tests/tcp_custom_syncookie.c     | 20 +++++++++++++++++
->>>> As you touch bpf selftest helper files, please rebase on bpf-next
->>>> to avoid possible conflicts and tag bpf-next in the Subject.
->>> To hopefully  minimize the conflicts handling I'm going to apply patch
->>> 1/2 to net-next. Please resubmit patch 2/2 to bpf-next after the
->>> relevant net core reach there.
->> Uhmm... the original feature went through the bpf tree, so I guess both
->> patches could/should via bpf-next. Hopefully conflict into the tcp code
->> should be minimal.
-> I think it is best to land both patches together. It seems the 7.1 pull-request
-> is out. We can take it to bpf-next/net after the merge window and then follow
-> by a pull-request for the net-next tree as usual.
+Later, commit 7033c6cc9620 ("selftests/mm: mremap_test: optimize
+execution time from minutes to seconds using chunkwise memcmp") used
+memcmp() on bigger chunks, to fallback to byte-wise scanning to detect
+the problematic index only if it discovered a problem.
 
+However, the implementation is overly complicated (e.g., get_sqrt() is
+currently not optimal) and we don't really have to report the exact
+index: whoever debugs the failing test can figure that out.
 
-Thanks, Martin. I will rebase and send it, targeting bpf-next, after the 
-merge window ends.
+Let's simplify by just comparing both byte streams with memcmp() and not
+detecting the exact failed index.
 
+Reported-by: Sarthak Sharma <sarthak.sharma@arm.com>
+Tested-by: Sarthak Sharma <sarthak.sharma@arm.com>
+Signed-off-by: Dev Jain <dev.jain@arm.com>
+---
+Applies on mm-unstable.
+
+v1->v2:
+ - Simplify patch description
+
+v1:
+ - https://lore.kernel.org/all/20260410143031.148173-1-dev.jain@arm.com/
+
+ tools/testing/selftests/mm/mremap_test.c | 109 +++--------------------
+ 1 file changed, 10 insertions(+), 99 deletions(-)
+
+diff --git a/tools/testing/selftests/mm/mremap_test.c b/tools/testing/selftests/mm/mremap_test.c
+index 308576437228c..131d9d6db8679 100644
+--- a/tools/testing/selftests/mm/mremap_test.c
++++ b/tools/testing/selftests/mm/mremap_test.c
+@@ -76,27 +76,6 @@ enum {
+ 	.expect_failure = should_fail				\
+ }
+ 
+-/* compute square root using binary search */
+-static unsigned long get_sqrt(unsigned long val)
+-{
+-	unsigned long low = 1;
+-
+-	/* assuming rand_size is less than 1TB */
+-	unsigned long high = (1UL << 20);
+-
+-	while (low <= high) {
+-		unsigned long mid = low + (high - low) / 2;
+-		unsigned long temp = mid * mid;
+-
+-		if (temp == val)
+-			return mid;
+-		if (temp < val)
+-			low = mid + 1;
+-		high = mid - 1;
+-	}
+-	return low;
+-}
+-
+ /*
+  * Returns false if the requested remap region overlaps with an
+  * existing mapping (e.g text, stack) else returns true.
+@@ -995,11 +974,9 @@ static long long remap_region(struct config c, unsigned int threshold_mb,
+ 			      char *rand_addr)
+ {
+ 	void *addr, *tmp_addr, *src_addr, *dest_addr, *dest_preamble_addr = NULL;
+-	unsigned long long t, d;
+ 	struct timespec t_start = {0, 0}, t_end = {0, 0};
+ 	long long  start_ns, end_ns, align_mask, ret, offset;
+ 	unsigned long long threshold;
+-	unsigned long num_chunks;
+ 
+ 	if (threshold_mb == VALIDATION_NO_THRESHOLD)
+ 		threshold = c.region_size;
+@@ -1068,87 +1045,21 @@ static long long remap_region(struct config c, unsigned int threshold_mb,
+ 		goto clean_up_dest_preamble;
+ 	}
+ 
+-	/*
+-	 * Verify byte pattern after remapping. Employ an algorithm with a
+-	 * square root time complexity in threshold: divide the range into
+-	 * chunks, if memcmp() returns non-zero, only then perform an
+-	 * iteration in that chunk to find the mismatch index.
+-	 */
+-	num_chunks = get_sqrt(threshold);
+-	for (unsigned long i = 0; i < num_chunks; ++i) {
+-		size_t chunk_size = threshold / num_chunks;
+-		unsigned long shift = i * chunk_size;
+-
+-		if (!memcmp(dest_addr + shift, rand_addr + shift, chunk_size))
+-			continue;
+-
+-		/* brute force iteration only over mismatch segment */
+-		for (t = shift; t < shift + chunk_size; ++t) {
+-			if (((char *) dest_addr)[t] != rand_addr[t]) {
+-				ksft_print_msg("Data after remap doesn't match at offset %llu\n",
+-						t);
+-				ksft_print_msg("Expected: %#x\t Got: %#x\n", rand_addr[t] & 0xff,
+-						((char *) dest_addr)[t] & 0xff);
+-				ret = -1;
+-				goto clean_up_dest;
+-			}
+-		}
+-	}
+-
+-	/*
+-	 * if threshold is not divisible by num_chunks, then check the
+-	 * last chunk
+-	 */
+-	for (t = num_chunks * (threshold / num_chunks); t < threshold; ++t) {
+-		if (((char *) dest_addr)[t] != rand_addr[t]) {
+-			ksft_print_msg("Data after remap doesn't match at offset %llu\n",
+-					t);
+-			ksft_print_msg("Expected: %#x\t Got: %#x\n", rand_addr[t] & 0xff,
+-					((char *) dest_addr)[t] & 0xff);
+-			ret = -1;
+-			goto clean_up_dest;
+-		}
++	/* Verify byte pattern after remapping */
++	if (memcmp(dest_addr, rand_addr, threshold)) {
++		ksft_print_msg("Data after remap doesn't match\n");
++		ret = -1;
++		goto clean_up_dest;
+ 	}
+ 
+ 	/* Verify the dest preamble byte pattern after remapping */
+-	if (!c.dest_preamble_size)
+-		goto no_preamble;
+-
+-	num_chunks = get_sqrt(c.dest_preamble_size);
+-
+-	for (unsigned long i = 0; i < num_chunks; ++i) {
+-		size_t chunk_size = c.dest_preamble_size / num_chunks;
+-		unsigned long shift = i * chunk_size;
+-
+-		if (!memcmp(dest_preamble_addr + shift, rand_addr + shift,
+-			    chunk_size))
+-			continue;
+-
+-		/* brute force iteration only over mismatched segment */
+-		for (d = shift; d < shift + chunk_size; ++d) {
+-			if (((char *) dest_preamble_addr)[d] != rand_addr[d]) {
+-				ksft_print_msg("Preamble data after remap doesn't match at offset %llu\n",
+-						d);
+-				ksft_print_msg("Expected: %#x\t Got: %#x\n", rand_addr[d] & 0xff,
+-						((char *) dest_preamble_addr)[d] & 0xff);
+-				ret = -1;
+-				goto clean_up_dest;
+-			}
+-		}
+-	}
+-
+-	for (d = num_chunks * (c.dest_preamble_size / num_chunks); d < c.dest_preamble_size; ++d) {
+-		if (((char *) dest_preamble_addr)[d] != rand_addr[d]) {
+-			ksft_print_msg("Preamble data after remap doesn't match at offset %llu\n",
+-					d);
+-			ksft_print_msg("Expected: %#x\t Got: %#x\n", rand_addr[d] & 0xff,
+-					((char *) dest_preamble_addr)[d] & 0xff);
+-			ret = -1;
+-			goto clean_up_dest;
+-		}
++	if (c.dest_preamble_size &&
++	    memcmp(dest_preamble_addr, rand_addr, c.dest_preamble_size)) {
++		ksft_print_msg("Preamble data after remap doesn't match\n");
++		ret = -1;
++		goto clean_up_dest;
+ 	}
+ 
+-no_preamble:
+ 	start_ns = t_start.tv_sec * NS_PER_SEC + t_start.tv_nsec;
+ 	end_ns = t_end.tv_sec * NS_PER_SEC + t_end.tv_nsec;
+ 	ret = end_ns - start_ns;
+-- 
+2.34.1
