@@ -1,108 +1,120 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f201.google.com (mail-dy1-f201.google.com [74.125.82.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB3B737F742;
-	Wed, 15 Apr 2026 21:54:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36AB5242D6A
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 Apr 2026 23:21:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776290096; cv=none; b=hZ+U++7s/9DN7mAbFT1I5zbBdkctkYea/6ccsbKC4yD4tjf/WD+u3Tsmgeflnq51azhA6IBsCPYk9NLhyt1PxPa+huEakCfIiCIjehKCbIarZZaQrYTh2cdD7G3y8pZfmpgOeEe0w9dhuiX0C2wA3VttKw/TNmzeFdbZ4aZ4KSE=
+	t=1776295296; cv=none; b=gp7uWMYclo/YbeVMrsS0MsWnMvGfUk+Kou9rHK/wujZIocSVjBNchbefQRi/QqtM/0vv+Xp3Lf3oa53QN+TFbK6eRBtqHXsBO0Qp3Ajc3WySajxuymnoy9+LYY2ZHPOd3GiasYdSXvgpROtA5T78cg40ovqonlcy1QCIezQGxso=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776290096; c=relaxed/simple;
-	bh=TZYFKbFO+bWgfI+VnjBD8YlmOVr1OUyHfh1/1awWrzQ=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=SisNT13UrlGjJ3MyUTU2iXrAztvHkUx2N3FPV9Rz0AaQuxTf4kZEGQDldQ9kcX0RS8GmKakLtSJ2LZKiIi0dGCvN348isXNre5jrcMaYr3Ui1ZoRZ9lJNRwfMpTqzfPsWm6ajHYKXUhFEd6p7yKPqmAVSV+Z6u0Z8AwCG8JlWEw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GhM+q2hh; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776295296; c=relaxed/simple;
+	bh=6dAhuECT/i1VihQi3r45JGDd6acMTRJ9plcxtde7Fn0=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=PJbaSXHjSVqqXDdGzILz3GRAGQ/ynKkO09wtU07WeiYHiFwsJ0lGuV0r8dD6HpUoD+pi4mWivPC3wt2acq6Qmm+kH7hB4M4HMDsp3sE3kjX3ytaRqbj5SB1wLl1LBntrAUI5cDdJeYHaRzbzZhWmmb/n5bVuj17xYN/MQo8xhdM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aniketgattani.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=X4b63/zq; arc=none smtp.client-ip=74.125.82.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aniketgattani.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GhM+q2hh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 374EDC19424;
-	Wed, 15 Apr 2026 21:54:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776290095;
-	bh=TZYFKbFO+bWgfI+VnjBD8YlmOVr1OUyHfh1/1awWrzQ=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=GhM+q2hh7e6EsSX9fvSD37JJU8+QL6Nph36Ukot21F5hh+DZFS4AXFLLun6tAHPPX
-	 q3uNINLhzsK6sZLJ19Sq14PsiGD0y9+NabbB6rAQfGD7UR2GGb1vNSWt9zsxVNWw+1
-	 rgbQtYfN8BTMT4seC8yzSzDo8Mrz8KLIehjqnbVi5DebNZbTjQcbpZglM3FYtYVoZY
-	 GZl5TiT1QDr8dbXFwtl1k7mmkAQ0n6ovBwkEkd4ZRNdLegvTVUd1AbsVzF/yP8abSO
-	 JADzfx0jMBqjSIq8Bbe4DQkqvdwx541jCCVWjD92HtYHwHBbg8XGo7ZoAnEhmQ5tkT
-	 t0JrU6NX5rkIw==
-Content-Type: multipart/mixed; boundary="===============3319286475227976617=="
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="X4b63/zq"
+Received: by mail-dy1-f201.google.com with SMTP id 5a478bee46e88-2bdd327d970so78853eec.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Apr 2026 16:21:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1776295293; x=1776900093; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=+r+WpZUUQ/YvdDlyZscQdfNrzTqbtr5QHQkAJv55K3U=;
+        b=X4b63/zqCfUiwaG554XMiwn1ZyYAa/xLbA5PczHnIp/PY2F7kWK36iy7vad6m5jtMz
+         qda7Cy1zcLlxsrJNpJkxizbmSiUYsvLMBwfMcP/3q3bQ3AmQz4Mve9rhs4EkV9RPMV7F
+         fmfjEzDE1YLTblWaktV97NK3SPXDAFaIORK9PCPy5ia6q8mnTdscxn9brN/yb3MHCVNh
+         gJrGEuXWiKD2l3qHoHkuksHepnaPelGvuMAjrf41E9EbjlVKd5EyZZxKd2ffZHBrJ1ys
+         ii86s5KS0nZllGQAQYnOy8shvJAAbxQVClXX1uuutgLD+0GKelQJuda9YeZmtdIOGHSk
+         jxFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776295293; x=1776900093;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+r+WpZUUQ/YvdDlyZscQdfNrzTqbtr5QHQkAJv55K3U=;
+        b=Ls5DENaWl+zwCzqoVZSBtVG4qyCI9fy5j23lxVKIbfy7KOQPizbc8DBEpcINMZY+i6
+         3OSTAq3e5fXCPEEz11cT4z+wmxi1nbyX/pLNOcL1iTA/HRd7LHzVgDb1sMyxCzbseUCj
+         PtTLeXjEuFZojCMK+sKtPWUILhoeHGxhBvFZwzBETKoOh8dt89EtQkjs8qdeBygVLStw
+         gfz1sUuwYu4P/fdH2YS8tk1klNaXH/YKQTEDBEjzykrt73EFSOZSqKDNojy20MusjrfC
+         L6TQaudipgCa9AWOH3SdJ67yqqWvc8ssN327jREBE52K3nvi/iUumzvPBeo8o9GTPxnc
+         XPqQ==
+X-Forwarded-Encrypted: i=1; AFNElJ8O+gAY0SGf967UmtSC2sjLfEt+EL4udRyDEsQE8bILeUrPT4rC8YwMaEzUG3DTJFkC25B6KwOW018V5JQmur0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw1gzI4ExtqCi9AL89VD/KdBkp+HC7WmJrJK2NCfBu8xwZUVSS6
+	eOy3um3Rqi98i/1tGG3CwINC9o2ChwWx+Kl9X7kHxVvj2q8Jry6Te8on84RTa9JHwb1Oyjkz9LM
+	gKEOg6/6g0bBc4cTtvaHgYVrfh74f0IB9Qw==
+X-Received: from dybdm8.prod.google.com ([2002:a05:7300:bb08:b0:2d8:5557:aec])
+ (user=aniketgattani job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:7300:ad26:b0:2de:e194:5fb1 with SMTP id 5a478bee46e88-2df7dcdd7b4mr803163eec.7.1776295293029;
+ Wed, 15 Apr 2026 16:21:33 -0700 (PDT)
+Date: Wed, 15 Apr 2026 23:21:04 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <15b5d4de8ec1d989cc4d066c0ed1699deaa80562fefe0b13edba930fce880dcf@mail.kernel.org>
-In-Reply-To: <20260415-selftests-bpf_misconfig-v5-7-03d0a52a898a@suse.com>
-References: <20260415-selftests-bpf_misconfig-v5-7-03d0a52a898a@suse.com>
-Subject: Re: [PATCH bpf-next v5 07/11] selftests/bpf: Allow test_progs to link with a partial object set
-From: bot+bpf-ci@kernel.org
-To: rbm@suse.com,andrii@kernel.org,eddyz87@gmail.com,ast@kernel.org,daniel@iogearbox.net,martin.lau@linux.dev,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,shuah@kernel.org,nathan@kernel.org,nick.desaulniers+lkml@gmail.com,morbo@google.com,justinstitt@google.com
-Cc: bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,llvm@lists.linux.dev,alan.maguire@oracle.com,rbm@suse.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed, 15 Apr 2026 21:54:55 +0000 (UTC)
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.54.0.rc1.513.gad8abe7a5a-goog
+Message-ID: <20260415232106.2803644-1-aniketgattani@google.com>
+Subject: [PATCH v2 0/2] sched/membarrier: Use per-CPU mutexes for targeted commands
+From: Aniket Gattani <aniketgattani@google.com>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	"Paul E . McKenney" <paulmck@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Ben Segall <bsegall@google.com>, Josh Don <joshdon@google.com>, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, Aniket Gattani <aniketgattani@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
---===============3319286475227976617==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+This series mitigates a severe contention issue in the membarrier system
+call by replacing the global membarrier_ipi_mutex with per-CPU mutexes
+for targeted expedited commands.
 
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index ee7bbfcd661b..128ea61fd986 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -754,14 +754,14 @@ endif
->  # some X.test.o files have runtime dependencies on Y.bpf.o files
->  $(OUTPUT)/$(TRUNNER_BINARY): | $(TRUNNER_BPF_OBJS)
->
-> -$(OUTPUT)/$(TRUNNER_BINARY): $(TRUNNER_TEST_OBJS)			\
-> -			     $(TRUNNER_EXTRA_OBJS) $$(BPFOBJ)		\
-> +$(OUTPUT)/$(TRUNNER_BINARY): $(TRUNNER_EXTRA_OBJS) $$(BPFOBJ)		\
->  			     $(TRUNNER_LIB_OBJS)			\
->  			     $(TRUNNER_BPFTOOL)				\
->  			     $(OUTPUT)/veristat				\
-> -			     | $(TRUNNER_BINARY)-extras
-> +			     | $(TRUNNER_BINARY)-extras			\
-> +			     $(TRUNNER_TEST_OBJS)
+Problem:
+Currently, MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ relies on a single
+global mutex to serialize IPIs. On large systems with heavy concurrent
+usage, this creates significant contention. The issue cascades into
+hard lockups when combined with CFS bandwidth throttling, during which
+target CPUs may have interrupts disabled for extended periods.
+If membarrier is waiting on such a CPU, it holds the global mutex,
+stalling all other membarrier callers system-wide.
 
-Does moving TRUNNER_TEST_OBJS to the order-only prerequisite list
-break incremental builds in the default (BPF_STRICT_BUILD=1) case?
+Solution:
+Patch 1 introduces membarrier_cpu_mutexes to serialize expedited commands
+specifically when a target CPU is provided, isolating the lock contention
+to the targeted CPU. Broadcast commands continue to use the global mutex.
 
-Order-only prerequisites ensure build ordering but do not cause the
-target to be rebuilt when they are updated.  If a developer edits a
-test source file, the corresponding .test.o is correctly recompiled
-via the pattern rule and .d dependencies, but because
-TRUNNER_TEST_OBJS is no longer a normal prerequisite of
-$(OUTPUT)/$(TRUNNER_BINARY), the binary will not be relinked to
-pick up the new object.  The developer would need to run make clean
-or touch a normal prerequisite to get the updated test code linked
-into the binary.
+Patch 2 introduces a dedicated kselftest reproducer
+(membarrier_rseq_stress) to permanently test this interaction. It
+aggressively hammers targeted membarrier commands within a deep,
+aggressively throttled cgroup hierarchy to prove the lockup scenario
+and validate the fix.
 
->  	$$(call msg,BINARY,,$$@)
-> -	$(Q)$$(CC) $$(CFLAGS) $$(filter %.a %.o,$$^) $$(LDLIBS) $$(LLVM_LDLIBS) $$(LDFLAGS) $$(LLVM_LDFLAGS) -o $$@
-> +	$(Q)$$(CC) $$(CFLAGS) $$(filter %.a %.o,$(if $(PERMISSIVE),$$(wildcard $(TRUNNER_TEST_OBJS)),$(TRUNNER_TEST_OBJS)) $$^) $$(LDLIBS) $$(LLVM_LDLIBS) $$(LDFLAGS) $$(LLVM_LDFLAGS) -o $$@
+Results:
+As measured by the stress test introduced in Patch 2, testing on an
+AMD Turin machine with 384 CPUs (2 NUMA nodes, SMT=2) shows:
 
-When PERMISSIVE is set and some .test.o files are absent, the
-resulting binary still contains entries in the prog_test_defs[]
-array for the missing tests (via tests.h and __weak symbols), but
-both run_test and run_serial_test resolve to NULL.  The existing
-validation in test_progs.c main():
-
-    if ((test->run_test == NULL && test->run_serial_test == NULL) ||
-        (test->run_test != NULL && test->run_serial_test != NULL)) {
-            ...
-            exit(EXIT_ERR_SETUP_INFRA);
-    }
-
-will abort the entire test run.  This is addressed later in the
-series by commit ec7dae68360b ("selftests/bpf: Skip tests whose
-objects were not built"), which replaces the abort with a skip
-marker.
-
+Throughput: ~200x increase in successful membarrier calls.
 
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+Changes in v2:
+v1: https://lore.kernel.org/lkml/20260409212223.2072418-1-aniketgattani@google.com
+- Use different mutex macros for global vs targeted cpu membarrier (Mathieu).
+- Use (unsigned int) cpu_id >= nr_cpu_id (Peter).
+- Removed #warning on unsupported architectures that causes build
+failures with W=1 reported by the kernel test robot.
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24478691588
---===============3319286475227976617==--
+Aniket Gattani (2):
+  sched/membarrier: Use per-CPU mutexes for targeted commands
+  selftests/membarrier: Add rseq stress test for CFS throttle
+    interactions
+
+ kernel/sched/membarrier.c                     |  36 +-
+ tools/testing/selftests/membarrier/Makefile   |   5 +-
+ .../membarrier/membarrier_rseq_stress.c       | 951 ++++++++++++++++++
+ 3 files changed, 979 insertions(+), 13 deletions(-)
+ create mode 100644
+ tools/testing/selftests/membarrier/membarrier_rseq_stress.c
+
+-- 
+2.54.0.rc1.513.gad8abe7a5a-goog
+
