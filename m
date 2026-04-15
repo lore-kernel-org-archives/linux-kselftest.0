@@ -1,67 +1,67 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 071C838CFEE
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 Apr 2026 20:59:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FDAE38CFFE
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 Apr 2026 20:59:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776286795; cv=none; b=eEoCMNVnfYxRW4fua02/Zv42w4K5dPGzCV/EZDl79gr5vBYheTfd6vz9Q0/MbOKaP+BVUVGzRliNoCbHc0Z7TZQR0jv4Uwch+WLpX7pch4MViQFnev9Ltvr52+rlw9KdR9tn9Fnd4xCkuDJ36aYW6GAz1bhD8YvxYI6kZhuK2Ns=
+	t=1776286798; cv=none; b=iPIH9O0GxbaPSU+hvaXfpwn8TiqPxJSAnpn74KPyULHIZvQ0TOwtWgahpLoDZJInqMLa70qODpQJudkE7a1C2RJ7+hKYLQR4ZHC/NbEIvHaaWpwSlHGAkSag9vVs/+0G4elxZWfqK7QW6cclSLG3tSaU2H5BOi/WMSFrx5mBTFU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776286795; c=relaxed/simple;
-	bh=GbttUT6vyhtCn2eIxN8DR5H29xyp1zOxmftUR/Likoo=;
+	s=arc-20240116; t=1776286798; c=relaxed/simple;
+	bh=sd6o23TXTQBmDe9CNsrT1vAQRg7+CRHUQ5cNo1CDVZ8=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ix5u9PLNHli1ye0pPIWjwXYR6UxTdZuJVGYTh7saIopKVmVk9QVRQRDjWVkrja4y0nsxSjouchP+fYWHrqPOJqeCL1EM76+IEhwBO/rdBsaTpJGJtn5fS5ooz3uSah7H5wroPPTibrTwmp+wGc0NtqUsC8JsgPNXODZDeWGA9SI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Rnh1Dybd; arc=none smtp.client-ip=209.85.128.45
+	 In-Reply-To:To:Cc; b=hzWAmA5UqUnnMnXZ4nW8UPYsnwB9gzc00oELbIgoxEv9TlBgvyqtaw8/gqYYqh0H/xYJlKCNArfDiXPeeQy/0dM8cFVWKxP68SOlMFyQ027YxyC16wQoKaBR/1W1hahY+UcKyltXL39fWuwAFEQ0UtRNwZGniOWxWH2gUSJ6fGU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=YEZknZHP; arc=none smtp.client-ip=209.85.128.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Rnh1Dybd"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4887fd35e60so50655595e9.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 Apr 2026 13:59:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="YEZknZHP"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-488b8bc6bc9so52104255e9.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Apr 2026 13:59:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1776286792; x=1776891592; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1776286796; x=1776891596; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=/Mfo/BD19IRGxdfb+sFo/dHsayqzRb0xyff0MVjqgFk=;
-        b=Rnh1Dybd9hOAXM49NhyY7YtyfDn254B5cWHqYUheuD2MaAxIIljgCymv8CnljZ6XRP
-         PA9CbZIkuPUleaZl6nvQkKghmZfw81/ooQ2iJyMiiCvlUIQ3Fq+pEq5EOIBMJz430Kxf
-         pTZ1q9a/6YnkWO4sRq9BX+iez4wGLzh6mf27NhqKpnj3Gl/6VU4IRKj2fyVQMVId8Sjg
-         oJXZ2Bv61CZkPpfOrV8KOJcXiJT6FxA7GFyq3YtuxoaMz5b7YF81i5fEfgnsxtE52AHp
-         zziX7d6EUaJg3ZUqKtcZQ5UDZu74wPk1kNQ8deu3c0galDoQtH81wjVslEGSQJDoYcOl
-         2SNw==
+        bh=R+LZLrUSOhq9xIydX+pHIEZAmNfKMNGZSAqdkfa11Ks=;
+        b=YEZknZHP9aKPxjBFdRAVs3+YLbAsxo+p+/iUXZR+fmfnc5uCJNOCP3gs1ehyDV9PdL
+         Ry6A96FB8ZpHN08SBhoofaPV54RSbyhvuSNwgSPX/Q/XCCJzyz4TpS+w68gS3cblVuY/
+         1stdb48ePH4G3nmSmmik1WPKqT1E9GOG2SLLdqVbakeLlx9Slgc9Z6Fqj1CcZLjbF0HE
+         oDADoL6SG5HR5N3OlHHle8vYXbd3vg+oB5VlI7x8Gkw9cUKTqzzaVWa4bYxcSrloJIpw
+         1ogabcCL2ZMzmA5Co9lHHpRddnSTCaJIzq6l4KP2g1UoP7sBo/sCNERJ6pjVH072XeBY
+         idiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776286792; x=1776891592;
+        d=1e100.net; s=20251104; t=1776286796; x=1776891596;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=/Mfo/BD19IRGxdfb+sFo/dHsayqzRb0xyff0MVjqgFk=;
-        b=dRgeQjr29WDFrDY9ecxZxeXxBZjERwQx0ktaZlwX9IaOl3NANRVJSPjeGfs44EnxaX
-         jBE2RupVt9Se5gx+hv/Im9OS3lB0VlDaCLR12TiCagImepxZKd6Uv2Yfc+BJwYAcLsBz
-         d/xi0Byn80CUBA4tN3/zb1xEj7fkPpgbGNeBpJtlTyPhiNfyggCX/n0PkaZSrH3ylFwU
-         Cu0+Y+c2/wQ4tbCKCEVjRB9pSHyJMJVA3pjio5BuQGohkO4LBT2AU4ZLHO9ZEyXC71zc
-         HD48tEUqlSkB0gPd5dB0lBaHHpDnGibvfCG6CfWccR1yhKe21BIJb9BdZ1EmqO6BAJzJ
-         77Dg==
-X-Forwarded-Encrypted: i=1; AFNElJ+lF4sOSd0jUoSTBOleK8/N66ytJ/Hegdu+hRrG8x8qx5Fr/cQvq1YmV2+q5h+QpOsvexnMXe8JxJuFF710QK8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz5IvCeLQkk2TvNGhV4dzeC0ltOHuitrdjla7FAtE36fl8rCqnA
-	cHX/mJJ/jwqRWy3uxuel4S9SPTHWEYqNhHSSYc3HwliImugoeo23BF7viVqzKhIv854=
-X-Gm-Gg: AeBDiet8mDTYzApjdW0mEwxtZjDK0PIKYguj6nNeDAC8BhLA5iutP91AFWsrBilHBN6
-	HKjNnpROyIO0FKjrv6kFS+d996RXBW4017sLhZJT97dfm67C5v0mpRdYV8pMOzEUo5Rc4E9xKpT
-	icYJ+zHPc1qRAom0iON56CDNs09R8uHNsTDq46HeTqKpRK+rdXEBOVExhU2DxxUIcHSR3CwIWTe
-	Q6eyni2N9Wbahpxub86WMBHBv6QgTaper8k/OwJS1gLIimr+lDJxFj5iS56dW7zpZuLYGEdCYc0
-	HRJFpFKd5AjPNuUvNilfk8FOjwzUf6t7wdgbZUdwLh/R/d/J9xVa1Ldhxni1u35KJA1y6QTU/v/
-	Ean2DMSBPQTbTNx7qrOEM/i7FEcqUm3I75o496YA8wloJiOGWmT9DdL9cXDbnR3/ggpwSlcitpp
-	swF1UV1MjOpuw=
-X-Received: by 2002:a05:600c:a109:b0:488:af7f:7751 with SMTP id 5b1f17b1804b1-488d6836508mr224987635e9.15.1776286792383;
-        Wed, 15 Apr 2026 13:59:52 -0700 (PDT)
+        bh=R+LZLrUSOhq9xIydX+pHIEZAmNfKMNGZSAqdkfa11Ks=;
+        b=M0x81sywKJoWv0aFuV1jN7BleVszVYmth+tH2h+Lfpx2W9bOpFYIeTpfXg/221WWxE
+         tTDtFU1tIgO5JaaS5EPvZ6HprkI12aTsp84D8z4zLHVo8d/j2VH1e3Y6tPgcI1St2/ci
+         1/CChpu2h3k+rwBmFzDHwBY6rRhkX3oooJFGbFrphvtUejJeWSKjtqqSnj5ikYibG+T8
+         yYHc7IXAoCrxAHBN5cu/Rm7L6qO4C5FC9lUlSRdbnVe4OtEDkPeF5h7UMV+nMABpSdZg
+         JRHB7tt0AFut/w8gu9dn8OFdHa1HDHCKpQCZjE85ufIkHqO6WWmZFCi03+vnvYoPrpnj
+         n7uA==
+X-Forwarded-Encrypted: i=1; AFNElJ/RuvGweh1na+9QemUhnWJEghSPIlc/U622DGnL7zs35t9DjE+Cbq3k8oWxuEtgZSxiUiT/EQmnLwqYVqazLL0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw7GIv/tnPqsyipoZFnF5J4leWi7hvDf5bIzeDiaUQfsqdKAEct
+	IYhmTpRGC94wxp8ZRKWZ8VPOmONXVXYHJpbvaHEkZ10symVoXwkZVMqAtPLv3G9GAxg=
+X-Gm-Gg: AeBDievwUxD166jXiBJPWTYqSlTNiyjpjUbK2FTxGn+kXvo0e4J2X5WYi3R1LR19P7M
+	nvn5HCjs9ptVWVHyvR/lZLfjG+Ms5OtHwWUHDKdai4QVfcPsAF6gNy4VlmtsGNlZ7GJll+Or82h
+	QpjnChWYQ2jU0SdUHsjdZW3zz+ghTooIfzWQGigjUir79L6NizcGc6zsaiG802KDm4p6gi/v8oz
+	FVjLru5uItfmLU0QDqu0G7UKVQNDz3Krp2DPoquiJVtvyMLUDW3ui3+dFkUFjWgTFohq8uFqlbD
+	6ZO1mGiu/utDOLwhGfovq3m8Ew+PZtNvUrOEtN03i7fEg3T6hfIy/JHo2q0CyMzMBWmLLigO/eG
+	rQKTYs5mgJK6VkBXmsfkx1IqBMerGy+N0b409p+zjYf+uhoW8d1OrpTVPxGvY1XvodGReRj+kti
+	GBls/xmQDFTEwVLjpZ0B27ig==
+X-Received: by 2002:a05:600c:528c:b0:488:a2ac:a337 with SMTP id 5b1f17b1804b1-488d68c2bffmr298755645e9.21.1776286795661;
+        Wed, 15 Apr 2026 13:59:55 -0700 (PDT)
 Received: from localhost ([2804:7f0:b765:e41:ce28:aaff:fe86:149c])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2de8f65fc42sm4398617eec.23.2026.04.15.13.59.50
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2de8f65f9bcsm5108876eec.22.2026.04.15.13.59.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Apr 2026 13:59:51 -0700 (PDT)
+        Wed, 15 Apr 2026 13:59:54 -0700 (PDT)
 From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
-Date: Wed, 15 Apr 2026 17:59:24 -0300
-Subject: [PATCH bpf-next v5 06/11] selftests/bpf: Tolerate test file
- compilation failures
+Date: Wed, 15 Apr 2026 17:59:25 -0300
+Subject: [PATCH bpf-next v5 07/11] selftests/bpf: Allow test_progs to link
+ with a partial object set
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,7 +70,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260415-selftests-bpf_misconfig-v5-6-03d0a52a898a@suse.com>
+Message-Id: <20260415-selftests-bpf_misconfig-v5-7-03d0a52a898a@suse.com>
 References: <20260415-selftests-bpf_misconfig-v5-0-03d0a52a898a@suse.com>
 In-Reply-To: <20260415-selftests-bpf_misconfig-v5-0-03d0a52a898a@suse.com>
 To: Andrii Nakryiko <andrii@kernel.org>, 
@@ -87,57 +87,60 @@ Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
  Alan Maguire <alan.maguire@oracle.com>, 
  "Ricardo B. Marliere" <rbm@suse.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openssh-sha256; t=1776286765; l=2121;
+X-Developer-Signature: v=1; a=openssh-sha256; t=1776286765; l=2150;
  i=rbm@suse.com; h=from:subject:message-id;
- bh=GbttUT6vyhtCn2eIxN8DR5H29xyp1zOxmftUR/Likoo=;
+ bh=sd6o23TXTQBmDe9CNsrT1vAQRg7+CRHUQ5cNo1CDVZ8=;
  b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
  x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QH3cGtcWTizPM2OE5ymULTo3iCCGvIHO81cuS4JZD6Ja/+3FrPxfKy+il554FamZbpk/0Qtz4cU
- dQjIhgbwTtQ8=
+ QKF6hcje9wxrjG1OyZ3oiDzcAPEvRA/9gmflkFbNKl71F/Dnahqeq7yL0Mv6YwaWV6nV/2kL6t7
+ 4cQZwZlwgbQM=
 X-Developer-Key: i=rbm@suse.com; a=openssh;
  fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
 
-Individual test files may fail to compile when headers or kernel features
-required by that test are absent. Currently this aborts the entire build.
+When individual test files are skipped due to compilation failures, their
+.test.o files are absent. The linker step currently lists all expected
+.test.o files as explicit prerequisites, so make considers any missing one
+an error.
 
-Make the per-test compilation non-fatal: remove the output object on
-failure and print a SKIP-TEST marker to stderr. Guard the BTFIDS
-post-processing step so it is skipped when the object file is absent. The
-linker step will later ignore absent objects, allowing the remaining tests
-to build and run.
+Move TRUNNER_TEST_OBJS to the order-only prerequisite list so that their
+absence does not prevent linking. Use $(wildcard ...) in the filter
+expression passed to the linker so that only the objects that were actually
+built are linked in.
 
-Use plain printf and $(Q) instead of $(call msg,...) in the BTFIDS block:
-the msg macro expands to @printf which is a make-recipe construct and is
-invalid as a shell command inside an if-then-fi body; $(Q) restores echo
-suppression at the recipe level where it is meaningful.
+Place the wildcard expansion before $^ in the filter to preserve the
+original link order: test objects must precede libbpf.a so that GNU ld,
+which scans static archives left-to-right, pulls in archive members that
+are referenced exclusively by test objects (e.g. ring_buffer__new from
+ringbuf.c).
 
 Signed-off-by: Ricardo B. Marlière <rbm@suse.com>
 ---
- tools/testing/selftests/bpf/Makefile | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ tools/testing/selftests/bpf/Makefile | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 3c9d61023414..ee7bbfcd661b 100644
+index ee7bbfcd661b..128ea61fd986 100644
 --- a/tools/testing/selftests/bpf/Makefile
 +++ b/tools/testing/selftests/bpf/Makefile
-@@ -704,11 +704,14 @@ $(TRUNNER_TEST_OBJS): $(TRUNNER_OUTPUT)/%.test.o:			\
- 		      $(TRUNNER_TESTS_DIR)/%.c				\
- 		      | $(TRUNNER_OUTPUT)/%.test.d
- 	$$(call msg,TEST-OBJ,$(TRUNNER_BINARY),$$@)
--	$(Q)cd $$(@D) && $$(CC) -I. $$(CFLAGS) -MMD -MT $$@ -c $(CURDIR)/$$< $$(LDLIBS) -o $$(@F)
-+	$(Q)cd $$(@D) && $$(CC) -I. $$(CFLAGS) -MMD -MT $$@ -c $(CURDIR)/$$< $$(LDLIBS) -o $$(@F) $(if $(PERMISSIVE),|| \
-+		($(RM) $$(@F); printf '  %-12s %s\n' 'SKIP-TEST' '$$(notdir $$@)' 1>&2))
- 	$$(if $$(TEST_NEEDS_BTFIDS),						\
--		$$(call msg,BTFIDS,$(TRUNNER_BINARY),$$@)			\
-+		$(Q)if [ -f $$@ ]; then						\
-+		printf '  %-8s%s %s\n' "BTFIDS" " [$(TRUNNER_BINARY)]" "$$(notdir $$@)"; \
- 		$(RESOLVE_BTFIDS) --btf $(TRUNNER_OUTPUT)/btf_data.bpf.o $$@;	\
--		$(RESOLVE_BTFIDS) --patch_btfids $$@.BTF_ids $$@)
-+		$(RESOLVE_BTFIDS) --patch_btfids $$@.BTF_ids $$@;		\
-+		fi)
+@@ -754,14 +754,14 @@ endif
+ # some X.test.o files have runtime dependencies on Y.bpf.o files
+ $(OUTPUT)/$(TRUNNER_BINARY): | $(TRUNNER_BPF_OBJS)
  
- $(TRUNNER_TEST_OBJS:.o=.d): $(TRUNNER_OUTPUT)/%.test.d:			\
- 			    $(TRUNNER_TESTS_DIR)/%.c			\
+-$(OUTPUT)/$(TRUNNER_BINARY): $(TRUNNER_TEST_OBJS)			\
+-			     $(TRUNNER_EXTRA_OBJS) $$(BPFOBJ)		\
++$(OUTPUT)/$(TRUNNER_BINARY): $(TRUNNER_EXTRA_OBJS) $$(BPFOBJ)		\
+ 			     $(TRUNNER_LIB_OBJS)			\
+ 			     $(TRUNNER_BPFTOOL)				\
+ 			     $(OUTPUT)/veristat				\
+-			     | $(TRUNNER_BINARY)-extras
++			     | $(TRUNNER_BINARY)-extras			\
++			     $(TRUNNER_TEST_OBJS)
+ 	$$(call msg,BINARY,,$$@)
+-	$(Q)$$(CC) $$(CFLAGS) $$(filter %.a %.o,$$^) $$(LDLIBS) $$(LLVM_LDLIBS) $$(LDFLAGS) $$(LLVM_LDFLAGS) -o $$@
++	$(Q)$$(CC) $$(CFLAGS) $$(filter %.a %.o,$(if $(PERMISSIVE),$$(wildcard $(TRUNNER_TEST_OBJS)),$(TRUNNER_TEST_OBJS)) $$^) $$(LDLIBS) $$(LLVM_LDLIBS) $$(LDFLAGS) $$(LLVM_LDFLAGS) -o $$@
+ 	$(Q)ln -sf $(if $2,..,.)/tools/build/bpftool/$(USE_BOOTSTRAP)bpftool \
+ 		   $(OUTPUT)/$(if $2,$2/)bpftool
+ 
 
 -- 
 2.53.0
