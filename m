@@ -1,103 +1,116 @@
-Received: from www537.your-server.de (www537.your-server.de [188.40.3.216])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22D7A31B80E;
-	Wed, 15 Apr 2026 09:07:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=188.40.3.216
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EE5E32FA1B
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 Apr 2026 09:16:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776244047; cv=none; b=R5ls3EA+ViG2M1ZO7VcEj4l06oImEbpVGJtJHd1NjK5xFgaZG5QKz2VVHVMfLF3DReBH9vKSy4+x0oSSn3oaqyDI1r0AC8GIlc4aPui0ePmS9EMNesen/bgpoqa+JWi4Y0lubM3KjgulDSyN97+3UXQ8jneb7tiBBtUft7Xnuc8=
+	t=1776244588; cv=none; b=dtQl7bY3o9ru+OSOreTC8R/e9IVFst5pH2GUxOIZrVYW8ApeKsXFOyQlx72xuk6nbhq2cND2CrHdYjIvw8QPZz+z9TN/7bt2PeNnjWtGzbgswjqmsr5AbqRbkTNYJi3hxYwd2G6gtycCZJsvNka74LlFnuLGK17ZlB5dt8956Lg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776244047; c=relaxed/simple;
-	bh=GBVWguG7RdZeq+1mTENU3jp7ImGFi/k9ptHm/Np7hXs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=evJLsFd4vGKd69ZvlUBa5+pUAV3UjyTmoB+xk9Z4vX1VBl72kAL+KzyvtivJRCOGuzNakxsvZlRcajKg/DB+qSLXLAP2pzRfmpFD+gqb9Cewgfx+C1q0tR7Ct5VMmiS/5KcZyogMA2hvpFKmKiQnEzGTgmJas3tya2UlXx7w9Tc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=Tefzh+47; arc=none smtp.client-ip=188.40.3.216
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ew.tq-group.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
+	s=arc-20240116; t=1776244588; c=relaxed/simple;
+	bh=XBnApSAYYoDDR0tm9wOMJHked1d/jcZYw82RPUp632s=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=kboY5T6GJHs1yFrHX5IK6+89FrOXO78PCCAZkP41fQbB/lSRYDimhapoBmAqVMlokw3443z7vqQzI1oh2TI4ehM195rdzEVGc/8bzoK6VQLM8/cPa6NC7XpHRKWnb12mNPb7VQpksH4b87WAtTBgyq4B8otiMEozB190amD6LbE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZAFdFv+k; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="Tefzh+47"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=ew.tq-group.com; s=default2602; h=Content-Type:Content-Transfer-Encoding:
-	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=GBVWguG7RdZeq+1mTENU3jp7ImGFi/k9ptHm/Np7hXs=; b=Tefzh+47t6l6/khyFeSKGS/lcJ
-	QJmitHEa6gYvJZ/aRnkk+C/TDK11jfN+M1ErYLE5EiP9jjlnl3g+uQ3fS6+l9GJfKGmb9GObDNPIP
-	7K1B8mZCbDoFjUVeacG+sNRY5yS71xQvuMTYFd3k2sNTRDy7S9y39j7gAFGnMnYtDbj/QaADSznap
-	Ub3FT+H5tF6in7evc6KVfUYw61kB60ZtYKeYtuv2Ug03bdb6bGEw6OBbhef4ND1zMb2NAF/HDp8wY
-	EvPa0yvTkLZho/REcEmHJ7I6pmND7rBUY9p1FFv17tG+oTvixJjNIFSFFZYn80SZO2EG825bTObaI
-	wHKie+Og==;
-Received: from sslproxy07.your-server.de ([78.47.199.104])
-	by www537.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <alexander.stein@ew.tq-group.com>)
-	id 1wCwDR-000ET6-1f;
-	Wed, 15 Apr 2026 11:07:21 +0200
-Received: from localhost ([127.0.0.1])
-	by sslproxy07.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <alexander.stein@ew.tq-group.com>)
-	id 1wCwDR-000KjI-17;
-	Wed, 15 Apr 2026 11:07:21 +0200
-From: Alexander Stein <alexander.stein@ew.tq-group.com>
-To: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <shuah@kernel.org>, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject:
- Re: [PATCH 1/8] arm64/hwcap: Generate the KERNEL_HWCAP_ definitions for the
- hwcaps
-Date: Wed, 15 Apr 2026 11:07:20 +0200
-Message-ID: <5941978.irdbgypaU6@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <ad9H0BiD4le07P-a@arm.com>
-References:
- <20260302-arm64-dpisa-2025-v1-0-0855e7f41689@kernel.org>
- <8745494.GXAFRqVoOG@steina-w> <ad9H0BiD4le07P-a@arm.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZAFdFv+k"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-48334ee0aeaso64105275e9.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Apr 2026 02:16:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776244585; x=1776849385; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=E5IZ+dOe/qCEN9b6XI8ElLsT16xrwMw5gmxZ3qINeFw=;
+        b=ZAFdFv+kJ96gw3Oadl5kz0mPnUM5fs9Hj26gE5widB/qh9U02OIPNmGYXVQEGSS7ZM
+         xC9fj37XEIgUOLQQ/eb80OHHccGhTH2gP5CYDn1GN8VcxLulXnqHQeixb1x97BAkHyfC
+         SCqZO/wt0KHluDeJP5VsxlbMCZc9SWRRtI2XhhwTjMXw/lhn+TsTyVAMmEgiRvMZ2Dhp
+         gGpKQbKtLvOODaiRgVzDBCwXlZbnxeUd03kleNzf+RkqjcOR1JkkJyi3lMz8u2cNwMwN
+         vYrHKftCDLejjf2VsQZckg7/0jq4MzRBHhdjBiUAx3FhaSIarNQVEILtKKHMDIjKFS/T
+         pdrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776244585; x=1776849385;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=E5IZ+dOe/qCEN9b6XI8ElLsT16xrwMw5gmxZ3qINeFw=;
+        b=YoUY5fBG4QwJBxNWRLnlf3rzO6l/7VGwQpLEKAHS1K3s3tGYbO5YGplWet02pGgiKv
+         UulutLWrXq5gAbNXqJbLYvh8FlR/2Rd8cVz+1luD1yALEWWDVC/w40JZl1w6F5fxXQfp
+         uTpioNmNSbFm0WB75Kk/djmZiZuDfLPlGtQrL+9WIBKpOBoPMJBt4cfUtQQsyAxxiIdj
+         rr+dKuaEt3OcE6Bz//b6CHIL2FYwbaF72guAs/AQ5YhA2UjaE4a2jvy/2HJZ2v3sZCdO
+         feJWNc6wxfCVt1HZJAWFWyCvXqeCnlMhByV+QMX28sjAMJqgYi57Fb9pcTF7zJT9wgn1
+         RZ9g==
+X-Forwarded-Encrypted: i=1; AFNElJ/CkDPZ/kkbVydNknE0uMtAtfgkbVe2PeJ1Oax8QceSFxC7yLtt4vrrfhAWr2NdxlYx9arkr9xx21v5A5cv9Zc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyj6q5m5imfYufK5+nzJ4b3lLvPoWMN3yY8eoNIaOC9+LdgRThY
+	hsTCBNPw+ImRadH/fn5gvE+bEcrLXY/nLrunotxmZRNWdks3qI7m+2dq
+X-Gm-Gg: AeBDievIJCltyV66rjmujGF+0c/coaRAOjU0tHhbJO0f7uhOiyMV3aBr8E6x+Im2Yxo
+	2kCHEXrcmy3Iptnp64lWO6qTX2qdCAcNeZ3iVBw0T9+QyWaYZgAm68JWJzmC8EXIzTqlpKmHCLB
+	cyGiBViUfJRm/BgM1dFwKAvFbb6MrQ7lCIRgAI3qxPYm41w56oRuz2wAKqbMXq3MtdnWOzkwplT
+	FUHs4Cii03d24OIslnvsB3MURCTDJs/Xbdwceiw+LsGg2RhPsx3Ox5kYJdfwz/AKZvebVrQWz48
+	lhRSyfQBhM1YngY3SAR4nQjahXg/aHqIveqrVQnNQhXCgJ96R22iyqd0TPRG+Kw+1R7O1O9ORvV
+	MSy7vfpU8PfX9heiW5XTSAlGxB2zqEfXMsQLPPceC7kHP3KJbXFMCt4QsD/nlsPzedQ9z3Hy+W3
+	BDCg3i3FeoMupdHosV5nUfDVcGPor3C+uLRO/G6hn3Xqn0C9dHzSYvznwuZJWyFmSX
+X-Received: by 2002:a05:600c:a11c:b0:487:2671:fb8f with SMTP id 5b1f17b1804b1-488d67fa40fmr205276285e9.8.1776244585433;
+        Wed, 15 Apr 2026 02:16:25 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488ee038752sm117771055e9.9.2026.04.15.02.16.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Apr 2026 02:16:25 -0700 (PDT)
+Date: Wed, 15 Apr 2026 10:16:23 +0100
+From: David Laight <david.laight.linux@gmail.com>
+To: Dev Jain <dev.jain@arm.com>
+Cc: "David Hildenbrand (Arm)" <david@kernel.org>, akpm@linux-foundation.org,
+ shuah@kernel.org, ljs@kernel.org, Liam.Howlett@oracle.com,
+ vbabka@kernel.org, rppt@kernel.org, surenb@google.com, mhocko@suse.com,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, ryan.roberts@arm.com,
+ anshuman.khandual@arm.com, Sarthak Sharma <sarthak.sharma@arm.com>
+Subject: Re: [PATCH v2] selftests/mm: Simplify byte pattern checking in
+ mremap_test
+Message-ID: <20260415101623.33004858@pumpkin>
+In-Reply-To: <57b5d0f9-3e56-4f96-9e3a-2f475a78a8eb@arm.com>
+References: <20260415044509.579428-1-dev.jain@arm.com>
+	<2e34b619-085f-4a9c-bb41-bc024fd40dd7@kernel.org>
+	<57b5d0f9-3e56-4f96-9e3a-2f475a78a8eb@arm.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Virus-Scanned: Clear (ClamAV 1.4.3/27972/Wed Apr 15 08:24:27 2026)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Catalin,
+On Wed, 15 Apr 2026 14:05:01 +0530
+Dev Jain <dev.jain@arm.com> wrote:
 
-Am Mittwoch, 15. April 2026, 10:09:52 CEST schrieb Catalin Marinas:
-> On Wed, Apr 15, 2026 at 08:24:22AM +0200, Alexander Stein wrote:
-> > Am Montag, 2. M=E4rz 2026, 23:53:16 CEST schrieb Mark Brown:
-> > > Currently for each hwcap we define both the HWCAPn_NAME definition wh=
-ich is
-> > > exposed to userspace and a kernel internal KERNEL_HWCAP_NAME definiti=
-on
-> > > which we use internally. This is tedious and repetitive, instead use a
-> > > script to generate the KERNEL_HWCAP_ definitions from the UAPI defini=
-tions.
-> > >=20
-> > > No functional changes intended.
-> >=20
-> > Somehow this change causes to delete and generate kernel-hwcap.h on each
-> > make call. This results in compiling essentially everything each time.
->=20
-> Does this fix it:
->=20
-> https://lore.kernel.org/r/20260413-arm64-hwcap-gen-fix-v1-1-26c56aed6908@=
-kernel.org
->=20
-> It's queued, it will go in before -rc1.
+...
+> > 
+> > c) Remove any randomization from the test. There is no need for random
+> >    patterns, just fill pages with increasing numbers.  
+> 
+> Agreed.
 
-Ah, I didn't notice that. Thanks. Works for me.
+I'd start from (say) 0x123456789abcdef0 rather than zero to avoid lots
+of zero bytes.
 
-Best regards
-Alexander
-=2D-=20
-TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
-Amtsgericht M=FCnchen, HRB 105018
-Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
-http://www.tq-group.com/
+> > d) Just always verify the whole regions. Without the rand() magic this
+> >    will probably be just ... fairly fast?  
+> 
+> Yeah we are doing a simple memcmp() so it is fine.
 
+You don't need a copy of the buffer, just compare against the pattern
+that filled it.
+
+	David
+
+> 
+> I'll implement these changes.
+> 
+> >   
+> 
+> 
 
