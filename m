@@ -1,136 +1,130 @@
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC5A9263F34
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 Apr 2026 12:03:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66E4F2D2385
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 Apr 2026 12:37:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776254622; cv=none; b=SowyUxKzAQM1ZYeuk9AUE7NzxTWGsg21MxCl/hmwftE1I9GWMIdE/OU1pZ3BxWKHa2TzLFNlXrGTrqHm1/QzoeZo2Fp9aHcXpy1vkZeZGtmEDuYz/n/d9q8po26Jr9YfrjeT5McYS0DgXo1vheNxL0KGL5/cIftl5cHJc5/rTNA=
+	t=1776256660; cv=none; b=D2RzdUVmrqkKIM5/P+VWh3IAQlqDSL5ykS7+ivEFgGKskb9Syr0nZx/P37lhBUgaOHxIr7zY6D6+7ffDQsqe2Ws4cRqpNnRrDtxoHm3p5IB/WJ6lCvEq2FdSO7qGzd2rEAn9/KTQgD5lQReJehcJ1q7QowBPWBGzBbn0aaIjRlg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776254622; c=relaxed/simple;
-	bh=3U6UHJgt835GYv40BhwoYNP4PwkYd8x9aLaj/9Mma14=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oqE/cku0I0KQyB/q0vc1DwGDkvBjOCuOTZYI6g//ezlzeRGQlIaN5azDc8viieH9Mr4pdze9r3sw3AYDx0I4MzJA2+odXF5+chzBW1XaxcW6iStDNzRqhMzEIkYMpSNqIXh+UhuOqIoEo2WkSaTtXbs06/W/IPMfzh5gVVTh4S8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=K3tGrjLb; arc=none smtp.client-ip=209.85.221.47
+	s=arc-20240116; t=1776256660; c=relaxed/simple;
+	bh=q4znQqg8V/w+XTKKS6TQ22baPgvBcP185doNB6m/8Eo=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ZWAapuKskxjHftiot/A1jnjeqxboP1i0uGoh1BY4jE3AwIpRW4n4FaIic+aQuF2mCv9NGQLemjK7ib6ZdEMBa2V8lb3WrEXLgIHjoN2tqRZgIx97F+8v+7PfSDJbzu/EaiRnjbiEQ4Qnr9kmLH52/9nkQNCY2QmCBljy4yCsBb8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=NihDecWh; arc=none smtp.client-ip=209.85.221.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="K3tGrjLb"
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-43d7650202fso2632521f8f.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 Apr 2026 05:03:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="NihDecWh"
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-43cfac48bc7so4713192f8f.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Apr 2026 05:37:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1776254619; x=1776859419; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=MY7KppkO24AIxEJgw2x9OFRmnNC7DRzHfNEKohz8ESc=;
-        b=K3tGrjLbd6yDHpJ0f/H2z7zGvYNrKp8VcNp62WUe2KHkJxXopaqAUC4N6clumbRBos
-         7VAXcmcRFHTn1wDnwKhhUCD+Nd6V8xAeIuYEeoOMibYgvCXeg9a+fExmOWLuB3cdxVkZ
-         BSdxvTkHHxoPAxfmkCxE1xnndEwVhmP15rf0I1qlTdGcQR5NuBV9/gi+LI97NRGnSQMB
-         R6+UemVi50sL+thMMLIhN8hWOVwgepgr3ol5NG9nqPCR8qoUoT29OMqSqtzwpkBF1YvJ
-         yhPBWQXuKs7GkvLuFJrp3eyfdeRQ/IC10ImEt1cQQd0XhT3TNJaAmbrr4Uoq72+E6W4K
-         RSFQ==
+        d=suse.com; s=google; t=1776256657; x=1776861457; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=q4znQqg8V/w+XTKKS6TQ22baPgvBcP185doNB6m/8Eo=;
+        b=NihDecWh8FInuI7hc8thR0MnAL7IO4TfE264DqxkIk2aVjd9p6syUlUo+eXPbtCirt
+         Y9L8qbqYdiuCBEm1ogRjSLxjA8LGMdfDEuH81yuY+RF8NrIWblgXVNvrnzLsVB4mgCLl
+         JM1znEpBMRxcyLSbzRxXAz4nafxqbWXIZcCSn1DjvmLKPMmDU+9yzEI7Z2Xv9eLrmwyO
+         krl3I4FqOjL8MerTRG4fAlgOPYCWaZ0M58COpqaZy3OEfiDv8Jeytdto4cn+6seJu4eP
+         igBFgSYv+B5G9zPQkoGo3CwfrG/k8zWHR5l89if+ljkdmhhYZT3xhMEKxyfJzK55T9eM
+         kedA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776254619; x=1776859419;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MY7KppkO24AIxEJgw2x9OFRmnNC7DRzHfNEKohz8ESc=;
-        b=W2hBo9lL8vajt3qhBmAqgJYnKU+rGox8pxuyKwt9kg2C0L/Ewq4QUx20KHf2SUc7cW
-         bm503isWNXmko/hAPm6CkBcUs+JWjSxjH6zyNSGSRdsyRzId4njSUey3ZEDgWwi0AyTU
-         3Cuu+n4RxqdRa/IyUzJDqm4QJpSEK5NllJha0q50ZRaUcBPNDb4BD8iqARgddGFNpsmJ
-         hPt/fezer2fSKdR5V3xl+hXFQNIH1MPh6mBTt4Z3YYmFlnvbEiamU55ktopt9fovi1hF
-         u1FlATU0i4Xy3zSPCRVsZwfZRyQgM2tqoLXkeSDeyGKb+1ARpnY+aWIi4XYIYDWJEcsn
-         4B7A==
-X-Forwarded-Encrypted: i=1; AFNElJ+ORIcPej9thC6+38hlhHG/CP16hO8S8KYllXMxGgSc9bZyk+pu8n0wBZR8mEef1xGpgHvoRQtnslQgDhudTM8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyjmCQeFvieYPscJBVZzAe2wCTjuKJ2GiDqzDoANZUytxoWVUyd
-	khS8NYRNAykUAAAES+EYjuLdbANcmeQtR5rPwtuNoUjGSuc5ToZ/B7bsmaj7cV6ZXf4=
-X-Gm-Gg: AeBDietMGKU4ZvrflaH+hWDN3fYTM4Y2dzzh/Oz2BNaVd1KO8tKrh+tu5HE0349d5qE
-	8+MOOnIjGkctpFmuRwYEJdxG4hlmeOIxp6LHhwLlA4NAGwtlPTYR287YWFq3NHvgacmeiouYsFU
-	qDxvekWggxZfTu6boagU8bdPlO9n6OMh+/ZjXL/XFDCzQJCaqs8OzT0ttAXTI0433cCbEoy+GZ5
-	+RntYyygvCKrKo2Eg3WHyuSPL+zL4ojzpTMC9BbtYDNR/UOgcLKc79NpDLhzJ8Ih18Eut5lHrc/
-	/mQdLci9/264jh4ID6NpY6wntrXSJ0kkx5OG4ex9tlGozSKXZqBJ3QGZpCzHZ9jOKcDli0v/vkC
-	+edlIjj0SC5LW4ziZjkwwPp/KJ48FgvDBTj2gKCkh+ynRRziZ5nfmR6OVtwF5984ewEtEcX09WA
-	qcNG3lpRd6ex0FsAFP3g4UGP9cXbpci1fhlkkf2yz5tUZnN8nZCNw/wSqsVg==
-X-Received: by 2002:a05:600c:46d0:b0:485:40c6:f507 with SMTP id 5b1f17b1804b1-488d689dbfcmr301107095e9.30.1776254618851;
-        Wed, 15 Apr 2026 05:03:38 -0700 (PDT)
-Received: from localhost (27-51-0-223.adsl.fetnet.net. [27.51.0.223])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b4780f035csm19983145ad.15.2026.04.15.05.03.37
+        d=1e100.net; s=20251104; t=1776256657; x=1776861457;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=q4znQqg8V/w+XTKKS6TQ22baPgvBcP185doNB6m/8Eo=;
+        b=ilpL+LYUCX+leVlUC0lkbbQpkNd41RC7DVj/Oc3e4+k96gGJhOaviO2rD88KKRLP22
+         BT3uYZCkUjvGAxNjHCqL44zZJZujLJwxbk3cL99PCjHFqqJ5dwCcu6lUJeuB04laT9qM
+         Ghd4+HcBsMqXVwPee9EaRDhlkHoLPwBbXLlulwAOOsgZtvfeVeKM6a7H5qArr5sMzatL
+         mqr/UmgoWKcU3i6Gs2cd9N5yjHQRINXMadnG7wSY9PtknhbJB8O+/x2++KBFS9acXkAa
+         JFkhT71nIQm8r+6eXpq5PvLAxA+RNyzewvK7mRIo/h73r6cegTXeXGEk7w48XTub06nT
+         r3Kg==
+X-Forwarded-Encrypted: i=1; AFNElJ86Uewac90CFDD5abPr+S3mtGvslmSX+lNWUD7LKVLZwASS5ncDDo1ntUjbTp1oxfg8wALVaeFKQ7/GZzEoIjg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw9yLrFV3NCCsb8x+/CsXb7OKbrFr1mq7Seawk9PHCgxVT0UUQE
+	yfravoNO4P7KSy64FHnCZ6xLyM9dmzYaqitNlNO4LuimjH8mB2rR/zYQ2smowu4IZ/c=
+X-Gm-Gg: AeBDieuVcypH8BWCbFPzjfySmsFm6a3R5WT+1h0ANSGD4+y3+F+sFL4dcXsQMcZKLMP
+	A7+b4EvLBlwxiZ3zgJ+YjNVyYG7UpZc/ZZkdNLKeVtSS8sbhTy2RSwx8Q46bOrhYKwuyMn53xpp
+	GPE+OF4cLYhVIcyEL/q96/6eaUB+WyS3MThP2ClN5zYRcydRoo4+2EIGeCI71e+sCYJ0AJ3z/nB
+	ScXhQIys10WrA70z1CUVqLOpCpzOnz8i9I1H/rQ1AVLu240dYylMZ/vF7OOxhgfS+PSqnR8xXjU
+	qaD/QNk1t4Xh3nwEnutF1AXCXj7+xlDuF41zl3TwfmFVGdmASpBLvsC/0sErp4J30YMDGIIFwtE
+	QqNtiFaqqi0QCupjLFoX479/Ys1dYqsP6Hrvz8CUO3VvdZPwD+yuBFE8tQF4PpEVcloLdEZ4sLh
+	9f2oT9efGHWt3eMHMWZxYc+MAVXC1wZhB1a7ArscNZg2Af40QiR9vYoSVqcii6PeA9cnk=
+X-Received: by 2002:a05:6000:1004:b0:43d:7868:21db with SMTP id ffacd0b85a97d-43d786822b6mr12590363f8f.18.1776256656638;
+        Wed, 15 Apr 2026 05:37:36 -0700 (PDT)
+Received: from ?IPv6:2804:1bc4:224:7800:585c:db3a:fcb:e21f? ([2804:1bc4:224:7800:585c:db3a:fcb:e21f])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43ead33d65asm5004581f8f.4.2026.04.15.05.37.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Apr 2026 05:03:37 -0700 (PDT)
-From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-To: bpf@vger.kernel.org
-Cc: Shung-Hsi Yu <shung-hsi.yu@suse.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next] selftests/bpf: Fix timer_start_deadlock failure due to hrtimer change
-Date: Wed, 15 Apr 2026 20:03:28 +0800
-Message-ID: <20260415120329.129192-1-shung-hsi.yu@suse.com>
-X-Mailer: git-send-email 2.53.0
+        Wed, 15 Apr 2026 05:37:36 -0700 (PDT)
+Message-ID: <847de72350a1fe8bd765f2e5493b13e8bf7b2966.camel@suse.com>
+Subject: Re: [PATCH v2 0/6] kselftests: livepatch: Adapt tests to be
+ executed on 4.12 kernels
+From: Marcos Paulo de Souza <mpdesouza@suse.com>
+To: Miroslav Benes <mbenes@suse.cz>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
+ Petr Mladek <pmladek@suse.com>, Joe Lawrence <joe.lawrence@redhat.com>,
+ Shuah Khan <shuah@kernel.org>, 	live-patching@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, 	linux-kernel@vger.kernel.org
+Date: Wed, 15 Apr 2026 09:37:30 -0300
+In-Reply-To: <alpine.LSU.2.21.2604151357350.1967@pobox.suse.cz>
+References: <20260413-lp-tests-old-fixes-v2-0-367c7cb5006f@suse.com>
+	 <alpine.LSU.2.21.2604151357350.1967@pobox.suse.cz>
+Autocrypt: addr=mpdesouza@suse.com; prefer-encrypt=mutual;
+ keydata=mDMEZ/0YqhYJKwYBBAHaRw8BAQdA4JZz0FED+JD5eKlhkNyjDrp6lAGmgR3LPTduPYGPT
+ Km0Kk1hcmNvcyBQYXVsbyBkZSBTb3V6YSA8bXBkZXNvdXphQHN1c2UuY29tPoiTBBMWCgA7FiEE2g
+ gC66iLbhUsCBoBemssEuRpLLUFAmf9GKoCGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgk
+ QemssEuRpLLWGxwD/S1I0bjp462FlKb81DikrOfWbeJ0FOJP44eRzmn20HmEBALBZIMrfIH2dJ5eM
+ GO8seNG8sYiP6JfRjl7Hyqca6YsE
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.0 (by Flathub.org) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Since commit f2e388a019e4 ("hrtimer: Reduce trace noise in hrtimer_start()"),
-hrtimer_cancel tracepoint is no longer called when a hrtimer is re-armed. So
-instead of a hrtimer_cancel followed by hrtimer_start tracepoint events, there
-is now only a since hrtimer_start tracepoint event with the new was_armed field
-set to 1, to indicated that the hrtimer was previously armed.
+On Wed, 2026-04-15 at 14:01 +0200, Miroslav Benes wrote:
+> On Mon, 13 Apr 2026, Marcos Paulo de Souza wrote:
+>=20
+> > A new version of the patchset, with fewer patches now. Please take
+> > a look!
+> >=20
+> > Original cover-letter:
+> > These patches don't really change how the patches are run, just
+> > skip
+> > some tests on kernels that don't support a feature (like kprobe and
+> > livepatched living together) or when a livepatch sysfs attribute is
+> > missing.
+> >=20
+> > The last patch slightly adjusts check_result function to skip dmesg
+> > messages on SLE kernels when a livepatch is removed.
+> >=20
+> > These patches are based on printk/for-next branch.
+> >=20
+> > Please review! Thanks!
+> >=20
+> > Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
+>=20
+> Besides my comment for 1/6 and what Sashiko discovered, it looks good
+> to=20
+> me.
+>=20
+> However, please also take a look at brand new=20
+> test_modules/test_klp_mod_target.c. It does not build on old kernels
+> since=20
+> they lack proc_create_single(). I think it should be covered in this
+> patch=20
+> set too.
 
-Update timer_start_deadlock accordingly so it traces hrtimer_start tracepoint
-instead, with was_armed used as guard.
+I saw that yesterday as well, but I wanted to merge this series first.
+I have plans to create a way to unregister the livepatches if something
+fails, so we can continue to run the other tests. I was planning to fix
+the test_klp_mod_target.c in the same patchset.
 
-Signed-off-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
----
-Currently only fails on Linus' tree since hrtimer changes haven't made
-its way into bpf-next yet.
----
- tools/testing/selftests/bpf/progs/timer_start_deadlock.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/progs/timer_start_deadlock.c b/tools/testing/selftests/bpf/progs/timer_start_deadlock.c
-index 019518ee18cd..afabd15bdac4 100644
---- a/tools/testing/selftests/bpf/progs/timer_start_deadlock.c
-+++ b/tools/testing/selftests/bpf/progs/timer_start_deadlock.c
-@@ -27,13 +27,13 @@ static int timer_cb(void *map, int *key, struct elem *value)
- 	return 0;
- }
- 
--SEC("tp_btf/hrtimer_cancel")
--int BPF_PROG(tp_hrtimer_cancel, struct hrtimer *hrtimer)
-+SEC("tp_btf/hrtimer_start")
-+int BPF_PROG(tp_hrtimer_start, struct hrtimer *hrtimer, enum hrtimer_mode mode, bool was_armed)
- {
- 	struct bpf_timer *timer;
- 	int key = 0;
- 
--	if (!in_timer_start)
-+	if (!in_timer_start || !was_armed)
- 		return 0;
- 
- 	tp_called = 1;
-@@ -60,7 +60,7 @@ int start_timer(void *ctx)
- 
- 	/*
- 	 * call hrtimer_start() twice, so that 2nd call does
--	 * remove_hrtimer() and trace_hrtimer_cancel() tracepoint.
-+	 * trace_hrtimer_start(was_armed=1) tracepoint.
- 	 */
- 	in_timer_start = 1;
- 	bpf_timer_start(timer, 1000000000, 0);
--- 
-2.53.0
-
+>=20
+> Regards
+> Miroslav
