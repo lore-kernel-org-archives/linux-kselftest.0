@@ -1,62 +1,65 @@
 Received: from mail-dy1-f201.google.com (mail-dy1-f201.google.com [74.125.82.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36AB5242D6A
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 Apr 2026 23:21:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A6E837F733
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 Apr 2026 23:21:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776295296; cv=none; b=gp7uWMYclo/YbeVMrsS0MsWnMvGfUk+Kou9rHK/wujZIocSVjBNchbefQRi/QqtM/0vv+Xp3Lf3oa53QN+TFbK6eRBtqHXsBO0Qp3Ajc3WySajxuymnoy9+LYY2ZHPOd3GiasYdSXvgpROtA5T78cg40ovqonlcy1QCIezQGxso=
+	t=1776295303; cv=none; b=VItODd0ahkYHLT9+X5MfCePOS4pAfKmtzbdxEEaeMJUlE/3Gcgb+hAM9g7BdwqokcdpNsu5IHMkTVYxTOCMFmGd7b6jjPMocyP6t1gHWoNLYvLwJlECmK6Mcv4St7RXM3y82hoL8lPf1tOodahovTR7HY7QEwq+VkSdNKt+1mbQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776295296; c=relaxed/simple;
-	bh=6dAhuECT/i1VihQi3r45JGDd6acMTRJ9plcxtde7Fn0=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=PJbaSXHjSVqqXDdGzILz3GRAGQ/ynKkO09wtU07WeiYHiFwsJ0lGuV0r8dD6HpUoD+pi4mWivPC3wt2acq6Qmm+kH7hB4M4HMDsp3sE3kjX3ytaRqbj5SB1wLl1LBntrAUI5cDdJeYHaRzbzZhWmmb/n5bVuj17xYN/MQo8xhdM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aniketgattani.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=X4b63/zq; arc=none smtp.client-ip=74.125.82.201
+	s=arc-20240116; t=1776295303; c=relaxed/simple;
+	bh=ae1xtS698SoRwAl9b81gcSSYyvLVQWskSnVOPWRdDMs=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=LrhqvD2/Lv5xZ/lBkxvts5ZM16z6v7ImIVHajEt6OFtM+sKwEgh/z0wq9R/0qzUYWLgK5j+CWB9jMMiS8f35reQsNZf/VFOtOyGAleVfLZWp7eep/CcVzLV0bPGoyyNQlG0hGVEtZa7I+vjEdzI7JGzwJ/IF+tkqe45bHAAu+M4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aniketgattani.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=WlP/NUIX; arc=none smtp.client-ip=74.125.82.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aniketgattani.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="X4b63/zq"
-Received: by mail-dy1-f201.google.com with SMTP id 5a478bee46e88-2bdd327d970so78853eec.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 Apr 2026 16:21:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WlP/NUIX"
+Received: by mail-dy1-f201.google.com with SMTP id 5a478bee46e88-2dd1c74508cso5747990eec.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Apr 2026 16:21:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1776295293; x=1776900093; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=+r+WpZUUQ/YvdDlyZscQdfNrzTqbtr5QHQkAJv55K3U=;
-        b=X4b63/zqCfUiwaG554XMiwn1ZyYAa/xLbA5PczHnIp/PY2F7kWK36iy7vad6m5jtMz
-         qda7Cy1zcLlxsrJNpJkxizbmSiUYsvLMBwfMcP/3q3bQ3AmQz4Mve9rhs4EkV9RPMV7F
-         fmfjEzDE1YLTblWaktV97NK3SPXDAFaIORK9PCPy5ia6q8mnTdscxn9brN/yb3MHCVNh
-         gJrGEuXWiKD2l3qHoHkuksHepnaPelGvuMAjrf41E9EbjlVKd5EyZZxKd2ffZHBrJ1ys
-         ii86s5KS0nZllGQAQYnOy8shvJAAbxQVClXX1uuutgLD+0GKelQJuda9YeZmtdIOGHSk
-         jxFA==
+        d=google.com; s=20251104; t=1776295301; x=1776900101; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=K0dDu/Q1pEDYYyPsxnES/b7A20+EKuhYKKH9BmyTXkk=;
+        b=WlP/NUIXW4Y+xcwMN2H2rOqFUEVuHMAhyAV70OPV5UybgoKy0Y9/t5a26qDaaVdnS2
+         xueO5G3CqHCp1N6CTiDAHAr7xiilIYS7s19a1tKBsN28ZIh02EIpTSdyv1Wrdr30+yDK
+         wRqVBGTq8jiq0dDnvAI7h8qvKr15leCFvz+dyRO84w0GJKvjRYvKErl0HHl3WYXeu0+Y
+         /6/6/EjyvcmPDfcIllJEtAZ4GE1A9FUSGFQJ5ZN39Dd5bvcCzhun1Zibaukqh5uNGX8M
+         hu5YapXbnepK/EvKpFRWd9te46K+nSYjiI69Lz+2CvMtRDOG+s1390cxX9g8ZYIcr3uG
+         1BSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776295293; x=1776900093;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+r+WpZUUQ/YvdDlyZscQdfNrzTqbtr5QHQkAJv55K3U=;
-        b=Ls5DENaWl+zwCzqoVZSBtVG4qyCI9fy5j23lxVKIbfy7KOQPizbc8DBEpcINMZY+i6
-         3OSTAq3e5fXCPEEz11cT4z+wmxi1nbyX/pLNOcL1iTA/HRd7LHzVgDb1sMyxCzbseUCj
-         PtTLeXjEuFZojCMK+sKtPWUILhoeHGxhBvFZwzBETKoOh8dt89EtQkjs8qdeBygVLStw
-         gfz1sUuwYu4P/fdH2YS8tk1klNaXH/YKQTEDBEjzykrt73EFSOZSqKDNojy20MusjrfC
-         L6TQaudipgCa9AWOH3SdJ67yqqWvc8ssN327jREBE52K3nvi/iUumzvPBeo8o9GTPxnc
-         XPqQ==
-X-Forwarded-Encrypted: i=1; AFNElJ8O+gAY0SGf967UmtSC2sjLfEt+EL4udRyDEsQE8bILeUrPT4rC8YwMaEzUG3DTJFkC25B6KwOW018V5JQmur0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw1gzI4ExtqCi9AL89VD/KdBkp+HC7WmJrJK2NCfBu8xwZUVSS6
-	eOy3um3Rqi98i/1tGG3CwINC9o2ChwWx+Kl9X7kHxVvj2q8Jry6Te8on84RTa9JHwb1Oyjkz9LM
-	gKEOg6/6g0bBc4cTtvaHgYVrfh74f0IB9Qw==
-X-Received: from dybdm8.prod.google.com ([2002:a05:7300:bb08:b0:2d8:5557:aec])
+        d=1e100.net; s=20251104; t=1776295301; x=1776900101;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=K0dDu/Q1pEDYYyPsxnES/b7A20+EKuhYKKH9BmyTXkk=;
+        b=lGOv6FMwD+eoBlg6tcGL3/xtbDJDOuHgFAlu+3fp4KEw0AIhvtSk166A+soG1lPoBo
+         qkVEY8Io/n3C01rFqQ6WsHRFPIqdxDhKsSQeSLYjpSw75G9AN1qNaZFPule12eM1tig9
+         S99Iq8FGHwliXvyzJh6k4wy2okXeYPiZoJs8nOGyrgdMALOFETxqInOQScXnI5FL5i4r
+         zjvc81ctiKOCeHgMICa6goSVw8FCBdwa1CHchuqv7y7jRsO5I1PlvHImYPK9KSKi+TmF
+         e2CYpF3/rqux/4Kw8PY4nh1hcI90S8auUG2eznQsUxshjFkPV/tH6gGVekayTpJicuzS
+         htQw==
+X-Forwarded-Encrypted: i=1; AFNElJ/XWmi09N1bIU4zmqJDtGdNeI0r3zlh0PUAo0U4vpXDCsHktWlBLYTqEAf67HCrlwua13uhqvMHp1xjejlLIMg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy7lNIgZI+Pp7GbF9aX3ENO9Xqtdx5pUq6O4U0nSfdAYmsSl4vz
+	sfyHxnw1jUpO6w7YG8613nNMdVuRfht6Gn6PK9itxF5PAEEHhELkIlU1JI+TrAeMjquG/GiQ+sh
+	bkxGeJxITSd5plAJ6gPH2T4tofEBU6s8vqg==
+X-Received: from dyjf14.prod.google.com ([2002:a05:7300:680e:b0:2d9:9fa3:5aa6])
  (user=aniketgattani job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:7300:ad26:b0:2de:e194:5fb1 with SMTP id 5a478bee46e88-2df7dcdd7b4mr803163eec.7.1776295293029;
- Wed, 15 Apr 2026 16:21:33 -0700 (PDT)
-Date: Wed, 15 Apr 2026 23:21:04 +0000
+ 2002:a05:7300:7c0c:b0:2d4:94cc:eebb with SMTP id 5a478bee46e88-2d586ea78eamr14457155eec.13.1776295301091;
+ Wed, 15 Apr 2026 16:21:41 -0700 (PDT)
+Date: Wed, 15 Apr 2026 23:21:05 +0000
+In-Reply-To: <20260415232106.2803644-1-aniketgattani@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
+References: <20260415232106.2803644-1-aniketgattani@google.com>
 X-Mailer: git-send-email 2.54.0.rc1.513.gad8abe7a5a-goog
-Message-ID: <20260415232106.2803644-1-aniketgattani@google.com>
-Subject: [PATCH v2 0/2] sched/membarrier: Use per-CPU mutexes for targeted commands
+Message-ID: <20260415232106.2803644-2-aniketgattani@google.com>
+Subject: [PATCH v2 1/2] sched/membarrier: Use per-CPU mutexes for targeted commands
 From: Aniket Gattani <aniketgattani@google.com>
 To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
 	"Paul E . McKenney" <paulmck@kernel.org>
@@ -65,56 +68,112 @@ Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 	linux-kselftest@vger.kernel.org, Aniket Gattani <aniketgattani@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-This series mitigates a severe contention issue in the membarrier system
-call by replacing the global membarrier_ipi_mutex with per-CPU mutexes
-for targeted expedited commands.
+Currently, the membarrier system call uses a single global mutex
+(`membarrier_ipi_mutex`) to serialize expedited commands. This causes
+significant contention on large systems when multiple threads invoke
+membarrier concurrently, even if they target different CPUs.
 
-Problem:
-Currently, MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ relies on a single
-global mutex to serialize IPIs. On large systems with heavy concurrent
-usage, this creates significant contention. The issue cascades into
-hard lockups when combined with CFS bandwidth throttling, during which
-target CPUs may have interrupts disabled for extended periods.
-If membarrier is waiting on such a CPU, it holds the global mutex,
-stalling all other membarrier callers system-wide.
+This contention becomes critical when combined with CFS bandwidth
+throttling/unthrottling, during which interrupts can be disabled for
+relatively long periods on target CPUs. If membarrier is waiting for a
+response from such a CPU, it holds the global mutex, blocking all other
+membarrier calls on the system. This cascade effect can lead to hard
+lockups when thousands of threads stall waiting for the mutex.
 
-Solution:
-Patch 1 introduces membarrier_cpu_mutexes to serialize expedited commands
-specifically when a target CPU is provided, isolating the lock contention
-to the targeted CPU. Broadcast commands continue to use the global mutex.
+Optimize `MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ` when a specific CPU is
+targeted by introducing per-CPU mutexes. Broadcast commands and commands
+without a specific CPU target continue to use the global mutex.
 
-Patch 2 introduces a dedicated kselftest reproducer
-(membarrier_rseq_stress) to permanently test this interaction. It
-aggressively hammers targeted membarrier commands within a deep,
-aggressively throttled cgroup hierarchy to prove the lockup scenario
-and validate the fix.
+This prevents the cascade lockup scenario. As measured by the stress test
+introduced in the subsequent patch, on an AMD Turin machine with 384 CPUs
+(2 NUMA nodes with SMT=2), this optimization yields 200x more
+throughput.
 
-Results:
-As measured by the stress test introduced in Patch 2, testing on an
-AMD Turin machine with 384 CPUs (2 NUMA nodes, SMT=2) shows:
-
-Throughput: ~200x increase in successful membarrier calls.
+Signed-off-by: Aniket Gattani <aniketgattani@google.com>
 
 ---
 Changes in v2:
-v1: https://lore.kernel.org/lkml/20260409212223.2072418-1-aniketgattani@google.com
-- Use different mutex macros for global vs targeted cpu membarrier (Mathieu).
-- Use (unsigned int) cpu_id >= nr_cpu_id (Peter).
-- Removed #warning on unsupported architectures that causes build
-failures with W=1 reported by the kernel test robot.
+  - Use different mutex macros for global vs targeted cpu membarrier (Mathieu).
+  - Use (unsigned int) cpu_id >= nr_cpu_id (Peter).
+---
+ kernel/sched/membarrier.c | 36 +++++++++++++++++++++++++-----------
+ 1 file changed, 25 insertions(+), 11 deletions(-)
 
-Aniket Gattani (2):
-  sched/membarrier: Use per-CPU mutexes for targeted commands
-  selftests/membarrier: Add rseq stress test for CFS throttle
-    interactions
-
- kernel/sched/membarrier.c                     |  36 +-
- tools/testing/selftests/membarrier/Makefile   |   5 +-
- .../membarrier/membarrier_rseq_stress.c       | 951 ++++++++++++++++++
- 3 files changed, 979 insertions(+), 13 deletions(-)
- create mode 100644
- tools/testing/selftests/membarrier/membarrier_rseq_stress.c
-
+diff --git a/kernel/sched/membarrier.c b/kernel/sched/membarrier.c
+index 623445603725..7f995bd48280 100644
+--- a/kernel/sched/membarrier.c
++++ b/kernel/sched/membarrier.c
+@@ -165,7 +165,20 @@
+ 	| MEMBARRIER_CMD_GET_REGISTRATIONS)
+ 
+ static DEFINE_MUTEX(membarrier_ipi_mutex);
++static DEFINE_PER_CPU(struct mutex, membarrier_cpu_mutexes);
++
+ #define SERIALIZE_IPI() guard(mutex)(&membarrier_ipi_mutex)
++#define SERIALIZE_IPI_CPU(cpu_id) guard(mutex)(&per_cpu(membarrier_cpu_mutexes, cpu_id))
++
++static int __init membarrier_init(void)
++{
++	int i;
++
++	for_each_possible_cpu(i)
++		mutex_init(&per_cpu(membarrier_cpu_mutexes, i));
++	return 0;
++}
++core_initcall(membarrier_init);
+ 
+ static void ipi_mb(void *info)
+ {
+@@ -358,14 +371,19 @@ static int membarrier_private_expedited(int flags, int cpu_id)
+ 	if (cpu_id < 0 && !zalloc_cpumask_var(&tmpmask, GFP_KERNEL))
+ 		return -ENOMEM;
+ 
+-	SERIALIZE_IPI();
++	if ((unsigned int)cpu_id >= nr_cpu_ids || !cpu_possible(cpu_id))
++		return 0;
++
++	SERIALIZE_IPI_CPU(cpu_id);
++
+ 	cpus_read_lock();
+ 
+ 	if (cpu_id >= 0) {
+ 		struct task_struct *p;
+ 
+-		if (cpu_id >= nr_cpu_ids || !cpu_online(cpu_id))
++		if (!cpu_online(cpu_id))
+ 			goto out;
++
+ 		rcu_read_lock();
+ 		p = rcu_dereference(cpu_rq(cpu_id)->curr);
+ 		if (!p || p->mm != mm) {
+@@ -373,6 +391,11 @@ static int membarrier_private_expedited(int flags, int cpu_id)
+ 			goto out;
+ 		}
+ 		rcu_read_unlock();
++		/*
++		 * smp_call_function_single() will call ipi_func() if cpu_id
++		 * is the calling CPU.
++		 */
++		smp_call_function_single(cpu_id, ipi_func, NULL, 1);
+ 	} else {
+ 		int cpu;
+ 
+@@ -385,15 +408,6 @@ static int membarrier_private_expedited(int flags, int cpu_id)
+ 				__cpumask_set_cpu(cpu, tmpmask);
+ 		}
+ 		rcu_read_unlock();
+-	}
+-
+-	if (cpu_id >= 0) {
+-		/*
+-		 * smp_call_function_single() will call ipi_func() if cpu_id
+-		 * is the calling CPU.
+-		 */
+-		smp_call_function_single(cpu_id, ipi_func, NULL, 1);
+-	} else {
+ 		/*
+ 		 * For regular membarrier, we can save a few cycles by
+ 		 * skipping the current cpu -- we're about to do smp_mb()
 -- 
 2.54.0.rc1.513.gad8abe7a5a-goog
 
