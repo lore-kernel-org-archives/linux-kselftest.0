@@ -1,67 +1,67 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FDAE38CFFE
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 Apr 2026 20:59:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A30D38D6A3
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 Apr 2026 21:00:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776286798; cv=none; b=iPIH9O0GxbaPSU+hvaXfpwn8TiqPxJSAnpn74KPyULHIZvQ0TOwtWgahpLoDZJInqMLa70qODpQJudkE7a1C2RJ7+hKYLQR4ZHC/NbEIvHaaWpwSlHGAkSag9vVs/+0G4elxZWfqK7QW6cclSLG3tSaU2H5BOi/WMSFrx5mBTFU=
+	t=1776286804; cv=none; b=btwy9vC1FqX0F8Rns6Jq4Sy5a4tKQD73PX/qVXyCsYj0kVUiGKFOHChvqfMhZPZFnT+NxdQlbe5ReC5O4rzVgTLtzUsPhmfsTc3BeB4R8spV4cu5Z22V4odXbrJL2lTi0Q3ivwkuW7RCMj4jeq33kUSmtSitgY/EZuB5GyRm3CU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776286798; c=relaxed/simple;
-	bh=sd6o23TXTQBmDe9CNsrT1vAQRg7+CRHUQ5cNo1CDVZ8=;
+	s=arc-20240116; t=1776286804; c=relaxed/simple;
+	bh=XCKe1TjHfJlwSJAX4fuY9DLW2sOgBtAwMXzZhTx/5F4=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=hzWAmA5UqUnnMnXZ4nW8UPYsnwB9gzc00oELbIgoxEv9TlBgvyqtaw8/gqYYqh0H/xYJlKCNArfDiXPeeQy/0dM8cFVWKxP68SOlMFyQ027YxyC16wQoKaBR/1W1hahY+UcKyltXL39fWuwAFEQ0UtRNwZGniOWxWH2gUSJ6fGU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=YEZknZHP; arc=none smtp.client-ip=209.85.128.53
+	 In-Reply-To:To:Cc; b=N3RSJfyp+ynqg3WJX21+metIbt43Y1HheKXAg9F7yZtOzbpRpYxPCc1pZQVLTTuFdjCitJ3Lrsb3MXECAw7LPgz6XtMIX1VcHRCSkBrYKa37/eg2lgsg42oZV8CSllDfrKgd+KfiNpekBlIOvJU27/oHG2MjgpZpD5g3zsU8BQM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=ECY9UoUj; arc=none smtp.client-ip=209.85.128.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="YEZknZHP"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-488b8bc6bc9so52104255e9.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 Apr 2026 13:59:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="ECY9UoUj"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-488a8ca4aadso86216145e9.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Apr 2026 14:00:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1776286796; x=1776891596; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1776286799; x=1776891599; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=R+LZLrUSOhq9xIydX+pHIEZAmNfKMNGZSAqdkfa11Ks=;
-        b=YEZknZHP9aKPxjBFdRAVs3+YLbAsxo+p+/iUXZR+fmfnc5uCJNOCP3gs1ehyDV9PdL
-         Ry6A96FB8ZpHN08SBhoofaPV54RSbyhvuSNwgSPX/Q/XCCJzyz4TpS+w68gS3cblVuY/
-         1stdb48ePH4G3nmSmmik1WPKqT1E9GOG2SLLdqVbakeLlx9Slgc9Z6Fqj1CcZLjbF0HE
-         oDADoL6SG5HR5N3OlHHle8vYXbd3vg+oB5VlI7x8Gkw9cUKTqzzaVWa4bYxcSrloJIpw
-         1ogabcCL2ZMzmA5Co9lHHpRddnSTCaJIzq6l4KP2g1UoP7sBo/sCNERJ6pjVH072XeBY
-         idiw==
+        bh=DtePe4tVB1ppaoNVFmbhZuXMDT7E+RF+3Sc+9onPhUc=;
+        b=ECY9UoUjSbklVFUpImxTqN5Y9k9yqBCaMPKuv4QeR+9KYHB5HBgLFbkfmzlznCh0VM
+         LsK52Pa6PEjzbINNwpHe5ONhUlvXky85o/GCmFgRRDcNDKWILDYSPZ8v4DFO6Zycvv31
+         DFEWbCklXpqQlntixEWer3P8MnIv4n8oaHBrn0EOn5z4T3EDslCVVpLq5iOYdLEYUSqB
+         UgBPUqPXrIULVFA8FbuzBlz01lhbSSFVWE4XGd7cGS5F2Zgf/nHxcRtHQ9s6XGliIkoK
+         5nLaT3x2nhTJormhXgKSc7wxPjopBe6SlJzJ5S26zFIYbPpaN6CWYpAQk3hssPIdr5e8
+         6Sqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776286796; x=1776891596;
+        d=1e100.net; s=20251104; t=1776286799; x=1776891599;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=R+LZLrUSOhq9xIydX+pHIEZAmNfKMNGZSAqdkfa11Ks=;
-        b=M0x81sywKJoWv0aFuV1jN7BleVszVYmth+tH2h+Lfpx2W9bOpFYIeTpfXg/221WWxE
-         tTDtFU1tIgO5JaaS5EPvZ6HprkI12aTsp84D8z4zLHVo8d/j2VH1e3Y6tPgcI1St2/ci
-         1/CChpu2h3k+rwBmFzDHwBY6rRhkX3oooJFGbFrphvtUejJeWSKjtqqSnj5ikYibG+T8
-         yYHc7IXAoCrxAHBN5cu/Rm7L6qO4C5FC9lUlSRdbnVe4OtEDkPeF5h7UMV+nMABpSdZg
-         JRHB7tt0AFut/w8gu9dn8OFdHa1HDHCKpQCZjE85ufIkHqO6WWmZFCi03+vnvYoPrpnj
-         n7uA==
-X-Forwarded-Encrypted: i=1; AFNElJ/RuvGweh1na+9QemUhnWJEghSPIlc/U622DGnL7zs35t9DjE+Cbq3k8oWxuEtgZSxiUiT/EQmnLwqYVqazLL0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw7GIv/tnPqsyipoZFnF5J4leWi7hvDf5bIzeDiaUQfsqdKAEct
-	IYhmTpRGC94wxp8ZRKWZ8VPOmONXVXYHJpbvaHEkZ10symVoXwkZVMqAtPLv3G9GAxg=
-X-Gm-Gg: AeBDievwUxD166jXiBJPWTYqSlTNiyjpjUbK2FTxGn+kXvo0e4J2X5WYi3R1LR19P7M
-	nvn5HCjs9ptVWVHyvR/lZLfjG+Ms5OtHwWUHDKdai4QVfcPsAF6gNy4VlmtsGNlZ7GJll+Or82h
-	QpjnChWYQ2jU0SdUHsjdZW3zz+ghTooIfzWQGigjUir79L6NizcGc6zsaiG802KDm4p6gi/v8oz
-	FVjLru5uItfmLU0QDqu0G7UKVQNDz3Krp2DPoquiJVtvyMLUDW3ui3+dFkUFjWgTFohq8uFqlbD
-	6ZO1mGiu/utDOLwhGfovq3m8Ew+PZtNvUrOEtN03i7fEg3T6hfIy/JHo2q0CyMzMBWmLLigO/eG
-	rQKTYs5mgJK6VkBXmsfkx1IqBMerGy+N0b409p+zjYf+uhoW8d1OrpTVPxGvY1XvodGReRj+kti
-	GBls/xmQDFTEwVLjpZ0B27ig==
-X-Received: by 2002:a05:600c:528c:b0:488:a2ac:a337 with SMTP id 5b1f17b1804b1-488d68c2bffmr298755645e9.21.1776286795661;
-        Wed, 15 Apr 2026 13:59:55 -0700 (PDT)
+        bh=DtePe4tVB1ppaoNVFmbhZuXMDT7E+RF+3Sc+9onPhUc=;
+        b=XKMtqcfDmYvFo3zSb5d3IqzWsud5Wq4z/wo10q6WJGBr4Lalm+hwCrujBgAUMFmmTq
+         wyQijxOI25UGqAubcsdCaKZMwDUdaqH5wYGsOhapIGFtMAsS2CrUjgntWLghtsDbEy3y
+         B2eaz/ei7Fv2oqNcuXue3cH/Do8wZt08b+onGnrlkhdOSBHhJ9wcd9iWGKrlg1yMtyQ6
+         xniwC7MJXl3Z2v2E5jST/IXgQpm41POPXGfCxIpI03c7cz/40LkDKfqmSOqRIJ4E1rFT
+         Ur7Qm+kSVbO1+iYpa6hHI8xlKwIxLhVZPf19+DDPDL05H0TUMwBhdtk7MuITaum9DYZy
+         rJzA==
+X-Forwarded-Encrypted: i=1; AFNElJ/Yirev8MbbXiffAby3EnYUtSnd0QPB5YBsBNfv9e9Hi80HFwA7iWwYlPUrINcCM1MbwX/yl5HSHxXl/DQ1uos=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy00o0F0/IMiHyx2ubBdnpacdeCSoXteLlvv0L8UJjaT0djCs8r
+	Z5ixJCUwlxrTklNmdVC9ssg0iEiMUKZuEZLwhdTmosa1sin0tDxUYsrmipbqNRZr77o=
+X-Gm-Gg: AeBDiesh51JXJ2B7Ez0EijtxobQ0ZXL9/eU1ZkC3jhfGGlKRIkgdDToC3Fi3yTo2aZc
+	/8FJ467Oj6lhYNIPzGS6cWxLAFM77xHC8lDvi6HumkJd7pXdjDIk0WYVDjfTroJm6BF6xrTYBUw
+	nEuDi2KIDLvXULiGOYKlB5p6kEO6ityD/VTCdt6LBko0i8vKe2IL0AQ7Vx94g65Vr1zZK6hxV2M
+	sCJ19GvhbKN2qpiOycjZUYCDgIs8NYrn3dwmq6qFTq/xVykF36cD7Deo9qebQb59yFNtHk7chK3
+	oAuj5WPRKCnC65GQZVBfKHg6NVFsc/H5Iw4vCjKA2VdHnbwpBCCRo+vMVkxHZFzscgNB4NSa3Ga
+	Ym9DKgdE6hrdIOJth1wmXPuqXsHZjTYblR8b+oFsB/20Ad7dsPuH+9yITlULcaVE9XQS1wQEAmp
+	Eey32O9bf7FiU=
+X-Received: by 2002:a05:600c:c0da:b0:485:4eaf:eb53 with SMTP id 5b1f17b1804b1-488d685c12dmr272771665e9.19.1776286799559;
+        Wed, 15 Apr 2026 13:59:59 -0700 (PDT)
 Received: from localhost ([2804:7f0:b765:e41:ce28:aaff:fe86:149c])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2de8f65f9bcsm5108876eec.22.2026.04.15.13.59.54
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12c5e6b5627sm3423734c88.13.2026.04.15.13.59.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Apr 2026 13:59:54 -0700 (PDT)
+        Wed, 15 Apr 2026 13:59:58 -0700 (PDT)
 From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
-Date: Wed, 15 Apr 2026 17:59:25 -0300
-Subject: [PATCH bpf-next v5 07/11] selftests/bpf: Allow test_progs to link
- with a partial object set
+Date: Wed, 15 Apr 2026 17:59:26 -0300
+Subject: [PATCH bpf-next v5 08/11] selftests/bpf: Tolerate benchmark build
+ failures
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,7 +70,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260415-selftests-bpf_misconfig-v5-7-03d0a52a898a@suse.com>
+Message-Id: <20260415-selftests-bpf_misconfig-v5-8-03d0a52a898a@suse.com>
 References: <20260415-selftests-bpf_misconfig-v5-0-03d0a52a898a@suse.com>
 In-Reply-To: <20260415-selftests-bpf_misconfig-v5-0-03d0a52a898a@suse.com>
 To: Andrii Nakryiko <andrii@kernel.org>, 
@@ -87,60 +87,57 @@ Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
  Alan Maguire <alan.maguire@oracle.com>, 
  "Ricardo B. Marliere" <rbm@suse.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openssh-sha256; t=1776286765; l=2150;
+X-Developer-Signature: v=1; a=openssh-sha256; t=1776286765; l=2217;
  i=rbm@suse.com; h=from:subject:message-id;
- bh=sd6o23TXTQBmDe9CNsrT1vAQRg7+CRHUQ5cNo1CDVZ8=;
+ bh=XCKe1TjHfJlwSJAX4fuY9DLW2sOgBtAwMXzZhTx/5F4=;
  b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
  x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QKF6hcje9wxrjG1OyZ3oiDzcAPEvRA/9gmflkFbNKl71F/Dnahqeq7yL0Mv6YwaWV6nV/2kL6t7
- 4cQZwZlwgbQM=
+ QGIQ/GwDhPKHV+R8rebF8BWOcRFMS81S8508Z9JJXDlNZw35XGIdfstY8zicLVz7LEf5figjWEE
+ JMfBs4EJgvAI=
 X-Developer-Key: i=rbm@suse.com; a=openssh;
  fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
 
-When individual test files are skipped due to compilation failures, their
-.test.o files are absent. The linker step currently lists all expected
-.test.o files as explicit prerequisites, so make considers any missing one
-an error.
+Benchmark objects depend on skeletons that may be missing when some BPF
+programs fail to build. In that case, benchmark object compilation or final
+bench linking should not abort the full selftests/bpf build.
 
-Move TRUNNER_TEST_OBJS to the order-only prerequisite list so that their
-absence does not prevent linking. Use $(wildcard ...) in the filter
-expression passed to the linker so that only the objects that were actually
-built are linked in.
-
-Place the wildcard expansion before $^ in the filter to preserve the
-original link order: test objects must precede libbpf.a so that GNU ld,
-which scans static archives left-to-right, pulls in archive members that
-are referenced exclusively by test objects (e.g. ring_buffer__new from
-ringbuf.c).
+Keep both steps non-fatal, emit SKIP-BENCH or SKIP-LINK, and remove failed
+outputs so stale objects or binaries are not reused by later incremental
+builds. Note that because bench.c statically references every benchmark via
+extern symbols, partial linking is not possible: if any single benchmark
+object fails, the entire bench binary is skipped. This is by design -- the
+error handler catches all compilation failures including genuine ones, but
+those are caught by full-config CI runs.
 
 Signed-off-by: Ricardo B. Marlière <rbm@suse.com>
 ---
- tools/testing/selftests/bpf/Makefile | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ tools/testing/selftests/bpf/Makefile | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index ee7bbfcd661b..128ea61fd986 100644
+index 128ea61fd986..163552458327 100644
 --- a/tools/testing/selftests/bpf/Makefile
 +++ b/tools/testing/selftests/bpf/Makefile
-@@ -754,14 +754,14 @@ endif
- # some X.test.o files have runtime dependencies on Y.bpf.o files
- $(OUTPUT)/$(TRUNNER_BINARY): | $(TRUNNER_BPF_OBJS)
+@@ -891,7 +891,8 @@ $(OUTPUT)/test_cpp: test_cpp.cpp $(OUTPUT)/test_core_extern.skel.h $(BPFOBJ)
+ # Benchmark runner
+ $(OUTPUT)/bench_%.o: benchs/bench_%.c bench.h $(BPFOBJ)
+ 	$(call msg,CC,,$@)
+-	$(Q)$(CC) $(CFLAGS) -O2 -c $(filter %.c,$^) $(LDLIBS) -o $@
++	$(Q)$(CC) $(CFLAGS) -O2 -c $(filter %.c,$^) $(LDLIBS) -o $@ $(if $(PERMISSIVE),|| \
++		($(RM) $@; printf '  %-12s %s\n' 'SKIP-BENCH' '$(notdir $@)' 1>&2))
+ $(OUTPUT)/bench_rename.o: $(OUTPUT)/test_overhead.skel.h
+ $(OUTPUT)/bench_trigger.o: $(OUTPUT)/trigger_bench.skel.h
+ $(OUTPUT)/bench_ringbufs.o: $(OUTPUT)/ringbuf_bench.skel.h \
+@@ -934,7 +935,8 @@ $(OUTPUT)/bench: $(OUTPUT)/bench.o \
+ 		 $(OUTPUT)/usdt_2.o \
+ 		 #
+ 	$(call msg,BINARY,,$@)
+-	$(Q)$(CC) $(CFLAGS) $(LDFLAGS) $(filter %.a %.o,$^) $(LDLIBS) -o $@
++	$(Q)$(CC) $(CFLAGS) $(LDFLAGS) $(filter %.a %.o,$(if $(PERMISSIVE),$(wildcard $^),$^)) $(LDLIBS) -o $@ $(if $(PERMISSIVE),|| \
++		($(RM) $@; printf '  %-12s %s\n' 'SKIP-LINK' '$(notdir $@) (some benchmarks may have been skipped)' 1>&2))
  
--$(OUTPUT)/$(TRUNNER_BINARY): $(TRUNNER_TEST_OBJS)			\
--			     $(TRUNNER_EXTRA_OBJS) $$(BPFOBJ)		\
-+$(OUTPUT)/$(TRUNNER_BINARY): $(TRUNNER_EXTRA_OBJS) $$(BPFOBJ)		\
- 			     $(TRUNNER_LIB_OBJS)			\
- 			     $(TRUNNER_BPFTOOL)				\
- 			     $(OUTPUT)/veristat				\
--			     | $(TRUNNER_BINARY)-extras
-+			     | $(TRUNNER_BINARY)-extras			\
-+			     $(TRUNNER_TEST_OBJS)
- 	$$(call msg,BINARY,,$$@)
--	$(Q)$$(CC) $$(CFLAGS) $$(filter %.a %.o,$$^) $$(LDLIBS) $$(LLVM_LDLIBS) $$(LDFLAGS) $$(LLVM_LDFLAGS) -o $$@
-+	$(Q)$$(CC) $$(CFLAGS) $$(filter %.a %.o,$(if $(PERMISSIVE),$$(wildcard $(TRUNNER_TEST_OBJS)),$(TRUNNER_TEST_OBJS)) $$^) $$(LDLIBS) $$(LLVM_LDLIBS) $$(LDFLAGS) $$(LLVM_LDFLAGS) -o $$@
- 	$(Q)ln -sf $(if $2,..,.)/tools/build/bpftool/$(USE_BOOTSTRAP)bpftool \
- 		   $(OUTPUT)/$(if $2,$2/)bpftool
- 
+ # This works around GCC warning about snprintf truncating strings like:
+ #
 
 -- 
 2.53.0
