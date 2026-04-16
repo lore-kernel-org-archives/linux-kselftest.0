@@ -1,80 +1,270 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 066AE3264E5;
-	Thu, 16 Apr 2026 12:00:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A5AD3AEF37
+	for <linux-kselftest@vger.kernel.org>; Thu, 16 Apr 2026 12:21:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776340838; cv=none; b=svy89l7f47opAOFud4UBq7fx84qa6X37qZsPrSfZ6OlPpkPg7DE9ZT2p+M3WgI8U51PiamwnLyNpbFwjRqRd3olODBMHV0+8+tCSE88XDqoRqBiURGTLVz+3ljQEhC9yrXapK6kn66/PKnwunraWfWdZrec485AXmMZECS6IE1I=
+	t=1776342096; cv=none; b=FZGulf+NtNt55QzNmCmTfof/yCkkgBYAWXJrlNtaG7nQevkh4XY+0h9HXV///3ylpjzXlEdw1dajnHQqqPGzlkzJNSqZlbaL9CL0fMCxb6Aiun8EsPyZlT3dNTOH3RzYD9QXaRSINEr1UekRhEhgbg0y49WL5a97PjcxoDzxsHM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776340838; c=relaxed/simple;
-	bh=vB2UW38Qsxy6HkmQ+i/p2fJNKXl27Njykbl1fdHvnNw=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=HwHtKplj/fD4ZrB4gv3jFYsN/+8fuYpdWQjvcUn6i1qL1NEqldwnw8kT1pyWgs5UQtf5bVCjrzxjoNicNrbXh0Uz2N0Z2IkRM11o5tyq10M9cG0HfRAV3srkgRrdJm18psAl3wD/BLY28R+R2HwUIHLQd1mTRf4Z6RC1SV8Wvvs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bkf1MWFH; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776342096; c=relaxed/simple;
+	bh=aFMfy235NadKRoXDD8SkRdUsVFyQgdSOUFZTSrN0W9A=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=KwsHVPXI+lye9TlJe0a9wygmLytDAEV7i13N8Psu+I32XWZeER5zxuWLGb+UO82U9OTST7RnOhK+f3YWqvF/4K5Zsf7G3tazoZ42RORFZbtomnw6oWxr4HrrHEOWojKdon7Hgu7VOKjyZCQ/7kDq1ww/8ua31oc/6evVIwzR5fU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=P+AqTHb2; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bkf1MWFH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1B39C2BCB3;
-	Thu, 16 Apr 2026 12:00:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776340837;
-	bh=vB2UW38Qsxy6HkmQ+i/p2fJNKXl27Njykbl1fdHvnNw=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=bkf1MWFHaz7IMbhvGfCC0GfTFWl8MyXoudkoEoLYwcndB51Ju76OJdzbf3FDn+Wh5
-	 Qf4DT0F2B80TXnJr0SueP9NRalUPBcBQ/oYfDe4emwczVKzYdneQWXnlwi+Ff/Gv20
-	 VMGlxg0QRsjSd9moNsIaog/O4myy2gbuIhiQLJEI7Gg4jc2gNmtFBqad/jV5W3Wjq1
-	 XX/ASFSrchVOZEzlmVsxktmCC8+VAYnbTHA/bAsdnfwJ5fj8QMp3dejginWXUDgfUD
-	 LEUW8/XZgXkhomLoWAoAIYPjZty1YuCV/RXBjOEMR8E5ZqoxX4wkcTIGB0vJv3XDtB
-	 rAcW0sZoIb9DA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B9E4C380AA4B;
-	Thu, 16 Apr 2026 12:00:07 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="P+AqTHb2"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-488b3f8fa2bso5700745e9.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Apr 2026 05:21:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1776342093; x=1776946893; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=R+K+lZ/LpIxF9orBTJ08OrUHOhfiRF/rFqyHa5p603o=;
+        b=P+AqTHb2JjAEwAUVTS5+1poYXrA+7+Sc8NPqro3EKmQPV09ftJ+vhjQx4yevX4kg5x
+         4xkRBNYDGDA8wqNp3aZt14WaALiaYSkwQnMGvgoAavWYXE7PATYtuPp7HJK9mvZxSQca
+         cBO603N4UkwEPvokOc1KfTjVs6CRH55gUyGZVGkknK9A/gjEpBNiPQLA+9kX00+MW3nI
+         6fPXX3jWIb+gJ8USmpljNjgXvGyuXMmQrawp50QJnAvq42vtrdsvRbgIlcKzZjxWIKTH
+         X0ofhMRC98f7GdQwscsTANlp3pa5NIqDOEGbhTYuW9mkRYsCST6XNPqHZWiGq4NKRKjk
+         C+Ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776342093; x=1776946893;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R+K+lZ/LpIxF9orBTJ08OrUHOhfiRF/rFqyHa5p603o=;
+        b=mgJ6sestTd6ZrrVmBUQ0k1cMBg6H1R4SUCA4MEMoHgwz0j5hxzBYLcOdO1DfNJFc65
+         nu/cutep/Gr6w6G1QYwNKpdtBwEXMKWkIFjhRGEFkjbl2rgFQVymNb6HRER93Es0RGt/
+         rEwWtMkglYHT0r7QS1CyRERY9uwJG04y6xafJTXudbm5MctZhezQpUgnNXNBMZkOHMIY
+         1H08krPLxdtUdTvJR09vRg/kZN3mo69ZvBFYKxDNIASY35/2ku6dDm91JuMFTgxZUIDQ
+         bE5u+iVc7OHeHA5QJ4pCBiYtcGU/Pb71bf9K4sv7noOmm+7zecyskDbCnZWIMf0drnwj
+         tDBA==
+X-Forwarded-Encrypted: i=1; AFNElJ9svkYcxTLHDVw+kbH+sA+SEB3Kt8bLEK3Kfm91Zq0J0TQlr3CAu8IIX6nEtqxm5iF3VsWiZs4GN4dLuCoflPI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzqbfiHr3Gzg4KcBxte+iGOMig/p3IAFQiQNz3+3XQNu46/EJZ6
+	tYKYxl/9ET0vraKpgSqzmJ00VPRgZsFDI34BkfoILG0PBrsqg00yqg3eEqhusfkK0nL1DjQUOAb
+	XnjfntNw=
+X-Gm-Gg: AeBDieu///dGnRVtKk/+VbbIy2YsSEcEK8MvdDOElgsGNw+jX8M/twjE7a95+F2qaTT
+	CIMChuu2k9TOgDakGCk8Z4uoHylemyngDEtQ7uX+/ia5ar7f3AN+diwCtMn2R5f5c7W3PaH865G
+	jBIw4Jfzy+uKkxNuhWWMO7GIG541OPuX2WkV2KvLGlDINLAacJVGzuAf5Zf6+/joc30Uigr4slm
+	Ceqo7etNbCO3A2gUEvyAxfZbP5EqSznJMjFZDFt2ERSr0CO9GIOpxWvp2B3Th4myWh21LkXnEoo
+	FZ78tDaqt0sM2IsAfG+DqDVbHsOnil2ypN/2U4xc0A+guTlS76RZOFeG2S12rY8xIdGE4ha/y33
+	BX5ZOIjOgeuVnRgcdE6Eobn43YJOQ2TqWC1MbcLGXkIbF/5gAmozroLuGNBKA1nlxteP15h9Tcy
+	z0+BF9HMMpsdc=
+X-Received: by 2002:a05:600c:a216:b0:488:8be1:ca3a with SMTP id 5b1f17b1804b1-488f47f247dmr29688655e9.15.1776342092627;
+        Thu, 16 Apr 2026 05:21:32 -0700 (PDT)
+Received: from localhost ([2804:7f0:b765:e41:ce28:aaff:fe86:149c])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2de8c10ad3dsm7428385eec.3.2026.04.16.05.21.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Apr 2026 05:21:31 -0700 (PDT)
+From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
+Subject: [PATCH bpf-next v6 00/11] selftests/bpf: Tolerate partial builds
+ across kernel configs
+Date: Thu, 16 Apr 2026 09:21:17 -0300
+Message-Id: <20260416-selftests-bpf_misconfig-v6-0-7efeab504af1@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v1 1/2] nexthop: fix IPv6 route referencing IPv4
- nexthop
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177634080629.2761349.3112126436479245128.git-patchwork-notify@kernel.org>
-Date: Thu, 16 Apr 2026 12:00:06 +0000
-References: <20260413114522.147784-1-jiayuan.chen@linux.dev>
-In-Reply-To: <20260413114522.147784-1-jiayuan.chen@linux.dev>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: netdev@vger.kernel.org, dsahern@kernel.org, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- shuah@kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
+X-B4-Tracking: v=1; b=H4sIAD3U4GkC/43O3WqEMBAF4FdZct20+Vd71fcopYxxsqZUXTKub
+ Fl890ZLQQRpL2fmzMe5M8IUkdjz6c4STpHi0OfBPZyYb6E/I49NnpkSygkjJCf8DCPSSLy+hPc
+ ukh/6EM/ceK0xWG9dAyx/XxKGeFvlV5ajvMfbyN5+LnStP9CPC7xkayDkdYLet8vqN/3UAY2Yl
+ kQbaRzS11pzkqv5Z6NJcsE1oFFeQChceKEr4aMfurXGpLaMPmZUZoJwhRC6FFA1O0ZvGXfM6Mz
+ YsgAppVFO+x1j/smYzFSVNMEKDE0odozdMNIeMzYzQjcCrIKyKmHDzPP8DRMGvQoXAgAA
+X-Change-ID: 20260401-selftests-bpf_misconfig-4c33ef5c56da
+To: Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+ Alan Maguire <alan.maguire@oracle.com>, 
+ "Ricardo B. Marliere" <rbm@suse.com>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=openssh-sha256; t=1776342088; l=7716;
+ i=rbm@suse.com; h=from:subject:message-id;
+ bh=aFMfy235NadKRoXDD8SkRdUsVFyQgdSOUFZTSrN0W9A=;
+ b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
+ x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
+ QOJ1R3ACMjFKDZ55i9avz+4DHzUqh3Y0QihDBMMf7TuYWrSRwLAf6Oqh9IhWXP84Ayte8iuKejE
+ lGj+sbx01Pgs=
+X-Developer-Key: i=rbm@suse.com; a=openssh;
+ fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
 
-Hello:
+Currently the BPF selftests can only be built by using the minimum kernel
+configuration defined in tools/testing/selftests/bpf/config*. This poses a
+problem in distribution kernels that may have some of the flags disabled or
+set as module. For example, we have been running the tests regularly in
+openSUSE Tumbleweed [1] [2] but to work around this fact we created a
+special package [3] that build the tests against an auxiliary vmlinux with
+the BPF Kconfig. We keep a list of known issues that may happen due to,
+amongst other things, configuration mismatches [4] [5].
 
-This series was applied to netdev/net.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
+The maintenance of this package is far from ideal, especially for
+enterprise kernels. The goal of this series is to enable the common usecase
+of running the following in any system:
 
-On Mon, 13 Apr 2026 19:45:19 +0800 you wrote:
-> syzbot reported a panic [1] [2].
-> 
-> When an IPv6 nexthop is replaced with an IPv4 nexthop, the has_v4 flag
-> of all groups containing this nexthop is not updated. This is because
-> nh_group_v4_update is only called when replacing AF_INET to AF_INET6,
-> but the reverse direction (AF_INET6 to AF_INET) is missed.
-> 
-> [...]
+```sh
+make -C tools/testing/selftests install \
+     SKIP_TARGETS= \
+     TARGETS=bpf \
+     BPF_STRICT_BUILD=0 \
+     O=/lib/modules/$(uname -r)/build
+```
 
-Here is the summary with links:
-  - [net,v1,1/2] nexthop: fix IPv6 route referencing IPv4 nexthop
-    https://git.kernel.org/netdev/net/c/29c95185ba32
-  - [net,v1,2/2] selftests: fib_nexthops: test stale has_v4 on nexthop replace
-    https://git.kernel.org/netdev/net/c/104f082f5ed6
+As an example, the following script targeting a minimal config can be used
+for testing:
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+```sh
+make defconfig
+scripts/config --file .config \
+               --enable DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT \
+               --enable DEBUG_INFO_BTF \
+               --enable BPF_SYSCALL \
+               --enable BPF_JIT
+make olddefconfig
+make -j$(nproc)
+make -j$(nproc) -C tools/testing/selftests install \
+     SKIP_TARGETS= \
+     TARGETS=bpf \
+     BPF_STRICT_BUILD=0
+```
 
+This produces a test_progs binary with 583 subtests, against the total of
+714. Many of them will still fail or be skipped at runtime due to lack of
+symbols, but at least there will be a clear way of building the tests.
+
+[1]: https://openqa.opensuse.org/tests/5811715
+[2]: https://openqa.opensuse.org/tests/5811730
+[3]: https://src.opensuse.org/rmarliere/kselftests
+[4]: https://github.com/openSUSE/kernel-qe/blob/main/kselftests_known_issues.yaml
+[5]: https://openqa.opensuse.org/tests/5811730/logfile?filename=run_kselftests-config_mismatches.txt
+
+Assisted-by: {codex,claude}
+Tested-by: Alan Maguire <alan.maguire@oracle.com>
+Signed-off-by: Ricardo B. Marliere <rbm@suse.com>
+---
+Changes in v6:
+- Add --ignore-missing-args to -extras rsync so out-of-tree permissive
+  builds do not abort when .ko files are absent (patch 2)
+- Remove stale skeleton headers in early-exit paths when .bpf.o is
+  missing on incremental builds (patch 3)
+- Fix strict-mode skeleton rules: use && before temp file cleanup so
+  bpftool failures are not masked by rm -f exit code (patch 3)
+- Track test filter selection separately from not_built so -t/-n flags
+  are respected for unbuilt tests (patch 7)
+- Make TRUNNER_TEST_OBJS order-only only in permissive mode, preserving
+  incremental relinking in strict builds (patch 8)
+- Reorder: move skip-unbuilt-tests patch before partial-linking patch
+  for bisectability
+- Link to v5: https://patch.msgid.link/20260415-selftests-bpf_misconfig-v5-0-03d0a52a898a@suse.com
+
+Changes in v5:
+- Add BPF_STRICT_BUILD toggle as patch 1 so every subsequent patch
+  gates tolerance behind PERMISSIVE from the start, making the series
+  bisectable with strict-by-default at every point
+- Fix O= commit message; make parent cp conditional (patch 2)
+- Tolerate linked skeleton failures (patch 3)
+- Skip feature detection for emit_tests (patch 4)
+- Clarify bench is all-or-nothing in commit message (patch 8)
+- Move stack_mprotect() to testing_helpers.c, drop weak stubs (patch 9)
+- Report not-built tests as "SKIP (not built)" in output (patch 10)
+- Drop overly broad 2>/dev/null || true from install rsync; rely solely
+  on --ignore-missing-args which already handles absent files (patch 11)
+- Link to v4: https://patch.msgid.link/20260406-selftests-bpf_misconfig-v4-0-9914f50efdf7@suse.com
+
+Changes in v4:
+- Drop the test_kmods kselftest module flow patch: lib.mk gen_mods_dir
+  invokes $(MAKE) -C $(TEST_GEN_MODS_DIR) without forwarding
+  RESOLVE_BTFIDS, breaking ASAN and GCC BPF CI builds (Makefile.modfinal
+  cannot find resolve_btfids in the kbuild output tree)
+- Link to v3:
+  https://patch.msgid.link/20260406-selftests-bpf_misconfig-v3-0-587a1114263c@suse.com
+
+Changes in v3:
+- Split test_kmods patch into two: fix KDIR handling (O= passthrough,
+  EXTRA_CFLAGS/EXTRA_LDFLAGS clearing) and wire into lib.mk via
+  TEST_GEN_MODS_DIR
+- Pass O= through to the kernel module build so artifacts land in the
+  output tree, not the source tree
+- Clear EXTRA_CFLAGS and EXTRA_LDFLAGS when invoking the kernel build to
+  prevent host flags (e.g. -static) leaking into module compilation
+- Replace the bespoke test_kmods pattern rule with lib.mk module
+  infrastructure (TEST_GEN_MODS_DIR); lib.mk now drives build and clean
+  lifecycle
+- Make the .ko copy step resilient: emit SKIP instead of failing when a
+  module is absent
+- Expand the uprobe weak stub comment in bpf_cookie.c to explain why
+  noinline is required
+- Link to v2:
+  https://patch.msgid.link/20260403-selftests-bpf_misconfig-v2-0-f06700380a9d@suse.com
+
+Changes in v2:
+- Skip test_kmods build/clean when KDIR directory does not exist
+- Use `Module.symvers` instead of `.config` for in-tree detection
+- Fix skeleton order-only prereqs commit message
+- Guard BTFIDS step when .test.o is absent
+- Add `__weak stack_mprotect()` stubs in `bpf_cookie.c` and `iters.c`
+- Link to v1:
+  https://patch.msgid.link/20260401-selftests-bpf_misconfig-v1-0-3ae42c0af76f@suse.com
+
+To: Alexei Starovoitov <ast@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>
+To: Andrii Nakryiko <andrii@kernel.org>
+To: Martin KaFai Lau <martin.lau@linux.dev>
+To: Eduard Zingerman <eddyz87@gmail.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: Song Liu <song@kernel.org>
+To: Yonghong Song <yonghong.song@linux.dev>
+To: Jiri Olsa <jolsa@kernel.org>
+To: Shuah Khan <shuah@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+To: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
+To: Bill Wendling <morbo@google.com>
+To: Justin Stitt <justinstitt@google.com>
+Cc: bpf@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev
+
+---
+Ricardo B. Marlière (11):
+      selftests/bpf: Add BPF_STRICT_BUILD toggle
+      selftests/bpf: Fix test_kmods KDIR to honor O= and distro kernels
+      selftests/bpf: Tolerate BPF and skeleton generation failures
+      selftests/bpf: Avoid rebuilds when running emit_tests
+      selftests/bpf: Make skeleton headers order-only prerequisites of .test.d
+      selftests/bpf: Tolerate test file compilation failures
+      selftests/bpf: Skip tests whose objects were not built
+      selftests/bpf: Allow test_progs to link with a partial object set
+      selftests/bpf: Tolerate benchmark build failures
+      selftests/bpf: Provide weak definitions for cross-test functions
+      selftests/bpf: Tolerate missing files during install
+
+ tools/testing/selftests/bpf/Makefile               | 165 ++++++++++++++-------
+ .../testing/selftests/bpf/prog_tests/bpf_cookie.c  |  17 ++-
+ tools/testing/selftests/bpf/prog_tests/iters.c     |   3 +-
+ tools/testing/selftests/bpf/prog_tests/test_lsm.c  |  22 ---
+ tools/testing/selftests/bpf/test_kmods/Makefile    |  24 ++-
+ tools/testing/selftests/bpf/test_progs.c           |  50 ++++++-
+ tools/testing/selftests/bpf/test_progs.h           |   1 +
+ tools/testing/selftests/bpf/testing_helpers.c      |  17 +++
+ tools/testing/selftests/bpf/testing_helpers.h      |   1 +
+ 9 files changed, 208 insertions(+), 92 deletions(-)
+---
+base-commit: 1f5ffc672165ff851063a5fd044b727ab2517ae3
+change-id: 20260401-selftests-bpf_misconfig-4c33ef5c56da
+
+Best regards,
+--  
+Ricardo B. Marlière <rbm@suse.com>
 
