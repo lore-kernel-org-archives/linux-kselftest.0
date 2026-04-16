@@ -1,139 +1,91 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3248D3B9DA9;
-	Thu, 16 Apr 2026 13:07:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 948D1169AD2;
+	Thu, 16 Apr 2026 13:16:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776344854; cv=none; b=NkAORj0caRJWVPjFOr3V+0lrWhMAKQORsRGoknS5SoaMImO39vXBEeTaX8P224P2KRbw0az/T3+HbenvEXdUW4N3hUelOC1A3Iz0E1Wxnc/YVhV4uo0Qv2UhJartsa7WIeybSHX2aSkm5X8ClnUnfLz5NbvDgOj2TwIaAuJFhjI=
+	t=1776345392; cv=none; b=fgm3TdhaUAwquHrToc0NSbcNnWpJACAtCG/d3PUs1bhtPiOEVgjb2C99rCXgMDb+8aDaP5k4lplyW0r0rE8IP1jkYQweuSEotsxkVTxcE9LlSKl4OE64yneqclnDS/PXGGDyhLM/cg42cZ+LP5lqyGjLqMxRYOW2ruyacHomm38=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776344854; c=relaxed/simple;
-	bh=RGR6IlEqqpx/s8nsqEXCWO4lq2ztrH/pNohj84WOIyg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LGeNSTBRMIu4BIvUZ5XcYiIqRdenE2qMKPl6A333wx/4s4xQdXkMRzc4gOdEdexeCM7jJZVr2klMCLbtx6fI8tEao8Gek1/vLnM8yH1KsZJ+g064EMXUqNJlB9D2/6GLNySOHx0lr67IbXN4D4JZHQvDQvyqnwacrsrzfrgVxHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CzAs7Sbw; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776345392; c=relaxed/simple;
+	bh=+BTDd40OOchvvN4pp/+11pvcQXCskUMiP4Psb/ddjAw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UvVdnX27byKfjMreSFytnn3tR6uE7TPnuQ7OV2Uq21WCiD3MGIN73VBRXLzJJx63AXJ3OT1nx3axZgPGBvkybG4yru4R4+Twwpvnlf+7AHpweikLw32RA08r6608wW7GpEgs3VYGOx/JPUMLE/zUg30xypFsR2xZImNPC48DhSU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a9Jmi+GD; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CzAs7Sbw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AECD9C2BCAF;
-	Thu, 16 Apr 2026 13:07:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a9Jmi+GD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C02C3C2BCAF;
+	Thu, 16 Apr 2026 13:16:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776344853;
-	bh=RGR6IlEqqpx/s8nsqEXCWO4lq2ztrH/pNohj84WOIyg=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=CzAs7SbwQrDdP5LCSfO/4gW/2qXtErV9fwwNpEDqonWYUo1srfmpbU06AtrtIji3D
-	 cHH74WWVXTIXnWkTV4G9RNIzrifNP5IAfcaMbTNlOf6f9tOwAeG3mCnFnx+sIJuJsC
-	 h5kiN7Iy54irw7Ux6h7Xih+CDNPVTVH6Weh6adW8TJ79X1APpf3XeOij239tt//YYL
-	 Xx8odjofMJ1HpaB5BRZ+D5twCW2zNd7gvhNeyyNx2ODWE/IR5WrGwNcZFyWSbDOHTY
-	 ega3a7GHNP8fjVeqm/ZwM1Om4G/zzRsB/Me9LxR/tyDW/UQGmnkNTNwDLg2ly0Dd+U
-	 HTA2JMtVgmXyQ==
-From: Christian Brauner <brauner@kernel.org>
-To: linux-fsdevel@vger.kernel.org,
-	Dorjoy Chowdhury <dorjoychy111@gmail.com>
-Cc: Christian Brauner <brauner@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	linux-api@vger.kernel.org,
-	ceph-devel@vger.kernel.org,
-	gfs2@lists.linux.dev,
-	linux-nfs@vger.kernel.org,
-	linux-cifs@vger.kernel.org,
-	v9fs@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
-	viro@zeniv.linux.org.uk,
-	jack@suse.cz,
-	jlayton@kernel.org,
-	chuck.lever@oracle.com,
-	alex.aring@gmail.com,
-	arnd@arndb.de,
-	adilger@dilger.ca,
-	mjguzik@gmail.com,
-	smfrench@gmail.com,
-	richard.henderson@linaro.org,
-	mattst88@gmail.com,
-	linmag7@gmail.com,
-	tsbogend@alpha.franken.de,
-	James.Bottomley@HansenPartnership.com,
-	deller@gmx.de,
-	davem@davemloft.net,
-	andreas@gaisler.com,
-	idryomov@gmail.com,
-	amarkuze@redhat.com,
-	slava@dubeyko.com,
-	agruenba@redhat.com,
-	trondmy@kernel.org,
-	anna@kernel.org,
-	sfrench@samba.org,
-	pc@manguebit.org,
-	ronniesahlberg@gmail.com,
-	sprasad@microsoft.com,
-	tom@talpey.com,
-	bharathsm@microsoft.com,
-	shuah@kernel.org,
-	miklos@szeredi.hu,
-	hansg@kernel.org
-Subject: Re: [PATCH v6 0/4] OPENAT2_REGULAR flag support for openat2
-Date: Thu, 16 Apr 2026 15:07:12 +0200
-Message-ID: <20260416-abgraben-seeweg-a44ce660957f@brauner>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260328172314.45807-1-dorjoychy111@gmail.com>
-References: <20260328172314.45807-1-dorjoychy111@gmail.com>
+	s=k20201202; t=1776345392;
+	bh=+BTDd40OOchvvN4pp/+11pvcQXCskUMiP4Psb/ddjAw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=a9Jmi+GDbjMHTgXe9pseHek7vFMqhTLTcHUz3teqgNxI4WjnsGXwkmzo7HhhOQDtb
+	 cmEpLOinjY0HPAZJEt53VjgakLh1BkoNTA9UXLGqF8ahb9XvyK2UM5d5JtrTsdHW4d
+	 4XbynzsiyA5eB24hOVIQ4sbbMRpnsGGN0W+LC5yGD2SMlcKd/W0W3hpwEsf+1suVRl
+	 5K3pD15iy/XjjffWaMmy9YLSL4AduvdeOeMBj4/YksT+CRt/IN6RFNZj77QCbMH1fN
+	 J1I2LPK7aJLuLIEXt7fXKtnJrOyhBGVWo6h45QfKjfDugIx6ZgREmMMuNFYpQS8eFM
+	 GQ+FwWDLnG1lQ==
+Date: Thu, 16 Apr 2026 14:16:27 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Ricardo =?iso-8859-1?Q?B=2E_Marli=E8re?= <rbm@suse.com>,
+	torvalds@linux-foundation.org, Shuah Khan <shuah@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	Aishwarya.TCV@arm.com, ben.copeland@linaro.org,
+	kernelci@lists.linux.dev
+Subject: Re: [PATCH 5/6] selftests: Preserve subtarget failures in all/install
+Message-ID: <e4b82973-7d9e-454d-8f69-6d2a1a8ec7dc@sirena.org.uk>
+References: <20260320-selftests-fixes-v1-0-79144f76be01@suse.com>
+ <20260320-selftests-fixes-v1-5-79144f76be01@suse.com>
+ <ad-ZdjzQZXNgkpwv@sirena.co.uk>
+ <3cdf8e79-7c59-4831-9b38-e9c2cef97fe1@linuxfoundation.org>
+ <ad-8BIkw_ijCLqcF@sirena.co.uk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2157; i=brauner@kernel.org; h=from:subject:message-id; bh=RGR6IlEqqpx/s8nsqEXCWO4lq2ztrH/pNohj84WOIyg=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWQ+uM++wXB/S+Hvp5l/rigkRrF0TPIL6P15cr/RvNQpM /QUzkjXd5SyMIhxMciKKbI4tJuEyy3nqdhslKkBM4eVCWQIAxenAEzkjjLDf4eZR2wq2503fAzq /GWqvre2dffiM/cq/G2aL5n8OqWz3J/hf+KxvnNrrPo65qRG+AmXfZid5cS+6G6OdJBWUnP8rJi rzAA=
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="S9dS9cTpUlvggvJ6"
+Content-Disposition: inline
+In-Reply-To: <ad-8BIkw_ijCLqcF@sirena.co.uk>
+X-Cookie: Process promptly.
 
-On Sat, 28 Mar 2026 23:22:21 +0600, Dorjoy Chowdhury wrote:
-> I came upon this "Ability to only open regular files" uapi feature suggestion
-> from https://uapi-group.org/kernel-features/#ability-to-only-open-regular-files
-> and thought it would be something I could do as a first patch and get to
-> know the kernel code a bit better.
-> 
-> The following filesystems have been tested by building and booting the kernel
-> x86 bzImage in a Fedora 43 VM in QEMU. I have tested with OPENAT2_REGULAR that
-> regular files can be successfully opened and non-regular files (directory, fifo etc)
-> return -EFTYPE.
-> - btrfs
-> - NFS (loopback)
-> - SMB (loopback)
-> 
-> [...]
 
-- I've added an explanation why OPENAT2_REGULAR is only needed for some
-  ->atomic_open() implementers but not others. What I don't like is that
-  we need all that custom handling in there but it's managable.
+--S9dS9cTpUlvggvJ6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-- I dropped the topmost style conversions. They really don't belong
-  there and if we switch to something better we should use (1 << <nr>).
+On Wed, Apr 15, 2026 at 05:25:40PM +0100, Mark Brown wrote:
+> On Wed, Apr 15, 2026 at 09:40:37AM -0600, Shuah Khan wrote:
 
-- I split the EFTYPE errno introduction into a separate patch.
+> > Mark, would you like to a revert for this?
 
----
+> Yes, I'll massage the text from my report into a changelog send
+> something - it'll probably be tomorrow now.
 
-Applied to the vfs-7.2.openat.regular branch of the vfs/vfs.git tree.
-Patches in the vfs-7.2.openat.regular branch should appear in linux-next soon.
+Sending shortly, FWIW I'm also seeing a buch of issues with:
 
-Please report any outstanding bugs that were missed during review in a
-new review to the original patch series allowing us to drop it.
+./run_kselftest.sh: 5: ./kselftest/runner.sh: Bad substitution
+./run_kselftest.sh: 5: .: cannot open ./ktap_helpers.sh: No such file
 
-It's encouraged to provide Acked-bys and Reviewed-bys even though the
-patch has now been applied. If possible patch trailers will be updated.
+--S9dS9cTpUlvggvJ6
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Note that commit hashes shown below are subject to change due to rebase,
-trailer updates or similar. If in doubt, please check the listed branch.
+-----BEGIN PGP SIGNATURE-----
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
-branch: master
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmng4SoACgkQJNaLcl1U
+h9B7Xwf/TP9yGAHaygXVSs77bl1fyf28ySLfd6wbN90nQroBxpwRgPAPkA3BuuhX
+TyHygPmgU/1GlbDdm1PG/uCSEDhk+eyI/1L1eaYFaZUPEcxODUOwSSE7G4B3pU9o
+yBKPwFXuSM1H8p+iiQg7hQqDEnJz/CFZruSmNCr5/xVcdTPFGkuiPWyniuqkyDG7
+5DIHeGnywYMr/rbb2ej57fv8rVnf4C5jBDC75hqIi1Zbbxno+XiLSXKK6KoM0M2v
+SrLhQJ4vSxsYR05AleYCdeJe/cya5oxqAblSNPQ6itZtHdX9aaQW5jaXkJY9Lx87
+2hZMnWzCK3RfyZsQrE05fkFmbs+wCQ==
+=bQJi
+-----END PGP SIGNATURE-----
 
-[1/4] openat2: new OPENAT2_REGULAR flag support
-      https://git.kernel.org/vfs/vfs/c/0b649c4d70f7
-[2/4] kselftest/openat2: test for OPENAT2_REGULAR flag
-      https://git.kernel.org/vfs/vfs/c/d7dc36df8fa7
-[3/4] sparc/fcntl.h: convert O_* flag macros from hex to octal
-      (dropped)
-[4/4] mips/fcntl.h: convert O_* flag macros from hex to octal
-      (dropped)
+--S9dS9cTpUlvggvJ6--
