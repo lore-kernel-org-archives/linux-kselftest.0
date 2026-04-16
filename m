@@ -1,80 +1,124 @@
-Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FF723328E6;
-	Thu, 16 Apr 2026 17:36:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B35C30C62E
+	for <linux-kselftest@vger.kernel.org>; Thu, 16 Apr 2026 18:18:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776360972; cv=none; b=up6bbFrvr+QzHR07ozc42kYPzE2S7LNx0kBlK/DO75Pe7I2hss6Fv+4k/7FAFRC9aTFZKiIHaelyIGXknQO8moBv/HQgCdi9PGyW8fPH/tdRtTxi2Oc/mfqmK+T5PusV97zNEG6dwwjENmTUGDQuhXJzJj6KazhMbC5S48b5P80=
+	t=1776363522; cv=none; b=vDCFI7dHCub5S2FcryuVhbaSPxpG3nPNG65rwUCsuL+vuj7A9VbpbBnd53EpUzT/ndwIb48pbu3ARsWPU1OsKLXfFyRGCEiyucEUVJ4TZnN8ts9IVepQIEkkYENeL8h6AXSz2ToJaTLvjJPmKQRDNZfp5Z0yy5x+/vR6lsJMF0g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776360972; c=relaxed/simple;
-	bh=RBcdUNeiuxQhZM2AmCxegew49tM6tiBBvfRnq9aHa0k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=onGiN9Rwj/ZTgJu3mPkxQANzrZH9y4AoRjDWB4J6O1/E1h3fOpQ/T7VTdkA/fs2tXX+fvfYm9rHB4t102rg+okIgPVbHFKtLaAUH5rCbtBPcEF5QM1aCq26vuQOHB3DSQHwINpLBfWhNVgaWvvFkVU/3wbGyd6qcqFb0VIhbu4g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ZPD+uEBB; arc=none smtp.client-ip=95.215.58.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1776363522; c=relaxed/simple;
+	bh=/JP5B3xtS7Ie5nsMHxaQ37bFOgQhEf6+4x6V9drX/IE=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=t8eVIXzZuezAK7UuT2GumtAPIKHQgWfq7hhe9a1kYdD6AY37sn9GtkkMZK0lT6pVR+9MluHVdNlhsLBclED3aE5zYXTXKEiZkgf4ddp4DSrQCtXHxjVVwJh+w5Bo9krJ4WAxSfDa4ahFNWhkTaABtFF0SuVUeRzErZxdA9YS4b4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=AKICb4Ne; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ZPD+uEBB"
-Date: Thu, 16 Apr 2026 10:35:23 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1776360957;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=X+cMC9sJAEt/m6pKNklcs18kvSXvKFvIm/NxmPOPEhQ=;
-	b=ZPD+uEBBlyHoCcdRlupt2N4WUxENhYQCZ44ETOUU1s747pMml8MzUKzOP72O+ssEpTJZ/G
-	esZrvITraissYGZtxL6KqdLogbiuZW0VBLD63AAwFus57n+Nf+rSosM5hDp5K54VWxuY/3
-	VQF+sD/yp4ds41udte6F9ft7vhjKKT0=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-To: KaFai Wan <kafai.wan@linux.dev>
-Cc: daniel@iogearbox.net, john.fastabend@gmail.com, sdf@fomichev.me, 
-	ast@kernel.org, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, 
-	song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, davem@davemloft.net, 
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, 
-	shuah@kernel.org, jiayuan.chen@linux.dev, bpf@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Quan Sun <2022090917019@std.uestc.edu.cn>, Yinhao Hu <dddddd@hust.edu.cn>, 
-	Kaiyan Mei <M202472210@hust.edu.cn>
-Subject: Re: [PATCH bpf v2 1/2] bpf: Reject TCP_NODELAY in TCP header option
-  callbacks
-Message-ID: <2026416172759.GIuu.martin.lau@linux.dev>
-References: <20260416112308.1820332-1-kafai.wan@linux.dev>
- <20260416112308.1820332-2-kafai.wan@linux.dev>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="AKICb4Ne"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-488a88aeec9so110731695e9.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Apr 2026 11:18:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1776363520; x=1776968320; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=/JP5B3xtS7Ie5nsMHxaQ37bFOgQhEf6+4x6V9drX/IE=;
+        b=AKICb4NeIlUjYIYB34rNop23COOcSRiz1aUfMNPYhg+1Zk9HJKOVR7sV+7uSWCbIae
+         3m3DE8M6FLYylJ4rk8ztFJI0gW3bWYsu/Ag//xw3F7D183VvIn639imispsMh4u05SN2
+         K26aRMBnQb5ZAZRp0slKKinLEGUpWVGODK+2mK0HO12Zzgw6k/0V/1S1iZVQSKYO62dB
+         rZ8sbn5Q4GiwLFGTke52Zp0usLnuxHhlY7ebjZpPfUTPqF51wU7+1ogDS1xbagDN7UB5
+         bAMQJIfRs+9ebEh1d6MoxrTWIkm6raHeL52I9mFjVbkBqjkFlJJEImcRjo0K74Wy/LHD
+         acsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776363520; x=1776968320;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/JP5B3xtS7Ie5nsMHxaQ37bFOgQhEf6+4x6V9drX/IE=;
+        b=YDsSnFLFC2xt7wtOVj/nBDBMaDn10YEgguVHOmaoX770AfNncsv6KntQdM3139+xEl
+         CVz2zILxdFIiPJa2oyPaiW/hmNelfNNzL0mjulD8/sb8c41F6fSO2WciHYE6NU2hCEfE
+         GlOTa7ddJMUo9JMHv0uKPGoAwASJcUNtwXk/hRsvOb4NzGoz3bDvJPauGt2171w+W4iT
+         vAJBhpbMnYsQ8Su3rUFCzE5tJwA845P4Aaibjm8tw7Li9vYAf8C9gzzctY/MZPvgJlmj
+         8KdPCXT6dssOezM5JWGF3hCVPc5t/x319EpTQy3BNxpP4rLQqT0XQW34ro/c5dpR0eEr
+         Augg==
+X-Forwarded-Encrypted: i=1; AFNElJ8NX+7zOaWsWJDTWRy07xQ//tNnGH4i/AOFuJNlaAkZEjTBCa61kpC+WcoiMr5gXziWglFmiBzFqEv1gCMaEsk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx2xBPRwIEUeNAkrtAKQO2PPZ25iJTxEO3tEBX0oEuRRYUdKMJt
+	KUsgpoXjvbPr6MOcPBUVXg5sP8Sd+0M8512Kb8vqIw3cvT5LLxlBXUrM7zoicWv/ZwEOJR8IskI
+	aIMA/4As=
+X-Gm-Gg: AeBDieu7hPJpjclk+jUgpPL/SR55UwhRUsdd2FRC2bVFAeboSBWFPfqfcwn95I7Flsi
+	/G33h3Jo2sTBj4N1N7S8syhiB+4/hLgoz5a+PR5HI5xvqlHnS4njd1g4tN+ZM44zlCl3TTDhNhf
+	YwUIGGRbJk8+w8TxeYH9hSwgkMn0IJuBip56b2jHLGw3PMLFMbJ5ImUsGIVFa8WJZCuaLb0snl/
+	DwElm67fB1nK2chJ9NAMDWdRzD9aS8LKwUCL53c+rkWtyGC1x78t+DIKOUuzYRDiIF7SczC25Hr
+	1iMSyE3Cm87TCaAoCIplL/TrmlelKdxFDc4v0Zy7ktZX0FHSaKPuFA6MstmJwEFyn/MaIW/3Esb
+	cX2GJzLn7yq2hHNM1Ec/1UaFfWNFdyCnN4Dk3b8+Cq/6VM7RxjwzA0eFAkF+BXoI8TT+jWppSOD
+	LfQDm5dk2xJoZJczmSZwPfQRTvxmX+ogrduRmzTgzlL0K6taOC9lLUvePFR9RUh/W0/lNxyIUFf
+	oUkvw==
+X-Received: by 2002:a05:600d:6:b0:487:1fc:14f9 with SMTP id 5b1f17b1804b1-488fb27d7dfmr93845e9.15.1776363519720;
+        Thu, 16 Apr 2026 11:18:39 -0700 (PDT)
+Received: from ?IPv6:2804:1bc4:224:7800:585c:db3a:fcb:e21f? ([2804:1bc4:224:7800:585c:db3a:fcb:e21f])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488f57da2aesm118706255e9.0.2026.04.16.11.18.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Apr 2026 11:18:39 -0700 (PDT)
+Message-ID: <5fb3ecf5a13bdf459019f6f011f3507593498875.camel@suse.com>
+Subject: Re: [PATCH v2 0/6] kselftests: livepatch: Adapt tests to be
+ executed on 4.12 kernels
+From: Marcos Paulo de Souza <mpdesouza@suse.com>
+To: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: Jiri Kosina <jikos@kernel.org>, Miroslav Benes <mbenes@suse.cz>, Petr
+ Mladek <pmladek@suse.com>, Joe Lawrence <joe.lawrence@redhat.com>, Shuah
+ Khan <shuah@kernel.org>, 	live-patching@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, 	linux-kernel@vger.kernel.org
+Date: Thu, 16 Apr 2026 15:18:33 -0300
+In-Reply-To: <wrecfrmldslvr4dvtb7hrmi3w6joby4qmray3fd3f4dfc2k2tv@ficeojpjxjop>
+References: <20260413-lp-tests-old-fixes-v2-0-367c7cb5006f@suse.com>
+	 <wrecfrmldslvr4dvtb7hrmi3w6joby4qmray3fd3f4dfc2k2tv@ficeojpjxjop>
+Autocrypt: addr=mpdesouza@suse.com; prefer-encrypt=mutual;
+ keydata=mDMEZ/0YqhYJKwYBBAHaRw8BAQdA4JZz0FED+JD5eKlhkNyjDrp6lAGmgR3LPTduPYGPT
+ Km0Kk1hcmNvcyBQYXVsbyBkZSBTb3V6YSA8bXBkZXNvdXphQHN1c2UuY29tPoiTBBMWCgA7FiEE2g
+ gC66iLbhUsCBoBemssEuRpLLUFAmf9GKoCGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgk
+ QemssEuRpLLWGxwD/S1I0bjp462FlKb81DikrOfWbeJ0FOJP44eRzmn20HmEBALBZIMrfIH2dJ5eM
+ GO8seNG8sYiP6JfRjl7Hyqca6YsE
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.0 (by Flathub.org) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260416112308.1820332-2-kafai.wan@linux.dev>
-X-Migadu-Flow: FLOW_OUT
 
-On Thu, Apr 16, 2026 at 07:23:07PM +0800, KaFai Wan wrote:
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index fcfcb72663ca..911ff04bca5a 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -5833,6 +5833,11 @@ BPF_CALL_5(bpf_sock_ops_setsockopt, struct bpf_sock_ops_kern *, bpf_sock,
->  	if (!is_locked_tcp_sock_ops(bpf_sock))
->  		return -EOPNOTSUPP;
->  
-> +	if ((bpf_sock->op == BPF_SOCK_OPS_HDR_OPT_LEN_CB ||
-> +	     bpf_sock->op == BPF_SOCK_OPS_WRITE_HDR_OPT_CB) &&
-> +	    IS_ENABLED(CONFIG_INET) && level == SOL_TCP && optname == TCP_NODELAY)
+On Thu, 2026-04-16 at 10:07 -0700, Josh Poimboeuf wrote:
+> On Mon, Apr 13, 2026 at 02:26:11PM -0300, Marcos Paulo de Souza
+> wrote:
+> > A new version of the patchset, with fewer patches now. Please take
+> > a look!
+> >=20
+> > Original cover-letter:
+> > These patches don't really change how the patches are run, just
+> > skip
+> > some tests on kernels that don't support a feature (like kprobe and
+> > livepatched living together) or when a livepatch sysfs attribute is
+> > missing.
+> >=20
+> > The last patch slightly adjusts check_result function to skip dmesg
+> > messages on SLE kernels when a livepatch is removed.
+>=20
+> Why are we adding complexity to support Linux 4.12 in mainline?=C2=A0
+> Isn't
+> that what enterprise distros are for?
 
-IS_ENABLED(CONFIG_INET) is unnecessary.
+These changes do not add any new complex code, just checks to enable
+the tests to run on older kernels. I believe that it would be good for
+all enterprises distros if they could run more tests in maintenance
+updates of their kernels using the upstream tests.
 
-pw-bot: cr
+The changes are not really that big. Some patches were removed from v1
+because there were adding checks for out-of-tree messages (like the
+last paragraph of the v2 erroneously shows), and another one was to
+check if kprobes could live alongside livepatches, which fails for 4.12
+kernels.
 
-> +		return -EOPNOTSUPP;
-> +
->  	return _bpf_setsockopt(bpf_sock->sk, level, optname, optval, optlen);
->  }
->  
-> -- 
-> 2.43.0
-> 
+The patches for this versions introduce only checks to avoid testing
+sysfs attributes for kernels that don't supports them.
