@@ -1,68 +1,68 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48B9C3BB9EB
-	for <linux-kselftest@vger.kernel.org>; Thu, 16 Apr 2026 12:22:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2541A3B9D83
+	for <linux-kselftest@vger.kernel.org>; Thu, 16 Apr 2026 12:22:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776342135; cv=none; b=WtJMakHjmP6ol1TPjJ6WOidVoyiKlQSa/UtW63/Lbna1WiWKMNpki3uShsovWDDOb2qwwwgRexCdqbol/q3FKVje8MaiM56WAX52uEeDnP+YPyGk+8EvboXKU3Phyjh28Z2ZQBcAY47iw7tbDjbrlLg+jzJx2gnZrruucOLmC3c=
+	t=1776342138; cv=none; b=E9ONDWAOLLQSoCOGw1TpXoLYMRp5gBsVKaBrtxbJsAwTdhQy0SalAja6SoN+0jd2jXecbpDBdaOUEICDwzKpjldMt6o393ol88gt8L0Ep0s/4UZ7ppNMTpt4krw6lQ9E8pnvK9Q6w/DjBf+1woD1t8mHxyXOYvkGY8U62n7tePE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776342135; c=relaxed/simple;
-	bh=ku5U3Ka0ndjPXP92siQHnGkpd1bCq2hgtWQ4GejuUdw=;
+	s=arc-20240116; t=1776342138; c=relaxed/simple;
+	bh=mEg+v7zXI0iREsRG6kydyUfkdkpuhC25e846u65Lppk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=eYYV0slTPQyS6PniYKLnNXgtTamaDOPzjliG4VtcUbekEDZ4DBIYBZCDRi7cD/0MluJ/yKLy3gb9ej82ZsVOcVLgazwudaE2jLRJdkKu1WQXY8/AVk/T0Nay5XEcWFkH5sLrsdOOp9MbJkixBCwLD5bwoxnw2V5/tIBiwncMhFE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=JcAWIne0; arc=none smtp.client-ip=209.85.128.51
+	 In-Reply-To:To:Cc; b=cMdEv9TyQ0k3QoPnpyeuN8ZN30sVhmdklkfxuBM61u3ft/0v1y2BDZzuS9n1VPWzL0ECKB8KrBxHwbVWIk87Ru10DVtx3n6krRK1txsc7QujZdIV55Zu+PZbZ2LVOBLg9LxJqK4aM69wXH6ROcwkfkO4M89v05CjZrJ1q7BhDGQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=TNVZSiU0; arc=none smtp.client-ip=209.85.128.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="JcAWIne0"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-488d2079582so74017655e9.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Apr 2026 05:22:13 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="TNVZSiU0"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4887ca8e529so4511325e9.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Apr 2026 05:22:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1776342131; x=1776946931; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1776342135; x=1776946935; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Oynt2x6SXKNaRU8MrrgQe7iSYgm0Zd6fxbgaEr/IL1k=;
-        b=JcAWIne0kU6feEsIZ0b7rhmXVoHGtaxG6QuZyqp3RxBVBhcqz18S2ZbJpT6j++nhBO
-         aQq7xEG/kGAS5MIeqRzF9e7gb71bUaWTYAscF8WhwDpNCJ4NQRQjXb8jgfcPzHW0jbJz
-         8vDS41qQO5gMiBdISccatwIwF550rx1zPSvgmFNZyl92HRKhH0UjAn/ndZ2pumIHNrBc
-         4+VKJcUlqmb1XLLAzCsYb+RdgXik/vptTL3uWvL0RxU6w7NCI90qFn8O0ESc+Eq5TEhg
-         1hoKv1OmuRogEjXg5rwYABTVL7PatCqN3oZDYCvbPRqI+kieuLP+4cD3UqaoZAOcPmpn
-         z0oQ==
+        bh=KhHX7gYP2RMHcZsNzdTs8ia86Fe1heXnXQrH+zN2ESQ=;
+        b=TNVZSiU0H5gK2CL/L/zsF9L1ePdd/Qt+IZ8EtOP8RZ6NM3pAUGgG7Tn5vAuZ5zHgQ4
+         cQOgx23pH8NE9obrM8PZbWIjrv372KMOWyer9Oh/64kCi+4RJ3UshCa7J6RB50xnDobY
+         LpVf9Rqdj3OWS9wH5gyaCfvV8yPtLvtMO0pJ2f1IzHLKho2zfZBwdVw00dRYgLid8OSK
+         d2qw0COdIW1e0T/PTH2b6dRlPnrevOs0Xxwd/aG/puff/YP2tTPdBNZ9bTvGhP/Kx/Kv
+         5FRMgvRpoZNvSRjSqFRIlPEPHn+g9jBzP0ePwKwGMfIin7tY66RoCuBYJRuNnIuw1qbD
+         I2hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776342131; x=1776946931;
+        d=1e100.net; s=20251104; t=1776342135; x=1776946935;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=Oynt2x6SXKNaRU8MrrgQe7iSYgm0Zd6fxbgaEr/IL1k=;
-        b=S5ToPBXaClyQ17s9HqvTkGDIwiSOa4B51gnqisbnEEYh2KJ6MUy6/oqFnEihuTD/9S
-         j5sCbcXcu1+PbPPxJZkVGXVvJqjAxVgaGxVGb4Kds78Qky8khKgx68JA7jyfkjprWivu
-         IEWApXIFaJQ6MEllgtOOprIidvAJz4TVRf1+/CIdnAGC9Eshlo74iPiEw6xLfTcCQAAU
-         uZVeZgZrX6T5cAEJQm7L4l2ISnFROCfqPH6deM4axyBHl+M1pTUIjPrCH2s71BgjNY1j
-         tRMTdiFSGU3jN0ZtgON3Ce2D/ATmbwkbzG0/Jp13jGUp1Twtc6hQ4eBcZMKGlbBcg8A+
-         dK0w==
-X-Forwarded-Encrypted: i=1; AFNElJ9knn5o9Y2WS8Vj64Ewxlr88H4O3g+W5+DKsPRKnEpX+G0W3T+JBN7lJJfWRAokEoMu3zaBz445CYGCQB/nuWA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxbn9GTMxQgP9wt7WhpTxv4b1hqPlZ4iMdZQew5+roGABGs+MIh
-	mGN1LrP94uFa5MIc1SQ03FLpNQksWYWJqLWfkr/g3VGzaCDmkA7G1rDvQLpuyjoMJ3/vC2zJMs5
-	9QoCy/RA=
-X-Gm-Gg: AeBDiesNB4Q0qoEzOY5OYoYAND11TbtOICqMIB7IF8ZmlMo26K42P5HpYmF+eVRcq/0
-	3u0OVE7wA1OVDpA31mo8oTP0Gkf/QRJDuQwd913X2K6eTz9Gq92Pp/K6FpNIbMb6Vk/zUo7lq3o
-	bbpHQiWOPTfiiyk+VI+SYhLVSvygRGNMTMLXIvP3JEgpcRKBH+hxe08THtCR+8JViv34mWwAd5H
-	AUdQ0W1/x2F626wDGoq0jfMbNrazPJd8IMPvLS/GecSZ0tJ+E4/J1uFR238uU6XwUjIN3sPw8aO
-	7NtK9WJvTwZv5a1LgRkSxcEoH99jBhyrrn7HU5cwkdan/eWEzdYkdKAj84CrmE4AIRu7QSERa2M
-	ctXQPFTlvJCN3lNr/BFczIdXRpy45BGyDe2oxnSsOI5Mc805RoGx9P0uWXlPkssSgyDTtDqmRN1
-	2DIR8cOI0Aw0s=
-X-Received: by 2002:a05:600d:1:b0:488:a2ac:a334 with SMTP id 5b1f17b1804b1-488d67c720emr320597815e9.3.1776342131415;
-        Thu, 16 Apr 2026 05:22:11 -0700 (PDT)
+        bh=KhHX7gYP2RMHcZsNzdTs8ia86Fe1heXnXQrH+zN2ESQ=;
+        b=f5oT8dmm2nnWvOfQ/SIvLHjJ+N02pxntXmx2xfXMrMd1M4LNlPrsgL+ioweSvXCsss
+         9LDak/6VSbf+KcH0WZkGgrIFS/qZ2p7AJnqdQAvUJAr8wCIvzN5FY1cFJ95UB+bGPIM3
+         HLo+8N+A0vrc+D/4HTyFZ94QzTu6464oAjPda9MNRjo4gGYT979G9AYmTA1uRZdOFuOg
+         2RNToTmP9+CLzdXSNUITxQ1/f0URjxov839GMsYvSs9hS12D+ymFmQImwVwwaz6/SOmB
+         hfOGTMbSaOiTLsYIxpbIPj2fwtv0+0hnZY5I5o3mZWLVCnsQMwjMWFeerL1HHNAj0FVD
+         wDbA==
+X-Forwarded-Encrypted: i=1; AFNElJ8q284cAzoU96xb4mdsUPrSPSUP7FXB3KNhUWcYkFtbu19/EX7v4WQzR/OVbNEO5THF7KmduaogreXHxcSoQXQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxqHZKtbu/MA5vgARLOYsr4OXO3LtL7Vb+Ch5mwIusTTkOZ7AOJ
+	VJy89Q61OIsNZVxcKTWeBYniWk2erZMqa0bmOrigEAEk+SK0LHYBtvYEQOkfUveRbIPIIBbhA4x
+	i9BZex50=
+X-Gm-Gg: AeBDiesA66kw8qOZ98pdNYGvA/p02+vmmdJDfV1Yyp2oTAjvq8cJrRae+nmQUtiix5s
+	7P560J9ZuePZr8LOHEJ3Pl49KCqaQE52dnJdmkadSstkxtJ/QR2+AEX+k6TsxgceesYUEeiKlUo
+	a5ZycQ5T8H7WXBA0pDEFO2xfZXpJYcK1sNzEeW3zSEOc3IEO2bBt95F6Vom9TIXm0acegj1x6p5
+	O/8wIfEhb3uJeSC8KI3yXHAICqA9UHOVHCFka/WdaQDw4Y7601ytrdBsu7JOd4S5i6/BBiRS1E/
+	kNd7jS9EY5EFpkSwCeGqlUPbWyOj9N4F3+71PLZfL6UUoPTqbAXQUYkpdyoK2/C6kL3lNb/GRg8
+	v4iRD/oPr1r/jUXRI5KwgLDJkX+YXLucQBr6fpKzfE+vIkrCXiUqfYT4nl8EGkAuwpC2NXZrS1h
+	GowOvawT//Wdo=
+X-Received: by 2002:a05:600c:5888:b0:488:a9c3:44a3 with SMTP id 5b1f17b1804b1-488f45c02abmr34600335e9.2.1776342135114;
+        Thu, 16 Apr 2026 05:22:15 -0700 (PDT)
 Received: from localhost ([2804:7f0:b765:e41:ce28:aaff:fe86:149c])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2de8c606db2sm6897614eec.11.2026.04.16.05.22.09
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2de8c90cd7esm8736289eec.13.2026.04.16.05.22.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Apr 2026 05:22:10 -0700 (PDT)
+        Thu, 16 Apr 2026 05:22:14 -0700 (PDT)
 From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
-Date: Thu, 16 Apr 2026 09:21:27 -0300
-Subject: [PATCH bpf-next v6 10/11] selftests/bpf: Provide weak definitions
- for cross-test functions
+Date: Thu, 16 Apr 2026 09:21:28 -0300
+Subject: [PATCH bpf-next v6 11/11] selftests/bpf: Tolerate missing files
+ during install
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -71,7 +71,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260416-selftests-bpf_misconfig-v6-10-7efeab504af1@suse.com>
+Message-Id: <20260416-selftests-bpf_misconfig-v6-11-7efeab504af1@suse.com>
 References: <20260416-selftests-bpf_misconfig-v6-0-7efeab504af1@suse.com>
 In-Reply-To: <20260416-selftests-bpf_misconfig-v6-0-7efeab504af1@suse.com>
 To: Andrii Nakryiko <andrii@kernel.org>, 
@@ -88,176 +88,66 @@ Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
  Alan Maguire <alan.maguire@oracle.com>, 
  "Ricardo B. Marliere" <rbm@suse.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openssh-sha256; t=1776342088; l=5376;
+X-Developer-Signature: v=1; a=openssh-sha256; t=1776342088; l=2151;
  i=rbm@suse.com; h=from:subject:message-id;
- bh=ku5U3Ka0ndjPXP92siQHnGkpd1bCq2hgtWQ4GejuUdw=;
+ bh=mEg+v7zXI0iREsRG6kydyUfkdkpuhC25e846u65Lppk=;
  b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
  x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QADQi3LbxVO70sLafTtzZ1OnYs3sI4Q1YFUFVnjYDmm2m3UqMyE9AKo9DgDBEEFgFn2aMcsIuHC
- qKzGtpkOGWAc=
+ QFN3SnWDFLPzFWsuaYADh4eBzRwT7G4DD1uJJxg8KDV+Al+f/kRjZMmp78ssLgAjQOV9rrCEpue
+ zdCykIU669A8=
 X-Developer-Key: i=rbm@suse.com; a=openssh;
  fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
 
-Some test files reference functions defined in other translation units that
-may not be compiled when skeletons are missing. Replace forward
-declarations of uprobe_multi_func_{1,2,3}() with weak no-op stubs so the
-linker resolves them regardless of which objects are present.
+With partial builds, some TEST_GEN_FILES entries can be absent at install
+time. rsync treats missing source arguments as fatal and aborts kselftest
+installation.
 
-Move stack_mprotect() from test_lsm.c into testing_helpers.c so it is
-always available. The previous weak-stub approach returned 0, which would
-cause callers expecting -1/EPERM to fail their assertions
-deterministically. Having the real implementation in a shared utility
-avoids this problem entirely.
+Override INSTALL_SINGLE_RULE in selftests/bpf to use --ignore-missing-args,
+while keeping the existing bpf-specific INSTALL_RULE extension logic. Also
+add --ignore-missing-args to the TEST_INST_SUBDIRS rsync loop so that
+subdirectories with no .bpf.o files (e.g. when a test runner flavor was
+skipped) do not abort installation.
+
+Note that the INSTALL_SINGLE_RULE override applies globally to all file
+categories including static source files (TEST_PROGS, TEST_FILES). These
+are version-controlled and should always be present, so the practical risk
+is negligible.
 
 Signed-off-by: Ricardo B. Marlière <rbm@suse.com>
 ---
- .../testing/selftests/bpf/prog_tests/bpf_cookie.c  | 17 +++++++++++------
- tools/testing/selftests/bpf/prog_tests/iters.c     |  3 +--
- tools/testing/selftests/bpf/prog_tests/test_lsm.c  | 22 ----------------------
- tools/testing/selftests/bpf/testing_helpers.c      | 17 +++++++++++++++++
- tools/testing/selftests/bpf/testing_helpers.h      |  1 +
- 5 files changed, 30 insertions(+), 30 deletions(-)
+ tools/testing/selftests/bpf/Makefile | 17 ++++++++++++++---
+ 1 file changed, 14 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-index 35adc3f6d443..5a864cd8ad1b 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-@@ -252,10 +252,17 @@ static void kprobe_multi_attach_api_subtest(void)
- 	kprobe_multi__destroy(skel);
- }
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 9e3e0a898e40..2808387b3d9f 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -974,11 +974,22 @@ EXTRA_CLEAN := $(SCRATCH_DIR) $(HOST_SCRATCH_DIR)			\
+ # Delete partially updated (corrupted) files on error
+ .DELETE_ON_ERROR:
  
--/* defined in prog_tests/uprobe_multi_test.c */
--void uprobe_multi_func_1(void);
--void uprobe_multi_func_2(void);
--void uprobe_multi_func_3(void);
-+/*
-+ * Weak uprobe target stubs. noinline is required because
-+ * uprobe_multi_test_run() takes their addresses to configure the BPF
-+ * program's attachment points; an inlined function has no stable
-+ * address in the binary to probe. The strong definitions in
-+ * uprobe_multi_test.c take precedence when that translation unit is
-+ * linked.
-+ */
-+noinline __weak void uprobe_multi_func_1(void) {}
-+noinline __weak void uprobe_multi_func_2(void) {}
-+noinline __weak void uprobe_multi_func_3(void) {}
- 
- static void uprobe_multi_test_run(struct uprobe_multi *skel)
- {
-@@ -574,8 +581,6 @@ static void tracing_subtest(struct test_bpf_cookie *skel)
- 		close(fmod_ret_fd);
- }
- 
--int stack_mprotect(void);
--
- static void lsm_subtest(struct test_bpf_cookie *skel)
- {
- 	__u64 cookie;
-diff --git a/tools/testing/selftests/bpf/prog_tests/iters.c b/tools/testing/selftests/bpf/prog_tests/iters.c
-index a539980a2fbe..7c0b59fdf498 100644
---- a/tools/testing/selftests/bpf/prog_tests/iters.c
-+++ b/tools/testing/selftests/bpf/prog_tests/iters.c
-@@ -7,6 +7,7 @@
- #include <unistd.h>
- #include <malloc.h>
- #include <stdlib.h>
-+#include <linux/compiler.h>
- #include <test_progs.h>
- #include "cgroup_helpers.h"
- 
-@@ -202,8 +203,6 @@ static void subtest_task_iters(void)
- 	iters_task__destroy(skel);
- }
- 
--extern int stack_mprotect(void);
--
- static void subtest_css_task_iters(void)
- {
- 	struct iters_css_task *skel = NULL;
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_lsm.c b/tools/testing/selftests/bpf/prog_tests/test_lsm.c
-index bdc4fc06bc5a..d7495efd4a56 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_lsm.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_lsm.c
-@@ -5,36 +5,14 @@
-  */
- 
- #include <test_progs.h>
--#include <sys/mman.h>
- #include <sys/wait.h>
- #include <unistd.h>
--#include <malloc.h>
--#include <stdlib.h>
- 
- #include "lsm.skel.h"
- #include "lsm_tailcall.skel.h"
- 
- char *CMD_ARGS[] = {"true", NULL};
- 
--#define GET_PAGE_ADDR(ADDR, PAGE_SIZE)					\
--	(char *)(((unsigned long) (ADDR + PAGE_SIZE)) & ~(PAGE_SIZE-1))
--
--int stack_mprotect(void)
--{
--	void *buf;
--	long sz;
--	int ret;
--
--	sz = sysconf(_SC_PAGESIZE);
--	if (sz < 0)
--		return sz;
--
--	buf = alloca(sz * 3);
--	ret = mprotect(GET_PAGE_ADDR(buf, sz), sz,
--		       PROT_READ | PROT_WRITE | PROT_EXEC);
--	return ret;
--}
--
- int exec_cmd(int *monitored_pid)
- {
- 	int child_pid, child_status;
-diff --git a/tools/testing/selftests/bpf/testing_helpers.c b/tools/testing/selftests/bpf/testing_helpers.c
-index 6fbe1e995660..3f7ae76c209b 100644
---- a/tools/testing/selftests/bpf/testing_helpers.c
-+++ b/tools/testing/selftests/bpf/testing_helpers.c
-@@ -5,6 +5,7 @@
- #include <stdlib.h>
- #include <string.h>
- #include <errno.h>
-+#include <sys/mman.h>
- #include <bpf/bpf.h>
- #include <bpf/libbpf.h>
- #include "disasm.h"
-@@ -516,3 +517,19 @@ bool is_jit_enabled(void)
- 
- 	return enabled;
- }
++# When permissive, tell rsync to ignore missing source arguments so that
++# partial builds do not abort installation.
++ifneq ($(PERMISSIVE),)
++override define INSTALL_SINGLE_RULE
++	$(if $(INSTALL_LIST),@mkdir -p $(INSTALL_PATH))
++	$(if $(INSTALL_LIST),rsync -a --copy-unsafe-links --ignore-missing-args $(INSTALL_LIST) $(INSTALL_PATH)/)
++endef
++endif
 +
-+int stack_mprotect(void)
-+{
-+	void *buf;
-+	long sz;
-+	int ret;
-+
-+	sz = sysconf(_SC_PAGESIZE);
-+	if (sz < 0)
-+		return sz;
-+
-+	buf = alloca(sz * 3);
-+	ret = mprotect((void *)(((unsigned long)(buf + sz)) & ~(sz - 1)), sz,
-+		       PROT_READ | PROT_WRITE | PROT_EXEC);
-+	return ret;
-+}
-diff --git a/tools/testing/selftests/bpf/testing_helpers.h b/tools/testing/selftests/bpf/testing_helpers.h
-index 2ca2356a0b58..2edc6fb7fc52 100644
---- a/tools/testing/selftests/bpf/testing_helpers.h
-+++ b/tools/testing/selftests/bpf/testing_helpers.h
-@@ -59,5 +59,6 @@ struct bpf_insn;
- int get_xlated_program(int fd_prog, struct bpf_insn **buf, __u32 *cnt);
- int testing_prog_flags(void);
- bool is_jit_enabled(void);
-+int stack_mprotect(void);
- 
- #endif /* __TESTING_HELPERS_H */
+ DEFAULT_INSTALL_RULE := $(INSTALL_RULE)
+ override define INSTALL_RULE
+ 	$(DEFAULT_INSTALL_RULE)
+-	@for DIR in $(TEST_INST_SUBDIRS); do		  \
+-		mkdir -p $(INSTALL_PATH)/$$DIR;   \
+-		rsync -a $(OUTPUT)/$$DIR/*.bpf.o $(INSTALL_PATH)/$$DIR;\
++	@for DIR in $(TEST_INST_SUBDIRS); do				  \
++		mkdir -p $(INSTALL_PATH)/$$DIR;				  \
++		rsync -a $(if $(PERMISSIVE),--ignore-missing-args)	  \
++			$(OUTPUT)/$$DIR/*.bpf.o				  \
++			$(INSTALL_PATH)/$$DIR;				  \
+ 	done
+ endef
 
 -- 
 2.53.0
