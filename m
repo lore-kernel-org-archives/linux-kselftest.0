@@ -1,113 +1,172 @@
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
+Received: from mail-vs1-f45.google.com (mail-vs1-f45.google.com [209.85.217.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3E6135F5E4
-	for <linux-kselftest@vger.kernel.org>; Thu, 16 Apr 2026 15:21:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.41
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776352874; cv=none; b=EN3nbd2gkShavIV23sH7E2pb0ggwYmgW4vcD8EvkTsFSGLJLlt08qkOloiEjwPxhfBW8U7BuCddCxNZ3ZAy2SNgcPXK1qos9VKclan0Qjcvl5iC9YzYZYKvZjquZblIovaSeljL7u+ouKTMNqrZaWTqFg4+kzJsclwRBrx3GDLw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776352874; c=relaxed/simple;
-	bh=lY8KnyEnww1BaerqB9rUeouJcntcbdG7KfY4D4jc3hQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IaQnWVB2mPN5EM3CeKMwD6awL+zDFLwg9de9Kxy7ZRwzrbWri6OQscyVpjvp9m8MV0ge0eKQ8ZEeIbxkGZnOzKg7OlDu2zAud+7OA4J2Z762OzX+ZTxtb38MFBLQKZPVKmY2tWanZ/SL83ymWf2C4D/BalLC/tJ6L22OtrhTdmw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=UXD+qgWg; arc=none smtp.client-ip=209.85.160.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58BA23E1CEE
+	for <linux-kselftest@vger.kernel.org>; Thu, 16 Apr 2026 15:22:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.217.45
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776352939; cv=pass; b=RwBmWpSfS8DiJlqoVxIPOL9riQNajNOGUfVblF2W4BuYq6REdZEiFmYGLIwEOkKJRdAbb/Y++vkRbxwYSDbu11f/XVbKxXmiA3b+M+vGvwHJBxILs7unHnFEjnepspO3zervcTpNYBGwZrIcoM3/Tj3LE5iDqUQM741hNI/QYvo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776352939; c=relaxed/simple;
+	bh=d8h0wpCxAz5qr8QgJAWyo5NPmRw20h5MEF24J15IyVI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nppMNHPk41dyNGTamniaRxswWpT3KVxfcSmXFTSdUwotd7nlusiDB10NsgXwwVbsMvCD5lDVN9QaynCoZATJfPlIKxzBAPfHuSA6HI6mi0icejiW0y5YrSycTayXVdMTecllR6Heuba+ZPtmkSh4QDrEpocbtOohnaApVRVIQ10=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g4lVbpH3; arc=pass smtp.client-ip=209.85.217.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="UXD+qgWg"
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-4230a00de40so626017fac.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Apr 2026 08:21:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g4lVbpH3"
+Received: by mail-vs1-f45.google.com with SMTP id ada2fe7eead31-610e2e8f57dso1356381137.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Apr 2026 08:22:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776352935; cv=none;
+        d=google.com; s=arc-20240605;
+        b=dX6PLTqaqocSuDVZyYlhnx1EhElOo2Bk3NaVha8VIO4/o9BNBZEJPD5GrU/z/O6APF
+         lpYkRLW2bHj8zqNZGGSYYWueXCCB25NLByV1hc6fYSk1+q8vcr+ZdOGcX57rzbZVZ5jo
+         FaRcgIc2Cw+Xv6qUTtKm31+snauMqBlOxb+BiPyUu4byBwqTX35YnEEJsxixi571PK6U
+         qiC5GJo7/1hzcJN4zH/i8jC+V4Z7Dz7f6r8spNlzl7xgfQ8JbpFHqU3Zp4FiGB/N6aLx
+         EWQ24KBuHiqVbbRTpS8pw9l3QZcj7FDuVK/BsNUJVlBBjOSHgAQVk3IEncF2ADuOb1/H
+         EeLQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=ZrzbbPcScOB3YiJODipm6pYCq1GabErqB6lK+E1UuOI=;
+        fh=Hvn13Ej0aAJIRMRLrdTpBneXTxjouP2hcVMx7l7sWIc=;
+        b=Nle4R2qgWNLz5P+oRTZGiKdhsgRZpg8gJTFX6+PrIzOhbUEXExcKQPaTq7WzgFJl79
+         m/lWB04Dmoj+vRhz2JwJ4ycDsYqCf1MHY3OYV1RgyuwWdu6C+8HudHDg/YjvMyrmhz7T
+         uB7goHZtGOq185E/TuvPpMrTqdr8GzIRdZ3+74CQjgizFrctXvRuhLTEMreRJn2ShGPf
+         CpRgMjlJC9icj9v+LP4pfdzGbi3EUxTHU5GcnQ4MHQQEG/K544WBHuUtZJ85bDnFd+Yj
+         A1AnKKpPshVGuGSzFzax5MeeVejuJN61t6I79zfy4zuwY1F8hRV/Fygi3djxmM+Tud3/
+         WxFA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1776352872; x=1776957672; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7ED7Dtk/V7JNqL6bwm+6sfQAnzfjIa9OPc/3hBimeik=;
-        b=UXD+qgWgk/64Yt2GJgOpAU+SRkyuvWJaYd7Dy4XFvOUF+8y6zYAusyTKobEbIbGnva
-         3xGjwKXH5t4ooZsTk7WgeIoG7XrWBQInKdhGmjavoIW2OYFcDTdsFW5UtaF0uxyHvYj+
-         w/DTeAv6C+f6GYxKsZt5eefMY0G+6JtzOxA8I=
+        d=gmail.com; s=20251104; t=1776352935; x=1776957735; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZrzbbPcScOB3YiJODipm6pYCq1GabErqB6lK+E1UuOI=;
+        b=g4lVbpH3NYuTwHK4zof4cI1R5F3IIOc7rqMOk/MWHpRmevLzRVb+qRlTlkjItjBIHx
+         c7M0jhqWfaQ2vMdmdCGZvAPwF+odTZ9kyd6p7sv+kuJPT06vFRz8sGzxEE+RDZyrNUPi
+         T43wkAslMCjJ0svGA08kUb5Gbx/3985K1GhQDZgh/+pTKuxWXmHDa0LxQ7N8Y6D+AdMV
+         pK9JcsBfafPuXYE4xQ1M0Bsj7zmPTRKj8Oqs1QY2itp7CaL3brWr7nECH3oyQEx2Fb50
+         mvvGzjXFjjCeXabKEm078u3WnFCD8fkfLKek/kSJSKQGUKyNJa4mEQC63tdpwccNytZ5
+         6URQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776352872; x=1776957672;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7ED7Dtk/V7JNqL6bwm+6sfQAnzfjIa9OPc/3hBimeik=;
-        b=beaGjw46geUY0bHVvVGXubJw0FTP2C0eCFVcXUG/e/Ub93Jtgrm5sJ2+CuKwLl9vat
-         3rfCQoM+7otx3hCkxH7Rnxl4ZZWIJniQieE6WBvuA7mXIUKRKCVvbEoQwgCpPqBNfTVO
-         wXdhfBPLe3ZZmaMVyDL3CT/d1gnzEG6eq9bWRtfjlz7+1/hb+Ma5hMlJXF6xA8WaIjRw
-         IDN5XY3I+Tm2cy2+USyA3SvC4I+iPB8Ok3x4WVDdTBGxoiqfKKBb/v8OSDQL7Z2yhXss
-         Ss6GKnJvRbOZ3LsUcOL1q8dVtnVsixJbZzY2y+EJZyYK1Tukyku3+TJSveuDPAwNNZFY
-         VcYw==
-X-Forwarded-Encrypted: i=1; AFNElJ9xFKz31LlGX2j8WymmXPgvGfXKdH/EDWNutHMzPBRWB/xE1WlscdbqsItencj5xhEq65lj9lK1HVfRIYvjK0M=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzs8js5dyEtnVhkQXjS4AeL28TPh48uUJkgzHbSNMj9re3Ycvix
-	yef1Y8hsenlHiqI9XV9SELiNaimM/Kg09vxSeEx2KkJt1zWA+SVSruf/pOZKTCotOeI=
-X-Gm-Gg: AeBDievE9q68M7Jhi0tvH4wntFwn8jmjqkiJLxD4QEu0R1z5/UIeGtwsnkUsmAmoOgF
-	plZZTap0MyfqP+EXZElhJeHLydGK8ui33JZOj1/OwlQny3rY9v/dOzBIz2jxqJQMiaV4AcxF0z+
-	8kOZ1wZrEEGWEqgo37OE1X4uvdcvyGGu+Ztl5iAGEg7VlKo49hi9JMR7Msyd7nGyvwxh4Zar23Z
-	cCIs/ADiKxvwe9R59vxg2QGf1WKvDSMuVosis5NMxl1hlxJD3zh0693bEeZ7NVPoD2Abu6ZNN0b
-	MKZ4dXx+SSS6+/9fEfMTMEtRc8Ia61VvJRJ0OFc8Ktpm/Ljmhff5FmJJAHpyE2sFpyIZAdKWSXa
-	PlI4PWIWM2IaomQJRF4GQoz6Jp3h7tss/7nfDwsC8vpKPBiRgBhwoXIEQzQwnblE+u7Tv4Sfqqu
-	wZ2zIB6D5ldjj96g76ucmznP3YbKB0zVE=
-X-Received: by 2002:a4a:e39a:0:b0:67b:b738:59b4 with SMTP id 006d021491bc7-694249766b9mr1880122eaf.32.1776352871649;
-        Thu, 16 Apr 2026 08:21:11 -0700 (PDT)
-Received: from [192.168.1.14] ([38.15.57.99])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-42689699dc8sm4149132fac.14.2026.04.16.08.21.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Apr 2026 08:21:11 -0700 (PDT)
-Message-ID: <9c9f9851-5962-4281-9f34-a1f2e012b13e@linuxfoundation.org>
-Date: Thu, 16 Apr 2026 09:21:10 -0600
+        d=1e100.net; s=20251104; t=1776352935; x=1776957735;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=ZrzbbPcScOB3YiJODipm6pYCq1GabErqB6lK+E1UuOI=;
+        b=KXsCNdazzLqeTZ6QCzctVJmo55Y1EpCJ6/xkAbNVlYFHBk9szyGgDxQp5CSx9DSy55
+         V3UKFnvCghu755OadS1zaQl2IbB6+CPCAgXTFbXjb69gZ+lR20ZDTVz/imP28vw41Ha0
+         ToNTGI3v8N0ArpPZ1L2INzyd2n8Seb+R9apsecbEkgofF6GpRnJsLXjJPrQUJh4EhCph
+         zDaP9WtJb4WUsXElKz7cTCoW/6tU6SnFRvG+FDI3zuhyjmrYUcnNZ2heGilS4ZH3B3Nn
+         DjP0cZXRTwpVVg1wlt3Q5pchtdFjZBxl+ssOeCp0YnQXuWlunlW5tQJvPFLifJ/nR/ai
+         q5ag==
+X-Forwarded-Encrypted: i=1; AFNElJ+Ki2fPYaABv+KtombwZpRow/KV9Zg6qVPabu7h0hYHonfp/fyZZnc3faw/wAFrEFRaoy+gyzFgr4mv48+ezHM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy1xb1wxgToujFqnwaTrPotzGPogE8oSl0I+GNG/kQsqJVWCCdT
+	CMURBgjt3X2j+QSOQXy7kWcPRpyynZ6ZQOZ27+sVkzMF7BEY7rp+JQD++OFQpb17MaRhDfoyFyn
+	XZNOb84PiKQ4t22iBVrrvtpifHEL+DvQ=
+X-Gm-Gg: AeBDievzohZ6+jxX4TBBeJVi3QDYO0ZHBLD/DoW4qXWMpOWWj/EopzMZVKN1kpoY9nx
+	j0m9GGlUyo0/OtIMwRh2G14mmC2VrlwTbSaxXRbPDKJ0YIPLFvx1IEZuu3pv2xPSS/A2TYM4BBt
+	xenXHFRU5D0nA4P/nX0OZMMTSrErH7Isiixt4Cfe+1wwFH9eC004jR5gZbAYQnZIlAkNBCns7wl
+	ASPWSWTahUQp0EVkMAVHB1Ov2tO+QALHijEGPIW+VCwe6e7b8ObtSel6UzY6BTAKh69lsbPYJaJ
+	MoLOIirYb6o5AF76ODnLMpZuUCB84+MWKtSU6y+g+Q==
+X-Received: by 2002:a05:6102:4194:b0:610:48e8:8c4a with SMTP id
+ ada2fe7eead31-61048e896d0mr7561251137.24.1776352934841; Thu, 16 Apr 2026
+ 08:22:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 5/6] selftests: Preserve subtarget failures in all/install
-To: Mark Brown <broonie@kernel.org>
-Cc: =?UTF-8?Q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>,
- torvalds@linux-foundation.org, Shuah Khan <shuah@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kbuild@vger.kernel.org, Aishwarya.TCV@arm.com,
- ben.copeland@linaro.org, kernelci@lists.linux.dev,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20260320-selftests-fixes-v1-0-79144f76be01@suse.com>
- <20260320-selftests-fixes-v1-5-79144f76be01@suse.com>
- <ad-ZdjzQZXNgkpwv@sirena.co.uk>
- <3cdf8e79-7c59-4831-9b38-e9c2cef97fe1@linuxfoundation.org>
- <ad-8BIkw_ijCLqcF@sirena.co.uk>
- <e4b82973-7d9e-454d-8f69-6d2a1a8ec7dc@sirena.org.uk>
- <c834846c-96d5-405c-97d9-f182b8fe1569@linuxfoundation.org>
- <a73aa838-d194-4867-86fb-42bc8d057fd9@sirena.org.uk>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <a73aa838-d194-4867-86fb-42bc8d057fd9@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20260328172314.45807-1-dorjoychy111@gmail.com> <20260416-abgraben-seeweg-a44ce660957f@brauner>
+In-Reply-To: <20260416-abgraben-seeweg-a44ce660957f@brauner>
+From: Dorjoy Chowdhury <dorjoychy111@gmail.com>
+Date: Thu, 16 Apr 2026 21:22:03 +0600
+X-Gm-Features: AQROBzDwlhonUu0OdB2GZDkt71Qp2GPutRABZHn8dYTEqH0ntcAPsZO_it5641c
+Message-ID: <CAFfO_h5mORm0OuK-d4thzBWWySmyvLSVeVa7phZc4Df-8D=1Cg@mail.gmail.com>
+Subject: Re: [PATCH v6 0/4] OPENAT2_REGULAR flag support for openat2
+To: Christian Brauner <brauner@kernel.org>
+Cc: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-api@vger.kernel.org, ceph-devel@vger.kernel.org, gfs2@lists.linux.dev, 
+	linux-nfs@vger.kernel.org, linux-cifs@vger.kernel.org, v9fs@lists.linux.dev, 
+	linux-kselftest@vger.kernel.org, viro@zeniv.linux.org.uk, jack@suse.cz, 
+	jlayton@kernel.org, chuck.lever@oracle.com, alex.aring@gmail.com, 
+	arnd@arndb.de, adilger@dilger.ca, mjguzik@gmail.com, smfrench@gmail.com, 
+	richard.henderson@linaro.org, mattst88@gmail.com, linmag7@gmail.com, 
+	tsbogend@alpha.franken.de, James.Bottomley@hansenpartnership.com, 
+	deller@gmx.de, davem@davemloft.net, andreas@gaisler.com, idryomov@gmail.com, 
+	amarkuze@redhat.com, slava@dubeyko.com, agruenba@redhat.com, 
+	trondmy@kernel.org, anna@kernel.org, sfrench@samba.org, pc@manguebit.org, 
+	ronniesahlberg@gmail.com, sprasad@microsoft.com, tom@talpey.com, 
+	bharathsm@microsoft.com, shuah@kernel.org, miklos@szeredi.hu, 
+	hansg@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 4/16/26 09:15, Mark Brown wrote:
-> On Thu, Apr 16, 2026 at 09:08:17AM -0600, Shuah Khan wrote:
->> On 4/16/26 07:16, Mark Brown wrote:
-> 
->>> Sending shortly, FWIW I'm also seeing a buch of issues with:
-> 
->>> ./run_kselftest.sh: 5: ./kselftest/runner.sh: Bad substitution
->>> ./run_kselftest.sh: 5: .: cannot open ./ktap_helpers.sh: No such file
-> 
->> I will take a look and isolate the two commits that changes
->> run_kselftest.sh - sorry for the trouble with CI this time
->> around.
-> 
-> Pretty sure it's 2964f6b816c2 (selftests: Use ktap helpers for
-> runner.sh) - I've just put together a fix for that one, will throw it at
-> my testing and send it later today all being well.  It uses readlink -e
-> which isn't implemented by busybox.
+On Thu, Apr 16, 2026 at 7:07=E2=80=AFPM Christian Brauner <brauner@kernel.o=
+rg> wrote:
+>
+> On Sat, 28 Mar 2026 23:22:21 +0600, Dorjoy Chowdhury wrote:
+> > I came upon this "Ability to only open regular files" uapi feature sugg=
+estion
+> > from https://uapi-group.org/kernel-features/#ability-to-only-open-regul=
+ar-files
+> > and thought it would be something I could do as a first patch and get t=
+o
+> > know the kernel code a bit better.
+> >
+> > The following filesystems have been tested by building and booting the =
+kernel
+> > x86 bzImage in a Fedora 43 VM in QEMU. I have tested with OPENAT2_REGUL=
+AR that
+> > regular files can be successfully opened and non-regular files (directo=
+ry, fifo etc)
+> > return -EFTYPE.
+> > - btrfs
+> > - NFS (loopback)
+> > - SMB (loopback)
+> >
+> > [...]
+>
+> - I've added an explanation why OPENAT2_REGULAR is only needed for some
+>   ->atomic_open() implementers but not others. What I don't like is that
+>   we need all that custom handling in there but it's managable.
+>
+> - I dropped the topmost style conversions. They really don't belong
+>   there and if we switch to something better we should use (1 << <nr>).
+>
+> - I split the EFTYPE errno introduction into a separate patch.
+>
+> ---
 
-Yes 2964f6b816c2 is my first suspect with ktap_helpers.sh no such file.
-Thank you for fixing this. That way we can patch it and not revert it.
+Thanks for fixing up and picking this one up!
 
-thanks,
--- SHuah
+>
+> Applied to the vfs-7.2.openat.regular branch of the vfs/vfs.git tree.
+> Patches in the vfs-7.2.openat.regular branch should appear in linux-next =
+soon.
+>
+
+I don't see a vfs-7.2.openat.regular branch in vfs/vfs.git tree in
+git.kernel.org.  Maybe this hasn't been pushed yet?
+
+> Please report any outstanding bugs that were missed during review in a
+> new review to the original patch series allowing us to drop it.
+>
+> It's encouraged to provide Acked-bys and Reviewed-bys even though the
+> patch has now been applied. If possible patch trailers will be updated.
+>
+> Note that commit hashes shown below are subject to change due to rebase,
+> trailer updates or similar. If in doubt, please check the listed branch.
+>
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
+> branch: master
+>
+
+I guess you wanted to mean vfs-7.2.openat.regular here?
+
+Regards,
+Dorjoy
