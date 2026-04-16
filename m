@@ -1,102 +1,192 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2828439448B;
-	Thu, 16 Apr 2026 13:03:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67E4D3B5825;
+	Thu, 16 Apr 2026 13:05:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776344627; cv=none; b=q/3njywddBWyN9PED7juP1ck/FgVZ9rYkkcO8O2H5IVaBgxhXt0kd26EflK3EqddcN868p+vu2G0e5Yn370fM6u73b+KrA1EKKTxhgtqC1CV/60WSvF23cGtDuMnaQiq28zUMnEkKaZSY+ypK+w0JGnS8fR9+hhjOmgi37V9b34=
+	t=1776344759; cv=none; b=KCa1MrmHjNRjVEUazN0XzHjtrHlxHL46aYlmQhJEUL/GRjGt6ae63kM7d3RE2CibU2mTKvgZCkUfukIuDoztwV3GZeyM0virznnrA7xcfk65qimnefhadK1k+0pL8Y3dgXa4bW0Jc7cVvLuu3s7xm3uTF2t+Jp9YM9cUy1bT+70=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776344627; c=relaxed/simple;
-	bh=U+ZtfVg+btbC6MDDdBJb+AzYwUYtrSmejI1JsfZ0GCA=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=IgSE7fUyMsFsInIQRXlfOnt/RXHRmurj/sZQ8yoSJmNkQKGGMh3HrmPUCNQjbFsbYXblRy6UTWCNtu+ERGXKYgb8S7QB8hy3pEDN0/FHAXoEd6frtlw0DY5B0iPAmcxrh0fI+0qGvRXUzHPTeHtF2z46Ud4P6gbpqJD0jJrt7CY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aLUrYLwq; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776344759; c=relaxed/simple;
+	bh=LKqiYtCSdYGhCyBf/mMMNOBQugaqjT2Dib6bCbcxP/s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PRQZQvJyKpXsPtWpB2teltOKlZ2WHlCYKRfwptornbjn8TwLIMPFWqP5XR72onSP4yOchbi82SkCRATBmcySk+6RiLo2G+9qeZcgOC7r2QHwBNbYu7XIyuOkg/iJDdmCxC0N1CtUTcadVUttxowF01x7IqL/noXITak0ejvoBvg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com; spf=pass smtp.mailfrom=cyphar.com; dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b=Ofuf1/2e; arc=none smtp.client-ip=80.241.56.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cyphar.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aLUrYLwq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B1B6C2BCB3;
-	Thu, 16 Apr 2026 13:03:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776344626;
-	bh=U+ZtfVg+btbC6MDDdBJb+AzYwUYtrSmejI1JsfZ0GCA=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=aLUrYLwqaAH5AFR+W69v008J4xqFv512y05jBuTKEnGqkfyS9HPkryVxFx+hB8rYS
-	 eLjWN//lDedwK5WgQkUoZBDdrQs6oQNu8EF15teHqGOsWgCoJ0kl8HVwseOqPbTa4+
-	 ciwI+qE3tW8UYPmw2VBG7Fe1XkEYGNZxPPnvJZ1bkb1zhrdIo3jP33b/twOW76SUFP
-	 5vtoI/JYZBCL0QrgWhd47d5kZfFE2MxnWEeXadUA4dwwogEy+aDIp9XkzzpN4qxCMV
-	 yiERLA0LvYIfshhLq1FneZd+sp9r48r97uekfkvQ/LYmtm5cjj3jH84+qnPTc8oMMk
-	 dxS+FLo7E+8cw==
-Content-Type: multipart/mixed; boundary="===============5086334849017688193=="
+	dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b="Ofuf1/2e"
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:b231:465::1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4fxJD11Fnvz9trN;
+	Thu, 16 Apr 2026 15:05:53 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cyphar.com; s=MBO0001;
+	t=1776344753;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=j3SVhaxoe6KpS7BWIdNtnzlL4xk1+jeKHvu5tT02YlI=;
+	b=Ofuf1/2e7ix58a6QMnjoZqNi0IkQDsa4ZwzLticveCI0rqjUCCCttZsEArNllde0VXuvNC
+	06uqhm88AO/DtfQqy7VsqR5v0Bkuy4Jp3LHh8K6W5shnGlaHY4q/0VImNPonJF1+hdUkYW
+	7Y4SK+8qK0OPTqi70cxSoyKfSrWGlZzHD4gpd21bm6Iw6jhUDEbIvLXe8/cUg/urCs3bxJ
+	AxwpmKv53w1vvfF6M6yzU+RNtAqAhygVMWhK1JjjxPhWIJFtMaCCEvG5paRmyd2BVvsyee
+	Qmzo80CrRuAb8PsaduekY0cMCxq1B3EIA0DadMN5CChtpgNH/bQxuOpBX0aQ/Q==
+Authentication-Results: outgoing_mbo_mout;
+	dkim=none;
+	spf=pass (outgoing_mbo_mout: domain of cyphar@cyphar.com designates 2001:67c:2050:b231:465::1 as permitted sender) smtp.mailfrom=cyphar@cyphar.com
+Date: Thu, 16 Apr 2026 23:05:08 +1000
+From: Aleksa Sarai <cyphar@cyphar.com>
+To: Dorjoy Chowdhury <dorjoychy111@gmail.com>
+Cc: jlayton@kernel.org, linux-fsdevel@vger.kernel.org, 
+	Linus Torvalds <torvalds@linux-foundation.org>, linux-kernel@vger.kernel.org, linux-api@vger.kernel.org, 
+	ceph-devel@vger.kernel.org, gfs2@lists.linux.dev, linux-nfs@vger.kernel.org, 
+	linux-cifs@vger.kernel.org, v9fs@lists.linux.dev, linux-kselftest@vger.kernel.org, 
+	viro@zeniv.linux.org.uk, brauner@kernel.org, jack@suse.cz, chuck.lever@oracle.com, 
+	alex.aring@gmail.com, arnd@arndb.de, adilger@dilger.ca, mjguzik@gmail.com, 
+	smfrench@gmail.com, richard.henderson@linaro.org, mattst88@gmail.com, 
+	linmag7@gmail.com, tsbogend@alpha.franken.de, James.Bottomley@hansenpartnership.com, 
+	deller@gmx.de, davem@davemloft.net, andreas@gaisler.com, idryomov@gmail.com, 
+	amarkuze@redhat.com, slava@dubeyko.com, agruenba@redhat.com, trondmy@kernel.org, 
+	anna@kernel.org, sfrench@samba.org, pc@manguebit.org, ronniesahlberg@gmail.com, 
+	sprasad@microsoft.com, tom@talpey.com, bharathsm@microsoft.com, shuah@kernel.org, 
+	miklos@szeredi.hu, hansg@kernel.org
+Subject: Re: [PATCH v6 1/4] openat2: new OPENAT2_REGULAR flag support
+Message-ID: <2026-04-16-raunchy-random-curfew-guide-GmtLJR@cyphar.com>
+References: <20260328172314.45807-1-dorjoychy111@gmail.com>
+ <20260328172314.45807-2-dorjoychy111@gmail.com>
+ <2026-04-16-selfless-milky-wasps-shin-p6liRL@cyphar.com>
+ <CAFfO_h5kWCYszymaY=tPAbpU=PjLFxsND+CWSYtypN4iuW+qPw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <c666b0c8e3e085c57e6d75ac801c67f5c063c56f37b6542d4ca55ec001e433db@mail.kernel.org>
-In-Reply-To: <20260416-selftests-bpf_misconfig-v6-8-7efeab504af1@suse.com>
-References: <20260416-selftests-bpf_misconfig-v6-8-7efeab504af1@suse.com>
-Subject: Re: [PATCH bpf-next v6 08/11] selftests/bpf: Allow test_progs to link with a partial object set
-From: bot+bpf-ci@kernel.org
-To: rbm@suse.com,andrii@kernel.org,eddyz87@gmail.com,ast@kernel.org,daniel@iogearbox.net,martin.lau@linux.dev,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,shuah@kernel.org,nathan@kernel.org,nick.desaulniers+lkml@gmail.com,morbo@google.com,justinstitt@google.com
-Cc: bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,llvm@lists.linux.dev,alan.maguire@oracle.com,rbm@suse.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 16 Apr 2026 13:03:46 +0000 (UTC)
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="iix77o3fx2yurggd"
+Content-Disposition: inline
+In-Reply-To: <CAFfO_h5kWCYszymaY=tPAbpU=PjLFxsND+CWSYtypN4iuW+qPw@mail.gmail.com>
+X-Rspamd-Queue-Id: 4fxJD11Fnvz9trN
 
---===============5086334849017688193==
-Content-Type: text/plain; charset="us-ascii"
+
+--iix77o3fx2yurggd
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v6 1/4] openat2: new OPENAT2_REGULAR flag support
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
 
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index 5ad50d3ff2f8..79991dc98ddd 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
+On 2026-04-16, Dorjoy Chowdhury <dorjoychy111@gmail.com> wrote:
+> On Thu, Apr 16, 2026 at 5:41=E2=80=AFPM Aleksa Sarai <cyphar@cyphar.com> =
+wrote:
+> >
+> > On 2026-03-28, Dorjoy Chowdhury <dorjoychy111@gmail.com> wrote:
+> > > This flag indicates the path should be opened if it's a regular file.
+> > > This is useful to write secure programs that want to avoid being
+> > > tricked into opening device nodes with special semantics while thinki=
+ng
+> > > they operate on regular files. This is a requested feature from the
+> > > uapi-group[1].
+> > >
+> > > A corresponding error code EFTYPE has been introduced. For example, if
+> > > openat2 is called on path /dev/null with OPENAT2_REGULAR in the flag
+> > > param, it will return -EFTYPE. EFTYPE is already used in BSD systems
+> > > like FreeBSD, macOS.
+> > >
+> > > When used in combination with O_CREAT, either the regular file is
+> > > created, or if the path already exists, it is opened if it's a regular
+> > > file. Otherwise, -EFTYPE is returned.
+> > >
+> > > When OPENAT2_REGULAR is combined with O_DIRECTORY, -EINVAL is returned
+> > > as it doesn't make sense to open a path that is both a directory and a
+> > > regular file.
+> > >
+> > > [1]: https://uapi-group.org/kernel-features/#ability-to-only-open-reg=
+ular-files
+> > >
+> > > Signed-off-by: Dorjoy Chowdhury <dorjoychy111@gmail.com>
+> > > ---
+> >
+> > Aside from the nit below, feel free to take a
+> >
+> > Reviewed-by: Aleksa Sarai <aleksa@amutable.com>
+> >
+>=20
+> Thanks for reviewing!
+>=20
+> > > diff --git a/fs/open.c b/fs/open.c
+> > > index 681d405bc61e..a6f445f72181 100644
+> > > --- a/fs/open.c
+> > > +++ b/fs/open.c
+> > > @@ -960,7 +960,7 @@ static int do_dentry_open(struct file *f,
+> > >       if (f->f_mapping->a_ops && f->f_mapping->a_ops->direct_IO)
+> > >               f->f_mode |=3D FMODE_CAN_ODIRECT;
+> > >
+> > > -     f->f_flags &=3D ~(O_CREAT | O_EXCL | O_NOCTTY | O_TRUNC);
+> > > +     f->f_flags &=3D ~(O_CREAT | O_EXCL | O_NOCTTY | O_TRUNC | OPENA=
+T2_REGULAR);
+> >
+> > It's not clear to me why you dropped this, I didn't see a review
+> > mentioning it either. (General note: Ideally the cover letter changelog
+> > would mention who suggested a change in brackets after the changelog
+> > line so it's easier to track where a change might've come from.)
+> >
+>=20
+> Thanks for the general note. I will keep that in mind.
+>=20
+> The review was from Jeff Layton in v5
+> https://lore.kernel.org/linux-fsdevel/5fcc2a6e6d92dae0601c6b3b8faa8b2f839=
+81afb.camel@kernel.org/
+> " 1. OPENAT2_REGULAR leaks into f_flags - do_dentry_open() strips
+> open-time-only flags (O_CREAT|O_EXCL|O_NOCTTY|O_TRUNC)
+>   but does not strip OPENAT2_REGULAR. When a regular file is
+> successfully opened via openat2() with this flag, the bit
+>   persists in file->f_flags and will be returned by fcntl(fd, F_GETFL)."
+>=20
+> I think it makes sense to strip off as OPENAT2_REGULAR is an open time
+> only flag (like O_CREAT and the others already), right?
 
-[ ... ]
+Well, O_DIRECTORY isn't stripped so if we want to mirror that behaviour
+then it shouldn't be stripped either IMHO.
 
-> -$(OUTPUT)/$(TRUNNER_BINARY): $(TRUNNER_TEST_OBJS)			\
-> +$(OUTPUT)/$(TRUNNER_BINARY): $(if $(PERMISSIVE),,$(TRUNNER_TEST_OBJS))	\
->  			     $(TRUNNER_EXTRA_OBJS) $$(BPFOBJ)		\
+O_NOCTTY and O_TRUNC make sense to strip (they are not relevant to the
+file after it was opened -- truncation only happens at open time and you
+can always set your controlling TTY later).
 
-[ ... ]
+The story with O_CREAT and O_EXCL is a bit more complicated. They are
+stripped but the history there is unclear -- the line was added in Linux
+0.98.4(!) with no mention in the release note at the time. (Linus: I
+wonder if you remember why this was changed at the time? Sorry for the
+trip down memory lane...)
 
-> -	$(Q)$$(CC) $$(CFLAGS) $$(filter %.a %.o,$$^) $$(LDLIBS) $$(LLVM_LDLIBS) $$(LDFLAGS) $$(LLVM_LDFLAGS) -o $$@
-> +	$(Q)$$(CC) $$(CFLAGS) $$(filter %.a %.o,$(if $(PERMISSIVE),$$(wildcard $(TRUNNER_TEST_OBJS)),$(TRUNNER_TEST_OBJS)) $$^) $$(LDLIBS) $$(LLVM_LDLIBS) $$(LDFLAGS) $$(LLVM_LDFLAGS) -o $$@
+However, the existence of F_CREATED_QUERY kind of shows that these kinds
+of checks are stuff that userspace can find handy (though FMODE_CREATED
+is more useful than O_CREAT|O_EXCL anyway). O_EXCL is used internally
+for stuff so it can be re-exposed, I'm just not sure it's a good
+precedent to make a decision based on.
 
-Does this duplicate every test object on the linker command line in
-the default (non-PERMISSIVE) build?
+Then again, userspace can check with fstat(2) so it's not the end of the
+world, but I don't really see a strong reason to hide information from
+userspace. Since the mail was from Claude (and it tends to give silly
+nits like that) I'm not sure whether Jeff would agree with my view or
+not.
 
-When PERMISSIVE is not set, the $(if) on the prerequisite line
-resolves to $(TRUNNER_TEST_OBJS), keeping them as normal
-prerequisites. That means $^ already contains all test objects.
+--=20
+Aleksa Sarai
+https://www.cyphar.com/
 
-The $(if) in the recipe also resolves to $(TRUNNER_TEST_OBJS),
-which is prepended before $$^. After expansion, the $(filter)
-input becomes:
+--iix77o3fx2yurggd
+Content-Type: application/pgp-signature; name="signature.asc"
 
-  $(TRUNNER_TEST_OBJS) $^
-  ^^^^^^^^^^^^^^^^^^^^^
-  already present in $^ as normal prerequisites
+-----BEGIN PGP SIGNATURE-----
 
-$(filter) does not deduplicate, so every .test.o file appears
-twice in the linker arguments. With the default BPF_STRICT_BUILD=1
-this would cause "multiple definition" errors from the linker for
-all test entry points (test_arena_atomics, test_ringbuf, etc.).
+iJEEABYKADkWIQS2TklVsp+j1GPyqQYol/rSt+lEbwUCaeDegxsUgAAAAAAEAA5t
+YW51MiwyLjUrMS4xMiwyLDIACgkQKJf60rfpRG/oDAD+OTut8n70aNHtOfSq9HfZ
+Nqs1285ca/4efdXyrzF6TdsA/Rq1PeAKk1gWARrfSWVj0XaRIK8fqL+aRFpJp6Xk
+SgwB
+=KY3X
+-----END PGP SIGNATURE-----
 
-The PERMISSIVE path looks correct because test objects are
-order-only there and are excluded from $^, so the
-$(wildcard ...) expansion is the only source.
-
-One possible fix would be to omit the explicit
-$(TRUNNER_TEST_OBJS) from the filter text in the non-PERMISSIVE
-case, since $^ already carries them in the right order:
-
-  $(filter %.a %.o,$(if $(PERMISSIVE),$(wildcard $(TRUNNER_TEST_OBJS))) $^)
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24510378997
---===============5086334849017688193==--
+--iix77o3fx2yurggd--
