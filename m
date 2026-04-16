@@ -1,144 +1,102 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from ewsoutbound.kpnmail.nl (ewsoutbound.kpnmail.nl [195.121.94.185])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1AFF3D3CFC
-	for <linux-kselftest@vger.kernel.org>; Thu, 16 Apr 2026 13:49:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43C5D3D3CEA
+	for <linux-kselftest@vger.kernel.org>; Thu, 16 Apr 2026 13:52:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.121.94.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776347364; cv=none; b=bDslN/RGLikzFatB6XkDIMrs0P45/241Tk9T4e8JG4Q2knGY6wxUXQfrywlfC1ttr4DOu7vZ245zf5rqIEx1+wEgDdrfDZmUApiJ/POIx31ICcSo/gOfqPV1n+GX/KIRfn85E6TpnXWRkngx6PlyDUy7tY0yJYwCsmtnQG/oQ9o=
+	t=1776347570; cv=none; b=VB0y5ef9HdGH9RQMF+AWUITJblg7sGBM9psdFvkA20rIw94QSE/HkBt2vUbvDrQ6WTAq2+S8xijbaqpXm/i5yFt9S32dN8VCAi41Dn1F1G2YJl8sFBwl5LjXX8KfI8k85n2A+wYQRiXBeOTpuRKFDdjmJvsLsymQ4AFAkY8S3LI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776347364; c=relaxed/simple;
-	bh=s3RYvsEfI9ZdxhsabL5/svtqvt3W5lr9R3yghTmr/gA=;
+	s=arc-20240116; t=1776347570; c=relaxed/simple;
+	bh=fR/tBoBER6gaLeI/7QI7VQve0Bl/0GNLwOyUMXYytLU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O7aLUMrjCyDNWwaBqvR4YH7afctyod7OpCmDPCPYdoV1lf+skfeYOM47eJANTaTsyfuyZvhN3K7xacj7TvqKkLZ5gR3jrCplioKhOE3gzXnGnC3R1N6/pZDfCD4ASaOgWOETr7OuK+PF82PHbE1s4TEhkP74j0LIVIFgpV6+dJ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AqlOLz/H; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZH+OpXVVTyEbXKmAFHSf2+tGnpeGzokcoZsW+kslxZKx/EBf2TO/A1CcfgDcyz1U0L4pFSO9HKunL8BJi5ZaUS2Jyyaikrym5kJ81teNmH/5FPTREUUOD9dG+vQFUNj9yzgjJBsK/nJxEkZd+DTPdTCU/zl8t77sO4Vp37mNZhc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xs4all.nl; spf=pass smtp.mailfrom=xs4all.nl; dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b=Bm77yj7r; arc=none smtp.client-ip=195.121.94.185
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xs4all.nl
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xs4all.nl
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AqlOLz/H"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1CECC2BCB3;
-	Thu, 16 Apr 2026 13:49:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776347363;
-	bh=s3RYvsEfI9ZdxhsabL5/svtqvt3W5lr9R3yghTmr/gA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AqlOLz/HXz7hqXJps/IG3FaK45yw4Z0YqpDgxczLEUlMgLP/IaXrmJbUuoShfRQLv
-	 vftvKRCapRZ2NnHiAPar2EyWyd1TLgt1Ko3HP26W9UXE3KJe6nOTTqAu5ayiqwWDuc
-	 XpRqOEFJHtFkpoOhcRVFGqeTGm9UPhn1W3sRBs3gJTk8qtriK2XhdZZeKMO8eAnMRX
-	 RrWZK4z6KQSDAFWR9ri0eyK6s9sh+oS1BWmgHMXfV+x8F0JKGr4LT1pzYeU6dSS+QX
-	 NTH+dc5QJnfsEaf5J7JTMdMnLxrBMEYV49XhLFbHvE6l6N4y5OIU6WW/oMpYggnVxf
-	 X/zDR59vHkmWA==
-Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 10D1DF4006A;
-	Thu, 16 Apr 2026 09:49:22 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-02.internal (MEProxy); Thu, 16 Apr 2026 09:49:22 -0400
-X-ME-Sender: <xms:4ejgaSIYoDKvzxgPhCYw9DPRyWu3jwC0TpDUBp2Y_WPBEvYW4NkgmQ>
-    <xme:4ejgaZZzLX6dOeyn967dwC6gkgLyv9vcgNA6uPCwoD_vHRVb7RcfCwDmoAjJ9YVqE
-    08pcZZq3c1LOn1mJr8ufEayJfWseVOwMDmPX8U7mXRxDeX49F70Dak>
-X-ME-Received: <xmr:4ejgae6P2292B6joISlFkUr1uSQIblLQ826adWwScn_jixogzy7A9WlfZMDvEA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgdegjeduiecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpeffhffvvefukfhfgggtugfgjgesthekredttddtjeenucfhrhhomhepmfhirhihlhcu
-    ufhhuhhtshgvmhgruhcuoehkrghssehkvghrnhgvlhdrohhrgheqnecuggftrfgrthhtvg
-    hrnhepgeehudelheevjefftdeuheegudfhieeutdegjedukeefffeugeevvefhteejuefh
-    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpehkihhrihhllhdomhgvshhmthhprghuthhhphgv
-    rhhsohhnrghlihhthidqudeiudduiedvieehhedqvdekgeeggeejvdekqdhkrghspeepkh
-    gvrhhnvghlrdhorhhgsehshhhuthgvmhhovhdrnhgrmhgvpdhnsggprhgtphhtthhopeef
-    iedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepuggrvhhiugeskhgvrhhnvghlrd
-    horhhgpdhrtghpthhtoheprghkphhmsehlihhnuhigqdhfohhunhgurghtihhonhdrohhr
-    ghdprhgtphhtthhopehpvghtvghrgiesrhgvughhrghtrdgtohhmpdhrtghpthhtoheplh
-    hjsheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhpphhtsehkvghrnhgvlhdrohhr
-    ghdprhgtphhtthhopehsuhhrvghnsgesghhoohhglhgvrdgtohhmpdhrtghpthhtohepvh
-    gsrggskhgrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihgrmhdrhhhofihlvght
-    thesohhrrggtlhgvrdgtohhmpdhrtghpthhtohepiihihiesnhhvihguihgrrdgtohhm
-X-ME-Proxy: <xmx:4ejgaSJVJZNJGoZKWD6T5M5NCXLkDUW8HAqvk7UxjtI2XNWxSUR8Nw>
-    <xmx:4ujgacZ3_iV3ApOrNQMeV55o3dk_kAFG7wtgo-r3D52O-xdB1xB3sg>
-    <xmx:4ujgaSwCvAmjEpSOSI1Euf8uiFljZZ1F2wZxHEPu8tpaRo64t5cn4w>
-    <xmx:4ujgaQV7QWSdaLPXVIHy_TozBtgAeyudvkqy14pgSHWIZEzajtLLfQ>
-    <xmx:4ujgaeYmb7YFAUc8ewO2iFBH8S_30cSSVTvrTPJ_T_QqPAxdKtfbGI7L>
-Feedback-ID: i10464835:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 16 Apr 2026 09:49:20 -0400 (EDT)
-Date: Thu, 16 Apr 2026 14:49:14 +0100
-From: Kiryl Shutsemau <kas@kernel.org>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	Peter Xu <peterx@redhat.com>, Lorenzo Stoakes <ljs@kernel.org>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
-	Vlastimil Babka <vbabka@kernel.org>, "Liam R . Howlett" <Liam.Howlett@oracle.com>, 
-	Zi Yan <ziy@nvidia.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Sean Christopherson <seanjc@google.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, kvm@vger.kernel.org
-Subject: Re: [RFC, PATCH 00/12] userfaultfd: working set tracking for VM
- guest memory
-Message-ID: <aeDoqFWPFxkkNB26@thinkstation>
-References: <20260414142354.1465950-1-kas@kernel.org>
- <55019037-4f1c-4d9c-83ee-3a844d8f3d5e@kernel.org>
- <ad50rPOseVa-SP_s@thinkstation>
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="Bm77yj7r"
+X-KPN-MessageId: 85cdf846-399b-11f1-8ff3-005056999439
+Received: from smtp.kpnmail.nl (unknown [10.31.155.8])
+	by ewsoutbound.so.kpn.org (Halon) with ESMTPS
+	id 85cdf846-399b-11f1-8ff3-005056999439;
+	Thu, 16 Apr 2026 15:52:35 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=xs4all.nl; s=xs4all01;
+	h=content-type:mime-version:message-id:subject:to:from:date;
+	bh=RY3GV0svFcqA7cCPfaszOdrLtyZzjsraL0boACERiuo=;
+	b=Bm77yj7rU+vFVFKmploFWuopQ4KP+9igOSdE0V5MOiwez+S33NTIsehbR1j0n6dXZu41MUPS/90DQ
+	 YhiuMN1WLzUHU7KpmkEat0WYXoQzkIz8Og/kG5wSV2/5ImE1mxpiGGvI5aK76Tz7l80BRMAFs7nQ1d
+	 CPy7X5zk9GXk51USXbyPp8KeSZ/XK3amZfb8WI4J3fSYe6UCbfx0iSIoOZXd3LiT/tBj6AwPFuYgQA
+	 47Dytq6I7Yj7kQ4xjO4wXCZ2Nf5ipmHIPOVpcdHgNgLT53voKuqg0g3vuodBDCXAjAmrXvngNNtamV
+	 eZk1FD/joeTHZPZTENk6OuS8hVJLjRQ==
+X-KPN-MID: 33|SKts585cr2zFmJQ8YyKkgci4hPBI42ksYs/aslJTT0Xxn/5/EiobnXRqyHnOzvH
+ sdJqHs49lRVAWOLYzfVfJBbhGeUXrowLvqdkHsEcuCm0=
+X-KPN-VerifiedSender: Yes
+X-CMASSUN: 33|EO0iyE5VadVg69F0c4xTu20RSvoYNTh4lUdRxSkFOravu4ka0cNe+tq1cWW2Zay
+ NHnz46xH6R3GRJWVTZMYDPA==
+Received: from localhost (142-169-144-85.ftth.glasoperator.nl [85.144.169.142])
+	by smtp.xs4all.nl (Halon) with ESMTPSA
+	id 85299d3e-399b-11f1-9c0b-00505699d6e5;
+	Thu, 16 Apr 2026 15:52:34 +0200 (CEST)
+Date: Thu, 16 Apr 2026 15:52:34 +0200
+From: Jori Koolstra <jkoolstra@xs4all.nl>
+To: Dorjoy Chowdhury <dorjoychy111@gmail.com>
+Cc: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-api@vger.kernel.org, ceph-devel@vger.kernel.org, gfs2@lists.linux.dev, 
+	linux-nfs@vger.kernel.org, linux-cifs@vger.kernel.org, v9fs@lists.linux.dev, 
+	linux-kselftest@vger.kernel.org, viro@zeniv.linux.org.uk, brauner@kernel.org, jack@suse.cz, 
+	jlayton@kernel.org, chuck.lever@oracle.com, alex.aring@gmail.com, arnd@arndb.de, 
+	adilger@dilger.ca, mjguzik@gmail.com, smfrench@gmail.com, 
+	richard.henderson@linaro.org, mattst88@gmail.com, linmag7@gmail.com, tsbogend@alpha.franken.de, 
+	James.Bottomley@hansenpartnership.com, deller@gmx.de, davem@davemloft.net, andreas@gaisler.com, 
+	idryomov@gmail.com, amarkuze@redhat.com, slava@dubeyko.com, agruenba@redhat.com, 
+	trondmy@kernel.org, anna@kernel.org, sfrench@samba.org, pc@manguebit.org, 
+	ronniesahlberg@gmail.com, sprasad@microsoft.com, tom@talpey.com, bharathsm@microsoft.com, 
+	shuah@kernel.org, miklos@szeredi.hu, hansg@kernel.org
+Subject: Re: [PATCH v6 1/4] openat2: new OPENAT2_REGULAR flag support
+Message-ID: <aeDpIgfDaIKEaBcL@lt-jori.localdomain>
+Mail-Followup-To: Jori Koolstra <jkoolstra@xs4all.nl>, 
+	Dorjoy Chowdhury <dorjoychy111@gmail.com>, linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-api@vger.kernel.org, ceph-devel@vger.kernel.org, gfs2@lists.linux.dev, 
+	linux-nfs@vger.kernel.org, linux-cifs@vger.kernel.org, v9fs@lists.linux.dev, 
+	linux-kselftest@vger.kernel.org, viro@zeniv.linux.org.uk, brauner@kernel.org, jack@suse.cz, 
+	jlayton@kernel.org, chuck.lever@oracle.com, alex.aring@gmail.com, arnd@arndb.de, 
+	adilger@dilger.ca, mjguzik@gmail.com, smfrench@gmail.com, 
+	richard.henderson@linaro.org, mattst88@gmail.com, linmag7@gmail.com, tsbogend@alpha.franken.de, 
+	James.Bottomley@hansenpartnership.com, deller@gmx.de, davem@davemloft.net, andreas@gaisler.com, 
+	idryomov@gmail.com, amarkuze@redhat.com, slava@dubeyko.com, agruenba@redhat.com, 
+	trondmy@kernel.org, anna@kernel.org, sfrench@samba.org, pc@manguebit.org, 
+	ronniesahlberg@gmail.com, sprasad@microsoft.com, tom@talpey.com, bharathsm@microsoft.com, 
+	shuah@kernel.org, miklos@szeredi.hu, hansg@kernel.org
+References: <20260328172314.45807-1-dorjoychy111@gmail.com>
+ <20260328172314.45807-2-dorjoychy111@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ad50rPOseVa-SP_s@thinkstation>
+In-Reply-To: <20260328172314.45807-2-dorjoychy111@gmail.com>
 
-On Tue, Apr 14, 2026 at 06:10:44PM +0100, Kiryl Shutsemau wrote:
-> On Tue, Apr 14, 2026 at 05:37:50PM +0200, David Hildenbrand (Arm) wrote:
-> > On 4/14/26 16:23, Kiryl Shutsemau (Meta) wrote:
-> > > This series adds userfaultfd support for tracking the working set of
-> > > VM guest memory, enabling VMMs to identify cold pages and evict them
-> > > to tiered or remote storage.
-> > > 
-> > > == Problem ==
-> > > 
-> > > VMMs managing guest memory need to:
-> > > 1. Track which pages are actively used (working set detection)
-> > > 2. Safely evict cold pages to slower storage
-> > > 3. Fetch pages back on demand when accessed again
-> > > 
-> > > For shmem-backed guest memory, working set tracking partially works
-> > > today: MADV_DONTNEED zaps PTEs while pages stay in page cache, and
-> > > re-access auto-resolves from cache. But safe eviction still requires
-> > > synchronous fault interception to prevent data loss races.
-> > > 
-> > > For anonymous guest memory (needed for KSM cross-VM deduplication),
-> > > there is no mechanism at all — clearing a PTE loses the page.
-> > > 
-> > > == Solution ==
-> > > 
-> > > The series introduces a unified userfaultfd interface that works
-> > > across both anonymous and shmem-backed memory:
-> > > 
-> > > UFFD_FEATURE_MINOR_ANON: extends MODE_MINOR registration to anonymous
-> > > private memory. Uses the PROT_NONE hinting mechanism (same as NUMA
-> > > balancing) to make pages inaccessible without freeing them.
-> > 
-> > I would rather tackle this from the other direction: it's another form
-> > of protection (like WP), not really a "minor" mode.
-> > 
-> > Could we add a UFFDIO_REGISTER_MODE_RWP (or however we would call it)
-> > and support it for anon+shmem, avoiding the zapping for shmem completely?
-> 
-> I like this idea.
-> 
-> It should be functionally equivalent, but your interface idea fits
-> better with the rest.
-> 
-> Thanks! Will give it a try.
+On Sat, Mar 28, 2026 at 11:22:22PM +0600, Dorjoy Chowdhury wrote:
+> diff --git a/arch/alpha/include/uapi/asm/fcntl.h b/arch/alpha/include/uapi/asm/fcntl.h
+> index 50bdc8e8a271..fe488bf7c18e 100644
+> --- a/arch/alpha/include/uapi/asm/fcntl.h
+> +++ b/arch/alpha/include/uapi/asm/fcntl.h
+> @@ -34,6 +34,7 @@
+>  
+>  #define O_PATH		040000000
+>  #define __O_TMPFILE	0100000000
+> +#define OPENAT2_REGULAR	0200000000
+>
 
-Here is an updated version:
+I don't quite understand why we are adding OPENAT2_REGULAR inside the
+O_* flag range. Wasn't this supposed to be only supported for openat2()?
+If so, I don't see the need to waste an O_* flag bit. But maybe I am
+missing something.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git/log/?h=uffd/rfc-v2
-
-will post after -rc1 is tagged.
-
-I like it more. It got substantially cleaner.
-
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Thanks,
+Jori.
