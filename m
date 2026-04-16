@@ -1,141 +1,113 @@
-Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [80.241.56.151])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B1C13DE45C;
-	Thu, 16 Apr 2026 15:16:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3E6135F5E4
+	for <linux-kselftest@vger.kernel.org>; Thu, 16 Apr 2026 15:21:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776352585; cv=none; b=jlHrNVCvQ8noJhLYVrAiRNI/lnMDYK+CX5kP3YyDyVxBsYMEndk6QZGIeOq10sqSb6MRTNzKAJ9NOCZJjPowG4zdl4SqYwOhzpHzcSTJKX87Ms/YslB28lG27eF2GfGrGJu+1Dj1VTjEmMyxGuJfSc2sTV+3qUcaFu+kSg9eLl8=
+	t=1776352874; cv=none; b=EN3nbd2gkShavIV23sH7E2pb0ggwYmgW4vcD8EvkTsFSGLJLlt08qkOloiEjwPxhfBW8U7BuCddCxNZ3ZAy2SNgcPXK1qos9VKclan0Qjcvl5iC9YzYZYKvZjquZblIovaSeljL7u+ouKTMNqrZaWTqFg4+kzJsclwRBrx3GDLw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776352585; c=relaxed/simple;
-	bh=XyF+E6gO478wOiq/pgMuvIN81fx+9yXqn/Vvu2aT0L4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tOofYZVZ2XdsaRVag0klVLF7jG2XIZtwpKMf0FrUtULvCvTL512zt27kuRCnfM3SXfv5O0rbH4Lxn3bb+1vOOy58JSIzw6kFv2oZGTVOkGZhKLqtMvlEeJjXvI7UVl2sXUHqeb6Xm+4oo5V/5a36a6A0z+XfvAFYP60uTXQFOl0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com; spf=pass smtp.mailfrom=cyphar.com; dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b=Virv/0El; arc=none smtp.client-ip=80.241.56.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cyphar.com
+	s=arc-20240116; t=1776352874; c=relaxed/simple;
+	bh=lY8KnyEnww1BaerqB9rUeouJcntcbdG7KfY4D4jc3hQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IaQnWVB2mPN5EM3CeKMwD6awL+zDFLwg9de9Kxy7ZRwzrbWri6OQscyVpjvp9m8MV0ge0eKQ8ZEeIbxkGZnOzKg7OlDu2zAud+7OA4J2Z762OzX+ZTxtb38MFBLQKZPVKmY2tWanZ/SL83ymWf2C4D/BalLC/tJ6L22OtrhTdmw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=UXD+qgWg; arc=none smtp.client-ip=209.85.160.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b="Virv/0El"
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [10.196.197.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4fxM6P2PZ5z9tSb;
-	Thu, 16 Apr 2026 17:16:13 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cyphar.com; s=MBO0001;
-	t=1776352573;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=nhdCoiv/I0uxkoUrCPPG8rmJC6ZboD1OxA5S+uwKny8=;
-	b=Virv/0ElZ0qFnnPY/GhS5IhJ+h+GwbEprg/h6Z9gV2OljviLjkdVEwRZ+7X854ZIKSFeH0
-	hC4Niqhi7j9PLi4+x63KFfnDPt4RuFBqYxloFK25bI25vzvnHeqoJVXrIUJggjY/wyR6sU
-	RAg+Gmv9Q8pOXrv4JpVr7Wx/FZ1ibiwpX3fq5zPDnVBU8spo4050i3foBmWYOnB3d8Hz0d
-	zJQBpIWvwsnJqNPDc7mRLjs7ut2beQ15RsBmg4fBV07bQjFt69J5XLy6EZvGe9QHajdQDq
-	FFTKxD9BCwP255KkJ0kJ8owP3FVsOz/lVDwfI2wM+7QFoaGvhF8LuoZY6ew7SQ==
-Date: Fri, 17 Apr 2026 01:15:42 +1000
-From: Aleksa Sarai <cyphar@cyphar.com>
-To: Dorjoy Chowdhury <dorjoychy111@gmail.com>
-Cc: Jori Koolstra <jkoolstra@xs4all.nl>, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-api@vger.kernel.org, ceph-devel@vger.kernel.org, 
-	gfs2@lists.linux.dev, linux-nfs@vger.kernel.org, linux-cifs@vger.kernel.org, 
-	v9fs@lists.linux.dev, linux-kselftest@vger.kernel.org, viro@zeniv.linux.org.uk, 
-	brauner@kernel.org, jack@suse.cz, jlayton@kernel.org, chuck.lever@oracle.com, 
-	alex.aring@gmail.com, arnd@arndb.de, adilger@dilger.ca, mjguzik@gmail.com, 
-	smfrench@gmail.com, richard.henderson@linaro.org, mattst88@gmail.com, 
-	linmag7@gmail.com, tsbogend@alpha.franken.de, James.Bottomley@hansenpartnership.com, 
-	deller@gmx.de, davem@davemloft.net, andreas@gaisler.com, idryomov@gmail.com, 
-	amarkuze@redhat.com, slava@dubeyko.com, agruenba@redhat.com, trondmy@kernel.org, 
-	anna@kernel.org, sfrench@samba.org, pc@manguebit.org, ronniesahlberg@gmail.com, 
-	sprasad@microsoft.com, tom@talpey.com, bharathsm@microsoft.com, shuah@kernel.org, 
-	miklos@szeredi.hu, hansg@kernel.org
-Subject: Re: [PATCH v6 1/4] openat2: new OPENAT2_REGULAR flag support
-Message-ID: <2026-04-16-upstate-capable-deacon-petals-0l25lH@cyphar.com>
-References: <20260328172314.45807-1-dorjoychy111@gmail.com>
- <20260328172314.45807-2-dorjoychy111@gmail.com>
- <aeDpIgfDaIKEaBcL@lt-jori.localdomain>
- <CAFfO_h6pkyX=uN5uoXda6toTtT6KsahfBNBLom9i21HdZ7JOmQ@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="UXD+qgWg"
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-4230a00de40so626017fac.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Apr 2026 08:21:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1776352872; x=1776957672; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7ED7Dtk/V7JNqL6bwm+6sfQAnzfjIa9OPc/3hBimeik=;
+        b=UXD+qgWgk/64Yt2GJgOpAU+SRkyuvWJaYd7Dy4XFvOUF+8y6zYAusyTKobEbIbGnva
+         3xGjwKXH5t4ooZsTk7WgeIoG7XrWBQInKdhGmjavoIW2OYFcDTdsFW5UtaF0uxyHvYj+
+         w/DTeAv6C+f6GYxKsZt5eefMY0G+6JtzOxA8I=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776352872; x=1776957672;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7ED7Dtk/V7JNqL6bwm+6sfQAnzfjIa9OPc/3hBimeik=;
+        b=beaGjw46geUY0bHVvVGXubJw0FTP2C0eCFVcXUG/e/Ub93Jtgrm5sJ2+CuKwLl9vat
+         3rfCQoM+7otx3hCkxH7Rnxl4ZZWIJniQieE6WBvuA7mXIUKRKCVvbEoQwgCpPqBNfTVO
+         wXdhfBPLe3ZZmaMVyDL3CT/d1gnzEG6eq9bWRtfjlz7+1/hb+Ma5hMlJXF6xA8WaIjRw
+         IDN5XY3I+Tm2cy2+USyA3SvC4I+iPB8Ok3x4WVDdTBGxoiqfKKBb/v8OSDQL7Z2yhXss
+         Ss6GKnJvRbOZ3LsUcOL1q8dVtnVsixJbZzY2y+EJZyYK1Tukyku3+TJSveuDPAwNNZFY
+         VcYw==
+X-Forwarded-Encrypted: i=1; AFNElJ9xFKz31LlGX2j8WymmXPgvGfXKdH/EDWNutHMzPBRWB/xE1WlscdbqsItencj5xhEq65lj9lK1HVfRIYvjK0M=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzs8js5dyEtnVhkQXjS4AeL28TPh48uUJkgzHbSNMj9re3Ycvix
+	yef1Y8hsenlHiqI9XV9SELiNaimM/Kg09vxSeEx2KkJt1zWA+SVSruf/pOZKTCotOeI=
+X-Gm-Gg: AeBDievE9q68M7Jhi0tvH4wntFwn8jmjqkiJLxD4QEu0R1z5/UIeGtwsnkUsmAmoOgF
+	plZZTap0MyfqP+EXZElhJeHLydGK8ui33JZOj1/OwlQny3rY9v/dOzBIz2jxqJQMiaV4AcxF0z+
+	8kOZ1wZrEEGWEqgo37OE1X4uvdcvyGGu+Ztl5iAGEg7VlKo49hi9JMR7Msyd7nGyvwxh4Zar23Z
+	cCIs/ADiKxvwe9R59vxg2QGf1WKvDSMuVosis5NMxl1hlxJD3zh0693bEeZ7NVPoD2Abu6ZNN0b
+	MKZ4dXx+SSS6+/9fEfMTMEtRc8Ia61VvJRJ0OFc8Ktpm/Ljmhff5FmJJAHpyE2sFpyIZAdKWSXa
+	PlI4PWIWM2IaomQJRF4GQoz6Jp3h7tss/7nfDwsC8vpKPBiRgBhwoXIEQzQwnblE+u7Tv4Sfqqu
+	wZ2zIB6D5ldjj96g76ucmznP3YbKB0zVE=
+X-Received: by 2002:a4a:e39a:0:b0:67b:b738:59b4 with SMTP id 006d021491bc7-694249766b9mr1880122eaf.32.1776352871649;
+        Thu, 16 Apr 2026 08:21:11 -0700 (PDT)
+Received: from [192.168.1.14] ([38.15.57.99])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-42689699dc8sm4149132fac.14.2026.04.16.08.21.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Apr 2026 08:21:11 -0700 (PDT)
+Message-ID: <9c9f9851-5962-4281-9f34-a1f2e012b13e@linuxfoundation.org>
+Date: Thu, 16 Apr 2026 09:21:10 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ms7kw7kvw4rfqdw6"
-Content-Disposition: inline
-In-Reply-To: <CAFfO_h6pkyX=uN5uoXda6toTtT6KsahfBNBLom9i21HdZ7JOmQ@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 5/6] selftests: Preserve subtarget failures in all/install
+To: Mark Brown <broonie@kernel.org>
+Cc: =?UTF-8?Q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>,
+ torvalds@linux-foundation.org, Shuah Khan <shuah@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, Aishwarya.TCV@arm.com,
+ ben.copeland@linaro.org, kernelci@lists.linux.dev,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20260320-selftests-fixes-v1-0-79144f76be01@suse.com>
+ <20260320-selftests-fixes-v1-5-79144f76be01@suse.com>
+ <ad-ZdjzQZXNgkpwv@sirena.co.uk>
+ <3cdf8e79-7c59-4831-9b38-e9c2cef97fe1@linuxfoundation.org>
+ <ad-8BIkw_ijCLqcF@sirena.co.uk>
+ <e4b82973-7d9e-454d-8f69-6d2a1a8ec7dc@sirena.org.uk>
+ <c834846c-96d5-405c-97d9-f182b8fe1569@linuxfoundation.org>
+ <a73aa838-d194-4867-86fb-42bc8d057fd9@sirena.org.uk>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <a73aa838-d194-4867-86fb-42bc8d057fd9@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
+On 4/16/26 09:15, Mark Brown wrote:
+> On Thu, Apr 16, 2026 at 09:08:17AM -0600, Shuah Khan wrote:
+>> On 4/16/26 07:16, Mark Brown wrote:
+> 
+>>> Sending shortly, FWIW I'm also seeing a buch of issues with:
+> 
+>>> ./run_kselftest.sh: 5: ./kselftest/runner.sh: Bad substitution
+>>> ./run_kselftest.sh: 5: .: cannot open ./ktap_helpers.sh: No such file
+> 
+>> I will take a look and isolate the two commits that changes
+>> run_kselftest.sh - sorry for the trouble with CI this time
+>> around.
+> 
+> Pretty sure it's 2964f6b816c2 (selftests: Use ktap helpers for
+> runner.sh) - I've just put together a fix for that one, will throw it at
+> my testing and send it later today all being well.  It uses readlink -e
+> which isn't implemented by busybox.
 
---ms7kw7kvw4rfqdw6
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v6 1/4] openat2: new OPENAT2_REGULAR flag support
-MIME-Version: 1.0
+Yes 2964f6b816c2 is my first suspect with ktap_helpers.sh no such file.
+Thank you for fixing this. That way we can patch it and not revert it.
 
-On 2026-04-16, Dorjoy Chowdhury <dorjoychy111@gmail.com> wrote:
-> On Thu, Apr 16, 2026 at 7:52=E2=80=AFPM Jori Koolstra <jkoolstra@xs4all.n=
-l> wrote:
-> >
-> > On Sat, Mar 28, 2026 at 11:22:22PM +0600, Dorjoy Chowdhury wrote:
-> > > diff --git a/arch/alpha/include/uapi/asm/fcntl.h b/arch/alpha/include=
-/uapi/asm/fcntl.h
-> > > index 50bdc8e8a271..fe488bf7c18e 100644
-> > > --- a/arch/alpha/include/uapi/asm/fcntl.h
-> > > +++ b/arch/alpha/include/uapi/asm/fcntl.h
-> > > @@ -34,6 +34,7 @@
-> > >
-> > >  #define O_PATH               040000000
-> > >  #define __O_TMPFILE  0100000000
-> > > +#define OPENAT2_REGULAR      0200000000
-> > >
-> >
-> > I don't quite understand why we are adding OPENAT2_REGULAR inside the
-> > O_* flag range. Wasn't this supposed to be only supported for openat2()?
-> > If so, I don't see the need to waste an O_* flag bit. But maybe I am
-> > missing something.
-> >
->=20
-> Yes, OPENAT2_REGULAR is only supported for openat2. I am not sure if I
-> got a specific review to not add OPENAT2_REGULAR in the O_* flag 32
-> bit range. But as far as I understand, for the old open system calls
-> we can't easily add new O_* flags as the older codepaths don't strip
-> off unknown bits which openat2 does. It's not easy to add new O_*
-> flags for the old open system calls since that could break userspace
-> programs. So I guess it's okay to add OPENAT2_REGULAR in the 32 bits
-> range anyway? (Also lots of code paths take 32bit flags param right
-> now and those would need changing to take uint64_t instead but this is
-> of course not a reason to not add the new flag outside of the 32
-> bits).
-
-Oh, I didn't notice that this wasn't mentioned here, we had a separate
-discussion about it in a thread with Jori and I must've assumed we
-discussed it in both. (My brain is also really not wired up to read
-large octal values easily.)
-
-While it is hard to add new O_* flags (hence OPENAT2_REGULAR), it's not
-/impossible/ (Jori has a patch for OPENAT2_EMPTY_PATH that is safe to
-add to O_* flags because of some fun historical coincidences).
-
-I would have a slight preference towards segregating the bits, ideally
-at the top end but even 1<<31 would've been nice. Then again, I'm not
-too fussed either way to be honest...
-
---=20
-Aleksa Sarai
-https://www.cyphar.com/
-
---ms7kw7kvw4rfqdw6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iJEEABYKADkWIQS2TklVsp+j1GPyqQYol/rSt+lEbwUCaeD9HhsUgAAAAAAEAA5t
-YW51MiwyLjUrMS4xMiwyLDIACgkQKJf60rfpRG9xNAD/S5O3wWRTFXlfMtlEHV4H
-tBLno64cQT7NoYqdsUavC30BAL3p0Ba/trcO4rvoUwChjEeB5/aNYaoe0DC5i/3Y
-W2AO
-=6Jzu
------END PGP SIGNATURE-----
-
---ms7kw7kvw4rfqdw6--
+thanks,
+-- SHuah
