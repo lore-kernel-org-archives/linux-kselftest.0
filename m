@@ -1,124 +1,146 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B35C30C62E
-	for <linux-kselftest@vger.kernel.org>; Thu, 16 Apr 2026 18:18:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97F3D25783C;
+	Thu, 16 Apr 2026 18:32:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776363522; cv=none; b=vDCFI7dHCub5S2FcryuVhbaSPxpG3nPNG65rwUCsuL+vuj7A9VbpbBnd53EpUzT/ndwIb48pbu3ARsWPU1OsKLXfFyRGCEiyucEUVJ4TZnN8ts9IVepQIEkkYENeL8h6AXSz2ToJaTLvjJPmKQRDNZfp5Z0yy5x+/vR6lsJMF0g=
+	t=1776364346; cv=none; b=NG3wrvrWBoUmi8nIKfj3NO+T1pHbvbQTLLSE3ZNNbugc/bdggv+ZuYrleKG5r7GTjBIOP0BHHRa+Wm/gsQT+aT5kQPuR9y2RcFMscrmTv1dtOoGHUzYd8sAE9PAO5nZQSDmx57klybru9Xntos10jZBwyeyzeqA1plt6OpdXR0w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776363522; c=relaxed/simple;
-	bh=/JP5B3xtS7Ie5nsMHxaQ37bFOgQhEf6+4x6V9drX/IE=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=t8eVIXzZuezAK7UuT2GumtAPIKHQgWfq7hhe9a1kYdD6AY37sn9GtkkMZK0lT6pVR+9MluHVdNlhsLBclED3aE5zYXTXKEiZkgf4ddp4DSrQCtXHxjVVwJh+w5Bo9krJ4WAxSfDa4ahFNWhkTaABtFF0SuVUeRzErZxdA9YS4b4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=AKICb4Ne; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1776364346; c=relaxed/simple;
+	bh=cuaEVAsEImHzMRgmx5zy1ElIshNgZdC1LMYmjR+EZF8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dGBcfns3MrOJRV5rLl7N3RanAQwqTBG5ZFwefSZ9q/fffE0r1IptsCN5rUx4d0rApcjkQv5cyjNsilGAHeIGjqCDNUZxITeJoLz+g8w9IZPgDjYd1oyBx0jCyM0gebf1hVynMGRX9p405IbW94aOM8Q0QnfhjbIw9zG58sK09UA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YOjrVj0z; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="AKICb4Ne"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-488a88aeec9so110731695e9.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Apr 2026 11:18:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1776363520; x=1776968320; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=/JP5B3xtS7Ie5nsMHxaQ37bFOgQhEf6+4x6V9drX/IE=;
-        b=AKICb4NeIlUjYIYB34rNop23COOcSRiz1aUfMNPYhg+1Zk9HJKOVR7sV+7uSWCbIae
-         3m3DE8M6FLYylJ4rk8ztFJI0gW3bWYsu/Ag//xw3F7D183VvIn639imispsMh4u05SN2
-         K26aRMBnQb5ZAZRp0slKKinLEGUpWVGODK+2mK0HO12Zzgw6k/0V/1S1iZVQSKYO62dB
-         rZ8sbn5Q4GiwLFGTke52Zp0usLnuxHhlY7ebjZpPfUTPqF51wU7+1ogDS1xbagDN7UB5
-         bAMQJIfRs+9ebEh1d6MoxrTWIkm6raHeL52I9mFjVbkBqjkFlJJEImcRjo0K74Wy/LHD
-         acsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776363520; x=1776968320;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/JP5B3xtS7Ie5nsMHxaQ37bFOgQhEf6+4x6V9drX/IE=;
-        b=YDsSnFLFC2xt7wtOVj/nBDBMaDn10YEgguVHOmaoX770AfNncsv6KntQdM3139+xEl
-         CVz2zILxdFIiPJa2oyPaiW/hmNelfNNzL0mjulD8/sb8c41F6fSO2WciHYE6NU2hCEfE
-         GlOTa7ddJMUo9JMHv0uKPGoAwASJcUNtwXk/hRsvOb4NzGoz3bDvJPauGt2171w+W4iT
-         vAJBhpbMnYsQ8Su3rUFCzE5tJwA845P4Aaibjm8tw7Li9vYAf8C9gzzctY/MZPvgJlmj
-         8KdPCXT6dssOezM5JWGF3hCVPc5t/x319EpTQy3BNxpP4rLQqT0XQW34ro/c5dpR0eEr
-         Augg==
-X-Forwarded-Encrypted: i=1; AFNElJ8NX+7zOaWsWJDTWRy07xQ//tNnGH4i/AOFuJNlaAkZEjTBCa61kpC+WcoiMr5gXziWglFmiBzFqEv1gCMaEsk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx2xBPRwIEUeNAkrtAKQO2PPZ25iJTxEO3tEBX0oEuRRYUdKMJt
-	KUsgpoXjvbPr6MOcPBUVXg5sP8Sd+0M8512Kb8vqIw3cvT5LLxlBXUrM7zoicWv/ZwEOJR8IskI
-	aIMA/4As=
-X-Gm-Gg: AeBDieu7hPJpjclk+jUgpPL/SR55UwhRUsdd2FRC2bVFAeboSBWFPfqfcwn95I7Flsi
-	/G33h3Jo2sTBj4N1N7S8syhiB+4/hLgoz5a+PR5HI5xvqlHnS4njd1g4tN+ZM44zlCl3TTDhNhf
-	YwUIGGRbJk8+w8TxeYH9hSwgkMn0IJuBip56b2jHLGw3PMLFMbJ5ImUsGIVFa8WJZCuaLb0snl/
-	DwElm67fB1nK2chJ9NAMDWdRzD9aS8LKwUCL53c+rkWtyGC1x78t+DIKOUuzYRDiIF7SczC25Hr
-	1iMSyE3Cm87TCaAoCIplL/TrmlelKdxFDc4v0Zy7ktZX0FHSaKPuFA6MstmJwEFyn/MaIW/3Esb
-	cX2GJzLn7yq2hHNM1Ec/1UaFfWNFdyCnN4Dk3b8+Cq/6VM7RxjwzA0eFAkF+BXoI8TT+jWppSOD
-	LfQDm5dk2xJoZJczmSZwPfQRTvxmX+ogrduRmzTgzlL0K6taOC9lLUvePFR9RUh/W0/lNxyIUFf
-	oUkvw==
-X-Received: by 2002:a05:600d:6:b0:487:1fc:14f9 with SMTP id 5b1f17b1804b1-488fb27d7dfmr93845e9.15.1776363519720;
-        Thu, 16 Apr 2026 11:18:39 -0700 (PDT)
-Received: from ?IPv6:2804:1bc4:224:7800:585c:db3a:fcb:e21f? ([2804:1bc4:224:7800:585c:db3a:fcb:e21f])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488f57da2aesm118706255e9.0.2026.04.16.11.18.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Apr 2026 11:18:39 -0700 (PDT)
-Message-ID: <5fb3ecf5a13bdf459019f6f011f3507593498875.camel@suse.com>
-Subject: Re: [PATCH v2 0/6] kselftests: livepatch: Adapt tests to be
- executed on 4.12 kernels
-From: Marcos Paulo de Souza <mpdesouza@suse.com>
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: Jiri Kosina <jikos@kernel.org>, Miroslav Benes <mbenes@suse.cz>, Petr
- Mladek <pmladek@suse.com>, Joe Lawrence <joe.lawrence@redhat.com>, Shuah
- Khan <shuah@kernel.org>, 	live-patching@vger.kernel.org,
- linux-kselftest@vger.kernel.org, 	linux-kernel@vger.kernel.org
-Date: Thu, 16 Apr 2026 15:18:33 -0300
-In-Reply-To: <wrecfrmldslvr4dvtb7hrmi3w6joby4qmray3fd3f4dfc2k2tv@ficeojpjxjop>
-References: <20260413-lp-tests-old-fixes-v2-0-367c7cb5006f@suse.com>
-	 <wrecfrmldslvr4dvtb7hrmi3w6joby4qmray3fd3f4dfc2k2tv@ficeojpjxjop>
-Autocrypt: addr=mpdesouza@suse.com; prefer-encrypt=mutual;
- keydata=mDMEZ/0YqhYJKwYBBAHaRw8BAQdA4JZz0FED+JD5eKlhkNyjDrp6lAGmgR3LPTduPYGPT
- Km0Kk1hcmNvcyBQYXVsbyBkZSBTb3V6YSA8bXBkZXNvdXphQHN1c2UuY29tPoiTBBMWCgA7FiEE2g
- gC66iLbhUsCBoBemssEuRpLLUFAmf9GKoCGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgk
- QemssEuRpLLWGxwD/S1I0bjp462FlKb81DikrOfWbeJ0FOJP44eRzmn20HmEBALBZIMrfIH2dJ5eM
- GO8seNG8sYiP6JfRjl7Hyqca6YsE
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.0 (by Flathub.org) 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YOjrVj0z"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BDF7C2BCAF;
+	Thu, 16 Apr 2026 18:32:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776364346;
+	bh=cuaEVAsEImHzMRgmx5zy1ElIshNgZdC1LMYmjR+EZF8=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=YOjrVj0zkuyJq4UJAR2lP/YzBG7O+jCdG706M15jBmDHS8e2++5PcpU0ovWXMbB1a
+	 33+kZ1OAPsZVfuQ1d2eoozg0XaqoX7973YAjvOan9LfWEvs2LR26eBqQPOSHzMNW99
+	 XC5v2EEC7+KtgR5XWdivrJkVZy8K04wlwava9tp82RdORo1GV1+KNPz6srG802iSX1
+	 0BshNuFosNEh6xxtwDjoW/L2Ao5CMZppGnzZQl0mvXqpNbTte6/x3J5LjyoTMk1RB3
+	 OKfYdF7ririrKNyTHNuiO925fzsqMRe2tQ9VZJUck7m49cPPZ66ZFLMkKQHkgUmsQd
+	 4ErCtFqBERQQQ==
+Message-ID: <1a499781-1115-44bc-adbf-2ac3769354ca@kernel.org>
+Date: Thu, 16 Apr 2026 20:32:19 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC, PATCH 00/12] userfaultfd: working set tracking for VM guest
+ memory
+To: Kiryl Shutsemau <kas@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Peter Xu <peterx@redhat.com>,
+ Lorenzo Stoakes <ljs@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Vlastimil Babka <vbabka@kernel.org>,
+ "Liam R . Howlett" <Liam.Howlett@oracle.com>, Zi Yan <ziy@nvidia.com>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Sean Christopherson <seanjc@google.com>, Paolo Bonzini
+ <pbonzini@redhat.com>, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kvm@vger.kernel.org
+References: <20260414142354.1465950-1-kas@kernel.org>
+ <55019037-4f1c-4d9c-83ee-3a844d8f3d5e@kernel.org>
+ <ad50rPOseVa-SP_s@thinkstation> <aeDoqFWPFxkkNB26@thinkstation>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <aeDoqFWPFxkkNB26@thinkstation>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, 2026-04-16 at 10:07 -0700, Josh Poimboeuf wrote:
-> On Mon, Apr 13, 2026 at 02:26:11PM -0300, Marcos Paulo de Souza
-> wrote:
-> > A new version of the patchset, with fewer patches now. Please take
-> > a look!
-> >=20
-> > Original cover-letter:
-> > These patches don't really change how the patches are run, just
-> > skip
-> > some tests on kernels that don't support a feature (like kprobe and
-> > livepatched living together) or when a livepatch sysfs attribute is
-> > missing.
-> >=20
-> > The last patch slightly adjusts check_result function to skip dmesg
-> > messages on SLE kernels when a livepatch is removed.
->=20
-> Why are we adding complexity to support Linux 4.12 in mainline?=C2=A0
-> Isn't
-> that what enterprise distros are for?
+On 4/16/26 15:49, Kiryl Shutsemau wrote:
+> On Tue, Apr 14, 2026 at 06:10:44PM +0100, Kiryl Shutsemau wrote:
+>> On Tue, Apr 14, 2026 at 05:37:50PM +0200, David Hildenbrand (Arm) wrote:
+>>>
+>>> I would rather tackle this from the other direction: it's another form
+>>> of protection (like WP), not really a "minor" mode.
+>>>
+>>> Could we add a UFFDIO_REGISTER_MODE_RWP (or however we would call it)
+>>> and support it for anon+shmem, avoiding the zapping for shmem completely?
+>>
+>> I like this idea.
+>>
+>> It should be functionally equivalent, but your interface idea fits
+>> better with the rest.
+>>
+>> Thanks! Will give it a try.
+> 
+> Here is an updated version:
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git/log/?h=uffd/rfc-v2
+> 
+> will post after -rc1 is tagged.
+> 
+> I like it more. It got substantially cleaner.
 
-These changes do not add any new complex code, just checks to enable
-the tests to run on older kernels. I believe that it would be good for
-all enterprises distros if they could run more tests in maintenance
-updates of their kernels using the upstream tests.
+I don't have time to look into the details just yet, but my thinking was
+that
 
-The changes are not really that big. Some patches were removed from v1
-because there were adding checks for out-of-tree messages (like the
-last paragraph of the v2 erroneously shows), and another one was to
-check if kprobes could live alongside livepatches, which fails for 4.12
-kernels.
+a) It would avoid the zap+refault
 
-The patches for this versions introduce only checks to avoid testing
-sysfs attributes for kernels that don't supports them.
+b) We could reuse the uffd-wp PTE bit + marker to indicate/remember the
+   protection, making it co-exist with NUMA hinting naturally.
+
+b) obviously means that we cannot use uffd-wp and uffd-rwp at the same
+time in the same uffd area. I guess that should be acceptable for the
+use cases we you should have in mind?
+
+But I also haven't taken a closer look at this patch set, whether you
+would already be using a PTE bit somehow (I suspect not :) )
+
+-- 
+Cheers,
+
+David
