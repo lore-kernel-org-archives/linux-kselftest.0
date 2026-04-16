@@ -1,62 +1,62 @@
-Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
+Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B3B034C83C
-	for <linux-kselftest@vger.kernel.org>; Thu, 16 Apr 2026 21:14:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90FBA2ED846
+	for <linux-kselftest@vger.kernel.org>; Thu, 16 Apr 2026 21:14:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776374059; cv=none; b=DPJSfvLYVxNMdi5OKkExNuj2HZFfG52GdyVi3Kt5F9frxinnIgJUTKhLfvu5IAh6uwMfDliszapWp6doNMQM705kvV+VLh01emAHGPS3dCSheAj6R1Y5mGFJPfd0F2wvb/pqu7Ni7N8BDCovIkJxpaywSd3d+0gVzITrYTHZXxI=
+	t=1776374088; cv=none; b=tRw/FdF1mCCsZ1lnCK8Am9wRdpTwRlVP5kVjUjKqxeMNTMwnqHH9rsZqM8P+j/3B2iSGnLSM2JATQF8/9jozU5Yb5T1hZtGsRyJfRXT9L3slhXWejRrRONal9ioLG4d4BH47COVMBKGTyky5QePqW9TMdtYhBtGqZWL/hB5IEeg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776374059; c=relaxed/simple;
-	bh=vzGCSdSZGgznvW2BflHE/U1h+EX3Txa7VKjbpQUid+k=;
+	s=arc-20240116; t=1776374088; c=relaxed/simple;
+	bh=rsKvP2WS/xjdIb2fQz2+k8dJxXsp0PHKmOX7LkSjlc8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fnLzDWYe7pPbsVBVMCCOuPQl0Q6a6Jdm3MIgp7VUZnWBGLwHFWl7QggOF2Krv9kaL5TcvPRGYlDt1luLjUWdZcKV0JfeKJNv51vIQ48vQuy8Y05Tl+SlKu140O6eMWAyDUBSI8O+3ziRG9c0DtaVS0fw9/LXoqt1ZzgwXI1i3zM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Lc+QyANV; arc=none smtp.client-ip=209.85.210.53
+	 In-Reply-To:Content-Type; b=t68e5iuCC6vyAZ5lbrKwO16FyW+S6phb4VXr2KSMgB6iL61409iTgZzPGnKGkabI1X1cpk2sZjTVUrDfW0d3/ajSqt9tkkOV1HbgYvFjUduo1+0sUOszzheUeq8w7t+roPqvKJFkPk8+3O1jqB4Qwr29OLyUNlXzEld+zxLAV0w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=LLv16BYv; arc=none smtp.client-ip=209.85.161.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Lc+QyANV"
-Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-7d4be94eeacso11513a34.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Apr 2026 14:14:17 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="LLv16BYv"
+Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-679f6ee3fb0so6246eaf.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Apr 2026 14:14:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1776374056; x=1776978856; darn=vger.kernel.org;
+        d=linuxfoundation.org; s=google; t=1776374086; x=1776978886; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=636WrS47DhMrab3WetvRTiVdIVfIM/ZId3iUkiQeAM4=;
-        b=Lc+QyANVubb1V+Bj+NsW7SG1KnMV1EJ58/TMFgscUhgMQmzGZ4v6dfZKIUR5MrAybP
-         hMfMAP38zwNF7ohp6QKUy9NDMPQTWS1glZqFR3NkOAZxwb40UUAtN6jw+4/1FMSbbgl4
-         A6sOLXYtYMjnPcY/yZ70hBFC4K6felxeqXVg0=
+        bh=URdEeFOpJ4MkhIst1k7ByThYTxeqJAWmyNzSxv3nzfo=;
+        b=LLv16BYviJUa3dIYbsqzlbdSFfwoz71GsO/6+HLPqsPCpQSxJ5vN25M5lSUMz7Wqri
+         Ahxo4zXnVg7wbmxhDUZe3CLT+HkoQRGMU+IxE9u9dvbUHMdU4Q8zZ8Tigq4Mo5mDL4+j
+         /MTYP/Md5fPK/RUhJ8yyaSh/Ahdtgso0fj9Oo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776374056; x=1776978856;
+        d=1e100.net; s=20251104; t=1776374086; x=1776978886;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=636WrS47DhMrab3WetvRTiVdIVfIM/ZId3iUkiQeAM4=;
-        b=E/vI01SH+rDXGaa+gCP9KTaXmQ7/4r4o7McYMqA5o3/xzTCga/CrvmDLeRTDRCgbzU
-         NWx5EquwMA2sWOtrj281QC0V4e3VQWX1upDRONHJBy8+BCluVpIMBE4SjtBIj81wV/mT
-         +v2SywOrPRY0+RVI6wTiaMN20ITm8hqj2pwUOD/vCXrVjmUG7JG7Csv5O7JEfog0NopD
-         OSWEgscPhCdErf3bZqDHiY5pjBA/dtdLd3Aw0YUpFwBZt/dFs6F9lUiLvRalxIC1ob80
-         rdscaf683MyAnwXGqHhjYVhVZ3CeavJTK2CJdRkzwnjvGftdwXMh16JCzEYIRShuHXgh
-         ITaQ==
-X-Gm-Message-State: AOJu0Yz01OXU5AxH/bT+uFC563E7CDS4hO1t8AZItHNhl+RuU5nhLJkr
-	ul/X+vo1nKnXTLqYVcq1rW/6aVk+wXhoO2vGJX+EmO7YVLfDWVBjKE3bh1W5s/iqffQ=
-X-Gm-Gg: AeBDiesyxdAqptz16jyn0pPPoZdoA+aFkcGmKt+tJliHIP3kXbSr/KX9T6gsXuqzr+v
-	uvO1KgdRazVPI6uo5hXYYeRKJnAXRJNqwnDyUTDNEh+INAeEG+Dyy23ijzLVGvKPPCgnI1FLIAS
-	Hd6NXwUxuxQF+ZZFs/4qRYUAD3AbDJ2LdNylePfpBgB2CkUNm4xclyOb58JaZDENfF1X4AKP0UZ
-	brSQIAVuUNE863UZ+8O0sKCs2N0Dl1dFxN6pJaq8P6RE+lMP5qt2saWbWBW0PD1exnYWlLR8aCq
-	uYqmgqMda9hNF5huhh9NamyWM9LR78G7ZMfJM9ew9i4jisHWkgBtskshj45F5wlJ5akOi5Kw8Ak
-	je97U5jglEwH4971Icj+Mp8LAD082YhEMWzCMAUYgBcyvOPWeUfvJw6xNd88c73NH5Dh3G8NrnX
-	rio1nd41Ub/OPCtRu2Mds0flJw0G2Ewyg4WWWuBtnpnQ==
-X-Received: by 2002:a05:6830:3152:b0:7d7:ebf0:34b0 with SMTP id 46e09a7af769-7dc951c681dmr139660a34.15.1776374056218;
-        Thu, 16 Apr 2026 14:14:16 -0700 (PDT)
+        bh=URdEeFOpJ4MkhIst1k7ByThYTxeqJAWmyNzSxv3nzfo=;
+        b=FigJclg46unyfs3pRbjxbdqBRGcNSskj5zA6DrqQomUQY3kvS3rr2t2oyOXzXWiYYy
+         gb5FQTznUIjNq8PYc5hkOxkmZVMX0zgnG1kCZBS8NZaHEIvt2uC/Y7w5kQv1c7GxgAqI
+         W77fVOI19kBj5qRkR07o67SXWYkVdhKYjfZYVY2rHQjtxGm2ZJzWvVHY7mooHJxYhY6Y
+         y2j8iBsD8dcSrxdSJ5v4ivotlhT/BVD98k390tMK9wD01AIj5clR+d0sFUllgL3x1/qv
+         h+XazgdElmiJ+q4jdB0TyRaL3LswdWoBJ5BxTLOJ5Qqx4FJsMh9iFmFoVMz8qWSaqejg
+         T+PA==
+X-Gm-Message-State: AOJu0YyZKgW6iyLVG+8Zv3NKgnhAvpy2AZPtVG3zcnQhIOe7NaArVnk4
+	wqgrpFqjlbmTVbhZWEUK5UqCd36KCXOO1umVzYz7hD5koSsBlDw+cbeGJ93MvGZc4JA=
+X-Gm-Gg: AeBDietYmcSltz+Zy03n4ifHKNFKZ0p18xTRfDsJAhHyNcK+OEWT1/CJWmbgdJ2ycRc
+	VuqRdbOQhwAEQ2sLmjbrS+iLSRMtRVfnvKdzDKaTdPU52g8CpPDy1n8MQrh2SSr19CbKczKbXnC
+	3+bwt7M5sLuzAGJj0uZv2pD3IvhxiuMExEO6svEY6fSWW2cW1D8aq4gSTm3Hf55Ebh9dx+EAjWP
+	A7CgjpdX2oicpVL/v24pJwAU53p+DhAnmgZZ2sPNrfJ6HgnQLcMOowWyUwy6Xsz6/g76tOhjwfd
+	o4FQ7oeDuy1QfbB2K8RLxteg8/Wd7T1IS6HrNvR+xcYm9AT5ZetINcBbSoJFJ+HaVysPOhdPxIc
+	EwyWZFyXrdCjFd6/dtv9zKoBl4YWvURKnTqPZqzS/AuFj39umMmCeQv81m8bS+tXTggNrrHAjhw
+	1+mPhAh+bQjK4PZfKqh8EStpE3/vovZs7ztBd58eB4ug==
+X-Received: by 2002:a05:6820:986:b0:684:da8a:a6ae with SMTP id 006d021491bc7-69462ee0885mr176806eaf.35.1776374086532;
+        Thu, 16 Apr 2026 14:14:46 -0700 (PDT)
 Received: from [192.168.1.14] ([38.15.57.99])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7dc90c94d9fsm752957a34.27.2026.04.16.14.14.13
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6946043dbf8sm611575eaf.12.2026.04.16.14.14.44
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Apr 2026 14:14:14 -0700 (PDT)
-Message-ID: <57e570f4-af6d-4055-8464-2a2d552542f1@linuxfoundation.org>
-Date: Thu, 16 Apr 2026 15:14:13 -0600
+        Thu, 16 Apr 2026 14:14:45 -0700 (PDT)
+Message-ID: <e138bae2-3a3c-4183-8f2c-5768a2bfe2f0@linuxfoundation.org>
+Date: Thu, 16 Apr 2026 15:14:44 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -64,52 +64,42 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests: Deescalate error reporting
+Subject: Re: [PATCH 0/2] selftests: Fix runner.sh breakage
 To: Mark Brown <broonie@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- =?UTF-8?Q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
+ Hangbin Liu <liuhangbin@gmail.com>, Brendan Jackman <jackmanb@google.com>
 Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, Shuah Khan <skhan@linuxfoundation.org>
-References: <20260416-selftests-deescalate-error-reporting-v1-1-38e7c0536227@kernel.org>
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20260416-selftest-fix-readlink-e-v1-0-94e4cabbdec4@kernel.org>
 Content-Language: en-US
 From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20260416-selftests-deescalate-error-reporting-v1-1-38e7c0536227@kernel.org>
+In-Reply-To: <20260416-selftest-fix-readlink-e-v1-0-94e4cabbdec4@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 4/16/26 07:19, Mark Brown wrote:
-> Commit 7e47389142b8 ("selftests: Preserve subtarget failures in
-> all/install") updated the propagation of errors from indivdual kselftest
-> targets to be similar to that seen with FORCE_TARGETS.  While it would
-> be really nice to be in a position to do this currently it is premature
-> to do this as the default behaviour.
+On 4/16/26 13:03, Mark Brown wrote:
+> Commit 2964f6b816c2 ("selftests: Use ktap helpers for runner.sh")
+> introduced several regressions by introducing dependencies on bash and
+> GNU coreutils breaking testing on Debian based systems.  Roll these
+> changes back.
 > 
-> At present we default to trying to build all selftests but a combination
-> of code quality issues and build dependencies mean that it is almost
-> certain that at least one of them will fail to build (for example,
-> several depend on clang so don't work in a GCC container) and a top
-> level failure in the kselftest build reported.  Further, the resulting
-> failures mean that the install target does not run at all so any build
-> problem is escallated to a complete failure to produce a kselftest
-> tarball so CI systems that run into issues loose all selftests coverage.
-> This has been causing disruption to a range of CI systems including
-> KernelCI, mine and Arm's internal one.
-> 
-> Revert the commit, users who need this behaviour should be able to use
-> FORCE_TARGETS for the time being.  At present users that do this (such
-> as linux-next) are most likely building a subset of targets known to
-> succeed in their environments.
-> 
-> Fixes: 7e47389142b8 ("selftests: Preserve subtarget failures in all/install")
 > Signed-off-by: Mark Brown <broonie@kernel.org>
 > ---
->   tools/testing/selftests/Makefile | 8 ++++----
->   1 file changed, 4 insertions(+), 4 deletions(-)
+> Mark Brown (2):
+>        selftests: Fix runner.sh busybox support
+>        selftests: Fix runner.sh for non-bash shells
+> 
+>   tools/testing/selftests/kselftest/runner.sh | 26 ++++++++++++++------------
+>   1 file changed, 14 insertions(+), 12 deletions(-)
+> ---
+> base-commit: 2964f6b816c25ee094df4a143eb5b8828910045f
+> change-id: 20260416-selftest-fix-readlink-e-da604f02686b
+> 
+> Best regards,
+> --
+> Mark Brown <broonie@kernel.org>
 > 
 
-Thank you. I applied it to linux-kselftest next and will send pr tomorrow.
+Thank you. I applied these two patches to linux-kselftest next and will send pr tomorrow.
 
 thanks,
 -- Shuah
