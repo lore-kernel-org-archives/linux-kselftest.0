@@ -1,110 +1,144 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 624AE38F635;
-	Thu, 16 Apr 2026 13:47:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1AFF3D3CFC
+	for <linux-kselftest@vger.kernel.org>; Thu, 16 Apr 2026 13:49:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776347249; cv=none; b=R/L7eMNWTycVUdinQI3y220lWn94LbBuspzxATFAstEwNRLZKTjpiCDG4Azxyogz9gopcAsDdDHC/zgprfoDE7RfVEl+uUF9IT99rQhFQoBL714Ir7pWWFDp2ZKIRZvi/r3RGZjk+HxADM9bfSNET5XTfe0lreT2YYJNZXr3BnU=
+	t=1776347364; cv=none; b=bDslN/RGLikzFatB6XkDIMrs0P45/241Tk9T4e8JG4Q2knGY6wxUXQfrywlfC1ttr4DOu7vZ245zf5rqIEx1+wEgDdrfDZmUApiJ/POIx31ICcSo/gOfqPV1n+GX/KIRfn85E6TpnXWRkngx6PlyDUy7tY0yJYwCsmtnQG/oQ9o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776347249; c=relaxed/simple;
-	bh=0oPhK4aYcKricj1uxY7kKY/SjzHIOXndcz4fKLSJius=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JQuQ+VGsgkK+gkNL/uUeESvkcXX7vkvnkLRnxRcHDni79YFsFOMJ7gI1cqFBenvmWOVNvrXxRhtzI8V9XHRHjlcXxmX889qFftjyvyt8/3M0Ypg3Thj/UgnWlXqhqw4LjJ1TS3wtp4m7aWhNRWPwtJDxUhuaug+aa29UQ0AR75c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aKJzmsdo; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776347364; c=relaxed/simple;
+	bh=s3RYvsEfI9ZdxhsabL5/svtqvt3W5lr9R3yghTmr/gA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=O7aLUMrjCyDNWwaBqvR4YH7afctyod7OpCmDPCPYdoV1lf+skfeYOM47eJANTaTsyfuyZvhN3K7xacj7TvqKkLZ5gR3jrCplioKhOE3gzXnGnC3R1N6/pZDfCD4ASaOgWOETr7OuK+PF82PHbE1s4TEhkP74j0LIVIFgpV6+dJ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AqlOLz/H; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aKJzmsdo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80A3CC2BCAF;
-	Thu, 16 Apr 2026 13:47:26 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AqlOLz/H"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1CECC2BCB3;
+	Thu, 16 Apr 2026 13:49:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776347249;
-	bh=0oPhK4aYcKricj1uxY7kKY/SjzHIOXndcz4fKLSJius=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=aKJzmsdo0nLY72dM03i839OgIsGV+EUfMC5h2W85EJF+EgPkSt9T2H0vZCwfV71TF
-	 75S8hjl+PptQy7L/p/+mAbH59Nls8TTMLIR+3of4eVH4Y57GzaPazvimyiRIMtsfOT
-	 K80cWDLd48VsRxglu5ROj+8FsS6Vjs0kGyGwBXG5spSYmE4sNfrQEyxrj0qWIrLbD0
-	 dXZqtdpXUo+Ff2A2w6shF9FZfvu1WjkWzgalSiP5Ec6shOfAgvl7AbjpHHGgNorobO
-	 Ug7rUWMu9SdVqP//ZFExHAYra52x5wR7PESBHGPvbCDRN9QDMJcK3QevhcdYttIMnC
-	 NxQO5P7LOgODg==
-Message-ID: <8352ca55-0899-408a-a16e-59f5f2ed9250@kernel.org>
-Date: Thu, 16 Apr 2026 15:47:23 +0200
+	s=k20201202; t=1776347363;
+	bh=s3RYvsEfI9ZdxhsabL5/svtqvt3W5lr9R3yghTmr/gA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=AqlOLz/HXz7hqXJps/IG3FaK45yw4Z0YqpDgxczLEUlMgLP/IaXrmJbUuoShfRQLv
+	 vftvKRCapRZ2NnHiAPar2EyWyd1TLgt1Ko3HP26W9UXE3KJe6nOTTqAu5ayiqwWDuc
+	 XpRqOEFJHtFkpoOhcRVFGqeTGm9UPhn1W3sRBs3gJTk8qtriK2XhdZZeKMO8eAnMRX
+	 RrWZK4z6KQSDAFWR9ri0eyK6s9sh+oS1BWmgHMXfV+x8F0JKGr4LT1pzYeU6dSS+QX
+	 NTH+dc5QJnfsEaf5J7JTMdMnLxrBMEYV49XhLFbHvE6l6N4y5OIU6WW/oMpYggnVxf
+	 X/zDR59vHkmWA==
+Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 10D1DF4006A;
+	Thu, 16 Apr 2026 09:49:22 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-02.internal (MEProxy); Thu, 16 Apr 2026 09:49:22 -0400
+X-ME-Sender: <xms:4ejgaSIYoDKvzxgPhCYw9DPRyWu3jwC0TpDUBp2Y_WPBEvYW4NkgmQ>
+    <xme:4ejgaZZzLX6dOeyn967dwC6gkgLyv9vcgNA6uPCwoD_vHRVb7RcfCwDmoAjJ9YVqE
+    08pcZZq3c1LOn1mJr8ufEayJfWseVOwMDmPX8U7mXRxDeX49F70Dak>
+X-ME-Received: <xmr:4ejgae6P2292B6joISlFkUr1uSQIblLQ826adWwScn_jixogzy7A9WlfZMDvEA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgdegjeduiecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpeffhffvvefukfhfgggtugfgjgesthekredttddtjeenucfhrhhomhepmfhirhihlhcu
+    ufhhuhhtshgvmhgruhcuoehkrghssehkvghrnhgvlhdrohhrgheqnecuggftrfgrthhtvg
+    hrnhepgeehudelheevjefftdeuheegudfhieeutdegjedukeefffeugeevvefhteejuefh
+    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpehkihhrihhllhdomhgvshhmthhprghuthhhphgv
+    rhhsohhnrghlihhthidqudeiudduiedvieehhedqvdekgeeggeejvdekqdhkrghspeepkh
+    gvrhhnvghlrdhorhhgsehshhhuthgvmhhovhdrnhgrmhgvpdhnsggprhgtphhtthhopeef
+    iedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepuggrvhhiugeskhgvrhhnvghlrd
+    horhhgpdhrtghpthhtoheprghkphhmsehlihhnuhigqdhfohhunhgurghtihhonhdrohhr
+    ghdprhgtphhtthhopehpvghtvghrgiesrhgvughhrghtrdgtohhmpdhrtghpthhtoheplh
+    hjsheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhpphhtsehkvghrnhgvlhdrohhr
+    ghdprhgtphhtthhopehsuhhrvghnsgesghhoohhglhgvrdgtohhmpdhrtghpthhtohepvh
+    gsrggskhgrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihgrmhdrhhhofihlvght
+    thesohhrrggtlhgvrdgtohhmpdhrtghpthhtohepiihihiesnhhvihguihgrrdgtohhm
+X-ME-Proxy: <xmx:4ejgaSJVJZNJGoZKWD6T5M5NCXLkDUW8HAqvk7UxjtI2XNWxSUR8Nw>
+    <xmx:4ujgacZ3_iV3ApOrNQMeV55o3dk_kAFG7wtgo-r3D52O-xdB1xB3sg>
+    <xmx:4ujgaSwCvAmjEpSOSI1Euf8uiFljZZ1F2wZxHEPu8tpaRo64t5cn4w>
+    <xmx:4ujgaQV7QWSdaLPXVIHy_TozBtgAeyudvkqy14pgSHWIZEzajtLLfQ>
+    <xmx:4ujgaeYmb7YFAUc8ewO2iFBH8S_30cSSVTvrTPJ_T_QqPAxdKtfbGI7L>
+Feedback-ID: i10464835:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 16 Apr 2026 09:49:20 -0400 (EDT)
+Date: Thu, 16 Apr 2026 14:49:14 +0100
+From: Kiryl Shutsemau <kas@kernel.org>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	Peter Xu <peterx@redhat.com>, Lorenzo Stoakes <ljs@kernel.org>, 
+	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+	Vlastimil Babka <vbabka@kernel.org>, "Liam R . Howlett" <Liam.Howlett@oracle.com>, 
+	Zi Yan <ziy@nvidia.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Sean Christopherson <seanjc@google.com>, 
+	Paolo Bonzini <pbonzini@redhat.com>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [RFC, PATCH 00/12] userfaultfd: working set tracking for VM
+ guest memory
+Message-ID: <aeDoqFWPFxkkNB26@thinkstation>
+References: <20260414142354.1465950-1-kas@kernel.org>
+ <55019037-4f1c-4d9c-83ee-3a844d8f3d5e@kernel.org>
+ <ad50rPOseVa-SP_s@thinkstation>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH net] selftests: net: add missing CMAC to tcp_ao config
-Content-Language: fr
-To: Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net
-Cc: netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
- andrew+netdev@lunn.ch, horms@kernel.org, shuah@kernel.org, fw@strlen.de,
- antonio@openvpn.net, phil@nwl.cc, linux-kselftest@vger.kernel.org
-References: <20260416010439.1053587-1-kuba@kernel.org>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- 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
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <20260416010439.1053587-1-kuba@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ad50rPOseVa-SP_s@thinkstation>
 
-Hi Jakub,
+On Tue, Apr 14, 2026 at 06:10:44PM +0100, Kiryl Shutsemau wrote:
+> On Tue, Apr 14, 2026 at 05:37:50PM +0200, David Hildenbrand (Arm) wrote:
+> > On 4/14/26 16:23, Kiryl Shutsemau (Meta) wrote:
+> > > This series adds userfaultfd support for tracking the working set of
+> > > VM guest memory, enabling VMMs to identify cold pages and evict them
+> > > to tiered or remote storage.
+> > > 
+> > > == Problem ==
+> > > 
+> > > VMMs managing guest memory need to:
+> > > 1. Track which pages are actively used (working set detection)
+> > > 2. Safely evict cold pages to slower storage
+> > > 3. Fetch pages back on demand when accessed again
+> > > 
+> > > For shmem-backed guest memory, working set tracking partially works
+> > > today: MADV_DONTNEED zaps PTEs while pages stay in page cache, and
+> > > re-access auto-resolves from cache. But safe eviction still requires
+> > > synchronous fault interception to prevent data loss races.
+> > > 
+> > > For anonymous guest memory (needed for KSM cross-VM deduplication),
+> > > there is no mechanism at all — clearing a PTE loses the page.
+> > > 
+> > > == Solution ==
+> > > 
+> > > The series introduces a unified userfaultfd interface that works
+> > > across both anonymous and shmem-backed memory:
+> > > 
+> > > UFFD_FEATURE_MINOR_ANON: extends MODE_MINOR registration to anonymous
+> > > private memory. Uses the PROT_NONE hinting mechanism (same as NUMA
+> > > balancing) to make pages inaccessible without freeing them.
+> > 
+> > I would rather tackle this from the other direction: it's another form
+> > of protection (like WP), not really a "minor" mode.
+> > 
+> > Could we add a UFFDIO_REGISTER_MODE_RWP (or however we would call it)
+> > and support it for anon+shmem, avoiding the zapping for shmem completely?
+> 
+> I like this idea.
+> 
+> It should be functionally equivalent, but your interface idea fits
+> better with the rest.
+> 
+> Thanks! Will give it a try.
 
-On 16/04/2026 03:04, Jakub Kicinski wrote:
-> Recent changes to crypto and wifi made CMAC no longer
-> selected by default on x86 and tcp_ao needs it.
-> Add the missing config.
+Here is an updated version:
 
-Thank you for the fix, I see that CMAC is the default algo used in the
-TCP AO selftests, and this modification fixes the recent issue.
+https://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git/log/?h=uffd/rfc-v2
 
-Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+will post after -rc1 is tagged.
 
-Cheers,
-Matt
+I like it more. It got substantially cleaner.
+
 -- 
-Sponsored by the NGI0 Core fund.
-
+  Kiryl Shutsemau / Kirill A. Shutemov
