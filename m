@@ -1,139 +1,144 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83EC1282F13;
-	Thu, 16 Apr 2026 13:21:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F330637FF6A
+	for <linux-kselftest@vger.kernel.org>; Thu, 16 Apr 2026 13:24:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776345685; cv=none; b=bObo8qBYlVpleo56ZUMIIfZeC4/ySQ7K2mVDSdkfUyMNn0X/kn7d6gzwAk8QdCGFiPt0crh1188Pa5Nj9y62/9D6nmnEP58ABb/KO8wbG3HYj+04/cVBgW3Cdq+mv1NM0EBuCfbU3o6p4bixoczb+VgwwGLihmfGHxF7qzHUJ/Q=
+	t=1776345859; cv=none; b=cPz26CO7ezscA1EwwcfAYFLlshB6BzMOpPTOUnGwkR4QOc+ele2MuJ1TBPYZBhQ9RuRvLwMTvhY8rfvJhNLdwba+P3lygHtaxwphmtpoGLBNsmHjZCY/XDQx2GYLewkSY8NGEzWtwo5ZH5h06BvF7KP6Ovj5B1VApQ51xHpIxFQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776345685; c=relaxed/simple;
-	bh=KNEH2B/3cKbD4Ox1zRhS7kvDtEqd+S+LnelX9B3Saws=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=hBLO6N/rplNrYsbULmscWj1ZbURFNzou78TY0U9t+PmhGzEmqBjKtbQTtY6rShTnT/xORw2t7o19+q7OTgXYMjDKy1FUISrHPXzq3wJGX29SthjOvlM7GC9EE+utGAebYWZmc2sEfkw4UOsk8bOU1NXOhgklsg5S+GuXr8JJJ5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nvddPm9z; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776345859; c=relaxed/simple;
+	bh=LSQ309ZyhRYApe/OUUxt4UG9UndSDX1k4N06FDImwRc=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=jVF8y6R5Xv8t6L7tQ9fVqD9FmRNQziQlV/kjJAQDQM/ZV4rrB7ok70QZpAvokhkWg6yEeEOHam71PHU1EvPGOWPu1c+apWe5611SW+likQinJAziQ/9OJg62HlGMArVTEj2FIYssssHS4Rz/1nLeC7K+5CMDN7f+SWlrDyEZ4Gg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=j0bZ8nFH; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=LxNn6Biv; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=j0bZ8nFH; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=LxNn6Biv; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nvddPm9z"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B293C2BCAF;
-	Thu, 16 Apr 2026 13:21:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776345685;
-	bh=KNEH2B/3cKbD4Ox1zRhS7kvDtEqd+S+LnelX9B3Saws=;
-	h=From:Date:Subject:To:Cc:From;
-	b=nvddPm9zFGhCr2/s0pn+MxNCEuGvCkMbrh+s+cEE9ek2Wv38lmuveKmggalzvDGt6
-	 tn/K0DndCEXGIpPeXiYOvdpw1EhmnwPlKTN581fx5lWxjDzqlOaj+CF7MXK/Sdnews
-	 Yvz1MaHCWG+OkjA46/n0UnIbn13YQPBLdRODiC2x5vQOlUAWjifNTRj3FBZSeDO91C
-	 BHDg2wsvUJdfLcZLLr2rHAcit/SG5OjUca24hcwHBV1MQysxTtt7kfB7G5YvxO/Pgs
-	 gm1JwPzrZrfqeUfNzaIageP+hRnFyT3wX7wj8H8RhPaLqSc/oiE7bI3//tQrq4V0rM
-	 dNBiScoG0imCA==
-From: Mark Brown <broonie@kernel.org>
-Date: Thu, 16 Apr 2026 14:19:24 +0100
-Subject: [PATCH] selftests: Deescalate error reporting
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="j0bZ8nFH";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="LxNn6Biv";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="j0bZ8nFH";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="LxNn6Biv"
+Received: from pobox.suse.cz (unknown [10.128.32.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 2B24B6A7EC;
+	Thu, 16 Apr 2026 13:24:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1776345856; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=dn0YSAI8OUP/RSoT1dekWzWWqb33qqX1G9UyUae0VrE=;
+	b=j0bZ8nFH3/Uy0ILmeHh32hFb2hXB/84NAMuXundgYuc1B0otTTZVGULF/90ruNdtNl3Gnp
+	/h4V7sYH4/2is7kS2dfh0WMvYSIRxHvZHBsXMg0E03MDwawjWrTBb1+QMHYT+GO/ND5W8F
+	G7Xc03UzWrpmrmTpOvxmefAhnvhWJbw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1776345856;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=dn0YSAI8OUP/RSoT1dekWzWWqb33qqX1G9UyUae0VrE=;
+	b=LxNn6BivO31HGQVA+rRZhfHp85/b2YlXv3rG6pan5zmfKcVyp21qMlxV2ILnTQ8xlZADNo
+	LrUMLWbBc761xjDw==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1776345856; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=dn0YSAI8OUP/RSoT1dekWzWWqb33qqX1G9UyUae0VrE=;
+	b=j0bZ8nFH3/Uy0ILmeHh32hFb2hXB/84NAMuXundgYuc1B0otTTZVGULF/90ruNdtNl3Gnp
+	/h4V7sYH4/2is7kS2dfh0WMvYSIRxHvZHBsXMg0E03MDwawjWrTBb1+QMHYT+GO/ND5W8F
+	G7Xc03UzWrpmrmTpOvxmefAhnvhWJbw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1776345856;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=dn0YSAI8OUP/RSoT1dekWzWWqb33qqX1G9UyUae0VrE=;
+	b=LxNn6BivO31HGQVA+rRZhfHp85/b2YlXv3rG6pan5zmfKcVyp21qMlxV2ILnTQ8xlZADNo
+	LrUMLWbBc761xjDw==
+Date: Thu, 16 Apr 2026 15:24:16 +0200 (CEST)
+From: Miroslav Benes <mbenes@suse.cz>
+To: Marcos Paulo de Souza <mpdesouza@suse.com>
+cc: Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
+    Petr Mladek <pmladek@suse.com>, Joe Lawrence <joe.lawrence@redhat.com>, 
+    Shuah Khan <shuah@kernel.org>, live-patching@vger.kernel.org, 
+    linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/6] kselftests: livepatch: Adapt tests to be executed
+ on 4.12 kernels
+In-Reply-To: <847de72350a1fe8bd765f2e5493b13e8bf7b2966.camel@suse.com>
+Message-ID: <alpine.LSU.2.21.2604161524010.10044@pobox.suse.cz>
+References: <20260413-lp-tests-old-fixes-v2-0-367c7cb5006f@suse.com>  <alpine.LSU.2.21.2604151357350.1967@pobox.suse.cz> <847de72350a1fe8bd765f2e5493b13e8bf7b2966.camel@suse.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260416-selftests-deescalate-error-reporting-v1-1-38e7c0536227@kernel.org>
-X-B4-Tracking: v=1; b=H4sIANzh4GkC/yXNQQrCMBBG4auUWTvQhtiiVxEXSfq3RkpSZlIRS
- u9u1OW3eW8nhUQoXZudBK+oMaeK7tRQeLg0g+NYTaY1fWu7nhXLVKBFeQQ0uMUVMESysGDNUmK
- a2Tp7Meeh894MVFOrYIrv3+Z2/1s3/0Qo3zYdxwfx1iIDiAAAAA==
-X-Change-ID: 20260416-selftests-deescalate-error-reporting-4a492571bb27
-To: Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
-Cc: Shuah Khan <skhan@linuxfoundation.org>, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
- Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.16-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2914; i=broonie@kernel.org;
- h=from:subject:message-id; bh=KNEH2B/3cKbD4Ox1zRhS7kvDtEqd+S+LnelX9B3Saws=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBp4OJSxFETLAxIv/KVZfqbD2g6pIHysqHfOdoPU
- Cds2dpd5EaJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaeDiUgAKCRAk1otyXVSH
- 0NqpB/9/DUzVLyRrJVcL7bBio8tC3sw7UmnQzCqfgqHyUmz37to0X+CBAkXUX4jkWjevPuzVTqz
- W5pK19oD/XmwCe5hFoNIsHaJoF3w2gZode42ToXZmf44wvV6fKpqhgB33nixTStDTLqwtpgS7Jz
- rouCTcYSM1k/DSHHK9bSZtQK9dQ5DKeOuTlwQZk4XT2T9bSq5DjlqPEFHPxY+X6zqPa5eDn8R3D
- gdznwhR1rvE9QYuBJ3tmR8b69EHmQ4+9zuiY8odHQz0V3w8bQZN9XhPNn+vWbqqDUnz/nmlJaoj
- EBt4DrAF4j4Zdaaniil7N2q2eJz5L+bmvBN2JdH4PaHWkAsi
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Score: -4.30
+X-Spam-Level: 
+X-Spamd-Result: default: False [-4.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	ARC_NA(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	RCVD_COUNT_ZERO(0.00)[0];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email]
+X-Spam-Flag: NO
 
-Commit 7e47389142b8 ("selftests: Preserve subtarget failures in
-all/install") updated the propagation of errors from indivdual kselftest
-targets to be similar to that seen with FORCE_TARGETS.  While it would
-be really nice to be in a position to do this currently it is premature
-to do this as the default behaviour.
+On Wed, 15 Apr 2026, Marcos Paulo de Souza wrote:
 
-At present we default to trying to build all selftests but a combination
-of code quality issues and build dependencies mean that it is almost
-certain that at least one of them will fail to build (for example,
-several depend on clang so don't work in a GCC container) and a top
-level failure in the kselftest build reported.  Further, the resulting
-failures mean that the install target does not run at all so any build
-problem is escallated to a complete failure to produce a kselftest
-tarball so CI systems that run into issues loose all selftests coverage.
-This has been causing disruption to a range of CI systems including
-KernelCI, mine and Arm's internal one.
+> On Wed, 2026-04-15 at 14:01 +0200, Miroslav Benes wrote:
+> > On Mon, 13 Apr 2026, Marcos Paulo de Souza wrote:
+> > 
+> > > A new version of the patchset, with fewer patches now. Please take
+> > > a look!
+> > > 
+> > > Original cover-letter:
+> > > These patches don't really change how the patches are run, just
+> > > skip
+> > > some tests on kernels that don't support a feature (like kprobe and
+> > > livepatched living together) or when a livepatch sysfs attribute is
+> > > missing.
+> > > 
+> > > The last patch slightly adjusts check_result function to skip dmesg
+> > > messages on SLE kernels when a livepatch is removed.
+> > > 
+> > > These patches are based on printk/for-next branch.
+> > > 
+> > > Please review! Thanks!
+> > > 
+> > > Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
+> > 
+> > Besides my comment for 1/6 and what Sashiko discovered, it looks good
+> > to 
+> > me.
+> > 
+> > However, please also take a look at brand new 
+> > test_modules/test_klp_mod_target.c. It does not build on old kernels
+> > since 
+> > they lack proc_create_single(). I think it should be covered in this
+> > patch 
+> > set too.
+> 
+> I saw that yesterday as well, but I wanted to merge this series first.
+> I have plans to create a way to unregister the livepatches if something
+> fails, so we can continue to run the other tests. I was planning to fix
+> the test_klp_mod_target.c in the same patchset.
 
-Revert the commit, users who need this behaviour should be able to use
-FORCE_TARGETS for the time being.  At present users that do this (such
-as linux-next) are most likely building a subset of targets known to
-succeed in their environments.
+Fair enough.
 
-Fixes: 7e47389142b8 ("selftests: Preserve subtarget failures in all/install")
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/Makefile | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 0949f370ad78..450f13ba4cca 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -209,14 +209,14 @@ export KHDR_INCLUDES
- .DEFAULT_GOAL := all
- 
- all:
--	@ret=0;							\
-+	@ret=1;							\
- 	for TARGET in $(TARGETS) $(INSTALL_DEP_TARGETS); do	\
- 		BUILD_TARGET=$$BUILD/$$TARGET;			\
- 		mkdir $$BUILD_TARGET  -p;			\
- 		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET	\
- 				O=$(abs_objtree)		\
- 				$(if $(FORCE_TARGETS),|| exit);	\
--		[ $$? -eq 0 ] || ret=1;			\
-+		ret=$$((ret * $$?));				\
- 	done; exit $$ret;
- 
- run_tests: all
-@@ -274,7 +274,7 @@ ifdef INSTALL_PATH
- 	install -m 744 kselftest/ksft.py $(INSTALL_PATH)/kselftest/
- 	install -m 744 run_kselftest.sh $(INSTALL_PATH)/
- 	rm -f $(TEST_LIST)
--	@ret=0;	\
-+	@ret=1;	\
- 	for TARGET in $(TARGETS) $(INSTALL_DEP_TARGETS); do \
- 		BUILD_TARGET=$$BUILD/$$TARGET;	\
- 		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET install \
-@@ -283,7 +283,7 @@ ifdef INSTALL_PATH
- 				OBJ_PATH=$(INSTALL_PATH) \
- 				O=$(abs_objtree)		\
- 				$(if $(FORCE_TARGETS),|| exit);	\
--		[ $$? -eq 0 ] || ret=1;		\
-+		ret=$$((ret * $$?));		\
- 	done; exit $$ret;
- 
- 
-
----
-base-commit: 7e47389142b8ada66280be71e01a3238751086f0
-change-id: 20260416-selftests-deescalate-error-reporting-4a492571bb27
-
-Best regards,
---  
-Mark Brown <broonie@kernel.org>
-
+Miroslav
