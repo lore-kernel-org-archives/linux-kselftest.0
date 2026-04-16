@@ -1,99 +1,189 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out30-112.freemail.mail.aliyun.com (out30-112.freemail.mail.aliyun.com [115.124.30.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60DF31A6805;
-	Thu, 16 Apr 2026 00:30:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B5B01A76BB;
+	Thu, 16 Apr 2026 00:49:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.112
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776299446; cv=none; b=Cpud+2nHukp33Z84gJw1fSUBxEwMm1+BegtrBOnGMgtNM1YgbKkbnOHUnc2NNsxshb589/VI32d38rXPzyBo9Sqyr87zeIrz3d510CsKoW48AotqDuUgDVPOVACjOEb3IfaKVOL6M9aOdEBtYZO8qcrFYVpivTyUEIiEp8v4JQs=
+	t=1776300591; cv=none; b=BPX/w9U6deVo7sRv2FsFztOwx0DOGioqastpKzdU2MT8Vp3aCW56ujTYrgYMK228hHBWRDO03Uxq4+Sc6LX6+0ezbqzo5Qnd1uWC9R8jU96CngwZw9SrSvDrQ6F7t6e23VJnGajM21hbBqx7i50LCA2H0eCjfCqaVx8Hjxrt6mI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776299446; c=relaxed/simple;
-	bh=8hdB6viDEMIXDVmOzuuRHuVAjFMysD7iScx0KyZBz4g=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=rB8/RiNsINatG8aVQ1ELwU7WX2UZ3R+ZHEsO7GX2AMfYBui35Kgewpls34YxinV5seQH8yfFrgkLLQhb2bjK4N47fCEwvLsOJActM0TVxEXEF+hZLjk9jpdBsF69dFAamJad28tP3OnwQieevsl8vDoRsgijTEHBQuhcMz4qXU8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IXqGhRxh; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776300591; c=relaxed/simple;
+	bh=nZyawi2/LGtC+zwcrr+zobVZrUuRPtZ6WF3mypXUwqM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FnrDkWXB9zxTxOi2cWeXd9ily1bUGMNFRcK0ZwEbivO9qbNeAyzlgKn/ZonyST2mWieVb3sjBn95848aohUzPxQADYyPmwpYfV6hhb7nckdDPMT6hlTN3gGkJwuv+Cku3M89zPDpEix+F8P4aEk8d2ZrdmWQAtHaNJ2J1j2Fyq8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=u9pGVu4t; arc=none smtp.client-ip=115.124.30.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IXqGhRxh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D89E9C19424;
-	Thu, 16 Apr 2026 00:30:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776299445;
-	bh=8hdB6viDEMIXDVmOzuuRHuVAjFMysD7iScx0KyZBz4g=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=IXqGhRxhTM5WD/LJvpHMQqA4sgum8mSVOrXSXxiSfXdrNhD50Pjb939jdVpJ74A5g
-	 d9oERdEYIsQEntckzwwJ2soI7OPdosgwv7n3/4tIwLIBPSGd3GFz118YskPSjRE7wP
-	 Oxb91Yzpmxz1uhBcepA5FGTh5ttSa+liL7S2eFEi3dupdjjzalSDsTMZdlI6UsKQ/6
-	 nNbYbbNWLo+AX9wlU1qHDKlHofl9YEdpZwOkuFst36N97nGN95N7xjNbC354Y2/4B5
-	 DF/3+MpuiTUyJexfGMYFaGs5T2tceq1MPvLHoUvdO/TuG6RRNdaDF8eexwQUD+gUOM
-	 /r8JdYxO+51og==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3FD24380A964;
-	Thu, 16 Apr 2026 00:30:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="u9pGVu4t"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1776300579; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=wMDkB3M6DeO+x7rz8eUh1YbTs7caB4nDxuzSIvsHJSU=;
+	b=u9pGVu4tz8YOXUv3jDJZ3zVJKNxRdw2KuZbfxjR7TnjS2akLiVuCym9ba4rciE8lD1NsfCkJT8tMwP8PNBWrCif4kbRmkkJJS/ZQtNaS1axQl7NY+L4sAkRWgHF/PV1nhww3rmt4AxNoH1wHc5M7pO7AaT+L+pb2hKlOfLtIOgs=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R811e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037033178;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=27;SR=0;TI=SMTPD_---0X1680nn_1776300576;
+Received: from 30.74.144.131(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0X1680nn_1776300576 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Thu, 16 Apr 2026 08:49:37 +0800
+Message-ID: <9c6e376e-1a91-4aaa-9918-ca161fe57130@linux.alibaba.com>
+Date: Thu, 16 Apr 2026 08:49:36 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 7.2 v2 05/12] mm/khugepaged: remove READ_ONLY_THP_FOR_FS
+ check in hugepage_pmd_enabled()
+To: Zi Yan <ziy@nvidia.com>, "David Hildenbrand (Arm)" <david@kernel.org>,
+ Matthew Wilcox <willy@infradead.org>
+Cc: Nico Pache <npache@redhat.com>, Song Liu <songliubraving@fb.com>,
+ Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>,
+ Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+ Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
+ Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
+ Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Shuah Khan <shuah@kernel.org>, linux-btrfs@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+References: <20260413192030.3275825-1-ziy@nvidia.com>
+ <20260413192030.3275825-6-ziy@nvidia.com>
+ <ad1TMjF1L3usYIC5@casper.infradead.org>
+ <05F00072-7E06-47C9-BC26-FE3736F557FC@nvidia.com>
+ <a4d477a8-71d8-4219-9cb3-153f2c01e184@kernel.org>
+ <84B8F641-A3DF-4219-AA57-6BA48E9B4998@nvidia.com>
+ <998c02b6-2612-42c1-8099-d65ae275d1a2@kernel.org>
+ <7468C68E-FB09-4714-94A3-4BED63453295@nvidia.com>
+ <b7aa5515-6908-4ec6-91e9-eb79d5ef70b4@linux.alibaba.com>
+ <afe0dfb9-feeb-4243-bc4b-305e5e33b581@kernel.org>
+ <38697379-cbba-4c64-ae65-6774b01021d9@linux.alibaba.com>
+ <68F85F77-8EFE-449D-B643-AEEB38CB50B2@nvidia.com>
+From: Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <68F85F77-8EFE-449D-B643-AEEB38CB50B2@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf v4 0/5] bpf, sockmap: Fix af_unix null-ptr-deref in
- proto update
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177629941504.2543974.17636062196868674829.git-patchwork-notify@kernel.org>
-Date: Thu, 16 Apr 2026 00:30:15 +0000
-References: 
- <20260414-unix-proto-update-null-ptr-deref-v4-0-2af6fe97918e@rbox.co>
-In-Reply-To: 
- <20260414-unix-proto-update-null-ptr-deref-v4-0-2af6fe97918e@rbox.co>
-To: Michal Luczaj <mhal@rbox.co>
-Cc: john.fastabend@gmail.com, jakub@cloudflare.com, edumazet@google.com,
- kuniyu@google.com, pabeni@redhat.com, willemb@google.com,
- davem@davemloft.net, kuba@kernel.org, horms@kernel.org, yhs@fb.com,
- andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
- martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
- cong.wang@bytedance.com, netdev@vger.kernel.org, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- jiayuan.chen@linux.dev, yimingqian591@gmail.com
 
-Hello:
 
-This series was applied to bpf/bpf.git (master)
-by Martin KaFai Lau <martin.lau@kernel.org>:
 
-On Tue, 14 Apr 2026 16:13:14 +0200 you wrote:
-> Updating sockmap/sockhash using a unix sock races unix_stream_connect():
-> when sock_map_sk_state_allowed() passes (sk_state == TCP_ESTABLISHED),
-> unix_peer(sk) in unix_stream_bpf_update_proto() may still return NULL.
+On 4/16/26 2:01 AM, Zi Yan wrote:
+> On 15 Apr 2026, at 5:21, Baolin Wang wrote:
 > 
-> Signed-off-by: Michal Luczaj <mhal@rbox.co>
+>> On 4/15/26 4:00 PM, David Hildenbrand (Arm) wrote:
+>>> On 4/15/26 08:36, Baolin Wang wrote:
+>>>>
+>>>>
+>>>> On 4/15/26 2:25 AM, Zi Yan wrote:
+>>>>> On 14 Apr 2026, at 14:14, David Hildenbrand (Arm) wrote:
+>>>>>
+>>>>>>
+>>>>>> Yeah, it would be better if we could avoid it. But the dependency on the
+>>>>>> global toggle as it is today is a bit weird.
+>>>>>>
+>>>>>>
+>>>>>> I don't think there is other interaction with FS and the global toggle
+>>>>>> besides this and the one you are adjusting, right?
+>>>>>>
+>>>>
+>>>> I'm afraid not. Please also consider the per-size mTHP interfaces. It's
+>>>> possible that hugepage_global_enabled() returns false, but
+>>>> hugepages-2048kB/enabled is set to "always", which would still allow
+>>>> khugepaged to collapse folios.
+>>
+>> My comments are in reply to Zi’s comment:
+>>
+>> "I think hugepage_global_enabled() should be enough to decide whether khugepaged should run or not."
+>>
+>> I’m concerned that only relying on hugepage_global_enabled() to decide whether khugepaged should run would cause a regression for anonymous and shmem memory collapse, as it ignores per-size mTHP configuration.
+>>
+>>> The question is really which semantics we want.
+>>>
+>>> Right now, there is no way to disable khugepaged for anon pages, to just
+>>> get them during page faults.
+>>
+>> Right.
+>>
+>>> And we are now talking about the same problem for FS: to only get them
+>>> during page faults (like we did so far without CONFIG_READ_ONLY_THP_FOR_FS).
+>>
+>> OK. I’m fine with using hugepage_global_enabled() to determine whether khugepaged scans file folios.
+>>
+>> My concern is that for anonymous memory and shmem, the per-size mTHP settings should be considered.
+> 
+> OK, I misunderstood the meaning of hugepage_global_enabled(), since per-size
+> mTHP settings could also enable khugepaged if PMD_SIZE is set.
+> 
+> I will take willy’s original suggestion and make khugepaged on if the global
+> setting is enabled. The below is the new version of this patch. I moved anon
+> pmd huge page code to a separate anon_hpage_pmd_enabled() like
+> shmem_hpage_pmd_enabled() and cleaned up the comment. Let me know your thoughts.
+> 
+> Thanks.
+> 
+>  From 92b92f2b2ab41c70b41dd304ce648786ee6a1603 Mon Sep 17 00:00:00 2001
+> From: Zi Yan <ziy@nvidia.com>
+> Date: Wed, 15 Apr 2026 13:52:50 -0400
+> Subject: [PATCH] mm/khugepaged: remove READ_ONLY_THP_FOR_FS check in
+>   hugepage_pmd_enabled()
+> 
+> Remove READ_ONLY_THP_FOR_FS and khugepaged for file-backed pmd-sized
+> hugepages are enabled by the global transparent hugepage control.
+> khugepaged can still be enabled by per-size control for anon and shmem when
+> the global control is off.
+> 
+> Signed-off-by: Zi Yan <ziy@nvidia.com>
 > ---
-> Changes in v4:
-> - Circle back to v1 approach
-> - More details in commit messages [Martin]
-> - Make unix iter take the state lock [Kaniyuki]
-> - Link to v3: https://lore.kernel.org/r/20260306-unix-proto-update-null-ptr-deref-v3-0-2f0c7410c523@rbox.co
+>   mm/khugepaged.c | 26 +++++++++++++++-----------
+>   1 file changed, 15 insertions(+), 11 deletions(-)
 > 
-> [...]
+> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+> index b8452dbdb043..586d27ce896e 100644
+> --- a/mm/khugepaged.c
+> +++ b/mm/khugepaged.c
+> @@ -406,18 +406,8 @@ static inline int collapse_test_exit_or_disable(struct mm_struct *mm)
+>   		mm_flags_test(MMF_DISABLE_THP_COMPLETELY, mm);
+>   }
+> 
+> -static bool hugepage_pmd_enabled(void)
+> +static inline bool anon_hpage_pmd_enabled()
+>   {
+> -	/*
+> -	 * We cover the anon, shmem and the file-backed case here; file-backed
+> -	 * hugepages, when configured in, are determined by the global control.
+> -	 * Anon pmd-sized hugepages are determined by the pmd-size control.
+> -	 * Shmem pmd-sized hugepages are also determined by its pmd-size control,
+> -	 * except when the global shmem_huge is set to SHMEM_HUGE_DENY.
+> -	 */
+> -	if (IS_ENABLED(CONFIG_READ_ONLY_THP_FOR_FS) &&
+> -	    hugepage_global_enabled())
+> -		return true;
+>   	if (test_bit(PMD_ORDER, &huge_anon_orders_always))
+>   		return true;
+>   	if (test_bit(PMD_ORDER, &huge_anon_orders_madvise))
+> @@ -425,6 +415,20 @@ static bool hugepage_pmd_enabled(void)
+>   	if (test_bit(PMD_ORDER, &huge_anon_orders_inherit) &&
+>   	    hugepage_global_enabled())
+>   		return true;
+> +	return false;
+> +}
+> +
+> +static bool hugepage_pmd_enabled(void)
+> +{
+> +	/*
+> +	 * Anon, shmem and file-backed pmd-sized hugepages are all determined by
+> +	 * the global control. If the global control is off, anon and shmem
+> +	 * pmd-sized hugepages are also determined by its per-size control.
+> +	 */
+> +	if (hugepage_global_enabled())
+> +		return true;
+> +	if (anon_hpage_pmd_enabled())
+> +		return true;
+>   	if (IS_ENABLED(CONFIG_SHMEM) && shmem_hpage_pmd_enabled())
+>   		return true;
+>   	return false;
 
-Here is the summary with links:
-  - [bpf,v4,1/5] bpf, sockmap: Annotate af_unix sock::sk_state data-races
-    https://git.kernel.org/bpf/bpf/c/a25566084e39
-  - [bpf,v4,2/5] bpf, sockmap: Fix af_unix iter deadlock
-    https://git.kernel.org/bpf/bpf/c/4d328dd69538
-  - [bpf,v4,3/5] selftests/bpf: Extend bpf_iter_unix to attempt deadlocking
-    https://git.kernel.org/bpf/bpf/c/997b8483d44c
-  - [bpf,v4,4/5] bpf, sockmap: Fix af_unix null-ptr-deref in proto update
-    https://git.kernel.org/bpf/bpf/c/dca38b7734d2
-  - [bpf,v4,5/5] bpf, sockmap: Take state lock for af_unix iter
-    https://git.kernel.org/bpf/bpf/c/64c2f93fc325
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Thanks. Looks reasonable to me. Let’s also see what David thinks.
