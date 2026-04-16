@@ -1,154 +1,222 @@
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2541A3B9D83
-	for <linux-kselftest@vger.kernel.org>; Thu, 16 Apr 2026 12:22:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA96A3B8BCD
+	for <linux-kselftest@vger.kernel.org>; Thu, 16 Apr 2026 12:33:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776342138; cv=none; b=E9ONDWAOLLQSoCOGw1TpXoLYMRp5gBsVKaBrtxbJsAwTdhQy0SalAja6SoN+0jd2jXecbpDBdaOUEICDwzKpjldMt6o393ol88gt8L0Ep0s/4UZ7ppNMTpt4krw6lQ9E8pnvK9Q6w/DjBf+1woD1t8mHxyXOYvkGY8U62n7tePE=
+	t=1776342819; cv=none; b=CeoOocLwK8HMBw0W6WZuJODBhaZFzzxMA7+PFjkOq7wJ28bb0Vuj1CdHSe6t623D1jKPcO6n8t0Jr6vs1vIT90xGMdzLy+ZpY6nXvFAuRWlWJatg12I25taTM/HFVE8Of0d3WqEj+6+CedY5gehxYGikLopiQXmYmQs60TRa+Qg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776342138; c=relaxed/simple;
-	bh=mEg+v7zXI0iREsRG6kydyUfkdkpuhC25e846u65Lppk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=cMdEv9TyQ0k3QoPnpyeuN8ZN30sVhmdklkfxuBM61u3ft/0v1y2BDZzuS9n1VPWzL0ECKB8KrBxHwbVWIk87Ru10DVtx3n6krRK1txsc7QujZdIV55Zu+PZbZ2LVOBLg9LxJqK4aM69wXH6ROcwkfkO4M89v05CjZrJ1q7BhDGQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=TNVZSiU0; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1776342819; c=relaxed/simple;
+	bh=CEb3cuo/uAP88ESWyuNyMkZh7DTfU9K7tpZY9polNZ8=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=ezEriF4aymYhatiihv2cCy7wZLm+NH/MxmNHyMtR48cToEiF3dLSwukoEu5J8IViC6nt2HOByXTgNLDvXGZzAzATnnKJw1KYqQ/Ur3DYbCTddaIUnAdaUvmWSZMIqTSYpXbJSwfEbdtdTUtR2XZ74GaSqa5qum37RHmMz1JuWok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V7GJG2gO; arc=none smtp.client-ip=209.85.128.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="TNVZSiU0"
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4887ca8e529so4511325e9.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Apr 2026 05:22:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V7GJG2gO"
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-79a60975dc5so92319287b3.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Apr 2026 05:33:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1776342135; x=1776946935; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KhHX7gYP2RMHcZsNzdTs8ia86Fe1heXnXQrH+zN2ESQ=;
-        b=TNVZSiU0H5gK2CL/L/zsF9L1ePdd/Qt+IZ8EtOP8RZ6NM3pAUGgG7Tn5vAuZ5zHgQ4
-         cQOgx23pH8NE9obrM8PZbWIjrv372KMOWyer9Oh/64kCi+4RJ3UshCa7J6RB50xnDobY
-         LpVf9Rqdj3OWS9wH5gyaCfvV8yPtLvtMO0pJ2f1IzHLKho2zfZBwdVw00dRYgLid8OSK
-         d2qw0COdIW1e0T/PTH2b6dRlPnrevOs0Xxwd/aG/puff/YP2tTPdBNZ9bTvGhP/Kx/Kv
-         5FRMgvRpoZNvSRjSqFRIlPEPHn+g9jBzP0ePwKwGMfIin7tY66RoCuBYJRuNnIuw1qbD
-         I2hw==
+        d=gmail.com; s=20251104; t=1776342816; x=1776947616; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LArw8lu+z3P+Njr288piMWTqVUwbnY19SMC1K2R3E/8=;
+        b=V7GJG2gOVXPXgEcWQ/6GxvBr9fAZXecoBQKOmbmF6wvO2XZB8MRBS/u6R34kQ6AYbZ
+         dYY6FlHa+Edmfc9f1h6SDUcullyvuyeuYEnfZKWF1TFkZpeHOVjsB/pYwL7C+TXbiUV/
+         2y1TA1D4YpQ42Yg52hDz3yc+V3EQi+zt+wQGF3zaMsbW6+pdQ+CokgFzDHY20MqdzrMa
+         5IUmVSMLejNWAAgnwUV/B6+awLkYCf5GatPGp/gJktsBfqABRplmATqWXgU8BtmHMTT1
+         Y2h0ZQ9p5VicyI3QtbEpzwIXWSolxXkBfSEE86HvCxevq/L0s+QPS1f5AgbJS0aEJrS8
+         0HNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776342135; x=1776946935;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=KhHX7gYP2RMHcZsNzdTs8ia86Fe1heXnXQrH+zN2ESQ=;
-        b=f5oT8dmm2nnWvOfQ/SIvLHjJ+N02pxntXmx2xfXMrMd1M4LNlPrsgL+ioweSvXCsss
-         9LDak/6VSbf+KcH0WZkGgrIFS/qZ2p7AJnqdQAvUJAr8wCIvzN5FY1cFJ95UB+bGPIM3
-         HLo+8N+A0vrc+D/4HTyFZ94QzTu6464oAjPda9MNRjo4gGYT979G9AYmTA1uRZdOFuOg
-         2RNToTmP9+CLzdXSNUITxQ1/f0URjxov839GMsYvSs9hS12D+ymFmQImwVwwaz6/SOmB
-         hfOGTMbSaOiTLsYIxpbIPj2fwtv0+0hnZY5I5o3mZWLVCnsQMwjMWFeerL1HHNAj0FVD
-         wDbA==
-X-Forwarded-Encrypted: i=1; AFNElJ8q284cAzoU96xb4mdsUPrSPSUP7FXB3KNhUWcYkFtbu19/EX7v4WQzR/OVbNEO5THF7KmduaogreXHxcSoQXQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxqHZKtbu/MA5vgARLOYsr4OXO3LtL7Vb+Ch5mwIusTTkOZ7AOJ
-	VJy89Q61OIsNZVxcKTWeBYniWk2erZMqa0bmOrigEAEk+SK0LHYBtvYEQOkfUveRbIPIIBbhA4x
-	i9BZex50=
-X-Gm-Gg: AeBDiesA66kw8qOZ98pdNYGvA/p02+vmmdJDfV1Yyp2oTAjvq8cJrRae+nmQUtiix5s
-	7P560J9ZuePZr8LOHEJ3Pl49KCqaQE52dnJdmkadSstkxtJ/QR2+AEX+k6TsxgceesYUEeiKlUo
-	a5ZycQ5T8H7WXBA0pDEFO2xfZXpJYcK1sNzEeW3zSEOc3IEO2bBt95F6Vom9TIXm0acegj1x6p5
-	O/8wIfEhb3uJeSC8KI3yXHAICqA9UHOVHCFka/WdaQDw4Y7601ytrdBsu7JOd4S5i6/BBiRS1E/
-	kNd7jS9EY5EFpkSwCeGqlUPbWyOj9N4F3+71PLZfL6UUoPTqbAXQUYkpdyoK2/C6kL3lNb/GRg8
-	v4iRD/oPr1r/jUXRI5KwgLDJkX+YXLucQBr6fpKzfE+vIkrCXiUqfYT4nl8EGkAuwpC2NXZrS1h
-	GowOvawT//Wdo=
-X-Received: by 2002:a05:600c:5888:b0:488:a9c3:44a3 with SMTP id 5b1f17b1804b1-488f45c02abmr34600335e9.2.1776342135114;
-        Thu, 16 Apr 2026 05:22:15 -0700 (PDT)
-Received: from localhost ([2804:7f0:b765:e41:ce28:aaff:fe86:149c])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2de8c90cd7esm8736289eec.13.2026.04.16.05.22.13
+        d=1e100.net; s=20251104; t=1776342816; x=1776947616;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LArw8lu+z3P+Njr288piMWTqVUwbnY19SMC1K2R3E/8=;
+        b=hMs0iTlq40YPi8mmzSKKyEuxck3PPTbo7zg9M//jlEDMNmHVjG4MI+uC2/MmTMFM8C
+         Rd6tyIjtgC2HAjhm8RbxYLZ3J3l2VI5dId62mteu1uNymSqKWuTCc+SksI1NKCEkJb16
+         3CONBWoG7Q8+mFX6D88BmrEkHwR+KqzdN3q8G7T+dfJjXi1jOBwy9VcTNyK0CWUFwOsr
+         Ng38SKhxUCXhxTL93jzBOuhRWQucgiXDZMjLTloxkGMcufvRZgliG7Lw0DJVq7m//wF6
+         flIIeN6YrhVz09lxyKbV66wP2iDLqZmVrZSnUpfT9BQmsTdVpOFmfYPupYgkhN5t2K5/
+         6WQw==
+X-Forwarded-Encrypted: i=1; AFNElJ978cD+fApc7Z+b+ecwUsqlxWfbMfG45G8yODuQ33yNqEFjJx9JEJwnoRAD32KRW8WOf+LTTyXFHdIUz7PJCjs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzT+LrhMlN9gLvtJfoZsDI+Gbr3tlD1AcLMsSEYkQZhLFwbNAMg
+	R4TSf3hQd3agrkMSa/8L01/dMp+XmGy693fQluqmS7jBD+1uPU0za0/k
+X-Gm-Gg: AeBDiesvp5Hhw4AtdAx/PyedStSAMo+ci9K6iuHJ9wn9ALcHful08P8gxkE/LjTQT8t
+	yFZJfwotJQ1DBiaLjHFRTM6f4K9XowbB/WONiu3clQaoYGyalKdUwvP6P7ERaOIFwt+zsAGN6i5
+	zR84VMeuig6jMesjkJblpcV1u5wR1kWNY09tE5nb7l7ABbKoEUgZU1HhzMseI7g+ghga19dLSKd
+	tFpvZ/GX04P1alwEE+IoNsG66OrEibOQ2yZ8U6VVgStrPM8pxcKKS/0dAeo73Lp9Ob/U7rAmp1c
+	wrYMo6wsZXllaFkJeUI5DAryOET1DvQcLkdAuT9vg4rMIE8UR7dLABdSa4dMCO45ZeIfiHjSDrG
+	N8eNSSQbajm4Fkbs8ePh1ebS9URH380N66ENmsBJcV2BFYNtPU4ZGM+mQ/8P/r97C4js0eJPj4s
+	Rtfu2zCgLNZSIUuYimihS8W/iINltvuFqqRE6UTTgwEeND0l27BcqnrUbkhMPjwGY26x0yPu8wB
+	3GbznG2ZWxERskX2zSPy29rTQ==
+X-Received: by 2002:a05:690c:6e85:b0:7b8:f152:753a with SMTP id 00721157ae682-7b8f15278bfmr15108987b3.19.1776342815689;
+        Thu, 16 Apr 2026 05:33:35 -0700 (PDT)
+Received: from gmail.com (172.165.85.34.bc.googleusercontent.com. [34.85.165.172])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-7b7693179a5sm21853427b3.36.2026.04.16.05.33.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Apr 2026 05:22:14 -0700 (PDT)
-From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
-Date: Thu, 16 Apr 2026 09:21:28 -0300
-Subject: [PATCH bpf-next v6 11/11] selftests/bpf: Tolerate missing files
- during install
+        Thu, 16 Apr 2026 05:33:35 -0700 (PDT)
+Date: Thu, 16 Apr 2026 08:33:34 -0400
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Nick Hudson <nhudson@akamai.com>, 
+ bpf@vger.kernel.org, 
+ netdev@vger.kernel.org, 
+ Willem de Bruijn <willemb@google.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Nick Hudson <nhudson@akamai.com>, 
+ Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Shuah Khan <shuah@kernel.org>, 
+ linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org
+Message-ID: <willemdebruijn.kernel.2a800b32a572a@gmail.com>
+In-Reply-To: <20260416075514.927101-7-nhudson@akamai.com>
+References: <20260416075514.927101-1-nhudson@akamai.com>
+ <20260416075514.927101-7-nhudson@akamai.com>
+Subject: Re: [PATCH bpf-next v4 6/6] selftests/bpf: tc_tunnel validate decap
+ GSO state
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260416-selftests-bpf_misconfig-v6-11-7efeab504af1@suse.com>
-References: <20260416-selftests-bpf_misconfig-v6-0-7efeab504af1@suse.com>
-In-Reply-To: <20260416-selftests-bpf_misconfig-v6-0-7efeab504af1@suse.com>
-To: Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
- Alan Maguire <alan.maguire@oracle.com>, 
- "Ricardo B. Marliere" <rbm@suse.com>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openssh-sha256; t=1776342088; l=2151;
- i=rbm@suse.com; h=from:subject:message-id;
- bh=mEg+v7zXI0iREsRG6kydyUfkdkpuhC25e846u65Lppk=;
- b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
- x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QFN3SnWDFLPzFWsuaYADh4eBzRwT7G4DD1uJJxg8KDV+Al+f/kRjZMmp78ssLgAjQOV9rrCEpue
- zdCykIU669A8=
-X-Developer-Key: i=rbm@suse.com; a=openssh;
- fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-With partial builds, some TEST_GEN_FILES entries can be absent at install
-time. rsync treats missing source arguments as fatal and aborts kselftest
-installation.
+Nick Hudson wrote:
+> Require BPF_F_ADJ_ROOM_DECAP_L4_UDP and BPF_F_ADJ_ROOM_DECAP_L4_GRE enum
+> values at runtime using CO-RE enum existence checks so missing kernel
+> support fails fast instead of silently proceeding.
+> 
+> After bpf_skb_adjust_room() decapsulation, inspect skb_shared_info and
+> sk_buff state for GSO packets and assert that the expected tunnel GSO
+> bits are cleared and encapsulation matches the remaining tunnel state.
+> 
+> Signed-off-by: Nick Hudson <nhudson@akamai.com>
+> ---
+>  .../selftests/bpf/progs/test_tc_tunnel.c      | 58 +++++++++++++++++++
+>  1 file changed, 58 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/bpf/progs/test_tc_tunnel.c b/tools/testing/selftests/bpf/progs/test_tc_tunnel.c
+> index 7376df405a6b..74dfb694a210 100644
+> --- a/tools/testing/selftests/bpf/progs/test_tc_tunnel.c
+> +++ b/tools/testing/selftests/bpf/progs/test_tc_tunnel.c
+> @@ -6,6 +6,7 @@
+>  
+>  #include <bpf/bpf_helpers.h>
+>  #include <bpf/bpf_endian.h>
+> +#include <bpf/bpf_core_read.h>
+>  #include "bpf_tracing_net.h"
+>  #include "bpf_compiler.h"
+>  
+> @@ -37,6 +38,23 @@ struct vxlanhdr___local {
+>  
+>  #define	EXTPROTO_VXLAN	0x1
+>  
+> +#define SKB_GSO_UDP_TUNNEL_MASK	(SKB_GSO_UDP_TUNNEL |			\
+> +				 SKB_GSO_UDP_TUNNEL_CSUM |		\
+> +				 SKB_GSO_TUNNEL_REMCSUM)
 
-Override INSTALL_SINGLE_RULE in selftests/bpf to use --ignore-missing-args,
-while keeping the existing bpf-specific INSTALL_RULE extension logic. Also
-add --ignore-missing-args to the TEST_INST_SUBDIRS rsync loop so that
-subdirectories with no .bpf.o files (e.g. when a test runner flavor was
-skipped) do not abort installation.
+Leftover remcsum reference?
 
-Note that the INSTALL_SINGLE_RULE override applies globally to all file
-categories including static source files (TEST_PROGS, TEST_FILES). These
-are version-controlled and should always be present, so the practical risk
-is negligible.
+> +
+> +#define SKB_GSO_TUNNEL_MASK		(SKB_GSO_UDP_TUNNEL_MASK |		\
 
-Signed-off-by: Ricardo B. Marlière <rbm@suse.com>
----
- tools/testing/selftests/bpf/Makefile | 17 ++++++++++++++---
- 1 file changed, 14 insertions(+), 3 deletions(-)
+Odd indentation?
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 9e3e0a898e40..2808387b3d9f 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -974,11 +974,22 @@ EXTRA_CLEAN := $(SCRATCH_DIR) $(HOST_SCRATCH_DIR)			\
- # Delete partially updated (corrupted) files on error
- .DELETE_ON_ERROR:
- 
-+# When permissive, tell rsync to ignore missing source arguments so that
-+# partial builds do not abort installation.
-+ifneq ($(PERMISSIVE),)
-+override define INSTALL_SINGLE_RULE
-+	$(if $(INSTALL_LIST),@mkdir -p $(INSTALL_PATH))
-+	$(if $(INSTALL_LIST),rsync -a --copy-unsafe-links --ignore-missing-args $(INSTALL_LIST) $(INSTALL_PATH)/)
-+endef
-+endif
-+
- DEFAULT_INSTALL_RULE := $(INSTALL_RULE)
- override define INSTALL_RULE
- 	$(DEFAULT_INSTALL_RULE)
--	@for DIR in $(TEST_INST_SUBDIRS); do		  \
--		mkdir -p $(INSTALL_PATH)/$$DIR;   \
--		rsync -a $(OUTPUT)/$$DIR/*.bpf.o $(INSTALL_PATH)/$$DIR;\
-+	@for DIR in $(TEST_INST_SUBDIRS); do				  \
-+		mkdir -p $(INSTALL_PATH)/$$DIR;				  \
-+		rsync -a $(if $(PERMISSIVE),--ignore-missing-args)	  \
-+			$(OUTPUT)/$$DIR/*.bpf.o				  \
-+			$(INSTALL_PATH)/$$DIR;				  \
- 	done
- endef
+> +				 SKB_GSO_GRE |				\
+> +				 SKB_GSO_GRE_CSUM |			\
+> +				 SKB_GSO_IPXIP4 |			\
+> +				 SKB_GSO_IPXIP6 |			\
+> +				 SKB_GSO_ESP)
+> +
+> +#define BPF_F_ADJ_ROOM_DECAP_L4_MASK	(BPF_F_ADJ_ROOM_DECAP_L4_UDP |	\
+> +				 BPF_F_ADJ_ROOM_DECAP_L4_GRE)
+> +
+> +#define BPF_F_ADJ_ROOM_DECAP_IPXIP_MASK	(BPF_F_ADJ_ROOM_DECAP_IPXIP4 |	\
+> +					 BPF_F_ADJ_ROOM_DECAP_IPXIP6)
+> +
+>  #define	VXLAN_FLAGS     bpf_htonl(1<<27)
+>  #define	VNI_ID		1
+>  #define	VXLAN_VNI	bpf_htonl(VNI_ID << 8)
+> @@ -592,6 +610,8 @@ int __encap_ip6vxlan_eth(struct __sk_buff *skb)
+>  static int decap_internal(struct __sk_buff *skb, int off, int len, char proto)
+>  {
+>  	__u64 flags = BPF_F_ADJ_ROOM_FIXED_GSO;
+> +	struct sk_buff *kskb;
+> +	struct skb_shared_info *shinfo;
+>  	struct ipv6_opt_hdr ip6_opt_hdr;
+>  	struct gre_hdr greh;
+>  	struct udphdr udph;
+> @@ -621,6 +641,11 @@ static int decap_internal(struct __sk_buff *skb, int off, int len, char proto)
+>  		break;
+>  	case IPPROTO_GRE:
+>  		olen += sizeof(struct gre_hdr);
+> +		if (!bpf_core_enum_value_exists(enum bpf_adj_room_flags,
+> +						BPF_F_ADJ_ROOM_DECAP_L4_GRE))
+> +			return TC_ACT_SHOT;
+> +		flags |= BPF_F_ADJ_ROOM_DECAP_L4_GRE;
+> +
+>  		if (bpf_skb_load_bytes(skb, off + len, &greh, sizeof(greh)) < 0)
+>  			return TC_ACT_OK;
+>  		switch (bpf_ntohs(greh.protocol)) {
+> @@ -634,6 +659,10 @@ static int decap_internal(struct __sk_buff *skb, int off, int len, char proto)
+>  		break;
+>  	case IPPROTO_UDP:
+>  		olen += sizeof(struct udphdr);
+> +		if (!bpf_core_enum_value_exists(enum bpf_adj_room_flags,
+> +						BPF_F_ADJ_ROOM_DECAP_L4_UDP))
+> +			return TC_ACT_SHOT;
+> +		flags |= BPF_F_ADJ_ROOM_DECAP_L4_UDP;
+>  		if (bpf_skb_load_bytes(skb, off + len, &udph, sizeof(udph)) < 0)
+>  			return TC_ACT_OK;
+>  		switch (bpf_ntohs(udph.dest)) {
+> @@ -655,6 +684,35 @@ static int decap_internal(struct __sk_buff *skb, int off, int len, char proto)
+>  	if (bpf_skb_adjust_room(skb, -olen, BPF_ADJ_ROOM_MAC, flags))
+>  		return TC_ACT_SHOT;
+>  
+> +	kskb = bpf_cast_to_kern_ctx(skb);
+> +	shinfo = bpf_core_cast(kskb->head + kskb->end, struct skb_shared_info);
+> +	if (!shinfo->gso_size)
+> +		return TC_ACT_OK;
+> +
+> +	if ((flags & BPF_F_ADJ_ROOM_DECAP_L4_UDP) &&
+> +	    (shinfo->gso_type & SKB_GSO_UDP_TUNNEL_MASK))
+> +		return TC_ACT_SHOT;
+> +
+> +	if ((flags & BPF_F_ADJ_ROOM_DECAP_L4_GRE) &&
+> +	    (shinfo->gso_type & (SKB_GSO_GRE | SKB_GSO_GRE_CSUM)))
+> +		return TC_ACT_SHOT;
+> +
+> +	if ((flags & BPF_F_ADJ_ROOM_DECAP_IPXIP4) &&
+> +	    (shinfo->gso_type & SKB_GSO_IPXIP4))
+> +		return TC_ACT_SHOT;
+> +
+> +	if ((flags & BPF_F_ADJ_ROOM_DECAP_IPXIP6) &&
+> +	    (shinfo->gso_type & SKB_GSO_IPXIP6))
+> +		return TC_ACT_SHOT;
+> +
+> +	if (flags & (BPF_F_ADJ_ROOM_DECAP_L4_MASK |
+> +		     BPF_F_ADJ_ROOM_DECAP_IPXIP_MASK)) {
+> +		if ((shinfo->gso_type & SKB_GSO_TUNNEL_MASK) && !kskb->encapsulation)
+> +			return TC_ACT_SHOT;
+> +		if (!(shinfo->gso_type & SKB_GSO_TUNNEL_MASK) && kskb->encapsulation)
+> +			return TC_ACT_SHOT;
+> +	}
+> +
+>  	return TC_ACT_OK;
+>  }
+>  
+> -- 
+> 2.34.1
+> 
 
--- 
-2.53.0
 
