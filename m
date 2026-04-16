@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1375C78F39;
-	Thu, 16 Apr 2026 08:40:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD12A38C2DA;
+	Thu, 16 Apr 2026 08:41:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776328803; cv=none; b=UGVWGyG4T3EEtIy6QcRsqT+audV1zCO8hDDxgIhx0kDEkqnmq1AzaU7cKwsWF+EyCc80gHZsJYqhXUOFzrTvHKFdcS8VTvLha1sJVYrWwsGGbSPPZymZGqwNiv/mcwhQmrRb84tIcu2Qw/1yDgbHbIxMTdHdX+wUek95IqrDqow=
+	t=1776328900; cv=none; b=MaUfbOUN7TY6MaidH8G25fXXBVdOMnqEXqQZ0dIeoXsEMS0QC49yDbzHc2Cs6Qk8IBMzDv8Sv/FhOglGbIJNElE4jF3OzEoaYQthI/uM6owHWfDH7+AjXJTAmaqm5dnXKleLCu3lXVvGSp9OWM/k7wMeJ/sFgYFTbwGcUMFFt+g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776328803; c=relaxed/simple;
-	bh=qoCcvhCddFl/JRy2cur4v0b/BY7NeK62mPtbEGaij24=;
+	s=arc-20240116; t=1776328900; c=relaxed/simple;
+	bh=c0z/MoObpI8cPfFzZtMALrrcSJEqfu6jvTeJkX5JR3c=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jhIqdQVifquRmKqoBMu7gGAbEBoBpbNw2t583h6ikp6b1BtJkx8u8G9pIXKKxIwQeOSpyWew+wYcRiio+jClHCEzuQ5ByD7h3GAlvD1W65MM1YPsneAdDJdWVf2qWB5Ev0PSIH7jS5bh1/yEI/XvFFHaJcpr/e/R2EqkXlDk4tk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FRGv6TDd; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=eCZBkVXEIr0Ik2tliyoYbDiEEZ921/1lM5mm3SFriiHdRc0KDENh4vWOyV5BZOhDU2W6rjhXlPtJF4qsY0bgaIIoViX9F43qUepT/mJK9gvchrbxHf8exNotJzy1JVAY9zZXgLgsSLsMBuKxWtGa9qqyFrx0VZoHmMElyaFYEr8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m8uzB6ao; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FRGv6TDd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C96C4C2BCAF;
-	Thu, 16 Apr 2026 08:39:57 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m8uzB6ao"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6B90C2BCAF;
+	Thu, 16 Apr 2026 08:41:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776328802;
-	bh=qoCcvhCddFl/JRy2cur4v0b/BY7NeK62mPtbEGaij24=;
+	s=k20201202; t=1776328900;
+	bh=c0z/MoObpI8cPfFzZtMALrrcSJEqfu6jvTeJkX5JR3c=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=FRGv6TDdb/CbTs0XqVEWfWFufNO6r11Sec9GNZCu99m074cH+9gDMKx7EQ9tMQXBr
-	 OnRF/W9n//CCRHlK5PsY0adB2obxDy/gafQUEoS1jqc49gRe9eUslf+dK1p6MCuU8u
-	 tNU8US+6mfWjCUyeg6jrteBEwdQurFTU8bWNXfuqjQApqOwtM3boYCfOqgAsSMhuXX
-	 0xKKg0xcWwkoiM9B9sGTLwNZps5/PB+Z1zmmPL5P/zaNKKUjIXPMhJPRZyC3eK3HPi
-	 7QPSxFZkflveXtdsasyl+8jWzH1UfnZa2eo3fE9f5lHmsNVU9pjx3OAreNFQRhfYiJ
-	 Ru9sNP6eyUrog==
-Message-ID: <a88aaf79-ad64-4529-a86e-b94fc8fa9b27@kernel.org>
-Date: Thu, 16 Apr 2026 10:39:52 +0200
+	b=m8uzB6aontBX9myMaBQgETnsDXUxhNDVlPOYhtHR/Mt8YXc/baoadpkpS95McrUBZ
+	 NeAMZKLon8H/OGIZ701tJ8HOhCe2u/FlReE+KS8mt6vb6ycVjN7LasfUYZzs2oYRnM
+	 uiYNypO9OnVJhUT90uVDQ7xH1Hvgt84/WTTQfB6KITXH/uiC33mVUha/PLd0/weUHW
+	 p6ZOkobE81TK21rC2lnoOXWmuBaiviENshN2v3tlwCMEwcxSUPVwdhXha6G5QcYdVU
+	 kmoVRTUIRtDH89/syJOel/b8rgIkLlcCk7aluHi25oRpoJgq8e9+UJgG5MBlEjOa3/
+	 nJUeVafxtdZ5g==
+Message-ID: <d148375f-fe17-4f28-aec6-9732058fc3ab@kernel.org>
+Date: Thu, 16 Apr 2026 10:41:31 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,14 +35,15 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 3/3] selftests/mm: run the MAP_DROPPABLE selftest
+Subject: Re: [PATCH v4 2/3] selftests/mm: verify droppable mappings cannot be
+ locked
 To: Anthony Yznaga <anthony.yznaga@oracle.com>, linux-mm@kvack.org,
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 Cc: akpm@linux-foundation.org, ljs@kernel.org, Liam.Howlett@oracle.com,
  vbabka@kernel.org, rppt@kernel.org, surenb@google.com, mhocko@suse.com,
  jannh@google.com, pfalcato@suse.de, Jason@zx2c4.com, shuah@kernel.org
 References: <20260416033939.49981-1-anthony.yznaga@oracle.com>
- <20260416033939.49981-4-anthony.yznaga@oracle.com>
+ <20260416033939.49981-3-anthony.yznaga@oracle.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -89,64 +90,20 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20260416033939.49981-4-anthony.yznaga@oracle.com>
+In-Reply-To: <20260416033939.49981-3-anthony.yznaga@oracle.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 4/16/26 05:39, Anthony Yznaga wrote:
-> The test was not being run by the selftest framework so it was never
-> noticed that it would fail with an assertion failure on configs without
-> support for MAP_DROPPABLE. Update the test so that it is skipped instead
-> when MAP_DROPPABLE is not supported, and add it to the mmap category so
-> that the test is run by the framework.
+> For configs that support MAP_DROPPABLE verify that a mapping created
+> with MAP_DROPPABLE cannot be locked via mlock(), and that it will not
+> be locked if it's created after mlockall(MCL_FUTURE).
 > 
 > Signed-off-by: Anthony Yznaga <anthony.yznaga@oracle.com>
+> Acked-by: David Hildenbrand (Arm) <david@kernel.org>
 > ---
->  tools/testing/selftests/mm/droppable.c    | 9 ++++++++-
->  tools/testing/selftests/mm/run_vmtests.sh | 1 +
->  2 files changed, 9 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/mm/droppable.c b/tools/testing/selftests/mm/droppable.c
-> index 44940f75c461..30c8be37fcb9 100644
-> --- a/tools/testing/selftests/mm/droppable.c
-> +++ b/tools/testing/selftests/mm/droppable.c
-> @@ -26,7 +26,14 @@ int main(int argc, char *argv[])
->  	ksft_set_plan(1);
->  
->  	alloc = mmap(0, alloc_size, PROT_READ | PROT_WRITE, MAP_ANONYMOUS | MAP_DROPPABLE, -1, 0);
-> -	assert(alloc != MAP_FAILED);
-> +	if (alloc == MAP_FAILED) {
-> +		if ((errno == EOPNOTSUPP) || (errno == EINVAL)) {
-> +			ksft_test_result_skip("MAP_DROPPABLE not supported\n");
-> +			exit(KSFT_SKIP);
-> +		}
-> +		ksft_test_result_fail("mmap error: %s\n", strerror(errno));
-> +		exit(KSFT_FAIL);
-> +	}
->  	memset(alloc, 'A', alloc_size);
->  	for (size_t i = 0; i < alloc_size; i += page_size)
->  		assert(*(uint8_t *)(alloc + i));
-> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-> index d8468451b3a3..e1e355d50e65 100755
-> --- a/tools/testing/selftests/mm/run_vmtests.sh
-> +++ b/tools/testing/selftests/mm/run_vmtests.sh
-> @@ -382,6 +382,7 @@ else
->  fi
->  
->  CATEGORY="mmap" run_test ./map_populate
-> +CATEGORY="mmap" run_test ./droppable
->  
->  CATEGORY="mlock" run_test ./mlock-random-test
->  
 
-On my older kernel:
-
-$ ./droppable
-TAP version 13
-1..1
-ok 1 # SKIP MAP_DROPPABLE not supported
-
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+LGTM, thanks!
 
 -- 
 Cheers,
