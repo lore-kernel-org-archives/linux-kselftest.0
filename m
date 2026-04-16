@@ -1,147 +1,100 @@
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32D2A340280
-	for <linux-kselftest@vger.kernel.org>; Thu, 16 Apr 2026 18:55:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8F6934A786;
+	Thu, 16 Apr 2026 18:56:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776365726; cv=none; b=ltK1Y+LJ5f0VXzC+5M1qpWVr/VFqEXETxN46VeCUt+ytFValSRttZ2xkyImZ5pVwMCxAbqIRFj10rWh8iUYjRotdqBOxZK1cgXNgZnc2OoDI2HQF78zZIZHQ0PV3XnZLlvxFsjEgJX73Q0bBI2OtIverIf54q3osztfU1Je+Brw=
+	t=1776365785; cv=none; b=AFPeZxWHmsXl/sxKHAs2qLcK7c3ElfSthtGmeemD1xgGOVWWtxZvVJdyrMQ2LVh+ogVOnH6vuyS6R33s3gQ8PsFpLSTbWu0g7OfH4hdbXNzDT9y3jI2OtuUELthERf0LIVVQ2y0TVsQVWaorRfZbg2ynAaEKa4wdVtXxNC/bxEA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776365726; c=relaxed/simple;
-	bh=/vtMgiw5QLUdNwiN05esofk6FTaIE2b9NYDtemrg3FA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=setmaSPCcaBCNeBCJyatWElQVhw3umPyvmgh3IrNIwiJfha9y1LoMYl4kUREq0QM7Yk51udKdUrLLb8iXndlkSB/pbyINB40RYz6IQVcTxQ68SPTPaagUl2xJUQyenKHeiwpYtUnFkc8DcyHpurXPV5M0EkzPqL2ac1fMT4lVck=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ezMrbCMA; arc=none smtp.client-ip=209.85.210.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1776365785; c=relaxed/simple;
+	bh=7PB2sZPapAgcAUO2mX4Ti0uvTw8JML/xOAAhd79EyPE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cCyZpAq2T9chgZO70gDjYCx4fXSPeYP3yexo4tLjPrT296o1jhEQ44zQ1BSoS2LX1xxeFYjShrBKeB5RZ6yrkyXcIDm45z4M+qhUO65vKb3x2Ea+5XehtDBrXoFXv4KwhGh/SpWJ9XsGUgYPVWAmc7gjCeD+Br7tiJZt9B3bstQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mPWqxa6z; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ezMrbCMA"
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-82cd5c07f93so3757299b3a.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Apr 2026 11:55:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776365724; x=1776970524; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JMiVlw5Dks3Rppi6Ek+IOA4onw9VFCFtvI5cTye7hR0=;
-        b=ezMrbCMAn9gUtXcsz2oYGdr/JAixMjWdVqP755EZxTOuVd58AX4L53rmQQdOydiNAh
-         nnVURwodITeEdSmcuSPVJ7ZUOlvhzo972GCr/r+NPpJqXw1R9DIA4AAF0vg66JIDEpcG
-         67y2qRWhVxVbFdg93Nj/pS+J6MpCjHEwHXn+jYAm+7ESmk0y5ldXoMUhprzYbktatAKB
-         tG9Z+kYd7jgduq6rBUXFzOw6T05wCFdhHbZbIWGi9RRKwLqhDMwStuxfFlCS0b+hKYIh
-         Mn0BUx+vcQkAk0SGNBLFjPodxRDsVh9h9HfXTGNGWBGs2+g3JCc21EfSo/CzI/A85rCM
-         uMlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776365724; x=1776970524;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=JMiVlw5Dks3Rppi6Ek+IOA4onw9VFCFtvI5cTye7hR0=;
-        b=eR9+Q4yn0DX/CDGpt20UQYjRpl4nEHH2u4PDcBxF3xwve6hvo38bnQpPvEv+Ly74I3
-         ZLSeju1hqBhVmNzH1aBIGAWaJx++Vyx3/FB6TGgcdxJMnIfrZovcDt65kxBF2qfzHxuz
-         N8QJ6Awy1NSteGcxckScmyYVczajAKAgebsjCkum3eCB/QynAUmWkQE7iNGPDaQ6HLxZ
-         W6OEClav1ShO3wG3fKuZe9iV/XmElwBnKQ8WdInqm8AZM5V3GIDVtIIDDRUm18ndWsMX
-         lF7XDr/SS4+YJ0PpsMEnf3FWhyGMvbJm/nUwW+imLq6Sv2M2goRhdNgOy8IV51z0pR3n
-         Z52Q==
-X-Forwarded-Encrypted: i=1; AFNElJ8CDKr9ffxujN5TT4dWlZTKs5NHO6PY44htIcCbc4BQuPxeduPPLZnOeGW/be0QgCqzLFOP5AWnVvBXK0d/84c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzyyRKaiyxDmkm39x+MvxqIiQSM9qO7eKfeW6K8dPvX6FlOMcyV
-	N8I5SCTEvQQQDU4eyXgVCk/JTT7Gi0+QOu9feNMLC2TkHRwWEkIZLGiD
-X-Gm-Gg: AeBDietvpdVlcsTWG5bPpR2zFeHK+317xeaB0lj4sAiWeD2A3ZEYlaAY5p88H/lbZV9
-	rO3eSqKMCIbebjkKxiA7/iGAvDlPthLsXLIxu8jKw0Ntzmm0GKuQOJ0SOs/X3Z55/G8tr/bAXk/
-	ULYiB8XeXv3P/EmPAqla4+Q59D7c7XM0NeJNEtDJc1OOGmrxXqqeXDBvRavzjdYihARWmIyavpQ
-	uAPH/4P7qwn+FweDgj5RTORtxCKcXltYFE0vQr+7Fbch9kVRN5TVL7L3xkFH30gXZbj8H8stbAd
-	sjkHLbXmP7H0U/dfs/PD1nSNjYtGYHUp8BXwf01ZSeSfNrcEplZbGzlbnMOip7uAvFOElyQj8uS
-	NRFGl8aFJ/l+ujbZ6RV1f2A1HFitbXF8WEyOoMl3VT7eYnO4LlNC0DND8FgmD29E7/yRKa0Kfvr
-	skZXtvd6pYWL78OFytVu8SRSAy0fRt9MBVOHVuFGqpABTr6uqGuBk/Xcb986cIBlhiJQ7TXTdB+
-	UaVh72uKrwz+b66Dzx+2xdfCP9F0ChBeQ==
-X-Received: by 2002:a05:6a00:1406:b0:827:3914:f130 with SMTP id d2e1a72fcca58-82f888c9963mr506028b3a.36.1776365724466;
-        Thu, 16 Apr 2026 11:55:24 -0700 (PDT)
-Received: from SLSGDTSWING002.tail0ac356.ts.net ([129.126.109.177])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82f6744b350sm5668181b3a.54.2026.04.16.11.55.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Apr 2026 11:55:23 -0700 (PDT)
-From: Weiming Shi <bestswngs@gmail.com>
-To: jhs@mojatatu.com,
-	vinicius.gomes@intel.com,
-	jiri@resnulli.us,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	shuah@kernel.org
-Cc: horms@kernel.org,
-	vladimir.oltean@nxp.com,
-	xmei5@asu.edu,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Weiming Shi <bestswngs@gmail.com>
-Subject: [PATCH net v4 2/2] selftests/tc-testing: add taprio test for class dump after child delete
-Date: Fri, 17 Apr 2026 02:55:02 +0800
-Message-ID: <20260416185501.647884-4-bestswngs@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260416185501.647884-2-bestswngs@gmail.com>
-References: <20260416185501.647884-2-bestswngs@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mPWqxa6z"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36227C2BCAF;
+	Thu, 16 Apr 2026 18:56:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776365784;
+	bh=7PB2sZPapAgcAUO2mX4Ti0uvTw8JML/xOAAhd79EyPE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=mPWqxa6zsjaCrCljJTl+M5Pfc9ek5lJZqoyevDvtoq3cOUYO4GOBQZt870v+D5ksw
+	 ahJLWEtNNt22du17mTZV9LoHAvPXrhHzzcLxuemlQ31IsOEBBsNAnwazb4tHijONDH
+	 58WLGLrgg8BxusHw0vL5coGv/Zs2qq2lzljX2FdzoKUF0B5128mLRJuxquj0+PrGd3
+	 4ZN5MqjRkT9aYKV4lwDtiRW1+ro+0HmU5SNmHs0NAXn9ODB8tSOXWi5SfvCjS0Urjh
+	 MPaptaE3DriewkH4aYliuUPzv+eyV82IHb3k3dufAUAOP+MsYq6nAa4tjPKx+tKgUU
+	 deaapm856Vdqw==
+Date: Thu, 16 Apr 2026 21:56:16 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
+	Aishwarya TCV <aishwarya.tcv@arm.com>, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/mm: Specify requirement for
+ PROC_MEM_ALWAYS_FORCE=y
+Message-ID: <aeEw0Jf1JOCvmdri@kernel.org>
+References: <20260416-selftests-mm-proc-mem-always-force-v1-1-3f5865153c67@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260416-selftests-mm-proc-mem-always-force-v1-1-3f5865153c67@kernel.org>
 
-Add a regression test for the NULL pointer dereference fixed in the
-previous commit. Before the fix, taprio_graft() stored NULL into
-q->qdiscs[cl - 1] when an explicitly grafted child qdisc was deleted
-via RTM_DELQDISC; the next RTM_GETTCLASS dump then crashed the kernel
-in taprio_dump_class() while reading child->handle.
+On Thu, Apr 16, 2026 at 07:40:56PM +0100, Mark Brown wrote:
+> Several of the mm selftests made use of /proc/pid/mem as part of their
+> operation but we do not specify this in the config fragment for them, at
+> least mkdirty and ksm_functional_tests have this requirement.
+> 
+> This has been working fine in practice since PROC_MEM_ALWAYS_FORCE was the
+> default setting but commit 599bbba5a36f ("proc: make PROC_MEM_FORCE_PTRACE
+> the Kconfig default") that is no longer the case, meaning that tests run
+> on kernels built based on defconfigs have started having the new more
+> restrictive default and failing. Add PROC_MEM_ALWAYS_FORCE to the config
+> fragment for the mm selftests.
+> 
+> Thanks to Aishwarya TCV for spotting the issue and identifying the commit
+> that introduced it.
+> 
+> Reported-by: Aishwarya TCV <aishwarya.tcv@arm.com>
+> Signed-off-by: Mark Brown <broonie@kernel.org>
 
-The test installs a taprio root qdisc on a multi-queue netdevsim
-device, grafts a pfifo child onto class 8001:1, deletes that child,
-and then performs a class dump. On a fixed kernel the dump succeeds
-and all eight taprio classes are listed; on an unpatched kernel the
-class dump crashes, which surfaces as a test failure.
+Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 
-Signed-off-by: Weiming Shi <bestswngs@gmail.com>
-Assisted-by: Claude:claude-opus-4-6
----
- .../tc-testing/tc-tests/qdiscs/taprio.json    | 26 +++++++++++++++++++
- 1 file changed, 26 insertions(+)
+> ---
+>  tools/testing/selftests/mm/config | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/tools/testing/selftests/mm/config b/tools/testing/selftests/mm/config
+> index 1dbe2b4558ab..06f78bd232e2 100644
+> --- a/tools/testing/selftests/mm/config
+> +++ b/tools/testing/selftests/mm/config
+> @@ -13,3 +13,4 @@ CONFIG_PROFILING=y
+>  CONFIG_UPROBES=y
+>  CONFIG_MEMORY_FAILURE=y
+>  CONFIG_HWPOISON_INJECT=m
+> +CONFIG_PROC_MEM_ALWAYS_FORCE=y
+> 
+> ---
+> base-commit: 599bbba5a36f6de57ab14c373c25881e2b5273f5
+> change-id: 20260416-selftests-mm-proc-mem-always-force-5ce1b26022c2
+> 
+> Best regards,
+> --  
+> Mark Brown <broonie@kernel.org>
+> 
 
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/taprio.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/taprio.json
-index 557fb074acf0c..cd19d05925e40 100644
---- a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/taprio.json
-+++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/taprio.json
-@@ -302,5 +302,31 @@
-             "$TC qdisc del dev $ETH root",
-             "echo \"1\" > /sys/bus/netdevsim/del_device"
-         ]
-+    },
-+    {
-+        "id": "c7e1",
-+        "name": "Class dump after graft and delete of explicit child qdisc",
-+        "category": [
-+            "qdisc",
-+            "taprio"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "echo \"1 1 8\" > /sys/bus/netdevsim/new_device",
-+            "$TC qdisc replace dev $ETH handle 8001: parent root taprio num_tc 8 map 0 1 2 3 4 5 6 7 queues 1@0 1@1 1@2 1@3 1@4 1@5 1@6 1@7 base-time 0 sched-entry S ff 20000000 clockid CLOCK_TAI",
-+            "$TC qdisc add dev $ETH parent 8001:1 handle 8002: pfifo",
-+            "$TC qdisc del dev $ETH parent 8001:1 handle 8002:"
-+        ],
-+        "cmdUnderTest": "$TC class show dev $ETH",
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC class show dev $ETH",
-+        "matchPattern": "class taprio 8001:[0-9]+ root",
-+        "matchCount": "8",
-+        "teardown": [
-+            "$TC qdisc del dev $ETH root",
-+            "echo \"1\" > /sys/bus/netdevsim/del_device"
-+        ]
-     }
- ]
 -- 
-2.43.0
-
+Sincerely yours,
+Mike.
