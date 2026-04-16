@@ -1,97 +1,103 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2605B27AC31;
-	Thu, 16 Apr 2026 15:15:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFAC527EC7C;
+	Thu, 16 Apr 2026 15:16:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776352531; cv=none; b=HeE+LRL1H5tTAzLZ1hsrUSMam7QN9nSIP5OypukKqc5G/v3YTis28jK2SiFCXySBLmuerUSBVteUx246hO303NUg1h9QIq2Id5rn5Ylt2TLghfSPECHLRgW4r2SgUz5FlJ5B8WlHxseGMoulb2ii983dSztmUB3FBMRq2YrPx7A=
+	t=1776352571; cv=none; b=SjAoG5UGtD35OaQMbHONHqrEjPVY/aMVb8+P5HcJH5QFXgLSzHchQ/8YsD8aA6qQe+YO+RVZanowgla1YXQDCUalCCvnhukX/Ce7rxSdFqNA8/UDwAJy9/X/V9r74YcYLn/HNGQZje0nmZPBrhfOMovfbPO2TZKWHNz0+JADd7g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776352531; c=relaxed/simple;
-	bh=LisHuWk5CtOhPpzcFcnZw02s1JFOO2YiaB8bzlLqXOM=;
+	s=arc-20240116; t=1776352571; c=relaxed/simple;
+	bh=R/VXngqidib4280DMAEsDTQLmoqwzttjaI/QiZ/CBEM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GTQOgFp/QTpVKmXyEFE4MPy1lZJa5G9hdmWhiPhj1r3dDbLc75WouUNtTF3LE8fdKtyshD60BHPOgmMO25n48krLrBtgAbB5kq8Y9CcRyiZzwLYqJk/pO/IrPeWAohb/FMR8Cl6g9a+6uot6RuFm352q/VlH0hC4t6zH4Swwpd8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BOj3nvVF; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=j7aadqQgUceYvpEouRzA54KQzplfRILMnKrXUuSRLTZ/A5yhchdmOoszqpW4abWmXut9fprM5gC+LTXGO2DP3pnMhavhe8XYmNVP2RPQR6QpDA2NVpT0A7BPFxHbsjwKeP6Jz0IoLsHCTeCOqlzmR0SUekb4CwD8eQ7QYWsKQN4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GrMnB8CX; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BOj3nvVF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A00F7C2BCAF;
-	Thu, 16 Apr 2026 15:15:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GrMnB8CX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D8D8C2BCAF;
+	Thu, 16 Apr 2026 15:16:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776352530;
-	bh=LisHuWk5CtOhPpzcFcnZw02s1JFOO2YiaB8bzlLqXOM=;
+	s=k20201202; t=1776352571;
+	bh=R/VXngqidib4280DMAEsDTQLmoqwzttjaI/QiZ/CBEM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BOj3nvVFu16d45AU6qWxvWAEti+37JdQLCSWW0GBlRPOfn6f7/Mq8b1YvjdXqb0Hd
-	 xA4jrpbCzA3p4UqQAG8SQWMcbvYo04sOEFgltNjDu66D+o4cWGOP3SJc3E8hhDa/vt
-	 P3cPpC3zj+xUqwlIjqHrJ6sSCnbIxoRK/TcYwnt4usVNEbG7urRwWE+c82tDceMOCB
-	 JadLUanQeQexuSL+Z7xddUxIg1QbE77omKPBRzVDA6/H6XElc1vW2U4qQ4z3WLOC7R
-	 pgEHK2sbPzZjGgmM9Guqnq4d3Ue0HS7WNJBc4Xx32B5xeg2ttRns7tC8wW/XgZpt9n
-	 RkLOlSd4SDYOw==
-Date: Thu, 16 Apr 2026 16:15:25 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: Ricardo =?iso-8859-1?Q?B=2E_Marli=E8re?= <rbm@suse.com>,
-	torvalds@linux-foundation.org, Shuah Khan <shuah@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nsc@kernel.org>, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	Aishwarya.TCV@arm.com, ben.copeland@linaro.org,
-	kernelci@lists.linux.dev
-Subject: Re: [PATCH 5/6] selftests: Preserve subtarget failures in all/install
-Message-ID: <a73aa838-d194-4867-86fb-42bc8d057fd9@sirena.org.uk>
-References: <20260320-selftests-fixes-v1-0-79144f76be01@suse.com>
- <20260320-selftests-fixes-v1-5-79144f76be01@suse.com>
- <ad-ZdjzQZXNgkpwv@sirena.co.uk>
- <3cdf8e79-7c59-4831-9b38-e9c2cef97fe1@linuxfoundation.org>
- <ad-8BIkw_ijCLqcF@sirena.co.uk>
- <e4b82973-7d9e-454d-8f69-6d2a1a8ec7dc@sirena.org.uk>
- <c834846c-96d5-405c-97d9-f182b8fe1569@linuxfoundation.org>
+	b=GrMnB8CXeTKkquRmmNdHRBG2I3Clbf9zRyvulAAnhDPl6tdWJcLBMAegbWD/eqBxK
+	 ULmP+xl+QzJGXa61DRhhWvjZhCXfKrWnP5KN+LdFzF7gFbMiROu80sjr1iMd1fRlok
+	 3rnUs2y1JD3TeWl2kyD3FiAkL3W1FWUP5whyOSb9CVPsVU3NBjQUfx9Fx6zkjfZxxz
+	 G3vd9azRg8MFjzhgxtlu6Pfr6wCPBu0Y91RQezlZ8eGrQRdj0ZDVadKcNewHzDrIGL
+	 pQQgLMnpXoOlR0OHk18epMQQMUueYwI72il5BIGPLvl/vZP8KDohZ6KTiXsKUYw9Bs
+	 KLEpMfCkZVjyQ==
+Date: Thu, 16 Apr 2026 17:15:58 +0200
+From: Christian Brauner <brauner@kernel.org>
+To: Jori Koolstra <jkoolstra@xs4all.nl>
+Cc: Dorjoy Chowdhury <dorjoychy111@gmail.com>, 
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, linux-api@vger.kernel.org, 
+	ceph-devel@vger.kernel.org, gfs2@lists.linux.dev, linux-nfs@vger.kernel.org, 
+	linux-cifs@vger.kernel.org, v9fs@lists.linux.dev, linux-kselftest@vger.kernel.org, 
+	viro@zeniv.linux.org.uk, jack@suse.cz, jlayton@kernel.org, chuck.lever@oracle.com, 
+	alex.aring@gmail.com, arnd@arndb.de, adilger@dilger.ca, mjguzik@gmail.com, 
+	smfrench@gmail.com, richard.henderson@linaro.org, mattst88@gmail.com, 
+	linmag7@gmail.com, tsbogend@alpha.franken.de, James.Bottomley@hansenpartnership.com, 
+	deller@gmx.de, davem@davemloft.net, andreas@gaisler.com, idryomov@gmail.com, 
+	amarkuze@redhat.com, slava@dubeyko.com, agruenba@redhat.com, trondmy@kernel.org, 
+	anna@kernel.org, sfrench@samba.org, pc@manguebit.org, ronniesahlberg@gmail.com, 
+	sprasad@microsoft.com, tom@talpey.com, bharathsm@microsoft.com, shuah@kernel.org, 
+	miklos@szeredi.hu, hansg@kernel.org, Aleksa Sarai <cyphar@cyphar.com>
+Subject: Re: [PATCH v6 1/4] openat2: new OPENAT2_REGULAR flag support
+Message-ID: <20260416-aufbau-sorgenfrei-cfa87c9ddc11@brauner>
+References: <20260328172314.45807-1-dorjoychy111@gmail.com>
+ <20260328172314.45807-2-dorjoychy111@gmail.com>
+ <aeDpIgfDaIKEaBcL@lt-jori.localdomain>
+ <CAFfO_h6pkyX=uN5uoXda6toTtT6KsahfBNBLom9i21HdZ7JOmQ@mail.gmail.com>
+ <1714293523.333222.1776351806025@kpc.webmail.kpnmail.nl>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="zUdTV4mK0SqpDqKj"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <c834846c-96d5-405c-97d9-f182b8fe1569@linuxfoundation.org>
-X-Cookie: Process promptly.
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1714293523.333222.1776351806025@kpc.webmail.kpnmail.nl>
 
+On Thu, Apr 16, 2026 at 05:03:26PM +0200, Jori Koolstra wrote:
+> 
+> > Op 16-04-2026 16:21 CEST schreef Dorjoy Chowdhury <dorjoychy111@gmail.com>:
+> > 
+> >  
+> > On Thu, Apr 16, 2026 at 7:52 PM Jori Koolstra <jkoolstra@xs4all.nl> wrote:
+> > >
+> > > On Sat, Mar 28, 2026 at 11:22:22PM +0600, Dorjoy Chowdhury wrote:
+> > > > diff --git a/arch/alpha/include/uapi/asm/fcntl.h b/arch/alpha/include/uapi/asm/fcntl.h
+> > > > index 50bdc8e8a271..fe488bf7c18e 100644
+> > > > --- a/arch/alpha/include/uapi/asm/fcntl.h
+> > > > +++ b/arch/alpha/include/uapi/asm/fcntl.h
+> > > > @@ -34,6 +34,7 @@
+> > > >
+> > > >  #define O_PATH               040000000
+> > > >  #define __O_TMPFILE  0100000000
+> > > > +#define OPENAT2_REGULAR      0200000000
+> > > >
+> > >
+> > > I don't quite understand why we are adding OPENAT2_REGULAR inside the
+> > > O_* flag range. Wasn't this supposed to be only supported for openat2()?
+> > > If so, I don't see the need to waste an O_* flag bit. But maybe I am
+> > > missing something.
+> > >
+> > 
+> > Yes, OPENAT2_REGULAR is only supported for openat2. I am not sure if I
+> > got a specific review to not add OPENAT2_REGULAR in the O_* flag 32
+> > bit range. But as far as I understand, for the old open system calls
+> > we can't easily add new O_* flags as the older codepaths don't strip
+> > off unknown bits which openat2 does. It's not easy to add new O_*
+> > flags for the old open system calls since that could break userspace
+> > programs.
+> 
+> If I recall correctly, Aleksa has suggested we might also want to add
+> O_EMPTYPATH to openat() instead of only allowing this for openat2().
+> I am waiting to see what Christian thinks of this.
 
---zUdTV4mK0SqpDqKj
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+We can do that, yes. For O_EMPTYPATH that is workable.
 
-On Thu, Apr 16, 2026 at 09:08:17AM -0600, Shuah Khan wrote:
-> On 4/16/26 07:16, Mark Brown wrote:
-
-> > Sending shortly, FWIW I'm also seeing a buch of issues with:
-
-> > ./run_kselftest.sh: 5: ./kselftest/runner.sh: Bad substitution
-> > ./run_kselftest.sh: 5: .: cannot open ./ktap_helpers.sh: No such file
-
-> I will take a look and isolate the two commits that changes
-> run_kselftest.sh - sorry for the trouble with CI this time
-> around.
-
-Pretty sure it's 2964f6b816c2 (selftests: Use ktap helpers for
-runner.sh) - I've just put together a fix for that one, will throw it at
-my testing and send it later today all being well.  It uses readlink -e
-which isn't implemented by busybox.
-
---zUdTV4mK0SqpDqKj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmng/Q0ACgkQJNaLcl1U
-h9AhWQf5AdREEXqZ00cYXkNeSKBQIqLFg0vU5Uim2n//lDZr5ny7O0kREdylBk7G
-eQqB8AV2PifiISv6srvtJSNGPVeRgBSvI/bjpwqSjgTM52IHgEjyAyI27YtoSoj/
-ileyhrmpjei95AHSiGvqRGOrMyfET6JkB0Zw058X9RANhcBj95ef2UKEGjo7Z7q0
-WpvgXoyJfXGo3ZagjtKP8knwLO7OKrEqFOioXNCVRn6BsOqtuFVZ8eQtEI0c3C3R
-T0RJYhJLeBeSiIF23wWOFUNZE8k6QjAcf6YPJJ0REFBkttV97lscWCmc8b/rluE4
-cUYDhDq2e/ABG/7HGH5IOEgMVEVkDQ==
-=9mqL
------END PGP SIGNATURE-----
-
---zUdTV4mK0SqpDqKj--
+I don't mind too much if we leave OPENAT2_REGUALR in the 32-bit flag
+space. It'll silently be ignored but the flag name should give it away.
