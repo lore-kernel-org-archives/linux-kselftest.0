@@ -1,47 +1,47 @@
 Received: from CH5PR02CU005.outbound.protection.outlook.com (mail-northcentralusazon11012025.outbound.protection.outlook.com [40.107.200.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2578D355803;
-	Fri, 17 Apr 2026 03:15:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F8FD356A37;
+	Fri, 17 Apr 2026 03:15:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.200.25
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776395750; cv=fail; b=SrSxLA18LzAM+fy72GUZek3SJx81Pytxn5soHZP1LthNdX9HXGTZcif5/lHVKFyNMgsiJqWYmsWZ+pHH+txquZO4/N1PxGLvp7mE2hUDqnMmJ3GGA2rNhjTobits/4qUWmngHbzhLBW61YFO1KhMzWMkp2tO9wSuIicCF88zNlw=
+	t=1776395759; cv=fail; b=qRd8ScUg9aZ2nhavUOZWUTog1SJ2iCHxwoyHAD9cuu5N88HvupOOr4HYQLo20vxEhQ8vtcdv/FLKTmttqo8er/nurZFKE7Qy+3eeFHnpLHQZ8iVM/FM4GrqflU6j4bfI7CFTnsPVEnmkGUn5Je/u8tHaEF51kB5EppM/vzz6jKY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776395750; c=relaxed/simple;
-	bh=Q8S/vb/HQyr2cUDUOTyaSas6UTH/kcx0vJCBTOuObEQ=;
+	s=arc-20240116; t=1776395759; c=relaxed/simple;
+	bh=puo+cQo9vdMoWOWDb7YqkFt0qAo2DWHNN2wNpwd8JVU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=f/H1WK0JANfe477xgUnZUiFMmh0rzUWOl9wHYNJCpjOYGSgWDyq6r3oj/ca9vMIRbCse1Izh0YueQTisKbo9qIuAh23hkFn8h06vLUp2r17uqF9YwVttn0JT0Tke08MIr4Nchch4zrvLuP7pl5XaxbBpLdpmQIQljsabnLYHCVY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=HQqZ2WrM; arc=fail smtp.client-ip=40.107.200.25
+	 Content-Type:MIME-Version; b=Ia+LHhQKRhiQ/SQQEnPFOcZa3d07Z6J4qiOFHB2pwWY55vopBYnXtrkItCNkIY5CMqXTdviXw3SDzv2B1diFmYXosJN0TtGogDl6CjksO6Pfak4klMDX8yw+TAZhil2pRGlLw8wSNYc6x0QvJtWK8gsAJNAZ0UiRFO9TZb04boE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=ItaFsQ8l; arc=fail smtp.client-ip=40.107.200.25
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="HQqZ2WrM"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="ItaFsQ8l"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=fn3lwtFCuB3cZ8oTgVeOrhPPd7GmIvXHOpuh0xaMT/UPifRuIzPYZfROBOZTkXzNcN5ULQJ8LhCVfAEvtzRT9eUcd3pvqwOhhBgNgHpj4yrpaZzuZGnqL1vFyCM1HZeSfm2HFogJ2CjrZgs9rekbCNP3hU/b/aHd5x1PUl9h6i+hZmTkgl3oO1gota6puuJIBitEKjbcr5E6gqvkvTa+OBQVSUWcHpl6kB8+jHnprbFAEHtQXKg+3GNTHdco3l9zJ7T+l7repERQ5yy+rlmniPjyPHvPReZleFj99M2HliG2ZolIxX+rYSJLv2g0cbRxhePBQOhPR6aU1p/Wac1A4w==
+ b=R/pdLs/5Mm3D3Qh0RqPnnfHRtVxlnDNunxmzN6m7fu2GmhGHCY7YJK1pVqr43YPOL+g640U/mO3sHY37xH1OQ109M3j2R9g8eVZX9RPr01plaKF/5WWh2GlHaLrVlXbOrLRrlAbTFX0AC6cpcT0GWVLkIn5lBQQv+zV8bgJZiwJDEQJ/gD1CzLJxRyXg1nsUQ7DuhbcbJ5aaYGn5Dj2Ta59PV0KBJYtjBP5L9rYilX9q2sZp2/Vs1wYBrNBcpCyUDAU9QUohkWhw0BllgmqDDJQi6Bepqmqw8tHirWpFnBelg9ZyH6mXd4yFzhZPiDak+5tZ40ij2DUEuZyraQE5Kw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=m3Kn4ZjjjSFenQxslEbf8CsmDbwUtgd8OY5p2iwX8Ig=;
- b=U2uTab9ZJcTNbwWBzLLPomAPHIS/MCa4WTRSWkrjWuGUFslJBOp95aQuCGFgddMxVp8EOz/DrJ+mFsnta899IDPOpzpImAoU6gI9enNA0xCsmaaG4fZ/LFlgLt5Uca1WQko7sjYUYxLSuaarEQbvPjNIHCuSZ1rwAfEC4TVplJIEsrh4vb0OTTPYGcHpSYQBK2B3MI4yTUYpOaKq1PbPStmTigta3p+fw+5VRNyAKpaut4wOzKyAJ/9lzTGlr1m08RBrqv03+9EDpRxKHkubBrQBt2WluzRkmnPfq17Vk3vbZL2KsNQgGPVvjwI++vZOV9CNra//oXA5pH7mfrmKNQ==
+ bh=6Mdjryzo6b/ExVpO7wI7MYePe1mVvLTeEKgVziXgRyY=;
+ b=sW5uOXviFHE4egJ1eNPB5/K8tDxb2k5aNkAFi8YxS44fUMXkmvpE5HmR0FlU4MiWuHMMl6MsI/wlflZIFGOrDE9r/+GWSlHx1IOnyDxWXUa/+qEQE1zd/iePPTmv02MxogMH+tfSuSROom7Ejyc3gp/cjg5ORTOG/6RnetAVLnNov0QKCUypQJzZisCCLmFkOwHA6r5mIvy61DiENzmrINETApo03dbqQcwzXFOEtfW8jV9XQ/JvGIB1GPJUgGK/nPNW9bTT2WMvheFXSxkMbC8n6s7g4N+D92Y0bbk2FBTVWPLu7ezIhMOHeRry7mec+5YhytBL27jyDtdp5dLPhg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=m3Kn4ZjjjSFenQxslEbf8CsmDbwUtgd8OY5p2iwX8Ig=;
- b=HQqZ2WrMm5T+/oBpoE4b+TlESJjsBqvPAsRtPrZXlGo/K59nQHDJ9gKh3Z/62dnDgZSM+qyJPtcczmVjAdHUIfJF/4/MyoG2+SQJ7d8rRJTeXQmEMJ1PzYqnJ0zw5qhYg6IEamOECaD7gyzOBPLIEu08Fsy0OO10dXyHO0IH/EBm6hRJ3OHCgk1fA31gZk3JiHvM3eyZwwqxud0XB0GNHzc+ReN5lz3EHBfg3p7IxfOxhSq91HJnDKxc9NQnQjrX+W9gLCOCTt/kH9KqU8j2JYuUvrwGhN1QbHCa0Tm5GMnDzAa79F96E5wCBMhs5WDUN0JCKFFqxA6vc54Xzf1ZWA==
+ bh=6Mdjryzo6b/ExVpO7wI7MYePe1mVvLTeEKgVziXgRyY=;
+ b=ItaFsQ8lOvKuACYOJsDymTTUAp8uzRZ4B+JDtFBwR0Byd1+CzSbcUOr0q+b2wbqOupPY8vV7YNKg72+CE+SAJYH+KNtAlhReL6QT/sPn13Vl6fPmA9wQJMyep+wg+nAA4NacAfBJSV4bSzFaSi4fCJGTOdypQlhA8zOuMwTT0nX+e1kHaMH0uVpYD7LPIZLFBQpYHNV9Ou+EJV73hJ5nw0ZDBhdqp0dNU/XnT44C0KcrNhR/e/nrbg8Xr5E64XOeIY8NhKzb67PNkTw6YbyoS9SoCktwt3geBuJR1QttwaJ4aOy2SuITosRQV+AqLpB6rs8nFPopsWs1DlITQvRy+A==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from CY8PR12MB8300.namprd12.prod.outlook.com (2603:10b6:930:7d::16)
  by DS0PR12MB7772.namprd12.prod.outlook.com (2603:10b6:8:138::9) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9818.25; Fri, 17 Apr
- 2026 03:15:40 +0000
+ 2026 03:15:42 +0000
 Received: from CY8PR12MB8300.namprd12.prod.outlook.com
  ([fe80::ce75:8187:3ac3:c5de]) by CY8PR12MB8300.namprd12.prod.outlook.com
  ([fe80::ce75:8187:3ac3:c5de%3]) with mapi id 15.20.9818.023; Fri, 17 Apr 2026
- 03:15:40 +0000
+ 03:15:42 +0000
 From: Yury Norov <ynorov@nvidia.com>
 To: Miguel Ojeda <ojeda@kernel.org>,
 	Boqun Feng <boqun@kernel.org>,
@@ -82,16 +82,16 @@ To: Miguel Ojeda <ojeda@kernel.org>,
 	linux-kselftest@vger.kernel.org,
 	kunit-dev@googlegroups.com
 Cc: Yury Norov <ynorov@nvidia.com>
-Subject: [PATCH 2/3] rust: testing: add Kconfig for KUnit test
-Date: Thu, 16 Apr 2026 23:15:28 -0400
-Message-ID: <20260417031531.315281-3-ynorov@nvidia.com>
+Subject: [PATCH 3/3] Documentation: rust: testing: add Kconfig guidance
+Date: Thu, 16 Apr 2026 23:15:29 -0400
+Message-ID: <20260417031531.315281-4-ynorov@nvidia.com>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20260417031531.315281-1-ynorov@nvidia.com>
 References: <20260417031531.315281-1-ynorov@nvidia.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: CH2PR14CA0019.namprd14.prod.outlook.com
- (2603:10b6:610:60::29) To CY8PR12MB8300.namprd12.prod.outlook.com
+X-ClientProxiedBy: CH2PR14CA0009.namprd14.prod.outlook.com
+ (2603:10b6:610:60::19) To CY8PR12MB8300.namprd12.prod.outlook.com
  (2603:10b6:930:7d::16)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -101,253 +101,86 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: CY8PR12MB8300:EE_|DS0PR12MB7772:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1ceee3b2-e5e7-42a6-232b-08de9c2f9aa2
+X-MS-Office365-Filtering-Correlation-Id: abbfcf2c-1808-44c2-b60c-08de9c2f9bc6
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|10070799003|366016|1800799024|376014|7416014|921020|56012099003|18002099003|22082099003;
 X-Microsoft-Antispam-Message-Info:
-	OXh4wXqbvjTnjw1BMhMGRs9KdS0NCYbMHMBaM4BlYl7odyvwJ1QB8T4gLLkkdxGWQfOTyaAKt08C2myJVsSm9+c78GkhTg/6kqBuZbl+pjvB2MoIaFoyo+OI05gH1svl0T4s4+/WgH6lz1zuA5+ZfHh4D7i/TOvTkHuKf92uABp+DkSGKXc4NPDYF0Hfm6gHbAduQp0PcIeNnuDA4p/MbOSbiOs1OFiOrHh95YGNuIHzkjr1T1TLPV70M5BWUgvf2KFm2d31YUmUUXr4fvNPNj1XDmXISw/v44GDU7BA2l+EJPeCZCNRjyMvQN0emvDSsaWsDQ2rLaIakH/yO7MO+MJyh2FEiXmcXwF/FkPZc1XOV4X5QUuXt+Mhl6Wwh+NugQh89ynwjWJNfAbKoJn4virysAn8GQhGYmhHG5pA5aVGfMpj1OFksHl+Bgjb808ZUSQ1xOsLey/9TteLKGeHTHotcIei1FgCpAf2ssZqOWK0fAx1yT5uuIQXd6f1gc64T9AFXlgdOSkCH+xOtGqqyBpcJtUd6NPrgJZZ18CxYiVOR+Yo+OVri4q3lQhCoJbaD4/sG/ibO0A3lk3jVxP2tqXOPmYFS8CN1h4hAIf9Bg6LhrelEGJJwaGUDITdaF0wT5ZLaIQVkfh4jEKH5P9nmba376CZ6zt2PnZY3ztHIiB13nNaukKAAtwJO1sYHukN2VXTJP0ySGRxFbSN0hIFFXFyxraUCG7mWNcxodRmATS/Ajx2qMhM/RSaeADHZAS8HtnogQcQEOCE99rWjraJqA==
+	RpBQfS3/Xuv1ZsxOo8WxpgTufDJ6UmOSJBo2ZVflov2PqFAj2kSRaumQx4OtglWl7LmmQzjQAcIA0bG258K2v+wCdMRUNY+IKW+fxC1Baf3RCATQ0J0PitrgU2cr2o9GU0SQ+Jgi8Y5Wl92uB6KERpdk98I1RP6mtQ0qaNyA+iXFLpR/m2/fwgBXGNrJ4lV81JCn95CDkdKm/kFFc3WdopoB6ohyhDTm9XBfyNx0ZVAT9rZHslcjgTektdiAJVPFm9OsS+R4qCFFnHAJivQi3iFvbA59oEwplo1TwUfAhzO/DsPpa0vtOMNGESHry6QGT7IHNHh/lt/7URf4++/NTSIUGC8HEY+U7Pa12NCVx2KIxhwiETxQH3U8p5235jkYJ0MYRh7u43V6gNefqRv3KN9TbqOTo1JgQzymoJBXp5EIkXp2dOTiTyNNSRTDbxrq5vFWSXr8WUGOWx+37P9J5hOFAZGjaSz4QOxehX7bcX2UTlybjNakeTj4+6icOWx6sRqHyszR6myh+OqPozt/tSkXPMOhu6vhGf3BzrFbLCpzRLEMtsyA293IOQhqq2aaH8bucWmXStufb7hNgElgwk1nt1Q3M9NnZnwtFLQLd+fj74LGZTsoRw/2HCDn0BIn+syuskdZcLNZWB+Bus4VfWNYUhSyhPG3P6D/7wxcSyHc94iTk4hneCyslIwD0W7Z9s1XfyQ84k3rh924s+6UmLwhykOKqrPd8lekLHY+PBns4WfkphWZeojXXf9D8IclFLCNFGfbLUWC01bdstPRaQ==
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY8PR12MB8300.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(10070799003)(366016)(1800799024)(376014)(7416014)(921020)(56012099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?wbMYabag1reY4RFuCIU1yLwGZ5FKKz2RioepjWWlVcaIuubv6TDC31PD25CH?=
- =?us-ascii?Q?geoCl0lOmVx2wTJ9ESfzV+stONUxYF/lnUVwTCVakZHZljZJxf92O2myedfF?=
- =?us-ascii?Q?Xke4sQEh7jXcIhulmvnH6YRSGSSIvuZPhESla4OUaOUfxk74rDuxm05P/tj/?=
- =?us-ascii?Q?mSMBddqHwI1qcuTmu4qb55xGTMNdocakRdAJd22GjE1x1UWy9W/lH7Hqxclp?=
- =?us-ascii?Q?8vbTH9uVOG3IVM+Z7ou6TNoDGWBAZafDdn19+NjTcFKvBiPZmoYiqL3+QtpZ?=
- =?us-ascii?Q?DcrCNQ/FEt7JTyXzIvHWp/k1rr3+A7PhiX4Bnxf47iWeVnJWhIeCPyLI3opk?=
- =?us-ascii?Q?HYwiCHCpGkOy3Jgh9FwHGEenimQ718UGDExkgPxmavgHrtk1oZrW6IsFVcgX?=
- =?us-ascii?Q?+lwUFTGvSrHFklIeyXY7+ByFjaW82o+GjXaxl15ElmEV85gJWTMXfBWiDmzk?=
- =?us-ascii?Q?uRsAziZcivdr3CnoHycNTSVlgz0kszBGkkeMsLMXOlXYzeOXOdaTlLiv91us?=
- =?us-ascii?Q?yIlW6H2T5A6bV0jZhb3oJfeuYvC94tnpcarIaRxsMVXf9PL55sVM0hMjnWax?=
- =?us-ascii?Q?SseLMRfz92vO0iWtVg/LJCxGZqvlyXfJrkoZqY/gRDFoxVcP8oQv/ay9tqce?=
- =?us-ascii?Q?sc2vaL+QsRTn+XWlcd2N7NI96QkAVA5BzyuXAYzErNhB9roweGctkKQMZJn0?=
- =?us-ascii?Q?yx0mCHuRDXUmm5v2LV5AocrIzRReVXPhF7DHUjT/yujJ9sVDYvLTpHN7eBoQ?=
- =?us-ascii?Q?sYPwIYCxtd6AWGuV42+vFM0u9cN6onQIQ6HXrtiJd/ZU0fRm1CDwpbmy0FKo?=
- =?us-ascii?Q?0GhifEv+hj/p5qhvaM7B8/LnGPTyFRoN7QCoVlwGvrf1vMPC1NSL0DHViSNx?=
- =?us-ascii?Q?hR4JjLDhRQFTjhMJeIv5ouoCrQu57mKR/RSnTWlem1KxMkDdqDs2GSqT8aYJ?=
- =?us-ascii?Q?ZLPMmaixUhdGQdolvIhA1bGHLi+bBrK04dF2rpUw3bOZcO7ORprpYABWZfbc?=
- =?us-ascii?Q?S/3gICbI4yzJzFLpMZfhvOjsRuobFNnQLYT147xQGKcS/6RxzaD/0rWqOUfY?=
- =?us-ascii?Q?An24qZTdU1y9Gbo3gxXosj3ZORSvzcMuBSG6eKUrxxtepRY6KQtw+4lC+XXf?=
- =?us-ascii?Q?bkgHUfONSP5rVj+maDtd6/qW5eRCF3Ub/NTQ6t6XLpa43FDW/keHq/EyRc3O?=
- =?us-ascii?Q?Ys3A9mi07VEv5qijFdSVukntPyi1WwKHoD9FZ7m4OFdTjTtMvtWZAgk+w7vk?=
- =?us-ascii?Q?9a+i1cuQuPi/Zd7PXghdMSqSQ19UhUDnAe4XcKlmf+hyumd2/o8zkHDhCfjp?=
- =?us-ascii?Q?dQ3JP5Mh7RPnpBBpDQYl4VTL44ydTJrqafskhI9K7LHvbxkX4FTq2gFcm1H3?=
- =?us-ascii?Q?APMGEDsg7be3PwwIQi1tGhZn/dpBlbQYOlybeslXEuF5fh8RkeuwmKWtdbN3?=
- =?us-ascii?Q?cmcuyExyZmy0s5UEnkWJnvgKiOY+XLzJx+HSsXDqLEXcqZKS0kGDpHCw7xGE?=
- =?us-ascii?Q?VIFSXqW8q3uoFAlabgctTx74Ev5ecWa8K3zTy/ik3t8TOJsMvKTSaGnwKfuB?=
- =?us-ascii?Q?8uwfYijVgKXm1vFIgfEW9sCQl979BgXg1ITnrGI34bJhFKfYUQIiuyP4jHdj?=
- =?us-ascii?Q?9E3MCGSQsnoEALlZUHRVRcBhhf/KW9V0jPaH//u4kEE0CdDJzWmSNyaUknyI?=
- =?us-ascii?Q?eKdMd1UfpbSoeFxoc8CVW0O8vVwa/hbOked4n7tQ/WDvYJr7nt+SJP/N/D7w?=
- =?us-ascii?Q?RiN3JyhzDIswkHfuM0NMMglJfRBStAS51b65hDRt2fc1MifHxi/u?=
+	=?us-ascii?Q?jsvKS9xQsIRgnrk2CVwKNfhnKUADiJF5sgN6GqsxDoCqtOdcFlx74NmqW3at?=
+ =?us-ascii?Q?Dt4A2j02X/UVOdqMewn0aXurR/E64XjO2v0j6wF2zizqWm0w2BPIxPqvxBmc?=
+ =?us-ascii?Q?nxYvSqgyjyYWkS/Br3AmF8wH1n794aUP2UMPvr9jLUSzNGiFbPO2/enOOBfM?=
+ =?us-ascii?Q?OZsBhOPWmuZjttWaNvi8x/efab2+y6dp5B3GvlDXj3p3jWa2A2WcouX7rjHK?=
+ =?us-ascii?Q?Y9H78+q+3oR3kfDX11fueDuDtgnAQ33KVVevLCljBVgSqWn/Oh31/2d1jguW?=
+ =?us-ascii?Q?qTxTPrf+k+LtOutagxLsSiZk9ggkAmIZEmgzuhF4qcU8KQbpF9GikleEOnHp?=
+ =?us-ascii?Q?+WfirCPfkiruqRbNx1nqVb8FiGAtAosecUtGQpSnzy/A7+bnLBqLQ4+QBe1V?=
+ =?us-ascii?Q?Iq3hnvIOuxIW00dl/W8ugMtolSEeSen2phcT6Vg117nZ28cox0JTeiSM6d2h?=
+ =?us-ascii?Q?iSWEjyk5jdxrvpA65i0Uh4y0fObwEIa0fuu4a4/YKgOpqD/WKgU1h4sUmWAO?=
+ =?us-ascii?Q?ERWv6yDyjdD784kOlJPKzhkoqdFZ6VHo5bdiMm6UU7jeaCzET9YWYjexK2fR?=
+ =?us-ascii?Q?fJ6yFLIjHL0MpVUg65U591ACzVxmu1CyFeJN2eVriJ8MoOuahUxhV345Q2Wm?=
+ =?us-ascii?Q?YpM6SrG+hj55AarR3HjlI8dr84r/gxs/6KolcEA2pcj1qbjpnRppR0fc4aB3?=
+ =?us-ascii?Q?2XihywnpFrzsKTa5K1ufCQd1qce9zrB9OspGAHTHZldW0RgmDFCN1VkZAz4J?=
+ =?us-ascii?Q?W5nXzSx1YQ6jGH+igrRl3CAeTt6TWgXYNdHnJdaRmMVUNjdYlU27/RvZ6Al3?=
+ =?us-ascii?Q?i8Ou6b6YXK0Yxw1ULi4fJmKm4cSPGp3cN2K378zqh3ds2DCQinGGYPIXkyxE?=
+ =?us-ascii?Q?KikkWL1COMZMn8rnp9759OAo+niil8uuCge53vSXuMSJHLTPDgunPchdvIbL?=
+ =?us-ascii?Q?7F9IMa2Y/iP4R6ZBtSbdb/NAAKKGJ39GSB3Y5BBAtN9wFdYKgJ+o/c7up9dt?=
+ =?us-ascii?Q?7sup4IpvVaHs/yrBC8NhkeBFrcQSoRXmFd56BK52qF+ytc9dDvlmmXqbty6R?=
+ =?us-ascii?Q?h64GokuLS6/nCVNTBJmJrIwSd3Kx5DvX07v3iQHK+Uf78MpMHE/458LdQQyz?=
+ =?us-ascii?Q?ZKtVfwbx9UDmGGeQ8TeSBMtLAuHxNS9N8MLXr5Lyu9FVZO5v5vbJYBu9WV5l?=
+ =?us-ascii?Q?TBokDCocz03khKBURCFiYk1MRgSZgqG/rJvfF4P2bj/dmRBw/DXX1ECQgk2f?=
+ =?us-ascii?Q?JwfKPtI46GHL34ivPAW15lhnqdhYDfeIVappTC/mY4AngRRy9eEod0pKTuEU?=
+ =?us-ascii?Q?0b1xyFaj2yb4jNw92uDvk7RmFMPciQml2NJ2EYRYnC1jI7izBgqaeevna4Jg?=
+ =?us-ascii?Q?T7MHdhOeeaJ0KIhh1zLNSfMRMbS19+1MFCtRZJIDyK6dP5iGadxQ1NzMWNiX?=
+ =?us-ascii?Q?FRecHJW+bT6FnDsN1sEsfKor2GLS6KMAnth5HWD5wxGdebBHLKlh/qiIw1zw?=
+ =?us-ascii?Q?Px928wJvqVbAnAjlkKDN7RkvqRFiAw/nSnLX/q7U/SXnV8P4zCotKrcnlvfD?=
+ =?us-ascii?Q?/bPM9O7lWiUosL3FOFW11DUTBLeoCeLqKWJ1s4H5L/AbSMB++873ANoB6805?=
+ =?us-ascii?Q?kTTPS+nUsPf35THqqhNlxJCseeXfnoMOoVgZ3NOt2RQwofYHJSHr0wc13jAZ?=
+ =?us-ascii?Q?mPow6uS44nuapuXGT1bEwIF+1uiMAxIKeUAds2u6BZdSLNysQa5DFiV8oWDv?=
+ =?us-ascii?Q?D90Oi/eSHEpNxSyXzFUvlHuYReg67xfmEYK72tbgdJ9IfNJR0+r5?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1ceee3b2-e5e7-42a6-232b-08de9c2f9aa2
+X-MS-Exchange-CrossTenant-Network-Message-Id: abbfcf2c-1808-44c2-b60c-08de9c2f9bc6
 X-MS-Exchange-CrossTenant-AuthSource: CY8PR12MB8300.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Apr 2026 03:15:40.6476
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Apr 2026 03:15:42.5600
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: H/M5Nvel25GxX/U2De1JbykW08lpWsHINB7WnPvy26ViWDBpoRZQsHtK2Rin0hCAmnxvaH1lQA6XPpqtLbRD3Q==
+X-MS-Exchange-CrossTenant-UserPrincipalName: eiY+QdPeMoibgRNsffKDgBPToeiW+AryPXUPkYjVUiwWRfQLPzOnvqzE6315Lz+nUjGmMGfkRPNKv67nFnHBvA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7772
 
-There are 6 individual Rust KUnit tests. All the tests are compiled
-unconditionally now, which adds ~200 kB to the kernel image for me
-on x86_64. As Rust matures, this bloating will inevitably grow.
+Now that rust KUnit tests are protected with Kconfig, update the
+documentation to mention it.
 
-Add Kconfig.test which includes a RUST_KUNIT_TESTS menu, and all
-individual tests under it.
-
-As usual, new tests are all enabled if KUNIT_ALL_TESTS=y.
-
-Suggested-by: Alice Ryhl <aliceryhl@google.com>
 Signed-off-by: Yury Norov <ynorov@nvidia.com>
 ---
-This doesn't create a new entry in MAINTAINERS for the Kconfig.test,
-so the new file just follows the implicit rule for the rust/ directory.
-Please let me know if the explicit entry is needed.
+ Documentation/rust/testing.rst | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
- init/Kconfig                         |  2 +
- rust/kernel/Kconfig.test             | 76 ++++++++++++++++++++++++++++
- rust/kernel/alloc/allocator.rs       |  1 +
- rust/kernel/alloc/kvec.rs            |  1 +
- rust/kernel/bitmap.rs                |  1 +
- rust/kernel/kunit.rs                 |  1 +
- rust/kernel/str.rs                   |  1 +
- rust/kernel/sync/atomic/predefine.rs |  1 +
- 8 files changed, 84 insertions(+)
- create mode 100644 rust/kernel/Kconfig.test
-
-diff --git a/init/Kconfig b/init/Kconfig
-index 43875ef36752..4af544514e6c 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -2208,6 +2208,8 @@ config RUST
+diff --git a/Documentation/rust/testing.rst b/Documentation/rust/testing.rst
+index f43cb77bcc69..24de173471b2 100644
+--- a/Documentation/rust/testing.rst
++++ b/Documentation/rust/testing.rst
+@@ -141,10 +141,13 @@ These tests are introduced by the ``kunit_tests`` procedural macro, which takes
+ the name of the test suite as an argument.
  
- 	  If unsure, say N.
+ For instance, assume we want to test the function ``f`` from the documentation
+-tests section. We could write, in the same file where we have our function:
++tests section. We could write, in the same file where we have our function.
++Each test is protected with the corresponding Kconfig option, see
++rust/kernel/Kconfig.test.
  
-+source "rust/kernel/Kconfig.test"
-+
- config RUSTC_VERSION_TEXT
- 	string
- 	depends on RUST
-diff --git a/rust/kernel/Kconfig.test b/rust/kernel/Kconfig.test
-new file mode 100644
-index 000000000000..a05243696a01
---- /dev/null
-+++ b/rust/kernel/Kconfig.test
-@@ -0,0 +1,76 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+menuconfig RUST_KUNIT_TESTS
-+	bool "Rust KUnit tests"
-+	depends on KUNIT && RUST
-+	default KUNIT_ALL_TESTS
-+	help
-+	  This menu collects all options for Rust Kunit tests.
-+	  See Documentation/rust/testing.rst for how to protect
-+	  unit tests with these options.
-+
-+	  Say Y here to enable Rust KUnit tests.
-+
-+	  If unsure, say N.
-+
-+if RUST_KUNIT_TESTS
-+config RUST_ALLOCATOR_KUNIT_TEST
-+	bool "KUnit tests for Rust allocator API" if !KUNIT_ALL_TESTS
-+	default KUNIT_ALL_TESTS
-+	help
-+	  This option enables KUnit tests for the Rust allocator API.
-+	  These are only for development and testing, not for regular
-+	  kernel use cases.
-+
-+	  If unsure, say N.
-+
-+config RUST_KVEC_KUNIT_TEST
-+	bool "KUnit tests for Rust KVEC API" if !KUNIT_ALL_TESTS
-+	default KUNIT_ALL_TESTS
-+	help
-+	  This option enables KUnit tests for the Rust KVEC API.
-+	  These are only for development and testing, not for
-+	  regular kernel use cases.
-+
-+	  If unsure, say N.
-+
-+config RUST_BITMAP_KUNIT_TEST
-+	bool "KUnit tests for Rust bitmap API" if !KUNIT_ALL_TESTS
-+	default KUNIT_ALL_TESTS
-+	help
-+	  This option enables KUnit tests for the Rust bitmap API.
-+	  These are only for development and testing, not for regular
-+	  kernel use cases.
-+
-+	  If unsure, say N.
-+
-+config RUST_KUNIT_SELFTEST
-+	bool "KUnit selftests for Rust" if !KUNIT_ALL_TESTS
-+	default KUNIT_ALL_TESTS
-+	help
-+	  This option enables KUnit selftests. These are only
-+	  for development and testing, not for regular kernel
-+	  use cases.
-+
-+	  If unsure, say N.
-+
-+config RUST_STR_KUNIT_TEST
-+	bool "KUnit tests for Rust strings APIs" if !KUNIT_ALL_TESTS
-+	default KUNIT_ALL_TESTS
-+	help
-+	  This option enables KUnit tests for the Rust strings API.
-+	  These are only for development and testing, not for regular
-+	  kernel use cases.
-+
-+	  If unsure, say N.
-+
-+config RUST_ATOMICS_KUNIT_TEST
-+	bool "KUnit tests for Rust atomics APIs" if !KUNIT_ALL_TESTS
-+	default KUNIT_ALL_TESTS
-+	help
-+	  This option enables KUnit tests for the Rust atomics API.
-+	  These are only for development and testing, not for regular
-+	  kernel use cases.
-+
-+	  If unsure, say N.
-+
-+endif
-diff --git a/rust/kernel/alloc/allocator.rs b/rust/kernel/alloc/allocator.rs
-index 63bfb91b3671..0d3434bca867 100644
---- a/rust/kernel/alloc/allocator.rs
-+++ b/rust/kernel/alloc/allocator.rs
-@@ -251,6 +251,7 @@ unsafe fn realloc(
-     }
- }
+ .. code-block:: rust
  
-+#[cfg(CONFIG_RUST_ALLOCATOR_KUNIT_TEST)]
- #[macros::kunit_tests(rust_allocator)]
- mod tests {
-     use super::*;
-diff --git a/rust/kernel/alloc/kvec.rs b/rust/kernel/alloc/kvec.rs
-index ac8d6f763ae8..563c760c8105 100644
---- a/rust/kernel/alloc/kvec.rs
-+++ b/rust/kernel/alloc/kvec.rs
-@@ -1351,6 +1351,7 @@ fn drop(&mut self) {
-     }
- }
- 
-+#[cfg(CONFIG_RUST_KVEC_KUNIT_TEST)]
- #[macros::kunit_tests(rust_kvec)]
- mod tests {
-     use super::*;
-diff --git a/rust/kernel/bitmap.rs b/rust/kernel/bitmap.rs
-index 894043c9e460..b27e0ec80d64 100644
---- a/rust/kernel/bitmap.rs
-+++ b/rust/kernel/bitmap.rs
-@@ -499,6 +499,7 @@ pub fn next_zero_bit(&self, start: usize) -> Option<usize> {
-     }
- }
- 
-+#[cfg(CONFIG_RUST_BITMAP_KUNIT_TEST)]
- #[macros::kunit_tests(rust_kernel_bitmap)]
- mod tests {
-     use super::*;
-diff --git a/rust/kernel/kunit.rs b/rust/kernel/kunit.rs
-index a1edf7491579..cdee5f27bd7f 100644
---- a/rust/kernel/kunit.rs
-+++ b/rust/kernel/kunit.rs
-@@ -329,6 +329,7 @@ pub fn in_kunit_test() -> bool {
-     !unsafe { bindings::kunit_get_current_test() }.is_null()
- }
- 
-+#[cfg(CONFIG_RUST_KUNIT_SELFTEST)]
- #[kunit_tests(rust_kernel_kunit)]
- mod tests {
-     use super::*;
-diff --git a/rust/kernel/str.rs b/rust/kernel/str.rs
-index 8311d91549e1..a435674f05ea 100644
---- a/rust/kernel/str.rs
-+++ b/rust/kernel/str.rs
-@@ -415,6 +415,7 @@ macro_rules! c_str {
-     }};
- }
- 
-+#[cfg(CONFIG_RUST_STR_KUNIT_TEST)]
- #[kunit_tests(rust_kernel_str)]
- mod tests {
-     use super::*;
-diff --git a/rust/kernel/sync/atomic/predefine.rs b/rust/kernel/sync/atomic/predefine.rs
-index 84fcd7cfcb73..7468153429e1 100644
---- a/rust/kernel/sync/atomic/predefine.rs
-+++ b/rust/kernel/sync/atomic/predefine.rs
-@@ -154,6 +154,7 @@ fn rhs_into_delta(rhs: usize) -> isize_atomic_repr {
-     }
- }
- 
-+#[cfg(CONFIG_RUST_ATOMICS_KUNIT_TEST)]
- #[macros::kunit_tests(rust_atomics)]
- mod tests {
-     use super::super::*;
++	#[cfg(CONFIG_RUST_MYMOD_KUNIT_TEST)]
+ 	#[kunit_tests(rust_kernel_mymod)]
+ 	mod tests {
+ 	    use super::*;
 -- 
 2.51.0
 
