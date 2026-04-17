@@ -1,113 +1,94 @@
-Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7CE33B6364
-	for <linux-kselftest@vger.kernel.org>; Fri, 17 Apr 2026 10:27:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B97113B7757;
+	Fri, 17 Apr 2026 10:36:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776421648; cv=none; b=JuJXGoc6Q2CNwQrAvLJNhemGaTiB1fyQIl+X1tsVH5D8mUmXLKW5E40Zc6EcDyaynwUz0GByPJbmk3mzuMz602VG3w7YgZ+DgUZ5aYzzQGyjRG/xKW0Eyb2Vqx/XKwYey1ax8P2ng9GB/umkhN5vNyYW3i2sMPRrygfi93Rinjo=
+	t=1776422185; cv=none; b=cLz65NTMMsNwESn52ge/wtccxaqH8BKRaTFzYc2kRQRX33srOTLqG3akJlT4hkKp2iMFOwllBkZP+XKQ0XQJgRI2LxEaoslOqIY2BLsewPPVDEXdUi2mZ28jy+TgDvWF+eYv8Bx+jympO6rdQlXRRJ22Mh7ItovykiCAQwerxEs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776421648; c=relaxed/simple;
-	bh=IaXeKln7M9N7HcvTCKtwJ4tn/m+fj0Km4rcVmVH7hD4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kTNS1ChCu0Jhmxoin6pUS6PcQTWseAQhIymtDCI5K4bSJ7RG64pdyUdDMSqlEBDJUqXGKD+iHEYDg1dMnyQ2NH/14eE642Lpf3jXa9nuF2ulb6imyokU8EerCTqGQVRBYocCVgzIoRGC+4uoYMqB2RzIPN3TAbPYm0YWmNYaYEc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Oa6qtvm6; arc=none smtp.client-ip=91.218.175.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1776422185; c=relaxed/simple;
+	bh=rvVNHidjO5cV52QcqTOC4HaikastdbVk16UEczL3Lgs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oONPw4kN045yOCilZVLWfvX20WAdCQBbnTMamQBFO+44h0QLutAw4ZHhZ7lm9f9fhWQ0KL4mfhebSR8NDeHL1rsa9BOxq3A1YLcuV/jEnYXk79+rbI1+wmh8ms4di2TNP1fyqVnCxvVb4hl48iz5f8HT+r3uHBzHd6HDqAB12Z4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MAoNy6xF; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Oa6qtvm6"
-Message-ID: <0d25b0b7-5560-482c-a626-fc43abb045b3@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1776421631;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=H8L1TXwxJHEz1sfg1EUcrGf2kt7J7QaV9bX1WaMgGMU=;
-	b=Oa6qtvm642n96GU5TT04Z7xtWs1T0GAdrjl61vbOlvZmKZHrwCGxsdOfZSRdpn+/yn+hu2
-	L4E5GSx89h9FmPwpy15PDmLRne3CoyX/PtEIMAgfyxkPE1Ge2yeZmEwSdSWfCdZijQma2o
-	Mo0sHyoi3R5jlGGtVXd/mJOKoIMVE/k=
-Date: Fri, 17 Apr 2026 18:26:41 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MAoNy6xF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06BD2C19425;
+	Fri, 17 Apr 2026 10:36:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776422185;
+	bh=rvVNHidjO5cV52QcqTOC4HaikastdbVk16UEczL3Lgs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=MAoNy6xFnyPluWovR96Cg/vY/bpyuQRY7vncy2LEZSmHbqmth+oKGcyidRdoTvVCe
+	 d429QUVavxOEqjPZRy5IInUCAn5Ovrsl6dqQZDkkkvCiFekmRZqUU49IY8fn4mUICa
+	 1PkAqfSl0DT/H/RV/kZYAtRS2L6idKtD3+jOZUNFnRacjfp5v7KEeAA21FVcXnmI/L
+	 3x1lemQcwLTrvjQTqoktelmYLFGtDlhwss7IXst6v7pqnq9wxMru5/3HIEQ8DIyAeC
+	 YSghaaLSC/Vnz9PSqX3JzWiwVup5gYnkmRYdAUgdjKzbs7nBGZtaI3Xb2CnGYybibF
+	 g3+qYsfgox39g==
+Date: Fri, 17 Apr 2026 11:36:20 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Ricardo =?iso-8859-1?Q?B=2E_Marli=E8re?= <rbm@suse.com>,
+	torvalds@linux-foundation.org, Shuah Khan <shuah@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	Aishwarya.TCV@arm.com, ben.copeland@linaro.org,
+	kernelci@lists.linux.dev
+Subject: Re: [PATCH 5/6] selftests: Preserve subtarget failures in all/install
+Message-ID: <798e6edb-1c56-4c68-ae3a-a9c4e1b022a5@sirena.org.uk>
+References: <20260320-selftests-fixes-v1-0-79144f76be01@suse.com>
+ <20260320-selftests-fixes-v1-5-79144f76be01@suse.com>
+ <ad-ZdjzQZXNgkpwv@sirena.co.uk>
+ <3cdf8e79-7c59-4831-9b38-e9c2cef97fe1@linuxfoundation.org>
+ <ad-8BIkw_ijCLqcF@sirena.co.uk>
+ <e4b82973-7d9e-454d-8f69-6d2a1a8ec7dc@sirena.org.uk>
+ <c834846c-96d5-405c-97d9-f182b8fe1569@linuxfoundation.org>
+ <a73aa838-d194-4867-86fb-42bc8d057fd9@sirena.org.uk>
+ <9c9f9851-5962-4281-9f34-a1f2e012b13e@linuxfoundation.org>
+ <0420ebf1-2598-4f4f-bd09-95774156b48b@linuxfoundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf v3 1/2] bpf: Reject TCP_NODELAY in TCP header option
- callbacks
-To: KaFai Wan <kafai.wan@linux.dev>, martin.lau@linux.dev,
- daniel@iogearbox.net, john.fastabend@gmail.com, sdf@fomichev.me,
- ast@kernel.org, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
- song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
- jiayuan.chen@linux.dev, bpf@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc: Quan Sun <2022090917019@std.uestc.edu.cn>, Yinhao Hu
- <dddddd@hust.edu.cn>, Kaiyan Mei <M202472210@hust.edu.cn>
-References: <20260417092035.2299913-1-kafai.wan@linux.dev>
- <20260417092035.2299913-2-kafai.wan@linux.dev>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <20260417092035.2299913-2-kafai.wan@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="KmZdBgDaIn46m5wC"
+Content-Disposition: inline
+In-Reply-To: <0420ebf1-2598-4f4f-bd09-95774156b48b@linuxfoundation.org>
+X-Cookie: Uh-oh!!  I'm having TOO MUCH FUN!!
 
 
-On 4/17/26 5:20 PM, KaFai Wan wrote:
-> A BPF_SOCK_OPS program can enable
-> BPF_SOCK_OPS_WRITE_HDR_OPT_CB_FLAG and then call
-> bpf_setsockopt(TCP_NODELAY) from BPF_SOCK_OPS_HDR_OPT_LEN_CB or
-> BPF_SOCK_OPS_WRITE_HDR_OPT_CB.
->
-> In these callbacks, bpf_setsockopt(TCP_NODELAY) can reach
-> __tcp_sock_set_nodelay(), which can call tcp_push_pending_frames().
->
->  From BPF_SOCK_OPS_HDR_OPT_LEN_CB, tcp_push_pending_frames() can call
-> tcp_current_mss(), which calls tcp_established_options() and re-enters
-> bpf_skops_hdr_opt_len().
->
-> BPF_SOCK_OPS_HDR_OPT_LEN_CB
->    -> bpf_setsockopt(TCP_NODELAY)
->      -> tcp_push_pending_frames()
->        -> tcp_current_mss()
->          -> tcp_established_options()
->            -> bpf_skops_hdr_opt_len()
->              -> BPF_SOCK_OPS_HDR_OPT_LEN_CB
->
->  From BPF_SOCK_OPS_WRITE_HDR_OPT_CB, tcp_push_pending_frames() can call
-> tcp_write_xmit(), which calls tcp_transmit_skb().  That path recomputes
-> header option length through tcp_established_options() and
-> bpf_skops_hdr_opt_len() before re-entering bpf_skops_write_hdr_opt().
->
-> BPF_SOCK_OPS_WRITE_HDR_OPT_CB
->    -> bpf_setsockopt(TCP_NODELAY)
->      -> tcp_push_pending_frames()
->        -> tcp_write_xmit()
->          -> tcp_transmit_skb()
->            -> tcp_established_options()
->              -> bpf_skops_hdr_opt_len()
->            -> bpf_skops_write_hdr_opt()
->              -> BPF_SOCK_OPS_WRITE_HDR_OPT_CB
->
-> This leads to unbounded recursion and can overflow the kernel stack.
->
-> Reject TCP_NODELAY with -EOPNOTSUPP in bpf_sock_ops_setsockopt()
-> when bpf_setsockopt() is called from
-> BPF_SOCK_OPS_HDR_OPT_LEN_CB or BPF_SOCK_OPS_WRITE_HDR_OPT_CB.
->
-> Reported-by: Quan Sun <2022090917019@std.uestc.edu.cn>
-> Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
-> Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
-> Closes: https://lore.kernel.org/bpf/d1d523c9-6901-4454-a183-94462b8f3e4e@std.uestc.edu.cn/
-> Fixes: 7e41df5dbba2 ("bpf: Add a few optnames to bpf_setsockopt")
-> Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
+--KmZdBgDaIn46m5wC
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+On Thu, Apr 16, 2026 at 03:15:30PM -0600, Shuah Khan wrote:
+> On 4/16/26 09:21, Shuah Khan wrote:
 
-Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+> > Yes 2964f6b816c2 is my first suspect with ktap_helpers.sh no such file.
+> > Thank you for fixing this. That way we can patch it and not revert it.
 
-I think the result of AI review is false-positve.
+> Just a quick note to say I applied all 3 patches and will send pr tomorrow.
 
+Thanks Shuah!  I'll try to confirm everything looks good when they're
+all merged together after today's -next.
 
+--KmZdBgDaIn46m5wC
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmniDSMACgkQJNaLcl1U
+h9As/Af/ciLF9Rtpujhy/dj0AC1stnb685JP5uhLDAEVJcb61RROlSFgVDwz4i/N
+EYRB59qPD/kFrI9y/8xv4ySJ+VNGDIa/dS+bnlGvMz6uuhVTy86a9oC3Gqc3MHdn
+Q8qyBckdfoBA47JaronYtuUxE/If7kiebzJQYRoRtZJ7A6eRqP2kdJBA9Ggzty4t
+W9SEAR32lSxI+BPPiZ4nKgrS3sDLE/Kyz283Pa/A9d5cZCT1J+L/Jb5GvwuMEVf6
+fLFAHQT3cUo4hTbP1xEMn/yxpFUCPxWCXy5nOaAIPt5eCHlPvsmfdMlkMVc/zv0s
+q0Tbf1oqtJ7A7MAiGRIWXu2X/o12Bg==
+=Xd1p
+-----END PGP SIGNATURE-----
+
+--KmZdBgDaIn46m5wC--
