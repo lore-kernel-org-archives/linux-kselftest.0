@@ -1,122 +1,188 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40AC5350D74
-	for <linux-kselftest@vger.kernel.org>; Fri, 17 Apr 2026 18:36:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DE29351C28
+	for <linux-kselftest@vger.kernel.org>; Fri, 17 Apr 2026 18:52:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776450998; cv=none; b=HKMVvUPsOk9We4zVJbq/EZRtnDfsL0PRGw7voj0U9m39Xlx+dbRAVSE9Mahm+am4MDyGZSSlSxvtPpnzutPCZBqIcTeH0U6MmhnOUZDoNaRCLw5CTCYZCDdHsxyZzOYROtjzId+PgOesuNbR5G35VAi1ccvzhEZIAvcF7sadTqk=
+	t=1776451936; cv=none; b=HT9QqAut3fA9WkgQYZfE/vLCXv/MnBVRI3lIsqQ8XM9YkwB39idXDkpI54Ub47IUyYW2AtKcaltN2gFnzq3Wa2lUgC4veaNt8O8/DpGZ1PbezeNNj8zC3/XK0MeC3WHUs+0LCuTfxPsiNyyLLH9Lgmd+9PX8Zw/q3Abnoi/62rM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776450998; c=relaxed/simple;
-	bh=jhi8Q9sKzMlM9j3Xkto1ZUlcQv/ROlzg10YIqA3tX1k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KNjjon3KOWezpGhIMkEzH100ifzU9ZXTfcDqTqMjfSl8flP3HGSJ9sfR520mW/fV8joZY1u5TELEiZK4eWlqQXkAlK+kq9DX1wBKZYMKxM+gQYmocRmYNnVwfyrBuH03XbDd2rpJZjfHOYMC6qGUk2m8bRt3dleqPpCS7KMoeFs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SAET08na; arc=none smtp.client-ip=170.10.129.124
+	s=arc-20240116; t=1776451936; c=relaxed/simple;
+	bh=rsUS+utW3f/2ZuQ0BnY5p+GMQTkXA04rVUTwB66KHrc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=iVT5f2A4AMYXpCRwPHiwclfMgX6rqcnbaY5BEjGcGj6CoNk/uLP5/MLCDJFYfe7esDVgiAS4wrUR0nWJGQiLVK4FxX8VnAa4gMtSC4UKc+zrU/bs1lIDo0WDjGesHc4Rea9V78pmCPfAB6f/d+F/4D1Zjk/h4caY2+iCjXbbYHA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=VJeCXddq; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SAET08na"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VJeCXddq"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1776450994;
+	s=mimecast20190719; t=1776451933;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=qzO4xHkNqCBbD3gDH7u2XXP1am7OmyGOsroGGiFrSjc=;
-	b=SAET08naIY30JZN8eXIEjXw2QFm0wecVqqKi3xEH0H1moEy/hz3LxFwfFE0PWFvzrKWaVh
-	w4f/IYFMKHsx8A0sYfQWVPdHq3FES7bRGsvD1T2zWekaglpMnbAW8MM06GZl7+bHrealho
-	hkPrY9JaZlgw6xopUVvofa/LYsV4M1s=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+	bh=mApCTEkHaw2nunpwDopWIwCdkBTK3Xqkfnut5+6MZQY=;
+	b=VJeCXddq/t9D1pdpfNS59UQcCV2bs6EAPqvAZRvUf5FHY2Oqk2ZfWA6p/+eGcr4VqEodoC
+	5s6TJAftc+tMF9xX+m23k4qaPAzWeNAF9FYSnF28IY3suUixHkPSWmFOIh2uRwarxi9MzP
+	7BpHVz6JRxyYzuut2glOtnjSVZMihgY=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-439-cFxf94TMPoStTwVXHme2-Q-1; Fri,
- 17 Apr 2026 14:36:28 -0400
-X-MC-Unique: cFxf94TMPoStTwVXHme2-Q-1
-X-Mimecast-MFC-AGG-ID: cFxf94TMPoStTwVXHme2-Q_1776450986
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-180-BcuikIyZNLOHgFsylPJrug-1; Fri,
+ 17 Apr 2026 14:52:07 -0400
+X-MC-Unique: BcuikIyZNLOHgFsylPJrug-1
+X-Mimecast-MFC-AGG-ID: BcuikIyZNLOHgFsylPJrug_1776451921
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A8C2718005A9;
-	Fri, 17 Apr 2026 18:36:26 +0000 (UTC)
-Received: from redhat.com (unknown [10.22.88.10])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 25F4E1800906;
-	Fri, 17 Apr 2026 18:36:25 +0000 (UTC)
-Date: Fri, 17 Apr 2026 14:36:22 -0400
-From: Joe Lawrence <joe.lawrence@redhat.com>
-To: Marcos Paulo de Souza <mpdesouza@suse.com>
-Cc: Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>,
-	Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>,
-	Shuah Khan <shuah@kernel.org>, live-patching@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/6] kselftests: livepatch: Adapt tests to be executed
- on 4.12 kernels
-Message-ID: <aeJ9pn6v5sGq5nln@redhat.com>
-References: <20260413-lp-tests-old-fixes-v2-0-367c7cb5006f@suse.com>
- <wrecfrmldslvr4dvtb7hrmi3w6joby4qmray3fd3f4dfc2k2tv@ficeojpjxjop>
- <5fb3ecf5a13bdf459019f6f011f3507593498875.camel@suse.com>
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 449B419560B2;
+	Fri, 17 Apr 2026 18:52:00 +0000 (UTC)
+Received: from [10.22.88.98] (unknown [10.22.88.98])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C41D91800660;
+	Fri, 17 Apr 2026 18:51:56 +0000 (UTC)
+Message-ID: <fd28bea7-83bd-48b7-8c3c-ad44474b8b5b@redhat.com>
+Date: Fri, 17 Apr 2026 14:51:55 -0400
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] cgroup/cpuset: record DL BW alloc CPU for attach
+ rollback
+To: Guopeng Zhang <zhangguopeng@kylinos.cn>, tj@kernel.org,
+ hannes@cmpxchg.org, mkoutny@suse.com, void@manifault.com, arighi@nvidia.com,
+ changwoo@igalia.com, shuah@kernel.org, chenridong@huaweicloud.com,
+ Juri Lelli <juri.lelli@redhat.com>, Valentin Schneider
+ <vschneid@redhat.com>, Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc: cgroups@vger.kernel.org, sched-ext@lists.linux.dev,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260417033742.40793-1-zhangguopeng@kylinos.cn>
+ <20260417033742.40793-2-zhangguopeng@kylinos.cn>
+Content-Language: en-US
+From: Waiman Long <longman@redhat.com>
+In-Reply-To: <20260417033742.40793-2-zhangguopeng@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <5fb3ecf5a13bdf459019f6f011f3507593498875.camel@suse.com>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-On Thu, Apr 16, 2026 at 03:18:33PM -0300, Marcos Paulo de Souza wrote:
-> On Thu, 2026-04-16 at 10:07 -0700, Josh Poimboeuf wrote:
-> > On Mon, Apr 13, 2026 at 02:26:11PM -0300, Marcos Paulo de Souza
-> > wrote:
-> > > A new version of the patchset, with fewer patches now. Please take
-> > > a look!
-> > > 
-> > > Original cover-letter:
-> > > These patches don't really change how the patches are run, just
-> > > skip
-> > > some tests on kernels that don't support a feature (like kprobe and
-> > > livepatched living together) or when a livepatch sysfs attribute is
-> > > missing.
-> > > 
-> > > The last patch slightly adjusts check_result function to skip dmesg
-> > > messages on SLE kernels when a livepatch is removed.
-> > 
-> > Why are we adding complexity to support Linux 4.12 in mainline?�
-> > Isn't
-> > that what enterprise distros are for?
-> 
-> These changes do not add any new complex code, just checks to enable
-> the tests to run on older kernels. I believe that it would be good for
-> all enterprises distros if they could run more tests in maintenance
-> updates of their kernels using the upstream tests.
-> 
-> The changes are not really that big. Some patches were removed from v1
-> because there were adding checks for out-of-tree messages (like the
-> last paragraph of the v2 erroneously shows), and another one was to
-> check if kprobes could live alongside livepatches, which fails for 4.12
-> kernels.
-> 
-> The patches for this versions introduce only checks to avoid testing
-> sysfs attributes for kernels that don't supports them.
-> 
+On 4/16/26 11:37 PM, Guopeng Zhang wrote:
+> cpuset_can_attach() allocates DL bandwidth only when migrating
+> deadline tasks to a disjoint CPU mask, but cpuset_cancel_attach()
+> rolls back based only on nr_migrate_dl_tasks. This makes the DL
+> bandwidth alloc/free paths asymmetric: rollback can call dl_bw_free()
+> even when no dl_bw_alloc() was done.
+>
+> Rollback also needs to undo the reservation against the same CPU/root
+> domain that was charged. Record the CPU used by dl_bw_alloc() and use
+> that state in cpuset_cancel_attach(). If no allocation happened,
+> dl_bw_cpu stays at -1 and rollback skips dl_bw_free(). If allocation
+> did happen, bandwidth is returned to the same CPU/root domain.
+>
+> Successful attach paths are unchanged. This only fixes failed attach
+> rollback accounting.
+>
+> Fixes: 2ef269ef1ac0 ("cgroup/cpuset: Free DL BW in case can_attach() fails")
+> Signed-off-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
+> ---
+>   kernel/cgroup/cpuset-internal.h |  5 +++++
+>   kernel/cgroup/cpuset.c          | 13 +++++++++----
+>   2 files changed, 14 insertions(+), 4 deletions(-)
+>
+> diff --git a/kernel/cgroup/cpuset-internal.h b/kernel/cgroup/cpuset-internal.h
+> index fd7d19842ded..bb4e692bea30 100644
+> --- a/kernel/cgroup/cpuset-internal.h
+> +++ b/kernel/cgroup/cpuset-internal.h
+> @@ -168,6 +168,11 @@ struct cpuset {
+>   	int nr_deadline_tasks;
+>   	int nr_migrate_dl_tasks;
+>   	u64 sum_migrate_dl_bw;
+> +	/*
+> +	 * CPU used for temporary DL bandwidth allocation during attach;
+> +	 * -1 if no DL bandwidth was allocated in the current attach.
+> +	 */
+> +	int dl_bw_cpu;
+>   
+>   	/* Invalid partition error code, not lock protected */
+>   	enum prs_errcode prs_err;
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index 1335e437098e..e3a081a07c6d 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -288,6 +288,7 @@ struct cpuset top_cpuset = {
+>   	.flags = BIT(CS_CPU_EXCLUSIVE) |
+>   		 BIT(CS_MEM_EXCLUSIVE) | BIT(CS_SCHED_LOAD_BALANCE),
+>   	.partition_root_state = PRS_ROOT,
+> +	.dl_bw_cpu = -1,
+>   };
+>   
+>   /**
+> @@ -579,6 +580,8 @@ static struct cpuset *dup_or_alloc_cpuset(struct cpuset *cs)
+>   	if (!trial)
+>   		return NULL;
+>   
+> +	trial->dl_bw_cpu = -1;
+> +
+>   	/* Setup cpumask pointer array */
+>   	cpumask_var_t *pmask[4] = {
+>   		&trial->cpus_allowed,
+> @@ -2980,6 +2983,7 @@ static void reset_migrate_dl_data(struct cpuset *cs)
+>   {
+>   	cs->nr_migrate_dl_tasks = 0;
+>   	cs->sum_migrate_dl_bw = 0;
+> +	cs->dl_bw_cpu = -1;
+>   }
+>   
+>   /* Called by cgroups to determine if a cpuset is usable; cpuset_mutex held */
+> @@ -3056,6 +3060,8 @@ static int cpuset_can_attach(struct cgroup_taskset *tset)
+>   			reset_migrate_dl_data(cs);
+>   			goto out_unlock;
+>   		}
+> +
+> +		cs->dl_bw_cpu = cpu;
+>   	}
+>   
+>   out_success:
+> @@ -3080,12 +3086,11 @@ static void cpuset_cancel_attach(struct cgroup_taskset *tset)
+>   	mutex_lock(&cpuset_mutex);
+>   	dec_attach_in_progress_locked(cs);
+>   
+> -	if (cs->nr_migrate_dl_tasks) {
+> -		int cpu = cpumask_any(cs->effective_cpus);
+> +	if (cs->dl_bw_cpu >= 0)
+> +		dl_bw_free(cs->dl_bw_cpu, cs->sum_migrate_dl_bw);
+>   
+> -		dl_bw_free(cpu, cs->sum_migrate_dl_bw);
+> +	if (cs->nr_migrate_dl_tasks)
+>   		reset_migrate_dl_data(cs);
+> -	}
+>   
+>   	mutex_unlock(&cpuset_mutex);
+>   }
 
-IMHO when the changes are reasonably small, I think we should consider
-accomodating older kernels for the selftest suite.  If we reach the
-point of having to introduce version #ifdef-erry, that opinion would
-flip pretty quickly.  It's pretty amazing that modern tests still run on
-older kernels (with this patchset) -- not an explicit kselftest goal
-AFAIK, but nice to have.
+The patch looks correct to me.
 
-If we do merge this patchset, it should update the doc
-tools/testing/selftests/livepatch/README to note the oldest
-expected/tested upstream kernel.  (So new selftest authors may have some
-idea of what API / sysfs features to use.)  And that this compatibility
-was only an incidental "feature" that came for nearly free.  It's not a
-promise to never add backwards-incompatible tests in the future.
+Reviewed-by: Waiman Long <longman@redhat.com>
 
---
-Joe
+However, I have a DL bandwidth accounting question unrelated to this 
+patch that I would like the scheduler people to clarify. The allocation 
+of additional DL BW is based on the condition
+
+         if (!cpumask_intersects(oldcs->effective_cpus, 
+cs->effective_cpus)) {
+
+IOW, additional DL BW will need to be allocated when the old and new 
+cpuset doesn't overlap. However, they could still be in the same root 
+domain. Does that mean we will be double counting it?
+
+Looking from the other side, the root domain may have enough DL BW for 
+the task migration, but the subset of CPUs in the cpuset itself may not 
+have enough total DL BW to host all the DL tasks to be migrated, is that 
+a problem?
+
+Cheers,
+Longman
 
