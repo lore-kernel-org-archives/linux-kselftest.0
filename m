@@ -1,35 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96C3239768D;
-	Fri, 17 Apr 2026 12:37:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9906B3382C9;
+	Fri, 17 Apr 2026 12:41:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776429472; cv=none; b=ppqerIgK/oXw4MNHhdcZnUEGHWnlYTWAEFZGG+XLO4FALCI7RCyPSChA36sue791DqknfeZ3SUYosWkPea030mwSbgw3NmgDCe189iIPluUBloD6N4GTWH6SSvX1CS06XMrKsszA1epzUDpyjQ0aROOgwWBo8QK22MFM6TT9hHY=
+	t=1776429707; cv=none; b=WZQVsux34BewkXQAnoYWJFgNrcY2lbQI4vCvewNGTBeIs7UmCOSnBsrzkBoLQq5MzVVAlujjKc3NCTE1/Sr0N1ryL6JC+hoTurwMhU47P5Ru7f0gvJ+SKNiqCbxV2e41zN6z4BOYDEABVnWpOhUP35pf9iWBArsVvZvN+J+/lFk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776429472; c=relaxed/simple;
-	bh=3V+1JeRzd24DClnOrQ9aq3AVM1QM0xWwhGfZaoC1XwE=;
+	s=arc-20240116; t=1776429707; c=relaxed/simple;
+	bh=GUBplnlCMi99Gs/84QdBPA+gbdFXK1Nj+AsexHJodlg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OjtvyBOjmpj7JfC8/SWb2ENJvptPQDW8CwYdJvTPYVIJlHE3rBWiCl5V09XCx64Thq+10varsrH+5cQ0EAAI0qLic6EBnDdsRm9sMge0rPaBLQfQLMEWmh+WWA54InaKmm/cEVUfPCtKBy1fzzwP730GBvC1iiAKHYWJdIxWW5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LJI48adG; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=KZqBSCsxJHIj+L6P33J3m9JcsB8bQcJAJkblQRyeIl5BkSY0scHLCOr+udgVmTQsnkCF4HQ+vDIET/0dXa6VEA/JfBUd5UFNTN1FjTsyDJHSD9qtMUYswpSWkhB19nz6iZH7fXZvh5UTNmKQT8XFML+kByPS9qpxVs85BazmURk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RPB8bTUB; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LJI48adG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55C8EC19425;
-	Fri, 17 Apr 2026 12:37:49 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RPB8bTUB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E78DFC2BCB0;
+	Fri, 17 Apr 2026 12:41:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776429471;
-	bh=3V+1JeRzd24DClnOrQ9aq3AVM1QM0xWwhGfZaoC1XwE=;
+	s=k20201202; t=1776429707;
+	bh=GUBplnlCMi99Gs/84QdBPA+gbdFXK1Nj+AsexHJodlg=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LJI48adGM3785seEzMFbj3rLKP4F/ni5aDsMwk04wQQep35nTAdL1EFbi/ueCoDJW
-	 x982Ls943GgCo6EKbr/7p4oQUGlKsalbxal+5EdwrBJSWiq05Rz/pmzxNB7+uOlaU3
-	 eMbLwRLPXuHXPYFIrDLJKG/N+l6h/LuHQ3H+C1sP8l/y1k0/mvnViNW0qwohnte80h
-	 bDLcGfwxq8XQrfXrRefyb/pkpia93j0RYqRlV711XLg17cqw4peihVP4JgaZcHMe3g
-	 kElEv8ZYPy2ZfQKmTYkG7+UmYOlVhOEIVFaHTtpbGiiGh4K97YWyIQSZK7bZ+sdOFD
-	 9BuqQSer9/eNg==
-Date: Fri, 17 Apr 2026 13:37:46 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: "David Hildenbrand (Arm)" <david@kernel.org>,
+	b=RPB8bTUBq/1b9zMrL+pk2CxwlWv75pQfDdbN992NdkpZaIm0PK8auIyMKGKgx5VRb
+	 U1CQsjOc3RzHsrCAjFAUllRWTWyrXwKefCh5YeqxUtd7jiPFJ1Dy5SECInSHTkpgQY
+	 Opxv6KGhj6S5B4YQYdYAY7ZeNc7hr3r4/K0jmzE1G+f3gdS6izQwpzqfVYLivzalhV
+	 TY0vOSx040V87BdmFuPB968ekB9Th5rHsOCUIippdM3228DsPzrwYrS45plgww8gCu
+	 nWhQdWZ0Fc7L2HCf3iPq6b4FZymLzqgeAekH+CEqMTAJutUvk/XTgYZNhAgzjEmjEZ
+	 f8O2zhXC8AWXw==
+Date: Fri, 17 Apr 2026 15:41:39 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Anshuman Khandual <anshuman.khandual@arm.com>
+Cc: Mark Brown <broonie@kernel.org>,
+	"David Hildenbrand (Arm)" <david@kernel.org>,
 	Andrew Morton <akpm@linux-foundation.org>,
 	Lorenzo Stoakes <ljs@kernel.org>,
 	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
@@ -40,60 +41,57 @@ Cc: "David Hildenbrand (Arm)" <david@kernel.org>,
 	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] selftests/mm: Specify requirement for
  PROC_MEM_ALWAYS_FORCE=y
-Message-ID: <ad3c60a8-8346-44cb-927f-367dd0c39b1a@sirena.org.uk>
+Message-ID: <aeIqg0m3YL9OAyH5@kernel.org>
 References: <20260416-selftests-mm-proc-mem-always-force-v1-1-3f5865153c67@kernel.org>
  <17ea54b2-d43f-49a9-9dd4-d2330a8daa92@kernel.org>
  <5357ef55-15c0-4c66-867d-898fa7f51414@sirena.org.uk>
  <aeE4XSuXY8RfphVs@kernel.org>
- <8260f624-7ed8-4766-8f80-0d0d4dbb5cb1@sirena.org.uk>
- <aeIonE2r89VdTJZt@kernel.org>
+ <aee4e68c-077f-4056-9d40-69bc849d1538@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="WvM8zwGvYrTLpcPO"
-Content-Disposition: inline
-In-Reply-To: <aeIonE2r89VdTJZt@kernel.org>
-X-Cookie: Uh-oh!!  I'm having TOO MUCH FUN!!
-
-
---WvM8zwGvYrTLpcPO
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <aee4e68c-077f-4056-9d40-69bc849d1538@arm.com>
 
-On Fri, Apr 17, 2026 at 03:33:32PM +0300, Mike Rapoport wrote:
-> On Fri, Apr 17, 2026 at 12:24:25PM +0100, Mark Brown wrote:
+On Fri, Apr 17, 2026 at 08:26:36AM +0530, Anshuman Khandual wrote:
+> On 17/04/26 12:58 AM, Mike Rapoport wrote:
+> > On Thu, Apr 16, 2026 at 08:10:53PM +0100, Mark Brown wrote:
+> >> On Thu, Apr 16, 2026 at 09:05:11PM +0200, David Hildenbrand (Arm) wrote:
+> >>> On 4/16/26 20:40, Mark Brown wrote:
+> >>
+> >>>> Several of the mm selftests made use of /proc/pid/mem as part of their
+> >>>> operation but we do not specify this in the config fragment for them, at
+> >>>> least mkdirty and ksm_functional_tests have this requirement.
+> >>
+> >>> I guess we could teach most tests to SKIP if /proc/pid/mem is unusable.
+> >>
+> >> That would be nicer, yes.  I imagine some of these will predate there
+> >> being a configuration option here at all, it's possible there's newer
+> >> tests that skip cleanly - I didn't look at the skips.
+> > 
+> > Enabling access to /proc/pid/mem keeps the coverage, not that it's great
+> > right now, but still.
+> >  
+> > +	mem_fd = open("/proc/self/mem", O_RDWR);
+> > +	if (mem_fd < 0) {
+> > +		ksft_test_result_skip("opening /proc/self/mem failed\n");
+> > +		return;
+> > +	}
+> > +
+> 
+> Change LGTM making these tests skip rather gracefully.
 
-> > >  {
-> > > -	mem_fd = open("/proc/self/mem", O_RDWR);
-> > > -	if (mem_fd < 0)
-> > > -		ksft_exit_fail_msg("opening /proc/self/mem failed\n");
+Yeah, the issue though is that open() succeeds regardless of PROC_MEM_
+setting in Kconfig. With restricted /proc/pid/mem the failure happens in
+write(), and there we don't know what actually went wrong.
 
-> > Yes, this is a preexisting bug in the test which I see there are more
-> > instances of :(
-
-> Do you mean that ksft_exit_fail_msg() should also print the test name and
-> the actual failure message should be ksft_perror() before?
-
-Oh, I hadn't read that closely enough - if bombing out of the entire
-program it's not an issue.
-
---WvM8zwGvYrTLpcPO
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmniKZkACgkQJNaLcl1U
-h9CUXQf/b4HKtAKgUlKmw4k5mcM9h3raGw+Kp/OhcI3iGExLzD7Z6MM3OSS0aqf7
-52XBXkTSFt3BVCT6G3dEW9nC7tc3cWzO1G4RKjk5wLX5x7Nu/Eeic2lcqqeOVawz
-V2i6VT90YaC4MKf+x0ydPYntbYFIYSpSMCNo88kPQKrgkOiFb9jcy85eOabL9/62
-iaK9S8M9Wk8MwiAHblPbEUPqU4+9xJWvkje1e+R5RdOYjSaCWgzs3c6SdaxaG4SR
-M2lHD9WmhBl7Pp+OeUiOxU7jyMuWADBJQatPN7CL9bwkcXS+osuMKdb8Fw7GTqG7
-FGHHo2Gy3yz9rI8i8hVdJNQqHtqrjw==
-=Mej+
------END PGP SIGNATURE-----
-
---WvM8zwGvYrTLpcPO--
+We can try checking errno, but it's fragile and it's better to fail the
+test if write() failed IMO.
+  
+-- 
+Sincerely yours,
+Mike.
