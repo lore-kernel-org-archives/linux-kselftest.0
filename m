@@ -1,62 +1,63 @@
-Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
+Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6A803491C4
-	for <linux-kselftest@vger.kernel.org>; Fri, 17 Apr 2026 17:24:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F38F34AB0B
+	for <linux-kselftest@vger.kernel.org>; Fri, 17 Apr 2026 17:27:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776446664; cv=none; b=LgMnmuemWEzgUKdRgB11dfb+NxUj4xhQpBNuJWx9s+BCbyFAGB7xVutJ1xcxzMZp5bUH6xfa2hPjzuzv77tMpSbXaqqprxGHBYTfW3/semAFd3jzr72QAJJ/9rA+WFcfSOw7CQAovCv//ktYHGCC97EAOdRl96HUCuZs6pA0FpI=
+	t=1776446850; cv=none; b=U++czqcWzx/5VoONbKIJteZjTo804lCNWAyy4BaJxLQNWDhds6DhPzGGME9s2xUfltD/351JjCd1arEzcfkieVVH+G5CE/M6y+I+yTLdW7gS7BoEqc1CO86FUBjnRL/meP0eQXSozZZM9xWb/l7zFnVXYUqY5k0nmGA0vxc6+wQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776446664; c=relaxed/simple;
-	bh=aHv9tsQwOFWggkpGigY/3Zh58wAA9DWTSfuVQSJCNNE=;
+	s=arc-20240116; t=1776446850; c=relaxed/simple;
+	bh=7Y+D6KqcYE9lTP7zS5oHeHLOKpJ4jNFqhuy0hQB9z9g=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GGfR5zv1JjRVONEeN1EM010JRMkjR4RfOmyv1VSx3Fc01okcNm7tJQXC8lMZgU26/nBq4EQds56WUHB3eWu/OStExD/qm9siFPdkzkLaOf2sHgE6TSRLwIhy6GQFzhjNJC5AiU6GU2zidizz92lmsYqHHfNAMAsuB0E2H4UCyUc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=UgVkkGSM; arc=none smtp.client-ip=209.85.161.44
+	 In-Reply-To:Content-Type; b=bwk7RJcK5ex3vtIlq0WEeuIq+00ksHzaeFeEzygWEIPlQBWKNU84OdrPvocsqGVGlrBxX3DBppMxO/jmR1JXJGMSI4nEk7FaE90/MI722S+vq6M2rJUwvKRkea58HKLrGK8lSS2VqmAu9PdaEErCXVeX2lZowdsuVVddhTQB++U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=N5PKGutg; arc=none smtp.client-ip=209.85.210.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="UgVkkGSM"
-Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-6830f4f34c9so523066eaf.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Apr 2026 10:24:20 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="N5PKGutg"
+Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-7dbff06e4a6so933978a34.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Apr 2026 10:27:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1776446660; x=1777051460; darn=vger.kernel.org;
+        d=linuxfoundation.org; s=google; t=1776446845; x=1777051645; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=G9lqaLLbAqqCpm4lRt6a4mxEqUE0kMvxTIEVafwoTsY=;
-        b=UgVkkGSMX1s87UoibbL0nZvO/V6K+jGItps7/85e7bCKJZow6kMsKUUAYg+FUPXoGG
-         g0ip7Qd3D0AO2hX5X3owsL+ZW4vRfi1D/S2qEgdGpQzm7U2UvdrHImalfUUTCfWOFiZ/
-         IEXY9I9G2rte6uCewfgewAhrNHaVPEZpGb80s=
+        bh=GLn+P2ktPPdEjm49mYZXWZCPIYGUflvOd0GJ7r0DE78=;
+        b=N5PKGutgvOZ01mZs+scY3X4VeezwrlWv+Z6jo5Je1cyfCfgnjbo+6KmlSaYhAUuflG
+         VTxUSdgRlpNjGrtOGGZtIbhHM8g3Ij3wbyhTmQMrwJv/SrUFNWqRHqLN464xATESNbmA
+         KD11WjJVAeWjbFp4u405DijA0TIvHtTOh+Vis=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776446660; x=1777051460;
+        d=1e100.net; s=20251104; t=1776446845; x=1777051645;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=G9lqaLLbAqqCpm4lRt6a4mxEqUE0kMvxTIEVafwoTsY=;
-        b=NU1yKyach9ijKFpXjfBm1pb313utpmmAGWdwUpvSXiBJdYMfrnWu8i762+nKWR787C
-         W2/aR8LRHA9D4gvhvW6IgiX4JONWa4OvIvXpv3gUCy/0kEWcSRUnvLMGgupa0ZkLzvkS
-         1HyoC/7ktE0GZBBoKyDZtShN+72Mpulf1QKzz23JwcCrgxrf27C1j0bQglMJ3bm6mdFw
-         s26+en6ncXty92aWDGDzpl716/dZa0MjtoI0i6D4qxUrQZOqUioNh25qHckRNuAx4R4Y
-         ZlKFmsHlTCrY1weRWkNB5pxX3g4GNyyPy2CxLWZn3mR1gT0GDBJY5G3GyhQtfSJDWkrY
-         9sDQ==
-X-Gm-Message-State: AOJu0Yxi7F/Gv6Bs6Nzllodt1sTQY+E3xosFNmr8OIkQYo7FD9tNtMl3
-	L7m7jKB5Xs3aX+4JT39/SnEVoSdJBavYtimocKEUrdpeMkubZHyJn6TXdL5Hqv6+5lA=
-X-Gm-Gg: AeBDiesvmPZ/wt/Lsv0qL3kyiYL6GeXeWQP6iw25B4xsGNbIkga+hP8ZTQBYpQBvNSS
-	eofUqiMQxnwvuhji8wgjeICkU6owvdjwbCMSXcl1kDqgaszRivaFqCA4dUUFHsJlsLjk2b8bd88
-	LCcnaCdVHDws6d8udNoUP2TmVut0yBpO7aan2xmAADHqPvzYNIJN6fVB34vknChBGEyno1URLL3
-	/qLFwbuBni1cq4fp41b7usqraJYsYeNSbsIT8a+0VeiyV/5aGMpTKt0wnLeLp1kA/E+f6BiBPvR
-	d/WXujNE3oJdftQ2mbCdtJZyU6CIBcWq83dvxmEQ17QyAVjVrbKSZsdncym/BA9tMeL6yU6yoIo
-	7iygA0qvRk5j+6a6GELA0elFt0D99zMYaopMMEYu7SK6Yh9SPuG2uet+cT3b60CZbS1ib2w0+Qv
-	/6mymvefq3cedaEsaSHGXSANZk/5yonJk1CRqs19JYzA==
-X-Received: by 2002:a05:6820:4716:b0:691:e8ce:35c2 with SMTP id 006d021491bc7-6946537dcacmr1145945eaf.20.1776446659659;
-        Fri, 17 Apr 2026 10:24:19 -0700 (PDT)
+        bh=GLn+P2ktPPdEjm49mYZXWZCPIYGUflvOd0GJ7r0DE78=;
+        b=eLh5vf50Vr0w+yYs4LZpIKPMjluhNiHq8kQMGMoa88zazuStwiUD3sGyK7K44DRM/u
+         Oia8ezU/Xlc4UMbm96kVdibroJWNOL0JE8EJ9zLb52rq2CP1kBg03hvExtwBWUBbcBD9
+         4+uDhXRxkuHK1JJYlYxL3jozsBu4dj0JWMwX39hXM/HU6HKFBj2CoIiOarh+dfC/ughY
+         3J0ARBXwJSrXG7gCJbSuMWMlXhwB5U0iV4zfQUwAd+Uxp+DlBNcmL7ZTmd6UoXhOGSm1
+         GB6M8UqRMOzyNBnsn0KsZ0qrbfGaoGqLvebBhrSwXwRY8wwpOvd7DWpJ7xEBE1qBQj6w
+         IhgQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/5kF3b+dHOZI8BGaBu66hnwnhYXg6bImXNoNunumcPBSBeAy88OAMG0i+zzXfuoK4ljk1RL91kfPriBw00wKc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw7nmq/8dzfGunpcEvFa/6v9lU8gqFFYQXpyAeUPmprudtzh02M
+	HPh5yPbgkY8e8mqytggW9VMXPUF/sxaLNniSNQWOYS74PgE9BeE5UzH3hwF6ibnSTxc=
+X-Gm-Gg: AeBDievTD7MKySxiQJDzVs1/KMKA1tTHDacKlHBr73uFrL+yA0Xr6E1pMxixc4rLrbk
+	b4BHVopNIkZRjFq7MW8YjGgE9fNQiD+Wxld4F8iSFhjNXmiERh23IjAndJE3ujIoNc0AXATgN8R
+	eDaDIAIR9p71E0bHunq+Yb8WgwbN5JXatZ9lBK6Uk4VfpZDkLOxjhV8kF97gc+Yv/GLTO7RMmQE
+	GsT5uQGIan+V4Yah5J33/POTFsyWhLQJ0wsUNtNQLKjTCxUV/Eyit7AKVtVDn5w6wLspW4dB73D
+	JdbJp/Ny8IymSgsN/d+wi7Maq+LX+TbmbmHQzSBGfOupctffYW0uQ+zPhSwJdOrQTPNEzqxCR8z
+	M8VtebRJaMzr1LwAZXrKO4pObmpdOT4agmL/W20tTlktCNulM7eZuhfNCYHRYx1wUsSwj44u457
+	eFpH47hzLoVQoEXK1UlCPb6r6gnv7dMSHdDKJRg9T+dQ==
+X-Received: by 2002:a05:6830:348c:b0:7d7:cc53:c457 with SMTP id 46e09a7af769-7dc951e22b1mr2523842a34.17.1776446844974;
+        Fri, 17 Apr 2026 10:27:24 -0700 (PDT)
 Received: from [192.168.1.14] ([38.15.57.99])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-42b93048e4dsm1608931fac.2.2026.04.17.10.24.16
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7dc975b06d2sm1585184a34.23.2026.04.17.10.27.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Apr 2026 10:24:17 -0700 (PDT)
-Message-ID: <ab4cea9d-3274-4018-a172-f5399eef1f4f@linuxfoundation.org>
-Date: Fri, 17 Apr 2026 11:24:15 -0600
+        Fri, 17 Apr 2026 10:27:23 -0700 (PDT)
+Message-ID: <edded65a-633e-4891-b4b2-cd85aea20f66@linuxfoundation.org>
+Date: Fri, 17 Apr 2026 11:27:22 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -64,44 +65,51 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests: Fix duplicated test number reporting
-To: Mark Brown <broonie@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Hangbin Liu <liuhangbin@gmail.com>, Brendan Jackman <jackmanb@google.com>
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+Subject: Re: [PATCH 5/6] selftests: Preserve subtarget failures in all/install
+To: Mark Brown <broonie@kernel.org>
+Cc: =?UTF-8?Q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>,
+ torvalds@linux-foundation.org, Shuah Khan <shuah@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, Aishwarya.TCV@arm.com,
+ ben.copeland@linaro.org, kernelci@lists.linux.dev,
  Shuah Khan <skhan@linuxfoundation.org>
-References: <20260417-selftests-fix-double-number-v1-1-1be5d7c36b94@kernel.org>
+References: <20260320-selftests-fixes-v1-0-79144f76be01@suse.com>
+ <20260320-selftests-fixes-v1-5-79144f76be01@suse.com>
+ <ad-ZdjzQZXNgkpwv@sirena.co.uk>
+ <3cdf8e79-7c59-4831-9b38-e9c2cef97fe1@linuxfoundation.org>
+ <ad-8BIkw_ijCLqcF@sirena.co.uk>
+ <e4b82973-7d9e-454d-8f69-6d2a1a8ec7dc@sirena.org.uk>
+ <c834846c-96d5-405c-97d9-f182b8fe1569@linuxfoundation.org>
+ <a73aa838-d194-4867-86fb-42bc8d057fd9@sirena.org.uk>
+ <9c9f9851-5962-4281-9f34-a1f2e012b13e@linuxfoundation.org>
+ <0420ebf1-2598-4f4f-bd09-95774156b48b@linuxfoundation.org>
+ <e54a02b1-dd0b-4dd4-93aa-0484bb2cd8fe@sirena.org.uk>
 Content-Language: en-US
 From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20260417-selftests-fix-double-number-v1-1-1be5d7c36b94@kernel.org>
+In-Reply-To: <e54a02b1-dd0b-4dd4-93aa-0484bb2cd8fe@sirena.org.uk>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 4/17/26 10:57, Mark Brown wrote:
-> Commit 2964f6b816c2 ("selftests: Use ktap helpers for runner.sh") converted
-> the prints in runner.sh to use the relevant helpers from ktap_helpers.sh,
-> not modifying any of the strings printed in the process. This included
-> converting all the result reports to use the relevant ktap_test_ function.
-> Since the output was originally KTAP compliant the strings reported for
-> test names now include test numbers:
+On 4/17/26 07:30, Mark Brown wrote:
+> On Thu, Apr 16, 2026 at 03:15:30PM -0600, Shuah Khan wrote:
+> 
+>> Just a quick note to say I applied all 3 patches and will send pr tomorrow.
+> 
+> Confirmed that everything seems to be running fine in -next for me.  I
+> am seeing the test number duplicated in the log messages from the
+> wrapper:
 > 
 >    ok 59 59 selftests: arm64: syscall-abi
 > 
-> instead of the expected format:
-> 
->    ok 59 selftests: arm64: syscall-abi
-> 
-> which causes result parsers to interpret the second number as part of the
-> test name.
-> 
-> Given the use of the helpers the tracking of test numbers by runner.sh is
-> now redundant, remove it entirely to restore the expected output format.
-> 
-> Fixes: 2964f6b816c2 ("selftests: Use ktap helpers for runner.sh")
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
+> which is confusing my parser a little but is less of an emergency, I'll
+> take a look.
 
-That was quick - I applied this one also to linux-kselftest next.
-I will send one pr with all 4 fixes tomorrow.
+Just about to send pr when I noticed your patch to fix the above.
+I applied it to linux-kselftest next and will send a combined pr
+with all 4 patches tomorrow.
+
+Thanks for fixing these regressions.
 
 thanks,
 -- Shuah
