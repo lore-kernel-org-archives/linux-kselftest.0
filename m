@@ -1,94 +1,144 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-179.mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B97113B7757;
-	Fri, 17 Apr 2026 10:36:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E50A36D9E7
+	for <linux-kselftest@vger.kernel.org>; Fri, 17 Apr 2026 10:45:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776422185; cv=none; b=cLz65NTMMsNwESn52ge/wtccxaqH8BKRaTFzYc2kRQRX33srOTLqG3akJlT4hkKp2iMFOwllBkZP+XKQ0XQJgRI2LxEaoslOqIY2BLsewPPVDEXdUi2mZ28jy+TgDvWF+eYv8Bx+jympO6rdQlXRRJ22Mh7ItovykiCAQwerxEs=
+	t=1776422748; cv=none; b=MzJNZJEDV+KTZQY909mfRlpIT27gPcuxkdKlEJ7PuerQvjCX3+DpMCaO0dsn8c7o8qLsFac11TObaEXya9Jb7jzvyX+cbGjqRSz5K9NGNIs+Tv+rgiXsDMfiLafDREsemO4Ywnhqvp/pJwRxuri02+ufQSEa7vsdMD1w+M5MCf0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776422185; c=relaxed/simple;
-	bh=rvVNHidjO5cV52QcqTOC4HaikastdbVk16UEczL3Lgs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oONPw4kN045yOCilZVLWfvX20WAdCQBbnTMamQBFO+44h0QLutAw4ZHhZ7lm9f9fhWQ0KL4mfhebSR8NDeHL1rsa9BOxq3A1YLcuV/jEnYXk79+rbI1+wmh8ms4di2TNP1fyqVnCxvVb4hl48iz5f8HT+r3uHBzHd6HDqAB12Z4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MAoNy6xF; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776422748; c=relaxed/simple;
+	bh=0VRL0cpLJ+qES0oZbNjlAL/FiePH+bQn1HvWNYQ7Fz8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=riVD9D70hXXlsPZMsmOXFA7ZO0/6ynZMrnL/g7JLITNQbFDvReLIfqm5yssmfL8779E30qM8qBcLeAQVtxfZgszrXYPk5rrN8RpR3mzyA3PuFTUY1FcnW8Eqra4hriYH2liJ1xYPlR78klSfgamJN2eOwinAv7mjVr7H5+j6DDM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=l/DWVYQV; arc=none smtp.client-ip=95.215.58.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MAoNy6xF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06BD2C19425;
-	Fri, 17 Apr 2026 10:36:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776422185;
-	bh=rvVNHidjO5cV52QcqTOC4HaikastdbVk16UEczL3Lgs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=MAoNy6xFnyPluWovR96Cg/vY/bpyuQRY7vncy2LEZSmHbqmth+oKGcyidRdoTvVCe
-	 d429QUVavxOEqjPZRy5IInUCAn5Ovrsl6dqQZDkkkvCiFekmRZqUU49IY8fn4mUICa
-	 1PkAqfSl0DT/H/RV/kZYAtRS2L6idKtD3+jOZUNFnRacjfp5v7KEeAA21FVcXnmI/L
-	 3x1lemQcwLTrvjQTqoktelmYLFGtDlhwss7IXst6v7pqnq9wxMru5/3HIEQ8DIyAeC
-	 YSghaaLSC/Vnz9PSqX3JzWiwVup5gYnkmRYdAUgdjKzbs7nBGZtaI3Xb2CnGYybibF
-	 g3+qYsfgox39g==
-Date: Fri, 17 Apr 2026 11:36:20 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: Ricardo =?iso-8859-1?Q?B=2E_Marli=E8re?= <rbm@suse.com>,
-	torvalds@linux-foundation.org, Shuah Khan <shuah@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nsc@kernel.org>, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	Aishwarya.TCV@arm.com, ben.copeland@linaro.org,
-	kernelci@lists.linux.dev
-Subject: Re: [PATCH 5/6] selftests: Preserve subtarget failures in all/install
-Message-ID: <798e6edb-1c56-4c68-ae3a-a9c4e1b022a5@sirena.org.uk>
-References: <20260320-selftests-fixes-v1-0-79144f76be01@suse.com>
- <20260320-selftests-fixes-v1-5-79144f76be01@suse.com>
- <ad-ZdjzQZXNgkpwv@sirena.co.uk>
- <3cdf8e79-7c59-4831-9b38-e9c2cef97fe1@linuxfoundation.org>
- <ad-8BIkw_ijCLqcF@sirena.co.uk>
- <e4b82973-7d9e-454d-8f69-6d2a1a8ec7dc@sirena.org.uk>
- <c834846c-96d5-405c-97d9-f182b8fe1569@linuxfoundation.org>
- <a73aa838-d194-4867-86fb-42bc8d057fd9@sirena.org.uk>
- <9c9f9851-5962-4281-9f34-a1f2e012b13e@linuxfoundation.org>
- <0420ebf1-2598-4f4f-bd09-95774156b48b@linuxfoundation.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="l/DWVYQV"
+Message-ID: <9d8f345e-e3aa-428d-8484-8127387bb4a4@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1776422741;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TX419zoOiGLPA/HkUNw0XGLgQfe+SD1cqA8DukbVfYA=;
+	b=l/DWVYQV/EMiKjrRUIH1rDNxFlRC62ccAcD9M3jpilGTVBLiGKOkFHMGahAuxby3XNgdwh
+	fmf8HkF9S5ONFOjHvmqq2c3OEa33cnmZ1D4SIQeUvv/19zfqN/RftnlUZ1cX/Ygakeo6c8
+	NlbPQI/G+Lm1OJE124oh4JAqX+5DPsA=
+Date: Fri, 17 Apr 2026 18:45:07 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="KmZdBgDaIn46m5wC"
-Content-Disposition: inline
-In-Reply-To: <0420ebf1-2598-4f4f-bd09-95774156b48b@linuxfoundation.org>
-X-Cookie: Uh-oh!!  I'm having TOO MUCH FUN!!
+Subject: Re: [PATCH bpf v3 2/2] selftests/bpf: Test TCP_NODELAY in TCP hdr opt
+ callbacks
+To: KaFai Wan <kafai.wan@linux.dev>, martin.lau@linux.dev,
+ daniel@iogearbox.net, john.fastabend@gmail.com, sdf@fomichev.me,
+ ast@kernel.org, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
+ song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
+ jiayuan.chen@linux.dev, bpf@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260417092035.2299913-1-kafai.wan@linux.dev>
+ <20260417092035.2299913-3-kafai.wan@linux.dev>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <20260417092035.2299913-3-kafai.wan@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
 
---KmZdBgDaIn46m5wC
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On 4/17/26 5:20 PM, KaFai Wan wrote:
+> Add a sockops selftest for the TCP_NODELAY restriction in
+> BPF_SOCK_OPS_HDR_OPT_LEN_CB and BPF_SOCK_OPS_WRITE_HDR_OPT_CB.
+>
+> With BPF_SOCK_OPS_WRITE_HDR_OPT_CB_FLAG enabled,
+> bpf_setsockopt(TCP_NODELAY) returns -EOPNOTSUPP from
+> BPF_SOCK_OPS_HDR_OPT_LEN_CB and BPF_SOCK_OPS_WRITE_HDR_OPT_CB, avoiding
+> unbounded recursion and kernel stack overflow.
+>
+> Other cases continue to work as before, including
+> BPF_SOCK_OPS_PASSIVE_ESTABLISHED_CB and user space
+> setsockopt(TCP_NODELAY).
+>
+> Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
 
-On Thu, Apr 16, 2026 at 03:15:30PM -0600, Shuah Khan wrote:
-> On 4/16/26 09:21, Shuah Khan wrote:
 
-> > Yes 2964f6b816c2 is my first suspect with ktap_helpers.sh no such file.
-> > Thank you for fixing this. That way we can patch it and not revert it.
+Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 
-> Just a quick note to say I applied all 3 patches and will send pr tomorrow.
 
-Thanks Shuah!  I'll try to confirm everything looks good when they're
-all merged together after today's -next.
+A little nit below, no need to resend.
 
---KmZdBgDaIn46m5wC
-Content-Type: application/pgp-signature; name="signature.asc"
+> ---
+>   .../selftests/bpf/prog_tests/tcp_hdr_options.c    | 12 +++++++++++-
+>   .../bpf/progs/test_misc_tcp_hdr_options.c         | 15 ++++++++++++++-
+>   2 files changed, 25 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/tcp_hdr_options.c b/tools/testing/selftests/bpf/prog_tests/tcp_hdr_options.c
+> index 56685fc03c7e..7b9dbbb84316 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/tcp_hdr_options.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/tcp_hdr_options.c
+> @@ -461,7 +461,7 @@ static void misc(void)
+>   	const unsigned int nr_data = 2;
+>   	struct bpf_link *link;
+>   	struct sk_fds sk_fds;
+> -	int i, ret;
+> +	int i, ret, true_val = 1;
+>   
 
------BEGIN PGP SIGNATURE-----
+NIT: please follow the reverse xmas tree variable ordering
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmniDSMACgkQJNaLcl1U
-h9As/Af/ciLF9Rtpujhy/dj0AC1stnb685JP5uhLDAEVJcb61RROlSFgVDwz4i/N
-EYRB59qPD/kFrI9y/8xv4ySJ+VNGDIa/dS+bnlGvMz6uuhVTy86a9oC3Gqc3MHdn
-Q8qyBckdfoBA47JaronYtuUxE/If7kiebzJQYRoRtZJ7A6eRqP2kdJBA9Ggzty4t
-W9SEAR32lSxI+BPPiZ4nKgrS3sDLE/Kyz283Pa/A9d5cZCT1J+L/Jb5GvwuMEVf6
-fLFAHQT3cUo4hTbP1xEMn/yxpFUCPxWCXy5nOaAIPt5eCHlPvsmfdMlkMVc/zv0s
-q0Tbf1oqtJ7A7MAiGRIWXu2X/o12Bg==
-=Xd1p
------END PGP SIGNATURE-----
 
---KmZdBgDaIn46m5wC--
+>   	lport_linum_map_fd = bpf_map__fd(misc_skel->maps.lport_linum_map);
+>   
+> @@ -477,6 +477,10 @@ static void misc(void)
+>   		return;
+>   	}
+>   
+> +	ret = setsockopt(sk_fds.active_fd, SOL_TCP, TCP_NODELAY, &true_val, sizeof(true_val));
+> +	if (!ASSERT_OK(ret, "setsockopt(TCP_NODELAY)"))
+> +		goto check_linum;
+> +
+>   	for (i = 0; i < nr_data; i++) {
+>   		/* MSG_EOR to ensure skb will not be combined */
+>   		ret = send(sk_fds.active_fd, send_msg, sizeof(send_msg),
+> @@ -507,6 +511,12 @@ static void misc(void)
+>   
+>   	ASSERT_EQ(misc_skel->bss->nr_hwtstamp, 0, "nr_hwtstamp");
+>   
+> +	ASSERT_TRUE(misc_skel->data->nodelay_est_ok, "unexpected nodelay_est_ok");
+> +
+> +	ASSERT_TRUE(misc_skel->data->nodelay_hdr_len_err, "unexpected nodelay_hdr_len_err");
+> +
+> +	ASSERT_TRUE(misc_skel->data->nodelay_write_hdr_err, "unexpected nodelay_write_hdr_err");
+> +
+
+NIT: It's would be misleading if you run ./test_progs with "-v"
+misc:PASS:unexpected nodelay_est_ok 0 nsec
+
+"PASS:unexpected" ?
+
+>   check_linum:
+>   	ASSERT_FALSE(check_error_linum(&sk_fds), "check_error_linum");
+>   	sk_fds_close(&sk_fds);
+> diff --git a/tools/testing/selftests/bpf/progs/test_misc_tcp_hdr_options.c b/tools/testing/selftests/bpf/progs/test_misc_tcp_hdr_options.c
+> index d487153a839d..a02e28d9db2e 100644
+> --- a/tools/testing/selftests/bpf/progs/test_misc_tcp_hdr_options.c
+> +++ b/tools/testing/selftests/bpf/progs/test_misc_tcp_hdr_options.c
+> @@ -29,6 +29,10 @@ unsigned int nr_syn = 0;
+>   unsigned int nr_fin = 0;
+>   unsigned int nr_hwtstamp = 0;
+>   
+> +bool nodelay_est_ok = true;
+> +bool nodelay_hdr_len_err = true;
+> +bool nodelay_write_hdr_err = true;
+
+I prefer "nodelay_hdr_len_reject"
+
+
