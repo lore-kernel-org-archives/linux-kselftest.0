@@ -1,147 +1,180 @@
-Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
+Received: from CH5PR02CU005.outbound.protection.outlook.com (mail-northcentralusazon11012025.outbound.protection.outlook.com [40.107.200.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DB572DCF74
-	for <linux-kselftest@vger.kernel.org>; Fri, 17 Apr 2026 03:08:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776395316; cv=none; b=T1B/laL6ES5Mymga8ZmpuRuH7DuWiA+ulagVVIO4kteWuBjAWM69WpCgN+UtlnH08s8CNuonxTIOguHZhC41vT2YZdC7o3VZR5lSkxYfd2hr7Qea7SYU5YTN7z7CC7+7UcPCOlInArbIUZPzYirTm6Wy2wXrKthOwSpXVihOEHM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776395316; c=relaxed/simple;
-	bh=qPlTbEZw35AsBE/G7ZHRttLjCnYveS+K3cvQbHTG8xk=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=qYj8DY/I5RYkEGG6EatgKQvYXo3Mb6rN8o7BfriW2TKrY1xb+O45oXuA53G34i/ogQCBP8+G9cX0lXYwG7qkhcoiROtetIDCUU+WBxG+CYjIwoh/gASIDLlj65y4MhzGKyfVY/OYYLnn4auptgYMZ5BVSKcVJyUiJYlDUgWqUA8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FJimC2q6; arc=none smtp.client-ip=91.218.175.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47EA4282F05;
+	Fri, 17 Apr 2026 03:15:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.200.25
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776395747; cv=fail; b=Qq63PBLn8+g5M9ARL3mIe+UU9wp3xcudHkjKX754dtf0g2mYNdLLepR2Uzy2FH3/p8efoA/+LGOYaVrTyZvTnDo+xPwfPcV65ycW7VZDfaWLFkzbPOvJQR/00RCu6zSz5U//LEP8QlyxGX6OwrOuCICaTYFtDuvmhk+E1bZxQD8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776395747; c=relaxed/simple;
+	bh=7TdZU9G1o6CI0OmqLm8EuTCBLbc8L4ayNZjl11DM9Po=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=uUN4GKqiElrb12qn9C61fF7az/hFZ5mIa7QMnIilFq8lIxAaMiig82ZJbKlFypJeUJlzQPeXH3qnp+jzZ+MZJGxy079YrPkefjKjpWI3PONBLwQ2QCCgIgis6Qs13SzltNGVyiYrxVcBGBUr8q3hWxFTAjfgQ5/Zam5JuhzqHJo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=J5QadiZs; arc=fail smtp.client-ip=40.107.200.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FJimC2q6"
-Message-ID: <d3560ae4d662400e64b1cc72b84e3836b7bc371a.camel@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1776395302;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=7RBHgDM72E4FFRUPPk/y4OrCekuqa2O/ftWhf5CuOtM=;
-	b=FJimC2q6T7NSgxyJH739fNQrfVEGxPCogVc/rCWcdC3Z5b7MkYez+QRdKhbMXJTr3pPEhk
-	VGy9xapTeyEHv3OKImdvFDakF8dLrX2x5yxYlCOTMlOBhud8DUA9fuwcVZh1PvhzmBJxc1
-	+mAso4Ufu3IYv8aB0QJeeQWU8Ezqs98=
-Subject: Re: [PATCH bpf v2 2/2] selftests/bpf: Test TCP_NODELAY in TCP hdr
- opt callbacks
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: KaFai Wan <kafai.wan@linux.dev>
-To: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: daniel@iogearbox.net, john.fastabend@gmail.com, sdf@fomichev.me, 
- ast@kernel.org, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, 
- song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
- davem@davemloft.net,  edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org,  shuah@kernel.org,
- jiayuan.chen@linux.dev, bpf@vger.kernel.org,  netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org,  linux-kselftest@vger.kernel.org
-Date: Fri, 17 Apr 2026 11:07:50 +0800
-In-Reply-To: <2026416184330.-HAW.martin.lau@linux.dev>
-References: <20260416112308.1820332-1-kafai.wan@linux.dev>
-	 <20260416112308.1820332-3-kafai.wan@linux.dev>
-	 <2026416184330.-HAW.martin.lau@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="J5QadiZs"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=j0+ypoRirwoyVHT/NALDVQZx0lEYTyTb81ylUcRzSHC1USo4YFUsPEiRgsP2mmJ2PuPBaK+BR07+4byQq+zvJJV+vKELWMEJzn+mAWJuBlLLQBgR6F0d+Pfi+jkZiDRROX8PgTAMWHmldz6DMpfGA0mL9FxRI9tvdZHUsiGabwmOedXlqNkR/Wd+frA9FUoeBhuK6EOcleiMUnsb+7YIYxMclzE7/gl5zSVMK9bC+U29TQDpkYCWBKlNAfe035t3xuzmbtl27tIABLpm4lnwFR/AQxRp8sJ9ak8aGQoJukJWJ9RA9VaWwWTfK5DdWTPp3mpHPDgSGjHriFWgTggnsQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+sXHPmKMajO/f+B2Gb79GxmtAl1NEf5zp52EuZczvUA=;
+ b=jH0jkRKkmbk9HMdgSM3D3wYKUNHmzjZfVAP9OFdsgwPaOznkN1TLShKH1DdUEjMi9KoTtZyk/B31kZ/ZnLWP2OgXDMADJrTlhbUjXD0K7nLjpnY8llSWVTSrcP1yq50s9FDvBhK7Ci50edDxDtvo7t+VxwSYjVG0uElI5gU4crK5q8wHlRpacBVxYPsjdxSCyheJj7Ais5MqBtnTHeZ3EtPGWNtJacvqJKKy9JDcWxihdclaMW3T4kf0zpo0Yb8VP7hMrSh1tmUbJcsBANojo5En74RtHb2r3LhmbBifCGkJ455OIU/yAT5BiZ/817rhkuDJ8OSna0bdskGKjFTaPA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+sXHPmKMajO/f+B2Gb79GxmtAl1NEf5zp52EuZczvUA=;
+ b=J5QadiZswoL39qPQJ8N61QqPsrAVF7/BGI1B/8UvExhUqvWOJS0J5+Ru0LKvNSYg9CzKew7ZZLxdXu4GaU9bfuhmCQERsLBEPJfXoM2WsKaYzIyXYGKJKRPWTgtkbMENjWDzQiCZ/gzBEoo1upaaQS5XHIV3zb8CT4itzy34FyoIIXHwMsKgoibMLni9EKPU44O+7lH/IMZjNMGEJAGkZkao94cG9meHokLOYwJrL9e67YVDAMJc4c2uyHbZ65Bpeb9Yybc/UciMbtqDB4Y5mVjS0AnxFsT6JKOdetPcW6OEwRtDXvTHNCd6Fmnqva+hPATpnIEwe7zcoJMOFASvFA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CY8PR12MB8300.namprd12.prod.outlook.com (2603:10b6:930:7d::16)
+ by DS0PR12MB7772.namprd12.prod.outlook.com (2603:10b6:8:138::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9818.25; Fri, 17 Apr
+ 2026 03:15:37 +0000
+Received: from CY8PR12MB8300.namprd12.prod.outlook.com
+ ([fe80::ce75:8187:3ac3:c5de]) by CY8PR12MB8300.namprd12.prod.outlook.com
+ ([fe80::ce75:8187:3ac3:c5de%3]) with mapi id 15.20.9818.023; Fri, 17 Apr 2026
+ 03:15:35 +0000
+From: Yury Norov <ynorov@nvidia.com>
+To: Miguel Ojeda <ojeda@kernel.org>,
+	Boqun Feng <boqun@kernel.org>,
+	Gary Guo <gary@garyguo.net>,
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Burak Emir <bqe@google.com>,
+	Yury Norov <yury.norov@gmail.com>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <david@davidgow.net>,
+	Rae Moar <raemoar63@gmail.com>,
+	Will Deacon <will@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Kees Cook <kees@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>,
+	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Douglas Anderson <dianders@chromium.org>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Christian Brauner <brauner@kernel.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Tamir Duberstein <tamird@kernel.org>,
+	rust-for-linux@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com
+Cc: Yury Norov <ynorov@nvidia.com>
+Subject: [PATCH 0/3] rust: add Kconfig.test
+Date: Thu, 16 Apr 2026 23:15:26 -0400
+Message-ID: <20260417031531.315281-1-ynorov@nvidia.com>
+X-Mailer: git-send-email 2.51.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: CH0PR03CA0305.namprd03.prod.outlook.com
+ (2603:10b6:610:118::7) To CY8PR12MB8300.namprd12.prod.outlook.com
+ (2603:10b6:930:7d::16)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Migadu-Flow: FLOW_OUT
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY8PR12MB8300:EE_|DS0PR12MB7772:EE_
+X-MS-Office365-Filtering-Correlation-Id: a86a37a0-8954-4e5a-a347-08de9c2f97c6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|10070799003|366016|1800799024|376014|7416014|921020|56012099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	Nx/Y25Q15PTjgePQZpKmeo0URKBy6NLqsaDFwx4OqoUjLVXwPdKX+iQ3yBBZSAyUVBTtIx4H1J/RWb0hdLm41NMFDJ0rs21zZhaN0uHtt7NuqKp4P6MOPiOMFiehDhaodJ8gcfI4QE/b0gSCnGb/H3fjbmV0KWYnDwtYWtHkUhQvizmC6e6Gr9YUuqK+zsqyDWBX3cAujxcH7hWY74csf1zKAw3tDtjbLIdsv+D0YeCdc89+IUxCTM0BIluW9I80ZGSfzaJwqedCjppAqhwJoWyDBrmwHVcfd4Tt0QOHcP+gnf4m56lvlu7cMUF4fJIMxX4UZ1Gh/NQxVcIFmLFhKlSNPcVlWGI1XESwJMA1ku2gAFAnYM4lSybHZz3LtF9tn4DZ5ixrOZnXKV/xV5SAledWiABAwW94UyO/Z3H3a5wjmHK5kLb270pM+Zz98UDxte177FqS4RFYZvtwxQzMpa33Cv+L6FYfKf4FBLn8ea50jzdTE0UMstA+RAeAQU8hJL1M/1lImlcJSQ7uBDAF5ZzN7MaIgEOb6ORVh6MPGN8qz3Gg3G+ckCli77zLIqNWDvaCFCr82v9fblbctK9YNToQ4MEEz+mB8wH9KXV9gCGoE5WgOyrajdIyuKCqZMjASsKEdYF1pN426YDS8Sa00g2ZjvcPyJ8ZP2YiCmfxIakYpHZVcXFbzlabXpp9ZOHBDe6knrEcNuNrnQFzqJwrCUB5VsR/Kx4ud7xXOyamYH2Sn8IzJc4WHAj3b/lKaKkQRCY9CeF+TzCkOTwWkShCbA==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY8PR12MB8300.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(10070799003)(366016)(1800799024)(376014)(7416014)(921020)(56012099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?W55lktk0xQmgd+xh5K4vu55wpkBQqMMikZO04ZqzH/B9r3e9Q/Zv09u+0vic?=
+ =?us-ascii?Q?k4tuOp+i+HQ3aVT1Uwmx2lcF09a6tsNCJm4WvhiMZK38xBcpllmuTAhEtZvg?=
+ =?us-ascii?Q?X2bqa4W/3aS+MX8nhRZQk6SfCdBsA5AR+R2BFM2BGYXF0KRa4Uhscx2bBZ0f?=
+ =?us-ascii?Q?GqBMoTN6cYKhRzQ9P1hVDvrADOWqWOQIgqgzdaLJeku18oh0EoX5LBx/XLaK?=
+ =?us-ascii?Q?zRwGQo8AvQWZhjQ7mR7ydbP3ItPAIt9OzUxJkE4R79hFOQ11uE20Bb+7xiZ6?=
+ =?us-ascii?Q?BCNVOVha7lnNdhMNe7erDNqcaeiJGzw5dfUZFkrh1Jg9ev+K52dqLJNSKRBC?=
+ =?us-ascii?Q?1lwXy/F0jwlA+G/kpFiIIa7XXl2P1M2Mx02L8QyuowTxC0f4nNJ+2Vi3CrlO?=
+ =?us-ascii?Q?NETShVIg5CaHaqnBFWlIRFrtSrjQdeZPSDx+ofM+g8tHcO3KWjbWAAKCVk9/?=
+ =?us-ascii?Q?qh5aoLrVM15ERgqp631ik7Jt3zWWLE2WHtPiRGduhmaOMLgEQiXMnd+psQED?=
+ =?us-ascii?Q?gDzXaODnKI2vcEakIIIHGzZfmPeOgiUb3gkPZkGYPA4r6/MJn//foKLdR8tQ?=
+ =?us-ascii?Q?cJ4w6VCn3Qsk2LZfpvWTSgWNXRkYm0UupzFRf6hpMUTjMmIMUqmlqJbwwkT2?=
+ =?us-ascii?Q?6Wzl6bkQwh0cJa3D6FBWN2VGgouf1mJm3CDtaOJwnoljUzXyZqijoRNlBrO1?=
+ =?us-ascii?Q?T5C21pDKEh51BYhGPbffia+TpsglJlNla/LlFU9gE46Wlrl/kTBitL684Yr1?=
+ =?us-ascii?Q?z3G2xgbE2us/oOQ/1YLGWt8hECsL/553IcqwpUVfZLdtA3T/w+fjbKneeGdg?=
+ =?us-ascii?Q?6wQg4emQPllXfugOv4CizitDl+W7gJYPiH7S1ryQtj6bzjS3JFA8ih9MK5Gv?=
+ =?us-ascii?Q?fOroX/MMgd6LQsKO89ktfThEJ35MeT25yOuhQLfSUvPNRZVZTtN6j/gjVrGH?=
+ =?us-ascii?Q?EYlHtMZU47CO7nAoYxQj4HgkH9LPgvpDu88mYdOwySpbgvmSXfPc+f58G3MU?=
+ =?us-ascii?Q?3/xpKpPLDPlyqr2uUsi/Jaw03eKYXMz7AsIs4ySMG18Xsh2R46mxak/2//ws?=
+ =?us-ascii?Q?t9An/Fp5swPQkneJpDP409G+OCcn/bdDozxRlMQQAqc5MTYQLKOQ2ZedSf9t?=
+ =?us-ascii?Q?XhE8WR6mvrzQCJxkPlaZiCD/M7PwdX/yudJL6arjCzpHa972m2Xkez2AlEkX?=
+ =?us-ascii?Q?M1+95eCLbcIz5YIIhNm94LrZz4QE7cRbYYD5EofR/LixW2avhrPneMfs7Zg6?=
+ =?us-ascii?Q?Qbh4zepLyJMcrF5Qxb1WXY9InaiCuV9I+U/R6vBN+46v67ghM2Dmo2Us+mtO?=
+ =?us-ascii?Q?XWUvmH9G1RXLDQ11tq2PH8blb+vbVrvU/bNiahbKLzcE1rVTKlRKugVFdZtA?=
+ =?us-ascii?Q?JZjpAm7kx4rx2Rg3kwaL4UK3nHtGV1BfmuK1grSwpKbNnirpXZ3zl1PhmRf0?=
+ =?us-ascii?Q?jWcyRDC8EwUf8SyFDfL1oCJfSa3DU4vX0+OAw6Sn1bsWZZCv2XcF3jDRYTxf?=
+ =?us-ascii?Q?zNLc9kY5TU68VuoCQx5RKxVtU2m/VfSkuTVkuqvPbd/AzcAyueira5H2O5vC?=
+ =?us-ascii?Q?2JQekrYJAznyZjrm1fZArVR7p4PIHnnUj/l+xKELdThtPhzDMui4b8HL9vd9?=
+ =?us-ascii?Q?pGqN87m3K9+fAPq4/MbwoIgy6ZKbaDrSuCmbiUYBtsjOLexgGOPnZJwgsrFB?=
+ =?us-ascii?Q?3qHT1wwIEGuEX3XF2yI/F71Mna+FSHjamxrg9lvK++Uj9Np5uo1001nPUug8?=
+ =?us-ascii?Q?qdfb5poQFTLLqMlz+hGQrvsJM6Fp1LEffZOGRzzmqxAAdychtwhi?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a86a37a0-8954-4e5a-a347-08de9c2f97c6
+X-MS-Exchange-CrossTenant-AuthSource: CY8PR12MB8300.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Apr 2026 03:15:35.8370
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: zBuEXK21LjBYOb8VWQfjYfPtjuC4x1h1zTRWvoJKENvxIKlAPah6Jzpmywj0e5PA0f2GpOpDrwNGLO4/2FNR4g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7772
 
-On Thu, 2026-04-16 at 12:06 -0700, Martin KaFai Lau wrote:
-> On Thu, Apr 16, 2026 at 07:23:08PM +0800, KaFai Wan wrote:
-> > index 56685fc03c7e..2d738c0c4259 100644
-> > --- a/tools/testing/selftests/bpf/prog_tests/tcp_hdr_options.c
-> > +++ b/tools/testing/selftests/bpf/prog_tests/tcp_hdr_options.c
-> > @@ -513,6 +513,59 @@ static void misc(void)
-> > =C2=A0	bpf_link__destroy(link);
-> > =C2=A0}
-> > =C2=A0
-> > +static void hdr_sockopt(void)
-> > +{
-> > +	const char send_msg[] =3D "MISC!!!";
-> > +	char recv_msg[sizeof(send_msg)];
-> > +	const unsigned int nr_data =3D 2;
-> > +	struct bpf_link *link;
-> > +	struct sk_fds sk_fds;
-> > +	int i, ret, true_val =3D 1;
-> > +
-> > +	lport_linum_map_fd =3D bpf_map__fd(misc_skel->maps.lport_linum_map);
-> > +
-> > +	link =3D bpf_program__attach_cgroup(misc_skel->progs.misc_hdr_sockopt=
-, cg_fd);
-> > +	if (!ASSERT_OK_PTR(link, "attach_cgroup(misc_hdr_sockopt)"))
-> > +		return;
-> > +
-> > +	if (sk_fds_connect(&sk_fds, false)) {
-> > +		bpf_link__destroy(link);
-> > +		return;
-> > +	}
-> > +
-> > +	ret =3D setsockopt(sk_fds.active_fd, SOL_TCP, TCP_NODELAY, &true_val,=
- sizeof(true_val));
-> > +	if (!ASSERT_OK(ret, "setsockopt(TCP_NODELAY) active"))
-> > +		goto check_linum;
-> > +
-> > +	ret =3D setsockopt(sk_fds.passive_fd, SOL_TCP, TCP_NODELAY, &true_val=
-, sizeof(true_val));
->=20
-> Why are these two setsockopt(TCP_NODELAY) calls needed?
->=20
-> Instead of creating a new "void hdr_sockopt(void)", can the test be done =
-in the
-> existing "void misc(void)" by doing bpf_setsockopt(TCP_NODELAY) in the
-> misc_estab() bpf prog?
+There are 6 individual Rust KUnit tests. All the tests are compiled
+unconditionally now, which adds ~200 kB to the kernel image on my
+x86_64 buld. As Rust matures, this bloating will inevitably grow.
 
-Oh, I see.=C2=A0I meant to test on both active and passive side. We can onl=
-y test on active side in the
-existing "void misc(void)".
->=20
-> The PASSIVE_ESTABLISHED_CB can do the bpf_setsockopt(TCP_NODELAY, 0)
-> if it wants to keep the same expectation on Nagle. The
-> BPF_SOCK_OPS_HDR_OPT_LEN_CB and BPF_SOCK_OPS_WRITE_HDR_OPT_CB
-> can do bpf_setsockopt(TCP_NODELAY, 1) to test recursion and
-> the error return value.
->=20
-> > =C2=A0void test_tcp_hdr_options(void)
-> > diff --git a/tools/testing/selftests/bpf/progs/test_misc_tcp_hdr_option=
-s.c
-> > b/tools/testing/selftests/bpf/progs/test_misc_tcp_hdr_options.c
-> > index d487153a839d..a8cf7c4e7ed2 100644
-> > --- a/tools/testing/selftests/bpf/progs/test_misc_tcp_hdr_options.c
-> > +++ b/tools/testing/selftests/bpf/progs/test_misc_tcp_hdr_options.c
-> > @@ -28,6 +28,12 @@ unsigned int nr_data =3D 0;
-> > =C2=A0unsigned int nr_syn =3D 0;
-> > =C2=A0unsigned int nr_fin =3D 0;
-> > =C2=A0unsigned int nr_hwtstamp =3D 0;
-> > +unsigned int nr_hdr_sockopt_estab =3D 0;
-> > +unsigned int nr_hdr_sockopt_estab_err =3D 0;
-> > +unsigned int nr_hdr_sockopt_len =3D 0;
-> > +unsigned int nr_hdr_sockopt_len_err =3D 0;
-> > +unsigned int nr_hdr_sockopt_write =3D 0;
-> > +unsigned int nr_hdr_sockopt_write_err =3D 0;
->=20
-> nr_hdr_sockopt_estab, nr_hdr_sockopt_len, and nr_hdr_sockopt_write
-> are unnecessary. These tests have already been covered in some ways.
+Add Kconfig.test, which provides a RUST_KUNIT_TESTS menu, and all
+individual tests under it.
 
-yes, they are unnecessary in existing misc_estab()
->=20
-> Mostly a nit. The new counters are used in both connections. Note the
-> existing nr_xxx is exclusively used in either active or passive,
-> so there is no parallel counting in practice.
->=20
-> Instead of counting, just use a bool nodelay_est_ok,
-> nodelay_hdr_len_err, nodelay_write_err and assert them
-> to be true in userspace.
+Yury Norov (3):
+  rust: tests: drop 'use crate' in bitmap and atomic KUnit tests
+  rust: testing: add Kconfig for KUnit test
+  Documentation: rust: testing: add Kconfig guidance
 
-indeed. will fix these in next version.
+ Documentation/rust/testing.rst       |  5 ++-
+ init/Kconfig                         |  2 +
+ rust/kernel/Kconfig.test             | 76 ++++++++++++++++++++++++++++
+ rust/kernel/alloc/allocator.rs       |  1 +
+ rust/kernel/alloc/kvec.rs            |  1 +
+ rust/kernel/bitmap.rs                |  5 +--
+ rust/kernel/kunit.rs                 |  1 +
+ rust/kernel/str.rs                   |  1 +
+ rust/kernel/sync/atomic/predefine.rs |  5 +--
+ 9 files changed, 79 insertions(+), 7 deletions(-)
+ create mode 100644 rust/kernel/Kconfig.test
 
---=20
-Thanks,
-KaFai
+-- 
+2.51.0
+
