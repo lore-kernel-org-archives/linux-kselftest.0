@@ -1,161 +1,109 @@
-Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED3143B27EA;
-	Fri, 17 Apr 2026 09:27:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA32733B6C6;
+	Fri, 17 Apr 2026 10:10:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776418075; cv=none; b=SQdlyhAElldRMNXWWO5uffSJEFS1PjBRbbXeslln+yUoqvOkJRNhLSEmn8He3eKOcFwNTiA7FylhE2MigbGsR8SLoaSaDnOmkumKlMWxbjEAHjHjVjd9pYbniVCH/BD1zzl9xGwoSXdacSRKvn4DNxzzbWqQ99Z+gZAU4oK77s8=
+	t=1776420601; cv=none; b=ELEzST0B5L1B39psrunKLBVoovmvk01fJ7f6QT6HYqAzNW5CEI318urqHHirm0uUQBgkqFSzGxADJowcFvMOAl6jUi50FmGV+d3C2LU+A0mAWYNCW/1dOO6tWrKhNjXA4Z67kRbWkrqi8EvFzp/Cc1anPqPmM3GL+3SKmNVwxV0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776418075; c=relaxed/simple;
-	bh=LzAJF/FmkAqdlVvZY2fTdc22L5n729dJwqViP4n+Eyk=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=dIuVtqM6Y/WalLNAoVhOGvtCX2HPb2xySgn1cqtjULcqFXjrZbzke+pwauZAO6+Rgjc0C1rUDwh52yyQHiS0iYNUo1lCOx+01wAeBhsVxZfCdi2oqEfGr7jLtbIshewrYxsv3i8sIVn8GeK/oLbJHooicbQiXAfDtfU7/MvZS/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=lu/fJe4q; arc=none smtp.client-ip=95.215.58.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1776420601; c=relaxed/simple;
+	bh=DS/BrD9NVZLl9n2YbrPgzBv+89D0hS++LNwbEDuReb4=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=r1ikt+E+eRIwx7Lf7HDyoUzRnNBN3vEW78563sp7WyugyFS0g5pXNRn7QphpqORkVFhkoB18+vABoe4pUfd0iW19IgruBgpBZsBOf5K5aN03Ci8au8wdQg8XxDKKDhbLAIvST/vIfQD0NoDkzmExf4QVqPl+wTvET3PU5fn3txo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MgLmOHsn; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="lu/fJe4q"
-Message-ID: <d1d87bf52477d0170366ca83694dc9f7755ccdec.camel@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1776418071;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=i7InGljGZEKZAmpSEkbXjkOBCSclolAPEwl4w3xfvzc=;
-	b=lu/fJe4qghAYGUbAqPoKARQP91hI1335ELyfUsJhpgNqiVEFFe5IIxgkGrOyZ26hRswwJz
-	5C5uE1xtO7ELW2KN2/fwezgEDaWXwuO6DR/w6LZs+48uWBPCVLTgbmVjwBMQ0Jr4UWFRMn
-	tK828SMLs6vK+bh/PQKo1gjg9MHA6bw=
-Subject: Re: [PATCH bpf v2 1/2] bpf: Reject TCP_NODELAY in TCP header option
- callbacks
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: KaFai Wan <kafai.wan@linux.dev>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>, martin.lau@linux.dev, 
- daniel@iogearbox.net, john.fastabend@gmail.com, sdf@fomichev.me,
- ast@kernel.org,  andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
- song@kernel.org,  yonghong.song@linux.dev, jolsa@kernel.org,
- davem@davemloft.net,  edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org,  shuah@kernel.org,
- bpf@vger.kernel.org, netdev@vger.kernel.org,  linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Cc: Quan Sun <2022090917019@std.uestc.edu.cn>, Yinhao Hu
- <dddddd@hust.edu.cn>,  Kaiyan Mei <M202472210@hust.edu.cn>
-Date: Fri, 17 Apr 2026 17:27:11 +0800
-In-Reply-To: <ce2019d0-c127-4c0a-8d2a-f373a68d1bd2@linux.dev>
-References: <20260416112308.1820332-1-kafai.wan@linux.dev>
-	 <20260416112308.1820332-2-kafai.wan@linux.dev>
-	 <ce2019d0-c127-4c0a-8d2a-f373a68d1bd2@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MgLmOHsn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF93BC19425;
+	Fri, 17 Apr 2026 10:10:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776420601;
+	bh=DS/BrD9NVZLl9n2YbrPgzBv+89D0hS++LNwbEDuReb4=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=MgLmOHsn31f2/5kSsyRZ+2nkau6AuWbUQYpMsN7UxWp1HHueq8DES7KlS8Gpc6R4q
+	 /4KVz3Ff+MngDdZlthzn88qTd2V+m0LGFdmgqwD4shNZeKrHgBlxl40QllUHZfI+aC
+	 DvB+kX3Wj5T6uvGkyzQqY8VRVhKO62aux6p0Gcd3L9bZ9upFXrFkeJ5CDCnSK05hKm
+	 ZLW0xNeQuvDsx2dlgrHG1b/eNeX/yhgz8BxR9LPjP5QOMCEgJ+JVMuj1n4aBNLvqLI
+	 +KdjESuQwldMAYJ3ASoRHMwAsvPqyqL4bE7EJz3jJVEcwUHeezUj7aYS1afCqS7tw3
+	 9BINj2Y2a98ng==
+Content-Type: multipart/mixed; boundary="===============6727964678341861361=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Migadu-Flow: FLOW_OUT
+Message-Id: <5fea6b5e9d1a13e72edf8222a8ebe50cbb660b37e62b87b65dab6f6f317943ec@mail.kernel.org>
+In-Reply-To: <20260417092035.2299913-2-kafai.wan@linux.dev>
+References: <20260417092035.2299913-2-kafai.wan@linux.dev>
+Subject: Re: [PATCH bpf v3 1/2] bpf: Reject TCP_NODELAY in TCP header option callbacks
+From: bot+bpf-ci@kernel.org
+To: kafai.wan@linux.dev,martin.lau@linux.dev,daniel@iogearbox.net,john.fastabend@gmail.com,sdf@fomichev.me,ast@kernel.org,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,davem@davemloft.net,edumazet@google.com,kuba@kernel.org,pabeni@redhat.com,horms@kernel.org,shuah@kernel.org,jiayuan.chen@linux.dev,kafai.wan@linux.dev,bpf@vger.kernel.org,netdev@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org
+Cc: 2022090917019@std.uestc.edu.cn,dddddd@hust.edu.cn,M202472210@hust.edu.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri, 17 Apr 2026 10:10:00 +0000 (UTC)
 
-On Fri, 2026-04-17 at 10:43 +0800, Jiayuan Chen wrote:
->=20
-> On 4/16/26 7:23 PM, KaFai Wan wrote:
-> > A BPF_SOCK_OPS program can enable
-> > BPF_SOCK_OPS_WRITE_HDR_OPT_CB_FLAG and then call
-> > bpf_setsockopt(TCP_NODELAY) from BPF_SOCK_OPS_HDR_OPT_LEN_CB or
-> > BPF_SOCK_OPS_WRITE_HDR_OPT_CB.
-> >=20
-> > In these callbacks, bpf_setsockopt(TCP_NODELAY) can reach
-> > __tcp_sock_set_nodelay(), which can call tcp_push_pending_frames().
-> >=20
-> > =C2=A0From BPF_SOCK_OPS_HDR_OPT_LEN_CB, tcp_push_pending_frames() can c=
-all
-> > tcp_current_mss(), which calls tcp_established_options() and re-enters
-> > bpf_skops_hdr_opt_len().
-> >=20
-> > BPF_SOCK_OPS_HDR_OPT_LEN_CB
-> > =C2=A0=C2=A0 -> bpf_setsockopt(TCP_NODELAY)
-> > =C2=A0=C2=A0=C2=A0=C2=A0 -> tcp_push_pending_frames()
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 -> tcp_current_mss()
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 -> tcp_established_opt=
-ions()
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 -> bpf_sko=
-ps_hdr_opt_len()
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 -> BPF_SOCK_OPS_HDR_OPT_LEN_CB
-> >=20
-> > =C2=A0From BPF_SOCK_OPS_WRITE_HDR_OPT_CB, tcp_push_pending_frames() can=
- call
-> > tcp_write_xmit(), which calls tcp_transmit_skb().=C2=A0 That path recom=
-putes
-> > header option length through tcp_established_options() and
-> > bpf_skops_hdr_opt_len() before re-entering bpf_skops_write_hdr_opt().
-> >=20
-> > BPF_SOCK_OPS_WRITE_HDR_OPT_CB
-> > =C2=A0=C2=A0 -> bpf_setsockopt(TCP_NODELAY)
-> > =C2=A0=C2=A0=C2=A0=C2=A0 -> tcp_push_pending_frames()
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 -> tcp_write_xmit()
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 -> tcp_transmit_skb()
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 -> tcp_est=
-ablished_options()
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 -> bpf_skops_hdr_opt_len()
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 -> bpf_sko=
-ps_write_hdr_opt()
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 -> BPF_SOCK_OPS_WRITE_HDR_OPT_CB
-> >=20
-> > This leads to unbounded recursion and can overflow the kernel stack.
-> >=20
-> > Reject TCP_NODELAY with -EOPNOTSUPP in bpf_sock_ops_setsockopt()
-> > when bpf_setsockopt() is called from
-> > BPF_SOCK_OPS_HDR_OPT_LEN_CB or BPF_SOCK_OPS_WRITE_HDR_OPT_CB.
-> >=20
-> > Reported-by: Quan Sun <2022090917019@std.uestc.edu.cn>
-> > Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
-> > Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
-> > Closes: https://lore.kernel.org/bpf/d1d523c9-6901-4454-a183-94462b8f3e4=
-e@std.uestc.edu.cn/
-> > Fixes: 7e41df5dbba2 ("bpf: Add a few optnames to bpf_setsockopt")
-> > Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
-> > ---
-> > =C2=A0 net/core/filter.c | 5 +++++
-> > =C2=A0 1 file changed, 5 insertions(+)
-> >=20
-> > diff --git a/net/core/filter.c b/net/core/filter.c
-> > index fcfcb72663ca..911ff04bca5a 100644
-> > --- a/net/core/filter.c
-> > +++ b/net/core/filter.c
-> > @@ -5833,6 +5833,11 @@ BPF_CALL_5(bpf_sock_ops_setsockopt, struct bpf_s=
-ock_ops_kern *, bpf_sock,
-> > =C2=A0=C2=A0	if (!is_locked_tcp_sock_ops(bpf_sock))
-> > =C2=A0=C2=A0		return -EOPNOTSUPP;
-> > =C2=A0=20
-> > +	if ((bpf_sock->op =3D=3D BPF_SOCK_OPS_HDR_OPT_LEN_CB ||
-> > +	=C2=A0=C2=A0=C2=A0=C2=A0 bpf_sock->op =3D=3D BPF_SOCK_OPS_WRITE_HDR_O=
-PT_CB) &&
-> > +	=C2=A0=C2=A0=C2=A0 IS_ENABLED(CONFIG_INET) && level =3D=3D SOL_TCP &&=
- optname =3D=3D TCP_NODELAY)
-> > +		return -EOPNOTSUPP;
-> > +
-> > =C2=A0=C2=A0	return _bpf_setsockopt(bpf_sock->sk, level, optname, optva=
-l, optlen);
-> > =C2=A0 }
-> > =C2=A0=20
->=20
-> A simple comment is recommended:
->=20
-> /* TCP_NODELAY triggers tcp_push_pending_frames() and re-enters these=20
-> callbacks. */
->=20
-ok. Added in new version.
->=20
-> Also like Martin pointed before, BPF_SOCK_OPS_HDR_OPT_LEN_CB /=20
-> BPF_SOCK_OPS_WRITE_HDR_OPT_CB
->=20
-> can only be produced under CONFIG_INET so IS_ENABLED(CONFIG_INET) is dead=
-.
->=20
+--===============6727964678341861361==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
---=20
-Thanks,
-KaFai
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 5fa9189eb772..96849f4c1fbc 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -5833,6 +5833,12 @@ BPF_CALL_5(bpf_sock_ops_setsockopt, struct bpf_sock_ops_kern *, bpf_sock,
+>  	if (!is_locked_tcp_sock_ops(bpf_sock))
+>  		return -EOPNOTSUPP;
+>
+> +	/* TCP_NODELAY triggers tcp_push_pending_frames() and re-enters these callbacks. */
+> +	if ((bpf_sock->op == BPF_SOCK_OPS_HDR_OPT_LEN_CB ||
+> +	     bpf_sock->op == BPF_SOCK_OPS_WRITE_HDR_OPT_CB) &&
+> +	    level == SOL_TCP && optname == TCP_NODELAY)
+> +		return -EOPNOTSUPP;
+> +
+
+Does this fix also need to block TCP_CORK? When bpf_setsockopt() is called
+with SOL_TCP and TCP_CORK where the value is 0 (disabling cork), the call
+path goes through:
+
+bpf_sock_ops_setsockopt()
+  -> _bpf_setsockopt()
+    -> __bpf_setsockopt()
+      -> sol_tcp_sockopt()
+        -> do_tcp_setsockopt()
+          -> __tcp_sock_set_cork(sk, false)
+
+In __tcp_sock_set_cork() at net/ipv4/tcp.c, when cork is disabled, it
+unconditionally calls tcp_push_pending_frames(sk):
+
+net/ipv4/tcp.c:__tcp_sock_set_cork() {
+    ...
+    tcp->nonagle |= TCP_NAGLE_OFF|TCP_NAGLE_PUSH;
+
+    tcp_push_pending_frames(sk);
+}
+
+This triggers the same recursion chain described in the commit message:
+
+tcp_push_pending_frames()
+  -> tcp_current_mss()
+    -> tcp_established_options()
+      -> bpf_skops_hdr_opt_len()
+        -> BPF_CGROUP_RUN_PROG_SOCK_OPS_SK (re-enters with
+           op=BPF_SOCK_OPS_HDR_OPT_LEN_CB)
+
+causing unbounded recursion and kernel stack overflow. Note that enabling
+TCP_CORK (val=1) is safe since it doesn't call tcp_push_pending_frames(),
+only disabling it (val=0) does.
+
+
+>  	return _bpf_setsockopt(bpf_sock->sk, level, optname, optval, optlen);
+>  }
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24558395229
+--===============6727964678341861361==--
