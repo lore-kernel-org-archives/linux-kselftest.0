@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1CA935DA4C;
-	Fri, 17 Apr 2026 11:43:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F6CB32AADE;
+	Fri, 17 Apr 2026 11:50:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776426223; cv=none; b=KAwStqhwjVfgPEFrA9fr3w4V4VI5ZiM/ss1+87OHqDwLlysstMjQ2H/k9t81MG4cy3HsNlPVfZurXr7kuiuylYFyx5zC8E9h79Whzsquhdyw0lNgfaKmfwfo/S4aI645gSuVshGgBZPPtM6BsMC31L8q2g1xiIeAF/pADtf5QaE=
+	t=1776426659; cv=none; b=SA3YRuPXou0R8+thOyNcwoio1VIEiEi/HHrp3IioPZjMedn5S7uqCkUyTQG1J7zGx0Mko8bmG6lAkoGvKJe/fJI4ug/xCCzL4R6X+L63DylZjikRUeGLiNIP639qt324P2HaRdyLYMEk+XQ90jDjpoa8/zBjPDXFxkC7lEWrQ2Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776426223; c=relaxed/simple;
-	bh=JGgbvpvWm+Ik8ZBTXf+YL1qrGBJYpDxeijGIxjtDHkQ=;
+	s=arc-20240116; t=1776426659; c=relaxed/simple;
+	bh=eChbAgykxjX0W5rYjX38q+EpgtcI2CThnTHQSgO+2C8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gOR+8PENaDKzrsVwehYpU4YeAsQi1fUzuOQImsO/Vc59ULA+ZNAmnAgKpyRNLqZE3rK8XFDVI4xuEy1ql4GViOjgl1lk3n6sNft5FNjhMwpI7Kd9BrTMBMDADHqipafiAMZy4k2JlQiXPXtXYOHLxGwBRq0MmyVhqUxVS9RSF5s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rh1kWv/p; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=GTbrDUIodZryAVMQMPY/CL0coJ2A3D7v7uvkIlaTQPskKwXIocKiH+Gni3xnIYKL9TaCK0HjnzcoyVu0q7bZz8FJlGaIpMdDPk1IL1DITJv2WFYG+DhKbKnO92MdN0vty1pIpEBjhIDwlZCooXmEhm3pSpEfCx/Ow+TtuhsjQVE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SlAhKPap; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rh1kWv/p"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A65EEC19425;
-	Fri, 17 Apr 2026 11:43:38 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SlAhKPap"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67F00C19425;
+	Fri, 17 Apr 2026 11:50:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776426223;
-	bh=JGgbvpvWm+Ik8ZBTXf+YL1qrGBJYpDxeijGIxjtDHkQ=;
+	s=k20201202; t=1776426658;
+	bh=eChbAgykxjX0W5rYjX38q+EpgtcI2CThnTHQSgO+2C8=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=rh1kWv/pWbdLIgEVHPwauDYHLUIFVZUP6FH3zD4hG9r2CQf6vxykMagcdtJFPSIIh
-	 tvy0ByCX5em5C880qRgnFn/S8aaUQANfgMCf8to2uMjMCmTq2s3rrHdNmb9hInzEHJ
-	 WMIIFTxxRM3gWA7aH/HuEO+uIXvDNsBGHX3agIUwDr2FHjMtyg8Z4+nod8NYhvHVyY
-	 HvA1V02mYmjnHe0YwVr8667tXr1ErTSWKzesTg2Nd0qQHyqrFx43Y8UNCVAvkN9ctn
-	 CF3h766uicbcARhlCRZdj/jdFjB+2gYrJdUX0NPbizpPhrgpBKqOuWk/uv54W/F0xX
-	 OHjknsEsvoAnQ==
-Message-ID: <4c635703-3d8d-4cfa-bb98-7f6f5fcbe547@kernel.org>
-Date: Fri, 17 Apr 2026 13:43:36 +0200
+	b=SlAhKPapXV3MGVCHn44BXiJ4tHz78BdMc1lyfrOGcjqzwRPmD1Hc3rHm7p1TxaBRk
+	 PQ++dEY3fDb7DCQ4mUa5IvWEqtKLP31N60Ysd2Tt2gAY2LsLyw9MpSp02SY3733zLd
+	 MZko1FyQgkrc2bADXrdz8I92E3NKO02cC+yBAXrQVng6/zVdCc4yX4CpJYZsxv1J5Q
+	 WRFHqWyBUZvKeZA5Ipu35Yc3XiFyjNj1QLXDIya+la75QzfBjJosdmznj0Z0pTgt5y
+	 Wgd8VPKql4RexoTD3gyzmSul528C3LMQKtqg2Vc+Ns0eke9xlBVII8I1VgjrehhiQM
+	 g9agWd2ZFrkkA==
+Message-ID: <2c0f57b1-7a4f-4e50-9d7f-6b96c0f73796@kernel.org>
+Date: Fri, 17 Apr 2026 13:50:49 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,23 +35,28 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC, PATCH 00/12] userfaultfd: working set tracking for VM guest
- memory
-To: Kiryl Shutsemau <kas@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Peter Xu <peterx@redhat.com>,
- Lorenzo Stoakes <ljs@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Vlastimil Babka <vbabka@kernel.org>,
- "Liam R . Howlett" <Liam.Howlett@oracle.com>, Zi Yan <ziy@nvidia.com>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Sean Christopherson <seanjc@google.com>, Paolo Bonzini
- <pbonzini@redhat.com>, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kvm@vger.kernel.org
-References: <20260414142354.1465950-1-kas@kernel.org>
- <55019037-4f1c-4d9c-83ee-3a844d8f3d5e@kernel.org>
- <ad50rPOseVa-SP_s@thinkstation> <aeDoqFWPFxkkNB26@thinkstation>
- <1a499781-1115-44bc-adbf-2ac3769354ca@kernel.org>
- <aeFCuLJXT8VOkzH7@thinkstation>
+Subject: Re: [PATCH 7.2 v2 02/12] mm/khugepaged: add folio dirty check after
+ try_to_unmap_flush()
+To: Zi Yan <ziy@nvidia.com>
+Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+ Song Liu <songliubraving@fb.com>, Chris Mason <clm@fb.com>,
+ David Sterba <dsterba@suse.com>, Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+ Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>, Nico Pache <npache@redhat.com>,
+ Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
+ Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
+ Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Shuah Khan <shuah@kernel.org>, linux-btrfs@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+References: <20260413192030.3275825-1-ziy@nvidia.com>
+ <20260413192030.3275825-3-ziy@nvidia.com>
+ <10aadfeb-86c6-47b2-b6ab-b86657aafb88@kernel.org>
+ <842D3AD2-32A0-41E1-AC09-08EC793EAF7F@nvidia.com>
+ <C83282EC-F3C3-44FB-A8A4-615F67F9CEEC@nvidia.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -98,63 +103,65 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <aeFCuLJXT8VOkzH7@thinkstation>
+In-Reply-To: <C83282EC-F3C3-44FB-A8A4-615F67F9CEEC@nvidia.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 4/16/26 22:25, Kiryl Shutsemau wrote:
-> On Thu, Apr 16, 2026 at 08:32:19PM +0200, David Hildenbrand (Arm) wrote:
->> On 4/16/26 15:49, Kiryl Shutsemau wrote:
->>>
->>> Here is an updated version:
->>>
->>> https://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git/log/?h=uffd/rfc-v2
->>>
->>> will post after -rc1 is tagged.
->>>
->>> I like it more. It got substantially cleaner.
+On 4/17/26 04:09, Zi Yan wrote:
+> On 14 Apr 2026, at 11:55, Zi Yan wrote:
+> 
+>> On 14 Apr 2026, at 6:38, David Hildenbrand (Arm) wrote:
 >>
->> I don't have time to look into the details just yet, but my thinking was
->> that
+>>>
+>>> maybe simplify to "folios, since that would require taking the folio lock first."
 >>
->> a) It would avoid the zap+refault
-> 
-> Yep.
-> 
->> b) We could reuse the uffd-wp PTE bit + marker to indicate/remember the
->>    protection, making it co-exist with NUMA hinting naturally.
+>> Sure.
 >>
->> b) obviously means that we cannot use uffd-wp and uffd-rwp at the same
->> time in the same uffd area. I guess that should be acceptable for the
->> use cases we you should have in mind?
+>>>
+>>>
+>>>
+>>> IIRC, after successful try_to_unmap() the PTE dirty bit would be synced to the
+>>> folio. That's what you care about, not about any stale TLB entries.
+>>
+>> Right. I missed the PTE dirty bit to folio dirtiness part.
+>>
+>>>
+>>> The important part is that the
+>>>
+>>> So can't we simply test for dirty folios after the refcount check (where
+>>> we made sure the folio is no longer mapped)?
+>>>
+>>
+>> I think so.
 > 
-> I took a different path: I still use PROT_NONE PTEs, so it cannot
-> co-exist with NUMA balancing [fully], but WP + RWP should be fine. I
-> need to add a test for this.
+> After more thoughts, this still works but the reasoning is more complicated.
 > 
-> I didn't give up on NUMA balancing completely. task_numa_fault() is
-> called on RWP fault. So it should help scheduler decisions somewhat.
+> After try_to_unmap(), PTE dirty bit is transferred to folio dirty flag if exists.
+> The code bails out if the folio is dirty. A clean folio means the removed
+> PTEs were clean, thus TLB entries caching these PTEs have dirty bit not set.
+
+Right.
+
+> Any write to the folio after try_to_unmap() causes a page table walk and
+> a page fault due to invalid PTEs, and they cannot proceed since collapse_file()
+> is holding the folio lock. 
+
+Right.
+
+> As a result, we can skip marking folio dirty
+> after the collapse.
+
+Exactly.
+
 > 
-> I think an RWP user might want to use WP too.
-> 
-> Do you see this trade-off as reasonable?
+> If we allow a dirty folio after try_to_unmap(), we need to mark the folio dirty
+> after the collapse like shmem. And a potential optimization is that we only
+> mark the after-collapse folio dirty if any old folio is dirty after try_to_unmap().
 
-One reason why the PTE bit was added for the WP case was to distinguish
-it from other write faults.
+That was my thinking as well, but it would be something we'd try to
+handle separately.
 
-I assume without a dedicated PTE bit your design will always suffer from
-false positive notifications.
-
-Leaving NUMA-balancing aside, a simple
-mprotect(PROT_NONE)+mprotect(PROT_READ) would already be problematic to
-distinguish both cases. Zap+refault for shmem would likely have similar
-problems (we'd need a marker).
-
-I don't think a design that allows for false positives is what we really
-want, especially as it would diverge from what we already have for WP.
-
-Yes, using the PTE bit (that we already have) implies that we could, for
-now, not allow the combination of WP + RWP.
+Folios that are under writeback cannot be collapsed IIUC.
 
 -- 
 Cheers,
