@@ -1,98 +1,147 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8873440DFDD;
-	Fri, 17 Apr 2026 02:57:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DB572DCF74
+	for <linux-kselftest@vger.kernel.org>; Fri, 17 Apr 2026 03:08:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776394678; cv=none; b=NVaDHnGNPpbfJ+LqKLOLWzhwRTnv7Xkmqb99MvuMfKiVnRZwIQjQvVSt8cOKND9dgZYyWtPk/wm9dtsmWv/0BfPPEZ6SmPmnGNvc7JSW5jY7meM8udHWcQHPiL3X+Bw9O4vXmp+bstc8xpNQ1rzv4YywyuNZnOJrktY9kW8+n0Y=
+	t=1776395316; cv=none; b=T1B/laL6ES5Mymga8ZmpuRuH7DuWiA+ulagVVIO4kteWuBjAWM69WpCgN+UtlnH08s8CNuonxTIOguHZhC41vT2YZdC7o3VZR5lSkxYfd2hr7Qea7SYU5YTN7z7CC7+7UcPCOlInArbIUZPzYirTm6Wy2wXrKthOwSpXVihOEHM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776394678; c=relaxed/simple;
-	bh=rU6WmezYl0sFEUtCoWXdlbtECzJmA5nZDI8WaNi1Io8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QQA7XK4XsQ7/OEkDyXqEzgbgcWlZtLOainjdtgWWdUMpB92h12GU+jXRBPUkjdaBINb2STN7BF2tZCxoxfz1lXOfS+BrF8d6Y+atXCVPODE6Ij2rkJyr97D2kxhyR9Aw4EYxy22QwS5tEE1p9qt1+2ZqLKNu1oPoFN199f7vijQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=HHfZtUF4; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1776395316; c=relaxed/simple;
+	bh=qPlTbEZw35AsBE/G7ZHRttLjCnYveS+K3cvQbHTG8xk=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=qYj8DY/I5RYkEGG6EatgKQvYXo3Mb6rN8o7BfriW2TKrY1xb+O45oXuA53G34i/ogQCBP8+G9cX0lXYwG7qkhcoiROtetIDCUU+WBxG+CYjIwoh/gASIDLlj65y4MhzGKyfVY/OYYLnn4auptgYMZ5BVSKcVJyUiJYlDUgWqUA8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FJimC2q6; arc=none smtp.client-ip=91.218.175.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="HHfZtUF4"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1FEF01D70;
-	Thu, 16 Apr 2026 19:57:50 -0700 (PDT)
-Received: from [10.163.182.249] (unknown [10.163.182.249])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 970EE3F7B4;
-	Thu, 16 Apr 2026 19:57:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1776394675; bh=rU6WmezYl0sFEUtCoWXdlbtECzJmA5nZDI8WaNi1Io8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=HHfZtUF4DX1Gnx+ce5LsWGA8rOp8LoMLW80xHORqa1niNvxA9NKtQvEOk0wQbh2WE
-	 TwNyACytKPLobSP7VzhreMhv+kY+5+DKN3q7RXUUHUCoRy4k5x4XsJVnhs27XJFu9F
-	 bBXylUqT2cJUNk7IVzWYvTLkiMvlkI7IirZvO610=
-Message-ID: <c3c27255-d50f-4c82-baa5-1f71375dec99@arm.com>
-Date: Fri, 17 Apr 2026 08:27:46 +0530
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FJimC2q6"
+Message-ID: <d3560ae4d662400e64b1cc72b84e3836b7bc371a.camel@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1776395302;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=7RBHgDM72E4FFRUPPk/y4OrCekuqa2O/ftWhf5CuOtM=;
+	b=FJimC2q6T7NSgxyJH739fNQrfVEGxPCogVc/rCWcdC3Z5b7MkYez+QRdKhbMXJTr3pPEhk
+	VGy9xapTeyEHv3OKImdvFDakF8dLrX2x5yxYlCOTMlOBhud8DUA9fuwcVZh1PvhzmBJxc1
+	+mAso4Ufu3IYv8aB0QJeeQWU8Ezqs98=
+Subject: Re: [PATCH bpf v2 2/2] selftests/bpf: Test TCP_NODELAY in TCP hdr
+ opt callbacks
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: KaFai Wan <kafai.wan@linux.dev>
+To: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: daniel@iogearbox.net, john.fastabend@gmail.com, sdf@fomichev.me, 
+ ast@kernel.org, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, 
+ song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
+ davem@davemloft.net,  edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, horms@kernel.org,  shuah@kernel.org,
+ jiayuan.chen@linux.dev, bpf@vger.kernel.org,  netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org,  linux-kselftest@vger.kernel.org
+Date: Fri, 17 Apr 2026 11:07:50 +0800
+In-Reply-To: <2026416184330.-HAW.martin.lau@linux.dev>
+References: <20260416112308.1820332-1-kafai.wan@linux.dev>
+	 <20260416112308.1820332-3-kafai.wan@linux.dev>
+	 <2026416184330.-HAW.martin.lau@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/mm: Specify requirement for
- PROC_MEM_ALWAYS_FORCE=y
-To: Mark Brown <broonie@kernel.org>, Andrew Morton
- <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>,
- Lorenzo Stoakes <ljs@kernel.org>, "Liam R. Howlett"
- <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@kernel.org>,
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>
-Cc: Aishwarya TCV <aishwarya.tcv@arm.com>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260416-selftests-mm-proc-mem-always-force-v1-1-3f5865153c67@kernel.org>
-Content-Language: en-US
-From: Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <20260416-selftests-mm-proc-mem-always-force-v1-1-3f5865153c67@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On 17/04/26 12:10 AM, Mark Brown wrote:
-> Several of the mm selftests made use of /proc/pid/mem as part of their
-> operation but we do not specify this in the config fragment for them, at
-> least mkdirty and ksm_functional_tests have this requirement.
-> 
-> This has been working fine in practice since PROC_MEM_ALWAYS_FORCE was the
-> default setting but commit 599bbba5a36f ("proc: make PROC_MEM_FORCE_PTRACE
-> the Kconfig default") that is no longer the case, meaning that tests run
-> on kernels built based on defconfigs have started having the new more
-> restrictive default and failing. Add PROC_MEM_ALWAYS_FORCE to the config
-> fragment for the mm selftests.
-> 
-> Thanks to Aishwarya TCV for spotting the issue and identifying the commit
-> that introduced it.
-> 
-> Reported-by: Aishwarya TCV <aishwarya.tcv@arm.com>
-> Signed-off-by: Mark Brown <broonie@kernel.org>
+On Thu, 2026-04-16 at 12:06 -0700, Martin KaFai Lau wrote:
+> On Thu, Apr 16, 2026 at 07:23:08PM +0800, KaFai Wan wrote:
+> > index 56685fc03c7e..2d738c0c4259 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/tcp_hdr_options.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/tcp_hdr_options.c
+> > @@ -513,6 +513,59 @@ static void misc(void)
+> > =C2=A0	bpf_link__destroy(link);
+> > =C2=A0}
+> > =C2=A0
+> > +static void hdr_sockopt(void)
+> > +{
+> > +	const char send_msg[] =3D "MISC!!!";
+> > +	char recv_msg[sizeof(send_msg)];
+> > +	const unsigned int nr_data =3D 2;
+> > +	struct bpf_link *link;
+> > +	struct sk_fds sk_fds;
+> > +	int i, ret, true_val =3D 1;
+> > +
+> > +	lport_linum_map_fd =3D bpf_map__fd(misc_skel->maps.lport_linum_map);
+> > +
+> > +	link =3D bpf_program__attach_cgroup(misc_skel->progs.misc_hdr_sockopt=
+, cg_fd);
+> > +	if (!ASSERT_OK_PTR(link, "attach_cgroup(misc_hdr_sockopt)"))
+> > +		return;
+> > +
+> > +	if (sk_fds_connect(&sk_fds, false)) {
+> > +		bpf_link__destroy(link);
+> > +		return;
+> > +	}
+> > +
+> > +	ret =3D setsockopt(sk_fds.active_fd, SOL_TCP, TCP_NODELAY, &true_val,=
+ sizeof(true_val));
+> > +	if (!ASSERT_OK(ret, "setsockopt(TCP_NODELAY) active"))
+> > +		goto check_linum;
+> > +
+> > +	ret =3D setsockopt(sk_fds.passive_fd, SOL_TCP, TCP_NODELAY, &true_val=
+, sizeof(true_val));
+>=20
+> Why are these two setsockopt(TCP_NODELAY) calls needed?
+>=20
+> Instead of creating a new "void hdr_sockopt(void)", can the test be done =
+in the
+> existing "void misc(void)" by doing bpf_setsockopt(TCP_NODELAY) in the
+> misc_estab() bpf prog?
 
-Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
+Oh, I see.=C2=A0I meant to test on both active and passive side. We can onl=
+y test on active side in the
+existing "void misc(void)".
+>=20
+> The PASSIVE_ESTABLISHED_CB can do the bpf_setsockopt(TCP_NODELAY, 0)
+> if it wants to keep the same expectation on Nagle. The
+> BPF_SOCK_OPS_HDR_OPT_LEN_CB and BPF_SOCK_OPS_WRITE_HDR_OPT_CB
+> can do bpf_setsockopt(TCP_NODELAY, 1) to test recursion and
+> the error return value.
+>=20
+> > =C2=A0void test_tcp_hdr_options(void)
+> > diff --git a/tools/testing/selftests/bpf/progs/test_misc_tcp_hdr_option=
+s.c
+> > b/tools/testing/selftests/bpf/progs/test_misc_tcp_hdr_options.c
+> > index d487153a839d..a8cf7c4e7ed2 100644
+> > --- a/tools/testing/selftests/bpf/progs/test_misc_tcp_hdr_options.c
+> > +++ b/tools/testing/selftests/bpf/progs/test_misc_tcp_hdr_options.c
+> > @@ -28,6 +28,12 @@ unsigned int nr_data =3D 0;
+> > =C2=A0unsigned int nr_syn =3D 0;
+> > =C2=A0unsigned int nr_fin =3D 0;
+> > =C2=A0unsigned int nr_hwtstamp =3D 0;
+> > +unsigned int nr_hdr_sockopt_estab =3D 0;
+> > +unsigned int nr_hdr_sockopt_estab_err =3D 0;
+> > +unsigned int nr_hdr_sockopt_len =3D 0;
+> > +unsigned int nr_hdr_sockopt_len_err =3D 0;
+> > +unsigned int nr_hdr_sockopt_write =3D 0;
+> > +unsigned int nr_hdr_sockopt_write_err =3D 0;
+>=20
+> nr_hdr_sockopt_estab, nr_hdr_sockopt_len, and nr_hdr_sockopt_write
+> are unnecessary. These tests have already been covered in some ways.
 
-> ---
->  tools/testing/selftests/mm/config | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/tools/testing/selftests/mm/config b/tools/testing/selftests/mm/config
-> index 1dbe2b4558ab..06f78bd232e2 100644
-> --- a/tools/testing/selftests/mm/config
-> +++ b/tools/testing/selftests/mm/config
-> @@ -13,3 +13,4 @@ CONFIG_PROFILING=y
->  CONFIG_UPROBES=y
->  CONFIG_MEMORY_FAILURE=y
->  CONFIG_HWPOISON_INJECT=m
-> +CONFIG_PROC_MEM_ALWAYS_FORCE=y
-> 
-> ---
-> base-commit: 599bbba5a36f6de57ab14c373c25881e2b5273f5
-> change-id: 20260416-selftests-mm-proc-mem-always-force-5ce1b26022c2
-> 
-> Best regards,
-> --  
-> Mark Brown <broonie@kernel.org>
-> 
-> 
+yes, they are unnecessary in existing misc_estab()
+>=20
+> Mostly a nit. The new counters are used in both connections. Note the
+> existing nr_xxx is exclusively used in either active or passive,
+> so there is no parallel counting in practice.
+>=20
+> Instead of counting, just use a bool nodelay_est_ok,
+> nodelay_hdr_len_err, nodelay_write_err and assert them
+> to be true in userspace.
 
+indeed. will fix these in next version.
+
+--=20
+Thanks,
+KaFai
