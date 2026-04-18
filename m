@@ -1,267 +1,207 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A30BD35970F;
-	Sat, 18 Apr 2026 11:01:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776510075; cv=none; b=afsadEah5Wt1y4RUzs/KimZRdQvJ/VHiOipqwi/xdXS0tP8AowDa7zU40ZXYVnqB2zkDnN9VM8vcoYka1Sl/3uYn4tTx5T+a+QKyeCQbN09rpJExHGj3RVYBebp+qBgRcP9Y6sTFtwHqdyC2j9k1HlLnjw97qAyxKK34TFDkUSk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776510075; c=relaxed/simple;
-	bh=sZoUbqG9CxBotaWHnOZiPFKTeBgb66YHvpq2HPRKqX0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=l+fbPG3AouZMkjzFHlLzuAADqvqfrrBJHoGQJrnJafm95eN+/UXItvj4PeQ3LrzzLNsgDTVdosVRWeW6+UZAyvsJG4WaiTAr+E+5tNlXbI+XbmQH8AcyU1HQJ41A4fIc6AiN8Gg6Tirn162FEhC/ePkL60K5DGvEGKPiwbhMka8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mf5ju1QO; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D929237CD48
+	for <linux-kselftest@vger.kernel.org>; Sat, 18 Apr 2026 13:31:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.50
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776519074; cv=pass; b=qodJ9hYxi6c2K4y0d/4InvKFd7n0kKPhqZxFZm6na5qnJ4P07ezq/i8HxJCtwSX7z9BCRTIQvjIBiflXumc0qaM9vye+nqNGc3bZqXLqnCtPxmCX+wXypeUWQuxnWmkufJ7Fi8961EFU22/+Fk2jR6NcYOMRNf5VAZ5+OlKnfDg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776519074; c=relaxed/simple;
+	bh=bCwZZOAmrkF68yCBfWzlCLDNALt2LE2uQMq0wLsUN6Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=aAWMQFm2VqVC/pkTteGgtmO5wQPclj+1NX4lwNz335546l1uCOCotJHNen2h8GoYOfYJvWA6TkGF5arhJ5c1Dxs/cYf20TB+fBADs2ByJmijjj1RO4oFywscgZ0VzbxZkgwsuOeSnQf6lPqAapodF82SUA9mb9wsusDSqT7JCmg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nqe4POKP; arc=pass smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mf5ju1QO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF380C2BCB8;
-	Sat, 18 Apr 2026 11:01:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776510075;
-	bh=sZoUbqG9CxBotaWHnOZiPFKTeBgb66YHvpq2HPRKqX0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Mf5ju1QOvH3HlyTG4qnP7elvnF+hxKxb0mLQ2SnKDGm7Bf10EWxGXuIloTNlFzz/L
-	 OWz0UKvhbcNwUGuLtgxz8m0ZQpKdpTKw+udZhHhT6wB1230Xlpraz1JuIlwECZpa3c
-	 QRmCA769jUxCp/PD8zLrAupwbQcKxd8exPDWN1rqw+kNQELjJjvUVRiJrY+d5f4jui
-	 vXANZeneevITQ1NLbQxwZ2iL6JhF6Jv37gX9CQja2OpHXW0UWBPP1dcaFNrIpYjiqn
-	 qi7B4juBsYd0p4lCB7MUMgfR0qxHHZtp1jcf514dvKte9e5wxhB/cQvbI0JJmUSArV
-	 X2wM90vdkgO9Q==
-From: Mike Rapoport <rppt@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>
-Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Barry Song <baohua@kernel.org>,
-	Dev Jain <dev.jain@arm.com>,
-	Donet Tom <donettom@linux.ibm.com>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	John Hubbard <jhubbard@nvidia.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Lance Yang <lance.yang@linux.dev>,
-	Leon Romanovsky <leon@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	Mark Brown <broonie@kernel.org>,
-	Michal Hocko <mhocko@suse.com>,
-	Mike Rapoport <rppt@kernel.org>,
-	Nico Pache <npache@redhat.com>,
-	Peter Xu <peterx@redhat.com>,
-	Ryan Roberts <ryan.roberts@arm.com>,
-	Sarthak Sharma <sarthak.sharma@arm.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Zi Yan <ziy@nvidia.com>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: [PATCH v2 53/53] selftests/mm: run_vmtests.sh: drop detection and setup of HugeTLB
-Date: Sat, 18 Apr 2026 13:55:38 +0300
-Message-ID: <20260418105539.1261536-54-rppt@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260418105539.1261536-1-rppt@kernel.org>
-References: <20260418105539.1261536-1-rppt@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nqe4POKP"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-488b0046078so14925155e9.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 18 Apr 2026 06:31:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776519071; cv=none;
+        d=google.com; s=arc-20240605;
+        b=SblPBg9SVubfCYkfakWvU2IJ0hPMXQhmopYOduMooNrtuhpp63Kt9/OWRcodvRSmFb
+         D4ekECT+I3Q8tGrjeATv8M0+K+ub4YE2DjTw6N8KyI4g0tm677yEp8G7iulia+EoGa7n
+         52Ad/9Yhpk8PV+FQjM9lMouSWZFm0mKw9ODI/SpxHBoMRDQFsB5HH74VO75P9ZAs15It
+         Xarq74PPW+GC9R5jRPI8Z4uEBgc61DObh4N4TZr2tTJi7BqgqcLsojjb8WnY4m7s0FnD
+         iu3k+z+CqOhh3CfuWNxqGd2GK3nlkw64nmYiBT0mMRgd/L3/orx3viKG4CXvVzPtJOex
+         h1tQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=oPxDtIL/dHAuVmHL3LN6nRPtuUfUzQdagiPbu8rpFsA=;
+        fh=F9JheRIoDgbPFDpDa6QYp+ZAdYg7dSZ/7j3Jod5m40U=;
+        b=IjyYiBzCoPViTPqjF2RwO8dzUboCExglbQgULhaijAHsTGFMDwkhxKm+dsmHJ9JALS
+         VvDzfUrep+tXWIZ7EzL3iKr3z6WCxtvJwCCk8enn9zViDXk2r/hs5SOyvQWCGT783nv6
+         PrR0yJUn1eI54zHs/cfB76fnYcsNL9jGCa5lwLAsx31lQhKeLaBHhugAznhcEihnKmou
+         9gdTrgURVYoO4Kbq2gbi3gtVj1rxpq+ozMHAsckC9NrJNpVKqPee7DYu3A+dAkezf+ZL
+         VO6c8RvlbxKzXeGupj9jOgGXhbd6uSlHkPv09eOPYsfgCdD6atRnLTutI3sNeVCxDyCH
+         ElZQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776519071; x=1777123871; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oPxDtIL/dHAuVmHL3LN6nRPtuUfUzQdagiPbu8rpFsA=;
+        b=nqe4POKP7hoaHZ8oWFfDPaz142h+NbFtqH1qbrCD9UaeVjceH3DFvvFVb0SZLddFRu
+         tdJMv88aj3YnsKkhQg3VuZdHxMbQtDoEhjFy0wGp2Wr3pmxKM6iMX244fjXew+BHThLF
+         4GUQOycULtcyXDWRi8XtMUYQ3FyS1nx4/old23+QyBAB1lkd3lpRrNYyTcSD845kYrcP
+         SmEEPpWr1NiX+ypuC9YRqKQwxE9D5+QTLF78WVcZyB4834e0X6Z3eWcDLOP0op6JR+jK
+         Dg1VOSnAPK9k/KACbDawDVpVIQOSyWXTJkB6kGLN2UzJ5B0GWcLPOYKS8/atD68RQSzb
+         b+mA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776519071; x=1777123871;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=oPxDtIL/dHAuVmHL3LN6nRPtuUfUzQdagiPbu8rpFsA=;
+        b=Lp5t9xdQmJOnxuUhPhv4evrxRjOJ7Dg4LofBubpL1BPihf49iLaxRqoddGG6c/mqRY
+         WiHYuKMTtAx/EtnsC2sgLj/mtymudcEGCvvn7kF5y4z2/1O7TDeMsvvbZPGmCqqoELAN
+         L02fLn4nFy3tWhCutpWagNCSFhAYyQxeair/4Jp9ahze3yTWam9+j5iqOFNFjT1bWFE4
+         L56Zd6N68diVxdEYThvW/ZWHGkzILxvOR70YSKnzeF7/5/9N37Qr8hy46QBHY7civRp+
+         Z3VfbdR8mZGu/BTgZhSKIBeC11E0P5A4iRKjT0i8Kp8tsymX8rHa5Xp9FvAhbdWQUN23
+         ruIw==
+X-Forwarded-Encrypted: i=1; AFNElJ8k0F3lMYBlc31Q9N+pXgVOH8wB7Sd7SnNcYd0eeZCvOfloBfmZMEGplvMm529ZKYIrgcLT8ZajvULErHPws40=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxr2R2qRwgy/CdodRgM1OjBxo/MkVsCAXi/zlGb5Uw0E8TvwBdt
+	2hQttWdzO7MACLAuZAU6+WpCzUMfJMSAGBK1azAh6SMCSyxgmi2DXSgHkPhAZ7g7GvpShz9gtRx
+	0wfpVLasK0Z420YF6BibWhC7+BYgOD9M=
+X-Gm-Gg: AeBDieugRBrnolKya5dgjm1x9N3UCvMiVoTX18nwMnBj7pFGX+UOLGn+3kZ7Xw+LTPy
+	EOczAlQBBbmGjk4OxfNTOUT7OkGWwxOukPc4tSaqSCfjndhZAT7BgO25D8YPSEAanAZ7gOq7TfF
+	A7/UEUE953lGAb0OWY91UuaFi2sJxhuGoAOR4cfta28ZI+SkVNSf22Dw6z85VjmxvIIY7TChOVm
+	55xXb0XsZm93WYEhN8IOKp/KOmv4UI6yRciahzY0hk/W9Rf1trR/qgfNz1ZO6Y7MwUev7+wi4H8
+	96lzdbhbJCW3OVT4kZ9j
+X-Received: by 2002:a05:600c:c090:b0:488:c744:49b with SMTP id
+ 5b1f17b1804b1-488fb74a53dmr69112185e9.7.1776519070984; Sat, 18 Apr 2026
+ 06:31:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260418041633.691435-1-jt26wzz@gmail.com> <20260418041633.691435-2-jt26wzz@gmail.com>
+ <CANn89iJOfDB+5oORjWPbP7Z1SyqUhMzVR8u8i+8P8MPDgg_EGA@mail.gmail.com>
+In-Reply-To: <CANn89iJOfDB+5oORjWPbP7Z1SyqUhMzVR8u8i+8P8MPDgg_EGA@mail.gmail.com>
+From: =?UTF-8?B?5LiK5Yu+5ouz?= <jt26wzz@gmail.com>
+Date: Sat, 18 Apr 2026 21:30:58 +0800
+X-Gm-Features: AQROBzC_Q-GZ8-zgpzaaVdMpWl_DnGJZTBYhOtWPKNJNKNL5h8rrfVmdaVjYoyo
+Message-ID: <CALgi0XnEePV0WukxhkYr5-anFRTAQFMEGKOGX7pHa-g+56O37w@mail.gmail.com>
+Subject: Re: [PATCH net 1/2] tcp: call sk_data_ready() after listener migration
+To: Eric Dumazet <edumazet@google.com>
+Cc: netdev@vger.kernel.org, ncardwell@google.com, kuniyu@google.com, 
+	davem@davemloft.net, dsahern@kernel.org, kuba@kernel.org, pabeni@redhat.com, 
+	horms@kernel.org, shuah@kernel.org, tamird@kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+Thanks Eric, you're right.
 
-All the tests that use HugeTLB can detect and setup HugeTLB pages on
-their own.
+After inet_csk_reqsk_queue_add() succeeds, the ref acquired in
+reuseport_migrate_sock() is effectively transferred to
+nreq->rsk_listener. Another CPU can then dequeue nreq (via
+accept() or listener shutdown), hit reqsk_put(), and drop that
+listener ref.
 
-Drop detection and setup of HugeTLB from run_vmtests.sh.
+Since listeners are SOCK_RCU_FREE, the post-queue_add()
+dereferences of nsk should be under rcu_read_lock()/
+rcu_read_unlock(), which also covers the existing sock_net(nsk)
+access in that path.
 
-Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
----
- tools/testing/selftests/mm/run_vmtests.sh | 128 ++--------------------
- 1 file changed, 9 insertions(+), 119 deletions(-)
+I also checked reqsk_timer_handler(): reqsk_queue_migrated()
+there is only accounting, and once nreq becomes visible via
+inet_ehash_insert(), the handler no longer appears to
+dereference nsk.
 
-diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-index b42d19036182..7e0c379e7af4 100755
---- a/tools/testing/selftests/mm/run_vmtests.sh
-+++ b/tools/testing/selftests/mm/run_vmtests.sh
-@@ -157,60 +157,6 @@ run_gup_matrix() {
-     done
- }
- 
--# get huge pagesize and freepages from /proc/meminfo
--while read -r name size unit; do
--	if [ "$name" = "HugePages_Free:" ]; then
--		freepgs="$size"
--	fi
--	if [ "$name" = "Hugepagesize:" ]; then
--		hpgsize_KB="$size"
--	fi
--done < /proc/meminfo
--
--# Simple hugetlbfs tests have a hardcoded minimum requirement of
--# huge pages totaling 256MB (262144KB) in size.  The userfaultfd
--# hugetlb test requires a minimum of 2 * nr_cpus huge pages.  Take
--# both of these requirements into account and attempt to increase
--# number of huge pages available.
--nr_cpus=$(nproc)
--uffd_min_KB=$((hpgsize_KB * nr_cpus * 2))
--hugetlb_min_KB=$((256 * 1024))
--if [[ $uffd_min_KB -gt $hugetlb_min_KB ]]; then
--	needmem_KB=$uffd_min_KB
--else
--	needmem_KB=$hugetlb_min_KB
--fi
--
--# set proper nr_hugepages
--if [ -n "$freepgs" ] && [ -n "$hpgsize_KB" ]; then
--	orig_nr_hugepgs=$(cat /proc/sys/vm/nr_hugepages)
--	needpgs=$((needmem_KB / hpgsize_KB))
--	tries=2
--	while [ "$tries" -gt 0 ] && [ "$freepgs" -lt "$needpgs" ]; do
--		lackpgs=$((needpgs - freepgs))
--		echo 3 > /proc/sys/vm/drop_caches
--		if ! echo $((lackpgs + orig_nr_hugepgs)) > /proc/sys/vm/nr_hugepages; then
--			echo "Please run this test as root"
--			exit $ksft_skip
--		fi
--		while read -r name size unit; do
--			if [ "$name" = "HugePages_Free:" ]; then
--				freepgs=$size
--			fi
--		done < /proc/meminfo
--		tries=$((tries - 1))
--	done
--	nr_hugepgs=$(cat /proc/sys/vm/nr_hugepages)
--	if [ "$freepgs" -lt "$needpgs" ]; then
--		printf "Not enough huge pages available (%d < %d)\n" \
--		       "$freepgs" "$needpgs"
--	fi
--	HAVE_HUGEPAGES=1
--else
--	echo "no hugetlbfs support in kernel?"
--	HAVE_HUGEPAGES=0
--fi
--
- # filter 64bit architectures
- ARCH64STR="arm64 mips64 parisc64 ppc64 ppc64le riscv64 s390x sparc64 x86_64"
- if [ -z "$ARCH" ]; then
-@@ -283,29 +229,13 @@ run_test() {
- echo "TAP version 13" | tap_output
- 
- CATEGORY="hugetlb" run_test ./hugetlb-mmap
--
--shmmax=$(cat /proc/sys/kernel/shmmax)
--shmall=$(cat /proc/sys/kernel/shmall)
--echo 268435456 > /proc/sys/kernel/shmmax
--echo 4194304 > /proc/sys/kernel/shmall
- CATEGORY="hugetlb" run_test ./hugetlb-shm
--echo "$shmmax" > /proc/sys/kernel/shmmax
--echo "$shmall" > /proc/sys/kernel/shmall
--
- CATEGORY="hugetlb" run_test ./hugetlb-mremap
- CATEGORY="hugetlb" run_test ./hugetlb-vmemmap
- CATEGORY="hugetlb" run_test ./hugetlb-madvise
- CATEGORY="hugetlb" run_test ./hugetlb_dio
--
--if [ "${HAVE_HUGEPAGES}" = "1" ]; then
--	nr_hugepages_tmp=$(cat /proc/sys/vm/nr_hugepages)
--	# For this test, we need one and just one huge page
--	echo 1 > /proc/sys/vm/nr_hugepages
--	CATEGORY="hugetlb" run_test ./hugetlb_fault_after_madv
--	CATEGORY="hugetlb" run_test ./hugetlb_madv_vs_map
--	# Restore the previous number of huge pages, since further tests rely on it
--	echo "$nr_hugepages_tmp" > /proc/sys/vm/nr_hugepages
--fi
-+CATEGORY="hugetlb" run_test ./hugetlb_fault_after_madv
-+CATEGORY="hugetlb" run_test ./hugetlb_madv_vs_map
- 
- if test_selected "hugetlb"; then
- 	echo "NOTE: These hugetlb tests provide minimal coverage.  Use"	  | tap_prefix
-@@ -332,44 +262,12 @@ CATEGORY="gup_test" run_test ./gup_longterm
- CATEGORY="userfaultfd" run_test ./uffd-unit-tests
- uffd_stress_bin=./uffd-stress
- CATEGORY="userfaultfd" run_test ${uffd_stress_bin} anon 20 16
--# Hugetlb tests require source and destination huge pages. Pass in almost half
--# the size of the free pages we have, which is used for *each*. An adjustment
--# of (nr_parallel - 1) is done (see nr_parallel in uffd-stress.c) to have some
--# extra hugepages - this is done to prevent the test from failing by racily
--# reserving more hugepages than strictly required.
--# uffd-stress expects a region expressed in MiB, so we adjust
--# half_ufd_size_MB accordingly.
- adjustment=$(( (31 < (nr_cpus - 1)) ? 31 : (nr_cpus - 1) ))
--half_ufd_size_MB=$((((freepgs - adjustment) * hpgsize_KB) / 1024 / 2))
--CATEGORY="userfaultfd" run_test ${uffd_stress_bin} hugetlb "$half_ufd_size_MB" 32
--CATEGORY="userfaultfd" run_test ${uffd_stress_bin} hugetlb-private "$half_ufd_size_MB" 32
-+CATEGORY="userfaultfd" run_test ${uffd_stress_bin} hugetlb 128 32
-+CATEGORY="userfaultfd" run_test ${uffd_stress_bin} hugetlb-private 128 32
- CATEGORY="userfaultfd" run_test ${uffd_stress_bin} shmem 20 16
- CATEGORY="userfaultfd" run_test ${uffd_stress_bin} shmem-private 20 16
--# uffd-wp-mremap requires at least one page of each size.
--have_all_size_hugepgs=true
--declare -A nr_size_hugepgs
--for f in /sys/kernel/mm/hugepages/**/nr_hugepages; do
--	old=$(cat $f)
--	nr_size_hugepgs["$f"]="$old"
--	if [ "$old" == 0 ]; then
--		echo 1 > "$f"
--	fi
--	if [ $(cat "$f") == 0 ]; then
--		have_all_size_hugepgs=false
--		break
--	fi
--done
--if $have_all_size_hugepgs; then
--	CATEGORY="userfaultfd" run_test ./uffd-wp-mremap
--else
--	echo "# SKIP ./uffd-wp-mremap"
--fi
--
--#cleanup
--for f in "${!nr_size_hugepgs[@]}"; do
--	echo "${nr_size_hugepgs["$f"]}" > "$f"
--done
--echo "$nr_hugepgs" > /proc/sys/vm/nr_hugepages
-+CATEGORY="userfaultfd" run_test ./uffd-wp-mremap
- 
- CATEGORY="compaction" run_test ./compaction_test
- 
-@@ -393,14 +291,11 @@ CATEGORY="mremap" run_test ./mremap_test
- CATEGORY="hugetlb" run_test ./thuge-gen
- CATEGORY="hugetlb" run_test ./charge_reserved_hugetlb.sh -cgroup-v2
- CATEGORY="hugetlb" run_test ./hugetlb_reparenting_test.sh -cgroup-v2
-+
- if $RUN_DESTRUCTIVE; then
--nr_hugepages_tmp=$(cat /proc/sys/vm/nr_hugepages)
--enable_soft_offline=$(cat /proc/sys/vm/enable_soft_offline)
--echo 8 > /proc/sys/vm/nr_hugepages
--CATEGORY="hugetlb" run_test ./hugetlb-soft-offline
--echo "$nr_hugepages_tmp" > /proc/sys/vm/nr_hugepages
--echo "$enable_soft_offline" > /proc/sys/vm/enable_soft_offline
--CATEGORY="hugetlb" run_test ./hugetlb-read-hwpoison
-+	CATEGORY="hugetlb" run_test ./hugetlb-soft-offline
-+	echo "$enable_soft_offline" > /proc/sys/vm/enable_soft_offline
-+	CATEGORY="hugetlb" run_test ./hugetlb-read-hwpoison
- fi
- 
- if [ $VADDR64 -ne 0 ]; then
-@@ -464,7 +359,6 @@ if [ -x ./protection_keys_64 ]
- then
- 	CATEGORY="pkey" run_test ./protection_keys_64
- fi
--echo "$nr_hugepgs" > /proc/sys/vm/nr_hugepages
- 
- if [ -x ./soft-dirty ]
- then
-@@ -545,10 +439,6 @@ if [ -n "${LOADED_MOD}" ]; then
- 	modprobe -r hwpoison_inject > /dev/null 2>&1
- fi
- 
--if [ "${HAVE_HUGEPAGES}" = 1 ]; then
--	echo "$orig_nr_hugepgs" > /proc/sys/vm/nr_hugepages
--fi
--
- echo "SUMMARY: PASS=${count_pass} SKIP=${count_skip} FAIL=${count_fail}" | tap_prefix
- echo "1..${count_total}" | tap_output
- 
--- 
-2.53.0
+I'll fold this into v2.
 
+
+Eric Dumazet <edumazet@google.com> =E4=BA=8E2026=E5=B9=B44=E6=9C=8818=E6=97=
+=A5=E5=91=A8=E5=85=AD 14:02=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Fri, Apr 17, 2026 at 9:17=E2=80=AFPM Zhenzhong Wu <jt26wzz@gmail.com> =
+wrote:
+> >
+> > When inet_csk_listen_stop() migrates an established child socket from
+> > a closing listener to another socket in the same SO_REUSEPORT group,
+> > the target listener gets a new accept-queue entry via
+> > inet_csk_reqsk_queue_add(), but that path never notifies the target
+> > listener's waiters.
+> >
+> > As a result, a nonblocking accept() still succeeds because it checks
+> > the accept queue directly, but waiters that sleep for listener
+> > readiness can remain asleep until another connection generates a
+> > wakeup. This affects poll()/epoll_wait()-based waiters, and can also
+> > leave a blocking accept() asleep after migration even though the
+> > child is already in the target listener's accept queue.
+> >
+> > This was observed in a local test where listener A completed the
+> > handshake, queued the child, and was closed before userspace called
+> > accept(). The child was migrated to listener B, but listener B never
+> > received a wakeup for the migrated accept-queue entry.
+> >
+> > Call READ_ONCE(nsk->sk_data_ready)(nsk) after a successful migration
+> > in inet_csk_listen_stop().
+> >
+> > The reqsk_timer_handler() path does not need the same change:
+> > half-open requests only become readable to userspace when the final
+> > ACK completes the handshake, and tcp_child_process() already wakes
+> > the listener in that case.
+> >
+> > Fixes: 54b92e841937 ("tcp: Migrate TCP_ESTABLISHED/TCP_SYN_RECV sockets=
+ in accept queues.")
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Zhenzhong Wu <jt26wzz@gmail.com>
+> > ---
+> >  net/ipv4/inet_connection_sock.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/net/ipv4/inet_connection_sock.c b/net/ipv4/inet_connection=
+_sock.c
+> > index 4ac3ae1bc..da1ce082f 100644
+> > --- a/net/ipv4/inet_connection_sock.c
+> > +++ b/net/ipv4/inet_connection_sock.c
+> > @@ -1483,6 +1483,7 @@ void inet_csk_listen_stop(struct sock *sk)
+> >                                         __NET_INC_STATS(sock_net(nsk),
+> >                                                         LINUX_MIB_TCPMI=
+GRATEREQSUCCESS);
+> >                                         reqsk_migrate_reset(req);
+> > +                                       READ_ONCE(nsk->sk_data_ready)(n=
+sk);
+>
+> I think this is adding a potential UAF (Use Afte Free).
+> @nsk might have been freed already by another thread/cpu.
+> Note the existing code already has similar issues.
+>
+> Untested patch:
+>
+> diff --git a/net/ipv4/inet_connection_sock.c b/net/ipv4/inet_connection_s=
+ock.c
+> index 4ac3ae1bc1afc3a39f2790e39b4dda877dc3272b..287b6e01c4f71bfec3dd2a708=
+f316224d9eb4a64
+> 100644
+> --- a/net/ipv4/inet_connection_sock.c
+> +++ b/net/ipv4/inet_connection_sock.c
+> @@ -1479,6 +1479,7 @@ void inet_csk_listen_stop(struct sock *sk)
+>                         if (nreq) {
+>                                 refcount_set(&nreq->rsk_refcnt, 1);
+>
+> +                               rcu_read_lock();
+>                                 if (inet_csk_reqsk_queue_add(nsk,
+> nreq, child)) {
+>                                         __NET_INC_STATS(sock_net(nsk),
+>
+> LINUX_MIB_TCPMIGRATEREQSUCCESS);
+> @@ -1489,7 +1490,7 @@ void inet_csk_listen_stop(struct sock *sk)
+>                                         reqsk_migrate_reset(nreq);
+>                                         __reqsk_free(nreq);
+>                                 }
+> -
+> +                               rcu_read_unlock();
+>                                 /* inet_csk_reqsk_queue_add() has already
+>                                  * called inet_child_forget() on failure =
+case.
+>                                  */
