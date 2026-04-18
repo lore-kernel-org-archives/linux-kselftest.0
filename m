@@ -1,207 +1,159 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from CH5PR02CU005.outbound.protection.outlook.com (mail-northcentralusazon11012017.outbound.protection.outlook.com [40.107.200.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D929237CD48
-	for <linux-kselftest@vger.kernel.org>; Sat, 18 Apr 2026 13:31:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 596C5397694;
+	Sat, 18 Apr 2026 14:50:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.200.17
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776519074; cv=pass; b=qodJ9hYxi6c2K4y0d/4InvKFd7n0kKPhqZxFZm6na5qnJ4P07ezq/i8HxJCtwSX7z9BCRTIQvjIBiflXumc0qaM9vye+nqNGc3bZqXLqnCtPxmCX+wXypeUWQuxnWmkufJ7Fi8961EFU22/+Fk2jR6NcYOMRNf5VAZ5+OlKnfDg=
+	t=1776523814; cv=fail; b=QBnGfnALCYIgfonAgKEnhH3JC2KNGSK6DDZQcHE9u0VFOIEIvN3dNKbIPRuxJZ82KKbbkrmBd4SElS22SyYKEQ6YFHbmkS0D/dKsDjc2Xj9F23kfHG4jyqb1uziTVmdR0yDUr7lwL8vwDi0dvnKpqqmHwSPTkL7SHngevf0Kg8c=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776519074; c=relaxed/simple;
-	bh=bCwZZOAmrkF68yCBfWzlCLDNALt2LE2uQMq0wLsUN6Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=aAWMQFm2VqVC/pkTteGgtmO5wQPclj+1NX4lwNz335546l1uCOCotJHNen2h8GoYOfYJvWA6TkGF5arhJ5c1Dxs/cYf20TB+fBADs2ByJmijjj1RO4oFywscgZ0VzbxZkgwsuOeSnQf6lPqAapodF82SUA9mb9wsusDSqT7JCmg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nqe4POKP; arc=pass smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1776523814; c=relaxed/simple;
+	bh=4Oac5h/PAct5oCCBWs7NTE4sgjwwr4Vo071Ohc+0SEY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=TmtDP3OKY+JjzUy6x52ljKaRJMkhY/J4DpUqQ+078k0CT0DHMzvoa18u01elUG6XZ9Nk4LH+tFrw/edsLpMB7KRc6TC7JHMnlYESCIpfFHevUOevzipsNOyD93KnYCJ8kLS0VTG4AJsY1HVBjCMyx7FJ8ouZx+Xxn4KBV06WgGk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=GMzJ10aS; arc=fail smtp.client-ip=40.107.200.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nqe4POKP"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-488b0046078so14925155e9.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 18 Apr 2026 06:31:12 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776519071; cv=none;
-        d=google.com; s=arc-20240605;
-        b=SblPBg9SVubfCYkfakWvU2IJ0hPMXQhmopYOduMooNrtuhpp63Kt9/OWRcodvRSmFb
-         D4ekECT+I3Q8tGrjeATv8M0+K+ub4YE2DjTw6N8KyI4g0tm677yEp8G7iulia+EoGa7n
-         52Ad/9Yhpk8PV+FQjM9lMouSWZFm0mKw9ODI/SpxHBoMRDQFsB5HH74VO75P9ZAs15It
-         Xarq74PPW+GC9R5jRPI8Z4uEBgc61DObh4N4TZr2tTJi7BqgqcLsojjb8WnY4m7s0FnD
-         iu3k+z+CqOhh3CfuWNxqGd2GK3nlkw64nmYiBT0mMRgd/L3/orx3viKG4CXvVzPtJOex
-         h1tQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=oPxDtIL/dHAuVmHL3LN6nRPtuUfUzQdagiPbu8rpFsA=;
-        fh=F9JheRIoDgbPFDpDa6QYp+ZAdYg7dSZ/7j3Jod5m40U=;
-        b=IjyYiBzCoPViTPqjF2RwO8dzUboCExglbQgULhaijAHsTGFMDwkhxKm+dsmHJ9JALS
-         VvDzfUrep+tXWIZ7EzL3iKr3z6WCxtvJwCCk8enn9zViDXk2r/hs5SOyvQWCGT783nv6
-         PrR0yJUn1eI54zHs/cfB76fnYcsNL9jGCa5lwLAsx31lQhKeLaBHhugAznhcEihnKmou
-         9gdTrgURVYoO4Kbq2gbi3gtVj1rxpq+ozMHAsckC9NrJNpVKqPee7DYu3A+dAkezf+ZL
-         VO6c8RvlbxKzXeGupj9jOgGXhbd6uSlHkPv09eOPYsfgCdD6atRnLTutI3sNeVCxDyCH
-         ElZQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776519071; x=1777123871; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oPxDtIL/dHAuVmHL3LN6nRPtuUfUzQdagiPbu8rpFsA=;
-        b=nqe4POKP7hoaHZ8oWFfDPaz142h+NbFtqH1qbrCD9UaeVjceH3DFvvFVb0SZLddFRu
-         tdJMv88aj3YnsKkhQg3VuZdHxMbQtDoEhjFy0wGp2Wr3pmxKM6iMX244fjXew+BHThLF
-         4GUQOycULtcyXDWRi8XtMUYQ3FyS1nx4/old23+QyBAB1lkd3lpRrNYyTcSD845kYrcP
-         SmEEPpWr1NiX+ypuC9YRqKQwxE9D5+QTLF78WVcZyB4834e0X6Z3eWcDLOP0op6JR+jK
-         Dg1VOSnAPK9k/KACbDawDVpVIQOSyWXTJkB6kGLN2UzJ5B0GWcLPOYKS8/atD68RQSzb
-         b+mA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776519071; x=1777123871;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=oPxDtIL/dHAuVmHL3LN6nRPtuUfUzQdagiPbu8rpFsA=;
-        b=Lp5t9xdQmJOnxuUhPhv4evrxRjOJ7Dg4LofBubpL1BPihf49iLaxRqoddGG6c/mqRY
-         WiHYuKMTtAx/EtnsC2sgLj/mtymudcEGCvvn7kF5y4z2/1O7TDeMsvvbZPGmCqqoELAN
-         L02fLn4nFy3tWhCutpWagNCSFhAYyQxeair/4Jp9ahze3yTWam9+j5iqOFNFjT1bWFE4
-         L56Zd6N68diVxdEYThvW/ZWHGkzILxvOR70YSKnzeF7/5/9N37Qr8hy46QBHY7civRp+
-         Z3VfbdR8mZGu/BTgZhSKIBeC11E0P5A4iRKjT0i8Kp8tsymX8rHa5Xp9FvAhbdWQUN23
-         ruIw==
-X-Forwarded-Encrypted: i=1; AFNElJ8k0F3lMYBlc31Q9N+pXgVOH8wB7Sd7SnNcYd0eeZCvOfloBfmZMEGplvMm529ZKYIrgcLT8ZajvULErHPws40=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxr2R2qRwgy/CdodRgM1OjBxo/MkVsCAXi/zlGb5Uw0E8TvwBdt
-	2hQttWdzO7MACLAuZAU6+WpCzUMfJMSAGBK1azAh6SMCSyxgmi2DXSgHkPhAZ7g7GvpShz9gtRx
-	0wfpVLasK0Z420YF6BibWhC7+BYgOD9M=
-X-Gm-Gg: AeBDieugRBrnolKya5dgjm1x9N3UCvMiVoTX18nwMnBj7pFGX+UOLGn+3kZ7Xw+LTPy
-	EOczAlQBBbmGjk4OxfNTOUT7OkGWwxOukPc4tSaqSCfjndhZAT7BgO25D8YPSEAanAZ7gOq7TfF
-	A7/UEUE953lGAb0OWY91UuaFi2sJxhuGoAOR4cfta28ZI+SkVNSf22Dw6z85VjmxvIIY7TChOVm
-	55xXb0XsZm93WYEhN8IOKp/KOmv4UI6yRciahzY0hk/W9Rf1trR/qgfNz1ZO6Y7MwUev7+wi4H8
-	96lzdbhbJCW3OVT4kZ9j
-X-Received: by 2002:a05:600c:c090:b0:488:c744:49b with SMTP id
- 5b1f17b1804b1-488fb74a53dmr69112185e9.7.1776519070984; Sat, 18 Apr 2026
- 06:31:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="GMzJ10aS"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=wE4A7c38DL5kyDVOG2z26ayX9dEtKJjkyx01lmjBJQQleR3W/S3vbi84RLumoACl4ZZMYMUcfF2uyAd/CwHYBqlpGqABx9DWHUS+Nu3TjhXtxNZtpwmS88TzTp8lzYQ+k+3eLUtJK39+X1YBtx3rJTKmBGKI2roRziDB/ZMBrbwYv+4g/oRpEPWGjzl2iPu6hKpGRMo6w0eGBZ2HJUqiCesy7bKmf+Iifi2AvPnQIgi7+z4NQ7kocq5TY85VHEfZb6d1dgBLCkPiCt1pnYxzZ8uduDxF0UKszkJ7prlPo2qIfNbEAjRE1ojvp93Z4zXpXZ+9NJO0Q7n0Y0VFGEwzGQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PEQ6fs7rjRjy+MzhfZL8CyKNQAnXSE3ijfvDxUQpoIQ=;
+ b=scRe17n11b3OTkXNA2zFo2CzFjlhxEU1wLwmo9Rv0rzWg/D7jXHix53p3Sq1/aHMCUljGhoEJBX4t3hd+i2FZvrNRyYV80jDiuTzVdNtjfJNy5Y9bwweNF5pjBg0w3EojAn6wLWq+aOd1x0FZSbvD4lpDycVkd4Wz3C5DRldsymVYMN3HmhwBG1pAReXf/dape58YefgNVTNpskqAJKYflPBbjhmWB43SFtU34AXTcS5b5o7183WSbjVCXQ8LDZw3MCG1eoBMG7gqWC49jPUzWF6caAEsN1RqmTEeu5CC7Yv8jpzeffFFUHMPkL/B8pdgxHWApKCH/dl5M3Vgo9weA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PEQ6fs7rjRjy+MzhfZL8CyKNQAnXSE3ijfvDxUQpoIQ=;
+ b=GMzJ10aSaidZslxF8lp/fqktHWiPj108mzVn9kL1Fn0YvgzhwiineK4DDowLbeEUbNyeiGCp3HjX+xt8gH9sEa79lzCKgPB/SVnNWboMislpuW+eqR205luruFkl6JDbsbq8CLbt+Uhmq1IiL7SQYJ6Maykm4VRaykf8MPn6SlIrQcnrWD6F4Yr7vp12VkLORyGWDBlZd//RQT1K8tDcXdiLNI6Es4hixmNr9fdUV4yudROVdqaV/qv3D4xLeqwNaLAutvisfygrUVJkNd7+nEIuWj+sqydSgFo0fMLZq5Az1+B8uc1ppXWsMPDdyDNn3G7BAFy3kqHDOn9XLw2hog==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from SA3PR12MB7901.namprd12.prod.outlook.com (2603:10b6:806:306::12)
+ by LV2PR12MB6015.namprd12.prod.outlook.com (2603:10b6:408:14f::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9818.25; Sat, 18 Apr
+ 2026 14:50:08 +0000
+Received: from SA3PR12MB7901.namprd12.prod.outlook.com
+ ([fe80::6f7f:5844:f0f7:acc2]) by SA3PR12MB7901.namprd12.prod.outlook.com
+ ([fe80::6f7f:5844:f0f7:acc2%6]) with mapi id 15.20.9846.007; Sat, 18 Apr 2026
+ 14:50:08 +0000
+Date: Sat, 18 Apr 2026 17:49:57 +0300
+From: Ido Schimmel <idosch@nvidia.com>
+To: Ujjal Roy <royujjal@gmail.com>
+Cc: "David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	David Ahern <dsahern@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Andy Roulin <aroulin@nvidia.com>, Yong Wang <yongwang@nvidia.com>,
+	Petr Machata <petrm@nvidia.com>, Ujjal Roy <ujjal@alumnux.com>,
+	bridge@lists.linux.dev, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v4 5/5] selftests: net: bridge: add MRC and QQIC
+ field encoding tests
+Message-ID: <20260418144957.GA798825@shredder>
+References: <20260412111047.1326-1-royujjal@gmail.com>
+ <20260412111047.1326-6-royujjal@gmail.com>
+ <20260413084752.GD209364@shredder>
+ <CAE2MWkmvdAVMBvJ9xKgEzjJZ010=oY_ZoG==FBjHEisHEMrS8Q@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAE2MWkmvdAVMBvJ9xKgEzjJZ010=oY_ZoG==FBjHEisHEMrS8Q@mail.gmail.com>
+X-ClientProxiedBy: FR4P281CA0373.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:f8::20) To SA3PR12MB7901.namprd12.prod.outlook.com
+ (2603:10b6:806:306::12)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260418041633.691435-1-jt26wzz@gmail.com> <20260418041633.691435-2-jt26wzz@gmail.com>
- <CANn89iJOfDB+5oORjWPbP7Z1SyqUhMzVR8u8i+8P8MPDgg_EGA@mail.gmail.com>
-In-Reply-To: <CANn89iJOfDB+5oORjWPbP7Z1SyqUhMzVR8u8i+8P8MPDgg_EGA@mail.gmail.com>
-From: =?UTF-8?B?5LiK5Yu+5ouz?= <jt26wzz@gmail.com>
-Date: Sat, 18 Apr 2026 21:30:58 +0800
-X-Gm-Features: AQROBzC_Q-GZ8-zgpzaaVdMpWl_DnGJZTBYhOtWPKNJNKNL5h8rrfVmdaVjYoyo
-Message-ID: <CALgi0XnEePV0WukxhkYr5-anFRTAQFMEGKOGX7pHa-g+56O37w@mail.gmail.com>
-Subject: Re: [PATCH net 1/2] tcp: call sk_data_ready() after listener migration
-To: Eric Dumazet <edumazet@google.com>
-Cc: netdev@vger.kernel.org, ncardwell@google.com, kuniyu@google.com, 
-	davem@davemloft.net, dsahern@kernel.org, kuba@kernel.org, pabeni@redhat.com, 
-	horms@kernel.org, shuah@kernel.org, tamird@kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA3PR12MB7901:EE_|LV2PR12MB6015:EE_
+X-MS-Office365-Filtering-Correlation-Id: eac95ba7-8321-4ebf-a39b-08de9d59c8c4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|376014|366016|1800799024|56012099003|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	dMzCaVP/hLC4g51Q8LTzW6rzpYEaUOhRaNbqy15Dx+DFwt4znhNLP/gk2fQDW2toJrgbcDQEZesRLO6tRzd4kly6UDqDMAtPk64oV+k5qkxTPdXHGvmbV11r+DGirKlTf7zqGNadZw+CMwHsTl8I5STnuub5pdfE71uOLUj+IYmuaFNMphjqTMjwz8e6Bi+S18fbaT5NSis6gvEVAuduTPFmrFKKXfsbZgzJYsctMJnQqr5qQ4F6owA1ywpUDqat3LO1aaN/pJx54NpVoiK0nUsyOdYYLxu8v8MxPMiStVPdy8fg5AEnpjlwiQj/93dvHGtgfm7ELuHjIl2FBO2w/ZhV8QYpznlE/06nNE/b7bswVv1doKiqu+PuekhNPNDLA02i8Lhd4Bb/kkYeWa9QPYQvEX9+a89oMwfUXbfoTs2q2N6U2wRkDr7qRkxRWNofsRHoxL1CqAp7u/+7HiYxLN71C8oTSogUxLlnuOBJ9vDcSZHs4tbN4n+IEQCb1IMMJRnvKQWCasHeQvy2KO3E+Mj9Z7ah8fU2VCE+Wg5YyuC/yATZwML8xZz1XV1Y/DwGPwaEI8SEDa+1lxb7ymV9KGrcjH+R4chCF5UhxhqQ5fqGbxiI4c7LdwNn/G/T0h+m0BUSEzurBHtJJYhMCNb0V8q/hgwz/uqAckEMavZGr9Pr1ItCU8ERxdwL10iXcfmeuale0kTdBVWv2t0+tOn11COygvTQ+62h8nMwJyo+bzA=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA3PR12MB7901.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024)(56012099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?cXM4OGpGbkI2Si94VEdwbnhKTkZiTWZzSlUrWTk2cGpta0gzVlRUcnNoSzBo?=
+ =?utf-8?B?TlRqc3JUc1YrMjdPcm1XRUJkeXlxcFY5VkhHNGNUcmdtdVcyb3NFWWx4a3NI?=
+ =?utf-8?B?MUR6RWRpVlMwUmRpanVOejR3MitVTGZ3RUVrTUo5L0I3Z0l0eXVycGYzWXJh?=
+ =?utf-8?B?aDBSTTVhMjNoOUJ0czFJVURlNnVMajh0SEZLQXg2VDJqandYeDdrbWcvaTM5?=
+ =?utf-8?B?UlFQNUJPSTRCemxYNW04VGR1cGZKOERNb0ZwRDYyWm53QjZlOVY3MFlERzVh?=
+ =?utf-8?B?TkJWazVyeGZ0dVRuRDdqNnVOWWRnTmt0OEwySm9iSXFHdEw1cTkyWUE3L1pt?=
+ =?utf-8?B?QkVYVzRDRlNYU0tvdkE0Tm96SmYxaTJZV2Znd085UUtrY1NheVhHZHVLRVIz?=
+ =?utf-8?B?M05hK1lHTGtkWnQ1eS85Tm5UUG5zTFhmMXp2bUZiY1RPZHFneVZRTEx1b3k0?=
+ =?utf-8?B?KzR6WXk1TkNheXB3Q3ZZK21uYkdKWk1rNmZCMU5ZNWRNbGJaUWhXOFB3aFc0?=
+ =?utf-8?B?U2Q1bzBhNnMyOFNvRnp5Uit6WE1OWkxndkhvaTUwRFF5NkN2VnhCVEwvU2RZ?=
+ =?utf-8?B?a3pUclUzcHAvSDU2TFJPN3JMZjVDbDlpM3YyOTB1ZzVyRTVCQXdnL1FjcjIv?=
+ =?utf-8?B?VlRTTHg0WFpTV0ZGeXhvaU5sNnNrMUc2MHBsY0V3UHJXSlMvOTVFNUZYcVh2?=
+ =?utf-8?B?KytVRFhlcGM5Qk9zUXhjVEtyU1VYdzVXN2RURjFvbTJzaWdBbDZYMHFRb3hO?=
+ =?utf-8?B?Y2krTW5EbHFZRGZ2RXJ1QUxzc1RzNzhGaXVlL05idXpVbnFTelhCeWR6eTBF?=
+ =?utf-8?B?NFF3RHQxVWc4TnhML0JHandqVDVHYXZTek1uUEtpMzFEYS90MFg4VlhCQTJ0?=
+ =?utf-8?B?YXNQeFl0NVFud0NVQnZGVEFrN0lpa3kyQUxBVFkrUWRFeW1YRTFkUmhvMVEx?=
+ =?utf-8?B?UDQvQWRjMkptV2FRL3ZnRmllVVJMUzc0Sy9mRjl4Nmd5ZGNsYjRkRjZjOUxw?=
+ =?utf-8?B?bEJKT2NqKzZ3bTZQWkc1YS9Nem80aUVNZ01lRmJEdm5OUVVpRHQ5WDc4QURF?=
+ =?utf-8?B?dDhlZjVic3kvOGtxd1pTdzhjRzlWYjR4aFN0SVZlQStqTzdzZjBEUDhoR2FK?=
+ =?utf-8?B?aDBONDFwTFVpVkdBM2FlMk5mVnFTc2xCNGNVclFKV0VvTVEyUnpYU0o3L3VM?=
+ =?utf-8?B?ejB2bXljbDVMSkdaQ08vQ3cvajlJNmhvazRxV3EycmRsSzY5WFBDdzBQc3k4?=
+ =?utf-8?B?dmxsTTJqanFYa3FrbkdKQU9DY0o1RWZkcUtIaVJlUnFzTjVrcmd3VHRsNUc2?=
+ =?utf-8?B?d3B0TXVweUN2elllNEZyaTUxb2V4SDR0MUZWYVVKamV4c1M1KzFJVjUwamtN?=
+ =?utf-8?B?bkRPOHl4U2wwSDFNbno2OStLN0VPZEw1ZmM3b3NQMUtiY1RWWnhNUUswSUVZ?=
+ =?utf-8?B?bmUxQXpDTjBrUFY3VUdNTG10ZFdOQ3dKeFBFMDFVSHNTQ0Nmc0tpWkxGTXVG?=
+ =?utf-8?B?MS9NQ2RjcC9SUW8vb2FWeUZYdkZPbXV3QmlqSFZPdktUSnQ3YVViQnhyT0NO?=
+ =?utf-8?B?NmwzMmtQcEFDRFR1cW1KeWxKMWhQOW96V0FjWVhmUkwxNXg2SXEwbUJFUXlG?=
+ =?utf-8?B?MU5xUDk5U2RTU0xsWEFQdk55QkxTYTRpRnlkaS9OOVQxQVVXbndzNzB5eTlu?=
+ =?utf-8?B?VEtML1c5MEpYYmJtUHBhcDkvMFNZRkpYME5uai9QbFNJQlVHWWxVWmtzUjJl?=
+ =?utf-8?B?QngxcUlBTm5KSk8rem9wVE5SNFEwOXdYZ2srMFlnbzJVK2h6TVh6aU9OMzA1?=
+ =?utf-8?B?Tzk5K3FwckJiU1hnSEM0ejVHKzNuZERxVlFmMldFRmY3M2hucEszR2tmMmNy?=
+ =?utf-8?B?TldFVkdTS2dzaGlGVHhrSlRHd0JqQkF0ZU8zbjJJNFNkdEFucGQvYWFJZHFl?=
+ =?utf-8?B?bWFPMW56VUNUZjMycE5GUzlLUGhiajU2OWNqSHVYaVY1L0h3NVFJSE9oK0dR?=
+ =?utf-8?B?R2JkOTNxNXBjd2dzeWcxNkhzMEw0SHFGQ2NIaWFSRktQUUNBenVsZjdkMEY0?=
+ =?utf-8?B?ZXJDNXB1TEN0ZTdTK0MxRng3MEoyQkRsN1NSWkFCY2dDbkhWZzFDSUVyUWQw?=
+ =?utf-8?B?QzNGbHVMc2dHcmpFdW85U25nODhZTmdwVWpxSWJiVTl4d2hnbi92UWhnY09G?=
+ =?utf-8?B?SUV3TUYvZm10d3BaNE40Skk5Y0RodzMwMlNwL3pUWnYyNTFVaU1HTGpCMmov?=
+ =?utf-8?B?MlB1Y25lOXBPSEc5ak1xb2p2SFpOdWdpMlBuQjNWQ2l5TjZCQVVySnY1L1dV?=
+ =?utf-8?B?VG1iRGlBcFJkZDNxdUlYNlB3dThrM3RjSmVFK2M5L1ZUNVU2c3FPQT09?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: eac95ba7-8321-4ebf-a39b-08de9d59c8c4
+X-MS-Exchange-CrossTenant-AuthSource: SA3PR12MB7901.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Apr 2026 14:50:08.1874
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: eR6DEhydTaHBzaWkzhvEILD/sjyOGIusNlkU/mRKTHIiA0TDf7gdZ5cmNUyCO6AwiW3V5RdIbBHmFNFvx2yDFQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB6015
 
-Thanks Eric, you're right.
+On Fri, Apr 17, 2026 at 11:27:06AM +0530, Ujjal Roy wrote:
+> On Mon, Apr 13, 2026 at 2:18 PM Ido Schimmel <idosch@nvidia.com> wrote:
+> >
+> > See some comments below, but note that net-next is closed:
+> >
+> > https://lore.kernel.org/netdev/20260412142250.131bf997@kernel.org/
+> >
+> > So you can either wait with v5 until it is open again or post it as RFC
+> > so that we can at least review (but not merge) it while net-next is
+> > closed.
+> 
+> Let me clear the changes asked here inline, so that I will be prepared
+> with v5 until net-next is open. You can ask me to send it as RFC v5,
+> if you have doubts about inline answers.
 
-After inet_csk_reqsk_queue_add() succeeds, the ref acquired in
-reuseport_migrate_sock() is effectively transferred to
-nreq->rsk_listener. Another CPU can then dequeue nreq (via
-accept() or listener shutdown), hit reqsk_put(), and drop that
-listener ref.
+I checked the proposed changes and they look fine to me.
 
-Since listeners are SOCK_RCU_FREE, the post-queue_add()
-dereferences of nsk should be under rcu_read_lock()/
-rcu_read_unlock(), which also covers the existing sock_net(nsk)
-access in that path.
-
-I also checked reqsk_timer_handler(): reqsk_queue_migrated()
-there is only accounting, and once nreq becomes visible via
-inet_ehash_insert(), the handler no longer appears to
-dereference nsk.
-
-I'll fold this into v2.
-
-
-Eric Dumazet <edumazet@google.com> =E4=BA=8E2026=E5=B9=B44=E6=9C=8818=E6=97=
-=A5=E5=91=A8=E5=85=AD 14:02=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Fri, Apr 17, 2026 at 9:17=E2=80=AFPM Zhenzhong Wu <jt26wzz@gmail.com> =
-wrote:
-> >
-> > When inet_csk_listen_stop() migrates an established child socket from
-> > a closing listener to another socket in the same SO_REUSEPORT group,
-> > the target listener gets a new accept-queue entry via
-> > inet_csk_reqsk_queue_add(), but that path never notifies the target
-> > listener's waiters.
-> >
-> > As a result, a nonblocking accept() still succeeds because it checks
-> > the accept queue directly, but waiters that sleep for listener
-> > readiness can remain asleep until another connection generates a
-> > wakeup. This affects poll()/epoll_wait()-based waiters, and can also
-> > leave a blocking accept() asleep after migration even though the
-> > child is already in the target listener's accept queue.
-> >
-> > This was observed in a local test where listener A completed the
-> > handshake, queued the child, and was closed before userspace called
-> > accept(). The child was migrated to listener B, but listener B never
-> > received a wakeup for the migrated accept-queue entry.
-> >
-> > Call READ_ONCE(nsk->sk_data_ready)(nsk) after a successful migration
-> > in inet_csk_listen_stop().
-> >
-> > The reqsk_timer_handler() path does not need the same change:
-> > half-open requests only become readable to userspace when the final
-> > ACK completes the handshake, and tcp_child_process() already wakes
-> > the listener in that case.
-> >
-> > Fixes: 54b92e841937 ("tcp: Migrate TCP_ESTABLISHED/TCP_SYN_RECV sockets=
- in accept queues.")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Zhenzhong Wu <jt26wzz@gmail.com>
-> > ---
-> >  net/ipv4/inet_connection_sock.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/net/ipv4/inet_connection_sock.c b/net/ipv4/inet_connection=
-_sock.c
-> > index 4ac3ae1bc..da1ce082f 100644
-> > --- a/net/ipv4/inet_connection_sock.c
-> > +++ b/net/ipv4/inet_connection_sock.c
-> > @@ -1483,6 +1483,7 @@ void inet_csk_listen_stop(struct sock *sk)
-> >                                         __NET_INC_STATS(sock_net(nsk),
-> >                                                         LINUX_MIB_TCPMI=
-GRATEREQSUCCESS);
-> >                                         reqsk_migrate_reset(req);
-> > +                                       READ_ONCE(nsk->sk_data_ready)(n=
-sk);
->
-> I think this is adding a potential UAF (Use Afte Free).
-> @nsk might have been freed already by another thread/cpu.
-> Note the existing code already has similar issues.
->
-> Untested patch:
->
-> diff --git a/net/ipv4/inet_connection_sock.c b/net/ipv4/inet_connection_s=
-ock.c
-> index 4ac3ae1bc1afc3a39f2790e39b4dda877dc3272b..287b6e01c4f71bfec3dd2a708=
-f316224d9eb4a64
-> 100644
-> --- a/net/ipv4/inet_connection_sock.c
-> +++ b/net/ipv4/inet_connection_sock.c
-> @@ -1479,6 +1479,7 @@ void inet_csk_listen_stop(struct sock *sk)
->                         if (nreq) {
->                                 refcount_set(&nreq->rsk_refcnt, 1);
->
-> +                               rcu_read_lock();
->                                 if (inet_csk_reqsk_queue_add(nsk,
-> nreq, child)) {
->                                         __NET_INC_STATS(sock_net(nsk),
->
-> LINUX_MIB_TCPMIGRATEREQSUCCESS);
-> @@ -1489,7 +1490,7 @@ void inet_csk_listen_stop(struct sock *sk)
->                                         reqsk_migrate_reset(nreq);
->                                         __reqsk_free(nreq);
->                                 }
-> -
-> +                               rcu_read_unlock();
->                                 /* inet_csk_reqsk_queue_add() has already
->                                  * called inet_child_forget() on failure =
-case.
->                                  */
+Thanks
