@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 023D7355F46;
-	Sat, 18 Apr 2026 10:56:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CE7D317165;
+	Sat, 18 Apr 2026 10:56:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776509798; cv=none; b=htVu55qUUXZswUVFk3gJER1PYnLcFkiiwA/QtZEXUpSxdLvCtVpcuV+rO3YYDWC74J+pHRwnOb0ODrESejWi1+baWG/TfuuEFEX6thO5p7ZgLmi2xRXfuTxAHMX9P3L38U2jZaRiBSrsAO2YFYI/T6XdV8zs9GR6+3J0n7FhLuU=
+	t=1776509804; cv=none; b=UE999yplnt8BouVjF2b9fiID+/JAUkuZJu8Xhe7oADGlqobKJNjMmIL06911odz8DnKQ04nOe0T3rusW+ms7qevjqfX/ByxfLDTeGaYHdB2huFJEgapugVE4GJiedUES4YqhMLDe++RcPoFKmEiRj5H71sreCn8MHMgh3reLxfc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776509798; c=relaxed/simple;
-	bh=NitfBPXl8kD3vu5rR/J2HvzzLd7OiNMTutBSbiBcjN8=;
+	s=arc-20240116; t=1776509804; c=relaxed/simple;
+	bh=RPP2M4jgrgVVbnlv+9qx8Ljc6sfVvUVG+024MkBH3jY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=n0l+08uqsio37n00250CYcCFjWGtyn0xXYrOTB8mDkbhxJR3EbFbKu4U9Y/Fmk65NwAZm6jeHAJTugZ9pU9WQpc228VOA0PSR6NeGw+FgQ1HKCKlQ+8thgG/HB6kT0k2swpYXUF2E0TL9sqHtdemBe/vIRM5OqIIl0y5tIjG9Pc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f7xJe9tY; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=ig+zLmxhTSWiO7WqI3Dsj0CkLtZtJxgVRbB7zELJzQYNcNTtkWRxjkO9hxuVKPU5is6eUDKlKFlanpVzyWrY6A9UK/iB8BnchtT+ROQbAT22KGVvcmMNW9H56wxJkOExVYpZkGdjQXjOU5oLgalAuWOCJqeeAQcpTfhsvDcQC60=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BEfPSxfC; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f7xJe9tY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1DB9C2BCB9;
-	Sat, 18 Apr 2026 10:56:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BEfPSxfC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20033C19424;
+	Sat, 18 Apr 2026 10:56:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776509797;
-	bh=NitfBPXl8kD3vu5rR/J2HvzzLd7OiNMTutBSbiBcjN8=;
+	s=k20201202; t=1776509803;
+	bh=RPP2M4jgrgVVbnlv+9qx8Ljc6sfVvUVG+024MkBH3jY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=f7xJe9tYyt16QWurqku2tRbQs22RNG4wZ5+X6pwY3jWd4cfBJqucTkoMNStMJrb4D
-	 ECBq0Y2QVGXBtpIsYni7zsr2niIyMWIXByzusEXS+7Ta6VJq8vJOXLjdhchid3Rg7x
-	 It/dEhwlySxOzxPd2sdDMlLQ6NU0ge5wY3ChPiDQO7jSrLVN1Au057xvWllg3BZwud
-	 8f5lk0gCGuT+OWTNsxLFlMrZiOv/OWj7LnJcaF9gPWBjsYx7V8KZVH0q4gIwO/JMq9
-	 jTBj5CAV9iYej7d08NDY3CQ9WHxbrQxQgn2NiiWA41PZCqfRUFq5PJcOYZUFgtiVPm
-	 hJ/51JEQanYEA==
+	b=BEfPSxfCvvCLHqSY8U9BWJ2yQiSSXop1PNE8kq+8txPBSc0awe8ptQOId1DG1zGYl
+	 PtPCnRP6D08RB0bB2watpFBbojw7/XZu/RPPNDRlPt/qFSMW/55Cj9+GFoXLlOnpHy
+	 hVRWhzBtNj6AbQdJHL01WWw9vNXhpWzn7bxDif25xIo0X/cUNn+W5PQ+mrBGPJeMv6
+	 k1U5UShDMGPm3bc7HOPq5AlBVpxujHfwSISwv2EW+K4H6kBQPIzjup9OS8BCnb7jl0
+	 hpk3ezCKDLDKeUMx2yxKfPg+ZGbvW5zbKI5YMU6csdYpL0q5uwTRNR0j+y36IIoRtM
+	 C4q/Kw9sl7O4g==
 From: Mike Rapoport <rppt@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	David Hildenbrand <david@kernel.org>
@@ -53,9 +53,9 @@ Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-mm@kvack.org
-Subject: [PATCH v2 08/53] selftests/mm: hugetlb-vmemmap: use kselftest framework
-Date: Sat, 18 Apr 2026 13:54:53 +0300
-Message-ID: <20260418105539.1261536-9-rppt@kernel.org>
+Subject: [PATCH v2 09/53] selftests/mm: hugetlb-madvise: use kselftest framework
+Date: Sat, 18 Apr 2026 13:54:54 +0300
+Message-ID: <20260418105539.1261536-10-rppt@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260418105539.1261536-1-rppt@kernel.org>
 References: <20260418105539.1261536-1-rppt@kernel.org>
@@ -69,58 +69,202 @@ Content-Transfer-Encoding: 8bit
 
 From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-Convert hugetlb-vmemmap test to use kselftest framework for reporting
+Convert hugetlb-madvise test to use kselftest framework for reporting
 and tracking successful and failing runs.
 
-Reviewed-by: Mark Brown <broonie@kernel.org>
 Reviewed by: Donet Tom <donettom@linux.ibm.com>
 Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 ---
- tools/testing/selftests/mm/hugetlb-vmemmap.c | 42 +++++++++-----------
- 1 file changed, 18 insertions(+), 24 deletions(-)
+ tools/testing/selftests/mm/hugetlb-madvise.c | 204 ++++++++-----------
+ 1 file changed, 82 insertions(+), 122 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/hugetlb-vmemmap.c b/tools/testing/selftests/mm/hugetlb-vmemmap.c
-index df366a4d1b92..485a6978b40f 100644
---- a/tools/testing/selftests/mm/hugetlb-vmemmap.c
-+++ b/tools/testing/selftests/mm/hugetlb-vmemmap.c
-@@ -63,7 +63,7 @@ static int check_page_flags(unsigned long pfn)
- 	read(fd, &pageflags, sizeof(pageflags));
- 	if ((pageflags & HEAD_PAGE_FLAGS) != HEAD_PAGE_FLAGS) {
- 		close(fd);
--		printf("Head page flags (%lx) is invalid\n", pageflags);
-+		ksft_print_msg("Head page flags (%lx) is invalid\n", pageflags);
- 		return -1;
- 	}
+diff --git a/tools/testing/selftests/mm/hugetlb-madvise.c b/tools/testing/selftests/mm/hugetlb-madvise.c
+index 898cc90b314f..4c6c346a3af5 100644
+--- a/tools/testing/selftests/mm/hugetlb-madvise.c
++++ b/tools/testing/selftests/mm/hugetlb-madvise.c
+@@ -26,12 +26,11 @@
  
-@@ -77,7 +77,7 @@ static int check_page_flags(unsigned long pfn)
- 		if ((pageflags & TAIL_PAGE_FLAGS) != TAIL_PAGE_FLAGS ||
- 		    (pageflags & HEAD_PAGE_FLAGS) == HEAD_PAGE_FLAGS) {
- 			close(fd);
--			printf("Tail page flags (%lx) is invalid\n", pageflags);
-+			ksft_print_msg("Tail page flags (%lx) is invalid\n", pageflags);
- 			return -1;
- 		}
- 	}
-@@ -91,44 +91,38 @@ int main(int argc, char **argv)
- {
- 	void *addr;
- 	unsigned long pfn;
-+	int ret;
-+
+ #define validate_free_pages(exp_free)					\
+ 	do {								\
+-		int fhp = get_free_hugepages();				\
+-		if (fhp != (exp_free)) {				\
+-			printf("Unexpected number of free huge "	\
+-				"pages line %d\n", __LINE__);		\
+-			exit(1);					\
+-		}							\
++		unsigned long fhp = get_free_hugepages();		\
++		if (fhp != (exp_free))					\
++			ksft_exit_fail_msg("Unexpected number of free "	\
++				"huge pages %ld, expected %ld line %d\n", \
++				fhp, (exp_free), __LINE__);		\
+ 	} while (0)
+ 
+ unsigned long huge_page_size;
+@@ -57,28 +56,24 @@ int main(int argc, char **argv)
+ 	int fd;
+ 	int ret;
+ 
 +	ksft_print_header();
 +	ksft_set_plan(1);
- 
- 	pagesize  = psize();
- 	maplength = default_huge_page_size();
--	if (!maplength) {
--		printf("Unable to determine huge page size\n");
++
+ 	huge_page_size = default_huge_page_size();
+-	if (!huge_page_size) {
+-		printf("Unable to determine huge page size, exiting!\n");
 -		exit(1);
 -	}
-+	if (!maplength)
++	if (!huge_page_size)
 +		ksft_exit_skip("Unable to determine huge page size\n");
++
+ 	base_page_size = sysconf(_SC_PAGE_SIZE);
+-	if (!huge_page_size) {
+-		printf("Unable to determine base page size, exiting!\n");
+-		exit(1);
+-	}
++	if (!base_page_size)
++		ksft_exit_fail_msg("Unable to determine base page size\n");
  
- 	addr = mmap(NULL, maplength, PROT_READ | PROT_WRITE,
- 			MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB, -1, 0);
+ 	free_hugepages = get_free_hugepages();
+-	if (free_hugepages < MIN_FREE_PAGES) {
+-		printf("Not enough free huge pages to test, exiting!\n");
+-		exit(KSFT_SKIP);
+-	}
++	if (free_hugepages < MIN_FREE_PAGES)
++		ksft_exit_skip("Not enough free huge pages (have %lu, need %d)\n", free_hugepages, MIN_FREE_PAGES);
+ 
+ 	fd = memfd_create(argv[0], MFD_HUGETLB);
+-	if (fd < 0) {
+-		perror("memfd_create() failed");
+-		exit(1);
+-	}
++	if (fd < 0)
++		ksft_exit_fail_perror("memfd_create");
+ 
+ 	/*
+ 	 * Test validity of MADV_DONTNEED addr and length arguments.  mmap
+@@ -90,16 +85,13 @@ int main(int argc, char **argv)
+ 			PROT_READ | PROT_WRITE,
+ 			MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB,
+ 			-1, 0);
+-	if (addr == MAP_FAILED) {
+-		perror("mmap");
+-		exit(1);
+-	}
++	if (addr == MAP_FAILED)
++		ksft_exit_fail_perror("mmap");
++
+ 	if (munmap(addr, huge_page_size) ||
+ 			munmap(addr + (NR_HUGE_PAGES + 1) * huge_page_size,
+-				huge_page_size)) {
+-		perror("munmap");
+-		exit(1);
+-	}
++				huge_page_size))
++		ksft_exit_fail_perror("munmap");
+ 	addr = addr + huge_page_size;
+ 
+ 	write_fault_pages(addr, NR_HUGE_PAGES);
+@@ -108,20 +100,14 @@ int main(int argc, char **argv)
+ 	/* addr before mapping should fail */
+ 	ret = madvise(addr - base_page_size, NR_HUGE_PAGES * huge_page_size,
+ 		MADV_DONTNEED);
+-	if (!ret) {
+-		printf("Unexpected success of madvise call with invalid addr line %d\n",
+-				__LINE__);
+-			exit(1);
+-	}
++	if (!ret)
++		ksft_exit_fail_msg("madvise with invalid addr unexpectedly succeeded line %d\n", __LINE__);
+ 
+ 	/* addr + length after mapping should fail */
+ 	ret = madvise(addr, (NR_HUGE_PAGES * huge_page_size) + base_page_size,
+ 		MADV_DONTNEED);
+-	if (!ret) {
+-		printf("Unexpected success of madvise call with invalid length line %d\n",
+-				__LINE__);
+-			exit(1);
+-	}
++	if (!ret)
++		ksft_exit_fail_msg("madvise with invalid length unexpectedly succeeded line %d\n", __LINE__);
+ 
+ 	(void)munmap(addr, NR_HUGE_PAGES * huge_page_size);
+ 
+@@ -132,10 +118,9 @@ int main(int argc, char **argv)
+ 			PROT_READ | PROT_WRITE,
+ 			MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB,
+ 			-1, 0);
+-	if (addr == MAP_FAILED) {
+-		perror("mmap");
+-		exit(1);
+-	}
++	if (addr == MAP_FAILED)
++		ksft_exit_fail_perror("mmap");
++
+ 	write_fault_pages(addr, NR_HUGE_PAGES);
+ 	validate_free_pages(free_hugepages - NR_HUGE_PAGES);
+ 
+@@ -143,19 +128,14 @@ int main(int argc, char **argv)
+ 	ret = madvise(addr + base_page_size,
+ 			NR_HUGE_PAGES * huge_page_size - base_page_size,
+ 			MADV_DONTNEED);
+-	if (!ret) {
+-		printf("Unexpected success of madvise call with unaligned start address %d\n",
+-				__LINE__);
+-			exit(1);
+-	}
++	if (!ret)
++		ksft_exit_fail_msg("madvise with unaligned start unexpectedly succeeded line %d\n", __LINE__);
+ 
+ 	/* addr + length should be aligned down to huge page size */
+ 	if (madvise(addr,
+ 			((NR_HUGE_PAGES - 1) * huge_page_size) + base_page_size,
+-			MADV_DONTNEED)) {
+-		perror("madvise");
+-		exit(1);
+-	}
++			MADV_DONTNEED))
++		ksft_exit_fail_perror("madvise");
+ 
+ 	/* should free all but last page in mapping */
+ 	validate_free_pages(free_hugepages - 1);
+@@ -170,17 +150,14 @@ int main(int argc, char **argv)
+ 			PROT_READ | PROT_WRITE,
+ 			MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB,
+ 			-1, 0);
+-	if (addr == MAP_FAILED) {
+-		perror("mmap");
+-		exit(1);
+-	}
++	if (addr == MAP_FAILED)
++		ksft_exit_fail_perror("mmap");
++
+ 	write_fault_pages(addr, NR_HUGE_PAGES);
+ 	validate_free_pages(free_hugepages - NR_HUGE_PAGES);
+ 
+-	if (madvise(addr, NR_HUGE_PAGES * huge_page_size, MADV_DONTNEED)) {
+-		perror("madvise");
+-		exit(1);
+-	}
++	if (madvise(addr, NR_HUGE_PAGES * huge_page_size, MADV_DONTNEED))
++		ksft_exit_fail_perror("madvise");
+ 
+ 	/* should free all pages in mapping */
+ 	validate_free_pages(free_hugepages);
+@@ -190,29 +167,25 @@ int main(int argc, char **argv)
+ 	/*
+ 	 * Test MADV_DONTNEED on private mapping of hugetlb file
+ 	 */
+-	if (fallocate(fd, 0, 0, NR_HUGE_PAGES * huge_page_size)) {
+-		perror("fallocate");
+-		exit(1);
+-	}
++	if (fallocate(fd, 0, 0, NR_HUGE_PAGES * huge_page_size))
++		ksft_exit_fail_perror("fallocate");
++
+ 	validate_free_pages(free_hugepages - NR_HUGE_PAGES);
+ 
+ 	addr = mmap(NULL, NR_HUGE_PAGES * huge_page_size,
+ 			PROT_READ | PROT_WRITE,
+ 			MAP_PRIVATE, fd, 0);
 -	if (addr == MAP_FAILED) {
 -		perror("mmap");
 -		exit(1);
@@ -128,38 +272,182 @@ index df366a4d1b92..485a6978b40f 100644
 +	if (addr == MAP_FAILED)
 +		ksft_exit_fail_perror("mmap");
  
- 	/* Trigger allocation of HugeTLB page. */
- 	write_bytes(addr, maplength);
+ 	/* read should not consume any pages */
+ 	read_fault_pages(addr, NR_HUGE_PAGES);
+ 	validate_free_pages(free_hugepages - NR_HUGE_PAGES);
  
- 	pfn = virt_to_pfn(addr);
- 	if (pfn == -1UL) {
-+		ksft_perror("virt_to_pfn");
- 		munmap(addr, maplength);
--		perror("virt_to_pfn");
--		exit(1);
-+		ksft_exit_fail();
- 	}
- 
--	printf("Returned address is %p whose pfn is %lx\n", addr, pfn);
-+	ksft_print_msg("Returned address is %p whose pfn is %lx\n", addr, pfn);
- 
--	if (check_page_flags(pfn) < 0) {
--		munmap(addr, maplength);
--		perror("check_page_flags");
+ 	/* madvise should not free any pages */
+-	if (madvise(addr, NR_HUGE_PAGES * huge_page_size, MADV_DONTNEED)) {
+-		perror("madvise");
 -		exit(1);
 -	}
-+	ret = check_page_flags(pfn);
++	if (madvise(addr, NR_HUGE_PAGES * huge_page_size, MADV_DONTNEED))
++		ksft_exit_fail_perror("madvise");
++
+ 	validate_free_pages(free_hugepages - NR_HUGE_PAGES);
  
--	/* munmap() length of MAP_HUGETLB memory must be hugepage aligned */
--	if (munmap(addr, maplength)) {
--		perror("munmap");
+ 	/* writes should allocate private pages */
+@@ -220,10 +193,9 @@ int main(int argc, char **argv)
+ 	validate_free_pages(free_hugepages - (2 * NR_HUGE_PAGES));
+ 
+ 	/* madvise should free private pages */
+-	if (madvise(addr, NR_HUGE_PAGES * huge_page_size, MADV_DONTNEED)) {
+-		perror("madvise");
 -		exit(1);
 -	}
-+	if (munmap(addr, maplength))
-+		ksft_exit_fail_perror("munmap");
++	if (madvise(addr, NR_HUGE_PAGES * huge_page_size, MADV_DONTNEED))
++		ksft_exit_fail_perror("madvise");
++
+ 	validate_free_pages(free_hugepages - NR_HUGE_PAGES);
  
+ 	/* writes should allocate private pages */
+@@ -238,10 +210,9 @@ int main(int argc, char **argv)
+ 	 * implementation.
+ 	 */
+ 	if (fallocate(fd, FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE,
+-					0, NR_HUGE_PAGES * huge_page_size)) {
+-		perror("fallocate");
+-		exit(1);
+-	}
++					0, NR_HUGE_PAGES * huge_page_size))
++		ksft_exit_fail_perror("fallocate");
++
+ 	validate_free_pages(free_hugepages);
+ 
+ 	(void)munmap(addr, NR_HUGE_PAGES * huge_page_size);
+@@ -249,29 +220,25 @@ int main(int argc, char **argv)
+ 	/*
+ 	 * Test MADV_DONTNEED on shared mapping of hugetlb file
+ 	 */
+-	if (fallocate(fd, 0, 0, NR_HUGE_PAGES * huge_page_size)) {
+-		perror("fallocate");
+-		exit(1);
+-	}
++	if (fallocate(fd, 0, 0, NR_HUGE_PAGES * huge_page_size))
++		ksft_exit_fail_perror("fallocate");
++
+ 	validate_free_pages(free_hugepages - NR_HUGE_PAGES);
+ 
+ 	addr = mmap(NULL, NR_HUGE_PAGES * huge_page_size,
+ 			PROT_READ | PROT_WRITE,
+ 			MAP_SHARED, fd, 0);
+-	if (addr == MAP_FAILED) {
+-		perror("mmap");
+-		exit(1);
+-	}
++	if (addr == MAP_FAILED)
++		ksft_exit_fail_perror("mmap");
+ 
+ 	/* write should not consume any pages */
+ 	write_fault_pages(addr, NR_HUGE_PAGES);
+ 	validate_free_pages(free_hugepages - NR_HUGE_PAGES);
+ 
+ 	/* madvise should not free any pages */
+-	if (madvise(addr, NR_HUGE_PAGES * huge_page_size, MADV_DONTNEED)) {
+-		perror("madvise");
+-		exit(1);
+-	}
++	if (madvise(addr, NR_HUGE_PAGES * huge_page_size, MADV_DONTNEED))
++		ksft_exit_fail_perror("madvise");
++
+ 	validate_free_pages(free_hugepages - NR_HUGE_PAGES);
+ 
+ 	/*
+@@ -279,29 +246,25 @@ int main(int argc, char **argv)
+ 	 *
+ 	 * madvise is same as hole punch and should free all pages.
+ 	 */
+-	if (madvise(addr, NR_HUGE_PAGES * huge_page_size, MADV_REMOVE)) {
+-		perror("madvise");
+-		exit(1);
+-	}
++	if (madvise(addr, NR_HUGE_PAGES * huge_page_size, MADV_REMOVE))
++		ksft_exit_fail_perror("madvise");
++
+ 	validate_free_pages(free_hugepages);
+ 	(void)munmap(addr, NR_HUGE_PAGES * huge_page_size);
+ 
+ 	/*
+ 	 * Test MADV_REMOVE on shared and private mapping of hugetlb file
+ 	 */
+-	if (fallocate(fd, 0, 0, NR_HUGE_PAGES * huge_page_size)) {
+-		perror("fallocate");
+-		exit(1);
+-	}
++	if (fallocate(fd, 0, 0, NR_HUGE_PAGES * huge_page_size))
++		ksft_exit_fail_perror("fallocate");
++
+ 	validate_free_pages(free_hugepages - NR_HUGE_PAGES);
+ 
+ 	addr = mmap(NULL, NR_HUGE_PAGES * huge_page_size,
+ 			PROT_READ | PROT_WRITE,
+ 			MAP_SHARED, fd, 0);
+-	if (addr == MAP_FAILED) {
+-		perror("mmap");
+-		exit(1);
+-	}
++	if (addr == MAP_FAILED)
++		ksft_exit_fail_perror("mmap");
+ 
+ 	/* shared write should not consume any additional pages */
+ 	write_fault_pages(addr, NR_HUGE_PAGES);
+@@ -310,10 +273,8 @@ int main(int argc, char **argv)
+ 	addr2 = mmap(NULL, NR_HUGE_PAGES * huge_page_size,
+ 			PROT_READ | PROT_WRITE,
+ 			MAP_PRIVATE, fd, 0);
+-	if (addr2 == MAP_FAILED) {
+-		perror("mmap");
+-		exit(1);
+-	}
++	if (addr2 == MAP_FAILED)
++		ksft_exit_fail_perror("mmap");
+ 
+ 	/* private read should not consume any pages */
+ 	read_fault_pages(addr2, NR_HUGE_PAGES);
+@@ -324,17 +285,15 @@ int main(int argc, char **argv)
+ 	validate_free_pages(free_hugepages - (2 * NR_HUGE_PAGES));
+ 
+ 	/* madvise of shared mapping should not free any pages */
+-	if (madvise(addr, NR_HUGE_PAGES * huge_page_size, MADV_DONTNEED)) {
+-		perror("madvise");
+-		exit(1);
+-	}
++	if (madvise(addr, NR_HUGE_PAGES * huge_page_size, MADV_DONTNEED))
++		ksft_exit_fail_perror("madvise");
++
+ 	validate_free_pages(free_hugepages - (2 * NR_HUGE_PAGES));
+ 
+ 	/* madvise of private mapping should free private pages */
+-	if (madvise(addr2, NR_HUGE_PAGES * huge_page_size, MADV_DONTNEED)) {
+-		perror("madvise");
+-		exit(1);
+-	}
++	if (madvise(addr2, NR_HUGE_PAGES * huge_page_size, MADV_DONTNEED))
++		ksft_exit_fail_perror("madvise");
++
+ 	validate_free_pages(free_hugepages - NR_HUGE_PAGES);
+ 
+ 	/* private write should consume additional pages again */
+@@ -346,15 +305,16 @@ int main(int argc, char **argv)
+ 	 * not correct.  private pages should not be freed, but this is
+ 	 * expected.  See comment associated with FALLOC_FL_PUNCH_HOLE call.
+ 	 */
+-	if (madvise(addr, NR_HUGE_PAGES * huge_page_size, MADV_REMOVE)) {
+-		perror("madvise");
+-		exit(1);
+-	}
++	if (madvise(addr, NR_HUGE_PAGES * huge_page_size, MADV_REMOVE))
++		ksft_exit_fail_perror("madvise");
++
+ 	validate_free_pages(free_hugepages);
+ 
+ 	(void)munmap(addr, NR_HUGE_PAGES * huge_page_size);
+ 	(void)munmap(addr2, NR_HUGE_PAGES * huge_page_size);
+ 
+ 	close(fd);
 -	return 0;
-+	ksft_test_result(!ret, "HugeTLB vmemmap page flags\n");
++
++	ksft_test_result_pass("MADV_DONTNEED and MADV_REMOVE on hugetlb\n");
 +	ksft_finished();
  }
 -- 
