@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9349F359A8C;
-	Sat, 18 Apr 2026 10:58:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D93B359A65;
+	Sat, 18 Apr 2026 10:58:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776509896; cv=none; b=SIhUBmARHMUMXBy5DrALVRE8UfGVnVOO5MIgk2Tf+1EGw9tYf2lMZfCYJBfSs/P7g++qhiRhKqnDyluHAqAWcATrYepgohwQAhdpbGXlsbYc+ZoaXIaEOcO2q+2wTv8Wc0jAukvlZ9bCevdLQc/pVrNE/J1tTSGv4jbjgzTH+GU=
+	t=1776509902; cv=none; b=OzIDV9gF0FDghp/i4nbqIM04Bd/p5Vr090ONYyWLqEo5cDc3aGuFIrhc1OqpqjPH3iBD4rqyIyUDEKW3YGgunldgCcZMyIC1knG9EI39OQjPmAhoSM7SC6QjeNa6h8EUFWXYcdMu6zouFTDoELrNR7WJbva7A4n1vJg/olrV9P0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776509896; c=relaxed/simple;
-	bh=6tmwrYqrWIbuMw5GfhGQhH/MUUQ+JMHsDHml8bmka3I=;
+	s=arc-20240116; t=1776509902; c=relaxed/simple;
+	bh=jAQxw9MbYkXsl544OFupWFjq2DLx0d+HujNgYQfq/0c=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fRGT362nKS6vUEpBoD6d91MUPJDRlbOevdFu24hS7KsGK8Aq125NYX1lieSC1yTr+WfWiJAEirwNizk99T2TF4Pxmrejz+zNhZl+b37aBcZiu0XfIEA0cVSoc1LGaFFzNAO82u5kzSQMnDSqF1QYZufi9E56bvH5hFi/JdKur3c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IGeA0rJG; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=R5+enQxI1qDhm8H0FxASjbNxW4onOZ3+uXmVv5WolgGgY8xc8r9bAb9da6+/J6n7VLALmmwlS2yBjeGc75QLh8WMFQDLpG2m4g6o+xFQ8k4gr0CPpKmMct+w1igrdG/iZv9DuhKHW15xwWc8WTNQ7OpX4m6TK41vKxMSHcW2AFQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LI7uCwAA; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IGeA0rJG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E7C7C2BCB3;
-	Sat, 18 Apr 2026 10:58:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LI7uCwAA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0E3CC2BCB3;
+	Sat, 18 Apr 2026 10:58:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776509896;
-	bh=6tmwrYqrWIbuMw5GfhGQhH/MUUQ+JMHsDHml8bmka3I=;
+	s=k20201202; t=1776509902;
+	bh=jAQxw9MbYkXsl544OFupWFjq2DLx0d+HujNgYQfq/0c=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=IGeA0rJGx3EWp9zaN0FaHGeJ9lm88kv7Bj7KXhkxuDxTaqqIzTlQsYOEk+jLaeFt8
-	 FTyfJkn+83E5IkPSZyF/k1gHsjGb1COu3oaE0i7mUUxIauWfNI8s9ws0BaaB5ZKYq/
-	 732rTBshW5d65zXNh87oPwri3SVXrEdZ60BlDqmB95Mn18DB1m+EAxoSAN8CY8bv3/
-	 RbyenMAz6F7hQsyOCLvghFYFLYTiaFul8Bw1D4DWM7A7STNWFvg8i586c7KMh4w70l
-	 A3J7RNJrd9Kxtd3kG4BFO3d+LvT8zaZIrQt4Fn4S93PGQ8/2UBxJMao4UlR8pkVfxm
-	 AuR81iyjr58Kw==
+	b=LI7uCwAA+U6wF0SqxD8YiuvZxwQTeURo7rF12HrPMx1NwE3aOfDfxx9oyhPSoAjc3
+	 R/onu2CB7oBz4xZOm7RaqYMZalGNkst82fTQPHQdnZ+dhFxdY4pDps51x5XhIe4KLb
+	 QrO0Ci3UcStJDa9K9z7vEIb+zgSVt7DeF8iLbPegAHbAmzM4+hNqt/MBChHI7uSfx3
+	 A5PJ+peGn8YSC73CdvYu4816nfEtf7kv+6yTwJeRTye/ng+PrzuXbx5N085Ize28uq
+	 VRnn+/HIqz41LZgJsABs5DphO9Xs9Tnvj6PBrtGTYS3WcoWBFAop2HK5BocY/b5erm
+	 tDzGDTh8yHRxg==
 From: Mike Rapoport <rppt@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	David Hildenbrand <david@kernel.org>
@@ -53,9 +53,9 @@ Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-mm@kvack.org
-Subject: [PATCH v2 24/53] selftests/mm: hugepage_settings: add APIs to get and set nr_hugepages
-Date: Sat, 18 Apr 2026 13:55:09 +0300
-Message-ID: <20260418105539.1261536-25-rppt@kernel.org>
+Subject: [PATCH v2 25/53] selftests/mm: hugepage_settings: rename get_free_hugepages()
+Date: Sat, 18 Apr 2026 13:55:10 +0300
+Message-ID: <20260418105539.1261536-26-rppt@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260418105539.1261536-1-rppt@kernel.org>
 References: <20260418105539.1261536-1-rppt@kernel.org>
@@ -69,83 +69,186 @@ Content-Transfer-Encoding: 8bit
 
 From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-Add APIs that allow reading and writing of
-
-/sys/kernel/mm/hugepages/hugepages-NkB/nr_hugepages
-
-to detect and change the amount of HugeTLB pages of different sizes.
+... to hugetlb_free_default_hugepages() for consistency with
+hugetlb_nr_default_pages().
 
 Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 ---
- .../testing/selftests/mm/hugepage_settings.c  | 25 +++++++++++++++++++
- .../testing/selftests/mm/hugepage_settings.h  | 23 +++++++++++++++++
- 2 files changed, 48 insertions(+)
+ .../testing/selftests/mm/hugepage_settings.c  | 28 ++++++-------------
+ .../testing/selftests/mm/hugepage_settings.h  | 12 +++++++-
+ tools/testing/selftests/mm/hugetlb-madvise.c  |  4 +--
+ tools/testing/selftests/mm/hugetlb_dio.c      |  6 ++--
+ .../selftests/mm/hugetlb_fault_after_madv.c   |  2 +-
+ .../selftests/mm/hugetlb_madv_vs_map.c        |  2 +-
+ tools/testing/selftests/mm/uffd-stress.c      |  2 +-
+ 7 files changed, 28 insertions(+), 28 deletions(-)
 
 diff --git a/tools/testing/selftests/mm/hugepage_settings.c b/tools/testing/selftests/mm/hugepage_settings.c
-index 8f563315b1fc..5961229b9931 100644
+index 5961229b9931..4ae7332b5e1b 100644
 --- a/tools/testing/selftests/mm/hugepage_settings.c
 +++ b/tools/testing/selftests/mm/hugepage_settings.c
-@@ -464,3 +464,28 @@ unsigned long get_free_hugepages(void)
- 	fclose(f);
- 	return fhp;
+@@ -446,25 +446,6 @@ unsigned long default_huge_page_size(void)
+ 	return hps;
+ }
+ 
+-unsigned long get_free_hugepages(void)
+-{
+-	unsigned long fhp = 0;
+-	char *line = NULL;
+-	size_t linelen = 0;
+-	FILE *f = fopen("/proc/meminfo", "r");
+-
+-	if (!f)
+-		return fhp;
+-	while (getline(&line, &linelen, f) > 0) {
+-		if (sscanf(line, "HugePages_Free:      %lu", &fhp) == 1)
+-			break;
+-	}
+-
+-	free(line);
+-	fclose(f);
+-	return fhp;
+-}
+-
+ static void hugetlb_sysfs_path(char *buf, size_t buflen,
+ 			       unsigned long size, const char *attr)
+ {
+@@ -489,3 +470,12 @@ void hugetlb_set_nr_pages(unsigned long size, unsigned long nr)
+ 
+ 	write_num(path, nr);
  }
 +
-+static void hugetlb_sysfs_path(char *buf, size_t buflen,
-+			       unsigned long size, const char *attr)
-+{
-+	snprintf(buf, buflen, "/sys/kernel/mm/hugepages/hugepages-%lukB/%s",
-+		 size / 1024, attr);
-+}
-+
-+unsigned long hugetlb_nr_pages(unsigned long size)
++unsigned long hugetlb_free_pages(unsigned long size)
 +{
 +	char path[PATH_MAX];
 +
-+	hugetlb_sysfs_path(path, sizeof(path), size, "nr_hugepages");
++	hugetlb_sysfs_path(path, sizeof(path), size, "free_hugepages");
 +
 +	return read_num(path);
 +}
-+
-+void hugetlb_set_nr_pages(unsigned long size, unsigned long nr)
-+{
-+	char path[PATH_MAX];
-+
-+	hugetlb_sysfs_path(path, sizeof(path), size, "nr_hugepages");
-+
-+	write_num(path, nr);
-+}
 diff --git a/tools/testing/selftests/mm/hugepage_settings.h b/tools/testing/selftests/mm/hugepage_settings.h
-index 9357d07e6c1b..d6f41a45e8ee 100644
+index d6f41a45e8ee..57fbf2f57e13 100644
 --- a/tools/testing/selftests/mm/hugepage_settings.h
 +++ b/tools/testing/selftests/mm/hugepage_settings.h
-@@ -94,4 +94,27 @@ int detect_hugetlb_page_sizes(unsigned long sizes[], int max);
- unsigned long default_huge_page_size(void);
- unsigned long get_free_hugepages(void);
+@@ -92,10 +92,10 @@ bool thp_is_enabled(void);
  
-+unsigned long hugetlb_nr_pages(unsigned long size);
-+void hugetlb_set_nr_pages(unsigned long size, unsigned long nr);
-+
-+static inline unsigned long hugetlb_nr_default_pages(void)
+ int detect_hugetlb_page_sizes(unsigned long sizes[], int max);
+ unsigned long default_huge_page_size(void);
+-unsigned long get_free_hugepages(void);
+ 
+ unsigned long hugetlb_nr_pages(unsigned long size);
+ void hugetlb_set_nr_pages(unsigned long size, unsigned long nr);
++unsigned long hugetlb_free_pages(unsigned long size);
+ 
+ static inline unsigned long hugetlb_nr_default_pages(void)
+ {
+@@ -117,4 +117,14 @@ static inline void hugetlb_set_nr_default_pages(unsigned long nr)
+ 	hugetlb_set_nr_pages(size, nr);
+ }
+ 
++static inline unsigned long hugetlb_free_default_pages(void)
 +{
 +	unsigned long size = default_huge_page_size();
 +
 +	if (!size)
 +		return 0;
 +
-+	return hugetlb_nr_pages(size);
-+}
-+
-+static inline void hugetlb_set_nr_default_pages(unsigned long nr)
-+{
-+	unsigned long size = default_huge_page_size();
-+
-+	if (!size)
-+		return;
-+
-+	hugetlb_set_nr_pages(size, nr);
++	return hugetlb_free_pages(size);
 +}
 +
  #endif /* __THP_SETTINGS_H__ */
+diff --git a/tools/testing/selftests/mm/hugetlb-madvise.c b/tools/testing/selftests/mm/hugetlb-madvise.c
+index 316384d919db..3c08eb6db6a2 100644
+--- a/tools/testing/selftests/mm/hugetlb-madvise.c
++++ b/tools/testing/selftests/mm/hugetlb-madvise.c
+@@ -27,7 +27,7 @@
+ 
+ #define validate_free_pages(exp_free)					\
+ 	do {								\
+-		unsigned long fhp = get_free_hugepages();		\
++		unsigned long fhp = hugetlb_free_default_pages();		\
+ 		if (fhp != (exp_free))					\
+ 			ksft_exit_fail_msg("Unexpected number of free "	\
+ 				"huge pages %ld, expected %ld line %d\n", \
+@@ -68,7 +68,7 @@ int main(int argc, char **argv)
+ 	if (!base_page_size)
+ 		ksft_exit_fail_msg("Unable to determine base page size\n");
+ 
+-	free_hugepages = get_free_hugepages();
++	free_hugepages = hugetlb_free_default_pages();
+ 	if (free_hugepages < MIN_FREE_PAGES)
+ 		ksft_exit_skip("Not enough free huge pages (have %lu, need %d)\n", free_hugepages, MIN_FREE_PAGES);
+ 
+diff --git a/tools/testing/selftests/mm/hugetlb_dio.c b/tools/testing/selftests/mm/hugetlb_dio.c
+index 81e3f7bc8e76..47019433ddaf 100644
+--- a/tools/testing/selftests/mm/hugetlb_dio.c
++++ b/tools/testing/selftests/mm/hugetlb_dio.c
+@@ -93,7 +93,7 @@ static void run_dio_using_hugetlb(int fd, unsigned int start_off,
+ 		ksft_exit_fail_perror("lseek failed\n");
+ 
+ 	/* Get the free huge pages before allocation */
+-	free_hpage_b = get_free_hugepages();
++	free_hpage_b = hugetlb_free_default_pages();
+ 	if (free_hpage_b == 0) {
+ 		close(fd);
+ 		ksft_exit_skip("No free hugepage, exiting!\n");
+@@ -121,7 +121,7 @@ static void run_dio_using_hugetlb(int fd, unsigned int start_off,
+ 	munmap(orig_buffer, h_pagesize);
+ 
+ 	/* Get the free huge pages after unmap*/
+-	free_hpage_a = get_free_hugepages();
++	free_hpage_a = hugetlb_free_default_pages();
+ 
+ 	ksft_print_msg("No. Free pages before allocation : %d\n", free_hpage_b);
+ 	ksft_print_msg("No. Free pages after munmap : %d\n", free_hpage_a);
+@@ -142,7 +142,7 @@ int main(void)
+ 	ksft_print_header();
+ 
+ 	/* Check if huge pages are free */
+-	if (!get_free_hugepages())
++	if (!hugetlb_free_default_pages())
+ 		ksft_exit_skip("No free hugepage, exiting\n");
+ 
+ 	fd = open("/tmp", O_TMPFILE | O_RDWR | O_DIRECT, 0664);
+diff --git a/tools/testing/selftests/mm/hugetlb_fault_after_madv.c b/tools/testing/selftests/mm/hugetlb_fault_after_madv.c
+index abc3904c5268..c718dd065d53 100644
+--- a/tools/testing/selftests/mm/hugetlb_fault_after_madv.c
++++ b/tools/testing/selftests/mm/hugetlb_fault_after_madv.c
+@@ -78,7 +78,7 @@ int main(void)
+ 	ksft_print_msg("[INFO] detected default hugetlb page size: %zu KiB\n",
+ 		       huge_page_size / 1024);
+ 
+-	free_hugepages = get_free_hugepages();
++	free_hugepages = hugetlb_free_default_pages();
+ 	if (free_hugepages != 1) {
+ 		ksft_exit_skip("This test needs one and only one page to execute. Got %lu\n",
+ 			       free_hugepages);
+diff --git a/tools/testing/selftests/mm/hugetlb_madv_vs_map.c b/tools/testing/selftests/mm/hugetlb_madv_vs_map.c
+index ac60b4f18784..dfbd71a7f709 100644
+--- a/tools/testing/selftests/mm/hugetlb_madv_vs_map.c
++++ b/tools/testing/selftests/mm/hugetlb_madv_vs_map.c
+@@ -89,7 +89,7 @@ int main(void)
+ 	ksft_print_header();
+ 	ksft_set_plan(1);
+ 
+-	free_hugepages = get_free_hugepages();
++	free_hugepages = hugetlb_free_default_pages();
+ 
+ 	if (free_hugepages != 1)
+ 		ksft_exit_skip("This test needs one and only one page to execute. Got %lu\n",
+diff --git a/tools/testing/selftests/mm/uffd-stress.c b/tools/testing/selftests/mm/uffd-stress.c
+index e92a85463eb1..7e37cf3d27f6 100644
+--- a/tools/testing/selftests/mm/uffd-stress.c
++++ b/tools/testing/selftests/mm/uffd-stress.c
+@@ -480,7 +480,7 @@ int main(int argc, char **argv)
+ 	 * for racy extra reservation of hugepages.
+ 	 */
+ 	if (gopts->test_type == TEST_HUGETLB &&
+-	   get_free_hugepages() < 2 * (bytes / gopts->page_size) + gopts->nr_parallel - 1)
++	   hugetlb_free_default_pages() < 2 * (bytes / gopts->page_size) + gopts->nr_parallel - 1)
+ 		ksft_exit_skip("Skipping userfaultfd... not enough hugepages\n");
+ 
+ 	gopts->nr_pages_per_cpu = bytes / gopts->page_size / gopts->nr_parallel;
 -- 
 2.53.0
 
