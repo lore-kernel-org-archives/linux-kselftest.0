@@ -1,241 +1,218 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 346D727FD49;
-	Sat, 18 Apr 2026 09:27:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5317258EC1;
+	Sat, 18 Apr 2026 10:55:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776504433; cv=none; b=DTSi9Rx8bsKTkmhYpU1C+4q0ZUz7YJ0Rj1c3buHaPOpKriBNyGz8X4q57rCt0u73JQsRgxZvbGh5mVROHhWx5545O1ps7ZamBPnn794gFICQjk0ulsqKskWHAJ7X4u7Y9ganAZbBGDBDsnTsDEb/nmFL15CssLLpZRT+tcs+mkg=
+	t=1776509748; cv=none; b=aDWWLzv3mCc6iuJuEwOsKuJWihv3bAMKKljIw5XS+OVBV7eq6iTygvjUzJNJA4Zy2DedzloOuf3Cw2x4m9DysA165xa0rWjfWvwRprWkXVEhWGJbaOCHck6yrudQwCVoQ7jJr/+APToxarPy9UNmtBKFkeOqYDLFnIa55Z4bA8o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776504433; c=relaxed/simple;
-	bh=qQK1tXEC3bQP9DZ7GFPDMCN0K1t29slMgrLD0yyfeZ4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RxGcu/qLdDmHJWsbjYg6waZ/PjqHBskssVR1IJmZgaho/v2RXRBJVHC3Ivvis6leSSF36GyvJLEMASD/EUfvcvTzQdhE8lpVbNPu5B0ksWXM6tjyZRUhpelHxBwQ62pzYqbarsJBVOVlGbQZbV2xbNRKipf2GimrCqqlxd8OSag=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ikWmHtfu; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776509748; c=relaxed/simple;
+	bh=jrUv75r0z4SPERcrtX0eA/LM+gbhyzEiQNjQWukcbRQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=E4IC1eukkvl81Jxfwo1e1sYmQquxvI6Ma83Hqy171axwr0g7pimW95hT80e2JhrTlDf9eWbYq4hmiLv0csW19/s03eBPxYAtQZ4qX4TL12Tu2NshxqeWH8HPdF9MH3reawvo6gbD7b7N6i5G6PUzZfl2MK2nHk/IX2Du7yBObQ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sYtsBjVw; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ikWmHtfu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCC7BC19424;
-	Sat, 18 Apr 2026 09:27:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sYtsBjVw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C594FC19424;
+	Sat, 18 Apr 2026 10:55:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776504432;
-	bh=qQK1tXEC3bQP9DZ7GFPDMCN0K1t29slMgrLD0yyfeZ4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ikWmHtfu7pVAnscldTDWmT2dkebMotrLIBQE8B3cj/NJm+LMOdJQ1+SicHCaJzh2j
-	 hvQDrQkhkcCi9Gs9VMZ+zu/zKq2plSfI+RnUQ2AKfDN0ePzK/cddQUoOimK4WLSszf
-	 73s7zVs5pDX8IJ1ORCYFd+4yIo+u+omrpvxuhh0vbNwiJSdalDH28uKWpTGEVH3tOm
-	 jyy0UKIxK3Db8Tw+PQ4t/LhdfbHTtt1XgMdnZxUteaIAUPqDeMUzwIoq2wRqAysxrN
-	 /iuPRwQi1pEE1O52z35J4YmZ5J/y1R47cZAbeZXVPqXz4SmGwgdUhgQxYkzqAzQNjx
-	 3cpLn0aRJZ1mQ==
-Date: Sat, 18 Apr 2026 10:27:04 +0100
-From: Lorenzo Stoakes <ljs@kernel.org>
-To: Zi Yan <ziy@nvidia.com>
-Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>, 
-	Song Liu <songliubraving@fb.com>, Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	Andrew Morton <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
-	Nico Pache <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, 
-	Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>, 
-	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
-	linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 7.2 v3 00/12] Remove read-only THP support for FSes
- without large folio support
-Message-ID: <aeNNjgD09VqwI0jo@lucifer>
-References: <20260418024429.4055056-1-ziy@nvidia.com>
+	s=k20201202; t=1776509748;
+	bh=jrUv75r0z4SPERcrtX0eA/LM+gbhyzEiQNjQWukcbRQ=;
+	h=From:To:Cc:Subject:Date:From;
+	b=sYtsBjVw7ththwKj1VCTW3JjuBRgRn6oS3EzStEot3vXdc45kVIXP05d01E2tHxQQ
+	 28kBM8LSTugZXQeIqM5vFvRZrWnZQA1Tn9EMdGJKOLNb8x3jw7khNEkQ4tLt6fSHG9
+	 d3uuUMO4rT8vdrPCMX4NEuubikxI7nwHWNNW+wV4Lif9SnThm3j7CnB7raALBXf1kr
+	 //h3yG1TJanoK1im7QF1VrHuTTn9APlS3q42CoUV4AMBgET28FI0j39nodj7tAfE4B
+	 z78w0qtl5al4HJzxYnCDwdxJQfuaVD7YMQGfyk+j2suAXrDfPxB0hBsw+n/ggugPHZ
+	 zGx8Jj5gXrw3Q==
+From: Mike Rapoport <rppt@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>
+Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Barry Song <baohua@kernel.org>,
+	Dev Jain <dev.jain@arm.com>,
+	Donet Tom <donettom@linux.ibm.com>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	John Hubbard <jhubbard@nvidia.com>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Lance Yang <lance.yang@linux.dev>,
+	Leon Romanovsky <leon@kernel.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Mark Brown <broonie@kernel.org>,
+	Michal Hocko <mhocko@suse.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	Nico Pache <npache@redhat.com>,
+	Peter Xu <peterx@redhat.com>,
+	Ryan Roberts <ryan.roberts@arm.com>,
+	Sarthak Sharma <sarthak.sharma@arm.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Zi Yan <ziy@nvidia.com>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: [PATCH v2 00/53] make MM selftests more CI friendly
+Date: Sat, 18 Apr 2026 13:54:45 +0300
+Message-ID: <20260418105539.1261536-1-rppt@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260418024429.4055056-1-ziy@nvidia.com>
 
-On Fri, Apr 17, 2026 at 10:44:17PM -0400, Zi Yan wrote:
-> Hi all,
->
-> This patchset removes READ_ONLY_THP_FOR_FS Kconfig and enables creating
-> read-only THPs for FSes with large folio support (the supported orders
-> need to include PMD_ORDER) by default.
->
-> Before the patchset, the status of creating read-only THPs is below:
+From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-Good to specify the read-only bit up front!
+Hi,
 
->
->                             |    PF     | MADV_COLLAPSE | khugepaged |
->                             |-----------|---------------|------------|
->  large folio FSes only      |     ✓     |       x       |      x     |
->  READ_ONLY_THP_FOR_FS only  |     x     |       ✓       |      ✓     |
->  both                       |     ✓     |       ✓       |      ✓     |
+There's a lot of dancing around HugeTLB settings in run_vmtests.sh.
+Some test need just a few default huge pages, some require at least 256 MB, and
+some just skip lots of tests if huge pages of all supported sizes are not
+available.
 
-This diagrams seem familiar :P but very nice, thanks!
+The goal of this set is to make tests deal with HugeTLB setup and teardown.
 
-And since we include cover letter in series in mm this should be some nice
-documentation in the commit msg also.
+There are already convenient helpers that allow easy reading and writing of
+/proc and /sysfs, so adding a few APIs that will detect and update HugeTLB
+settings shouldn't be a big deal. But these nice helpers use kselftest
+framework, and many of HugeTLB (and even THP) test don't, so as a result this
+patchset also includes a lot of churn for conversion of those tests to
+kselftest framework (patches 7-19).
 
->
-> where READ_ONLY_THP_FOR_FS implies no large folio FSes.
->
->
-> Now without READ_ONLY_THP_FOR_FS:
->
->                            |    PF     | MADV_COLLAPSE | khugepaged |
->                            |-----------|---------------|------------|
->  large folio FSes          |     ✓     |       ✓       |      ✓     |
->  no large folio FSes       |     x     |       x       |      x     |
+The series break out:
+patches 1-4:   small fixes
+patches 7-19:  mechanical conversion to kselftest framework
+patches 20-26: extension of thp_settings to hugepage_settings to also include
+               HugeTLB helpers
+patches 27-28: add helpers for setting up SHM limits in hugetlb-shm and
+               thuge-gen tests
+patches 29-51: integrate the new APIs in all the tests that use HugeTLB
+patches 52-53: drop HugeTLB setup from run_vmtests.sh
 
-This is really nice and clear thanks!
+I belive at this point this can go to mm-new and wait there for more review
+feedback.
 
->
-> This means no large folio FSes need to add large folio support (the
-> supported orders need to include PMD_ORDER), so that they can leverage
-> read-only THP creation function.
->
-> To prevent breaking read-only THP support for large folio FSes,
-> 1. first 4 patches enables the support, so that without READ_ONLY_THP_FOR_FS,
->    read-only THP still works for large folio FSes,
+Based on mm-stable-2026-04-18-02-14
 
-I guess this introduces what was previously supported by
-CONFIG_READ_ONLY_THP_FOR_FS to large folios as part of that before removal of
-the config option?
+v2 changes:
+* fix hugetlb mmap tests to actually test file mappings
+* increase maximal tests number in khugepaged
+* add tags, thanks everyone!
 
-> 2. Patch 5 removes READ_ONLY_THP_FOR_FS Kconfig,
-> 3. the rest of patches remove code related to READ_ONLY_THP_FOR_FS.
+v1: https://lore.kernel.org/all/20260406141735.2179309-1-rppt@kernel.org
 
-Makes sense thanks!
+Mike Rapoport (Microsoft) (53):
+  selftests/mm: hugetlb-read-hwpoison: add SIGBUS handler
+  selftests/mm: khugepaged: enable collapse_single_pte_entry_compound for shmem
+  selftests/mm: migration: don't assume hupe page is TWOMEG
+  selftests/mm: run_vmtests.sh: don't gate THP and KSM tests on HAVE_HUGEPAGES
+  selftests/mm: merge map_hugetlb into hugepage-mmap
+  selftests/mm: rename hugepage-* tests to hugetlb-*
+  selftests/mm: hugetlb-shm: use kselftest framework
+  selftests/mm: hugetlb-vmemmap: use kselftest framework
+  selftests/mm: hugetlb-madvise: use kselftest framework
+  selftests/mm: hugetlb_madv_vs_map: use kselftest framework
+  selftests/mm: hugetlb-read-hwpoison: use kselftest framework
+  selftests/mm: khugepaged: group tests in an array
+  selftests/mm: khugepaged: use ksefltest framework
+  selftests/mm: ksm_tests: use kselftest framework
+  selftests/mm: protection_keys: use descriptive test names in TAP output
+  selftests/mm: protection_keys: use kselftest framework
+  selftests/mm: uffd-stress: use kselftest framework
+  selftests/mm: uffd-unit-tests: use kselftest framework
+  selftests/mm: va_high_addr_switch: use kselftest framework
+  selftests/mm: add atexit() and signal handlers to thp_settings
+  selftests/mm: rename thp_settings.[ch] to hugepage_settings.[ch]
+  selftests/mm: move HugeTLB helpers to hugepage_settings
+  selftests/mm: hugepage_settings: use unsigned long in detect_hugetlb_page_size
+  selftests/mm: hugepage_settings: add APIs to get and set nr_hugepages
+  selftests/mm: hugepage_settings: rename get_free_hugepages()
+  selftests/mm: hugepage_settings: add APIs for HugeTLB setup and teardown
+  selftests/mm: move read_file(), read_num() and write_num() to vm_util
+  selftests/mm: vm_util: add helpers to set and restore shm limits
+  selftests/mm: compaction_test: use HugeTLB helpers ...
+  selftests/mm: cow: add setup of HugeTLB pages
+  selftests/mm: gup_longterm: add setup of HugeTLB pages
+  selftests/mm: gup_test: add setup of HugeTLB pages
+  selftests/mm: hmm-tests: add setup of HugeTLB pages
+  selftests/mm: hugepage_dio: add setup of HugeTLB pages
+  selftests/mm: hugetlb_fault_after_madv: add setup of HugeTLB pages
+  selftests/mm: hugetlb-madvise: add setup of HugeTLB pages
+  selftests/mm: hugetlb_madv_vs_map: add setup of HugeTLB pages
+  selftests/mm: hugetlb-mmap: add setup of HugeTLB pages
+  selftests/mm: hugetlb-mremap: add setup of HugeTLB pages
+  selftests/mm: hugetlb-shm: add setup of HugeTLB pages
+  selftests/mm: hugetlb-soft-online: add setup of HugeTLB pages
+  selftests/mm: hugetlb-vmemmap: add setup of HugeTLB pages
+  selftests/mm: migration: add setup of HugeTLB pages
+  selftests/mm: pagemap_ioctl: add setup of HugeTLB pages
+  selftests/mm: protection_keys: use library code for HugeTLB setup
+  selftests/mm: thuge-gen: add setup of HugeTLB pages
+  selftests/mm: uffd-stress: use hugetlb_save and alloc huge pages
+  selftests/mm: uffd-unit-tests: add setup of HugeTLB pages
+  selftests/mm: uffd-wp-mremap: add setup of HugeTLB pages
+  selftests/mm: va_high_addr_switch: add setup of HugeTLB pages
+  selftests/mm: va_high_addr_switch.sh: drop huge pages setup
+  selftests/mm: run_vmtests.sh: free memory if available memory is low
+  selftests/mm: run_vmtests.sh: drop detection and setup of HugeTLB
 
->
->
-> The overview of the changes is:
->
-> 1. collapse_file() checks for to-be-collapsed folio dirtiness after they
->    are locked, unmapped to make sure no new write happens. Before,
->    mapping->nr_thps and inode->i_writecount are used to cause read-only
->    THP truncation before a fd becomes writable.
->
-> 2. hugepage_pmd_enabled() is true for anon, shmem, and file-backed cases
->    if the global khugepaged control is on, otherwise, khugepaged for
->    file-backed case is turned off and anon and shmem depend on per-size
->    control knobs.
->
-> 3. collapse_file() from mm/khugepaged.c, instead of checking
->    CONFIG_READ_ONLY_THP_FOR_FS, makes sure the mapping_max_folio_order()
->    of struct address_space of the file is at least PMD_ORDER.
->
-> 4. file_thp_enabled() also checks mapping_max_folio_order() instead and
->    no longer checks if the input file is opened as read-only (Change 1
->    handles read-write files).
->
-> 5. truncate_inode_partial_folio() calls folio_split() directly instead
->    of the removed try_folio_split_to_order(), since large folios can
->    only show up on a FS with large folio support.
->
-> 6. nr_thps is removed from struct address_space, since it is no longer
->    needed to drop all read-only THPs from a FS without large folio
->    support when the fd becomes writable. Its related filemap_nr_thps*()
->    are removed too.
->
-> 7. folio_check_splittable() no longer checks READ_ONLY_THP_FOR_FS.
->
-> 8. Updated comments in various places.
->
->
-> Changelog
-> ===
-> From V2[3]:
-> 1. removed unnecessary check in collapse_scan_file().
->
-> 2. removed inode_is_open_for_write() check in file_thp_enabled().
->
-> 3. changed hugepage_pmd_enabled() to return true if khugepaged global
->    control is on instead of false. cleaned up anon and shmem code in the
->    function.
->
-> 4. moved folio dirtiness check after try_to_unmap() but before
->    try_to_unmap_flush(), since that is sufficient to prevent new writes.
->
-> 5. reordered patch 4 and 5, so that khugepaged behavior does not change
->    after READ_ONLY_THP_FOR_FS is removed.
->
-> 6. added read-write file test in khugepaged selftest.
->
-> 7. removed the read-only file restriction from guard-region selftest.
->
-> From V1[2]:
-> 1. removed inode_is_open_for_write() check in collapse_file(), since the
->    added folio dirtiness check after try_to_unmap_flush() should be
->    sufficient to prevent writes to candidate folios.
->
-> 2. removed READ_ONLY_THP_FOR_FS check in hugepage_pmd_enabled(), please
->    see Patch 5 and item 2 in the overview for more details.
->
-> 3. moved the patch removing READ_ONLY_THP_FOR_FS Kconfig after enabling
->    khugepaged and MADV_COLLAPSE to create read-only THPs.
->
-> 4. added mapping_pmd_thp_support() helper function.
->
-> 5. used VM_WARN_ON_ONCE() in collapse_file() for mapping eligibility check
->    and address alignment check instead of if + return error code. Always
->    allow shmem, since MADV_COLLAPSE ignore shmem huge config.
->
-> 6. added mapping eligibility check in collapse_scan_file().
->
-> 7. removed trailing ; for folio_split() in the !CONFIG_TRANSPARENT_HUGEPAGE.
->
-> 8. simplified code in folio_check_splittable() after removing
->    READ_ONLY_THP_FOR_FS code.
->
-> 9. clarified that read-only THP works for FSes with PMD THP support by
->    default.
->
-> From RFC[1]:
-> 1. instead of removing READ_ONLY_THP_FOR_FS function entirely, turn it
->    on by default for all FSes with large folio support and the supported
->    orders includes PMD_ORDER.
->
-> Suggestions and comments are welcome.
->
-> Link: https://lore.kernel.org/all/20260323190644.1714379-1-ziy@nvidia.com/ [1]
-> Link: https://lore.kernel.org/all/20260327014255.2058916-1-ziy@nvidia.com/ [2]
-> Link: https://lore.kernel.org/all/20260413192030.3275825-1-ziy@nvidia.com/ [3]
->
-> Zi Yan (12):
->   mm/khugepaged: remove READ_ONLY_THP_FOR_FS check
->   mm/khugepaged: add folio dirty check after try_to_unmap()
->   mm/huge_memory: remove READ_ONLY_THP_FOR_FS from file_thp_enabled()
->   mm/khugepaged: remove READ_ONLY_THP_FOR_FS check in
->     hugepage_pmd_enabled()
->   mm: remove READ_ONLY_THP_FOR_FS Kconfig option
->   mm: fs: remove filemap_nr_thps*() functions and their users
->   fs: remove nr_thps from struct address_space
->   mm/huge_memory: remove folio split check for READ_ONLY_THP_FOR_FS
->   mm/truncate: use folio_split() in truncate_inode_partial_folio()
->   fs/btrfs: remove a comment referring to READ_ONLY_THP_FOR_FS
->   selftests/mm: remove READ_ONLY_THP_FOR_FS in khugepaged
->   selftests/mm: remove READ_ONLY_THP_FOR_FS code from guard-regions
->
->  fs/btrfs/defrag.c                          |   3 -
->  fs/inode.c                                 |   3 -
->  fs/open.c                                  |  27 -----
->  include/linux/fs.h                         |   5 -
->  include/linux/huge_mm.h                    |  25 +----
->  include/linux/pagemap.h                    |  35 ++-----
->  include/linux/shmem_fs.h                   |   2 +-
->  mm/Kconfig                                 |  11 ---
->  mm/filemap.c                               |   1 -
->  mm/huge_memory.c                           |  39 ++------
->  mm/khugepaged.c                            |  86 ++++++++--------
->  mm/truncate.c                              |   8 +-
->  tools/testing/selftests/mm/guard-regions.c |  18 +---
->  tools/testing/selftests/mm/khugepaged.c    | 110 +++++++++++++++------
->  tools/testing/selftests/mm/run_vmtests.sh  |  12 ++-
->  15 files changed, 156 insertions(+), 229 deletions(-)
->
-> --
-> 2.43.0
->
+ tools/testing/selftests/mm/.gitignore         |   4 +
+ tools/testing/selftests/mm/Makefile           |  13 +-
+ tools/testing/selftests/mm/compaction_test.c  | 113 +----
+ tools/testing/selftests/mm/cow.c              |  29 +-
+ .../selftests/mm/folio_split_race_test.c      |   2 +-
+ tools/testing/selftests/mm/guard-regions.c    |   2 +-
+ tools/testing/selftests/mm/gup_longterm.c     |   3 +-
+ tools/testing/selftests/mm/gup_test.c         |  12 +
+ tools/testing/selftests/mm/hmm-tests.c        |  24 +-
+ tools/testing/selftests/mm/hugepage-mmap.c    |  78 ----
+ .../{thp_settings.c => hugepage_settings.c}   | 284 +++++++++++--
+ .../{thp_settings.h => hugepage_settings.h}   |  75 +++-
+ tools/testing/selftests/mm/hugetlb-madvise.c  | 209 ++++------
+ tools/testing/selftests/mm/hugetlb-mmap.c     | 140 +++++++
+ .../{hugepage-mremap.c => hugetlb-mremap.c}   |  13 +-
+ .../selftests/mm/hugetlb-read-hwpoison.c      | 123 +++---
+ .../mm/{hugepage-shm.c => hugetlb-shm.c}      |  65 ++-
+ .../selftests/mm/hugetlb-soft-offline.c       |  45 +-
+ .../{hugepage-vmemmap.c => hugetlb-vmemmap.c} |  46 +-
+ tools/testing/selftests/mm/hugetlb_dio.c      |  15 +-
+ .../selftests/mm/hugetlb_fault_after_madv.c   |   7 +-
+ .../selftests/mm/hugetlb_madv_vs_map.c        |  22 +-
+ tools/testing/selftests/mm/khugepaged.c       | 394 ++++++++----------
+ tools/testing/selftests/mm/ksm_tests.c        | 182 ++++----
+ tools/testing/selftests/mm/map_hugetlb.c      |  88 ----
+ tools/testing/selftests/mm/migration.c        |  54 ++-
+ tools/testing/selftests/mm/pagemap_ioctl.c    |  13 +-
+ tools/testing/selftests/mm/pkey-helpers.h     |   6 +-
+ .../testing/selftests/mm/prctl_thp_disable.c  |   2 +-
+ tools/testing/selftests/mm/protection_keys.c  | 131 +++---
+ tools/testing/selftests/mm/run_vmtests.sh     | 177 ++------
+ tools/testing/selftests/mm/soft-dirty.c       |   2 +-
+ .../selftests/mm/split_huge_page_test.c       |   2 +-
+ tools/testing/selftests/mm/thuge-gen.c        |  80 +---
+ tools/testing/selftests/mm/transhuge-stress.c |   2 +-
+ tools/testing/selftests/mm/uffd-common.h      |   1 +
+ tools/testing/selftests/mm/uffd-stress.c      |  44 +-
+ tools/testing/selftests/mm/uffd-unit-tests.c  | 110 +++--
+ tools/testing/selftests/mm/uffd-wp-mremap.c   |  12 +-
+ .../selftests/mm/va_high_addr_switch.c        |  40 +-
+ .../selftests/mm/va_high_addr_switch.sh       |  39 +-
+ tools/testing/selftests/mm/vm_util.c          | 133 +++---
+ tools/testing/selftests/mm/vm_util.h          |  15 +-
+ 43 files changed, 1376 insertions(+), 1475 deletions(-)
+ delete mode 100644 tools/testing/selftests/mm/hugepage-mmap.c
+ rename tools/testing/selftests/mm/{thp_settings.c => hugepage_settings.c} (60%)
+ rename tools/testing/selftests/mm/{thp_settings.h => hugepage_settings.h} (55%)
+ create mode 100644 tools/testing/selftests/mm/hugetlb-mmap.c
+ rename tools/testing/selftests/mm/{hugepage-mremap.c => hugetlb-mremap.c} (94%)
+ rename tools/testing/selftests/mm/{hugepage-shm.c => hugetlb-shm.c} (56%)
+ rename tools/testing/selftests/mm/{hugepage-vmemmap.c => hugetlb-vmemmap.c} (76%)
+ delete mode 100644 tools/testing/selftests/mm/map_hugetlb.c
+
+
+base-commit: 0b5e8d7999076ac3c490fc18376a404e2626abff
+--
+2.53.0
