@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DE4D355F52;
-	Sat, 18 Apr 2026 10:58:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A46B335A933;
+	Sat, 18 Apr 2026 10:58:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776509933; cv=none; b=GGjHIen0kctW4E7v3Eszwisl4hDE6DuRTweygAByW7FppmegJvm+baQbaMBVO4hd8DHWjvK4I5DNaP6wPIxgmmBHcKrJiE5GPsSDnjmS5FIsjzu6b6FQkLJrDYwymCuZ3OYXdKWlFTRVYx/I29SVvzPTg9TEcoHFNmD1VMxcxC8=
+	t=1776509939; cv=none; b=BZMwRrBfyroJU+dj+iIOugYvrRSwxyfmVYXBtVtllhl2pbCWc/JPlapxAU+jhhNih26GAdP5YI78UE16yaTIWcbkOMWB2w/IIOl2nBSedv/4QPSLzMoWLMI+iWUog7mglVSxjfBYD08Te+K0mDakIFCcfcBCLRJ0Ye471PoTecs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776509933; c=relaxed/simple;
-	bh=1/ugYRnvvCSRn7Fw/zm14SmACzlAtT74uoyJWfVmAG8=;
+	s=arc-20240116; t=1776509939; c=relaxed/simple;
+	bh=+OvcjE79uMeuRExtXX4z8n9tjto6YL9x88apIU5Xm3o=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qbPwdbQn7AKWFuQ5LLC+23oypV6CCyHqxgvlifXAYABuKodFt/QYqoxFa+rNLpJeTMXIlV/gpKKld14t3s23huHCrOg3V2u5zs8aj61r5PYwunLiSBVi3JLVWMn8t8pevyOWA9byvtABoJfO8TzsrL0GTpFMZQ5U3bYf7BZr9m4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GaYvJpiU; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=PTRXO30AFNtGyUsQcc8QfjgYyiuDrvKvw/pAobXbV18qUUJ28VkNqq7Na/rJAY+Uod0aqy4HE5JWSaDphXA6I7bQFb7p7NpOhSHiKINrRbUD/R6rczGROhaj0tcZkCQO/4dp1q/zwJFJCfTJiGfrOVJKkX2u84J8sCe3D2itRAw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CifmbLgm; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GaYvJpiU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78C54C2BCB3;
-	Sat, 18 Apr 2026 10:58:47 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CifmbLgm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B129C4AF09;
+	Sat, 18 Apr 2026 10:58:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776509933;
-	bh=1/ugYRnvvCSRn7Fw/zm14SmACzlAtT74uoyJWfVmAG8=;
+	s=k20201202; t=1776509939;
+	bh=+OvcjE79uMeuRExtXX4z8n9tjto6YL9x88apIU5Xm3o=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=GaYvJpiUhsFjtAZ6oeEfPRx/pDSIplMUmXnj8hsUT96vWC7ZP7+1Ea3T30s/eF94q
-	 eKwXJsTOAnnBsGeNPkSmN5Gge3gcCZsHttWZQuA5S1Xdal4Wa+yRCt72wcdTRYVSw2
-	 Vq0R2kuAVWMgrcQpyuRkMO5IXDnz2a9IMetzEEpNIDaXWn0UwgA/uq4u2yvXNnuBHi
-	 4Yr1BeujIa1LBCQcjvTnNsPjHFQ0aT7tR643fszmn0nYlqhmMbFvsb12hWhn7iVQlh
-	 XBgaInMNWixJfVi6KKF27h3E7ulZb1AEgipizlM0LmPhLz/dN865L5L1zq79f3maBg
-	 vIGexg/0WiFSg==
+	b=CifmbLgmAlYE+culTIaik2iqjJ4EbB1Ar4Y5N/59otRf5EXwd4Yr3umgje2Gx1GIY
+	 f9JhTb5PS3bvcQR0AuKtiAIeukKIkSnvrIv4yVvaKRWGqrVlq/fqraOk51/Y7AHjer
+	 2g22X79fpc84uQRYoyvTD1N1nJrc0l22Ncvsr17mKy4nxupfKQhBu1TYutvkppoGM4
+	 wbENnbaiIuHYYa9AkuOVUljTKkfEC30uteprGGCkc6Q7aCcxgYFUL/APOU9Zh7tIUh
+	 oGGJNFVA0uWyPGyc9BbznI4FUcS3FRuAZs2IDZ6VP40hTuWZUkp+B+HxDHK6q3m91b
+	 QYQVHub0LcmiQ==
 From: Mike Rapoport <rppt@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	David Hildenbrand <david@kernel.org>
@@ -53,9 +53,9 @@ Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-mm@kvack.org
-Subject: [PATCH v2 30/53] selftests/mm: cow: add setup of HugeTLB pages
-Date: Sat, 18 Apr 2026 13:55:15 +0300
-Message-ID: <20260418105539.1261536-31-rppt@kernel.org>
+Subject: [PATCH v2 31/53] selftests/mm: gup_longterm: add setup of HugeTLB pages
+Date: Sat, 18 Apr 2026 13:55:16 +0300
+Message-ID: <20260418105539.1261536-32-rppt@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260418105539.1261536-1-rppt@kernel.org>
 References: <20260418105539.1261536-1-rppt@kernel.org>
@@ -69,46 +69,30 @@ Content-Transfer-Encoding: 8bit
 
 From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-cow tests skips HugeTLB tests if there are no free huge pages prepared
-by a wrapper script.
+gup_longterm tests skips HugeTLB tests if there are no free huge pages
+prepared by a wrapper script.
 
 Add setup of HugeTLB pages to the test and make sure that the original
 settings are restored on the test exit.
 
 Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 ---
- tools/testing/selftests/mm/cow.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ tools/testing/selftests/mm/gup_longterm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/mm/cow.c b/tools/testing/selftests/mm/cow.c
-index 4321f4208fe3..1df513bf362d 100644
---- a/tools/testing/selftests/mm/cow.c
-+++ b/tools/testing/selftests/mm/cow.c
-@@ -1881,21 +1881,21 @@ int main(int argc, char **argv)
+diff --git a/tools/testing/selftests/mm/gup_longterm.c b/tools/testing/selftests/mm/gup_longterm.c
+index ab4eaf4feb7c..6e1de12bf28c 100644
+--- a/tools/testing/selftests/mm/gup_longterm.c
++++ b/tools/testing/selftests/mm/gup_longterm.c
+@@ -510,7 +510,7 @@ int main(int argc, char **argv)
+ 	int i;
+ 
+ 	pagesize = getpagesize();
+-	nr_hugetlbsizes = detect_hugetlb_page_sizes(hugetlbsizes,
++	nr_hugetlbsizes = hugetlb_setup(2, hugetlbsizes,
+ 						    ARRAY_SIZE(hugetlbsizes));
  
  	ksft_print_header();
- 
-+	hugepage_save_settings(true, true);
-+
- 	pagesize = getpagesize();
- 	pmdsize = read_pmd_pagesize();
- 	if (pmdsize) {
- 		/* Only if THP is supported. */
- 		thp_read_settings(&default_settings);
- 		default_settings.hugepages[sz2ord(pmdsize, pagesize)].enabled = THP_INHERIT;
--		thp_save_settings();
- 		thp_push_settings(&default_settings);
- 
- 		ksft_print_msg("[INFO] detected PMD size: %zu KiB\n",
- 			       pmdsize / 1024);
- 		nr_thpsizes = detect_thp_sizes(thpsizes, ARRAY_SIZE(thpsizes));
- 	}
--	nr_hugetlbsizes = detect_hugetlb_page_sizes(hugetlbsizes,
--						    ARRAY_SIZE(hugetlbsizes));
-+	nr_hugetlbsizes = hugetlb_setup(2, hugetlbsizes, ARRAY_SIZE(hugetlbsizes));
- 	has_huge_zeropage = detect_huge_zeropage();
- 
- 	ksft_set_plan(ARRAY_SIZE(anon_test_cases) * tests_per_anon_test_case() +
 -- 
 2.53.0
 
