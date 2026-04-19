@@ -1,279 +1,95 @@
-Received: from ewsoutbound.kpnmail.nl (ewsoutbound.kpnmail.nl [195.121.94.168])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86DB530EF84
-	for <linux-kselftest@vger.kernel.org>; Sun, 19 Apr 2026 13:23:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.121.94.168
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C831126A1AC;
+	Sun, 19 Apr 2026 14:13:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776604999; cv=none; b=TMgJBaAi6QjZ2/VSZ1gAuLjmM7fXeh926i98hv/g/ctraQM7ZB3UE0WKKLP8txtEFxrpxpR6jsE/1Rg/ds5JN1ZssLl8oeU6ZYMtmGRbpKy5V2CRS1j6yNput3CWPoV1U93f+FKl2OTuSdL+GhmE+eTa/PNHOKqsUO5LkLhzQ8Q=
+	t=1776608013; cv=none; b=AiwM8LiN+uNkuvjCWzqS8cn06Ti4kpUsVNgIfHjR91rjsUoOvEIii75VapOGV/KBj2nFwS2M/B6upq4wjJ+9jF83qH31shLAYeEooVrxJYIo7wp/vhUYbSqCoDXzKL+mguVYl58AgtMoP4Fl7jdDTymDzOLEyH0s0WwjCPBwClY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776604999; c=relaxed/simple;
-	bh=kk/pWjEu1FPRZGl74ySaQWrHQGs8YGaWyKcN35dQXag=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LKvSG+OGm8XZzEHaoALb+0t2igMdWWacwbsROuybB/Ann2uYGuF/QkAXvaPkru8nd6K2scU14j9R+JR1mt6khvhgjsk34oGR8qIsbdPy6r0ocaxn1umnq+FM+a5t1koejJCx91zwweGmtP2+r/ZrJXSKgDkL1+0d70tdQ7AjBWU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xs4all.nl; spf=pass smtp.mailfrom=xs4all.nl; dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b=VpBzn8Jl; arc=none smtp.client-ip=195.121.94.168
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xs4all.nl
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xs4all.nl
+	s=arc-20240116; t=1776608013; c=relaxed/simple;
+	bh=J/e8EdFsJdLULkm3fAcZKJUFyqjPokX/d8LV5xp1w58=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=sZIvAQXIv0oAlMTKKNJFIRs/2Jc07YYWhJiyQ2pKiudZ+uc6zg5tksgYjwSnC2iwJUcOx+ReO0P9xaTqyQrmOISm2VSn/S+WwO+sLP1zmUIBwNbMmeqEFwvMgpKYdEZqu/Tc4YieZINtOluOlax/amac2ob48JUlnzw0X3PzxTM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dcrbFSeT; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="VpBzn8Jl"
-X-KPN-MessageId: c3b6a62d-3bf2-11f1-92a9-005056aba152
-Received: from smtp.kpnmail.nl (unknown [10.31.155.39])
-	by ewsoutbound.so.kpn.org (Halon) with ESMTPS
-	id c3b6a62d-3bf2-11f1-92a9-005056aba152;
-	Sun, 19 Apr 2026 15:22:07 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=xs4all.nl; s=xs4all01;
-	h=mime-version:message-id:date:subject:to:from;
-	bh=S4JIMBWVyeDfEi8dxlJjEffwFK6Rn0yu/34Q5pFwrXc=;
-	b=VpBzn8JlDroIFR7gca8n98TLucjDnmm6fQ6BEYt0sI3t8onT5Ij1auoEFwNkGJWhF6V9A//vo8/Se
-	 OzI74LLnmmK9jAtHExD2f1gZQFw9vuukSZx0eX1Urd1UNZQY21iyPCu2SIoHVgpp3ZDm0+XBb+cn/Q
-	 oSUTlVlyS/drcnmm82gLb3rdcX5AIXIY3nBBiKtcA2VbVpTX3ehJIDFYhFHeYXkLnZ9f2yb55RHFP2
-	 lrzkJoI2KbrwNkioqlT1/xddJ/28MxG5v2QgeKM3WNvIHi/mDfXWuYBvqdNBGZCReNBfeKF+rmhc29
-	 Mb43ddcyQxCMZ2XDCwQgBGenET94gJQ==
-X-KPN-MID: 33|gNKem4IwOoz5XhXBXnCIBbZOTjwbXn1VIYefPcnTGdreC9/VLmOKOsmhwKorchz
- QZvH3w/qncZKdrv4QVZyqcU+Xxq6GPVAfhJdBk06GHYc=
-X-KPN-VerifiedSender: Yes
-X-CMASSUN: 33|EXSiaji+dWNqQVBuIvUO78BDWYPfpmWJT2l8f5Ytnr77ETuspE+OrjpcAAtNxcQ
- lC78qYIF+MxJBalzRkTCPIg==
-Received: from daedalus.home (unknown [178.227.25.188])
-	by smtp.xs4all.nl (Halon) with ESMTPSA
-	id c0c97afc-3bf2-11f1-8011-005056ab7447;
-	Sun, 19 Apr 2026 15:22:07 +0200 (CEST)
-From: Jori Koolstra <jkoolstra@xs4all.nl>
-To: Aleksa Sarai <cyphar@cyphar.com>,
-	cmirabil@redhat.com,
-	Jeff Layton <jlayton@kernel.org>,
-	Chuck Lever <chuck.lever@oracle.com>,
-	Alexander Aring <alex.aring@gmail.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>,
-	Jan Kara <jack@suse.cz>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Jori Koolstra <jkoolstra@xs4all.nl>,
-	Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Wei Yang <richard.weiyang@gmail.com>,
-	linux-fsdevel@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dcrbFSeT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60CA5C2BCAF;
+	Sun, 19 Apr 2026 14:13:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776608013;
+	bh=J/e8EdFsJdLULkm3fAcZKJUFyqjPokX/d8LV5xp1w58=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=dcrbFSeToFcTNl+gLAFJPT+Ac/9pC7E3rANYHIaDFc+xDgsrX9v1JenvIozkGiMeI
+	 ZfHfWp4Sy585KEsbhCKuQXeT4Az5bkbEsiyNcuFNeIKTAjcwcu+IJICmjh3EaW9Lw3
+	 gZ3oNsGxHsI3DkPPF+AHx/U5mQKMj4EfFSz46CkDvoZrOAQZll3zt4oNgh5jIvef/s
+	 R/o4gO8StrAg8QrM+5TRoBUITO5zRtf0d28xuUkyF7MkNsw2enDsx6dfh4neuNeFUf
+	 qzb8mxlCEMcHV3BXf6sENDQXii/BcMx0/bwlBgxTWBYQO3EHtA7U4YlBSeYBynhiCe
+	 XHU1sNGU4ZLQQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=lobster-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <maz@kernel.org>)
+	id 1wEStu-0000000Cq78-36gR;
+	Sun, 19 Apr 2026 14:13:30 +0000
+Date: Sun, 19 Apr 2026 15:13:30 +0100
+Message-ID: <87o6jfavhx.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
+Cc: Oliver Upton <oupton@kernel.org>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Kees Cook <kees@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev,
 	linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org,
+	linux-hardening@vger.kernel.org,
+	devel@daynix.com,
+	kvm@vger.kernel.org,
+	linux-doc@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v4 2/2] selftest: add tests for O_EMPTYPATH
-Date: Sun, 19 Apr 2026 15:21:43 +0200
-Message-ID: <20260419132202.487612-1-jkoolstra@xs4all.nl>
-X-Mailer: git-send-email 2.53.0
+Subject: Re: [PATCH v7 1/4] KVM: arm64: PMU: Add kvm_pmu_enabled_counter_mask()
+In-Reply-To: <20260418-hybrid-v7-1-2bf39ad009bf@rsg.ci.i.u-tokyo.ac.jp>
+References: <20260418-hybrid-v7-0-2bf39ad009bf@rsg.ci.i.u-tokyo.ac.jp>
+	<20260418-hybrid-v7-1-2bf39ad009bf@rsg.ci.i.u-tokyo.ac.jp>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: odaki@rsg.ci.i.u-tokyo.ac.jp, oupton@kernel.org, joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, catalin.marinas@arm.com, will@kernel.org, kees@kernel.org, gustavoars@kernel.org, pbonzini@redhat.com, corbet@lwn.net, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org, devel@daynix.com, kvm@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-Add tests for the new O_EMPTYPATH flag of openat(2)/openat2(2).
+On Sat, 18 Apr 2026 09:14:23 +0100,
+Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp> wrote:
+> 
+> This function will be useful to enumerate enabled counters.
 
-Also, the current openat2 tests include a helper header file that
-defines the necessary structs and constants to use openat2(2), such as
-struct open_how. This may result in conflicting definitions when the
-system header openat2.h is present as well.
+Consider expanding this commit message a bit. Something along the
+lines of:
 
-So add openat2.h generated by 'make headers' to the uapi header
-files in ./tools/include and remove the helper file definitions of
-the current openat2 selftests.
+"Add kvm_pmu_enabled_counter_mask() as an accessor returning a 64bit
+ mask of the counters enabled on a given vcpu.
 
-Signed-off-by: Jori Koolstra <jkoolstra@xs4all.nl>
----
- tools/include/uapi/linux/openat2.h            | 43 +++++++++++++++
- tools/testing/selftests/openat2/Makefile      |  4 +-
- .../selftests/openat2/emptypath_test.c        | 55 +++++++++++++++++++
- tools/testing/selftests/openat2/helpers.h     | 40 +-------------
- 4 files changed, 103 insertions(+), 39 deletions(-)
- create mode 100644 tools/include/uapi/linux/openat2.h
- create mode 100644 tools/testing/selftests/openat2/emptypath_test.c
+ This will eventually be useful to iterate over the counters."
 
-diff --git a/tools/include/uapi/linux/openat2.h b/tools/include/uapi/linux/openat2.h
-new file mode 100644
-index 000000000000..4759c471676c
---- /dev/null
-+++ b/tools/include/uapi/linux/openat2.h
-@@ -0,0 +1,43 @@
-+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-+#ifndef _LINUX_OPENAT2_H
-+#define _LINUX_OPENAT2_H
-+
-+#include <linux/types.h>
-+
-+/*
-+ * Arguments for how openat2(2) should open the target path. If only @flags and
-+ * @mode are non-zero, then openat2(2) operates very similarly to openat(2).
-+ *
-+ * However, unlike openat(2), unknown or invalid bits in @flags result in
-+ * -EINVAL rather than being silently ignored. @mode must be zero unless one of
-+ * {O_CREAT, O_TMPFILE} are set.
-+ *
-+ * @flags: O_* flags.
-+ * @mode: O_CREAT/O_TMPFILE file mode.
-+ * @resolve: RESOLVE_* flags.
-+ */
-+struct open_how {
-+	__u64 flags;
-+	__u64 mode;
-+	__u64 resolve;
-+};
-+
-+/* how->resolve flags for openat2(2). */
-+#define RESOLVE_NO_XDEV		0x01 /* Block mount-point crossings
-+					(includes bind-mounts). */
-+#define RESOLVE_NO_MAGICLINKS	0x02 /* Block traversal through procfs-style
-+					"magic-links". */
-+#define RESOLVE_NO_SYMLINKS	0x04 /* Block traversal through all symlinks
-+					(implies OEXT_NO_MAGICLINKS) */
-+#define RESOLVE_BENEATH		0x08 /* Block "lexical" trickery like
-+					"..", symlinks, and absolute
-+					paths which escape the dirfd. */
-+#define RESOLVE_IN_ROOT		0x10 /* Make all jumps to "/" and ".."
-+					be scoped inside the dirfd
-+					(similar to chroot(2)). */
-+#define RESOLVE_CACHED		0x20 /* Only complete if resolution can be
-+					completed through cached lookup. May
-+					return -EAGAIN if that's not
-+					possible. */
-+
-+#endif /* _LINUX_OPENAT2_H */
-diff --git a/tools/testing/selftests/openat2/Makefile b/tools/testing/selftests/openat2/Makefile
-index 185dc76ebb5f..db004a527634 100644
---- a/tools/testing/selftests/openat2/Makefile
-+++ b/tools/testing/selftests/openat2/Makefile
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-or-later
- 
--CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined
--TEST_GEN_PROGS := openat2_test resolve_test rename_attack_test
-+CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined $(TOOLS_INCLUDES)
-+TEST_GEN_PROGS := openat2_test resolve_test rename_attack_test emptypath_test
- 
- # gcc requires -static-libasan in order to ensure that Address Sanitizer's
- # library is the first one loaded. However, clang already statically links the
-diff --git a/tools/testing/selftests/openat2/emptypath_test.c b/tools/testing/selftests/openat2/emptypath_test.c
-new file mode 100644
-index 000000000000..3d861ecd0c05
---- /dev/null
-+++ b/tools/testing/selftests/openat2/emptypath_test.c
-@@ -0,0 +1,55 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+
-+#define __SANE_USERSPACE_TYPES__
-+#include <fcntl.h>
-+#include <unistd.h>
-+#include <errno.h>
-+
-+#include "kselftest.h"
-+
-+#ifndef O_EMPTYPATH
-+#define O_EMPTYPATH	040000000
-+#endif
-+
-+int main(void)
-+{
-+	int opath_fd, reopen_fd;
-+	const char *path = "/tmp/emptypath_test";
-+
-+	ksft_print_header();
-+	ksft_set_plan(2);
-+
-+	opath_fd = open(path, O_CREAT | O_WRONLY, S_IRWXU);
-+	if (opath_fd < 0)
-+		ksft_exit_fail_msg("create %s: %m\n", path);
-+	close(opath_fd);
-+
-+	opath_fd = open(path, O_PATH);
-+	if (opath_fd < 0)
-+		ksft_exit_fail_msg("open %s O_PATH: %m\n", path);
-+
-+	reopen_fd = openat(opath_fd, "", O_RDONLY);
-+	if (reopen_fd < 0 && errno == ENOENT)
-+		ksft_test_result_pass("empty path without O_EMPTYPATH returns ENOENT\n");
-+	else if (reopen_fd >= 0) {
-+		ksft_test_result_fail("empty path without O_EMPTYPATH unexpectedly succeeded\n");
-+		close(reopen_fd);
-+	} else {
-+		ksft_test_result_fail("empty path without O_EMPTYPATH: expected ENOENT, got %m\n");
-+	}
-+
-+	reopen_fd = openat(opath_fd, "", O_RDONLY | O_EMPTYPATH);
-+
-+	if (reopen_fd < 0 && errno == EINVAL)
-+		ksft_exit_skip("O_EMPTYPATH not supported\n");
-+
-+	if (reopen_fd >= 0) {
-+		ksft_test_result_pass("O_EMPTYPATH reopens O_PATH fd\n");
-+		close(reopen_fd);
-+	} else {
-+		ksft_test_result_fail("O_EMPTYPATH failed: %m\n");
-+	}
-+
-+	unlink(path);
-+	ksft_finished();
-+}
-diff --git a/tools/testing/selftests/openat2/helpers.h b/tools/testing/selftests/openat2/helpers.h
-index 510e60602511..0f600df91d2a 100644
---- a/tools/testing/selftests/openat2/helpers.h
-+++ b/tools/testing/selftests/openat2/helpers.h
-@@ -14,6 +14,9 @@
- #include <linux/types.h>
- #include "kselftest.h"
- 
-+#define OPEN_HOW_SIZE_VER0	24
-+#define OPEN_HOW_SIZE_LATEST	OPEN_HOW_SIZE_VER0
-+
- #define ARRAY_LEN(X) (sizeof (X) / sizeof (*(X)))
- #define BUILD_BUG_ON(e) ((void)(sizeof(struct { int:(-!!(e)); })))
- 
-@@ -24,45 +27,8 @@
- #define SYS_openat2 __NR_openat2
- #endif /* SYS_openat2 */
- 
--/*
-- * Arguments for how openat2(2) should open the target path. If @resolve is
-- * zero, then openat2(2) operates very similarly to openat(2).
-- *
-- * However, unlike openat(2), unknown bits in @flags result in -EINVAL rather
-- * than being silently ignored. @mode must be zero unless one of {O_CREAT,
-- * O_TMPFILE} are set.
-- *
-- * @flags: O_* flags.
-- * @mode: O_CREAT/O_TMPFILE file mode.
-- * @resolve: RESOLVE_* flags.
-- */
--struct open_how {
--	__u64 flags;
--	__u64 mode;
--	__u64 resolve;
--};
--
--#define OPEN_HOW_SIZE_VER0	24 /* sizeof first published struct */
--#define OPEN_HOW_SIZE_LATEST	OPEN_HOW_SIZE_VER0
--
- bool needs_openat2(const struct open_how *how);
- 
--#ifndef RESOLVE_IN_ROOT
--/* how->resolve flags for openat2(2). */
--#define RESOLVE_NO_XDEV		0x01 /* Block mount-point crossings
--					(includes bind-mounts). */
--#define RESOLVE_NO_MAGICLINKS	0x02 /* Block traversal through procfs-style
--					"magic-links". */
--#define RESOLVE_NO_SYMLINKS	0x04 /* Block traversal through all symlinks
--					(implies OEXT_NO_MAGICLINKS) */
--#define RESOLVE_BENEATH		0x08 /* Block "lexical" trickery like
--					"..", symlinks, and absolute
--					paths which escape the dirfd. */
--#define RESOLVE_IN_ROOT		0x10 /* Make all jumps to "/" and ".."
--					be scoped inside the dirfd
--					(similar to chroot(2)). */
--#endif /* RESOLVE_IN_ROOT */
--
- #define E_func(func, ...)						      \
- 	do {								      \
- 		errno = 0;						      \
+Thanks,
+
+	M.
+
 -- 
-2.53.0
-
+Jazz isn't dead. It just smells funny.
