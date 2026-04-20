@@ -1,105 +1,151 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CABE83C0624;
-	Mon, 20 Apr 2026 13:27:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCBCB28000F
+	for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2026 13:46:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776691622; cv=none; b=S4yCiRi006aXCX9Ih7Cfv2UF1So/pL5+FgDJ0lJgb51yoDpVqb88sziLNviSpoD76kt3O1a/ZY9spueB+n2E/6/AyVmBgSxX8BwiN6HVDZqO9WQuB5P24Y/vzmeQ/0x+k2KHQ6uyZMPI/pxyQ/eWt1nzOalYLGqsku5LDQidemY=
+	t=1776692815; cv=none; b=BzOAG52+youilPfF5aMZAgoDQy+KSpsDTCKKDMOvN818IMRx+B8f/mXYX1e7wQind7N5fhX0c/yOdHKDgDGzPZhLlyHpLuqbGdKQK/lihcFzpZ4lptpTY82Js1qcuWH+3i8SSpCllfFYuYdUt9NZSA0jnvh6FYGeKLxnT287Q5E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776691622; c=relaxed/simple;
-	bh=2HFDKDa+QYlTQ7jECX761lpR0rAZxZkBIpMTXWaLxk8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sjG10gtFWSiljityG3g4MJtfFuFuyZ1wsrGlDpp3nbfCjxJBLGPjd/6eYC5z9RiX2nV3zUpmbPtQoypJ55hv80zysjrveGVb8kK5h2g0NAdUqAuFWzuRMPy2GkDgDs81L0I8CEsFRStHHQoRGugCxdQeyp7FZhQB7W/UIm95JLI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jjR1yiFQ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776692815; c=relaxed/simple;
+	bh=7e3Jv1hIBDXr8+1tQjy6HqPVRAwUWQkas33WNmF25rU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LuNOdCqkD49puWqlb8UWVZi0xH2sGmMcWbxnm7rFETd+NR2xOnt/QifQfLUrHk2rMnkAcpSQZZr2AFyyOqZEpWokshLP66os5yN7ziq3++TKFqrSUpm/QxOiTGsf+5WRPgRaHhmQ2HV8VuIPOeY7XYmzfNNZflKxxIhUFko5ads=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Gmg/2BdQ; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jjR1yiFQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D019C2BCB7;
-	Mon, 20 Apr 2026 13:27:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776691622;
-	bh=2HFDKDa+QYlTQ7jECX761lpR0rAZxZkBIpMTXWaLxk8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=jjR1yiFQmvgvbl0MaX6FNOeY5wctDyVfhMdSyIirW6I859uV+uFivP6rsbcMLpbBJ
-	 eMmrtnwo/O+wkJ/1LyGgGtJQdnwnEWR7lUHlMkLQDxcPqLpJ4uflgJaKXNa2xrze3H
-	 Vq8JqB3PP0Nf1XroKgBLpHBVilumLijzKt8Jd6iOb2U3CmelzIuTyN571mgWe9Ef48
-	 UrrhN2Tk2sO9pSbA515cdthqO2u8U7t93o+skRJ6ibVvX9fkdYtT1iTbRhIcFciDOW
-	 VqD0oCAmwKy9yYATxq/9wVLqqMN/ZM2co2sGW3E8cA5yQe2iaJ2DU3TvsVTNkV/FrG
-	 EcCepRH6Cf5RA==
-From: Sasha Levin <sashal@kernel.org>
-To: patches@lists.linux.dev,
-	stable@vger.kernel.org
-Cc: Daniel Golle <daniel@makrotopia.org>,
-	Alexander Sverdlin <alexander.sverdlin@siemens.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Sasha Levin <sashal@kernel.org>,
-	davem@davemloft.net,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	shuah@kernel.org,
-	razor@blackwall.org,
-	netdev@vger.kernel.org,
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Gmg/2BdQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1776692812;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=WSlaPufJUm31B5UrUIPJHDj4SD8uuuIu+HPiYK3Sn6o=;
+	b=Gmg/2BdQE/6mpZv3wkdkkmc5H1G06m5+QxNV2/jfkZNXVZz+9YHL3C4/jWpCsF4w/qQMRS
+	BgDml8+DpottuLBCHHb++d/huxKhG0Jp7lXgeJTYS/AguUfxIECJmX7a5iWd7zgu6XpcNy
+	eurcKVicQwsi9mF6ghp2yvcodeQsGkk=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-372-e2TyLXTRM9-8PWHrrVAy-Q-1; Mon,
+ 20 Apr 2026 09:46:49 -0400
+X-MC-Unique: e2TyLXTRM9-8PWHrrVAy-Q-1
+X-Mimecast-MFC-AGG-ID: e2TyLXTRM9-8PWHrrVAy-Q_1776692805
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C82601956067;
+	Mon, 20 Apr 2026 13:46:44 +0000 (UTC)
+Received: from fedora (unknown [10.44.49.212])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id D886C3000C15;
+	Mon, 20 Apr 2026 13:46:38 +0000 (UTC)
+Received: by fedora (sSMTP sendmail emulation); Mon, 20 Apr 2026 15:46:37 +0200
+From: "Jerome Marchand" <jmarchan@redhat.com>
+To: bpf@vger.kernel.org
+Cc: Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Mykyta Yatsenko <yatsenko@meta.com>,
+	Jerome Marchand <jmarchan@redhat.com>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.18] selftests: net: bridge_vlan_mcast: wait for h1 before querier check
-Date: Mon, 20 Apr 2026 09:18:51 -0400
-Message-ID: <20260420132314.1023554-137-sashal@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260420132314.1023554-1-sashal@kernel.org>
-References: <20260420132314.1023554-1-sashal@kernel.org>
+Subject: [PATCH] selftests/bpf: Page out as late a possible in file_reader
+Date: Mon, 20 Apr 2026 15:46:37 +0200
+Message-ID: <20260420134637.2513867-1-jmarchan@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.18.23
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-From: Daniel Golle <daniel@makrotopia.org>
+The file_reader/on_open_expect_fault fails consistently on my system.
+It expects a page fault on first dynptr read of some range the exe
+file of the current process because it has paged out that page range
+earlier. However a lot can happen to that range (which depending on
+the actual memory layout could contain text section, data section,
+sections )related to dynamic linking...) between the moment it was
+paged out and the moment the bpf program expected to hit a pagefault
+actually run.
 
-[ Upstream commit efaa71faf212324ecbf6d5339e9717fe53254f58 ]
+A bit of instrumentation with mincore() shows that pages from that
+range were accessed several times before the program is run. In
+particular the call of file_reader__load() seems to fault all the
+range in.
 
-The querier-interval test adds h1 (currently a slave of the VRF created
-by simple_if_init) to a temporary bridge br1 acting as an outside IGMP
-querier. The kernel VRF driver (drivers/net/vrf.c) calls cycle_netdev()
-on every slave add and remove, toggling the interface admin-down then up.
-Phylink takes the PHY down during the admin-down half of that cycle.
-Since h1 and swp1 are cable-connected, swp1 also loses its link may need
-several seconds to re-negotiate.
+Move the call to madvise(MADV_PAGEOUT) to just before attaching the
+program to minimize the risk of having those page pulled back in from
+under our feet.
 
-Use setup_wait_dev $h1 0 which waits for h1 to return to UP state, so the
-test can rely on the link being back up at this point.
-
-Fixes: 4d8610ee8bd77 ("selftests: net: bridge: add vlan mcast_querier_interval tests")
-Signed-off-by: Daniel Golle <daniel@makrotopia.org>
-Reviewed-by: Alexander Sverdlin <alexander.sverdlin@siemens.com>
-Link: https://patch.msgid.link/c830f130860fd2efae08bfb9e5b25fd028e58ce5.1775424423.git.daniel@makrotopia.org
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Jerome Marchand <jmarchan@redhat.com>
 ---
+ .../selftests/bpf/prog_tests/file_reader.c    | 22 +++++++++----------
+ 1 file changed, 10 insertions(+), 12 deletions(-)
 
-LLM Generated explanations, may be completely bogus:
-
-Error: Failed to generate final synthesis
-
- tools/testing/selftests/net/forwarding/bridge_vlan_mcast.sh | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/tools/testing/selftests/net/forwarding/bridge_vlan_mcast.sh b/tools/testing/selftests/net/forwarding/bridge_vlan_mcast.sh
-index 72dfbeaf56b92..e8031f68200ad 100755
---- a/tools/testing/selftests/net/forwarding/bridge_vlan_mcast.sh
-+++ b/tools/testing/selftests/net/forwarding/bridge_vlan_mcast.sh
-@@ -414,6 +414,7 @@ vlmc_querier_intvl_test()
- 	bridge vlan add vid 10 dev br1 self pvid untagged
- 	ip link set dev $h1 master br1
- 	ip link set dev br1 up
-+	setup_wait_dev $h1 0
- 	bridge vlan add vid 10 dev $h1 master
- 	bridge vlan global set vid 10 dev br1 mcast_snooping 1 mcast_querier 1
- 	sleep 2
+diff --git a/tools/testing/selftests/bpf/prog_tests/file_reader.c b/tools/testing/selftests/bpf/prog_tests/file_reader.c
+index 5cde32b35da44..48aae7ea0e4bb 100644
+--- a/tools/testing/selftests/bpf/prog_tests/file_reader.c
++++ b/tools/testing/selftests/bpf/prog_tests/file_reader.c
+@@ -10,6 +10,7 @@
+ 
+ const char *user_ptr = "hello world";
+ char file_contents[256000];
++void *addr;
+ 
+ void *get_executable_base_addr(void)
+ {
+@@ -26,8 +27,7 @@ void *get_executable_base_addr(void)
+ static int initialize_file_contents(void)
+ {
+ 	int fd, page_sz = sysconf(_SC_PAGESIZE);
+-	ssize_t n = 0, cur, off;
+-	void *addr;
++	ssize_t n = 0, cur;
+ 
+ 	fd = open("/proc/self/exe", O_RDONLY);
+ 	if (!ASSERT_OK_FD(fd, "Open /proc/self/exe\n"))
+@@ -52,16 +52,6 @@ static int initialize_file_contents(void)
+ 	/* page-align base file address */
+ 	addr = (void *)((unsigned long)addr & ~(page_sz - 1));
+ 
+-	/*
+-	 * Page out range 0..512K, use 0..256K for positive tests and
+-	 * 256K..512K for negative tests expecting page faults
+-	 */
+-	for (off = 0; off < sizeof(file_contents) * 2; off += page_sz) {
+-		if (!ASSERT_OK(madvise(addr + off, page_sz, MADV_PAGEOUT),
+-			       "madvise pageout"))
+-			return errno;
+-	}
+-
+ 	return 0;
+ }
+ 
+@@ -90,6 +80,14 @@ static void run_test(const char *prog_name)
+ 	if (!ASSERT_OK(err, "file_reader__load"))
+ 		goto cleanup;
+ 
++	/*
++	 * Page out range 0..512K, use 0..256K for positive tests and
++	 * 256K..512K for negative tests expecting page faults
++	 */
++	if (!ASSERT_OK(madvise(addr, sizeof(file_contents) * 2, MADV_PAGEOUT),
++		       "madvise pageout"))
++		goto cleanup;
++
+ 	err = file_reader__attach(skel);
+ 	if (!ASSERT_OK(err, "file_reader__attach"))
+ 		goto cleanup;
 -- 
 2.53.0
 
