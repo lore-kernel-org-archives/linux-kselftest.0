@@ -1,94 +1,95 @@
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A5DA27B353
-	for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2026 07:22:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.222.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED8472FD7D3
+	for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2026 07:22:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.182
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776669728; cv=pass; b=h1W5hFBIY+Or6Qmd+Hc8Xxj6o9iorxPrpVXgm1UQf6dm4NuPie3iioTodqBZWB5nc+PGzEv8G2PeJupB5kbzyYwhI2AfwHhnzRAp4fnJ3UGwqdrFEwrUeg9PwfYM5LPSqIy6ZXx+dp2p4jh9HhWMM8yYL3Jo8HW6CUbCn9Z9u34=
+	t=1776669760; cv=pass; b=hvyApNAjzy+cUs6toDMCpKJ5F7YOXEl6DHhakqdg3tbgfixNGDXNIXDpO8uiYnz2STl9nOiRml51a5BBVXBpqUw6DtZud0R5CLFPIxYqk7U86t2j5oA31Dge3JoKkl7Zu/YhRSHOHJUy9FKaYolr1CVToanrri9D1NphEwuWLrc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776669728; c=relaxed/simple;
-	bh=KCWKz+FtlPBgRCYFABaMUT1OdH92SjQSov3W4C2s+FA=;
+	s=arc-20240116; t=1776669760; c=relaxed/simple;
+	bh=z6RjGPSiK8r0oWXY5W6DEUzXSooC04ggiIIVzrIwlyE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MjXU8QfzaLFhGn6VkEey5TNXabUKjS0l1LfYlkWT/9wLnVLUAxZnmPGlTzcBLXbOMJd+7O6dk7i+M4RrkbDhmqbp8+CG+ts1wZbX5EW+KBS+fuzgCP9JnmU5Mr5hoVlgIXUXxr2UEtsFAOmeImcVdf1lwmeWXYb02VK2XLlrxls=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=foVDIpIh; arc=pass smtp.client-ip=209.85.222.171
+	 To:Cc:Content-Type; b=ZmmC8DyXMdj+seVUuSWTkEN+6VDioH6BTG5wAlqgPTqwrhskQCD/wFRD8B+Yku8AlAg/SipbCQ/S565zNqUJv9iephmNp3sWbmCsmaPIBSOTrrHnrLGQgQlZrKeUU26V46Ai+K5xnQV4lgRbzr/J7ULY3EIa5my2leUX5aY/WhA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=UBFHCkDw; arc=pass smtp.client-ip=209.85.160.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="foVDIpIh"
-Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-8cb20bcff5aso260100385a.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2026 00:22:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776669726; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UBFHCkDw"
+Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-50697d6a69cso14516561cf.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2026 00:22:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776669757; cv=none;
         d=google.com; s=arc-20240605;
-        b=k5QQF037INEKbo05jsu+rDh11EeWYWVPlXsb851xYnsfwXdYVYO2QeIWHLj+rEl7kS
-         V68GnfRg7uBdWeYM+BxiaIRB3jV0lCmLaOw0tv/QmKRRZqOOT2BOUQsS3N9D2FCrj3qn
-         eXCeMQ0muyq28FSHdiDiSyDEgkjb28ASpRef8x7T4OpMocKDJUJ1vV4+ehElL6JSgqcL
-         JYE3aUUyGt2W/TO3Yfxga8kJKxCz5EtwgxKviODMFmg7eY6bcbYEz3llYIWL8rcNf+rR
-         Y+31dX+3nD/ZtgKrwSrPSd3+ZGrfK+zUfcsOsI3GtMFWF6IaHLapaauabKCvbUfYSx9w
-         XrYg==
+        b=WbalRwOxdiH32JTWfC6oSy4DYOs0p1Ac4Aqp/N9tATlFSJEB6W6HZ0UFByGx3gzroY
+         Dt7iBJfqPwYrPf3TFAbEToc9/NobZYGVc7IiMrxtxyCOXOpJ/YZ31aDqjwGJJZQpcYJc
+         prBuk1KN/UEVTPkJVnpyqpJyTCgBK77qfG5gs+ngL4pjLWJwjoI9pI+31jy9VlWpBwku
+         ppoOT66g2MuC1Gf/QES3675/LoBemj9+Q3e6BlELDLHnfBk863hr+ekS6NiHHST2ybD8
+         rvZ0Xsx6ToOIOMdu9DAsaLjpxDcmNXeToQO06ODJlLf26GeklDn8QcemUaSj7p4rtutd
+         iItA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=BDIniOySTzGT5p8wsR3mWPyJ5w+on2w+W1qyzBFCzag=;
-        fh=MD74rL81xVf1kByazU43PG6OBvt94SGBk/6JagrELl4=;
-        b=kewll6zA1bJIRcrBf78NdUV9ugT+/2piaTi85Ltn5wO3u/dIjOKhQzLNY9YJ3zbtIw
-         Vh9pVKDlsLegvL3oGJhn23XRPnzElpxwGmukDySWg9m+OlIWop1649KhGI+7FDGMVIwO
-         srwyo50k7q5KO7hWLv0HpCUt1YPaKTNHoTuz9CCgBG/zajo/SXvBjsM9cPvasfeRLseU
-         Y9kLAK/Ko/xEx0zrvIXqQfsg03abDfMd3pp+JrgDEl2v2Pd8NOMbVEmsA9QRWTJYhuGM
-         2TpfBEiCaRoBECuaWxZp9dAVIS9yRkKEVuHdYqUq/0BAVqR1+GtFJMmpvWzlAy1A/aKV
-         e11A==;
+        bh=KVOChXZq0zoMztJw+hJ88VSw+ye8042PpZuah7BunBU=;
+        fh=nmbr7RSlHxYPuHsYUQmjzGaIv7P2Fk0WXiWJs34/lac=;
+        b=M8YjeqOLMR4HPoQYOMHAeuK7xAvO4yJCnO430SIayChN3X9z1q6ztWrFBcxHayJeHw
+         +vFJ3RcOjsYKzpfC4qfk9AhcBu7RL1mgcqoXyEcKZwm0t3DX4JNoe3Q0qHHRzK7fRaqQ
+         8CxHgLrZH2uPtLWFV7783zp9lD8qioSvAPTVpJ2txAlh/EDmGsuUBgYOp4kLwvwEuUdA
+         vO6Fpk8NO0+R5XWjNvppddYpF+aQr7y0ecVEE/AlicsTxzTUN4+Odp79heICku6ebxPV
+         XDRlkW1woCqM6Oe2fJmbifPd2yhK5AoepvYjm0AtQ+Amcx0J+KeIQZbJ7OyWrv/8KE/K
+         QC1Q==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1776669726; x=1777274526; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1776669757; x=1777274557; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=BDIniOySTzGT5p8wsR3mWPyJ5w+on2w+W1qyzBFCzag=;
-        b=foVDIpIhHeNSb0/J2kEYcvJ+2aXoOYCyrKm46ksomOAVEsxyW+gj5vJnoChTeWdco6
-         qZL42QD/KFvIWCo6fC87RkDP3GqQA7Mkogp9CZ+IIqo3MiwG8jOkuatLUwtba1Qmxodt
-         OmP6YjZJ5TSdrrIPjwSdTsUaOr3lKEzyTBFcuTWZ/fRFYP/cZZuHzVdXl3w5m4v/wBSM
-         haBz1QK8IY/QHyocdE5G+RUz29Nt/X2TJNwsoNiUQbu5nbPmeKp9oLuUrVJRtN8KAnCn
-         15BH7RP3futcSPGcAyVHnylne+yEZMVI8fQvc5k00wpCe1zo25X6b7kvGE7K88JCHYo8
-         l7/g==
+        bh=KVOChXZq0zoMztJw+hJ88VSw+ye8042PpZuah7BunBU=;
+        b=UBFHCkDwTHXb/dR8rzW28LgFTvbprdGUXDCFAdiGBymsgYRkIfpHE1C3RrCXLshQ96
+         G73xr/Az/0nFi5t6WERBEFRG9uWqGnGRhQfisGFwn/oPmd95cxStLzX0m4wpcqo+Dy1s
+         l14CrJ7CSHpDMPiUY+YVURsSfDATuIXQMIwzMx2djpIXP+sZCPJ7QvvgOb3/2O0lNK2p
+         LoaKPPbfae3GJr/5VAxpMOEMvT6U62+uasKkQwbSpfEQzoa0DUUpnpYsoJqeIZV4SnhV
+         Pe670EKs7HkgLatZKlLBXLArtQWYoSrSaiAe1irIJ0lIqgLGwfbY6jHhwXnXNbz0A5up
+         f0DA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776669726; x=1777274526;
+        d=1e100.net; s=20251104; t=1776669757; x=1777274557;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=BDIniOySTzGT5p8wsR3mWPyJ5w+on2w+W1qyzBFCzag=;
-        b=R78jroON3aMXdVPsjPCW1uvS4PPAuY6U2wwlGkOow8FkCHPveMx3O1eW/xIo1MEFp+
-         HV5SqqCyfd14Y5cSy0GcXaFhfi0idVoguPYcTUBt65qqU8g/smT1RYIomS6sRa5zU+TC
-         i9GLzbtS7SsF0/fkzC6eiASOC0KPQ9Bo9yy+BcuWV7e/ETIlgREhYzzRKB8GvKxwz91A
-         /LI9BJaVKf8oIXlXIe69m0bdHWPlWwI14IEGSNWXfzikjFgv90lCbeFr6a40oX8WeOCv
-         khabtZ/h1xbX6aFe8tv61L0qMuz0gABgOMJlJF8Hoji8E0UyauYBzBfRMgq4EeiZ8T40
-         UbeQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+D0GfhZCHot0RFVdEZws2N1znitIG/87rr+uiwWBPgh+0um0A4Tm0DRbJyG1h5G48yxxVZc5KXRchel2yHxr8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyc0Pl1H2OwSRO+hQFPJ+JoJDDIAg73EZomE7/hfBtx+2V9TbnI
-	V45sf4MNkX9UbcKO2C3an65aWbWWDplYHW9VQmqMTP67Pi5Qn7UF0d4jY0yBG26swxcKjZY6xDU
-	YNo4hldy0NM5oWLpL05KFWbBiL+9S2/kHPorMhKB22VHnFPou0Zk92jU8
-X-Gm-Gg: AeBDievDirUIfDJgavZlsJPqO11bCDW514PuJhYcXO/+jHA3homebfMBiUCdHd3KkZ9
-	BXI4g/PsU4RMDIkEplnuYqUNosSiRCbxzKX169C1WdVJA1hbw2tp9ikZGnlUVKPVRloJy1WCXNe
-	BvKhU77L2WIph52DOTl3Cks1T8NHYlm4+OOeTrIMWfNIdu/aWq+lMx8WpG6nbnuSVSmXqusTfto
-	GEpL5srfGhh9ORcaFbzovdgcPKI44WOcXzZdR7FEdjo41OZP1TcFLcgWZeDDzv99+9b1fP7zFTG
-	WUcDmzr+wYhfBe0Aa+7nYze2aI4BZ9MsrEuS/PbhqmJxK2HwcsgMccErTDldDEopzMKjMR9R6B6
-	Pi4nr4Hlf
-X-Received: by 2002:a05:620a:4612:b0:8d4:aa50:686b with SMTP id
- af79cd13be357-8e7911ce9cdmr1760867885a.31.1776669722994; Mon, 20 Apr 2026
- 00:22:02 -0700 (PDT)
+        bh=KVOChXZq0zoMztJw+hJ88VSw+ye8042PpZuah7BunBU=;
+        b=YAkd0uYP2afVzYFZcNQkm+ZkF1P9zzCba/xvFbPrJriraJLEplVfen/B6DsAn71Fd6
+         VCNxugHK/90T+E33QiW9N2Yq+zdvasdggMsUrOARHDXtN0bfABThdb13rc2nb8wlEnRh
+         wQN0JTx9nCDTNn5weUNtk+7urhIUlxYZ4eR1QKaTUhuYHYHRb6DUybNP4T4gqiQi55lG
+         kS6ExDgLw5S1GGR6VmPamR8d11tA2zXGAQx/UQkuAQk92lCTFYYnypymJldeRxs+R70q
+         ld+LAwfiKbjxyK28NfaWPFcSIA/uhhEAV6jk/GrtTe04snl8AL9wjAekEhdJJQGcX9uv
+         aI9A==
+X-Forwarded-Encrypted: i=1; AFNElJ9vFGwyMxzKzH/mXViQcPrP4qQzgomR9STNh4kchG7mOyoX80K9YW5npJv3yhJhvMKmLPH+0FtwNxARu/0rICg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwIJ9WkhzqoqSRmgr/mpAK+kIe7jwmFKOJjP5lgHGWZ5Ws33fxy
+	3rAAVTqkjKFM3oqALyfSOYsz2S6hPAn/CHS6cchpn9V9yjJd20iphbw8STUwr4koZ9vyEvU2qod
+	n1JNddzPC0oRX19xXzO0TcCaTym3oatzmH9PsbmDT
+X-Gm-Gg: AeBDietYXv1p/i7k2GGwot1VRLI2xtBUeYedm4uWl1EPCOZg1K0SJmrV8I9G2Mx6Ur5
+	s//YsW87V4atNFmdt3lqx4fm6SGtXYF6dFEvry4v56dOa7Im3xtiFTWJHphxo2dWLBHrQmMYoE1
+	gVHoGyPianWX7AdTV8VHiC16f7zXpaTsYs2my/et6QY8IrN+2DuBO1fljmErxLS57tpTp9zp4za
+	QO4SZGrnj1r6n35ybj+dWrn6GWT/Z7a0hKrSs5uV6351Opy0HezbTzogdTD2w3Vbd3iTRBiCO1q
+	86vcUAjIaihR6U+EhoFK0YMykLR/2aVzVHDdVFEa9YrTJpPApveANr6XD3cNS4k5wXjh9A4hXLO
+	sQlCSwcXY
+X-Received: by 2002:a05:622a:13ca:b0:509:1470:d3b2 with SMTP id
+ d75a77b69052e-50e36ca15abmr179564361cf.60.1776669756390; Mon, 20 Apr 2026
+ 00:22:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260420025428.101192-1-jiayuan.chen@linux.dev> <20260420025428.101192-2-jiayuan.chen@linux.dev>
-In-Reply-To: <20260420025428.101192-2-jiayuan.chen@linux.dev>
+References: <20260420025428.101192-1-jiayuan.chen@linux.dev> <20260420025428.101192-3-jiayuan.chen@linux.dev>
+In-Reply-To: <20260420025428.101192-3-jiayuan.chen@linux.dev>
 From: Eric Dumazet <edumazet@google.com>
-Date: Mon, 20 Apr 2026 00:21:50 -0700
-X-Gm-Features: AQROBzAPtbdNncUYWcDbX3rq6a0AQWH842ELgzylDrIvAQmNen0p8Yr8P2Snyzw
-Message-ID: <CANn89iLOoA7=rHuGKY6xKUWrVksxR-EoRJ1xWsPm4quBdqWsrw@mail.gmail.com>
-Subject: Re: [PATCH net 1/2] tcp: send a challenge ACK on SEG.ACK > SND.NXT
+Date: Mon, 20 Apr 2026 00:22:25 -0700
+X-Gm-Features: AQROBzDC74EX5M4Dk7Jdn6RBQi37Kbrc-y7UEen5QduIBRs6mrCuXqesYzBzsmw
+Message-ID: <CANn89iJhHZH69ShAS5_V5RdgPgvfz19dZn7wsb_N3EAScVoR2w@mail.gmail.com>
+Subject: Re: [PATCH net 2/2] selftests/net: packetdrill: cover challenge ACK
+ on SEG.ACK > SND.NXT
 To: Jiayuan Chen <jiayuan.chen@linux.dev>
 Cc: netdev@vger.kernel.org, Neal Cardwell <ncardwell@google.com>, 
 	Kuniyuki Iwashima <kuniyu@google.com>, "David S. Miller" <davem@davemloft.net>, 
@@ -101,40 +102,16 @@ Content-Transfer-Encoding: quoted-printable
 On Sun, Apr 19, 2026 at 7:55=E2=80=AFPM Jiayuan Chen <jiayuan.chen@linux.de=
 v> wrote:
 >
-> RFC 5961 Section 5.2 validates an incoming segment's ACK value
-> against the range [SND.UNA - MAX.SND.WND, SND.NXT] and states:
+> Exercise the RFC 5961 Section 5.2 / RFC 793 Section 3.9 requirement
+> on the upper edge of the acceptable ACK range, mirroring the existing
+> coverage of the SEG.ACK < SND.UNA - MAX.SND.WND case.
 >
->   "All incoming segments whose ACK value doesn't satisfy the above
->    condition MUST be discarded and an ACK sent back."
+> After the peer ACKs data the receiver has never sent, the receiver
+> must respond with <SEQ =3D SND.NXT, ACK =3D RCV.NXT, CTL =3D ACK> and dro=
+p
+> the offending segment.  The script validates this exact response.
 >
-> Commit 354e4aa391ed ("tcp: RFC 5961 5.2 Blind Data Injection Attack
-> Mitigation") opted Linux into this mitigation and implements the
-> challenge ACK on the lower side (SEG.ACK < SND.UNA - MAX.SND.WND),
-> but the symmetric upper side (SEG.ACK > SND.NXT) still takes the
-> pre-RFC-5961 path and silently returns
-> SKB_DROP_REASON_TCP_ACK_UNSENT_DATA, even though RFC 793 Section 3.9
-> (now RFC 9293 Section 3.10.7.4) has always required:
->
->   "If the ACK acknowledges something not yet sent (SEG.ACK > SND.NXT)
->    then send an ACK, drop the segment, and return."
->
-> Complete the mitigation by sending a challenge ACK on that branch,
-> reusing the existing tcp_send_challenge_ack() path which already
-> enforces the per-socket RFC 5961 Section 7 rate limit via
-> __tcp_oow_rate_limited().  FLAG_NO_CHALLENGE_ACK is honoured for
-> symmetry with the lower-edge case.
->
-> Fixes: 354e4aa391ed ("tcp: RFC 5961 5.2 Blind Data Injection Attack Mitig=
-ation")
 > Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
->
-> ---
-> I'm not sure if 'blamed commit' is appropriate, because I think
-> it's due to missing parts of the implementation, or it might be
-> directly targeted to net-next.
-
-The Fixes: tag seems appropriate, and net tree LGTM.
 
 Reviewed-by: Eric Dumazet <edumazet@google.com>
-
 Thanks!
