@@ -1,73 +1,124 @@
-Received: from out30-110.freemail.mail.aliyun.com (out30-110.freemail.mail.aliyun.com [115.124.30.110])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B574C40DFBD;
-	Mon, 20 Apr 2026 07:56:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.110
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6BBE37F8A1
+	for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2026 07:58:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776671805; cv=none; b=lJCr37IRyfG0dVV24IjAyZe9lgZrDYbCUI03RCGzIMLIbfwwI1IQ9psAvMUo3lqTEhzxI7YFvZ5wE0FlD72lvQCoyGmDQDwGYRrW8PfutAe2gJOZ/GqAS/MOtP9k9LSM5OjNb4Gn6bd6orpRhwreBF8aH61dqOTo1zYwvODWYiE=
+	t=1776671909; cv=none; b=AK/cEVYAJRyQqffo2j0mwfFGa5VIXTRF1j/UvCGArox/Yy2qZfaelGcx0bFVPPrhidKEbtsKygNIgiS4gWFvSck56TMuGMk/RlfzOihPpRw7ljY2d2QeBtiotY8N+DduQcrEWgEgUAZdBA7dEWktE2A+eVrr2KposNMzxJaokEs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776671805; c=relaxed/simple;
-	bh=5queap52K73mDcWZRnpsercrASVJe7bERpuTxjUVZ/c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OZ3iH0znn5jK+D9oKdE0Ptxqy1ym+6ltZ/+rF9HFC1BnNbqfy7XdbcbN1Fvkaa4F8PzfRXDJniyPAZG2xpJi8ExfMl9fAmXpX7XZM0nP03m1lP/W+LqbFEhdxoLjI6yncXRvrYIMZuAuSbNqswbPqSWQmoCpzSol6bQ7mjNgb6w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=utjinGhd; arc=none smtp.client-ip=115.124.30.110
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1776671909; c=relaxed/simple;
+	bh=X5G5mHY5kq5f3IvFP9CJtL2o3Q9QcWxvNB9CKbkfxyc=;
+	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
+	 References:Date:Message-Id; b=QaiIWSopIScxRcCkKgzwmFyfkDtsdBDwrztwfPPk7P6yDgRY5WyWxOzeFaqfaznGgu1V1CPPAEJy3jbE5EL2zOdHVcOf5gkdCPnMz/W7j5EGo7bDy6nKJOXQT0+pXXZKYDw1j9wawKGXAfTlPVCCTsOs0zWayZmo3ALFvORq/Vw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DflLwwh9; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="utjinGhd"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1776671793; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=xXWSFBSCtt1/CFq45jJqfZ4qaQqmuiM4XbV6wvtaWvg=;
-	b=utjinGhdOWzKtqAp+x094qkfcQAJgKCArp6t+zBP2qZewpLJdG4NzVpOGhEw/kXZxRSBDVzwHmU+YLbgaDYd859GjQFh5sQKRqFDSldRHjQX9vcv3lHsbmEEscRsPSZnc8y/9PlnWHnkSGiVZs/5yra2mPfl73PGvgA8dgikRf8=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R281e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037009110;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=27;SR=0;TI=SMTPD_---0X1J08mT_1776671790;
-Received: from 30.74.144.127(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0X1J08mT_1776671790 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Mon, 20 Apr 2026 15:56:31 +0800
-Message-ID: <e1baac32-dcb9-4458-bc57-0ac3cea65fa7@linux.alibaba.com>
-Date: Mon, 20 Apr 2026 15:56:29 +0800
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DflLwwh9"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1776671906;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+eOGQZSG/sTjuYk//asYw4DDdal69kUFJwf3nSU/tY4=;
+	b=DflLwwh9c8pcmsRvMB5/fYVyKyw8GCTg/fBvp62koDdLn4TZ6RFBlTT7trDRyZ+KICoaDO
+	2TVkyLNF3HTxRG0i4/GMsMlZlL+cafXzdPWrKoO8AYoRVEBHH9XpLIngPnrc3/jFIjMmVx
+	o2yG1c3Bjo+E6fSMKUj9kYyzLmxgrgY=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-587-UMddlqhUOjKp5ngNkvFJwg-1; Mon,
+ 20 Apr 2026 03:58:23 -0400
+X-MC-Unique: UMddlqhUOjKp5ngNkvFJwg-1
+X-Mimecast-MFC-AGG-ID: UMddlqhUOjKp5ngNkvFJwg_1776671901
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CCFCC195605E;
+	Mon, 20 Apr 2026 07:58:19 +0000 (UTC)
+Received: from jlelli-thinkpadt14gen4.remote.csb (headnet01.pony-001.prod.iad2.dc.redhat.com [10.2.32.101])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 067AE195608E;
+	Mon, 20 Apr 2026 07:58:13 +0000 (UTC)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 7.2 v3 11/12] selftests/mm: remove READ_ONLY_THP_FOR_FS in
- khugepaged
-To: Zi Yan <ziy@nvidia.com>, "Matthew Wilcox (Oracle)" <willy@infradead.org>,
- Song Liu <songliubraving@fb.com>
-Cc: Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>,
- Alexander Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
- Andrew Morton <akpm@linux-foundation.org>,
- David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, Nico Pache <npache@redhat.com>,
- Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
- Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Shuah Khan <shuah@kernel.org>, linux-btrfs@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-References: <20260418024429.4055056-1-ziy@nvidia.com>
- <20260418024429.4055056-12-ziy@nvidia.com>
-From: Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <20260418024429.4055056-12-ziy@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH 1/2] cgroup/cpuset: record DL BW alloc CPU for attach
+ rollback
+From: Juri Lelli <juri.lelli@redhat.com>
+To: Waiman Long <longman@redhat.com>
+Cc: Guopeng Zhang <zhangguopeng@kylinos.cn>, tj@kernel.org, 
+ hannes@cmpxchg.org, mkoutny@suse.com, void@manifault.com, arighi@nvidia.com, 
+ changwoo@igalia.com, shuah@kernel.org, chenridong@huaweicloud.com, 
+ Juri Lelli <juri.lelli@redhat.com>, 
+ Valentin Schneider <vschneid@redhat.com>, 
+ Dietmar Eggemann <dietmar.eggemann@arm.com>, cgroups@vger.kernel.org, 
+ sched-ext@lists.linux.dev, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org
+In-Reply-To: <e0fea6ec-397c-40a6-9300-a3529a3d1167@redhat.com>
+References: <20260417033742.40793-1-zhangguopeng@kylinos.cn>
+ <20260417033742.40793-2-zhangguopeng@kylinos.cn>
+ <fd28bea7-83bd-48b7-8c3c-ad44474b8b5b@redhat.com>
+ <6aca2465-1ea7-417a-beb8-e385fa3902bf@kylinos.cn>
+ <e0fea6ec-397c-40a6-9300-a3529a3d1167@redhat.com>
+Date: Mon, 20 Apr 2026 09:58:11 +0200
+Message-Id: <177667189136.43781.14481765787952757348.b4-reply@b4>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1776671893; l=1803;
+ i=juri.lelli@redhat.com; s=20250626; h=from:subject:message-id;
+ bh=X5G5mHY5kq5f3IvFP9CJtL2o3Q9QcWxvNB9CKbkfxyc=;
+ b=6pUttxV2K5elVOMXaIeZE/fHVnx/DQzeySz6fQ2Z23/WKZo+WL9QdM2KGXIXIo7Lx7XiOSmdY
+ 7uVb7Ve3NZJDQB9zQZhSj+wAwxJeazNvnT7MkxgSXqyAizLBbYVEq5i
+X-Developer-Key: i=juri.lelli@redhat.com; a=ed25519;
+ pk=kSwf88oiY/PYrNMRL/tjuBPiSGzc+U3bD13Zag6wO5Q=
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
+Hi!
 
-
-On 4/18/26 10:44 AM, Zi Yan wrote:
-> Change the requirement to a file system with large folio support and the
-> supported order needs to include PMD_ORDER.
+On 2026-04-19 22:31:29-04:00, Waiman Long wrote:
+> On 4/19/26 10:21 PM, Guopeng Zhang wrote:
 > 
-> Also add tests of opening a file with read write permission and populating
-> folios with writes. Reuse the XFS image from split_huge_page_test.
+> > 在 2026/4/18 2:51, Waiman Long 写道:
+> > ...
+> > Hi Waiman,
+> >
+> > Thank you for the review and for the Reviewed-by.
+> > I think you are right to call this out. Looking at the
+> > current logic, !cpumask_intersects(oldcs->effective_cpus, cs->effective_cpus)
+> > does not obviously guarantee that the migration is crossing into a different
+> > root domain. If the old and new cpusets are disjoint but still belong to the
+> > same root domain, it does look possible that we reserve bandwidth on the
+> > destination side without a corresponding subtraction from the source side.
+> > I will try to reproduce that configuration and follow up with results.
+> > my current understanding is that the DL bandwidth
+> > accounting is done at root-domain granularity, not at arbitrary cpuset-subset
+> > granularity.
 > 
-> Signed-off-by: Zi Yan <ziy@nvidia.com>
-> ---
+> That is my understanding too.
+> 
+> > That also seems consistent with
+> > Documentation/scheduler/sched-deadline.rst, which says that deadline tasks
+> > cannot have a CPU affinity mask smaller than the root domain they are created
+> > on, and that a restricted CPU set should be achieved by creating a restricted
+> > root domain with cpuset.
+> 
+> A root domain should be created by creating cpuset root partition for v2 
+> or using the cpuset.cpu_exclusive flag in v1.
+> 
+> What is listed in the documentation is the ideal case, but users may not 
+> strictly follow the rule.
 
-Tested-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+But, if they don't and try to create DEADLINE task on cpusets that are
+subsets of a root-domain, that should fail, as the affinity mask won't
+be covering the entire root domain. So no BW allocated (and no
+additional data structures) for subsets either.
+
+Thanks,
+Juri
+
