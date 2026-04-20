@@ -1,101 +1,84 @@
-Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F00E632AADC
-	for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2026 15:38:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5427C34AAF7;
+	Mon, 20 Apr 2026 16:19:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776699537; cv=none; b=Sghv4wXmNcNozAa+LEJ5Rz9Mz6Kmlw1+3mhrTHrK1WAE0bVsO49RsUht2TMeFuS/wheS7qeKKp1RwDYYfwLqcKQeSln/blP3IdHub7bhDa2BrG1QJ2ToUpm9ERPxmvlk0Bu0Ial5BdC0XjDHz/l9YtB7jXynSC6FpS7aadShZGA=
+	t=1776701982; cv=none; b=A8Dkedicup69Q9xGtFeJOov4THMv3Lam33Ue9w2fyzKRcpuEPvgZf4QYJkZH6yBKIWbMKihAO2gKr6KC0rw0RVW2BVYT5af1azI8P+iCfgTi2Dt6s9UtRf8EgOgJBOexDNfRJU13h95IPDOqHFvQwXuSVQ4YMblm12VJQtNtJ7U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776699537; c=relaxed/simple;
-	bh=055uktPBT992k6H9Q5EGRoMPFsBuV5dAn5Qh19VwmXo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=s0VWyb5DUZBeA9A0yIlIo23tdhszAS8+BqjV49BUyOpKHGrKjZ0wfa7sayxuKFSGsxSDtJkGpC/WPvzSvVkHjjB5AcvYg0GGci0qUBfdMUchxzD4gFXxyiWFww2QOP3qHvu60ipWG1+OTvZUoE4do0tx3YOhp0kd6Z4Hy6fH+sM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=kpj5+/6m; arc=none smtp.client-ip=91.218.175.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1776701982; c=relaxed/simple;
+	bh=V907ZH/w9z2dvPzXc2YXpulBRdGMgFTtktBPYK+GEd4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=W5of5NoMcbKp+3/HX2d9rwSDkruzL3VY0XogxiTHbwfuAhflDEwwAeCJ8zvsVDywGNXgG391CDA/BQs1pXLm3RiL93usWrCsI4NmE3vLSKZne0jc6EFxxt5NZpGHkSTnj/ZM8xTrs7MND60ZiXZRVf8JFQNKUhhvI/3a234b/wU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nrhIjLKd; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="kpj5+/6m"
-Message-ID: <32f95b96-c711-4155-bd81-19b413eebae6@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1776699524;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Ip0QzwUEFbOglucOicZThEws9BYZk3TUrfkEAPdWX5s=;
-	b=kpj5+/6mD49/yH+eZtL944+H03Yb1qyhj6axJEFvNRfIGcnBl8rjEzPqFZy0eU5JZtodBY
-	hlo3tfAZT8fPPxiuboBbq9iyiNDhTgsQUnnywGqTWZ9lUdRYYZ5cpA/eYNvO7+c767Xvb4
-	jDQfyPULabJGsxoySzo01QkwAZgQ51U=
-Date: Mon, 20 Apr 2026 23:38:22 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nrhIjLKd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A141AC19425;
+	Mon, 20 Apr 2026 16:19:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776701982;
+	bh=V907ZH/w9z2dvPzXc2YXpulBRdGMgFTtktBPYK+GEd4=;
+	h=From:Subject:Date:To:Cc:From;
+	b=nrhIjLKdxGKQNX/9M7a069uEQX8z1qclV0Zlgs12/6DaP1ZRd8JPaetz8B/yD3Q5f
+	 Sg3tE7ppFi0cZ6+uTWAnsk6Mr0cRSVgGnlzoy2nJpFX8WncCeqxGbbXFi9ER5lI11q
+	 8haV5QmRJ+g49ykxcBmtstlMtpc+CLdzQJWYmXBMWW6ZhzVrYhklLBxgtGLAGMfKnC
+	 /uwp3huO7OpzcmyAjpVhZNhFRlnYtNsqrd1OeFfomSykZy9ZS1ze78coz8siniWXrB
+	 qrL+wlJ/S/IG2w+HVn/w6SgplVo3Ed4Qt2BIjLaEW7/NAMMXqxgCnZsSOKvPr7lEpl
+	 ot5iV2eyonPXQ==
+From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+Subject: [PATCH net 0/2] mptcp: sync the msk->sndbuf at accept() time
+Date: Mon, 20 Apr 2026 18:19:22 +0200
+Message-Id: <20260420-net-mptcp-sync-sndbuf-accept-v1-0-e3523e3aeb44@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH net 0/2] tcp: symmetric challenge ACK for SEG.ACK >
- SND.NXT
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
- Neal Cardwell <ncardwell@google.com>, Kuniyuki Iwashima <kuniyu@google.com>,
- "David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260420025428.101192-1-jiayuan.chen@linux.dev>
- <20260420082454.1b85cd94@kernel.org>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <20260420082454.1b85cd94@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXM0QrCMAyF4VcZuTYQy9yYryJedFmqFYyl6cQx9
+ u6revkfON8KJjmKwblZIcs7WnxpjeOhAb57vQnGqTY4ch21jlCl4DMVTmiLMppO4xzQM0sqeKJ
+ +8F0YuKUeKpGyhPj58ReoT7j+R5vHh3D5wrBtO0PsY96FAAAA
+X-Change-ID: 20260420-net-mptcp-sync-sndbuf-accept-5079a6f9c407
+To: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>
+Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev, 
+ linux-kernel@vger.kernel.org, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
+ Gang Yan <yangang@kylinos.cn>, stable@vger.kernel.org, 
+ Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=786; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=V907ZH/w9z2dvPzXc2YXpulBRdGMgFTtktBPYK+GEd4=;
+ b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDKfBUl+fhWbYntc4HmJnH1Lb3VP2R+eL4KzLe5wc4ev8
+ 3uYL2fdUcrCIMbFICumyCLdFpk/83kVb4mXnwXMHFYmkCEMXJwCMJFIHYb/EZ0ZcpJCs9d1yTBv
+ 1Ei2+tN+zlx2Tl3u+W0eitP/XLfZzvA/S6heovNKXuKhugRhdgem7zPbVuqvMk/7YH72q86HrJt
+ MAA==
+X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
+On passive MPTCP connections, the MPTCP socket send buffer doesn't have
+the expected size at accept() time.
 
-On 4/20/26 11:24 PM, Jakub Kicinski wrote:
-> AI says:
->
-> Your patch "tcp: send a challenge ACK on SEG.ACK > SND.NXT" breaks an
-> existing packetdrill selftest:
->
->    selftests/net/packetdrill/tcp_ts_recent_invalid_ack.pkt
->
-> Test output:
->    tcp_ts_recent_invalid_ack.pkt:25: error handling packet:
->    live packet field tcp_ack_seq: expected: 1001 (0x3e9) vs actual: 1 (0x1)
->    script packet:  0.200125 . 1:1(0) ack 1001 <nop,nop,TS val 200 ecr 201>
->    actual packet:  0.200119 . 1:1(0) ack 1 win 65535 <nop,nop,TS val 200 ecr 200>
->    not ok 1 ipv4
->    not ok 2 ipv6
->    not ok 3 ipv4-mapped-ipv6
->
-> Root cause:
->
-> The test `tcp_ts_recent_invalid_ack.pkt` sends a FIN+ACK with ACK=9999
-> (which exceeds SND.NXT=1) to verify that the kernel does not update ts_recent
-> from an invalid packet.  Before your patch, this packet was silently dropped.
-> After your patch, the kernel now emits a challenge ACK (SEQ=1, ACK=1) in
-> response to the ACK=9999 segment.
->
-> The test script does not expect this challenge ACK, so when it subsequently
-> tries to match the expected "ack 1001" response to the following data segment,
-> it instead sees the challenge ACK "ack 1", causing a mismatch on all three
-> address families (ipv4, ipv6, ipv4-mapped-ipv6).
->
-> Fix: update `tcp_ts_recent_invalid_ack.pkt` to consume the new challenge ACK
-> before checking the response to the subsequent data segment.  For example,
-> add after the bad FIN+ACK line:
->
->    +0 > . 1:1(0) ack 1
->
-> so that the challenge ACK is explicitly expected and the rest of the script
-> proceeds as before.
+Patch 1 fixes the regression introduced in v6.7, while the following one
+validates the fix in the selftests.
 
+Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+---
+Gang Yan (2):
+      mptcp: sync the msk->sndbuf at accept() time
+      selftests: mptcp: add a check for sndbuf of S/C
 
-Thanks Jakub, you're right.
+ net/mptcp/protocol.c                      |  2 +-
+ tools/testing/selftests/net/mptcp/diag.sh | 28 ++++++++++++++++++++++++++++
+ 2 files changed, 29 insertions(+), 1 deletion(-)
+---
+base-commit: 0cf004ffb61cd32d140531c3a84afe975f9fc7ea
+change-id: 20260420-net-mptcp-sync-sndbuf-accept-5079a6f9c407
 
-Will fold the tcp_ts_recent_invalid_ack.pkt update into the kernel fix in v2
-
-to keep bisect clean and makes the backport self-contained.
+Best regards,
+--  
+Matthieu Baerts (NGI0) <matttbe@kernel.org>
 
