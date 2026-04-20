@@ -1,39 +1,32 @@
-Received: from www3579.sakura.ne.jp (www3579.sakura.ne.jp [49.212.243.89])
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3E6B1E520A
-	for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2026 05:27:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=49.212.243.89
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9BBF25D53B;
+	Mon, 20 Apr 2026 06:07:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776662841; cv=none; b=RwB65cpYejytLZo3k/o7q8QQsgD9gEx1PnrhM87TQoEgQA4CHeTE3GBYUU16ZKTJN20lBBjkbs1HLC4fnQJdLSYPRt4UtF0r/csMb5B1uwILaAn3VrqRc31nFu5FA32AY8IrPYHMvJpmrUzQqe0+1snnYp1LvYN/364d1Hd5UxA=
+	t=1776665255; cv=none; b=Pn7ssI0HpgZqosYftJFGS67vdaqEcwz7t0HN89FtSHUCSKTmEsBZyDJ4/EEovUIFtZGSqxLHYG/iYLGrWdz19KbB9g9He7nj4UabwH6LEzWZerH9eDSq5U1JMwtk4zOJWfmQTulyyCCCst4im91GZvcj4G7pvO4dA97WpIAdbic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776662841; c=relaxed/simple;
-	bh=5pFfAh0w8FoorL1tj4Eo6xVJ2XthVkrf9fRKjTtD1aA=;
+	s=arc-20240116; t=1776665255; c=relaxed/simple;
+	bh=/V3Lviby6LuoMIdNEQHBuwGR8SAWyAkzpYfJ4x52X/k=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Bhr6axdijCEcpCMFYLtwHirPo+U4ioq0omgG9wIwrwgKjuc+f0B3+Vo1FWq1zVlawNGqh9ev1ljVV10ZOsxQ8+XTHbyFl+JUjwXR9+VRsrqfOdqGiTskCRiNlYNEESiTkdbh6ASJ/58oaPHh/hltUtc1ipK6EHlMHE0nKgYbsbs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp; dkim=fail (0-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b=O/7mWMQ/ reason="key not found in DNS"; arc=none smtp.client-ip=49.212.243.89
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp
+	 In-Reply-To:Content-Type; b=pjkpksN0kXmZiibcNHyliyvTxBFyv9K0aBTO9qTNY1HVKwEzuBifEqJ9lYByZhR2rD9uGsLRGLUxDIQLpH8VEUI7H1eoso/WxuyVngWXr+AEXUVIzn7cY0O+5l/7KI7X5HeUINT/hBhoKNWwjgJFAyTK4195j6QtW4noZhBufKg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=wsg0uLPQ; arc=none smtp.client-ip=115.124.30.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b="O/7mWMQ/"
-Received: from [133.11.54.205] (h205.csg.ci.i.u-tokyo.ac.jp [133.11.54.205])
-	(authenticated bits=0)
-	by www3579.sakura.ne.jp (8.16.1/8.16.1) with ESMTPSA id 63K5R9l2040505
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-	Mon, 20 Apr 2026 14:27:09 +0900 (JST)
-	(envelope-from odaki@rsg.ci.i.u-tokyo.ac.jp)
-DKIM-Signature: a=rsa-sha256; bh=zYqBi5Y7SR8juLwBRICUsdi/c0VzNDgvxNB9NS9Ihhs=;
-        c=relaxed/relaxed; d=rsg.ci.i.u-tokyo.ac.jp;
-        h=From:Message-ID:To:Subject:Date;
-        s=rs20250326; t=1776662829; v=1;
-        b=O/7mWMQ/1Txgcq83Zz62yWSSux2cnql95+dF4NKmTQQ36GGq2zOlxgygimjHS7rK
-         QO7SJEiAYsGCw2hyAEfp2dxSbmYksGEpyKjIkX9sAqfsqFOR20VCHYv4OF8mYYJk
-         dn/kGNqtvWlBLp9fo2rwzsgifb1A3Xkmk9OnmIUicx1UuVhgl24WCAT0FuTdxnfw
-         n9R/xRc2LawyKhC0rslMiN+blLIKkm8vjADTYVdqIy74ZkN1uG6yMkBuiaAVDd2u
-         YorDbuNva9Uk1LlmuoiGaPVrt3yrY3OSUzujy4uXsa5F+tVVTRy9a6MYN/c7xjNQ
-         5cBa22eQ/DJCl3bNh4hiTw==
-Message-ID: <73cc9b30-091d-44d6-8a57-d4aa97ad678c@rsg.ci.i.u-tokyo.ac.jp>
-Date: Mon, 20 Apr 2026 14:27:08 +0900
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="wsg0uLPQ"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1776665243; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=jlXoyWfT+08BHayF7RT9Vylznnk/5A39eUeopQdgDu4=;
+	b=wsg0uLPQN03uyaFRH7U2SqCA/6Ih12JBtrp+H+vWMT21pu4EK/wPqPSF3ydyKubskBie7RRZQCIqE5pm76ZL+wLaoO67RLvZIVF0p7xBa8o/JQTeHSjPM72srpxBXVIKijFWqrwlvDMQ66TfY1y2L40yL3/gqr2mI/TaALulWrA=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037026112;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=27;SR=0;TI=SMTPD_---0X1I7RdU_1776665239;
+Received: from 30.74.144.127(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0X1I7RdU_1776665239 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Mon, 20 Apr 2026 14:07:20 +0800
+Message-ID: <7fa885ca-d074-4e75-842a-6fe7e48cb298@linux.alibaba.com>
+Date: Mon, 20 Apr 2026 14:07:18 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -41,45 +34,44 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 1/4] KVM: arm64: PMU: Add
- kvm_pmu_enabled_counter_mask()
-To: Marc Zyngier <maz@kernel.org>
-Cc: Oliver Upton <oupton@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu
- <yuzenghui@huawei.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Kees Cook <kees@kernel.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org, devel@daynix.com, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260418-hybrid-v7-0-2bf39ad009bf@rsg.ci.i.u-tokyo.ac.jp>
- <20260418-hybrid-v7-1-2bf39ad009bf@rsg.ci.i.u-tokyo.ac.jp>
- <87o6jfavhx.wl-maz@kernel.org>
-Content-Language: en-US
-From: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
-In-Reply-To: <87o6jfavhx.wl-maz@kernel.org>
+Subject: Re: [PATCH 7.2 v3 01/12] mm/khugepaged: remove READ_ONLY_THP_FOR_FS
+ check
+To: Zi Yan <ziy@nvidia.com>, "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+ Song Liu <songliubraving@fb.com>
+Cc: Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>,
+ Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>, Nico Pache <npache@redhat.com>,
+ Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
+ Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
+ Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Shuah Khan <shuah@kernel.org>, linux-btrfs@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+References: <20260418024429.4055056-1-ziy@nvidia.com>
+ <20260418024429.4055056-2-ziy@nvidia.com>
+From: Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <20260418024429.4055056-2-ziy@nvidia.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 2026/04/19 23:13, Marc Zyngier wrote:
-> On Sat, 18 Apr 2026 09:14:23 +0100,
-> Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp> wrote:
->>
->> This function will be useful to enumerate enabled counters.
-> 
-> Consider expanding this commit message a bit. Something along the
-> lines of:
-> 
-> "Add kvm_pmu_enabled_counter_mask() as an accessor returning a 64bit
->   mask of the counters enabled on a given vcpu.
-> 
->   This will eventually be useful to iterate over the counters."
 
-That looks better. I think I'll use that message for the next version.
 
-Regards,
-Akihiko Odaki
+On 4/18/26 10:44 AM, Zi Yan wrote:
+> collapse_file() requires FSes supporting large folio with at least
+> PMD_ORDER, so replace the READ_ONLY_THP_FOR_FS check with that.
+> MADV_COLLAPSE ignores shmem huge config, so exclude the check for shmem.
+> 
+> While at it, replace VM_BUG_ON with VM_WARN_ON_ONCE.
+> 
+> Add a helper function mapping_pmd_thp_support() for FSes supporting large
+> folio with at least PMD_ORDER.
+> 
+> Signed-off-by: Zi Yan <ziy@nvidia.com>
+> ---
+
+LGTM.
+Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
