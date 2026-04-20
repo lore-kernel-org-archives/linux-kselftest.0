@@ -1,172 +1,75 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F721378D78
-	for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2026 16:52:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D67AC37F8BC
+	for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2026 17:09:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776703936; cv=none; b=Y/4SBI84gxrsISmkqrTQbCzyrQ1GBKAkzjk6JurI7qMTI5aG0sb1GLMy0ftvYc6W5Rd+1mfuWOflS7JT/3x6w82egTYWuhJvlZQrsjDYVx47TQNNiewOt7vKlcYt9rjXIblFJpYK7WiY7PvR8wqXFDBBZo2K6jRePsjxifokXW0=
+	t=1776704972; cv=none; b=ZWdgIquGiJn1LVIQQSvd1Bwl3IioYfHKg+Fuk0Y0rqHjzy6oKVTWUwKTDfF6aVL2VypEM9A3TxG4vNE8Sx33+L1bSVHal2qr+uY826/T/w3b0v4xUXx8Cb1gNLYFIGwhptwErw7eRihXMH8mphoaCgRDByh2QiwTRvZdgtZFSiY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776703936; c=relaxed/simple;
-	bh=Kxi+WBS9YMy1saAUSaYtPzYaZTtXBUg1DFgRCzPc8ik=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XErpBRH62BmoPpcUQrZedVUJZa7HbXbatEZTDaiG+obMPNUh4tAzre3NUnwvf5JcpXZBUQq/+B3blKENvxxg5al/Hlf3sigJou1HRRsN2hVYhYKu60ta/gKzPp1lscohhXjEo6IL3ABIr4eujD5bRV5d35ahx3rXq07bXZBURjU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VrVUYNDz; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1776704972; c=relaxed/simple;
+	bh=LUFhttCt6qq2eWwycDWvN0ipZrq6FSIlPoPYrMs4hRU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pzDM4XVO0dqzgqv0ujiwa3Qp3mkE9fX0xEpgmcKKIl2BxHFznvTVXq/RDCRr9Nrt9WgyZYFxOERJdSXkfsf9NkCxinflQwOPmqp1Rq808rRAtddtbNAyCMU5oEZKSdF+XJrltFF+wSRciIgjMQVQE5hZ/uE+6hiVM0VnnBRlt2M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=jtrtsOvW; arc=none smtp.client-ip=91.218.175.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VrVUYNDz"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-488ad135063so26481195e9.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2026 09:52:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776703933; x=1777308733; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=X7WVV2rXlZkPThmov5vqqJDurN8/X/UV4KgQra6/Gw8=;
-        b=VrVUYNDzT9mAzVMIBiXkSuHzsGk8zvrEymZtR+ULtO3PDH3kkJmX1kSGN9VAL0+mpo
-         Z/YoRwBTYeQ4covL8X1ewfWlmxi+TuEKKixKXzvLqU7ePkfeWUa7MoWSDwieSyVZbvPN
-         vL3SRb7scVuXY6CEM5gVZZQ2Hj8XQIIE4rNJW+WyKOOGtiKb6VBpx8/LBlU4RqxlFO1T
-         qtN2FWW7LG5Vq6m5o15mSjB2O6zJCVgn3ylXrzpWG/pBYHYTYp3S4pb9vPf0HbyK/xbz
-         +7P1TKNCbumYoCElJZ+3f17sAw0Z+YuC1KtPuRsdm/PFWt/LqKryAOruuLAFU91Zi8ZH
-         xUcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776703933; x=1777308733;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=X7WVV2rXlZkPThmov5vqqJDurN8/X/UV4KgQra6/Gw8=;
-        b=CVhHf1RH/20/BmhVCJyuYq/+XKTmJm7uk2y9aBYGXMUOjdzav9KkewPiTT+22zEWMN
-         ZtK95F7qoKYNDyjuvzLRXVSVg8fzzro3NtUbPNp1bxwRJw0+R8kbF2DBOY2rtVL9I57r
-         cwwOEECRACEBfXGS1MSrBgbsZYH/CnMqdKTlUZQkFWKrm9aAKkk3UY8WxUdoe3iGq8ZQ
-         yJcqSAZ679Afme3Wy1oyuDgzWJTJisI1RJPL4WSEPR3PdJ+31hb6a9/gGYFa/Yn6iase
-         Xf7BU32a62EA72AFXUEu+og4qN60S1Sg/G8DC0QsE9BAJPHR/oRJpH57bLRKC6zU4w30
-         Bq2w==
-X-Forwarded-Encrypted: i=1; AFNElJ8wPqjVSYb4/47BsAO76/ADpBlwARj5Yzj2B8noO62p3/9FDhdFCMhLCx4XaUmSvGEoN70JN6U9lfmne0SP+qQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzG4jQL2rDQslTFYseZFO/eX1y4LsOVVl+czUqKSUia5x8VqUPQ
-	XGaquTCeY8+7+zVhUWNCr9jvmk3rKJyhmHeJQNzrl400NJKAHv+yYbB+
-X-Gm-Gg: AeBDiesH/5W9akSYQ7Dc1/GgzrIFzclGnQyKi2Kvznw0l5Wkyy/WVZ8rX4NRpp4XB4p
-	we/x4qPCM+WyYU6xPrHMx8OvP35kWL7hHwV5pInpsG8R9gGWoBhOk23hggTb6xyvrLpV7u9SsDA
-	kMrDsihOI3SQOJVZ7YW2FDo8jGkrH9OxsIHSXCP5OaRCXRv3Rs7rTTJq51SwAZal9ibtm/OQMBg
-	lr6lFVsjI0pn3b6OuSgAq2b5fc6Or5ToBUOoW2P4t7XJBqG3hA5slLKj7qSTxlnEMxVbz+cnl/S
-	FFpSczrLxIBX4TsdgdJ3ZDSGOsLyMKqoy+9oKPXipcPrSttpP0g55lPyLcKePS/JoOEu4iHzS1P
-	R0KaWyVYDnWR6kvFZY8lslAqbRQ1ucqusJXxY+sH85JL6QepYF2U0MyR7L1MfSqGVLqPr6ODaHk
-	JzWx4AQJaW93MGeyl40oc9pPuA51eBN8PsZY6hWRSAsJDGT5iVzTIcFOEEa0BENkseya1DLw==
-X-Received: by 2002:a05:600c:a40a:b0:489:1ba8:5bf0 with SMTP id 5b1f17b1804b1-4891ba85dc1mr67435325e9.21.1776703932396;
-        Mon, 20 Apr 2026 09:52:12 -0700 (PDT)
-Received: from ?IPV6:2a03:83e0:1126:4:5432:2d05:ea5:f7f7? ([2620:10d:c092:500::6:8ffd])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43fe4cb11b4sm31219009f8f.2.2026.04.20.09.52.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Apr 2026 09:52:12 -0700 (PDT)
-Message-ID: <f02fd939-85f7-414a-8b03-a9ebe56c7660@gmail.com>
-Date: Mon, 20 Apr 2026 17:52:11 +0100
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="jtrtsOvW"
+Date: Mon, 20 Apr 2026 10:09:16 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1776704967;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=OWgmLMt7/TMrBm86Ew6P18FFPWPU3UwIA+bIKdihQo0=;
+	b=jtrtsOvWrdt0C55JuXEg9NM9xf0uMiN1Wlr83eo+8gIcDs5bL7Y7Oq0S/8ilLMbKr0o1qv
+	Rd1qVh0bMPrIxIPBnvZMJ7pIKCdD/+sw/xcElt2O105f3AnthA1tK5yF92+Ov/plG01zqj
+	SwavRzIw/SRsBPYVtlNcPUOqr6aTrFI=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+To: KaFai Wan <kafai.wan@linux.dev>
+Cc: daniel@iogearbox.net, john.fastabend@gmail.com, sdf@fomichev.me, 
+	ast@kernel.org, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, 
+	song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, davem@davemloft.net, 
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, 
+	shuah@kernel.org, jiayuan.chen@linux.dev, bpf@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf v3 2/2] selftests/bpf: Test TCP_NODELAY in TCP hdr
+ opt callbacks
+Message-ID: <202642017513.aNTV.martin.lau@linux.dev>
+References: <20260417092035.2299913-1-kafai.wan@linux.dev>
+ <20260417092035.2299913-3-kafai.wan@linux.dev>
+ <2026417162132.9MRI.martin.lau@linux.dev>
+ <9b3e7c118f5b9105b92f53b66034c1b7884c1372.camel@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/bpf: Page out as late a possible in file_reader
-To: Jerome Marchand <jmarchan@redhat.com>, bpf@vger.kernel.org
-Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
- <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Mykyta Yatsenko <yatsenko@meta.com>,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260420134637.2513867-1-jmarchan@redhat.com>
-Content-Language: en-US
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-In-Reply-To: <20260420134637.2513867-1-jmarchan@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <9b3e7c118f5b9105b92f53b66034c1b7884c1372.camel@linux.dev>
+X-Migadu-Flow: FLOW_OUT
 
-On 4/20/26 2:46 PM, Jerome Marchand wrote:
-> The file_reader/on_open_expect_fault fails consistently on my system.
-> It expects a page fault on first dynptr read of some range the exe
-> file of the current process because it has paged out that page range
-> earlier. However a lot can happen to that range (which depending on
-> the actual memory layout could contain text section, data section,
-> sections )related to dynamic linking...) between the moment it was
-> paged out and the moment the bpf program expected to hit a pagefault
-> actually run.
+On Sat, Apr 18, 2026 at 10:19:47AM +0800, KaFai Wan wrote:
+> > > +	ret = setsockopt(sk_fds.active_fd, SOL_TCP, TCP_NODELAY, &true_val, sizeof(true_val));
+> > 
+> > Same comment as in v2. Why this setsockopt is needed?
 > 
-> A bit of instrumentation with mincore() shows that pages from that
-> range were accessed several times before the program is run. In
-> particular the call of file_reader__load() seems to fault all the
-> range in.
+> Sorry I miss this. It's from the review of v1, my first version would break the syscall setsockopt
+> and other CB besides HDR_OPT_LEN/WRITE_HDR_OPT. So in the test I check setsockopt() and
+> bpf_setsockopt() in PASSIVE_ESTABLISHED_CB to make sure patch#1 would not break user space and other
+> CB.
+
+ic. Yep, remove it since v3 is not changing the syscall setsockopt.
+
 > 
-> Move the call to madvise(MADV_PAGEOUT) to just before attaching the
-> program to minimize the risk of having those page pulled back in from
-> under our feet.
+> > The setsockopt in userspace is unnecessary. 
 > 
-> Signed-off-by: Jerome Marchand <jmarchan@redhat.com>
-> ---
+> Is bpf_setsockopt() in PASSIVE_ESTABLISHED_CB also unnecessary? I'll respin if they are unnecessary.
 
-Thank you for the patch, the change looks good. Does it fail 
-consistently on 4K page size?
-
-Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
-
->   .../selftests/bpf/prog_tests/file_reader.c    | 22 +++++++++----------
->   1 file changed, 10 insertions(+), 12 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/file_reader.c b/tools/testing/selftests/bpf/prog_tests/file_reader.c
-> index 5cde32b35da44..48aae7ea0e4bb 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/file_reader.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/file_reader.c
-> @@ -10,6 +10,7 @@
->   
->   const char *user_ptr = "hello world";
->   char file_contents[256000];
-> +void *addr;
->   
->   void *get_executable_base_addr(void)
->   {
-> @@ -26,8 +27,7 @@ void *get_executable_base_addr(void)
->   static int initialize_file_contents(void)
->   {
->   	int fd, page_sz = sysconf(_SC_PAGESIZE);
-> -	ssize_t n = 0, cur, off;
-> -	void *addr;
-> +	ssize_t n = 0, cur;
->   
->   	fd = open("/proc/self/exe", O_RDONLY);
->   	if (!ASSERT_OK_FD(fd, "Open /proc/self/exe\n"))
-> @@ -52,16 +52,6 @@ static int initialize_file_contents(void)
->   	/* page-align base file address */
->   	addr = (void *)((unsigned long)addr & ~(page_sz - 1));
->   
-> -	/*
-> -	 * Page out range 0..512K, use 0..256K for positive tests and
-> -	 * 256K..512K for negative tests expecting page faults
-> -	 */
-> -	for (off = 0; off < sizeof(file_contents) * 2; off += page_sz) {
-> -		if (!ASSERT_OK(madvise(addr + off, page_sz, MADV_PAGEOUT),
-> -			       "madvise pageout"))
-> -			return errno;
-> -	}
-> -
->   	return 0;
->   }
->   
-> @@ -90,6 +80,14 @@ static void run_test(const char *prog_name)
->   	if (!ASSERT_OK(err, "file_reader__load"))
->   		goto cleanup;
->   
-> +	/*
-> +	 * Page out range 0..512K, use 0..256K for positive tests and
-> +	 * 256K..512K for negative tests expecting page faults
-> +	 */
-> +	if (!ASSERT_OK(madvise(addr, sizeof(file_contents) * 2, MADV_PAGEOUT),
-> +		       "madvise pageout"))
-> +		goto cleanup;
-> +
->   	err = file_reader__attach(skel);
->   	if (!ASSERT_OK(err, "file_reader__attach"))
->   		goto cleanup;
-
+This one is fine. It checks if the bpf_setsockopt is not affectred in other CB.
