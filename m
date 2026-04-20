@@ -1,100 +1,87 @@
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-187.mta1.migadu.com (out-187.mta1.migadu.com [95.215.58.187])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96CD4387590
-	for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2026 20:43:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FE2B386C3F
+	for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2026 20:43:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776717810; cv=none; b=pQDLqsx/si6ddDMkg436t0uEIb84CD3jA1iHFTQB3l/9jG5BZChHIXJyeKFCp3M+8kenjUheCA8eqdN2Zb3Em+RJmMUnsa0jMCAu1bdxoBgUo6pH4XF8i7AORQuG1I5Jy8ID3pG5kDAYJyvu2SKvskbb3h5B++hvDbhYCd1mDwQ=
+	t=1776717839; cv=none; b=MplnXQDCU1MlSZU2OkocJhXOHAMHkum4R5kPf63IS1Wq4IcVF5v9uZjU0RtsNxjGODU2TbHmgQsHMNS5Eq2WnqupEAvYNhSWDmqFiVvhUC01Ey3OehFVlQuSAGCj7xAcV2DWkF5dVuivR14gCN6VhNbUOvBrQXOKLWL9AUhMvR8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776717810; c=relaxed/simple;
-	bh=2TQCEiF5Y/KXRZuugVpD0ZOKr6LVSShqt3Fx7ra9V9g=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=rSoZ5OsYzekM2qtFmV45j9+1OXMMbBHs1139tbEeHhuNzqpRuw7tHXtMfqPKeRhVjXfs4LUFr4eOkeKEEXXDopaSMnskeRh27VMtrs+AHkeSf4OrkNRsQkP9kaSNuj8Ub8szMRi9k/vkBUs4EFZnT+eT8ufHmEuLf+po76NBEds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=dyDxvdCY; arc=none smtp.client-ip=209.85.214.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1776717839; c=relaxed/simple;
+	bh=Bhe7pfgl/AFu6WLydL6w9J5N3ApXPzLXHG9nFzZ4fmY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XTsuYhjQFnEm/uxsLkGWFuL8IzrHLjz8+tXLypzpA+7XnZGM5MWH3LeaZ81knUFCweqERH4lOONo+s/h4Joh/Te9NymdfLdjil198TJhX3j5PJNyze9RA6pjSxs+UJHhgxzyS1fVO+VA6a3zWlrukLjtOc00bO5v6eh8u0HFZVU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=X+xowDQe; arc=none smtp.client-ip=95.215.58.187
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dyDxvdCY"
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2b249541063so30600195ad.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2026 13:43:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1776717808; x=1777322608; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Bw/xOa4cMDz+3Y150IRREEsvI8FeQ6LscRd2k8rTaIk=;
-        b=dyDxvdCY2dethMRJST9NbaSjEguo0wX4dE6pDuUvhCZKtlJnOaAIL3UeXLkfcM7qPk
-         vFW8mR9doxNFiiXoAz+S5PC8+7whNdaAkv8Kx9Hd/Y6uevnICQyA5BrMjSMYWGLmbMyn
-         kVbiAxukpMjgj5KbBgRa/qv/TMm565c+PjGf7jPaeTwVCt6rE+UiNKBtCrvy3zuSrKWq
-         rLItIBhTJ51XiVZAGoAMQbcCTcLnE+gtwcwiUPx1P3bwOnZtsa3Epvayp07zeT2vj1ye
-         suJ9hJjgd0APjq7ouQPZRddbhnZpn0mY/b6ZcS6iVnUnbIXgGMQJIFiIjdx5ButclYps
-         sdRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776717808; x=1777322608;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Bw/xOa4cMDz+3Y150IRREEsvI8FeQ6LscRd2k8rTaIk=;
-        b=Z56Z60PNOHwOk/fIKrcN2w3TUIgVM11SkYgF8r8C6V/3fpJNUch68sUkhZjLgYMpiB
-         4iSGVBhaDhQYGhsrr2vswHD8DHb1gvs2WyCWOLWIg7jRNok2wg2j2tr+yr3Kl/qGgCw8
-         N7X4O3wRX+gsleaO9WfPnz6dcubr/WReRQ6JxPvj+MKve8oCXWOKkReYRvaPG5JedRHB
-         OrxsCe0nOJyLRNP5C5ZlFv1RbY0vtxoWLkaVX8ykVV3UBCZnSvCfJIVpP43ugF8m3VXz
-         jhqgOEc0D3rdHMPIhFu1zm7Y+Kjcw9pNbfgGhFGzaQFVyaJK5pd4sA+7vwmx1TTGDVUp
-         BkEg==
-X-Forwarded-Encrypted: i=1; AFNElJ8PTWmqev0bzooHtaJuxD6ZuMVn9368jw12dxsEsEHAEumR94GOPC0bob7gkE8NX0ZWnMS6A5axjKgyQZv7h70=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzCtY0IXBPQ5Y8sIs9mUYLBfi6s6gtreWwLb3UKdMEMC9lkJVlQ
-	mJ23hz5RB7pp6L7mHvMeLVdHQyL90MBMtDR/QN6+Hq2NJCkl+q6Bv4TqMYgCbku2aO/GhMWdcqs
-	phJt+MQ==
-X-Received: from plai2.prod.google.com ([2002:a17:902:c942:b0:2b3:2649:c9c1])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:d30b:b0:2b0:673a:7c90
- with SMTP id d9443c01a7336-2b5f9f50051mr108270095ad.28.1776717807739; Mon, 20
- Apr 2026 13:43:27 -0700 (PDT)
-Date: Mon, 20 Apr 2026 13:43:26 -0700
-In-Reply-To: <20260220004223.4168331-5-dmatlack@google.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="X+xowDQe"
+Date: Mon, 20 Apr 2026 13:43:36 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1776717826;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ihWIIczfSlnxjYYCRII7UJ70yxUYqdVRkPZC4QRKtXo=;
+	b=X+xowDQe7i2RsriG3BR8r3i1s1dXQVN7OeBZeqF4YpX9aziNxjkGZv2I0i5dX/z7sLVTRY
+	qbiNjbmWozQoFwhw82fHiRn/vZsm4CcckBZ1ilyB5jGUg+IXoFxkoMW7rkDyutUtUWnpIa
+	/3WCpfYXqzkVUA7tfwfEtojl47bbgjA=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+To: Werner Kasselman <werner@verivus.ai>
+Cc: "bpf@vger.kernel.org" <bpf@vger.kernel.org>, 
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>, "andrii@kernel.org" <andrii@kernel.org>, 
+	"ast@kernel.org" <ast@kernel.org>, "brakmo@fb.com" <brakmo@fb.com>, 
+	"daniel@iogearbox.net" <daniel@iogearbox.net>, "davem@davemloft.net" <davem@davemloft.net>, 
+	"eddyz87@gmail.com" <eddyz87@gmail.com>, "edumazet@google.com" <edumazet@google.com>, 
+	"haoluo@google.com" <haoluo@google.com>, "horms@kernel.org" <horms@kernel.org>, 
+	"john.fastabend@gmail.com" <john.fastabend@gmail.com>, "jolsa@kernel.org" <jolsa@kernel.org>, 
+	"kpsingh@kernel.org" <kpsingh@kernel.org>, "kuba@kernel.org" <kuba@kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, "pabeni@redhat.com" <pabeni@redhat.com>, 
+	"sdf@fomichev.me" <sdf@fomichev.me>, "shuah@kernel.org" <shuah@kernel.org>, 
+	"song@kernel.org" <song@kernel.org>, "yonghong.song@linux.dev" <yonghong.song@linux.dev>, 
+	"jiayuan.chen@linux.dev" <jiayuan.chen@linux.dev>, "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH 2/2] bpf: guard sock_ops rtt_min against non-locked
+ tcp_sock
+Message-ID: <202642020410.q7GJ.martin.lau@linux.dev>
+References: <20260417023119.3830723-1-werner@verivus.com>
+ <20260417023119.3830723-3-werner@verivus.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260220004223.4168331-1-dmatlack@google.com> <20260220004223.4168331-5-dmatlack@google.com>
-Message-ID: <aeaP7kPPlyBZE-1h@google.com>
-Subject: Re: [PATCH v2 04/10] KVM: selftests: Use u64 instead of uint64_t
-From: Sean Christopherson <seanjc@google.com>
-To: David Matlack <dmatlack@google.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Ackerley Tng <ackerleytng@google.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
-	Andrew Jones <ajones@ventanamicro.com>, Anup Patel <anup@brainfault.org>, 
-	Atish Patra <atish.patra@linux.dev>, Bibo Mao <maobibo@loongson.cn>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Claudio Imbrenda <imbrenda@linux.ibm.com>, 
-	Colin Ian King <colin.i.king@gmail.com>, David Hildenbrand <david@kernel.org>, Fuad Tabba <tabba@google.com>, 
-	Huacai Chen <chenhuacai@kernel.org>, James Houghton <jthoughton@google.com>, 
-	Janosch Frank <frankja@linux.ibm.com>, Joey Gouly <joey.gouly@arm.com>, kvmarm@lists.linux.dev, 
-	kvm-riscv@lists.infradead.org, kvm@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	Lisa Wang <wyihan@google.com>, loongarch@lists.linux.dev, 
-	Marc Zyngier <maz@kernel.org>, Maxim Levitsky <mlevitsk@redhat.com>, Nutty Liu <nutty.liu@hotmail.com>, 
-	Oliver Upton <oupton@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <pjw@kernel.org>, 
-	"Pratik R. Sampat" <prsampat@amd.com>, Rahul Kumar <rk0006818@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Suzuki K Poulose <suzuki.poulose@arm.com>, Tianrui Zhao <zhaotianrui@loongson.cn>, 
-	Wu Fei <wu.fei9@sanechips.com.cn>, Yosry Ahmed <yosry.ahmed@linux.dev>, 
-	Zenghui Yu <yuzenghui@huawei.com>
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260417023119.3830723-3-werner@verivus.com>
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, Feb 20, 2026, David Matlack wrote:
-> Use u64 instead of uint64_t to make the KVM selftests code more concise
-> and more similar to the kernel (since selftests are primarily developed
-> by kernel developers).
-> 
-> This commit was generated with the following command:
-> 
->   git ls-files tools/testing/selftests/kvm | xargs sed -i 's/uint64_t/u64/g'
-> 
-> Then by manually adjusting whitespace to make checkpatch.pl happy.
-> 
-> Also include <linux/types.h> in include/test_util.h and
-> include/x86/pmu.h to avoid compilation failure.
+On Fri, Apr 17, 2026 at 02:31:26AM +0000, Werner Kasselman wrote:
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index e8ad062f63bc..9c43193a5c39 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -10827,14 +10827,12 @@ static u32 sock_ops_convert_ctx_access(enum bpf_access_type type,
+>  			     sizeof(struct minmax));
+>  		BUILD_BUG_ON(sizeof(struct minmax) <
+>  			     sizeof(struct minmax_sample));
+> +		BUILD_BUG_ON(offsetof(struct tcp_sock, rtt_min) +
+> +			     offsetof(struct minmax_sample, v) > S16_MAX);
 
-kvm_util_types.h also needs to include types.h, as it blatantly uses u64 without
-any includes.  It obviously works thanks to ordering, but it's a lurking trap for
-others.
+This doesn't look like a test that is added by human.
+Will sizeof(tcp_sock) ever reach S16_MAX? It is unnecessarily defensive and
+inconsistent with other tcp_sock field loads.
+
+> diff --git a/tools/testing/selftests/bpf/prog_tests/sock_ops_get_sk.c b/tools/testing/selftests/bpf/prog_tests/sock_ops_get_sk.c
+> index 343d92c4df30..1aea4c97d5d3 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/sock_ops_get_sk.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/sock_ops_get_sk.c
+
+Separate the test in its own patch.
+
+Also tag and add revision to subject, "[PATCH v3 bpf...]".
+Take a look at how other patches are posted in the bpf mailing list.
+
+pw-bot: cr
