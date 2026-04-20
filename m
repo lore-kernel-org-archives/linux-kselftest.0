@@ -1,196 +1,105 @@
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80B4A3FF888
-	for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2026 13:26:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CABE83C0624;
+	Mon, 20 Apr 2026 13:27:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776691604; cv=none; b=VcijVMGjHn/hvI/r1oUwt4Fi8R2pU/VzWPeLrvWw7TrSjm4ZPXePhYdHNqEGi838U2Od2x49IlGr4ZytYBQwMfCc08EdrW7cWGuBwx+SyC+cGpyNaQbVisuSSC0a8wFYkxKIlrVvqT2eX//0WZ/vMXzo+LeJr/RK44eKysOW1d0=
+	t=1776691622; cv=none; b=S4yCiRi006aXCX9Ih7Cfv2UF1So/pL5+FgDJ0lJgb51yoDpVqb88sziLNviSpoD76kt3O1a/ZY9spueB+n2E/6/AyVmBgSxX8BwiN6HVDZqO9WQuB5P24Y/vzmeQ/0x+k2KHQ6uyZMPI/pxyQ/eWt1nzOalYLGqsku5LDQidemY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776691604; c=relaxed/simple;
-	bh=SUnJjgkqoiRjey4Mme0Ytcc27949+m9HMpFNJ4j4u04=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IIBBoZw1nVyi/LEqkf35E6Aa3nznXRLLd6tNGq8VV4fkBrQYYslPImBpVYRooYjgz9h5GlmN5M8f7yLy8FogGmlkXrOPVGJfkSh/OksTPYTVYk8ku2TaXNZ0sQBDJBqavFJySt9hKAZDXU0Suvo6qNKlr4iuNovQdBBm5RKIB0s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=A58xvaoE; arc=none smtp.client-ip=209.85.222.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
+	s=arc-20240116; t=1776691622; c=relaxed/simple;
+	bh=2HFDKDa+QYlTQ7jECX761lpR0rAZxZkBIpMTXWaLxk8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=sjG10gtFWSiljityG3g4MJtfFuFuyZ1wsrGlDpp3nbfCjxJBLGPjd/6eYC5z9RiX2nV3zUpmbPtQoypJ55hv80zysjrveGVb8kK5h2g0NAdUqAuFWzuRMPy2GkDgDs81L0I8CEsFRStHHQoRGugCxdQeyp7FZhQB7W/UIm95JLI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jjR1yiFQ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="A58xvaoE"
-Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-8d7e7f48499so348997485a.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2026 06:26:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1776691600; x=1777296400; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0ZK98ieIRG457WI8zfD0fDHqFblKktpbnpJAvLDPkbM=;
-        b=A58xvaoEq67aH9ULs1ces4Ml7HWYtldV1dz76aMvy6xSXVbEBCsk4KsUbNGc293np+
-         aXqPeThxXbHjAUA4bcGnZYMP9NB3CdSSQyLbdiyGdryr86TrQSD0PGMbc0bysFMmiGUF
-         fgtfpLyaY17Y/MEJuY1WGge9YOPtHAizWFg32S688H5wvh7DqlukcN+8KQcEyoEkVnYr
-         YAi2vky7Ap9FGBIaO9dRT9zR0aVbcIBzsYSs8Vbd013cA7gc/koyBslV/1sjlzxnNF18
-         7nMG50BggmcjUZ8E9rODMNHtUpJyxMcJxlc709pjTbloBr+IOkFw5b/q9XuDugNVmiai
-         qOHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776691600; x=1777296400;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0ZK98ieIRG457WI8zfD0fDHqFblKktpbnpJAvLDPkbM=;
-        b=JT/6n3NL42b7nQDvuBS5t9K+HqjBJvIZ9/DQLuB/+aeGpyPW3xrL39Tafl4emujZ3P
-         /+MnCNEEqIAcsIbbEuPB89yQuyYIffxo/U34/28Plhawd2WbaU8LkhyKW3Vjp1eBIdsH
-         7uxGedNlqTh4416FK6Jx26TtNB0/i0FMNisoExg0AsjmGLaIplyoeXwnnRvSRMNYiFO/
-         fPbuYXwXhMUO7oTv6GPzy3FzUuSQ3rW5TM+SqlH8/HhrFFopWz51KU8vV+mz2Tu7q6Ym
-         0vuT4rGRaAVMZ9A5IpdOBJ4N6pHCmFix1I8We7/pcGG42yJHfrcEt3PMKDURhhNLI07p
-         EaOA==
-X-Forwarded-Encrypted: i=1; AFNElJ8ff0F35dk98hVgf7UezCC40oVGi+exCAUdC1dEWipOPq98rtAsQ8FKifzBQMtlHE7NVZLGEjDxocerHRJ2nH8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx1nvD1h1BysPlTgR6tb4uij/f8B7CiU7BRRhx2TX0rNdD2gM5O
-	i6bEy70ze43jovd6FdklcHa9z/CFVZ1pHqYICXpbaERGO37twYByLSleJLcK5Soe1wA=
-X-Gm-Gg: AeBDiesJ6XEgTryMfl/yUzJ+P5Y2tLNnNgGmI93072q1nKirrjzJw8LCBIzDo8zlSYt
-	cRJizwH7YWqf4VANR4gopOPuWLs7Hq7s0FZ8saRRBib6QfgdOwGNwW81kma+OxU2xbipEJyXNcc
-	RwIkR59jydbs5xRdidrH9IlfM+A4vCcF/VR0JQ3n9rXTnfqe1urcKqW1UXR01YDfruNyQmwx3tM
-	VeeasE3ombD9U2/vQsMUIa5U8nx9FK62sK67WkUqPUsmZhJvQcMJ39oxh7YUVKxatpnJHN2X6Qy
-	ZdEjmsWlNxLjrZG1lQtKTsfhGva4zzUtWZM5QepkVH3ZygFgJiLuW2xdv+XeWiDFEcui1KW4zm8
-	vzsbQpSdN7F3Bmf5OTqCP3hMKs5t/UJa/FOSUybCN4NHaGwWa0WSA3l7aq7shRmTL186W7cFNaK
-	rnBiI92RDbXAqrMGe/wJ81/PXsPUu1k1YUfh1L/a1QL+2gZEXd/nLK2M3dveDF
-X-Received: by 2002:a05:620a:410c:b0:8cf:c729:a629 with SMTP id af79cd13be357-8e78fc29218mr1998016685a.20.1776691600368;
-        Mon, 20 Apr 2026 06:26:40 -0700 (PDT)
-Received: from plex ([71.181.43.54])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8eb61bc0d7dsm201476385a.24.2026.04.20.06.26.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Apr 2026 06:26:39 -0700 (PDT)
-Date: Mon, 20 Apr 2026 13:26:38 +0000
-From: Pasha Tatashin <pasha.tatashin@soleen.com>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: Pasha Tatashin <pasha.tatashin@soleen.com>, 
-	linux-kselftest@vger.kernel.org, shuah@kernel.org, akpm@linux-foundation.org, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, dmatlack@google.com, kexec@lists.infradead.org, 
-	pratyush@kernel.org, skhawaja@google.com, graf@amazon.com
-Subject: Re: [PATCH 1/5] liveupdate: Remove limit on the number of sessions
-Message-ID: <ttirtg6trmvhuaubix4ufhv2i7vl37n3ef5rgkpxp56nvfvwmt@ehghcskmjqzo>
-References: <20260414200237.444170-1-pasha.tatashin@soleen.com>
- <20260414200237.444170-2-pasha.tatashin@soleen.com>
- <aeXSEe9Bo-vsSkMH@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jjR1yiFQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D019C2BCB7;
+	Mon, 20 Apr 2026 13:27:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776691622;
+	bh=2HFDKDa+QYlTQ7jECX761lpR0rAZxZkBIpMTXWaLxk8=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=jjR1yiFQmvgvbl0MaX6FNOeY5wctDyVfhMdSyIirW6I859uV+uFivP6rsbcMLpbBJ
+	 eMmrtnwo/O+wkJ/1LyGgGtJQdnwnEWR7lUHlMkLQDxcPqLpJ4uflgJaKXNa2xrze3H
+	 Vq8JqB3PP0Nf1XroKgBLpHBVilumLijzKt8Jd6iOb2U3CmelzIuTyN571mgWe9Ef48
+	 UrrhN2Tk2sO9pSbA515cdthqO2u8U7t93o+skRJ6ibVvX9fkdYtT1iTbRhIcFciDOW
+	 VqD0oCAmwKy9yYATxq/9wVLqqMN/ZM2co2sGW3E8cA5yQe2iaJ2DU3TvsVTNkV/FrG
+	 EcCepRH6Cf5RA==
+From: Sasha Levin <sashal@kernel.org>
+To: patches@lists.linux.dev,
+	stable@vger.kernel.org
+Cc: Daniel Golle <daniel@makrotopia.org>,
+	Alexander Sverdlin <alexander.sverdlin@siemens.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Sasha Levin <sashal@kernel.org>,
+	davem@davemloft.net,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	shuah@kernel.org,
+	razor@blackwall.org,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.18] selftests: net: bridge_vlan_mcast: wait for h1 before querier check
+Date: Mon, 20 Apr 2026 09:18:51 -0400
+Message-ID: <20260420132314.1023554-137-sashal@kernel.org>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260420132314.1023554-1-sashal@kernel.org>
+References: <20260420132314.1023554-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aeXSEe9Bo-vsSkMH@kernel.org>
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.18.23
+Content-Transfer-Encoding: 8bit
 
-On 04-20 10:13, Mike Rapoport wrote:
-> On Tue, Apr 14, 2026 at 08:02:33PM +0000, Pasha Tatashin wrote:
-> > Currently, the number of LUO sessions is limited by a fixed number of
-> > pre-allocated pages for serialization (16 pages, allowing for ~819
-> > sessions).
-> > 
-> > This limitation is problematic if LUO is used to support things such as
-> > systemd file descriptor store, and would be used not just as VM memory
-> > but to save other states on the machine.
-> > 
-> > Remove this limit by transitioning to a linked-block approach for
-> > session metadata serialization. Instead of a single contiguous block,
-> > session metadata is now stored in a chain of 16-page blocks. Each block
-> > starts with a header containing the physical address of the next block
-> > and the number of session entries in the current block.
-> > 
-> > - Bump session ABI version to v3.
-> > - Update struct luo_session_header_ser to include a 'next' pointer.
-> > - Implement dynamic block allocation in luo_session_insert().
-> > - Update setup, serialization, and deserialization logic to traverse
-> >   the block chain.
-> > - Remove LUO_SESSION_MAX limit.
-> > 
-> > Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
-> > ---
-> >  include/linux/kho/abi/luo.h      |  19 +--
-> >  kernel/liveupdate/luo_internal.h |  12 +-
-> >  kernel/liveupdate/luo_session.c  | 237 +++++++++++++++++++++++--------
-> >  3 files changed, 197 insertions(+), 71 deletions(-)
-> 
-> ...
-> 
-> > +/**
-> > + * struct luo_session_block - Internal representation of a session serialization block.
-> > + * @list: List head for linking blocks in memory.
-> > + * @ser:  Pointer to the serialized header in preserved memory.
-> > + */
-> > +struct luo_session_block {
-> > +	struct list_head list;
-> > +	struct luo_session_header_ser *ser;
-> > +};
-> > +
-> >  /**
-> >   * struct luo_session_header - Header struct for managing LUO sessions.
-> >   * @count:      The number of sessions currently tracked in the @list.
-> > + * @nblocks:    The number of allocated serialization blocks.
-> >   * @list:       The head of the linked list of `struct luo_session` instances.
-> >   * @rwsem:      A read-write semaphore providing synchronized access to the
-> >   *              session list and other fields in this structure.
-> > - * @header_ser: The header data of serialization array.
-> > - * @ser:        The serialized session data (an array of
-> > - *              `struct luo_session_ser`).
-> > + * @blocks:     The list of serialization blocks (struct luo_session_block).
-> >   * @active:     Set to true when first initialized. If previous kernel did not
-> >   *              send session data, active stays false for incoming.
-> >   */
-> >  struct luo_session_header {
-> >  	long count;
-> > +	long nblocks;
-> >  	struct list_head list;
-> >  	struct rw_semaphore rwsem;
-> > -	struct luo_session_header_ser *header_ser;
-> > -	struct luo_session_ser *ser;
-> > +	struct list_head blocks;
-> 
-> Don't we need some sort of locking for blocks?
+From: Daniel Golle <daniel@makrotopia.org>
 
-The rwsem right above the blocks field protects it. New blocks are only 
-created when luo_session_insert() is called, which takes 
-rwsem_write(&sh->rwsem).
+[ Upstream commit efaa71faf212324ecbf6d5339e9717fe53254f58 ]
 
-For simplicity, once blocks are created, we never free them. This is 
-safe given that sessions can only be created by a single privileged 
-agent.
+The querier-interval test adds h1 (currently a slave of the VRF created
+by simple_if_init) to a temporary bridge br1 acting as an outside IGMP
+querier. The kernel VRF driver (drivers/net/vrf.c) calls cycle_netdev()
+on every slave add and remove, toggling the interface admin-down then up.
+Phylink takes the PHY down during the admin-down half of that cycle.
+Since h1 and swp1 are cable-connected, swp1 also loses its link may need
+several seconds to re-negotiate.
 
-> 
-> >  	bool active;
-> >  };
->   
-> > @@ -147,15 +222,6 @@ static int luo_session_insert(struct luo_session_header *sh,
-> >  
-> >  	guard(rwsem_write)(&sh->rwsem);
-> >  
-> > -	/*
-> > -	 * For outgoing we should make sure there is room in serialization array
-> > -	 * for new session.
-> > -	 */
-> > -	if (sh == &luo_session_global.outgoing) {
-> > -		if (sh->count == LUO_SESSION_MAX)
-> > -			return -ENOMEM;
-> > -	}
-> > -
-> >  	/*
-> >  	 * For small number of sessions this loop won't hurt performance
-> >  	 * but if we ever start using a lot of sessions, this might
-> 
-> For ~8.1 million sessions this comment does not seem valid anymore ;-)
+Use setup_wait_dev $h1 0 which waits for h1 to return to UP state, so the
+test can rely on the link being back up at this point.
 
-Fair point! However, in all reasonable use cases we expect to have at 
-most hundreds of sessions, so this should still be fine. To extend on 
-this: the O(N^2) complexity mentioned in the comment is really only a 
-problem during restoration, which happens during our performance 
-critical blackout time. However, it is used there only for sanity 
-checking, if we trust the previous kernel, we can remove this 
-duplication check entirely.
+Fixes: 4d8610ee8bd77 ("selftests: net: bridge: add vlan mcast_querier_interval tests")
+Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+Reviewed-by: Alexander Sverdlin <alexander.sverdlin@siemens.com>
+Link: https://patch.msgid.link/c830f130860fd2efae08bfb9e5b25fd028e58ce5.1775424423.git.daniel@makrotopia.org
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
 
-Let's keep this sanity check for now. If it ever becomes a performance 
-bottleneck, we can remove it during the blackout time and optimize the 
-pre-blackout session creation to use an O(log(N)) search by storing them 
-in a sorted by name data structure.
+LLM Generated explanations, may be completely bogus:
 
-> 
-> -- 
-> Sincerely yours,
-> Mike.
+Error: Failed to generate final synthesis
+
+ tools/testing/selftests/net/forwarding/bridge_vlan_mcast.sh | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/tools/testing/selftests/net/forwarding/bridge_vlan_mcast.sh b/tools/testing/selftests/net/forwarding/bridge_vlan_mcast.sh
+index 72dfbeaf56b92..e8031f68200ad 100755
+--- a/tools/testing/selftests/net/forwarding/bridge_vlan_mcast.sh
++++ b/tools/testing/selftests/net/forwarding/bridge_vlan_mcast.sh
+@@ -414,6 +414,7 @@ vlmc_querier_intvl_test()
+ 	bridge vlan add vid 10 dev br1 self pvid untagged
+ 	ip link set dev $h1 master br1
+ 	ip link set dev br1 up
++	setup_wait_dev $h1 0
+ 	bridge vlan add vid 10 dev $h1 master
+ 	bridge vlan global set vid 10 dev br1 mcast_snooping 1 mcast_querier 1
+ 	sleep 2
+-- 
+2.53.0
+
