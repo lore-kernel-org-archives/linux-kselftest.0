@@ -1,111 +1,588 @@
-Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
+Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FFBA37EFE2
-	for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2026 02:55:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4C6117DFE7
+	for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2026 04:32:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776653734; cv=none; b=MdtrrbkwI7aCcHezsrIcKDurolWJD0EyR1/1YnJDr2Y6xPGQuZEEp+unDOh2Br3/I//OTPjVuGmXfPdwMVVqszHalJdXzRtAwopoxGiVG44pDCHJLa3r6sRKHriNOunE1hhm0YpObFDJ89ccls7JJGme7hsZ+2+ZscMFBhjI4ao=
+	t=1776659534; cv=none; b=aJTWqHbMMppSJMvuOpznNyS+aRKNR/HgathJidNzmfNU85OuT9PMeYJPqjNiPOOVAMcDex1ad6+vwF2pH2ZWUnOVmsHumkeMt/zd5W4vxhrpUdrpCod2lburjpyW1nHZI4qkMW6IavuuTrJu1MOpVM+gGBj0ZHaGS96BLfaWBDs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776653734; c=relaxed/simple;
-	bh=W+YhvuHhs0tpeD/R6Thui+aVfpVb/wJM8LJx2eu4Ffw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XrClScFwxX9ryn03cXZn9KMtQ6Bj6TVdiSwLgbxaLPB9kFw6qGjs0Am8fKcw8aTyisnadCuUk3Fmn/5pkfRoDF+yZrvbPNlE8TWdAjGqmFuJ16JM7FtWm+qwpZm772mGbPv29YiezFvIVhzIPH1Fb6MPEJEtOiUdTpNb2NcPvfI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=wmMB/PyV; arc=none smtp.client-ip=95.215.58.189
+	s=arc-20240116; t=1776659534; c=relaxed/simple;
+	bh=F0w4tJF17WWWAigZKd6R2wm2cv19pah5KWnms2S507Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ldHP5r+49tkI8uznsI7DZKeM8F7ju/BndgR8S+8TtfceOqyJ5IeoUWv/W4fjdeHO431FQFzRMEqE9ZMmTxUYTmf0RV29Pu0NPlQvWwfoYyMImQteHXQi97Gqm48Dk2uGEnJ0hcl7UawzdFXyCh4ZEjmtteZ9RjjIWkuuU/Xoj48=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=G09nrrQe; arc=none smtp.client-ip=95.215.58.183
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="wmMB/PyV"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="G09nrrQe"
+Message-ID: <cea19b89-22d4-4df3-a770-d75eff22e556@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1776653717;
+	t=1776659530;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=wp8FZznvlQ3LIkoMDFeNKqv6fbtzOk5vOjQ3wvKUWag=;
-	b=wmMB/PyVmIOoQtSfg4u3z1sUPnRt1IG9m3PmxFhbZmpeAYSQk2Eaz/IjQzU1niRXtx/T+q
-	01ucqJMe7QeqwNF83mXLa4hFipj0ped2Ybwae5spy597bc2139w6uNsdKJz7k267AZc45u
-	0h5Dy8ApLfF0o8acel5xKbUg0i3vUT0=
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: netdev@vger.kernel.org
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Eric Dumazet <edumazet@google.com>,
-	Neal Cardwell <ncardwell@google.com>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	David Ahern <dsahern@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net 2/2] selftests/net: packetdrill: cover challenge ACK on SEG.ACK > SND.NXT
-Date: Mon, 20 Apr 2026 10:54:09 +0800
-Message-ID: <20260420025428.101192-3-jiayuan.chen@linux.dev>
-In-Reply-To: <20260420025428.101192-1-jiayuan.chen@linux.dev>
-References: <20260420025428.101192-1-jiayuan.chen@linux.dev>
+	bh=5MnYggTyySz4EUQ19/7Dx63B3B6BmxCSuohEE45TtEc=;
+	b=G09nrrQeVAZKf4wksdB8CU5gruoW1QcK0eujZuWYMJmHbys+6aCRTmy3u6R4PYilHIl0DL
+	WutfMtemwFp0vJBJ5tMG6k1QcrxoSNkgbboqQhhRQ7jO9RK9BZwf5o3lakqwRa3equsqgf
+	Kxk+FoZmdL2UPRV3N6s9zt5onjTE1t0=
+Date: Sun, 19 Apr 2026 21:32:00 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH 1/5] liveupdate: Remove limit on the number of sessions
+To: Pasha Tatashin <pasha.tatashin@soleen.com>,
+ "yanjun.zhu@linux.dev" <yanjun.zhu@linux.dev>
+Cc: linux-kselftest@vger.kernel.org, rppt@kernel.org, shuah@kernel.org,
+ akpm@linux-foundation.org, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ dmatlack@google.com, kexec@lists.infradead.org, pratyush@kernel.org,
+ skhawaja@google.com, graf@amazon.com
+References: <20260414200237.444170-1-pasha.tatashin@soleen.com>
+ <20260414200237.444170-2-pasha.tatashin@soleen.com>
+ <4bd21077-8711-4ae7-a695-8bc88ce652d1@linux.dev>
+ <CA+CK2bDvFQUYCsD+jKBWw1KfRNJ4DOopAu29iq7SWYrPWV+dzQ@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Zhu Yanjun <yanjun.zhu@linux.dev>
+In-Reply-To: <CA+CK2bDvFQUYCsD+jKBWw1KfRNJ4DOopAu29iq7SWYrPWV+dzQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Exercise the RFC 5961 Section 5.2 / RFC 793 Section 3.9 requirement
-on the upper edge of the acceptable ACK range, mirroring the existing
-coverage of the SEG.ACK < SND.UNA - MAX.SND.WND case.
 
-After the peer ACKs data the receiver has never sent, the receiver
-must respond with <SEQ = SND.NXT, ACK = RCV.NXT, CTL = ACK> and drop
-the offending segment.  The script validates this exact response.
+在 2026/4/14 17:14, Pasha Tatashin 写道:
+> On Tue, Apr 14, 2026 at 8:06 PM yanjun.zhu <yanjun.zhu@linux.dev> wrote:
+>> On 4/14/26 1:02 PM, Pasha Tatashin wrote:
+>>> Currently, the number of LUO sessions is limited by a fixed number of
+>>> pre-allocated pages for serialization (16 pages, allowing for ~819
+>>> sessions).
+>>>
+>>> This limitation is problematic if LUO is used to support things such as
+>>> systemd file descriptor store, and would be used not just as VM memory
+>>> but to save other states on the machine.
+>>>
+>>> Remove this limit by transitioning to a linked-block approach for
+>>> session metadata serialization. Instead of a single contiguous block,
+>>> session metadata is now stored in a chain of 16-page blocks. Each block
+>>> starts with a header containing the physical address of the next block
+>>> and the number of session entries in the current block.
+>>>
+>>> - Bump session ABI version to v3.
+>>> - Update struct luo_session_header_ser to include a 'next' pointer.
+>>> - Implement dynamic block allocation in luo_session_insert().
+>>> - Update setup, serialization, and deserialization logic to traverse
+>>>     the block chain.
+>>> - Remove LUO_SESSION_MAX limit.
+>>>
+>>> Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+>>> ---
+>>>    include/linux/kho/abi/luo.h      |  19 +--
+>>>    kernel/liveupdate/luo_internal.h |  12 +-
+>>>    kernel/liveupdate/luo_session.c  | 237 +++++++++++++++++++++++--------
+>>>    3 files changed, 197 insertions(+), 71 deletions(-)
+>>>
+>>> diff --git a/include/linux/kho/abi/luo.h b/include/linux/kho/abi/luo.h
+>>> index 46750a0ddf88..f5732958545e 100644
+>>> --- a/include/linux/kho/abi/luo.h
+>>> +++ b/include/linux/kho/abi/luo.h
+>>> @@ -57,9 +57,10 @@
+>>>     *   - compatible: "luo-session-v1"
+>>>     *     Identifies the session ABI version.
+>>>     *   - luo-session-header: u64
+>>> - *     The physical address of a `struct luo_session_header_ser`. This structure
+>>> - *     is the header for a contiguous block of memory containing an array of
+>>> - *     `struct luo_session_ser`, one for each preserved session.
+>>> + *     The physical address of the first `struct luo_session_header_ser`.
+>>> + *     This structure is the header for a block of memory containing an array
+>>> + *     of `struct luo_session_ser` entries. Multiple blocks are linked via
+>>> + *     the `next` field in the header.
+>>>     *
+>>>     * File-Lifecycle-Bound Node (luo-flb):
+>>>     *   This node describes all preserved global objects whose lifecycle is bound
+>>> @@ -77,9 +78,9 @@
+>>>     *   `__packed` structures. These structures contain the actual preserved state.
+>>>     *
+>>>     *   - struct luo_session_header_ser:
+>>> - *     Header for the session array. Contains the total page count of the
+>>> - *     preserved memory block and the number of `struct luo_session_ser`
+>>> - *     entries that follow.
+>>> + *     Header for the session data block. Contains the physical address of the
+>>> + *     next session data block and the number of `struct luo_session_ser`
+>>> + *     entries that follow this header in the current block.
+>>>     *
+>>>     *   - struct luo_session_ser:
+>>>     *     Metadata for a single session, including its name and a physical pointer
+>>> @@ -153,21 +154,23 @@ struct luo_file_set_ser {
+>>>     *                          luo_session_header_ser
+>>>     */
+>>>    #define LUO_FDT_SESSION_NODE_NAME   "luo-session"
+>>> -#define LUO_FDT_SESSION_COMPATIBLE   "luo-session-v2"
+>>> +#define LUO_FDT_SESSION_COMPATIBLE   "luo-session-v3"
+>>>    #define LUO_FDT_SESSION_HEADER              "luo-session-header"
+>>>
+>>>    /**
+>>>     * struct luo_session_header_ser - Header for the serialized session data block.
+>>> + * @next:  Physical address of the next struct luo_session_header_ser.
+>>>     * @count: The number of `struct luo_session_ser` entries that immediately
+>>>     *         follow this header in the memory block.
+>>>     *
+>>> - * This structure is located at the beginning of a contiguous block of
+>>> + * This structure is located at the beginning of a block of
+>>>     * physical memory preserved across the kexec. It provides the necessary
+>>>     * metadata to interpret the array of session entries that follow.
+>>>     *
+>>>     * If this structure is modified, `LUO_FDT_SESSION_COMPATIBLE` must be updated.
+>>>     */
+>>>    struct luo_session_header_ser {
+>>> +     u64 next;
+>>>        u64 count;
+>>>    } __packed;
+>>>
+>>> diff --git a/kernel/liveupdate/luo_internal.h b/kernel/liveupdate/luo_internal.h
+>>> index 875844d7a41d..a73f42069301 100644
+>>> --- a/kernel/liveupdate/luo_internal.h
+>>> +++ b/kernel/liveupdate/luo_internal.h
+>>> @@ -11,6 +11,16 @@
+>>>    #include <linux/liveupdate.h>
+>>>    #include <linux/uaccess.h>
+>>>
+>>> +/*
+>>> + * Safeguard limit for the number of serialization blocks. This is used to
+>>> + * prevent infinite loops and excessive memory allocation in case of memory
+>>> + * corruption in the preserved state.
+>>> + *
+>>> + * This limit allows for ~8.1 million sessions and ~1.2 million files per
+>>> + * session, which is more than enough for all realistic use cases.
+>>> + */
+>>> +#define LUO_MAX_BLOCKS 10000
+>>> +
+>>>    struct luo_ucmd {
+>>>        void __user *ubuffer;
+>>>        u32 user_size;
+>>> @@ -59,7 +69,6 @@ struct luo_file_set {
+>>>     * struct luo_session - Represents an active or incoming Live Update session.
+>>>     * @name:       A unique name for this session, used for identification and
+>>>     *              retrieval.
+>>> - * @ser:        Pointer to the serialized data for this session.
+>>>     * @list:       A list_head member used to link this session into a global list
+>>>     *              of either outgoing (to be preserved) or incoming (restored from
+>>>     *              previous kernel) sessions.
+>>> @@ -70,7 +79,6 @@ struct luo_file_set {
+>>>     */
+>>>    struct luo_session {
+>>>        char name[LIVEUPDATE_SESSION_NAME_LENGTH];
+>>> -     struct luo_session_ser *ser;
+>>>        struct list_head list;
+>>>        bool retrieved;
+>>>        struct luo_file_set file_set;
+>>> diff --git a/kernel/liveupdate/luo_session.c b/kernel/liveupdate/luo_session.c
+>>> index 92b1af791889..007ca34eba79 100644
+>>> --- a/kernel/liveupdate/luo_session.c
+>>> +++ b/kernel/liveupdate/luo_session.c
+>>> @@ -69,30 +69,39 @@
+>>>    #include <uapi/linux/liveupdate.h>
+>>>    #include "luo_internal.h"
+>>>
+>>> -/* 16 4K pages, give space for 744 sessions */
+>>> +/* 16 4K pages, give space for 819 sessions per block */
+>>>    #define LUO_SESSION_PGCNT   16ul
+>>> -#define LUO_SESSION_MAX              (((LUO_SESSION_PGCNT << PAGE_SHIFT) -   \
+>>> +#define LUO_SESSION_BLOCK_MAX                (((LUO_SESSION_PGCNT << PAGE_SHIFT) -   \
+>>>                sizeof(struct luo_session_header_ser)) /                \
+>>>                sizeof(struct luo_session_ser))
+>>>
+>>> +/**
+>>> + * struct luo_session_block - Internal representation of a session serialization block.
+>>> + * @list: List head for linking blocks in memory.
+>>> + * @ser:  Pointer to the serialized header in preserved memory.
+>>> + */
+>>> +struct luo_session_block {
+>>> +     struct list_head list;
+>>> +     struct luo_session_header_ser *ser;
+>>> +};
+>>> +
+>>>    /**
+>>>     * struct luo_session_header - Header struct for managing LUO sessions.
+>>>     * @count:      The number of sessions currently tracked in the @list.
+>>> + * @nblocks:    The number of allocated serialization blocks.
+>>>     * @list:       The head of the linked list of `struct luo_session` instances.
+>>>     * @rwsem:      A read-write semaphore providing synchronized access to the
+>>>     *              session list and other fields in this structure.
+>>> - * @header_ser: The header data of serialization array.
+>>> - * @ser:        The serialized session data (an array of
+>>> - *              `struct luo_session_ser`).
+>>> + * @blocks:     The list of serialization blocks (struct luo_session_block).
+>>>     * @active:     Set to true when first initialized. If previous kernel did not
+>>>     *              send session data, active stays false for incoming.
+>>>     */
+>>>    struct luo_session_header {
+>>>        long count;
+>>> +     long nblocks;
+>>>        struct list_head list;
+>>>        struct rw_semaphore rwsem;
+>>> -     struct luo_session_header_ser *header_ser;
+>>> -     struct luo_session_ser *ser;
+>>> +     struct list_head blocks;
+>>>        bool active;
+>>>    };
+>>>
+>>> @@ -110,10 +119,12 @@ static struct luo_session_global luo_session_global = {
+>>>        .incoming = {
+>>>                .list = LIST_HEAD_INIT(luo_session_global.incoming.list),
+>>>                .rwsem = __RWSEM_INITIALIZER(luo_session_global.incoming.rwsem),
+>>> +             .blocks = LIST_HEAD_INIT(luo_session_global.incoming.blocks),
+>>>        },
+>>>        .outgoing = {
+>>>                .list = LIST_HEAD_INIT(luo_session_global.outgoing.list),
+>>>                .rwsem = __RWSEM_INITIALIZER(luo_session_global.outgoing.rwsem),
+>>> +             .blocks = LIST_HEAD_INIT(luo_session_global.outgoing.blocks),
+>>>        },
+>>>    };
+>>>
+>>> @@ -140,6 +151,70 @@ static void luo_session_free(struct luo_session *session)
+>>>        kfree(session);
+>>>    }
+>>>
+>>> +static int luo_session_add_block(struct luo_session_header *sh,
+>>> +                              struct luo_session_header_ser *ser)
+>>> +{
+>>> +     struct luo_session_block *block;
+>>> +
+>>> +     if (sh->nblocks >= LUO_MAX_BLOCKS)
+>>> +             return -ENOSPC;
+>>> +
+>>> +     block = kzalloc_obj(*block);
+>>> +     if (!block)
+>>> +             return -ENOMEM;
+>>> +
+>>> +     block->ser = ser;
+>>> +     list_add_tail(&block->list, &sh->blocks);
+>>> +     sh->nblocks++;
+>>> +
+>>> +     return 0;
+>>> +}
+>>> +
+>>> +static int luo_session_create_ser_block(struct luo_session_header *sh)
+>>> +{
+>>> +     struct luo_session_block *last = NULL;
+>>> +     struct luo_session_header_ser *ser;
+>>> +     int err;
+>>> +
+>>> +     ser = kho_alloc_preserve(LUO_SESSION_PGCNT << PAGE_SHIFT);
+>>> +     if (IS_ERR(ser))
+>>> +             return PTR_ERR(ser);
+>>> +
+>>> +     if (!list_empty(&sh->blocks))
+>>> +             last = list_last_entry(&sh->blocks, struct luo_session_block, list);
+>>> +
+>>> +     err = luo_session_add_block(sh, ser);
+>>> +     if (err)
+>>> +             goto err_unpreserve;
+>>> +
+>>> +     if (last)
+>>> +             last->ser->next = virt_to_phys(ser);
+>>> +
+>>> +     return 0;
+>>> +
+>>> +err_unpreserve:
+>>> +     kho_unpreserve_free(ser);
+>>> +     return err;
+>>> +}
+>>> +
+>>> +static void luo_session_destroy_ser_blocks(struct luo_session_header *sh,
+>>> +                                        bool unpreserve)
+>>> +{
+>>> +     struct luo_session_block *block, *tmp;
+>>> +
+>>> +     list_for_each_entry_safe(block, tmp, &sh->blocks, list) {
+>>> +             if (block->ser) {
+>>> +                     if (unpreserve)
+>>> +                             kho_unpreserve_free(block->ser);
+>>> +                     else
+>>> +                             kho_restore_free(block->ser);
+>>> +             }
+>>> +             list_del(&block->list);
+>>> +             kfree(block);
+>>> +             sh->nblocks--;
+>>> +     }
+>>> +}
+>>> +
+>>>    static int luo_session_insert(struct luo_session_header *sh,
+>>>                              struct luo_session *session)
+>>>    {
+>>> @@ -147,15 +222,6 @@ static int luo_session_insert(struct luo_session_header *sh,
+>>>
+>>>        guard(rwsem_write)(&sh->rwsem);
+>>>
+>>> -     /*
+>>> -      * For outgoing we should make sure there is room in serialization array
+>>> -      * for new session.
+>>> -      */
+>>> -     if (sh == &luo_session_global.outgoing) {
+>>> -             if (sh->count == LUO_SESSION_MAX)
+>>> -                     return -ENOMEM;
+>>> -     }
+>>> -
+>>>        /*
+>>>         * For small number of sessions this loop won't hurt performance
+>>>         * but if we ever start using a lot of sessions, this might
+>>> @@ -166,6 +232,20 @@ static int luo_session_insert(struct luo_session_header *sh,
+>>>                if (!strncmp(it->name, session->name, sizeof(it->name)))
+>>>                        return -EEXIST;
+>>>        }
+>>> +
+>>> +     /*
+>>> +      * For outgoing we should make sure there is room in serialization array
+>>> +      * for new session. If not, allocate a new block.
+>>> +      */
+>>> +     if (sh == &luo_session_global.outgoing) {
+>>> +             if (sh->count == sh->nblocks * LUO_SESSION_BLOCK_MAX) {
+>> I am not sure if "LUO_SESSION_BLOCK_MAX 10000" has special meaning or not.
+> LUO_SESSION_BLOCK_MAX is calculated based on the number of times
+> "struct luo_session_ser)" fits into a page-aligned block minus the
+> luo_session_header_ser. It is not power-of-two, so there is no pretty
+> way to change this to avoid multiplcation.
 
-Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
----
- .../tcp_rfc5961_ack-beyond-snd-nxt.pkt        | 31 +++++++++++++++++++
- 1 file changed, 31 insertions(+)
- create mode 100644 tools/testing/selftests/net/packetdrill/tcp_rfc5961_ack-beyond-snd-nxt.pkt
+Maybe we can use
 
-diff --git a/tools/testing/selftests/net/packetdrill/tcp_rfc5961_ack-beyond-snd-nxt.pkt b/tools/testing/selftests/net/packetdrill/tcp_rfc5961_ack-beyond-snd-nxt.pkt
-new file mode 100644
-index 000000000000..29d61a98d5ef
---- /dev/null
-+++ b/tools/testing/selftests/net/packetdrill/tcp_rfc5961_ack-beyond-snd-nxt.pkt
-@@ -0,0 +1,31 @@
-+// SPDX-License-Identifier: GPL-2.0
-+//
-+// RFC 5961 Section 5.2 / RFC 793 Section 3.9: when a received
-+// segment's SEG.ACK acknowledges data we have never sent
-+// (SEG.ACK > SND.NXT), the receiver MUST discard the segment and
-+// send a challenge ACK back.
-+//
-+// Complement the existing mitigation for the symmetric
-+// (SEG.ACK < SND.UNA - MAX.SND.WND) case.
-+
-+`./defaults.sh`
-+
-+   // Open listener socket
-+    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
-+   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
-+   +0 bind(3, ..., ...) = 0
-+   +0 listen(3, 1) = 0
-+
-+   // Three-way handshake
-+   +0 < S 0:0(0) win 32792 <mss 1000,sackOK,nop,nop,nop,wscale 7>
-+   +0 > S. 0:0(0) ack 1 <...>
-+ +.1 < . 1:1(0) ack 1 win 257
-+   +0 accept(3, ..., ...) = 4
-+
-+   // Server has sent no data yet: SND.UNA = SND.NXT = 1, RCV.NXT = 1.
-+   // Peer sends a pure ACK with SEG.ACK = 2, which is > SND.NXT.
-+   +0 < . 1:1(0) ack 2 win 257
-+
-+   // Expect an immediate challenge ACK:
-+   //   <SEQ = SND.NXT = 1, ACK = RCV.NXT = 1, CTL = ACK>
-+   +0 > . 1:1(0) ack 1
+if (!(sh->count % LUO_SESSION_BLOCK_MASK) && sh->count > 0)
+
+This can avoid multiplcation.
+
+Just 2 cent suggestion.
+
+Zhu Yanjun
+
+>
+>> If not, we can use the following:
+>>
+>> #define LUO_SESSION_BLOCK_SHIFT 13
+>> #define LUO_SESSION_BLOCK_MAX   (1UL << LUO_SESSION_BLOCK_SHIFT) // 8192
+>> #define LUO_SESSION_BLOCK_MASK  (LUO_SESSION_BLOCK_MAX - 1)      // 0x1FFF
+>>
+>> if (!(sh->count & LUO_SESSION_BLOCK_MASK) && sh->count > 0) {
+>> ...
+>> }
+>>
+>> Zhu Yanjun
+>>
+>>> +                     int err = luo_session_create_ser_block(sh);
+>>> +
+>>> +                     if (err)
+>>> +                             return err;
+>>> +             }
+>>> +     }
+>>> +
+>>>        list_add_tail(&session->list, &sh->list);
+>>>        sh->count++;
+>>>
+>>> @@ -444,9 +524,12 @@ int __init luo_session_setup_outgoing(void *fdt_out)
+>>>        u64 header_ser_pa;
+>>>        int err;
+>>>
+>>> -     header_ser = kho_alloc_preserve(LUO_SESSION_PGCNT << PAGE_SHIFT);
+>>> -     if (IS_ERR(header_ser))
+>>> -             return PTR_ERR(header_ser);
+>>> +     err = luo_session_create_ser_block(&luo_session_global.outgoing);
+>>> +     if (err)
+>>> +             return err;
+>>> +
+>>> +     header_ser = list_first_entry(&luo_session_global.outgoing.blocks,
+>>> +                                   struct luo_session_block, list)->ser;
+>>>        header_ser_pa = virt_to_phys(header_ser);
+>>>
+>>>        err = fdt_begin_node(fdt_out, LUO_FDT_SESSION_NODE_NAME);
+>>> @@ -459,19 +542,18 @@ int __init luo_session_setup_outgoing(void *fdt_out)
+>>>        if (err)
+>>>                goto err_unpreserve;
+>>>
+>>> -     luo_session_global.outgoing.header_ser = header_ser;
+>>> -     luo_session_global.outgoing.ser = (void *)(header_ser + 1);
+>>>        luo_session_global.outgoing.active = true;
+>>>
+>>>        return 0;
+>>>
+>>>    err_unpreserve:
+>>> -     kho_unpreserve_free(header_ser);
+>>> +     luo_session_destroy_ser_blocks(&luo_session_global.outgoing, true);
+>>>        return err;
+>>>    }
+>>>
+>>>    int __init luo_session_setup_incoming(void *fdt_in)
+>>>    {
+>>> +     struct luo_session_header *sh = &luo_session_global.incoming;
+>>>        struct luo_session_header_ser *header_ser;
+>>>        int err, header_size, offset;
+>>>        u64 header_ser_pa;
+>>> @@ -501,11 +583,14 @@ int __init luo_session_setup_incoming(void *fdt_in)
+>>>        }
+>>>
+>>>        header_ser_pa = get_unaligned((u64 *)ptr);
+>>> -     header_ser = phys_to_virt(header_ser_pa);
+>>> -
+>>> -     luo_session_global.incoming.header_ser = header_ser;
+>>> -     luo_session_global.incoming.ser = (void *)(header_ser + 1);
+>>> -     luo_session_global.incoming.active = true;
+>>> +     while (header_ser_pa) {
+>>> +             header_ser = phys_to_virt(header_ser_pa);
+>>> +             err = luo_session_add_block(sh, header_ser);
+>>> +             if (err)
+>>> +                     return err;
+>>> +             header_ser_pa = header_ser->next;
+>>> +     }
+>>> +     sh->active = true;
+>>>
+>>>        return 0;
+>>>    }
+>>> @@ -513,6 +598,7 @@ int __init luo_session_setup_incoming(void *fdt_in)
+>>>    int luo_session_deserialize(void)
+>>>    {
+>>>        struct luo_session_header *sh = &luo_session_global.incoming;
+>>> +     struct luo_session_block *block;
+>>>        static bool is_deserialized;
+>>>        static int err;
+>>>
+>>> @@ -539,40 +625,49 @@ int luo_session_deserialize(void)
+>>>         * userspace to detect the failure and trigger a reboot, which will
+>>>         * reliably reset devices and reclaim memory.
+>>>         */
+>>> -     for (int i = 0; i < sh->header_ser->count; i++) {
+>>> -             struct luo_session *session;
+>>> -
+>>> -             session = luo_session_alloc(sh->ser[i].name);
+>>> -             if (IS_ERR(session)) {
+>>> -                     pr_warn("Failed to allocate session [%.*s] during deserialization %pe\n",
+>>> -                             (int)sizeof(sh->ser[i].name),
+>>> -                             sh->ser[i].name, session);
+>>> -                     err = PTR_ERR(session);
+>>> -                     return err;
+>>> -             }
+>>> +     list_for_each_entry(block, &sh->blocks, list) {
+>>> +             struct luo_session_ser *ser = (void *)(block->ser + 1);
+>>>
+>>> -             err = luo_session_insert(sh, session);
+>>> -             if (err) {
+>>> -                     pr_warn("Failed to insert session [%s] %pe\n",
+>>> -                             session->name, ERR_PTR(err));
+>>> -                     luo_session_free(session);
+>>> +             if (block->ser->count > LUO_SESSION_BLOCK_MAX) {
+>>> +                     pr_warn("Session block contains too many entries: %llu\n",
+>>> +                             block->ser->count);
+>>> +                     err = -EINVAL;
+>>>                        return err;
+>>>                }
+>>>
+>>> -             scoped_guard(mutex, &session->mutex) {
+>>> -                     err = luo_file_deserialize(&session->file_set,
+>>> -                                                &sh->ser[i].file_set_ser);
+>>> -             }
+>>> -             if (err) {
+>>> -                     pr_warn("Failed to deserialize files for session [%s] %pe\n",
+>>> -                             session->name, ERR_PTR(err));
+>>> -                     return err;
+>>> +             for (int i = 0; i < block->ser->count; i++) {
+>>> +                     struct luo_session *session;
+>>> +
+>>> +                     session = luo_session_alloc(ser[i].name);
+>>> +                     if (IS_ERR(session)) {
+>>> +                             pr_warn("Failed to allocate session [%.*s] during deserialization %pe\n",
+>>> +                                     (int)sizeof(ser[i].name),
+>>> +                                     ser[i].name, session);
+>>> +                             err = PTR_ERR(session);
+>>> +                             return err;
+>>> +                     }
+>>> +
+>>> +                     err = luo_session_insert(sh, session);
+>>> +                     if (err) {
+>>> +                             pr_warn("Failed to insert session [%s] %pe\n",
+>>> +                                     session->name, ERR_PTR(err));
+>>> +                             luo_session_free(session);
+>>> +                             return err;
+>>> +                     }
+>>> +
+>>> +                     scoped_guard(mutex, &session->mutex) {
+>>> +                             err = luo_file_deserialize(&session->file_set,
+>>> +                                                        &ser[i].file_set_ser);
+>>> +                     }
+>>> +                     if (err) {
+>>> +                             pr_warn("Failed to deserialize files for session [%s] %pe\n",
+>>> +                                     session->name, ERR_PTR(err));
+>>> +                             return err;
+>>> +                     }
+>>>                }
+>>>        }
+>>>
+>>> -     kho_restore_free(sh->header_ser);
+>>> -     sh->header_ser = NULL;
+>>> -     sh->ser = NULL;
+>>> +     luo_session_destroy_ser_blocks(sh, false);
+>>>
+>>>        return 0;
+>>>    }
+>>> @@ -580,31 +675,51 @@ int luo_session_deserialize(void)
+>>>    int luo_session_serialize(void)
+>>>    {
+>>>        struct luo_session_header *sh = &luo_session_global.outgoing;
+>>> +     struct luo_session_block *block;
+>>>        struct luo_session *session;
+>>> +     struct luo_session_ser *ser;
+>>>        int i = 0;
+>>>        int err;
+>>>
+>>>        guard(rwsem_write)(&sh->rwsem);
+>>> +
+>>> +     if (list_empty(&sh->blocks))
+>>> +             return 0;
+>>> +
+>>> +     block = list_first_entry(&sh->blocks, struct luo_session_block, list);
+>>> +     ser = (void *)(block->ser + 1);
+>>> +
+>>>        list_for_each_entry(session, &sh->list, list) {
+>>> -             err = luo_session_freeze_one(session, &sh->ser[i]);
+>>> +             if (i == LUO_SESSION_BLOCK_MAX) {
+>>> +                     block->ser->count = i;
+>>> +                     block = list_next_entry(block, list);
+>>> +                     ser = (void *)(block->ser + 1);
+>>> +                     i = 0;
+>>> +             }
+>>> +
+>>> +             err = luo_session_freeze_one(session, &ser[i]);
+>>>                if (err)
+>>>                        goto err_undo;
+>>>
+>>> -             strscpy(sh->ser[i].name, session->name,
+>>> -                     sizeof(sh->ser[i].name));
+>>> +             strscpy(ser[i].name, session->name,
+>>> +                     sizeof(ser[i].name));
+>>>                i++;
+>>>        }
+>>> -     sh->header_ser->count = sh->count;
+>>> +     block->ser->count = i;
+>>>
+>>>        return 0;
+>>>
+>>>    err_undo:
+>>>        list_for_each_entry_continue_reverse(session, &sh->list, list) {
+>>>                i--;
+>>> -             luo_session_unfreeze_one(session, &sh->ser[i]);
+>>> -             memset(sh->ser[i].name, 0, sizeof(sh->ser[i].name));
+>>> +             if (i < 0) {
+>>> +                     block = list_prev_entry(block, list);
+>>> +                     ser = (void *)(block->ser + 1);
+>>> +                     i = LUO_SESSION_BLOCK_MAX - 1;
+>>> +             }
+>>> +             luo_session_unfreeze_one(session, &ser[i]);
+>>> +             memset(ser[i].name, 0, sizeof(ser[i].name));
+>>>        }
+>>>
+>>>        return err;
+>>>    }
+>>> -
+>>
 -- 
-2.43.0
+Best Regards,
+Yanjun.Zhu
 
