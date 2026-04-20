@@ -1,398 +1,299 @@
-Received: from www3579.sakura.ne.jp (www3579.sakura.ne.jp [49.212.243.89])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31A8239F172
-	for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2026 12:07:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=49.212.243.89
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08ABB39D6CF
+	for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2026 12:28:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776686844; cv=none; b=R6zzz8alhX/juclwU/kJD2lPPCEIt3GpPVZn3lK0Ng7kFqT8/GCa1Yb/Xna3yswVtaaQeelJTIFB9XdekGn4p432pXxW4bki5G8g5YSaKnxQOqUx/k4k5rrBO+bQAumkclR8pf1mUb+nh2/XePAv6i5xFUri7X48JMrt/tr9t00=
+	t=1776688138; cv=none; b=IJEfHKPFjxq+YhlsjXIA/GjScmnvE4+EDKmxIdu/QTy8D0i1UBpSgFOzOvtmq/qRZvq/hRmEepEvQkt991rFtjGD/AkkLtvlZjnGbGybfujVt77Pw6HpwEqu1HNoXs3fU3mItMq/r4I7mBtrlReYOK5Nj1ULVbWMm6CzZ53jJqc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776686844; c=relaxed/simple;
-	bh=dIbC/SDZoQjLyj3i5wL+OjmBtDXFYM6j1mSBuSXj66A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Zuvaan8qULMvdhEsWxLggBPEw2lRhXDYkKLIB/UUjcJTNqrKhahJt0s+89AZ16wXhF9XVSmZIwVFMTslbvZv8JBhL8GnsEqHbMG0hJD4swzsoOUM5QoErihGprhZQiqeBIGQ3UOZhpMp+MwMPOFhkE4M5ILE8Zd3T1ODlhBk9n0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp; dkim=fail (0-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b=j5w++ARO reason="key not found in DNS"; arc=none smtp.client-ip=49.212.243.89
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp
+	s=arc-20240116; t=1776688138; c=relaxed/simple;
+	bh=YrG/fz4XHy0lJrNq0ioWe/eV0p1dqVvTCjwS+fLU/zA=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=akVr2lZUvWAzIFlTDa6Y8C7PoUuBKwjBb03MDB7dvH9eOPBtdcnxLNVKGAIJSWlUt26O/NGRCWBnGq8s+/LsEQya+nD0Tdb0sNkOdxk2ts0pUYY7T+KPMXDz69gwxPpNmvMADaKpzk2oNCLfRfv/BgZV/r2r9NBQFQZcvk1vodE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MwhlpbNx; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b="j5w++ARO"
-Received: from [133.11.54.205] (h205.csg.ci.i.u-tokyo.ac.jp [133.11.54.205])
-	(authenticated bits=0)
-	by www3579.sakura.ne.jp (8.16.1/8.16.1) with ESMTPSA id 63KC7Hq6039258
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-	Mon, 20 Apr 2026 21:07:17 +0900 (JST)
-	(envelope-from odaki@rsg.ci.i.u-tokyo.ac.jp)
-DKIM-Signature: a=rsa-sha256; bh=X3xyOUVDZuLC/5XI0816FBtwBZa8y8tYdcbO0N0eS3I=;
-        c=relaxed/relaxed; d=rsg.ci.i.u-tokyo.ac.jp;
-        h=From:Message-ID:To:Subject:Date;
-        s=rs20250326; t=1776686837; v=1;
-        b=j5w++AROJFK9hvfK610kpcnBX0FZ+xiqACla7A2e6jZXphC4kXBfSLhwnTBm3Sw+
-         Xxv9jBN7EPrpmtjSN6jOAC+kQWRnPG08iINzA0Ya5MotAzZP49vynlibgpIIiwSl
-         JG8h8i7L2nRX8Gae88bAZm5lB1JXMDvjqLPypecbGJekzyUNfMW/MShpDLCUBq/B
-         T47j8mZJB+SyAN4fymNnD3sOfXVXaMr1ecCcoQCTdn6SSuuALjysdMPSKcttizwT
-         r0hm0nNZNkVUD3lRuWwK8n7ViQ6+6jdvT/PJwblabq5qhA91C19uNPLF2+hEVxqX
-         /0EeQWKF2839cd1ZAJEyFw==
-Message-ID: <ad44c69e-2f99-4f31-81b4-faae52eea080@rsg.ci.i.u-tokyo.ac.jp>
-Date: Mon, 20 Apr 2026 21:07:15 +0900
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MwhlpbNx"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1776688136;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=3l6GbX/2lVpz4UfXca0mAc0lkb+4W+wizL4Pd4I2yo4=;
+	b=MwhlpbNx84aDA90AuCVo5IaZB+ibwWpPjc+Pt3OVXWqPj4hAgGQQ/X1icOBX30Rq8DNB/M
+	5CtNOPYfT36GxmyiibxM8SDbDCuHwGfpcXDAv7B8DT1NWIpbBLICWD4/t+20Bji6HhOIPL
+	qMygO6U0EmwedO0q3uIJJ8yjyol9n4s=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-546-P4q0mrtLNheUCtkDTUhjUQ-1; Mon,
+ 20 Apr 2026 08:28:52 -0400
+X-MC-Unique: P4q0mrtLNheUCtkDTUhjUQ-1
+X-Mimecast-MFC-AGG-ID: P4q0mrtLNheUCtkDTUhjUQ_1776688129
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 70F0D1955E98;
+	Mon, 20 Apr 2026 12:28:48 +0000 (UTC)
+Received: from [192.168.1.153] (headnet01.pony-001.prod.iad2.dc.redhat.com [10.2.32.101])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 031F1195608E;
+	Mon, 20 Apr 2026 12:28:40 +0000 (UTC)
+From: Albert Esteve <aesteve@redhat.com>
+Subject: [PATCH v7 0/5] kunit: Add support for suppressing warning
+ backtraces
+Date: Mon, 20 Apr 2026 14:28:02 +0200
+Message-Id: <20260420-kunit_add_support-v7-0-e8bc6e0f70de@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 3/4] KVM: arm64: PMU: Introduce FIXED_COUNTERS_ONLY
-To: Marc Zyngier <maz@kernel.org>
-Cc: Oliver Upton <oupton@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu
- <yuzenghui@huawei.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Kees Cook <kees@kernel.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org, devel@daynix.com, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260418-hybrid-v7-0-2bf39ad009bf@rsg.ci.i.u-tokyo.ac.jp>
- <20260418-hybrid-v7-3-2bf39ad009bf@rsg.ci.i.u-tokyo.ac.jp>
- <87ldeic1gk.wl-maz@kernel.org>
- <06c6664c-7f0c-47b2-babf-ba2a541fd9f2@rsg.ci.i.u-tokyo.ac.jp>
- <86qzoa0xj6.wl-maz@kernel.org>
-Content-Language: en-US
-From: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
-In-Reply-To: <86qzoa0xj6.wl-maz@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/23OQQqDMBCF4auUrBtJIoltV71HEYnOWEPRyCRKi
+ 3j3RkHoost/8T7ewgKSw8Bup4URzi44P6QozifWdHZ4IneQmimhjMil4q9pcLGyAFWYxtFT5Kr
+ N9UWYWl4BWNqNhK177+ajTN2S73nsCO0haaGVkbkqtM6kMVILLrltLPVusHdC6GzMGt9vWudC9
+ PTZD85mM48vxZ8vs+GCAyhlsc5b1PCrleu6fgFJm/oM8QAAAA==
+X-Change-ID: 20260312-kunit_add_support-2f35806b19dd
+To: Arnd Bergmann <arnd@arndb.de>, 
+ Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, 
+ Rae Moar <raemoar63@gmail.com>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+ dri-devel@lists.freedesktop.org, workflows@vger.kernel.org, 
+ linux-doc@vger.kernel.org, peterz@infradead.org, 
+ Alessandro Carminati <acarmina@redhat.com>, 
+ Guenter Roeck <linux@roeck-us.net>, Kees Cook <kees@kernel.org>, 
+ Albert Esteve <aesteve@redhat.com>, 
+ Linux Kernel Functional Testing <lkft@linaro.org>, 
+ Dan Carpenter <dan.carpenter@linaro.org>, 
+ =?utf-8?q?Ma=C3=ADra_Canal?= <mcanal@igalia.com>, 
+ Kees Cook <kees@kernel.org>, Simona Vetter <simona.vetter@ffwll.ch>, 
+ David Gow <david@davidgow.net>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1776688120; l=9728;
+ i=aesteve@redhat.com; s=20260303; h=from:subject:message-id;
+ bh=YrG/fz4XHy0lJrNq0ioWe/eV0p1dqVvTCjwS+fLU/zA=;
+ b=q5SKRV4o4hy7KRKMOH2/JPN3oAAbwazbCSZH2r6W5M8vvM7GKK+d/EMQ1uIyqN9JbB9TY1Lca
+ MDedWnPfyLjCvYsXteZ+iuMz6LkErvJb/1ePt8cB5JFgN5bgQtbZIko
+X-Developer-Key: i=aesteve@redhat.com; a=ed25519;
+ pk=YSFz6sOHd2L45+Fr8DIvHTi6lSIjhLZ5T+rkxspJt1s=
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-On 2026/04/20 18:51, Marc Zyngier wrote:
-> On Mon, 20 Apr 2026 09:36:16 +0100,
-> Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp> wrote:
->>
->> On 2026/04/20 2:19, Marc Zyngier wrote:
->>> On Sat, 18 Apr 2026 09:14:25 +0100,
->>> Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp> wrote:
->>>>
->>>> On a heterogeneous arm64 system, KVM's PMU emulation is based on the
->>>> features of a single host PMU instance. When a vCPU is migrated to a
->>>> pCPU with an incompatible PMU, counters such as PMCCNTR_EL0 stop
->>>> incrementing.
->>>>
->>>> Although this behavior is permitted by the architecture, Windows does
->>>> not handle it gracefully and may crash with a division-by-zero error.
->>>>
->>>> The current workaround requires VMMs to pin vCPUs to a set of pCPUs
->>>> that share a compatible PMU. This is difficult to implement correctly in
->>>> QEMU/libvirt, where pinning occurs after vCPU initialization, and it
->>>> also restricts the guest to a subset of available pCPUs.
->>>>
->>>> Introduce the KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY attribute to
->>>> create a "fixed-counters-only" PMU. When set, KVM exposes a PMU that is
->>>> compatible with all pCPUs but that does not support programmable
->>>> event counters which may have different feature sets on different PMUs.
->>>>
->>>> This allows Windows guests to run reliably on heterogeneous systems
->>>> without crashing, even without vCPU pinning, and enables VMMs to
->>>> schedule vCPUs across all available pCPUs, making full use of the host
->>>> hardware.
->>>>
->>>> Much like KVM_ARM_VCPU_PMU_V3_IRQ and other read-write attributes, this
->>>> attribute provides a getter that facilitates kernel and userspace
->>>> debugging/testing.
->>>
->>> OK, so that's the sales pitch. But how is it implemented? I would like
->>> to be able to read a high-level description of the implementation
->>> trade-offs.
->>
->> Implementation-wise it is very trivial. Essentially the following
->> addition in kvm_arm_pmu_v3_get_attr() is the entire implementation:
->> +	case KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY:
->> +		if (test_bit(KVM_ARCH_FLAG_PMU_V3_FIXED_COUNTERS_ONLY,
->> &vcpu->kvm->arch.flags))
->> +			return 0;
->>
->> Both its functionality and code complexity is trivial. So we can argue that:
->> - the functionality is too trivial to be useful or
->> - the interface/implementation complexity is so trivial that it does not
->>    incur maintenance burden
->>
->> In this case the selftest uses the getter so I was more inclined to
->> have it, but adding one just for the selftest sounds too ad-hoc, so
->> here I looked into other attributes to ensure that it was not
->> introducing inconsistency with existing interfaces.
->>
->> As the result, I found there are other read-write attributes; in fact
->> there are more read-write attributes than write-only ones.
-> 
-> You're completely missing the point. I'm referring to the whole of the
-> commit message, which is more of a marketing slide than a technical
-> description.
+Some unit tests intentionally trigger warning backtraces by passing bad
+parameters to kernel API functions. Such unit tests typically check the
+return value from such calls, not the existence of the warning backtrace.
 
-In terms of implementation, the obvious tradeoff is that it adds more 
-code to implement the feature. One thing to note is that 
-kvm_vcpu_load_pmu() is added and is called each time a vCPU migrates 
-across pCPUs. The heavy part, making the KVM_REQ_RELOAD_PMU request, 
-only happens when the feature is enabled.
+Such intentionally generated warning backtraces are neither desirable
+nor useful for a number of reasons:
+- They can result in overlooked real problems.
+- A warning that suddenly starts to show up in unit tests needs to be
+  investigated and has to be marked to be ignored, for example by
+  adjusting filter scripts. Such filters are ad hoc because there is
+  no real standard format for warnings. On top of that, such filter
+  scripts would require constant maintenance.
 
-> 
-> I really don't care about the getter at this stage, which while
-> pointless, does not make things more awful than they already are.
-> 
->>
->>>
->>>>
->>>> Signed-off-by: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
->>>> ---
->>>>    Documentation/virt/kvm/devices/vcpu.rst |  29 ++++++
->>>>    arch/arm64/include/asm/kvm_host.h       |   2 +
->>>>    arch/arm64/include/uapi/asm/kvm.h       |   1 +
->>>>    arch/arm64/kvm/arm.c                    |   1 +
->>>>    arch/arm64/kvm/pmu-emul.c               | 155 +++++++++++++++++++++++---------
->>>>    include/kvm/arm_pmu.h                   |   2 +
->>>>    6 files changed, 147 insertions(+), 43 deletions(-)
->>>>
->>>> diff --git a/Documentation/virt/kvm/devices/vcpu.rst b/Documentation/virt/kvm/devices/vcpu.rst
->>>> index 60bf205cb373..e0aeb1897d77 100644
->>>> --- a/Documentation/virt/kvm/devices/vcpu.rst
->>>> +++ b/Documentation/virt/kvm/devices/vcpu.rst
->>>> @@ -161,6 +161,35 @@ explicitly selected, or the number of counters is out of range for the
->>>>    selected PMU. Selecting a new PMU cancels the effect of setting this
->>>>    attribute.
->>>>    +1.6 ATTRIBUTE: KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY
->>>> +------------------------------------------------------
->>>> +
->>>> +:Parameters: no additional parameter in kvm_device_attr.addr
->>>> +
->>>> +:Returns:
->>>> +
->>>> +	 =======  =====================================================
->>>> +	 -EBUSY   Attempted to set after initializing PMUv3 or running
->>>> +		  VCPU, or attempted to set for the first time after
->>>> +		  setting an event filter
->>>> +	 -ENXIO   Attempted to get before setting
->>>> +	 -ENODEV  Attempted to set while PMUv3 not supported
->>>> +	 =======  =====================================================
->>>> +
->>>> +If set, PMUv3 will be emulated without programmable event counters. The VCPU
->>>> +will use any compatible hardware PMU. This attribute is particularly useful on
->>>
->>> Not quite "any PMU". It will use *the* PMU of the physical CPU,
->>> irrespective of the implementation.
->>
->> I think:
->>
->> - this comment
->> - one on the KVM_EXIT_FAIL_ENTRY_CPU_UNSUPPORTED note
->> - one on kvm_pmu_create_perf_event()
->> - and one on kvm_arm_pmu_v3_set_pmu_fixed_counters_only()
->>
->> All boil down into one question: will it support all possible CPUs, or
->> will it support a subset? Let me answer here:
->>
->> This patch is written to support a subset instead of all possible
->> CPUs. If a pCPU does not have a compatible PMU, the pCPU will not be
->> supported and cause KVM_EXIT_FAIL_ENTRY_CPU_UNSUPPORTED.
-> 
-> This is not a thing. Either *all* the CPUs have a PMU that can be used
-> for KVM, or PMU support is not offered to guests. That's a hard line
-> in the sand. And the code already upholds this by checking the
-> sanitised PMUVer field.
-> 
->>
->> This patch does not enforce all possible CPUs are covered by the
->> compatible PMUs. Theoretically speaking,
->> kvm_arm_pmu_get_pmuver_limit() enables the PMU emulation when real
->> PMUv3 hardware covers all possible CPUs *or* the relevant registers
->> can be trapped with IMPDEF, so some pCPU may not have a compatible PMU
->> and only provide the IMPDEF trapping.
-> 
-> How is that possible? Please describe the case where that can happen,
-> and I will make sure that such a system stops booting. The intent is
-> definitely that that:
-> 
-> - for early CPUs, we take the minimal capability of all CPUs
-> 
-> - for late CPUs, either they match at least the capability recorded by
->    early CPUs, or they don't boot.
+One option to address the problem would be to add messages such as
+"expected warning backtraces start/end here" to the kernel log.
+However, that would again require filter scripts, might result in
+missing real problematic warning backtraces triggered while the test
+is running, and the irrelevant backtrace(s) would still clog the
+kernel log.
 
-All CPUs may trap the relevant registers with IMPDEF but some of them 
-may not have compatible PMUs. As I wrote in the previous email, I don't 
-think it will happen in practice.
+Solve the problem by providing a means to identify and suppress specific
+warning backtraces while executing test code. Support suppressing multiple
+backtraces while at the same time limiting changes to generic code to the
+absolute minimum.
 
-> 
->> Practically, I don't think any sane configuration will ever have such
->> a subset support, so we can explicitly enforce all possible CPUs are
->> covered by the compatible PMUs if desired.
-> 
-> That's not just desired. This is a requirement. And it is already
-> enforced AFAICS.
-> 
->>
->>>
->>>> +heterogeneous systems where different hardware PMUs cover different physical
->>>> +CPUs. The compatibility of hardware PMUs can be checked with
->>>> +KVM_ARM_VCPU_PMU_V3_SET_PMU. All VCPUs in a VM share this attribute. It isn't
->>>> +possible to set it for the first time if a PMU event filter is already present.
->>>
->>> "for the first time" gives the impression that it will work if you try
->>> again. I'd rather we say that "This feature is incompatible with the
->>> existence of a PMU event filter".
->>
->> The following sequence will work:
->> 1. Set KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY
->> 2. Set KVM_ARM_VCPU_PMU_V3_FILTER
->> 3. Set KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY
->>
->> This is to make the behavior conistent with KVM_ARM_VCPU_PMU_V3_SET_PMU.
-> 
-> I don't think this is correct. Filtering is completely at odds with
-> this patch, and I don't want to have to reason about the combination.
+Overview:
+Patch#1 Introduces the suppression infrastructure.
+Patch#2 Mitigates the impact of suppression.
+Patch#3 Adds selftests to validate the functionality.
+Patch#4 Demonstrates real-world usage in the DRM subsystem.
+Patch#5 Documents the new API and usage guidelines.
 
-kvm_arm_pmu_v3_set_pmu() has the following condition:
+Design Notes:
+The objective is to suppress unwanted WARN*() generated messages.
 
-if (kvm_vm_has_ran_once(kvm) ||
-     (kvm->arch.pmu_filter && kvm->arch.arm_pmu != arm_pmu)) {
-	ret = -EBUSY;
-	break;
-}
+Although most major architectures share common bug handling via `lib/bug.c`
+and `report_bug()`, some minor or legacy architectures still rely on their
+own platform-specific handling. This divergence must be considered in any
+such feature. Additionally, a key challenge in implementing this feature is
+the fragmentation of `WARN*()` message emission: part of the output is
+produced in the macro itself (via __warn_printk()), and part in the exception
+handler.
 
-kvm_arm_pmu_v3_set_pmu_fixed_counters_only() has the corresponding 
-condition for consistency:
+Lessons from the Previous Attempt:
+In earlier iterations, suppression logic was added inside the
+`__report_bug()` function to intercept WARN*() output. To implement the
+check in the bug handler code, two strategies were considered:
 
-if (kvm_vm_has_ran_once(kvm) ||
-     (kvm->arch.pmu_filter &&
-      !test_bit(KVM_ARCH_FLAG_PMU_V3_FIXED_COUNTERS_ONLY,
-	       &kvm->arch.flags)))
-	return -EBUSY;
+* Strategy #1: Use `kallsyms` to infer the originating function. This
+  approach proved unreliable due to compiler-induced transformations
+  such as inlining, cloning, and code fragmentation.
 
-We can of course kill the PMU event filter for FIXED_COUNTERS_ONLY. The 
-filter is effectively no-op with FIXED_COUNTERS_ONLY and I don't think 
-that consistency matters much.
+* Strategy #2: Store function name `__func__` in `struct bug_entry` in
+  the `__bug_table`. However, `__func__` is a compiler-generated symbol,
+  which complicates relocation and linking in position-independent code.
+  Additionally, architectures not using the unified `BUG()` path would
+  still require ad-hoc handling.
 
-> 
-> [...]
-> 
->>>> +	int i;
->>>> +
->>>> +	for_each_set_bit(i, &mask, 32) {
->>>> +		pmc = kvm_vcpu_idx_to_pmc(vcpu, i);
->>>> +		if (!pmc->perf_event)
->>>> +			continue;
->>>> +
->>>> +		cpu_pmu = to_arm_pmu(pmc->perf_event->pmu);
->>>> +		if (!cpumask_test_cpu(vcpu->cpu, &cpu_pmu->supported_cpus)) {
->>>> +			kvm_make_request(KVM_REQ_RELOAD_PMU, vcpu);
->>>> +			break;
->>>> +		}
->>>> +	}
->>>> +}
->>>> +
->>>
->>> Why do we need to inflict this on VMs that do not have the fixed
->>> counter restriction?
->>
->> This function is to re-create the perf_event in case the current
->> perf_event does not support the pCPU because e.g., the pCPU is a
->> E-core while the perf_event only covers the P-cores.
-> 
-> That's not what I meant. This code is only here to support the
-> fixed-function feature. It makes no sense outside of it, because *we
-> don't support counter migration across implementations*.
-> 
-> So what's the purpose of this stuff for the normal KVM setup?
+A per-macro solution was also attempted (v5-v6), injecting checks
+directly into the `WARN*()` macros in `include/asm-generic/bug.h`.
+While this offered full control, it required modifying the generic
+bug header and was considered too invasive and damaging the critical
+path, and thus incorrect [1].
 
-None. It's only for this feature. We can add a check of the feature flag 
-at the beginning of the function to avoid that loop.
+Current Proposal: Check in `warn_slowpath_fmt()` and `__report_bug()`.
+Suppression is checked at two points in the warning path:
+- In `warn_slowpath_fmt()` (kernel/panic.c), for architectures without
+  __WARN_FLAGS. The check runs before any output, fully suppressing
+  both message and backtrace.
+- In `__report_bug()` (lib/bug.c), for architectures that define
+  __WARN_FLAGS. The check runs before `__warn()` is called, suppressing
+  the backtrace and stack dump. On this path, the `WARN()` format message
+  may still appear in the kernel log since `__warn_printk()` executes
+  before the trap.
+This approach avoids modifying include/asm-generic/bug.h entirely,
+requires no architecture-specific code, and limits changes to generic
+code to the absolute minimum.
 
-> 
->>
->>>
->>> And even then, all you have to reconfigure is the cycle counter. So
->>> why the loop? All we want to find out is whether the cycle counter is
->>> instantiated on the PMU that matches the current CPU.
->>
->> I just wanted to avoid hardcoding assumptions on the fixed
->> counter(s). FEAT_PMUv3_ICNTR will be naturaly handled with a loop, for
->> example.
-> 
-> Well, not that loop, since ICNTR is counter 32. So please let's stop
-> the nonsense and only add what is required?
-> 
-> [...]
-> 
->>>>    +
->>>> clear_bit(KVM_ARCH_FLAG_PMU_V3_FIXED_COUNTERS_ONLY,
->>>> &kvm->arch.flags);
->>>
->>> Why does this need to be cleared? I'd rather we make sure it is never
->>> set the first place.
->>
->> KVM_ARM_VCPU_PMU_V3_SET_PMU and
->> KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY can be set on the same
->> VCPU. The last KVM_ARM_VCPU_PMU_V3_SET_PMU or
->> KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY setting will be effective.
->>
->> A VMM may try set these attributes to check if the setting is
->> supported. For example, the RFC QEMU patch first uses
->> KVM_ARM_VCPU_PMU_V3_SET_PMU to find a compatible PMU that covers all
->> pCPUs, and then falls back to
->> KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY. The order of such probing is
->> up to the VMM.
-> 
-> KVM_ARM_VCPU_PMU_V3_SET_PMU is not a probing mechanism. You must probe
-> the PMUs by looking in /sys/bus/event_source/devices/, like kvmtool
-> does.
-> 
-> So there is no reason to support this stuff, and the two flags should
-> be made mutually exclusive.
+A helper function, `__kunit_is_suppressed_warning()`, walks an RCU-
+protected list of active suppressions, matching by current task. The
+suppression state is dynamically allocated via kunit_kzalloc() and
+tied to the KUnit test lifecycle via kunit_add_action(), ensuring
+automatic cleanup at test exit.
 
-Thanks for the pointer. I'll make a change to make the flags mutually 
-exclusive and test it with an amended QEMU patch that follows what 
-kvmtool does.
+To minimize runtime impact when no suppressions are active, an atomic
+counter tracks the number of active suppressions.
+`__kunit_is_suppressed_warning()` checks this counter first and returns
+immediately when it is zero, avoiding the RCU-protected list traversal
+in the common case.
 
-> 
-> [...]
-> 
->>>>
->>>
->>> In conclusion, I find this patch to be rather messy. For a start, it
->>> needs to be split in at least 5 patches:
->>>
->>> - at least two for the refactoring
->>> - one for the PMU core changes
->>> - one for the UAPI
->>> - one for documentation
->>
->> That clarifies the expected granurarity of patches. The next version
->> will be in that layout, perhaps with more patches if an additional
->> change. Thanks for the guidance.
->>
->>>
->>> I'd also like some clarification on how this is intended to work if we
->>> enable FEAT_PMUv3_ICNTR, because the definition seems to be designed
->>> to encompass all fixed-function counters, and I expect this to grow
->>> over time.
->>
->> Indeed the UAPI was designed to encompass all fixed-function counters
->> as suggested by Oliver.
->>
->> To support the UAPI, the implementation avoids hardcoding the
->> assumption on the fixed counter(s). FEAT_PMUv3_INCTR will be naturaly
->> supported once the common code is properly updated (i.e., the size of
->> the event counter bitmask is grown the corresponding registers are
->> wired up with a proper check of the feature.)
->>
->> I expect migration will be handled with the conventional register
->> getters and setters, but please share if you have a concern.
-> 
-> At the very least I want to see some documentation explaining that.
+This series is based on the RFC patch and subsequent discussion at
+https://patchwork.kernel.org/project/linux-kselftest/patch/02546e59-1afe-4b08-ba81-d94f3b691c9a@moroto.mountain/
+and offers a more comprehensive solution of the problem discussed there.
 
-What kind of documentation do you expect? If we change 
-kvm_vcpu_load_pmu() to avoid for_each_set_bit(), there would be a good 
-chance to forget updating it when mechanically updating existing 
-for_each_set_bit() instances, so it is a candidate for documentation. 
-But I don't have a good idea where to place it either.
+[1] https://lore.kernel.org/all/CAGegRW76X8Fk_5qqOBw_aqBwAkQTsc8kXKHEuu9ECeXzdJwMSw@mail.gmail.com/
 
-Regards,
-Akihiko Odaki
+Changes since RFC:
+- Introduced CONFIG_KUNIT_SUPPRESS_BACKTRACE
+- Minor cleanups and bug fixes
+- Added support for all affected architectures
+- Added support for counting suppressed warnings
+- Added unit tests using those counters
+- Added patch to suppress warning backtraces in dev_addr_lists tests
+
+Changes since v1:
+- Rebased to v6.9-rc1
+- Added Tested-by:, Acked-by:, and Reviewed-by: tags
+  [I retained those tags since there have been no functional changes]
+- Introduced KUNIT_SUPPRESS_BACKTRACE configuration option, enabled by
+  default.
+
+Changes since v2:
+- Rebased to v6.9-rc2
+- Added comments to drm warning suppression explaining why it is needed.
+- Added patch to move conditional code in arch/sh/include/asm/bug.h
+  to avoid kerneldoc warning
+- Added architecture maintainers to Cc: for architecture specific patches
+- No functional changes
+
+Changes since v3:
+- Rebased to v6.14-rc6
+- Dropped net: "kunit: Suppress lock warning noise at end of dev_addr_lists tests"
+  since 3db3b62955cd6d73afde05a17d7e8e106695c3b9
+- Added __kunit_ and KUNIT_ prefixes.
+- Tested on interessed architectures.
+
+Changes since v4:
+- Rebased to v6.15-rc7
+- Dropped all code in __report_bug()
+- Moved all checks in WARN*() macros.
+- Dropped all architecture specific code.
+- Made __kunit_is_suppressed_warning nice to noinstr functions.
+
+Changes since v5:
+- Rebased to v7.0-rc3
+- Added RCU protection for the suppressed warnings list.
+- Added static key and branching optimization.
+- Removed custom `strcmp` implementation and reworked
+  __kunit_is_suppressed_warning() entrypoint function.
+
+Changes since v6:
+- Moved suppression checks from WARN*() macros to warn_slowpath_fmt()
+  and __report_bug().
+- Replaced stack-allocated suppression struct with kunit_kzalloc() heap
+  allocation tied to the KUnit test lifecycle.
+- Changed suppression strategy from function-name matching to task-scoped:
+  all warnings on the current task are suppressed between START and END,
+  rather than only warnings originating from a specific named function.
+- Simplified macro API: removed KUNIT_DECLARE_SUPPRESSED_WARNING(),
+  the START macro now takes (test) and handles allocation internally.
+- Removed static key and branching optiomization, as by the time it
+  was executed, callers are already in warn slowpaths.
+- Link to v6: https://lore.kernel.org/r/20260317-kunit_add_support-v6-0-dd22aeb3fe5d@redhat.com
+
+Alessandro Carminati (2):
+  bug/kunit: Core support for suppressing warning backtraces
+  bug/kunit: Suppressing warning backtraces reduced impact on WARN*()
+    sites
+
+Guenter Roeck (3):
+  Add unit tests to verify that warning backtrace suppression works.
+  drm: Suppress intentional warning backtraces in scaling unit tests
+  kunit: Add documentation for warning backtrace suppression API
+
+ Documentation/dev-tools/kunit/usage.rst |  30 ++++++-
+ drivers/gpu/drm/tests/drm_rect_test.c   |  16 ++++
+ include/asm-generic/bug.h               |  48 +++++++----
+ include/kunit/bug.h                     |  62 ++++++++++++++
+ include/kunit/test.h                    |   1 +
+ lib/kunit/Kconfig                       |   9 ++
+ lib/kunit/Makefile                      |   9 +-
+ lib/kunit/backtrace-suppression-test.c  | 105 ++++++++++++++++++++++++
+ lib/kunit/bug.c                         |  54 ++++++++++++
+ 9 files changed, 316 insertions(+), 18 deletions(-)
+ create mode 100644 include/kunit/bug.h
+ create mode 100644 lib/kunit/backtrace-suppression-test.c
+ create mode 100644 lib/kunit/bug.c
+
+--
+2.34.1
+
+---
+Alessandro Carminati (2):
+      bug/kunit: Core support for suppressing warning backtraces
+      bug/kunit: Reduce runtime impact of warning backtrace suppression
+
+Guenter Roeck (3):
+      kunit: Add backtrace suppression self-tests
+      drm: Suppress intentional warning backtraces in scaling unit tests
+      kunit: Add documentation for warning backtrace suppression API
+
+ Documentation/dev-tools/kunit/usage.rst | 30 ++++++++++-
+ drivers/gpu/drm/tests/drm_rect_test.c   | 14 +++++
+ include/kunit/bug.h                     | 56 ++++++++++++++++++++
+ include/kunit/test.h                    |  1 +
+ kernel/panic.c                          |  8 ++-
+ lib/bug.c                               |  8 +++
+ lib/kunit/Kconfig                       |  9 ++++
+ lib/kunit/Makefile                      |  9 +++-
+ lib/kunit/backtrace-suppression-test.c  | 90 ++++++++++++++++++++++++++++++++
+ lib/kunit/bug.c                         | 91 +++++++++++++++++++++++++++++++++
+ 10 files changed, 312 insertions(+), 4 deletions(-)
+---
+base-commit: 80234b5ab240f52fa45d201e899e207b9265ef91
+change-id: 20260312-kunit_add_support-2f35806b19dd
+
+Best regards,
+-- 
+Albert Esteve <aesteve@redhat.com>
+
