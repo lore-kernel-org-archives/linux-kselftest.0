@@ -1,39 +1,32 @@
-Received: from www3579.sakura.ne.jp (www3579.sakura.ne.jp [49.212.243.89])
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 533CA3815F8
-	for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2026 06:21:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=49.212.243.89
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C363438236A;
+	Mon, 20 Apr 2026 06:28:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.132
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776666110; cv=none; b=sEbnBsSQIgq4fvizypvT7AXalqU7ah9dpdogiyzhRNmIADtFzWgHiPQs4p7TUZN3eqlWAhXMjBISkBGOq0mrTwGe40BSS2BZv3c1JWhwiMMg5mIXWbpkvfe+ghpqdIG/N3ZudQzkRfEpJtpH29GP18OtjccS3A5zM+zuM9BhzXI=
+	t=1776666539; cv=none; b=A1Qq81X53MFKIDa8qaH/uJP34Q0XjicE6mt1tET20evgFs0lXfAIV4naS13xywgbw434sXdbo2719kGJx1sBQi0Mz0RUdjouOEleIk5IQUtCPOAXu8I4rE/LFsehBFW7MnYVT6u8tTgyt8Ni/kKoLQl7Nv/z2xag8/2i+PJkKqU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776666110; c=relaxed/simple;
-	bh=4gcTz+8sS8b31hqBB1wlc7iFgF0lAJ8qLJYbhTEXAjU=;
+	s=arc-20240116; t=1776666539; c=relaxed/simple;
+	bh=OdWyKFIb5pu7/v7CzaMNErLs/PS+/JzianHuO70VLCE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AbNX6Izkn7SHoqYh+KLdmBu45+zwnXWZja1Jqe0NAp3ysYqqnGjVKZzDPKWc1XYy25D3TnQIMTIetmfSa20XSr7m7K58+Arle7L17v7xelKLFEsPc1A5HGJRnEBZqkN7o5pvQcekGBu8Rkqkhv2pQIMSNbg8cZOT2iL/Q6eZayA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp; dkim=fail (0-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b=Fab4JszZ reason="key not found in DNS"; arc=none smtp.client-ip=49.212.243.89
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp
+	 In-Reply-To:Content-Type; b=Bf1OKE16lJMU7sidnKI5JRvhfv5ox5Ks3Z8lDaxIjJFv7hBYFfEL8rWihr+DkchgYkNhXv3NaaLqqbWSgHlIbbSwhSlbqbr39wIdMH7geMLESMY7MdGOK2d7fHwukBQeNvqDZIiZAvcve72vxow4f7RRVIlPtmHClHe+FA4jeSA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=p38bcaUh; arc=none smtp.client-ip=115.124.30.132
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b="Fab4JszZ"
-Received: from [133.11.54.205] (h205.csg.ci.i.u-tokyo.ac.jp [133.11.54.205])
-	(authenticated bits=0)
-	by www3579.sakura.ne.jp (8.16.1/8.16.1) with ESMTPSA id 63K6Lj2B066789
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-	Mon, 20 Apr 2026 15:21:46 +0900 (JST)
-	(envelope-from odaki@rsg.ci.i.u-tokyo.ac.jp)
-DKIM-Signature: a=rsa-sha256; bh=FJ5CdXSzLkVwwaN2gkjigUMa98BbQG4sZbq6fGjnjvg=;
-        c=relaxed/relaxed; d=rsg.ci.i.u-tokyo.ac.jp;
-        h=From:Message-ID:To:Subject:Date;
-        s=rs20250326; t=1776666106; v=1;
-        b=Fab4JszZTcVq1Wcnn3GPi67jiAAuyi0vN2G2vLUb9wiEHaXeyWOJkP8k6OKIG/Bc
-         MSLW8jYjzMErRS7+BPGAzAQj37qGFNtOApRCwgTMTfkhtKcrAVGud92dlFVeUf3M
-         waOVb7QFgWsztepP+AjxR8oCG+yuABP9noUYDjyPUIuNlXuFXLU2Ufakz/L5MeEi
-         5dnVj6poWbruKOBnHfQR3bWRS5xFuBh/fEVbPRwR3kCe8bA9K93Cc1OFqoB6KHfI
-         fT64THxfBFME0MahSZA486qwy7PBjndEm7kgZ+ygWf59mGkv/qAIE7bYBie4RBIi
-         J84VxqyKbF5pYOy69uV7tg==
-Message-ID: <483e5cf2-a54c-4781-ac6d-49f5bc7128ba@rsg.ci.i.u-tokyo.ac.jp>
-Date: Mon, 20 Apr 2026 15:21:45 +0900
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="p38bcaUh"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1776666528; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=TnJNP5Zf8rEkIUqerK5GYr5N8IvbRMuI+6hpj6QnM5w=;
+	b=p38bcaUhgMWqkddM9RWWJyS8C+mR0DeDj4yF5EVgaTUxWFxOrAXfZgjsBxlyMO9EWXRZBYUwopcZw7kR+jGl7VC1OGTHJ+m+uEdbvlhTT42ttySwKz2/LieLhhED6xsAi0efWuOn6dUmeXNdqmngvuO5bdtwNfm3qy1ZyF+HwHk=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R721e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037033178;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=27;SR=0;TI=SMTPD_---0X1I6o8n_1776666524;
+Received: from 30.74.144.127(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0X1I6o8n_1776666524 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Mon, 20 Apr 2026 14:28:46 +0800
+Message-ID: <78a05609-05f3-4b2f-861c-30dab49083c1@linux.alibaba.com>
+Date: Mon, 20 Apr 2026 14:28:44 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -41,114 +34,49 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 2/4] KVM: arm64: PMU: Protect the list of PMUs with RCU
-To: Marc Zyngier <maz@kernel.org>
-Cc: Oliver Upton <oupton@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu
- <yuzenghui@huawei.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Kees Cook <kees@kernel.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org, devel@daynix.com, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260418-hybrid-v7-0-2bf39ad009bf@rsg.ci.i.u-tokyo.ac.jp>
- <20260418-hybrid-v7-2-2bf39ad009bf@rsg.ci.i.u-tokyo.ac.jp>
- <87mryzauib.wl-maz@kernel.org>
-Content-Language: en-US
-From: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
-In-Reply-To: <87mryzauib.wl-maz@kernel.org>
+Subject: Re: [PATCH 7.2 v3 02/12] mm/khugepaged: add folio dirty check after
+ try_to_unmap()
+To: Zi Yan <ziy@nvidia.com>, "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+ Song Liu <songliubraving@fb.com>
+Cc: Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>,
+ Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>, Nico Pache <npache@redhat.com>,
+ Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
+ Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
+ Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Shuah Khan <shuah@kernel.org>, linux-btrfs@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+References: <20260418024429.4055056-1-ziy@nvidia.com>
+ <20260418024429.4055056-3-ziy@nvidia.com>
+From: Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <20260418024429.4055056-3-ziy@nvidia.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 2026/04/19 23:34, Marc Zyngier wrote:
-> On Sat, 18 Apr 2026 09:14:24 +0100,
-> Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp> wrote:
->>
->> Convert the list of PMUs to a RCU-protected list that has primitives to
->> avoid read-side contention.
->>
->> Signed-off-by: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
->> ---
->>   arch/arm64/kvm/pmu-emul.c | 14 ++++++--------
->>   1 file changed, 6 insertions(+), 8 deletions(-)
->>
->> diff --git a/arch/arm64/kvm/pmu-emul.c b/arch/arm64/kvm/pmu-emul.c
->> index 59ec96e09321..ef5140bbfe28 100644
->> --- a/arch/arm64/kvm/pmu-emul.c
->> +++ b/arch/arm64/kvm/pmu-emul.c
->> @@ -7,9 +7,9 @@
->>   #include <linux/cpu.h>
->>   #include <linux/kvm.h>
->>   #include <linux/kvm_host.h>
->> -#include <linux/list.h>
->>   #include <linux/perf_event.h>
->>   #include <linux/perf/arm_pmu.h>
->> +#include <linux/rculist.h>
->>   #include <linux/uaccess.h>
->>   #include <asm/kvm_emulate.h>
->>   #include <kvm/arm_pmu.h>
->> @@ -26,7 +26,6 @@ static bool kvm_pmu_counter_is_enabled(struct kvm_pmc *pmc);
->>   
->>   bool kvm_supports_guest_pmuv3(void)
->>   {
->> -	guard(mutex)(&arm_pmus_lock);
->>   	return !list_empty(&arm_pmus);
+
+
+On 4/18/26 10:44 AM, Zi Yan wrote:
+> This check ensures the correctness of collapse read-only THPs for FSes
+> after READ_ONLY_THP_FOR_FS is enabled by default for all FSes supporting
+> PMD THP pagecache.
 > 
-> Please read include/linux/rculist.h and the discussion about the
-> interaction of list_empty() with RCU-protected lists. How about using
-> list_first_or_null_rcu() for peace of mind?
+> READ_ONLY_THP_FOR_FS only supports read-only fd and uses mapping->nr_thps
+> and inode->i_writecount to prevent any write to read-only to-be-collapsed
+> folios. In upcoming commits, READ_ONLY_THP_FOR_FS will be removed and the
+> aforementioned mechanism will go away too. To ensure khugepaged functions
+> as expected after the changes, skip if any folio is dirty after
+> try_to_unmap(), since a dirty folio means this read-only folio
+> got some writes via mmap can happen between try_to_unmap() and
+> try_to_unmap_flush() via cached TLB entries and khugepaged does not support
+> writable pagecache folio collapse yet.
+> 
+> Signed-off-by: Zi Yan <ziy@nvidia.com>
+> ---
 
-list_first_or_null_rcu() is useful to replace a sequence of list_empty() 
-and list_first_entry() that is protected by a lock, but this function 
-instead requires the invariant that nobody deletes an element from the 
-list, and list_first_or_null_rcu() does not allow removing the requirement.
-
-The header file says:
- > Where are list_empty_rcu() and list_first_entry_rcu()?
- >
- > They do not exist because they would lead to subtle race conditions:
- >
- > if (!list_empty_rcu(mylist)) {
- >	struct foo *bar = list_first_entry_rcu(mylist, struct foo,
- >					       list_member);
- >	do_something(bar);
- > }
- >
- > The list might be non-empty when list_empty_rcu() checks it, but it
- > might have become empty by the time that list_first_entry_rcu()
- > rereads the ->next pointer, which would result in a SEGV.
- >
- > When not using RCU, it is OK for list_first_entry() to re-read that
- > pointer because both functions should be protected by some lock that
- > blocks writers.
- >
- > When using RCU, list_empty() uses READ_ONCE() to fetch the
- > RCU-protected ->next pointer and then compares it to the address of
- > the  list head.  However, it neither dereferences this pointer nor
- > provides  this pointer to its caller.  Thus, READ_ONCE() suffices
- > (that is,  rcu_dereference() is not needed), which means that
- > list_empty() can be used anywhere you would want to use
- > list_empty_rcu().  Just don't expect anything useful to happen if you
- > do a subsequent lockless call to list_first_entry_rcu()!!!
- >
- > See list_first_or_null_rcu for an alternative.
-
-However, kvm_supports_guest_pmuv3() locked a mutex when calling 
-list_empty() and unlocked it immediately after that, instead of 
-re-reading list_first_entry(). This construct inherently had a race 
-condition with code that deletes an element; when the caller of 
-kvm_supports_guest_pmuv3() decides to enable guest PMUv3, the host PMU 
-may have been gone. But it was still safe because no one deletes an element.
-
-The same logic also applies when using RCU. As the comment says, we can 
-use list_empty() instead of the hypothetical list_empty_rcu() macro 
-because we don't expect it to magically enable something like 
-list_first_entry_rcu(). This function instead keep relying on the fact 
-that no one deletes an element of the list.
-
-Regards,
-Akihiko Odaki
+LGTM.
+Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
