@@ -1,95 +1,66 @@
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5AEC3CF681
-	for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2026 20:16:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.174
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776716192; cv=pass; b=VEWQ4V3vn/aCIJ1QlgYiH748GG8snRminGKbnLj/EFz7lRCCf4bYoCPed2aTm0G/SbGycpMotMWmc95D9pQO45S97du/1rYE9ifXsZ8QKtvAyhtmqafwchHA/2pS3ViDDZ12aPp4X3Q7G6fP5IlLTjDECSTqNSrDzVwjKwPANG8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776716192; c=relaxed/simple;
-	bh=T2CbOfZfcHTYTTfWTmb6AIcYZZvXGVpPVSpTlqZSmuA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=R5AEL9lURhTo9XGB6sdqsrr0G6gsYmQyiIVEJEfRfPZXHlV9Fvx8X/MafnuDVSgYHPPhfLzRCzCBW0b8/CsriMLYaqkUtfb1Iz67PwXT4M9UrVi4cwryaKK3sUzQ3YlgYeAACFvwC2mroKeiT3vRgbSTIrySqlESD1DJo5IEC8M=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=A0kz6ZdF; arc=pass smtp.client-ip=209.85.208.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96CD4387590
+	for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2026 20:43:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776717810; cv=none; b=pQDLqsx/si6ddDMkg436t0uEIb84CD3jA1iHFTQB3l/9jG5BZChHIXJyeKFCp3M+8kenjUheCA8eqdN2Zb3Em+RJmMUnsa0jMCAu1bdxoBgUo6pH4XF8i7AORQuG1I5Jy8ID3pG5kDAYJyvu2SKvskbb3h5B++hvDbhYCd1mDwQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776717810; c=relaxed/simple;
+	bh=2TQCEiF5Y/KXRZuugVpD0ZOKr6LVSShqt3Fx7ra9V9g=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=rSoZ5OsYzekM2qtFmV45j9+1OXMMbBHs1139tbEeHhuNzqpRuw7tHXtMfqPKeRhVjXfs4LUFr4eOkeKEEXXDopaSMnskeRh27VMtrs+AHkeSf4OrkNRsQkP9kaSNuj8Ub8szMRi9k/vkBUs4EFZnT+eT8ufHmEuLf+po76NBEds=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=dyDxvdCY; arc=none smtp.client-ip=209.85.214.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="A0kz6ZdF"
-Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-38dd9f11a09so32600441fa.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2026 13:16:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776716189; cv=none;
-        d=google.com; s=arc-20240605;
-        b=HYa/lIFbpa7mjrTwzJyGCyhzaHmUAcnjw5V/owPjg2D5tgzYJT9OYjX8Xq0DCGRaRu
-         odMk10NlDzRZuE3v4K/63v9yrdfvZmpounObiamIPLaofXs7dOWprbICBtJQUBrTnh2F
-         gINeWyNujk1e2Lu5QVicfj59A3Gw03XndMLWaVqf+Y6sjErCQQstoKI2xa1C1VBlu8gq
-         ErAuSGrlwOihp+upmDWrmG+KMV4K9Gigzs2dIJ9+a2dvlZrWISKNkkOaZt1Xi1kUYy5x
-         UvPI9OZYhsJ17VD3Y5mCckr/Zx9Sd/kcLbZV2pnqHZV27aAcZ78XCdVuTLcFMi3zO0A4
-         u8fw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=uT/kFgtDJcz1r8Wwv13r6DbOoiLv2w0cC+Hfy6lE6eQ=;
-        fh=0ityi9ewVkrwzgRoQrysalhf0DJgaZkJ3scdyv8sIi4=;
-        b=YRgXQn2wa5JuEHRnqrafgvRzKwk2ncvCwolhKSxYWyJijWn7HzzCbwRK5Yh7uzu94L
-         mH95PVjZLkgawGU/cWHHWN6qctKx4W3Uddsq33Mp2sy+yOv05MxmAvcwKxoduVIv7ME4
-         y5yP2ZlPf4yyTci98DOE5dE0EcWvEN/Y5RhixB0S1GB6TUnMy8YZy3NP/FSIksffmPso
-         AKiL29J0YZV43M7n7YxGdg+5OLYhR5C8vhVMotiomuUWPklZsBjl2BEW8ZavXquA+5x2
-         JjCZdaIVH5f55ITDZWgiHCD9zPHRBPsFNlIYRE6Wr9WaMHdikT41LUghsonbTP5VIp6L
-         ekEA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dyDxvdCY"
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2b249541063so30600195ad.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2026 13:43:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1776716189; x=1777320989; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uT/kFgtDJcz1r8Wwv13r6DbOoiLv2w0cC+Hfy6lE6eQ=;
-        b=A0kz6ZdFpUXcd8IqmoJYz51+uPaLogT2P6K49MbG2w96mfbJC77PkRjEAb6G/Ryvjt
-         x3uvkwSq+mLYc9HSGrii1BlGbFAYGdz52TktuUnxCx4CN/72VOeRHwRs+n99i4SDNLup
-         rwxcQPnf1+nwJ/RxITJzu5Gixk6/9YO7Lm+qZpLP3lVloG8H4ooKFW9AdOd2x/fFtwVe
-         w2uAfH163m5piwAHuBnqcicePOWbeNb1lNawaAMC1eEE3c1k5Zbx0JjMzzcubFNodQKK
-         IgtmdiE/tSLWgxYB86eh6EukVHRPQFz8QkcBquVj06y01E5vgZsmkS7+k4CAPR29pc/S
-         XGkA==
+        d=google.com; s=20251104; t=1776717808; x=1777322608; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Bw/xOa4cMDz+3Y150IRREEsvI8FeQ6LscRd2k8rTaIk=;
+        b=dyDxvdCY2dethMRJST9NbaSjEguo0wX4dE6pDuUvhCZKtlJnOaAIL3UeXLkfcM7qPk
+         vFW8mR9doxNFiiXoAz+S5PC8+7whNdaAkv8Kx9Hd/Y6uevnICQyA5BrMjSMYWGLmbMyn
+         kVbiAxukpMjgj5KbBgRa/qv/TMm565c+PjGf7jPaeTwVCt6rE+UiNKBtCrvy3zuSrKWq
+         rLItIBhTJ51XiVZAGoAMQbcCTcLnE+gtwcwiUPx1P3bwOnZtsa3Epvayp07zeT2vj1ye
+         suJ9hJjgd0APjq7ouQPZRddbhnZpn0mY/b6ZcS6iVnUnbIXgGMQJIFiIjdx5ButclYps
+         sdRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776716189; x=1777320989;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=uT/kFgtDJcz1r8Wwv13r6DbOoiLv2w0cC+Hfy6lE6eQ=;
-        b=PHxLqrQ3AR+RPiS6avP9/KE7c35NjvOhS325sCOWg9Jhp7j16y0ZDVx72HLmaKVzm1
-         y3r9r8kMGwpLqnUaIB422R5tPru5LST+285mh/3xzOesXNkO8qTGrECIbenX3chfYHky
-         9vZDuG6aQajCLfKlG24UvN0BEnzt23nicjsvCcXiMVmdNHkim1Pt4CeuASx1XRMLpIOL
-         XhwVHCVqqx19asrdfAUTYm4UeHSsPkexSR7oc970ELueGKKwmWUhxn6XA5oX7sH/oXG2
-         5KslyT7jVDho5m19Ec5G3+rqvRvzoHoFPjzin7RUZx9CpMCWmd8fK0txJO1+rzmzMgvx
-         iHNg==
-X-Forwarded-Encrypted: i=1; AFNElJ9OOWg3f9MF2ie0tlrEAo7nqpCHulivJkSyHVjGnGPJpNd9MmZIpABDM9OkpFhE1gi+AH2eN9O5+yAWTFWuWpk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwSoL9HPYXKDNXcW2RkEWeFcQIzNXNdU8hZFi3sMUtqIl6cm16m
-	+m8MP8cZBL8qmx6QpW8YhzanF+aoaFd9CguydCWuX+AmKy+3M0Ygm5zSwwKXQBeXJi+qIuDt+bN
-	y2NJesOQlw0CzB1oDrqIMbZwUwYcKAXfuua0JPk8d
-X-Gm-Gg: AeBDievl54rvl6JVgTBDe6wzDEKoWR9eObDMzNRJ74aqY7apNzrK7KkEigyOuuOUWbh
-	2NdIMySVpJM6LFCJRRl9jDvBFzBBHQ51jTkiImPo70WL0zo/7rwMnc0DBxnbMZvYw7UGwcINRI3
-	49Cs5QPONBp7sFVsiyJgWNZeek5YzInv46nUhZ+J9G9iv1N1jgvldtsdrhoOMfJZ/5G3Cq94RkC
-	xOvapbun/0015BEE6r9Mxn3fji6agAxb0kmLKr+kAlYjs2NoFig5YojFpDR/AEWCXJXxT9GabsA
-	3hJScdl8I4viR1aKHd4UKNZBWQzKX+2LuQ9c1snr
-X-Received: by 2002:a05:651c:400e:b0:38e:76c2:dc8f with SMTP id
- 38308e7fff4ca-38ec7ae0487mr32714001fa.25.1776716188389; Mon, 20 Apr 2026
- 13:16:28 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1776717808; x=1777322608;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Bw/xOa4cMDz+3Y150IRREEsvI8FeQ6LscRd2k8rTaIk=;
+        b=Z56Z60PNOHwOk/fIKrcN2w3TUIgVM11SkYgF8r8C6V/3fpJNUch68sUkhZjLgYMpiB
+         4iSGVBhaDhQYGhsrr2vswHD8DHb1gvs2WyCWOLWIg7jRNok2wg2j2tr+yr3Kl/qGgCw8
+         N7X4O3wRX+gsleaO9WfPnz6dcubr/WReRQ6JxPvj+MKve8oCXWOKkReYRvaPG5JedRHB
+         OrxsCe0nOJyLRNP5C5ZlFv1RbY0vtxoWLkaVX8ykVV3UBCZnSvCfJIVpP43ugF8m3VXz
+         jhqgOEc0D3rdHMPIhFu1zm7Y+Kjcw9pNbfgGhFGzaQFVyaJK5pd4sA+7vwmx1TTGDVUp
+         BkEg==
+X-Forwarded-Encrypted: i=1; AFNElJ8PTWmqev0bzooHtaJuxD6ZuMVn9368jw12dxsEsEHAEumR94GOPC0bob7gkE8NX0ZWnMS6A5axjKgyQZv7h70=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzCtY0IXBPQ5Y8sIs9mUYLBfi6s6gtreWwLb3UKdMEMC9lkJVlQ
+	mJ23hz5RB7pp6L7mHvMeLVdHQyL90MBMtDR/QN6+Hq2NJCkl+q6Bv4TqMYgCbku2aO/GhMWdcqs
+	phJt+MQ==
+X-Received: from plai2.prod.google.com ([2002:a17:902:c942:b0:2b3:2649:c9c1])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:d30b:b0:2b0:673a:7c90
+ with SMTP id d9443c01a7336-2b5f9f50051mr108270095ad.28.1776717807739; Mon, 20
+ Apr 2026 13:43:27 -0700 (PDT)
+Date: Mon, 20 Apr 2026 13:43:26 -0700
+In-Reply-To: <20260220004223.4168331-5-dmatlack@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260220004223.4168331-1-dmatlack@google.com> <20260220004223.4168331-2-dmatlack@google.com>
- <aeaHPYwzs0dhwX9-@google.com>
-In-Reply-To: <aeaHPYwzs0dhwX9-@google.com>
-From: David Matlack <dmatlack@google.com>
-Date: Mon, 20 Apr 2026 13:15:59 -0700
-X-Gm-Features: AQROBzA7QaU-uTclKNPqPjm7N83BGZYqy9MhPcyoyTd2bRZSTk_SV3WPxct_hj8
-Message-ID: <CALzav=dvNr2s3UzDKPyxS3JUcaWykKNvYPJUW+8g21DA9SzJLw@mail.gmail.com>
-Subject: Re: [PATCH v2 01/10] KVM: selftests: Use gva_t instead of vm_vaddr_t
-To: Sean Christopherson <seanjc@google.com>
+Mime-Version: 1.0
+References: <20260220004223.4168331-1-dmatlack@google.com> <20260220004223.4168331-5-dmatlack@google.com>
+Message-ID: <aeaP7kPPlyBZE-1h@google.com>
+Subject: Re: [PATCH v2 04/10] KVM: selftests: Use u64 instead of uint64_t
+From: Sean Christopherson <seanjc@google.com>
+To: David Matlack <dmatlack@google.com>
 Cc: Paolo Bonzini <pbonzini@redhat.com>, Ackerley Tng <ackerleytng@google.com>, 
 	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
 	Andrew Jones <ajones@ventanamicro.com>, Anup Patel <anup@brainfault.org>, 
@@ -108,89 +79,22 @@ Cc: Paolo Bonzini <pbonzini@redhat.com>, Ackerley Tng <ackerleytng@google.com>,
 	Suzuki K Poulose <suzuki.poulose@arm.com>, Tianrui Zhao <zhaotianrui@loongson.cn>, 
 	Wu Fei <wu.fei9@sanechips.com.cn>, Yosry Ahmed <yosry.ahmed@linux.dev>, 
 	Zenghui Yu <yuzenghui@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
 
-On Mon, Apr 20, 2026 at 1:06=E2=80=AFPM Sean Christopherson <seanjc@google.=
-com> wrote:
->
-> On Fri, Feb 20, 2026, David Matlack wrote:
-> > Replace all occurrences of vm_vaddr_t with gva_t to align with KVM code
-> > and with the conversion helpers (e.g. addr_gva2hva()). Also replace
-> > vm_vaddr in function names with gva to align with the new type name.
->
-> ...
->
-> > @@ -716,22 +716,22 @@ void vm_mem_region_move(struct kvm_vm *vm, uint32=
-_t slot, uint64_t new_gpa);
-> >  void vm_mem_region_delete(struct kvm_vm *vm, uint32_t slot);
-> >  struct kvm_vcpu *__vm_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id);
-> >  void vm_populate_vaddr_bitmap(struct kvm_vm *vm);
-> > -vm_vaddr_t vm_vaddr_unused_gap(struct kvm_vm *vm, size_t sz, vm_vaddr_=
-t vaddr_min);
-> > -vm_vaddr_t vm_vaddr_alloc(struct kvm_vm *vm, size_t sz, vm_vaddr_t vad=
-dr_min);
-> > -vm_vaddr_t __vm_vaddr_alloc(struct kvm_vm *vm, size_t sz, vm_vaddr_t v=
-addr_min,
-> > -                         enum kvm_mem_region_type type);
-> > -vm_vaddr_t vm_vaddr_alloc_shared(struct kvm_vm *vm, size_t sz,
-> > -                              vm_vaddr_t vaddr_min,
-> > -                              enum kvm_mem_region_type type);
-> > -vm_vaddr_t vm_vaddr_alloc_pages(struct kvm_vm *vm, int nr_pages);
-> > -vm_vaddr_t __vm_vaddr_alloc_page(struct kvm_vm *vm,
-> > -                              enum kvm_mem_region_type type);
-> > -vm_vaddr_t vm_vaddr_alloc_page(struct kvm_vm *vm);
-> > +gva_t gva_unused_gap(struct kvm_vm *vm, size_t sz, gva_t vaddr_min);
-> > +gva_t gva_alloc(struct kvm_vm *vm, size_t sz, gva_t vaddr_min);
-> > +gva_t __gva_alloc(struct kvm_vm *vm, size_t sz, gva_t vaddr_min,
-> > +               enum kvm_mem_region_type type);
-> > +gva_t gva_alloc_shared(struct kvm_vm *vm, size_t sz,
-> > +                    gva_t vaddr_min,
-> > +                    enum kvm_mem_region_type type);
-> > +gva_t gva_alloc_pages(struct kvm_vm *vm, int nr_pages);
-> > +gva_t __gva_alloc_page(struct kvm_vm *vm,
-> > +                    enum kvm_mem_region_type type);
-> > +gva_t gva_alloc_page(struct kvm_vm *vm);
->
-> The existing vm_vaddr_alloc() and friends are pretty bad names.  gva_allo=
-c() is
-> far, far worse.  The APIs aren't just allocation a guest virtual address,=
- they're
-> allocating guest physical memory, finding a usable virtual address, and c=
-reating
-> mappings.
->
-> I don't see any reason to have vaddr or gva in the name.  E.g. malloc() i=
-sn't
-> virt_malloc().  But I do think they need to be explicitly scoped to KVM, =
-and to
-> a VM.  I'll drop API renames from this patch, and rename them to vm_alloc=
-() and
-> friends in a separate patch.  Amusingly, that naming scheme will still wo=
-rk if
-> "vm" is misconstrued as "virtual memory" instead of "virtual machine".
+On Fri, Feb 20, 2026, David Matlack wrote:
+> Use u64 instead of uint64_t to make the KVM selftests code more concise
+> and more similar to the kernel (since selftests are primarily developed
+> by kernel developers).
+> 
+> This commit was generated with the following command:
+> 
+>   git ls-files tools/testing/selftests/kvm | xargs sed -i 's/uint64_t/u64/g'
+> 
+> Then by manually adjusting whitespace to make checkpatch.pl happy.
+> 
+> Also include <linux/types.h> in include/test_util.h and
+> include/x86/pmu.h to avoid compilation failure.
 
-Sounds good to me.
-
-> P.S. This is a great example of why I insist on one logical change per pa=
-tch, with
-> judicious exemptions for opportunistic cleanups/changes.  If this has bee=
-n a
-> separate patch, it would have taken me all of two seconds to unwind.  As =
-it was,
-> I spent a good 10-15 minutes dealing with this.  In large part because I =
-kept
-> making goofs, but that's the whole point: there was no reason to put me i=
-n a
-> position to make goofs.
->
-> The other argument against these sorts of "Also do xyz" add-ons is that o=
-f a
-> slippery slope.  Why rename these APIs in this patch, but not the myriad =
-vaddr
-> variables?  Then after a few "I'll just clean this up too" changes, there=
-'s an
-> entire series in what is purportedly just a typedef rename.
-
-You're right, the API rename should have been split off into its own patch.
-Thanks for the guidance!
+kvm_util_types.h also needs to include types.h, as it blatantly uses u64 without
+any includes.  It obviously works thanks to ordering, but it's a lurking trap for
+others.
