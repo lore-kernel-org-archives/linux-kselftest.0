@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69133305968;
-	Mon, 20 Apr 2026 09:04:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52A4830E0E5;
+	Mon, 20 Apr 2026 09:20:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776675852; cv=none; b=ocmsn92gnt93IPVIN/mDq7Xtl/DUgHBH0t3vRUXSMYHAWavumOWCORqOAMahh/fzJfCunOT7ObOmqX/+6+h039H0yieCjEAGK/mvRZNH21w3+KrJICDG1SFSg/KsNnjU3M1BmBIjhRmyfY5pQfTx6oZikHTkoe7Ka7yEPPDYXEI=
+	t=1776676803; cv=none; b=HyVnRV8GNQYVI41nn0ISO+uLNIKuNdmCjhaIoHugUDJXDyagAMutW8in7J10jEfkucJ1bXW0tE8XMKEJqNbfAwULXC2BznL8mK+CTwKRtr2fwBu3ZkoJ2rZ3gJHYUb/ShAyEZvIDaPRIGxZpocpoAJBGcJYxBcH75LTzsxMPV3A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776675852; c=relaxed/simple;
-	bh=LvA6yjoRn3XU9vfmaoFuNvn1wjFt/ZCsrwm3PZylO34=;
+	s=arc-20240116; t=1776676803; c=relaxed/simple;
+	bh=l7We2lzrn0rwykgmQ297ASg/aplyptJQ9fcEc9kC5wI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TPH9I1GMlExf8KW+/un8BfxZ2S24lJzgCXgsVYWAEQMt9UX4fnPxz422gst1mxmIlaf0wotrXCs2rleNMw5XOHbDlkcUgwtkUiAOQkoWoKbfvknTMYwxCWdRm21kwrEQgphuk2Z3tvhwWwHXSyWJNBOkTOzoaSI+axXIhZ/AZLY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m52YxECK; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=XjOlwIg+IXpJa2whIwFxuvG0LXHtXZl1w/KhyxqfeI4JMDhs2P00CyH2UN2X6kIgOMZz3QWKr8SDpwMAN/01A60PWT+Dgu0gqxTOt7bOX1++5T5ChN1A3WB3XRHlCgcfp7A2IjOqn3D+4D4RtZfnXmneuqeXa/67pRGGdJ0PvO8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AHwAnR+k; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m52YxECK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 684C0C2BCB3;
-	Mon, 20 Apr 2026 09:04:05 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AHwAnR+k"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CB54C19425;
+	Mon, 20 Apr 2026 09:19:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776675852;
-	bh=LvA6yjoRn3XU9vfmaoFuNvn1wjFt/ZCsrwm3PZylO34=;
+	s=k20201202; t=1776676802;
+	bh=l7We2lzrn0rwykgmQ297ASg/aplyptJQ9fcEc9kC5wI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=m52YxECKeoX6n/aJd/MQyyLYEDAcDiU6qfah2TRvUf22q5ZtBkCn+PWXjPte4+u8/
-	 27IGmc0DuXy7i3061Bvdi6EkS6Y4FPfH/X2H/XBNDTQXJVXeg0X4sf6rsSoFibCuzK
-	 vvgmUMiSmWbX4baV3ZUq+wYFxs3MljkZwdbH/jlLXVw/Wt7xcBCz+/ryG/Yvbg0Rwa
-	 jtuZWXTs8nKz/PwLrVHFhG9SQeGTJ4bTaL1SQRiUadcIEvKvkmha1/+AmX4vIOWA4M
-	 5yF4VjXgionb8tj46hMFgoXdK3ODMbHzMOU28pvxomln5Gj4jkq5N4EFXeGij0heJn
-	 jiPG5tPvsk5Ow==
-Date: Mon, 20 Apr 2026 12:04:01 +0300
+	b=AHwAnR+kA/5sGR9O98GtTLl9HG/iXsHupIIGjGjLrepNxyB2UZrSbWpi3bTO/wUpn
+	 ruBsJzi+li8gcRsxOfD3/BbwAcSafZeEmRp+knTdW0nOTOk3tQ0K9MCxwBLXJX5Hl5
+	 I3CyuIcy8QJnXesb6HUF5FNWwO9ViCHZhbVjp/72wDgL26nccfqL/9SLfcO7l/6seS
+	 30Ot4C0zKgD3JCf8hvZsgWS3+lb1eNVbISrhnkiBFnpECEeAlcwQcUn4GWSx1ifLQ3
+	 JBdA9XvAhdJkEf0jicvSjiOfzt0HDB8AWH14KlDKXlUhRCttiqgU2c/0+/S+r4fyXY
+	 Of/wLNA1eoNiQ==
+Date: Mon, 20 Apr 2026 12:19:51 +0300
 From: Mike Rapoport <rppt@kernel.org>
-To: Sarthak Sharma <sarthak.sharma@arm.com>
+To: Ryan Roberts <ryan.roberts@arm.com>
 Cc: Andrew Morton <akpm@linux-foundation.org>,
 	David Hildenbrand <david@kernel.org>,
 	Baolin Wang <baolin.wang@linux.alibaba.com>,
@@ -39,17 +39,15 @@ Cc: Andrew Morton <akpm@linux-foundation.org>,
 	Leon Romanovsky <leon@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
 	Mark Brown <broonie@kernel.org>, Michal Hocko <mhocko@suse.com>,
 	Nico Pache <npache@redhat.com>, Peter Xu <peterx@redhat.com>,
-	Ryan Roberts <ryan.roberts@arm.com>, Shuah Khan <shuah@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
 	Suren Baghdasaryan <surenb@google.com>,
 	Vlastimil Babka <vbabka@kernel.org>, Zi Yan <ziy@nvidia.com>,
 	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
 	linux-mm@kvack.org
-Subject: Re: [PATCH 02/53] selftests/mm: khugepaged: enable
- collapse_single_pte_entry_compound for shmem
-Message-ID: <aeXsAW3kTujGGu2m@kernel.org>
+Subject: Re: [PATCH 00/53] selftests/mm: make MM selftests more CI friendly
+Message-ID: <aeXvty_LE4v5XLq3@kernel.org>
 References: <20260406141735.2179309-1-rppt@kernel.org>
- <20260406141735.2179309-3-rppt@kernel.org>
- <a44aa2d7-5eb9-468a-a0ee-ee10b2b73502@arm.com>
+ <ee6bbac9-b375-4413-a771-6d32c7afda67@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -58,91 +56,82 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a44aa2d7-5eb9-468a-a0ee-ee10b2b73502@arm.com>
+In-Reply-To: <ee6bbac9-b375-4413-a771-6d32c7afda67@arm.com>
 
-On Mon, Apr 20, 2026 at 12:20:43PM +0530, Sarthak Sharma wrote:
-> Hi Mike
-> 
-> On 4/6/26 7:46 PM, Mike Rapoport wrote:
+Hi Ryan,
+
+On Mon, Apr 20, 2026 at 09:37:03AM +0100, Ryan Roberts wrote:
+> On 06/04/2026 15:16, Mike Rapoport wrote:
 > > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 > > 
-> > A comment in collapse_single_pte_entry_compound() says it can't run on
-> > shmem because "MADV_DONTNEED can't evict tmpfs pages".
-> > But MADV_REMOVE can!
+> > Hi,
 > > 
-> > Use MADV_REMOVE for tmpfs to evict pages and enable
-> > collapse_single_pte_entry_compound() test for shmem.
+> > There's a lot of dancing around HugeTLB settings in run_vmtests.sh.
+> > Some test need just a few default huge pages, some require at least 256 MB, and
+> > some just skip lots of tests if huge pages of all supported sizes are not
+> > available.
 > > 
-> > Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> > --->  tools/testing/selftests/mm/khugepaged.c | 14 ++++++--------
-> >  1 file changed, 6 insertions(+), 8 deletions(-)
-> > 
-> > diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
-> > index 3fe7ef04ac62..e6fb01ca44ed 100644
-> > --- a/tools/testing/selftests/mm/khugepaged.c
-> > +++ b/tools/testing/selftests/mm/khugepaged.c
-> > @@ -783,20 +783,17 @@ static void collapse_max_ptes_swap(struct collapse_context *c, struct mem_ops *o
-> >  
-> >  static void collapse_single_pte_entry_compound(struct collapse_context *c, struct mem_ops *ops)
-> >  {
-> > +	int advise = MADV_DONTNEED;
-> >  	void *p;
-> >  
-> >  	p = alloc_hpage(ops);
-> >  
-> > -	if (is_tmpfs(ops)) {
-> > -		/* MADV_DONTNEED won't evict tmpfs pages */
-> > -		printf("tmpfs...");
-> > -		skip("Skip");
-> > -		goto skip;
-> > -	}
-> > +	if (is_tmpfs(ops))
-> > +		advise = MADV_REMOVE;
+> > The goal of this set is to make tests deal with HugeTLB setup and teardown.
 > 
-> is_tmpfs(ops) will always return false for shmem_ops, since the function
-> definition does not handle the shmem_ops case. Therefore, this advise
-> will always remain as MADV_DONTNEED.
-
-is_tmpfs() will be true for file ops when file is on tmpfs.
- 
-> Also, I am able to run the shmem tests using MADV_DONTNEED and the tests
-> succeed. So, perhaps we don't need to use MADV_REMOVE in this case?
-
-I read the comment and changed the advice to the one that will actually
-evict the pages from the page cache.
-Looking closely it this and collapse_max_ptes_none() test, I don't think
-presence of the pages in the page cache would somehow affect splitting and
-collapsing, so apparently the skips for is_tmpfs() cases can be just
-dropped.
- 
-> >  
-> >  	madvise(p, hpage_pmd_size, MADV_NOHUGEPAGE);
-> >  	printf("Split huge page leaving single PTE mapping compound page...");
-> > -	madvise(p + page_size, hpage_pmd_size - page_size, MADV_DONTNEED);
-> > +	madvise(p + page_size, hpage_pmd_size - page_size, advise);
-> >  	if (ops->check_huge(p, 0))
-> >  		success("OK");
-> >  	else
-> > @@ -805,7 +802,6 @@ static void collapse_single_pte_entry_compound(struct collapse_context *c, struc
-> >  	c->collapse("Collapse PTE table with single PTE mapping compound page",
-> >  		    p, 1, ops, true);
-> >  	validate_memory(p, 0, page_size);
-> > -skip:
-> >  	ops->cleanup_area(p, hpage_pmd_size);
-> >  }
-> >  
-> > @@ -1251,8 +1247,10 @@ int main(int argc, char **argv)
-> >  
-> >  	TEST(collapse_single_pte_entry_compound, khugepaged_context, anon_ops);
-> >  	TEST(collapse_single_pte_entry_compound, khugepaged_context, file_ops);
-> > +	TEST(collapse_single_pte_entry_compound, khugepaged_context, shmem_ops);
-> >  	TEST(collapse_single_pte_entry_compound, madvise_context, anon_ops);
-> >  	TEST(collapse_single_pte_entry_compound, madvise_context, file_ops);
-> > +	TEST(collapse_single_pte_entry_compound, madvise_context, shmem_ops);
-> >  
-> >  	TEST(collapse_full_of_compound, khugepaged_context, anon_ops);
-> >  	TEST(collapse_full_of_compound, khugepaged_context, file_ops);
+> Hi Mike,
 > 
+> I haven't had a chance to review this series properly, but the intent certainly
+> seems extremely valuable!
+> 
+> I thought I'd share some configuration magic that I always use when running on
+> arm64. Appologies if I'm teaching you to suck eggs...
+> 
+> arm64 supports multiple hugetlb sizes and (at least in the past) the magic in
+> run_vmtests.sh only reserves for the default size. As a consequence, whenever I
+> run these tests on arm64, I always boot with:
+> 
+> hugepagesz=1G hugepages=0:2,1:2
+> hugepagesz=32M hugepages=0:2,1:2
+> default_hugepagesz=2M hugepages=0:64,1:64
+> hugepagesz=64K hugepages=0:2,1:2
+> 
+> Which reserves 2 pages of each supported non-default size in each of 2 NUMA
+> nodes, and 64 of the default size in each NUMA node. (This would need adjusting
+> if using a different base page size).
+> 
+> My recollection is that this effectively overrides what the script was doing and
+> is sufficient to make all hugetlb tests run for all hugepage sizes.
+
+My goal is to let the tests themself set up the right hugetlb configuration
+without forcing it neither in command line nor in the wrapper scripts.
+
+On x86 I can run all the tests in a virtio-ng VM with two nodes and no
+kernel command line overrides. I suppose that should work on arm64 too.
+
+There are some additional settings that such a VM would need to avoid
+skipping tests that presume swap or a real filesystem, but that's more of
+virtio-ng limitation.
+
+> If it's possible to get this non-default hugepage size reservation logic into
+> the tests themselves, this will make the mm selftests much easier to run on
+> arm64 with full coverage.
+
+That's what the second half of series do. E.g for cow tests:
+
+https://lore.kernel.org/linux-mm/ee6bbac9-b375-4413-a771-6d32c7afda67@arm.com/T/#m62f23b835061449bc6249afacf993bb32ea11234
+ 
+> Another observation is that "secretmem.enable" is currently needed on the
+> cmdline to enable secretmem so that the associated tests run. Not sure what can
+> be done to make that simpler?
+
+Looks like you're testing really old kernels :)
+The secretmem default changed to "enabled" from 6.5 ;-)
+ 
+> And there are tests that depend on having more than 1 NUMA node; I always run
+> under QEMU with 2 emulated NUMA nodes. I guess that's really just a property of
+> the HW, so nothing to be done from the test harness.
+
+Right, test harness can't do much about it. It's either run in a virtual
+machines with 2 (or more) nodes or enable NUMA emulation in the kernel
+configuration and the kernel command line.
+
+> Thanks,
+> Ryan
 
 -- 
 Sincerely yours,
