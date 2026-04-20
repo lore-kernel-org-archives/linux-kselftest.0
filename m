@@ -1,150 +1,166 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A89738F941;
-	Mon, 20 Apr 2026 09:46:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B15938F938
+	for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2026 09:46:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776678370; cv=none; b=u+/Urxrnw0GRIEevHxh1eLiZQOksIjVEmbHMUDBPpdslG/jSgcEnu77vTiPOfe4ChFhKaU5nJG4/jyfL5BdcbByRpAOsdFGrbQ5V1QnwQcZYHuA3mu6f/iLxPpg+O3NEe8z4/sghMbuvQsytN66V1cG9F3+Li6KsoXarC2hHeZg=
+	t=1776678408; cv=none; b=F2aRZTxhjRs603mq5fYwdUdkzBSpNPGbFLnF9pmiIGjjk8bqBIqcdS66BWbuQav7mCOWaHhS5sBdXvFtpVndB+SC9TAXASMKz53lFs+GNiFCjqpNMR1NfenbnGPwdxYDzk+e8kRwsJyrTxzNWGrDJ7j/rTdbzURYBRne6EK6D2c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776678370; c=relaxed/simple;
-	bh=0LnwgCKSOKAxCSRRobCz2g3Fg7fEI4umGWE6lQbQdxI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LCE/QtkVFof7978t1stqyeteicGhnzaY4eqbU26CMSim2ZoV7tGOGMP6T8dXLEujsSGA28ndCx5yi5STas5c7S2Dm+z/kmOCHJjSPBCdC163pirzaM0O64ydlVoLNgoCe6h2SyPTQGLn3NbFQ26TUR/KNMawS+FF9hPDWkpCw5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=L1LwmNHa; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1776678408; c=relaxed/simple;
+	bh=LxKtPlsGjHGCsLEvJ5qrtOTlK3zheCU9r9WCCneQQ94=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=bqpwy8pg7vAQEyH84CLLFi7xdl+iyDr31yZ6HrPZwNWD8xORwaOeQCJe1sCevuvy0/mW9cA1JfbDiLdfn/9PwrBg/iuStodtcbZM0HjBetd1KAJdBbFr7Ew//0CG8LAfnbWpLQNs5YKTA3BCI4buH0MjwK/dv321SbBTcRMQecM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=vSMMRm2G; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=SJcYhERc; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=vSMMRm2G; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=SJcYhERc; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="L1LwmNHa"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A81581516;
-	Mon, 20 Apr 2026 02:46:01 -0700 (PDT)
-Received: from [10.57.89.131] (unknown [10.57.89.131])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 82BA13F915;
-	Mon, 20 Apr 2026 02:46:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1776678367; bh=0LnwgCKSOKAxCSRRobCz2g3Fg7fEI4umGWE6lQbQdxI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=L1LwmNHazBeqgP6sMtuBhEJMafYyFNM7jjZ0Qel4K/ytrAl+aBOWdqbirlIqrhu9E
-	 t3l7UVo2nnaaHUWUcYmUCrdW7+wUVNPQY3UDCvHzMwNUFb4gY1NfZoFw0XGTHgLUHz
-	 +9zhNRSNlLjUvCK43bQB6iqegMvA1nY9I+ygUsqw=
-Message-ID: <1e2f1bdf-dca4-4b0c-90fa-d61a2552835f@arm.com>
-Date: Mon, 20 Apr 2026 10:46:01 +0100
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="vSMMRm2G";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="SJcYhERc";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="vSMMRm2G";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="SJcYhERc"
+Received: from pobox.suse.cz (unknown [10.128.32.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 8402E6A7D2;
+	Mon, 20 Apr 2026 09:46:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1776678405; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=QICAfPU5wlU/aFnTAQ1cZvh0W6tc1EFtdfhvMfiP3eI=;
+	b=vSMMRm2G/VBPkDWYoo9lpLXIrIURLo86wh3S2CV70CUw9LCSPFy5B/yR1QkSCRolJl6XZf
+	UsQhkAqz3eNOiZemSACKzR9oMjF6HKEEES/Hh0CtZKUpq+uNOCLLdpQnMCiY1SttOyO/7i
+	kD50OH2hkSeSh0PwC5dI5ld2ynjyU3k=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1776678405;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=QICAfPU5wlU/aFnTAQ1cZvh0W6tc1EFtdfhvMfiP3eI=;
+	b=SJcYhERczWgiATU0eo2TEHSICZke3hsp+T0CfbaaJxWl19Wn2ruN/rAIrDgkDdxcGVgAWY
+	b7GCNM8ypiouYxAA==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1776678405; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=QICAfPU5wlU/aFnTAQ1cZvh0W6tc1EFtdfhvMfiP3eI=;
+	b=vSMMRm2G/VBPkDWYoo9lpLXIrIURLo86wh3S2CV70CUw9LCSPFy5B/yR1QkSCRolJl6XZf
+	UsQhkAqz3eNOiZemSACKzR9oMjF6HKEEES/Hh0CtZKUpq+uNOCLLdpQnMCiY1SttOyO/7i
+	kD50OH2hkSeSh0PwC5dI5ld2ynjyU3k=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1776678405;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=QICAfPU5wlU/aFnTAQ1cZvh0W6tc1EFtdfhvMfiP3eI=;
+	b=SJcYhERczWgiATU0eo2TEHSICZke3hsp+T0CfbaaJxWl19Wn2ruN/rAIrDgkDdxcGVgAWY
+	b7GCNM8ypiouYxAA==
+Date: Mon, 20 Apr 2026 11:46:45 +0200 (CEST)
+From: Miroslav Benes <mbenes@suse.cz>
+To: Joe Lawrence <joe.lawrence@redhat.com>
+cc: Marcos Paulo de Souza <mpdesouza@suse.com>, 
+    Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
+    Petr Mladek <pmladek@suse.com>, Shuah Khan <shuah@kernel.org>, 
+    live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+    linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/6] kselftests: livepatch: Adapt tests to be executed
+ on 4.12 kernels
+In-Reply-To: <aeJ9pn6v5sGq5nln@redhat.com>
+Message-ID: <alpine.LSU.2.21.2604201146290.21177@pobox.suse.cz>
+References: <20260413-lp-tests-old-fixes-v2-0-367c7cb5006f@suse.com> <wrecfrmldslvr4dvtb7hrmi3w6joby4qmray3fd3f4dfc2k2tv@ficeojpjxjop> <5fb3ecf5a13bdf459019f6f011f3507593498875.camel@suse.com> <aeJ9pn6v5sGq5nln@redhat.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 00/53] selftests/mm: make MM selftests more CI friendly
-Content-Language: en-GB
-To: Mike Rapoport <rppt@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- David Hildenbrand <david@kernel.org>,
- Baolin Wang <baolin.wang@linux.alibaba.com>, Barry Song <baohua@kernel.org>,
- Dev Jain <dev.jain@arm.com>, Jason Gunthorpe <jgg@ziepe.ca>,
- John Hubbard <jhubbard@nvidia.com>, "Liam R. Howlett"
- <Liam.Howlett@oracle.com>, Lance Yang <lance.yang@linux.dev>,
- Leon Romanovsky <leon@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
- Mark Brown <broonie@kernel.org>, Michal Hocko <mhocko@suse.com>,
- Nico Pache <npache@redhat.com>, Peter Xu <peterx@redhat.com>,
- Shuah Khan <shuah@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Vlastimil Babka <vbabka@kernel.org>, Zi Yan <ziy@nvidia.com>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-mm@kvack.org
-References: <20260406141735.2179309-1-rppt@kernel.org>
- <ee6bbac9-b375-4413-a771-6d32c7afda67@arm.com> <aeXvty_LE4v5XLq3@kernel.org>
-From: Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <aeXvty_LE4v5XLq3@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="-2146828000-1941054320-1776678405=:21177"
+X-Spam-Score: -3.30
+X-Spam-Level: 
+X-Spamd-Result: default: False [-3.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	CTYPE_MIXED_BOGUS(1.00)[];
+	NEURAL_HAM_SHORT(-0.20)[-0.999];
+	MIME_GOOD(-0.10)[multipart/mixed,text/plain];
+	ARC_NA(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+,1:+];
+	TO_DN_SOME(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_COUNT_ZERO(0.00)[0];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[pobox.suse.cz:helo,pobox.suse.cz:mid]
+X-Spam-Flag: NO
 
-On 20/04/2026 10:19, Mike Rapoport wrote:
-> Hi Ryan,
-> 
-> On Mon, Apr 20, 2026 at 09:37:03AM +0100, Ryan Roberts wrote:
->> On 06/04/2026 15:16, Mike Rapoport wrote:
->>> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
->>>
->>> Hi,
->>>
->>> There's a lot of dancing around HugeTLB settings in run_vmtests.sh.
->>> Some test need just a few default huge pages, some require at least 256 MB, and
->>> some just skip lots of tests if huge pages of all supported sizes are not
->>> available.
->>>
->>> The goal of this set is to make tests deal with HugeTLB setup and teardown.
->>
->> Hi Mike,
->>
->> I haven't had a chance to review this series properly, but the intent certainly
->> seems extremely valuable!
->>
->> I thought I'd share some configuration magic that I always use when running on
->> arm64. Appologies if I'm teaching you to suck eggs...
->>
->> arm64 supports multiple hugetlb sizes and (at least in the past) the magic in
->> run_vmtests.sh only reserves for the default size. As a consequence, whenever I
->> run these tests on arm64, I always boot with:
->>
->> hugepagesz=1G hugepages=0:2,1:2
->> hugepagesz=32M hugepages=0:2,1:2
->> default_hugepagesz=2M hugepages=0:64,1:64
->> hugepagesz=64K hugepages=0:2,1:2
->>
->> Which reserves 2 pages of each supported non-default size in each of 2 NUMA
->> nodes, and 64 of the default size in each NUMA node. (This would need adjusting
->> if using a different base page size).
->>
->> My recollection is that this effectively overrides what the script was doing and
->> is sufficient to make all hugetlb tests run for all hugepage sizes.
-> 
-> My goal is to let the tests themself set up the right hugetlb configuration
-> without forcing it neither in command line nor in the wrapper scripts.
-> 
-> On x86 I can run all the tests in a virtio-ng VM with two nodes and no
-> kernel command line overrides. I suppose that should work on arm64 too.
-> 
-> There are some additional settings that such a VM would need to avoid
-> skipping tests that presume swap or a real filesystem, but that's more of
-> virtio-ng limitation.
-> 
->> If it's possible to get this non-default hugepage size reservation logic into
->> the tests themselves, this will make the mm selftests much easier to run on
->> arm64 with full coverage.
-> 
-> That's what the second half of series do. E.g for cow tests:
-> 
-> https://lore.kernel.org/linux-mm/ee6bbac9-b375-4413-a771-6d32c7afda67@arm.com/T/#m62f23b835061449bc6249afacf993bb32ea11234
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Ahh, excellent; you're already considering the non-default sizes. I'll get back
-in my box :)
+---2146828000-1941054320-1776678405=:21177
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8BIT
 
->  
->> Another observation is that "secretmem.enable" is currently needed on the
->> cmdline to enable secretmem so that the associated tests run. Not sure what can
->> be done to make that simpler?
+On Fri, 17 Apr 2026, Joe Lawrence wrote:
+
+> On Thu, Apr 16, 2026 at 03:18:33PM -0300, Marcos Paulo de Souza wrote:
+> > On Thu, 2026-04-16 at 10:07 -0700, Josh Poimboeuf wrote:
+> > > On Mon, Apr 13, 2026 at 02:26:11PM -0300, Marcos Paulo de Souza
+> > > wrote:
+> > > > A new version of the patchset, with fewer patches now. Please take
+> > > > a look!
+> > > > 
+> > > > Original cover-letter:
+> > > > These patches don't really change how the patches are run, just
+> > > > skip
+> > > > some tests on kernels that don't support a feature (like kprobe and
+> > > > livepatched living together) or when a livepatch sysfs attribute is
+> > > > missing.
+> > > > 
+> > > > The last patch slightly adjusts check_result function to skip dmesg
+> > > > messages on SLE kernels when a livepatch is removed.
+> > > 
+> > > Why are we adding complexity to support Linux 4.12 in mainline? 
+> > > Isn't
+> > > that what enterprise distros are for?
+> > 
+> > These changes do not add any new complex code, just checks to enable
+> > the tests to run on older kernels. I believe that it would be good for
+> > all enterprises distros if they could run more tests in maintenance
+> > updates of their kernels using the upstream tests.
+> > 
+> > The changes are not really that big. Some patches were removed from v1
+> > because there were adding checks for out-of-tree messages (like the
+> > last paragraph of the v2 erroneously shows), and another one was to
+> > check if kprobes could live alongside livepatches, which fails for 4.12
+> > kernels.
+> > 
+> > The patches for this versions introduce only checks to avoid testing
+> > sysfs attributes for kernels that don't supports them.
+> > 
 > 
-> Looks like you're testing really old kernels :)
-> The secretmem default changed to "enabled" from 6.5 ;-)
-
-Good to know; I created my scripts/environment pre-6.5, so that's just
-historical baggage on my part, I guess.
-
->  
->> And there are tests that depend on having more than 1 NUMA node; I always run
->> under QEMU with 2 emulated NUMA nodes. I guess that's really just a property of
->> the HW, so nothing to be done from the test harness.
+> IMHO when the changes are reasonably small, I think we should consider
+> accomodating older kernels for the selftest suite.  If we reach the
+> point of having to introduce version #ifdef-erry, that opinion would
+> flip pretty quickly.  It's pretty amazing that modern tests still run on
+> older kernels (with this patchset) -- not an explicit kselftest goal
+> AFAIK, but nice to have.
 > 
-> Right, test harness can't do much about it. It's either run in a virtual
-> machines with 2 (or more) nodes or enable NUMA emulation in the kernel
-> configuration and the kernel command line.
+> If we do merge this patchset, it should update the doc
+> tools/testing/selftests/livepatch/README to note the oldest
+> expected/tested upstream kernel.  (So new selftest authors may have some
+> idea of what API / sysfs features to use.)  And that this compatibility
+> was only an incidental "feature" that came for nearly free.  It's not a
+> promise to never add backwards-incompatible tests in the future.
 
-ACK
+I agree with Joe on both points.
 
-Thanks again for this improvement!
-
-> 
->> Thanks,
->> Ryan
-> 
-
+Miroslav
+---2146828000-1941054320-1776678405=:21177--
