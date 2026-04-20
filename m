@@ -1,73 +1,216 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from mx0a-00190b01.pphosted.com (mx0a-00190b01.pphosted.com [67.231.149.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F07203939DD
-	for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2026 10:15:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC40A38AC65;
+	Mon, 20 Apr 2026 10:41:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.149.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776680132; cv=none; b=n4t2/5nl6X07xckhQHfkkeGmrbMDdGRMuBb5WcGXsrv9TpR8I0MxcQiEX1n7jfnRK9rg4PeZf2oqWh3lDb4uW3mC7gOF5tbdcbh6uFPEBTzGT8+/y2XlRK+LReGo6IJZzGj2cbBi2bLoW5m4SXrDm4VB0bqbECSjzi+LqeJMfho=
+	t=1776681699; cv=none; b=qKwGu4HP9iSCZmh7wL2QDSnopf+hRodGpl1/kugDM413xQD7t/Cu386QVzVzj+GSoPrn1bfMXv9bDsrBl5z/toqJa+sZh//Pkw+UYPgIHA500FavVIFK29AhLalsIoSY7kP3easRbNs37V+23eZRfGKlKC68rujhDfzvhskDV/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776680132; c=relaxed/simple;
-	bh=jeZ6axS0z+/u5zLEoBy/iMBKukSdV5khZ3tDuN19gGQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=drRXjXu5aKwRLTiE0mNKgCks5R/+R1PII12ew2b7lDgT7SzIr3jE7OZg1FwRNHDDs07+10bAYWNH+I2p0RYWtH4HiqY0SJZfJoD6tvH6FaPDARanzPCG4d4rlSaUyTOu4PGPF2z05qlgjSZn3i2JPXTOZyIJzQs65261L3dbkzE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=EEm6DLuR; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=RiCMKETj; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1776681699; c=relaxed/simple;
+	bh=QQ3g16h5A2ScaSGZq7cMSiDlwefFELwdXx+l8VMkO9I=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=AfK1+66Kj7BaS6AC8HyVBNVqYZmXFshQndnpbFm3zVm8kLhKteq5ujAw5LrR8HURQC5u/wVPcbZb2dIGf8JTH+fIkFBE/lVm8K6rSpdygZdO5Sc3qZq6nq+5X6vcbFEIe/Wmi+mDgTvw+9A4tZLpP9fXvDfuIDsPjtEguc9sU3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=akamai.com; spf=pass smtp.mailfrom=akamai.com; dkim=pass (2048-bit key) header.d=akamai.com header.i=@akamai.com header.b=DxguWQOu; arc=none smtp.client-ip=67.231.149.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=akamai.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=akamai.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="EEm6DLuR";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="RiCMKETj"
-Date: Mon, 20 Apr 2026 12:15:23 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1776680128;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xMyjHnGlqdoIum0HdiuinTdbTgMxtUfNvwiiDU48OO0=;
-	b=EEm6DLuRefJ64mrmSuMXc+tedtrj2DQ33OxNVygY73lFjDJcCB8p7RHiDRNYyiIvPiQbcG
-	5fQ4XKCGNIXClaLJDjKa+YB4Jivuml1R3KjbKAaRn8cKNUbDewx1epBClzJmMd0BjRkq07
-	FUMi7v95zATnIAMypJStAMdlWa7TKt8xpenk9UcYtT5NJkavAQ0ccBi51q6AZvxdbyagRP
-	WsFYuZ5TqcjajagcIaAA4IvOv8flgkTRteEQ3u16QTszlv++NYiEMjXJAyDso+sbzKcYX9
-	PqyyQRqyXk4NLgw24/n+IcBFv2nwYr9v5WCKHs82qai1gbOImqMBkd5UrmHOzQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1776680128;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xMyjHnGlqdoIum0HdiuinTdbTgMxtUfNvwiiDU48OO0=;
-	b=RiCMKETjVasm1jVUvE9MSxc50IYVJEZc01cS04fuD8prrZ210iVvrGASwtLD7bxy4s6TRx
-	+YhjZe3f22XY+UCQ==
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-To: Geliang Tang <geliang@kernel.org>
-Cc: Kees Cook <kees@kernel.org>, Andy Lutomirski <luto@amacapital.net>, 
-	Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>, 
-	Christian Brauner <brauner@kernel.org>, Geliang Tang <tanggeliang@kylinos.cn>, 
-	linux-kselftest@vger.kernel.org, mptcp@lists.linux.dev
-Subject: Re: [PATCH v2] selftests: harness: fix pidfd leak in __wait_for_test
-Message-ID: <20260420121444-2eb5e0cc-a7fe-4199-9ac2-5bbc9eb421cb@linutronix.de>
-References: <a82e275ccfb2609a1984d90ab559fa3af78f1e81.1776678050.git.tanggeliang@kylinos.cn>
+	dkim=pass (2048-bit key) header.d=akamai.com header.i=@akamai.com header.b="DxguWQOu"
+Received: from pps.filterd (m0409408.ppops.net [127.0.0.1])
+	by m0409408.ppops.net-00190b01. (8.18.1.11/8.18.1.11) with ESMTP id 63K5rwhY1429513;
+	Mon, 20 Apr 2026 11:41:07 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=akamai.com; h=cc
+	:content-transfer-encoding:date:from:in-reply-to:message-id
+	:mime-version:references:subject:to; s=jan2016.eng; bh=F5YacMKKu
+	D2bMrKo7gug8xWVYe6fIm4KuMzWaZDgsMM=; b=DxguWQOuA38OhJa+esmdFP2A5
+	svXVdqQLzg8y7kiJuTMljHpBWNXuBDtvl93dwSd+Z+fGhCHQ/fLOGgV+GhJOku/+
+	eC6Du7zIB6MvYw321LoZa3d7VeBwrDc+5L6DlHMkcgpczBfySyLqFehf4uJGi7IU
+	AHG8ezBmyTrnIgCx/HFHXffuE8CNxTTv86zNR7Oi1USvaOEVXBe13WYcqgvEeOgA
+	lnaleXkh4FPoSlCXlDL3Fj4zw++vQl9CvMSirynbvL0UUekFCfu0m5j9dwNxQnKZ
+	5IFVYwfdzVvN1ncGC/pPXvDuIQqeUwTTiw40o2Ay2HLRlfehRxXTYI2/xFKIQ==
+Received: from prod-mail-ppoint1 (prod-mail-ppoint1.akamai.com [184.51.33.18])
+	by m0409408.ppops.net-00190b01. (PPS) with ESMTPS id 4dmmv5dy8s-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 20 Apr 2026 11:41:07 +0100 (BST)
+Received: from pps.filterd (prod-mail-ppoint1.akamai.com [127.0.0.1])
+	by prod-mail-ppoint1.akamai.com (8.18.1.7/8.18.1.7) with ESMTP id 63KABkFd011924;
+	Mon, 20 Apr 2026 06:41:06 -0400
+Received: from prod-mail-relay02.akamai.com ([172.27.118.35])
+	by prod-mail-ppoint1.akamai.com (PPS) with ESMTP id 4dm59tfe7c-1;
+	Mon, 20 Apr 2026 06:41:06 -0400 (EDT)
+Received: from muc-lhvdhd.munich.corp.akamai.com (muc-lhvdhd.munich.corp.akamai.com [172.29.0.147])
+	by prod-mail-relay02.akamai.com (Postfix) with ESMTP id 6BC7A83;
+	Mon, 20 Apr 2026 10:41:04 +0000 (UTC)
+From: Nick Hudson <nhudson@akamai.com>
+To: bpf@vger.kernel.org, netdev@vger.kernel.org,
+        Willem de Bruijn <willemb@google.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Nick Hudson <nhudson@akamai.com>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Eduard Zingerman <eddyz87@gmail.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v5 6/6] selftests/bpf: tc_tunnel validate decap GSO state
+Date: Mon, 20 Apr 2026 11:40:51 +0100
+Message-Id: <20260420104051.1528843-7-nhudson@akamai.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20260420104051.1528843-1-nhudson@akamai.com>
+References: <20260420104051.1528843-1-nhudson@akamai.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <a82e275ccfb2609a1984d90ab559fa3af78f1e81.1776678050.git.tanggeliang@kylinos.cn>
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-20_02,2026-04-17_04,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0
+ adultscore=0 phishscore=0 spamscore=0 malwarescore=0 lowpriorityscore=0
+ bulkscore=0 mlxlogscore=999 suspectscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2604070000 definitions=main-2604200099
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDIwMDEwMyBTYWx0ZWRfX64cK3cSTRqJK
+ jX5RRCdTJ4S4TugFp7xUthtlTFphkjVHpuyAHEbBJOvypOKDecVb7SZxm3Bs4l3SQnwnTfR9LxR
+ X+vtFKeE5D1wygKcX3WzaypgC8r1stzCCVKjhyrB0+aGznCsqtDRa5c3/eNU6PG6MKEe+Ij1JyJ
+ sJ047H+q2+9GTlvtCilArErguH5pUyqB3zCBDdfrKEWf+143VYapfEAqdlEW4LvwhQ2ZK8QzZRK
+ C7+aAKCj7OAz9MKaP8435RSE5cBmKGA/0CK6dRc17JJapP6V7zKkxnIJF/W1gEUotI53P7mD5x4
+ 1qEKPGHBqJob2VGqIGclOTkFxpNOkdDiweRz6z58QMeu78wegXWRpelBboEcs1lH4AGnAEP09a3
+ /hO+1DMGIBHhit9LhQIiKeh3gDP2NknbiDL/fj5B46x3WcaP+3m6h44OLDhqn76VF3wX94hcum7
+ ALpvT6eWFg9c1JxnudA==
+X-Authority-Analysis: v=2.4 cv=GqdyPE1C c=1 sm=1 tr=0 ts=69e602c3 cx=c_pps
+ a=StLZT/nZ0R8Xs+spdojYmg==:117 a=StLZT/nZ0R8Xs+spdojYmg==:17
+ a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22 a=Ifg-1AOnLHOf1gn6spyb:22
+ a=BYUV7c42er6_Rx9bq0XK:22 a=X7Ea-ya5AAAA:8 a=70DEBb0-UiQd8ec9lQUA:9
+X-Proofpoint-ORIG-GUID: bQUvVOSb2dm9DgJhsCADXEi6U6CqCJ1X
+X-Proofpoint-GUID: bQUvVOSb2dm9DgJhsCADXEi6U6CqCJ1X
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-20_02,2026-04-17_04,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 impostorscore=0
+ adultscore=0 spamscore=0 malwarescore=0 priorityscore=1501 lowpriorityscore=0
+ clxscore=1015 phishscore=0 bulkscore=0 suspectscore=0 classifier=typeunknown
+ authscore=0 authtc= authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.22.0-2604170000 definitions=main-2604200103
 
-On Mon, Apr 20, 2026 at 05:45:28PM +0800, Geliang Tang wrote:
-> From: Geliang Tang <tanggeliang@kylinos.cn>
-> 
-> Fix the pidfd leak in kselftest_harness.h's __wait_for_test() where
-> childfd = syscall(__NR_pidfd_open, t->pid, 0) is never closed.
-> 
-> Fixes: 73a3cde97677 ("selftests: harness: Implement test timeouts through pidfd")
-> Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
+Require BPF_F_ADJ_ROOM_DECAP_L4_UDP and BPF_F_ADJ_ROOM_DECAP_L4_GRE enum
+values at runtime using CO-RE enum existence checks so missing kernel
+support fails fast instead of silently proceeding.
 
-Reviewed-by: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
+After bpf_skb_adjust_room() decapsulation, inspect skb_shared_info and
+sk_buff state for GSO packets and assert that the expected tunnel GSO
+bits are cleared and encapsulation matches the remaining tunnel state.
 
-(...)
+Signed-off-by: Nick Hudson <nhudson@akamai.com>
+---
+ .../selftests/bpf/progs/test_tc_tunnel.c      | 57 +++++++++++++++++++
+ 1 file changed, 57 insertions(+)
+
+diff --git a/tools/testing/selftests/bpf/progs/test_tc_tunnel.c b/tools/testing/selftests/bpf/progs/test_tc_tunnel.c
+index 7376df405a6b..511022630bb1 100644
+--- a/tools/testing/selftests/bpf/progs/test_tc_tunnel.c
++++ b/tools/testing/selftests/bpf/progs/test_tc_tunnel.c
+@@ -6,6 +6,7 @@
+ 
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_endian.h>
++#include <bpf/bpf_core_read.h>
+ #include "bpf_tracing_net.h"
+ #include "bpf_compiler.h"
+ 
+@@ -37,6 +38,22 @@ struct vxlanhdr___local {
+ 
+ #define	EXTPROTO_VXLAN	0x1
+ 
++#define SKB_GSO_UDP_TUNNEL_MASK	(SKB_GSO_UDP_TUNNEL |			\
++				 SKB_GSO_UDP_TUNNEL_CSUM)
++
++#define SKB_GSO_TUNNEL_MASK	(SKB_GSO_UDP_TUNNEL_MASK |		\
++				 SKB_GSO_GRE |				\
++				 SKB_GSO_GRE_CSUM |			\
++				 SKB_GSO_IPXIP4 |			\
++				 SKB_GSO_IPXIP6 |			\
++				 SKB_GSO_ESP)
++
++#define BPF_F_ADJ_ROOM_DECAP_L4_MASK	(BPF_F_ADJ_ROOM_DECAP_L4_UDP |	\
++				 BPF_F_ADJ_ROOM_DECAP_L4_GRE)
++
++#define BPF_F_ADJ_ROOM_DECAP_IPXIP_MASK	(BPF_F_ADJ_ROOM_DECAP_IPXIP4 |	\
++					 BPF_F_ADJ_ROOM_DECAP_IPXIP6)
++
+ #define	VXLAN_FLAGS     bpf_htonl(1<<27)
+ #define	VNI_ID		1
+ #define	VXLAN_VNI	bpf_htonl(VNI_ID << 8)
+@@ -592,6 +609,8 @@ int __encap_ip6vxlan_eth(struct __sk_buff *skb)
+ static int decap_internal(struct __sk_buff *skb, int off, int len, char proto)
+ {
+ 	__u64 flags = BPF_F_ADJ_ROOM_FIXED_GSO;
++	struct sk_buff *kskb;
++	struct skb_shared_info *shinfo;
+ 	struct ipv6_opt_hdr ip6_opt_hdr;
+ 	struct gre_hdr greh;
+ 	struct udphdr udph;
+@@ -621,6 +640,11 @@ static int decap_internal(struct __sk_buff *skb, int off, int len, char proto)
+ 		break;
+ 	case IPPROTO_GRE:
+ 		olen += sizeof(struct gre_hdr);
++		if (!bpf_core_enum_value_exists(enum bpf_adj_room_flags,
++						BPF_F_ADJ_ROOM_DECAP_L4_GRE))
++			return TC_ACT_SHOT;
++		flags |= BPF_F_ADJ_ROOM_DECAP_L4_GRE;
++
+ 		if (bpf_skb_load_bytes(skb, off + len, &greh, sizeof(greh)) < 0)
+ 			return TC_ACT_OK;
+ 		switch (bpf_ntohs(greh.protocol)) {
+@@ -634,6 +658,10 @@ static int decap_internal(struct __sk_buff *skb, int off, int len, char proto)
+ 		break;
+ 	case IPPROTO_UDP:
+ 		olen += sizeof(struct udphdr);
++		if (!bpf_core_enum_value_exists(enum bpf_adj_room_flags,
++						BPF_F_ADJ_ROOM_DECAP_L4_UDP))
++			return TC_ACT_SHOT;
++		flags |= BPF_F_ADJ_ROOM_DECAP_L4_UDP;
+ 		if (bpf_skb_load_bytes(skb, off + len, &udph, sizeof(udph)) < 0)
+ 			return TC_ACT_OK;
+ 		switch (bpf_ntohs(udph.dest)) {
+@@ -655,6 +683,35 @@ static int decap_internal(struct __sk_buff *skb, int off, int len, char proto)
+ 	if (bpf_skb_adjust_room(skb, -olen, BPF_ADJ_ROOM_MAC, flags))
+ 		return TC_ACT_SHOT;
+ 
++	kskb = bpf_cast_to_kern_ctx(skb);
++	shinfo = bpf_core_cast(kskb->head + kskb->end, struct skb_shared_info);
++	if (!shinfo->gso_size)
++		return TC_ACT_OK;
++
++	if ((flags & BPF_F_ADJ_ROOM_DECAP_L4_UDP) &&
++	    (shinfo->gso_type & SKB_GSO_UDP_TUNNEL_MASK))
++		return TC_ACT_SHOT;
++
++	if ((flags & BPF_F_ADJ_ROOM_DECAP_L4_GRE) &&
++	    (shinfo->gso_type & (SKB_GSO_GRE | SKB_GSO_GRE_CSUM)))
++		return TC_ACT_SHOT;
++
++	if ((flags & BPF_F_ADJ_ROOM_DECAP_IPXIP4) &&
++	    (shinfo->gso_type & SKB_GSO_IPXIP4))
++		return TC_ACT_SHOT;
++
++	if ((flags & BPF_F_ADJ_ROOM_DECAP_IPXIP6) &&
++	    (shinfo->gso_type & SKB_GSO_IPXIP6))
++		return TC_ACT_SHOT;
++
++	if (flags & (BPF_F_ADJ_ROOM_DECAP_L4_MASK |
++		     BPF_F_ADJ_ROOM_DECAP_IPXIP_MASK)) {
++		if ((shinfo->gso_type & SKB_GSO_TUNNEL_MASK) && !kskb->encapsulation)
++			return TC_ACT_SHOT;
++		if (!(shinfo->gso_type & SKB_GSO_TUNNEL_MASK) && kskb->encapsulation)
++			return TC_ACT_SHOT;
++	}
++
+ 	return TC_ACT_OK;
+ }
+ 
+-- 
+2.34.1
+
