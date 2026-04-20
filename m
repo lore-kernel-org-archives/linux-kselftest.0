@@ -1,227 +1,236 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6862C2EA75E;
-	Mon, 20 Apr 2026 13:53:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F15F63BD653;
+	Mon, 20 Apr 2026 14:18:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776693199; cv=none; b=OEATqB0g52NmSdCCIWzCDLjLP2q4swubpW9w55rdNES6DK77KXzMkXYlwUOjucg/2rSlVjUzCnOyM1HU+SafC/OvmGsn7Ld2Mxk+XxcTJw4bGFSZv+jStTYVStpby6meW2zetauI2rKozfbgHpLJVeIiUit+uTVJUduucCckmVE=
+	t=1776694725; cv=none; b=FyuGYrrAwdrcWaWrlVXmJsIeHQascKG2jMEnqzYrnSODS2Imm1GfCPJEXXNh0Sydopcg0QsVbICxztbvrEC9voLLbGzs49jhaPoqainiqfBGgJHfHJcWit9Q9PncoglQAjPsVdnI9oB59kobqsvp9jEMhs+jRdjGJkqglxnr1Ro=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776693199; c=relaxed/simple;
-	bh=/2WX7QRrreqNa1lPcnWhMEbZ0TkX/QFlLwzbB3DhuUg=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=HUfLQbJHOmdiU1r7Gc4u/2b3r60RkIuTkMNoJ7lLchsSwAoETvEeBGuqrMHM8Zp9vZ7q8LLhJFH3uZG8mHcz0HrAuQLM1eFR8jvk8px/HGfSM2KZ8UM/f5V79e6CTrrYwyh+XqDLGOqZlo2Wy1CEv5IxncF5OSSHD/tlJtf8Lm4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CLHDrjXd; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776694725; c=relaxed/simple;
+	bh=EWxipZ+oDs4F5xPYmtxH6oYUrOKrfAeNEA4GnhJp7Nw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NngsFSiSjx2Ok+1mhJvru2bh/NWkZ3X7uDk0oME/ipK5kpL+aHiui/E4NjN4rN6Ijzmj1zpx5uth7Nn/+CPJiqJMFVuQmuxSOkIzoGBwhrZPST3sLj2mjd8tRQSlkJuCDqA463pRtBRAWs0O0F3Apetx8ewGQ2t70HZKhpL4u7E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=gp/LJD1x; arc=none smtp.client-ip=91.218.175.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CLHDrjXd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEB41C19425;
-	Mon, 20 Apr 2026 13:53:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776693199;
-	bh=/2WX7QRrreqNa1lPcnWhMEbZ0TkX/QFlLwzbB3DhuUg=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=CLHDrjXdglACtNImEqi28IDMMq7a5VhtuFLdyxVmCXCyceC4zd94riRPfAVgYMPA0
-	 EvhnwhPlhqZSYz1oW/9EpYgcRqCh0KlVGeYyKv0OaJ+I3bcrttEzeUId2W6blRETn6
-	 m47ogPkO9Fvt5G3+IJTKRSl230r0zn/MAa3H5V2XJ7nKn4yOY0wRf2BX6yvvqTy3QP
-	 MzM+0VSDOTi2+sUr92tv5K+/QzK2ZzxE0ur6/57SeB/VszFCS0E3IiRytMNb1KD7pn
-	 iveHZNnTVhLopLxmDmSXERfBw8mGUtEfPMeRPcdm2RvxvO53fB17/KW31sQf6hOor2
-	 FJmdjbmlZxbHw==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <maz@kernel.org>)
-	id 1wEp3s-0000000D5cc-1J1N;
-	Mon, 20 Apr 2026 13:53:16 +0000
-Date: Mon, 20 Apr 2026 14:53:15 +0100
-Message-ID: <86ldeh20xg.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
-Cc: Oliver Upton <oupton@kernel.org>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu
- <yuzenghui@huawei.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Kees Cook <kees@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="gp/LJD1x"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1776694720;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=H0srVNgnwH91e/1YYNJ3AyGtX1xlUnjy0Bmegh+gDZY=;
+	b=gp/LJD1x5PQFW+h6FWzpwaJn1k3yIreJrjmW7OOmNxDxpbz1ThO0BeXw8xDc8oAY0d5y+Z
+	7/ViQntqxwJUGxhCvWy4uBWp42phttMHmb2Wyb9dz4kYnU0l3+QBohkWgP2/xpeK4NFGbh
+	Easp2DyDkK3ZFyfpfOFq8uQGcsh+EPY=
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
 	Shuah Khan <shuah@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev,
+	Christian Brauner <brauner@kernel.org>,
+	Seth Forshee <sforshee@kernel.org>,
+	Yuichiro Tsuji <yuichtsu@amazon.com>,
+	Andrey Albershteyn <aalbersh@redhat.com>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	Willem de Bruijn <willemb@google.com>,
+	Jason Xing <kerneljasonxing@gmail.com>,
+	Tao Chen <chen.dylane@linux.dev>,
+	Mykyta Yatsenko <yatsenko@meta.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Anton Protopopov <a.s.protopopov@gmail.com>,
+	Amery Hung <ameryhung@gmail.com>,
+	Rong Tao <rongtao@cestc.cn>,
 	linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org,
-	devel@daynix.com,
-	kvm@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v7 3/4] KVM: arm64: PMU: Introduce FIXED_COUNTERS_ONLY
-In-Reply-To: <ad44c69e-2f99-4f31-81b4-faae52eea080@rsg.ci.i.u-tokyo.ac.jp>
-References: <20260418-hybrid-v7-0-2bf39ad009bf@rsg.ci.i.u-tokyo.ac.jp>
-	<20260418-hybrid-v7-3-2bf39ad009bf@rsg.ci.i.u-tokyo.ac.jp>
-	<87ldeic1gk.wl-maz@kernel.org>
-	<06c6664c-7f0c-47b2-babf-ba2a541fd9f2@rsg.ci.i.u-tokyo.ac.jp>
-	<86qzoa0xj6.wl-maz@kernel.org>
-	<ad44c69e-2f99-4f31-81b4-faae52eea080@rsg.ci.i.u-tokyo.ac.jp>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	linux-api@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	kernel-patches-bot@fb.com
+Subject: [PATCH bpf-next v12 0/8] bpf: Extend BPF syscall with common attributes support
+Date: Mon, 20 Apr 2026 22:17:56 +0800
+Message-ID: <20260420141804.27179-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: odaki@rsg.ci.i.u-tokyo.ac.jp, oupton@kernel.org, joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, catalin.marinas@arm.com, will@kernel.org, kees@kernel.org, gustavoars@kernel.org, pbonzini@redhat.com, corbet@lwn.net, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org, devel@daynix.com, kvm@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Mon, 20 Apr 2026 13:07:15 +0100,
-Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp> wrote:
-> 
-> On 2026/04/20 18:51, Marc Zyngier wrote:
-> > On Mon, 20 Apr 2026 09:36:16 +0100,
-> > Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp> wrote:
-> >> 
-> >> On 2026/04/20 2:19, Marc Zyngier wrote:
-> >>> On Sat, 18 Apr 2026 09:14:25 +0100,
-> >>> Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp> wrote:
-> >>>> 
-> >>>> On a heterogeneous arm64 system, KVM's PMU emulation is based on the
-> >>>> features of a single host PMU instance. When a vCPU is migrated to a
-> >>>> pCPU with an incompatible PMU, counters such as PMCCNTR_EL0 stop
-> >>>> incrementing.
-> >>>> 
-> >>>> Although this behavior is permitted by the architecture, Windows does
-> >>>> not handle it gracefully and may crash with a division-by-zero error.
-> >>>> 
-> >>>> The current workaround requires VMMs to pin vCPUs to a set of pCPUs
-> >>>> that share a compatible PMU. This is difficult to implement correctly in
-> >>>> QEMU/libvirt, where pinning occurs after vCPU initialization, and it
-> >>>> also restricts the guest to a subset of available pCPUs.
-> >>>> 
-> >>>> Introduce the KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY attribute to
-> >>>> create a "fixed-counters-only" PMU. When set, KVM exposes a PMU that is
-> >>>> compatible with all pCPUs but that does not support programmable
-> >>>> event counters which may have different feature sets on different PMUs.
-> >>>> 
-> >>>> This allows Windows guests to run reliably on heterogeneous systems
-> >>>> without crashing, even without vCPU pinning, and enables VMMs to
-> >>>> schedule vCPUs across all available pCPUs, making full use of the host
-> >>>> hardware.
-> >>>> 
-> >>>> Much like KVM_ARM_VCPU_PMU_V3_IRQ and other read-write attributes, this
-> >>>> attribute provides a getter that facilitates kernel and userspace
-> >>>> debugging/testing.
-> >>> 
-> >>> OK, so that's the sales pitch. But how is it implemented? I would like
-> >>> to be able to read a high-level description of the implementation
-> >>> trade-offs.
-> >> 
-> >> Implementation-wise it is very trivial. Essentially the following
-> >> addition in kvm_arm_pmu_v3_get_attr() is the entire implementation:
-> >> +	case KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY:
-> >> +		if (test_bit(KVM_ARCH_FLAG_PMU_V3_FIXED_COUNTERS_ONLY,
-> >> &vcpu->kvm->arch.flags))
-> >> +			return 0;
-> >> 
-> >> Both its functionality and code complexity is trivial. So we can argue that:
-> >> - the functionality is too trivial to be useful or
-> >> - the interface/implementation complexity is so trivial that it does not
-> >>    incur maintenance burden
-> >> 
-> >> In this case the selftest uses the getter so I was more inclined to
-> >> have it, but adding one just for the selftest sounds too ad-hoc, so
-> >> here I looked into other attributes to ensure that it was not
-> >> introducing inconsistency with existing interfaces.
-> >> 
-> >> As the result, I found there are other read-write attributes; in fact
-> >> there are more read-write attributes than write-only ones.
-> > 
-> > You're completely missing the point. I'm referring to the whole of the
-> > commit message, which is more of a marketing slide than a technical
-> > description.
-> 
-> In terms of implementation, the obvious tradeoff is that it adds more
-> code to implement the feature. One thing to note is that
-> kvm_vcpu_load_pmu() is added and is called each time a vCPU migrates
-> across pCPUs. The heavy part, making the KVM_REQ_RELOAD_PMU request,
-> only happens when the feature is enabled.
+This patch series builds upon the discussion in
+"[PATCH bpf-next v4 0/4] bpf: Improve error reporting for freplace attachment failure" [1].
 
-Well, that's what I want to see. The repeated blurb about Windows
-being broken is cover letter material, but not fir for a commit
-message.
+This patch series introduces support for *common attributes* in the BPF
+syscall, providing a unified mechanism for passing shared metadata across
+all BPF commands, initially used by BPF_PROG_LOAD, BPF_BTF_LOAD, and
+BPF_MAP_CREATE.
 
-[...]
+The initial set of common attributes includes:
 
-> >>> "for the first time" gives the impression that it will work if you try
-> >>> again. I'd rather we say that "This feature is incompatible with the
-> >>> existence of a PMU event filter".
-> >> 
-> >> The following sequence will work:
-> >> 1. Set KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY
-> >> 2. Set KVM_ARM_VCPU_PMU_V3_FILTER
-> >> 3. Set KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY
-> >> 
-> >> This is to make the behavior conistent with KVM_ARM_VCPU_PMU_V3_SET_PMU.
-> > 
-> > I don't think this is correct. Filtering is completely at odds with
-> > this patch, and I don't want to have to reason about the combination.
-> 
-> kvm_arm_pmu_v3_set_pmu() has the following condition:
-> 
-> if (kvm_vm_has_ran_once(kvm) ||
->     (kvm->arch.pmu_filter && kvm->arch.arm_pmu != arm_pmu)) {
-> 	ret = -EBUSY;
-> 	break;
-> }
-> 
-> kvm_arm_pmu_v3_set_pmu_fixed_counters_only() has the corresponding
-> condition for consistency:
-> 
-> if (kvm_vm_has_ran_once(kvm) ||
->     (kvm->arch.pmu_filter &&
->      !test_bit(KVM_ARCH_FLAG_PMU_V3_FIXED_COUNTERS_ONLY,
-> 	       &kvm->arch.flags)))
-> 	return -EBUSY;
-> 
-> We can of course kill the PMU event filter for
-> FIXED_COUNTERS_ONLY. The filter is effectively no-op with
-> FIXED_COUNTERS_ONLY and I don't think that consistency matters much.
+1. 'log_buf': User-provided buffer for storing log output.
+2. 'log_size': Size of the provided log buffer.
+3. 'log_level': Verbosity level for logging.
+4. 'log_true_size': Actual log size reported by kernel.
 
-We shouldn't allow weird combinations in the UAPI. Since it makes no
-sense to have both fixed-function *and* filters, we should make them
-mutually exclusive.
+With this extension, the BPF syscall will be able to return meaningful
+error messages (e.g., map creation failures), improving debuggability
+and user experience.
 
-[...]
+Links:
+[1] https://lore.kernel.org/bpf/20250224153352.64689-1-leon.hwang@linux.dev/
 
-> >> I expect migration will be handled with the conventional register
-> >> getters and setters, but please share if you have a concern.
-> > 
-> > At the very least I want to see some documentation explaining that.
-> 
-> What kind of documentation do you expect?
+Changes:
+v11 -> v12:
+* Drop "log_" prefix in struct bpf_log_attr in patch #3.
+* Drop "log_" prefix in struct bpf_log_opts in patch #7.
+* Copy log_true_size using copy_to_bpfptr_offset() in patch #3 (per Alexei).
+* v11: https://lore.kernel.org/bpf/20260216150445.68278-1-leon.hwang@linux.dev/
 
-A description of what counters are exposed by this feature, and what
-architectural features they are dependent on.
+v10 -> v11:
+* Collect Acked-by from Andrii, thanks.
+* Validate whether log_buf, log_size, and log_level are valid by reusing
+  bpf_verifier_log_attr_valid() in patch #4 (per Andrii).
+* v10: https://lore.kernel.org/bpf/20260211151115.78013-1-leon.hwang@linux.dev/
 
-> If we change kvm_vcpu_load_pmu() to avoid for_each_set_bit(), there
-> would be a good chance to forget updating it when mechanically
-> updating existing for_each_set_bit() instances, so it is a candidate
-> for documentation. But I don't have a good idea where to place it
-> either.
+v9 -> v10:
+* Collect Acked-by from Andrii, thanks.
+* Address comments from Andrii:
+  * Drop log NULL check in bpf_log_attr_finalize().
+  * Return -EFAULT early in bpf_log_attr_finalize().
+  * Validate whether log_buf, log_size, and log_level are set.
+  * Keep log_buf, log_size, log_level, and user-pointer log_true_size in struct
+    bpf_log_attr.
+  * Make prog_load and btf_load work with the new struct bpf_log_attr.
+  * Add comment to log_true_size of struct bpf_log_opts in libbpf.
+* Address comment from Alexei:
+  * Avoid using BPF_LOG_FIXED as log_level in tests.
+* v9: https://lore.kernel.org/bpf/20260202144046.30651-1-leon.hwang@linux.dev/
 
-The moment we introduce FEAT_PMUv3_ICNTR, the whole PMUv3 emulation
-will catch fire anyway, as we already limit ourselves to 32 bits for
-reset and nesting switch.
+v8 -> v9:
+* Rework reporting 'log_true_size' for prog_load, btf_load, and map_create to
+  simplify struct bpf_log_attr (per Alexei).
+* v8: https://lore.kernel.org/bpf/20260126151409.52072-1-leon.hwang@linux.dev/
 
-So this will be a major redesign anyway. If you are really worried,
-leave a comment in there.
+v7 -> v8:
+* Return 0 when fd < 0 and errno != EFAULT in probe_sys_bpf_ext(), then simplify
+  probe_bpf_syscall_common_attrs() (per Alexei and Andrii).
+* v7: https://lore.kernel.org/bpf/20260123032445.125259-1-leon.hwang@linux.dev/
 
-	M.
+v6 -> v7:
+* Return -errno when fd < 0 and errno != EFAULT in probe_sys_bpf_ext().
+* Convert return value of probe_sys_bpf_ext() to bool in
+  probe_bpf_syscall_common_attrs().
+* Address comments from Andrii:
+  * Drop the comment, and handle fd >= 0 case explicitly in
+    probe_sys_bpf_ext().
+  * Return an error when fd >= 0 in probe_sys_bpf_ext().
+* v6: https://lore.kernel.org/bpf/20260120152424.40766-1-leon.hwang@linux.dev/
 
--- 
-Without deviation from the norm, progress is not possible.
+v5 -> v6:
+* Address comments from Andrii:
+  * Update some variables' name.
+  * Drop unnecessary 'close(fd)' in libbpf.
+  * Rename FEAT_EXTENDED_SYSCALL to FEAT_BPF_SYSCALL_COMMON_ATTRS with
+    updated description in libbpf.
+  * Use EINVAL instead of EUSERS, as EUSERS is not used in bpf yet.
+  * Rename struct bpf_syscall_common_attr_opts to bpf_log_opts in libbpf.
+  * Add 'OPTS_SET(log_opts, log_true_size, 0);' in libbpf's 'bpf_map_create()'.
+* v5: https://lore.kernel.org/bpf/20260112145616.44195-1-leon.hwang@linux.dev/
+
+v4 -> v5:
+* Rework reporting 'log_true_size' for prog_load, btf_load, and map_create
+  (per Alexei).
+* v4: https://lore.kernel.org/bpf/20260106172018.57757-1-leon.hwang@linux.dev/
+
+RFC v3 -> v4:
+* Drop RFC.
+* Address comments from Andrii:
+  * Add parentheses in 'sys_bpf_ext()'.
+  * Avoid creating new fd in 'probe_sys_bpf_ext()'.
+  * Add a new struct to wrap log fields in libbpf.
+* Address comments from Alexei:
+  * Do not skip writing to user space when log_true_size is zero.
+  * Do not use 'bool' arguments.
+  * Drop the adding WARN_ON_ONCE()'s.
+* v3: https://lore.kernel.org/bpf/20251002154841.99348-1-leon.hwang@linux.dev/
+
+RFC v2 -> RFC v3:
+* Rename probe_sys_bpf_extended to probe_sys_bpf_ext.
+* Refactor reporting 'log_true_size' for prog_load.
+* Refactor reporting 'btf_log_true_size' for btf_load.
+* Add warnings for internal bugs in map_create.
+* Check log_true_size in test cases.
+* Address comment from Alexei:
+  * Change kvzalloc/kvfree to kzalloc/kfree.
+* Address comments from Andrii:
+  * Move BPF_COMMON_ATTRS to 'enum bpf_cmd' alongside brief comment.
+  * Add bpf_check_uarg_tail_zero() for extra checks.
+  * Rename sys_bpf_extended to sys_bpf_ext.
+  * Rename sys_bpf_fd_extended to sys_bpf_ext_fd.
+  * Probe the new feature using NULL and -EFAULT.
+  * Move probe_sys_bpf_ext to libbpf_internal.h and drop LIBBPF_API.
+  * Return -EUSERS when log attrs are conflict between bpf_attr and
+    bpf_common_attr.
+  * Avoid touching bpf_vlog_init().
+  * Update the reason messages in map_create.
+  * Finalize the log using __cleanup().
+  * Report log size to users.
+  * Change type of log_buf from '__u64' to 'const char *' and cast type
+    using ptr_to_u64() in bpf_map_create().
+  * Do not return -EOPNOTSUPP when kernel doesn't support this feature
+    in bpf_map_create().
+  * Add log_level support for map creation for consistency.
+* Address comment from Eduard:
+  * Use common_attrs->log_level instead of BPF_LOG_FIXED.
+* v2: https://lore.kernel.org/bpf/20250911163328.93490-1-leon.hwang@linux.dev/
+
+RFC v1 -> RFC v2:
+* Fix build error reported by test bot.
+* Address comments from Alexei:
+  * Drop new uapi for freplace.
+  * Add common attributes support for prog_load and btf_load.
+  * Add common attributes support for map_create.
+* v1: https://lore.kernel.org/bpf/20250728142346.95681-1-leon.hwang@linux.dev/
+
+Leon Hwang (8):
+  bpf: Extend BPF syscall with common attributes support
+  libbpf: Add support for extended BPF syscall
+  bpf: Refactor reporting log_true_size for prog_load
+  bpf: Add syscall common attributes support for prog_load
+  bpf: Add syscall common attributes support for btf_load
+  bpf: Add syscall common attributes support for map_create
+  libbpf: Add syscall common attributes support for map_create
+  selftests/bpf: Add tests to verify map create failure log
+
+ include/linux/bpf.h                           |   4 +-
+ include/linux/bpf_verifier.h                  |  16 ++
+ include/linux/btf.h                           |   3 +-
+ include/linux/syscalls.h                      |   3 +-
+ include/uapi/linux/bpf.h                      |   8 +
+ kernel/bpf/btf.c                              |  30 +---
+ kernel/bpf/log.c                              |  91 +++++++++-
+ kernel/bpf/syscall.c                          | 114 +++++++++---
+ kernel/bpf/verifier.c                         |  17 +-
+ tools/include/uapi/linux/bpf.h                |   8 +
+ tools/lib/bpf/bpf.c                           |  52 +++++-
+ tools/lib/bpf/bpf.h                           |  17 +-
+ tools/lib/bpf/features.c                      |   8 +
+ tools/lib/bpf/libbpf_internal.h               |   3 +
+ .../selftests/bpf/prog_tests/map_init.c       | 166 ++++++++++++++++++
+ 15 files changed, 473 insertions(+), 67 deletions(-)
+
+--
+2.53.0
+
