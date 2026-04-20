@@ -1,32 +1,39 @@
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+Received: from www3579.sakura.ne.jp (www3579.sakura.ne.jp [49.212.243.89])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9BBF25D53B;
-	Mon, 20 Apr 2026 06:07:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 533CA3815F8
+	for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2026 06:21:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=49.212.243.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776665255; cv=none; b=Pn7ssI0HpgZqosYftJFGS67vdaqEcwz7t0HN89FtSHUCSKTmEsBZyDJ4/EEovUIFtZGSqxLHYG/iYLGrWdz19KbB9g9He7nj4UabwH6LEzWZerH9eDSq5U1JMwtk4zOJWfmQTulyyCCCst4im91GZvcj4G7pvO4dA97WpIAdbic=
+	t=1776666110; cv=none; b=sEbnBsSQIgq4fvizypvT7AXalqU7ah9dpdogiyzhRNmIADtFzWgHiPQs4p7TUZN3eqlWAhXMjBISkBGOq0mrTwGe40BSS2BZv3c1JWhwiMMg5mIXWbpkvfe+ghpqdIG/N3ZudQzkRfEpJtpH29GP18OtjccS3A5zM+zuM9BhzXI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776665255; c=relaxed/simple;
-	bh=/V3Lviby6LuoMIdNEQHBuwGR8SAWyAkzpYfJ4x52X/k=;
+	s=arc-20240116; t=1776666110; c=relaxed/simple;
+	bh=4gcTz+8sS8b31hqBB1wlc7iFgF0lAJ8qLJYbhTEXAjU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pjkpksN0kXmZiibcNHyliyvTxBFyv9K0aBTO9qTNY1HVKwEzuBifEqJ9lYByZhR2rD9uGsLRGLUxDIQLpH8VEUI7H1eoso/WxuyVngWXr+AEXUVIzn7cY0O+5l/7KI7X5HeUINT/hBhoKNWwjgJFAyTK4195j6QtW4noZhBufKg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=wsg0uLPQ; arc=none smtp.client-ip=115.124.30.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	 In-Reply-To:Content-Type; b=AbNX6Izkn7SHoqYh+KLdmBu45+zwnXWZja1Jqe0NAp3ysYqqnGjVKZzDPKWc1XYy25D3TnQIMTIetmfSa20XSr7m7K58+Arle7L17v7xelKLFEsPc1A5HGJRnEBZqkN7o5pvQcekGBu8Rkqkhv2pQIMSNbg8cZOT2iL/Q6eZayA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp; dkim=fail (0-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b=Fab4JszZ reason="key not found in DNS"; arc=none smtp.client-ip=49.212.243.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="wsg0uLPQ"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1776665243; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=jlXoyWfT+08BHayF7RT9Vylznnk/5A39eUeopQdgDu4=;
-	b=wsg0uLPQN03uyaFRH7U2SqCA/6Ih12JBtrp+H+vWMT21pu4EK/wPqPSF3ydyKubskBie7RRZQCIqE5pm76ZL+wLaoO67RLvZIVF0p7xBa8o/JQTeHSjPM72srpxBXVIKijFWqrwlvDMQ66TfY1y2L40yL3/gqr2mI/TaALulWrA=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037026112;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=27;SR=0;TI=SMTPD_---0X1I7RdU_1776665239;
-Received: from 30.74.144.127(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0X1I7RdU_1776665239 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Mon, 20 Apr 2026 14:07:20 +0800
-Message-ID: <7fa885ca-d074-4e75-842a-6fe7e48cb298@linux.alibaba.com>
-Date: Mon, 20 Apr 2026 14:07:18 +0800
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b="Fab4JszZ"
+Received: from [133.11.54.205] (h205.csg.ci.i.u-tokyo.ac.jp [133.11.54.205])
+	(authenticated bits=0)
+	by www3579.sakura.ne.jp (8.16.1/8.16.1) with ESMTPSA id 63K6Lj2B066789
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+	Mon, 20 Apr 2026 15:21:46 +0900 (JST)
+	(envelope-from odaki@rsg.ci.i.u-tokyo.ac.jp)
+DKIM-Signature: a=rsa-sha256; bh=FJ5CdXSzLkVwwaN2gkjigUMa98BbQG4sZbq6fGjnjvg=;
+        c=relaxed/relaxed; d=rsg.ci.i.u-tokyo.ac.jp;
+        h=From:Message-ID:To:Subject:Date;
+        s=rs20250326; t=1776666106; v=1;
+        b=Fab4JszZTcVq1Wcnn3GPi67jiAAuyi0vN2G2vLUb9wiEHaXeyWOJkP8k6OKIG/Bc
+         MSLW8jYjzMErRS7+BPGAzAQj37qGFNtOApRCwgTMTfkhtKcrAVGud92dlFVeUf3M
+         waOVb7QFgWsztepP+AjxR8oCG+yuABP9noUYDjyPUIuNlXuFXLU2Ufakz/L5MeEi
+         5dnVj6poWbruKOBnHfQR3bWRS5xFuBh/fEVbPRwR3kCe8bA9K93Cc1OFqoB6KHfI
+         fT64THxfBFME0MahSZA486qwy7PBjndEm7kgZ+ygWf59mGkv/qAIE7bYBie4RBIi
+         J84VxqyKbF5pYOy69uV7tg==
+Message-ID: <483e5cf2-a54c-4781-ac6d-49f5bc7128ba@rsg.ci.i.u-tokyo.ac.jp>
+Date: Mon, 20 Apr 2026 15:21:45 +0900
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -34,44 +41,114 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 7.2 v3 01/12] mm/khugepaged: remove READ_ONLY_THP_FOR_FS
- check
-To: Zi Yan <ziy@nvidia.com>, "Matthew Wilcox (Oracle)" <willy@infradead.org>,
- Song Liu <songliubraving@fb.com>
-Cc: Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>,
- Alexander Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
- Andrew Morton <akpm@linux-foundation.org>,
- David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, Nico Pache <npache@redhat.com>,
- Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
- Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Shuah Khan <shuah@kernel.org>, linux-btrfs@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-References: <20260418024429.4055056-1-ziy@nvidia.com>
- <20260418024429.4055056-2-ziy@nvidia.com>
-From: Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <20260418024429.4055056-2-ziy@nvidia.com>
+Subject: Re: [PATCH v7 2/4] KVM: arm64: PMU: Protect the list of PMUs with RCU
+To: Marc Zyngier <maz@kernel.org>
+Cc: Oliver Upton <oupton@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu
+ <yuzenghui@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Kees Cook <kees@kernel.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org, devel@daynix.com, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260418-hybrid-v7-0-2bf39ad009bf@rsg.ci.i.u-tokyo.ac.jp>
+ <20260418-hybrid-v7-2-2bf39ad009bf@rsg.ci.i.u-tokyo.ac.jp>
+ <87mryzauib.wl-maz@kernel.org>
+Content-Language: en-US
+From: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
+In-Reply-To: <87mryzauib.wl-maz@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-
-
-On 4/18/26 10:44 AM, Zi Yan wrote:
-> collapse_file() requires FSes supporting large folio with at least
-> PMD_ORDER, so replace the READ_ONLY_THP_FOR_FS check with that.
-> MADV_COLLAPSE ignores shmem huge config, so exclude the check for shmem.
+On 2026/04/19 23:34, Marc Zyngier wrote:
+> On Sat, 18 Apr 2026 09:14:24 +0100,
+> Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp> wrote:
+>>
+>> Convert the list of PMUs to a RCU-protected list that has primitives to
+>> avoid read-side contention.
+>>
+>> Signed-off-by: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
+>> ---
+>>   arch/arm64/kvm/pmu-emul.c | 14 ++++++--------
+>>   1 file changed, 6 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/arch/arm64/kvm/pmu-emul.c b/arch/arm64/kvm/pmu-emul.c
+>> index 59ec96e09321..ef5140bbfe28 100644
+>> --- a/arch/arm64/kvm/pmu-emul.c
+>> +++ b/arch/arm64/kvm/pmu-emul.c
+>> @@ -7,9 +7,9 @@
+>>   #include <linux/cpu.h>
+>>   #include <linux/kvm.h>
+>>   #include <linux/kvm_host.h>
+>> -#include <linux/list.h>
+>>   #include <linux/perf_event.h>
+>>   #include <linux/perf/arm_pmu.h>
+>> +#include <linux/rculist.h>
+>>   #include <linux/uaccess.h>
+>>   #include <asm/kvm_emulate.h>
+>>   #include <kvm/arm_pmu.h>
+>> @@ -26,7 +26,6 @@ static bool kvm_pmu_counter_is_enabled(struct kvm_pmc *pmc);
+>>   
+>>   bool kvm_supports_guest_pmuv3(void)
+>>   {
+>> -	guard(mutex)(&arm_pmus_lock);
+>>   	return !list_empty(&arm_pmus);
 > 
-> While at it, replace VM_BUG_ON with VM_WARN_ON_ONCE.
-> 
-> Add a helper function mapping_pmd_thp_support() for FSes supporting large
-> folio with at least PMD_ORDER.
-> 
-> Signed-off-by: Zi Yan <ziy@nvidia.com>
-> ---
+> Please read include/linux/rculist.h and the discussion about the
+> interaction of list_empty() with RCU-protected lists. How about using
+> list_first_or_null_rcu() for peace of mind?
 
-LGTM.
-Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+list_first_or_null_rcu() is useful to replace a sequence of list_empty() 
+and list_first_entry() that is protected by a lock, but this function 
+instead requires the invariant that nobody deletes an element from the 
+list, and list_first_or_null_rcu() does not allow removing the requirement.
+
+The header file says:
+ > Where are list_empty_rcu() and list_first_entry_rcu()?
+ >
+ > They do not exist because they would lead to subtle race conditions:
+ >
+ > if (!list_empty_rcu(mylist)) {
+ >	struct foo *bar = list_first_entry_rcu(mylist, struct foo,
+ >					       list_member);
+ >	do_something(bar);
+ > }
+ >
+ > The list might be non-empty when list_empty_rcu() checks it, but it
+ > might have become empty by the time that list_first_entry_rcu()
+ > rereads the ->next pointer, which would result in a SEGV.
+ >
+ > When not using RCU, it is OK for list_first_entry() to re-read that
+ > pointer because both functions should be protected by some lock that
+ > blocks writers.
+ >
+ > When using RCU, list_empty() uses READ_ONCE() to fetch the
+ > RCU-protected ->next pointer and then compares it to the address of
+ > the  list head.  However, it neither dereferences this pointer nor
+ > provides  this pointer to its caller.  Thus, READ_ONCE() suffices
+ > (that is,  rcu_dereference() is not needed), which means that
+ > list_empty() can be used anywhere you would want to use
+ > list_empty_rcu().  Just don't expect anything useful to happen if you
+ > do a subsequent lockless call to list_first_entry_rcu()!!!
+ >
+ > See list_first_or_null_rcu for an alternative.
+
+However, kvm_supports_guest_pmuv3() locked a mutex when calling 
+list_empty() and unlocked it immediately after that, instead of 
+re-reading list_first_entry(). This construct inherently had a race 
+condition with code that deletes an element; when the caller of 
+kvm_supports_guest_pmuv3() decides to enable guest PMUv3, the host PMU 
+may have been gone. But it was still safe because no one deletes an element.
+
+The same logic also applies when using RCU. As the comment says, we can 
+use list_empty() instead of the hypothetical list_empty_rcu() macro 
+because we don't expect it to magically enable something like 
+list_first_entry_rcu(). This function instead keep relying on the fact 
+that no one deletes an element of the list.
+
+Regards,
+Akihiko Odaki
