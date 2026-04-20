@@ -1,147 +1,180 @@
-Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63DBF33B6D3;
-	Mon, 20 Apr 2026 06:55:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.97
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A2BA288C08;
+	Mon, 20 Apr 2026 07:01:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776668116; cv=none; b=eaWbeSj4+VPh8QCO+TtUi9PAfusyNwZppXos78tri/+4AVUGm9zREfjflbXhF569bqMzU2N5dsUpP5T4uUsB96KJhUatmAm/u8fV7K+1WQbDp8axKXmnZtuG5eZI1Wxb+VrflBYUqO/Ovm6MGvqxvOzp5753xZFQzRjl2/dGhA0=
+	t=1776668515; cv=none; b=Kn1qUmUFfW4q6iA5rM49cR/2Rf7458yQrymAG9LZmziWHF9oWh45+/gx4fVKcqxujm4rXb+X8hnzz6bRxd6sCUP5AfszyKziHJaxM1PvLaaLv616qeWYqGvrOCvoa86ulX5gaIADwVFLDUtPhxRFLmx+dmHEbqjo4Kl0E9uO6S0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776668116; c=relaxed/simple;
-	bh=WgSenpZPR5BbOhR/mz5LFDVo7DMeo1niph9T9+tPKcM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ob9R/WYk67RZI3VG0me1xjj1sEQLfEET93NWe6WQKtoSyB0D67bMUXiIA2Q9qNndo+3DBZWPiSa92lNSEINUKgoj9l1kUaHThT0BnB2f4OiyTWTy5Pq6aUjLeidg8e/gSr+9qVw5JV/Lx1JF/sJQRZWAFf98EKfHFsoKYKIuwdI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=SPjAJ/9Y; arc=none smtp.client-ip=115.124.30.97
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1776668515; c=relaxed/simple;
+	bh=2HubVmemKYFSrpjdVlLvyLMzuA44GJ7AxdEWaTIopnc=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=OK2wyIhOWXa5us76790Qw0ygWzVIB3ike1cQ7r3tqfTFoYEW9m8mNYxBYfVxx0vBlmDIv/Z5FWzwCIF7Y6yKvi3dX7cVIcV7kAnh2xL9/UpDQNngFpKVgWz72DnLXu7wZ8HBMbeYmTSnZFdESVJ+8PyFtmwwbmI0UgZKUZpU7No=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YOoS5Wx6; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="SPjAJ/9Y"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1776668104; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=4wwaB5GIadZhT3WNLdwXoaV7zc2xYRrQwirl3loMrXg=;
-	b=SPjAJ/9Y2Exz47Df+Yy3mndrCMPj3N/2AimrLBaXATc7sTc7d7+yqGV8gUElP6BmrHsAJ5qsAtIpF4Ni1STDMdTIb/Rrl69+aesKFo8VymF2eqgYeHUm7rRAOH0f9Z6rZXiyAeBHK6UyDVBrtdlFeRCgIEn9mE6P+Jk88+YEEeY=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R651e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037009110;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=27;SR=0;TI=SMTPD_---0X1IKCmb_1776668101;
-Received: from 30.74.144.127(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0X1IKCmb_1776668101 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Mon, 20 Apr 2026 14:55:02 +0800
-Message-ID: <b228baf2-0dcd-4135-bab9-04d979b6e617@linux.alibaba.com>
-Date: Mon, 20 Apr 2026 14:55:00 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YOoS5Wx6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95BBFC19425;
+	Mon, 20 Apr 2026 07:01:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776668514;
+	bh=2HubVmemKYFSrpjdVlLvyLMzuA44GJ7AxdEWaTIopnc=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=YOoS5Wx6pMZKMZlHW21lbBbviCZhxubZdgxsA5GEOdEF+RMDw+un8C/pDE2dE88W1
+	 QIPOW1WJ9wC+EUw+ikTEoHL/aHm8POBVuM99jhiygKKqp8sluMUIQKxs7Fm8q45l2R
+	 FD/lAPTX3x51DyEOcxfERLKVSxw1mOFWkJ/Q1RDJ6woo8j5PXAMGu76M75jfBaxvMQ
+	 iB5Eg8bM2xbBf1fSvLksohlm4V1RiGmP+aAr4E3Qq5cK5Op3ox663otj5ljWjc1psQ
+	 6c8cEwZgIq1aYGMGHLnhY7HX6UXVDMByfegV4FefqoJqMO0NS8404or0Dzmw/FM0O/
+	 qC9LVkf/tnk6w==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <maz@kernel.org>)
+	id 1wEidk-0000000CylX-00qd;
+	Mon, 20 Apr 2026 07:01:52 +0000
+Date: Mon, 20 Apr 2026 08:01:51 +0100
+Message-ID: <86se8q15eo.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
+Cc: Oliver Upton <oupton@kernel.org>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu
+ <yuzenghui@huawei.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Kees Cook <kees@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org,
+	devel@daynix.com,
+	kvm@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v7 2/4] KVM: arm64: PMU: Protect the list of PMUs with RCU
+In-Reply-To: <483e5cf2-a54c-4781-ac6d-49f5bc7128ba@rsg.ci.i.u-tokyo.ac.jp>
+References: <20260418-hybrid-v7-0-2bf39ad009bf@rsg.ci.i.u-tokyo.ac.jp>
+	<20260418-hybrid-v7-2-2bf39ad009bf@rsg.ci.i.u-tokyo.ac.jp>
+	<87mryzauib.wl-maz@kernel.org>
+	<483e5cf2-a54c-4781-ac6d-49f5bc7128ba@rsg.ci.i.u-tokyo.ac.jp>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 7.2 v3 04/12] mm/khugepaged: remove READ_ONLY_THP_FOR_FS
- check in hugepage_pmd_enabled()
-To: Zi Yan <ziy@nvidia.com>, "Matthew Wilcox (Oracle)" <willy@infradead.org>,
- Song Liu <songliubraving@fb.com>
-Cc: Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>,
- Alexander Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
- Andrew Morton <akpm@linux-foundation.org>,
- David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, Nico Pache <npache@redhat.com>,
- Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
- Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Shuah Khan <shuah@kernel.org>, linux-btrfs@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-References: <20260418024429.4055056-1-ziy@nvidia.com>
- <20260418024429.4055056-5-ziy@nvidia.com>
-From: Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <20260418024429.4055056-5-ziy@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: odaki@rsg.ci.i.u-tokyo.ac.jp, oupton@kernel.org, joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, catalin.marinas@arm.com, will@kernel.org, kees@kernel.org, gustavoars@kernel.org, pbonzini@redhat.com, corbet@lwn.net, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org, devel@daynix.com, kvm@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-
-
-On 4/18/26 10:44 AM, Zi Yan wrote:
-> Remove READ_ONLY_THP_FOR_FS and khugepaged for file-backed pmd-sized
-> hugepages are enabled by the global transparent hugepage control.
-> khugepaged can still be enabled by per-size control for anon and shmem when
-> the global control is off.
+On Mon, 20 Apr 2026 07:21:45 +0100,
+Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp> wrote:
 > 
-> Add shmem_hpage_pmd_enabled() stub for !CONFIG_SHMEM to remove
-> IS_ENABLED(SHMEM) in hugepage_pmd_enabled().
+> On 2026/04/19 23:34, Marc Zyngier wrote:
+> > On Sat, 18 Apr 2026 09:14:24 +0100,
+> > Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp> wrote:
+> >> 
+> >> Convert the list of PMUs to a RCU-protected list that has primitives to
+> >> avoid read-side contention.
+> >> 
+> >> Signed-off-by: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
+> >> ---
+> >>   arch/arm64/kvm/pmu-emul.c | 14 ++++++--------
+> >>   1 file changed, 6 insertions(+), 8 deletions(-)
+> >> 
+> >> diff --git a/arch/arm64/kvm/pmu-emul.c b/arch/arm64/kvm/pmu-emul.c
+> >> index 59ec96e09321..ef5140bbfe28 100644
+> >> --- a/arch/arm64/kvm/pmu-emul.c
+> >> +++ b/arch/arm64/kvm/pmu-emul.c
+> >> @@ -7,9 +7,9 @@
+> >>   #include <linux/cpu.h>
+> >>   #include <linux/kvm.h>
+> >>   #include <linux/kvm_host.h>
+> >> -#include <linux/list.h>
+> >>   #include <linux/perf_event.h>
+> >>   #include <linux/perf/arm_pmu.h>
+> >> +#include <linux/rculist.h>
+> >>   #include <linux/uaccess.h>
+> >>   #include <asm/kvm_emulate.h>
+> >>   #include <kvm/arm_pmu.h>
+> >> @@ -26,7 +26,6 @@ static bool kvm_pmu_counter_is_enabled(struct kvm_pmc *pmc);
+> >>     bool kvm_supports_guest_pmuv3(void)
+> >>   {
+> >> -	guard(mutex)(&arm_pmus_lock);
+> >>   	return !list_empty(&arm_pmus);
+> > 
+> > Please read include/linux/rculist.h and the discussion about the
+> > interaction of list_empty() with RCU-protected lists. How about using
+> > list_first_or_null_rcu() for peace of mind?
 > 
-> Signed-off-by: Zi Yan <ziy@nvidia.com>
-> ---
->   include/linux/shmem_fs.h |  2 +-
->   mm/khugepaged.c          | 28 ++++++++++++++++------------
->   2 files changed, 17 insertions(+), 13 deletions(-)
+> list_first_or_null_rcu() is useful to replace a sequence of
+> list_empty() and list_first_entry() that is protected by a lock, but
+> this function instead requires the invariant that nobody deletes an
+> element from the list, and list_first_or_null_rcu() does not allow
+> removing the requirement.
+>
+> The header file says:
+> > Where are list_empty_rcu() and list_first_entry_rcu()?
+> >
+> > They do not exist because they would lead to subtle race conditions:
+> >
+> > if (!list_empty_rcu(mylist)) {
+> >	struct foo *bar = list_first_entry_rcu(mylist, struct foo,
+> >					       list_member);
+> >	do_something(bar);
+> > }
+> >
+> > The list might be non-empty when list_empty_rcu() checks it, but it
+> > might have become empty by the time that list_first_entry_rcu()
+> > rereads the ->next pointer, which would result in a SEGV.
+> >
+> > When not using RCU, it is OK for list_first_entry() to re-read that
+> > pointer because both functions should be protected by some lock that
+> > blocks writers.
+> >
+> > When using RCU, list_empty() uses READ_ONCE() to fetch the
+> > RCU-protected ->next pointer and then compares it to the address of
+> > the  list head.  However, it neither dereferences this pointer nor
+> > provides  this pointer to its caller.  Thus, READ_ONCE() suffices
+> > (that is,  rcu_dereference() is not needed), which means that
+> > list_empty() can be used anywhere you would want to use
+> > list_empty_rcu().  Just don't expect anything useful to happen if you
+> > do a subsequent lockless call to list_first_entry_rcu()!!!
+> >
+> > See list_first_or_null_rcu for an alternative.
 > 
-> diff --git a/include/linux/shmem_fs.h b/include/linux/shmem_fs.h
-> index 1a345142af7d..dff8fb6ddac0 100644
-> --- a/include/linux/shmem_fs.h
-> +++ b/include/linux/shmem_fs.h
-> @@ -127,7 +127,7 @@ int shmem_writeout(struct folio *folio, struct swap_iocb **plug,
->   void shmem_truncate_range(struct inode *inode, loff_t start, uoff_t end);
->   int shmem_unuse(unsigned int type);
->   
-> -#ifdef CONFIG_TRANSPARENT_HUGEPAGE
-> +#if defined(CONFIG_TRANSPARENT_HUGEPAGE) && defined(CONFIG_SHMEM)
->   unsigned long shmem_allowable_huge_orders(struct inode *inode,
->   				struct vm_area_struct *vma, pgoff_t index,
->   				loff_t write_end, bool shmem_huge_force);
-> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-> index 1c0fdc81d276..718a2d06d1e6 100644
-> --- a/mm/khugepaged.c
-> +++ b/mm/khugepaged.c
-> @@ -406,18 +406,8 @@ static inline int collapse_test_exit_or_disable(struct mm_struct *mm)
->   		mm_flags_test(MMF_DISABLE_THP_COMPLETELY, mm);
->   }
->   
-> -static bool hugepage_pmd_enabled(void)
-> +static inline bool anon_hpage_pmd_enabled(void)
->   {
-> -	/*
-> -	 * We cover the anon, shmem and the file-backed case here; file-backed
-> -	 * hugepages, when configured in, are determined by the global control.
-> -	 * Anon pmd-sized hugepages are determined by the pmd-size control.
-> -	 * Shmem pmd-sized hugepages are also determined by its pmd-size control,
-> -	 * except when the global shmem_huge is set to SHMEM_HUGE_DENY.
-> -	 */
-> -	if (IS_ENABLED(CONFIG_READ_ONLY_THP_FOR_FS) &&
-> -	    hugepage_global_enabled())
-> -		return true;
->   	if (test_bit(PMD_ORDER, &huge_anon_orders_always))
->   		return true;
->   	if (test_bit(PMD_ORDER, &huge_anon_orders_madvise))
-> @@ -425,7 +415,21 @@ static bool hugepage_pmd_enabled(void)
->   	if (test_bit(PMD_ORDER, &huge_anon_orders_inherit) &&
->   	    hugepage_global_enabled())
->   		return true;
-> -	if (IS_ENABLED(CONFIG_SHMEM) && shmem_hpage_pmd_enabled())
-> +	return false;
-> +}
-> +
-> +static bool hugepage_pmd_enabled(void)
-> +{
-> +	/*
-> +	 * Anon, shmem and file-backed pmd-size hugepages are all determined by
-> +	 * the global control. If the global control is off, anon and shmem
-> +	 * pmd-sized hugepages are also determined by its per-size control.
-> +	 */
+> However, kvm_supports_guest_pmuv3() locked a mutex when calling
+> list_empty() and unlocked it immediately after that, instead of
+> re-reading list_first_entry(). This construct inherently had a race
+> condition with code that deletes an element; when the caller of
+> kvm_supports_guest_pmuv3() decides to enable guest PMUv3, the host PMU
+> may have been gone. But it was still safe because no one deletes an
+> element.
+> 
+> The same logic also applies when using RCU. As the comment says, we
+> can use list_empty() instead of the hypothetical list_empty_rcu()
+> macro because we don't expect it to magically enable something like
+> list_first_entry_rcu(). This function instead keep relying on the fact
+> that no one deletes an element of the list.
 
-Personally, I found the previous comments clearer to me. The statement 
-"Anon, shmem pmd-size hugepages are all determined by the global 
-control" seems somewhat confusing. For example, if 
-hugepage_global_enabled() returns true but the pmd-sized sub-control is 
-set to 'never', that means anon pmd-size hugepages are not allowed.
+And that's exactly the sort of thing I am trying to plan for. *Should*
+we introduce a way to remove PMUs from the list, this predicate
+becomes unsafe.
 
-The code changes LGTM.
+So I want at least a comment explaining this to the unsuspecting
+reader, as this is rather subtle.
 
-> +	if (hugepage_global_enabled())
-> +		return true;
-> +	if (anon_hpage_pmd_enabled())
-> +		return true;
-> +	if (shmem_hpage_pmd_enabled())
->   		return true;
->   	return false;
->   }
+	M.
 
+-- 
+Without deviation from the norm, progress is not possible.
