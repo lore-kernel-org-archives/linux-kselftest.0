@@ -1,117 +1,121 @@
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from canpmsgout04.his.huawei.com (canpmsgout04.his.huawei.com [113.46.200.219])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED8472FD7D3
-	for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2026 07:22:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.182
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776669760; cv=pass; b=hvyApNAjzy+cUs6toDMCpKJ5F7YOXEl6DHhakqdg3tbgfixNGDXNIXDpO8uiYnz2STl9nOiRml51a5BBVXBpqUw6DtZud0R5CLFPIxYqk7U86t2j5oA31Dge3JoKkl7Zu/YhRSHOHJUy9FKaYolr1CVToanrri9D1NphEwuWLrc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776669760; c=relaxed/simple;
-	bh=z6RjGPSiK8r0oWXY5W6DEUzXSooC04ggiIIVzrIwlyE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZmmC8DyXMdj+seVUuSWTkEN+6VDioH6BTG5wAlqgPTqwrhskQCD/wFRD8B+Yku8AlAg/SipbCQ/S565zNqUJv9iephmNp3sWbmCsmaPIBSOTrrHnrLGQgQlZrKeUU26V46Ai+K5xnQV4lgRbzr/J7ULY3EIa5my2leUX5aY/WhA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=UBFHCkDw; arc=pass smtp.client-ip=209.85.160.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 330F1DDCD;
+	Mon, 20 Apr 2026 07:26:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.219
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776670011; cv=none; b=Lra6yXMsYvb5/qhjsb0JzhkNiew7P4tRCr5fogUwut9wnvutE08N2qu7hOUtE4GTMQwmGiJgTn090rpXfXCyAoGHE0T7eYzCyWjt5S0InRpMQ8V3gq7vVoh7UwfW7TmfMY+ZjrkLU9UdoDEQvgsVbqLldHYsXbjM/40DdCg4IgA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776670011; c=relaxed/simple;
+	bh=htInwWmBS9Dv3ID0U9R8OjOebzN3vBru2Y30EyYYcbU=;
+	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=L0ek8jdi1sM+LZB8FSHVDtHiVbrodD4An91pLc5b+7kWMJrEyRT8QJgRB/+IjoZQg7s+w5nd9643RntqfkPJCgqDHSME3NIa4FkCDgqt/drT1vYP3YrqAEynbx4aZnp4ggtqrbtOfkYR8wLzNTVLRW6fBl/l6ditg3BGr/dukHI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=FIuFuYZx; arc=none smtp.client-ip=113.46.200.219
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UBFHCkDw"
-Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-50697d6a69cso14516561cf.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2026 00:22:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776669757; cv=none;
-        d=google.com; s=arc-20240605;
-        b=WbalRwOxdiH32JTWfC6oSy4DYOs0p1Ac4Aqp/N9tATlFSJEB6W6HZ0UFByGx3gzroY
-         Dt7iBJfqPwYrPf3TFAbEToc9/NobZYGVc7IiMrxtxyCOXOpJ/YZ31aDqjwGJJZQpcYJc
-         prBuk1KN/UEVTPkJVnpyqpJyTCgBK77qfG5gs+ngL4pjLWJwjoI9pI+31jy9VlWpBwku
-         ppoOT66g2MuC1Gf/QES3675/LoBemj9+Q3e6BlELDLHnfBk863hr+ekS6NiHHST2ybD8
-         rvZ0Xsx6ToOIOMdu9DAsaLjpxDcmNXeToQO06ODJlLf26GeklDn8QcemUaSj7p4rtutd
-         iItA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=KVOChXZq0zoMztJw+hJ88VSw+ye8042PpZuah7BunBU=;
-        fh=nmbr7RSlHxYPuHsYUQmjzGaIv7P2Fk0WXiWJs34/lac=;
-        b=M8YjeqOLMR4HPoQYOMHAeuK7xAvO4yJCnO430SIayChN3X9z1q6ztWrFBcxHayJeHw
-         +vFJ3RcOjsYKzpfC4qfk9AhcBu7RL1mgcqoXyEcKZwm0t3DX4JNoe3Q0qHHRzK7fRaqQ
-         8CxHgLrZH2uPtLWFV7783zp9lD8qioSvAPTVpJ2txAlh/EDmGsuUBgYOp4kLwvwEuUdA
-         vO6Fpk8NO0+R5XWjNvppddYpF+aQr7y0ecVEE/AlicsTxzTUN4+Odp79heICku6ebxPV
-         XDRlkW1woCqM6Oe2fJmbifPd2yhK5AoepvYjm0AtQ+Amcx0J+KeIQZbJ7OyWrv/8KE/K
-         QC1Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1776669757; x=1777274557; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KVOChXZq0zoMztJw+hJ88VSw+ye8042PpZuah7BunBU=;
-        b=UBFHCkDwTHXb/dR8rzW28LgFTvbprdGUXDCFAdiGBymsgYRkIfpHE1C3RrCXLshQ96
-         G73xr/Az/0nFi5t6WERBEFRG9uWqGnGRhQfisGFwn/oPmd95cxStLzX0m4wpcqo+Dy1s
-         l14CrJ7CSHpDMPiUY+YVURsSfDATuIXQMIwzMx2djpIXP+sZCPJ7QvvgOb3/2O0lNK2p
-         LoaKPPbfae3GJr/5VAxpMOEMvT6U62+uasKkQwbSpfEQzoa0DUUpnpYsoJqeIZV4SnhV
-         Pe670EKs7HkgLatZKlLBXLArtQWYoSrSaiAe1irIJ0lIqgLGwfbY6jHhwXnXNbz0A5up
-         f0DA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776669757; x=1777274557;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=KVOChXZq0zoMztJw+hJ88VSw+ye8042PpZuah7BunBU=;
-        b=YAkd0uYP2afVzYFZcNQkm+ZkF1P9zzCba/xvFbPrJriraJLEplVfen/B6DsAn71Fd6
-         VCNxugHK/90T+E33QiW9N2Yq+zdvasdggMsUrOARHDXtN0bfABThdb13rc2nb8wlEnRh
-         wQN0JTx9nCDTNn5weUNtk+7urhIUlxYZ4eR1QKaTUhuYHYHRb6DUybNP4T4gqiQi55lG
-         kS6ExDgLw5S1GGR6VmPamR8d11tA2zXGAQx/UQkuAQk92lCTFYYnypymJldeRxs+R70q
-         ld+LAwfiKbjxyK28NfaWPFcSIA/uhhEAV6jk/GrtTe04snl8AL9wjAekEhdJJQGcX9uv
-         aI9A==
-X-Forwarded-Encrypted: i=1; AFNElJ9vFGwyMxzKzH/mXViQcPrP4qQzgomR9STNh4kchG7mOyoX80K9YW5npJv3yhJhvMKmLPH+0FtwNxARu/0rICg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwIJ9WkhzqoqSRmgr/mpAK+kIe7jwmFKOJjP5lgHGWZ5Ws33fxy
-	3rAAVTqkjKFM3oqALyfSOYsz2S6hPAn/CHS6cchpn9V9yjJd20iphbw8STUwr4koZ9vyEvU2qod
-	n1JNddzPC0oRX19xXzO0TcCaTym3oatzmH9PsbmDT
-X-Gm-Gg: AeBDietYXv1p/i7k2GGwot1VRLI2xtBUeYedm4uWl1EPCOZg1K0SJmrV8I9G2Mx6Ur5
-	s//YsW87V4atNFmdt3lqx4fm6SGtXYF6dFEvry4v56dOa7Im3xtiFTWJHphxo2dWLBHrQmMYoE1
-	gVHoGyPianWX7AdTV8VHiC16f7zXpaTsYs2my/et6QY8IrN+2DuBO1fljmErxLS57tpTp9zp4za
-	QO4SZGrnj1r6n35ybj+dWrn6GWT/Z7a0hKrSs5uV6351Opy0HezbTzogdTD2w3Vbd3iTRBiCO1q
-	86vcUAjIaihR6U+EhoFK0YMykLR/2aVzVHDdVFEa9YrTJpPApveANr6XD3cNS4k5wXjh9A4hXLO
-	sQlCSwcXY
-X-Received: by 2002:a05:622a:13ca:b0:509:1470:d3b2 with SMTP id
- d75a77b69052e-50e36ca15abmr179564361cf.60.1776669756390; Mon, 20 Apr 2026
- 00:22:36 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="FIuFuYZx"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=hkO6Nc68R7AMJu+lA9Su51P8nuTpDZ4kPudBZi+bg+8=;
+	b=FIuFuYZx6PMxQ3fAVUZLYpHeiTSRPTIcJ20Ubhiz5fQF+InL/Iuja4kC8IcH3zRZ83hzoqqXY
+	7j+swclZ2tWYU+DN9STn+/NZ1ogv85AdvFPfR14qbKswsVaeXuEnFwkeF5BL40b4q2Rw4U00Ui3
+	zhpcdX1FjCecB0RuFlyEJDQ=
+Received: from mail.maildlp.com (unknown [172.19.162.197])
+	by canpmsgout04.his.huawei.com (SkyGuard) with ESMTPS id 4fzcML0ljLz1prN0;
+	Mon, 20 Apr 2026 15:20:14 +0800 (CST)
+Received: from dggemv706-chm.china.huawei.com (unknown [10.3.19.33])
+	by mail.maildlp.com (Postfix) with ESMTPS id 3E84040569;
+	Mon, 20 Apr 2026 15:26:38 +0800 (CST)
+Received: from kwepemq500010.china.huawei.com (7.202.194.235) by
+ dggemv706-chm.china.huawei.com (10.3.19.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Mon, 20 Apr 2026 15:26:38 +0800
+Received: from [10.173.124.160] (10.173.124.160) by
+ kwepemq500010.china.huawei.com (7.202.194.235) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Mon, 20 Apr 2026 15:26:36 +0800
+Subject: Re: [PATCH v5 13/14] selftests/mm: move hwpoison setup into
+ run_test() and silence modprobe output for memory-failure category
+To: Sayali Patil <sayalip@linux.ibm.com>
+CC: David Hildenbrand <david@kernel.org>, Zi Yan <ziy@nvidia.com>, "Michal
+ Hocko" <mhocko@kernel.org>, Oscar Salvador <osalvador@suse.de>, "Lorenzo
+ Stoakes" <lorenzo.stoakes@oracle.com>, Dev Jain <dev.jain@arm.com>,
+	<Liam.Howlett@oracle.com>, <linuxppc-dev@lists.ozlabs.org>, "Venkat Rao
+ Bagalkote" <venkat88@linux.ibm.com>, Andrew Morton
+	<akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+	<linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, Ritesh Harjani <ritesh.list@gmail.com>
+References: <cover.1776150071.git.sayalip@linux.ibm.com>
+ <ec5a0e5e98c4fe55b8571c408ca891bd02208cc3.1776150071.git.sayalip@linux.ibm.com>
+From: Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <bdcb1965-d59d-4cf8-d79b-a7997012aac6@huawei.com>
+Date: Mon, 20 Apr 2026 15:26:36 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260420025428.101192-1-jiayuan.chen@linux.dev> <20260420025428.101192-3-jiayuan.chen@linux.dev>
-In-Reply-To: <20260420025428.101192-3-jiayuan.chen@linux.dev>
-From: Eric Dumazet <edumazet@google.com>
-Date: Mon, 20 Apr 2026 00:22:25 -0700
-X-Gm-Features: AQROBzDC74EX5M4Dk7Jdn6RBQi37Kbrc-y7UEen5QduIBRs6mrCuXqesYzBzsmw
-Message-ID: <CANn89iJhHZH69ShAS5_V5RdgPgvfz19dZn7wsb_N3EAScVoR2w@mail.gmail.com>
-Subject: Re: [PATCH net 2/2] selftests/net: packetdrill: cover challenge ACK
- on SEG.ACK > SND.NXT
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: netdev@vger.kernel.org, Neal Cardwell <ncardwell@google.com>, 
-	Kuniyuki Iwashima <kuniyu@google.com>, "David S. Miller" <davem@davemloft.net>, 
-	David Ahern <dsahern@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <ec5a0e5e98c4fe55b8571c408ca891bd02208cc3.1776150071.git.sayalip@linux.ibm.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
+ kwepemq500010.china.huawei.com (7.202.194.235)
 
-On Sun, Apr 19, 2026 at 7:55=E2=80=AFPM Jiayuan Chen <jiayuan.chen@linux.de=
-v> wrote:
->
-> Exercise the RFC 5961 Section 5.2 / RFC 793 Section 3.9 requirement
-> on the upper edge of the acceptable ACK range, mirroring the existing
-> coverage of the SEG.ACK < SND.UNA - MAX.SND.WND case.
->
-> After the peer ACKs data the receiver has never sent, the receiver
-> must respond with <SEQ =3D SND.NXT, ACK =3D RCV.NXT, CTL =3D ACK> and dro=
-p
-> the offending segment.  The script validates this exact response.
->
-> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+On 2026/4/14 16:22, Sayali Patil wrote:
+> run_vmtests.sh contains special handling to ensure the hwpoison_inject
+> module is available for the memory-failure tests. This logic was
+> implemented outside of run_test(), making the setup category-specific
+> but managed globally.
+> 
+> Move the hwpoison_inject handling into run_test() and restrict it
+> to the memory-failure category so that:
+> 1. the module is checked and loaded only when memory-failure tests run,
+> 2. the test is skipped if the module or the debugfs interface
+> (/sys/kernel/debug/hwpoison/) is not available.
+> 3. the module is unloaded after the test if it was loaded by the script.
+> 
+> This localizes category-specific setup and makes the test flow
+> consistent with other per-category preparations.
+> 
+> While updating this logic, fix the module availability check.
+> The script previously used:
+> 
+> 	modprobe -R hwpoison_inject
+> 
+> The -R option prints the resolved module name to stdout, causing every
+> run to print:
+> 
+> 	hwpoison_inject
+> 
+> in the test output, even when no action is required, introducing
+> unnecessary noise.
+> 
+> Replace this with:
+> 
+> 	modprobe -n hwpoison_inject
+> 
+> which verifies that the module is loadable without producing output,
+> keeping the selftest logs clean and consistent.
+> 
+> Also, ensure that skipped tests do not override a previously recorded
+> failure. A skipped test currently sets exitcode to ksft_skip even if a
+> prior test has failed, which can mask failures in the final exit status.
+> Update the logic to only set exitcode to ksft_skip when no failure has
+> been recorded.
+> 
+> Fixes: ff4ef2fbd101 ("selftests/mm: add memory failure anonymous page test")
+> Reviewed-by: Zi Yan <ziy@nvidia.com>
+> Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+> Signed-off-by: Sayali Patil <sayalip@linux.ibm.com>
 
-Reviewed-by: Eric Dumazet <edumazet@google.com>
-Thanks!
+Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
+
+Thanks.
+.
