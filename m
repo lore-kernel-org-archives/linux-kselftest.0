@@ -1,94 +1,82 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC5D8378815;
-	Mon, 20 Apr 2026 02:35:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4943233C532
+	for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2026 02:55:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776652557; cv=none; b=kU4eMCtZHruUFvMMNPPtl8RTIRGrMnKgpkViNi3uxA9WkAyn2+KvUncVBqgyuC0otBkF2czx8/a+qMLc6wkEUxr3w6nPU8F9KiY3Zb7JY+AOS3gVTucsBCh7YXRULJaCm30a61nGrhwNqHZRWMywC88yvdTC8uoZZRwKs6WcWRg=
+	t=1776653704; cv=none; b=ktx8UBpsmfXEx1x0lBwjnhzg+s4PInQHruKmr7bABy8fexnsF5CtXDXWfVlEIjfUj1R6R/8PYrQLSkAECc43nEMf2Dz28MWaVXqwz5zpUs3MdGhkatCtxTNdKN/WUkUp5WBN1oehJVfLUr765g1Vk1F/sWob8mry6gLdD7lsK2U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776652557; c=relaxed/simple;
-	bh=jzKNATAd4EMprFr37lKdzxGwYC+ch+3R3nJ93zyWOCM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=P8nxCcr4JwAazG5uo0G6NUiIbQysRIvVwFrSaIKVnXvdixBy0H1V8RCdNzk8qjHZu5M5WbfkvJ7uLWjteNwjTWA42xgRG0T1z/9+9kW5LCbg33XCi4CvnWCLXscdcLWSiMGEXXDQlKQ8iPbfycscxcL2MEMrsrWqnXCULGN7chc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: a1a3df903c6111f1aa26b74ffac11d73-20260420
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:0c690f79-0839-480e-8c21-0dc375d05e34,IP:20,
-	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-	N:release,TS:15
-X-CID-INFO: VERSION:1.3.12,REQID:0c690f79-0839-480e-8c21-0dc375d05e34,IP:20,UR
-	L:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:15
-X-CID-META: VersionHash:e7bac3a,CLOUDID:3dfe6c0ce732333c153d0ec4da67bd9d,BulkI
-	D:260418030341G5O2PQN4,BulkQuantity:1,Recheck:0,SF:17|19|64|66|78|80|81|82
-	|83|102|127|841|898,TC:nil,Content:0|15|52,EDM:-3,IP:-2,URL:0,File:nil,RT:
-	nil,Bulk:40,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0
-	,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: a1a3df903c6111f1aa26b74ffac11d73-20260420
-X-User: zhangguopeng@kylinos.cn
-Received: from [192.168.109.140] [(183.242.174.22)] by mailgw.kylinos.cn
-	(envelope-from <zhangguopeng@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_128_GCM_SHA256 128/128)
-	with ESMTP id 435864654; Mon, 20 Apr 2026 10:35:44 +0800
-Message-ID: <fae13102-24c1-4354-860c-9c6618ebbb07@kylinos.cn>
-Date: Mon, 20 Apr 2026 10:35:38 +0800
+	s=arc-20240116; t=1776653704; c=relaxed/simple;
+	bh=TRQmr5m2Pb2uWL2kgXGK5YQvYZA5Wl9ljtXrjhhoGzw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gyrkCm48Uz0DRS2FkELfDLK9MNhh52IRKj0eLpNdIHJP5pnsyoKZh39N8huLKqo/dT/G57bz1gcHKwEOoqJXve6BOeXC8qcm/c0kk9mB9M1yuqgxpksEwfQz7UwWMj5Ln30XMldOYbwIaw1A37xJynnaqhrDHusifLs3tNjt7w8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=lnT9nnbp; arc=none smtp.client-ip=95.215.58.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="lnT9nnbp"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1776653700;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=YFCGag2+RARMnL+MuWGy6ZpexdQQulX1NigU2jaRQH8=;
+	b=lnT9nnbpxaHOTA4jVlYHs9/NOASScjeuENcxVZZ/xvWqlOmydsneyGVfoAYhhAf4XhdZlW
+	WUtAqxpDEJ9Eyfq4FKfoG30AOem9ZRd4/qE1ZuYwTh6YIOi3Xx0aPcL2OghCNqo5VSuXDQ
+	dyb9AOUzazo9f5grLj6wtr5V8HLhTR4=
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: netdev@vger.kernel.org
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Eric Dumazet <edumazet@google.com>,
+	Neal Cardwell <ncardwell@google.com>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	David Ahern <dsahern@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net 0/2] tcp: symmetric challenge ACK for SEG.ACK > SND.NXT
+Date: Mon, 20 Apr 2026 10:54:07 +0800
+Message-ID: <20260420025428.101192-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/2] cgroup/cpuset: fix DL rollback accounting and add a
- selftest
-To: Tejun Heo <tj@kernel.org>
-Cc: longman@redhat.com, hannes@cmpxchg.org, mkoutny@suse.com,
- void@manifault.com, arighi@nvidia.com, changwoo@igalia.com,
- shuah@kernel.org, chenridong@huaweicloud.com, cgroups@vger.kernel.org,
- sched-ext@lists.linux.dev, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260417033742.40793-1-zhangguopeng@kylinos.cn>
- <3bccc1e5c1f5518cd140245956b0360e@kernel.org>
-From: Guopeng Zhang <zhangguopeng@kylinos.cn>
-In-Reply-To: <3bccc1e5c1f5518cd140245956b0360e@kernel.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
+Commit 354e4aa391ed ("tcp: RFC 5961 5.2 Blind Data Injection Attack
+Mitigation") quotes RFC 5961 Section 5.2 in full, which requires
+that any incoming segment whose ACK value falls outside
+[SND.UNA - MAX.SND.WND, SND.NXT] MUST be discarded and an ACK sent
+back.  Linux currently sends that challenge ACK only on the lower
+edge (SEG.ACK < SND.UNA - MAX.SND.WND); on the symmetric upper edge
+(SEG.ACK > SND.NXT) the segment is silently dropped with
+SKB_DROP_REASON_TCP_ACK_UNSENT_DATA.
 
+Patch 1 completes the mitigation by emitting a rate-limited challenge
+ACK on that branch, reusing tcp_send_challenge_ack() and honouring
+FLAG_NO_CHALLENGE_ACK for consistency with the lower-edge case.
 
-在 2026/4/18 3:03, Tejun Heo 写道:
-> Hello,
-> 
-> On Fri, Apr 17, 2026 at 11:37:40AM +0800, Guopeng Zhang wrote:
->> Guopeng Zhang (2):
->>   cgroup/cpuset: record DL BW alloc CPU for attach rollback
->>   selftests/sched_ext: add cpuset DL rollback test
-> 
-> Applied 1 to cgroup/for-7.1-fixes.
-Hello Tejun,
+Patch 2 adds a packetdrill selftest under
+tools/testing/selftests/net/packetdrill/ that verifies the new
+behaviour.
 
-Thanks for applying patch 1.
-> 
-> For 2, a cpuset test doesn't belong under selftests/sched_ext, but
-> selftests/cgroup doesn't have the machinery to host a sched_ext-based test
-> either, so there's no good home for it right now. If the rollback path can
-> be exercised without a BPF scheduler, please rewrite it that way and resend
-> targeting selftests/cgroup.
-I will look into whether this can be rewritten without a BPF scheduler
-and resent under selftests/cgroup.
+Jiayuan Chen (2):
+  tcp: send a challenge ACK on SEG.ACK > SND.NXT
+  selftests/net: packetdrill: cover challenge ACK on SEG.ACK > SND.NXT
 
-Thanks,
-Guopeng
-> 
-> Thanks.
-> 
-> --
-> tejun
+ net/ipv4/tcp_input.c                          | 10 ++++--
+ .../tcp_rfc5961_ack-beyond-snd-nxt.pkt        | 31 +++++++++++++++++++
+ 2 files changed, 38 insertions(+), 3 deletions(-)
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_rfc5961_ack-beyond-snd-nxt.pkt
+
+-- 
+2.43.0
 
