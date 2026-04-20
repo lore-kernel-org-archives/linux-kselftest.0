@@ -1,180 +1,109 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A2BA288C08;
-	Mon, 20 Apr 2026 07:01:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E919A242D84;
+	Mon, 20 Apr 2026 07:05:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776668515; cv=none; b=Kn1qUmUFfW4q6iA5rM49cR/2Rf7458yQrymAG9LZmziWHF9oWh45+/gx4fVKcqxujm4rXb+X8hnzz6bRxd6sCUP5AfszyKziHJaxM1PvLaaLv616qeWYqGvrOCvoa86ulX5gaIADwVFLDUtPhxRFLmx+dmHEbqjo4Kl0E9uO6S0=
+	t=1776668712; cv=none; b=sPI2NP5PXG1flRyfdtWBhMgNIaJJg74bXa7IWSktddI1K/fGjBaBxoTRisf5GXSiFN+LwuaiiQ9QmMG+EKh+Qo4cP7SvIopFoRC5tfOJBWr3oX7bLopndzN8Hhad53nuDiZEevmfFSymWaNNRqRFD1yltEGRUdxRHDDDgI+8bUM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776668515; c=relaxed/simple;
-	bh=2HubVmemKYFSrpjdVlLvyLMzuA44GJ7AxdEWaTIopnc=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OK2wyIhOWXa5us76790Qw0ygWzVIB3ike1cQ7r3tqfTFoYEW9m8mNYxBYfVxx0vBlmDIv/Z5FWzwCIF7Y6yKvi3dX7cVIcV7kAnh2xL9/UpDQNngFpKVgWz72DnLXu7wZ8HBMbeYmTSnZFdESVJ+8PyFtmwwbmI0UgZKUZpU7No=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YOoS5Wx6; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776668712; c=relaxed/simple;
+	bh=/mTdgqMKSzVERAv+PGja5d4B7gPbLYOKOK4qUPAirGQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AzNC7AGTsc2v358YARL+zZJe50mYic7BX92o3+w+7AV3Q2fCgMmWYxkEfRK+EauJeRWgK0P2KYvmrgsAClGHt3ZXjJM/4IoOJ3jDwZ9ODneoFgSFpLmPeeUrm32Qs0c72oIhJLNoD8WkGoou+xaHUv3IV/BShsorxC49HMrbZ08=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gDVAZaaB; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YOoS5Wx6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95BBFC19425;
-	Mon, 20 Apr 2026 07:01:54 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gDVAZaaB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E18EFC19425;
+	Mon, 20 Apr 2026 07:05:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776668514;
-	bh=2HubVmemKYFSrpjdVlLvyLMzuA44GJ7AxdEWaTIopnc=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=YOoS5Wx6pMZKMZlHW21lbBbviCZhxubZdgxsA5GEOdEF+RMDw+un8C/pDE2dE88W1
-	 QIPOW1WJ9wC+EUw+ikTEoHL/aHm8POBVuM99jhiygKKqp8sluMUIQKxs7Fm8q45l2R
-	 FD/lAPTX3x51DyEOcxfERLKVSxw1mOFWkJ/Q1RDJ6woo8j5PXAMGu76M75jfBaxvMQ
-	 iB5Eg8bM2xbBf1fSvLksohlm4V1RiGmP+aAr4E3Qq5cK5Op3ox663otj5ljWjc1psQ
-	 6c8cEwZgIq1aYGMGHLnhY7HX6UXVDMByfegV4FefqoJqMO0NS8404or0Dzmw/FM0O/
-	 qC9LVkf/tnk6w==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <maz@kernel.org>)
-	id 1wEidk-0000000CylX-00qd;
-	Mon, 20 Apr 2026 07:01:52 +0000
-Date: Mon, 20 Apr 2026 08:01:51 +0100
-Message-ID: <86se8q15eo.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
-Cc: Oliver Upton <oupton@kernel.org>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu
- <yuzenghui@huawei.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Kees Cook <kees@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
+	s=k20201202; t=1776668711;
+	bh=/mTdgqMKSzVERAv+PGja5d4B7gPbLYOKOK4qUPAirGQ=;
+	h=From:To:Cc:Subject:Date:From;
+	b=gDVAZaaB/0CztH229VfAiEGUznX/jJkbRdvOhLDl7tO/nh2HGHS/0Bor40PreqqIU
+	 r/hlZobYB4lokvSoWgiCyTB8l3NAJk+YHg6WRW+CU33KCF2dGvWjbAqEiQDV+lvLZ6
+	 JQZo3gFX86NZijdI/2ignBZJSay9aL948Dmx9oiLpoII2Q4wqcB3z5OFpxu8c+Nrx1
+	 DT3FBi7Z1RHDRrF+qeIDVipddrU2c+zwfjYsozPRBtoPq79BshzQsxOzKxVWrKAJpl
+	 Bj0LYIXE/C/jqPYvDZgPOSNhLDe14XpmE6FIzq97Nw6VUebTxWdystAPGvijcPxaPk
+	 yE63ADpzqoWxg==
+From: Geliang Tang <geliang@kernel.org>
+To: Kees Cook <kees@kernel.org>,
+	Andy Lutomirski <luto@amacapital.net>,
+	Will Drewry <wad@chromium.org>,
 	Shuah Khan <shuah@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org,
-	devel@daynix.com,
-	kvm@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v7 2/4] KVM: arm64: PMU: Protect the list of PMUs with RCU
-In-Reply-To: <483e5cf2-a54c-4781-ac6d-49f5bc7128ba@rsg.ci.i.u-tokyo.ac.jp>
-References: <20260418-hybrid-v7-0-2bf39ad009bf@rsg.ci.i.u-tokyo.ac.jp>
-	<20260418-hybrid-v7-2-2bf39ad009bf@rsg.ci.i.u-tokyo.ac.jp>
-	<87mryzauib.wl-maz@kernel.org>
-	<483e5cf2-a54c-4781-ac6d-49f5bc7128ba@rsg.ci.i.u-tokyo.ac.jp>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	Christian Brauner <brauner@kernel.org>,
+	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+Cc: Geliang Tang <tanggeliang@kylinos.cn>,
+	linux-kselftest@vger.kernel.org,
+	mptcp@lists.linux.dev
+Subject: [PATCH] selftests: harness: fix pidfd leak in __wait_for_test
+Date: Mon, 20 Apr 2026 15:04:57 +0800
+Message-ID: <f6a4cf56c8c361d3e7373d83fd3930bd28600b4c.1776668161.git.tanggeliang@kylinos.cn>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: odaki@rsg.ci.i.u-tokyo.ac.jp, oupton@kernel.org, joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, catalin.marinas@arm.com, will@kernel.org, kees@kernel.org, gustavoars@kernel.org, pbonzini@redhat.com, corbet@lwn.net, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org, devel@daynix.com, kvm@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Mon, 20 Apr 2026 07:21:45 +0100,
-Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp> wrote:
-> 
-> On 2026/04/19 23:34, Marc Zyngier wrote:
-> > On Sat, 18 Apr 2026 09:14:24 +0100,
-> > Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp> wrote:
-> >> 
-> >> Convert the list of PMUs to a RCU-protected list that has primitives to
-> >> avoid read-side contention.
-> >> 
-> >> Signed-off-by: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
-> >> ---
-> >>   arch/arm64/kvm/pmu-emul.c | 14 ++++++--------
-> >>   1 file changed, 6 insertions(+), 8 deletions(-)
-> >> 
-> >> diff --git a/arch/arm64/kvm/pmu-emul.c b/arch/arm64/kvm/pmu-emul.c
-> >> index 59ec96e09321..ef5140bbfe28 100644
-> >> --- a/arch/arm64/kvm/pmu-emul.c
-> >> +++ b/arch/arm64/kvm/pmu-emul.c
-> >> @@ -7,9 +7,9 @@
-> >>   #include <linux/cpu.h>
-> >>   #include <linux/kvm.h>
-> >>   #include <linux/kvm_host.h>
-> >> -#include <linux/list.h>
-> >>   #include <linux/perf_event.h>
-> >>   #include <linux/perf/arm_pmu.h>
-> >> +#include <linux/rculist.h>
-> >>   #include <linux/uaccess.h>
-> >>   #include <asm/kvm_emulate.h>
-> >>   #include <kvm/arm_pmu.h>
-> >> @@ -26,7 +26,6 @@ static bool kvm_pmu_counter_is_enabled(struct kvm_pmc *pmc);
-> >>     bool kvm_supports_guest_pmuv3(void)
-> >>   {
-> >> -	guard(mutex)(&arm_pmus_lock);
-> >>   	return !list_empty(&arm_pmus);
-> > 
-> > Please read include/linux/rculist.h and the discussion about the
-> > interaction of list_empty() with RCU-protected lists. How about using
-> > list_first_or_null_rcu() for peace of mind?
-> 
-> list_first_or_null_rcu() is useful to replace a sequence of
-> list_empty() and list_first_entry() that is protected by a lock, but
-> this function instead requires the invariant that nobody deletes an
-> element from the list, and list_first_or_null_rcu() does not allow
-> removing the requirement.
->
-> The header file says:
-> > Where are list_empty_rcu() and list_first_entry_rcu()?
-> >
-> > They do not exist because they would lead to subtle race conditions:
-> >
-> > if (!list_empty_rcu(mylist)) {
-> >	struct foo *bar = list_first_entry_rcu(mylist, struct foo,
-> >					       list_member);
-> >	do_something(bar);
-> > }
-> >
-> > The list might be non-empty when list_empty_rcu() checks it, but it
-> > might have become empty by the time that list_first_entry_rcu()
-> > rereads the ->next pointer, which would result in a SEGV.
-> >
-> > When not using RCU, it is OK for list_first_entry() to re-read that
-> > pointer because both functions should be protected by some lock that
-> > blocks writers.
-> >
-> > When using RCU, list_empty() uses READ_ONCE() to fetch the
-> > RCU-protected ->next pointer and then compares it to the address of
-> > the  list head.  However, it neither dereferences this pointer nor
-> > provides  this pointer to its caller.  Thus, READ_ONCE() suffices
-> > (that is,  rcu_dereference() is not needed), which means that
-> > list_empty() can be used anywhere you would want to use
-> > list_empty_rcu().  Just don't expect anything useful to happen if you
-> > do a subsequent lockless call to list_first_entry_rcu()!!!
-> >
-> > See list_first_or_null_rcu for an alternative.
-> 
-> However, kvm_supports_guest_pmuv3() locked a mutex when calling
-> list_empty() and unlocked it immediately after that, instead of
-> re-reading list_first_entry(). This construct inherently had a race
-> condition with code that deletes an element; when the caller of
-> kvm_supports_guest_pmuv3() decides to enable guest PMUv3, the host PMU
-> may have been gone. But it was still safe because no one deletes an
-> element.
-> 
-> The same logic also applies when using RCU. As the comment says, we
-> can use list_empty() instead of the hypothetical list_empty_rcu()
-> macro because we don't expect it to magically enable something like
-> list_first_entry_rcu(). This function instead keep relying on the fact
-> that no one deletes an element of the list.
+From: Geliang Tang <tanggeliang@kylinos.cn>
 
-And that's exactly the sort of thing I am trying to plan for. *Should*
-we introduce a way to remove PMUs from the list, this predicate
-becomes unsafe.
+Fix the pidfd leak in kselftest_harness.h's __wait_for_test() where
+childfd = syscall(__NR_pidfd_open, t->pid, 0) is never closed.
 
-So I want at least a comment explaining this to the unsuspecting
-reader, as this is rather subtle.
+Fixes: 73a3cde97677 ("selftests: harness: Implement test timeouts through pidfd")
+Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
+---
+Hi,
 
-	M.
+While adding more TLS selftests for MPTCP KTLS development, a segmentation
+fault occurred. Debugging revealed that the accept() failure was due to MPTCP
+tests requiring over 1024 file descriptors simultaneously. I initially raised
+the limit to 4096 in [1], but sashiko noted that the real issue was a pidfd
+leak in kselftest_harness.h's __wait_for_test(). Hence, this fix addresses that.
 
+Thanks,
+-Geliang
+
+[1]
+https://patchwork.kernel.org/project/mptcp/patch/ced184831757eaae9e690f65d799809ed22cae28.1776469069.git.tanggeliang@kylinos.cn/
+
+---
+ tools/testing/selftests/kselftest_harness.h | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
+index 75fb016cd190..b12bc4dc3230 100644
+--- a/tools/testing/selftests/kselftest_harness.h
++++ b/tools/testing/selftests/kselftest_harness.h
+@@ -1001,7 +1001,7 @@ static void __wait_for_test(struct __test_metadata *t)
+ 		fprintf(TH_LOG_STREAM,
+ 			"# %s: unable to wait on child pidfd\n",
+ 			t->name);
+-		return;
++		goto out;
+ 	} else if (ret == 0) {
+ 		timed_out = true;
+ 		/* signal process group */
+@@ -1013,7 +1013,7 @@ static void __wait_for_test(struct __test_metadata *t)
+ 		fprintf(TH_LOG_STREAM,
+ 			"# %s: Failed to wait for PID %d (errno: %d)\n",
+ 			t->name, t->pid, errno);
+-		return;
++		goto out;
+ 	}
+ 
+ 	if (timed_out) {
+@@ -1066,6 +1066,8 @@ static void __wait_for_test(struct __test_metadata *t)
+ 			t->name,
+ 			status);
+ 	}
++out:
++	close(childfd);
+ }
+ 
+ static void test_harness_list_tests(void)
 -- 
-Without deviation from the norm, progress is not possible.
+2.51.0
+
