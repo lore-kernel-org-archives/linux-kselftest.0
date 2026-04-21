@@ -1,218 +1,152 @@
-Received: from mail-dl1-f53.google.com (mail-dl1-f53.google.com [74.125.82.53])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A17F637106E
-	for <linux-kselftest@vger.kernel.org>; Tue, 21 Apr 2026 22:59:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9D483803D4
+	for <linux-kselftest@vger.kernel.org>; Tue, 21 Apr 2026 23:08:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.42
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776812393; cv=pass; b=OOkMyVBjpvPX0UO/VyAc5XB2EQ0Dk3gmVWGjnC9lHMFXJK705rjoTMTuMUma9TqFSmeTYoL3qDg9MmRzuAbcW2982YWmpS/EJMwvm+iaUxzFAFwZusguvTp7ZsXS5Zxd3Xb0/JPchdrVUo5dTf7moA0Kxgyf5DcLSoestgskiUk=
+	t=1776812914; cv=pass; b=BZzEZk/NMsCM/SltWY4VuDFXDdJ0ALHP0C+6xG8meKuHaOHf1JLBej4LfdHkk6e2L8bqSY1R4ozj/+BP4yfRzCPjomxgpT9iOmLZuLgmrRtoKHp20mvwp2JRx0QQizpj0h2FqDAe+XE2Rv1pRrmOc8shReVw/JCFapeMnN0L94U=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776812393; c=relaxed/simple;
-	bh=a3Prwcdh8j9+3CtUCjVP05sQvOvEc9TKH7JXC6xKWl4=;
+	s=arc-20240116; t=1776812914; c=relaxed/simple;
+	bh=TR8FfcO11p7vVa6RPRWvJwht4gBSEvxOdxbVlJmTMFY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NcWg/QZfGIzXHLn+r5GuB5BFSHfPlVi/52/3u3lZiHZAHrT3gQgeDbIk028he5Buxa4cUPZB5fRC+XBfw+AoP5kSYQhlGLs4AeDXxkAx8LAby5JQpCNtd4p44/E0EKXB4ulU7hu0pcAM7rTlTLodg8dY7CRSt2SvdZaE+wySkuA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=kJnEIdXO; arc=pass smtp.client-ip=74.125.82.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 To:Cc:Content-Type; b=l9gaGZMZUowD9ckpjfCG8TSfrR1R4KzAJqF+Fa2Lbrb2uOC5YWeuZy3OYc4LBWzyZTzD6kJ55SdMZ7IOaJY0Y+PtRl3pQG0U5MDkpkFvRAPIu9wDl2u5Zq+tnGaxrxf7X29zk/7dVLhvpc83I8YgBOibAyApVUFpxMgoKLPFFcI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f8ISN6my; arc=pass smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="kJnEIdXO"
-Received: by mail-dl1-f53.google.com with SMTP id a92af1059eb24-12c7212836bso12623766c88.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Apr 2026 15:59:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776812391; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f8ISN6my"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-48a563e4ef7so12206665e9.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Apr 2026 16:08:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776812911; cv=none;
         d=google.com; s=arc-20240605;
-        b=cWEPZVSIqg0tXrMbYM0iIoy9J139jPf2sfwGEhDZ76FXpVgTjmi8afDEI9UbbfwTid
-         2b/CLn9g/vyD3v/jnPXmmIBH7x6cMPc3GuOqjQ5/xyILHUuKn800rBuTnmypx6cMOJN8
-         LcFMaabVlCjiVMwfGH8h2XEudIF7Bi26c1lIxjJ0WZQLLMnx9bLjEOF79MXvomqyXJ86
-         diYPoWKl5neh+lDl2ZFZgE72YKS9M8JzWTkj/lNPVDJnQPGfy/Q1tZLy9Iit3Htvw7Ce
-         OBJumywpRKICuuLJCT6FdmzLjcuT6Lo8Cmc++eBsnkX63JSsrCYxb3L5P4DFua6CWVTB
-         k2sg==
+        b=ECTGelVpATehipuIcd1onoHPbhl+PEWmq11xJHhMgQKKyaGBmFfD55w9fbTjkVQ3fD
+         LjvKaVOdLmSjGGHl4Sxm5VfDCSndtTp7sj7YpepiNdLHMwMkmYnpOBLMwo4NL5c39nZ8
+         7kq3tC2O8LdOms4gM0nfqeNm86DvMLZIGdCBdiAiCcn7zMP32w8HlC/MDfsrBmxuUz70
+         5UyobZEFL2tMtcbXC3Bszu4l1gslWJDGjlKSVBW9BI5N0F6aTKoNALdJ/WKONJ5KBmJ3
+         zTJFvbDGI2Hsf+0k3upKaMLfDvzAeO+tlAcNrkDE7BD4qGc5STemIxHImLDIBgsHm0ps
+         vf6Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=EUyujIAApUVAkDEH0uSDEg04wL17CBrnWRgJpkrkKwA=;
-        fh=iY/R8sr4soBT+Uq4C5ZtC0IcDHxWMsHKAkE0YcUY/d8=;
-        b=QHfN6s9/Cu/AG5TG54bqaRw8zFVJRbND2aQCcaonrgKwqBOyhpUS/1Nb63Vs9aIVn7
-         GRJVzmM9/pFXvrgz1WLbAfV4HkPZY2SlYrN05/lgGhX1DJ5F3td6ZVP5V5Fkdix+DPfL
-         1WgoboSyBYs2kedjOFv1qbZnTB8ysvSaDe012xBcHoZcwOIH5AVluht1JnAWHTqENK6n
-         Jbv7JjcNrRXdvn2MZOLlF/vajgs5U2Q9ogAJToE9Zqqh2p0koR+B7FYeuIu91NCGtxRw
-         g/E+euJ/njwqzXp4r/YAbgESi8AXTwUHkLt+EerJM/gCa4/ZloNM3SJOeWdzS30k4Yz4
-         GZWw==;
+        bh=TR8FfcO11p7vVa6RPRWvJwht4gBSEvxOdxbVlJmTMFY=;
+        fh=U845YzOguOEMmkbiL6oSZCcqj9Fu7+0Ds8wvMGMhvSc=;
+        b=jGgTK1R+khC/dG/pw6AaSaJ0qcsMcBQAwzKCC5JtR+bD32UbreFdgpHr7oMYQtIyvq
+         TjfCL+fzbMtJWYgOJb0DkwkrIpaxiWXNO7wZFmiWFgfk4qaWx2GsoF0bnyV8Wsicvoiq
+         F5I4eIXRhZfCbyzjmK+uYYSMVkcofbgleUDW+R/wkEFAFXz1R98gobmGJLr+PotHZAoA
+         YEwHPM0ottycgO2eDZTHV8EVvcwJYB4IeH7zHnvsEPRRgibQ6zPPnvOVYpVvVXjisFyJ
+         K4aGhBT16xh7bvPckWOnYAai4ebj/M83gpHTTQUCEEDJrWKU+KSTwjDmSRaaxctLPDDI
+         YAGg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1776812391; x=1777417191; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1776812911; x=1777417711; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=EUyujIAApUVAkDEH0uSDEg04wL17CBrnWRgJpkrkKwA=;
-        b=kJnEIdXOSNh5El6j8Cqf8cZQDH0EsSIFvXhpT1bMNNqRKxB73DY+SOpdx33agney4Q
-         qbxoyNQ+YyyZcBloPQN2hF2nzIqGMEVRqnD3jU5VaqYIolVbKrtYj4ILdfy1sgqxanTz
-         mX91nn/T6xuR7hD2PLwpr4qxKm5TpEZyFZ8LuTnezZBy/AWm4ASgMfSNDBoU1sZw+t+k
-         lR3MqLoT4OwFn2fCd3qnH4kxQiGx9+BfbRng0oiknMFjiJ3NATFyd1K496VpVMp4W0a0
-         eIpB2UHFW+sjPdMmsIEwNa+NeMtj8Vkh3ZllKJ7ChtjxM0XK5F1EyeRr4X3m72rJQVp5
-         O1yg==
+        bh=TR8FfcO11p7vVa6RPRWvJwht4gBSEvxOdxbVlJmTMFY=;
+        b=f8ISN6myN0HouaGClnTTEmtYdTHVXREC81ZsCdvw8OzsjdvhMDCIl/pHWuaWRc6yj7
+         s8+QDhNUEOIRUrGGJPo4iXX+fXbI8ejZuYp6PAdrgZ8SCp/e8VyTkRt3kOChA0T7Ri3n
+         JaJ4ay+KYNopVNKSHQxonn+n1eNDEjkSMxuvfy1eaDoWgO0tOwIegQO5Hs+UTIznTXMZ
+         28iTByKLIpXNg/sfsHODU1wmZbBgJUfNVtH2u3+nU9aFevpzW1MEO6M+O1pJCAv7BqUh
+         gkn4OBsbu30PqRPufkTbVSc5qXpWAkm6E3cZU6Gc3LcpcNS2EwMJHtnllscyw9Uwe4GL
+         kr8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776812391; x=1777417191;
+        d=1e100.net; s=20251104; t=1776812911; x=1777417711;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=EUyujIAApUVAkDEH0uSDEg04wL17CBrnWRgJpkrkKwA=;
-        b=ADJRy5Zw/jbJxkk9v2gvplhXNSFfo9v+AtEQFkB9/nbjLyzKh3DwlJrNPwYx0ReT9g
-         EcfyiF+1j+a3Vjf6ZiCDrHUsO//y7hOdPOB9GUZ+gIFeiVyXzfRq5CrgdzHKBYZw7UBe
-         E5HsMtFzT5rnBUv8ttrPxMxzdCQFH6031IUZTfkSZ5fsKHNj8l5ov74b4qfBAtCLt8c+
-         jCGghJlaXabxFi34ZCr282Z6Q/HZykRV44pa4ibGS2eHjAlRfySa4PN1aXG9FLGOJeea
-         bfsHP2ZHg+oGxo6aTX8ockSJf+li8ynRc+xkhwomPQWu7f4Al5rRq/D5XeTMsoyKbtkJ
-         Ao/Q==
-X-Forwarded-Encrypted: i=1; AFNElJ/DjjvF0cQ9IDgxOitXz/Rl1sPtXKqe3CV06tZ3TQm2WIOkFDDKAQ9aot0gz8AZO9eL78e0r6w+Hc0LZf4qrk0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzAmGqu4ppAoLYNRBiQWo/bReUHllROjgZVt5FY3FsGamLwk6uT
-	z3GTgrko0/kWAN86I+M+G7jc6oKmSGdArjkCXn+um1vDZk+h5Fsjl9g7Upg+44Tz4pa1HTkD4xG
-	orUkLVTfvoH16jGVqqyiZO/kIi2otZL6FdiEXKJIn
-X-Gm-Gg: AeBDietlWIeqMW7glNDbjdKwRT6ty4Q9d9d8dgRS4H15SQaJA4LSOIX4/DsT6a09/cH
-	Zx6mwlHIiD4xIMFwcqA7ueNfAeB3ZbX56TFrSL6LyPqYgr7848K+ip/tJwwK8Uuhx/n1I4eppHh
-	H1emVCkyb5UTZ4cPYPqmbdwBoXQjtNS+igpgc5oEbg74+ZADh4BuWR/vDwY+zwsRfQoNEIGttZn
-	J0pp7WG3SSHRisdf+taxqrUB0EbCSoJ/+QGW8mLp/cXkyyWXi9BLKREJvRRB2EnHUhNPUS3tSA5
-	kZD34ODaqW7e2smTRfmctj/NExvaVmIp6ViYava/i8tH86ep5Bi6md2oeCDBAJfuldLVXz0UD1C
-	krTsAOGjSQcBc0U14gKGDen6SCN+x1cnHRQqe/gASAJJMBTOk4euXV8OMk/aqlkYEkY8wLGC5fQ
-	==
-X-Received: by 2002:a05:7022:60c:b0:12a:713b:8958 with SMTP id
- a92af1059eb24-12c73f7596bmr10068832c88.10.1776812390229; Tue, 21 Apr 2026
- 15:59:50 -0700 (PDT)
+        bh=TR8FfcO11p7vVa6RPRWvJwht4gBSEvxOdxbVlJmTMFY=;
+        b=PlLO5ZjPka3WiWmnbigdCtsCJ2z9LFVpVESeL4XozIVIVZl8TB4jEMlNPZJJpgozDG
+         qtW1EKk/beTjhPcVQI9UUM/D/sJrBjlktRkImY4zzRzs8q7OM0x8MyLU/rUKho+9Yu1J
+         Wyu+CtZ/5ezHI1F4GdasAij54t5POEqMS+UpKJTrifeb+CKrfrG9R8VxOv9C3uzycC5f
+         bttdQhzoGrtgM23nweRFuB9/mjZKQMJ5G7Ghtla5i1cTAseePvVbTS+Hvdq66kQASIRJ
+         auYscU3fygSgTugCJ4BuNhBEOtTK56mtbDqlxI6OmwjCqLWGOSQYPYLuFd9l7HyctbdL
+         P1VQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+dfd4Ftu4e2UB7IaEo1FLOE+M/5LUQJCOweX8GHOwP94CV3P0S2bJNxEEJcmyMyTZaFfndsBB6gjBcU1Tir7E=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyskV4b7SMD5eP6Y4CgwKWaq+t3FvErikuZalrYhaORYMaNrUvG
+	T6RsiZAEF7shptPaMfP1sM4JagYg4xpemQyvuU6Ic0BWGzF1O6RN2mFkUb4bZyqxP39MvXfT37l
+	FoW+F7I3yhbrAtiJaJRY5Osnuu16zk1I=
+X-Gm-Gg: AeBDiesbcgy2/tczL7K+uK8eebZunC4Hc38n9Cz3yyo9svIIw9plz3k2ePGiCNyIgls
+	NRibcX9pGGE4UnkjrSCeNoHY1PtkegamoeCUGx9BIPNK4KA8GCY7K+22hCNdtxlYmbpVLQk3abm
+	n0450JkI2lGXTQ7ywPxgQKCVWTTWKKwN63q2x7yj44nLhUJC5EEF1OIFDxso36dXvObZ0mpxDmP
+	g32jaY+8+ptRc6wlzQfo1/lIZO/JLmJNBObDADxXG4ov2wQ9aKruPrFhXw8b/BNJpGQh4QgAlbw
+	ISNYE0oVNZkLe63QmMkZCl86Q0N+mID+XfiseeKHwa22yl1zF8TS4611zV1361+YAiBwCdoPxuW
+	TtUz483X7VmsDZaukemvlar5KePuJOeeKpRgC
+X-Received: by 2002:a05:600c:a314:b0:48a:58aa:523 with SMTP id
+ 5b1f17b1804b1-48a58aa059emr27059935e9.31.1776812911066; Tue, 21 Apr 2026
+ 16:08:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260421123106.142299-1-jt26wzz@gmail.com> <20260421123106.142299-3-jt26wzz@gmail.com>
-In-Reply-To: <20260421123106.142299-3-jt26wzz@gmail.com>
-From: Kuniyuki Iwashima <kuniyu@google.com>
-Date: Tue, 21 Apr 2026 15:59:39 -0700
-X-Gm-Features: AQROBzD2IEw4ypAL697CZLXFoPfbIAflmemsvJ5os_4y8LuiwAgFAJA40Z9E2X0
-Message-ID: <CAAVpQUDv28sNCYdo6oH25FNKnddZibwrmxMUf4GqgS4fRA8+og@mail.gmail.com>
-Subject: Re: [PATCH net v3 2/2] selftests/bpf: check epoll readiness during
- reuseport migration
-To: Zhenzhong Wu <jt26wzz@gmail.com>
-Cc: netdev@vger.kernel.org, edumazet@google.com, ncardwell@google.com, 
-	davem@davemloft.net, dsahern@kernel.org, kuba@kernel.org, pabeni@redhat.com, 
-	horms@kernel.org, shuah@kernel.org, tamird@kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260311-bpf-auditd-send-message-v1-0-10a62db5c92f@cloudflare.com>
+ <aefnIw1Tx_2r5nkS@CMGLRV3> <CAADnVQJQxa+fHM9X8COc60ZMcxF0DMhWbtArg_gPynpbbg55TQ@mail.gmail.com>
+ <CAHC9VhSo-M1wK2s2P0B+2F0pJqNguW7Kj-g63anp1xCMSBLa6Q@mail.gmail.com>
+ <CAADnVQL33TOWFmxcWod3BCgmMXSQ=cEp6NCcxgQaJL0C7+Z9zA@mail.gmail.com> <CAHC9VhSKvC+p5j5Pe1YKB-=vRkRA81K3kp97Q6-H5K+kvYa0AQ@mail.gmail.com>
+In-Reply-To: <CAHC9VhSKvC+p5j5Pe1YKB-=vRkRA81K3kp97Q6-H5K+kvYa0AQ@mail.gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Tue, 21 Apr 2026 16:08:19 -0700
+X-Gm-Features: AQROBzCAY_2lHhQ1prWwPyLIfmaKNZadZdFGYpecw-J2REDrg4GAqC8BWUzx63I
+Message-ID: <CAADnVQJBOk8w89kj95M3GH-eFdC7njZt=zMEU=skB-DTb3k-bw@mail.gmail.com>
+Subject: Re: [PATCH RFC bpf-next 0/4] audit: Expose audit subsystem to BPF LSM
+ programs via BPF kfuncs
+To: Paul Moore <paul@paul-moore.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Frederick Lawler <fred@cloudflare.com>, 
+	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, Eric Paris <eparis@redhat.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+	LKML <linux-kernel@vger.kernel.org>, 
+	LSM List <linux-security-module@vger.kernel.org>, audit@vger.kernel.org, 
+	bpf <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, kernel-team <kernel-team@cloudflare.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 21, 2026 at 5:31=E2=80=AFAM Zhenzhong Wu <jt26wzz@gmail.com> wr=
+On Tue, Apr 21, 2026 at 3:50=E2=80=AFPM Paul Moore <paul@paul-moore.com> wr=
 ote:
 >
-> Inside migrate_dance(), add epoll checks around shutdown() to
-> verify that the target listener is not ready before shutdown()
-> and becomes ready immediately after shutdown() triggers migration.
+> On Tue, Apr 21, 2026 at 6:15=E2=80=AFPM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> > On Tue, Apr 21, 2026 at 3:10=E2=80=AFPM Paul Moore <paul@paul-moore.com=
+> wrote:
+> > >
+> > > > It's still Nack.
+> > >
+> > > Based solely on the diffstat and a quick look, this appears to be an
+> > > LSM patchset, not necessarily a BPF patchset; yes, there are kfuncs,
+> > > but they are LSM/audit kfuncs and not core BPF functionality.
+> > > Regardless, I want to see how the LSS presentation is received before
+> > > worrying about this too much, but your NACK has been noted.
+> >
+> > Paul,
+> >
+> > told you countless times LSM cannot touch BPF bits without
+> > explicit Ack.
 >
-> Cover TCP_ESTABLISHED and TCP_SYN_RECV. Exclude TCP_NEW_SYN_RECV
-> as it depends on later handshake completion.
+> Based on a quick glance it doesn't appear that Fred's patches touch
+> BPF bits, they simply supply kfuncs for users to use in their BPF
+> programs.
 >
-> Suggested-by: Kuniyuki Iwashima <kuniyu@google.com>
-> Signed-off-by: Zhenzhong Wu <jt26wzz@gmail.com>
-> ---
->  .../bpf/prog_tests/migrate_reuseport.c        | 46 ++++++++++++++++---
->  1 file changed, 40 insertions(+), 6 deletions(-)
+> > So, no, you cannot add bpf kfuncs in random places in the kernel
 >
-> diff --git a/tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c b=
-/tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c
-> index 653b0a20f..6180a79a7 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c
-> @@ -7,24 +7,29 @@
->   *   3. call listen() for 1 server socket. (migration target)
->   *   4. update a map to migrate all child sockets
->   *        to the last server socket (migrate_map[cookie] =3D 4)
-> - *   5. call shutdown() for first 4 server sockets
-> + *   5. for TCP_ESTABLISHED and TCP_SYN_RECV cases, verify via epoll
-> + *        that the last server socket is not ready before migration.
-> + *   6. call shutdown() for first 4 server sockets
->   *        and migrate the requests in the accept queue
->   *        to the last server socket.
-> - *   6. call listen() for the second server socket.
-> - *   7. call shutdown() for the last server
-> + *   7. for TCP_ESTABLISHED and TCP_SYN_RECV cases, verify via epoll
-> + *        that the last server socket is ready after migration.
-> + *   8. call listen() for the second server socket.
-> + *   9. call shutdown() for the last server
->   *        and migrate the requests in the accept queue
->   *        to the second server socket.
-> - *   8. call listen() for the last server.
-> - *   9. call shutdown() for the second server
-> + *  10. call listen() for the last server.
-> + *  11. call shutdown() for the second server
->   *        and migrate the requests in the accept queue
->   *        to the last server socket.
-> - *  10. call accept() for the last server socket.
-> + *  12. call accept() for the last server socket.
->   *
->   * Author: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
->   */
->
->  #include <bpf/bpf.h>
->  #include <bpf/libbpf.h>
-> +#include <sys/epoll.h>
->
->  #include "test_progs.h"
->  #include "test_migrate_reuseport.skel.h"
-> @@ -350,8 +355,28 @@ static int update_maps(struct migrate_reuseport_test=
-_case *test_case,
->
->  static int migrate_dance(struct migrate_reuseport_test_case *test_case)
->  {
-> +       struct epoll_event ev =3D {
-> +               .events =3D EPOLLIN,
-> +       };
-> +       int epoll =3D -1, nfds;
->         int i, err;
->
-> +       if (test_case->state !=3D BPF_TCP_NEW_SYN_RECV) {
-> +               epoll =3D epoll_create1(0);
-> +               if (!ASSERT_NEQ(epoll, -1, "epoll_create1"))
-> +                       return -1;
-> +
-> +               ev.data.fd =3D test_case->servers[MIGRATED_TO];
-> +               if (!ASSERT_OK(epoll_ctl(epoll, EPOLL_CTL_ADD,
-> +                                        test_case->servers[MIGRATED_TO],=
- &ev),
-> +                              "epoll_ctl"))
-> +                       goto close_epoll;
-> +
-> +               nfds =3D epoll_wait(epoll, &ev, 1, 0);
-> +               if (!ASSERT_EQ(nfds, 0, "epoll_wait 1"))
-> +                       goto close_epoll;
-> +       }
-> +
->         /* Migrate TCP_ESTABLISHED and TCP_SYN_RECV requests
->          * to the last listener based on eBPF.
->          */
+> I see plenty of places outside of kernel/bpf that define kfuncs.
 
-Sorry I forgot to update return -1 to goto close_epoll
-when shutdown() fails.
+We discussed this already.
+All those places were explicitly acked by BPF maintainers.
 
-Otherwise looks good.
-
-Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
-
-
-> @@ -365,6 +390,15 @@ static int migrate_dance(struct migrate_reuseport_te=
-st_case *test_case)
->         if (test_case->state =3D=3D BPF_TCP_NEW_SYN_RECV)
->                 return 0;
->
-> +       nfds =3D epoll_wait(epoll, &ev, 1, 0);
-> +       if (!ASSERT_EQ(nfds, 1, "epoll_wait 2")) {
-> +close_epoll:
-> +               close(epoll);
-> +               return -1;
-> +       }
-> +
-> +       close(epoll);
-> +
->         /* Note that we use the second listener instead of the
->          * first one here.
->          *
-> --
-> 2.43.0
->
+Every time somebody adds a kfunc it breaks safety, because
+people don't read or don't understand Documentation/bpf/kfuncs.rst.
+kfuncs are not export_symbol.
+Object ownership model needs to be thought through.
+Calling context needs to be analyzed and so on.
+Just because something "works for me" it doesn't mean
+that it's safe.
