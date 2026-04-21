@@ -1,108 +1,173 @@
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0139A2BFC60
-	for <linux-kselftest@vger.kernel.org>; Tue, 21 Apr 2026 17:38:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9E9131E844
+	for <linux-kselftest@vger.kernel.org>; Tue, 21 Apr 2026 17:41:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.178
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776793115; cv=pass; b=lr8E3p8Hzm2psB16JlIIKxquxrq/QEtWxSJ07H5K0BWqa5qD+aJah4RJ6CPSIebQDegHkYBN6dT1iFtKZqaD+5S+fYslUpe5bdzuBrwnSUmGpGUTNl7tBc4ut5y+3eadD+ualHWTz5jchsFlM2LR/Kytg34kKsYBQRi2kFHjK98=
+	t=1776793262; cv=pass; b=k3Hul6sJdyh63FpQDu9082lVA7pugUfdjXySQrV9G9jL9uZvGYtsWpk94VNW9BzajjpUzTfBgUphwy1aE397UYfKSQp7Zb23dlMZlkokVC9vXeNVBSn6Kjcbp+vXt5VQLk0OrDtpmy5J4jLXiV5Afp3c1bLA2VdsxaDzm3rAG3o=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776793115; c=relaxed/simple;
-	bh=SZnZR6xff9RM5goVzYDgSWzr9sSSzdIU3mFZLeQjaZI=;
+	s=arc-20240116; t=1776793262; c=relaxed/simple;
+	bh=tCH8EMRzy1X9IMXq6R2TSgftHF1nceCRK1je/4RFR+0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Kko4sYWSWCWMXxn9v8arAlnENNqgfy58HjIu/A8FXBf3pKken5/PGSSh4INrNRk9Nv5wThrVxwlMfbzKqq3AN1LlEqyyPk7kC2PJyRKds0VMNLFx2BeNS/JDelhcs8V89qrQGSUeGSeLLTgQpGNNrcHkvbOfUtDGloPE25+9+0s=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YD2oR0BP; arc=pass smtp.client-ip=209.85.218.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=App1krrbtv9zKl9vRQr36u8bz9Fw7kU9Bl7tgIEIkH9x8vjEoKGZKvtEwnPfGTL6Y1VIho4rKm+kSQVGzyB0JJntHSD4ZyeooQe4MZ2nAHLNkMQeEzxdYlenky0IX9aXRDoipQrId4cWJfAa4kI7ytiKqwiWpdGXH4dudDHa10Q=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fbjgHHau; arc=pass smtp.client-ip=209.85.208.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YD2oR0BP"
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-ba922426c5cso286958366b.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Apr 2026 10:38:33 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776793112; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fbjgHHau"
+Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-38dd9f11a09so42186351fa.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Apr 2026 10:41:00 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776793259; cv=none;
         d=google.com; s=arc-20240605;
-        b=PEvlFLKUeYaZ4esdiNDSEQCAXzk5/gfa/P9Pwh1rjZRSKse9USlZ/vSXQHv0/2BNFU
-         dTg+u7BgpV+JrhKU3J5upy9DKEf6MRSbYX3mCFcwV1yOqiW75wfdyb+KFntKImsCRGWr
-         Tau6huW+CAPolGlXGZJhV2Tdit9/wRoEQs0fPDMgRee0aqMWNBGFOsXPKyAmJdOSVC/C
-         bPw1x/4fo5dhQI6N/4di8mQsUevLMsnnFHCj42nRWvfIOVRIYvDm4nV1tWt/09ZO9RFc
-         79KOFpyKacWpg1vL08oS3aOKbSni8mwNvm3wuUbkEmeVq/Yy74lMNwAWTvwgzns7cqke
-         usRQ==
+        b=IdW2Iatnvv2Za70/skLoSQ9NZZl4sRgTy+GIaQXjC4YEt5ArkdPpVpfWfkLOxhNCO9
+         8eLBwk6wfLqPWF4DQnd8JxZsDbhqaRSh0S5apx71UYH2KbaF27xoYzbCyTLRuDr2p0nO
+         HIcsbY+HX14JYGWbMcI20dog6NCoNFtTHkT8vEB+mKIwiGehinVkNSYME5swhqopPshb
+         +3z3nBsAU15ix/lUmApXE9nYhlr3j6Bmt+momC79v5TznVnyoON1jbYQg9obQDWcUXMC
+         bIIIiJU+27oSgPm2TY62F2gBEPUl27xxxx1mCX3Z/kqLjpUPim4QrCaEDvetRzYDgXv0
+         Rt5Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=SZnZR6xff9RM5goVzYDgSWzr9sSSzdIU3mFZLeQjaZI=;
-        fh=09JxdbyoBbPJWx1yU9QNZ4eJ94VQoy1/26KQO7XWOTQ=;
-        b=MrhP7ViTsJI9Nm6fKORPmnEH+QGDg1HzbovnB+53kJBXrho1KGKsXD5dqeTq7aazzv
-         NJBiSOMKH6gNjMzQSkNbzaM96feaZtgEAqdW/NgSnA+jtIcDr4Mw7UeJqxsnJNx8AQZg
-         JsXP1POg2V6yI59M3krpClcRbrijikrJSHqe8PrQSZ5BZuGoXDDfukgIIUh9YjC1/+Br
-         SVZJzayPJRnW7lZNBJiH+OiA7TDqrutkiKHl3EdJkZQEwNDK9b19wnZrqaUofxVA4Ghf
-         5fxJQj5gfPwbnIQtOVLiQNJrtOQaWG8ojGvnkUGITKQsAoiJwEPyc6ZvYndMe7GdEdah
-         cu+Q==;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=gAM3zLbl9RAB5ix2RgDFnveQg42iFe43IZ/4vSwL0po=;
+        fh=GkLRT4LhoQZbgby62ycTmsoUampkodme8DT9eYxI9JA=;
+        b=g1CG9mMGrRSbuTb/2UVL+LVuc9GOXa3vdrV1VTmJaJXmoKCg653jl/9n2njte6CyN+
+         aIciIq8g/7WIsFKq44AS9kakUtonNtbgp5dG8jGpVsjh9myBOALP5KbQ2U6ji2IKtjyf
+         JxPs29yoUEPl3fjFWWVH4/AQXf5VhbxLEAFRGIoSQc3RnTTffk4lJk2TH2vz1hNsHnIS
+         vqNaDU+ZJ+Cn/OVlAXkt/1416shrgXqdAyI19ubo7HogVloUrko80kDecyU+elODjwA0
+         rGcDLbYLFJUdcxi7+6nlHOxNpuo47QZEOW/9p5Pxui6Efj3LQCEovNYmDk9TxFMtCzsn
+         gT3A==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776793112; x=1777397912; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=SZnZR6xff9RM5goVzYDgSWzr9sSSzdIU3mFZLeQjaZI=;
-        b=YD2oR0BPi6wk/dUg5L5MjZqsxRdBR95YFbyOgwGU0x8t2bMOAPRSsgyRcn/PsBRx9N
-         xjFIefLzYhrQTsYrEUJjRp3/c1m2Wlu0NtH5H9ou+x7zo0TPsmIH8Ef66A4dpdAblusO
-         MI5CWEOgDL98lH5nPGmUiIaiuslUwbR/+vRt/advRCC5ePcTfr0gC2DUfWbVMn6dJZ7a
-         6RMLehJ24NIMCgeN3Vgn/VfrCL3txIUao61XclfiAZzK3QPMZGXPm8anyYf+L4/+BA5A
-         991QzS5RzN+VjZkKyOvW/iRfA9e6IcwAqali6bVkfJ1ZngLtCPwilw6Wi4ebaDtupFOA
-         duXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776793112; x=1777397912;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20251104; t=1776793259; x=1777398059; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=SZnZR6xff9RM5goVzYDgSWzr9sSSzdIU3mFZLeQjaZI=;
-        b=jPilRtqxPkbDsqEGCvKH2lccqrOGefBlv6myBPJB4AASlfgYDK1Sh3UMLm2vTtRhXt
-         aa2VGbOxzn9+JwZ/YaPsxzmgifiMjHF66iictYH/bYDnwXnsoBeRBag0meK9zH837fPl
-         amo3su9iBdXVoQKB3fhnFTMdASLovrOo7Nd8dp4vl46qqSswmq8No07lDL0rV+uG0mjP
-         TjafsNykN09CYoogZZVarSLo++jYkgU9oArUbU3cyAxHGovVPwJ4PB1eVUgzqtZ6Pj/V
-         0jg0vMCTiM2hDy1Kj8irRjva4KKeJxRRejlSixf+VIibc3zMFxMti1oP2TjHRfGuOOrP
-         ZYvg==
-X-Forwarded-Encrypted: i=1; AFNElJ+S69v6xvkQUWBuIBui0T/kDZvgWhNDgeVvhRpU1pQgz+aJm7Eim/zRykTAWkDasPRsQpfmZXyBDa80LCkDee4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxBWncQtPqRip57gqNodjQPX+kpkFEpJyCSL6YpNxnoARhTxLdG
-	WzwnsbkWvG7IQtzI0UZTf5WEM8aaVbAO4tN7wxf/I5fjwOsg1PG9nJ43QWAPMfQrvMBLxsje+Xw
-	sRGCUhvMMU5BXd1w/X3IOaFnm9ZjTdvw=
-X-Gm-Gg: AeBDiet3Dm2Ij5R2RAAQPs0ua91qwznt5bvdy0FAyxp7Fx9jgbzeYswFfLKI6FpZ7LN
-	Ud8dr8RN5gMuaTOmYPDCOB8y4P6PER+krFARaFXAnMiNThM9wvpMVAtjA+Isa9oVjLbnc82udSO
-	0A3/AsB+4LiPE3kuwf63VhdpzsObP5ilbPFX+VA/5ArmZCPeypfUC9fk0yPu1+Vcg1w8C2oxAK1
-	sb348FlhCcXUjBe46JFerKcwnPfygX2FHr0R/Pyn4kcEgcslWUFXbHyCSWLgCG8/vemdZPaNDjM
-	mSdA81itaY1eIFIU2GxQOTUs0OINQUedMoVHy3FQOou3oMod
-X-Received: by 2002:a17:907:3f8a:b0:ba7:b198:7d35 with SMTP id
- a640c23a62f3a-ba7b198818dmr503855866b.19.1776793112143; Tue, 21 Apr 2026
- 10:38:32 -0700 (PDT)
+        bh=gAM3zLbl9RAB5ix2RgDFnveQg42iFe43IZ/4vSwL0po=;
+        b=fbjgHHausqRnAQv/Gm0WB1KYT5Ef+TjO137SVJmjln5wwrHMvzEM38YMAuW7lI2DTb
+         NmEcU9H8n+70Xuk4H9OKhUBfjM+y8aqzI61ep7qrPQsvQuLY4PBSJrvyNi54ZOD0lQEb
+         hc9TLUSu55ru6RHCT9SmkNPdZUWzQ0RwesPUupmg+Vkq0H44zIrr6UN1iMayAsCbIDYP
+         w2pI6PeAKZlgHOp1DYAQD7SK+YIsZxubN5NKtf+JS68fS9biWnuos4dDvBonRAl2iC0d
+         1nUIA2R+ep93u2n9Fq+p91C1rVCx8xwQHIcIpKSIVBGgn85bcpA+5RwGL9/kDfPaelwF
+         fr4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776793259; x=1777398059;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=gAM3zLbl9RAB5ix2RgDFnveQg42iFe43IZ/4vSwL0po=;
+        b=dR6XLnK8G0aBuBPDpYnGYkZFhI79DLyNrQCv9e9qbshW7IgdHCIPzN2OLh3X325RAi
+         F3r/fGN7XoQJ3Ari4ciJkDBaVumFEHLXWawPK80Jczg9vpl03Za0ELLT5hOo0ZWxchCl
+         m9TyS/duSpf+OAcg54KESeZWx7uzhuzJhfuR1l9dPCibVModcDgEV3kAjs31kj3Mp8CR
+         zFICNPxuZYyGcnPOzX6wYEN2WIWEz+q9oqJL7NzD1nw8jRYz31KRB2N8xCZC39BmPERa
+         s3kcJncC+8i7yaGgkUZGeVD1kW8w+07HjUw/W2zX2UYWrGoGxG5ZWP/U0/I6gWDJhdCy
+         i8lg==
+X-Forwarded-Encrypted: i=1; AFNElJ9RYtA+YMHezO8UBzExvFG57D1tStiD13hpY9FUtgUFNIoqthcJpaHySIUi9b+QYxz8O+CbpWt4oiSFZyMhcXA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxpYB0VatplU7aZfxWCBhEJrx9PD0pu0y1b/Z+fKQv/XmFLntYn
+	nCm/XPHUSoSNdu9SpHzYpWv5ALrPAD4/zcQkepLkwes0+YuwQtbMr491J9xG6OENl13stJLpqwa
+	nsNCDrhEHk3NO9dlrc94vvG3yrv6bc/Pky3ZE2fgY
+X-Gm-Gg: AeBDiesu1Zzvnkgv6B2ig6MrirwInUfHYz+3SajPXVO/9LvCAzzmyfv4Dc+FUAWApoM
+	e/CLRM5S72zJfrANB0r7WOs36j0hWF9za7+/SzPshvQBFy2iX15V+uonakDF5vil2Lr2pdw1MOI
+	RvTrKYC/+OEDrWmVz2+UrXQ/rP/meAmtdBpM/lyYHGFHGCxVSI/N5FfdE2OTftjhDPAVVXbFpMx
+	4WB3tmm/MR0udSiJFyGrhQRrC0KWKBegJwGvwGZRxloT1yy1v2gvReSrbI0oMOmAAmloS5JUJ0u
+	Hyy8OkgygbzL0SJptkVI/Ok7sxAIXg==
+X-Received: by 2002:a2e:a594:0:b0:38d:ed62:f1d5 with SMTP id
+ 38308e7fff4ca-38ec7aa4a03mr63977601fa.17.1776793258292; Tue, 21 Apr 2026
+ 10:40:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260203063357.14320-1-linmag7@gmail.com> <202602041817.3967F048D@keescook>
- <CA+=Fv5S=XxDyNFdqhR3p_wEPwGEpjfE+Rqk1h1JJhactWFib_Q@mail.gmail.com>
- <CA+=Fv5SZK0eaT5Y_a-eTdZacFEcp36rF1YE=tyooDuVpZW=uOw@mail.gmail.com> <202604210947.C4D4020@keescook>
-In-Reply-To: <202604210947.C4D4020@keescook>
-From: Magnus Lindholm <linmag7@gmail.com>
-Date: Tue, 21 Apr 2026 19:38:20 +0200
-X-Gm-Features: AQROBzD_czgDbhMDDFHAMaPvE7silGhZt6Bx5-z7E6I_tlnN5wHuhvwGMOA776c
-Message-ID: <CA+=Fv5R6+aKQi_zmQjAbMquEZgsm46j9y68Q4MNijT206BYHXg@mail.gmail.com>
-Subject: Re: [PATCH] selftests/seccomp: add Alpha support to seccomp_bpf
-To: Kees Cook <kees@kernel.org>
-Cc: luto@amacapital.net, wad@chromium.org, shuah@kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-alpha@vger.kernel.org, glaubitz@physik.fu-berlin.de
+References: <20260323235817.1960573-1-dmatlack@google.com> <20260323235817.1960573-8-dmatlack@google.com>
+In-Reply-To: <20260323235817.1960573-8-dmatlack@google.com>
+From: David Matlack <dmatlack@google.com>
+Date: Tue, 21 Apr 2026 10:40:29 -0700
+X-Gm-Features: AQROBzAxQqecIHMlVLo5_fKuOniGGCbgFfk1LcXxhbCrQbMNTrTkqomhARN-2eM
+Message-ID: <CALzav=ehpWA=XchL+XLZuaYfYmBTPNWDYt1W3LFY5-6+US4E7w@mail.gmail.com>
+Subject: Re: [PATCH v3 07/24] vfio/pci: Preserve vfio-pci device files across
+ Live Update
+To: Alex Williamson <alex@shazbot.org>, Bjorn Helgaas <bhelgaas@google.com>
+Cc: Adithya Jayachandran <ajayachandra@nvidia.com>, Alexander Graf <graf@amazon.com>, 
+	Alex Mastro <amastro@fb.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Ankit Agrawal <ankita@nvidia.com>, Arnd Bergmann <arnd@arndb.de>, Askar Safin <safinaskar@gmail.com>, 
+	"Borislav Petkov (AMD)" <bp@alien8.de>, Chris Li <chrisl@kernel.org>, Dapeng Mi <dapeng1.mi@linux.intel.com>, 
+	David Rientjes <rientjes@google.com>, Feng Tang <feng.tang@linux.alibaba.com>, 
+	Jacob Pan <jacob.pan@linux.microsoft.com>, Jason Gunthorpe <jgg@nvidia.com>, 
+	Jason Gunthorpe <jgg@ziepe.ca>, Jonathan Corbet <corbet@lwn.net>, Josh Hilke <jrhilke@google.com>, 
+	Kees Cook <kees@kernel.org>, Kevin Tian <kevin.tian@intel.com>, kexec@lists.infradead.org, 
+	kvm@vger.kernel.org, Leon Romanovsky <leon@kernel.org>, Leon Romanovsky <leonro@nvidia.com>, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
+	linux-pci@vger.kernel.org, Li RongQing <lirongqing@baidu.com>, 
+	Lukas Wunner <lukas@wunner.de>, Marco Elver <elver@google.com>, 
+	=?UTF-8?Q?Micha=C5=82_Winiarski?= <michal.winiarski@intel.com>, 
+	Mike Rapoport <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>, 
+	Pasha Tatashin <pasha.tatashin@soleen.com>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>, 
+	"Peter Zijlstra (Intel)" <peterz@infradead.org>, Pranjal Shrivastava <praan@google.com>, 
+	Pratyush Yadav <pratyush@kernel.org>, Raghavendra Rao Ananta <rananta@google.com>, 
+	Randy Dunlap <rdunlap@infradead.org>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
+	Saeed Mahameed <saeedm@nvidia.com>, Samiullah Khawaja <skhawaja@google.com>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Vipin Sharma <vipinsh@google.com>, 
+	Vivek Kasireddy <vivek.kasireddy@intel.com>, William Tu <witu@nvidia.com>, Yi Liu <yi.l.liu@intel.com>, 
+	Zhu Yanjun <yanjun.zhu@linux.dev>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi
+On Mon, Mar 23, 2026 at 4:58=E2=80=AFPM David Matlack <dmatlack@google.com>=
+ wrote:
 
-> It looks like the selftest changes still need to be landed?
->
+> +static int vfio_pci_liveupdate_freeze(struct liveupdate_file_op_args *ar=
+gs)
+> +{
+> +       struct vfio_device *device =3D vfio_device_from_file(args->file);
+> +       struct vfio_pci_core_device *vdev;
+> +       struct pci_dev *pdev;
+> +       int ret;
+> +
+> +       vdev =3D container_of(device, struct vfio_pci_core_device, vdev);
+> +       pdev =3D vdev->pdev;
+> +
+> +       guard(mutex)(&device->dev_set->lock);
+> +
+> +       /*
+> +        * Userspace must disable interrupts on the device prior to freez=
+e so
+> +        * that the device does not send any interrupts until new interru=
+pt
+> +        * handlers have been established by the next kernel.
+> +        */
+> +       if (vdev->irq_type !=3D VFIO_PCI_NUM_IRQS) {
+> +               pci_err(pdev, "Freeze failed! Interrupts are still enable=
+d.\n");
+> +               return -EINVAL;
+> +       }
+> +
+> +       ret =3D pci_load_saved_state(pdev, vdev->pci_saved_state);
+> +       if (ret)
+> +               return ret;
+> +
+> +       vfio_pci_core_try_reset(vdev);
 
-Yeah, I took the SECCOMP support patch through my tree during this merge window,
-I was thinking that the patch for selftest would go through your tree?
+I think a call to pci_clear_master() is needed here to so the device
+stops issuing memory transactions while VFIO is trying to resetting
+it. Otherwise I see these timeouts when running
+vfio_pci_liveupdate_kexec_test with Intel DSA: "timed out waiting for
+pending transaction; performing function level reset anyway".
 
-Regards
+Sashiko also wondered if pci_clear_master() is needed to ensure that
+the device has bus mastering disabled during the kexec but I don't
+think that is actually an issue. vfio_pci_core_enable() makes sure
+that vdev->pci_saved_state has bus mastering disabled, so
+pci_restore_state() below here should guaranteed it is clear during
+kexec.
 
-Magnus
+https://sashiko.dev/#/patchset/20260323235817.1960573-1-dmatlack%40google.c=
+om?part=3D7
+
+> +       pci_restore_state(pdev);
+> +       return 0;
+>  }
