@@ -1,122 +1,196 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88873175A87
-	for <linux-kselftest@vger.kernel.org>; Tue, 21 Apr 2026 08:49:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C3E933F8C2;
+	Tue, 21 Apr 2026 08:50:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776761370; cv=none; b=qcb1gIKmFsshzq3dOUUAdh8rsU3CDCPm2IjD5cm8ZhTRLaLqEcRi3E+s9G+I/4nryQ6rcTe1SI6M19ZbfqO9WeT0IppVS+UuJF5bGG2EdPr95dtWHteMUj9Pmip55vAeYhETNLRm6RjBtdyXpv+S33c7ubzJJrVPcKt3jD8/2iQ=
+	t=1776761405; cv=none; b=lOIGx6YXscpfqI0bLAOdsUshkLoHN1byaSH9z3pjDsR7p+jR1nZT7ZtPM8kLej4RadszpYD9vUwFVFDckxJlRp7tQAYkrsRk8mskvzxJsDa+ewGnqig3/6noJX949bsnLigGsUydoTNxoeR1DlazZJtsGYnSKScchMBVu4B/Coo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776761370; c=relaxed/simple;
-	bh=5JsshEzSWKkHHybeMjzuOi1TJBB5BJquoeXBOVXlaJE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ctlHJPVqE81YnfOy2IwvC8KRLbyWxUaY/qC54+4U2eFz20D3TXQv8fH1/Fb7GTB3FzFW3GYmN+LSZAa3CNBoOxcJe/5teUADk0GLySFyAWedabSdq+3qlrmXrgzCVTOtq9I+dMJGOdHviiQwuN006tcEilEEpqWyan7HoIbApgw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZU3qDPJK; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=GUZBopwT; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1776761405; c=relaxed/simple;
+	bh=HaTQPXvOEJyusO788jGddOJOEFqrCuHs2/f3+g1Am18=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=T2cuOIyS0I6Iac9j8mdgjq7OuJsnpFJaXsWPHLMIACAEkKMsDHbmuPJ3rNSEjRkXRsRtGjfZOvDtP0dBGJH1TdcmWW4GULNUSw1/qwaEWA/SfsIPVgWPA29H50DY7ISjnhdmdO5x7IaND3HFuhtNI4igdfDGoIQ5c3kNwdu3AZE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pR8Z523t; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZU3qDPJK";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="GUZBopwT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1776761367;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=dM9QpEa1glVvOOAGDNSNRupzn3Y+00X/KBAisgsGArQ=;
-	b=ZU3qDPJKq1Ez26tTasFHZvjiaMP3B5FGUzu7PViUIhLAQA7md3EMCdVIDR+hwsXYn2la9f
-	+K4hdb0+m280hx0LUWIgl1FgSBmIeLfDMQXht1x4uDMCPjVPqnHAs80OzN4UxkfhWFsPLO
-	Gg257FMolqSFAuFeUbEGbse1+f6b1cQ=
-Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com
- [209.85.216.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-298-wDbTngNSNLCGefpW_8K3Jg-1; Tue, 21 Apr 2026 04:49:26 -0400
-X-MC-Unique: wDbTngNSNLCGefpW_8K3Jg-1
-X-Mimecast-MFC-AGG-ID: wDbTngNSNLCGefpW_8K3Jg_1776761365
-Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-358e95e81aeso584791a91.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Apr 2026 01:49:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1776761365; x=1777366165; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dM9QpEa1glVvOOAGDNSNRupzn3Y+00X/KBAisgsGArQ=;
-        b=GUZBopwT2Lqz7xmtwyln0Wd/xOyF8y0E2AetOfdfdfE3a/V4x9LHEF8kU6vwff6/rU
-         4HcCYwl3o3cDKthaYV3Nl5ehhZ8tpyvmvg0OsMrGUqq5d9I9I5NFPyeOX6hYU2pyU6cg
-         GnsIC/tXAqK8dn6iPlxIkuSqO/23oSuX/YpnGUmCC4zsuKz0EAsO89ueo4s3QIoowG2h
-         6fK//Q4mu9v3oQKBDDaxJpX8Q/XIJi2Awl7Cb8ZISXdYVZD7bVjQ0gTqZok7lJATJTuD
-         xaphl4Ewmu9PBPHb9Smi7RK0+jGG4TSt2au+KyqA3TjvlOhKsIYcbO2EgF41LNDoYf0C
-         s3dA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776761365; x=1777366165;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dM9QpEa1glVvOOAGDNSNRupzn3Y+00X/KBAisgsGArQ=;
-        b=e7olwgv3s9MBoMnEYSQx+EKlIIVa5qaoCh7mk6BkiNgDfIhcjlK41QmFmy/qUNzZVj
-         N2QGk3EmzDIiGzCAVrJupOtoqEx32p2Iyjwb59wxxknVRXIMDDKcGmlvcf6Dj7MglkJH
-         tc5AI57Xey0e5iOSSB1nwxtt4+dZaLOAw3B5QZdypQQcIqQZp8SkSgpHkMVWIR5EGcMB
-         0r64rxQYZU+EftQyml26WWO0MJtQv4kcKhWTcZqbfutbx18+PgWk+ZyiDD6nIQviWTxE
-         ftZwdBkrrbLOdvkndkLWqciasMgOLVNxxcikvdibxGnKj7ZCrbD1lEXQqxildhZi2d4b
-         gKag==
-X-Forwarded-Encrypted: i=1; AFNElJ86cRDyfFJG8YLvj1Dr4VxPu5dPEzSdavs2zHoOEmyW5t6hjQIPH0xuvIdwWQ7DYRXnZz7ifaDJA5XlY8pW4nc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxM+HavfVD1w6LZOghjTxaDhNkXhSI8b1Pcg6C0oNViBNQMFy1f
-	frFsCfJgls1RfrelEvQCZiYCkjYHByV7VUSjXvwN9xW+Cabhe+4G2sMSwoy6ePYnzhCReofFxeH
-	Elcyi1a9JPb4Y+bf7oqBEddZtHN59B2sATmkk6lbKWe8yRP6OYdZJ83ftjA65IPWKLkLLjw==
-X-Gm-Gg: AeBDiesbz+MOaRApgJaolMJFF4973pNq3yLssZjpxjkeW3Y4LIfc3N27+88EJGnPzRZ
-	ubP9nlK76x+3otyJ91LSc2eL+cZRKZRCoLpoc1t/s/00ElkvhcXvlxvRV3hQVAc6e7pFhNui3MG
-	I65G7SKHc3z8q9BGKJK2YMV8A/FZ4Q178pSzWQhU6cA8WPagv7SyYXj5HnnDMzbL0fBFkZTlf9o
-	wOblQBP324EkWcTO1UKhmmS2SGYMwNgb6cyzOzokKaZTvgvNIYqOjO+ZPSa6UZIb9zegICObRtQ
-	/roSWF2KQ4ZIZFMmRqDxPGhTVggpCVyWhVm78gosHOVxb/2GBI7CtwfRw2EKicz6ttkhf3ggYve
-	68NSQ1iddZg/5myhXHymPFn90V3ps7MlBltXTBfqLPTs5eq7Y1G3re5kOUlBYlWTJnqw=
-X-Received: by 2002:a17:90a:60f:b0:35f:b137:5a63 with SMTP id 98e67ed59e1d1-361403add26mr12204446a91.5.1776761365201;
-        Tue, 21 Apr 2026 01:49:25 -0700 (PDT)
-X-Received: by 2002:a17:90a:60f:b0:35f:b137:5a63 with SMTP id 98e67ed59e1d1-361403add26mr12204426a91.5.1776761364789;
-        Tue, 21 Apr 2026 01:49:24 -0700 (PDT)
-Received: from [192.168.88.32] ([150.228.25.104])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-36141869e88sm12675045a91.1.2026.04.21.01.49.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Apr 2026 01:49:24 -0700 (PDT)
-Message-ID: <d306bbeb-141c-4a44-bcc0-2e2c5d51efd5@redhat.com>
-Date: Tue, 21 Apr 2026 10:49:12 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pR8Z523t"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8BB7C2BCB5;
+	Tue, 21 Apr 2026 08:50:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776761405;
+	bh=HaTQPXvOEJyusO788jGddOJOEFqrCuHs2/f3+g1Am18=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=pR8Z523tl/pYJTgna0TzpDJ97VzUhuDGpfMXUMlZSvJUP88/Uf6wwLL6TZpPWR05u
+	 fD93UYvGK1Z22WuxegmEtlR4ePNUVX6G2eE2ADwU3KwsnRkrgv6KuslEMDj4RRqwRM
+	 14skmyaN7pOCw5z4aXywKO7WdmtNgjWIjQBE7KBokI+Z8nr8LT+UnHedRP0w1FkO7/
+	 PdygA/+aEmRmgNTyEpaQ4QOWy0df653T3ZV/1poX6L5HiEPSJxYDfp5OljRX0SkdFT
+	 tqfeD8TETWZix6tWtCS922YGEo3mzAzhVFRtMGSFWkbCfLN9whd61bgc0fioeZwxZd
+	 WIVg9roArtZ/w==
+From: Thomas Gleixner <tglx@kernel.org>
+To: Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>, Johannes
+ Weiner <hannes@cmpxchg.org>, Michal =?utf-8?Q?Koutn=C3=BD?=
+ <mkoutny@suse.com>, Jonathan
+ Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Catalin
+ Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, "K. Y.
+ Srinivasan" <kys@microsoft.com>, Haiyang Zhang <haiyangz@microsoft.com>,
+ Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>, Long Li
+ <longli@microsoft.com>, Guenter Roeck <linux@roeck-us.net>, Frederic
+ Weisbecker <frederic@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>,
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, Joel Fernandes
+ <joelagnelf@nvidia.com>, Josh Triplett <josh@joshtriplett.org>, Boqun Feng
+ <boqun@kernel.org>, Uladzislau Rezki <urezki@gmail.com>, Steven Rostedt
+ <rostedt@goodmis.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
+ Anna-Maria Behnsen <anna-maria@linutronix.de>, Ingo Molnar
+ <mingo@kernel.org>, Chen Ridong <chenridong@huaweicloud.com>, Peter
+ Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann
+ <dietmar.eggemann@arm.com>, Ben Segall <bsegall@google.com>, Mel Gorman
+ <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>, K Prateek
+ Nayak <kprateek.nayak@amd.com>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>
+Cc: cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-hyperv@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ rcu@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Costa Shulyupin <cshulyup@redhat.com>,
+ Qiliang Yuan <realwujing@gmail.com>, Waiman Long <longman@redhat.com>
+Subject: Re: [PATCH 04/23] tick/nohz: Allow runtime changes in full dynticks
+ CPUs
+In-Reply-To: <20260421030351.281436-5-longman@redhat.com>
+References: <20260421030351.281436-1-longman@redhat.com>
+ <20260421030351.281436-5-longman@redhat.com>
+Date: Tue, 21 Apr 2026 10:50:00 +0200
+Message-ID: <87340od7ev.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net v4 1/2] net/sched: taprio: fix NULL pointer
- dereference in class dump
-To: Weiming Shi <bestswngs@gmail.com>, jhs@mojatatu.com,
- vinicius.gomes@intel.com, jiri@resnulli.us, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, shuah@kernel.org
-Cc: horms@kernel.org, vladimir.oltean@nxp.com, xmei5@asu.edu,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260416185501.647884-2-bestswngs@gmail.com>
- <20260416185501.647884-3-bestswngs@gmail.com>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <20260416185501.647884-3-bestswngs@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 
-On 4/16/26 8:55 PM, Weiming Shi wrote:
-> @@ -2196,14 +2199,14 @@ static int taprio_graft(struct Qdisc *sch, unsigned long cl,
->  	*old = q->qdiscs[cl - 1];
->  	if (FULL_OFFLOAD_IS_ENABLED(q->flags)) {
->  		WARN_ON_ONCE(dev_graft_qdisc(dev_queue, new) != *old);
-> -		if (new)
-> +		if (new != &noop_qdisc)
->  			qdisc_refcount_inc(new);
->  		if (*old)
->  			qdisc_put(*old);
+On Mon, Apr 20 2026 at 23:03, Waiman Long wrote:
+> Full dynticks can only be enabled if "nohz_full" boot option has been
+> been specified with or without parameter. Any change in the list of
+> nohz_full CPUs have to be reflected in tick_nohz_full_mask. Introduce
+> a new tick_nohz_full_update_cpus() helper that can be called to update
+> the tick_nohz_full_mask at run time. The housekeeping_update() function
+> is modified to call the new helper when the HK_TYPE_KERNEL_NOSIE cpumask
+> is going to be changed.
+>
+> We also need to enable CPU context tracking for those CPUs that
 
-Unless I'm lost, it looks like taprio_leaf() can now return
-`noop_qdisc`. As a consequence, `old` can be a valid qdisc, NULL or even
-`noop_qdisc`. In the latter case it should not decrease the refcount, as
-it was not increased previously.
+We need nothing. Use passive voice for change logs as requested in
+documentation.
 
-/P
+> are in tick_nohz_full_mask. So remove __init from tick_nohz_init()
+> and ct_cpu_track_user() so that they be called later when an isolated
+> cpuset partition is being created. The __ro_after_init attribute is
+> taken away from context_tracking_key as well.
+>
+> Also add a new ct_cpu_untrack_user() function to reverse the action of
+> ct_cpu_track_user() in case we need to disable the nohz_full mode of
+> a CPU.
+>
+> With nohz_full enabled, the boot CPU (typically CPU 0) will be the
+> tick CPU which cannot be shut down easily. So the boot CPU should not
+> be used in an isolated cpuset partition.
+>
+> With runtime modification of nohz_full CPUs, tick_do_timer_cpu can become
+> TICK_DO_TIMER_NONE. So remove the two TICK_DO_TIMER_NONE WARN_ON_ONCE()
+> checks in tick-sched.c to avoid unnecessary warnings.
+
+in tick-sched.c? Describe the functions which contain that.
+
+>  static inline void tick_nohz_task_switch(void)
+> diff --git a/kernel/context_tracking.c b/kernel/context_tracking.c
+> index 925999de1a28..394e432630a3 100644
+> --- a/kernel/context_tracking.c
+> +++ b/kernel/context_tracking.c
+> @@ -411,7 +411,7 @@ static __always_inline void ct_kernel_enter(bool user, int offset) { }
+>  #define CREATE_TRACE_POINTS
+>  #include <trace/events/context_tracking.h>
+>  
+> -DEFINE_STATIC_KEY_FALSE_RO(context_tracking_key);
+> +DEFINE_STATIC_KEY_FALSE(context_tracking_key);
+>  EXPORT_SYMBOL_GPL(context_tracking_key);
+>  
+>  static noinstr bool context_tracking_recursion_enter(void)
+> @@ -674,9 +674,9 @@ void user_exit_callable(void)
+>  }
+>  NOKPROBE_SYMBOL(user_exit_callable);
+>  
+> -void __init ct_cpu_track_user(int cpu)
+> +void ct_cpu_track_user(int cpu)
+>  {
+> -	static __initdata bool initialized = false;
+> +	static bool initialized;
+>  
+>  	if (cpu == CONTEXT_TRACKING_FORCE_ENABLE) {
+>  		static_branch_inc(&context_tracking_key);
+> @@ -700,6 +700,15 @@ void __init ct_cpu_track_user(int cpu)
+>  	initialized = true;
+>  }
+>  
+> +void ct_cpu_untrack_user(int cpu)
+> +{
+> +	if (!per_cpu(context_tracking.active, cpu))
+> +		return;
+> +
+> +	per_cpu(context_tracking.active, cpu) = false;
+> +	static_branch_dec(&context_tracking_key);
+> +}
+> +
+
+Why is this in a patch which makes tick/nohz related changes? This is a
+preparatory change, so make it that way and do not bury it inside
+something else.
+
+> +/* Get the new set of run-time nohz CPU list & update accordingly */
+> +void tick_nohz_full_update_cpus(struct cpumask *cpumask)
+> +{
+> +	int cpu;
+> +
+> +	if (!tick_nohz_full_running) {
+> +		pr_warn_once("Full dynticks cannot be enabled without the nohz_full kernel boot parameter!\n");
+
+That's the result of this enforced enable hackery. Make this work
+properly.
+
+> +		return;
+> +	}
+> +
+> +	/*
+> +	 * To properly enable/disable nohz_full dynticks for the affected CPUs,
+> +	 * the new nohz_full CPUs have to be copied to tick_nohz_full_mask and
+> +	 * ct_cpu_track_user/ct_cpu_untrack_user() will have to be called
+> +	 * for those CPUs that have their states changed. Those CPUs should be
+> +	 * in an offline state.
+> +	 */
+> +	for_each_cpu_andnot(cpu, cpumask, tick_nohz_full_mask) {
+> +		WARN_ON_ONCE(cpu_online(cpu));
+> +		ct_cpu_track_user(cpu);
+> +		cpumask_set_cpu(cpu, tick_nohz_full_mask);
+> +	}
+> +
+> +	for_each_cpu_andnot(cpu, tick_nohz_full_mask, cpumask) {
+> +		WARN_ON_ONCE(cpu_online(cpu));
+> +		ct_cpu_untrack_user(cpu);
+> +		cpumask_clear_cpu(cpu, tick_nohz_full_mask);
+> +	}
+> +}
+
+So this writes to tick_nohz_full_mask while other CPUs can access
+it. That's just wrong and I'm not at all interested in the resulting
+KCSAN warnings.
+
+tick_nohz_full_mask needs to become a RCU protected pointer, which is
+updated once the new mask is established in a separately allocated one.
+
+Thanks,
+
+        tglx
+
 
