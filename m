@@ -1,148 +1,174 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAFCC3A5E69;
-	Tue, 21 Apr 2026 09:20:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E40F234846D
+	for <linux-kselftest@vger.kernel.org>; Tue, 21 Apr 2026 10:52:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776763220; cv=none; b=b7Ln4mvMVWnz8SeG7pW2jty4s9wVRqzxq2/yQfkl1qk1C1xmTqe5aatIXZQjmO3+rXYnHwnyzFGaVyciGEWfe9XZzDKifhFFwlE5rhJBY1spHJi9HcxNPNfZCPrGkMCB0ylMjZlEsMVU+Hz3RYcSg/1vpinAK1wXnYxe1nh+ygc=
+	t=1776768770; cv=none; b=pnpdXUbISR344D3Iq7ZPDxe6bGuk3uUsGPYUWybyn/Az4wtIFx0/B9KtyKSiZc/oro+fb/bextdsTTLu2qH2Uon115vDuYq99puV2whW2NejluSHqJggDLvRjtadkif3kiluKWnwC9tGsn62UQX4tglO/PQH0kKSdkYNsU9Sgd4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776763220; c=relaxed/simple;
-	bh=mNosDArApEhR/sEjt6xuw/c6Atp9IN4OF4EzpiaVe+k=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=qIoLVaVGMySzcr6ilYuZlY3/b/9BBOOhUUCfacb5avlPDoQtNliFjVoQIaDxCa/MvaG1sPJu/SL1edTCl6wF1DZtSaH733akC6YLVzBKnizDjSDJXxN8MObQh12trzXd2Qf58xBFzKPrkL0PhOpyP8pQWBrIPb3l1Qna5wXFhR8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=WnPPXhcx; arc=none smtp.client-ip=220.197.31.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1776768770; c=relaxed/simple;
+	bh=s2cLGCqIxj2tLTuawRHmiHFZw06sP4n2pjrbd69MCRo=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=N8KwdxjHsxRn7qblKTZqGFMW4gMt4qryjMHaCLzcDAPIPkNeixz5G1fEQrBpVTm8wx8AT0JVv/Gk4DtSXPc+GCGS57OgsNBKHOnsSw2DloTNJ/29qrJd5hv0WMvtph/Sai0j/7SVjmhGZ+5m4dI7UDQR6kSb0qkzv4IFelQMHzA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EpvMXRgA; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="WnPPXhcx"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=Ng
-	RzgCjuXo48vslvABagpJ43ZvHZTy3kJBFKV9GRc+E=; b=WnPPXhcxaxe0R7cSDv
-	d2kYJNwpMcTeSA/2hUJUnKRx9FOJKXto9V05WP4Dpfu3WPP9i6dRnJymKf3uD+a2
-	0Ko+p+2HGAwtdVO6wYddcokaGZlCtukLnfMLdnZ2BtOYbE51Z0K3Z6fpZwusaPKq
-	KmIVeeu79wpAWNVzZGDq0/tEg=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g0-4 (Coremail) with SMTP id _____wC330MDQedpAr6+Aw--.8329S2;
-	Tue, 21 Apr 2026 17:18:59 +0800 (CST)
-From: Feng Yang <yangfeng59949@163.com>
-To: yangfeng59949@163.com
-Cc: andrii@kernel.org,
-	ast@kernel.org,
-	bpf@vger.kernel.org,
-	daniel@iogearbox.net,
-	eddyz87@gmail.com,
-	jiayuan.chen@linux.dev,
-	john.fastabend@gmail.com,
-	jolsa@kernel.org,
-	kpsingh@kernel.org,
-	leon.hwang@linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	martin.lau@linux.dev,
-	mattbobrowski@google.com,
-	memxor@gmail.com,
-	menglong.dong@linux.dev,
-	song@kernel.org,
-	yangfeng@kylinos.cn,
-	yonghong.song@linux.dev
-Subject: Re: [PATCH v3 bpf-next 1/2] bpf: Fix Null-Pointer Dereference in kernel_clone() via BPF fmod_ret on security_task_alloc
-Date: Tue, 21 Apr 2026 17:18:59 +0800
-Message-Id: <20260421091859.256592-1-yangfeng59949@163.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20260411163556.8567-2-yangfeng59949@163.com>
-References: <20260411163556.8567-2-yangfeng59949@163.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EpvMXRgA"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4891b0786beso18586675e9.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Apr 2026 03:52:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776768767; x=1777373567; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/DssGU0+rzpwgKnEuiXqwzg+hG6js1BvprdxT5pzyL4=;
+        b=EpvMXRgA9knINhtuyv8i7NfsaKJYAmypy9nQnysR60+idSaORJjGV5G/yT3fGyjl+e
+         5+zUlZWV21GoSzj00hsqu4og2JLmZipEboNZITiz0ErLUZHDvx1ZVNa7hJp1Y+sYEb6E
+         aRmd1ZnNi3NGmEN6abJjIwBfZpz9VdqdFZej6aIy9beix1G1ce3YxD4qT7mcPmtNyH7W
+         WbmT6523CmDXb0s3NwELz2oTvGpPCMIhaQnvyc7uOa+wBI6u4AkYLWzkdVxCjJZJ0deI
+         AxTxgDbdyOI7PgXrtdI1sy3pJ0Das6LLQqmRlMbT8G7aCTN/CGdSyWB88KQKO/975Oba
+         ccfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776768767; x=1777373567;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/DssGU0+rzpwgKnEuiXqwzg+hG6js1BvprdxT5pzyL4=;
+        b=DKqeyfMR0nyPogZNzvqlIv4hv/6hmvk3zkrRPHd4MctmxeQ2RnjkVQDgcBOc9VPWpA
+         WMeYLvBHXLJv+sfAnTETMj7CyjfMZte4OpvXJEQKyTRY0y7tC8prbOumZTD8cbLwR6MC
+         GBrrWR/5arwCKoIGxG0enTf78yzceeDZDWYF6YFy4CFnp5b8I9JjzG6CZUUslRTsjfB3
+         PlSoNGTxt3XpYet+s8AmIkeAVvNgoUDLuF5JEvXAM45ree8n3WUW78MnkX6jUIwcs7Yr
+         al+oLpfIWiP65v7MWIKOOVyak2UoQx9jKYOoz5K/QCwj1HJLAYlKjEtuEV/TpflCwcFC
+         61eA==
+X-Forwarded-Encrypted: i=1; AFNElJ/EVMusbPrKqhBWkTsTDa15s2WoDPNDQsxN066MzD4w0FTMwjM0ggD24wQNCJ8cPzZO64evQdr3idMSTls0a2k=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxylPZ4x4ceZrxVhmLzzEwnXzO/N0ESSe0ZVaHCRsT0tif5R2PA
+	NFa5eQJkXHoXhWlS39bC2+BirL4836Vq5k9Um/gBWJzGd33lXD32T+ga
+X-Gm-Gg: AeBDieudIdzvK7I6YexJB6/mtcoi9wUnLB3RGyNPxjPGLnPhguMkE+tOcksNO1NRZxk
+	cqxJC4/YBDa04xl80eFQj/iPKxf2mJ6vLEyJorxxkSrC+1FL0yqqY30loCCWt2zj/tUUDsNJggP
+	K22kq8jwLczJc799haZ/xDSViOSE17omneU1l2bOptT/nA7Gt1AoYz64z3NP9b6O38QI97a4fVa
+	i4tPvNOIpSh05xqci2tvlwPU411n+0weW7BbBV8Uewr1vJdCHJgr+S6EFpSSLHA7X0XcxudagEj
+	Cp0qy+DCCnQasD+2e/FT1Az7kiPA/zIlnZQLOM+POt14sYnOiS4Z4cJzkMjCy3l0Wdqd7ePNna3
+	6CkBl6xktu1ta83kzx2COzSIddKs8JhFy/gBGllrVWlJUoVOeIFfXaO8EcarN+6jPpHVCc7VPXc
+	Unh3q91GI=
+X-Received: by 2002:a05:600c:4f13:b0:489:1a65:dd6e with SMTP id 5b1f17b1804b1-4891a65de3emr143246375e9.8.1776768766994;
+        Tue, 21 Apr 2026 03:52:46 -0700 (PDT)
+Received: from krava ([2a02:8308:a00c:e200::d99c])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4891cc7b2efsm81786335e9.0.2026.04.21.03.52.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Apr 2026 03:52:46 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Tue, 21 Apr 2026 12:52:44 +0200
+To: Jerome Marchand <jmarchan@redhat.com>
+Cc: bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+	Shuah Khan <shuah@kernel.org>, Mykyta Yatsenko <yatsenko@meta.com>,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/bpf: Page out as late a possible in file_reader
+Message-ID: <aedW_Aj4NrvqBeDg@krava>
+References: <20260420134637.2513867-1-jmarchan@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wC330MDQedpAr6+Aw--.8329S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Zry5CFy3tFWDuFy3Gw45ZFb_yoW8Xry5pa
-	yUJF9Fyrn0k395JF4kAws3Zr1S9wsxGw45Aws0qw1qyFyUtr48G347K3yavr1rCr1UKw1I
-	qFsIyFsxCF4ay37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JUOTm-UUUUU=
-X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/xtbC0ASlHmnnQQTakgAA3s
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260420134637.2513867-1-jmarchan@redhat.com>
 
-[...]
+On Mon, Apr 20, 2026 at 03:46:37PM +0200, Jerome Marchand wrote:
+> The file_reader/on_open_expect_fault fails consistently on my system.
+> It expects a page fault on first dynptr read of some range the exe
+> file of the current process because it has paged out that page range
+> earlier. However a lot can happen to that range (which depending on
+> the actual memory layout could contain text section, data section,
+> sections )related to dynamic linking...) between the moment it was
+> paged out and the moment the bpf program expected to hit a pagefault
+> actually run.
+> 
+> A bit of instrumentation with mincore() shows that pages from that
+> range were accessed several times before the program is run. In
+> particular the call of file_reader__load() seems to fault all the
+> range in.
+> 
+> Move the call to madvise(MADV_PAGEOUT) to just before attaching the
+> program to minimize the risk of having those page pulled back in from
+> under our feet.
+> 
+> Signed-off-by: Jerome Marchand <jmarchan@redhat.com>
 
-Issue Regarding BPF_PROG_TYPE_EXT Programs Bypassing Validation Logic:
+nit typo in the subject a -> as
 
-__attribute__ ((noinline)) int B()
-{
-        return 0; /* Valid return value */
-}
+Acked-by: Jiri Olsa <jolsa@kernel.org>
 
-SEC("fmod_ret/security_task_alloc")
-int A()
-{
-        return B();
-}
-
-SEC("freplace/B")
-int replace()
-{
-        return 1; /* Invalid return value */
-}
-
-This method can verify whether the return value of freplace is legitimate
-by using env->prog->aux->dst_prog->aux->attach_btf_id.
-
-However, this approach will reject legitimate programs if the return value of
-the original program does not come from the replaced function (as shown below).
-
-__attribute__ ((noinline)) int B()
-{
-        return 0; 
-}
-
-SEC("fmod_ret/security_task_alloc")
-int A()
-{
-        B();
-        return 0;
-}
-
-SEC("freplace/B")
-int replace()
-{
-        return 1;
-}
-
-I have not found a proper solution to this issue.
+jirka
 
 
-
-target.bpf.c:
-__attribute__ ((noinline)) int B()
-{
-	bpf_printk("--\n");
-	return -2;	
-}
-
-SEC("fmod_ret/security_task_alloc")
-int A()
-{
-	int i = B();
-	bpf_printk("return: %d\n", i);
-   	return i;
-}
-
-freplace.bpf.c:
-SEC("freplace/B")
-int replace()
-{
-	bpf_printk("freplace\n");
-	return -1;
-}
-In addition, the log output from testing the above program is as follows:
-cat /sys/kernel/debug/tracing/trace_pipe 
-          attack-5370    [002] ...11  4379.086626: bpf_trace_printk: freplace
-
-          attack-5370    [002] ...11  4379.086656: bpf_trace_printk: return: -2
-
-Strangely, the replacement program is executed, but the return value still originates from the original program.
-
-
+> ---
+>  .../selftests/bpf/prog_tests/file_reader.c    | 22 +++++++++----------
+>  1 file changed, 10 insertions(+), 12 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/file_reader.c b/tools/testing/selftests/bpf/prog_tests/file_reader.c
+> index 5cde32b35da44..48aae7ea0e4bb 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/file_reader.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/file_reader.c
+> @@ -10,6 +10,7 @@
+>  
+>  const char *user_ptr = "hello world";
+>  char file_contents[256000];
+> +void *addr;
+>  
+>  void *get_executable_base_addr(void)
+>  {
+> @@ -26,8 +27,7 @@ void *get_executable_base_addr(void)
+>  static int initialize_file_contents(void)
+>  {
+>  	int fd, page_sz = sysconf(_SC_PAGESIZE);
+> -	ssize_t n = 0, cur, off;
+> -	void *addr;
+> +	ssize_t n = 0, cur;
+>  
+>  	fd = open("/proc/self/exe", O_RDONLY);
+>  	if (!ASSERT_OK_FD(fd, "Open /proc/self/exe\n"))
+> @@ -52,16 +52,6 @@ static int initialize_file_contents(void)
+>  	/* page-align base file address */
+>  	addr = (void *)((unsigned long)addr & ~(page_sz - 1));
+>  
+> -	/*
+> -	 * Page out range 0..512K, use 0..256K for positive tests and
+> -	 * 256K..512K for negative tests expecting page faults
+> -	 */
+> -	for (off = 0; off < sizeof(file_contents) * 2; off += page_sz) {
+> -		if (!ASSERT_OK(madvise(addr + off, page_sz, MADV_PAGEOUT),
+> -			       "madvise pageout"))
+> -			return errno;
+> -	}
+> -
+>  	return 0;
+>  }
+>  
+> @@ -90,6 +80,14 @@ static void run_test(const char *prog_name)
+>  	if (!ASSERT_OK(err, "file_reader__load"))
+>  		goto cleanup;
+>  
+> +	/*
+> +	 * Page out range 0..512K, use 0..256K for positive tests and
+> +	 * 256K..512K for negative tests expecting page faults
+> +	 */
+> +	if (!ASSERT_OK(madvise(addr, sizeof(file_contents) * 2, MADV_PAGEOUT),
+> +		       "madvise pageout"))
+> +		goto cleanup;
+> +
+>  	err = file_reader__attach(skel);
+>  	if (!ASSERT_OK(err, "file_reader__attach"))
+>  		goto cleanup;
+> -- 
+> 2.53.0
+> 
