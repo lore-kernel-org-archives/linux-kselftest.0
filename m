@@ -1,179 +1,107 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B6E53A6B71
-	for <linux-kselftest@vger.kernel.org>; Tue, 21 Apr 2026 07:20:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40815175A6D;
+	Tue, 21 Apr 2026 07:25:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776756040; cv=none; b=gtl78Ih9pcPr6blIReviOG3jpBnX5FKHMQBS1/OgmM5mNpf3m5q4klAso/YpH8iiBYMqtdF26nAvRG4gCnToWXbsAkIGoHGCMHXdX0RfZGT2Ybj3DfZUTia2nfYI3VL+mm3ucczew1Y7uynfUFbVwo46XETV3mvLIl/sVbsFGRc=
+	t=1776756312; cv=none; b=VM1nYehBatrWJ/OeQ9kWS8011UgGz6cAUkV7rntV4zyt6zs8YmMxk6IZKENs2jE2kZgNRZ37Jr7X9LWYxRmld/iHmODeCClDHhyuzY86RY94iOAUoH+6pnYojfu1Y2SoW8U97U/76r18LKIFP2hjBvwSlsG5tBUxseL9wiFbzik=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776756040; c=relaxed/simple;
-	bh=r3oDADiv+N0A8T7lQH96TM08ffovG+vlf4ODJIsA3Tw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Z8bbcQDW7g/tydnVSpDsU32QmDzjHYJ/F413/HxL3xmuOeLCHC9oFC7S0dkpxOXLyq1jqTMeqFMwkEcZGr0RBfhaxiwNxXWVgMbtzYoW8LTGvEonLlAYDWawKND9Fia3E+kmn9cAbJ+5PohYPGOvzbqQx1epRCcfPzuxjI1NyhI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hZ+HMq1R; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1776756312; c=relaxed/simple;
+	bh=plEh598qh3qqk54SU3Ya8nDC15W8+JoFU/NOjYwa1eI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Q7Nb8RVYfefDyy9j1x6XXlmiFYU8NgbA2SqxV3EIQDPB7j6yxHGQ8V2zBF02KuZd3GVhSzoFHQId2GzECnBhWvCFSDREEI7oN4M/jnjrm73O63cW7mC/aEdmzZ+hjApasdMnm9WiUOvSRV9UAnNaSKnmuF2Q0LMwoLRx49JNm20=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I8nTJuu2; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hZ+HMq1R"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1776756038;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=dAEpDAchAD1vBPaag8bT1as/DxfEf/i9ISWEXwjmEg4=;
-	b=hZ+HMq1RbnQ5dSi+udhu36OSPF5xUjSLS88e9Z/UHWghnMbp4y+nvuoCluj3RtmSeVNudE
-	6dvbbiztwf8xO/yJHju3GBZ7EXuVPKENVJpA9le2aVMnFWHlfp+Y08vLQIgA8Ctq8IPosH
-	7X+19OzMEYhcjg2vxrvH0HnQGUx7qhY=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-447-iW5YCpy7Pqeb_aiSM6uFmQ-1; Tue,
- 21 Apr 2026 03:20:35 -0400
-X-MC-Unique: iW5YCpy7Pqeb_aiSM6uFmQ-1
-X-Mimecast-MFC-AGG-ID: iW5YCpy7Pqeb_aiSM6uFmQ_1776756033
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D47661800464;
-	Tue, 21 Apr 2026 07:20:33 +0000 (UTC)
-Received: from [192.168.1.153] (headnet01.pony-001.prod.iad2.dc.redhat.com [10.2.32.101])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4552A195608E;
-	Tue, 21 Apr 2026 07:20:31 +0000 (UTC)
-From: Albert Esteve <aesteve@redhat.com>
-Date: Tue, 21 Apr 2026 09:19:50 +0200
-Subject: [PATCH v2 4/4] selftests: cgroup: handle vmtest-dmem -b to test
- locally built kernel
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I8nTJuu2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39DB7C2BCB0;
+	Tue, 21 Apr 2026 07:25:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776756311;
+	bh=plEh598qh3qqk54SU3Ya8nDC15W8+JoFU/NOjYwa1eI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=I8nTJuu2oMi4lJ75x9Q956MeJBePyfguSJ/RBSrTQ25Gt3s5ppxbBH80i7oy3dj3K
+	 RbWTsqfs1gNdDvPBMn2uwP/dVlzTjk0Uwz3+m7kiHBEhlPkHkErE6EF5ibTyF4wLh5
+	 h56UCXxavN2VNpLCYOobQw52PzrhOeaWDJEPBx2JNO+5eq3TxgJEiMr0yotCaIdqKw
+	 MAsEDAYhcJjuLFE12rmP0VTrtusDg8YKcKYqQ2SKVPOjTXttTnC/bbNTEdlMvZgXuj
+	 Re2OrpiS6J38RE2T/8UB1AKI+dBp2zTIz7O6t3JNAntGr80mm4P32UoSxH/MWZNvJP
+	 8ZpRHsQ6eFJNA==
+Date: Tue, 21 Apr 2026 10:25:02 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Donet Tom <donettom@linux.ibm.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Barry Song <baohua@kernel.org>, Dev Jain <dev.jain@arm.com>,
+	Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Lance Yang <lance.yang@linux.dev>,
+	Leon Romanovsky <leon@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
+	Mark Brown <broonie@kernel.org>, Michal Hocko <mhocko@suse.com>,
+	Nico Pache <npache@redhat.com>, Peter Xu <peterx@redhat.com>,
+	Ryan Roberts <ryan.roberts@arm.com>,
+	Sarthak Sharma <sarthak.sharma@arm.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Vlastimil Babka <vbabka@kernel.org>, Zi Yan <ziy@nvidia.com>,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: Re: [PATCH v2 05/53] selftests/mm: merge map_hugetlb into
+ hugepage-mmap
+Message-ID: <aecmTjikgWAvoYTE@kernel.org>
+References: <20260418105539.1261536-1-rppt@kernel.org>
+ <20260418105539.1261536-6-rppt@kernel.org>
+ <5e4fa215-224c-43cf-a0e6-0d91e09a4a3b@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260421-kunit_cgroups-v2-4-bb6675d8249c@redhat.com>
-References: <20260421-kunit_cgroups-v2-0-bb6675d8249c@redhat.com>
-In-Reply-To: <20260421-kunit_cgroups-v2-0-bb6675d8249c@redhat.com>
-To: Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
- =?utf-8?q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
- Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Albert Esteve <aesteve@redhat.com>, 
- mripard@redhat.com, Eric Chanudet <echanude@redhat.com>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1776756020; l=2885;
- i=aesteve@redhat.com; s=20260303; h=from:subject:message-id;
- bh=VyPxWSFvU4OcET+PkfTmCG2H+xrQkI2juMymHBuFUyY=;
- b=VWGhi3RDtL9AdYDYlykueSsNZ4apNw6iwuzCH91Angksv5T6oALG7Twi0URclS4Sr5UKKJW2v
- L4CyOIojxzSA3a+FS4h1pDmAa/K2i5ahPPmccPbJKAQmoYG0DhI/NxX
-X-Developer-Key: i=aesteve@redhat.com; a=ed25519;
- pk=YSFz6sOHd2L45+Fr8DIvHTi6lSIjhLZ5T+rkxspJt1s=
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5e4fa215-224c-43cf-a0e6-0d91e09a4a3b@linux.ibm.com>
 
-From: Eric Chanudet <echanude@redhat.com>
+Hi Donet,
 
-Currently vmtest-dmem.sh relies on the host's running kernel or a
-pre-built one when booting the virtme-ng VM, with no option to
-configure and build a local kernel tree directly.
+On Mon, Apr 20, 2026 at 02:50:49PM +0530, Donet Tom wrote:
+> On 4/18/26 4:24 PM, Mike Rapoport wrote:
+> >
+> > +static void test_file_mmap(size_t length, int shift)
+> > +{
+> > +	const char *test_name = "hugetlb file mmap";
+> > +	int mmap_flags = MAP_SHARED;
+> > +	bool passed;
+> > +	int fd;
+> > +
+> > +	if (shift)
+> > +		mmap_flags |= (shift & MAP_HUGE_MASK) << MAP_HUGE_SHIFT;
+> 
+> From what I understand, selecting an alternative huge page size using mmap
+> flags is typically used along with MAP_HUGETLB. Since we are not using
+> MAP_HUGETLB, would this code still be necessary? please let me know if I
+> might be missing something.
+> 
+> 
+> 
+> > -	fd = memfd_create("hugepage-mmap", MFD_HUGETLB);
+> > +	fd = memfd_create("hugetlb-mmap", MFD_HUGETLB);
+> > 
+> In my test, the default huge page size is 2MB. I passed a shift value of 30
+> (for 1GB huge pages), but the mmap call failed — To support 1GB huge page
+> sizes on a system with a 2MB default huge page size, I used MFD_HUGETLB |
+> MFD_HUGE_1GB. With this change, file-backed mmap using 1GB huge pages
+> started working. Do you think this change would be needed?
 
-This adds friction to the development cycle: the user must manually
-run vng --kconfig with the correct config fragment, build the kernel,
-and pass the result to the script.
+Yes, I'll update the test to use proper MFD_ flags. Then mmap_flags change
+won't be needed.
 
-Add a -b flag that automates this workflow.  When set, handle_build()
-configures the kernel using vng --kconfig with the selftest config
-fragment, builds it with make -j$(nproc), and vm_start() passes the
-local tree to vng --run so the VM boots the freshly built kernel.
-
-Signed-off-by: Eric Chanudet <echanude@redhat.com>
-Signed-off-by: Albert Esteve <aesteve@redhat.com>
----
- tools/testing/selftests/cgroup/vmtest-dmem.sh | 34 ++++++++++++++++++++++++++-
- 1 file changed, 33 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/cgroup/vmtest-dmem.sh b/tools/testing/selftests/cgroup/vmtest-dmem.sh
-index 3174f22b06361..a5f1e529e1aa0 100755
---- a/tools/testing/selftests/cgroup/vmtest-dmem.sh
-+++ b/tools/testing/selftests/cgroup/vmtest-dmem.sh
-@@ -23,6 +23,7 @@ readonly WAIT_TOTAL=$((WAIT_PERIOD * WAIT_PERIOD_MAX))
- readonly QEMU_PIDFILE="$(mktemp /tmp/qemu_dmem_vmtest_XXXX.pid)"
- readonly QEMU_OPTS=" --pidfile ${QEMU_PIDFILE} "
+Thanks for spotting this!
  
-+BUILD=0
- QEMU="qemu-system-$(uname -m)"
- VERBOSE=0
- SHELL_MODE=0
-@@ -72,17 +73,46 @@ check_deps() {
- 	done
- }
- 
-+handle_build() {
-+	if [[ ! "${BUILD}" -eq 1 ]]; then
-+		return
-+	fi
-+
-+	if [[ ! -d "${KERNEL_CHECKOUT}" ]]; then
-+		echo "-b requires vmtest.sh called from the kernel source tree" >&2
-+		exit 1
-+	fi
-+
-+	pushd "${KERNEL_CHECKOUT}" &>/dev/null
-+
-+	if ! vng --kconfig --config "${SCRIPT_DIR}"/config; then
-+		die "failed to generate .config for kernel source tree (${KERNEL_CHECKOUT})"
-+	fi
-+
-+	if ! make -j"$(nproc)"; then
-+		die "failed to build kernel from source tree (${KERNEL_CHECKOUT})"
-+	fi
-+
-+	popd &>/dev/null
-+}
-+
- vm_start() {
- 	local logfile=/dev/null
- 	local verbose_opt=""
-+	local kernel_opt=""
- 
- 	if [[ "${VERBOSE}" -eq 2 ]]; then
- 		verbose_opt="--verbose"
- 		logfile=/dev/stdout
- 	fi
- 
-+	if [[ "${BUILD}" -eq 1 ]]; then
-+		kernel_opt="${KERNEL_CHECKOUT}"
-+	fi
-+
- 	vng \
- 		--run \
-+		"$kernel_opt" \
- 		${verbose_opt} \
- 		--qemu-opts="${QEMU_OPTS}" \
- 		--qemu="$(command -v "${QEMU}")" \
-@@ -165,10 +195,11 @@ run_test() {
- 	vm_ssh -- "cd '${GUEST_TREE}' && ./tools/testing/selftests/cgroup/test_dmem"
- }
- 
--while getopts ":hvq:s" o; do
-+while getopts ":hvq:sb" o; do
- 	case "${o}" in
- 	v) VERBOSE=$((VERBOSE + 1)) ;;
- 	q) QEMU="${OPTARG}" ;;
-+	b) BUILD=1 ;;
- 	s) SHELL_MODE=1 ;;
- 	h|*) usage ;;
- 	esac
-@@ -177,6 +208,7 @@ done
- trap cleanup EXIT
- 
- check_deps
-+handle_build
- echo "Booting virtme-ng VM..."
- vm_start
- vm_wait_for_ssh
+> -Donet
+> 
 
 -- 
-2.52.0
-
+Sincerely yours,
+Mike.
