@@ -1,337 +1,222 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D7363793DD
-	for <linux-kselftest@vger.kernel.org>; Tue, 21 Apr 2026 03:07:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD447365A02
+	for <linux-kselftest@vger.kernel.org>; Tue, 21 Apr 2026 05:59:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776740875; cv=none; b=LuKSPMC9IT+g7UnKb0He0S4XdV3jAact+CC+bw07V3YlAzw3xSxZuQngC1rzOOK2ukD4Bmoqh4LJ6uyYwCE5Xnx6HfP4zCNtk+WWb2f3Tuz6YRga+vLXyqaCRHhXr5EWUGvk1b62lU8y+WU8OcioOL6AozGKc6PmIyS4fKpcNOw=
+	t=1776751159; cv=none; b=HxpaqYuyrMKgB9ldO+JgZGSyvTkig6TdI2yRAEtblxk9QKKNGEnvNKc4QYVxZeB7r8KUN3NZxeKlshJZDtk7HC93plLvgihfFZ0YMxWIHYH3IgUqkUu1Hz5QyTA7T5acPwsQiQri8WLTFHOsKDdd3Dyp28KcSOr8A7psRBR/+Mc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776740875; c=relaxed/simple;
-	bh=pdahzaI6TYYLoH1na7BPnX7x2KDai2pfXdzq/9hklYw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tMyxu4JzlI1bz+3ZF5JI9zgL8IJgYz49/9fi4DdKmhdZ4tuKBBi8BucpGDEJcAJMy5zlJ+Yo/48OBFZcGGdzxyIBsmGGLiRYdiGyNUqYnMTLs+qRBUy8M4uxjgxLrj1FfPN15cqWFBz227foYx0sm5WaEzw/obmo4IOpqNcv3qI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KQfgC0Cv; arc=none smtp.client-ip=170.10.129.124
+	s=arc-20240116; t=1776751159; c=relaxed/simple;
+	bh=L/GSkA0qp1yoMrPDQGqRCPZENkQK4jf0rUUdQZvqlnY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=olpZBKbRn01zVyJ3i7pq9en0DPDCcklvMxloXjSahaw2wBGnvNrgDqB2W4/bcqhurpunpCsYcAnrywouEEJek36atEb4Q2Er9/Meou6ApeEfOibEzqXARzqcHT+7sbo2kq+J6k3pNbAU19JZD+qufCE1Pa855/wQIiYLMNYH5nk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bL4iRB9M; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZJqmjuVF; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KQfgC0Cv"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bL4iRB9M";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZJqmjuVF"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1776740873;
+	s=mimecast20190719; t=1776751154;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=id5gu+CSXzoxxDihrOTSOMQURNR0EZCi73AeA6doMCM=;
-	b=KQfgC0CvtkSnG/mA/1CVhuaxG1AITcpBjfprRF4lRP6hARfibrMVEUepQLFR9AHh0teGb6
-	PNqxAcyxmg9LlMUvwUx7AxgOg3mvgfZbqELIYezkiG6rDwteyiU5AMG7zpI4l5h7uCHftP
-	WfJuM8NZL/IZXtf6CCUp0yp5tzcIfgo=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-113-eswoHUPCNHOcZgPwTq7aKQ-1; Mon,
- 20 Apr 2026 23:07:48 -0400
-X-MC-Unique: eswoHUPCNHOcZgPwTq7aKQ-1
-X-Mimecast-MFC-AGG-ID: eswoHUPCNHOcZgPwTq7aKQ_1776740863
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id AFC621800367;
-	Tue, 21 Apr 2026 03:07:43 +0000 (UTC)
-Received: from llong-thinkpadp16vgen1.westford.csb (unknown [10.22.65.81])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C546C19560AB;
-	Tue, 21 Apr 2026 03:07:36 +0000 (UTC)
-From: Waiman Long <longman@redhat.com>
-To: Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	"K. Y. Srinivasan" <kys@microsoft.com>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
-	Wei Liu <wei.liu@kernel.org>,
-	Dexuan Cui <decui@microsoft.com>,
-	Long Li <longli@microsoft.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Boqun Feng <boqun@kernel.org>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang@linux.dev>,
-	Anna-Maria Behnsen <anna-maria@linutronix.de>,
-	Ingo Molnar <mingo@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Chen Ridong <chenridong@huaweicloud.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Ben Segall <bsegall@google.com>,
-	Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>
-Cc: cgroups@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-hyperv@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	rcu@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Costa Shulyupin <cshulyup@redhat.com>,
-	Qiliang Yuan <realwujing@gmail.com>,
-	Waiman Long <longman@redhat.com>
-Subject: [PATCH 23/23] cgroup/cpuset: Documentation and kselftest updates
-Date: Mon, 20 Apr 2026 23:03:51 -0400
-Message-ID: <20260421030351.281436-24-longman@redhat.com>
-In-Reply-To: <20260421030351.281436-1-longman@redhat.com>
-References: <20260421030351.281436-1-longman@redhat.com>
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=hdFkkNEEQNJRuD44zjV6gQfNzOTNDlLLmN0HXIC8Vs0=;
+	b=bL4iRB9MQa1hHwDjAYXgB/MjWHFgTM2pJ/7BkWdJRdzCVB5IcbiwTJEEVziv0zSBRcPdMc
+	mhHMQ01UBMyECLxv2J1awkMd1vwQ4Txkc4mX69JpDSJ9SUPEhsfk5wH6TRaKfGOseLRIOF
+	lsL9kLJfIIg7tpCzBLKb4qe1gb1kv60=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-646-J3N8w-ycPAOfYhG_LG95pw-1; Tue, 21 Apr 2026 01:59:12 -0400
+X-MC-Unique: J3N8w-ycPAOfYhG_LG95pw-1
+X-Mimecast-MFC-AGG-ID: J3N8w-ycPAOfYhG_LG95pw_1776751152
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-488ba2f4094so19137605e9.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Apr 2026 22:59:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1776751151; x=1777355951; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=hdFkkNEEQNJRuD44zjV6gQfNzOTNDlLLmN0HXIC8Vs0=;
+        b=ZJqmjuVFWc2i5EvTxMwCALFBjF63P4hOZzWvfh2TY1dBUKcOKWvjNEzo0Z1JlR9E8x
+         qwHe4r+mIUTFIBHRW6LAQKsBzuS1Gsxq4MWdn5zxGukZGdMMg0hQ8r0KA3jYVwDs+kdy
+         Uc1u5msiHTAsihh1MlRlvjIKLdF5eevjNbdImkPt63j9G/x5n7QOqrJ9YrPKCtyaKMV+
+         zjPAyqUwSIJRy0hFa5pr0EFHbJOdjDbGDCyQl4D1TUp5vcDE5N9p9AdseotfVQ2QGhwh
+         Clazx1HDWDRPNCGVXZAG9Wosl7CHY/u8nSuaNqgrapgHagV0pJzV79Bvq+vhcdvuTVxK
+         G4vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776751151; x=1777355951;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hdFkkNEEQNJRuD44zjV6gQfNzOTNDlLLmN0HXIC8Vs0=;
+        b=NYWgwNNNEncXQo03t6YMPAw2mOB8BHKRi9e4+BOQy7VyZNRcdMv2aU2RBV2rVEl4fr
+         SWVF3Ge+OikgPzg3g2PaSAJMHZDjPb493IdBIz8U8WKrv6dxOXzmmlj/O/3cT2PxHcCk
+         nO3G+lDHPip0qoqSGGUVlKrV5/PipgpSvtWBwbFlPDzfowZqoVBOLeZMYOohdOJ8RwG3
+         fKI3vCBBG3rFolvWEo86DnTtulLGt3kpIyLYOqLJxMCCgWQYTnvGIEhDfV3nsTmjF9u6
+         XGkaKc+z9nLx1/BAs/JzG/QS18aUGDJvuY7o163Ozr+HOvsQI75sX3GrSV768QithpUR
+         riwA==
+X-Forwarded-Encrypted: i=1; AFNElJ/grh26EcoQbTbnJWs/8SAU/PqGtOAUqB0c1nrIIqIpf+Tajnw9QcuVaCaCloVkJzGdVIpD50ROC/1XP5gLL8I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxVD0eLNOQoOK7tZiUyFSyq8k1GNIF2tbzzgEzhqNJPlCBXneP2
+	3RgUy3K5envgcpFXuk989kO9Q+GHmJiXMP1s+JjR3WxG9tdUrJr9j9EC7iLfCi0opA8QBJWWE9M
+	3F1PkTpJeZAe62OT8zcXfffgXRB68w8+SYfqK3pj2N6/sx9R/0U60/u1d4cQznLlq4W2zpg==
+X-Gm-Gg: AeBDiet/fL1oyukCuYXZ56QPczXusgA6yWUj4qTXIH0oiF91F3rXHgW8Ri4fPCxAYb8
+	2sPG9l2y6FGtY106+bO/ApTJd0q9TjPy0FRj9EM1S+CkngdN+8I9HW33tQq1clrKO7b+wj7Xqp/
+	Dyoj3XevuWLppaJaJriDhXi5Hez4GmvBjaaVQRHKQLZJCuC37tlTqdDm8CFtAsybc9936R23c1w
+	1uJkqlKAcp+3yfNybEF0vpzJJ7meYc8zCO+2ssPKgOEw/CkIigH07GB8nA6NHIPtNb66o1ti9HY
+	sc2M86/P3MKwHP49u38g7vdolVhT/rIqSkRnZ6rZdy3xtQjtfe1LpzakhwYI60j88Yjz4nfwBp9
+	ru4LvwNpFbsuVASbsWfr5J2eyF+c/eDe9o7NWEyo9U34sr73NRmsfwb9IJpC/SMQyPLhy5rnQ
+X-Received: by 2002:a05:600c:4a15:b0:489:1aed:1658 with SMTP id 5b1f17b1804b1-4891aed16d8mr64652005e9.23.1776751151512;
+        Mon, 20 Apr 2026 22:59:11 -0700 (PDT)
+X-Received: by 2002:a05:600c:4a15:b0:489:1aed:1658 with SMTP id 5b1f17b1804b1-4891aed16d8mr64651825e9.23.1776751151049;
+        Mon, 20 Apr 2026 22:59:11 -0700 (PDT)
+Received: from [192.168.0.223] (ip-89-103-124-216.bb.vodafone.cz. [89.103.124.216])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488fc0f82bbsm565012525e9.3.2026.04.20.22.59.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Apr 2026 22:59:10 -0700 (PDT)
+Message-ID: <836b0ce8-f427-434f-984b-4fc60b02c810@redhat.com>
+Date: Tue, 21 Apr 2026 07:59:08 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/bpf: Page out as late a possible in file_reader
+To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, bpf@vger.kernel.org
+Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
+ <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@linux.dev>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, Mykyta Yatsenko <yatsenko@meta.com>,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260420134637.2513867-1-jmarchan@redhat.com>
+ <f02fd939-85f7-414a-8b03-a9ebe56c7660@gmail.com>
+Content-Language: en-US
+From: Jerome Marchand <jmarchan@redhat.com>
+Autocrypt: addr=jmarchan@redhat.com; keydata=
+ xsBNBFO1HMkBCAC7ldQoS6JT5Fk9gRCJQrZjexkWsUhK8LVmKJXpbybAnojJOHrD7H02FwDh
+ F6kAZVZMBAFf5aUZQHtjF+UvBNiPptIohb7ODLS/hiTZHpUI1/JkBOZ8wZbWakkTEwsj5Ccw
+ czVB0PCDm+coE5BcQezEEn3ENNO45X2YQ6DeDzdpYRiCEOQufDPAwvSHoP/lXfRayNDuNRxd
+ 20RS73qTYupcbMDEEYd24vvh62gVVusuljUPWaDB7w+z6i7zwzTzkoTGW/OURSnOy731VGsK
+ BniaFdLAipta1rhg43no0qJuAqxLEzgxUYiDN3cZf7Nf6eSnG71ugUUtYgc1d5I1Fe1RABEB
+ AAHNJUplcm9tZSBNYXJjaGFuZCA8am1hcmNoYW5AcmVkaGF0LmNvbT7CwJgEEwEIAEICGyMG
+ CwkIBwMCBhUIAgkKCwQWAgMBAh4BAheAAhkBFiEEKhfvHc6w3BYc12CSdPMckK2y6gIFAmgH
+ aZgFCRgUChcACgkQdPMckK2y6gKeUQf6AvMundBabBuvOQIhz/OP4VrUV/ilEAxXqPPEqv8p
+ O+GKSnWBdYpIR/nBh62u/GN88l1LjgTWh1PbhvUtB1TviXtapp/MN9IcPVJkJVFh0KdyObMt
+ 4muJpUrEmnyn9WOZKhfEZGaXBq5zraqBrg4u1r0H0aoXDhSd/EF9JS2Qnm8rWaktzGotgGkJ
+ ntjh5BuZCHd9YSTIYkux5tUO0LFitgiHgE/AIDk+2lKTCEei15SjWNCo3DluagDpfOjgtGSY
+ 6UNRH1XBKH86EKKJelsBCNRalvYQRzmzS/GAYLaHBqyACmKsGmERcLpvmJsQqWF7sMJXy412
+ mr+b7iufKihOtc7ATQRTtRzJAQgAxpKIAn2SVSfk3CsskkE3FzLfu3suaueUVtS/ZaY/K8hf
+ M3oB1AA/jQFwIwXIeT8rz2kRjDkNkli3DMAMovCuABLCun+Ts8cSqJN22iPVD5AuwkiZPcvm
+ v1VpkFxJE4OwyrpJOIcyPHRXyTYO6V/nTuD64+BUkLPf0dfGKetz9k89qGeacx346JPZndfb
+ 7/rUI9Z7FW9mTTyI3IP6x0eLOFKmzULsV8yrGJqU1xUuLD3bh/fbvljqlqWjvervZKsVNPGM
+ yOjRQeu7T/E0SMNTV2dXUP7jyJhmdKQ0uDrjE7kwVjZtrmb94915Gne2+ou2Vh+NwhOpbCIo
+ eWgSBfxrYQARAQABwsB8BBgBCAAmAhsMFiEEKhfvHc6w3BYc12CSdPMckK2y6gIFAmgHaZgF
+ CRgUChcACgkQdPMckK2y6gJLZQf+O5J+4qMLK3+RpCNP6jrUp9v/67t1CaVyHhbl4XOzR0jR
+ iXHauB7MtIu9AYd8b+KcCZoXjtX34uBhB8XwXZjVTp6aD6ILKZYtcm+KJ7bioXgJSwaarS8W
+ kpDUOKnphOpfCL9c1qLRVGKCwvpAgG+RK/FMT/gq05idrTqaH95CS2WMyDar7IwWU6qzYykA
+ GdumHbxQYMSgSBhmsGfYXa+QAYOI/w6TivVjVyTD8feL9yN0zxACMVKRNy3xeDvPQQm7jP+Y
+ hbgyBmp4HfLY/BS7/FKS5Tv1ke4kBDohXRJEGxjzrTWLUNZBIusgT6lPVX4OjlvwX8cjsxnR
+ nZg+C3oGDA==
+In-Reply-To: <f02fd939-85f7-414a-8b03-a9ebe56c7660@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-As CPU hotplug is now being used to enable runtime update to the list
-of nohz_full and managed_irq CPUs, we should avoid using CPU 0 in the
-formation of isolated partition as CPU 0 may not be able to be brought
-offline like in the case of x86-64 architecture. So a number of the
-test cases in test_cpuset_prs.sh will have to be updated accordingly.
+On 4/20/26 6:52 PM, Mykyta Yatsenko wrote:
+> On 4/20/26 2:46 PM, Jerome Marchand wrote:
+>> The file_reader/on_open_expect_fault fails consistently on my system.
+>> It expects a page fault on first dynptr read of some range the exe
+>> file of the current process because it has paged out that page range
+>> earlier. However a lot can happen to that range (which depending on
+>> the actual memory layout could contain text section, data section,
+>> sections )related to dynamic linking...) between the moment it was
+>> paged out and the moment the bpf program expected to hit a pagefault
+>> actually run.
+>>
+>> A bit of instrumentation with mincore() shows that pages from that
+>> range were accessed several times before the program is run. In
+>> particular the call of file_reader__load() seems to fault all the
+>> range in.
+>>
+>> Move the call to madvise(MADV_PAGEOUT) to just before attaching the
+>> program to minimize the risk of having those page pulled back in from
+>> under our feet.
+>>
+>> Signed-off-by: Jerome Marchand <jmarchan@redhat.com>
+>> ---
+> 
+> Thank you for the patch, the change looks good. Does it fail 
+> consistently on 4K page size?
 
-A new test will also be run in offline isn't allowed in CPU 0 to verify
-that using CPU 0 as part of an isolated partition will fail.
+It did when I ran the test manually. On our automated testing system, it 
+failed intermittently.
 
-The cgroup-v2.rst is also updated to reflect the new capability of using
-CPU hotplug to enable run time change to the nohz_full and managed_irq
-CPU lists.
+Regards,
+Jerome
 
-Since there is a slight performance overhead to enable runtime changes
-to nohz_full CPU list, users have to explicitly opt in by adding a
-"nohz_ful" kernel command line parameter with or without a CPU list.
-
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- Documentation/admin-guide/cgroup-v2.rst       | 35 +++++++---
- .../selftests/cgroup/test_cpuset_prs.sh       | 70 +++++++++++++++++--
- 2 files changed, 92 insertions(+), 13 deletions(-)
-
-diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-index 8ad0b2781317..e97fc031eb86 100644
---- a/Documentation/admin-guide/cgroup-v2.rst
-+++ b/Documentation/admin-guide/cgroup-v2.rst
-@@ -2604,11 +2604,12 @@ Cpuset Interface Files
- 
- 	It accepts only the following input values when written to.
- 
--	  ==========	=====================================
-+	  ==========	===============================================
- 	  "member"	Non-root member of a partition
- 	  "root"	Partition root
--	  "isolated"	Partition root without load balancing
--	  ==========	=====================================
-+	  "isolated"	Partition root without load balancing and other
-+		        OS noises
-+	  ==========	===============================================
- 
- 	A cpuset partition is a collection of cpuset-enabled cgroups with
- 	a partition root at the top of the hierarchy and its descendants
-@@ -2652,11 +2653,29 @@ Cpuset Interface Files
- 	partition or scheduling domain.  The set of exclusive CPUs is
- 	determined by the value of its "cpuset.cpus.exclusive.effective".
- 
--	When set to "isolated", the CPUs in that partition will be in
--	an isolated state without any load balancing from the scheduler
--	and excluded from the unbound workqueues.  Tasks placed in such
--	a partition with multiple CPUs should be carefully distributed
--	and bound to each of the individual CPUs for optimal performance.
-+	When set to "isolated", the CPUs in that partition will be in an
-+	isolated state without any load balancing from the scheduler and
-+	excluded from the unbound workqueues as well as other OS noises.
-+	Tasks placed in such a partition with multiple CPUs should be
-+	carefully distributed and bound to each of the individual CPUs
-+	for optimal performance.
-+
-+	As CPU hotplug, if supported, is used to improve the degree of
-+	CPU isolation close to the "nohz_full" kernel boot parameter.
-+	In some architectures, like x86-64, the boot CPU (typically CPU
-+	0) cannot be brought offline, so the boot CPU should not be used
-+	for forming isolated partitions.  The "nohz_full" kernel boot
-+	parameter needs to be present to enable full dynticks support
-+	and RCU no-callback CPU mode for CPUs in isolated partitions
-+	even if the optional cpu list isn't provided.
-+
-+	Using CPU hotplug for creating or destroying an isolated
-+	partition can cause latency spike in applications running
-+	in other isolated partitions.  A reserved list of CPUs can
-+	optionally be put in the "nohz_full" kernel boot parameter to
-+	alleviate this problem.  When these reserved CPUs are used for
-+	isolated partitions, CPU hotplug won't need to be invoked and
-+	so there won't be latency spike in other isolated partitions.
- 
- 	A partition root ("root" or "isolated") can be in one of the
- 	two possible states - valid or invalid.  An invalid partition
-diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-index a56f4153c64d..eebb4122b581 100755
---- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-+++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-@@ -67,6 +67,12 @@ then
- 	echo Y > /sys/kernel/debug/sched/verbose
- fi
- 
-+# Enable dynamic debug message if available
-+DYN_DEBUG=/proc/dynamic_debug/control
-+[[ -f $DYN_DEBUG ]] && {
-+	echo "file kernel/cpu.c +p" > $DYN_DEBUG
-+}
-+
- cd $CGROUP2
- echo +cpuset > cgroup.subtree_control
- 
-@@ -84,6 +90,15 @@ echo member > test/cpuset.cpus.partition
- echo "" > test/cpuset.cpus
- [[ $RESULT -eq 0 ]] && skip_test "Child cgroups are using cpuset!"
- 
-+#
-+# If nohz_full parameter is specified and nohz_full file exists, CPU hotplug
-+# will be used to modify nohz_full cpumask to include all the isolated CPUs
-+# in cpuset isolated partitions.
-+#
-+NOHZ_FULL=/sys/devices/system/cpu/nohz_full
-+BOOT_NOHZ_FULL=$(fmt -1 /proc/cmdline | grep "^nohz_full")
-+[[ "$BOOT_NOHZ_FULL" = nohz_full ]] && CHK_NOHZ_FULL=1
-+
- #
- # If isolated CPUs have been reserved at boot time (as shown in
- # cpuset.cpus.isolated), these isolated CPUs should be outside of CPUs 0-8
-@@ -318,8 +333,8 @@ TEST_MATRIX=(
- 	# Invalid to valid local partition direct transition tests
- 	" C1-3:P2  X4:P2    .      .      .      .      .      .     0 A1:1-3|XA1:1-3|A2:1-3:XA2: A1:P2|A2:P-2 1-3"
- 	" C1-3:P2  X4:P2    .      .      .    X3:P2    .      .     0 A1:1-2|XA1:1-3|A2:3:XA2:3 A1:P2|A2:P2 1-3"
--	" C0-3:P2    .      .    C4-6   C0-4     .      .      .     0 A1:0-4|B1:5-6 A1:P2|B1:P0"
--	" C0-3:P2    .      .    C4-6 C0-4:C0-3  .      .      .     0 A1:0-3|B1:4-6 A1:P2|B1:P0 0-3"
-+	" C1-3:P2    .      .    C4-6   C1-4     .      .      .     0 A1:1-4|B1:5-6 A1:P2|B1:P0"
-+	" C1-3:P2    .      .    C4-6 C1-4:C1-3  .      .      .     0 A1:1-3|B1:4-6 A1:P2|B1:P0 1-3"
- 
- 	# Local partition invalidation tests
- 	" C0-3:X1-3:P2 C1-3:X2-3:P2 C2-3:X3:P2 \
-@@ -329,8 +344,8 @@ TEST_MATRIX=(
- 	" C0-3:X1-3:P2 C1-3:X2-3:P2 C2-3:X3:P2 \
- 				   .      .    C4:X     .      .     0 A1:1-3|A2:1-3|A3:2-3|XA2:|XA3: A1:P2|A2:P-2|A3:P-2 1-3"
- 	# Local partition CPU change tests
--	" C0-5:P2  C4-5:P1  .      .      .    C3-5     .      .     0 A1:0-2|A2:3-5 A1:P2|A2:P1 0-2"
--	" C0-5:P2  C4-5:P1  .      .    C1-5     .      .      .     0 A1:1-3|A2:4-5 A1:P2|A2:P1 1-3"
-+	" C1-5:P2  C4-5:P1  .      .      .    C3-5     .      .     0 A1:1-2|A2:3-5 A1:P2|A2:P1 1-2"
-+	" C1-5:P2  C4-5:P1  .      .    C2-5     .      .      .     0 A1:2-3|A2:4-5 A1:P2|A2:P1 2-3"
- 
- 	# cpus_allowed/exclusive_cpus update tests
- 	" C0-3:X2-3 C1-3:X2-3 C2-3:X2-3 \
-@@ -442,6 +457,21 @@ TEST_MATRIX=(
- 	"   C0-3     .      .    C4-5   X3-5     .      .      .     1 A1:0-3|B1:4-5"
- )
- 
-+#
-+# Test matrix to verify that using CPU 0 in isolated (local or remote) partition
-+# will fail when offline isn't allowed for CPU 0.
-+#
-+CPU0_ISOLCPUS_MATRIX=(
-+	#  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs Pstate ISOLCPUS
-+	#  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- ------ --------
-+	"   C0-3     .      .    C4-5     P2     .      .      .     0 A1:0-3|B1:4-5 A1:P-2"
-+	"   C1-3     .      .      .      P2     .      .      .     0 A1:1-3 A1:P2"
-+	"   C1-3     .      .      .    P2:C0-3  .      .      .     0 A1:0-3 A1:P-2"
-+	"  CX0-3   C0-3     .      .       .     P2     .      .     0 A1:0-3|A2:0-3 A2:P-2"
-+	"  CX0-3 C0-3:X1-3  .      .       .     P2     .      .     0 A1:0|A2:1-3 A2:P2"
-+	"  CX0-3 C0-3:X1-3  .      .       .   P2:X0-3  .      .     0 A1:0-3|A2:0-3 A2:P-2"
-+)
-+
- #
- # Cpuset controller remote partition test matrix.
- #
-@@ -513,7 +543,7 @@ write_cpu_online()
- 		}
- 	fi
- 	echo $VAL > $CPUFILE
--	pause 0.05
-+	pause 0.10
- }
- 
- #
-@@ -654,6 +684,8 @@ dump_states()
- 		[[ -e $PCPUS  ]] && echo "$PCPUS: $(cat $PCPUS)"
- 		[[ -e $ISCPUS ]] && echo "$ISCPUS: $(cat $ISCPUS)"
- 	done
-+	# Dump nohz_full
-+	[[ -f $NOHZ_FULL ]] && echo "nohz_full: $(cat $NOHZ_FULL)"
- }
- 
- #
-@@ -789,6 +821,18 @@ check_isolcpus()
- 		EXPECTED_SDOMAIN=$EXPECTED_ISOLCPUS
- 	fi
- 
-+	#
-+	# Check if nohz_full match cpuset.cpus.isolated if nohz_boot parameter
-+	# specified with no parameter.
-+	#
-+	[[ -f $NOHZ_FULL && "$BOOT_NOHZ_FULL" = nohz_full ]] && {
-+		NOHZ_FULL_CPUS=$(cat $NOHZ_FULL)
-+		[[ "$ISOLCPUS" != "$NOHZ_FULL_CPUS" ]] && {
-+			echo "nohz_full ($NOHZ_FULL_CPUS) does not match cpuset.cpus.isolated ($ISOLCPUS)"
-+			return 1
-+		}
-+	}
-+
- 	#
- 	# Appending pre-isolated CPUs
- 	# Even though CPU #8 isn't used for testing, it can't be pre-isolated
-@@ -1070,6 +1114,21 @@ run_remote_state_test()
- 	echo "All $I tests of $TEST PASSED."
- }
- 
-+#
-+# Testing CPU 0 isolated partition test when offline is disabled
-+#
-+run_cpu0_isol_test()
-+{
-+	# Skip the test if CPU0 offline is allowed or if nohz_full kernel
-+	# boot parameter is missing.
-+	CPU0_ONLINE=/sys/devices/system/cpu/cpu0/online
-+	[[ -f $CPU0_ONLINE ]] && return
-+	grep -q -w nohz_full /proc/cmdline
-+	[[ $? -ne 0 ]] && return
-+
-+	run_state_test CPU0_ISOLCPUS_MATRIX
-+}
-+
- #
- # Testing the new "isolated" partition root type
- #
-@@ -1207,6 +1266,7 @@ test_inotify()
- trap cleanup 0 2 3 6
- run_state_test TEST_MATRIX
- run_remote_state_test REMOTE_TEST_MATRIX
-+run_cpu0_isol_test
- test_isolated
- test_inotify
- echo "All tests PASSED."
--- 
-2.53.0
+> 
+> Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
+> 
+>>   .../selftests/bpf/prog_tests/file_reader.c    | 22 +++++++++----------
+>>   1 file changed, 10 insertions(+), 12 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/bpf/prog_tests/file_reader.c b/ 
+>> tools/testing/selftests/bpf/prog_tests/file_reader.c
+>> index 5cde32b35da44..48aae7ea0e4bb 100644
+>> --- a/tools/testing/selftests/bpf/prog_tests/file_reader.c
+>> +++ b/tools/testing/selftests/bpf/prog_tests/file_reader.c
+>> @@ -10,6 +10,7 @@
+>>   const char *user_ptr = "hello world";
+>>   char file_contents[256000];
+>> +void *addr;
+>>   void *get_executable_base_addr(void)
+>>   {
+>> @@ -26,8 +27,7 @@ void *get_executable_base_addr(void)
+>>   static int initialize_file_contents(void)
+>>   {
+>>       int fd, page_sz = sysconf(_SC_PAGESIZE);
+>> -    ssize_t n = 0, cur, off;
+>> -    void *addr;
+>> +    ssize_t n = 0, cur;
+>>       fd = open("/proc/self/exe", O_RDONLY);
+>>       if (!ASSERT_OK_FD(fd, "Open /proc/self/exe\n"))
+>> @@ -52,16 +52,6 @@ static int initialize_file_contents(void)
+>>       /* page-align base file address */
+>>       addr = (void *)((unsigned long)addr & ~(page_sz - 1));
+>> -    /*
+>> -     * Page out range 0..512K, use 0..256K for positive tests and
+>> -     * 256K..512K for negative tests expecting page faults
+>> -     */
+>> -    for (off = 0; off < sizeof(file_contents) * 2; off += page_sz) {
+>> -        if (!ASSERT_OK(madvise(addr + off, page_sz, MADV_PAGEOUT),
+>> -                   "madvise pageout"))
+>> -            return errno;
+>> -    }
+>> -
+>>       return 0;
+>>   }
+>> @@ -90,6 +80,14 @@ static void run_test(const char *prog_name)
+>>       if (!ASSERT_OK(err, "file_reader__load"))
+>>           goto cleanup;
+>> +    /*
+>> +     * Page out range 0..512K, use 0..256K for positive tests and
+>> +     * 256K..512K for negative tests expecting page faults
+>> +     */
+>> +    if (!ASSERT_OK(madvise(addr, sizeof(file_contents) * 2, 
+>> MADV_PAGEOUT),
+>> +               "madvise pageout"))
+>> +        goto cleanup;
+>> +
+>>       err = file_reader__attach(skel);
+>>       if (!ASSERT_OK(err, "file_reader__attach"))
+>>           goto cleanup;
+> 
 
