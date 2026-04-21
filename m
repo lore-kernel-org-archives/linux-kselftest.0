@@ -1,173 +1,123 @@
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9E9131E844
-	for <linux-kselftest@vger.kernel.org>; Tue, 21 Apr 2026 17:41:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.178
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776793262; cv=pass; b=k3Hul6sJdyh63FpQDu9082lVA7pugUfdjXySQrV9G9jL9uZvGYtsWpk94VNW9BzajjpUzTfBgUphwy1aE397UYfKSQp7Zb23dlMZlkokVC9vXeNVBSn6Kjcbp+vXt5VQLk0OrDtpmy5J4jLXiV5Afp3c1bLA2VdsxaDzm3rAG3o=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776793262; c=relaxed/simple;
-	bh=tCH8EMRzy1X9IMXq6R2TSgftHF1nceCRK1je/4RFR+0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=App1krrbtv9zKl9vRQr36u8bz9Fw7kU9Bl7tgIEIkH9x8vjEoKGZKvtEwnPfGTL6Y1VIho4rKm+kSQVGzyB0JJntHSD4ZyeooQe4MZ2nAHLNkMQeEzxdYlenky0IX9aXRDoipQrId4cWJfAa4kI7ytiKqwiWpdGXH4dudDHa10Q=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fbjgHHau; arc=pass smtp.client-ip=209.85.208.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E21F336682A
+	for <linux-kselftest@vger.kernel.org>; Tue, 21 Apr 2026 18:21:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776795694; cv=none; b=bVmlJWyctOXLn3DI0rSu5jtKwTtyonrgMjK8NYAcg0HJB9BT3r5Y7+esItFSxhYGbjVOt7KoLWXe0xatWyxpYKwigz4Er0vaJFY+UJLXUvq3cchr6iWhmYns8NK5B8iDI6uGh6rEHdkIVNJaAxEviDfEPPASZLsJB2N8/9h1efQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776795694; c=relaxed/simple;
+	bh=aQmfxg7NQpvGz9XaY5eGgk1AWvqY2YAH6p7UeRcAVIc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KdtP/Q6rmtD0vhHuzmndlgfcz49QYmP30JwsZgJpWNzSBtUV/++/iKyZXYZyDZTnQW/sZlwMWmeLIlDDXuuOTcqmxDuoGf9BgSEYpHSg3zdPaOEq99uV6ndYz0VJ4hLoS+ZpwuhuztPdP+PCI34gVykgfduhmCXLnVSWqCvUFZE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oJoelv2H; arc=none smtp.client-ip=209.85.221.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fbjgHHau"
-Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-38dd9f11a09so42186351fa.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Apr 2026 10:41:00 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776793259; cv=none;
-        d=google.com; s=arc-20240605;
-        b=IdW2Iatnvv2Za70/skLoSQ9NZZl4sRgTy+GIaQXjC4YEt5ArkdPpVpfWfkLOxhNCO9
-         8eLBwk6wfLqPWF4DQnd8JxZsDbhqaRSh0S5apx71UYH2KbaF27xoYzbCyTLRuDr2p0nO
-         HIcsbY+HX14JYGWbMcI20dog6NCoNFtTHkT8vEB+mKIwiGehinVkNSYME5swhqopPshb
-         +3z3nBsAU15ix/lUmApXE9nYhlr3j6Bmt+momC79v5TznVnyoON1jbYQg9obQDWcUXMC
-         bIIIiJU+27oSgPm2TY62F2gBEPUl27xxxx1mCX3Z/kqLjpUPim4QrCaEDvetRzYDgXv0
-         Rt5Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=gAM3zLbl9RAB5ix2RgDFnveQg42iFe43IZ/4vSwL0po=;
-        fh=GkLRT4LhoQZbgby62ycTmsoUampkodme8DT9eYxI9JA=;
-        b=g1CG9mMGrRSbuTb/2UVL+LVuc9GOXa3vdrV1VTmJaJXmoKCg653jl/9n2njte6CyN+
-         aIciIq8g/7WIsFKq44AS9kakUtonNtbgp5dG8jGpVsjh9myBOALP5KbQ2U6ji2IKtjyf
-         JxPs29yoUEPl3fjFWWVH4/AQXf5VhbxLEAFRGIoSQc3RnTTffk4lJk2TH2vz1hNsHnIS
-         vqNaDU+ZJ+Cn/OVlAXkt/1416shrgXqdAyI19ubo7HogVloUrko80kDecyU+elODjwA0
-         rGcDLbYLFJUdcxi7+6nlHOxNpuo47QZEOW/9p5Pxui6Efj3LQCEovNYmDk9TxFMtCzsn
-         gT3A==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oJoelv2H"
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-43fe8bda8e9so2378015f8f.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Apr 2026 11:21:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1776793259; x=1777398059; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gAM3zLbl9RAB5ix2RgDFnveQg42iFe43IZ/4vSwL0po=;
-        b=fbjgHHausqRnAQv/Gm0WB1KYT5Ef+TjO137SVJmjln5wwrHMvzEM38YMAuW7lI2DTb
-         NmEcU9H8n+70Xuk4H9OKhUBfjM+y8aqzI61ep7qrPQsvQuLY4PBSJrvyNi54ZOD0lQEb
-         hc9TLUSu55ru6RHCT9SmkNPdZUWzQ0RwesPUupmg+Vkq0H44zIrr6UN1iMayAsCbIDYP
-         w2pI6PeAKZlgHOp1DYAQD7SK+YIsZxubN5NKtf+JS68fS9biWnuos4dDvBonRAl2iC0d
-         1nUIA2R+ep93u2n9Fq+p91C1rVCx8xwQHIcIpKSIVBGgn85bcpA+5RwGL9/kDfPaelwF
-         fr4A==
+        d=gmail.com; s=20251104; t=1776795680; x=1777400480; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ey1/flgNoHl/BMtWwmVozPsjz6fm2TXt8LsvNUUYd8c=;
+        b=oJoelv2HHEVJnzn6fnmH8P6XhUL/qLzKdzJeg6fPIWUdz6xtf0A5UPHXH7BgykZZFK
+         HggTElADNEdJUN4i26O5eM8XYGcDjFL/h9O1xMVnY9LxgCEaE+DfFJpAupdt+1Ikhpi8
+         hq9TwZXNbtTPmy43l90iDTsnIHhPd8oNVCJlZ9HiX8G/fdVzdDei+99m+CPs3osyozgm
+         2Wkxe973kQKDxlImQoVSyH5PWiWMBz3C5UPAXytBSqwQG48DBy6biM4+lJmcW6xg8T2w
+         UKf6VX7CoXsVf77AdZWJGSfDQczxxPaEug4OdKrNboaRt3SGnXfF1mAts6d2MOC6rDn3
+         4W+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776793259; x=1777398059;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=gAM3zLbl9RAB5ix2RgDFnveQg42iFe43IZ/4vSwL0po=;
-        b=dR6XLnK8G0aBuBPDpYnGYkZFhI79DLyNrQCv9e9qbshW7IgdHCIPzN2OLh3X325RAi
-         F3r/fGN7XoQJ3Ari4ciJkDBaVumFEHLXWawPK80Jczg9vpl03Za0ELLT5hOo0ZWxchCl
-         m9TyS/duSpf+OAcg54KESeZWx7uzhuzJhfuR1l9dPCibVModcDgEV3kAjs31kj3Mp8CR
-         zFICNPxuZYyGcnPOzX6wYEN2WIWEz+q9oqJL7NzD1nw8jRYz31KRB2N8xCZC39BmPERa
-         s3kcJncC+8i7yaGgkUZGeVD1kW8w+07HjUw/W2zX2UYWrGoGxG5ZWP/U0/I6gWDJhdCy
-         i8lg==
-X-Forwarded-Encrypted: i=1; AFNElJ9RYtA+YMHezO8UBzExvFG57D1tStiD13hpY9FUtgUFNIoqthcJpaHySIUi9b+QYxz8O+CbpWt4oiSFZyMhcXA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxpYB0VatplU7aZfxWCBhEJrx9PD0pu0y1b/Z+fKQv/XmFLntYn
-	nCm/XPHUSoSNdu9SpHzYpWv5ALrPAD4/zcQkepLkwes0+YuwQtbMr491J9xG6OENl13stJLpqwa
-	nsNCDrhEHk3NO9dlrc94vvG3yrv6bc/Pky3ZE2fgY
-X-Gm-Gg: AeBDiesu1Zzvnkgv6B2ig6MrirwInUfHYz+3SajPXVO/9LvCAzzmyfv4Dc+FUAWApoM
-	e/CLRM5S72zJfrANB0r7WOs36j0hWF9za7+/SzPshvQBFy2iX15V+uonakDF5vil2Lr2pdw1MOI
-	RvTrKYC/+OEDrWmVz2+UrXQ/rP/meAmtdBpM/lyYHGFHGCxVSI/N5FfdE2OTftjhDPAVVXbFpMx
-	4WB3tmm/MR0udSiJFyGrhQRrC0KWKBegJwGvwGZRxloT1yy1v2gvReSrbI0oMOmAAmloS5JUJ0u
-	Hyy8OkgygbzL0SJptkVI/Ok7sxAIXg==
-X-Received: by 2002:a2e:a594:0:b0:38d:ed62:f1d5 with SMTP id
- 38308e7fff4ca-38ec7aa4a03mr63977601fa.17.1776793258292; Tue, 21 Apr 2026
- 10:40:58 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1776795680; x=1777400480;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ey1/flgNoHl/BMtWwmVozPsjz6fm2TXt8LsvNUUYd8c=;
+        b=j6qem7bCax8d3329ZSPGZG0lrl8/ocNtbemdGSxRlSnj92R7XoO1Nf3fhhH/XxKLt5
+         +de/tBKj2pRhjFnz7kELsvbIqOjM59PddVK9pJOePz9sORv1Qmpf7HfRdk6hror4zHaK
+         xrzx40UbaZgHxjfxKKpwTvG6/PsZH20l3/bZL6V7TLx/H0D7q3Cb3Lg8PIkkNxwhLrAq
+         ItV6p1dz9duinrcq9GpzEAFyBlOFwv9j5cVyCxUMpgT40YCLzzgHMZa8jhw1g2FGrovD
+         e85mtHBILWbcG7IylspkoCAJ5eg743Bo/0iAxx59WWbqIsz+pUGRxslsiVQVqS1BTool
+         KrdQ==
+X-Forwarded-Encrypted: i=1; AFNElJ8VgvQNb4KA91hzVU/z8EoTOJsemZ47kM3VHatQXbFea1KfTJRxsQI4LD6wZEv01sGeiMtY05ywbk9PUG6s3es=@vger.kernel.org
+X-Gm-Message-State: AOJu0YylGnma4szuzQKAHqGN1XjDdmxjpMaL0fWLpAsairZRsWSneafs
+	sR5lg3W/1pUYTbvyoi3aw7RgPdABLtcphw4XLG48tRyXkc51PdfZs3Ni
+X-Gm-Gg: AeBDiesHZOLdK0VCalratFpODeTOgGCCLcUs2Zqrn2g7vudfDoZQyxDweUuJVWpiysM
+	nEM9lQ13G4RjRNuUhNcSAxgEauxDZmxCTL0U3TtLEiQbyclEkQOcIgI/4aQmYncWQSxXfIQ/1Xh
+	NaQh+9KEeLzvz3OX8KuznJSxOMTY34bzoSa1uwhVXhI8o0O4rK7v/VR2cXzynqhf+8n+kg6ooT4
+	QJoLHBZ7hGJZy3prqlGHRtnpvuDslYP8gVavVa4vYq72zJNhBXdfvZfAzKT9IQ77xhwf/ly1SfJ
+	FM0nyuSzAN5YRJzSDITM61CU13noomner8X7dXuMgNW2YuWoKjx6wfknPp84wmRKz6bE/64t3uf
+	AqXqqEqt1qkDc98SDhFfT+gefxA6XJ8I4bX91as4fsmjh4iKJ50bpwAx6vd7HhKl5JTieaZemLO
+	tC3YoIY4HwIONxvqFlM42wE4VlA9AI/UGymTuoH3i0qLzbJW2g53OlKNL+eMIJJ9WOX3N4IBCrH
+	HmZ3etjntASvySXOtE1+mmqzrb00oc/k81LoMSVFspfMWJ89Ib5f4M5DZkeN/YQJ34GyUCwLPes
+	Tw0xBPv0TuwiBMRheoDBsXSAl9YiBb0lPozhY9j1CHSPXPy2HNHbzA==
+X-Received: by 2002:a05:6000:2082:b0:441:1c18:f779 with SMTP id ffacd0b85a97d-4411c18f7c5mr10736741f8f.37.1776795680060;
+        Tue, 21 Apr 2026 11:21:20 -0700 (PDT)
+Received: from mail.gmail.com (2a01cb0889497e0026dd69ace0c02e6e.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:26dd:69ac:e0c0:2e6e])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43fe4cb1365sm41235025f8f.7.2026.04.21.11.21.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Apr 2026 11:21:19 -0700 (PDT)
+Date: Tue, 21 Apr 2026 20:21:16 +0200
+From: Paul Chaignon <paul.chaignon@gmail.com>
+To: Alexis =?iso-8859-1?Q?Lothor=E9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>, ebpf@linuxfoundation.org,
+	Bastien Curutchet <bastien.curutchet@bootlin.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+	Alan Maguire <alan.maguire@oracle.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: drop xdping tool
+Message-ID: <aefAHLdVZaOmf1Os@mail.gmail.com>
+References: <20260417-xdping-v1-1-9b0ce0e7adf8@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260323235817.1960573-1-dmatlack@google.com> <20260323235817.1960573-8-dmatlack@google.com>
-In-Reply-To: <20260323235817.1960573-8-dmatlack@google.com>
-From: David Matlack <dmatlack@google.com>
-Date: Tue, 21 Apr 2026 10:40:29 -0700
-X-Gm-Features: AQROBzAxQqecIHMlVLo5_fKuOniGGCbgFfk1LcXxhbCrQbMNTrTkqomhARN-2eM
-Message-ID: <CALzav=ehpWA=XchL+XLZuaYfYmBTPNWDYt1W3LFY5-6+US4E7w@mail.gmail.com>
-Subject: Re: [PATCH v3 07/24] vfio/pci: Preserve vfio-pci device files across
- Live Update
-To: Alex Williamson <alex@shazbot.org>, Bjorn Helgaas <bhelgaas@google.com>
-Cc: Adithya Jayachandran <ajayachandra@nvidia.com>, Alexander Graf <graf@amazon.com>, 
-	Alex Mastro <amastro@fb.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Ankit Agrawal <ankita@nvidia.com>, Arnd Bergmann <arnd@arndb.de>, Askar Safin <safinaskar@gmail.com>, 
-	"Borislav Petkov (AMD)" <bp@alien8.de>, Chris Li <chrisl@kernel.org>, Dapeng Mi <dapeng1.mi@linux.intel.com>, 
-	David Rientjes <rientjes@google.com>, Feng Tang <feng.tang@linux.alibaba.com>, 
-	Jacob Pan <jacob.pan@linux.microsoft.com>, Jason Gunthorpe <jgg@nvidia.com>, 
-	Jason Gunthorpe <jgg@ziepe.ca>, Jonathan Corbet <corbet@lwn.net>, Josh Hilke <jrhilke@google.com>, 
-	Kees Cook <kees@kernel.org>, Kevin Tian <kevin.tian@intel.com>, kexec@lists.infradead.org, 
-	kvm@vger.kernel.org, Leon Romanovsky <leon@kernel.org>, Leon Romanovsky <leonro@nvidia.com>, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
-	linux-pci@vger.kernel.org, Li RongQing <lirongqing@baidu.com>, 
-	Lukas Wunner <lukas@wunner.de>, Marco Elver <elver@google.com>, 
-	=?UTF-8?Q?Micha=C5=82_Winiarski?= <michal.winiarski@intel.com>, 
-	Mike Rapoport <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>, 
-	Pasha Tatashin <pasha.tatashin@soleen.com>, "Paul E. McKenney" <paulmck@kernel.org>, 
-	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>, 
-	"Peter Zijlstra (Intel)" <peterz@infradead.org>, Pranjal Shrivastava <praan@google.com>, 
-	Pratyush Yadav <pratyush@kernel.org>, Raghavendra Rao Ananta <rananta@google.com>, 
-	Randy Dunlap <rdunlap@infradead.org>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
-	Saeed Mahameed <saeedm@nvidia.com>, Samiullah Khawaja <skhawaja@google.com>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Vipin Sharma <vipinsh@google.com>, 
-	Vivek Kasireddy <vivek.kasireddy@intel.com>, William Tu <witu@nvidia.com>, Yi Liu <yi.l.liu@intel.com>, 
-	Zhu Yanjun <yanjun.zhu@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260417-xdping-v1-1-9b0ce0e7adf8@bootlin.com>
 
-On Mon, Mar 23, 2026 at 4:58=E2=80=AFPM David Matlack <dmatlack@google.com>=
- wrote:
+On Fri, Apr 17, 2026 at 05:33:02PM +0200, Alexis Lothoré (eBPF Foundation) wrote:
+> As part of a larger cleanup effort in the bpf selftests directory,
+> tests and scripts are either being converted to the test_progs framework
+> (so they are executed automatically in bpf CI), or removed if not
+> relevant for such integration.
+> 
+> The test_xdping.sh script (with the associated xdping.c) acts as a RTT
+> measurement tool, by attaching two small xdp programs to two interfaces.
+> Converting this test to test_progs may not make much sense:
+> - RTT measurement does not really fit in the scope of a functional test,
+>   this is rather about measuring some performance level.
+> - there are other existing tests in test_progs that actively validate
+>   XDP features like program attachment, return value processing, packet
+>   modification, etc
+> 
+> Drop test_xdping.sh and the corresponding xdping.c userspace part. Keep
+> the ebpf part (xdping_kern.c), as it is used by another test integrated
+> in test_progs (btf_dump)
 
-> +static int vfio_pci_liveupdate_freeze(struct liveupdate_file_op_args *ar=
-gs)
-> +{
-> +       struct vfio_device *device =3D vfio_device_from_file(args->file);
-> +       struct vfio_pci_core_device *vdev;
-> +       struct pci_dev *pdev;
-> +       int ret;
-> +
-> +       vdev =3D container_of(device, struct vfio_pci_core_device, vdev);
-> +       pdev =3D vdev->pdev;
-> +
-> +       guard(mutex)(&device->dev_set->lock);
-> +
-> +       /*
-> +        * Userspace must disable interrupts on the device prior to freez=
-e so
-> +        * that the device does not send any interrupts until new interru=
-pt
-> +        * handlers have been established by the next kernel.
-> +        */
-> +       if (vdev->irq_type !=3D VFIO_PCI_NUM_IRQS) {
-> +               pci_err(pdev, "Freeze failed! Interrupts are still enable=
-d.\n");
-> +               return -EINVAL;
-> +       }
-> +
-> +       ret =3D pci_load_saved_state(pdev, vdev->pci_saved_state);
-> +       if (ret)
-> +               return ret;
-> +
-> +       vfio_pci_core_try_reset(vdev);
+The xdping_kern object file is just used in bpf_dump to check we can
+parse the license as expected. You can replace that by any other test
+with a GPL license (ex., btf_type_tag_percpu.bpf.o) and remove
+xdping_kern.c.
 
-I think a call to pci_clear_master() is needed here to so the device
-stops issuing memory transactions while VFIO is trying to resetting
-it. Otherwise I see these timeouts when running
-vfio_pci_liveupdate_kexec_test with Intel DSA: "timed out waiting for
-pending transaction; performing function level reset anyway".
+[...]
 
-Sashiko also wondered if pci_clear_master() is needed to ensure that
-the device has bus mastering disabled during the kexec but I don't
-think that is actually an issue. vfio_pci_core_enable() makes sure
-that vdev->pci_saved_state has bus mastering disabled, so
-pci_restore_state() below here should guaranteed it is clear during
-kexec.
-
-https://sashiko.dev/#/patchset/20260323235817.1960573-1-dmatlack%40google.c=
-om?part=3D7
-
-> +       pci_restore_state(pdev);
-> +       return 0;
->  }
