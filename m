@@ -1,63 +1,118 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 306C2362156;
-	Tue, 21 Apr 2026 16:48:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF29E303A04;
+	Tue, 21 Apr 2026 16:51:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776790101; cv=none; b=bU+sFHfWDM1R/3xLJu6vVJJyW0Kk1dLUG6bA6vPtJw54Q9I65ZISCwe0F/ngH7M2LANoOHwW7ssUFAKtM+GZhMggMLbUxY+WZlO/6VhZPb3mpy1XdZ6+HRqsit2xWXqLSOy0VBLCnkrUaAj4swrBg7X64cQBd5G9Fhv4bgj/xkU=
+	t=1776790316; cv=none; b=tiQkrzj2nAnuaTR7b5zKhgPSSJt+WNXd1xtTLJb71aZDcMUeCPY2C5VRa9CmX+ydy9q0hmlwKYFOfgPsNlSC4IiCpZt9KkH5kU/L6nsjQ0Nvpoq1406Y3UIqWoodNIAvyPHGRwr2ilvD6t5ibeKoDInooJwEBiBG9ny5vl+oRlw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776790101; c=relaxed/simple;
-	bh=ldA8hS36Kur5HttaL1WpXfyvcIQX+S7LJTsP2yQx2P4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B017dOhfJTLrYGeGv8jtMMjURALu4ypV4tsKOUSDwHfL2UbQfI3w1nKqqcPjVFmtP3mU31vJXMsI0uISMB5NaOGZI7DpgPMOpCtaIyBKjUHjLowbUNH3bhymfsRXBX0nps6xc0pxpSMjFUVgP8pa5wUOEalkI99tPIg3g12GC9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TKtJb3k7; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776790316; c=relaxed/simple;
+	bh=Uj4yLnfolWi0joGL37a4KRLKuEFr9kz2JSlGsbIgul4=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=YoP80GBiZQjTW8rz5um02aeqQpIxn1qCYMgUQ/9EHBtrJ6I5Mo90k1x5MQoVuEGafd1yeRAWLwCjyEbtdlzvO9/RL98DSplBiKiqgVlix8sSFNusBRdIRKrrKGCXYX4LioHBm6RukI4eKdx5Frov3KsCnETOaCA9de+j7hcYVqk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IL8BIx6E; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TKtJb3k7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE14AC2BCB0;
-	Tue, 21 Apr 2026 16:48:20 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IL8BIx6E"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CD5DC2BCB3;
+	Tue, 21 Apr 2026 16:51:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776790100;
-	bh=ldA8hS36Kur5HttaL1WpXfyvcIQX+S7LJTsP2yQx2P4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TKtJb3k7Kay0MG3ISkg3LhbpGSrbheYJDtfOn1hBJOJTqqvEXGcA4e8F28IpW9+Jo
-	 2e1+y2LY2FXtCvdpqYkUHo2SkupBDHaSbSlRZXfk3RJ5nk3rwUtHUsYR4J4Z59uav/
-	 MN7oY6qixAvr2QPMaY5zXNoZk3COzEmmnpI0vxHmGa8wqkD31NTExm2JIHiA+ZqfZq
-	 AgOS0407XOYifMEPE1snxcqbR5mQ53GKe4IvBKPloLp+GP0zJzzTVCPBxachC2lyu6
-	 6g5IaTdLpRGJrjAxPCSdo6DhogIsI0cMhfvWm+elIHmCvR9M/dgmpkdzNXhd6MYAP9
-	 0Ss/SpKjiCW5g==
-Date: Tue, 21 Apr 2026 09:48:20 -0700
-From: Kees Cook <kees@kernel.org>
-To: Magnus Lindholm <linmag7@gmail.com>
-Cc: luto@amacapital.net, wad@chromium.org, shuah@kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-alpha@vger.kernel.org, glaubitz@physik.fu-berlin.de
-Subject: Re: [PATCH] selftests/seccomp: add Alpha support to seccomp_bpf
-Message-ID: <202604210947.C4D4020@keescook>
-References: <20260203063357.14320-1-linmag7@gmail.com>
- <202602041817.3967F048D@keescook>
- <CA+=Fv5S=XxDyNFdqhR3p_wEPwGEpjfE+Rqk1h1JJhactWFib_Q@mail.gmail.com>
- <CA+=Fv5SZK0eaT5Y_a-eTdZacFEcp36rF1YE=tyooDuVpZW=uOw@mail.gmail.com>
+	s=k20201202; t=1776790315;
+	bh=Uj4yLnfolWi0joGL37a4KRLKuEFr9kz2JSlGsbIgul4=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=IL8BIx6EfyKoEYPygkPr6xjPzls/EX0SAlTv0iEimorpFNhzSRIa3gqLhfhsf89Jh
+	 5+AkVSNGpABXjSsQMs6E7Xx5IS4t7tOgpXePRZ8Uc8VzUz31roXN2zlj5fvKmT+7Tz
+	 Z85nMo1H9U5uVbYVwYslqwiRBvL6jFdlhqB617Q3pXy8jJKQVKs4I61NtAyLD6ZJNG
+	 atsbkvWXtAxTi15HwQshlyrRj8tsr0ZhDj5rYUHFB60V86injZ2dL1QycZtpPP9IGx
+	 aDiSCFI/DY3DfTQrpOkrddmJjtRDTlJZL1RKnOd7Hf8UAFN8QICYZE8ilvGJVPsXuD
+	 jN5Xztjn+3hxQ==
+Content-Type: multipart/mixed; boundary="===============2527023340673005569=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+=Fv5SZK0eaT5Y_a-eTdZacFEcp36rF1YE=tyooDuVpZW=uOw@mail.gmail.com>
+Message-Id: <158599be54ab5be12aa6394a30c5d1e8f155abf8f580214ea78103a2ff8cfe3e@mail.kernel.org>
+In-Reply-To: <20260421155804.135786-2-kafai.wan@linux.dev>
+References: <20260421155804.135786-2-kafai.wan@linux.dev>
+Subject: Re: [PATCH bpf-next v4 1/4] bpf: Reject TCP_NODELAY in TCP header option callbacks
+From: bot+bpf-ci@kernel.org
+To: kafai.wan@linux.dev,ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,sdf@fomichev.me,davem@davemloft.net,edumazet@google.com,kuba@kernel.org,pabeni@redhat.com,horms@kernel.org,dsahern@kernel.org,shuah@kernel.org,ihor.solodrai@linux.dev,kafai.wan@linux.dev,jiayuan.chen@linux.dev,hoyeon.lee@suse.com,ameryhung@gmail.com,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,netdev@vger.kernel.org,linux-kselftest@vger.kernel.org
+Cc: 2022090917019@std.uestc.edu.cn,dddddd@hust.edu.cn,M202472210@hust.edu.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue, 21 Apr 2026 16:51:55 +0000 (UTC)
 
-On Mon, Apr 20, 2026 at 07:13:09AM +0200, Magnus Lindholm wrote:
-> Hi,
-> 
-> Alpha support for SECCOMP and SECCOMP_FILTER was just merged into Linus' tree.
-> 
-> See: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/arch/alpha?id=55b22075f7840ef48254886758976531fe146609
+--===============2527023340673005569==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-It looks like the selftest changes still need to be landed?
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 5fa9189eb772..96849f4c1fbc 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -5833,6 +5833,12 @@ BPF_CALL_5(bpf_sock_ops_setsockopt, struct bpf_sock_ops_kern *, bpf_sock,
+>  	if (!is_locked_tcp_sock_ops(bpf_sock))
+>  		return -EOPNOTSUPP;
+>
+> +	/* TCP_NODELAY triggers tcp_push_pending_frames() and re-enters these callbacks. */
+> +	if ((bpf_sock->op == BPF_SOCK_OPS_HDR_OPT_LEN_CB ||
+> +	     bpf_sock->op == BPF_SOCK_OPS_WRITE_HDR_OPT_CB) &&
+> +	    level == SOL_TCP && optname == TCP_NODELAY)
+> +		return -EOPNOTSUPP;
+> +
 
--Kees
+Does this same recursion vulnerability exist for BPF TCP congestion
+control algorithms using BPF_PROG_TYPE_STRUCT_OPS?
 
--- 
-Kees Cook
+If a BPF congestion control algorithm invokes bpf_setsockopt(TCP_NODELAY)
+from its cwnd_event callback when handling CA_EVENT_TX_START, could it
+trigger unbounded recursion through this path:
+
+BPF_PROG_TYPE_STRUCT_OPS cwnd_event callback (CA_EVENT_TX_START)
+  -> bpf_setsockopt(TCP_NODELAY)
+    -> tcp_push_pending_frames()
+      -> tcp_write_xmit()
+        -> tcp_transmit_skb()
+          -> tcp_event_data_sent()
+            -> cwnd_event()
+              -> BPF congestion control cwnd_event callback
+
+The author confirmed this issue in the v3 discussion thread and Martin
+KaFai Lau suggested creating a new func_proto
+(bpf_sk_setsockopt_nodelay_proto) to reject TCP_NODELAY for all struct_ops
+programs, but this patch only addresses BPF_SOCK_OPS callbacks.
+
+Reference: https://lore.kernel.org/bpf/20260418092235.98444C19424@smtp.kernel.org/
+
+
+Does this fix also need to block TCP_CORK when the value is 0?
+
+When bpf_setsockopt() is called with SOL_TCP and TCP_CORK with value 0
+(disabling cork), the call path goes through __tcp_sock_set_cork() in
+net/ipv4/tcp.c, which unconditionally calls tcp_push_pending_frames(sk)
+when cork is disabled:
+
+__tcp_sock_set_cork()
+  -> tcp_push_pending_frames()
+    -> tcp_current_mss()
+      -> tcp_established_options()
+        -> bpf_skops_hdr_opt_len()
+          -> BPF_SOCK_OPS_HDR_OPT_LEN_CB
+
+This triggers the same recursion chain described in the commit message,
+but the patch only blocks TCP_NODELAY, not TCP_CORK with value 0.
+
+Reference: https://lore.kernel.org/bpf/5fea6b5e9d1a13e72edf8222a8ebe50cbb660b37e62b87b65dab6f6f317943ec@mail.kernel.org/
+
+>  	return _bpf_setsockopt(bpf_sock->sk, level, optname, optval, optlen);
+>  }
+>
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/24733356810
+--===============2527023340673005569==--
