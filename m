@@ -1,112 +1,148 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A87823D7DC;
-	Tue, 21 Apr 2026 09:02:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAFCC3A5E69;
+	Tue, 21 Apr 2026 09:20:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776762153; cv=none; b=kM7cXqrVB4SJsHLqPjyt/rpCaxmVRXv/K59iwuPFUZOOaEKug6s/6CBX8H0sr+M4Uo1TdJAPDVTb85NR9qVHmOGP4f4yrPvT3YZNpmSffQmhH6AhIpVv5e0a1K5IiE0rY9Q1oge5jzw20qbsFYWAbory5N5wL/vENttORWtk/MM=
+	t=1776763220; cv=none; b=b7Ln4mvMVWnz8SeG7pW2jty4s9wVRqzxq2/yQfkl1qk1C1xmTqe5aatIXZQjmO3+rXYnHwnyzFGaVyciGEWfe9XZzDKifhFFwlE5rhJBY1spHJi9HcxNPNfZCPrGkMCB0ylMjZlEsMVU+Hz3RYcSg/1vpinAK1wXnYxe1nh+ygc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776762153; c=relaxed/simple;
-	bh=hyZWWcOnCF0YqBIfepMB2TKvI6XHZWcg6x6y0OZJQLI=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=QGmpFxmiLi2ZiMh/4pUFdLub6B8g0tlQ9SU9FiSw1LJv1U2kQ1/N5fa8KUiSa12yvSQfA/r8BjOcl3BoMGOapUoDSh4903ESek074jkamKBFu7tOxvT7m5xq/dxXM/BLCscPVXvO3234xeIkMVyz7zPp19QuwVAnOXgpu3zS2n4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dTHsJ8O1; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776763220; c=relaxed/simple;
+	bh=mNosDArApEhR/sEjt6xuw/c6Atp9IN4OF4EzpiaVe+k=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=qIoLVaVGMySzcr6ilYuZlY3/b/9BBOOhUUCfacb5avlPDoQtNliFjVoQIaDxCa/MvaG1sPJu/SL1edTCl6wF1DZtSaH733akC6YLVzBKnizDjSDJXxN8MObQh12trzXd2Qf58xBFzKPrkL0PhOpyP8pQWBrIPb3l1Qna5wXFhR8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=WnPPXhcx; arc=none smtp.client-ip=220.197.31.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dTHsJ8O1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB781C2BCB5;
-	Tue, 21 Apr 2026 09:02:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776762152;
-	bh=hyZWWcOnCF0YqBIfepMB2TKvI6XHZWcg6x6y0OZJQLI=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=dTHsJ8O1tmL/CMMD9GDGnTM+P4zaYf0VkAPrivxCnrtZ13VF+imGxW9VTBIRq/Uf2
-	 SOF+NB6yQxfQQYNPzJk34BR5kVyD+W+jdDXneQtqRSWhS4SD+QZSj6I4bQzTtcspBX
-	 e8pzBlONSb73VG8u3/0biZVM1Fe2lfQa3EkCLYd20CL1r9ZXze4oaIXMZz5tEqWYTF
-	 Ji9ZurauMtTzsXivS8ZiFUfHXNA89x8w0rTDN5iIoWs3qPAfjwgLXFVn5Tx64Jrd8S
-	 IZ8CmCzIzJA5ncBEo/OSVj1zWApAUV1Ddw4xCcHDxilmuZ4e5C0ni0Qolyo9QgCEwE
-	 5Nrc5IUcYX9Og==
-From: Thomas Gleixner <tglx@kernel.org>
-To: Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>, Johannes
- Weiner <hannes@cmpxchg.org>, Michal =?utf-8?Q?Koutn=C3=BD?=
- <mkoutny@suse.com>, Jonathan
- Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Catalin
- Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, "K. Y.
- Srinivasan" <kys@microsoft.com>, Haiyang Zhang <haiyangz@microsoft.com>,
- Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>, Long Li
- <longli@microsoft.com>, Guenter Roeck <linux@roeck-us.net>, Frederic
- Weisbecker <frederic@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>,
- Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, Joel Fernandes
- <joelagnelf@nvidia.com>, Josh Triplett <josh@joshtriplett.org>, Boqun Feng
- <boqun@kernel.org>, Uladzislau Rezki <urezki@gmail.com>, Steven Rostedt
- <rostedt@goodmis.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
- Anna-Maria Behnsen <anna-maria@linutronix.de>, Ingo Molnar
- <mingo@kernel.org>, Chen Ridong <chenridong@huaweicloud.com>, Peter
- Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
- Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann
- <dietmar.eggemann@arm.com>, Ben Segall <bsegall@google.com>, Mel Gorman
- <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>, K Prateek
- Nayak <kprateek.nayak@amd.com>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>
-Cc: cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-hyperv@vger.kernel.org, linux-hwmon@vger.kernel.org,
- rcu@vger.kernel.org, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Costa Shulyupin <cshulyup@redhat.com>,
- Qiliang Yuan <realwujing@gmail.com>, Waiman Long <longman@redhat.com>
-Subject: Re: [PATCH 16/23] genirq/cpuhotplug: Use RCU to protect access of
- HK_TYPE_MANAGED_IRQ cpumask
-In-Reply-To: <20260421030351.281436-17-longman@redhat.com>
-References: <20260421030351.281436-1-longman@redhat.com>
- <20260421030351.281436-17-longman@redhat.com>
-Date: Tue, 21 Apr 2026 11:02:29 +0200
-Message-ID: <87qzo8bs9m.ffs@tglx>
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="WnPPXhcx"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=Ng
+	RzgCjuXo48vslvABagpJ43ZvHZTy3kJBFKV9GRc+E=; b=WnPPXhcxaxe0R7cSDv
+	d2kYJNwpMcTeSA/2hUJUnKRx9FOJKXto9V05WP4Dpfu3WPP9i6dRnJymKf3uD+a2
+	0Ko+p+2HGAwtdVO6wYddcokaGZlCtukLnfMLdnZ2BtOYbE51Z0K3Z6fpZwusaPKq
+	KmIVeeu79wpAWNVzZGDq0/tEg=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g0-4 (Coremail) with SMTP id _____wC330MDQedpAr6+Aw--.8329S2;
+	Tue, 21 Apr 2026 17:18:59 +0800 (CST)
+From: Feng Yang <yangfeng59949@163.com>
+To: yangfeng59949@163.com
+Cc: andrii@kernel.org,
+	ast@kernel.org,
+	bpf@vger.kernel.org,
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	jiayuan.chen@linux.dev,
+	john.fastabend@gmail.com,
+	jolsa@kernel.org,
+	kpsingh@kernel.org,
+	leon.hwang@linux.dev,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	martin.lau@linux.dev,
+	mattbobrowski@google.com,
+	memxor@gmail.com,
+	menglong.dong@linux.dev,
+	song@kernel.org,
+	yangfeng@kylinos.cn,
+	yonghong.song@linux.dev
+Subject: Re: [PATCH v3 bpf-next 1/2] bpf: Fix Null-Pointer Dereference in kernel_clone() via BPF fmod_ret on security_task_alloc
+Date: Tue, 21 Apr 2026 17:18:59 +0800
+Message-Id: <20260421091859.256592-1-yangfeng59949@163.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20260411163556.8567-2-yangfeng59949@163.com>
+References: <20260411163556.8567-2-yangfeng59949@163.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wC330MDQedpAr6+Aw--.8329S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Zry5CFy3tFWDuFy3Gw45ZFb_yoW8Xry5pa
+	yUJF9Fyrn0k395JF4kAws3Zr1S9wsxGw45Aws0qw1qyFyUtr48G347K3yavr1rCr1UKw1I
+	qFsIyFsxCF4ay37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JUOTm-UUUUU=
+X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/xtbC0ASlHmnnQQTakgAA3s
 
-On Mon, Apr 20 2026 at 23:03, Waiman Long wrote:
+[...]
 
-> As HK_TYPE_MANAGED_IRQ cpumask is going to be changeable at run time,
-> use RCU to protect access to the cpumask.
->
-> To enable the new HK_TYPE_MANAGED_IRQ cpumask to take effect, the
-> following steps can be done.
+Issue Regarding BPF_PROG_TYPE_EXT Programs Bypassing Validation Logic:
 
-Can be done?
+__attribute__ ((noinline)) int B()
+{
+        return 0; /* Valid return value */
+}
 
->  1) Update the HK_TYPE_MANAGED_IRQ cpumask to take out the newly isolated
->     CPUs and add back the de-isolated CPUs.
->  2) Tear down the affected CPUs to cause irq_migrate_all_off_this_cpu()
->     to be called on the affected CPUs to migrate the irqs to other
->     HK_TYPE_MANAGED_IRQ housekeeping CPUs.
->  3) Bring up the previously offline CPUs to invoke
->     irq_affinity_online_cpu() to allow the newly de-isolated CPUs to
->     be used for managed irqs.
+SEC("fmod_ret/security_task_alloc")
+int A()
+{
+        return B();
+}
 
-Which previously offline CPUs?
+SEC("freplace/B")
+int replace()
+{
+        return 1; /* Invalid return value */
+}
 
-> diff --git a/kernel/irq/manage.c b/kernel/irq/manage.c
-> index 2e8072437826..8270c4de260b 100644
-> --- a/kernel/irq/manage.c
-> +++ b/kernel/irq/manage.c
-> @@ -263,6 +263,7 @@ int irq_do_set_affinity(struct irq_data *data, const struct cpumask *mask, bool
->  	    housekeeping_enabled(HK_TYPE_MANAGED_IRQ)) {
->  		const struct cpumask *hk_mask;
->  
-> +		guard(rcu)();
->  		hk_mask = housekeeping_cpumask(HK_TYPE_MANAGED_IRQ);
->  
->  		cpumask_and(tmp_mask, mask, hk_mask);
+This method can verify whether the return value of freplace is legitimate
+by using env->prog->aux->dst_prog->aux->attach_btf_id.
 
-How is this hunk related to $Subject?
+However, this approach will reject legitimate programs if the return value of
+the original program does not come from the replaced function (as shown below).
 
-Thanks,
+__attribute__ ((noinline)) int B()
+{
+        return 0; 
+}
 
-        tglx
+SEC("fmod_ret/security_task_alloc")
+int A()
+{
+        B();
+        return 0;
+}
+
+SEC("freplace/B")
+int replace()
+{
+        return 1;
+}
+
+I have not found a proper solution to this issue.
+
+
+
+target.bpf.c:
+__attribute__ ((noinline)) int B()
+{
+	bpf_printk("--\n");
+	return -2;	
+}
+
+SEC("fmod_ret/security_task_alloc")
+int A()
+{
+	int i = B();
+	bpf_printk("return: %d\n", i);
+   	return i;
+}
+
+freplace.bpf.c:
+SEC("freplace/B")
+int replace()
+{
+	bpf_printk("freplace\n");
+	return -1;
+}
+In addition, the log output from testing the above program is as follows:
+cat /sys/kernel/debug/tracing/trace_pipe 
+          attack-5370    [002] ...11  4379.086626: bpf_trace_printk: freplace
+
+          attack-5370    [002] ...11  4379.086656: bpf_trace_printk: return: -2
+
+Strangely, the replacement program is executed, but the return value still originates from the original program.
+
+
