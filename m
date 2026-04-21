@@ -1,272 +1,138 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58EB43D7D97;
-	Tue, 21 Apr 2026 14:13:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5562E3AE187
+	for <linux-kselftest@vger.kernel.org>; Tue, 21 Apr 2026 14:14:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776780823; cv=none; b=FbmVFkSKuJvXWTL/xH8vmCa90cxVpBmwYkPp0e+rE+DJO4uH5U9tPea0RvbC5QPreayVYg3Ea1IJNi/Cj3FYr+JDHBh2V0y1LsE0fsql2Sq85nAHi33yZsiJ0c5TuZC5J3/kShufuYwuL0034+g5SF4HW3+3QpzbZAwo0bvIeOM=
+	t=1776780875; cv=none; b=IEkFll9qzf4yJUhxxmuF7xS6vzH8F7r8vXzglW/tvp9Eaetp9MD3pMKREwwWKMrcbt7xqzp/5btColVkxc/DEodk5BteLrl06CNln0edT0ulFNuY8vnVx67F2h9WjwXCuUUM2RxszdwZ98GsrNU+1YiSIdm9bUeMcgt/Mw2yOUM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776780823; c=relaxed/simple;
-	bh=Z5xsKdbb1dj+8VU85SeZGqxL3277Mj5PEYA3E5O0VIk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=JQmesqWW7t8RLcl+ZtdcqvNLMXHmsJWsa9TDm2GGB7NWh3xGMp6vpGfvgh8gMxpPeKhtdxxuZNKC09iXnuinM7XPqC/alROlm7KTtw8yH6o2XS2ia2V/Jsjrfh+avGarA5fzJrFyaBvkks/O8X1KwUAn/hR1jGmGScTU5iIBDYE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=Kz/rPGIC; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=debian.org
+	s=arc-20240116; t=1776780875; c=relaxed/simple;
+	bh=9EVLxOxko56ykP0XKUiXqVA16ePSpExPWd0qgmq91lU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KZCVG83PsjWia5FQOXDqtgdW3URGu+7haGyF0afWFwnmGW16pyYtcL3mwAS/e2Larr+MfurNt62Mrx/yI3v6172vuy9WLL1XoW/aL9dMvOhOYj8YMfP3zLf9Okmyh+fRugheonuEmPcLbrhkPyg5NIH4jIbOmJjAOqBiQt04pzg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=g5dD4jyX; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="Kz/rPGIC"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:In-Reply-To:References:
-	Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:
-	From:Reply-To:Content-ID:Content-Description;
-	bh=hlUmsxjaOV8fnPvProkr8mAom/iLkQvq+HSacis3lno=; b=Kz/rPGICFxDLyCRvV90jgpuPDu
-	kjBYcjuaD6NPfHMmE/1m0wqt4y5k3Q1h3l/7pRyye5a9qyWQtkwEqMcsao9BKI1N+Ehbv8Uhj/KBk
-	y9KVDUv3vFcA9AaEZlKMynxrrvJ2Inc/7YDeRf6/52Ul5IIOyZ4/0khvM1d6XxUYwPmgQic4CBSK3
-	Mt3zucxcoZPXJCuB6ocJTmEwmtPLQt3EYAljcsPnRmoJdNoVklsKOQhtuffGbWD31U5UPdOMhrG7h
-	3eTMHuRll7QKm/8QN+74/U+7dWVh4aKE3aoMMgxJwaKnEbrLoAGSPdanip+mAPKEMsbdlPBLujrdr
-	BjTj7kng==;
-Received: from authenticated user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wFBPm-000tUc-2j;
-	Tue, 21 Apr 2026 13:45:23 +0000
-From: Breno Leitao <leitao@debian.org>
-Date: Tue, 21 Apr 2026 06:45:04 -0700
-Subject: [PATCH 1/2] mm/kmemleak: dedupe verbose scan output by allocation
- backtrace
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="g5dD4jyX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1776780871;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=HkSs5q895BkMlUjroUvolg58w1rFDrf/FdQnm8MeJy4=;
+	b=g5dD4jyXlGLhDQNP7Wj4UoRcw4DKhRPcpJCFRhdChzVQDi8t2F9BkNPW7xOT5ROvcS+YFZ
+	NU+ZS4Rw/kt8fy44EZ+Hliz6lc8wVNks5JUERUvLD+L9iYv96XjcaGr96iKFhzRGZ3V4e8
+	fA+ZZJPBHmenvm3WlXKgqnjnvzS/rBs=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-307-g7Ym5ECUP9WJNDNti_MzuQ-1; Tue,
+ 21 Apr 2026 10:14:28 -0400
+X-MC-Unique: g7Ym5ECUP9WJNDNti_MzuQ-1
+X-Mimecast-MFC-AGG-ID: g7Ym5ECUP9WJNDNti_MzuQ_1776780862
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1011E18002C0;
+	Tue, 21 Apr 2026 14:14:20 +0000 (UTC)
+Received: from [10.22.81.187] (unknown [10.22.81.187])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 67E2A19560AB;
+	Tue, 21 Apr 2026 14:14:10 +0000 (UTC)
+Message-ID: <3b796360-81e4-4f90-9b19-8a9f21cbac07@redhat.com>
+Date: Tue, 21 Apr 2026 10:14:09 -0400
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 03/23] tick/nohz: Make nohz_full parameter optional
+To: Thomas Gleixner <tglx@kernel.org>, Tejun Heo <tj@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ "K. Y. Srinivasan" <kys@microsoft.com>,
+ Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
+ Dexuan Cui <decui@microsoft.com>, Long Li <longli@microsoft.com>,
+ Guenter Roeck <linux@roeck-us.net>, Frederic Weisbecker
+ <frederic@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>,
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+ Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
+ <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
+ Uladzislau Rezki <urezki@gmail.com>, Steven Rostedt <rostedt@goodmis.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
+ Anna-Maria Behnsen <anna-maria@linutronix.de>, Ingo Molnar
+ <mingo@kernel.org>, Chen Ridong <chenridong@huaweicloud.com>,
+ Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>, Ben Segall
+ <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+ Valentin Schneider <vschneid@redhat.com>,
+ K Prateek Nayak <kprateek.nayak@amd.com>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>
+Cc: cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-hyperv@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ rcu@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Costa Shulyupin <cshulyup@redhat.com>,
+ Qiliang Yuan <realwujing@gmail.com>
+References: <20260421030351.281436-1-longman@redhat.com>
+ <20260421030351.281436-4-longman@redhat.com> <875x5kd88d.ffs@tglx>
+Content-Language: en-US
+From: Waiman Long <longman@redhat.com>
+In-Reply-To: <875x5kd88d.ffs@tglx>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260421-kmemleak_dedup-v1-1-65e31c6cdf0c@debian.org>
-References: <20260421-kmemleak_dedup-v1-0-65e31c6cdf0c@debian.org>
-In-Reply-To: <20260421-kmemleak_dedup-v1-0-65e31c6cdf0c@debian.org>
-To: Andrew Morton <akpm@linux-foundation.org>, 
- David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
- Shuah Khan <shuah@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>
-Cc: linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
- linux-kselftest@vger.kernel.org, kernel-team@meta.com, 
- Breno Leitao <leitao@debian.org>
-X-Mailer: b4 0.16-dev-453a6
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6885; i=leitao@debian.org;
- h=from:subject:message-id; bh=Z5xsKdbb1dj+8VU85SeZGqxL3277Mj5PEYA3E5O0VIk=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBp539pHvLkqwsjZdrAzwLbngpwIt+uSSJa+hscd
- vA0i5jPifmJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaed/aQAKCRA1o5Of/Hh3
- bbOIEACBYq4GRdQmktMUMzjqE5ShlIz8N7Qn+Za1YtGsepw7W330xwHkDDcLifcOSTzzUCDhg+B
- pbLcnEjQ/uXOtUDJLSVDMMYj2CmaOegwzDirJNhN7CRbDm22mxE+zJERoYANCgjWgDFNRzWIHdA
- XzGWWxOlZRWcOxPTfSTDSk3gKQvjtzy/vSF4BxQo6PBDcOJXdy/9vKBWqjXASjwPQ8x3TL676Yz
- 3msodUO8fnglsbuY189K2iO9KkMySW4Tdb6Te/NoUsRtTS0LrOGJyFUh2BUtAb7YGGmblsTNHbM
- mwJ+DUGNbTQvpLfhR1wSLTjhpOyGOXMUA6Ka4s8qZlNGsdOoGu+iVhQN+pC0UQZ6/aUKo5mJY+p
- wwtXSrnQl/Coul0EPOJX332xd553GiFo5YIehv3lrlTz9eeOrwo1ucggto0rB6T5igdyKfANztr
- ThPQAIc+Hhw09ZMimNOwjB+X10U2DlbJR5V9t5q+kTtBKk8pO8Oy8ZGmYcTbFpQSOdzGPczb3Kj
- owng1CZxzk6rsZEBwV6butKtr7QyjSItXch7iNSdlUVpCjikE4/HSGT0p1P0TNZof/Y0SwI34oa
- tvRPfwL/jvZ+awi2sO2xPnX7c7T76iPkRXIWNa94x9oX6pW2llrFeyyW3PBkpXI7drmFfYtTkkc
- h7a2ayAs5VWueow==
-X-Developer-Key: i=leitao@debian.org; a=openpgp;
- fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
-X-Debian-User: leitao
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-In kmemleak's verbose mode, every unreferenced object found during
-a scan is logged with its full header, hex dump and 16-frame backtrace.
-Workloads that leak many objects from a single allocation site flood
-dmesg with byte-for-byte identical backtraces, drowning out distinct
-leaks and other kernel messages.
+On 4/21/26 4:32 AM, Thomas Gleixner wrote:
+> On Mon, Apr 20 2026 at 23:03, Waiman Long wrote:
+>> To provide nohz_full tick support, there is a set of tick dependency
+>> masks that need to be evaluated on every IRQ and context switch.
+> s/IRQ/interrupt/
+>
+> This is a changelog and not a SMS service.
+>> Switching on nohz_full tick support at runtime will be problematic
+>> as some of the tick dependency masks may not be properly set causing
+>> problem down the road.
+> That's useless blurb with zero content.
+>
+>> Allow nohz_full boot option to be specified without any
+>> parameter to force enable nohz_full tick support without any
+>> CPU in the tick_nohz_full_mask yet. The context_tracking_key and
+>> tick_nohz_full_running flag will be enabled in this case to make
+>> tick_nohz_full_enabled() return true.
+> I kinda can crystal-ball what you are trying to say here, but that does
+> not make it qualified as a proper change log.
+>
+>> There is still a small performance overhead by force enable nohz_full
+>> this way. So it should only be used if there is a chance that some
+>> CPUs may become isolated later via the cpuset isolated partition
+>> functionality and better CPU isolation closed to nohz_full is desired.
+> Why has this key to be enabled on boot if there are no CPUs in the
+> isolated mask?
+>
+> If you want to manage this dynamically at runtime then enable the key
+> once CPUs are isolated. Yes, it's more work, but that avoids the "should
+> only be used" nonsense and makes this more robust down the road.
 
-Dedupe within each scan using stackdepot's trace_handle as the key: for
-every leaked object, look up an entry in a per-scan xarray keyed by
-trace_handle. The first sighting stores a representative object; later
-sightings just bump a counter. After the scan, walk the xarray once and
-emit each unique backtrace, followed by a single summary line when more
-than one object shares it.
+OK, I will try to make it fully dynamic. Of course, it will be more work.
 
-Important to say that the contents of /sys/kernel/debug/kmemleak are
-unchanged - only the verbose console output is collapsed.
+Cheers,
+Longman
 
-Note 1: The xarray operations and kmalloc(GFP_ATOMIC) for the dedup
-entry must happen outside object->lock: object->lock is a raw spinlock,
-while the slab path takes higher wait-context locks (n->list_lock),
-which lockdep flags as an invalid wait context. trace_handle is read
-under object->lock, which serialises with kmemleak_update_trace()'s
-writer, so it is safe to capture and use after dropping the lock.
-
-Note 2: Stashed object pointers carry a get_object() reference across
-rcu_read_unlock() that dedup_flush() drops after printing, preventing
-use-after-free if the underlying allocation is freed concurrently.
-
-Signed-off-by: Breno Leitao <leitao@debian.org>
----
- mm/kmemleak.c | 113 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 111 insertions(+), 2 deletions(-)
-
-diff --git a/mm/kmemleak.c b/mm/kmemleak.c
-index 2eff0d6b622b6..046847d372777 100644
---- a/mm/kmemleak.c
-+++ b/mm/kmemleak.c
-@@ -92,6 +92,7 @@
- #include <linux/nodemask.h>
- #include <linux/mm.h>
- #include <linux/workqueue.h>
-+#include <linux/xarray.h>
- #include <linux/crc32.h>
- 
- #include <asm/sections.h>
-@@ -1684,6 +1685,82 @@ static void kmemleak_cond_resched(struct kmemleak_object *object)
- 	put_object(object);
- }
- 
-+/*
-+ * Per-scan dedup table for verbose leak printing. Each entry collapses all
-+ * leaks that share one allocation backtrace (keyed by stackdepot
-+ * trace_handle) into a single representative object plus a count.
-+ */
-+struct kmemleak_dedup_entry {
-+	struct kmemleak_object *object;
-+	unsigned long count;
-+};
-+
-+/*
-+ * Record a leaked object in the dedup table. The representative object's
-+ * use_count is incremented so it can be safely dereferenced by dedup_flush()
-+ * outside the RCU read section; dedup_flush() drops the reference. On
-+ * allocation failure (or a concurrent insert) the object is printed
-+ * immediately, preserving today's "always log every leak" guarantee.
-+ * Caller must not hold object->lock and must hold rcu_read_lock().
-+ */
-+static void dedup_record(struct xarray *dedup, struct kmemleak_object *object,
-+			 depot_stack_handle_t trace_handle)
-+{
-+	struct kmemleak_dedup_entry *entry;
-+
-+	entry = xa_load(dedup, trace_handle);
-+	if (entry) {
-+		/* This is a known beast, just increase the counter */
-+		entry->count++;
-+		return;
-+	}
-+
-+	/*
-+	 * A brand new report. Object will have object->use_count increased
-+	 * in here, and released put_object() at dedup_flush
-+	 */
-+	entry = kmalloc(sizeof(*entry), GFP_ATOMIC);
-+	if (entry && get_object(object)) {
-+		if (xa_insert(dedup, trace_handle, entry, GFP_ATOMIC) == 0) {
-+			entry->object = object;
-+			entry->count = 1;
-+			return;
-+		}
-+		put_object(object);
-+	}
-+	kfree(entry);
-+
-+	/*
-+	 * Fallback for kmalloc/get_object(): Just print it straight away
-+	 */
-+	raw_spin_lock_irq(&object->lock);
-+	print_unreferenced(NULL, object);
-+	raw_spin_unlock_irq(&object->lock);
-+}
-+
-+/*
-+ * Drain the dedup table: print one full record per unique backtrace,
-+ * followed by a summary line whenever more than one object shared it.
-+ * Releases the reference dedup_record() took on each representative object.
-+ */
-+static void dedup_flush(struct xarray *dedup)
-+{
-+	struct kmemleak_dedup_entry *entry;
-+	unsigned long idx;
-+
-+	xa_for_each(dedup, idx, entry) {
-+		raw_spin_lock_irq(&entry->object->lock);
-+		print_unreferenced(NULL, entry->object);
-+		raw_spin_unlock_irq(&entry->object->lock);
-+		if (entry->count > 1)
-+			pr_warn("  ... and %lu more object(s) with the same backtrace\n",
-+				entry->count - 1);
-+		put_object(entry->object);
-+		kfree(entry);
-+		xa_erase(dedup, idx);
-+	}
-+}
-+
- /*
-  * Scan data sections and all the referenced memory blocks allocated via the
-  * kernel's standard allocators. This function must be called with the
-@@ -1834,10 +1911,19 @@ static void kmemleak_scan(void)
- 		return;
- 
- 	/*
--	 * Scanning result reporting.
-+	 * Scanning result reporting. When verbose printing is enabled, dedupe
-+	 * by stackdepot trace_handle so each unique backtrace is logged once
-+	 * per scan, annotated with the number of objects that share it. The
-+	 * per-leak count below still reflects every object, and
-+	 * /sys/kernel/debug/kmemleak still lists them individually.
- 	 */
-+	struct xarray dedup;
-+
-+	xa_init(&dedup);
- 	rcu_read_lock();
- 	list_for_each_entry_rcu(object, &object_list, object_list) {
-+		depot_stack_handle_t trace_handle;
-+
- 		if (need_resched())
- 			kmemleak_cond_resched(object);
- 
-@@ -1849,18 +1935,41 @@ static void kmemleak_scan(void)
- 		if (!color_white(object))
- 			continue;
- 		raw_spin_lock_irq(&object->lock);
-+		trace_handle = 0;
- 		if (unreferenced_object(object) &&
- 		    !(object->flags & OBJECT_REPORTED)) {
- 			object->flags |= OBJECT_REPORTED;
- 
- 			if (kmemleak_verbose)
--				print_unreferenced(NULL, object);
-+				trace_handle = object->trace_handle;
- 
- 			new_leaks++;
- 		}
- 		raw_spin_unlock_irq(&object->lock);
-+
-+		/*
-+		 * Dedup bookkeeping must happen outside object->lock.
-+		 * dedup_record() may call kmalloc(GFP_ATOMIC), and the slab
-+		 * path takes locks (n->list_lock, etc.) at a higher
-+		 * wait-context level than the raw_spinlock_t object->lock;
-+		 *
-+		 * Passing object without object->lock here is safe:
-+		 *  - the surrounding rcu_read_lock() keeps the memory alive
-+		 *    even if a concurrent kmemleak_free() drops use_count to
-+		 *    zero and queues free_object_rcu();
-+		 *  - dedup_record() only manipulates use_count via the atomic
-+		 *    get_object()/put_object() helpers and stores the bare
-+		 *    pointer into the xarray;
-+		 *  - on the fallback print path it re-acquires object->lock
-+		 *    before calling print_unreferenced().
-+		 */
-+		if (trace_handle)
-+			dedup_record(&dedup, object, trace_handle);
- 	}
- 	rcu_read_unlock();
-+	/* Flush'em all */
-+	dedup_flush(&dedup);
-+	xa_destroy(&dedup);
- 
- 	if (new_leaks) {
- 		kmemleak_found_leaks = true;
-
--- 
-2.52.0
+> Thanks,
+>
+>          tglx
+>
+>
 
