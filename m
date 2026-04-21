@@ -1,47 +1,47 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 463B837DEA4
-	for <linux-kselftest@vger.kernel.org>; Tue, 21 Apr 2026 03:06:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3C9637AA6D
+	for <linux-kselftest@vger.kernel.org>; Tue, 21 Apr 2026 03:07:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776740813; cv=none; b=tBmQOchiUkOSHagvHpEteUEpIY9IzhXm+6VET+jxTDS2uprXeu5V5Dp3bTerttEaeN/S+VnI72PAPhmFGvLZyk3OprzAZmLlQ7r+wDAk+xFokK9EqTatIrNnF8jxnK0UhT/zX/Nw4v1sJooIOo487EJGNCihPyK6j0SQjkstV14=
+	t=1776740826; cv=none; b=Iyw9Px1GnX+8wmhrsSsDIeCn+SxOc4iMmdNtkoqkzqoyxIJqctXXz6SdMRmtqm+6JpB1pKZtbsrqdntcMvvbQV6XDRRArrqmNKtumKjKtfy3xDv4bjtFErFmgWWUcYsE1RNwr3QWUjpV3S1yQcIkKFtZeVLwVNRdKMm5JN6/HMs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776740813; c=relaxed/simple;
-	bh=jlSzrdRoCk8O53BdpCgrGHVT1k8wkXcmtZiCQ2yPsTQ=;
+	s=arc-20240116; t=1776740826; c=relaxed/simple;
+	bh=wBqbSVNLmblycpPiB4EVKCEJkX8NpN5Q/069MdSR2vo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=AZjFvBxd/H7m+nmLLWP8NYPulcz9iyRM2OhjHXhvlhV83ZxpqgEC0htN4YaB7eyGd4cLsNlJXa4RnWBbpanotNnrBxuj5uoBKT79KCXotWz8jCkgMWvLwC1bVqHLlBJR0NerKvVdjIRLSdAYqdus4ozeqgcet2L44DQ0BG3K7V4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=iZnlrT0p; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=AQ/1X5byu6vYeQY0IbZNJ0Yo3QgcEAybxYx2+N+dxP06BKj0Mm4o/Mw3hCsMmrXlTtcJuL7vah6P92nkYRMn6H5Iwvl7Vy4afekrlZJijuMv9UnHuZS65rgdE2/odvOx9g2aLeeTHo3yaT7rT5nvLwL5MP2YBKNAH5AywxniqGI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=J0z1+NLZ; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="iZnlrT0p"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="J0z1+NLZ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1776740811;
+	s=mimecast20190719; t=1776740822;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=L6fqD7LU2lkfHc9CGeiddofdvg6nvrDcuHa8qiOr5+o=;
-	b=iZnlrT0puAU2anr6CMIfqOv4amRYroIRfhtK2mMpA6cgx7ltY7gdDJRLfIk+smjC1pCVe3
-	V7f6qF3hBaIT65xffEti3DnSHW0N83Humg4UPO0CoRdC8LFaFBvwhD3aFjdQmFpAi6hmjg
-	XAyF4QTCMxTPIM9HyWDe+WAgJulfoiM=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+	bh=IJ1jBK4Qvk6IyuAc9PHelYKQB7rpI+GlQygtFZv3Gyc=;
+	b=J0z1+NLZE015VPaJ7TgWVVYA/x1QYNDOTanY2mlWpcylQmR+kVCodj1rrQ21r4zS6xBmcw
+	fxkBZXJVfiwcrvIiLQyI1SZTPWTdzUK3DxM5BCgTSTkqJ5DAma3eLHzXWdzNFUKnzzAkpy
+	0YHUGYMmVKqjK7175qgWuQuZQf5QbAk=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-203-3E8X-6EKONCGjFMgsGHa1w-1; Mon,
- 20 Apr 2026 23:06:49 -0400
-X-MC-Unique: 3E8X-6EKONCGjFMgsGHa1w-1
-X-Mimecast-MFC-AGG-ID: 3E8X-6EKONCGjFMgsGHa1w_1776740805
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-376-wTudjAQlMAi-26eGJaOhJw-1; Mon,
+ 20 Apr 2026 23:06:57 -0400
+X-MC-Unique: wTudjAQlMAi-26eGJaOhJw-1
+X-Mimecast-MFC-AGG-ID: wTudjAQlMAi-26eGJaOhJw_1776740812
 Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D587C18005AA;
-	Tue, 21 Apr 2026 03:06:44 +0000 (UTC)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 517F11956054;
+	Tue, 21 Apr 2026 03:06:52 +0000 (UTC)
 Received: from llong-thinkpadp16vgen1.westford.csb (unknown [10.22.65.81])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id E7C5619560AB;
-	Tue, 21 Apr 2026 03:06:37 +0000 (UTC)
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 1DB4119560AB;
+	Tue, 21 Apr 2026 03:06:44 +0000 (UTC)
 From: Waiman Long <longman@redhat.com>
 To: Tejun Heo <tj@kernel.org>,
 	Johannes Weiner <hannes@cmpxchg.org>,
@@ -96,9 +96,9 @@ Cc: cgroups@vger.kernel.org,
 	Costa Shulyupin <cshulyup@redhat.com>,
 	Qiliang Yuan <realwujing@gmail.com>,
 	Waiman Long <longman@redhat.com>
-Subject: [PATCH 15/23] Drivers: hv: Use RCU to protect access of HK_TYPE_MANAGED_IRQ cpumask
-Date: Mon, 20 Apr 2026 23:03:43 -0400
-Message-ID: <20260421030351.281436-16-longman@redhat.com>
+Subject: [PATCH 16/23] genirq/cpuhotplug: Use RCU to protect access of HK_TYPE_MANAGED_IRQ cpumask
+Date: Mon, 20 Apr 2026 23:03:44 -0400
+Message-ID: <20260421030351.281436-17-longman@redhat.com>
 In-Reply-To: <20260421030351.281436-1-longman@redhat.com>
 References: <20260421030351.281436-1-longman@redhat.com>
 Precedence: bulk
@@ -111,77 +111,50 @@ Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
 As HK_TYPE_MANAGED_IRQ cpumask is going to be changeable at run time,
-use RCU to protect access to the cpumask. The memory allocation
-alloc_cpumask_var() call is done before taking the rcu_read_lock()
-as this call can be sleepable.
+use RCU to protect access to the cpumask.
+
+To enable the new HK_TYPE_MANAGED_IRQ cpumask to take effect, the
+following steps can be done.
+
+ 1) Update the HK_TYPE_MANAGED_IRQ cpumask to take out the newly isolated
+    CPUs and add back the de-isolated CPUs.
+ 2) Tear down the affected CPUs to cause irq_migrate_all_off_this_cpu()
+    to be called on the affected CPUs to migrate the irqs to other
+    HK_TYPE_MANAGED_IRQ housekeeping CPUs.
+ 3) Bring up the previously offline CPUs to invoke
+    irq_affinity_online_cpu() to allow the newly de-isolated CPUs to
+    be used for managed irqs.
 
 Signed-off-by: Waiman Long <longman@redhat.com>
 ---
- drivers/hv/channel_mgmt.c | 15 +++++++++------
- drivers/hv/vmbus_drv.c    |  7 +++++--
- 2 files changed, 14 insertions(+), 8 deletions(-)
+ kernel/irq/cpuhotplug.c | 1 +
+ kernel/irq/manage.c     | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/drivers/hv/channel_mgmt.c b/drivers/hv/channel_mgmt.c
-index 84eb0a6a0b54..44441dafed90 100644
---- a/drivers/hv/channel_mgmt.c
-+++ b/drivers/hv/channel_mgmt.c
-@@ -752,13 +752,16 @@ static void init_vp_index(struct vmbus_channel *channel)
- 	u32 i, ncpu = num_online_cpus();
- 	cpumask_var_t available_mask;
- 	struct cpumask *allocated_mask;
--	const struct cpumask *hk_mask = housekeeping_cpumask(HK_TYPE_MANAGED_IRQ);
-+	const struct cpumask *hk_mask;
- 	u32 target_cpu;
- 	int numa_node;
-+	bool alloc_ok;
+diff --git a/kernel/irq/cpuhotplug.c b/kernel/irq/cpuhotplug.c
+index cd5689e383b0..86437c78f1f2 100644
+--- a/kernel/irq/cpuhotplug.c
++++ b/kernel/irq/cpuhotplug.c
+@@ -196,6 +196,7 @@ static bool hk_should_isolate(struct irq_data *data, unsigned int cpu)
+ 	if (!housekeeping_enabled(HK_TYPE_MANAGED_IRQ))
+ 		return false;
  
--	if (!perf_chn ||
--	    !alloc_cpumask_var(&available_mask, GFP_KERNEL) ||
--	    cpumask_empty(hk_mask)) {
-+	alloc_ok = alloc_cpumask_var(&available_mask, GFP_KERNEL);
 +	guard(rcu)();
-+	hk_mask = housekeeping_cpumask(HK_TYPE_MANAGED_IRQ);
-+
-+	if (!perf_chn || !alloc_ok || cpumask_empty(hk_mask)) {
- 		/*
- 		 * If the channel is not a performance critical
- 		 * channel, bind it to VMBUS_CONNECT_CPU.
-@@ -770,7 +773,7 @@ static void init_vp_index(struct vmbus_channel *channel)
- 		channel->target_cpu = VMBUS_CONNECT_CPU;
- 		if (perf_chn)
- 			hv_set_allocated_cpu(VMBUS_CONNECT_CPU);
--		return;
-+		goto out_free;
- 	}
+ 	hk_mask = housekeeping_cpumask(HK_TYPE_MANAGED_IRQ);
+ 	if (cpumask_subset(irq_data_get_effective_affinity_mask(data), hk_mask))
+ 		return false;
+diff --git a/kernel/irq/manage.c b/kernel/irq/manage.c
+index 2e8072437826..8270c4de260b 100644
+--- a/kernel/irq/manage.c
++++ b/kernel/irq/manage.c
+@@ -263,6 +263,7 @@ int irq_do_set_affinity(struct irq_data *data, const struct cpumask *mask, bool
+ 	    housekeeping_enabled(HK_TYPE_MANAGED_IRQ)) {
+ 		const struct cpumask *hk_mask;
  
- 	for (i = 1; i <= ncpu + 1; i++) {
-@@ -808,7 +811,7 @@ static void init_vp_index(struct vmbus_channel *channel)
- 	}
++		guard(rcu)();
+ 		hk_mask = housekeeping_cpumask(HK_TYPE_MANAGED_IRQ);
  
- 	channel->target_cpu = target_cpu;
--
-+out_free:
- 	free_cpumask_var(available_mask);
- }
- 
-diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
-index 3faa74e49a6b..60c7a5ac15c0 100644
---- a/drivers/hv/vmbus_drv.c
-+++ b/drivers/hv/vmbus_drv.c
-@@ -1763,8 +1763,11 @@ int vmbus_channel_set_cpu(struct vmbus_channel *channel, u32 target_cpu)
- 	if (target_cpu >= nr_cpumask_bits)
- 		return -EINVAL;
- 
--	if (!cpumask_test_cpu(target_cpu, housekeeping_cpumask(HK_TYPE_MANAGED_IRQ)))
--		return -EINVAL;
-+	scoped_guard(rcu) {
-+		if (!cpumask_test_cpu(target_cpu,
-+				      housekeeping_cpumask(HK_TYPE_MANAGED_IRQ)))
-+			return -EINVAL;
-+	}
- 
- 	if (!cpu_online(target_cpu))
- 		return -EINVAL;
+ 		cpumask_and(tmp_mask, mask, hk_mask);
 -- 
 2.53.0
 
