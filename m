@@ -1,123 +1,164 @@
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+Received: from mail-dy1-f202.google.com (mail-dy1-f202.google.com [74.125.82.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E21F336682A
-	for <linux-kselftest@vger.kernel.org>; Tue, 21 Apr 2026 18:21:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3530E36309C
+	for <linux-kselftest@vger.kernel.org>; Tue, 21 Apr 2026 18:30:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776795694; cv=none; b=bVmlJWyctOXLn3DI0rSu5jtKwTtyonrgMjK8NYAcg0HJB9BT3r5Y7+esItFSxhYGbjVOt7KoLWXe0xatWyxpYKwigz4Er0vaJFY+UJLXUvq3cchr6iWhmYns8NK5B8iDI6uGh6rEHdkIVNJaAxEviDfEPPASZLsJB2N8/9h1efQ=
+	t=1776796228; cv=none; b=a1zAX+8GjHR+nyiihJM9lTOGiC02jPlFHndCrm/zb0Kju5m6rk1zWLFNDPxWbEJhklfouGkNrzhx8tyN1ZZzr7Y4ScZmf1NiA5LcAtYmfusH+5RVZ+E4WRazvZoiZc1I3G53/5WDvn02OR48i3KUTAfpkY17bEp71iM+8o3TefA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776795694; c=relaxed/simple;
-	bh=aQmfxg7NQpvGz9XaY5eGgk1AWvqY2YAH6p7UeRcAVIc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KdtP/Q6rmtD0vhHuzmndlgfcz49QYmP30JwsZgJpWNzSBtUV/++/iKyZXYZyDZTnQW/sZlwMWmeLIlDDXuuOTcqmxDuoGf9BgSEYpHSg3zdPaOEq99uV6ndYz0VJ4hLoS+ZpwuhuztPdP+PCI34gVykgfduhmCXLnVSWqCvUFZE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oJoelv2H; arc=none smtp.client-ip=209.85.221.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1776796228; c=relaxed/simple;
+	bh=E9Sag1aNatvSWiMy8pJBN9tWHnqzLKMOx7NGZq3NpP4=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=lXAvrl+ThY/r0NzIM7Ws5eoJXqF0S5Jsb1iowefVNlL7XJ3OtmTMhqstc6CSKKZ/NXfa/s6PbSuNPUdltfMFMGosELJsr7TAePpHOGI55lNW+IpaeqzKCJ5aITgpvKTYJ9po8J2AQTYvUVXi8VU/qDyneQao7sEX+ypcH3qIJgg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--pratmal.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=G3NMN8rU; arc=none smtp.client-ip=74.125.82.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--pratmal.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oJoelv2H"
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-43fe8bda8e9so2378015f8f.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Apr 2026 11:21:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="G3NMN8rU"
+Received: by mail-dy1-f202.google.com with SMTP id 5a478bee46e88-2ddd8ef5343so4379621eec.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Apr 2026 11:30:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776795680; x=1777400480; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ey1/flgNoHl/BMtWwmVozPsjz6fm2TXt8LsvNUUYd8c=;
-        b=oJoelv2HHEVJnzn6fnmH8P6XhUL/qLzKdzJeg6fPIWUdz6xtf0A5UPHXH7BgykZZFK
-         HggTElADNEdJUN4i26O5eM8XYGcDjFL/h9O1xMVnY9LxgCEaE+DfFJpAupdt+1Ikhpi8
-         hq9TwZXNbtTPmy43l90iDTsnIHhPd8oNVCJlZ9HiX8G/fdVzdDei+99m+CPs3osyozgm
-         2Wkxe973kQKDxlImQoVSyH5PWiWMBz3C5UPAXytBSqwQG48DBy6biM4+lJmcW6xg8T2w
-         UKf6VX7CoXsVf77AdZWJGSfDQczxxPaEug4OdKrNboaRt3SGnXfF1mAts6d2MOC6rDn3
-         4W+w==
+        d=google.com; s=20251104; t=1776796220; x=1777401020; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=I7gCU+7+MVJ8oLDIS9623dDF2RYQtZ2sejtpCDF2UxY=;
+        b=G3NMN8rUdGeT/1YjgXB2p4JByPoyT3qcAKYbCVrzbi0qK3tyD3PgkKjh9OY1nx2ID+
+         7P/9wJEwtleE82dGagzqXIJKAc7a3etnD8UoijlNFvf4JzxOvGNOD+sCwMZEl7H90j1k
+         hN1arqBjeLxJKNTEKu//atedf7zgN+9BW/DhsoC3N7lLceXEiCUttXEoiepj9objtDmS
+         hULbccMAdHySjXZohAdR8dMk/4Z7OqCuWFplF3/6w6cBh3Yh/gAeCWSlXFOW/sRyFqz7
+         PgJXKfeS4w162aP31gxcEI/M1YlMWuVjseTG/falPKTCj/mtNzamOCn4fsPogOWeC7F0
+         YfyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776795680; x=1777400480;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ey1/flgNoHl/BMtWwmVozPsjz6fm2TXt8LsvNUUYd8c=;
-        b=j6qem7bCax8d3329ZSPGZG0lrl8/ocNtbemdGSxRlSnj92R7XoO1Nf3fhhH/XxKLt5
-         +de/tBKj2pRhjFnz7kELsvbIqOjM59PddVK9pJOePz9sORv1Qmpf7HfRdk6hror4zHaK
-         xrzx40UbaZgHxjfxKKpwTvG6/PsZH20l3/bZL6V7TLx/H0D7q3Cb3Lg8PIkkNxwhLrAq
-         ItV6p1dz9duinrcq9GpzEAFyBlOFwv9j5cVyCxUMpgT40YCLzzgHMZa8jhw1g2FGrovD
-         e85mtHBILWbcG7IylspkoCAJ5eg743Bo/0iAxx59WWbqIsz+pUGRxslsiVQVqS1BTool
-         KrdQ==
-X-Forwarded-Encrypted: i=1; AFNElJ8VgvQNb4KA91hzVU/z8EoTOJsemZ47kM3VHatQXbFea1KfTJRxsQI4LD6wZEv01sGeiMtY05ywbk9PUG6s3es=@vger.kernel.org
-X-Gm-Message-State: AOJu0YylGnma4szuzQKAHqGN1XjDdmxjpMaL0fWLpAsairZRsWSneafs
-	sR5lg3W/1pUYTbvyoi3aw7RgPdABLtcphw4XLG48tRyXkc51PdfZs3Ni
-X-Gm-Gg: AeBDiesHZOLdK0VCalratFpODeTOgGCCLcUs2Zqrn2g7vudfDoZQyxDweUuJVWpiysM
-	nEM9lQ13G4RjRNuUhNcSAxgEauxDZmxCTL0U3TtLEiQbyclEkQOcIgI/4aQmYncWQSxXfIQ/1Xh
-	NaQh+9KEeLzvz3OX8KuznJSxOMTY34bzoSa1uwhVXhI8o0O4rK7v/VR2cXzynqhf+8n+kg6ooT4
-	QJoLHBZ7hGJZy3prqlGHRtnpvuDslYP8gVavVa4vYq72zJNhBXdfvZfAzKT9IQ77xhwf/ly1SfJ
-	FM0nyuSzAN5YRJzSDITM61CU13noomner8X7dXuMgNW2YuWoKjx6wfknPp84wmRKz6bE/64t3uf
-	AqXqqEqt1qkDc98SDhFfT+gefxA6XJ8I4bX91as4fsmjh4iKJ50bpwAx6vd7HhKl5JTieaZemLO
-	tC3YoIY4HwIONxvqFlM42wE4VlA9AI/UGymTuoH3i0qLzbJW2g53OlKNL+eMIJJ9WOX3N4IBCrH
-	HmZ3etjntASvySXOtE1+mmqzrb00oc/k81LoMSVFspfMWJ89Ib5f4M5DZkeN/YQJ34GyUCwLPes
-	Tw0xBPv0TuwiBMRheoDBsXSAl9YiBb0lPozhY9j1CHSPXPy2HNHbzA==
-X-Received: by 2002:a05:6000:2082:b0:441:1c18:f779 with SMTP id ffacd0b85a97d-4411c18f7c5mr10736741f8f.37.1776795680060;
-        Tue, 21 Apr 2026 11:21:20 -0700 (PDT)
-Received: from mail.gmail.com (2a01cb0889497e0026dd69ace0c02e6e.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:26dd:69ac:e0c0:2e6e])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43fe4cb1365sm41235025f8f.7.2026.04.21.11.21.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Apr 2026 11:21:19 -0700 (PDT)
-Date: Tue, 21 Apr 2026 20:21:16 +0200
-From: Paul Chaignon <paul.chaignon@gmail.com>
-To: Alexis =?iso-8859-1?Q?Lothor=E9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>, ebpf@linuxfoundation.org,
-	Bastien Curutchet <bastien.curutchet@bootlin.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-	Alan Maguire <alan.maguire@oracle.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: drop xdping tool
-Message-ID: <aefAHLdVZaOmf1Os@mail.gmail.com>
-References: <20260417-xdping-v1-1-9b0ce0e7adf8@bootlin.com>
+        d=1e100.net; s=20251104; t=1776796220; x=1777401020;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=I7gCU+7+MVJ8oLDIS9623dDF2RYQtZ2sejtpCDF2UxY=;
+        b=DLoJ1dcji48UHWQbQ7L6TuYZydKFN3IKD5pBSj2SDQib8Uml68dvcSUVbwgs/5q0Ev
+         JwBwEe4b7L+YAYUNWqBrG4NfFlRDIernhjk4tjjRldNTeoQ9oJffszf12FZxyQO1lwwb
+         VGdmXxYnhTt0e+XzGa/AoJgM53kgQnt02YweF+X/vqftWEXncaeX5vhiN5+Pr6Yy9CU0
+         uaCdDWLE0zmp1y0DBk7qWnyqLVIB4qHyYeXxffgjs2LTZmfzzGzcgf5VX7uFrHMZMlWm
+         MDCY9r39XIQG8ptQWTSAvj8C+jne6zK8prlIYkGTOGi2fdtDKgwiLZ3rr2JmER+nwq2V
+         YNBw==
+X-Forwarded-Encrypted: i=1; AFNElJ+7UAd+GDfqvpLK/CaRjFu2KaRnwbx7je+tMT0B7vIz+ErTqapHJ2cHgtQCu2XxqFWzx3ykxHWnIbWzxs+5+OA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxSbQIN1ci0i8RwYvlm8PT+ngjWX6t7iPoRbhmS7DjJmY4q9Wbd
+	VdvYc5sVRfuw2sFnBqQhrme7rq2+WkOUYiKaf7ps4dWmyjIHAOSnVTlKg+4w3sPKn4uAty5lfSE
+	/PUOmcWDzNQ==
+X-Received: from dyclw17.prod.google.com ([2002:a05:693c:2111:b0:2d9:472c:9184])
+ (user=pratmal job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7300:d70d:b0:2d3:f3fc:bb6b
+ with SMTP id 5a478bee46e88-2e4646cca96mr11336030eec.1.1776796219319; Tue, 21
+ Apr 2026 11:30:19 -0700 (PDT)
+Date: Tue, 21 Apr 2026 18:30:00 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260417-xdping-v1-1-9b0ce0e7adf8@bootlin.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.54.0.rc1.555.g9c883467ad-goog
+Message-ID: <20260421183000.1541546-1-pratmal@google.com>
+Subject: [RFC PATCH] selftests/mm: use pattern matching in .gitignore
+From: pratmal@google.com
+To: akpm@linux-foundation.org, shuah@kernel.org
+Cc: yosryahmed@google.com, david@kernel.org, ljs@kernel.org, 
+	Liam.Howlett@oracle.com, vbabka@kernel.org, rppt@kernel.org, 
+	surenb@google.com, mhocko@suse.com, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Pratyush Mallick <pratmal@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Apr 17, 2026 at 05:33:02PM +0200, Alexis Lothoré (eBPF Foundation) wrote:
-> As part of a larger cleanup effort in the bpf selftests directory,
-> tests and scripts are either being converted to the test_progs framework
-> (so they are executed automatically in bpf CI), or removed if not
-> relevant for such integration.
-> 
-> The test_xdping.sh script (with the associated xdping.c) acts as a RTT
-> measurement tool, by attaching two small xdp programs to two interfaces.
-> Converting this test to test_progs may not make much sense:
-> - RTT measurement does not really fit in the scope of a functional test,
->   this is rather about measuring some performance level.
-> - there are other existing tests in test_progs that actively validate
->   XDP features like program attachment, return value processing, packet
->   modification, etc
-> 
-> Drop test_xdping.sh and the corresponding xdping.c userspace part. Keep
-> the ebpf part (xdping_kern.c), as it is used by another test integrated
-> in test_progs (btf_dump)
+From: Pratyush Mallick <pratmal@google.com>
 
-The xdping_kern object file is just used in bpf_dump to check we can
-parse the license as expected. You can replace that by any other test
-with a GPL license (ex., btf_type_tag_percpu.bpf.o) and remove
-xdping_kern.c.
+The current .gitignore hardcodes each generated test binary by name,
+requiring updates every time a new test is added.
 
-[...]
+Switch to the patten-matching approach similar to KVM:selftests.
+Ignore everything by default and then allow source extensions (.c, .h, .sh)
+and tracked non-source files.
+
+Signed-off-by: Pratyush Mallick <pratmal@google.com>
+---
+ tools/testing/selftests/mm/.gitignore | 72 ++++-----------------------
+ 1 file changed, 11 insertions(+), 61 deletions(-)
+
+diff --git a/tools/testing/selftests/mm/.gitignore b/tools/testing/selftests/mm/.gitignore
+index 83ad9454dd9d..92f9205d3996 100644
+--- a/tools/testing/selftests/mm/.gitignore
++++ b/tools/testing/selftests/mm/.gitignore
+@@ -1,63 +1,13 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+-cow
+-hugepage-mmap
+-hugepage-mremap
+-hugepage-shm
+-hugepage-vmemmap
+-hugetlb-madvise
+-hugetlb-read-hwpoison
+-hugetlb-soft-offline
+-khugepaged
+-map_hugetlb
+-map_populate
+-thuge-gen
+-compaction_test
+-memory-failure
+-migration
+-mlock2-tests
+-mrelease_test
+-mremap_dontunmap
+-mremap_test
+-on-fault-limit
+-transhuge-stress
+-pagemap_ioctl
+-pfnmap
+-process_madv
+-*.tmp*
+-protection_keys
+-protection_keys_32
+-protection_keys_64
+-madv_populate
+-uffd-stress
+-uffd-unit-tests
+-uffd-wp-mremap
+-mlock-intersect-test
+-mlock-random-test
+-virtual_address_range
+-gup_test
+-va_128TBswitch
+-map_fixed_noreplace
+-write_to_hugetlbfs
+-hmm-tests
+-memfd_secret
+-soft-dirty
+-split_huge_page_test
+-ksm_tests
++*
++!/**/
++!*.c
++!*.h
++!*.sh
++!.gitignore
++!Makefile
++!config
++!settings
++#Re-ignore generated files
+ local_config.h
+-local_config.mk
+-ksm_functional_tests
+-mdwe_test
+-gup_longterm
+-mkdirty
+-va_high_addr_switch
+-hugetlb_fault_after_madv
+-hugetlb_madv_vs_map
+-mseal_test
+-droppable
+-hugetlb_dio
+-pkey_sighandler_tests_32
+-pkey_sighandler_tests_64
+-guard-regions
+-merge
+-prctl_thp_disable
+-rmap
++*.mod.c
+-- 
+2.54.0.rc1.555.g9c883467ad-goog
 
