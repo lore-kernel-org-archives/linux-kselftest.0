@@ -1,196 +1,200 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C3E933F8C2;
-	Tue, 21 Apr 2026 08:50:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776761405; cv=none; b=lOIGx6YXscpfqI0bLAOdsUshkLoHN1byaSH9z3pjDsR7p+jR1nZT7ZtPM8kLej4RadszpYD9vUwFVFDckxJlRp7tQAYkrsRk8mskvzxJsDa+ewGnqig3/6noJX949bsnLigGsUydoTNxoeR1DlazZJtsGYnSKScchMBVu4B/Coo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776761405; c=relaxed/simple;
-	bh=HaTQPXvOEJyusO788jGddOJOEFqrCuHs2/f3+g1Am18=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=T2cuOIyS0I6Iac9j8mdgjq7OuJsnpFJaXsWPHLMIACAEkKMsDHbmuPJ3rNSEjRkXRsRtGjfZOvDtP0dBGJH1TdcmWW4GULNUSw1/qwaEWA/SfsIPVgWPA29H50DY7ISjnhdmdO5x7IaND3HFuhtNI4igdfDGoIQ5c3kNwdu3AZE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pR8Z523t; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B85AB38422F
+	for <linux-kselftest@vger.kernel.org>; Tue, 21 Apr 2026 08:50:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=170.10.129.124
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776761415; cv=pass; b=XuLCc48S9zqDSL15Naq9/meOAIFs39MHjhwK1fermvacFkW2OCgq0vUdDkgqaa3MQucAakQWNa1d3ZSuOvKiRV0N/72W5n6My6zRVPPfM/bQ2vGDOrj8RCtTAKHvISxunEderktZ46zwXsqZWfqduLGyfDbpnyvTk45+Rq7emkI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776761415; c=relaxed/simple;
+	bh=xs2N39HHM6PqtgrRMGSJFnO7luxy+UhyOqy82YwC1R8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VnLF2HdWZI4EtdAHz4pH/AGXdzJNsnDmQ6TledV5wAIIVcC98gQZRx9B+1y4UqntGcYq4XQycr5YZdSvWGzL7QU0gueJpu8WpXzaKHGTB98zrmDMqlo5KmwQXCv7tSF+SmUg4aB4Z5MGB6lI4iYqF0FQ4V4NG9sXC6hkSITZeBA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=an4JMKCf; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=DLWPZtud; arc=pass smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pR8Z523t"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8BB7C2BCB5;
-	Tue, 21 Apr 2026 08:50:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776761405;
-	bh=HaTQPXvOEJyusO788jGddOJOEFqrCuHs2/f3+g1Am18=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=pR8Z523tl/pYJTgna0TzpDJ97VzUhuDGpfMXUMlZSvJUP88/Uf6wwLL6TZpPWR05u
-	 fD93UYvGK1Z22WuxegmEtlR4ePNUVX6G2eE2ADwU3KwsnRkrgv6KuslEMDj4RRqwRM
-	 14skmyaN7pOCw5z4aXywKO7WdmtNgjWIjQBE7KBokI+Z8nr8LT+UnHedRP0w1FkO7/
-	 PdygA/+aEmRmgNTyEpaQ4QOWy0df653T3ZV/1poX6L5HiEPSJxYDfp5OljRX0SkdFT
-	 tqfeD8TETWZix6tWtCS922YGEo3mzAzhVFRtMGSFWkbCfLN9whd61bgc0fioeZwxZd
-	 WIVg9roArtZ/w==
-From: Thomas Gleixner <tglx@kernel.org>
-To: Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>, Johannes
- Weiner <hannes@cmpxchg.org>, Michal =?utf-8?Q?Koutn=C3=BD?=
- <mkoutny@suse.com>, Jonathan
- Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Catalin
- Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, "K. Y.
- Srinivasan" <kys@microsoft.com>, Haiyang Zhang <haiyangz@microsoft.com>,
- Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>, Long Li
- <longli@microsoft.com>, Guenter Roeck <linux@roeck-us.net>, Frederic
- Weisbecker <frederic@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>,
- Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, Joel Fernandes
- <joelagnelf@nvidia.com>, Josh Triplett <josh@joshtriplett.org>, Boqun Feng
- <boqun@kernel.org>, Uladzislau Rezki <urezki@gmail.com>, Steven Rostedt
- <rostedt@goodmis.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
- Anna-Maria Behnsen <anna-maria@linutronix.de>, Ingo Molnar
- <mingo@kernel.org>, Chen Ridong <chenridong@huaweicloud.com>, Peter
- Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
- Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann
- <dietmar.eggemann@arm.com>, Ben Segall <bsegall@google.com>, Mel Gorman
- <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>, K Prateek
- Nayak <kprateek.nayak@amd.com>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>
-Cc: cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-hyperv@vger.kernel.org, linux-hwmon@vger.kernel.org,
- rcu@vger.kernel.org, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Costa Shulyupin <cshulyup@redhat.com>,
- Qiliang Yuan <realwujing@gmail.com>, Waiman Long <longman@redhat.com>
-Subject: Re: [PATCH 04/23] tick/nohz: Allow runtime changes in full dynticks
- CPUs
-In-Reply-To: <20260421030351.281436-5-longman@redhat.com>
-References: <20260421030351.281436-1-longman@redhat.com>
- <20260421030351.281436-5-longman@redhat.com>
-Date: Tue, 21 Apr 2026 10:50:00 +0200
-Message-ID: <87340od7ev.ffs@tglx>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="an4JMKCf";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="DLWPZtud"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1776761411;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ZLkS/Ta9vRJDH5KioddXAEgwRVTq9xjtMihkgqxZ3KQ=;
+	b=an4JMKCfL9X6mLxbOWv2fmZhXnnUKbMQYTcMXwSSpCJoJCksiHvjThxIb714+/hkojUKm2
+	stshGysuN0NvsxHaeOe+Q7RzYEogYeGS24EaReeuIItS3M7mZ1OXPUMiNYXDox6mPQOLIc
+	2fLMMzUgGfWDBNPkyjcW7mUdfOtX0vM=
+Received: from mail-yw1-f198.google.com (mail-yw1-f198.google.com
+ [209.85.128.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-675-rj4NgCkRPgutS5BKQ2LSWw-1; Tue, 21 Apr 2026 04:50:10 -0400
+X-MC-Unique: rj4NgCkRPgutS5BKQ2LSWw-1
+X-Mimecast-MFC-AGG-ID: rj4NgCkRPgutS5BKQ2LSWw_1776761410
+Received: by mail-yw1-f198.google.com with SMTP id 00721157ae682-7a45cf7ff24so64685197b3.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Apr 2026 01:50:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776761410; cv=none;
+        d=google.com; s=arc-20240605;
+        b=heEa5VhUaYGDSNFCrDXYp37NfQyzlAVKhPdgcYGk6pL+QAK+pWzZO9neir+3BxyziF
+         DjvOP99i0bQZAbO73yXIoJru5zQLXsdQZdTEgyd1VHVIpKjvVGFjYZ4AHhUHrMl7frBD
+         bCzf/g6L9dBvDkczEspyM5wohmsxxmt5QU744XO+6TGVi5IfDnhsxv6Bfl1qmmG3O52Y
+         QGtpvxxpY1x+j8bbq6IuhFKCibMwH2nLxjJInKxq2M84XHHL9Pf+elX0Soa1vUPKur1X
+         w8/4Ep/aZsr4VeU7V7U7ZIaYyPLT3iJhRt3v5OjFYtdtPx4zIHW2qWknFnPxgJLZpHFF
+         wE4g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=ZLkS/Ta9vRJDH5KioddXAEgwRVTq9xjtMihkgqxZ3KQ=;
+        fh=a4PVgJLpk4v5QNVVy8Ei9wkh5w4IsPUmex0+82SLzNE=;
+        b=iyRUIspOb3x98De/DemNZDAmp+uvEy+r//F61LwQVAH4x2qvZ83+4257WKRHXjl6gF
+         SxkKS1ahliv/M4kQPvMV1+ccdle/aAm3Q/zvYyJcrA82o9MYduXKSlyfWDvuGSzj49hA
+         d8Vh0q75sqibcfUsuKSBG1F8pxAEG3FzGf8hEvKfTZxo+uR7CM3UkY8IBRosVCqnz0k4
+         fOAr8/q1ZEOswOR4I+aqHAZXbAiXdlGW1eHGHiFejxShKDPrqsojNEUSgpOwHH+Mo3Ua
+         nOefIHiFJknLX+aXMasACDs5PL7VDO8LkY1v7Ms72UAsOFWKKC4bwspiAWHrCcCT6iFg
+         zbUQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1776761410; x=1777366210; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZLkS/Ta9vRJDH5KioddXAEgwRVTq9xjtMihkgqxZ3KQ=;
+        b=DLWPZtud7iL2OqOU4xQvCVQetOMkZ8xXfcTv/ioIwv5L0uhrmTBuaba1JNLfc61PTI
+         6MEFRpkla/7ceyeAVIT9Oh5ymrzC/fQUgKdDzaa/7xSQdotalga+rOKUQy40peUmr+/u
+         b6r9853w0/jMZo2bnmFwBSuAIjUIzVVax3O2NCsDZtoquO7Hq2bZnAIqJVrWpv+NFZgu
+         b5Y6HVVXrYoSRmdxlGP5KRwLwIYcjSE8EEmJB10E1EW3DvzFVmepZhRd/DkS6bN+qyY4
+         P+oJ/mBTU7n2UPC6R4+uG3C1NHEHyqgcajCqbd70VrrexRPSgyUozFiH0ZVQ+mF9v/TC
+         HtwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776761410; x=1777366210;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=ZLkS/Ta9vRJDH5KioddXAEgwRVTq9xjtMihkgqxZ3KQ=;
+        b=MD0olUkbRwutfe54LRFxXaGomlwGlGg6HZbSs1P3Us5LQrppt6aBVAD7/6zEA/GHzj
+         2SRsvv6PTBWHbF3S9B2ae9+y/wzK1IbhFw9ku0O8dJT6zZAkOE314aVd+pe+yS5XxPFC
+         D5BeCojW8jbmRXziaFoH7ThVWZrCXAgQOpjlXPEsMbGalz5BJzEac2aHSrQHf5M+1gzq
+         kZV/KpQBkJzdtoJMZr9qEGCWyIU4uK0ARIOAZBoFV++2Ea9dZ00P50j6eIMzIDc/b/AN
+         gOjNFbaqiCPw3g0w+LGHHND2R2HEskvHQYtyQDGZgbiGWTGhvlKtkCXgZGllzncnh4d/
+         xcFQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9EqX4Iw4qtNOCVyexCAX4cpi9wPoItT/+MlQRmGUAH0j5OStuItw9f2CdUzVww10o4UBVuS8pXesDhxXPu/yM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw1RK72vCA7zH5PIVNHhbXypA4dlS8lR0S7URQhuZiLjKNQDp2M
+	CQeH1gkT08K4VRwfOEkRvRd50cBsh4ehjD4HmVZA48arwipUmNL5NE6fgLI8xPA1FcZCyuCIJ2d
+	LcGenaS3u4nTRCQDrik9E9RGAO8OnkywQGJgekD/Wv1F+sR2bibFe3nMNwNU3p9PxP+RtdboKhw
+	v8v4NhNPebEPpZuZvzVP/OE+oy/Dm8AWIWP7EqpzejJN3h
+X-Gm-Gg: AeBDiev0t/nzPWASkZi+EmV0p/31RTH+gqoCdZJV8YkU4I1BSUGOtjqZLyHjzV+lLbY
+	tmauWFZacq+XvV35yCgGjQwjYQXGyjm5sf4JAG3MrmIz3DvOcqA/NKR+T414NNGfR1BCHcH5+RN
+	g42SuQMYfVakifOiIrLS68o8ijZPKQ3wdW4K2b5uXuRBeU7gjmJ2nsxLrpxFEGn8arS9t9FXLRM
+	zmzCD4P+lqoI0+B
+X-Received: by 2002:a05:690c:dd5:b0:7b2:9347:7bdf with SMTP id 00721157ae682-7b9ed000a01mr173415487b3.37.1776761410082;
+        Tue, 21 Apr 2026 01:50:10 -0700 (PDT)
+X-Received: by 2002:a05:690c:dd5:b0:7b2:9347:7bdf with SMTP id
+ 00721157ae682-7b9ed000a01mr173415087b3.37.1776761409658; Tue, 21 Apr 2026
+ 01:50:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20260420-kunit_add_support-v7-0-e8bc6e0f70de@redhat.com>
+ <20260420-kunit_add_support-v7-4-e8bc6e0f70de@redhat.com> <20260420144702.GM3102624@noisy.programming.kicks-ass.net>
+In-Reply-To: <20260420144702.GM3102624@noisy.programming.kicks-ass.net>
+From: Albert Esteve <aesteve@redhat.com>
+Date: Tue, 21 Apr 2026 10:49:58 +0200
+X-Gm-Features: AQROBzCldOYbfR8ys3ZZ4dkJqQQZYQ8VWy-mBIRFS67smM8o_e_X6azO-SUJq08
+Message-ID: <CADSE00JJq6fsYbkFN5hBD=-ZWsFG9p4_C55fp3MupMJQj0QCUQ@mail.gmail.com>
+Subject: Re: [PATCH v7 4/5] drm: Suppress intentional warning backtraces in
+ scaling unit tests
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Brendan Higgins <brendan.higgins@linux.dev>, 
+	David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, dri-devel@lists.freedesktop.org, 
+	workflows@vger.kernel.org, linux-doc@vger.kernel.org, 
+	Guenter Roeck <linux@roeck-us.net>, Linux Kernel Functional Testing <lkft@linaro.org>, 
+	Dan Carpenter <dan.carpenter@linaro.org>, =?UTF-8?B?TWHDrXJhIENhbmFs?= <mcanal@igalia.com>, 
+	Alessandro Carminati <acarmina@redhat.com>, Simona Vetter <simona.vetter@ffwll.ch>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Apr 20 2026 at 23:03, Waiman Long wrote:
-> Full dynticks can only be enabled if "nohz_full" boot option has been
-> been specified with or without parameter. Any change in the list of
-> nohz_full CPUs have to be reflected in tick_nohz_full_mask. Introduce
-> a new tick_nohz_full_update_cpus() helper that can be called to update
-> the tick_nohz_full_mask at run time. The housekeeping_update() function
-> is modified to call the new helper when the HK_TYPE_KERNEL_NOSIE cpumask
-> is going to be changed.
+On Mon, Apr 20, 2026 at 4:47=E2=80=AFPM Peter Zijlstra <peterz@infradead.or=
+g> wrote:
 >
-> We also need to enable CPU context tracking for those CPUs that
-
-We need nothing. Use passive voice for change logs as requested in
-documentation.
-
-> are in tick_nohz_full_mask. So remove __init from tick_nohz_init()
-> and ct_cpu_track_user() so that they be called later when an isolated
-> cpuset partition is being created. The __ro_after_init attribute is
-> taken away from context_tracking_key as well.
+> On Mon, Apr 20, 2026 at 02:28:06PM +0200, Albert Esteve wrote:
+> > From: Guenter Roeck <linux@roeck-us.net>
+> >
+> > The drm_test_rect_calc_hscale and drm_test_rect_calc_vscale unit tests
+> > intentionally trigger warning backtraces by providing bad parameters to
+> > the tested functions. What is tested is the return value, not the exist=
+ence
+> > of a warning backtrace. Suppress the backtraces to avoid clogging the
+> > kernel log and distraction from real problems.
+> >
+> > Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> > Acked-by: Dan Carpenter <dan.carpenter@linaro.org>
+> > Acked-by: Ma=C3=ADra Canal <mcanal@igalia.com>
+> > Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+> > Cc: David Airlie <airlied@gmail.com>
+> > Cc: Daniel Vetter <daniel@ffwll.ch>
+> > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> > Signed-off-by: Alessandro Carminati <acarmina@redhat.com>
+> > Signed-off-by: Albert Esteve <aesteve@redhat.com>
+> > ---
+> >  drivers/gpu/drm/tests/drm_rect_test.c | 14 ++++++++++++++
+> >  1 file changed, 14 insertions(+)
+> >
+> > diff --git a/drivers/gpu/drm/tests/drm_rect_test.c b/drivers/gpu/drm/te=
+sts/drm_rect_test.c
+> > index 17e1f34b76101..1dd7d819165e7 100644
+> > --- a/drivers/gpu/drm/tests/drm_rect_test.c
+> > +++ b/drivers/gpu/drm/tests/drm_rect_test.c
+> > @@ -409,8 +409,15 @@ static void drm_test_rect_calc_hscale(struct kunit=
+ *test)
+> >       const struct drm_rect_scale_case *params =3D test->param_value;
+> >       int scaling_factor;
+> >
+> > +     /*
+> > +      * drm_rect_calc_hscale() generates a warning backtrace whenever =
+bad
+> > +      * parameters are passed to it. This affects all unit tests with =
+an
+> > +      * error code in expected_scaling_factor.
+> > +      */
+> > +     KUNIT_START_SUPPRESSED_WARNING(test);
+> >       scaling_factor =3D drm_rect_calc_hscale(&params->src, &params->ds=
+t,
+> >                                             params->min_range, params->=
+max_range);
+> > +     KUNIT_END_SUPPRESSED_WARNING(test);
 >
-> Also add a new ct_cpu_untrack_user() function to reverse the action of
-> ct_cpu_track_user() in case we need to disable the nohz_full mode of
-> a CPU.
+> Would not something like:
 >
-> With nohz_full enabled, the boot CPU (typically CPU 0) will be the
-> tick CPU which cannot be shut down easily. So the boot CPU should not
-> be used in an isolated cpuset partition.
+>         scoped_kunit_suppress() {
+>                 scaling_factor =3D drm_rect_calc_hscale(&params->src, &pa=
+rams->dst,
+>                                                       params->min_range, =
+params->max_range);
+>         }
 >
-> With runtime modification of nohz_full CPUs, tick_do_timer_cpu can become
-> TICK_DO_TIMER_NONE. So remove the two TICK_DO_TIMER_NONE WARN_ON_ONCE()
-> checks in tick-sched.c to avoid unnecessary warnings.
+> be better?
 
-in tick-sched.c? Describe the functions which contain that.
+Since KUnit already has a few macros in its API it didn't occur to me.
+Good idea, I like it. And I guess the scope approach matches well with
+your __cleanup comment in the first patch. If no one opposes, I will
+work toward that pattern for the next version.
 
->  static inline void tick_nohz_task_switch(void)
-> diff --git a/kernel/context_tracking.c b/kernel/context_tracking.c
-> index 925999de1a28..394e432630a3 100644
-> --- a/kernel/context_tracking.c
-> +++ b/kernel/context_tracking.c
-> @@ -411,7 +411,7 @@ static __always_inline void ct_kernel_enter(bool user, int offset) { }
->  #define CREATE_TRACE_POINTS
->  #include <trace/events/context_tracking.h>
->  
-> -DEFINE_STATIC_KEY_FALSE_RO(context_tracking_key);
-> +DEFINE_STATIC_KEY_FALSE(context_tracking_key);
->  EXPORT_SYMBOL_GPL(context_tracking_key);
->  
->  static noinstr bool context_tracking_recursion_enter(void)
-> @@ -674,9 +674,9 @@ void user_exit_callable(void)
->  }
->  NOKPROBE_SYMBOL(user_exit_callable);
->  
-> -void __init ct_cpu_track_user(int cpu)
-> +void ct_cpu_track_user(int cpu)
->  {
-> -	static __initdata bool initialized = false;
-> +	static bool initialized;
->  
->  	if (cpu == CONTEXT_TRACKING_FORCE_ENABLE) {
->  		static_branch_inc(&context_tracking_key);
-> @@ -700,6 +700,15 @@ void __init ct_cpu_track_user(int cpu)
->  	initialized = true;
->  }
->  
-> +void ct_cpu_untrack_user(int cpu)
-> +{
-> +	if (!per_cpu(context_tracking.active, cpu))
-> +		return;
-> +
-> +	per_cpu(context_tracking.active, cpu) = false;
-> +	static_branch_dec(&context_tracking_key);
-> +}
-> +
+>
+> Also, how can you stand all this screaming in the code?
+>
 
-Why is this in a patch which makes tick/nohz related changes? This is a
-preparatory change, so make it that way and do not bury it inside
-something else.
-
-> +/* Get the new set of run-time nohz CPU list & update accordingly */
-> +void tick_nohz_full_update_cpus(struct cpumask *cpumask)
-> +{
-> +	int cpu;
-> +
-> +	if (!tick_nohz_full_running) {
-> +		pr_warn_once("Full dynticks cannot be enabled without the nohz_full kernel boot parameter!\n");
-
-That's the result of this enforced enable hackery. Make this work
-properly.
-
-> +		return;
-> +	}
-> +
-> +	/*
-> +	 * To properly enable/disable nohz_full dynticks for the affected CPUs,
-> +	 * the new nohz_full CPUs have to be copied to tick_nohz_full_mask and
-> +	 * ct_cpu_track_user/ct_cpu_untrack_user() will have to be called
-> +	 * for those CPUs that have their states changed. Those CPUs should be
-> +	 * in an offline state.
-> +	 */
-> +	for_each_cpu_andnot(cpu, cpumask, tick_nohz_full_mask) {
-> +		WARN_ON_ONCE(cpu_online(cpu));
-> +		ct_cpu_track_user(cpu);
-> +		cpumask_set_cpu(cpu, tick_nohz_full_mask);
-> +	}
-> +
-> +	for_each_cpu_andnot(cpu, tick_nohz_full_mask, cpumask) {
-> +		WARN_ON_ONCE(cpu_online(cpu));
-> +		ct_cpu_untrack_user(cpu);
-> +		cpumask_clear_cpu(cpu, tick_nohz_full_mask);
-> +	}
-> +}
-
-So this writes to tick_nohz_full_mask while other CPUs can access
-it. That's just wrong and I'm not at all interested in the resulting
-KCSAN warnings.
-
-tick_nohz_full_mask needs to become a RCU protected pointer, which is
-updated once the new mask is established in a separately allocated one.
-
-Thanks,
-
-        tglx
-
+Again, KUnit already contains many macros, so this use didn't register
+as such. Now I will not be able to unsee it.
 
