@@ -1,248 +1,250 @@
-Received: from www3579.sakura.ne.jp (www3579.sakura.ne.jp [49.212.243.89])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 313F2946A
-	for <linux-kselftest@vger.kernel.org>; Wed, 22 Apr 2026 07:02:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=49.212.243.89
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776841338; cv=none; b=lLzHrdpxllFNNZ4Mh5IVQvrgilReFlP0Iw/ubIwU0HdZANMJ68lHqxC7x8GLYINyP0RzSXh9ZpmEJRk1eAzGtXXzwvbSzLau4hy17VtrXvbrmeCXK2+cSGOrXUa2vRqNX/xD+IksREBC0cVJwzsNx0c7dqXNOBhSXH95/bPQVbw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776841338; c=relaxed/simple;
-	bh=gqk3uD4R/tE9ZWWfHwCVoKk1/vJMJjFUD5vCjQ+gtRE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HiPSXEEOhLDQddUD518pE7S44IFCE/+XmX7tsf5quzW3F4DY/JPnNTAC10NW3pH4AqSLD2XJLz8wZVvNWpwBv7QabpT2ES99kiPB/fYMjNbuQP5P58bnUdOqanTBbjtEV+FRyTDcc5XiuJMxeF1Rcz4qddUeTqqBAOmcpRaPIEM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp; dkim=fail (0-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b=nazrWpPO reason="key not found in DNS"; arc=none smtp.client-ip=49.212.243.89
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rsg.ci.i.u-tokyo.ac.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rsg.ci.i.u-tokyo.ac.jp
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C457C36C5AC
+	for <linux-kselftest@vger.kernel.org>; Wed, 22 Apr 2026 07:14:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.44
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776842059; cv=pass; b=Hh6mQCbpD5zFSPSb30rCFsw2sOZTa1jvNdf68RtFbS0fn1i5tJmutv4bfgfzCusJF0OdWcS3CNmoFkceTnZJ1+mpBto/rr7kOwlLOytHiysPfK3ZaqHRt3gnMu9lKPaHz+B3s6P3zRyw8JfIbyZK77nO6pHdpp6TLqkA+K1bN7A=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776842059; c=relaxed/simple;
+	bh=XowSd59N4h93jym+TJycNOip1Un2FoiepuvLyVCQEyM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rw/gxvKu4pB0UVhDr7V38QkwPwvwTpKaWMIx3oNZC9c/h/v11+2zeuRRp7QYMPCRMQkTZm5dnd57roNruD1aUWA/YOyGTP83wEM0neMxmEoY5czgi8xVRtUsGkuGYdOso42W4MlNH74CmvudqTVlqR34/+SRMNm8v0g+7Detfug=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=STFUNdij; arc=pass smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=rsg.ci.i.u-tokyo.ac.jp header.i=@rsg.ci.i.u-tokyo.ac.jp header.b="nazrWpPO"
-Received: from [133.11.54.205] (h205.csg.ci.i.u-tokyo.ac.jp [133.11.54.205])
-	(authenticated bits=0)
-	by www3579.sakura.ne.jp (8.16.1/8.16.1) with ESMTPSA id 63M726wI004805
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-	Wed, 22 Apr 2026 16:02:06 +0900 (JST)
-	(envelope-from odaki@rsg.ci.i.u-tokyo.ac.jp)
-DKIM-Signature: a=rsa-sha256; bh=spF9IOW2V15dt6bJE0CRBrgMv2oh2xWd5j7mz2cgmZk=;
-        c=relaxed/relaxed; d=rsg.ci.i.u-tokyo.ac.jp;
-        h=From:Message-ID:To:Subject:Date;
-        s=rs20250326; t=1776841326; v=1;
-        b=nazrWpPOx1MUGEQQP5jnqy7DnpgSUPBt+epaBv0wb9yxB67VjM13b0XbIxSdZ8Dz
-         T5CQmSpsVMKBnJWJBfvZMyngEYKJFfZMNjN4w3ZhdoyB/XSw+qLYb41eEckAGS2X
-         BEH57BHzIM/fhzGcS+hQUiDIl6RRIFTOkCguyNTRX1mIApCowv428/0fWfm5Kd6Z
-         7toEuwuPTFRzu6kLLpeWean3D2SrmYR7F6yyBrnOXU1DR15c0U959WEwh6XJm81g
-         ttzTKQqQ/7GXlyL+w+Y5UGnyurFKA4AzE/cgET+zMT1z4YjUDTpISkP1n8h/yvfC
-         7KGiBzQMkIDtiEEF+lvS1A==
-Message-ID: <327f74e4-78b8-4629-a418-d1d3ba78859f@rsg.ci.i.u-tokyo.ac.jp>
-Date: Wed, 22 Apr 2026 16:02:05 +0900
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="STFUNdij"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-488ad135063so43893315e9.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Apr 2026 00:14:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776842056; cv=none;
+        d=google.com; s=arc-20240605;
+        b=lkwpE74GYnvLi4twczfA4zl1d31Yr9GbWEcfLKju//WusWGmP0OAPJka3slHsOXAVv
+         05HMoXw0TErTD31TLbmq401lPw54rD2vxSJilF8MyfnLvFfnO1xw+lqGNRm2YoOSnho0
+         vdnyfrAEEV1HuIVbxtSmYcudtVE1/wHpL65KWU1jOEH0s027KFSFyApTFA3MBhsrBwjb
+         7hLKJ6BhZu76XVjbtMQUmZ14yWcb3R1rZE/sM750DWzv0TFtFFiseO90hrHk212JljGb
+         GsdW8hy7cSKuwtl6LW+3DibHs+rPA19bsozGjomEl3GufDJwI+5EcMR2KzDNF9namYmT
+         nA0A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=bqnR6HI2Fa/Xow2KsNl3iKJdbqbKp2MgpRDTzxPIh/8=;
+        fh=TW/ZV6lDQDu85Cz1CqdTEBuV05l4I/hMr1EpOO0ljAk=;
+        b=V/ZcMl9KWv5WvpauvQGXohs0KX0GsfBhycibEIuhDsAnB8M7k4AOWH2WFNbDQCkfNp
+         ++mWYJBs4AzqR2m2nCsfdNscYxzdq4HUUfa3Nl6q/tvjUwAenir46KD1cT/WCRQwBbcw
+         s0rAMBQ6AfoCBt0bSRIRdt9gpTolMVtlYmaCM8GwO3RRr7TBEByXhXVlO2nt63tf4a9H
+         gqdMHkJwi7NPM4Gc0n9G/Fe5I7DNQo3Ulxd4AKVZMqHwqCzHAnlj/0Xl+FAk3qUSKIFo
+         Tj18FYJH2r7GWfDe96Q2X06KOov442AVg8pyT/4R7xbo88EeJ8nnD+C02Ill95BwZAYV
+         iyig==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776842056; x=1777446856; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bqnR6HI2Fa/Xow2KsNl3iKJdbqbKp2MgpRDTzxPIh/8=;
+        b=STFUNdijZrCHWnDhAbFY77gtD4bOPf0qPu5JXOD6cwNYNm2Pow4futGiRlCh3zeVlQ
+         igeb3L8sSkj+H4WZOpSZx/9d3p0xl4aJ3yq+YBtI/4dzFFEyJAF6/r5O+1hMVmLSJI6s
+         Y7jfQ5NBkOfWew1mQj9onTdyR7mpjj9npxRLb1xVtqC0cCvwkIwYSlFGireBfKliyGr8
+         YL0ajtsTkpCWpPFHfvn3zWBG1AgKSrXqJDBPsqBgG+RDtSeF1IRW/aybEucmqSrVQWaV
+         NbCTdc0tQiDIjgq06G7ezeVeN4Os2a7RX7LiCNJ/l67MYMam6+ZzSJjvpdo0pRqNGsZV
+         ZyvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776842056; x=1777446856;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=bqnR6HI2Fa/Xow2KsNl3iKJdbqbKp2MgpRDTzxPIh/8=;
+        b=SpB9Ta769GHGaplXTG2XrgMBSIUBGxvc6lpqqNiGJTaHELbE/ZslNS0bvV9SPWzaRO
+         0r8SbDn+FpETX9zhBVGh7GC6FJZj4qWh0zt9RDeTCVtClcBV0dPubMwKJd6LzzcwhBRF
+         WA+kVg42PV7pgj8puPaqPnOVByeHHKcA5FONdvd9zV2RTLPgf7Ab5zQcKlxMKsQF1yIb
+         tbPbcX83k3VtcfJJYZvzbwdYLozh0dMIg/lkXU6S/NyJLTvwGsyYjzrx1PML4UBXFJf5
+         PTsjZXHg0Ld3lfAS2b7ob9pj0lk4DKkA9zUis30vQOd50QpiCsB0rltsctXNQcSKPDBt
+         i9Cg==
+X-Forwarded-Encrypted: i=1; AFNElJ//3nFByeulcRS/9XZvUxTxAfatCrI8ZrkkexOEet9MMprclilrX/9RoxkIIbjGJpHA1p3a5vvdFXwWxd9e5jU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy74O0uEE/2Pg9L4BgWLn1K+Puj8H2KXNKh+N4SeWYV142D9ifg
+	sV3xpGzBhHHGwR1iW1K5/3oycCL4JVfB2OJrj9EeAYc7zvq3jzMV5WnlWgh2SPm5I62tm3oi06K
+	C5FttF+GcZ0zyesaqayIsbqLbyV2jg7w=
+X-Gm-Gg: AeBDieuBjMVRe9kA30onU2pN2qexzSR31pdohNN9qaSgimQMXoBvvqDq+0YiPsNkTei
+	aupwlAPUSSJmIXacARwj7d6uNu4HKhIpFG5iHnNf8dVhyPpngd/xXoJKPaEUweIyzS7/+NlbeEZ
+	/q4HQkJW/uY6b2y80xpcCgVFlJSaUbS88CNn2ipAamLt1FjedhovFtpvZO4dSwOZmZQahbpIFJ3
+	wAdRQZMUsFg/3bYHHgjBW4svST04TxCcVzz1FgQo4gUbWlVaZLrXgsOoaCb5Urg12SMNgi/cI9i
+	yWipfsMnyxSL7e1Rb0lqYCrQvA==
+X-Received: by 2002:a05:600c:8b55:b0:48a:57e1:d8cc with SMTP id
+ 5b1f17b1804b1-48a57e1d8d4mr65879105e9.9.1776842055910; Wed, 22 Apr 2026
+ 00:14:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 3/4] KVM: arm64: PMU: Introduce FIXED_COUNTERS_ONLY
-To: Marc Zyngier <maz@kernel.org>
-Cc: Oliver Upton <oupton@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu
- <yuzenghui@huawei.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Kees Cook <kees@kernel.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org, devel@daynix.com, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260418-hybrid-v7-0-2bf39ad009bf@rsg.ci.i.u-tokyo.ac.jp>
- <20260418-hybrid-v7-3-2bf39ad009bf@rsg.ci.i.u-tokyo.ac.jp>
- <87ldeic1gk.wl-maz@kernel.org>
- <06c6664c-7f0c-47b2-babf-ba2a541fd9f2@rsg.ci.i.u-tokyo.ac.jp>
- <86qzoa0xj6.wl-maz@kernel.org>
- <ad44c69e-2f99-4f31-81b4-faae52eea080@rsg.ci.i.u-tokyo.ac.jp>
- <86ldeh20xg.wl-maz@kernel.org>
-Content-Language: en-US
-From: Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>
-In-Reply-To: <86ldeh20xg.wl-maz@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20260422024554.130346-1-jt26wzz@gmail.com> <20260422024554.130346-3-jt26wzz@gmail.com>
+ <CAJ-ks9=FKMoczH+Z=GQ7C40T42=zdknYzzHCa8UVFOtq2H69cw@mail.gmail.com>
+ <CALgi0XnM49xUZm2-YAjPFoc_8j_F=y4gmVemGHacyH8aXeXaHw@mail.gmail.com> <CAAVpQUAKCDVPHhFjWch2-zpKp2rHEPzvwE4R1UrDTMd_6Y2HYA@mail.gmail.com>
+In-Reply-To: <CAAVpQUAKCDVPHhFjWch2-zpKp2rHEPzvwE4R1UrDTMd_6Y2HYA@mail.gmail.com>
+From: Zhenzhong Wu <jt26wzz@gmail.com>
+Date: Wed, 22 Apr 2026 15:14:03 +0800
+X-Gm-Features: AQROBzBPry-HAb88G-Fx1bXIMUprfrxusGK4mpwNqFKy-bWEEZuX23LA3vZxfvI
+Message-ID: <CALgi0Xm7+_uREQ3Sv19O8vfFyuwXNxVdUS9KQEvtkQHc=g2B4g@mail.gmail.com>
+Subject: Re: [PATCH net v4 2/2] selftests/bpf: check epoll readiness during
+ reuseport migration
+To: Kuniyuki Iwashima <kuniyu@google.com>
+Cc: Tamir Duberstein <tamird@kernel.org>, netdev@vger.kernel.org, edumazet@google.com, 
+	ncardwell@google.com, davem@davemloft.net, dsahern@kernel.org, 
+	kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2026/04/20 22:53, Marc Zyngier wrote:
-> On Mon, 20 Apr 2026 13:07:15 +0100,
-> Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp> wrote:
->>
->> On 2026/04/20 18:51, Marc Zyngier wrote:
->>> On Mon, 20 Apr 2026 09:36:16 +0100,
->>> Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp> wrote:
->>>>
->>>> On 2026/04/20 2:19, Marc Zyngier wrote:
->>>>> On Sat, 18 Apr 2026 09:14:25 +0100,
->>>>> Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp> wrote:
->>>>>>
->>>>>> On a heterogeneous arm64 system, KVM's PMU emulation is based on the
->>>>>> features of a single host PMU instance. When a vCPU is migrated to a
->>>>>> pCPU with an incompatible PMU, counters such as PMCCNTR_EL0 stop
->>>>>> incrementing.
->>>>>>
->>>>>> Although this behavior is permitted by the architecture, Windows does
->>>>>> not handle it gracefully and may crash with a division-by-zero error.
->>>>>>
->>>>>> The current workaround requires VMMs to pin vCPUs to a set of pCPUs
->>>>>> that share a compatible PMU. This is difficult to implement correctly in
->>>>>> QEMU/libvirt, where pinning occurs after vCPU initialization, and it
->>>>>> also restricts the guest to a subset of available pCPUs.
->>>>>>
->>>>>> Introduce the KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY attribute to
->>>>>> create a "fixed-counters-only" PMU. When set, KVM exposes a PMU that is
->>>>>> compatible with all pCPUs but that does not support programmable
->>>>>> event counters which may have different feature sets on different PMUs.
->>>>>>
->>>>>> This allows Windows guests to run reliably on heterogeneous systems
->>>>>> without crashing, even without vCPU pinning, and enables VMMs to
->>>>>> schedule vCPUs across all available pCPUs, making full use of the host
->>>>>> hardware.
->>>>>>
->>>>>> Much like KVM_ARM_VCPU_PMU_V3_IRQ and other read-write attributes, this
->>>>>> attribute provides a getter that facilitates kernel and userspace
->>>>>> debugging/testing.
->>>>>
->>>>> OK, so that's the sales pitch. But how is it implemented? I would like
->>>>> to be able to read a high-level description of the implementation
->>>>> trade-offs.
->>>>
->>>> Implementation-wise it is very trivial. Essentially the following
->>>> addition in kvm_arm_pmu_v3_get_attr() is the entire implementation:
->>>> +	case KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY:
->>>> +		if (test_bit(KVM_ARCH_FLAG_PMU_V3_FIXED_COUNTERS_ONLY,
->>>> &vcpu->kvm->arch.flags))
->>>> +			return 0;
->>>>
->>>> Both its functionality and code complexity is trivial. So we can argue that:
->>>> - the functionality is too trivial to be useful or
->>>> - the interface/implementation complexity is so trivial that it does not
->>>>     incur maintenance burden
->>>>
->>>> In this case the selftest uses the getter so I was more inclined to
->>>> have it, but adding one just for the selftest sounds too ad-hoc, so
->>>> here I looked into other attributes to ensure that it was not
->>>> introducing inconsistency with existing interfaces.
->>>>
->>>> As the result, I found there are other read-write attributes; in fact
->>>> there are more read-write attributes than write-only ones.
->>>
->>> You're completely missing the point. I'm referring to the whole of the
->>> commit message, which is more of a marketing slide than a technical
->>> description.
->>
->> In terms of implementation, the obvious tradeoff is that it adds more
->> code to implement the feature. One thing to note is that
->> kvm_vcpu_load_pmu() is added and is called each time a vCPU migrates
->> across pCPUs. The heavy part, making the KVM_REQ_RELOAD_PMU request,
->> only happens when the feature is enabled.
-> 
-> Well, that's what I want to see. The repeated blurb about Windows
-> being broken is cover letter material, but not fir for a commit
-> message.
+Thanks both. Keeping the goto for consistency with the rest of the test.
 
-I understand. I'll leave the Windows issue the cover letter and write 
-focused patch messages after splitting patches.
-
-> 
-> [...]
-> 
->>>>> "for the first time" gives the impression that it will work if you try
->>>>> again. I'd rather we say that "This feature is incompatible with the
->>>>> existence of a PMU event filter".
->>>>
->>>> The following sequence will work:
->>>> 1. Set KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY
->>>> 2. Set KVM_ARM_VCPU_PMU_V3_FILTER
->>>> 3. Set KVM_ARM_VCPU_PMU_V3_FIXED_COUNTERS_ONLY
->>>>
->>>> This is to make the behavior conistent with KVM_ARM_VCPU_PMU_V3_SET_PMU.
->>>
->>> I don't think this is correct. Filtering is completely at odds with
->>> this patch, and I don't want to have to reason about the combination.
->>
->> kvm_arm_pmu_v3_set_pmu() has the following condition:
->>
->> if (kvm_vm_has_ran_once(kvm) ||
->>      (kvm->arch.pmu_filter && kvm->arch.arm_pmu != arm_pmu)) {
->> 	ret = -EBUSY;
->> 	break;
->> }
->>
->> kvm_arm_pmu_v3_set_pmu_fixed_counters_only() has the corresponding
->> condition for consistency:
->>
->> if (kvm_vm_has_ran_once(kvm) ||
->>      (kvm->arch.pmu_filter &&
->>       !test_bit(KVM_ARCH_FLAG_PMU_V3_FIXED_COUNTERS_ONLY,
->> 	       &kvm->arch.flags)))
->> 	return -EBUSY;
->>
->> We can of course kill the PMU event filter for
->> FIXED_COUNTERS_ONLY. The filter is effectively no-op with
->> FIXED_COUNTERS_ONLY and I don't think that consistency matters much.
-> 
-> We shouldn't allow weird combinations in the UAPI. Since it makes no
-> sense to have both fixed-function *and* filters, we should make them
-> mutually exclusive.
-
-Then I think it makes sense to make KVM_ARM_VCPU_PMU_V3_SET_NR_COUNTERS 
-mutually exclusive for consistency, but I found something weird with it.
-
-The documentation says it already "mandates that a PMU has explicitly 
-been selected via KVM_ARM_VCPU_PMU_V3_SET_PMU", but apparently that's 
-not properly implemented.
-
-kvm_arm_pmu_v3_set_nr_counters() has the following check:
-	if (!kvm->arch.arm_pmu)
-		return -EINVAL;
-
-I suspect it is intended to check if a PMU has explicitly been selected, 
-but this check is effectively no-op because kvm_arm_set_default_pmu() 
-has already set kvm->arch.arm_pmu before reaching there.
-
-Furthermore, tools/testing/selftests/kvm/arm64/vpmu_counter_access.c 
-seems to expect KVM_ARM_VCPU_PMU_V3_SET_NR_COUNTERS to work without 
-selecting a PMU via KVM_ARM_VCPU_PMU_V3_SET_PMU.
-
-How should we deal with the discrepancy between the documentation and 
-the implementation/selftest?
-
-> 
-> [...]
-> 
->>>> I expect migration will be handled with the conventional register
->>>> getters and setters, but please share if you have a concern.
->>>
->>> At the very least I want to see some documentation explaining that.
->>
->> What kind of documentation do you expect?
-> 
-> A description of what counters are exposed by this feature, and what
-> architectural features they are dependent on.
-
-I'll update the attribute documentation accordingly.
-
-> 
->> If we change kvm_vcpu_load_pmu() to avoid for_each_set_bit(), there
->> would be a good chance to forget updating it when mechanically
->> updating existing for_each_set_bit() instances, so it is a candidate
->> for documentation. But I don't have a good idea where to place it
->> either.
-> 
-> The moment we introduce FEAT_PMUv3_ICNTR, the whole PMUv3 emulation
-> will catch fire anyway, as we already limit ourselves to 32 bits for
-> reset and nesting switch.
-> 
-> So this will be a major redesign anyway. If you are really worried,
-> leave a comment in there.
-
-I'll leave one line comment in the implementation corresponding to the 
-attribute documentation.
-
-Regards,
-Akihiko Odaki
+On Wed, Apr 22, 2026 at 2:40=E2=80=AFPM Kuniyuki Iwashima <kuniyu@google.co=
+m> wrote:
+>
+> On Tue, Apr 21, 2026 at 11:34=E2=80=AFPM Zhenzhong Wu <jt26wzz@gmail.com>=
+ wrote:
+> >
+> > Thanks Tamir, I will fold this into v5 - there's already a precedent
+> > in socket_helpers.h, so I will just include it from there.
+>
+> The test does not use cleanup in other places,
+> no need to mix them up.
+>
+>
+> >
+> > On Wed, Apr 22, 2026 at 11:04=E2=80=AFAM Tamir Duberstein <tamird@kerne=
+l.org> wrote:
+> > >
+> > > On Tue, Apr 21, 2026 at 7:46=E2=80=AFPM Zhenzhong Wu <jt26wzz@gmail.c=
+om> wrote:
+> > > >
+> > > > Inside migrate_dance(), add epoll checks around shutdown() to
+> > > > verify that the target listener is not ready before shutdown()
+> > > > and becomes ready immediately after shutdown() triggers migration.
+> > > >
+> > > > Cover TCP_ESTABLISHED and TCP_SYN_RECV. Exclude TCP_NEW_SYN_RECV
+> > > > as it depends on later handshake completion.
+> > > >
+> > > > Suggested-by: Kuniyuki Iwashima <kuniyu@google.com>
+> > > > Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
+> > > > Signed-off-by: Zhenzhong Wu <jt26wzz@gmail.com>
+> > > > ---
+> > > >  .../bpf/prog_tests/migrate_reuseport.c        | 49 +++++++++++++++=
++---
+> > > >  1 file changed, 42 insertions(+), 7 deletions(-)
+> > > >
+> > > > diff --git a/tools/testing/selftests/bpf/prog_tests/migrate_reusepo=
+rt.c b/tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c
+> > > > index 653b0a20f..c62907732 100644
+> > > > --- a/tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c
+> > > > +++ b/tools/testing/selftests/bpf/prog_tests/migrate_reuseport.c
+> > > > @@ -7,24 +7,29 @@
+> > > >   *   3. call listen() for 1 server socket. (migration target)
+> > > >   *   4. update a map to migrate all child sockets
+> > > >   *        to the last server socket (migrate_map[cookie] =3D 4)
+> > > > - *   5. call shutdown() for first 4 server sockets
+> > > > + *   5. for TCP_ESTABLISHED and TCP_SYN_RECV cases, verify via epo=
+ll
+> > > > + *        that the last server socket is not ready before migratio=
+n.
+> > > > + *   6. call shutdown() for first 4 server sockets
+> > > >   *        and migrate the requests in the accept queue
+> > > >   *        to the last server socket.
+> > > > - *   6. call listen() for the second server socket.
+> > > > - *   7. call shutdown() for the last server
+> > > > + *   7. for TCP_ESTABLISHED and TCP_SYN_RECV cases, verify via epo=
+ll
+> > > > + *        that the last server socket is ready after migration.
+> > > > + *   8. call listen() for the second server socket.
+> > > > + *   9. call shutdown() for the last server
+> > > >   *        and migrate the requests in the accept queue
+> > > >   *        to the second server socket.
+> > > > - *   8. call listen() for the last server.
+> > > > - *   9. call shutdown() for the second server
+> > > > + *  10. call listen() for the last server.
+> > > > + *  11. call shutdown() for the second server
+> > > >   *        and migrate the requests in the accept queue
+> > > >   *        to the last server socket.
+> > > > - *  10. call accept() for the last server socket.
+> > > > + *  12. call accept() for the last server socket.
+> > > >   *
+> > > >   * Author: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
+> > > >   */
+> > > >
+> > > >  #include <bpf/bpf.h>
+> > > >  #include <bpf/libbpf.h>
+> > > > +#include <sys/epoll.h>
+> > > >
+> > > >  #include "test_progs.h"
+> > > >  #include "test_migrate_reuseport.skel.h"
+> > > > @@ -350,21 +355,51 @@ static int update_maps(struct migrate_reusepo=
+rt_test_case *test_case,
+> > > >
+> > > >  static int migrate_dance(struct migrate_reuseport_test_case *test_=
+case)
+> > > >  {
+> > > > +       struct epoll_event ev =3D {
+> > > > +               .events =3D EPOLLIN,
+> > > > +       };
+> > > > +       int epoll =3D -1, nfds;
+> > > >         int i, err;
+> > > >
+> > > > +       if (test_case->state !=3D BPF_TCP_NEW_SYN_RECV) {
+> > > > +               epoll =3D epoll_create1(0);
+> > > > +               if (!ASSERT_NEQ(epoll, -1, "epoll_create1"))
+> > > > +                       return -1;
+> > > > +
+> > > > +               ev.data.fd =3D test_case->servers[MIGRATED_TO];
+> > > > +               if (!ASSERT_OK(epoll_ctl(epoll, EPOLL_CTL_ADD,
+> > > > +                                        test_case->servers[MIGRATE=
+D_TO], &ev),
+> > > > +                              "epoll_ctl"))
+> > > > +                       goto close_epoll;
+> > > > +
+> > > > +               nfds =3D epoll_wait(epoll, &ev, 1, 0);
+> > > > +               if (!ASSERT_EQ(nfds, 0, "epoll_wait 1"))
+> > > > +                       goto close_epoll;
+> > > > +       }
+> > > > +
+> > > >         /* Migrate TCP_ESTABLISHED and TCP_SYN_RECV requests
+> > > >          * to the last listener based on eBPF.
+> > > >          */
+> > > >         for (i =3D 0; i < MIGRATED_TO; i++) {
+> > > >                 err =3D shutdown(test_case->servers[i], SHUT_RDWR);
+> > > >                 if (!ASSERT_OK(err, "shutdown"))
+> > > > -                       return -1;
+> > > > +                       goto close_epoll;
+> > > >         }
+> > > >
+> > > >         /* No dance for TCP_NEW_SYN_RECV to migrate based on eBPF *=
+/
+> > > >         if (test_case->state =3D=3D BPF_TCP_NEW_SYN_RECV)
+> > > >                 return 0;
+> > > >
+> > > > +       nfds =3D epoll_wait(epoll, &ev, 1, 0);
+> > > > +       if (!ASSERT_EQ(nfds, 1, "epoll_wait 2")) {
+> > > > +close_epoll:
+> > > > +               if (epoll >=3D 0)
+> > > > +                       close(epoll);
+> > > > +               return -1;
+> > > > +       }
+> > >
+> > > I think you can avoid this goto using `__attribute__((cleanup(...))`:
+> > >
+> > >   static void close_fd(int *fd)
+> > >   {
+> > >         if (*fd >=3D 0)
+> > >                 close(*fd);
+> > >   }
+> > >
+> > >   #define __close_fd __attribute__((cleanup(close_fd)))
+> > >
+> > > then in the test:
+> > >
+> > > __close_fd int epoll =3D -1;
+> > >
+> > > there's an example of this in
+> > > tools/testing/selftests/bpf/prog_tests/socket_helpers.h.
