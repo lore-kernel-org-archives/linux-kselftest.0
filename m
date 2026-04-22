@@ -1,63 +1,33 @@
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DBF526982C
-	for <linux-kselftest@vger.kernel.org>; Wed, 22 Apr 2026 14:51:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.43
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCD24318EE7;
+	Wed, 22 Apr 2026 14:55:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776869497; cv=none; b=BuPFWCTWCbcV6yqIs9GeKPBBP72vqAaG5eoKZVvqRxIKr48d4BWXPYif2ZBIM0tbA7LV8fK/9810xyzq0kyi4wn41/VRvIAcg8eP41Jk+UXIQ/iu57CFnc87mFC4XnTHL/JNGuoH6wq0nTAB+WWfewbthEixIO18hcL0koASSEc=
+	t=1776869713; cv=none; b=fLLfx77Org7SLX59TyaMj0jp9vVigJdLXlkdC24Ql0RcGy0N6fufFUI/gpsiuv7if7+hCJlB4BA3TV0gMrM93lhQHdzp6TWc8a3pYIJvsXao9JRrA3E3xCWqfZH/ULp/CMdKs3U2Nc+egmdxOKCkli3327cWUKezZMW74/VqG0Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776869497; c=relaxed/simple;
-	bh=+LVXyKE69oIbtlJfKGv2kRb15cV1n7Spv9A2aCjVHyU=;
+	s=arc-20240116; t=1776869713; c=relaxed/simple;
+	bh=wJB1LFrB+6P6GUuEZG1cJk09ntt3ZtX4VBvKoiziV80=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aH0ahN7KnKEd6WFpfNB8KGjOB8XGVtAh8zj70bGV+sxvFTq03ykM/NUjt+TKjG7EFT89A7EAkkinOyN4+KIhM5mx7PbZ0LeWVIg/N+GtSdbH8tI5DZyStUXyY6DuX212izCjzRDj+6m0ZV2TvHATQooZnbP3mFbVrFN/rHSQG2w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=bI/I3Yyg; arc=none smtp.client-ip=209.85.210.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	 In-Reply-To:Content-Type; b=U2SBg6te0d2ZDjEKW/XyUkGSINb4yi7AX9rM/qPDGkUciRK1xIyIxMLDt6qeBkIdTpMvxblpjRz4M4B53THbYDR60YXleSL9PzWbXCZC55/5rdoJQqYTJ7nCSdLt8iNUxeI2zvbY+BWfDRhsZS9qfLNrKSwMFhd2eavP3/ibgDc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=JBVyTXly; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="bI/I3Yyg"
-Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-7dbcf927395so3185464a34.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 Apr 2026 07:51:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1776869494; x=1777474294; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=b2jvAvtZDpm4Iy7l9gNgov7ZiaduiFtwdyuSw5zTo7w=;
-        b=bI/I3YygFEVKJGWwnfibx6H6ybBCnitGAT11SMRx3r3dwZhut0LwGzi67iBcgePMrW
-         eP3bPnDneAqThsfNvtWPvVnIDIdmPavPzngXPlQh0luCWiPMDrdsKX4qWTeIrt288kpV
-         mbTLd3H5qVmeCUrnRkdg7d6aYW2rKggA2lTss=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776869494; x=1777474294;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=b2jvAvtZDpm4Iy7l9gNgov7ZiaduiFtwdyuSw5zTo7w=;
-        b=Yfuz2rsRcyz8Z8mO99CVftmetFrMNgNnEzvJTGll8ExM6rCAl+HYCjDPSMdPsk6uUA
-         vUXwuhmkwQ3sdPLCcweCpYnTkM5mbcyNHqFAPgMAX1Whdr47csYH47GGq9+V6hgJY/QC
-         AtQd5SSMMGFz8Q02C0+p0w1TsoB/eOoXPKdnpxi8W0Ek9/00E21o60ToproVf4/oGK8m
-         uc0BtQXiKTDSdRW4jQuWkIep4e1QvPH97rm1dGMEmjIVUm/51luqxmT7s+dW8zlprL8V
-         RhNAr+OQV/vodkliXszuYM/lI4lqubLr/oPPBIKHSo38EZJ3Gt7sq/rSUl2SocIFML/9
-         bjrA==
-X-Forwarded-Encrypted: i=1; AFNElJ/Hs1RPRN419ju2SfXw26tF+MCP8gg8pb6wnr1ym+20z/f2oHAJ/kjpV4FM3kxEC2d2ee+6MNB3Cq0UnbfAGCo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx6KzO+l2CTUo3eufVxcO7X6Oj6ZlMZZqjCQxfzrQvGSSbBGeTI
-	tGja+C0LKT6G+mIwT3TQB/MOanFkzBXHrAkwYRytFfrrxOwPh1m0EeuiNRy0H1zUmcc=
-X-Gm-Gg: AeBDieunwB3LyGAjoY/PzOxswSnJeXfFK0kSIC0vYM07KqZOUa0cOPHlFbKUjZISl23
-	cK/tfiDQEf6IlHoluwOtH0iC7UybRClbkWQweNjfpuqIhSWcDIywkbb986aa3V+ljyNnBwRqfrm
-	VCB4s1N8SFkNP1crI0FQzKN3KSZj7ngixBhkgw/M8ZKjCHSG4Bguni1eXOVX4+WPAXmzxPhUT1H
-	h4lEenZyPiDRrsZ7e43cKUbpeGbXCK5bLF/rVcLgnMPOnoW+axDVLukRTHNbGXjROyuxYO5ye90
-	VewcmnYsCVMu8ncdB3nDOU/LH3Qxo1YJJp3eWJe+U/Mz+OvgJX7XzEPS9KuuQ47nAne07giQGD7
-	imqk0dU6QvIZYXDZUns1qDF2wz+FMrLP/seHOYxhWnDN8AzksmlDvT/89KbLsa7H1BbqQpWqXJA
-	fwnaMiATv8AhO72gHwOHfyzSsEDBYgzrZUXLbUtjoX+Q==
-X-Received: by 2002:a05:6820:f00d:b0:68b:cadc:4346 with SMTP id 006d021491bc7-69462e16373mr12134290eaf.1.1776869494590;
-        Wed, 22 Apr 2026 07:51:34 -0700 (PDT)
-Received: from [192.168.1.14] ([38.15.57.99])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-696148cd37dsm142307eaf.8.2026.04.22.07.51.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Apr 2026 07:51:33 -0700 (PDT)
-Message-ID: <4915db6e-5bcf-4f70-b510-693f5d5b8678@linuxfoundation.org>
-Date: Wed, 22 Apr 2026 08:51:32 -0600
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="JBVyTXly"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6BBC21FC4;
+	Wed, 22 Apr 2026 07:55:04 -0700 (PDT)
+Received: from [10.57.63.98] (unknown [10.57.63.98])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 11BF33FE87;
+	Wed, 22 Apr 2026 07:55:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1776869709; bh=wJB1LFrB+6P6GUuEZG1cJk09ntt3ZtX4VBvKoiziV80=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=JBVyTXlyA0MOQUTKYlz3n9cWumPLYHdJa0eN95ySt03/esN0IUlkcZNndcqtI2ku+
+	 awm6imBU+4GxwbUdan20Skrc47sQU8i80ATkV+PddD32eQXbbScdBWgf93zO7McgMl
+	 o4+GqLtTo3xcIMglkkN6+XCpFmpAdQcsimhtCsgA=
+Message-ID: <693f4d7c-46f4-409b-8944-a8c9e4b5e073@arm.com>
+Date: Wed, 22 Apr 2026 16:55:05 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -65,55 +35,67 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] selftests: runner: Avoid spurious warning about
- missing failures file
-To: Yohei Kojima <yk@y-koj.net>,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Shuah Khan <shuah@kernel.org>, Brendan Jackman <jackmanb@google.com>,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20260224-kselftest-fix-failures-file-v2-1-2bfb8f5cb6a8@linutronix.de>
- <ader8C3F2uOY7ro6@desktop.y-koj.net>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <ader8C3F2uOY7ro6@desktop.y-koj.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH 1/4] arm64: signal: Preserve POR_EL0 if poe_context is
+ missing
+To: Will Deacon <will@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ Catalin Marinas <catalin.marinas@arm.com>, Joey Gouly <joey.gouly@arm.com>,
+ Mark Brown <broonie@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ linux-kselftest@vger.kernel.org
+References: <20260421144252.1440365-1-kevin.brodsky@arm.com>
+ <20260421144252.1440365-2-kevin.brodsky@arm.com>
+ <aei87MmXaEdg8YOf@willie-the-truck>
+From: Kevin Brodsky <kevin.brodsky@arm.com>
+Content-Language: en-GB
+In-Reply-To: <aei87MmXaEdg8YOf@willie-the-truck>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 4/9/26 07:38, Yohei Kojima wrote:
-> On Tue, Feb 24, 2026 at 04:37:56PM +0100, Thomas Weißschuh wrote:
->> When runner.sh is *not* executed via run_kselftest.sh, the variable
->> $kselftest_failures_file does not exist. This triggers a harmless but
->> annyoing warning from runner.sh if a test fails:
->>
->> tools/testing/selftests/kselftest/runner.sh: line 50: : No such file or directory
->>
->> Silence the spurious warning.
->>
->> Fixes: d9e6269e3303 ("selftests/run_kselftest.sh: exit with error if tests fail")
->> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
->> Reviewed-By: Brendan Jackman <jackmanb@google.com>
-> 
-> Hi all,
-> 
-> It seems this patch hasn't been picked up yet, although it already got
-> reviewed by Brendan. This bug is also mentioned by a netdev maintainer
-> and several developers [1], so I think it would be nice to have this
-> patch merged.
-> 
-> [1]: https://lore.kernel.org/lkml/20260112135326.7ce71119@kernel.org/
-> 
-> I confirmed that it still applies to 7.0-rc7. I also tested it by adding
-> a failing test to net and namespaces selftests, and confirmed that the
-> error disappeared.
-> 
-> Tested-by: Yohei Kojima <yk@y-koj.net>
-> 
+On 22/04/2026 14:19, Will Deacon wrote:
+>> @@ -74,8 +76,12 @@ struct rt_sigframe_user_layout {
+>>   * This state needs to be carefully managed to ensure that it doesn't cause
+>>   * uaccess to fail when setting up the signal frame, and the signal handler
+>>   * itself also expects a well-defined state when entered.
+>> + *
+>> + * The valid_fields member is a bitfield (see UA_STATE_HAS_*), specifying which
+>> + * of the remaining fields is valid (has been set to a value).
+>>   */
+>>  struct user_access_state {
+>> +	unsigned int valid_fields;
+>>  	u64 por_el0;
+>>  };
+> Do you think it would be worth adding some accessors to make it easier
+> to keep the flags in sync? For example:
+>
+> /* Stores por_el0 into uas->por_el0 and sets UA_STATE_HAS_POR_EL0 */
+> void set_ua_state_por_el0(struct user_access_state *uas, u64 por_el0);
+>
+> /*
+>  * If UA_STATE_HAS_POR_EL0, *por_el0 = uas->por_el0 and return 0.
+>  * Otherwise, return -ENOENT.
+>  */
+> int get_ua_state_por_el0(struct user_access_state *uas, u64 *por_el0);
+>
+> WDYT?
 
-Sorry for the delay.
+I did get a feeling having helpers would be a good idea. I wonder if
+getters/setters aren't a bit overkill though, as they make accesses to
+the struct more cumbersome and we'd need a pair for every member (unless
+we use some macro magic). Maybe it would be sufficient to have say
+ua_state_has_field(POR_EL0) to check if the bit is set, and
+ua_state_set_field_valid(POR_EL0) to set the bit?
 
-It disappeared in my Inbox - I will pick this up for Linux 7.1-rc2
+>> @@ -1095,7 +1104,7 @@ SYSCALL_DEFINE0(rt_sigreturn)
+>>  {
+>>  	struct pt_regs *regs = current_pt_regs();
+>>  	struct rt_sigframe __user *frame;
+>> -	struct user_access_state ua_state;
+>> +	struct user_access_state ua_state = {0};
+> nit: {} should do (no need for the '0'). Same in setup_rt_frame().
 
-thanks,
--- Shuah
+Will change it, I have some vague recollection that GCC and Clang
+disagreed about the meaning of {}... but that's probably fixed nowadays.
 
+Thanks for the review!
+
+- Kevin
