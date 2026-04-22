@@ -1,91 +1,104 @@
-Received: from mail-dy1-f201.google.com (mail-dy1-f201.google.com [74.125.82.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from pdx-out-003.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-003.esa.us-west-2.outbound.mail-perimeter.amazon.com [44.246.68.102])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A756C3F0761
-	for <linux-kselftest@vger.kernel.org>; Wed, 22 Apr 2026 19:08:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 151D83F20E3;
+	Wed, 22 Apr 2026 19:45:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=44.246.68.102
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776884938; cv=none; b=RF9KJJN5alrInOU6u/QzZNWRUJEmPO6SGp+9eyZOlQYfZciivRaFRT/i5At387ZsJPQSUUIc9ua6emBkkkts+jFrji+b3ugHDRrkBp3812mVeSDoXI3pUptDrl6RfTfjkZ4mVnNahJQ4LOc361+F/qIFbkVor56G/v0aWpZ/rVw=
+	t=1776887114; cv=none; b=clt228x/CMRXepK0MsmLIVqM9otT6ZjubS1xEKdcRrXHv3hnFiqYQVcvRx6giwRx8NQvnDD3VnCrGsy5wVn5MLFgXF+0qSZJt2UXBZroGETOzB3iNfJz+SVAPDkYrM/7ciXohal/ft3jPOHmYpsaOFdmmpkIu/EXkE1YiKoBHS0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776884938; c=relaxed/simple;
-	bh=Ka3j9GtWrjfOgNs6t/EAhaSOHFfzjiy9buCvdrLXvTY=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=LiiWD6Y6dHxH5OcsTKDYuC4ZAU3nPqj4TWfmSYa87nrL3zgXN83NFhoCKHCmFPrCGpo2ujZei7Vv4TRqJm6I7hSYv79BM/7zGKwvtAAl2jj81KTTWF/lz+jQfMOyD0G299/2MrERYgLX0jgra1fiJhdiif6l9IBoSajqmyXaG2I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--pratmal.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mgOsZBOh; arc=none smtp.client-ip=74.125.82.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--pratmal.bounces.google.com
+	s=arc-20240116; t=1776887114; c=relaxed/simple;
+	bh=zOD4+ez2La3MDMjPq9tHjAMj4pkdZwGX+OCxK9Xcsqo=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type:Content-Disposition; b=X7HZt0OOHRjMGG5oVv5JEKWP+I/IZ/iidmJbvtieGnzk52Y7GIweswWUQPDwMUrIH4bt+6Q+NEbP2pyker3CwWBOmRrlj3zk93F7p3Adt05fqBgqSD0HVjXBR83TX97iK4e08s2q1eW1cA7vc8FJnmkSPjYguC/E1Oi7KE9diho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.de; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=Dr5yVbU3; arc=none smtp.client-ip=44.246.68.102
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mgOsZBOh"
-Received: by mail-dy1-f201.google.com with SMTP id 5a478bee46e88-2e60238adb1so10502031eec.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 Apr 2026 12:08:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="Dr5yVbU3"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1776884929; x=1777489729; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cVMtEztbiTd0hbm+E9Z2wpGXbkqaSZ9UDyzAJLuzfu8=;
-        b=mgOsZBOhsWEoW1lgwDuzyRSH22vSDYd5eBL93mQe1LyZYY6hFotsPK3X+F/csd76Ih
-         7KoiV+1QzjAtTj9brDLuWCnmW+4OkNxMNZBvTe7jR4JW9IxtdHLQJYX1vpW8fKT4uOE8
-         bysTXRJiJCmggqhdA9k0ifrQIGAKRN056M042AnhULiWiKzjj67jqkW4i7oVoVBxicOV
-         ln23NviULvIVvnvnoEaBhl6lAoeysHcQTZom+MBR33W5U4qJ+qa74nerBLGlGfV3YLde
-         ox4aSJ8MckwXhYDFUf8drQHirew6mjJcTgFlSnV/QomN9az437SxiMAX70/ofVc/bA4S
-         LkWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776884929; x=1777489729;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cVMtEztbiTd0hbm+E9Z2wpGXbkqaSZ9UDyzAJLuzfu8=;
-        b=k/X9Qs8DqZrp9oN8W8QyvMCKIujPlGgOeM93elxifHKnF14b+8kIrMNUQvAHbgDu9R
-         +qZ9knBH4dp1lj/5mjDZBoG6/Gym4SpR/ifaqg3EONgpFejKTzHLFbsC/NbO0UY0k1iR
-         n3sW/wwGq9s80yWe+Ty4OGhSTziVvg6M5pH0uAU9Kwpj976ku32ygnDSZgRVFfEZaH4o
-         DQLybu5FMKdiQmZ+pWc2ui488SpL5QmTGMVbDAbynimRju08Y4dNLwDSzY0VdsBTfhpr
-         XaH0iiHr6MrfiCZ7kyt/Wh+MdlUWsmoZQVIkYReRG8G5je934oWBBMiVylGZ3kToc6ZI
-         xW/g==
-X-Forwarded-Encrypted: i=1; AFNElJ/yVEm38qIKmT/AkTQHzxZ1FIh2Mso0sc7SdHM3N2IjJcGawya14yVi7iNg33VFNxqmpi1OHczmWAfwVqeYkhk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzy7y3O602+C7r4aCudHPF29JjwAJ4y+6+BCFxVVVM5usztBb+D
-	uKivIXO6COP7Iv9oeXaOexK9z99dqujgiF5mruiglzKm9H3XUG7tD0ASt8EDtmE8e+zx3n0HV8U
-	6q0tZZJWQGw==
-X-Received: from dyhd3.prod.google.com ([2002:a05:7300:8283:b0:2e2:b79e:ed06])
- (user=pratmal job=prod-delivery.src-stubby-dispatcher) by 2002:a05:693c:2b04:b0:2be:6f30:f2f9
- with SMTP id 5a478bee46e88-2e479215120mr13595652eec.26.1776884928695; Wed, 22
- Apr 2026 12:08:48 -0700 (PDT)
-Date: Wed, 22 Apr 2026 19:08:47 +0000
-In-Reply-To: <03a23a7a-58fe-42f4-a294-9d688ce33e2d@kernel.org>
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1776887113; x=1808423113;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=F3Ew7GWl4hFk7DGEDfzxq4i/SILfoOPlGFgcShS4Xvc=;
+  b=Dr5yVbU3dKBUYV46s+4qUrrWHc75cWviE0v6hYwKzh2MlyxzzDReX1Nx
+   87FzHha5RXrFd01s4g35apbwL1/77LPo/fSmE+WU6crR0aTXMIBMDcu7M
+   N8OlSSZmpewwSuf/oqRv+Yjb+qQdE8TfCnHL3LXk+QbXr9oTTN94DAkRT
+   wLcNrCTMn0nxBP83mTa8mV28cyfXFRxvx6Sl7JTbq9RzI3f1bY/uH0Tni
+   cCniXRHk0JK5h2T1GGjagX/mgpF9RisU9j7S7yd0snJgseffGmlzeOIMp
+   LUi2W6MKv1OqI1wrAkhRucsxRWNDGwYSwFsvRjB/2SQ8GrAC6Qf4cOGSW
+   A==;
+X-CSE-ConnectionGUID: BaH4UvB3RryO4tQ7O5rThw==
+X-CSE-MsgGUID: GQKMfITMRIyD9op1/OiSsg==
+X-IronPort-AV: E=Sophos;i="6.23,193,1770595200"; 
+   d="scan'208";a="17985208"
+Received: from ip-10-5-6-203.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.6.203])
+  by internal-pdx-out-003.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Apr 2026 19:45:09 +0000
+Received: from EX19MTAUWB002.ant.amazon.com [205.251.233.48:31246]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.4.227:2525] with esmtp (Farcaster)
+ id 3f3692eb-30ab-4061-bfd4-d9ea74ca80e9; Wed, 22 Apr 2026 19:45:09 +0000 (UTC)
+X-Farcaster-Flow-ID: 3f3692eb-30ab-4061-bfd4-d9ea74ca80e9
+Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
+ EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37;
+ Wed, 22 Apr 2026 19:45:05 +0000
+Received: from dev-dsk-doebel-1a-7b355d76.us-east-1.amazon.com (10.169.119.5)
+ by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37;
+ Wed, 22 Apr 2026 19:45:04 +0000
+From: Bjoern Doebel <doebel@amazon.com>
+To: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+CC: Bjoern Doebel <doebel@dev-dsk-doebel-1a-7b355d76.us-east-1.amazon.com>,
+	Bjoern Doebel <doebel@amazon.com>, Christian Brauner <brauner@kernel.org>,
+	Shuah Khan <shuah@kernel.org>, "open list:NAMESPACES:"
+	<linux-kernel@vger.kernel.org>, "open list:KERNEL SELFTEST FRAMEWORK"
+	<linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH] selftests/pid_namespace: compute pid_max test limits dynamically
+Date: Wed, 22 Apr 2026 19:44:17 +0000
+Message-ID: <aekk2daigQjwrtzq@dev-dsk-doebel-1a-7b355d76.us-east-1.amazon.com>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <301ac97e-3f7f-4979-92b0-d5124ff571a7@virtuozzo.com>
+References: <20260421194344.2981537-1-doebel@amazon.com> <301ac97e-3f7f-4979-92b0-d5124ff571a7@virtuozzo.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <03a23a7a-58fe-42f4-a294-9d688ce33e2d@kernel.org>
-X-Mailer: git-send-email 2.54.0.rc2.533.g4f5dca5207-goog
-Message-ID: <20260422190847.216343-1-pratmal@google.com>
-Subject: Re: [RFC PATCH] selftests/mm: use pattern matching in .gitignore
-From: pratmal@google.com
-To: david@kernel.org
-Cc: akpm@linux-foundation.org, shuah@kernel.org, yosryahmed@google.com, 
-	ljs@kernel.org, Liam.Howlett@oracle.com, vbabka@suse.cz, rppt@kernel.org, 
-	surenb@google.com, mhocko@suse.com, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+X-ClientProxiedBy: EX19D040UWB002.ant.amazon.com (10.13.138.89) To
+ EX19D001UWA001.ant.amazon.com (10.13.138.214)
+Content-Transfer-Encoding: 7bit
 
-(Resending to correct David's email address. Apologies for the noise!)
+From: Bjoern Doebel <doebel@dev-dsk-doebel-1a-7b355d76.us-east-1.amazon.com>
 
-On 4/22/26 18:04, David Hildenbrand (Arm) wrote:
-> On 4/21/26 20:30, pratmal@google.com wrote:
->> From: Pratyush Mallick <pratmal@google.com>
->> 
->> The current .gitignore hardcodes each generated test binary by name,
->> requiring updates every time a new test is added.
->> 
->> Switch to the patten-matching approach similar to KVM:selftests.
->> Ignore everything by default and then allow source extensions (.c, .h, .sh)
->> and tracked non-source files.
-> That looks pretty nice. Any reason for the RFC? (iow, are you unsure about some
-> side-effects?)
+On Wed, Apr 22, 2026 at 03:00:12PM +0200, Pavel Tikhomirov wrote:
+> Why 24? Since val is int and longest int is INT_MIN, which has 11 characters, so 12 should be enough.
 
-Exactly that. I verified that the build works fine, however I sent it 
-as an RFC just to be cautious. I wanted to get some feedback in case this 
-might introduce some unwanted behavior that I'm not aware of. :)
+That's true, changing it to buf[12].
 
-Thanks,
-Pratyush
+> Maybe we can simplify things by using global variable instead of pushing 
+> argument everywhere?
+> 
+> There is also FIXTURE_SETUP/TEST_F which can probably be combined with global variable 
+> too. Plus you can try to avoid calling pid_min() multiple times.
+
+Done, thanks for pointing me at the right infrastructure.
+
+Sending v2.
+
+Bjoern
+
+
+
+
+Amazon Web Services Development Center Germany GmbH
+Tamara-Danz-Str. 13
+10243 Berlin
+Geschaeftsfuehrung: Christof Hellmis, Andreas Stieger
+Eingetragen am Amtsgericht Charlottenburg unter HRB 257764 B
+Sitz: Berlin
+Ust-ID: DE 365 538 597
+
