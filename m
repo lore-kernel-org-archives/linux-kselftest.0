@@ -1,136 +1,251 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28990399357
-	for <linux-kselftest@vger.kernel.org>; Wed, 22 Apr 2026 18:38:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C845A35B63C;
+	Wed, 22 Apr 2026 18:39:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776883114; cv=none; b=lbR7m7EZVDd7YGdK29U+0VaGnYBMcLd7vwDeSPJPRF3qf3iv8vGT4vCewsfv7EGF8AzJWuvtyWYX2hXbBHRJcRd/wrclVUOVTVtdt9AbFyujVPZE8BKb8UGKfZbskUW33qRwDCrgoxV7aexd/eXvuD/7JyLqx14nd4pOHhyvDtc=
+	t=1776883197; cv=none; b=RKtHoCvm1ZkxZN18xuKqooIsLqVe5A5GpFWVnEAM8y7xBhayE3o1Iej2yJZlroOdVbuVp5u19uNd0B2S0NLoGgHH67RaHMgK724zJEEqU9lz4BacyO0TMz6DAe4oXffRIgcrSMIxnkMiCiqVCfJ0YZs2lWMsV6fygYly/hp1T8c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776883114; c=relaxed/simple;
-	bh=BcxRMIhkNuu2sSh+H+IQ0Fs35eUwSLc/sSU7chKO5WQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=A9+EY3aOTUcN1kGbZB9GDd8HEpMCYkYP8S+Uh8Bq2vXwpD80mfgH9NyYkJdZXPipvvmof48KvGVM9yimz2wlVsGJwtRNM6xBnaMCJc5kL3cAQ0hQ4UV9mlthgoL6x4tfJSJHyvQAuXqHvVpuVtMvvCZiTiDqydHYkIgjyDoVfNc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QWkMvQ8C; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1776883197; c=relaxed/simple;
+	bh=gPBkLTS8xvviMRNP8SEcmV5ut7acgVc3jDTKipEUsns=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Hv8NvnPpoulgpkFgHey7C+8Y6Ws5Gsclfy0oApV4X3Z95jpP7BIIlFbCMih114bt22Sx/nYv3MqfX/Sn1QHheFyYAvBDZP6I3/H7aPz4bfft3yREhFIZHHPLuDP3DzlvVF4/PhgOpW8kJs1njaSuZ/P5DvOND8af9u2CzRD4t0Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RG1AIUof; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QWkMvQ8C"
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-82fa01e86e2so3089491b3a.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 Apr 2026 11:38:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776883111; x=1777487911; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=qo4HSW6PCAr8ze25Kke7fPDCSM3HoYXfLWuG/y7OdJQ=;
-        b=QWkMvQ8CsCk2Ohv1EhpKt23jH010x0ySlnNxgEG2pSgH0e9O6tEIwPbYUfAIlZMZoh
-         AH92GTnoR7zAJGgLBB3pqSJHIKyadDuQgSJ8wSX7Bz5Wd6YuHa0zUJJV98enMf6/mUBU
-         tQIhPWAO8/UMtRGddzq5Xanme3nFl4wHKHr3JfvdpLRiXVnt3QkqAjChbk1iXxHK24/3
-         5w0Wpv57WO8Vl86eTX2rOSGWy3bW7P+f039Q8e9ugTLpzlPv4RDlKrhkOOPew+ADA3IZ
-         VsxmgEQ75i6996oSV4B9pKSuMRH87x0pJbZ+gNfsJl5zKts35cskugDgTL5Lf86PfbZA
-         PjNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776883111; x=1777487911;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qo4HSW6PCAr8ze25Kke7fPDCSM3HoYXfLWuG/y7OdJQ=;
-        b=I0jQ1I0gVos5b8z2bS8gbV6lOashchWtGYuMBtCgMsemQnkjlLAHh4EliVxe+vPBOS
-         O0FJrLQxXfdKGlvpuv/1Kk9WybGvV7KxuowZo/vnPbI+P2rZCENxJ9FH9wuMCqNQxnUC
-         piw2s0P69FTa/WNq9Pqv1NM/bXAyOkMjbO7uAaSbuJx3OYOQNIXkrB+Nx3Rg2mvoxFn1
-         oLbMSAIxQoFL02nkNqwI+PmHuGbbHnK87FhY8z9IB9IjXY2wdLjE97QWD2ZeIAbABO15
-         Ta95shQhPiZwbqft72nhndtTFfpqjoHPWwhHTUlWsrti83J4kBempl7wb1Nhq7dMMia1
-         I92Q==
-X-Forwarded-Encrypted: i=1; AFNElJ+Gzpq5b+T26GQQOcFrxwx2zqhqeqj8ufitwkKK7qwiH+8OZ8Y2nGHpoU7GVla4x0jhR98+CfNnPN0qwuie11s=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxYnEBVaOsoeP26/88zlGjDrVpCLFC6rYpPCH8OTiNNlHPUaHal
-	htLs+KNHUFZqnoyIo8Bt4xxY3HI/Qr4h9K223mza1QdC+99xksZUM6e4
-X-Gm-Gg: AeBDievYqBfuAtQPGHyxWpH9VYM50YJow36r9DB/23abXQpQrgiJTkKZMosI/TWwmiy
-	rcoBrA3lqLEhriw1B5vR9SbXUn37aQ+H/zWFC5WxrjIFipKJFSW0Q/BcG5OWY/SuPjWJWsvAn3B
-	mXSi7XDuCSEnPY1qXyNISyYi2BjUet6TkMknwUzYmeqs+yb3+XgJ0eeF66W7QcPZk8KLA0shrMb
-	PdyEp7yJlUCo8tWO7eRplky00uHpmI0DFpx1ztvbyhXtiwETJUI/jKEifu4dtuv1eR9Q5syZ2YR
-	+fATPqYOuu+B/0FMVIIriNu7NqMRkYd02NryBjNroePBCDJphgO4Cm4Xf4nNCwlFDwg0WmptgZm
-	TWTZ9vlowocdTUMBMWna+dvBdb2qQelha4Z7Yp/DmePXiEASnGSNPxTdee7SKpZeZ4+gnrwrxsI
-	KZJF89dh/1L5KHTqPHe1zZ+gndrWPPis5WpOHjsCidThE=
-X-Received: by 2002:a05:6a00:1acc:b0:82f:4a4d:377e with SMTP id d2e1a72fcca58-82f8c8c2f8fmr26121261b3a.28.1776883111412;
-        Wed, 22 Apr 2026 11:38:31 -0700 (PDT)
-Received: from archlinux ([205.254.163.121])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82f8ebe6439sm18034262b3a.41.2026.04.22.11.38.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Apr 2026 11:38:31 -0700 (PDT)
-From: Suchit Karunakaran <suchitkarunakaran@gmail.com>
-To: andrii@kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	shuah@kernel.org
-Cc: jolsa@kernel.org,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Suchit Karunakaran <suchitkarunakaran@gmail.com>
-Subject: [PATCH] selftests/bpf: replace bpf_probe_read_kernel with direct access
-Date: Thu, 23 Apr 2026 00:07:57 +0530
-Message-ID: <20260422183757.15069-1-suchitkarunakaran@gmail.com>
-X-Mailer: git-send-email 2.53.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RG1AIUof"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A4F7C19425;
+	Wed, 22 Apr 2026 18:39:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776883197;
+	bh=gPBkLTS8xvviMRNP8SEcmV5ut7acgVc3jDTKipEUsns=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=RG1AIUofKfe1bYx9Q4cRXAEWj+ON9FElIcMnnfMFF5BknmDNEGf66PIK9UkMmih4x
+	 q4NIPGJeGozprMQtH0pH+1BGB0EycqP3DdE4hsePDKc9wLbrk0rCcr0QGuyZi/inG0
+	 Q14x9hD9OKGhJslLLO4vekucewh5KWpQQh/pFsm2mIyNW6/ib4cYFwNT0njGDjRqcz
+	 ZiZXIEM9kE+YJMcvfUsW4MF20wGd+/oxvvcfR4drh233AJLyRUYZmR009wFJVXp2am
+	 9b6/ARH061RBy+hrJ/gWkrclE4F/ERVWbBtDGpVIzd6ISnUXHEzAHNEQWAm89JrQne
+	 5K/NY4RJaPr1Q==
+Message-ID: <b77d559b-215e-460a-a268-e63b8273ef42@kernel.org>
+Date: Wed, 22 Apr 2026 20:39:50 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC, PATCH 00/12] userfaultfd: working set tracking for VM guest
+ memory
+To: Kiryl Shutsemau <kas@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Peter Xu <peterx@redhat.com>,
+ Lorenzo Stoakes <ljs@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Vlastimil Babka <vbabka@kernel.org>,
+ "Liam R . Howlett" <Liam.Howlett@oracle.com>, Zi Yan <ziy@nvidia.com>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Sean Christopherson <seanjc@google.com>, Paolo Bonzini
+ <pbonzini@redhat.com>, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kvm@vger.kernel.org
+References: <20260414142354.1465950-1-kas@kernel.org>
+ <55019037-4f1c-4d9c-83ee-3a844d8f3d5e@kernel.org>
+ <ad50rPOseVa-SP_s@thinkstation> <aeDoqFWPFxkkNB26@thinkstation>
+ <1a499781-1115-44bc-adbf-2ac3769354ca@kernel.org>
+ <aeFCuLJXT8VOkzH7@thinkstation>
+ <4c635703-3d8d-4cfa-bb98-7f6f5fcbe547@kernel.org>
+ <aeImfRrrvr3UoKtL@thinkstation> <aeTnlQUOOh-dHG8z@thinkstation>
+ <34f75083-29a3-4860-8a6e-94551d37ac6a@kernel.org>
+ <aed6fHLrIdahbdY3@thinkstation>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <aed6fHLrIdahbdY3@thinkstation>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Use direct field access instead of bpf_probe_read_kernel() for
-nlk->groups[0] and inode->i_ino, and clean up related code.
+On 4/21/26 16:33, Kiryl Shutsemau wrote:
+> On Tue, Apr 21, 2026 at 03:03:56PM +0200, David Hildenbrand (Arm) wrote:
+>> On 4/19/26 16:33, Kiryl Shutsemau wrote:
+>>>
+>>> See https://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git uffd/rfc-v3
+>>>
+>>
+>> Quick feedback from skimming over it:
+>>
+>>
+>> 1) ARCH_SUPPORTS_PROT_NONE needs some thought, because I am pretty sure all 
+>> architectures support something like mprotect(PROT_NONE), and the config
+>> option might be misleading.
+>>
+>> So you very likely want to express different semantics here. You want to
+>> know whether pte_protnone()/pmd_protnone() works.
+> 
+> We do support mprotect(PROT_NONE) everywhere, but we don't always have a
+> way to distinguish such entries from others without VMA in hands. Like,
+> there are other PTEs that don't have present bit set. In my and NUMA
+> balancing context we cannot rely on VMA, because we want to install
+> PAGE_NONE entires into accessible VMA.
 
-Removes obsolete FIXME comments and unused variable.
+Exactly. So it's not ARCH_SUPPORTS_PROT_NONE.
 
-Signed-off-by: Suchit Karunakaran <suchitkarunakaran@gmail.com>
----
- .../testing/selftests/bpf/progs/bpf_iter_netlink.c  | 13 ++-----------
- 1 file changed, 2 insertions(+), 11 deletions(-)
+> 
+> So we need two things; pte/pmd_protnone() checks and PAGE_NONE itself.
+> The first to test PTE for PAGE_NONE, the second for pte/pmd_modify() to
+> make the entry protnone.
+> 
+> Currently, generic code only use this functionality for NUMA balancing
+> and gated by NUMA balancing config option. So I moved it under separate
+> config option.
+> 
+> Do you want it to be named differently?
 
-diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_netlink.c b/tools/testing/selftests/bpf/progs/bpf_iter_netlink.c
-index 00b2ceae81fb..5930bf8899d2 100644
---- a/tools/testing/selftests/bpf/progs/bpf_iter_netlink.c
-+++ b/tools/testing/selftests/bpf/progs/bpf_iter_netlink.c
-@@ -17,7 +17,6 @@ int dump_netlink(struct bpf_iter__netlink *ctx)
- 	struct seq_file *seq = ctx->meta->seq;
- 	struct netlink_sock *nlk = ctx->sk;
- 	unsigned long group, ino;
--	struct inode *inode;
- 	struct socket *sk;
- 	struct sock *s;
- 
-@@ -35,10 +34,7 @@ int dump_netlink(struct bpf_iter__netlink *ctx)
- 	if (!nlk->groups)  {
- 		group = 0;
- 	} else {
--		/* FIXME: temporary use bpf_probe_read_kernel here, needs
--		 * verifier support to do direct access.
--		 */
--		bpf_probe_read_kernel(&group, sizeof(group), &nlk->groups[0]);
-+		group = nlk->groups[0];
- 	}
- 	BPF_SEQ_PRINTF(seq, "%-10u %08x %-8d %-8d %-5d %-8d ",
- 		       nlk->portid, (u32)group,
-@@ -50,12 +46,7 @@ int dump_netlink(struct bpf_iter__netlink *ctx)
- 	if (!sk) {
- 		ino = 0;
- 	} else {
--		/* FIXME: container_of inside SOCK_INODE has a forced
--		 * type conversion, and direct access cannot be used
--		 * with current verifier.
--		 */
--		inode = SOCK_INODE(sk);
--		bpf_probe_read_kernel(&ino, sizeof(ino), &inode->i_ino);
-+		ino = SOCK_INODE(sk)->i_ino;
- 	}
- 	BPF_SEQ_PRINTF(seq, "%-8u %-8lu\n", s->sk_drops.counter, ino);
- 
+Would ARCH_SUPPORTS_PXX_PROTNONE or sth. like that better describe that
+pte_protnone()/pmd_protnone() do what we want?
+
+> 
+>> 2) The other stuff is really just an extension of existing WP handling.
+>> I suspect we want to have some reasonable cleanups to not end up in
+>> common code with
+>>
+>> @@ -1841,7 +1841,7 @@ static void copy_huge_non_present_pmd(
+>>  	add_mm_counter(dst_mm, MM_ANONPAGES, HPAGE_PMD_NR);
+>>  	mm_inc_nr_ptes(dst_mm);
+>>  	pgtable_trans_huge_deposit(dst_mm, dst_pmd, pgtable);
+>> -	if (!userfaultfd_wp(dst_vma))
+>> +	if (!userfaultfd_wp(dst_vma) && !userfaultfd_rwp(dst_vma))
+>>  		pmd = pmd_swp_clear_uffd_wp(pmd);
+>>  	set_pmd_at(dst_mm, addr, dst_pmd, pmd);
+>>
+>> All the uffd handling should be better isolated (i.e., a single vma check?),
+>> and likely the uffd bit should be abstracted away from being called "wp" to
+>> something more generic.
+>>
+>> Maybe it's simply a "uffd" flag which's semantics depend
+>> on the vma flags.
+>>
+>> Maybe something like:
+>>
+>> @@ -1841,7 +1841,7 @@ static void copy_huge_non_present_pmd(
+>>  	add_mm_counter(dst_mm, MM_ANONPAGES, HPAGE_PMD_NR);
+>>  	mm_inc_nr_ptes(dst_mm);
+>>  	pgtable_trans_huge_deposit(dst_mm, dst_pmd, pgtable);
+>> 	if (!userfaultfd_uses_pte_bit(dst_vma))
+>>  		pmd = pmd_swp_clear_uffd(pmd);
+>>  	set_pmd_at(dst_mm, addr, dst_pmd, pmd);
+>>
+>> Not sure, needs another thought. But I think there are some decent
+>> cleanups to be had.
+> 
+> That's fair. Maybe userfaultfd_protected() name is better for the VMA
+> check?
+
+Yes, something like that could also work.
+
+> 
+> And about UFFD_WP bit name. Maybe we can just drop _WP: _PAGE_UFFD_WP ->
+> _PAGE_UFFD, pte_uffd_wp() -> pte_uffd()?
+
+Yes, I hinted at the above with pmd_swp_clear_uffd().
+
+> 
+> But it is a lot of changes. Can I do the bit rename as a follow up
+> patchset?
+
+Let's get this clean. There is no need to rush that in ;)
+
+I suspect it's a fairly mechanical change.
+
+> 
+>> 3) Some other stuff needs a second thought, like
+>>
+>> diff --git a/mm/gup.c b/mm/gup.c
+>> index 8e7dc2c6ee738..08fc18f1290d4 100644
+>> --- a/mm/gup.c
+>> +++ b/mm/gup.c
+>> @@ -695,7 +695,8 @@ static inline bool can_follow_write_pmd(pmd_t pmd, struct page *page,
+>>  	/* ... and a write-fault isn't required for other reasons. */
+>>  	if (pmd_needs_soft_dirty_wp(vma, pmd))
+>>  		return false;
+>> -	return !userfaultfd_huge_pmd_wp(vma, pmd);
+>> +	return !userfaultfd_huge_pmd_wp(vma, pmd) &&
+>> +	       !userfaultfd_huge_pmd_rwp(vma, pmd);
+>>  }
+>>
+>> How can a pte be writable and prot_none at the same time? Maybe just confused AI
+>> output that you should carefully double check before sending that out officially.
+> 
+> Note that this path is for !pmd_write() case to begin with. It serves
+> FOLL_FORCE case. I believe this check is correct: we don't want to allow
+> to write to such pages even with FOLL_FORCE.
+> 
+> But looking around, I missed gup_can_follow_protnone() modification. It
+> has to return false for RWP.
+
+Right, read-permission checks come before the write-permission checks.
+
+> 
+>> 4) How do we want to handle PM_UFFD_WP?
+>>
+>> We are pretty much out of flags soon. Overloading PM_UFFD_WP means that we will not
+>> be able to easily support using a separate bit.
+>>
+>> But our internal design will not easily allow that either, and I am not really
+>> sure we want to go down that path any time soon.
+>>
+>> Maybe we could document this for now as "In WP VMAs, indicated WP PTEs.
+>> Otherwise, in RWP VMAs, indicates RWP.". Whenever we would allow both at the
+>> same time, we could change the semantics. User space would fail to create one
+>> with both protection types for now either way.
+> 
+> Yeah. I think about doing documentation-only update for PM_UFFD_WP for
+> now.
+
+Ok, good!
+
 -- 
-2.53.0
+Cheers,
 
+David
