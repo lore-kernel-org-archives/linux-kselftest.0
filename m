@@ -1,102 +1,80 @@
-Received: from out-187.mta1.migadu.com (out-187.mta1.migadu.com [95.215.58.187])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8AC1366060
-	for <linux-kselftest@vger.kernel.org>; Wed, 22 Apr 2026 21:12:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96D755B1EB;
+	Wed, 22 Apr 2026 21:20:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776892323; cv=none; b=GzEF5hEVxc+aumIKw9AP6h6q1lFhnAaXko1noGV3LoC9C2wdhpL5pLGVqLKRog83BmGqSrMOrKnKcDHIfIi1oyfIaBXlr3CPtzueR0RrafJy0EYzNmof/06Mp1MqERYq1/bLhUztKJjj9G9d8ZrzLpaV9oPTj22+5tsFkJBoa8I=
+	t=1776892847; cv=none; b=hAEFHUJjI8nPsBfM3jj1+GpG+SEx1rZ0lNlEPnK+EANbSHRwaAQzwfeEyPJVkfGxghSxlzSBpJ6vf4tQfHFkQ0g2eMfLUr93b1yJN/9/Kw2KShDeGADntiiPULLdMj4PRgCYMz0bUUzP8ly0Rgiqgx6FgP1K5Vv0rHMIE+fpVvk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776892323; c=relaxed/simple;
-	bh=v7U75NKiCPYtTdQcEnkj2wpWyCLF3eSW0cslj4j/1DY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Lc5rthnuxDwHP/llqkf7SLhSySwLhYL29CRvoBTb0Qp0tweMF63eIM7xdDqDT4S6ecz9XMbX+7hiu3lbCEayVul7KgQKTHyeXrABH6veNBHNFvha5S+z+YKnbmQQK5QAGAk7IT+zypW0zFdYvCXLNwYabA2E2SFdWvyEYmc1c/M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=J257CulQ; arc=none smtp.client-ip=95.215.58.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1776892847; c=relaxed/simple;
+	bh=xNHI594aiMqpecdXehVR3ZQD0ZoiTrl2cLuFkfBG6nw=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=IWeicMX0tXUIhTV5OlkjKO+CTpyvJrFQNPbNN9xFDulU70i5UDhiuntL0yc7iCcTROR9rnKn+2/sTw+ji9F72a2sHSUGm81PyI0Oeb6rr7NjVHhvZjeFBQQvik+i3b4CIXVz2bMHH4YWwiNkG2WUDAI13mte5t5waTSzEz3B/aA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BDW2sj7J; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="J257CulQ"
-Date: Wed, 22 Apr 2026 14:11:39 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1776892310;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=GEandxuFafG0C/7810R/J7c3UrG1zSU4EJVrzgVn8Pc=;
-	b=J257CulQuZDOKAP+hzxI5m1x/1f7RRcZvINwLvEqjQYq4bjPPs5X0QpCTGoLcWmFqADdLp
-	GK6KMC54APkAvW4xZ1bw6YlSpPubaIXn9c1ptGPMxwjkj1KVROaqnB5SZe3HDHwn5aKCGn
-	0M7OTrg6f0N7RExaee2KtNlWER+8oEQ=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-To: Werner Kasselman <werner@verivus.ai>
-Cc: "bpf@vger.kernel.org" <bpf@vger.kernel.org>, 
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf v5 2/2] selftests/bpf: cover same-reg sock_ops
- rtt_min request_sock access
-Message-ID: <202642221444.tUNv.martin.lau@linux.dev>
-References: <20260417023119.3830723-1-werner@verivus.com>
- <20260420230030.2802408-1-werner@verivus.com>
- <20260420230030.2802408-3-werner@verivus.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BDW2sj7J"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EA9BC19425;
+	Wed, 22 Apr 2026 21:20:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776892847;
+	bh=xNHI594aiMqpecdXehVR3ZQD0ZoiTrl2cLuFkfBG6nw=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=BDW2sj7JmTDTKBagEsQOfLc/cgtwpvZwupW1DsgGvaFPoqsEt7EZUd+tyHzq81fL/
+	 wbTOt9U9V8kX83B3OYTRScr3Ay2sWGxnJWjhedMVYo5CkPookmjPm5oSPwcjJyNIxQ
+	 fBlLoVP7/pr9ZdjzzAqF7p2slFIFvqpu2XYwFnfbLd9tExRU15WatV/YmOq+1uK51a
+	 UYoUZrqD/CR1W4rRMX///u4hVtyC9btuBtwNb3cQFY9j7vRJF2TN6VrtWeyC5yZgWA
+	 7vgS65CLyI4yZsf5+6lgimaTuZnX21IbczOx428NB2vxUVbUDMgChb36NuR/CJZfbP
+	 0Efrd6zx5opuQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B9F9B3809A85;
+	Wed, 22 Apr 2026 21:20:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260420230030.2802408-3-werner@verivus.com>
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] selftests/bpf: Page out as late a possible in file_reader
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177689280955.4040916.1149416555658938866.git-patchwork-notify@kernel.org>
+Date: Wed, 22 Apr 2026 21:20:09 +0000
+References: <20260420134637.2513867-1-jmarchan@redhat.com>
+In-Reply-To: <20260420134637.2513867-1-jmarchan@redhat.com>
+To: Jerome Marchand <jmarchan@redhat.com>
+Cc: bpf@vger.kernel.org, andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org,
+ daniel@iogearbox.net, martin.lau@linux.dev, memxor@gmail.com,
+ song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, shuah@kernel.org,
+ yatsenko@meta.com, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
 
-On Mon, Apr 20, 2026 at 11:00:37PM +0000, Werner Kasselman wrote:
-> Add a tcpbpf sock_ops selftest that forces a same-register ctx->rtt_min read on request_sock-backed callbacks and verifies the observed value is zero.
+Hello:
+
+This patch was applied to bpf/bpf-next.git (master)
+by Kumar Kartikeya Dwivedi <memxor@gmail.com>:
+
+On Mon, 20 Apr 2026 15:46:37 +0200 you wrote:
+> The file_reader/on_open_expect_fault fails consistently on my system.
+> It expects a page fault on first dynptr read of some range the exe
+> file of the current process because it has paged out that page range
+> earlier. However a lot can happen to that range (which depending on
+> the actual memory layout could contain text section, data section,
+> sections )related to dynamic linking...) between the moment it was
+> paged out and the moment the bpf program expected to hit a pagefault
+> actually run.
 > 
-> This covers the dst_reg == src_reg path that the previous ctx_rewrite-only test did not exercise.
+> [...]
 
-Same formatting issue.
+Here is the summary with links:
+  - selftests/bpf: Page out as late a possible in file_reader
+    https://git.kernel.org/bpf/bpf-next/c/a20f97791a78
 
-> 
-> Signed-off-by: Werner Kasselman <werner@verivus.com>
-> ---
->  .../testing/selftests/bpf/prog_tests/tcpbpf_user.c |  4 ++++
->  .../testing/selftests/bpf/progs/test_tcpbpf_kern.c | 14 ++++++++++++++
->  tools/testing/selftests/bpf/test_tcpbpf.h          |  2 ++
->  3 files changed, 20 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/tcpbpf_user.c b/tools/testing/selftests/bpf/prog_tests/tcpbpf_user.c
-> index 7e8fe1bad03f..1b08e49327d0 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/tcpbpf_user.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/tcpbpf_user.c
-> @@ -42,6 +42,10 @@ static void verify_result(struct tcpbpf_globals *result)
->  	/* check getsockopt for window_clamp */
->  	ASSERT_EQ(result->window_clamp_client, 9216, "window_clamp_client");
->  	ASSERT_EQ(result->window_clamp_server, 9216, "window_clamp_server");
-> +
-> +	/* check same-reg rtt_min read on request_sock-backed callbacks */
-> +	ASSERT_NEQ(result->rtt_min_req_seen, 0, "rtt_min_req_seen");
-> +	ASSERT_EQ(result->rtt_min_req_nonzero, 0, "rtt_min_req_nonzero");
->  }
->  
->  static void run_test(struct tcpbpf_globals *result)
-> diff --git a/tools/testing/selftests/bpf/progs/test_tcpbpf_kern.c b/tools/testing/selftests/bpf/progs/test_tcpbpf_kern.c
-> index 6935f32eeb8f..a488b282b5dd 100644
-> --- a/tools/testing/selftests/bpf/progs/test_tcpbpf_kern.c
-> +++ b/tools/testing/selftests/bpf/progs/test_tcpbpf_kern.c
-> @@ -33,6 +33,7 @@ int bpf_testcb(struct bpf_sock_ops *skops)
->  {
->  	char header[sizeof(struct ipv6hdr) + sizeof(struct tcphdr)];
->  	struct bpf_sock_ops *reuse = skops;
-> +	long rtt_min = (long)skops;
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-It is overly smart to test the same dst_reg == src_reg.
-A new test has just been added to test it in a cleaner way.
 
-pw-bot: cr
-
-You haven't spent time to take a look of the patches first.
-Please don't post again. I will stop reviewing your patches from now.
