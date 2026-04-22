@@ -1,61 +1,63 @@
 Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE6E0347BC4
-	for <linux-kselftest@vger.kernel.org>; Wed, 22 Apr 2026 08:04:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A188D383C8D
+	for <linux-kselftest@vger.kernel.org>; Wed, 22 Apr 2026 08:05:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776845102; cv=none; b=KWZYflnwZKBcNa8KrblvSLMAsBiw5/2gX0y88rQ9GLeLimPkZrnJ/39dPdh1PSgShx4s99LP/Hkrzq1W4VDW078zpLrGzj1dNaySzsUaSvSAe31UtlQ3nn1zijXVfHN/VKWy9gyxXzISXzpD+Qf1C8flt53glQ2ED+8vQJonlm4=
+	t=1776845106; cv=none; b=Wv/KyLqCtmDw+75pnzWY5RjYA+SOubhna4tOiFnpoOSoAzEXvDVKOj3rxqZLaoaEQkHxqVT/DGa8cQCseRDPS9bHSO5HcDWXOlgCmFe0mJ2zqg2jbdsLCvHQqdvtvAjgfg2ffWXzMqUFeF9cnVcSjB05bbVQYWN4cqXulrlQVt8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776845102; c=relaxed/simple;
-	bh=bkqmz1ZhsEhdlRVPXHrl/jgc4xYDIpBCMijytr4ar40=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=H8x2syjviU7d8PRnGuigYegIaH51t+nCk7zczj3eRIBjfCMFQP/V8uc1t2iQMTSIKCke2w3JA1+hO8yI4ElK26LQfndA7+3/SLncCx8z2qMY4JgWxj6SaEQsupnO/qtGe6C5K+lKiO4NXuD/L3IotP032g1c02X/6dP1U1gt+Fw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RpBoyxml; arc=none smtp.client-ip=209.85.216.43
+	s=arc-20240116; t=1776845106; c=relaxed/simple;
+	bh=wED/8uiDYXQ3er+mEA5UyDwO3Aj8eeu5M6WUxw3jp/I=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Ir9QIVRCbUJlZekLw7ylfGE1xIC1Oudh3e2IEKpUpF/o3VvDsIOgAxu2xLWpuPzzK3QRFYinA8A8DaXEQRE4VHMT10JTl1q6W33zIMOqh5Mcoh641y57WTgSYQRYkFSjP2mZ2JEMxTRDIDbRm0Ol2ZtxIocyGDsBAURC4sEepgA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ij9Kvs+s; arc=none smtp.client-ip=209.85.216.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RpBoyxml"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-3567e2b4159so3543594a91.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 Apr 2026 01:04:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ij9Kvs+s"
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-35da1af3e10so4909168a91.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Apr 2026 01:05:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776845099; x=1777449899; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=DItXGjCrmn7d94S2RI3cNWwTTtEvovQ6aSZWbg/Gdoc=;
-        b=RpBoyxmlaxeNW44LoUOwy4kbg65ELv7+BxxezR392T8pbC7WlvRrxSmYsj01y+Ms2v
-         JUmusXBcqGUDUY2T5b9f6u31sQm8nZf9+Sx6XClvvxw2GvDpYAHC3kbwBNlKVrynnA7s
-         zMRKzd/Vcu7aEObUWJrGSwCKesghITuWbG8TGcbUmFzxc9Bcn2WZ5j/78KbmnY0AdAxP
-         rnfQ7NHxc107Vkb6pdvgCPu9cB+G+PD9dMoZkzaijZmjfUDIbVoEjSDePtqVVuPiSH3/
-         qm3K3Ow4PCwRg4d5jI1F2F0O3YSYTV58o4JjOtQYx0dRxZ+oA4HYX2aCGRkiYUn1IRrg
-         P+0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776845099; x=1777449899;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1776845102; x=1777449902; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=DItXGjCrmn7d94S2RI3cNWwTTtEvovQ6aSZWbg/Gdoc=;
-        b=BYagYUkvL9iw9GvS2D5Eh8Qh/AneomkYqzb/pDJuyyFQ+8J8vt9cSexUMMl9UTdfLP
-         E6xFdSVH0spkwXKYGA3r2E3GL8wWZAg4p3syEgwBUshTJdnFGbOPh2IfJ7eKON6uIcqA
-         W8JyIhQUFRPkcVq80MFx7ukfyt1wi9Mn9jZkjL/enxLYjBQPZ+S2XJIXKL+lNMAfeWYx
-         eDGD2r7wFUiqhPJKpWUAujfQRGKrwbMnsoqw5XJ7AF9gVicdQ14SumFq8tuyl2irtVuB
-         YawWAr+89EXkSU77YAoSzbVt6zHD8UbVPMrD1K7x/c9NjIawNqe7GwFHv8Jc8s0cQjQ7
-         oLeQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9DRGoay68gL2VELafu6VJCo+0kIlliX6Y+TMwJWNsr2vP+Pf+hnntIro+xyp7jG91h9yekrauxNT8m+WvbZZk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy6gzNMINczxsHNz24fnDGC442lLtqpD9qtH522xnl2qMpLrCYO
-	sQ/u+3eNCOJGS5bYR9vBAWNCLMSq9qWvmLobXXSvVaQ6IdK7bXMk+m8=
-X-Gm-Gg: AeBDiev6H4NdjcTGoNzN9zdys2V0zo5tFWicT26OzaeVQLvXe2Vl8v7BlctmBfqgo24
-	s0yBIx+By7f9cwRVgHaUS3je/KKVQ/vrG1WRJ3XWmOEhMxZ/lbOSSJ8QlwVbvDzk7Qra63jj65l
-	yWf7V8ceejetSh7z5nKVAJtCkt9NIvayim/NYWINVJr8v83yUjZZPRsitM1vnSzZcI5WRR9e35r
-	HPoP7Rej4FBgF3E1VoS4o/tE/Cg6kBZ8ydlPbG8pug4dPGP2tXt0SKqRhHXv34ztJdiv/wLf16S
-	nSK2XO/NrWSOiiPPjBm6dQnFn9jYvuOs/pbP9cRCLd5YPBp0HLWGbl8jKpi/3Rh1avh9+XaDX6F
-	LSZgN2751m7rSjjRnjGjJTKJRLTG4iMWwXcm0iLVadIw2FVrlC/zDywJuy4DmgKPpWhGlay8lof
-	5stakZT8gmz+txEAkve5j/Rj3BHcDz9bCf
-X-Received: by 2002:a17:90b:53c3:b0:35d:a38a:a117 with SMTP id 98e67ed59e1d1-361404745f7mr22559423a91.15.1776845098695;
-        Wed, 22 Apr 2026 01:04:58 -0700 (PDT)
+        bh=7P3WPkfA1Saa+jmrVSo3FMd6D9WCAJMGXoYkKyQ3YxY=;
+        b=ij9Kvs+sABGBtTcGicPL7jlFPr+Jqat/53tmFgxCbE68EQKqGDzpsNGgFFHJvu+iym
+         30tafpAnqtryg8O5mHMPr+YXOpBeIIKrz0/wptFcxA7/X4UPD4105YfAb6sOicozFTwb
+         GO4iOtRu0+zLVIHw+pW31bPv2y/TVdU5vQv7ddiD2q1c8eJFDW5ZRRpFKXF+gK6qErzX
+         67FqI6I5HWKPtJUzrZ3LtsHXKsay9hqVUVQlL620uf7DjBy8P1SKMJFNZ+YztIRHwcrx
+         lDoLzUMjxCv54YfXh32KerH5Xvs2INgD8hKxveBkoOFBedBy8PX8mlmRvx+OxtgJLodt
+         uOEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776845102; x=1777449902;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=7P3WPkfA1Saa+jmrVSo3FMd6D9WCAJMGXoYkKyQ3YxY=;
+        b=G9BXqUInbrHGJA8Sx2Qa6D7yFGtwAzs6/UVHU7G6C/LqERPwmLwdQ2dHFh4HtKFmZM
+         F2SAfu065+HJ8AVNGMQ3jhKALSxq6F6OW4XIpSqmKhBvcm6uwMaXjLkrUeQ8CstYszIc
+         lKUDQUx0DvsyLPEoq5HYEKR7JyDTC14gsZ57T4WzIHQukqAoplkFJudwqfmcoInbCJJj
+         C3cq5FFQkO89NWr05hPEUgcQ+JcYuIcP+5pGHGIgztNNIriVKzNzwDbLetD4KqtVlR6I
+         KdXIrfvUgkH/yjQ+L5X42lmxVIsZPEhFYQPxihbK/xKUH3RpcrNNcP4+jZwk3+4+vrvr
+         0E0Q==
+X-Forwarded-Encrypted: i=1; AFNElJ/X/fRmJYhREmZ7qTbTU/ApQ8VVaNRyJZ9D9vOtTKSSqpk5nnvahXRTHN+dxf6M5E0kCHIafhv9TY/LTGdQJ9s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzC1MiwMb7Zh0pxuU+9RhBdgI2/5cM4+XDmoRkYwiniS98jcMkN
+	yK3DNupG6lj6aElAbPk1IqRzZ3OC3tJAUSKoKSrq2o3230BvnoErsPvFPxGIw+Paafiw
+X-Gm-Gg: AeBDiet3IiGHSaEofDRrqi1oJsQRqSlcmxyf2GwP+M+oHYRL+pezMv09XIgtOBtHvEr
+	dS/bnGAsK/k7HQUyC1/1aQEU3f2EJZD40ZoMZDwm3drZ27G15ypJHckew8rvcfiHlHYiCGHZaOR
+	h4/PpGjW+LytkPrTpEC9n1gRZq5VD81ZwkZzva9CZ6PYOOaVsn8jNm+xU3UdislXdfRIcRJWEl0
+	QMPPXEdqSlfCJUfNKnZtDbTZjIyeUoYlsbp9GjtOsEqFXopygIW/8iOTCR6Co3QI+a+MVZ7Y46p
+	VRIA2s3fZ0fllgOuvN56Gxwuwopo0R+yU7n526qZKoSLzOkhqmVBwSc/XNWKJI2QMphKEVPSYxo
+	75lH4wRdeAd3aRXR/nsrcpreRJ68gbTmfyxloFKtVCkv8bQcxwqI2jvkvWhhbCiNKWgaeZ6poML
+	YEvu+jNFYkhhY1Y4z8gMbx9R9PFekwKQ8w
+X-Received: by 2002:a17:90b:4b44:b0:361:3224:2f65 with SMTP id 98e67ed59e1d1-361403bdd07mr21489530a91.3.1776845102478;
+        Wed, 22 Apr 2026 01:05:02 -0700 (PDT)
 Received: from thoundrobot ([43.154.64.180])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3613fb9b121sm8508494a91.5.2026.04.22.01.04.55
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3613fb9b121sm8508494a91.5.2026.04.22.01.04.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Apr 2026 01:04:58 -0700 (PDT)
+        Wed, 22 Apr 2026 01:05:02 -0700 (PDT)
 From: Li Wang <wangli.ahau@gmail.com>
 To: akpm@linux-foundation.org,
 	david@kernel.org,
@@ -69,10 +71,12 @@ To: akpm@linux-foundation.org,
 Cc: linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 0/2] selftests/mm: clean up build output and verbosity
-Date: Wed, 22 Apr 2026 16:04:44 +0800
-Message-ID: <20260422080446.26020-1-wangli.ahau@gmail.com>
+Subject: [PATCH v3 1/2] selftests/mm: respect build verbosity settings for 32/64-bit targets
+Date: Wed, 22 Apr 2026 16:04:45 +0800
+Message-ID: <20260422080446.26020-2-wangli.ahau@gmail.com>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260422080446.26020-1-wangli.ahau@gmail.com>
+References: <20260422080446.26020-1-wangli.ahau@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -81,40 +85,69 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Currently, the build process for the mm selftests is unnecessarily noisy.
+The 32-bit and 64-bit compilation rules invoke $(CC) directly, bypassing
+the $(Q) quiet prefix and $(call msg,...) helper used by the rest of the
+selftests build system. This causes these rules to always print the full
+compiler command line, even when V=0 (the default).
 
-First, it leaks raw compiler errors during the liburing feature probe if
-the headers are missing, which is confusing since the build system already
-handles this gracefully with a clear warning.
+Wrap the commands with $(Q) and $(call msg,CC,,$@) to match the
+convention used by lib.mk, so that quiet and verbose builds behave
+consistently across all targets.
 
-Second, the specific 32-bit and 64-bit compilation targets ignore the
-standard kbuild verbosity settings, always printing their full compiler
-commands even during a default quiet build.
+==== Build logs ====
+  ...
+  CC       merge
+  CC       rmap
+  CC       soft-dirty
+  gcc -Wall -O2 -I /usr/src/25/tools/testing/selftests/../../..
+                -isystem /usr/src/25/tools/testing/selftests/../../../usr/include
+                -isystem /usr/src/25/tools/testing/selftests/../../../tools/include/uapi
+                -Wunreachable-code -U_FORTIFY_SOURCE -no-pie -D_GNU_SOURCE=
+                -I/usr/src/25/tools/testing/selftests/../../../tools/testing/selftests
+                -m32 -mxsave  protection_keys.c vm_util.c thp_settings.c pkey_util.c
+                -lrt -lpthread -lm -lrt -ldl -lm
+                -o /usr/src/25/tools/testing/selftests/mm/protection_keys_32
+  gcc -Wall -O2 -I /usr/src/25/tools/testing/selftests/../../..
+                -isystem /usr/src/25/tools/testing/selftests/../../../usr/include
+                -isystem /usr/src/25/tools/testing/selftests/../../../tools/include/uapi
+                -Wunreachable-code -U_FORTIFY_SOURCE -no-pie -D_GNU_SOURCE=
+                -I/usr/src/25/tools/testing/selftests/../../../tools/testing/selftests
+                -m32 -mxsave  pkey_sighandler_tests.c vm_util.c thp_settings.c pkey_util.c
+                -lrt -lpthread -lm -lrt -ldl -lm
+                -o /usr/src/25/tools/testing/selftests/mm/pkey_sighandler_tests_32
+  ...
 
-Notes:
-  My email address has changed due to employment change.
-  Previous Signed-off-by was with <liwang@redhat.com>.
-  Resent it after -rc1, as requested by Andrew.
+Reported-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Li Wang <wangli.ahau@gmail.com>
+Tested-by: Andrew Morton <akpm@linux-foundation.org>
+---
+ tools/testing/selftests/mm/Makefile | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-V3:
- - Nothing special but email change.
-
-V2:
-
- - Drop 2/4, 3/4 from v1 to v2, since Andrew wasn't able to confirm the
-   patch works for the rarely happening issue now, so I decided to just
-   hand on the process of the parallel issue.
-
- - Refine the 4/4 patch only to hide compiler errors when missing liburing.
-
-Li Wang (2):
-  selftests/mm: respect build verbosity settings for 32/64-bit targets
-  selftests/mm: suppress compiler error in liburing check
-
- tools/testing/selftests/mm/Makefile        | 9 ++++++---
- tools/testing/selftests/mm/check_config.sh | 2 +-
- 2 files changed, 7 insertions(+), 4 deletions(-)
-
+diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+index cd24596cdd2..6195770eba6 100644
+--- a/tools/testing/selftests/mm/Makefile
++++ b/tools/testing/selftests/mm/Makefile
+@@ -216,7 +216,8 @@ ifeq ($(CAN_BUILD_I386),1)
+ $(BINARIES_32): CFLAGS += -m32 -mxsave
+ $(BINARIES_32): LDLIBS += -lrt -ldl -lm
+ $(BINARIES_32): $(OUTPUT)/%_32: %.c
+-	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(notdir $^) $(LDLIBS) -o $@
++	$(call msg,CC,,$@)
++	$(Q)$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(notdir $^) $(LDLIBS) -o $@
+ $(foreach t,$(VMTARGETS),$(eval $(call gen-target-rule-32,$(t))))
+ endif
+ 
+@@ -224,7 +225,8 @@ ifeq ($(CAN_BUILD_X86_64),1)
+ $(BINARIES_64): CFLAGS += -m64 -mxsave
+ $(BINARIES_64): LDLIBS += -lrt -ldl
+ $(BINARIES_64): $(OUTPUT)/%_64: %.c
+-	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(notdir $^) $(LDLIBS) -o $@
++	$(call msg,CC,,$@)
++	$(Q)$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(notdir $^) $(LDLIBS) -o $@
+ $(foreach t,$(VMTARGETS),$(eval $(call gen-target-rule-64,$(t))))
+ endif
+ 
 -- 
 2.53.0
 
