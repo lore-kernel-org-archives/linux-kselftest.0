@@ -1,127 +1,169 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E01C03C276D;
-	Wed, 22 Apr 2026 09:27:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAF3138839F;
+	Wed, 22 Apr 2026 09:35:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776850026; cv=none; b=GzUfucn9zL7cpX/ldSUxDNejFZCS38B89tBhq6A2qmKB/ssTflg4XS1I4GHqXggoFNBgocO918zvxUs1L7/31RNc1K8mMOvXQtUWn48kOnNhbj3cKB7GHq0imgXXMtQR4q1NnKtNvwIbaWlPMy2AT9GOIfpb7BwCAnlCZPfXrHY=
+	t=1776850506; cv=none; b=C1PBQwJ5BuIs+Ja24+S4JPWrSujpZ4J7Nl7Rfgb30TxVZRqQ0IOQIu48tqGQNf/QTERQWqEVe0MW5g76CaYbkJ+c4MRZfLCSEtxJbYLv6HPz0RrkwfKPtTkJsJeeiIcSKXhpiuDgOH1QMOXquQ8coYk4kMSv2twetUrZWN9T4OY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776850026; c=relaxed/simple;
-	bh=XSXtvCEOw1rXi02T2nIM3gho4XRJ3rOy8aCyH/Flzh4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TpFpJp03Owt5eJQthBn1Wm3m0UbDfxZDBxjw6Y1rrAyp6Gjamlw6RZynrnINh9mdtBVtj/BgjxChGLcq63VUVX9E624f3DtcieS3npg8tqm0YrS+mfKMC/pv09PD2uwI2d6i8n3fQmPCtDJyB9b9PBdy/NGXfOkSvuBgO1ib1vw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fW8rW8oH; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fW8rW8oH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33EC6C4AF0B;
-	Wed, 22 Apr 2026 09:27:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776850025;
-	bh=XSXtvCEOw1rXi02T2nIM3gho4XRJ3rOy8aCyH/Flzh4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fW8rW8oH3Zc32i8I3WGhWbQgmqOQKPT6gmk4fL2A7usxNc9F5NFFDRh4v+xNfaQkQ
-	 sh5xmCFr7QeNBkx1UZEBXgjEQnmllo3w7bxebHJ41r/S380l5A4Lnq6z78cfADpCHf
-	 JvONOpjWbbGLy87jnRV99MswY6ifyOlCnJe5Rrr5rOV25RC7VbomMVCFAcCbyvU4hn
-	 1QCqqks9KBG3Ah3iBAeJlBBr4fSZdxfSbI0DamZu75Ld1yt86YzUbOGFW5YYhiS4m3
-	 7z8qA7SgDS+aQm/+5cTNVdO8XtiIC7TAPZtT1AmObHBUUEjx0t53Aa5XfsthRa9gvS
-	 8/8ikfI0ZNuqQ==
-Received: from phl-compute-11.internal (phl-compute-11.internal [10.202.2.51])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 375E6F40069;
-	Wed, 22 Apr 2026 05:27:04 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-11.internal (MEProxy); Wed, 22 Apr 2026 05:27:04 -0400
-X-ME-Sender: <xms:aJToaeGii4IM0oL6w5d9DlxZY3J34dusHidJOAQXLgxR_JTVDGQCyg>
-    <xme:aJToad0Ul418c1XPvY5j--gNP5mTl49gtqYfgphTeOn1ICkf_UmQy3NXxAS3wq9BG
-    NJ99eKbxEncWGVE7MVsMuCQMSN12LZk5LZkSG7ZLzIQZqixnHUxC_c>
-X-ME-Received: <xmr:aJToaeWov4PpwQe5q92KBYrsgst-IOJcGq9KUBqEPWgZnkyw2V4ddXjAIzZCzQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgdeifeeludcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefmihhrhihlucfu
-    hhhuthhsvghmrghuuceokhgrsheskhgvrhhnvghlrdhorhhgqeenucggtffrrghtthgvrh
-    hnpeeuieejieffkeehfeffffdtkeelfeelhefhfefhudehjeehvdffleeuvddufefgkeen
-    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehkihhrih
-    hllhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqudeiudduiedvieehhedq
-    vdekgeeggeejvdekqdhkrghspeepkhgvrhhnvghlrdhorhhgsehshhhuthgvmhhovhdrnh
-    grmhgvpdhnsggprhgtphhtthhopeefiedpmhhouggvpehsmhhtphhouhhtpdhrtghpthht
-    ohepuggrvhhiugeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghkphhmsehlihhnuh
-    igqdhfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopehpvghtvghrgiesrhgvughh
-    rghtrdgtohhmpdhrtghpthhtoheplhhjsheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoh
-    eprhhpphhtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehsuhhrvghnsgesghhoohhg
-    lhgvrdgtohhmpdhrtghpthhtohepvhgsrggskhgrsehkvghrnhgvlhdrohhrghdprhgtph
-    htthhopehlihgrmhdrhhhofihlvghtthesohhrrggtlhgvrdgtohhmpdhrtghpthhtohep
-    iihihiesnhhvihguihgrrdgtohhm
-X-ME-Proxy: <xmx:aJToac1TuZDXfFwGRdKOtg1b447Z32xwhaJLPFiNfasgDF-0BKtUBg>
-    <xmx:aJToaSf7bUXXrkiDOgQqd6YfId5bSLgjAU5kG26CSzkCZ7t6PKo1ew>
-    <xmx:aJToaeT_HeYfJdQGHfRSP2cjHnz9A1PvUdNFY3H4v5as0SDQQ5z40A>
-    <xmx:aJToadkTSABajhQ1iNy4XkkRzKKnBSjuz186wCOy5HZsK4bzmG2-_g>
-    <xmx:aJToaapUOmAHDxHH5oNJEiX7nbl8UAhRgZuVgIHxUCaomgEUar_uEr38>
-Feedback-ID: i10464835:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 22 Apr 2026 05:27:03 -0400 (EDT)
-Date: Wed, 22 Apr 2026 10:27:02 +0100
-From: Kiryl Shutsemau <kas@kernel.org>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	Peter Xu <peterx@redhat.com>, Lorenzo Stoakes <ljs@kernel.org>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
-	Vlastimil Babka <vbabka@kernel.org>, "Liam R . Howlett" <Liam.Howlett@oracle.com>, 
-	Zi Yan <ziy@nvidia.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Sean Christopherson <seanjc@google.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, kvm@vger.kernel.org
-Subject: Re: [RFC, PATCH 00/12] userfaultfd: working set tracking for VM
- guest memory
-Message-ID: <aeiUGtFgmYB9M18L@thinkstation>
-References: <55019037-4f1c-4d9c-83ee-3a844d8f3d5e@kernel.org>
- <ad50rPOseVa-SP_s@thinkstation>
- <aeDoqFWPFxkkNB26@thinkstation>
- <1a499781-1115-44bc-adbf-2ac3769354ca@kernel.org>
- <aeFCuLJXT8VOkzH7@thinkstation>
- <4c635703-3d8d-4cfa-bb98-7f6f5fcbe547@kernel.org>
- <aeImfRrrvr3UoKtL@thinkstation>
- <aeTnlQUOOh-dHG8z@thinkstation>
- <34f75083-29a3-4860-8a6e-94551d37ac6a@kernel.org>
- <aed6fHLrIdahbdY3@thinkstation>
+	s=arc-20240116; t=1776850506; c=relaxed/simple;
+	bh=p7P8V6Ltow3mGw8KRZMBasw50nMRtXyR1TO6duHL6BA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mIw5WC2SJhrqZZNPSvmb/d+lSaY1KbySphunpRj8BXoB9ZKt7bD8Z8iO+9ItQNQT+82Hjp0SB3Hk47C7CSnfrQu06LxFzhTOlnOcWl33UtgoMVBPKNjuoSQNp4dhusPLMSRsTAa2Vb71E3bndj504qVAYIf48zxBWrddb757rPY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.177])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4g0vFR72LmzKHMd7;
+	Wed, 22 Apr 2026 17:34:35 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.112])
+	by mail.maildlp.com (Postfix) with ESMTP id 773F1405F2;
+	Wed, 22 Apr 2026 17:34:56 +0800 (CST)
+Received: from [10.67.111.176] (unknown [10.67.111.176])
+	by APP1 (Coremail) with SMTP id cCh0CgD3mwY+luhpInw6BQ--.28182S2;
+	Wed, 22 Apr 2026 17:34:55 +0800 (CST)
+Message-ID: <e37620c6-b198-48e1-a991-ad614058e882@huaweicloud.com>
+Date: Wed, 22 Apr 2026 17:34:54 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aed6fHLrIdahbdY3@thinkstation>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 08/23] arm64: topology: Use RCU to protect access to
+ HK_TYPE_TICK cpumask
+To: Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ "K. Y. Srinivasan" <kys@microsoft.com>,
+ Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
+ Dexuan Cui <decui@microsoft.com>, Long Li <longli@microsoft.com>,
+ Guenter Roeck <linux@roeck-us.net>, Frederic Weisbecker
+ <frederic@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>,
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+ Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
+ <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
+ Uladzislau Rezki <urezki@gmail.com>, Steven Rostedt <rostedt@goodmis.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
+ Anna-Maria Behnsen <anna-maria@linutronix.de>, Ingo Molnar
+ <mingo@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>, Ben Segall
+ <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+ Valentin Schneider <vschneid@redhat.com>,
+ K Prateek Nayak <kprateek.nayak@amd.com>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>
+Cc: cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-hyperv@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ rcu@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Costa Shulyupin <cshulyup@redhat.com>,
+ Qiliang Yuan <realwujing@gmail.com>
+References: <20260421030351.281436-1-longman@redhat.com>
+ <20260421030351.281436-9-longman@redhat.com>
+Content-Language: en-US
+From: Chen Ridong <chenridong@huaweicloud.com>
+In-Reply-To: <20260421030351.281436-9-longman@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:cCh0CgD3mwY+luhpInw6BQ--.28182S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7AFyrurW5uryUCr4UKF1UGFg_yoW8tw18pr
+	45Gws0krWjgFnrA343X3ZF9r1F93s3Jwn0ka93CF1Fkw43CF18KFnYkr15Wr4xuw1Dur4I
+	yrZ5tFWSga47JFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
+	14v26rWY6Fy7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWrXVW8
+	Jr1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
+	CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AK
+	xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa
+	7IU0EksDUUUUU==
+X-CM-SenderInfo: hfkh02xlgr0w46kxt4xhlfz01xgou0bp/
 
-On Tue, Apr 21, 2026 at 03:33:27PM +0100, Kiryl Shutsemau wrote:
-> > 3) Some other stuff needs a second thought, like
-> > 
-> > diff --git a/mm/gup.c b/mm/gup.c
-> > index 8e7dc2c6ee738..08fc18f1290d4 100644
-> > --- a/mm/gup.c
-> > +++ b/mm/gup.c
-> > @@ -695,7 +695,8 @@ static inline bool can_follow_write_pmd(pmd_t pmd, struct page *page,
-> >  	/* ... and a write-fault isn't required for other reasons. */
-> >  	if (pmd_needs_soft_dirty_wp(vma, pmd))
-> >  		return false;
-> > -	return !userfaultfd_huge_pmd_wp(vma, pmd);
-> > +	return !userfaultfd_huge_pmd_wp(vma, pmd) &&
-> > +	       !userfaultfd_huge_pmd_rwp(vma, pmd);
-> >  }
-> > 
-> > How can a pte be writable and prot_none at the same time? Maybe just confused AI
-> > output that you should carefully double check before sending that out officially.
-> 
-> Note that this path is for !pmd_write() case to begin with. It serves
-> FOLL_FORCE case. I believe this check is correct: we don't want to allow
-> to write to such pages even with FOLL_FORCE.
-> 
-> But looking around, I missed gup_can_follow_protnone() modification. It
-> has to return false for RWP.
 
-With gup_can_follow_protnone() fixed, the checks in
-can_follow_write_pmd/pte() are redundant. Will drop them.
+
+On 2026/4/21 11:03, Waiman Long wrote:
+> As the HK_TYPE_TICK cpumask is going to be changeable at run time, we
+> need to use RCU to protect access to the cpumask to prevent it from
+> going away in the middle of the operation.
+> 
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> ---
+>  arch/arm64/kernel/topology.c | 17 ++++++++++++++---
+>  1 file changed, 14 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
+> index b32f13358fbb..48f150801689 100644
+> --- a/arch/arm64/kernel/topology.c
+> +++ b/arch/arm64/kernel/topology.c
+> @@ -173,6 +173,7 @@ void arch_cpu_idle_enter(void)
+>  	if (!amu_fie_cpu_supported(cpu))
+>  		return;
+>  
+> +	guard(rcu)();
+>  	/* Kick in AMU update but only if one has not happened already */
+>  	if (housekeeping_cpu(cpu, HK_TYPE_TICK) &&
+>  	    time_is_before_jiffies(per_cpu(cpu_amu_samples.last_scale_update, cpu)))
+> @@ -187,11 +188,16 @@ int arch_freq_get_on_cpu(int cpu)
+>  	unsigned int start_cpu = cpu;
+>  	unsigned long last_update;
+>  	unsigned int freq = 0;
+> +	bool hk_cpu;
+>  	u64 scale;
+>  
+>  	if (!amu_fie_cpu_supported(cpu) || !arch_scale_freq_ref(cpu))
+>  		return -EOPNOTSUPP;
+>  
+> +	scoped_guard(rcu) {
+> +		hk_cpu = housekeeping_cpu(cpu, HK_TYPE_TICK);
+> +	}
+> +
+
+Should we put this into a while loop, since cpu might be changed to ref_cpu?
+
+>  	while (1) {
+>  
+>  		amu_sample = per_cpu_ptr(&cpu_amu_samples, cpu);
+> @@ -204,16 +210,21 @@ int arch_freq_get_on_cpu(int cpu)
+>  		 * (and thus freq scale), if available, for given policy: this boils
+>  		 * down to identifying an active cpu within the same freq domain, if any.
+>  		 */
+> -		if (!housekeeping_cpu(cpu, HK_TYPE_TICK) ||
+> +		if (!hk_cpu ||
+>  		    time_is_before_jiffies(last_update + msecs_to_jiffies(AMU_SAMPLE_EXP_MS))) {
+>  			struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
+> +			bool hk_intersects;
+>  			int ref_cpu;
+>  
+>  			if (!policy)
+>  				return -EINVAL;
+>  
+> -			if (!cpumask_intersects(policy->related_cpus,
+> -						housekeeping_cpumask(HK_TYPE_TICK))) {
+> +			scoped_guard(rcu) {
+> +				hk_intersects = cpumask_intersects(policy->related_cpus,
+> +							housekeeping_cpumask(HK_TYPE_TICK));
+> +			}
+> +
+> +			if (!hk_intersects) {
+>  				cpufreq_cpu_put(policy);
+>  				return -EOPNOTSUPP;
+>  			}
 
 -- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Best regards,
+Ridong
+
