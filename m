@@ -1,53 +1,136 @@
-Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [91.216.245.30])
+Received: from MW6PR02CU001.outbound.protection.outlook.com (mail-westus2azon11012046.outbound.protection.outlook.com [52.101.48.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04CBA19AD5C;
-	Wed, 22 Apr 2026 13:51:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.216.245.30
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776865881; cv=none; b=lZiamxQaHowiCcYsiDYZ9KBtCPvRsfUb6GlmD0Ot11wtppwxJdi95HJk7gHaErl1jBCjupTl9elU6X2fnCBwbV92vGWfFdTSfXDyiQHQaGsTuReFBf1vcrIm4qFs5xrLP6HHDamDcrglwcjL+piXv15uk3NYblkZxRhhA1T+Qko=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776865881; c=relaxed/simple;
-	bh=TfUf5P/ZH414X6ziQV7zEfFP2CvK/Zx8bpWlZdkh0Yw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eUNOVH3V0CkeAHs3G+hErXOx2ygVim5fs6Jjl/+V767pJtgaQOLwv2a5iR3FqxNW51kwK405Tn5Syw4of74bOvC02IsPuBkj3KvQvzzi4g68IBVRiOHst7p0acN3ktmpBHcWiLJtFiPXciycgtrRfPs7OrGdNa6L6qHrDyNno20=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strlen.de; spf=pass smtp.mailfrom=strlen.de; arc=none smtp.client-ip=91.216.245.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strlen.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=strlen.de
-Received: by Chamillionaire.breakpoint.cc (Postfix, from userid 1003)
-	id 57E6160890; Wed, 22 Apr 2026 15:51:10 +0200 (CEST)
-Date: Wed, 22 Apr 2026 15:51:09 +0200
-From: Florian Westphal <fw@strlen.de>
-To: Vastargazing <vebohr@gmail.com>
-Cc: pablo@netfilter.org, netfilter-devel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, shuah@kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] selftests: netfilter: add nft_ct timeout destroy
- race test
-Message-ID: <aejSTa7PcHkaOs4C@strlen.de>
-References: <20260422131818.106417-1-vebohr@gmail.com>
- <20260422131818.106417-2-vebohr@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 396F322652D;
+	Wed, 22 Apr 2026 14:07:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.48.46
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776866856; cv=fail; b=m++R5hCD8XkSuVKMePv4BvW6JWelYY2NS59eeygQhvx/6w6698KXJuQAGigZAHp6mO684WoHIUgEuBniYc4oUWyMX29p20JCfpH0psH+JIGueYLJKfWGR1IfzOHgva4blFRqmNRK1mFn2lQMvH5nhyo9dtIg5nGyUc+Xsd118iI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776866856; c=relaxed/simple;
+	bh=mh86S50RQDtjo4b5+LedW063NWaNapokvcTK0Kj4sZM=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=OzHfLy7HgS97yPAzyvULMhVZ72hGi/SiYkC5vGmA65hSHuc+TnhJqa+mej2vtQhbex7wI3gSarN3SF3IrdrDtEAXWQ0tj9uZa7ehzAbzYxhj1r657TZUeEMX+r/DvJrCJiA0ExCkktghjHrZ7ZfLH2aUp4zT6TbuGiTLqUaDeCA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=GWS1Ip/x; arc=fail smtp.client-ip=52.101.48.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="GWS1Ip/x"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=FsSK01EyN8HBSjzgs5CnUrcuDMNCEfyh4luw/WksgKDK009fmDXy7AmKawVp0VIlRdlFBve9R8BJrBcf+zMD2HfEblHdB0RminvVJOZzw6c2heRBeMtDgKlcYKb61ZxAisH9T6wmwJXC66MylV6YYG/E+Ob96mA4NF1Nzqr90wMSOUbbkQLki6esXWPbQNyUx6ysR6OvBeYIRAJ7KPmfew3FYJ86Njp9zULjIbwtF3UtxKhhH2/lpwCULPdUIpqy+MHqvefEnEVVmHEa/0yphhhdU84d+aW2LYlEDwLBy3zUGKzbMm/GdC5rVRK8lBeQQTuUJkoSCeUeWeIT3KGDKQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=uKl6PNr/EtsVRUKZqjh4FjqZVOGL/X+I07kqX4+YgYg=;
+ b=hsOvdl26Ll93LhWMMeWbCoTVQj5mqSeagcilEsuSKpDE72wC72uHdlHNXrJ2EFgaoCinaMo1SNeGK8NXqkh9ZvumGJVFknDmSvFw63DjhU2YUa832MyKgcRlRil2cWykDwfD9CUySu1OXSH6h2b89zIcR6fOd0SMW+mgG6PugUOilJwCMpUkhCA9k41DwBH/cwS8zuFzfnAce7921v++jfsdNuuHR+03sa5Bx1lw/ueDZy4g/A4BqMJ9bVa4h3X/mg4Y2cO4tRYvysGMmxrJw1HcM2HZePRdBG221NkZtqMNRsAAonR6zHD38lgeYtWCaXMfbl7N9FAHllimTA3Y6A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uKl6PNr/EtsVRUKZqjh4FjqZVOGL/X+I07kqX4+YgYg=;
+ b=GWS1Ip/xYOQ3TGve7Qyupw0HxsPqWZJB+xVzl/VJKdvo09twlxR2QE4h0PL3vJ4BS9LcOKoZdzEES9yX3+KjB3ZyHU503wqUV5OJIM4TYTwccdkrtirI6E9166dhRite0zWkfZDSeHYspDjR3szwTi7bKi2evC3irpdKW5D350cz3dVjpA0/SrJvfsBr9PyLZTBzPBE11LZ4zCd38kxZN4r7dmZZiSgYUZrAUAlwDVaQsy0cyu4p7rDk9raCqT0iy7kJ/RJnIj4yxK04iZ21AgVPJFrtSp0fBBCG8n6YCiK5AEXO9Qb9PBXhEf8NwtJsE14dztxBxRrBhw4y4clKfw==
+Received: from BY1P220CA0020.NAMP220.PROD.OUTLOOK.COM (2603:10b6:a03:5c3::7)
+ by CH3PR12MB9344.namprd12.prod.outlook.com (2603:10b6:610:1c8::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9846.16; Wed, 22 Apr
+ 2026 14:07:30 +0000
+Received: from SJ1PEPF000023CD.namprd02.prod.outlook.com
+ (2603:10b6:a03:5c3:cafe::91) by BY1P220CA0020.outlook.office365.com
+ (2603:10b6:a03:5c3::7) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9791.48 via Frontend Transport; Wed,
+ 22 Apr 2026 14:07:30 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ SJ1PEPF000023CD.mail.protection.outlook.com (10.167.244.8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9846.18 via Frontend Transport; Wed, 22 Apr 2026 14:07:30 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 22 Apr
+ 2026 07:07:11 -0700
+Received: from c-237-113-240-247.mtl.labs.mlnx (10.126.231.37) by
+ rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.20; Wed, 22 Apr 2026 07:07:06 -0700
+From: Cosmin Ratiu <cratiu@nvidia.com>
+To: <netdev@vger.kernel.org>
+CC: Steffen Klassert <steffen.klassert@secunet.com>, Herbert Xu
+	<herbert@gondor.apana.org.au>, "David S . Miller" <davem@davemloft.net>,
+	"Eric Dumazet" <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
+ Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Andrew Lunn
+	<andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>, Cosmin Ratiu
+	<cratiu@nvidia.com>, Nimrod Oren <noren@nvidia.com>, Carolina Jubran
+	<cjubran@nvidia.com>, Gal Pressman <gal@nvidia.com>,
+	<linux-kselftest@vger.kernel.org>
+Subject: [PATCH ipsec 0/3] xfrm: Don't clobber inner headers when already set
+Date: Wed, 22 Apr 2026 17:06:45 +0300
+Message-ID: <20260422140648.3877129-1-cratiu@nvidia.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260422131818.106417-2-vebohr@gmail.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ1PEPF000023CD:EE_|CH3PR12MB9344:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1b9d802c-fa0e-4ecd-eb25-08dea0787e07
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|7416014|376014|36860700016|82310400026|18002099003|56012099003;
+X-Microsoft-Antispam-Message-Info:
+	zc+m1eCanOyW+rWZKSEFoGxqsiEXkaYBxUaNZp0Sjw58dhLBRn2V4aYPyXZ97gdoOUQI4CyedGB0y5dv6Ese7xjYezyT1kHfIVWG3EEFnP7G8J4H2+uOH5+ju8XYDOTRZQWft4vB4hAICh7zrz+ZXO3J4xJd3cbC/vEwwl4C4XtXQ2Situt1AcurDpR1xaSbj8soMrZRWKG7e45pt6pk/FFeiRfeXj4dlD101C+xGzJnfHyryYy6n9m7MlZ2HMC5LtxiHv33o94IK8wUVZPUDR6PUiUUsJQoRt3C4+AJFtXFMzK53Hyo4jmFstBynKuPBKUsTy4gcjUoeyHqkIVanujIIcws6dHg8rLszCcxNkC5MwbTKd70zpjKB5LOoPcUyzGwYxAovXJQfAJbiLtxBmVfBMuhXcjdig/HnY6mMz6ZcoD7pHYC7Xn5TTiuk3ijHW93Jjr9oGEQBVKktAbnvLs52Dy0J6iylxjUS5OAxMNgnIBSgj7m1Bmf4EziXy8W4v+ZDDztYgnKfFAvOBNQ5vTdBLUniXfwpFUBUTrF7zF57J22cGLk70PyXJ2w8/qcJjPnnJQS2aNidbczvgpx1ZVQsuGvJl+8zyV0+1ioXxv4F6AKz/kVESt27pkByOkQxHwbWrOuZVL/sk9ykeXkPRb2oFnOGLMeSgRMT08uKjbCf/Frq9KgUId4xou8+g6X4rEiXQxff0+eb1MfT1xDhnHFJ1zxyK7R+5KWSmP1ISsFnRX0VodyXM/XXBm5gRFM8gac3IH32zqTAl4p9AvzoQ==
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(36860700016)(82310400026)(18002099003)(56012099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	nzDjaIvE7hcfmtz7jNTQg8KHyjm3UpnVag4R1J8o6i0RFwdA+AVYA5GpXU8y6HR9DEm2G2AsB5M3nmQ/ItlWYui6TBgCU5iS0VaaQEdxifaYibJoTa8pOgh7FZOTd+WOnz8R0xv2JLTXvIgyZKx2ppDdh2W9M+Lzmim5zhHnfmxR+ofXSBupq+UiV9VSQTVyPPwfRs+67fU8cYJfQlNklWUAnf6IdGGWeAlvbFu9el38Ibxh/D2Zx62PDKDrcUe5HK/Sk35MncOLUanYVNBBIYsmd4ZOIYWP8FGNBFsKH1GXSRroQxK8FZ0YGDW3e/0hwumuQ23WogCV0fwxDawF1ITOa76BiA4viBOkqXpo/D7mrCznPZKd+EJbjKRUVCzPNyfNwxc6XPIPn7+PcUbv35REMGABr3IM9mkl7vYDEXAGXkG4krvHY2mBhKuTapmH
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Apr 2026 14:07:30.3849
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1b9d802c-fa0e-4ecd-eb25-08dea0787e07
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SJ1PEPF000023CD.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB9344
 
-Vastargazing <vebohr@gmail.com> wrote:
-> new file mode 100644
+Commit [1] exposed an existing issue in xfrm which broke tunneling
+protocols over IPsec (e.g. VXLAN over IPsec).
 
-This should say '755', else you get
+This series fixes that and adds a test which exercises VXLAN over IPsec.
+For details please see the individual patches.
 
-# Warning: file nft_ct_timeout_concurrency.sh is not executable
+[1] commit 7fb4c1967011 ("net: pull headers in qdisc_pkt_len_segs_init()")
 
-I'm not sure we should add regression tests for regression tests sake.
-Else we'll quickly accumulate thousands of such scripts and test
-run time will explode.
+Cosmin Ratiu (3):
+  tools/selftests: Use a sensible timeout value for iperf3 client
+  tools/selftests: Add a VXLAN+IPsec traffic test
+  xfrm: Don't clobber inner headers when already set
 
-A functional test for timeout policies would be much more useful.
-We have a few of those in nftables.git but they ony check that
-userspace and kernel parsing sides work.
+ net/xfrm/xfrm_output.c                        |  20 +-
+ .../testing/selftests/drivers/net/hw/Makefile |   1 +
+ tools/testing/selftests/drivers/net/hw/config |   5 +
+ .../selftests/drivers/net/hw/ipsec_vxlan.py   | 204 ++++++++++++++++++
+ .../selftests/drivers/net/lib/py/load.py      |   5 +-
+ 5 files changed, 228 insertions(+), 7 deletions(-)
+ create mode 100755 tools/testing/selftests/drivers/net/hw/ipsec_vxlan.py
+
+-- 
+2.53.0
+
