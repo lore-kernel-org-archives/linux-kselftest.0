@@ -1,145 +1,141 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 442523DE45A
-	for <linux-kselftest@vger.kernel.org>; Wed, 22 Apr 2026 12:36:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD7033DEAEC
+	for <linux-kselftest@vger.kernel.org>; Wed, 22 Apr 2026 12:36:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776861400; cv=none; b=FraCHZMn7K01SnYDvkGxkyghnlZSAKqTgvoiZ9V9g8jzQeJinzwMKufzj7bp8I0Sw6yLdTrJG6/PU5qii6yEZVZ7cTaHj+8mQNApor7BdYXuWZkfGZBkCTNFpwiDFLOuThkdkHV2IkkyWsg0tufqh4DUdPYECEbpcYJnYHIoqtM=
+	t=1776861410; cv=none; b=qNlW2gmirmgw2cDfRw5VkRuH+p76QwwtIABDR/FaRI1Vc36XMFO1MvHMOmaHpKlY6jEuyDf2pPMZBfatHT938Jw6kTODV0caNXVRnp70KKtd/Bc8/vnaHlc6XhibXavS91/DjS1OKwT5nI05lFyvuRh2Zhy1uVWQAOi4z7zwUvU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776861400; c=relaxed/simple;
-	bh=GRci3Ps6TOnDQU277EdMiL7Fyn0ArsGYZ4aCWByhIXo=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=bB8Q9SaiUb7Gus6ayMAULlVMu3oyXVGdMuTQ0EiAN1iFBmX1CABlj36Qn5qrOhfEGmEjWjUeinkNVZUlHPMIMxIBohDGrXrcppQVQQg6s2w3Ik5+gLkfedjrxP1KkuKzxGOysZK+2FlcWrD37X0vaO2iC0YOyFgm6kznADy4IKQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SVgWHVwL; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=GcyaPDx7; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1776861410; c=relaxed/simple;
+	bh=UmlsK3nX3/45Gag00vmnNqkWEmc23oJzT6WgbnbrVH0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=nG574chUL48UyOl/QD1DtfO+IDN8opGcKbX3M1IBokPHsvqd8mMkIVc63GsjIg6NTJWFVqRqr/MB3rJo7FWY89kcWMSMa0qwjDx7LKf0leYsHg1vCAXUCRDt6fPz4yuq5PtSefNZr/1uBFiCHqOeSpwFd+rx5pVfkz9eU3VNEto=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=r1gM+m4m; arc=none smtp.client-ip=95.215.58.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SVgWHVwL";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="GcyaPDx7"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1776861392;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="r1gM+m4m"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1776861398;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=/87qWMjmdqk20+dY4xcLoxNd/NvWXE/CewiI5GysFx8=;
-	b=SVgWHVwLq5VPR+Q7Ig3eV82cmj0e8dFlzH36FXdYg6ZHskh77tkM6Fs1WWZHzHSCu+uhNq
-	fKL57Xofo+Nb7CjcJZgadefb2AfAxfiBUx0LqZHDd63Rl1LLZacTjed6ofidz/azY4xJif
-	mImzXPHgaTYmkvcjlB7yhm09Ov3mnOg=
-Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com
- [209.85.215.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-563-O1uatapINf6RnRtwagsR1A-1; Wed, 22 Apr 2026 08:36:31 -0400
-X-MC-Unique: O1uatapINf6RnRtwagsR1A-1
-X-Mimecast-MFC-AGG-ID: O1uatapINf6RnRtwagsR1A_1776861390
-Received: by mail-pg1-f200.google.com with SMTP id 41be03b00d2f7-c795fa31e18so2643399a12.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 Apr 2026 05:36:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1776861390; x=1777466190; darn=vger.kernel.org;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=/87qWMjmdqk20+dY4xcLoxNd/NvWXE/CewiI5GysFx8=;
-        b=GcyaPDx7cedNVMaK/tZGBH7XaxfkEi6PkhjPp/dXbsRfftimWO+1xDBO9mWm3C4whz
-         GRiamSZPv3zJIJdcKVv7S4Fdpc0+Y5EXZtTSMsjrEYYXBmXxkQWCuZ5yLMYZ42+eQwy5
-         jAyAh3nNEmt1ZFlwX88ay0GaQbke+86qNS1llNfiNsJbVWAuPSNHGDW+5PXZ+EOoE1I9
-         VzwldsyMfVJnwt68FVnrojr4MmkfyYjF3O8LKYF85tA4kU6pcWX97ATCa6c7ItqANi9Y
-         jOqeKL6OoCLPx/iOrlPpxKZlc4Tn0zpxLmvUA5Q+A2tqD6KRD1/B7K0pGhwa/77SdJTi
-         YGtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776861390; x=1777466190;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/87qWMjmdqk20+dY4xcLoxNd/NvWXE/CewiI5GysFx8=;
-        b=o7SdvSk5gYRXJu3z9dYehgMz7Wu96O9VC/QlInEb36Y4KDW7kzrB40+xdTBZeqTDPs
-         009w2BK8TEkq+27ARKR5Dp1JepXnF7VWVzTPktrtr/MMr6iwI5ZJ9+6KKVFwnY3YPe/F
-         O7K5WQSP69ntS8dgT9WcEv0XxNs7ymFxo13d0LA067XX788+wzfW4vAQvmecw7PMIeCP
-         noUksmCfYjJTXoTFkqVMMJNGpdQzrkTOuDhwo7jW9WgbhJWZ66TdFqd3EQO9vfqRhsPZ
-         cElHihLt5+sUJTa+GYWPmnasy5X0W80L0nCNLrrai/aaHHoDbMZIl7N5piQF2jPyplFQ
-         +9Dg==
-X-Forwarded-Encrypted: i=1; AFNElJ/IWk1LJGUqEZ5QbmSZ1jdyNUMBvHv8FeGyhoV4USoV5ZfEYIU5CoGgtNtt9RbXhBrSc8Fuegjsp0l0onruUeg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzQAPDboVdm1dr8A8Jzu3l9Xc+qQ8XuYglvTIneMhxfRBw2d7aQ
-	L2Kh0FgGDVAB91D8ZA9ZstC2KzljtoM7g1LINEfPk1clBqxaGPlxdHNzVYs2a+jMtqCvIkS+jRf
-	z5JiltFcwo2Yvk/JY1r0kVSXsYzEei9fPw36eO/TQGKYVeTAg0dJs015qg9SCTjXqnXE6Ew==
-X-Gm-Gg: AeBDieveMJX5xiPptqpuLg2Ht6btDiCumgXUctZggAlHqi/dxnAVWO4yomA7dwgpv+8
-	EdOY+1658D+gkkg0UlaiohSnYeLCxJXzC+or5cafxbr10T20oRlDaybEmTyfCeMGiCgz4iAvwPp
-	kWUMLMIBjMSxGLx/1UWi3yFqW5/1FMhJg2xczsk0PZ8B6p6fJHyxnt8BaQIcz+SoVcGxsfxTtOm
-	EUt+dIvsl74t63bC3CApJtt21ppv1UZQy5mtzbFi9kpEqTWBajii40X9E8IDOj4zkGX/fqmDE2u
-	JFLFJxGGraou+d9AoGwx2niIi8gvRDubwiLJEMAYtlZynP5E+gAdzX7CxJKek7AxduzIFFUqNuy
-	shadjizUkT6STotHEBqn86vUvQbdh
-X-Received: by 2002:a05:6a00:1a0b:b0:82f:b519:a5d0 with SMTP id d2e1a72fcca58-82fb519a776mr10942175b3a.39.1776861390352;
-        Wed, 22 Apr 2026 05:36:30 -0700 (PDT)
-X-Received: by 2002:a05:6a00:1a0b:b0:82f:b519:a5d0 with SMTP id d2e1a72fcca58-82fb519a776mr10942152b3a.39.1776861389901;
-        Wed, 22 Apr 2026 05:36:29 -0700 (PDT)
-Received: from fedora (g3.ign.cz. [91.219.240.17])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82f8e9d35acsm17671348b3a.15.2026.04.22.05.36.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Apr 2026 05:36:29 -0700 (PDT)
-From: Vitaly Kuznetsov <vkuznets@redhat.com>
-To: Piotr Zarycki <piotr.zarycki@gmail.com>, kvm@vger.kernel.org
-Cc: seanjc@google.com, pbonzini@redhat.com, shuah@kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- kernel-janitors@vger.kernel.org, Piotr Zarycki <piotr.zarycki@gmail.com>
-Subject: Re: [PATCH] KVM: selftests: hyperv_tlb_flush: replace NOP loop with
- udelay()
-In-Reply-To: <20260421172953.191345-1-piotr.zarycki@gmail.com>
-References: <20260421172953.191345-1-piotr.zarycki@gmail.com>
-Date: Wed, 22 Apr 2026 14:36:17 +0200
-Message-ID: <87v7djgoji.fsf@redhat.com>
+	bh=pM2IjHIbVO6/fYfLnhdC4p1EDvpZh2+saCdt1MD8IdM=;
+	b=r1gM+m4msXumUedGixP1iFrAGozWcRsMnhcJJYsUHFRXCT5VG07QFCNJFjTDRn7MH9DVP/
+	d7T7u0F/nZ8SogcJO2Ciw/3DQbIumsM2legm1Tpr41EZEPeu/CDlHJMrEOr7Rf/HnlUbNZ
+	djJDLejb9J3tZU8uMJULxQ9LSZi3qqo=
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: netdev@vger.kernel.org
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Eric Dumazet <edumazet@google.com>,
+	Neal Cardwell <ncardwell@google.com>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	David Ahern <dsahern@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net v3 2/2] selftests/net: packetdrill: cover RFC 5961 5.2 challenge ACK on both edges
+Date: Wed, 22 Apr 2026 20:35:39 +0800
+Message-ID: <20260422123605.320000-3-jiayuan.chen@linux.dev>
+In-Reply-To: <20260422123605.320000-1-jiayuan.chen@linux.dev>
+References: <20260422123605.320000-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Piotr Zarycki <piotr.zarycki@gmail.com> writes:
+RFC 5961 Section 5.2 / RFC 793 Section 3.9 require a challenge ACK
+whenever an incoming SEG.ACK falls outside
+[SND.UNA - MAX.SND.WND, SND.NXT].  There is currently no packetdrill
+coverage for either edge.
 
-> Replace the open-coded NOP loop with udelay() which was added to KVM
-> selftests in commit 6b878cbb87bf ("KVM: selftests: Add guest udelay()
-> utility for x86"). The NOP loop is CPU speed dependent while udelay()
-> provides a deterministic delay regardless of host CPU frequency.
->
-> Signed-off-by: Piotr Zarycki <piotr.zarycki@gmail.com>
-> ---
->  tools/testing/selftests/kvm/x86/hyperv_tlb_flush.c | 8 +-------
->  1 file changed, 1 insertion(+), 7 deletions(-)
->
-> diff --git a/tools/testing/selftests/kvm/x86/hyperv_tlb_flush.c b/tools/testing/selftests/kvm/x86/hyperv_tlb_flush.c
-> index c542cc4762b1..68ebd790ff41 100644
-> --- a/tools/testing/selftests/kvm/x86/hyperv_tlb_flush.c
-> +++ b/tools/testing/selftests/kvm/x86/hyperv_tlb_flush.c
-> @@ -141,15 +141,9 @@ static void swap_two_test_pages(vm_paddr_t pte_gva1, vm_paddr_t pte_gva2)
->  	*(uint64_t *)pte_gva2 = tmp;
->  }
->  
-> -/*
-> - * TODO: replace the silly NOP loop with a proper udelay() implementation.
-> - */
->  static inline void do_delay(void)
->  {
-> -	int i;
-> -
-> -	for (i = 0; i < 1000000; i++)
-> -		asm volatile("nop");
-> +	udelay(100);
->  }
->  
->  /*
+Add tcp_rfc5961_ack-out-of-window.pkt, which in a single passive-open
+connection exercises:
 
-Oh, I completely forgot I added the TODO :-) Thanks for the patch! I
-also gave it a spin and it looks like rdtsc() from udelay() doesn't
-hurt.
+  - Upper edge (SEG.ACK > SND.NXT): peer ACKs data that was never
+    sent before the server has transmitted anything.
+  - Lower edge (SEG.ACK < SND.UNA - MAX.SND.WND): after the server
+    has sent 2000 bytes (the peer-advertised rwnd forces two 1000-byte
+    segments, both acknowledged), peer sends an ACK that is older
+    than the acceptable window.
 
-Personally, I belive we should now just drop the whole do_delay()
-function and use udelay(100) instead. We have only two call sites and
-there's no strict requirement that the delay time should match. 
+Both cases must elicit a challenge ACK
+<SEQ = SND.NXT, ACK = RCV.NXT, CTL = ACK>.  The per-socket RFC 5961
+Section 7 rate limit is disabled for the duration of the test so that
+both challenge ACKs can fire back-to-back.
 
-In any case,
+Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+Reviewed-by: Eric Dumazet <edumazet@google.com>
+---
+ .../tcp_rfc5961_ack-out-of-window.pkt         | 48 +++++++++++++++++++
+ 1 file changed, 48 insertions(+)
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_rfc5961_ack-out-of-window.pkt
 
-Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-
+diff --git a/tools/testing/selftests/net/packetdrill/tcp_rfc5961_ack-out-of-window.pkt b/tools/testing/selftests/net/packetdrill/tcp_rfc5961_ack-out-of-window.pkt
+new file mode 100644
+index 000000000000..2776b8728085
+--- /dev/null
++++ b/tools/testing/selftests/net/packetdrill/tcp_rfc5961_ack-out-of-window.pkt
+@@ -0,0 +1,48 @@
++// SPDX-License-Identifier: GPL-2.0
++//
++// RFC 5961 Section 5.2 / RFC 793 Section 3.9: an incoming segment's
++// ACK value must lie in [SND.UNA - MAX.SND.WND, SND.NXT]; otherwise
++// the receiver MUST discard the segment and send a challenge ACK
++// back.  Exercise both edges of that window in a single connection.
++
++`./defaults.sh
++sysctl -q net.ipv4.tcp_invalid_ratelimit=0
++`
++
++   0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
++  +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
++  +0 bind(3, ..., ...) = 0
++  +0 listen(3, 1) = 0
++
++// Three-way handshake.  Peer advertises rwnd = 1000 (no wscale), so
++// MAX.SND.WND is tracked as 1000.
++  +0 < S 0:0(0) win 1000 <mss 1000,sackOK,nop,nop,nop,wscale 0>
++  +0 > S. 0:0(0) ack 1 <...>
+++.1 < . 1:1(0) ack 1 win 1000
++  +0 accept(3, ..., ...) = 4
++
++// ---- Upper edge: SEG.ACK > SND.NXT --------------------------------
++// Server has sent nothing yet, so SND.UNA = SND.NXT = 1.
++// Peer sends a pure ACK with SEG.ACK = 2, beyond SND.NXT.
++  +0 < . 1:1(0) ack 2 win 1000
++// Expect a challenge ACK: <SEQ = SND.NXT = 1, ACK = RCV.NXT = 1>.
++  +0 > . 1:1(0) ack 1
++
++// Advance SND.UNA past MAX.SND.WND so that the lower edge becomes
++// reachable.  Issue two 1-MSS writes so each skb is exactly one MSS
++// and PSH is set by tcp_push() at the end of each sendmsg, keeping
++// the setup independent of the TSO / tcp_fragment split path.
++  +0 write(4, ..., 1000) = 1000
++  +0 > P. 1:1001(1000) ack 1
+++.01 < . 1:1(0) ack 1001 win 1000
++  +0 write(4, ..., 1000) = 1000
++  +0 > P. 1001:2001(1000) ack 1
+++.01 < . 1:1(0) ack 2001 win 1000
++// Now SND.UNA = SND.NXT = 2001, MAX.SND.WND = 1000, bytes_acked = 2000.
++
++// ---- Lower edge: SEG.ACK < SND.UNA - MAX.SND.WND ------------------
++// SND.UNA - MAX.SND.WND = 2001 - 1000 = 1001, so SEG.ACK = 1000 falls
++// below the acceptable range.
++  +0 < . 1:1(0) ack 1000 win 1000
++// Expect a challenge ACK: <SEQ = SND.NXT = 2001, ACK = RCV.NXT = 1>.
++  +0 > . 2001:2001(0) ack 1
 -- 
-Vitaly
+2.43.0
 
