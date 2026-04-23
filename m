@@ -1,68 +1,67 @@
-Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72674365A1B
-	for <linux-kselftest@vger.kernel.org>; Thu, 23 Apr 2026 20:55:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98DD736F426
+	for <linux-kselftest@vger.kernel.org>; Thu, 23 Apr 2026 20:55:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776977710; cv=none; b=oQG2YCxql5esc4XJ6l8FMF3WMvJqBuDjDMAoCnFEsllR8xCpL8R6q04yrLgjLCrmUZY/3BxaaioCCNcb/ZI/X80A3kvRd5XOl35zJRjuMykuuX1KvArmlBPa05A7ZWf3j5f2S/V7YqFpsdfT0YbBb8FRTWxnTooXuVlDupOqfTs=
+	t=1776977716; cv=none; b=OOanKMLAKdVNhZHKYbRPidj1KxkOTzp348I6v8fr+newS+/ZjQPJXULfVosWttthg5x8UrS4q0ZzjeYupXhlYrmg5eFSnue3p/yYKzuDTFBDcFUWWNkPhxvjpMc0nM1b2Wa9KphLnNXZGMiP44xGILeP9hbhw7QVIx2V4ZYAPEU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776977710; c=relaxed/simple;
-	bh=Lx8Le50+nsjiQgeV6zgGG9hZjacD3w46irda8Vp6AWc=;
+	s=arc-20240116; t=1776977716; c=relaxed/simple;
+	bh=N6DLiVASeuimkj0ky/CjB9cS4a6lMcbjqDXmylGeHH4=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=IDwzjmY34WA9VVhBm9UHuTKGCkZ0v/Zh87zQ4iS1+H6ose3rpFXTo8zwxvjVXqHpv6C9e4E+EyLwNSBo1HbRPVJ+mtKvaC15iyAjRp2NNz37JaBnQlK+LeVWB3sykCIusNHOr29n7t7uA+5KatvUAkpjoI04IhOGxf6fkMx8F8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lCeKlXA+; arc=none smtp.client-ip=209.85.167.171
+	 In-Reply-To:To:Cc; b=oRcVOBs/Ge3WZDLJ50ebhuVgXNAniyBBQSCGBQ+oHQU2d+z5922DhQLSg0dzS0Lx3fFQaAbFIJkMVEagvccvi3LLRExth8bgzC+tT3w3IX1gA1PyC+TBTfSryNv/fj8156rzQYngsM+dENTLhw/VNab/AaD05pTGUTZH+u2jbX4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jToRvGcc; arc=none smtp.client-ip=209.85.167.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lCeKlXA+"
-Received: by mail-oi1-f171.google.com with SMTP id 5614622812f47-479810de04bso2590681b6e.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 Apr 2026 13:55:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jToRvGcc"
+Received: by mail-oi1-f175.google.com with SMTP id 5614622812f47-479d68a90a7so2684750b6e.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 23 Apr 2026 13:55:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776977708; x=1777582508; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1776977713; x=1777582513; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=qXxdsOArU9ZJHRv0gxhcPUMG6BfjYVh32ZwNXW3DQls=;
-        b=lCeKlXA+HVILeoFEQlz44dUNEhFS8T99IFanrFztEbctbGZUEf5Bk8mT7wZ1jJ4sDZ
-         MJZqH/E9GlY5bjlwyv1V5fe17nvh4O7sVKFT4OVmMwDMMPpdvqe8vLiYaF5jRaQatyFa
-         Pd9fzPjwx3Ez9T79ZXZNr1E33eCmhAr4sb3tGIUkvhXighdDCNMgu46NxAV+On97eKmp
-         yiD4wi597MvfJN1bicceCjkZ9k9evwknLxSBWFOxYu0tVcKGaMYxIXk3IiXov8VuYoZO
-         5figCpso0ekt4R+HgBUwvfH18IHYHAbKeavSGleE2+z+D9cXoQ4EPBrbPPG28Vpu9N05
-         021A==
+        bh=xQ+t538DK5KlP4845w+LRXbRqcfRle16Hyt2NlH5lpA=;
+        b=jToRvGcclK9hclu3TlMODI1A/hm22T66vuAHbF6Io8ryfweBmr/7/i1qDMmS1kgLc+
+         bxu/uPyUF8bG+S+Xu5bnRB3BamWrl/LOn9a09dQlxSy6tZJ19P+0GfimLZuCu55Rlp6s
+         l01o4TvTEL43eZu3qtiUCb6klOz3X557A2PbfChvkCwFbN0ewUiZXmk3H5qzDxsqPNgT
+         Yz59Z35u8nIIEcXoHsm1IVty4JTPcBl5a4uVpZM2QCsXE/vmM5b3IWdPs18QLBHcDIKI
+         4XRPZqCkc5Kqhot9LaLRetNvfWqCnKRU6eGufELtprHCP6BgpELiV+rdfZvHzQkoMs7f
+         FgmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776977708; x=1777582508;
+        d=1e100.net; s=20251104; t=1776977713; x=1777582513;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=qXxdsOArU9ZJHRv0gxhcPUMG6BfjYVh32ZwNXW3DQls=;
-        b=Efmt1DO7NWsophKd2pP3jXf6pYEsrS42GAMjGyX3ssBpbtc1l7f0SsEZXd64FhvgWh
-         3BrvQHDqjl5f3ivtn6OxSST4xTJlSudwI2u8d3q2bkjQTFOGRTWtQH5WxEuBen/MC6kD
-         0zU4EAmN694j1rjf+/KgcLbtnPioT0eB6R9xVW+0dObBLWLbxv1yJBUvDpUX/lsKBzj7
-         gcQBJaWm4GMTHacNbvJfVle6BPWx7KrTBwL3/9gDuTJisrcsfcPqhd6hhtq0doMUsLsk
-         KOsNacD4Cc8bM62ripfMB/b601wMPlG71WJnFOPbpOGgWV+wa3Il0ywuuwPWr3MFlL/0
-         HdTw==
-X-Forwarded-Encrypted: i=1; AFNElJ/fjRND3SpKrZrUi92peT3a9pi2ENmblw2V7nqg/8i8+MexPbYbQQNjHULOq2pRp/8Huk6ydev895wQeYW9IxE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxZhh7/24Gh2+QLP/bBpAEyk/YAB7N1ZsLMKFgQd3MIDSTBJrQS
-	1K9lV8xvxCodoMveMSIKY9x4H5yvA7OjUZCneu7eUdoVgwEv/r6+X1SP
-X-Gm-Gg: AeBDieulx98WDGXZEomE/l3JMg4eE7o/X8YEof9OOVIWYP8oo/hyAEoMzWuNdyEfpT/
-	MTjuUGGWyYlDTITMpc6qZ+JgojnL4+vxSfBA2FBgBBvIrnMoUgNalZ5kbqh0MjL9Kj0HlgK7VXQ
-	dGvJAehsb1X7p9xxHHnvFH/ctgOJvJXob5kot+pzkEy73xGrzeHbs+hvQ4tdmwwBDPqvysfShhI
-	pvbgb4vXsq3tJt2RJ+isWojdG+FB+fhoXn3WJD2G4DbdhM241Ex4t8lgkUSxTVxRw3t6TQi3uK5
-	p+/kbQFYQJDQWlKVKiBAJqKll1ST9Y5slYDVE/FbEe5KvJ8Lvl6/SYFVC8NYX8igq+dtlE/K1Py
-	kOUKOGY4rwMHx/u9gKGeW/2z2Rb+1nYDmzDrfAujFfbwTq1Sn4zU8QSDGBiQrzNLXisJir+hHtn
-	fVBXIVMt9NK40zyn5Rb40R/SJCSC0jjWcnvjDkH8omq96YFgd0B77EEA7L11TqqvEzyCoFc5nnY
-	McKHvrV/tk=
-X-Received: by 2002:a05:6808:2381:b0:467:f567:d609 with SMTP id 5614622812f47-4799cacba8amr15988443b6e.34.1776977708127;
-        Thu, 23 Apr 2026 13:55:08 -0700 (PDT)
+        bh=xQ+t538DK5KlP4845w+LRXbRqcfRle16Hyt2NlH5lpA=;
+        b=sYEpmnYKhOK9ZvRCQaBDUrm8r6dynLtsHQV/ZxdyxW0rETcNHD2OD4Srjwq55ei79B
+         mzYY3LqUpHbq4sVAtIAo5jp9ILmtu8z4Wnc7sYsq3iTIh94l7a9cJxtsxQCiVrkV7t7k
+         +wUxegPn9zHCuaGgAHK7JsR6rwWssJSeUxjosANE0+yDvu2Ls1vyrzCFWORJ10R8JkOe
+         eWn1hjPwXMsQ+/vC6TWWkWABhH4mCzpS4Q39pGIXZvpBS8Q2hgWe14lgC/xJFQhwbPly
+         CQtqp/0+QbddZQlPIb+5ajh1fU17C/BXRy2SVEv5ZEPivx8YJ5pIQg5oDebwhfLnV8P3
+         rI2w==
+X-Forwarded-Encrypted: i=1; AFNElJ/yAzHdN5qYrzdOJTTXJyYuXpfJR4LfzvGvGC+ceVDcUPKX92V4dD8ENhxp0kNxR+jMDDo/gvSJqciV7vxkmqA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywmr1u66J/FpOCY19IbX1yBlbkBkvfvIMDTsUjtY5CP4FpPql4F
+	jvXF8nrYuyZHzLYRl4bkV4jABjKWwQ2VNkJ4ji7G4NLta/J6vtEUE3CF
+X-Gm-Gg: AeBDieu6VgQqvnt683Ew79SH8WuUIwdMSRziwKk8GGYtYdOvypQeQcKsya+v2Vo2e2t
+	7jbP7k9tZhaYG3heyWFAoUWIUyUJwmw2Gl0JmlLOtp4AwYlMniw0XooXOaraUi79K6YVCqAIG3H
+	7CwZr3HuWC62g01RX+wd4B0a0KPIBOvZcr19enrGpluG1x3bm/202k+g4HD+oQJZtul+KtRNxvQ
+	ce4I7tv/pmfZ+ZxE1Ysm3Vpcd9wUVSMYe0AVRSETf8AppInM6tFvF3YreOV/pB5Qu9s0QH+m9Ls
+	dTQf8U9aA75qg0vTwN+VUCn9tEkRCIp8FgYSALTMFlzH3nzwfaK8BlbBqNg1wrRPYuVdqLVwNtu
+	unQruc4RyxbtyITGpHLLVCbPkraHBAUY6ws+AuAoy+mwXZXQCPXlerSpfN+lKhoXPDXxriIg3NO
+	6Vzgu2MKjaw66ghc7iJ3tmJ8uWv2xJUqHpbY7wgMR1B4Xe3oXaHXxQnEtWzuEpgGJl26dNyNCTR
+	6KBRSy9KVk=
+X-Received: by 2002:a05:6808:e68f:b0:47b:c703:4231 with SMTP id 5614622812f47-47bc7034dc7mr1386941b6e.16.1776977713420;
+        Thu, 23 Apr 2026 13:55:13 -0700 (PDT)
 Received: from [192.168.0.245] (c-98-38-17-99.hsd1.co.comcast.net. [98.38.17.99])
-        by smtp.googlemail.com with ESMTPSA id 5614622812f47-4799fead505sm14329744b6e.2.2026.04.23.13.55.03
+        by smtp.googlemail.com with ESMTPSA id 5614622812f47-4799fead505sm14329744b6e.2.2026.04.23.13.55.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Apr 2026 13:55:07 -0700 (PDT)
+        Thu, 23 Apr 2026 13:55:12 -0700 (PDT)
 From: Jim Cromie <jim.cromie@gmail.com>
-Date: Thu, 23 Apr 2026 14:53:54 -0600
-Subject: [PATCH v14 13/92] dyndbg: tweak pr_fmt to avoid expansion
- conflicts
+Date: Thu, 23 Apr 2026 14:53:55 -0600
+Subject: [PATCH v14 14/92] dyndbg: reduce verbose/debug clutter
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -71,7 +70,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260423-submit-dyndbg-classmap-foundation-v14-13-2b809a8019d0@gmail.com>
+Message-Id: <20260423-submit-dyndbg-classmap-foundation-v14-14-2b809a8019d0@gmail.com>
 References: <20260423-submit-dyndbg-classmap-foundation-v14-0-2b809a8019d0@gmail.com>
 In-Reply-To: <20260423-submit-dyndbg-classmap-foundation-v14-0-2b809a8019d0@gmail.com>
 To: Arnd Bergmann <arnd@arndb.de>, Jason Baron <jbaron@akamai.com>, 
@@ -166,38 +165,131 @@ Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-stm32@st-md-mailman.stormreply.com, linux-renesas-soc@vger.kernel.org, 
  etnaviv@lists.freedesktop.org, Jim Cromie <jim.cromie@gmail.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1776977637; l=739;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1776977637; l=3911;
  i=jim.cromie@gmail.com; s=20260203; h=from:subject:message-id;
- bh=Lx8Le50+nsjiQgeV6zgGG9hZjacD3w46irda8Vp6AWc=;
- b=SnpdcS+23XSjrZpeLIyoz7fp4858ZuhNdkUZ3gyhPRKYDKkKBaruLmuYi2tS21h9vU8M8wWZE
- Y5Q7mlfCnULCyFEZyjXTXMc7I7vQ1FQTWqcfAQXyvf5zEOLG4FrW4jT
+ bh=N6DLiVASeuimkj0ky/CjB9cS4a6lMcbjqDXmylGeHH4=;
+ b=smdObwt3/3HRk1wBYVctMzI+f80HbU+QWqDLWb82qvaWDwuJYffAI82+sQIOu7Qinq1xWmx1P
+ Ias8KDROqGBDKJUxV5hv3ogiRe2jP1pYr8OafadNijakVkg0ApTr2Nd
 X-Developer-Key: i=jim.cromie@gmail.com; a=ed25519;
  pk=C6E5ODlPQo7ZBynATXH9wg7K6HxP0pIXyf4s38Qw0XE=
 
-Disambiguate pr_fmt(fmt) arg, by changing it to _FMT_, to avoid naming
-confusion with many later macros also using that argname.
+currently, for verbose=3, these are logged (blank lines for clarity):
+
+ dyndbg: query 0: "class DRM_UT_CORE +p" mod:*
+ dyndbg: split into words: "class" "DRM_UT_CORE" "+p"
+
+ dyndbg: op='+'
+ dyndbg: flags=0x1
+ dyndbg: *flagsp=0x1 *maskp=0xffffffff
+
+ dyndbg: parsed: func="" file="" module="" format="" lineno=0-0 class=...
+ dyndbg: no matches for query
+ dyndbg: no-match: func="" file="" module="" format="" lineno=0-0 class=...
+ dyndbg: processed 1 queries, with 0 matches, 0 errs
+
+That is excessive, so this patch:
+ - shrinks 3 lines of 2nd stanza to single line
+ - drops 1st 2 lines of 3rd stanza
+   3rd line is like 1st, with result, not procedure.
+   2nd line is just status, retold in 4th, with more info.
+
+New output:
+
+ dyndbg: query 0: "class DRM_UT_CORE +p" mod:*
+ dyndbg: split into words: "class" "DRM_UT_CORE" "+p"
+ dyndbg: op='+' flags=0x1 *flagsp=0x1 *maskp=0xffffffff
+ dyndbg: no-match: func="" file="" module="" format="" lineno=0-0 class=...
+ dyndbg: processed 1 queries, with 0 matches, 0 errs
+
+Also reduce verbose=3 messages in ddebug_add_module
+
+When modprobing a module, dyndbg currently logs/says "add-module", and
+then "skipping" if the module has no prdbgs.  Instead just check 1st
+and return quietly.
 
 no functional change
 
 Reviewed-by: Louis Chauvet <louis.chauvet@bootlin.com>
 Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
 ---
- lib/dynamic_debug.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ lib/dynamic_debug.c | 21 ++++++---------------
+ 1 file changed, 6 insertions(+), 15 deletions(-)
 
 diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
-index ffa1cf7c2c72..9575b92a8deb 100644
+index 9575b92a8deb..3ae9ecabdad1 100644
 --- a/lib/dynamic_debug.c
 +++ b/lib/dynamic_debug.c
-@@ -11,7 +11,7 @@
-  * Copyright (C) 2013 Du, Changbin <changbin.du@gmail.com>
-  */
+@@ -276,9 +276,6 @@ static int ddebug_change(const struct ddebug_query *query,
+ 	}
+ 	mutex_unlock(&ddebug_lock);
  
--#define pr_fmt(fmt) "dyndbg: " fmt
-+#define pr_fmt(_FMT_) "dyndbg: " _FMT_
+-	if (!nfound && verbose)
+-		pr_info("no matches for query\n");
+-
+ 	return nfound;
+ }
  
- #include <linux/kernel.h>
- #include <linux/module.h>
+@@ -511,7 +508,6 @@ static int ddebug_parse_flags(const char *str, struct flag_settings *modifiers)
+ 		pr_err("bad flag-op %c, at start of %s\n", *str, str);
+ 		return -EINVAL;
+ 	}
+-	v3pr_info("op='%c'\n", op);
+ 
+ 	for (; *str ; ++str) {
+ 		for (i = ARRAY_SIZE(opt_array) - 1; i >= 0; i--) {
+@@ -525,7 +521,6 @@ static int ddebug_parse_flags(const char *str, struct flag_settings *modifiers)
+ 			return -EINVAL;
+ 		}
+ 	}
+-	v3pr_info("flags=0x%x\n", modifiers->flags);
+ 
+ 	/* calculate final flags, mask based upon op */
+ 	switch (op) {
+@@ -541,7 +536,7 @@ static int ddebug_parse_flags(const char *str, struct flag_settings *modifiers)
+ 		modifiers->flags = 0;
+ 		break;
+ 	}
+-	v3pr_info("*flagsp=0x%x *maskp=0x%x\n", modifiers->flags, modifiers->mask);
++	v3pr_info("op='%c' flags=0x%x maskp=0x%x\n", op, modifiers->flags, modifiers->mask);
+ 
+ 	return 0;
+ }
+@@ -551,7 +546,7 @@ static int ddebug_exec_query(char *query_string, const char *modname)
+ 	struct flag_settings modifiers = {};
+ 	struct ddebug_query query = {};
+ #define MAXWORDS 9
+-	int nwords, nfound;
++	int nwords;
+ 	char *words[MAXWORDS];
+ 
+ 	nwords = ddebug_tokenize(query_string, words, MAXWORDS);
+@@ -569,10 +564,7 @@ static int ddebug_exec_query(char *query_string, const char *modname)
+ 		return -EINVAL;
+ 	}
+ 	/* actually go and implement the change */
+-	nfound = ddebug_change(&query, &modifiers);
+-	vpr_info_dq(&query, nfound ? "applied" : "no-match");
+-
+-	return nfound;
++	return ddebug_change(&query, &modifiers);
+ }
+ 
+ /* handle multiple queries in query string, continue on error, return
+@@ -1246,11 +1238,10 @@ static int ddebug_add_module(struct _ddebug_info *di, const char *modname)
+ {
+ 	struct ddebug_table *dt;
+ 
+-	v3pr_info("add-module: %s.%d sites\n", modname, di->num_descs);
+-	if (!di->num_descs) {
+-		v3pr_info(" skip %s\n", modname);
++	if (!di->num_descs)
+ 		return 0;
+-	}
++
++	v3pr_info("add-module: %s %d sites\n", modname, di->num_descs);
+ 
+ 	dt = kzalloc_obj(*dt);
+ 	if (dt == NULL) {
 
 -- 
 2.53.0
