@@ -1,162 +1,104 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF96D31F98E
-	for <linux-kselftest@vger.kernel.org>; Thu, 23 Apr 2026 20:10:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B06E631AF14
+	for <linux-kselftest@vger.kernel.org>; Thu, 23 Apr 2026 20:22:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776975038; cv=none; b=l2dQNJ3nklnSx3cySBnz2XoBqIQODtyPrGEKIJQ1ZtT1huSVDvQQDIOLNZrxlu1pM/4MIihdE/fc/SYTNXIVKm/VmblhvufZ57vdD2oGS/Esh7WGaHSVDlYlmlyofVGcqpQ4hdCLcutbRBDH04O30GXbhwLv2AMxkcHjHiY4ImE=
+	t=1776975776; cv=none; b=DLj9KTQjjVfI2arLbDMbnA5FM0hM50fCOmLBYHR+bBIRAEK0NhehhBH7vKHjGNSDpFQ+vcuCMr0+Cy+k10RCqVCLilXOr1Ptij9544bs8jA3xc3FQXNV+ysq3HUh1alTAwR8Y0wCl34QJ/MiQB20UIFDN23RB/I/Jke7o11W/QQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776975038; c=relaxed/simple;
-	bh=HWvc3SolTkjILjVuQingZd/cQ6XMRPtVQk3Bexw8POc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=snTXeRvv2/HacNaNZTkWgJu9VgHBijY2Sz0DF2+2m5y0YAVNXfTzPgmfrXu9wIYRJSMmIoObCoDDx7iFGScNTsPc5X9ahyLkvDV3i+pYJOo6cPjCjJhuLNGG3/FNd5OXdJsKffHOWg3UTdhTl6AJTLuDlwpai/1AnHMGZ0G1D3g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=esHd+RDF; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=uIfRLiTC; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1776975776; c=relaxed/simple;
+	bh=0yoTTIK9jvtoaN6oDnsx9bypKCAdqDn3T/Bi9awqNlY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=gYcx65yHhdaoQbvYw5aV8uNKSvYSM55uXaHYSvcmH6BdNLAFk32FPaY0JlckWoYUsFqSF/ytaJzohFWMFfzVGwtwrsvXVljRCGFPAI3dXxam+UgP1f6PJzL5oDlQJbuqB+qdZC4IzZFE+QEbwLJRX7qgjQgkhWiEWMJ1j1hLnes=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NSHVaFxV; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="esHd+RDF";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="uIfRLiTC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1776975036;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=L1G8kt4KIcRoHxbZhKFDwigWKJXLBw/Au6uDx0Oi0Fg=;
-	b=esHd+RDFq2x4QyR8cO1UheK9aUGBLo8yhuGXtza8i4OzuxLgyBCJDPc84ZVP0XaS/BbErZ
-	E/cOcOfWKu8q+BVpwkcugprg/ne2Dw6+w6dfvSSQotkoXqKJSMbvSqqDoo0dziA4Eod0CO
-	vRb4WM3htMsk9ez6X8dNzY05BP0+6XE=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-190-92STC5FRODm-EY-1zUP1yQ-1; Thu, 23 Apr 2026 16:10:34 -0400
-X-MC-Unique: 92STC5FRODm-EY-1zUP1yQ-1
-X-Mimecast-MFC-AGG-ID: 92STC5FRODm-EY-1zUP1yQ_1776975034
-Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-8eb82634cbeso885899485a.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 Apr 2026 13:10:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1776975034; x=1777579834; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=L1G8kt4KIcRoHxbZhKFDwigWKJXLBw/Au6uDx0Oi0Fg=;
-        b=uIfRLiTCfJA0XH3cVVfxBGtSRk78RR9/pGET5yvBE1xAZGMOe+JfXigqRPHWaUB3wh
-         t8w3bJnlIX9FKxFprvDfJ5sN5rvf9l3raPfP8UFyI3k7adcS39wB+I4djBjUTWS8pn23
-         pJ+M04GcyseVtZHuqJ3FY6umojVzhu5L/JkHKUje14BQnbmQdrDNW7a3C1jZUTsOnJGC
-         PCBEQdsewKBVA6dzTcHGsb0CDBCD8leuUWoqJAnD4FH2x4CVLaQMDsYZqoYHpVO7TlrQ
-         LssGP0faSuzyn6Ite29VecxdD5i3ttUL98+q+b3gp3dVU4k/xzys/0JuY0DJI4JnuxCt
-         tTsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776975034; x=1777579834;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=L1G8kt4KIcRoHxbZhKFDwigWKJXLBw/Au6uDx0Oi0Fg=;
-        b=JFvjnydWk0GYpVA1zpktW7cQzaOHkB4lcL8cKF9D1EWwyKBiVJFrOD92z9g+0QQNcz
-         FR35W/disUgxCxsoLsYFqd2/+bD0q2lEI59DGIagrvhq3rJ3/Wc5KeG0Z6pyiEQ6Klf7
-         861jD0pemQviwleYtwYQGgLq8lDQBfykU1dNPE/MGF3ev5jpCVczQz87xkMpXdb9Tjg3
-         59N1XBYOhxmGYSQvumTanYg/ZgWvqTUaVetp29ZLJxkSGmY5DKndoN6HamrmVgdXAULT
-         5HEJqc8lT2e+677GVw18RPfBeMjR4jOcc3bedbwZYNDaB9XfCQScmgkXpXHgu7P/EUXD
-         Q8bw==
-X-Forwarded-Encrypted: i=1; AFNElJ+/5jDp+ELdZWUchO7SMLwmS+gXm2fKj7x3p1q+TiIFAl1lnvRCQTC0issCIIcSWwSdmnBPJ3/pqAnOesBiYgs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyBdxgcScwDXLev/fgP09qcsWV7l7i8LiCzRp4WXqgGJ/PUVTas
-	+PKJzKpKV2QwqLJziwjbSfFThu3WMVSQPhhz5KOF2yw8jPsqkDwxPPIhyogcbD35Noe0rf5/Mz7
-	Yey+12hjMrGqEfdISxam1o3sgN8iM7phPaqW4fVFBxt1MZUIU8easZGROY6qlyTOqiLfLNg==
-X-Gm-Gg: AeBDieueWgPAj9oX7ldrTA5A/2IuGKJv8wpHro870cuf7X8m3TF0ymY/YVHPO7HAf7k
-	7Sgvj+wN8mbYZqEUclU8/uA5eFAw4QmIWwHoXgGNuUGGOTh4cIKMPQEcbwmQoKWVepJ4msgSpW5
-	7dJxkEJEpFXskhsq+0CFXCjlbLwyiULPfdIAcxXQibw62ZYGZftuk398Sc+xKXrNMk5gWYI9Stn
-	PE6R3eYMhXmfnVuCqS+8F9RVudQXXyozYx2T3fWBYnbos2SsbdLM5MhegC19ixw0+1bK30Mpaxk
-	xPPrTpPb+BXyw5fbkYU3zMM0pKr0tt0ZeqYD73EX/6h6Iik6oz5SK0ibWo9FjOLi/hf6E69g9yc
-	hPIQkdakh4//i+OPLyIqz4Fp3bDdYUV2YPeDVdnLOn0++c8Z7Brodsdhk8A==
-X-Received: by 2002:a05:620a:25ca:b0:8df:1541:d782 with SMTP id af79cd13be357-8e79236e338mr4156918585a.52.1776975033982;
-        Thu, 23 Apr 2026 13:10:33 -0700 (PDT)
-X-Received: by 2002:a05:620a:25ca:b0:8df:1541:d782 with SMTP id af79cd13be357-8e79236e338mr4156914485a.52.1776975033492;
-        Thu, 23 Apr 2026 13:10:33 -0700 (PDT)
-Received: from x1.local ([142.189.10.167])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8e7d8edb789sm1845246085a.31.2026.04.23.13.10.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Apr 2026 13:10:33 -0700 (PDT)
-Date: Thu, 23 Apr 2026 16:10:30 -0400
-From: Peter Xu <peterx@redhat.com>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: Kiryl Shutsemau <kas@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Lorenzo Stoakes <ljs@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
-	Zi Yan <ziy@nvidia.com>, Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Sean Christopherson <seanjc@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, kvm@vger.kernel.org
-Subject: Re: [RFC, PATCH 00/12] userfaultfd: working set tracking for VM
- guest memory
-Message-ID: <aep8tsYFfr_Xe54q@x1.local>
-References: <aeImfRrrvr3UoKtL@thinkstation>
- <aeTnlQUOOh-dHG8z@thinkstation>
- <34f75083-29a3-4860-8a6e-94551d37ac6a@kernel.org>
- <aed6fHLrIdahbdY3@thinkstation>
- <b77d559b-215e-460a-a268-e63b8273ef42@kernel.org>
- <aeorZMvKwu8zKX5i@thinkstation>
- <aeoxnuGKO3uqS2kG@x1.local>
- <aeo5IPpQi7onyjTF@thinkstation>
- <aeprnnccJeyHB2rt@x1.local>
- <17b0dc02-eee3-46d6-9afb-5f81a3a20216@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NSHVaFxV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CE92C2BCB9
+	for <linux-kselftest@vger.kernel.org>; Thu, 23 Apr 2026 20:22:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776975776;
+	bh=0yoTTIK9jvtoaN6oDnsx9bypKCAdqDn3T/Bi9awqNlY=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=NSHVaFxVgnvgDFPLBJRn/HSJnZnyGD/ETRl2aeH/5+8ftgO6I014jzvwbboCkL/DV
+	 vSWn2GWQ5rtQ7079GaIuISrBjyLDaPTqQi+kf9+KM1vwpr165BU01xWZy4Y49+57TZ
+	 UAxDW/LMf95RShQtkbIfGhHE4qT0faGUC97lsJtH7QRpv2bGHVpOhjrs/I8Y5XG/Q1
+	 nF91M1WNGQyg5AsFfd+gta7suKTnNv09DE/0DPSCHxU62RKYFe7Cx+cUywkvw5vJ1D
+	 3XjZTzwYiowb836iNPatcsPWNutQlMcwT4zF0r9zH/oLbvkvc2ftXVJ4tPBCp7MYbU
+	 E8NxenGg4tqOQ==
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-b932fe2e1a7so170142066b.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 23 Apr 2026 13:22:56 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AFNElJ8wV9XoBGVc+Anpvuwstr+DTfucLEagVJkQUgEcA7mcWfefnEA/6sNDfOkzcPVuH+L3iaK09JGgaJI8yjOOTRQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywf4zXGhx0XnqZUeQRuKCzglQaJqMwPZdwHWlUF8rb/raFdTfTc
+	A/6i8bGGwh674B/jVIiCGsYJnZ4AQ/Rp4mFPAzyH9/06grlPxJa1ZyE+3Y/YZSapBhQqZvZ4x/f
+	kAWzDknMzMKbQCIzrViHtQJ18vL4wic0=
+X-Received: by 2002:a17:907:6e90:b0:baa:65b:fe43 with SMTP id
+ a640c23a62f3a-baa066b40d1mr643391366b.38.1776975775156; Thu, 23 Apr 2026
+ 13:22:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <17b0dc02-eee3-46d6-9afb-5f81a3a20216@kernel.org>
+References: <03a23a7a-58fe-42f4-a294-9d688ce33e2d@kernel.org>
+ <20260422190847.216343-1-pratmal@google.com> <da96efa9-401d-4d11-90cc-00ebff340921@kernel.org>
+In-Reply-To: <da96efa9-401d-4d11-90cc-00ebff340921@kernel.org>
+From: Yosry Ahmed <yosry@kernel.org>
+Date: Thu, 23 Apr 2026 13:22:43 -0700
+X-Gmail-Original-Message-ID: <CAO9r8zOurrz71zxi7kbe_fYxqyQiizrHpkv_1rqGg3x9YzgAdw@mail.gmail.com>
+X-Gm-Features: AQROBzAYv-6W8FmrEkCiowKjw-qG_okPOzeXzxeHNGb6zyZqY0KL08DwDTBCY10
+Message-ID: <CAO9r8zOurrz71zxi7kbe_fYxqyQiizrHpkv_1rqGg3x9YzgAdw@mail.gmail.com>
+Subject: Re: [RFC PATCH] selftests/mm: use pattern matching in .gitignore
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: pratmal@google.com, akpm@linux-foundation.org, shuah@kernel.org, 
+	yosryahmed@google.com, ljs@kernel.org, Liam.Howlett@oracle.com, 
+	vbabka@suse.cz, rppt@kernel.org, surenb@google.com, mhocko@suse.com, 
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 23, 2026 at 09:25:30PM +0200, David Hildenbrand (Arm) wrote:
-> > 
-> > The other thing is, as I mentioned in the other email, I still don't know
-> > how the current RW protection would work for anonymous.  I don't yet think
-> > the user swapper can read the anon page with RW-protected pgtables.  So far
-> > my understanding is maybe you only care about shmem so it's fine, but it'll
-> > always be great to confirm with you.
-> 
-> I wonder if uffdio_move could be used for a swapper implementation instead?
+On Thu, Apr 23, 2026 at 6:28=E2=80=AFAM David Hildenbrand (Arm)
+<david@kernel.org> wrote:
+>
+> On 4/22/26 21:08, pratmal@google.com wrote:
+> > (Resending to correct David's email address. Apologies for the noise!)
+> >
+>
+> Heh, no worries, I didn't even notice.
+>
+> As long as you CC one of the mailing lists I'm subscribed to, even mails =
+to my
+> old RH address will still hit my inbox.
+>
+> > On 4/22/26 18:04, David Hildenbrand (Arm) wrote:
+> >> On 4/21/26 20:30, pratmal@google.com wrote:
+> >>> From: Pratyush Mallick <pratmal@google.com>
+> >>>
+> >>> The current .gitignore hardcodes each generated test binary by name,
+> >>> requiring updates every time a new test is added.
+> >>>
+> >>> Switch to the patten-matching approach similar to KVM:selftests.
+> >>> Ignore everything by default and then allow source extensions (.c, .h=
+, .sh)
+> >>> and tracked non-source files.
+> >> That looks pretty nice. Any reason for the RFC? (iow, are you unsure a=
+bout some
+> >> side-effects?)
+> >
+> > Exactly that. I verified that the build works fine, however I sent it
+> > as an RFC just to be cautious. I wanted to get some feedback in case th=
+is
+> > might introduce some unwanted behavior that I'm not aware of. :)
+>
+> After taking a peek at the KVM one, I think what you propose makes perfec=
+t sense.
+>
+> I do wonder, whether we want to make our lives easier and rename
+> "local_config.h" to something like "local_config.h_gen", so we don't need=
+ the
+> "re-ignore" part.
 
-If RW is justified to be useful first, maybe.
-
-I had a gut feeling Kirill's use case doesn't use anon at all, then if
-nobody needs it we can still decide to not support anon.
-
-> 
-> If we ever have to read from a protnone page, maybe we could teach ptrace access
-> to do it, or have something that can read from prot_none areas -- like
-> uffdio_copy, which can write to prot-none areas.
-
-Somethinig like swap_access() in my proposal can also partly achieve that.
-
-https://lore.kernel.org/all/aYuad2k75iD9bnBE@x1.local/
-
-There, it was only about reading from swap so far, though.  But that one
-might be easier to be extended to read PROT_NONE and directly put data into
-buffer user specified (ps: in my local tree impl I named it maccess() to
-pair with mincore(), but it doesn't really matter; it doesn't even need to
-be a syscall..).
-
-To me, the interfacing is not a major issue.  The major question I have is
-why RW protection can help in swap system impl when we already have uffd-wp.
-
-So I want to make sure the use case can't be implemented by uffd-wp already.
-Because that's really what we might do for QEMU.
-
-The other thing is I want to see possibilities of reusing any new kernel
-feature that can provide hotness.  Currently idle page tracking has issue,
-not only about perf and rmap, but also on not working with mglru (defaults
-for Fedora/RHEL).  If we can split the requirements and solve the hotness
-issue, then it'll also be very helpful.
-
-Thanks,
-
--- 
-Peter Xu
-
+There's also the *.mod.c part, but I am not sure why that is needed as
+the current .gitignore doesn't have anything with .mod.c in it.
