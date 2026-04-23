@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 888393F076C;
-	Thu, 23 Apr 2026 13:28:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 974BD28B7DA;
+	Thu, 23 Apr 2026 13:31:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776950889; cv=none; b=TZ8cDQFMdNM6su7k34nzDJ1TvUktY58YbizH71A2YMpFzzzD6Ij4rJDLrwmSw2YhljIhFEPNfxdfe1rifjPe6BZMt+1YzJaX0H7dkVPkFRc3OyB++VnTfGbseWIjzOCscSyentZqvWaY+6brSOUxJa26G/f5wAfDYpoe6Gd0muQ=
+	t=1776951080; cv=none; b=a6rfci/rpko6Kng6y6OEapBNqLpPqtW/RWMsWANyqCHnkK0dyIosK7dGcNXFxi3y/uJN2vrS8ehQKwr1R2y1lz6k2ZceBSH37+WP2rEL8bD93ODk1vcLwuYVBtybGPFa7GXXzuV0gJ1HdISB9hxxKyAluwyPpDMX2LfPT9zWu+g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776950889; c=relaxed/simple;
-	bh=UdQJdVZKPGon/fRA+Ymep9Kcr+GFrjgmKm4qj3xWeYY=;
+	s=arc-20240116; t=1776951080; c=relaxed/simple;
+	bh=KMe0YNCVeH3Ab45BSIZHBghW101L8KHnVWa2ygzk6FM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=C5IlCW4Uja7w0gdhSLwvk/O9fwhke5zywfjikuMm77fSoSEa/TKAedWNTAttUMBT7tCOWbYtYWxTUUl3G/PIec2ONe/9oJ61zHxDGmfjdrDDtoasfJ7g3VFeIvp0M5i54wA4CPm7j5dYbbx0Os1KZebME+B/67BjVA9U0foF2II=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DGgrrB0I; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=W+rZ/E5oHzopG3CeEzJ3N249fKxKFxPbeunn4tAmTri9Uk5tVrxfDZmZx0XeHwJHm3852mhxA5vX3zK2rqpt7dtb8FgdKGzoY+4Yo+tfHiKGpy6mqkHycVSukcv4H4l8OCm5b3XSTeaPU/x7OhfSnuFlIxeJZIUi0wqQB1SYiuA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SuC0qMwj; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DGgrrB0I"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8D0EC2BCAF;
-	Thu, 23 Apr 2026 13:28:05 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SuC0qMwj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99DACC2BCF5;
+	Thu, 23 Apr 2026 13:31:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776950889;
-	bh=UdQJdVZKPGon/fRA+Ymep9Kcr+GFrjgmKm4qj3xWeYY=;
+	s=k20201202; t=1776951080;
+	bh=KMe0YNCVeH3Ab45BSIZHBghW101L8KHnVWa2ygzk6FM=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=DGgrrB0I2oqVS+p8oatAec00Eyrzsv3qWmTOMyFJ9AjOOrxeDn/YwNdYZ0mUlEW0o
-	 SkOBQ0RHlMd5wTxJY1b8AzovMzbflW6nOMSTPVjA/4wk1+4rOw0z6Kih8RPlkau8BM
-	 mb0wjE3pf5R8Nnn/0quxlIrcohgrucbnWISAXhyE9cDUA1rpoTiV2kJJ8iE81K2NDd
-	 Ol+he5di/FMJSMlBV9/JMlKs+g397OwEYSm2egp2vgSHemIv6zA7cPU0VS4Q50c1Bi
-	 WfLODRTeuC6Xjf/GVQkqh6y9pfc1WJrjBGmBhH1G3916dDnFjS6ybUZQ3rYp3lq/s0
-	 QolPJ6q9bXNfg==
-Message-ID: <da96efa9-401d-4d11-90cc-00ebff340921@kernel.org>
-Date: Thu, 23 Apr 2026 15:28:03 +0200
+	b=SuC0qMwjuhuShAxltSJy+p42wFrO/oEDq9LCHWMiAJ0YOY5HjFHxsHPseW6itbOj1
+	 MskzRFu6+BB8HC53EyqYDLf3HVZzIpNk7Xn046iHDtEPcKz1EjhWkaxI046fGNWjJd
+	 rc1G/Kd+urQI3eWNnpsZPDixF9wFkzuJ8twln3xpelDWQFer2bNMDYRLH4Z6FD4R0z
+	 gDJxERrcLbNdBcD3y9XIzp5X2jwYHZYMN7rEsgg1e0vqqzr6HR9F0hoezShgr2yaiL
+	 wFUXsCc0B4zX+Lpe4IIP4MaJX6HgeiAG/FbJMpWFp0io0nugd9Vjttj4qp6KUpbHbF
+	 i3XvMVhtP8+nw==
+Message-ID: <7a762959-014c-4727-999f-a5073f9eaf7a@kernel.org>
+Date: Thu, 23 Apr 2026 15:31:14 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,14 +35,13 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH] selftests/mm: use pattern matching in .gitignore
-To: pratmal@google.com
-Cc: akpm@linux-foundation.org, shuah@kernel.org, yosryahmed@google.com,
- ljs@kernel.org, Liam.Howlett@oracle.com, vbabka@suse.cz, rppt@kernel.org,
- surenb@google.com, mhocko@suse.com, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <03a23a7a-58fe-42f4-a294-9d688ce33e2d@kernel.org>
- <20260422190847.216343-1-pratmal@google.com>
+Subject: Re: [PATCH v3 0/2] selftests/mm: clean up build output and verbosity
+To: Li Wang <wangli.ahau@gmail.com>, akpm@linux-foundation.org,
+ ljs@kernel.org, Liam.Howlett@oracle.com, vbabka@kernel.org, rppt@kernel.org,
+ surenb@google.com, mhocko@suse.com, shuah@kernel.org
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260422080446.26020-1-wangli.ahau@gmail.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -89,41 +88,30 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20260422190847.216343-1-pratmal@google.com>
+In-Reply-To: <20260422080446.26020-1-wangli.ahau@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 4/22/26 21:08, pratmal@google.com wrote:
-> (Resending to correct David's email address. Apologies for the noise!)
+On 4/22/26 10:04, Li Wang wrote:
+> Currently, the build process for the mm selftests is unnecessarily noisy.
 > 
-
-Heh, no worries, I didn't even notice.
-
-As long as you CC one of the mailing lists I'm subscribed to, even mails to my
-old RH address will still hit my inbox.
-
-> On 4/22/26 18:04, David Hildenbrand (Arm) wrote:
->> On 4/21/26 20:30, pratmal@google.com wrote:
->>> From: Pratyush Mallick <pratmal@google.com>
->>>
->>> The current .gitignore hardcodes each generated test binary by name,
->>> requiring updates every time a new test is added.
->>>
->>> Switch to the patten-matching approach similar to KVM:selftests.
->>> Ignore everything by default and then allow source extensions (.c, .h, .sh)
->>> and tracked non-source files.
->> That looks pretty nice. Any reason for the RFC? (iow, are you unsure about some
->> side-effects?)
+> First, it leaks raw compiler errors during the liburing feature probe if
+> the headers are missing, which is confusing since the build system already
+> handles this gracefully with a clear warning.
 > 
-> Exactly that. I verified that the build works fine, however I sent it 
-> as an RFC just to be cautious. I wanted to get some feedback in case this 
-> might introduce some unwanted behavior that I'm not aware of. :)
+> Second, the specific 32-bit and 64-bit compilation targets ignore the
+> standard kbuild verbosity settings, always printing their full compiler
+> commands even during a default quiet build.
+> 
+> Notes:
+>   My email address has changed due to employment change.
+>   Previous Signed-off-by was with <liwang@redhat.com>.
 
-After taking a peek at the KVM one, I think what you propose makes perfect sense.
+:(
 
-I do wonder, whether we want to make our lives easier and rename
-"local_config.h" to something like "local_config.h_gen", so we don't need the
-"re-ignore" part.
+As a former RH'er, I'm deeply sorry for what has happened there, really.
+
+Thank you for continuing to contribute upstream, highly appreciated!
 
 -- 
 Cheers,
