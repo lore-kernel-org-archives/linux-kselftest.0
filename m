@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2330229BDB4;
-	Thu, 23 Apr 2026 13:38:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E8792C324D;
+	Thu, 23 Apr 2026 13:40:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776951529; cv=none; b=DxITEU0gIPLFlsreG597iuD2GzSQ3vaHk1jOp60Sn86PJfuYiZPz8vBSNhFsnRWhfeHD3EDVb0eyCfMeMSgY8oOaxTvXPXxqKn1S/luHhLfTsyrqwiFqOjgKbeWKredCpB2XCMi3adtIb2Evjm8H+jPDam6+OtoGupaC5+fH23g=
+	t=1776951657; cv=none; b=bQsDbMmpfmoj/9YgwzVEi7PMf97oK4zNqhZgiL7HYsZAItbEoZM2zm51U2kerPgHqlQKLEsRhZ1/Juns1pTSUMXCc22mHXTXiPhIA3itlB+FA7EhqeTTr92DoT1fstL5wnKxZAfl8td0utxqTs8LopGtRUXcG2HBi9IKZBXn/Zw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776951529; c=relaxed/simple;
-	bh=ICwDzIGe32smAh50GrVCkO16wFKiYn6OJO/XJNoFuLU=;
+	s=arc-20240116; t=1776951657; c=relaxed/simple;
+	bh=kbWYQRsR8eQbjfcpNar2gN24mlB/zcQ4Jq7F4eLQ/Uc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=B+ToIUU8zFDH8PeH0cz/P3PX5XBczWTEKc5dt7oFbiWFdC32+hJjmhqBiwy0L+rzzLeSjkVsJ4Fx6tdetlxJTR3m3CajqG7wtERRvGOxnWezf2yUHw+qqRSPKaJO4DC+Pa7y1BkBr8f3pNgicoVyg7vmSCUSDQ0JvP19IAL2Tq4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U9a5z/Cr; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=pZkQV19pDrNMPnGbphsdplSQHcWHuxP6UJuF6NHBAbiyGRx201aDkkcb13hl49xBYDW1ZmDOXRlYL7tsIi7q4P+PjMDnQtlMUS0HTIcc1Ny15bKUNN/iQ1+Zq2g9OPh0DLQYLsQwDpjwF0FzF4pww+w+v5i4xydIiIm3ehTCrMo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qSik5BHf; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U9a5z/Cr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03606C2BCAF;
-	Thu, 23 Apr 2026 13:38:44 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qSik5BHf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B232FC2BCAF;
+	Thu, 23 Apr 2026 13:40:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776951528;
-	bh=ICwDzIGe32smAh50GrVCkO16wFKiYn6OJO/XJNoFuLU=;
+	s=k20201202; t=1776951657;
+	bh=kbWYQRsR8eQbjfcpNar2gN24mlB/zcQ4Jq7F4eLQ/Uc=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=U9a5z/CraOHCdM4FWmGM8ORuy+wLAleTeIvQhY7DUJT4OKeogxfHQhJO/l0ObJhhh
-	 sqfOqvM1ovEJ5hwPyGtzd9/1vlfiu0XZYYlV8VDZjC8ZxJ+dcoHEO66GS6o4qhGXjJ
-	 gUfiYn38bQyRHBSQ4RdDuiCwl56U3UzzmsBK/LEmExExgq5qt4P2iXI0h9aCU33ys8
-	 nSmoiK9I03l9Cl8G51/yHgWxltwfjGGC4X2Hx1AJsisg2eHKPV+OSUfzO9hCiOSFl+
-	 3K9BnJ9Im1HXNbEh9jvsLZ8CEq8AAEk4gp8o7K0rgKWWYqcz1e00unSdU4t3T2PaSJ
-	 iE1/Bzi236D6w==
-Message-ID: <963b4f8e-b1cb-4e80-b14f-04a43fa15e9b@kernel.org>
-Date: Thu, 23 Apr 2026 15:38:42 +0200
+	b=qSik5BHfRphh2+WjtZepWBi4tvNmWs2K9X0HsY158a72I4wEXP/zDzX7OGztTjMID
+	 YTBrg6eAyLBVPV0O56eE64aIInKUMiIIvDNoulwi1sNg4SWYfMQeupj5Ru47d1wVhq
+	 7B8r6BfCsnNt8k51tLr27tGM6yZfyWSTmsTDzdBGoUP2vx96dwjAWyyzK02mdsMdE+
+	 ElTqWsYVt6G+6JLMeL8Bf7pZc0O1Qk0LiEw82/HYfIg84XI3uDJCO9TxFYL9cHOU15
+	 Zlkg4uwAUQ8KvPKE7TJlVop0cABYlqfZkWzYotm03+C3gZHyeroevKOf9fqsQPIlRb
+	 N4F836PPel5pg==
+Message-ID: <f6ca5592-9a5b-46bf-94ab-3d8a0e2ad996@kernel.org>
+Date: Thu, 23 Apr 2026 15:40:51 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,15 +35,15 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/2] selftests/mm: respect build verbosity settings for
- 32/64-bit targets
+Subject: Re: [PATCH v3 2/2] selftests/mm: suppress compiler error in liburing
+ check
 To: Li Wang <wangli.ahau@gmail.com>, akpm@linux-foundation.org,
  ljs@kernel.org, Liam.Howlett@oracle.com, vbabka@kernel.org, rppt@kernel.org,
  surenb@google.com, mhocko@suse.com, shuah@kernel.org
 Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20260422080446.26020-1-wangli.ahau@gmail.com>
- <20260422080446.26020-2-wangli.ahau@gmail.com>
+ <20260422080446.26020-3-wangli.ahau@gmail.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -90,49 +90,37 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20260422080446.26020-2-wangli.ahau@gmail.com>
+In-Reply-To: <20260422080446.26020-3-wangli.ahau@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 4/22/26 10:04, Li Wang wrote:
-> The 32-bit and 64-bit compilation rules invoke $(CC) directly, bypassing
-> the $(Q) quiet prefix and $(call msg,...) helper used by the rest of the
-> selftests build system. This causes these rules to always print the full
-> compiler command line, even when V=0 (the default).
+> When building the mm selftests on a system without liburing development
+> headers, check_config.sh leaks a raw compiler error:
 > 
-> Wrap the commands with $(Q) and $(call msg,CC,,$@) to match the
-> convention used by lib.mk, so that quiet and verbose builds behave
-> consistently across all targets.
+>   /tmp/tmp.kIIOIqwe3n.c:2:10: fatal error: liburing.h: No such file or directory
+>       2 | #include <liburing.h>
+>         |          ^~~~~~~~~~~~
 > 
-> ==== Build logs ====
->   ...
->   CC       merge
->   CC       rmap
->   CC       soft-dirty
->   gcc -Wall -O2 -I /usr/src/25/tools/testing/selftests/../../..
->                 -isystem /usr/src/25/tools/testing/selftests/../../../usr/include
->                 -isystem /usr/src/25/tools/testing/selftests/../../../tools/include/uapi
->                 -Wunreachable-code -U_FORTIFY_SOURCE -no-pie -D_GNU_SOURCE=
->                 -I/usr/src/25/tools/testing/selftests/../../../tools/testing/selftests
->                 -m32 -mxsave  protection_keys.c vm_util.c thp_settings.c pkey_util.c
->                 -lrt -lpthread -lm -lrt -ldl -lm
->                 -o /usr/src/25/tools/testing/selftests/mm/protection_keys_32
->   gcc -Wall -O2 -I /usr/src/25/tools/testing/selftests/../../..
->                 -isystem /usr/src/25/tools/testing/selftests/../../../usr/include
->                 -isystem /usr/src/25/tools/testing/selftests/../../../tools/include/uapi
->                 -Wunreachable-code -U_FORTIFY_SOURCE -no-pie -D_GNU_SOURCE=
->                 -I/usr/src/25/tools/testing/selftests/../../../tools/testing/selftests
->                 -m32 -mxsave  pkey_sighandler_tests.c vm_util.c thp_settings.c pkey_util.c
->                 -lrt -lpthread -lm -lrt -ldl -lm
->                 -o /usr/src/25/tools/testing/selftests/mm/pkey_sighandler_tests_32
->   ...
+> Since this is an expected failure during the configuration probe,
+> redirect the compiler output to /dev/null to hide it.
 > 
-> Reported-by: Andrew Morton <akpm@linux-foundation.org>
+> And the build system prints a clear warning when this occurs:
+> 
+>   Warning: missing liburing support. Some tests will be skipped.
+> 
+> Because the user is properly notified about the missing dependency, the
+> raw compiler error is redundant and only confuse users.
+> 
+> Additionally, update the Makefile to use $(Q) and $(call msg,...) for
+> the check_config.sh execution. This aligns the probe with standard
+> kbuild output formatting, providing a clean "CHK" message instead of
+> printing the raw command during the build.
+> 
 > Signed-off-by: Li Wang <wangli.ahau@gmail.com>
-> Tested-by: Andrew Morton <akpm@linux-foundation.org>
 > ---
 
-Great
+Thanks!
 
 Tested-by: David Hildenbrand (Arm) <david@kernel.org>
 Acked-by: David Hildenbrand (Arm) <david@kernel.org>
