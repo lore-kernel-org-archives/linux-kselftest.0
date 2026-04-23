@@ -1,114 +1,140 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-179.mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 594F623BD06;
-	Thu, 23 Apr 2026 23:16:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A62D34D90E;
+	Thu, 23 Apr 2026 23:26:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776986208; cv=none; b=i8wx1uxMNBGE5cb9jEP7kwsmcF+JfassKnLmG20bFZ3f5lgtxtYCAzW+Ng7cFE1G2yPOzI7eGVaqt3aQL7uGFpY4/KNvFfAVK2ETVURgkIK5RcjuIQB8367pAuwkChsEocYNBANI0AheLC6ipeZoVH64btA24lvH2Ju1/9ZXe6s=
+	t=1776986782; cv=none; b=t1Qk+yO+gOk7AmM8yqr4T3shRPocj1O0WYHWnfJmMkRdOA3XQuSg7Ka9GNGm3dZZ4mWgJFFPxK+5DW2sCWHUP78kFz/HdH0HCAaT7ZjMx2zDdGKm01yIbkxm1l3dQeZS3ibVjbTo/4sDwzeERxtPx1+ukRdSVTaZf1I9bUUXWas=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776986208; c=relaxed/simple;
-	bh=PBOOnBDu6N9+TKIZiWkWoePc/vR/NOWjl3zwDHP5lZ8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=GOeIkbj5tTrXfsk6gl10O3UM08xlaTDb6UyXtJsHUzEpGGueksdQz16V/TF/KXUbIaW4zlkReE724Zi83bTzrIdevdXLeSi1ESUrBfK//JYcjr2QKZZYKhcHak1t1iXL+wKzN5OmwWundJVt4odgiQc44Ldja1jqiHZgThR7bQ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D8txcW1f; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776986782; c=relaxed/simple;
+	bh=vMJQBa5zmzOAcaZtVAWU6wleEYJ5jJl9bsl9eKfiVzg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=U5uMr2ZfidaZh9CAcW9xie0wOLU1t6GG4Fmt4fZlFt+lGxVv9PIG6YLNX+O+CmvuJaVuhYZoPa3YePut9swGq9jvIBf8KZtqCKB9JIscyUdaf0bczxkB5ut2QEYZsXPfEfHag1MqZFfUQkNANRdfWiQrtQLR9d4VsbzPGle6rqE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Q85Pf2c3; arc=none smtp.client-ip=95.215.58.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D8txcW1f"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 576D9C2BCAF;
-	Thu, 23 Apr 2026 23:16:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776986208;
-	bh=PBOOnBDu6N9+TKIZiWkWoePc/vR/NOWjl3zwDHP5lZ8=;
-	h=From:Date:Subject:To:Cc:From;
-	b=D8txcW1fZg4TTe7/PPKtUW+4D8XpE68JsVl4x7ROVUC6S/vvvmkpqRxWtzQz2HVfV
-	 fFnAmphSZrtAGu131I1xocwbW5PBqtBkCo3539hr1bKw/UxPl5tHSbJgSaKsaxl9uY
-	 ZeEyGFu5B7wVE+1F3Ts4FO2jzY2DrYB5NTa7QW69oM5h/s5xQ0c4+R9Px2rOl7t/dx
-	 txgJXPRGF3BupsGNNS4wIxuBQcsRyJJ0+jBJZkK8z2BlnwVePUuWR638ELS4/hpXDu
-	 Lt1p963otaYf4v91SNWN+UPkh4yv84NB/BLlk7Op+Fpnijhra6iFXb4q6Xdbe57DLB
-	 qqVsI1Ak4QBQA==
-From: Mark Brown <broonie@kernel.org>
-Date: Fri, 24 Apr 2026 00:16:22 +0100
-Subject: [PATCH] selftests/rseq: Add config fragment
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Q85Pf2c3"
+Message-ID: <a739cf27-a65a-40da-830d-edda27bfa6b7@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1776986777;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bycuOgk3I1MKhMIM80x+6ULtiN6q6gNeSnWYfwMp2UQ=;
+	b=Q85Pf2c3c+FeYg1SoeAxmKVmNYmFRy5EPFvL8r7Ld8slAdmuqei/5BBGZqFglkUiiMOy2Z
+	MfYNQ15FZq4HzXDe2ZfGA8LHPBweQJSLvIaxmRuqJ+WAfrUrugHSRImkzObKBglbNmpvwG
+	3wrJVtgivZKCi5yjrw0ltpfsKWcwbgY=
+Date: Thu, 23 Apr 2026 16:25:50 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260424-selftests-rseq-config-fragment-v1-1-fcf60116e690@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAEWo6mkC/yXNMQ7CMAxA0atUnrEUAgTBVRBDGuxgBCm1A6pU9
- e4EGN/y/wxGKmRw7GZQeovJUBrWqw7SNZZMKJdm8M4Ht/UbNLpzJauGajRiGgpLRtaYH1Qqhh2
- 7Q4rs/D5AizyVWKbf4HT+2179jVL9VmFZPnBnSBaCAAAA
-X-Change-ID: 20260423-selftests-rseq-config-fragment-65f09caf0276
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
- Peter Zijlstra <peterz@infradead.org>, 
- "Paul E. McKenney" <paulmck@kernel.org>, Boqun Feng <boqun@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, Thomas Gleixner <tglx@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.16-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1736; i=broonie@kernel.org;
- h=from:subject:message-id; bh=PBOOnBDu6N9+TKIZiWkWoePc/vR/NOWjl3zwDHP5lZ8=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBp6qhdThXA+9vgVBGCZ3z69vDU9kQ9iH3cjhkpz
- TzwAknenuKJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaeqoXQAKCRAk1otyXVSH
- 0NsfB/9BTEzGRGETKyBndfKjJOryofeVdXhmxEJkksOoBGrQtJ0NDTlp2TAyt96muYXSgSY4Uys
- fFIQpHH0iiIzsXtV6VVht812cQlEqXFdo6Ayti+4u3xd/BfoBfCKgDuFiAQCaENI8LC0HNc+W9V
- NKyiz3faytwnHxtHhpGYOHUATFjw9vAueCid9vHJbzRStvkj7gVshc3zBq5AVoE5tPAjAkhZI0l
- g8Dg16PxEAfviQS93dP3XatfBmjzkqNoorsgJvTmWSVZ/ovlDB2AMxdiSfKeY4Iadg92XWjo/nb
- 8eHjXBjOAU1nmYGY6nwS2o/d0zGEO2U06mm9B7hG66B88tZC
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+Subject: Re: [PATCH bpf-next v9 1/9] bpf: refactor kfunc checks using
+ table-driven approach in verifier
+To: Chengkaitao <pilgrimtao@gmail.com>,
+ Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Emil Tsalapatis <emil@etsalapatis.com>, leon.hwang@linux.dev,
+ Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, memxor@gmail.com
+Cc: Martin KaFai Lau <martin.lau@linux.dev>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Chengkaitao <chengkaitao@kylinos.cn>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+ bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+References: <20260329140506.9595-1-pilgrimtao@gmail.com>
+ <20260329140506.9595-2-pilgrimtao@gmail.com>
+ <CAADnVQ+xS4ti=cSqAnG4ePmjEZXUb-8Ss9cjkWiiWgtv-_NNVQ@mail.gmail.com>
+ <CAAWJmAYxbEX0M3JFJn11WOfvRoLrxnuXtkDp5omt-FJYwc8mpg@mail.gmail.com>
+ <1fcda49a-caeb-42b9-9727-d1ab3d07d84b@linux.dev>
+ <CAAWJmAYNS-NaY-57Pt=GC5qSpbfJLKwydVXfem6ckwgFW9aTnw@mail.gmail.com>
+ <82148eb1-f270-48f1-8900-e0becc6384e8@linux.dev>
+ <CAAWJmAZQHmgKXgr0xN5sHWUGyu43xLyg4eG7yBrMDi7YALrKsw@mail.gmail.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <CAAWJmAZQHmgKXgr0xN5sHWUGyu43xLyg4eG7yBrMDi7YALrKsw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Currently we do not provide a config fragment for the rseq selftests but
-there are several options which are either required or helpful for
-running them:
+On 4/9/26 7:53 PM, Chengkaitao wrote:
+> On Wed, Apr 8, 2026 at 2:41 AM Ihor Solodrai <ihor.solodrai@linux.dev> wrote:
+>>
+>> On 4/4/26 3:38 AM, Chengkaitao wrote:
+>>>
+>>> It pushes us to untangle messy verifier safety cases and make them modular,
+>>> so they can be expressed as parameters to BPF_VERIF_KFUNC_DEF
+>>
+>> Again, I agree with the premise that verifier safety checks could
+>> become more modular where possible. But I think we should first
+>> separate two questions:
+>>
+>> 1. What kfunc properties should be declared centrally?
+>> 2. Where that declaration should live?
+>>
+>> While I'd like to answer (1) with "all of them", I am not convinced
+>> the answer to (2) is .BTF_ids or BTF. A better C side declarative
+>> representation would give us most of the benefit here without making
+>> the BTF tooling more complex.
+>>
+>> Here is how I think we should move forward:
+>>
+>>   1. Your bpf_list_* work is orthogonal to BTF_ID refactoring, so it's
+>>   reasonable to first focus on landing it without changes to generic
+>>   kfunc handling.
+> 
+> There is no consensus on whether the patch below should exist at all.
+> [PATCH bpf-next v9 1/9] bpf: refactor kfunc checks using table-driven ...
 
- - CONFIG_RSEQ is required for obvious reasons, it is enabled by default
-   but it doesn't hurt to specify it in case the user is usinsg a
-   defconfig that disables it.
+Hi Kaitao,
 
- - CONFIG_RSEQ_DEBUG_DEFAULT_ENABLE turns on runtime debug checks which
-   would for example have helped spot some of the recent issues we've
-   seen on arm64:
+I think this refactoring patch should be dropped from the series.
+For now use the established pattern with special_kfunc_list, and don't
+introduce new _impl kfuncs.
 
-      https://lore.kernel.org/all/87zf2u28d1.ffs@tglx/
+> 
+> Should we drop it entirely, or limit its scope to the is_bpf_* helpers
+> that contain a large number of btf_id == special_kfunc_list[*]-style
+> checks—for example by reverting to v8 or an earlier revision?
 
- - CONFIG_DEBUG_RSEQ enables debugging on configurations that don't have
-   generic entry support.
+I don't think "reverting to v8" will work. Since you've sent v9
+significant changes to the verifier.c have been landed, so you have
+some rebase work to do anyways.  I suggest you minimize unnecessary
+refactoring in this series, and focus on bpf_list_* api extension.
 
- - CONFIG_RSEQ_SLICE_EXTENSION is tested by the slice_test test, the
-   test will fail without it.
+pw-bot: cr
 
-Add a configuration fragment which enables these options, helping
-encourage CI systems and people doing manual testing to run the tests
-with all the features and additional checks.  We also enable
-CONFIG_DEBUG_KERNEL and CONFIG_EXPERT which are dependencies for these
-options.
+Thanks, and apologies for slow reply.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/rseq/config | 6 ++++++
- 1 file changed, 6 insertions(+)
 
-diff --git a/tools/testing/selftests/rseq/config b/tools/testing/selftests/rseq/config
-new file mode 100644
-index 000000000000..d11b8c61530e
---- /dev/null
-+++ b/tools/testing/selftests/rseq/config
-@@ -0,0 +1,6 @@
-+CONFIG_DEBUG_KERNEL=y
-+CONFIG_DEBUG_RSEQ=y
-+CONFIG_EXPERT=y
-+CONFIG_RSEQ=y
-+CONFIG_RSEQ_DEBUG_DEFAULT_ENABLE=y
-+CONFIG_RSEQ_SLICE_EXTENSION=y
-
----
-base-commit: 2e68039281932e6dc37718a1ea7cbb8e2cda42e6
-change-id: 20260423-selftests-rseq-config-fragment-65f09caf0276
-
-Best regards,
---  
-Mark Brown <broonie@kernel.org>
+> https://lore.kernel.org/all/20260316112843.78657-2-pilgrimtao@gmail.com/
+> 
+> cc: Alexei Starovoitov, Emil Tsalapatis, Leon Hwang, Mykyta Yatsenko,
+>       Kumar Kartikeya Dwivedi
+> 
+>>   2. I plan to send patches (soon) for resolve_btfids, and then for
+>>   BTF_ID macrology to eliminate the enum + array pattern. You are
+>>   welcome to join the discussion and review / test the patches.
+>>
+>>   3. After all of the above lands, we can come back to the general
+>>   BTF_ID / kfunc handling discussion. If you are interested in
+>>   developing this further, I suggest to re-think the approach and come
+>>   up with a "single kfunc metadata definition" that doesn't require
+>>   significant changes in .BTF_ids section layout.
+>>
+>> A slightly off-topic comment: the usage of `_impl` pattern for kfuncs
+>> should be considered deprecated. Any new kfuncs that work with
+>> verifier-supplied arguments should use KF_IMPLICIT_ARGS mechanism.  So
+>> the `bpf_list_add_impl` in your seires should only have one version:
+>> `bpf_list_add` marked with KF_IMPLICIT_ARGS flag.
+> 
 
