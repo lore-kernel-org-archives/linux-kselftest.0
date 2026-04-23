@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 974BD28B7DA;
-	Thu, 23 Apr 2026 13:31:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2330229BDB4;
+	Thu, 23 Apr 2026 13:38:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776951080; cv=none; b=a6rfci/rpko6Kng6y6OEapBNqLpPqtW/RWMsWANyqCHnkK0dyIosK7dGcNXFxi3y/uJN2vrS8ehQKwr1R2y1lz6k2ZceBSH37+WP2rEL8bD93ODk1vcLwuYVBtybGPFa7GXXzuV0gJ1HdISB9hxxKyAluwyPpDMX2LfPT9zWu+g=
+	t=1776951529; cv=none; b=DxITEU0gIPLFlsreG597iuD2GzSQ3vaHk1jOp60Sn86PJfuYiZPz8vBSNhFsnRWhfeHD3EDVb0eyCfMeMSgY8oOaxTvXPXxqKn1S/luHhLfTsyrqwiFqOjgKbeWKredCpB2XCMi3adtIb2Evjm8H+jPDam6+OtoGupaC5+fH23g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776951080; c=relaxed/simple;
-	bh=KMe0YNCVeH3Ab45BSIZHBghW101L8KHnVWa2ygzk6FM=;
+	s=arc-20240116; t=1776951529; c=relaxed/simple;
+	bh=ICwDzIGe32smAh50GrVCkO16wFKiYn6OJO/XJNoFuLU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=W+rZ/E5oHzopG3CeEzJ3N249fKxKFxPbeunn4tAmTri9Uk5tVrxfDZmZx0XeHwJHm3852mhxA5vX3zK2rqpt7dtb8FgdKGzoY+4Yo+tfHiKGpy6mqkHycVSukcv4H4l8OCm5b3XSTeaPU/x7OhfSnuFlIxeJZIUi0wqQB1SYiuA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SuC0qMwj; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=B+ToIUU8zFDH8PeH0cz/P3PX5XBczWTEKc5dt7oFbiWFdC32+hJjmhqBiwy0L+rzzLeSjkVsJ4Fx6tdetlxJTR3m3CajqG7wtERRvGOxnWezf2yUHw+qqRSPKaJO4DC+Pa7y1BkBr8f3pNgicoVyg7vmSCUSDQ0JvP19IAL2Tq4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U9a5z/Cr; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SuC0qMwj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99DACC2BCF5;
-	Thu, 23 Apr 2026 13:31:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U9a5z/Cr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03606C2BCAF;
+	Thu, 23 Apr 2026 13:38:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776951080;
-	bh=KMe0YNCVeH3Ab45BSIZHBghW101L8KHnVWa2ygzk6FM=;
+	s=k20201202; t=1776951528;
+	bh=ICwDzIGe32smAh50GrVCkO16wFKiYn6OJO/XJNoFuLU=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=SuC0qMwjuhuShAxltSJy+p42wFrO/oEDq9LCHWMiAJ0YOY5HjFHxsHPseW6itbOj1
-	 MskzRFu6+BB8HC53EyqYDLf3HVZzIpNk7Xn046iHDtEPcKz1EjhWkaxI046fGNWjJd
-	 rc1G/Kd+urQI3eWNnpsZPDixF9wFkzuJ8twln3xpelDWQFer2bNMDYRLH4Z6FD4R0z
-	 gDJxERrcLbNdBcD3y9XIzp5X2jwYHZYMN7rEsgg1e0vqqzr6HR9F0hoezShgr2yaiL
-	 wFUXsCc0B4zX+Lpe4IIP4MaJX6HgeiAG/FbJMpWFp0io0nugd9Vjttj4qp6KUpbHbF
-	 i3XvMVhtP8+nw==
-Message-ID: <7a762959-014c-4727-999f-a5073f9eaf7a@kernel.org>
-Date: Thu, 23 Apr 2026 15:31:14 +0200
+	b=U9a5z/CraOHCdM4FWmGM8ORuy+wLAleTeIvQhY7DUJT4OKeogxfHQhJO/l0ObJhhh
+	 sqfOqvM1ovEJ5hwPyGtzd9/1vlfiu0XZYYlV8VDZjC8ZxJ+dcoHEO66GS6o4qhGXjJ
+	 gUfiYn38bQyRHBSQ4RdDuiCwl56U3UzzmsBK/LEmExExgq5qt4P2iXI0h9aCU33ys8
+	 nSmoiK9I03l9Cl8G51/yHgWxltwfjGGC4X2Hx1AJsisg2eHKPV+OSUfzO9hCiOSFl+
+	 3K9BnJ9Im1HXNbEh9jvsLZ8CEq8AAEk4gp8o7K0rgKWWYqcz1e00unSdU4t3T2PaSJ
+	 iE1/Bzi236D6w==
+Message-ID: <963b4f8e-b1cb-4e80-b14f-04a43fa15e9b@kernel.org>
+Date: Thu, 23 Apr 2026 15:38:42 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,13 +35,15 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 0/2] selftests/mm: clean up build output and verbosity
+Subject: Re: [PATCH v3 1/2] selftests/mm: respect build verbosity settings for
+ 32/64-bit targets
 To: Li Wang <wangli.ahau@gmail.com>, akpm@linux-foundation.org,
  ljs@kernel.org, Liam.Howlett@oracle.com, vbabka@kernel.org, rppt@kernel.org,
  surenb@google.com, mhocko@suse.com, shuah@kernel.org
 Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20260422080446.26020-1-wangli.ahau@gmail.com>
+ <20260422080446.26020-2-wangli.ahau@gmail.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -88,30 +90,52 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20260422080446.26020-1-wangli.ahau@gmail.com>
+In-Reply-To: <20260422080446.26020-2-wangli.ahau@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 4/22/26 10:04, Li Wang wrote:
-> Currently, the build process for the mm selftests is unnecessarily noisy.
+> The 32-bit and 64-bit compilation rules invoke $(CC) directly, bypassing
+> the $(Q) quiet prefix and $(call msg,...) helper used by the rest of the
+> selftests build system. This causes these rules to always print the full
+> compiler command line, even when V=0 (the default).
 > 
-> First, it leaks raw compiler errors during the liburing feature probe if
-> the headers are missing, which is confusing since the build system already
-> handles this gracefully with a clear warning.
+> Wrap the commands with $(Q) and $(call msg,CC,,$@) to match the
+> convention used by lib.mk, so that quiet and verbose builds behave
+> consistently across all targets.
 > 
-> Second, the specific 32-bit and 64-bit compilation targets ignore the
-> standard kbuild verbosity settings, always printing their full compiler
-> commands even during a default quiet build.
+> ==== Build logs ====
+>   ...
+>   CC       merge
+>   CC       rmap
+>   CC       soft-dirty
+>   gcc -Wall -O2 -I /usr/src/25/tools/testing/selftests/../../..
+>                 -isystem /usr/src/25/tools/testing/selftests/../../../usr/include
+>                 -isystem /usr/src/25/tools/testing/selftests/../../../tools/include/uapi
+>                 -Wunreachable-code -U_FORTIFY_SOURCE -no-pie -D_GNU_SOURCE=
+>                 -I/usr/src/25/tools/testing/selftests/../../../tools/testing/selftests
+>                 -m32 -mxsave  protection_keys.c vm_util.c thp_settings.c pkey_util.c
+>                 -lrt -lpthread -lm -lrt -ldl -lm
+>                 -o /usr/src/25/tools/testing/selftests/mm/protection_keys_32
+>   gcc -Wall -O2 -I /usr/src/25/tools/testing/selftests/../../..
+>                 -isystem /usr/src/25/tools/testing/selftests/../../../usr/include
+>                 -isystem /usr/src/25/tools/testing/selftests/../../../tools/include/uapi
+>                 -Wunreachable-code -U_FORTIFY_SOURCE -no-pie -D_GNU_SOURCE=
+>                 -I/usr/src/25/tools/testing/selftests/../../../tools/testing/selftests
+>                 -m32 -mxsave  pkey_sighandler_tests.c vm_util.c thp_settings.c pkey_util.c
+>                 -lrt -lpthread -lm -lrt -ldl -lm
+>                 -o /usr/src/25/tools/testing/selftests/mm/pkey_sighandler_tests_32
+>   ...
 > 
-> Notes:
->   My email address has changed due to employment change.
->   Previous Signed-off-by was with <liwang@redhat.com>.
+> Reported-by: Andrew Morton <akpm@linux-foundation.org>
+> Signed-off-by: Li Wang <wangli.ahau@gmail.com>
+> Tested-by: Andrew Morton <akpm@linux-foundation.org>
+> ---
 
-:(
+Great
 
-As a former RH'er, I'm deeply sorry for what has happened there, really.
-
-Thank you for continuing to contribute upstream, highly appreciated!
+Tested-by: David Hildenbrand (Arm) <david@kernel.org>
+Acked-by: David Hildenbrand (Arm) <david@kernel.org>
 
 -- 
 Cheers,
