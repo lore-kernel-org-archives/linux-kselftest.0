@@ -1,66 +1,68 @@
-Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B6A235F180
-	for <linux-kselftest@vger.kernel.org>; Thu, 23 Apr 2026 20:54:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 855C53603F7
+	for <linux-kselftest@vger.kernel.org>; Thu, 23 Apr 2026 20:54:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776977694; cv=none; b=ngXd+xPNk07Ktojph/zdmJwoz/MayD8njlXrzT/ogHR6Ri9Lbf50pWR3UrB9ll2/w7enwAkhzIzRnLCwA3rj6vtA4f/s1YYqjU9Ar8SUwPOnQXYXbKM2+EOxJ+D+SFvo8cUcFS7XYg6mUScDfNLrEWSCMDG8ThNL5QgMf7g+I30=
+	t=1776977697; cv=none; b=tEY+KBzsXjx8cmmMAt+FzcOKA9ilqW1aBguAarAksmooWdCGbbvvdFOsBIZDbvnXieNmsqV6N0DNdpPVw0WSt0IAfX+0uVXEp9jVDtr+TpxEmVvTr0EnQT6UtMNChtFb82XLCEbWQVBxDCzYVAcix3OYisMQea8iITKS9tKKSXE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776977694; c=relaxed/simple;
-	bh=v7nXtN9RgqHdJNPNJFFsg1eD6gNLpxPo8kGjLNQhYDo=;
+	s=arc-20240116; t=1776977697; c=relaxed/simple;
+	bh=4QM3LS2xsg7RLYgSN87KN0NOYRoI2SlINH0Xj+sS9wE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=CXhYardnYFT9DbiF4FhsmEt2Qijv1/8l0XM2RfMUgnb1QyNWd44sNH4uBkslTB9/lxlt5pl4tRmpKcmxNTF9+uCSUG/BiU8R8MmZ9wMAKJ6tvBxbeZf9GzGOrqAExLntqQtDT4beSrMm5M79og8PniZ+gdi+qdZOV4cfMC3E/+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A0Xhgwka; arc=none smtp.client-ip=209.85.167.169
+	 In-Reply-To:To:Cc; b=k1Uv1AZZOcCVz0Ft4e8+VmGohLC4HAIp86YYUs9XRD16sdUCdF4RFAF7PjfLQoCDj1JhxgD6XdUoijOI05bYLIj+yeYchq+V/wqltmzN2MfIUfqJplEL6XiwOjm2jNKnjj1KtnuqG14RQRn3Oq2/5UO5lKO9XALFhbnfpVFRsI4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ouWbJAlv; arc=none smtp.client-ip=209.85.167.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A0Xhgwka"
-Received: by mail-oi1-f169.google.com with SMTP id 5614622812f47-470145d7df5so4423440b6e.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 Apr 2026 13:54:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ouWbJAlv"
+Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-45f053b7b90so4049783b6e.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 23 Apr 2026 13:54:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776977688; x=1777582488; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1776977693; x=1777582493; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=zftWqWhtfgLT8BdUHmflQKmCQdRaRDCFv8UXc0/NgE8=;
-        b=A0XhgwkaAmrciumk5W0sJi4JjLboQfBieY4l0T3vWIARM5OtzJ9OgCumY3H+VLe/3v
-         C0s2sOuvcGrSRjD+dqSpXDeZ/NhyfRTrwxy7WtKmNq6VugP62oY3ozQ4Z+NO6YK9zSd+
-         NzaiddUK1k++WrSzB5ft7Az6a7WM5aMVcP01q7jxNX7MGBwgS9VUk0q6D+tp0/ohmo1l
-         cZgTVe4rhuXDYx62jJ0wBl8phzjakdqwV78frnOSqneiiyuXhjOaDqrLLTzWEhfEFs4B
-         MTnhQ3Y749tpFQZ7EMDMiE7xdZ1Zy7/iXrrLm4pS/lfZ7p1Kxd9xQX2mjQNb3+gZkOKt
-         40Bw==
+        bh=3OHbRsO14nacRj9UKrh+9hs7l7M/scZ1A9iLFCIgQ2w=;
+        b=ouWbJAlvkADmDziDPgSQp4eYlV0uNQa8UsljBgi1mfWOe5pDhen1mZHM4CoFuxezSC
+         gjn8sae9KuzqupTnwi8ewDOGCnRWVwiNgzFODIwkTqgvXufaIQjE8VUw2pQENUkDzI4L
+         NV7+5O9r4f9u6e2Qzhi6Ugozi5905R0MJZfwofwTUatSrSin5cncBkpaSmoC0+lSxWU4
+         hB8niiaxYJ8b9MT1pQbbGT0k//IkJtigfppiW6tCapwJkENqRKys66U6iTgxPmetx0Xf
+         RRLq+nWpIOykHL8aisiQmMJGqepshJ+I0wS3Plc3THMy5/7bRM5f54FDDy7X/V4j+yJX
+         khww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776977688; x=1777582488;
+        d=1e100.net; s=20251104; t=1776977693; x=1777582493;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=zftWqWhtfgLT8BdUHmflQKmCQdRaRDCFv8UXc0/NgE8=;
-        b=cLogwqo7HjxVaVpETzTKFkdbXzYBvL5UECsny0g2n1ZhvuTiwQRsq9qkO+eQWBkVGY
-         FxrQo5ZEHKqNSmeQbLSfVRvbwwRPksoYk77IpVbQtQEkNrfKyQ6PvIYUfTzIn/k7jDIl
-         T9uZ6z5xqrb45xHWLgjitgiP9bSbAsbQ+Jc2fPie+ACNSx4VfT9UI8Mrey5gNX/bwQAu
-         yZo+aDUvQdRLlnAK5ir8lL/yw5xyfLiVbvOY9pdHRtQ6Jmm4HXC7mMtnqE9ugVucV+1A
-         BwkyeJlxrg+Sp9Nn8Ai827reZs18q2UW0+G4NDS11mP3uV0AOBfkXrivgmZonFoF7oJd
-         XITg==
-X-Forwarded-Encrypted: i=1; AFNElJ//iR9+wS4QBiGnWtvUCt3g7zN3XEiY7LfkvSqjKLr3EYtePAkoG0Acw7wm/cRboQlCuAlRQ2Y101cNc4EW2F4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxAcxPGvWmjYAIoCJl3TjFiFvaOmgdZ0RXxRsUv7tp1E4AEPdV6
-	winE/gwE0LDcpOTZA+BMmKeDDkgY+kwzhHdXFegXpokq8bPGKNhk944/
-X-Gm-Gg: AeBDiet6fc2Jbvov3mK+5SlDnqLdXZjhH2YDb6eqPOiBSco3Zhz2KJSxcS/NZCl1DLL
-	VifPuBfP/+LP+0n3dGwWJQJG4Yjz1+THGcIoBqf84py4PuZbdME0llEE8TPl2PQ84d16JRn17+R
-	l/yoHiAi7VqlQ3h/GYhmv/ulYFlhfgoN0P5DDiNkrypptWCuZNfPSOCOlhknX5G7OcxmDql6mb7
-	P9ZVBJKum6bB5gtaK8Z+8iKxyOyRE8NIuAcc4zLg6i3VK2HFIBLO2DRHKCN/h61qKek0T7i1l1P
-	l0OXX1d6eEJ7HnqJ4nDjhZRg6ApegJq65bZ8ir8OoLz8mXOeQBIMZA08hWR2fkJxcbtQaeirA5p
-	aRC3eLGdph7heqLkIAT7gWVGveZwvdICatWoygGsspuhQRsp+U6PQmQIq1UuhORMBDfTgS1nqZD
-	RWl2UIfuuTG0iqJWle1QIYhwGr+aNeK2Ta5W9PRzdO9D5dxDoXhP5kgBROd9OxnS+TQSERTEMa
-X-Received: by 2002:a05:6808:1384:b0:467:2926:1231 with SMTP id 5614622812f47-4799cabb091mr15541122b6e.33.1776977687962;
-        Thu, 23 Apr 2026 13:54:47 -0700 (PDT)
+        bh=3OHbRsO14nacRj9UKrh+9hs7l7M/scZ1A9iLFCIgQ2w=;
+        b=YVDwdWz3ykoQJ4Wqk07LygNzlrwt7yuE7bNijKjpZin8ygIlQFNFMJdUao+dZSbKG2
+         fH/L3F4TwpRdKiOI67vF4mNzvdNWwbDWk77cWQ6ZiOZwvQyG5vkgzZyJygoMRAwui23f
+         meyGYV8+cMNcmRQJgaD9wZ/s+TBDGP9A15Sjp0vUv96t4oqXOCWxQqh5DEzgixjP+T6F
+         STQwlM5S7RhgscGl5iTspptPVIq5R5LIo8EeIcmm2BChXp3Ja9vFFrKrxT56FGbyzxWf
+         jFr/PWJorUH3YPiZYS4GbRyjd6EkTya8WUxz8DCZsSm7JHEJVEehk5An4jEn09dox1eY
+         gD9g==
+X-Forwarded-Encrypted: i=1; AFNElJ91v1VBxjg4s/2Ue1MdW6Gi3ovY2svt80LHtbyr09v0dHQjdAflnaJUMTagE3d3B81KBED1EZjtvY9BtPKpgx4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyfarTK6PsDnEPmCehHuva8fdpFJRfc6DgCag3gYUStTAl1gkk+
+	A1a+hQt7t3FUqjeIjBFp03xIuWlFtb9AmuUsQDwmyAuafbQ86NWPvsHU
+X-Gm-Gg: AeBDiesBCrdWgGFTT9vdZXjL6FSRao7nO1fMVw9YJcOHycptcH1V/E215E4n6BW6fpF
+	W3ZWFwsmGgu/G4CHi8/2uf8rwDYMtzqxaN+q2EfmI9ZZdnvjkt14P+hZUN0EbF3cqBcpsmiTeBB
+	DBwImDhEnMW5HqqlZHNg8jISf6jz+9r2uLpHBd/szuuzv6rWAcHxyFbIoGyIIMq2tkFQZRTNGbf
+	nFVFtILeQpCE02zenaC+34GN5cPL5hKGhMIIR6cEytIPsDMKvyd0i0kwKrIiO1eang3CqIO7wQq
+	LQaWZR+snYOQQre6+xWkL+O6DCv+AnGbvIn083ZO5AhQwbpWFNjslkiC0t8rGKf7mfk4019hI7g
+	fw+zzj9rINtc6+4K0XV0lkbmr/V5ya62tGGxJpZfzKzDfsmtg3ESK+2E/PsJoMzGTpbQ1m+lcgQ
+	ewLz92iyEkzFgmexgVj0jqsDivg0aK/LFnuYNoRzb/RCHR+XIgJqVsAhy3O+THUwXUotmWtEfX3
+	i61UHPeJGE=
+X-Received: by 2002:a05:6808:d4a:b0:467:49c0:5f6d with SMTP id 5614622812f47-4799ca893f0mr15678939b6e.23.1776977692926;
+        Thu, 23 Apr 2026 13:54:52 -0700 (PDT)
 Received: from [192.168.0.245] (c-98-38-17-99.hsd1.co.comcast.net. [98.38.17.99])
-        by smtp.googlemail.com with ESMTPSA id 5614622812f47-4799fead505sm14329744b6e.2.2026.04.23.13.54.42
+        by smtp.googlemail.com with ESMTPSA id 5614622812f47-4799fead505sm14329744b6e.2.2026.04.23.13.54.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Apr 2026 13:54:47 -0700 (PDT)
+        Thu, 23 Apr 2026 13:54:52 -0700 (PDT)
 From: Jim Cromie <jim.cromie@gmail.com>
-Date: Thu, 23 Apr 2026 14:53:50 -0600
-Subject: [PATCH v14 09/92] test-dyndbg: fixup CLASSMAP usage error
+Date: Thu, 23 Apr 2026 14:53:51 -0600
+Subject: [PATCH v14 10/92] dyndbg: reword "class unknown," to
+ "class:_UNKNOWN_"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -69,7 +71,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260423-submit-dyndbg-classmap-foundation-v14-9-2b809a8019d0@gmail.com>
+Message-Id: <20260423-submit-dyndbg-classmap-foundation-v14-10-2b809a8019d0@gmail.com>
 References: <20260423-submit-dyndbg-classmap-foundation-v14-0-2b809a8019d0@gmail.com>
 In-Reply-To: <20260423-submit-dyndbg-classmap-foundation-v14-0-2b809a8019d0@gmail.com>
 To: Arnd Bergmann <arnd@arndb.de>, Jason Baron <jbaron@akamai.com>, 
@@ -164,50 +166,41 @@ Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-stm32@st-md-mailman.stormreply.com, linux-renesas-soc@vger.kernel.org, 
  etnaviv@lists.freedesktop.org, Jim Cromie <jim.cromie@gmail.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1776977636; l=1492;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1776977636; l=1024;
  i=jim.cromie@gmail.com; s=20260203; h=from:subject:message-id;
- bh=v7nXtN9RgqHdJNPNJFFsg1eD6gNLpxPo8kGjLNQhYDo=;
- b=VBe9Ut7lbIIOEurwbAbNeQYJD7LG7Pt57wkJQXnWBJg9CpLMfTuVjx/oiKOPJeZDCdXsgXfoN
- q302jYDv/rXD00pgA4KJloRhJnDOj+7pbSDUehOIPs/xW+brF00GdRj
+ bh=4QM3LS2xsg7RLYgSN87KN0NOYRoI2SlINH0Xj+sS9wE=;
+ b=zEZMT0WhA4tazHE8iUsJRCDfWjq/snV5y5Ucebwf2eD2LMkQH1VD4rtB+5MLgRCm4kUHuVv2l
+ mCQ8zw3QDM0CpaAyRTte6a4hImlzDdBhTb6cuX8iNQbekmlAYqZ0f+w
 X-Developer-Key: i=jim.cromie@gmail.com; a=ed25519;
  pk=C6E5ODlPQo7ZBynATXH9wg7K6HxP0pIXyf4s38Qw0XE=
 
-commit 6ea3bf466ac6 ("dyndbg: test DECLARE_DYNDBG_CLASSMAP, sysfs nodes")
+When a dyndbg classname is unknown to a kernel module (as before
+previous patch), the callsite is un-addressable via >control queries.
 
-A closer look at test_dynamic_debug.ko logging output reveals a macro
-usage error:
-
-lib/test_dynamic_debug.c:105 [test_dynamic_debug]do_cats =p "LOW msg\n" class:MID
-lib/test_dynamic_debug.c:106 [test_dynamic_debug]do_cats =p "MID msg\n" class:HI
-lib/test_dynamic_debug.c:107 [test_dynamic_debug]do_cats =_ "HI msg\n" class unknown, _id:13
-
-107 says: HI is unknown, and 105,106 have a LOW/MID and MID/HI skew.
-
-DECLARE_DYNDBG_CLASSMAP() _base arg must equal the enum's 1st value,
-in this case it was _base + 1.  This leaves HI class un-selectable.
-
-NB: the macro could better validate its arguments.
+The control-file displays this condition as "class unknown,"
+currently.  That spelling is sub-optimal/too-generic, so change it to
+"class:_UNKNOWN_" to loudly announce the erroneous situation, and to
+make it uniquely greppable.
 
 Reviewed-by: Louis Chauvet <louis.chauvet@bootlin.com>
-Tested-by: Louis Chauvet <louis.chauvet@bootlin.com>
 Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
 ---
- lib/test_dynamic_debug.c | 2 +-
+ lib/dynamic_debug.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/lib/test_dynamic_debug.c b/lib/test_dynamic_debug.c
-index 77c2a669b6af..396144cf351b 100644
---- a/lib/test_dynamic_debug.c
-+++ b/lib/test_dynamic_debug.c
-@@ -75,7 +75,7 @@ DD_SYS_WRAP(disjoint_bits, p);
- DD_SYS_WRAP(disjoint_bits, T);
+diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
+index 6b1e983cfedc..a9caf84ddb22 100644
+--- a/lib/dynamic_debug.c
++++ b/lib/dynamic_debug.c
+@@ -1166,7 +1166,7 @@ static int ddebug_proc_show(struct seq_file *m, void *p)
+ 		if (class)
+ 			seq_printf(m, " class:%s", class);
+ 		else
+-			seq_printf(m, " class unknown, _id:%d", dp->class_id);
++			seq_printf(m, " class:_UNKNOWN_ _id:%d", dp->class_id);
+ 	}
+ 	seq_putc(m, '\n');
  
- /* symbolic input, independent bits */
--enum cat_disjoint_names { LOW = 11, MID, HI };
-+enum cat_disjoint_names { LOW = 10, MID, HI };
- DECLARE_DYNDBG_CLASSMAP(map_disjoint_names, DD_CLASS_TYPE_DISJOINT_NAMES, 10,
- 			"LOW", "MID", "HI");
- DD_SYS_WRAP(disjoint_names, p);
 
 -- 
 2.53.0
