@@ -1,160 +1,181 @@
-Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5643D38D68F;
-	Thu, 23 Apr 2026 08:31:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAFEE3E3178
+	for <linux-kselftest@vger.kernel.org>; Thu, 23 Apr 2026 09:15:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776933080; cv=none; b=Kvsv8UZxhdGfqbJanMgTKwHJGjBk4/viOJus4ronPVT7kOQd9MQsdhrwERDjbz9A7c0s2K6iXP37WXB9fyGUzvGVbAoHWZJeU1QGQyjYTs+xJkg2suQXWyATWPfVrxXKuupkKOvE4jwW/t/gEHxBwwXkwieS0bhjPdBmqp+Mr78=
+	t=1776935735; cv=none; b=PC9jz6tfTC4/zPSWWFQhq91Y5gG6mGdZrSAg7qoDxUAskW5ScANbA8Jc8RTW9JlJJ+5+wyi+XINSdqOtQ98GsVw1fRPOzGPsmBcbCL2TpHRdK100X+gFARMHEgSqU2ignnt0SXyuC1paUYtFM1IzgCVE5zQ/G9/zE5Vm9tZ4GeU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776933080; c=relaxed/simple;
-	bh=0mGuKowfe/XKCihGyX/x0JPopKQmhoso38DXB1vAdFA=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Nl0fpfx1ogWSYAu60FourKE0G3+WO86IK+KeEe64IA4nqegGmA+j5Cmrif+nXT//h3p0iQo5gEPRBpT7ykws9/Am4K1JgwZoFnbk1sQGV1qYdH7QN8fPxc1hQjl7DNi5zL3T1hpBjF4vuQD8cNx+qmhVCzyKCamamuBK6r9Yekc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=bE5bcvvO; arc=none smtp.client-ip=95.215.58.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1776935735; c=relaxed/simple;
+	bh=tumqCjg8ioy3Iv8OQ2rolx3y2ieRyPfAr1zre5Dbmdc=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:MIME-Version:
+	 Content-Type; b=ALE49e/8EN3vwVOsq08ZwFeuh5E0zcn1yzJAO/dVAjUZJV3+P1P7KMJKm4CC17MUdZva3XnFBd2ejnZ5BFjw5NmAJMF8pcNlz/TtT+6qRggPAxSVJUH/gdKkUGv+YrAo+TWZt7aHn0bYnIBnV1SdbxMlbOXfYENygIhZYCtr+6M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bIItjoZu; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="bE5bcvvO"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1776933076;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8YwT2J6y8VB+nAR+GUBhFBsu9Q8obY1raNP6TplLRG0=;
-	b=bE5bcvvOtZaF4jMACv4gJWXGy9pHyr8ZxjVjWFRr+w6XlHcOtheOUgxbQgLv+svPUFqb4T
-	GokyuelKSqLfKOt2rGQAUf3T4tMyRE7867WB0u62bDlpEYJXjKkepMxOSQNZFnhG3YNhsv
-	dANjm0XSetWNnKHvHhvfdfBZT807gF4=
-From: Lance Yang <lance.yang@linux.dev>
-To: ziy@nvidia.com
-Cc: willy@infradead.org,
-	songliubraving@fb.com,
-	clm@fb.com,
-	dsterba@suse.com,
-	viro@zeniv.linux.org.uk,
-	brauner@kernel.org,
-	jack@suse.cz,
-	akpm@linux-foundation.org,
-	david@kernel.org,
-	ljs@kernel.org,
-	baolin.wang@linux.alibaba.com,
-	Liam.Howlett@oracle.com,
-	npache@redhat.com,
-	ryan.roberts@arm.com,
-	dev.jain@arm.com,
-	baohua@kernel.org,
-	lance.yang@linux.dev,
-	vbabka@kernel.org,
-	rppt@kernel.org,
-	surenb@google.com,
-	mhocko@suse.com,
-	shuah@kernel.org,
-	linux-btrfs@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 7.2 v3 02/12] mm/khugepaged: add folio dirty check after try_to_unmap()
-Date: Thu, 23 Apr 2026 16:30:50 +0800
-Message-Id: <20260423083050.68509-1-lance.yang@linux.dev>
-In-Reply-To: <20260418024429.4055056-3-ziy@nvidia.com>
-References: <20260418024429.4055056-3-ziy@nvidia.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bIItjoZu"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2b461310af5so25260515ad.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 23 Apr 2026 02:15:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776935734; x=1777540534; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:in-reply-to:organization
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/sHEpv/1qXsMJgP6KklqXPkz0wDWe4Z9dTmnatzra1I=;
+        b=bIItjoZuaFRjlCxStQ7q0yuGsBaLUMfXwAVlNl1bh8A6E9ksgW7pyEygSPwfukU3U0
+         ZA/tAXnjvmBH1qMp5wx27RRhxJTMm03s2wzUQBAuYBUgty3Kx1DPnlNd2ZCamIKpzO25
+         u1QAOlUWrNGxWIK8kYxbHLhHJN6rwbDzGNIlc1LybHjDfRpfSSGo2p0T1TaVrr9czxVM
+         tLIle31AloQu5fSU2uDPXimAyiq8D4lsF5zshRUoVP2eZ4+6Gj6KqjNo8ZBGWa9HumLQ
+         qFriEojZUweU/tk2M9VUxose5RKx/LKACrcXSMxv4Fp58eb1v3Wi1PJbCQ6Ln2c+6yQq
+         cuAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776935734; x=1777540534;
+        h=content-transfer-encoding:mime-version:in-reply-to:organization
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=/sHEpv/1qXsMJgP6KklqXPkz0wDWe4Z9dTmnatzra1I=;
+        b=MurRtpAPIyCFBSefBton2YfWToi1aLYqQhUiY3y6a2/4FWOyGK48gStuKl+mOkS3qN
+         ewbKhfZMgAuoYssZhbIV1ADqriRqmPvLzzlSjKWnQBWP5ovuAtVbU0L11Ety/bsIbpWI
+         e6uE0JzTrSPoSJ6qxsl319t4JS0uaxOc7gnQ2RXR9tGidAEFvrhI7KQrvPHlZZ9ISg8d
+         q1jrfbN4kidlshgyNwREoWb9K+lxL/w3E9/Cn+dCwpya+ELhnR/XyZEACc8lIoJc9iMk
+         DC3Z2J0i6lv1cNCi2+Xa+NNSDKoHwSq0RceJJpKo4bW9twM9iywWnWVlD9A9pbUbC2z1
+         DLwA==
+X-Forwarded-Encrypted: i=1; AFNElJ9hKKNvUvgaLDTcF0An1ga6fi0dcFwo8hzsB7ELRAXQMCU1NFcVVSUEkl3HpONIXLsh3l7JUdkCn/WzglX2pa0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywafu44SSnr/Fdv11pxs9r+PIAy4yOjnHD4gEr/uDWifnKLPcRm
+	rGlSxsemXA3YZFJDYdtUiFq0duXg2Z573ZnqZHHi3ENBJCFx+5J/2NOI
+X-Gm-Gg: AeBDiet6XVKwnA9EpwA5cqZqNV/ZgiMsGm9jzNOwlM03TqmA7he+XIUUNmEO1N9sRDq
+	DZbufmdtnKhi+rr3dFOX2xyifZtNFkKDNq/c3FdZLAaFQUCjNYJ4F+1fHsPrKOQF8k+6zUXsQc5
+	nsWZQoQEHNaT/q4MAChqqeRODd2LdAqbYy0ou9r8fPBy0c31IxNJ4o9TP9h75PUZgTEkbYqyKtK
+	IqXL3GEN39oCM+8Ndu9N/F9i8glFPBQX+eWo7Asg818IizUtIEM2z5e7t4L4pAn1bMBkmOTUwrc
+	OpMmuaUOQqHlz30FEc0JbN9q8AbM+5FkVqZcgbhF33OE5eV77JAeolskPyR+h1i8uD8oykbynaZ
+	c9vm0eKPYG8SbNS9FEJ56ZkBDxklrY3jch1v56Xo151I6CdNmghTQgsZ2t8W4o8hefqlxef0cXG
+	twmAAAyEfs6NxXbWpm6QakZwerrwEuy2Isp7anWFJRy8wpnXpDGqSuom2KZW8AWmI0Eg==
+X-Received: by 2002:a17:902:aa96:b0:2b7:86be:7670 with SMTP id d9443c01a7336-2b786be7763mr67586695ad.19.1776935733936;
+        Thu, 23 Apr 2026 02:15:33 -0700 (PDT)
+Received: from localhost (vpngw1.cse.cuhk.edu.hk. [137.189.90.211])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b5fab55062sm190241795ad.84.2026.04.23.02.15.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Apr 2026 02:15:33 -0700 (PDT)
+Date: Thu, 23 Apr 2026 17:15:16 +0800
+From: XIAO WU <shawdoxwu@gmail.com>
+To: bot+bpf-ci@kernel.org
+Cc: a.s.protopopov@gmail.com, akpm@linux-foundation.org,
+ ameryhung@gmail.com, andrii@kernel.org, ast@kernel.org,
+ bpf@vger.kernel.org, brauner@kernel.org, brgerst@gmail.com,
+ cgroups@vger.kernel.org, chenridong@huaweicloud.com, clm@meta.com,
+ daniel@iogearbox.net, davem@davemloft.net, eddyz87@gmail.com,
+ geliang@kernel.org, hannes@cmpxchg.org, haoluo@google.com, hawk@kernel.org,
+ hui.zhu@linux.dev, ihor.solodrai@linux.dev, inwardvessel@gmail.com,
+ jeffxu@chromium.org, jiayuan.chen@linux.dev, john.fastabend@gmail.com,
+ jolsa@kernel.org, kees@kernel.org, kernel@jfarr.cc,
+ kerneljasonxing@gmail.com, kpsingh@kernel.org, kuba@kernel.org,
+ lance.yang@linux.dev, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org, martin.lau@kernel.org,
+ martin.lau@linux.dev, masahiroy@kernel.org, mhocko@kernel.org,
+ mkoutny@suse.com, muchun.song@linux.dev, nathan@kernel.org,
+ netdev@vger.kernel.org, ojeda@kernel.org, paul.chaignon@gmail.com,
+ peterz@infradead.org, rdunlap@infradead.org, roman.gushchin@linux.dev,
+ sdf@fomichev.me, shakeel.butt@linux.dev, shuah@kernel.org, song@kernel.org,
+ tj@kernel.org, willemb@google.com, yonghong.song@linux.dev,
+ zhuhui@kylinos.cn
+Subject: Re: [RFC PATCH bpf-next v6 11/12] selftests/bpf: Add test for
+ memcg_bpf_ops hierarchies
+Message-ID: <20260423171516.00004adc@gmail.com>
+Organization: CUHK
+X-Mailer: Claws Mail 3.21.0 (GTK+ 2.24.33; x86_64-w64-mingw32)
+In-Reply-To: <958ccd923342ddd02e9122381d51319cb125ec51d601bb6fcad57531a2f5ef57@mail.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
+Hi,
 
-On Fri, Apr 17, 2026 at 10:44:19PM -0400, Zi Yan wrote:
->This check ensures the correctness of collapse read-only THPs for FSes
->after READ_ONLY_THP_FOR_FS is enabled by default for all FSes supporting
->PMD THP pagecache.
+> +cleanup:
+> +	bpf_link__destroy(link1);
+> +	bpf_link__destroy(link2);
+> +	bpf_link__destroy(link3);
+> +	memcg_ops__detach(skel);
+> +	memcg_ops__destroy(skel);
 >
->READ_ONLY_THP_FOR_FS only supports read-only fd and uses mapping->nr_thps
->and inode->i_writecount to prevent any write to read-only to-be-collapsed
->folios. In upcoming commits, READ_ONLY_THP_FOR_FS will be removed and the
->aforementioned mechanism will go away too. To ensure khugepaged functions
->as expected after the changes, skip if any folio is dirty after
->try_to_unmap(), since a dirty folio means this read-only folio
->got some writes via mmap can happen between try_to_unmap() and
->try_to_unmap_flush() via cached TLB entries and khugepaged does not support
->writable pagecache folio collapse yet.
->
->Signed-off-by: Zi Yan <ziy@nvidia.com>
->---
-> mm/khugepaged.c | 25 +++++++++++++++++++++----
-> 1 file changed, 21 insertions(+), 4 deletions(-)
->
->diff --git a/mm/khugepaged.c b/mm/khugepaged.c
->index 3eb5d982d3d3..1c0fdc81d276 100644
->--- a/mm/khugepaged.c
->+++ b/mm/khugepaged.c
->@@ -1979,8 +1979,7 @@ static enum scan_result collapse_file(struct mm_struct *mm, unsigned long addr,
-> 				}
-> 			} else if (folio_test_dirty(folio)) {
-> 				/*
->-				 * khugepaged only works on read-only fd,
->-				 * so this page is dirty because it hasn't
->+				 * This page is dirty because it hasn't
-> 				 * been flushed since first write. There
-> 				 * won't be new dirty pages.
-> 				 *
->@@ -2038,8 +2037,8 @@ static enum scan_result collapse_file(struct mm_struct *mm, unsigned long addr,
-> 		if (!is_shmem && (folio_test_dirty(folio) ||
-> 				  folio_test_writeback(folio))) {
-> 			/*
->-			 * khugepaged only works on read-only fd, so this
->-			 * folio is dirty because it hasn't been flushed
->+			 * khugepaged only works on clean file-backed folios,
->+			 * so this folio is dirty because it hasn't been flushed
-> 			 * since first write.
-> 			 */
-> 			result = SCAN_PAGE_DIRTY_OR_WRITEBACK;
->@@ -2083,6 +2082,24 @@ static enum scan_result collapse_file(struct mm_struct *mm, unsigned long addr,
-> 			goto out_unlock;
-> 		}
-> 
->+		/*
->+		 * At this point, the folio is locked, unmapped. Make sure the
->+		 * folio is clean, so that no one else is able to write to it,
->+		 * since that would require taking the folio lock first.
->+		 * Otherwise that means the folio was pointed by a dirty PTE and
->+		 * some CPU might have a valid TLB entry with dirty bit set
->+		 * still pointing to this folio and writes can happen without
->+		 * causing a page table walk and folio lock acquisition before
->+		 * the try_to_unmap_flush() below is done. After the collapse,
->+		 * file-backed folio is not set as dirty and can be discarded
->+		 * before any new write marks the folio dirty, causing data
->+		 * corruption.
->+		 */
->+		if (!is_shmem && folio_test_dirty(folio)) {
->+			result = SCAN_PAGE_DIRTY_OR_WRITEBACK;
->+			goto out_unlock;
+> Can this crash if skel is NULL?
 
-Looks buggy :)
+Yes, this is a valid bug in the selftest cleanup path.
 
-This runs after folio_isolate_lru() and after xas_lock_irq(&xas) ...
+If execution jumps to cleanup before memcg_ops__open_and_load()
+succeeds, skel remains NULL. In that case, memcg_ops__detach(skel)
+dereferences NULL through obj->skeleton in the generated detach helper,
+as you pointed out.
 
-If not missing something, "goto out_unlock" would leave the xarray lock
-held and the folio off the LRU :)
+This is also inconsistent with nearby tests in the same file that
+already do if (skel) {
+    memcg_ops__detach(skel);
+    memcg_ops__destroy(skel);
+}
 
-Note that the block right above does call xas_unlock_irq(&xas), and it
-also does call folio_putback_lru(folio):
+The C repro, modeling the same control flow:
 
----8<---
-		if (folio_ref_count(folio) != 2 + folio_nr_pages(folio)) {
-			result = SCAN_PAGE_COUNT;
-			xas_unlock_irq(&xas);     <-
-			folio_putback_lru(folio); <-
-			goto out_unlock;
-		}
----
+--8<--
+// SPDX-License-Identifier: GPL-2.0
+// PoC for cleanup-path NULL dereference in
+test_memcg_ops_hierarchies().
 
-So we should follow the same cleanup as that block here, right?
+#include <stdio.h>
+
+struct bpf_object_skeleton {
+    int dummy;
+};
+
+struct memcg_ops {
+    struct bpf_object_skeleton *skeleton;
+};
+
+__attribute__((noinline))
+static void bpf_object__detach_skeleton(struct bpf_object_skeleton *s)
+{
+    (void)s;
+}
+
+/* Matches generated skeleton helper shape from review mail. */
+static inline void memcg_ops__detach(struct memcg_ops *obj)
+{
+    bpf_object__detach_skeleton(obj->skeleton);
+}
+
+static int setup_cgroup_environment_fail(void)
+{
+    return -1;
+}
+
+int main(void)
+{
+    int ret;
+    struct memcg_ops *skel = NULL;
+
+    fprintf(stderr, "[*] trigger cleanup with skel == NULL\n");
+
+    /* Simulate early failure before open_and_load() assigns skel. */
+    ret = setup_cgroup_environment_fail();
+    if (ret)
+        goto cleanup;
+
+cleanup:
+    /* Same problematic call pattern as in the test cleanup block. */
+    memcg_ops__detach(skel);
+
+    return 0;
+}
+--8<--
+
+
+Signed-off-by: XIAO WU <shawdoxwu@gmail.com>
+
+Thanks,
+
+xiao
