@@ -1,94 +1,155 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBB1B3DBD5B
-	for <linux-kselftest@vger.kernel.org>; Thu, 23 Apr 2026 03:57:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE89221638D
+	for <linux-kselftest@vger.kernel.org>; Thu, 23 Apr 2026 04:48:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776916674; cv=none; b=ouRAFy90y9dKfREtL+3S4nHd7JHahmes2WC19AljMy7K5FMlBOY5HJS0bPvVIJfj59MTgYwp3KiFDnXpwu1bv8fENWC6mIM8WOFIsasFUto5fe9fbfnzgBZgnfmA+5YheG0Gt9tbz5L5e3nNrkltowVI++3osBHj2sORDp8o1z8=
+	t=1776919691; cv=none; b=QPoZ92rjRrNeOWsdMMxOKB42MIoiMGexu/eyJSxpWXpOuM17HXUJU+7Y6tSoClcK7q+yG6UG6MbALhAbkFVZmFaDdy8vBIimDm1+u11YMJCYjpudRJIzZSmO21IpoKPiIrnpmtS2JPA7aNR9jO6vnncUBt6YHKTaGCPfbGU/lbw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776916674; c=relaxed/simple;
-	bh=sP8VwTVibgFh2Sp26u4FZsd/tmJ1zb+xee4pxb/MRMQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GAmR/Fy/bAKMAWjkhoxU28E0aLI1PLX2Vc5Z6kPzDY/oyzyCYYessySgYVJh1e9Kbh+UQC6cQHv53x3KNz3ecv3+jyM87yKie4IMAHLKiG+qjzxrtRmfOUZ3Jy4ONdPw/VGAcE4pmzBj4Osx10m9WpuXydPOaZzrN0M8+GqlOKM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bXg2Bhtg; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1776919691; c=relaxed/simple;
+	bh=rv++CDO3/N6wprt/C2IZzwTSdIEqADbSlhN+/tasXIM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gIBp0WTET3o2ujkoyH8qMKw/5pgIo5kHyvTZs2ydj8/evToTTFdjlyMRkki1myDdAdqamZswBZiFNNA1CnyWQk4ypTY1S6b9rSsiEfrbxTrWJJRP8iazBrCWXro82tXdAsDU2EwJ1XX5wouKiexDVcp4MHZcT47N5AKp+sVD1Ro=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=pSwKFVPk; arc=none smtp.client-ip=91.218.175.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bXg2Bhtg"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4891e5b9c1fso41416925e9.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 Apr 2026 20:57:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776916670; x=1777521470; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MbrL1XZZhefhQUaVu+cW2ak3PDj8qOb0MiC1YKHdwbI=;
-        b=bXg2BhtgkslZZLbmpnqmOl5evT5/Gy/gADyyVP07Wx1KQ+KiTke1xFJirkSfBL+4vR
-         1HQigetdSFw8LK6JSEUx7anct7v81njKAjTW876p+yDE8HBFq1niU/AEU6hbZUx9hlRR
-         KTAX+NnIvDlMK55qOr5M4EZ7IBU4L5+gbWP1dIOIahNb2nPbIsztgQmK8snnnw5kMWII
-         15K83LafEC79lyCjPRYY7Wy71z4HFw9tB8pe+j8dbwrQO5t/iwjWPYLG1yXdbPNiUB5J
-         ++sHg2Hys+tDMp+sABQbyCUWkQZb7qPKZrbrXKHN7nUz/0kxblihcv5TeFQg2vz9+Va5
-         toww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776916670; x=1777521470;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MbrL1XZZhefhQUaVu+cW2ak3PDj8qOb0MiC1YKHdwbI=;
-        b=YNKxTbK1gM+x8pPisYpziqnsxG8H2X4h3Z5u5i6Qx9RF4N10oJKfskui+SVoz+tTAm
-         HODhdjufUK1pPJ4s2xe7jcCmTSThCDVIMsDeuu2NZrFdLbvfeQrbFOUC6NIuDMwgWTEL
-         IH0nZ6jkVj7BsTTvVUuQbuUzzOMzWMwJE+VSMwZcXv/sM0lCLw4knFIi7i1/sP5HPL6o
-         yO3x2yrX7hCklDhS4M4Ai/8kh8IjCYLZVpRTyYiS6Xzc+mkQ74C103TZ9HhDrQy4588g
-         lrJueiqV4yo0Y55h4qq7zAN6a6m3A1ObzqZ13UBRifHImB7MElZ+O/CtdUQDyL78ao61
-         71Qw==
-X-Forwarded-Encrypted: i=1; AFNElJ/3FES1dCHLQ8e66Lk9HZTrRCE/n/pn+2+GF9ICjVYA5DgkgOUeW2GMj1VR8g+wWUG55/N5fcBcMqXR2CpkW3o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzF8ALxXy8dhbFMCfPwEOldZ4QNV5mNmwCcR8E3O8r3KQrlOSIX
-	al5eOVIQml8KXjvfCy9lPTqGx+WJsFa0SSmOyCOCFiT/3BTBviUgKepE
-X-Gm-Gg: AeBDieuwsGnJqj8emhJJJmKJCdtdnVp0Dzuqy4TqAjb29hNHA9AKBNUCKGAXXUaiicJ
-	GZVvVAyyg/kuAZWmpOsn0bLq3ItKT55oki4HTzcTvznAlG3jaWzKAdcoTZpybtEkyEZwEdMo+lE
-	PhdW2yx+T3sbeS8kMkDMpnreCBCboLw3WiO9k0tCUGYXiJl0IPZlnUCLadSCJh/XFxMBSNZNGSv
-	wmiqi85M6UBAgEG+jzEUbVdTltIiImbTJzgM07ncqXjPu+qh81607tDJHJALN1+lrLUebIOD7iL
-	I5H+to1hVDMD8esN47M7c8zbKZshnJPwppR5dmWh1vP+S2i/KhAyAiwvLcVdwtfupYDnYBNm/fF
-	Mwt+v3gVD/9JDLHQX7PtIMqdw1j9JGwsgO+3BS97INNSMmAykzP7tSghwfh02yTKt82PsbC88+O
-	qIQ+YWEt3EvuNEuZzCyFydVSuT3w1uV9QvbNpJuHH8E/4NBfe+73PuKg0MQusex5zvylGz7dgcp
-	9h9GjAg6yTUhs46hjg=
-X-Received: by 2002:a05:600d:8451:b0:48a:599a:36fe with SMTP id 5b1f17b1804b1-48a599a4413mr69411735e9.24.1776916670290;
-        Wed, 22 Apr 2026 20:57:50 -0700 (PDT)
-Received: from fedora (185-147-214-8.mad.as62651.net. [185.147.214.8])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-488fc0f82bbsm836912545e9.3.2026.04.22.20.57.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Apr 2026 20:57:49 -0700 (PDT)
-Date: Thu, 23 Apr 2026 11:57:44 +0800
-From: Ming Lei <tom.leiming@gmail.com>
-To: Caleb Sander Mateos <csander@purestorage.com>
-Cc: Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-block@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 3/3] selftests: ublk: add ublk auto integrity test
-Message-ID: <aemYuKH5wlOFhMX8@fedora>
-References: <20260421200901.1528842-1-csander@purestorage.com>
- <20260421200901.1528842-4-csander@purestorage.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="pSwKFVPk"
+Message-ID: <268e0f1e-8575-4ee1-8a0c-48e1b9ae05f0@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1776919676;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=F2ZOLwoMzsrbZBwQV+NdexL8zdWBG0VIOfAx2UN7NiM=;
+	b=pSwKFVPk3ujuY4dTQoLRLMcsH014KXuXyCtwbvn5BpAjl2tog1AzPpF6zi5PKQRYU+4s54
+	DcR7ZoY7F9/0nR2yK2QwOs9aKQaduL6/xrtsJdILfC6i+J7TBDgLWAKIpxiidWUUC/kA4E
+	MB+UB0RZF7aHqNLieJzBgCKgNazv8gg=
+Date: Thu, 23 Apr 2026 12:47:39 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260421200901.1528842-4-csander@purestorage.com>
+Subject: Re: [PATCH 7.2 v3 01/12] mm/khugepaged: remove READ_ONLY_THP_FOR_FS
+ check
+Content-Language: en-US
+To: Zi Yan <ziy@nvidia.com>
+Cc: willy@infradead.org, songliubraving@fb.com, clm@fb.com, dsterba@suse.com,
+ viro@zeniv.linux.org.uk, brauner@kernel.org, jack@suse.cz,
+ akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org,
+ baolin.wang@linux.alibaba.com, Liam.Howlett@oracle.com, npache@redhat.com,
+ ryan.roberts@arm.com, dev.jain@arm.com, baohua@kernel.org,
+ vbabka@kernel.org, rppt@kernel.org, surenb@google.com, mhocko@suse.com,
+ shuah@kernel.org, linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org
+References: <20260418024429.4055056-2-ziy@nvidia.com>
+ <20260423024324.51588-1-lance.yang@linux.dev>
+ <20BA865A-1B69-48DA-BE12-9BFC6EA5A4CE@nvidia.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Lance Yang <lance.yang@linux.dev>
+In-Reply-To: <20BA865A-1B69-48DA-BE12-9BFC6EA5A4CE@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Tue, Apr 21, 2026 at 02:09:01PM -0600, Caleb Sander Mateos wrote:
-> The end-to-end integrity ublk selftest test_integrity_02 requires a
-> relatively recent fio version to support I/O with integrity buffers. Add
-> a version test_integrity_03 that uses the block layer's auto integrity
-> path instead. The auto integrity code doesn't check the application tag,
-> and doesn't indicate the bad guard/ref tag (just returns EILSEQ). But
-> it's a good smoke-test of the ublk integrity code and provides coverage
-> of the auto integrity path as well.
+
+
+On 2026/4/23 10:51, Zi Yan wrote:
+> On 22 Apr 2026, at 22:43, Lance Yang wrote:
 > 
-> Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
+>> On Fri, Apr 17, 2026 at 10:44:18PM -0400, Zi Yan wrote:
+>>> collapse_file() requires FSes supporting large folio with at least
+>>> PMD_ORDER, so replace the READ_ONLY_THP_FOR_FS check with that.
+>>> MADV_COLLAPSE ignores shmem huge config, so exclude the check for shmem.
+>>>
+>>> While at it, replace VM_BUG_ON with VM_WARN_ON_ONCE.
+>>>
+>>> Add a helper function mapping_pmd_thp_support() for FSes supporting large
+>>> folio with at least PMD_ORDER.
+>>>
+>>> Signed-off-by: Zi Yan <ziy@nvidia.com>
+>>> ---
+>>> include/linux/pagemap.h | 10 ++++++++++
+>>> mm/khugepaged.c         |  5 +++--
+>>> 2 files changed, 13 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/include/linux/pagemap.h b/include/linux/pagemap.h
+>>> index ec442af3f886..c3cb1ec982cd 100644
+>>> --- a/include/linux/pagemap.h
+>>> +++ b/include/linux/pagemap.h
+>>> @@ -524,6 +524,16 @@ static inline bool mapping_large_folio_support(const struct address_space *mappi
+>>> 	return mapping_max_folio_order(mapping) > 0;
+>>> }
+>>>
+>>> +static inline bool mapping_pmd_thp_support(const struct address_space *mapping)
+>>> +{
+>>> +	/* AS_FOLIO_ORDER is only reasonable for pagecache folios */
+>>> +	VM_WARN_ONCE((unsigned long)mapping & FOLIO_MAPPING_ANON,
+>>> +			"Anonymous mapping always supports PMD THP");
+>>
+>> Nit: afraid not, at least when running on architectures without PMD leaf
+>> entries ...
+>>
+>> Maybe better to say this helper is only meaningful for pagecache-backed
+>> mappings. Anonymous mappings should not reach here.
+> 
+> Good suggestion. Will fix it.
+> 
+>>
+>>> +
+>>> +	return mapping_max_folio_order(mapping) >= PMD_ORDER;
+>>> +}
+>>> +
+>>> +
+>>> /* Return the maximum folio size for this pagecache mapping, in bytes. */
+>>> static inline size_t mapping_max_folio_size(const struct address_space *mapping)
+>>> {
+>>> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+>>> index b8452dbdb043..3eb5d982d3d3 100644
+>>> --- a/mm/khugepaged.c
+>>> +++ b/mm/khugepaged.c
+>>> @@ -1892,8 +1892,9 @@ static enum scan_result collapse_file(struct mm_struct *mm, unsigned long addr,
+>>> 	int nr_none = 0;
+>>> 	bool is_shmem = shmem_file(file);
+>>>
+>>> -	VM_BUG_ON(!IS_ENABLED(CONFIG_READ_ONLY_THP_FOR_FS) && !is_shmem);
+>>> -	VM_BUG_ON(start & (HPAGE_PMD_NR - 1));
+>>> +	/* MADV_COLLAPSE ignores shmem huge config, so do not check shmem */
+>>> +	VM_WARN_ON_ONCE(!is_shmem && !mapping_pmd_thp_support(mapping));
+>>
+>> With [1], can we drop !is_shmem here as well? shmem would then always
+>> call mapping_set_large_folios(inode->i_mapping):
+>>
+>> ---8<---
+>> diff --git a/mm/shmem.c b/mm/shmem.c
+>> index 4ecefe02881d..dafbea53b22d 100644
+>> --- a/mm/shmem.c
+>> +++ b/mm/shmem.c
+>> @@ -3087,10 +3087,7 @@ static struct inode *__shmem_get_inode(struct mnt_idmap *idmap,
+>>   	cache_no_acl(inode);
+>>   	if (sbinfo->noswap)
+>>   		mapping_set_unevictable(inode->i_mapping);
+>> -
+>> -	/* Don't consider 'deny' for emergencies and 'force' for testing */
+>> -	if (sbinfo->huge)
+>> -		mapping_set_large_folios(inode->i_mapping);
+>> +	mapping_set_large_folios(inode->i_mapping);
+>>
+>>   	switch (mode & S_IFMT) {
+>>   	default:
+>> --
+>>
+>> But we can do that in a follow-up, once the revert lands :)
+> 
+> Right. That would make this patchset depend on Baolin’s fix. A follow-up
+> patch is easier for managing these patches. I will add a TODO in the
+> comment, so that we will not forget. Thank you for the suggestion.
 
-Reviewed-by: Ming Lei <tom.leiming@gmail.com>
+OK. With the changes above,
 
-Thanks,
-Ming
+Reviewed-by: Lance Yang <lance.yang@linux.dev>
