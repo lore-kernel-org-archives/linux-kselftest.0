@@ -1,146 +1,159 @@
-Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABBF43D413A
-	for <linux-kselftest@vger.kernel.org>; Thu, 23 Apr 2026 06:57:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776927431; cv=pass; b=CKBMsKASqKfUkriZ6eZ11471I2+R28ZLKZYCUO/Rp0ExQz/u+6uTjAUv+nuYET4vdpJ4kpXEZYbZGgHhMGGJMB3P6kzXDiutHcHYXCBMi+tJMQ5dlTsDrJ2MCrzD4wUUtanyrm5FBlxWWHG0tNmATtOEkf9+urQRvFk5VwlVJ5k=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776927431; c=relaxed/simple;
-	bh=FaMQxyMbm/MvssklYFNdPl+DM+5+46erElji7HAPf4Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Gr/gH7kR2bV1B81RFu4rj9AaeS1TMJqiZo0UVj6f4gbi/jZ1T06CnguF0c/BJvGnCU/HJXGVPG7x6zkT/lBGANXloAVJ5MQ3i+f4L+speBSNo4F0i6O0dKLwnEkgu/Gdmd+Lp/24T5Q5K4Xv2hK/dUuQxefWqLH2uxv4MDR2Ots=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aDnxWOoK; arc=pass smtp.client-ip=209.85.160.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A39CE33C18B
+	for <linux-kselftest@vger.kernel.org>; Thu, 23 Apr 2026 07:50:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776930633; cv=none; b=Pd/dtMri1SiFo7EndyUptI09/kAaeP9oDKRghJhg8xyIVnWv4VeBnDa1D0CpwEY3oDvLktEgvN3ZJFYK2pMSohpfEVgmS4y3S3a7jdJqlC0oUP33uTk0nenifcTqgp1goS/FB2U+bG0onvWDmM7E4beM00Ii1DHmEP2t1XwanxQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776930633; c=relaxed/simple;
+	bh=IgtwCmjndgaX5VLGbpmx2IqtuMX+Uwr5274d8PnIO7I=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=V1jtLnKP61tkvE2t/bqoCS3cq5Wi/USItYVcS5Hun7eJin8fOAglXfKEJwzmIZaWuE/a5ONs4yEWX9jJ4R8g3fXt7NrCOintI/1q7CcsEYKn8sgi+TMFtnuWgdCQrDnW1hPUKWKAh5trWRDXYjdJbx7fdKddnr7PSRYQYwgVDkc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QunwAd/6; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=aH9RIC6I; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aDnxWOoK"
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-42ff0576868so38565fac.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 Apr 2026 23:57:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1776927428; cv=none;
-        d=google.com; s=arc-20240605;
-        b=B28T8yiKsMKQX/ublkY2LGxMWXvecL9oT4nMAIv9AD8/UuveByce775dD6d4kvnwJv
-         F9f7B2yalFlR+4qn9zpwutG33PRQX0ScvtmRZpWv97e99zPz4XfVYjErbpVAgnTtVZEg
-         5PY4sAqeplJvcH2nKvl7eKFQwn+PGpqh84bEUrYjoG3RM8tCNBATcvQqIXAm3cZb9AnL
-         tnPfzpZU2Vp1pebaLOlaNQA8ZlaixouGKZnK+H6u5HK68a2ohLsv3hRIas6ZGLfPHFeu
-         f1V/kbnyFYZ5Fzwt6Zj4DB1IIJazFdwbXt0hislHCu6slAW792LhN/gkkd26Plkh/e74
-         7v4Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=QB81J+kn3zUKSpeQ5Shly/8f+kNoagaKHjIgpIqova8=;
-        fh=QBQESWzWrNV60ib9INMtHFDFzVMjhdyfBHYb/1Uc1A4=;
-        b=XSl2r4lKrUxcXNLWa4y5N/sMJwge5nt4Lx2wwenfdPOznLS3+G6zV/OHtKwlNCE3an
-         Wc1WVwnvF5FjSVp26QNcaLWSkQxkGISSC8spSJRSpDbAMNlg4EUdQbtFiFV3vmnMOK56
-         fKvJiQ6WsS5CrlK5pdNbCdxAGeZ4HNREWIU4o5HeU5lkRIWE5rPcTf4/BMm/QywIkTht
-         ILHuEu23T1MMIE+r2Z19veAbo4K10iZWYVk7MJ1UcyiYMtl3jQz70SRwIEZRavyGADlY
-         p+bg2AifrUu1aaZaho9JvuWx1H/bMXVtX0GRbMjwyi1zynT7GHQWAJSp6RmUnhSZG6/K
-         hbHg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QunwAd/6";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="aH9RIC6I"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1776930630;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=7M6hLcNsYTpn8pFlak44q94E8+lDHFczoYFSZXMpddI=;
+	b=QunwAd/63TOm7YDPervaQaI9TzmoJ4FoBweyCm2zBuaosP4pAeaIiiTuSLS63taKzFWlDy
+	phFCXzpWwRsY0T0cg4uBwPSoMQxKy3bVPk/sUG3INRymnyca/qbAfqXN5ynmG4BdpjzRoR
+	BxtfpxyvK2A3xVqXQ9giHj53RuV8sZU=
+Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com
+ [209.85.210.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-556-Yrjc-QbSPWG1RvuC3QQkJQ-1; Thu, 23 Apr 2026 03:50:29 -0400
+X-MC-Unique: Yrjc-QbSPWG1RvuC3QQkJQ-1
+X-Mimecast-MFC-AGG-ID: Yrjc-QbSPWG1RvuC3QQkJQ_1776930628
+Received: by mail-pf1-f199.google.com with SMTP id d2e1a72fcca58-82f756ebd0dso4265984b3a.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 23 Apr 2026 00:50:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776927428; x=1777532228; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QB81J+kn3zUKSpeQ5Shly/8f+kNoagaKHjIgpIqova8=;
-        b=aDnxWOoKVJAeiy+w1c9dhUM0ea2Ll9yoNW3Ap+jnC/MIoOsuLt3b2WFgqzbrWDO/E5
-         jEAaP3bcSBvc1/hBbhw//9L9NbVQWxsjrJVrdFIYCCBl+vofnHezjMS7y4g67VYqgfWN
-         FaFR2T46ZA/bYJiIeQqjEiS6055+H3bVD9GK8Ll3/bbOFClmVAPTi4MdqRdiGeChzmcj
-         m6TzeQn2AzoV9uOXQxW5QL3rORPC2a1YxwNlma69uckaqi7f2/okhQuhdHHCtsROpGNy
-         Qp0XnVg1KK+n3pTkFA1poNLu0kp8mF5DEL833cBCKX4kth1a81PG8+fveVeQoHTSEeEu
-         /eqA==
+        d=redhat.com; s=google; t=1776930628; x=1777535428; darn=vger.kernel.org;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7M6hLcNsYTpn8pFlak44q94E8+lDHFczoYFSZXMpddI=;
+        b=aH9RIC6IMgKWJJ/9wsV9feHrNvlMacZPgZ01bFFqV10zrEMimmDTM/8ZeHKrmzgH2m
+         M6cgg9Wsj8S8UmztldG0PkdQzjaDn5Ichql/GLtJwiGz0bN91B8sUHlk8Q/Dj8BIqfIu
+         BRjhTI07WFuEaxUOSTJN/zzsaYrED1kqBSfSIY6wcmK1IMNVCF5rBgRQpvZllxC7R0vI
+         lXV+80tUht9im8lbN+tJOXzaCl591sWWyyUQonWBwzWAaWUmVuHCQWioZu1UO/MrOMin
+         b1FAG6agOiProfaAvy+wuieuttSfn2nDeZXLqUgVEgjRG21+dNBHHw//fzQgblpP1+B7
+         aRbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776927428; x=1777532228;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=QB81J+kn3zUKSpeQ5Shly/8f+kNoagaKHjIgpIqova8=;
-        b=KObBq5/SbxjOaUiIug3w6u4iBoEr/EnxLbm2vG8ulaZrxOk50vbUDCVxU5cj9E7quL
-         A0klQOLp8npqZYbzTxIMerjIwSLOuOtdntHFpJzqezYPixWQ4MTsTyXINZbbULSQQU29
-         OpHNZawvNAti/AY61662fVmnluJAJoP7xGqlPcErRDLfZt0wltBr9XY5OMAqoZtymm1R
-         0A0sTQN10/y20K4G5t5H4qBPkt6lJc5yU1r5yBY93Z5HW9V+z8Sslg6pxlWGtDHi565L
-         4FmIet6dD4LG42G1cYqKewEPAR9WKkXmNyIi7IcALeuljFNp42Et+UwWiwKkN7fZ6d3i
-         wNbQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/diUjXkfhLFNs2bRczGfYljwQZXBBF/64cpX6jHkMkris4k8s+tmYOOBzkyPXz4ALBRnAGX/vxhX4BHRfoMJU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxHDWIViBMPIc0Ivn3RNfZwRFXZPlJE+29uh1DnICXT36+xb+/n
-	LacI8saqPdWYQI05zFgT3JdqabQGloztIx1tmZkbmmmaSnw1QOGk7wZZfGsQyOaiyujuzZboB/9
-	GSen/hTpYejpXpWHwq+gFsL4/sjLsTxI=
-X-Gm-Gg: AeBDietswFadFhFb3Os9oi0/4YghtXZIWE93cJ8T8zlsyNIIWVACC3GpC2GpKlipag1
-	RpF/whi6A1we3Qb4J9rZsy+WEbUsrHdQZFRvnFVhR+We8ISCY97fqR+Th5dsm9n6NtkpFVZ3HCR
-	vDWIMIgwevtQhQtPQfLcFKLep5LViZm6+WkcLFn3IFe+VYjeCfVYU+vWK7b0Hmfd3028fpqZdqF
-	41IamE5hIrGZLCho6DDTNVtaSUvFSax9zZKQcUrVICcNZa+escS5/3/daVWCUdA4/aNalHfxWMl
-	e1/HOTQipI18VtiTz2MuSWcTsBA+Nw==
-X-Received: by 2002:a05:6871:c005:b0:42c:7f89:2916 with SMTP id
- 586e51a60fabf-42c7f892ceamr7133923fac.20.1776927428557; Wed, 22 Apr 2026
- 23:57:08 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1776930628; x=1777535428;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7M6hLcNsYTpn8pFlak44q94E8+lDHFczoYFSZXMpddI=;
+        b=HOxCXHYyiQe8iXpV1Uorc+O/uunT3szTsyT3h6DpNzhnFyAxLmFfZXGL8Gw7Lpm7sc
+         T7vkSdKtLRR+d5+qeiOZ2rdrnr9xBoIneGVkOkLFOLyWFjcAXd9rybDsEfIekgG+CoAN
+         Lv9zgvC/l0UPI9wLO9BA65M4tYpWWsLLH7OAFPlqnWQ0JZ3DeNd35JJl/ldERe8u6r9Z
+         86yBF74XwQ7EFJv8P3c2CZGETj8k5brBhmiN2u+Fg+FqfOpU8FmdP37DpRU/StXDOJxR
+         ZmmilI4Hl4VRXZGAICon9GRV4eKkLqpw6cOlpaH6dKO52LirrrFyk69htlT35AUfPdVV
+         r3/w==
+X-Forwarded-Encrypted: i=1; AFNElJ9H025DgjjRUbNdHxDSWncZsUd+1Wl++/FbzEsz/VYZmqrjxN1qkp5Zml46mXwI/WrAlc07kxvFtKqCXTplwJw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxgN53+RxjFRiy6LFFuoF3Cxi4GDgZ0D7sVDrv+kQMpp2Zy4TZ/
+	Q/yRXUy7B96FBGdeugDqU/66DCDxFVl4q/5REZcWvh5dMAiKcWuD5kUE9wIWJH2PK1XrMhUmwfR
+	Z42GFlFv5JCkQYEFQF0gkJhY1YwEDVRaOgs97bYUlTXWsyvAfJtuZ/8Cm97W5JBOhnfNxxw==
+X-Gm-Gg: AeBDiesCnmHO4q9sA6mhskkbK9+eF3m9B7TPcWfHxL1k34tn1whWgnmjXwmA4TrJDsp
+	bqIT5Ohvm4M+FRptqb64PTEEmgfjUoxnY04N6sg6iiqdBFUrI5iKIZjThrCgHSOzvjgOOHUkoDl
+	FsOLtD3PL3gDRjzLtebppzdHAWmqUqQx2wHppgg1nhoJ9sRoCyvBv2bHo7/38pE5SHibtILAsTu
+	/Ub4gAcpdpqGxJxJ12A5PXhqMsbCuOmFMPnJcfJnvE0INom3uODGmGpUgwY3RLqcQIi19ypLf+u
+	tdXjYhNx0ti2qehchZ8dCF15e32lnEFDZAbddoQfYex3qB7aGNcquiDf8CFJHXlq+NK533fVBr2
+	Hf/vjkkXfKQS1PKcC1UtpYyFl3C3p
+X-Received: by 2002:a05:6a00:148e:b0:82c:9cd2:fee5 with SMTP id d2e1a72fcca58-82f8c87e28amr25577178b3a.7.1776930628214;
+        Thu, 23 Apr 2026 00:50:28 -0700 (PDT)
+X-Received: by 2002:a05:6a00:148e:b0:82c:9cd2:fee5 with SMTP id d2e1a72fcca58-82f8c87e28amr25577148b3a.7.1776930627699;
+        Thu, 23 Apr 2026 00:50:27 -0700 (PDT)
+Received: from fedora (g3.ign.cz. [91.219.240.17])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82f8ec23b19sm22580923b3a.59.2026.04.23.00.50.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Apr 2026 00:50:26 -0700 (PDT)
+From: Vitaly Kuznetsov <vkuznets@redhat.com>
+To: Piotr Zarycki <piotr.zarycki@gmail.com>
+Cc: kvm@vger.kernel.org, seanjc@google.com, pbonzini@redhat.com,
+ shuah@kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org, Piotr
+ Zarycki <piotr.zarycki@gmail.com>
+Subject: Re: [PATCH v2] KVM: selftests: hyperv_tlb_flush: replace NOP loop
+ with udelay()
+In-Reply-To: <20260422130307.1171808-1-piotr.zarycki@gmail.com>
+References: <87v7djgoji.fsf@redhat.com>
+ <20260422130307.1171808-1-piotr.zarycki@gmail.com>
+Date: Thu, 23 Apr 2026 09:50:16 +0200
+Message-ID: <87se8mglon.fsf@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260422183757.15069-1-suchitkarunakaran@gmail.com> <CAADnVQ+=iEmyf-=T=V0oW2aK+dgx4S0CbAAPi4pSg=DnaHNFoA@mail.gmail.com>
-In-Reply-To: <CAADnVQ+=iEmyf-=T=V0oW2aK+dgx4S0CbAAPi4pSg=DnaHNFoA@mail.gmail.com>
-From: Suchit Karunakaran <suchitkarunakaran@gmail.com>
-Date: Thu, 23 Apr 2026 12:26:57 +0530
-X-Gm-Features: AQROBzCmP_tTpa9MPR2n3mcSyZk76MbSm-jGeLSvbrvMhcfw5ZdsgAHyHU-UZm4
-Message-ID: <CAO9wTFi8wrhP07YikinU283Z_JVyttNrzwwgdVWz=gUvuWjzGw@mail.gmail.com>
-Subject: Re: [PATCH] selftests/bpf: replace bpf_probe_read_kernel with direct access
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Eduard <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Shuah Khan <shuah@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, bpf <bpf@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-On Thu, 23 Apr 2026 at 02:51, Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Wed, Apr 22, 2026 at 11:38=E2=80=AFAM Suchit Karunakaran
-> <suchitkarunakaran@gmail.com> wrote:
-> >
-> > Use direct field access instead of bpf_probe_read_kernel() for
-> > nlk->groups[0] and inode->i_ino, and clean up related code.
-> >
-> > Removes obsolete FIXME comments and unused variable.
-> >
-> > Signed-off-by: Suchit Karunakaran <suchitkarunakaran@gmail.com>
-> > ---
-> >  .../testing/selftests/bpf/progs/bpf_iter_netlink.c  | 13 ++-----------
-> >  1 file changed, 2 insertions(+), 11 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_netlink.c b/too=
-ls/testing/selftests/bpf/progs/bpf_iter_netlink.c
-> > index 00b2ceae81fb..5930bf8899d2 100644
-> > --- a/tools/testing/selftests/bpf/progs/bpf_iter_netlink.c
-> > +++ b/tools/testing/selftests/bpf/progs/bpf_iter_netlink.c
-> > @@ -17,7 +17,6 @@ int dump_netlink(struct bpf_iter__netlink *ctx)
-> >         struct seq_file *seq =3D ctx->meta->seq;
-> >         struct netlink_sock *nlk =3D ctx->sk;
-> >         unsigned long group, ino;
-> > -       struct inode *inode;
-> >         struct socket *sk;
-> >         struct sock *s;
-> >
-> > @@ -35,10 +34,7 @@ int dump_netlink(struct bpf_iter__netlink *ctx)
-> >         if (!nlk->groups)  {
-> >                 group =3D 0;
-> >         } else {
-> > -               /* FIXME: temporary use bpf_probe_read_kernel here, nee=
-ds
-> > -                * verifier support to do direct access.
-> > -                */
-> > -               bpf_probe_read_kernel(&group, sizeof(group), &nlk->grou=
-ps[0]);
->
-> Please stop sending patches to remove TODO and FIXME.
->
-> pw-bot: cr
+Piotr Zarycki <piotr.zarycki@gmail.com> writes:
 
-Sorry about that. I'll test it more rigorously next time and ensure
-the patch is sensible.
+> Replace the open-coded NOP loop with udelay() which was added to KVM
+> selftests in commit 6b878cbb87bf ("KVM: selftests: Add guest udelay()
+> utility for x86"). The NOP loop is CPU speed dependent while udelay()
+> provides a deterministic delay regardless of host CPU frequency.
+>
+> Signed-off-by: Piotr Zarycki <piotr.zarycki@gmail.com>
+
+Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+
+Thanks!
+
+> ---
+>  .../testing/selftests/kvm/x86/hyperv_tlb_flush.c  | 15 ++-------------
+>  1 file changed, 2 insertions(+), 13 deletions(-)
+>
+> diff --git a/tools/testing/selftests/kvm/x86/hyperv_tlb_flush.c b/tools/testing/selftests/kvm/x86/hyperv_tlb_flush.c
+> index c542cc4762b1..4b7f089542c1 100644
+> --- a/tools/testing/selftests/kvm/x86/hyperv_tlb_flush.c
+> +++ b/tools/testing/selftests/kvm/x86/hyperv_tlb_flush.c
+> @@ -141,17 +141,6 @@ static void swap_two_test_pages(vm_paddr_t pte_gva1, vm_paddr_t pte_gva2)
+>  	*(uint64_t *)pte_gva2 = tmp;
+>  }
+>  
+> -/*
+> - * TODO: replace the silly NOP loop with a proper udelay() implementation.
+> - */
+> -static inline void do_delay(void)
+> -{
+> -	int i;
+> -
+> -	for (i = 0; i < 1000000; i++)
+> -		asm volatile("nop");
+> -}
+> -
+>  /*
+>   * Prepare to test: 'disable' workers by setting the expectation to '0',
+>   * clear hypercall input page and then swap two test pages.
+> @@ -169,7 +158,7 @@ static inline void prepare_to_test(struct test_data *data)
+>  	wmb();
+>  
+>  	/* Make sure workers have enough time to notice */
+> -	do_delay();
+> +	udelay(100);
+>  
+>  	/* Swap test page mappings */
+>  	swap_two_test_pages(data->test_pages_pte[0], data->test_pages_pte[1]);
+> @@ -189,7 +178,7 @@ static inline void post_test(struct test_data *data, u64 exp1, u64 exp2)
+>  	set_expected_val((void *)data->test_pages, exp2, WORKER_VCPU_ID_2);
+>  
+>  	/* Make sure workers have enough time to test */
+> -	do_delay();
+> +	udelay(100);
+>  }
+>  
+>  #define TESTVAL1 0x0101010101010101
+
+-- 
+Vitaly
+
