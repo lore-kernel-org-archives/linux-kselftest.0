@@ -1,131 +1,120 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E8792C324D;
-	Thu, 23 Apr 2026 13:40:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 622FD30FC1E
+	for <linux-kselftest@vger.kernel.org>; Thu, 23 Apr 2026 14:04:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776951657; cv=none; b=bQsDbMmpfmoj/9YgwzVEi7PMf97oK4zNqhZgiL7HYsZAItbEoZM2zm51U2kerPgHqlQKLEsRhZ1/Juns1pTSUMXCc22mHXTXiPhIA3itlB+FA7EhqeTTr92DoT1fstL5wnKxZAfl8td0utxqTs8LopGtRUXcG2HBi9IKZBXn/Zw=
+	t=1776953069; cv=none; b=lwbSJgmnPmAm/Z3CbAL6E5TpQqCWouXCuhIeW1iSizPwbuXEvcRejYDUVO20jNttFgQm/noToJ09HH38Jdf+qa4yNIRKcoyVXKnRoGYa1shta/upFT4KeDTC6s8s2XPOyVCgyHI7/DgVOZWOOLVj9GZUfUTILBeXijD2mYLjcoY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776951657; c=relaxed/simple;
-	bh=kbWYQRsR8eQbjfcpNar2gN24mlB/zcQ4Jq7F4eLQ/Uc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pZkQV19pDrNMPnGbphsdplSQHcWHuxP6UJuF6NHBAbiyGRx201aDkkcb13hl49xBYDW1ZmDOXRlYL7tsIi7q4P+PjMDnQtlMUS0HTIcc1Ny15bKUNN/iQ1+Zq2g9OPh0DLQYLsQwDpjwF0FzF4pww+w+v5i4xydIiIm3ehTCrMo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qSik5BHf; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776953069; c=relaxed/simple;
+	bh=93DgQkvyCBKcB5iVjkvu47HUGp7BR5xEpAEy3kzg4Gk=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=r1w646p/cns/7f9NU6XO7JJQKyfyzyqNC5j9Bc1HU83aFCKED06qmXtgzbxrzipgzKC2Vw2j1yw/ltdOrAoFzQYeCmXtgQDEvQuUxIGZw1j3R1yug7fC2tVxYnyTyE+hashRAjbh8Mu+8mhWoLJXBBIHPPjI7TslZY9CujFvc4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PlPAneEp; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qSik5BHf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B232FC2BCAF;
-	Thu, 23 Apr 2026 13:40:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776951657;
-	bh=kbWYQRsR8eQbjfcpNar2gN24mlB/zcQ4Jq7F4eLQ/Uc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=qSik5BHfRphh2+WjtZepWBi4tvNmWs2K9X0HsY158a72I4wEXP/zDzX7OGztTjMID
-	 YTBrg6eAyLBVPV0O56eE64aIInKUMiIIvDNoulwi1sNg4SWYfMQeupj5Ru47d1wVhq
-	 7B8r6BfCsnNt8k51tLr27tGM6yZfyWSTmsTDzdBGoUP2vx96dwjAWyyzK02mdsMdE+
-	 ElTqWsYVt6G+6JLMeL8Bf7pZc0O1Qk0LiEw82/HYfIg84XI3uDJCO9TxFYL9cHOU15
-	 Zlkg4uwAUQ8KvPKE7TJlVop0cABYlqfZkWzYotm03+C3gZHyeroevKOf9fqsQPIlRb
-	 N4F836PPel5pg==
-Message-ID: <f6ca5592-9a5b-46bf-94ab-3d8a0e2ad996@kernel.org>
-Date: Thu, 23 Apr 2026 15:40:51 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PlPAneEp"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4890098abbaso49752765e9.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 23 Apr 2026 07:04:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776953067; x=1777557867; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3KWq8azbCSD7brpyXZ6QpBU16YtUoefjhmh1Zjdknw8=;
+        b=PlPAneEptNA1rVpN8Yvj8bpDR7v6+MuTpAfa/OT0mOajhvvKu5lDO+DQqffF0qqOl8
+         65g55upfK54hjoS3NTPo8GEDHpdUU1CbOmg6cnxBHDelLJe/TftwO61k+qIfOaHYXwlC
+         QqHV/Yumrp+t8QAGS3hrH/3TUFAiuE3j3xtrVx0JnVYzyfkJWxdFFmpH9ddhFb65CLVc
+         GqiLSzr7taNsZ0i1IBW30JvmXvv4OttEzFqNavQG4i9KcEjgcFY5wJhF/AZhLNzp1KIL
+         /2lPJfPMYjQJn85zvIcCq8lfe9TCYP5PriRZjWZ57vJU8aUntjNc8BVhSPUh2rgIKxN6
+         DyfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776953067; x=1777557867;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=3KWq8azbCSD7brpyXZ6QpBU16YtUoefjhmh1Zjdknw8=;
+        b=M2trky7SeMcIRHk/HrKYJkB0hnaXq1wMk/v5fwjnQpEqe1xL0y1afbGK5YJDkzrGFQ
+         ZzRB6gSerVON3RQ1YeF2iU7UnIB3QDXHYjRMo0gInseQ58FaeIiyFAJkhQix6BlXHF0i
+         7wMhbkeKgrCSwGL0xWugYvWiFKYrG0X7T4T8/0s5uuKnspAC9GlSdP/oIC+6GMypnzXG
+         Yocc0gaTV1BFkTWLoRt6BdTkoc4NP+xmex/8jbeeN768cF9CsQbPz+ck37anElnRlMUN
+         zpkktUX0Q75I7sw741X7dCFaJP7Sh0Orw4PhqfE4OGecTcCMogAsQjXBlePApzvqc3u0
+         QwOQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/vndXBRvW/LV1vulzj+g+Vl7DGw5CSp6Jx7TiFPan4P5T2//oCMa5/fDSFytwFrfBx+Z/Jc0BJKS4jxA1vttM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwIwGjzBSNmhG69Ehau+5QVXP7UFk1PLeVg0QegHVIS/FbMzl2o
+	NcBf7hsF+Szr+D8BtjvAl3W1uG2SzJcPkY2X0Ppxh0eja0rxRRVjSPOh
+X-Gm-Gg: AeBDievzVQhvwHPPoegp07gWpraAX/sOv0tnYCGwbNHcWtNbvVct4zPHF7uo2O7emas
+	n2d299sYg1roKL2Tw3d+fMYkS8awh5m+yqiXR20suyNzRPLAwMiDv39owMQmRPe2CT8GScFc4rL
+	GsFYGyGMgwseEoRhbtcunXIf8z1KhOp556yvS94LNrTZjpDGcEiUtr8snwD/P+kvXwwGEKidFwi
+	wQatm7jqmvg/GMXrU+AVWkQcIU9YFoJZkelgr+Up91Daw+X9elDy/qGdpleH+dQQzMjrOyXHi/S
+	PgpV5lZyl1UqS/vJX80Ge3FFXQ/URuCYgEV9ZaxXUKzqtXGKlN0ewqAhY/9OQNh4nI/K9U7FCZ/
+	YzQ3Ng+Nz5EaJ6CZqXJ45i++RFkO03ll+AtP8lpu+64dobdE5DxjbiONrcJm6X78j+hbRyOyHFq
+	8fuZS+Y0Cq/SEtz9fOvfBOtXKm9FDLNQ5jQk9gfKU+T02+IxUEzIEjgeTtQopDxRPg6t9OSoHQo
+	Q8=
+X-Received: by 2002:a05:6000:4283:b0:43d:7ea1:fb53 with SMTP id ffacd0b85a97d-43fe3e15f7emr42641829f8f.33.1776953066423;
+        Thu, 23 Apr 2026 07:04:26 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43fe4dc24cfsm52984876f8f.16.2026.04.23.07.04.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Apr 2026 07:04:25 -0700 (PDT)
+Date: Thu, 23 Apr 2026 15:04:23 +0100
+From: David Laight <david.laight.linux@gmail.com>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: Usama Arif <usama.arif@linux.dev>, Alban Crequy
+ <alban.crequy@gmail.com>, Andrew Morton <akpm@linux-foundation.org>,
+ Christian Brauner <brauner@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ "Liam R . Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka
+ <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan
+ <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org, Alban Crequy
+ <albancrequy@microsoft.com>, Peter Xu <peterx@redhat.com>, Willy Tarreau
+ <w@1wt.eu>, linux-kselftest@vger.kernel.org, shuah@kernel.org
+Subject: Re: [PATCH v2 1/2] mm/process_vm_access: pidfd and nowait support
+ for process_vm_readv/writev
+Message-ID: <20260423150423.1a428820@pumpkin>
+In-Reply-To: <62d88cde-efc0-48cb-be8d-813eda810343@kernel.org>
+References: <20260409142256.131676-1-usama.arif@linux.dev>
+	<62d88cde-efc0-48cb-be8d-813eda810343@kernel.org>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/2] selftests/mm: suppress compiler error in liburing
- check
-To: Li Wang <wangli.ahau@gmail.com>, akpm@linux-foundation.org,
- ljs@kernel.org, Liam.Howlett@oracle.com, vbabka@kernel.org, rppt@kernel.org,
- surenb@google.com, mhocko@suse.com, shuah@kernel.org
-Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260422080446.26020-1-wangli.ahau@gmail.com>
- <20260422080446.26020-3-wangli.ahau@gmail.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <20260422080446.26020-3-wangli.ahau@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On 4/22/26 10:04, Li Wang wrote:
-> When building the mm selftests on a system without liburing development
-> headers, check_config.sh leaks a raw compiler error:
-> 
->   /tmp/tmp.kIIOIqwe3n.c:2:10: fatal error: liburing.h: No such file or directory
->       2 | #include <liburing.h>
->         |          ^~~~~~~~~~~~
-> 
-> Since this is an expected failure during the configuration probe,
-> redirect the compiler output to /dev/null to hide it.
-> 
-> And the build system prints a clear warning when this occurs:
-> 
->   Warning: missing liburing support. Some tests will be skipped.
-> 
-> Because the user is properly notified about the missing dependency, the
-> raw compiler error is redundant and only confuse users.
-> 
-> Additionally, update the Makefile to use $(Q) and $(call msg,...) for
-> the check_config.sh execution. This aligns the probe with standard
-> kbuild output formatting, providing a clean "CHK" message instead of
-> printing the raw command during the build.
-> 
-> Signed-off-by: Li Wang <wangli.ahau@gmail.com>
-> ---
+On Thu, 23 Apr 2026 14:52:26 +0200
+"David Hildenbrand (Arm)" <david@kernel.org> wrote:
 
-Thanks!
+> >>  
+> >>  	/* Get process information */
+> >> -	task = find_get_task_by_vpid(pid);
+> >> +	if (flags & PROCESS_VM_PIDFD)
+> >> +		task = pidfd_get_task(pid, &f_flags);
+> >> +	else
+> >> +		task = find_get_task_by_vpid(pid);
+> >> +
+> >>  	if (!task) {
+> >>  		rc = -ESRCH;
+> >>  		goto free_proc_pages;  
+> > 
+> > pidfd_get_task() returns ERR_PTR() on failure (e.g. ERR_PTR(-EBADF)),
+> > but the code checks "if (!task)" which only catches NULL. An invalid
+> > pidfd will cause mm_access() and put_task_struct() to dereference an
+> > error pointer, crashing the kernel.  
+> 
+> Yes. Should we add proper selftests that exercise these code paths?
+> 
 
-Tested-by: David Hildenbrand (Arm) <david@kernel.org>
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+Probably worth checking what happens when a 64bit process tries to
+read high addresses of a 32bit process.
 
--- 
-Cheers,
+I remember trying to grok the way this code accessed the iov[] and
+failing to find the appropriate access_ok() for the accesses to the
+target process.
 
-David
+	David
