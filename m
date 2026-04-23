@@ -1,139 +1,139 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69EA623ED6A;
-	Thu, 23 Apr 2026 14:29:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7FA430F95C
+	for <linux-kselftest@vger.kernel.org>; Thu, 23 Apr 2026 14:50:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776954559; cv=none; b=nDkcorQ4sL6c3MN/6c4kngTYyun8wI4s1E+nIZoQRtngEVTOpQzMUZXlNLDWvfIPVahqm8hClD7oFQyeAMQ0He6Sub3eCupkbePQyK46OWjEvWcmKWqdF1lDeLLoeHa91vNv8jZEO2sy4i6JN9U62sPmFMesC35iutmHDpSehY8=
+	t=1776955815; cv=none; b=kOWSdN8zzGbhggRukfHov9jvKbmLzOkuUR4zA9NwsbaF/RqwjvfS4nW5/USAIHEw9gzSO1rztHW4/dcRdYkqJmHk55b1ArgS4/blOg/jaMJop0khW+dPN0s4qeiFye6zgA5A5dB2SFdsaj1GOdIhEetDNyf9MEyGxwmdVCDsjE0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776954559; c=relaxed/simple;
-	bh=1gkahLjaXHUIa8DvHyVWpXrUQMCiYSLHL3RwfePawRk=;
+	s=arc-20240116; t=1776955815; c=relaxed/simple;
+	bh=Mc9Ivz4Vqi3k0d4nNCkfaFzAMJGthygwguiunClkBVQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=k0XY9LIae1SrhQfP28KDySaiyueyGTW0g3s9Qkm2l/NihvfqvtM6MiaDbCFDTItWgJ3NeEy+gLkf8SPG1KcDu1C2VWDty5+xTTCVTwsAB8Ifv/mvClOdsRFMeM/G3G6xciiZGL0r8hFfx5mur88Szm/XNzB9xMsUwsiQ/Va5KJ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=GjKOBwJ4; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=cLIWgez7Dn5MnBfQ7Uy+KUHy/+qskkx7pJPerfbIzkLrO740If4TFJWdEPkkQfXOSQjrDlcpDMZAPnd+h4o3IhH0yASy/sQo1MRNOb4vNHGbe5IYBpjMHxf0RXEc2+dN6V/ipunpPNlV4JJE5gmXjMzvvqBb7GOofjnWI40OOQk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YKtuat50; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=caFb9AfV; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="GjKOBwJ4"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 39DEA1C0A;
-	Thu, 23 Apr 2026 07:29:12 -0700 (PDT)
-Received: from arm.com (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 881CA3F641;
-	Thu, 23 Apr 2026 07:29:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1776954557; bh=1gkahLjaXHUIa8DvHyVWpXrUQMCiYSLHL3RwfePawRk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GjKOBwJ4fvKcjJAZzuDdKnOsN0TMHub2fIJNKcOUzct1fX07mAYhd/vowncnSNL0m
-	 KMoy2Xbotudp6egM6uTzDwdrAZA73XOG00/S5GrmGgOrCu6go8sfieie1kyGYT6mbM
-	 b/IPKK6JNmYoMBa1uNq9s8rykokk0HORY0kvctb8=
-Date: Thu, 23 Apr 2026 15:29:08 +0100
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Breno Leitao <leitao@debian.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YKtuat50";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="caFb9AfV"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1776955813;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Y9FCzHmWnVVCccSekWVzHWb5njrn6p7+7lqlQWHM0xY=;
+	b=YKtuat508qOZhOekyqkUrqYzPyBW3fsoHMjnvaNwPQr7kgQcwk/cKlsq/6zthWyGoiergT
+	gEJmzYgtI20bpFWHe5y1sTgm7yjSLp3P9p8eFhQ3cpCAiTdQd7v2JB5NEUcceq4xbqOPe7
+	pXapCYZgZuapgI+8w3ZpyyjvsuRp2Sc=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-678-Mh_B5gSDOxOQVHbtUxbxwA-1; Thu, 23 Apr 2026 10:50:10 -0400
+X-MC-Unique: Mh_B5gSDOxOQVHbtUxbxwA-1
+X-Mimecast-MFC-AGG-ID: Mh_B5gSDOxOQVHbtUxbxwA_1776955810
+Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-8acafc224a8so169863496d6.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 23 Apr 2026 07:50:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1776955810; x=1777560610; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y9FCzHmWnVVCccSekWVzHWb5njrn6p7+7lqlQWHM0xY=;
+        b=caFb9AfVP2PMzQ44LcvEB+VhqljJBvIJsPqIfqLqlhgzT22qYQT2Kyh1N+lyfefTSS
+         glXyUKbmwVzY3WHh1VEHj4r652BaCmCveqJMaT65wCj5sztdk8YUlCBcneqsPvudUn5+
+         20WyJyHkhy+RhrHrjM02rrikt98A1Jbl+4Zv9bAeKBLl9FCpJUZ/QiKa0L2gY/kVH8b4
+         pGdnx3oxfzvtcv7CA9pfKFecJV5YAQTXStRNeLmVY262C75kbqg/RJGoeV7/NxvRtqKT
+         cbaP1KEQxd/x5F7NkzwvUOwOPUZ4Ar2MTE45+F4r3/3GCT9c6zCCDMk2WQhwuzAngkZ/
+         xL+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776955810; x=1777560610;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Y9FCzHmWnVVCccSekWVzHWb5njrn6p7+7lqlQWHM0xY=;
+        b=jM7kTzBkQTiighD17LoUBhMDWJoT4USBvsdhVLW45pHnXgBon8CYmrwtzRQznxKMou
+         sLqJrYALRMzfPIrkzPQ78iLMWW0HfJLrh52voEeO9pjlfChr+iQcNypp3MhMGbu4k9ep
+         S33uLORY8hN4NN24AjNH36uRakzFU72sfnKoAGT/jBsD9jwQAfyfz/c8ZdcNygaYFVRP
+         HqR8q/czzsb4uQLkvnFMZkPjQ4RmmEogpNLTrtgFIqTRbeQfxI94W8B3mjC/JqRAVyd3
+         jA29F1PiwmXPBFBgK8is+vUVcb8bx19tYurVwlyjkigaGOHTZNeIyStqpRhOMUYdrqdd
+         ieTQ==
+X-Forwarded-Encrypted: i=1; AFNElJ8GWRZfbA8XSCmHCgo7PvUzvKuhgiJk5RlfsxsT3nJJm3m51KF1rwtazZy8YLSaCXcGYs4yiugb0QaSVKw4Uyk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxmDYanYcXZ1DYxcQtBCxYQkYTG7iAghTYMAzdHa0yZcuiGDe6b
+	QkIKF4daiPT7xVpiyE1/gDEjUB+W0aDr2Tbo87iKGReK6/lr3YEoOUTMLaeaNuezlSRJn4uIE04
+	4l2d0ktHRHxLa37mBpvnWWLk/xg1JBgmSUyPoK+x8g6/4byILkBKxM+oVSqFznqLhPvrKSPqTrw
+	M78Q==
+X-Gm-Gg: AeBDieuGZFw2HnMuWB/UWNItW3GeCs3+zc72QUqsblGLZrVXjyKsIIwxoS8vjHOFvVW
+	bRDZnFxnHxSgP3b554Z8YRg5Ct9OCUpHTxeX1CFGepDpq3mjkaNML20VUVI9yVqDAkEL44u/FfN
+	NgHQqVdDnS4832pLJTVNqaduxiFCNUzqWVbiIzze3/qy3FrwgMTzqiVuDivMp6I9UR+/0E8AwTh
+	msHezVUGUOI+h8jn1BWUnNjCtx+vINcLsN6jNOrrwNmlUsKWmFRzT5pi5jeahVVZ73WshwJLVO0
+	GxpWbLr/YuSkReWAlTJX40n8LmpJNsKvPZKHwn4a8PmTBqn/xwU4axOT9IRziOvWa31XiTZ1x7F
+	73WRmg24CsiwktYMdA0kcOR4Y8fa7/LC46grJxB2lkCS5WmNWXsLKePlIEg==
+X-Received: by 2002:a05:620a:4084:b0:8dc:eca0:35bd with SMTP id af79cd13be357-8e78fa1dd25mr4108115785a.5.1776955809701;
+        Thu, 23 Apr 2026 07:50:09 -0700 (PDT)
+X-Received: by 2002:a05:620a:4084:b0:8dc:eca0:35bd with SMTP id af79cd13be357-8e78fa1dd25mr4108105885a.5.1776955809008;
+        Thu, 23 Apr 2026 07:50:09 -0700 (PDT)
+Received: from x1.local ([142.189.10.167])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8e7d98c15a9sm1850297485a.43.2026.04.23.07.50.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Apr 2026 07:50:08 -0700 (PDT)
+Date: Thu, 23 Apr 2026 10:50:06 -0400
+From: Peter Xu <peterx@redhat.com>
+To: Kiryl Shutsemau <kas@kernel.org>
+Cc: "David Hildenbrand (Arm)" <david@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Lorenzo Stoakes <ljs@kernel.org>, Mike Rapoport <rppt@kernel.org>,
 	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH 1/2] mm/kmemleak: dedupe verbose scan output by
- allocation backtrace
-Message-ID: <aeostKcaHzmVBFjb@arm.com>
-References: <20260421-kmemleak_dedup-v1-0-65e31c6cdf0c@debian.org>
- <20260421-kmemleak_dedup-v1-1-65e31c6cdf0c@debian.org>
+	Vlastimil Babka <vbabka@kernel.org>,
+	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
+	Zi Yan <ziy@nvidia.com>, Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Sean Christopherson <seanjc@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [RFC, PATCH 00/12] userfaultfd: working set tracking for VM
+ guest memory
+Message-ID: <aeoxnuGKO3uqS2kG@x1.local>
+References: <aeDoqFWPFxkkNB26@thinkstation>
+ <1a499781-1115-44bc-adbf-2ac3769354ca@kernel.org>
+ <aeFCuLJXT8VOkzH7@thinkstation>
+ <4c635703-3d8d-4cfa-bb98-7f6f5fcbe547@kernel.org>
+ <aeImfRrrvr3UoKtL@thinkstation>
+ <aeTnlQUOOh-dHG8z@thinkstation>
+ <34f75083-29a3-4860-8a6e-94551d37ac6a@kernel.org>
+ <aed6fHLrIdahbdY3@thinkstation>
+ <b77d559b-215e-460a-a268-e63b8273ef42@kernel.org>
+ <aeorZMvKwu8zKX5i@thinkstation>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260421-kmemleak_dedup-v1-1-65e31c6cdf0c@debian.org>
+In-Reply-To: <aeorZMvKwu8zKX5i@thinkstation>
 
-On Tue, Apr 21, 2026 at 06:45:04AM -0700, Breno Leitao wrote:
-> +/*
-> + * Record a leaked object in the dedup table. The representative object's
-> + * use_count is incremented so it can be safely dereferenced by dedup_flush()
-> + * outside the RCU read section; dedup_flush() drops the reference. On
-> + * allocation failure (or a concurrent insert) the object is printed
-> + * immediately, preserving today's "always log every leak" guarantee.
-> + * Caller must not hold object->lock and must hold rcu_read_lock().
-> + */
-> +static void dedup_record(struct xarray *dedup, struct kmemleak_object *object,
-> +			 depot_stack_handle_t trace_handle)
-> +{
-> +	struct kmemleak_dedup_entry *entry;
-> +
-> +	entry = xa_load(dedup, trace_handle);
-> +	if (entry) {
-> +		/* This is a known beast, just increase the counter */
-> +		entry->count++;
-> +		return;
-> +	}
-> +
-> +	/*
-> +	 * A brand new report. Object will have object->use_count increased
-> +	 * in here, and released put_object() at dedup_flush
-> +	 */
-> +	entry = kmalloc(sizeof(*entry), GFP_ATOMIC);
+Hello, Kiryl,
 
-Do we need to allocate a structure here? We could instead add a
-dup_count member in the kmemleak_object and just link the object itself
-into the xarray. Well, maybe the leak being a rare event is not that
-bad.
+On Thu, Apr 23, 2026 at 03:27:11PM +0100, Kiryl Shutsemau wrote:
+> The patchet is pretty good shape in my eyes and will probably drop RFC
+> tag.
 
-> +	if (entry && get_object(object)) {
-> +		if (xa_insert(dedup, trace_handle, entry, GFP_ATOMIC) == 0) {
+I still have some high level questions not yet got answered.  Do you want
+to answer them?
 
-I wonder if we need xa_insert() at all. Since it's indexed by
-trace_handle, we could follow similar mechanism like stack_depot with a
-large hash array, maybe gated by CONFIG_DEBUG_KMEMLEAK_VERBOSE.
+https://lore.kernel.org/all/ad59TxAHNwFWH7Cc@x1.local/
 
-> +			entry->object = object;
-> +			entry->count = 1;
-> +			return;
-> +		}
-> +		put_object(object);
-> +	}
-> +	kfree(entry);
-> +
-> +	/*
-> +	 * Fallback for kmalloc/get_object(): Just print it straight away
-> +	 */
-> +	raw_spin_lock_irq(&object->lock);
-> +	print_unreferenced(NULL, object);
-> +	raw_spin_unlock_irq(&object->lock);
-> +}
-> +
-> +/*
-> + * Drain the dedup table: print one full record per unique backtrace,
-> + * followed by a summary line whenever more than one object shared it.
-> + * Releases the reference dedup_record() took on each representative object.
-> + */
-> +static void dedup_flush(struct xarray *dedup)
-> +{
-> +	struct kmemleak_dedup_entry *entry;
-> +	unsigned long idx;
-> +
-> +	xa_for_each(dedup, idx, entry) {
-> +		raw_spin_lock_irq(&entry->object->lock);
-> +		print_unreferenced(NULL, entry->object);
-> +		raw_spin_unlock_irq(&entry->object->lock);
+In summary, it's about:
 
-Sashiko has a good point here - while the kmemleak metadata is still
-around due to an earlier get_object(), the object itself may have been
-freed and the hex dump in print_unreferenced() could fault (e.g.
-vunmap'ed object). Same with the print_unreferenced() above. It's
-probably not worth printing the first bytes of the content anyway when
-we do coalescing, the content would differ anyway. Also it's possible
-that the size differs even if the stack trace is the same but I guess we
-can ignore this.
+- Whether we have explored other approaches on page hotness tracking
 
-https://sashiko.dev/#/patchset/20260421-kmemleak_dedup-v1-0-65e31c6cdf0c@debian.org
+- Whether read protection is required for an userspace swap system
+  (e.g. did you get time to have a look at umap?)
+
+Thanks,
 
 -- 
-Catalin
+Peter Xu
+
