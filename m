@@ -1,183 +1,156 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C78ECA4E;
-	Thu, 23 Apr 2026 01:11:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F9113B9DAF
+	for <linux-kselftest@vger.kernel.org>; Thu, 23 Apr 2026 02:43:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776906676; cv=none; b=bJxtXhPF/aRmVHnDnmsNXEjRrF9L3DVByYLyfZjx3CApYaQCx+xkYZuOFw4ZWOURhkA3HqP3W9o+bk+2xMe2+OjbjcQUJPLBIx8ttK+sqclIOhjlhtblop6NN3XoU9t7nbP8HKFY8Y4Za1BTBJ270cmoE0QmGK+9BpqsSd/IFFY=
+	t=1776912233; cv=none; b=umI+Y09KhId5YWw87jFRejlVcm87AdTx4GHtC/QybRN6CiHjFh4IrHvywgwKYKH+UIyBCtmlzxzCZmNatg5NG9Ez9T7aj8NM6ktLFU/TMF0Q12TOGPfe6KO1nH8DikSlxypPxn096hlFdtZoCj4tG1ZfZK6HZBD0TPU5HcJuPpU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776906676; c=relaxed/simple;
-	bh=6IEjWa5Bp2HmWAT63DqZwaxugME+cvx69VMEGChpnTc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WVRejSmhhCgsxKtvPEj58Bj3JmWHQnjc2iachVRVjxev+oxqR+ZeQwazuZfDNjxSM9mBV/KwnyRB11mXfm+zcSxImBubeMqKL+uVwQe2Za2GMLYtKCSiaw7vnd6FaE8Xw61t+cNEL0fO965Kjc3CNVrVsAchaY6qqNJtaXLkdzo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.170])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4g1J0p05thzYQtjP;
-	Thu, 23 Apr 2026 09:10:02 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.252])
-	by mail.maildlp.com (Postfix) with ESMTP id C684140561;
-	Thu, 23 Apr 2026 09:11:00 +0800 (CST)
-Received: from [10.67.111.176] (unknown [10.67.111.176])
-	by APP3 (Coremail) with SMTP id _Ch0CgAnHbehcelp3eGGBQ--.59173S2;
-	Thu, 23 Apr 2026 09:10:59 +0800 (CST)
-Message-ID: <e8824498-f8ec-496a-a21c-d1dc594f4c8e@huaweicloud.com>
-Date: Thu, 23 Apr 2026 09:10:57 +0800
+	s=arc-20240116; t=1776912233; c=relaxed/simple;
+	bh=f5Ela3h3SmwpTpGrcI9Z0tlKA/R88o+MOdI07JVimvc=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=mXczYynIvFO0sj1jkC3AMre3xE3qtMRqJEedNchM96lZLn9fPBCVGP2lSnk81ry8cPtIOID4vDbfDgLxHijrnn5l1EjeDnORfmL6x7vpnirOLB7kOoZK2CMmAayNRQA66/BEk/ULZxgY1s8vuayKoACXjCW+4nOJ0zgtsYg/7eQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=dbVPz/70; arc=none smtp.client-ip=91.218.175.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="dbVPz/70"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1776912219;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=lMukq5Ux3ezv5Tyfl0FoaOXQcgnvMJcY/OsebFof9qE=;
+	b=dbVPz/70tYHnFMXxFY25JlFErOfD2J4+flnFzZWIC+GFQLAapotxsFxlAWVXDzN/3tqSgp
+	7ZkBqd9Q4CRT3BAfi8roSgJ3+PwfRM3RTMma7KOb7LXwjYwl89WkYLG6UjTE0BMSSNEtUh
+	o25vpDGVCfCldSri1nd6fxpGOgDUlW8=
+From: Lance Yang <lance.yang@linux.dev>
+To: ziy@nvidia.com
+Cc: willy@infradead.org,
+	songliubraving@fb.com,
+	clm@fb.com,
+	dsterba@suse.com,
+	viro@zeniv.linux.org.uk,
+	brauner@kernel.org,
+	jack@suse.cz,
+	akpm@linux-foundation.org,
+	david@kernel.org,
+	ljs@kernel.org,
+	baolin.wang@linux.alibaba.com,
+	Liam.Howlett@oracle.com,
+	npache@redhat.com,
+	ryan.roberts@arm.com,
+	dev.jain@arm.com,
+	baohua@kernel.org,
+	lance.yang@linux.dev,
+	vbabka@kernel.org,
+	rppt@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	shuah@kernel.org,
+	linux-btrfs@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 7.2 v3 01/12] mm/khugepaged: remove READ_ONLY_THP_FOR_FS check
+Date: Thu, 23 Apr 2026 10:43:24 +0800
+Message-Id: <20260423024324.51588-1-lance.yang@linux.dev>
+In-Reply-To: <20260418024429.4055056-2-ziy@nvidia.com>
+References: <20260418024429.4055056-2-ziy@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 19/23] cgroup/cpuset: Improve check for calling
- housekeeping_update()
-To: Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- "K. Y. Srinivasan" <kys@microsoft.com>,
- Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
- Dexuan Cui <decui@microsoft.com>, Long Li <longli@microsoft.com>,
- Guenter Roeck <linux@roeck-us.net>, Frederic Weisbecker
- <frederic@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>,
- Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
- Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
- <josh@joshtriplett.org>, Boqun Feng <boqun@kernel.org>,
- Uladzislau Rezki <urezki@gmail.com>, Steven Rostedt <rostedt@goodmis.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
- Anna-Maria Behnsen <anna-maria@linutronix.de>, Ingo Molnar
- <mingo@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>, Ben Segall
- <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
- Valentin Schneider <vschneid@redhat.com>,
- K Prateek Nayak <kprateek.nayak@amd.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>
-Cc: cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-hyperv@vger.kernel.org, linux-hwmon@vger.kernel.org,
- rcu@vger.kernel.org, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Costa Shulyupin <cshulyup@redhat.com>,
- Qiliang Yuan <realwujing@gmail.com>
-References: <20260421030351.281436-1-longman@redhat.com>
- <20260421030351.281436-20-longman@redhat.com>
-Content-Language: en-US
-From: Chen Ridong <chenridong@huaweicloud.com>
-In-Reply-To: <20260421030351.281436-20-longman@redhat.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:_Ch0CgAnHbehcelp3eGGBQ--.59173S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxCw1UJF1UurW7urWktr13urg_yoW5AFy5pr
-	yUWrW3t345trs7u343Xwn7Wry0gw48GF17KasxG3WrGF9rZFn2yry0kFnxCry8uwnxGryU
-	ZF9rWws29a4UArDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvFb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
-	14v26rWY6Fy7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
-	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWrXVW8
-	Jr1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
-	CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AK
-	xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
-	xUVZ2-UUUUU
-X-CM-SenderInfo: hfkh02xlgr0w46kxt4xhlfz01xgou0bp/
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
 
-
-On 2026/4/21 11:03, Waiman Long wrote:
-> By making sure that isolated_hk_cpus matches isolated_cpus at boot time,
-> we can more accurately determine if calling housekeeping_update()
-> is needed by comparing if the two cpumasks are equal. The
-> update_housekeeping flag still have a use in cpuset_handle_hotplug()
-> to determine if a work function should be queued to invoke
-> cpuset_update_sd_hk_unlock() as it is not supposed to look at
-> isolated_hk_cpus without holding cpuset_top_mutex.
+On Fri, Apr 17, 2026 at 10:44:18PM -0400, Zi Yan wrote:
+>collapse_file() requires FSes supporting large folio with at least
+>PMD_ORDER, so replace the READ_ONLY_THP_FOR_FS check with that.
+>MADV_COLLAPSE ignores shmem huge config, so exclude the check for shmem.
+>
+>While at it, replace VM_BUG_ON with VM_WARN_ON_ONCE.
+>
+>Add a helper function mapping_pmd_thp_support() for FSes supporting large
+>folio with at least PMD_ORDER.
+>
+>Signed-off-by: Zi Yan <ziy@nvidia.com>
+>---
+> include/linux/pagemap.h | 10 ++++++++++
+> mm/khugepaged.c         |  5 +++--
+> 2 files changed, 13 insertions(+), 2 deletions(-)
+>
+>diff --git a/include/linux/pagemap.h b/include/linux/pagemap.h
+>index ec442af3f886..c3cb1ec982cd 100644
+>--- a/include/linux/pagemap.h
+>+++ b/include/linux/pagemap.h
+>@@ -524,6 +524,16 @@ static inline bool mapping_large_folio_support(const struct address_space *mappi
+> 	return mapping_max_folio_order(mapping) > 0;
+> }
 > 
+>+static inline bool mapping_pmd_thp_support(const struct address_space *mapping)
+>+{
+>+	/* AS_FOLIO_ORDER is only reasonable for pagecache folios */
+>+	VM_WARN_ONCE((unsigned long)mapping & FOLIO_MAPPING_ANON,
+>+			"Anonymous mapping always supports PMD THP");
 
-Currently, isolated_hk_cpus is updated within the cpuset_mutex critical section
-(before mutex_unlock(&cpuset_mutex)) in cpuset_update_sd_hk_unlock. Therefore, I
-think update_housekeeping can now be removed.
+Nit: afraid not, at least when running on architectures without PMD leaf
+entries ...
 
-> Signed-off-by: Waiman Long <longman@redhat.com>
-> ---
->  kernel/cgroup/cpuset.c | 36 ++++++++++++++++++++----------------
->  1 file changed, 20 insertions(+), 16 deletions(-)
+Maybe better to say this helper is only meaningful for pagecache-backed
+mappings. Anonymous mappings should not reach here.
+
+>+
+>+	return mapping_max_folio_order(mapping) >= PMD_ORDER;
+>+}
+>+
+>+
+> /* Return the maximum folio size for this pagecache mapping, in bytes. */
+> static inline size_t mapping_max_folio_size(const struct address_space *mapping)
+> {
+>diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+>index b8452dbdb043..3eb5d982d3d3 100644
+>--- a/mm/khugepaged.c
+>+++ b/mm/khugepaged.c
+>@@ -1892,8 +1892,9 @@ static enum scan_result collapse_file(struct mm_struct *mm, unsigned long addr,
+> 	int nr_none = 0;
+> 	bool is_shmem = shmem_file(file);
 > 
-> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-> index a4eccb0ec0d1..1b0c50b46a49 100644
-> --- a/kernel/cgroup/cpuset.c
-> +++ b/kernel/cgroup/cpuset.c
-> @@ -1339,26 +1339,29 @@ static void cpuset_update_sd_hk_unlock(void)
->  	__releases(&cpuset_mutex)
->  	__releases(&cpuset_top_mutex)
->  {
-> +	update_housekeeping = false;
-> +
->  	/* force_sd_rebuild will be cleared in rebuild_sched_domains_locked() */
->  	if (force_sd_rebuild)
->  		rebuild_sched_domains_locked();
->  
-> -	if (update_housekeeping) {
-> -		update_housekeeping = false;
-> -		cpumask_copy(isolated_hk_cpus, isolated_cpus);
-> -
-> -		/*
-> -		 * housekeeping_update() is now called without holding
-> -		 * cpus_read_lock and cpuset_mutex. Only cpuset_top_mutex
-> -		 * is still being held for mutual exclusion.
-> -		 */
-> -		mutex_unlock(&cpuset_mutex);
-> -		cpus_read_unlock();
-> -		WARN_ON_ONCE(housekeeping_update(isolated_hk_cpus, BIT(HK_TYPE_DOMAIN)));
-> -		mutex_unlock(&cpuset_top_mutex);
-> -	} else {
-> +	if (cpumask_equal(isolated_hk_cpus, isolated_cpus)) {
-> +		/* No housekeeping cpumask update needed */
->  		cpuset_full_unlock();
-> +		return;
->  	}
-> +
-> +	cpumask_copy(isolated_hk_cpus, isolated_cpus);
-> +
-> +	/*
-> +	 * housekeeping_update() is now called without holding
-> +	 * cpus_read_lock and cpuset_mutex. Only cpuset_top_mutex
-> +	 * is still being held for mutual exclusion.
-> +	 */
-> +	mutex_unlock(&cpuset_mutex);
-> +	cpus_read_unlock();
-> +	WARN_ON_ONCE(housekeeping_update(isolated_hk_cpus, BIT(HK_TYPE_DOMAIN)));
-> +	mutex_unlock(&cpuset_top_mutex);
->  }
->  
->  /*
-> @@ -3692,10 +3695,11 @@ int __init cpuset_init(void)
->  
->  	BUG_ON(!alloc_cpumask_var(&cpus_attach, GFP_KERNEL));
->  
-> -	if (housekeeping_enabled(HK_TYPE_DOMAIN_BOOT))
-> +	if (housekeeping_enabled(HK_TYPE_DOMAIN_BOOT)) {
->  		cpumask_andnot(isolated_cpus, cpu_possible_mask,
->  			       housekeeping_cpumask(HK_TYPE_DOMAIN_BOOT));
-> -
-> +		cpumask_copy(isolated_hk_cpus, isolated_cpus);
-> +	}
->  	return 0;
->  }
->  
+>-	VM_BUG_ON(!IS_ENABLED(CONFIG_READ_ONLY_THP_FOR_FS) && !is_shmem);
+>-	VM_BUG_ON(start & (HPAGE_PMD_NR - 1));
+>+	/* MADV_COLLAPSE ignores shmem huge config, so do not check shmem */
+>+	VM_WARN_ON_ONCE(!is_shmem && !mapping_pmd_thp_support(mapping));
 
--- 
-Best regards,
-Ridong
+With [1], can we drop !is_shmem here as well? shmem would then always
+call mapping_set_large_folios(inode->i_mapping):
 
+---8<---
+diff --git a/mm/shmem.c b/mm/shmem.c
+index 4ecefe02881d..dafbea53b22d 100644
+--- a/mm/shmem.c
++++ b/mm/shmem.c
+@@ -3087,10 +3087,7 @@ static struct inode *__shmem_get_inode(struct mnt_idmap *idmap,
+ 	cache_no_acl(inode);
+ 	if (sbinfo->noswap)
+ 		mapping_set_unevictable(inode->i_mapping);
+-
+-	/* Don't consider 'deny' for emergencies and 'force' for testing */
+-	if (sbinfo->huge)
+-		mapping_set_large_folios(inode->i_mapping);
++	mapping_set_large_folios(inode->i_mapping);
+ 
+ 	switch (mode & S_IFMT) {
+ 	default:
+--
+
+But we can do that in a follow-up, once the revert lands :)
+
+[1] https://lore.kernel.org/linux-mm/b2c7deee259a94b0d00a7c320d8d24d2c421f761.1776908112.git.baolin.wang@linux.alibaba.com/
