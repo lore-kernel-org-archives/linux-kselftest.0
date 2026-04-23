@@ -1,119 +1,146 @@
-Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE7D73C6A41;
-	Thu, 23 Apr 2026 06:10:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.171
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776924610; cv=none; b=tq6D3FYWQ+zAfZFgAKZD2joELSiPMyM2SR4kdBUQtH0k3tI9mtkzXbKYM2Ug5f1unDMLWoqrlBILv/hLKC72ikE2WKUjygDelqfNusdcDzGmP74rio3yXdcNwp+9PouBtyBaN/iy3jWK8eSvyzhCER+yQxI+tONZApLmb3E+9JE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776924610; c=relaxed/simple;
-	bh=uLosDgdLGC+hCzjBv1fjJJICon9cNjB1X5tzjUczlvA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mz36qDXYK7rAgIs8w/Q6iWALbY69FW3Aa0oFiRlGxvlHqMK3ibXVnBL1BlXZQAKUVaw9HyxS7obqMh7jPCqx1/jaK70f6lUjm74v9VNUPSZKRj9f3GP4bjfN2ipgip14144qUEp/mKZKx00rTcXQRLZ00zSO++GjJxAYDAchhXs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com; spf=pass smtp.mailfrom=cyphar.com; dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b=ztgDFe2q; arc=none smtp.client-ip=80.241.56.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cyphar.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABBF43D413A
+	for <linux-kselftest@vger.kernel.org>; Thu, 23 Apr 2026 06:57:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.50
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776927431; cv=pass; b=CKBMsKASqKfUkriZ6eZ11471I2+R28ZLKZYCUO/Rp0ExQz/u+6uTjAUv+nuYET4vdpJ4kpXEZYbZGgHhMGGJMB3P6kzXDiutHcHYXCBMi+tJMQ5dlTsDrJ2MCrzD4wUUtanyrm5FBlxWWHG0tNmATtOEkf9+urQRvFk5VwlVJ5k=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776927431; c=relaxed/simple;
+	bh=FaMQxyMbm/MvssklYFNdPl+DM+5+46erElji7HAPf4Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Gr/gH7kR2bV1B81RFu4rj9AaeS1TMJqiZo0UVj6f4gbi/jZ1T06CnguF0c/BJvGnCU/HJXGVPG7x6zkT/lBGANXloAVJ5MQ3i+f4L+speBSNo4F0i6O0dKLwnEkgu/Gdmd+Lp/24T5Q5K4Xv2hK/dUuQxefWqLH2uxv4MDR2Ots=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aDnxWOoK; arc=pass smtp.client-ip=209.85.160.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b="ztgDFe2q"
-Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:b231:465::202])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4g1Qfx1GRPz9sRl;
-	Thu, 23 Apr 2026 08:10:01 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cyphar.com; s=MBO0001;
-	t=1776924601;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=WQAxOcn+CbXJ0CO5eO1MI50csyPPK/QKuyLgBrgsTs8=;
-	b=ztgDFe2qz7Rlakao3tS3YXBXjT7nhuKXHsZXjQEIFOQlKOiD7C52D6dODoRG9z7QxeMg4p
-	9N7zEhr+BxJX0LHNz0g23JdCTw7ED+CTrbS9lmhJ24ANrrUjbvh2ypRBWkxva0Fta2NICw
-	RNxY6yRid668mr+z5wFwyorj9jIId5IILoU/OtCrfXLRE/8Ke7qWUG03RfOo2m+ffmBFhd
-	hkwf1XAbiKOvoAKgfgHij2/t4EI5alIr00uZVLCEZP8i/IPHs/w8rw19VpusBgA1rzN67W
-	LgJ4UmDwaWg4hxeCP+jUA27wkBdcX2WUGWB2se9n9nYfoM3NHe0TQVsPy796vA==
-Authentication-Results: outgoing_mbo_mout;
-	dkim=none;
-	spf=pass (outgoing_mbo_mout: domain of cyphar@cyphar.com designates 2001:67c:2050:b231:465::202 as permitted sender) smtp.mailfrom=cyphar@cyphar.com
-Date: Thu, 23 Apr 2026 16:09:42 +1000
-From: Aleksa Sarai <cyphar@cyphar.com>
-To: Jori Koolstra <jkoolstra@xs4all.nl>
-Cc: cmirabil@redhat.com, Jeff Layton <jlayton@kernel.org>, 
-	Chuck Lever <chuck.lever@oracle.com>, Alexander Aring <alex.aring@gmail.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	Arnd Bergmann <arnd@arndb.de>, Shuah Khan <shuah@kernel.org>, 
-	Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Wei Yang <richard.weiyang@gmail.com>, linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 2/2] selftest: add tests for O_EMPTYPATH
-Message-ID: <2026-04-23-supreme-mellow-band-wounds-xFZ0uI@cyphar.com>
-References: <20260419132202.487612-1-jkoolstra@xs4all.nl>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aDnxWOoK"
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-42ff0576868so38565fac.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Apr 2026 23:57:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776927428; cv=none;
+        d=google.com; s=arc-20240605;
+        b=B28T8yiKsMKQX/ublkY2LGxMWXvecL9oT4nMAIv9AD8/UuveByce775dD6d4kvnwJv
+         F9f7B2yalFlR+4qn9zpwutG33PRQX0ScvtmRZpWv97e99zPz4XfVYjErbpVAgnTtVZEg
+         5PY4sAqeplJvcH2nKvl7eKFQwn+PGpqh84bEUrYjoG3RM8tCNBATcvQqIXAm3cZb9AnL
+         tnPfzpZU2Vp1pebaLOlaNQA8ZlaixouGKZnK+H6u5HK68a2ohLsv3hRIas6ZGLfPHFeu
+         f1V/kbnyFYZ5Fzwt6Zj4DB1IIJazFdwbXt0hislHCu6slAW792LhN/gkkd26Plkh/e74
+         7v4Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=QB81J+kn3zUKSpeQ5Shly/8f+kNoagaKHjIgpIqova8=;
+        fh=QBQESWzWrNV60ib9INMtHFDFzVMjhdyfBHYb/1Uc1A4=;
+        b=XSl2r4lKrUxcXNLWa4y5N/sMJwge5nt4Lx2wwenfdPOznLS3+G6zV/OHtKwlNCE3an
+         Wc1WVwnvF5FjSVp26QNcaLWSkQxkGISSC8spSJRSpDbAMNlg4EUdQbtFiFV3vmnMOK56
+         fKvJiQ6WsS5CrlK5pdNbCdxAGeZ4HNREWIU4o5HeU5lkRIWE5rPcTf4/BMm/QywIkTht
+         ILHuEu23T1MMIE+r2Z19veAbo4K10iZWYVk7MJ1UcyiYMtl3jQz70SRwIEZRavyGADlY
+         p+bg2AifrUu1aaZaho9JvuWx1H/bMXVtX0GRbMjwyi1zynT7GHQWAJSp6RmUnhSZG6/K
+         hbHg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776927428; x=1777532228; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QB81J+kn3zUKSpeQ5Shly/8f+kNoagaKHjIgpIqova8=;
+        b=aDnxWOoKVJAeiy+w1c9dhUM0ea2Ll9yoNW3Ap+jnC/MIoOsuLt3b2WFgqzbrWDO/E5
+         jEAaP3bcSBvc1/hBbhw//9L9NbVQWxsjrJVrdFIYCCBl+vofnHezjMS7y4g67VYqgfWN
+         FaFR2T46ZA/bYJiIeQqjEiS6055+H3bVD9GK8Ll3/bbOFClmVAPTi4MdqRdiGeChzmcj
+         m6TzeQn2AzoV9uOXQxW5QL3rORPC2a1YxwNlma69uckaqi7f2/okhQuhdHHCtsROpGNy
+         Qp0XnVg1KK+n3pTkFA1poNLu0kp8mF5DEL833cBCKX4kth1a81PG8+fveVeQoHTSEeEu
+         /eqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776927428; x=1777532228;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=QB81J+kn3zUKSpeQ5Shly/8f+kNoagaKHjIgpIqova8=;
+        b=KObBq5/SbxjOaUiIug3w6u4iBoEr/EnxLbm2vG8ulaZrxOk50vbUDCVxU5cj9E7quL
+         A0klQOLp8npqZYbzTxIMerjIwSLOuOtdntHFpJzqezYPixWQ4MTsTyXINZbbULSQQU29
+         OpHNZawvNAti/AY61662fVmnluJAJoP7xGqlPcErRDLfZt0wltBr9XY5OMAqoZtymm1R
+         0A0sTQN10/y20K4G5t5H4qBPkt6lJc5yU1r5yBY93Z5HW9V+z8Sslg6pxlWGtDHi565L
+         4FmIet6dD4LG42G1cYqKewEPAR9WKkXmNyIi7IcALeuljFNp42Et+UwWiwKkN7fZ6d3i
+         wNbQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/diUjXkfhLFNs2bRczGfYljwQZXBBF/64cpX6jHkMkris4k8s+tmYOOBzkyPXz4ALBRnAGX/vxhX4BHRfoMJU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxHDWIViBMPIc0Ivn3RNfZwRFXZPlJE+29uh1DnICXT36+xb+/n
+	LacI8saqPdWYQI05zFgT3JdqabQGloztIx1tmZkbmmmaSnw1QOGk7wZZfGsQyOaiyujuzZboB/9
+	GSen/hTpYejpXpWHwq+gFsL4/sjLsTxI=
+X-Gm-Gg: AeBDietswFadFhFb3Os9oi0/4YghtXZIWE93cJ8T8zlsyNIIWVACC3GpC2GpKlipag1
+	RpF/whi6A1we3Qb4J9rZsy+WEbUsrHdQZFRvnFVhR+We8ISCY97fqR+Th5dsm9n6NtkpFVZ3HCR
+	vDWIMIgwevtQhQtPQfLcFKLep5LViZm6+WkcLFn3IFe+VYjeCfVYU+vWK7b0Hmfd3028fpqZdqF
+	41IamE5hIrGZLCho6DDTNVtaSUvFSax9zZKQcUrVICcNZa+escS5/3/daVWCUdA4/aNalHfxWMl
+	e1/HOTQipI18VtiTz2MuSWcTsBA+Nw==
+X-Received: by 2002:a05:6871:c005:b0:42c:7f89:2916 with SMTP id
+ 586e51a60fabf-42c7f892ceamr7133923fac.20.1776927428557; Wed, 22 Apr 2026
+ 23:57:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="7lbdvdzc3omjjgc6"
-Content-Disposition: inline
-In-Reply-To: <20260419132202.487612-1-jkoolstra@xs4all.nl>
-X-Rspamd-Queue-Id: 4g1Qfx1GRPz9sRl
-
-
---7lbdvdzc3omjjgc6
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
+References: <20260422183757.15069-1-suchitkarunakaran@gmail.com> <CAADnVQ+=iEmyf-=T=V0oW2aK+dgx4S0CbAAPi4pSg=DnaHNFoA@mail.gmail.com>
+In-Reply-To: <CAADnVQ+=iEmyf-=T=V0oW2aK+dgx4S0CbAAPi4pSg=DnaHNFoA@mail.gmail.com>
+From: Suchit Karunakaran <suchitkarunakaran@gmail.com>
+Date: Thu, 23 Apr 2026 12:26:57 +0530
+X-Gm-Features: AQROBzCmP_tTpa9MPR2n3mcSyZk76MbSm-jGeLSvbrvMhcfw5ZdsgAHyHU-UZm4
+Message-ID: <CAO9wTFi8wrhP07YikinU283Z_JVyttNrzwwgdVWz=gUvuWjzGw@mail.gmail.com>
+Subject: Re: [PATCH] selftests/bpf: replace bpf_probe_read_kernel with direct access
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Eduard <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Shuah Khan <shuah@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, bpf <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v4 2/2] selftest: add tests for O_EMPTYPATH
-MIME-Version: 1.0
 
-On 2026-04-19, Jori Koolstra <jkoolstra@xs4all.nl> wrote:
-> Add tests for the new O_EMPTYPATH flag of openat(2)/openat2(2).
->=20
-> Also, the current openat2 tests include a helper header file that
-> defines the necessary structs and constants to use openat2(2), such as
-> struct open_how. This may result in conflicting definitions when the
-> system header openat2.h is present as well.
->=20
-> So add openat2.h generated by 'make headers' to the uapi header
-> files in ./tools/include and remove the helper file definitions of
-> the current openat2 selftests.
+On Thu, 23 Apr 2026 at 02:51, Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Wed, Apr 22, 2026 at 11:38=E2=80=AFAM Suchit Karunakaran
+> <suchitkarunakaran@gmail.com> wrote:
+> >
+> > Use direct field access instead of bpf_probe_read_kernel() for
+> > nlk->groups[0] and inode->i_ino, and clean up related code.
+> >
+> > Removes obsolete FIXME comments and unused variable.
+> >
+> > Signed-off-by: Suchit Karunakaran <suchitkarunakaran@gmail.com>
+> > ---
+> >  .../testing/selftests/bpf/progs/bpf_iter_netlink.c  | 13 ++-----------
+> >  1 file changed, 2 insertions(+), 11 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_netlink.c b/too=
+ls/testing/selftests/bpf/progs/bpf_iter_netlink.c
+> > index 00b2ceae81fb..5930bf8899d2 100644
+> > --- a/tools/testing/selftests/bpf/progs/bpf_iter_netlink.c
+> > +++ b/tools/testing/selftests/bpf/progs/bpf_iter_netlink.c
+> > @@ -17,7 +17,6 @@ int dump_netlink(struct bpf_iter__netlink *ctx)
+> >         struct seq_file *seq =3D ctx->meta->seq;
+> >         struct netlink_sock *nlk =3D ctx->sk;
+> >         unsigned long group, ino;
+> > -       struct inode *inode;
+> >         struct socket *sk;
+> >         struct sock *s;
+> >
+> > @@ -35,10 +34,7 @@ int dump_netlink(struct bpf_iter__netlink *ctx)
+> >         if (!nlk->groups)  {
+> >                 group =3D 0;
+> >         } else {
+> > -               /* FIXME: temporary use bpf_probe_read_kernel here, nee=
+ds
+> > -                * verifier support to do direct access.
+> > -                */
+> > -               bpf_probe_read_kernel(&group, sizeof(group), &nlk->grou=
+ps[0]);
+>
+> Please stop sending patches to remove TODO and FIXME.
+>
+> pw-bot: cr
 
-These tests were switched recently to use the kselftests harness[1], you
-might need to rework these tests and rebase on top of vfs-7.2.msic.
-
-Those patches also fixed the issue you had with a custom openat2.h --
-glibc has wrappers for openat2 now so we can just use them directly.
-
-[1]: https://patch.msgid.link/20260401-openat2-selftests-kunit-v2-0-ad153a0=
-7da0c@amutable.com
-
-> Signed-off-by: Jori Koolstra <jkoolstra@xs4all.nl>
-> ---
->  tools/include/uapi/linux/openat2.h            | 43 +++++++++++++++
->  tools/testing/selftests/openat2/Makefile      |  4 +-
->  .../selftests/openat2/emptypath_test.c        | 55 +++++++++++++++++++
->  tools/testing/selftests/openat2/helpers.h     | 40 +-------------
->  4 files changed, 103 insertions(+), 39 deletions(-)
->  create mode 100644 tools/include/uapi/linux/openat2.h
->  create mode 100644 tools/testing/selftests/openat2/emptypath_test.c
-
---=20
-Aleksa Sarai
-https://www.cyphar.com/
-
---7lbdvdzc3omjjgc6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iJEEABYKADkWIQS2TklVsp+j1GPyqQYol/rSt+lEbwUCaem3phsUgAAAAAAEAA5t
-YW51MiwyLjUrMS4xMiwyLDIACgkQKJf60rfpRG+acAD+MzJ8gjBdS8OyyO3+k/eq
-O/rBn4e07cZucqT4Sts6sA0BAON36J4FYlGbvwnWj3alP4bHRGzoGb56Uapyf7Qc
-uFkD
-=v5du
------END PGP SIGNATURE-----
-
---7lbdvdzc3omjjgc6--
+Sorry about that. I'll test it more rigorously next time and ensure
+the patch is sensible.
