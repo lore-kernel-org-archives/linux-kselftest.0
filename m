@@ -1,195 +1,110 @@
-Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazon11021113.outbound.protection.outlook.com [52.101.70.113])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51231378D8C;
-	Thu, 23 Apr 2026 10:07:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.70.113
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776938847; cv=fail; b=N0DIH5qOMzrG93L+A8QTAjaRXbJVAVRyhJMopxOka2ZjuLgm68ENs8PHBRIRBBubnUTioZ796lARH/6T40ktQK0zU6RttnZS8Rjxvpcb62tAtLwnpJzTAHNgNPyZnPXOv4QJ1YSVtX2RdWqNdoMVrkzeWNmTM8qL50HHuldsnOI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776938847; c=relaxed/simple;
-	bh=Z+rqtzIWxYLcgf/NTlgTkFDdsjuLaWd/6WCwm+SwXOk=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=e4QmxdqXdTGvpcjkw94PyJRIAsJqSJb0ergZfMuhHu42mA0irWYqSP1n24CUv0JGvyXyDUjN4uodK+YtZluAVjFuoqY+ZJhJA3hi+svYhuX9trM3dbVrxr4Qyql+ztstHz3+I7ks9hGROAbBxryg5phJR31GPBdxzKoDv3LQZmE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=xP1uLhvr; arc=fail smtp.client-ip=52.101.70.113
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 782FF38737A;
+	Thu, 23 Apr 2026 10:19:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776939570; cv=none; b=AQ6BaswjrbMQNbNH8iydrGjUcPNi92vXks3iWyuc96PE0kwG86BrT+2luFRdfTFdyEnUXemTh7IDx8WTPpJ7mVdsdzLdFWFWOG0VoFsFVuYZD3UzrfziVv5an/nZcwWuc5fMK9NCgI3RQGK5lf8BkDkYxTqL38Ur9lOwqCNpQeI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776939570; c=relaxed/simple;
+	bh=3ygz8aPQ887mmlXRKJ2niuUkt3iUa+0zyJRimlH0iLg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=O3QsDMCLOcW4r80DVqa70vs7NsxzL5GJZvQ8vZ+wVtwHQLu6MTPhMyYI0LtcS2COZkDPGsHgbtrAfw9b0A89fOvrl/fNKecMgvJMEAIE08uJzG7Fn1gVQaIROyTWMb301XCWBZMhHUUq6BwzTQCNctWkzyn9LpzV1mNX+sBNqVY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WdFbFYl7; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="xP1uLhvr"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=uy/aWVos+9CQLFzZlhppzOwf8yhPSvdakK8WcaxZoB9+/I0a/76LyWCGKnkexjQjPROY5HWNd1PZYkitsfuCpLdMAO5zdnq+m/jFwHYDNGWyR5zvRlyo2q5gm6hq8U13am/a4WKWnXv/sSUjmVmIJkcymROSrpsntUh2fjdvs99aZX/Mnqh/WnDyXN5n5qgrW8rmzypPOKZdMwHm+KZqfweT4Ng58uFFFu7PFSdoBK1XgB8HRI/16mPk5borQgxtrCdgl65NTakjlw7XnsrgQ4jiAWSuyoW/N8ksSLpt2Ao30u+lx2V1gbkZxNQC/qK3vyiWTENjwfu7FpTSatWG9g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZiaYJRMoZyfwKqBY56sdsW3Bh+SX8CLBhxmyCXJANoU=;
- b=ac8TiUPHD6pzlljAHMKZgfF5pzHoOb7ZW6m0WPKLbpJkAPDeWOa9944dQb8UkfB/F6qgqGrbYHDyaQcWe3eFpIAAJ3bdSeTClGkTivC1s3jPFM1MCTMHz/0reqeEc5816BiTlDFvYFHIM0BH3wS+9KS/JQZKrZLKDxRfQ+MdjW/SP4ywI525czyeFC3rYSJ/av6IEJBYk9y73cOw4xXk/aJf8zGB9Zt3CrH/iohTohNGtCd7SqE2bOUUwRVEc2FV6s2oKTTpqwCPIDnALjGiGXX3nuls/mrMKmMEYiq9+Og6vFIN7DVsn0dy44khQCZhAY+U5k6aMb/l8NyXZ/vUOQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=virtuozzo.com; dmarc=pass action=none
- header.from=virtuozzo.com; dkim=pass header.d=virtuozzo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=virtuozzo.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZiaYJRMoZyfwKqBY56sdsW3Bh+SX8CLBhxmyCXJANoU=;
- b=xP1uLhvrf0a51aKEetDn4GS3/TaiiiP0jEPm41+eoNGsoVTnlL6DEgpQJTB07JdHtl1wO319sLUqocSTlNS5t3vLumEbSYntEtzag2UVawoODkHTPOwVkdg7/RlWNWgbEClrBoMrj+kU3pthGd9MYklOiVps9V70C7/D4EDDf7wUS/6U+bagqq++KkPXRHtDd/K9n0ZwYfst7eGhnDGldqpstzgn9eyHXMPCpeT+EJKw7l8ihgsabdoEXie5wck3uqovZ2aaK/PJGKQNPnJS70jnnA3XLOAZ+ydD+UhMuNVifuRUv+UHIvtLNcaCme6rxnm9XQVGtJenW73HfzRmRg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=virtuozzo.com;
-Received: from DU0PR08MB9003.eurprd08.prod.outlook.com (2603:10a6:10:471::13)
- by PR3PR08MB5580.eurprd08.prod.outlook.com (2603:10a6:102:8c::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9846.21; Thu, 23 Apr
- 2026 10:07:21 +0000
-Received: from DU0PR08MB9003.eurprd08.prod.outlook.com
- ([fe80::3470:51d7:36e4:36d2]) by DU0PR08MB9003.eurprd08.prod.outlook.com
- ([fe80::3470:51d7:36e4:36d2%5]) with mapi id 15.20.9846.021; Thu, 23 Apr 2026
- 10:07:21 +0000
-Message-ID: <679c54ef-9799-4df8-8555-c4f54922bea9@virtuozzo.com>
-Date: Thu, 23 Apr 2026 12:07:20 +0200
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] selftests/pid_namespace: compute pid_max test limits
- dynamically
-To: Bjoern Doebel <doebel@amazon.com>, linux-kselftest@vger.kernel.org
-Cc: brauner@kernel.org, shuah@kernel.org, linux-kernel@vger.kernel.org,
- stable@vger.kernel.org
-References: <20260421194344.2981537-1-doebel@amazon.com>
- <20260422201151.3830506-1-doebel@amazon.com>
-Content-Language: en-US
-From: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
-In-Reply-To: <20260422201151.3830506-1-doebel@amazon.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BE1P281CA0171.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:b10:66::14) To DU0PR08MB9003.eurprd08.prod.outlook.com
- (2603:10a6:10:471::13)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WdFbFYl7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62B77C2BCAF;
+	Thu, 23 Apr 2026 10:19:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776939570;
+	bh=3ygz8aPQ887mmlXRKJ2niuUkt3iUa+0zyJRimlH0iLg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=WdFbFYl7H0jbCT8dSo1bJErpMV5J/bQS1D6GT7LviSzdrkc1ANJuyh4N1Ww1b7Y9u
+	 Cd2mW+9bEAknm5VH+yY+BHD5NTdni+7zMnHnpxOtkqc91h7oOvPI5GiutDoUGhw4QW
+	 s33rrZZHxx2YytIIoBvImlZlU1rYctjB2GsY9M/UXhh29p8AvKBA/JLDq53Axu0Xce
+	 dfjx6UKHV90rHugLaF6MYnoS8FBE8sJu21qUUohO4naSFLbiSJu7IqjIg2RHCN1SXk
+	 NpDzzO1Jg0wq48N2b+XYaz2xndvfuSQ8629Ma2RHHHQ5y/z/d9Bv0spT3AKcwXD/ov
+	 RAeChM9mscW4g==
+Date: Thu, 23 Apr 2026 13:19:24 +0300
+From: Leon Romanovsky <leon@kernel.org>
+To: Chenguang Zhao <zhaochenguang@kylinos.cn>
+Cc: Shuah Khan <shuah@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	RDMA mailing list <linux-rdma@vger.kernel.org>
+Subject: Re: [PATCH] selftests: net: add RDMA CM observability and regression
+ scripts
+Message-ID: <20260423101924.GB172828@unreal>
+References: <20260416062224.1546388-1-zhaochenguang@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU0PR08MB9003:EE_|PR3PR08MB5580:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5bf7e6af-7904-4583-8b35-08dea1201c05
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|376014|10070799003|18002099003|22082099003|56012099003;
-X-Microsoft-Antispam-Message-Info:
-	E2+T3Sw26EfWStFqO9LZ+6EmZdK8cJb1yCEWI7D5QdPLvzZmzbKNsHcxPod1WGdFqL/JU8lqZd5djp5lDrM0PTDIdEV3QIRLvGRKd7BJn5K2FhXJYO7tZL+JjfwpkYfPEOtcR9ZOqHrV0GW5wsECdbulx2ZaPs55XzfS6wfWneqEkmi9+WDRdidsBidXz9UuUNSPb5umSfQiiYw8tzD4zR3MsbaWaiUfj1YBpCZYYxnVmRT9PUQrXZwR8+wKUohfbhQLnfCrSpA53aKG7TtmkzmPwpXHAG0OsqVrcVOdV7C0U/8VmUH7uZkQCfhoPEqQ5CWpPo38c65IrZD+2XTIZ/VbAbN0xIs+ermdjwLmH31X1PZY56iLZcjyfyra/wklqfvYMpMs4HfdTiDKLUaHKf+NOap5oo4h6QO6GB9a5BgzJBA2j7GNFnegD5tZtMgLHLD+zVe4kvXdc6BK9xuyyh7MMxkin0xqNf+hnj8JgHIKRDYwaUfio9UPujncFyF+WOQq9TX3Ln8HlUr4d6Wn+rg69siGUAJqZwSn1DMD4UoE6RUEvoq4mjI/hQAqgfi7bk+66RHqGNoarBXY5NdQHFvqU8bgO3iKCFcYsj6ByxW5EdAjI5SQDnajswjMt4wnt3fpzMYs8+S51kafN6TnigIvWBL1+Gj/ADl32i3KLdF7Wi6YEkT2gRx6CvxtoL+W3nwnfKGwoIyv3ngIv0NXYvpb6IaqmQsk82QsGCvbr44=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9003.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(10070799003)(18002099003)(22082099003)(56012099003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?Vm1pVDB6Ykt0SjNEeVJ6bWFoeXpURVQ2cEVKd3BXVXo1UFErK2s4NFV1RXc1?=
- =?utf-8?B?RE42TkZiNDh0VUFHeVB2QUF5bVdoajNwRnJsa3oxMW5oV1E1MDduUzloTDdj?=
- =?utf-8?B?QWthQmx2b01uUi9hcklPMWV4bmpmd3NHZWRjVHVyVUJ1ckhjQlBzZzlVVDUv?=
- =?utf-8?B?NStzaXlKUEhIeWhncGVBdVg5eEhaOFVyN3dzemw4Vkw3MktIM0tXeGhaWE1P?=
- =?utf-8?B?NzR0Y1FvMVVzQi9OeTJlUFlaTnlSa3RxMkxLdm5FaFhpb1U4b1VDN0dDV2NB?=
- =?utf-8?B?Z1NJV1c1OERhbEFkbVlvMzVIcGxZSDJXMjBZd3hMSUFlTmk2ZnB3NVd0aUll?=
- =?utf-8?B?MEFXVlFKbGhzMzdIZStuQ2tRaHVpOHNGNjBnenJwSTNaUzRKQkZPSU81RGdP?=
- =?utf-8?B?RllQR0hhWnBjcnpyMm1mK2g4am9MTkU1TFlkZXZBU0l2U3JnN0R1V0lpWllm?=
- =?utf-8?B?Qm9JM1RpVXJWNU00SFlrUllmdmZKckRSRVk1T2pVRy9uOGZMZ0g0VUYrK3Jy?=
- =?utf-8?B?WmFQWThPWitHSmV0Z2VjUk0vblZwWnRiTzFPYkpaTHBNVktpVkVWTTN6VTNG?=
- =?utf-8?B?c0ZqUk1lOUhjdExCV0RWVmNIR1hTdzV3aFpSdGxzcm1PemlEM096SU4vdDRT?=
- =?utf-8?B?R0xMUXFpb2xFbG1QNTA0dkZnZG1VS1o2bDhjTlJQY3RaU01tTU5UY05wTGNG?=
- =?utf-8?B?TVhpVnpTNWZEbFZOQXBvb3ovdlM5d2lBUjdCNTlER1BjQU1XSlZ1VVFKM3Vx?=
- =?utf-8?B?WVRaSG15bVhkZ0NMaWNzU0ZNNjhPTVNrV25jcEVZUm9lVDhSbmNGTVNicUxU?=
- =?utf-8?B?WEhZSjh2NExYbU54YmtoQWZQdGZuMWp6SU4yalh4b2hQN1hZMEtjSE1GN3BG?=
- =?utf-8?B?TEppamlQaDFRQkQ3cXhnMmNmZkVwZEFTZUYzb3p5MnRVSjBlbVdMVVJPT21L?=
- =?utf-8?B?MVYycXdKZHBFazRBSkNaUWZab2lPNmpVS292UllQUE1CRXNRZnYzckU3cXY2?=
- =?utf-8?B?M0FFbE9HTVVZNU5rUWdNblViYldsNE9SbXhDc3RZVW9kenhBWnF5VExMSloy?=
- =?utf-8?B?VTBuZzBiREx0QnV0cS8rbzBEZTRFY202T1NiRlEwK2kxdnI5Y1FQU1BpSFJ3?=
- =?utf-8?B?dUordEVodytBYXdHbEtLQUhXZjNzdmtpYVVGS2paRVRZSEhIMEg3UnlnTE1m?=
- =?utf-8?B?bjlZNzFVNTc5OExqQitGcjNBN0M4YWhvKzR5V3FsZ1Vkd0lOV2dxVFcrejNU?=
- =?utf-8?B?Y3gzQmFyUmVXVEljM2Y2ajV6UVBKUlA0M01nK2hSeGd2ay9JcWMrTE05dFdz?=
- =?utf-8?B?VDdMdmdHQlhkVjlaK3BXcEJEclpxK0tLVmVtZk4zQUJYTFhuWlR4YWxqeXMw?=
- =?utf-8?B?RkRtYW5pek5NbUo0ZFIxZnBFVVhXQUZud2hUb3pYVXVxNGxRTmtzNm94RGY4?=
- =?utf-8?B?Q1c2QU94eGZmNnlXMktCQXhGNDYxTXJCR0RSYVlWUFgycTRleVUwdGQ3ZHhr?=
- =?utf-8?B?anY3Y2RGOWV3REY4bi9VU0NxTWo4K0FVU3hmMVpTUkFTZUNBdkc0RGVuY21G?=
- =?utf-8?B?MXZCVnBTRStQOHRqMC8yK0N5cjRsRmk3ajRSSlFBT0Q2VHNnSjk0SWc5ZWZt?=
- =?utf-8?B?VjBrelJycGJRbDBtdTZqaCtBaVMxb0UzdFBhcTlFdllWcjF5MlFqSEZmYy9Y?=
- =?utf-8?B?am1ITkpDQlFydnJvenV3K3I5NUI2WEJORXRHSCtLTFNoUW5jTnFWcUZTOXRs?=
- =?utf-8?B?RS9MNk5nL3ZIbVV0YmI1ZWkyc1VCUmNaZlhmOGdQd0ZhYkE5b2N1QW5yUy96?=
- =?utf-8?B?SDJFZjlHOTNVaVBJSHJjZVNnSDNNOG9LTXlXYWtXY1l1VVVHZ0JIRUIxM2Nj?=
- =?utf-8?B?andPSFhuS2FXQzBWdGpnMmlVcHcydkcySWxFY2k1cm1pWGxJNmgxVGgrNUVH?=
- =?utf-8?B?M240THJLVVpqQWl6MVdZbDU4d2dJQmRnQmIxblowb094RjlWOVZXcnkvVlJl?=
- =?utf-8?B?UWpXNFpKWCsvNzRFR1M2b0FvMDkyMHdxZWoxaDVlVktKWi92VWdvTnh1RC9v?=
- =?utf-8?B?UW9EVGlkaFkvcVBXczcxcjVqSk9vSVJSS05NYlZ1bExnbUdjT2ZhOVYxd2o1?=
- =?utf-8?B?cFIvL2REZ2FQMGo3T24vR2RnZjBlNDF4cDNBN2I4dHpuTjU1eTBoeU5IYVJE?=
- =?utf-8?B?ZWIzemNEaWFTMDRnQVBGbkVXMlJzc0VWNW13MUdrZ01lZTFMNnFBVDR3YnNx?=
- =?utf-8?B?M09PSi9qSi9RWVBrWHo5MnNnU3ZvUFNvZU1yUE8rK0hJc0J2ZUJtNXByaDFW?=
- =?utf-8?B?T1V4VlBMT3BlUXo1S1l1VUN2b0YxY2NFV2xuNjhnMzNhTkxoaGtIbGZPOFhh?=
- =?utf-8?Q?QsUnMZK0AEtyAnIVt5ss+gkJMUkpekfQ15QNI1LU5tR6Y?=
-X-MS-Exchange-AntiSpam-MessageData-1: TvB1vUKr1G1Gewn3OPG19YpX0OuKqfAb49A=
-X-OriginatorOrg: virtuozzo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5bf7e6af-7904-4583-8b35-08dea1201c05
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR08MB9003.eurprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Apr 2026 10:07:21.6534
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 0bc7f26d-0264-416e-a6fc-8352af79c58f
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 5idg8zV8guqAOQWnSo1hogaVftmtl98xKR6wDA60Z2KBTedG9pAXLWc2sO1gf20hIkX0yGsHf/MPKGNYnV2SgWmj95POhaz1yFfqer73Qb8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR3PR08MB5580
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260416062224.1546388-1-zhaochenguang@kylinos.cn>
 
-
-
-On 4/22/26 22:11, Bjoern Doebel wrote:
-> The pid_max kselftest hardcodes pid_max values of 400 and 500, but the
-> kernel enforces a minimum of PIDS_PER_CPU_MIN * num_possible_cpus().
-> On machines with many possible CPUs (e.g. nr_cpu_ids=128 yields a
-> minimum of 1024), writing 400 or 500 to /proc/sys/kernel/pid_max
-> returns EINVAL and all three tests fail.
+On Thu, Apr 16, 2026 at 02:22:24PM +0800, Chenguang Zhao wrote:
+> Add a minimal RDMA CM selftest suite that captures observability
+> baselines and runs trace, counter-delta, and fault-injection oriented
+> checks, plus a review-loop helper for repeated validation rounds.
 > 
-> Compute these limits the same way as the kernel does and set outer_limit
-> and inner_limit dynamically based on the result. Original test semantics
-> are preserved (outer < inner, nested namespace capped by parent).
+> Usage (client side):
+> - export
+>   CM_WORKLOAD_CMD='ib_send_bw -d <dev> -i <port> -R -g <gid> <server_ip>'
+>   (User can customize CM_WORKLOAD_CMD)
+> - sudo -E make -C tools/testing/selftests
+>   TARGETS=drivers/net/rdma run_tests
 > 
-
-Reviewed-by: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
-
-> Signed-off-by: Bjoern Doebel <doebel@amazon.com>
-> Assisted-by: Kiro:claude-opus-4.6
+> Signed-off-by: Chenguang Zhao <zhaochenguang@kylinos.cn>
 > ---
-> v2:
-> - use global outer_limit/inner_limit instead of complicated config
->   struct
-> - make use of FIXTURE/TEST_F macros
-> - reduce buffer size in write_int_to_fd() to 12
+>   The first patch adds a focused RDMA CM selftest suite under
+>   kselftest to make CM behavior easier to observe and validate
+>   in routine regression runs.
 > 
->  .../testing/selftests/pid_namespace/pid_max.c | 156 ++++++++++++++----
->  1 file changed, 124 insertions(+), 32 deletions(-)
+>   It introduces baseline collection, trace-sequence checks,
+>   counter-delta checks, and failslab-based recovery checks, plus
+>   a review-loop script for one-shot serial execution. It also
+>   registers drivers/net/rdma in the top-level selftests TARGETS,
+>   so the suite runs through standard kselftest flow
+>   (make ... TARGETS=drivers/net/rdma run_tests) instead of requiring
+>   manual script-by-script execution.
+> ---
+>  tools/testing/selftests/Makefile              |   1 +
+>  .../selftests/drivers/net/rdma/Makefile       |  13 ++
+>  .../selftests/drivers/net/rdma/README.md      | 168 ++++++++++++++++++
+>  .../drivers/net/rdma/rdma_cm_baseline.sh      |  58 ++++++
+>  .../drivers/net/rdma/rdma_cm_counter_delta.sh |  72 ++++++++
+>  .../net/rdma/rdma_cm_fault_injection.sh       |  95 ++++++++++
+>  .../drivers/net/rdma/rdma_cm_review_loop.sh   |  35 ++++
+>  .../net/rdma/rdma_cm_trace_sequence.sh        |  83 +++++++++
+>  .../selftests/drivers/net/rdma/rdma_common.sh | 126 +++++++++++++
+>  9 files changed, 651 insertions(+)
+>  create mode 100644 tools/testing/selftests/drivers/net/rdma/Makefile
+>  create mode 100644 tools/testing/selftests/drivers/net/rdma/README.md
+>  create mode 100755 tools/testing/selftests/drivers/net/rdma/rdma_cm_baseline.sh
+>  create mode 100755 tools/testing/selftests/drivers/net/rdma/rdma_cm_counter_delta.sh
+>  create mode 100755 tools/testing/selftests/drivers/net/rdma/rdma_cm_fault_injection.sh
+>  create mode 100755 tools/testing/selftests/drivers/net/rdma/rdma_cm_review_loop.sh
+>  create mode 100755 tools/testing/selftests/drivers/net/rdma/rdma_cm_trace_sequence.sh
+>  create mode 100755 tools/testing/selftests/drivers/net/rdma/rdma_common.sh
 > 
-...
-> @@ -328,17 +405,32 @@ static int pid_max_nested_limit_outer(void *data)
->  	return 0;
->  }
->  
-> -TEST(pid_max_simple)
-> +FIXTURE(pid_max) {
-> +	int dummy;
+> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+> index 984abb6d42ab..0df7034f46b2 100644
+> --- a/tools/testing/selftests/Makefile
+> +++ b/tools/testing/selftests/Makefile
+> @@ -22,6 +22,7 @@ TARGETS += drivers/ntsync
+>  TARGETS += drivers/s390x/uvdevice
+>  TARGETS += drivers/net
+>  TARGETS += drivers/net/bonding
+> +TARGETS += drivers/net/rdma
 
-nit: Having dummy variable here does not seem to be required.
+It is very wrong place to put RDMA functionality.
+We have tools/testing/selftests/rdma folder for that.
 
-> +};
-> +
-> +FIXTURE_SETUP(pid_max)
->  {
-> -	pid_t pid;
-> +	int min = pid_min();
->  
-> +	outer_limit = min + 100;
-> +	inner_limit = min + 200;
-> +}
-> +
-> +FIXTURE_TEARDOWN(pid_max)
-> +{
-> +}
-> +
-> +TEST_F(pid_max, simple)
-
-
--- 
-Best regards, Pavel Tikhomirov
-Senior Software Developer, Virtuozzo.
-
+Thanks
