@@ -1,232 +1,553 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from DU2PR03CU002.outbound.protection.outlook.com (mail-northeuropeazon11011062.outbound.protection.outlook.com [52.101.65.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DA8429D275;
-	Thu, 23 Apr 2026 08:10:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.18
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776931838; cv=fail; b=D6XIP3wY5UvB9IqmG2EoM/iX8QaaKKqgMtutmixoo56fuE/ZV6y5srji6HJmcuVifHQaRgLBUVW/qXUvXjHOw+SOD1Akfh6M9jSrmyMh5rgx7Rec3JnvQdEPH7Z2OCoXZK+lI5pqKP4VtnGvaEan4/6sJL0PXYBSuhU9v/ryiX8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776931838; c=relaxed/simple;
-	bh=K4RtPeAj+sjQVoMP/u/AA5b+vGGClAXzSibyxlUQOTA=;
-	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=msyawabybd1zCQgsGqU2j1RlbUvVWLW+Rs4KclSvDvoMiCmkF+7tqaK5pz/zH/xY04KwsRAe75wVjL8kXh0LMXHJ7NjP7NooJj22ij/oVdINLvyZvfhKbkjwp2M4ViqSmQEbOZYH/nvPx9yzHisvqHiUsYuNdWoZ+RzDIe/vzHE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YzSyJ1F8; arc=fail smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF7BD3C0619;
+	Thu, 23 Apr 2026 08:26:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.65.62
+ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776932796; cv=fail; b=mbaZfs+hRVVufff395rDDWaZ6iZy2Qofyp9lpJbI06U2mGvaTtdCT755QzFape2yxy2phu+mmYF/uFaxBmF4mAKSG2rx7Y/Q/2RJVUMzrUxzBs15aHZxvAjqgMKNDtU8a/vT5NFNkCD4DQx1e/D1Gu7atGXPOyvA2u5AJl4a0hw=
+ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776932796; c=relaxed/simple;
+	bh=x0CK9fLxH0vwhHnWJKJBUIl2ootFaRYq9+LDxSPHMBo=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=ANBJuxnuN1kpQEXjomPDyZJbeWuUocZSfHahlqRUmQNwWx0Rpm2breU5g//hf4WyHkD6MEwoAYasSZXY5SCSrJHmAJSEG7unJRd5iX09IKcgGcoj5MZafTVtT8Kd1tFne4uNONoSZOPGl008qkJmB5SGGfDuZd2V8704EEZ4EAY=
+ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=iFKy0svG; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=iFKy0svG; arc=fail smtp.client-ip=52.101.65.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YzSyJ1F8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1776931837; x=1808467837;
-  h=date:from:to:cc:subject:message-id:references:
-   content-transfer-encoding:in-reply-to:mime-version;
-  bh=K4RtPeAj+sjQVoMP/u/AA5b+vGGClAXzSibyxlUQOTA=;
-  b=YzSyJ1F84ZgpLO7uJ6sZFBtd356GK+FFFtogb+Polqw4BrVNv5Ehm2Nn
-   t0T1WaF62IAbYsjN27tgt71TuyGex1NntJTX4RQ+DEkJjH6FPeSDJmkot
-   dxzAfyMzrRp4zmmIJhhCOuHoHGBW5XADqhDoMYxMmZ87Pi03eI4yKHUgk
-   flmVBfoARkvfMjIAPnndfD/4ihX01jM/cywsg4+8CZr1QQe0J14AsPpFJ
-   MWsu3HI+dJ2kfkAuT3ULsWLLEBZhOixmrK3huDMLP5Yle60uL/DuF2CKO
-   G4wjErxzxOTgwtDN6ih6vWmxcsbfkm1UcjUhYM37r4lkYCqDj28PlQl3y
-   g==;
-X-CSE-ConnectionGUID: bJQTyHgPQ3657FNAgZhQnQ==
-X-CSE-MsgGUID: IbqK+fCdSNmBIqlqtlp3Tw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11764"; a="77912209"
-X-IronPort-AV: E=Sophos;i="6.23,194,1770624000"; 
-   d="scan'208";a="77912209"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2026 01:10:36 -0700
-X-CSE-ConnectionGUID: qAbuymfaS3W5+JK3bbNW4g==
-X-CSE-MsgGUID: fCboZ7XhTb6VWAVU6InWRg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,194,1770624000"; 
-   d="scan'208";a="234380026"
-Received: from fmsmsx903.amr.corp.intel.com ([10.18.126.92])
-  by fmviesa004.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2026 01:09:54 -0700
-Received: from FMSMSX902.amr.corp.intel.com (10.18.126.91) by
- fmsmsx903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37; Thu, 23 Apr 2026 01:09:53 -0700
-Received: from fmsedg901.ED.cps.intel.com (10.1.192.143) by
- FMSMSX902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37 via Frontend Transport; Thu, 23 Apr 2026 01:09:53 -0700
-Received: from SN4PR0501CU005.outbound.protection.outlook.com (40.93.194.26)
- by edgegateway.intel.com (192.55.55.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37; Thu, 23 Apr 2026 01:09:51 -0700
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="iFKy0svG";
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="iFKy0svG"
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
+ b=A+VGDrHk3mCefmnIXDpGPjYiy+ggsddU05jnlPABqhEROwWlaEdiEs2phTUqhMduyQg8pePvq76OCh+wRHJvQlXKgXzVWbF6RQRgA2A3K6gFVP589ofLH1BmtxftxhvUdUtOxEyN7MjXJszenMV98ayieNRi1SFFja3mN7vHOH8fdMT5HPcafX4xymMaWZUYl8BkntK+E5IdUNOrJDw5pJ8NJ6KcyMtZDNYFBcEXcELtWjwoHMiVq0b9hOeEadWXJBVgJAc/mlKG+SKlVu6YZS649BILhcY8TBRTG5d1Zr3C6/0rTroMCjLXC0VAK+xRbjaJi7BGhr3QkE1zY4iftA==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=W84IEXk7NWp9AyXIpRgNvDpD8EwrurhrpPNQQtaqYTg=;
+ b=p6dPzPJtfbIZj3MWvLdLy3B2GOUCPbegr2RcWP10YmD+Y6w6O7gHL6AXepnsjB6qdg2wEWT6wLzbNyXREP+CGDZtG1aFbdKVwrrfWB7O5gAvKjJLit5qcrF57wnBExH8M36HvUITLjcTNPkNa8W0xXlteV9LAAEDVlp4QJ9uvzElwoqoCZl7PoVLevkvSZx2+/EU8+AA9K4Gy4rASeBZEqtA9UElDYoDQCmzFKU98OY6jzpy3NerOMKCD6mp1tpllh3XVAbgX/YUo2wGYzAktuj9jFSa/l9avkD+siecRdAe52h6R94A2fw+AF8tG9P5yXMzXlwXRYXb0LMIDSoGCQ==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
+ 4.158.2.129) smtp.rcpttodomain=kernel.org smtp.mailfrom=arm.com; dmarc=pass
+ (p=none sp=none pct=100) action=none header.from=arm.com; dkim=pass
+ (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
+ dmarc=[1,1,header.from=arm.com])
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=W84IEXk7NWp9AyXIpRgNvDpD8EwrurhrpPNQQtaqYTg=;
+ b=iFKy0svGktz7UHSKmYBAlCoKtXlb20nV+tOms0HNFEpJ5SaJxduku8ymYcJu2wq7JuKkZ4cc8gIakY2Otv7URDGMqv7pt5232Hw2MKqs5wvixzWXy3s0pcaRhC4AX900uxZtYr+gwY4jQBwYTlOSw31FalaWOU8DPOD8xtD4zis=
+Received: from DB8PR06CA0053.eurprd06.prod.outlook.com (2603:10a6:10:120::27)
+ by PAXPR08MB6448.eurprd08.prod.outlook.com (2603:10a6:102:152::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9846.21; Thu, 23 Apr
+ 2026 08:26:22 +0000
+Received: from DB1PEPF000509E7.eurprd03.prod.outlook.com
+ (2603:10a6:10:120:cafe::e3) by DB8PR06CA0053.outlook.office365.com
+ (2603:10a6:10:120::27) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9791.48 via Frontend Transport; Thu,
+ 23 Apr 2026 08:26:22 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
+ smtp.mailfrom=arm.com; dkim=pass (signature was verified)
+ header.d=arm.com;dmarc=pass action=none header.from=arm.com;
+Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
+ 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
+ client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
+Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
+ DB1PEPF000509E7.mail.protection.outlook.com (10.167.242.57) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9846.18
+ via Frontend Transport; Thu, 23 Apr 2026 08:26:21 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=IIYwOi+hOAtj2O4LJO44R8etNBr6dZv6atZ3Tfr9KrIkTBCaj+tLyOuOW1Jqkua80Jyx9AU8kH6MPYkf7wA7rNDmQKRtwQt1D63Fo53gza6YLazR+mtcdXLCnAx9nwwL+KT8s/u99eT2T8QaFBXTxl0eP87vUYJWxl5piDiPPUggcW4epmh5HRGoxL0wKPEUYBhqMYDP3qNTalwdh8y0own3J1+cqH7zF6SN33JJG5vALR2yM4bBrz04iIL96jqvnwx7TbGad0RQWiljuynyKrQqOz3rK5mK+NwJkGCwLxqivA38gTKjaD2K4TY9WRNpGHsFDaDs2DPoNo00mGc7lg==
+ b=iO1m/3SWD7hOplkds4S495e4ZlmceBiPHfjCV/DuHlD3MjeA2SQPkauIg1NNBTZt3tHulL+T6uftAIrM1DrQTkqX5GhUg5AuUdBZHBiQEgVqcFy448ak7Gnhr1cdrtftyoSnQwq0aT0biF+3ivJuDl+RF0ZyZSY2+X8Zy/lPFo1N/+BV2NlIbvcA+h41oY7MBLKSvTkqCG8OpGWBHzlVGW8S4clITHQVV3gqRF2Eu0ZMITM4Oe6mE+Mf00GbWfVn+tBcIalrr+ti6H+8zav+SwA0ssxs0GFrwM80xxUWZX4e4sgrkvUZaT98hcVSJEY9/0WRkjZJZGYeFaKYAJMBzA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6Lh/ioE0xVUbcobJdiASPt2buwtZUptK5ePC1ksSaDc=;
- b=KRZPLbuUlKonrhnuFDLAT9UjNdADhCWd2Xkok0+wD+0h9WVtuu4D34O/85WC4odsXO7vO0SzSA67+JGiyy+zCwFujV/H47X0kVLhtvNAMIyyzfjPCHAT313nwosvuDU1G9hZJggAAfyZAG0WliNE8aaddEx04d5eMNG2/+HEBXMWwglzRc2x4heeZFBzqmJ57Ddn2bZE8CyV+CkgGfMwZpOigm8axrDLbJvPAbrpuMk3J6F0eYhCZIpFnY6prNtRpPdWpQHHCLBvl+QhOlXFt0jsY3yKAYBt0pRhx7GeaiuyASO0Kc39bFWXXxwG9WUBoLO52/5wVjhgJJkA+JujWA==
+ bh=W84IEXk7NWp9AyXIpRgNvDpD8EwrurhrpPNQQtaqYTg=;
+ b=bmyLUVbSNaGyAUU7ri39gpCKxxj0+yaYLPICZTkFPECZhkYMfEWTa6BK5G3fjHbzVlvcAqdLxHavHPZuG9Qz1TyxpXgaakNb/LJ7oZ7Ft3nw/0SM3qNz46wFdezQQMWh2F9VCmNJrBFUG6mM6IlvJGtXC98WdMxxUbNXIq8/+fqaDRcVNN6q30VZOCM/E7xY/9IsADyk0Vj1OwJkEUrvHCFR43Mln+wFwrbofEgTZfycZzHLX6SDsCGetluTfnHE9VFQn/Uo9X0FQyxSvAIXVn4wAYg11ASFFxZ5ssCX825iLf7tKtgR/vhclhhzHwADnB0TxIx165DyiC0pQNyqjQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from BL0PR11MB3282.namprd11.prod.outlook.com (2603:10b6:208:6a::32)
- by IA1PR11MB6420.namprd11.prod.outlook.com (2603:10b6:208:3a8::7) with
+ smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
+ header.d=arm.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=W84IEXk7NWp9AyXIpRgNvDpD8EwrurhrpPNQQtaqYTg=;
+ b=iFKy0svGktz7UHSKmYBAlCoKtXlb20nV+tOms0HNFEpJ5SaJxduku8ymYcJu2wq7JuKkZ4cc8gIakY2Otv7URDGMqv7pt5232Hw2MKqs5wvixzWXy3s0pcaRhC4AX900uxZtYr+gwY4jQBwYTlOSw31FalaWOU8DPOD8xtD4zis=
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+Received: from DU0PR08MB9203.eurprd08.prod.outlook.com (2603:10a6:10:417::12)
+ by PA4PR08MB6077.eurprd08.prod.outlook.com (2603:10a6:102:e7::22) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9846.21; Thu, 23 Apr
- 2026 08:09:38 +0000
-Received: from BL0PR11MB3282.namprd11.prod.outlook.com
- ([fe80::5050:537c:f8b:6a19]) by BL0PR11MB3282.namprd11.prod.outlook.com
- ([fe80::5050:537c:f8b:6a19%4]) with mapi id 15.20.9846.021; Thu, 23 Apr 2026
- 08:09:38 +0000
-Date: Thu, 23 Apr 2026 10:09:03 +0200
-From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-CC: "nick.desaulniers+lkml@gmail.com" <nick.desaulniers+lkml@gmail.com>,
-	"shuah@kernel.org" <shuah@kernel.org>, "justinstitt@google.com"
-	<justinstitt@google.com>, "james.morse@arm.com" <james.morse@arm.com>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"morbo@google.com" <morbo@google.com>, "akpm@linux-foundation.org"
-	<akpm@linux-foundation.org>, "mingo@redhat.com" <mingo@redhat.com>,
-	"xin@zytor.com" <xin@zytor.com>, "ilpo.jarvinen@linux.intel.com"
-	<ilpo.jarvinen@linux.intel.com>, "nathan@kernel.org" <nathan@kernel.org>,
-	"oleg@redhat.com" <oleg@redhat.com>, "seanjc@google.com" <seanjc@google.com>,
-	"hou, wenlong" <houwenlong.hwl@antgroup.com>, "ryan.roberts@arm.com"
-	<ryan.roberts@arm.com>, "m.wieczorretman@pm.me" <m.wieczorretman@pm.me>,
-	"peterz@infradead.org" <peterz@infradead.org>, "tglx@kernel.org"
-	<tglx@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>, "bp@alien8.de"
-	<bp@alien8.de>, "ljs@kernel.org" <ljs@kernel.org>, "perry.yuan@amd.com"
-	<perry.yuan@amd.com>, "jgross@suse.com" <jgross@suse.com>, "Mehta, Sohil"
-	<sohil.mehta@intel.com>, "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"x86@kernel.org" <x86@kernel.org>
-Subject: Re: [PATCH v6 1/3] x86/process: Shorten the LAM tag width
-Message-ID: <aemzYE5td11cWydN@wieczorr-mobl1.localdomain>
-References: <cover.1775813245.git.m.wieczorretman@pm.me>
- <79720f2640839b15f22e3618136b084cb376456b.1775813245.git.m.wieczorretman@pm.me>
- <8bc4ff4b7491c6fea6e17583a6fa249961c08275.camel@intel.com>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <8bc4ff4b7491c6fea6e17583a6fa249961c08275.camel@intel.com>
-X-ClientProxiedBy: DUZPR01CA0023.eurprd01.prod.exchangelabs.com
- (2603:10a6:10:46b::17) To BYAPR11MB3288.namprd11.prod.outlook.com
- (2603:10b6:a03:7e::33)
+ 2026 08:25:16 +0000
+Received: from DU0PR08MB9203.eurprd08.prod.outlook.com
+ ([fe80::f1e:73f2:57df:4047]) by DU0PR08MB9203.eurprd08.prod.outlook.com
+ ([fe80::f1e:73f2:57df:4047%2]) with mapi id 15.20.9846.016; Thu, 23 Apr 2026
+ 08:25:16 +0000
+Message-ID: <703f8dd4-9b23-489f-8170-e4c652991b97@arm.com>
+Date: Thu, 23 Apr 2026 13:55:07 +0530
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 09/53] selftests/mm: hugetlb-madvise: use kselftest
+ framework
+To: Mike Rapoport <rppt@kernel.org>, Andrew Morton
+ <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>
+Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
+ Barry Song <baohua@kernel.org>, Dev Jain <dev.jain@arm.com>,
+ Donet Tom <donettom@linux.ibm.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+ John Hubbard <jhubbard@nvidia.com>, "Liam R. Howlett"
+ <Liam.Howlett@oracle.com>, Lance Yang <lance.yang@linux.dev>,
+ Leon Romanovsky <leon@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ Mark Brown <broonie@kernel.org>, Michal Hocko <mhocko@suse.com>,
+ Nico Pache <npache@redhat.com>, Peter Xu <peterx@redhat.com>,
+ Ryan Roberts <ryan.roberts@arm.com>, Shuah Khan <shuah@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Vlastimil Babka <vbabka@kernel.org>,
+ Zi Yan <ziy@nvidia.com>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org
+References: <20260418105539.1261536-1-rppt@kernel.org>
+ <20260418105539.1261536-10-rppt@kernel.org>
+From: Sarthak Sharma <sarthak.sharma@arm.com>
+Content-Language: en-US
+In-Reply-To: <20260418105539.1261536-10-rppt@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MA5PR01CA0190.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a01:1b2::10) To DU0PR08MB9203.eurprd08.prod.outlook.com
+ (2603:10a6:10:417::12)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL0PR11MB3282:EE_|IA1PR11MB6420:EE_
-X-MS-Office365-Filtering-Correlation-Id: ddd2acc0-5bf9-4846-0db4-08dea10fa8e3
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-TrafficTypeDiagnostic:
+	DU0PR08MB9203:EE_|PA4PR08MB6077:EE_|DB1PEPF000509E7:EE_|PAXPR08MB6448:EE_
+X-MS-Office365-Filtering-Correlation-Id: e2d956b6-ed53-49fa-5d44-08dea1120032
+x-checkrecipientrouted: true
+NoDisclaimer: true
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|366016|1800799024|22082099003|18002099003|56012099003;
-X-Microsoft-Antispam-Message-Info: R/Cc4TFUnlxcGnH8iRbVbblrff9nFzuU/GddepeVKxWL22NXxdSEfYvmbkk1YxPHTlYMfzGXw/exaRkjcS5Ou2VEAPthglfKgFbe6z3LUcqHQmlGX5qnKCItPdMQi66ui9hCaMK3fEYw/h86YsLwHkYeH47Z7KCDV3HvZ2AQmcbnqE0fFUZoIAaJi6PRZ18xuDoTuqs54f2fBRdg+Fagd1Y5iHIPC6ukL40YjGGddQaZD/KvUq11IdYkSKIpVMhrE/3a7UCBOSqY0ztks/GPTugRai7qYeaRxTfOWHu0/MxzcKqOtzIXWani+92zu/lUph+zoHRmq7PnimGEEmWWLSXVJZ6DpQIC6tqmR+Ef+82J0ccQK13ZSKAPSfzBofSfcsZYGRDM6Sd+9RaFBdxIpMx0bfeiJBnLYq9JuNxHv3KCATBfQonbQXzcofXa6p/ZAF6KPixzuI5fLYywd3W6oxlJ3BjWPkEHL3nKfIKERp1U9MgHJbiy11R/mh5b6URARg64V9CU0I4pYya+rtzUoZKAB5A8mMUnOzuaZL/0IgMLppOJibMEdN6WM9Kk5NeIEL/W7HdMgqos6tgPMDSUuSPzWaVn++e9Vqb0uaxaja6EXRf8oJSFqSaULOxktcyc7epYtLsb38RmPgZSEZB9U4yWql4WvAOB/xMHrIIJhgxqgD+7SM8BuKv0V5KM4v5DQTkpzsAueekM+ePk1Kw08rWL7mOTqFYQ3j/mCTEZ6A0=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR11MB3282.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024)(22082099003)(18002099003)(56012099003);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Untrusted:
+ BCL:0;ARA:13230040|7416014|376014|366016|1800799024|18002099003|56012099003|22082099003;
+X-Microsoft-Antispam-Message-Info-Original:
+ Es8C4UwQvSSDlxUMwuIRHdrjLXgYgVv6P0/UQe9KWerD36p/tlUIFm48uB1ggvNlqWg7pcOh3gxPbLwDlleSZf75IxRams/Z98oRzFJwMSpIrOd0FrAfl1/U6Gt3SBh5VZ0lg1cNbnXz5ByV0z4eKjUwmcfHWAeDEIUCRl8e9EuyIgS61EI4RyAosE+Gtq/TxnodY0pIR9ktUUlQLYr1GhtRIzGCZtl3Ku7sax/7HVm/ZH2LWgNvETsfGNf5lxCXUq2R0CYtxcIGUcAToKJ/U/3aGLirQRIBjhq4D/DolCbzoZDvpqvnyeQfhWdh7xcUOpO1gnz3pnOGdB3hKFZ4vDqXhjvc/ac6+OBQuY09FoqjpKWIVD0IuhEsgsov9H+GeNYrjw87v9wOIEJTagy/WxCSebTC2saTqID11JgMEXGTHAvQhaxvKrjoaaLdIvZBuiP7Cu1b9ov0ukPP+DM3tuNuoShw7floFd9ONZOLCe2TvZllDkbQdTLlOGzXt9Y7ApGephjnVKLvKlZ32AnWHMo+jVBPGa7WvUrDZxBmH6uawA7Bw9bC7m8XCPcw6cFF+5TjriKAKcx4kGgOGo3LwS8WbSRSncscUYhPtZDIysZ0SwCVk4LMk8Mjb8qzFeWVysTo9SfwnlQCvqhXX0c/TxhbTCLImxtkF428P9+udR7tutQmHFIvYjyo1hPTka5XJb3OBa30dmdTbgZvuyuOIyh4LCilP7HWgjtQBzyPsjU=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9203.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024)(18002099003)(56012099003)(22082099003);DIR:OUT;SFP:1101;
+X-Exchange-RoutingPolicyChecked:
+ W3VQ5WR609GypCBLxn8p3l34lVz9a/W2SiECljwwk6HSlNGINfEKKN5Ct9LsyykofPm11usIS+xe5loYWtULxrL3yMj/xefyvzCUSAoYrJD0yo2CKn5WdWEgOyf1+1094G8NJ37Ykg1Gm5Wa37QS5CftEj1W13VgWZd7A3M4MmlZotpZ1JOKK0G1fkRefbfoceLm4t1+AO/LcAIxyyxHh46tO83kw3J06vSlkFPqc4NV4NGVjSwpQhIF9tMkJoaBsRiKf0ShDpnAqdO7T40NVzt8pLpC7+lt7HE4AFVW9PUqsWNXYcGh8qVWS+u4dYiaznkjmRuzwmSndQ8F6xUxCw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR08MB6077
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ DB1PEPF000509E7.eurprd03.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+	64918722-86a1-4c40-43a3-08dea111d911
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|14060799003|35042699022|36860700016|1800799024|376014|7416014|56012099003|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	JLTENGdJjc3/vblhkOjO5FGl1LsOh2HTPN6u4vh0UG8oD+z6L6xwIMPz93da3SItPi+FFfLaZM4HSIgp5BR//kQhaHpnIeZaSxbqr7HKUmXJOFGbw2bAbIzEcVrtktY/nye+NF/OxBAd5HoIoVACooi8qjfSJOcbh3fNGzgu3rp64pDoxiSViMHzOtmOy7Whhe62U19Z4y7Td7te2BSJUUyMV/je/B+TLwWaJoaEdYs825ot7+yc6CbYKfbw5BXeDv64Ycda0KVs1T1uftME2aWGmE+Chw6lx03czheMWkIGWhgv9a7zTLJ4jyfxq8xNJo/r+1eTw/NANUQY+G/ZY63VGdF0EqdkShRXBptDwpbSbVzm0TK+orhvVpRp0nwqzJwC+Nh5G/t2yQbkgChoQkvLmUzSdN5isVrEnJedJE1ehXhJOLyug0ycBWZ5LnHXs5ievID7UYZC+TZkciGzhbWbSpxUK3JHma8gG6crvRFN7YueN/H5vzMADY9ZxTKlWX8WOJfL4vy1tEP16tS5KvH1J8y+vDIx/pIFzozpnKnkADzT44HfDitcSG4YLRVDzYqC8SRSod86vtxOUxY5X2wrebJ31I1AtqE9zq0eSDuqjtWO5hQCXldnNKKT0JSquo4QM5A+F16pBNKdKAyy00CzWOsV+FufusItP5MaVT5lWsAPTsDMptk24FkdDM+PaB5FTW5tNkDpFUjCmD5uENEy71+I/BqGPcB1jqAyAZoHArdl8/hSaMWSt+jk/CfBy9XZdQ9MaUjIHldpUgbotg==
+X-Forefront-Antispam-Report:
+	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(14060799003)(35042699022)(36860700016)(1800799024)(376014)(7416014)(56012099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?o3YlnoFVY0BPSEzrxzdy/kQVOWHPUDxMrbJGCUHl/eSHP8MgAiB6/D+k2Z?=
- =?iso-8859-1?Q?J/qz2ECV/fUG3B12QZjBBKFwdzo0jJM/wtTmD9Q9y4HpDun2NaH18HyOz2?=
- =?iso-8859-1?Q?YMACX4PMm+9axFg2XxwNuTMdc33vV+p4XvSgijA9Ysk0S7cJJpEFetMmzc?=
- =?iso-8859-1?Q?hzniR8X0tCGs1xQt5caYH2BZtcdxG2rnO9/ZKC6ZbvXRrMBNwL2Kw77fT2?=
- =?iso-8859-1?Q?jBni2dhyq+yAZQxrPIk0gVYlXm/erWVmNOrGDne+fLtlq0zXrUEKMeGR6R?=
- =?iso-8859-1?Q?yN1majPX3CKzF+cXOxMp0q4zIodKUY+uFmRLPeR1Wyau0TX+pVMdZKEejD?=
- =?iso-8859-1?Q?8aJRbERD+ZXDHFjrrkjoAcSqCoXQrETVZzdVLbbsFk7lf6J4uR0r1naiZ3?=
- =?iso-8859-1?Q?YgzvngC2KQF5hi6g3kLYWIyLoBN/O1EsHX7Kk7WwgXejM/JnQKTnYwtifp?=
- =?iso-8859-1?Q?F//3fegVBSL2GBJWolxKYWVXfs5g1mTpG0YDRwmsVQLZeMEWkONHukvzAu?=
- =?iso-8859-1?Q?2U1m+XDxeuWPHChqVrx1wlD0+qjagTdKmMtPm2MUUgPEg26e/VkjJeRERh?=
- =?iso-8859-1?Q?M2HjhsYSss25AP3iFeA6b/IaoQVPCjQJzRWHm13W1TbRWbG4WuAO7uPi7K?=
- =?iso-8859-1?Q?3g8KCn/ZYLKUEq1+ujijzhkpe5XIT+r2Evjm4Z/qJefW6RAou8uPnG8FGM?=
- =?iso-8859-1?Q?RdmJvEyvA1PZvQ/d0YUPvmqYhb+DIhY4p2A/ciQOBRsyjqcwCTfuovnt2P?=
- =?iso-8859-1?Q?QvkvksupYkpmV/smubQqrqr+HrsJTPFNPPSI73iLjRbnQUyVYGEeMIo8N4?=
- =?iso-8859-1?Q?ogBBYidy/Vh13Rup2VdxxXAc7mThO1jor37KKqdDS6aisHew77s/nCXYhR?=
- =?iso-8859-1?Q?qhHn0na2RYTEBufeToUh0sTGK2j3UPf1rlH4+6DpE+r86bCTWhxtBnZZzU?=
- =?iso-8859-1?Q?WTp5gaZxy5mRFgg8AuAENVCzrUQEHbpydQs/oM5e/ezIg4U+sOYAT/DNKZ?=
- =?iso-8859-1?Q?L+uklmRrm7AJwQGVF6FNTrY9kVCJZypZZNEQLvtDNpsbu9ltCsaDIEF8h/?=
- =?iso-8859-1?Q?f5dR8Wngf8Yl1Y5KwY1MhpUA3EKmPwlNldiyv4M02aIcOxQI98hxOly7hc?=
- =?iso-8859-1?Q?fEwBE/nY3wUyDO/YADbzqXvzSLwVsIAsJyPxETE8eDmZPSbeYimSoAvvj8?=
- =?iso-8859-1?Q?DT6G1g0Ph6+XQN3yX9BNw8lnFpkSoTqq6N+wwe6hoLfSDw6n0H2Q96WfXt?=
- =?iso-8859-1?Q?pzewUj24q5kKWErZd+6kEEDuXMTym2brLQpAjg8Z60vOB92pUIY1BvRKA8?=
- =?iso-8859-1?Q?72nCN14iHXSJqxtSsGIl0sU0RTdM8PjjzG5VEM2nci47AHNmg091Smfr18?=
- =?iso-8859-1?Q?1WKNJ2snkQ2ELoh1C0WMA/MgCUvpt1UrwuThSpA71yIZIwp2zeYP7OEDyr?=
- =?iso-8859-1?Q?AwcB6Tf9wAs7Nl3ZlEjuRkPUgW4rQNse/GXFkhmRxJfzpESYyRDccuykni?=
- =?iso-8859-1?Q?nn5vN4o12e7/vaBSfni3SYcwMy9PXZVEM0mFMzoql+bTx2qq/Y4EhO8cKj?=
- =?iso-8859-1?Q?0k0PwAqIzyoudKQiU9WpgQbPfdB+fgnfDCnXy2rmHv5mBFAFbeWQcwne+4?=
- =?iso-8859-1?Q?YQz9E/g2kZq7Pc8/F4eqB8p+NOpZpDPI3wVJuRrzlInWA+uSO1Y+c6EylD?=
- =?iso-8859-1?Q?P2RcpQ5OlKDUVfeYLn5nTJzxG4LhuI7DzufmSg3EVK7hh27yYIH17nnIEY?=
- =?iso-8859-1?Q?vstpYnKSp/XrxHmK8z0nDaGyfL1lv1+tIJggW/hlsOw9mbNl3YbAasiGRT?=
- =?iso-8859-1?Q?rAtu9ebvNX7WBQx+M9f3FUKqhrozkdfpvreWRZ5yYputTtKTSDOO?=
-X-Exchange-RoutingPolicyChecked: OgLHwRSvjjGDIBYYggh11hhKfemuzvP0D2EJRzejOWAweq9q9bBNzncIyWyGHDBbHvgAWqIu8qSgqN9CCf66THtkiF3VPZ3dbHNw7glLllI27uvtg7xfu1THMziW+R76ByBaOd4MKnSZxnbOkNpdhqpO+klzSJ/ucp0J1Q26XVNKKC2u/b+BExCHvnmEY+VMbqSynxZg9AC19LX0TGFsy6vEGRKGiWBPvWsSInYYQcM6/4DiXx0oalr4Pambazhv9cj81G6WqoWdLAVlfHi4zJzq/1/G4d2YRFXz40/QW5B2JcHPAH/5Bf0hYpkx/BcqOIIdDoW/3uvGZumPG6pMnA==
-X-MS-Exchange-CrossTenant-Network-Message-Id: ddd2acc0-5bf9-4846-0db4-08dea10fa8e3
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3288.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Apr 2026 08:09:38.1837
+X-MS-Exchange-AntiSpam-MessageData-0:
+	bX4JdhJ7iWEovIdf9m8Mr9QxUjfsfu9K8oQ7WCm0JATepGfF9Gtou9Mknr1RCkxPCntlTVtwCaG2ygJHAcghAq+r58CjB9SZmzinjohapvgOVTR56bXLQ0fDNSOgN5gXF7sTLR6Q3JJzsp0I07JIwCcqwS1BBTvQWrGzKtUHi1v+JjlWsSk7tJ3mlPd9xH12vODYnzPbMj8DEFj1ubKq5qNvoWjPNh0cWal8sb/fHekKugLEZxHbFjezFIg32X5tI97Fjs6BK1VBsMbgTIutfUQk7f7x2c1afz0aiEv8vDyzkD9uKOQ+cThVl4hl2UdYhZ/ZOB5QNdaAVdDE5IsSs/sfkuiWYS2lB+tzq12wOFigaBN6ucculAhutl4u5d2fIWniXk+u4A6mwxFoKSDm9zWDM8SJdyWSpBphia0S1wlG4ESqCTOBx5Xp5C8WhNDO
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Apr 2026 08:26:21.6801
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /u9ikGaXOtTa681Hcet+uMPPPFSKgSB6i5HO7Q+mHjkhJkGFPUEPe4+75fddU3NdZQ7+iLR5EuoLqwDDYgQ/eF+GQlChiJMR30xCj+Yx98s=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB6420
-X-OriginatorOrg: intel.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e2d956b6-ed53-49fa-5d44-08dea1120032
+X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DB1PEPF000509E7.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR08MB6448
 
-On 2026-04-22 at 18:07:29 +0000, Edgecombe, Rick P wrote:
->On Fri, 2026-04-10 at 09:55 +0000, Maciej Wieczor-Retman wrote:
->>  
->>  #ifdef CONFIG_ADDRESS_MASKING
->>  
->> -#define LAM_U57_BITS 6
->> +#define LAM_TAG_BITS	4
->> +#define LAM_LS_BIT	57
->> +#define LAM_MS_BIT	(LAM_LS_BIT + LAM_TAG_BITS - 1) /* 60 */
->> +#define LAM_UNTAG_MASK	~GENMASK(LAM_MS_BIT, LAM_LS_BIT)
->>  
->>  static void enable_lam_func(void *__mm)
->>  {
->> @@ -814,7 +817,7 @@ static void enable_lam_func(void *__mm)
->>  static void mm_enable_lam(struct mm_struct *mm)
->>  {
->>  	mm->context.lam_cr3_mask = X86_CR3_LAM_U57;
->> -	mm->context.untag_mask =  ~GENMASK(62, 57);
->> +	mm->context.untag_mask = LAM_UNTAG_MASK;
->>  
->
->It's been a bit since I looked at LAM. The untag_mask is used to strip the
->addresses passed by userspace, right? So this lies to userspace about the
->tagging behavior of the CPU? Userspace still gets the LAM_U57 behavior, but is
->told the untag mask is the 4 chcktag bits?
+Hi Mike!
 
-Yes, the intention being that hardware might move from using the 6-bit tag width
-at some point in favor of the 4-bit one. So the user can safely expect the 4-bit
-tags to work.
+On 4/18/26 4:24 PM, Mike Rapoport wrote:
+> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+> 
+> Convert hugetlb-madvise test to use kselftest framework for reporting
+> and tracking successful and failing runs.
+> 
+> Reviewed by: Donet Tom <donettom@linux.ibm.com>
+> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 
->If so, then there will be a difference between userspace accesses to a pointer
->and the kernel's handling of a user pointer (mmap(), gup, etc). I don't know
->that it is unsafe, but have you thought through the implications? Besides that
->though it's a weird ABI.
+I've run the test before and after applying the patch. Before the patch,
+the test exited silently when no errors occured. After applying the
+patch, it prints correctly formatted KTAP output.
 
-Do you think leaving the untag_mask as it was (bits 62:57) while advertising
-that 4 bits are available would be better? The untag_mask would be more inline
-with what the hardware is doing currently while ABI would promise to long term
-only stick by the 4-bit tags.
+Tested-by: Sarthak Sharma <sarthak.sharma@arm.com>
 
->What is the chktag behavior for bits 61 and 62? Are they ignored or trigger a
->#GP?
+> ---
+>  tools/testing/selftests/mm/hugetlb-madvise.c | 204 ++++++++-----------
+>  1 file changed, 82 insertions(+), 122 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/mm/hugetlb-madvise.c b/tools/testing/selftests/mm/hugetlb-madvise.c
+> index 898cc90b314f..4c6c346a3af5 100644
+> --- a/tools/testing/selftests/mm/hugetlb-madvise.c
+> +++ b/tools/testing/selftests/mm/hugetlb-madvise.c
+> @@ -26,12 +26,11 @@
+>  
+>  #define validate_free_pages(exp_free)					\
+>  	do {								\
+> -		int fhp = get_free_hugepages();				\
+> -		if (fhp != (exp_free)) {				\
+> -			printf("Unexpected number of free huge "	\
+> -				"pages line %d\n", __LINE__);		\
+> -			exit(1);					\
+> -		}							\
+> +		unsigned long fhp = get_free_hugepages();		\
+> +		if (fhp != (exp_free))					\
+> +			ksft_exit_fail_msg("Unexpected number of free "	\
+> +				"huge pages %ld, expected %ld line %d\n", \
+> +				fhp, (exp_free), __LINE__);		\
+>  	} while (0)
+>  
+>  unsigned long huge_page_size;
+> @@ -57,28 +56,24 @@ int main(int argc, char **argv)
+>  	int fd;
+>  	int ret;
+>  
+> +	ksft_print_header();
+> +	ksft_set_plan(1);
+> +
+>  	huge_page_size = default_huge_page_size();
+> -	if (!huge_page_size) {
+> -		printf("Unable to determine huge page size, exiting!\n");
+> -		exit(1);
+> -	}
+> +	if (!huge_page_size)
+> +		ksft_exit_skip("Unable to determine huge page size\n");
+> +
+>  	base_page_size = sysconf(_SC_PAGE_SIZE);
+> -	if (!huge_page_size) {
+> -		printf("Unable to determine base page size, exiting!\n");
+> -		exit(1);
+> -	}
+> +	if (!base_page_size)
+> +		ksft_exit_fail_msg("Unable to determine base page size\n");
+>  
+>  	free_hugepages = get_free_hugepages();
+> -	if (free_hugepages < MIN_FREE_PAGES) {
+> -		printf("Not enough free huge pages to test, exiting!\n");
+> -		exit(KSFT_SKIP);
+> -	}
+> +	if (free_hugepages < MIN_FREE_PAGES)
+> +		ksft_exit_skip("Not enough free huge pages (have %lu, need %d)\n", free_hugepages, MIN_FREE_PAGES);
+>  
+>  	fd = memfd_create(argv[0], MFD_HUGETLB);
+> -	if (fd < 0) {
+> -		perror("memfd_create() failed");
+> -		exit(1);
+> -	}
+> +	if (fd < 0)
+> +		ksft_exit_fail_perror("memfd_create");
+>  
+>  	/*
+>  	 * Test validity of MADV_DONTNEED addr and length arguments.  mmap
+> @@ -90,16 +85,13 @@ int main(int argc, char **argv)
+>  			PROT_READ | PROT_WRITE,
+>  			MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB,
+>  			-1, 0);
+> -	if (addr == MAP_FAILED) {
+> -		perror("mmap");
+> -		exit(1);
+> -	}
+> +	if (addr == MAP_FAILED)
+> +		ksft_exit_fail_perror("mmap");
+> +
+>  	if (munmap(addr, huge_page_size) ||
+>  			munmap(addr + (NR_HUGE_PAGES + 1) * huge_page_size,
+> -				huge_page_size)) {
+> -		perror("munmap");
+> -		exit(1);
+> -	}
+> +				huge_page_size))
+> +		ksft_exit_fail_perror("munmap");
+>  	addr = addr + huge_page_size;
+>  
+>  	write_fault_pages(addr, NR_HUGE_PAGES);
+> @@ -108,20 +100,14 @@ int main(int argc, char **argv)
+>  	/* addr before mapping should fail */
+>  	ret = madvise(addr - base_page_size, NR_HUGE_PAGES * huge_page_size,
+>  		MADV_DONTNEED);
+> -	if (!ret) {
+> -		printf("Unexpected success of madvise call with invalid addr line %d\n",
+> -				__LINE__);
+> -			exit(1);
+> -	}
+> +	if (!ret)
+> +		ksft_exit_fail_msg("madvise with invalid addr unexpectedly succeeded line %d\n", __LINE__);
+>  
+>  	/* addr + length after mapping should fail */
+>  	ret = madvise(addr, (NR_HUGE_PAGES * huge_page_size) + base_page_size,
+>  		MADV_DONTNEED);
+> -	if (!ret) {
+> -		printf("Unexpected success of madvise call with invalid length line %d\n",
+> -				__LINE__);
+> -			exit(1);
+> -	}
+> +	if (!ret)
+> +		ksft_exit_fail_msg("madvise with invalid length unexpectedly succeeded line %d\n", __LINE__);
+>  
+>  	(void)munmap(addr, NR_HUGE_PAGES * huge_page_size);
+>  
+> @@ -132,10 +118,9 @@ int main(int argc, char **argv)
+>  			PROT_READ | PROT_WRITE,
+>  			MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB,
+>  			-1, 0);
+> -	if (addr == MAP_FAILED) {
+> -		perror("mmap");
+> -		exit(1);
+> -	}
+> +	if (addr == MAP_FAILED)
+> +		ksft_exit_fail_perror("mmap");
+> +
+>  	write_fault_pages(addr, NR_HUGE_PAGES);
+>  	validate_free_pages(free_hugepages - NR_HUGE_PAGES);
+>  
+> @@ -143,19 +128,14 @@ int main(int argc, char **argv)
+>  	ret = madvise(addr + base_page_size,
+>  			NR_HUGE_PAGES * huge_page_size - base_page_size,
+>  			MADV_DONTNEED);
+> -	if (!ret) {
+> -		printf("Unexpected success of madvise call with unaligned start address %d\n",
+> -				__LINE__);
+> -			exit(1);
+> -	}
+> +	if (!ret)
+> +		ksft_exit_fail_msg("madvise with unaligned start unexpectedly succeeded line %d\n", __LINE__);
+>  
+>  	/* addr + length should be aligned down to huge page size */
+>  	if (madvise(addr,
+>  			((NR_HUGE_PAGES - 1) * huge_page_size) + base_page_size,
+> -			MADV_DONTNEED)) {
+> -		perror("madvise");
+> -		exit(1);
+> -	}
+> +			MADV_DONTNEED))
+> +		ksft_exit_fail_perror("madvise");
+>  
+>  	/* should free all but last page in mapping */
+>  	validate_free_pages(free_hugepages - 1);
+> @@ -170,17 +150,14 @@ int main(int argc, char **argv)
+>  			PROT_READ | PROT_WRITE,
+>  			MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB,
+>  			-1, 0);
+> -	if (addr == MAP_FAILED) {
+> -		perror("mmap");
+> -		exit(1);
+> -	}
+> +	if (addr == MAP_FAILED)
+> +		ksft_exit_fail_perror("mmap");
+> +
+>  	write_fault_pages(addr, NR_HUGE_PAGES);
+>  	validate_free_pages(free_hugepages - NR_HUGE_PAGES);
+>  
+> -	if (madvise(addr, NR_HUGE_PAGES * huge_page_size, MADV_DONTNEED)) {
+> -		perror("madvise");
+> -		exit(1);
+> -	}
+> +	if (madvise(addr, NR_HUGE_PAGES * huge_page_size, MADV_DONTNEED))
+> +		ksft_exit_fail_perror("madvise");
+>  
+>  	/* should free all pages in mapping */
+>  	validate_free_pages(free_hugepages);
+> @@ -190,29 +167,25 @@ int main(int argc, char **argv)
+>  	/*
+>  	 * Test MADV_DONTNEED on private mapping of hugetlb file
+>  	 */
+> -	if (fallocate(fd, 0, 0, NR_HUGE_PAGES * huge_page_size)) {
+> -		perror("fallocate");
+> -		exit(1);
+> -	}
+> +	if (fallocate(fd, 0, 0, NR_HUGE_PAGES * huge_page_size))
+> +		ksft_exit_fail_perror("fallocate");
+> +
+>  	validate_free_pages(free_hugepages - NR_HUGE_PAGES);
+>  
+>  	addr = mmap(NULL, NR_HUGE_PAGES * huge_page_size,
+>  			PROT_READ | PROT_WRITE,
+>  			MAP_PRIVATE, fd, 0);
+> -	if (addr == MAP_FAILED) {
+> -		perror("mmap");
+> -		exit(1);
+> -	}
+> +	if (addr == MAP_FAILED)
+> +		ksft_exit_fail_perror("mmap");
+>  
+>  	/* read should not consume any pages */
+>  	read_fault_pages(addr, NR_HUGE_PAGES);
+>  	validate_free_pages(free_hugepages - NR_HUGE_PAGES);
+>  
+>  	/* madvise should not free any pages */
+> -	if (madvise(addr, NR_HUGE_PAGES * huge_page_size, MADV_DONTNEED)) {
+> -		perror("madvise");
+> -		exit(1);
+> -	}
+> +	if (madvise(addr, NR_HUGE_PAGES * huge_page_size, MADV_DONTNEED))
+> +		ksft_exit_fail_perror("madvise");
+> +
+>  	validate_free_pages(free_hugepages - NR_HUGE_PAGES);
+>  
+>  	/* writes should allocate private pages */
+> @@ -220,10 +193,9 @@ int main(int argc, char **argv)
+>  	validate_free_pages(free_hugepages - (2 * NR_HUGE_PAGES));
+>  
+>  	/* madvise should free private pages */
+> -	if (madvise(addr, NR_HUGE_PAGES * huge_page_size, MADV_DONTNEED)) {
+> -		perror("madvise");
+> -		exit(1);
+> -	}
+> +	if (madvise(addr, NR_HUGE_PAGES * huge_page_size, MADV_DONTNEED))
+> +		ksft_exit_fail_perror("madvise");
+> +
+>  	validate_free_pages(free_hugepages - NR_HUGE_PAGES);
+>  
+>  	/* writes should allocate private pages */
+> @@ -238,10 +210,9 @@ int main(int argc, char **argv)
+>  	 * implementation.
+>  	 */
+>  	if (fallocate(fd, FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE,
+> -					0, NR_HUGE_PAGES * huge_page_size)) {
+> -		perror("fallocate");
+> -		exit(1);
+> -	}
+> +					0, NR_HUGE_PAGES * huge_page_size))
+> +		ksft_exit_fail_perror("fallocate");
+> +
+>  	validate_free_pages(free_hugepages);
+>  
+>  	(void)munmap(addr, NR_HUGE_PAGES * huge_page_size);
+> @@ -249,29 +220,25 @@ int main(int argc, char **argv)
+>  	/*
+>  	 * Test MADV_DONTNEED on shared mapping of hugetlb file
+>  	 */
+> -	if (fallocate(fd, 0, 0, NR_HUGE_PAGES * huge_page_size)) {
+> -		perror("fallocate");
+> -		exit(1);
+> -	}
+> +	if (fallocate(fd, 0, 0, NR_HUGE_PAGES * huge_page_size))
+> +		ksft_exit_fail_perror("fallocate");
+> +
+>  	validate_free_pages(free_hugepages - NR_HUGE_PAGES);
+>  
+>  	addr = mmap(NULL, NR_HUGE_PAGES * huge_page_size,
+>  			PROT_READ | PROT_WRITE,
+>  			MAP_SHARED, fd, 0);
+> -	if (addr == MAP_FAILED) {
+> -		perror("mmap");
+> -		exit(1);
+> -	}
+> +	if (addr == MAP_FAILED)
+> +		ksft_exit_fail_perror("mmap");
+>  
+>  	/* write should not consume any pages */
+>  	write_fault_pages(addr, NR_HUGE_PAGES);
+>  	validate_free_pages(free_hugepages - NR_HUGE_PAGES);
+>  
+>  	/* madvise should not free any pages */
+> -	if (madvise(addr, NR_HUGE_PAGES * huge_page_size, MADV_DONTNEED)) {
+> -		perror("madvise");
+> -		exit(1);
+> -	}
+> +	if (madvise(addr, NR_HUGE_PAGES * huge_page_size, MADV_DONTNEED))
+> +		ksft_exit_fail_perror("madvise");
+> +
+>  	validate_free_pages(free_hugepages - NR_HUGE_PAGES);
+>  
+>  	/*
+> @@ -279,29 +246,25 @@ int main(int argc, char **argv)
+>  	 *
+>  	 * madvise is same as hole punch and should free all pages.
+>  	 */
+> -	if (madvise(addr, NR_HUGE_PAGES * huge_page_size, MADV_REMOVE)) {
+> -		perror("madvise");
+> -		exit(1);
+> -	}
+> +	if (madvise(addr, NR_HUGE_PAGES * huge_page_size, MADV_REMOVE))
+> +		ksft_exit_fail_perror("madvise");
+> +
+>  	validate_free_pages(free_hugepages);
+>  	(void)munmap(addr, NR_HUGE_PAGES * huge_page_size);
+>  
+>  	/*
+>  	 * Test MADV_REMOVE on shared and private mapping of hugetlb file
+>  	 */
+> -	if (fallocate(fd, 0, 0, NR_HUGE_PAGES * huge_page_size)) {
+> -		perror("fallocate");
+> -		exit(1);
+> -	}
+> +	if (fallocate(fd, 0, 0, NR_HUGE_PAGES * huge_page_size))
+> +		ksft_exit_fail_perror("fallocate");
+> +
+>  	validate_free_pages(free_hugepages - NR_HUGE_PAGES);
+>  
+>  	addr = mmap(NULL, NR_HUGE_PAGES * huge_page_size,
+>  			PROT_READ | PROT_WRITE,
+>  			MAP_SHARED, fd, 0);
+> -	if (addr == MAP_FAILED) {
+> -		perror("mmap");
+> -		exit(1);
+> -	}
+> +	if (addr == MAP_FAILED)
+> +		ksft_exit_fail_perror("mmap");
+>  
+>  	/* shared write should not consume any additional pages */
+>  	write_fault_pages(addr, NR_HUGE_PAGES);
+> @@ -310,10 +273,8 @@ int main(int argc, char **argv)
+>  	addr2 = mmap(NULL, NR_HUGE_PAGES * huge_page_size,
+>  			PROT_READ | PROT_WRITE,
+>  			MAP_PRIVATE, fd, 0);
+> -	if (addr2 == MAP_FAILED) {
+> -		perror("mmap");
+> -		exit(1);
+> -	}
+> +	if (addr2 == MAP_FAILED)
+> +		ksft_exit_fail_perror("mmap");
+>  
+>  	/* private read should not consume any pages */
+>  	read_fault_pages(addr2, NR_HUGE_PAGES);
+> @@ -324,17 +285,15 @@ int main(int argc, char **argv)
+>  	validate_free_pages(free_hugepages - (2 * NR_HUGE_PAGES));
+>  
+>  	/* madvise of shared mapping should not free any pages */
+> -	if (madvise(addr, NR_HUGE_PAGES * huge_page_size, MADV_DONTNEED)) {
+> -		perror("madvise");
+> -		exit(1);
+> -	}
+> +	if (madvise(addr, NR_HUGE_PAGES * huge_page_size, MADV_DONTNEED))
+> +		ksft_exit_fail_perror("madvise");
+> +
+>  	validate_free_pages(free_hugepages - (2 * NR_HUGE_PAGES));
+>  
+>  	/* madvise of private mapping should free private pages */
+> -	if (madvise(addr2, NR_HUGE_PAGES * huge_page_size, MADV_DONTNEED)) {
+> -		perror("madvise");
+> -		exit(1);
+> -	}
+> +	if (madvise(addr2, NR_HUGE_PAGES * huge_page_size, MADV_DONTNEED))
+> +		ksft_exit_fail_perror("madvise");
+> +
+>  	validate_free_pages(free_hugepages - NR_HUGE_PAGES);
+>  
+>  	/* private write should consume additional pages again */
+> @@ -346,15 +305,16 @@ int main(int argc, char **argv)
+>  	 * not correct.  private pages should not be freed, but this is
+>  	 * expected.  See comment associated with FALLOC_FL_PUNCH_HOLE call.
+>  	 */
+> -	if (madvise(addr, NR_HUGE_PAGES * huge_page_size, MADV_REMOVE)) {
+> -		perror("madvise");
+> -		exit(1);
+> -	}
+> +	if (madvise(addr, NR_HUGE_PAGES * huge_page_size, MADV_REMOVE))
+> +		ksft_exit_fail_perror("madvise");
+> +
+>  	validate_free_pages(free_hugepages);
+>  
+>  	(void)munmap(addr, NR_HUGE_PAGES * huge_page_size);
+>  	(void)munmap(addr2, NR_HUGE_PAGES * huge_page_size);
+>  
+>  	close(fd);
+> -	return 0;
+> +
+> +	ksft_test_result_pass("MADV_DONTNEED and MADV_REMOVE on hugetlb\n");
+> +	ksft_finished();
+>  }
 
-In ChkTag? I don't think the full specification is out yet so I'm not sure. In
-current LAM they are ignored.
-
->>  	/*
->>  	 * Even though the process must still be single-threaded at this
->> @@ -850,7 +853,7 @@ static int prctl_enable_tagged_addr(struct mm_struct *mm, unsigned long nr_bits)
->>  		return -EBUSY;
->>  	}
->>  
->> -	if (!nr_bits || nr_bits > LAM_U57_BITS) {
->> +	if (!nr_bits || nr_bits > LAM_TAG_BITS) {
->>  		mmap_write_unlock(mm);
->
-
--- 
-Kind regards
-Maciej Wieczór-Retman
