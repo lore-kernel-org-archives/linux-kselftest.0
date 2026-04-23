@@ -1,67 +1,67 @@
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1517D3537F8
-	for <linux-kselftest@vger.kernel.org>; Thu, 23 Apr 2026 20:54:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FE8C359A91
+	for <linux-kselftest@vger.kernel.org>; Thu, 23 Apr 2026 20:54:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776977667; cv=none; b=EUDNC+2H7+3mW60V8QfmW3HUZkKmVIZWXvrMnmuH5Cv03W7JI3mVbEkujRMuV/eKWZhtEMqc82pF9uDx1dVmdmRjDOCNuTsHwf//xk61GTvLN/7JQjRdMlNuhutqC2RjoBhCLvDgi+Q71aQcl+K/ddfuAw+WfXmPLGdlpphPMQY=
+	t=1776977670; cv=none; b=r8j5gATrheh+vExVxFv4TFR2Q9qmJVAy4mduLRN9A3cJpmMkTkZxVtlNnz4MGm1MIeTnUz2NPUJJI3Kxjoe3nEVlDqrD8LrTVrn6JK2cZ/PkmurdxloWAvbL0GGb6m3ZaLVxxydyM5QbOtuvFAmWuvYZVHxVRZLSIty20kpbZO0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776977667; c=relaxed/simple;
-	bh=sNU5+ypIpAa5nAh/P3nhq7a8EpP2K+tX+yS4ogUpRkQ=;
+	s=arc-20240116; t=1776977670; c=relaxed/simple;
+	bh=yhbhtMafwedcznkoTTq3A1K1JzGoFiP1xFdaFxmpil0=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=U+uxrLVc1umbFBMh+gvd/x+Zcja1rBBz7HsG+9lpcQkSKnK3XoJ/IZSxfA6ppt5TS0ZPWO3Z1X7D/ngxaBA1IoNH3NDL2/4uquEVAGftxsTLYwBMBtw3F374P2Z3avCWPbKrlPi/yPssPld7gXPirsaAIx+28vcmBCXFumPeEUA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qQLMuef3; arc=none smtp.client-ip=209.85.167.172
+	 In-Reply-To:To:Cc; b=g2M/MTJjXeZo+SO8o1N8/DJYRz/rBfoztHnd5cWO1AOT8rWka5Ic0y+FxTQsdKVLGktTKj4+5zgXyAo9jFV7y3CIgPEcabfK8xFGx8hEUujRUtqEzi4z+Ri8/hePoWHPGcBdSaqdoPZhgNYby3YA1n0byOGOWm6k6RTQZtvGRxc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gevqG6jL; arc=none smtp.client-ip=209.85.167.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qQLMuef3"
-Received: by mail-oi1-f172.google.com with SMTP id 5614622812f47-479d4df9035so2814048b6e.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 Apr 2026 13:54:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gevqG6jL"
+Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-479ef2b7979so2363263b6e.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 23 Apr 2026 13:54:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1776977663; x=1777582463; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1776977668; x=1777582468; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=XeWez1t8td9fUSkTZ45jVnBaujfXA4urEuOR5XIVYjA=;
-        b=qQLMuef3LzqQu1Lasgqwf/N7OqbYXnjZQ7pdUc8QDt9vqIFjO1hWHw18h1iTfZgHzu
-         CrV9OMN/HJaCw6tr6btes2tf33Op8RXrinFZIctqWRb06j9eD1tTX0bb11cEVHHsIbs7
-         KhyDY5x6pEDkIrzNLP2+0bHKVgO73Ey0ZD3jK6Nxy8rfdeoDZ1S+5h+PUaGFewXhQoRY
-         q4TKzOHBusGjSvKXQgPZh91GBjH30R3SCB1GuOeLi/LoVKkeo9hH428jFN2jHX31RQtX
-         wAyP6494FZW/PVVbhZ/0EfxIw8X+FSfrZCNJ5OkOR4HtnUSorzcVSVYzk905YWlZoP7/
-         F3NA==
+        bh=3AavURMKgxnJ1c03+cp4P3aAyoZ6FxTFnt5qWW9lW8A=;
+        b=gevqG6jLKnNObJpUM4OtV8EKv6WRAfcLX8081YbZl7SanrraesfhTbcW5su8zfasaw
+         39C56I0QjjNY40+1ZUBPPdfnNkTRA/FGQZyOLQnSZkLu76aHCfbS0MsOcOGyZqy884gZ
+         /TVD1347StvRO1+o+dZdDP28dN9yMBjqq/cagWgFGTQ57uEazNCcyGs+Iii/yGkR7Aq/
+         CDxxTymSiv2tWSvsp2mYMT8o5laq5ETcAQkqv0rnpOqN1Sq9UdL5/B+5+pdS3JQruQCZ
+         KZfDCzGhnE+/nJBc3kJbEfaLzJxUzCKs8PjMh5rqYXz7gKd/dVS93oqW+3aSQAk6x5v2
+         jBuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776977663; x=1777582463;
+        d=1e100.net; s=20251104; t=1776977668; x=1777582468;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=XeWez1t8td9fUSkTZ45jVnBaujfXA4urEuOR5XIVYjA=;
-        b=TIj6yld0Aek2zuNYJsoq8WU/jkHQjhBpaEuKSBc342dfe1Mqmv5B05/Btl55Ro2pIJ
-         CWdQ7LwgdylMSbK2onNgLiYPR4xIvN6UpjhkW7z8Kpml2UUepTWyyBZ7CIomoA8ri6YE
-         wvP/ghuTguu5rVGKcCwyLEJqG1jjMQJvifdzZ9bVNMgVSNFrP8cq2M13cobrNUjZRVbA
-         npG4zcFObExNhZlzndnUq/rIWuULoMjLJzUCnfXAnI51Vqf/XlW1jqXfn6ozsVKw2hEY
-         sHDxXn41VFy+Zxtm13QzHavIu1XMTfIK/EbST+pzK+qDU61ny+D8l/D2VexmKsdIUFoH
-         1vUw==
-X-Forwarded-Encrypted: i=1; AFNElJ+TLFUSF1PJvx1DxYpOeA9WlI4zH9pRbCL763qsXYNQ26rXaty1I8awmRJBuKeCsIP3DYi5+b1UeoAH/nDyn/w=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzq5Xp00ANqrlObTP0lHxLRUQHenyNmflVzmbCFtQcjlrv2d7iO
-	KgC52zoOuTZNIOSm67DvuVZiK4V8mAU7zWzkDGtJx9sBxG3FFAEpoHt+
-X-Gm-Gg: AeBDietoKTVKrxPu1gO1e5Xn7y/7izfNMykpRlbAu14oG9zmyklGQzC96TcO05XIr18
-	PfWjTeILIGMWxx4kQLYwyJ5zobuld5CW07/hjaivFh6UPs+UegwMlnOs7qTbojFl1d11MULOfud
-	SMry+2ypj6yTErjJFwnkWy45NMpZdu2MA9gC/Ev/Qf5pcYamkcolJIG/BrI9KF9cqatM2ixH7Br
-	9wbg+EdibfHeIp1+i6sG6XeXNajAPlJ0gvGFRKXIRDFyVU0mKEaraNkmMA6fwvvF3Tw6Rd3LGoO
-	Y+VT38UdD7N/4MGAUua43FSTOueLL4SOIEOKNeUXE44mbOCLyCs2NznH4vbltWilzXzcTHQA7vQ
-	jhMKGvypCb3pZwu0ixxa2M/lGWVHY9DXVBBda5aqRzbhbeoBCgD/m8JiEMzjQAjuG8OvdVniII3
-	KXAggN/cITd95y22POF3i2tdFgDI0zOueTECEeh6nqt72p1guvJz4otu2oXem1r53Lt/Pz8S3n
-X-Received: by 2002:a05:6808:308b:b0:453:58dc:c006 with SMTP id 5614622812f47-4799bc8ecdcmr12645103b6e.3.1776977662798;
-        Thu, 23 Apr 2026 13:54:22 -0700 (PDT)
+        bh=3AavURMKgxnJ1c03+cp4P3aAyoZ6FxTFnt5qWW9lW8A=;
+        b=mM8A4fpUgyWKqDNpolycT9lbyVK93mLlyRyPLplnUlvW8i7G48KTpegsV9T8hh6Ot1
+         ymQ2aBehDShrJd7rlES+qZoUV8sPNyKrIrMTR49pXtauogj8kHsqQRcyN/iH0vRH4jWI
+         fcTz84DZi369mKHCLZ4parWDX7nmydK2MQySOZjGmsor41JQqWmOK+c1SwyeA63PHDhn
+         gyjSvsrKMWKkI6Aki89G84CZNPrWuSXQj7zpmjdOmxVrf6/pFgAa+y7i5bTRTn6644Ue
+         kg43TTdZu16gJBJiD/08q+ATgk/bZPvLB+nLQyo5y4ZNlmSUB/R3RgF4BiLRjUhRWvaE
+         fzvQ==
+X-Forwarded-Encrypted: i=1; AFNElJ8+zBR3OxN1HATTBHb7nqvG5EN9kdqtoPS4QuTc+rMqh97PM1whOymm9eHvWhYuyGjoNMRh+wozf0qjPkqDtZo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyCHfepNYJUE4UPznviEGEvCBAGEyZ0p2Ze79fWCDr+7p6hAIm3
+	aVoTVsSFvWEowImq4aTIyMJ4zWiN3CvZiAI9qx49hX7GtAikYJ/NMY6u
+X-Gm-Gg: AeBDietY8YRuCVDvWdxFSpNT6ziEPkwN3GXJpSPcbE1w/CXePOrF96bKMj0uyfBcxzY
+	O4S/L07plqz2N8bq+saXU8YZPURHl25EkfMhEgaFQ9zxWEmfsB0JwQiEKrvq45VbeoHSJ+rNaKK
+	4WQKlScQ/d9fmUcoGOz8Y9lT7TjROj7jupv7IsGWD5u7hHwMIGaJeAyCA7NdPhiQrDF61I2J133
+	ony9W8kXzc7P2vlAJ5K7GnHZw8gN2VLUj3bzCdayZgOFWbdJoYjIar3tfHjI7kk9Go/I5JcQlEz
+	Z5JZlicfeExHHqDcwtMYJv6sW1HcuUU86MLjep0go7TZhuJ7v+zhgHzi3N5Bg4WJ9gi4f6hKpOU
+	i6fFjarDUB9NxgZ0p+EksSJ+yGbS3WWCN36AKU7W5RDzN+5qUB4zFUK9APfhupeIRNpreKBB/rL
+	2atxay5gz288kgbYM9VsLGfbPnJbALxg8+VeLBl8h0JIm+OTycdthAFneOI+FRMMZWxxPHVDRo
+X-Received: by 2002:a05:6808:3185:b0:479:d779:353e with SMTP id 5614622812f47-479d7793951mr11455441b6e.24.1776977667938;
+        Thu, 23 Apr 2026 13:54:27 -0700 (PDT)
 Received: from [192.168.0.245] (c-98-38-17-99.hsd1.co.comcast.net. [98.38.17.99])
-        by smtp.googlemail.com with ESMTPSA id 5614622812f47-4799fead505sm14329744b6e.2.2026.04.23.13.54.17
+        by smtp.googlemail.com with ESMTPSA id 5614622812f47-4799fead505sm14329744b6e.2.2026.04.23.13.54.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Apr 2026 13:54:22 -0700 (PDT)
+        Thu, 23 Apr 2026 13:54:27 -0700 (PDT)
 From: Jim Cromie <jim.cromie@gmail.com>
-Date: Thu, 23 Apr 2026 14:53:45 -0600
-Subject: [PATCH v14 04/92] vmlinux.lds.h: drop unused HEADERED_SECTION*
- macros
+Date: Thu, 23 Apr 2026 14:53:46 -0600
+Subject: [PATCH v14 05/92] dyndbg: factor ddebug_match_desc out from
+ ddebug_change
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,7 +70,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260423-submit-dyndbg-classmap-foundation-v14-4-2b809a8019d0@gmail.com>
+Message-Id: <20260423-submit-dyndbg-classmap-foundation-v14-5-2b809a8019d0@gmail.com>
 References: <20260423-submit-dyndbg-classmap-foundation-v14-0-2b809a8019d0@gmail.com>
 In-Reply-To: <20260423-submit-dyndbg-classmap-foundation-v14-0-2b809a8019d0@gmail.com>
 To: Arnd Bergmann <arnd@arndb.de>, Jason Baron <jbaron@akamai.com>, 
@@ -165,49 +165,143 @@ Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-stm32@st-md-mailman.stormreply.com, linux-renesas-soc@vger.kernel.org, 
  etnaviv@lists.freedesktop.org, Jim Cromie <jim.cromie@gmail.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1776977636; l=1428;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1776977636; l=4346;
  i=jim.cromie@gmail.com; s=20260203; h=from:subject:message-id;
- bh=sNU5+ypIpAa5nAh/P3nhq7a8EpP2K+tX+yS4ogUpRkQ=;
- b=HjA55O/V4Utgz/Is+2KPNeba99m7x06Pmf6eKmFuis60V6Ckv9Whwi8Vq/ULE1QgolctL7g58
- bkmCuf3PSdMCJgld6ykSOAGyPlyeM4J3BFTe9HpTql06GTY7Wia+MgQ
+ bh=yhbhtMafwedcznkoTTq3A1K1JzGoFiP1xFdaFxmpil0=;
+ b=s3zjeey9fywDlNSmeYgJ2Q73pCJpq+/OdN0a/H8EwyFHmlrvRJGb/aVY2p5dIqVvML8EZBPgY
+ 7jC0WFdsgR7DmoLmDDTzS5cQSQfLVwBno8gTzj2A/wuWXUrm2E54zPm
 X-Developer-Key: i=jim.cromie@gmail.com; a=ed25519;
  pk=C6E5ODlPQo7ZBynATXH9wg7K6HxP0pIXyf4s38Qw0XE=
 
-These macros are unused, no point in carrying them any more.
+ddebug_change() is a big (~100 lines) function with a nested for loop.
 
-NB: these macros were just moved to bounded_sections.lds.h, from
-vmlinux.lds.h, which is the known entity, and therefore more
-meaningful in the 1-line summary, so thats what I used as the topic.
+The outer loop walks the per-module ddebug_tables list, and does
+module stuff: it filters on a query's "module FOO*" and "class BAR",
+failures here skip the entire inner loop.
 
+The inner loop (60 lines) scans a module's descriptors.  It starts
+with a long block of filters on function, line, format, and the
+validated "BAR" class (or the legacy/_DPRINTK_CLASS_DFLT).
+
+These filters "continue" past pr_debugs that don't match the query
+criteria, before it falls through the code below that counts matches,
+then adjusts the flags and static-keys.  This is unnecessarily hard to
+think about.
+
+So move the per-descriptor filter-block into a boolean function:
+ddebug_match_desc(desc), and change each "continue" to "return false".
+This puts a clear interface in place, so any future changes are either
+inside, outside, or across this interface.
+
+also fix checkpatch complaints about spaces and braces.
+
+Reviewed-by: Louis Chauvet <louis.chauvet@bootlin.com>
 Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
 ---
- include/asm-generic/bounded_sections.lds.h | 15 ---------------
- 1 file changed, 15 deletions(-)
+ lib/dynamic_debug.c | 83 ++++++++++++++++++++++++++++++-----------------------
+ 1 file changed, 47 insertions(+), 36 deletions(-)
 
-diff --git a/include/asm-generic/bounded_sections.lds.h b/include/asm-generic/bounded_sections.lds.h
-index 43e79603d4af..f5876e68cbe7 100644
---- a/include/asm-generic/bounded_sections.lds.h
-+++ b/include/asm-generic/bounded_sections.lds.h
-@@ -20,19 +20,4 @@
+diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
+index 18a71a9108d3..6b1e983cfedc 100644
+--- a/lib/dynamic_debug.c
++++ b/lib/dynamic_debug.c
+@@ -172,6 +172,52 @@ static struct ddebug_class_map *ddebug_find_valid_class(struct ddebug_table cons
+  * callsites, normally the same as number of changes.  If verbose,
+  * logs the changes.  Takes ddebug_lock.
+  */
++static bool ddebug_match_desc(const struct ddebug_query *query,
++			      struct _ddebug *dp,
++			      int valid_class)
++{
++	/* match site against query-class */
++	if (dp->class_id != valid_class)
++		return false;
++
++	/* match against the source filename */
++	if (query->filename &&
++	    !match_wildcard(query->filename, dp->filename) &&
++	    !match_wildcard(query->filename,
++			    kbasename(dp->filename)) &&
++	    !match_wildcard(query->filename,
++			    trim_prefix(dp->filename)))
++		return false;
++
++	/* match against the function */
++	if (query->function &&
++	    !match_wildcard(query->function, dp->function))
++		return false;
++
++	/* match against the format */
++	if (query->format) {
++		if (*query->format == '^') {
++			char *p;
++			/* anchored search. match must be at beginning */
++			p = strstr(dp->format, query->format + 1);
++			if (p != dp->format)
++				return false;
++		} else if (!strstr(dp->format, query->format)) {
++			return false;
++		}
++	}
++
++	/* match against the line number range */
++	if (query->first_lineno &&
++	    dp->lineno < query->first_lineno)
++		return false;
++	if (query->last_lineno &&
++	    dp->lineno > query->last_lineno)
++		return false;
++
++	return true;
++}
++
+ static int ddebug_change(const struct ddebug_query *query,
+ 			 struct flag_settings *modifiers)
+ {
+@@ -204,42 +250,7 @@ static int ddebug_change(const struct ddebug_query *query,
+ 		for (i = 0; i < dt->num_ddebugs; i++) {
+ 			struct _ddebug *dp = &dt->ddebugs[i];
  
- #define BOUNDED_SECTION(_sec)	 BOUNDED_SECTION_BY(_sec, _sec)
+-			/* match site against query-class */
+-			if (dp->class_id != valid_class)
+-				continue;
+-
+-			/* match against the source filename */
+-			if (query->filename &&
+-			    !match_wildcard(query->filename, dp->filename) &&
+-			    !match_wildcard(query->filename,
+-					   kbasename(dp->filename)) &&
+-			    !match_wildcard(query->filename,
+-					   trim_prefix(dp->filename)))
+-				continue;
+-
+-			/* match against the function */
+-			if (query->function &&
+-			    !match_wildcard(query->function, dp->function))
+-				continue;
+-
+-			/* match against the format */
+-			if (query->format) {
+-				if (*query->format == '^') {
+-					char *p;
+-					/* anchored search. match must be at beginning */
+-					p = strstr(dp->format, query->format+1);
+-					if (p != dp->format)
+-						continue;
+-				} else if (!strstr(dp->format, query->format))
+-					continue;
+-			}
+-
+-			/* match against the line number range */
+-			if (query->first_lineno &&
+-			    dp->lineno < query->first_lineno)
+-				continue;
+-			if (query->last_lineno &&
+-			    dp->lineno > query->last_lineno)
++			if (!ddebug_match_desc(query, dp, valid_class))
+ 				continue;
  
--#define HEADERED_SECTION_PRE_LABEL(_sec_, _label_, _BEGIN_, _END_, _HDR_) \
--	_HDR_##_label_	= .;						\
--	KEEP(*(.gnu.linkonce.##_sec_))					\
--	BOUNDED_SECTION_PRE_LABEL(_sec_, _label_, _BEGIN_, _END_)
--
--#define HEADERED_SECTION_POST_LABEL(_sec_, _label_, _BEGIN_, _END_, _HDR_) \
--	_label_##_HDR_ = .;						\
--	KEEP(*(.gnu.linkonce.##_sec_))					\
--	BOUNDED_SECTION_POST_LABEL(_sec_, _label_, _BEGIN_, _END_)
--
--#define HEADERED_SECTION_BY(_sec_, _label_)				\
--	HEADERED_SECTION_PRE_LABEL(_sec_, _label_, __start, __stop)
--
--#define HEADERED_SECTION(_sec)	 HEADERED_SECTION_BY(_sec, _sec)
--
- #endif /* _ASM_GENERIC_BOUNDED_SECTIONS_H */
+ 			nfound++;
 
 -- 
 2.53.0
