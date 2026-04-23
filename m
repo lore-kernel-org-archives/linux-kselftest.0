@@ -1,155 +1,119 @@
-Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
+Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE89221638D
-	for <linux-kselftest@vger.kernel.org>; Thu, 23 Apr 2026 04:48:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE7D73C6A41;
+	Thu, 23 Apr 2026 06:10:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776919691; cv=none; b=QPoZ92rjRrNeOWsdMMxOKB42MIoiMGexu/eyJSxpWXpOuM17HXUJU+7Y6tSoClcK7q+yG6UG6MbALhAbkFVZmFaDdy8vBIimDm1+u11YMJCYjpudRJIzZSmO21IpoKPiIrnpmtS2JPA7aNR9jO6vnncUBt6YHKTaGCPfbGU/lbw=
+	t=1776924610; cv=none; b=tq6D3FYWQ+zAfZFgAKZD2joELSiPMyM2SR4kdBUQtH0k3tI9mtkzXbKYM2Ug5f1unDMLWoqrlBILv/hLKC72ikE2WKUjygDelqfNusdcDzGmP74rio3yXdcNwp+9PouBtyBaN/iy3jWK8eSvyzhCER+yQxI+tONZApLmb3E+9JE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776919691; c=relaxed/simple;
-	bh=rv++CDO3/N6wprt/C2IZzwTSdIEqADbSlhN+/tasXIM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gIBp0WTET3o2ujkoyH8qMKw/5pgIo5kHyvTZs2ydj8/evToTTFdjlyMRkki1myDdAdqamZswBZiFNNA1CnyWQk4ypTY1S6b9rSsiEfrbxTrWJJRP8iazBrCWXro82tXdAsDU2EwJ1XX5wouKiexDVcp4MHZcT47N5AKp+sVD1Ro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=pSwKFVPk; arc=none smtp.client-ip=91.218.175.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1776924610; c=relaxed/simple;
+	bh=uLosDgdLGC+hCzjBv1fjJJICon9cNjB1X5tzjUczlvA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mz36qDXYK7rAgIs8w/Q6iWALbY69FW3Aa0oFiRlGxvlHqMK3ibXVnBL1BlXZQAKUVaw9HyxS7obqMh7jPCqx1/jaK70f6lUjm74v9VNUPSZKRj9f3GP4bjfN2ipgip14144qUEp/mKZKx00rTcXQRLZ00zSO++GjJxAYDAchhXs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com; spf=pass smtp.mailfrom=cyphar.com; dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b=ztgDFe2q; arc=none smtp.client-ip=80.241.56.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cyphar.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="pSwKFVPk"
-Message-ID: <268e0f1e-8575-4ee1-8a0c-48e1b9ae05f0@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1776919676;
+	dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b="ztgDFe2q"
+Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:b231:465::202])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4g1Qfx1GRPz9sRl;
+	Thu, 23 Apr 2026 08:10:01 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cyphar.com; s=MBO0001;
+	t=1776924601;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=F2ZOLwoMzsrbZBwQV+NdexL8zdWBG0VIOfAx2UN7NiM=;
-	b=pSwKFVPk3ujuY4dTQoLRLMcsH014KXuXyCtwbvn5BpAjl2tog1AzPpF6zi5PKQRYU+4s54
-	DcR7ZoY7F9/0nR2yK2QwOs9aKQaduL6/xrtsJdILfC6i+J7TBDgLWAKIpxiidWUUC/kA4E
-	MB+UB0RZF7aHqNLieJzBgCKgNazv8gg=
-Date: Thu, 23 Apr 2026 12:47:39 +0800
+	bh=WQAxOcn+CbXJ0CO5eO1MI50csyPPK/QKuyLgBrgsTs8=;
+	b=ztgDFe2qz7Rlakao3tS3YXBXjT7nhuKXHsZXjQEIFOQlKOiD7C52D6dODoRG9z7QxeMg4p
+	9N7zEhr+BxJX0LHNz0g23JdCTw7ED+CTrbS9lmhJ24ANrrUjbvh2ypRBWkxva0Fta2NICw
+	RNxY6yRid668mr+z5wFwyorj9jIId5IILoU/OtCrfXLRE/8Ke7qWUG03RfOo2m+ffmBFhd
+	hkwf1XAbiKOvoAKgfgHij2/t4EI5alIr00uZVLCEZP8i/IPHs/w8rw19VpusBgA1rzN67W
+	LgJ4UmDwaWg4hxeCP+jUA27wkBdcX2WUGWB2se9n9nYfoM3NHe0TQVsPy796vA==
+Authentication-Results: outgoing_mbo_mout;
+	dkim=none;
+	spf=pass (outgoing_mbo_mout: domain of cyphar@cyphar.com designates 2001:67c:2050:b231:465::202 as permitted sender) smtp.mailfrom=cyphar@cyphar.com
+Date: Thu, 23 Apr 2026 16:09:42 +1000
+From: Aleksa Sarai <cyphar@cyphar.com>
+To: Jori Koolstra <jkoolstra@xs4all.nl>
+Cc: cmirabil@redhat.com, Jeff Layton <jlayton@kernel.org>, 
+	Chuck Lever <chuck.lever@oracle.com>, Alexander Aring <alex.aring@gmail.com>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
+	Arnd Bergmann <arnd@arndb.de>, Shuah Khan <shuah@kernel.org>, 
+	Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Wei Yang <richard.weiyang@gmail.com>, linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 2/2] selftest: add tests for O_EMPTYPATH
+Message-ID: <2026-04-23-supreme-mellow-band-wounds-xFZ0uI@cyphar.com>
+References: <20260419132202.487612-1-jkoolstra@xs4all.nl>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH 7.2 v3 01/12] mm/khugepaged: remove READ_ONLY_THP_FOR_FS
- check
-Content-Language: en-US
-To: Zi Yan <ziy@nvidia.com>
-Cc: willy@infradead.org, songliubraving@fb.com, clm@fb.com, dsterba@suse.com,
- viro@zeniv.linux.org.uk, brauner@kernel.org, jack@suse.cz,
- akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org,
- baolin.wang@linux.alibaba.com, Liam.Howlett@oracle.com, npache@redhat.com,
- ryan.roberts@arm.com, dev.jain@arm.com, baohua@kernel.org,
- vbabka@kernel.org, rppt@kernel.org, surenb@google.com, mhocko@suse.com,
- shuah@kernel.org, linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org
-References: <20260418024429.4055056-2-ziy@nvidia.com>
- <20260423024324.51588-1-lance.yang@linux.dev>
- <20BA865A-1B69-48DA-BE12-9BFC6EA5A4CE@nvidia.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Lance Yang <lance.yang@linux.dev>
-In-Reply-To: <20BA865A-1B69-48DA-BE12-9BFC6EA5A4CE@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="7lbdvdzc3omjjgc6"
+Content-Disposition: inline
+In-Reply-To: <20260419132202.487612-1-jkoolstra@xs4all.nl>
+X-Rspamd-Queue-Id: 4g1Qfx1GRPz9sRl
 
 
+--7lbdvdzc3omjjgc6
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v4 2/2] selftest: add tests for O_EMPTYPATH
+MIME-Version: 1.0
 
-On 2026/4/23 10:51, Zi Yan wrote:
-> On 22 Apr 2026, at 22:43, Lance Yang wrote:
-> 
->> On Fri, Apr 17, 2026 at 10:44:18PM -0400, Zi Yan wrote:
->>> collapse_file() requires FSes supporting large folio with at least
->>> PMD_ORDER, so replace the READ_ONLY_THP_FOR_FS check with that.
->>> MADV_COLLAPSE ignores shmem huge config, so exclude the check for shmem.
->>>
->>> While at it, replace VM_BUG_ON with VM_WARN_ON_ONCE.
->>>
->>> Add a helper function mapping_pmd_thp_support() for FSes supporting large
->>> folio with at least PMD_ORDER.
->>>
->>> Signed-off-by: Zi Yan <ziy@nvidia.com>
->>> ---
->>> include/linux/pagemap.h | 10 ++++++++++
->>> mm/khugepaged.c         |  5 +++--
->>> 2 files changed, 13 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/include/linux/pagemap.h b/include/linux/pagemap.h
->>> index ec442af3f886..c3cb1ec982cd 100644
->>> --- a/include/linux/pagemap.h
->>> +++ b/include/linux/pagemap.h
->>> @@ -524,6 +524,16 @@ static inline bool mapping_large_folio_support(const struct address_space *mappi
->>> 	return mapping_max_folio_order(mapping) > 0;
->>> }
->>>
->>> +static inline bool mapping_pmd_thp_support(const struct address_space *mapping)
->>> +{
->>> +	/* AS_FOLIO_ORDER is only reasonable for pagecache folios */
->>> +	VM_WARN_ONCE((unsigned long)mapping & FOLIO_MAPPING_ANON,
->>> +			"Anonymous mapping always supports PMD THP");
->>
->> Nit: afraid not, at least when running on architectures without PMD leaf
->> entries ...
->>
->> Maybe better to say this helper is only meaningful for pagecache-backed
->> mappings. Anonymous mappings should not reach here.
-> 
-> Good suggestion. Will fix it.
-> 
->>
->>> +
->>> +	return mapping_max_folio_order(mapping) >= PMD_ORDER;
->>> +}
->>> +
->>> +
->>> /* Return the maximum folio size for this pagecache mapping, in bytes. */
->>> static inline size_t mapping_max_folio_size(const struct address_space *mapping)
->>> {
->>> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
->>> index b8452dbdb043..3eb5d982d3d3 100644
->>> --- a/mm/khugepaged.c
->>> +++ b/mm/khugepaged.c
->>> @@ -1892,8 +1892,9 @@ static enum scan_result collapse_file(struct mm_struct *mm, unsigned long addr,
->>> 	int nr_none = 0;
->>> 	bool is_shmem = shmem_file(file);
->>>
->>> -	VM_BUG_ON(!IS_ENABLED(CONFIG_READ_ONLY_THP_FOR_FS) && !is_shmem);
->>> -	VM_BUG_ON(start & (HPAGE_PMD_NR - 1));
->>> +	/* MADV_COLLAPSE ignores shmem huge config, so do not check shmem */
->>> +	VM_WARN_ON_ONCE(!is_shmem && !mapping_pmd_thp_support(mapping));
->>
->> With [1], can we drop !is_shmem here as well? shmem would then always
->> call mapping_set_large_folios(inode->i_mapping):
->>
->> ---8<---
->> diff --git a/mm/shmem.c b/mm/shmem.c
->> index 4ecefe02881d..dafbea53b22d 100644
->> --- a/mm/shmem.c
->> +++ b/mm/shmem.c
->> @@ -3087,10 +3087,7 @@ static struct inode *__shmem_get_inode(struct mnt_idmap *idmap,
->>   	cache_no_acl(inode);
->>   	if (sbinfo->noswap)
->>   		mapping_set_unevictable(inode->i_mapping);
->> -
->> -	/* Don't consider 'deny' for emergencies and 'force' for testing */
->> -	if (sbinfo->huge)
->> -		mapping_set_large_folios(inode->i_mapping);
->> +	mapping_set_large_folios(inode->i_mapping);
->>
->>   	switch (mode & S_IFMT) {
->>   	default:
->> --
->>
->> But we can do that in a follow-up, once the revert lands :)
-> 
-> Right. That would make this patchset depend on Baolin’s fix. A follow-up
-> patch is easier for managing these patches. I will add a TODO in the
-> comment, so that we will not forget. Thank you for the suggestion.
+On 2026-04-19, Jori Koolstra <jkoolstra@xs4all.nl> wrote:
+> Add tests for the new O_EMPTYPATH flag of openat(2)/openat2(2).
+>=20
+> Also, the current openat2 tests include a helper header file that
+> defines the necessary structs and constants to use openat2(2), such as
+> struct open_how. This may result in conflicting definitions when the
+> system header openat2.h is present as well.
+>=20
+> So add openat2.h generated by 'make headers' to the uapi header
+> files in ./tools/include and remove the helper file definitions of
+> the current openat2 selftests.
 
-OK. With the changes above,
+These tests were switched recently to use the kselftests harness[1], you
+might need to rework these tests and rebase on top of vfs-7.2.msic.
 
-Reviewed-by: Lance Yang <lance.yang@linux.dev>
+Those patches also fixed the issue you had with a custom openat2.h --
+glibc has wrappers for openat2 now so we can just use them directly.
+
+[1]: https://patch.msgid.link/20260401-openat2-selftests-kunit-v2-0-ad153a0=
+7da0c@amutable.com
+
+> Signed-off-by: Jori Koolstra <jkoolstra@xs4all.nl>
+> ---
+>  tools/include/uapi/linux/openat2.h            | 43 +++++++++++++++
+>  tools/testing/selftests/openat2/Makefile      |  4 +-
+>  .../selftests/openat2/emptypath_test.c        | 55 +++++++++++++++++++
+>  tools/testing/selftests/openat2/helpers.h     | 40 +-------------
+>  4 files changed, 103 insertions(+), 39 deletions(-)
+>  create mode 100644 tools/include/uapi/linux/openat2.h
+>  create mode 100644 tools/testing/selftests/openat2/emptypath_test.c
+
+--=20
+Aleksa Sarai
+https://www.cyphar.com/
+
+--7lbdvdzc3omjjgc6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iJEEABYKADkWIQS2TklVsp+j1GPyqQYol/rSt+lEbwUCaem3phsUgAAAAAAEAA5t
+YW51MiwyLjUrMS4xMiwyLDIACgkQKJf60rfpRG+acAD+MzJ8gjBdS8OyyO3+k/eq
+O/rBn4e07cZucqT4Sts6sA0BAON36J4FYlGbvwnWj3alP4bHRGzoGb56Uapyf7Qc
+uFkD
+=v5du
+-----END PGP SIGNATURE-----
+
+--7lbdvdzc3omjjgc6--
