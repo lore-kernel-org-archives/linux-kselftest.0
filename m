@@ -1,70 +1,136 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94AA23B52FD;
-	Fri, 24 Apr 2026 12:48:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F7CF3CFF60;
+	Fri, 24 Apr 2026 12:54:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777034921; cv=none; b=ZhNZrte7n9aYqrM3b+acBXRMn+aXT3HbTM7mjb1TbyolCMFvDKh0hkgV9PG+zrqmfyIWgxPpD+VMxstuDzRQ5qytN6FpCJT44S2wOOJrik+uyJ2Z6/IkPjLqr2Tdk/cZYwWKcEa5vKnhLwD0Kd6CRckDlr2lWAUtW0rVf2drEZA=
+	t=1777035262; cv=none; b=eAUIjH2QINngUk32PGAwQbEI3dAoqCLDdHPuC407YC6P0OqD63Rxq57l2hiT0MVWXhcZ2IoOTy/qKUqP2ZttHhKWvkUFMtQQ8tRAY3Q9G2UbratO4XGBRt0hPanfHVtWdByKEFwl/nqnNJq/iuGULLYylULoDLS1QjY3O2lkIzc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777034921; c=relaxed/simple;
-	bh=TROVbJzrIa38ArftKGm7M6iYtIDBZWbB0um0eGyg+zU=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=PYx56c55Lck9cnHOCYGbIWrkh0GmHEU5cTGhKHGxYRJrR2Zm6dXW8n0fZYgZWLlOEAZ3LAXbQDXMuDF318d+WnLIyb+M5r7eu+jMFy3VtYqku+7bi120ZJZ67vQHra5s7x7E9gtWvEEHAyUU66VVNodKmzoyOMpneUZ7ain40e4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=cFpBcO2v; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777035262; c=relaxed/simple;
+	bh=4un0AvoUA+zLuhMb6+AyLNGwgmWdLWkPi6NVYswIZ80=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=uFrT9C933UijQG9jEjhzgFqkvH4gv4jfqf7xOYyGBQgbTYVuQJtpqqeuOVmY9FokoSZoFLByGkmndQRGK+YFu4hFzrCSXP3SzhsjTRu1VjHe7SWP7NdlisndujSypHDc7YdTbApSm4EllLjAg8y58/Dk75g9slIXsL0jmmDMHOk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tb+TBMi1; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="cFpBcO2v"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE1A8C19425;
-	Fri, 24 Apr 2026 12:48:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1777034921;
-	bh=TROVbJzrIa38ArftKGm7M6iYtIDBZWbB0um0eGyg+zU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=cFpBcO2vALXr7md4hid3exLyeME0fHrvBJjlifO6sM51NXzOxK4YlOkMEBQOymJ8l
-	 Bfh2flYFFsoEBJftcGNE15m+vewO3VtLyRNpV459DjEydpAmB/VxIg+aeq+MeFV2Y4
-	 6+5v1ltjzw1cQVsfP1HG1TkTQol6eMmalQBLhR50=
-Date: Fri, 24 Apr 2026 05:48:40 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Breno Leitao <leitao@debian.org>
-Cc: Miaohe Lin <linmiaohe@huawei.com>, Naoya Horiguchi
- <nao.horiguchi@gmail.com>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
- <skhan@linuxfoundation.org>, David Hildenbrand <david@kernel.org>, Lorenzo
- Stoakes <ljs@kernel.org>, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, Suren
- Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Shuah
- Khan <shuah@kernel.org>, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kernel-team@meta.com
-Subject: Re: [PATCH v5 3/4] Documentation: document
- panic_on_unrecoverable_memory_failure sysctl
-Message-Id: <20260424054840.a63d80ed01b968caf9d9ef64@linux-foundation.org>
-In-Reply-To: <20260424-ecc_panic-v5-3-a35f4b50425c@debian.org>
-References: <20260424-ecc_panic-v5-0-a35f4b50425c@debian.org>
-	<20260424-ecc_panic-v5-3-a35f4b50425c@debian.org>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tb+TBMi1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F4FBC19425;
+	Fri, 24 Apr 2026 12:54:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777035260;
+	bh=4un0AvoUA+zLuhMb6+AyLNGwgmWdLWkPi6NVYswIZ80=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=tb+TBMi1jFQtKruV0mazW23XvhWz95tKb+MHlI1XunrIZWMwTL6vFacr28CB/ZUBl
+	 Ku6DP5vY9utRnL7Kj2hWoZr12wMlYHV2faKXC2J16c7XmPT6JlnvhmrFOpnyI6wYFS
+	 LJ7S1J9dlVsIR4jL0eqz8w1e+GKtxC+Nr59+ynZH9S348LkkbJGM1RnPCgtUYmNhyI
+	 yeK5ZXSsQGgLw5JOYD+LZPWJoCs7Z29irMSDFfF3KI/MACi9Cu0ayo9e6mC+Dup/XH
+	 OQJq4UMuGKoWR/0Ax5FaMmfum2c2FQUNygcnGrQOMPiz0ZyncHrWHc3RivHAL7D1mR
+	 zQizA7rigd3hQ==
+Message-ID: <896b3956-3cdc-48b5-a0a0-a3ec35aefa07@kernel.org>
+Date: Fri, 24 Apr 2026 14:54:12 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 7.2 v4 09/12] mm/truncate: use folio_split() in
+ truncate_inode_partial_folio()
+To: Zi Yan <ziy@nvidia.com>, Andrew Morton <akpm@linux-foundation.org>,
+ "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+ Song Liu <songliubraving@fb.com>
+Cc: Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>,
+ Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+ Lorenzo Stoakes <ljs@kernel.org>, Baolin Wang
+ <baolin.wang@linux.alibaba.com>, "Liam R. Howlett"
+ <Liam.Howlett@oracle.com>, Nico Pache <npache@redhat.com>,
+ Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
+ Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
+ Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Shuah Khan <shuah@kernel.org>, linux-btrfs@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+References: <20260424024915.28758-1-ziy@nvidia.com>
+ <20260424024915.28758-10-ziy@nvidia.com>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <20260424024915.28758-10-ziy@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On Fri, 24 Apr 2026 05:24:01 -0700 Breno Leitao <leitao@debian.org> wrote:
-
-> Add documentation for the new vm.panic_on_unrecoverable_memory_failure
-> sysctl, describing the three categories of failures that trigger a
-> panic and noting which kernel page types are not yet covered.
+On 4/24/26 04:49, Zi Yan wrote:
+> After READ_ONLY_THP_FOR_FS is removed, FS either supports large folio or
+> not. folio_split() can be used on a FS with large folio support without
+> worrying about getting a THP on a FS without large folio support.
 > 
->
-> ...
->
-> +When enabled, this sysctl triggers a panic on three categories of
-> +unrecoverable failures: reserved kernel pages, non-buddy kernel pages
-> +with zero refcount (e.g. tail pages of high-order allocations), and
-> +pages whose state cannot be classified as recoverable.
+> When READ_ONLY_THP_FOR_FS was present, a PMD large pagecache folio can
+> appear in a FS without large folio support after khugepaged or
+> madvise(MADV_COLLAPSE) creates it. During truncate_inode_partial_folio(),
+> such a PMD large pagecache folio is split and if the FS does not support
+> large folio, it needs to be split to order-0 ones and could not be split
+> non uniformly to ones with various orders. try_folio_split_to_order() was
+> added to handle this situation by checking folio_check_splittable(...,
+> SPLIT_TYPE_NON_UNIFORM) to detect if the large folio is created due to
+> READ_ONLY_THP_FOR_FS and the FS does not support large folio. Now
+> READ_ONLY_THP_FOR_FS is removed, all large pagecache folios are created
+> with FSes supporting large folio, this function is no longer needed and all
+> large pagecache folios can be split non uniformly.
 
-Before someone asks, I wonder if we should make this a bitfield thing,
-so people can select which of the above three should get the panic
-treatment.
+In general looks good. Just one question:
+
+folio_check_splittable() also rejects SPLIT_TYPE_NON_UNIFORM / new_order for
+swapcache pages.
+
+It's confusing, but truncate would never stumble over such folios, correct?
+
+-- 
+Cheers,
+
+David
