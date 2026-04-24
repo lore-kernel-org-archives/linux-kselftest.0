@@ -1,149 +1,147 @@
-Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62AEC1AB6F1;
-	Fri, 24 Apr 2026 23:31:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6BD83148AE;
+	Sat, 25 Apr 2026 00:00:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777073521; cv=none; b=tgD52TOcbGV2Qkd9beb5dJNx9SD6kjIR5zW26V0hik1O08jHIR129YA7bNJYNGAxxsu/0EB1Ugxd+gMugiZEtja8OByv1A9K+OxfHkoC8yPy6WMG16GqIl/pHtjot5jSnbuRO51vyoIj1PLKHEK1gl8STlaMORH9LQOr57rGH/8=
+	t=1777075209; cv=none; b=B6iv/AqiD8efJbknC2kJhsiSqg3B3jTcQSYD3OfxZwF9Iswvm2cthdOITrFgvzjYBFCF97m984EJF3I9fUMdzXFbXXDJw8++GXFuqq4hxuwLv675QDphh2GetxR36sfw2IJGBRqlYsPpqA521enoWg+VANYBw+/30EGXTUe+A90=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777073521; c=relaxed/simple;
-	bh=HblVc0QZVcSH+BEhdYmIe+eu3V5O05SC87J/OgoXbNg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ouuxexNJObo7J5HoVlroFQxrcZu4UNdoJ/P5VDNQXts/Z2ux9VB7zBT7swLGetaeO0Rj36YopDCYGs3HaMSsCWLTCvAteGGwfvpkkXj7zDDdQGGrdIngA1tMnXnqbutdtT5tiL2+Zf07qkIzkf6MpjoCrTCsz7j7cskPWAQgN/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FWyOdMQC; arc=none smtp.client-ip=95.215.58.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1777075209; c=relaxed/simple;
+	bh=C8r7huZNyRElYBe+dzNVCmXSopmsS7PatU3slqIvHiI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=iYK47PmD9Qg5KpBjWwDvziFCrTUFtB/ExcEaQM8Z9L4sfqSWGT88xTBjwsgRJ1vwyhYuDyfc1tq8lXiBLLIzu/spfzHr8DWjGEMkx5yZtscaMQ8I6HERNX27ly/m1uxDtHyJXHcrkbyTgeGIBUC6pOTjWrOqs1shCjU25UG2Yys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IsP6Nh8W; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FWyOdMQC"
-Message-ID: <d8fccecd-5418-46ff-8e9f-065d1dee6d98@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1777073506;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zyUuyE7w6pvvtI2U755rVQDGqOG1TjZmAAoWkbcJ3pw=;
-	b=FWyOdMQChNJACKlHSUigRbF+UkaZINGXAnfgG0l27LLGRf/hYjHu/Lxkyy0R7Svov/3cgV
-	ca7lKrp+oJsiAffpgj9aIdrEaU8SwwAp8RbrsigFrfnx1EjvABSU63IFjcjHzxaGMsifyR
-	FfCrsxV2p8KUbJc33PxkbcHVFDmYG7c=
-Date: Fri, 24 Apr 2026 16:31:29 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IsP6Nh8W"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2F5DC19425;
+	Sat, 25 Apr 2026 00:00:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777075208;
+	bh=C8r7huZNyRElYBe+dzNVCmXSopmsS7PatU3slqIvHiI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=IsP6Nh8WvKEeCyPJ56ahQHwF2bxzxblJotd1wZXbilPyV3ve/Uv8Fv6kAOoOzg680
+	 JLRwJXvtvWV8b+bWgo10MkWEQwvxbFRoRRApx99J14hHn8fRbsy2knuRrjitI/Yqwd
+	 5TDlZhBpyC/o7ItjCRUbfLopFA09l+QpXJe3pklvOuKrdKP7MrYWCUQGYquGkA6Ylc
+	 z+mx7p/i4O4Y3yD3JVGMuSPP2XfiojskNYGLRFLNAXsvYcNyZ6ucZXPH7nVSKGrAy9
+	 qs9kjsYLBG6KTgXZQrtiCzdp1e7jFlwQE8kqWEmr7uXOjnB2b3S5Jk68JSgotIDUQR
+	 qvV2VssP7PYQA==
+From: SeongJae Park <sj@kernel.org>
+To: Peter Xu <peterx@redhat.com>
+Cc: SeongJae Park <sj@kernel.org>,
+	Kiryl Shutsemau <kas@kernel.org>,
+	"David Hildenbrand (Arm)" <david@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
+	Zi Yan <ziy@nvidia.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Sean Christopherson <seanjc@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	kvm@vger.kernel.org
+Subject: Re: [RFC, PATCH 00/12] userfaultfd: working set tracking for VM guest memory
+Date: Fri, 24 Apr 2026 16:59:59 -0700
+Message-ID: <20260425000000.84178-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <aetaH3W47iR56nQ5@x1.local>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH RFC bpf-next 1/8] kasan: expose generic kasan helpers
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- Andrey Konovalov <andreyknvl@gmail.com>
-Cc: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- "David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>,
- Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
- Shuah Khan <shuah@kernel.org>, Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Andrey Ryabinin <ryabinin.a.a@gmail.com>,
- Alexander Potapenko <glider@google.com>, Dmitry Vyukov <dvyukov@google.com>,
- Vincenzo Frascino <vincenzo.frascino@arm.com>,
- Andrew Morton <akpm@linux-foundation.org>, ebpf@linuxfoundation.org,
- Bastien Curutchet <bastien.curutchet@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Xu Kuohai <xukuohai@huawei.com>, bpf <bpf@vger.kernel.org>,
- LKML <linux-kernel@vger.kernel.org>,
- Network Development <netdev@vger.kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
- kasan-dev <kasan-dev@googlegroups.com>, linux-mm <linux-mm@kvack.org>
-References: <20260413-kasan-v1-0-1a5831230821@bootlin.com>
- <20260413-kasan-v1-1-1a5831230821@bootlin.com>
- <CA+fCnZfubV6LgRjO3NQvhrG2Q5o0ftkFFupLWVYS50XDnmCaog@mail.gmail.com>
- <DHSWK17EZUDP.GIJ6BX2NFR6U@bootlin.com>
- <CAADnVQLJ=fJ7t1i2+_RYqU1gqYqiLP9Zrwo4vdZsgzjK_yzJTQ@mail.gmail.com>
- <CA+fCnZd31GzdpEqR8VhfK4JtUKyyRMgbBoAbeGACJgm7WvB6Vw@mail.gmail.com>
- <CAADnVQKv5y+gq=TnOAEXSqgBRpmHNjwqCfxpLaw5XkcbQ+23bg@mail.gmail.com>
- <CA+fCnZe-b0Qqbo5gGv3HN20twquQETDfYYkE1r9tPr9zUFbW9Q@mail.gmail.com>
- <CAADnVQKuptG_opA12O=Xb9_+cHf3f=ycAZdfUp17P2HBYQzdsg@mail.gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <CAADnVQKuptG_opA12O=Xb9_+cHf3f=ycAZdfUp17P2HBYQzdsg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
-On 4/19/26 3:51 PM, Alexei Starovoitov wrote:
-> On Sun, Apr 19, 2026 at 2:49 PM Andrey Konovalov <andreyknvl@gmail.com> wrote:
->>
->> On Tue, Apr 14, 2026 at 5:58 PM Alexei Starovoitov
->> <alexei.starovoitov@gmail.com> wrote:
->>>
->>> I think we're talking past each other.
->>> We're not interested in KASAN_SW_TAGS or KASAN_HW_TAGS.
->>> We're not going to modify arm64 JIT at all.
->>>
->>> This is purely KASAN_GENRIC and only on x86-64.
->>> JIT will emit exactly what compilers emit for generic
->>> which is __asan_load/store. This is as stable ABI as it can get
->>> and we don't want to deviate from it.
->>
->> OK, I supposed that's fair. You did throw me off point with your
->> performance comment. But if you decide to add SW_TAGS support at some
->> point, I think this discussion needs to be revisited.
->>
->> But please add a comment saying that those functions are only exposed
->> for BPF JIT and they are not supposed to be used by other parts of the
->> kernel. And in case you do end up adding a new config option, guard
->> the public declarations by a corresponding ifdef.
+On Fri, 24 Apr 2026 07:55:11 -0400 Peter Xu <peterx@redhat.com> wrote:
+
+> On Thu, Apr 23, 2026 at 05:26:24PM -0700, SeongJae Park wrote:
+> > On Thu, 23 Apr 2026 14:57:34 -0400 Peter Xu <peterx@redhat.com> wrote:
+> > 
+> > > On Thu, Apr 23, 2026 at 07:08:00PM +0100, Kiryl Shutsemau wrote:
+> > > > On Thu, Apr 23, 2026 at 10:50:06AM -0400, Peter Xu wrote:
+> > [...] 
+> > > > > - Whether we have explored other approaches on page hotness tracking
+> > [...]
+> > > > DAMON is built around sampling. It is good for working set estimation,
+> > > > but I don't think it is directly useful for eviction decision. It can
+> > > > miss hot pages. LRU rotation will also loose info.
+> > > 
+> > > Exactly.  If we need to collect ACCESS bit (or anything similar) for
+> > > eviction accuracy pusrpose, IIUC we need per-page info, we can't estimate
+> > > by sampling.
+> > 
+> > That's a fair argument.
+> > 
+> > Nonetheless, there are some companies who use DAMON [1] for a similar eviction
+> > purpose on their products.
+> > 
+> > Also, page level accuracy issue was indeed concerns from many people.  DAMON
+> > therefore provides page level DAMOS filter [2].  The idea is finding a large
+> > region of cold pages in low overhead first, then do page level access recheck
+> > on page of the region using the filter, just before doing the eviction.
+> > 
+> > DAMON-based memory tiering also uses it [3], to avoid wrongly
+> > promoting/demoting cold/hot pages in DAMON-claimed hot/cold regions.  The
+> > evaluation result was not very bad, and a few more users reported positive test
+> > results.
+> > 
+> > Also, DAMON can be used for page level monitoring [5] and open to changes for
+> > users.  Actually a work [6] for making DAMON-based page level monitoring more
+> > lightweight is ongoing.
 > 
-> I feel concerns of misuse are overblown.
-> Being in include/linux/kasan.h doesn't make them free-for-all
-> all of a sudden, but if you prefer we can just copy paste:
-> +void __asan_load1(void *p);
-> +void __asan_store1(void *p);
-> into bpf_jit_comp.c
+> Good to know that, thanks for the info, SJ.  I'll add a note and try to
+> explore all these at some point.
 > 
->>> The goal here is to find bugs in the verifier.
->>> If something got past it, that shouldn't have,
->>> kasan generic on x86-64 is enough.
->>
->> FWIW, I suspect HW_TAGS KASAN already just works with JITed BPF code.
+> I recall I read a paper describing damon tracking overheads when
+> granularity is small and when the memory scope is large (in VM's case, it
+> can be e.g. 1TB or more).  Would there be quick answer on whether this one
+> still suffers (or maybe it was never a problem)?
+
+I think that should still be same.  In case of fixed granularity monitoring,
+the overhead is inherently proportional to the memory size.  And we didn't make
+many effort on making the overhead lower.  We have two ongoing works [1,2] for
+that, though.
+
+Nonetheless, whether the overhead is too high or not would depend on the use
+case, I'd say.  That is, if the system has hundreds of CPUs, letting DAMON
+occupying one CPU might be no real problem.  Rather, there were users who
+willing to give more than one CPUs to DAMON if DAMON can provide more accurate
+monitoring results or work faster.  That kind of scaling is possible, by using
+multiple kdamonds that monitors different partitions of the address ranges.
+
 > 
-> Ohh. Good point. Looks like modern arm64 cpus in public clouds
-> don't have that enabled, so one would need pixel phone to
-> catch verifier bugs via hw_tags.
+> > 
+> > I understand no one fits all and the decision is up to each user :)
+> > Nevertheless, I will be happy to help if you have any question or request for
+> > DAMON.
+> 
+> I'll definitely ask after digging more into that, thanks for the offer!
 
-This comment got me curious, and acckktually if we *really* want to,
-we can get some KASAN_HW_TAGS testing for BPF already.
+The pleasure is mine! :)
 
-The first option is emulation, since QEMU supports MTE [1], e.g.:
+> 
+> > 
+> > [1] https://cdn.amazon.science/ee/a4/41ff11374f2f865e5e24de11bd17/resource-management-in-aurora-serverless.pdf
+> > [2] https://origin.kernel.org/doc/html/latest/mm/damon/design.html#filters
+> > [3] https://github.com/damonitor/damo/blob/next/scripts/mem_tier.sh#L40
+> > [4] https://www.phoronix.com/news/DAMON-Self-Tuned-Memory-Tiering
+> > [5] https://origin.kernel.org/doc/html/latest/mm/damon/faq.html#can-i-simply-monitor-page-granularity
+> > [6] https://lore.kernel.org/20260423004211.7037-1-akinobu.mita@gmail.com
 
-    qemu-system-aarch64 -machine virt,mte=on ...
-
-This is of course slow, because it runs in software, so it's
-infeasible to run this for every signle patch on BPF CI. But we could
-run it on schedule on the base branches or smth like that.
-
-[1] https://qemu-project.gitlab.io/qemu/system/arm/virt.html
-
-The second option is set up an AmpereOne machine on Oracle Cloud
-(assuming they are available, haven't checked), because apparently [2]
-those CPUs run with MTE.
-
-It's a bunch of infra work and spending, but it is doable if it was
-a priority.
-
-[2] https://arxiv.org/abs/2511.17773
+[1] https://lore.kernel.org/20260423004211.7037-1-akinobu.mita@gmail.com
+[2] https://lore.kernel.org/20260423122340.138880-1-jiayuan.chen@linux.dev
 
 
-> So we still need this x86-specific jit kasan.
-> I guess eventually it can be removed when hw_tags support is widespread.
+Thanks,
+SJ
 
+[...]
