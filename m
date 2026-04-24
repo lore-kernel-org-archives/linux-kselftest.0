@@ -1,79 +1,104 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 286B03DA7E5;
-	Fri, 24 Apr 2026 17:30:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87F86344DAC;
+	Fri, 24 Apr 2026 17:36:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777051818; cv=none; b=RKEP87DEVCpFauZuNnj1ys6AC8lRdmMy5/VQT1Xywh8VpivBtU/lFTkioow5dVOt4831Apfizfnfyp/v8FN8R4f+IwLpiBkoGsTIlHFsRc6yETGfhI3iiGO0XVsXyxvk23witdjVvtsieOnKhjf/5Mh+BQsHTsI49rCyuBwt/ec=
+	t=1777052177; cv=none; b=IGz7Q53+QD3aTnNPlNJUs3RrM1sjFi+HGigd6Re4adCGgqGU8qQ7envv52bpu4Jx7OOrXyQlXKRC1AP/nWa4cPPfXuTOTJjrbBCaZpW7n7YsOIuSN3arGlbLQswO1tn8njJY4PjsUWm3dWRW8Az2CgqhEd4zDm/gF2h+pncwjmU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777051818; c=relaxed/simple;
-	bh=FJU/2TkCOeajLjX0b6PlHQiWuH3XWM9F2Fppc5W6w1Y=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=jxOXPUVGxyx34g7MkNxhx3CwWY/q0p0mhs/CX10P//hVs9Ih8MpUKxyFCv4bYwLAiDYQcJOjtBH+koy6pRqZC2l3d0ibsOGW43m6EL+nl47cE4YncsXOorjm7/Q1cBcLti74Ik9qpjh9k5V+w7EGOHSMiMRnCUSVTWmkwHGNBIQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=iOAoXV+n; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777052177; c=relaxed/simple;
+	bh=CHDOwNRYG2bj/v4igJm1ULxAjW/zxl269FB69HbK180=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JDt50B/qWwm8aCGnF53IbXxcXq5JJzHHtTZWNfs/HXawxrrE0GsEuua35dsie6rKa9BSDxxtGJZLnaAWBDDw/VzvO1WiPEqp3ynbRHa8dQwU5acIKzGzdbIL+wUfYDOe9r6bgtIZI22EnNkL8xkSrKvORRxx3j2C3YQqXASR2VE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HdqPztEq; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="iOAoXV+n"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 548D8C19425;
-	Fri, 24 Apr 2026 17:30:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1777051817;
-	bh=FJU/2TkCOeajLjX0b6PlHQiWuH3XWM9F2Fppc5W6w1Y=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=iOAoXV+nD0woDWou3qWdbKPLCxnMBb6XSFk8Fa+kFopjKVG7GJy+vOCPAwQ19OLlg
-	 dsIP4hsihV5RDoBZvoocZKO/0i0MvAlvqLKtkgliyXPylDuNDOzgWGyxjgrvGnHdn5
-	 7XXTVveqyBlOQ42NPRt3rr+9d/ZzDvJhrq7uC3Rk=
-Date: Fri, 24 Apr 2026 10:30:16 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Breno Leitao <leitao@debian.org>
-Cc: David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka
- <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan
- <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Shuah Khan
- <shuah@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH v2 0/2] mm/kmemleak: dedupe verbose scan output
-Message-Id: <20260424103016.4ad3219ae815e45de62cfaf7@linux-foundation.org>
-In-Reply-To: <20260424-kmemleak_dedup-v2-0-8bea649b2a92@debian.org>
-References: <20260424-kmemleak_dedup-v2-0-8bea649b2a92@debian.org>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HdqPztEq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60C63C19425;
+	Fri, 24 Apr 2026 17:36:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777052177;
+	bh=CHDOwNRYG2bj/v4igJm1ULxAjW/zxl269FB69HbK180=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=HdqPztEq6GgG+lx4rIeXweQ+HFDlgQy45R2pauOCrgB2ju68+qqXeOaw4z0DNTYP+
+	 s2+zRDeyp6eFktSfGoIbm4sIrEYdYhcwxjZAbOhuarg7LCeF8hcAiUJjw1X/dphSSP
+	 7OnbVkx7eges0WkthglliKS2zqUGoKdUU9kSVF/tgi/s/BBatOYu8oWig71H1Wsm8N
+	 iPmYRAIN4tSWKd38BApz2P/AqWf94Q9Sy50lkzFKw1o/kmGNtLLBbTXHYBFwz7GQZU
+	 JvTQa3qr3iVAWe3Y8IgSOrnRh/jy7mafFtZOexfhtKlFwEw8+GehGvKyE6A3jz64Qc
+	 oFRqlBPFo4oyQ==
+Date: Fri, 24 Apr 2026 18:36:09 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Luiz Capitulino <luizcap@redhat.com>
+Cc: Mike Rapoport <rppt@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Barry Song <baohua@kernel.org>, Dev Jain <dev.jain@arm.com>,
+	Donet Tom <donettom@linux.ibm.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+	John Hubbard <jhubbard@nvidia.com>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Lance Yang <lance.yang@linux.dev>,
+	Leon Romanovsky <leon@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
+	Michal Hocko <mhocko@suse.com>, Nico Pache <npache@redhat.com>,
+	Peter Xu <peterx@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
+	Sarthak Sharma <sarthak.sharma@arm.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Vlastimil Babka <vbabka@kernel.org>, Zi Yan <ziy@nvidia.com>,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: Re: [PATCH v2 06/53] selftests/mm: rename hugepage-* tests to
+ hugetlb-*
+Message-ID: <30bb8071-06df-4953-b189-ab6a0520739d@sirena.org.uk>
+References: <20260418105539.1261536-1-rppt@kernel.org>
+ <20260418105539.1261536-7-rppt@kernel.org>
+ <4d2fb0ec-91e4-4902-9d7f-68d782ee98c7@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="fMCaExAVrSqimxm0"
+Content-Disposition: inline
+In-Reply-To: <4d2fb0ec-91e4-4902-9d7f-68d782ee98c7@redhat.com>
+X-Cookie: 1 bulls, 3 cows.
 
-On Fri, 24 Apr 2026 08:03:35 -0700 Breno Leitao <leitao@debian.org> wrote:
 
-> I am starting to run with kmemleak in verbose enabled in some "probe
-> points" across the my employers fleet so that suspected leaks land in
-> dmesg without needing a separate read of /sys/kernel/debug/kmemleak.
-> 
-> The downside is that workloads which leak many objects from a single
-> allocation site flood the console with byte-for-byte identical
-> backtraces. Hundreds of duplicates per scan are common, drowning out
-> distinct leaks and unrelated kernel messages, while adding no signal
-> beyond the first occurrence.
-> 
-> This series collapses those duplicates inside kmemleak itself. Each
-> unique stackdepot trace_handle prints once per scan, followed by a
-> short summary line when more than one object shares it:
-> 
->   kmemleak: unreferenced object 0xff110001083beb00 (size 192):
->   kmemleak:   comm "modprobe", pid 974, jiffies 4294754196
->   kmemleak:   ...
->   kmemleak:   backtrace (crc 6f361828):
->   kmemleak:     __kmalloc_cache_noprof+0x1af/0x650
->   kmemleak:     ...
->   kmemleak:   ... and 71 more object(s) with the same backtrace
-> 
-> The "N new suspected memory leaks" tally and the contents of
-> /sys/kernel/debug/kmemleak are unchanged - the per-object detail is
-> still available on demand, only the verbose (dmesg) output is collapsed.
+--fMCaExAVrSqimxm0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-AI review likes the kernel patch but worries about the selftest:
-	https://sashiko.dev/#/patchset/20260424-kmemleak_dedup-v2-0-8bea649b2a92@debian.org
+On Fri, Apr 24, 2026 at 01:20:02PM -0400, Luiz Capitulino wrote:
+> On 2026-04-18 06:54, Mike Rapoport wrote:
+
+> > --- a/tools/testing/selftests/mm/.gitignore
+> > +++ b/tools/testing/selftests/mm/.gitignore
+> > @@ -4,6 +4,10 @@ hugepage-mmap
+> >   hugepage-mremap
+> >   hugepage-shm
+> >   hugepage-vmemmap
+
+> Shouldn't we remove these? Also, there's a reference to hugepage-mmap in
+> Documentation/admin-guide/mm/hugetlbpage.rst.
+
+Linus complained at some point about removing things from .gitignore
+causing issues with old binaries left around in the working directory.
+
+--fMCaExAVrSqimxm0
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmnrqggACgkQJNaLcl1U
+h9BgyQf9GE7Gxqd6ZWhu6oYwgnH6MS5KcKZDxeEzEVo7XnAa6yCx54tOLV55nHUy
+KLvJ74V0fzhAkFZqXXwe3pP+ZwjE8WX8/osZdpYk1Hzw9J7MH47lmL9LnW9MGeNz
+SXF4HGRzP9WjlGs9wDmR1xQW2wx2wTCvWBjaSdWHkp0vkty8bkjxiJ8sJcI1JKDV
+Mdi9tTjg3bDelR9IJ9V5rcO2KDQ1W/58f0AUnisFmLKOR6tt+F6CI1PZtVewAHQn
+LdFHWUgwBFRBFPjqnhDuGBHGyd2jL9lJHAJgMurBBQ5AUdtGW13Pw/5HJth3Xbav
+MnwVIHp2xlYA8EGQWL1Z1uPDBD5ykQ==
+=hz+5
+-----END PGP SIGNATURE-----
+
+--fMCaExAVrSqimxm0--
