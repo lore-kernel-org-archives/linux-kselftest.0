@@ -1,146 +1,212 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B2613C1991;
-	Fri, 24 Apr 2026 12:05:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A9DF3BAD85;
+	Fri, 24 Apr 2026 12:21:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777032328; cv=none; b=fqGG86Qyt6GjPDrP6mKJQgr/EFJ2lJpD2gjUFKifV7peLYIsCnRqykphMSkPmGGUKBfiEJ/oNWmgqRtkWgjrLQYkNcuf2W0S1LiojzOSRvQMDaDonwoMoZAqNCCsVVVh1/51F4yYxQeRJgduLhI1KaakMOnZcIPW+wUopDSxaxA=
+	t=1777033283; cv=none; b=gE0EFuHKO8GjEEOc3suxEkh0iTvDH3G1wp5ImOfGg8InNE5Zsd85QKizI5ulWJsVjElMcWXQQx4v+Aiqh+ej+RtJoHzTRR/tMvSvvws3sTF1NdOLscPK1JqMFWigmnFhEK3tmy5uuJ8PWk3jinLHBXHdZViNDn28v4S1sQMX/x8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777032328; c=relaxed/simple;
-	bh=ZX0Gk8ZXhQfYmfd0QPEkV0r5QjqKFEBtavYYnWGlGwo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HaFcd/ouxlnz8FQ6ZJxUGhv2x3SdXNYEJLVMqlWzVzNrUs62rMwW5k+uCARKxigJLyrXd6I+SzODomf2ZAlR8aGIcvm2z9mRobBLFpt79rZjEBdZbw1zDOQ+Y228a6ILu9rZmSoV9YSQDJVdkxXra9V6+36Dn2njO5Tw4+Z3K2U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=iUnghvZg; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1777033283; c=relaxed/simple;
+	bh=ae12Dx1GP1nt/ZBN0pu4+BdRD8YdZHY9YSVa9HGmjY4=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=cR1F4qzMazRe9+kwPvjT0CM2VYnJ15KtMkSWznQm+ZFnfiyq+DrNJRHfmp90QH5x1Vh0gLwUDhkJvr36GqZKwu/+PcXkl8a9ySbxr6cIt3si5jF+7j5hFIOGxOEEduVf4ebXec+h6XeQ3YmGJ8pMI8LTBFYhCjknZsyacfyZQCU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lQAqpc02; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="iUnghvZg"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 746F31BA8;
-	Fri, 24 Apr 2026 05:05:19 -0700 (PDT)
-Received: from arm.com (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 288FF3F641;
-	Fri, 24 Apr 2026 05:05:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1777032325; bh=ZX0Gk8ZXhQfYmfd0QPEkV0r5QjqKFEBtavYYnWGlGwo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=iUnghvZg4F5GF19O8nsZ8aWARvil/vxjb6twmWwcuKOzCZErwJNqshbtD2FCc+QBH
-	 F2xOfl3YbiUWeKuqaL/AuAUOHURDX7RlxZMLMyhFQdW077RDxZ57WXfu/6sob5q7ka
-	 vJ0UeX/aH+eDu0BIep0FzblGysOW/jjSJudv7b88=
-Date: Fri, 24 Apr 2026 13:05:20 +0100
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Breno Leitao <leitao@debian.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH 1/2] mm/kmemleak: dedupe verbose scan output by
- allocation backtrace
-Message-ID: <aetcgHhBXfPe6lr1@arm.com>
-References: <20260421-kmemleak_dedup-v1-0-65e31c6cdf0c@debian.org>
- <20260421-kmemleak_dedup-v1-1-65e31c6cdf0c@debian.org>
- <aeostKcaHzmVBFjb@arm.com>
- <aesymSWyh8NRIrDQ@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lQAqpc02"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1777033282; x=1808569282;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version:content-transfer-encoding;
+  bh=ae12Dx1GP1nt/ZBN0pu4+BdRD8YdZHY9YSVa9HGmjY4=;
+  b=lQAqpc02441EAQxCACdF4jktlR77FjF6SgDUge3VR++e4htz3zw1lNya
+   7nSsO0nYTCdJ4JgC8A3+teRkeVJ4ywQwUejg85jBMtz33kBumujnLqBtF
+   RLPUh2vcQ0CEmKAeaZIFJZ7hj2YHTaBhtvSWTA/nn7I2ZF0bBf6q3oa/T
+   FwwNSGhujp7JHEhYYOZ7iEFotbFBcEsBMQTjtXsT8gmzrCy8bIJe0Paon
+   jz79vWKA4wIjxlqg0erHsqtVmE/8+14KG70O5RCCriZVQFnAQvEOt9HFh
+   I6AW6uY9DA0G8XNJeocC1CjhZcIz8x/QUoHBw75phhUx5sahvE2hBtvEo
+   g==;
+X-CSE-ConnectionGUID: 8cA+UwSOQ2GmzJ1fq/SsZg==
+X-CSE-MsgGUID: zFVPp0mPQjWfmD6cBjZVXg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11765"; a="88622050"
+X-IronPort-AV: E=Sophos;i="6.23,196,1770624000"; 
+   d="scan'208";a="88622050"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2026 05:21:20 -0700
+X-CSE-ConnectionGUID: Ddy2JyWkRiCTb6Lq3VNE8g==
+X-CSE-MsgGUID: yrtNyG9vRgKsTS8VOCKqyw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,196,1770624000"; 
+   d="scan'208";a="226406679"
+Received: from smoticic-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.89])
+  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2026 05:21:14 -0700
+From: Jani Nikula <jani.nikula@intel.com>
+To: Albert Esteve <aesteve@redhat.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Arnd Bergmann <arnd@arndb.de>,
+ Brendan Higgins <brendan.higgins@linux.dev>, David Gow
+ <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>, Maarten Lankhorst
+ <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>,
+ Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
+ Simona Vetter <simona@ffwll.ch>, Jonathan Corbet <corbet@lwn.net>, Shuah
+ Khan <skhan@linuxfoundation.org>, Andrew Morton
+ <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kunit-dev@googlegroups.com, dri-devel@lists.freedesktop.org,
+ workflows@vger.kernel.org, linux-doc@vger.kernel.org, Guenter Roeck
+ <linux@roeck-us.net>, Linux Kernel Functional Testing <lkft@linaro.org>,
+ Dan Carpenter <dan.carpenter@linaro.org>, =?utf-8?Q?Ma=C3=ADra?= Canal
+ <mcanal@igalia.com>,
+ Alessandro Carminati <acarmina@redhat.com>, Simona Vetter
+ <simona.vetter@ffwll.ch>
+Subject: Re: [PATCH v7 4/5] drm: Suppress intentional warning backtraces in
+ scaling unit tests
+In-Reply-To: <CADSE00+b-8moX5FkLjLs+wzyaW5dtJDMxvTT6Gu-QmDoDxJdVA@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park,
+ 6 krs Bertel Jungin Aukio 5, 02600 Espoo, Finland
+References: <20260420-kunit_add_support-v7-0-e8bc6e0f70de@redhat.com>
+ <20260420-kunit_add_support-v7-4-e8bc6e0f70de@redhat.com>
+ <20260420144702.GM3102624@noisy.programming.kicks-ass.net>
+ <CADSE00JJq6fsYbkFN5hBD=-ZWsFG9p4_C55fp3MupMJQj0QCUQ@mail.gmail.com>
+ <8a9c125c08206296d698c79c3d3dd6aea36a7e3b@intel.com>
+ <CADSE00+b-8moX5FkLjLs+wzyaW5dtJDMxvTT6Gu-QmDoDxJdVA@mail.gmail.com>
+Date: Fri, 24 Apr 2026 15:21:11 +0300
+Message-ID: <4a64dbd6cff28950a7adbfe7d01ddfe93df34cb7@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aesymSWyh8NRIrDQ@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Apr 24, 2026 at 02:26:53AM -0700, Breno Leitao wrote:
-> diff --git a/mm/kmemleak.c b/mm/kmemleak.c
-> index 2eff0d6b622b6..d521cc71ec1ee 100644
-> --- a/mm/kmemleak.c
-> +++ b/mm/kmemleak.c
-> @@ -92,6 +92,7 @@
->  #include <linux/nodemask.h>
->  #include <linux/mm.h>
->  #include <linux/workqueue.h>
-> +#include <linux/xarray.h>
->  #include <linux/crc32.h>
->  
->  #include <asm/sections.h>
-> @@ -153,6 +154,8 @@ struct kmemleak_object {
->  	/* checksum for detecting modified objects */
->  	u32 checksum;
->  	depot_stack_handle_t trace_handle;
-> +	/* per-scan dedup count, valid only while in scan-local dedup xarray */
-> +	unsigned int dup_count;
+On Fri, 24 Apr 2026, Albert Esteve <aesteve@redhat.com> wrote:
+> On Tue, Apr 21, 2026 at 1:51=E2=80=AFPM Jani Nikula <jani.nikula@intel.co=
+m> wrote:
+>>
+>> On Tue, 21 Apr 2026, Albert Esteve <aesteve@redhat.com> wrote:
+>> > On Mon, Apr 20, 2026 at 4:47=E2=80=AFPM Peter Zijlstra <peterz@infrade=
+ad.org> wrote:
+>> >>
+>> >> On Mon, Apr 20, 2026 at 02:28:06PM +0200, Albert Esteve wrote:
+>> >> > From: Guenter Roeck <linux@roeck-us.net>
+>> >> >
+>> >> > The drm_test_rect_calc_hscale and drm_test_rect_calc_vscale unit te=
+sts
+>> >> > intentionally trigger warning backtraces by providing bad parameter=
+s to
+>> >> > the tested functions. What is tested is the return value, not the e=
+xistence
+>> >> > of a warning backtrace. Suppress the backtraces to avoid clogging t=
+he
+>> >> > kernel log and distraction from real problems.
+>> >> >
+>> >> > Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>> >> > Acked-by: Dan Carpenter <dan.carpenter@linaro.org>
+>> >> > Acked-by: Ma=C3=ADra Canal <mcanal@igalia.com>
+>> >> > Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+>> >> > Cc: David Airlie <airlied@gmail.com>
+>> >> > Cc: Daniel Vetter <daniel@ffwll.ch>
+>> >> > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+>> >> > Signed-off-by: Alessandro Carminati <acarmina@redhat.com>
+>> >> > Signed-off-by: Albert Esteve <aesteve@redhat.com>
+>> >> > ---
+>> >> >  drivers/gpu/drm/tests/drm_rect_test.c | 14 ++++++++++++++
+>> >> >  1 file changed, 14 insertions(+)
+>> >> >
+>> >> > diff --git a/drivers/gpu/drm/tests/drm_rect_test.c b/drivers/gpu/dr=
+m/tests/drm_rect_test.c
+>> >> > index 17e1f34b76101..1dd7d819165e7 100644
+>> >> > --- a/drivers/gpu/drm/tests/drm_rect_test.c
+>> >> > +++ b/drivers/gpu/drm/tests/drm_rect_test.c
+>> >> > @@ -409,8 +409,15 @@ static void drm_test_rect_calc_hscale(struct k=
+unit *test)
+>> >> >       const struct drm_rect_scale_case *params =3D test->param_valu=
+e;
+>> >> >       int scaling_factor;
+>> >> >
+>> >> > +     /*
+>> >> > +      * drm_rect_calc_hscale() generates a warning backtrace whene=
+ver bad
+>> >> > +      * parameters are passed to it. This affects all unit tests w=
+ith an
+>> >> > +      * error code in expected_scaling_factor.
+>> >> > +      */
+>> >> > +     KUNIT_START_SUPPRESSED_WARNING(test);
+>> >> >       scaling_factor =3D drm_rect_calc_hscale(&params->src, &params=
+->dst,
+>> >> >                                             params->min_range, para=
+ms->max_range);
+>> >> > +     KUNIT_END_SUPPRESSED_WARNING(test);
+>> >>
+>> >> Would not something like:
+>> >>
+>> >>         scoped_kunit_suppress() {
+>> >>                 scaling_factor =3D drm_rect_calc_hscale(&params->src,=
+ &params->dst,
+>> >>                                                       params->min_ran=
+ge, params->max_range);
+>> >>         }
+>> >>
+>> >> be better?
+>> >
+>> > Since KUnit already has a few macros in its API it didn't occur to me.
+>> > Good idea, I like it. And I guess the scope approach matches well with
+>> > your __cleanup comment in the first patch. If no one opposes, I will
+>> > work toward that pattern for the next version.
+>>
+>> There's a catch with kunit and __cleanup and thus (scoped) guards. Kunit
+>> runs in ktreads, asserts lead to kthread_exit() and the __cleanup won't
+>> be called.
+>
+> Hi Jani,
+>
+> Good point. In this specific case, the actual cleanup is handled by
+> kunit_add_action_or_reset(), so __cleanup not firing on assert is
+> harmless.
 
-I would add this around the pid_t pid member since both are 32-bit,
-better struct compaction. Here we'll get 32-bit padding.
+Right.
 
->  	/* memory ranges to be scanned inside an object (empty for all) */
->  	struct hlist_head area_list;
->  	unsigned long jiffies;		/* creation timestamp */
-> @@ -360,8 +363,9 @@ static const char *__object_type_str(struct kmemleak_object *object)
->   * Printing of the unreferenced objects information to the seq file. The
->   * print_unreferenced function must be called with the object->lock held.
->   */
-> -static void print_unreferenced(struct seq_file *seq,
-> -			       struct kmemleak_object *object)
-> +static void __print_unreferenced(struct seq_file *seq,
-> +				 struct kmemleak_object *object,
-> +				 bool no_hex_dump)
->  {
->  	int i;
->  	unsigned long *entries;
-> @@ -373,7 +377,8 @@ static void print_unreferenced(struct seq_file *seq,
->  			   object->pointer, object->size);
->  	warn_or_seq_printf(seq, "  comm \"%s\", pid %d, jiffies %lu\n",
->  			   object->comm, object->pid, object->jiffies);
-> -	hex_dump_object(seq, object);
-> +	if (!no_hex_dump)
-> +		hex_dump_object(seq, object);
+>
+>>
+>> Warning suppression being part of kunit infrastructure, asserts can and
+>> should end the suppression too. But setting the example (scoped) guards
+>> are safe in kunit tests in general feels like a trap waiting to happen.
+>>
+>
+> ... but I agree it sets a misleading precedent. I'll stick with the
+> explicit start/end API, then? Or maybe we can clearly document why the
+> scoped approach is safe in this case and use it.
 
-Nit: just use "hex_dump" and avoid double negation.
+I don't know what the right approach is, just wanted to make sure you're
+aware of this particular gotcha with guards and kunit.
 
->  	warn_or_seq_printf(seq, "  backtrace (crc %x):\n", object->checksum);
->  
->  	for (i = 0; i < nr_entries; i++) {
-> @@ -382,6 +387,12 @@ static void print_unreferenced(struct seq_file *seq,
->  	}
->  }
->  
-> +static void print_unreferenced(struct seq_file *seq,
-> +			       struct kmemleak_object *object)
-> +{
-> +	__print_unreferenced(seq, object, false);
-> +}
-> +
->  /*
->   * Print the kmemleak_object information. This function is used mainly for
->   * debugging special cases when kmemleak operations. It must be called with
-> @@ -1684,6 +1695,103 @@ static void kmemleak_cond_resched(struct kmemleak_object *object)
->  	put_object(object);
->  }
->  
-> +/*
-> + * Print one leak inline, re-checking OBJECT_ALLOCATED under the lock so
-> + * the hex dump does not touch user memory that was freed concurrently.
-> + * Used by the dedup_record() fallback paths where we cannot dedup and defer
-> + * printing through the xarray.
-> + */
-> +static void print_leak_locked(struct kmemleak_object *object, bool no_hex_dump)
-> +{
-> +	raw_spin_lock_irq(&object->lock);
-> +	if (object->flags & OBJECT_ALLOCATED)
-> +		__print_unreferenced(NULL, object, no_hex_dump);
-> +	raw_spin_unlock_irq(&object->lock);
+BR,
+Jani.
 
-I don't think OBJECT_ALLOCATED should prevent the printing here. If it's
-called from dedup_flush() and the first object that kept accumulating
-the dup_count is freed, you'd not print anything. I would only use
-OBJECT_ALLOCATED to decide whether to do the hex dump if requested.
+>
+>>
+>> BR,
+>> Jani.
+>>
+>>
+>> >
+>> >>
+>> >> Also, how can you stand all this screaming in the code?
+>> >>
+>> >
+>> > Again, KUnit already contains many macros, so this use didn't register
+>> > as such. Now I will not be able to unsee it.
+>> >
+>> >
+>>
+>> --
+>> Jani Nikula, Intel
+>>
+>
 
--- 
-Catalin
+--=20
+Jani Nikula, Intel
