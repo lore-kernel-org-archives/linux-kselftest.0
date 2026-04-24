@@ -1,199 +1,169 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from CH5PR02CU005.outbound.protection.outlook.com (mail-northcentralusazon11012055.outbound.protection.outlook.com [40.107.200.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F02829C35A;
-	Fri, 24 Apr 2026 15:06:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777043178; cv=none; b=fqPpRXsSYnFah/qurr4IvOLZxlZb3qto0PrbHzyLWbY19NcewLV5q7NXVE3QEydPc2AvoEgK6o7S+Mr/AFrGkSKD/y/AfAp1gq1IMsHc9UuMxvqpSq8xnH73foVI1LKjEEFwmCe0yX8AoJf7sJVUwcsdKSzhoRhg4+wJ/GjtkWI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777043178; c=relaxed/simple;
-	bh=Mx+xKsW705Bvtu1gt8242kE4k6qFTx9knH17MmM+aWY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=jeL8I0kR7RIcm0f0udBg70vLkLncxCVEYaq0+40FYLCamb+/wFLOc/5R74zsdznZUDTv9bw8AW+bwmVwvUSqVldw1SYXSPR9cDQ5Gf1MyR1ObJlv/+OlPJVUYPRTGkvPxWr9EokqJZcNKtlYvcRcwP9ABQ7uL7ZmtmJxjRHajnw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=PI5OVsN4; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=debian.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA12B149C6F;
+	Fri, 24 Apr 2026 15:08:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.200.55
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777043287; cv=fail; b=O2fV5Ggf9Cb5OHinmEkOApqHfB2A6K7jHCrrfcW8t+gBUfJ9U5Blny3N/G20ByI4dK2YsnMIBZqowqdjLZmcLvzq4cN6oKCrqWKfyMgWgSNm1OT5QXK/4Gu8cvPZeejr/xctgtOrRrs+erKB9tvSq/I2z5h9TrzGcN4kORLtg7c=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777043287; c=relaxed/simple;
+	bh=AsD2zjqIFeaWIiWitUWmwOV4aLEwwUfK4MY6DCvTFo4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Gt0akC2BCsUrOBhWww0y82oxZG0QCPEEilh3XCKXDO+dLHA7vglIk5lYfETv+4mCxGluoMcVx9fUWqVo2s8Nneo8wCE8BWJGqpJwlBJPBn+nLwM1GlesLprV6vD/jJ7fCXDQeNWBOHkrvbSTZDONH+vlq7HXAKlbbLCpn13DEHI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=oqVIIwjE; arc=fail smtp.client-ip=40.107.200.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="PI5OVsN4"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:In-Reply-To:References:
-	Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:
-	From:Reply-To:Content-ID:Content-Description;
-	bh=9dMHvY64E/0Eq0UOACVelGjv1g6r0jBYKkjfUoG9zeY=; b=PI5OVsN4Z6FnbV8R064sujFqJl
-	XDFvbKTV/B2aAsEH9Yhng24qnIyrxQSm0AiayKPUen2OpANSsLqGgl3DbJr/wUzdgIPLBOx35qM79
-	P7fOn/9Qdwu2VMtTDPxeQ27YxrXIM73czvuSSqjS5vVDlAlTStmft9+T8v2ebQhHqOaOMB4Ys5U60
-	xlaydWz54n/CUFmd0nQxcyI8EueR1oRAlXrK4v8ogIl5BogD22nupTtm1FxnYrFvxYjgwrymQtz+t
-	MP51QEgqRcuKRp4DgyAf6/18G9riJRh31d4NNoK7pOTDJv2aNS1vb48T1SkUenv2aLUV7aSzmNodW
-	YUV5dyWg==;
-Received: from authenticated user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wGI6f-003FtN-2S;
-	Fri, 24 Apr 2026 15:06:14 +0000
-From: Breno Leitao <leitao@debian.org>
-Date: Fri, 24 Apr 2026 08:03:37 -0700
-Subject: [PATCH v2 2/2] selftests/mm: add kmemleak verbose dedup test
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="oqVIIwjE"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=OazFlueUy4kOk51CrAg/bVfIwxAdp8mI1NiT/bv1z5uw5o5AP26oHYcYced5kzV79NPgwNlh1bPGSD4OmD2QBm1uglxJIWPyszawVrB50eb0fXtGpmB5A4OG6jJ69hmwF3F3wOJNU9TaF2rMoD/U6xgQLeXn095ewMJ9G1UJIKKmFrd+XDhwmcOAKjGBlxg2pAc7qXRNb00ygJQ6U+MkLKpq1xWN7OnGsnwJnfWGV1eWRVMS652LiN0Bp3Vx8g3EsV2gT1GiUE+9Bchq/KZlyH6EWRCvSRMVfS70Qh49rvBWCY0ZxbMeT2Qk+n91FiTHEQKGj4QEJC1Ao5Z+siy5vw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=AsD2zjqIFeaWIiWitUWmwOV4aLEwwUfK4MY6DCvTFo4=;
+ b=Hq+2NbkTdpqoANI4EgFEWo+EXykmrwMwI3fiysk/7lD+/+sVULao+26IKLW0BMQcHzPaIAsvxrwx87Z//8S3iSdv+nhXzMm0Egs6Vssko+WYkbNsYupe4DOPvOPEgOp0+oZVKGsHsLkv6CRSzPqkBLhsDBuwv7IvyUvKs6gKaXmq7Eg1LMQG7XZV8rhUyXZw30tFRG5Mf/m8dNutOP8OvpNmQgrTd6v6kcnKaXIHoKOMj3ZFTZBkJCBq+ozbCGLg97HUQ5GOXla9nCaSmFvgOVZ4kVfl5sTtYHGlMvOaz5Ps2lzk/zv9NC7dM7opOTqjjBbRsGe2t1YiPuqDsqv3aw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=AsD2zjqIFeaWIiWitUWmwOV4aLEwwUfK4MY6DCvTFo4=;
+ b=oqVIIwjEK7MY2bdtqdT9V10YOPohTzAu3IgN+VCuyZaKWAAD1t+kJ0x4QKBdIdKCXnqNM/QnrNJBZiJU0ShPPWZPjYJo4arZeNdfV5bOgub8fc/oLnZZn7QYnfBGHLA8RDyJw9YkRBUmE9bywhq9tWSsNi2hV09neVP96YL0UiEWUn/cEsrRovpf08hsrG1VdWViREAgafg+T7q0047ff5OymcPpS/zYp1DgEmEszXF49LKB7FeK+CnszVGn+RExI8991K/9b5uHmJeHCeTriRmHMuLQmTsKOFiwueAl48Alhb3rsj+rzNdBg9ZCyVYguGsw7VeguHeukp686XDdkA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DS7PR12MB9473.namprd12.prod.outlook.com (2603:10b6:8:252::5) by
+ SJ2PR12MB9209.namprd12.prod.outlook.com (2603:10b6:a03:558::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9846.21; Fri, 24 Apr
+ 2026 15:07:57 +0000
+Received: from DS7PR12MB9473.namprd12.prod.outlook.com
+ ([fe80::f01d:73d2:2dda:c7b2]) by DS7PR12MB9473.namprd12.prod.outlook.com
+ ([fe80::f01d:73d2:2dda:c7b2%4]) with mapi id 15.20.9846.021; Fri, 24 Apr 2026
+ 15:07:56 +0000
+From: Zi Yan <ziy@nvidia.com>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+ Song Liu <songliubraving@fb.com>, Chris Mason <clm@fb.com>,
+ David Sterba <dsterba@suse.com>, Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+ Lorenzo Stoakes <ljs@kernel.org>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>, Nico Pache <npache@redhat.com>,
+ Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
+ Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
+ Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Shuah Khan <shuah@kernel.org>, linux-btrfs@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 7.2 v4 09/12] mm/truncate: use folio_split() in
+ truncate_inode_partial_folio()
+Date: Fri, 24 Apr 2026 11:07:50 -0400
+X-Mailer: MailMate (2.0r6290)
+Message-ID: <B2F4546B-F57D-4EF8-90E7-37879711877A@nvidia.com>
+In-Reply-To: <896b3956-3cdc-48b5-a0a0-a3ec35aefa07@kernel.org>
+References: <20260424024915.28758-1-ziy@nvidia.com>
+ <20260424024915.28758-10-ziy@nvidia.com>
+ <896b3956-3cdc-48b5-a0a0-a3ec35aefa07@kernel.org>
+Content-Type: text/plain
+X-ClientProxiedBy: BLAPR03CA0173.namprd03.prod.outlook.com
+ (2603:10b6:208:32f::35) To DS7PR12MB9473.namprd12.prod.outlook.com
+ (2603:10b6:8:252::5)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260424-kmemleak_dedup-v2-2-8bea649b2a92@debian.org>
-References: <20260424-kmemleak_dedup-v2-0-8bea649b2a92@debian.org>
-In-Reply-To: <20260424-kmemleak_dedup-v2-0-8bea649b2a92@debian.org>
-To: Andrew Morton <akpm@linux-foundation.org>, 
- David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
- Shuah Khan <shuah@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>
-Cc: linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
- linux-kselftest@vger.kernel.org, kernel-team@meta.com, 
- Breno Leitao <leitao@debian.org>
-X-Mailer: b4 0.16-dev-453a6
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4637; i=leitao@debian.org;
- h=from:subject:message-id; bh=Mx+xKsW705Bvtu1gt8242kE4k6qFTx9knH17MmM+aWY=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBp64bVkIXMqiaoxF7/YW4ndSiQGKZ4M5JvO3WQi
- jiQ4M/AdmmJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaeuG1QAKCRA1o5Of/Hh3
- bWNGD/9iZuj9NLm2IOIKDhoKk9IMdZkgszMRFOP0qTV5nwgrdiwdAvUt1C7/jIRI/5PKG5+qTXf
- Z4J0dOuKdWWiSz+MK4m5cAQl9FQ3GsrBNS3+5DXGhjlGGEqAIyXj50yqtHoYx3g4Exfu9cUWw8i
- KDhkRaFE3oEppROX+1w4pyvJNRG5a/4Lb2kA7oKGt9UWVduGgplYoqsxSs4fEEiRNB38OPvJRW0
- j+MLOuVQrs3dOi8qwhWSHPsotDXcL4pME4OOSroW/BZeM5zidMtTSCmKEHzQxGp+bzDJkmbkCwi
- HIBKvBkGuEC5ntP8yQbGFzxTKTY2nfgxNxFbkqLDcy12L8q2AUdvcsH7J+5HQBgHEHCW6tzfCFV
- 6RA3wZMVGy3s4u5J31PnaPn1EEL6u23gdtimMbAabWwS+PREkAjl5Qrepfe2xmarbbgdH7QfeGp
- 0EHXp5ii4nh4BxQ5BdeA96gQWSHb24GmKRdOc7RzYb7hSLeRj/OfFUnxyPoN4AYgh3O0Qp+uQpS
- bDH8iZbEKaYjhkpH14t8aaibg9DD4TLuTPY30QNvYc8mxdI0wG8G7e2hSEDUdZMQ+PAH0zrYbtn
- XHPOrGMs9EesA28xLmPrk6Z1Gg086xjeQXVSXY0PKGQVuf3kJA+8YFjHu6WDpS56enRf4+09IIi
- Zd3h+k1wT5ogScA==
-X-Developer-Key: i=leitao@debian.org; a=openpgp;
- fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
-X-Debian-User: leitao
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR12MB9473:EE_|SJ2PR12MB9209:EE_
+X-MS-Office365-Filtering-Correlation-Id: 56917fd8-b64f-45b5-e791-08dea213443e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|376014|7416014|1800799024|22082099003|56012099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	bG+BtlKVUmhdlzVvYCy/zUgtBnrXR/HOYEyMgs8vWZdKC9o6M1StVqkgEsikkaS6DXHcwmqubRt5+lcc/f/V3Q260VwmEG8IY7AfZ8J7L5RpITRgymT8IZ0slPeOmsvU8eOWvZzdLSSpVP7KYUO+NczJlyCdDkNbwc6qv7L/NV4hPbykec9jYggzqgcdNsLq4csZnlZvxeDzie7ZUZUAirqxz5RVeJu0viq5HqYpyNxwnFfBaYHH0+DjcQQ8O22/FI6Atqinx/T1zXo9cl1LSR0SMEI5CTsKynNAM+dnsCZGfkeEC3ovlet/uI/LrSnJeYLYC6Uoj4f+yUAhwn4wcuYcgRuLcFBbHiKZLY8bMk0Fajh+sAAep4vYom6tP3+YVaX/HzkKS70PsQ9n0qpoXnmGMWXVwyJcpE6jJMNlUXnHHerBPbtttdJcO4442rz8mpuLLQ5RGOpE2EE0P1PDN5c8oljJ5QARyG1bzbl/e0KG+jj9QCgmD9EV0BjnT8/rrY/WC/98uhyhWUasvoUzo8NgG6+9ZMuGARoZobO6PNuNL42NWdUTimeJGcCtE/sZ5NjhPPCiZChvXBm2Tqk8cE5QMHhqwp1ZVlvMrrhNTgycZZcwuJyZ3PCVMpZ1s1qK9BAlGkQrwF/0Y2zNEDg/RxbuWJNF9Evn1oxsAvWGN2q2JJ4gm0F4us7xykrDqCfsaGfX99UXJDmCR2kXufRY/n4pAJ1sBr0E0D27/UEffno=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB9473.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024)(22082099003)(56012099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?H8VD8+ETLYmekhIRYPNLyPjDKVYEu0RMETAml1k17GzY9eXd8H4MSmiQaWyp?=
+ =?us-ascii?Q?nPQXx+J3OoHMPb5HhnL7Weu/lmz3FHEdDKCSYRGnVpvt5ygjXpwQ7tjHgAdl?=
+ =?us-ascii?Q?focf69Qw+MzBt2jXV9Zut7v4l5dHZdDQbJ2Z6ANjSK6F3AMkG9RdvoWDc8rr?=
+ =?us-ascii?Q?1B0msd9YyBSp8u1u8CZ4KUkhjipkjn8mNGRDGY3PBIlOeE7N/sCTOxbx2cS6?=
+ =?us-ascii?Q?xKq7Pm2WL7mF6Xjj2yH10JQWchrdetk8Xv9mPbwrxzccNAiSffYO6+IBiPUu?=
+ =?us-ascii?Q?XwC9gc7iPKHreXrjwXWBjxwfZDlDw9IPdnzA2+ANb92BH6mQojV9dvf+WjQx?=
+ =?us-ascii?Q?va4QT/rmV5+kY3oDC/kqDztsB7kA08+8SMUwAc6tXAeCLp652PIfyEYfW+WW?=
+ =?us-ascii?Q?HkxlCrnTncVfRGQ+bXrdp77AhH9Hh6u7VNG7pLWh7o2I/EZR3ZilqHRr+WVs?=
+ =?us-ascii?Q?aNly9RqhmU5ZcIU7UZn22YX+Dm7+1hnwzM6iCrIoiYVmclruSVK/9YAQUqRA?=
+ =?us-ascii?Q?Sft3uE45CslbPxCSN60acc8/2W7Ueh784DA4OZHNBK3uDigljnmvFbp5DMPH?=
+ =?us-ascii?Q?vNcpgFWpAnrQrGZhVfTSsIZMIsK+wiNG+Nh4Asv/ucX2dJ1ZSSBpxtasEQdl?=
+ =?us-ascii?Q?G8ppCifh5GAYBtRTgCQY/q7TD4xB/C4koPO0YMvtP8EKf/geoXP4xcd+t2ua?=
+ =?us-ascii?Q?TdbHxtk3/3jfpiesefLRPUgpC9S5zXCy6KXdksEzKXUNRJkWuKt/dF/IKxJX?=
+ =?us-ascii?Q?sT8Avi2YEQIC6Jqq0eN0lmoGTBG3TckInTmCIzID9oH+stXDlOgGg72LNTVP?=
+ =?us-ascii?Q?HxOuND+IxgVCUT4fAf/4JeuFjMdR6r8My9mv0CzzKwhHy1Rz882k/H1AdWqz?=
+ =?us-ascii?Q?KKC+XgubPtjble7mtJQLrhFk0/OMUCVXlwexe7RVOFFfqwpQ7ZmNQuV0NLlV?=
+ =?us-ascii?Q?Ooj6fQhhwMjrA1QEjYygfm4bP6A/hKgiyAYS5OFWBzQ3S1WsKW3CdRNIkpi9?=
+ =?us-ascii?Q?NyfESPKE5LrtP7W1rMnvDUSRVSukMdHyeML1jARFef/vsmdCTuE9gRv5kvA8?=
+ =?us-ascii?Q?/k77ufVWGhy6WF/+AnmXOQgZHaT9lqLHdvdJdqh/BwQ7/8wGxYubS3fWZNAQ?=
+ =?us-ascii?Q?ozt9NyTYB1RFOwbY3pJmrVTERu5sRhFep8U5pLB69waiOsOvsnr3Cueymr/j?=
+ =?us-ascii?Q?qSjs7CskuWTqEMgfurCZ33ZJMxdKXig8nBJlONWKgq21EbAVhcFHPN8Qojgx?=
+ =?us-ascii?Q?CKtSek498Vvt7vdK0ori9mVYAIdaotAldLSZToXNwt2P3Kn2rn/BCapDy1pc?=
+ =?us-ascii?Q?aXyW2v+7GjQXqJoD1QnMJU3zxMukLEzszVtC79wzjjlW6mekdErJ+/wpEUXH?=
+ =?us-ascii?Q?9qsEsrfxxe0lQ0gey0fbXCXRXvMgPFvei/bCaRuBfQ426qzmLjRP2gc0ZzQ/?=
+ =?us-ascii?Q?Gqh9fcleOWpf8NqjmBp2Jcy4mRE2Bfu9UOY+nVjSvLhAD4NBK6mY8lAnjw0c?=
+ =?us-ascii?Q?b3U3DMyh7n9eQ0dBvjDR6xnG8Yqn3CI50oA80st7tOPrUx/Kg1FyomLaVDgE?=
+ =?us-ascii?Q?zO/R/pV7gVY09Imgl4WLxrOWFsVNfDLTSc3m7+VdxszNpv0kGzUKUfgmYhLL?=
+ =?us-ascii?Q?ZoBnfnWb4jBHyzzrTcuXYZf2OHe5Q2CciDrAugkLj+YaK7S5Q8hiFFIhIp+i?=
+ =?us-ascii?Q?6IbVD6AmGPRcgZm0FbqiTONZZy93fU/eFnNqi09Sk0hWsJ1nxFjjahxde6yz?=
+ =?us-ascii?Q?c04ZaaoNPQ=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 56917fd8-b64f-45b5-e791-08dea213443e
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB9473.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Apr 2026 15:07:56.7509
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: gikcUvPpI0WTFQge7FUlddtBb5AsbNWmbSqZl7/Lk2XUV7RxDAzU07v48oKcXzFT
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB9209
 
-Exercise the per-scan dedup of kmemleak's verbose leak output added in
-the previous commit. The test depends on the kmemleak-test sample
-module (CONFIG_SAMPLE_KMEMLEAK=m); load it and unload it to orphan ten
-list entries from a single kzalloc() call site that all share one
-stackdepot trace_handle, trigger two scans, and assert that the number
-of "unreferenced object" lines printed in dmesg is strictly less than
-the number of leaks reported. Skip cleanly when kmemleak is absent,
-disabled at runtime, or CONFIG_SAMPLE_KMEMLEAK is not built in.
+On 24 Apr 2026, at 8:54, David Hildenbrand (Arm) wrote:
 
-Signed-off-by: Breno Leitao <leitao@debian.org>
----
- tools/testing/selftests/mm/Makefile               |  1 +
- tools/testing/selftests/mm/ksft_kmemleak_dedup.sh | 86 +++++++++++++++++++++++
- 2 files changed, 87 insertions(+)
+> On 4/24/26 04:49, Zi Yan wrote:
+>> After READ_ONLY_THP_FOR_FS is removed, FS either supports large folio or
+>> not. folio_split() can be used on a FS with large folio support without
+>> worrying about getting a THP on a FS without large folio support.
+>>
+>> When READ_ONLY_THP_FOR_FS was present, a PMD large pagecache folio can
+>> appear in a FS without large folio support after khugepaged or
+>> madvise(MADV_COLLAPSE) creates it. During truncate_inode_partial_folio(),
+>> such a PMD large pagecache folio is split and if the FS does not support
+>> large folio, it needs to be split to order-0 ones and could not be split
+>> non uniformly to ones with various orders. try_folio_split_to_order() was
+>> added to handle this situation by checking folio_check_splittable(...,
+>> SPLIT_TYPE_NON_UNIFORM) to detect if the large folio is created due to
+>> READ_ONLY_THP_FOR_FS and the FS does not support large folio. Now
+>> READ_ONLY_THP_FOR_FS is removed, all large pagecache folios are created
+>> with FSes supporting large folio, this function is no longer needed and all
+>> large pagecache folios can be split non uniformly.
+>
+> In general looks good. Just one question:
+>
+> folio_check_splittable() also rejects SPLIT_TYPE_NON_UNIFORM / new_order for
+> swapcache pages.
 
-diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-index cd24596cdd27e..65ceefb931c3b 100644
---- a/tools/testing/selftests/mm/Makefile
-+++ b/tools/testing/selftests/mm/Makefile
-@@ -151,6 +151,7 @@ TEST_PROGS += ksft_gup_test.sh
- TEST_PROGS += ksft_hmm.sh
- TEST_PROGS += ksft_hugetlb.sh
- TEST_PROGS += ksft_hugevm.sh
-+TEST_PROGS += ksft_kmemleak_dedup.sh
- TEST_PROGS += ksft_ksm.sh
- TEST_PROGS += ksft_ksm_numa.sh
- TEST_PROGS += ksft_madv_guard.sh
-diff --git a/tools/testing/selftests/mm/ksft_kmemleak_dedup.sh b/tools/testing/selftests/mm/ksft_kmemleak_dedup.sh
-new file mode 100755
-index 0000000000000..1a1b6efd6470a
---- /dev/null
-+++ b/tools/testing/selftests/mm/ksft_kmemleak_dedup.sh
-@@ -0,0 +1,86 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Verify that kmemleak's verbose scan output deduplicates leaks that share
-+# the same allocation backtrace. The kmemleak-test module leaks 10 list
-+# entries from a single kzalloc() call site, so they share one stackdepot
-+# trace_handle. With dedup, only one "unreferenced object" line should be
-+# printed for that backtrace per scan, while the per-scan leak counter
-+# still accounts for every object.
-+#
-+# The expected output is something like:
-+#   PASS: kmemleak verbose output deduplicated (11 printed for 61 leaks)
-+#
-+# Author: Breno Leitao <leitao@debian.org>
-+
-+ksft_skip=4
-+KMEMLEAK=/sys/kernel/debug/kmemleak
-+VERBOSE_PARAM=/sys/module/kmemleak/parameters/verbose
-+MODULE=kmemleak-test
-+
-+skip() {
-+	echo "SKIP: $*"
-+	exit $ksft_skip
-+}
-+
-+fail() {
-+	echo "FAIL: $*"
-+	exit 1
-+}
-+
-+[ "$(id -u)" -eq 0 ] || skip "must run as root"
-+[ -r "$KMEMLEAK" ] || skip "no kmemleak debugfs (CONFIG_DEBUG_KMEMLEAK)"
-+[ -w "$VERBOSE_PARAM" ] || skip "kmemleak verbose param missing"
-+modinfo "$MODULE" >/dev/null 2>&1 ||
-+	skip "$MODULE not built (CONFIG_SAMPLE_KMEMLEAK)"
-+
-+# kmemleak can be present but disabled at runtime (boot arg kmemleak=off,
-+# or it self-disabled after an internal error). In that state writes other
-+# than "clear" return EPERM, so probe once and skip if so.
-+if ! echo scan > "$KMEMLEAK" 2>/dev/null; then
-+	skip "kmemleak is disabled (check dmesg or kmemleak= boot arg)"
-+fi
-+
-+prev_verbose=$(cat "$VERBOSE_PARAM")
-+cleanup() {
-+	echo "$prev_verbose" > "$VERBOSE_PARAM" 2>/dev/null
-+	rmmod "$MODULE" 2>/dev/null
-+}
-+trap cleanup EXIT
-+
-+echo 1 > "$VERBOSE_PARAM"
-+
-+# Drain the existing leak set so the next scan only reports our objects.
-+echo clear > "$KMEMLEAK"
-+
-+modprobe "$MODULE" || fail "failed to load $MODULE"
-+# Removing the module orphans the list elements without freeing them.
-+rmmod "$MODULE"    || fail "failed to unload $MODULE"
-+
-+# Two scans: kmemleak requires the object to survive a full scan cycle
-+# before it is reported as unreferenced.
-+dmesg -C >/dev/null
-+echo scan > "$KMEMLEAK"; sleep 6
-+echo scan > "$KMEMLEAK"; sleep 6
-+
-+log=$(dmesg)
-+
-+new_leaks=$(echo "$log" |
-+	sed -n 's/.*kmemleak: \([0-9]\+\) new suspected.*/\1/p' | tail -1)
-+[ -n "$new_leaks" ] || fail "no 'new suspected memory leaks' line found"
-+
-+# Count "unreferenced object" lines emitted in verbose output.
-+printed=$(echo "$log" | grep -c 'kmemleak: unreferenced object')
-+
-+echo "new_leaks=$new_leaks printed=$printed"
-+
-+# The kzalloc(sizeof(*elem)) loop alone contributes 10 leaks sharing one
-+# backtrace, so without dedup printed >= 10. With dedup the printed count
-+# must be strictly less than the reported leak total.
-+[ "$new_leaks" -ge 10 ] || fail "expected >=10 new leaks, got $new_leaks"
-+[ "$printed"   -lt "$new_leaks" ] || \
-+	fail "no dedup: printed=$printed new_leaks=$new_leaks"
-+
-+echo "PASS: kmemleak verbose output deduplicated" \
-+	"($printed printed for $new_leaks leaks)"
-+exit 0
+Since swapcache only supports PMD order or 0 order yet.
 
--- 
-2.52.0
+>
+> It's confusing, but truncate would never stumble over such folios, correct?
 
+Right.
+
+Best Regards,
+Yan, Zi
