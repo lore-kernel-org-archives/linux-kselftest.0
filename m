@@ -1,456 +1,72 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BA2E38910D;
-	Fri, 24 Apr 2026 09:27:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7A5C35F8B7;
+	Fri, 24 Apr 2026 10:06:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777022834; cv=none; b=biakDdcpYDW6/xv9OtePramuodBngKt3+1oTLYhPF7zLbiP8i3ytFzg3iF6JGcOMsXaGdK+sZDeXDB6dbgYNN/JKf4lQKDZQNzj8Sinbk2dPc6Df+witAH5AWVcsVs8J9VeHp468dtdpZoqVxfzj0xiYZti9lwSrs/MHgMoSgtY=
+	t=1777025166; cv=none; b=lua49A8JE0k8v8xWz2ZBjdk/gBR2WUf4wCdGB49cTbZWBfm5qSuAV40aV6ZJsLYI4hlQWdo8nDhFkYrgUizDxLqv3pZ3Ng+l1JRZZbt4bsU07h3vyulxUS7EYzNWc0bsKSv1V3mEWYt0iN7CIZIO9eyWe6PFHeEVR/ACK+lPRF8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777022834; c=relaxed/simple;
-	bh=tBV9bU8UaK9TLccAYgOvTJ+5qnutdOMlZb21WjOIJtM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TXXMjt09WqxZb6lYXrEJWsRFaVN5o6frT4OL8XEMepGC4mKJ/sK4wBDQmzgOCuPiavYgV17VaU11Kwu6P1cODJpVD2ogch5Wkh5ufsEblSCVeA3Ta19jZA1/NXDcQe8OpAUerTMl2XiGf9976p/mR7TJOYUc01SaQx63aguIFTs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=YxwE6YlM; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=debian.org
+	s=arc-20240116; t=1777025166; c=relaxed/simple;
+	bh=5QXbN60HW7CsXZ5gwYFqYgAkYkkEIgU02nf2dVj5W3Q=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=lCyYy7/I2vabe2maRerwD7gMacjnB2JJTwStcxuuFMdJIKRbUqPiPZtTwcSvNUVNn1L61Lje2tPFILXGqyu9Z6iZ3l8CXGQw/EscIeat0AfYBFXceMXCdxnDnks1mL9jWh/LiE+XI57fDZBlDHRL1BQulhmrX/PuDg6HPrey+c8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=h3Twi9g5; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="YxwE6YlM"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-	Reply-To:Content-ID:Content-Description;
-	bh=u1JKHRu+5MuPmYUl/EfV4ZrR+5gJxryIP6aQ4C+kLlY=; b=YxwE6YlMfaSTq4plkRHmQ7Z2bm
-	9uUAtnia4XkpA3KuvGK8/ZS/OEkcerl7nGzZpLobHmz4AsrlcbHYXrDCV8J5i2IFGdZxp9K2Tx+cI
-	s+kS9hpGcK53+SAtS06eeuXZf5p60ZaC5YjtkI0Ov9VVHBZmS3gd84xYKw2Ijs8qno3F4/ktURkIy
-	V0StVvrPDFZcjIrsDqnGce4vNzII8uAixdOTGlvE0Bnv3Gf5LV2h37+YJYZD9/cS4Bma2B1uYBQnU
-	HLcE4lkn7oc2skUi8CjnmhxIIba/MfW7LHK37oLl3XAznPDDZl8GJv3i9uvw/I5NajzZNw7L67cqp
-	MYPXzDEg==;
-Received: from authenticated user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wGCoM-0034Qu-2t;
-	Fri, 24 Apr 2026 09:26:59 +0000
-Date: Fri, 24 Apr 2026 02:26:53 -0700
-From: Breno Leitao <leitao@debian.org>
-To: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@kernel.org>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
-	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH 1/2] mm/kmemleak: dedupe verbose scan output by
- allocation backtrace
-Message-ID: <aesymSWyh8NRIrDQ@gmail.com>
-References: <20260421-kmemleak_dedup-v1-0-65e31c6cdf0c@debian.org>
- <20260421-kmemleak_dedup-v1-1-65e31c6cdf0c@debian.org>
- <aeostKcaHzmVBFjb@arm.com>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="h3Twi9g5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E88C7C19425;
+	Fri, 24 Apr 2026 10:06:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1777025166;
+	bh=5QXbN60HW7CsXZ5gwYFqYgAkYkkEIgU02nf2dVj5W3Q=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=h3Twi9g569dZT07Ied/Me3zb+JPHA6eAsaQsNpHFXJrsrM4zUZlehSAh2LWT0VN/4
+	 qKd3Usi/c2Y7+LBaDAlN7ZMeW3J/2WG2cgGiEo1CkFwqRMSAowxutZvnGNxVteJQA3
+	 31c//zfVgdvryiRcUuP4ITuW/prdCVrvtsJdZkf4=
+Date: Fri, 24 Apr 2026 03:06:05 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Li Wang <li.wang@linux.dev>
+Cc: tj@kernel.org, longman@redhat.com, roman.gushchin@linux.dev,
+ hannes@cmpxchg.org, yosry@kernel.org, jiayuan.chen@linux.dev,
+ nphamcs@gmail.com, chengming.zhou@linux.dev, mkoutny@suse.com,
+ shuah@kernel.org, linux-mm@kvack.org, cgroups@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 0/8] selftests/cgroup: improve zswap tests robustness
+ and support large page sizes
+Message-Id: <20260424030605.6d0053c0df14bba325114e1b@linux-foundation.org>
+In-Reply-To: <20260424040059.12940-1-li.wang@linux.dev>
+References: <20260424040059.12940-1-li.wang@linux.dev>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aeostKcaHzmVBFjb@arm.com>
-X-Debian-User: leitao
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Thu, Apr 23, 2026 at 03:29:08PM +0100, Catalin Marinas wrote:
-> On Tue, Apr 21, 2026 at 06:45:04AM -0700, Breno Leitao wrote:
-> > +	/*
-> > +	 * A brand new report. Object will have object->use_count increased
-> > +	 * in here, and released put_object() at dedup_flush
-> > +	 */
-> > +	entry = kmalloc(sizeof(*entry), GFP_ATOMIC);
-> 
-> Do we need to allocate a structure here? We could instead add a
-> dup_count member in the kmemleak_object and just link the object itself
-> into the xarray. Well, maybe the leak being a rare event is not that
-> bad.
+On Fri, 24 Apr 2026 12:00:51 +0800 Li Wang <li.wang@linux.dev> wrote:
 
-Ack, that is a way better approach than this new struct and memory
-allocation.
+> This patchset aims to fix various spurious failures and improve the overall
+> robustness of the cgroup zswap selftests.
 
-> 
-> > +	if (entry && get_object(object)) {
-> > +		if (xa_insert(dedup, trace_handle, entry, GFP_ATOMIC) == 0) {
-> 
-> I wonder if we need xa_insert() at all. Since it's indexed by
-> trace_handle, we could follow similar mechanism like stack_depot with a
-> large hash array, maybe gated by CONFIG_DEBUG_KMEMLEAK_VERBOSE.
+Great, thanks, I'll queue this in mm.git's mm-new branch.  Next week
+I'll move it into mm-unstable, where it will receive liunx-next
+exposure.
 
-This custom method would buy us a few things: no GFP_ATOMIC on the scan path,
-no xa_node churn, no wait-context concern around object->lock, and the
-xa_is_err fallback goes away. The cost is a static bucket array (a few tens of
-KB) always reserved. Keep in mind that this code also change when uses set
-`kmemleak_verbose`, so, we cannot gate it using CONFIG_DEBUG_KMEMLEAK_VERBOSE.
+> The primary motivation is to make the tests compatible with architectures
+> that use non-4K page sizes (such as 64K on ppc64le and arm64). Currently,
+> the tests rely heavily on hardcoded 4K page sizes and fixed memory limits.
 
-The xarray approach keeps the per-scan storage proportional to the number of
-distinct backtraces actually seen, and scan_mutex already serialises
-everything, so the GFP_ATOMIC/xa_node overhead only materialises when leaks are
-being reported.
+Well that's an oops.
 
- Given how cold the scan path is, I'd lean toward keeping xarray unless you'd
-prefer the static-table version for maintainability reasons — happy to respin
-either way.
+> On 64K page size systems, these hardcoded values lead to sub-page granularity
+> accesses, incorrect page count calculations, and insufficient memory pressure
+> to trigger zswap writeback, ultimately causing the tests to fail.
 
-> > +			entry->object = object;
-> > +			entry->count = 1;
-> > +			return;
-> > +		}
-> > +		put_object(object);
-> > +	}
-> > +	kfree(entry);
-> > +
-> > +	/*
-> > +	 * Fallback for kmalloc/get_object(): Just print it straight away
-> > +	 */
-> > +	raw_spin_lock_irq(&object->lock);
-> > +	print_unreferenced(NULL, object);
-> > +	raw_spin_unlock_irq(&object->lock);
-> > +}
-> > +
-> > +/*
-> > + * Drain the dedup table: print one full record per unique backtrace,
-> > + * followed by a summary line whenever more than one object shared it.
-> > + * Releases the reference dedup_record() took on each representative object.
-> > + */
-> > +static void dedup_flush(struct xarray *dedup)
-> > +{
-> > +	struct kmemleak_dedup_entry *entry;
-> > +	unsigned long idx;
-> > +
-> > +	xa_for_each(dedup, idx, entry) {
-> > +		raw_spin_lock_irq(&entry->object->lock);
-> > +		print_unreferenced(NULL, entry->object);
-> > +		raw_spin_unlock_irq(&entry->object->lock);
-> 
-> Sashiko has a good point here - while the kmemleak metadata is still
-> around due to an earlier get_object(), the object itself may have been
-> freed and the hex dump in print_unreferenced() could fault (e.g.
-> vunmap'ed object). Same with the print_unreferenced() above. It's
-> probably not worth printing the first bytes of the content anyway when
-> we do coalescing, the content would differ anyway.
+I assume you've been testing on arm64 or ppc?
 
-Agreed, this is a real race once the print is deferred. v2 addresses
-it two ways:
-
-1. dedup_flush() re-acquires object->lock and re-checks
-OBJECT_ALLOCATED before printing. __delete_object() clears that
-flag under the same lock before the user memory is released, so
-the bytes are guaranteed live for the duration of the print.
-
-2. The hex dump is skipped for coalesced entries (dup_count > 1),
-as you suggested — the content would differ anyway, and skipping it removes the
-only remaining read of object->pointer's contents in the deferred path.
-
-> Also it's possible
-> that the size differs even if the stack trace is the same but I guess we
-> can ignore this.
-
-Yes, ignoring — the representative's size is what gets printed and
-the summary line just gives the count. Worth a sentence in the
-commit message; I'll add one.
-
-Thanks for the review and suggestion!
-
-In casse you are curious, this is the new approach I am testing now:
-
-commit fb356de0592c0de97d793207ef74b0f3f019379a
-Author: Breno Leitao <leitao@debian.org>
-Date:   Mon Apr 20 09:26:00 2026 -0700
-
-    mm/kmemleak: dedupe verbose scan output by allocation backtrace
-    
-    In kmemleak's verbose mode, every unreferenced object found during a
-    scan is logged with its full header, hex dump and 16-frame backtrace.
-    Workloads that leak many objects from a single allocation site flood
-    dmesg with byte-for-byte identical backtraces, drowning out distinct
-    leaks and other kernel messages.
-    
-    Dedupe within each scan using stackdepot's trace_handle as the key: for
-    every leaked object with a recorded stack trace, look up the
-    representative kmemleak_object in a per-scan xarray keyed by
-    trace_handle. The first sighting stores the object pointer (with a
-    get_object() reference) and sets object->dup_count to 1; later
-    sightings just bump dup_count on the representative. After the scan,
-    walk the xarray once and emit each unique backtrace, followed by a
-    single summary line when more than one object shares it.
-    
-    Leaks whose trace_handle is 0 (early-boot allocations tracked before
-    kmemleak_init() set up object_cache, or stack_depot_save() failures
-    under memory pressure) cannot be deduped, so they are still printed
-    inline via the same locked OBJECT_ALLOCATED-checked helper. The
-    contents of /sys/kernel/debug/kmemleak are unchanged - only the
-    verbose console output is collapsed.
-    
-    Safety notes:
-    
-     - The xarray store happens outside object->lock: object->lock is a
-       raw spinlock, while xa_store() may grab xa_node slab locks at a
-       higher wait-context level which lockdep flags as invalid.
-       trace_handle is captured under object->lock (which serialises with
-       kmemleak_update_trace()'s writer), so it is safe to use after
-       dropping the lock.
-    
-     - get_object() pins the kmemleak_object metadata across
-       rcu_read_unlock(), but the underlying tracked allocation can still
-       be freed concurrently. The deferred print path therefore re-acquires
-       object->lock and re-checks OBJECT_ALLOCATED via print_leak_locked()
-       before touching object->pointer; __delete_object() clears that flag
-       under the same lock before the user memory goes away. The same
-       helper is used by the trace_handle == 0 and xa_store() failure
-       fallbacks, so every printer in the new path has identical safety
-       guarantees.
-    
-     - If get_object() fails after we set OBJECT_REPORTED, the object is
-       already being torn down (use_count hit zero); the leak count is
-       still accurate but the verbose line is dropped, which is correct
-       - the memory was freed concurrently and is no longer a leak.
-    
-     - If xa_store() fails to allocate an xa_node under memory pressure,
-       we fall back to printing inline via print_leak_locked() instead of
-       silently dropping the leak.
-    
-     - The hex dump is skipped for coalesced entries (dup_count > 1):
-       bytes would differ across objects sharing a backtrace anyway, and
-       skipping it removes the only remaining read of object->pointer's
-       contents in the deferred path. The representative's reported size
-       may also differ from the coalesced objects' sizes; the printed
-       trace_handle reflects the representative's current value rather
-       than the value used as the dedup key, which is normally - but not
-       strictly - identical.
-    
-    Signed-off-by: Breno Leitao <leitao@debian.org>
-
-diff --git a/mm/kmemleak.c b/mm/kmemleak.c
-index 2eff0d6b622b6..d521cc71ec1ee 100644
---- a/mm/kmemleak.c
-+++ b/mm/kmemleak.c
-@@ -92,6 +92,7 @@
- #include <linux/nodemask.h>
- #include <linux/mm.h>
- #include <linux/workqueue.h>
-+#include <linux/xarray.h>
- #include <linux/crc32.h>
- 
- #include <asm/sections.h>
-@@ -153,6 +154,8 @@ struct kmemleak_object {
- 	/* checksum for detecting modified objects */
- 	u32 checksum;
- 	depot_stack_handle_t trace_handle;
-+	/* per-scan dedup count, valid only while in scan-local dedup xarray */
-+	unsigned int dup_count;
- 	/* memory ranges to be scanned inside an object (empty for all) */
- 	struct hlist_head area_list;
- 	unsigned long jiffies;		/* creation timestamp */
-@@ -360,8 +363,9 @@ static const char *__object_type_str(struct kmemleak_object *object)
-  * Printing of the unreferenced objects information to the seq file. The
-  * print_unreferenced function must be called with the object->lock held.
-  */
--static void print_unreferenced(struct seq_file *seq,
--			       struct kmemleak_object *object)
-+static void __print_unreferenced(struct seq_file *seq,
-+				 struct kmemleak_object *object,
-+				 bool no_hex_dump)
- {
- 	int i;
- 	unsigned long *entries;
-@@ -373,7 +377,8 @@ static void print_unreferenced(struct seq_file *seq,
- 			   object->pointer, object->size);
- 	warn_or_seq_printf(seq, "  comm \"%s\", pid %d, jiffies %lu\n",
- 			   object->comm, object->pid, object->jiffies);
--	hex_dump_object(seq, object);
-+	if (!no_hex_dump)
-+		hex_dump_object(seq, object);
- 	warn_or_seq_printf(seq, "  backtrace (crc %x):\n", object->checksum);
- 
- 	for (i = 0; i < nr_entries; i++) {
-@@ -382,6 +387,12 @@ static void print_unreferenced(struct seq_file *seq,
- 	}
- }
- 
-+static void print_unreferenced(struct seq_file *seq,
-+			       struct kmemleak_object *object)
-+{
-+	__print_unreferenced(seq, object, false);
-+}
-+
- /*
-  * Print the kmemleak_object information. This function is used mainly for
-  * debugging special cases when kmemleak operations. It must be called with
-@@ -1684,6 +1695,103 @@ static void kmemleak_cond_resched(struct kmemleak_object *object)
- 	put_object(object);
- }
- 
-+/*
-+ * Print one leak inline, re-checking OBJECT_ALLOCATED under the lock so
-+ * the hex dump does not touch user memory that was freed concurrently.
-+ * Used by the dedup_record() fallback paths where we cannot dedup and defer
-+ * printing through the xarray.
-+ */
-+static void print_leak_locked(struct kmemleak_object *object, bool no_hex_dump)
-+{
-+	raw_spin_lock_irq(&object->lock);
-+	if (object->flags & OBJECT_ALLOCATED)
-+		__print_unreferenced(NULL, object, no_hex_dump);
-+	raw_spin_unlock_irq(&object->lock);
-+}
-+
-+/*
-+ * Per-scan dedup table for verbose leak printing. The xarray is keyed by
-+ * stackdepot trace_handle and stores a pointer to the representative
-+ * kmemleak_object. The per-scan repeat count lives in object->dup_count.
-+ *
-+ * dedup_record() must run outside object->lock: xa_store() may take
-+ * mutexes (xa_node slab allocation) which lockdep would flag against the
-+ * raw spinlock object->lock.
-+ */
-+static void dedup_record(struct xarray *dedup, struct kmemleak_object *object,
-+			 depot_stack_handle_t trace_handle)
-+{
-+	struct kmemleak_object *rep;
-+	void *old;
-+
-+	/*
-+	 * No stack trace to dedup against: early-boot allocation tracked
-+	 * before kmemleak_init() set up object_cache, or stack_depot_save()
-+	 * failure under memory pressure.
-+	 */
-+	if (!trace_handle) {
-+		print_leak_locked(object, false);
-+		return;
-+	}
-+
-+	/* stack is available, now we can de-dup */
-+	rep = xa_load(dedup, trace_handle);
-+	if (rep) {
-+		rep->dup_count++;
-+		return;
-+	}
-+
-+	/*
-+	 * Object is being torn down (use_count already hit zero); the
-+	 * tracked memory at object->pointer is unsafe to read, so skip.
-+	 */
-+	if (!get_object(object))
-+		return;
-+
-+	object->dup_count = 1;
-+	old = xa_store(dedup, trace_handle, object, GFP_ATOMIC);
-+	if (xa_is_err(old)) {
-+		/* xa_node allocation failed; fall back to inline print. */
-+		print_leak_locked(object, false);
-+		put_object(object);
-+		return;
-+	}
-+	/*
-+	 * scan_mutex serialises all writers to the dedup xarray, so xa_store()
-+	 * after a NULL xa_load() must always overwrite an empty slot.
-+	 */
-+	WARN_ON_ONCE(old);
-+}
-+
-+/*
-+ * Drain the dedup table. Re-acquires object->lock and re-checks
-+ * OBJECT_ALLOCATED before printing: while get_object() pins the
-+ * kmemleak_object metadata, the underlying tracked allocation may have
-+ * been freed since the scan walked it (kmemleak_free clears
-+ * OBJECT_ALLOCATED under object->lock before the user memory goes away).
-+ * The hex dump is skipped for coalesced entries since the bytes would
-+ * differ across objects anyway.
-+ */
-+static void dedup_flush(struct xarray *dedup)
-+{
-+	struct kmemleak_object *object;
-+	unsigned long idx;
-+	unsigned int dup;
-+	bool coalesced;
-+
-+	xa_for_each(dedup, idx, object) {
-+		dup = object->dup_count;
-+		coalesced = dup > 1;
-+
-+		print_leak_locked(object, coalesced);
-+		if (coalesced)
-+			pr_warn("  ... and %u more object(s) with the same backtrace\n",
-+				dup - 1);
-+		put_object(object);
-+		xa_erase(dedup, idx);
-+	}
-+}
-+
- /*
-  * Scan data sections and all the referenced memory blocks allocated via the
-  * kernel's standard allocators. This function must be called with the
-@@ -1694,6 +1802,7 @@ static void kmemleak_scan(void)
- 	struct kmemleak_object *object;
- 	struct zone *zone;
- 	int __maybe_unused i;
-+	struct xarray dedup;
- 	int new_leaks = 0;
- 
- 	jiffies_last_scan = jiffies;
-@@ -1834,10 +1943,18 @@ static void kmemleak_scan(void)
- 		return;
- 
- 	/*
--	 * Scanning result reporting.
-+	 * Scanning result reporting. When verbose printing is enabled, dedupe
-+	 * by stackdepot trace_handle so each unique backtrace is logged once
-+	 * per scan, annotated with the number of objects that share it. The
-+	 * per-leak count below still reflects every object, and
-+	 * /sys/kernel/debug/kmemleak still lists them individually.
- 	 */
-+	xa_init(&dedup);
- 	rcu_read_lock();
- 	list_for_each_entry_rcu(object, &object_list, object_list) {
-+		depot_stack_handle_t trace_handle;
-+		bool dedup_print;
-+
- 		if (need_resched())
- 			kmemleak_cond_resched(object);
- 
-@@ -1849,18 +1966,33 @@ static void kmemleak_scan(void)
- 		if (!color_white(object))
- 			continue;
- 		raw_spin_lock_irq(&object->lock);
-+		trace_handle = 0;
-+		dedup_print = false;
- 		if (unreferenced_object(object) &&
- 		    !(object->flags & OBJECT_REPORTED)) {
- 			object->flags |= OBJECT_REPORTED;
--
--			if (kmemleak_verbose)
--				print_unreferenced(NULL, object);
--
-+			if (kmemleak_verbose) {
-+				trace_handle = object->trace_handle;
-+				dedup_print = true;
-+			}
- 			new_leaks++;
- 		}
- 		raw_spin_unlock_irq(&object->lock);
-+
-+		/*
-+		 * Defer the verbose print outside object->lock: xa_store()
-+		 * may take xa_node slab locks at a higher wait-context level
-+		 * which lockdep would flag against the raw_spinlock_t
-+		 * object->lock. rcu_read_lock() keeps the kmemleak_object
-+		 * alive across the call.
-+		 */
-+		if (dedup_print)
-+			dedup_record(&dedup, object, trace_handle);
- 	}
- 	rcu_read_unlock();
-+	/* Flush'em all */
-+	dedup_flush(&dedup);
-+	xa_destroy(&dedup);
- 
- 	if (new_leaks) {
- 		kmemleak_found_leaks = true;
-
+> Additionally, this series addresses OOM kills occurring in test_swapin_nozswap
+> by dynamically scaling memory limits, and prevents spurious test failures
+> when zswap is built into the kernel but globally disabled.
