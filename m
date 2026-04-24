@@ -1,169 +1,270 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from ewsoutbound.kpnmail.nl (ewsoutbound.kpnmail.nl [195.121.94.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCE573BD635
-	for <linux-kselftest@vger.kernel.org>; Fri, 24 Apr 2026 11:37:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05C433A6F02
+	for <linux-kselftest@vger.kernel.org>; Fri, 24 Apr 2026 11:47:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.121.94.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777030658; cv=none; b=ZeP2Nxtm43kKSj65ASdwrYOenym/rwN8yDUuyZF8No32bgxJyoZ1eO+aWI0WZW7zgG4RG3rU5MTc4h51aiTEu6K2gdLuuZcvgiLyKICoOtMIJ/QzTFsYCkgYOSMSW4JDxH740qhThzgXviGM2plmtVjzaQ7Jz6YDMR2fVMr+B7U=
+	t=1777031234; cv=none; b=ZvHE41H2zhdptvRtB2ipSueGO5ryQ/DrzEwqP6mxrdD/Vi/hv9jRVbOrWloHf6Z/ozQs3EramwXkqdvli08S+rYy/j5aaisxs1cueGaVP66qs8CAVJ+B9mDVCutLg8uJESfvH2ny8c8acm4OBmYtNUVripOzw0/ZtH4x4lzeIvw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777030658; c=relaxed/simple;
-	bh=pQAkkgwBTm0wMFjEsUuolfLk3Se7Aw+kEEZDfgUAj2I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kVUlTr/jduy9ar+CxpA1sfRTBB7gTikudGshU8p4zldZysfF77X3nVpH7/H9xamTYi5xgveidcj1TyP2KRS80S6BB/V9dS299b0BZVMGl8nVCKP8z50D6Sp1F4crz1jWzOUIqpc6bqyQEkKuwiC8/yikRd9iI0gJpQGo5RRv3iY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nzBIP5ab; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777031234; c=relaxed/simple;
+	bh=of1ei5AinEByyr4vGyS0hUQUKcBsyxYr4kztX2Wu5nQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ktTwm60vHZJ0SWmxR7OmnCVibUcsKd8jaI2CL0hKxNziBa2FE0cnti8k6iefogXTWvJPbX2qerF0mmudRYSYQkpk78LSIu0Rpn/DvkEfw49JtPUm2wHdqbEuBhiclScByxucHHsNdZ1zLekhSlH3nrozQ7O4YBipf3XLxBsxZOw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xs4all.nl; spf=pass smtp.mailfrom=xs4all.nl; dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b=mvUvuVki; arc=none smtp.client-ip=195.121.94.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xs4all.nl
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xs4all.nl
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nzBIP5ab"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44061C4AF09;
-	Fri, 24 Apr 2026 11:37:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777030658;
-	bh=pQAkkgwBTm0wMFjEsUuolfLk3Se7Aw+kEEZDfgUAj2I=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nzBIP5abjjPiZZKk8KmpEKOCx55UR2CcQo4kIqsUQXfA5UyKUBcFG6fL+eKBcY8h+
-	 Z/IfrfmDAAZ1oTeJyQgyK7Tne3nUUZDa89ct2P6caB9rXKFqCCe4EcsScpHzDGFzeY
-	 ZOr9zDzVzse/BEdiDRVjawbGvPPmtHFoHnJfkatWPHbyZr0JPu6QKpCbMJTeGj3Feh
-	 ZyVyaI03ezjru7DS4fm2FbV7yfpGkqG79XotEA98ZaMGW//j2ekaeioZXvojXXT9g9
-	 MVCJK/66fQqSt2ToUupcd7+2VDC/LsTQhO8gEr6GA/W3ei3jI14fr6IZXuhXPmP0Tg
-	 G9IeHmtC0ynOQ==
-Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 45D00F40068;
-	Fri, 24 Apr 2026 07:37:37 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-02.internal (MEProxy); Fri, 24 Apr 2026 07:37:37 -0400
-X-ME-Sender: <xms:AVbraWr5w8IN3pcVGoXPYYrMPDysCLNSoP-_ZN9t0HOo2Qko1JiDbg>
-    <xme:AVbraT4POzjwfmz4bT4yoZElgbWGQUHeFUgunMRWU2Ng-pHHGGDRmMhmkiPRm26SJ
-    sVpYz2SFbvKgtSkjzeY7zEIW244lEasDLHm0ADNoc4lJACEkWDdwWU>
-X-ME-Received: <xmr:AVbraXbGXxDYOWhmrT7HaBaIytopftSXGzadskJ8-cynWYp8WJVqyh8cEZsWkA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgdeileelfecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpeffhffvvefukfhfgggtugfgjgesthekrodttddtjeenucfhrhhomhepmfhirhihlhcu
-    ufhhuhhtshgvmhgruhcuoehkrghssehkvghrnhgvlhdrohhrgheqnecuggftrfgrthhtvg
-    hrnhephfffieehtdegkeelkeegkeeijefhieeitdevledujeeuteekgfetveejjeeiteek
-    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpehkihhrihhllhdomhgvshhmthhprghuthhhphgv
-    rhhsohhnrghlihhthidqudeiudduiedvieehhedqvdekgeeggeejvdekqdhkrghspeepkh
-    gvrhhnvghlrdhorhhgsehshhhuthgvmhhovhdrnhgrmhgvpdhnsggprhgtphhtthhopeef
-    iedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepphgvthgvrhigsehrvgguhhgrth
-    drtghomhdprhgtphhtthhopegurghvihgusehkvghrnhgvlhdrohhrghdprhgtphhtthho
-    pegrkhhpmheslhhinhhugidqfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtoheplh
-    hjsheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhpphhtsehkvghrnhgvlhdrohhr
-    ghdprhgtphhtthhopehsuhhrvghnsgesghhoohhglhgvrdgtohhmpdhrtghpthhtohepvh
-    gsrggskhgrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihgrmhdrhhhofihlvght
-    thesohhrrggtlhgvrdgtohhmpdhrtghpthhtohepiihihiesnhhvihguihgrrdgtohhm
-X-ME-Proxy: <xmx:AVbraQq9zuliAnRVDPxVtBQJGJxFL_QUAhEOzsJ1QnuDy8699f1iyw>
-    <xmx:AVbraY4lWjncW9FwD2xl5yl8EK0PYAnkDSbFag9Yr96vAKFnGgQudA>
-    <xmx:AVbraVSwRkroFnFwWJ0ASMKYBKsCFLz4T3EDzFpRp6go0R1lLWqdLA>
-    <xmx:AVbraQ2SpbTiy1zowaVMJ8EHvAfhpIeWkeiS40LSPhc1Gdn3NRXYIA>
-    <xmx:AVbraU4lHgmjedtxDgLxYgfTvjFaJxZKG-9HWwH7MyOScA--VfxBgiGu>
-Feedback-ID: i10464835:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 24 Apr 2026 07:37:36 -0400 (EDT)
-Date: Fri, 24 Apr 2026 12:37:35 +0100
-From: Kiryl Shutsemau <kas@kernel.org>
-To: Peter Xu <peterx@redhat.com>
-Cc: "David Hildenbrand (Arm)" <david@kernel.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
-	Vlastimil Babka <vbabka@kernel.org>, "Liam R . Howlett" <Liam.Howlett@oracle.com>, 
-	Zi Yan <ziy@nvidia.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Sean Christopherson <seanjc@google.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, kvm@vger.kernel.org
-Subject: Re: [RFC, PATCH 00/12] userfaultfd: working set tracking for VM
- guest memory
-Message-ID: <aetHWMZyEEIEzsJZ@thinkstation>
-References: <aeTnlQUOOh-dHG8z@thinkstation>
- <34f75083-29a3-4860-8a6e-94551d37ac6a@kernel.org>
- <aed6fHLrIdahbdY3@thinkstation>
- <b77d559b-215e-460a-a268-e63b8273ef42@kernel.org>
- <aeorZMvKwu8zKX5i@thinkstation>
- <aeoxnuGKO3uqS2kG@x1.local>
- <aeo5IPpQi7onyjTF@thinkstation>
- <aeprnnccJeyHB2rt@x1.local>
- <17b0dc02-eee3-46d6-9afb-5f81a3a20216@kernel.org>
- <aep8tsYFfr_Xe54q@x1.local>
+	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="mvUvuVki"
+X-KPN-MessageId: 54abf63c-3fd3-11f1-afde-005056994fde
+Received: from smtp.kpnmail.nl (unknown [10.31.155.8])
+	by ewsoutbound.so.kpn.org (Halon) with ESMTPS
+	id 54abf63c-3fd3-11f1-afde-005056994fde;
+	Fri, 24 Apr 2026 13:47:11 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=xs4all.nl; s=xs4all01;
+	h=mime-version:message-id:date:subject:to:from;
+	bh=Av2yy3jIxSiJO0Vtl0sA4w+c3DISiaPS7dntvIImIwY=;
+	b=mvUvuVki0+rXg6xcFpIkvAemxC+0xVYh+dYKHy90/U4UUJuRipNZ0lt7NSqu/rkQGMsRNhM4OdbLS
+	 Ap9GLh42ASFozeYEJphN5LyPfOEGaUjdx6AjcaUXFMulL3F0OFjHivy5QNKzZEie118zoKLgu85v0T
+	 khAMIqu4AeVfNLsm8vNI9VtGTNuR35ZL0gZvFgmP9CTeuAJL/G5PkUK6Zync/k+SBF3gyb/6/r9/HB
+	 +1yQ6rS2BPBVC4TQjmRvs2QOl5wR9TCb2f6e1OBjG4FfP5zAZCAF3cvdH5TdfSRPtZK36sX3ZwZG5y
+	 kVLOSNuC17Zy4dn78rCsvwMXLydPRSw==
+X-KPN-MID: 33|5uwLU1Is6HTPtbpq3n25D56o9w8X0YgCIT0NJmC/9ZmiQVUyp4131q1gzAbj128
+ UIYIT76OLY7qaNpTy5xbshEGwMHRGxRUBF2qCSxHfNrM=
+X-KPN-VerifiedSender: Yes
+X-CMASSUN: 33|a3eU5w9N8DVzzvyrum0x87E72wtwZRYGlBXjXaD3z8StejtSSuk7WbI/XgsB6Ca
+ zLboZcPlSRvrQ18VwI7/RvA==
+Received: from daedalus.home (unknown [178.227.109.146])
+	by smtp.xs4all.nl (Halon) with ESMTPSA
+	id 5465d358-3fd3-11f1-9c0b-00505699d6e5;
+	Fri, 24 Apr 2026 13:47:11 +0200 (CEST)
+From: Jori Koolstra <jkoolstra@xs4all.nl>
+To: Christian Brauner <brauner@kernel.org>,
+	Aleksa Sarai <cyphar@cyphar.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Jan Kara <jack@suse.cz>,
+	linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Jori Koolstra <jkoolstra@xs4all.nl>,
+	Aleksa Sarai <aleksa@amutable.com>,
+	Wei Yang <richard.weiyang@gmail.com>,
+	Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
+Subject: [PATCH v5 2/2] selftest: add tests for O_EMPTYPATH
+Date: Fri, 24 Apr 2026 13:46:03 +0200
+Message-ID: <20260424114611.1678641-3-jkoolstra@xs4all.nl>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260424114611.1678641-1-jkoolstra@xs4all.nl>
+References: <20260424114611.1678641-1-jkoolstra@xs4all.nl>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <aep8tsYFfr_Xe54q@x1.local>
 
-On Thu, Apr 23, 2026 at 04:10:30PM -0400, Peter Xu wrote:
-> On Thu, Apr 23, 2026 at 09:25:30PM +0200, David Hildenbrand (Arm) wrote:
-> > > 
-> > > The other thing is, as I mentioned in the other email, I still don't know
-> > > how the current RW protection would work for anonymous.  I don't yet think
-> > > the user swapper can read the anon page with RW-protected pgtables.  So far
-> > > my understanding is maybe you only care about shmem so it's fine, but it'll
-> > > always be great to confirm with you.
+Add tests for the new O_EMPTYPATH flag of openat(2)/openat2(2).
 
+Also, the current openat2 tests include a helper header file that
+defines the necessary structs and constants to use openat2(2), such as
+struct open_how. This may result in conflicting definitions when the
+system header openat2.h is present as well.
 
-That's true. We use vhost and therefore shmem in our setup.
+So add openat2.h generated by 'make headers' to the uapi header
+files in ./tools/include and remove the helper file definitions of
+the current openat2 selftests.
 
-One idea I had about how to make atomic eviction for anon is extending
-process_vm_read() and process_madvise():
+Signed-off-by: Jori Koolstra <jkoolstra@xs4all.nl>
+---
+ tools/include/uapi/linux/openat2.h            | 43 +++++++++++++++
+ .../selftests/filesystems/openat2/Makefile    |  4 +-
+ .../filesystems/openat2/emptypath_test.c      | 55 +++++++++++++++++++
+ .../selftests/filesystems/openat2/helpers.h   | 35 +-----------
+ 4 files changed, 101 insertions(+), 36 deletions(-)
+ create mode 100644 tools/include/uapi/linux/openat2.h
+ create mode 100644 tools/testing/selftests/filesystems/openat2/emptypath_test.c
 
-- Add a flag to process_vm_read() to bypass the protnone check on
-  accessible (or only RWP?) VMAs.
-
-- Allow process_madvise(MADV_DONTNEED) when the caller already has
-  ptrace write access to the target.
-
-The standing objection to remote DONTNEED has been "destructive", but
-process_vm_writev() already lets a ptrace-capable caller overwrite
-arbitrary anon with attacker-chosen content. DONTNEED is strictly
-weaker — it zeroes, it does not inject — so the trust model is already
-established.
-
-> > I wonder if uffdio_move could be used for a swapper implementation instead?
-
-I considered it. UFFDIO_MOVE can in principle relocate the cold folio
-into a staging VMA inside the VMM, which then reads it and drops it.
-The downside is the VMM has to maintain a second address range and
-serialise eviction through it. A purpose-built primitive — something
-like UFFDIO_EVICT that zaps the PTE and returns the folio contents
-(optionally to an fd for io_uring) — seems cleaner.
-
-
-> If RW is justified to be useful first, maybe.
-> 
-> I had a gut feeling Kirill's use case doesn't use anon at all, then if
-> nobody needs it we can still decide to not support anon.
-> 
-> > 
-> > If we ever have to read from a protnone page, maybe we could teach ptrace access
-> > to do it, or have something that can read from prot_none areas -- like
-> > uffdio_copy, which can write to prot-none areas.
-> 
-> Somethinig like swap_access() in my proposal can also partly achieve that.
-> 
-> https://lore.kernel.org/all/aYuad2k75iD9bnBE@x1.local/
-
-A maccess()-style primitive that reads through PROT_NONE is a reasonable
-building block and overlaps with part of what UFFDIO_EVICT would need.
-
-> There, it was only about reading from swap so far, though.  But that one
-> might be easier to be extended to read PROT_NONE and directly put data into
-> buffer user specified (ps: in my local tree impl I named it maccess() to
-> pair with mincore(), but it doesn't really matter; it doesn't even need to
-> be a syscall..).
-> 
-> To me, the interfacing is not a major issue.  The major question I have is
-> why RW protection can help in swap system impl when we already have uffd-wp.
-> 
-> So I want to make sure the use case can't be implemented by uffd-wp already.
-> Because that's really what we might do for QEMU.
-
-Race-free eviction can definitely be implemented with uffd-wp already.
-But not proper working set discovery.
-
-
+diff --git a/tools/include/uapi/linux/openat2.h b/tools/include/uapi/linux/openat2.h
+new file mode 100644
+index 000000000000..4759c471676c
+--- /dev/null
++++ b/tools/include/uapi/linux/openat2.h
+@@ -0,0 +1,43 @@
++/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
++#ifndef _LINUX_OPENAT2_H
++#define _LINUX_OPENAT2_H
++
++#include <linux/types.h>
++
++/*
++ * Arguments for how openat2(2) should open the target path. If only @flags and
++ * @mode are non-zero, then openat2(2) operates very similarly to openat(2).
++ *
++ * However, unlike openat(2), unknown or invalid bits in @flags result in
++ * -EINVAL rather than being silently ignored. @mode must be zero unless one of
++ * {O_CREAT, O_TMPFILE} are set.
++ *
++ * @flags: O_* flags.
++ * @mode: O_CREAT/O_TMPFILE file mode.
++ * @resolve: RESOLVE_* flags.
++ */
++struct open_how {
++	__u64 flags;
++	__u64 mode;
++	__u64 resolve;
++};
++
++/* how->resolve flags for openat2(2). */
++#define RESOLVE_NO_XDEV		0x01 /* Block mount-point crossings
++					(includes bind-mounts). */
++#define RESOLVE_NO_MAGICLINKS	0x02 /* Block traversal through procfs-style
++					"magic-links". */
++#define RESOLVE_NO_SYMLINKS	0x04 /* Block traversal through all symlinks
++					(implies OEXT_NO_MAGICLINKS) */
++#define RESOLVE_BENEATH		0x08 /* Block "lexical" trickery like
++					"..", symlinks, and absolute
++					paths which escape the dirfd. */
++#define RESOLVE_IN_ROOT		0x10 /* Make all jumps to "/" and ".."
++					be scoped inside the dirfd
++					(similar to chroot(2)). */
++#define RESOLVE_CACHED		0x20 /* Only complete if resolution can be
++					completed through cached lookup. May
++					return -EAGAIN if that's not
++					possible. */
++
++#endif /* _LINUX_OPENAT2_H */
+diff --git a/tools/testing/selftests/filesystems/openat2/Makefile b/tools/testing/selftests/filesystems/openat2/Makefile
+index 7736e37b7986..d848aac96bde 100644
+--- a/tools/testing/selftests/filesystems/openat2/Makefile
++++ b/tools/testing/selftests/filesystems/openat2/Makefile
+@@ -1,8 +1,8 @@
+ # SPDX-License-Identifier: GPL-2.0-or-later
+ 
+ CFLAGS += $(KHDR_INCLUDES)
+-CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined
+-TEST_GEN_PROGS := openat2_test resolve_test rename_attack_test
++CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined $(TOOLS_INCLUDES)
++TEST_GEN_PROGS := openat2_test resolve_test rename_attack_test emptypath_test
+ 
+ # gcc requires -static-libasan in order to ensure that Address Sanitizer's
+ # library is the first one loaded. However, clang already statically links the
+diff --git a/tools/testing/selftests/filesystems/openat2/emptypath_test.c b/tools/testing/selftests/filesystems/openat2/emptypath_test.c
+new file mode 100644
+index 000000000000..d75b5e998ff9
+--- /dev/null
++++ b/tools/testing/selftests/filesystems/openat2/emptypath_test.c
+@@ -0,0 +1,55 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++
++#define __SANE_USERSPACE_TYPES__
++#include <fcntl.h>
++#include <unistd.h>
++#include <errno.h>
++
++#include "kselftest.h"
++
++#ifndef O_EMPTYPATH
++#define O_EMPTYPATH	(1 << 26)
++#endif
++
++int main(void)
++{
++	int opath_fd, reopen_fd;
++	const char *path = "/tmp/emptypath_test";
++
++	ksft_print_header();
++	ksft_set_plan(2);
++
++	opath_fd = open(path, O_CREAT | O_WRONLY, S_IRWXU);
++	if (opath_fd < 0)
++		ksft_exit_fail_msg("create %s: %m\n", path);
++	close(opath_fd);
++
++	opath_fd = open(path, O_PATH);
++	if (opath_fd < 0)
++		ksft_exit_fail_msg("open %s O_PATH: %m\n", path);
++
++	reopen_fd = openat(opath_fd, "", O_RDONLY);
++	if (reopen_fd < 0 && errno == ENOENT)
++		ksft_test_result_pass("empty path without O_EMPTYPATH returns ENOENT\n");
++	else if (reopen_fd >= 0) {
++		ksft_test_result_fail("empty path without O_EMPTYPATH unexpectedly succeeded\n");
++		close(reopen_fd);
++	} else {
++		ksft_test_result_fail("empty path without O_EMPTYPATH: expected ENOENT, got %m\n");
++	}
++
++	reopen_fd = openat(opath_fd, "", O_RDONLY | O_EMPTYPATH);
++
++	if (reopen_fd < 0 && errno == EINVAL)
++		ksft_exit_skip("O_EMPTYPATH not supported\n");
++
++	if (reopen_fd >= 0) {
++		ksft_test_result_pass("O_EMPTYPATH reopens O_PATH fd\n");
++		close(reopen_fd);
++	} else {
++		ksft_test_result_fail("O_EMPTYPATH failed: %m\n");
++	}
++
++	unlink(path);
++	ksft_finished();
++}
+diff --git a/tools/testing/selftests/filesystems/openat2/helpers.h b/tools/testing/selftests/filesystems/openat2/helpers.h
+index 7ca54c718c45..3f01fb68c5a6 100644
+--- a/tools/testing/selftests/filesystems/openat2/helpers.h
++++ b/tools/testing/selftests/filesystems/openat2/helpers.h
+@@ -15,47 +15,14 @@
+ #include <limits.h>
+ #include <linux/types.h>
+ #include <linux/unistd.h>
++#include <linux/openat2.h>
+ #include "kselftest_harness.h"
+ 
+ #define BUILD_BUG_ON(e) ((void)(sizeof(struct { int:(-!!(e)); })))
+ 
+-/*
+- * Arguments for how openat2(2) should open the target path. If @resolve is
+- * zero, then openat2(2) operates very similarly to openat(2).
+- *
+- * However, unlike openat(2), unknown bits in @flags result in -EINVAL rather
+- * than being silently ignored. @mode must be zero unless one of {O_CREAT,
+- * O_TMPFILE} are set.
+- *
+- * @flags: O_* flags.
+- * @mode: O_CREAT/O_TMPFILE file mode.
+- * @resolve: RESOLVE_* flags.
+- */
+-struct open_how {
+-	__u64 flags;
+-	__u64 mode;
+-	__u64 resolve;
+-};
+-
+ #define OPEN_HOW_SIZE_VER0	24 /* sizeof first published struct */
+ #define OPEN_HOW_SIZE_LATEST	OPEN_HOW_SIZE_VER0
+ 
+-#ifndef RESOLVE_IN_ROOT
+-/* how->resolve flags for openat2(2). */
+-#define RESOLVE_NO_XDEV		0x01 /* Block mount-point crossings
+-					(includes bind-mounts). */
+-#define RESOLVE_NO_MAGICLINKS	0x02 /* Block traversal through procfs-style
+-					"magic-links". */
+-#define RESOLVE_NO_SYMLINKS	0x04 /* Block traversal through all symlinks
+-					(implies OEXT_NO_MAGICLINKS) */
+-#define RESOLVE_BENEATH		0x08 /* Block "lexical" trickery like
+-					"..", symlinks, and absolute
+-					paths which escape the dirfd. */
+-#define RESOLVE_IN_ROOT		0x10 /* Make all jumps to "/" and ".."
+-					be scoped inside the dirfd
+-					(similar to chroot(2)). */
+-#endif /* RESOLVE_IN_ROOT */
+-
+ __maybe_unused
+ static bool needs_openat2(const struct open_how *how)
+ {
 -- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+2.54.0
+
