@@ -1,140 +1,129 @@
-Received: from out-179.mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A62D34D90E;
-	Thu, 23 Apr 2026 23:26:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.179
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776986782; cv=none; b=t1Qk+yO+gOk7AmM8yqr4T3shRPocj1O0WYHWnfJmMkRdOA3XQuSg7Ka9GNGm3dZZ4mWgJFFPxK+5DW2sCWHUP78kFz/HdH0HCAaT7ZjMx2zDdGKm01yIbkxm1l3dQeZS3ibVjbTo/4sDwzeERxtPx1+ukRdSVTaZf1I9bUUXWas=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776986782; c=relaxed/simple;
-	bh=vMJQBa5zmzOAcaZtVAWU6wleEYJ5jJl9bsl9eKfiVzg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=U5uMr2ZfidaZh9CAcW9xie0wOLU1t6GG4Fmt4fZlFt+lGxVv9PIG6YLNX+O+CmvuJaVuhYZoPa3YePut9swGq9jvIBf8KZtqCKB9JIscyUdaf0bczxkB5ut2QEYZsXPfEfHag1MqZFfUQkNANRdfWiQrtQLR9d4VsbzPGle6rqE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Q85Pf2c3; arc=none smtp.client-ip=95.215.58.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 511421339A4
+	for <linux-kselftest@vger.kernel.org>; Fri, 24 Apr 2026 00:17:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.169
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1776989846; cv=pass; b=HjL2KeEh9eHtzpAR0oN7EsdwHtMd8jtAHSxoIGxXl8BJUwxjf86cgUQgQ8cAbWUxAk2G5/2EhinamJ2KlhwDBmAmpV8LqeVc039hDETJTMyWFTmRwdUWzIuZQjXg+UsbJ2Ktuv37iKi2BPdhgWN0jEIBldERpjowy07g0JlJtuU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1776989846; c=relaxed/simple;
+	bh=OWKqufAy9WCyNeb7K2f/LYLF5dN1ORSBiLgT0IKLWvM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=mpEpJ5RO5XhCpgXmWZKcmJZufpsrU3/vTcFNNI4MXirTNh3B3MfUV4wi3Z60JvfXoJMygUtqoI6COGzQfQXcxrnrdUc7XBV2zekTjLhrvTpNeNkPwcfFXiU6TEaftBskM7ZVL+1PgSPq3DqVnPAVl6hte3pyhte3/DU/ZKbk3cs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AIVBi5oG; arc=pass smtp.client-ip=209.85.160.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Q85Pf2c3"
-Message-ID: <a739cf27-a65a-40da-830d-edda27bfa6b7@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1776986777;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bycuOgk3I1MKhMIM80x+6ULtiN6q6gNeSnWYfwMp2UQ=;
-	b=Q85Pf2c3c+FeYg1SoeAxmKVmNYmFRy5EPFvL8r7Ld8slAdmuqei/5BBGZqFglkUiiMOy2Z
-	MfYNQ15FZq4HzXDe2ZfGA8LHPBweQJSLvIaxmRuqJ+WAfrUrugHSRImkzObKBglbNmpvwG
-	3wrJVtgivZKCi5yjrw0ltpfsKWcwbgY=
-Date: Thu, 23 Apr 2026 16:25:50 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AIVBi5oG"
+Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-50d87610513so79099601cf.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 23 Apr 2026 17:17:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1776989844; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Up602B6VsAkxwrnWpY1BJXdP7/OppAtYuTZrW60Q4WuLUwLUqCY6MtUQRDG06Ho80Q
+         bQSlasSDbe656j0Z33m3uVNFkI1BlW3nIV9c5i6OFy7cJphFHEEv7KeQ6ttfTpf+on8+
+         KuQh1Doo0/1FFGpdePNiCEL3/rgby043z149JoaYa4Sl4sO6rpYFST4ysFDiwcRTxn/C
+         8tcRoqoildlOWGXwhBLLfwIh6d96Cuo2YoIzRc7WAfFJVbUVm6+oqQ7c6H1uFMINzSi4
+         rBy4jPsTmrqJk+Olsr9/ZbPN20qc4utK1G7XC9ptPWWWHO7blpi6bdm/pTgupIMa2gdw
+         VkxQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=FdbcbxpTtTZxFBtMUaFAEYUB7AjxIKSASl4Kxrqo+EI=;
+        fh=Pe1pI5NQYM4xr6NF0eUsvNTNwvH5AhyitytZoQQ80rc=;
+        b=SlYdEPS6AxUsmcabr19n4NQsFsgPPwNyXqpLY6oiqUHVq3TUHsqJBJ6Qm8BkeFls3U
+         K8WXajlP1TbjCHIOLCrlSit03/Yj7iwQ8/ABr/XAZ6Idb+lhnvK/NE12fibIe0jwbqvf
+         qvL2HYMTnpQxRF+o1K2DYXZm4yRSK6J83qH9AtNcLUjScHmC+l3bamzhE+tm5j110/49
+         6txb0gk/jJ2PwNlLMU4bwrvqCYkjTJWdi9g4r607gDn6XvXBUPOYLlizk4E1mBferEuK
+         RADqloDK1FF4SLLj7iYtZ7AUAQIGfOI5a5ZMxsVZEc3ydAtFm1mJXoEWCKKdYtrs+u6E
+         /PCw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1776989844; x=1777594644; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=FdbcbxpTtTZxFBtMUaFAEYUB7AjxIKSASl4Kxrqo+EI=;
+        b=AIVBi5oGlrPPTO6Trsq6i6+uXBUcqnZN8HoUMB7v3FuE3GBh2nwKn3rS68V1nu4mhm
+         DQUMlzghNTg1dIsQu6Gd2CtT35FC/M783FvdSBoDf3Pax52ph+dV1akkG09o/iMk4Hww
+         9A0hFxNjQZkqQhF4tfYu0OIy1K2Hwf0eGKgWpNFM1S4dk0PfEbr/t6DbF1ym8qEd91cQ
+         e0EsSiuR8/2vwvbaZAHjS+gUarH70hWfrvYTPZPZm/FQV2EhSk5AzrE2zsv6ozpfdX/W
+         qcaruT7g4Xx6oyG146pRSNtpauCRBxc3SMq4bUNit1lx9LORPh7y6IRkMlO/GPtT9OV/
+         ZPuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776989844; x=1777594644;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FdbcbxpTtTZxFBtMUaFAEYUB7AjxIKSASl4Kxrqo+EI=;
+        b=N6yP3QjYjg3B/oi3JkZxyM0k9E+FMf0bsmtRiGrOmEVQqN/7geE1gDPpt5J747k8t+
+         LPuhSOdv1BiEdnPltLb1Wbab6JenMKyDj3j57p8otsgTre2fmovGttbveX7aQ7GupuTI
+         c7y97a6IgVT7g7aWZTB1A2IRy8yVtsYD9Ln7zlZWMbt8NYHbefhjxfMUgrm7EhiBqxby
+         FJC+TtM9ekOBV/Ccvcw8wJxhnWIHDcT1ByAPcu7GKuUJdm3xZ6yN5vZrbyHfDUKcOl3M
+         mJcZV7Vv2Jo4qE5wSidoGXobfMqE3FJLo6kQ5kxrczwgFSyAkGKCDrGrejpwCWAa0cN/
+         aQ2A==
+X-Forwarded-Encrypted: i=1; AFNElJ8kW2mVFS8DZxcIjLC1r7iXVg66sBsOH5te5AM1hfQ4IDJ/v8Vry8e3iyM1oZFKj9L/UXDUqT2mt4EaxSVuq1Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxJ3yH6b7BkUox/IuWOOiN8RB1fxlrCkcO0qJY42oNtwudCsQoZ
+	0V8V9x1uq4OiDwlsVnBdeWVD2ncsJGdosz1l7zqJbyXHeQJYMA1o0X54FRsP9LLiP0XuTucIfoz
+	pvcWYonjh/TDsBt3pKKTf7fim08s3Jw==
+X-Gm-Gg: AeBDieu6FibADxodQ4U5vjNabaUKxZlhTXOB7I54Tv1O9666rwtiQibyISdvL+JvYW4
+	8saM7vC4iVJRX4bfsoTZbZ+WtQfhhaFq9rpsnq/UFNOY/JHkFzdxey9dD1KGVCcPZamgEh+tPde
+	Zxdwa8FDQLf3nmRLhR2pNE3+AtvNAfrkVWdtHIQkMnfRefco716IncurpJTB84aOBBnvW2TzRt6
+	mbGuBocy1efBT9pCNNnzFiacjGh+RTuZh2gteNGGni+qc3FNX4hN0PPO6vRqZgifOrUc3ruqY2w
+	55BqWURqpVusHoEnVQ==
+X-Received: by 2002:a05:622a:1305:b0:50d:8db0:7abb with SMTP id
+ d75a77b69052e-50e36ecfca9mr440201351cf.42.1776989844280; Thu, 23 Apr 2026
+ 17:17:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v9 1/9] bpf: refactor kfunc checks using
- table-driven approach in verifier
-To: Chengkaitao <pilgrimtao@gmail.com>,
- Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- Emil Tsalapatis <emil@etsalapatis.com>, leon.hwang@linux.dev,
- Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, memxor@gmail.com
-Cc: Martin KaFai Lau <martin.lau@linux.dev>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Chengkaitao <chengkaitao@kylinos.cn>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-References: <20260329140506.9595-1-pilgrimtao@gmail.com>
- <20260329140506.9595-2-pilgrimtao@gmail.com>
- <CAADnVQ+xS4ti=cSqAnG4ePmjEZXUb-8Ss9cjkWiiWgtv-_NNVQ@mail.gmail.com>
- <CAAWJmAYxbEX0M3JFJn11WOfvRoLrxnuXtkDp5omt-FJYwc8mpg@mail.gmail.com>
- <1fcda49a-caeb-42b9-9727-d1ab3d07d84b@linux.dev>
- <CAAWJmAYNS-NaY-57Pt=GC5qSpbfJLKwydVXfem6ckwgFW9aTnw@mail.gmail.com>
- <82148eb1-f270-48f1-8900-e0becc6384e8@linux.dev>
- <CAAWJmAZQHmgKXgr0xN5sHWUGyu43xLyg4eG7yBrMDi7YALrKsw@mail.gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <CAAWJmAZQHmgKXgr0xN5sHWUGyu43xLyg4eG7yBrMDi7YALrKsw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+References: <20260422080446.26020-1-wangli.ahau@gmail.com> <7a762959-014c-4727-999f-a5073f9eaf7a@kernel.org>
+In-Reply-To: <7a762959-014c-4727-999f-a5073f9eaf7a@kernel.org>
+From: Li Wang <wangli.ahau@gmail.com>
+Date: Fri, 24 Apr 2026 08:17:13 +0800
+X-Gm-Features: AQROBzDVL2tftrpxjKYjdeKYAdmQKtLCLAzF9kdVNZECjlQvHjKJ9i_dwf6nu4k
+Message-ID: <CANgNiRw_MVRF3f9JSWsThJGUrq353S5QXoGMWYttav7-7uW2-Q@mail.gmail.com>
+Subject: Re: [PATCH v3 0/2] selftests/mm: clean up build output and verbosity
+To: "David Hildenbrand (Arm)" <david@kernel.org>, li.wang@linux.dev
+Cc: akpm@linux-foundation.org, ljs@kernel.org, Liam.Howlett@oracle.com, 
+	vbabka@kernel.org, rppt@kernel.org, surenb@google.com, mhocko@suse.com, 
+	shuah@kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 4/9/26 7:53 PM, Chengkaitao wrote:
-> On Wed, Apr 8, 2026 at 2:41 AM Ihor Solodrai <ihor.solodrai@linux.dev> wrote:
->>
->> On 4/4/26 3:38 AM, Chengkaitao wrote:
->>>
->>> It pushes us to untangle messy verifier safety cases and make them modular,
->>> so they can be expressed as parameters to BPF_VERIF_KFUNC_DEF
->>
->> Again, I agree with the premise that verifier safety checks could
->> become more modular where possible. But I think we should first
->> separate two questions:
->>
->> 1. What kfunc properties should be declared centrally?
->> 2. Where that declaration should live?
->>
->> While I'd like to answer (1) with "all of them", I am not convinced
->> the answer to (2) is .BTF_ids or BTF. A better C side declarative
->> representation would give us most of the benefit here without making
->> the BTF tooling more complex.
->>
->> Here is how I think we should move forward:
->>
->>   1. Your bpf_list_* work is orthogonal to BTF_ID refactoring, so it's
->>   reasonable to first focus on landing it without changes to generic
->>   kfunc handling.
-> 
-> There is no consensus on whether the patch below should exist at all.
-> [PATCH bpf-next v9 1/9] bpf: refactor kfunc checks using table-driven ...
+David Hildenbrand (Arm) <david@kernel.org> wrote:
 
-Hi Kaitao,
+> On 4/22/26 10:04, Li Wang wrote:
+> > Currently, the build process for the mm selftests is unnecessarily noisy.
+> >
+> > First, it leaks raw compiler errors during the liburing feature probe if
+> > the headers are missing, which is confusing since the build system already
+> > handles this gracefully with a clear warning.
+> >
+> > Second, the specific 32-bit and 64-bit compilation targets ignore the
+> > standard kbuild verbosity settings, always printing their full compiler
+> > commands even during a default quiet build.
+> >
+> > Notes:
+> >   My email address has changed due to employment change.
+> >   Previous Signed-off-by was with <liwang@redhat.com>.
+>
+> :(
+>
+> As a former RH'er, I'm deeply sorry for what has happened there, really.
+>
+> Thank you for continuing to contribute upstream, highly appreciated!
 
-I think this refactoring patch should be dropped from the series.
-For now use the established pattern with special_kfunc_list, and don't
-introduce new _impl kfuncs.
+Thank you David, I got a new account from kernel org yesterday:
 
-> 
-> Should we drop it entirely, or limit its scope to the is_bpf_* helpers
-> that contain a large number of btf_id == special_kfunc_list[*]-style
-> checks—for example by reverting to v8 or an earlier revision?
+  li.wang@linux.dev
 
-I don't think "reverting to v8" will work. Since you've sent v9
-significant changes to the verifier.c have been landed, so you have
-some rebase work to do anyways.  I suggest you minimize unnecessary
-refactoring in this series, and focus on bpf_list_* api extension.
+In the next, I hope to dedicate this email address to Linux and LTP
+development work.
 
-pw-bot: cr
-
-Thanks, and apologies for slow reply.
-
-
-> https://lore.kernel.org/all/20260316112843.78657-2-pilgrimtao@gmail.com/
-> 
-> cc: Alexei Starovoitov, Emil Tsalapatis, Leon Hwang, Mykyta Yatsenko,
->       Kumar Kartikeya Dwivedi
-> 
->>   2. I plan to send patches (soon) for resolve_btfids, and then for
->>   BTF_ID macrology to eliminate the enum + array pattern. You are
->>   welcome to join the discussion and review / test the patches.
->>
->>   3. After all of the above lands, we can come back to the general
->>   BTF_ID / kfunc handling discussion. If you are interested in
->>   developing this further, I suggest to re-think the approach and come
->>   up with a "single kfunc metadata definition" that doesn't require
->>   significant changes in .BTF_ids section layout.
->>
->> A slightly off-topic comment: the usage of `_impl` pattern for kfuncs
->> should be considered deprecated. Any new kfuncs that work with
->> verifier-supplied arguments should use KF_IMPLICIT_ARGS mechanism.  So
->> the `bpf_list_add_impl` in your seires should only have one version:
->> `bpf_list_add` marked with KF_IMPLICIT_ARGS flag.
-> 
-
+-- 
+Regards,
+Li Wang
