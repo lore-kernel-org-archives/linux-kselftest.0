@@ -1,270 +1,223 @@
-Received: from ewsoutbound.kpnmail.nl (ewsoutbound.kpnmail.nl [195.121.94.184])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05C433A6F02
-	for <linux-kselftest@vger.kernel.org>; Fri, 24 Apr 2026 11:47:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.121.94.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15B243BD646
+	for <linux-kselftest@vger.kernel.org>; Fri, 24 Apr 2026 11:51:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777031234; cv=none; b=ZvHE41H2zhdptvRtB2ipSueGO5ryQ/DrzEwqP6mxrdD/Vi/hv9jRVbOrWloHf6Z/ozQs3EramwXkqdvli08S+rYy/j5aaisxs1cueGaVP66qs8CAVJ+B9mDVCutLg8uJESfvH2ny8c8acm4OBmYtNUVripOzw0/ZtH4x4lzeIvw=
+	t=1777031511; cv=none; b=CBdI2yQfCdfDU7HG2U1GJx1hCoz/ML7sjN/WbkxrcXH87ANQVWGRJYSuA7yPY04057rZcHNbg6+7yCVxBwQdU3B1dVP+BK2UDSPLwa12UD9dGWYjKZbIklvzyAckYTxLd+qoi3R8U7uj6EL06z+/i8w8lxkr7iRdTnyXNJBvBho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777031234; c=relaxed/simple;
-	bh=of1ei5AinEByyr4vGyS0hUQUKcBsyxYr4kztX2Wu5nQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ktTwm60vHZJ0SWmxR7OmnCVibUcsKd8jaI2CL0hKxNziBa2FE0cnti8k6iefogXTWvJPbX2qerF0mmudRYSYQkpk78LSIu0Rpn/DvkEfw49JtPUm2wHdqbEuBhiclScByxucHHsNdZ1zLekhSlH3nrozQ7O4YBipf3XLxBsxZOw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xs4all.nl; spf=pass smtp.mailfrom=xs4all.nl; dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b=mvUvuVki; arc=none smtp.client-ip=195.121.94.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xs4all.nl
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xs4all.nl
+	s=arc-20240116; t=1777031511; c=relaxed/simple;
+	bh=IXqkzhjdS3SL5Z8Nxy9tqGO8aU/DK+0un1yN9Rbn0xE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=p5lp6wCYc1I+5Jv6s3+ZUN/vq7UFObcUSaJIJG3127+xIF9OYPxCSGo4WAACBpa/0f8I+PYvIUd2ayE/JPB2dotopGp7+smIkQ+bbYR7Q0F1bfHVyE8SMFEOg4uvMRplMvWTiRQiVAjgk/l8FzzvMGzWC1IxSXwe3ql4/b+S6Vk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WtwYNfEx; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=KdQ9Lijl; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=xs4all.nl header.i=@xs4all.nl header.b="mvUvuVki"
-X-KPN-MessageId: 54abf63c-3fd3-11f1-afde-005056994fde
-Received: from smtp.kpnmail.nl (unknown [10.31.155.8])
-	by ewsoutbound.so.kpn.org (Halon) with ESMTPS
-	id 54abf63c-3fd3-11f1-afde-005056994fde;
-	Fri, 24 Apr 2026 13:47:11 +0200 (CEST)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WtwYNfEx";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="KdQ9Lijl"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1777031509;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=GPTaXwfQ0pC1v72UmTco14ZekCM1pyHL+NlaDMIoFPc=;
+	b=WtwYNfExDRDHNJodo1Pt6+HhZzPSTR8wR8+ymtag+VmiDeApi4kAYCslbLT7xNvK1I+FCB
+	dTeCzwQ66dDTjFus/ESs3LnmTmU1RjCzK8a8P26qdyJ/0noL9+wx0THWuCLhuoEpsgbGe+
+	bvpBr19XoVAn2sCZ/bUtsr0QYqZna1g=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-7-CcMhVCaBP0meZNp16jDXhA-1; Fri, 24 Apr 2026 07:51:48 -0400
+X-MC-Unique: CcMhVCaBP0meZNp16jDXhA-1
+X-Mimecast-MFC-AGG-ID: CcMhVCaBP0meZNp16jDXhA_1777031507
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-8d5b5d607d1so1520847785a.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Apr 2026 04:51:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=xs4all.nl; s=xs4all01;
-	h=mime-version:message-id:date:subject:to:from;
-	bh=Av2yy3jIxSiJO0Vtl0sA4w+c3DISiaPS7dntvIImIwY=;
-	b=mvUvuVki0+rXg6xcFpIkvAemxC+0xVYh+dYKHy90/U4UUJuRipNZ0lt7NSqu/rkQGMsRNhM4OdbLS
-	 Ap9GLh42ASFozeYEJphN5LyPfOEGaUjdx6AjcaUXFMulL3F0OFjHivy5QNKzZEie118zoKLgu85v0T
-	 khAMIqu4AeVfNLsm8vNI9VtGTNuR35ZL0gZvFgmP9CTeuAJL/G5PkUK6Zync/k+SBF3gyb/6/r9/HB
-	 +1yQ6rS2BPBVC4TQjmRvs2QOl5wR9TCb2f6e1OBjG4FfP5zAZCAF3cvdH5TdfSRPtZK36sX3ZwZG5y
-	 kVLOSNuC17Zy4dn78rCsvwMXLydPRSw==
-X-KPN-MID: 33|5uwLU1Is6HTPtbpq3n25D56o9w8X0YgCIT0NJmC/9ZmiQVUyp4131q1gzAbj128
- UIYIT76OLY7qaNpTy5xbshEGwMHRGxRUBF2qCSxHfNrM=
-X-KPN-VerifiedSender: Yes
-X-CMASSUN: 33|a3eU5w9N8DVzzvyrum0x87E72wtwZRYGlBXjXaD3z8StejtSSuk7WbI/XgsB6Ca
- zLboZcPlSRvrQ18VwI7/RvA==
-Received: from daedalus.home (unknown [178.227.109.146])
-	by smtp.xs4all.nl (Halon) with ESMTPSA
-	id 5465d358-3fd3-11f1-9c0b-00505699d6e5;
-	Fri, 24 Apr 2026 13:47:11 +0200 (CEST)
-From: Jori Koolstra <jkoolstra@xs4all.nl>
-To: Christian Brauner <brauner@kernel.org>,
-	Aleksa Sarai <cyphar@cyphar.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Jan Kara <jack@suse.cz>,
-	linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Jori Koolstra <jkoolstra@xs4all.nl>,
-	Aleksa Sarai <aleksa@amutable.com>,
-	Wei Yang <richard.weiyang@gmail.com>,
-	Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>,
+        d=redhat.com; s=google; t=1777031507; x=1777636307; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=GPTaXwfQ0pC1v72UmTco14ZekCM1pyHL+NlaDMIoFPc=;
+        b=KdQ9LijlYdyIePsA96+0tQrmQ/2KInYM+BppFx9SFezDqQyzH06iA1iHysYqS0fgeV
+         BXBu4HfK5C5yhLx+xc/nvy1Rx96JCNzAursLSYlEtYnA/X5hIN+Anejxf/treDAJG+1L
+         w2I/O7qyBPn2iIeDPjNRCGLlZWw7OflePeRzMeXjyG39Ua2rdln5FzRU02xDUd3f3i+V
+         5mH55cBxZzAum7NWuy5IJGRxG4eC+z6H6Y+qO430IcgUrDL4Am/huCZG9i6UMxC1yq3I
+         gpkT8SwvitwqTy3i8v++Udr4KLgg4Nm4OdWTWgzJY6F+/r2S7rCcmTvyz1z/MHkrqR0V
+         MSSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777031507; x=1777636307;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GPTaXwfQ0pC1v72UmTco14ZekCM1pyHL+NlaDMIoFPc=;
+        b=sbWs0fd50V0PyjkJFkdBBPl+y+gXs2z9GzgUzwWUNZF6rXLOFPVTsSm4AOpK3ZHekW
+         7wMNiXF2mQJ+pfJyYw2eCqH3/4RoCzwnsXC5UHzbgeke623CazQxKpCWdecS4sfvtJ6/
+         lsNO4DHH18D/LWL9rTt9k5cAoqJ06h6OB7DXahU0B8YL65OjGBSA5ilW5Yoo/qd+MeV/
+         eDNvhUxC88jb8Fe8K0P2mMzo9OAXN7lzI1iV7rXvK0vkuTlEyStazgUdt4GvJldxthpo
+         4HtgroDbGAuwKkSywvItwf2T2bAp5BazgVwSPgIUb0fuz1YEAW7u632ZnvTghMy+7wB1
+         Yavg==
+X-Forwarded-Encrypted: i=1; AFNElJ/FqwkqBESNkuGBveFC1KNTqoU9e9eCJyByAke3xwhPOSPrd+Vto5IX4W5UTAeK7TU5HfLcOdznRwQ1yoqyfFQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw59o4tOpsJ/NzzQH6uVehwRpeJx2GqmfsGmUdYgldtW0x9Gy3i
+	4WdWfCkyMVoPu4wKgBDh/3b+JDhXNf8hI3ONUyU4XrgLQmgTdcO5+ULa4hMWF9+v21yqNQPFdyl
+	joEE/+zsVzOFidZzL4SrC999P53Ia1fkOqfQXKiZUU/artirQE+QI9e7kr+EtztnW6mEQMQ==
+X-Gm-Gg: AeBDiesUfZMpqM/EbjPMe8i4ICtbNZiFekpOGxnQRvRaKW3bRh0w+wjLuCpoGp0a200
+	3UQwsX3XI64CQGUW7/3YBuYyfl71rTrJEnnZaF5E3nXbiZXmQm+h9WRcluethk+laiIJoNB++Jo
+	Yl6FDcO1NP81QMtgqfW3dnLP+YlVy8MLyDqGq7OvSMT6wUqlIAMxyGiYYQC4EpJHalHyk606Woj
+	P6sXaQwK2Y5WspuORe4V4Mr7yaQ/dFRJ5a8rO4oonU/ia7r2JzoC/PRFpVjxPM2oa0du6lus6yL
+	jn/aigYB4NiM3xxx4qSNO8j3q7zrRpY912cVikRSMdBCgR1xXTQZ9lPhPRQ3wMApmiEiCUxut03
+	CPDeVq0llwucZKogXpSHQWCgRt1Q6AspCuiUd0y/BbXoWjdUUqL8CPr4UDQ==
+X-Received: by 2002:a05:620a:5698:b0:8eb:605f:6cd6 with SMTP id af79cd13be357-8eb605f8de1mr2383251585a.60.1777031507390;
+        Fri, 24 Apr 2026 04:51:47 -0700 (PDT)
+X-Received: by 2002:a05:620a:5698:b0:8eb:605f:6cd6 with SMTP id af79cd13be357-8eb605f8de1mr2383245685a.60.1777031506710;
+        Fri, 24 Apr 2026 04:51:46 -0700 (PDT)
+Received: from x1.local ([142.189.10.167])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8e7d64cce76sm1958573085a.14.2026.04.24.04.51.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Apr 2026 04:51:46 -0700 (PDT)
+Date: Fri, 24 Apr 2026 07:51:44 -0400
+From: Peter Xu <peterx@redhat.com>
+To: Kiryl Shutsemau <kas@kernel.org>
+Cc: "David Hildenbrand (Arm)" <david@kernel.org>,
 	Andrew Morton <akpm@linux-foundation.org>,
-	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
-Subject: [PATCH v5 2/2] selftest: add tests for O_EMPTYPATH
-Date: Fri, 24 Apr 2026 13:46:03 +0200
-Message-ID: <20260424114611.1678641-3-jkoolstra@xs4all.nl>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260424114611.1678641-1-jkoolstra@xs4all.nl>
-References: <20260424114611.1678641-1-jkoolstra@xs4all.nl>
+	Lorenzo Stoakes <ljs@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
+	Zi Yan <ziy@nvidia.com>, Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Sean Christopherson <seanjc@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [RFC, PATCH 00/12] userfaultfd: working set tracking for VM
+ guest memory
+Message-ID: <aetZUOINzfTXChLL@x1.local>
+References: <aeImfRrrvr3UoKtL@thinkstation>
+ <aeTnlQUOOh-dHG8z@thinkstation>
+ <34f75083-29a3-4860-8a6e-94551d37ac6a@kernel.org>
+ <aed6fHLrIdahbdY3@thinkstation>
+ <b77d559b-215e-460a-a268-e63b8273ef42@kernel.org>
+ <aeorZMvKwu8zKX5i@thinkstation>
+ <aeoxnuGKO3uqS2kG@x1.local>
+ <aeo5IPpQi7onyjTF@thinkstation>
+ <aeprnnccJeyHB2rt@x1.local>
+ <aes7b17nG0cXrtEd@thinkstation>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <aes7b17nG0cXrtEd@thinkstation>
 
-Add tests for the new O_EMPTYPATH flag of openat(2)/openat2(2).
+On Fri, Apr 24, 2026 at 11:34:48AM +0100, Kiryl Shutsemau wrote:
+> On Thu, Apr 23, 2026 at 02:57:34PM -0400, Peter Xu wrote:
+> > On Thu, Apr 23, 2026 at 07:08:00PM +0100, Kiryl Shutsemau wrote:
+> > > > - Whether read protection is required for an userspace swap system
+> > > >   (e.g. did you get time to have a look at umap?)
+> > > 
+> > > I looked at it briefly, so I can miss details.
+> > > 
+> > > IIUC, in absence of read tracking it doesn't collect hotness information
+> > > at all. The eviction is based on fault-in time: the oldest faulted-in
+> > 
+> > For example, let's imagine if we can have a per-mm idle page tracker, would
+> > it work for you to collect hotness info?
+> >
+> > The other idea is, no matter whether we use MGLRU or legacy LRU, if we can
+> > expose a better interface to share hotness info from kernel to userspace,
+> > would it be possible?
+> 
+> I don't see how either fits our problem.
+> 
+> Both page_idle and the LRUs (legacy or MGLRU) track accesses on physical
+> memory. We need visibility in the virtual address space domain.
 
-Also, the current openat2 tests include a helper header file that
-defines the necessary structs and constants to use openat2(2), such as
-struct open_how. This may result in conflicting definitions when the
-system header openat2.h is present as well.
+Yes they are, but ACCESS bit isn't.  ACCESS bit is only about virtual
+mapping or any similar mapping (like EPT's access bit).
 
-So add openat2.h generated by 'make headers' to the uapi header
-files in ./tools/include and remove the helper file definitions of
-the current openat2 selftests.
+What I described with per-mm tracking (either we call it per-mm idle page
+tracking or using other interface) is about relying on ACCESS bit, not
+pgtable changes using RWP.  IMHO It's more efficient and it will also
+achieve your goal of VA tracking.
 
-Signed-off-by: Jori Koolstra <jkoolstra@xs4all.nl>
----
- tools/include/uapi/linux/openat2.h            | 43 +++++++++++++++
- .../selftests/filesystems/openat2/Makefile    |  4 +-
- .../filesystems/openat2/emptypath_test.c      | 55 +++++++++++++++++++
- .../selftests/filesystems/openat2/helpers.h   | 35 +-----------
- 4 files changed, 101 insertions(+), 36 deletions(-)
- create mode 100644 tools/include/uapi/linux/openat2.h
- create mode 100644 tools/testing/selftests/filesystems/openat2/emptypath_test.c
+In your case (and also ours), if you're looking for VMs running virtual
+machines, I think you need both pgtable's ACCESS bit and EPT-similar ACCESS
+bit.  Here what's redundant is rmap, not ACCESS bit tracking.  When both
+MMU and secondary MMU supports hardware access tracking, AFAIU it's faster
+than RWP.
 
-diff --git a/tools/include/uapi/linux/openat2.h b/tools/include/uapi/linux/openat2.h
-new file mode 100644
-index 000000000000..4759c471676c
---- /dev/null
-+++ b/tools/include/uapi/linux/openat2.h
-@@ -0,0 +1,43 @@
-+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-+#ifndef _LINUX_OPENAT2_H
-+#define _LINUX_OPENAT2_H
-+
-+#include <linux/types.h>
-+
-+/*
-+ * Arguments for how openat2(2) should open the target path. If only @flags and
-+ * @mode are non-zero, then openat2(2) operates very similarly to openat(2).
-+ *
-+ * However, unlike openat(2), unknown or invalid bits in @flags result in
-+ * -EINVAL rather than being silently ignored. @mode must be zero unless one of
-+ * {O_CREAT, O_TMPFILE} are set.
-+ *
-+ * @flags: O_* flags.
-+ * @mode: O_CREAT/O_TMPFILE file mode.
-+ * @resolve: RESOLVE_* flags.
-+ */
-+struct open_how {
-+	__u64 flags;
-+	__u64 mode;
-+	__u64 resolve;
-+};
-+
-+/* how->resolve flags for openat2(2). */
-+#define RESOLVE_NO_XDEV		0x01 /* Block mount-point crossings
-+					(includes bind-mounts). */
-+#define RESOLVE_NO_MAGICLINKS	0x02 /* Block traversal through procfs-style
-+					"magic-links". */
-+#define RESOLVE_NO_SYMLINKS	0x04 /* Block traversal through all symlinks
-+					(implies OEXT_NO_MAGICLINKS) */
-+#define RESOLVE_BENEATH		0x08 /* Block "lexical" trickery like
-+					"..", symlinks, and absolute
-+					paths which escape the dirfd. */
-+#define RESOLVE_IN_ROOT		0x10 /* Make all jumps to "/" and ".."
-+					be scoped inside the dirfd
-+					(similar to chroot(2)). */
-+#define RESOLVE_CACHED		0x20 /* Only complete if resolution can be
-+					completed through cached lookup. May
-+					return -EAGAIN if that's not
-+					possible. */
-+
-+#endif /* _LINUX_OPENAT2_H */
-diff --git a/tools/testing/selftests/filesystems/openat2/Makefile b/tools/testing/selftests/filesystems/openat2/Makefile
-index 7736e37b7986..d848aac96bde 100644
---- a/tools/testing/selftests/filesystems/openat2/Makefile
-+++ b/tools/testing/selftests/filesystems/openat2/Makefile
-@@ -1,8 +1,8 @@
- # SPDX-License-Identifier: GPL-2.0-or-later
- 
- CFLAGS += $(KHDR_INCLUDES)
--CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined
--TEST_GEN_PROGS := openat2_test resolve_test rename_attack_test
-+CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined $(TOOLS_INCLUDES)
-+TEST_GEN_PROGS := openat2_test resolve_test rename_attack_test emptypath_test
- 
- # gcc requires -static-libasan in order to ensure that Address Sanitizer's
- # library is the first one loaded. However, clang already statically links the
-diff --git a/tools/testing/selftests/filesystems/openat2/emptypath_test.c b/tools/testing/selftests/filesystems/openat2/emptypath_test.c
-new file mode 100644
-index 000000000000..d75b5e998ff9
---- /dev/null
-+++ b/tools/testing/selftests/filesystems/openat2/emptypath_test.c
-@@ -0,0 +1,55 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+
-+#define __SANE_USERSPACE_TYPES__
-+#include <fcntl.h>
-+#include <unistd.h>
-+#include <errno.h>
-+
-+#include "kselftest.h"
-+
-+#ifndef O_EMPTYPATH
-+#define O_EMPTYPATH	(1 << 26)
-+#endif
-+
-+int main(void)
-+{
-+	int opath_fd, reopen_fd;
-+	const char *path = "/tmp/emptypath_test";
-+
-+	ksft_print_header();
-+	ksft_set_plan(2);
-+
-+	opath_fd = open(path, O_CREAT | O_WRONLY, S_IRWXU);
-+	if (opath_fd < 0)
-+		ksft_exit_fail_msg("create %s: %m\n", path);
-+	close(opath_fd);
-+
-+	opath_fd = open(path, O_PATH);
-+	if (opath_fd < 0)
-+		ksft_exit_fail_msg("open %s O_PATH: %m\n", path);
-+
-+	reopen_fd = openat(opath_fd, "", O_RDONLY);
-+	if (reopen_fd < 0 && errno == ENOENT)
-+		ksft_test_result_pass("empty path without O_EMPTYPATH returns ENOENT\n");
-+	else if (reopen_fd >= 0) {
-+		ksft_test_result_fail("empty path without O_EMPTYPATH unexpectedly succeeded\n");
-+		close(reopen_fd);
-+	} else {
-+		ksft_test_result_fail("empty path without O_EMPTYPATH: expected ENOENT, got %m\n");
-+	}
-+
-+	reopen_fd = openat(opath_fd, "", O_RDONLY | O_EMPTYPATH);
-+
-+	if (reopen_fd < 0 && errno == EINVAL)
-+		ksft_exit_skip("O_EMPTYPATH not supported\n");
-+
-+	if (reopen_fd >= 0) {
-+		ksft_test_result_pass("O_EMPTYPATH reopens O_PATH fd\n");
-+		close(reopen_fd);
-+	} else {
-+		ksft_test_result_fail("O_EMPTYPATH failed: %m\n");
-+	}
-+
-+	unlink(path);
-+	ksft_finished();
-+}
-diff --git a/tools/testing/selftests/filesystems/openat2/helpers.h b/tools/testing/selftests/filesystems/openat2/helpers.h
-index 7ca54c718c45..3f01fb68c5a6 100644
---- a/tools/testing/selftests/filesystems/openat2/helpers.h
-+++ b/tools/testing/selftests/filesystems/openat2/helpers.h
-@@ -15,47 +15,14 @@
- #include <limits.h>
- #include <linux/types.h>
- #include <linux/unistd.h>
-+#include <linux/openat2.h>
- #include "kselftest_harness.h"
- 
- #define BUILD_BUG_ON(e) ((void)(sizeof(struct { int:(-!!(e)); })))
- 
--/*
-- * Arguments for how openat2(2) should open the target path. If @resolve is
-- * zero, then openat2(2) operates very similarly to openat(2).
-- *
-- * However, unlike openat(2), unknown bits in @flags result in -EINVAL rather
-- * than being silently ignored. @mode must be zero unless one of {O_CREAT,
-- * O_TMPFILE} are set.
-- *
-- * @flags: O_* flags.
-- * @mode: O_CREAT/O_TMPFILE file mode.
-- * @resolve: RESOLVE_* flags.
-- */
--struct open_how {
--	__u64 flags;
--	__u64 mode;
--	__u64 resolve;
--};
--
- #define OPEN_HOW_SIZE_VER0	24 /* sizeof first published struct */
- #define OPEN_HOW_SIZE_LATEST	OPEN_HOW_SIZE_VER0
- 
--#ifndef RESOLVE_IN_ROOT
--/* how->resolve flags for openat2(2). */
--#define RESOLVE_NO_XDEV		0x01 /* Block mount-point crossings
--					(includes bind-mounts). */
--#define RESOLVE_NO_MAGICLINKS	0x02 /* Block traversal through procfs-style
--					"magic-links". */
--#define RESOLVE_NO_SYMLINKS	0x04 /* Block traversal through all symlinks
--					(implies OEXT_NO_MAGICLINKS) */
--#define RESOLVE_BENEATH		0x08 /* Block "lexical" trickery like
--					"..", symlinks, and absolute
--					paths which escape the dirfd. */
--#define RESOLVE_IN_ROOT		0x10 /* Make all jumps to "/" and ".."
--					be scoped inside the dirfd
--					(similar to chroot(2)). */
--#endif /* RESOLVE_IN_ROOT */
--
- __maybe_unused
- static bool needs_openat2(const struct open_how *how)
- {
+> 
+> We don't care which physical page backs a given guest address at any
+> moment. We want to know which piece of the user's dataset is cold, and
+> the answer has to be indifferent to kernel actions underneath: the
+> tracking must survive migration and swap-out. RWP gives us that — the
+
+This is exactly what we hit...  that's the reason why I was trying to
+propose a new API to read directly from swap (swap_access) or similar.
+
+Btw, from another perspective, I believe we could also persist ACCESS bit
+across migration or swap out.
+
+For migration, see e.g. remove_migration_pte() has:
+
+		if (!softleaf_is_migration_young(entry))
+			pte = pte_mkold(pte);
+
+For swap, it's different.  Normally, if an userapp would manage page
+hotness, it will record the hotness within the userspace with whatever
+algorithm it wants.  Then it will also survive host swap happening because
+that hotness is per-VA.  It should be deduced from any hotness tracking
+system it previously used to sample (and it still can be idle page
+tracking, even if not efficient enough; when the VM page isn't mapped
+anywhere else, rmap is pure overhead, it doesn't introduce false positives).
+
+> uffd-wp bit is preserved across swap PTEs and migration entries, so the
+> "this VA was declared cold" marker stays attached to the VA. A
+> physical-side tracker loses its state the moment the folio is freed or
+> replaced: a refaulted folio is a fresh object with no history.
+> 
+> Scaling goes the same way. Per-mm tracking of the form RWP does can
+> scale with the working set. A physical-side tracker scales with all folios
+> on the LRU/memcg, then needs an rmap walk per folio to map back to a
+> VA — which is exactly the reason page_idle doesn't scale for this use
+> case today.
+> 
+> There is also a cgroup-level confound: memcg hotness mixes guest memory
+> with the VMM's own (worker threads, I/O buffers, vhost-user rings).
+> VMA-scoped tracking is the natural unit regardless of the migration
+> story.
+
+This kind of further proved you're using shmem and you have separate
+mappings.
+
+Again, when with a per-mm idle page tracking these issue should all be
+gone.  That per-mm idle page tracking needs to:
+
+  - Ignore rmap so it's VA based
+  - Still consider secondary MMUs, hence mmu young notifier needs to present
+  - Work based on ACCESS bit (to leverage hardware tracking accelerations),
+    rather than relying on a kernel fault to set the access mark, which
+    should be more efficient.
+
+The other thing is, could you please still answer why RWP is required for
+swap impl in general?  It's not yet mentioned in the reply.
+
+Personally I really feel like we're looking at very similar problems.  It
+is a great news to me, because if you can convince me on the new api it
+means our use case may likely also adopt the approach, vice versa.
+
+It would be great to share the new interface no matter what it is, instead
+of trying to push different ones.
+
+Thanks,
+
 -- 
-2.54.0
+Peter Xu
 
