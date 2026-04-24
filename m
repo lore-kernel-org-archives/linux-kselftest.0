@@ -1,170 +1,275 @@
-Received: from mail-vk1-f176.google.com (mail-vk1-f176.google.com [209.85.221.176])
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70B7B3FA5C5
-	for <linux-kselftest@vger.kernel.org>; Fri, 24 Apr 2026 19:08:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B126F3FAE08
+	for <linux-kselftest@vger.kernel.org>; Fri, 24 Apr 2026 19:58:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.175
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777057729; cv=pass; b=rtavt4JA0mU6XdJ7ogd1mpwNUg78uKC+v36caDNLmwFj2V1PuYXdsWiWVosutnrUntvsMR8NgzBtWnuNadxdfHf+4heGbX3CXBDvad8FgKrMilfrgPaPl0qaWM5ci1OdVEkJRvgtAuaMPRkemSGl01Sv6y9T3U8dN9Raw2CJA8I=
+	t=1777060699; cv=pass; b=pj97uvtDXSBc0CSQvW8/P+lRj5jawnMUQoeA1Og0DNLsru9VirhB0+oK3Fb9vFOeui1bTT0zoVHD0BOrrsQbKTAAr6pGd6SIcw4HguCIF16vZna5oFKLLTINTR7ftqyluX7zgzNfxSArgmM75EQDM8MsX2f1CLanu4Neym+pCGY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777057729; c=relaxed/simple;
-	bh=RZtEXtNhHfkNb6REgZmVRn/FfCDvY0I1XuFnEkLVDpk=;
-	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nN3BXZbu/bwWVg4K1PqqspO9LBGX299naQj1eAz4MKZQh8+6qjnECkwRX89Izg23zUn9KrjFHirh1ICwYTC2chUFc10teGLBe23DDAu0FyXH+u5oAF8mvsJd/wqRyfXAnFjJa7lqga0Q0GpeEl9QVzVUTmHqCd8yd4IbXmFq8c4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Wn8Zmut6; arc=pass smtp.client-ip=209.85.221.176
+	s=arc-20240116; t=1777060699; c=relaxed/simple;
+	bh=swqZP6bwTIUcJ5KzcYIemDhYEvjynCxyftExGjuU4rY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=RVd7303hr8HOO1RTbrUSkjfK3CdrZyD36w8luuXtlw+l5vvtwNcEJd3vLRSOaRd8NmqVKdKbRnRQYZjMdudbFvRyCd2z6MdBUuHoRahZ9MthqCBACSUxTwq9oe80/lMKGM7d5ILSK5el7rBethk3TQk+1vl9bIP7Kf68KO241Qk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZryCtjif; arc=pass smtp.client-ip=209.85.160.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Wn8Zmut6"
-Received: by mail-vk1-f176.google.com with SMTP id 71dfb90a1353d-5637886c92aso3342923e0c.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 Apr 2026 12:08:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1777057727; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZryCtjif"
+Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-50d864c23bdso5153271cf.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Apr 2026 12:58:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1777060697; cv=none;
         d=google.com; s=arc-20240605;
-        b=ZgtkL19bnVURsJxTdPF87NSKiFZBCSEaLZt2pvAzu2c70nIRPawfassvucrL7DyQV3
-         WO/ddRdlUAh3MBpj6QQDwPZCoK4sdGNu5ztdnDOr72hoH1jmbEOsOMXjjbfMZIKjvkR7
-         17VdnXI9KPRpvwY+zfZL91pnBGLdFtyalye7yLSH6r68gB0KPUbFixrbGMYTLLTeqWik
-         Ls1By+8Al7FeOoz74K7gztcVIrq5CC66X2xekDBKnO0tIzcn2xPxbeN87Ra2Wn+CYhjz
-         CUOnYqGPegYyRIguYXa2gycS3XsWkzT0AyD2B/dL1NazRJ0/qU3B9InFigjkQUQwYUEd
-         fJcg==
+        b=GPHgFj7ilSaTuAAm/P7IVPV3FpJ3LtV3R4NDQ3GVbaLqy7coKQcmvbQ7+OHEGowxPO
+         h5OIl01yP4jxs6OWog/K10pwjJssWyw44oOIAwc/pjKx8y37yHiaTyEF005VK3CISqzl
+         YvCnAIc8wRGWr+EjjdYx/XTa8QY5FEdXN1cUOboeZdv+dyvwORvEGjw1w1Cv4+fJqjpt
+         yy0o0A02sP9yJbZMrc+6CKH6He+p9nQl5yVUhU584N4jYVWKwMkeRI0awmIseS4+ImyP
+         9Q9WUMqABj2AO4C4IF7HP2T8w+7Xbgv4uZN14p5Kex/Q9VrrYJemdt2QpE+DsNMdsOEW
+         qUmA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:dkim-signature;
-        bh=RZtEXtNhHfkNb6REgZmVRn/FfCDvY0I1XuFnEkLVDpk=;
-        fh=Y2WF4A2vQvYvr1+qmBBhPNh35K1Np3asBVcIORdbP60=;
-        b=PI43/hLhNqqLJu2nz0fFNb+jVYE6w5yOb9r5c/u4Yobc5JUGfXl4FFcyk5XR/P2d98
-         QeWrZy9NfqLgB0YSTiZ49wSzpcq9PARFa5vWzWe5TgEeha2TuSB5JZERpsrWQBGFxDub
-         cyHGr1TO6uWoZKDkynfb1hXG1qdBfd4T+9dMbOQ7m20VLggB4U+htNeenALiNgt9Wbvu
-         OX6tG0OKMzhmK6oPlAHTcuElk99qELzYw6AcBh7FhsvBB7vVOIty/Qna4Qwv13T3WVr4
-         hM2COO331DLx8T7ub7t5h3xelj+r+e1BtMvhgtt5Mggixs5R5TGfqJfaGqPnyQ/lVtyd
-         7HlA==;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Jx/+X7z1qY/OvSf5HyX8x1jyhWzg0V6nE8tOpGh+FOs=;
+        fh=+cJ3UmeFDA4m82E6e9ZS4WMCy+CK3nOP0YM73a8F7XY=;
+        b=Yn7mYGdrRNC5AtTnQI/5RrXeoAuAJTtwMNxbg1Km74af2VrjOIJ0YqXVZIff3XqX2/
+         TmdejmfTkZt6b4xYInyaAhJYSnNke8OJuYJzIsJxF9yNuq1WlqTvWRslTIVUXGsujTEK
+         ZeCQdgaekyHhlyjk7FAcNZoxRzbYpCWO3lLlyfqQAWQN7vmMnyVjPwJnLFYM5XaB/t1R
+         G2Z+HEMP08Ja8oB7USuPDU3Vsng8+wiqmWuwAo6MiSIlDBR/C2B0UbsoEfcsHC+h5z+n
+         UIn/qhfEcMiYV25RaiyJmgIc8NKOu0E7FVcwNMVyMRcey/ZKtTT/LRSo5csmtLC+9//d
+         J+Sw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1777057727; x=1777662527; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=RZtEXtNhHfkNb6REgZmVRn/FfCDvY0I1XuFnEkLVDpk=;
-        b=Wn8Zmut6TaIcmSg3y5Y5a+blYeLvO3T/F4cHcw7Y8e65aB9j3gDdqe6JDEYmFaxXsZ
-         uIQGVA2a08X7iOx8+HCedIzhEYlzfqxt7TxqduTtq6glVAcYLTiwX5qcK2CUN/+nHq+4
-         Jo13b3vYy8hS6wAtD1oyrYQ4hn8tPCncQFjs+VGwm7irmd1cXip0GMtJKIO+Db+OMYLQ
-         eSgAOsZe9TTW14NiWWp0Y4karM6mZgVQLZQJ4E5+zz9bwtbeNA8z4rQe8troqd28vD4S
-         fDYrv12KqJkch1N8sdlTMc7ddWq5+lsgB3TbbljGW6d1Er6BANNXjsQj0T96BTN9ztdB
-         jvtg==
+        d=google.com; s=20251104; t=1777060697; x=1777665497; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Jx/+X7z1qY/OvSf5HyX8x1jyhWzg0V6nE8tOpGh+FOs=;
+        b=ZryCtjif7bm2zeJaLziU1qTTapOZIcYBoIVADxLNCBV/Gx7a4vig6Klohi2JlhCv9h
+         jiifEqZEaz0HCmfkHx17egwG2wqicAFz0J26N/KsfB8IkimK5kZV8/mFOyzdqAsJgWjK
+         V5KANuGUT5fqfqCuy/s7BNi/A9uxkzsmBMxpl8TX7Tv23myDDp7PIkWw6b+dMXZxXrE2
+         egKTTNkEbn//TMLBA8ApVpwd7QBHJjPFvytIYexChKcGRrT7nh3uj4KKWSKGpF8jBUeA
+         UH7OwP1ompcY7dXeca61tK+geIzVFIdg4fmkEkolNU5H2+uarvmw448ZlHPA8MW5FObG
+         QC1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777057727; x=1777662527;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RZtEXtNhHfkNb6REgZmVRn/FfCDvY0I1XuFnEkLVDpk=;
-        b=hdUz0DTSdnzbMuA73KDk47RalP0klaQwIAyIdOMF32p7r7KwUCzIiuhjYmImSJNP00
-         6k2BPi6uJgxHl0+eJACb7fdf2GTpmxWoBLzRRDkqql0/vOwX2NOFD3qZgm0pD0mZYYWr
-         qycgiAM2/BytoOMyHc7Z2vnqVhnMbwZ9S/aodniOZ6ob9k/lUHEnI91T7MFsy9hA7jX9
-         47nkfx80QO9UmhiUafzHDTJHLvQk4omU2cupIcjf6CrUb3ufFMqVVygJiFFkGh1thnBj
-         M/9aIRUrus8gkEIK5/8Uxb9nWQONvhRZ5qiqoGRoZSyaT5q0gm8s9pGv79Fchn7seWvI
-         DB/Q==
-X-Forwarded-Encrypted: i=1; AFNElJ9GPVezuvwRI4zdWK1fCE0fJmh71+o9Qg8f3gBnaOw/EV0jniWQ5f+2BVi6/orY+GZZQXVZrfSmQPQwUPJCxpI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxVJsH6MQSmLT/TPK6mCSHF5nwli6ZKN14Vl4BE8zQeWfKUOukX
-	oSgXtl3uuarDLk3+0dU/vLh5AULt4g/LpVKd7hvdLM24J7yBl82sXecGK8WHmOVn1Vrx+A7rYEI
-	xm1FG9jWp43DCzDACMctgKjjtUwjHAycjf5FrKVUw
-X-Gm-Gg: AeBDievLfB7G6Z42FGlBFDk9dRMEFvpmQSlZqGhpvSPyf2bkJHL/rMrDGLqgC9GY6m+
-	Hclt3E+fWQUGoDdCv2WSBPbGNJLsQkQ1pgNAjca9WVRMBMIRNbBU042ZlsU3sVgQymgScoAcfGx
-	3mkcUOhHDhCn2+WkXbGUpezhR46hINk0UMDmVm0swkwq9/JZePtBZAoavbTIzV2Odxcyj7gYTYE
-	yuVS5/WVXwMiHrmXsJwYXafgg63hHqyBraqDF19kta0QoiGLj2Qhqv6PH9gbBMiZDPHGqjnMvfu
-	Rq4Wklzo5RJY2a2W0A2tC3YXDhNYD+prnJ7rmmopzpXPTi3QcDdtrhXgCRdNidKTwPSMXukTm6m
-	OvhTQ54EVlI9/XkA=
-X-Received: by 2002:a05:6122:8b8b:b0:56c:ddbf:57e2 with SMTP id
- 71dfb90a1353d-56fc6816e2amr12940121e0c.11.1777057726762; Fri, 24 Apr 2026
- 12:08:46 -0700 (PDT)
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 24 Apr 2026 12:08:45 -0700
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 24 Apr 2026 12:08:45 -0700
-From: Ackerley Tng <ackerleytng@google.com>
-In-Reply-To: <3blpenhpvysb2ig7efegedx4v3flppl5ftnz6vhpqlatfk3ycn@vmmhs7mvjieg>
-References: <20260326-gmem-inplace-conversion-v4-0-e202fe950ffd@google.com>
- <20260326-gmem-inplace-conversion-v4-10-e202fe950ffd@google.com>
- <2r4mmfiuisw26qymahnbh2oxqkkrywqev477kc4rlkcyx7tels@c7ple7kdgpo3>
- <CAEvNRgFkusZeKxGctUpTTbYjdi7nZL1ZZar-gT7XRUOCZ2xtpw@mail.gmail.com>
- <eiiecl7jvywvqb4drq7cchmcabcrdka25wxr77uavxqineeedm@rfcnhdz6xoxf> <3blpenhpvysb2ig7efegedx4v3flppl5ftnz6vhpqlatfk3ycn@vmmhs7mvjieg>
+        d=1e100.net; s=20251104; t=1777060697; x=1777665497;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Jx/+X7z1qY/OvSf5HyX8x1jyhWzg0V6nE8tOpGh+FOs=;
+        b=sxz/HsfcyJv/8aAw2J333p0B1yF5akdt9K0Qwcy18/p1IIeFVkKJf9rzpA2dQsmMlZ
+         dulz0UbsbcNd7TllvGFd1ZQcwGK51/qSU9EhI62t6dyhS0i/e9TcD+ljzuNxKkMt5o16
+         7yuwDpb/CM3Ja3P9aU5taBrOpz+b87zgyLQ6JYfcZjEkE2aihcUNhVvD1X3zU7utFrsZ
+         TKcgbhMy5FlN15pGLIcJY3ElReLpNwWy4sKxTPCEbUBzIhvvXfnCALgIOZkyVXGMJ3p7
+         m47Wi3T9IWUNThQ61ONzoz6EaKP9TgPRGCfd0wpXVD4RWqXt44Qzwhx4js7u3Pd/kAll
+         m9mA==
+X-Forwarded-Encrypted: i=1; AFNElJ8COVWrssPwCWemexg2HYK01OHxRE970qO0TH2YWZSIqSrP23CS95XOQMH8crwqVy52f26NclY+GRyyHIz3ITE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw8JXTVGTLTRkCt11P+xTY5UWNkt/zp66wwGHYZAjroPcUmvQS9
+	B2Tm03IvczBe9I49lG0+F6jyBCsVrkdeRQrOkWH9DFyT2MTEbjwQhd7ND/BfOrupvx3McJCCJU3
+	7/jvEQfVs8sgq5iiCLAt6R8CWZb60LMGPYFsY9RI4
+X-Gm-Gg: AeBDieuIPwwe2TCx5w3WOfNudjPj9vLYlAXklddAP8s3NgAlin6t0DJZ7y7eY+o0swL
+	qKuBsuaJ+IG69fr4hmWjjozSb7Ext1cquIpYYYo9NaLyBoWQZhhs8wE0xVRHsk/U0Voox3G92jX
+	b4QAjqRMEDDXljAqE6UmQcxwn8yV/cN99FYfJKWZ834q5imnrmqGB6cGTIs6z2FA4d2bi9NuSxH
+	c9S/K0pdJEj7clv56fW7Q0UUNq49UCQ7XtRuVh+W1pwTJWehmzjWmoi5IxS97vAbKuPlsWn9IkZ
+	xTx6tQNIMaq4WIm3eRmD1ahJsHQ=
+X-Received: by 2002:a05:622a:248e:b0:50f:bea3:9475 with SMTP id
+ d75a77b69052e-50fbea3aabdmr20044151cf.14.1777060696083; Fri, 24 Apr 2026
+ 12:58:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Fri, 24 Apr 2026 12:08:45 -0700
-X-Gm-Features: AQROBzBye4IStJFmb-zjsEcLePEkodFuzsfbkbSYLrRwBVn_bPHs_yld_lwLStI
-Message-ID: <CAEvNRgGbMhkX310CkFY_M5x-zod=BDTiuznrZ0XvFPUK7weL1A@mail.gmail.com>
-Subject: Re: [PATCH RFC v4 10/44] KVM: guest_memfd: Add support for KVM_SET_MEMORY_ATTRIBUTES2
-To: Michael Roth <michael.roth@amd.com>
-Cc: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com, 
-	brauner@kernel.org, chao.p.peng@linux.intel.com, david@kernel.org, 
-	ira.weiny@intel.com, jmattson@google.com, jthoughton@google.com, 
-	oupton@kernel.org, pankaj.gupta@amd.com, qperret@google.com, 
-	rick.p.edgecombe@intel.com, rientjes@google.com, shivankg@amd.com, 
-	steven.price@arm.com, tabba@google.com, willy@infradead.org, 
-	wyihan@google.com, yan.y.zhao@intel.com, forkloop@google.com, 
-	pratyush@kernel.org, suzuki.poulose@arm.com, aneesh.kumar@kernel.org, 
-	Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson <seanjc@google.com>, 
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
-	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
-	Nhat Pham <nphamcs@gmail.com>, Baoquan He <bhe@redhat.com>, Barry Song <baohua@kernel.org>, 
-	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
-	Wei Xu <weixugc@google.com>, Jason Gunthorpe <jgg@ziepe.ca>, Vlastimil Babka <vbabka@kernel.org>, 
-	kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org
+References: <20260424070234.190145-1-surenb@google.com> <20260424070234.190145-3-surenb@google.com>
+ <j3vswsvp6jp3hopogpc2qqre4mwneeffoutbytlgt6sah2blgz@33rsxbylk7bv>
+In-Reply-To: <j3vswsvp6jp3hopogpc2qqre4mwneeffoutbytlgt6sah2blgz@33rsxbylk7bv>
+From: Suren Baghdasaryan <surenb@google.com>
+Date: Fri, 24 Apr 2026 12:58:05 -0700
+X-Gm-Features: AQROBzB1Rx4ZvLow_W2QFHi8uxoLOiZRRVGVFV_nLgtZwxwfKXdBC5rKzdCtvYI
+Message-ID: <CAJuCfpF+hE+Rf5mkJXBr1rc8_VX13RUu1MtQVaAZZRYRPskRXA@mail.gmail.com>
+Subject: Re: [PATCH 2/3] selftests/proc: ensure the test is performed at the
+ right page boundary
+To: "Liam R. Howlett" <liam@infradead.org>
+Cc: akpm@linux-foundation.org, ljs@kernel.org, vbabka@kernel.org, 
+	david@redhat.com, willy@infradead.org, jannh@google.com, paulmck@kernel.org, 
+	pfalcato@suse.de, shuah@kernel.org, hsukrut3@gmail.com, 
+	richard.weiyang@gmail.com, reddybalavignesh9979@gmail.com, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Michael Roth <michael.roth@amd.com> writes:
+On Fri, Apr 24, 2026 at 11:21=E2=80=AFAM Liam R. Howlett <liam@infradead.or=
+g> wrote:
+>
+> On 26/04/24 12:02AM, Suren Baghdasaryan wrote:
+> > When running tearing tests we need to ensure the pages we use include
+> > VMAs that were mapped by the child process for this test. Currently we
+> > always use the first two pages, checking VMAs at their boundaries and
+> > this works, however once we add tests for /proc/pid/smaps, the first tw=
+o
+> > pages might not contain the VMAs that child modifies.
+> > Locate the page that contains the first VMA mapped by the child and use
+> > that and the next page for the test.
+> >
+> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+>
+> Reviewed-by: Liam R. Howlett <liam@infradead.org>
 
-Thank you for your patches!
+Thanks!
 
 >
-> [...snip...]
+> > ---
+> >  tools/testing/selftests/proc/proc-maps-race.c | 78 ++++++++++++++++---
+> >  1 file changed, 68 insertions(+), 10 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/proc/proc-maps-race.c b/tools/test=
+ing/selftests/proc/proc-maps-race.c
+> > index a734553718da..c5031b0593b7 100644
+> > --- a/tools/testing/selftests/proc/proc-maps-race.c
+> > +++ b/tools/testing/selftests/proc/proc-maps-race.c
+> > @@ -39,6 +39,13 @@
+> >  #include <sys/types.h>
+> >  #include <sys/wait.h>
+> >
+> > +#define min(a, b) \
+> > +     ({ \
+> > +             typeof(a) _a =3D (a); \
+> > +             typeof(b) _b =3D (b); \
+> > +             _a < _b ? _a : _b; \
+> > +     })
+> > +
 >
->>
->> I also did some minor updates (prefixed with a "[squash]" tag) to advertise
->> the KVM_SET_MEMORY_ATTRIBUTES2_PRESERVED flag so it can be used by
+> Another implementation of min in the selftests.  I guess it's somewhat
+> unavoidable.
+
+Yeah, I was looking for a good place to put it and reuse in other
+tests but the only common part it seems is the harness and it didn't
+feel like the right place to put it.
+
 >
-> Though I'm not sure how we deal with it if SNP/TDX at some point become
-> capable of using the PRESERVED flag *after* populate... but maybe that's
-> too unlikely to worry about? If we wanted to address it though, we could
-> have both PRESERVED and PRESERVED_BEFORE_LAUNCH so they can be
-> enumerated separately from the start.
->
-
-Not sure how likely it is, but if SNP and TDX can honor PRESERVE
-semantics after populate, I think we could implement support under a new
-flag like CIPHER.
-
-CIPHER can then be used to mean "do the encryption or decryption", and
-for platforms not supporting encryption, they'd stick with PRESERVE?
-
-Should we redefine the semantics of PRESERVE to be "ensure that memory
-contents don't change while guest_memfd tracking is being updated" and
-avoid making a commitment on how the guest should read the memory?
-
-The above update would be aligned with ZERO not being allowed for
-conversions to private (because KVM/guest_memfd does not make guarantees
-about the contract between the host and guest.
-
-This way, all of those (ZERO, PRESERVE) will focus on KVM's interface
-with the host.
-
-This lines up for SW_PROTECTED_VMs too, since reading memory that didn't
-change in the guest is the contract between SW_PROTECTED_VMs and the
-host.
-
->> userspace for SNP/TDX in the kvm_gmem_populate() path as agreed upon
->> during PUCK.
->>
->>
->> [...snip...]
->>
+> >  /* /proc/pid/maps parsing routines */
+> >  struct page_content {
+> >       char *data;
+> > @@ -77,6 +84,7 @@ FIXTURE(proc_maps_race)
+> >       struct line_content first_line;
+> >       unsigned long duration_sec;
+> >       int shared_mem_size;
+> > +     int skip_pages;
+> >       int page_size;
+> >       int vma_count;
+> >       bool verbose;
+> > @@ -105,27 +113,68 @@ struct vma_modifier_info {
+> >       void *child_mapped_addr[];
+> >  };
+> >
+> > -
+> > -static bool read_two_pages(FIXTURE_DATA(proc_maps_race) *self)
+> > +static bool read_page(FIXTURE_DATA(proc_maps_race) *self,
+> > +                   struct page_content *page)
+> >  {
+> >       ssize_t  bytes_read;
+> >
+> > -     if (lseek(self->maps_fd, 0, SEEK_SET) < 0)
+> > +     bytes_read =3D read(self->maps_fd, page->data, self->page_size);
+> > +     if (bytes_read <=3D 0)
+> >               return false;
+> >
+> > -     bytes_read =3D read(self->maps_fd, self->page1.data, self->page_s=
+ize);
+> > -     if (bytes_read <=3D 0)
+> > +     /* Make sure data always ends with a newline character. */
+> > +     if (page->data[bytes_read - 1] !=3D '\n')
+> >               return false;
+> >
+> > -     self->page1.size =3D bytes_read;
+> > +     page->size =3D bytes_read;
+> >
+> > -     bytes_read =3D read(self->maps_fd, self->page2.data, self->page_s=
+ize);
+> > -     if (bytes_read <=3D 0)
+> > +     return true;
+> > +}
+> > +
+> > +static int locate_containing_page(FIXTURE_DATA(proc_maps_race) *self,
+> > +                               unsigned long addr, unsigned long size)
+> > +{
+> > +     unsigned long start, end;
+> > +     int page =3D 0;
+> > +
+> > +     if (lseek(self->maps_fd, 0, SEEK_SET) < 0)
+> > +             return -1;
+> > +
+> > +     while (true) {
+> > +             char *curr_pos;
+> > +             char *end_pos;
+> > +
+> > +             if (!read_page(self, &self->page1))
+> > +                     return -1;
+> > +
+> > +             curr_pos =3D self->page1.data;
+> > +             end_pos =3D self->page1.data + self->page1.size;
+> > +             while (curr_pos < end_pos) {
+> > +                     if (sscanf(curr_pos, "%lx-%lx", &start, &end) =3D=
+=3D 2 &&
+> > +                         start =3D=3D addr && end =3D=3D addr + size)
+> > +                             return page;
+> > +
+> > +                     curr_pos =3D strchr(curr_pos, '\n');
+> > +                     if (!curr_pos)
+> > +                             break;
+> > +                     curr_pos++;
+> > +             }
+> > +             page++;
+> > +     }
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static bool read_two_pages(FIXTURE_DATA(proc_maps_race) *self)
+> > +{
+> > +     if (lseek(self->maps_fd, 0, SEEK_SET) < 0)
+> >               return false;
+> >
+> > -     self->page2.size =3D bytes_read;
+> > +     for (int i =3D 0; i < self->skip_pages; i++)
+> > +             if (!read_page(self, &self->page1))
+> > +                     return false;
+> >
+> > -     return true;
+> > +     return read_page(self, &self->page1) && read_page(self, &self->pa=
+ge2);
+> >  }
+> >
+> >  static void copy_first_line(struct page_content *page, char *first_lin=
+e)
+> > @@ -418,6 +467,8 @@ FIXTURE_SETUP(proc_maps_race)
+> >       struct vma_modifier_info *mod_info;
+> >       pthread_mutexattr_t mutex_attr;
+> >       pthread_condattr_t cond_attr;
+> > +     unsigned long first_map_addr;
+> > +     unsigned long last_map_addr;
+> >       unsigned long duration_sec;
+> >       char fname[32];
+> >
+> > @@ -502,6 +553,13 @@ FIXTURE_SETUP(proc_maps_race)
+> >       self->page2.data =3D malloc(self->page_size);
+> >       ASSERT_NE(self->page2.data, NULL);
+> >
+> > +     first_map_addr =3D (unsigned long)mod_info->child_mapped_addr[0];
+> > +     last_map_addr =3D (unsigned long)mod_info->child_mapped_addr[mod_=
+info->vma_count - 1];
+> > +
+> > +     self->skip_pages =3D locate_containing_page(self,
+> > +                                     min(first_map_addr, last_map_addr=
+),
+> > +                                     self->page_size * 3);
+> > +     ASSERT_NE(self->skip_pages, -1);
+> >       ASSERT_TRUE(read_boundary_lines(self, &self->last_line, &self->fi=
+rst_line));
+> >
+> >       /*
+> > --
+> > 2.54.0.545.g6539524ca2-goog
+> >
