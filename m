@@ -1,141 +1,98 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E45B7372B2F;
-	Fri, 24 Apr 2026 10:34:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5469539E194;
+	Fri, 24 Apr 2026 11:08:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777026892; cv=none; b=ip7UWt/LHR1KfDoYLf3A+uOc6ZvjiUmjB5ndcJFNGqHgJshZREUhzIz51dV/1ZvYpK5w1LjD7nreyVByjEopALKttSh+MwKLKDuv25qTCnKtOyia/D4mKotdnN8GuZMycFoTbwxti5Zt0W8yyN+X5HVqGdQsymUeiDcehXAC5Eo=
+	t=1777028885; cv=none; b=D0ul7GjiOX1MKrY4izP+d7CKmV6aQUC7xKZthYrXkuWcrZl5Qzcy1VWs/nDwE/e2YdOiza2sIbOD0Ysx1ucasHX8cR/I/zvonFFYotQgE0SdDIIIRBi1N2SJ6alBFnnWNuvzGnwykPfO3rPFTEpUyGV73STkC8xBzBzv5xxiyXk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777026892; c=relaxed/simple;
-	bh=PEyb6FtGbI/y7wrR0DER3IIKFWzjINJX60KL18Yzo7c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WeN4/272nY3WaizD32SVJcPzk6ooQ96SAdJ4ioKo94lT+jRtio6V0v1BCTwTNRTWzcS2/NMBBVc1vU7uhX7aGEEz0OWnJA06US11avaT2qktPHmJjS1e22BJ2YflBhn0dtfEmPxUjH3XvD8ulE1WJXBqJc1o6uQ8D3X0LMWtHYY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AzPE19aI; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777028885; c=relaxed/simple;
+	bh=EhTixBg2942FDflTxtXBYV+26rSI2mTgBToDUlR3aI0=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ETf81DYbWwR1JSEtajdDipyGDFt/IF9dJvu1m613i6oJ7G4Ky2WXk9DnF0fqTXJZ7CdCSQ1IvmGqQg4Jl6Z1eeNBAYQec7HqfzPI5KHozoHOU5AAh8+V1IBrMhvasIVuNDMCE+G7mI3BXKJSHpPtNljkb4tjDP3qwPg2VsvFT+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gyLsioWS; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AzPE19aI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28940C4AF09;
-	Fri, 24 Apr 2026 10:34:51 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gyLsioWS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAD78C19425;
+	Fri, 24 Apr 2026 11:08:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777026891;
-	bh=PEyb6FtGbI/y7wrR0DER3IIKFWzjINJX60KL18Yzo7c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AzPE19aIZMgleOj/9Q7vqfwN9bsj9eXevrDOI8GRSdwxw+lk6cdJetqiieBdiQveT
-	 vyjhKFYAWIx0OboZGTxjR7SxzElRboGrqBA7wyqsAfh/A2rzelHLROqcleYL3Mrkt+
-	 YNmCNLzcKDtYT1Rax37fg649Gx74TdctTD1h6EGbXlEuJ/Xyi9uQZXbVbA+RADYK0c
-	 UwpFbbq8bpY7D21KSX5uN4EkXkTAg7SsT8YLRmg7y7HJ47lL1HYnUvyhTeU4ZWmPeG
-	 /TM3uIQvoOg5FY4QfhVQdAwCo8tSgVEmXMkkgr9tOXhduJeHAT7oP4UoFJb/JzORLv
-	 6y8HrPtoEzLQA==
-Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 38E5CF40068;
-	Fri, 24 Apr 2026 06:34:50 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-05.internal (MEProxy); Fri, 24 Apr 2026 06:34:50 -0400
-X-ME-Sender: <xms:Skfrac-9Tfj0ayWIBJIyngPd4UlMGsnZuiY2Oelqutif3fZ89iuzgw>
-    <xme:SkfraTNg1kxr5_buB3DEXyDvBCKG4GgTfo0nWqyAN6dyJ9vDnG1M4d2_CcatbFkHf
-    uC8G8SDCtNyHrsZb0n-pTk_58d3N0hdZ5Zueu8mn01R4yd_aXmCjM0>
-X-ME-Received: <xmr:SkfraYMAqtZJXSqD1tnl6ecYoMkMELXZiL5l-qals8ZbGO6s1wuIwfBVKC0ypA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgdeileektdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpeffhffvvefukfhfgggtugfgjgesthekredttddtjeenucfhrhhomhepmfhirhihlhcu
-    ufhhuhhtshgvmhgruhcuoehkrghssehkvghrnhgvlhdrohhrgheqnecuggftrfgrthhtvg
-    hrnhepiefgvddtkeevjefhhedtudeuueeikeejkedvgffgtdekgeeiveejvdegtedvhefg
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepkhhirh
-    hilhhlodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduieduudeivdeiheeh
-    qddvkeeggeegjedvkedqkhgrsheppehkvghrnhgvlhdrohhrghesshhhuhhtvghmohhvrd
-    hnrghmvgdpnhgspghrtghpthhtohepfeeipdhmohguvgepshhmthhpohhuthdprhgtphht
-    thhopehpvghtvghrgiesrhgvughhrghtrdgtohhmpdhrtghpthhtohepuggrvhhiugeskh
-    gvrhhnvghlrdhorhhgpdhrtghpthhtoheprghkphhmsehlihhnuhigqdhfohhunhgurght
-    ihhonhdrohhrghdprhgtphhtthhopehljhhssehkvghrnhgvlhdrohhrghdprhgtphhtth
-    hopehrphhptheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhurhgvnhgssehgohho
-    ghhlvgdrtghomhdprhgtphhtthhopehvsggrsghkrgeskhgvrhhnvghlrdhorhhgpdhrtg
-    hpthhtoheplhhirghmrdhhohiflhgvthhtsehorhgrtghlvgdrtghomhdprhgtphhtthho
-    peiiihihsehnvhhiughirgdrtghomh
-X-ME-Proxy: <xmx:SkfraROW4DK729VqpkvKr_9pXjP4KoM5f2Ijx0pGvl9ajs3wr547_w>
-    <xmx:SkfrafUWOGIT00cIGKIOwesTuYnJ7J989uaVVotDzWIgsw5j_hZNsw>
-    <xmx:SkfraZrqDgPEAmJatscUh4DMeUJmyMI_-RQaPUOMUT-77ArD7thZGA>
-    <xmx:SkfraVeHg_mWZ1zZqHIOmbwfIE1rZc8UvSJL51nsn7j2yohQ9UZJxw>
-    <xmx:SkfraVC1daTB8U6MHmddnRPSUtC-87Qe-I1RWKoYXacKv5v0ffkmLpEm>
-Feedback-ID: i10464835:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 24 Apr 2026 06:34:49 -0400 (EDT)
-Date: Fri, 24 Apr 2026 11:34:48 +0100
-From: Kiryl Shutsemau <kas@kernel.org>
-To: Peter Xu <peterx@redhat.com>
-Cc: "David Hildenbrand (Arm)" <david@kernel.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
-	Vlastimil Babka <vbabka@kernel.org>, "Liam R . Howlett" <Liam.Howlett@oracle.com>, 
-	Zi Yan <ziy@nvidia.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Sean Christopherson <seanjc@google.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, kvm@vger.kernel.org
-Subject: Re: [RFC, PATCH 00/12] userfaultfd: working set tracking for VM
- guest memory
-Message-ID: <aes7b17nG0cXrtEd@thinkstation>
-References: <4c635703-3d8d-4cfa-bb98-7f6f5fcbe547@kernel.org>
- <aeImfRrrvr3UoKtL@thinkstation>
- <aeTnlQUOOh-dHG8z@thinkstation>
- <34f75083-29a3-4860-8a6e-94551d37ac6a@kernel.org>
- <aed6fHLrIdahbdY3@thinkstation>
- <b77d559b-215e-460a-a268-e63b8273ef42@kernel.org>
- <aeorZMvKwu8zKX5i@thinkstation>
- <aeoxnuGKO3uqS2kG@x1.local>
- <aeo5IPpQi7onyjTF@thinkstation>
- <aeprnnccJeyHB2rt@x1.local>
+	s=k20201202; t=1777028885;
+	bh=EhTixBg2942FDflTxtXBYV+26rSI2mTgBToDUlR3aI0=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=gyLsioWS5UkEU/oiFMqlSXoZ/KEgJoWh5e1lbm7vRt1m8h6wiureytQh1/CpEvSjq
+	 UxYGnWQlFTW3mpCio70n3eisrCnXOjs9UcarC1eTY0DtkXTwmgPpz8IrTn4hV06pOq
+	 Nhe8Im1geRV7iqZx1OZbwwMuZbjRHEXWPC3gcvgvFTcHd+WCZ2661lb1CvJdbc5cSh
+	 l4u9acMIVyDT8UTSUlkAenrMYOPEMvlYSJ4k+ItlgAV8gj9DIIsQKExGrfLly9ut9t
+	 2CUBWlTveBbgoXYbuPugjG/kozw652T0pt3Xhm5ECHSQeOKhA9IOAR298hZo380dfN
+	 VWSNRF7Vk687g==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=valley-girl.lan)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <maz@kernel.org>)
+	id 1wGEOA-0000000ELuP-12bL;
+	Fri, 24 Apr 2026 11:08:02 +0000
+From: Marc Zyngier <maz@kernel.org>
+To: Oliver Upton <oupton@kernel.org>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	David Woodhouse <dwmw@amazon.co.uk>,
+	Raghavendra Rao Ananta <rananta@google.com>,
+	Eric Auger <eric.auger@redhat.com>,
+	Kees Cook <kees@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	David Woodhouse <dwmw2@infradead.org>
+Subject: Re: (subset) [PATCH 1/3] KVM: arm64: vgic: Fix IIDR revision field extracted from wrong value
+Date: Fri, 24 Apr 2026 12:07:57 +0100
+Message-ID: <177702878141.537738.13460155220731277452.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260407210949.2076251-2-dwmw2@infradead.org>
+References: <20260407210949.2076251-1-dwmw2@infradead.org> <20260407210949.2076251-2-dwmw2@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <aeprnnccJeyHB2rt@x1.local>
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: oupton@kernel.org, joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, catalin.marinas@arm.com, will@kernel.org, pbonzini@redhat.com, shuah@kernel.org, dwmw@amazon.co.uk, rananta@google.com, eric.auger@redhat.com, kees@kernel.org, arnd@arndb.de, nathan@kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, dwmw2@infradead.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Thu, Apr 23, 2026 at 02:57:34PM -0400, Peter Xu wrote:
-> On Thu, Apr 23, 2026 at 07:08:00PM +0100, Kiryl Shutsemau wrote:
-> > > - Whether read protection is required for an userspace swap system
-> > >   (e.g. did you get time to have a look at umap?)
-> > 
-> > I looked at it briefly, so I can miss details.
-> > 
-> > IIUC, in absence of read tracking it doesn't collect hotness information
-> > at all. The eviction is based on fault-in time: the oldest faulted-in
+On Tue, 07 Apr 2026 21:27:02 +0100, David Woodhouse wrote:
+> The uaccess write handlers for GICD_IIDR in both GICv2 and GICv3
+> extract the revision field from 'reg' (the current IIDR value read back
+> from the emulated distributor) instead of 'val' (the value userspace is
+> trying to write). This means userspace can never actually change the
+> implementation revision — the extracted value is always the current one.
 > 
-> For example, let's imagine if we can have a per-mm idle page tracker, would
-> it work for you to collect hotness info?
->
-> The other idea is, no matter whether we use MGLRU or legacy LRU, if we can
-> expose a better interface to share hotness info from kernel to userspace,
-> would it be possible?
+> Fix the FIELD_GET to use 'val' so that userspace can select a different
+> revision for migration compatibility.
+> 
+> [...]
 
-I don't see how either fits our problem.
+Applied to fixes, thanks!
 
-Both page_idle and the LRUs (legacy or MGLRU) track accesses on physical
-memory. We need visibility in the virtual address space domain.
+[1/3] KVM: arm64: vgic: Fix IIDR revision field extracted from wrong value
+      commit: a0e6ae45af17e8b27958830595799c702ffbab8d
 
-We don't care which physical page backs a given guest address at any
-moment. We want to know which piece of the user's dataset is cold, and
-the answer has to be indifferent to kernel actions underneath: the
-tracking must survive migration and swap-out. RWP gives us that — the
-uffd-wp bit is preserved across swap PTEs and migration entries, so the
-"this VA was declared cold" marker stays attached to the VA. A
-physical-side tracker loses its state the moment the folio is freed or
-replaced: a refaulted folio is a fresh object with no history.
+Cheers,
 
-Scaling goes the same way. Per-mm tracking of the form RWP does can
-scale with the working set. A physical-side tracker scales with all folios
-on the LRU/memcg, then needs an rmap walk per folio to map back to a
-VA — which is exactly the reason page_idle doesn't scale for this use
-case today.
-
-There is also a cgroup-level confound: memcg hotness mixes guest memory
-with the VMM's own (worker threads, I/O buffers, vhost-user rings).
-VMA-scoped tracking is the natural unit regardless of the migration
-story.
-
+	M.
 -- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Without deviation from the norm, progress is not possible.
+
+
