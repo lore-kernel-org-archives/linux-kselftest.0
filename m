@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0355B32938D;
-	Fri, 24 Apr 2026 09:11:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87D6E375AC4;
+	Fri, 24 Apr 2026 09:14:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777021914; cv=none; b=VCoUeKFBIE20LXEulVRyyhiIlS6CPUaZF468KExedLz1YvXUO9TNafMmOq34y+2gY3R3Nibb3hGmdfTtbO/RXk371XqsgHNTn5fSa6knlHYNBar7CIxS/WSSS0i773G+PaWDBmkrRsBCcfomDFMIQ1tPSi+GtaRoBQG63W/jtO4=
+	t=1777022043; cv=none; b=kLN+zDagbcKQSdx/Bu4yi0QtgyFPvnnLbx5Fv0rzVkrxCAXMPxtz8TgvLM3Y5SNTUjXr1qrMZSfMGsRQIfxbTCeYOTDvxccBS6K7t7jPLdAPfDrNsFSNs82iN4lIfdWcQJhm0De+KRvXJQzwElERl/LZ9Gv+LiGVcgG0qn6Q/0M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777021914; c=relaxed/simple;
-	bh=SsqSo4+zjog+NkLRTA0Kn233Cxw/eENvVArd9TQ7CcA=;
+	s=arc-20240116; t=1777022043; c=relaxed/simple;
+	bh=niop0reY6PituW/Dk1Z2ZYI5VhcmIRP9z/VzEFO68oo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=doART8zXK1lc08r85yLgfAmwzASH+PTEgsrtC3d0HCBcj8jygu0AD1ViFYc23o6fTjkyYih9EdEkIAcH5vqmYD9IUlKvqIVjpAyqDtYs3Ifeps2Fp7TWzMsFlniIZeQEP3Q7hnK1AOQuml83mQMWcD+UinJtB92idbuvbb41R4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Su1jyHjF; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=Lymvpzg0LQO2patm8bzewRye/DIgTvPigHusjNSan8qch+c2Jv509SkQARGpVCZqMcos4UwJpRQHqwvKiVruNXKMA930dPddbGltE7lzl0ZQsM1n+/ybZQ3fci/vNizpfXaXTflcRS4hTqp7l5xmkipOZ7eXEjTLZrpS6sPnzpw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BHgSpMBO; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Su1jyHjF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69C07C19425;
-	Fri, 24 Apr 2026 09:11:44 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BHgSpMBO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D27AFC19425;
+	Fri, 24 Apr 2026 09:13:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777021913;
-	bh=SsqSo4+zjog+NkLRTA0Kn233Cxw/eENvVArd9TQ7CcA=;
+	s=k20201202; t=1777022043;
+	bh=niop0reY6PituW/Dk1Z2ZYI5VhcmIRP9z/VzEFO68oo=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Su1jyHjFu/8YsS48wDh711n00szcy8RRRx8P4BZ+dQyykIbYmeeE9RTMf8ATgJBsJ
-	 jCQHZ4bj09apvjrQpVki8eBjYYIiLVXFTEfekDI/YJsEsigdOWyqc5nEHmK/O7azzw
-	 QU6u8C25RMKPE+YqRBm12lfEW6MHkhInS6brKvL1XEEzhxgYEGdXwVtkwaESEH7eoT
-	 JKGgUB+mnHGanzv0cifDp5Bjq87FKWg63zEiKjoD8iOqA/Q53kdAIY+BAauVSSkHfo
-	 MBu7Bgg9iyCY0xvNfHK8lISptO8ffBRbj2VO3lQNmVpb6iJ4hopu2byxyx3pDpX5El
-	 H+Z5ortWjUULg==
-Date: Fri, 24 Apr 2026 12:11:39 +0300
+	b=BHgSpMBOVOcwn8p0Xm8TP+46ztAmOgjg7Q2X5khW4rxTMNN0LXQZlmq5PLvGXVkWd
+	 cymeLh0U5LJBo2TNtCOtZ5yUzR471uRchQgaAY6znwAZwQ2h9mqTlTZfkENhkHFnl/
+	 ppUDOP++UwrQyblYcvuKhSIu6bv7UU98TEJeGy0382i1PT63Y5ZvRwT2yRBq7CD2xk
+	 Z3KFITUiFIPFqTg9tNlIYtIEXhBvhCYhOFI9zg4uJoW4bIeY85T3PJWYAREZiejl/y
+	 2PB0a7qbtYjuIBLl3QChA/QksVLIygq/gfT5k0m/gjYYLNUlRuLUhoqsnjihiP5hNy
+	 zo4VXKAXcBCsA==
+Date: Fri, 24 Apr 2026 12:13:51 +0300
 From: Mike Rapoport <rppt@kernel.org>
-To: Mark Brown <broonie@kernel.org>
+To: Sarthak Sharma <sarthak.sharma@arm.com>
 Cc: Andrew Morton <akpm@linux-foundation.org>,
 	David Hildenbrand <david@kernel.org>,
 	Baolin Wang <baolin.wang@linux.alibaba.com>,
@@ -38,22 +38,19 @@ Cc: Andrew Morton <akpm@linux-foundation.org>,
 	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
 	Lance Yang <lance.yang@linux.dev>,
 	Leon Romanovsky <leon@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
-	Michal Hocko <mhocko@suse.com>, Nico Pache <npache@redhat.com>,
-	Peter Xu <peterx@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
-	Sarthak Sharma <sarthak.sharma@arm.com>,
-	Shuah Khan <shuah@kernel.org>,
+	Mark Brown <broonie@kernel.org>, Michal Hocko <mhocko@suse.com>,
+	Nico Pache <npache@redhat.com>, Peter Xu <peterx@redhat.com>,
+	Ryan Roberts <ryan.roberts@arm.com>, Shuah Khan <shuah@kernel.org>,
 	Suren Baghdasaryan <surenb@google.com>,
 	Vlastimil Babka <vbabka@kernel.org>, Zi Yan <ziy@nvidia.com>,
 	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
 	linux-mm@kvack.org
-Subject: Re: [PATCH v2 16/53] selftests/mm: protection_keys: use kselftest
+Subject: Re: [PATCH v2 07/53] selftests/mm: hugetlb-shm: use kselftest
  framework
-Message-ID: <aeszy67Qrb8Q-Xw_@kernel.org>
+Message-ID: <aes0TwOonlHVgn67@kernel.org>
 References: <20260418105539.1261536-1-rppt@kernel.org>
- <20260418105539.1261536-17-rppt@kernel.org>
- <f8495e44-a34a-4289-90f8-0faa71bf1a71@sirena.org.uk>
- <aeczFjEs6sqRPy0w@kernel.org>
- <bf3133c3-ae12-45ac-a3d1-5e58b849f817@sirena.org.uk>
+ <20260418105539.1261536-8-rppt@kernel.org>
+ <3d154106-1de3-4cd8-9bee-53ef20245d62@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -62,31 +59,49 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <bf3133c3-ae12-45ac-a3d1-5e58b849f817@sirena.org.uk>
+In-Reply-To: <3d154106-1de3-4cd8-9bee-53ef20245d62@arm.com>
 
-On Tue, Apr 21, 2026 at 01:59:21PM +0100, Mark Brown wrote:
-> On Tue, Apr 21, 2026 at 11:19:34AM +0300, Mike Rapoport wrote:
-> > On Mon, Apr 20, 2026 at 06:54:31PM +0100, Mark Brown wrote:
+Hi Sarthak,
+
+On Wed, Apr 22, 2026 at 04:50:20PM +0530, Sarthak Sharma wrote:
+> Hi Mike!
 > 
-> > > If that fflush() is needed it should go into the helper, particularly
-> > > since ksft_finshed() calls exit() so the fflush() will never be reachd.
+> On 4/18/26 4:24 PM, Mike Rapoport wrote:
+> > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+> > 
+> > Convert hugetlb-shm test to use kselftest framework for reporting and
+> > tracking successful and failing runs.
+> > 
+> > Reviewed-by: Mark Brown <broonie@kernel.org>
+> > Reviewed by: Donet Tom <donettom@linux.ibm.com>
+> > Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> > ---
+> >  tools/testing/selftests/mm/hugetlb-shm.c | 46 ++++++++++++------------
+> >  1 file changed, 23 insertions(+), 23 deletions(-)
+> > 
+> >  
+> > -	dprintf("Starting the Check...");
+> > +	ksft_print_msg("Starting the Check...");
+> >  	for (i = 0; i < LENGTH; i++)
+> >  		if (shmaddr[i] != (char)i) {
+> > -			printf("\nIndex %lu mismatched\n", i);
+> > -			exit(3);
+> > +			ksft_print_msg("Index %lu mismatched\n", i);
+> > +			shmctl(shmid, IPC_RMID, NULL);
+> > +			ksft_exit_fail_msg("Data mismatch at index %lu\n", i);
 > 
-> > Looks like I'm missing prints because of something in my environment, I'll
-> > just drop the fflush().
+> ksft_print_msg() and ksft_exit_fail_msg() are printing the same thing
+> here. Should we remove the ksft_print_msg() to avoid redundancy?
+
+Yes, I'll drop the first print.
+ 
+> I've run the test before and after applying the patch. The output has
+> been correctly formatted into KTAP format with no change in results.
 > 
-> Interesting.  Usually the culprit would be calls to _exit() that bypass
-> the libc cleanup but I'm not seeing any right now...
+> Tested-by: Sarthak Sharma <sarthak.sharma@arm.com>
 
-Interesting indeed :)
-
-My observations up till now that if I run the test on the host, it prints
-everything (without fflush()) changes at all). If I run the same test in a
-VM either using virtio-ng or ssh'ing into a debian VM, only the first part
-of prints is displayed. However if I run protection_keys_64 | tee in the
-same VM everything is printed.
-
-I'll just drop the fflush() from this patch and will investigate later.
-
+Thanks!
+ 
 -- 
 Sincerely yours,
 Mike.
