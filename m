@@ -1,76 +1,221 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C99C3E4C7E;
-	Fri, 24 Apr 2026 16:44:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61BF933E355;
+	Fri, 24 Apr 2026 16:51:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777049072; cv=none; b=mKwTYdBss8z6eNcVxgvO3d/QSNUJMnbGQ4MZ1Vlic5oTAHIqoQJ2q8tfKooYlyoTBj8NsHm41kKSkmZXROrKkcjd5sp4r209g4+aZzTfscm1UO/w7sTMyhwmXnAOf+1YKNjwaEx/AuSljwUFT9lHXwTJhW09ZrNQxZChoPXR7A4=
+	t=1777049496; cv=none; b=Jz45WcWuqI2zC8HpY//Rv0fYwdioOd3TUhNOkESXbdRkxlGT5ujsbbUYZG9ML45qKQ1TR14el8iWDLSQu/C8DNl7IP2dZZoVE0v/8X2rWuN1X//UTHP8FowoLpFzd342smU0LykIepsy4Qinu0VNSELiwar3zQKtWfovSl1PsFM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777049072; c=relaxed/simple;
-	bh=a6yyF/+Http6UHyckaBMmwbISlEebiB5pcVWoL92C6Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tAuuIhr7vzXOCj1Ah/vTjObHyD7MvXrLVzDvSUoGDB1FLcbkXkc/Tng6qFAVBYWjWF2l6lFw8vToWfJctlP4LeUJMJRXWg0Gj5NeEk8QH/5xVJq1O2opybBucQ0Vfdw5a6oAmsAUZ1xTmHTXfrKdM+PPUzZ7yz4wjs/OpHeViOc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=Bt6hNc8X; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1777049496; c=relaxed/simple;
+	bh=H33Ls5pcEb9yVpjrsIIokmBmIDGsoErkqLOTcwUdbMs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Y0E+oeO7jL1h8QgD3mVFY3MeEHzCJFW4Gy31Tz78mZ+JYt5sLRfznf1uMz7HNHCTE3FhBAMUJ/1opYkmABK4wK7WxMNseVc9Fe6FKNUC+jv4vnjiwVovb202gJcLtlNDWMCpDVeXomGzyqH1x0q9JctgUkPKdohXDi9vSOwk/k0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RAAAQkrf; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="Bt6hNc8X"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 10A751BB2;
-	Fri, 24 Apr 2026 09:44:19 -0700 (PDT)
-Received: from arm.com (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 800E13FAA1;
-	Fri, 24 Apr 2026 09:44:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1777049064; bh=a6yyF/+Http6UHyckaBMmwbISlEebiB5pcVWoL92C6Y=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Bt6hNc8XUGtXJqMPNnKc6d+t8PZk5JFxhIZGt/dmjoo9jFel1zv/VHdDeBJZ6uIpl
-	 8aRrEJs6rcclMxBf3OBdGsjU3L3NpTW0Rr2J2+MsyURBcbtk8Bnju8yGJC36Zvi89D
-	 xebzjhSLX4oxrExwIJGuna+KzjR7NEb92ijcbT1I=
-Date: Fri, 24 Apr 2026 17:44:16 +0100
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: Leo Yan <leo.yan@arm.com>, Will Deacon <will@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] kselftest/arm64: Fix build failure with GCC-15
-Message-ID: <aeud4Hqxq4PNitMc@arm.com>
-References: <20260422-selftests_arm64_gcc15-v2-1-c0134de8838a@arm.com>
- <aeuRfEeOUWEHzPix@arm.com>
- <63409143-f4eb-48c3-89de-1aef4fb57381@sirena.org.uk>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RAAAQkrf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9E8DC19425;
+	Fri, 24 Apr 2026 16:51:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777049496;
+	bh=H33Ls5pcEb9yVpjrsIIokmBmIDGsoErkqLOTcwUdbMs=;
+	h=From:To:Cc:Subject:Date:From;
+	b=RAAAQkrfj5d21vWPedH3peKTh0F+ICh0aFRvtsZjOr9eS9YVlpIIW9IE74pTQZvsD
+	 hpdJaEJPyFeD1nHKj+i3R7RZ1+Y/ytJIGPfAiVrpTFZH2hWS0KfsiBotOpyz3vMxv4
+	 SYmeyxdkX3QrzsIlDxtw/9vZHTHLIC2HkOZqv8JNWwC7DAYEw864EJ/BrP2ahvInVN
+	 Fz3dtSQXh0i+OqOlT2AbQZ09teEDwQZ4jR1oX5QpDhjicVtSA7lt06Et8+LyCeDsuW
+	 v3zn18Qut0ly8NuQn3a6Ctca9EzoQ6Zpr2RbEfDOFD1FYICfruurPXFa93N1Jp6PJf
+	 lgCEBV+ZLD8CA==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-api@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: linux-doc@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-kbuild@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	workflows@vger.kernel.org,
+	tools@kernel.org,
+	x86@kernel.org,
+	Thomas Gleixner <tglx@kernel.org>,
+	"Paul E . McKenney" <paulmck@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Cyril Hrubis <chrubis@suse.cz>,
+	Kees Cook <kees@kernel.org>,
+	Jake Edge <jake@lwn.net>,
+	David Laight <david.laight.linux@gmail.com>,
+	Askar Safin <safinaskar@zohomail.com>,
+	Gabriele Paoloni <gpaoloni@redhat.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Christian Brauner <brauner@kernel.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Sasha Levin <sashal@kernel.org>
+Subject: [PATCH v3 0/9] Kernel API Specification Framework
+Date: Fri, 24 Apr 2026 12:51:20 -0400
+Message-ID: <20260424165130.2306833-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <63409143-f4eb-48c3-89de-1aef4fb57381@sirena.org.uk>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Apr 24, 2026 at 05:07:42PM +0100, Mark Brown wrote:
-> On Fri, Apr 24, 2026 at 04:51:24PM +0100, Catalin Marinas wrote:
-> > On Wed, Apr 22, 2026 at 06:42:54PM +0100, Leo Yan wrote:
-> 
-> > > Building on Debian sid with GCC 15 fails:
-> 
-> > I think a better fix is to always define struct user_gcs and only
-> > conditionally define NT_ARM_GCS (IOW, move the #endif higher).
-> 
-> I've not actually double checked that everything is wired up properly
-> but I believe these days this should actually pick up asm/ptrace.h from
-> the headers_install target so a current kernel copy.  We ought to be
-> able to remove the local definition of struct user_gcs I think, there's
-> still some weirdness with the NT_ definitions I can't remember but the
-> struct should be fine.
+This proposal introduces machinery for documenting kernel APIs, addressing the
+long-standing challenge of maintaining stable interfaces between the kernel and
+user-space programs. Despite the kernel's commitment to never breaking user
+space, the lack of machine-readable API specifications has led to breakages
+across kernel interfaces.
 
-OK, so it does look like it picks the kernel uapi/asm/ptrace.h. It
-builds fine on Debian stable (no GCS anywhere) with including
-asm/ptrace.h and removing struct user_gcs.
+Specifications can document parameter types, valid ranges, constraints, and
+alignment requirements. They capture return value semantics including success
+conditions and error codes with their meaning. Execution context requirements,
+capabilities, locking constraints, signal handling behavior, and side effects
+can all be formally specified.
 
-But I think we should include asm/ptrace.h in libc-gcs.h and not the
-gcs-util.h header (for NT_ARM_GCS it's fine to keep in gcs-util.h).
+These specifications live alongside the code they document and are both
+human-readable and machine-parseable. They can be validated at runtime when
+CONFIG_KAPI_RUNTIME_CHECKS is enabled, exported via debugfs for userspace
+tools, and extracted from either vmlinux or source code.
+
+This enables static analysis tools to verify userspace API usage at compile
+time, test generation based on formal specifications, consistent error handling
+validation, automated documentation generation, and formal verification of
+kernel interfaces.
+
+The implementation includes a core framework with ELF section storage,
+kerneldoc integration for inline specification, a debugfs interface for runtime
+querying, and a Rust-based extraction tool (tools/kapi) supporting JSON, RST,
+and plain text output formats. Example specifications are provided for the four
+fundamental file syscalls (sys_open, sys_close, sys_read, sys_write). The
+series also includes a KUnit test suite with 27 tests and a runtime
+verification selftest with 29 TAP tests.
+
+The series with runtime testing enabled (CONFIG_KAPI_RUNTIME_CHECKS=y)
+currently survives LTP tests in a KVM VM.
+
+Changes since v2:
+
+- Replace statically sized arrays in the spec structs with const char *
+  pointers to reduce memory footprint and remove string truncation.
+
+- Simplify the kerneldoc DSL to short tokens (e.g. `type: uint, input`,
+  `contexts: process, softirq`, `constraint-type: range(0, KMAX)`,
+  `side-effect: alloc_memory`) in place of raw KAPI_* enum names.
+
+- tools/kapi: commit Cargo.lock for reproducible offline builds, add a
+  Makefile and README, expand the kerneldoc parser to cover the full
+  DSL, and refactor the vmlinux extractor for the const-pointer layout.
+
+- tools/lib/python/kdoc/kdoc_apispec.py expanded to match the DSL so
+  scripts/kernel-doc --apispec emits the structure the extractor consumes.
+
+References:
+
+  v2: https://lore.kernel.org/all/20260322121026.869758-1-sashal@kernel.org/
+  v1: https://lore.kernel.org/all/20260313150928.2637368-1-sashal@kernel.org/
+  RFC v5: https://lore.kernel.org/lkml/20251218204239.4159453-1-sashal@kernel.org/
+  RFC v4: https://lore.kernel.org/lkml/20250825181434.3340805-1-sashal@kernel.org/
+  RFC v3: https://lore.kernel.org/lkml/20250711114248.2288591-1-sashal@kernel.org/
+  RFC v2: https://lore.kernel.org/lkml/20250624180742.5795-1-sashal@kernel.org/
+  RFC v1: https://lore.kernel.org/lkml/20250614134858.790460-1-sashal@kernel.org/
+
+Sasha Levin (9):
+  kernel/api: introduce kernel API specification framework
+  kernel/api: enable kerneldoc-based API specifications
+  kernel/api: add debugfs interface for kernel API specifications
+  tools/kapi: add kernel API specification extraction tool
+  kernel/api: add API specification for sys_open
+  kernel/api: add API specification for sys_close
+  kernel/api: add API specification for sys_read
+  kernel/api: add API specification for sys_write
+  kernel/api: add runtime verification selftest
+
+ .gitignore                                    |    1 +
+ Documentation/dev-tools/index.rst             |    1 +
+ Documentation/dev-tools/kernel-api-spec.rst   |  704 ++++
+ MAINTAINERS                                   |   11 +
+ arch/x86/include/asm/syscall_wrapper.h        |   40 +
+ fs/open.c                                     |  566 ++++
+ fs/read_write.c                               |  697 ++++
+ include/asm-generic/vmlinux.lds.h             |   28 +
+ include/linux/kernel_api_spec.h               | 1269 ++++++++
+ include/linux/syscalls.h                      |   38 +
+ init/Kconfig                                  |    2 +
+ kernel/Makefile                               |    3 +
+ kernel/api/.gitignore                         |    2 +
+ kernel/api/Kconfig                            |   77 +
+ kernel/api/Makefile                           |   14 +
+ kernel/api/internal.h                         |   21 +
+ kernel/api/kapi_debugfs.c                     |  553 ++++
+ kernel/api/kapi_kunit.c                       |  538 ++++
+ kernel/api/kernel_api_spec.c                  | 1362 ++++++++
+ scripts/Makefile.build                        |   31 +
+ scripts/Makefile.clean                        |    3 +
+ tools/docs/kernel-doc                         |    5 +
+ tools/kapi/.gitignore                         |    4 +
+ tools/kapi/Cargo.lock                         |  679 ++++
+ tools/kapi/Cargo.toml                         |   20 +
+ tools/kapi/Makefile                           |   33 +
+ tools/kapi/README.md                          |   32 +
+ tools/kapi/src/extractor/debugfs.rs           |  849 +++++
+ tools/kapi/src/extractor/kerneldoc_parser.rs  | 2831 +++++++++++++++++
+ tools/kapi/src/extractor/mod.rs               |  388 +++
+ tools/kapi/src/extractor/source_parser.rs     |  415 +++
+ .../src/extractor/vmlinux/binary_utils.rs     |  462 +++
+ .../src/extractor/vmlinux/magic_finder.rs     |  115 +
+ tools/kapi/src/extractor/vmlinux/mod.rs       |  857 +++++
+ tools/kapi/src/formatter/json.rs              |  634 ++++
+ tools/kapi/src/formatter/mod.rs               |  122 +
+ tools/kapi/src/formatter/plain.rs             |  646 ++++
+ tools/kapi/src/formatter/rst.rs               |  726 +++++
+ tools/kapi/src/main.rs                        |  123 +
+ tools/lib/python/kdoc/kdoc_apispec.py         | 1249 ++++++++
+ tools/lib/python/kdoc/kdoc_output.py          |    9 +-
+ tools/lib/python/kdoc/kdoc_parser.py          |   86 +-
+ tools/testing/selftests/Makefile              |    1 +
+ tools/testing/selftests/kapi/Makefile         |    7 +
+ tools/testing/selftests/kapi/kapi_test_util.h |   33 +
+ tools/testing/selftests/kapi/test_kapi.c      | 1096 +++++++
+ 46 files changed, 17378 insertions(+), 5 deletions(-)
+ create mode 100644 Documentation/dev-tools/kernel-api-spec.rst
+ create mode 100644 include/linux/kernel_api_spec.h
+ create mode 100644 kernel/api/.gitignore
+ create mode 100644 kernel/api/Kconfig
+ create mode 100644 kernel/api/Makefile
+ create mode 100644 kernel/api/internal.h
+ create mode 100644 kernel/api/kapi_debugfs.c
+ create mode 100644 kernel/api/kapi_kunit.c
+ create mode 100644 kernel/api/kernel_api_spec.c
+ create mode 100644 tools/kapi/.gitignore
+ create mode 100644 tools/kapi/Cargo.lock
+ create mode 100644 tools/kapi/Cargo.toml
+ create mode 100644 tools/kapi/Makefile
+ create mode 100644 tools/kapi/README.md
+ create mode 100644 tools/kapi/src/extractor/debugfs.rs
+ create mode 100644 tools/kapi/src/extractor/kerneldoc_parser.rs
+ create mode 100644 tools/kapi/src/extractor/mod.rs
+ create mode 100644 tools/kapi/src/extractor/source_parser.rs
+ create mode 100644 tools/kapi/src/extractor/vmlinux/binary_utils.rs
+ create mode 100644 tools/kapi/src/extractor/vmlinux/magic_finder.rs
+ create mode 100644 tools/kapi/src/extractor/vmlinux/mod.rs
+ create mode 100644 tools/kapi/src/formatter/json.rs
+ create mode 100644 tools/kapi/src/formatter/mod.rs
+ create mode 100644 tools/kapi/src/formatter/plain.rs
+ create mode 100644 tools/kapi/src/formatter/rst.rs
+ create mode 100644 tools/kapi/src/main.rs
+ create mode 100644 tools/lib/python/kdoc/kdoc_apispec.py
+ create mode 100644 tools/testing/selftests/kapi/Makefile
+ create mode 100644 tools/testing/selftests/kapi/kapi_test_util.h
+ create mode 100644 tools/testing/selftests/kapi/test_kapi.c
 
 -- 
-Catalin
+2.53.0
+
