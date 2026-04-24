@@ -1,41 +1,41 @@
 Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D2163C944A;
-	Fri, 24 Apr 2026 12:24:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C5683CAE85;
+	Fri, 24 Apr 2026 12:24:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777033480; cv=none; b=MGD0vqKfykQVX93fMVlSxr3CYSsgj2a6o+4OXsz6SRdnGD66L5DCXbaXkOyNb0LuTvz/PZ54Kdy7/nvL9cIU8cyjBo3xrr7fM9kztwji+zUI2BwNwXmWhTLIj9QvlCsLSa+8q9npPcAeqQAE9sB2BDnfMbOliq0xGe+Gyq3nLis=
+	t=1777033485; cv=none; b=bf/6WE0kTUstqSyhnhbb4HaGJZ00GaBg2rP41enSvTO1IifXu/KneeyHpwXZKzJU4z+aVd35cbha5tm1N5oSIfU+1wrG/vr+C+bEqDNj+csreFUy71zIyDRu9/OrpcDjynMisgBWrhiicHy4CQ6BgkR1EPCKoXP4zv8DcYms01A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777033480; c=relaxed/simple;
-	bh=/qCKorRDHDfdon8uQB15LannYTC+7j0ppSiNsgWgO1Y=;
+	s=arc-20240116; t=1777033485; c=relaxed/simple;
+	bh=Ju4F+y15N/15YSKcoOoe8hecUCP4Fg5cxAM43INPgiw=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=gS+e3Y1u30UT0xGHTUPGtwPj9XsrsCrUO143oeXR6Z3SnF98zRc8+s06HqpsBLt4+X82ApORWQMMPQu3R5V2oxBAzAJN0RWArql3U/BhcfG9immR6UWdERNmiVnkAb05whHDQ1CulagsG81sQdozXgdHJ6En3pdMU38wWdd8Dfs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=gKK60k+S; arc=none smtp.client-ip=82.195.75.108
+	 In-Reply-To:To:Cc; b=mXiRESmQW6juTuaB3YDiIB2SFM2zcL0CRRczyRL+axh20likMgTQxg4al87KjlsTlUQr39nkOlrF3OJrALSGxvsaz6kt4HhLb0pRwNLEe0s1A+J7J/0i+pZpFkE8MBE/7TOVm1P1bZP6XgVgdiA91SSAXIuratGbuAEWo7MTy00=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=YN3rWZLc; arc=none smtp.client-ip=82.195.75.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="gKK60k+S"
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="YN3rWZLc"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
 	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:In-Reply-To:References:
 	Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:
 	From:Reply-To:Content-ID:Content-Description;
-	bh=T58sPSkCpDO6mBCqL0XNY2K3RwSWcmiQzHhYDz9yJNk=; b=gKK60k+S3QWIkEsCrZpLN2qzb7
-	nut7ZZBWKz1PqFWcgB/i1eQix6vrVsbVf5Nrkxr34b/YhxBif9c1+0eAA3/pEQ4WAHsXQEJ9MNnJi
-	SdkS2/kuu+SY3XwaCJHg0iINy/ij99/44h+aDAha2ATMISlY4HV0+1j3Jb5UFpK2VH5KtagHiwfQN
-	Dz7KAPRyMp5DW66Cp8F4YHEaw+KBYzYuL5E6n7qTbkup10a/+jjak64JJ2Bo6MfENvuiNtLXtvKZE
-	ZLWCZj8qTrFsS3zHAtcnCspX3nJ+lmZBJN/MYuX2vDBIYzoL4BLLFegpjc/O8A1dYNwMFp4dJXR6o
-	j2BqZ/BA==;
+	bh=VJ09Jo0h/vP/hOFzbwH4NhaWc8BN8qSSaNGeuLFDRBg=; b=YN3rWZLc23qtp4id7Che7GivgN
+	LF8Am2+CC2mxHoaRu6hOkF4Usj7eEN2lt36BXtrcuCZHr0CRb9M/FG1Ww3J3kohVSyInyp1hyL3l8
+	jmn1ipXgtFzxQbSUpXrTbw/mbQ+J+IJEd4kqeE0PHYxGWcyJ+fP89PpGplBbNJHZOXBwEkJj3Fzpk
+	i4TlXPfLlVClj7Wn0MhbDkO47SINKJMlIMr/IoiGn9+3pBC/cZIqOhfVroRDtO6al8t/eMyO4IdXQ
+	Ii9j6FATtWNS92NqCAPLU5EhlNwANxF4onx6QHwt5toxqK3JS82KjsNx1Dhj1Edw7p3Xiy8qS2hGG
+	BToyHnJw==;
 Received: from authenticated user
 	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.96)
 	(envelope-from <leitao@debian.org>)
-	id 1wGFaF-003APz-1L;
-	Fri, 24 Apr 2026 12:24:35 +0000
+	id 1wGFaK-003AQL-1h;
+	Fri, 24 Apr 2026 12:24:40 +0000
 From: Breno Leitao <leitao@debian.org>
-Date: Fri, 24 Apr 2026 05:24:01 -0700
-Subject: [PATCH v5 3/4] Documentation: document
- panic_on_unrecoverable_memory_failure sysctl
+Date: Fri, 24 Apr 2026 05:24:02 -0700
+Subject: [PATCH v5 4/4] selftests/mm: regression test for
+ panic_on_unrecoverable_memory_failure
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -44,7 +44,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260424-ecc_panic-v5-3-a35f4b50425c@debian.org>
+Message-Id: <20260424-ecc_panic-v5-4-a35f4b50425c@debian.org>
 References: <20260424-ecc_panic-v5-0-a35f4b50425c@debian.org>
 In-Reply-To: <20260424-ecc_panic-v5-0-a35f4b50425c@debian.org>
 To: Miaohe Lin <linmiaohe@huawei.com>, 
@@ -60,116 +60,151 @@ Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
  linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  Breno Leitao <leitao@debian.org>, kernel-team@meta.com
 X-Mailer: b4 0.16-dev-453a6
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3920; i=leitao@debian.org;
- h=from:subject:message-id; bh=/qCKorRDHDfdon8uQB15LannYTC+7j0ppSiNsgWgO1Y=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBp62Duf59kh2dj9J6Mb05R+4nEoFVAbAXCB+7LW
- 8yh5FWm1EqJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaetg7gAKCRA1o5Of/Hh3
- bSVZEACbzhttOBC3Ol+GlNv//VUwHekj1rvhaAp79eZJ8vFb8jBi8rEAbCDhEBO1mCojmLbpb2E
- rrywuAl9yDZxWmG2mQGJtDS5wvNtMbP9KWUgwtpctvC0OQnATLrf1BN46NdC4RQ/628ZoL6TgTV
- PCqSuAlxdCkZkG/xsQE+KlPmqGUTogqFEqtreAk4CxZHtPrNqTOQ2TJOtIFIxflrSFcKPlUyD2U
- c4oUttA2kx7Uk03nMUB7HTRBbQ8jdaHGr9GSU44Kfk5s1skC8xGZOd3JD+XlCsiNRD5zCfda/1i
- Bzs1tmJih0O8B6ZaZvl2RGyxIpFFEh0ekQMP6HuESvcW59bJexYxoY5Ilkz3M4RhU5n3/PzHsi4
- Vw9EHRuK7f8+ci2tANKyIZV9vIT9gRo1JWtfU2dBzicb43za53G57L9YFbwuWlyYJB9Xo55gd4Y
- qvZTF1DQ5MISTe547MZi8KsZ6qeHZUAnbIw1ua+rhwXxlipjEltrf6jdDqvcnurrPWF0FsEsk8k
- GSFndcTgQta0DeaX3U6V+zAt30Yg44jSSE2EhwydgOWLJhp8QG8HeFcCnJfq3NaIPw46+YhxASK
- uQjcjPwGAE+SIuwlCi3ow/0n1KcmQNCdQn7DNfQUarx1YP59vGKOZGahiPFCtGMp2smPr0jUTZu
- iZaBWTaaqrwqKzA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3929; i=leitao@debian.org;
+ h=from:subject:message-id; bh=Ju4F+y15N/15YSKcoOoe8hecUCP4Fg5cxAM43INPgiw=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBp62Duu02nZb1HcgkNBUxR/EIf1G8rz/XDjppUT
+ a5iK2aM0haJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaetg7gAKCRA1o5Of/Hh3
+ bWsDD/9hAKxJHJJVVYekL9J7smIGLipCaTr4t1HTbxP1YFDcRGht3rB9LvffgMAKZ62PgQoIP3k
+ Wv5fIbdL4Wqec2gvXjLyr+VE5aQxBiIZSpqsTJx8iKAsQIBI4xpXpjy+T/j7Du+BP2EElYhXjKD
+ +f9SEYoqgOYL8XCgucawSJQ2yzGSykz0pj4Cp2JqGqTTMVNSNn+P0bf6j0/fHRNdKclHBz6rL+f
+ 5tHOkvT9UyD5FQwvuxJ/lDyT5b0D3PYChXL5Och1JmS33EzDyKZtKclj4qtaEgaI2PlToBApaTW
+ nHOlSx4tDt0Xyh55JRMqCAKvHLWUw52QeABwgugBgR/CM4vlbct8Ep71GfT9AGwjz/sR6yqEZRh
+ w03TG61wtVlT6gNdaYhCeX4t7fu/EpivZfdO2/qaB5A3QPAPtijmolOVwjlZGVixcPDnQGppcog
+ 6uZyckkp4wLCspqDn8TfZ1gJp24FSSVZs4RKaFLUtuWzfNWKiN38ZwoZ+XU/96usP8yHOt7OuBB
+ g66OGBDe5NJJUju6idlaxWnnowQ7TdpfNYWq8QpLQGEtDn2IU2DHrqD3L1Zb7VdCicDrnEnSqb+
+ iiiuXHHejKuVCcRSHbwdxDE6P8smOYx45fIXYbcu+sfSSyscZ+RyQ7hTORpdAHkVC1vYSVwveVr
+ giSdM36EMaw2/hg==
 X-Developer-Key: i=leitao@debian.org; a=openpgp;
  fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 X-Debian-User: leitao
 
-Add documentation for the new vm.panic_on_unrecoverable_memory_failure
-sysctl, describing the three categories of failures that trigger a
-panic and noting which kernel page types are not yet covered.
+Add a test that enables vm.panic_on_unrecoverable_memory_failure and
+injects MADV_HWPOISON on a userspace anonymous page. The page must
+still be recovered via SIGBUS — it must not trigger a kernel panic.
+
+This is the regression test for the panic_on_unrecoverable_mf()
+recheck: a buddy page being concurrently allocated to userspace can
+briefly land on the MF_MSG_KERNEL_HIGH_ORDER branch (refcount 0, not in
+buddy), and without the recheck the kernel would panic on what is
+actually a recoverable userspace page.
+
+Run in a forked child so the SIGBUS path is fully exercised; if the
+kernel ever regresses and panics, the host VM dies and the harness
+reports the binary as never returning, which is itself a clear
+failure signal.
+
+Skips when the sysctl is not present (feature not built in) or when
+the test cannot write to it (insufficient privilege). Saves and
+restores the original sysctl value.
 
 Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
- Documentation/admin-guide/sysctl/vm.rst | 65 +++++++++++++++++++++++++++++++++
- 1 file changed, 65 insertions(+)
+ tools/testing/selftests/mm/memory-failure.c | 84 +++++++++++++++++++++++++++++
+ 1 file changed, 84 insertions(+)
 
-diff --git a/Documentation/admin-guide/sysctl/vm.rst b/Documentation/admin-guide/sysctl/vm.rst
-index 97e12359775c9..f118ec5cd1fad 100644
---- a/Documentation/admin-guide/sysctl/vm.rst
-+++ b/Documentation/admin-guide/sysctl/vm.rst
-@@ -67,6 +67,7 @@ Currently, these files are in /proc/sys/vm:
- - page-cluster
- - page_lock_unfairness
- - panic_on_oom
-+- panic_on_unrecoverable_memory_failure
- - percpu_pagelist_high_fraction
- - stat_interval
- - stat_refresh
-@@ -925,6 +926,70 @@ panic_on_oom=2+kdump gives you very strong tool to investigate
- why oom happens. You can get snapshot.
+diff --git a/tools/testing/selftests/mm/memory-failure.c b/tools/testing/selftests/mm/memory-failure.c
+index 032ed952057c6..9cb8d694aee94 100644
+--- a/tools/testing/selftests/mm/memory-failure.c
++++ b/tools/testing/selftests/mm/memory-failure.c
+@@ -17,9 +17,13 @@
+ #include <sys/vfs.h>
+ #include <linux/magic.h>
+ #include <errno.h>
++#include <sys/wait.h>
++#include <stdlib.h>
  
+ #include "vm_util.h"
  
-+panic_on_unrecoverable_memory_failure
-+======================================
++#define PANIC_SYSCTL "/proc/sys/vm/panic_on_unrecoverable_memory_failure"
 +
-+When a hardware memory error (e.g. multi-bit ECC) hits a kernel page
-+that cannot be recovered by the memory failure handler, the default
-+behaviour is to ignore the error and continue operation.  This is
-+dangerous because the corrupted data remains accessible to the kernel,
-+risking silent data corruption or a delayed crash when the poisoned
-+memory is next accessed.
-+
-+When enabled, this sysctl triggers a panic on three categories of
-+unrecoverable failures: reserved kernel pages, non-buddy kernel pages
-+with zero refcount (e.g. tail pages of high-order allocations), and
-+pages whose state cannot be classified as recoverable.
-+
-+Note that some kernel page types — such as slab objects, vmalloc
-+allocations, kernel stacks, and page tables — share a failure path
-+with transient refcount races and are not currently covered by this
-+option. I.e, do not panic when not confident of the page status.
-+
-+For many environments it is preferable to panic immediately with a clean
-+crash dump that captures the original error context, rather than to
-+continue and face a random crash later whose cause is difficult to
-+diagnose.
-+
-+Use cases
-+---------
-+
-+This option is most useful in environments where unattributed crashes
-+are expensive to debug or where data integrity must take precedence
-+over availability:
-+
-+* Large fleets, where multi-bit ECC errors on kernel pages are observed
-+  regularly and post-mortem analysis of an unrelated downstream crash
-+  (often seconds to minutes after the original error) consumes
-+  significant engineering effort.
-+
-+* Systems configured with kdump, where panicking at the moment of the
-+  hardware error produces a vmcore that still contains the faulting
-+  address, the affected page state, and the originating MCE/GHES
-+  record — context that is typically lost by the time a delayed crash
-+  occurs.
-+
-+* High-availability clusters that rely on fast, deterministic node
-+  failure for failover, and prefer an immediate panic over silent data
-+  corruption propagating to replicas or persistent storage.
-+
-+* Kernel and platform developers reproducing hwpoison issues with
-+  tools such as ``mce-inject`` or error-injection debugfs interfaces,
-+  where panicking on the unrecoverable path makes regressions
-+  immediately visible instead of surfacing as later, unrelated
-+  failures.
-+
-+= =====================================================================
-+0 Try to continue operation (default).
-+1 Panic immediately.  If the ``panic`` sysctl is also non-zero then the
-+  machine will be rebooted.
-+= =====================================================================
-+
-+Example::
-+
-+     echo 1 > /proc/sys/vm/panic_on_unrecoverable_memory_failure
-+
-+
- percpu_pagelist_high_fraction
- =============================
+ enum inject_type {
+ 	MADV_HARD,
+ 	MADV_SOFT,
+@@ -355,4 +359,84 @@ TEST_F(memory_failure, dirty_pagecache)
+ 	ASSERT_EQ(close(fd), 0);
+ }
  
++static int read_sysctl_int(const char *path, int *out)
++{
++	char buf[16];
++	int fd, n;
++
++	fd = open(path, O_RDONLY);
++	if (fd < 0)
++		return -1;
++	n = read(fd, buf, sizeof(buf) - 1);
++	close(fd);
++	if (n <= 0)
++		return -1;
++	buf[n] = '\0';
++	*out = atoi(buf);
++	return 0;
++}
++
++static int write_sysctl_int(const char *path, int val)
++{
++	char buf[16];
++	int fd, len, ret = 0;
++
++	fd = open(path, O_WRONLY);
++	if (fd < 0)
++		return -1;
++	len = snprintf(buf, sizeof(buf), "%d\n", val);
++	if (write(fd, buf, len) != len)
++		ret = -1;
++	close(fd);
++	return ret;
++}
++
++/*
++ * Regression test for vm.panic_on_unrecoverable_memory_failure.
++ *
++ * With the sysctl on, hwpoison injection on a userspace anonymous page
++ * must still be recovered via SIGBUS — it must not trigger a kernel
++ * panic. This guards the panic_on_unrecoverable_mf() recheck that rules
++ * out concurrent buddy allocations being misclassified as unrecoverable
++ * kernel pages (MF_MSG_KERNEL_HIGH_ORDER).
++ *
++ * If the kernel regresses and panics, the host VM dies and the test
++ * harness will report the binary as never having returned — which is
++ * itself a clear failure signal.
++ */
++TEST(panic_on_unrecoverable_user_page)
++{
++	unsigned long page_size;
++	int saved, status;
++	void *addr;
++	pid_t pid;
++
++	if (read_sysctl_int(PANIC_SYSCTL, &saved))
++		SKIP(return, "%s not available\n", PANIC_SYSCTL);
++	if (write_sysctl_int(PANIC_SYSCTL, 1))
++		SKIP(return, "cannot enable %s (need root?)\n", PANIC_SYSCTL);
++
++	page_size = sysconf(_SC_PAGESIZE);
++
++	pid = fork();
++	ASSERT_NE(pid, -1);
++	if (pid == 0) {
++		addr = mmap(NULL, page_size, PROT_READ | PROT_WRITE,
++			    MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
++		if (addr == MAP_FAILED)
++			_exit(1);
++		*(volatile char *)addr = 1;
++		if (madvise(addr, page_size, MADV_HWPOISON))
++			_exit(2);
++		FORCE_READ(*(volatile char *)addr);
++		_exit(0); /* unreachable: SIGBUS expected */
++	}
++
++	ASSERT_EQ(waitpid(pid, &status, 0), pid);
++	write_sysctl_int(PANIC_SYSCTL, saved);
++
++	ASSERT_TRUE(WIFSIGNALED(status));
++	ASSERT_EQ(WTERMSIG(status), SIGBUS);
++}
++
+ TEST_HARNESS_MAIN
 
 -- 
 2.52.0
