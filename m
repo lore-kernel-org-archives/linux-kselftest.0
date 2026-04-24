@@ -1,75 +1,90 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BC0B36E46C;
-	Fri, 24 Apr 2026 13:19:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7529C3D6494;
+	Fri, 24 Apr 2026 13:28:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777036770; cv=none; b=qnBGGpjeS5RtEIYpH7EfCcs9bbVR9XBAnvrZ9Cvqr9nv+TBMo5HiH1wQ/6RePqnaNXn3S4cOwvF+fH1aeaY438QmR2zm39QjYu8fHmRZgaavvZf0cejz7B2pXHUxDHLeNK7vPju8a5+Y51JtexENC01L0+o1eJFVNmKLJAyqQs4=
+	t=1777037327; cv=none; b=VOGBXeg6jb8+fHRFvG97rntJoku/AsQrlKeRjnfRDG0yCho2w5PuHJo2Y19/uQs4XQUONRuwmtGB7VbytIQGzBtNU14lbbNrgJd1IS/4fyzfO7gmaNyyk6tC6/nEc+1Ji8VOU/+/j9daH3WfZh3xkPkfRTbW4s1YkSgxOX/q138=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777036770; c=relaxed/simple;
-	bh=9oviElGuemGAVi46Q61CGwpxVccZVcmFAcX0wffBesg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=riErNTW8UqIwr8hlOFdWGht6SkauWwtAH0N7R+b0GVy/rR44H54w/JH+cBqjYb2woK5+QZVsCXr42qQl0SlakRF5xkq1t8YXHSh79jY/L9Qg+6hhs7cMo4KNZ6F3HZWC37Qb+uImmPozumEmnwi66vH9SYKST0eUoMscy2tYXtM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=i9X1T2X+; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1777037327; c=relaxed/simple;
+	bh=IhfgqdqsMepvSbnRCEvYdIExQH0XA0VhU82KOe48pfw=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=Q+wGrU0e8FMlNOXqPEoWvvvtNaWG8KpxaoCEm13GuXBUqRvsl7BlT/YcjjK3Rx2vutcw8islR2o6ReVS7MgQ2fsUFNLi2LCGE1kHWPk05gXyq7pYrbMflQtKb1/SlWXoQN0zq8cRJPBSglvARTEdofl2SA4Ccj7QZxi6IFX4+XM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=KGGRP124; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="i9X1T2X+"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=sXX8DCyTeaTt4IdZmkdODt+bPlX1tsjH9okoeWinoGE=; b=i9X1T2X+j7Rh8FdSDr4hl4IDUK
-	zsnG28/uG4V+Ypkb0qn22B3vMKmhwi58tajOcz0klI4b66gkS+auXluE/FJDxwEvVBi+LcWgjWN9R
-	r7Gl6Ur74cwqK+Uj9caVGY2/pNnZ2iz9rBqyvwp+sGbSEsmWpMyLo0Rm44dMsm6raXUZSQ0n5C1gR
-	q8DGKOuyUxXP7CCGXYrJsWG/YWLOqVwrzavUkJnknsGwIXZV6alWMkBDIismCv94L5wireRkMUmPC
-	ludTMUXCkrlAnWE2FWrQBVY2jTlZKd92I3KTBBq2njwzHO0NeWCUF7uJ0tOEe8dJLRFAFiQgIx7C+
-	OGYmjLGg==;
-Received: from willy by casper.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1wGGR7-0000000FBlQ-2Efw;
-	Fri, 24 Apr 2026 13:19:13 +0000
-Date: Fri, 24 Apr 2026 14:19:13 +0100
-From: Matthew Wilcox <willy@infradead.org>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="KGGRP124"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23438C19425;
+	Fri, 24 Apr 2026 13:28:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1777037326;
+	bh=IhfgqdqsMepvSbnRCEvYdIExQH0XA0VhU82KOe48pfw=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=KGGRP124jq93G6t3s0LoBErg/++C25uWv3WaS28c2d0dr5EjZRdlcn9rJmIVD7sS6
+	 1dR/yjWyOG34MN9YAW26tHjJ/ff7TDLMAHmqoCKOwecvaobKO9MkU//t5h0X437qCS
+	 KlPDQXKOfqBYKs6oJfrZ35BbV3cC6/mWvwlDk75c=
+Date: Fri, 24 Apr 2026 06:28:45 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
 To: Breno Leitao <leitao@debian.org>
-Cc: Miaohe Lin <linmiaohe@huawei.com>,
-	Naoya Horiguchi <nao.horiguchi@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	kernel-team@meta.com
+Cc: Miaohe Lin <linmiaohe@huawei.com>, Naoya Horiguchi
+ <nao.horiguchi@gmail.com>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
+ <skhan@linuxfoundation.org>, David Hildenbrand <david@kernel.org>, Lorenzo
+ Stoakes <ljs@kernel.org>, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, Suren
+ Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Shuah
+ Khan <shuah@kernel.org>, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kernel-team@meta.com
 Subject: Re: [PATCH v5 0/4] mm/memory-failure: add panic option for
  unrecoverable pages
-Message-ID: <aett0XmQ1EPSDdnY@casper.infradead.org>
+Message-Id: <20260424062845.fd3d9acd12489f15bec7e72f@linux-foundation.org>
+In-Reply-To: <20260424-ecc_panic-v5-0-a35f4b50425c@debian.org>
 References: <20260424-ecc_panic-v5-0-a35f4b50425c@debian.org>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260424-ecc_panic-v5-0-a35f4b50425c@debian.org>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Fri, Apr 24, 2026 at 05:23:58AM -0700, Breno Leitao wrote:
+On Fri, 24 Apr 2026 05:23:58 -0700 Breno Leitao <leitao@debian.org> wrote:
+
+> When the memory failure handler encounters an in-use kernel page that it
+> cannot recover (slab, page tables, kernel stacks, vmalloc, etc.), it
+> currently logs the error as "Ignored" and continues operation.
+> 
+> This leaves corrupted data accessible to the kernel, which will inevitably
+> cause either silent data corruption or a delayed crash when the poisoned memory
+> is next accessed.
+> 
 > This is a common problem on large fleets. We frequently observe multi-bit ECC
 > errors hitting kernel slab pages, where memory_failure() fails to recover them
 > and the system crashes later at an unrelated code path, making root cause
 > analysis unnecessarily difficult.
+> 
+> Here is one specific example from production on an arm64 server: a multi-bit
+> ECC error hit a dentry cache slab page, memory_failure() failed to recover it
+> (slab pages are not supported by the hwpoison recovery mechanism), and 67
+> seconds later d_lookup() accessed the poisoned cache line causing
+> a synchronous external abort:
+> 
+>     [88690.479680] [Hardware Error]: error_type: 3, multi-bit ECC
+>     [88690.498473] Memory failure: 0x40272d: unhandlable page.
+>     [88690.498619] Memory failure: 0x40272d: recovery action for
+>                    get hwpoison page: Ignored
+>     ...
+>     [88757.847126] Internal error: synchronous external abort:
+>                    0000000096000410 [#1] SMP
+>     [88758.061075] pc : d_lookup+0x5c/0x220
+> 
+> This series adds a new sysctl vm.panic_on_unrecoverable_memory_failure
+> (default 0) that, when enabled, panics immediately on unrecoverable
+> memory failures. This provides a clean crash dump at the time of the
+> error, which is far more useful for diagnosis than a random crash later
+> at an unrelated code path.
 
-Who is "we"?  Please attribute your patches to your employer by putting
-their name in brackets after yours.  My ~/.gitconfig has:
-
-[user]
-        name = Matthew Wilcox (Oracle)
-
+Sashiko is asking things:
+	https://sashiko.dev/#/patchset/20260424-ecc_panic-v5-0-a35f4b50425c@debian.org
