@@ -1,207 +1,262 @@
-Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60CEC34B1AD
-	for <linux-kselftest@vger.kernel.org>; Fri, 24 Apr 2026 22:13:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA59634A763
+	for <linux-kselftest@vger.kernel.org>; Fri, 24 Apr 2026 23:10:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777068794; cv=none; b=C1MAVAgJUJrrPaOkLr943EEqpRrM7pLa6KAFphwBAkV74wSbd91G2xnt3HKOxL287Ln66RTz0lZ7YcvHALlbH/GikRZr7ioonxDxX0TARpcZBrpFLHmE+wMXhjtxNA/AHlGA47wQTrxvz32FpJZHhId0EMvotluwGQgBtzzx4/A=
+	t=1777072249; cv=none; b=dWXUed/45PJsIiIePvaGz05kK/9MS6GPwW/ouHY5JfBeRETLVSX1xTJDgDqPWju98dEX5dHewRHROpkteRSUevS/Vr/WxLThONDNXDp9O8nYCieGbURt/Jlq8wfcD71luqH2MGuVZRt+VHMICKyIl2wHgr2m+Vg2/Usn5E6VH0I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777068794; c=relaxed/simple;
-	bh=edkfnYqeyMC0Qt+W6n8ze5hGF7NTNhj3oyNEAcTDdxw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NlCV6GAuGTprAeaHaec4Ha1iLdOb4lzzFBK+XeOfrj8wXJ5XKXPAUNjThjOUNqsHyAsx2N17mXCs6jS5gv1jHHKBYzoicVLu9veAiyyaWL30/5GbFxYPBd/ArhB3Bww8o2kvXrm+zDbmXYJl7iFvgOd6w14Tu1IzUqO+ld2XhVw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=H5m4vQCZ; arc=none smtp.client-ip=209.85.222.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
+	s=arc-20240116; t=1777072249; c=relaxed/simple;
+	bh=VX1tYX9cRv+eO+feWH8A3dJq6HWUr6MsMOHqfw2gbSE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hbTSW6jRGucMPnR97Tvb0iGUD4ovfAalh+NMkPUZmVQS/yvA1IWh1XPM4Mvylbvk5JoNo159EfQF2k8YOLcilqQAm0uGhQxhgZHY5tIx92NZFbjDEorg9j+MBIt3/56XQ2ebIdVnBpqZR1IpZ+DMukZQryx6rF6GdlwxUCJM3V4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=VXHbxxZf; arc=none smtp.client-ip=95.215.58.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="H5m4vQCZ"
-Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-8d6d5e45c43so944091285a.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 Apr 2026 15:13:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1777068792; x=1777673592; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=p1Bt8LRPmWuCECk46OUK1KhCrmrzQEbzIWvPlDI3cp4=;
-        b=H5m4vQCZE27E+gDtn8BVCf5jLiPS6GNSYRuHd7oK/ryAnR76eU7gh4QWRI3SAXCvku
-         xwbAjZ3hIBI5GEUgbOSGuhXCViPpczYPF9VhNc2dh89l7qQROTD8YZ3pfblRmIXAApD+
-         LLNyElsdRzbz0O8P7asNE1yJaILYoWrFSeatd7+ExO8xnYjLQgg2muQOyOklYWskuFkU
-         cwfy9M7PKhf/GFqDNR2idR9iNUU//TC3BIEIHtpqSrhi/HtxH3xMTkMDNiCC7PJfnIaI
-         RfTF+U+c9gQck78mXjxg5cQFxiXkgiK0mPHrBDKGiKFmfg+/2VAfJKkgnb8JLTc01FjS
-         F9Hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777068792; x=1777673592;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=p1Bt8LRPmWuCECk46OUK1KhCrmrzQEbzIWvPlDI3cp4=;
-        b=M8DJ0pA2OByV3W7h9+02OF+EFQ4G1lner4pPIuRSNprGYCmBhULqLZnZVpMPCMtuMF
-         EJ2C9vq5Q80Obo6WkGW+pMKHaI9bo2KuRteTtZO/dsDdyglh29R0zaO6lieP51S1fSlS
-         hUbfUOofmImffyvlZgu4p2BLZB7YBFR7E1J6oFS8+CvPL6dhwddw64Li+rJRDOtI1Fjr
-         TxmmY9o8kVrdRRsJQuFLbsjjFH2wGIjlHxbifgRq8ubURZEhnOPxvaO/wZ7kNEVTRJNj
-         8o2dnBPSruISDNia0HiZieBUt75hDfbyQv5nHU7WlxOIHhxQSY08I6Cpdw6Ib9XMUu12
-         ejtg==
-X-Forwarded-Encrypted: i=1; AFNElJ/NXCBJwn0jeGUP3iqXWLg/sZjGPBFCJ/t8k8ajlSytR9dHmOLR8JwHnQ4bShYi3p02gZq0C6FWSjDR10gtEYQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw3DpY8OJrVfZm4Mqzlgs3OvDSAJMpwIwKxpn/WQx8MUxeKHY5+
-	Z+O4ZTQL4twjLRtLool3uf+GmYS56CB5JKaSis+MnIHm6bsEGXqENkwjzWVMmGgYUuM=
-X-Gm-Gg: AeBDieuUv4xLYnxspgJd13ZHPtgqGyWbb7QhsuuirEFu+q3lP/kH51fUQY8FhvY2i/1
-	DuwOvIz8QC+Lm1QC2MxPK8e6jV8n9eD6L9t0w2I8cMw93/FaklMSOnXRXhHNrhd0bmlxOonJxV8
-	u9FwWfdypD/rmkBVuCozjSD4ggvfImXyfMGdyLexVlOlKElJID2BQ5LzQzpVqI3Ol25Sp2OlgEN
-	K628dIOc8DMnGA8hRhgU+0dbDdn2T2836iycwNC0koMw5yCV/Xh0vSDee5D4V288OPNiQAfMwYa
-	G0F172i6y2oQ+O4bygA8CREgGabz6nNyRwWeUIVrCTPkH8/U8I+yeh1usNcEj/Hi8s7XAoOQLTq
-	TggBZQ0vvjYmI71h7oPc1vKrcnYy9vK8Iy3ywYhbNRuMAMHi1EkvX80mCtH45QzJkNx9Ye4mVkJ
-	4PtfgajJsaw2gQCa4rFrfzHiAPsz1LOatPlp2DGjEPysiKG29aoMNkVaOdkpQ0Eo+8Ds8qDcuPi
-	01huSIL/yzo4ESu
-X-Received: by 2002:ac8:7d15:0:b0:50f:b13e:b740 with SMTP id d75a77b69052e-50fb13eb934mr273244551cf.9.1777068792308;
-        Fri, 24 Apr 2026 15:13:12 -0700 (PDT)
-Received: from ziepe.ca (crbknf0213w-47-54-130-67.pppoe-dynamic.high-speed.nl.bellaliant.net. [47.54.130.67])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-50fc42c7fabsm78174021cf.9.2026.04.24.15.13.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Apr 2026 15:13:11 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.97)
-	(envelope-from <jgg@ziepe.ca>)
-	id 1wGOlq-00000004lHz-0nuV;
-	Fri, 24 Apr 2026 19:13:10 -0300
-Date: Fri, 24 Apr 2026 19:13:10 -0300
-From: Jason Gunthorpe <jgg@ziepe.ca>
-To: Paul Moore <paul@paul-moore.com>
-Cc: Leon Romanovsky <leon@kernel.org>,
-	Roberto Sassu <roberto.sassu@huaweicloud.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Matt Bobrowski <mattbobrowski@google.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Saeed Mahameed <saeedm@nvidia.com>,
-	Itay Avraham <itayavr@nvidia.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-rdma@vger.kernel.org, Chiara Meiohas <cmeiohas@nvidia.com>,
-	Maher Sanalla <msanalla@nvidia.com>,
-	linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v2 0/4] Firmware LSM hook
-Message-ID: <20260424221310.GA804026@ziepe.ca>
-References: <20260413164220.GP3694781@ziepe.ca>
- <CAHC9VhR1Uke9P==CELKavBcogHoNCtMZFfNWUbgm5HYUfomhtw@mail.gmail.com>
- <20260413231920.GS3694781@ziepe.ca>
- <CAHC9VhTLamfe4C81ZNRVT=H32x+KLxSqH3o0eBfrHsWAgAqxCA@mail.gmail.com>
- <20260415134705.GG2577880@ziepe.ca>
- <CAHC9VhSECYihup=tURo_Qk__xUdYYPkHgnz5CWA0BrRAkvwbog@mail.gmail.com>
- <20260417191749.GK2577880@ziepe.ca>
- <CAHC9VhQbpS9XpO6dWu7gOiX=ppjtAxnNBOFe6s5wjEZNpMRjgw@mail.gmail.com>
- <20260424143603.GB3611611@ziepe.ca>
- <CAHC9VhR++21SD+v4Bb16SQmYHgJYZ0ytQ+BecGPNK+fEOe4G7g@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="VXHbxxZf"
+Message-ID: <71fb19ff-6dde-43f4-a0e9-5c8cf2ba4ed4@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1777072234;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ZF2xo+im5ABqQb8juDoszdqEpMu6aUbnETaBqpZGMY0=;
+	b=VXHbxxZfy9OoLtXfzxZ8LCjQMjD/OkCiG8Davia89CJr1Bfd4TuZZXt6E5Iwkup+l0h+3v
+	cFjh3APLkpXSJQIKe7Yoo0ID2ftKfKivDSn005tkbrPGCE8tOLFAb99bTVlgqSaCzwUXKq
+	dS3LDHdZC3mJaN1fdjTfIxwCD2pD6Pc=
+Date: Fri, 24 Apr 2026 16:10:19 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHC9VhR++21SD+v4Bb16SQmYHgJYZ0ytQ+BecGPNK+fEOe4G7g@mail.gmail.com>
+Subject: Re: [PATCH RFC bpf-next 0/8] bpf: add support for KASAN checks in
+ JITed programs
+To: =?UTF-8?Q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?=
+ <alexis.lothore@bootlin.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ Jiri Olsa <jolsa@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
+ "David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>,
+ Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ Shuah Khan <shuah@kernel.org>, Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+ Alexander Potapenko <glider@google.com>,
+ Andrey Konovalov <andreyknvl@gmail.com>, Dmitry Vyukov <dvyukov@google.com>,
+ Vincenzo Frascino <vincenzo.frascino@arm.com>,
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: ebpf@linuxfoundation.org,
+ Bastien Curutchet <bastien.curutchet@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Xu Kuohai <xukuohai@huawei.com>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org, kasan-dev@googlegroups.com,
+ linux-mm@kvack.org
+References: <20260413-kasan-v1-0-1a5831230821@bootlin.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <20260413-kasan-v1-0-1a5831230821@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, Apr 24, 2026 at 04:59:30PM -0400, Paul Moore wrote:
-> >
-> > > Most LSMs will want to know who is initiating the firmware request
-> > > (the subject), the requested operation/opcode (the action/verb), and
-> > > the target of the request (the object, which in this case is likely
-> > > the kernel or the device).
-> >
-> > How is
-> >   system_u:object_r:httpd_packet_t:s0
-> >
-> > A kernel or device?
+On 4/13/26 11:28 AM, Alexis LothorÃ© (eBPF Foundation) wrote:
+> Hello,
+> this series aims to bring basic support for KASAN checks to BPF JITed
+> programs. This follows the first RFC posted in [1].
+
+Hi Alexis,
+
+Thank you for working on this, it's a real testing gap.
+I have a few comments, see below.
+
+The series doesn't apply cleanly on bpf-next right now, but I was able
+to apply to a little older revision (eb5249b12507).
+
 > 
-> It's not.  It's one of two labels on a packet.  I've cautioned you
-> about leaning too heavily on the secmark comparison as it falls apart
-> in a number of places, this is one of those places.
-
-But I want to label a packet too, you keep going back to it not being
-the same thing and I keep repeating that all I want to do is put
-labels on FWCTL packets :(
-
-> > It is a label for packet contents. I also want a label for packet contents.
+> KASAN allows to spot memory management mistakes by reserving a fraction
+> of memory as "shadow memory" that will map to the rest of the memory and
+> allow its monitoring. Each memory-accessing instruction is then
+> instrumented at build time to call some ASAN check function, that will
+> analyze the corresponding bits in shadow memory, and if it detects the
+> access as invalid, trigger a detailed report. The goal of this series is
+> to replicate this mechanism for BPF programs when they are being JITed
+> into native instructions: that's then the (runtime) JIT compiler who is
+> in charge of inserting calls to the corresponding kasan checks, when a
+> program is being loaded into the kernel. This task involves:
+> - identifying at program load time the instructions performing memory
+>   accesses
+> - identifying those accesses properties (size ? read or write ?) to
+>   define the relevant kasan check function to call
+> - just before the identified instructions:
+>   - perform the basic context saving (ie: saving registers)
+>   - inserting a call to the relevant kasan check function 
+>   - restore context
+> - whenever the instrumented program executes, if it performs an invalid
+>   access, it triggers a kasan report identical to those instrumented on
+>   kernel side at build time.
 > 
-> According to your explanations, my understanding is that you want a
-> fwctl RPC operation.  That is not the same as the secmark label
-> assigned by an iptables/nftables rule.
+> As discussed in [1], this series is based on some choices and
+> assumptions:
+> - it focuses on x86_64 for now, and so only on KASAN_GENERIC
 
-I view fwctl as an opaque packet based messaging subsystem. It
-communicates a packet to a remote CPU and returns a response packet
-back to the userspace.
+I wonder if it's feasible to implement KASAN support on the verifier
+side in post-verification fixups. AI slop for illustration:
 
-Trying to have the kernel assign fixed meaning to the content of the
-packets inside the kernel is contrary to the entire design of fwctl.
+  ;; Original (1 BPF insn):
+  dst = *(u64 *)(src + off)           ; BPF_LDX | BPF_MEM | BPF_DW
 
-It is like demanding the netstack parse HTTP packets as a precondition
-to using LSM. It makes no sense.
+  ;; Rewrite (~7 BPF insns):
+  r_tmp1 = src                         ; BPF_MOV64_REG
+  r_tmp1 += off                        ; BPF_ALU64 | BPF_ADD | K   (full address)
+  r_tmp2 = r_tmp1                      ; copy
+  r_tmp2 >>= 3                         ; KASAN_SHADOW_SCALE_SHIFT
+  r_tmp2 += KASAN_SHADOW_OFFSET        ; shadow address
+  r_tmp3 = *(u8 *)(r_tmp2 + 0)         ; BPF_LDX | BPF_B   (load shadow byte)
+  if r_tmp3 != 0 goto +2               ; BPF_JNE | PC+2
+  dst = *(u64 *)(src + off)            ; original access (fast path)
+  goto +1                              ; skip slowpath
+  call __asan_report_load8             ; BPF kfunc
+  dst = *(u64 *)(src + off)            ; retry the access after report (non-fatal)
 
-Any LSM integration requires a labeling system that is not hard wired
-into the built kernel. I don't much care what it is, so long as the
-classification and label space are defined by userspace.
+A sort of inline kasan directly in BPF.
 
-You say it is not like secmark, fine, but I see a perfect mirror in
-secmark...
+There are plenty of issues with it: instruction limit, exposing asan
+API as kfuncs, etc. On the flip side we get cross-arch support out of
+the box with no or mininal JIT changes.
 
-> > You can take that view, it is certainly one valid way to look at it.
-> >
-> > But it is completely impractical.
+Honestly I'm not excited about this approach, but curious if anyone
+thought about this, or maybe it was already discussed?
+
+
+> - not all memory accessing BPF instructions are being instrumented:
+>   - it focuses on STX/LDX instructions
+>   - it discards instructions accessing BPF program stack (already
+>     monitored by page guards)
+>   - it discards possibly faulting instructions, like BPF_PROBE_MEM or
+>     BPF_PROBE_ATOMIC insns
 > 
-> Elaborate on that, because from what I can tell that is the valid way
-> to look at it from a subject/verb/object perspective.
+> The series is marked and sent as RFC:
+> - to allow collecting feedback early and make sure that it goes into the
+>   right direction
+> - because it depends on Xu's work to pass data between the verifier and
+>   JIT compilers. This work is not merged yet, see [2]. I have been
+>   tracking the various revisions he sent on the ML and based my local
+>   branch on his work
+> - because tests brought by this series currently can't run on BPF CI:
+>   they expect kasan multishot to be enabled, otherwise the first test
+>   will make all other kasan-related tests fail.
 
-We cannot have the kernel predefine verb labels.
+AFAICT this can be trivially fixed on BPF CI side, we just need to set
+kasan_multi_shot for the VMs running the tests. I will do that, your
+next revision doesn't have to be and RFC.
 
-I'm completely fine with using verb if it can be dynamic and userspace
-can tell the kernel what the verbs labels are.
+> - because some cases like atomic loads/stores are not instrumented yet
+>   (and are still making me scratch my head)
+> - because it will hopefully provide a good basis to discuss the topic at
+>   LSFMMBPF (see [3])
 
-This is the only reason I pointed at secmark, it shows a system that
-has both a user controller classifier and dynamic labels that are not
-fixed into the built kernel. ie it is flexible.
+Apparently, KASAN reporting routine takes a lock [1]:
 
-> > > > The same way secmark cannot pre-identify all the XXX_packet_t's.
-> > >
-> > > Once again, I think there is a disconnect or misunderstanding, on a
-> > > SELinux system using secmark all of the packet types, e.g.
-> > > "XXX_packet_t's", *are* pre-defined in the SELinux policy.
-> >
-> > "Pre-defined" in a text files in user space controlled by the admin.
->
-> That's not correct.  It's kinda like saying the NIC driver sources are
-> simply "text files in user space controlled by the admin".  
+   __asan_load()
+     -> check_region_inline()
+        -> kasan_report()
+           -> start_report()
+             -> raw_spin_lock_irqsave(&report_lock, *flags);
 
-That's very pedantic. I mean to the point I wonder if we are even
-speaking the same language.
+BPF programs can run in NMI context, and so it appears to be possible
+to get an unflagged (because of lockdep_off() in start_report)
+deadlock, if an NMI fires on a CPU already holding report_lock.
+Although I guess you'd need two KASAN bugs to happen
+simultaneously for that to occur?... A rare event, I would hope.
 
-I said the labels are defined by userspace, you said no, and then
-explained that they are defined by userspace going through a bunch of
-steps:
+It could be addressed with either in_nmi() check at runtime, or
+forbidding kasan for NMI-runnable BPF program types.
 
-> The SELinux secmark labels are defined in the SELinux policy sources
-> which must be compiled and loaded into the kernel before they are
-> valid on a running system. Policy must be written not only to define
-> the secmark labels, but also to define the access control rules
-> which govern how those packets are handled by the system.  The
-> iptables/nftables command lines simply assign a secmark label to a
-> packet; that's important, but only a small part of the total
-> equation.
+That said, this may be a case of being overly defensive to appease the
+ai overlords.
 
-I understand all of this, I am totally fine with it. A package will
-install, a distribution will provide, or admin will write these
-things, and do all the steps to load them into the kernel. I don't see
-any issue with that.
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/mm/kasan/report.c?h=v7.0#n204
 
-Hardwiring things into the built kernel is a problem that must be
-avoided because end users only run the kernel provided by the
-distribution. "recompiling the driver" is not an option that is
-available.
+> 
+> Despite this series not being ready for integration yet, anyone
+> interested in running it locally can perform the following steps to run
+> the JITed KASAN instrumentation selftests:
+> - rebasing locally this series on [2]
+> - building and running the corresponding kernel with kasan_multi_shot
+>   enabled
+> - running `test_progs -a kasan`
+> 
+> And should get a variety of KASAN tests executed for BPF programs:
+> 
+>   #162/1   kasan/bpf_kasan_uaf_read_1:OK
+>   #162/2   kasan/bpf_kasan_uaf_read_2:OK
+>   #162/3   kasan/bpf_kasan_uaf_read_4:OK
+>   #162/4   kasan/bpf_kasan_uaf_read_8:OK
+>   #162/5   kasan/bpf_kasan_uaf_write_1:OK
+>   #162/6   kasan/bpf_kasan_uaf_write_2:OK
+>   #162/7   kasan/bpf_kasan_uaf_write_4:OK
+>   #162/8   kasan/bpf_kasan_uaf_write_8:OK
+>   #162/9   kasan/bpf_kasan_oob_read_1:OK
+>   #162/10  kasan/bpf_kasan_oob_read_2:OK
+>   #162/11  kasan/bpf_kasan_oob_read_4:OK
+>   #162/12  kasan/bpf_kasan_oob_read_8:OK
+>   #162/13  kasan/bpf_kasan_oob_write_1:OK
+>   #162/14  kasan/bpf_kasan_oob_write_2:OK
+>   #162/15  kasan/bpf_kasan_oob_write_4:OK
+>   #162/16  kasan/bpf_kasan_oob_write_8:OK
+>   #162     kasan:OK
+>   Summary: 1/16 PASSED, 0 SKIPPED, 0 FAILED
+> 
+> [1] https://lore.kernel.org/bpf/DG7UG112AVBC.JKYISDTAM30T@bootlin.com/
+> [2] https://lore.kernel.org/bpf/cover.1776062885.git.xukuohai@hotmail.com/
+> [3] https://lore.kernel.org/bpf/DGGNCXX79H8O.2P6K8L1QW1M8K@bootlin.com/
+> 
+> Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+> ---
+> Alexis Lothoré (eBPF Foundation) (8):
+>       kasan: expose generic kasan helpers
+>       bpf: mark instructions accessing program stack
+>       bpf: add BPF_JIT_KASAN for KASAN instrumentation of JITed programs
+>       bpf, x86: add helper to emit kasan checks in x86 JITed programs
+>       bpf, x86: emit KASAN checks into x86 JITed programs
+>       selftests/bpf: do not run verifier JIT tests when BPF_JIT_KASAN is enabled
+>       bpf, x86: enable KASAN for JITed programs on x86
+>       selftests/bpf: add tests to validate KASAN on JIT programs
+> 
+>  arch/x86/Kconfig                                   |   1 +
+>  arch/x86/net/bpf_jit_comp.c                        | 106 +++++++++++++
+>  include/linux/bpf.h                                |   2 +
+>  include/linux/bpf_verifier.h                       |   2 +
+>  include/linux/kasan.h                              |  13 ++
+>  kernel/bpf/Kconfig                                 |   9 ++
+>  kernel/bpf/core.c                                  |  10 ++
+>  kernel/bpf/verifier.c                              |   7 +
+>  mm/kasan/kasan.h                                   |  10 --
+>  tools/testing/selftests/bpf/prog_tests/kasan.c     | 165 +++++++++++++++++++++
+>  tools/testing/selftests/bpf/progs/kasan.c          | 146 ++++++++++++++++++
+>  .../testing/selftests/bpf/test_kmods/bpf_testmod.c |  79 ++++++++++
+>  tools/testing/selftests/bpf/test_loader.c          |   5 +
+>  tools/testing/selftests/bpf/unpriv_helpers.c       |   5 +
+>  tools/testing/selftests/bpf/unpriv_helpers.h       |   1 +
+>  15 files changed, 551 insertions(+), 10 deletions(-)
+> ---
+> base-commit: 7990a071b32887a1a883952e8cf60134b6d6fea0
+> change-id: 20260126-kasan-fcd68f64cd7b
+> 
+> Best regards,
+> --  
+> Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+> 
 
-Jason
