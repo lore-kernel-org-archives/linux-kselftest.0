@@ -1,83 +1,97 @@
-Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f201.google.com (mail-dy1-f201.google.com [74.125.82.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98CFB14BF92
-	for <linux-kselftest@vger.kernel.org>; Fri, 24 Apr 2026 05:20:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2577B31E85E
+	for <linux-kselftest@vger.kernel.org>; Fri, 24 Apr 2026 07:02:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777008042; cv=none; b=FxIqqz4/f2ZuvOQ4/tYdZ3hzd61f7Mi4tmpF3eWlUVcIRZ43i2/XkFB6Ro0s1lyf/q/1Qh/tx/ifl1YuFLzEQ9L6IYwghkvsKRbR5AChCh3s3j94B/85EAzxl8855dWqq2lsvJPisgDAhLbxgtw4dFNAoYJwtOQjS2m7U7aVb38=
+	t=1777014178; cv=none; b=HtagCq9rA1ofbsLz/u4QVu4mzRQs1uKsDwvDhCK/CdUn8bNzz1VFzRpyrrZ30R2bBzqlT5Q1zipzWwjj1B1AUfvHFjEOuCrxXLSNd/0FIyLk5BY1NBEqHDyjRI7D8cDXLlGo4KsK9hmwUXLNA049GMbNYAnSpqkpT/HJzklsPSY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777008042; c=relaxed/simple;
-	bh=yzSFr76VywT6mzIWHv1uIbUW5oarBczpza1ZqXVPhNQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=spMLkFZ0iAj4ud5mfr58l6HlEoG/T8dALZgyOwIw2xUAcq8+8eK1DuboxhB0Sdq9XqST8mqsbjkUrYlnSr9QVzLKLc5NRrM1lt7g6Q/oYxi169ZQacm3uN404yyODqCuFdasrDrEcIeOW476x5tNRNg45GrPh87eorZlrIjXvyg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=DErWeeVw; arc=none smtp.client-ip=91.218.175.185
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1777014178; c=relaxed/simple;
+	bh=YCWTzN/i7ucHlXNg2mLVBc9k/4QhjPMBsOtk4DkUkqg=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=CuHrEGYAn8+4UDluTKTPwE2m87hby+4GSuPFrbiazZEYo9uvk/knA2V61812qOyFxH9Clv+fAalXI6dP63p34qc/ArIoXaMWxKNmlAIOcSHwFegQBDzggO7QiIkon+zD4AjU8CQoxujk21Ue4VsVZg2duBXj19Hcn2pVv8VFSag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=b5EhU345; arc=none smtp.client-ip=74.125.82.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="DErWeeVw"
-Message-ID: <84e67f8e-7cb7-4710-bc46-055a2bb9d0ca@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1777008038;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=yzSFr76VywT6mzIWHv1uIbUW5oarBczpza1ZqXVPhNQ=;
-	b=DErWeeVwVrnD0TSpf7Ktcrk/EQp2CqM95/ld7OLjvYvCxmZizMlH0nFpDSmgQ8+FMSLC3s
-	GEDweT2SNYfK0MQzHu13h9CFRBxKdnq3ACWpjgnXUhv/9gygK4TdUbIwQpXooivd4WqXUr
-	eSYdusT7dBqItD1zY/6/XWLHkDYcE48=
-Date: Fri, 24 Apr 2026 13:20:27 +0800
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="b5EhU345"
+Received: by mail-dy1-f201.google.com with SMTP id 5a478bee46e88-2dd1c74508cso12169334eec.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Apr 2026 00:02:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1777014175; x=1777618975; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=zxJZiwOMWb+N8XiOQ98GcOFWZadlOkrX+lM5TYojf0g=;
+        b=b5EhU345yPbj+6V4c5uT1CetY1x3cZsn9TWEPpFndI1gYirReesG9RFW+7Z5Gjj80m
+         Y0lecuaKNAXB5rbp7A1mAhaGo5afuQbGqrDvz9BTOlBdRqRtnsiv3RWe29NDbqEKiS6v
+         k7xW5/EW6WyE0KEAQyjVORWYa5zTPqscGY6at118HDAR52Hgm2BCLuM9VyznuaQ76oKl
+         l+Hh89fCkch0N+BlMrdjr/JHgG5m2dV9EFc3XeOCWA+EKQqLcNiY2oL51TQxj8e5Wlg7
+         1h7o89XR319ZxQfVJWJs0sG2KeCX3i1JZXdWmQVnU1Y1SbxYKMc2I85XYzcXnW2GSImE
+         cZsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777014175; x=1777618975;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zxJZiwOMWb+N8XiOQ98GcOFWZadlOkrX+lM5TYojf0g=;
+        b=EUotKiqpt4S+M87RNMUVSvH7DMJrhzRFDx7Pt6+njOr+B6pUF1+Ptw161b4VrKaqT1
+         KXka5YaaaFr4aGPZsVcqpXTwIcw33x4FkR0/ylquNGzwRTbrdmiy6NR/LLMDqB9um2AC
+         jpKggnMwhdnNupVXTelZ0hicGbOBlHDenBxDi3ah8qlkSdasA1WrVxO/m1gHrZUNr1bV
+         eL5wZddXXbp8g0y4zXE40g9yihbf4qzUuMKK8tFRZ6EOHoDkG3kYtwtujLqynTJxhm7/
+         xgfBr0/IVMfElkHz1ApbsdYi/mI8GAbVtS8Y/NlG5BYr5LrAmz+nxBVsHAfHpTDEaMms
+         OEsg==
+X-Forwarded-Encrypted: i=1; AFNElJ8gqsGl59+yNuk4sNJn2QtS2oFXWApSaCn27lmE/ejotzyuWAEil1+9q+rzIbJ8HlaI59mfffiXwqq0knxcBHs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyfULlCiQ9S+FxZBFzSsuL5wrCX9aIJq54RSofpI2Ab3P/cAJcM
+	jF4x586Vppwp6BylSrshrTaJkZ3s2Ank8E/Fd2OdX1YRYYvk7hMNxEZEZZfrL0gQILcGlOCfSoD
+	U6iq19Q==
+X-Received: from dlbcf6.prod.google.com ([2002:a05:7022:4586:b0:12d:b65b:1fb3])
+ (user=surenb job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:6895:b0:12c:8e7f:1b30
+ with SMTP id a92af1059eb24-12c8e7f1ca8mr10233008c88.2.1777014174940; Fri, 24
+ Apr 2026 00:02:54 -0700 (PDT)
+Date: Fri, 24 Apr 2026 00:02:31 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Subject: Re: [PATCH v7 5/8] selftests/cgroup: replace hardcoded page size
- values in test_zswap
-To: Li Wang <li.wang@linux.dev>, akpm@linux-foundation.org, tj@kernel.org,
- longman@redhat.com, roman.gushchin@linux.dev, hannes@cmpxchg.org,
- yosry@kernel.org, nphamcs@gmail.com, chengming.zhou@linux.dev,
- mkoutny@suse.com, shuah@kernel.org
-Cc: linux-mm@kvack.org, cgroups@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- Michal Hocko <mhocko@kernel.org>, Muchun Song <muchun.song@linux.dev>,
- Shakeel Butt <shakeel.butt@linux.dev>
-References: <20260424040059.12940-1-li.wang@linux.dev>
- <20260424040059.12940-6-li.wang@linux.dev>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <20260424040059.12940-6-li.wang@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.54.0.545.g6539524ca2-goog
+Message-ID: <20260424070234.190145-1-surenb@google.com>
+Subject: [PATCH 0/3] use vma locks for proc/pid/{smaps|numa_maps} reads
+From: Suren Baghdasaryan <surenb@google.com>
+To: akpm@linux-foundation.org
+Cc: liam@infradead.org, ljs@kernel.org, vbabka@kernel.org, david@redhat.com, 
+	willy@infradead.org, jannh@google.com, paulmck@kernel.org, pfalcato@suse.de, 
+	shuah@kernel.org, hsukrut3@gmail.com, richard.weiyang@gmail.com, 
+	reddybalavignesh9979@gmail.com, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, surenb@google.com
+Content-Type: text/plain; charset="UTF-8"
+
+Use per-vma locks when reading /proc/pid/smaps and /proc/pid/numa_maps
+similar to /proc/pid/maps to reduce contention on central mmap_lock. One
+major difference between maps and smaps/numa_maps reading is that the
+latter executes page table walk which can't be done under RCU due to a
+possibility of sleeping. Therefore we drop RCU read lock before this walk
+while keeping the VMA locked. After the walk we retake RCU read lock,
+reset VMA iterator and proceed with the next VMA.
+
+The last two patches extend /proc/pid/maps test to cover /proc/pid/smaps
+reading during concurrent address space modification.
+
+Applies over mm-unstable.
+
+Suren Baghdasaryan (3):
+  fs/proc/task_mmu: read proc/pid/{smaps|numa_maps} under per-vma lock
+  selftests/proc: ensure the test is performed at the right page
+    boundary
+  selftests/proc: add /proc/pid/smaps tearing tests
+
+ fs/proc/task_mmu.c                            | 193 ++++++++++---
+ tools/testing/selftests/proc/proc-maps-race.c | 254 ++++++++++++++----
+ 2 files changed, 354 insertions(+), 93 deletions(-)
 
 
-On 4/24/26 12:00 PM, Li Wang wrote:
-> test_zswap uses hardcoded values of 4095 and 4096 throughout as page
-> stride and page size, which are only correct on systems with a 4K page
-> size. On architectures with larger pages (e.g., 64K on arm64 or ppc64),
-> these constants cause memory to be touched at sub-page granularity,
-> leading to inefficient access patterns and incorrect page count
-> calculations, which can cause test failures.
->
-> Replace all hardcoded 4095 and 4096 values with a global pagesize
-> variable initialized from sysconf(_SC_PAGESIZE) at startup, and remove
-> the redundant local sysconf() calls scattered across individual
-> functions. No functional change on 4K page size systems.
->
-> Signed-off-by: Li Wang <li.wang@linux.dev>
-> Cc: Johannes Weiner <hannes@cmpxchg.org>
-> Cc: Michal Hocko <mhocko@kernel.org>
-> Cc: Michal Koutný <mkoutny@suse.com>
-> Cc: Muchun Song <muchun.song@linux.dev>
-> Cc: Nhat Pham <nphamcs@gmail.com>
-> Cc: Tejun Heo <tj@kernel.org>
-> Cc: Roman Gushchin <roman.gushchin@linux.dev>
-> Cc: Shakeel Butt <shakeel.butt@linux.dev>
-> Acked-by: Yosry Ahmed <yosry@kernel.org>
-
-
-Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+base-commit: a22b29c0b1a2a245ef5f782d7456de3c76eb135f
+-- 
+2.54.0.545.g6539524ca2-goog
 
