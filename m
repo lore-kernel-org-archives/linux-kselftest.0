@@ -1,58 +1,71 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6BD83148AE;
-	Sat, 25 Apr 2026 00:00:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0314A224AF7;
+	Sat, 25 Apr 2026 03:42:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.242.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777075209; cv=none; b=B6iv/AqiD8efJbknC2kJhsiSqg3B3jTcQSYD3OfxZwF9Iswvm2cthdOITrFgvzjYBFCF97m984EJF3I9fUMdzXFbXXDJw8++GXFuqq4hxuwLv675QDphh2GetxR36sfw2IJGBRqlYsPpqA521enoWg+VANYBw+/30EGXTUe+A90=
+	t=1777088579; cv=none; b=apkwmt66SzoP/xEy9Rdp60oOXdIRzwT0tv6I0vWvFQ5IzEMNlkdhS/fRnlGoAm1ZO+cIyoA4MsYq2d6FLpQKkFegZOdTynSUsGKQGLpSTykvVZ9Ek7TAQ9txvLZJcyDwXNl26Bu0aOVNIg3YVVRfGGFNlNpVDdM/MjKxTdSg0Eg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777075209; c=relaxed/simple;
-	bh=C8r7huZNyRElYBe+dzNVCmXSopmsS7PatU3slqIvHiI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=iYK47PmD9Qg5KpBjWwDvziFCrTUFtB/ExcEaQM8Z9L4sfqSWGT88xTBjwsgRJ1vwyhYuDyfc1tq8lXiBLLIzu/spfzHr8DWjGEMkx5yZtscaMQ8I6HERNX27ly/m1uxDtHyJXHcrkbyTgeGIBUC6pOTjWrOqs1shCjU25UG2Yys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IsP6Nh8W; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777088579; c=relaxed/simple;
+	bh=IrQI7yW76VzE6zKYQoU3I+Gd2W2Ui+lUDWkL9wjoYKg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MlX3BzOy9TnoW0tBsMDSJaDFBFkj6HKDtc030Dn4m7mkLNHhxqerQwU0mERN3+XLb/3DZOG+MyVXff807Eltr444Qd/EZ6/V3UcJkUQ8+NF5s1WGGl5LcDhd2G0vKEpe5Rq9WgDb3/etb9Nyu0sv+ZSjiIG5LWC8Qx+l+JvVa7k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net; spf=pass smtp.mailfrom=davidgow.net; dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b=AQ+8e0Fa; dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b=gmGNhwGh; arc=none smtp.client-ip=203.29.242.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IsP6Nh8W"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2F5DC19425;
-	Sat, 25 Apr 2026 00:00:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777075208;
-	bh=C8r7huZNyRElYBe+dzNVCmXSopmsS7PatU3slqIvHiI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=IsP6Nh8WvKEeCyPJ56ahQHwF2bxzxblJotd1wZXbilPyV3ve/Uv8Fv6kAOoOzg680
-	 JLRwJXvtvWV8b+bWgo10MkWEQwvxbFRoRRApx99J14hHn8fRbsy2knuRrjitI/Yqwd
-	 5TDlZhBpyC/o7ItjCRUbfLopFA09l+QpXJe3pklvOuKrdKP7MrYWCUQGYquGkA6Ylc
-	 z+mx7p/i4O4Y3yD3JVGMuSPP2XfiojskNYGLRFLNAXsvYcNyZ6ucZXPH7nVSKGrAy9
-	 qs9kjsYLBG6KTgXZQrtiCzdp1e7jFlwQE8kqWEmr7uXOjnB2b3S5Jk68JSgotIDUQR
-	 qvV2VssP7PYQA==
-From: SeongJae Park <sj@kernel.org>
-To: Peter Xu <peterx@redhat.com>
-Cc: SeongJae Park <sj@kernel.org>,
-	Kiryl Shutsemau <kas@kernel.org>,
-	"David Hildenbrand (Arm)" <david@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
-	Zi Yan <ziy@nvidia.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Sean Christopherson <seanjc@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
+	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b="AQ+8e0Fa";
+	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b="gmGNhwGh"
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
+	s=201606; t=1777088576;
+	bh=IrQI7yW76VzE6zKYQoU3I+Gd2W2Ui+lUDWkL9wjoYKg=;
+	h=From:To:Cc:Subject:Date:From;
+	b=AQ+8e0FapH7a4thlHKhPH/exAOal43Y1BAAX3f3ZMHc94PCy875Q5FjuGt49Cf2ZS
+	 5uId7rzKLSEMKqNCcFE8P8ldd6El29bDrkUTy0b3IUHIxYUG56iQKSEquZH/NJIsS0
+	 5WlEWO4OxLgppbflwjgbATOxjmB3YQh1Wyg0ajmZE29E2jBW7DvxKQVemPG6bWoggD
+	 atQ8AtKCD0L21k+daSvzv95fVi1ZGfEV1+7e6BI2MOU4oIPfQpBjgyB0+N6fNyCkN2
+	 pI5VbvBmhn981W9aeMLZ0iDEd0b+eK42fVE/fh8e9n7x65+g8ZHDP6SWYz832EXxCY
+	 jtpKE+26u7cwi981PpjdmmMG1+lfg/JFXw4pzuRLdwSsJf5yCeyZmltG1bnn+0Tn4J
+	 eeVRlaR/DQArGKH6CjMMx830kzoHwbRj+49WpI+m41Q06wOo3JbLYCVkJwNMsKDrw+
+	 8xidb9+PMhB2T19WWxCNgISnCQumKFEPX6OhWgvcccpmYSBv+dMEgjUFzEYpP3Iz5d
+	 /APGHfsxQga97wdlaDkIgzIsIdAnZ1jq4cpLETnH2GiDiuz48xX7G61Yfm/1bKe8Of
+	 5ZzwHB0NwWqRGWK/rKbFfPHIev+M6BfSSkEO9xzCGYy4KQphQC3jQ4CqRq3qlRCPLO
+	 2yiJwpN7GwhVHO9YdbWHLMvA=
+Received: by sphereful.davidgow.net (Postfix, from userid 119)
+	id 23C681E8F12; Sat, 25 Apr 2026 11:42:56 +0800 (AWST)
+X-Spam-Level: 
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
+	s=201606; t=1777088536;
+	bh=IrQI7yW76VzE6zKYQoU3I+Gd2W2Ui+lUDWkL9wjoYKg=;
+	h=From:To:Cc:Subject:Date:From;
+	b=gmGNhwGhg9kvRBaAOg7zuJ7/iGldOom8YwqCKBoaDXE+CtWskc/fFkY4OtyLVK0pb
+	 SdkVqqMtkSQSDonAhywElSV6Bbd+HUQoYyZWD45McZasYjjTkc5IggfzccKO2DC/8Z
+	 G0nmZioWU7ro/rnfCGKzlg6y9ZpHZ+vnSyGxGxdlvRbQJ0tiN8XIKrJVNnpxvd2xJB
+	 AA5YtDy6iZr7H5iu6MjP3ADmux+hGg6ShcPKddmLlqS/0YTQSLpEKjd62w7KJDF7AY
+	 pvKasBE0IXXQ0cfIqhVnesIL0c4vISQ8QuE0/f8P1M71XjygwaBV8cxMNRQJu9gCYt
+	 hn0XoSc193MZ6ItW6SF4yqjpje0mSXYf6/B7eb1oqRxTwDNUSmwHc1AhLZVe0my29Y
+	 phjtkK75erpYass+uK2ypaam2bIPL2MKBpZl+pqeOq2InLNTfDFNriQO1R4M3JND0q
+	 H7CMS0k26bSGGVV1Ua2i/770uNCniYf/TfuU4mSMeniGDZ/PoO8RwORgZ9Ye+JDjxI
+	 PV2VT2lOW0Dk6fsR+8bvBwGbd9g8NCo5mbsgfxF7nxNx5rymfArEA80dtRDML1I6zn
+	 Fh3R63VGSIdf23lFqOc/Lu3mM/Wts7aft2Cr15oKBEwPWAxOTX2QV6UPv6hhaFItgp
+	 EPLXxG+xKY4yDv7DJGRhPvog=
+Received: from localhost (pa49-196-90-201.pa.vic.optusnet.com.au [49.196.90.201])
+	by sphereful.davidgow.net (Postfix) with ESMTPSA id B05881E8F0D;
+	Sat, 25 Apr 2026 11:42:15 +0800 (AWST)
+From: David Gow <david@davidgow.net>
+To: Brendan Higgins <brendan.higgins@linux.dev>,
+	Rae Moar <raemoar63@gmail.com>,
+	Shuah Khan <skhan@linuxfoundation.org>
+Cc: David Gow <david@davidgow.net>,
+	Alan Maguire <alan.maguire@oracle.com>,
+	Anders Roxell <anders.roxell@linaro.org>,
 	linux-kselftest@vger.kernel.org,
-	kvm@vger.kernel.org
-Subject: Re: [RFC, PATCH 00/12] userfaultfd: working set tracking for VM guest memory
-Date: Fri, 24 Apr 2026 16:59:59 -0700
-Message-ID: <20260425000000.84178-1-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <aetaH3W47iR56nQ5@x1.local>
-References: 
+	kunit-dev@googlegroups.com,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] kunit: config: Enable KUNIT_DEBUGFS by default
+Date: Sat, 25 Apr 2026 11:41:53 +0800
+Message-ID: <20260425034155.53913-1-david@davidgow.net>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -61,87 +74,33 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On Fri, 24 Apr 2026 07:55:11 -0400 Peter Xu <peterx@redhat.com> wrote:
+The KUNIT_DEBUGFS option is currently enabled based on the value of
+KUNIT_ALL_TESTS, but it really doesn't have anything to do with the set of
+enabled tests, so just enable it by default anyway. In particular, this
+shouldn't be only visible if KUNIT_ALL_TESTS is set, which is quite
+confusing.
 
-> On Thu, Apr 23, 2026 at 05:26:24PM -0700, SeongJae Park wrote:
-> > On Thu, 23 Apr 2026 14:57:34 -0400 Peter Xu <peterx@redhat.com> wrote:
-> > 
-> > > On Thu, Apr 23, 2026 at 07:08:00PM +0100, Kiryl Shutsemau wrote:
-> > > > On Thu, Apr 23, 2026 at 10:50:06AM -0400, Peter Xu wrote:
-> > [...] 
-> > > > > - Whether we have explored other approaches on page hotness tracking
-> > [...]
-> > > > DAMON is built around sampling. It is good for working set estimation,
-> > > > but I don't think it is directly useful for eviction decision. It can
-> > > > miss hot pages. LRU rotation will also loose info.
-> > > 
-> > > Exactly.  If we need to collect ACCESS bit (or anything similar) for
-> > > eviction accuracy pusrpose, IIUC we need per-page info, we can't estimate
-> > > by sampling.
-> > 
-> > That's a fair argument.
-> > 
-> > Nonetheless, there are some companies who use DAMON [1] for a similar eviction
-> > purpose on their products.
-> > 
-> > Also, page level accuracy issue was indeed concerns from many people.  DAMON
-> > therefore provides page level DAMOS filter [2].  The idea is finding a large
-> > region of cold pages in low overhead first, then do page level access recheck
-> > on page of the region using the filter, just before doing the eviction.
-> > 
-> > DAMON-based memory tiering also uses it [3], to avoid wrongly
-> > promoting/demoting cold/hot pages in DAMON-claimed hot/cold regions.  The
-> > evaluation result was not very bad, and a few more users reported positive test
-> > results.
-> > 
-> > Also, DAMON can be used for page level monitoring [5] and open to changes for
-> > users.  Actually a work [6] for making DAMON-based page level monitoring more
-> > lightweight is ongoing.
-> 
-> Good to know that, thanks for the info, SJ.  I'll add a note and try to
-> explore all these at some point.
-> 
-> I recall I read a paper describing damon tracking overheads when
-> granularity is small and when the memory scope is large (in VM's case, it
-> can be e.g. 1TB or more).  Would there be quick answer on whether this one
-> still suffers (or maybe it was never a problem)?
+Fixes: beaed42c427d ("kunit: default KUNIT_* fragments to KUNIT_ALL_TESTS")
+Signed-off-by: David Gow <david@davidgow.net>
+---
+ lib/kunit/Kconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-I think that should still be same.  In case of fixed granularity monitoring,
-the overhead is inherently proportional to the memory size.  And we didn't make
-many effort on making the overhead lower.  We have two ongoing works [1,2] for
-that, though.
+diff --git a/lib/kunit/Kconfig b/lib/kunit/Kconfig
+index 498cc51e493d..f80ca3aeedb0 100644
+--- a/lib/kunit/Kconfig
++++ b/lib/kunit/Kconfig
+@@ -16,8 +16,8 @@ menuconfig KUNIT
+ if KUNIT
+ 
+ config KUNIT_DEBUGFS
+-	bool "KUnit - Enable /sys/kernel/debug/kunit debugfs representation" if !KUNIT_ALL_TESTS
+-	default KUNIT_ALL_TESTS
++	bool "KUnit - Enable /sys/kernel/debug/kunit debugfs representation"
++	default y
+ 	help
+ 	  Enable debugfs representation for kunit.  Currently this consists
+ 	  of /sys/kernel/debug/kunit/<test_suite>/results files for each
+-- 
+2.53.0
 
-Nonetheless, whether the overhead is too high or not would depend on the use
-case, I'd say.  That is, if the system has hundreds of CPUs, letting DAMON
-occupying one CPU might be no real problem.  Rather, there were users who
-willing to give more than one CPUs to DAMON if DAMON can provide more accurate
-monitoring results or work faster.  That kind of scaling is possible, by using
-multiple kdamonds that monitors different partitions of the address ranges.
-
-> 
-> > 
-> > I understand no one fits all and the decision is up to each user :)
-> > Nevertheless, I will be happy to help if you have any question or request for
-> > DAMON.
-> 
-> I'll definitely ask after digging more into that, thanks for the offer!
-
-The pleasure is mine! :)
-
-> 
-> > 
-> > [1] https://cdn.amazon.science/ee/a4/41ff11374f2f865e5e24de11bd17/resource-management-in-aurora-serverless.pdf
-> > [2] https://origin.kernel.org/doc/html/latest/mm/damon/design.html#filters
-> > [3] https://github.com/damonitor/damo/blob/next/scripts/mem_tier.sh#L40
-> > [4] https://www.phoronix.com/news/DAMON-Self-Tuned-Memory-Tiering
-> > [5] https://origin.kernel.org/doc/html/latest/mm/damon/faq.html#can-i-simply-monitor-page-granularity
-> > [6] https://lore.kernel.org/20260423004211.7037-1-akinobu.mita@gmail.com
-
-[1] https://lore.kernel.org/20260423004211.7037-1-akinobu.mita@gmail.com
-[2] https://lore.kernel.org/20260423122340.138880-1-jiayuan.chen@linux.dev
-
-
-Thanks,
-SJ
-
-[...]
