@@ -1,57 +1,58 @@
 Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0314A224AF7;
-	Sat, 25 Apr 2026 03:42:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A9CC230BEC;
+	Sat, 25 Apr 2026 03:43:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.242.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777088579; cv=none; b=apkwmt66SzoP/xEy9Rdp60oOXdIRzwT0tv6I0vWvFQ5IzEMNlkdhS/fRnlGoAm1ZO+cIyoA4MsYq2d6FLpQKkFegZOdTynSUsGKQGLpSTykvVZ9Ek7TAQ9txvLZJcyDwXNl26Bu0aOVNIg3YVVRfGGFNlNpVDdM/MjKxTdSg0Eg=
+	t=1777088599; cv=none; b=MbByy5P1tTbwFc3qM2OO3mtxEwoqd3S9nl608OO8P2bJ9XXu/md+8F63EmybnIJC2/mVLYLBcyceMb8ru/y+vPuqtNWPtAI3grkstPnFzYeMyedQaY7a0RTwEvd1DGpRJh+onRyblKzD1TNBCrTa7Hae/XEzOx0fZ+qoK8gJuwc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777088579; c=relaxed/simple;
-	bh=IrQI7yW76VzE6zKYQoU3I+Gd2W2Ui+lUDWkL9wjoYKg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MlX3BzOy9TnoW0tBsMDSJaDFBFkj6HKDtc030Dn4m7mkLNHhxqerQwU0mERN3+XLb/3DZOG+MyVXff807Eltr444Qd/EZ6/V3UcJkUQ8+NF5s1WGGl5LcDhd2G0vKEpe5Rq9WgDb3/etb9Nyu0sv+ZSjiIG5LWC8Qx+l+JvVa7k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net; spf=pass smtp.mailfrom=davidgow.net; dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b=AQ+8e0Fa; dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b=gmGNhwGh; arc=none smtp.client-ip=203.29.242.92
+	s=arc-20240116; t=1777088599; c=relaxed/simple;
+	bh=fsIicR7YSjJl20yZsB4hJRQWtE//Ro0LJQLfIdIU9CA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=fPYYxiuHM+v+Fsnivhgzk9oWS1tbdZh/Zu17ub6zD6SDNkMt9/6NF8Zwumw/Kp4wui8GM0miaV8IX37xDajBi+yaawLgsiRg349Il7tqMX5o/Om7eXNiyvnOpHuRKdBkixoM3SfUUabmEGFUVgVxuPYzxXlaI54CMMb+qjVZzW4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net; spf=pass smtp.mailfrom=davidgow.net; dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b=AO5DeYTv; dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b=NKosyZCh; arc=none smtp.client-ip=203.29.242.92
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b="AQ+8e0Fa";
-	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b="gmGNhwGh"
+	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b="AO5DeYTv";
+	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b="NKosyZCh"
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
-	s=201606; t=1777088576;
-	bh=IrQI7yW76VzE6zKYQoU3I+Gd2W2Ui+lUDWkL9wjoYKg=;
-	h=From:To:Cc:Subject:Date:From;
-	b=AQ+8e0FapH7a4thlHKhPH/exAOal43Y1BAAX3f3ZMHc94PCy875Q5FjuGt49Cf2ZS
-	 5uId7rzKLSEMKqNCcFE8P8ldd6El29bDrkUTy0b3IUHIxYUG56iQKSEquZH/NJIsS0
-	 5WlEWO4OxLgppbflwjgbATOxjmB3YQh1Wyg0ajmZE29E2jBW7DvxKQVemPG6bWoggD
-	 atQ8AtKCD0L21k+daSvzv95fVi1ZGfEV1+7e6BI2MOU4oIPfQpBjgyB0+N6fNyCkN2
-	 pI5VbvBmhn981W9aeMLZ0iDEd0b+eK42fVE/fh8e9n7x65+g8ZHDP6SWYz832EXxCY
-	 jtpKE+26u7cwi981PpjdmmMG1+lfg/JFXw4pzuRLdwSsJf5yCeyZmltG1bnn+0Tn4J
-	 eeVRlaR/DQArGKH6CjMMx830kzoHwbRj+49WpI+m41Q06wOo3JbLYCVkJwNMsKDrw+
-	 8xidb9+PMhB2T19WWxCNgISnCQumKFEPX6OhWgvcccpmYSBv+dMEgjUFzEYpP3Iz5d
-	 /APGHfsxQga97wdlaDkIgzIsIdAnZ1jq4cpLETnH2GiDiuz48xX7G61Yfm/1bKe8Of
-	 5ZzwHB0NwWqRGWK/rKbFfPHIev+M6BfSSkEO9xzCGYy4KQphQC3jQ4CqRq3qlRCPLO
-	 2yiJwpN7GwhVHO9YdbWHLMvA=
+	s=201606; t=1777088596;
+	bh=fsIicR7YSjJl20yZsB4hJRQWtE//Ro0LJQLfIdIU9CA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=AO5DeYTvwLSR4SXBZkXj/Y8POgFm0Jcc6kzuKu2u0KkrPhRINW4P1C4VHSwSOs86F
+	 ZnIhazH2N72aaItCezmXRYC5E7oean4HTzEVM3PmoYsscuOK3I5Qz/W5xwrs8Jxtnf
+	 4K4W3+5bZrnV3iJN5TwNUslG5/S38+bzuw+dEkfbIwBngqciWlouPnQV5Rk5CnEwgP
+	 vNV2Ap/d9oaiMcFQJ1xwRf/ioHbjwsJVH8DG7E5vS2S66O5ex8/Nq908+ZxULBjIDg
+	 xlvIgHco0K6UsoNDBaP/B6PrC8InpPR8E9I5rM8s3kVYLfitMcO01CLzQ1UwDonW3l
+	 1WQYf2s61OOFeFAaV7jKVmqHvBU/cxTjdtxjPTjudBQJ66YmN6F7aa3/fm9az44RkN
+	 qrQut1l3R9rAmNif4mhGqzV97OutF0mBQn/4x4dCoAwTWiT/M0tkLJKO69y8Tk2asZ
+	 Ncpd9WtrFq5sWAbTYsf+dxLJBrYmFw4w6gU3rVNZuNwTEn2iliVUbmIEcpLtefjI1b
+	 3YiLA6yNnIj7HbAHvN9yjPzl0/o5uxbvVqXEIa8GyDzsKzZwT+fppdOU11Dp12TTRO
+	 t+gzJh0q6F6AtiH12V2rkASumqJOgFLbuO15En8RXgPTtM0PHgo7UgtPqW4r5dW9Np
+	 J2oCYxo+7GPDczfYChHNZACo=
 Received: by sphereful.davidgow.net (Postfix, from userid 119)
-	id 23C681E8F12; Sat, 25 Apr 2026 11:42:56 +0800 (AWST)
+	id AAF391E8F13; Sat, 25 Apr 2026 11:43:16 +0800 (AWST)
 X-Spam-Level: 
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
-	s=201606; t=1777088536;
-	bh=IrQI7yW76VzE6zKYQoU3I+Gd2W2Ui+lUDWkL9wjoYKg=;
-	h=From:To:Cc:Subject:Date:From;
-	b=gmGNhwGhg9kvRBaAOg7zuJ7/iGldOom8YwqCKBoaDXE+CtWskc/fFkY4OtyLVK0pb
-	 SdkVqqMtkSQSDonAhywElSV6Bbd+HUQoYyZWD45McZasYjjTkc5IggfzccKO2DC/8Z
-	 G0nmZioWU7ro/rnfCGKzlg6y9ZpHZ+vnSyGxGxdlvRbQJ0tiN8XIKrJVNnpxvd2xJB
-	 AA5YtDy6iZr7H5iu6MjP3ADmux+hGg6ShcPKddmLlqS/0YTQSLpEKjd62w7KJDF7AY
-	 pvKasBE0IXXQ0cfIqhVnesIL0c4vISQ8QuE0/f8P1M71XjygwaBV8cxMNRQJu9gCYt
-	 hn0XoSc193MZ6ItW6SF4yqjpje0mSXYf6/B7eb1oqRxTwDNUSmwHc1AhLZVe0my29Y
-	 phjtkK75erpYass+uK2ypaam2bIPL2MKBpZl+pqeOq2InLNTfDFNriQO1R4M3JND0q
-	 H7CMS0k26bSGGVV1Ua2i/770uNCniYf/TfuU4mSMeniGDZ/PoO8RwORgZ9Ye+JDjxI
-	 PV2VT2lOW0Dk6fsR+8bvBwGbd9g8NCo5mbsgfxF7nxNx5rymfArEA80dtRDML1I6zn
-	 Fh3R63VGSIdf23lFqOc/Lu3mM/Wts7aft2Cr15oKBEwPWAxOTX2QV6UPv6hhaFItgp
-	 EPLXxG+xKY4yDv7DJGRhPvog=
+	s=201606; t=1777088537;
+	bh=fsIicR7YSjJl20yZsB4hJRQWtE//Ro0LJQLfIdIU9CA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=NKosyZChvSpnjsasPsHyBnwYgw/Qh5TO5CwBIpNVMuzWeX7RSvQUCg9oha3Wq+Fef
+	 hJ4jt8d9WHyYDDyYXqMuExrr/NFt0jtnbqYwqK6AE1tcnxrlWTsge3s82ZDXcxLXqq
+	 koJe9d/C2sUy1Jp/4T50JOf3wyiEYB8XghWvuZeAnaGJPhRnK3585oKKenRbp5/n5u
+	 mLivXFI3UnWLxhidkzYNdKHciihX62Z0gpkMhWEpzHaGUFKa8OzOmsih9CX15X+TRk
+	 Cp0CFrp8FgLeoeGX+9o9WdhU8Cs2pOgpvfSdazH8H30YrlQPvyFYhY5nv/l9KciJRO
+	 DGCEsxUrZ9Kvs7rm/RWsjOaAt/SWpfC3jf2NkGwnpwRV+xqaSo8SMT1+jEhU/TI0gv
+	 cmmyMk0BlWJ8mK3aOn1CiI4r30mNBOx5Ch8V8hCkug58wBQrMC/D0KAhJHJCcb+HOS
+	 TyJQFEnt4NJLhzVc/WueTDGlE5veapVNEMr0nQoRScPn4kLkUHLZbIdXeGNEs8cYli
+	 c6FarI37L8qdZZaHUIsfCRcAROZwAwyrZJoStXMJ+R3sUJWVR9fWnFtWHN5BDKwTG8
+	 Bme2S3vti7tZazwoIqRDJ6yYEjFIw7Q0Ti04ALlz1I85O4XYjqcVbMI4N6EggPw9Ou
+	 fycSgGGaxlYvgd7CgQGYBaPI=
 Received: from localhost (pa49-196-90-201.pa.vic.optusnet.com.au [49.196.90.201])
-	by sphereful.davidgow.net (Postfix) with ESMTPSA id B05881E8F0D;
-	Sat, 25 Apr 2026 11:42:15 +0800 (AWST)
+	by sphereful.davidgow.net (Postfix) with ESMTPSA id 48F6D1E8F11;
+	Sat, 25 Apr 2026 11:42:16 +0800 (AWST)
 From: David Gow <david@davidgow.net>
 To: Brendan Higgins <brendan.higgins@linux.dev>,
 	Rae Moar <raemoar63@gmail.com>,
@@ -62,10 +63,12 @@ Cc: David Gow <david@davidgow.net>,
 	linux-kselftest@vger.kernel.org,
 	kunit-dev@googlegroups.com,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] kunit: config: Enable KUNIT_DEBUGFS by default
-Date: Sat, 25 Apr 2026 11:41:53 +0800
-Message-ID: <20260425034155.53913-1-david@davidgow.net>
+Subject: [PATCH 2/2] kunit: config: KUNIT_DEBUGFS should depend on DEBUG_FS
+Date: Sat, 25 Apr 2026 11:41:54 +0800
+Message-ID: <20260425034155.53913-2-david@davidgow.net>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260425034155.53913-1-david@davidgow.net>
+References: <20260425034155.53913-1-david@davidgow.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -74,33 +77,27 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The KUNIT_DEBUGFS option is currently enabled based on the value of
-KUNIT_ALL_TESTS, but it really doesn't have anything to do with the set of
-enabled tests, so just enable it by default anyway. In particular, this
-shouldn't be only visible if KUNIT_ALL_TESTS is set, which is quite
-confusing.
+CONFIG_KUNIT_DEBUGFS is totally useless without debugfs, so it should
+depend on CONFIG_DEBUG_FS.
 
-Fixes: beaed42c427d ("kunit: default KUNIT_* fragments to KUNIT_ALL_TESTS")
+Fixes: e2219db280e3 ("kunit: add debugfs /sys/kernel/debug/kunit/<suite>/results display")
 Signed-off-by: David Gow <david@davidgow.net>
 ---
- lib/kunit/Kconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ lib/kunit/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/lib/kunit/Kconfig b/lib/kunit/Kconfig
-index 498cc51e493d..f80ca3aeedb0 100644
+index f80ca3aeedb0..94ff8e4089bf 100644
 --- a/lib/kunit/Kconfig
 +++ b/lib/kunit/Kconfig
-@@ -16,8 +16,8 @@ menuconfig KUNIT
- if KUNIT
+@@ -17,6 +17,7 @@ if KUNIT
  
  config KUNIT_DEBUGFS
--	bool "KUnit - Enable /sys/kernel/debug/kunit debugfs representation" if !KUNIT_ALL_TESTS
--	default KUNIT_ALL_TESTS
-+	bool "KUnit - Enable /sys/kernel/debug/kunit debugfs representation"
-+	default y
+ 	bool "KUnit - Enable /sys/kernel/debug/kunit debugfs representation"
++	depends on DEBUG_FS
+ 	default y
  	help
  	  Enable debugfs representation for kunit.  Currently this consists
- 	  of /sys/kernel/debug/kunit/<test_suite>/results files for each
 -- 
 2.53.0
 
