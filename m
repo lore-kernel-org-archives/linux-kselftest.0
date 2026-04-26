@@ -1,210 +1,136 @@
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F320621256C
-	for <linux-kselftest@vger.kernel.org>; Sun, 26 Apr 2026 13:01:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C59135A927
+	for <linux-kselftest@vger.kernel.org>; Sun, 26 Apr 2026 13:42:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777208497; cv=none; b=AWd3MrZw69WgDdPLdPIMQjWl5jf0ATDbKtojVXnd9ADkJ8hSObigyWggQPPrTzML3iFtFpI20R11YlZb+fLYLmBwUNhzvOEMqxxDHBso3BRLVyAA6ezfpNFt1g8FblKFQzBr23hX/sYBwF581pSZ898uvbaF+huOdmi9l+I+dhU=
+	t=1777210949; cv=none; b=QOWGRQSJAb1QLK1TmSgWDmg+/MtlVZKyJWnf8zig+MN2FcxUvUt7EffVdERkEgBk/98/qXugOOM4P1DjEZ+89Doai0wDJpUr73s/GoM06Pu2zIhfpsMhtFb9KL0+fx8eVmpL/KzSN2j9zmY8jrQ4v/Rx85bt3Bpo5Sie0Ufx1xQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777208497; c=relaxed/simple;
-	bh=TCoSibuEHDVGM9Nbq10rloswURUgdUub3SsgD2V6WOQ=;
+	s=arc-20240116; t=1777210949; c=relaxed/simple;
+	bh=FhdP40ZNedHqEmlY8s3OTQPdz7LoUhJhpTXV8+ccUeY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gZ9kI4Oz+b9JZWsSKYPUFxHvLNX7CBQRwXa1fbxIMypfwqTBWe+eevBK9vjY2p2Xyq/tLMV8M3OZFcViRV+fgfkw/HA6MPqK2JZ6pD22sGc+Jh0o12IznNtCB3VJMXMEMdZqbL13UoGXPV/Rz8Th2sY7fTgJtfvWPvtZRkKSqUg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hv9WzeKA; arc=none smtp.client-ip=209.85.216.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=DLJrrwCs2BJsbInaMgZGBusILyeisuxgZa2UHbY11xW+ZaL/aAJ2UFKsTLxgXzJeLR34MXpqdylJb2UPQfnqh3282ZWMvwlG08RzJinuaRhALc38rPWhpSXLcA9CtQ8uWD85MFoNCT/r6SbXWf2kbkjn1GexvnFYSDuKLaiKiww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=NDVK9wCG; arc=none smtp.client-ip=209.85.160.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hv9WzeKA"
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-35fb0bb27e7so6077055a91.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 26 Apr 2026 06:01:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="NDVK9wCG"
+Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-5062fc5d86aso77483641cf.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 26 Apr 2026 06:42:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777208495; x=1777813295; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=hz+a2+HfJFQcmnAlUttTKf4fXe/Se+UaNtVUmto+Owo=;
-        b=hv9WzeKAxovJbKRnxjfiWZqKm5Ho3B6n21GZLqe+0k9jTmPSCYZESsoaanEhX3Z0zC
-         gndQZWrzLQN8u9uPB8e336WrFpmao48OPYtIfiaJwmTuUXsgPoDq9Pd2BxHjaZZbgQJh
-         SP2I6XIF1ZTg9vk1E2nv2uA35sQqG9wPko1tHPL1rV1+Bl766rptSPBtO/goVmjia1ox
-         88de6Yk7ZWgK0vVi2BPf8Fvbg7ZMmp1JrV9UmD33Fycc2ysJeNUc3DgIU0SJKP0JP/MD
-         TBHNSe0Q78O+7/1UKLN0XuyVGTjqv2L3aBnwmEmL5Uafowr2RCUyiIsyAHq0I+Bp7hUD
-         2wOw==
+        d=ziepe.ca; s=google; t=1777210947; x=1777815747; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=etZa6+dwk3PB/o1Yn2oB8jvevYbsEL8oVxXn5echsWc=;
+        b=NDVK9wCGz9EYGOfwj4a+B7VlhjB+7bxntO+H2Mhsmfh7HADt2fuEn7Sm0iCM098dI0
+         GV6TunZ93LQSKNrxXPxmwg/MJ53dYV8drX54guno0onWf4crbuJa5LbgjWkTNH3Ok30S
+         fUtLQMo4W8G5W/1xI6OANVL5kO5J1dKBMTd4sOlO8L1Wn3DE/AnMcGVl81a5IG/xzFmB
+         Bsa8p6eX/cVEH26ggcREruOgMbp/xpfytVhND/VStxGcstiEUHvRwxPGvXeYsCf35G07
+         sZG+pt3Z2Y9kXqKaMdBDpoELBmE2BcxoVH/niuVgtAIMzjRtCAXMOIV2/qb1QTYJtE2C
+         fPfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777208495; x=1777813295;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hz+a2+HfJFQcmnAlUttTKf4fXe/Se+UaNtVUmto+Owo=;
-        b=BXOIw+CJJJgJZZTZqs+e6zDPMspbpjJaqU8gE5xecyKcLJ8SnBv/G/c20ekuJbf+78
-         pjDpMGflgl6cZKUn5EwxOB9WapFbS30hoeLr619bP+V59JJiO5Xeh97j0xFrX5YKaQgA
-         yCsQWYsC3DiVn/nqxDkgoe7/Y+YfoJdBRYxzwCtWvOlUoLNjX3/TC3Wb42A8rPj1KtwI
-         kDcMfPReOy6Zv2cL0/pXpmkb0F+iIYJm6GiKmR1jVCSVjevlycPrtU+/bf4PmpOsLmDu
-         ZzIJxBmbfh6LBXxViGCqEFZBO5OVgNZ5YM2hMrNgPWrzGqscJfN89GW2lj3J+cCzNfJl
-         mFRA==
-X-Forwarded-Encrypted: i=1; AFNElJ9l6dcxA1uPO5A8dnAaf0F754Vw0Nn6IhOL8ZjOhQM1p2JgDlCqDMqtwZVzApR9pohHJTmfN1DMKtj+SiT720Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxpGiA2NfUuGxhbrYYHhfb5JZfyjarWedkivr1fqmlC+u5U6zg8
-	xR+AYGp2SqFUxI9l55G+AcbwNmi1ilSyefChbhsZfCn0TDCkqzKvNcV+
-X-Gm-Gg: AeBDiesp2eUw9M1oJjSAPkY00SRJRw+MC/wjf/1JCaJcjd3cbc9i0MPh4r6iHlIlCuH
-	UULbhatu/F8ujQ/ppXfePQ94SGcHm9O09CqJE76m90+7GL8D8w6rAcVT8vbU8p5x5+VsXDUM9uU
-	AINNNuSIKZ3bj6PcYNFozG0AOLITYdi7cHMbCtLgsckUj0dkmCjMH+bKrl+EAJ5gomTKDnnGbVf
-	K5KWUZAqM73DgYawl2oMdghU4smEImKLbT5iKTm2u6GLnCXLUbfdxFryekPBvDHmDCKrH7NdpzO
-	og7rC/1MR3dEqJkzTfV5WHopKIItF3Qfj6ATMMnH0Dh+XnRf8WnHCXPPLluD9fPIEdGGpUhiVxy
-	PVdCQI/YwZhonMI7/UVGSwtuIL60isvCZnkKH13i+dZyrxedKjnHnl8EVAsYR0gsQaku7dM8eqc
-	NuWC1ctg8hoapjhCpIuhNj+xR3ddMdVlCMnK6TxggiOfKy0TNcpMfLSLv2cW/XeQ==
-X-Received: by 2002:a17:90b:37cb:b0:35f:d56d:1c45 with SMTP id 98e67ed59e1d1-3614041bc7cmr35776295a91.12.1777208495116;
-        Sun, 26 Apr 2026 06:01:35 -0700 (PDT)
-Received: from Air.local ([198.176.50.157])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-36145fe05f4sm13222157a91.0.2026.04.26.06.01.26
+        d=1e100.net; s=20251104; t=1777210947; x=1777815747;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=etZa6+dwk3PB/o1Yn2oB8jvevYbsEL8oVxXn5echsWc=;
+        b=OrhhwktCYwDp/GEFmDbu97oTdBG3XnUn5GWWHVZTnq59wSjqsC/ZthrA/BPjt35Cgr
+         1+copAmi6uUysKyyTOfhsf9b/A2bUiDjepqClrsu3P/Pde2YbgXAAGN4qxA+8fi+u4QC
+         7j1u9UtUKIrv0OU/ChSQreeNxixU7RRBg+tuke1ho+AxvehBlx5sMrPzAmcEAeZJgbno
+         DnCldmI/SwTO+mrNG9SkmftO/SDqtwcwIXOh0tratCKEuP17bjqY3IibDGyxRcHqQrwm
+         e72HZqheqFme/PA+3z9gIt0gnbmLRdQSlcyg29Ngk1FF+WuLfjxNWox+d5/0aMJZ0bVl
+         r9GA==
+X-Forwarded-Encrypted: i=1; AFNElJ+OrE+XkjJyvohJ8o/r8FcAQrEx+P+lCYK0a8XjoH07rsIrtyeZlyVuM5dmpQRykjGDNbjPnsD1X36gNVNsS50=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx37H+EvKX++8HC2JHDSMqIEudsJ1roJApsfsuISNr6WUStsAV9
+	6ACxneDqyIEvKqu0hHZGt/ot4qLWiGuA9CiQU0EtC/lj1TgDky+aMkBCAcc5ykMbhnQ=
+X-Gm-Gg: AeBDieuJ6DlI62isIxd7gQ2KAJQD0NBEb1f1zLT4qTl4oEcunkJDvsISzuWTvqvqo4p
+	M2V6kDBW7875TsVx4XztRxZLSwcqtqKH/gKqyhTSzi4+OlQTuB5e7CFe5OxbGxabhddamu6Bl6S
+	b8ZFbOnbzj2CVG9yhZnP3IV9gLEngfJvkwozu2CJ305kjDK2TtQnro+MK7gLEXyfPbUIWPdZIUL
+	L9iDz0131qEQfAkWSHCi4aFg6O0gaADtsNcp/efgUPaqSYPeFI1kC3kW0jCdFZlEbts4zVZZa0a
+	SYwbs4+umrt/OpOUcpnLAqtplJ9Xnh9tbnyOfpoq8b4/HVofKZ44/xdcEt+3rqLmw1QpY9kODau
+	QZHLNQy9QnkydaXHE1kov2OMtov2eFBGf03Q2s8bO2xQ6ujTrhNGiDfzUkPuy806vM3okT9ywNw
+	wAOeQaOiAcs3deswGCeiwKhhb4MMsnICg+FD96aKP6DqXvMIxRwX1ifTVGZyucvnqpUtQ3tCmcH
+	tILuMl/ikJO192A
+X-Received: by 2002:ac8:7d14:0:b0:50e:df54:c36d with SMTP id d75a77b69052e-50edf54c741mr408613341cf.18.1777210947033;
+        Sun, 26 Apr 2026 06:42:27 -0700 (PDT)
+Received: from ziepe.ca (crbknf0213w-47-54-130-67.pppoe-dynamic.high-speed.nl.bellaliant.net. [47.54.130.67])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-50e392c859asm305729281cf.1.2026.04.26.06.42.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Apr 2026 06:01:34 -0700 (PDT)
-Date: Sun, 26 Apr 2026 21:01:22 +0800
-From: Weiming Shi <bestswngs@gmail.com>
-To: Jamal Hadi Salim <jhs@mojatatu.com>
-Cc: vinicius.gomes@intel.com, jiri@resnulli.us, davem@davemloft.net, 
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, 
-	vladimir.oltean@nxp.com, shuah@kernel.org, xmei5@asu.edu, netdev@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net v5 1/2] net/sched: taprio: fix NULL pointer
- dereference in class dump
-Message-ID: <ae4MazwnHXufRYRU@Air.local>
-References: <20260422161958.2517539-2-bestswngs@gmail.com>
- <20260422161958.2517539-3-bestswngs@gmail.com>
- <CAM0EoMka18Lsu94wTFZU3ntXP9Z3vNy0Get+=THPdsCafcoPnw@mail.gmail.com>
+        Sun, 26 Apr 2026 06:42:26 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.97)
+	(envelope-from <jgg@ziepe.ca>)
+	id 1wGzke-0000000EqhS-4C2t;
+	Sun, 26 Apr 2026 10:42:25 -0300
+Date: Sun, 26 Apr 2026 10:42:24 -0300
+From: Jason Gunthorpe <jgg@ziepe.ca>
+To: Leon Romanovsky <leon@kernel.org>
+Cc: Paul Moore <paul@paul-moore.com>,
+	Roberto Sassu <roberto.sassu@huaweicloud.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Matt Bobrowski <mattbobrowski@google.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Saeed Mahameed <saeedm@nvidia.com>,
+	Itay Avraham <itayavr@nvidia.com>,
+	Dave Jiang <dave.jiang@intel.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-rdma@vger.kernel.org, Chiara Meiohas <cmeiohas@nvidia.com>,
+	Maher Sanalla <msanalla@nvidia.com>,
+	linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v2 0/4] Firmware LSM hook
+Message-ID: <20260426134224.GC3501894@ziepe.ca>
+References: <20260413164220.GP3694781@ziepe.ca>
+ <CAHC9VhR1Uke9P==CELKavBcogHoNCtMZFfNWUbgm5HYUfomhtw@mail.gmail.com>
+ <20260413231920.GS3694781@ziepe.ca>
+ <CAHC9VhTLamfe4C81ZNRVT=H32x+KLxSqH3o0eBfrHsWAgAqxCA@mail.gmail.com>
+ <20260415134705.GG2577880@ziepe.ca>
+ <CAHC9VhSECYihup=tURo_Qk__xUdYYPkHgnz5CWA0BrRAkvwbog@mail.gmail.com>
+ <20260417191749.GK2577880@ziepe.ca>
+ <20260423140950.GE172828@unreal>
+ <20260424141921.GA3611611@ziepe.ca>
+ <20260426103957.GH172828@unreal>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAM0EoMka18Lsu94wTFZU3ntXP9Z3vNy0Get+=THPdsCafcoPnw@mail.gmail.com>
+In-Reply-To: <20260426103957.GH172828@unreal>
 
-On 26-04-26 06:59, Jamal Hadi Salim wrote:
-> On Wed, Apr 22, 2026 at 12:20 PM Weiming Shi <bestswngs@gmail.com> wrote:
-> >
-> > When a TAPRIO child qdisc is deleted via RTM_DELQDISC, taprio_graft()
-> > is called with new == NULL and stores NULL into q->qdiscs[cl - 1].
-> > Subsequent RTM_GETTCLASS dump operations walk all classes via
-> > taprio_walk() and call taprio_dump_class(), which calls taprio_leaf()
-> > returning the NULL pointer, then dereferences it to read child->handle,
-> > causing a kernel NULL pointer dereference.
-> >
-> > The bug is reachable with namespace-scoped CAP_NET_ADMIN on any kernel
-> > with CONFIG_NET_SCH_TAPRIO enabled. On systems with unprivileged user
-> > namespaces enabled, an unprivileged local user can trigger a kernel
-> > panic by creating a taprio qdisc inside a new network namespace,
-> > grafting an explicit child qdisc, deleting it, and requesting a class
-> > dump. The RTM_GETTCLASS dump itself requires no capability.
-> >
-> >  Oops: general protection fault, probably for non-canonical address 0xdffffc0000000007: 0000 [#1] SMP KASAN NOPTI
-> >  KASAN: null-ptr-deref in range [0x0000000000000038-0x000000000000003f]
-> >  RIP: 0010:taprio_dump_class (net/sched/sch_taprio.c:2478)
-> >  Call Trace:
-> >   <TASK>
-> >   tc_fill_tclass (net/sched/sch_api.c:1966)
-> >   qdisc_class_dump (net/sched/sch_api.c:2326)
-> >   taprio_walk (net/sched/sch_taprio.c:2514)
-> >   tc_dump_tclass_qdisc (net/sched/sch_api.c:2352)
-> >   tc_dump_tclass_root (net/sched/sch_api.c:2370)
-> >   tc_dump_tclass (net/sched/sch_api.c:2431)
-> >   rtnl_dumpit (net/core/rtnetlink.c:6864)
-> >   netlink_dump (net/netlink/af_netlink.c:2325)
-> >   rtnetlink_rcv_msg (net/core/rtnetlink.c:6959)
-> >   netlink_rcv_skb (net/netlink/af_netlink.c:2550)
-> >   </TASK>
-> >
-> > Fix this by substituting &noop_qdisc when new is NULL in
-> > taprio_graft(), a common pattern used by other qdiscs (e.g.,
-> > multiq_graft()) to ensure the q->qdiscs[] slots are never NULL.
-> > This makes control-plane dump paths safe without requiring individual
-> > NULL checks.
-> >
-> > Since the data-plane paths (taprio_enqueue and taprio_dequeue_from_txq)
-> > previously had explicit NULL guards that would drop/skip the packet
-> > cleanly, update those checks to test for &noop_qdisc instead. Without
-> > this, packets would reach taprio_enqueue_one() which increments the root
-> > qdisc's qlen and backlog before calling the child's enqueue; noop_qdisc
-> > drops the packet but those counters are never rolled back, permanently
-> > inflating the root qdisc's statistics.
-> >
-> > After this change *old can be a valid qdisc, NULL, or &noop_qdisc.
-> > Only call qdisc_put(*old) in the first case to avoid decreasing
-> > noop_qdisc's refcount, which was never increased.
-> >
-> > Fixes: 665338b2a7a0 ("net/sched: taprio: dump class stats for the actual q->qdiscs[]")
-> > Reported-by: Xiang Mei <xmei5@asu.edu>
-> > Signed-off-by: Weiming Shi <bestswngs@gmail.com>
-> > Assisted-by: Claude:claude-opus-4-6
+On Sun, Apr 26, 2026 at 01:39:57PM +0300, Leon Romanovsky wrote:
+> On Fri, Apr 24, 2026 at 11:19:21AM -0300, Jason Gunthorpe wrote:
+> > On Thu, Apr 23, 2026 at 05:09:50PM +0300, Leon Romanovsky wrote:
+> > 
+> > > > > Leon mentioned that different firmware revisions would have different
+> > > > > parameters for a given opcode, and that one would need to inspect
+> > > > > those parameters to properly filter the command.  Is that not true, or
+> > > > > am I misreading or misunderstanding Leon's comments?
+> > > > 
+> > > > They are ABI stable, so there will be rules about future changes that
+> > > > old software can follow to ignore or reject future things it doesn't
+> > > > understand.
+> > > 
+> > > It is wishful thinking and applicable only to mlx5 devices. No one
+> > > promises that other devices follow same ABI rules.
+> > 
+> > Well, I will definately kick them out of fwctl if they don't.
 > 
-> Acked-by: Jamal Hadi Salim <jhs@mojatatu.com>
-> 
-> Please add Tested-by: if you tested it with the tdc patch in 2/2
-> 
-> cheers,
-> jamal
+> It is easy to say but harder to follow. The kernel includes many devices that
+> exist only in specific hyperscale environments, where the update cycle is
+> tightly controlled. They easily can break FW backward compatibility.
 
-Tested-by: Weiming Shi <bestswngs@gmail.com>
+Well Linus's rule applies here, if it doesn't bother anyone it didn't
+break..
 
-Thanks,
-Weiming Shi
-
-> > ---
-> >  net/sched/sch_taprio.c | 13 ++++++++-----
-> >  1 file changed, 8 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/net/sched/sch_taprio.c b/net/sched/sch_taprio.c
-> > index 8e37528119506..a7daf34593e07 100644
-> > --- a/net/sched/sch_taprio.c
-> > +++ b/net/sched/sch_taprio.c
-> > @@ -634,7 +634,7 @@ static int taprio_enqueue(struct sk_buff *skb, struct Qdisc *sch,
-> >         queue = skb_get_queue_mapping(skb);
-> >
-> >         child = q->qdiscs[queue];
-> > -       if (unlikely(!child))
-> > +       if (unlikely(child == &noop_qdisc))
-> >                 return qdisc_drop(skb, sch, to_free);
-> >
-> >         if (taprio_skb_exceeds_queue_max_sdu(sch, skb)) {
-> > @@ -717,7 +717,7 @@ static struct sk_buff *taprio_dequeue_from_txq(struct Qdisc *sch, int txq,
-> >         int len;
-> >         u8 tc;
-> >
-> > -       if (unlikely(!child))
-> > +       if (unlikely(child == &noop_qdisc))
-> >                 return NULL;
-> >
-> >         if (TXTIME_ASSIST_IS_ENABLED(q->flags))
-> > @@ -2183,6 +2183,9 @@ static int taprio_graft(struct Qdisc *sch, unsigned long cl,
-> >         if (!dev_queue)
-> >                 return -EINVAL;
-> >
-> > +       if (!new)
-> > +               new = &noop_qdisc;
-> > +
-> >         if (dev->flags & IFF_UP)
-> >                 dev_deactivate(dev, false);
-> >
-> > @@ -2196,14 +2199,14 @@ static int taprio_graft(struct Qdisc *sch, unsigned long cl,
-> >         *old = q->qdiscs[cl - 1];
-> >         if (FULL_OFFLOAD_IS_ENABLED(q->flags)) {
-> >                 WARN_ON_ONCE(dev_graft_qdisc(dev_queue, new) != *old);
-> > -               if (new)
-> > +               if (new != &noop_qdisc)
-> >                         qdisc_refcount_inc(new);
-> > -               if (*old)
-> > +               if (*old && *old != &noop_qdisc)
-> >                         qdisc_put(*old);
-> >         }
-> >
-> >         q->qdiscs[cl - 1] = new;
-> > -       if (new)
-> > +       if (new != &noop_qdisc)
-> >                 new->flags |= TCQ_F_ONETXQUEUE | TCQ_F_NOPARENT;
-> >
-> >         if (dev->flags & IFF_UP)
-> > --
-> > 2.43.0
-> >
+Jason
