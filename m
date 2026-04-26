@@ -1,159 +1,225 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DB9B2EBB8C;
-	Sun, 26 Apr 2026 10:58:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777201126; cv=none; b=UPT/2to4lWYvK5gT+WBgPUdxw575UFe0oku1+Ye6FevTWkGyNAh9rWvhbM4V5kiHU95ZXxtfM1JxgJIBw2eOpub1sff4g2LpA++790B1c24m+G74Y8KycVSFr+OWfP+X8fuyNzGYT+dXHnxQvr+i/jFbW8jSihcNdGL/uMOX6nY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777201126; c=relaxed/simple;
-	bh=mkkI+lXLMcbjVq5S0Bvo04h/9+PSK8v/F/iMiEKV2hw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Vg9z8Hs6wdxdrgS9zo+6ljhrpPLD4DE7VLRrmUJVly9F8VU2v+q6Jq4LnuH4R0WI9WswROL4InUlt7qf1Dc8XBViNU0iOVsnUBPqLICPeIyc9uB5E8aopAZuDU7D1r6rl1234qJ80vCQbTGY+2pzO3ZP8KONgHYLerYD79c0qDE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wnu5Bxw9; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EBEE34A76A
+	for <linux-kselftest@vger.kernel.org>; Sun, 26 Apr 2026 10:59:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.182
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777201158; cv=pass; b=jNy+N/2rLFnfZ/sZM9+gdGpoP4PxNPY7RpjY7QhIjJbyPKaQcXMxzrLvf6fKtbuMGAN9Jls/7wHsAdipoilF2mXYHcKysj5gnb4Rkxu7Ueb0gmTSVilYzuVQykeKdd9vi4TaLpfPhX2gV4FRMenFhfSBkROlMbt///FFG9JNb5U=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777201158; c=relaxed/simple;
+	bh=QzJaR5J8RyQ1tSvYBbCR8p3++ETasbsBmRkAIgSzkcU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rydun17x3UTv16KDtpNQIkIjEbtQUZVC9EHjOKyeTekjJz8UlfPD74dNjm4URiqWKspsrk3m6PahYm5uZlsCc8kqyxhVB/gxKZdWMGVGXWell7hyftz+Qwwr12jPRi3R5OLU8N7NjjomLcUtDUw4XSdCuheGdqt08gm5UnTiLfE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (2048-bit key) header.d=mojatatu-com.20251104.gappssmtp.com header.i=@mojatatu-com.20251104.gappssmtp.com header.b=B08oLEGj; arc=pass smtp.client-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wnu5Bxw9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68E58C2BCAF;
-	Sun, 26 Apr 2026 10:58:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777201126;
-	bh=mkkI+lXLMcbjVq5S0Bvo04h/9+PSK8v/F/iMiEKV2hw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Wnu5Bxw9rXhG06Go4iTyIXSDOa+mQ5Vuu2x0WHdRYrvoFnHH8SvqFaqyGi8gZnfVo
-	 rNrEaLATkeLJzBlaS3huZSg8pXMz+mRx2XfDidb3Qn8wuf9FIdcPGMbcMlKHRbLsIF
-	 E/kS3AB1tFWbeLsalS98galB73i4pxITt073G4egUeROdOZNeGDZUwaT0PwzBnkZwE
-	 0xkD+IXZgCO0mRqAlvM3b3vbghe88BhElPmyJNMqLHD4jpAauJLh6RH7fFMRhQWwbT
-	 L/MsSCciy6r5SRfd7MvXPhp0f8/59QbjoHOndQxh21dBR10JVBO9nc14+jdaSl/HFY
-	 bEwxkaQZuafCg==
-Date: Sun, 26 Apr 2026 12:58:29 +0200
-From: Mike Rapoport <rppt@kernel.org>
-To: Luiz Capitulino <luizcap@redhat.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Barry Song <baohua@kernel.org>, Dev Jain <dev.jain@arm.com>,
-	Donet Tom <donettom@linux.ibm.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-	John Hubbard <jhubbard@nvidia.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Lance Yang <lance.yang@linux.dev>,
-	Leon Romanovsky <leon@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
-	Mark Brown <broonie@kernel.org>, Michal Hocko <mhocko@suse.com>,
-	Nico Pache <npache@redhat.com>, Peter Xu <peterx@redhat.com>,
-	Ryan Roberts <ryan.roberts@arm.com>,
-	Sarthak Sharma <sarthak.sharma@arm.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Vlastimil Babka <vbabka@kernel.org>, Zi Yan <ziy@nvidia.com>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: Re: [PATCH v2 43/53] selftests/mm: migration: add setup of HugeTLB
- pages
-Message-ID: <ae3v1cyMLbcvJtYW@kernel.org>
-References: <20260418105539.1261536-1-rppt@kernel.org>
- <20260418105539.1261536-44-rppt@kernel.org>
- <a8510cbd-4a30-460c-b870-a250ceb8a522@redhat.com>
+	dkim=pass (2048-bit key) header.d=mojatatu-com.20251104.gappssmtp.com header.i=@mojatatu-com.20251104.gappssmtp.com header.b="B08oLEGj"
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-82f69adeecbso3815586b3a.2
+        for <linux-kselftest@vger.kernel.org>; Sun, 26 Apr 2026 03:59:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1777201156; cv=none;
+        d=google.com; s=arc-20240605;
+        b=XlJjTAr63EvLBcOhWSF2VVBcvlNUBq7ADm4sEPOP/kRjXlc07xG8H1ETqDQsYlihzB
+         dx+SHtjsD442EreE7Xrme2YNH6pX7tUw2eZXHVs5YN76/VLZxLCHoaE84S6MNDt6d7y4
+         34o9phPqx0f2M+lC2RVHsyie7FMYNeGvZyG93lZyDAtjv88l3F7gPyBZZRU3Ps3JXTZ6
+         vKkBkWrkywO5YEAvEmrvuf77L8ao1wwZ18qDiWh2NC3rKaYoDrqkTTZiSnQeR184gALR
+         m7a4P2onWVCqckTEEcPu50S7OUUFlnG5NnYaqwdcw8buYrv14bwDFSFVAzAfT4bGVwMO
+         33pQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Z43G+siVNfTfqwol+9vvew4HXuMyxWOD6fgODyjOUvQ=;
+        fh=z4fanKVurQ+7KFD9cvEF0cXoUgzb9xn6oKCkKUYG8i4=;
+        b=MFcAXxSBOHa0P8LWMGAdz5y248ion4sNBAX5fNNDHEFHh64N3Lp/LJkf4SSCHRHffB
+         qCBhsKPrkLcqzHKqPAtppBSoTSPcc15bECAu2V9LMUhm62L7u1QJtAUsx4yzb5tWOJG2
+         3onmpe+l10wkPE7YbfAAUToLUPX+9BZ64P0aiKHT6XJr3JY28tIqyKPJe1Qop4v//5U4
+         TqKuBFHb0jrDlE+pTiv3+EgjgFYFXPwwDF37hQfa1mhNhWbM7YCktiJACwJmpk2eWbJI
+         LfqbJrEF4FT0byZ6F3xKWOveMWG/BM3DyajEqJyjNCaCmJW6JUR9/Gfhy8FGVJJmhHFD
+         2s5w==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mojatatu-com.20251104.gappssmtp.com; s=20251104; t=1777201156; x=1777805956; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Z43G+siVNfTfqwol+9vvew4HXuMyxWOD6fgODyjOUvQ=;
+        b=B08oLEGj/zc12Ig6OaXkOTVYSJcqLydB+YVE9o1A6uO4L1/YnkefZaBQ6W8RNaoHcf
+         vu6XB7WSzmX34fTDGkvo56i8YHnY8lqI15kH+NU5L2chPGStXtdS494PDFvZ3TNBAUju
+         lKqWYgbnAR47FuWb0+nWmGLganAeIAXxYbBCSeFypb9onrsjjIsrOuLbIoNoDKp592DY
+         jXMoCWfIuN5UPNEB6uvx+2opwUOZMwkvCY6wCvjXKzVbLwXSJu9R1lfURZvVigK9rmrU
+         LdSOwGHrtwrlH7fzyjb6AgdJ7XdRh6TgbagRVpTHY8JQ4XvjGdPN/4MwaG0zNgK9ozss
+         dhKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777201156; x=1777805956;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Z43G+siVNfTfqwol+9vvew4HXuMyxWOD6fgODyjOUvQ=;
+        b=F8NqaliHjYEX0FvzEGTVNBdFykORVTwp4qa/IxxK27tgEskxAjRdDDKEfA66rR44a5
+         BdmJm2j/6wY/z9m7aCgB/XGRKEUSK2tjhbTlbt9J6XKJiMBHnMEKzdy5YNSk+DSvUieH
+         c0VeP5g6L7FFL58scx9k2jpkP+q9OB1DFMrP+qjA+8meJyhmzkKGGzH5x/lYsot295vR
+         9W88rooQwTE+9D5zVo4/9ZBgl3Ec25lvlKh26jRNz9RJ1GonYPUO0uFwHKnY27klRZ40
+         qW9ipY4iYAaGacAZJHeb5MetRSyghMa0dc+ii1Ee1N/t1XlJBuIbOjkUvtxhZnLurh9y
+         GwMA==
+X-Forwarded-Encrypted: i=1; AFNElJ8Dyan4X2ic1dKX7lNK7l5vacgeFrdwOFtLY2uPTMI4kNb5+SEauwbbDjbFvAzgi5OKnuPbhUySE9ar50Zlso4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxSCvKLrYgSbBOH6/KjYwUDcKqGcdtzr4kqcea7gNVNOT8YWdXK
+	lm6c9aE4G2MKp8e20jXB2rSO3GdBdIrAxSuAfIKYqTLhMGwT3ZaLhd911FDgyl3KmqYTu+HX16H
+	/zW+Q3puTYhRcd8gno9swbHPRslI2KPLKhcO4juXb
+X-Gm-Gg: AeBDiesJftvcEgQ9+FtoCTOLJKTWelX1BK3wXh2j9ixcgzTAbJW46gffLrCH4crf7rv
+	shkL7vMjZFr5sT6UHlEI1Z/ZAVA4ayzTAlUshsNb/n81jUMzlVbO9mVV2TwZasU4OlK1ZLzGTUl
+	gK67mOGhguo8umvaDs5eAGKsUUX9XB0FZjuHkUln4puhwDsHxiMZKFL9tJVyE2J4nCJLQKBTqmR
+	eVoECMi01TfUCbn+PGHy9NTaZrGgiT3LQ3Vp/EHdnb4mgiPLy0NaZYxf3V3vbFaS2FbmDiWsjZ4
+	+aqXD2FK1PKI67GQFAbIjYwAHVRFLohRFoLgw3D0
+X-Received: by 2002:a05:6a00:1bc6:b0:82f:1b1b:e166 with SMTP id
+ d2e1a72fcca58-82f8c99159emr41296406b3a.33.1777201156605; Sun, 26 Apr 2026
+ 03:59:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a8510cbd-4a30-460c-b870-a250ceb8a522@redhat.com>
+References: <20260422161958.2517539-2-bestswngs@gmail.com> <20260422161958.2517539-3-bestswngs@gmail.com>
+In-Reply-To: <20260422161958.2517539-3-bestswngs@gmail.com>
+From: Jamal Hadi Salim <jhs@mojatatu.com>
+Date: Sun, 26 Apr 2026 06:59:05 -0400
+X-Gm-Features: AQROBzDdlUOYkMaP9cdvY9lBi6RpAH3mvy83bOI6hcc8joAewAsu9FYK5nmnDUU
+Message-ID: <CAM0EoMka18Lsu94wTFZU3ntXP9Z3vNy0Get+=THPdsCafcoPnw@mail.gmail.com>
+Subject: Re: [PATCH net v5 1/2] net/sched: taprio: fix NULL pointer
+ dereference in class dump
+To: Weiming Shi <bestswngs@gmail.com>
+Cc: vinicius.gomes@intel.com, jiri@resnulli.us, davem@davemloft.net, 
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, 
+	vladimir.oltean@nxp.com, shuah@kernel.org, xmei5@asu.edu, 
+	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Apr 24, 2026 at 01:11:45PM -0400, Luiz Capitulino wrote:
-> On 2026-04-18 06:55, Mike Rapoport wrote:
-> > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-> > 
-> > migration skips HugeTLB tests if there are no free huge pages
-> > prepared by a wrapper script.
-> > 
-> > Add setup of HugeTLB pages to the test and make sure that the original
-> > settings are restored on the test exit.
-> > 
-> > Since kselftest_harness runs fixture setup and the tests in child
-> > processes, use HUGETLB_SETUP_DEFAULT_PAGES() that defines a constructor
-> > that runs in the main process and add verification that there are enough
-> > free huge pages to the tests that use them.
-> > 
-> > Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> > ---
-> >   tools/testing/selftests/mm/migration.c | 8 ++++++++
-> >   1 file changed, 8 insertions(+)
-> > 
-> > diff --git a/tools/testing/selftests/mm/migration.c b/tools/testing/selftests/mm/migration.c
-> > index ccf42002ce86..61fb00953f83 100644
-> > --- a/tools/testing/selftests/mm/migration.c
-> > +++ b/tools/testing/selftests/mm/migration.c
-> > @@ -23,6 +23,8 @@
-> >   #define MAX_RETRIES	100
-> >   #define ALIGN(x, a)	(((x) + (a - 1)) & (~((a) - 1)))
-> > +HUGETLB_SETUP_DEFAULT_PAGES(1)
-> 
-> Hey Mike,
-> 
-> I've been reviewing and testing this series and got a reproducible issue
-> with this test when running it on a x86 KVM guest with 88 vCPUs.
-> 
-> The issue is that, when executing the full MM suite with
-> sudo ./run_vmtests.sh -d -a, all 6 migration test pass but it doesn't exit.
-> Instead, it gets stuck after this output:
-> 
-> """
-> # # PASSED: 6 / 6 tests passed.
-> # # Totals: pass:6 fail:0 xfail:0 xpass:0 skip:0 error:0
-> """
-> 
-> Getting a backtrace from gdb I see:
-> 
-> """
-> #0  0x00007efd2f2c247b in __lll_lock_wait_private () from /lib64/libc.so.6
-> #1  0x00007efd2f26fa88 in __run_exit_handlers () from /lib64/libc.so.6
-> #2  0x00007efd2f26fabe in exit () from /lib64/libc.so.6
-> #3  0x0000000000404f2e in hugepage_restore_settings_sighandler ()
-> #4  <signal handler called>
-> #5  0x00007efd2f32f416 in __unregister_atfork () from /lib64/libc.so.6
-> #6  0x00007efd2f26f338 in __cxa_finalize () from /lib64/libc.so.6
-> #7  0x00007efd2f4548c7 in __do_global_dtors_aux () from /lib64/libm.so.6
-> #8  0x00007ffd66ae0320 in ?? ()
-> #9  0x00007efd2f55b2d2 in _dl_call_fini (closure_map=0x7efd2f5500c0) at dl-call_fini.c:43
-> """
-> 
-> Could we be messing with libc internal state somehow? I also get systemd
-> services hung when I try to reboot.
+On Wed, Apr 22, 2026 at 12:20=E2=80=AFPM Weiming Shi <bestswngs@gmail.com> =
+wrote:
+>
+> When a TAPRIO child qdisc is deleted via RTM_DELQDISC, taprio_graft()
+> is called with new =3D=3D NULL and stores NULL into q->qdiscs[cl - 1].
+> Subsequent RTM_GETTCLASS dump operations walk all classes via
+> taprio_walk() and call taprio_dump_class(), which calls taprio_leaf()
+> returning the NULL pointer, then dereferences it to read child->handle,
+> causing a kernel NULL pointer dereference.
+>
+> The bug is reachable with namespace-scoped CAP_NET_ADMIN on any kernel
+> with CONFIG_NET_SCH_TAPRIO enabled. On systems with unprivileged user
+> namespaces enabled, an unprivileged local user can trigger a kernel
+> panic by creating a taprio qdisc inside a new network namespace,
+> grafting an explicit child qdisc, deleting it, and requesting a class
+> dump. The RTM_GETTCLASS dump itself requires no capability.
+>
+>  Oops: general protection fault, probably for non-canonical address 0xdff=
+ffc0000000007: 0000 [#1] SMP KASAN NOPTI
+>  KASAN: null-ptr-deref in range [0x0000000000000038-0x000000000000003f]
+>  RIP: 0010:taprio_dump_class (net/sched/sch_taprio.c:2478)
+>  Call Trace:
+>   <TASK>
+>   tc_fill_tclass (net/sched/sch_api.c:1966)
+>   qdisc_class_dump (net/sched/sch_api.c:2326)
+>   taprio_walk (net/sched/sch_taprio.c:2514)
+>   tc_dump_tclass_qdisc (net/sched/sch_api.c:2352)
+>   tc_dump_tclass_root (net/sched/sch_api.c:2370)
+>   tc_dump_tclass (net/sched/sch_api.c:2431)
+>   rtnl_dumpit (net/core/rtnetlink.c:6864)
+>   netlink_dump (net/netlink/af_netlink.c:2325)
+>   rtnetlink_rcv_msg (net/core/rtnetlink.c:6959)
+>   netlink_rcv_skb (net/netlink/af_netlink.c:2550)
+>   </TASK>
+>
+> Fix this by substituting &noop_qdisc when new is NULL in
+> taprio_graft(), a common pattern used by other qdiscs (e.g.,
+> multiq_graft()) to ensure the q->qdiscs[] slots are never NULL.
+> This makes control-plane dump paths safe without requiring individual
+> NULL checks.
+>
+> Since the data-plane paths (taprio_enqueue and taprio_dequeue_from_txq)
+> previously had explicit NULL guards that would drop/skip the packet
+> cleanly, update those checks to test for &noop_qdisc instead. Without
+> this, packets would reach taprio_enqueue_one() which increments the root
+> qdisc's qlen and backlog before calling the child's enqueue; noop_qdisc
+> drops the packet but those counters are never rolled back, permanently
+> inflating the root qdisc's statistics.
+>
+> After this change *old can be a valid qdisc, NULL, or &noop_qdisc.
+> Only call qdisc_put(*old) in the first case to avoid decreasing
+> noop_qdisc's refcount, which was never increased.
+>
+> Fixes: 665338b2a7a0 ("net/sched: taprio: dump class stats for the actual =
+q->qdiscs[]")
+> Reported-by: Xiang Mei <xmei5@asu.edu>
+> Signed-off-by: Weiming Shi <bestswngs@gmail.com>
+> Assisted-by: Claude:claude-opus-4-6
 
-I don't think we are messing with libc internal state, but we surely leave
-zombies around.
-All the tests that fork() terminate the children with kill() but they never
-call wait*() to collect the exit status.
- 
-> Some of the migration tests fork() and then kill() their children
-> processes. Won't those all restore the hugetlb state concurrently
-> from hugepage_restore_settings_atexit()?
+Acked-by: Jamal Hadi Salim <jhs@mojatatu.com>
 
-Yeah, I missed the kill()s :/
- 
-> Also, for shared_anon_htlb, don't we need to reserve a HugeTLB page per
-> children?
+Please add Tested-by: if you tested it with the tdc patch in 2/2
 
-We only mmap() a single huge page in the parent, the children don't create
-new mappings.
- 
-> And there's another issue: when running the migration test individually,
-> private_anon_htlb gets skipped. I guess it's because the previous test
-> is restoring the HugeTLB state:
-
-It could be.
-
-I pushed the updated version that has the fixes for both zombie and
-signal issues:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git/log/?h=mm-selftest/v3
-
-Would be great if you can test it in your setup.
-
--- 
-Sincerely yours,
-Mike.
+cheers,
+jamal
+> ---
+>  net/sched/sch_taprio.c | 13 ++++++++-----
+>  1 file changed, 8 insertions(+), 5 deletions(-)
+>
+> diff --git a/net/sched/sch_taprio.c b/net/sched/sch_taprio.c
+> index 8e37528119506..a7daf34593e07 100644
+> --- a/net/sched/sch_taprio.c
+> +++ b/net/sched/sch_taprio.c
+> @@ -634,7 +634,7 @@ static int taprio_enqueue(struct sk_buff *skb, struct=
+ Qdisc *sch,
+>         queue =3D skb_get_queue_mapping(skb);
+>
+>         child =3D q->qdiscs[queue];
+> -       if (unlikely(!child))
+> +       if (unlikely(child =3D=3D &noop_qdisc))
+>                 return qdisc_drop(skb, sch, to_free);
+>
+>         if (taprio_skb_exceeds_queue_max_sdu(sch, skb)) {
+> @@ -717,7 +717,7 @@ static struct sk_buff *taprio_dequeue_from_txq(struct=
+ Qdisc *sch, int txq,
+>         int len;
+>         u8 tc;
+>
+> -       if (unlikely(!child))
+> +       if (unlikely(child =3D=3D &noop_qdisc))
+>                 return NULL;
+>
+>         if (TXTIME_ASSIST_IS_ENABLED(q->flags))
+> @@ -2183,6 +2183,9 @@ static int taprio_graft(struct Qdisc *sch, unsigned=
+ long cl,
+>         if (!dev_queue)
+>                 return -EINVAL;
+>
+> +       if (!new)
+> +               new =3D &noop_qdisc;
+> +
+>         if (dev->flags & IFF_UP)
+>                 dev_deactivate(dev, false);
+>
+> @@ -2196,14 +2199,14 @@ static int taprio_graft(struct Qdisc *sch, unsign=
+ed long cl,
+>         *old =3D q->qdiscs[cl - 1];
+>         if (FULL_OFFLOAD_IS_ENABLED(q->flags)) {
+>                 WARN_ON_ONCE(dev_graft_qdisc(dev_queue, new) !=3D *old);
+> -               if (new)
+> +               if (new !=3D &noop_qdisc)
+>                         qdisc_refcount_inc(new);
+> -               if (*old)
+> +               if (*old && *old !=3D &noop_qdisc)
+>                         qdisc_put(*old);
+>         }
+>
+>         q->qdiscs[cl - 1] =3D new;
+> -       if (new)
+> +       if (new !=3D &noop_qdisc)
+>                 new->flags |=3D TCQ_F_ONETXQUEUE | TCQ_F_NOPARENT;
+>
+>         if (dev->flags & IFF_UP)
+> --
+> 2.43.0
+>
