@@ -1,45 +1,51 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D71542F3C26;
-	Sun, 26 Apr 2026 20:52:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12F8D450F2;
+	Sun, 26 Apr 2026 23:16:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777236760; cv=none; b=H0sUxuohMzlsKoHi7fQnkePN5GjFDZut4M2pUf2ogNWKRlBsgA4gfCze/2xBw6Pp8DyRUa0ZzT+OE/ZllENsi+b4mh5jB6uH81Sh0i3maVlKxuSlF6H/QZWPunym37nrgdgUtgabzrpsW/3SHRru9hfKa7GrsPzQ8u4gdQbBVTE=
+	t=1777245389; cv=none; b=jQUDCwf6Ur7rspilnTo6Hl6xNUAii+Mpb4hqAVEIMtZJM/mJjGWareDaqOH1cwuYDqcqNU7tFWOSkX9/w47e8yGuRxYrATgThEzF8oHhaIOPbNWjtEEKg3pkLWGjadsyhX9rnjVVxulEjAePXIriaj1WLF9m9bOdrkMAg+rPD64=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777236760; c=relaxed/simple;
-	bh=EauBIBzKjl6rFCRlEGSo/s6NrgLL9HoVh8TIqUsq9vs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uv5Cj5pMR4uyd/tPO0QjhmFyTk8H6Yw30fbnv5fB47oPPVK/ZgWN7JioML0JOdtVbViriobK8iA45c+vuHsjLetEUMuCCDoNflBzMsQf+gvp8uqpzQLQwPKbR+JFgO3KOvzske3WhZpLKKgp3oPLXe8P5ypOGbTljo15F3bUsk4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gRx7UFjK; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777245389; c=relaxed/simple;
+	bh=xK3N5VQUiYZLj+igl9pSNGuZYFek1+bNERSn81pIloY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Xd8cEhwvqKkMFFOioam1l+OJQNam57k+H/XLq9B0CsfP8Dy7Gp3XOw5STQZN8C7CFfofWjSDajSeJsV5rvkiWkYv0JkMwTr3+3PwqFgxprlJaB2px7XVUakxZG2vJEwStw+EsWvE20MMparFthIA02cDiJMMZANCaADPS8bfffQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kZ3Xw33y; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gRx7UFjK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76993C2BCC6;
-	Sun, 26 Apr 2026 20:52:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kZ3Xw33y"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 198D5C2BCAF;
+	Sun, 26 Apr 2026 23:16:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777236760;
-	bh=EauBIBzKjl6rFCRlEGSo/s6NrgLL9HoVh8TIqUsq9vs=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=gRx7UFjKG7iVz+GBgkB2NmPpNVPR17CgtwZ/i2OJDocLdRNO/cyy/JAcgUfnzrADA
-	 T3VkslyLFV+bjCWVyIyyCc1gHTvMiha4EuOIpjqYzHU7lPZNkWX3lQkTfbZXE0+mDg
-	 kFeTjAO9roxZMD3wrgRcG1+scESM5dczc1DR6QNGQiERnv+TxkDGYXQ19h0LWH29S2
-	 oZNiJIJRW8DIa1mZl9MefTbCVtwvBD5u7tKvkcjgmKFRArMx18X9M3+dILfcX+Vyw/
-	 cDlmsVCBULjjjwokPNCFDUFKtytHBttrMIcFAUEXme6capLt1uprvgpHISbnZNpj+v
-	 GQ8E1rc9gtC0A==
+	s=k20201202; t=1777245388;
+	bh=xK3N5VQUiYZLj+igl9pSNGuZYFek1+bNERSn81pIloY=;
+	h=From:To:Cc:Subject:Date:From;
+	b=kZ3Xw33yEQRge/f82YUoMVioGH2Xx8fnIyFxVU/gew+SEqkwR6K9UUxhlOxYfWmw4
+	 fz+YwLgLl6rKrDQ7czhrk5AMQLId/KHnncfuR5iVkqgE2C3TKA87ss3suB1k/IbGPD
+	 2U7sl8r4uCq0/SIje84IV+jW2UxwIyLPuSIFa4SUUE58ItBr9KcH3Ar3ReHfU0kd61
+	 ErSKPe0kba+7xW1UxhfOzA5gQwcEoEVnIvbSpSCE1n2e3rI3thHNq7KGE1gOz4nDC0
+	 768QWXaWDnvyMYA4HoO4MWWjmJcuhCK10fpOwBZ6u24mNXcM1x2uPX/2YipArB+iM0
+	 7nl2WwK1fcpLA==
 From: SeongJae Park <sj@kernel.org>
-To: 
+To: Andrew Morton <akpm@linux-foundation.org>
 Cc: SeongJae Park <sj@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	David Hildenbrand <david@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Michal Hocko <mhocko@suse.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
 	damon@lists.linux.dev,
+	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-mm@kvack.org
-Subject: [RFC PATCH 17/19] selftests/damon/sysfs.sh: test probes dir
-Date: Sun, 26 Apr 2026 13:52:18 -0700
-Message-ID: <20260426205222.93895-18-sj@kernel.org>
+Subject: [PATCH v2 0/4] mm/damon: repost non-hotfix reviewed patches in damon/next tree
+Date: Sun, 26 Apr 2026 16:16:13 -0700
+Message-ID: <20260426231619.107231-1-sj@kernel.org>
 X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260426205222.93895-1-sj@kernel.org>
-References: <20260426205222.93895-1-sj@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -48,76 +54,51 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add simple existence tests for data probes sysfs directories and files.
+Re-posting non-hotfix DAMON patches that reviewed by DAMON maintainer
+but not yet merged into mm.git.
 
-Signed-off-by: SeongJae Park <sj@kernel.org>
----
- tools/testing/selftests/damon/sysfs.sh | 48 ++++++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
+The first patch from Liew Rui Yan add a minor performance optimization
+using ilog2() instead of inefficient manual implementation of the
+functionality.
 
-diff --git a/tools/testing/selftests/damon/sysfs.sh b/tools/testing/selftests/damon/sysfs.sh
-index 83e3b7f63d81c..1ac3e2ce8e448 100755
---- a/tools/testing/selftests/damon/sysfs.sh
-+++ b/tools/testing/selftests/damon/sysfs.sh
-@@ -291,11 +291,59 @@ test_intervals()
- 	ensure_file "$intervals_dir/update_us" "exist" "600"
- }
- 
-+test_damon_filter()
-+{
-+	damon_filter_dir=$1
-+	ensure_file "$damon_filter_dir/type" "exist" "600"
-+	ensure_write_succ "$damon_filter_dir/type" "anon" "valid input"
-+	ensure_write_fail "$damon_filter_dir/type" "foo" "invalid input"
-+	ensure_file "$damon_filter_dir/matching" "exist" "600"
-+	ensure_file "$damon_filter_dir/allow" "exist" "600"
-+}
-+
-+test_damon_filters()
-+{
-+	filters_dir=$1
-+	ensure_dir "$filters_dir" "exist"
-+	ensure_file "$filters_dir/nr_filters" "exist" "600"
-+	ensure_write_succ  "$filters_dir/nr_filters" "1" "valid input"
-+	test_damon_filter "$filters_dir/0"
-+
-+	ensure_write_succ  "$filters_dir/nr_filters" "2" "valid input"
-+	test_damon_filter "$filters_dir/0"
-+	test_damon_filter "$filters_dir/1"
-+
-+	ensure_write_succ "$filters_dir/nr_filters" "0" "valid input"
-+	ensure_dir "$filters_dir/0" "not_exist"
-+	ensure_dir "$filters_dir/1" "not_exist"
-+}
-+
-+test_probe()
-+{
-+	probe_dir=$1
-+	ensure_dir "$probe_dir" "exist"
-+	test_damon_filters "$probe_dir/filters"
-+}
-+
-+test_probes()
-+{
-+	probes_dir=$1
-+	ensure_dir "$probes_dir" "exist"
-+	ensure_file "$probes_dir/nr_probes" "exist" "600"
-+
-+	ensure_write_succ "$probes_dir/nr_probes" "1" "valid input"
-+	test_probe "$probes_dir/0"
-+
-+	ensure_write_succ "$probes_dir/nr_probes" "0" "valid input"
-+	ensure_dir "$probes_dir/0" "not_exist"
-+}
-+
- test_monitoring_attrs()
- {
- 	monitoring_attrs_dir=$1
- 	ensure_dir "$monitoring_attrs_dir" "exist"
- 	test_intervals "$monitoring_attrs_dir/intervals"
-+	test_probes "$monitoring_attrs_dir/probes"
- 	test_range "$monitoring_attrs_dir/nr_regions"
- }
- 
+The second patch from Cheng-Han Wu fixes a minor typo:
+s/parametrs/parameters/.
+
+The third patch from Liew Rui Yan make commit_inputs operation of
+DAMON_RECLAIM and DAMON_LRU_SORT synchronous to improve the user
+experience.
+
+The fourth patch from Asier Gutierrez adds a new DAMOS action,
+DAMOS_COLLAPSE for deterministic DAMOS-based access-aware THP system.
+
+Changes from v1
+- v1: https://lore.kernel.org/20260402155733.77050-1-sj@kernel.org
+- Add DAMOS_COLLAPSE patch.
+- Rebase to latest mm-new.
+
+Asier Gutierrez (1):
+  mm/damon: support MADV_COLLAPSE via DAMOS_COLLAPSE scheme action
+
+Cheng-Han Wu (1):
+  Docs/admin-guide/mm/damon: fix 'parametrs' typo
+
+Liew Rui Yan (2):
+  mm/damon/ops-common: optimize damon_hot_score() using ilog2()
+  mm/damon: add synchronous commit for commit_inputs
+
+ .../admin-guide/mm/damon/lru_sort.rst         |  2 +-
+ .../admin-guide/mm/damon/reclaim.rst          |  2 +-
+ Documentation/mm/damon/design.rst             |  4 ++
+ include/linux/damon.h                         |  2 +
+ mm/damon/lru_sort.c                           | 46 ++++++++++++++++---
+ mm/damon/ops-common.c                         |  9 ++--
+ mm/damon/reclaim.c                            | 46 ++++++++++++++++---
+ mm/damon/sysfs-schemes.c                      |  4 ++
+ mm/damon/vaddr.c                              |  3 ++
+ tools/testing/selftests/damon/sysfs.py        | 11 +++--
+ 10 files changed, 105 insertions(+), 24 deletions(-)
+
+
+base-commit: 1e24f85d7a997307185d5345c1711f485570a123
 -- 
 2.47.3
