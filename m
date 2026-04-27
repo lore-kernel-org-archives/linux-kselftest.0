@@ -1,63 +1,62 @@
-Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
+Received: from mail-dl1-f41.google.com (mail-dl1-f41.google.com [74.125.82.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 837413E315F
-	for <linux-kselftest@vger.kernel.org>; Mon, 27 Apr 2026 17:44:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C4B43E6DFF
+	for <linux-kselftest@vger.kernel.org>; Mon, 27 Apr 2026 17:46:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777311903; cv=none; b=r+kF8Tiz0ZRyRk/PZSgz5/XHed9g6MMZJAmWe79q/snuHZtc9eP9ClYcZpjxAirz5k0lPWulIdDfew+FW+vC6CfB5K8upHdxcf9Xiwz5oWAYacvT37nVASJyZkHESmCbfbWpzEWJWhrwP1p5LYh1gHxSEvXssPpXaYJIjC0QQ8M=
+	t=1777312013; cv=none; b=PQ6SpDDb4rNCIOwwljCrSj10ux/jFj4Se7Kb8k3Hcn6vTsMG5quPjBgqCfuPfkubjivmhq+FOS6oaLe1wvKOx3TDmvTfC4bnE+XnTlsA+yWSoc93LpmjsKUx90K0bHT3mr2BoYsBfno0bEnV9JsQObm6NZiDEQPVWckAu5t477A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777311903; c=relaxed/simple;
-	bh=4Y4O3agHDFOBx+xyDha/Oc3P8x3xjQzyHRXVKrvNyAM=;
+	s=arc-20240116; t=1777312013; c=relaxed/simple;
+	bh=e5HjhuVcIZm6djIJ10bLTcfPxKhnYmXhabkxmU9/cyo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aBMKHT+UYpMaW1J8N8wPPJ+Igzfh5S6z8kmDqnNRblV4wBM5GKF1PMbMJQl58/EaJoK3Fc7oGekg86J5nXgA44YfiExCvyzIjaLybiP7RtWHChpLXxZlYF05SCzh+nc0LRSeoF8s1bYVTakHwwvNSQzTuFNSFRx3CQmCdWZWIOc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=YF2ltafx; arc=none smtp.client-ip=74.125.82.179
+	 In-Reply-To:Content-Type; b=KmunZjHYrvKXJL2l8Bm/DOEp1c1fwhtDl1rwqBQj5NShxC0BulVofB7BLXya6m2pflsdVvmduZ7yx4lwWIu9OtfSrLXRsQvbqYe2v5jFBG/PCS1BZ7idOXlJ3kyR2cJg8+pqFbeQ3t/iCIa9P+cY/yQL73sX733ZOoSbWmsTiPg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=YDfocJGp; arc=none smtp.client-ip=74.125.82.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="YF2ltafx"
-Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-2de831d2b20so1356204eec.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 27 Apr 2026 10:44:59 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="YDfocJGp"
+Received: by mail-dl1-f41.google.com with SMTP id a92af1059eb24-12c45281a06so14157684c88.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Apr 2026 10:46:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1777311898; x=1777916698; darn=vger.kernel.org;
+        d=linuxfoundation.org; s=google; t=1777312009; x=1777916809; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=9D2K1vsMEYoTo0SmC/YpuFOBiDy6YrczCVTaUbkCqYs=;
-        b=YF2ltafxYQfnwjMybByuwxiJX5hpz7KLNzPgFc6ZpRTY/ZnyvimTZhTPb5950qgW7u
-         gIGZvnnSg2rTFdXtxfSJeqU62Wl4gQDVihfK/oRNY2y6HBzq+hD+VUFgFhbaGZEWvC0d
-         v/Nkia7QfaqMo/lHdKeNaf2Pt4Wt4QfEZWxYw=
+        bh=7XYyRpT3Px+QXPGB9xxIGkvs+bq3B849MvDwIxQIdqI=;
+        b=YDfocJGpkfGlw/ddwbBpOBbwdD8iTe//TVtdyw34EW8xvOUHAldWtq7ExhaIuV8Swv
+         pMmLjT6AIX9tIsjlWojjSj0ASOASV5KQ4F5BhlNQuSMv/eM9OWg6MCTup1gVQmR1qH1z
+         8rS0bcizzFAAcSnh3zYfm2RJ74EKVqHNTUZfs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777311898; x=1777916698;
+        d=1e100.net; s=20251104; t=1777312009; x=1777916809;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=9D2K1vsMEYoTo0SmC/YpuFOBiDy6YrczCVTaUbkCqYs=;
-        b=OpwKFav6aBlCtTOzN0hFgLW7AjPgTX/GozvqzBu9ES/EEYPo+84/fm3hFjusjWs0hR
-         bRhjROMV94s2vr9eTp0U7/cuOd/3QDB71tLtIzVJUCoP1ixVudKtXKoQpp0D/9T8WD4r
-         1NaBmuQT29frWwZC3Em97zmcqAurCiNY1UGgMGfRRbEgMvFVMcp3C5PvO3othsbue4/o
-         kHAeKYwLGjyVhxR4XW8JB1FUxxNEeDdEYkQojxrfuOFiFhAA6Dx3brwCJEa1ikTcqXGO
-         2GUMty+PhyikxTb6qvP50QeEaDM/0wtsqg/2TE8uFt/i6P+4ATF0qXEJXuhT/EzwPg4G
-         8ARg==
-X-Forwarded-Encrypted: i=1; AFNElJ8eZ6y/q2VNCEk1dakCZ5owto5fBn92oJp2cg4eOwT22ADSLD5/SA6lPWvfwK4wegdv/NHw77q96WovIDi1w10=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxSkFxvY3xSNamOjKOzEkcVWxg5S1y0A4or/4DvtN5akKM4IlH6
-	9YjTF/gknVanMpLuvpppty63NpNoeoeJ9FAy0WiEQkbHayrR/rceT8ToShfTerRvu20=
-X-Gm-Gg: AeBDiesdPvSFfnrIVkAGO3nikrlaNFLeBNxZCQiY54swN2E0HHPQzYtdp4GBgGSLAir
-	n806jzAA1SCeqYjUb3GGONReThHhNmVNFX4YXuTKOyhPU4l2zjX6RZ9nL6oYC6S9BFrGYzYH9Np
-	o+eE44BcuiMGJfetHbVen6z21Qzwfzy+kSMe2aOH0oUeSfpkUCWRtlzA1nHyCpQc/oLTmMbVWD9
-	pDoupJRsUUESPjw1XYmyrHU8mEknEDgLtBM/bDYcbbbBERLFeuA9ZzeL8D36yUye/xqEB1AlEsL
-	liNTrljoM81sBYXGqGia19WS31rkgqdHKpj+q+jPJdwyOyLCLIAUm8tdk7rowwJDIS3C8AI029z
-	L3n4ehEaIZEZ2LFZTa3UUnJiMV1Jj47O+8R1RoJ5aY12NLm+yMh9wpy7udyOdUC5ztdaKo59fXm
-	WnkSRt5spedBg5igRzZQMdnbmcPD1y1d5fDnx9Rg4Qrmds
-X-Received: by 2002:a05:7022:fe0a:b0:12a:72af:83d1 with SMTP id a92af1059eb24-12ddd50b1dbmr148212c88.11.1777311897824;
-        Mon, 27 Apr 2026 10:44:57 -0700 (PDT)
+        bh=7XYyRpT3Px+QXPGB9xxIGkvs+bq3B849MvDwIxQIdqI=;
+        b=aYCmvTfk61TWzuquL4rZnuADctcoMzwWGQ6UlN5BUVqejHzCtMNvAbDbiyb6qE3NAZ
+         O2EiCU73RY2ZaSpdN7OO50yxioor+bAYNKFWsvNJ6FY1HYj/rSWtkyNVxg15vcIae3XV
+         TSPnj+vReZvz9N3vz6kzInnliW3f7Fb7/MKoJCLE+XrjO2JZOzyG8AtjqQmSF9UDpgFg
+         JCD/BVooKjpvcZAfs2g0pz+02aD2S8jGr8rvRVOCTFGS45BIrz2CQ+X2EdnNWsoGLxQA
+         NpUUISSw4Rc3mDYJ4jedxa6jLsVS71EGmSwi7AAPtXkZ5Bds8nSeL2BPVRokjzCPtjQq
+         4zbQ==
+X-Gm-Message-State: AOJu0YwPc588IoNHNaIIIQxzB/zTHnYzqo2sBLwrHJg4uC8Ecwrvr8Zr
+	8XXEQKsH/Tam4L0vITmvvRu7GWdInV18UVeAVnt2XRO2DXladZ0uhiwRfuLkYGg7nZc=
+X-Gm-Gg: AeBDiesgoA2/OWtPWJmh9g84tKCAXb5LXo+afjpACblpiFS3KSjiD+mtNwfRbjE5da9
+	uT/UUjy2DEHj2zniRxKRECC3G6CoHrVnP0mzzU1wsMA3Y5hleLF8a4OeF0xg68uNMb8vtiHZiAL
+	RayRzLjUZReDBO8sHqPP3HhEycx3cbx+Lqvvk0tbjBKxkKiKC1P0fUhqmdSOp5VBpdH3VqeV9M/
+	OF4Cdvy7JZmBaRZJvogRr4SRK3dfGTBDIcWnc3KGVN642noYsa4Bv1lOJb8O0JC1GItcTuxmpaA
+	ms2Yzm7KfPes7eDOwyg185HANiel1FgNND4tXxVxHkI/HNU9Ssj+miYC0HqVKe5WlsHWAwI7UCW
+	+AUJToAUtwSJL/j9TvV3i+Wl1yPK+Nx90WlFfbgbvsznyJ0ADJhXtZJ18G+JIOtBU08Ey8V9RX7
+	6K5gZdCxvfGa67NQlJADxwCZCEVnYlgDCWtFXs2c8TyTrh0SxTCnHkuA4=
+X-Received: by 2002:a05:7022:e28:b0:12c:8e70:c338 with SMTP id a92af1059eb24-12ddd4db90emr131910c88.2.1777312009022;
+        Mon, 27 Apr 2026 10:46:49 -0700 (PDT)
 Received: from [172.30.76.185] ([50.224.25.13])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12dca2c1c16sm14378525c88.5.2026.04.27.10.44.56
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2e53ccce0f5sm44032479eec.17.2026.04.27.10.46.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Apr 2026 10:44:57 -0700 (PDT)
-Message-ID: <7b424355-58bf-470f-ab5a-071ef9c5646f@linuxfoundation.org>
-Date: Mon, 27 Apr 2026 11:44:56 -0600
+        Mon, 27 Apr 2026 10:46:48 -0700 (PDT)
+Message-ID: <c182a8fd-5eb3-4189-a552-884d4d94c626@linuxfoundation.org>
+Date: Mon, 27 Apr 2026 11:46:46 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -65,55 +64,42 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests: kselftest: fix wrong test number in
- ksft_exit_skip
-To: Sarthak Sharma <sarthak.sharma@arm.com>, shuah@kernel.org
-Cc: pbonzini@redhat.com, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <20260427112447.147985-1-sarthak.sharma@arm.com>
+Subject: Re: [PATCH v2] selftests: harness: Restore order of test functions
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
+ Kees Cook <kees@kernel.org>, Andy Lutomirski <luto@amacapital.net>,
+ Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
+ Sun Jian <sun.jian.kdev@gmail.com>, Jakub Kicinski <kuba@kernel.org>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20260422-kselftests-harness-order-v2-1-93ea980ea3ac@linutronix.de>
 Content-Language: en-US
 From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20260427112447.147985-1-sarthak.sharma@arm.com>
+In-Reply-To: <20260422-kselftests-harness-order-v2-1-93ea980ea3ac@linutronix.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 4/27/26 05:24, Sarthak Sharma wrote:
-> ksft_exit_skip() increments ksft_xskip before printing the KTAP
-> result. As a result, ksft_test_num() already includes the skipped
-> test.
+On 4/22/26 06:32, Thomas Weißschuh wrote:
+> The recent addition of explicit constructor orders for fixture tests
+> broke the ordering of those relative to non-fixture tests and the
+> reverse-constructor-order detection.
 > 
-> Adding 1 to ksft_test_num() increments the printed test number
-> again, producing an incorrect test number and wrong KTAP output.
+> Restore the ordering of the test functions relative to each other by
+> using the same explicit test order for all test registrations and
+> __constructor_order_first().
 > 
-> Drop the extra increment and print ksft_test_num() directly.
-
-I applied this patch to linux-kselftest fixes branch.
-
-I ran a few tests and couldn't really see the problem this patch
-fixes with and without the patch.
-
-Can you send me before and after for mm or timers test runs?
-
+> Rename the constant, as it is not specific to TEST_F() anymore.
 > 
-> Fixes: b85d387c9b09 ("kselftest: fix TAP output for skipped tests")
-> Signed-off-by: Sarthak Sharma <sarthak.sharma@arm.com>
+> Fixes: 6be268151426 ("selftests/harness: order TEST_F and XFAIL_ADD constructors")
+> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+> Reviewed-by: Kees Cook <kees@kernel.org>
 > ---
->   tools/testing/selftests/kselftest.h | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
-> index afbcf8412ae5..827b47cf4df8 100644
-> --- a/tools/testing/selftests/kselftest.h
-> +++ b/tools/testing/selftests/kselftest.h
-> @@ -449,7 +449,7 @@ static inline __noreturn __printf(1, 2) void ksft_exit_skip(const char *msg, ...
->   	 */
->   	if (ksft_plan || ksft_test_num()) {
->   		ksft_cnt.ksft_xskip++;
-> -		printf("ok %u # SKIP ", 1 + ksft_test_num());
-> +		printf("ok %u # SKIP ", ksft_test_num());
->   	} else {
->   		printf("1..0 # SKIP ");
->   	}
+> Changes in v2:
+> - Pick up review tag from Kees.
+> - Add missing closing brace in FIXTURE_VARIANT_ADD().
+> - Link to v1: https://patch.msgid.link/20260420-kselftests-harness-order-v1-1-b3c603782ce8@linutronix.de
+> ---
+
+Applied to linux-kselftest fixes for Linux 7.1-rc2
 
 thanks,
 -- Shuah
