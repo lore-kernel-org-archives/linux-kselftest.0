@@ -1,91 +1,94 @@
-Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A90F4303C83
-	for <linux-kselftest@vger.kernel.org>; Mon, 27 Apr 2026 22:36:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E1CB3559DF
+	for <linux-kselftest@vger.kernel.org>; Mon, 27 Apr 2026 22:43:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777329387; cv=none; b=u85eeglcM6qvfFKemYl208oi8sTWZV5R2oxxMH0CQoNk8AWMqSgwd271SwGkcoYM2+WTiNvfaUL0Ds5WlQc7QZhjtJxz/WKeWfrmGn+yAcz3vwqpseHhYgcPmH4Fe9UOAWkGOj9rIo7DFRvxAfMvh4B9FqTeRgN7+rSFqHa3T6g=
+	t=1777329789; cv=none; b=UzX9hmVqQc61Rvu77r97DTXuRSQHLD5CNE5TbERX+hzBZTF67cGPLnjvcDYfUtWiaAnrNtrdN0B4OoG+zQpZVha9c9rR1al8K9APJZS2iou9TNkV8OJqd9YrTpUWykMgW3hCor3V0XPXJetyLNfRUp9Su24dl1+4ee4H8TmVgXY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777329387; c=relaxed/simple;
-	bh=MnOzzzamYXiwghHrVckJNVajr4kLMULxSd8oeLokv0k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NvAgvBmTBZBlqpF65nh2h2m/uBlMa9ngdjG0XIACECARTktK3lpC6BUJAlx1LtsfO8Opkgu2USmIh/mcSTZ6u3vrCqJfiD+1WKjCvdMF7wCd2jDYESikwWVYnVw/UNPtpjRzpsfvzy21KdkXisR2fmUwpxQkG53kHKnF+eiTKik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=npN4mFu9; arc=none smtp.client-ip=91.218.175.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1777329789; c=relaxed/simple;
+	bh=PbcoGJ83hfaOZ6laTOR0uL8GbaAzSabp+C4TwUKxS8w=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=fdDRP2hhIVTdN/z54M6TOg6YBduwlCr1pfGvKHIm0D1/E531NA/WyLdH2Hf3Qxigyg6620raHXeiSoitcs1SMyUNkBd9Tt7+Tr+9/a19YTes14N4ZSdPw0g5Jii09ZpOXkdNYcyDInUB4WHrmMuoohCzHN5GLsKPP6hqTv5WUIs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--sharmasagarika.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MflZwKi/; arc=none smtp.client-ip=209.85.128.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--sharmasagarika.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="npN4mFu9"
-Date: Mon, 27 Apr 2026 15:36:03 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1777329373;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=LsQU2/LjFk+qRAd2b5lbs1cknpmT2BXH5jVMeLp8gG0=;
-	b=npN4mFu9PZrqDAG0R8FzMVWqfso7n+haulHAzPTGd9Rax1uBCE5S/e/on4S6r+8qovHxsa
-	5JNXDhWy0RnO5IQBexuNjeIv5Wcg68hyBJprcoXHFGKpzrnTcm4MAPmjcpwZjLCMtAwuO5
-	/Sm3VA3mUeZh15hz1Jcju3Yft/En86U=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-To: nhudson@akamai.com
-Cc: bot+bpf-ci@kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org, 
-	willemb@google.com, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
-	eddyz87@gmail.com, memxor@gmail.com, shuah@kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, martin.lau@kernel.org, 
-	yonghong.song@linux.dev, clm@meta.com, ihor.solodrai@linux.dev
-Subject: Re: [PATCH v5 6/6] selftests/bpf: tc_tunnel validate decap GSO state
-Message-ID: <2026427222011._PrH.martin.lau@linux.dev>
-References: <20260420104051.1528843-7-nhudson@akamai.com>
- <2ea5cc41fd138e94dc34b1d4073833118b93ae48d802aabe480e355e27417b62@mail.kernel.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MflZwKi/"
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-7a45cf7ff24so173291497b3.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Apr 2026 15:43:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1777329787; x=1777934587; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=SpSbFarD004TIRxjjXURunEN1itNuJvj7VUYTMGDc0I=;
+        b=MflZwKi/qGbCvI/KBaDsMCCcKSso2/gl8ZtaIbsC8RQx+z3ORi/YzQNU2Uh0PeQ7l7
+         DBU37m7mbTO6+ec2+9hP56Old69tc5NsJWm44MzcKdz5Ir38xoEUXSYuqfW/a1POuBJz
+         K3OCKMPFpMpfzX3hYEK2OAXaAzksN+HzXfCecAB2snxd2nQELL9H1vQztHdkYaULGMwa
+         SidSNClx7mkfE6XHHB9MiuRn8x+9MOEB1iSFEZ/Q3Wdkh/vmaPQZ2giGHoIXM/KMDasy
+         WrR8nQXGLWq9PupYdKWVX7Z+TEgl8D2ev4r6PovJ+PCaUyXakVdJKVo6a/OcXCEtFfQo
+         xrmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777329787; x=1777934587;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SpSbFarD004TIRxjjXURunEN1itNuJvj7VUYTMGDc0I=;
+        b=QQoLI9kvXGeeph1lddWLc5dh41mze3WiplX01ab8vZ3WNipu3sHToLzC1pM6mGixpq
+         rJDZCgQCSKbco4uNIE0JxjiBS+Ihz+nrS2vOEBbxD2pWmIxfERlFBh+OfIEwJC1tgG3m
+         JtOpztmOLMYdM9W6TL8O5KNLXztoeFkYohOV2rVEhPu+5jqr6/yFVzlbt9+6Jq1Pg9je
+         WNeTPZ0OMcK3eR8GslZ1eg+S9hWZ0OBoN0g+BFZFz5VV2ApFEueuvpRqihcb5mwwYXRw
+         DYHtobi1rQd8ZSpt2Y6iGJ7iDP83Ni/qO1vXns4CKbJkt2IvVOWzqL+d8T/h8IWuY8uw
+         kqTw==
+X-Forwarded-Encrypted: i=1; AFNElJ83XLFp4vv4JJFyUSLRVqR1p1AHJq97QNTUfbPq/ksBRMlQBQwJJiMXyYw191vkPEjtTdq6aVxKW5gRwGV6vjA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxuBKBUpQ8x+Ug+zEy7xbPVtL3pWq8XJKSUvlMRoGCa7AKHV/v5
+	4ZS8etvmgzB0HygA0sYU5tvMz0NauKWjrvye2EHGBq9FZpS1dhgGwyNNxwA5Z9hx5nHBCMViOCE
+	nTfwf8flHG+AWadw+Ewj1hZhuEJ5C+sunGsl7vg==
+X-Received: from yxaa9.prod.google.com ([2002:a05:690e:23c9:b0:654:1934:377f])
+ (user=sharmasagarika job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:690e:130d:b0:657:a0f4:ac1d with SMTP id 956f58d0204a3-65beed1d82bmr470283d50.12.1777329787001;
+ Mon, 27 Apr 2026 15:43:07 -0700 (PDT)
+Date: Mon, 27 Apr 2026 22:42:21 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2ea5cc41fd138e94dc34b1d4073833118b93ae48d802aabe480e355e27417b62@mail.kernel.org>
-X-Migadu-Flow: FLOW_OUT
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.54.0.545.g6539524ca2-goog
+Message-ID: <20260427224243.3499162-1-sharmasagarika@google.com>
+Subject: [PATCH net v1 0/2] ipv6: fix ECMP route failover on carrier loss
+From: Sagarika Sharma <sharmasagarika@google.com>
+To: "David S . Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>, 
+	Kuniyuki Iwashima <kuniyu@google.com>, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Sagarika Sharma <sharmasagarika@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Apr 20, 2026 at 11:19:30AM +0000, bot+bpf-ci@kernel.org wrote:
-> > +	if (!shinfo->gso_size)
-> > +		return TC_ACT_OK;
-> > +
-> > +	if ((flags & BPF_F_ADJ_ROOM_DECAP_L4_UDP) &&
-> > +	    (shinfo->gso_type & SKB_GSO_UDP_TUNNEL_MASK))
-> > +		return TC_ACT_SHOT;
-> > +
-> > +	if ((flags & BPF_F_ADJ_ROOM_DECAP_L4_GRE) &&
-> > +	    (shinfo->gso_type & (SKB_GSO_GRE | SKB_GSO_GRE_CSUM)))
-> > +		return TC_ACT_SHOT;
-> > +
-> > +	if ((flags & BPF_F_ADJ_ROOM_DECAP_IPXIP4) &&
-> > +	    (shinfo->gso_type & SKB_GSO_IPXIP4))
-> > +		return TC_ACT_SHOT;
-> > +
-> > +	if ((flags & BPF_F_ADJ_ROOM_DECAP_IPXIP6) &&
-> > +	    (shinfo->gso_type & SKB_GSO_IPXIP6))
-> > +		return TC_ACT_SHOT;
-> 
-> Are these IPXIP4 and IPXIP6 checks reachable?
-> 
-> Looking earlier in decap_internal(), for IPPROTO_IPIP and IPPROTO_IPV6
-> cases, the function only sets BPF_F_ADJ_ROOM_DECAP_L3_IPV4 and
-> BPF_F_ADJ_ROOM_DECAP_L3_IPV6 on the flags variable (around the protocol
-> switch statement).
-> 
-> Because BPF_F_ADJ_ROOM_DECAP_IPXIP4 and BPF_F_ADJ_ROOM_DECAP_IPXIP6 are
-> never added to flags, wouldn't these validation checks always be skipped?
-> 
-> Ref: https://lore.kernel.org/bpf/20260416124324.B0CE6C2BCAF@smtp.kernel.org/
+This patchset resolves an issue where established IPv6 connections are
+unable to transition to alternative ECMP nexthops upon carrier loss.
 
-This comment has been mentioned again. It seems legit. Please don't ignore
-the review comment. Otherwise, it will be assumed that the solutions are
-being worked on and patchwork will eventually archive the patches after
-some time.
+Unlike IPv4, the IPv6 routing subsystem does not actively invalidate
+cached destinations during a NETDEV_CHANGE event. Sockets persist
+with dead routes, leading to stalled traffic or connection drops.
 
-Also, there is a 'SYS(fail_close_ns_client, "ethtool -K veth1 tso off");'
-in prog_tests/test_tc_tunnel.c. Is the shinfo->gso_type ever set?
-What will break if tso is kept on?
+This series introduces a fix to trigger route invalidation by
+updating the route serial number on link carrier loss and provides
+a corresponding selftest to validate the failover behavior for IPv4
+and IPv6.
+
+Kuniyuki Iwashima (1):
+  selftest: net: Add test for TCP flow failover with ECMP routes.
+
+Sagarika Sharma (1):
+  ipv6: update route serial number on NETDEV_CHANGE
+
+ net/ipv6/route.c                              |   1 +
+ tools/testing/selftests/net/Makefile          |   1 +
+ .../selftests/net/tcp_ecmp_failover.sh        | 209 ++++++++++++++++++
+ 3 files changed, 211 insertions(+)
+ create mode 100755 tools/testing/selftests/net/tcp_ecmp_failover.sh
+
+-- 
+2.54.0.545.g6539524ca2-goog
+
