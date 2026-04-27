@@ -1,72 +1,31 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ABB836C597
-	for <linux-kselftest@vger.kernel.org>; Mon, 27 Apr 2026 12:56:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9FA7157487;
+	Mon, 27 Apr 2026 13:16:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777294603; cv=none; b=HseJSAJRLbUzTa9MCMaLqVYiAn8BWSyOYkYjW13S9peks7RpP2zVh6c5xA0WjTNeXChvWurcp4Qw1yvu2w/b77qwhLEgLZ1zJbP532+gtZskBodtUnQR3BsiBmrDr65MMSqCpuO65osn+txXNlPoQFOa0p0K71AbX9G5RpoOTfI=
+	t=1777295784; cv=none; b=Ac6XZIYqAQTORppAA5akU3AOilbYxv/hfh6Qyk8NTEX708ZSGyVQV4WQaUo+xP0c/6oib62e7V0xovI/MItZJCcdj9Ao19l4N8NOcKNSpKkOhWL0jpA5QgWpB+0vS+++j09CvMqGc9mCUx4GjZ8KUWBbhcuHGUjjydzoeCCxvCk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777294603; c=relaxed/simple;
-	bh=8t0VYON5zGhnHZloPadv6KiTma/S00GU/iIieLRl7Ew=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CjX9FW3cH+5Qc6a8G4wcPWq19nVKmZnOKK/aik3O+JN5pHzoxWYkZJ7Qcau4p2kjTPdDrKA1P3bBrWgQAfmYR/nj7zXxrdtw/ewXHOv91mSPG/L8R2AxVq97ps/BKvlSCTIM9XvNy8g/axTBeEW2IWVacsvu1onTkwb5NWHElV4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bW4vgcK7; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bW4vgcK7"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1777294601;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=+URdhFKjGzMvMSRmjpUoghA1XThJExmfB2vNvQphk6w=;
-	b=bW4vgcK7Wqcb3k/PGw61yZXNKv5IA9CU2GnHp3QWbxK96XhI7HYzs00MNversZC/n2yFSm
-	QKkX7phMjKY9YfNmTl5rS+hZ+ncXTKRcb5bgsl8nht26WrbFzwjrGYGlErXRMm6nAuWRTu
-	xVGSGSvTVDOC8u+xhjmHM9E4PeJ83zM=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-593-XwfXGd2nMw2EevgC7W6zrQ-1; Mon, 27 Apr 2026 08:56:40 -0400
-X-MC-Unique: XwfXGd2nMw2EevgC7W6zrQ-1
-X-Mimecast-MFC-AGG-ID: XwfXGd2nMw2EevgC7W6zrQ_1777294600
-Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-8cd722c1a69so1825151585a.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 27 Apr 2026 05:56:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777294600; x=1777899400;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+URdhFKjGzMvMSRmjpUoghA1XThJExmfB2vNvQphk6w=;
-        b=mH4lNfRgb/paqLK1DIPo5qjadvuTh/DISUhLuTPCO1bdLLZFleqe/YBzhe4fx9mNKg
-         OJbWhkOZdk5ijmYryg6z9O0yI7qmBdEqdJOVoTn4iEWdG/ReqrziDFqAnKfpds2C2O4O
-         g76mzW0X845ZsPOS+Bwy5aydFqKuuyUNY27KY2R02DDFRxxRTRTslj6iHW0FvGNUCGv2
-         p3Hjjlai2O8p+sms8u86fPiGqcHGRnGbg3oG7u85rBdlj2aYR5TMrz+qJLmWnhy4srrz
-         LMjlnd8r1I7DbU53qOtyPrMeCA/sjIyBpDaUN4VOte2sM35Eg460nPo8sw6gbxzkRsIN
-         Gpag==
-X-Forwarded-Encrypted: i=1; AFNElJ+TcCN2YHEUD6dTZ+MEe9iTdnu6GF+ui5TROeyleKJWnBwZQQG0tWPyko0pyXBHNfzC/D9F7G7s2i01O1nczxs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzQ2h/wLn2EnFJvSRkGXkc0K94nl8mKx716FT9LyJaWLTKS6NNs
-	QDn0zp+bMbC1bzJxhMHevSKUf3YXYQrs6+dWNRbl1Z/ir0rsXNKxprGMOOLJtzmYojdjYqdEbAg
-	yxBa8fBu8gXzt1iJueV6dXmjjGecOfEot9Tap4cp+D4VUtPtBA9FF54ei2Gf/kHt9dAd99Q==
-X-Gm-Gg: AeBDies0ZvfgEDcYmeNwR6jMWDelLa2iKoye2SuI46GH0EPKjf2zYaTF19ObzbibPGa
-	pd9/NwTdO436BkfL4+7j05TgB7GdfYqQQ7H1Yr+jlNII6bpDELmrmo+lTccRdXRF8Hdrk0Pylhn
-	SwXO9jZhJKz+JvqOfu/G50rC6XJzawaIQ3icemPHww7vA4HydTIbRfA9bcAvI3WGP7IW7G69RkA
-	gQ4YdtZZH4i30hgYwh34BWOFA/sLeU2yFdoYGbUPrMW07vZXWohTROzn91IGq2bp/Ck7nNt3XWc
-	9lnL+7BSyB6Fo5niXENOfXULawY20mxh2yWVOEtq29w8g1iKcrzYn4VG7sMt1RK8DE2Jf/AcWmb
-	fj5cUx+vi60P3pyY4iBI4iExx30BSt5GN38zn
-X-Received: by 2002:a05:620a:31a6:b0:8ee:f43a:bb6d with SMTP id af79cd13be357-8eef44a0499mr3559418685a.57.1777294599620;
-        Mon, 27 Apr 2026 05:56:39 -0700 (PDT)
-X-Received: by 2002:a05:620a:31a6:b0:8ee:f43a:bb6d with SMTP id af79cd13be357-8eef44a0499mr3559414585a.57.1777294599047;
-        Mon, 27 Apr 2026 05:56:39 -0700 (PDT)
-Received: from [192.168.2.110] ([69.159.169.238])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8b02aa4f1f9sm256378186d6.0.2026.04.27.05.56.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Apr 2026 05:56:38 -0700 (PDT)
-Message-ID: <67d7b067-97a8-4600-a9a6-46f3e797ffed@redhat.com>
-Date: Mon, 27 Apr 2026 08:56:27 -0400
+	s=arc-20240116; t=1777295784; c=relaxed/simple;
+	bh=9D3kSfGEhcTJtXAEVO0dJzxfTeTQl0IDfHqFrldNpYA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=Bis0NqqKB5JAhDjFBsxEJ6CNmMaIZ2zAoBn/NAfhzb8rwomrM0azP7pCfj2k41J/f8rQqk3AnDAs2VbHKRS59/1EM70wIt638eiDTuqlIj8g8H/INqzPdY8Hf5jsF8sUl9yrhe3ZKF8ghKg65iR8MKF3dckTeEwksJeL4LByYYk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei-partners.com; spf=pass smtp.mailfrom=huawei-partners.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei-partners.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei-partners.com
+Received: from mail.maildlp.com (unknown [172.18.224.107])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4g43wn4p6qzJ467g;
+	Mon, 27 Apr 2026 21:16:09 +0800 (CST)
+Received: from mscpeml500003.china.huawei.com (unknown [7.188.49.51])
+	by mail.maildlp.com (Postfix) with ESMTPS id EDF944058E;
+	Mon, 27 Apr 2026 21:16:11 +0800 (CST)
+Received: from [10.123.123.154] (10.123.123.154) by
+ mscpeml500003.china.huawei.com (7.188.49.51) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Mon, 27 Apr 2026 16:16:07 +0300
+Message-ID: <14036b07-413e-4dcd-a363-e7f834d85da3@huawei-partners.com>
+Date: Mon, 27 Apr 2026 16:16:07 +0300
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -74,133 +33,270 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 43/53] selftests/mm: migration: add setup of HugeTLB
- pages
-To: Mike Rapoport <rppt@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- David Hildenbrand <david@kernel.org>,
- Baolin Wang <baolin.wang@linux.alibaba.com>, Barry Song <baohua@kernel.org>,
- Dev Jain <dev.jain@arm.com>, Donet Tom <donettom@linux.ibm.com>,
- Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Lance Yang <lance.yang@linux.dev>, Leon Romanovsky <leon@kernel.org>,
- Lorenzo Stoakes <ljs@kernel.org>, Mark Brown <broonie@kernel.org>,
- Michal Hocko <mhocko@suse.com>, Nico Pache <npache@redhat.com>,
- Peter Xu <peterx@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
- Sarthak Sharma <sarthak.sharma@arm.com>, Shuah Khan <shuah@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Vlastimil Babka <vbabka@kernel.org>,
- Zi Yan <ziy@nvidia.com>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org
-References: <20260418105539.1261536-1-rppt@kernel.org>
- <20260418105539.1261536-44-rppt@kernel.org>
- <a8510cbd-4a30-460c-b870-a250ceb8a522@redhat.com>
- <ae3v1cyMLbcvJtYW@kernel.org>
-Content-Language: en-US, en-CA
-From: Luiz Capitulino <luizcap@redhat.com>
-In-Reply-To: <ae3v1cyMLbcvJtYW@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [RFC PATCH 00/19] mm/damon: introduce data attributes monitoring
+To: SeongJae Park <sj@kernel.org>
+CC: "Liam R. Howlett" <liam@infradead.org>, Andrew Morton
+	<akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>, Jonathan
+ Corbet <corbet@lwn.net>, Lorenzo Stoakes <ljs@kernel.org>, Masami Hiramatsu
+	<mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Michal Hocko <mhocko@suse.com>, Mike Rapoport <rppt@kernel.org>, Shuah Khan
+	<shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, Steven Rostedt
+	<rostedt@goodmis.org>, Suren Baghdasaryan <surenb@google.com>, Vlastimil
+ Babka <vbabka@kernel.org>, <damon@lists.linux.dev>,
+	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <linux-mm@kvack.org>,
+	<linux-trace-kernel@vger.kernel.org>
+References: <20260426205222.93895-1-sj@kernel.org>
+Content-Language: en-US
+From: Gutierrez Asier <gutierrez.asier@huawei-partners.com>
+In-Reply-To: <20260426205222.93895-1-sj@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: mscpeml500004.china.huawei.com (7.188.26.250) To
+ mscpeml500003.china.huawei.com (7.188.49.51)
 
-On 2026-04-26 06:58, Mike Rapoport wrote:
-> On Fri, Apr 24, 2026 at 01:11:45PM -0400, Luiz Capitulino wrote:
->> On 2026-04-18 06:55, Mike Rapoport wrote:
->>> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
->>>
->>> migration skips HugeTLB tests if there are no free huge pages
->>> prepared by a wrapper script.
->>>
->>> Add setup of HugeTLB pages to the test and make sure that the original
->>> settings are restored on the test exit.
->>>
->>> Since kselftest_harness runs fixture setup and the tests in child
->>> processes, use HUGETLB_SETUP_DEFAULT_PAGES() that defines a constructor
->>> that runs in the main process and add verification that there are enough
->>> free huge pages to the tests that use them.
->>>
->>> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
->>> ---
->>>    tools/testing/selftests/mm/migration.c | 8 ++++++++
->>>    1 file changed, 8 insertions(+)
->>>
->>> diff --git a/tools/testing/selftests/mm/migration.c b/tools/testing/selftests/mm/migration.c
->>> index ccf42002ce86..61fb00953f83 100644
->>> --- a/tools/testing/selftests/mm/migration.c
->>> +++ b/tools/testing/selftests/mm/migration.c
->>> @@ -23,6 +23,8 @@
->>>    #define MAX_RETRIES	100
->>>    #define ALIGN(x, a)	(((x) + (a - 1)) & (~((a) - 1)))
->>> +HUGETLB_SETUP_DEFAULT_PAGES(1)
->>
->> Hey Mike,
->>
->> I've been reviewing and testing this series and got a reproducible issue
->> with this test when running it on a x86 KVM guest with 88 vCPUs.
->>
->> The issue is that, when executing the full MM suite with
->> sudo ./run_vmtests.sh -d -a, all 6 migration test pass but it doesn't exit.
->> Instead, it gets stuck after this output:
->>
->> """
->> # # PASSED: 6 / 6 tests passed.
->> # # Totals: pass:6 fail:0 xfail:0 xpass:0 skip:0 error:0
->> """
->>
->> Getting a backtrace from gdb I see:
->>
->> """
->> #0  0x00007efd2f2c247b in __lll_lock_wait_private () from /lib64/libc.so.6
->> #1  0x00007efd2f26fa88 in __run_exit_handlers () from /lib64/libc.so.6
->> #2  0x00007efd2f26fabe in exit () from /lib64/libc.so.6
->> #3  0x0000000000404f2e in hugepage_restore_settings_sighandler ()
->> #4  <signal handler called>
->> #5  0x00007efd2f32f416 in __unregister_atfork () from /lib64/libc.so.6
->> #6  0x00007efd2f26f338 in __cxa_finalize () from /lib64/libc.so.6
->> #7  0x00007efd2f4548c7 in __do_global_dtors_aux () from /lib64/libm.so.6
->> #8  0x00007ffd66ae0320 in ?? ()
->> #9  0x00007efd2f55b2d2 in _dl_call_fini (closure_map=0x7efd2f5500c0) at dl-call_fini.c:43
->> """
->>
->> Could we be messing with libc internal state somehow? I also get systemd
->> services hung when I try to reboot.
-> 
-> I don't think we are messing with libc internal state, but we surely leave
-> zombies around.
-> All the tests that fork() terminate the children with kill() but they never
-> call wait*() to collect the exit status.
+Hi SeonJae,
 
-Right!
+On 4/26/2026 11:52 PM, SeongJae Park wrote:
+> TL; DR
+> ======
+> 
+> Extend DAMON for monitoring general data attributes other than accesses.
+> This is for enabling light-weight page type (e.g., belonging cgroup)
+> aware monitoring in short term.  In long term, this will help extending
+> DAMON for multiple access events capture primitives (e.g., page faults
+> and PMU) and eventually pivotting DAMON to a "Data Attributes Monitoring
+> and Operations eNgine" in long term.
 
->> Some of the migration tests fork() and then kill() their children
->> processes. Won't those all restore the hugetlb state concurrently
->> from hugepage_restore_settings_atexit()?
-> 
-> Yeah, I missed the kill()s :/
->   
->> Also, for shared_anon_htlb, don't we need to reserve a HugeTLB page per
->> children?
-> 
-> We only mmap() a single huge page in the parent, the children don't create
-> new mappings.
+Very interesting. Looking forward to seeing this in upstream.
 
-You're right, I missed the fact that the children only read from the
-page.
+> 
+> Background: High Cost of Page Level Properties Monitoring
+> =========================================================
+> 
+> DAMON is initially introduced as a Data Access MONitor.  It has been
+> extended for not only access monitoring but also data access-aware
+> system operations (DAMOS).  But still the monitoring part is only for
+> data accesses.
+> 
+> Data access patterns is good information, but some users need more
+> holistic views.  Particularly, users want to show the access pattern
+> information together with the types of the memory.  For example, users
+> who work for making huge pages efficiently want to know how much of
+> DAMON-found hot/cold regions are backed by huge pages.  Users who run
+> multiple workloads with different cgroups want to know how much of
+> DAMON-found hot/cold regions belong to specific cgroups.
+> 
+> For the user demand, we developed a DAMOS extension for page level
+> properties based monitoring [1], which has landed on 6.14.  Using the
+> feature, users can inform the page level data properties that they are
+> interested in, in a flexible format that uses DAMOS filters.  Then,
+> DAMON applies the filters to each folio of the entire DAMON region and
+> lets users know how many bytes of memory in each DAMON region passed the
+> given filters.
+> 
+> This gives page level detailed and deterministic information to users.
+> But, because the operation is done at page level, the overhead is
+> proportional to the memory size.  It was useful for test or debugging
+> purposes on a small number of machines.  But it was obviously too heavy
+> to be enabled always on all machines running the real user workloads.
+> For real world workloads, it was recommended to use the feature with
+> user-space controlled sampling approaches.  For example, users could do
+> the page level monitoring only once per hour, on randomly selected one
+> percent of machines of their fleet.  If the runtime and the  size of the
+> fleet is long and big enough, it should provide statistically meaningful
+> data.
+> 
+> But users are too busy to implement such controls on their own.
+> 
+> Data Attributes Monitoring
+> ==========================
+> 
+> Extend DAMON to monitor not only data accesses, but also general data
+> attributes.  Do the extension while keeping the main promise of DAMON,
+> the bounded and best-effort minimum overhead.
+> 
+> Allow users to specify what data attributes in addition to the data
+> access they want to monitor.  Users can install one 'data probe' per
+> data attribute of their interest for this purpose.  The 'data probe'
+> should be able to be applied to any memory, and determine if the given
+> memory has the appropriate data attribute.  E.g., if memory of physical
+> address 42 belongs to cgroup A.  Each 'data probe' is configured with
+> filters that are very similar to the DAMOS filters.
+> 
+> When DAMON checks if each sampling address memory of each region is
+> accessed since the last check, it applies data probes if registered.
+> Same to the number of access check-positive samples accounting
+> (nr_accesses), it accounts the number of each data probe-positive
+> samples in another per-region counters array, namely 'probe_hits'. When
+> DAMON resets nr_accesses every aggregation interval, it resets
+> 'probe_hits' together.
+> 
+> Users can read 'probe_hits' just before the values are reset.  In this
+> way, users can know how many hot/cold memory regions have data
+> attributes of their interest.  E.g., 30 percent of this system's hot
+> memory is belonging to cgroup A and 80 percent of the hot cgroup A
+> memory is backed by huge pages.
+> 
+> Patches Sequence
+> ================
+> 
+> First eight patches implement the core feature, interface and the
+> working support.  Patch 1 introduces data probe data structure, namely
+> damon_probe.  Patch 2 extends damon_ctx for installing data probes.
+> Patch 3 introduces another data structure for filters of each data
+> probe, namely damon_filter.  Patch 4 updates damon_ctx commit function
+> to handle the probes.  Patch 5 extends damon_region for the per-region
+> per-probe positive samples counter, namely probe_hits.  Patch 6 extends
+> damon_operations for applying probes on the underlying DAMON operations
+> implementation.  Patch 7 updates kdamond_fn() to invoke the probes
+> applying callback.  Patch 8 finally implements the probes support on
+> paddr ops.
+> 
+> Eight changes for user interface (patches 9-16) come next.  Patches 9-13
+> implements sysfs directories and files for setting data probes, namely
+> probes directory, probe directory, filters directory, filter directory
+> and filter directory internal files, respectively.  Patch 14 connects
+> the user inputs that are made via the sysfs files to DAMON core.
+> Patch 15 implements sysfs files for showing the per-region per-probe
+> positive samples count, namely probe_hits.  Patch 16 introduces a new
+> tracepoint for showing the counts via tracefs.
+> 
+> Patch 14 adds a selftest for the sysfs files.
+> 
+> Patches 15 and 16 documents the design and usage of the new feature,
+> respectively.
+> 
+> Discussions
+> ===========
+> 
+> This allows the page properties monitoring with overhead that is low
+> enough to be enabled always on real world workloads.  Because the
+> sampling time for access check is reused for data attributes check,  the
+> upper-bounded and best-effort minimum overhead of DAMON is kept.
+> Because the sampling memory for access check is reused for data
+> attributes check, additional overhead is minimum.
+> 
+> Still DAMOS-based page level properties monitoring should be useful,
+> because it provides a deterministic page level information.  When in
+> doubt of the sampling based information, running DAMOS-based one
+> together and comparing the results would be useful, for debugging and
+> tuning.
+> 
+> Plan for Dropping RFC tag
+> =========================
+> 
+> The user ABI for reading probe_hits is not yet convincing.  It is
+> exposed to users by a tracepoint and new sysfs file.  For the
+> tracepoint, a new one namely damon:damon_aggregated_v2 is introduced.
+> The name is not convincing, and its internal mechanism seems to have
+> room to be improved before dropping RFC.  For the sysfs, a file under
+> the DAMOS-tried region directory namely 'probe_hits' is added.  Reading
+> it returns four probe_hits values with ',' as a separator.  With the
+> maximum number of data probes, this should work.  This can make future
+> changes of the limit difficult.  I will try to find a better way before
+> dropping the RFC tag.  Maybe 'probe_hits/' directory having files of
+> name '0' to 'N-1' for each of user-registered 'N' data probes.
+> 
+> I'm currently hoping to drop the RFC tag by 7.2-rc1.
+> 
+> Future Works: Short Term
+> ========================
+> 
+> This series is introducing only a single type of data attribute:
+> anonymous page.  Once this is landed, I will extend it for
+> cgroup-belonging, so that we can do cgroup-level monitoring with low
+> overhead.  After that, I may further work on supporting all DAMOS filter
+> types.  And as demands are found, we could extend the types.
+> 
+> This version of implementation is limiting the maximum number of data
+> probes to four.  I will try to find a way to remove the limit in future,
+> if it is easy to do.  I personally think it should be enough for common
+> use cases, though, and therefore not giving high priority at the moment.
+> 
+> Future Works: Long Term
+> =======================
+> 
+> There are user requests for extending DAMON with detailed access
+> information, for example, per-CPUs/threads/read/writes monitoring.  For
+> that, I was working [2] on extending DAMON to use page fault events as
+> another access check primitives, and making the infrastructure flexible
+> for future use of yet another access check primitive.  Actually there is
+> another ongoing work [3] for extending DAMON with PMU events.  The
+> motivation of the work is reducing the overhead, though.
+> 
+> In my work [2], I was introducing a new interface for access sampling
+> primitives control.  Now I think this data probe interface can be used
+> for that, too.  That is, data access becomes just one type of data
+> attribute.  Also, pg_idle-confirmed access, page fault-confirmed access,
+> and PMU event-confirmed access will be different types of data
+> attributes.
+> 
+> The regions adjustment mechanism is currently working based on the
+> access information.  That's because DAMON is designed for data access
+> monitoring.  That is, data access information is the primary interest,
+> and therefore DAMON adjusts regions in a way that can best-present the
+> information.
+> 
+> Once data access becomes just one of data attributes, there is no reason
+> to think data access that special.  There might be some users not
+> interested in access at all but want to know the location of memory of
+> specific type.  Data probes interface will allow doing that.  Further,
+> we could extend the interface to let users set any data attribute as the
+> 'primary' attribute.  Then, DAMON will split and merge regions in a way
+> that can best-present the 'primary' attributes.
+> 
+> DAMOS will also be extended, to specify targets based on not only the
+> data access pattern, but all user-registered data attributes.  From this
+> stage, we may be able to call DAMON as a "Data Attributes Monitoring and
+> Operations eNgine".
+> 
+> [1] https://lore.kernel.org/20250106193401.109161-1-sj@kernel.org
+> [2] https://lore.kernel.org/20251208062943.68824-1-sj@kernel.org/
+> [3] https://lore.kernel.org/20260423004211.7037-1-akinobu.mita@gmail.com
+> 
+> SeongJae Park (19):
+>   mm/damon/core: introduce struct damon_probe
+>   mm/damon/core: embed damon_probe objects in damon_ctx
+>   mm/damon/core: introduce damon_filter
+>   mm/damon/core: commit probes
+>   mm/damon/core: introduce damon_region->probe_hits
+>   mm/damon/core: introduce damon_ops->apply_probes
+>   mm/damon/core: do data attributes monitoring
+>   mm/damon/paddr: support data attributes monitoring
+>   mm/damon/sysfs: implement probes dir
+>   mm/damon/sysfs: implement probe dir
+>   mm/damon/sysfs: implement filters directory
+>   mm/damon/sysfs: implement filter dir
+>   mm/damon/sysfs: implement filter dir files
+>   mm/damon/sysfs: setup probes on DAMON core API parameters
+>   mm/damon/sysfs-schemes: implement tried_region/probe_hits file
+>   mm/damon: trace probe_hits
+>   selftests/damon/sysfs.sh: test probes dir
+>   Docs/mm/damon/design: document data attributes monitoring
+>   Docs/admin-guide/mm/damon/usage: document data attributes monitoring
+> 
+>  Documentation/admin-guide/mm/damon/usage.rst |  44 +-
+>  Documentation/mm/damon/design.rst            |  37 ++
+>  include/linux/damon.h                        |  60 +++
+>  include/trace/events/damon.h                 |  41 ++
+>  mm/damon/core.c                              | 182 +++++++
+>  mm/damon/paddr.c                             |  45 ++
+>  mm/damon/sysfs-schemes.c                     |  30 ++
+>  mm/damon/sysfs.c                             | 502 +++++++++++++++++++
+>  tools/testing/selftests/damon/sysfs.sh       |  48 ++
+>  9 files changed, 982 insertions(+), 7 deletions(-)
+> 
+> 
+> base-commit: 8f22aa2e28454419ed2031119ad32ea4a6c9f1f1
 
->> And there's another issue: when running the migration test individually,
->> private_anon_htlb gets skipped. I guess it's because the previous test
->> is restoring the HugeTLB state:
-> 
-> It could be.
-> 
-> I pushed the updated version that has the fixes for both zombie and
-> signal issues:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git/log/?h=mm-selftest/v3
-> 
-> Would be great if you can test it in your setup.
+My main concern is about potential pollution of sysfs. DAMON is already
+complex to set up, with a lot of knobs. Adding more configuration options
+may make admin's job more complex.
 
-This works! Both issues are fixed: the migration test completes w/o
-hanging and when I run it individually all tests run.
+Do you plan to support this extension in damo user space?
 
-One last question: should we munmap() the mappings in this test? Though
-I understand this goes beyond your series goal.
+-- 
+Asier Gutierrez
+Huawei
 
