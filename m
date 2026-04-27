@@ -1,110 +1,91 @@
-Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3FCA35F603
-	for <linux-kselftest@vger.kernel.org>; Mon, 27 Apr 2026 21:20:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A90F4303C83
+	for <linux-kselftest@vger.kernel.org>; Mon, 27 Apr 2026 22:36:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777324813; cv=none; b=BKN0DaB7bpkn7B/phh401zwhWZvIU0u3GInXuuv1UV3KwKYkdo8x+3+uK12nR2EyGT8hs+Jx6HNKAfgjgViyfY5o6WNmT+l3vy5v1P0DqbsHEx0dOfq973lB7R89lB6C6p5s/yqMGV03yvK4yjsAcwZ/ot2hpPjnQfenRLt+9NY=
+	t=1777329387; cv=none; b=u85eeglcM6qvfFKemYl208oi8sTWZV5R2oxxMH0CQoNk8AWMqSgwd271SwGkcoYM2+WTiNvfaUL0Ds5WlQc7QZhjtJxz/WKeWfrmGn+yAcz3vwqpseHhYgcPmH4Fe9UOAWkGOj9rIo7DFRvxAfMvh4B9FqTeRgN7+rSFqHa3T6g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777324813; c=relaxed/simple;
-	bh=wCXqIOOlIDnSn6wujP2KbKL2ztP/1h1QOB0MF5jkUzE=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=rkyDe5RRKHS8V+AAleUB18qReBx868HHxTmEEz3U9DuYencFLlUTcxDB9JNs7husLKIPQDET7xKH60plKBpQWDU+qrZR0ULkhjx8mK7fr4ZBOe1s3j2OzXAQqYuN5G6Dmoroh0xjh0Sq99uxol67HiR9c35ucrvC5vKhvRliDME=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=S0ltqXpB; arc=none smtp.client-ip=209.85.210.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1777329387; c=relaxed/simple;
+	bh=MnOzzzamYXiwghHrVckJNVajr4kLMULxSd8oeLokv0k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NvAgvBmTBZBlqpF65nh2h2m/uBlMa9ngdjG0XIACECARTktK3lpC6BUJAlx1LtsfO8Opkgu2USmIh/mcSTZ6u3vrCqJfiD+1WKjCvdMF7wCd2jDYESikwWVYnVw/UNPtpjRzpsfvzy21KdkXisR2fmUwpxQkG53kHKnF+eiTKik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=npN4mFu9; arc=none smtp.client-ip=91.218.175.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="S0ltqXpB"
-Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-82f74f0e3c6so7012421b3a.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 27 Apr 2026 14:20:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1777324812; x=1777929612; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=L/MdLtT/yrkXJOR0VhZtn2A+WvIE3I+Wl3TlhiqBWNg=;
-        b=S0ltqXpB/1X5RzLmttfSNPuKUVDOgZNT/ZNx4LZJ5lrYLCRPb+WNJp8NKpDsV1rv1A
-         p4F2WcT/qB3uVk19pUgJH5+/ZeBdnzHaBWy9F2oBn/ZZlxYlMAu+ooB5Mc00Sm2UCblT
-         BpFXTbttLSQqKz/mCRc+T89+FhRa831hCglH77YDMSXfue+Cn1YlkFjqwJgpPe1Fyo5N
-         Gerh0PE1Ie0PRe1XU16OXrI/ag3s2DP8VXBSukJFGOltSYKLS8AQ6+40eSGDeF7YQpI6
-         XhJIbWL+GJ5zY//Kp9sa8XHO0ars3PS7a5amowYGe6TnNEq4Ve94frChExt0DWsuX4tV
-         OhPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777324812; x=1777929612;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=L/MdLtT/yrkXJOR0VhZtn2A+WvIE3I+Wl3TlhiqBWNg=;
-        b=avTGoLfldOnrOSzI4Zi3Jyfe87XB9x046NoV9m5FPKxCnGdomTK5UGqkhPcOw/imn0
-         ybMY19uNHu6If6s0Kj4FzPDs+b42upX+9yN2Yje3gAMvJFzD9ZGuWnw01YNsqLgn83DP
-         rlsXNG5LIdTCFiOLJF9Bu6oVkkHiFEVoJeLLqQL/mYGdT0LyjCTC1A5ng6OfRsFYVZ7D
-         y29HKcGPysz2zvLrVf2v6Cx+CSup089V8+VqjCIN5k/Ru1+YvPms108FpDeSvk4EJL7h
-         khlkDkwG1mgVxeCaorDNGpXUEJfK+AA8dCh/YwjBUmpj1BgCwmRW8zZQuhWZhS+u/C52
-         UiWQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+9dtpOftSu1q+kVsIcyyYeLpJ3eU/B30Mj85kUNl0HzGcZF7xjrBSQhIE17DYxxQbmSNjdjShZusJPaONqiIU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwA00lnXfarPzOZwaCM3UMttA3IQnNZsG+W0F17EAyKaAPPnmLW
-	glEvZn6dOXFMdB2ZPOnAEI/LnvmwNtMDnCPhUVkD/0426IrSAW5uEWX3ZmqajxHFy0a09R7ZJ1C
-	v8dyoEw==
-X-Received: from pfoo23.prod.google.com ([2002:a05:6a00:1a17:b0:82f:aad4:3985])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:408b:b0:82d:29f:d003
- with SMTP id d2e1a72fcca58-834ddb0bbeamr173477b3a.12.1777324811618; Mon, 27
- Apr 2026 14:20:11 -0700 (PDT)
-Date: Mon, 27 Apr 2026 14:20:10 -0700
-In-Reply-To: <20260427204847.112899-4-tycho@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="npN4mFu9"
+Date: Mon, 27 Apr 2026 15:36:03 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1777329373;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=LsQU2/LjFk+qRAd2b5lbs1cknpmT2BXH5jVMeLp8gG0=;
+	b=npN4mFu9PZrqDAG0R8FzMVWqfso7n+haulHAzPTGd9Rax1uBCE5S/e/on4S6r+8qovHxsa
+	5JNXDhWy0RnO5IQBexuNjeIv5Wcg68hyBJprcoXHFGKpzrnTcm4MAPmjcpwZjLCMtAwuO5
+	/Sm3VA3mUeZh15hz1Jcju3Yft/En86U=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+To: nhudson@akamai.com
+Cc: bot+bpf-ci@kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org, 
+	willemb@google.com, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	eddyz87@gmail.com, memxor@gmail.com, shuah@kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, martin.lau@kernel.org, 
+	yonghong.song@linux.dev, clm@meta.com, ihor.solodrai@linux.dev
+Subject: Re: [PATCH v5 6/6] selftests/bpf: tc_tunnel validate decap GSO state
+Message-ID: <2026427222011._PrH.martin.lau@linux.dev>
+References: <20260420104051.1528843-7-nhudson@akamai.com>
+ <2ea5cc41fd138e94dc34b1d4073833118b93ae48d802aabe480e355e27417b62@mail.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260427204847.112899-1-tycho@kernel.org> <20260427204847.112899-4-tycho@kernel.org>
-Message-ID: <ae_TCofu4bHP_Ch-@google.com>
-Subject: Re: [PATCH v2 3/4] KVM: SEV: Add the kvm-amd.rapl_disable module parameter
-From: Sean Christopherson <seanjc@google.com>
-To: Tycho Andersen <tycho@kernel.org>
-Cc: Ashish Kalra <ashish.kalra@amd.com>, Tom Lendacky <thomas.lendacky@amd.com>, 
-	John Allen <john.allen@amd.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
-	"David S. Miller" <davem@davemloft.net>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, linux-crypto@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Kim Phillips <kim.phillips@amd.com>, 
-	Alexey Kardashevskiy <aik@amd.com>, Nikunj A Dadhania <nikunj@amd.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, Dapeng Mi <dapeng1.mi@linux.intel.com>, 
-	Kees Cook <kees@kernel.org>, Marco Elver <elver@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Li RongQing <lirongqing@baidu.com>, Eric Biggers <ebiggers@kernel.org>, 
-	"Paul E. McKenney" <paulmck@kernel.org>, linux-doc@vger.kernel.org, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2ea5cc41fd138e94dc34b1d4073833118b93ae48d802aabe480e355e27417b62@mail.kernel.org>
+X-Migadu-Flow: FLOW_OUT
 
-On Mon, Apr 27, 2026, Tycho Andersen wrote:
-> From: "Tycho Andersen (AMD)" <tycho@kernel.org>
+On Mon, Apr 20, 2026 at 11:19:30AM +0000, bot+bpf-ci@kernel.org wrote:
+> > +	if (!shinfo->gso_size)
+> > +		return TC_ACT_OK;
+> > +
+> > +	if ((flags & BPF_F_ADJ_ROOM_DECAP_L4_UDP) &&
+> > +	    (shinfo->gso_type & SKB_GSO_UDP_TUNNEL_MASK))
+> > +		return TC_ACT_SHOT;
+> > +
+> > +	if ((flags & BPF_F_ADJ_ROOM_DECAP_L4_GRE) &&
+> > +	    (shinfo->gso_type & (SKB_GSO_GRE | SKB_GSO_GRE_CSUM)))
+> > +		return TC_ACT_SHOT;
+> > +
+> > +	if ((flags & BPF_F_ADJ_ROOM_DECAP_IPXIP4) &&
+> > +	    (shinfo->gso_type & SKB_GSO_IPXIP4))
+> > +		return TC_ACT_SHOT;
+> > +
+> > +	if ((flags & BPF_F_ADJ_ROOM_DECAP_IPXIP6) &&
+> > +	    (shinfo->gso_type & SKB_GSO_IPXIP6))
+> > +		return TC_ACT_SHOT;
 > 
-> Add a user-visible way to set the RAPL_DIS bit for SNP init.
+> Are these IPXIP4 and IPXIP6 checks reachable?
 > 
-> Since setting RAPL_DIS affects the whole system, put the module parameter
-> in kvm_amd instead of in the CCP driver to hopefully make it more obvious
-> to admins.
+> Looking earlier in decap_internal(), for IPPROTO_IPIP and IPPROTO_IPV6
+> cases, the function only sets BPF_F_ADJ_ROOM_DECAP_L3_IPV4 and
+> BPF_F_ADJ_ROOM_DECAP_L3_IPV6 on the flags variable (around the protocol
+> switch statement).
 > 
-> Signed-off-by: Tycho Andersen (AMD) <tycho@kernel.org>
-> ---
->  Documentation/admin-guide/kernel-parameters.txt | 5 +++++
->  arch/x86/kvm/svm/sev.c                          | 8 ++++++++
->  2 files changed, 13 insertions(+)
+> Because BPF_F_ADJ_ROOM_DECAP_IPXIP4 and BPF_F_ADJ_ROOM_DECAP_IPXIP6 are
+> never added to flags, wouldn't these validation checks always be skipped?
 > 
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index 4d0f545fb3ec..2b50eed8664c 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -3207,6 +3207,11 @@ Kernel parameters
->  			max_snp_asid == min_sev_asid-1, will effectively make
->  			SEV-ES unusable.
->  
-> +	kvm-amd.rapl_disable=	[KVM,AMD] Whether to disable RAPL
-> +			(Running Average Power Limit) when initializing the SNP
-> +			firmware. This disables the counters for the entire system until an
-> +			SNP shutdown command is issued.
+> Ref: https://lore.kernel.org/bpf/20260416124324.B0CE6C2BCAF@smtp.kernel.org/
 
-I'm pretty sure I said this earlier: KVM absolutely should not be able to disable
-RAPL for the entire system.  That needs to be a power management thing.  KVM then
-needs to communicate (and enforce?) the policy to userspace.
+This comment has been mentioned again. It seems legit. Please don't ignore
+the review comment. Otherwise, it will be assumed that the solutions are
+being worked on and patchwork will eventually archive the patches after
+some time.
+
+Also, there is a 'SYS(fail_close_ns_client, "ethtool -K veth1 tso off");'
+in prog_tests/test_tc_tunnel.c. Is the shinfo->gso_type ever set?
+What will break if tso is kept on?
