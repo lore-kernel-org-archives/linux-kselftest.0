@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AC313988F9;
-	Mon, 27 Apr 2026 07:49:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4715370D7B;
+	Mon, 27 Apr 2026 08:06:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777276194; cv=none; b=Ny7WQuR5OxAbZoHdzevlr0ok4SnvB+1/o45JGJGHNIdqwnO2Jtc2AsErjy3kolshpUgET9CBpyk5DR9rPAiL9VOEpbQc3uyh+anYbpw1KU0jv3kA6dRS3aeYy/FU8cPcFshz6CD5qOVEW4WwV6Jl9Oy6y81187CaHwwLqJjWkqo=
+	t=1777277177; cv=none; b=fcAdZYQSDcLalMMcOKHKPM/AP39hP0hdIN4JrPD8lvjepSwfE91GfL2jI5U5lV1tzijhl0M2XCurdU2b/+jXjk/7aru38VSq0Eec2pTqcZCmqRp7donjudIkc2AcTX2n/jmvsX2P9dFFxdKb0nTSNb9J06ZI2ViUk4U1wBJdrCs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777276194; c=relaxed/simple;
-	bh=8PAx/Lj/i0A7i3Xe8MtXIluINnIK7hkHmrHp0hfdwsM=;
+	s=arc-20240116; t=1777277177; c=relaxed/simple;
+	bh=AL1E4Adq2PIOW/A91Vatqt/l1w6K52dJEV/Y71qWN1k=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gSCiqyQ18iDKWekRpBLCWelcSjO2W+Hu01CSrYumWrgyeT38IZT21KTHIuHKQqnsDZZlhKtuLp9Ihip7Sw3O3YjX5O/+dP6yVj+IbtzOgy66C42C+eWFv7QRNH+svz7dbVU6cMNkvHisKqsMWaCs1sIFaSUVq9J3+q0oJzmuNMo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SPJ6hkYf; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=c8degn/IuxIa8BmBDFzf2vjBx5JKmyiGe6TpKa1sqfOoqh3XNj09cMfw69pjtFpuFkcPT7GcuELtm/ToC54I9AYsKPGow1iDjQAcQHOhegErE9OjfnJjq8p9CtFa9aK5wt0N2eS5kajxJfDX0EjA+qPtzDliH9pCijGIpXBJnsE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g2t8kzqx; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SPJ6hkYf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1921DC19425;
-	Mon, 27 Apr 2026 07:49:49 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g2t8kzqx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C85CAC19425;
+	Mon, 27 Apr 2026 08:06:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777276193;
-	bh=8PAx/Lj/i0A7i3Xe8MtXIluINnIK7hkHmrHp0hfdwsM=;
+	s=k20201202; t=1777277177;
+	bh=AL1E4Adq2PIOW/A91Vatqt/l1w6K52dJEV/Y71qWN1k=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=SPJ6hkYfzN+5b4CnLo73B7aefn99CtQpDhkPueDg+mQloUliBGWOb/Xrp00C7QNdp
-	 S7HMxRBB+228JCvtKo4IeL9TXUdavserDjkvSzEZT2goKRjEpwMGUXdJJLN/ssXWM1
-	 40Svp9zP3dXZlHl7tRBWhk263pDl3h43ONP8u9c0XLAjit8AXW45sAMS1IJ4A9gRjg
-	 MmC5WGSNb3sTuIvNgRPxL0pU2CoZEGsyMMrFbNc5Cj5eeEFIUiIKB/KDB1BQXRGpnj
-	 xubxSKqDA8DfAdMUjz6vMEYXkuONh4km4VVYPU7CkCNjjKx+2RBkt2OSpISWCz/00Q
-	 iR1LlxwoHjP2A==
-Message-ID: <40a48a9a-57d6-4658-89a0-68891b5bda99@kernel.org>
-Date: Mon, 27 Apr 2026 09:49:46 +0200
+	b=g2t8kzqx8vmMdRBX237gzVsvhp4YeQG0hyJwqWNhyD+BNaIu2JVhl8NgGt2/VuzEy
+	 DYsRObdR2R/37JaVsGF6XFQjkcaJ6kgXM8VDIvx8g87a0uYkR8GTAFbxuP2xgFDaj0
+	 TyFJRyuIsZ9bYcr1jLzPfJqMI5hnuQe4xC+1c2wV/ZEIeIgWFwFFeInviigGghXnki
+	 +dUR6jU7l9dR3CONroIcNwg6NF7K1oZ1NwvjSDIb1aZSmx32bnSXkgHxlr1yT4aUeq
+	 BV+sQ1qlzjf/58IV8br2f3kpBpf+NpO/6iGUicKamkSoA2WjWzq6eLwx9lHmG6RjcT
+	 937RrvkSaOT0g==
+Message-ID: <4899bbfa-4d6e-41ff-9318-1872a6b91afa@kernel.org>
+Date: Mon, 27 Apr 2026 10:06:06 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,16 +35,26 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] mm/madvise: reject invalid process_madvise() advice for
- zero-length vectors
-To: fujunjie <fujunjie1@qq.com>, Andrew Morton <akpm@linux-foundation.org>
-Cc: "Liam R . Howlett" <Liam.Howlett@oracle.com>,
- Lorenzo Stoakes <ljs@kernel.org>, Vlastimil Babka <vbabka@kernel.org>,
- Jann Horn <jannh@google.com>, Shuah Khan <shuah@kernel.org>,
- Christian Brauner <brauner@kernel.org>, SeongJae Park <sj@kernel.org>,
- linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <tencent_98F3571EF9236437E5165F5C08CF258A9E08@qq.com>
+Subject: Re: [PATCH 7.2 v3 03/12] mm/huge_memory: remove READ_ONLY_THP_FOR_FS
+ from file_thp_enabled()
+To: Zi Yan <ziy@nvidia.com>, "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+ Lorenzo Stoakes <ljs@kernel.org>
+Cc: Song Liu <songliubraving@fb.com>, Chris Mason <clm@fb.com>,
+ David Sterba <dsterba@suse.com>, Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>, Nico Pache <npache@redhat.com>,
+ Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
+ Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
+ Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Shuah Khan <shuah@kernel.org>, linux-btrfs@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+References: <20260418024429.4055056-1-ziy@nvidia.com>
+ <20260418024429.4055056-4-ziy@nvidia.com>
+ <74D4C50B-CB20-45B3-8E7E-E9A499701F61@nvidia.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -91,58 +101,62 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <tencent_98F3571EF9236437E5165F5C08CF258A9E08@qq.com>
+In-Reply-To: <74D4C50B-CB20-45B3-8E7E-E9A499701F61@nvidia.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 4/26/26 13:08, fujunjie wrote:
-> process_madvise() validates the advice while walking the imported iovec.
-> If the iovec has zero total length, vector_madvise() never enters the
-> loop and returns 0 without checking whether the advice value is valid.
+On 4/25/26 14:00, Zi Yan wrote:
+> On 17 Apr 2026, at 22:44, Zi Yan wrote:
 > 
-> For a local mm, such as process_madvise(PIDFD_SELF, ...), the remote-only
-> process_madvise_remote_valid() check is skipped.  As a result, an invalid
-> advice can be reported as success when the vector has zero total length.
-> This differs from madvise(), which rejects an invalid advice before
-> returning success for a zero-length range.
+>> Replace it with a check on the max folio order of the file's address space
+>> mapping, making sure PMD THP is supported. Also remove the read-only fd
+>> check, since collapse_file() now makes sure all to-be-collapsed folios are
+>> clean and the created PMD file THP can be handled by FSes properly.
+>>
+>> Signed-off-by: Zi Yan <ziy@nvidia.com>
+>> ---
+>>  mm/huge_memory.c | 8 ++++----
+>>  1 file changed, 4 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+>> index 970e077019b7..7e9cf8c0985f 100644
+>> --- a/mm/huge_memory.c
+>> +++ b/mm/huge_memory.c
+>> @@ -86,9 +86,6 @@ static inline bool file_thp_enabled(struct vm_area_struct *vma)
+>>  {
+>>  	struct inode *inode;
+>>
+>> -	if (!IS_ENABLED(CONFIG_READ_ONLY_THP_FOR_FS))
+>> -		return false;
+>> -
+>>  	if (!vma->vm_file)
+>>  		return false;
+>>
+>> @@ -97,7 +94,10 @@ static inline bool file_thp_enabled(struct vm_area_struct *vma)
+>>  	if (IS_ANON_FILE(inode))
+>>  		return false;
+>>
+>> -	return !inode_is_open_for_write(inode) && S_ISREG(inode->i_mode);
 > 
-> Reject invalid advice before walking the vector.  Valid zero-length
-> requests remain no-ops and continue to return 0.
+> Hi Matthew, David, and Lorenzo,
 > 
-> Add a selftest that covers invalid advice with a zero-length iovec and an
-> empty vector, while also checking that a valid zero-length request still
-> succeeds.
-> 
-> Fixes: 021781b01275 ("mm/madvise: unrestrict process_madvise() for current process")
-> Signed-off-by: fujunjie <fujunjie1@qq.com>
-> ---
-> Testing:
-> - Built bzImage.
-> - Built tools/testing/selftests/mm/process_madv.
-> - Ran tools/testing/selftests/mm/process_madv in QEMU:
->   # PASSED: 7 / 7 tests passed.
-> 
->  mm/madvise.c                              |  3 +++
->  tools/testing/selftests/mm/process_madv.c | 29 +++++++++++++++++++++++
->  2 files changed, 32 insertions(+)
-> 
-> diff --git a/mm/madvise.c b/mm/madvise.c
-> index 69708e953cf56..83fe9e651a907 100644
-> --- a/mm/madvise.c
-> +++ b/mm/madvise.c
-> @@ -2046,6 +2046,9 @@ static ssize_t vector_madvise(struct mm_struct *mm, struct iov_iter *iter,
->  
->  	total_len = iov_iter_count(iter);
->  
-> +	if (!madvise_behavior_valid(behavior))
-> +		return -EINVAL;
-> +
+> After some discussions on irc, I feel that we probably should not allow
+> read-write fd for PMD THP collapse at the moment. Combining with the
+> filemap_flush() under folio_dirty() check from collapse_file(), khugepaged
+> would become a kwritebackd that scans pagecache folios and writes them back.
+> If we limit it to read-only fds, at least khugepaged would only write
+> back once for the pagecache folios from these fds.
 
-I'd suggest performing the check just before the !process_madvise_remote_valid()
-check, such that "invalid/unsupported" orders are reported in the same priority,
-independent of local vs. non-local MM.
+Makes sense. The comment above the filemap_flush() is valuable :)
 
-Or is there a good reason to not do it there?
+> 
+> I am planning to restore inode_is_open_for_write() check in the next version.
+> Let me know your thoughts.
+
+That would be better. Do we plan on handling races with concurrent writable-opening?
+
+Or could we simply gate the filemap_flush() by a inode_is_open_for_write(), to
+not have it turn into a kwritebackd()?
 
 -- 
 Cheers,
