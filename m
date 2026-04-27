@@ -1,118 +1,77 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE9E13396F4
-	for <linux-kselftest@vger.kernel.org>; Mon, 27 Apr 2026 16:04:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 833B7341660;
+	Mon, 27 Apr 2026 16:05:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777305849; cv=none; b=EMPq9NExyATV+fsVuRw9ypL43MVHNKXTbHHA+ib/ue7zz/UN/biimMR5gxTOKvi7BBTfHJLhYrj/uJIT4wnQW5WJ7DtSZDuU7h1kAhe8PHFCc1WQaKluplxqbGKwF/1agB0Qg2dimyd8ud6Drklr6O2MCpaYsphFaqXDZjIvZZY=
+	t=1777305957; cv=none; b=jsuOaeAObDHE833C6YizU/1SSidZ07dgwvd4mRWsEaNuK+LyCs/8m+OJKLW1E6KPuVJJUs4POdNALhtrzz0laVZnER4EyBzWVE2k93Q/Oe4Ceh613n2qcaYvvc00AtvjRciRr5RqxHKYAVv4BoH+qD9I8JOjQt0tXjf9pLI9xtM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777305849; c=relaxed/simple;
-	bh=ydXHDbA23nlDpQ3nMlm3NWaN0ysulU/aADBaJq8dS08=;
-	h=Message-ID:Date:MIME-Version:From:To:Subject:Cc:Content-Type; b=o4QnmkSpFWsAc7PuJn3b48f5QfCY5QSVmWdme5MRfuzise6Nbs/PtAgsNpZL7OAslvILPLukYqquT6zWnlWBl1bUS9OvJ1Ee2KoXgrUi7gVyJeizwW0lo12zjD4VRxbbP0fg9fZm32McumYw8cAecSUaoSFCqMzy/13Lq3tj8xc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=En43amU2; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1777305957; c=relaxed/simple;
+	bh=T5Q/izJx7hg/QUUHDFKPTpLsTO4+gBEZnXygCLpSSjc=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=HHggRrzUVb9FNbpgSUwFGotxIERxpwI7SheVvEzufdQO3V2aOg+csz3+mxGyFG77EO6OR70trnRMP7FNbQHK6AA2j4d/eC25D2zgLb/8rXS0AktDqanI6v49+EOia3qnQ9G6ojAzBT98Y4577T9uRDqJMj/0PS0wNbyL3CJHUiE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=Zv86YZ7x; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="En43amU2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1777305847;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=yljwN6KCpoZ9u8ZPW4Plzy1QSibJM6+pSoXgDh3CAaY=;
-	b=En43amU2WLER3NtZalpiPI8C1aD9kQ3LUPtTHiAw4NcqikjG7m4g3I81AclUhSIVEGoXJM
-	JJIemLjxhpQYY0DTFxu31zCjPisy46NP7XF3f0Qw4VqFJmrBePkP1Qa1igBHCRTHJCzqf8
-	hTU8kI6MNLlVyELGsU4NAzSA1vKTDhk=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-639-kznsBgB0M-OqOikWiSRE4Q-1; Mon, 27 Apr 2026 12:04:04 -0400
-X-MC-Unique: kznsBgB0M-OqOikWiSRE4Q-1
-X-Mimecast-MFC-AGG-ID: kznsBgB0M-OqOikWiSRE4Q_1777305844
-Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-8aca3b7b536so262534606d6.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 27 Apr 2026 09:04:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777305844; x=1777910644;
-        h=content-transfer-encoding:cc:subject:to:from:content-language
-         :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yljwN6KCpoZ9u8ZPW4Plzy1QSibJM6+pSoXgDh3CAaY=;
-        b=Fn+F7cgwBMujxzQ4ee9xUeXsseyOm/06FlhqoJFH9MhT5yZLwpsLbzn+DcQAtrzuf2
-         e4vV7OJQXZtErm/BbIJ6BzySPDxZ+xqY25+rlTk3bVbyykru77cEyrj9Abr5vqNKnY8V
-         e/HGJw9N7OUDBCIZem+2u7UGnAVg+tH2nav8rdQ0TBOseRhih1KhTjkYXOAgzU76RVff
-         xgNDEY+0TCEG5HQbRaruT2k+gjyqv8Hw3tepAlO1s4vUalws/TuB41nDpY/QxE+eBYiL
-         2pgfSCTnTxgJPRuoIKFtkZEWPKhCUZnvmwDJKPwKB84SExJoztR674In1PTeOAM/wye4
-         MOJA==
-X-Forwarded-Encrypted: i=1; AFNElJ+rqSgf/bSq0Scq7lequk9Vx29Cw8jbOjQArSDgh+BE3mfcKPW7qUzV82J7UrZ/5RBU2M0+iZIIvFwA6THzzwI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwhRPZexPlsQM5d2QIlOvynhTK2uYWAXphHDv8MKWDFiHlhaj2a
-	C2WfENeRE7oy+poDQe6oIB5rbvWRdmUU3msqRAqzhRYKyO9grE4NEpYFVa07pV8NXaGiWo7Nby1
-	BwHGFNtEtJysBitJ6qmrTZXkEn1B3aF0mawLaJffwcSXsAzpD/zO0hIDUmP0bgHBoCCyGHQ==
-X-Gm-Gg: AeBDietH06bIIuE4gCoFSzY4uJpErPpMF5QDkEnUNrcEj8sJ7iid7Zxkz+JbJm6K5yY
-	QqlcYQ/qYsR7cnoFMgQgcDzMjoVLJ3c7joZbM8n9nw0wK6aSAwPx/hXLvhxwRhwBE+y5DEB+FSE
-	IKGsunGBH4sa6GqI3xtqZ4sgIOMx6Kv7kb8wV2s5H7WQJxnFr3andtan2uLCM73wRZD9piPp+HX
-	MyuOALEEwFvw9fU3XAd7fsh1PrvRYtfZ7OSbA6Nx4A/sIt8HaoVxMwK0yp61s7qPfULVPGHS14G
-	onuulMSwIu/VLIgXoOoloCMWYM59K+cbV8Q2CuHL6Zpdntz0AYcMK2MGvxhbuEItdMCl4IwJncm
-	SQqm8HX9dzOe/+262p5UQYcsPC9zSiIeo21JX
-X-Received: by 2002:a05:622a:1650:b0:50b:41bf:4ee5 with SMTP id d75a77b69052e-50e36f1b3cdmr659161211cf.57.1777305843830;
-        Mon, 27 Apr 2026 09:04:03 -0700 (PDT)
-X-Received: by 2002:a05:622a:1650:b0:50b:41bf:4ee5 with SMTP id d75a77b69052e-50e36f1b3cdmr659160301cf.57.1777305843219;
-        Mon, 27 Apr 2026 09:04:03 -0700 (PDT)
-Received: from [192.168.2.110] ([69.159.169.238])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-50e392c859asm338056491cf.1.2026.04.27.09.04.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Apr 2026 09:04:02 -0700 (PDT)
-Message-ID: <214fd9e4-5398-4c26-859e-c982c2e277c3@redhat.com>
-Date: Mon, 27 Apr 2026 12:03:51 -0400
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="Zv86YZ7x"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1777305953;
+	bh=T5Q/izJx7hg/QUUHDFKPTpLsTO4+gBEZnXygCLpSSjc=;
+	h=From:Subject:Date:To:Cc:From;
+	b=Zv86YZ7xyFxBwjQTToySmVhX3+mKRB8iXSB8ZVxyPe0JBplEvO/eusx8iLots+XpX
+	 C0EhpS5D4oa613eM8MFub+rRJpAWkeonOKgL3rHGX6CFXWSgxI0qLob/mkFn6LEaCt
+	 cQGxIi5CFBesI0AALHD2pcIqj7o8rWjqYBDyYYBc=
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Subject: [PATCH 0/2] kunit: qemu_configs: Add or1k / openrisc configuration
+Date: Mon, 27 Apr 2026 18:04:55 +0200
+Message-Id: <20260427-kunit-or1k-v1-0-9d3109e991e8@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US, en-CA
-From: Luiz Capitulino <luizcap@redhat.com>
-To: Linux Memory Management List <linux-mm@kvack.org>,
- Andrew Morton <akpm@linux-foundation.org>, Mike Rapoport <rppt@kernel.org>
-Subject: [PATCH] selftests/mm: run_vmtests.sh: fix destructive tests
- invocation
-Cc: "David Hildenbrand (Red Hat)" <david@kernel.org>,
- Lorenzo Stoakes <ljs@kernel.org>, "Liam R. Howlett"
- <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
- LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXMTQ5AMBBA4avIrDWZ1k8TVxELajAkJS0iadxds
+ fwW7wXw5Jg8VEkARyd7Xm2ETBMwU2tHEtxHg0JVYq60WA7Lu1idXAQiZoWRWa+RIAabo4Gvb1Y
+ 3v/3RzWT29wD3/QAec5j2bgAAAA==
+X-Change-ID: 20260427-kunit-or1k-00035c13d70e
+To: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, 
+ Rae Moar <raemoar63@gmail.com>
+Cc: linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, 
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ kunit-dev@googlegroups.com, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1777305952; l=593;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=T5Q/izJx7hg/QUUHDFKPTpLsTO4+gBEZnXygCLpSSjc=;
+ b=ZBGpsShrNJn7Kugx5aDvGmon6NXXf746zYSo+kRMHfUeeJSpI7EjU8aS3SmahUvJbLuzLnlvp
+ 9FgudjqwtJ+ChQxf1V5maSTBRLRyWMQ9feCDSOYegxlxVMFuI9cdbAD
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-Destructive tests should be invocated with -d command-line option, but
-this won't work today since 'd' is missing in getopts command-line. This
-commit fixes it.
+Add a basic configuration to run kunit tests on or1k / openrisc.
 
-Signed-off-by: Luiz Capitulino <luizcap@redhat.com>
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
-Mike,
+Thomas Weißschuh (2):
+      gen_compile_commands: Ignore libgcc.a
+      kunit: qemu_configs: Add or1k / openrisc configuration
 
-Maybe it's a good idea to add this patch to your series since the
-hugetlb-read-hwpoison selftest won't work without your fix.
+ scripts/clang-tools/gen_compile_commands.py |  2 ++
+ tools/testing/kunit/qemu_configs/or1k.py    | 18 ++++++++++++++++++
+ 2 files changed, 20 insertions(+)
+---
+base-commit: 254f49634ee16a731174d2ae34bc50bd5f45e731
+change-id: 20260427-kunit-or1k-00035c13d70e
 
-  tools/testing/selftests/mm/run_vmtests.sh | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-index d8468451b3a3..c17b133a81d2 100755
---- a/tools/testing/selftests/mm/run_vmtests.sh
-+++ b/tools/testing/selftests/mm/run_vmtests.sh
-@@ -103,7 +103,7 @@ RUN_ALL=false
-  RUN_DESTRUCTIVE=false
-  TAP_PREFIX="# "
-  
--while getopts "aht:n" OPT; do
-+while getopts "aht:nd" OPT; do
-  	case ${OPT} in
-  		"a") RUN_ALL=true ;;
-  		"h") usage ;;
--- 
-2.53.0
+Best regards,
+--  
+Thomas Weißschuh <linux@weissschuh.net>
 
