@@ -1,99 +1,234 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out203-205-221-239.mail.qq.com (out203-205-221-239.mail.qq.com [203.205.221.239])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31BB935C184;
-	Mon, 27 Apr 2026 09:45:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2AE135C184;
+	Mon, 27 Apr 2026 09:45:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.239
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777283156; cv=none; b=NNvd8om2CF8IuBG3yM3S5b9lqz3b6iZdRfRTypyR1+6G4g9aXuY9AyYs1ILUB9FozgguzGwTRCLOj/jSYiXlvU1IhDGvq2Vz3Zdr5nwXFgoM7ZaY5If2V+CFIHIHqYc8RGLTOmv1mD0I7K+jWSqzQgXhSoW5lSesJqtjb26AQVU=
+	t=1777283162; cv=none; b=cHJWbaK5wguoaxhuT6ydNzBsULdJK9NbUVd7p9ftTzVg/u4sC1zOAjvF14kVYgKwIf0Dsd1bp6Lh7/rcnfRIZ7AQR7ZSMXk+2mLYvjo3T8P6j2r7SHclq7oUJrNXRVGDApukYrLpWyqq738ekd5ZKhmiCv7eIEIAA9E1z9NA/kY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777283156; c=relaxed/simple;
-	bh=isjUBm9ZnfeVq00beWsqNNEypGwAPQWGomwp/CzhDoY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ARFLqwt+F+J9bdXaWW+PBY/h6W1xvMkLY4eov2FGVH/Z5Bh/dBPwAGtUwA+V1YQHzbvmYlAFfEtavQbDyp0qhcUvR/oWePwdm+iQyB0z/NLEd9Dya121Lrcjg7XHTluEo6f+m9ZBo8p6UMFd/XLWJlGaQJFoaVKpT50rQ32TVw4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BD99g3MZ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777283162; c=relaxed/simple;
+	bh=d0pf8dgY8fh3R23bi0l4ShNQfH/4/uYn4vONGMtTDvQ=;
+	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
+	 MIME-Version; b=FrrsUlvJxqjDcI3NfXJq4mEuVvjq8DdDqbBfF88KeRwRvifInu4LvWNUPUc+uVta/8GZ7Y1GTN501xmYaUEax4e7I5BOUNbHESUM3QwV8/FdKNmzi0+9jqigR9gmjcqIel8ArMdh5Y0B+4lD5eoahYvPV4FfxCLLiiVFe+nAbV0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=GdAv6HW8; arc=none smtp.client-ip=203.205.221.239
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BD99g3MZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E387EC19425;
-	Mon, 27 Apr 2026 09:45:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777283156;
-	bh=isjUBm9ZnfeVq00beWsqNNEypGwAPQWGomwp/CzhDoY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BD99g3MZltYvFYIuAtPBr1bwuBD6/DRlleri4FEj/6kcy8u9Pf3/4xq/mP4sFVhzg
-	 adrtCIie4RyXwYvAnV0XJkvP/DzKsT0BYkRjmCYF0P4LFNscYjV1QecA1hA0+8LbPJ
-	 N1WtprZ2Wd5KybcAzmPjZ0vlBGiq5JLsO/oSbwEO1U0COPTy5k7y+AP4X686H+3ZJO
-	 u4FHOGz/euk4/rCcpx3ZFTGu6bX96Xdsqfh/2b9LIt5nbt0wtXrjTAFLJRJgEsLiFH
-	 LhgL96Fi8l2DFhQlqd49cUhyNozBbE6GxB/fQPjCYv7Q0la4LkxKVTkcyeg/kbPict
-	 sDThFTXQG2JSA==
-Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
-	id 597991AC583B; Mon, 27 Apr 2026 10:45:53 +0100 (BST)
-Date: Mon, 27 Apr 2026 18:45:53 +0900
-From: Mark Brown <broonie@kernel.org>
-To: Sarthak Sharma <sarthak.sharma@arm.com>
-Cc: Mike Rapoport <rppt@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="GdAv6HW8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1777283156; bh=caEr/cCPAOS7lUtBcTXzM2Ao0/6+pmmZoN+wBM7w94E=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=GdAv6HW8iiitdnrPD+mLM2XUQNIHlMy9z25p4vUkEAKgzY+dsAjPFgYY4ebwSiGvs
+	 rd0oCKWSc2LyVx5ExZwk07KiZ99YqFcf7YCgr8ne0m8RTbd7iCczfqbUTB1awMeKfW
+	 W+6xtK1LHGtPRkmnMBWLdTuyRtk7qyy7QTnSk1rY=
+Received: from node68.. ([166.111.236.25])
+	by newxmesmtplogicsvrszc56-0.qq.com (NewEsmtp) with SMTP
+	id B748F4E8; Mon, 27 Apr 2026 17:45:52 +0800
+X-QQ-mid: xmsmtpt1777283152t3r2xn4s1
+Message-ID: <tencent_BB588C2CDED859A873093DAF28B2CC1F7B0A@qq.com>
+X-QQ-XMAILINFO: Od8VqZhFMB3Nt5FwU4X6EKhyI3JM0ioNsa6LDu1k/JFnM/st19XrkwqJalskix
+	 YYx3xngayGJzSvVE/CsVfQMBhAeyEGTKJl2ESdAKYxjPf54SBZIiGhJtCQd2wxfCJlaEMqU+mToV
+	 mmkvPpDcJh7tUU1q86o7eg764dcCD3emQ3bCxUfhn23ZK6LV8zZGyGkvreSHN5wSlpL/rkmx4Lqs
+	 sU37eTPWKa4JXh8K0BMkRh9QgZ+LbXwoGbUj8ywSRfpWWaBBGK8UkGJpOYocz3AFb1yDac9ILQXI
+	 gGRv2M9lqKxpDvkWRLPqtF7UmOSmRuSBFxzqW0aOeJXHX1wJiPGtnPFp9EQg4wGagOaI09iZ4qcn
+	 IS6c/tcEaDpIl3PFy2xlpB5DvSlPZIbMUrsrYU8Aa4ixKOc2BGH9pv65smoby0mpQgXmnIKkZqul
+	 nKZ8GrYHhvqQKyLUHlgwDTrjXf6N5dHisoHwkRYlat2nIwB7Me2j9EeXmpxwtLVInsiiE/ej9n08
+	 LAmlFcigBOXcKocUG7UEpgMmxxgLZHqLdKHUw8nd37e3l3BZnxp/RWUdcDZ0v2lf4QXHyGsNB9e5
+	 N5xNexcnzWNSOCogdsR/5DvV703jP2bdxPqtQ7QD+soUtYxh5MezZ46v1pF3a74E6kVfWGRbgajw
+	 ATx7j0inchIqpVzDhPL3F5d4pwc758mxEAAbCgLii8oBSgsBlcGlM2vpD7CESxKUTiHlYe0pEi8o
+	 R4daunvagTSMBCHv8PgIh7hXpBf7W6anpciFwFlDBWNaiArp/nMvzGhtwBsVIvsGXpZtvw+n4jEv
+	 AcRh4AMKi9aNJs/HJ8XUs8pVAqng+tMwcEDPvWGmEb3PWNLZ6VVt7C5iS3XgDmdCW2nVEz2XI9E4
+	 q9Qpm40RGvP0223HdWX4dtpjiXD+gMnqo4emjspXTlfokZy6ZVLndIH3bCK62xWUbE2MDOs1HDaN
+	 H3On2ka6j/sE8F7ZuvKnkr/45xu7k/bO2omkcAnV1h7EWdRBT3fK7jzQtkCUbKseDOrxAwE0RcCH
+	 JmljRFhl1VlEzzP2yV
+X-QQ-XMRINFO: NS+P29fieYNwqS3WCnRCOn9D1NpZuCnCRA==
+From: fujunjie <fujunjie1@qq.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+	Lorenzo Stoakes <ljs@kernel.org>,
 	David Hildenbrand <david@kernel.org>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Barry Song <baohua@kernel.org>, Dev Jain <dev.jain@arm.com>,
-	Donet Tom <donettom@linux.ibm.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-	John Hubbard <jhubbard@nvidia.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Lance Yang <lance.yang@linux.dev>,
-	Leon Romanovsky <leon@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
-	Michal Hocko <mhocko@suse.com>, Nico Pache <npache@redhat.com>,
-	Peter Xu <peterx@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Jann Horn <jannh@google.com>,
 	Shuah Khan <shuah@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Vlastimil Babka <vbabka@kernel.org>, Zi Yan <ziy@nvidia.com>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: Re: [PATCH v2 10/53] selftests/mm: hugetlb_madv_vs_map: use
- kselftest framework
-Message-ID: <ae8wUSJusD1u_grJ@sirena.co.uk>
-References: <20260418105539.1261536-1-rppt@kernel.org>
- <20260418105539.1261536-11-rppt@kernel.org>
- <4d25a566-1e37-4e31-b304-8fa6ce7e3ec4@arm.com>
+	Christian Brauner <brauner@kernel.org>,
+	SeongJae Park <sj@kernel.org>,
+	linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	fujunjie <fujunjie1@qq.com>
+Subject: [PATCH v2] mm/madvise: reject invalid process_madvise() advice for zero-length vectors
+Date: Mon, 27 Apr 2026 09:43:30 +0000
+X-OQ-MSGID: <20260427094330.3364571-1-fujunjie1@qq.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <tencent_98F3571EF9236437E5165F5C08CF258A9E08@qq.com>
+References: <tencent_98F3571EF9236437E5165F5C08CF258A9E08@qq.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="iLNEbpoW8iVFtLSb"
-Content-Disposition: inline
-In-Reply-To: <4d25a566-1e37-4e31-b304-8fa6ce7e3ec4@arm.com>
-X-Cookie: Victory uber allies!
+Content-Transfer-Encoding: 8bit
 
+process_madvise() used to validate the advice while walking each
+imported iovec. If the vector has zero total length, vector_madvise()
+does not enter the loop and can return success without checking whether
+the advice value is valid.
 
---iLNEbpoW8iVFtLSb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+For a local mm, such as process_madvise(PIDFD_SELF, ...), the remote-only
+process_madvise_remote_valid() check is skipped. As a result, an invalid
+advice can be reported as success when the vector has zero total length.
+This differs from madvise(), which rejects an invalid advice before
+returning success for a zero-length range.
 
-On Mon, Apr 27, 2026 at 02:19:25PM +0530, Sarthak Sharma wrote:
+Validate the generic madvise behavior at the syscall-facing entry points
+before any vector walk. In process_madvise(), do this before the
+remote-only advice restriction so unsupported advice is rejected with the
+same priority for local and remote mm. Then keep the per-range helper
+focused on address/length validation, avoiding repeated behavior checks
+for every iovec.
 
-> Seems like there is something wrong in ksft_exit_skip(). Should we
-> change this ksft_exit_skip() to ksft_test_result_skip() followed by
-> ksft_finished()?
+Valid zero-length requests remain no-ops and continue to return 0. Add a
+selftest that covers invalid advice with a zero-length iovec and an empty
+vector, while also checking that a valid zero-length request still
+succeeds.
 
-If it's causing issues we should probably just fix ksft_exit_skip()
-rather than open coding a fix - I think nobody bothered because it's
-mostly used during setup before having planned anything properly.
+Fixes: 021781b01275 ("mm/madvise: unrestrict process_madvise() for current process")
+Signed-off-by: fujunjie <fujunjie1@qq.com>
+---
+v2:
+- Validate behavior at the syscall-facing entry points and leave the range
+  helper for address/length checks, avoiding repeated behavior checks in the
+  iovec loop.
+- Put the generic process_madvise() behavior check before
+  process_madvise_remote_valid(), as suggested by David.
+- Keep the zero-length selftest coverage from v1.
 
---iLNEbpoW8iVFtLSb
-Content-Type: application/pgp-signature; name="signature.asc"
+Testing:
+Built bzImage and tools/testing/selftests/mm/process_madv. In QEMU, the
+process_madv selftest reports 7/7 passed.
 
------BEGIN PGP SIGNATURE-----
+ mm/madvise.c                              | 29 ++++++++++++++++-------------
+ tools/testing/selftests/mm/process_madv.c | 29 +++++++++++++++++++++++++++++
+ 2 files changed, 45 insertions(+), 13 deletions(-)
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmnvMFAACgkQJNaLcl1U
-h9CX3wf9Fu2krEJ+4z8cXiWjKnTbj4KknBX1P0yHSPUmkgJc8rdAqgrLt337LbKE
-YkaadqkiEWoI8HHlpARfFxAdlTw8XgmACpe0obuj5wUnNKYg5Ksg6E9kvMjEF3lB
-RrKI2v0LOq8FXvWXSwsMakAp63VXyPiob5/0fKD0D7qOZnQhy394KMAOuRASpHKG
-z3OBxXhvrZp6kF/XUNtV1QeWPrgzb5RBA8OQeI91cstutpVmeMSvV4ROFJiEeq1b
-l7p192srFB4288+DOD4pakxNVoNnz4QzTwHMNk3ZcN9ehja++g3S2vbpjBuz3EE2
-l3cRfr1D6RoxuVoSukaAO5QdCSBZ3g==
-=5Yit
------END PGP SIGNATURE-----
+diff --git a/mm/madvise.c b/mm/madvise.c
+index 69708e953cf56..ce238dd96f158 100644
+--- a/mm/madvise.c
++++ b/mm/madvise.c
+@@ -1834,13 +1834,10 @@ static void madvise_finish_tlb(struct madvise_behavior *madv_behavior)
+ 		tlb_finish_mmu(madv_behavior->tlb);
+ }
+ 
+-static bool is_valid_madvise(unsigned long start, size_t len_in, int behavior)
++static bool is_valid_madvise_range(unsigned long start, size_t len_in)
+ {
+ 	size_t len;
+ 
+-	if (!madvise_behavior_valid(behavior))
+-		return false;
+-
+ 	if (!PAGE_ALIGNED(start))
+ 		return false;
+ 	len = PAGE_ALIGN(len_in);
+@@ -1859,17 +1856,15 @@ static bool is_valid_madvise(unsigned long start, size_t len_in, int behavior)
+  * madvise_should_skip() - Return if the request is invalid or nothing.
+  * @start:	Start address of madvise-requested address range.
+  * @len_in:	Length of madvise-requested address range.
+- * @behavior:	Requested madvise behavior.
+  * @err:	Pointer to store an error code from the check.
+  *
+- * If the specified behaviour is invalid or nothing would occur, we skip the
+- * operation.  This function returns true in the cases, otherwise false.  In
+- * the former case we store an error on @err.
++ * If the specified range is invalid or nothing would occur, we skip the
++ * operation.  This function returns true in these cases, otherwise false.  In
++ * the former case we store an error in @err.
+  */
+-static bool madvise_should_skip(unsigned long start, size_t len_in,
+-		int behavior, int *err)
++static bool madvise_should_skip(unsigned long start, size_t len_in, int *err)
+ {
+-	if (!is_valid_madvise(start, len_in, behavior)) {
++	if (!is_valid_madvise_range(start, len_in)) {
+ 		*err = -EINVAL;
+ 		return true;
+ 	}
+@@ -2013,7 +2008,10 @@ int do_madvise(struct mm_struct *mm, unsigned long start, size_t len_in, int beh
+ 		.tlb = &tlb,
+ 	};
+ 
+-	if (madvise_should_skip(start, len_in, behavior, &error))
++	if (!madvise_behavior_valid(behavior))
++		return -EINVAL;
++
++	if (madvise_should_skip(start, len_in, &error))
+ 		return error;
+ 	error = madvise_lock(&madv_behavior);
+ 	if (error)
+@@ -2056,7 +2054,7 @@ static ssize_t vector_madvise(struct mm_struct *mm, struct iov_iter *iter,
+ 		size_t len_in = iter_iov_len(iter);
+ 		int error;
+ 
+-		if (madvise_should_skip(start, len_in, behavior, &error))
++		if (madvise_should_skip(start, len_in, &error))
+ 			ret = error;
+ 		else
+ 			ret = madvise_do_behavior(start, len_in, &madv_behavior);
+@@ -2131,6 +2129,11 @@ SYSCALL_DEFINE5(process_madvise, int, pidfd, const struct iovec __user *, vec,
+ 		goto release_task;
+ 	}
+ 
++	if (!madvise_behavior_valid(behavior)) {
++		ret = -EINVAL;
++		goto release_mm;
++	}
++
+ 	/*
+ 	 * We need only perform this check if we are attempting to manipulate a
+ 	 * remote process's address space.
+diff --git a/tools/testing/selftests/mm/process_madv.c b/tools/testing/selftests/mm/process_madv.c
+index cd4610baf5d7d..9a7e2788fcc50 100644
+--- a/tools/testing/selftests/mm/process_madv.c
++++ b/tools/testing/selftests/mm/process_madv.c
+@@ -309,6 +309,35 @@ TEST_F(process_madvise, invalid_vlen)
+ 	ASSERT_EQ(munmap(map, pagesize), 0);
+ }
+ 
++/*
++ * Test that invalid advice is rejected even when the iovec has zero total
++ * length. A zero-length advice is a no-op for valid advice, but invalid
++ * advice should still fail with EINVAL.
++ */
++TEST_F(process_madvise, invalid_advice_zero_length)
++{
++	struct iovec vec = {
++		.iov_base = NULL,
++		.iov_len = 0,
++	};
++	int pidfd = self->pidfd;
++	ssize_t ret;
++
++	errno = 0;
++	ret = sys_process_madvise(pidfd, &vec, 1, -1, 0);
++	ASSERT_EQ(ret, -1);
++	ASSERT_EQ(errno, EINVAL);
++
++	errno = 0;
++	ret = sys_process_madvise(pidfd, &vec, 1, MADV_DONTNEED, 0);
++	ASSERT_EQ(ret, 0);
++
++	errno = 0;
++	ret = sys_process_madvise(pidfd, NULL, 0, -1, 0);
++	ASSERT_EQ(ret, -1);
++	ASSERT_EQ(errno, EINVAL);
++}
++
+ /*
+  * Test process_madvise() with an invalid flag value. Currently, only a flag
+  * value of 0 is supported. This test is reserved for the future, e.g., if
+base-commit: 1b55f8358e35a67bf3969339ea7b86988af92f66
+-- 
+2.34.1
 
---iLNEbpoW8iVFtLSb--
