@@ -1,50 +1,60 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7898B2857C1;
-	Mon, 27 Apr 2026 16:49:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2699C3D567C;
+	Mon, 27 Apr 2026 16:51:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777308573; cv=none; b=a5hxpTe4zpY/pjdyfQCK4UuoHHczSjFSBGFgovpDpDCfP/+te0tisFS64FnmPy0dsaFvlnITaFj4DgcUdfUdFLof0Z2dMeLJ++YntqIK5d0tGF1ZNtKO90vJZ9GPXdb6vbJtAks6YZF4gSmZtr8g2LMUofpHzim6dELkNYFbzCE=
+	t=1777308693; cv=none; b=dpPJH5GfHrpuNByFJh3aCgxhYUVxm69r+OlHzyeK4hbBxRjbHjgz6U5Blm3BUH+G8MhA81u4qBkoa5Ut5ZarBCj5YTyEUBLyyt7IJeCQQyvS1b1/THJzCYXJLw/Gm//GzwYzpp5H5P61iPuYvG2X7FbYdksjIxwq/Mxo0aNUnRQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777308573; c=relaxed/simple;
-	bh=KmYd32L9lRML6KYGHyxIlyge+HcaDt0cRuYzVqygieg=;
+	s=arc-20240116; t=1777308693; c=relaxed/simple;
+	bh=wk5Lpv1tDjcTgkb38S1GdZbUP/B9Epp7J8Jqy+D91+0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ue+1PIJuG3REXZv7GQ2sTfMdUyMUmTDDx92cIie1th2lofDh9v0pweNrvpDSyA3sfyD0KociS6GQWWPzOPWYI0oAHE4sy4UX50cBxzB6DrNF+jyUNV5fMt04F00u9PygZuooX6OvHwkv/JoZMTZdjox/8EQvxG8PxBi62HQwcE8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BspDxyaK; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=oeiYlntQ1AKchju18TuiUidwjJOPuLx0HV6yTQPXLS7iCZpKEcb62OaqrFolyy5FE2eaX/OvvXZpqTzkoaCISjRlujm44MpkBZPL0EEcWT0IYx4sVXB9h92UwrTVmJkhKIGCAFljbOFYGX+TjPXq3Bg0hWNC4MY4D9kSRSFj1DA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RqwlM5at; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BspDxyaK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21632C19425;
-	Mon, 27 Apr 2026 16:49:29 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RqwlM5at"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90B80C19425;
+	Mon, 27 Apr 2026 16:51:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777308573;
-	bh=KmYd32L9lRML6KYGHyxIlyge+HcaDt0cRuYzVqygieg=;
+	s=k20201202; t=1777308692;
+	bh=wk5Lpv1tDjcTgkb38S1GdZbUP/B9Epp7J8Jqy+D91+0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BspDxyaKeYJTsKRjrSO6QFjRG9fuNUKxklQ0QOSV7YkBYz2Ve9kUCFrvBdULpvDfB
-	 Awu0dpoWTu7m3ONEsjXiD3xUDkZbj8qwKesrsgNqn88UxU7GChz+dyctQGq7wyFdxD
-	 W8hAuQCBpgVKJx3/PH0YbYUfIRaD3AnhsM2myCyHTiixug1/xRkHgdcwVuhy9+faaN
-	 jwq85jBcl9C51LjFpK52qhif7IZS4oLcGeNdgW11YvNoFGQfMgK56QUnbh0IhPNX69
-	 vVQQfEMP72RZmyiZjHQeifzUxnS8ygO7g50nrL+Hq8tbAxEmaXN/CCnJm/vBwDnBnh
-	 iEzPUSeSx6NSw==
-Date: Mon, 27 Apr 2026 18:49:26 +0200
+	b=RqwlM5at3f2RHg6Brtta+vAerb0epgvShvlwsNfKx2w/K9k310FWyYID6PyO5huTZ
+	 jVTBtNz9RS745lmvu+vor/NrpHcdaUWapQMLhLX1Ry5v3gQr00WGje1UP+RZoAL9TB
+	 MhVeQdi2R3knacXshbo7EzbUcgdva/RS0/w/UVRNQQawAk98ZIXZEo1w3pVqayacXi
+	 2d+mAqBZGMnWEyVOAeTx+ZTNDrHtkIcBhbJlL2WZXiIQK816LzR9QvrJ01rHPg2cUr
+	 peeHKP95rRcF3vjikvz3jv3tr/O8T5R+fHKZcjowKBGaxohplsLwwWZ6E1kWy0OAep
+	 tJB0TXyhqrmIw==
+Date: Mon, 27 Apr 2026 18:51:21 +0200
 From: Mike Rapoport <rppt@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Luiz Capitulino <luizcap@redhat.com>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	"David Hildenbrand (Red Hat)" <david@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
+To: Luiz Capitulino <luizcap@redhat.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Barry Song <baohua@kernel.org>, Dev Jain <dev.jain@arm.com>,
+	Donet Tom <donettom@linux.ibm.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+	John Hubbard <jhubbard@nvidia.com>,
 	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@kernel.org>,
+	Lance Yang <lance.yang@linux.dev>,
+	Leon Romanovsky <leon@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
+	Mark Brown <broonie@kernel.org>, Michal Hocko <mhocko@suse.com>,
+	Nico Pache <npache@redhat.com>, Peter Xu <peterx@redhat.com>,
+	Ryan Roberts <ryan.roberts@arm.com>,
+	Sarthak Sharma <sarthak.sharma@arm.com>,
+	Shuah Khan <shuah@kernel.org>,
 	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	LKML <linux-kernel@vger.kernel.org>,
-	Muhammad Usama Anjum <usama.anjum@arm.com>
-Subject: Re: [PATCH] selftests/mm: run_vmtests.sh: fix destructive tests
- invocation
-Message-ID: <ae-TlsIq_YkQcCUY@kernel.org>
-References: <214fd9e4-5398-4c26-859e-c982c2e277c3@redhat.com>
- <20260427091250.61316471db20dfb0852141c1@linux-foundation.org>
+	Vlastimil Babka <vbabka@kernel.org>, Zi Yan <ziy@nvidia.com>,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: Re: [PATCH v2 43/53] selftests/mm: migration: add setup of HugeTLB
+ pages
+Message-ID: <ae-UCVba16jg3-gR@kernel.org>
+References: <20260418105539.1261536-1-rppt@kernel.org>
+ <20260418105539.1261536-44-rppt@kernel.org>
+ <a8510cbd-4a30-460c-b870-a250ceb8a522@redhat.com>
+ <ae3v1cyMLbcvJtYW@kernel.org>
+ <67d7b067-97a8-4600-a9a6-46f3e797ffed@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,55 +63,33 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260427091250.61316471db20dfb0852141c1@linux-foundation.org>
+In-Reply-To: <67d7b067-97a8-4600-a9a6-46f3e797ffed@redhat.com>
 
-On Mon, Apr 27, 2026 at 09:12:50AM -0700, Andrew Morton wrote:
-> On Mon, 27 Apr 2026 12:03:51 -0400 Luiz Capitulino <luizcap@redhat.com> wrote:
-> 
-> > Destructive tests should be invocated with -d command-line option, but
-> > this won't work today since 'd' is missing in getopts command-line. This
-> > commit fixes it.
+On Mon, Apr 27, 2026 at 08:56:27AM -0400, Luiz Capitulino wrote:
+> On 2026-04-26 06:58, Mike Rapoport wrote:
+> > > And there's another issue: when running the migration test individually,
+> > > private_anon_htlb gets skipped. I guess it's because the previous test
+> > > is restoring the HugeTLB state:
 > > 
-> > Signed-off-by: Luiz Capitulino <luizcap@redhat.com>
-
-Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-
-> > ---
-> > Mike,
+> > It could be.
 > > 
-> > Maybe it's a good idea to add this patch to your series since the
-> > hugetlb-read-hwpoison selftest won't work without your fix.
+> > I pushed the updated version that has the fixes for both zombie and
+> > signal issues:
+> > 
+> > https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git/log/?h=mm-selftest/v3
+> > 
+> > Would be great if you can test it in your setup.
 > 
-> Or I can scoot it into mainline as a hotfix and Mike will pick it up
-> via Linus, soon?
+> This works! Both issues are fixed: the migration test completes w/o
+> hanging and when I run it individually all tests run.
 
-I'm fine with this.
+Thanks for confirming!
  
-> It'd be good to have a Fixes:.  It looks like a3c5cc5129ef5 or
-> 2bc4813622459?
+> One last question: should we munmap() the mappings in this test? Though
+> I understand this goes beyond your series goal.
 
-It's rather f16ff3b692ad ;-)
-It added RUN_DESTRUCTIVE and a case for 'd' option, but missed it in
-getops.
-
-> >   tools/testing/selftests/mm/run_vmtests.sh | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-> > index d8468451b3a3..c17b133a81d2 100755
-> > --- a/tools/testing/selftests/mm/run_vmtests.sh
-> > +++ b/tools/testing/selftests/mm/run_vmtests.sh
-> > @@ -103,7 +103,7 @@ RUN_ALL=false
-> >   RUN_DESTRUCTIVE=false
-> >   TAP_PREFIX="# "
-> >   
-> > -while getopts "aht:n" OPT; do
-> > +while getopts "aht:nd" OPT; do
-> >   	case ${OPT} in
-> >   		"a") RUN_ALL=true ;;
-> >   		"h") usage ;;
-> > -- 
-> > 2.53.0
+We could, but the tests _exit() anyway as a part of kselftest_harness, so
+it does not really matter.
 
 -- 
 Sincerely yours,
