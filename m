@@ -1,113 +1,196 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AF333AB274;
-	Mon, 27 Apr 2026 14:46:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4795B3314D9;
+	Mon, 27 Apr 2026 15:12:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777301168; cv=none; b=m0QzAccsrlhSAQEciASSoD09rq7CoaUoCTd3Rg18Pj3z7gIEksfXXj0JyHQOS7KNd+f75UEFarEE2IlN7l8ydcQ0uyFhht1RabFz6eLTCJRjVjJu2wM6rocgcms46iTDIILegN0x+NHX1Yd5RbVpAjbz58V/b3Qtl+vLOFyxbig=
+	t=1777302760; cv=none; b=pM5RBZLz14vOVydtzres+7Otv6iTUjVRKAzT7znaL5PmbunSTFn0sNjxXF0AlYyfYgs8JyNLRHHAhFzgqoH1ab0a1iIqxNREb1kdbyCNMbvTgfu4x1BN31GFVOZ7t1Z6e5pPjiefxHHxdEo0YmjJVRlncZ5jwoY2O9uHLTQcIm8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777301168; c=relaxed/simple;
-	bh=9bOQyceFqVVaiIYzsp+CzkVSPcb894AUd8r8NRaXx3U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=D4BX6mHeqzWUoqqhAJnEgfpX/sDIb4QFJCf/9UIUnAPlLTh1pHkwJtGp2N5witAWJ4Vcr1m9P+bsmyM3fQ1nMGJP29ktrY5aW1OWoDmmAKvYVFt6kDoUs5NIF7q1kK9JjRXJsFeY/1AJdePT8XAJUlnsgq8tvBJv6vZrhzEvPy8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=W5Wp1neS; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=debian.org
+	s=arc-20240116; t=1777302760; c=relaxed/simple;
+	bh=zI5vHsvRGeABhz8+PYlJ/EahgR6YXI9rVwoXD7+ThEw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OYVnrYSFddxAkiY4iWkf6k3AHV7JdOcdxoHeAshzea9gMsUmqKtTW/xg96N3NCGp16muFjfJscczmFnUAqfqBexLcfeETY87pqFWpGsp2CAeNpCU2zY/mKKNPAiP+5xJ2QVOHMlLdDtEeov4+R68MRBoVod4RMS+M4xi059plgQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TJH0uQrr; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="W5Wp1neS"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=8SUkHRDbaC9aZSa+oEHyg1Tzg2ppQcm4MIPmCZq/6ek=; b=W5Wp1neSmz5WcLXieabX6NdOIa
-	/vIMKR3XDwBY7vq7gRwuR4TKoy35qj/UUZ0zgGzJ+TQH87QwodOzx3msj8XbBY3YL8TI/vTQlsEcm
-	q/yJ1o902d12aYqnr4+kEkLg+zkuyZNKMDrW8KOwBOxPoohzsRjkRBVW6wD3Gn1uOlESQf7hqBbMW
-	JT7RJjxrMTKBekEc6MfeLPKnmfWHsJP9jJcc/EMyMVHBprz2sOxG3FgaFFDnNgab8aX9k2AKpXW2m
-	kww5UFBHZ4GW7aj7c/oJMwfgwxnfvEa++1Dt5uatbhtsx/DrNtScv024D7pkGoeL16hdhnYczFseu
-	iVigaT1Q==;
-Received: from authenticated user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wHNDS-005YR3-2h;
-	Mon, 27 Apr 2026 14:45:43 +0000
-Date: Mon, 27 Apr 2026 07:45:37 -0700
-From: Breno Leitao <leitao@debian.org>
-To: Lance Yang <lance.yang@linux.dev>
-Cc: linmiaohe@huawei.com, nao.horiguchi@gmail.com, 
-	akpm@linux-foundation.org, corbet@lwn.net, skhan@linuxfoundation.org, david@kernel.org, 
-	ljs@kernel.org, Liam.Howlett@oracle.com, vbabka@kernel.org, rppt@kernel.org, 
-	surenb@google.com, mhocko@suse.com, shuah@kernel.org, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	kernel-team@meta.com
-Subject: Re: [PATCH v5 1/4] mm/memory-failure: report MF_MSG_KERNEL for
- reserved pages
-Message-ID: <ae92WpsjxQ71BE9Q@gmail.com>
-References: <20260424-ecc_panic-v5-1-a35f4b50425c@debian.org>
- <20260427123330.92847-1-lance.yang@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TJH0uQrr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26352C2BCB4;
+	Mon, 27 Apr 2026 15:12:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777302759;
+	bh=zI5vHsvRGeABhz8+PYlJ/EahgR6YXI9rVwoXD7+ThEw=;
+	h=From:To:Cc:Subject:Date:From;
+	b=TJH0uQrr4r3lQ4SuRm8wQheI46NGHnjW0QSkdAQJJsu2EKy+VSXazj2JF1TM4hI+/
+	 y2J5lRBaWoR34EDo5PTi/ir2Xwo0j1Ajr/SEEE/bOpV6XpNQ803wlXUP1NP9sl02mr
+	 Bw1MWIzuC9PCYv23QUAJnAyAFqF70+0jE9QvtK9kskHcnV55eFAhsKFhu/FQFHi7X5
+	 k5OFiJomVq6+m/bmS6qpa9l9qkkSKHuUVWpEWQnxWCtU/b822T8eq9k5tctOtnVvJG
+	 9m8LLjyNgoAchDQzm1+gt+Vc5bQPrD7JuEyjSD/Rg0+c6wth3tgA3OZPEKZW191Wfb
+	 hq3vYfKKtkRjw==
+From: SeongJae Park <sj@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: SeongJae Park <sj@kernel.org>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@davidgow.net>,
+	David Hildenbrand <david@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Michal Hocko <mhocko@suse.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	damon@lists.linux.dev,
+	kunit-dev@googlegroups.com,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: [PATCH v2 00/10] mm/damon: let DAMON be paused and resumed
+Date: Mon, 27 Apr 2026 08:12:19 -0700
+Message-ID: <20260427151231.113429-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260427123330.92847-1-lance.yang@linux.dev>
-X-Debian-User: leitao
+Content-Transfer-Encoding: 8bit
 
-On Mon, Apr 27, 2026 at 08:33:30PM +0800, Lance Yang wrote:
-> 
-> On Fri, Apr 24, 2026 at 05:23:59AM -0700, Breno Leitao wrote:
-> >When get_hwpoison_page() returns a negative value, distinguish
-> >reserved pages from other failure cases by reporting MF_MSG_KERNEL
-> >instead of MF_MSG_GET_HWPOISON. Reserved pages belong to the kernel
-> >and should be classified accordingly for proper handling.
-> >
-> >Acked-by: Miaohe Lin <linmiaohe@huawei.com>
-> >Signed-off-by: Breno Leitao <leitao@debian.org>
-> >---
-> > mm/memory-failure.c | 11 ++++++++++-
-> > 1 file changed, 10 insertions(+), 1 deletion(-)
-> >
-> >diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-> >index ee42d43613097..7b67e43dafbd1 100644
-> >--- a/mm/memory-failure.c
-> >+++ b/mm/memory-failure.c
-> >@@ -2432,7 +2432,16 @@ int memory_failure(unsigned long pfn, int flags)
-> > 		}
-> > 		goto unlock_mutex;
-> > 	} else if (res < 0) {
-> >-		res = action_result(pfn, MF_MSG_GET_HWPOISON, MF_IGNORED);
-> >+		/*
-> >+		 * PageReserved is stable here: reserved pages have
-> >+		 * PG_reserved set at boot or by drivers and are never
-> >+		 * freed through the page allocator.
-> >+		 */
-> 
-> Not necessarily. PG_reserved is not a permanent lifetime property for
-> every page that has carried it.
-> 
-> page-flags.h says early reserved pages may later have PG_reserved
-> cleared and then be given to the page allocator :)
-> 
-> At least some drivers also clear PG_reserved when releasing pages they
-> marked reserved.
-> 
-> Would it be clearer to say that pages with PG_reserved set are not
-> currently managed by the page allocator, rather than saying reserved
-> pages are never freed through the page allocator?
+DAMON utilizes a few mechanisms that enhance itself over time. Adaptive
+regions adjustment, goal-based DAMOS quota auto-tuning and monitoring
+intervals auto-tuning like self-training mechanisms are such examples.
+It also adds access frequency stability information (age) to the
+monitoring results, which makes it enhanced over time.
 
-Would a comment like the following look better?
+Sometimes users have to stop DAMON.  In this case, DAMON internal state
+that enhanced over the time of the last execution simply goes away.
+Restarted DAMON have to train itself and enhance its output from the
+scratch.  This makes DAMON less useful in such cases.  Introducing three
+such use cases below.
 
-  /*
-   * Pages with PG_reserved set are not currently managed by the
-   * page allocator (memblock-reserved memory, driver reservations,
-   * etc.), so classify them as kernel-owned for reporting.
-   */
-  if (PageReserved(p))
-      res = action_result(pfn, MF_MSG_KERNEL, MF_IGNORED);
+Investigation of DAMON.  It is best to do the investigation online,
+especially when it is a production environment.  DAMON therefore
+provides features for such online investigations, including DAMOS stats,
+monitoring result snapshot exposure, and multiple tracepoints.  When
+those are insufficient, and there are additional clues that could be
+interfered by DAMON, users have to temporarily stop DAMON to collect the
+additional clues.  It is not very useful since many of DAMON internal
+clues are gone when DAMON is stopped.  The loss of the monitoring
+results that improved over time is also problematic, especially in
+production environments.
 
-Thanks for the review,
---breno
+Monitoring of workloads that have different user-known phases.  For
+example, in Android, applications are known to have very different
+access patterns and behaviors when they are running on the foreground
+and the background.  It can therefore be useful to separate monitoring
+of apps based on whether they are running on the foreground and on the
+background.  Having two DAMON threads per application that paused and
+resumed for the apps foreground/background switches can be useful for
+the purpose.  But such pause/resume of the execution is not supported.
+
+Tests of DAMON.  A few DAMON selftests are using drgn to dump the
+internal DAMON status.  The tests show if the dumped status is the same
+as what the test code expected.  Because DAMON keeps running and
+modifying its internal status, there are chances of data races that can
+cause false test results.  Stopping DAMON can avoid the race.  But,
+since the internal state of DAMON is dropped, the test coverage will be
+limited.
+
+Let DAMON execution be paused and resumed without loss of the internal
+state, to overhaul the limitations.  For this, introduce a new DAMON
+context parameter, namely 'pause'.  API callers can update it while the
+context is running, using the online parameters update functions
+(damon_commit_ctx() and damon_call()).  Once it is set, kdamond_fn()
+main loop will do only limited works excluding the monitoring and DAMOS
+works, while sleeping sampling intervals per the work.  The limited
+works include handling of the online parameters update.  Hence users can
+unset the 'pause' parameter again.  Once it is unset, kdamond_fn() main
+loop will do all the work again (resumed).  Under the paused state, it
+also does stop condition checks and handling of it, so that paused DAMON
+can also be stopped if needed.  Expose the feature to the user space via
+DAMON sysfs interface.  Also, update existing drgn-based tests to test
+and use the feature.
+
+Tests
+=====
+
+I confirmed the feature functionality using real time tracing ('perf
+trace' or 'trace-cmd stream') of damon:damon_aggregated DAMON
+tracepoint.  By pausing and resuming the DAMON execution, I was able to
+see the trace stops and continued as expected.  Note that the pause
+feature support is added to DAMON user-space tool (damo) after v3.1.9.
+Users can use '--pause_ctx' command line option of damo for that, and I
+actually used it for my test.  The extended drgn-based selftests are
+also testing a part of the functionality.
+
+Patches Sequence
+================
+
+Patch 1 introduces the new core API for the pause feature.  Patch 2
+extend DAMON sysfs interface for the new parameter.  Patches 3-5 update
+design, usage and ABI documents for the new sysfs file, respectively.
+The following five patches are for tests.  Patch 6 implements a new
+kunit test for the pause parameter online commitment.  Patches 7 and 8
+extend DAMON selftest helpers to support the new feature.  Patch 9
+extends selftest to test the commitment of the feature.  Finally, patch
+10 updates existing selftest to be safe from the race condition using
+the pause/resume feature.
+
+Changelog
+=========
+
+Changes from RFC v5
+(https://lore.kernel.org/20260323231538.84452-1-sj@kernel.org)
+- Rebase to latest mm-new.
+- Drop RFC tag again.
+Changes from RFC v4
+(https://lore.kernel.org/20260322155728.81434-1-sj@kernel.org)
+- Fix typo: selftets.
+- Fix wrong selftests kdamonds resume iteration.
+Changes from v1 (or, RFC v3)
+(https://lore.kernel.org/20260321181343.93971-1-sj@kernel.org)
+- Add RFC tag again.
+- Handle maybe_corrupted inside pause-loop.
+- Reduce unnecessary commits in sysfs.py selftest.
+Changes from RFC v2
+(https://lore.kernel.org/20260319052157.99433-1-sj@kernel.org)
+- Move damon_ctx->pause to public fields section.
+- Wordsmith design doc change.
+- Fix unintended resume of contexts in multiple contexts use case.
+- Rebase to latest mm-new.
+Changes from RFC v1
+(https://lore.kernel.org/20260315210012.94846-1-sj@kernel.org)
+- Continuously cancel new damos_walk() requests when paused.
+- Initialize damon_sysfs_context->pause.
+- Make sysfs.py dump-purpose pausing to work for all contexts.
+
+SeongJae Park (10):
+  mm/damon/core: introduce damon_ctx->paused
+  mm/damon/sysfs: add pause file under context dir
+  Docs/mm/damon/design: update for context pause/resume feature
+  Docs/admin-guide/mm/damon/usage: update for pause file
+  Docs/ABI/damon: update for pause sysfs file
+  mm/damon/tests/core-kunit: test pause commitment
+  selftests/damon/_damon_sysfs: support pause file staging
+  selftests/damon/drgn_dump_damon_status: dump pause
+  selftests/damon/sysfs.py: check pause on assert_ctx_committed()
+  selftests/damon/sysfs.py: pause DAMON before dumping status
+
+ .../ABI/testing/sysfs-kernel-mm-damon         |  7 ++++
+ Documentation/admin-guide/mm/damon/usage.rst  | 12 ++++--
+ Documentation/mm/damon/design.rst             |  7 ++++
+ include/linux/damon.h                         |  2 +
+ mm/damon/core.c                               |  9 +++++
+ mm/damon/sysfs.c                              | 31 +++++++++++++++
+ mm/damon/tests/core-kunit.h                   |  4 ++
+ tools/testing/selftests/damon/_damon_sysfs.py | 10 ++++-
+ .../selftests/damon/drgn_dump_damon_status.py |  1 +
+ tools/testing/selftests/damon/sysfs.py        | 39 +++++++++++++++++++
+ 10 files changed, 117 insertions(+), 5 deletions(-)
+
+
+base-commit: c12c06c4198f28d4d2bb48cc9608dbbfb020bf43
+-- 
+2.47.3
