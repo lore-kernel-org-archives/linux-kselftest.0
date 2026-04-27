@@ -1,99 +1,131 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A2FA3D646C;
-	Mon, 27 Apr 2026 16:58:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B2E83DA5B5
+	for <linux-kselftest@vger.kernel.org>; Mon, 27 Apr 2026 16:59:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777309102; cv=none; b=ss1cPzYK2RCw6iFKTpAnJZobmOC+j13CJEqnmZtvKRRuCWNyBMXlZmLPww9yfNbn24vpKm9gpDSFI/5Krhd9/GUKacKmjY+b9suL94J+cAhU2NpZ4Qt4p1a+TA8Lx7vCItYuPQJiK+f9GKpmoYqpC4tv5lSTLKWiAVshs31v+8o=
+	t=1777309167; cv=none; b=rSXWZxe6esvOzKwUNeVdzOmkEvqE1yEgTyJxmb/RVj+Zz+rdkQXJd4kDTFT1EPVchU0P8NxLV2ssaoEP2P4wOXqc1puFeyj/EriLsVG1jyv2pXWWTn39wiFujO8ygHn5zHvve2F51MWFjPVei89LBlci7eA1U4EoZlyOzoXFFYU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777309102; c=relaxed/simple;
-	bh=gF0/KqE2r1s/rHh37xnH1iq1RSWy7/8b/0idZTppFi4=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=p5te/wmbsDNwnl0/s1BTbzXTVSKEtT1iOc4K6vyHD4JD1Q3Ut/30sVYMRZZBAPcHA52TEnj83sdiLJmJBSVPKOjFAG8ez6+GxbKO5MRVuMMnB28PosvNdVD0lAWUcT9s5rnnUwgwenQhZn6l2xM3/d/0jkQ1nq8Ep1W9VZSslAY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=TgR87r/t; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777309167; c=relaxed/simple;
+	bh=whicB2ftr5oTRrTNIW+rmCW4aEeQ9SHLQFsgKCkj210=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=V+MWQnibqFRmKpFkAr3fds0JcWSxfPozyyTAbtghXQsZYFPsbGOyjWjNIGovSvk60/kzspalzM6w9Vh4Dr3twT99FeYay358q/olAqbbDXIzMePlREpntJru2Hj4lopq+GCNVN1TsVl3ycINv+6N/GNAeRjpFyRcP6MhotUOk2Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=sQdMoABB; arc=none smtp.client-ip=95.215.58.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="TgR87r/t"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBFCDC19425;
-	Mon, 27 Apr 2026 16:58:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1777309102;
-	bh=gF0/KqE2r1s/rHh37xnH1iq1RSWy7/8b/0idZTppFi4=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=TgR87r/tAsqffUdshHCL+xOVugvkbtl37982ubKyKahtqP+6u80aKTyIN90MOzS1p
-	 32Xr6wc0f60VvHsrLxoe49cUpvWcaPcKoT9ATaOVTPW60FVLqnIVTzyYcXafF307vF
-	 VXWw3Cg5uqEYYE5fRxwUmZhnv6nyKBXyQc8EAez0=
-Date: Mon, 27 Apr 2026 09:58:21 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Luiz Capitulino <luizcap@redhat.com>
-Cc: Mike Rapoport <rppt@kernel.org>, Linux Memory Management List
- <linux-mm@kvack.org>, "David Hildenbrand (Red Hat)" <david@kernel.org>,
- Lorenzo Stoakes <ljs@kernel.org>, "Liam R. Howlett"
- <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@kernel.org>, Suren
- Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Shuah
- Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org, LKML
- <linux-kernel@vger.kernel.org>, Muhammad Usama Anjum <usama.anjum@arm.com>
-Subject: Re: [PATCH] selftests/mm: run_vmtests.sh: fix destructive tests
- invocation
-Message-Id: <20260427095821.b9ec5644c83ebf0ff5b9a80c@linux-foundation.org>
-In-Reply-To: <6e105a9f-e335-469d-92a0-9bd0aa806706@redhat.com>
-References: <214fd9e4-5398-4c26-859e-c982c2e277c3@redhat.com>
-	<20260427091250.61316471db20dfb0852141c1@linux-foundation.org>
-	<ae-TlsIq_YkQcCUY@kernel.org>
-	<6e105a9f-e335-469d-92a0-9bd0aa806706@redhat.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="sQdMoABB"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1777309163;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=2Svt+4NlaIIFnDXWH/eCk2Ml80i80lObraw1UrKQl8Y=;
+	b=sQdMoABBd2Dfl+OPTz0lmHecx/bDu/iIBz8zhcfZkFgAHCXhuLPOZvHqL+iILoUD0jt7rE
+	dx4+ScstADMWzjT2JdVY2PBP4iNUHG2/xGy7bx9zQNSYNJqVX4H13wAVNVeCledFhLdwXS
+	o1bfvYB0buNxslXDiB5u8sA9JGz1G2s=
+From: Kaitao cheng <kaitao.cheng@linux.dev>
+To: martin.lau@linux.dev,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	shuah@kernel.org,
+	chengkaitao@kylinos.cn,
+	linux-kselftest@vger.kernel.org
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v10 1/8] bpf: refactor __bpf_list_del to take list node pointer
+Date: Tue, 28 Apr 2026 00:58:59 +0800
+Message-ID: <20260427165906.84420-2-kaitao.cheng@linux.dev>
+In-Reply-To: <20260427165906.84420-1-kaitao.cheng@linux.dev>
+References: <20260427165906.84420-1-kaitao.cheng@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Mon, 27 Apr 2026 12:55:34 -0400 Luiz Capitulino <luizcap@redhat.com> wrote:
+From: Kaitao Cheng <chengkaitao@kylinos.cn>
 
-> Andrew, do you need a v2 or can you edit the patch description for me?
-> 
+Refactor __bpf_list_del to accept (head, struct list_head *n) instead of
+(head, bool tail). The caller now passes the specific node to remove:
+bpf_list_pop_front passes h->next, bpf_list_pop_back passes h->prev.
 
-All done, thanks.
+Prepares for introducing bpf_list_del(head, node) kfunc to remove an
+arbitrary node when the user holds ownership.
 
-From: Luiz Capitulino <luizcap@redhat.com>
-Subject: selftests/mm: run_vmtests.sh: fix destructive tests invocation
-Date: Mon, 27 Apr 2026 12:03:51 -0400
-
-Destructive tests should be invoked with -d command-line option, but
-this won't work today since 'd' is missing in getopts command-line.  This
-commit fixes it.
-
-Link: https://lore.kernel.org/214fd9e4-5398-4c26-859e-c982c2e277c3@redhat.com
-Fixes: f16ff3b692ad ("selftests/mm: run_vmtests.sh: add missing tests")
-Signed-off-by: Luiz Capitulino <luizcap@redhat.com>
-Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-Cc: David Hildenbrand <david@kernel.org>
-Cc: Liam R. Howlett <liam@infradead.org>
-Cc: Lorenzo Stoakes <ljs@kernel.org>
-Cc: Michal Hocko <mhocko@suse.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Suren Baghdasaryan <surenb@google.com>
-Cc: Vlastimil Babka <vbabka@kernel.org>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
 ---
+ kernel/bpf/helpers.c | 20 +++++++++++++-------
+ 1 file changed, 13 insertions(+), 7 deletions(-)
 
- tools/testing/selftests/mm/run_vmtests.sh |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
---- a/tools/testing/selftests/mm/run_vmtests.sh~selftests-mm-run_vmtestssh-fix-destructive-tests-invocation
-+++ a/tools/testing/selftests/mm/run_vmtests.sh
-@@ -103,7 +103,7 @@ RUN_ALL=false
- RUN_DESTRUCTIVE=false
- TAP_PREFIX="# "
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index baa12b24bb64..9cd7b028592c 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -2550,22 +2550,24 @@ __bpf_kfunc int bpf_list_push_back_impl(struct bpf_list_head *head,
+ 	return bpf_list_push_back(head, node, meta__ign, off);
+ }
  
--while getopts "aht:n" OPT; do
-+while getopts "aht:nd" OPT; do
- 	case ${OPT} in
- 		"a") RUN_ALL=true ;;
- 		"h") usage ;;
-_
+-static struct bpf_list_node *__bpf_list_del(struct bpf_list_head *head, bool tail)
++static struct bpf_list_node *__bpf_list_del(struct bpf_list_head *head,
++					    struct list_head *n)
+ {
+-	struct list_head *n, *h = (void *)head;
++	struct list_head *h = (void *)head;
+ 	struct bpf_list_node_kern *node;
+ 
+ 	/* If list_head was 0-initialized by map, bpf_obj_init_field wasn't
+ 	 * called on its fields, so init here
+ 	 */
+-	if (unlikely(!h->next))
++	if (unlikely(!h->next)) {
+ 		INIT_LIST_HEAD(h);
++		return NULL;
++	}
+ 	if (list_empty(h))
+ 		return NULL;
+ 
+-	n = tail ? h->prev : h->next;
+ 	node = container_of(n, struct bpf_list_node_kern, list_head);
+-	if (WARN_ON_ONCE(READ_ONCE(node->owner) != head))
++	if (unlikely(READ_ONCE(node->owner) != head))
+ 		return NULL;
+ 
+ 	list_del_init(n);
+@@ -2575,12 +2577,16 @@ static struct bpf_list_node *__bpf_list_del(struct bpf_list_head *head, bool tai
+ 
+ __bpf_kfunc struct bpf_list_node *bpf_list_pop_front(struct bpf_list_head *head)
+ {
+-	return __bpf_list_del(head, false);
++	struct list_head *h = (void *)head;
++
++	return __bpf_list_del(head, h->next);
+ }
+ 
+ __bpf_kfunc struct bpf_list_node *bpf_list_pop_back(struct bpf_list_head *head)
+ {
+-	return __bpf_list_del(head, true);
++	struct list_head *h = (void *)head;
++
++	return __bpf_list_del(head, h->prev);
+ }
+ 
+ __bpf_kfunc struct bpf_list_node *bpf_list_front(struct bpf_list_head *head)
+-- 
+2.50.1 (Apple Git-155)
 
