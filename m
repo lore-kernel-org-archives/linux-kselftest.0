@@ -1,145 +1,127 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9844D347BC1;
-	Mon, 27 Apr 2026 15:49:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18E7C344D9D
+	for <linux-kselftest@vger.kernel.org>; Mon, 27 Apr 2026 15:58:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777304977; cv=none; b=XvKQjDIQpxOPiUeuYTf5rrk3D6x9HYVU6qKODJF9mTn4IRMkvJp5patkgyk0/Y/DZ3QaTOKmM+OZA8EUJQI7TxfX18kJQ/QO+T96q8jDlJDdVmrs+ETvrPKNt49GhtZGJwO3mlEQ2HiLK2NKUYrN4GfbLVkqTFeSIru0d4Ck59Y=
+	t=1777305493; cv=none; b=Xl1P43Z1w1JiqbOCA9lzD2KZExprQScXYl9OKNW5CawaJ7IuMV05tFuN7vT7KrpwV0VLquHvsbmnqp4r+8iJ1ivPwuiu9jlI7OZbslDb8FXqO3hbWCx1oQVl+rji+fncpIHYWaCD681RL/Vrp6a2qt2/dpXFpPUjYTjhCEfPgrc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777304977; c=relaxed/simple;
-	bh=RnyH3VaJp9iG+DCxp6sKhHFXhoXkGIg/w2D9Ek0Oh5Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nizY87n/AnKB0cTg6M7gnT4BUNkQusdoTBqpfon/3y6M8Uxi88Xtc0TIlQUf5Lf5yIulbps7MjpF5G/RAfX4fxf/UzV/Cv0Is2gvV7JxWYuNeA+PZoKz2Kb2hMheQqQOtIIdpEJ5u5E++cf0uoTuUPnIeck8LHUijyUbNr7ijXA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MI6yBmVH; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777305493; c=relaxed/simple;
+	bh=WNcCv2dYJaAVCb27nOY+hxf7Ohx8wEqh/8daXbYI+Tc=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=gd8UGmYZk6LZ937wmQM3mv/XLvIHDZH1ywnaYrF1TA+3FC6NsdIotkGSEs6a4fza9Gcn2oMLIRPrO1bfv0I7AoPE0CGqmOlRu7xG0QrGq8nKoLIP2mju0P9zdovKNTglCx/OQhL5xwTspxWSZfD2zbpgkIUAsMTw1vNBqHPHN0Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xLewC43e; arc=none smtp.client-ip=95.215.58.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MI6yBmVH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A5E7C19425;
-	Mon, 27 Apr 2026 15:49:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777304977;
-	bh=RnyH3VaJp9iG+DCxp6sKhHFXhoXkGIg/w2D9Ek0Oh5Q=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=MI6yBmVHD6NdSnTMBO36N9sU6nMr/OjWEqGqd2jCLjCEWVVf7dk6mjXJGk2yQaK+E
-	 PhAYxUVn5EV8LITl1X+gPSXptKRIM68RrM34vUt2DrcVNMQao53KTVeexPSpg28oD3
-	 f0L2Wus9WpPXxriMmieKZnpDtIBoXuIfbtGyEw9UGVFgV4dr1WPwrtXnNPuVkTAPhX
-	 d0LlPk1CCsyBnddzt+4T76XT6w7AfRcUNgeHf3g8/28A86Jer16wSp+KT0ISHT+EgH
-	 O4pOx9y4K1R9LRkKGLNNOayXWpdALpsycItvZHn9moremGmL8FZrXgwn+NY/5Arsfd
-	 IEXCtXz5ZIQlw==
-Message-ID: <9d365395-051a-436b-9017-352ebc889770@kernel.org>
-Date: Mon, 27 Apr 2026 17:49:28 +0200
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xLewC43e"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1777305480;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=tDtbus8CxHrwyQM3OMQxzeKwt9hPmc6cbwSAuU/oDr8=;
+	b=xLewC43eXTp7cTNuezMPBEADJ3J7iL+BrYFniYehOCZGgKBxD6ZhQZp07xLW6DCG+UmilV
+	IOkePLTdKPAeFsDUqJWTK6ciN34NHPccn51FnevfhPh34nyCSvwRY+ENY2bUVVvl6mVJTS
+	i788J1u1a8TuefrI+2Erz7vnZpZ6rU0=
+From: Lance Yang <lance.yang@linux.dev>
+To: leitao@debian.org
+Cc: linmiaohe@huawei.com,
+	nao.horiguchi@gmail.com,
+	akpm@linux-foundation.org,
+	corbet@lwn.net,
+	skhan@linuxfoundation.org,
+	david@kernel.org,
+	ljs@kernel.org,
+	Liam.Howlett@oracle.com,
+	vbabka@kernel.org,
+	rppt@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	shuah@kernel.org,
+	linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	kernel-team@meta.com,
+	Lance Yang <lance.yang@linux.dev>
+Subject: Re: [PATCH v5 1/4] mm/memory-failure: report MF_MSG_KERNEL for reserved pages
+Date: Mon, 27 Apr 2026 23:57:39 +0800
+Message-Id: <20260427155739.1643-1-lance.yang@linux.dev>
+In-Reply-To: <20260427123330.92847-1-lance.yang@linux.dev>
+References: <20260427123330.92847-1-lance.yang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 2/4] mm/memory-failure: add panic option for
- unrecoverable pages
-To: Breno Leitao <leitao@debian.org>, Miaohe Lin <linmiaohe@huawei.com>,
- Naoya Horiguchi <nao.horiguchi@gmail.com>,
- Andrew Morton <akpm@linux-foundation.org>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, Lorenzo Stoakes <ljs@kernel.org>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Shuah Khan <shuah@kernel.org>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kernel-team@meta.com
-References: <20260424-ecc_panic-v5-0-a35f4b50425c@debian.org>
- <20260424-ecc_panic-v5-2-a35f4b50425c@debian.org>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <20260424-ecc_panic-v5-2-a35f4b50425c@debian.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-
-> +	switch (type) {
-> +	case MF_MSG_KERNEL:
-> +	case MF_MSG_UNKNOWN:
-> +		return true;
-> +	case MF_MSG_KERNEL_HIGH_ORDER:
-> +		/*
-> +		 * Rule out a concurrent buddy allocation: give the
-> +		 * allocator a moment to finish prep_new_page() and
-> +		 * re-check. A genuine high-order kernel tail page stays
-> +		 * unowned; an in-flight allocation will have bumped the
-> +		 * refcount, attached a mapping, or placed the page on
-> +		 * an LRU by now.
-> +		 */
-> +		p = pfn_to_online_page(pfn);
-> +		if (!p)
-> +			return true;
-> +		/*
-> +		 * Yield so a concurrent allocator on another CPU can
-> +		 * finish prep_new_page() and have its writes become
-> +		 * visible before we resample the page state.
-> +		 */
-> +		cpu_relax();
-> +		return page_count(p) == 0 &&
-> +		       !PageLRU(p) &&
-> +		       !page_mapped(p) &&
-> +		       !page_folio(p)->mapping &&
-> +		       !is_free_buddy_page(p);
-
-I don't get what you are doing here. The right way to check for a tail page is
-not by checking the refcount.
-
-Further, you are not holding a folio reference? If so, calling
-page_mapped/folio_mapped is shaky. On concurrent folio split you can trigger a
-VM_WARN_ON_FOLIO().
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
 
-Maybe folio_snapshot() is what you are looking for, if you are in fact not
-holding a reference?
+On Mon, Apr 27, 2026 at 08:33:30PM +0800, Lance Yang wrote:
+>
+>On Fri, Apr 24, 2026 at 05:23:59AM -0700, Breno Leitao wrote:
+>>When get_hwpoison_page() returns a negative value, distinguish
+>>reserved pages from other failure cases by reporting MF_MSG_KERNEL
+>>instead of MF_MSG_GET_HWPOISON. Reserved pages belong to the kernel
+>>and should be classified accordingly for proper handling.
+>>
+>>Acked-by: Miaohe Lin <linmiaohe@huawei.com>
+>>Signed-off-by: Breno Leitao <leitao@debian.org>
+>>---
+>> mm/memory-failure.c | 11 ++++++++++-
+>> 1 file changed, 10 insertions(+), 1 deletion(-)
+>>
+>>diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+>>index ee42d43613097..7b67e43dafbd1 100644
+>>--- a/mm/memory-failure.c
+>>+++ b/mm/memory-failure.c
+>>@@ -2432,7 +2432,16 @@ int memory_failure(unsigned long pfn, int flags)
+>> 		}
+>> 		goto unlock_mutex;
+>> 	} else if (res < 0) {
+>>-		res = action_result(pfn, MF_MSG_GET_HWPOISON, MF_IGNORED);
+>>+		/*
+>>+		 * PageReserved is stable here: reserved pages have
+>>+		 * PG_reserved set at boot or by drivers and are never
+>>+		 * freed through the page allocator.
+>>+		 */
+>
+>Not necessarily. PG_reserved is not a permanent lifetime property for
+>every page that has carried it.
+>
+>page-flags.h says early reserved pages may later have PG_reserved
+>cleared and then be given to the page allocator :)
+>
+>At least some drivers also clear PG_reserved when releasing pages they
+>marked reserved.
+>
+>Would it be clearer to say that pages with PG_reserved set are not
+>currently managed by the page allocator, rather than saying reserved
+>pages are never freed through the page allocator?
+>
+>Otherwise, LGTM.
 
--- 
-Cheers,
+Ouch, I missed one more thing ...
 
-David
+Sashiko pointed out that[1]
+
+> +		if (PageReserved(p))
+
+"Can this introduce a use-after-free risk on the struct page?"
+
+get_any_page() may put the page before returning -EIO. After that ref is
+dropped, PageReserved(p) is not safe, IIUC :(
+
+Maybe just cache it before the call?
+
+is_reserved = PageReserved(p);
+res = get_hwpoison_page(p, flags);
+
+[1] https://sashiko.dev/#/patchset/20260424-ecc_panic-v5-0-a35f4b50425c@debian.org
