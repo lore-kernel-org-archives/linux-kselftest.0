@@ -1,35 +1,35 @@
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D3883B8D78;
-	Mon, 27 Apr 2026 12:04:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE2F53B9601;
+	Mon, 27 Apr 2026 12:04:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777291449; cv=none; b=KeohPGCJ4GAZh7iF4vBJo2EzsshlltpQoVng9gXa9sZjsdikObWluVciUb20dro5gllO1L+1MFxHvOyapqCOcG5gYSvxLo2g4nkTzPrIVME8dZcnYbUx7j1Ds/U8SALhq4SDZtyA1JipHeowikhNJ3rdy9VdkTuJyavSGJuIIdA=
+	t=1777291451; cv=none; b=d65FpXQoDWQUtPrNrp9SDZh2EOynXFUmbw9NjrNAkNhVXDNokvgmgFRApc6etzGIYi3qR2YlpQm3x6Btj8AxKyoGwRCxgEB/FecSCPbOrd8DyO6XnVt4xyR/fU1JKxQDseOzCBtfcFzWacbZSyuAbDtoRLYENi+Fxji7VdfATNE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777291449; c=relaxed/simple;
-	bh=ldcRjHyX3ikGZr7TkP8sF4TKynkn1s47t2JOAAGYL7E=;
+	s=arc-20240116; t=1777291451; c=relaxed/simple;
+	bh=W1D5lSXRtEDeQjde+9XAOouOpPIYvgXYBK0Xv65p3K0=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=XiEsPdtWPxcbsUKqCxySlyk2IrY+B2UiKNrCTRvWh+wY3CRCdzZu55wYHHHxqAcfI3/yjGndz8JEZxQbSwfaZ027vR4FPTxXAuJYzU70ih4HU7czdyCABoefLV/ZR+snd4z0nbICY/+turiBdJPcn3TnSLyLjAgiGCT5vW2rQiM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=Miik+htN; arc=none smtp.client-ip=217.140.110.172
+	 In-Reply-To:To:Cc; b=jbCJePvn0i239XG3riG53birYo4WH6WhCfuMbzBRKe+e5Kxb6gNF6qVLV5wZoTRxd+65kQDXxVGwfPVMIydAkvO/ZjtVH9QfnVZXJfXygUADWrvBNd628+hYO55JUOvKBDSVxAdPO+OVhPWeLcvywgmE06YJCKG8vRzS91nWlqU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=FrcRXtyo; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="Miik+htN"
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="FrcRXtyo"
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 023032437;
-	Mon, 27 Apr 2026 05:04:02 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EA2391684;
+	Mon, 27 Apr 2026 05:04:03 -0700 (PDT)
 Received: from localhost.localdomain (e123572-lin.cambridge.arm.com [10.1.194.54])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DA85A3F62B;
-	Mon, 27 Apr 2026 05:04:05 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CA1BE3F62B;
+	Mon, 27 Apr 2026 05:04:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1777291447; bh=ldcRjHyX3ikGZr7TkP8sF4TKynkn1s47t2JOAAGYL7E=;
+	t=1777291449; bh=W1D5lSXRtEDeQjde+9XAOouOpPIYvgXYBK0Xv65p3K0=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=Miik+htNqUHD8vM0xx8JqEjpijJJ/3fmWSdcOzhiUxUJX8LFyjsOuhSbRJ6QTtLCF
-	 x98ojX4IXXUjskp5T8b8iUrxWEOkFCf6JjJnIoySQSzjTKSt/V1TDI4v64H/FLFMrg
-	 9YAfKQxrgNv/njWtR81B9dfN559OxTMw8e1GvVXQ=
+	b=FrcRXtyoVN+V5QnRWUBcPP11+5QJboDFs/HJ+cJcNWlVL73mrj0coeJAWyJ6c00lz
+	 Ma1oL+zHBHNZpHbpiurhIeqZM4hAmR80fUOAiPEn+krHPySnbUvDCwR0rEMf0VARDX
+	 NM2JVBbf7eizQct9FKyZ/R6dTUecIOJ7Qf9bSXmg=
 From: Kevin Brodsky <kevin.brodsky@arm.com>
-Date: Mon, 27 Apr 2026 13:03:36 +0100
-Subject: [PATCH v2 4/5] kselftest/arm64: Move/add POE helpers to
- test_signals_utils.h
+Date: Mon, 27 Apr 2026 13:03:37 +0100
+Subject: [PATCH v2 5/5] kselftest/arm64: Add tests for POR_EL0
+ save/reset/restore
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -38,7 +38,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260427-poe_signal-v2-4-2bd9d6f16ab4@arm.com>
+Message-Id: <20260427-poe_signal-v2-5-2bd9d6f16ab4@arm.com>
 References: <20260427-poe_signal-v2-0-2bd9d6f16ab4@arm.com>
 In-Reply-To: <20260427-poe_signal-v2-0-2bd9d6f16ab4@arm.com>
 To: linux-arm-kernel@lists.infradead.org
@@ -51,77 +51,188 @@ Cc: Kevin Brodsky <kevin.brodsky@arm.com>,
  linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
  linux-kernel@vger.kernel.org
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1777291437; l=2017;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1777291437; l=5057;
  i=kevin.brodsky@arm.com; s=20260427; h=from:subject:message-id;
- bh=ldcRjHyX3ikGZr7TkP8sF4TKynkn1s47t2JOAAGYL7E=;
- b=r24fR4zGfLVsqC3/BUO4grJOZYk9vXPaWiQGFFkqbpPG0E3bWUZYasLlLJnROsUstdfZcv6rz
- l5q3dEkmPbMB4V4cqfkWkRZN/jzikVM6ShcRdFYHENfVT5ULyQjmCrh
+ bh=W1D5lSXRtEDeQjde+9XAOouOpPIYvgXYBK0Xv65p3K0=;
+ b=5XkTdq3N2XGqgMLfy65UGbovi8wThCf1OhK2p3M89xXvnTmO/hRQNDs1NU+gdq2uzLZO9C9BO
+ laUnaCvsYZCATe6H8kHpDgAZSU5TxOL+f0VbJZHTFkICzz6VO6ioq6C
 X-Developer-Key: i=kevin.brodsky@arm.com; a=ed25519;
  pk=N2QG+eJKrvkNovwhhwJhnJ4+ScVfsGCHldmqLfcMTFs=
 
-In preparation to adding further POE signal tests, move
-get_por_el0() to test_signals_utils.h and add set_por_el0().
+POR_EL0 is expected to be:
+- Saved in the poe_context record
+- Reset to POR_EL0_INIT when invoking the signal handler
+- Restored from poe_context when returning from the signal handler
 
-Reviewed-by: Mark Brown <broonie@kernel.org>
+Add a new test, poe_restore, to check that the save/reset/restore
+mechanism is working as intended. See commit 2e8a1acea859 ("arm64:
+signal: Improve POR_EL0 handling to avoid uaccess failures") for
+more details.
+
+This commit did not handle the case where poe_context is missing
+correctly. This was recently fixed; add a new test,
+poe_missing_poe_context, to check this case.
+
+Note: td->pass is only set to true at the very end, as an unexpected
+signal may occur in case of failure (especially in
+poe_missing_poe_context if POR_EL0 is restored to an invalid value).
+Failures are tracked with a global, failed_check.
+
 Signed-off-by: Kevin Brodsky <kevin.brodsky@arm.com>
 ---
- .../testing/selftests/arm64/signal/test_signals_utils.h  | 16 ++++++++++++++++
- .../selftests/arm64/signal/testcases/poe_siginfo.c       | 15 ---------------
- 2 files changed, 16 insertions(+), 15 deletions(-)
+ .../signal/testcases/poe_missing_poe_context.c     | 73 ++++++++++++++++++++++
+ .../selftests/arm64/signal/testcases/poe_restore.c | 64 +++++++++++++++++++
+ 2 files changed, 137 insertions(+)
 
-diff --git a/tools/testing/selftests/arm64/signal/test_signals_utils.h b/tools/testing/selftests/arm64/signal/test_signals_utils.h
-index 36fc12b3cd60..2c7b8c64a35a 100644
---- a/tools/testing/selftests/arm64/signal/test_signals_utils.h
-+++ b/tools/testing/selftests/arm64/signal/test_signals_utils.h
-@@ -57,6 +57,22 @@ static inline __attribute__((always_inline)) uint64_t get_gcspr_el0(void)
- 	return val;
- }
- 
-+#define SYS_POR_EL0 "S3_3_C10_C2_4"
+diff --git a/tools/testing/selftests/arm64/signal/testcases/poe_missing_poe_context.c b/tools/testing/selftests/arm64/signal/testcases/poe_missing_poe_context.c
+new file mode 100644
+index 000000000000..3f22d8cf6106
+--- /dev/null
++++ b/tools/testing/selftests/arm64/signal/testcases/poe_missing_poe_context.c
+@@ -0,0 +1,73 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2026 Arm Ltd
++ *
++ * Verify that the POR_EL0 register is left untouched on sigreturn if the
++ * POE frame record is missing.
++ */
 +
-+static inline uint64_t get_por_el0(void)
++#include <asm/sigcontext.h>
++
++#include "test_signals_utils.h"
++#include "testcases.h"
++
++#define POR_EL0_INIT	0x07ul
++#define POR_EL0_CUSTOM	0x77ul
++
++static bool failed_check;
++
++static bool modify_por_el0(struct tdescr *td)
 +{
-+	uint64_t val;
++	set_por_el0(POR_EL0_CUSTOM);
 +
-+	asm volatile("mrs %0, " SYS_POR_EL0 "\n" : "=r"(val));
-+
-+	return val;
++	return true;
 +}
 +
-+static inline void set_por_el0(uint64_t val)
++static int signal_remove_poe_context(struct tdescr *td, siginfo_t *si,
++				      ucontext_t *uc)
 +{
-+	asm volatile("msr " SYS_POR_EL0 ", %0\n" :: "r"(val));
++	struct _aarch64_ctx *ctx = GET_UC_RESV_HEAD(uc);
++	size_t resv_size = GET_UCP_RESV_SIZE(uc);
++	struct _aarch64_ctx *poe_ctx_head;
++
++	poe_ctx_head = get_header(ctx, POE_MAGIC, resv_size, NULL);
++	if (!poe_ctx_head) {
++		fprintf(stderr, "Missing poe_context record\n");
++		failed_check = true;
++		return 0;
++	}
++
++	/*
++	 * Actually removing the record would require moving down the next
++	 * records. An easier option is to turn it into an ESR record, which is
++	 * ignored by sigreturn().
++	 */
++	poe_ctx_head->magic = ESR_MAGIC;
++
++	return 0;
 +}
 +
- static inline bool feats_ok(struct tdescr *td)
- {
- 	if (td->feats_incompatible & td->feats_supported)
-diff --git a/tools/testing/selftests/arm64/signal/testcases/poe_siginfo.c b/tools/testing/selftests/arm64/signal/testcases/poe_siginfo.c
-index 36bd9940ee05..e15fedf4da6e 100644
---- a/tools/testing/selftests/arm64/signal/testcases/poe_siginfo.c
-+++ b/tools/testing/selftests/arm64/signal/testcases/poe_siginfo.c
-@@ -21,21 +21,6 @@ static union {
- 	char buf[1024 * 128];
- } context;
- 
--#define SYS_POR_EL0 "S3_3_C10_C2_4"
--
--static uint64_t get_por_el0(void)
--{
--	uint64_t val;
--
--	asm volatile(
--		"mrs	%0, " SYS_POR_EL0 "\n"
--		: "=r"(val)
--		:
--		: );
--
--	return val;
--}
--
- int poe_present(struct tdescr *td, siginfo_t *si, ucontext_t *uc)
- {
- 	struct _aarch64_ctx *head = GET_BUF_RESV_HEAD(context);
++static void check_por_el0_preserved(struct tdescr *td)
++{
++	uint64_t por_el0 = get_por_el0();
++
++	if (por_el0 == POR_EL0_INIT) {
++		fprintf(stderr, "POR_EL0 preserved\n");
++	} else {
++		fprintf(stderr, "POR_EL0 unexpectedly set to %lx\n", por_el0);
++		failed_check = true;
++	}
++
++	td->pass = !failed_check;
++}
++
++struct tdescr tde = {
++	.name = "POR_EL0 missing poe_context",
++	.descr = "Remove poe_context record and check POR_EL0 is preserved",
++	.feats_required = FEAT_POE,
++	.timeout = 3,
++	.sig_trig = SIGUSR1,
++	.init = modify_por_el0,
++	.run = signal_remove_poe_context,
++	.check_result = check_por_el0_preserved,
++};
+diff --git a/tools/testing/selftests/arm64/signal/testcases/poe_restore.c b/tools/testing/selftests/arm64/signal/testcases/poe_restore.c
+new file mode 100644
+index 000000000000..9f9a61a4214d
+--- /dev/null
++++ b/tools/testing/selftests/arm64/signal/testcases/poe_restore.c
+@@ -0,0 +1,64 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2026 Arm Ltd
++ *
++ * Verify that the POR_EL0 register is saved and restored as expected on signal
++ * entry/return.
++ */
++
++#include <asm/sigcontext.h>
++
++#include "test_signals_utils.h"
++#include "testcases.h"
++
++#define POR_EL0_INIT	0x07ul
++#define POR_EL0_CUSTOM	0x77ul
++
++static bool failed_check;
++
++static bool modify_por_el0(struct tdescr *td)
++{
++	set_por_el0(POR_EL0_CUSTOM);
++
++	return true;
++}
++
++static int signal_check_por_el0_reset(struct tdescr *td, siginfo_t *si,
++				      ucontext_t *uc)
++{
++	uint64_t signal_por_el0 = get_por_el0();
++
++	if (signal_por_el0 != POR_EL0_INIT) {
++		fprintf(stderr, "POR_EL0 is %lx in signal handler (expected %lx)\n",
++			signal_por_el0, POR_EL0_INIT);
++		failed_check = true;
++	}
++
++	return 0;
++}
++
++static void check_por_el0_restored(struct tdescr *td)
++{
++	uint64_t por_el0 = get_por_el0();
++
++	if (por_el0 == POR_EL0_CUSTOM) {
++		fprintf(stderr, "POR_EL0 restored\n");
++	} else {
++		fprintf(stderr, "POR_EL0 was %lx but is now %lx\n",
++			POR_EL0_CUSTOM, por_el0);
++		failed_check = true;
++	}
++
++	td->pass = !failed_check;
++}
++
++struct tdescr tde = {
++	.name = "POR_EL0 restore",
++	.descr = "Validate that POR_EL0 is saved/restored on signal entry/return",
++	.feats_required = FEAT_POE,
++	.timeout = 3,
++	.sig_trig = SIGUSR1,
++	.init = modify_por_el0,
++	.run = signal_check_por_el0_reset,
++	.check_result = check_por_el0_restored,
++};
 
 -- 
 2.51.2
