@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E48130594E;
-	Tue, 28 Apr 2026 20:43:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 898A031F9B8;
+	Tue, 28 Apr 2026 20:43:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777409024; cv=none; b=s5Jj3f9L6cje44rNCiVuoQ+rHrKPpq2DhgrO8Dqiu+sSWIjdVf9lvxj2Dpyi2Bl8LTC1TuulsHtq938pNt41e+sFjq7BIKC2hXjl/EuOEeUV60KM/W2SGg0coQp4xlyAwmAvaM6ujqp8abHI2KGCKuknWNIq1sDEedWpl+zq+yQ=
+	t=1777409030; cv=none; b=n76bQecKn1Oq5rs7i3erX81xGTitMXMaCKFvS3V2XCYHIJ3MgMXANTvyXamU7bcF4oufnblXEGYrrI7x7Cd25ubXhRuwwbDXdKolNCp6sjcZYEyaT4uqKGZWnWDA/HY/msvzJQ+7su+m68bXunNwz40xRg2H3yhstbWuyTfxDxU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777409024; c=relaxed/simple;
-	bh=dLU/bCwt/eyA3PPvWB4ap77KznBqGFR0SnU6xHYGFcc=;
+	s=arc-20240116; t=1777409030; c=relaxed/simple;
+	bh=bpVjE+rMZ04PnOlIbMfzh/SWaUuNZKecssAAspqsN00=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=eZskMT+vXceL7fRovEJ9oexiU+vgp5jZKv36hnqFB9R944P7g9pm+E2Ts1gsagMzLofMUkr5DCRlosSE7jlklukbm57pK+dlBNgn20n4fx2kuc2D6EFmaQFUsiIAan8MKyF/RvYrH0hmNwe8/HHsFAVHOwvFmSuRGEOvG48zsm4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mwWAMGYD; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=fzmy+n6u/Vb2tV8OZeo53+vBuZ7WDZq1MYJPh6n0kIzsZyT7Ss/5WKaul5A8pwGgTi0SWIY1siDoup09spWjAwziqdJdwGvgnXnAi5zP9eOYF5vQwnHOL5Xc4SRJZz090wkJOO1GYiH48cmgOBbya2E9gtGxCBH2GXaw1gDbPXQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Lp7BNmJf; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mwWAMGYD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBB26C2BCAF;
-	Tue, 28 Apr 2026 20:43:37 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Lp7BNmJf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5442AC2BCB3;
+	Tue, 28 Apr 2026 20:43:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777409023;
-	bh=dLU/bCwt/eyA3PPvWB4ap77KznBqGFR0SnU6xHYGFcc=;
+	s=k20201202; t=1777409030;
+	bh=bpVjE+rMZ04PnOlIbMfzh/SWaUuNZKecssAAspqsN00=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=mwWAMGYDBm1/30LXf/9ytrjyyByqvvFyPg5pEzATYztnQDEwJ9Zw3n0dj9e1frT4Y
-	 PXNluZ5vLoTN5VWyN9Ou5WDvkwCsY7/jaLg2GJVZf/9e03WI5umRW00q5YZ9gXs1wh
-	 eC3boZrlA2bezEuyOsRjLh4VuMeAhsm9RGnzbMAEGegMZ5s86t4+egl2etx4Tmdt4o
-	 eSFiMrMAVRmJhEDjIv1I3yK5LR0DxJ4qvdQ81ZNPZ7Uxg0xApN8eEa0MN09FENMHn5
-	 5v7WZ/XTutw2g2y4LDlGtWY2WeIYLmIe3tRMYciuthDi0wX2SMowhWrnI61sYaJdIA
-	 MUSUOGb9ULIsA==
+	b=Lp7BNmJfBs3tnIXRwomoqgNhS3DpKCfQnJiUKp0ucl4K0f1Qr/E4L975/0TC+Tejs
+	 8bphHhHBaxKSe3Q7WxLlL+zQmOYK67ceUwO6kM3zTrTkslmOh5U+uXc3AWHA3Wgdqw
+	 Ior2MXonGYqegGcU6qpUJ2I2cZic5sG9876hxsh/nrct7YHaLpcHZbx9n1mKXrHnmv
+	 pPi2JLgfCdbJ6pmTzVqlBUJ5rsWfkf1zMuRFIkDYfWZaFNibPhnsJC6/i68phkXOED
+	 ZHBIhZ5NZK/AoKcIZXhGvRflC+tdNyQN/dBUldyqkyFG3YpeInMFQ1s8aR5PFCv/mT
+	 VMt6K8MPkbr2Q==
 From: Mike Rapoport <rppt@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	David Hildenbrand <david@kernel.org>
@@ -54,9 +54,9 @@ Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-mm@kvack.org
-Subject: [PATCH v3 08/54] selftests/mm: hugetlb-shm: use kselftest framework
-Date: Tue, 28 Apr 2026 23:41:54 +0300
-Message-ID: <20260428204240.1924129-9-rppt@kernel.org>
+Subject: [PATCH v3 09/54] selftests/mm: hugetlb-vmemmap: use kselftest framework
+Date: Tue, 28 Apr 2026 23:41:55 +0300
+Message-ID: <20260428204240.1924129-10-rppt@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260428204240.1924129-1-rppt@kernel.org>
 References: <20260428204240.1924129-1-rppt@kernel.org>
@@ -70,96 +70,98 @@ Content-Transfer-Encoding: 8bit
 
 From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-Convert hugetlb-shm test to use kselftest framework for reporting and
-tracking successful and failing runs.
+Convert hugetlb-vmemmap test to use kselftest framework for reporting
+and tracking successful and failing runs.
 
 Reviewed-by: Donet Tom <donettom@linux.ibm.com>
 Reviewed-by: Mark Brown <broonie@kernel.org>
 Tested-by: Sarthak Sharma <sarthak.sharma@arm.com>
 Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 ---
- tools/testing/selftests/mm/hugetlb-shm.c | 45 ++++++++++++------------
- 1 file changed, 22 insertions(+), 23 deletions(-)
+ tools/testing/selftests/mm/hugetlb-vmemmap.c | 42 +++++++++-----------
+ 1 file changed, 18 insertions(+), 24 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/hugetlb-shm.c b/tools/testing/selftests/mm/hugetlb-shm.c
-index de8f5d523084..0f70b1a50b6b 100644
---- a/tools/testing/selftests/mm/hugetlb-shm.c
-+++ b/tools/testing/selftests/mm/hugetlb-shm.c
-@@ -28,9 +28,9 @@
- #include <sys/shm.h>
- #include <sys/mman.h>
+diff --git a/tools/testing/selftests/mm/hugetlb-vmemmap.c b/tools/testing/selftests/mm/hugetlb-vmemmap.c
+index df366a4d1b92..485a6978b40f 100644
+--- a/tools/testing/selftests/mm/hugetlb-vmemmap.c
++++ b/tools/testing/selftests/mm/hugetlb-vmemmap.c
+@@ -63,7 +63,7 @@ static int check_page_flags(unsigned long pfn)
+ 	read(fd, &pageflags, sizeof(pageflags));
+ 	if ((pageflags & HEAD_PAGE_FLAGS) != HEAD_PAGE_FLAGS) {
+ 		close(fd);
+-		printf("Head page flags (%lx) is invalid\n", pageflags);
++		ksft_print_msg("Head page flags (%lx) is invalid\n", pageflags);
+ 		return -1;
+ 	}
  
--#define LENGTH (256UL*1024*1024)
-+#include "vm_util.h"
- 
--#define dprintf(x)  printf(x)
-+#define LENGTH (256UL*1024*1024)
- 
- int main(void)
+@@ -77,7 +77,7 @@ static int check_page_flags(unsigned long pfn)
+ 		if ((pageflags & TAIL_PAGE_FLAGS) != TAIL_PAGE_FLAGS ||
+ 		    (pageflags & HEAD_PAGE_FLAGS) == HEAD_PAGE_FLAGS) {
+ 			close(fd);
+-			printf("Tail page flags (%lx) is invalid\n", pageflags);
++			ksft_print_msg("Tail page flags (%lx) is invalid\n", pageflags);
+ 			return -1;
+ 		}
+ 	}
+@@ -91,44 +91,38 @@ int main(int argc, char **argv)
  {
-@@ -38,44 +38,43 @@ int main(void)
- 	unsigned long i;
- 	char *shmaddr;
- 
+ 	void *addr;
+ 	unsigned long pfn;
++	int ret;
++
 +	ksft_print_header();
 +	ksft_set_plan(1);
-+
- 	shmid = shmget(2, LENGTH, SHM_HUGETLB | IPC_CREAT | SHM_R | SHM_W);
--	if (shmid < 0) {
--		perror("shmget");
+ 
+ 	pagesize  = psize();
+ 	maplength = default_huge_page_size();
+-	if (!maplength) {
+-		printf("Unable to determine huge page size\n");
 -		exit(1);
 -	}
--	printf("shmid: 0x%x\n", shmid);
-+	if (shmid < 0)
-+		ksft_exit_fail_perror("shmget");
-+
-+	ksft_print_msg("shmid: 0x%x\n", shmid);
++	if (!maplength)
++		ksft_exit_skip("Unable to determine huge page size\n");
  
- 	shmaddr = shmat(shmid, NULL, 0);
- 	if (shmaddr == (char *)-1) {
--		perror("Shared memory attach failure");
-+		ksft_perror("Shared memory attach failure");
- 		shmctl(shmid, IPC_RMID, NULL);
--		exit(2);
-+		ksft_exit_fail();
- 	}
--	printf("shmaddr: %p\n", shmaddr);
-+	ksft_print_msg("shmaddr: %p\n", shmaddr);
- 
--	dprintf("Starting the writes:\n");
--	for (i = 0; i < LENGTH; i++) {
-+	ksft_print_msg("Starting the writes:\n");
-+	for (i = 0; i < LENGTH; i++)
- 		shmaddr[i] = (char)(i);
--		if (!(i % (1024 * 1024)))
--			dprintf(".");
+ 	addr = mmap(NULL, maplength, PROT_READ | PROT_WRITE,
+ 			MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB, -1, 0);
+-	if (addr == MAP_FAILED) {
+-		perror("mmap");
+-		exit(1);
 -	}
--	dprintf("\n");
++	if (addr == MAP_FAILED)
++		ksft_exit_fail_perror("mmap");
  
--	dprintf("Starting the Check...");
-+	ksft_print_msg("Starting the Check...");
- 	for (i = 0; i < LENGTH; i++)
- 		if (shmaddr[i] != (char)i) {
--			printf("\nIndex %lu mismatched\n", i);
--			exit(3);
-+			shmctl(shmid, IPC_RMID, NULL);
-+			ksft_exit_fail_msg("Data mismatch at index %lu\n", i);
- 		}
--	dprintf("Done.\n");
-+	ksft_print_msg("Done.\n");
+ 	/* Trigger allocation of HugeTLB page. */
+ 	write_bytes(addr, maplength);
  
- 	if (shmdt((const void *)shmaddr) != 0) {
--		perror("Detach failure");
-+		ksft_perror("Detach failure");
- 		shmctl(shmid, IPC_RMID, NULL);
--		exit(4);
+ 	pfn = virt_to_pfn(addr);
+ 	if (pfn == -1UL) {
++		ksft_perror("virt_to_pfn");
+ 		munmap(addr, maplength);
+-		perror("virt_to_pfn");
+-		exit(1);
 +		ksft_exit_fail();
  	}
  
- 	shmctl(shmid, IPC_RMID, NULL);
+-	printf("Returned address is %p whose pfn is %lx\n", addr, pfn);
++	ksft_print_msg("Returned address is %p whose pfn is %lx\n", addr, pfn);
+ 
+-	if (check_page_flags(pfn) < 0) {
+-		munmap(addr, maplength);
+-		perror("check_page_flags");
+-		exit(1);
+-	}
++	ret = check_page_flags(pfn);
+ 
+-	/* munmap() length of MAP_HUGETLB memory must be hugepage aligned */
+-	if (munmap(addr, maplength)) {
+-		perror("munmap");
+-		exit(1);
+-	}
++	if (munmap(addr, maplength))
++		ksft_exit_fail_perror("munmap");
  
 -	return 0;
-+	ksft_test_result_pass("hugepage using SysV shmget/shmat\n");
++	ksft_test_result(!ret, "HugeTLB vmemmap page flags\n");
 +	ksft_finished();
  }
 -- 
