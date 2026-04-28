@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86A0528725A;
-	Tue, 28 Apr 2026 20:43:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E48130594E;
+	Tue, 28 Apr 2026 20:43:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777409017; cv=none; b=Q0eSFbfecvvTJUlLqUIV/VGftI2n1WJBmgQUWKh2elajvHV4OHa9kQjb1rtpyRaTF8mbsQt3sF+ylYwtahv4nC5MO1NxhnJ9H4yIaj8RXISl5ALhvozUSKNmKP8liYXa34iYdpf9PagJCwcjJxBgBzB+OGak7QgKV9fIa3bYCyc=
+	t=1777409024; cv=none; b=s5Jj3f9L6cje44rNCiVuoQ+rHrKPpq2DhgrO8Dqiu+sSWIjdVf9lvxj2Dpyi2Bl8LTC1TuulsHtq938pNt41e+sFjq7BIKC2hXjl/EuOEeUV60KM/W2SGg0coQp4xlyAwmAvaM6ujqp8abHI2KGCKuknWNIq1sDEedWpl+zq+yQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777409017; c=relaxed/simple;
-	bh=9sC3778jKyDFz3Hjf8iXiNoDRSWAhHT+f8fPth7IqjA=;
+	s=arc-20240116; t=1777409024; c=relaxed/simple;
+	bh=dLU/bCwt/eyA3PPvWB4ap77KznBqGFR0SnU6xHYGFcc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tMlNZXLvEIcAOh6v02B/28GxsSnDjcJ6/cnfhv8jYQeTC+R7ypeB2PSVWXue5ga9BzrnEDLzYr81k0SVIMP/LJ+sfebKH/3tOHCsZ61BMLasuEfnITYTCc4Stx8lzcl0yPNigD0BHbBalFdqhwUJdJ+MhB5S3lw1TrIGKrvaYys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MFRVWxxU; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=eZskMT+vXceL7fRovEJ9oexiU+vgp5jZKv36hnqFB9R944P7g9pm+E2Ts1gsagMzLofMUkr5DCRlosSE7jlklukbm57pK+dlBNgn20n4fx2kuc2D6EFmaQFUsiIAan8MKyF/RvYrH0hmNwe8/HHsFAVHOwvFmSuRGEOvG48zsm4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mwWAMGYD; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MFRVWxxU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E9BDC2BCAF;
-	Tue, 28 Apr 2026 20:43:30 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mwWAMGYD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBB26C2BCAF;
+	Tue, 28 Apr 2026 20:43:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777409017;
-	bh=9sC3778jKyDFz3Hjf8iXiNoDRSWAhHT+f8fPth7IqjA=;
+	s=k20201202; t=1777409023;
+	bh=dLU/bCwt/eyA3PPvWB4ap77KznBqGFR0SnU6xHYGFcc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=MFRVWxxU2l48pg7KdlcATzh/BQ7El7mawJuXdhfzSUId5u/FV3ENpGrpXoVv/S/5e
-	 diGcw13XfZ66wO6iK6hu/nz+PFGHcwnt5Yh9Kz8cgkfNZUENMDb/9cXjrvfidS/0En
-	 Q9CsEbrpDu2gG6VRAai5UYV/lv4uWDvGC1kM/eG6mUfifvB+4vsxxt79dAdTkvoO+w
-	 UBiE5Xg01xGq0XKss6X4SfkdurzI9BbwHtB04Jn+VmOmuutfi75GehlCP7x5cR+v0f
-	 csq7HGnKd78f9EibARdiq0bwCYC+gXAK2lSpyAw75v7VpnTjcNibWt59VaCe8g3kKA
-	 zzSHvWYTm+k8Q==
+	b=mwWAMGYDBm1/30LXf/9ytrjyyByqvvFyPg5pEzATYztnQDEwJ9Zw3n0dj9e1frT4Y
+	 PXNluZ5vLoTN5VWyN9Ou5WDvkwCsY7/jaLg2GJVZf/9e03WI5umRW00q5YZ9gXs1wh
+	 eC3boZrlA2bezEuyOsRjLh4VuMeAhsm9RGnzbMAEGegMZ5s86t4+egl2etx4Tmdt4o
+	 eSFiMrMAVRmJhEDjIv1I3yK5LR0DxJ4qvdQ81ZNPZ7Uxg0xApN8eEa0MN09FENMHn5
+	 5v7WZ/XTutw2g2y4LDlGtWY2WeIYLmIe3tRMYciuthDi0wX2SMowhWrnI61sYaJdIA
+	 MUSUOGb9ULIsA==
 From: Mike Rapoport <rppt@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	David Hildenbrand <david@kernel.org>
@@ -54,9 +54,9 @@ Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-mm@kvack.org
-Subject: [PATCH v3 07/54] selftests/mm: rename hugepage-* tests to hugetlb-*
-Date: Tue, 28 Apr 2026 23:41:53 +0300
-Message-ID: <20260428204240.1924129-8-rppt@kernel.org>
+Subject: [PATCH v3 08/54] selftests/mm: hugetlb-shm: use kselftest framework
+Date: Tue, 28 Apr 2026 23:41:54 +0300
+Message-ID: <20260428204240.1924129-9-rppt@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260428204240.1924129-1-rppt@kernel.org>
 References: <20260428204240.1924129-1-rppt@kernel.org>
@@ -70,149 +70,98 @@ Content-Transfer-Encoding: 8bit
 
 From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-hugepage could mean both THP and HugeTLB these days.
-
-Rename hugepage-* tests for HugeTLB to hugetlb-* to avoid confusion.
+Convert hugetlb-shm test to use kselftest framework for reporting and
+tracking successful and failing runs.
 
 Reviewed-by: Donet Tom <donettom@linux.ibm.com>
+Reviewed-by: Mark Brown <broonie@kernel.org>
+Tested-by: Sarthak Sharma <sarthak.sharma@arm.com>
 Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 ---
- tools/testing/selftests/mm/.gitignore                     | 4 ++++
- tools/testing/selftests/mm/Makefile                       | 8 ++++----
- tools/testing/selftests/mm/hugetlb-madvise.c              | 2 +-
- .../selftests/mm/{hugepage-mmap.c => hugetlb-mmap.c}      | 2 +-
- .../selftests/mm/{hugepage-mremap.c => hugetlb-mremap.c}  | 2 +-
- .../selftests/mm/{hugepage-shm.c => hugetlb-shm.c}        | 2 +-
- .../mm/{hugepage-vmemmap.c => hugetlb-vmemmap.c}          | 0
- tools/testing/selftests/mm/run_vmtests.sh                 | 8 ++++----
- 8 files changed, 16 insertions(+), 12 deletions(-)
- rename tools/testing/selftests/mm/{hugepage-mmap.c => hugetlb-mmap.c} (99%)
- rename tools/testing/selftests/mm/{hugepage-mremap.c => hugetlb-mremap.c} (99%)
- rename tools/testing/selftests/mm/{hugepage-shm.c => hugetlb-shm.c} (99%)
- rename tools/testing/selftests/mm/{hugepage-vmemmap.c => hugetlb-vmemmap.c} (100%)
+ tools/testing/selftests/mm/hugetlb-shm.c | 45 ++++++++++++------------
+ 1 file changed, 22 insertions(+), 23 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/.gitignore b/tools/testing/selftests/mm/.gitignore
-index b0c30c5ee9e3..9ccd9e1447e6 100644
---- a/tools/testing/selftests/mm/.gitignore
-+++ b/tools/testing/selftests/mm/.gitignore
-@@ -4,6 +4,10 @@ hugepage-mmap
- hugepage-mremap
- hugepage-shm
- hugepage-vmemmap
-+hugetlb-mmap
-+hugetlb-mremap
-+hugetlb-shm
-+hugetlb-vmemmap
- hugetlb-madvise
- hugetlb-read-hwpoison
- hugetlb-soft-offline
-diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-index cbda989f6b6a..a6955660a806 100644
---- a/tools/testing/selftests/mm/Makefile
-+++ b/tools/testing/selftests/mm/Makefile
-@@ -63,10 +63,10 @@ TEST_GEN_FILES += hmm-tests
- TEST_GEN_FILES += hugetlb-madvise
- TEST_GEN_FILES += hugetlb-read-hwpoison
- TEST_GEN_FILES += hugetlb-soft-offline
--TEST_GEN_FILES += hugepage-mmap
--TEST_GEN_FILES += hugepage-mremap
--TEST_GEN_FILES += hugepage-shm
--TEST_GEN_FILES += hugepage-vmemmap
-+TEST_GEN_FILES += hugetlb-mremap
-+TEST_GEN_FILES += hugetlb-shm
-+TEST_GEN_FILES += hugetlb-vmemmap
-+TEST_GEN_FILES += hugetlb-mmap
- TEST_GEN_FILES += khugepaged
- TEST_GEN_FILES += madv_populate
- TEST_GEN_FILES += map_fixed_noreplace
-diff --git a/tools/testing/selftests/mm/hugetlb-madvise.c b/tools/testing/selftests/mm/hugetlb-madvise.c
-index 5b12041fa310..898cc90b314f 100644
---- a/tools/testing/selftests/mm/hugetlb-madvise.c
-+++ b/tools/testing/selftests/mm/hugetlb-madvise.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-- * hugepage-madvise:
-+ * hugetlb-madvise:
-  *
-  * Basic functional testing of madvise MADV_DONTNEED and MADV_REMOVE
-  * on hugetlb mappings.
-diff --git a/tools/testing/selftests/mm/hugepage-mmap.c b/tools/testing/selftests/mm/hugetlb-mmap.c
-similarity index 99%
-rename from tools/testing/selftests/mm/hugepage-mmap.c
-rename to tools/testing/selftests/mm/hugetlb-mmap.c
-index fa886ec148c2..9f5ea8d6d656 100644
---- a/tools/testing/selftests/mm/hugepage-mmap.c
-+++ b/tools/testing/selftests/mm/hugetlb-mmap.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-- * hugepage-mmap:
-+ * hugetlb-mmap:
-  *
-  * Example of using huge page memory in a user application using the mmap
-  * system call.  Before running this application, make sure that the
-diff --git a/tools/testing/selftests/mm/hugepage-mremap.c b/tools/testing/selftests/mm/hugetlb-mremap.c
-similarity index 99%
-rename from tools/testing/selftests/mm/hugepage-mremap.c
-rename to tools/testing/selftests/mm/hugetlb-mremap.c
-index b8f7d92e5a35..1c87c39780c5 100644
---- a/tools/testing/selftests/mm/hugepage-mremap.c
-+++ b/tools/testing/selftests/mm/hugetlb-mremap.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-- * hugepage-mremap:
-+ * hugetlb-mremap:
-  *
-  * Example of remapping huge page memory in a user application using the
-  * mremap system call.  The path to a file in a hugetlbfs filesystem must
-diff --git a/tools/testing/selftests/mm/hugepage-shm.c b/tools/testing/selftests/mm/hugetlb-shm.c
-similarity index 99%
-rename from tools/testing/selftests/mm/hugepage-shm.c
-rename to tools/testing/selftests/mm/hugetlb-shm.c
-index ef06260802b5..de8f5d523084 100644
---- a/tools/testing/selftests/mm/hugepage-shm.c
+diff --git a/tools/testing/selftests/mm/hugetlb-shm.c b/tools/testing/selftests/mm/hugetlb-shm.c
+index de8f5d523084..0f70b1a50b6b 100644
+--- a/tools/testing/selftests/mm/hugetlb-shm.c
 +++ b/tools/testing/selftests/mm/hugetlb-shm.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-- * hugepage-shm:
-+ * hugetlb-shm:
-  *
-  * Example of using huge page memory in a user application using Sys V shared
-  * memory system calls.  In this example the app is requesting 256MB of
-diff --git a/tools/testing/selftests/mm/hugepage-vmemmap.c b/tools/testing/selftests/mm/hugetlb-vmemmap.c
-similarity index 100%
-rename from tools/testing/selftests/mm/hugepage-vmemmap.c
-rename to tools/testing/selftests/mm/hugetlb-vmemmap.c
-diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-index 61b450032af8..b9e520194634 100755
---- a/tools/testing/selftests/mm/run_vmtests.sh
-+++ b/tools/testing/selftests/mm/run_vmtests.sh
-@@ -282,18 +282,18 @@ run_test() {
+@@ -28,9 +28,9 @@
+ #include <sys/shm.h>
+ #include <sys/mman.h>
  
- echo "TAP version 13" | tap_output
+-#define LENGTH (256UL*1024*1024)
++#include "vm_util.h"
  
--CATEGORY="hugetlb" run_test ./hugepage-mmap
-+CATEGORY="hugetlb" run_test ./hugetlb-mmap
+-#define dprintf(x)  printf(x)
++#define LENGTH (256UL*1024*1024)
  
- shmmax=$(cat /proc/sys/kernel/shmmax)
- shmall=$(cat /proc/sys/kernel/shmall)
- echo 268435456 > /proc/sys/kernel/shmmax
- echo 4194304 > /proc/sys/kernel/shmall
--CATEGORY="hugetlb" run_test ./hugepage-shm
-+CATEGORY="hugetlb" run_test ./hugetlb-shm
- echo "$shmmax" > /proc/sys/kernel/shmmax
- echo "$shmall" > /proc/sys/kernel/shmall
+ int main(void)
+ {
+@@ -38,44 +38,43 @@ int main(void)
+ 	unsigned long i;
+ 	char *shmaddr;
  
--CATEGORY="hugetlb" run_test ./hugepage-mremap
--CATEGORY="hugetlb" run_test ./hugepage-vmemmap
-+CATEGORY="hugetlb" run_test ./hugetlb-mremap
-+CATEGORY="hugetlb" run_test ./hugetlb-vmemmap
- CATEGORY="hugetlb" run_test ./hugetlb-madvise
- CATEGORY="hugetlb" run_test ./hugetlb_dio
++	ksft_print_header();
++	ksft_set_plan(1);
++
+ 	shmid = shmget(2, LENGTH, SHM_HUGETLB | IPC_CREAT | SHM_R | SHM_W);
+-	if (shmid < 0) {
+-		perror("shmget");
+-		exit(1);
+-	}
+-	printf("shmid: 0x%x\n", shmid);
++	if (shmid < 0)
++		ksft_exit_fail_perror("shmget");
++
++	ksft_print_msg("shmid: 0x%x\n", shmid);
  
+ 	shmaddr = shmat(shmid, NULL, 0);
+ 	if (shmaddr == (char *)-1) {
+-		perror("Shared memory attach failure");
++		ksft_perror("Shared memory attach failure");
+ 		shmctl(shmid, IPC_RMID, NULL);
+-		exit(2);
++		ksft_exit_fail();
+ 	}
+-	printf("shmaddr: %p\n", shmaddr);
++	ksft_print_msg("shmaddr: %p\n", shmaddr);
+ 
+-	dprintf("Starting the writes:\n");
+-	for (i = 0; i < LENGTH; i++) {
++	ksft_print_msg("Starting the writes:\n");
++	for (i = 0; i < LENGTH; i++)
+ 		shmaddr[i] = (char)(i);
+-		if (!(i % (1024 * 1024)))
+-			dprintf(".");
+-	}
+-	dprintf("\n");
+ 
+-	dprintf("Starting the Check...");
++	ksft_print_msg("Starting the Check...");
+ 	for (i = 0; i < LENGTH; i++)
+ 		if (shmaddr[i] != (char)i) {
+-			printf("\nIndex %lu mismatched\n", i);
+-			exit(3);
++			shmctl(shmid, IPC_RMID, NULL);
++			ksft_exit_fail_msg("Data mismatch at index %lu\n", i);
+ 		}
+-	dprintf("Done.\n");
++	ksft_print_msg("Done.\n");
+ 
+ 	if (shmdt((const void *)shmaddr) != 0) {
+-		perror("Detach failure");
++		ksft_perror("Detach failure");
+ 		shmctl(shmid, IPC_RMID, NULL);
+-		exit(4);
++		ksft_exit_fail();
+ 	}
+ 
+ 	shmctl(shmid, IPC_RMID, NULL);
+ 
+-	return 0;
++	ksft_test_result_pass("hugepage using SysV shmget/shmat\n");
++	ksft_finished();
+ }
 -- 
 2.53.0
 
