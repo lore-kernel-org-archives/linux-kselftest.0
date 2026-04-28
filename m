@@ -1,126 +1,146 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55C9438BF6A
-	for <linux-kselftest@vger.kernel.org>; Tue, 28 Apr 2026 09:26:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B90463D9030
+	for <linux-kselftest@vger.kernel.org>; Tue, 28 Apr 2026 09:44:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777368419; cv=none; b=Y2p7kuU9SUuiFjaMGOU3TZ5Oqn3OuHtiznhrsfTHNESv2JeTuSxPkweHj/7+DXgY0u++PBJWWwX3QRa3UfuaYAyOcUBy1T0UBjJJqKdeW0RnwTh47DKZWg3fL1xKwkWBd6vdtPit/YvEPxkHp1B9Y5JHrVN+l/4Krda32I/dY5A=
+	t=1777369460; cv=none; b=EZnr8w1XTkTp9vbFoAPXvO4wnXqclh+uJu/UWNVW6TdcrW/uRttfx5k5lDUOtYY9JTYNzllED5dP+7/6W1gcZ/hZxs0kicR/hyjdZW9z95JjOU08luhtb1bduawZd5BQi4jQ3r5J62w/Rfc98cbgNjMGVNcae9qlIA7ZgMCgFEg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777368419; c=relaxed/simple;
-	bh=BwUcI927SyLVRlFXerZ4C2KhkdStVKNEijngOS5FYtg=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=dikTIqVl6HSljCArOLm+dIpVhRwsW38RZfNmpKuC0/Yx/VebC5m68Uypf7f3MMIMwni4Ed2OMrJYubogVUngHBSonL3nZw+fxfi7b8kDzYK7kJo91SotpIerCOwvrOgguQGMjRDQfKRcPuN7u6RbFf+tlJWjOLviuIjfVKHsB0c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=P1WtQyIX; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=ByaXHfkS; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1777369460; c=relaxed/simple;
+	bh=DeWJxjbLIolKMcSrmMuJw9zc9LM8Faz8SK7Ib6yqngs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ZIooOb8W/uutNpI4e9KN1NUiXzHkzPDT5CMCgGoBIk40ZCW7JP3akcofZDnYcp6rh/oCXzEQ96o/uZyCZloiPVvknXXwOs4inuLf/NWdDFw3lXV47c4xsWB0P+S30RBXybI0LA8EsPurdCNxqduZoL9uDZNrex9jsmWXAs5yjOM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=avLSWovu; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="P1WtQyIX";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="ByaXHfkS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1777368412;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=SElkUbSArWKRvTI8r4YNCpzW999fwj8na5PfWJ0BC/g=;
-	b=P1WtQyIXOlKqlriw82bVLnMlz7GLkrFb+vcOYZK21Zi8ALRljQsQNCSCoVslAu/Ia8MVPq
-	/v09f7i4URiaDgi6YrtQMtbwoE2GjDhhjMefCQsFOXuYWzAKEST35GP6ig5YD0WU93HCAL
-	0ZgLAGOvc2o+FpfknPibGB8tiv/dg7Q=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-127-y_diUf89O9G6DSuGdPU5TA-1; Tue, 28 Apr 2026 05:26:51 -0400
-X-MC-Unique: y_diUf89O9G6DSuGdPU5TA-1
-X-Mimecast-MFC-AGG-ID: y_diUf89O9G6DSuGdPU5TA_1777368410
-Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-8ebe2c596c6so1658887585a.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 Apr 2026 02:26:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="avLSWovu"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2b788a98557so56676735ad.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Apr 2026 02:44:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1777368410; x=1777973210; darn=vger.kernel.org;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=SElkUbSArWKRvTI8r4YNCpzW999fwj8na5PfWJ0BC/g=;
-        b=ByaXHfkSkXkv/5ZtKldihyLqrlhI9OMbFtkQbaB7iqTIGIhyQwUArXCaRIUtGIusWi
-         9gUbJyDRdr+oZOdRv/dXlFYR2Mztcow78k//x+BViao7sAByd7zvl/uE8M5tjXbRkDo1
-         HSnndf/gFiO80XZ+/Fqoo1+f7XMpSv6+YuxD/kdRA3EoB7PR43LOzIblqSWyd0bT9G2y
-         IVQzGcL6fYKrVJYz2P9IwVqfWRqB/uDn1c72Blf7UEpz09jQ+4dIcjCytOennZv8qFW1
-         E5ErvNgCeROodrZ2vCs+SJHVfAm1JLhLIPg/nqLtiZYbNIenswN2X0Jjeu+Vy53qwYMb
-         qYbg==
+        d=gmail.com; s=20251104; t=1777369458; x=1777974258; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=C0tY05QQvlWHs+V2WEHsXr/YdchRNZ2bEMNFCy2QVF8=;
+        b=avLSWovuhT8vFpFEBCz2J58Ike2129ElpzKGECEcZxsVhlWEBPWur2ZEd8NOeGqqgR
+         /vEn5pc9xYXC8+MiBcV5dgEf7OO1rxRBg82uuberIByj4VQBYrNVsnHDK2lcCGURKkmF
+         sZ+nDNgLHBMb2NDgp2u7NueVzYCVIoYtbqzKN1Bndz32MBnDoqDHZzLRx3h73IpAdK5m
+         3Kzo/qmEi8MOc4NMmxaW/MRGDBwg3SQYHPlWlpV3Nu+iLitUvF+eMPXdFOOuOLwD7lh7
+         nZuAfQt/ThzkV/gDZ5Xmd7700JhX2AZI1ldb1vxKlb3K0u5WAGmqzLIEPUr8Rp02C5VD
+         suyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777368410; x=1777973210;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SElkUbSArWKRvTI8r4YNCpzW999fwj8na5PfWJ0BC/g=;
-        b=gf2g9lRPobC5oEbddGBfe2jEzpSGzMpby2/dXirNz7eb6rB394CPWjBZvrrSUaTYtw
-         +XqMDH4cVkLPtjQivQDcwOcScbrdYB9W1ilIXmuyub64b6qxN6LR0Kg0rbL3/5qcV9FP
-         th7CfAdzJG6yFLnUWYArj1nooRy8qgX1hOipeGmwi/+YGxzJ6Suht9zj6Q2F34yqMIRe
-         pXeiLtG+iQp6Uc+TIk9KrVDUKzpdWcpjP85uq5Kc62qYb1PEB1uLFwqu+/JWNeU1ZPKI
-         jfPdxrTQyTTh264b/yfiOgZuhxG2AAErVXkiUj3WnDK65IV+2hKjeOWFmnREIAKdUVzn
-         mwMg==
-X-Forwarded-Encrypted: i=1; AFNElJ9meXU86mL6WMUFc4XEl27yMY7GS9UgOYBmm1JWT3yifmcq5aWB5dZi9YqRE9KiOxPQg4kGuaXv5lGBE4MYlgM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyJRhmPB7FGK+hMP3yMlAVVw2VcExiI3ZgLxEPzZ7iko+s8tMF7
-	/m4YEXv8idMpzO1QNgge3YZdhvqY4Z8zcvll1AKqh10A7aBQ4IOyKntVFxDKjgrEet+3NYt4x5g
-	lgM+QVXxsDgDIKLZDP4aNOIvAKA+FC4plS+SWy8gQB5YC5oGD9DJiTcf/U6K2xsg0mnfOkQ9vpW
-	2ymQ==
-X-Gm-Gg: AeBDietUdPfMAT+h3mgIGgqd2dd844TAlcvmUdjJ6/3sXDfbAIg7fWCQELaQNNe+csU
-	8aoeqYf887ai/3xiJWNMzxXkhNcrdQ10mZKVyKeyLshFUb4gTQC8x9viRndPzOAY8RHEnKcGtnu
-	h/VuVgrZFGrOXG2d2bgB/xhc+VXclG9B5+FycSAe73MmghLflWKxuymE8AO94uiiwZtsQBFn+iE
-	R+zAPMLGEfCGy6/ToMLEif49tn9FXyJd8mWwsX18FAxoK7uE5S0keXBsqWImx/NhyDpAQTTl3eE
-	RZPA5DaZNHSCLqB+jyJt1dGMCQ0j6Lsfq7ELlXc+H9N2PsKdRZO4PM/AmB9dEr2/g4rtERAeZK7
-	jRoIDCGQhZxbjcNGZyaZof/Fb3hB0
-X-Received: by 2002:a05:620a:2a07:b0:8cb:5176:f00 with SMTP id af79cd13be357-8f7d98fe7c8mr276263485a.45.1777368410335;
-        Tue, 28 Apr 2026 02:26:50 -0700 (PDT)
-X-Received: by 2002:a05:620a:2a07:b0:8cb:5176:f00 with SMTP id af79cd13be357-8f7d98fe7c8mr276261885a.45.1777368409899;
-        Tue, 28 Apr 2026 02:26:49 -0700 (PDT)
-Received: from fedora (g3.ign.cz. [91.219.240.17])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8f7c81c5605sm142517985a.33.2026.04.28.02.26.47
+        d=1e100.net; s=20251104; t=1777369458; x=1777974258;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=C0tY05QQvlWHs+V2WEHsXr/YdchRNZ2bEMNFCy2QVF8=;
+        b=XyvUKrYRtO6S3aDRi6q0t4d1Ln5/3ecf14Md6Pg/oS4vqm0nXcwCmTrJitN2R3F/hV
+         cZS/6JtZpRAcGDc/ekBJeq+QeudastjwD9wWjkIcfuOPlHkbdXE09gjHvs1macIRxpjF
+         OPwWoF82t9UiL5xhdnqRxD5vXTWA3m8BQC/cEB1iMZNRrMwoBTX3Nrun5mMXfQUjl8DD
+         sNX+7xfltXw56VJmQdR9UVF5Wh9gN0wn4QtKcDyOCl+7u715uMPW2rY2Lq1KUCJ1Koa8
+         U69ONdRnFY7e7dQD8vp8UdTQD7xNeZJNXfpQpMNuOiAnTf4LZ2a5AvR1CmaGK2vKutBa
+         N45g==
+X-Forwarded-Encrypted: i=1; AFNElJ/skUV9NoAr9JSuwYfTYJ4nI011vtAeWpXbhN4PaZiVAiOxMIKGtfXkLnuFyMXbZ72p1laMvPpm5Aju20t/GbM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxK953k9F7m6i+2LshVUoCKsCgGjbzHF6yY0lAb5g9FdXLSZJvp
+	+/ZqnxDt9FuEdmkHZEeQecfdYFdA3fiBL3b+VLEdA1CpVedKXIL2jm3E
+X-Gm-Gg: AeBDieuMZXD54XZSG/1Fr1nTLl224FIQK2fuQ0B2cpSrNcH2J+qA3ojMEmqECPIcDUC
+	pcRiPbKznwror2Kj8eO5qiQlunWLZF+RcOq238+As8JP13Lu/aA+GJpoad6GC5gg95YPKzPp90/
+	od2UIAraF680oVzQVqdhkJoNCVEpiVS7TJSHdgPQVji5GkNm7seuuM9Q16RfeuSVOgFQdYs6B8n
+	aExRVZ2s2mU3r3n05EsB56Rw3W1tlkH03t3l9PXFcBD+OO2QZtuv2tVR0GVaacBWpvpBaSn24sS
+	nBX9PJiJxl6/2lMjS+imueI3F95uMSdYe/UwRVoAZGZ3uLuygxBkcC/1UlO2JohfwZf8aR0M0nC
+	5if5CwvVHDD5X1pPTQ2QlRV4MXoIzkE7NBvI5pH2NnL1RxSkMudvOaqDFCbYLsc3y6+PJtJRR9F
+	exIAemhBtntrlSOBwSu0l+8c4V1E6CFOlhMVxk5cdp
+X-Received: by 2002:a17:903:c48:b0:2b0:b41e:c5c3 with SMTP id d9443c01a7336-2b97c47b448mr18768865ad.29.1777369457950;
+        Tue, 28 Apr 2026 02:44:17 -0700 (PDT)
+Received: from vini ([2401:4900:8fca:e7b6:f223:6319:a79e:7616])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b97aa9f410sm20403125ad.25.2026.04.28.02.44.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Apr 2026 02:26:49 -0700 (PDT)
-From: Vitaly Kuznetsov <vkuznets@redhat.com>
-To: Piotr Zarycki <piotr.zarycki@gmail.com>, seanjc@google.com,
- pbonzini@redhat.com
-Cc: shuah@kernel.org, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, Piotr Zarycki <piotr.zarycki@gmail.com>
-Subject: Re: [PATCH] KVM: selftests: Fix typo in comment in hyperv_features.c
-In-Reply-To: <20260428083037.1926902-1-piotr.zarycki@gmail.com>
-References: <20260428083037.1926902-1-piotr.zarycki@gmail.com>
-Date: Tue, 28 Apr 2026 11:26:45 +0200
-Message-ID: <87v7dbl9ka.fsf@redhat.com>
+        Tue, 28 Apr 2026 02:44:17 -0700 (PDT)
+From: Vineet Agarwal <agarwal.vineet2006@gmail.com>
+To: akpm@linux-foundation.org,
+	david@kernel.org,
+	ljs@kernel.org,
+	shuah@kernel.org
+Cc: linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Vineet Agarwal <agarwal.vineet2006@gmail.com>
+Subject: [PATCH v2] selftests/mm: khugepaged: initialize file contents via mmap
+Date: Tue, 28 Apr 2026 15:13:56 +0530
+Message-ID: <20260428094356.60415-1-agarwal.vineet2006@gmail.com>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <3abf09d8-a98e-4f1b-b8d9-77879a8a2733@kernel.org>
+References: <3abf09d8-a98e-4f1b-b8d9-77879a8a2733@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 
-Piotr Zarycki <piotr.zarycki@gmail.com> writes:
+file_setup_area() currently allocates anonymous memory, fills it,
+and writes it into the backing file used for collapse testing.
 
-> Fix a typo in a comment: 'vailable' -> 'available'.
->
-> Signed-off-by: Piotr Zarycki <piotr.zarycki@gmail.com>
-> ---
->  tools/testing/selftests/kvm/x86/hyperv_features.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/kvm/x86/hyperv_features.c b/tools/testing/selftests/kvm/x86/hyperv_features.c
-> index 130b9ce7e5dd..f943c748f9ff 100644
-> --- a/tools/testing/selftests/kvm/x86/hyperv_features.c
-> +++ b/tools/testing/selftests/kvm/x86/hyperv_features.c
-> @@ -457,7 +457,7 @@ static void guest_test_msrs_access(void)
->  			msr->fault_expected = true;
->  			break;
->  		case 45:
-> -			/* MSR is vailable when CPUID feature bit is set */
-> +			/* MSR is available when CPUID feature bit is set */
->  			if (!has_invtsc)
->  				goto next_stage;
->  			vcpu_set_cpuid_feature(vcpu, HV_ACCESS_TSC_INVARIANT);
+Instead of copying data through write(), map the file directly with
+MAP_SHARED after resizing it with ftruncate(), initialize the mapped
+area in place, and sync it with msync().
 
-Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+This simplifies the setup path and avoids the need for explicit
+partial write handling.
 
-Thanks!
+Signed-off-by: Vineet Agarwal <agarwal.vineet2006@gmail.com>
+---
+ tools/testing/selftests/mm/khugepaged.c | 25 +++++++++++++++++++++----
+ 1 file changed, 21 insertions(+), 4 deletions(-)
 
+diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
+index 3fe7ef04ac62..f6e171e1da4f 100644
+--- a/tools/testing/selftests/mm/khugepaged.c
++++ b/tools/testing/selftests/mm/khugepaged.c
+@@ -369,7 +369,6 @@ static void *file_setup_area(int nr_hpages)
+ 	int fd;
+ 	void *p;
+ 	unsigned long size;
+-
+ 	unlink(finfo.path);  /* Cleanup from previous failed tests */
+ 	printf("Creating %s for collapse%s...", finfo.path,
+ 	       finfo.type == VMA_SHMEM ? " (tmpfs)" : "");
+@@ -381,11 +380,29 @@ static void *file_setup_area(int nr_hpages)
+ 	}
+ 
+ 	size = nr_hpages * hpage_pmd_size;
+-	p = alloc_mapping(nr_hpages);
++	if (ftruncate(fd, size)) {
++		perror("ftruncate()");
++		close(fd);
++		exit(EXIT_FAILURE);
++	}
++	p = mmap(BASE_ADDR, size, PROT_READ | PROT_WRITE,
++		MAP_SHARED, fd, 0);
++	if (p == MAP_FAILED || p != BASE_ADDR) {
++		perror("mmap()");
++		close(fd);
++		exit(EXIT_FAILURE);
++	}
+ 	fill_memory(p, 0, size);
+-	write(fd, p, size);
+-	close(fd);
++
++	if (msync(p, size, MS_SYNC)) {
++		perror("msync()");
++		munmap(p, size);
++		close(fd);
++		exit(EXIT_FAILURE);
++	}
++
+ 	munmap(p, size);
++	close(fd);
+ 	success("OK");
+ 
+ 	printf("Opening %s read only for collapse...", finfo.path);
 -- 
-Vitaly
+2.54.0
 
