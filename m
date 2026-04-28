@@ -1,84 +1,138 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C34892DB7BD;
-	Tue, 28 Apr 2026 01:50:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1454B2882B4
+	for <linux-kselftest@vger.kernel.org>; Tue, 28 Apr 2026 01:56:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777341055; cv=none; b=gpwK3qCjATCeN0obDEnmUmNQHpb14bPwso2IHqFwQUcR6aGEWtndwlJh9a8lgTutxb0jQ5zp193joz4/2Jzj2RKXBLMIX19Y9Pl+SgemcsDPnDPIYF7QoXLwHvgumIPepeQLqjv7mSp011Suv4sMkYFUOHehlU8W2Tp/1NvyZDU=
+	t=1777341362; cv=none; b=HeHhh7IQtkhGxVwJblHnXXYHWcVofq3m2roYSWeHiJ25GwVY3do4wM9AV8Cg3QxF29fBcQArqiVU0uIkfdayukvKgWgfi4ZBc5izhR3puzXafFsqyptGK15D4tOWF2u5/qIhE3drXjKiW/iomybXNE/Xy5EScmSbzp/3evH8ok8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777341055; c=relaxed/simple;
-	bh=blhnT1OhgZfmkBn7i5SypMFOmLdooHT0yasHfhzVmL0=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=O9LNfKYVF4KWkuX8erqfV0s/aLfzgzKKt+ouYBb0AgZ3nq8pCVPhBy3+7eG+DJFpRWy5JgAvVpD38BN/L+0SK+xomhvw63eWLgCO87qYE+tEhJEjgHkRLlJHlWyzl3qmooyo1bZEF11nI9KO7LcGLhg28i3qL+0Z6xpSQWWcgKY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eMidOyBR; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777341362; c=relaxed/simple;
+	bh=anSOECpq5XPzFNzUTD7jWWaHJ2C8Nwxun2aWo/NzAFI=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=l/Gs7ZBDMxkYZDcpXE9Brb9PrWGWXhoP62MIDCSmDrLMqy3l5AJ7e1X3LfqcQOtAO0a1uQSXBvKlu0LwP8rUyJBx4lcBrHU4PNCeiFzIZzJkncmnkMADyMA8ag2zquXl0fTxSqEYYLGuPqQ7LOgHGsPoKqG0WzkAc89qvC7qm4g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=U9K05KIk; arc=none smtp.client-ip=209.85.215.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eMidOyBR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84E21C19425;
-	Tue, 28 Apr 2026 01:50:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777341055;
-	bh=blhnT1OhgZfmkBn7i5SypMFOmLdooHT0yasHfhzVmL0=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=eMidOyBRA1zd0r021PRvVAP62k8XR+0zGeFcvzMhPdoFkm730HryHtgSkCMJmDkZD
-	 s2XoB2FzkUdYgfSpTJ4Ek3BeLSZ/G7TpXYVF2n75rNLDCDSvjivNcAB2h1xW4HPG07
-	 aW7hii4IVM3hCNxYSPzcQiexyLiWvwFOzhVkscmM7489KDFyED5UdopuWJwbSlKBhy
-	 eHg2j/ogESuuma1VgUvpRZECVw7C1d43zLZcCjl4pWmRwmnVlbmjEjwUhuk6VlXpbx
-	 DfipXe9YrCfehzKIP8tNLj0gss6Cts7jQPLEcb2IsakwY5UvmcbOftNDS9U0OUQz/8
-	 uozrwBBPBb2Ew==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 02E09392FFDF;
-	Tue, 28 Apr 2026 01:50:14 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="U9K05KIk"
+Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-c79281bd14cso4182406a12.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Apr 2026 18:56:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1777341360; x=1777946160; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=sb1r1UAVTIKvqTTC9ylCprM3NS1BE0PR7/PT9svzr60=;
+        b=U9K05KIk0r/OfaEk+HitlahM8f7WSUmzB1X8M/xqVN0wPhOLUftKu2BRuGr6XT57Ab
+         8DCMp738VpOA0M1uxkWXPifybhpxRTx1U4q+gWb5QEAovUS0Ihb38PosFnQb756pPIST
+         0p1moR+Y8+ghdQmSmgd6vUwsWlOTFflrPGM1hde+Me9mKAwou/Rjk4hUXLYkXdlYgBAy
+         58oHWPknIqz1BR6Hkg7p4D7zVEwCdQ+mPKCvYeLhJ0Xt16CnX8+44hqwSdVbILgvqUAq
+         uvHxbJaNRj5MH3fCH3836XWObioS2N4KD9cy7SiTEL0bN0q9m/8N17twz0bL5J4i+IG9
+         8Cow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777341360; x=1777946160;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sb1r1UAVTIKvqTTC9ylCprM3NS1BE0PR7/PT9svzr60=;
+        b=FH4488hhgE2LsjdzknCeWRRgXk0n9VuHhJMuccX8sDPIAMk0hs91e4k2OBqEz+lCJ6
+         rN9cCWxtVq6dBQC6pRPYWQt4vS8Evf1bjwY5ahXT0qM7aEdOb3w/G+BRpmzdsZB7W3uj
+         v0Uyts5lmtgNwh84rvk1LU6kB+xAjHShjrNfuvEuoEpRvWPdCxtsok2DoDyEE+TlQJjO
+         2xlHVKH1lcN7MRN0fXsKtqpGrZ1t/bH8wgcAcHlxDukVicUw1holvaB52YaFhlYglVQo
+         k/lOLwJh8BwCNl3AQHMDJbtfTaiR4pj2Ylw/xmH1QFYFaa8HvNfHaekHva1rL+MrXVhO
+         z0sw==
+X-Forwarded-Encrypted: i=1; AFNElJ/3QrnQIBru7uwjvERxm1t4K9eTyDT+QjeDreGKfJYdLMiDadHWim+8UZA7YzrI1tu0yytZkFYFE/nL8Y0HGQg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy5wd5hqvsrehcBBeFWE4ylQTh778rbsCkM8D1cWFQuaGP6gA9n
+	1Tn9GzZv0BVGTKGkvRD8RYqmcgBVEaikH6WNPkC85U6f+PTD8dpLqhgM24N1GRR7pmOAhDZDVVG
+	KpiAxxA==
+X-Received: from pfbhg24.prod.google.com ([2002:a05:6a00:8618:b0:82f:b53f:40d7])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:807:b0:82d:24f:2516
+ with SMTP id d2e1a72fcca58-834ddb0bb43mr1053701b3a.11.1777341360270; Mon, 27
+ Apr 2026 18:56:00 -0700 (PDT)
+Date: Mon, 27 Apr 2026 18:55:58 -0700
+In-Reply-To: <20260427231217.GA1670652@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v5 0/2] net/sched: taprio: fix NULL pointer
- dereference in
- class dump
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177734101277.196918.11456842228580431598.git-patchwork-notify@kernel.org>
-Date: Tue, 28 Apr 2026 01:50:12 +0000
-References: <20260422161958.2517539-2-bestswngs@gmail.com>
-In-Reply-To: <20260422161958.2517539-2-bestswngs@gmail.com>
-To: Weiming Shi <bestswngs@gmail.com>
-Cc: vinicius.gomes@intel.com, jhs@mojatatu.com, jiri@resnulli.us,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- horms@kernel.org, vladimir.oltean@nxp.com, shuah@kernel.org, xmei5@asu.edu,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
+Mime-Version: 1.0
+References: <20260202-vfio-selftest-only-64bit-v2-1-9c3ebb37f0f4@fb.com>
+ <e51b4ff2-13c4-47d4-b781-3dcbd740d274@meta.com> <20260427231217.GA1670652@nvidia.com>
+Message-ID: <afATrrjqt8zj2plL@google.com>
+Subject: Re: [PATCH v2] vfio: selftests: only build tests on arm64 and x86_64
+From: Sean Christopherson <seanjc@google.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Matt Evans <mattev@meta.com>, Ted Logan <tedlogan@fb.com>, 
+	David Matlack <dmatlack@google.com>, Alex Williamson <alex@shazbot.org>, Shuah Khan <shuah@kernel.org>, 
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="us-ascii"
 
-Hello:
-
-This series was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Thu, 23 Apr 2026 00:19:57 +0800 you wrote:
-> Fix a NULL pointer dereference in taprio_dump_class() reachable by an
-> unprivileged local user on kernels with unprivileged user namespaces
-> enabled and CONFIG_NET_SCH_TAPRIO=y. The bug allows a local DoS via a
-> crafted sequence of taprio child-qdisc graft, delete, and class dump.
+On Mon, Apr 27, 2026, Jason Gunthorpe wrote:
+> On Tue, Mar 17, 2026 at 01:55:17PM +0000, Matt Evans wrote:
+> > Hi Ted,
+> > 
+> > On 03/02/2026 01:23, Ted Logan wrote:
+> > > Only build vfio self-tests on arm64 and x86_64; these are the only
+> > > architectures where the vfio self-tests are run. Addresses compiler
+> > > warnings for format and conversions on i386.
+> > > 
+> > > Reported-by: kernel test robot <lkp@intel.com>
+> > > Closes: https://lore.kernel.org/oe-kbuild-all/202601211830.aBEjmEFD-lkp@intel.com/
+> > > Signed-off-by: Ted Logan <tedlogan@fb.com>
+> > > ---
+> > > Do not build vfio self-tests for 32-bit architectures, where they're
+> > > untested and unmaintained. Only build these tests for arm64 and x86_64,
+> > > where they're regularly tested.
+> > > 
+> > > Compiler warning fixed by patch:
+> > > 
+> > >    In file included from tools/testing/selftests/vfio/lib/include/libvfio.h:6:
+> > >    tools/testing/selftests/vfio/lib/include/libvfio/iommu.h:49:2: warning: format specifies type 'unsigned long' but the argument has type 'u64' (aka 'unsigned long long') [-Wformat]
+> > >       49 |         VFIO_ASSERT_EQ(__iommu_unmap(iommu, region, NULL), 0);
+> > >          |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > >    tools/testing/selftests/vfio/lib/include/libvfio/assert.h:32:37: note: expanded from macro 'VFIO_ASSERT_EQ'
+> > >       32 | #define VFIO_ASSERT_EQ(_a, _b, ...) VFIO_ASSERT_OP(_a, _b, ==, ##__VA_ARGS__)
+> > >          |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > >    tools/testing/selftests/vfio/lib/include/libvfio/assert.h:27:22: note: expanded from macro 'VFIO_ASSERT_OP'
+> > >       26 |         fprintf(stderr, "  Observed: %#lx %s %#lx\n",                           \
+> > >          |                                              ~~~~
+> > >       27 |                         (u64)__lhs, #_op, (u64)__rhs);                          \
+> > >          |                                           ^~~~~~~~~~
+> > > ---
+> > > Changes in v2:
+> > > - Add white space around arch checks
+> > > - Clean up uname command
+> > > - Link to v1: https://lore.kernel.org/r/20260130-vfio-selftest-only-64bit-v1-1-d89ac0944c01@fb.com
+> > > ---
+> > >  tools/testing/selftests/vfio/Makefile | 9 +++++++++
+> > >  1 file changed, 9 insertions(+)
+> > > 
+> > > diff --git a/tools/testing/selftests/vfio/Makefile b/tools/testing/selftests/vfio/Makefile
+> > > index ead27892ab65..8e90e409e91d 100644
+> > > --- a/tools/testing/selftests/vfio/Makefile
+> > > +++ b/tools/testing/selftests/vfio/Makefile
+> > > @@ -1,3 +1,10 @@
+> > > +ARCH ?= $(shell uname -m)
+> > > +
+> > > +ifeq (,$(filter $(ARCH),arm64 x86_64))
+> > 
+> > This fails to build (i.e. elides the build) on my local arm64 machine,
+> > because uname -m returns 'aarch64', not 'arm64'.
 > 
-> Patch 1/2 is the fix: replace NULL entries in q->qdiscs[] with the
-> global &noop_qdisc singleton so that control-plane dump paths, as well
-> as the existing NULL guards in the data-plane enqueue/dequeue paths,
-> cannot deref a NULL child qdisc.
+> I have the same issue on x86! The kernel uses x86 is the ARCH when you
+> run it straight from the top level make
 > 
-> [...]
+> make[4]: Entering directory '/home/jgg/oss/wip/mlx5st/tools/testing/selftests/vfio'
+> Makefile:1: "Saw ARCH=x86"
+> 
+> Even though this is a 64 bit build.
 
-Here is the summary with links:
-  - [net,v5,1/2] net/sched: taprio: fix NULL pointer dereference in class dump
-    https://git.kernel.org/netdev/net/c/3d07ca5c0fae
-  - [net,v5,2/2] selftests/tc-testing: add taprio test for class dump after child delete
-    https://git.kernel.org/netdev/net/c/a469feed399d
+Heh, it's much funnier when it's happening to someone else.  :-)
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+KVM selftests went through these exact pains.  I'm pretty sure these are the
+relevant commits (the empty targets one may or may not apply to VFIO).
 
-
+9af04539d474dda4984ff4909d4568e6123c8cba KVM: selftests: Override ARCH for x86_64 instead of using ARCH_DIR
+67730e6c53d70fb31618230f81c4acee9f72eaa3 KVM: selftests: Use canonical $(ARCH) paths for KVM selftests directories
+43fbd8cd389faa9760c5152b1c58e893c812953b KVM: selftests: Provide empty 'all' and 'clean' targets for unsupported ARCHs
