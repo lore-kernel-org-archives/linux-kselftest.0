@@ -1,38 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C70423A4F5A;
-	Tue, 28 Apr 2026 23:25:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD8AD38947A;
+	Tue, 28 Apr 2026 23:25:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777418719; cv=none; b=MxmHOoy7e29J6Za88aoOYOxh81AmqcQsmRcI11EPHAqQ6DG/sLfU0nbjiB70XB3Sv86KJ0EwVLcwZzo/KVlx3KKtknypZ02mN6hcoeo+rrQdXCITh6SmkPrCSadMXZGrthaP//rEBJZBj1g/ux3RcXROdah9qhAFc6gsrIzb9qw=
+	t=1777418720; cv=none; b=rFBbJpQdOq5iJol1ntQGZ4gFD94fVvGNpr21j0v294JADt9q+DAbz0jAFXhBexAVA1YzIkPRPnt+wHi0SKI3zYOTfH1rO7flIPHU0KObwtQNFrUlbUWc92UOVgmc6H6HcuUuW8rCNOpj4PrQ+AqZyyDdtayo+O6SFBWnxr8PTJ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777418719; c=relaxed/simple;
-	bh=h0E8/6sqDBUjmrJANiVtGnaPjc3NqIh4YoXQcBBDZCs=;
+	s=arc-20240116; t=1777418720; c=relaxed/simple;
+	bh=k74W65/sgUamQSqwCX6QPTIXutTYcok2/gXOIvWj2PA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ksRD5ITPlixljlVWw6P/bTRtcHaExIyZNKeMY7ITJSmjoHGCNI0p86WhwuOVqHllvDLxJEnyQmvkaR0NpbddbpexyIrhLb6RYrRsrYsxlyIiUJ1irc/mhP5dGe3x4uUKtLvs3v3S7d4zZRI5l8rEj6+QtiRMLklI4whDX4mn24w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uIjiu9AO; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=X9rZenK/7eet4SdCTb9lDuraKIgMO5OWTAOSCmule1KPPBO0FMK+OP0vmavsxvh59+wwaapFjlVW5P5n64UOdYC5fLltdvI/qVZ69TEPgMOzJHfBD9VgjuIJytCmYlIAE76pn7Vc+H6us3fDJNMQ/MvA8cK4lnQxWxrep5k3ZZw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LSi4BCso; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uIjiu9AO"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A9692C2BCC6;
-	Tue, 28 Apr 2026 23:25:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LSi4BCso"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9152DC2BCFD;
+	Tue, 28 Apr 2026 23:25:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777418719;
-	bh=h0E8/6sqDBUjmrJANiVtGnaPjc3NqIh4YoXQcBBDZCs=;
+	s=k20201202; t=1777418720;
+	bh=k74W65/sgUamQSqwCX6QPTIXutTYcok2/gXOIvWj2PA=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=uIjiu9AO2n+mlQXWf2gw8OqrACXNjfOEaBEpNgzz2AfJY/Ri/0V5QqIKx5Sm0HIHx
-	 2rH+cAXJYjtxFT3VJFWkYdnePPg4U/sbXO0O/YI8xkfiCSYRzCDR+txOf27iOTZxlL
-	 kRFx73QCeQd8frJF/qhIKV+yLHMTD9+wqiX97Frp3hNJ28Rixfjsl4N6VAARpHtf1q
-	 Mxdb2eM7aHAWc+9oomi2DHOAYpiqRUM1OgO3DZRdc7XJpYRkkhvnNhr4eIXimfAzTR
-	 SVSJ56X+ixQm0S7s+QCDdmNRkjfBTu4paI9tTQlwwLub5YUawwsKsmCvnhw0aVRIL8
-	 k1lp/kTtuUSCQ==
+	b=LSi4BCsoodSXa1Wtr13JwRzUK7xTLAqk5OWVYFi2qSZPJ8zA7D+SSEZ1D48CUQuT+
+	 rWdSDWpaqxHqFxy+C8tpaeex+3XlA/tdpLIO8UDkK6nnXxZD/h7cmmE++U6gJk3C2D
+	 veEGJHjGxJutmaCwOy1blzJNkJVTaVSnd+qKK+/ZDF65hFJXLzL5k55DQNEwpVZJjs
+	 chf90qFJ55yGB1MFvKtI6gllnnUEiMFUB29cB6ag4flt/+o5SeW/liCAjjEA/ap/W+
+	 KqNkstYd+cJqeIILMDbXblEpphRxwalJU5tVTSbo+mhaujLAi01uGpsdsuhmLwv/N+
+	 8Rv/jZsXG7DMA==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DAF7CCF9E3;
-	Tue, 28 Apr 2026 23:25:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 868DAFF8877;
+	Tue, 28 Apr 2026 23:25:20 +0000 (UTC)
 From: Ackerley Tng via B4 Relay <devnull+ackerleytng.google.com@kernel.org>
-Date: Tue, 28 Apr 2026 16:25:24 -0700
-Subject: [PATCH RFC v5 29/53] KVM: selftests: Create gmem fd before
- "regular" fd when adding memslot
+Date: Tue, 28 Apr 2026 16:25:35 -0700
+Subject: [PATCH RFC v5 40/53] KVM: selftests: Test that shared/private
+ status is consistent across processes
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -41,7 +41,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260428-gmem-inplace-conversion-v5-29-d8608ccfca22@google.com>
+Message-Id: <20260428-gmem-inplace-conversion-v5-40-d8608ccfca22@google.com>
 References: <20260428-gmem-inplace-conversion-v5-0-d8608ccfca22@google.com>
 In-Reply-To: <20260428-gmem-inplace-conversion-v5-0-d8608ccfca22@google.com>
 To: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com, 
@@ -74,11 +74,11 @@ Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
  linux-coco@lists.linux.dev, Ackerley Tng <ackerleytng@google.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1777418714; l=2823;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1777418714; l=3473;
  i=ackerleytng@google.com; s=20260225; h=from:subject:message-id;
- bh=xIGL1xcJD27ice4aJgoH91ewbUcnazqU1ilqG8uRRXI=;
- b=KLdpylxs7EMDFFjrINTIXIZrFpXw4Ph7VX2ZjGBd63YJibo+NhqXvS32V8elMg2pLudMsgawf
- qO+LRqj10LJAlOQU6/3WvHtyA6qVnGYE4bNRtRE7lGHCjeSiqhsT5zA
+ bh=za9mbinhXQlrBGNX8T7yWO9RNCSzSfL649W98OVJnA0=;
+ b=lkg9YFQlIbB1hlTVjPrGIukY3fzR7s6d2zyamzlqVzgGFcxL3JfBdyNqZw0C9MA3wGvekD5Qw
+ vGC5eHP/UQ6DLO56Vn4ZHsd+yy/F3u/Qr3S2vgUpUxAbrEbmXmlAi+g
 X-Developer-Key: i=ackerleytng@google.com; a=ed25519;
  pk=sAZDYXdm6Iz8FHitpHeFlCMXwabodTm7p8/3/8xUxuU=
 X-Endpoint-Received: by B4 Relay for ackerleytng@google.com/20260225 with
@@ -88,80 +88,109 @@ Reply-To: ackerleytng@google.com
 
 From: Sean Christopherson <seanjc@google.com>
 
-When adding a memslot associated a guest_memfd instance, create/dup the
-guest_memfd before creating the "normal" backing file.  This will allow
-dup'ing the gmem fd as the normal fd when guest_memfd supports mmap(),
-i.e. to make guest_memfd the _only_ backing source for the memslot.
+Add a test to verify that a guest_memfd's shared/private status is
+consistent across processes, and that any shared pages previously mapped in
+any process are unmapped from all processes.
+
+The test forks a child process after creating the shared guest_memfd
+region so that the second process exists alongside the main process for the
+entire test.
+
+The processes then take turns to access memory to check that the
+shared/private status is consistent across processes.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
+Co-developed-by: Ackerley Tng <ackerleytng@google.com>
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 ---
- tools/testing/selftests/kvm/lib/kvm_util.c | 45 +++++++++++++++---------------
- 1 file changed, 23 insertions(+), 22 deletions(-)
+ .../kvm/x86/guest_memfd_conversions_test.c         | 74 ++++++++++++++++++++++
+ 1 file changed, 74 insertions(+)
 
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index 2a76eca7029d3..df73b23a4c66a 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -1054,6 +1054,29 @@ void vm_mem_add(struct kvm_vm *vm, enum vm_mem_backing_src_type src_type,
- 	if (alignment > 1)
- 		region->mmap_size += alignment;
+diff --git a/tools/testing/selftests/kvm/x86/guest_memfd_conversions_test.c b/tools/testing/selftests/kvm/x86/guest_memfd_conversions_test.c
+index 8dfbf3630cec2..21918b83d3792 100644
+--- a/tools/testing/selftests/kvm/x86/guest_memfd_conversions_test.c
++++ b/tools/testing/selftests/kvm/x86/guest_memfd_conversions_test.c
+@@ -334,6 +334,80 @@ GMEM_CONVERSION_TEST_INIT_SHARED(truncate)
+ 	test_private(t, 0, 0, 'A');
+ }
  
-+	if (flags & KVM_MEM_GUEST_MEMFD) {
-+		if (guest_memfd < 0) {
-+			u32 guest_memfd_flags = 0;
++/* Test that shared/private memory protections work and are seen from any process. */
++GMEM_CONVERSION_TEST_INIT_SHARED(forked_accesses)
++{
++	/*
++	 * No races are intended in this test, shared memory is only used to
++	 * coordinate between processes.
++	 */
++	static enum {
++		STATE_INIT,
++		STATE_CHECK_SHARED,
++		STATE_DONE_CHECKING_SHARED,
++		STATE_CHECK_PRIVATE,
++		STATE_DONE_CHECKING_PRIVATE,
++	} *test_state;
++	pid_t child_pid;
 +
-+			TEST_ASSERT(!guest_memfd_offset,
-+				    "Offset must be zero when creating new guest_memfd");
-+			guest_memfd = vm_create_guest_memfd(vm, mem_size, guest_memfd_flags);
-+		} else {
-+			/*
-+			 * Install a unique fd for each memslot so that the fd
-+			 * can be closed when the region is deleted without
-+			 * needing to track if the fd is owned by the framework
-+			 * or by the caller.
-+			 */
-+			guest_memfd = kvm_dup(guest_memfd);
-+		}
++	test_state = kvm_mmap(sizeof(*test_state), PROT_READ | PROT_WRITE,
++			      MAP_SHARED | MAP_ANONYMOUS, -1);
 +
-+		region->region.guest_memfd = guest_memfd;
-+		region->region.guest_memfd_offset = guest_memfd_offset;
-+	} else {
-+		region->region.guest_memfd = -1;
++#define TEST_STATE_AWAIT(__state)						\
++	while (READ_ONCE(*test_state) != __state) {				\
++		if (child_pid != 0) {						\
++			int status;						\
++			pid_t pid;						\
++			do {							\
++				pid = waitpid(child_pid, &status, WNOHANG);	\
++			} while (pid == -1 && errno == EINTR);			\
++			if (pid == -1)						\
++				TEST_FAIL("Couldn't check child status.");	\
++			else if (pid != 0)					\
++				TEST_FAIL("Child exited prematurely.");		\
++		}								\
 +	}
 +
- 	region->fd = -1;
- 	if (backing_src_is_shared(src_type))
- 		region->fd = kvm_memfd_alloc(region->mmap_size,
-@@ -1083,28 +1106,6 @@ void vm_mem_add(struct kvm_vm *vm, enum vm_mem_backing_src_type src_type,
- 
- 	region->backing_src_type = src_type;
- 
--	if (flags & KVM_MEM_GUEST_MEMFD) {
--		if (guest_memfd < 0) {
--			u32 guest_memfd_flags = 0;
--			TEST_ASSERT(!guest_memfd_offset,
--				    "Offset must be zero when creating new guest_memfd");
--			guest_memfd = vm_create_guest_memfd(vm, mem_size, guest_memfd_flags);
--		} else {
--			/*
--			 * Install a unique fd for each memslot so that the fd
--			 * can be closed when the region is deleted without
--			 * needing to track if the fd is owned by the framework
--			 * or by the caller.
--			 */
--			guest_memfd = kvm_dup(guest_memfd);
--		}
--
--		region->region.guest_memfd = guest_memfd;
--		region->region.guest_memfd_offset = guest_memfd_offset;
--	} else {
--		region->region.guest_memfd = -1;
--	}
--
- 	region->unused_phy_pages = sparsebit_alloc();
- 	if (vm_arch_has_protected_memory(vm))
- 		region->protected_phy_pages = sparsebit_alloc();
++#define TEST_STATE_SET(__state) WRITE_ONCE(*test_state, __state)
++
++	child_pid = fork();
++	TEST_ASSERT(child_pid != -1, "fork failed");
++
++	if (child_pid == 0) {
++		const char inconsequential = 0xdd;
++
++		TEST_STATE_AWAIT(STATE_CHECK_SHARED);
++
++		/*
++		 * This maps the pages into the child process as well, and tests
++		 * that the conversion process will unmap the guest_memfd memory
++		 * from all processes.
++		 */
++		host_do_rmw(t->mem, 0, 0xB, 0xC);
++
++		TEST_STATE_SET(STATE_DONE_CHECKING_SHARED);
++		TEST_STATE_AWAIT(STATE_CHECK_PRIVATE);
++
++		TEST_EXPECT_SIGBUS(READ_ONCE(t->mem[0]));
++		TEST_EXPECT_SIGBUS(WRITE_ONCE(t->mem[0], inconsequential));
++
++		TEST_STATE_SET(STATE_DONE_CHECKING_PRIVATE);
++		exit(0);
++	}
++
++	test_shared(t, 0, 0, 0xA, 0xB);
++
++	TEST_STATE_SET(STATE_CHECK_SHARED);
++	TEST_STATE_AWAIT(STATE_DONE_CHECKING_SHARED);
++
++	test_convert_to_private(t, 0, 0xC, 0xD);
++
++	TEST_STATE_SET(STATE_CHECK_PRIVATE);
++	TEST_STATE_AWAIT(STATE_DONE_CHECKING_PRIVATE);
++
++	kvm_munmap(test_state, sizeof(*test_state));
++}
++
+ int main(int argc, char *argv[])
+ {
+ 	TEST_REQUIRE(kvm_check_cap(KVM_CAP_VM_TYPES) & BIT(KVM_X86_SW_PROTECTED_VM));
 
 -- 
 2.54.0.545.g6539524ca2-goog
