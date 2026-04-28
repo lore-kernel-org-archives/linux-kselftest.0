@@ -1,419 +1,225 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD496441041;
-	Tue, 28 Apr 2026 19:12:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7E7A28C854
+	for <linux-kselftest@vger.kernel.org>; Tue, 28 Apr 2026 19:31:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777403581; cv=none; b=fsqdnJYxqE5UPRC80hxHX9BQ038xeauW+L1Ck6qAKrgSkI15NkFVmrgiJKtOE3yNEQE10qxm5s0gMQuYhUX4C+VdIk1r5HM2doLAY7fp3+jmbJXdxt2DzTqz8xkUMbaLUqi2pYrPSjw3NBfxI5VNwpdvE1Phn08xJG8cBgz575Y=
+	t=1777404669; cv=none; b=FRkjCZfRxvmtqEXduer/NFLXpbKfOWiyFA1R31JZHAzgmVFGiJvlpESuZMqSYs6FdGSmx6hzMTUOGvGjlT+w7F/Xj+qARSPMYP4QF93HkKNJ+5+DN57xRaid2kXT2zOqeYcq9eMu0Gs8x2cQCZX2vFEPlejp8D42+cE7nvgPuX0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777403581; c=relaxed/simple;
-	bh=LW20oK5gep1O4hCoBzhzlxKkVMKP6dTyYEq1aE0qMrY=;
-	h=Message-ID:Subject:From:To:Date:Content-Type:MIME-Version; b=Nvg0Ni4x8QD/IMS0TAwZVL3PgZtmOPKsP/Bt0Ti3asf5lPwbmEuXibO6/OfLuDAn+y5tph8FPSuDaL8pBhjdZXyW5XWg7E7ipyBV9+RQT3GlpohuWdqW84sVHuheDtRb7k9k0SVj0pi4wZyrqbg2A5EYNXShJ9XJSuCey9HUuPg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=desiato.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=QzCop7WT; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=desiato.srs.infradead.org
+	s=arc-20240116; t=1777404669; c=relaxed/simple;
+	bh=MV4Ee5PABW2ZLMx9mFu6dM0/W+lBQ6B283fQiCq1qLo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=a7iLExey2iruXtsCrh+IFmPkyRMC6SUo40rm7iE3VYqVG9N+p5hyDmzaCI7l8QaMBtwcPAMkYiwtSBdC7BxpXUhsvxfiVZD0aNg84Nofnv/m9WA5mGqUr8HDY0C1f2S+wRKsQCVX1jp8sfFP0O1s4krS+U4uhxEWino7g0SThHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=TgAbT3zN; arc=none smtp.client-ip=209.85.222.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="QzCop7WT"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=MIME-Version:Content-Type:Date:To:From
-	:Subject:Message-ID:Sender:Reply-To:Cc:Content-Transfer-Encoding:Content-ID:
-	Content-Description:In-Reply-To:References;
-	bh=MPtT6lfJ1mcwWUBwYq4nwnM8SAjUYS9/wvh+pAM9QBQ=; b=QzCop7WT76dYs8lHjFox/z5pi5
-	R/WerepPftvIOiSnWseweT2aFCqbL3YXqbb0HoxJwICUxJZkN3mBUgdjz5VXbCx4dQn0C3Ny+c5Av
-	wvicGj1j3F3oN1q2p6M7ZRoDez/KA4zBNEh0JmYsLzL8NW4sIdsP+iiPzefwggJ5Laq6s/d5B/7X/
-	UwntkUsPR8A6/F5+yyblwbRYn/CS2n+rQWLcE+AV6FPwzaZoAJU/BdIo+igL1m9UHCOURAnoz4y5b
-	qdqVYN9X+qN83xYyBZRkxHsXy/szqKtSW52NAHqanu+v4TSzBHkyHYAegAnm9NqwDKbbtvcAXh+fa
-	u7qAvCtA==;
-Received: from [172.31.31.148] (helo=u09cd745991455d.ant.amazon.com)
-	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1wHnrL-00000003uCl-1xdv;
-	Tue, 28 Apr 2026 19:12:40 +0000
-Message-ID: <c855535b4262ecd41f67734d19e8f48a7f014c2a.camel@infradead.org>
-Subject: [PATCH] KVM: x86/xen: Add
- KVM_XEN_VCPU_ATTR_TYPE_WRITE_HYPERCALL_PAGE
-From: David Woodhouse <dwmw2@infradead.org>
-To: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <skhan@linuxfoundation.org>, Sean Christopherson
- <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar
- <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,  Dave Hansen
- <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin"
- <hpa@zytor.com>, David Woodhouse <dwmw2@infradead.org>, Paul Durrant
- <paul@xen.org>, kvm@vger.kernel.org,  linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org,  linux-kselftest@vger.kernel.org
-Date: Tue, 28 Apr 2026 20:12:39 +0100
-Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-	boundary="=-qmv3LylIXMZ8XL1hvURK"
-User-Agent: Evolution 3.52.3-0ubuntu1.1 
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="TgAbT3zN"
+Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-8f83efb5729so99094985a.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Apr 2026 12:31:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=soleen.com; s=google; t=1777404667; x=1778009467; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=SAI8x2/bEv74FJXz3oAJzkvQVs+0CkcEMU6FT3AZkn4=;
+        b=TgAbT3zNdZk2wo6872xifrmbuhx2y48bA3kmWpZKTvSMPHitzm64b52+he+lUEJJW1
+         Em3AaMydSsNrwEBxZrHQlxLSb48XtoOm0pfOToWjJhXhi1DFbQlsmCtuxDjgGqG+H9FT
+         RYwjv694N+5njAwmNdyYolY+wzybeb5GBtyaPaJF2TLsdQesK/Hs9U6B3ypXs0u5L2vZ
+         eKV4cE/+0oWxF6n46r7IzdJKDB4EkZFcmEMGNRxVhyU2YQEoHccxUs0vD+D7NY2hi2jW
+         Bdt6fkTMN1ozYVmzmb3Fa1z65nIQSTHqdTmigGX7IduijlNxmmQodMkMAvAQaZZu0SD/
+         lliQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777404667; x=1778009467;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SAI8x2/bEv74FJXz3oAJzkvQVs+0CkcEMU6FT3AZkn4=;
+        b=pqGhrcii/LRXXlleaqE++9B4WSLCErU7klyZTsTJTCQ2npClnLroiRKbyBvsnl7zas
+         MHZsQjvp+noZcNlygPdi/w6addONsZNWvldIFSwkda+SlxrG9uNP6c86ukW9rHFc61Si
+         oflZS+z6O7eVeK4I/kj3sdNTwoedZy7jej40Stg5PZO4aYwdUNgszXYVeXn8DEQvCZ3J
+         m3s7xXrzsZx4f1UwAhVZVPtbIUS0pgPYuoXAWR836GE3qaA8bDX7pVYBdCOAsMTfrExo
+         mCJXKaVra/IA/nEABGjKUnKjMjtFfE8CWPMlxn4nE2nb6dx6NXJDHgkI8Jef5P6siIvm
+         NkGA==
+X-Forwarded-Encrypted: i=1; AFNElJ9wRCxofvxTRMACnmSWh/o6Raao7UJUmN7e9J9NB7sqSy7SUCXtRTuYoXSOCyf37OZPr2NCSfTCYHw+i3J4hoQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YznjxwUK5OLgs6qLBiN8RTgXXpyx8gv7153apA1h9vqMv+fMoMU
+	xL4ZSoSile3noEeL01dOTqse8LF0Htb7WB6zllxyYLPRh8R6ySRf65FQQf6NeBFxdmY39pVizFr
+	bI9xSQ1g=
+X-Gm-Gg: AeBDies1x6b+M/90zK2SS1H7/j83n5p4q1pXwSFV+FI+Z4aeLQBlN17kqkZc/0bvwaf
+	+BGfUJ2kfI9ihg9UMZbp/3VF8kXQBSfbkrVKGrTmQ9er5uY+ZXBaP76Ka/MDDI87zHLXxeiV7Qb
+	PVrJzOJN/mjFjY2dfgLaH8RhiTWHeIT1II7n3A5FwyQE9IAp901lQgD+OUy5sVoFreG9FwBfeq4
+	8mT0PdjczxawZ3SngX0fjDHI8xtivss7FcokZNexoaYOEx9E5nBpckJTiY3PprkD9zlg55OGqn1
+	vIYP4lpP989sco/BJ6cdqVmeieJccjmrPYbyqd1/SYW/j/YrKQv7/fRI+z8Yn1Yd9cjjRSpf74T
+	kU32aNpAatDcILGZOIVDv63tK1QRGv4TBAncDdW0Ijks0gs+2m4dmnA941y5AQ9XP9LSsQc5XWx
+	4S9RNjGKvqOhnXQ+cGSQv9M8ogUw3JcuQbPkh4Vavi1TtNo2xhFenH87b0IQJi3w==
+X-Received: by 2002:a05:620a:46a2:b0:8cf:d62a:c81d with SMTP id af79cd13be357-8f7d9201d94mr664574885a.29.1777404666489;
+        Tue, 28 Apr 2026 12:31:06 -0700 (PDT)
+Received: from plex ([71.181.43.54])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8f7c85a8eb1sm260640585a.41.2026.04.28.12.31.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Apr 2026 12:31:05 -0700 (PDT)
+Date: Tue, 28 Apr 2026 19:31:04 +0000
+From: Pasha Tatashin <pasha.tatashin@soleen.com>
+To: Pratyush Yadav <pratyush@kernel.org>
+Cc: Pasha Tatashin <pasha.tatashin@soleen.com>, 
+	Mike Rapoport <rppt@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, Usama Arif <usama.arif@linux.dev>, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v3 0/6] selftests/liveupdate: add memfd tests
+Message-ID: <afEKfQ0GUNVJ76a1@plex>
+References: <20260404102452.4091740-1-pratyush@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260404102452.4091740-1-pratyush@kernel.org>
 
+On 04-04 10:24, Pratyush Yadav wrote:
+> From: "Pratyush Yadav (Google)" <pratyush@kernel.org>
+> 
+> Hi,
+> 
+> This series adds some tests for memfd preservation across a live update.
+> Currently memfd is only tested indirectly via luo_kexec_simple or
+> luo_multi_session. Add a dedicated test suite for it.
+> 
+> Patches 1 and 2 are preparatory, adding base framework and helpers, and
+> the other patches each add a test. Some of the code is taken from the
+> libluo patches [0] I sent a while ago.
+> 
+> [0] https://lore.kernel.org/linux-mm/20250723144649.1696299-33-pasha.tatashin@soleen.com/
 
---=-qmv3LylIXMZ8XL1hvURK
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Here are few observations that I noticed when I tried to run your tests:
 
-From: David Woodhouse <dwmw@amazon.co.uk>
+1. The '-h' tells you nothing about --stage argument:
 
-Commit 3617c0ee7decb ("KVM: x86/xen: Only write Xen hypercall page for
-guest writes to MSR") blocked host-initiated writes from triggering the
-Xen hypercall page setup, to fix an SRCU usage violation when the
-hypercall MSR index collides with a real MSR written during vCPU reset.
+root@liveupdate-vm:~/liveupdate# ./luo_memfd -h
+Usage: ./luo_memfd [-h|-l|-d] [-t|-T|-v|-V|-f|-F|-r name]
+	-h       print help
+	-l       list all tests
+	-d       enable debug prints
 
-However, some VMMs legitimately need to trigger hypercall page setup
-from host context. For example, a VMM may intercept the guest's MSR
-write to track an epoch (for kexec/crash recovery), and then replay the
-write as a host-initiated KVM_SET_MSRS to populate the hypercall page.
-The host_initiated check breaks this use case.
+	-t name  include test
+	-T name  exclude test
+	-v name  include variant
+	-V name  exclude variant
+	-f name  include fixture
+	-F name  exclude fixture
+	-r name  run specified test
+	...
 
-Add KVM_XEN_VCPU_ATTR_TYPE_WRITE_HYPERCALL_PAGE as a new vcpu attribute
-that explicitly invokes kvm_xen_write_hypercall_page() under proper
-locking. This gives userspace a safe interface to trigger hypercall page
-setup without going through the MSR write path, preserving the
-host_initiated defence in depth while restoring the lost functionality.
+2. '-l' does not work after you run stage1, do you keep /dev/liveupdate 
+open? That is not needed, we only need to keep session open.
 
-Fixes: 3617c0ee7dec ("KVM: x86/xen: Only write Xen hypercall page for guest=
- writes to MSR")
-Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
----
- Documentation/virt/kvm/api.rst                | 11 +++
- arch/x86/include/uapi/asm/kvm.h               |  3 +
- arch/x86/kvm/x86.c                            |  3 +-
- arch/x86/kvm/xen.c                            |  7 ++
- .../selftests/kvm/x86/xen_vmcall_test.c       | 96 +++++++++++++++++++
- 5 files changed, 119 insertions(+), 1 deletion(-)
+root@liveupdate-vm:~/liveupdate# ./luo_memfd -l
+1..0 # SKIP Failed to open /dev/liveupdate (Device or resource busy) device. Is LUO enabled?
 
-diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rs=
-t
-index 52bbbb553ce1..63423c375a78 100644
---- a/Documentation/virt/kvm/api.rst
-+++ b/Documentation/virt/kvm/api.rst
-@@ -5800,6 +5800,17 @@ KVM_XEN_VCPU_ATTR_TYPE_UPCALL_VECTOR
-   vector configured with HVM_PARAM_CALLBACK_IRQ. It is disabled by
-   setting the vector to zero.
-=20
-+KVM_XEN_VCPU_ATTR_TYPE_WRITE_HYPERCALL_PAGE
-+  This attribute is available when the KVM_CAP_XEN_HVM ioctl indicates
-+  support for KVM_XEN_HVM_CONFIG_WRITE_HYPERCALL_PAGE. It triggers
-+  population of the Xen hypercall page at the guest physical address
-+  specified in ``gpa``, just as if the guest had written to the
-+  hypercall MSR. This is intended for VMMs that intercept the guest's
-+  MSR write (e.g. to track an epoch for kexec/crash recovery) and need
-+  to replay the write from host context. Direct host-initiated writes
-+  via KVM_SET_MSRS are blocked for safety; this attribute provides the
-+  correct alternative.
-+
-=20
- 4.129 KVM_XEN_VCPU_GET_ATTR
- ---------------------------
-diff --git a/arch/x86/include/uapi/asm/kvm.h b/arch/x86/include/uapi/asm/kv=
-m.h
-index 5f2b30d0405c..977f3aa66c18 100644
---- a/arch/x86/include/uapi/asm/kvm.h
-+++ b/arch/x86/include/uapi/asm/kvm.h
-@@ -596,6 +596,7 @@ struct kvm_x86_mce {
- #define KVM_XEN_HVM_CONFIG_RUNSTATE_UPDATE_FLAG	(1 << 6)
- #define KVM_XEN_HVM_CONFIG_PVCLOCK_TSC_UNSTABLE	(1 << 7)
- #define KVM_XEN_HVM_CONFIG_SHARED_INFO_HVA	(1 << 8)
-+#define KVM_XEN_HVM_CONFIG_WRITE_HYPERCALL_PAGE	(1 << 9)
-=20
- #define KVM_XEN_MSR_MIN_INDEX			0x40000000u
- #define KVM_XEN_MSR_MAX_INDEX			0x4fffffffu
-@@ -704,6 +705,8 @@ struct kvm_xen_vcpu_attr {
- #define KVM_XEN_VCPU_ATTR_TYPE_UPCALL_VECTOR	0x8
- /* Available with KVM_CAP_XEN_HVM / KVM_XEN_HVM_CONFIG_SHARED_INFO_HVA */
- #define KVM_XEN_VCPU_ATTR_TYPE_VCPU_INFO_HVA	0x9
-+/* Available with KVM_CAP_XEN_HVM / KVM_XEN_HVM_CONFIG_WRITE_HYPERCALL_PAG=
-E */
-+#define KVM_XEN_VCPU_ATTR_TYPE_WRITE_HYPERCALL_PAGE 0xa
-=20
- /* Secure Encrypted Virtualization command */
- enum sev_cmd_id {
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 0a1b63c63d1a..3facf0429c0a 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -4891,7 +4891,8 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, lon=
-g ext)
- 		    KVM_XEN_HVM_CONFIG_EVTCHN_2LEVEL |
- 		    KVM_XEN_HVM_CONFIG_EVTCHN_SEND |
- 		    KVM_XEN_HVM_CONFIG_PVCLOCK_TSC_UNSTABLE |
--		    KVM_XEN_HVM_CONFIG_SHARED_INFO_HVA;
-+		    KVM_XEN_HVM_CONFIG_SHARED_INFO_HVA |
-+		    KVM_XEN_HVM_CONFIG_WRITE_HYPERCALL_PAGE;
- 		if (sched_info_on())
- 			r |=3D KVM_XEN_HVM_CONFIG_RUNSTATE |
- 			     KVM_XEN_HVM_CONFIG_RUNSTATE_UPDATE_FLAG;
-diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
-index 91fd3673c09a..c16b4560c9e7 100644
---- a/arch/x86/kvm/xen.c
-+++ b/arch/x86/kvm/xen.c
-@@ -907,6 +907,13 @@ int kvm_xen_vcpu_set_attr(struct kvm_vcpu *vcpu, struc=
-t kvm_xen_vcpu_attr *data)
- {
- 	int idx, r =3D -ENOENT;
-=20
-+	/*
-+	 * kvm_xen_write_hypercall_page() manages its own locking.
-+	 * Handle it before taking xen_lock to avoid a deadlock.
-+	 */
-+	if (data->type =3D=3D KVM_XEN_VCPU_ATTR_TYPE_WRITE_HYPERCALL_PAGE)
-+		return kvm_xen_write_hypercall_page(vcpu, data->u.gpa) ? -EIO : 0;
-+
- 	mutex_lock(&vcpu->kvm->arch.xen.xen_lock);
- 	idx =3D srcu_read_lock(&vcpu->kvm->srcu);
-=20
-diff --git a/tools/testing/selftests/kvm/x86/xen_vmcall_test.c b/tools/test=
-ing/selftests/kvm/x86/xen_vmcall_test.c
-index 2585087cdf5c..1536d510ab30 100644
---- a/tools/testing/selftests/kvm/x86/xen_vmcall_test.c
-+++ b/tools/testing/selftests/kvm/x86/xen_vmcall_test.c
-@@ -12,6 +12,8 @@
- #include "processor.h"
- #include "hyperv.h"
-=20
-+#include <string.h>
-+
- #define HCALL_REGION_GPA	0xc0000000ULL
- #define HCALL_REGION_SLOT	10
-=20
-@@ -26,6 +28,10 @@
- #define HVCALL_SIGNAL_EVENT		0x005d
- #define HV_STATUS_INVALID_ALIGNMENT	4
-=20
-+enum {
-+	TEST_WRITE_HYPERCALL_PAGE =3D 1,
-+};
-+
- static void guest_code(void)
- {
- 	unsigned long rax =3D INPUTVALUE;
-@@ -76,17 +82,65 @@ static void guest_code(void)
- 			     "r"(r8));
- 	GUEST_ASSERT(rax =3D=3D HV_STATUS_INVALID_ALIGNMENT);
-=20
-+	/*
-+	 * Test KVM_XEN_VCPU_ATTR_TYPE_WRITE_HYPERCALL_PAGE: ask userspace
-+	 * to set up MSR filtering, then write the MSR. The WRMSR will exit
-+	 * to userspace (not populate the page). Userspace verifies the page
-+	 * is empty, uses the attr to populate it, then resumes us.
-+	 */
-+	GUEST_SYNC(TEST_WRITE_HYPERCALL_PAGE);
-+
-+	__asm__ __volatile__("wrmsr" : : "c" (XEN_HYPERCALL_MSR),
-+			     "a" (HCALL_REGION_GPA & 0xffffffff),
-+			     "d" (HCALL_REGION_GPA >> 32));
-+
-+	/* Userspace populated the page via the attr =E2=80=94 verify it works */
-+	rax =3D INPUTVALUE;
-+	rdi =3D ARGVALUE(1);
-+	rsi =3D ARGVALUE(2);
-+	rdx =3D ARGVALUE(3);
-+	r10 =3D ARGVALUE(4);
-+	r8 =3D ARGVALUE(5);
-+	r9 =3D ARGVALUE(6);
-+	__asm__ __volatile__("call *%1" : "=3Da"(rax) :
-+			     "r"(HCALL_REGION_GPA + INPUTVALUE * 32),
-+			     "a"(rax), "D"(rdi), "S"(rsi), "d"(rdx),
-+			     "r"(r10), "r"(r8), "r"(r9));
-+	GUEST_ASSERT(rax =3D=3D RETVALUE);
-+
- 	GUEST_DONE();
- }
-=20
-+static void setup_msr_filter(struct kvm_vm *vm)
-+{
-+	uint64_t deny_bits =3D 0;
-+	struct kvm_msr_filter filter =3D {
-+		.flags =3D KVM_MSR_FILTER_DEFAULT_ALLOW,
-+		.ranges =3D {
-+			{
-+				.flags =3D KVM_MSR_FILTER_WRITE,
-+				.nmsrs =3D 1,
-+				.base =3D XEN_HYPERCALL_MSR,
-+				.bitmap =3D (uint8_t *)&deny_bits,
-+			},
-+		},
-+	};
-+
-+	vm_ioctl(vm, KVM_X86_SET_MSR_FILTER, &filter);
-+}
-+
- int main(int argc, char *argv[])
- {
- 	unsigned int xen_caps;
- 	struct kvm_vcpu *vcpu;
- 	struct kvm_vm *vm;
-+	bool msr_filter_ready =3D false;
-=20
- 	xen_caps =3D kvm_check_cap(KVM_CAP_XEN_HVM);
- 	TEST_REQUIRE(xen_caps & KVM_XEN_HVM_CONFIG_INTERCEPT_HCALL);
-+	TEST_REQUIRE(xen_caps & KVM_XEN_HVM_CONFIG_WRITE_HYPERCALL_PAGE);
-+	TEST_REQUIRE(kvm_check_cap(KVM_CAP_X86_USER_SPACE_MSR));
-+	TEST_REQUIRE(kvm_check_cap(KVM_CAP_X86_MSR_FILTER));
-=20
- 	vm =3D vm_create_with_one_vcpu(&vcpu, guest_code);
- 	vcpu_set_hv_cpuid(vcpu);
-@@ -123,6 +177,36 @@ int main(int argc, char *argv[])
- 			continue;
- 		}
-=20
-+		if (run->exit_reason =3D=3D KVM_EXIT_X86_WRMSR) {
-+			/* MSR filter caught the Xen hypercall MSR write */
-+			TEST_ASSERT(msr_filter_ready,
-+				    "Unexpected WRMSR exit before filter setup");
-+			TEST_ASSERT_EQ(run->msr.index, XEN_HYPERCALL_MSR);
-+
-+			/*
-+			 * The host_initiated check should have prevented
-+			 * KVM from populating the page. Verify it's empty.
-+			 */
-+			uint8_t *hcall_page =3D addr_gpa2hva(vm, HCALL_REGION_GPA);
-+			TEST_ASSERT_EQ(hcall_page[0], 0);
-+
-+			/*
-+			 * Now use the attr to populate the page, as a
-+			 * VMM would after intercepting the MSR write.
-+			 */
-+			struct kvm_xen_vcpu_attr attr =3D {
-+				.type =3D KVM_XEN_VCPU_ATTR_TYPE_WRITE_HYPERCALL_PAGE,
-+				.u.gpa =3D HCALL_REGION_GPA,
-+			};
-+			vcpu_ioctl(vcpu, KVM_XEN_VCPU_SET_ATTR, &attr);
-+
-+			/* Verify the page is now populated */
-+			TEST_ASSERT_EQ(hcall_page[0], 0xb8);
-+
-+			run->msr.error =3D 0;
-+			continue;
-+		}
-+
- 		TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_IO);
-=20
- 		switch (get_ucall(vcpu, &uc)) {
-@@ -130,6 +214,18 @@ int main(int argc, char *argv[])
- 			REPORT_GUEST_ASSERT(uc);
- 			/* NOT REACHED */
- 		case UCALL_SYNC:
-+			TEST_ASSERT_EQ(uc.args[1], TEST_WRITE_HYPERCALL_PAGE);
-+
-+			/*
-+			 * Guest is about to write the Xen MSR. Clear the
-+			 * hypercall page, install MSR filter to intercept
-+			 * the write, and enable userspace MSR exits.
-+			 */
-+			memset(addr_gpa2hva(vm, HCALL_REGION_GPA), 0, PAGE_SIZE);
-+			vm_enable_cap(vm, KVM_CAP_X86_USER_SPACE_MSR,
-+				      KVM_MSR_EXIT_REASON_FILTER);
-+			setup_msr_filter(vm);
-+			msr_filter_ready =3D true;
- 			break;
- 		case UCALL_DONE:
- 			goto done;
---=20
-2.43.0
+3. Stage 1 has proper [STAGE 1] prefix, but no [STAGE 2] prefix for 
+stage 2:
+# Starting 4 tests from 1 test cases.
+#  RUN           global.memfd_data ...
+# [STAGE 1] Forking persistent child to hold sessions...
+# [STAGE 1] Child PID: 245. Resources are pinned.
+# [STAGE 1] You may now perform kexec reboot.
+#            OK  global.memfd_data
+ok 1 global.memfd_data
+#  RUN           global.zero_memfd ...
+# [STAGE 1] Forking persistent child to hold sessions...
+# [STAGE 1] Child PID: 247. Resources are pinned.
+# [STAGE 1] You may now perform kexec reboot.
+#            OK  global.zero_memfd
+ok 2 global.zero_memfd
+#  RUN           global.preserved_ops ...
+#            OK  global.preserved_ops
+ok 3 global.preserved_ops
+#  RUN           global.fallocate_memfd ...
+# [STAGE 1] Forking persistent child to hold sessions...
+# [STAGE 1] Child PID: 250. Resources are pinned.
+# [STAGE 1] You may now perform kexec reboot.
+#            OK  global.fallocate_memfd
+ok 4 global.fallocate_memfd
+# PASSED: 4 / 4 tests passed.
+# Totals: pass:4 fail:0 xfail:0 xpass:0 skip:0 error:0
 
+./do_kexec
 
+root@liveupdate-vm:~/liveupdate# ./luo_memfd
+TAP version 13
+1..4
+# Starting 4 tests from 1 test cases.
+#  RUN           global.memfd_data ...
+#            OK  global.memfd_data
+ok 1 global.memfd_data
+#  RUN           global.zero_memfd ...
+#            OK  global.zero_memfd
+ok 2 global.zero_memfd
+#  RUN           global.preserved_ops ...
+#      SKIP      test only expected to run on stage 1
+#            OK  global.preserved_ops
+ok 3 global.preserved_ops # SKIP test only expected to run on stage 1
+#  RUN           global.fallocate_memfd ...
+#            OK  global.fallocate_memfd
+ok 4 global.fallocate_memfd
+# PASSED: 4 / 4 tests passed.
+# 1 skipped test(s) detected. Consider enabling relevant config options to improve coverage.
+# Totals: pass:3 fail:0 xfail:0 xpass:0 skip:1 error:0
 
---=-qmv3LylIXMZ8XL1hvURK
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Transfer-Encoding: base64
+4. I also do not like that we now have duplicated stage parsing code in  
+luo_test(), perhaps we should add our own  test_harness_run() variant 
+that depends on stage, and use it in both current tests, and the new 
+memfd tests.
 
-MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCD9Aw
-ggSOMIIDdqADAgECAhAOmiw0ECVD4cWj5DqVrT9PMA0GCSqGSIb3DQEBCwUAMGUxCzAJBgNVBAYT
-AlVTMRUwEwYDVQQKEwxEaWdpQ2VydCBJbmMxGTAXBgNVBAsTEHd3dy5kaWdpY2VydC5jb20xJDAi
-BgNVBAMTG0RpZ2lDZXJ0IEFzc3VyZWQgSUQgUm9vdCBDQTAeFw0yNDAxMzAwMDAwMDBaFw0zMTEx
-MDkyMzU5NTlaMEExCzAJBgNVBAYTAkFVMRAwDgYDVQQKEwdWZXJva2V5MSAwHgYDVQQDExdWZXJv
-a2V5IFNlY3VyZSBFbWFpbCBHMjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMjvgLKj
-jfhCFqxYyRiW8g3cNFAvltDbK5AzcOaR7yVzVGadr4YcCVxjKrEJOgi7WEOH8rUgCNB5cTD8N/Et
-GfZI+LGqSv0YtNa54T9D1AWJy08ZKkWvfGGIXN9UFAPMJ6OLLH/UUEgFa+7KlrEvMUupDFGnnR06
-aDJAwtycb8yXtILj+TvfhLFhafxroXrflspavejQkEiHjNjtHnwbZ+o43g0/yxjwnarGI3kgcak7
-nnI9/8Lqpq79tLHYwLajotwLiGTB71AGN5xK+tzB+D4eN9lXayrjcszgbOv2ZCgzExQUAIt98mre
-8EggKs9mwtEuKAhYBIP/0K6WsoMnQCcCAwEAAaOCAVwwggFYMBIGA1UdEwEB/wQIMAYBAf8CAQAw
-HQYDVR0OBBYEFIlICOogTndrhuWByNfhjWSEf/xwMB8GA1UdIwQYMBaAFEXroq/0ksuCMS1Ri6en
-IZ3zbcgPMA4GA1UdDwEB/wQEAwIBhjAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIweQYI
-KwYBBQUHAQEEbTBrMCQGCCsGAQUFBzABhhhodHRwOi8vb2NzcC5kaWdpY2VydC5jb20wQwYIKwYB
-BQUHMAKGN2h0dHA6Ly9jYWNlcnRzLmRpZ2ljZXJ0LmNvbS9EaWdpQ2VydEFzc3VyZWRJRFJvb3RD
-QS5jcnQwRQYDVR0fBD4wPDA6oDigNoY0aHR0cDovL2NybDMuZGlnaWNlcnQuY29tL0RpZ2lDZXJ0
-QXNzdXJlZElEUm9vdENBLmNybDARBgNVHSAECjAIMAYGBFUdIAAwDQYJKoZIhvcNAQELBQADggEB
-ACiagCqvNVxOfSd0uYfJMiZsOEBXAKIR/kpqRp2YCfrP4Tz7fJogYN4fxNAw7iy/bPZcvpVCfe/H
-/CCcp3alXL0I8M/rnEnRlv8ItY4MEF+2T/MkdXI3u1vHy3ua8SxBM8eT9LBQokHZxGUX51cE0kwa
-uEOZ+PonVIOnMjuLp29kcNOVnzf8DGKiek+cT51FvGRjV6LbaxXOm2P47/aiaXrDD5O0RF5SiPo6
-xD1/ClkCETyyEAE5LRJlXtx288R598koyFcwCSXijeVcRvBB1cNOLEbg7RMSw1AGq14fNe2cH1HG
-W7xyduY/ydQt6gv5r21mDOQ5SaZSWC/ZRfLDuEYwggWbMIIEg6ADAgECAhAH5JEPagNRXYDiRPdl
-c1vgMA0GCSqGSIb3DQEBCwUAMEExCzAJBgNVBAYTAkFVMRAwDgYDVQQKEwdWZXJva2V5MSAwHgYD
-VQQDExdWZXJva2V5IFNlY3VyZSBFbWFpbCBHMjAeFw0yNDEyMzAwMDAwMDBaFw0yODAxMDQyMzU5
-NTlaMB4xHDAaBgNVBAMME2R3bXcyQGluZnJhZGVhZC5vcmcwggIiMA0GCSqGSIb3DQEBAQUAA4IC
-DwAwggIKAoICAQDali7HveR1thexYXx/W7oMk/3Wpyppl62zJ8+RmTQH4yZeYAS/SRV6zmfXlXaZ
-sNOE6emg8WXLRS6BA70liot+u0O0oPnIvnx+CsMH0PD4tCKSCsdp+XphIJ2zkC9S7/yHDYnqegqt
-w4smkqUqf0WX/ggH1Dckh0vHlpoS1OoxqUg+ocU6WCsnuz5q5rzFsHxhD1qGpgFdZEk2/c//ZvUN
-i12vPWipk8TcJwHw9zoZ/ZrVNybpMCC0THsJ/UEVyuyszPtNYeYZAhOJ41vav1RhZJzYan4a1gU0
-kKBPQklcpQEhq48woEu15isvwWh9/+5jjh0L+YNaN0I//nHSp6U9COUG9Z0cvnO8FM6PTqsnSbcc
-0j+GchwOHRC7aP2t5v2stVx3KbptaYEzi4MQHxm/0+HQpMEVLLUiizJqS4PWPU6zfQTOMZ9uLQRR
-ci+c5xhtMEBszlQDOvEQcyEG+hc++fH47K+MmZz21bFNfoBxLP6bjR6xtPXtREF5lLXxp+CJ6KKS
-blPKeVRg/UtyJHeFKAZXO8Zeco7TZUMVHmK0ZZ1EpnZbnAhKE19Z+FJrQPQrlR0gO3lBzuyPPArV
-hvWxjlO7S4DmaEhLzarWi/ze7EGwWSuI2eEa/8zU0INUsGI4ywe7vepQz7IqaAovAX0d+f1YjbmC
-VsAwjhLmveFjNwIDAQABo4IBsDCCAawwHwYDVR0jBBgwFoAUiUgI6iBOd2uG5YHI1+GNZIR//HAw
-HQYDVR0OBBYEFFxiGptwbOfWOtMk5loHw7uqWUOnMDAGA1UdEQQpMCeBE2R3bXcyQGluZnJhZGVh
-ZC5vcmeBEGRhdmlkQHdvb2Rob3Uuc2UwFAYDVR0gBA0wCzAJBgdngQwBBQEBMA4GA1UdDwEB/wQE
-AwIF4DAdBgNVHSUEFjAUBggrBgEFBQcDAgYIKwYBBQUHAwQwewYDVR0fBHQwcjA3oDWgM4YxaHR0
-cDovL2NybDMuZGlnaWNlcnQuY29tL1Zlcm9rZXlTZWN1cmVFbWFpbEcyLmNybDA3oDWgM4YxaHR0
-cDovL2NybDQuZGlnaWNlcnQuY29tL1Zlcm9rZXlTZWN1cmVFbWFpbEcyLmNybDB2BggrBgEFBQcB
-AQRqMGgwJAYIKwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmRpZ2ljZXJ0LmNvbTBABggrBgEFBQcwAoY0
-aHR0cDovL2NhY2VydHMuZGlnaWNlcnQuY29tL1Zlcm9rZXlTZWN1cmVFbWFpbEcyLmNydDANBgkq
-hkiG9w0BAQsFAAOCAQEAQXc4FPiPLRnTDvmOABEzkIumojfZAe5SlnuQoeFUfi+LsWCKiB8Uextv
-iBAvboKhLuN6eG/NC6WOzOCppn4mkQxRkOdLNThwMHW0d19jrZFEKtEG/epZ/hw/DdScTuZ2m7im
-8ppItAT6GXD3aPhXkXnJpC/zTs85uNSQR64cEcBFjjoQDuSsTeJ5DAWf8EMyhMuD8pcbqx5kRvyt
-JPsWBQzv1Dsdv2LDPLNd/JUKhHSgr7nbUr4+aAP2PHTXGcEBh8lTeYea9p4d5k969pe0OHYMV5aL
-xERqTagmSetuIwolkAuBCzA9vulg8Y49Nz2zrpUGfKGOD0FMqenYxdJHgDCCBZswggSDoAMCAQIC
-EAfkkQ9qA1FdgOJE92VzW+AwDQYJKoZIhvcNAQELBQAwQTELMAkGA1UEBhMCQVUxEDAOBgNVBAoT
-B1Zlcm9rZXkxIDAeBgNVBAMTF1Zlcm9rZXkgU2VjdXJlIEVtYWlsIEcyMB4XDTI0MTIzMDAwMDAw
-MFoXDTI4MDEwNDIzNTk1OVowHjEcMBoGA1UEAwwTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJ
-KoZIhvcNAQEBBQADggIPADCCAgoCggIBANqWLse95HW2F7FhfH9bugyT/danKmmXrbMnz5GZNAfj
-Jl5gBL9JFXrOZ9eVdpmw04Tp6aDxZctFLoEDvSWKi367Q7Sg+ci+fH4KwwfQ8Pi0IpIKx2n5emEg
-nbOQL1Lv/IcNiep6Cq3DiyaSpSp/RZf+CAfUNySHS8eWmhLU6jGpSD6hxTpYKye7PmrmvMWwfGEP
-WoamAV1kSTb9z/9m9Q2LXa89aKmTxNwnAfD3Ohn9mtU3JukwILRMewn9QRXK7KzM+01h5hkCE4nj
-W9q/VGFknNhqfhrWBTSQoE9CSVylASGrjzCgS7XmKy/BaH3/7mOOHQv5g1o3Qj/+cdKnpT0I5Qb1
-nRy+c7wUzo9OqydJtxzSP4ZyHA4dELto/a3m/ay1XHcpum1pgTOLgxAfGb/T4dCkwRUstSKLMmpL
-g9Y9TrN9BM4xn24tBFFyL5znGG0wQGzOVAM68RBzIQb6Fz758fjsr4yZnPbVsU1+gHEs/puNHrG0
-9e1EQXmUtfGn4InoopJuU8p5VGD9S3Ikd4UoBlc7xl5yjtNlQxUeYrRlnUSmdlucCEoTX1n4UmtA
-9CuVHSA7eUHO7I88CtWG9bGOU7tLgOZoSEvNqtaL/N7sQbBZK4jZ4Rr/zNTQg1SwYjjLB7u96lDP
-sipoCi8BfR35/ViNuYJWwDCOEua94WM3AgMBAAGjggGwMIIBrDAfBgNVHSMEGDAWgBSJSAjqIE53
-a4blgcjX4Y1khH/8cDAdBgNVHQ4EFgQUXGIam3Bs59Y60yTmWgfDu6pZQ6cwMAYDVR0RBCkwJ4ET
-ZHdtdzJAaW5mcmFkZWFkLm9yZ4EQZGF2aWRAd29vZGhvdS5zZTAUBgNVHSAEDTALMAkGB2eBDAEF
-AQEwDgYDVR0PAQH/BAQDAgXgMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEFBQcDBDB7BgNVHR8E
-dDByMDegNaAzhjFodHRwOi8vY3JsMy5kaWdpY2VydC5jb20vVmVyb2tleVNlY3VyZUVtYWlsRzIu
-Y3JsMDegNaAzhjFodHRwOi8vY3JsNC5kaWdpY2VydC5jb20vVmVyb2tleVNlY3VyZUVtYWlsRzIu
-Y3JsMHYGCCsGAQUFBwEBBGowaDAkBggrBgEFBQcwAYYYaHR0cDovL29jc3AuZGlnaWNlcnQuY29t
-MEAGCCsGAQUFBzAChjRodHRwOi8vY2FjZXJ0cy5kaWdpY2VydC5jb20vVmVyb2tleVNlY3VyZUVt
-YWlsRzIuY3J0MA0GCSqGSIb3DQEBCwUAA4IBAQBBdzgU+I8tGdMO+Y4AETOQi6aiN9kB7lKWe5Ch
-4VR+L4uxYIqIHxR7G2+IEC9ugqEu43p4b80LpY7M4KmmfiaRDFGQ50s1OHAwdbR3X2OtkUQq0Qb9
-6ln+HD8N1JxO5nabuKbymki0BPoZcPdo+FeRecmkL/NOzzm41JBHrhwRwEWOOhAO5KxN4nkMBZ/w
-QzKEy4PylxurHmRG/K0k+xYFDO/UOx2/YsM8s138lQqEdKCvudtSvj5oA/Y8dNcZwQGHyVN5h5r2
-nh3mT3r2l7Q4dgxXlovERGpNqCZJ624jCiWQC4ELMD2+6WDxjj03PbOulQZ8oY4PQUyp6djF0keA
-MYIDuzCCA7cCAQEwVTBBMQswCQYDVQQGEwJBVTEQMA4GA1UEChMHVmVyb2tleTEgMB4GA1UEAxMX
-VmVyb2tleSBTZWN1cmUgRW1haWwgRzICEAfkkQ9qA1FdgOJE92VzW+AwDQYJYIZIAWUDBAIBBQCg
-ggE3MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI2MDQyODE5MTIz
-OVowLwYJKoZIhvcNAQkEMSIEIImG4sMDYjKah80fUuFCttF325WRQ8f/LLhJSPNNgn29MGQGCSsG
-AQQBgjcQBDFXMFUwQTELMAkGA1UEBhMCQVUxEDAOBgNVBAoTB1Zlcm9rZXkxIDAeBgNVBAMTF1Zl
-cm9rZXkgU2VjdXJlIEVtYWlsIEcyAhAH5JEPagNRXYDiRPdlc1vgMGYGCyqGSIb3DQEJEAILMVeg
-VTBBMQswCQYDVQQGEwJBVTEQMA4GA1UEChMHVmVyb2tleTEgMB4GA1UEAxMXVmVyb2tleSBTZWN1
-cmUgRW1haWwgRzICEAfkkQ9qA1FdgOJE92VzW+AwDQYJKoZIhvcNAQEBBQAEggIApc6evEHGRqmA
-xBiM2DalKAlcV7w79taOYftme7vPq8KtYBksf+wUL478GPbMce1y9v1u62dehIOvJA4h9zUY8ClM
-Wm9ClDCc6Jn+bpZcK/G6PnBXTc6Gti6x+1evU7VG8IOttz0ONd1Wbe2ha9YEE/CO5HQ0jCVb7ACe
-Cas5xCkYsCAFj4SnbQDblS7DuJpssPIqFT6KL7e0UbKScfbpHhSit4QBDdy80oQ6EBI6CT6wLwtC
-Ybjo2H3034FxdGaiS77A/HYZFHdt6r1MloMhmFK3kGgIWSZfbo92WmNRl30bN+Zfo6+G7jgi03f6
-sfAv3urozTIi9bf3pLpwwKyraHX7LtEV/9/CZVEoLwBfDaclXyyUDGSSYH+3/6DiLNEF+Ey7mNKp
-sEetCOnfZ2fvbhpVfb+slVe8gg+nOPOhchzvsi0Rsl8ElaFojsXRJnQPLRRhLvbr+TXy8rAKoRFD
-ih5S0GuTKTgQrO5dNahFaCPGDFaOHd+t5mi4/aXuWjMT7fm8Bh8gTvxVcwHTwET3IClg8/3TSOO6
-TCFKnkjYoMjcvbtfTFhbwGOTACVKtKkad/0qxyG1SjnkGXilOIMB8W5ePshLHurwcSIigKy+z99r
-Kuw5d/o6C6MLq6oNkmRhjfolmjS768rPvAI9+dozb9plgnyH14az/p/50GhM30UAAAAAAAA=
+Pasha
 
-
---=-qmv3LylIXMZ8XL1hvURK--
+> 
+> Changes in v3:
+> - Retry on EINTR instead of giving up in read_size() and write_size().
+> - Use O_TRUNC in save_test_data().
+> - Return the value of write_size() directly in create_random_memfd(). No
+>   need to check errno since write_size() already returns -errno.
+> - Save errno before calling close() in create_random_memfd() to avoid
+>   overwriting the value.
+> - Use memcmp() instead of open-coding the comparison loop.
+> - Return value of test_harness_run() from main().
+> 
+> Changes in v2:
+> - Drop LIVEUPDATE_DEV since it isn't used.
+> - Split luo_fd and stage declaration on separate lines.
+> - Split all 2-stage tests into helper function for each test.
+> - Fix wording and argument order when LUO_DEVICE fails to open.
+> - Rename verify_fd_content() to verify_fd_content_read().
+> - Advance buffer pointer in {read,write}_size().
+> - Add a check to make sure current working directory is not on a tmpfs
+>   mount. If so, skip the tests since saved data files will be lost.
+> - Rename RANDOM_DATA_FILE and RANDOM_DATA_FILE_FALLOCATE to
+>   MEMFD_DATA_FS_COPY and FALLOCATE_DATA_FS_COPY respectively. Also
+>   update the file names to reflect this naming convention.
+> - Collect R-bys.
+> 
+> Regards,
+> Pratyush Yadav
+> 
+> Pratyush Yadav (Google) (6):
+>   selftests/liveupdate: add framework for memfd tests
+>   selftests/liveupdate: add helper functions for memfd tests
+>   selftests/liveupdate: add test for memfd content preservation
+>   selftests/liveupdate: add test for zero-size memfd preservation
+>   selftests/liveupdate: add test for operations on a preserved memfd
+>   selftests/liveupdate: add fallocate test for memfd
+> 
+>  tools/testing/selftests/liveupdate/Makefile   |   2 +
+>  .../testing/selftests/liveupdate/luo_memfd.c  | 355 ++++++++++++++++++
+>  .../selftests/liveupdate/luo_test_utils.c     | 191 +++++++++-
+>  .../selftests/liveupdate/luo_test_utils.h     |  10 +
+>  4 files changed, 557 insertions(+), 1 deletion(-)
+>  create mode 100644 tools/testing/selftests/liveupdate/luo_memfd.c
+> 
+> 
+> base-commit: 98ddd87f9704ef2fc837ec2ca38877c364d8dada
+> -- 
+> 2.53.0.1213.gd9a14994de-goog
+> 
