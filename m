@@ -1,268 +1,220 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from AM0PR02CU008.outbound.protection.outlook.com (mail-westeuropeazon11013000.outbound.protection.outlook.com [52.101.72.0])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAE083644CF;
-	Tue, 28 Apr 2026 20:48:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777409327; cv=none; b=DRO6aiwdkLxDZFvZEtyg784v1Cswmx+rXLv5V6eZePE9eRzHwZzLw4I8lPZ2Ge4soE4Cg5YkOwchscIofUUNdtUn5BeGmrkarjzDk9Uv4yK8lbnC2zfEFLXdK9dapBHfhEwlJmb3hewTvzN+uWOgFS4o1vMlrJjfNKvSnp1a290=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777409327; c=relaxed/simple;
-	bh=sZoUbqG9CxBotaWHnOZiPFKTeBgb66YHvpq2HPRKqX0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=B1Z0SCOK44mYCA4U63KlBK8GGo1MW+x12lvlGnQ7eOcmTec5eW5fzAmp8fnVNjF7fZGCtHUVSqUnXwq5kihUMNzTKCCAmC7KQ9mobuDvUBz19IYIFwtEgGt37qyQbydYICq1MuH2EfQUJI1BbUA09HF2NMvZndCHe0GLh37KorE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BEwvk+c8; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AC8C340A59;
+	Tue, 28 Apr 2026 20:49:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.72.0
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777409372; cv=fail; b=l4VkciLeCfik+7eGnQrTX6SRtAu+fWMcpPKMNO1K5q/9xga9M7JxG9cSyyQjjEyBTXHxh+w8wO06PnR03dL+lZ5mVpmmmxpX3hL+tImQuh3nQCDEBcNYHTgqx7lDDjcPFQoYvgJzcz/wS2tmL53e6/hKyvTaW0xCj02Am0ByjhQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777409372; c=relaxed/simple;
+	bh=WcNa5lgwRqyYlPhgtSu9SZtFyBWPxnCJpYYbdDPxHwk=;
+	h=From:Subject:Date:Message-Id:Content-Type:To:Cc:MIME-Version; b=es8pala61FvRmvfaCPBZFALfiiKCeAxb7gUlRsNV+ef3UUa9/02nI7MtgUvHtiT+kD3IcM2upsPc430npD519znDOnMeUAXOMbtqea54HCE4x5JgnjGezlO8VK6jknOzbVOxKy77/lmScTRVAGielP66KOxRoxgv1iogvxnQatQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=est.tech; spf=pass smtp.mailfrom=est.tech; dkim=pass (2048-bit key) header.d=est.tech header.i=@est.tech header.b=aeBi/F7q; arc=fail smtp.client-ip=52.101.72.0
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=est.tech
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=est.tech
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BEwvk+c8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0401C2BCB3;
-	Tue, 28 Apr 2026 20:48:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777409326;
-	bh=sZoUbqG9CxBotaWHnOZiPFKTeBgb66YHvpq2HPRKqX0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=BEwvk+c89LXIHHCN4f4+Pq+EZNnwtnAEh4uQfFVWCsMySqE6CEf3Zyl21hKweLePx
-	 QTen65EdzL7a0w0B10gW3pGXeKM1OaZppOW2E1rJi6+9i6Ri394QYTTjA0KbveQ749
-	 n+ukaoBLr/8SEUosGjg0ZiD3nTontIjbw+DDyEeQtOe31/UdT5ncNH9cRoagF0E3qN
-	 iDIqSxmz37VI8471rn/QiADf1v6JpmoBierHgdYLgEW3Ha5d/9hP2ElN0wZoFspVAE
-	 MRZc13pYZLOorECpjjSqnX7REv2Mwxt5BxDR9zjP3yNeukhpr17mQxNJF3vyFpVIg7
-	 KcHpVou0RUFCQ==
-From: Mike Rapoport <rppt@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>
-Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Barry Song <baohua@kernel.org>,
-	Dev Jain <dev.jain@arm.com>,
-	Donet Tom <donettom@linux.ibm.com>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	John Hubbard <jhubbard@nvidia.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Lance Yang <lance.yang@linux.dev>,
-	Leon Romanovsky <leon@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	Luiz Capitulino <luizcap@redhat.com>,
-	Mark Brown <broonie@kernel.org>,
-	Michal Hocko <mhocko@suse.com>,
-	Mike Rapoport <rppt@kernel.org>,
-	Nico Pache <npache@redhat.com>,
-	Peter Xu <peterx@redhat.com>,
-	Ryan Roberts <ryan.roberts@arm.com>,
-	Sarthak Sharma <sarthak.sharma@arm.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Zi Yan <ziy@nvidia.com>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: [PATCH v3 54/54] selftests/mm: run_vmtests.sh: drop detection and setup of HugeTLB
-Date: Tue, 28 Apr 2026 23:42:40 +0300
-Message-ID: <20260428204240.1924129-55-rppt@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260428204240.1924129-1-rppt@kernel.org>
-References: <20260428204240.1924129-1-rppt@kernel.org>
+	dkim=pass (2048-bit key) header.d=est.tech header.i=@est.tech header.b="aeBi/F7q"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=xre3r+s6xA0+Tcwux21VhFc5dEIutFqHMBl+b+g7FxI4IVYtYAOeadboSbWTEWuznGwy39LOmYM3dJO/QaOOio66jqCVQWgE48fw5Rp9i5ewL17zARgx2l+jC2rb7AM249FV0iDQnpuvTBeKvqMfgrNKd2pnuZqwdrZcpml9TMGMGZyAghpxi7PgFBgGAZHP/DNlVuyBeKNAfy9OH7Hn2uw2TFHaAh2Nk1FndTNXIrMQybJVeJV+xH5WPqv1qeXCC9aVc7Zq+daFJFVmSdgcuPxQ8Hym8ElnyLoDw9v0sjDabQJu4XTis6I5i3Mgj2mgESD52N5ZTdOFgecUYGALow==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KxmAjhkR2AzcW8nmiAYVzvrYXiY3Tg7vT2+EijDw31A=;
+ b=yV3wjcsShan82zFDP04etOum/Rvfc9kM2Kp3kdDlKYTt4BO6i3EkYya8lAcH0S9KC3WjvuLu1LOnOV0ceC7Pi3HOVZQy8b502o82kIC/DmQmvixms/is5IS1nUyxdMYV96ePr4XNehwaKo1yh9ikjrdEC1YdWUzGxbay4bpYRv0wSZYk77pRpJid9YAFLUfdDzRjjickFlJiVMPEfPVr/99zVTnqlAhneMvUZ4UwWfkWit1XhMXmBCzJGcozYpA6t/1tAMpMU9in0w/S7usTt7rpU02WzC0Bb1C5oy+EVE57caR0VpYDpoIJVAoAsb8jmwyBNFQw6N7KHRlQojeY0Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=est.tech; dmarc=pass action=none header.from=est.tech;
+ dkim=pass header.d=est.tech; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=est.tech; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KxmAjhkR2AzcW8nmiAYVzvrYXiY3Tg7vT2+EijDw31A=;
+ b=aeBi/F7qXzImuinaWpBOjFoJiVEIPr2eRBDwn8P5jRJlrpQxIMpZ/9QwOoeN7MOYStfRf95gUktRzHi5/Sj/wRZjY3iC4VqbjO8PEEjZSRoEWbsP5it8ZqOjNABBst2tEXfIloXuzdekwTmOkUXxKIV+GsGZg+Sn6xBGePxAXlGzOYk8arrotuDbAaOc03e/vLaufgnGfA2lS5QAuVCSo21nEdhQ+I7EWC8Xsqml9AdCceBSiJ3i9XfKbHROZxH4o4DtEIGLy6ZwFz+gFuaHcacO8/HxFzbYEztKTmLQMniEFEwbtxIHM1QtpP7JgJp3BkIpuxgFZkkTqec0o3B3uQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=est.tech;
+Received: from PAWP189MB2611.EURP189.PROD.OUTLOOK.COM (2603:10a6:102:336::8)
+ by AS4P189MB1894.EURP189.PROD.OUTLOOK.COM (2603:10a6:20b:4b5::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9870.18; Tue, 28 Apr
+ 2026 20:49:24 +0000
+Received: from PAWP189MB2611.EURP189.PROD.OUTLOOK.COM
+ ([fe80::b400:cf4f:b2e1:d884]) by PAWP189MB2611.EURP189.PROD.OUTLOOK.COM
+ ([fe80::b400:cf4f:b2e1:d884%6]) with mapi id 15.20.9846.025; Tue, 28 Apr 2026
+ 20:49:24 +0000
+From: Fredrik Markstrom <fredrik.markstrom@est.tech>
+Subject: [PATCH 0/3] arm64: perf: Skip device memory during user callchain
+ unwinding
+Date: Tue, 28 Apr 2026 22:48:57 +0200
+Message-Id: <20260428-master-with-pfix-v3-v1-0-c384d3e53092@est.tech>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIADkd8WkC/x2MywqAIBAAf0X23IKPyuhXooPUWnvIRKOC6N+Tj
+ sMw80CmxJShFw8kOjnzHgqoSsC0urAQ8lwYtNStrLXFzeWDEl58rBg933gadGSVNb4x3eSglDF
+ RMf91GN/3AxeNnXBlAAAA
+X-Change-ID: 20260427-master-with-pfix-v3-ae7173f538ca
+To: Catalin Marinas <catalin.marinas@arm.com>, 
+ Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+ Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+ Arnaldo Carvalho de Melo <acme@kernel.org>, 
+ Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, 
+ Adrian Hunter <adrian.hunter@intel.com>, 
+ James Clark <james.clark@linaro.org>, 
+ Santosh Shilimkar <santosh.shilimkar@ti.com>, 
+ Olof Johansson <olof@lixom.net>, Tony Lindgren <tony@atomide.com>
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+ Nicolas Pitre <nico@fluxnic.net>, 
+ Fredrik Markstrom <fredrik.markstrom@est.tech>, 
+ Ivar Holmqvist <ivar.holmqvist@est.tech>, 
+ Malin Jonsson <malin.jonsson@est.tech>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1777409361; l=2932;
+ i=fredrik.markstrom@est.tech; h=from:subject:message-id;
+ bh=WcNa5lgwRqyYlPhgtSu9SZtFyBWPxnCJpYYbdDPxHwk=;
+ b=YVgxDT6iQHwbCBBrHPO0HkqqW2xxU3myrxeXURPqBQB+9UHE3VQjRI/grEAicq7LUsD9LFfxk
+ 3COY2IRRWIxARuVuzndw3icdBLJzbI6kLtYXkEG6I7cm5DkjIFsUH+G
+X-Developer-Key: i=fredrik.markstrom@est.tech; a=ed25519;
+ pk=0a8IXHEgAX55JPS8VZfTf1sDp7q/oAOf459tDQd40Eg=
+X-ClientProxiedBy: GVZP280CA0031.SWEP280.PROD.OUTLOOK.COM
+ (2603:10a6:150:276::11) To PAWP189MB2611.EURP189.PROD.OUTLOOK.COM
+ (2603:10a6:102:336::8)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAWP189MB2611:EE_|AS4P189MB1894:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9a70f8a0-4ef1-4f1c-d9e5-08dea567a18f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|376014|7416014|921020|56012099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	3mkep9zQWGeRIT94bADVwWYUMq8UIOCgi9wrWPGZFfy2yiJkMdv2vRkWPyTZPwNFu6wgpumA/SflFwe3VP5XQaL6mu6pfK2KzN/kB8GZA8iwQVZgnE2dtCPhxZWIW0b/dBI5/F2yE8DN7zzrW9K6cDdJaZj6XYEKVGo9BJoTiR1u1Su1BNrgyp5t5YIyM16vmmP3d7z2kDnmQMSRNB2uQGycjU0OIK/3SAjZC/nqW56cM7hdmOWZoFjtOAYN8eU08vGm/1F3KrrXvCwuqKqwHbmsI1loHnYN8Roc4Xf1s4G3GhOf3tRuhYyoGdM51HhadnJJe1uKZiuWIWN+1OTUYblv3V6A+LLJearQwLzZya+84k/qiM7W+8LmZj46qbvFscFvlXtO7OduJgYzMA1kjnOf/AvqY+LtGoAP6y3uosAAze+er/RZrDK7YVb/NYPAipGC/lim8i4qqDvhzmMQQAa37BOX57swBBJtP4uVnV6HI7bTZfiWq5vRsN6wbUiyLl9GlytZgGIzZIZzW5OaJyVjkbdwD23F4ZDVQzEf9K4TrNixqKfY36bu/AlN9zP2pHiMXYrPQ8YLe8eJ6CDt5PB5eHJhhnSFVWNrJq21ME2IF4LVRUqHgUsnsiE9wSdepTIE/uXqdlbg9B0pTqUMDi/eAaW3jAKx9Ln2femRhgSankDAGJkghIeyuKk0k0c6VAI13nlwS2VkuGinzeYS/Ai2jFC18f3yubK7LAGuGeIr+nRe1kjWf7Snf1NxxkTQunWQxBW7DclIN5Y+asW/fJUlq8DNXrClrs7LFD78FL4=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAWP189MB2611.EURP189.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(921020)(56012099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?SHlsYzEzbTBmT0dzWEZ1bmZ2RFFRUWZzd1ZFeVFjOEZ1RmFpbGtlRWtFemVS?=
+ =?utf-8?B?c1VBb3JhTGZmWHByZTBhdGR2elUxakxLS0FOeDljcDBVRnBLdjVmZE9JWXM5?=
+ =?utf-8?B?cWN6TjRITmx4TEV3cERQQzhKU3NYYTEyVGV5bnJvMTlBT3NhNzlVRWlScUxY?=
+ =?utf-8?B?aCt6a2tnN09OV3NNTENRb29NTFU3RXAwaFhZc1Y2YWVSeEY4WldCZUUrWnFB?=
+ =?utf-8?B?V2N0bDJHRjNrWEdvMWpxZmtsVmE2Z3dqYVZhTGRZMkpzRXJvejQzQS9nSzVE?=
+ =?utf-8?B?NlhISVJzY1NoM1VxRTVEZFZSdXRoWElrYjROcGhPZ1dIKzNhRElxaVM4NWJF?=
+ =?utf-8?B?YWpIbklXajVidlNUYTBESkJtM3NibWhzbGdOWXluaUM0VDZMNHZrQkZtODlt?=
+ =?utf-8?B?Tis5dHh2QnpDNTNXWHVvNzNMcUJYd2lVLzBTb0xkSzRibFdLOU5FdDJSb0c5?=
+ =?utf-8?B?MjRhN0c5bU5ONGtnRkJvdDZKUW9zQ1duSGwyZ1YwdldJUk5GSmp5aHZlWW1R?=
+ =?utf-8?B?eEVydDNwRDJtRDdSYWJ5dXhkcnJFNWJSZlhSZnc1WmoxVS9yYngyeFl6eGhX?=
+ =?utf-8?B?MFMrZjJmTGtFK1BlRTlZM0tQZlNsaEYyMlNJcWpmU2dIWmxpdEpMbjFvUFU3?=
+ =?utf-8?B?UU5TOWJSdFpLb2IzTklxNEZQNFM1T0kwQXJXb3o0emMxNTh5QkdEMm11T0di?=
+ =?utf-8?B?czlqOWd3eGZyODF6eElMYzJXZTBBT2tHSWhMUytvV1RoSzF4WmNkeTRqSkE1?=
+ =?utf-8?B?WGloa0UxRFc5RGNDSnB2S25NWXEyYlhsWUZRU09CNHU0N2cxY2lyQ3ZBZ3R3?=
+ =?utf-8?B?aGJDRjlGNkpadGUrSXBmOHRER2VRWUg3VldBeUhtNFNLekliQVNPZm5jNkRO?=
+ =?utf-8?B?S1Q3K0x0eng5RGpDZW1idnhqVVF1MDhyQ3RUNCtybVJjeGFmSnlMRWdFUmNY?=
+ =?utf-8?B?Nk14bXdDNWluWHpYa0diRStMbktlZ014WTUxVUxKckxPV0EvYndsNE9iSW0w?=
+ =?utf-8?B?Y2VsdjBJNFRBSTR6R1grUWxVM0xlQWxYU0hLMi8wU0ZyUVZmUGhpMjJmTjhS?=
+ =?utf-8?B?VXpGSndmajIrWjh6L1VtcHVCNjJMekhJUmdoSW1LemNKOVRIM256YXRrdklF?=
+ =?utf-8?B?d1IwdjVGMFVjM051R25PQjBSZTBDRWhWNFhMZFdyajk1enpCWWZYbnZQWVV6?=
+ =?utf-8?B?T1hGSEJIQ25ZTkEyRkNuZWJzYXB1UjZ6VXh5TmZlMmlyZVdibDZvU0hacXBo?=
+ =?utf-8?B?cWw1N29zWC96UlU5UWNHRFdzZGtUdzNROFhLNW53bzJFQXV5OXlCTTdlUjIv?=
+ =?utf-8?B?cVBxeDVzNSs3ZnN0SjNDQ1FFcVdvdDN3TGtTd3pBTE1SbGkwQjJsSnE4ZW9q?=
+ =?utf-8?B?dVVMa1hSVktqWjRYK25HSHJOVGFDN2VqcVpza0FxbEdUWE5qZUlGK2tWUXVE?=
+ =?utf-8?B?RkxYemdaVWFCWFRvUTh1STVHcUNCaDBQemgvWWFkV3V3WDF3NDltNEFuRlIy?=
+ =?utf-8?B?TFhKU2R0UUpScWV1N0plbmpmK2VubjJQN2NYbFVSRTlDS25ydTNmNzQ4cm8w?=
+ =?utf-8?B?bzZIZ2ZRY2o0YldMZSsyelJMbVl0eStkMngzQWl5MFZhbVhqeGhmM3U0MFJi?=
+ =?utf-8?B?NWNSTGZGZDFFSWZ0STFSamdVeXczNVY2TUpFT2hNbVF2SlRKOHB1em1keDR0?=
+ =?utf-8?B?TFlSR003WUFSTzN4dnBxeFUzLy9jZUpYckpHQ2UwcWRKTXE3QXBkR1oxeUNO?=
+ =?utf-8?B?YW9uTHltZm5BNytDV2VoSzFYMzFaQ1kzcnlCeWRyWHpuRnY4ZEFjNkpuZU90?=
+ =?utf-8?B?NlZsWGowSFl5bmQ2aWdLQnFZRTM3WUFzbzB4SnBFN0JTeVF5S1NLMUFKVDVh?=
+ =?utf-8?B?dis5L0tML3VmRWdWRHF3WDg5MEdOWWJPMDcxN2JvUnhPcFRsVGg5ZEFMMXJw?=
+ =?utf-8?B?WnpvcFBGbFNpZm1rMmwrSjFVcHBjNU1aYTZlY1d2d0hSWmRiMkQvVjN5bGky?=
+ =?utf-8?B?VHVJM3pxTmhpNXlQczMvanNFRmdBVndWODkrb21vUnFzVUJIL3h5TjQ0RVlG?=
+ =?utf-8?B?TDg4NHh0UG1oUFM1bE41UGdtM3AvVTVveUl2WVY5NTAwLzFkVzNZN21ESXRi?=
+ =?utf-8?B?QkQzM2ljM213cndoZlluQU9rYjJCaURwR3NpYlg1RzRIQ3ZqNitrcTV2d0JR?=
+ =?utf-8?B?dDlGOE1sTkRCWXBaZXM3Tnc1VkZBM01aWXJPT2pYWFh0WDJ4NVcvNjZRU1dB?=
+ =?utf-8?B?K3pqR0hBdklWRm1NYVRqWURJSjlWbUF2SGxQZm9ubmNVZzF0bTZNZzlhcTNT?=
+ =?utf-8?B?OVAwaTdkUTkxeXVHd0FzSElxSk1rUWNLUWhBOVhkSCsrQVNkTURyamdnVjg1?=
+ =?utf-8?Q?QarsscF7inabZeFI=3D?=
+X-OriginatorOrg: est.tech
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9a70f8a0-4ef1-4f1c-d9e5-08dea567a18f
+X-MS-Exchange-CrossTenant-AuthSource: PAWP189MB2611.EURP189.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Apr 2026 20:49:24.6159
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: d2585e63-66b9-44b6-a76e-4f4b217d97fd
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: q7h+S7QsZKHfcWwQFC1yWocplE3b0yxHNW9T5rdGy1uu9c69FKVYMjAE5VOheso7FW6dK/S7ToV5dg/yvG5s/M9IWSKP6RpZhcSLsYlFAMQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS4P189MB1894
 
-From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+Perf callchain unwinding follows userspace frame pointers via
+copy_from_user. A corrupted or malicious frame pointer can point
+into device I/O memory mapped into the process (e.g. via UIO or
+/dev/mem), causing the kernel to read from MMIO regions in PMU
+interrupt context. Such reads can have side effects on hardware
+(clearing status registers, advancing FIFOs, triggering DMA) and
+on arm64 can produce a synchronous external abort that panics the
+kernel.
 
-All the tests that use HugeTLB can detect and setup HugeTLB pages on
-their own.
+This series adds a guard that detects device memory before each
+frame pointer read and skips the frame.
 
-Drop detection and setup of HugeTLB from run_vmtests.sh.
+Patch 1: Lockless page table walk checking the MAIR attribute index
+          in the leaf PTE to identify device memory types
+          (MT_DEVICE_nGnRnE, MT_DEVICE_nGnRE). Follows the same
+          pattern as perf_get_pgtable_size() in kernel/events/core.c.
 
-Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+Patch 2: (DO NOT MERGE) Module parameter to disable the guard at
+          runtime for regression testing.
+
+Patch 3: (DO NOT MERGE) kselftest that exercises the attack vector:
+          maps /dev/mem, points FP into it, and verifies the kernel
+          survives perf sampling.
+
+Alternatives considered:
+
+ - VMA lookup (mmap_read_trylock + vma_lookup checking VM_IO):
+   requires the mmap lock on every frame.
+ - RCU maple tree lookup: lock-free but still a tree traversal
+   per frame.
+ - lock_vma_under_rcu: sleeping lock, unusable from IRQ context.
+
+The page table walk requires no locks and costs only 4 pointer
+dereferences per frame.
+
+Limitations:
+
+ - The MAIR attribute check is arm64-specific. Other architectures
+   use different mechanisms to identify device memory and would need
+   their own PTE inspection logic.
+ - The walk only detects memory types visible in the PTE. If a VM_IO
+   region has not been faulted in, the walk sees no PTE and fails
+   safe (skips the frame). This is conservative — it may skip frames
+   that would not actually fault.
+
+A QEMU-based reproducer is available at:
+https://gitlab.com/frma71/qemu-kernel-tests/-/tree/vmio_perf_test?ref_type=tags
+
+Signed-off-by: Fredrik Markstrom <fredrik.markstrom@est.tech>
 ---
- tools/testing/selftests/mm/run_vmtests.sh | 128 ++--------------------
- 1 file changed, 9 insertions(+), 119 deletions(-)
+Fredrik Markstrom (3):
+      arm64: perf: Skip device memory during user callchain unwinding
+      DO NOT MERGE: arm64: perf: Add skip_vmio parameter to control device memory callchain guard
+      DO NOT MERGE: selftests: perf_events: Add device memory callchain unwinding test
 
-diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-index b42d19036182..7e0c379e7af4 100755
---- a/tools/testing/selftests/mm/run_vmtests.sh
-+++ b/tools/testing/selftests/mm/run_vmtests.sh
-@@ -157,60 +157,6 @@ run_gup_matrix() {
-     done
- }
- 
--# get huge pagesize and freepages from /proc/meminfo
--while read -r name size unit; do
--	if [ "$name" = "HugePages_Free:" ]; then
--		freepgs="$size"
--	fi
--	if [ "$name" = "Hugepagesize:" ]; then
--		hpgsize_KB="$size"
--	fi
--done < /proc/meminfo
--
--# Simple hugetlbfs tests have a hardcoded minimum requirement of
--# huge pages totaling 256MB (262144KB) in size.  The userfaultfd
--# hugetlb test requires a minimum of 2 * nr_cpus huge pages.  Take
--# both of these requirements into account and attempt to increase
--# number of huge pages available.
--nr_cpus=$(nproc)
--uffd_min_KB=$((hpgsize_KB * nr_cpus * 2))
--hugetlb_min_KB=$((256 * 1024))
--if [[ $uffd_min_KB -gt $hugetlb_min_KB ]]; then
--	needmem_KB=$uffd_min_KB
--else
--	needmem_KB=$hugetlb_min_KB
--fi
--
--# set proper nr_hugepages
--if [ -n "$freepgs" ] && [ -n "$hpgsize_KB" ]; then
--	orig_nr_hugepgs=$(cat /proc/sys/vm/nr_hugepages)
--	needpgs=$((needmem_KB / hpgsize_KB))
--	tries=2
--	while [ "$tries" -gt 0 ] && [ "$freepgs" -lt "$needpgs" ]; do
--		lackpgs=$((needpgs - freepgs))
--		echo 3 > /proc/sys/vm/drop_caches
--		if ! echo $((lackpgs + orig_nr_hugepgs)) > /proc/sys/vm/nr_hugepages; then
--			echo "Please run this test as root"
--			exit $ksft_skip
--		fi
--		while read -r name size unit; do
--			if [ "$name" = "HugePages_Free:" ]; then
--				freepgs=$size
--			fi
--		done < /proc/meminfo
--		tries=$((tries - 1))
--	done
--	nr_hugepgs=$(cat /proc/sys/vm/nr_hugepages)
--	if [ "$freepgs" -lt "$needpgs" ]; then
--		printf "Not enough huge pages available (%d < %d)\n" \
--		       "$freepgs" "$needpgs"
--	fi
--	HAVE_HUGEPAGES=1
--else
--	echo "no hugetlbfs support in kernel?"
--	HAVE_HUGEPAGES=0
--fi
--
- # filter 64bit architectures
- ARCH64STR="arm64 mips64 parisc64 ppc64 ppc64le riscv64 s390x sparc64 x86_64"
- if [ -z "$ARCH" ]; then
-@@ -283,29 +229,13 @@ run_test() {
- echo "TAP version 13" | tap_output
- 
- CATEGORY="hugetlb" run_test ./hugetlb-mmap
--
--shmmax=$(cat /proc/sys/kernel/shmmax)
--shmall=$(cat /proc/sys/kernel/shmall)
--echo 268435456 > /proc/sys/kernel/shmmax
--echo 4194304 > /proc/sys/kernel/shmall
- CATEGORY="hugetlb" run_test ./hugetlb-shm
--echo "$shmmax" > /proc/sys/kernel/shmmax
--echo "$shmall" > /proc/sys/kernel/shmall
--
- CATEGORY="hugetlb" run_test ./hugetlb-mremap
- CATEGORY="hugetlb" run_test ./hugetlb-vmemmap
- CATEGORY="hugetlb" run_test ./hugetlb-madvise
- CATEGORY="hugetlb" run_test ./hugetlb_dio
--
--if [ "${HAVE_HUGEPAGES}" = "1" ]; then
--	nr_hugepages_tmp=$(cat /proc/sys/vm/nr_hugepages)
--	# For this test, we need one and just one huge page
--	echo 1 > /proc/sys/vm/nr_hugepages
--	CATEGORY="hugetlb" run_test ./hugetlb_fault_after_madv
--	CATEGORY="hugetlb" run_test ./hugetlb_madv_vs_map
--	# Restore the previous number of huge pages, since further tests rely on it
--	echo "$nr_hugepages_tmp" > /proc/sys/vm/nr_hugepages
--fi
-+CATEGORY="hugetlb" run_test ./hugetlb_fault_after_madv
-+CATEGORY="hugetlb" run_test ./hugetlb_madv_vs_map
- 
- if test_selected "hugetlb"; then
- 	echo "NOTE: These hugetlb tests provide minimal coverage.  Use"	  | tap_prefix
-@@ -332,44 +262,12 @@ CATEGORY="gup_test" run_test ./gup_longterm
- CATEGORY="userfaultfd" run_test ./uffd-unit-tests
- uffd_stress_bin=./uffd-stress
- CATEGORY="userfaultfd" run_test ${uffd_stress_bin} anon 20 16
--# Hugetlb tests require source and destination huge pages. Pass in almost half
--# the size of the free pages we have, which is used for *each*. An adjustment
--# of (nr_parallel - 1) is done (see nr_parallel in uffd-stress.c) to have some
--# extra hugepages - this is done to prevent the test from failing by racily
--# reserving more hugepages than strictly required.
--# uffd-stress expects a region expressed in MiB, so we adjust
--# half_ufd_size_MB accordingly.
- adjustment=$(( (31 < (nr_cpus - 1)) ? 31 : (nr_cpus - 1) ))
--half_ufd_size_MB=$((((freepgs - adjustment) * hpgsize_KB) / 1024 / 2))
--CATEGORY="userfaultfd" run_test ${uffd_stress_bin} hugetlb "$half_ufd_size_MB" 32
--CATEGORY="userfaultfd" run_test ${uffd_stress_bin} hugetlb-private "$half_ufd_size_MB" 32
-+CATEGORY="userfaultfd" run_test ${uffd_stress_bin} hugetlb 128 32
-+CATEGORY="userfaultfd" run_test ${uffd_stress_bin} hugetlb-private 128 32
- CATEGORY="userfaultfd" run_test ${uffd_stress_bin} shmem 20 16
- CATEGORY="userfaultfd" run_test ${uffd_stress_bin} shmem-private 20 16
--# uffd-wp-mremap requires at least one page of each size.
--have_all_size_hugepgs=true
--declare -A nr_size_hugepgs
--for f in /sys/kernel/mm/hugepages/**/nr_hugepages; do
--	old=$(cat $f)
--	nr_size_hugepgs["$f"]="$old"
--	if [ "$old" == 0 ]; then
--		echo 1 > "$f"
--	fi
--	if [ $(cat "$f") == 0 ]; then
--		have_all_size_hugepgs=false
--		break
--	fi
--done
--if $have_all_size_hugepgs; then
--	CATEGORY="userfaultfd" run_test ./uffd-wp-mremap
--else
--	echo "# SKIP ./uffd-wp-mremap"
--fi
--
--#cleanup
--for f in "${!nr_size_hugepgs[@]}"; do
--	echo "${nr_size_hugepgs["$f"]}" > "$f"
--done
--echo "$nr_hugepgs" > /proc/sys/vm/nr_hugepages
-+CATEGORY="userfaultfd" run_test ./uffd-wp-mremap
- 
- CATEGORY="compaction" run_test ./compaction_test
- 
-@@ -393,14 +291,11 @@ CATEGORY="mremap" run_test ./mremap_test
- CATEGORY="hugetlb" run_test ./thuge-gen
- CATEGORY="hugetlb" run_test ./charge_reserved_hugetlb.sh -cgroup-v2
- CATEGORY="hugetlb" run_test ./hugetlb_reparenting_test.sh -cgroup-v2
-+
- if $RUN_DESTRUCTIVE; then
--nr_hugepages_tmp=$(cat /proc/sys/vm/nr_hugepages)
--enable_soft_offline=$(cat /proc/sys/vm/enable_soft_offline)
--echo 8 > /proc/sys/vm/nr_hugepages
--CATEGORY="hugetlb" run_test ./hugetlb-soft-offline
--echo "$nr_hugepages_tmp" > /proc/sys/vm/nr_hugepages
--echo "$enable_soft_offline" > /proc/sys/vm/enable_soft_offline
--CATEGORY="hugetlb" run_test ./hugetlb-read-hwpoison
-+	CATEGORY="hugetlb" run_test ./hugetlb-soft-offline
-+	echo "$enable_soft_offline" > /proc/sys/vm/enable_soft_offline
-+	CATEGORY="hugetlb" run_test ./hugetlb-read-hwpoison
- fi
- 
- if [ $VADDR64 -ne 0 ]; then
-@@ -464,7 +359,6 @@ if [ -x ./protection_keys_64 ]
- then
- 	CATEGORY="pkey" run_test ./protection_keys_64
- fi
--echo "$nr_hugepgs" > /proc/sys/vm/nr_hugepages
- 
- if [ -x ./soft-dirty ]
- then
-@@ -545,10 +439,6 @@ if [ -n "${LOADED_MOD}" ]; then
- 	modprobe -r hwpoison_inject > /dev/null 2>&1
- fi
- 
--if [ "${HAVE_HUGEPAGES}" = 1 ]; then
--	echo "$orig_nr_hugepgs" > /proc/sys/vm/nr_hugepages
--fi
--
- echo "SUMMARY: PASS=${count_pass} SKIP=${count_skip} FAIL=${count_fail}" | tap_prefix
- echo "1..${count_total}" | tap_output
- 
+ MAINTAINERS                                        |   1 +
+ arch/arm64/kernel/stacktrace.c                     | 103 +++++++++++++++++++
+ tools/testing/selftests/perf_events/Makefile       |   2 +-
+ .../testing/selftests/perf_events/test_perf_vmio.c | 114 +++++++++++++++++++++
+ 4 files changed, 219 insertions(+), 1 deletion(-)
+---
+base-commit: dca922e019dd758b4c1b4bec8f1d509efddeaab4
+change-id: 20260427-master-with-pfix-v3-ae7173f538ca
+
+Best regards,
 -- 
-2.53.0
+Fredrik Markstrom <fredrik.markstrom@est.tech>
 
