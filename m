@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C720633B6C9;
-	Tue, 28 Apr 2026 20:48:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F0F933B6C9;
+	Tue, 28 Apr 2026 20:48:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777409313; cv=none; b=ZgC8EesKVaiGs1Q630q4I7m9oqbaLuqzN2K8JyyJQ/0P9vbFyFvCNkZvl1s7i1QBXkoxGouXuEu3WGYSAdY1/0FiOz0OOQVZH3yct0JIyfA25091/4ImUhRfABNzcfeGlJrIvg5bFcvnLsvaO7fi3lY0YPKtRG9RBdftabr0Bvk=
+	t=1777409320; cv=none; b=PyhNBU9z8qnwK6Rqo/n2AalI7O1fFSbGq2zxVDFyR+vflh+fr3FvOr//JJcBku6jEzby70tu+b2fn3Z43vV26aqOajT6KIrEXEgRxuEquoNxCCBJQm/bsUcVXrxztgMrm9Lb8sk+EMEJEEWRx8UCn9iRD0eQ8S3UbfPLsRko8c4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777409313; c=relaxed/simple;
-	bh=Y+6CuufKGBRmaBQ8v4yV5d9wcJCiC93SEawkGDgeJlU=;
+	s=arc-20240116; t=1777409320; c=relaxed/simple;
+	bh=XYoR5ykBzH9ln8CEkCcM3Jpo8h2bXIFgxUkz6fxZ/LA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UCTEQK9hjBVn8+768mBvd+ihklVRe5B7d6yNG+FQiK3fcRBkgrTExqTv04gIm5ckGx9vuwmiSVWOqLNCxq2I/yqRs8RunuLqbbWB7ncpw7WzcvPF4Hjo+wyU7M5GMsvHhwp1LqHoqbklJDaYZRiCn/42haKca/Ca7Y7ifqyrr+g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W+uVDnSU; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=R0YZWICS2rZOU+fQPDMiKJBt1wYApZtL0E7HQ3tm2nLWGiiHoTxDT8eQFMmUFYjM7fiiUyOJ7k4scJ+CGoT+XUK5q8SCCOjC5CfbZdoGdpaXdqBe3HYAMDIB+NxRtHdPMtG7DwLacOstz7emFNiRek2ysKobNiLHW2HI6/wgiEk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KtqfrHTS; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W+uVDnSU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C4D7C2BCAF;
-	Tue, 28 Apr 2026 20:48:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KtqfrHTS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3441EC2BCB3;
+	Tue, 28 Apr 2026 20:48:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777409313;
-	bh=Y+6CuufKGBRmaBQ8v4yV5d9wcJCiC93SEawkGDgeJlU=;
+	s=k20201202; t=1777409320;
+	bh=XYoR5ykBzH9ln8CEkCcM3Jpo8h2bXIFgxUkz6fxZ/LA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=W+uVDnSU0GDGxd9dYc1UPrAi61qoOsqwnWxGzKpcS+fQCXupvYkTZPohSGMiBNDiP
-	 f+cp9C8F8EEsm7aTf6gCKRx7ql5Obp58kL8u1g9nVgt6VeohkCRMfZxcvzOBLsxgC5
-	 D8QrvdaAZtyZ79cNKZhjoo97ScLImtZyeNcm4rkAK12SbORcATSeYX3XZoZrVOOTtN
-	 9kP7LagU9W5xXiXnpYz/Jt3Lgriq9l2tsB4gIsLIQeau7TbrkiOyddJAb9YL9DcIvi
-	 hGwBOL+/bjp7pVO/+KlXHURo6UEC3GL5t7Mls7zO8DjTrwKQ2umWFsNWK+8VfRfmps
-	 Oij28WScEgXhA==
+	b=KtqfrHTS9/FD20Apc6D6Tc83MdB6i2S17dvN7aBXRCPZwoTGCiyaxEQu76quQaxOH
+	 EDbLBrK09yVRuVjNG96piJu6xIptkjuo5ymsEv2ot/85tUVh0hwY57HLzsg3GTz6MH
+	 lUMOoawbdRHlF4zZO2qY7frcKff9DET5JqFZkx9Z1lm4VkFtjIl3Zz1US2j7MxBq/Z
+	 Z8hAzlo1QqTnexXK3qBvdh0BxU5BfJPvWcK/pncK9zuT2vfQjt9rEcdbAWjWNHqZbH
+	 Pjtasw+ZBZq89CI+EJYemgvjUdlBKpYoMuuUzEFJ/lWb/wVPkpa4FsWeSmKn0gpzJi
+	 mBpD7G/+Ge6Uw==
 From: Mike Rapoport <rppt@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	David Hildenbrand <david@kernel.org>
@@ -54,9 +54,9 @@ Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-mm@kvack.org
-Subject: [PATCH v3 52/54] selftests/mm: va_high_addr_switch.sh: drop huge pages setup
-Date: Tue, 28 Apr 2026 23:42:38 +0300
-Message-ID: <20260428204240.1924129-53-rppt@kernel.org>
+Subject: [PATCH v3 53/54] selftests/mm: run_vmtests.sh: free memory if available memory is low
+Date: Tue, 28 Apr 2026 23:42:39 +0300
+Message-ID: <20260428204240.1924129-54-rppt@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260428204240.1924129-1-rppt@kernel.org>
 References: <20260428204240.1924129-1-rppt@kernel.org>
@@ -70,71 +70,57 @@ Content-Transfer-Encoding: 8bit
 
 From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-Since va_high_addr_switch takes care of setting up huge pages, there is
-no need to set them up in the va_high_addr_switch.sh wrapper script.
+Currently when running THP and HugeTLB tests, if HAVE_HUGEPAGES is set
+run_test() drops caches, compacts memory and runs the test. But if
+HAVE_HUGEPAGES is not set it skips the tests entirely, even if THP tests
+have nothing to do with HAVE_HUGEPAGES.
+
+Replace the check if HAVE_HUGEPAGES is set with a check of how much memory
+is available. If there is less than 256 MB of available memory, drop caches
+and run compaction and then continue to run a test regardless of
+HAVE_HUGEPAGES value.
 
 Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 ---
- .../selftests/mm/va_high_addr_switch.sh       | 41 +------------------
- 1 file changed, 1 insertion(+), 40 deletions(-)
+ tools/testing/selftests/mm/run_vmtests.sh | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/va_high_addr_switch.sh b/tools/testing/selftests/mm/va_high_addr_switch.sh
-index 9492c2d72634..01c15fe3c799 100755
---- a/tools/testing/selftests/mm/va_high_addr_switch.sh
-+++ b/tools/testing/selftests/mm/va_high_addr_switch.sh
-@@ -9,7 +9,6 @@
- 
- # Kselftest framework requirement - SKIP code is 4.
- ksft_skip=4
--orig_nr_hugepages=0
- 
- skip()
- {
-@@ -77,43 +76,5 @@ check_test_requirements()
- 	esac
+diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
+index b9e520194634..b42d19036182 100755
+--- a/tools/testing/selftests/mm/run_vmtests.sh
++++ b/tools/testing/selftests/mm/run_vmtests.sh
+@@ -99,6 +99,9 @@ EOF
+ 	exit 0
  }
  
--save_nr_hugepages()
--{
--	orig_nr_hugepages=$(cat /proc/sys/vm/nr_hugepages)
--}
--
--restore_nr_hugepages()
--{
--	echo "$orig_nr_hugepages" > /proc/sys/vm/nr_hugepages
--}
--
--setup_nr_hugepages()
--{
--	local needpgs=$1
--	while read -r name size unit; do
--		if [ "$name" = "HugePages_Free:" ]; then
--			freepgs="$size"
--			break
--		fi
--	done < /proc/meminfo
--	if [ "$freepgs" -ge "$needpgs" ]; then
--		return
--	fi
--	local hpgs=$((orig_nr_hugepages + needpgs))
--	echo $hpgs > /proc/sys/vm/nr_hugepages
--
--	local nr_hugepgs=$(cat /proc/sys/vm/nr_hugepages)
--	if [ "$nr_hugepgs" != "$hpgs" ]; then
--		restore_nr_hugepages
--		skip "$0: no enough hugepages for testing"
--	fi
--}
--
- check_test_requirements
--save_nr_hugepages
--# The HugeTLB tests require 6 pages
--setup_nr_hugepages 6
--./va_high_addr_switch --run-hugetlb
--retcode=$?
--restore_nr_hugepages
--exit $retcode
-+./va_high_addr_switch
++mem_available_kb=$(awk '/MemAvailable/ {print $2}' /proc/meminfo)
++mem_available_Mb=$((mem_available_kb / 1024))
++
+ RUN_ALL=false
+ RUN_DESTRUCTIVE=false
+ TAP_PREFIX="# "
+@@ -239,15 +242,12 @@ run_test() {
+ 		# On memory constrainted systems some tests can fail to allocate hugepages.
+ 		# perform some cleanup before the test for a higher success rate.
+ 		if [ ${CATEGORY} == "thp" -o ${CATEGORY} == "hugetlb" ]; then
+-			if [ "${HAVE_HUGEPAGES}" = "1" ]; then
+-				echo 3 > /proc/sys/vm/drop_caches
+-				sleep 2
+-				echo 1 > /proc/sys/vm/compact_memory
+-				sleep 2
+-			else
+-				echo "hugepages not supported" | tap_prefix
+-				skip=1
+-			fi
++		    if (( $mem_available_Mb < 256 )); then
++			echo 3 > /proc/sys/vm/drop_caches
++			sleep 2
++			echo 1 > /proc/sys/vm/compact_memory
++			sleep 2
++		    fi
+ 		fi
+ 
+ 		local test=$(pretty_name "$*")
 -- 
 2.53.0
 
