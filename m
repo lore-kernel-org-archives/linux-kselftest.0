@@ -1,59 +1,50 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4A6E175A72;
-	Tue, 28 Apr 2026 00:33:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17BDF1DA23;
+	Tue, 28 Apr 2026 01:11:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777336401; cv=none; b=Et8tvOnyK40fYz4pWqqYUffZAQF3TIxb2Xaq7re+hUDRHpDeWiwy6VScFtxVu/9z6xpYt5L2gKCQJmQ5A1u+FuVqelFVgKnwndgiTVDyOlOCpQDlR1eY26rYo9Flfr5uLQREHskgsyqcRkbRbUj9uTZB7xezhX3Er06kiQNf5ns=
+	t=1777338690; cv=none; b=O9IJ6tvaEVxcQFdOukIRSy5vb21uNCnx3PYlennYMnMFe9aJREcUxDutJui8FS575mcAYso0GGr0g8dF/dFGTPaB91fujUs6+LLd9IPoBl5PwxlvQWuxuIWIf34JxxAZPwDUtOyW0j/MJVY0dZBJtr0mnTYr8gr1MSEhuDoTk/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777336401; c=relaxed/simple;
-	bh=ZcdrUd8JxPkWJLg3gCpjoRkvfIkDc4Y0TOh/l4kL4Cw=;
+	s=arc-20240116; t=1777338690; c=relaxed/simple;
+	bh=0chybH7wDbE+Yxx7fnZNf/D9EykYuOuLrNTgRV+W8is=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=o1NtvtDd3AVHr/QVBrRGZlPFGrAlR0lvae/7pbVbIK6qcEKrfN1aPIh4ZmjFJuC/JlUOnRjEQodE9P/RDpznFOCj4z5znJn2m9gqmt8/gnERi1HcDtRWN/zFUi1rYaMB7zANB5osRY/72NmQNjMNBPk3Eb4DRqgmG67sgZOlgm0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W3jmgxmj; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=Ma3vLndhE5DTE5p09cGALvetuqp4I61JLIB0vh8DgNNSjDeN9hi6hvFTsuSgYu3swd8mmrAdJawedZ8/kUk3kZO4tLwjRn5FsreZbDArpz8i20qR6ICGNpiKTqjggI0l0RxsqEVPN8ocmRMspHxC0/0XXg1aOSnKo0wlpM4tiAg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nx9cBZLN; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W3jmgxmj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF5E4C19425;
-	Tue, 28 Apr 2026 00:33:20 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nx9cBZLN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28F56C19425;
+	Tue, 28 Apr 2026 01:11:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777336401;
-	bh=ZcdrUd8JxPkWJLg3gCpjoRkvfIkDc4Y0TOh/l4kL4Cw=;
+	s=k20201202; t=1777338689;
+	bh=0chybH7wDbE+Yxx7fnZNf/D9EykYuOuLrNTgRV+W8is=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=W3jmgxmjb5NsMB8nfzuMsp69890MkKukIXm/8fmi/oAu9/3CXkSuiXwt6PDYr0gZf
-	 7fZ75Myat0x/3+Qgzk5m718sTFdDuSv+vQKMSlrXX5rtosbKcHZ6p66XoWH0KBNQz4
-	 Mx39vjSDGQkzTkbLelRE2IvPFwZDZWQJIeJFo5tGEF0DcqEXfNVppjoXLU8wUk41Qj
-	 IN1Hynk2iSKbZyrz7+rbQsGOv960XvAHG1pEJ5lXeNUa2ObV+UdIF0g6P1mzkSBRqa
-	 2a0VvJrHZenwNu8kYf5JBAb+BaCTYppN0dzLpVPwU8MXCysmCUsbsFdTIdwW4YtxWf
-	 YgwsXKhj6cm4A==
+	b=nx9cBZLNU6RhYrZt7DSdNNRGo+eHDDen6vRfRUrjaDxGmSgWrkduggNJxgtpIIplu
+	 fx0fovQZzL6DiM2k+cAiBcH0xCHq4DskyH5bQ/nBG2aqD/HFgGKJMTkEVNZDpH7Gge
+	 OSkjdb70B0n6yWErKWNmS/3ng4MLp2bDgknxaSCN2M27nJmi4uCU1zagGb9dtJU4Rd
+	 L8hu4jswqM2SOqvI6kv58dp/UEQ6/q2ECDcw4QehFRkgXDmqN0oTQVqUu0mPDRyg+m
+	 N47Wlqs7hBkKtA3ORURRcEC/mGIInrNjmtuoVGHcdhYZW10V5eRDTi4lyr+54TcmvO
+	 6PLA2yEMWAkig==
 From: SeongJae Park <sj@kernel.org>
-To: Gutierrez Asier <gutierrez.asier@huawei-partners.com>
+To: fujunjie <fujunjie1@qq.com>
 Cc: SeongJae Park <sj@kernel.org>,
-	"Liam R. Howlett" <liam@infradead.org>,
 	Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
+	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
 	Lorenzo Stoakes <ljs@kernel.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Mike Rapoport <rppt@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Suren Baghdasaryan <surenb@google.com>,
+	David Hildenbrand <david@kernel.org>,
 	Vlastimil Babka <vbabka@kernel.org>,
-	damon@lists.linux.dev,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
+	Jann Horn <jannh@google.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Christian Brauner <brauner@kernel.org>,
 	linux-mm@kvack.org,
-	linux-trace-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 00/19] mm/damon: introduce data attributes monitoring
-Date: Mon, 27 Apr 2026 17:33:11 -0700
-Message-ID: <20260428003312.113061-1-sj@kernel.org>
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2] mm/madvise: reject invalid process_madvise() advice for zero-length vectors
+Date: Mon, 27 Apr 2026 18:11:18 -0700
+Message-ID: <20260428011119.113840-1-sj@kernel.org>
 X-Mailer: git-send-email 2.47.3
-In-Reply-To: <14036b07-413e-4dcd-a363-e7f834d85da3@huawei-partners.com>
+In-Reply-To: <tencent_BB588C2CDED859A873093DAF28B2CC1F7B0A@qq.com>
 References: 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -63,48 +54,85 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On Mon, 27 Apr 2026 16:16:07 +0300 Gutierrez Asier <gutierrez.asier@huawei-partners.com> wrote:
+On Mon, 27 Apr 2026 09:43:30 +0000 fujunjie <fujunjie1@qq.com> wrote:
 
-> Hi SeonJae,
+> process_madvise() used to validate the advice while walking each
+> imported iovec. If the vector has zero total length, vector_madvise()
+> does not enter the loop and can return success without checking whether
+> the advice value is valid.
 > 
-> On 4/26/2026 11:52 PM, SeongJae Park wrote:
-> > TL; DR
-> > ======
-> > 
-> > Extend DAMON for monitoring general data attributes other than accesses.
-> > This is for enabling light-weight page type (e.g., belonging cgroup)
-> > aware monitoring in short term.  In long term, this will help extending
-> > DAMON for multiple access events capture primitives (e.g., page faults
-> > and PMU) and eventually pivotting DAMON to a "Data Attributes Monitoring
-> > and Operations eNgine" in long term.
+> For a local mm, such as process_madvise(PIDFD_SELF, ...), the remote-only
+> process_madvise_remote_valid() check is skipped. As a result, an invalid
+> advice can be reported as success when the vector has zero total length.
+> This differs from madvise(), which rejects an invalid advice before
+> returning success for a zero-length range.
 > 
-> Very interesting. Looking forward to seeing this in upstream.
+> Validate the generic madvise behavior at the syscall-facing entry points
+> before any vector walk. In process_madvise(), do this before the
+> remote-only advice restriction so unsupported advice is rejected with the
+> same priority for local and remote mm. Then keep the per-range helper
+> focused on address/length validation, avoiding repeated behavior checks
+> for every iovec.
+> 
+> Valid zero-length requests remain no-ops and continue to return 0. Add a
+> selftest that covers invalid advice with a zero-length iovec and an empty
+> vector, while also checking that a valid zero-length request still
+> succeeds.
+> 
+> Fixes: 021781b01275 ("mm/madvise: unrestrict process_madvise() for current process")
+> Signed-off-by: fujunjie <fujunjie1@qq.com>
 
-Thank you!
+Looks good to me.  I have trivial comments below, though.  Because those are
+really trivial, please feel free to add
+
+Reviewed-by: SeongJae Park <sj@kernel.org>
+
+> ---
+[...]
+>   *
+> - * If the specified behaviour is invalid or nothing would occur, we skip the
+> - * operation.  This function returns true in the cases, otherwise false.  In
+> - * the former case we store an error on @err.
+> + * If the specified range is invalid or nothing would occur, we skip the
+> + * operation.  This function returns true in these cases, otherwise false.  In
+> + * the former case we store an error in @err.
+
+Maybe we can keep the second and the third lines of the above comment
+unchanged?
 
 [...]
-> My main concern is about potential pollution of sysfs. DAMON is already
-> complex to set up, with a lot of knobs. Adding more configuration options
-> may make admin's job more complex.
+> +/*
+> + * Test that invalid advice is rejected even when the iovec has zero total
+> + * length. A zero-length advice is a no-op for valid advice, but invalid
+> + * advice should still fail with EINVAL.
+> + */
+> +TEST_F(process_madvise, invalid_advice_zero_length)
+> +{
+> +	struct iovec vec = {
+> +		.iov_base = NULL,
+> +		.iov_len = 0,
+> +	};
+> +	int pidfd = self->pidfd;
+> +	ssize_t ret;
+> +
+> +	errno = 0;
+> +	ret = sys_process_madvise(pidfd, &vec, 1, -1, 0);
+> +	ASSERT_EQ(ret, -1);
+> +	ASSERT_EQ(errno, EINVAL);
+> +
+> +	errno = 0;
+> +	ret = sys_process_madvise(pidfd, &vec, 1, MADV_DONTNEED, 0);
+> +	ASSERT_EQ(ret, 0);
+> +
+> +	errno = 0;
 
-You are right, ther are a lot of knobs for DAMON.  Nevertheless, each knob is
-simple and independent, so easy to scale.  We also provide user-space tool for
-users who still want to use DAMON in highly customized way, and DAMON modules
-for users who want common purpose usage of DAMON with minimum tunable knobs.
+The previous sys_process_madvise() is expected to not set errno, correct?
+Maybe the above 'errno' reassignment is unnecessary?
 
-I believe the beginning part of DAMON usage document [2] is explaining this
-point.
-
-FWIW, I'm also working on DAMON-X [1] for making the modules based appraoch
-just works for more use cases.
-
-> 
-> Do you plan to support this extension in damo user space?
-
-Yes, I will!
-
-[1] https://lore.kernel.org/linux-mm/20260307210250.204245-1-sj@kernel.org/
-[2] Documentation/admin-guide/mm/damon/usage.rst
+> +	ret = sys_process_madvise(pidfd, NULL, 0, -1, 0);
+> +	ASSERT_EQ(ret, -1);
+> +	ASSERT_EQ(errno, EINVAL);
+> +}
 
 
 Thanks,
