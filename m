@@ -1,165 +1,124 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68C773E2757;
-	Tue, 28 Apr 2026 10:07:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D16353E557D;
+	Tue, 28 Apr 2026 10:15:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777370860; cv=none; b=fd42Sv07pyKzLhNuHNd4bckWLvLebAD9TnIl4KU5Z224l43tY5TI9eIa5qiff0jlXHtc3elqSSxWnsP+PaQpdd/37QTr7hdA4C3nZqLLccASmQDYfpLSp+vx7RZphEc5RcDAaDHrrdNYtVGoVkHKZq39r8oGfbTv4cUPfjxeLWg=
+	t=1777371319; cv=none; b=uVBMuu2l9IOAVKSwtlOgFJ8dXBUKmEZsKk1JpHLbYmHfBlfY3H58hqJypFpA9sjDZ6FfXWHnIYoBAzNPTirW/NTpU0jtkco9zfL3F/iI/m2hyw0GwlcgNjh+rXsJnfQPbMarpRWZBu4bQ5FzeKMaENHEssHNTeqeDw5KIcCyvPg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777370860; c=relaxed/simple;
-	bh=we5RUTtK9BBrAx6WOi8PWHN82eXXZYUIrgpPPhKr5yc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qtPLjBSE7yOyMf9aSUjEX1OohtTLMw3cRygP4j9Ebzl+/P1UN5jJghOlkvF49mAcRDF/TwMpJ1mYSaN79VfA3q8WYTsZpLhhKJui+/EOqpiByTXjtuo6AjFSBNuDqNl/pDGiPpCDrUEDAMnskPW9WsgS42XxlEawDhkiL2ExlVk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NY22Njy5; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777371319; c=relaxed/simple;
+	bh=ofVz5HqdphQZ+WDXJPcnWX4aaxd9tyeydKj7LMa8neo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=g3+bSeVq2RJ4IzF9axIq1IxdtteCZPRofOOZH6sWcrM5u1kOPd3ySs1qkLBrB/qvA8uYoVpcIF10VxcJnxWSrLDWdpZU5uQDqrRCKBacqBbZshUrNZWUu7GPK75ucu+D6qHJ9ycWi7r5wqQ5otXqr1iZXQLo7RLfXy0QJCiJavw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=MW6wK6sI; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NY22Njy5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB894C2BCAF;
-	Tue, 28 Apr 2026 10:07:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777370860;
-	bh=we5RUTtK9BBrAx6WOi8PWHN82eXXZYUIrgpPPhKr5yc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=NY22Njy5Q5KdvpVPewa/YRTnvi9owrLVBDACvvAwqjrcc1inXnRJDvTYNfJ/CaPMi
-	 g+soSXkNpHK32TgY2YDOWww6Rs26KRPvQ07I0q/oxo/6LvZMGGvulfak5zAN1wMEDy
-	 6ZxxnJM6e9PbiYw/xnqDeC3PR3ZewkC35mIfglVmPXg7D5aveR50qIrifvuTMCdA+4
-	 EFUM0r6WkaNO28Tt9WtaMmV+lkJKLc+jfB/SVTqRf5oW1Qpo863r78sYuVTECQ6NHb
-	 J014Du9XlPcz/YhNcBy0ZrImxZbXYo5S4Fh7Y+xDJ+/sDQW0ZEPAlEz2yO8fPiDC5E
-	 i3gOAZnWEsCqw==
-Message-ID: <5b1defae-fa59-4088-96cd-d769ad475907@kernel.org>
-Date: Tue, 28 Apr 2026 12:07:35 +0200
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="MW6wK6sI"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 81DE21650;
+	Tue, 28 Apr 2026 03:15:10 -0700 (PDT)
+Received: from localhost (e132581.arm.com [10.1.196.87])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 81AC23F763;
+	Tue, 28 Apr 2026 03:15:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1777371316; bh=ofVz5HqdphQZ+WDXJPcnWX4aaxd9tyeydKj7LMa8neo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=MW6wK6sIVeDlOJOa9WK9oww+c9ipPg8oKl+MTzOK+fJXwVRQTMDVQmbUIjr5R9IgA
+	 8bMwCHgpOKZWAvaiTJrg1nrHUQn9EJHLnDsGuz/ZdsxhVvW+/lil360K+9/bYH1BHb
+	 zI5gylqOvy72EuXy1nrC6BvtE3BGJdBLrrNEnK/A=
+Date: Tue, 28 Apr 2026 11:15:13 +0100
+From: Leo Yan <leo.yan@arm.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] kselftest/arm64: Fix build failure with GCC-15
+Message-ID: <20260428101513.GE16537@e132581.arm.com>
+References: <20260422-selftests_arm64_gcc15-v2-1-c0134de8838a@arm.com>
+ <aeuRfEeOUWEHzPix@arm.com>
+ <63409143-f4eb-48c3-89de-1aef4fb57381@sirena.org.uk>
+ <aeud4Hqxq4PNitMc@arm.com>
+ <b94bce09-69d5-4454-b4a0-81612f286f0a@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] selftests/mm: khugepaged: initialize file contents via
- mmap
-To: Vineet Agarwal <agarwal.vineet2006@gmail.com>, akpm@linux-foundation.org,
- ljs@kernel.org, shuah@kernel.org
-Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <3abf09d8-a98e-4f1b-b8d9-77879a8a2733@kernel.org>
- <20260428100058.62554-1-agarwal.vineet2006@gmail.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <20260428100058.62554-1-agarwal.vineet2006@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b94bce09-69d5-4454-b4a0-81612f286f0a@sirena.org.uk>
 
-On 4/28/26 12:00, Vineet Agarwal wrote:
-> file_setup_area() currently allocates anonymous memory, fills it,
-> and writes it into the backing file used for collapse testing.
+On Fri, Apr 24, 2026 at 06:09:01PM +0100, Mark Brown wrote:
+> On Fri, Apr 24, 2026 at 05:44:16PM +0100, Catalin Marinas wrote:
 > 
-> Instead of copying data through write(), resize the file with
-> ftruncate(), map it directly with MAP_SHARED, and initialize the
-> mapped area in place.
+> > OK, so it does look like it picks the kernel uapi/asm/ptrace.h. It
+> > builds fine on Debian stable (no GCS anywhere) with including
+> > asm/ptrace.h and removing struct user_gcs.
+
+kselftest has the GCC option: "-isystem $(top_srcdir)/usr/include",
+So asm/ptrace.h does come from kernel's usr/include/asm/ptrace.h.
+
+NT_ARM_GCS comes from /usr/aarch64-linux-gnu/include/elf.h.
+
+> > But I think we should include asm/ptrace.h in libc-gcs.h and not the
+> > gcs-util.h header (for NT_ARM_GCS it's fine to keep in gcs-util.h).
 > 
-> This simplifies the setup path and avoids the need for explicit
-> partial write handling.
+> It's not glibc specific so it seems reasonable to keep it in gcs-util.h,
+> even though we don't currently have any nolibc stuff that uses ptrace.
+> That said this isn't particularly strongly held opinion so I don't
+> *really* mind either way.
 
+Does below change make sense to you?
 
-Please
+Subject: [PATCH] kselftest/arm64: Include <asm/ptrace.h> for user_gcs definition
 
-a) Wait a bit longer before you resend.
+kselftest includes kernel uAPI headers with option:
 
-b) Don't send as reply to earlier revisions.
+  -isystem $(top_srcdir)/usr/include
 
-> 
-> Signed-off-by: Vineet Agarwal <agarwal.vineet2006@gmail.com>
-> ---
->  tools/testing/selftests/mm/khugepaged.c | 17 +++++++++++++----
->  1 file changed, 13 insertions(+), 4 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
-> index 3fe7ef04ac62..57ca4224bd5a 100644
-> --- a/tools/testing/selftests/mm/khugepaged.c
-> +++ b/tools/testing/selftests/mm/khugepaged.c
-> @@ -369,7 +369,6 @@ static void *file_setup_area(int nr_hpages)
->  	int fd;
->  	void *p;
->  	unsigned long size;
-> -
+Include <asm/ptrace.h> in libc-gcs.c for the definition of struct
+user_gcs from the uAPI headers, and remove the redundant
+definition in gcs-util.h.
 
-Unrelated change.
+Fixes: a505a52b4e29 ("kselftest/arm64: Add a GCS test program built with the system libc")
+Signed-off-by: Leo Yan <leo.yan@arm.com>
+---
+ tools/testing/selftests/arm64/gcs/gcs-util.h | 6 ------
+ tools/testing/selftests/arm64/gcs/libc-gcs.c | 1 +
+ 2 files changed, 1 insertion(+), 6 deletions(-)
 
->  	unlink(finfo.path);  /* Cleanup from previous failed tests */
->  	printf("Creating %s for collapse%s...", finfo.path,
->  	       finfo.type == VMA_SHMEM ? " (tmpfs)" : "");
-> @@ -381,11 +380,21 @@ static void *file_setup_area(int nr_hpages)
->  	}
->  
->  	size = nr_hpages * hpage_pmd_size;
-> -	p = alloc_mapping(nr_hpages);
-> +	if (ftruncate(fd, size)) {
-> +		perror("ftruncate()");
-> +		close(fd);
-> +		exit(EXIT_FAILURE);
-> +	}
-> +	p = mmap(BASE_ADDR, size, PROT_READ | PROT_WRITE,
-> +		MAP_SHARED, fd, 0);
-> +	if (p == MAP_FAILED || p != BASE_ADDR) {
-> +		perror("mmap()");
-> +		close(fd);
-> +		exit(EXIT_FAILURE);
-> +	}
->  	fill_memory(p, 0, size);
-> -	write(fd, p, size);
-> -	close(fd);
->  	munmap(p, size);
-> +	close(fd);
-
-That change is not strictly required. We can munmap() after close().
-
-Apart from that LGTM.
-
+diff --git a/tools/testing/selftests/arm64/gcs/gcs-util.h b/tools/testing/selftests/arm64/gcs/gcs-util.h
+index c99a6b39ac14..7a81bb07ed4b 100644
+--- a/tools/testing/selftests/arm64/gcs/gcs-util.h
++++ b/tools/testing/selftests/arm64/gcs/gcs-util.h
+@@ -18,12 +18,6 @@
+ 
+ #ifndef NT_ARM_GCS
+ #define NT_ARM_GCS 0x410
+-
+-struct user_gcs {
+-	__u64 features_enabled;
+-	__u64 features_locked;
+-	__u64 gcspr_el0;
+-};
+ #endif
+ 
+ /* Shadow Stack/Guarded Control Stack interface */
+diff --git a/tools/testing/selftests/arm64/gcs/libc-gcs.c b/tools/testing/selftests/arm64/gcs/libc-gcs.c
+index 17b2fabfec38..72e82bfbecc9 100644
+--- a/tools/testing/selftests/arm64/gcs/libc-gcs.c
++++ b/tools/testing/selftests/arm64/gcs/libc-gcs.c
+@@ -16,6 +16,7 @@
+ 
+ #include <asm/hwcap.h>
+ #include <asm/mman.h>
++#include <asm/ptrace.h>
+ 
+ #include <linux/compiler.h>
+ 
 -- 
-Cheers,
+2.34.1
 
-David
