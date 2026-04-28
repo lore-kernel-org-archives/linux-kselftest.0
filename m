@@ -1,468 +1,343 @@
-Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11010064.outbound.protection.outlook.com [52.101.69.64])
+Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C9D730E829;
-	Tue, 28 Apr 2026 06:35:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.69.64
-ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777358150; cv=fail; b=mbB2cIyBkgbBIVEC5KSRWOUTMWCh9vVpNXN7OdK9MJMOBm7XrklAqyYx6AMDC9LC8BuGA3ChgA3hVulWzE+7TTeWZd6AC827pQ0ZveuvKpmBp5KEmm/NjCymn7KZkG86jJoXJohAv4BfY3n8/3ULuCALKkUILHkBKBT0O5/QvXo=
-ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777358150; c=relaxed/simple;
-	bh=vzewtWawAlsTWsm4Y98HuCuUI+EaKHCLAVuRhw7HMfY=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=TldKJNIpVDAq5nzepD4jjadAqE0W3s+YqiE70KEl25/DyZQ+SxljTfdXAAXr8bsWE/4Pevcwv1ME3Pge1u4nFpwS5Pn4LQueXDo9VaOoTQqXOe57FgXBq576S5pleJziZIB9OSEWsrDYCVyZdh12TwVcWrLklWBjX0JigDH/bFU=
-ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=hjj39yF6; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=hjj39yF6; arc=fail smtp.client-ip=52.101.69.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2FBE355F57;
+	Tue, 28 Apr 2026 06:47:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777358878; cv=none; b=NUhTHM2HL7npmlKIVpcgABKS5FJt9PI0szHs9BZBf6TTVuJr8LqUYLPfAazQzzMSabm5zKDemXXsGO8WYM3jvC2jcmo8wwGakXBjoClp6U7BOAxlHVzDo/MVStudxn/I9lKCPTXr31SbSCqYK0sdtqGodXrORzuaeos7E0IF2nc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777358878; c=relaxed/simple;
+	bh=tMutqL/VYi2Wa2/lM2qhDSE5rYKHRd0/GydeAZwnFA4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=pfVeTBdTL3+O+qIFIwd5WX33xilBzuj5xA2oyVpUFJ8Nv+2a7BpBRA0HI6mTratM2lVVtKuyNh25Xg3WMREMXjTl4fEjewjy43P36amvco49Utpm1Ddgh12vJl8gHGH0GYCRRVSUBd6iKUVegocnUGuirqqPLJSMNVdcgHZ/Hs8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=dpMn0R8B; arc=none smtp.client-ip=95.215.58.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="hjj39yF6";
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="hjj39yF6"
-ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
- b=ivAaFMs8YE6USsbhFopGGhHZiYGnBcUB71l/U/lZd10DsSfJdoRJ5gfEoeXi6s/IRQHs4llNjKh2/5q3H5NewWprdI94NNecrnh9eqEAmr0lVgJOr7cd6bhU933tzGZ12L9Tw4ykeR0dRoIaN3iI4XvHzSe0svVKNp0OMTJN0YvyqPQXjxFNTB8N/L1R0NIi/phUjxGB/rBlYukJ+9zt/zaJlXT+7sC5XJ1eE7LURqLhv30xm+qzT8X/bxO0F4gfu19qrdvShNOv9X1asfeIJZQ9LpLRmDAgZaahAvv7H8Mw6rb9LwQOjm1HlcL3RwM8soO2EVMLJJtMtWJd7RAEwA==
-ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IU6gxJonDogyBuLtLrTcK1eXNyqGnbXbncAypgq4Ues=;
- b=mv/WFAYaZc4scNjIVfHgwodB6gH+LogMIOGyBjPLS54qY1VzOGcWikkXM9ZTE+7W5W4spOn3gsJbwTSg/PTW9/NAL1gw/Gm24odRBQeyMG35sCoyf5yye8m6N5D3LQiZwphj4n4iOWzcFC90Y7NIDACTyc9oNmJ7uwBJ12gH5emim6LfLLSqOKswCvpqaqM5nUJW0yGgk/Af0xIMbzRJLovjlbIPzCZQgLOgoM7Zj6AxUw3fjfw/NW64ivVkLCecLfn6IFy3AI2IRH0dRniQkFdjQbMH38KbFxTQ9Q7T+YnoK6GUYrtCl4FuOMqi6TMEL6wdevvXsZpv71BEs10MIg==
-ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
- 4.158.2.129) smtp.rcpttodomain=kernel.org smtp.mailfrom=arm.com; dmarc=pass
- (p=none sp=none pct=100) action=none header.from=arm.com; dkim=pass
- (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
- spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
- dmarc=[1,1,header.from=arm.com])
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IU6gxJonDogyBuLtLrTcK1eXNyqGnbXbncAypgq4Ues=;
- b=hjj39yF6THe7m8NnOuSB3ZkD06zXC/xMF63nGIZkeT6l/dvwV28YKjNBBoqArCy6lKJp18EUeeQva6+XOb47gz8E5IY4xsQMHSSuQUYwDlncLNsOD5y2YY5dUk9bkHp3ZvYe3+gz0fjCNfLq0O4hlLCMtOs/F/D+WfMjM2pIRoA=
-Received: from CWLP265CA0450.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:1b7::23)
- by MI3PR08MB11908.eurprd08.prod.outlook.com (2603:10a6:290:74::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9846.26; Tue, 28 Apr
- 2026 06:35:42 +0000
-Received: from AMS1EPF0000004E.eurprd04.prod.outlook.com
- (2603:10a6:400:1b7:cafe::3) by CWLP265CA0450.outlook.office365.com
- (2603:10a6:400:1b7::23) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9846.26 via Frontend Transport; Tue,
- 28 Apr 2026 06:35:42 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=arm.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
- client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
-Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
- AMS1EPF0000004E.mail.protection.outlook.com (10.167.16.139) with Microsoft
- SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9846.18
- via Frontend Transport; Tue, 28 Apr 2026 06:35:41 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=jgTl+lMlXSSIF67Dk5xsXuFnAw4TXjoJlQjf3QR9WVsCTFI0O7YTYx32dO5ZEMS6VXYQJv8ICbVg3V6BNmOfflsy4t585daJuGuh3umgoVc0l9iO0zqpLYgOtezwBk4bwTwIzujaCCCWuX5A1UAYYhNJBEXawCLkPciSsALNB6XtaynYvgNuZOX/qNqkqygRt8ERoo5Bipou97OeIw88E0Rz6HJgUPlCZXwYukBzkt3tv6OdzhT1EwFLQ+zTJznIu7XSrKLucwK0KEpJdX5gfNzXdGwwaHLaowVIRvLT1mSZKmEKGT09FjiIVX7KSJfR8SWS+rlqlzaV3YkkPgk4mA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IU6gxJonDogyBuLtLrTcK1eXNyqGnbXbncAypgq4Ues=;
- b=AXfvyDU4g9zt81fm63/K1n9XvE5Qb6B9tQI4AWUAwpl6e5bGk1X78UveQ4Nvi6rTruZTfVe7rMrwXfOXkMRM0c1YPSxEfRuND7SYp5lF3iHb3k8GruISR1b9CsXugLwhpNx0HnVdAJBI1CukJ5oOKz8NEUOZgad7MgTDTCfvDW3u8H5F2xFdMLJyJT4D1l95zvaRGVV1BQeXJars1iNDZEHRtpsg4a0+KGnAr19mI6gkXTAz8lCpeGRp+vCC5wy9HMadHI+DuYZnHlrJDaFZXPaGabBCAhkg+uIPHA8IX354eTREANR2mryZEl3RqFQfpY/21oLx9BmyX43ttlFLyA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IU6gxJonDogyBuLtLrTcK1eXNyqGnbXbncAypgq4Ues=;
- b=hjj39yF6THe7m8NnOuSB3ZkD06zXC/xMF63nGIZkeT6l/dvwV28YKjNBBoqArCy6lKJp18EUeeQva6+XOb47gz8E5IY4xsQMHSSuQUYwDlncLNsOD5y2YY5dUk9bkHp3ZvYe3+gz0fjCNfLq0O4hlLCMtOs/F/D+WfMjM2pIRoA=
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-Received: from DU0PR08MB9203.eurprd08.prod.outlook.com (2603:10a6:10:417::12)
- by GV1PR08MB10907.eurprd08.prod.outlook.com (2603:10a6:150:1ed::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9846.26; Tue, 28 Apr
- 2026 06:34:34 +0000
-Received: from DU0PR08MB9203.eurprd08.prod.outlook.com
- ([fe80::f1e:73f2:57df:4047]) by DU0PR08MB9203.eurprd08.prod.outlook.com
- ([fe80::f1e:73f2:57df:4047%2]) with mapi id 15.20.9846.025; Tue, 28 Apr 2026
- 06:34:34 +0000
-Message-ID: <9f866cae-4850-416e-9d4f-4ee00dd197f1@arm.com>
-Date: Tue, 28 Apr 2026 12:04:25 +0530
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 11/53] selftests/mm: hugetlb-read-hwpoison: use
- kselftest framework
-To: Mike Rapoport <rppt@kernel.org>, Andrew Morton
- <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>
-Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
- Barry Song <baohua@kernel.org>, Dev Jain <dev.jain@arm.com>,
- Donet Tom <donettom@linux.ibm.com>, Jason Gunthorpe <jgg@ziepe.ca>,
- John Hubbard <jhubbard@nvidia.com>, "Liam R. Howlett"
- <Liam.Howlett@oracle.com>, Lance Yang <lance.yang@linux.dev>,
- Leon Romanovsky <leon@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
- Mark Brown <broonie@kernel.org>, Michal Hocko <mhocko@suse.com>,
- Nico Pache <npache@redhat.com>, Peter Xu <peterx@redhat.com>,
- Ryan Roberts <ryan.roberts@arm.com>, Shuah Khan <shuah@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Vlastimil Babka <vbabka@kernel.org>,
- Zi Yan <ziy@nvidia.com>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org
-References: <20260418105539.1261536-1-rppt@kernel.org>
- <20260418105539.1261536-12-rppt@kernel.org>
-From: Sarthak Sharma <sarthak.sharma@arm.com>
-Content-Language: en-US
-In-Reply-To: <20260418105539.1261536-12-rppt@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MA5PR01CA0125.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a01:1d5::16) To DU0PR08MB9203.eurprd08.prod.outlook.com
- (2603:10a6:10:417::12)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="dpMn0R8B"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1777358874;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=FWl3+3xYCQS2TfIONHLvVzjRWYCsw+YxH5UO5pc9yUM=;
+	b=dpMn0R8B93+rDrCnXJ/n+L8zj00H7MJvaPqmSRxTfNaaY0ZEl+LDZGcN3DW9KppxwJw7mI
+	5Tpzu2pJXQV5SCMJsRy43y37V6QWh5zGA6LOgquKLFzIpUbCXSn6TaNkCxdKxL+2bokp0N
+	H11ZfrV9Lvv51iEgVCrwSjiHP/cNfpA=
+From: Qingfang Deng <qingfang.deng@linux.dev>
+To: Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Simon Horman <horms@kernel.org>,
+	Willem de Bruijn <willemb@google.com>,
+	Petr Machata <petrm@nvidia.com>,
+	Anubhav Singh <anubhavsinggh@google.com>,
+	Richard Gobert <richardbgobert@gmail.com>,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: linux-ppp@vger.kernel.org,
+	Pablo Neira Ayuso <pablo@netfilter.org>,
+	Qingfang Deng <qingfang.deng@linux.dev>
+Subject: [PATCH net-next v7 2/2] selftests: net: test PPPoE packets in gro.sh
+Date: Tue, 28 Apr 2026 14:47:05 +0800
+Message-ID: <20260428064717.74794-2-qingfang.deng@linux.dev>
+In-Reply-To: <20260428064717.74794-1-qingfang.deng@linux.dev>
+References: <20260428064717.74794-1-qingfang.deng@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic:
-	DU0PR08MB9203:EE_|GV1PR08MB10907:EE_|AMS1EPF0000004E:EE_|MI3PR08MB11908:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7fd8979c-6c3d-46c4-ba18-08dea4f05e94
-x-checkrecipientrouted: true
-NoDisclaimer: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted:
- BCL:0;ARA:13230040|366016|1800799024|7416014|376014|56012099003|18002099003|22082099003;
-X-Microsoft-Antispam-Message-Info-Original:
- KYMJ+ZhDws+lY1Wc/IExugrcGQqdiuoJAouYZgEjQ9cKmXAvFz67msxrACh9Uw30zStyX3RD3aPxF1hwZBQHXVPKvQNzcJc6r0rEwc6kF9hGKdnafCOoE5IoMTK7hWYdqLlICrzLKcvogWf2pFwxR8ATXkhYgECwt1QYoAzoAowvMiq0Cz/zpJ9GGODBGHTP/2qDa2QxXgBfiaRA9zCUAKKYC5kFXGxDETiVpdU7OSXHgfd5AY3g11xJhsRRV4BkpUPXe6D63lA2HBdjLozS3Gx12QBP1BuFTliXl3U/91uFnjQ2b1JIeB2PDzxBE50eGakQXL/2DWpocc+1+wUJyo0uHyzERe0KF3wQVUznh2wkU/gndxzd8I+VkZjGHuf11Xkv7ubEFLoIHvdy6+L0D0vqar+IG9fuW4aBglUgY0Swst1uTze3QfKPCa5LSlZtuT4kKriPvbu5/K9fZrSnrNVVnFHzqwl9+UxLJ861DxU+JvCRqYIYV5m/3bayHzfsdxy0VLY3W+KZRaSscpVszuK2EG+oq0Hjti8/PW3/qIzukRhJie7Xb1AkUglzIjV0syblbzS9cFpptj0IputE2hsr29WF7Ac77/jpeFwVoItjqeIA+DuviiDXzXygBcN6aAJXUm8dgM/2Tp/Q3E646secsemOcDy7SGZF+i2ya8cnJH9eYDv6LYVsWCNaFNF3lyKnLKA5eRw45CV1QQfRFndVaTrjxLP5K0sfO3L6eMA=
-X-Forefront-Antispam-Report-Untrusted:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9203.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014)(56012099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
-X-Exchange-RoutingPolicyChecked:
- enmaGC0cEVqx0CsRXaJcF8FB8/yKUUaSUQZtYVMlSxIARjUlBgWQNJW0bJSnitVb1chsP+8wXnhO4zTBh419jj27oc5Vkd3hI4lz9k8N5FcJXjZrTsd111QTWPsFamL37Z48rU+QW+sPKuRQ72x2hBFzkk6A/trr7cg1nDf1EmX6ISTS03ZdwtnX2r0WDhm9N2expU5BHq77I+3qrb7FylLXZFUAMMCEFdccmxTveQnLbbIgVQSQ/XvnDCxhbFe4b4JBj+Zj6BIqZb8LYXv3SjbJw7cOAZK3Xolpsxe3FBz6Q73JkkLfku5qGQQL349rjZSuIvuxxj9CpYcZK319Kg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR08MB10907
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped:
- AMS1EPF0000004E.eurprd04.prod.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs:
-	a84d8ff5-9bfa-43c6-468a-08dea4f035d3
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|35042699022|1800799024|36860700016|14060799003|82310400026|376014|7416014|56012099003|18002099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	KuY2ABOQkEjgSBZoPxsIkPTqbfzP9hUhuqVc7jIsoDmzrkoMXFV/IB0B7bp7afxopKCGv2ABAllOBWf/U1WjZe/jhsbMT4FVyzK5i3wYQDws1c6pqrDFSOQAvjN7NAErrYs3GmSnC6uKTvsR9oJU+x30SClVrr+p4v8z8Kbj83YqmVgrua3NZdVzBkZy7wOqxCOdH92yxlE5bBNbfrJogFhJg7AuV6Xx3X8P1x+VSB7X79PO2o17uugvVfXpFud5oKvlu748vC6OqXb+PbqCBdEqj4kMTRcBVltU53tMnx8amLeX62v63AHM26uRpTmjHYSlusROzf2ni5nmXC/O6ldjF7TL//hlCH9PwOpoFjRE8dNTZy0ImUlgjy0WqJ1z1Z827FYCRfnAc8k+Kxj3ZeJawEiUlOwluK5QAeb/Fcw8dMI+AFod0Mqzd5rFE1y9BYHMoYUGrWcrq/d0G/XyAywsuHDZXRUK5oZq5LjBGQbez0Q2yVEUqRFowRPviqQZzHEHdkr/yhw2EVhdwVGSv7gpva8dzv3+zzfRl3IFK+/Y8q7mT3w6CEdcoEePE4oL8HwVR+emgqNiPD2s1M7y280eahvpLmkTjPsJ1MA7ckyzc9KicH9D4wQ8mT47lW+uWKMPBDqAMWFNvG03bOv8+vVj6nYGw8f2oNGILyIM9NLMGlubRJAU9f5Aphz3D4Td5ZLgHQXyIUebUFW9gpdK4oei8h41fgiRPicUCy7ro533+z5c7lL0PtkDrnHSUwiI6UO4gga8vk4VVzWbKvsnjQ==
-X-Forefront-Antispam-Report:
-	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(35042699022)(1800799024)(36860700016)(14060799003)(82310400026)(376014)(7416014)(56012099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	rKn3PgwhI6nWtyQa0Gy8CCAeaAfNDuAAjbLQPk+uLfWg0asgnodELPsTaO7RYWKVT1elz5wyHpjam0d8exuNfB++VdEyvHNScjaMRELt4rZwAavFZ97IMMzzWiWRZBvaQDYauFDhS5BxqZ1gB4oPQHLWkuk6g0uF2JFd1q4gU/0jx/ECUzdoJXcwDU+34g0bAlIET3ZVNRZJohz8ymbUTZoeXd+/qqk06oLgR4hGExbNVSHBCZNje3k8V4nK7LYvnkn6cXPo0VyoKQkc6/7urbgRZnCUMQXv5Nxiz9dnMJwNn6Bi5hO1P4gD/g5sSQ9tHIfQymgUGhCU04cKZYef0UzPZ52oR/rkowNj1rAYp12Xz3wFzT25NHV7vQC+FgmFuUK4uGxCbB7SiDcCha+fVfbeiuqCZIcj6jQQCBRdTkoy9yg1B+D3WqUEASCzWpzb
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Apr 2026 06:35:41.8116
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7fd8979c-6c3d-46c4-ba18-08dea4f05e94
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	AMS1EPF0000004E.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MI3PR08MB11908
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
+Add PPPoE test-cases to the GRO selftest. Only run a subset of
+common_tests to avoid changing the hardcoded L3 offsets everywhere.
+Add a new "pppoe_sid" test case to verify that packets with different
+PPPoE session IDs are correctly identified as separate flows and not
+coalesced.
 
+Signed-off-by: Qingfang Deng <qingfang.deng@linux.dev>
+---
+v7:
+ - Do not run all the tests for PPPoE
+ - Add a new test for PPPoE
+v6: https://lore.kernel.org/netdev/20260326081127.61229-2-dqfext@gmail.com
 
-On 4/18/26 4:24 PM, Mike Rapoport wrote:
-> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-> 
-> Convert hugetlb-read-hwpoison test to use kselftest framework for
-> reporting and tracking successful and failing runs.
-> 
-> Reviewed-by: Mark Brown <broonie@kernel.org>
-> Reviewed by: Donet Tom <donettom@linux.ibm.com>
-> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> ---
+ tools/testing/selftests/drivers/net/config |  2 +
+ tools/testing/selftests/drivers/net/gro.py | 11 +++
+ tools/testing/selftests/net/lib/gro.c      | 99 ++++++++++++++++++----
+ 3 files changed, 96 insertions(+), 16 deletions(-)
 
-I ran the test before and after applying the patch. The patch
-correctly formats the output according to KTAP format with no change in
-results.
-
-Tested-by: Sarthak Sharma <sarthak.sharma@arm.com>
-
->  .../selftests/mm/hugetlb-read-hwpoison.c      | 118 +++++++++---------
->  1 file changed, 57 insertions(+), 61 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/mm/hugetlb-read-hwpoison.c b/tools/testing/selftests/mm/hugetlb-read-hwpoison.c
-> index 6bbf15f78061..01cd5465e0f8 100644
-> --- a/tools/testing/selftests/mm/hugetlb-read-hwpoison.c
-> +++ b/tools/testing/selftests/mm/hugetlb-read-hwpoison.c
-> @@ -13,9 +13,7 @@
->  #include <signal.h>
->  
->  #include "kselftest.h"
-> -
-> -#define PREFIX " ... "
-> -#define ERROR_PREFIX " !!! "
-> +#include "vm_util.h"
->  
->  #define MAX_WRITE_READ_CHUNK_SIZE (getpagesize() * 16)
->  #define MAX(a, b) (((a) > (b)) ? (a) : (b))
-> @@ -26,17 +24,22 @@ enum test_status {
->  	TEST_SKIPPED = 2,
->  };
->  
-> -static char *status_to_str(enum test_status status)
-> +static void report_status(enum test_status status, const char *test_name,
-> +			  size_t chunk_size)
->  {
->  	switch (status) {
->  	case TEST_PASSED:
-> -		return "TEST_PASSED";
-> +		ksft_test_result_pass("%s chunk_size=0x%lx\n",
-> +				      test_name, chunk_size);
-> +		break;
->  	case TEST_FAILED:
-> -		return "TEST_FAILED";
-> +		ksft_test_result_fail("%s chunk_size=0x%lx\n",
-> +				      test_name, chunk_size);
-> +		break;
->  	case TEST_SKIPPED:
-> -		return "TEST_SKIPPED";
-> -	default:
-> -		return "TEST_???";
-> +		ksft_test_result_skip("%s chunk_size=0x%lx\n",
-> +				      test_name, chunk_size);
-> +		break;
->  	}
->  }
->  
-> @@ -59,8 +62,8 @@ static bool verify_chunk(char *buf, size_t len, char val)
->  
->  	for (i = 0; i < len; ++i) {
->  		if (buf[i] != val) {
-> -			printf(PREFIX ERROR_PREFIX "check fail: buf[%lu] = %u != %u\n",
-> -				i, buf[i], val);
-> +			ksft_print_msg("check fail: buf[%lu] = %u != %u\n",
-> +				       i, buf[i], val);
->  			return false;
->  		}
->  	}
-> @@ -76,21 +79,21 @@ static bool seek_read_hugepage_filemap(int fd, size_t len, size_t wr_chunk_size,
->  	ssize_t total_ret_count = 0;
->  	char val = offset / wr_chunk_size + offset % wr_chunk_size;
->  
-> -	printf(PREFIX PREFIX "init val=%u with offset=0x%lx\n", val, offset);
-> -	printf(PREFIX PREFIX "expect to read 0x%lx bytes of data in total\n",
-> -	       expected);
-> +	ksft_print_msg("init val=%u with offset=0x%lx\n", val, offset);
-> +	ksft_print_msg("expect to read 0x%lx bytes of data in total\n",
-> +		       expected);
->  	if (lseek(fd, offset, SEEK_SET) < 0) {
-> -		perror(PREFIX ERROR_PREFIX "seek failed");
-> +		ksft_perror("seek failed");
->  		return false;
->  	}
->  
->  	while (offset + total_ret_count < len) {
->  		ret_count = read(fd, buf, wr_chunk_size);
->  		if (ret_count == 0) {
-> -			printf(PREFIX PREFIX "read reach end of the file\n");
-> +			ksft_print_msg("read reach end of the file\n");
->  			break;
->  		} else if (ret_count < 0) {
-> -			perror(PREFIX ERROR_PREFIX "read failed");
-> +			ksft_perror("read failed");
->  			break;
->  		}
->  		++val;
-> @@ -99,8 +102,8 @@ static bool seek_read_hugepage_filemap(int fd, size_t len, size_t wr_chunk_size,
->  
->  		total_ret_count += ret_count;
->  	}
-> -	printf(PREFIX PREFIX "actually read 0x%lx bytes of data in total\n",
-> -	       total_ret_count);
-> +	ksft_print_msg("actually read 0x%lx bytes of data in total\n",
-> +		       total_ret_count);
->  
->  	return total_ret_count == expected;
->  }
-> @@ -113,15 +116,15 @@ static bool read_hugepage_filemap(int fd, size_t len,
->  	ssize_t total_ret_count = 0;
->  	char val = 0;
->  
-> -	printf(PREFIX PREFIX "expect to read 0x%lx bytes of data in total\n",
-> -	       expected);
-> +	ksft_print_msg("expect to read 0x%lx bytes of data in total\n",
-> +		       expected);
->  	while (total_ret_count < len) {
->  		ret_count = read(fd, buf, wr_chunk_size);
->  		if (ret_count == 0) {
-> -			printf(PREFIX PREFIX "read reach end of the file\n");
-> +			ksft_print_msg("read reach end of the file\n");
->  			break;
->  		} else if (ret_count < 0) {
-> -			perror(PREFIX ERROR_PREFIX "read failed");
-> +			ksft_perror("read failed");
->  			break;
->  		}
->  		++val;
-> @@ -130,8 +133,8 @@ static bool read_hugepage_filemap(int fd, size_t len,
->  
->  		total_ret_count += ret_count;
->  	}
-> -	printf(PREFIX PREFIX "actually read 0x%lx bytes of data in total\n",
-> -	       total_ret_count);
-> +	ksft_print_msg("actually read 0x%lx bytes of data in total\n",
-> +		       total_ret_count);
->  
->  	return total_ret_count == expected;
->  }
-> @@ -143,14 +146,14 @@ test_hugetlb_read(int fd, size_t len, size_t wr_chunk_size)
->  	char *filemap = NULL;
->  
->  	if (ftruncate(fd, len) < 0) {
-> -		perror(PREFIX ERROR_PREFIX "ftruncate failed");
-> +		ksft_perror("ftruncate failed");
->  		return status;
->  	}
->  
->  	filemap = mmap(NULL, len, PROT_READ | PROT_WRITE,
->  		       MAP_SHARED | MAP_POPULATE, fd, 0);
->  	if (filemap == MAP_FAILED) {
-> -		perror(PREFIX ERROR_PREFIX "mmap for primary mapping failed");
-> +		ksft_perror("mmap for primary mapping failed");
->  		goto done;
->  	}
->  
-> @@ -163,7 +166,7 @@ test_hugetlb_read(int fd, size_t len, size_t wr_chunk_size)
->  	munmap(filemap, len);
->  done:
->  	if (ftruncate(fd, 0) < 0) {
-> -		perror(PREFIX ERROR_PREFIX "ftruncate back to 0 failed");
-> +		ksft_perror("ftruncate back to 0 failed");
->  		status = TEST_FAILED;
->  	}
->  
-> @@ -180,14 +183,14 @@ test_hugetlb_read_hwpoison(int fd, size_t len, size_t wr_chunk_size,
->  	const unsigned long pagesize = getpagesize();
->  
->  	if (ftruncate(fd, len) < 0) {
-> -		perror(PREFIX ERROR_PREFIX "ftruncate failed");
-> +		ksft_perror("ftruncate failed");
->  		return status;
->  	}
->  
->  	filemap = mmap(NULL, len, PROT_READ | PROT_WRITE,
->  		       MAP_SHARED | MAP_POPULATE, fd, 0);
->  	if (filemap == MAP_FAILED) {
-> -		perror(PREFIX ERROR_PREFIX "mmap for primary mapping failed");
-> +		ksft_perror("mmap for primary mapping failed");
->  		goto done;
->  	}
->  
-> @@ -202,7 +205,7 @@ test_hugetlb_read_hwpoison(int fd, size_t len, size_t wr_chunk_size,
->  	 */
->  	hwp_addr = filemap + len / 2 + pagesize;
->  	if (madvise(hwp_addr, pagesize, MADV_HWPOISON) < 0) {
-> -		perror(PREFIX ERROR_PREFIX "MADV_HWPOISON failed");
-> +		ksft_perror("MADV_HWPOISON failed");
->  		goto unmap;
->  	}
->  
-> @@ -229,7 +232,7 @@ test_hugetlb_read_hwpoison(int fd, size_t len, size_t wr_chunk_size,
->  	munmap(filemap, len);
->  done:
->  	if (ftruncate(fd, 0) < 0) {
-> -		perror(PREFIX ERROR_PREFIX "ftruncate back to 0 failed");
-> +		ksft_perror("ftruncate back to 0 failed");
->  		status = TEST_FAILED;
->  	}
->  
-> @@ -242,17 +245,17 @@ static int create_hugetlbfs_file(struct statfs *file_stat)
->  
->  	fd = memfd_create("hugetlb_tmp", MFD_HUGETLB);
->  	if (fd < 0) {
-> -		perror(PREFIX ERROR_PREFIX "could not open hugetlbfs file");
-> +		ksft_perror("could not open hugetlbfs file");
->  		return -1;
->  	}
->  
->  	memset(file_stat, 0, sizeof(*file_stat));
->  	if (fstatfs(fd, file_stat)) {
-> -		perror(PREFIX ERROR_PREFIX "fstatfs failed");
-> +		ksft_perror("fstatfs failed");
->  		goto close;
->  	}
->  	if (file_stat->f_type != HUGETLBFS_MAGIC) {
-> -		printf(PREFIX ERROR_PREFIX "not hugetlbfs file\n");
-> +		ksft_print_msg("not hugetlbfs file\n");
->  		goto close;
->  	}
->  
-> @@ -264,7 +267,7 @@ static int create_hugetlbfs_file(struct statfs *file_stat)
->  
->  static void sigbus_handler(int sig)
->  {
-> -	printf(PREFIX "received SIGBUS\n");
-> +	ksft_print_msg("received SIGBUS\n");
->  }
->  
->  int main(void)
-> @@ -279,51 +282,44 @@ int main(void)
->  	};
->  	size_t i;
->  
-> +	ksft_print_header();
-> +	ksft_set_plan(ARRAY_SIZE(wr_chunk_sizes) * 3);
-> +
->  	signal(SIGBUS, sigbus_handler);
->  	for (i = 0; i < ARRAY_SIZE(wr_chunk_sizes); ++i) {
-> -		printf("Write/read chunk size=0x%lx\n",
-> -		       wr_chunk_sizes[i]);
-> +		ksft_print_msg("Write/read chunk size=0x%lx\n",
-> +			       wr_chunk_sizes[i]);
->  
->  		fd = create_hugetlbfs_file(&file_stat);
->  		if (fd < 0)
-> -			goto create_failure;
-> -		printf(PREFIX "HugeTLB read regression test...\n");
-> +			ksft_exit_fail_msg("Failed to create hugetlbfs file\n");
-> +
->  		status = test_hugetlb_read(fd, file_stat.f_bsize,
->  					   wr_chunk_sizes[i]);
-> -		printf(PREFIX "HugeTLB read regression test...%s\n",
-> -		       status_to_str(status));
->  		close(fd);
-> -		if (status == TEST_FAILED)
-> -			return -1;
-> +		report_status(status, "HugeTLB read regression",
-> +			      wr_chunk_sizes[i]);
->  
->  		fd = create_hugetlbfs_file(&file_stat);
->  		if (fd < 0)
-> -			goto create_failure;
-> -		printf(PREFIX "HugeTLB read HWPOISON test...\n");
-> +			ksft_exit_fail_msg("Failed to create hugetlbfs file\n");
-> +
->  		status = test_hugetlb_read_hwpoison(fd, file_stat.f_bsize,
->  						    wr_chunk_sizes[i], false);
-> -		printf(PREFIX "HugeTLB read HWPOISON test...%s\n",
-> -		       status_to_str(status));
->  		close(fd);
-> -		if (status == TEST_FAILED)
-> -			return -1;
-> +		report_status(status, "HugeTLB read HWPOISON",
-> +			      wr_chunk_sizes[i]);
->  
->  		fd = create_hugetlbfs_file(&file_stat);
->  		if (fd < 0)
-> -			goto create_failure;
-> -		printf(PREFIX "HugeTLB seek then read HWPOISON test...\n");
-> +			ksft_exit_fail_msg("Failed to create hugetlbfs file\n");
-> +
->  		status = test_hugetlb_read_hwpoison(fd, file_stat.f_bsize,
->  						    wr_chunk_sizes[i], true);
-> -		printf(PREFIX "HugeTLB seek then read HWPOISON test...%s\n",
-> -		       status_to_str(status));
->  		close(fd);
-> -		if (status == TEST_FAILED)
-> -			return -1;
-> +		report_status(status, "HugeTLB seek then read HWPOISON",
-> +			      wr_chunk_sizes[i]);
->  	}
->  
-> -	return 0;
-> -
-> -create_failure:
-> -	printf(ERROR_PREFIX "Abort test: failed to create hugetlbfs file\n");
-> -	return -1;
-> +	ksft_finished();
->  }
+diff --git a/tools/testing/selftests/drivers/net/config b/tools/testing/selftests/drivers/net/config
+index fd16994366f4..07e386895b94 100644
+--- a/tools/testing/selftests/drivers/net/config
++++ b/tools/testing/selftests/drivers/net/config
+@@ -8,5 +8,7 @@ CONFIG_NETCONSOLE=m
+ CONFIG_NETCONSOLE_DYNAMIC=y
+ CONFIG_NETCONSOLE_EXTENDED_LOG=y
+ CONFIG_NETDEVSIM=m
++CONFIG_PPP=y
++CONFIG_PPPOE=y
+ CONFIG_VLAN_8021Q=m
+ CONFIG_XDP_SOCKETS=y
+diff --git a/tools/testing/selftests/drivers/net/gro.py b/tools/testing/selftests/drivers/net/gro.py
+index 221f27e57147..ad7c80f7ba96 100755
+--- a/tools/testing/selftests/drivers/net/gro.py
++++ b/tools/testing/selftests/drivers/net/gro.py
+@@ -313,6 +313,12 @@ def _gro_variants():
+         "ip_frag6", "ip_v6ext_same", "ip_v6ext_diff",
+     ]
+ 
++    # Tests specific to PPPoE
++    pppoe_tests = [
++        "data_same", "data_lrg_sml", "data_sml_lrg", "data_lrg_1byte",
++        "data_burst", "pppoe_sid",
++    ]
++
+     for mode in ["sw", "hw", "lro"]:
+         for protocol in ["ipv4", "ipv6", "ipip", "ip6ip6"]:
+             for test_name in common_tests:
+@@ -325,6 +331,11 @@ def _gro_variants():
+                 for test_name in ipv6_tests:
+                     yield mode, protocol, test_name
+ 
++    for mode in ["sw"]:
++        for protocol in ["pppoev4", "pppoev6"]:
++            for test_name in pppoe_tests:
++                yield mode, protocol, test_name
++
+ 
+ @ksft_variants(_gro_variants())
+ def test(cfg, mode, protocol, test_name):
+diff --git a/tools/testing/selftests/net/lib/gro.c b/tools/testing/selftests/net/lib/gro.c
+index 11b16ae5f0e8..0da55b757bcc 100644
+--- a/tools/testing/selftests/net/lib/gro.c
++++ b/tools/testing/selftests/net/lib/gro.c
+@@ -67,12 +67,14 @@
+ #include <errno.h>
+ #include <error.h>
+ #include <getopt.h>
++#include <net/ethernet.h>
++#include <net/if.h>
+ #include <linux/filter.h>
+ #include <linux/if_packet.h>
++#include <linux/if_pppox.h>
+ #include <linux/ipv6.h>
+ #include <linux/net_tstamp.h>
+-#include <net/ethernet.h>
+-#include <net/if.h>
++#include <linux/ppp_defs.h>
+ #include <netinet/in.h>
+ #include <netinet/ip.h>
+ #include <netinet/ip6.h>
+@@ -134,6 +136,7 @@ static int total_hdr_len = -1;
+ static int ethhdr_proto = -1;
+ static bool ipip;
+ static bool ip6ip6;
++static bool pppoe;
+ static uint64_t txtime_ns;
+ static int num_flows = 4;
+ static bool order_check;
+@@ -171,6 +174,22 @@ static void vlog(const char *fmt, ...)
+ 	}
+ }
+ 
++static void fill_pppoelayer(void *buf, int payload_len, uint16_t sid)
++{
++	struct pppoe_ppp_hdr {
++		struct pppoe_hdr eh;
++		__be16 proto;
++	} *ph = buf;
++
++	payload_len += sizeof(struct tcphdr);
++	ph->eh.type = 1;
++	ph->eh.ver = 1;
++	ph->eh.code = 0;
++	ph->eh.sid = htons(sid);
++	ph->eh.length = htons(payload_len + sizeof(ph->proto));
++	ph->proto = htons(proto == PF_INET ? PPP_IP : PPP_IPV6);
++}
++
+ static void setup_sock_filter(int fd)
+ {
+ 	const int dport_off = tcp_offset + offsetof(struct tcphdr, dest);
+@@ -412,11 +431,15 @@ static void create_packet(void *buf, int seq_offset, int ack_offset,
+ 
+ 	fill_networklayer(buf + inner_ip_off, payload_len, IPPROTO_TCP);
+ 	if (inner_ip_off > ETH_HLEN) {
+-		int encap_proto = (proto == PF_INET) ?
+-				  IPPROTO_IPIP : IPPROTO_IPV6;
++		if (pppoe) {
++			fill_pppoelayer(buf + ETH_HLEN, payload_len + ip_hdr_len, 0x1234);
++		} else {
++			int encap_proto = (proto == PF_INET) ?
++					  IPPROTO_IPIP : IPPROTO_IPV6;
+ 
+-		fill_networklayer(buf + ETH_HLEN,
+-				  payload_len + ip_hdr_len, encap_proto);
++			fill_networklayer(buf + ETH_HLEN,
++					  payload_len + ip_hdr_len, encap_proto);
++		}
+ 	}
+ 
+ 	fill_datalinklayer(buf);
+@@ -526,7 +549,7 @@ static void send_flags(int fd, struct sockaddr_ll *daddr, int psh, int syn,
+ static void send_data_pkts(int fd, struct sockaddr_ll *daddr,
+ 			   int payload_len1, int payload_len2)
+ {
+-	static char buf[ETH_HLEN + IP_MAXPACKET];
++	static char buf[MAX_HDR_LEN + IP_MAXPACKET];
+ 
+ 	create_packet(buf, 0, 0, payload_len1, 0);
+ 	write_packet(fd, buf, total_hdr_len + payload_len1, daddr);
+@@ -1071,6 +1094,20 @@ static void send_fragment6(int fd, struct sockaddr_ll *daddr)
+ 	write_packet(fd, buf, bufpkt_len, daddr);
+ }
+ 
++static void send_changed_pppoe_sid(int fd, struct sockaddr_ll *daddr)
++{
++	static char buf[MAX_HDR_LEN + PAYLOAD_LEN];
++	int pkt_size = total_hdr_len + PAYLOAD_LEN;
++	struct pppoe_hdr *hdr = (struct pppoe_hdr *)(buf + ETH_HLEN);
++
++	create_packet(buf, 0, 0, PAYLOAD_LEN, 0);
++	write_packet(fd, buf, pkt_size, daddr);
++
++	create_packet(buf, PAYLOAD_LEN, 0, PAYLOAD_LEN, 0);
++	hdr->sid = htons(0x4321);
++	write_packet(fd, buf, pkt_size, daddr);
++}
++
+ static void bind_packetsocket(int fd)
+ {
+ 	struct sockaddr_ll daddr = {};
+@@ -1121,9 +1158,10 @@ static void recv_error(int fd, int rcv_errno)
+ static void check_recv_pkts(int fd, int *correct_payload,
+ 			    int correct_num_pkts)
+ {
+-	static char buffer[IP_MAXPACKET + ETH_HLEN + 1];
+-	struct iphdr *iph = (struct iphdr *)(buffer + ETH_HLEN);
+-	struct ipv6hdr *ip6h = (struct ipv6hdr *)(buffer + ETH_HLEN);
++	static char buffer[IP_MAXPACKET + MAX_HDR_LEN + 1];
++	int nhoff = ETH_HLEN + (pppoe ? PPPOE_SES_HLEN : 0);
++	struct iphdr *iph = (struct iphdr *)(buffer + nhoff);
++	struct ipv6hdr *ip6h = (struct ipv6hdr *)(buffer + nhoff);
+ 	struct tcphdr *tcph;
+ 	bool bad_packet = false;
+ 	int tcp_ext_len = 0;
+@@ -1140,7 +1178,7 @@ static void check_recv_pkts(int fd, int *correct_payload,
+ 
+ 	while (1) {
+ 		ip_ext_len = 0;
+-		pkt_size = recv(fd, buffer, IP_MAXPACKET + ETH_HLEN + 1, 0);
++		pkt_size = recv(fd, buffer, sizeof(buffer), 0);
+ 		if (pkt_size < 0)
+ 			recv_error(fd, errno);
+ 
+@@ -1183,9 +1221,10 @@ static void check_recv_pkts(int fd, int *correct_payload,
+ 
+ static void check_capacity_pkts(int fd)
+ {
+-	static char buffer[IP_MAXPACKET + ETH_HLEN + 1];
+-	struct iphdr *iph = (struct iphdr *)(buffer + ETH_HLEN);
+-	struct ipv6hdr *ip6h = (struct ipv6hdr *)(buffer + ETH_HLEN);
++	static char buffer[IP_MAXPACKET + MAX_HDR_LEN + 1];
++	int nhoff = ETH_HLEN + (pppoe ? PPPOE_SES_HLEN : 0);
++	struct iphdr *iph = (struct iphdr *)(buffer + nhoff);
++	struct ipv6hdr *ip6h = (struct ipv6hdr *)(buffer + nhoff);
+ 	int num_pkt = 0, num_coal = 0, pkt_idx;
+ 	const char *fail_reason = NULL;
+ 	int flow_order[num_flows * 2];
+@@ -1203,7 +1242,7 @@ static void check_capacity_pkts(int fd)
+ 
+ 	while (1) {
+ 		ip_ext_len = 0;
+-		pkt_size = recv(fd, buffer, IP_MAXPACKET + ETH_HLEN + 1, 0);
++		pkt_size = recv(fd, buffer, sizeof(buffer), 0);
+ 		if (pkt_size < 0)
+ 			recv_error(fd, errno);
+ 
+@@ -1499,6 +1538,12 @@ static void gro_sender(void)
+ 		usleep(fin_delay_us);
+ 		write_packet(txfd, fin_pkt, total_hdr_len, &daddr);
+ 
++	/* PPPoE sub-tests */
++	} else if (strcmp(testname, "pppoe_sid") == 0) {
++		send_changed_pppoe_sid(txfd, &daddr);
++		usleep(fin_delay_us);
++		write_packet(txfd, fin_pkt, total_hdr_len, &daddr);
++
+ 	} else {
+ 		error(1, 0, "Unknown testcase: %s", testname);
+ 	}
+@@ -1716,6 +1761,12 @@ static void gro_receiver(void)
+ 	} else if (strcmp(testname, "capacity") == 0) {
+ 		check_capacity_pkts(rxfd);
+ 
++	} else if (strcmp(testname, "pppoe_sid") == 0) {
++		correct_payload[0] = PAYLOAD_LEN;
++		correct_payload[1] = PAYLOAD_LEN;
++		printf("different PPPoE session ID doesn't coalesce: ");
++		check_recv_pkts(rxfd, correct_payload, 2);
++
+ 	} else {
+ 		error(1, 0, "Test case error: unknown testname %s", testname);
+ 	}
+@@ -1734,6 +1785,8 @@ static void parse_args(int argc, char **argv)
+ 		{ "ipv6", no_argument, NULL, '6' },
+ 		{ "ipip", no_argument, NULL, 'e' },
+ 		{ "ip6ip6", no_argument, NULL, 'E' },
++		{ "pppoev4", no_argument, NULL, 'p' },
++		{ "pppoev6", no_argument, NULL, 'P' },
+ 		{ "num-flows", required_argument, NULL, 'n' },
+ 		{ "rx", no_argument, NULL, 'r' },
+ 		{ "saddr", required_argument, NULL, 's' },
+@@ -1745,7 +1798,7 @@ static void parse_args(int argc, char **argv)
+ 	};
+ 	int c;
+ 
+-	while ((c = getopt_long(argc, argv, "46d:D:eEi:n:rs:S:t:ov", opts, NULL)) != -1) {
++	while ((c = getopt_long(argc, argv, "46d:D:eEi:n:pPrs:S:t:ov", opts, NULL)) != -1) {
+ 		switch (c) {
+ 		case '4':
+ 			proto = PF_INET;
+@@ -1765,6 +1818,16 @@ static void parse_args(int argc, char **argv)
+ 			proto = PF_INET6;
+ 			ethhdr_proto = htons(ETH_P_IPV6);
+ 			break;
++		case 'p':
++			pppoe = true;
++			proto = PF_INET;
++			ethhdr_proto = htons(ETH_P_PPP_SES);
++			break;
++		case 'P':
++			pppoe = true;
++			proto = PF_INET6;
++			ethhdr_proto = htons(ETH_P_PPP_SES);
++			break;
+ 		case 'd':
+ 			addr4_dst = addr6_dst = optarg;
+ 			break;
+@@ -1812,6 +1875,10 @@ int main(int argc, char **argv)
+ 	} else if (ip6ip6) {
+ 		tcp_offset = ETH_HLEN + sizeof(struct ipv6hdr) * 2;
+ 		total_hdr_len = tcp_offset + sizeof(struct tcphdr);
++	} else if (pppoe) {
++		tcp_offset = ETH_HLEN + PPPOE_SES_HLEN +
++			(proto == PF_INET ? sizeof(struct iphdr) : sizeof(struct ipv6hdr));
++		total_hdr_len = tcp_offset + sizeof(struct tcphdr);
+ 	} else if (proto == PF_INET) {
+ 		tcp_offset = ETH_HLEN + sizeof(struct iphdr);
+ 		total_hdr_len = tcp_offset + sizeof(struct tcphdr);
+-- 
+2.43.0
 
