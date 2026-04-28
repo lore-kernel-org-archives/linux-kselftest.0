@@ -1,38 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD8AD38947A;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E98313D34B1;
 	Tue, 28 Apr 2026 23:25:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777418720; cv=none; b=rFBbJpQdOq5iJol1ntQGZ4gFD94fVvGNpr21j0v294JADt9q+DAbz0jAFXhBexAVA1YzIkPRPnt+wHi0SKI3zYOTfH1rO7flIPHU0KObwtQNFrUlbUWc92UOVgmc6H6HcuUuW8rCNOpj4PrQ+AqZyyDdtayo+O6SFBWnxr8PTJ0=
+	t=1777418721; cv=none; b=JtNf9sP3c1aCQDMyAcbL+cPNx5uei+C99uj7nZZdtWgQH+1jj5l8Z29/jgXiVgN9l1VLAT1aF5R97R4SedggX1N1SIgfc2SpoP/vUr8/6hv0dFgrZ4xlm/AmGgTxeijFCJ0d3SPDqCIECua/POawWCsAsetkFFR/LR0BszaciBs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777418720; c=relaxed/simple;
-	bh=k74W65/sgUamQSqwCX6QPTIXutTYcok2/gXOIvWj2PA=;
+	s=arc-20240116; t=1777418721; c=relaxed/simple;
+	bh=fi5qoarFijE2lWp5XxDoESzLwDXl1eAEmD22R/fPyIs=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=X9rZenK/7eet4SdCTb9lDuraKIgMO5OWTAOSCmule1KPPBO0FMK+OP0vmavsxvh59+wwaapFjlVW5P5n64UOdYC5fLltdvI/qVZ69TEPgMOzJHfBD9VgjuIJytCmYlIAE76pn7Vc+H6us3fDJNMQ/MvA8cK4lnQxWxrep5k3ZZw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LSi4BCso; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=aneW6fn3P5w8HOpjRjC7S6qtEP/dVNND2vMzgGU63JjPCY7I19iVm3LUzThagOByew3J/PRkx6h+MdghoFHO8pbxFLZNtljAP7JRyqyjjCAQlOzZwYZPrgefEEl9qdVqORyRZpI8ysu1E5nzxZNf79uWDwMy+FXjhiTgOL3dz5I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L4evB6Kh; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LSi4BCso"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9152DC2BCFD;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L4evB6Kh"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id CD0C0C2BCB8;
 	Tue, 28 Apr 2026 23:25:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1777418720;
-	bh=k74W65/sgUamQSqwCX6QPTIXutTYcok2/gXOIvWj2PA=;
+	bh=fi5qoarFijE2lWp5XxDoESzLwDXl1eAEmD22R/fPyIs=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=LSi4BCsoodSXa1Wtr13JwRzUK7xTLAqk5OWVYFi2qSZPJ8zA7D+SSEZ1D48CUQuT+
-	 rWdSDWpaqxHqFxy+C8tpaeex+3XlA/tdpLIO8UDkK6nnXxZD/h7cmmE++U6gJk3C2D
-	 veEGJHjGxJutmaCwOy1blzJNkJVTaVSnd+qKK+/ZDF65hFJXLzL5k55DQNEwpVZJjs
-	 chf90qFJ55yGB1MFvKtI6gllnnUEiMFUB29cB6ag4flt/+o5SeW/liCAjjEA/ap/W+
-	 KqNkstYd+cJqeIILMDbXblEpphRxwalJU5tVTSbo+mhaujLAi01uGpsdsuhmLwv/N+
-	 8Rv/jZsXG7DMA==
+	b=L4evB6Khg1O5ByRuDGL14styXW8AJIiKNKNXoWZY9e310k/C1vn/SFuMfURWGVPFa
+	 gmcf5CnqjWieP74atQhouofZc1jF9je/jvHIb2aj1JJzmii3hehhvgLLnm5sj0brlu
+	 dbs1VTzi6/6YkWGIV7yKlsstePw0fGeyRcvtCTvXNaPoq9KPmTdISzS7P1goc8gLUS
+	 G8OhlMs7Y38okfdUbOYcZt5aQ31hutAwW3ekCzM/0Z+Xak0kDlDBY1XWhlNWJQqq7t
+	 gMFsCtoXPdhd8zTHv/g8h6xFzjf1B4Oex42GzYC+1o16QTkAzhBve/XweR6s1j956U
+	 AuOFKb5gEIM6A==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 868DAFF8877;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C1014FF8875;
 	Tue, 28 Apr 2026 23:25:20 +0000 (UTC)
 From: Ackerley Tng via B4 Relay <devnull+ackerleytng.google.com@kernel.org>
-Date: Tue, 28 Apr 2026 16:25:35 -0700
-Subject: [PATCH RFC v5 40/53] KVM: selftests: Test that shared/private
- status is consistent across processes
+Date: Tue, 28 Apr 2026 16:25:38 -0700
+Subject: [PATCH RFC v5 43/53] KVM: selftests: Support checking that data
+ not equal expected
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -41,7 +41,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260428-gmem-inplace-conversion-v5-40-d8608ccfca22@google.com>
+Message-Id: <20260428-gmem-inplace-conversion-v5-43-d8608ccfca22@google.com>
 References: <20260428-gmem-inplace-conversion-v5-0-d8608ccfca22@google.com>
 In-Reply-To: <20260428-gmem-inplace-conversion-v5-0-d8608ccfca22@google.com>
 To: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com, 
@@ -74,11 +74,11 @@ Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
  linux-coco@lists.linux.dev, Ackerley Tng <ackerleytng@google.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1777418714; l=3473;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1777418714; l=2851;
  i=ackerleytng@google.com; s=20260225; h=from:subject:message-id;
- bh=za9mbinhXQlrBGNX8T7yWO9RNCSzSfL649W98OVJnA0=;
- b=lkg9YFQlIbB1hlTVjPrGIukY3fzR7s6d2zyamzlqVzgGFcxL3JfBdyNqZw0C9MA3wGvekD5Qw
- vGC5eHP/UQ6DLO56Vn4ZHsd+yy/F3u/Qr3S2vgUpUxAbrEbmXmlAi+g
+ bh=7gz8kf/n4ixOaF8MVfsAM6UcG2xye98XFNb81uX9/Q0=;
+ b=K0nhoHtw+bHDcFt0NTXB9H8IY5KufQrx9yXWXRDB44IJvZWG6vgqoP88UFkyWNZSvMMA4sjKx
+ IeEHazMTIeLBYKybYfkuwhPvhexJMT5hxbaymArE73yb7zsZfD59Xn1
 X-Developer-Key: i=ackerleytng@google.com; a=ed25519;
  pk=sAZDYXdm6Iz8FHitpHeFlCMXwabodTm7p8/3/8xUxuU=
 X-Endpoint-Received: by B4 Relay for ackerleytng@google.com/20260225 with
@@ -86,111 +86,79 @@ X-Endpoint-Received: by B4 Relay for ackerleytng@google.com/20260225 with
 X-Original-From: Ackerley Tng <ackerleytng@google.com>
 Reply-To: ackerleytng@google.com
 
-From: Sean Christopherson <seanjc@google.com>
+From: Ackerley Tng <ackerleytng@google.com>
 
-Add a test to verify that a guest_memfd's shared/private status is
-consistent across processes, and that any shared pages previously mapped in
-any process are unmapped from all processes.
+Expand run_guest_do_rmw() to support checking that data at given pgoff is
+not equal to expected_val. This will be used in a later patch that tests
+that memory contents are scrambled.
 
-The test forks a child process after creating the shared guest_memfd
-region so that the second process exists alongside the main process for the
-entire test.
-
-The processes then take turns to access memory to check that the
-shared/private status is consistent across processes.
-
-Signed-off-by: Sean Christopherson <seanjc@google.com>
-Co-developed-by: Ackerley Tng <ackerleytng@google.com>
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 ---
- .../kvm/x86/guest_memfd_conversions_test.c         | 74 ++++++++++++++++++++++
- 1 file changed, 74 insertions(+)
+ .../selftests/kvm/x86/guest_memfd_conversions_test.c    | 17 +++++++++++++----
+ 1 file changed, 13 insertions(+), 4 deletions(-)
 
 diff --git a/tools/testing/selftests/kvm/x86/guest_memfd_conversions_test.c b/tools/testing/selftests/kvm/x86/guest_memfd_conversions_test.c
-index 8dfbf3630cec2..21918b83d3792 100644
+index 922261ebaff96..57adb6d84a053 100644
 --- a/tools/testing/selftests/kvm/x86/guest_memfd_conversions_test.c
 +++ b/tools/testing/selftests/kvm/x86/guest_memfd_conversions_test.c
-@@ -334,6 +334,80 @@ GMEM_CONVERSION_TEST_INIT_SHARED(truncate)
- 	test_private(t, 0, 0, 'A');
+@@ -137,6 +137,7 @@ static void __gmem_conversions_multipage_##test(test_data_t *t, int nr_pages,	\
+ struct guest_check_data {
+ 	void *mem;
+ 	char expected_val;
++	bool assert_not_equal;
+ 	char write_val;
+ };
+ static struct guest_check_data guest_data;
+@@ -146,7 +147,13 @@ static void guest_do_rmw(void)
+ 	for (;;) {
+ 		char *mem = READ_ONCE(guest_data.mem);
+ 
+-		GUEST_ASSERT_EQ(READ_ONCE(*mem), READ_ONCE(guest_data.expected_val));
++		if (READ_ONCE(guest_data.assert_not_equal)) {
++			GUEST_ASSERT_NE(READ_ONCE(*mem),
++					READ_ONCE(guest_data.expected_val));
++		} else {
++			GUEST_ASSERT_EQ(READ_ONCE(*mem),
++					READ_ONCE(guest_data.expected_val));
++		}
+ 		WRITE_ONCE(*mem, READ_ONCE(guest_data.write_val));
+ 
+ 		GUEST_SYNC(0);
+@@ -154,13 +161,15 @@ static void guest_do_rmw(void)
  }
  
-+/* Test that shared/private memory protections work and are seen from any process. */
-+GMEM_CONVERSION_TEST_INIT_SHARED(forked_accesses)
-+{
-+	/*
-+	 * No races are intended in this test, shared memory is only used to
-+	 * coordinate between processes.
-+	 */
-+	static enum {
-+		STATE_INIT,
-+		STATE_CHECK_SHARED,
-+		STATE_DONE_CHECKING_SHARED,
-+		STATE_CHECK_PRIVATE,
-+		STATE_DONE_CHECKING_PRIVATE,
-+	} *test_state;
-+	pid_t child_pid;
-+
-+	test_state = kvm_mmap(sizeof(*test_state), PROT_READ | PROT_WRITE,
-+			      MAP_SHARED | MAP_ANONYMOUS, -1);
-+
-+#define TEST_STATE_AWAIT(__state)						\
-+	while (READ_ONCE(*test_state) != __state) {				\
-+		if (child_pid != 0) {						\
-+			int status;						\
-+			pid_t pid;						\
-+			do {							\
-+				pid = waitpid(child_pid, &status, WNOHANG);	\
-+			} while (pid == -1 && errno == EINTR);			\
-+			if (pid == -1)						\
-+				TEST_FAIL("Couldn't check child status.");	\
-+			else if (pid != 0)					\
-+				TEST_FAIL("Child exited prematurely.");		\
-+		}								\
-+	}
-+
-+#define TEST_STATE_SET(__state) WRITE_ONCE(*test_state, __state)
-+
-+	child_pid = fork();
-+	TEST_ASSERT(child_pid != -1, "fork failed");
-+
-+	if (child_pid == 0) {
-+		const char inconsequential = 0xdd;
-+
-+		TEST_STATE_AWAIT(STATE_CHECK_SHARED);
-+
-+		/*
-+		 * This maps the pages into the child process as well, and tests
-+		 * that the conversion process will unmap the guest_memfd memory
-+		 * from all processes.
-+		 */
-+		host_do_rmw(t->mem, 0, 0xB, 0xC);
-+
-+		TEST_STATE_SET(STATE_DONE_CHECKING_SHARED);
-+		TEST_STATE_AWAIT(STATE_CHECK_PRIVATE);
-+
-+		TEST_EXPECT_SIGBUS(READ_ONCE(t->mem[0]));
-+		TEST_EXPECT_SIGBUS(WRITE_ONCE(t->mem[0], inconsequential));
-+
-+		TEST_STATE_SET(STATE_DONE_CHECKING_PRIVATE);
-+		exit(0);
-+	}
-+
-+	test_shared(t, 0, 0, 0xA, 0xB);
-+
-+	TEST_STATE_SET(STATE_CHECK_SHARED);
-+	TEST_STATE_AWAIT(STATE_DONE_CHECKING_SHARED);
-+
-+	test_convert_to_private(t, 0, 0xC, 0xD);
-+
-+	TEST_STATE_SET(STATE_CHECK_PRIVATE);
-+	TEST_STATE_AWAIT(STATE_DONE_CHECKING_PRIVATE);
-+
-+	kvm_munmap(test_state, sizeof(*test_state));
-+}
-+
- int main(int argc, char *argv[])
+ static void run_guest_do_rmw(struct kvm_vcpu *vcpu, loff_t pgoff,
+-			     char expected_val, char write_val)
++			     char expected_val, char write_val,
++			     bool assert_not_equal)
  {
- 	TEST_REQUIRE(kvm_check_cap(KVM_CAP_VM_TYPES) & BIT(KVM_X86_SW_PROTECTED_VM));
+ 	struct ucall uc;
+ 	int r;
+ 
+ 	guest_data.mem = (void *)GUEST_MEMFD_SHARING_TEST_GVA + pgoff * page_size;
+ 	guest_data.expected_val = expected_val;
++	guest_data.assert_not_equal = assert_not_equal;
+ 	guest_data.write_val = write_val;
+ 	sync_global_to_guest(vcpu->vm, guest_data);
+ 
+@@ -191,7 +200,7 @@ static void test_private(test_data_t *t, loff_t pgoff, char starting_val,
+ 			 char write_val)
+ {
+ 	TEST_EXPECT_SIGBUS(WRITE_ONCE(t->mem[pgoff * page_size], write_val));
+-	run_guest_do_rmw(t->vcpu, pgoff, starting_val, write_val);
++	run_guest_do_rmw(t->vcpu, pgoff, starting_val, write_val, false);
+ 	TEST_EXPECT_SIGBUS(READ_ONCE(t->mem[pgoff * page_size]));
+ }
+ 
+@@ -207,7 +216,7 @@ static void test_shared(test_data_t *t, loff_t pgoff, char starting_val,
+ 			char host_write_val, char write_val)
+ {
+ 	host_do_rmw(t->mem, pgoff, starting_val, host_write_val);
+-	run_guest_do_rmw(t->vcpu, pgoff, host_write_val, write_val);
++	run_guest_do_rmw(t->vcpu, pgoff, host_write_val, write_val, false);
+ 	TEST_ASSERT_EQ(READ_ONCE(t->mem[pgoff * page_size]), write_val);
+ }
+ 
 
 -- 
 2.54.0.545.g6539524ca2-goog
