@@ -1,171 +1,196 @@
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from SJ2PR03CU001.outbound.protection.outlook.com (mail-westusazon11012070.outbound.protection.outlook.com [52.101.43.70])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE95831327F
-	for <linux-kselftest@vger.kernel.org>; Tue, 28 Apr 2026 20:16:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777407385; cv=none; b=lQW2c6lVESu522uiLDxIazkg7MtTVzaXU83LC7hcLDXy2ujphb2R/07qB1r+zErkDSo1SsqYaSbKZJFfuMSFtXIDMD0xkxe7Q3kjfzStpHmt7KW/mE+bhBJIKTnVWWOFzHWYr/H303ckOZA3a5fAmVVUkMZdr02POZZAtdVppTU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777407385; c=relaxed/simple;
-	bh=UtQfTFcQQz26sVGJfaPAfwXb/6VrfQbxAomGRCM0hPg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aitdU5jl+aMTOSUMbuQl3idfwdX4kt2dcS+U0kOGso6xBuwsYYJpUIe5kG8wV6UwmZ8Xi8ZqEsFd3e+/rfL6JF27xy24FQ+6YxnkkKAgPO60NvLr8mnANH0uQea/DwfZjvjZQgCn6vxDS465wFNEJb9jdjYvp9k1Z9JdrVhVC1c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nJQX0VoM; arc=none smtp.client-ip=209.85.210.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF7D37404E;
+	Tue, 28 Apr 2026 20:17:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.43.70
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777407458; cv=fail; b=ewnjMS9oMAc3M4jfy7bHazWUsVZEOY7eg8BT8Tec8O47+CvkVisonr3cCfQ+RQJ1cM8bS3OJbdFlPJXFACayeRMYIaUCND+KZ9amvcOCbbVgkhJLc4ibtYEuIxurgEXH+Tqew5TrfUVMYJ300WY0Bgy5CkBJdgLkO4yfkmxKBkE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777407458; c=relaxed/simple;
+	bh=ij/sHGKFfPciYqdMlTUnvE0x/XQIWdvuSzFDnXK8xik=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=qIqe8lv5t69qfnoXs2cmO00RKZvaKBf3H0jGDw7qvjtmHujqtul5nU34rq9I4XAr2hs4+o+Joi4wbhvlWBhST9/jBkLTMg7qfWJqBeeh8ZGTsVhpF4T6+8Ec50efcML6bL+EAUdu+0nbDf2B5E5YdSp23/9Y/1A+CQSPH6vvyfE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=WqIVrAKw; arc=fail smtp.client-ip=52.101.43.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nJQX0VoM"
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-8318293f02bso112249b3a.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 Apr 2026 13:16:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1777407383; x=1778012183; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=98FH8HYWYd41s3fr9Etidq2Y/SsuKUn0hQ9/Ra3GrCM=;
-        b=nJQX0VoMBrMX0i5dGbC54w4lFMRwuaJdkj5q3lPJOtatGQI0yBPmKemwyV2huZYodG
-         i13sUkwdt1M1fVyOOBnVZ7DbmwLSqFPYNTb2R85jguYrw6a9QikVerNxsWYpmjz8gH4g
-         uN+SHpSSvmb8b+AwEzqLnOyWLMeK1/sM6PrQaV1jXJcaYiHse4KmU0eKyIfiduqCiBnF
-         thjOxr3exP6dsi8DBldD5UZXhxe1OUzdSWoxD4W2uOOgubXBN0gTAlzShg1FpG8ok2WY
-         6ApX2N5KOqiXem8Hd2Q3Z8M4REY1OaVT9PvqVvHCEGDjofr/8RP9K2MiGNK/abpiVrOh
-         bJRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777407383; x=1778012183;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=98FH8HYWYd41s3fr9Etidq2Y/SsuKUn0hQ9/Ra3GrCM=;
-        b=Ik3tj6nGqTXzlqU3F2YRuraUDhiVykA9So28GrKAXfc0CWgLVg9xnO0vrM5XVzMNf6
-         iMLRzP5wDL7kR/TgYq4Q/PQPno6I67zmr+irv0VmHQkvH5uLUivholGTBDPL2az80U4D
-         E9XSojOdBaBFsWDSjPDP5od8fGH36rjmj3T1GawCMga9g0ckdVKFu9KMueLGkxpNEsVH
-         VVgHJfNcMCFFdwe87iujytnnJzwr8aavJJLpHPzdMOXUx3SEocMDM9KEv37qriD0FXNJ
-         tk7dla03G8Il2w6pXt+Lk9CRr4kZe61MItFycKvzhin7r3yczZLRwwLT8RfaHUi5vWoj
-         aukQ==
-X-Forwarded-Encrypted: i=1; AFNElJ++2pO/m44UUFmIiJff+WWawnWq7xf0ZC8OhlVKr8FJKXoVd497AdYUWO5eKBU0vuG/a0wy6PphjmCx+CW/eho=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwXl/82tVH5Dve4lDj/I2/+a0fXEHutOMP3oyQp4Fa7i/xHRrIl
-	u9Le+Z+9uH5JiGdnMvPRecVVVvgqQTCixr4PSgu03Ng5LLloOPlamTBFPl+ld45ybg==
-X-Gm-Gg: AeBDieumip9M3+9/WI35GfoAfU9KVfYoYXR94X/We1Eo5vO2T1x2/JONn+3Bl9QIO46
-	Bi4YIqjvmtbgFYaGtJ1S2fdY40/V27Ouf1XxL/LV9pss+PSlaNq4Q+0LDANdGB+RZaySSdai+CY
-	lPoau57HmIWSNfqL96OymT5JU+MZxg9E4d1j1o0YATV9a3aCqZ51ryEtCv+MQ5V9F3Jj9Rjpv5v
-	YMB0HZ3T/HWkEQ5O23MWAE/fune+ywGcIKPv6caWlJuddizSUB0xnGnS/0DslXlaYfuZDmAb66w
-	v12RDxwPBiu6aVQVca6DBG7drI7iXqzAqn/tOp+j4OLQA5TXXW+cM0+RvtMX/yjVk/23deAO4MN
-	n58QUYZ5CReXkQongc4+3JT9oa/QH3LKT+rUUdMeSx8iO2IKddOC7YXTM2MVuyiCEkm6B+6Qtjz
-	tzWUhSJCIRV5UZ93eYGVDtMWXCppURUpBhYLIJ9CCN8l7yY+n9cS+Fiwao7/Xz9w/hCfdIhELuH
-	CprEIxtjJ+Q6c6q
-X-Received: by 2002:a05:6a00:1404:b0:82f:47ec:944f with SMTP id d2e1a72fcca58-834ebb80fbemr309868b3a.16.1777407382525;
-        Tue, 28 Apr 2026 13:16:22 -0700 (PDT)
-Received: from google.com (76.9.127.34.bc.googleusercontent.com. [34.127.9.76])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-834daf6a1fesm3572011b3a.51.2026.04.28.13.16.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Apr 2026 13:16:21 -0700 (PDT)
-Date: Tue, 28 Apr 2026 20:16:17 +0000
-From: David Matlack <dmatlack@google.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Alex Williamson <alex@shazbot.org>, kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-	Alex Williamson <alex.williamson@redhat.com>,
-	patches@lists.linux.dev, Shuah Khan <skhan@linuxfoundation.org>
-Subject: Re: [PATCH] vfio: selftests: Fix out-of-tree build with make O=
-Message-ID: <afEVkVaIjNev8Ukq@google.com>
-References: <0-v1-79f29139180b+8e-vfio_st_make_o_jgg@nvidia.com>
- <afD7-rg58XvqRJpD@google.com>
- <20260428190437.GE718365@nvidia.com>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="WqIVrAKw"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=AW/9P+h+lWOjykKdVbM+oXU3iKxBS+8gYmmgxvR9ZtJcRzmqWfz9A8oaT701eEMcuQuhmcs5B2ft15utIzALMEUHEqcyTUAXekRxU2cyBm6BkT2rh9yCMJ33zxGHTmSyvEyAcoUYaMaRRa93Pb8DG0DM81mg9TKbIQt+QNvdakUxRt+cmBHZGPTn3sVkESKZuGr14eh+9PmQTcuA0ajUn+0an7MHihOUF/aYEfQb8+MKfNrQ34wKjs59h1C29LzgYaOE2+fFe4px6XMt78iKz4yJD/Wb0k8tawZvDdDda9Vguv9yEvDWu0NXER9Lf5iVRBaivuOublTIG+Klj0o10Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jKfvZWK1XQwgYWk5lLH/ADH7bVLKioZdPJgtWT+JOro=;
+ b=FN+prA+g4E1O2GLmoADhIQMbgvU4NnJn7MkLaLcSL48ABIZXQHUAVZLIjxkPyocOqGI/jmv6MArjxPu+yeiZGlu3z2bnEvofPH2aV2EhijU9xCh/SnYmauNSwfzes24vCRTdS2Tda60CNcwS5uBawGfcXfyfwh6CIvh24NN70u8J1/l2KsZmDdrTAdFjQUPt8Yf690nJdKonvhW6uXYSorwoD3xeBQRU+/IW3N86SjfoMIVWFIWG/9IGoMTbQcKOGH8n/OU4rJMAZFC7Qb93s0dW+UbfSLWkI8dq6VDgkLb5SSPoi99oe11ZKRZETuO62xPniVOTf3vPh3lzjCyQWQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jKfvZWK1XQwgYWk5lLH/ADH7bVLKioZdPJgtWT+JOro=;
+ b=WqIVrAKw5xZ6atV2BQmxf6OmQd3DDbDApp0paE0q792u1mNfYJMLUdDwvoMHJDQ6e2HdebTYBhfS3B/3ChRYFEK8t9rfZK6AYRkQsvcsOomSXaZnVzWhP48GN7N947Y/wKbhs2S91oF21D7HcNHgVUzjve3Xnw9nZrwyJl9+i59vh7nY3FuKGIYAk52FawzSf2GHuDpO7B1Mrg8NJcZAF+uEVQjTLeIdjhZHz9eF//C8anr2vvfktV3YEAKy6cbiIIOnpOIJ3fmo3PKriviPM0r+/Pdv91eecf+ds8SCXLJaPuePBdp8z6UKVWMCJQGNJst+xHsTNrv+7rDh47Msqw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DS7PR12MB9473.namprd12.prod.outlook.com (2603:10b6:8:252::5) by
+ DM6PR12MB4417.namprd12.prod.outlook.com (2603:10b6:5:2a4::12) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9870.16; Tue, 28 Apr 2026 20:17:31 +0000
+Received: from DS7PR12MB9473.namprd12.prod.outlook.com
+ ([fe80::f01d:73d2:2dda:c7b2]) by DS7PR12MB9473.namprd12.prod.outlook.com
+ ([fe80::f01d:73d2:2dda:c7b2%4]) with mapi id 15.20.9870.013; Tue, 28 Apr 2026
+ 20:17:29 +0000
+From: Zi Yan <ziy@nvidia.com>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: Vineet Agarwal <agarwal.vineet2006@gmail.com>, akpm@linux-foundation.org,
+ ljs@kernel.org, shuah@kernel.org, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] selftests/mm: khugepaged: initialize file contents via
+ mmap
+Date: Tue, 28 Apr 2026 16:17:26 -0400
+X-Mailer: MailMate (2.0r6290)
+Message-ID: <0FA813EA-5EFA-482F-B8BF-FE65D4169C44@nvidia.com>
+In-Reply-To: <95714cec-205e-4b56-b8ff-9afaf9408020@kernel.org>
+References: <20260428133138.88802-1-agarwal.vineet2006@gmail.com>
+ <583F8EE1-5C49-4250-A24B-0D73372E3864@nvidia.com>
+ <95714cec-205e-4b56-b8ff-9afaf9408020@kernel.org>
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: MN2PR16CA0040.namprd16.prod.outlook.com
+ (2603:10b6:208:234::9) To DS7PR12MB9473.namprd12.prod.outlook.com
+ (2603:10b6:8:252::5)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260428190437.GE718365@nvidia.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR12MB9473:EE_|DM6PR12MB4417:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8c8d47d4-100e-46c8-eb80-08dea5632c18
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|376014|366016|56012099003|18002099003|22082099003;
+X-Microsoft-Antispam-Message-Info:
+	RDY5RJbYGBWDHD21qYSvRDdE0ziMStul4KP2YGvHYlDRMX57/jf2AzP4k86Ogw6ST3jTRXXdkLDq/IfRkwi50zQsodNt6qiWXGTbVpBPr6E9UYhE1IW/hmHCrasFvyMqWfKYoVhNmJJA3RHiQB/T3QQf4X98VM2PvDNB7rAUd/nCfdStDQJGb4nL4CDhs5Q7i/bJ50et2H1+Ulv2ELWj09lDKosfwATdz17xbzAgxIPEiOoPEFid04bNkozr2Me2xeDiNJJbnQoWD+6KhNhpQvM+gJqDl52aIPR1Xqg4CLAXkoW1Iz7zaIseTQcMTWwAOR8LDUrsfEzoeGEo5R8ZAt+2YdE8UBEu+dqysn9g+ejzf4c0aX0yyHEJKmtepmZ+qMp5fj1ZFIhHlI91FdeZe2EJcb0N1Nzvp6vQ8vBUFDbjLxTlRyTa9JE/WE/+KbKr9sHWjYnMpw5iAja7A3GLXMWQSqJuQpgXukUeG5Vtcuc02GLspks8IaqGOJ/Rax8Ykl5OWq+PVe718241uhANmku/0/60o9lCPf/bBOKgtS5fnr/uiw4VgJxZ+YH1xgzHDBipnYBh2qa8lgVHKySM2C6uLu/a+nd53a9rOpvNABFKUTeLnFgrX8p2E8LYbuBsda997MXjnaVOkBlv6eSLZzwUIN0IXNt3yEjnDrEB0cPNGCahXsOvXnlqhxtCGGOI7IPX/5MnxDWTGcikY1rw2DKN/rxAA9NoQ5bMAsG5jWk=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB9473.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(56012099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?A3oinu7aGuz20nOruPrwlfiTpXJhgKoguuxJCmXn29feRwVZuhb9BRMv6o+R?=
+ =?us-ascii?Q?8E+245B+M+Rq3hmdh3SL+61x0f+sp/DXomkWPrSMareMhot5js3JRWBPvax4?=
+ =?us-ascii?Q?ztO7+/jmwsC76EgXdYIKYt4rTfUp8TSbUKSqCXbsKBYvxrg8fCM5lGlC3A6c?=
+ =?us-ascii?Q?bBOiHo5tJj41TyifoPUrwysqMmTmp0tCDxhLh0V2hqWlxF4ZILH6syNEub6Y?=
+ =?us-ascii?Q?lYXSxR6jI5xlaUk8R2RBhV3muuVAZZxFnySmzHw4NcFXie0uGQZt0hyOmUVf?=
+ =?us-ascii?Q?E/rawVX3ETJr7VZaS1FsGEKFqf5XAXFvppIO/dbGyPyK3bt87Q1fovee0eLX?=
+ =?us-ascii?Q?yJrq+xU5DrJXJaeAVWz7j95epL1bsTbewLeVQkOC9FTb2ntr+aGSaqHAcklm?=
+ =?us-ascii?Q?JHzNgLuseiU+ZwZ6H2IK9a7EWac4vq1a4vax4IvHiKpsWCbWb7CLRndr/Kar?=
+ =?us-ascii?Q?FnkXGTdaPHq5vfHK+pG5U4PdxiO2F84RWAO+enpeOcWdtauQ8fimoXM9IWzH?=
+ =?us-ascii?Q?9k3kyW9swMK9ZpUbfPw9JFuQ1PegyMY/WY0tb8MVlMtqdTqcZXi3J+gTlYQq?=
+ =?us-ascii?Q?5aJWRj+wBqWmkAtB9z/x5Pa7++133xwG74our7FE8Swyk7Qflmbls6OdehNq?=
+ =?us-ascii?Q?P4jPWJSkrCwsrhXIbxFz4EStAvlbcYiehlEKnwfHeDWBpzbyBk8ewGRiGmBi?=
+ =?us-ascii?Q?fJRFbqbbiNEnsge06MqOCdIFOTP5ADv1C1strubygWupD7LkmKM1REXNSnRi?=
+ =?us-ascii?Q?7NNrKpoxUsc/OBSe7IjXozuGD/tFab+YD2qloY0revF/dHrGJmVhwo+Mjqai?=
+ =?us-ascii?Q?Qd3h+n447zgok7QDzqc1+xEcY/q/Dm8iGksCsmuxmyQlxQfoBofv4aA2RgMe?=
+ =?us-ascii?Q?OpDD8vtDLBJKkU0KDSj4GDvPXzOlnBYU3JtTDVX20SzU6bmhmq3+01nNNwok?=
+ =?us-ascii?Q?AGWKSzJDxJTtgcUUP4KX6Mv3rljCtdUUc0NH66ZbOTC8xn7Yubx6vvnK43W+?=
+ =?us-ascii?Q?cG+n3ECQDc8OWM2GM2HCoAy/NO5WwGK1nbdHAmmiSMwteN+QUW+O7o8Ag/BM?=
+ =?us-ascii?Q?o0MuBUKv1YgKah0YLf/jDasTn8MfxdEXWH1PKgkDEjG+DHeSPjQO6KcnsDiO?=
+ =?us-ascii?Q?5cuV+Atzx0+sTqek5P6YfiwnOm3aR/PazZIhvHpL/D5bYwaacykMzkiRSKLs?=
+ =?us-ascii?Q?Zjbtv+KiN6pO4HaTP9nkwL2Pk+9EG2UJFxi7sZ5kZKTvTSzEEjULtF9fKKiG?=
+ =?us-ascii?Q?eYDFFKKNgvJzLKGzW8s4XczjbDm5csAqgj3y00c7vDHE70FkvCqN7ppo7OXz?=
+ =?us-ascii?Q?RrzTKklfSyWYsKk4n6XkBR1LS51V8qEQrEU+yE9y9W+15XS/KNTDtfBXIJG+?=
+ =?us-ascii?Q?/arqGMgh/8VXG9+vajQrcL06ZVl/gLkzNDsnigQm5wSHnavm5LulTOf4suli?=
+ =?us-ascii?Q?zjVs6TznFxniV4VxF0grG9MZowVm4VRGNYGnEQWpI5ApweBYnXOs4yKaOgho?=
+ =?us-ascii?Q?ztOfROGJIjVf88kCWtIooLyxtrDSJ7JKnEgXoeinQWDQgqqbG/xf5App41jl?=
+ =?us-ascii?Q?diZt5UoqrbCg718pSXzNH0Sd+JDqL1yD/SNxZzesBx6X/mWNh+IZzR4wHBlE?=
+ =?us-ascii?Q?pnVYdgIJH4jyb3fEbDqCS3T4aQWBrvG6GsNHD4/6SGkWc3kNWyKe6ydzWzNm?=
+ =?us-ascii?Q?V6Ph2iBqfp8fuC4n8y+MJI88ZzMyb8W0xU7qKQ6D6CCF2gCD?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8c8d47d4-100e-46c8-eb80-08dea5632c18
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB9473.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Apr 2026 20:17:29.4833
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3tmFDmBTT+7LNqdoVDhzFUDPdtklYGPJBOBNi5sjE8GiiYwNxGFvjpsdy3+ombj4
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4417
 
-On 2026-04-28 04:04 PM, Jason Gunthorpe wrote:
-> On Tue, Apr 28, 2026 at 06:27:06PM +0000, David Matlack wrote:
-> > On 2026-04-27 08:07 PM, Jason Gunthorpe wrote:
-> > > The test programs are compiled via a static pattern rule that requires
-> > > intermediate .o files:
-> > > 
-> > >   $(TEST_GEN_PROGS): %: %.o $(LIBVFIO_O)
-> > > 
-> > > After lib.mk prefixes TEST_GEN_PROGS with $(OUTPUT), this creates
-> > > dependencies on .o files in the output directory (e.g.
-> > > $(OUTPUT)/vfio_dma_mapping_test.o). However, there is no rule to compile
-> > > these .o files from the source directory .c files when OUTPUT differs
-> > > from the source directory.
-> > > 
-> > > Add an explicit chain of pattern rules:
-> > >   $(OUTPUT)/% -> $(OUTPUT)/%.o -> %.c
-> > > 
-> > > Following the same pattern already used in libvfio.mk for the library
-> > > objects.
-> > > 
-> > > Fixes: 19faf6fd969c ("vfio: selftests: Add a helper library for VFIO selftests")
-> > > Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+On 28 Apr 2026, at 16:07, David Hildenbrand (Arm) wrote:
 
-With the fix applied from your reply,
+> On 4/28/26 21:56, Zi Yan wrote:
+>> On 28 Apr 2026, at 9:31, Vineet Agarwal wrote:
+>>
+>>> file_setup_area() currently allocates anonymous memory, fills it,
+>>> and writes it into the backing file used for collapse testing.
+>>>
+>>> Instead of copying data through write(), resize the file with
+>>> ftruncate(), map it directly with MAP_SHARED, and initialize the
+>>> mapped area in place.
+>>>
+>>> This simplifies the setup path and avoids the need for explicit
+>>> partial write handling.
+>>>
+>>> Signed-off-by: Vineet Agarwal <agarwal.vineet2006@gmail.com>
+>>>
+>>> v3 -> v4:
+>>>   - Restore unrelated blank line removal
+>>>   - Restore original close()/munmap() ordering
+>>> ---
+>>>  tools/testing/selftests/mm/khugepaged.c | 14 ++++++++++++--
+>>>  1 file changed, 12 insertions(+), 2 deletions(-)
+>>
+>> This patch breaks the khugepaged test for READ_ONLY_THP_FOR_FS.
+>>
+>> When I ran sudo ./khugepaged all:file ~/ on ext4,
+>>
+>> collapse_max_ptes_none (khugepaged:file) fails.
+>
+> madvise() still works? Is it maybe because of dirty folios? (but that s=
+hould
+> also be the case on write ...)
 
-Reviewed-by: David Matlack <dmatlack@google.com>
+I asked codex instead.
 
-> > > ---
-> > >  tools/testing/selftests/vfio/Makefile | 5 ++++-
-> > >  1 file changed, 4 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/tools/testing/selftests/vfio/Makefile b/tools/testing/selftests/vfio/Makefile
-> > > index 40165d087a0bc4..81c3be8298fdc2 100644
-> > > --- a/tools/testing/selftests/vfio/Makefile
-> > > +++ b/tools/testing/selftests/vfio/Makefile
-> > > @@ -27,10 +27,13 @@ CFLAGS += $(EXTRA_CFLAGS)
-> > >  
-> > >  LDFLAGS += -pthread
-> > >  
-> > > -$(TEST_GEN_PROGS): %: %.o $(LIBVFIO_O)
-> > > +$(TEST_GEN_PROGS): $(OUTPUT)/%: %(OUTPUT)/%.o $(LIBVFIO_O)
-> > 
-> > Changing this line (with the fix you replied with) is not actually
-> > needed right? I tried the following without it and was able to build:
-> > 
-> >   $ make OUTPUT=/tmp -C tools/testing/selftests/vfio
-> > 
-> > $(TEST_GEN_PROGS) has already been prefixed with $(OUTPUT), so %
-> > in the original pattern already included $(OUTPUT).
-> > 
-> > Is this for readability?
-> 
-> Yes, it makes more sense to explicitly match the stems through the
-> flow than to have the implicit $(TEST_GEN_PROGS) == XXX/$(OUTPUT)
+Basically, mmap(MMAP_SHARED) makes the written folio dirty and the folio
+survives the later drop_caches. Adding msync() fixes the issue.
 
-Sounds good.
+The patch below fixes the issue.
 
-> 
-> > >  	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $< $(LIBVFIO_O) $(LDLIBS) -o $@
-> > >  
-> > >  TEST_GEN_PROGS_O = $(patsubst %, %.o, $(TEST_GEN_PROGS))
-> > > +$(TEST_GEN_PROGS_O): $(OUTPUT)/%.o: %.c
-> > > +	$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
-> > 
-> > Looking at this commit made me confused how this was even working before
-> > and I learned that make has built-in rules to build .o files that
-> > assumes the .c is in the same directory. 
-> 
-> Yes
-> 
-> > I see now that we were reying
-> > on those built-in rules to build $(TEST_GEN_PROGS_O). It makes sense to
-> > have an explicit rule to handle the directory mismatch between .c and
-> > .o.
-> 
-> Hmm now that I think about it, I wonder if it used the right flags..
+=46rom fdf796e52a94b7e21614c8cfb6cc947146221d28 Mon Sep 17 00:00:00 2001
+From: Zi Yan <ziy@nvidia.com>
+Date: Tue, 28 Apr 2026 16:12:08 -0400
+Subject: [PATCH] flush dirty folio so that drop_caches can work
 
-It looks like it used the same command that we will be using after this
-patch, just with the wrong path to the .c file.
+Signed-off-by: Zi Yan <ziy@nvidia.com>
+---
+ tools/testing/selftests/mm/khugepaged.c | 1 +
+ 1 file changed, 1 insertion(+)
 
- $ make -p -f /dev/null
- ...
- COMPILE.c = $(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c
- ...
- OUTPUT_OPTION = -o $@
- ...
-  %.o: %.c
-  #  recipe to execute (built-in):
-          $(COMPILE.c) $(OUTPUT_OPTION) $<
+diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/self=
+tests/mm/khugepaged.c
+index 87ca031cb7225..ac645d96285da 100644
+--- a/tools/testing/selftests/mm/khugepaged.c
++++ b/tools/testing/selftests/mm/khugepaged.c
+@@ -399,6 +399,7 @@ static void *file_setup_area_common(int nr_hpages, bo=
+ol read_only)
+ 		exit(EXIT_FAILURE);
+ 	}
+ 	fill_memory(p, 0, size);
++	msync(p, size, MS_SYNC);
+ 	close(fd);
+ 	munmap(p, size);
+ 	success("OK");
+-- =
+
+2.53.0
+
+
+
+
+Best Regards,
+Yan, Zi
