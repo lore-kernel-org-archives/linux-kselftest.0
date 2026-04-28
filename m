@@ -1,136 +1,171 @@
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E75FF3C3420
-	for <linux-kselftest@vger.kernel.org>; Tue, 28 Apr 2026 20:09:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.176
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777406964; cv=pass; b=p7vPRXkYaT7PSl3GfLy1d5jrjR/GDhbxRcY1YraE+VrOU6++WfiTpb5uyGvohX1xooLOUrmel6zt1hAF9FfRvndoCKqXkvvwwsZK57LdzrIgOG5BWFrWdl5IxtqXvsikBBreThZCU6W887M/MerGSFbuh+RkKoc29I3Mq57V/jo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777406964; c=relaxed/simple;
-	bh=0W6NRYFjQGnhyQglFSLJFfyHW1vF/d8gwkB3LP9mXno=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fOX+If3yuzwv+3HTcIrKx33m6h+NqAgVtMwOs/rtWf26j/LTgoupnzFzw8bYUTVzytk6JiVs6znPNHgUfGeE0YwCi/nT04DCPk4OOxRB+7UmLqMdmuqRdt3LeZk+fdv5JMDkRGkClcN2NnLGiSTd41sGhi6Yo5dv+H8i36h+6Jg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=p/9Z+PpQ; arc=pass smtp.client-ip=209.85.208.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE95831327F
+	for <linux-kselftest@vger.kernel.org>; Tue, 28 Apr 2026 20:16:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777407385; cv=none; b=lQW2c6lVESu522uiLDxIazkg7MtTVzaXU83LC7hcLDXy2ujphb2R/07qB1r+zErkDSo1SsqYaSbKZJFfuMSFtXIDMD0xkxe7Q3kjfzStpHmt7KW/mE+bhBJIKTnVWWOFzHWYr/H303ckOZA3a5fAmVVUkMZdr02POZZAtdVppTU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777407385; c=relaxed/simple;
+	bh=UtQfTFcQQz26sVGJfaPAfwXb/6VrfQbxAomGRCM0hPg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aitdU5jl+aMTOSUMbuQl3idfwdX4kt2dcS+U0kOGso6xBuwsYYJpUIe5kG8wV6UwmZ8Xi8ZqEsFd3e+/rfL6JF27xy24FQ+6YxnkkKAgPO60NvLr8mnANH0uQea/DwfZjvjZQgCn6vxDS465wFNEJb9jdjYvp9k1Z9JdrVhVC1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nJQX0VoM; arc=none smtp.client-ip=209.85.210.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="p/9Z+PpQ"
-Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-38e7d984096so131670941fa.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 Apr 2026 13:09:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1777406961; cv=none;
-        d=google.com; s=arc-20240605;
-        b=immXcM09hrY+0SFxv+sonRbi5NuHxwNX/Ad9IpqnIUEbMKwZSusvZXtOhjuIrEGZ+I
-         lVldjmUG+dbLL80Jft24us/4W1GYrWPJU6SS7S/W+KTtYusEhG5Bj/Yc5Ok+0+9LEp/q
-         qMmSyEEA6L/asv4ybTUK8TYIeVrkl4axooWq0Q00uwzyMbtJuFi94XLPMd2Krkx3mJnL
-         IT6vPRqYccCL6BmjR2d6RDxY+FNkK67lK6/UUnsdtHlvIQDXulwqkMjssvVRalIOa/NU
-         lX5DhPqOQQdMnv1dCWUcUPsznfMRWy2ufpK9t5BmOC2tRq/Gp04aC1jYh4PAa4VH0DXJ
-         oaXw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=lQv0iUQ29KVuQJDvZZSr4tHq4TPvwEiTETZj+a1BiUI=;
-        fh=vXtsyEVjJE75/4gomEFp63SSr+fog4JCwDznpQDuq1M=;
-        b=kgVQ2QI0NXuRrFmnipala4EJi5o4MHZmANllAhj7ZCdX0WpnOZHX15CX+F30qPuRnq
-         SelRV2TwpapN9xkXIoO3WTn+nRf28JrGF9LqjCGd4OLW7A05m2lumFWnh/qlx8UEFizG
-         JKgvcmxCebpddTU2Nj0vmmjcXMhUuZhbKdCUW7siHEFsTkGJL8rm8y5bUn3YyKEs7FK2
-         3KPuUtCXV2w8GJoIA7NYy2m0STPs/HD22eEEWhfDSj5a18Ajpp6mzfB3SSVSPruo6M7P
-         9K86GA80sWcRQ1nve7SHItZKOpUnSngmfv/cdY/AUNNEpdpZdWWqcKotL6HRUmyHFUyj
-         P8xw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nJQX0VoM"
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-8318293f02bso112249b3a.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Apr 2026 13:16:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1777406961; x=1778011761; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lQv0iUQ29KVuQJDvZZSr4tHq4TPvwEiTETZj+a1BiUI=;
-        b=p/9Z+PpQ6yrec7JBO4KfT753E6HJLYXDQTROSVCBj4s0HbZMvex2kPUAb63EtAb+Wq
-         XON4GGDsaabic25sThJdy+jMtBDP6quOg+NI5OBvYR1y79xdoq4qpqt979WT1E3wi3xg
-         bTkXhhpsgGanrJiSOmu4G6KBagliVgxTIiHFSn8gIO/FYI1QJftGysSyvDDDV3LXsEDe
-         Ilwatop/XICQh4qH7o4ilvGXwS1eJG1xIOccUUzwpqxoUmrFUU6Ear+O+3QWWAeMRo1c
-         XgRfrFMH5eYU0W0d2IwFYtX0c0IbGVM/TjoDGp5212nkulrSUbqGEq6IGAPbT69oio6N
-         iTaQ==
+        d=google.com; s=20251104; t=1777407383; x=1778012183; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=98FH8HYWYd41s3fr9Etidq2Y/SsuKUn0hQ9/Ra3GrCM=;
+        b=nJQX0VoMBrMX0i5dGbC54w4lFMRwuaJdkj5q3lPJOtatGQI0yBPmKemwyV2huZYodG
+         i13sUkwdt1M1fVyOOBnVZ7DbmwLSqFPYNTb2R85jguYrw6a9QikVerNxsWYpmjz8gH4g
+         uN+SHpSSvmb8b+AwEzqLnOyWLMeK1/sM6PrQaV1jXJcaYiHse4KmU0eKyIfiduqCiBnF
+         thjOxr3exP6dsi8DBldD5UZXhxe1OUzdSWoxD4W2uOOgubXBN0gTAlzShg1FpG8ok2WY
+         6ApX2N5KOqiXem8Hd2Q3Z8M4REY1OaVT9PvqVvHCEGDjofr/8RP9K2MiGNK/abpiVrOh
+         bJRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777406961; x=1778011761;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=lQv0iUQ29KVuQJDvZZSr4tHq4TPvwEiTETZj+a1BiUI=;
-        b=lQ2WnSl1gn36fAFTmDuSZrkKB9YSGY/YR12o7QlvfvQRuABITLiAl57gDEojiCwN+1
-         VXYCXTPzvrz5aSDyAL//YBi7pbBsnw8V3SWjnsF8cuIKchkACHKenK1mIAFZMfj1SID/
-         vIrMpCXRSz60HO0o9kJwzLn3zQjS3wDKfnGKDJxoEofMe/m9kjzX7FoRhQKWija+1MVT
-         A20NM5XTULCULgvmwXG9ptdBl/DndI1/yL/TjI9JqKNXv9ZFrQjgNdrAB7Q72l7qqUS0
-         ZpiDQQPIo14s13/ZgiJH0Q4p+oHw+eqCKBhtetSwLkqn4DJ2G94pmJ1Hb6RynJYv8G3z
-         UoJg==
-X-Forwarded-Encrypted: i=1; AFNElJ+bFBifCHMq4G1IMcEBuYdoCOQxAjUMmxYuGBsCCvqDteHh9nO7o5v9qO0DdEHAVa1PqgThhtQdP5lt++6ua9Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzE6f3DksPHEnkv8TiatC7rNYDmjQh2OIViZ79+kNHrGRXtXswO
-	xlJWjP9+A+EBiENhhUlzt8ub0bbF/wRyh8XTNkRYianGBsXiq3H4YWtAx/jsYNOLcmV/0dsPu4r
-	kn+URE8+lI7JIP8hMh85HglvuTA65oS6jGOUub4Qy
-X-Gm-Gg: AeBDieurTWhNBbC94EeAEKnIZjfZzQ58Q/gZ3r6+rgZ/ljHCTEQTYThWO2TKf0gqmvs
-	NnQqraJCc/Dc+6xBV/l7DA9dGB//p6xc3jXU7/b16CHdJ0y54KGL6w0GPRNnTSRXBkYwzoiEwwl
-	zsmNni27bMv/yXugm5tCb5JKW/3vW9RQLKoZflQqH5gS1+C7zYMUY9J6so1jeDlELS6VUnoMTdG
-	t97IssPwFPOA/AQukEAsodv6d1iEY+LQz1+1hrhZigzZy3EB+hR12hRgC9RA9K3rPoNyq591xS+
-	OstUTJBjPMaUlZNsGXcRNnBwWIH3dA==
-X-Received: by 2002:a05:651c:1613:b0:38a:2f02:e153 with SMTP id
- 38308e7fff4ca-392411fe4b2mr16497141fa.31.1777406960911; Tue, 28 Apr 2026
- 13:09:20 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1777407383; x=1778012183;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=98FH8HYWYd41s3fr9Etidq2Y/SsuKUn0hQ9/Ra3GrCM=;
+        b=Ik3tj6nGqTXzlqU3F2YRuraUDhiVykA9So28GrKAXfc0CWgLVg9xnO0vrM5XVzMNf6
+         iMLRzP5wDL7kR/TgYq4Q/PQPno6I67zmr+irv0VmHQkvH5uLUivholGTBDPL2az80U4D
+         E9XSojOdBaBFsWDSjPDP5od8fGH36rjmj3T1GawCMga9g0ckdVKFu9KMueLGkxpNEsVH
+         VVgHJfNcMCFFdwe87iujytnnJzwr8aavJJLpHPzdMOXUx3SEocMDM9KEv37qriD0FXNJ
+         tk7dla03G8Il2w6pXt+Lk9CRr4kZe61MItFycKvzhin7r3yczZLRwwLT8RfaHUi5vWoj
+         aukQ==
+X-Forwarded-Encrypted: i=1; AFNElJ++2pO/m44UUFmIiJff+WWawnWq7xf0ZC8OhlVKr8FJKXoVd497AdYUWO5eKBU0vuG/a0wy6PphjmCx+CW/eho=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwXl/82tVH5Dve4lDj/I2/+a0fXEHutOMP3oyQp4Fa7i/xHRrIl
+	u9Le+Z+9uH5JiGdnMvPRecVVVvgqQTCixr4PSgu03Ng5LLloOPlamTBFPl+ld45ybg==
+X-Gm-Gg: AeBDieumip9M3+9/WI35GfoAfU9KVfYoYXR94X/We1Eo5vO2T1x2/JONn+3Bl9QIO46
+	Bi4YIqjvmtbgFYaGtJ1S2fdY40/V27Ouf1XxL/LV9pss+PSlaNq4Q+0LDANdGB+RZaySSdai+CY
+	lPoau57HmIWSNfqL96OymT5JU+MZxg9E4d1j1o0YATV9a3aCqZ51ryEtCv+MQ5V9F3Jj9Rjpv5v
+	YMB0HZ3T/HWkEQ5O23MWAE/fune+ywGcIKPv6caWlJuddizSUB0xnGnS/0DslXlaYfuZDmAb66w
+	v12RDxwPBiu6aVQVca6DBG7drI7iXqzAqn/tOp+j4OLQA5TXXW+cM0+RvtMX/yjVk/23deAO4MN
+	n58QUYZ5CReXkQongc4+3JT9oa/QH3LKT+rUUdMeSx8iO2IKddOC7YXTM2MVuyiCEkm6B+6Qtjz
+	tzWUhSJCIRV5UZ93eYGVDtMWXCppURUpBhYLIJ9CCN8l7yY+n9cS+Fiwao7/Xz9w/hCfdIhELuH
+	CprEIxtjJ+Q6c6q
+X-Received: by 2002:a05:6a00:1404:b0:82f:47ec:944f with SMTP id d2e1a72fcca58-834ebb80fbemr309868b3a.16.1777407382525;
+        Tue, 28 Apr 2026 13:16:22 -0700 (PDT)
+Received: from google.com (76.9.127.34.bc.googleusercontent.com. [34.127.9.76])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-834daf6a1fesm3572011b3a.51.2026.04.28.13.16.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Apr 2026 13:16:21 -0700 (PDT)
+Date: Tue, 28 Apr 2026 20:16:17 +0000
+From: David Matlack <dmatlack@google.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Alex Williamson <alex@shazbot.org>, kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+	Alex Williamson <alex.williamson@redhat.com>,
+	patches@lists.linux.dev, Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [PATCH] vfio: selftests: Fix out-of-tree build with make O=
+Message-ID: <afEVkVaIjNev8Ukq@google.com>
+References: <0-v1-79f29139180b+8e-vfio_st_make_o_jgg@nvidia.com>
+ <afD7-rg58XvqRJpD@google.com>
+ <20260428190437.GE718365@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260202-vfio-selftest-only-64bit-v2-1-9c3ebb37f0f4@fb.com>
- <e51b4ff2-13c4-47d4-b781-3dcbd740d274@meta.com> <20260427231217.GA1670652@nvidia.com>
- <afATrrjqt8zj2plL@google.com> <afEEN_4ufBcQld0q@google.com> <afEQDT_nv0kdlaBU@google.com>
-In-Reply-To: <afEQDT_nv0kdlaBU@google.com>
-From: David Matlack <dmatlack@google.com>
-Date: Tue, 28 Apr 2026 13:08:51 -0700
-X-Gm-Features: AVHnY4JHVYEqeuMXhTnemoCMQimOvdWxg_oIU9vE-6Z88zRvGZF-15lHQeMKZio
-Message-ID: <CALzav=ecmNh6bE88oCHdmjSKK_Zpd96b84HbtmkaiDNRcotYfw@mail.gmail.com>
-Subject: Re: [PATCH v2] vfio: selftests: only build tests on arm64 and x86_64
-To: Sean Christopherson <seanjc@google.com>
-Cc: Jason Gunthorpe <jgg@nvidia.com>, Matt Evans <mattev@meta.com>, Ted Logan <tedlogan@fb.com>, 
-	Alex Williamson <alex@shazbot.org>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260428190437.GE718365@nvidia.com>
 
-On Tue, Apr 28, 2026 at 12:52=E2=80=AFPM Sean Christopherson <seanjc@google=
-.com> wrote:
->
-> On Tue, Apr 28, 2026, David Matlack wrote:
-> > On 2026-04-27 06:55 PM, Sean Christopherson wrote:
-> > > On Mon, Apr 27, 2026, Jason Gunthorpe wrote:
-> > > > Even though this is a 64 bit build.
-> > >
-> > > Heh, it's much funnier when it's happening to someone else.  :-)
-> > >
-> > > KVM selftests went through these exact pains.  I'm pretty sure these =
-are the
-> > > relevant commits (the empty targets one may or may not apply to VFIO)=
-.
-> > >
-> > > 9af04539d474dda4984ff4909d4568e6123c8cba KVM: selftests: Override ARC=
-H for x86_64 instead of using ARCH_DIR
-> > > 67730e6c53d70fb31618230f81c4acee9f72eaa3 KVM: selftests: Use canonica=
-l $(ARCH) paths for KVM selftests directories
-> > > 43fbd8cd389faa9760c5152b1c58e893c812953b KVM: selftests: Provide empt=
-y 'all' and 'clean' targets for unsupported ARCHs
-> >
-> > KVM selftests don't prevent 32-bit x86 builds though,
->
-> Yes they do?  x86 is an alias for x86_64 (or vice versa), and so the i386=
- target
-> gets binned into the empty target provided by tools/testing/selftests/kvm=
-/Makefile.
-> And KVM selftests most definitely don't play nice with 32-bit.
+On 2026-04-28 04:04 PM, Jason Gunthorpe wrote:
+> On Tue, Apr 28, 2026 at 06:27:06PM +0000, David Matlack wrote:
+> > On 2026-04-27 08:07 PM, Jason Gunthorpe wrote:
+> > > The test programs are compiled via a static pattern rule that requires
+> > > intermediate .o files:
+> > > 
+> > >   $(TEST_GEN_PROGS): %: %.o $(LIBVFIO_O)
+> > > 
+> > > After lib.mk prefixes TEST_GEN_PROGS with $(OUTPUT), this creates
+> > > dependencies on .o files in the output directory (e.g.
+> > > $(OUTPUT)/vfio_dma_mapping_test.o). However, there is no rule to compile
+> > > these .o files from the source directory .c files when OUTPUT differs
+> > > from the source directory.
+> > > 
+> > > Add an explicit chain of pattern rules:
+> > >   $(OUTPUT)/% -> $(OUTPUT)/%.o -> %.c
+> > > 
+> > > Following the same pattern already used in libvfio.mk for the library
+> > > objects.
+> > > 
+> > > Fixes: 19faf6fd969c ("vfio: selftests: Add a helper library for VFIO selftests")
+> > > Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 
-Are you sure that x86 is an alias for x86_64? If it is then we don't
-even need the __LP64__ stuff I posted.
+With the fix applied from your reply,
 
-But when I look at the top-level Makefile and imagine running make
-without setting ARCH on the command line on a 32-bit x86 host, ARCH
-will be set to SUBARCH, which will be x86.
+Reviewed-by: David Matlack <dmatlack@google.com>
+
+> > > ---
+> > >  tools/testing/selftests/vfio/Makefile | 5 ++++-
+> > >  1 file changed, 4 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/tools/testing/selftests/vfio/Makefile b/tools/testing/selftests/vfio/Makefile
+> > > index 40165d087a0bc4..81c3be8298fdc2 100644
+> > > --- a/tools/testing/selftests/vfio/Makefile
+> > > +++ b/tools/testing/selftests/vfio/Makefile
+> > > @@ -27,10 +27,13 @@ CFLAGS += $(EXTRA_CFLAGS)
+> > >  
+> > >  LDFLAGS += -pthread
+> > >  
+> > > -$(TEST_GEN_PROGS): %: %.o $(LIBVFIO_O)
+> > > +$(TEST_GEN_PROGS): $(OUTPUT)/%: %(OUTPUT)/%.o $(LIBVFIO_O)
+> > 
+> > Changing this line (with the fix you replied with) is not actually
+> > needed right? I tried the following without it and was able to build:
+> > 
+> >   $ make OUTPUT=/tmp -C tools/testing/selftests/vfio
+> > 
+> > $(TEST_GEN_PROGS) has already been prefixed with $(OUTPUT), so %
+> > in the original pattern already included $(OUTPUT).
+> > 
+> > Is this for readability?
+> 
+> Yes, it makes more sense to explicitly match the stems through the
+> flow than to have the implicit $(TEST_GEN_PROGS) == XXX/$(OUTPUT)
+
+Sounds good.
+
+> 
+> > >  	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $< $(LIBVFIO_O) $(LDLIBS) -o $@
+> > >  
+> > >  TEST_GEN_PROGS_O = $(patsubst %, %.o, $(TEST_GEN_PROGS))
+> > > +$(TEST_GEN_PROGS_O): $(OUTPUT)/%.o: %.c
+> > > +	$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
+> > 
+> > Looking at this commit made me confused how this was even working before
+> > and I learned that make has built-in rules to build .o files that
+> > assumes the .c is in the same directory. 
+> 
+> Yes
+> 
+> > I see now that we were reying
+> > on those built-in rules to build $(TEST_GEN_PROGS_O). It makes sense to
+> > have an explicit rule to handle the directory mismatch between .c and
+> > .o.
+> 
+> Hmm now that I think about it, I wonder if it used the right flags..
+
+It looks like it used the same command that we will be using after this
+patch, just with the wrong path to the .c file.
+
+ $ make -p -f /dev/null
+ ...
+ COMPILE.c = $(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c
+ ...
+ OUTPUT_OPTION = -o $@
+ ...
+  %.o: %.c
+  #  recipe to execute (built-in):
+          $(COMPILE.c) $(OUTPUT_OPTION) $<
