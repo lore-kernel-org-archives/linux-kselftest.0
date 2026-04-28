@@ -1,148 +1,143 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FE0F37419A
-	for <linux-kselftest@vger.kernel.org>; Tue, 28 Apr 2026 11:57:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1524B407567
+	for <linux-kselftest@vger.kernel.org>; Tue, 28 Apr 2026 12:29:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777377427; cv=none; b=RTdB5992Ig1YY7kcGM4P00HbSfuDEb3KZby/oYJSG0GzTLJNd8065uxlVKZHS6Z3mm1bOVuocaZZUaydBxgnbvmsDzTbiWKw5q9npdFrWwgsJNvOgAv+tvQqKtTGg/XLoXnjegYczxBSiYgsrU0iAe25ABHZh94JLFS2OQfoyPM=
+	t=1777379352; cv=none; b=BSHLYGg7q98ej0crP6pYRGFHpt8v3r+IIbLOBhXsGK4i9e/2wLdgGMOhKV1Ej8W+4GUFCfb2UUXn/5fyIMtyzbkLsgcQ4inEWHgQmhd8eg+5DfpRCEKxN5p0IRSTChAUX6FArYKXZ7hkcg3bkcrn4cYdsqr2TIDpGKmAt170KRQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777377427; c=relaxed/simple;
-	bh=x01fyI9hSlHUiPCaC8zQGcP2vLXq4qwF7JHLG0WKnek=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=l/01LutGRZRS0rHmus9NPJVGJG7MycurG/lEz7uE04gWkrM3H+w8GFgT6cv1qqTidvBOyAPiLtRGt1t9MocamOJMuus3kyOVmxhqUm+DgWRW8v2CcJE8d/G0Fr6vp719wRzIJSlfxxi7IMfQqLx9zyq3IOMXiGAUNK9b3p6Chew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RvD9bT6w; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1777379352; c=relaxed/simple;
+	bh=M4bOzB5KSiFxm7wQ90xnzZcpu1jf7AoTVdb4p95KygY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bMYZtzQKfKFposb/7x1bsMg4oRkigb8tKsuDfFXCVaEtn18pZcuG0HyISumT7zryMEnitD7YogNSRlO2HGHDqb/1dqvAODKo9/R4jDc+J4oVip5RrNPbw6b4w/pHbzGVEPZkvx/0EFBaIKG6u8WfTmKfYZdKl+pM0Q8yQs3OvpQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cEX2wNFL; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RvD9bT6w"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1777377425;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=AgBBjKG/PS5Dz1DwpETM5k/BFvsOUmL0XkfBNTKeCf4=;
-	b=RvD9bT6wn8/5HU6Dc1sIYgs5dZLPywAa50NumtznAJxKJTxIX08FiD24owOxyhmILjK8ZJ
-	Dd+evUe9ffLENjtrSR7KHTHasFBY7AhahX2S6jmQIyrTYpo6WbSmzcWbXVR91XipSlKBs4
-	tACxAya7qvhW3yPHRe7exZxcQOiaGVo=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-608-a4IX42CWOaOMC-YcJdOd6A-1; Tue, 28 Apr 2026 07:57:04 -0400
-X-MC-Unique: a4IX42CWOaOMC-YcJdOd6A-1
-X-Mimecast-MFC-AGG-ID: a4IX42CWOaOMC-YcJdOd6A_1777377424
-Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-8b1f39c5827so137577896d6.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 Apr 2026 04:57:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cEX2wNFL"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4891e5b9c1fso98274015e9.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Apr 2026 05:29:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1777379342; x=1777984142; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=TXcCY471zeTwyfOocDx7ieLgk3K5M2DX9c2HV3C7GKs=;
+        b=cEX2wNFLfVLFKOBtjV7alXDKvlYDFxVXRnXEg1Xw+9l0hlmpDCkqgsoUhAmtj/LSBd
+         Y/3nI5yuNrK877m3QWSBdD6Q4gstZEliyfQTog2i8+MAkM8LzCAXCRrQJPrWnqNztev4
+         S2dZ57bV56g5gT1qR82IHAGdIx+Tyk7ZAzEoGPW765mqSffFWalapfm8ooXuQq43msfm
+         yMM4WhGC2Pb0S+YuWzv6GmvtpNsBpU1aAMeXCW4DCP1s0pKpryRMkMmIFjFC951tz92l
+         o5uZ/qywGPjldtyRzGEiXbQd5GETVe3B6BOBEBqsw8e6dV/7UPWFtC4GjGzhM9mpS1bc
+         3qOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777377424; x=1777982224;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AgBBjKG/PS5Dz1DwpETM5k/BFvsOUmL0XkfBNTKeCf4=;
-        b=aELKvp5VcoccXb0wzgET1cfvWFAFBw/zeqRStCsZa8uB/taHt2I0LaE909NLL+tLJ2
-         yJNWSe6ArNVYe7qVKXwY13l5bBy/5X4pfZV02Qw3+JzjphaKmBwkPo+eyzCkfeB8HiyL
-         svz6d5rKLk0CQiAaNqNPfbXhTJWdDyW64GDCuxZXserNEeGBJZsm5VYuVfw7VSHRRAf5
-         E2TJl/ePzbVHYuOmqihZEBNWLzlq0BdqaAijTZftBclBEGh+/PLz3An77KOOT9q9ynNe
-         vVECHk0WMIQ8C9f3CxbjMz6mu4SuIyvThrZWG80iFMiwh4SIbnfUT7L/UNsDGbp9HRz0
-         Jw8A==
-X-Forwarded-Encrypted: i=1; AFNElJ8Y4YU7NVSDGxku7GSu9iBm+tbUdKocP72lm0RtmqN0t/aoYKU7gMGdUjwXaitkETu/MSA7fYIXMQ9oAD9E7EA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZwh6V3cVdynGpj0h2eUqcVWlQ+cP2PNhvQyEp0120Y/3j3mDp
-	de+RtV/m1mq2zi7VpLNmw2WZD7qDShmBb414ZdfxT909yP5JEVTJLL1ZwPvp4Xm/S+txhzVcepy
-	aIwqZJEiNYfrhosjxke7ZFren7h9E0gzXB5u7umP1kPQEdBYwb2CByzvr0B6hEWTP7R+V+Q==
-X-Gm-Gg: AeBDiet5OP63psiixT+1tQ0js3ZBKAsEw3QkC7S4EUwOBubryDCLO3mDQMRSgzndrhU
-	Qz1YIfsfURmP5/pIO0tg7bKTpRILvO8vb/KCTHxbY9zUZ/uf28hNw1yoZuFryY+CyWPYsnVLSxJ
-	ktLsPKC2ka6ZeZadOHtwUG7LgkgCuN/Fxq8D4JVLB6fgP+lKQXYIumauSIgcRvLcOe04aIj0cFA
-	id3WxJHGTOolXyxA3yuALolLnWp7MkUycQEpVAtKp41DbO1BZ+rMs4RCWI99bmwLXXlBfQl9cG7
-	vYE3Rbo4/cpfEAynGjylPMqL1nm5WKihaFtFBNa+l7r4xDPD7IH+Yo3mjY3r0BznkMxL8czlj6m
-	ReXJ0acElJc85w3DQ/0nP3e7sqZpZUkQESYf6sd4EHmfsJVtnw8oYbRPaeoSfgwFPKtv63/aPR7
-	zSpOCjU6n7gHblf9i+0MaOdow=
-X-Received: by 2002:a05:6214:311b:b0:8ac:ab31:0 with SMTP id 6a1803df08f44-8b3e31fb96dmr42763926d6.40.1777377423710;
-        Tue, 28 Apr 2026 04:57:03 -0700 (PDT)
-X-Received: by 2002:a05:6214:311b:b0:8ac:ab31:0 with SMTP id 6a1803df08f44-8b3e31fb96dmr42763486d6.40.1777377423235;
-        Tue, 28 Apr 2026 04:57:03 -0700 (PDT)
-Received: from [192.168.2.110] (bras-base-aylmpq0104w-grc-22-70-53-202-134.dsl.bell.ca. [70.53.202.134])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8b3e2956a8bsm18295396d6.31.2026.04.28.04.57.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Apr 2026 04:57:02 -0700 (PDT)
-Message-ID: <09847e2f-0397-44cc-b517-75bffa7124e2@redhat.com>
-Date: Tue, 28 Apr 2026 07:57:01 -0400
+        d=1e100.net; s=20251104; t=1777379342; x=1777984142;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TXcCY471zeTwyfOocDx7ieLgk3K5M2DX9c2HV3C7GKs=;
+        b=Rcc+MtHJ23YcYOId2/tUpxbfGamvFh8Z04Tcivs/S5sM4qC2pTqzY5HBHsKuq8T0BT
+         ge8QC19qZKi4p2+xDpXsOeKltTivxVPSB1tKqlTabmCjX02t7MD1BczqVjGdQicSCX0J
+         72TDfGbIfyzLBEHV/Lh6pD6DTWk6VZABJctakhFQvQ6zO6f1wsVrBcFyQq18kvEKyiMY
+         mWeVxBE0dhWHzl6C9jOnus0F4vcKxS+jD7f1SnqPxtFhkq0l/HehayBJ+OGETdOKBbFC
+         q/qU0KsAatEGkF2k/U/fy/YuoK7Qq4NDV+Vo5KPAjjx+R38hpSN+ZOv3SumgScB+ayKm
+         rDOQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/Us1eK0H8aR0J5hvB//0qiqdTuH6DvflWbWVLtHrmi0TncoPvAkaX8zYTVt/jdEdgktTDp2hPyVaQUOOp6VJk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxXHhTKEq0ZbsuSrwQa30wDA2bCNl1HI+GbdXxK2vzHxNjak+6l
+	mozNIUDMmx1YRwfwutI7SBoVX1pApARfHIbIHYtUAW0ZMWSNW/HnczFS
+X-Gm-Gg: AeBDievpkA8HmgUZmc8nzsydwgDVSciAQBbzKbDEnTltKtHEEyaixJKq2vJrKB2MFJ5
+	O4P/VQQZjCTxQ1aUMi0feS72s3y7Dr2m5e827m4RqmU7nslk+PfEyMDK2wM4LrqKvcgNwI8LpyW
+	+JYbRXDbEsstOwK5ufSCu/KReoaQdmj4lncCkS9xF12IdsRHtClomByDzWCDrNjCLhWIsz9rDig
+	cgkW/WujkQ84QDmW/DzcpY7FrviRiYRJNluhzIORehXX3jaXtNhG+EmfSU4SUAiShdy+LDR3t+t
+	H/NYHNWFoqpxu/VjPsUp9WWf7fqFNjbYpYU53WLteWQ/ezDXuUMTae14eq2Eifb1zvSS5GHJcm+
+	tU4PhAeOeF7rggwqTLerYBgCfuc23aI70KOvMg32nDDDdLmNUha50hTlMs30cvmraEL8FRsonuM
+	C5O1FA0GtsBqFzkdprl7v+M37I9IhiHQ8pP6YOivwvfVulJNZkOqJGApQ1IF3X4RFIu4aLG/Zt2
+	Q==
+X-Received: by 2002:a05:600c:6304:b0:488:c40b:c8bf with SMTP id 5b1f17b1804b1-48a77addb16mr46796805e9.2.1777379341448;
+        Tue, 28 Apr 2026 05:29:01 -0700 (PDT)
+Received: from localhost.localdomain (90-181-198-146.rco.o2.cz. [90.181.198.146])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48a77af1b86sm47479045e9.5.2026.04.28.05.29.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Apr 2026 05:29:00 -0700 (PDT)
+Sender: Alban Crequy <muadda@gmail.com>
+From: Alban Crequy <alban.crequy@gmail.com>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Christian Brauner <brauner@kernel.org>
+Cc: Lorenzo Stoakes <ljs@kernel.org>,
+	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	Alban Crequy <alban.crequy@gmail.com>,
+	Alban Crequy <albancrequy@microsoft.com>,
+	Peter Xu <peterx@redhat.com>,
+	Willy Tarreau <w@1wt.eu>,
+	linux-kselftest@vger.kernel.org,
+	shuah@kernel.org,
+	Usama Arif <usama.arif@linux.dev>,
+	David Laight <david.laight.linux@gmail.com>
+Subject: [PATCH v3 0/2] mm/process_vm_access: pidfd and nowait support for process_vm_readv/writev
+Date: Tue, 28 Apr 2026 14:28:24 +0200
+Message-ID: <20260428122826.339550-1-alban.crequy@gmail.com>
+X-Mailer: git-send-email 2.45.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 43/53] selftests/mm: migration: add setup of HugeTLB
- pages
-To: Mike Rapoport <rppt@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- David Hildenbrand <david@kernel.org>,
- Baolin Wang <baolin.wang@linux.alibaba.com>, Barry Song <baohua@kernel.org>,
- Dev Jain <dev.jain@arm.com>, Donet Tom <donettom@linux.ibm.com>,
- Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Lance Yang <lance.yang@linux.dev>, Leon Romanovsky <leon@kernel.org>,
- Lorenzo Stoakes <ljs@kernel.org>, Mark Brown <broonie@kernel.org>,
- Michal Hocko <mhocko@suse.com>, Nico Pache <npache@redhat.com>,
- Peter Xu <peterx@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
- Sarthak Sharma <sarthak.sharma@arm.com>, Shuah Khan <shuah@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Vlastimil Babka <vbabka@kernel.org>,
- Zi Yan <ziy@nvidia.com>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org
-References: <20260418105539.1261536-1-rppt@kernel.org>
- <20260418105539.1261536-44-rppt@kernel.org>
- <a8510cbd-4a30-460c-b870-a250ceb8a522@redhat.com>
- <ae3v1cyMLbcvJtYW@kernel.org>
- <67d7b067-97a8-4600-a9a6-46f3e797ffed@redhat.com>
- <ae-UCVba16jg3-gR@kernel.org>
- <0e2ef2c0-d74e-4aff-bba0-6dd91dbd4e41@redhat.com>
- <afBKJn_EjaTAe4A-@kernel.org>
-Content-Language: en-US, en-CA
-From: Luiz Capitulino <luizcap@redhat.com>
-In-Reply-To: <afBKJn_EjaTAe4A-@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 2026-04-28 01:48, Mike Rapoport wrote:
-> On Mon, Apr 27, 2026 at 01:19:07PM -0400, Luiz Capitulino wrote:
->> On 2026-04-27 12:51, Mike Rapoport wrote:
->>> On Mon, Apr 27, 2026 at 08:56:27AM -0400, Luiz Capitulino wrote:
->>>> On 2026-04-26 06:58, Mike Rapoport wrote:
->>>>>> And there's another issue: when running the migration test individually,
->>>>>> private_anon_htlb gets skipped. I guess it's because the previous test
->>>>>> is restoring the HugeTLB state:
->>>>>
->>>>> It could be.
->>>>>
->>>>> I pushed the updated version that has the fixes for both zombie and
->>>>> signal issues:
->>>>>
->>>>> https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git/log/?h=mm-selftest/v3
->>>>>
->>>>> Would be great if you can test it in your setup.
->>>>
->>>> This works! Both issues are fixed: the migration test completes w/o
->>>> hanging and when I run it individually all tests run.
->>>
->>> Thanks for confirming!
->>>> One last question: should we munmap() the mappings in this test? Though
->>>> I understand this goes beyond your series goal.
->>>
->>> We could, but the tests _exit() anyway as a part of kselftest_harness, so
->>> it does not really matter.
->>
->> OK. Just to clarify that I meant exercising the munmap() path, not that
->> we're not freeing resources. But if we know that _exit() is sufficient
->> for this, then it's fine.
-> 
-> exit tears down all the mappings, but the code path is slightly different
-> than calling munmap().
-> 
-> We can add munmap() calls there, but let's do it separately from this
-> series.
+This adds two flags to process_vm_readv/writev:
 
-Agreed.
+- PROCESS_VM_PIDFD: refer to the remote process via PID file descriptor
+  instead of PID.
+- PROCESS_VM_NOWAIT: do not block on IO if the memory access causes a
+  page fault.
+
+v2: https://lore.kernel.org/lkml/20260408145436.843538-1-alban.crequy@gmail.com/
+v1: https://lore.kernel.org/lkml/20251118132348.2415603-1-alban.crequy@gmail.com/
+Sashiko review of v2: https://sashiko.dev/#/patchset/20260408145436.843538-1-alban.crequy@gmail.com
+
+Changes since v2:
+- Fix ERR_PTR handling for pidfd_get_task(): use IS_ERR()/PTR_ERR()
+  for the pidfd path, matching process_madvise() (Usama Arif, Sashiko)
+- Add selftest for invalid pidfd (David Hildenbrand)
+- Add selftest for invalid pid
+- Remove hardcoded __NR_pidfd_open fallback, use <sys/syscall.h> (Sashiko)
+- SKIP pidfd tests on kernels without pidfd_open (ENOSYS) (Sashiko)
+- SKIP userfaultfd tests when unprivileged userfaultfd is disabled (EPERM) (Sashiko)
+- Fault in test_data before NOWAIT tests to ensure page is resident (Sashiko)
+- Add ksft_process_vm_readv.sh wrapper and run_vmtests.sh entry
+  so the test runs in CI
+- Rebase onto v7.1-rc1
+
+Not addressed:
+- uffd handler timeout causing test hang: kselftest_harness forks each
+  test with a 30-second timeout, so an infinite hang cannot occur (Sashiko)
+- 64-bit process reading 32-bit process high addresses: pre-existing
+  concern in the existing process_vm_readv code, not introduced by this
+  patch (David Laight)
+
+Alban Crequy (2):
+  mm/process_vm_access: pidfd and nowait support for
+    process_vm_readv/writev
+  selftests/mm: add tests for process_vm_readv flags
+
+ MAINTAINERS                                   |   1 +
+ include/uapi/linux/process_vm.h               |   9 +
+ mm/process_vm_access.c                        |  34 +-
+ tools/testing/selftests/mm/Makefile           |   2 +
+ .../selftests/mm/ksft_process_vm_readv.sh     |   4 +
+ tools/testing/selftests/mm/process_vm_readv.c | 421 ++++++++++++++++++
+ tools/testing/selftests/mm/run_vmtests.sh     |   4 +
+ 7 files changed, 466 insertions(+), 9 deletions(-)
+ create mode 100644 include/uapi/linux/process_vm.h
+ create mode 100755 tools/testing/selftests/mm/ksft_process_vm_readv.sh
+ create mode 100644 tools/testing/selftests/mm/process_vm_readv.c
+
+-- 
+2.45.0
 
