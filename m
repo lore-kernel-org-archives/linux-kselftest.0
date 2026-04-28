@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8E5F3E4C74;
-	Tue, 28 Apr 2026 10:06:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68C773E2757;
+	Tue, 28 Apr 2026 10:07:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777370780; cv=none; b=O2cZ4X7u72eGypFIiRAg73vBSNSb8YJ4lygvKbHSrDnIda7AGsB0kOVW2pym1LgzqS49tbF5H8enw0dY2myolqqAc1J1uanfbE30DCiBpH52xWQnUt4msQtGln8jVMl28K3fcyBQ1oYXyMysGiOVlCOqAWAuYermGsr6yQ1f8e4=
+	t=1777370860; cv=none; b=fd42Sv07pyKzLhNuHNd4bckWLvLebAD9TnIl4KU5Z224l43tY5TI9eIa5qiff0jlXHtc3elqSSxWnsP+PaQpdd/37QTr7hdA4C3nZqLLccASmQDYfpLSp+vx7RZphEc5RcDAaDHrrdNYtVGoVkHKZq39r8oGfbTv4cUPfjxeLWg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777370780; c=relaxed/simple;
-	bh=AWfjFy1xojRQSJaJulb4Pm2bC+OIK+obMAqlpq0c018=;
+	s=arc-20240116; t=1777370860; c=relaxed/simple;
+	bh=we5RUTtK9BBrAx6WOi8PWHN82eXXZYUIrgpPPhKr5yc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Llv0YseyXPqvWD6Xn43YY6cNZs5BBYhozbL+rn9wbP9580NODDu7AbF+yhL6vaGdQXRzdmFAw0LI6poENMM9UuCWQi3Ks+usjonvqiR2oCnL4EML4QiktGyjeGopoz4m+hJ4LaGgIjt8+Q23Xs5nOrC0VR56nNnmN613MxiRgMo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PmqFbsFU; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=qtPLjBSE7yOyMf9aSUjEX1OohtTLMw3cRygP4j9Ebzl+/P1UN5jJghOlkvF49mAcRDF/TwMpJ1mYSaN79VfA3q8WYTsZpLhhKJui+/EOqpiByTXjtuo6AjFSBNuDqNl/pDGiPpCDrUEDAMnskPW9WsgS42XxlEawDhkiL2ExlVk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NY22Njy5; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PmqFbsFU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE47BC2BCAF;
-	Tue, 28 Apr 2026 10:06:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NY22Njy5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB894C2BCAF;
+	Tue, 28 Apr 2026 10:07:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777370779;
-	bh=AWfjFy1xojRQSJaJulb4Pm2bC+OIK+obMAqlpq0c018=;
+	s=k20201202; t=1777370860;
+	bh=we5RUTtK9BBrAx6WOi8PWHN82eXXZYUIrgpPPhKr5yc=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=PmqFbsFUTG/9rSVRaADA2eVRe0zrojnWiuS374tRO6aCxI/ZVdQLX8e1K4i/nLlqN
-	 lIr6CMk1lESf0eWaX/A081nMU48DMCkU88urF9KIsBgowmy7H18VGxqIVfJsBXN6pn
-	 H28DoxSdOnPYxlU25pS0exa50Iph12eSYIJlEjUhTBijblJ2y4ZXFockuXxtRIe0Ag
-	 qTd/vWY+GZ/XvYlcvUreNQKnj7hp8muwIJRIEwIy3k03JqjI1wDW/ft3SzxkbBgmHo
-	 R4jLl9AG6Q1fNpjkfjYQ8m/d+Zo6P38xoFm2psivujM/hFsHbTNXSXkSBXJyfsiPGf
-	 3M4Ix9DDhC7DA==
-Message-ID: <7f729e75-dd66-49ea-ab5f-408fdc1a5c81@kernel.org>
-Date: Tue, 28 Apr 2026 12:06:14 +0200
+	b=NY22Njy5Q5KdvpVPewa/YRTnvi9owrLVBDACvvAwqjrcc1inXnRJDvTYNfJ/CaPMi
+	 g+soSXkNpHK32TgY2YDOWww6Rs26KRPvQ07I0q/oxo/6LvZMGGvulfak5zAN1wMEDy
+	 6ZxxnJM6e9PbiYw/xnqDeC3PR3ZewkC35mIfglVmPXg7D5aveR50qIrifvuTMCdA+4
+	 EFUM0r6WkaNO28Tt9WtaMmV+lkJKLc+jfB/SVTqRf5oW1Qpo863r78sYuVTECQ6NHb
+	 J014Du9XlPcz/YhNcBy0ZrImxZbXYo5S4Fh7Y+xDJ+/sDQW0ZEPAlEz2yO8fPiDC5E
+	 i3gOAZnWEsCqw==
+Message-ID: <5b1defae-fa59-4088-96cd-d769ad475907@kernel.org>
+Date: Tue, 28 Apr 2026 12:07:35 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,16 +35,14 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] selftests/mm: khugepaged: initialize file contents via
+Subject: Re: [PATCH v3] selftests/mm: khugepaged: initialize file contents via
  mmap
-To: Vineet Agarwal <agarwal.vineet2006@gmail.com>
-Cc: akpm@linux-foundation.org, ljs@kernel.org, shuah@kernel.org,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+To: Vineet Agarwal <agarwal.vineet2006@gmail.com>, akpm@linux-foundation.org,
+ ljs@kernel.org, shuah@kernel.org
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <3abf09d8-a98e-4f1b-b8d9-77879a8a2733@kernel.org>
- <20260428094356.60415-1-agarwal.vineet2006@gmail.com>
- <548dc617-ca19-45f6-852f-adebcf8d3a11@kernel.org>
- <CA+rjy8dFQiqwiGT3Aa-=-ZaHDzeT_87ohEb7ti=Z-DxX2FvTPw@mail.gmail.com>
+ <20260428100058.62554-1-agarwal.vineet2006@gmail.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -91,24 +89,75 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <CA+rjy8dFQiqwiGT3Aa-=-ZaHDzeT_87ohEb7ti=Z-DxX2FvTPw@mail.gmail.com>
+In-Reply-To: <20260428100058.62554-1-agarwal.vineet2006@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 4/28/26 11:52, Vineet Agarwal wrote:
-> ftruncate() is needed before mmap(), since the file is created with
-> O_TRUNC and initially has size 0. Without resizing it first, mapping
-> and accessing the full range can go beyond EOF.
+On 4/28/26 12:00, Vineet Agarwal wrote:
+> file_setup_area() currently allocates anonymous memory, fills it,
+> and writes it into the backing file used for collapse testing.
+> 
+> Instead of copying data through write(), resize the file with
+> ftruncate(), map it directly with MAP_SHARED, and initialize the
+> mapped area in place.
+> 
+> This simplifies the setup path and avoids the need for explicit
+> partial write handling.
 
-Ah, that makes sense, worth spelling it out. Indeed, we otherwise get
 
-$ sudo ./khugepaged madvise:file .
-Save THP and khugepaged settings... OK
-Allocate huge page on fault... OK
-Split huge PMD on MADV_DONTNEED... OK
+Please
 
-Run test: collapse_full (madvise:file)
-Creating ./collapse_test_file for collapse...Bus error
+a) Wait a bit longer before you resend.
+
+b) Don't send as reply to earlier revisions.
+
+> 
+> Signed-off-by: Vineet Agarwal <agarwal.vineet2006@gmail.com>
+> ---
+>  tools/testing/selftests/mm/khugepaged.c | 17 +++++++++++++----
+>  1 file changed, 13 insertions(+), 4 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
+> index 3fe7ef04ac62..57ca4224bd5a 100644
+> --- a/tools/testing/selftests/mm/khugepaged.c
+> +++ b/tools/testing/selftests/mm/khugepaged.c
+> @@ -369,7 +369,6 @@ static void *file_setup_area(int nr_hpages)
+>  	int fd;
+>  	void *p;
+>  	unsigned long size;
+> -
+
+Unrelated change.
+
+>  	unlink(finfo.path);  /* Cleanup from previous failed tests */
+>  	printf("Creating %s for collapse%s...", finfo.path,
+>  	       finfo.type == VMA_SHMEM ? " (tmpfs)" : "");
+> @@ -381,11 +380,21 @@ static void *file_setup_area(int nr_hpages)
+>  	}
+>  
+>  	size = nr_hpages * hpage_pmd_size;
+> -	p = alloc_mapping(nr_hpages);
+> +	if (ftruncate(fd, size)) {
+> +		perror("ftruncate()");
+> +		close(fd);
+> +		exit(EXIT_FAILURE);
+> +	}
+> +	p = mmap(BASE_ADDR, size, PROT_READ | PROT_WRITE,
+> +		MAP_SHARED, fd, 0);
+> +	if (p == MAP_FAILED || p != BASE_ADDR) {
+> +		perror("mmap()");
+> +		close(fd);
+> +		exit(EXIT_FAILURE);
+> +	}
+>  	fill_memory(p, 0, size);
+> -	write(fd, p, size);
+> -	close(fd);
+>  	munmap(p, size);
+> +	close(fd);
+
+That change is not strictly required. We can munmap() after close().
+
+Apart from that LGTM.
 
 -- 
 Cheers,
