@@ -1,38 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3E503CA4A0;
-	Tue, 28 Apr 2026 23:25:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFDAA3A4F23;
+	Tue, 28 Apr 2026 23:25:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777418720; cv=none; b=hKlIP6z8l/bRgJt4uSJDY9PnMutbiE0beAayj6TNru1Jpc4zzBtxQ29HGi1jjf2fMtuqbCJA+/0LbQEDSMhQaImY21wzP0Jk+LNax8B+a/cxnzMmYBsdB9YSOWEYsxPUBw2OSUfVEM8Glq31Y4LT9mVWamyH7Z3MtbAR5Vka+pk=
+	t=1777418719; cv=none; b=jVO643NML90Yt1d7qRaS076bY6NuLRYjYFR/rVGSC8YyGiKJ4hSIfkPIHDJ5X/t0l9G3k9Vk6dj+OP04AIRfcInHqq8LCwaCzCH/9Y1GPYdmbJYVcqEZySTdpBmJlzexDVtm3wKsg8sPQU8vIxF2xyrOs7pC0eAVIx0+QF5Z2pI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777418720; c=relaxed/simple;
-	bh=wdLoj8HH8Ns1xI8zoSpP1xSUU4YJ7JLqU9N7Wg1Hrz0=;
+	s=arc-20240116; t=1777418719; c=relaxed/simple;
+	bh=8ldZ9tHAeXetrK8aWEmsZfkrv8T0wMkcO8Q1/+uxlWI=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=NqljaZHyg7fQ6h5MuMx9A6nEKBZjbzHkUkumxU1OPWQDQN5evcrYo2JfGIXAy8axdPSnnnQh1RFSr/I9WIowzAmQ/YYF5E1YDIHC47AanXcru95EeL3H1HLRaFMEyG+hWowGO4izTKdYVEbuK5uzu2YOrCnIeU9/Tt3ZyG0J8J8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VVOYp38t; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=lti/U2xlhkKnevq7fqKdDG5tg9ZAGAZL4lHTI98OZguQnUK//qhqGXIDxszq2RRKIetPWmKmasSypPcYv4MZUdTyvi0FrOcqpmNiR5v1TYAqnxCoje+eWYWKHu2ug7/VaS1apq4zxIlYQ2c+sDBieJpPmdtyHOVazpwoR5pQQns=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KPo1ak4h; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VVOYp38t"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7ED6AC2BCFA;
-	Tue, 28 Apr 2026 23:25:20 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KPo1ak4h"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 93FFFC2BCB7;
+	Tue, 28 Apr 2026 23:25:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777418720;
-	bh=wdLoj8HH8Ns1xI8zoSpP1xSUU4YJ7JLqU9N7Wg1Hrz0=;
+	s=k20201202; t=1777418719;
+	bh=8ldZ9tHAeXetrK8aWEmsZfkrv8T0wMkcO8Q1/+uxlWI=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=VVOYp38tDjUKY+lrdJC7aR7qz8kMFuqNZpBLzDkfG6IRhjfGsPWMpGGOHl4z77Rk6
-	 J3sdvSPB7VUnU3vCX73wAaYDp8rsUodfc5LsB5r3/xVF35wBkBwJcdV/6FQupgtdBG
-	 9Dn2XHEnTEfFJwAhaB20qXDXWUib5ZRhAtXzht1S8HQQj30ZPQ/K4MpmejzrX631UB
-	 e4zHW2BxJtZii/IbBildVt5eTcQYlE1nc+mchzY3WalFToQBLRkP/W8Y3S9eP+ToWv
-	 F5tQ9t/R1HNRc7sW2MSpPYUGLV787DrXs0Phn0kbDwl+pyRiUZzDhVf81fSZbuAebl
-	 ifs0Ft1NbLapg==
+	b=KPo1ak4h7ief2ISZWZW/EZ/7mUK0FEIdHn2SODaZCs0Xf9ufV8ZFGVD+Zvn1XPy16
+	 hOPfyNzOV+QHcobBqaiFHqyiR564LH6VCqekgHYYkg/Y8lwpVVCgKYBlgKuuctko5o
+	 enSa0z2IGSPOyRO49DfClhcVZS8kELk+tSkcoG5HsX+wHT9yMv64B6Isrxj/DOkR3d
+	 64p1juXX/MayYcil/tbYNM8OzvEoLcNYa/EoZUr012aUdWyzvQNAQbsxNL+wdycRsN
+	 MF6X1JVo+QubUlUkjEa6BJGfJx/+cOZhRxthZAaXtQuEm235OEBXyBl1KbexW7FOGh
+	 8X7sSXG5wpFKw==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7229AFF8875;
-	Tue, 28 Apr 2026 23:25:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 88EE9FF8877;
+	Tue, 28 Apr 2026 23:25:19 +0000 (UTC)
 From: Ackerley Tng via B4 Relay <devnull+ackerleytng.google.com@kernel.org>
-Date: Tue, 28 Apr 2026 16:25:34 -0700
-Subject: [PATCH RFC v5 39/53] KVM: selftests: Test that truncation does not
- change shared/private status
+Date: Tue, 28 Apr 2026 16:25:23 -0700
+Subject: [PATCH RFC v5 28/53] KVM: Add CAP to enumerate supported
+ SET_MEMORY_ATTRIBUTES2 flags
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -41,7 +41,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260428-gmem-inplace-conversion-v5-39-d8608ccfca22@google.com>
+Message-Id: <20260428-gmem-inplace-conversion-v5-28-d8608ccfca22@google.com>
 References: <20260428-gmem-inplace-conversion-v5-0-d8608ccfca22@google.com>
 In-Reply-To: <20260428-gmem-inplace-conversion-v5-0-d8608ccfca22@google.com>
 To: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com, 
@@ -74,11 +74,11 @@ Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
  linux-coco@lists.linux.dev, Ackerley Tng <ackerleytng@google.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1777418714; l=1978;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1777418714; l=5528;
  i=ackerleytng@google.com; s=20260225; h=from:subject:message-id;
- bh=Bf9VYURnTgb4TwvCJyU5mwma0raoYBRglUIu1BddfsA=;
- b=Sy3fBvTvGT1l7P1754XNGwhnHr5V9qJNv9e3LC5taI2eQg7S9WzmF2LhNSMc6bbYXC5UjP7XV
- g61CrfU/Av3A6d5LctiXFLDMlkZ9ifHKNPN3O6xFeLM86WNKXhjnss1
+ bh=pIqYKdyBIT9N1Rsog/1YD0EZWPUQYi37ZuQ2ZuzAyaY=;
+ b=LQBZ48AGkz7+oQLurDh/BMdAf+VaqtbjZWVqTJOoJUGv/ubksh354Cn4r3Ib2Hs6R4f/Dz53w
+ n3OEKv307fhDKS75Bmp15XQZ4T1xi6Ti7nszk4NxAk+S39eJn3ZXztw
 X-Developer-Key: i=ackerleytng@google.com; a=ed25519;
  pk=sAZDYXdm6Iz8FHitpHeFlCMXwabodTm7p8/3/8xUxuU=
 X-Endpoint-Received: by B4 Relay for ackerleytng@google.com/20260225 with
@@ -88,54 +88,145 @@ Reply-To: ackerleytng@google.com
 
 From: Ackerley Tng <ackerleytng@google.com>
 
-Add a test to verify that deallocating a page in a guest memfd region via
-fallocate() with FALLOC_FL_PUNCH_HOLE does not alter the shared or private
-status of the corresponding memory range.
+Add CAP to enumerate supported SET_MEMORY_ATTRIBUTES2 flags, so userspace
+can find out which flags are supported when sending the
+KVM_SET_MEMORY_ATTRIBUTES2 ioctl to a guest_memfd.
 
-When a page backing a guest memfd mapping is deallocated, e.g., by punching
-a hole or truncating the file, and then subsequently faulted back in, the
-new page must inherit the correct shared/private status tracked by
-guest_memfd.
+Add a parameter for_cap to support enumeration of supported flags
+irrespective of attribute being set.
+
+These flags are only supported by guest_memfd, hence, if
+vm_memory_attributes is enabled, return 0 - no flags are supported when
+KVM_SET_MEMORY_ATTRIBUTES2 is sent to a VM fd.
 
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
-Co-developed-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- .../selftests/kvm/x86/guest_memfd_conversions_test.c       | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ Documentation/virt/kvm/api.rst |  3 +++
+ arch/x86/kvm/x86.c             |  5 +++--
+ include/linux/kvm_host.h       | 11 ++++++++++-
+ include/uapi/linux/kvm.h       |  1 +
+ virt/kvm/guest_memfd.c         |  6 ++++--
+ virt/kvm/kvm_main.c            |  5 +++++
+ 6 files changed, 26 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/x86/guest_memfd_conversions_test.c b/tools/testing/selftests/kvm/x86/guest_memfd_conversions_test.c
-index 2312592c4076b..8dfbf3630cec2 100644
---- a/tools/testing/selftests/kvm/x86/guest_memfd_conversions_test.c
-+++ b/tools/testing/selftests/kvm/x86/guest_memfd_conversions_test.c
-@@ -10,6 +10,7 @@
- #include <linux/sizes.h>
+diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+index aaa4a82f0b75d..38938243c2dfd 100644
+--- a/Documentation/virt/kvm/api.rst
++++ b/Documentation/virt/kvm/api.rst
+@@ -6685,6 +6685,9 @@ guarantees are made on offset ranges that do not have memory allocated
+ and range [0x0000, 0x3000) was set to shared, the content mode would
+ apply to only to offset ranges [0x0000, 0x1000) and [0x2000, 0x3000).
  
- #include "kvm_util.h"
-+#include "kvm_syscalls.h"
- #include "kselftest_harness.h"
- #include "test_util.h"
- #include "ucall_common.h"
-@@ -320,6 +321,19 @@ GMEM_CONVERSION_MULTIPAGE_TEST_INIT_SHARED(unallocated_folios, 8)
- 		test_convert_to_shared(t, i, 'B', 'C', 'D');
++The supported content modes can be queried using
++``KVM_CAP_MEMORY_ATTRIBUTES2_FLAGS``.
++
+ See also: :ref: `KVM_SET_MEMORY_ATTRIBUTES`.
+ 
+ .. _kvm_run:
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 296ed3b8ace6c..92709735613d5 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -14195,7 +14195,8 @@ void kvm_arch_gmem_invalidate(kvm_pfn_t start, kvm_pfn_t end)
+ }
+ #endif
+ 
+-u64 kvm_arch_gmem_supported_content_modes(struct kvm *kvm, bool to_private)
++u64 kvm_arch_gmem_supported_content_modes(struct kvm *kvm, bool to_private,
++					  bool for_cap)
+ {
+ 	if (!kvm) {
+ 		return KVM_SET_MEMORY_ATTRIBUTES2_ZERO |
+@@ -14227,7 +14228,7 @@ u64 kvm_arch_gmem_supported_content_modes(struct kvm *kvm, bool to_private)
+ 		 * shared, memory contents for pages that had already
+ 		 * been faulted could be zeroed.
+ 		 */
+-		if (to_private && !kvm->arch.pre_fault_allowed)
++		if (for_cap || (to_private && !kvm->arch.pre_fault_allowed))
+ 			supported |= KVM_SET_MEMORY_ATTRIBUTES2_PRESERVE;
+ 
+ 		return supported;
+diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+index 458bad0083c37..13d126dde32f1 100644
+--- a/include/linux/kvm_host.h
++++ b/include/linux/kvm_host.h
+@@ -742,7 +742,8 @@ static inline u64 kvm_gmem_get_supported_flags(struct kvm *kvm)
+ 	return flags;
  }
  
-+/* Truncation should not affect shared/private status. */
-+GMEM_CONVERSION_TEST_INIT_SHARED(truncate)
+-u64 kvm_arch_gmem_supported_content_modes(struct kvm *kvm, bool to_private);
++u64 kvm_arch_gmem_supported_content_modes(struct kvm *kvm, bool to_private,
++					  bool for_cap);
+ int kvm_gmem_apply_content_mode_zero(struct inode *inode, pgoff_t start,
+ 				     pgoff_t end);
+ int kvm_arch_gmem_apply_content_mode_zero(struct kvm *kvm, struct inode *inode,
+@@ -2551,6 +2552,14 @@ static inline u64 kvm_supported_mem_attributes(struct kvm *kvm)
+ 	return 0;
+ }
+ 
++static inline u64 kvm_supported_set_mem_attributes2_flags(struct kvm *kvm)
 +{
-+	host_do_rmw(t->mem, 0, 0, 'A');
-+	kvm_fallocate(t->gmem_fd, FALLOC_FL_KEEP_SIZE | FALLOC_FL_PUNCH_HOLE, 0, page_size);
-+	host_do_rmw(t->mem, 0, 0, 'A');
++	if (!IS_ENABLED(CONFIG_KVM_GUEST_MEMFD))
++		return 0;
 +
-+	test_convert_to_private(t, 0, 'A', 'B');
-+
-+	kvm_fallocate(t->gmem_fd, FALLOC_FL_KEEP_SIZE | FALLOC_FL_PUNCH_HOLE, 0, page_size);
-+	test_private(t, 0, 0, 'A');
++	return kvm_arch_gmem_supported_content_modes(kvm, false, true);
 +}
 +
- int main(int argc, char *argv[])
+ typedef unsigned long (kvm_get_memory_attributes_t)(struct kvm *kvm, gfn_t gfn);
+ DECLARE_STATIC_CALL(__kvm_get_memory_attributes, kvm_get_memory_attributes_t);
+ 
+diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+index c7cc6c22c2023..c0d465a5577da 100644
+--- a/include/uapi/linux/kvm.h
++++ b/include/uapi/linux/kvm.h
+@@ -997,6 +997,7 @@ struct kvm_enable_cap {
+ #define KVM_CAP_S390_KEYOP 247
+ #define KVM_CAP_S390_VSIE_ESAMODE 248
+ #define KVM_CAP_GUEST_MEMFD_MEMORY_ATTRIBUTES 249
++#define KVM_CAP_MEMORY_ATTRIBUTES2_FLAGS 250
+ 
+ struct kvm_irq_routing_irqchip {
+ 	__u32 irqchip;
+diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
+index 5c1db67e6fd35..071bf636ba5c0 100644
+--- a/virt/kvm/guest_memfd.c
++++ b/virt/kvm/guest_memfd.c
+@@ -693,7 +693,8 @@ static void kvm_gmem_invalidate(struct inode *inode, pgoff_t start, pgoff_t end)
+ static void kvm_gmem_invalidate(struct inode *inode, pgoff_t start, pgoff_t end) {}
+ #endif
+ 
+-u64 __weak kvm_arch_gmem_supported_content_modes(struct kvm *kvm, bool to_private)
++u64 __weak kvm_arch_gmem_supported_content_modes(struct kvm *kvm,
++						 bool to_private, bool for_cap)
  {
- 	TEST_REQUIRE(kvm_check_cap(KVM_CAP_VM_TYPES) & BIT(KVM_X86_SW_PROTECTED_VM));
+ 	/* Architectures must override with supported modes. */
+ 	return 0;
+@@ -709,7 +710,8 @@ static bool kvm_gmem_content_mode_is_supported(struct kvm *kvm,
+ 	if (content_mode == KVM_SET_MEMORY_ATTRIBUTES2_ZERO && to_private)
+ 		return false;
+ 
+-	return kvm_arch_gmem_supported_content_modes(kvm, to_private) & content_mode;
++	return kvm_arch_gmem_supported_content_modes(kvm, to_private, false) &
++	       content_mode;
+ }
+ 
+ int kvm_gmem_apply_content_mode_zero(struct inode *inode, pgoff_t start,
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index 3bf212fd99193..9fa6ecebab939 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -4979,6 +4979,11 @@ static int kvm_vm_ioctl_check_extension_generic(struct kvm *kvm, long arg)
+ 			return 0;
+ 
+ 		return kvm_supported_mem_attributes(kvm);
++	case KVM_CAP_MEMORY_ATTRIBUTES2_FLAGS:
++		if (vm_memory_attributes)
++			return 0;
++
++		return kvm_supported_set_mem_attributes2_flags(kvm);
+ #endif
+ 	default:
+ 		break;
 
 -- 
 2.54.0.545.g6539524ca2-goog
