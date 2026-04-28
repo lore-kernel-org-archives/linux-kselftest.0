@@ -1,156 +1,65 @@
-Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F45C3264FD
-	for <linux-kselftest@vger.kernel.org>; Tue, 28 Apr 2026 14:33:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90409306B37;
+	Tue, 28 Apr 2026 14:48:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777386835; cv=none; b=pehhKV7JdQL3zBViv18NQppthtE04aZ5bE57zZq1O9LWRtZVQSuvXJAWTU75py9mH5wCjrknf+WAbGk92KGY3j2K8/yxxXYGv09wsjHz+ZYMjIj/dmNV68FXzQfkmthpFb7INHgD29jARIuVJG4CPQ8qyT1iGEQ2feVEicb9bbc=
+	t=1777387718; cv=none; b=TD4ulo1U/hgdV5hFNcDmmn1CoMXWU3DAygtA/YGxo7MCz6FlO71D5XbEWxX/GaOVKFeACRscxKXtE2YUcGXpEEZstLMtMeTicm0QkamhXt3mijJqPKQ8zAkScIbcbVS1a4TnAxRHg4enmV9JOY7MLJVR0i/H9m9h40jB9x6IRq0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777386835; c=relaxed/simple;
-	bh=wZZTmXEwqvHVwIMKt7eoq7RwPscLgYLqhRUoY2lMqdY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UBdTnUOtSh2cFHecekCADuvpe8fu0g9hLUCgjncPM66ooUWlVfkBRcyEuIJOlnv4JfYFMJH7dEVc8zMGCqFjHAEZTZPBTDYhb7cwbqfgUq5J4C6RG0y+Bixopwmgw5K18Xv4ry3TWwHs8Csw8tuQJ/r9guQR8HVH/FY+Qp+N5pE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=whLKSZX2; arc=none smtp.client-ip=91.218.175.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1777387718; c=relaxed/simple;
+	bh=fl4uPnTzPtt7hgrrDvSXu3usBjSgMiPtMXIsK626XNs=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=iykTl+k5CIkK/xTqt+g04qRyTwQRmyXLDSZb41UNRyE388ALMN9XTCU5m59Y4Tag05qYgiKpZVIUzliD29hv5F/V06woKkkDMUnh+pbZXz0XPhH63H4vLxlt11acYbQXOBxFDNx2sK/+q5Au+5rHac0KJguzPd/bB++pn/TeTqg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=HNS7/b+X; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="whLKSZX2"
-Message-ID: <0637c1ce-0e73-4505-8a0c-e77339f4aefb@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1777386821;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=PiJ/ZUEvItEQ3cSHWBNKREX0o/wRj01XKfkM10DRZ1M=;
-	b=whLKSZX2y86J55Bdxsc4XRg/aSgFUiaGxyVzJQUisjB7Jwn+LMXKPFlbUxfv+agKh05KbV
-	CAdVfb7o67U04BCRK2n28zCj5HFXnnmSlgF7DxvJBbdPfMeq2zLbsMPp7X+4UgdQ1JdnaA
-	DBs2pNIFgqocxjNpxkVnOxG5HtqtdMA=
-Date: Tue, 28 Apr 2026 22:32:56 +0800
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="HNS7/b+X"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97411C2BCAF;
+	Tue, 28 Apr 2026 14:48:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1777387718;
+	bh=fl4uPnTzPtt7hgrrDvSXu3usBjSgMiPtMXIsK626XNs=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=HNS7/b+XCNrPLUcOE8F74Z3u6L0t/ABy5MsW/bWl3De+y631/5mG2Sr9RMq2naZ4Q
+	 oezo2lNAPYgOn2Mi/NyKyuwdvSz+Y4tvLNY1XWpcgTDooYql4J/q5E471TYxLxfrrG
+	 i7HzdoUPkZkRE8WjK24HiUoR2P0eORdhoZerDlzc=
+Date: Tue, 28 Apr 2026 07:48:37 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: SeongJae Park <sj@kernel.org>
+Cc: "Liam R. Howlett" <liam@infradead.org>, Brendan Higgins
+ <brendan.higgins@linux.dev>, David Gow <davidgow@davidgow.net>, David
+ Hildenbrand <david@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Lorenzo
+ Stoakes <ljs@kernel.org>, Michal Hocko <mhocko@suse.com>, Mike Rapoport
+ <rppt@kernel.org>, Shuah Khan <shuah@kernel.org>, Shuah Khan
+ <skhan@linuxfoundation.org>, Suren Baghdasaryan <surenb@google.com>,
+ Vlastimil Babka <vbabka@kernel.org>, damon@lists.linux.dev,
+ kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-mm@kvack.org
+Subject: Re: [PATCH 00/11] mm/damon: introduce DAMOS failed region quota
+ charge ratio
+Message-Id: <20260428074837.5fb02e0210ebabf160506a80@linux-foundation.org>
+In-Reply-To: <20260428013402.115171-1-sj@kernel.org>
+References: <20260428013402.115171-1-sj@kernel.org>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v10 3/8] bpf: Introduce the bpf_list_del kfunc.
-To: bot+bpf-ci@kernel.org
-Cc: martin.lau@linux.dev, john.fastabend@gmail.com, yonghong.song@linux.dev,
- song@kernel.org, eddyz87@gmail.com, andrii@kernel.org, daniel@iogearbox.net,
- ast@kernel.org, linux-kselftest@vger.kernel.org, chengkaitao@kylinos.cn,
- shuah@kernel.org, jolsa@kernel.org, haoluo@google.com, sdf@fomichev.me,
- kpsingh@kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- martin.lau@kernel.org, clm@meta.com, ihor.solodrai@linux.dev
-References: <20260427165906.84420-4-kaitao.cheng@linux.dev>
- <294242698d576e4fedf243ab055c6f9a984e55033933a9bd09808f62a7018e9d@mail.kernel.org>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Kaitao Cheng <kaitao.cheng@linux.dev>
-In-Reply-To: <294242698d576e4fedf243ab055c6f9a984e55033933a9bd09808f62a7018e9d@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-在 2026/4/28 02:43, bot+bpf-ci@kernel.org 写道:
->> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
->> index 1e8754877dd1..51b6ea4bb8cb 100644
->> --- a/kernel/bpf/helpers.c
->> +++ b/kernel/bpf/helpers.c
->> @@ -2593,6 +2593,15 @@ __bpf_kfunc struct bpf_list_node *bpf_list_pop_back(struct bpf_list_head *head)
->>  	return __bpf_list_del(head, h->prev);
->>  }
->>
->> +__bpf_kfunc struct bpf_list_node *bpf_list_del(struct bpf_list_head *head,
->> +					       struct bpf_list_node *node)
->> +{
->> +	struct bpf_list_node_kern *kn = (void *)node;
->> +
->> +	/* verifier guarantees node is a list node rather than list head */
->> +	return __bpf_list_del(head, &kn->list_head);
->> +}
-> 
-> Can this kfunc actually be called from any BPF program? Looking at the
-> verifier's handling of KF_ARG_PTR_TO_LIST_NODE arguments in
-> check_kfunc_args():
-> 
->     case KF_ARG_PTR_TO_LIST_NODE:
->         if (reg->type != (PTR_TO_BTF_ID | MEM_ALLOC)) {
->             verbose(env, "%s expected pointer to allocated object\n", ...);
->             return -EINVAL;
->         }
->         if (!reg->ref_obj_id) {
->             verbose(env, "allocated object must be referenced\n");
->             return -EINVAL;
->         }
-> 
-> This code path unconditionally requires an owning reference (ref_obj_id
-> must be non-zero).
-> 
-> However, once a node is added to the list via bpf_list_push_front/back,
-> the owning reference is converted to a non-owning reference
-> (ref_obj_id becomes 0) via ref_convert_owning_non_owning() and the
-> original owning reference is released. Any subsequent access to that
-> in-list node (including via bpf_list_front/back) only provides
-> non-owning references with ref_obj_id == 0.
-> 
-> This means:
->   - Passing a non-owning ref to bpf_list_del() fails the verifier's
->     "!reg->ref_obj_id" check with "allocated object must be referenced"
->   - Passing an owning ref to a node not yet in the list passes the
->     verifier check, but __bpf_list_del() will return NULL because
->     node_kern->owner != head
-> 
-> The sister kfunc bpf_rbtree_remove handles this by having a special
-> branch in check_kfunc_args() that accepts non-owning references for
-> that specific kfunc. Does bpf_list_del need similar handling?
+On Mon, 27 Apr 2026 18:33:49 -0700 SeongJae Park <sj@kernel.org> wrote:
 
-I have already fixed this issue in [PATCH bpf-next v10 7/8].
+> TL; DR: Let users set different DAMOS quota charge ratios for DAMOS
+> action failed regions, for deterministic and consistent DAMOS action
+> progress.
 
-> Looking at __bpf_list_del() in kernel/bpf/helpers.c:
-> 
-> 	node = container_of(n, struct bpf_list_node_kern, list_head);
-> 	if (unlikely(READ_ONCE(node->owner) != head))
-> 		return NULL;
-> 
-> Emil Tsalapatis and the Sashiko review bot raised concerns about
-> removing the WARN_ON_ONCE that was in v8 of this series. The original
-> WARN_ON_ONCE helped detect list corruption by triggering a kernel
-> warning when owner != head. The current unlikely() check silently
-> returns NULL instead.
-> 
-> Should this check trigger a warning for debugging list corruption issues?
+Add, thanks.
 
-In previous discussions, people generally advised against keeping
-warnings on this kind of path that can be triggered by BPF programs.
- 
-> Additionally, the Sashiko review noted a reuse bug: when
-> bpf_list_head_free() is called on a list that still contains elements,
-> those elements remain allocated but their owner field still points to
-> the now-freed head. Since the owner field is checked but never cleared,
-> could this lead to dangling pointer issues if nodes aren't freed
-> properly during list cleanup?
+As mentioned provately, Sashiko claims to have found things which it
+didn't see in the RFC.
 
-I have already fixed this issue in [PATCH bpf-next v10 2/8].
-
->> @@ -4725,6 +4734,7 @@ BTF_ID_FLAGS(func, bpf_list_push_back, KF_IMPLICIT_ARGS)
->>  BTF_ID_FLAGS(func, bpf_list_push_back_impl)
->>  BTF_ID_FLAGS(func, bpf_list_pop_front, KF_ACQUIRE | KF_RET_NULL)
->>  BTF_ID_FLAGS(func, bpf_list_pop_back, KF_ACQUIRE | KF_RET_NULL)
->> +BTF_ID_FLAGS(func, bpf_list_del, KF_ACQUIRE | KF_RET_NULL)
->>  BTF_ID_FLAGS(func, bpf_list_front, KF_RET_NULL)
->>  BTF_ID_FLAGS(func, bpf_list_back, KF_RET_NULL)
->>  BTF_ID_FLAGS(func, bpf_task_acquire, KF_ACQUIRE | KF_RCU | KF_RET_NULL)
-> 
-> [ ... ]
-> 
-> 
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25009536772
-
--- 
-Thanks
-Kaitao Cheng
-
+	https://sashiko.dev/#/patchset/20260428013402.115171-1-sj@kernel.org
