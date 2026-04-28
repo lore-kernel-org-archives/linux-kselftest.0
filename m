@@ -1,215 +1,123 @@
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F23853B8D4A;
-	Tue, 28 Apr 2026 21:38:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61FF5283FDD
+	for <linux-kselftest@vger.kernel.org>; Tue, 28 Apr 2026 22:03:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777412284; cv=none; b=RlSR1lG4oWMoP5AIDU9O27xXke7c+vYVGrqXwslZF6YRl0zYoW3qAIvg5HEzU+QVU4wnfNYkC1ZqwoEsY9YrSMpjK2CyZ7M+gfiRPGFCqR89jRs7i3JAPVR+aZw0TcPYGMttY8xWAR3xj794rchSNuONmbIQufV32NXwXafl51A=
+	t=1777413812; cv=none; b=Whh+14KIYLMcyhWQUtLxeYPPgIRkLq6MvUjoiCRw2cez9ubAtjhZhqdcs37JW6HMDwM/zAI/MmW5buxC8Sjib+RNChOwUPnY/SfLi0hRauv+/o3hF8tuUhb6tQAv/UZX2dTy8Tf2Mqxt78XdOo7wj/OFX1aKevG/06izp1Z7g78=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777412284; c=relaxed/simple;
-	bh=3DHxrurPMXhWs/+VFuk5zRg5OApGCHvlQgCxsQ6X7vM=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:From:To:
-	 References:In-Reply-To; b=aIjr5uI1rhGCOJmtyaxNULWLg2bdjl3c3hyktUD8bSQMJeE/0v0jTbasvz4uv44ZmHLba9x6jjfoPFQLG4R4oheCIpm5fIh9J+m+bQ554xXKE3pIknP8Ih0jPiScB23uSG4Hk8kOGCr+mrP6dxzqHW84lp84YcbkMSZeh9eW8oA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=BKpyABXY; arc=none smtp.client-ip=185.246.85.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1777413812; c=relaxed/simple;
+	bh=d6wlWfAlNzmZywTUab2iHAN93VEkTjYCQuFqfVHhy5c=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=eCBaOUh5VricY3pwVlBuko8piGEP8Yvuk0qgj+su2L67Z1cHQ6fvb9Sg7/+mUXJg80mvSt0/R7ZGO7wrqFvnIphkH8p1B/wAlSxXH3QcXr1sBBjIIPqzu0Nk8BN9KkDQl0EI9BL+FzDGhNBoqqVdWJqsnhwhAq0Hc3hceAGeogQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lRv1YDtc; arc=none smtp.client-ip=209.85.216.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="BKpyABXY"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 4CDAD4E42B64;
-	Tue, 28 Apr 2026 21:37:59 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id E94DD601D0;
-	Tue, 28 Apr 2026 21:37:58 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 049BC1072939F;
-	Tue, 28 Apr 2026 23:37:43 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1777412276; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=m2SIkG8G4dme99QjBJF700FHzCmI2Nw1YXi++Sm72C8=;
-	b=BKpyABXYUA3W1yBGbOawA4h4lg+xP/ujDg9fnM/GDmfVvQtFe4V86zv2jRnYLbIW85egeu
-	gzsW7by84jCsCEyDe38rcP0G9Lu0O5PyhiJVlX1VH0lqEiLpLLVqCPQ6zb2WFjm+11Eb5Y
-	n8RhoTuzI6NlP3mUu2V0iIjtY0wmrD64vrUUDjJFf8c9e/GfSIul/+IfTbDMPsSiDwMCw7
-	iSMV2XUHFoLSDmaAwdjiKsMThFnyCYBB9t0d5djhof0yNcYWt/373RotXiqc8RA8Tj6M7F
-	lFivzfSQqW2W19Ln1HG5awMplQ6C4gwNMrAWCyzv+PL9twiFGEXnUYVU/us/rQ==
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lRv1YDtc"
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-35dacc40f92so12200539a91.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Apr 2026 15:03:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1777413811; x=1778018611; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XiScA0jlgKQS8SiM5Z4RwZdEXof1LD1UadEyrjdi2R4=;
+        b=lRv1YDtcdmk275jFOxLQaNY3mF8wzlRauybP77HaYQdA7ZQ9544Lapt85D+GgfySC7
+         lykbeilYt/BxgTDxOTsSyPsfBx0CCWhNwBZ+yHkYv5+saKcI8vWZZnzWTk0YbO+Uspk4
+         AJwwi2+GfGiga7wSCGFeO6gTaz373/B1HF58VCasQl2ga8X2CRVRErs4cmwc+VRaFs6e
+         XaxBKdnExD1PoJcd20GU/B5IULN/3B/2LZ5USZBiQVsUybLv4QyDjTuDZjYaeV3eqonj
+         k16/Xc++PxAgXbYWLcZMAV606hRdnXe86ypKehZqLH31bKd43oYxcsORfY118cVFZnaX
+         u/xw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777413811; x=1778018611;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=XiScA0jlgKQS8SiM5Z4RwZdEXof1LD1UadEyrjdi2R4=;
+        b=rGWQl8gy5bj5+61odwOQkrreKTYYvjt6+OHr4b/m+NgUqYBdWxE3cU29WQaJAu7yEH
+         1E8mnmGhWbX6z+FCDw++rvFE3GQ8FAAPZkcr3O4f3Osj2zRaIfkpgeo4pXC5vnr2aGjf
+         TnTCBVZj4SRY6kI1tqcSU6d6jtZwqhs/hQZK0tshHUYCV6TMNTo8fAIAhXWuAI8ou1PP
+         mTgZyhNms9KJgnWQv0ihewmhFM8fTZdq62FC4wS2x4wXzkSi0AyLHhmv4mumb6r1LmLM
+         6oEsRucRkmTKeXlPD08zZ7Vv7xCwM3+pB/3T7iYc57QLSL+nzaaarUVXhP1ykNC/dNA6
+         MILA==
+X-Forwarded-Encrypted: i=1; AFNElJ/o7WT/Pd0hYP+mW6mOYXZ2zd6O9a4IoMPcd4ZYs9Vnye/jmFe6U9cDzNocuy7YCzPchhtQDYnFtdBAEQcpjDM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxf8FziDl/M4MZRO5BRxtYTsabvr+m/cq6JmkxQt6+L48u+rtQ1
+	W8+V+0ertiEkMfMiP7ECrTTla52y227h8RNlM2AgT5kfp573aqSGHS4T+6IHySwHAuhQs223wa1
+	4/EeI7w==
+X-Received: from plgm15.prod.google.com ([2002:a17:902:f64f:b0:2b2:4865:84cf])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:2b0e:b0:2b2:6cab:313c
+ with SMTP id d9443c01a7336-2b97c478cc2mr46645835ad.20.1777413810582; Tue, 28
+ Apr 2026 15:03:30 -0700 (PDT)
+Date: Tue, 28 Apr 2026 15:03:29 -0700
+In-Reply-To: <CALzav=ecmNh6bE88oCHdmjSKK_Zpd96b84HbtmkaiDNRcotYfw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
+References: <20260202-vfio-selftest-only-64bit-v2-1-9c3ebb37f0f4@fb.com>
+ <e51b4ff2-13c4-47d4-b781-3dcbd740d274@meta.com> <20260427231217.GA1670652@nvidia.com>
+ <afATrrjqt8zj2plL@google.com> <afEEN_4ufBcQld0q@google.com>
+ <afEQDT_nv0kdlaBU@google.com> <CALzav=ecmNh6bE88oCHdmjSKK_Zpd96b84HbtmkaiDNRcotYfw@mail.gmail.com>
+Message-ID: <afEusUxXDpFtZvV0@google.com>
+Subject: Re: [PATCH v2] vfio: selftests: only build tests on arm64 and x86_64
+From: Sean Christopherson <seanjc@google.com>
+To: David Matlack <dmatlack@google.com>
+Cc: Jason Gunthorpe <jgg@nvidia.com>, Matt Evans <mattev@meta.com>, Ted Logan <tedlogan@fb.com>, 
+	Alex Williamson <alex@shazbot.org>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 28 Apr 2026 23:37:43 +0200
-Message-Id: <DI5429HR7UGP.IJHX75ZB16AZ@bootlin.com>
-Subject: Re: [PATCH RFC bpf-next 2/8] bpf: mark instructions accessing
- program stack
-Cc: <ebpf@linuxfoundation.org>, "Bastien Curutchet"
- <bastien.curutchet@bootlin.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, "Xu Kuohai" <xukuohai@huawei.com>,
- <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <linux-stm32@st-md-mailman.stormreply.com>,
- <linux-arm-kernel@lists.infradead.org>, <kasan-dev@googlegroups.com>,
- <linux-mm@kvack.org>
-From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-To: "Ihor Solodrai" <ihor.solodrai@linux.dev>,
- =?utf-8?b?QWxleGlzIExvdGhvcsOpIChlQlBGIEZvdW5kYXRpb24p?=
- <alexis.lothore@bootlin.com>, "Alexei Starovoitov" <ast@kernel.org>,
- "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "John Fastabend"
- <john.fastabend@gmail.com>, "David S. Miller" <davem@davemloft.net>, "David
- Ahern" <dsahern@kernel.org>, "Thomas Gleixner" <tglx@kernel.org>, "Ingo
- Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>, "Dave Hansen"
- <dave.hansen@linux.intel.com>, <x86@kernel.org>, "H. Peter Anvin"
- <hpa@zytor.com>, "Shuah Khan" <shuah@kernel.org>, "Maxime Coquelin"
- <mcoquelin.stm32@gmail.com>, "Alexandre Torgue"
- <alexandre.torgue@foss.st.com>, "Andrey Ryabinin" <ryabinin.a.a@gmail.com>,
- "Alexander Potapenko" <glider@google.com>, "Andrey Konovalov"
- <andreyknvl@gmail.com>, "Dmitry Vyukov" <dvyukov@google.com>, "Vincenzo
- Frascino" <vincenzo.frascino@arm.com>, "Andrew Morton"
- <akpm@linux-foundation.org>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260413-kasan-v1-0-1a5831230821@bootlin.com>
- <20260413-kasan-v1-2-1a5831230821@bootlin.com>
- <7dd64547-25a4-46de-a896-98fcec04468e@linux.dev>
-In-Reply-To: <7dd64547-25a4-46de-a896-98fcec04468e@linux.dev>
-X-Last-TLS-Session-Version: TLSv1.3
 
-On Sat Apr 25, 2026 at 1:18 AM CEST, Ihor Solodrai wrote:
-> On 4/13/26 11:28 AM, Alexis Lothor=C3=83=C2=A9 (eBPF Foundation) wrote:
->> In order to prepare to emit KASAN checks in JITed programs, JIT
->> compilers need to be aware about whether some load/store instructions
->> are targeting the bpf program stack, as those should not be monitored
->> (we already have guard pages for that, and it is difficult anyway to
->> correctly monitor any kind of data passed on stack).
->>=20
->> To support this need, make the BPF verifier mark the instructions that
->> access program stack:
->> - add a setter that allows the verifier to mark instructions accessing
->>   the program stack
->> - add a getter that allows JIT compilers to check whether instructions
->>   being JITed are accessing the stack
->>=20
->> Signed-off-by: Alexis Lothor=C3=A9 (eBPF Foundation) <alexis.lothore@boo=
-tlin.com>
->> ---
->>  include/linux/bpf.h          |  2 ++
->>  include/linux/bpf_verifier.h |  2 ++
->>  kernel/bpf/core.c            | 10 ++++++++++
->>  kernel/bpf/verifier.c        |  7 +++++++
->>  4 files changed, 21 insertions(+)
->>=20
->> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
->> index b4b703c90ca9..774a0395c498 100644
->> --- a/include/linux/bpf.h
->> +++ b/include/linux/bpf.h
->> @@ -1543,6 +1543,8 @@ void bpf_jit_uncharge_modmem(u32 size);
->>  bool bpf_prog_has_trampoline(const struct bpf_prog *prog);
->>  bool bpf_insn_is_indirect_target(const struct bpf_verifier_env *env, co=
-nst struct bpf_prog *prog,
->>  				 int insn_idx);
->> +bool bpf_insn_accesses_stack(const struct bpf_verifier_env *env,
->> +			     const struct bpf_prog *prog, int insn_idx);
->>  #else
->>  static inline int bpf_trampoline_link_prog(struct bpf_tramp_link *link,
->>  					   struct bpf_trampoline *tr,
->> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
->> index b148f816f25b..ab99ed4c4227 100644
->> --- a/include/linux/bpf_verifier.h
->> +++ b/include/linux/bpf_verifier.h
->> @@ -660,6 +660,8 @@ struct bpf_insn_aux_data {
->>  	u16 const_reg_map_mask;
->>  	u16 const_reg_subprog_mask;
->>  	u32 const_reg_vals[10];
->> +	/* instruction accesses stack */
->> +	bool accesses_stack;
->>  };
->> =20
->>  #define MAX_USED_MAPS 64 /* max number of maps accessed by one eBPF pro=
-gram */
->> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
->> index 8b018ff48875..340abfdadbed 100644
->> --- a/kernel/bpf/core.c
->> +++ b/kernel/bpf/core.c
->> @@ -1582,6 +1582,16 @@ bool bpf_insn_is_indirect_target(const struct bpf=
-_verifier_env *env, const struc
->>  	insn_idx +=3D prog->aux->subprog_start;
->>  	return env->insn_aux_data[insn_idx].indirect_target;
->>  }
->> +
->> +bool bpf_insn_accesses_stack(const struct bpf_verifier_env *env,
->> +			     const struct bpf_prog *prog, int insn_idx)
->> +{
->> +	if (!env)
->> +		return false;
->> +	insn_idx +=3D prog->aux->subprog_start;
->> +	return env->insn_aux_data[insn_idx].accesses_stack;
->> +}
->> +
->>  #endif /* CONFIG_BPF_JIT */
->> =20
->>  /* Base function for offset calculation. Needs to go into .text section=
-,
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index 1e36b9e91277..7bce4fb4e540 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->> @@ -3502,6 +3502,11 @@ static void mark_indirect_target(struct bpf_verif=
-ier_env *env, int idx)
->>  	env->insn_aux_data[idx].indirect_target =3D true;
->>  }
->> =20
->> +static void mark_insn_accesses_stack(struct bpf_verifier_env *env, int =
-idx)
->> +{
->> +	env->insn_aux_data[idx].accesses_stack =3D true;
->> +}
->> +
->>  #define LR_FRAMENO_BITS	3
->>  #define LR_SPI_BITS	6
->>  #define LR_ENTRY_BITS	(LR_SPI_BITS + LR_FRAMENO_BITS + 1)
->> @@ -6490,6 +6495,8 @@ static int check_mem_access(struct bpf_verifier_en=
-v *env, int insn_idx, u32 regn
->>  		else
->>  			err =3D check_stack_write(env, regno, off, size,
->>  						value_regno, insn_idx);
->> +
->> +		mark_insn_accesses_stack(env, insn_idx);
->
-> I am not sure this can be done unconditionally here.
->
-> It may be possible in different states to have different pointer
-> types for the affected reg (PTR_TO_STACK in one execution path and say
-> PTR_TO_MAP_VALUE in another). And if set uncoditionally,
-> instrumentation may be skipped for legitimate targets.
->
-> Maybe reset by default in check_mem_access()?
+On Tue, Apr 28, 2026, David Matlack wrote:
+> On Tue, Apr 28, 2026 at 12:52=E2=80=AFPM Sean Christopherson <seanjc@goog=
+le.com> wrote:
+> >
+> > On Tue, Apr 28, 2026, David Matlack wrote:
+> > > On 2026-04-27 06:55 PM, Sean Christopherson wrote:
+> > > > On Mon, Apr 27, 2026, Jason Gunthorpe wrote:
+> > > > > Even though this is a 64 bit build.
+> > > >
+> > > > Heh, it's much funnier when it's happening to someone else.  :-)
+> > > >
+> > > > KVM selftests went through these exact pains.  I'm pretty sure thes=
+e are the
+> > > > relevant commits (the empty targets one may or may not apply to VFI=
+O).
+> > > >
+> > > > 9af04539d474dda4984ff4909d4568e6123c8cba KVM: selftests: Override A=
+RCH for x86_64 instead of using ARCH_DIR
+> > > > 67730e6c53d70fb31618230f81c4acee9f72eaa3 KVM: selftests: Use canoni=
+cal $(ARCH) paths for KVM selftests directories
+> > > > 43fbd8cd389faa9760c5152b1c58e893c812953b KVM: selftests: Provide em=
+pty 'all' and 'clean' targets for unsupported ARCHs
+> > >
+> > > KVM selftests don't prevent 32-bit x86 builds though,
+> >
+> > Yes they do?  x86 is an alias for x86_64 (or vice versa), and so the i3=
+86 target
+> > gets binned into the empty target provided by tools/testing/selftests/k=
+vm/Makefile.
+> > And KVM selftests most definitely don't play nice with 32-bit.
+>=20
+> Are you sure that x86 is an alias for x86_64?
 
-Hmm, ok, thanks, I missed this subtlety. I still need to dig in there to
-make sure to really understand how the verifier handles those states,
-but if I understand correctly your point, I guess that just resetting
-the "accesses stack" flag at the entry of check_mem_access is not
-enough: it would make the final result depend on the order of the states
-being checked, eg:
-- first state being checked result in PTR_TO_MAP_VALUE, no flag set
-- second (and final) state being checked result in PTR_TO_STACK, flag is
-  now set
-- if no other state: insn ends up being (wrongly) marked to be ignored=20
+Well, I was quite sure :-)   But scripts/subarch.include disagrees:
 
-So unless I am misunderstanding things here, the question rather becomes
-"for this specific insn, is there any state in which the accessed memory
-is anything else other than PTR_TO_STACK". The flag could just be
-inverted (ie set to true by default), and reset by any state resulting
-in something other than PTR_TO_STACK.
+  SUBARCH :=3D $(shell uname -m | sed -e s/i.86/x86/ -e s/x86_64/x86/ \
 
-Alexis
---=20
-Alexis Lothor=C3=A9, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+as does attempting to build KVM selftests on a 32-bit host.
 
+> If it is then we don't even need the __LP64__ stuff I posted.
+>=20
+> But when I look at the top-level Makefile and imagine running make
+> without setting ARCH on the command line on a 32-bit x86 host, ARCH
+> will be set to SUBARCH, which will be x86.
+
+Yep.  So the big question is, why doesn't anyone complain about KVM selftes=
+ts not
+building on 32-bit?  Because they most definitely don't build.
