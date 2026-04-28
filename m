@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A6312E8B82;
-	Tue, 28 Apr 2026 20:45:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFF4934F48F;
+	Tue, 28 Apr 2026 20:46:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777409156; cv=none; b=uY8k6MxQMByTJ3PmmlZTNS/nGKrVcRI2p0me2iJZo2For6DxYGafilvQzCEkcMO/T/tUnmi/VHGhPtmbN2d2YLa/nd1gCG9vZ4aHuULJ8fFCPF4j8x2ncDfXzixaXIRzvDroN4P7VzR10o5gfgSNImsl8oCr3EsT+EsY8fSuqAQ=
+	t=1777409162; cv=none; b=Es9SPHq0+biEbSmg+u22RafEYuC6bwZKT0vJWI9ik4ZargjBymk4rZ8ytb3U9LDO/Ppem3jFxUdKGz+S/PiIuvUoT0zM4H76m9gbHHMiBpARayuYb1lKxhBHsHZOf6myZJJWmEieZNIW705azCekHOqwZKzgP89pQwAjVWDB3vI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777409156; c=relaxed/simple;
-	bh=gpSR6Q48MYhV0thDfaQc0u3uDky+1QVh/9VDybETiJU=;
+	s=arc-20240116; t=1777409162; c=relaxed/simple;
+	bh=tO4w/saWs4TngI1dGJjVb/BDaQv7f0xtr7dZaOtNvYY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mqQ07x70i4zOvGrj7TjQYIPalRIW9dYXn0zFej8n0UAnFvdKLpPhnFV7W7tjpl9bwnx4cmXnktQ5rQB8371x5m/uWPYT4D/aVjz+dzOQht/aMxX95T516H5dWrU6sYeMd53XidFGgZkFRH03BOVjNafspQO3IyeYBPYTv2BcWEU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SXAX8Zde; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=g4CSKUxqLhbSomUJC6oqV/lrv1nisW5OA00mgnMVmrpisYoojkQaUjUPI9k9nrYU3qmfa0DJR6+vA+KBBxq3CqGGOFDOzp7Tz4z0ljJ5VfAg8P89MKQPjF+31XaYzdPfX6a7jtilIPKRILO+ayEzBlYNI+9IRgLao4zGMIIKO1Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KvvrQz/H; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SXAX8Zde"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF0B7C2BCAF;
-	Tue, 28 Apr 2026 20:45:49 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KvvrQz/H"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46996C2BCAF;
+	Tue, 28 Apr 2026 20:45:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777409155;
-	bh=gpSR6Q48MYhV0thDfaQc0u3uDky+1QVh/9VDybETiJU=;
+	s=k20201202; t=1777409162;
+	bh=tO4w/saWs4TngI1dGJjVb/BDaQv7f0xtr7dZaOtNvYY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=SXAX8ZdeY0TzLzh/4N6hGDybK1UkN0xYH7D0pq4KuLPf6Jiu0cR1w0SoTuounRAFK
-	 iL3XykeSo3R0SjXZV/6gpIw0eOClOQwg/JkmgAIJdyJi49fuf/+/pqB82a/aJFFadF
-	 8Xvwl7MEt67qVx1MxGisg3npyZ42rophkfR8ZLbKBkcmPnhmTYvRNb/divay4JN0fB
-	 ca6PZG1Fg0Ed8Gr26IEiAEz+DUG4YA2zlhyPvexHrHTW6NbldhUel/lp8xHrXyRuOc
-	 GAk28wSvVHfnUf9vjRmqdIDzT6VI2yqHcSdgzSOFxKTQacorIUyRwH0nZSfZ1DruPP
-	 i4iBdSAXtQt9w==
+	b=KvvrQz/H9MZvu86YAxyj5rQhIx/ZHPTpmdjW6uyN07IO7+ThUJ49IxJ86Ngu3/BjQ
+	 ViQ+H54GPyl8kerSDJPSxgtRGtytzWYqT0iSSGocFwCdIODYR/1EE3IrNgG8EjaIx/
+	 A05BS4zchquoEri2LpJ9bokTQm7yn3pejiBpXmeLnHwS9jTEmHqJ65Lu4o3BIJt4rR
+	 NAl4TJbWorv+YtUcgbe0Vx7cCqB91HhWkciiaYFgBk+HgT0z9c6mOtwaJB2SNOVirQ
+	 xes7xvc/+tXfA6EVZ8U50mb7VkZXNd1bc7xv0te4q+8O0iJOd2uPlEcviiE8zAwh0W
+	 tIOa7kh4QNzoQ==
 From: Mike Rapoport <rppt@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	David Hildenbrand <david@kernel.org>
@@ -54,9 +54,9 @@ Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-mm@kvack.org
-Subject: [PATCH v3 28/54] selftests/mm: move read_file(), read_num() and write_num() to vm_util
-Date: Tue, 28 Apr 2026 23:42:14 +0300
-Message-ID: <20260428204240.1924129-29-rppt@kernel.org>
+Subject: [PATCH v3 29/54] selftests/mm: vm_util: add helpers to set and restore shm limits
+Date: Tue, 28 Apr 2026 23:42:15 +0300
+Message-ID: <20260428204240.1924129-30-rppt@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260428204240.1924129-1-rppt@kernel.org>
 References: <20260428204240.1924129-1-rppt@kernel.org>
@@ -70,153 +70,73 @@ Content-Transfer-Encoding: 8bit
 
 From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-These are useful helpers for writing and reading sysfs and proc files.
+hugetlb-shm and thuge-gen tests require that limits defined by
+/proc/sys/kernel/{shmmax,shmall} should be higher than certain values.
 
-Make them available to the tests that don't use thp_settings.
+Add helpers that allow setting these limits and restoring their settings on
+a test exit.
 
-While on it make write_num() use "%lu" instead of "%ld" to match
-'unsigned long num' argument type.
+They will be used later in hugetlb-shm and thuge-gen.
 
 Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 ---
- .../testing/selftests/mm/hugepage_settings.c  | 41 -------------------
- .../testing/selftests/mm/hugepage_settings.h  |  4 --
- tools/testing/selftests/mm/vm_util.c          | 39 ++++++++++++++++++
- tools/testing/selftests/mm/vm_util.h          |  3 ++
- 4 files changed, 42 insertions(+), 45 deletions(-)
+ tools/testing/selftests/mm/vm_util.c | 28 ++++++++++++++++++++++++++++
+ tools/testing/selftests/mm/vm_util.h |  9 +++++++++
+ 2 files changed, 37 insertions(+)
 
-diff --git a/tools/testing/selftests/mm/hugepage_settings.c b/tools/testing/selftests/mm/hugepage_settings.c
-index 9d31b53dbc67..097ba085f423 100644
---- a/tools/testing/selftests/mm/hugepage_settings.c
-+++ b/tools/testing/selftests/mm/hugepage_settings.c
-@@ -48,47 +48,6 @@ static const char * const shmem_enabled_strings[] = {
- 	NULL
- };
- 
--int read_file(const char *path, char *buf, size_t buflen)
--{
--	int fd;
--	ssize_t numread;
--
--	fd = open(path, O_RDONLY);
--	if (fd == -1)
--		return 0;
--
--	numread = read(fd, buf, buflen - 1);
--	if (numread < 1) {
--		close(fd);
--		return 0;
--	}
--
--	buf[numread] = '\0';
--	close(fd);
--
--	return (unsigned int) numread;
--}
--
--unsigned long read_num(const char *path)
--{
--	char buf[21];
--
--	if (read_file(path, buf, sizeof(buf)) < 0) {
--		perror("read_file()");
--		exit(EXIT_FAILURE);
--	}
--
--	return strtoul(buf, NULL, 10);
--}
--
--void write_num(const char *path, unsigned long num)
--{
--	char buf[21];
--
--	sprintf(buf, "%ld", num);
--	write_file(path, buf, strlen(buf) + 1);
--}
--
- int thp_read_string(const char *name, const char * const strings[])
- {
- 	char path[PATH_MAX];
-diff --git a/tools/testing/selftests/mm/hugepage_settings.h b/tools/testing/selftests/mm/hugepage_settings.h
-index d6a1b4e5f734..3d1a4f18be30 100644
---- a/tools/testing/selftests/mm/hugepage_settings.h
-+++ b/tools/testing/selftests/mm/hugepage_settings.h
-@@ -66,10 +66,6 @@ struct thp_settings {
- 	struct shmem_hugepages_settings shmem_hugepages[NR_ORDERS];
- };
- 
--int read_file(const char *path, char *buf, size_t buflen);
--unsigned long read_num(const char *path);
--void write_num(const char *path, unsigned long num);
--
- int thp_read_string(const char *name, const char * const strings[]);
- void thp_write_string(const char *name, const char *val);
- unsigned long thp_read_num(const char *name);
 diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
-index e62e2a473123..752566f75c0b 100644
+index 752566f75c0b..5a89c2d903be 100644
 --- a/tools/testing/selftests/mm/vm_util.c
 +++ b/tools/testing/selftests/mm/vm_util.c
-@@ -699,6 +699,27 @@ int unpoison_memory(unsigned long pfn)
- 	return ret > 0 ? 0 : -errno;
+@@ -761,3 +761,31 @@ void write_num(const char *path, unsigned long num)
+ 	sprintf(buf, "%lu", num);
+ 	write_file(path, buf, strlen(buf) + 1);
  }
- 
-+int read_file(const char *path, char *buf, size_t buflen)
++
++static unsigned long shmall, shmmax;
++
++void __shm_limits_restore(void)
 +{
-+	int fd;
-+	ssize_t numread;
++	if (shmmax)
++		write_num("/proc/sys/kernel/shmmax", shmmax);
++	if (shmall)
++		write_num("/proc/sys/kernel/shmall", shmall);
++}
 +
-+	fd = open(path, O_RDONLY);
-+	if (fd == -1)
-+		return 0;
++void shm_limits_prepare(unsigned long length)
++{
++	unsigned long nr = length / psize();
++	unsigned long val;
 +
-+	numread = read(fd, buf, buflen - 1);
-+	if (numread < 1) {
-+		close(fd);
-+		return 0;
++	val = read_num("/proc/sys/kernel/shmmax");
++	if (val < length) {
++		write_num("/proc/sys/kernel/shmmax", length);
++		shmmax = val;
 +	}
 +
-+	buf[numread] = '\0';
-+	close(fd);
-+
-+	return (unsigned int) numread;
-+}
-+
- void write_file(const char *path, const char *buf, size_t buflen)
- {
- 	int fd, saved_errno;
-@@ -722,3 +743,21 @@ void write_file(const char *path, const char *buf, size_t buflen)
- 		ksft_exit_fail_msg("%s write(%.*s) is truncated, expected %zu bytes, got %zd bytes\n",
- 				path, (int)(buflen - 1), buf, buflen - 1, numwritten);
- }
-+
-+unsigned long read_num(const char *path)
-+{
-+	char buf[21];
-+
-+	if (read_file(path, buf, sizeof(buf)) < 0)
-+		ksft_exit_fail_perror("read_file()");
-+
-+	return strtoul(buf, NULL, 10);
-+}
-+
-+void write_num(const char *path, unsigned long num)
-+{
-+	char buf[21];
-+
-+	sprintf(buf, "%lu", num);
-+	write_file(path, buf, strlen(buf) + 1);
++	val = read_num("/proc/sys/kernel/shmall");
++	if (val < nr) {
++		write_num("/proc/sys/kernel/shmall", nr);
++		shmall = val;
++	}
 +}
 diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
-index 195bf2e26792..5fc9707f6b9a 100644
+index 5fc9707f6b9a..ea8fc8fdf0eb 100644
 --- a/tools/testing/selftests/mm/vm_util.h
 +++ b/tools/testing/selftests/mm/vm_util.h
-@@ -165,3 +165,6 @@ int unpoison_memory(unsigned long pfn);
- #define PAGEMAP_PFN(ent)	((ent) & ((1ull << 55) - 1))
- 
- void write_file(const char *path, const char *buf, size_t buflen);
-+int read_file(const char *path, char *buf, size_t buflen);
-+unsigned long read_num(const char *path);
-+void write_num(const char *path, unsigned long num);
+@@ -168,3 +168,12 @@ void write_file(const char *path, const char *buf, size_t buflen);
+ int read_file(const char *path, char *buf, size_t buflen);
+ unsigned long read_num(const char *path);
+ void write_num(const char *path, unsigned long num);
++
++void shm_limits_prepare(unsigned long length);
++void __shm_limits_restore(void);
++
++#define SHM_LIMITS_RESTORE()						\
++static void __attribute__((destructor)) shm_limits_restore(void)	\
++{									\
++	__shm_limits_restore();						\
++}
 -- 
 2.53.0
 
