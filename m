@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3A0B379989;
-	Tue, 28 Apr 2026 20:48:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76BC937B00C;
+	Tue, 28 Apr 2026 20:48:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777409301; cv=none; b=HaycHIfqzJPheoiDboSo0NAyeSvSmRMJmvKtF/z5nxQLbYuNEe7I+zyO/FcpTzGB3roJpMXHzImQXOwu1AnN7BUmGwWi45ivQD2ab4Fn/mU246zVvoI9EO0ga6Q+FYfDSvxTbNXRz3wCZrd11nGPPd/5fT47RCySHuPVPAPKa3o=
+	t=1777409307; cv=none; b=g5NNfYf4Pjk3XhVQbsrZU8+fFmG4Aj6m18jaIgwKTo7ex14Z4FislrmHX/BJRdVHLgyIiW+1FQnKUdEVa5pj9jbuOOVfrB30kEOHudO5wAL2c+tXJ4zARxSj3HgZumReSQfdbbprHyPYbSJF8f2WW1ojpC+OpxaUMJAYHzY5A9A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777409301; c=relaxed/simple;
-	bh=HtpaUkBbB7ijuw6rctcgEdxPGwj4VxmBP6AvOyp0uHE=;
+	s=arc-20240116; t=1777409307; c=relaxed/simple;
+	bh=n+ynKYOhHHd3fYSwNPmEpGp3HvFkvJ4/6qKKQftdCu0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RBGBXlkjCnl+jVz8pTFFzjccDWPL7MxwZHbvtg5GI1xiLVFH2B2EOQ4uLXyRf9usRxtGKWadRXbwb3Et/xagFhDfl/SXF82DCi/hO2W/dyhjmlKX/Q1efYxXwieNO0NlNcoHm0EnWVWfp+rXfvbx0TTji1RE/grwKE/D9ACDTbQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MrBgAN7v; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=sbZKR3VVdFFhladX+hj8TsMo1e24Jd7JxvBGb8KINngwddbfbd7BkfbobogxJDwIa8KYgPX2t9z8KFRw3s3/mnuCFhfYVwwbeM9spQblTId7M20S6sH4o/ciESQ6xSAx/jqX5qX9xJ/ggcGmDspniTjo8fbIdwR5t4PTFuB7mV4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fc5aWZvE; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MrBgAN7v"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78506C2BCAF;
-	Tue, 28 Apr 2026 20:48:14 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fc5aWZvE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FF6EC2BCB3;
+	Tue, 28 Apr 2026 20:48:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777409300;
-	bh=HtpaUkBbB7ijuw6rctcgEdxPGwj4VxmBP6AvOyp0uHE=;
+	s=k20201202; t=1777409307;
+	bh=n+ynKYOhHHd3fYSwNPmEpGp3HvFkvJ4/6qKKQftdCu0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=MrBgAN7v0Gg/6OxNrbQotAn9rKocS0ALXFItaZnMWNG1OLuQmgJy7qdzFHSbrC5QP
-	 zBQ5eDY7h59KZ3h81uYkJvJBierPcozQ7O7/7jo2eRoBfbscSY3a7+Frbk772e23k6
-	 1xgrJx8QYXesKBPb7sy/GNogVChQtwZSsIf9nV6dNOA3wrA3BtrUVGP3hrME5j/5Hr
-	 aWU51BXDfiNs7kbgjz+C5lKiW6hJFWmE4n/J4M2drZoiOhfQMCOI49Aj+eVojI956S
-	 MvZ1g4qUF6KPNuZnHXpXa5Rqb0DksAHwCigbZI6LCPDyQTrHEcp5NbVyGbz/0pKi+E
-	 bN9Ax4BP1jjTg==
+	b=fc5aWZvEBk/mFdR7Qscyfqp2MKP5O8O75phTbP6wzsYUc4XJeyPFoPeYDDJY/ovNH
+	 PxNoUCf8AG/OD97MlUQ9Qapk2W8FXPKjrMh9ZzMHkdqfk6wXXgPLyvByH2iOViry4M
+	 zuRKDV2hmkZuHCZE4CwaGcEcleWX79mzw/7xr+Fyj5MrOsL/X+VybscVk0ZiDeanov
+	 smGHfx38WNEPVfxCj88X8E/SV3pbjUFLo/5upRBsIGwKMScqIdvSS+S6zugAFy+nl+
+	 5ZnmcWMBoQVxOUhs62w+kdrXpWvJ04nm5MdbfBV38XBVB0LIHlVkJQ8h1keSX5xYxI
+	 n7NVEV3L5oQ0w==
 From: Mike Rapoport <rppt@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	David Hildenbrand <david@kernel.org>
@@ -54,9 +54,9 @@ Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-mm@kvack.org
-Subject: [PATCH v3 50/54] selftests/mm: uffd-wp-mremap: add setup of HugeTLB pages
-Date: Tue, 28 Apr 2026 23:42:36 +0300
-Message-ID: <20260428204240.1924129-51-rppt@kernel.org>
+Subject: [PATCH v3 51/54] selftests/mm: va_high_addr_switch: add setup of HugeTLB pages
+Date: Tue, 28 Apr 2026 23:42:37 +0300
+Message-ID: <20260428204240.1924129-52-rppt@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260428204240.1924129-1-rppt@kernel.org>
 References: <20260428204240.1924129-1-rppt@kernel.org>
@@ -70,7 +70,7 @@ Content-Transfer-Encoding: 8bit
 
 From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-uffd-wp-remap skips HugeTLB tests if there are no free huge pages
+va_high_addr_switch skips HugeTLB tests if there are no free huge pages
 prepared by a wrapper script.
 
 Add setup of HugeTLB pages to the test and make sure that the original
@@ -78,31 +78,22 @@ settings are restored on the test exit.
 
 Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 ---
- tools/testing/selftests/mm/uffd-wp-mremap.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ tools/testing/selftests/mm/va_high_addr_switch.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/mm/uffd-wp-mremap.c b/tools/testing/selftests/mm/uffd-wp-mremap.c
-index 9d67b11c2f28..f63fe02f404f 100644
---- a/tools/testing/selftests/mm/uffd-wp-mremap.c
-+++ b/tools/testing/selftests/mm/uffd-wp-mremap.c
-@@ -336,14 +336,14 @@ int main(int argc, char **argv)
- 	struct thp_settings settings;
- 	int i, j, plan = 0;
+diff --git a/tools/testing/selftests/mm/va_high_addr_switch.c b/tools/testing/selftests/mm/va_high_addr_switch.c
+index 0b69bd4b901d..e24d7ba00b44 100644
+--- a/tools/testing/selftests/mm/va_high_addr_switch.c
++++ b/tools/testing/selftests/mm/va_high_addr_switch.c
+@@ -325,7 +325,7 @@ int main(int argc, char **argv)
+ 	if (!supported_arch())
+ 		ksft_exit_skip("Architecture not supported\n");
  
-+	hugepage_save_settings(true, true);
-+
- 	pagesize = getpagesize();
- 	nr_thpsizes = detect_thp_sizes(thpsizes, ARRAY_SIZE(thpsizes));
--	nr_hugetlbsizes = detect_hugetlb_page_sizes(hugetlbsizes,
--						    ARRAY_SIZE(hugetlbsizes));
-+	nr_hugetlbsizes = hugetlb_setup(1, hugetlbsizes, ARRAY_SIZE(hugetlbsizes));
+-	if (argc == 2 && !strcmp(argv[1], "--run-hugetlb"))
++	if (hugetlb_setup_default(6))
+ 		run_hugetlb = true;
  
- 	/* If THP is supported, save THP settings and initially disable THP. */
- 	if (nr_thpsizes) {
--		thp_save_settings();
- 		thp_read_settings(&settings);
- 		for (i = 0; i < NR_ORDERS; i++) {
- 			settings.hugepages[i].enabled = THP_NEVER;
+ 	testcases_init();
 -- 
 2.53.0
 
