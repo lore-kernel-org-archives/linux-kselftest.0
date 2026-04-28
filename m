@@ -1,173 +1,140 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C48C738550B;
-	Tue, 28 Apr 2026 15:30:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D12C43C345D
+	for <linux-kselftest@vger.kernel.org>; Tue, 28 Apr 2026 15:53:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777390211; cv=none; b=h6dtwBA//2ZA3xvXjqnXQguS4PeQnewhHonkkF5tj3E515fCExZYugxq0+3RO0pQhKA7Z+SM2DGXLx1IcCvc+W1s67eZn1x7Zz2lMDHRAnTFxZv77X4dX/thSniDyJkI7yNL/zE14QzWV1wGU/Yios9T/LJrTBLNT4fXqKkRbYA=
+	t=1777391630; cv=none; b=paKywNhV3rpQb7Pmx7rkmaZtFhasQ5H5CXGSw0pSLEgRQpSiwSjwI3aXh9Peh50Z6EYqRnLXtFBD7MDrJADd/yZUOly299nuG1af0Lp9XoiKL6yXsTx+rzZaF36qtRbb0rYuDyX45Lw89c02sNN2SpmlLqQt1INBd4n4bK2cRlE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777390211; c=relaxed/simple;
-	bh=muM6M8nKIHut7+xSa6h9L/Si3vdZRbFddH2GuYKYsTM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EUDYh+uMkWEevYl4K+jRKy/5yttPZ4R/CZEeGCjMlUPauuC5EhiS2rv5Y0hh+Sc7MsTW3RH2PZPVLmSH+7Q7fYFVyDo7QCQtB8jYc357k9w8LTnKRRSTpPi8BwZFaO/yR4VpMkWSqNYFphvazDjJz1czlM2IHRpS5KIwe/SffPU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=PsdWffEK; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1777391630; c=relaxed/simple;
+	bh=92040OvP7NphZOcgJ01LGqbNZOBjVXmSRgTtp03HPzs=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=EAPppqc+bOVJhKQk1+PpsOkzaC/bRkfh6+i2CwBlMEp8d+54fhnSvljHsiBQS2cvHgfwgk7g+RF1nvygwgtu/xGkgtP4VNekiVZHYYpanUTw1de1K5J1ByK1F3x+VH+SfQ72v9o2dUhX6+/+xEb1y3a9H5Yav3aqUSg/RHiXqI4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Fyy6wJXR; arc=none smtp.client-ip=209.85.210.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="PsdWffEK"
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63S6bkhe2999657;
-	Tue, 28 Apr 2026 15:29:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=YwP493
-	ILC63v3+UTyJCc1eyOdyX+yQa9BtJobhiIseo=; b=PsdWffEK1/ENih1fDvZINM
-	yXmTufIwIZ1g32nDNONaa2cF1DcBuvIwuv5IXeBIUQ1g8xM0oBwC3sEM9CeqIxl4
-	NfZubhzYoVxvA6WyZbRXsyKM/z3Lww/ZdaGN9nriInLbSi9//3w03AbZAYTIzuk+
-	+rSFHBPhFIjKLiUmmYb/WprKiF032NMfVTVHj9jhMu9v8tJ9CK5XvdAuE8r53U/4
-	LfXc1AWajPOXdwj/dTruXO09KLBmcmITV2sa6+pFZTNRiWGC3iAvbcDaFwxDCxKM
-	0cNBeLwy6NQR8Hs9UpBcF+t5TY2Nwb1UHQg4JcxtxGg/a6AdHpFSV1l4OFfb+rrQ
-	==
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4drnb568nu-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 28 Apr 2026 15:29:49 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 63SFNo3i003786;
-	Tue, 28 Apr 2026 15:29:48 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4ds8xk2aa7-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 28 Apr 2026 15:29:48 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 63SFTiwr34996666
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 28 Apr 2026 15:29:44 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 8760A2004B;
-	Tue, 28 Apr 2026 15:29:44 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 3531C20049;
-	Tue, 28 Apr 2026 15:29:41 +0000 (GMT)
-Received: from [9.39.16.179] (unknown [9.39.16.179])
-	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 28 Apr 2026 15:29:40 +0000 (GMT)
-Message-ID: <7d3bbb94-575f-4119-9ef0-62cff98795ce@linux.ibm.com>
-Date: Tue, 28 Apr 2026 20:59:39 +0530
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Fyy6wJXR"
+Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-82f70ae35c0so6000511b3a.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Apr 2026 08:53:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1777391628; x=1777996428; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=kQTB8wCBT8LVtOg4OyEn9zyS1CPfIyYMGlnzm+b7XDs=;
+        b=Fyy6wJXRQvkfAUjbfUFVq01cLng/WvJZkQnaxFh0bUdGWj2lYl3Lft9IyZKoaOwIV/
+         naNf2u+1YuL01lOOadaPQheUrDlX91QDPTlUxN1PNacdE0O9NY9chU8qHMNwDyUiDQoz
+         Z2zKXSx1hnOrAo6NLTAoBaR3u6BFm9QFb0JDvjm/znah96wu008KrpnSYSlTew+cw9DD
+         qt1q9KATGTHpKVQ7Gn/AtguqEB6RrjB1eBvLyd1bUvwja9z4r8gJ/ierFH2KWEkk21T/
+         /B3nGvtkX9PNMnd20eOBtA/QRYJ2Mrk0lNq9H+IHWx7NDWGzERQZs7yFCGsjFJX78EDV
+         +8ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777391628; x=1777996428;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kQTB8wCBT8LVtOg4OyEn9zyS1CPfIyYMGlnzm+b7XDs=;
+        b=kiy3fIQn2sYbnF1krfwGaDZvhTDd2wZdPRc9s+5kyYSodierObrKpXBnkJTCgN1MSV
+         GIWUuUuEKM/g/ViXoY9UcL1CxSXWmwBCoaHbEtWnFKLtN5/HBiHmKQa3aAvZEBGmozDT
+         Av1jK7m6/GGEL2K7BRNXaBH8CGUcqyQ/LB0NO4miV3xTm1pJLvRgkHi+8Ztavby/ZDOA
+         ni4rSSWS3Q2RVLXa16eQVysamRpIu5zbz3SPpKCT1inHzF42wsi4d8qhFwLWhSySEaW6
+         gAT9FNkcG+NxhlMz6KXzaQMYWYDFvtgZjQqPl2BgRAYFmyvN8MH7Jgh7hA2+XimmBr5N
+         Abog==
+X-Forwarded-Encrypted: i=1; AFNElJ9oR2i3NqfuR5c0aW9Oz/JWsSb7L6URzDwD53k+Zx4IdC3sIZqC/6eONwoW1HUudRAp9e/e3MglyIOBU5vVPO0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw/ZLTJHi9M1GdLPXPaee79z6CdjZaYdBY4RcnY7kuWJG1zeIrl
+	umvVWJoqz+m+lx2pZiVQnFfL/dBRsIOXF6ORgclBroKGVHZM0cp60DJywIWqsw3M1eyqEPqjNiN
+	eg3v8wA==
+X-Received: from pfbem34.prod.google.com ([2002:a05:6a00:3762:b0:82f:7a66:cfb0])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:12c1:b0:829:8c08:d1f4
+ with SMTP id d2e1a72fcca58-834ddbec0e6mr3804392b3a.39.1777391627873; Tue, 28
+ Apr 2026 08:53:47 -0700 (PDT)
+Date: Tue, 28 Apr 2026 08:53:46 -0700
+In-Reply-To: <afDJZQHNi-qdcEEe@tycho.pizza>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/5] powerpc/bpf: fix alignment of long branch
- trampoline address
-To: adubey@linux.ibm.com, bpf@vger.kernel.org
-Cc: linuxppc-dev@lists.ozlabs.org, maddy@linux.ibm.com, ast@kernel.org,
-        andrii@kernel.org, daniel@iogearbox.net, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org, stable@vger.kernel.org
-References: <20260411221413.44304-1-adubey@linux.ibm.com>
- <20260411221413.44304-2-adubey@linux.ibm.com>
-Content-Language: en-US
-From: Hari Bathini <hbathini@linux.ibm.com>
-In-Reply-To: <20260411221413.44304-2-adubey@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Authority-Analysis: v=2.4 cv=AqDeGu9P c=1 sm=1 tr=0 ts=69f0d26d cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
- a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=U7nrCbtTmkRpXpFmAIza:22 a=VnNF1IyMAAAA:8
- a=VwQbUJbxAAAA:8 a=atBhxT8-om9CWOQYYk4A:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDI4MDE0NSBTYWx0ZWRfX6u62VQKvlfki
- LSaFxCoPf2J8cLw+nHlZFUbhVJaq8DqhSKIv/sQouhuHaBomuEvBfYz8471q1qU7EnzCDne6YS2
- 1NB1mbKMWUzaqo9HQvwfxNc/VbzEvN60xHP6EyfRV/NO+ZSoUWxU2FazOh4mn1DCzk8YkWQJ18C
- 5sPyAR4xqOTOsQUbKxb2EtRWRlpchoNfnW5Bmm+YyYf9XcsZ/OmSlWOY70l8PIcXwtb+B6ypxIl
- vpgjlIAKj4vxxgXYkLe/Dmz3JsjqoLtW65sBQ19HMMHI8U70MUJOo+SXdO67GEA4a17ieHAqZjX
- g8H3LJ3cwizp9wH0udoBX/Jakb9kWrvF/pu57mcJol/Wfiqf4BwVU3PJFbj5MhKOW5ZzLQYlagz
- GQn9nZfpH3U08yAJIq8ndVMd7fgAXmWLDFXSVV7pH/qwEryW0HjkGKZypgLRlSQKqtipJP/OlAh
- cCcs0qizQnBy66hXZqQ==
-X-Proofpoint-GUID: eAdXJj8nsRIqvr-NYA3wcRltfAJUWR6v
-X-Proofpoint-ORIG-GUID: eAdXJj8nsRIqvr-NYA3wcRltfAJUWR6v
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-04-28_04,2026-04-28_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 priorityscore=1501 phishscore=0 suspectscore=0 clxscore=1015
- lowpriorityscore=0 spamscore=0 bulkscore=0 impostorscore=0 malwarescore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2604200000 definitions=main-2604280145
+Mime-Version: 1.0
+References: <20260427204847.112899-1-tycho@kernel.org> <20260427204847.112899-4-tycho@kernel.org>
+ <ae_TCofu4bHP_Ch-@google.com> <afDJZQHNi-qdcEEe@tycho.pizza>
+Message-ID: <afDYCpbeT0HsXTMF@google.com>
+Subject: Re: [PATCH v2 3/4] KVM: SEV: Add the kvm-amd.rapl_disable module parameter
+From: Sean Christopherson <seanjc@google.com>
+To: Tycho Andersen <tycho@kernel.org>
+Cc: Ashish Kalra <ashish.kalra@amd.com>, Tom Lendacky <thomas.lendacky@amd.com>, 
+	John Allen <john.allen@amd.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	"David S. Miller" <davem@davemloft.net>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, linux-crypto@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Kim Phillips <kim.phillips@amd.com>, 
+	Alexey Kardashevskiy <aik@amd.com>, Nikunj A Dadhania <nikunj@amd.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Randy Dunlap <rdunlap@infradead.org>, Dapeng Mi <dapeng1.mi@linux.intel.com>, 
+	Kees Cook <kees@kernel.org>, Marco Elver <elver@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Li RongQing <lirongqing@baidu.com>, Eric Biggers <ebiggers@kernel.org>, 
+	"Paul E. McKenney" <paulmck@kernel.org>, linux-doc@vger.kernel.org, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-
-
-On 12/04/26 3:44 am, adubey@linux.ibm.com wrote:
-> From: Abhishek Dubey <adubey@linux.ibm.com>
+On Tue, Apr 28, 2026, Tycho Andersen wrote:
+> On Mon, Apr 27, 2026 at 02:20:10PM -0700, Sean Christopherson wrote:
+> > On Mon, Apr 27, 2026, Tycho Andersen wrote:
+> > > From: "Tycho Andersen (AMD)" <tycho@kernel.org>
+> > > 
+> > > Add a user-visible way to set the RAPL_DIS bit for SNP init.
+> > > 
+> > > Since setting RAPL_DIS affects the whole system, put the module parameter
+> > > in kvm_amd instead of in the CCP driver to hopefully make it more obvious
+> > > to admins.
+> > > 
+> > > Signed-off-by: Tycho Andersen (AMD) <tycho@kernel.org>
+> > > ---
+> > >  Documentation/admin-guide/kernel-parameters.txt | 5 +++++
+> > >  arch/x86/kvm/svm/sev.c                          | 8 ++++++++
+> > >  2 files changed, 13 insertions(+)
+> > > 
+> > > diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> > > index 4d0f545fb3ec..2b50eed8664c 100644
+> > > --- a/Documentation/admin-guide/kernel-parameters.txt
+> > > +++ b/Documentation/admin-guide/kernel-parameters.txt
+> > > @@ -3207,6 +3207,11 @@ Kernel parameters
+> > >  			max_snp_asid == min_sev_asid-1, will effectively make
+> > >  			SEV-ES unusable.
+> > >  
+> > > +	kvm-amd.rapl_disable=	[KVM,AMD] Whether to disable RAPL
+> > > +			(Running Average Power Limit) when initializing the SNP
+> > > +			firmware. This disables the counters for the entire system until an
+> > > +			SNP shutdown command is issued.
+> > 
+> > I'm pretty sure I said this earlier: KVM absolutely should not be able to disable
+> > RAPL for the entire system.  That needs to be a power management thing.
 > 
-> Ensure the dummy trampoline address field present between the OOL stub
-> and the long branch stub is 8-byte aligned, for memory compatibility
-> when content loaded to a register.
+> You definitely noted "not CCP", I don't think I quite understood what
+> that meant though:
+> https://lore.kernel.org/all/aZ86BZWi-GLiHvmt@tycho.pizza/
 > 
-> Reported-by: Hari Bathini <hbathini@linux.ibm.com>
-> Fixes: d243b62b7bd3 ("powerpc64/bpf: Add support for bpf trampolines")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
-> ---
->   arch/powerpc/net/bpf_jit.h        |  4 ++--
->   arch/powerpc/net/bpf_jit_comp.c   | 34 ++++++++++++++++++++++++++-----
->   arch/powerpc/net/bpf_jit_comp64.c |  4 ++--
->   3 files changed, 33 insertions(+), 9 deletions(-)
+> I'm a little worried that putting it in power management will generate
+> some weird dependencies, or weakref symbols that can't change things
+> if they are loaded independently of kvm_amd or something. But let me
+> see what I can come up with.
+
+Ugh, and it's not even powerman per se, it's actually a module in perf.  Oof.
+
+I 100% agree it'll be tricky, but I also stand by comments that neither the CCP
+driver or KVM should be allowed to silently pull the rug out from under the RAPL
+module.
+
+> > KVM then needs to communicate (and enforce?) the policy to
+> > userspace.
 > 
-> diff --git a/arch/powerpc/net/bpf_jit.h b/arch/powerpc/net/bpf_jit.h
-> index 7354e1d72f79..1184ad15d5a4 100644
-> --- a/arch/powerpc/net/bpf_jit.h
-> +++ b/arch/powerpc/net/bpf_jit.h
-> @@ -208,8 +208,8 @@ int bpf_jit_emit_func_call_rel(u32 *image, u32 *fimage, struct codegen_context *
->   int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, u32 *fimage, struct codegen_context *ctx,
->   		       u32 *addrs, int pass, bool extra_pass);
->   void bpf_jit_build_prologue(u32 *image, struct codegen_context *ctx);
-> -void bpf_jit_build_epilogue(u32 *image, struct codegen_context *ctx);
-> -void bpf_jit_build_fentry_stubs(u32 *image, struct codegen_context *ctx);
-> +void bpf_jit_build_epilogue(u32 *image, u32 *fimage, struct codegen_context *ctx);
-> +void bpf_jit_build_fentry_stubs(u32 *image, u32 *fimage, struct codegen_context *ctx);
->   void bpf_jit_realloc_regs(struct codegen_context *ctx);
->   int bpf_jit_emit_exit_insn(u32 *image, struct codegen_context *ctx, int tmp_reg, long exit_addr);
->   
-> diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
-> index a62a9a92b7b5..c255b30a37b0 100644
-> --- a/arch/powerpc/net/bpf_jit_comp.c
-> +++ b/arch/powerpc/net/bpf_jit_comp.c
-> @@ -49,11 +49,34 @@ asm (
->   "	.popsection				;"
->   );
->   
-> -void bpf_jit_build_fentry_stubs(u32 *image, struct codegen_context *ctx)
-> +void bpf_jit_build_fentry_stubs(u32 *image, u32 *fimage, struct codegen_context *ctx)
->   {
->   	int ool_stub_idx, long_branch_stub_idx;
->   
->   	/*
-> +	 * In the final pass, align the mis-aligned dummy_tramp_addr field
-> +	 * in the fimage. The alignment NOP must appear before OOL stub,
-> +	 * to make ool_stub_idx & long_branch_stub_idx constant from end.
-> +	 *
-> +	 * Need alignment NOP in following conditions:
-> +	 *
+> KVM doesn't need to enforce anything, the SEV firmware will generate a
+> launch error for policy violation if it's not supported.
+> 
+> For communicating to userspace if it's not a kvm module parameter, one
+> option is to mask it off in sev_get_snp_supported_policy() if it was
+> initialized without the support. Then it'll be visible via
+> KVM_X86_SNP_POLICY_BITS.
 
-I don't think I follow this table..
-
-> +	 * OOL stub aligned	CONFIG_PPC_FTRACE_OUT_OF_LINE	Alignment NOP
-> +	 *      Y                               Y                     N
-
-> +	 *      Y                               N                     Y
-
-Please help me understand why a NOP is needed here
-
-> +	 *      N                               Y                     Y
-
-> +	 *      N                               N                     N
-
-and also, why a NOP isn't needed here..
-
-- Hari
+Ya, this is what I was envisioning.
