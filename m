@@ -1,229 +1,274 @@
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from DM5PR21CU001.outbound.protection.outlook.com (mail-centralusazon11011030.outbound.protection.outlook.com [52.101.62.30])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 535BA44D023
-	for <linux-kselftest@vger.kernel.org>; Tue, 28 Apr 2026 17:40:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777398002; cv=none; b=tnctiPdOqjCStTYV8IZg1FSV8m8BuurfxJEM0kzZg0lmlG4Gwh6RhUo/w6rRYRO7llJ0HLy3ehxc82Tw6whmIRxVm/TWIMIR5kPk4MnVR7MUUVA7FV84D9V901YGmMM6t+4z19ZUvt/rybrD8W4IPQS0lbvJda/ymQY2YQKQCxM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777398002; c=relaxed/simple;
-	bh=1yZcxJpM16ON5PpaeLyyhomo152q1nuqWUasI2vXHrw=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=Iho0JbGMi3HV0rr4LSt2gwUrEWb2iZRjaE7KH7dAVXuqvRMaX1U9BJJVmabijgvO49fsns/Af8b6UUCiqqZjjYq9Iy6h7kJR6v/RsbMDe4UPJCXPBmngoD0X0haw6uXGDRT5hAdG9shIQRs5WngYAyL3QgQsr3+HHDTfYGh7duo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jstultz.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nxYwACHN; arc=none smtp.client-ip=209.85.214.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jstultz.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 412C7332628;
+	Tue, 28 Apr 2026 18:04:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.62.30
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777399474; cv=fail; b=KJGLGbADkO39v5JX7u4afC2HnvDsPUV2A6D5nXiT66O4itkd9uMsmUD+pmqUACJK93y4wqI2IgXa+JBoXfW0nB70sxh1AfNJ2CUN7SxK+Vi8rTwZ072Mc5hgcCDvrthhfvu33qAYzqp8krBmgdhhhWOeGprZx/FqAOQODDr5SrY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777399474; c=relaxed/simple;
+	bh=Sl8c2B+EL/sx5JAs0RCHcmJTg70fxNKiYAXdKlOpLck=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=kd+N9W6ouHBdSswGqY/5FwjoT3RRvRxXWsdHMuSXlMfvrLiZnae5ZgqOWSSbGqaUZ5SAZB5Uck+L0QmdMbXVRs01XsLH9L3stbCUw54bZ72XYrbAGJJrjaZMJov5UTo29yFZmAB2TyK1+d6vOHcWSnwHoxB8vvU0dXEoJFfUpUU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=5OXExj1C; arc=fail smtp.client-ip=52.101.62.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nxYwACHN"
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2b7c2ee830aso88092745ad.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 Apr 2026 10:40:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1777398001; x=1778002801; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=wg6ndJoJw7e3vRcb43WTRotH1q6LGrr+y/ggZNEiTTY=;
-        b=nxYwACHNy/B+q0UjovooMfnmoi47C+5IOtitPLc3nnBg21NSdWstnxDygf1ww5JwxH
-         RZnPe2ho77Fg8aPW3hP2406GCR92U+s3yu+91CrOvY2K1Nlh40m+v2HpkHs+ZMqbrSAQ
-         97viIOSvdbGXSoZWGeVFmbpnIMAJYKnQ1gBsxzHbe/vW3Bgb+usM63HjHWCdfC23lqDP
-         FExbQQ1BwkNkkRO9B7vJYwV8JpLlMPXEjZ0CcuANSU+kNCLlL1vW9QUsZyKO61De/XW9
-         fDbIcBtjpuaegBsDkMTd1mW4ok+85rTSca9y9tGe+6kNPc4s0HzaOCCWqublvcSbTFtV
-         favA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777398001; x=1778002801;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wg6ndJoJw7e3vRcb43WTRotH1q6LGrr+y/ggZNEiTTY=;
-        b=NA7sNJakjzNQmWeGgTt1so16dZK9Bmf5yN2v/jx62Orzez2HRx7tRAE7EwUOtz2h6K
-         MbZJ7Q44CeOHdLkLE7Ddiro5YcNtL6a7qj1A7IeSVKXetXDsNS5ezQ3QhLPpyw7Gsc9X
-         eZyzvX6ET5ZyHtjlCBuuSFyaWCqZiumkgGIcMCdmv6W53N8cNenL4oMD+NF8r1Or7LpG
-         hdiE/gB88qF/clPCioBV+gqR6WaCsiM0Xnoiwb2vLq355QPtdoF1ataafcM5mGgQwiJj
-         zkblG0cyehm34kSoRUnb8E5Giy53+ULlu2sR4AAcZE4f18Jlhdts8Eg2zLLWRf7SiNAE
-         LFng==
-X-Forwarded-Encrypted: i=1; AFNElJ8kVmIllOC/p3PyNwnBY9bazssWx0QpL4afdDVw6sZbnM8jlyCu6oOiVQctFuUPFjL9shGIq0cSeu2K5naou7s=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw0Uvrzv3fejLAp6l9mdkAXhSGnY1GQ3spfkBXgm6xZ0W60OMXB
-	jaYm/TfV4SFkFYnRTWySg8106X4/0/5SNg590WBbf3SqH/KBGheoCbLhpJHC2ZhI+M4MbpHcnz3
-	4jK3NgDHN
-X-Received: from plr20.prod.google.com ([2002:a17:903:4454:b0:2b2:458e:4d6a])
- (user=jstultz job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:f785:b0:2b4:656b:aeb0
- with SMTP id d9443c01a7336-2b97c497ee8mr42986115ad.35.1777398000479; Tue, 28
- Apr 2026 10:40:00 -0700 (PDT)
-Date: Tue, 28 Apr 2026 17:39:46 +0000
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="5OXExj1C"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=mKv63SoHK0q8/jyhJGMywezI11KekDJ3mCYyXpT1kfsu2bU4qpdNqUuuC5iiPQAjBF3u+IJHiuAbQ8n4i5SB+CODjFYwdrfPilQ13Oq4jLgiOuUq3ujk4PWT9NnHfOV2A/cNaHiVBYZCcudSkNsOlmeQwV3aZxsQl5ADNDWoHU7hpM7iM+8P9oPSim+3Z2RWmSunyfrl7kyahzlH5O+ZX7DwrhpzCpY3qsFnFCXQg48AQ+NN8kEH1KvIRhDmqx0iOLWb9VegHdPzcxPqZ9Pe4wmQSvq3iPevoMG9hOKYUfaHIBF/PdheDCYYZ8TJJs5lKyhSCFbamgJ/Z2PNJrgQHg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bTdG+HNKy+zC26eRw/7JtuwytpK9xNgvxmmvbNjGDGE=;
+ b=SCSc3nhOCRWSxQPMs7XlpWHEtT24FoI8T4z7yeXOtPhDXGp0SYvoK6Ky8t7yJfbrwFKkMXmEGc/aMKdHFxp56N38oR3t+7K5aUYuRRkZOacndExCUV1xAfTO4vquNQGkwpSXBjPc/BFoqawQG6YWhRszpY7nAMW6gGB5XWS9t7CJoJtcEyDc/dCo2DnK+F2EO4rKM0B2ycObsHA8yPhdE9eDxovmW6TM45oWHv9KdhOkWKEQFMHT872pB1TOAHIrCqD8pMFAJsLkRi/IeXw74jV3GNrq9Ji3ZA7Sidy2fHYzzumf6Qfl9/lWoKWoDMYHYfWl4PrnT/rrqSvht2V82w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bTdG+HNKy+zC26eRw/7JtuwytpK9xNgvxmmvbNjGDGE=;
+ b=5OXExj1CsZUf4lP532caJ2H58hz31TNNqSneiKxLvsmAmhMaoBQ7vY57dEMzeaoY+Vhx7gAR81AqJPZcutkxLxm6yvi9zXr77FSkdIIeptdBh5019ydpaPQcWIXvrP+6ua0tvs1E0LTY9B4sZ0rWaq1HW7Zf18Z70oq8+fUAZKg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB5070.namprd12.prod.outlook.com (2603:10b6:5:389::22)
+ by SA1PR12MB999084.namprd12.prod.outlook.com (2603:10b6:806:4a1::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9870.16; Tue, 28 Apr
+ 2026 18:04:29 +0000
+Received: from DM4PR12MB5070.namprd12.prod.outlook.com
+ ([fe80::f3f2:852c:78d5:9353]) by DM4PR12MB5070.namprd12.prod.outlook.com
+ ([fe80::f3f2:852c:78d5:9353%4]) with mapi id 15.20.9870.013; Tue, 28 Apr 2026
+ 18:04:29 +0000
+Message-ID: <c38c9074-2ae7-422f-8226-a07027a1abe8@amd.com>
+Date: Tue, 28 Apr 2026 13:04:25 -0500
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 3/4] KVM: SEV: Add the kvm-amd.rapl_disable module
+ parameter
+To: Sean Christopherson <seanjc@google.com>
+Cc: Tycho Andersen <tycho@kernel.org>, Ashish Kalra <ashish.kalra@amd.com>,
+ John Allen <john.allen@amd.com>, Herbert Xu <herbert@gondor.apana.org.au>,
+ "David S. Miller" <davem@davemloft.net>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>, Paolo Bonzini <pbonzini@redhat.com>,
+ Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ Shuah Khan <shuah@kernel.org>, linux-crypto@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Kim Phillips <kim.phillips@amd.com>,
+ Alexey Kardashevskiy <aik@amd.com>, Nikunj A Dadhania <nikunj@amd.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Randy Dunlap <rdunlap@infradead.org>, Dapeng Mi
+ <dapeng1.mi@linux.intel.com>, Kees Cook <kees@kernel.org>,
+ Marco Elver <elver@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Li RongQing <lirongqing@baidu.com>, Eric Biggers <ebiggers@kernel.org>,
+ "Paul E. McKenney" <paulmck@kernel.org>, linux-doc@vger.kernel.org,
+ kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260427204847.112899-1-tycho@kernel.org>
+ <20260427204847.112899-4-tycho@kernel.org> <ae_TCofu4bHP_Ch-@google.com>
+ <afDJZQHNi-qdcEEe@tycho.pizza> <afDYCpbeT0HsXTMF@google.com>
+ <20f94bed-2843-44ab-877c-3e68bd4314f8@amd.com> <afDkcpcQ5vPsjQkO@google.com>
+Content-Language: en-US
+From: Tom Lendacky <thomas.lendacky@amd.com>
+Autocrypt: addr=thomas.lendacky@amd.com; keydata=
+ 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
+ WiyqywZI5g==
+In-Reply-To: <afDkcpcQ5vPsjQkO@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: CH3P220CA0011.NAMP220.PROD.OUTLOOK.COM
+ (2603:10b6:610:1e8::26) To DM4PR12MB5070.namprd12.prod.outlook.com
+ (2603:10b6:5:389::22)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.54.0.545.g6539524ca2-goog
-Message-ID: <20260428173957.1394265-1-jstultz@google.com>
-Subject: [PATCH] selftests: posix_timers: Use CLOCK_THREAD_CPUTIME_ID for
- ITIMER_PROF measurements
-From: John Stultz <jstultz@google.com>
-To: LKML <linux-kernel@vger.kernel.org>
-Cc: John Stultz <jstultz@google.com>, Anna-Maria Behnsen <anna-maria@linutronix.de>, 
-	Frederic Weisbecker <frederic@kernel.org>, Thomas Gleixner <tglx@kernel.org>, Stephen Boyd <sboyd@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB5070:EE_|SA1PR12MB999084:EE_
+X-MS-Office365-Filtering-Correlation-Id: f300f91c-5870-479c-a5b3-08dea55097a7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|376014|7416014|1800799024|22082099003|18002099003|56012099003;
+X-Microsoft-Antispam-Message-Info:
+	4kPJwnOVQ3PvW12EL/o5qjPoXGDLj11jft2VEzBqPWz+5wAb3e5tqtsJHC6biFJEeqNQFZGC5vPGhErgn+F4Yzfcz0JAEewW2SbsiPQYeZL1w4E20su3W7hVbzGVwKoJURmYYvqsjIFxIHXrAE4aKYvxni/GSGP78YSNRkwXW+mbhR13lHTmuX0nODEMS46E6s67HZXpB9lorzuEDXvgG0usMA8Ie5GCqUxOUjvam6K0FlXRUMSLINWrlzJKvkhSV46TFj6ukB9V6p0M0+0wHoWaKGy3oHC4vMyzCA1fF7fVXA9e/N8kfl/pwJtATfXotAORa/5PyelE4t8ENbHCMm6KTlS1foQCDqPZBl1lnWQsLu3pg8Lde2vOGh+f1fNdU3w8uWcUzubQd5Cujh+sd2DQDFxly14lvRnFSL6dlp6lEvy2PkC8X874pHNyjubjsjPv5dkgrWkjmTafExcyFPMOMOrnpPyVCHsnArnfJLmdUIsUBRIwCPKkzh3HvMq7geHZz86iwz/Q6c/7wcGnJwYYrMmonWaREtUDw8JU1rAuuXwOu8hFOYKFX4owvL+GhKQo4hTiwz4oPL7py07ltRHEmKrKvjiPWtc8zmtKtsSfeW4HKS7Xlh2VeAehtxVhwzdGTwccn5VkJakIon0zWBcT4SG5UgsoRrtulGL3qafcu6FuCGHmNZ8dg/37Ai4mzf7sWpoKnsYuZdLSW6A+6J8Hlhhn3gEWq8CAGHXRjqRPNgeScSsoj4+mJrJZ6cWc
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5070.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024)(22082099003)(18002099003)(56012099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?NGhLcFpxbXNXUDlLUTR2L2w2dFJpM1RMdVMyNm5iditQUyt5TnY0SEFDSXJQ?=
+ =?utf-8?B?N3llbmE4L2pncjNVVnBtOFVpUlFlZ0NONktaRDFMZk9IU093RHVqdUgrbTZP?=
+ =?utf-8?B?T0h1dUw4VTFLNWFROWtpVWdKQWh3TUJTODhVSlNaelhCWi9tcWNvcmRBV3VH?=
+ =?utf-8?B?S25GWVJsMURPUXB1QjVDVlNJd01VcVM0SDhHRzVmd2tjVVh1aU9hWFJqbzZJ?=
+ =?utf-8?B?MUQ1OW5MUGNpNzR2SzV5UTBkWFhYSkhpa2NzbFZLZXpJWlhzakFSKzlQYkdR?=
+ =?utf-8?B?aXlHcTRqdTZRYXNmU3ZFUHhkVHc3NVRvR0FqWUJWT0Y2Q0VKcEcwR1RVTWZx?=
+ =?utf-8?B?NmdjaEkxWStzbjFZNWZJa09JSXlXVUUxZTlPODdPWlh0OFVVcGhrU2VnRU43?=
+ =?utf-8?B?VU13bG1jR0RJbVRIaURDK1g1Ujk3N2FzTGsvd1EzR0VHV2drWll5dTNqKzNR?=
+ =?utf-8?B?QytpS2l0cG5HbHJMN2c1ekVkd2phS1B1b1NSZFpZeGlaTFV3YnRCMkZDM0J1?=
+ =?utf-8?B?WW1ZVDM1Syt6a3JacGkzaWJsRDlybXZRTDVUY3ZMK2pEMXpWRjFjeWlsbkVD?=
+ =?utf-8?B?eSs2RkFNamlmbHBueDhxdmUzTVB2bVgvak5pc2ZoV0tnTENRbjRxaUY2UGth?=
+ =?utf-8?B?TW5qS2g1T21IUTVMcU9jUWZrMVF4UW51ZmFEWnRNNlB2RlJCZVJtaW52WUZx?=
+ =?utf-8?B?YTliYi9YMjIzenBiaTl6M0VxTERvWVdNa1pGTW8zVzRQN1lPN2hUK2xsbjVV?=
+ =?utf-8?B?bFlIcndoZG16K2J4WXl5MDVOTDNvZDdLR2ZZelBFOXhYeVl2OEZKd05nNjhv?=
+ =?utf-8?B?clp3MDkxckZpb1JKa1h4TU9QVzd3RGM3VXhIRmJvZ0NOMmZiM0xRNHBOY0xy?=
+ =?utf-8?B?NzdHSkxsSWlBeVNzdHVac25HWlRkUE5qMlJVSWJTN281cDBSQ0twMkRPdVVt?=
+ =?utf-8?B?emJYWjNEMGZ5TStrSjJqWlgwd29nMGxId1ZUbGt4ZWtpOXgrS05heWhQVG5w?=
+ =?utf-8?B?LzFMaE5GblJFMlhia3pZM1VLemFhYklSWDQ4ckxsMGsreWVIQ0FkVDZBU3Fo?=
+ =?utf-8?B?ZDN2c1ZkcW91ZDFkdGxkV0pqdUdpT0lBYW1iSnc1T01CRGp0bDJ2RDcwWU1L?=
+ =?utf-8?B?bEtlNzM4VlVxR1NxT3cwdUJhYWRkQ0YyTzVaV3RTWUU2YkVQOEJodTdNOFdH?=
+ =?utf-8?B?ME0xZ2pvQXdSYmtyMmQwVnQ3YjMzRzBXUWJFWG1pWW1oVFE5eGVzSzNKMGxW?=
+ =?utf-8?B?U0l0T3ExT1FTS3hQNmtuWWlRR3dMNXI3aHBWTGxpRWMxdWR4QTJDOGtldU83?=
+ =?utf-8?B?VFZyS0dIRUEzOEl1VjgzcWVBZVpmUnFKRm5UUHFWVHRteXNYNWRQWVNVaGV0?=
+ =?utf-8?B?N3R1dGNsZGJzNVhaTXVHUmRUY0VDWW9QRUJlaWVNOEdPZkxZVmFYOHdNUmUz?=
+ =?utf-8?B?Q1ZTWkRUTHZ3dXhCTnY2azNiZG1rd3hXNnpaSEZWWHZNaGtZdDFoVFlRT291?=
+ =?utf-8?B?cjVDbGoyblZ0a1F1M1ZUSDREcVlsSEpPTlhIaURRQkxuVDBESkVHY3I5UlVS?=
+ =?utf-8?B?QWh3NWhuTmhMSm01Ylc3aGd4Zzd3QWk3WTJUeVY5UnFrenVGSitWQmpndUpa?=
+ =?utf-8?B?VWhRKzFXT2pRUjhrUlNxNzM4Tlo1OU9qbklYY3h1L3kwc2dkNjJ1KzJUYVBW?=
+ =?utf-8?B?RjF6WCtvTTZhdHdDNTl5RUsvZUF2dHBvM1VSVy94VC95U29uZm5RMWszUG9O?=
+ =?utf-8?B?eVN4SG9rTm9rZmF1RlJaN1Q3VExWcm9ZSkhlc1JhMGFEeVNRQ1VqdUszYlY0?=
+ =?utf-8?B?dWhwUFpIMW9xYkg1Vm5KdWtua0Z4N2wzTVBMNHZoMTZkMWtvODJ3Mlo3WXp6?=
+ =?utf-8?B?ejZxbWk3L1AyTzF5aXFGL21Qc1lmMkZuaWhCVUhYSW4yeGVnaHRpT3ZKeTBQ?=
+ =?utf-8?B?ZkxKeDh2ZGRialE5SXRpRzV1WCswRWFMNDM0WWx0U0hDdDJ6dDBqZXU5RVNQ?=
+ =?utf-8?B?UzRYMDRwU2lLbzdIZUlZSEVoMkRBYzJyVWl5ZkdOVjJCRkNxK3VjZWY2R3Av?=
+ =?utf-8?B?NkVqRENGdnRPOE1JWHFjK3hEbVJSckhSeG1ONE12UUJCeXhObldyemFQYVlC?=
+ =?utf-8?B?dU5NTDBYVmdVazlqZWZuQW5UNTNUeDVYY25MaUdncHNoZGZPcW9DU0syb0Rl?=
+ =?utf-8?B?bkIwQWx0bXBaYXM4ZHloY2IwYW1HMGxrcTFxVDNxSVRTWFlrQm9HRzZERWhO?=
+ =?utf-8?B?TEpTN1lQUWl1amRPcmpPTnBSbDNnYWZHdVRUT1JEcTQxV2ZmekV6QzQ1ZEQ2?=
+ =?utf-8?Q?PQ2lBEwq7mxpM9xgLD?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f300f91c-5870-479c-a5b3-08dea55097a7
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5070.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Apr 2026 18:04:29.4830
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Ng4DgiWMwkHwGhbNex6TLy8507xllwnjlF6HGitGWU4Cgnnq1t2NImP2FNze6hmT/5jnAeEchG3cS48Ya7jA/g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB999084
 
-It was reported that the posix_timers test was at times seeing
-failures with ITIMER_PROF timers, specifically in cases where
-the RCU_SOFTIRQ was taking up significant amounts of time.
+On 4/28/26 11:46, Sean Christopherson wrote:
+> On Tue, Apr 28, 2026, Tom Lendacky wrote:
+>> On 4/28/26 10:53, Sean Christopherson wrote:
+>>> On Tue, Apr 28, 2026, Tycho Andersen wrote:
+>>>> On Mon, Apr 27, 2026 at 02:20:10PM -0700, Sean Christopherson wrote:
+>>>>> I'm pretty sure I said this earlier: KVM absolutely should not be able to disable
+>>>>> RAPL for the entire system.  That needs to be a power management thing.
+>>>>
+>>>> You definitely noted "not CCP", I don't think I quite understood what
+>>>> that meant though:
+>>>> https://lore.kernel.org/all/aZ86BZWi-GLiHvmt@tycho.pizza/
+>>>>
+>>>> I'm a little worried that putting it in power management will generate
+>>>> some weird dependencies, or weakref symbols that can't change things
+>>>> if they are loaded independently of kvm_amd or something. But let me
+>>>> see what I can come up with.
+>>>
+>>> Ugh, and it's not even powerman per se, it's actually a module in perf.  Oof.
+>>>
+>>> I 100% agree it'll be tricky, but I also stand by comments that neither the CCP
+>>> driver or KVM should be allowed to silently pull the rug out from under the RAPL
+>>> module.
+>>
+>> Maybe something that can be added to the current sev= kernel command line
+>> parameter, e.g. sev=norapl, or such?
+> 
+> Yeah.  The only question I have is if we expect end users to want to disable RAPL
+> at runtime.  If so, then we probably want a sysfs knob or something.
+> 
+> However, letting RAPL be toggled on/off will introduce some amount of complexity,
+> as the kernel would need to negotiate/coordinate with the RAPL perf module and
+> with the CPP driver to ensure RAPL stays in the "correct" state.  E.g. if the
+> perf module is loaded, then RAPL is effectively pinned "on".  And if SNP has been
+> initialized with RAPL_DIS, then RAPL is effectively pinned "off".  Blech.
+> 
+>> Maybe even with a kernel config option for a default value?
+> 
+> Probably overkill?
 
-Analysis showed that as the time in softirq isn't included in
-the task stime + utime accounting used to trigger the SIGPROF
-so delays from softirq work could cause it to appear that the
-signal was incorrectly delayed.
+Yeah, probably.
 
-Contributing to this is that the test uses gettimeofday() to
-measure itimers, which also means any scheduling delay can also
-cause failures (as the task may not be running the entire time).
+> 
+>> On SNP_SHUTDOWN it will be re-enabled if it was disabled.
+> 
+> Stating the obvious, if we do this, we open the can of worms I described above.
+> 
+>>>>> KVM then needs to communicate (and enforce?) the policy to
+>>>>> userspace.
+>>>>
+>>>> KVM doesn't need to enforce anything, the SEV firmware will generate a
+>>>> launch error for policy violation if it's not supported.
+>>>>
+>>>> For communicating to userspace if it's not a kvm module parameter, one
+>>>> option is to mask it off in sev_get_snp_supported_policy() if it was
+>>
+>> Did you mean sev_get_snp_policy_bits() or were you referring to the KVM
+>> ioctl() for retrieving them?
+>>
+>>>> initialized without the support. Then it'll be visible via
+>>>> KVM_X86_SNP_POLICY_BITS.
+>>>
+>>> Ya, this is what I was envisioning.
+>>
+>> It's still a valid policy bit (if supported by the platform), so I don't
+>> think masking it off is appropriate.
+> 
+> But it's not fully supported, no?  I.e. won't the VM fail if it requests RAPL_DIS?
+> 
+> Ooh, presumably the subtle difference is that on a platform without RAPL_DIS at
+> all, the VM will successfully launch and thus could run with RAPL enabled even
+> if the VM requested RAPL_DIS?
 
-To fix this, convert all the itimer measurements to use
-clock_gettime(), tweaking the logic to use nsecs instead of
-usecs. Then for ITIMER_PROF timers, utilize the
-CLOCK_THREAD_CPUTIME_ID clockid so that we are similarly
-measuring the time the task was running.
+No, the VM launch will fail in that case, too. But I thought the
+difference there would be getting an INVALID_PARAM for specifying an
+unsupported policy bit, but I think you still get POLICY_FAILURE, so maybe
+it doesn't matter.
 
-Signed-off-by: John Stultz <jstultz@google.com>
----
-Cc: Anna-Maria Behnsen <anna-maria@linutronix.de>
-Cc: Frederic Weisbecker <frederic@kernel.org>
-Cc: Thomas Gleixner <tglx@kernel.org>
-Cc: Stephen Boyd <sboyd@kernel.org>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: linux-kselftest@vger.kernel.org
-Cc: kernel-team@android.com
----
- tools/testing/selftests/timers/posix_timers.c | 55 ++++++++++---------
- 1 file changed, 28 insertions(+), 27 deletions(-)
+Thanks,
+Tom
 
-diff --git a/tools/testing/selftests/timers/posix_timers.c b/tools/testing/selftests/timers/posix_timers.c
-index 38512623622a5..2f3bac9fc6e87 100644
---- a/tools/testing/selftests/timers/posix_timers.c
-+++ b/tools/testing/selftests/timers/posix_timers.c
-@@ -78,19 +78,25 @@ static void sig_handler(int nr)
- 	done = 1;
- }
- 
-+static inline int64_t calcdiff_ns(struct timespec t1, struct timespec t2)
-+{
-+	int64_t diff;
-+
-+	diff = NSEC_PER_SEC * (int64_t)((int) t1.tv_sec - (int) t2.tv_sec);
-+	diff += ((int) t1.tv_nsec - (int) t2.tv_nsec);
-+	return diff;
-+}
-+
- /*
-  * Check the expected timer expiration matches the GTOD elapsed delta since
-  * we armed the timer. Keep a 0.5 sec error margin due to various jitter.
-  */
--static int check_diff(struct timeval start, struct timeval end)
-+static int check_diff(struct timespec start, struct timespec end)
- {
--	long long diff;
--
--	diff = end.tv_usec - start.tv_usec;
--	diff += (end.tv_sec - start.tv_sec) * USEC_PER_SEC;
-+	long long diff = calcdiff_ns(end, start);
- 
--	if (llabs(diff - DELAY * USEC_PER_SEC) > USEC_PER_SEC / 2) {
--		printf("Diff too high: %lld..", diff);
-+	if (llabs(diff - DELAY * NSEC_PER_SEC) > NSEC_PER_SEC / 2) {
-+		printf("Diff too high: %lld ns..", diff);
- 		return -1;
- 	}
- 
-@@ -99,22 +105,25 @@ static int check_diff(struct timeval start, struct timeval end)
- 
- static void check_itimer(int which, const char *name)
- {
--	struct timeval start, end;
-+	struct timespec start, end;
- 	struct itimerval val = {
- 		.it_value.tv_sec = DELAY,
- 	};
-+	int clock_id = CLOCK_REALTIME;
- 
- 	done = 0;
- 
- 	if (which == ITIMER_VIRTUAL)
- 		signal(SIGVTALRM, sig_handler);
--	else if (which == ITIMER_PROF)
-+	else if (which == ITIMER_PROF) {
-+		clock_id = CLOCK_THREAD_CPUTIME_ID;
- 		signal(SIGPROF, sig_handler);
-+	}
- 	else if (which == ITIMER_REAL)
- 		signal(SIGALRM, sig_handler);
- 
--	if (gettimeofday(&start, NULL) < 0)
--		fatal_error(name, "gettimeofday()");
-+	if (clock_gettime(clock_id, &start))
-+		fatal_error(name, "clock_gettime()");
- 
- 	if (setitimer(which, &val, NULL) < 0)
- 		fatal_error(name, "setitimer()");
-@@ -126,18 +135,19 @@ static void check_itimer(int which, const char *name)
- 	else if (which == ITIMER_REAL)
- 		idle_loop();
- 
--	if (gettimeofday(&end, NULL) < 0)
--		fatal_error(name, "gettimeofday()");
-+	if (clock_gettime(clock_id, &end))
-+		fatal_error(name, "clock_gettime()");
- 
- 	ksft_test_result(check_diff(start, end) == 0, "%s\n", name);
- }
- 
- static void check_timer_create(int which, const char *name)
- {
--	struct timeval start, end;
-+	struct timespec start, end;
- 	struct itimerspec val = {
- 		.it_value.tv_sec = DELAY,
- 	};
-+	int clock_id = CLOCK_REALTIME;
- 	timer_t id;
- 
- 	done = 0;
-@@ -148,16 +158,16 @@ static void check_timer_create(int which, const char *name)
- 	if (signal(SIGALRM, sig_handler) == SIG_ERR)
- 		fatal_error(name, "signal()");
- 
--	if (gettimeofday(&start, NULL) < 0)
--		fatal_error(name, "gettimeofday()");
-+	if (clock_gettime(clock_id, &start))
-+		fatal_error(name, "clock_gettime()");
- 
- 	if (timer_settime(id, 0, &val, NULL) < 0)
- 		fatal_error(name, "timer_settime()");
- 
- 	user_loop();
- 
--	if (gettimeofday(&end, NULL) < 0)
--		fatal_error(name, "gettimeofday()");
-+	if (clock_gettime(clock_id, &end))
-+		fatal_error(name, "clock_gettime()");
- 
- 	ksft_test_result(check_diff(start, end) == 0,
- 			 "timer_create() per %s\n", name);
-@@ -445,15 +455,6 @@ static void check_delete(void)
- 	ksft_test_result(!tsig.signals, "check_delete\n");
- }
- 
--static inline int64_t calcdiff_ns(struct timespec t1, struct timespec t2)
--{
--	int64_t diff;
--
--	diff = NSEC_PER_SEC * (int64_t)((int) t1.tv_sec - (int) t2.tv_sec);
--	diff += ((int) t1.tv_nsec - (int) t2.tv_nsec);
--	return diff;
--}
--
- static void check_sigev_none(int which, const char *name)
- {
- 	struct timespec start, now;
--- 
-2.54.0.545.g6539524ca2-goog
+
 
