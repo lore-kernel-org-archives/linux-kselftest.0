@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D080331218;
-	Tue, 28 Apr 2026 20:44:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C22CE332EA0;
+	Tue, 28 Apr 2026 20:44:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777409090; cv=none; b=QJKn8FF1SOaaLb+Lu3dwyrqXwV45yw75SdW/Ty6WBaWAeeBGiwYRK86/ogt2CWRE6t5jvXuz6p5USVXMi6rtJChtKOKJhskToIJ2M93KYtF/+MycRHjad5SIsyyk2YGAqWNXRwKWmW5leWugv+5Y5AiV8asMb7aDZuIOJEydvIE=
+	t=1777409096; cv=none; b=gF1CphcgaiC8SEA/VECTeeWfYaONKDvmxx1p5Yh0y18Oo8cbboe7e+Lg2oO3HlME0Wp6+lUWZTUqHn6UuvAu6FjqbBvpe8C1WDDrzHetbSFXw8/M69/9qAkrtTjRlDkY+4hlGuPQ8qf9eVna2kgviwe8wKzPoOul5biMxmNEC4E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777409090; c=relaxed/simple;
-	bh=7qKHzCadzgEQAQzNVqCf6fre80BxdReFv76mDf7/IKw=;
+	s=arc-20240116; t=1777409096; c=relaxed/simple;
+	bh=/VHYsNQ9mu4gXMtGoRr+26k5iHfnClRvZmbB31xolG4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fCUF109OUMBtENu6MiX/egAP1UnnoZN//I56Fs3q1TcQgkS+jDYVGxA/ZziOCSqEMRP2RWiMRh2/a0trfT0iFWLkT+St1/cLLRfZE1JxYcAPGQX5SC2J5acsHQvMuc8bTj+guKDWVXh0rTPYYL/K5nabNQ6RYYhU+sRd56EkEY8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EXmOL9ou; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=F4EDXaGcbeVjb7QuBb3eoShA4pmiVsgxA0rLGQY759HT7oDPZw6mpWwGvBEJosddtXN0AAvx6b4s9MpFkcuIn3zt39hetHLFEV2Bkkdg34eJl7eYOIcKbNDAb+/FsqdFHzD6E4NG0eGTze/104VtU2WOMeA1ZaptZTyqDmJPILg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qwT0gCvv; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EXmOL9ou"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2EFBC2BCB3;
-	Tue, 28 Apr 2026 20:44:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qwT0gCvv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B217C2BCAF;
+	Tue, 28 Apr 2026 20:44:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777409089;
-	bh=7qKHzCadzgEQAQzNVqCf6fre80BxdReFv76mDf7/IKw=;
+	s=k20201202; t=1777409096;
+	bh=/VHYsNQ9mu4gXMtGoRr+26k5iHfnClRvZmbB31xolG4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=EXmOL9ou5pb28Qr8PTiAefwZfwy88snUIzJS8rYsQHY0Zl+Z0b3Jh5GOP8TO2lVSV
-	 pEvW97yjRJoPizvGmLDImbmW4ewcXa8F33xnWt7pyp5cuXmKanuTgK9L/Wd+5jq5Ju
-	 TiA4/T9qHWfLhPNQCjNb0gNwENQ1ftUsC91Ky9NonciIwfyoHgSjQbcWvTjmqVRgZJ
-	 k6FYkUKxvk0QQUUzA1yQmggAkvy3ty2U1sVv9Q2p0CT2BuyQzwr91/41QjC3lbMnXA
-	 Lnxv5JQhLdeXJZk7DABLvQ1y0vpjuXSWAK/NAE7w+sa9D5FRdGm8XmCY5u9MCRE9iH
-	 U6NlWwOIJ4PEA==
+	b=qwT0gCvvMjOaBS8YabVlq3OHeNm/YlUpXm0dEeuGiuiSqiAexEePOfSHcvgZ2sBwr
+	 DIyQCgiDlQWOhId1P0q85ZdNOyExDIseXnptwi6k7vPuQwqaQFlHUVDdBuTuWdOkrh
+	 1CqcHgcz3kEVidEEZ7gQdjGPZxEWIhb562Z3z8NnuXpcRYzBdQ4dvkVBk3SA2KIpjm
+	 NW9BnEWKC88l30mDHw6ziArdYDUyIkiGAxOil9cbMxhNbs047Cl/KRhVY+OtYBwjqw
+	 aSO4XL6a1YrvtcHMgozdNT9orcoTZHe2Mxl153/c/RSIIvea0H78jznr2wizySp7Op
+	 13ab7tzEm6sew==
 From: Mike Rapoport <rppt@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	David Hildenbrand <david@kernel.org>
@@ -54,9 +54,9 @@ Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-mm@kvack.org
-Subject: [PATCH v3 18/54] selftests/mm: uffd-stress: use kselftest framework
-Date: Tue, 28 Apr 2026 23:42:04 +0300
-Message-ID: <20260428204240.1924129-19-rppt@kernel.org>
+Subject: [PATCH v3 19/54] selftests/mm: uffd-unit-tests: use kselftest framework
+Date: Tue, 28 Apr 2026 23:42:05 +0300
+Message-ID: <20260428204240.1924129-20-rppt@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260428204240.1924129-1-rppt@kernel.org>
 References: <20260428204240.1924129-1-rppt@kernel.org>
@@ -70,89 +70,151 @@ Content-Transfer-Encoding: 8bit
 
 From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-Convert uffd-stress test to use kselftest framework for reporting and
+Convert uffd-unit-tests to use kselftest framework for reporting and
 tracking successful and failing runs.
+
+Reviewed by: Donet Tom <donettom@linux.ibm.com>
 
 Reviewed-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 ---
- tools/testing/selftests/mm/uffd-stress.c | 41 +++++++++++-------------
- 1 file changed, 19 insertions(+), 22 deletions(-)
+ tools/testing/selftests/mm/uffd-unit-tests.c | 79 +++++++++++---------
+ 1 file changed, 44 insertions(+), 35 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/uffd-stress.c b/tools/testing/selftests/mm/uffd-stress.c
-index 700fbaa18d44..e92a85463eb1 100644
---- a/tools/testing/selftests/mm/uffd-stress.c
-+++ b/tools/testing/selftests/mm/uffd-stress.c
-@@ -286,19 +286,12 @@ static int userfaultfd_stress(uffd_global_test_opts_t *gopts)
- 	pthread_attr_setstacksize(&attr, 16*1024*1024);
+diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
+index 6f5e404a446c..1a33db281f8a 100644
+--- a/tools/testing/selftests/mm/uffd-unit-tests.c
++++ b/tools/testing/selftests/mm/uffd-unit-tests.c
+@@ -86,39 +86,24 @@ typedef struct {
+ 	uffd_test_case_ops_t *test_case_ops;
+ } uffd_test_case_t;
  
- 	while (bounces--) {
--		printf("bounces: %d, mode:", bounces);
--		if (bounces & BOUNCE_RANDOM)
--			printf(" rnd");
--		if (bounces & BOUNCE_RACINGFAULTS)
--			printf(" racing");
--		if (bounces & BOUNCE_VERIFY)
--			printf(" ver");
--		if (bounces & BOUNCE_POLL)
--			printf(" poll");
--		else
--			printf(" read");
--		printf(", ");
--		fflush(stdout);
-+		ksft_print_msg("bounces: %d, mode:%s%s%s%s, ",
-+			       bounces,
-+			       bounces & BOUNCE_RANDOM ? " rnd" : "",
-+			       bounces & BOUNCE_RACINGFAULTS ? " racing" : "",
-+			       bounces & BOUNCE_VERIFY ? " ver" : "",
-+			       bounces & BOUNCE_POLL ? " poll" : " read");
+-static void uffd_test_report(void)
+-{
+-	printf("Userfaults unit tests: pass=%u, skip=%u, fail=%u (total=%u)\n",
+-	       ksft_get_pass_cnt(),
+-	       ksft_get_xskip_cnt(),
+-	       ksft_get_fail_cnt(),
+-	       ksft_test_num());
+-}
++static char current_test[256];
  
- 		if (bounces & BOUNCE_POLL)
- 			fcntl(gopts->uffd, F_SETFL, gopts->uffd_flags | O_NONBLOCK);
-@@ -456,6 +449,9 @@ int main(int argc, char **argv)
- 	unsigned long nr_cpus;
- 	size_t bytes;
+ static void uffd_test_pass(void)
+ {
+-	printf("done\n");
+-	ksft_inc_pass_cnt();
++	ksft_test_result_pass("%s\n", current_test);
+ }
  
-+	ksft_print_header();
-+	ksft_set_plan(1);
+ #define  uffd_test_start(...)  do {		\
+-		printf("Testing ");		\
+-		printf(__VA_ARGS__);		\
+-		printf("... ");			\
+-		fflush(stdout);			\
++		snprintf(current_test, sizeof(current_test), __VA_ARGS__); \
+ 	} while (0)
+ 
+ #define  uffd_test_fail(...)  do {		\
+-		printf("failed [reason: ");	\
+-		printf(__VA_ARGS__);		\
+-		printf("]\n");			\
+-		ksft_inc_fail_cnt();		\
++		ksft_test_result_fail("%s\n", current_test);	\
+ 	} while (0)
+ 
+ static void uffd_test_skip(const char *message)
+ {
+-	printf("skipped [reason: %s]\n", message);
+-	ksft_inc_xskip_cnt();
++	ksft_test_result_skip("%s (%s)\n", current_test, message);
+ }
+ 
+ /*
+@@ -1701,6 +1686,26 @@ static void usage(const char *prog)
+ 	exit(KSFT_FAIL);
+ }
+ 
++static int uffd_count_tests(int n_tests, int n_mems, const char *test_filter)
++{
++	uffd_test_case_t *test;
++	int i, j, count = 0;
 +
- 	gopts = (uffd_global_test_opts_t *) malloc(sizeof(uffd_global_test_opts_t));
- 
- 	if (argc < 4)
-@@ -484,10 +480,8 @@ int main(int argc, char **argv)
- 	 * for racy extra reservation of hugepages.
- 	 */
- 	if (gopts->test_type == TEST_HUGETLB &&
--	   get_free_hugepages() < 2 * (bytes / gopts->page_size) + gopts->nr_parallel - 1) {
--		printf("skip: Skipping userfaultfd... not enough hugepages\n");
--		return KSFT_SKIP;
--	}
-+	   get_free_hugepages() < 2 * (bytes / gopts->page_size) + gopts->nr_parallel - 1)
-+		ksft_exit_skip("Skipping userfaultfd... not enough hugepages\n");
- 
- 	gopts->nr_pages_per_cpu = bytes / gopts->page_size / gopts->nr_parallel;
- 	if (!gopts->nr_pages_per_cpu) {
-@@ -503,9 +497,12 @@ int main(int argc, char **argv)
++	if (!test_filter)
++		count += 2;	/* test_uffd_api(false) + test_uffd_api(true) */
++
++	for (i = 0; i < n_tests; i++) {
++		test = &uffd_tests[i];
++		if (test_filter && !strstr(test->name, test_filter))
++			continue;
++		for (j = 0; j < n_mems; j++)
++			if (test->mem_targets & mem_types[j].mem_flag)
++				count++;
++	}
++
++	return count;
++}
++
+ int main(int argc, char *argv[])
+ {
+ 	int n_tests = sizeof(uffd_tests) / sizeof(uffd_test_case_t);
+@@ -1730,24 +1735,31 @@ int main(int argc, char *argv[])
+ 		}
  	}
- 	gopts->nr_pages = gopts->nr_pages_per_cpu * gopts->nr_parallel;
  
--	printf("nr_pages: %lu, nr_pages_per_cpu: %lu\n",
--	       gopts->nr_pages, gopts->nr_pages_per_cpu);
--	return userfaultfd_stress(gopts);
-+	ksft_print_msg("nr_pages: %lu, nr_pages_per_cpu: %lu\n",
-+		       gopts->nr_pages, gopts->nr_pages_per_cpu);
+-	if (!test_filter && !list_only) {
++	if (list_only) {
++		for (i = 0; i < n_tests; i++) {
++			test = &uffd_tests[i];
++			if (test_filter && !strstr(test->name, test_filter))
++				continue;
++			printf("%s\n", test->name);
++		}
++		return KSFT_PASS;
++	}
 +
-+	ksft_test_result(!userfaultfd_stress(gopts),
-+			 "uffd-stress %s\n", argv[1]);
++	ksft_print_header();
++	ksft_set_plan(uffd_count_tests(n_tests, n_mems, test_filter));
++
++	if (!test_filter) {
+ 		has_uffd = test_uffd_api(false);
+ 		has_uffd |= test_uffd_api(true);
+ 
+-		if (!has_uffd) {
+-			printf("Userfaultfd not supported or unprivileged, skip all tests\n");
+-			exit(KSFT_SKIP);
+-		}
++		if (!has_uffd)
++			ksft_exit_skip("Userfaultfd not supported or unprivileged\n");
+ 	}
+ 
+ 	for (i = 0; i < n_tests; i++) {
+ 		test = &uffd_tests[i];
+ 		if (test_filter && !strstr(test->name, test_filter))
+ 			continue;
+-		if (list_only) {
+-			printf("%s\n", test->name);
+-			continue;
+-		}
+ 		for (j = 0; j < n_mems; j++) {
+ 			mem_type = &mem_types[j];
+ 
+@@ -1794,10 +1806,7 @@ int main(int argc, char *argv[])
+ 		}
+ 	}
+ 
+-	if (!list_only)
+-		uffd_test_report();
+-
+-	return ksft_get_fail_cnt() ? KSFT_FAIL : KSFT_PASS;
 +	ksft_finished();
  }
  
  #else /* __NR_userfaultfd */
-@@ -514,8 +511,8 @@ int main(int argc, char **argv)
+@@ -1806,8 +1815,8 @@ int main(int argc, char *argv[])
  
  int main(void)
  {
--	printf("skip: Skipping userfaultfd test (missing __NR_userfaultfd)\n");
+-	printf("Skipping %s (missing __NR_userfaultfd)\n", __file__);
 -	return KSFT_SKIP;
 +	ksft_print_header();
 +	ksft_exit_skip("missing __NR_userfaultfd definition\n");
