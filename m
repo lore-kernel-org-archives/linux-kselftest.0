@@ -1,109 +1,134 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CAFD1A6816;
-	Tue, 28 Apr 2026 05:48:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79ACB2D6E58
+	for <linux-kselftest@vger.kernel.org>; Tue, 28 Apr 2026 06:24:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777355316; cv=none; b=ZnaoAYAVz8GKBVZybjjzLUvRvkJuR7hKLUp3tNjvi/6E+f8bYRMZB8sMp5hJi52AT5ZFxEhWPIV7SYqI/2r37RmAjb7bol2NTDjuCM8mNgCvTGKyjBqILxFkLxQHI+nkrx/alttrlazBTn1jELOZL4mQiPt7bhYdQPSVD/HQCqI=
+	t=1777357451; cv=none; b=LvaYefZfgrXq/gQ1uMCXYicHCtRm5I04L3A2ZcKBa0DcynWXVFucOWPBJdSXB9A+OVbNJ1SQxWv9o53Hsj0QqBFEbyj9yOe6VcmOCHaL94trc/pVQ3qcUKXFxhjA/uD8RqjJ6WRekaie8uCbLqQGjnVNQNmbd/Y0S+4QDP3rZmU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777355316; c=relaxed/simple;
-	bh=EdPSc+WMWGhg4RFoHQwwCJBiIBgm1vzCd/Q0/u0vbUw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LRt2f62Y0nDEqbyMgb/hzBsCt2Xxo5lKSFlMo/yBe0Nks20jTgX2TyfoLLEdJJXLRI6/LNJueHas52J4Zxix2bVWI96XdRgaM0oFJovAZBueFDyp8HIhXz/oJn74f6Kj/p+qi3X30dkBEjs3vBopEl0vQDSodZVL3QdmYcFhjJk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oGKCutFN; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777357451; c=relaxed/simple;
+	bh=G5pZnsK3YRw+anFbPEqRhBrG/5spNqtr4N8O17T6kJ4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pBD6bu89xVjBRcZLmFbj9XKsh/CqB3ulTPGZ0JgInQw7/vHjNEjdNpNz/BVlTPO/D5zQLsHfCArIMaOFMPMdbJWXsI1LQgFWeuSLFPLTNwvndxQFPmiH3vL1l+y6gT5bGxOZHnMBZV3/BSChvpeP4t+cWhOq4rWuSKJh4fDkNUQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NxXfeHoA; arc=none smtp.client-ip=209.85.210.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oGKCutFN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C10C0C2BCAF;
-	Tue, 28 Apr 2026 05:48:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777355315;
-	bh=EdPSc+WMWGhg4RFoHQwwCJBiIBgm1vzCd/Q0/u0vbUw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=oGKCutFN123k6dj8oOb6F2qm17O+ZlRbm1g65QIeeCO3Ixd8+EVkVtAssaRwGiOus
-	 6T7sWrkcxTMlJu4A/QzzpKRyCtNUJv5om7B2hVfPiK34BIjbF4TFkN+22fMq/ySom5
-	 P/xLChAnY/KUe/j1/vhoEtS/ee6No9lsk3bgrEOoexoLa8t39gv98kuDCv94MZaOAs
-	 VTILVWtfyGoOxwCIeeYEV7QLUycalFi4AaJaj5g5dtCtXyz5lRqrFP0bVyRsYpeRNx
-	 IbLELRLF0nK4uBIppwCdwGlOfi7NuXXDkYx6/WoFArpjXinNUylIzHwFHVApKdfkv8
-	 kMDx4njkrvp0w==
-Date: Tue, 28 Apr 2026 07:48:22 +0200
-From: Mike Rapoport <rppt@kernel.org>
-To: Luiz Capitulino <luizcap@redhat.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Barry Song <baohua@kernel.org>, Dev Jain <dev.jain@arm.com>,
-	Donet Tom <donettom@linux.ibm.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-	John Hubbard <jhubbard@nvidia.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Lance Yang <lance.yang@linux.dev>,
-	Leon Romanovsky <leon@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
-	Mark Brown <broonie@kernel.org>, Michal Hocko <mhocko@suse.com>,
-	Nico Pache <npache@redhat.com>, Peter Xu <peterx@redhat.com>,
-	Ryan Roberts <ryan.roberts@arm.com>,
-	Sarthak Sharma <sarthak.sharma@arm.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Vlastimil Babka <vbabka@kernel.org>, Zi Yan <ziy@nvidia.com>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: Re: [PATCH v2 43/53] selftests/mm: migration: add setup of HugeTLB
- pages
-Message-ID: <afBKJn_EjaTAe4A-@kernel.org>
-References: <20260418105539.1261536-1-rppt@kernel.org>
- <20260418105539.1261536-44-rppt@kernel.org>
- <a8510cbd-4a30-460c-b870-a250ceb8a522@redhat.com>
- <ae3v1cyMLbcvJtYW@kernel.org>
- <67d7b067-97a8-4600-a9a6-46f3e797ffed@redhat.com>
- <ae-UCVba16jg3-gR@kernel.org>
- <0e2ef2c0-d74e-4aff-bba0-6dd91dbd4e41@redhat.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NxXfeHoA"
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-82f69a286dbso8310001b3a.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Apr 2026 23:24:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1777357450; x=1777962250; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dCR2byQYfe0lorBCX0yQhVcHegZI42GX5HyJDRNPA3c=;
+        b=NxXfeHoA1pK91VDoaNFCQ8Z7q9Jwp5JHGnyOQPbVOp+r/mDZ9T06K2hwcmZf3CyalU
+         5SYGtLydxEieC2RjJZONODHB12F0f5evKGCFAUYR2dtNoOIwwPzgxZsdLTPZto9PHuAv
+         JWrygT5j3DAkCakTMJwmpt3/FsqbEBYQHbDJWeM98JOgeuhqQvyFtdfX5ISCD6xGNSWJ
+         tP4jFviqgkek3fc6GWgOyt3rq8pTEOCYYedWINAgqTuBJOTh8dLViRfH7Bmv11BeCL8I
+         0BacmCh+YEshEKDGZ+jr/+m8j3w+0QMwWl0yq+ylyxwcA9f5a47qUcsRtw8FS+nuvfff
+         5K0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777357450; x=1777962250;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dCR2byQYfe0lorBCX0yQhVcHegZI42GX5HyJDRNPA3c=;
+        b=axGBSbCrh9Ni3MOgPHxy03iViZ5AXkMSwsZSS3gGWAGYsl+BJyYJABk2MsG2I7Dko4
+         RkBT5jzpd7wQl/2b0hJVPgVYMnt8wFuujFAHd1FxKym+PG2iPoKpuWNq6NcjspJlBiHc
+         McYm+83Nm6KqvgdEPBa9lJNXlxYw4EmH851PxeyWasUxpqfT7RMgsZFJsiu2mwb/8l0L
+         X3srdrAWOOWJrXaIeEKZlbweDkxpZB5i5jJZS+vxgNQlfOsn8zUi79PZyTal+J/gvowO
+         f9YynfQDnRxQ/hfReJgbvfJnRYWq78HSQoMlWLorsa0TDuP8XWkPoaEHW8LgxazP/6Ls
+         5bBg==
+X-Forwarded-Encrypted: i=1; AFNElJ8V7gJoUz51WT4D7cEPHTLbu5/bb9VAZ2qgBhsCbPfH0J7+a6JU2OV7sJsOE3VW4U3kxRkrjVQCKNZ1mxEwVz4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzI8R3N4FQpXSNeOBbYH9PPDFeYdjB+giQgnCYYPpzyiXkHnCUT
+	JEBf9Y/jNjt/mv8zn95Steuw8sSD+scCdY+w3dLqZGVOtDaS06H71DGV
+X-Gm-Gg: AeBDies2IRnQey5ErC69eOb6QxakM+GiAN70DC2icR7Fekt1rjwaeLxk1GR7uEiebBN
+	jezSaUCmWvIXEGhRoSgyoUZjIKEMO11P6sKS8zqgL9pYFYY1gWzeB8tJf7wTG6n0A3iWiwAqEl+
+	ZVCa4e992hMlJBO0L68BFZ57Ddh+rtHlbTtw6WsUha2ne5n8AAjdtJuFxanrutFaIoPg4vuC50I
+	4R6I389aNxaVsJuJ2yBpRBbwKtwH+L4GQkpSlWbI/XBlND/g7pAtqWgac08ZQCJx/5soi5qJIPL
+	ki4uQpCdGxWW6xljgt7M7+n0acZQyeHwy9uBJMcioqMvRkg7aHqE9x+1TpAtQ/yMTAr6GsghPqr
+	ekH2612sJULtuBfblC7itBIZEsacccgHlv9Tnaa/AG1oYyEPeePByO+eW7oHN8xWOSTrNVbkwvs
+	Gxqe82+m2JLcszXsNziV9vpO9zD0wyZKYRKE2FawJv
+X-Received: by 2002:a05:6a00:bd0d:b0:82c:247b:ffdc with SMTP id d2e1a72fcca58-834ddc2d14emr1807018b3a.29.1777357449562;
+        Mon, 27 Apr 2026 23:24:09 -0700 (PDT)
+Received: from vini ([2401:4900:8fca:e7b6:f223:6319:a79e:7616])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-834dae2249esm1514843b3a.21.2026.04.27.23.23.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Apr 2026 23:24:09 -0700 (PDT)
+From: Vineet Agarwal <agarwal.vineet2006@gmail.com>
+To: akpm@linux-foundation.org,
+	david@kernel.org,
+	ljs@kernel.org,
+	shuah@kernel.org
+Cc: linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Vineet Agarwal <agarwal.vineet2006@gmail.com>
+Subject: [PATCH] selftests/mm: khugepaged: handle partial write in file_setup_area()
+Date: Tue, 28 Apr 2026 11:53:22 +0530
+Message-ID: <20260428062322.20417-1-agarwal.vineet2006@gmail.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0e2ef2c0-d74e-4aff-bba0-6dd91dbd4e41@redhat.com>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Apr 27, 2026 at 01:19:07PM -0400, Luiz Capitulino wrote:
-> On 2026-04-27 12:51, Mike Rapoport wrote:
-> > On Mon, Apr 27, 2026 at 08:56:27AM -0400, Luiz Capitulino wrote:
-> > > On 2026-04-26 06:58, Mike Rapoport wrote:
-> > > > > And there's another issue: when running the migration test individually,
-> > > > > private_anon_htlb gets skipped. I guess it's because the previous test
-> > > > > is restoring the HugeTLB state:
-> > > > 
-> > > > It could be.
-> > > > 
-> > > > I pushed the updated version that has the fixes for both zombie and
-> > > > signal issues:
-> > > > 
-> > > > https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git/log/?h=mm-selftest/v3
-> > > > 
-> > > > Would be great if you can test it in your setup.
-> > > 
-> > > This works! Both issues are fixed: the migration test completes w/o
-> > > hanging and when I run it individually all tests run.
-> > 
-> > Thanks for confirming!
-> > > One last question: should we munmap() the mappings in this test? Though
-> > > I understand this goes beyond your series goal.
-> > 
-> > We could, but the tests _exit() anyway as a part of kselftest_harness, so
-> > it does not really matter.
-> 
-> OK. Just to clarify that I meant exercising the munmap() path, not that
-> we're not freeing resources. But if we know that _exit() is sufficient
-> for this, then it's fine.
+file_setup_area() writes initialized test data into the backing
+file used for collapse testing, but it ignores the return value
+from write().
 
-exit tears down all the mappings, but the code path is slightly different
-than calling munmap().
+If write() fails or completes only partially, the test continues
+with incomplete file contents, which can lead to incorrect test
+results and make failures harder to diagnose.
 
-We can add munmap() calls there, but let's do it separately from this
-series. 
+Handle partial writes by retrying until all data is written and
+abort the test if write() fails.
 
+Signed-off-by: Vineet Agarwal <agarwal.vineet2006@gmail.com>
+---
+ tools/testing/selftests/mm/khugepaged.c | 18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
+index 3fe7ef04ac62..c13f06758750 100644
+--- a/tools/testing/selftests/mm/khugepaged.c
++++ b/tools/testing/selftests/mm/khugepaged.c
+@@ -369,7 +369,9 @@ static void *file_setup_area(int nr_hpages)
+ 	int fd;
+ 	void *p;
+ 	unsigned long size;
+-
++	size_t remaining;
++	ssize_t ret;
++	char *buf;
+ 	unlink(finfo.path);  /* Cleanup from previous failed tests */
+ 	printf("Creating %s for collapse%s...", finfo.path,
+ 	       finfo.type == VMA_SHMEM ? " (tmpfs)" : "");
+@@ -383,7 +385,19 @@ static void *file_setup_area(int nr_hpages)
+ 	size = nr_hpages * hpage_pmd_size;
+ 	p = alloc_mapping(nr_hpages);
+ 	fill_memory(p, 0, size);
+-	write(fd, p, size);
++	remaining = size;
++	buf = p;
++
++	while (remaining > 0) {
++		ret = write(fd, buf, remaining);
++		if (ret <= 0) {
++			close(fd);
++			munmap(p, size);
++			ksft_exit_fail_msg("write() failed while preparing test file\n");
++		}
++		buf += ret;
++		remaining -= ret;
++	}
+ 	close(fd);
+ 	munmap(p, size);
+ 	success("OK");
 -- 
-Sincerely yours,
-Mike.
+2.54.0
+
