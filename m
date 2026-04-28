@@ -1,100 +1,103 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E41A93D410C;
-	Tue, 28 Apr 2026 08:18:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CF512DCC01
+	for <linux-kselftest@vger.kernel.org>; Tue, 28 Apr 2026 08:32:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777364324; cv=none; b=fiW+n6j0FWhCYX2vnBsiO/AU7YYPicE//heezHMUdfu7w0apYUPHKGgL3ZO3XrC4d4E8pIHxvJ+Gk5h+nbt07es5yDa4RAZ0ujt0Blu4lQ1bW+lya1GpCsILqpPv/INVq5hArOEdzdURGM19oE8VmhyeZMn75LJMcXLk4kf7Tok=
+	t=1777365148; cv=none; b=UMwDDs7TY9ckoYbLXVX1BDvO165vazBSmwB/0dwoZgBcLSmNQis6y3yTrS9YMseYGICf+P++KRPvsYMXLMB+/GvX96XXAWqqKsQlDMqAJT2ozTgZc8XwfZaPsz0YJUo3R4pQRqeUhApDbr5KJKysd43i/6mivGMZMqtGp5x11ns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777364324; c=relaxed/simple;
-	bh=Pifngnls7yzoEeGxFyOD4KN5JPXem2G0mv34DhxL2U4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NIGXKZnetv2hunI1l2fFARZ/Z9UVD32velKq/DYiU88Uo+yRaK6oI/C//bs/ghc+SHef/w6Bscz1mbnXv34YNQZ9cdjfPHgmU1UVWKz4GEFlkKEWLB0JhVquTypE46Mp4CIJYJHoXiUoKHRCWNvYMRQokadLhjUBWHhTWfi/BSE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Hm3p1uM1; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1777365148; c=relaxed/simple;
+	bh=7m9TSkIprBQnO5SnKEMtRqur5OBCaZU7a+82O7NNe8w=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DtpzaKjLeP25b3J5Smk0u/yH7CNr3vVxAG6iXwUzcz2vQ9NU689HFJPWAhtjOcu3+bA19qmdJbQNtcijVQbzwiEY1FJkKbUe0OKwi1DR+zpQ5OO0acUf5dySMRmyRQOAmvmmkqw1KOBlyHlRyXEZdjshse/h9/8enUvQiOqBn8Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DI16++ZH; arc=none smtp.client-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Hm3p1uM1"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1777364323; x=1808900323;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Pifngnls7yzoEeGxFyOD4KN5JPXem2G0mv34DhxL2U4=;
-  b=Hm3p1uM1+tvfRNCsy0Uq0I9ke6UaxYWA7xZz+nFchpcuaLASgIJFyc+Y
-   AdyIBxO5sXM3D9z01lwGfX8s+3gYSpkMnKCEL1tCmEXaCgW4mWWBjYNkk
-   R3cTxLnrlMJLQkF1DHrFpMgefOKyKCibJ0tDzJ2iziWD9qorpCUDgLqPU
-   74LcNaY+ZLE+8RILxqx8TfRukHmAP/ILNQ7njwmZwh207gXswMTGP8iWZ
-   h6e7DbZQZFqy1Pb/E2VezrneWM58djLL71K/bWgVZXvAN7zxUmRUs16/J
-   oYhE7dVHGSTA343CEbBCIbhl339dfXCjZ4daqGL2kEFp8KvfBJHe/zoVd
-   w==;
-X-CSE-ConnectionGUID: t9cZ2wxETYGCFdC6ZVYaVQ==
-X-CSE-MsgGUID: Lbpyce14QCKja7QDSkw7lw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11769"; a="89646037"
-X-IronPort-AV: E=Sophos;i="6.23,203,1770624000"; 
-   d="scan'208";a="89646037"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2026 01:18:42 -0700
-X-CSE-ConnectionGUID: fZiFiA1hTKiicJQRYZmMvQ==
-X-CSE-MsgGUID: 2F5PYIEZSF+KN/QYJ3BUQQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,203,1770624000"; 
-   d="scan'208";a="264273755"
-Received: from lkp-server01.sh.intel.com (HELO aa799cca880d) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 28 Apr 2026 01:18:41 -0700
-Received: from kbuild by aa799cca880d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wHdeP-000000009eS-2hEf;
-	Tue, 28 Apr 2026 08:18:37 +0000
-Date: Tue, 28 Apr 2026 16:17:37 +0800
-From: kernel test robot <lkp@intel.com>
-To: Matan Cohen <matan@matanco.space>, Miklos Szeredi <miklos@szeredi.hu>,
-	Shuah Khan <skhan@linuxfoundation.org>
-Cc: oe-kbuild-all@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Matan Cohen <matan@matanco.space>
-Subject: Re: [PATCH] fuse: expose backing files in the daemon's fd table
-Message-ID: <202604281646.PF70aaEU-lkp@intel.com>
-References: <20260424144553.6241-1-matan@matanco.space>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DI16++ZH"
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-676fec7e946so9127950a12.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Apr 2026 01:32:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1777365144; x=1777969944; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=s+jLeOsk7xNnSzOzCqVVJFK8K7hUB/KB4pNNUZN70BM=;
+        b=DI16++ZHqDSVFE7ldw6cfr/ixcDGYqvKWZClvJJLu70ZZXmbywp6VK1QRHJVm9FDv6
+         XNjTS8WRLhEh6U1ZQo9tw9H5DaUhALpb/xfqKbC1rDZ87SuAPMj2dxPoXGc2TimlroFG
+         6DAmCc9zb0awDrKiYMftkLNJXMyzkndF8o6F2HdbWapY92ZqWdYndloXBqA3jckfXKlE
+         ccjRRgURYx9PI17CLRO7B/+L8hsQy5Sd+fswYcZVwsn4Ph9LVOI+zOMSshoKJR3fNa2g
+         RcazcAqjl/TiH0m45R+IURwOimZJ4e016wPtJ6lKF0CZJ5i+jXl7zBwUtxlQ9rrYWYPe
+         ko1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777365144; x=1777969944;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=s+jLeOsk7xNnSzOzCqVVJFK8K7hUB/KB4pNNUZN70BM=;
+        b=GQRU93TNmHk5YFtWlyoQ/hv8FARcqi/WWS9ppTfm+vZ6zHRVTmTGiaRuH9UB6N+cTF
+         y5XtYokEncUa38PKh//Twd66/x+sdomIpvrzj6+61WjL/cAovAHpqArreuxhYcNGE8Kp
+         tk5Pu8psxhTyKcCdjf48/uTiXpFxjMZIp3dzHBpK6sesi1JblarlawjSsC/dvoAPp52W
+         j+FpmvVVbmbNeYdYL5oz7GEttAeUO7PCi5vUtdd/47DQH9L88UDS63lyyUF3HagWnix3
+         ekFith2S19fcisn9j582BASYstu020ZibJijAtA4QBydqV2OyDblXCOTUNJklVpmW0AD
+         BHdw==
+X-Forwarded-Encrypted: i=1; AFNElJ84wFPXz3bs6IfXx1OmDEWXWjkLhvcGtmp20/OEMmM6KyDxgsZ+xiKzm6XJ1MKuhGn4SyJhhZoV0LCjTcnfO74=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzPS3p+bn86/WYrSUyc3FISfmp20ynC7gCNetnDndRPbrpz9G3Z
+	jvgIaayMf3WgZAsv5Y/pETid8N4nAA6g3nKLoTwqNGxwMTyknLoP336p
+X-Gm-Gg: AeBDieth5EU3S0SJW2e5BUHI76capPm6lInnloDcMf3P8EwSJzEWtDuNcoKwyK4cU+J
+	Nq04oBUE9min2NTFfBrfjJQK4Ssp4dv/BBs+7Vu+mpHg/JeKgxofUFXPHgbFpZdUfqBmMGv4gDq
+	RNwpEz5Z12ye5cPjNKgeAN98S5b+XPGzMxEAs0ANZYWa0Ksd3yLQAb26LTB6khEAVnQXM8kOc6J
+	WF95VBu88P7BUhQjNd6Bz+EcWsHEO/d9Bo38EP+3ij1U/BM14zNCVgm1TIeDjsQrV6n6I/j8AbM
+	J6CsfAdpjPgIqA74deixUDUkmhUSzjPnrQYi4MjhtlDPB/Z6eKTY9Pw1QIHpAaXpYXj285glKqR
+	1XsLVeXSDexsKHypMT/YxaE2dge/A2IHHOrrjqaySQTcGnqAxnq763ICFNJx4VjKqmonnDsvBPX
+	VtXlFZoAd/5/xDyx6z+NFkVydmEXOz5hYCyyxB1JuAoWHnDnQ+b52vF03wdHRdQU29blRzYi0ml
+	23e94pQYq9dof8egn8UNB734/RYNh4B36FjDg==
+X-Received: by 2002:a05:6402:1f46:b0:674:5b2c:d42c with SMTP id 4fb4d7f45d1cf-679bb04c1aemr866693a12.3.1777365143488;
+        Tue, 28 Apr 2026 01:32:23 -0700 (PDT)
+Received: from arch-piotr.tailb7ebba.ts.net (226.55.classcom.pl. [195.150.55.226])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-679b67ccdc8sm456152a12.4.2026.04.28.01.32.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Apr 2026 01:32:22 -0700 (PDT)
+From: Piotr Zarycki <piotr.zarycki@gmail.com>
+To: seanjc@google.com,
+	pbonzini@redhat.com
+Cc: shuah@kernel.org,
+	vkuznets@redhat.com,
+	kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Piotr Zarycki <piotr.zarycki@gmail.com>
+Subject: [PATCH] KVM: selftests: Fix typo in comment in hyperv_features.c
+Date: Tue, 28 Apr 2026 10:30:37 +0200
+Message-ID: <20260428083037.1926902-1-piotr.zarycki@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260424144553.6241-1-matan@matanco.space>
+Content-Transfer-Encoding: 8bit
 
-Hi Matan,
+Fix a typo in a comment: 'vailable' -> 'available'.
 
-kernel test robot noticed the following build errors:
+Signed-off-by: Piotr Zarycki <piotr.zarycki@gmail.com>
+---
+ tools/testing/selftests/kvm/x86/hyperv_features.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-[auto build test ERROR on v7.0]
-[also build test ERROR on linus/master next-20260427]
-[cannot apply to mszeredi-fuse/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Matan-Cohen/fuse-expose-backing-files-in-the-daemon-s-fd-table/20260426-193147
-base:   v7.0
-patch link:    https://lore.kernel.org/r/20260424144553.6241-1-matan%40matanco.space
-patch subject: [PATCH] fuse: expose backing files in the daemon's fd table
-config: nios2-allmodconfig (https://download.01.org/0day-ci/archive/20260428/202604281646.PF70aaEU-lkp@intel.com/config)
-compiler: nios2-linux-gcc (GCC) 11.5.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260428/202604281646.PF70aaEU-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202604281646.PF70aaEU-lkp@intel.com/
-
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
->> ERROR: modpost: "task_work_add" [fs/fuse/fuse.ko] undefined!
-
+diff --git a/tools/testing/selftests/kvm/x86/hyperv_features.c b/tools/testing/selftests/kvm/x86/hyperv_features.c
+index 130b9ce7e5dd..f943c748f9ff 100644
+--- a/tools/testing/selftests/kvm/x86/hyperv_features.c
++++ b/tools/testing/selftests/kvm/x86/hyperv_features.c
+@@ -457,7 +457,7 @@ static void guest_test_msrs_access(void)
+ 			msr->fault_expected = true;
+ 			break;
+ 		case 45:
+-			/* MSR is vailable when CPUID feature bit is set */
++			/* MSR is available when CPUID feature bit is set */
+ 			if (!has_invtsc)
+ 				goto next_stage;
+ 			vcpu_set_cpuid_feature(vcpu, HV_ACCESS_TSC_INVARIANT);
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.53.0
+
