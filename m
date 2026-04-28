@@ -1,46 +1,62 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70B5B25FA05;
-	Tue, 28 Apr 2026 20:36:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E2611397;
+	Tue, 28 Apr 2026 20:42:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777408588; cv=none; b=RidnvfifIVGRDg3jLukCeuRKJoDir4AB8XbXSEEkDVCoyqvnRPuicQxneuVSsfjOzdd3BVOikufT53RPjjSb9eisA3avKM/SDet3UMRISFVIaV94wf+V/ylCs8Dnt1Szw2MzzrLgTSvOmW2ZgP6TXo/EAoDGRvdlVZtQnj6IgkM=
+	t=1777408971; cv=none; b=FJIdFMOHiv8cX7xXbI5bJ5RO8yGEwxKdMPaw+jBO2lwQKutjDaGo/IpR6mZD3EKlehYQ73IZJsdl05ZdmZEa7JCShUJo7VCZNfm2Ahs0w8IzzBD9Ug9SbjzZeDg1swpblRsEIzY0QYWx0fVdVX8svN24Co9lUkWXchpK67srnCA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777408588; c=relaxed/simple;
-	bh=zVUU3GhjmgTmWxmcSAbHcFtgsY/d5O7hOya1pXw2ndM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=k5vSGluacgHnxwiFEVZTcUsudKQQBVNongh+b+Ojp+XsqRZvcno0dbBBBjDhjOtyUmWpGmDLNhZwFoiQHSDX5334elgfzXFTXBgpZTpYVlNNI2plid59d4YpOrykSe0Nqmrwxo1Oix6duhTlMMFF4AwBtGlFd5rKET4ZAo+04ms=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EvhYx4+V; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777408971; c=relaxed/simple;
+	bh=InHJJsNDXhcLEmF2wKCCqojIV89V59WutBjl+yrAS8s=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JvcjnBc91YcOOondXqzAgLwYYTOdNCaxS6uSI1m0KTOV19WDVpdQvnvwx0ye0LSWjs5aa2GhK7aMvvNLxwpAHXoAzN29pbiS8dRG/jVuQk8EUavdvTrCvJWcweaVv7N93kY1KvTVXsxeiWcfHRACXWlyhJShUyD94URyNcYEBwU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AxxsxWOC; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EvhYx4+V"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92C5DC2BCAF;
-	Tue, 28 Apr 2026 20:36:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AxxsxWOC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 223A0C2BCAF;
+	Tue, 28 Apr 2026 20:42:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777408588;
-	bh=zVUU3GhjmgTmWxmcSAbHcFtgsY/d5O7hOya1pXw2ndM=;
+	s=k20201202; t=1777408971;
+	bh=InHJJsNDXhcLEmF2wKCCqojIV89V59WutBjl+yrAS8s=;
 	h=From:To:Cc:Subject:Date:From;
-	b=EvhYx4+VixPmZH+Iz5kcQGva4p+Or45iJCvx2KngJGeCUz9bId7HhVtcUhhi5VFCb
-	 w0cgRi0GIuYEDCrlejDTEciKtD9K5PMerBaXEJ0vKsDvog04vMepAnXwK7UMOlhZZE
-	 8d+QJ5YLyiTtu3InZ+5k8moXNmB7hmWZNW3AIEDZhju82UxjsjqU+83zoSq9GM6bMZ
-	 4s/RsBWIkMMn68+xWh0iUSRdbCt6lOSiREgPKDAzoghlP7mt9blcSI2aBJFRoKUrNT
-	 Sw0XVRUlcR+STyQZf4AeWuUWBCveMQa0WFliyCaE6iAIGyuNo2J5kJXSB5kmO6dxoH
-	 v+m3UBK1takkw==
-From: Jakub Kicinski <kuba@kernel.org>
-To: davem@davemloft.net
-Cc: netdev@vger.kernel.org,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	andrew+netdev@lunn.ch,
-	horms@kernel.org,
-	Jakub Kicinski <kuba@kernel.org>,
-	shuah@kernel.org,
-	dimitri.daskalakis1@gmail.com,
-	pavan.chebbi@broadcom.com,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next] selftests: drv-net: rss: add case for field config on RSS context
-Date: Tue, 28 Apr 2026 13:36:24 -0700
-Message-ID: <20260428203624.1224387-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.54.0
+	b=AxxsxWOCidFnfVWYn2nEl7uZIMMOmhH6edN0If5hl2lPPRXn6DsBHYlzOm5IM7IuN
+	 j6fSxQ+V/Aw0hTLjR7kFjFQYn8kdvoMIkOVBUjX8eBh59BSOaywNwq+9z1vWxXia7c
+	 A2KnSKmsUze5yPa/ZRKu1Cb3YKszNw5jJp+RTaKsvRWLohP100MVlqetu8Ca6Q0hIW
+	 8MHWX797lpaUUW/ffnyWFyT9OBHcWzRxDvNmYOF6lgp9XRq64OP3imQlZVhT/sovHZ
+	 GSNzw5Er3ktrgcmg4rVtX86RxHya6lDNYbhgw2iqQ0vS1CXK71Xk5w/FBDokgcqxgg
+	 HQ0QU2Smuf0sA==
+From: Mike Rapoport <rppt@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>
+Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Barry Song <baohua@kernel.org>,
+	Dev Jain <dev.jain@arm.com>,
+	Donet Tom <donettom@linux.ibm.com>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	John Hubbard <jhubbard@nvidia.com>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Lance Yang <lance.yang@linux.dev>,
+	Leon Romanovsky <leon@kernel.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Luiz Capitulino <luizcap@redhat.com>,
+	Mark Brown <broonie@kernel.org>,
+	Michal Hocko <mhocko@suse.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	Nico Pache <npache@redhat.com>,
+	Peter Xu <peterx@redhat.com>,
+	Ryan Roberts <ryan.roberts@arm.com>,
+	Sarthak Sharma <sarthak.sharma@arm.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Zi Yan <ziy@nvidia.com>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: [PATCH v3 00/54] make MM selftests more CI friendly
+Date: Tue, 28 Apr 2026 23:41:46 +0300
+Message-ID: <20260428204240.1924129-1-rppt@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -49,136 +65,162 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-We had some issues with a suspected traffic imbalance on an RSS
-context. Make sure the tests cover the RXFH field selection
-vs additional contexts.
+From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
-CC: shuah@kernel.org
-CC: dimitri.daskalakis1@gmail.com
-CC: pavan.chebbi@broadcom.com
-CC: linux-kselftest@vger.kernel.org
----
- .../selftests/drivers/net/hw/rss_ctx.py       | 91 ++++++++++++++++++-
- 1 file changed, 90 insertions(+), 1 deletion(-)
+Hi,
 
-diff --git a/tools/testing/selftests/drivers/net/hw/rss_ctx.py b/tools/testing/selftests/drivers/net/hw/rss_ctx.py
-index 51f4e7bc3e5d..1243fe426d35 100755
---- a/tools/testing/selftests/drivers/net/hw/rss_ctx.py
-+++ b/tools/testing/selftests/drivers/net/hw/rss_ctx.py
-@@ -9,7 +9,7 @@ from lib.py import ksft_disruptive
- from lib.py import ksft_run, ksft_pr, ksft_exit
- from lib.py import ksft_eq, ksft_ne, ksft_ge, ksft_in, ksft_lt, ksft_true, ksft_raises
- from lib.py import NetDrvEpEnv
--from lib.py import EthtoolFamily, NetdevFamily
-+from lib.py import EthtoolFamily, NetdevFamily, NlError
- from lib.py import KsftSkipEx, KsftFailEx
- from lib.py import rand_port, rand_ports
- from lib.py import cmd, ethtool, ip, defer, CmdExitFailure, wait_file
-@@ -828,6 +828,94 @@ from lib.py import GenerateTraffic
-                           'noise' : (0, 1) })
- 
- 
-+def _set_flow_hash(cfg, fl_type, fields, context=0):
-+    req = {"header": {"dev-index": cfg.ifindex},
-+           "flow-hash": {fl_type: fields}}
-+    if context:
-+        req["context"] = context
-+    cfg.ethnl.rss_set(req)
-+
-+
-+def _get_flow_hash(cfg, fl_type, context=0):
-+    req = {"header": {"dev-index": cfg.ifindex}}
-+    if context:
-+        req["context"] = context
-+    rss = cfg.ethnl.rss_get(req)
-+    return rss.get("flow-hash", {}).get(fl_type, set())
-+
-+
-+def test_rss_context_flow_hash(cfg):
-+    """
-+    Validate, with traffic, that an additional RSS context honors the
-+    flow-hash field selection. If the driver lacks per-context field
-+    configuration ("ops->rxfh_per_ctx_fields") fall back to setting the
-+    fields on the main context, which the kernel applies device-wide.
-+    """
-+
-+    require_ntuple(cfg)
-+
-+    queue_cnt = len(_get_rx_cnts(cfg))
-+    if queue_cnt < 6:
-+        try:
-+            ksft_pr(f"Increasing queue count {queue_cnt} -> 6")
-+            ethtool(f"-L {cfg.ifname} combined 6")
-+            defer(ethtool, f"-L {cfg.ifname} combined {queue_cnt}")
-+        except CmdExitFailure as exc:
-+            raise KsftSkipEx("Not enough queues for the test") from exc
-+
-+    fl_type = f"tcp{cfg.addr_ipver}"
-+    if not _get_flow_hash(cfg, fl_type):
-+        raise KsftSkipEx(f"Device does not report flow-hash for {fl_type}")
-+
-+    # Reserve queues 0/1 for main, build a new context spanning 2..5
-+    ethtool(f"-X {cfg.ifname} equal 2")
-+    defer(ethtool, f"-X {cfg.ifname} default")
-+    ctx_id = ethtool_create(cfg, "-X", "context new start 2 equal 4")
-+    defer(ethtool, f"-X {cfg.ifname} context {ctx_id} delete")
-+
-+    port = rand_port()
-+    flow = f"flow-type {fl_type} dst-ip {cfg.addr} dst-port {port} context {ctx_id}"
-+    ntuple = ethtool_create(cfg, "-N", flow)
-+    defer(ethtool, f"-N {cfg.ifname} delete {ntuple}")
-+
-+    ip_only = {"ip-src", "ip-dst"}
-+    ip_l4   = ip_only | {"l4-b-0-1", "l4-b-2-3"}
-+
-+    # Try per-context flow-hash; fall back to main context if unsupported.
-+    cfg_ctx = ctx_id
-+    try:
-+        orig = _get_flow_hash(cfg, fl_type, context=ctx_id)
-+        _set_flow_hash(cfg, fl_type, ip_only, context=ctx_id)
-+    except NlError:
-+        ksft_pr("Per-context flow-hash not supported, using device-wide")
-+        cfg_ctx = 0
-+        orig = _get_flow_hash(cfg, fl_type)
-+        _set_flow_hash(cfg, fl_type, ip_only)
-+    defer(_set_flow_hash, cfg, fl_type, orig, context=cfg_ctx)
-+
-+    def measure():
-+        cnts = _get_rx_cnts(cfg)
-+        GenerateTraffic(cfg, port=port).wait_pkts_and_stop(20000)
-+        cnts = _get_rx_cnts(cfg, prev=cnts)
-+        ctx_cnts = cnts[2:6]
-+        directed = sum(ctx_cnts)
-+        used = sum(1 for c in ctx_cnts if c > directed / 200)
-+        return cnts, directed, used
-+
-+    # IP-only hash: iperf3 streams share src/dst IP, all should land on the
-+    # same queue inside the context's range.
-+    cnts, directed, used = measure()
-+    ksft_ge(directed, 20000, f"traffic on context {ctx_id} (IP-only): {cnts}")
-+    ksft_eq(used, 1, f"IP-only hash should use one queue in context {ctx_id}, got: {cnts}")
-+
-+    # IP+L4 hash: streams have distinct src ports, traffic should spread.
-+    _set_flow_hash(cfg, fl_type, ip_l4, context=cfg_ctx)
-+
-+    cnts, directed, used = measure()
-+    ksft_ge(directed, 20000, f"traffic on context {ctx_id} (IP+L4): {cnts}")
-+    ksft_ge(used, 2, f"IP+L4 hash should spread across context {ctx_id} queues, got: {cnts}")
-+
-+
- @ksft_disruptive
- def test_rss_context_persist_ifupdown(cfg, pre_down=False):
-     """
-@@ -935,6 +1023,7 @@ from lib.py import GenerateTraffic
-                   test_flow_add_context_missing,
-                   test_delete_rss_context_busy, test_rss_ntuple_addition,
-                   test_rss_default_context_rule,
-+                  test_rss_context_flow_hash,
-                   test_rss_context_persist_create_and_ifdown,
-                   test_rss_context_persist_ifdown_and_create],
-                  args=(cfg, ))
--- 
-2.54.0
+There's a lot of dancing around HugeTLB settings in run_vmtests.sh.
+Some test need just a few default huge pages, some require at least 256 MB, and
+some just skip lots of tests if huge pages of all supported sizes are not
+available.
 
+The goal of this set is to make tests deal with HugeTLB setup and teardown.
+
+There are already convenient helpers that allow easy reading and writing of
+/proc and /sysfs, so adding a few APIs that will detect and update HugeTLB
+settings shouldn't be a big deal. But these nice helpers use kselftest
+framework, and many of HugeTLB (and even THP) test don't, so as a result this
+patchset also includes a lot of churn for conversion of those tests to
+kselftest framework (patches 7-19).
+
+The series break out:
+patches 1-5:   small fixes
+patch 6:       merge of hugetlb mmap tests
+patch 7:       renaming of hugepage-* to hugetlb-*
+patches 8-20:  mechanical conversion to kselftest framework
+patches 21-27: extension of thp_settings to hugepage_settings to also include
+               HugeTLB helpers
+patches 28-29: add helpers for setting up SHM limits in hugetlb-shm and
+               thuge-gen tests
+patches 30-52: integrate the new APIs in all the tests that use HugeTLB
+patches 53-54: drop HugeTLB setup from run_vmtests.sh
+
+v3 changes:
+* add patches that fix cleanup of fork()ed processes in migration test
+* drop MADV_REMOVE changes to khugepage test
+* properly setup memfd for non-default hugepages in hugetlb-mmap test
+* add forgotten hugetlb_save_settings() to hugetlb_setup()
+* fixes for ksft reporting
+* rebase on v7.1-rc1
+* add more tags, thanks everyone!
+
+v2: https://lore.kernel.org/all/20260418105539.1261536-1-rppt@kernel.org
+* fix hugetlb mmap tests to actually test file mappings
+* increase maximal tests number in khugepaged
+* add tags, thanks everyone!
+
+v1: https://lore.kernel.org/all/20260406141735.2179309-1-rppt@kernel.org
+
+Mike Rapoport (Microsoft) (54):
+  selftests/mm: hugetlb-read-hwpoison: add SIGBUS handler
+  selftests/mm: migration: don't assume hupe page is TWOMEG
+  selftests/mm: migration: make nthreads represent number of working threads
+  selftests/mm: migration: properly cleanup fork()ed processes
+  selftests/mm: run_vmtests.sh: don't gate THP and KSM tests on HAVE_HUGEPAGES
+  selftests/mm: merge map_hugetlb into hugepage-mmap
+  selftests/mm: rename hugepage-* tests to hugetlb-*
+  selftests/mm: hugetlb-shm: use kselftest framework
+  selftests/mm: hugetlb-vmemmap: use kselftest framework
+  selftests/mm: hugetlb-madvise: use kselftest framework
+  selftests/mm: hugetlb_madv_vs_map: use kselftest framework
+  selftests/mm: hugetlb-read-hwpoison: use kselftest framework
+  selftests/mm: khugepaged: group tests in an array
+  selftests/mm: khugepaged: use ksefltest framework
+  selftests/mm: ksm_tests: use kselftest framework
+  selftests/mm: protection_keys: use descriptive test names in TAP output
+  selftests/mm: protection_keys: use kselftest framework
+  selftests/mm: uffd-stress: use kselftest framework
+  selftests/mm: uffd-unit-tests: use kselftest framework
+  selftests/mm: va_high_addr_switch: use kselftest framework
+  selftests/mm: add atexit() and signal handlers to thp_settings
+  selftests/mm: rename thp_settings.[ch] to hugepage_settings.[ch]
+  selftests/mm: move HugeTLB helpers to hugepage_settings
+  selftests/mm: hugepage_settings: use unsigned long in detect_hugetlb_page_size
+  selftests/mm: hugepage_settings: add APIs to get and set nr_hugepages
+  selftests/mm: hugepage_settings: rename get_free_hugepages()
+  selftests/mm: hugepage_settings: add APIs for HugeTLB setup and teardown
+  selftests/mm: move read_file(), read_num() and write_num() to vm_util
+  selftests/mm: vm_util: add helpers to set and restore shm limits
+  selftests/mm: compaction_test: use HugeTLB helpers ...
+  selftests/mm: cow: add setup of HugeTLB pages
+  selftests/mm: gup_longterm: add setup of HugeTLB pages
+  selftests/mm: gup_test: add setup of HugeTLB pages
+  selftests/mm: hmm-tests: add setup of HugeTLB pages
+  selftests/mm: hugepage_dio: add setup of HugeTLB pages
+  selftests/mm: hugetlb_fault_after_madv: add setup of HugeTLB pages
+  selftests/mm: hugetlb-madvise: add setup of HugeTLB pages
+  selftests/mm: hugetlb_madv_vs_map: add setup of HugeTLB pages
+  selftests/mm: hugetlb-mmap: add setup of HugeTLB pages
+  selftests/mm: hugetlb-mremap: add setup of HugeTLB pages
+  selftests/mm: hugetlb-shm: add setup of HugeTLB pages
+  selftests/mm: hugetlb-soft-online: add setup of HugeTLB pages
+  selftests/mm: hugetlb-vmemmap: add setup of HugeTLB pages
+  selftests/mm: migration: add setup of HugeTLB pages
+  selftests/mm: pagemap_ioctl: add setup of HugeTLB pages
+  selftests/mm: protection_keys: use library code for HugeTLB setup
+  selftests/mm: thuge-gen: add setup of HugeTLB pages
+  selftests/mm: uffd-stress: use hugetlb_save and alloc huge pages
+  selftests/mm: uffd-unit-tests: add setup of HugeTLB pages
+  selftests/mm: uffd-wp-mremap: add setup of HugeTLB pages
+  selftests/mm: va_high_addr_switch: add setup of HugeTLB pages
+  selftests/mm: va_high_addr_switch.sh: drop huge pages setup
+  selftests/mm: run_vmtests.sh: free memory if available memory is low
+  selftests/mm: run_vmtests.sh: drop detection and setup of HugeTLB
+
+ tools/testing/selftests/mm/.gitignore         |   4 +
+ tools/testing/selftests/mm/Makefile           |  13 +-
+ tools/testing/selftests/mm/compaction_test.c  | 113 +-----
+ tools/testing/selftests/mm/cow.c              |  29 +-
+ .../selftests/mm/folio_split_race_test.c      |   2 +-
+ tools/testing/selftests/mm/guard-regions.c    |   2 +-
+ tools/testing/selftests/mm/gup_longterm.c     |   3 +-
+ tools/testing/selftests/mm/gup_test.c         |  12 +
+ tools/testing/selftests/mm/hmm-tests.c        |  24 +-
+ tools/testing/selftests/mm/hugepage-mmap.c    |  78 ----
+ .../{thp_settings.c => hugepage_settings.c}   | 286 +++++++++++--
+ .../{thp_settings.h => hugepage_settings.h}   |  75 +++-
+ tools/testing/selftests/mm/hugetlb-madvise.c  | 209 ++++------
+ tools/testing/selftests/mm/hugetlb-mmap.c     | 145 +++++++
+ .../{hugepage-mremap.c => hugetlb-mremap.c}   |  13 +-
+ .../selftests/mm/hugetlb-read-hwpoison.c      | 123 +++---
+ .../mm/{hugepage-shm.c => hugetlb-shm.c}      |  64 +--
+ .../selftests/mm/hugetlb-soft-offline.c       |  45 +--
+ .../{hugepage-vmemmap.c => hugetlb-vmemmap.c} |  46 +--
+ tools/testing/selftests/mm/hugetlb_dio.c      |  15 +-
+ .../selftests/mm/hugetlb_fault_after_madv.c   |   7 +-
+ .../selftests/mm/hugetlb_madv_vs_map.c        |  22 +-
+ tools/testing/selftests/mm/khugepaged.c       | 380 ++++++++----------
+ tools/testing/selftests/mm/ksm_tests.c        | 182 ++++-----
+ tools/testing/selftests/mm/map_hugetlb.c      |  88 ----
+ tools/testing/selftests/mm/migration.c        | 152 ++++---
+ tools/testing/selftests/mm/pagemap_ioctl.c    |  13 +-
+ tools/testing/selftests/mm/pkey-helpers.h     |   6 +-
+ .../testing/selftests/mm/prctl_thp_disable.c  |   2 +-
+ tools/testing/selftests/mm/protection_keys.c  | 130 +++---
+ tools/testing/selftests/mm/run_vmtests.sh     | 177 ++------
+ tools/testing/selftests/mm/soft-dirty.c       |   2 +-
+ .../selftests/mm/split_huge_page_test.c       |   2 +-
+ tools/testing/selftests/mm/thuge-gen.c        |  80 +---
+ tools/testing/selftests/mm/transhuge-stress.c |   2 +-
+ tools/testing/selftests/mm/uffd-common.h      |   1 +
+ tools/testing/selftests/mm/uffd-stress.c      |  44 +-
+ tools/testing/selftests/mm/uffd-unit-tests.c  | 110 +++--
+ tools/testing/selftests/mm/uffd-wp-mremap.c   |  12 +-
+ .../selftests/mm/va_high_addr_switch.c        |  42 +-
+ .../selftests/mm/va_high_addr_switch.sh       |  41 +-
+ tools/testing/selftests/mm/vm_util.c          | 133 +++---
+ tools/testing/selftests/mm/vm_util.h          |  15 +-
+ 43 files changed, 1424 insertions(+), 1520 deletions(-)
+ delete mode 100644 tools/testing/selftests/mm/hugepage-mmap.c
+ rename tools/testing/selftests/mm/{thp_settings.c => hugepage_settings.c} (60%)
+ rename tools/testing/selftests/mm/{thp_settings.h => hugepage_settings.h} (55%)
+ create mode 100644 tools/testing/selftests/mm/hugetlb-mmap.c
+ rename tools/testing/selftests/mm/{hugepage-mremap.c => hugetlb-mremap.c} (94%)
+ rename tools/testing/selftests/mm/{hugepage-shm.c => hugetlb-shm.c} (57%)
+ rename tools/testing/selftests/mm/{hugepage-vmemmap.c => hugetlb-vmemmap.c} (76%)
+ delete mode 100644 tools/testing/selftests/mm/map_hugetlb.c
+
+
+base-commit: 254f49634ee16a731174d2ae34bc50bd5f45e731
+--
+2.53.0
