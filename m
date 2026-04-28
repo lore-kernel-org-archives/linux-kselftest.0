@@ -1,189 +1,137 @@
-Received: from SN4PR0501CU005.outbound.protection.outlook.com (mail-southcentralusazon11011009.outbound.protection.outlook.com [40.93.194.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D33AA3FA5DE;
-	Tue, 28 Apr 2026 11:19:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.194.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C5B13FF88E
+	for <linux-kselftest@vger.kernel.org>; Tue, 28 Apr 2026 11:21:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.222.170
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777375154; cv=fail; b=lp8EWa6Ot5E8fjoVKZlf3FR9jXDylI8siZIsXTEuH5mLy1dutoQckzkUpahqopWVfIARiBuzYq5O580JSHBXoWWG5xmkwCxe1HRV6qfo1fE3gb5GHxaAFB9vVqZDE9xzWXDGJnx+Zy8Bo1a7QaE96O+9upz8Am1tX87809X5Jr0=
+	t=1777375289; cv=pass; b=pvZazhLF6NkTSro4PIREGAjpifKzhocr+QcxPeK0T8MsdOhY/CoLAjF8vd8dvq29NaKrf/d1doliMH0L0QGcSVqMvUY23WeP78zX0qb3AMEDBy9QZ8SRUSsGMjLOAvP1ZyTz4VT2jXtomOcmHSUQPz2EtKD81uOUcm7MGgA0LR8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777375154; c=relaxed/simple;
-	bh=brA7hfodFlvVZXH4gv/l94NDddZvq+gui9jZNqYn5ws=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=c6vYT8MycCaTjmz+EhFZ8RCGYBP2WVFsQGWRHt44LpAUfX3AsDlRvhcLR96RJwmlaH1FwYg1dD6PHZ6u0wfXAau8bnKVnHPcupkCodUf3QSljEu9saeLZQCD7uOPAdNxbZ3f2E0ZKRqSrRB6ejrVI3aV2HAAg6RhpOdFEyAq2cU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Uuq0/E9a; arc=fail smtp.client-ip=40.93.194.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	s=arc-20240116; t=1777375289; c=relaxed/simple;
+	bh=7hoGj8/xuNHMHGnipzfbn6G/BSAJOVMpf5JmEo1pNO0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Z51CpUz50NmLbTKRr9oV4a1d1LyWTRIAQnMyGBTxmbJOCI39ZkaETsnZ3vn9VQMKjVlX3hrgqR6FZS+B8qar78GticfmgC6yRPrpQZbVprCHVAg5VmUKhbfKvbQLqM7QlYTacD/JjpWgShf5u7E/IcSd7nx/MTnsQcy8FlK4ihM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fHtWFyYk; arc=pass smtp.client-ip=209.85.222.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Uuq0/E9a"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=YDfc5296Jm1z606w6wNdgtSIZ+gv5Ho/87V9w1jJH1DrT3g2no7YvrOb93rsmcgpIGt7yZgzS9CSfOQp+1Lzd8cI5Km35aWfoOFZrDsZ4240WNG0Mk9P7q/LIjI91ILOTKK9VHib98emZhZYIfQZWf4Qif2gs7w7OlNIGZ29j82vOhs2BrHtOLB5jP8LCZAmwZy7q3luJpkCk8HOlN4B6bmugJ2IzhVIY0MzDNP4DgEwEHJlVlLq4AILxg3JjpOBwkCJHgA1PQxhLPHYnDPngHhlxYRMNvcBB+C5NVlzYEzqLdfpJa1RiT3Q55zzG7t0sBW93PUcNrbvJQHybSW60w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mjsXSEDgz+DAsopriQynm1mzZENGulrOCDCG/Vufeh0=;
- b=cHAvgGNrJ1365FY+nmWt4EQmqmjLWKrVYp8dopS5wp0dc/EybCnq55XjHm04hlGganhvHnCBqsMPvDXi/2NWCGdHyelamaM+TqJsxHVqgwfTngQk2FGYiEIFME38gQ4v5xj4llJC4cjO2/cxJFW38mVCYPnO13RzyOaFaIkoEud16aKN6TqN1EbtMgxSMfF9x0J58b4EjcnvQfU0SNsI68mLcfui8RCZJRWP8FcexonW65xd6hSSg9qpe7vYK8mXFJICBmoR4Ml13Yg9i4G/JLsJCCQ2Um2LOZSfUkaAG+qDC0pkwxmo2UlXSMVjIjWQg2EYJtBo/69UGdT13woeYg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mjsXSEDgz+DAsopriQynm1mzZENGulrOCDCG/Vufeh0=;
- b=Uuq0/E9auLOtQkw5DKBK7Tt+XcmwCF8URipJL7PA1N27wZvCPo8a5EIEvZx5uDMn6kiGgWcqcRm9yCm5pO33eJU0wkp6FXeD4CIOfXZsuDfZL40vmn05jn17i37FP57PWYAUCmzL/8YBvIPgLGYkKfps4njt8ZX6q9+JiZtAKwZB45sYenj3QJearn3Y/KRsGW9d28H7C1lNQLR25TuHKXkbolbXGMBy99dd9LQQKOcUaMJ1PtBCPelSnoTS4cY7hpwe4UhhN8iPdqwdi2u7Wd3Q8geGbDmBx7f3/dw8qmV/QF2e1WS/WhKu+gkO62vos/d1dE01Xd5nE5W9B0XuNA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from SA3PR12MB7901.namprd12.prod.outlook.com (2603:10b6:806:306::12)
- by BY5PR12MB4180.namprd12.prod.outlook.com (2603:10b6:a03:213::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9870.18; Tue, 28 Apr
- 2026 11:19:07 +0000
-Received: from SA3PR12MB7901.namprd12.prod.outlook.com
- ([fe80::6f7f:5844:f0f7:acc2]) by SA3PR12MB7901.namprd12.prod.outlook.com
- ([fe80::6f7f:5844:f0f7:acc2%6]) with mapi id 15.20.9870.013; Tue, 28 Apr 2026
- 11:19:06 +0000
-Date: Tue, 28 Apr 2026 14:18:55 +0300
-From: Ido Schimmel <idosch@nvidia.com>
-To: Sagarika Sharma <sharmasagarika@google.com>
-Cc: "David S . Miller" <davem@davemloft.net>,
-	David Ahern <dsahern@kernel.org>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>,
-	Kuniyuki Iwashima <kuniyu@google.com>, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net v1 2/2] selftest: net: Add test for TCP flow failover
- with ECMP routes.
-Message-ID: <20260428111855.GB571865@shredder>
-References: <20260427224243.3499162-1-sharmasagarika@google.com>
- <20260427224243.3499162-3-sharmasagarika@google.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260427224243.3499162-3-sharmasagarika@google.com>
-X-ClientProxiedBy: FR0P281CA0213.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:ac::7) To SA3PR12MB7901.namprd12.prod.outlook.com
- (2603:10b6:806:306::12)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fHtWFyYk"
+Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-8ef5776530bso729461085a.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Apr 2026 04:21:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1777375287; cv=none;
+        d=google.com; s=arc-20240605;
+        b=agZoiHm1bor47pt3TqSjm8msMm5KFcKaLXTLnbhzOq0IbcPQoyJf8N7Qs7bC1dfr/q
+         r2x0NJ3SF9X7XQGi1cw0iZaBYtPggiQbPNDpTw9EzWpNFSav2Z2xpeMlXq64nBc39Juu
+         RBroiLHT0XAsLTTxA8h0x8LDvF6c8FPsHWpZD7ltZhjdAx2q9OhzBYiv52AWmLtdUdnS
+         NMoL+01+qRpJNRes2/lqWUNQlPigHrfxxL+XVg2fis8XaR6uHS1idqAm5J9fwuHlS8cF
+         23/FHRDOpk5Zpl+FFGVy1WDhwmF3rAr9Qc0Szy9yhUKS3GrSAGe0JJBAhu806O5QUPgB
+         Opxw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=7hoGj8/xuNHMHGnipzfbn6G/BSAJOVMpf5JmEo1pNO0=;
+        fh=vXhYUJCvx1+Qzu1pqKN/M3wr/h4rAWqxLMZQ3hucKhY=;
+        b=Ef9Ih8NvOBQUOm5DDrkRfX19tAATv0an2gYmiY2NHvw7AcS5hO75ubNiQ540aDNFCA
+         COHAOnGFi4lewzNhVeVEQZDR7Z6qLm+h/Ly7r5azvnxgH8pAN3B1ZoamYRNe1HIZInkq
+         9FvFkzRyp5/GuRJ+KtnJXwlUu0KG7rINpNSjerUUzZ7gd3VMvVijf4k8+FYHQdUbRx5G
+         ycwwEQpN2RGxabApwwX/g/CY84nBDNpRUdDhM5x/xNp9VL5xQTw5lLxZdbZtCZIKkB7w
+         17JqAOVPYUpcsFH79SdJlGHLqnR5B2chz5zmqDWcLYIi1/gfPMjQMmfHDsH0C4dDUaIW
+         LEbw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1777375287; x=1777980087; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7hoGj8/xuNHMHGnipzfbn6G/BSAJOVMpf5JmEo1pNO0=;
+        b=fHtWFyYkGiXWbruSBwdLdiIYVcsM86ZR3y6Fd549rx+NazqYR1CzaJCY9c2Damjsj4
+         G/BO6Y/cWBZrCTVNMLV9XWuBFFeMiIYmEiT6RYmDenkkRfEv6Gf60eemeT/b+FOBOULN
+         6MERbUDiQwJXk4Tj41lzmLlUO5DgjZTp16VSYye0n6OF7h4ZoCuRJhYwACgfVdFHDqFZ
+         iDV3c6Q8//+5aSKY05tVJMSa74IbPku3sVLI9PtTQCTtiAFwb327Ya8PBkzokeVzEvui
+         07bW5WOk/4X/jw1rRG/In+7X1GDVORMpu2qlxrCCkZpbEwnh1zInBzfdCvSqcpFLiHTx
+         dCyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777375287; x=1777980087;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=7hoGj8/xuNHMHGnipzfbn6G/BSAJOVMpf5JmEo1pNO0=;
+        b=UxHE5XAjgEf2YJWJcxXZv+gmWEleaivKWCVopUVKhf3wGyVecD53hiCqzTnRv61e1v
+         M0J3a6P/Mnn4QrmJc3YObmTxUndfUR3Afj+A5qM9onjhzENYIzGE+S3wyBbKYcg8EBkE
+         wuX8tUymfSFLLfnPt/CYOdO9n3RajkAChE7ULvk57ntPZ9bAVxb6Er3q71A/VJAkmxCq
+         Ntox7jURXPw88c4F1H0G8lj2uY7uUnuSIkFTIG2/RK+rXvk5ucz/J+oWHVfvI7m/VDp4
+         0MhBEf1xuzo6hqN+2a8sxYagoGWfkIJ3sNtn3/6WuQPyO+aiuug9lfxdJwcW3w8rNTFi
+         NnUQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+yZ7qCkYIwK+SnGBP1/xLxGBlZuJRAtgFojWcuUBhPZH/t1PyMVcpTw+qvgwbDs1iv1SAYTmSxkkreDgO8Gco=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzTyNaCj8Xj5MXKmTXxDCiktUxfLo6oYk9Txs5FV6kBWaF+AaHL
+	XClIekx1aCVuXoR51m3TitxY2Ab4FjuzkZNdFCNvp7u6kF+TkGOO0AbYDxKNHf1rWf+Brw5lt5B
+	wagY8g6FUZBqo2pRReu3Y9Q71eCzzI3C88m8w40lK
+X-Gm-Gg: AeBDiesEOZBCMusTTzZ2AOU46+gKsNoGvAHRJZJTf2X5plZgPTzA8SWC+ODyZWd5RKh
+	HZZ9h1Xj5laPDhqXbMWF8fM1u32gCKDMbWWUhvdmDu/ysd2eL2w9Btieh2I9XR4an3kcQyRi2ox
+	XgMTjZ5MMT/FIuu4UUrQR8p4jvrfLMbi4tCs7mXB0oWKqO6bZiVBvesIPspcmVCFZKBqYdx81yA
+	IKBmLoB0bCLqHjAdmN+XUo7Tv05Bbdgx0spkHA1uDC31nJFAJSsl8XNbSkPCpeuMfRKpX12RemJ
+	YGShU9KP/pImKI5WjmpLU5sah6BfkowUBOahwlR7zX5ad7JZAHRz+Ohzra5e7ZAxH1KTBWRp87Y
+	5iNRaEODq
+X-Received: by 2002:a05:622a:4d4c:b0:50e:614e:4433 with SMTP id
+ d75a77b69052e-5100e19ab26mr32850641cf.30.1777375286472; Tue, 28 Apr 2026
+ 04:21:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA3PR12MB7901:EE_|BY5PR12MB4180:EE_
-X-MS-Office365-Filtering-Correlation-Id: 88b659e1-a6e8-4e58-cf08-08dea517f62a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|376014|7416014|1800799024|18002099003|22082099003|56012099003;
-X-Microsoft-Antispam-Message-Info:
-	P7Km8dQcoeEhTWeyvhL5fc4m6pIZw4dSvhBmy0panvBr9YhrJqr67GDzHybGlENgTcdoeoO6uKNoMb2gkCutioA4VIpvskcEHCKHBOEqv3bcycPuHvBOFQ77eOv/5T8o54fVMS/riWae12TMYQiioih/IF5ggiMOwbzNOEfgzKIT2YXsQaVf1w63ts1x9nU0Z3dZtmpMH4OGdlopkRNTjnNjtnqhQQ4TmHzs56z4SKN9mB+krmr5S1E5pko1EmbNcgqfFhqxGYF4891rFee1/gBFTXXAiH/jdmfqy2oOjZm8jsmnxwRogg+fCg7mJ3638Y0WuBydMTzD5T5cUyB962Cm495Ihkj9Sx/iLZLNEiJn9lSlj/Uc/fhA0IdB6YvTBM/x6u7qAET1W9usonvpH0PfYfdifIJ1RvzX5T4olE/VqQ2ckikzxkdGs/moMWy3VqdSU3HoXIwoOJMOrYERXHdkJfeMtPOKa6ZmgpaRsLeGPTpZ7kA9wFZhI1m1X0VJBdgZD0vC9VcUnEdQ4SPSR/Kev0wESQ3AXWQTmzrz/yaH/D3pbsBuQBL8xYtoVAdT8CZP+DpAb0cGP0UxL/ncr4JA35QWbpNllPXcewJw01IQlcJwO/ldSlcxdxpTyad9lE4Kc7/zCh7zqsdfR4SvEM0EyuOBK+D/UgCoQw3Vz9Jq3QjNuooK2yXVYXnJKRrg6sGzAhooaTvCJeo6yvaNr6BlFSFP92quF9QG4vIXLxM=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA3PR12MB7901.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024)(18002099003)(22082099003)(56012099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?B85jmDssCejxLiQHbSVkxMOrGVfBhI0t28DpmDSItFoAp9N75u94DpYLmY45?=
- =?us-ascii?Q?jdNSFaNbzqkXiqzOFGoZNE9LO65cCF2ghrhY6f19rGa7SS7W3qzYGX5ARvP9?=
- =?us-ascii?Q?/Zjzv/37ktLswqplhGjeNdvYYC59c+T4I0wAMOD5y+MwZ7Xw0wY/rQxEFjyr?=
- =?us-ascii?Q?+HSkPxRHQrGjVotPtPqHt/L3cycEswGt2N86m1RQccvWkMHAAlTR45OFdL23?=
- =?us-ascii?Q?8wb1B7ZFSvdCP5ObTxNp2GIC2u4sJipC9hizxaUDwSvBTkgkg7gVQSSGkYmE?=
- =?us-ascii?Q?e5nxSaYHkbcK0I6QD79wsMW5KEVMRFuMfdAwDgXv7uZBZqClWooOq04AgjRk?=
- =?us-ascii?Q?gFhuxcyIJI6fosEThIA2FZPaQS/J8GJElTDa2+fFkjSMYVYi1TQXhN8o43lU?=
- =?us-ascii?Q?F8To4DPdgkyo5iQYxD72Dx0b2/5ETdUcwMZX5bPSCt2mn+pQZfTO8NWPMs3x?=
- =?us-ascii?Q?/DvKP2kNbFnVr2sI8Yr+og0Y8ZdYXWkLDCdUNHNr7Zjp4CSkAMO/jAekDQDs?=
- =?us-ascii?Q?XASoUCCpnkwJchu0Y99B5aFh2Hzff7h+ZxNRFli2epVG/o1T6jHey3VvAKFt?=
- =?us-ascii?Q?N4ZizthC4vSYbltX7R7UXVb92YbxjBYMIyQ6vp/ereBr0VFfqDZ9vj1E8fzv?=
- =?us-ascii?Q?wHvNY3gbix8l5uN6lReSF7GGqmzfjeOJu6+lAUNf3/D8VEx7zuPoIhSiGGeB?=
- =?us-ascii?Q?mxbcwYUDomX2PaFsewyvUws4aJJ7ZEWplT0ezm7WSbrQUxHUowfkEv7GZ0uS?=
- =?us-ascii?Q?Ca5rH5DwTwWoaXCmCOKaKDRcMw3iNgipnHbAXFqVYDXoC45M74WOcfw5/J/d?=
- =?us-ascii?Q?8b6jlI9B66wPpmcWFjs8Ytes5sbQsrGPzekl42ev33oU3dCBypJWGq/fZ9ni?=
- =?us-ascii?Q?Pog5YRwVox3GVwKOFIZwsYwn52ZfpaCR3u4xar/eDgk4lS8EwtXDLR8DPobP?=
- =?us-ascii?Q?Ey8hZghTPY/oYcNUfOhCsXGBMBC/0n9JNWEf4BsOYj1O7csZr04LU1omLv5o?=
- =?us-ascii?Q?wpgTjaYNJ4ENnMS1oUq0Ev/acPtVPz+kLOvzOrU06hmKH27OCkbPTmNIH6WD?=
- =?us-ascii?Q?9pPpPW/pPYm0LeBaU0j2BZ4Ya1Rl5DVUGm+ywYgrQO69J6Wjdt/haf5FEjTH?=
- =?us-ascii?Q?BB16vp4WNAEsezgvJWqbm+htotdjqvW9zPbEKBPlIOzLQbYysRv7iG5nOiXj?=
- =?us-ascii?Q?YGnyEb29tntfEHoQ1BVd6zNcxpAwIZfnFvG0zBlTfla7P/X7NpSqIkWN5+nN?=
- =?us-ascii?Q?B5URwQXah0hVihNwn1buHoHtrZRWeZM8fMpimbrtn9h67+1sTYKTRMsgXTDA?=
- =?us-ascii?Q?AqvhzNJ7uHA9o4BkVLTACbutkN4LAp5uZuIwtiSX0VMnThZDcP/MsP5jjaqQ?=
- =?us-ascii?Q?qOA7PGYH8SItjVyuqyrNi17LAcdDZ9fpkf9vGbNIm37AISGeFy4A9lWUwmYR?=
- =?us-ascii?Q?FRLHyz8xZONdLw1J8TXi8USujZkvwoT2TrwhdnSqpCCAcZXwSOJsZA79Qhy+?=
- =?us-ascii?Q?hCYz6Umd86egrersZsHDz6XwFPxeB0Lxhe5N7ZI+EChb6USFPZLD1rmX5QhN?=
- =?us-ascii?Q?cW+Br2ZpJfaE1X7PEUzgppBIxdmuZitWfp3TsJKlYM8NgNvSa1lyle36KrV7?=
- =?us-ascii?Q?rC0Yx0Bcr7Sb1cknWI4He+Dx97tpfzfbrUuD0EmC7S0T/5QwX5/n3twKeSjg?=
- =?us-ascii?Q?nIl/UH7NbJ42tSXH3mPQoFSJx09chPJGiIZUdVPAt8b+JahV?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 88b659e1-a6e8-4e58-cf08-08dea517f62a
-X-MS-Exchange-CrossTenant-AuthSource: SA3PR12MB7901.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Apr 2026 11:19:06.8837
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BFBt2v7XLh9fmEMFLXgaebcADJK33kBsSLMSYHj9OXepuMND7l3A4qR5f3riF4iAa1nu7nh0E/p7kDL6otA2ew==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4180
+References: <20260427224243.3499162-1-sharmasagarika@google.com>
+ <20260427224243.3499162-2-sharmasagarika@google.com> <20260428110708.GA571865@shredder>
+In-Reply-To: <20260428110708.GA571865@shredder>
+From: Eric Dumazet <edumazet@google.com>
+Date: Tue, 28 Apr 2026 04:21:15 -0700
+X-Gm-Features: AVHnY4LMXCaEBa5uvR4wqE0QzYjHTahqHeIugW5yAVMSZFazKczpzJjPrXgJqLU
+Message-ID: <CANn89i+aaWE11Fttpdbq-OvFAkhtkqQwkWzDACvh=Do_wStJqw@mail.gmail.com>
+Subject: Re: [PATCH net v1 1/2] ipv6: update route serial number on NETDEV_CHANGE
+To: Ido Schimmel <idosch@nvidia.com>
+Cc: Sagarika Sharma <sharmasagarika@google.com>, "David S . Miller" <davem@davemloft.net>, 
+	David Ahern <dsahern@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>, 
+	Kuniyuki Iwashima <kuniyu@google.com>, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Apr 27, 2026 at 10:42:23PM +0000, Sagarika Sharma wrote:
-> From: Kuniyuki Iwashima <kuniyu@google.com>
-> 
-> Without the previous commit, TCP failed to switch to alternative
-> IPv6 routes immediately upon carrier loss.
-> 
-> It would persist with the dead route until reaching the threshold
-> net.ipv4.tcp_retries1, leading to unnecessary delays in failover.
-> 
-> Let's add a selftest for this scenario to ensure TCP fails over
-> immediately upon a carrier loss event.
-> 
-> Before:
->   TEST: TCP IPv4 failover                                             [ OK ]
->   TEST: TCP IPv6 failover                                             [FAIL]
-> 
-> After:
->   TEST: TCP IPv4 failover                                             [ OK ]
->   TEST: TCP IPv6 failover                                             [ OK ]
-> 
-> Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
-> Signed-off-by: Sagarika Sharma <sharmasagarika@google.com>
+On Tue, Apr 28, 2026 at 4:07=E2=80=AFAM Ido Schimmel <idosch@nvidia.com> wr=
+ote:
+>
+> On Mon, Apr 27, 2026 at 10:42:22PM +0000, Sagarika Sharma wrote:
+> > When using IPv6 ECMP routes, if a netdev listed as a nexthop experience=
+s
+> > a carrier change event (e.g., a bond device generating a NETDEV_CHANGE
+> > event after its slaves go linkdown), established connections utilizing
+> > that nexthop fail to fail over to other available nexthops. Instead,
+> > these connections stall or drop.
+> >
+> > This happens because the IPv6 FIB code does not invalidate the socket's
+> > cached destination when a NETDEV_CHANGE event occurs. While
+> > fib6_ifdown() correctly marks the nexthop with RTNH_F_LINKDOWN, it
+> > leaves the route's serial number unchanged. As a result, sockets with a
+> > previously cached dst do not realize the route is no longer viable and
+> > continue to try using the non-functional nexthop.
+> >
+> > This behavior contrasts with IPv4, which actively flushes cached
+> > destinations on a NETDEV_CHANGE event (see fib_netdev_event() in
+> > net/ipv4/fib_frontend.c).
+> >
+> > Fix this by updating the route serial number in fib6_ifdown() when
+> > setting RTNH_F_LINKDOWN. This invalidates stale cached destinations,
+> > forcing sockets to perform a new route lookup and fail over to a
+> > functioning nexthop.
+> >
+> > Fixes: 51ebd3181572 ("ipv6: add support of equal cost multipath (ECMP)"=
+)
+> > Signed-off-by: Sagarika Sharma <sharmasagarika@google.com>
+> > Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
+>
+> Reviewed-by: Ido Schimmel <idosch@nvidia.com>
 
-Thanks for the test. LGTM. A couple of nits below.
+Reviewed-by: Eric Dumazet <edumazet@google.com>
 
-[...]
-
-> diff --git a/tools/testing/selftests/net/tcp_ecmp_failover.sh b/tools/testing/selftests/net/tcp_ecmp_failover.sh
-> new file mode 100755
-> index 000000000000..f857d5db84d8
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/tcp_ecmp_failover.sh
-
-[...]
-
-> +
-> +test_ipv4
-> +test_ipv6
-
-Maybe squash something like [1]? I ran the test without the first patch
-and I get:
-
-# ./tcp_ecmp_failover.sh 
-TEST: TCP IPv4 failover                                             [ OK ]
-TEST: TCP IPv6 failover                                             [FAIL]
-# echo $?
-0
-
-[1]
-diff --git a/tools/testing/selftests/net/tcp_ecmp_failover.sh b/tools/testing/selftests/net/tcp_ecmp_failover.sh
-index f857d5db84d8..8b7a2d82c442 100755
---- a/tools/testing/selftests/net/tcp_ecmp_failover.sh
-+++ b/tools/testing/selftests/net/tcp_ecmp_failover.sh
-@@ -205,5 +205,10 @@ test_ipv6()
- 	cleanup
- }
- 
-+require_command socat
-+require_command tcpdump
-+
- test_ipv4
- test_ipv6
-+
-+exit "$EXIT_STATUS"
+Thanks!
