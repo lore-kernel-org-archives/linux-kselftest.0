@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C344534CFD0;
-	Tue, 28 Apr 2026 20:45:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CFC0524F;
+	Tue, 28 Apr 2026 20:45:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777409142; cv=none; b=ZncZuZpKcmEsdnYSqoI1pNFm4pTw8hQGEMLUHM7LjK0OmV4D4FsJUkzUHFp0l4bJAk1vAG9gcYBRtAsiJqnIXQnmjC4UdiOlpSdDMSTcVfDDex8B7QF7VmLAC7G56G9IiK14oRY24r5wgex5Gv9h/9ps2wv96YviTpStT/dPq7U=
+	t=1777409149; cv=none; b=WdLK5x75XcR2DqP6XSeQIAgtg1vJWsc/H7I7COpijNHk+MAO2CD6rjz2T9SLY4zD3XIB7WdA8hnJAcpphzHFv7/Qluv0KGXt74MoZGycd32kClrzwrp68gzDkbjGnBG/ebgrlMZVCNdt3388lwTlrF0YsQnoAB9JM19RjAhZdFI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777409142; c=relaxed/simple;
-	bh=jAQxw9MbYkXsl544OFupWFjq2DLx0d+HujNgYQfq/0c=;
+	s=arc-20240116; t=1777409149; c=relaxed/simple;
+	bh=OlIUBzF1pm75Atj7loyFKXAz39qc33UiLBzlYum8j8I=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Jc+dzDMbxpHX/zVVhbd7aP/rseDL6obio5d5FFy0s6saqOXc8KlJItOPBMFlsfGzc08nDg6vcVDzalNDMx9cwml9vXwodxhBT/Uqk8osg0jpmeCRYKwMVXZirus5EY/Bivx51J99q6oxIq2h04facavr0meNeTlrPQVK+7uuw84=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V+4Vny5l; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=WCZGtQ1B+tEWHfcbAcvn6rYosXp8evTIhneeicP11cfAKMa8fBt63rw8B7h+Z0YSZ8Tekz2MaGkPISPEeNs5s1kBfq8spNk6l/VAD19m6XTsdpLWegoy930904Tk9RQu8AQmSOXc4LWtsIlxxiEmfqRsX8Rsm7zQNH3E0cS+Bgw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k/UGjFeJ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V+4Vny5l"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89FAEC2BCAF;
-	Tue, 28 Apr 2026 20:45:36 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k/UGjFeJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21992C2BCAF;
+	Tue, 28 Apr 2026 20:45:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777409142;
-	bh=jAQxw9MbYkXsl544OFupWFjq2DLx0d+HujNgYQfq/0c=;
+	s=k20201202; t=1777409149;
+	bh=OlIUBzF1pm75Atj7loyFKXAz39qc33UiLBzlYum8j8I=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=V+4Vny5lUCOs29DUa+TMA1hirYtTwid7QaRPEsnAPG62zvxRp5MURNS0bKB60YaD2
-	 chTPM8zaivb1d3pSwMsyJQxeryhrR246XjgWmy0/dZZ55AkiJuezn5oWPf4IDNUNBP
-	 P4K00tKgjHiHaxBcb7PBJoXwoP52y/ce4SEIO/YJqpuZPmgPByQbdwnKH8tnt1eU10
-	 GUnLK9G8HN1iKbmrKYPTGvuVNlOsExVu6PVl0Rfr8xYpg2/grLZ29C+oY2XpK258Vl
-	 YqL0ceMsB1/C3TM1c8CRjtkpddQKnz17y4Wq1+q6zEd2gQT7T/z6Nxq7QB0wTjC3VE
-	 0gMgCjCN/hssg==
+	b=k/UGjFeJw0dt9uKzNCvUdtfovqatLZx9o4OUbHhk/quGTcjQhiWZi1jFcvGCJ/vOH
+	 HE7VV1znvB9Y9XYTnwqK5FbyW8sFx2HP1PN+pSWrVLTtr9yZXkKYrj4k1/N1/bH5gj
+	 kIYZNJvZo3oM8GMOt0tkI20KiJM44eNfDbsehM6yjiw7QSe2ooisV59hkLJwFvSW1J
+	 ciReWNIL4cMrnh7Q2J3f2dquu5mbc/OoGHYnVEZkeHEuOFJdeUpOAUwc58YC9MFTtA
+	 8rP1bSO8ITo+SgVpwdyuREMBBBMoNFl3n5Q1GzfgRnHlSuBr0C4uDUTHvuAs2/y5V6
+	 pdau8Y2vkJh1g==
 From: Mike Rapoport <rppt@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	David Hildenbrand <david@kernel.org>
@@ -54,9 +54,9 @@ Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-mm@kvack.org
-Subject: [PATCH v3 26/54] selftests/mm: hugepage_settings: rename get_free_hugepages()
-Date: Tue, 28 Apr 2026 23:42:12 +0300
-Message-ID: <20260428204240.1924129-27-rppt@kernel.org>
+Subject: [PATCH v3 27/54] selftests/mm: hugepage_settings: add APIs for HugeTLB setup and teardown
+Date: Tue, 28 Apr 2026 23:42:13 +0300
+Message-ID: <20260428204240.1924129-28-rppt@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260428204240.1924129-1-rppt@kernel.org>
 References: <20260428204240.1924129-1-rppt@kernel.org>
@@ -70,186 +70,312 @@ Content-Transfer-Encoding: 8bit
 
 From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-... to hugetlb_free_default_hugepages() for consistency with
-hugetlb_nr_default_pages().
+A lot of tests require free HugeTLB pages. Some need just a few default
+huge pages, some need a certain amount of memory available as HugeTLB, and
+some just skip lots of tests if huge pages of all supported sizes are not
+available.
+
+This all resulted in a huge mess in run_vmtests.sh that sets up some huge
+pages, adjusts them later and restores some of the settings if the stars
+align.
+
+Add APIs that allow saving the state of HugeTLB and setting up the desired
+amount of HugeTLB pages.
+
+Saving the state also registers atexit() callback and signal handler that
+will ensure restoration of HugeTLB state.
+
+Since many tests use both HugeTLB and THP, the atexit() callbacks and
+signal handler are restoring both.
+
+For kselftest_harness tests that run fixture setups and test in child
+processes add a constructor that will save and restore settings in the main
+process.
 
 Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 ---
- .../testing/selftests/mm/hugepage_settings.c  | 28 ++++++-------------
- .../testing/selftests/mm/hugepage_settings.h  | 12 +++++++-
- tools/testing/selftests/mm/hugetlb-madvise.c  |  4 +--
- tools/testing/selftests/mm/hugetlb_dio.c      |  6 ++--
- .../selftests/mm/hugetlb_fault_after_madv.c   |  2 +-
- .../selftests/mm/hugetlb_madv_vs_map.c        |  2 +-
- tools/testing/selftests/mm/uffd-stress.c      |  2 +-
- 7 files changed, 28 insertions(+), 28 deletions(-)
+ .../testing/selftests/mm/hugepage_settings.c  | 178 +++++++++++++++---
+ .../testing/selftests/mm/hugepage_settings.h  |  30 ++-
+ 2 files changed, 183 insertions(+), 25 deletions(-)
 
 diff --git a/tools/testing/selftests/mm/hugepage_settings.c b/tools/testing/selftests/mm/hugepage_settings.c
-index 5961229b9931..4ae7332b5e1b 100644
+index 4ae7332b5e1b..9d31b53dbc67 100644
 --- a/tools/testing/selftests/mm/hugepage_settings.c
 +++ b/tools/testing/selftests/mm/hugepage_settings.c
-@@ -446,25 +446,6 @@ unsigned long default_huge_page_size(void)
- 	return hps;
+@@ -306,31 +306,12 @@ void thp_restore_settings(void)
+ 		thp_write_settings(&saved_settings);
  }
  
--unsigned long get_free_hugepages(void)
--{
--	unsigned long fhp = 0;
--	char *line = NULL;
--	size_t linelen = 0;
--	FILE *f = fopen("/proc/meminfo", "r");
--
--	if (!f)
--		return fhp;
--	while (getline(&line, &linelen, f) > 0) {
--		if (sscanf(line, "HugePages_Free:      %lu", &fhp) == 1)
--			break;
--	}
--
--	free(line);
--	fclose(f);
--	return fhp;
+-static void thp_restore_settings_atexit(void)
++static void __thp_save_settings(void)
+ {
+-	thp_restore_settings();
 -}
 -
- static void hugetlb_sysfs_path(char *buf, size_t buflen,
- 			       unsigned long size, const char *attr)
- {
-@@ -489,3 +470,12 @@ void hugetlb_set_nr_pages(unsigned long size, unsigned long nr)
+-static void thp_restore_settings_sighandler(int sig)
+-{
+-	/* exit() will invoke the thp_restore_settings_atexit handler. */
+-	exit(KSFT_FAIL);
+-}
++	if (!thp_available())
++		return;
  
- 	write_num(path, nr);
+-void thp_save_settings(void)
+-{
+ 	thp_read_settings(&saved_settings);
+-
+-	/*
+-	 * setup exit hooks to make sure THP settings are restored on graceful
+-	 * and error exits and signals
+-	 */
+-	atexit(thp_restore_settings_atexit);
+-	signal(SIGTERM, thp_restore_settings_sighandler);
+-	signal(SIGINT, thp_restore_settings_sighandler);
+-	signal(SIGHUP, thp_restore_settings_sighandler);
+-	signal(SIGQUIT, thp_restore_settings_sighandler);
+-
+ 	thp_settings_saved = true;
+ }
+ 
+@@ -399,11 +380,31 @@ bool thp_is_enabled(void)
+ 	return mode == 1 || mode == 3;
+ }
+ 
++#define HUGETLB_MAX_NR_PAGESIZES 10
++struct hugetlb_settings {
++	unsigned long free_hugepages[HUGETLB_MAX_NR_PAGESIZES];
++	unsigned long nr_hugepages[HUGETLB_MAX_NR_PAGESIZES];
++	unsigned long sizes[HUGETLB_MAX_NR_PAGESIZES];
++	unsigned long default_size;
++	int nr_sizes;
++};
++
++static struct hugetlb_settings hugetlb_saved_settings;
++bool hugetlb_settings_saved;
++
+ int detect_hugetlb_page_sizes(unsigned long sizes[], int max)
+ {
+-	DIR *dir = opendir("/sys/kernel/mm/hugepages/");
++	static struct hugetlb_settings *settings = &hugetlb_saved_settings;
++	DIR *dir;
+ 	int count = 0;
+ 
++	if (settings->nr_sizes) {
++		for (count = 0; count < settings->nr_sizes; count++)
++			sizes[count] = settings->sizes[count];
++		return settings->nr_sizes;
++	}
++
++	dir = opendir("/sys/kernel/mm/hugepages/");
+ 	if (!dir)
+ 		return 0;
+ 
+@@ -427,11 +428,16 @@ int detect_hugetlb_page_sizes(unsigned long sizes[], int max)
+ 
+ unsigned long default_huge_page_size(void)
+ {
++	static struct hugetlb_settings *settings = &hugetlb_saved_settings;
+ 	unsigned long hps = 0;
+ 	char *line = NULL;
+ 	size_t linelen = 0;
+-	FILE *f = fopen("/proc/meminfo", "r");
++	FILE *f;
+ 
++	if (settings->default_size)
++		return settings->default_size;
++
++	f = fopen("/proc/meminfo", "r");
+ 	if (!f)
+ 		return 0;
+ 	while (getline(&line, &linelen, f) > 0) {
+@@ -479,3 +485,127 @@ unsigned long hugetlb_free_pages(unsigned long size)
+ 
+ 	return read_num(path);
  }
 +
-+unsigned long hugetlb_free_pages(unsigned long size)
++bool hugetlb_setup_default(unsigned long nr)
 +{
-+	char path[PATH_MAX];
++	unsigned long size;
 +
-+	hugetlb_sysfs_path(path, sizeof(path), size, "free_hugepages");
++	hugetlb_save_settings();
 +
-+	return read_num(path);
++	size = default_huge_page_size();
++	hugetlb_set_nr_pages(size, nr);
++
++	return hugetlb_free_pages(size) == nr;
 +}
-diff --git a/tools/testing/selftests/mm/hugepage_settings.h b/tools/testing/selftests/mm/hugepage_settings.h
-index d6f41a45e8ee..57fbf2f57e13 100644
---- a/tools/testing/selftests/mm/hugepage_settings.h
-+++ b/tools/testing/selftests/mm/hugepage_settings.h
-@@ -92,10 +92,10 @@ bool thp_is_enabled(void);
- 
- int detect_hugetlb_page_sizes(unsigned long sizes[], int max);
- unsigned long default_huge_page_size(void);
--unsigned long get_free_hugepages(void);
- 
- unsigned long hugetlb_nr_pages(unsigned long size);
- void hugetlb_set_nr_pages(unsigned long size, unsigned long nr);
-+unsigned long hugetlb_free_pages(unsigned long size);
- 
- static inline unsigned long hugetlb_nr_default_pages(void)
- {
-@@ -117,4 +117,14 @@ static inline void hugetlb_set_nr_default_pages(unsigned long nr)
- 	hugetlb_set_nr_pages(size, nr);
- }
- 
-+static inline unsigned long hugetlb_free_default_pages(void)
-+{
-+	unsigned long size = default_huge_page_size();
 +
-+	if (!size)
++unsigned long hugetlb_setup(unsigned long nr, unsigned long sizes[],
++			    int max)
++{
++	unsigned long enabled[10];
++	int nr_sizes = 0;
++	int nr_enabled;
++
++	hugetlb_save_settings();
++
++	nr_enabled = detect_hugetlb_page_sizes(enabled, ARRAY_SIZE(enabled));
++	if (!nr_enabled)
 +		return 0;
 +
-+	return hugetlb_free_pages(size);
++	if (nr_enabled > max) {
++		ksft_print_msg("detected %d huge page sizes, will only test %d\n", nr_enabled, max);
++		nr_enabled = max;
++	}
++
++	/* If HugeTLB is supported, request 2 HugeTLB pages of every size. */
++	for (int i = 0; i < nr_enabled; i++) {
++		hugetlb_set_nr_pages(enabled[i], nr);
++		if (hugetlb_free_pages(enabled[i]) < nr)
++			continue;
++
++		sizes[nr_sizes++] = enabled[i];
++	}
++
++	return nr_sizes;
++}
++
++static void __hugetlb_save_settings(void)
++{
++	struct hugetlb_settings *settings = &hugetlb_saved_settings;
++	int nr_sizes;
++
++	settings->default_size = default_huge_page_size();
++	if (!settings->default_size)
++		return;
++
++	nr_sizes = detect_hugetlb_page_sizes(settings->sizes,
++					     HUGETLB_MAX_NR_PAGESIZES);
++	if (!nr_sizes) {
++		settings->default_size = 0;
++		return;
++	}
++
++	for (int i = 0; i < nr_sizes; i++) {
++		unsigned long sz = settings->sizes[i];
++
++		if (!sz)
++			continue;
++
++		settings->free_hugepages[i] = hugetlb_free_pages(sz);
++		settings->nr_hugepages[i] = hugetlb_nr_pages(sz);
++	}
++
++	settings->nr_sizes = nr_sizes;
++	hugetlb_settings_saved = true;
++}
++
++void hugetlb_restore_settings(void)
++{
++	struct hugetlb_settings *settings = &hugetlb_saved_settings;
++
++	if (!hugetlb_settings_saved || !settings->default_size)
++		return;
++
++	for (int i = 0; i < HUGETLB_MAX_NR_PAGESIZES; i++) {
++		unsigned long sz = settings->sizes[i];
++
++		if (!sz)
++			continue;
++
++		hugetlb_set_nr_pages(sz, settings->nr_hugepages[i]);
++	}
++}
++
++static void hugepage_restore_settings_atexit(void)
++{
++	if (thp_settings_saved)
++		thp_restore_settings();
++	if (hugetlb_settings_saved)
++		hugetlb_restore_settings();
++}
++
++static void hugepage_restore_settings_sighandler(int sig)
++{
++	/* exit() will invoke the hugetlb_restore_settings_atexit handler. */
++	exit(KSFT_FAIL);
++}
++
++void hugepage_save_settings(bool thp, bool hugetlb)
++{
++	if (!thp && !hugetlb)
++		return;
++
++	if (thp)
++		__thp_save_settings();
++	if (hugetlb)
++		__hugetlb_save_settings();
++
++	/*
++	 * setup exit hooks to make sure THP settings are restored on graceful
++	 * and error exits and signals
++	 */
++	atexit(hugepage_restore_settings_atexit);
++	signal(SIGTERM, hugepage_restore_settings_sighandler);
++	signal(SIGINT, hugepage_restore_settings_sighandler);
++	signal(SIGHUP, hugepage_restore_settings_sighandler);
++	signal(SIGQUIT, hugepage_restore_settings_sighandler);
++}
+diff --git a/tools/testing/selftests/mm/hugepage_settings.h b/tools/testing/selftests/mm/hugepage_settings.h
+index 57fbf2f57e13..d6a1b4e5f734 100644
+--- a/tools/testing/selftests/mm/hugepage_settings.h
++++ b/tools/testing/selftests/mm/hugepage_settings.h
+@@ -6,6 +6,8 @@
+ #include <stddef.h>
+ #include <stdint.h>
+ 
++void hugepage_save_settings(bool thp, bool hugetlb);
++
+ /* Transparent Huge Pages (THP) */
+ 
+ enum thp_enabled {
+@@ -79,7 +81,11 @@ struct thp_settings *thp_current_settings(void);
+ void thp_push_settings(struct thp_settings *settings);
+ void thp_pop_settings(void);
+ void thp_restore_settings(void);
+-void thp_save_settings(void);
++
++static inline void thp_save_settings(void)
++{
++	hugepage_save_settings(/* thp = */ true, /* hugetlb = */ false);
++}
+ 
+ void thp_set_read_ahead_path(char *path);
+ unsigned long thp_supported_orders(void);
+@@ -97,6 +103,13 @@ unsigned long hugetlb_nr_pages(unsigned long size);
+ void hugetlb_set_nr_pages(unsigned long size, unsigned long nr);
+ unsigned long hugetlb_free_pages(unsigned long size);
+ 
++static inline void hugetlb_save_settings(void)
++{
++	hugepage_save_settings(/* thp = */ false, /* hugetlb = */ true);
++}
++
++void hugetlb_restore_settings(void);
++
+ static inline unsigned long hugetlb_nr_default_pages(void)
+ {
+ 	unsigned long size = default_huge_page_size();
+@@ -127,4 +140,19 @@ static inline unsigned long hugetlb_free_default_pages(void)
+ 	return hugetlb_free_pages(size);
+ }
+ 
++static inline bool hugetlb_available(void)
++{
++	return default_huge_page_size() != 0;
++}
++
++bool hugetlb_setup_default(unsigned long nr);
++unsigned long hugetlb_setup(unsigned long nr, unsigned long sizes[],
++			    int max);
++
++#define HUGETLB_SETUP_DEFAULT_PAGES(nr_pages) \
++static void __attribute__((constructor)) __hugetlb_setup_default(void)	\
++{									\
++	hugetlb_setup_default((nr_pages));				\
 +}
 +
  #endif /* __THP_SETTINGS_H__ */
-diff --git a/tools/testing/selftests/mm/hugetlb-madvise.c b/tools/testing/selftests/mm/hugetlb-madvise.c
-index 316384d919db..3c08eb6db6a2 100644
---- a/tools/testing/selftests/mm/hugetlb-madvise.c
-+++ b/tools/testing/selftests/mm/hugetlb-madvise.c
-@@ -27,7 +27,7 @@
- 
- #define validate_free_pages(exp_free)					\
- 	do {								\
--		unsigned long fhp = get_free_hugepages();		\
-+		unsigned long fhp = hugetlb_free_default_pages();		\
- 		if (fhp != (exp_free))					\
- 			ksft_exit_fail_msg("Unexpected number of free "	\
- 				"huge pages %ld, expected %ld line %d\n", \
-@@ -68,7 +68,7 @@ int main(int argc, char **argv)
- 	if (!base_page_size)
- 		ksft_exit_fail_msg("Unable to determine base page size\n");
- 
--	free_hugepages = get_free_hugepages();
-+	free_hugepages = hugetlb_free_default_pages();
- 	if (free_hugepages < MIN_FREE_PAGES)
- 		ksft_exit_skip("Not enough free huge pages (have %lu, need %d)\n", free_hugepages, MIN_FREE_PAGES);
- 
-diff --git a/tools/testing/selftests/mm/hugetlb_dio.c b/tools/testing/selftests/mm/hugetlb_dio.c
-index 81e3f7bc8e76..47019433ddaf 100644
---- a/tools/testing/selftests/mm/hugetlb_dio.c
-+++ b/tools/testing/selftests/mm/hugetlb_dio.c
-@@ -93,7 +93,7 @@ static void run_dio_using_hugetlb(int fd, unsigned int start_off,
- 		ksft_exit_fail_perror("lseek failed\n");
- 
- 	/* Get the free huge pages before allocation */
--	free_hpage_b = get_free_hugepages();
-+	free_hpage_b = hugetlb_free_default_pages();
- 	if (free_hpage_b == 0) {
- 		close(fd);
- 		ksft_exit_skip("No free hugepage, exiting!\n");
-@@ -121,7 +121,7 @@ static void run_dio_using_hugetlb(int fd, unsigned int start_off,
- 	munmap(orig_buffer, h_pagesize);
- 
- 	/* Get the free huge pages after unmap*/
--	free_hpage_a = get_free_hugepages();
-+	free_hpage_a = hugetlb_free_default_pages();
- 
- 	ksft_print_msg("No. Free pages before allocation : %d\n", free_hpage_b);
- 	ksft_print_msg("No. Free pages after munmap : %d\n", free_hpage_a);
-@@ -142,7 +142,7 @@ int main(void)
- 	ksft_print_header();
- 
- 	/* Check if huge pages are free */
--	if (!get_free_hugepages())
-+	if (!hugetlb_free_default_pages())
- 		ksft_exit_skip("No free hugepage, exiting\n");
- 
- 	fd = open("/tmp", O_TMPFILE | O_RDWR | O_DIRECT, 0664);
-diff --git a/tools/testing/selftests/mm/hugetlb_fault_after_madv.c b/tools/testing/selftests/mm/hugetlb_fault_after_madv.c
-index abc3904c5268..c718dd065d53 100644
---- a/tools/testing/selftests/mm/hugetlb_fault_after_madv.c
-+++ b/tools/testing/selftests/mm/hugetlb_fault_after_madv.c
-@@ -78,7 +78,7 @@ int main(void)
- 	ksft_print_msg("[INFO] detected default hugetlb page size: %zu KiB\n",
- 		       huge_page_size / 1024);
- 
--	free_hugepages = get_free_hugepages();
-+	free_hugepages = hugetlb_free_default_pages();
- 	if (free_hugepages != 1) {
- 		ksft_exit_skip("This test needs one and only one page to execute. Got %lu\n",
- 			       free_hugepages);
-diff --git a/tools/testing/selftests/mm/hugetlb_madv_vs_map.c b/tools/testing/selftests/mm/hugetlb_madv_vs_map.c
-index ac60b4f18784..dfbd71a7f709 100644
---- a/tools/testing/selftests/mm/hugetlb_madv_vs_map.c
-+++ b/tools/testing/selftests/mm/hugetlb_madv_vs_map.c
-@@ -89,7 +89,7 @@ int main(void)
- 	ksft_print_header();
- 	ksft_set_plan(1);
- 
--	free_hugepages = get_free_hugepages();
-+	free_hugepages = hugetlb_free_default_pages();
- 
- 	if (free_hugepages != 1)
- 		ksft_exit_skip("This test needs one and only one page to execute. Got %lu\n",
-diff --git a/tools/testing/selftests/mm/uffd-stress.c b/tools/testing/selftests/mm/uffd-stress.c
-index e92a85463eb1..7e37cf3d27f6 100644
---- a/tools/testing/selftests/mm/uffd-stress.c
-+++ b/tools/testing/selftests/mm/uffd-stress.c
-@@ -480,7 +480,7 @@ int main(int argc, char **argv)
- 	 * for racy extra reservation of hugepages.
- 	 */
- 	if (gopts->test_type == TEST_HUGETLB &&
--	   get_free_hugepages() < 2 * (bytes / gopts->page_size) + gopts->nr_parallel - 1)
-+	   hugetlb_free_default_pages() < 2 * (bytes / gopts->page_size) + gopts->nr_parallel - 1)
- 		ksft_exit_skip("Skipping userfaultfd... not enough hugepages\n");
- 
- 	gopts->nr_pages_per_cpu = bytes / gopts->page_size / gopts->nr_parallel;
 -- 
 2.53.0
 
