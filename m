@@ -1,343 +1,379 @@
-Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2FBE355F57;
-	Tue, 28 Apr 2026 06:47:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64ACC363C4C;
+	Tue, 28 Apr 2026 07:02:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777358878; cv=none; b=NUhTHM2HL7npmlKIVpcgABKS5FJt9PI0szHs9BZBf6TTVuJr8LqUYLPfAazQzzMSabm5zKDemXXsGO8WYM3jvC2jcmo8wwGakXBjoClp6U7BOAxlHVzDo/MVStudxn/I9lKCPTXr31SbSCqYK0sdtqGodXrORzuaeos7E0IF2nc=
+	t=1777359740; cv=none; b=Cj83dQ8rB6D4bmIqKQjBVAxLOxjE02+NQiHJG5VLPOWQsmlcpvCKH2GPWl4hz6dLWwQXeGWdVw+hCaBk1ulG3b+kzjsVbqqlzgoKJw0GfzkOdibgsKK6QUTil/FYSWBQGmllVQkG2MdS4AlH2cwCT5qBbsvnrM2G4yLzMoXGE/s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777358878; c=relaxed/simple;
-	bh=tMutqL/VYi2Wa2/lM2qhDSE5rYKHRd0/GydeAZwnFA4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=pfVeTBdTL3+O+qIFIwd5WX33xilBzuj5xA2oyVpUFJ8Nv+2a7BpBRA0HI6mTratM2lVVtKuyNh25Xg3WMREMXjTl4fEjewjy43P36amvco49Utpm1Ddgh12vJl8gHGH0GYCRRVSUBd6iKUVegocnUGuirqqPLJSMNVdcgHZ/Hs8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=dpMn0R8B; arc=none smtp.client-ip=95.215.58.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1777359740; c=relaxed/simple;
+	bh=hVKmKekCPR0otTesTdNIsOkYcvZaVMmGKCZhjWqRqaQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dAjC4H8/b+6uQV6dRQdTxJiod2mzsg9uWHz/bfbyIM+nkVR2ktdGacd/seWWShXed104GUqHNdl2bt0gVMxPm3cgd8a7mT1R9rwzJ57iCPb4I/bwLwI8OmXNLIfJqeiYpokvS5J+6t/6ppyCmSt8qp2PGGRXJ21EnuV7GmEbgAo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EURfwWR+; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="dpMn0R8B"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1777358874;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=FWl3+3xYCQS2TfIONHLvVzjRWYCsw+YxH5UO5pc9yUM=;
-	b=dpMn0R8B93+rDrCnXJ/n+L8zj00H7MJvaPqmSRxTfNaaY0ZEl+LDZGcN3DW9KppxwJw7mI
-	5Tpzu2pJXQV5SCMJsRy43y37V6QWh5zGA6LOgquKLFzIpUbCXSn6TaNkCxdKxL+2bokp0N
-	H11ZfrV9Lvv51iEgVCrwSjiHP/cNfpA=
-From: Qingfang Deng <qingfang.deng@linux.dev>
-To: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Simon Horman <horms@kernel.org>,
-	Willem de Bruijn <willemb@google.com>,
-	Petr Machata <petrm@nvidia.com>,
-	Anubhav Singh <anubhavsinggh@google.com>,
-	Richard Gobert <richardbgobert@gmail.com>,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: linux-ppp@vger.kernel.org,
-	Pablo Neira Ayuso <pablo@netfilter.org>,
-	Qingfang Deng <qingfang.deng@linux.dev>
-Subject: [PATCH net-next v7 2/2] selftests: net: test PPPoE packets in gro.sh
-Date: Tue, 28 Apr 2026 14:47:05 +0800
-Message-ID: <20260428064717.74794-2-qingfang.deng@linux.dev>
-In-Reply-To: <20260428064717.74794-1-qingfang.deng@linux.dev>
-References: <20260428064717.74794-1-qingfang.deng@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EURfwWR+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0EFFC2BCAF;
+	Tue, 28 Apr 2026 07:02:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777359740;
+	bh=hVKmKekCPR0otTesTdNIsOkYcvZaVMmGKCZhjWqRqaQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=EURfwWR+6d2gZ4I0ki7uadITZ+yglULChTeLvA5j3C+sGWIEveox/Hd+m2mmzxRJ8
+	 TyGEHiQiqKn7x+UT4Nk9UvUEnqafYDEPg0bJG64CMDMz82kxI3MHMQ0vU/bAKYyqz/
+	 bQULOHHmDgpOmzjjWM6gnabQ1mwhNtV7Qmn5bBfp4f3pylgPysDAOJrp3ogKQF0vsk
+	 VHhcayOV+qT1wybkGKaVPoIUsbPGK3juHxU5EInZhIYCVqsly15DwR5OVSbyG1hAu+
+	 hj17em3N4GW44EI15wVtCNtyA5ikEN3L5WfM9QV/H1Ivsk7+Rk8yPnJeefC066Z3mD
+	 i7etJJ1P4vnEA==
+Date: Tue, 28 Apr 2026 08:02:14 +0100
+From: Lorenzo Stoakes <ljs@kernel.org>
+To: fujunjie <fujunjie1@qq.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	"Liam R . Howlett" <Liam.Howlett@oracle.com>, David Hildenbrand <david@kernel.org>, 
+	Vlastimil Babka <vbabka@kernel.org>, Jann Horn <jannh@google.com>, Shuah Khan <shuah@kernel.org>, 
+	Christian Brauner <brauner@kernel.org>, SeongJae Park <sj@kernel.org>, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2] mm/madvise: reject invalid process_madvise() advice
+ for zero-length vectors
+Message-ID: <afBNyNJiWEAUSf1i@lucifer>
+References: <tencent_98F3571EF9236437E5165F5C08CF258A9E08@qq.com>
+ <tencent_BB588C2CDED859A873093DAF28B2CC1F7B0A@qq.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <tencent_BB588C2CDED859A873093DAF28B2CC1F7B0A@qq.com>
 
-Add PPPoE test-cases to the GRO selftest. Only run a subset of
-common_tests to avoid changing the hardcoded L3 offsets everywhere.
-Add a new "pppoe_sid" test case to verify that packets with different
-PPPoE session IDs are correctly identified as separate flows and not
-coalesced.
+On Mon, Apr 27, 2026 at 09:43:30AM +0000, fujunjie wrote:
+> process_madvise() used to validate the advice while walking each
+> imported iovec. If the vector has zero total length, vector_madvise()
+> does not enter the loop and can return success without checking whether
+> the advice value is valid.
+>
+> For a local mm, such as process_madvise(PIDFD_SELF, ...), the remote-only
+> process_madvise_remote_valid() check is skipped. As a result, an invalid
+> advice can be reported as success when the vector has zero total length.
+> This differs from madvise(), which rejects an invalid advice before
+> returning success for a zero-length range.
 
-Signed-off-by: Qingfang Deng <qingfang.deng@linux.dev>
+Oops! :) Thanks for taking a look at this.
+
+>
+> Validate the generic madvise behavior at the syscall-facing entry points
+> before any vector walk. In process_madvise(), do this before the
+> remote-only advice restriction so unsupported advice is rejected with the
+> same priority for local and remote mm. Then keep the per-range helper
+> focused on address/length validation, avoiding repeated behavior checks
+> for every iovec.
+
+The whole thing is a little bit of a mess to be honest I think we could clean
+this up a bit more, see below (+ attached patch).
+
+>
+> Valid zero-length requests remain no-ops and continue to return 0. Add a
+
+NIT: 'no-ops' -> 'a noop'. What is a valid zero-length request? Surely it's
+never valid?
+
+> selftest that covers invalid advice with a zero-length iovec and an empty
+> vector, while also checking that a valid zero-length request still
+> succeeds.
+
+Thanks appreciate you adding a self-test!
+
+>
+> Fixes: 021781b01275 ("mm/madvise: unrestrict process_madvise() for current process")
+> Signed-off-by: fujunjie <fujunjie1@qq.com>
+> ---
+> v2:
+> - Validate behavior at the syscall-facing entry points and leave the range
+>   helper for address/length checks, avoiding repeated behavior checks in the
+>   iovec loop.
+> - Put the generic process_madvise() behavior check before
+>   process_madvise_remote_valid(), as suggested by David.
+> - Keep the zero-length selftest coverage from v1.
+>
+> Testing:
+> Built bzImage and tools/testing/selftests/mm/process_madv. In QEMU, the
+> process_madv selftest reports 7/7 passed.
+>
+>  mm/madvise.c                              | 29 ++++++++++++++++-------------
+>  tools/testing/selftests/mm/process_madv.c | 29 +++++++++++++++++++++++++++++
+>  2 files changed, 45 insertions(+), 13 deletions(-)
+>
+> diff --git a/mm/madvise.c b/mm/madvise.c
+> index 69708e953cf56..ce238dd96f158 100644
+> --- a/mm/madvise.c
+> +++ b/mm/madvise.c
+> @@ -1834,13 +1834,10 @@ static void madvise_finish_tlb(struct madvise_behavior *madv_behavior)
+>  		tlb_finish_mmu(madv_behavior->tlb);
+>  }
+>
+> -static bool is_valid_madvise(unsigned long start, size_t len_in, int behavior)
+> +static bool is_valid_madvise_range(unsigned long start, size_t len_in)
+>  {
+>  	size_t len;
+>
+> -	if (!madvise_behavior_valid(behavior))
+> -		return false;
+> -
+
+So taking this out makes sense, but I think we're now in a bit of a confused
+state where is_valid_madvise_range() checks:
+
+* Whether start is page-aligned.
+* Whether len_in was (size_t)(small neg) aligned up -> 0
+* Whether start + len overflows
+
+Returning a boolean
+
+And madvise_should_skip():
+
+* Calls is_valid_madvise_range()
+* Checks if range is empty
+
+Returning a boolean, setting output variable *err to error if the former
+failed.
+
+We also hamfistedly check "start + PAGE_ALIGN(len_in) == start" which, unless
+I'm much mistaken, is equivalent to !len_in, except for the small negative
+aligning to zero case which we already checked.
+
+And to make it all more fun, both functions return opposite booleans :))
+
+So I think we should put this all into one function while we're here, get rid of
+the confusing output variable, return an error code, and have the callers
+manually check for !len_in also (compilers will optimise this into something
+sensible).
+
+This makes it clear at the call sites we skip empty ranges, cleans stuff up and
+makes clear what we check the input range for.
+
+I've attached a patch that you can apply on top of yours to make it clear what I
+mean here (no need for attribution!)
+
+I checked and your test passes! :)
+
+Cheers, Lorenzo
+
+>  	if (!PAGE_ALIGNED(start))
+>  		return false;
+>  	len = PAGE_ALIGN(len_in);
+> @@ -1859,17 +1856,15 @@ static bool is_valid_madvise(unsigned long start, size_t len_in, int behavior)
+>   * madvise_should_skip() - Return if the request is invalid or nothing.
+>   * @start:	Start address of madvise-requested address range.
+>   * @len_in:	Length of madvise-requested address range.
+> - * @behavior:	Requested madvise behavior.
+>   * @err:	Pointer to store an error code from the check.
+>   *
+> - * If the specified behaviour is invalid or nothing would occur, we skip the
+> - * operation.  This function returns true in the cases, otherwise false.  In
+> - * the former case we store an error on @err.
+> + * If the specified range is invalid or nothing would occur, we skip the
+> + * operation.  This function returns true in these cases, otherwise false.  In
+> + * the former case we store an error in @err.
+
+OK looks good, thanks for fixing the typo :)
+
+>   */
+> -static bool madvise_should_skip(unsigned long start, size_t len_in,
+> -		int behavior, int *err)
+> +static bool madvise_should_skip(unsigned long start, size_t len_in, int *err)
+>  {
+> -	if (!is_valid_madvise(start, len_in, behavior)) {
+> +	if (!is_valid_madvise_range(start, len_in)) {
+>  		*err = -EINVAL;
+>  		return true;
+>  	}
+> @@ -2013,7 +2008,10 @@ int do_madvise(struct mm_struct *mm, unsigned long start, size_t len_in, int beh
+>  		.tlb = &tlb,
+>  	};
+>
+> -	if (madvise_should_skip(start, len_in, behavior, &error))
+> +	if (!madvise_behavior_valid(behavior))
+> +		return -EINVAL;
+> +
+> +	if (madvise_should_skip(start, len_in, &error))
+>  		return error;
+>  	error = madvise_lock(&madv_behavior);
+>  	if (error)
+> @@ -2056,7 +2054,7 @@ static ssize_t vector_madvise(struct mm_struct *mm, struct iov_iter *iter,
+>  		size_t len_in = iter_iov_len(iter);
+>  		int error;
+>
+> -		if (madvise_should_skip(start, len_in, behavior, &error))
+> +		if (madvise_should_skip(start, len_in, &error))
+>  			ret = error;
+>  		else
+>  			ret = madvise_do_behavior(start, len_in, &madv_behavior);
+> @@ -2131,6 +2129,11 @@ SYSCALL_DEFINE5(process_madvise, int, pidfd, const struct iovec __user *, vec,
+>  		goto release_task;
+>  	}
+>
+> +	if (!madvise_behavior_valid(behavior)) {
+> +		ret = -EINVAL;
+> +		goto release_mm;
+> +	}
+> +
+>  	/*
+>  	 * We need only perform this check if we are attempting to manipulate a
+>  	 * remote process's address space.
+> diff --git a/tools/testing/selftests/mm/process_madv.c b/tools/testing/selftests/mm/process_madv.c
+> index cd4610baf5d7d..9a7e2788fcc50 100644
+> --- a/tools/testing/selftests/mm/process_madv.c
+> +++ b/tools/testing/selftests/mm/process_madv.c
+> @@ -309,6 +309,35 @@ TEST_F(process_madvise, invalid_vlen)
+>  	ASSERT_EQ(munmap(map, pagesize), 0);
+>  }
+>
+> +/*
+> + * Test that invalid advice is rejected even when the iovec has zero total
+> + * length. A zero-length advice is a no-op for valid advice, but invalid
+> + * advice should still fail with EINVAL.
+> + */
+> +TEST_F(process_madvise, invalid_advice_zero_length)
+> +{
+> +	struct iovec vec = {
+> +		.iov_base = NULL,
+> +		.iov_len = 0,
+> +	};
+> +	int pidfd = self->pidfd;
+> +	ssize_t ret;
+> +
+> +	errno = 0;
+> +	ret = sys_process_madvise(pidfd, &vec, 1, -1, 0);
+> +	ASSERT_EQ(ret, -1);
+> +	ASSERT_EQ(errno, EINVAL);
+> +
+> +	errno = 0;
+> +	ret = sys_process_madvise(pidfd, &vec, 1, MADV_DONTNEED, 0);
+> +	ASSERT_EQ(ret, 0);
+> +
+> +	errno = 0;
+> +	ret = sys_process_madvise(pidfd, NULL, 0, -1, 0);
+> +	ASSERT_EQ(ret, -1);
+> +	ASSERT_EQ(errno, EINVAL);
+> +}
+> +
+>  /*
+>   * Test process_madvise() with an invalid flag value. Currently, only a flag
+>   * value of 0 is supported. This test is reserved for the future, e.g., if
+> base-commit: 1b55f8358e35a67bf3969339ea7b86988af92f66
+> --
+> 2.34.1
+>
+
+----8<----
+From 55ea8f619b9772d8c517e2dd15d7bb7558ce5da2 Mon Sep 17 00:00:00 2001
+From: Lorenzo Stoakes <ljs@kernel.org>
+Date: Tue, 28 Apr 2026 07:48:30 +0100
+Subject: [PATCH] fixups
+
+Signed-off-by: Lorenzo Stoakes <ljs@kernel.org>
 ---
-v7:
- - Do not run all the tests for PPPoE
- - Add a new test for PPPoE
-v6: https://lore.kernel.org/netdev/20260326081127.61229-2-dqfext@gmail.com
+ mm/madvise.c | 55 +++++++++++++++++++++-------------------------------
+ 1 file changed, 22 insertions(+), 33 deletions(-)
 
- tools/testing/selftests/drivers/net/config |  2 +
- tools/testing/selftests/drivers/net/gro.py | 11 +++
- tools/testing/selftests/net/lib/gro.c      | 99 ++++++++++++++++++----
- 3 files changed, 96 insertions(+), 16 deletions(-)
-
-diff --git a/tools/testing/selftests/drivers/net/config b/tools/testing/selftests/drivers/net/config
-index fd16994366f4..07e386895b94 100644
---- a/tools/testing/selftests/drivers/net/config
-+++ b/tools/testing/selftests/drivers/net/config
-@@ -8,5 +8,7 @@ CONFIG_NETCONSOLE=m
- CONFIG_NETCONSOLE_DYNAMIC=y
- CONFIG_NETCONSOLE_EXTENDED_LOG=y
- CONFIG_NETDEVSIM=m
-+CONFIG_PPP=y
-+CONFIG_PPPOE=y
- CONFIG_VLAN_8021Q=m
- CONFIG_XDP_SOCKETS=y
-diff --git a/tools/testing/selftests/drivers/net/gro.py b/tools/testing/selftests/drivers/net/gro.py
-index 221f27e57147..ad7c80f7ba96 100755
---- a/tools/testing/selftests/drivers/net/gro.py
-+++ b/tools/testing/selftests/drivers/net/gro.py
-@@ -313,6 +313,12 @@ def _gro_variants():
-         "ip_frag6", "ip_v6ext_same", "ip_v6ext_diff",
-     ]
- 
-+    # Tests specific to PPPoE
-+    pppoe_tests = [
-+        "data_same", "data_lrg_sml", "data_sml_lrg", "data_lrg_1byte",
-+        "data_burst", "pppoe_sid",
-+    ]
-+
-     for mode in ["sw", "hw", "lro"]:
-         for protocol in ["ipv4", "ipv6", "ipip", "ip6ip6"]:
-             for test_name in common_tests:
-@@ -325,6 +331,11 @@ def _gro_variants():
-                 for test_name in ipv6_tests:
-                     yield mode, protocol, test_name
- 
-+    for mode in ["sw"]:
-+        for protocol in ["pppoev4", "pppoev6"]:
-+            for test_name in pppoe_tests:
-+                yield mode, protocol, test_name
-+
- 
- @ksft_variants(_gro_variants())
- def test(cfg, mode, protocol, test_name):
-diff --git a/tools/testing/selftests/net/lib/gro.c b/tools/testing/selftests/net/lib/gro.c
-index 11b16ae5f0e8..0da55b757bcc 100644
---- a/tools/testing/selftests/net/lib/gro.c
-+++ b/tools/testing/selftests/net/lib/gro.c
-@@ -67,12 +67,14 @@
- #include <errno.h>
- #include <error.h>
- #include <getopt.h>
-+#include <net/ethernet.h>
-+#include <net/if.h>
- #include <linux/filter.h>
- #include <linux/if_packet.h>
-+#include <linux/if_pppox.h>
- #include <linux/ipv6.h>
- #include <linux/net_tstamp.h>
--#include <net/ethernet.h>
--#include <net/if.h>
-+#include <linux/ppp_defs.h>
- #include <netinet/in.h>
- #include <netinet/ip.h>
- #include <netinet/ip6.h>
-@@ -134,6 +136,7 @@ static int total_hdr_len = -1;
- static int ethhdr_proto = -1;
- static bool ipip;
- static bool ip6ip6;
-+static bool pppoe;
- static uint64_t txtime_ns;
- static int num_flows = 4;
- static bool order_check;
-@@ -171,6 +174,22 @@ static void vlog(const char *fmt, ...)
- 	}
+diff --git a/mm/madvise.c b/mm/madvise.c
+index ce238dd96f15..865fe7fb3d81 100644
+--- a/mm/madvise.c
++++ b/mm/madvise.c
+@@ -1834,45 +1834,31 @@ static void madvise_finish_tlb(struct madvise_behavior *madv_behavior)
+ 		tlb_finish_mmu(madv_behavior->tlb);
  }
- 
-+static void fill_pppoelayer(void *buf, int payload_len, uint16_t sid)
-+{
-+	struct pppoe_ppp_hdr {
-+		struct pppoe_hdr eh;
-+		__be16 proto;
-+	} *ph = buf;
-+
-+	payload_len += sizeof(struct tcphdr);
-+	ph->eh.type = 1;
-+	ph->eh.ver = 1;
-+	ph->eh.code = 0;
-+	ph->eh.sid = htons(sid);
-+	ph->eh.length = htons(payload_len + sizeof(ph->proto));
-+	ph->proto = htons(proto == PF_INET ? PPP_IP : PPP_IPV6);
-+}
-+
- static void setup_sock_filter(int fd)
- {
- 	const int dport_off = tcp_offset + offsetof(struct tcphdr, dest);
-@@ -412,11 +431,15 @@ static void create_packet(void *buf, int seq_offset, int ack_offset,
- 
- 	fill_networklayer(buf + inner_ip_off, payload_len, IPPROTO_TCP);
- 	if (inner_ip_off > ETH_HLEN) {
--		int encap_proto = (proto == PF_INET) ?
--				  IPPROTO_IPIP : IPPROTO_IPV6;
-+		if (pppoe) {
-+			fill_pppoelayer(buf + ETH_HLEN, payload_len + ip_hdr_len, 0x1234);
-+		} else {
-+			int encap_proto = (proto == PF_INET) ?
-+					  IPPROTO_IPIP : IPPROTO_IPV6;
- 
--		fill_networklayer(buf + ETH_HLEN,
--				  payload_len + ip_hdr_len, encap_proto);
-+			fill_networklayer(buf + ETH_HLEN,
-+					  payload_len + ip_hdr_len, encap_proto);
-+		}
- 	}
- 
- 	fill_datalinklayer(buf);
-@@ -526,7 +549,7 @@ static void send_flags(int fd, struct sockaddr_ll *daddr, int psh, int syn,
- static void send_data_pkts(int fd, struct sockaddr_ll *daddr,
- 			   int payload_len1, int payload_len2)
- {
--	static char buf[ETH_HLEN + IP_MAXPACKET];
-+	static char buf[MAX_HDR_LEN + IP_MAXPACKET];
- 
- 	create_packet(buf, 0, 0, payload_len1, 0);
- 	write_packet(fd, buf, total_hdr_len + payload_len1, daddr);
-@@ -1071,6 +1094,20 @@ static void send_fragment6(int fd, struct sockaddr_ll *daddr)
- 	write_packet(fd, buf, bufpkt_len, daddr);
- }
- 
-+static void send_changed_pppoe_sid(int fd, struct sockaddr_ll *daddr)
-+{
-+	static char buf[MAX_HDR_LEN + PAYLOAD_LEN];
-+	int pkt_size = total_hdr_len + PAYLOAD_LEN;
-+	struct pppoe_hdr *hdr = (struct pppoe_hdr *)(buf + ETH_HLEN);
-+
-+	create_packet(buf, 0, 0, PAYLOAD_LEN, 0);
-+	write_packet(fd, buf, pkt_size, daddr);
-+
-+	create_packet(buf, PAYLOAD_LEN, 0, PAYLOAD_LEN, 0);
-+	hdr->sid = htons(0x4321);
-+	write_packet(fd, buf, pkt_size, daddr);
-+}
-+
- static void bind_packetsocket(int fd)
- {
- 	struct sockaddr_ll daddr = {};
-@@ -1121,9 +1158,10 @@ static void recv_error(int fd, int rcv_errno)
- static void check_recv_pkts(int fd, int *correct_payload,
- 			    int correct_num_pkts)
- {
--	static char buffer[IP_MAXPACKET + ETH_HLEN + 1];
--	struct iphdr *iph = (struct iphdr *)(buffer + ETH_HLEN);
--	struct ipv6hdr *ip6h = (struct ipv6hdr *)(buffer + ETH_HLEN);
-+	static char buffer[IP_MAXPACKET + MAX_HDR_LEN + 1];
-+	int nhoff = ETH_HLEN + (pppoe ? PPPOE_SES_HLEN : 0);
-+	struct iphdr *iph = (struct iphdr *)(buffer + nhoff);
-+	struct ipv6hdr *ip6h = (struct ipv6hdr *)(buffer + nhoff);
- 	struct tcphdr *tcph;
- 	bool bad_packet = false;
- 	int tcp_ext_len = 0;
-@@ -1140,7 +1178,7 @@ static void check_recv_pkts(int fd, int *correct_payload,
- 
- 	while (1) {
- 		ip_ext_len = 0;
--		pkt_size = recv(fd, buffer, IP_MAXPACKET + ETH_HLEN + 1, 0);
-+		pkt_size = recv(fd, buffer, sizeof(buffer), 0);
- 		if (pkt_size < 0)
- 			recv_error(fd, errno);
- 
-@@ -1183,9 +1221,10 @@ static void check_recv_pkts(int fd, int *correct_payload,
- 
- static void check_capacity_pkts(int fd)
- {
--	static char buffer[IP_MAXPACKET + ETH_HLEN + 1];
--	struct iphdr *iph = (struct iphdr *)(buffer + ETH_HLEN);
--	struct ipv6hdr *ip6h = (struct ipv6hdr *)(buffer + ETH_HLEN);
-+	static char buffer[IP_MAXPACKET + MAX_HDR_LEN + 1];
-+	int nhoff = ETH_HLEN + (pppoe ? PPPOE_SES_HLEN : 0);
-+	struct iphdr *iph = (struct iphdr *)(buffer + nhoff);
-+	struct ipv6hdr *ip6h = (struct ipv6hdr *)(buffer + nhoff);
- 	int num_pkt = 0, num_coal = 0, pkt_idx;
- 	const char *fail_reason = NULL;
- 	int flow_order[num_flows * 2];
-@@ -1203,7 +1242,7 @@ static void check_capacity_pkts(int fd)
- 
- 	while (1) {
- 		ip_ext_len = 0;
--		pkt_size = recv(fd, buffer, IP_MAXPACKET + ETH_HLEN + 1, 0);
-+		pkt_size = recv(fd, buffer, sizeof(buffer), 0);
- 		if (pkt_size < 0)
- 			recv_error(fd, errno);
- 
-@@ -1499,6 +1538,12 @@ static void gro_sender(void)
- 		usleep(fin_delay_us);
- 		write_packet(txfd, fin_pkt, total_hdr_len, &daddr);
- 
-+	/* PPPoE sub-tests */
-+	} else if (strcmp(testname, "pppoe_sid") == 0) {
-+		send_changed_pppoe_sid(txfd, &daddr);
-+		usleep(fin_delay_us);
-+		write_packet(txfd, fin_pkt, total_hdr_len, &daddr);
-+
- 	} else {
- 		error(1, 0, "Unknown testcase: %s", testname);
- 	}
-@@ -1716,6 +1761,12 @@ static void gro_receiver(void)
- 	} else if (strcmp(testname, "capacity") == 0) {
- 		check_capacity_pkts(rxfd);
- 
-+	} else if (strcmp(testname, "pppoe_sid") == 0) {
-+		correct_payload[0] = PAYLOAD_LEN;
-+		correct_payload[1] = PAYLOAD_LEN;
-+		printf("different PPPoE session ID doesn't coalesce: ");
-+		check_recv_pkts(rxfd, correct_payload, 2);
-+
- 	} else {
- 		error(1, 0, "Test case error: unknown testname %s", testname);
- 	}
-@@ -1734,6 +1785,8 @@ static void parse_args(int argc, char **argv)
- 		{ "ipv6", no_argument, NULL, '6' },
- 		{ "ipip", no_argument, NULL, 'e' },
- 		{ "ip6ip6", no_argument, NULL, 'E' },
-+		{ "pppoev4", no_argument, NULL, 'p' },
-+		{ "pppoev6", no_argument, NULL, 'P' },
- 		{ "num-flows", required_argument, NULL, 'n' },
- 		{ "rx", no_argument, NULL, 'r' },
- 		{ "saddr", required_argument, NULL, 's' },
-@@ -1745,7 +1798,7 @@ static void parse_args(int argc, char **argv)
- 	};
- 	int c;
- 
--	while ((c = getopt_long(argc, argv, "46d:D:eEi:n:rs:S:t:ov", opts, NULL)) != -1) {
-+	while ((c = getopt_long(argc, argv, "46d:D:eEi:n:pPrs:S:t:ov", opts, NULL)) != -1) {
- 		switch (c) {
- 		case '4':
- 			proto = PF_INET;
-@@ -1765,6 +1818,16 @@ static void parse_args(int argc, char **argv)
- 			proto = PF_INET6;
- 			ethhdr_proto = htons(ETH_P_IPV6);
- 			break;
-+		case 'p':
-+			pppoe = true;
-+			proto = PF_INET;
-+			ethhdr_proto = htons(ETH_P_PPP_SES);
-+			break;
-+		case 'P':
-+			pppoe = true;
-+			proto = PF_INET6;
-+			ethhdr_proto = htons(ETH_P_PPP_SES);
-+			break;
- 		case 'd':
- 			addr4_dst = addr6_dst = optarg;
- 			break;
-@@ -1812,6 +1875,10 @@ int main(int argc, char **argv)
- 	} else if (ip6ip6) {
- 		tcp_offset = ETH_HLEN + sizeof(struct ipv6hdr) * 2;
- 		total_hdr_len = tcp_offset + sizeof(struct tcphdr);
-+	} else if (pppoe) {
-+		tcp_offset = ETH_HLEN + PPPOE_SES_HLEN +
-+			(proto == PF_INET ? sizeof(struct iphdr) : sizeof(struct ipv6hdr));
-+		total_hdr_len = tcp_offset + sizeof(struct tcphdr);
- 	} else if (proto == PF_INET) {
- 		tcp_offset = ETH_HLEN + sizeof(struct iphdr);
- 		total_hdr_len = tcp_offset + sizeof(struct tcphdr);
--- 
-2.43.0
 
+-static bool is_valid_madvise_range(unsigned long start, size_t len_in)
++/**
++ * check_input_range() - Check if the requested range is valid.
++ * @start:	Start address of madvise-requested address range.
++ * @len_in:	Length of madvise-requested address range.
++ *
++ * Returns: 0 if the input range is valid, otherwise an error code.
++ */
++static int check_input_range(unsigned long start, size_t len_in)
+ {
+ 	size_t len;
+
+ 	if (!PAGE_ALIGNED(start))
+-		return false;
++		return -EINVAL;
++
+ 	len = PAGE_ALIGN(len_in);
+
+ 	/* Check to see whether len was rounded up from small -ve to zero */
+ 	if (len_in && !len)
+-		return false;
++		return -EINVAL;
+
++	/* Overflow? */
+ 	if (start + len < start)
+-		return false;
+-
+-	return true;
+-}
++		return -EINVAL;
+
+-/*
+- * madvise_should_skip() - Return if the request is invalid or nothing.
+- * @start:	Start address of madvise-requested address range.
+- * @len_in:	Length of madvise-requested address range.
+- * @err:	Pointer to store an error code from the check.
+- *
+- * If the specified range is invalid or nothing would occur, we skip the
+- * operation.  This function returns true in these cases, otherwise false.  In
+- * the former case we store an error in @err.
+- */
+-static bool madvise_should_skip(unsigned long start, size_t len_in, int *err)
+-{
+-	if (!is_valid_madvise_range(start, len_in)) {
+-		*err = -EINVAL;
+-		return true;
+-	}
+-	if (start + PAGE_ALIGN(len_in) == start) {
+-		*err = 0;
+-		return true;
+-	}
+-	return false;
++	return 0;
+ }
+
+ static bool is_madvise_populate(struct madvise_behavior *madv_behavior)
+@@ -2010,12 +1996,13 @@ int do_madvise(struct mm_struct *mm, unsigned long start, size_t len_in, int beh
+
+ 	if (!madvise_behavior_valid(behavior))
+ 		return -EINVAL;
+-
+-	if (madvise_should_skip(start, len_in, &error))
++	error = check_input_range(start, len_in);
++	if (error || !len_in)
+ 		return error;
+ 	error = madvise_lock(&madv_behavior);
+ 	if (error)
+ 		return error;
++
+ 	madvise_init_tlb(&madv_behavior);
+ 	error = madvise_do_behavior(start, len_in, &madv_behavior);
+ 	madvise_finish_tlb(&madv_behavior);
+@@ -2054,10 +2041,12 @@ static ssize_t vector_madvise(struct mm_struct *mm, struct iov_iter *iter,
+ 		size_t len_in = iter_iov_len(iter);
+ 		int error;
+
+-		if (madvise_should_skip(start, len_in, &error))
+-			ret = error;
+-		else
++		error = check_input_range(start, len_in);
++		if (len_in && !error)
+ 			ret = madvise_do_behavior(start, len_in, &madv_behavior);
++		else
++			ret = error;
++
+ 		/*
+ 		 * An madvise operation is attempting to restart the syscall,
+ 		 * but we cannot proceed as it would not be correct to repeat
+--
+2.54.0
