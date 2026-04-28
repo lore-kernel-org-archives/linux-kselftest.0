@@ -1,163 +1,159 @@
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AEE13A3E60
-	for <linux-kselftest@vger.kernel.org>; Tue, 28 Apr 2026 22:42:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777416149; cv=none; b=tDr1OE74kimVSQWnfuaWIu+EnzdArKOAVArhiaRe6wWZCOJ2njStso6sulng3LEv4NlIxtBlemG6G7zdhJPqXAhHJ9ufBq/y4Rrfa6CbHA2c28+cT3HnZO70alSftJGUuWEDjCWwhSt6JRjFDjpWQwnHTfjvu+scvoYbQFtROxY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777416149; c=relaxed/simple;
-	bh=9CfxHHUrdkC2HOcb/TS/DNlnMmhpx5XoMYQJ/X3bIM4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=SGJ4+IZiw9kEyhWpk1ZfaVNfp3/NBumoRD3xFY48jhWUmG6NYAbTOFwXh01fzKC1/NHTlZdu7shouOOvkse32IMjYcplrs+lxD54C+FfzEPmUGFAPWQ1oG55OGxhSWCPib5411dirZuRANjT33+WPkx66os6qDgACStLT7FgAKo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mkCBgfK8; arc=none smtp.client-ip=209.85.210.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 014FE2772D
+	for <linux-kselftest@vger.kernel.org>; Tue, 28 Apr 2026 22:53:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.180
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777416813; cv=pass; b=P7dV4ujoOccnNdpC27KtUvr4zxXz0N6gQwuZho0zXFhWM1cumT2AufsGq+cYwCXvmWg4SbDsApSUeyE6A8vtiJvGoo2HM6bOpODBCfH6ifPqTYpKNibP4vQmgpphJmEmwRYinemeS6pyzVpc7VlJBQG0Zy7MHpxEjjD5MoJ9iGI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777416813; c=relaxed/simple;
+	bh=/mZiLUYMjIePv3dqlxqei0TgnsDjFK+hjpawZr8xajE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Px/qX9PBOgVA3f9cHPveZYzqNgaud3pg5fO7i70jiIzJsTtoFQyanBq4+2bUcL3mB194POLm2BRJRIo0g9t5hsB/W1FHIhioHt7pz6IXY3l2yCiBhfcVpxIROAo+hsSbQIn0cvxZ0eWSFq+ilCdDW1TyIvo/b448EJbDvXZdnEE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JlWCZp9H; arc=pass smtp.client-ip=209.85.208.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mkCBgfK8"
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-82f33d28c1dso6583672b3a.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 Apr 2026 15:42:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JlWCZp9H"
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-38e84ed22bdso113467401fa.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Apr 2026 15:53:31 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1777416810; cv=none;
+        d=google.com; s=arc-20240605;
+        b=gaL06EBsxGpe3vNCa8qn3c5EbuakIfH4ffGVRTGrLCstNWUxjYSbP56uVr4I1tVcP9
+         Sza3Dyndk8PE892qS2mRQm25ZVAJciwhwTD6LDGdxIDDBEbe63EFvfHUdXsT2S3p7KR2
+         yv94ZmblJVL8jEWsKU0sUcWGtUlk6K4NbVw+JgrxEwJIwS00isNhJB73/2RXADlRMIhv
+         T+rEVVLAaoFnfzjd8OBJUpc2zixLT5PjukRl2HVa8J6snwpciAtfJMcDhyUi5SiqwuFl
+         nEF7xKhIJ3FDmf2fmZ5geuqpWpmL1JyrCKwocRMFP1cBfDidRrNPrxbIWHFQVmL2xRHS
+         1e1g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=gCMoPkPIjy6kiY/a1DllffhMFIvPwXuiq9EBnYCEpV4=;
+        fh=ttxqyFMa5eckHa9inVSJRA02606+nqiDZfOV9XICVEA=;
+        b=MmKnHtDakElIqruDQYTJDA1Tkq3XM9bRPJiYMQHD4rdKB5WBWAmKFPg9DgC2kPDI/z
+         ptuZc2tZzFzt/a6IHovbwxpt4uN/ThY9qQh7oTHfUF25KRE/4AbZniyb6HlQeFBewHbg
+         7bzHajrQQYBcjlFeYD5fQO9yMP8QptgLZl118JFLwgNJfctHQrIlkP5MduuL1M9ecmAz
+         NE1NuwzFPsiDhYlg4FxRV6MXy9StPCDSi29m9wykpILrx3yECdwd8V1xq1s5dBYFieb3
+         ZH8sVjERY3jp7W8CA5pCGbl9K1XErfbm+nrQVeC4GFkQ8+ruKnRHlyWnqY+kHLiXg3KJ
+         h+qA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777416147; x=1778020947; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Zt/Ht0RhxHPOrumBmtiIhgjoCgVfyyPmVo07gYfbsYg=;
-        b=mkCBgfK8IZCr029gch80jB56L0daRQ0xrq+mlojAk5EoADEJaBGZsLeSiqbKv9WNoh
-         NqmoegMAZekTc4FYJzsrNMxDQSB9BgDL833cykHXh1GmO+4XAXSbWjHp3lXfen50X2MN
-         M+fVOpsfIqIK2lsppRsl0085WaUYd8rqQQfpak+6nPnOQGQ4iZ838I7/aLGmrmzQ7s6B
-         cN/WDOS270ZL2FP/E061dEy/QgmTJilrnHhb0VlZpkO2nsCo0g/1m5DIhfD78un31WD5
-         GtbouO1ZfLTdddCmyRF9dCsCW+cpIIzRjHTxX1oMg7Z1phoBmVrO98tcDBXVUOcDtTMu
-         NxMw==
+        d=google.com; s=20251104; t=1777416810; x=1778021610; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gCMoPkPIjy6kiY/a1DllffhMFIvPwXuiq9EBnYCEpV4=;
+        b=JlWCZp9HLU63dA+gLbdvehv5mgqeUB3ggJqAvkVYNRdib5pan21hmTGBt+PVIviiON
+         /zpkvLYY3YuiGVGurwPAFuP44yJXMpQIzKNeAqSG/33g9JijdFJbMBsrDfiCYRrU5hOM
+         GJOZOiMED9fCmUatmKhWZtAeCJcjWg+ogzReJ3EcJ9v5jrMpMkznnIFP+UyNCetwMT6p
+         q4I5R4IJSy8846infjU8i/SoW7TO88Nz0y7onqabRKLo2YWNvXKA/VbuPS5ZVCZUsEcP
+         oSjIo0Rr/zHMPv8jHl7Zt8LYxmurzr7mZXWZ6+vZ1B9vc9SzZUpBL9jPoVzFZbqgiJeg
+         ej9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777416147; x=1778020947;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Zt/Ht0RhxHPOrumBmtiIhgjoCgVfyyPmVo07gYfbsYg=;
-        b=NySAd+RSwtUlueXlvFKpMASpk+lqwUFglGXcxw6Jv/Ai52ILaxPO2CHHsc6rJZpbwG
-         L799FovhNR4HRlITpmmt4tIJnr3wCOSZezudgAcybadel6F9u+i5z1oBR9WNcU+FkMiV
-         AOlYZVwuH9b6m/uT4wFezOq0v/TowNf++LWxVRqthYk7WAopicicaShUZ9WsutuwB8B6
-         irSkv8pfAccaWR1iM2FJWVR7Eg9hfLtj7t4gSapIzWpqS75yU0NgBh3JKNc2VY//GSuz
-         mywmhf32lOMfFsDnUczWJzP2U0uXkiHzNIU3J1QnUUTBWvQqa5xmtIinpLFQ60QXl6s0
-         q/RA==
-X-Forwarded-Encrypted: i=1; AFNElJ/KNRtVB4XosHMIRHjwaRATNqg1EWgr+QXUUoaqd2EftaQqlHKiRxHEVWVpB2POdnB7GnaowdFRnY140t2n43o=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywj8uREkcQS8vPBcmSkAYtcQvL35DxoUvDibqnVk2eEcoKxepU2
-	y0jHBHqNZ5eG2cMUN42xfLStdPmGARDNy3dSAndPHZ6CK3MUBcmhOMiA
-X-Gm-Gg: AeBDiestu+MF/6gnuCUcCvp3F4C8sZ52Mvm2CVp/ZtrDDDvvRdWhKGuOEhZxMlSPkxT
-	QAl9XQIms8i0S7tsj9Fdti7NJI5DZ6wUtIzgeLbpSjE1hqaOuoFlqb/Vp/40I9azNAvgzO7N/Ed
-	8+CyMMwlQeUNV256ZhbkaZhhDxQU21MzSGyQcnZ6honwtH/SGmHX0YCKDdqSaNBS9B8fHrXU1rG
-	Tl3pJnYBu+3RrihYow8MSb+mqmpECfLkezLvb8VSDMhVGgX/yuHOKeggZqaw8hUcQcb2p1CJGsv
-	IyDD+0MAyAn7eThMJlWl8cXfhs+yc4TlW6woowWYUaSJB/fHLJo9YWU78EkuSXuAURpt7FA7A7D
-	hPn4tS7soXpXTq9XBvbefJG8WixfH1jbkri2NCQNQ6j7WPo3gBk2r4qD9SlSOHIbKdCoSbbzGnL
-	p1qyJ5Bp/+7K69cF+E+mC1fIwJPpzGsQ==
-X-Received: by 2002:aa7:88c1:0:b0:82f:1973:4b96 with SMTP id d2e1a72fcca58-834ddc14602mr5517283b3a.26.1777416146426;
-        Tue, 28 Apr 2026 15:42:26 -0700 (PDT)
-Received: from localhost ([2a03:2880:ff:70::])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-834ed80f906sm96681b3a.60.2026.04.28.15.42.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Apr 2026 15:42:26 -0700 (PDT)
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-Date: Tue, 28 Apr 2026 15:42:08 -0700
-Subject: [PATCH net-next 11/11] selftests: drv-net: add netkit devmem tests
+        d=1e100.net; s=20251104; t=1777416810; x=1778021610;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=gCMoPkPIjy6kiY/a1DllffhMFIvPwXuiq9EBnYCEpV4=;
+        b=opTXwoedol9alLJu0Nn8VK7n9EAaoCZOuzycT4m9xOIqGTy/vn9ndsB62cpwkbvTm0
+         pMDVjp4nncJXa/h98uS3vr6u6OT5H1Bt3j0y6bkRad8DPIvM/8LEZRsa66M93Bmruj2T
+         QMEwDOsiANL2582NROVRQaj3hdafkklb+N1j+7N/8+8Mg89FPQcMtkxEI3/V1cGqfWE8
+         YQm4zEZppPF27rEG+QoBF8onJZt9jXh2KOj5a1d0omXWfYL8T7NklYzACw4hxFA/I7tT
+         nPW4rRH+BqG5K8NVB+U47GmROsodyvSjBcafjNxhUXjj2gFdPILIDpKrCRoelRwi0o7I
+         xpDg==
+X-Forwarded-Encrypted: i=1; AFNElJ9DF2T98DkbJ9TyI8qKh0L7Cmd3D8D6GWqvGiBCqUEnyq0TVmWIUrSEQAnzqrx8bFcV9Hn/+ptHtXKPG2j7gOE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxeti97UX222eqrbTmWGe9l3ZuWfOEg5oP+q3Nf7brjOfyWTWU8
+	h23stdJChxs4NXxIlmaw9o7br2n+2qX9fGMyJOpq9gVVNYcLcUQe21xseJrw55wcaXXoQ0fEKGE
+	f8ea78d4oA9/uRRmPLPaJJvWK614spKw7ppBRVDny
+X-Gm-Gg: AeBDietqJW+MEayZNpLu3oT7D+eo/sdaom685BcQWBKEFRU1wRrB6TrkTXP/je/1lfz
+	CqzJxSsZngghF2bT9+gzPLGl7CmDmjxGinoSoftH6K8hP1/KMk975ukCdNGoqpH6b+h0uk7Snvr
+	CJW4flzi70GOFHNNxdozoG2m15ymrEvFBnsdSaV/ZShoP1ccJzAk1MnmPCZm3IbqNWLYHiQsKdE
+	dSA1/aOXRFSDtAduXrW892OnOUPhI/mklL41LEr7DegYxk165icWFzRjIxKgdE5oza5K8uSSh6C
+	WgWeQ1hAh+gRw9OqA2CYy1aNS1zNEg==
+X-Received: by 2002:a05:6512:a90:b0:5a4:10ff:4e0d with SMTP id
+ 2adb3069b0e04-5a746407d4emr1588789e87.8.1777416809842; Tue, 28 Apr 2026
+ 15:53:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260428-tcp-dm-netkit-v1-11-719280eba4d2@meta.com>
-References: <20260428-tcp-dm-netkit-v1-0-719280eba4d2@meta.com>
-In-Reply-To: <20260428-tcp-dm-netkit-v1-0-719280eba4d2@meta.com>
-To: Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <skhan@linuxfoundation.org>, Alex Shi <alexs@kernel.org>, 
- Yanteng Si <si.yanteng@linux.dev>, Dongliang Mu <dzm91@hust.edu.cn>, 
- Michael Chan <michael.chan@broadcom.com>, 
- Pavan Chebbi <pavan.chebbi@broadcom.com>, 
- Joshua Washington <joshwash@google.com>, 
- Harshitha Ramamurthy <hramamurthy@google.com>, 
- Saeed Mahameed <saeedm@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>, 
- Mark Bloch <mbloch@nvidia.com>, Leon Romanovsky <leon@kernel.org>, 
- Alexander Duyck <alexanderduyck@fb.com>, kernel-team@meta.com, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- Nikolay Aleksandrov <razor@blackwall.org>, Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-doc@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org, 
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Stanislav Fomichev <sdf@fomichev.me>, Mina Almasry <almasrymina@google.com>, 
- Bobby Eshleman <bobbyeshleman@meta.com>
-X-Mailer: b4 0.14.3
+References: <20260202-vfio-selftest-only-64bit-v2-1-9c3ebb37f0f4@fb.com>
+ <e51b4ff2-13c4-47d4-b781-3dcbd740d274@meta.com> <20260427231217.GA1670652@nvidia.com>
+ <afATrrjqt8zj2plL@google.com> <afEEN_4ufBcQld0q@google.com>
+ <afEQDT_nv0kdlaBU@google.com> <CALzav=ecmNh6bE88oCHdmjSKK_Zpd96b84HbtmkaiDNRcotYfw@mail.gmail.com>
+ <afEusUxXDpFtZvV0@google.com>
+In-Reply-To: <afEusUxXDpFtZvV0@google.com>
+From: David Matlack <dmatlack@google.com>
+Date: Tue, 28 Apr 2026 15:53:01 -0700
+X-Gm-Features: AVHnY4KROHtcyZ8U_dHsYJqSV2d56G01Fv3HTYG7tHEcHveDjakYQKdw1QYHfig
+Message-ID: <CALzav=e08+Kh60daAM=A7rAwRU-SFs8m7k2JqSb6v+=T9RZGSQ@mail.gmail.com>
+Subject: Re: [PATCH v2] vfio: selftests: only build tests on arm64 and x86_64
+To: Sean Christopherson <seanjc@google.com>
+Cc: Jason Gunthorpe <jgg@nvidia.com>, Matt Evans <mattev@meta.com>, Ted Logan <tedlogan@fb.com>, 
+	Alex Williamson <alex@shazbot.org>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Bobby Eshleman <bobbyeshleman@meta.com>
+On Tue, Apr 28, 2026 at 3:03=E2=80=AFPM Sean Christopherson <seanjc@google.=
+com> wrote:
+>
+> On Tue, Apr 28, 2026, David Matlack wrote:
+> > On Tue, Apr 28, 2026 at 12:52=E2=80=AFPM Sean Christopherson <seanjc@go=
+ogle.com> wrote:
+> > >
+> > > On Tue, Apr 28, 2026, David Matlack wrote:
+> > > > On 2026-04-27 06:55 PM, Sean Christopherson wrote:
+> > > > > On Mon, Apr 27, 2026, Jason Gunthorpe wrote:
+> > > > > > Even though this is a 64 bit build.
+> > > > >
+> > > > > Heh, it's much funnier when it's happening to someone else.  :-)
+> > > > >
+> > > > > KVM selftests went through these exact pains.  I'm pretty sure th=
+ese are the
+> > > > > relevant commits (the empty targets one may or may not apply to V=
+FIO).
+> > > > >
+> > > > > 9af04539d474dda4984ff4909d4568e6123c8cba KVM: selftests: Override=
+ ARCH for x86_64 instead of using ARCH_DIR
+> > > > > 67730e6c53d70fb31618230f81c4acee9f72eaa3 KVM: selftests: Use cano=
+nical $(ARCH) paths for KVM selftests directories
+> > > > > 43fbd8cd389faa9760c5152b1c58e893c812953b KVM: selftests: Provide =
+empty 'all' and 'clean' targets for unsupported ARCHs
+> > > >
+> > > > KVM selftests don't prevent 32-bit x86 builds though,
+> > >
+> > > Yes they do?  x86 is an alias for x86_64 (or vice versa), and so the =
+i386 target
+> > > gets binned into the empty target provided by tools/testing/selftests=
+/kvm/Makefile.
+> > > And KVM selftests most definitely don't play nice with 32-bit.
+> >
+> > Are you sure that x86 is an alias for x86_64?
+>
+> Well, I was quite sure :-)   But scripts/subarch.include disagrees:
+>
+>   SUBARCH :=3D $(shell uname -m | sed -e s/i.86/x86/ -e s/x86_64/x86/ \
+>
+> as does attempting to build KVM selftests on a 32-bit host.
 
-Add nk_devmem.py with four tests for TCP devmem through a netkit device:
+Yeah that's what I was seeing as well. With that cleared up I'll send
+a fix for VFIO selftests to allow ARCH=3Dx86 if __LP64__ is defined,
+which will fix Jason's issue.
 
-These tests are just duplicates of the original devmem tests, with some
-adjusted parameters such as telling ncdevmem to avoid device setup
-(since it only has access to netkit, not a phys device).
+> > If it is then we don't even need the __LP64__ stuff I posted.
+> >
+> > But when I look at the top-level Makefile and imagine running make
+> > without setting ARCH on the command line on a 32-bit x86 host, ARCH
+> > will be set to SUBARCH, which will be x86.
+>
+> Yep.  So the big question is, why doesn't anyone complain about KVM selft=
+ests not
+> building on 32-bit?  Because they most definitely don't build.
 
-Each test uses NetDrvContEnv with primary_rx_redirect=True to set up the
-BPF redirect program on the primary netkit interface.
-
-Assisted-by: Claude Code:claude-sonnet-4-6
-Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
----
- .../testing/selftests/drivers/net/hw/nk_devmem.py  | 40 ++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
-
-diff --git a/tools/testing/selftests/drivers/net/hw/nk_devmem.py b/tools/testing/selftests/drivers/net/hw/nk_devmem.py
-new file mode 100755
-index 000000000000..c069d525798b
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/hw/nk_devmem.py
-@@ -0,0 +1,40 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
-+"""Test devmem TCP with netkit."""
-+
-+from os import path
-+from lib.py import ksft_run, ksft_exit, ksft_disruptive
-+from lib.py import NetDrvContEnv
-+from lib.py.devmem import setup_test, run_rx, run_tx, run_tx_chunks, run_rx_hds
-+
-+
-+@ksft_disruptive
-+def check_nk_rx(cfg) -> None:
-+    run_rx(cfg)
-+
-+
-+@ksft_disruptive
-+def check_nk_tx(cfg) -> None:
-+    run_tx(cfg)
-+
-+
-+@ksft_disruptive
-+def check_nk_tx_chunks(cfg) -> None:
-+    run_tx_chunks(cfg)
-+
-+
-+@ksft_disruptive
-+def check_nk_rx_hds(cfg) -> None:
-+    run_rx_hds(cfg)
-+
-+
-+def main() -> None:
-+    with NetDrvContEnv(__file__, rxqueues=2, primary_rx_redirect=True) as cfg:
-+        setup_test(cfg, path.abspath(path.dirname(__file__) + "/ncdevmem"))
-+        ksft_run([check_nk_rx, check_nk_tx, check_nk_tx_chunks, check_nk_rx_hds],
-+                 args=(cfg,))
-+    ksft_exit()
-+
-+
-+if __name__ == "__main__":
-+    main()
-
--- 
-2.52.0
-
+I guess no one's building on 32-bit hosts anymore? :)
