@@ -1,104 +1,173 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F008E3AEF20;
-	Tue, 28 Apr 2026 15:24:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C48C738550B;
+	Tue, 28 Apr 2026 15:30:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777389876; cv=none; b=Qjbn5RuNxHV0aJ4kGvnnaYu2cseNdhEe+qNn1y9ewaQQDh8fEWRfwgxa05cFpRyW/EMTKnSB4Hwo5zaeU4YB/Gj3QTa/w4igUj5HwlWbawA0/L1uJvJF5e7LnHfaxbPD0CzK+5FWAbxTEihVwIctStvpBQjqY+a9VXHpvstIdDo=
+	t=1777390211; cv=none; b=h6dtwBA//2ZA3xvXjqnXQguS4PeQnewhHonkkF5tj3E515fCExZYugxq0+3RO0pQhKA7Z+SM2DGXLx1IcCvc+W1s67eZn1x7Zz2lMDHRAnTFxZv77X4dX/thSniDyJkI7yNL/zE14QzWV1wGU/Yios9T/LJrTBLNT4fXqKkRbYA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777389876; c=relaxed/simple;
-	bh=fr/tHmzNTkk/OXH8pUHVXJSnE5ydLpCRkC0pcGdssWM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=k8VU2ETBJYg+Hq1fhWgShjQuLlsHCDqJwffhPnI8CY2Y1TGOYpgX6r79fHayiBMQKXEQk3nhkdagultECyU1n8kHc8DNNSsLvWagvC31ODA+F9oZTBfjQYIrR75OjyHKltWhyHwO1w8WQ4TQJfY0rDc2rrn5xy51ZM+N/9LAv7M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tSMNQjLt; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777390211; c=relaxed/simple;
+	bh=muM6M8nKIHut7+xSa6h9L/Si3vdZRbFddH2GuYKYsTM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EUDYh+uMkWEevYl4K+jRKy/5yttPZ4R/CZEeGCjMlUPauuC5EhiS2rv5Y0hh+Sc7MsTW3RH2PZPVLmSH+7Q7fYFVyDo7QCQtB8jYc357k9w8LTnKRRSTpPi8BwZFaO/yR4VpMkWSqNYFphvazDjJz1czlM2IHRpS5KIwe/SffPU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=PsdWffEK; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tSMNQjLt"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4ABCC2BCAF;
-	Tue, 28 Apr 2026 15:24:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777389875;
-	bh=fr/tHmzNTkk/OXH8pUHVXJSnE5ydLpCRkC0pcGdssWM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=tSMNQjLtSoXFNyCgm2wvc8eGNOP4NeBV9NZcV/XrVIib6Z9f8/tfJffjfvB8sKFYd
-	 STyJPHytDTqo1Bt/xjBXWzeAZji45aqvCmQn5M56VtflBesWmRin5y6bnruoqXyoEy
-	 JJ1k8sMu0B56WF7UhBV6Z01OcL1blMBFkEskJFuf1d0T4cTRwmbrp9/TPb51BrDLy3
-	 tsyH2PsD6PmXnuEGfX5L1Wg08A9dgX55HtjWkyynMyrURPWbUvvLi7/V0MeEdwgL/P
-	 TdBR581p0YYiVJFnF7NPa85gd59pXY9iy+HtLNi4WRNn8ZvU57TxmoeDYzVIsXTcgI
-	 q5k9YALgCwVWA==
-From: SeongJae Park <sj@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: SeongJae Park <sj@kernel.org>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@davidgow.net>,
-	David Hildenbrand <david@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	Michal Hocko <mhocko@suse.com>,
-	Mike Rapoport <rppt@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	damon@lists.linux.dev,
-	kunit-dev@googlegroups.com,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: Re: [PATCH 00/11] mm/damon: introduce DAMOS failed region quota charge ratio
-Date: Tue, 28 Apr 2026 08:24:24 -0700
-Message-ID: <20260428152424.125760-1-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260428074837.5fb02e0210ebabf160506a80@linux-foundation.org>
-References: 
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="PsdWffEK"
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63S6bkhe2999657;
+	Tue, 28 Apr 2026 15:29:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=YwP493
+	ILC63v3+UTyJCc1eyOdyX+yQa9BtJobhiIseo=; b=PsdWffEK1/ENih1fDvZINM
+	yXmTufIwIZ1g32nDNONaa2cF1DcBuvIwuv5IXeBIUQ1g8xM0oBwC3sEM9CeqIxl4
+	NfZubhzYoVxvA6WyZbRXsyKM/z3Lww/ZdaGN9nriInLbSi9//3w03AbZAYTIzuk+
+	+rSFHBPhFIjKLiUmmYb/WprKiF032NMfVTVHj9jhMu9v8tJ9CK5XvdAuE8r53U/4
+	LfXc1AWajPOXdwj/dTruXO09KLBmcmITV2sa6+pFZTNRiWGC3iAvbcDaFwxDCxKM
+	0cNBeLwy6NQR8Hs9UpBcF+t5TY2Nwb1UHQg4JcxtxGg/a6AdHpFSV1l4OFfb+rrQ
+	==
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4drnb568nu-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 28 Apr 2026 15:29:49 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 63SFNo3i003786;
+	Tue, 28 Apr 2026 15:29:48 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4ds8xk2aa7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 28 Apr 2026 15:29:48 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 63SFTiwr34996666
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 28 Apr 2026 15:29:44 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 8760A2004B;
+	Tue, 28 Apr 2026 15:29:44 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 3531C20049;
+	Tue, 28 Apr 2026 15:29:41 +0000 (GMT)
+Received: from [9.39.16.179] (unknown [9.39.16.179])
+	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 28 Apr 2026 15:29:40 +0000 (GMT)
+Message-ID: <7d3bbb94-575f-4119-9ef0-62cff98795ce@linux.ibm.com>
+Date: Tue, 28 Apr 2026 20:59:39 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/5] powerpc/bpf: fix alignment of long branch
+ trampoline address
+To: adubey@linux.ibm.com, bpf@vger.kernel.org
+Cc: linuxppc-dev@lists.ozlabs.org, maddy@linux.ibm.com, ast@kernel.org,
+        andrii@kernel.org, daniel@iogearbox.net, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org, stable@vger.kernel.org
+References: <20260411221413.44304-1-adubey@linux.ibm.com>
+ <20260411221413.44304-2-adubey@linux.ibm.com>
+Content-Language: en-US
+From: Hari Bathini <hbathini@linux.ibm.com>
+In-Reply-To: <20260411221413.44304-2-adubey@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Authority-Analysis: v=2.4 cv=AqDeGu9P c=1 sm=1 tr=0 ts=69f0d26d cx=c_pps
+ a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
+ a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=U7nrCbtTmkRpXpFmAIza:22 a=VnNF1IyMAAAA:8
+ a=VwQbUJbxAAAA:8 a=atBhxT8-om9CWOQYYk4A:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDI4MDE0NSBTYWx0ZWRfX6u62VQKvlfki
+ LSaFxCoPf2J8cLw+nHlZFUbhVJaq8DqhSKIv/sQouhuHaBomuEvBfYz8471q1qU7EnzCDne6YS2
+ 1NB1mbKMWUzaqo9HQvwfxNc/VbzEvN60xHP6EyfRV/NO+ZSoUWxU2FazOh4mn1DCzk8YkWQJ18C
+ 5sPyAR4xqOTOsQUbKxb2EtRWRlpchoNfnW5Bmm+YyYf9XcsZ/OmSlWOY70l8PIcXwtb+B6ypxIl
+ vpgjlIAKj4vxxgXYkLe/Dmz3JsjqoLtW65sBQ19HMMHI8U70MUJOo+SXdO67GEA4a17ieHAqZjX
+ g8H3LJ3cwizp9wH0udoBX/Jakb9kWrvF/pu57mcJol/Wfiqf4BwVU3PJFbj5MhKOW5ZzLQYlagz
+ GQn9nZfpH3U08yAJIq8ndVMd7fgAXmWLDFXSVV7pH/qwEryW0HjkGKZypgLRlSQKqtipJP/OlAh
+ cCcs0qizQnBy66hXZqQ==
+X-Proofpoint-GUID: eAdXJj8nsRIqvr-NYA3wcRltfAJUWR6v
+X-Proofpoint-ORIG-GUID: eAdXJj8nsRIqvr-NYA3wcRltfAJUWR6v
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-28_04,2026-04-28_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ adultscore=0 priorityscore=1501 phishscore=0 suspectscore=0 clxscore=1015
+ lowpriorityscore=0 spamscore=0 bulkscore=0 impostorscore=0 malwarescore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2604200000 definitions=main-2604280145
 
-Hello Andrew,
 
-On Tue, 28 Apr 2026 07:48:37 -0700 Andrew Morton <akpm@linux-foundation.org> wrote:
 
-> On Mon, 27 Apr 2026 18:33:49 -0700 SeongJae Park <sj@kernel.org> wrote:
+On 12/04/26 3:44 am, adubey@linux.ibm.com wrote:
+> From: Abhishek Dubey <adubey@linux.ibm.com>
 > 
-> > TL; DR: Let users set different DAMOS quota charge ratios for DAMOS
-> > action failed regions, for deterministic and consistent DAMOS action
-> > progress.
+> Ensure the dummy trampoline address field present between the OOL stub
+> and the long branch stub is 8-byte aligned, for memory compatibility
+> when content loaded to a register.
 > 
-> Add, thanks.
+> Reported-by: Hari Bathini <hbathini@linux.ibm.com>
+> Fixes: d243b62b7bd3 ("powerpc64/bpf: Add support for bpf trampolines")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
+> ---
+>   arch/powerpc/net/bpf_jit.h        |  4 ++--
+>   arch/powerpc/net/bpf_jit_comp.c   | 34 ++++++++++++++++++++++++++-----
+>   arch/powerpc/net/bpf_jit_comp64.c |  4 ++--
+>   3 files changed, 33 insertions(+), 9 deletions(-)
 > 
-> As mentioned provately, Sashiko claims to have found things which it
-> didn't see in the RFC.
-> 
-> 	https://sashiko.dev/#/patchset/20260428013402.115171-1-sj@kernel.org
+> diff --git a/arch/powerpc/net/bpf_jit.h b/arch/powerpc/net/bpf_jit.h
+> index 7354e1d72f79..1184ad15d5a4 100644
+> --- a/arch/powerpc/net/bpf_jit.h
+> +++ b/arch/powerpc/net/bpf_jit.h
+> @@ -208,8 +208,8 @@ int bpf_jit_emit_func_call_rel(u32 *image, u32 *fimage, struct codegen_context *
+>   int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, u32 *fimage, struct codegen_context *ctx,
+>   		       u32 *addrs, int pass, bool extra_pass);
+>   void bpf_jit_build_prologue(u32 *image, struct codegen_context *ctx);
+> -void bpf_jit_build_epilogue(u32 *image, struct codegen_context *ctx);
+> -void bpf_jit_build_fentry_stubs(u32 *image, struct codegen_context *ctx);
+> +void bpf_jit_build_epilogue(u32 *image, u32 *fimage, struct codegen_context *ctx);
+> +void bpf_jit_build_fentry_stubs(u32 *image, u32 *fimage, struct codegen_context *ctx);
+>   void bpf_jit_realloc_regs(struct codegen_context *ctx);
+>   int bpf_jit_emit_exit_insn(u32 *image, struct codegen_context *ctx, int tmp_reg, long exit_addr);
+>   
+> diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
+> index a62a9a92b7b5..c255b30a37b0 100644
+> --- a/arch/powerpc/net/bpf_jit_comp.c
+> +++ b/arch/powerpc/net/bpf_jit_comp.c
+> @@ -49,11 +49,34 @@ asm (
+>   "	.popsection				;"
+>   );
+>   
+> -void bpf_jit_build_fentry_stubs(u32 *image, struct codegen_context *ctx)
+> +void bpf_jit_build_fentry_stubs(u32 *image, u32 *fimage, struct codegen_context *ctx)
+>   {
+>   	int ool_stub_idx, long_branch_stub_idx;
+>   
+>   	/*
+> +	 * In the final pass, align the mis-aligned dummy_tramp_addr field
+> +	 * in the fimage. The alignment NOP must appear before OOL stub,
+> +	 * to make ool_stub_idx & long_branch_stub_idx constant from end.
+> +	 *
+> +	 * Need alignment NOP in following conditions:
+> +	 *
 
-TL; DR: I find no blocker for this patch series from the Sashiko reviews.
+I don't think I follow this table..
 
-Now sashiko replies its reviews for DAMON patches to authors and
-damon@lists.linux.dev.  So I replied [1,2,3] my review of the reviews to those
-on damon@lists.linux.dev mailing list.  As I mentioned on the TL;DR, I find no
-blocker for this series.
+> +	 * OOL stub aligned	CONFIG_PPC_FTRACE_OUT_OF_LINE	Alignment NOP
+> +	 *      Y                               Y                     N
 
-And I think you didn't see those because those are sent to only authors and
-damon@lists.linux.dev.
+> +	 *      Y                               N                     Y
 
-I nowadays reply-all to original recipients only if Sashiko found a blocker.  I
-will also add short notice for non-RFC patches if Sashiko found zero issue.
-Let me know if you want a different approach.
+Please help me understand why a NOP is needed here
 
-If it helps, maybe I can also ask Sashiko to send the DAMON patch review mails
-to you together.  Let me know if you want that.
+> +	 *      N                               Y                     Y
 
-[1] https://lore.kernel.org/20260428032324.115663-1-sj@kernel.org
-[2] https://lore.kernel.org/20260428033833.115866-1-sj@kernel.org
-[3] https://lore.kernel.org/20260428034139.115984-1-sj@kernel.org
+> +	 *      N                               N                     N
 
+and also, why a NOP isn't needed here..
 
-Thanks,
-SJ
+- Hari
