@@ -1,181 +1,185 @@
-Received: from mail-dl1-f43.google.com (mail-dl1-f43.google.com [74.125.82.43])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FC8147B42E
-	for <linux-kselftest@vger.kernel.org>; Tue, 28 Apr 2026 18:46:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.43
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777401987; cv=pass; b=EJyw+YZQJKiE+WDUEXmJ8J7531LO70cSEhVzPlSydIzKU7I4jNL6Q/8xd97IbxZA6whlQmUtkUTVR2uT1Aor5BMgzBqQUypbzR+Q+ASewU/F5RwrDMluclGw9N9FER8V2nx+Y1XP4FQhNdIPyNUIyjWQ6AXZ7N06rryveSbU8L8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777401987; c=relaxed/simple;
-	bh=rEtiQB7F3yfpKTXtDE6xOEkZoEUEpURybsk0EzNN1vQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Bn+IYm5GenxHHGocG1v6QUoJVP/xr/EAm2Lo4GrnbuVXjY8wNDIyNyo32kjvuXvudny/DRExQ+NJhFxUIgXa3u/0vZSkEvLzez8VtXBQMoijf0Ak59DtUthxaLYsc4IJcZyRGt4Pc8jw+5uBhLIIoiM9nxB7YzZ6gO9OYVM4OvU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Nly10/IP; arc=pass smtp.client-ip=74.125.82.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5073233D9E
+	for <linux-kselftest@vger.kernel.org>; Tue, 28 Apr 2026 19:02:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777402942; cv=none; b=In4yyh7Sim4Ta1uiS8ubx8Isbf1IeT0eMhRk8uhAR1vhjddMcCTTmcUZYnSGHTkqbVjb6M/B/zpQokRqJ85bRfKZadnZyC/pg/YVwhKAlqxO8V3/7nkiVV1ONSX0fIyWXryek4csnC2IqSJj/A7HqE8BYPjp+ZCwGWnTiimSNtM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777402942; c=relaxed/simple;
+	bh=utj7qAfjlNCCoxisNE8c1eXcslz7rYb9Hqgx+ZHGzoc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UJ0wgvZAD92hIeStLRJWmJYVJHuqJadez29tbVHeq8UJF9x+1NZ8CPuVZ0EJINXL9MfHmyiniFR5U6FW5IJ40wswi93E6SDDojri00k7qDGfM6O44gqsPUNu6d866npWtXcGC3ZrwONBua4Vwi+aD9DrCgV0dm13+IP1QC1SbuE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pfPZn/6B; arc=none smtp.client-ip=209.85.214.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Nly10/IP"
-Received: by mail-dl1-f43.google.com with SMTP id a92af1059eb24-12ddbe104ccso1967353c88.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 Apr 2026 11:46:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1777401984; cv=none;
-        d=google.com; s=arc-20240605;
-        b=H9USlRbzghL/6qhrR6O0pmiTsP+60FAJidEKxiMoVpyVebEOW85Mp1/B+esbxH6E8v
-         u7qtr9N4P7edzpiyW3wxLl5trpvbO5rBJsc+rM2gFy+tURT91NMV9shU4MNmUIW2NLuV
-         k7nM+lYNmj7yQgKk2xZq80RxcYNMeJ5xjcsaeE8I0Johx+nBJiI885hyFREgPa/pu6DD
-         tSQrtPt0HPubR6M2yDiLhfRQtZwhJN7zw/DI3ZAw2EE+EOXgNDQR5Z8GNxVOHE0P1URs
-         bT3l55FFcsOpS5MH+cEg9//3Q7dz/KofIl8XmyTcMiFhoh/pqPTPxfZIGKzGU5bwtrDi
-         wS/w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=dtWL2Nmofu08jaaEHqPK+HWLFx++QkkniP+LH/qTdYE=;
-        fh=VHsfkV4riEte2lT9HwseMNuhhOPHZpyV5MNjeVAvNy8=;
-        b=J4YgOtsIZltOJhRyIG4Tt9oMsQ4yLZAjVdGgy170jCBe77UwcXXOyANmOYYMncKYlZ
-         Xdm/7gBmyR5ETkb/PQUXnZHSPN4l/2ve/SHFp4PBwXcwfkdKSZYuL1VtpecvO+NF+YpZ
-         x12/ksBBPAit1KRK0LCiTik16frYbg3l+A4ZZJIwFmmnexocwpHWT3KI6CRHDjOmHvlX
-         kCt25z7O4134VPH3PiRDBZLXWSiVJk6j5yrJfpQzh6ssQ08C1oLmK4IHgVE/PGQCryKd
-         VjnqXBxkapzBJ/i2Ij4Nj6wBNh4WNYBo2IDRFm91qQSueHjFpkv4bXc85i/543rXma0x
-         KrLw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pfPZn/6B"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2ab077e3f32so51509025ad.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Apr 2026 12:02:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1777401984; x=1778006784; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dtWL2Nmofu08jaaEHqPK+HWLFx++QkkniP+LH/qTdYE=;
-        b=Nly10/IPrXGK0xUIyGHWhiMIa0B70CRVp4Yqm+ey7CL5w6LEtPzKz+TX3E8UjwQSKF
-         thFpdCUgYEFoK/4PuJhdCrpGUkqki59kBsf1vsMW8zxufiDZRi2yNu1FD9AI3HeaAwQL
-         tov0T//mvg4Z/L/J702qfseCMaQzFWiuuRTr5Zk0H9QbJMskp5iReiuvy5Rzo7gBsWhu
-         2btWboWQfpEAgow/HGf4eYzxLVB3DkRNtUsiok+x2bpjTkJszmwYsHkiN2xksjaNTV6y
-         CDVvGg+UR9CSLBAzGBTIYUq7s70zp9Qld9IDaTYaaXf6+dCahLo5DsCkQsdQsu51IML3
-         5Wug==
+        d=google.com; s=20251104; t=1777402941; x=1778007741; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xUzs5gShcjOh9gjGckbIhxPp4FsmMFw+qYY2UNbR7e0=;
+        b=pfPZn/6BHKj15/714PmoD6yCkxfcoWhHVpY9gDxKCeV6hgwxjMch3YIGj/c+L7onLd
+         1/kE/cd4+2oIMyM9ey1Gton1Q0OykXln0NWlgioF8GeCigmkg6TT/FjeCAHUqcc90nsu
+         eu9BFQ+u8cCw9XAg+0XoX582t61T40SR384giKZR918MD81RqzwKFHI1EtJAYPoBigcm
+         MjxlbTrPW4YLXoaYvab7DnI1lUaJuzJrqvmQEKAbzqNLSLqUGledF/dVsRrWIU87CKG/
+         Yr8scLj96LazgxRR6kP0ankAsilRyx2yMw95JUBj6DUBpuPvLZoiIAZkZKnvgFR4EGF7
+         1Yyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777401984; x=1778006784;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=dtWL2Nmofu08jaaEHqPK+HWLFx++QkkniP+LH/qTdYE=;
-        b=Jj2St2JAvYSsjm+FWf1o5+to0LAVOIxQ05iW3333UYs+tzlIPOMkFlYRd15ryeTC6n
-         CifY1gIl6qylCEHAi5kxM7jdUO5yhm6EmVRh4tC8EXiV+3AhZ9lBOtmoNefHr5hXwi50
-         9i+cZk9gFX2vE+BDqeUUAoTTPV3AyVFPhD5ii+/z35Y4088VjMfuqFvQo4xTc80PIcZV
-         lp25IbJBR0Q6BYeXAbpS0w+NPBsdXOYzktXsXlzjJVFBsxwizAxGuB5QpWl9/arQtowy
-         ETGoN16tYo9WanGQiP/DS5WgzBGDO8vuwY1CST27eXWMyQ3ceAGy18TDLFHMLxxjcR1l
-         1aWg==
-X-Forwarded-Encrypted: i=1; AFNElJ/o5HSY3bKMswqbHSywRpEjmj8dSJJr2COCkLA/2zsOz4C8DFlcHzodj/tQzRZ6jLx7t3dk7WW09j5JMqiIB7Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/QSZHiZfI5La88DiEd1krcE6Kt6RlxEN7qRQd3VmmDokGQ940
-	2hn9haI6oWZbU+mcii9CXL9QVZ4NOUSJcyI28wC2h5f+LG91V3v24z6N0ppL7obsmKMwILqoOR6
-	phNEAWt+l8KA9fFJcKchblfFaSNTES/toosFlyEtb
-X-Gm-Gg: AeBDiesuH11Tr8p5r3VRnT4Yv/jsOMcKLjvX66P9VA8CqHDRUh2wyK72cLwxRu0Pzi9
-	YDtEQv7u8V81a598cDlo8j/nZtJXV4edWtYiVm0tySfp+TFQM92BV3dlTb1NR+UwN7uTAi7No2Y
-	raIJ/R2eUCqv/WWJ6ZyeJU91uyHKm4tcBMfmXsAZxkOLX0P86Ynb3tCfBxO8/GYikknXSowY+Qy
-	Iyhm05+kD9lwEYIwohacodivDES1eWoPchPZbbajs+jdAWprLujZUsHrsOLW/WWJJ3AvKNfByWr
-	4aX5Mt6XT4gH9zwsXv1QJQ23JIFzHb1qPYJuLX7yBnLzwOs/jsbzjd4YqUQqL7mmyFXURSnDs4Z
-	HkqrHG5v9ZqHR/NDrHvF2pdXJ2K3WgjRpClAiT94OXdnUzoUJvj3bPgg0aug1T/WaL0W+gQ==
-X-Received: by 2002:a05:7022:4188:b0:11a:342e:8a98 with SMTP id
- a92af1059eb24-12ddd8b02f6mr2077359c88.0.1777401982374; Tue, 28 Apr 2026
- 11:46:22 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1777402941; x=1778007741;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xUzs5gShcjOh9gjGckbIhxPp4FsmMFw+qYY2UNbR7e0=;
+        b=cqgHbNfhmz1FwtfDanfkWRS4yUW2yhoWJaGP7Eg+vkPf0YGO85JdpgfkyLS1IjEk+N
+         M3q//gbqog9nQY4ExkIu6TWIURKEPiD3ax4nOvyq8qJLMY3wGfW9F79IAkcxwh4fSjtA
+         cvyltqzf8CMZ1szogRatk92BVfxk3swYrhhXajQIECSW7X4AIXC7/BYslHL7xpH53pUC
+         aKwksRwWzH2/cgVw4Y6n9PlN98IS5ryOEwyDZRe8ICHo6OHknVh3mXpArPsuJvr5TB0+
+         UKKNx/JGtZDxen6VoGZywfM3BA2ZxKkxFIyAGUKw0KfOSy7x4W09C4BLl98nfEPV2Cg9
+         iZpA==
+X-Forwarded-Encrypted: i=1; AFNElJ9P2SyUtS1puXDVx5hpznS1RJVh6xjp7xFPl1h61GtSQl3+7XD0lw4DnwrpbiHhbzN6zFHze81slTwiN38bchQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxUlLNafXcw6UKi53GpeibTl/BdZ3uebFUtWyg9woxj/F6r4900
+	JV1vO39N0gqv1nNHoSPy+nALR45XXftgzJoj4ElRcGBI+M1IyD8umzrM4XBEEPH1fw==
+X-Gm-Gg: AeBDieu7Kn3iJ0djIi+gx+6+s3/2gMtdW6hD/+8J4F6AXktDMNqOi3yUQ3sUZ9bzrAz
+	IC8k81ek4LgjgCi6zZpnqSLvw64At6De14OsQsDuM9fvWCkHj/wb93IioPf3HuGVLU1q+8r3OP9
+	5++R81LF+RGFfl4Rq5/YRdl/ry/RXwMK70vlccl+5g7JvRhwwFEjyM1Z7XplknXJh+qQVWsBB2+
+	2JsTTf0LS2ivtDI6rYWy+yWTvHqJtXJ1eCz5tuH0zk8ifbznRNXfBv+hAwj7laXpqrhJmGSzpaY
+	hRPqUYXdXoEKEjrsMgE70dJFAXavECwZ3AbHM8IQMlkanPSLZ3vbdudh/Y9Lv5Qkg2Dd2jFJ65G
+	7RudvIKWlU2yQvD0ZsHyHP3vNbhn9Vc4G2TqkFCfTiMa5ARMByVWwSJ2FrSuBCAU2g5jUT3Lx3k
+	VOlPdwPY3Cz/Hl3zvD2JDA4L47qxJaXf/UycCvXPAiMioo+dOC1PZ5pMOHI0zXrWmKOkCg2h6CX
+	QnlXA==
+X-Received: by 2002:a17:903:2ed0:b0:2ae:cb0e:fd59 with SMTP id d9443c01a7336-2b97c4120bdmr44062645ad.8.1777402940096;
+        Tue, 28 Apr 2026 12:02:20 -0700 (PDT)
+Received: from google.com (76.9.127.34.bc.googleusercontent.com. [34.127.9.76])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b9887a4ba0sm2025ad.32.2026.04.28.12.02.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Apr 2026 12:02:19 -0700 (PDT)
+Date: Tue, 28 Apr 2026 19:02:15 +0000
+From: David Matlack <dmatlack@google.com>
+To: Sean Christopherson <seanjc@google.com>
+Cc: Jason Gunthorpe <jgg@nvidia.com>, Matt Evans <mattev@meta.com>,
+	Ted Logan <tedlogan@fb.com>, Alex Williamson <alex@shazbot.org>,
+	Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v2] vfio: selftests: only build tests on arm64 and x86_64
+Message-ID: <afEEN_4ufBcQld0q@google.com>
+References: <20260202-vfio-selftest-only-64bit-v2-1-9c3ebb37f0f4@fb.com>
+ <e51b4ff2-13c4-47d4-b781-3dcbd740d274@meta.com>
+ <20260427231217.GA1670652@nvidia.com>
+ <afATrrjqt8zj2plL@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260427224243.3499162-1-sharmasagarika@google.com>
- <20260427224243.3499162-3-sharmasagarika@google.com> <20260428111855.GB571865@shredder>
-In-Reply-To: <20260428111855.GB571865@shredder>
-From: Kuniyuki Iwashima <kuniyu@google.com>
-Date: Tue, 28 Apr 2026 11:46:09 -0700
-X-Gm-Features: AVHnY4LIPo9NRXAYKNpP_C7ZD7DyMGfYzFjap98K_N3B6fceOtmrPZDLKWUIZM8
-Message-ID: <CAAVpQUCY_OEUj8UyrAz+RYfxL1konQGs4xKZQLdRMBxW-4kqDg@mail.gmail.com>
-Subject: Re: [PATCH net v1 2/2] selftest: net: Add test for TCP flow failover
- with ECMP routes.
-To: Ido Schimmel <idosch@nvidia.com>
-Cc: Sagarika Sharma <sharmasagarika@google.com>, "David S . Miller" <davem@davemloft.net>, 
-	David Ahern <dsahern@kernel.org>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Simon Horman <horms@kernel.org>, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <afATrrjqt8zj2plL@google.com>
 
-On Tue, Apr 28, 2026 at 4:19=E2=80=AFAM Ido Schimmel <idosch@nvidia.com> wr=
-ote:
->
-> On Mon, Apr 27, 2026 at 10:42:23PM +0000, Sagarika Sharma wrote:
-> > From: Kuniyuki Iwashima <kuniyu@google.com>
-> >
-> > Without the previous commit, TCP failed to switch to alternative
-> > IPv6 routes immediately upon carrier loss.
-> >
-> > It would persist with the dead route until reaching the threshold
-> > net.ipv4.tcp_retries1, leading to unnecessary delays in failover.
-> >
-> > Let's add a selftest for this scenario to ensure TCP fails over
-> > immediately upon a carrier loss event.
-> >
-> > Before:
-> >   TEST: TCP IPv4 failover                                             [=
- OK ]
-> >   TEST: TCP IPv6 failover                                             [=
-FAIL]
-> >
-> > After:
-> >   TEST: TCP IPv4 failover                                             [=
- OK ]
-> >   TEST: TCP IPv6 failover                                             [=
- OK ]
-> >
-> > Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
-> > Signed-off-by: Sagarika Sharma <sharmasagarika@google.com>
->
-> Thanks for the test. LGTM. A couple of nits below.
->
-> [...]
->
-> > diff --git a/tools/testing/selftests/net/tcp_ecmp_failover.sh b/tools/t=
-esting/selftests/net/tcp_ecmp_failover.sh
-> > new file mode 100755
-> > index 000000000000..f857d5db84d8
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/net/tcp_ecmp_failover.sh
->
-> [...]
->
-> > +
-> > +test_ipv4
-> > +test_ipv6
->
-> Maybe squash something like [1]? I ran the test without the first patch
-> and I get:
->
-> # ./tcp_ecmp_failover.sh
-> TEST: TCP IPv4 failover                                             [ OK =
-]
-> TEST: TCP IPv6 failover                                             [FAIL=
-]
-> # echo $?
-> 0
+On 2026-04-27 06:55 PM, Sean Christopherson wrote:
+> On Mon, Apr 27, 2026, Jason Gunthorpe wrote:
+> > On Tue, Mar 17, 2026 at 01:55:17PM +0000, Matt Evans wrote:
+> > > Hi Ted,
+> > > 
+> > > On 03/02/2026 01:23, Ted Logan wrote:
+> > > > Only build vfio self-tests on arm64 and x86_64; these are the only
+> > > > architectures where the vfio self-tests are run. Addresses compiler
+> > > > warnings for format and conversions on i386.
+> > > > 
+> > > > Reported-by: kernel test robot <lkp@intel.com>
+> > > > Closes: https://lore.kernel.org/oe-kbuild-all/202601211830.aBEjmEFD-lkp@intel.com/
+> > > > Signed-off-by: Ted Logan <tedlogan@fb.com>
+> > > > ---
+> > > > Do not build vfio self-tests for 32-bit architectures, where they're
+> > > > untested and unmaintained. Only build these tests for arm64 and x86_64,
+> > > > where they're regularly tested.
+> > > > 
+> > > > Compiler warning fixed by patch:
+> > > > 
+> > > >    In file included from tools/testing/selftests/vfio/lib/include/libvfio.h:6:
+> > > >    tools/testing/selftests/vfio/lib/include/libvfio/iommu.h:49:2: warning: format specifies type 'unsigned long' but the argument has type 'u64' (aka 'unsigned long long') [-Wformat]
+> > > >       49 |         VFIO_ASSERT_EQ(__iommu_unmap(iommu, region, NULL), 0);
+> > > >          |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > > >    tools/testing/selftests/vfio/lib/include/libvfio/assert.h:32:37: note: expanded from macro 'VFIO_ASSERT_EQ'
+> > > >       32 | #define VFIO_ASSERT_EQ(_a, _b, ...) VFIO_ASSERT_OP(_a, _b, ==, ##__VA_ARGS__)
+> > > >          |                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > > >    tools/testing/selftests/vfio/lib/include/libvfio/assert.h:27:22: note: expanded from macro 'VFIO_ASSERT_OP'
+> > > >       26 |         fprintf(stderr, "  Observed: %#lx %s %#lx\n",                           \
+> > > >          |                                              ~~~~
+> > > >       27 |                         (u64)__lhs, #_op, (u64)__rhs);                          \
+> > > >          |                                           ^~~~~~~~~~
+> > > > ---
+> > > > Changes in v2:
+> > > > - Add white space around arch checks
+> > > > - Clean up uname command
+> > > > - Link to v1: https://lore.kernel.org/r/20260130-vfio-selftest-only-64bit-v1-1-d89ac0944c01@fb.com
+> > > > ---
+> > > >  tools/testing/selftests/vfio/Makefile | 9 +++++++++
+> > > >  1 file changed, 9 insertions(+)
+> > > > 
+> > > > diff --git a/tools/testing/selftests/vfio/Makefile b/tools/testing/selftests/vfio/Makefile
+> > > > index ead27892ab65..8e90e409e91d 100644
+> > > > --- a/tools/testing/selftests/vfio/Makefile
+> > > > +++ b/tools/testing/selftests/vfio/Makefile
+> > > > @@ -1,3 +1,10 @@
+> > > > +ARCH ?= $(shell uname -m)
+> > > > +
+> > > > +ifeq (,$(filter $(ARCH),arm64 x86_64))
+> > > 
+> > > This fails to build (i.e. elides the build) on my local arm64 machine,
+> > > because uname -m returns 'aarch64', not 'arm64'.
+> > 
+> > I have the same issue on x86! The kernel uses x86 is the ARCH when you
+> > run it straight from the top level make
+> > 
+> > make[4]: Entering directory '/home/jgg/oss/wip/mlx5st/tools/testing/selftests/vfio'
+> > Makefile:1: "Saw ARCH=x86"
+> > 
+> > Even though this is a 64 bit build.
+> 
+> Heh, it's much funnier when it's happening to someone else.  :-)
+> 
+> KVM selftests went through these exact pains.  I'm pretty sure these are the
+> relevant commits (the empty targets one may or may not apply to VFIO).
+> 
+> 9af04539d474dda4984ff4909d4568e6123c8cba KVM: selftests: Override ARCH for x86_64 instead of using ARCH_DIR
+> 67730e6c53d70fb31618230f81c4acee9f72eaa3 KVM: selftests: Use canonical $(ARCH) paths for KVM selftests directories
+> 43fbd8cd389faa9760c5152b1c58e893c812953b KVM: selftests: Provide empty 'all' and 'clean' targets for unsupported ARCHs
 
-Thanks Ido, I completely missed the exit code.
-I'll fold the diff and fix some shellcheck warnings.
+KVM selftests don't prevent 32-bit x86 builds though, which is part of what
+we're trying to do here.
 
+For example running...
 
->
-> [1]
-> diff --git a/tools/testing/selftests/net/tcp_ecmp_failover.sh b/tools/tes=
-ting/selftests/net/tcp_ecmp_failover.sh
-> index f857d5db84d8..8b7a2d82c442 100755
-> --- a/tools/testing/selftests/net/tcp_ecmp_failover.sh
-> +++ b/tools/testing/selftests/net/tcp_ecmp_failover.sh
-> @@ -205,5 +205,10 @@ test_ipv6()
->         cleanup
->  }
->
-> +require_command socat
-> +require_command tcpdump
-> +
->  test_ipv4
->  test_ipv6
-> +
-> +exit "$EXIT_STATUS"
+  $ make -C tools/testing/selftests/kvm ARCH=x86 CC="gcc -m32"
+
+...produces a lot of -Wformat errors that were also seeing in VFIO selftests
+from the kernel test robot.
+
+I think something like this would fix your issue Jason. I haven't tested it on
+ARM yet:
+
+diff --git a/tools/testing/selftests/vfio/Makefile b/tools/testing/selftests/vfio/Makefile
+index 0684932d91bf..db71aef6bfb2 100644
+--- a/tools/testing/selftests/vfio/Makefile
++++ b/tools/testing/selftests/vfio/Makefile
+@@ -1,6 +1,11 @@
+ ARCH ?= $(shell uname -m)
+
+-ifeq (,$(filter $(ARCH),aarch64 arm64 x86_64))
++# VFIO selftests are currently only supported on 64-bit x86 and ARM.
++ifneq (,$(filter $(ARCH),x86 x86_64 aarch64 arm64))
++SUPPORTED_ARCH := $(shell echo __LP64__ | $(CC) $(CFLAGS) -E -x c - | tail -n 1)
++endif
++
++ifneq ($(SUPPORTED_ARCH),1)
+ # Do nothing on unsupported architectures
+ include ../lib.mk
+ else
+
