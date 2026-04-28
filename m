@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91202340A59;
-	Tue, 28 Apr 2026 20:45:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47A4333ADAE;
+	Tue, 28 Apr 2026 20:45:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777409129; cv=none; b=mzQv/4UqE/eHvqC/UWeyj5xytY1kQxIxi97whdSq2I83ql4vnaVnKl/jt1+kLKUgOE6qu5ZVZC69BeU3x6zia6TkAPWVxqvqbvRQ6latD4YxxcK4QXzvgZsuTUX3WvLW2sqMhw/QnAyZHoGkMlej47goFSt+t/VPi5orkdFL/yg=
+	t=1777409136; cv=none; b=Fnqrmz+nuhDYD/U65W+POTBbD4BZ1dv1wgQNKpefPF6dZdj/tNEtAkLO9bQtaKcOHyZPUqK/yxIpb7sLWms+08eGSxcvV7IKEQB55VjGOpkioLb4QZHVEYOVmc73mU4RTGXPGpDy6cP8nkl7efCUaK14JpViVhOZygdC6mh2/PU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777409129; c=relaxed/simple;
-	bh=/Wvi9uebpP/hGBuUfLX+2dm76zvxNiYlkCrT9K3LAcE=;
+	s=arc-20240116; t=1777409136; c=relaxed/simple;
+	bh=6tmwrYqrWIbuMw5GfhGQhH/MUUQ+JMHsDHml8bmka3I=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nQ3Cdg4qII39nXrJmfsJ16U0HHRnyF5SxKcU1Y6D04MH/u+SWMBM7ceLB9GKwSzAYEN6uEneCO09umbIhLsDFD735obGuCvpB3ysMZwsIJwM2aNGiToXlcYDOtGOaTLH2ZIOCkQ3hzkiJtqlkMPWc4IZ0dp4U2XWPqhPKZGNrTk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fh9A3V+y; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=D+jk0G+yjVVhTpQIhus3qWWSIaingfX4fT+WFl+v+89Q80gbEHWTND7VGMhdkLmUvnfilJJdEP0BvohUVlgGAau0BTL7O8omOsNCJf+xEE3/YAlhKZ+6FtjnvXHMFus2k2IU8Uz4AdsEslDYT2/dq/i5FLG2tnOnkpWvofBdBEA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=q2Yk6W1T; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fh9A3V+y"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66919C2BCAF;
-	Tue, 28 Apr 2026 20:45:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q2Yk6W1T"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1F61C4AF09;
+	Tue, 28 Apr 2026 20:45:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777409129;
-	bh=/Wvi9uebpP/hGBuUfLX+2dm76zvxNiYlkCrT9K3LAcE=;
+	s=k20201202; t=1777409136;
+	bh=6tmwrYqrWIbuMw5GfhGQhH/MUUQ+JMHsDHml8bmka3I=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=fh9A3V+ypXR4GS5oRIKpQ2uyi2xl8u++OvGhWngaOa12qIEfDGSBqgWfoZi1hBof1
-	 Yuuj0h94pGo39vk61AUVl1FOf789apcQAHiXFIYLZV3ZDw8iWNyOKDSUpKmB/MQD5Y
-	 GTI9BjMV/vQaNnGP2xoz5xYmzvDVje+KZba7CwbxO/1xu16tkCK8Pc3RkU/y9HAYkO
-	 Y1SfAhDpaM85FAdkwu/aYPSdaTvgz3HoZttOwzYZKV2uAbKSk0YfedSiCyZ46Xq89i
-	 239DVDEXi6HKISnYp9CNKV4iNV4QHorwTTNf3P54RhKwyYbMgN4i/ajmgkISj6s3N6
-	 1m54VeTDYLneg==
+	b=q2Yk6W1Tup/ZKaBNBSStPROW97IQHtgQWyBmaOm5+R37bRMYIQJ7GHA3ktQ/z/LiK
+	 nX2UGEfOWlweXBNBx4SnO3CWQq7yqnB1GEu+Ma0CC0m1wGge9NjWH2qT4yfXA/CzHn
+	 h0LJFmfeHrO2kO2Myyjdk6ztJ0aLOVm8sHGMovafiXVeX3WRJ3wMRIzt1MnwL+0Cly
+	 VFUY/m2GrrJ7HrS6dIz/VAagWeXXOh564Yb4BsQI/270BYsWtReYEjbWt0kQSHngru
+	 li09iiog7F9s8PKsg7EzlxiA8ZHCFFieMcwxuTE9l86B1QSECVusLnkoxALJbXFlTZ
+	 137gvmJ8Y35JA==
 From: Mike Rapoport <rppt@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	David Hildenbrand <david@kernel.org>
@@ -54,9 +54,9 @@ Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-mm@kvack.org
-Subject: [PATCH v3 24/54] selftests/mm: hugepage_settings: use unsigned long in detect_hugetlb_page_size
-Date: Tue, 28 Apr 2026 23:42:10 +0300
-Message-ID: <20260428204240.1924129-25-rppt@kernel.org>
+Subject: [PATCH v3 25/54] selftests/mm: hugepage_settings: add APIs to get and set nr_hugepages
+Date: Tue, 28 Apr 2026 23:42:11 +0300
+Message-ID: <20260428204240.1924129-26-rppt@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260428204240.1924129-1-rppt@kernel.org>
 References: <20260428204240.1924129-1-rppt@kernel.org>
@@ -70,40 +70,83 @@ Content-Transfer-Encoding: 8bit
 
 From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-... instead of size_t to avoid type mismatch in 32 and 64 bit builds.
+Add APIs that allow reading and writing of
+
+/sys/kernel/mm/hugepages/hugepages-NkB/nr_hugepages
+
+to detect and change the amount of HugeTLB pages of different sizes.
 
 Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 ---
- tools/testing/selftests/mm/hugepage_settings.c | 2 +-
- tools/testing/selftests/mm/hugepage_settings.h | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../testing/selftests/mm/hugepage_settings.c  | 25 +++++++++++++++++++
+ .../testing/selftests/mm/hugepage_settings.h  | 23 +++++++++++++++++
+ 2 files changed, 48 insertions(+)
 
 diff --git a/tools/testing/selftests/mm/hugepage_settings.c b/tools/testing/selftests/mm/hugepage_settings.c
-index ebaa621c45c6..8f563315b1fc 100644
+index 8f563315b1fc..5961229b9931 100644
 --- a/tools/testing/selftests/mm/hugepage_settings.c
 +++ b/tools/testing/selftests/mm/hugepage_settings.c
-@@ -399,7 +399,7 @@ bool thp_is_enabled(void)
- 	return mode == 1 || mode == 3;
+@@ -464,3 +464,28 @@ unsigned long get_free_hugepages(void)
+ 	fclose(f);
+ 	return fhp;
  }
- 
--int detect_hugetlb_page_sizes(size_t sizes[], int max)
-+int detect_hugetlb_page_sizes(unsigned long sizes[], int max)
- {
- 	DIR *dir = opendir("/sys/kernel/mm/hugepages/");
- 	int count = 0;
++
++static void hugetlb_sysfs_path(char *buf, size_t buflen,
++			       unsigned long size, const char *attr)
++{
++	snprintf(buf, buflen, "/sys/kernel/mm/hugepages/hugepages-%lukB/%s",
++		 size / 1024, attr);
++}
++
++unsigned long hugetlb_nr_pages(unsigned long size)
++{
++	char path[PATH_MAX];
++
++	hugetlb_sysfs_path(path, sizeof(path), size, "nr_hugepages");
++
++	return read_num(path);
++}
++
++void hugetlb_set_nr_pages(unsigned long size, unsigned long nr)
++{
++	char path[PATH_MAX];
++
++	hugetlb_sysfs_path(path, sizeof(path), size, "nr_hugepages");
++
++	write_num(path, nr);
++}
 diff --git a/tools/testing/selftests/mm/hugepage_settings.h b/tools/testing/selftests/mm/hugepage_settings.h
-index 320b97e768e8..9357d07e6c1b 100644
+index 9357d07e6c1b..d6f41a45e8ee 100644
 --- a/tools/testing/selftests/mm/hugepage_settings.h
 +++ b/tools/testing/selftests/mm/hugepage_settings.h
-@@ -90,7 +90,7 @@ bool thp_is_enabled(void);
- 
- /* HugeTLB */
- 
--int detect_hugetlb_page_sizes(size_t sizes[], int max);
-+int detect_hugetlb_page_sizes(unsigned long sizes[], int max);
+@@ -94,4 +94,27 @@ int detect_hugetlb_page_sizes(unsigned long sizes[], int max);
  unsigned long default_huge_page_size(void);
  unsigned long get_free_hugepages(void);
  
++unsigned long hugetlb_nr_pages(unsigned long size);
++void hugetlb_set_nr_pages(unsigned long size, unsigned long nr);
++
++static inline unsigned long hugetlb_nr_default_pages(void)
++{
++	unsigned long size = default_huge_page_size();
++
++	if (!size)
++		return 0;
++
++	return hugetlb_nr_pages(size);
++}
++
++static inline void hugetlb_set_nr_default_pages(unsigned long nr)
++{
++	unsigned long size = default_huge_page_size();
++
++	if (!size)
++		return;
++
++	hugetlb_set_nr_pages(size, nr);
++}
++
+ #endif /* __THP_SETTINGS_H__ */
 -- 
 2.53.0
 
