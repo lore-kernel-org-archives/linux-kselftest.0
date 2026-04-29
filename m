@@ -1,119 +1,103 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f67.google.com (mail-wm1-f67.google.com [209.85.128.67])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94A9F366823;
-	Wed, 29 Apr 2026 15:13:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 122B03783AC
+	for <linux-kselftest@vger.kernel.org>; Wed, 29 Apr 2026 15:18:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.67
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777475610; cv=none; b=TwVFck1i9l/aetpzJWF9N3M1ZxXl7gYHSab3ELGftwyoGVO3dOrRH37jnrzfkK/OwP7aEpIR/+AvlNXc3PTOf3jOpNd3GrJE9jg2Lb8BhbZap60bPUJqFrP/+hjtzFdNDF6zFkFMaRNsooFBaBRbA94p76q3twKTKhXGsfIpv/w=
+	t=1777475887; cv=none; b=RXjNXtiZjePC5HLwCiVTgnzLQg5Y0XpmNB+maHrpS4fOeAL3hn9ponIjH82VJ28/RNCTn+99sg8xYaKgOqclUIvRDqcDda6OFcbFHYU5ZJGKNEvohhIFGPDAAr2uYk/LkoWMyaz1M/CNRmiItgfWKYymtP7LoF4gzV6EOKm86XE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777475610; c=relaxed/simple;
-	bh=n5f2ixLZNRSBHxYtYWqzDjIrpTJYQNZPJFWrEwuX/Co=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=W79zDtKqlpSAY6AF1MjvS/foMUTI4/PI8t/wLmbXo3CrOxp35opz4QmJ1lEPAIFs1PpbjxMzJkk/x+M7FuPDEVs6HZjygA5mTKgdaq8PFXhtbAFm0iZn8N1zSpc5cV0cjbjXTeA2QPMa6iUcmxiJhjt4IT0m3N6RFZuF8X1ZuK4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FQWArXXR; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FQWArXXR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D10DAC19425;
-	Wed, 29 Apr 2026 15:13:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777475610;
-	bh=n5f2ixLZNRSBHxYtYWqzDjIrpTJYQNZPJFWrEwuX/Co=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=FQWArXXRivRPMgBvWmZg/7xE2EnBsWbFCHOILoYxJURPu+yFPlUwo3tq5VrC7RhTA
-	 DH0h8OjWQRYNZWwzNL3L3DZCNWwtGYDS3RhfIixjUXsE7N+hKb/K0Ok6tRWu91iwwg
-	 yA0ICPdET3Xv5uhyxKEx0DYLGy9gEZVwJM56XIuiFYCeWwRntMsZgGfK0BIa3A3ta7
-	 UqYSLoIOSMBDe8cJelisWGP2EoG1SXtPmb//Han0mwFj+BO10dA3RrRTYniNdT4IHm
-	 bzqQrlNKi+SOobE6JRDPoXXLuhSHSBJikokgz7wTJYNRpsUR6aM/nF5hFFIM4sl5BN
-	 6FZZmFQ9nyThg==
-Content-Type: multipart/mixed; boundary="===============0411060881976129338=="
+	s=arc-20240116; t=1777475887; c=relaxed/simple;
+	bh=Spbw5+FwnAD1Te86LZRFTidv12kPXHlIeSpjbXHRsAM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AbVXNQPsmZOb/1oZn0yNZ7luCjB3zSH1Yv6scXJUOx/bYmPrM+9jBi+97u+86REzs1U3hoqz++yg8ZRqwHanfsQ8HvllhzDsLNFu91NtWFa30zvnNxDejK4tFTgMjRX4dpVm/uJtt8KAIZowpXfdiNGYzQPAMpluDIpVsgHE32M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.67
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f67.google.com with SMTP id 5b1f17b1804b1-488a14c31eeso105947225e9.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Apr 2026 08:18:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777475883; x=1778080683;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6g3lBM/B1h9yI4BCUe+xp9frAHx+qvXrSW9JLGyPZkQ=;
+        b=afAA5C8BP96ui0OZQTG9clxeKD6dgOxxYtjyVBoLNRWsQity6/Mi9GI4wUW7YzsVph
+         O7PWYUAMyFh4VQssNW7CiGcTyM6WxeK1R4idLz7LRYWXSLhqP/JpbatGT/Ir7NbMiiSe
+         lg8sVjxpP5ALLpuHvrCITPKedb98+qXvuKHezlzz9C7CC6KdSWX0P1+ZBpWKBV7J3b+f
+         a/4jO7UUxwGb9VIb61JMI8+uZ/ht7RArQM6B4itn/toNNv0Dc1TNuyi8XVSsnzdwQVBG
+         Lm3EC+Cyd2NbvrrVWzhX3Kj5HZo8eCG3sGZNVmpMvb7CAtMUp78v7987ig6AI90J0Zow
+         rlOg==
+X-Forwarded-Encrypted: i=1; AFNElJ81dUwoUZ2NTK+vYV0ene8moyVkl3vOp6ITXnqbxnXqXhDBkkWJsNnNtLHGeut2QdZcJGIC0kUUpQiiXJ1Pyto=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyCPsXkKI4k4/Aft/FSSwdrx/nJGPI+qHLNgOI63otbuq7JMbTX
+	88C15vJxlJ7Pf0ZI+H1MncNqv3h4l4rC/rxSu/b8jLOc7fV1/fcsM1uC
+X-Gm-Gg: AeBDies8BLB3vnTNkdnoGAhiwziQVnE8sPjOMQnBI6vwDFLE9MEJi+PjD3DFz6IjkXu
+	/OfCbfRH5WwsNXQrjO9Uv6Y3bue7ehbUUujI4pOqcp4SnvaF3pkk7bmlJ6JEYV6utULSXP0aBdc
+	/l6Mz3qSn07OpRyPyX6+ylF49WF5eq6CwoENZbPNBqYbe8h31S8ExGFuxKsXaj7hx6N8RRtiBx6
+	BSROEkWH97v1fItc4GFLN/SwHwooKeHwzekeF06babp6dzn2mPMIh6VRlsWXfyErOuzIVLsto1n
+	owM5DWTClPVEXnTCCIFjF40lFH4eg8ZJix2gFQQ5+F5AcrRS+zbvn6xQXCaG+K6BZm0a+mw9XK2
+	e0EviOWKD7/+TvQ6POmRw8Q9yBffR1wHCr6/jNKQhy2ErJdgzOG+RjxtDBzce+WvpQg6jckHQbn
+	U2JrTCFsLhpZYGpPN4c9nQSGGmKEmrlW8SLrLgoT9Jnm3nDFoJtBIQri6o+wpJrjf73eLBbQ==
+X-Received: by 2002:a05:600c:a110:b0:489:1f3e:5f69 with SMTP id 5b1f17b1804b1-48a77b176f5mr97415915e9.18.1777475882817;
+        Wed, 29 Apr 2026 08:18:02 -0700 (PDT)
+Received: from im-t490s.redhat.com (89-24-32-159.nat.epc.tmcz.cz. [89.24.32.159])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48a7c2d3811sm32358165e9.3.2026.04.29.08.18.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Apr 2026 08:18:02 -0700 (PDT)
+From: Ilya Maximets <i.maximets@ovn.org>
+To: netdev@vger.kernel.org
+Cc: Aaron Conole <aconole@redhat.com>,
+	Eelco Chaudron <echaudro@redhat.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Yuan Tan <tanyuan98@outlook.com>,
+	Yang Yang <n05ec@lzu.edu.cn>,
+	dev@openvswitch.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Ilya Maximets <i.maximets@ovn.org>
+Subject: [PATCH net 0/2] openvswitch: fix self-deadlock on release of tunnel vports
+Date: Wed, 29 Apr 2026 17:16:35 +0200
+Message-ID: <20260429151756.4157670-1-i.maximets@ovn.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <0625d99bd069ff39efd2a3077ff84b7b0e7be5c2c3129bfbb4f7fc955a6aaae4@mail.kernel.org>
-In-Reply-To: <20260429-selftests-bpf_misconfig-v9-3-c311f06b4791@suse.com>
-References: <20260429-selftests-bpf_misconfig-v9-3-c311f06b4791@suse.com>
-Subject: Re: [PATCH bpf-next v9 03/11] selftests/bpf: Tolerate BPF and skeleton generation failures
-From: bot+bpf-ci@kernel.org
-To: rbm@suse.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,shuah@kernel.org,nathan@kernel.org,nick.desaulniers+lkml@gmail.com,morbo@google.com,justinstitt@google.com
-Cc: bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,llvm@lists.linux.dev,alan.maguire@oracle.com,rbm@suse.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed, 29 Apr 2026 15:13:29 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 
---===============0411060881976129338==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Two patches - the fix for the actual bug and the selftest that reproduces it.
 
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index cc6ee7a2df93..b104c687dcf0 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
+I missed the self-deadlock in the original patch that introduced the issue,
+because testing required code modification in the ovs-vswitchd to force it to
+use legacy tunnel ports.  I thought I made the change correctly, but apparently
+something went wrong and the tests were run with the standard LWT infra instead.
+The selftest added in this patch set will at least prevent this kind of mistakes
+in the future.
 
-[ ... ]
+I mentioned, however, that these tunnel vports are legacy and not actually used
+by ovs-vswitchd.  RTM_NEWLINK + COLLECT_METADATA is used in conjunction with the
+standard OVS_VPORT_TYPE_NETDEV instead since 2017.  The code to use the legacy
+tunnels still exists in ovs-vswitchd however, but only as a fallback for older
+kernels and we're planning to remove it in the next release.  I'll be sending an
+RFC to remove support for these legacy tunnel types from the kernel, as they
+serve no real purpose today and only increase the uAPI surface for CVEs, but
+we need to fix the known bugs for stable versions.
 
-> @@ -607,47 +611,81 @@ $(TRUNNER_BPF_OBJS): $(TRUNNER_OUTPUT)/%.bpf.o:				\
->  					  $$($$<-$2-CFLAGS),$(TRUNNER_BINARY))
->
->  $(TRUNNER_BPF_SKELS): %.skel.h: %.bpf.o $(BPFTOOL) | $(TRUNNER_OUTPUT)
-> -	$$(call msg,GEN-SKEL,$(TRUNNER_BINARY),$$@)
-> -	$(Q)$$(BPFTOOL) gen object $$(<:.o=.linked1.o) $$<
-> -	$(Q)$$(BPFTOOL) gen object $$(<:.o=.linked2.o) $$(<:.o=.linked1.o)
-> -	$(Q)$$(BPFTOOL) gen object $$(<:.o=.linked3.o) $$(<:.o=.linked2.o)
-> -	$(Q)diff $$(<:.o=.linked2.o) $$(<:.o=.linked3.o)
-> -	$(Q)$$(BPFTOOL) gen skeleton $$(<:.o=.linked3.o) name $$(notdir $$(<:.bpf.o=)) > $$@
-> -	$(Q)$$(BPFTOOL) gen subskeleton $$(<:.o=.linked3.o) name $$(notdir $$(<:.bpf.o=)) > $$(@:.skel.h=.subskel.h)
-> -	$(Q)rm -f $$(<:.o=.linked1.o) $$(<:.o=.linked2.o) $$(<:.o=.linked3.o)
-> +	$(Q)$(if $(PERMISSIVE),if [ ! -f $$< ]; then			\
-> +		$$(RM) $$@ $$(@:.skel.h=.subskel.h);			\
-> +		printf '  %-12s %s\n' 'SKIP-SKEL' '$$(notdir $$@)' 1>&2; \
-> +		exit 0;							\
-> +	fi;)								\
-> +	printf '  %-12s %s\n' 'GEN-SKEL' '[$(TRUNNER_BINARY)] $$(notdir $$@)' 1>&2; \
-> +	$$(BPFTOOL) gen object $$(<:.o=.linked1.o) $$< &&		\
-> +	$$(BPFTOOL) gen object $$(<:.o=.linked2.o) $$(<:.o=.linked1.o) && \
-> +	$$(BPFTOOL) gen object $$(<:.o=.linked3.o) $$(<:.o=.linked2.o) && \
-> +	diff $$(<:.o=.linked2.o) $$(<:.o=.linked3.o) &&		\
-> +	$$(BPFTOOL) gen skeleton $$(<:.o=.linked3.o) name $$(notdir $$(<:.bpf.o=)) > $$@ && \
-> +	$$(BPFTOOL) gen subskeleton $$(<:.o=.linked3.o) name $$(notdir $$(<:.bpf.o=)) > $$(@:.skel.h=.subskel.h) $(if $(PERMISSIVE),|| { \
-> +		$$(RM) $$@ $$(@:.skel.h=.subskel.h); \
-> +		printf '  %-12s %s\n' 'SKIP-SKEL' '$$(notdir $$@)' 1>&2; \
-> +	}) && \
-> +	rm -f $$(<:.o=.linked1.o) $$(<:.o=.linked2.o) $$(<:.o=.linked3.o)
+Ilya Maximets (2):
+  openvswitch: vport: fix self-deadlock on release of tunnel ports
+  selftests: openvswitch: add tests for tunnel vport refcounting
 
-Does the permissive mode error handler only apply to the final command?
+ net/openvswitch/vport-netdev.c                |  6 ++-
+ .../selftests/net/openvswitch/openvswitch.sh  | 37 +++++++++++++++++++
+ .../selftests/net/openvswitch/ovs-dpctl.py    | 10 ++---
+ 3 files changed, 47 insertions(+), 6 deletions(-)
 
-The TRUNNER_BPF_SKELS rule chains six commands together with &&:
+-- 
+2.53.0
 
-    $(BPFTOOL) gen object $(<:.o=.linked1.o) $< &&
-    $(BPFTOOL) gen object $(<:.o=.linked2.o) $(<:.o=.linked1.o) &&
-    $(BPFTOOL) gen object $(<:.o=.linked3.o) $(<:.o=.linked2.o) &&
-    diff $(<:.o=.linked2.o) $(<:.o=.linked3.o) &&
-    $(BPFTOOL) gen skeleton ... > $@ &&
-    $(BPFTOOL) gen subskeleton ... > $(@:.skel.h=.subskel.h) || { ... }
-
-If any of the first five commands fail, the && chain breaks and the
-recipe exits immediately with an error status, causing Make to abort the
-build. The error handler (|| { $(RM) ...; printf 'SKIP-SKEL' ...; })
-only catches failures from the final gen subskeleton command.
-
-This appears to contradict the commit message, which states the intent is
-to "continue with remaining tests" when generation fails. The same pattern
-affects TRUNNER_BPF_LSKELS, TRUNNER_BPF_LSKELS_SIGNED, and
-TRUNNER_BPF_SKELS_LINKED.
-
-To fully implement permissive mode, would it make sense to attach the
-error handler to the entire pipeline by wrapping the command sequence in
-a subshell?
-
-    ( cmd1 && cmd2 && ... ) || { error_handler }
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25115689001
---===============0411060881976129338==--
