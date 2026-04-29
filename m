@@ -1,181 +1,155 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail-106118.protonmail.ch (mail-106118.protonmail.ch [79.135.106.118])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5307B3FCB00;
-	Wed, 29 Apr 2026 13:20:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCB4E364E92
+	for <linux-kselftest@vger.kernel.org>; Wed, 29 Apr 2026 14:06:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.135.106.118
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777468813; cv=none; b=E2AWFJbhgGPXLsozUWp7vIF9LVpSn2pubek8ukNvSfbU3RY/LP4HEGpaY8obKKJtYzKnVQyWhOsilG8vnjZyvKgU+nvaMBez0ob0OBFHLjQL9SXzr2ANrl7EJERAQQhg1H05dKFfNnLRzQEMAgPasiWxuJm45NCr969yP7TQe7Y=
+	t=1777471570; cv=none; b=Ym/PjBUrqWZoG1wtkErBuT1AGGZF+QXEWeQEW58pUIJ1N+90RgPx44bNK/QSKbxHFAPR2/GcsMl2Sw0jqQfDiM13pNfUKefGZ12bvTmV9X/EvpJJXRx4yDFW6U9l7O7b9u/XYKACzojAt6b1g3qS4wNXMmkluRUF+nu7/ekb1Wg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777468813; c=relaxed/simple;
-	bh=WBIKlOKETVqEtql1+Yzk/jj+FrWANtHnrA8WI+d7PWk=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=a0+foN/l/RS17zT7QbziN2DWTOHGOHiiUOVms+kBFeKwVeHTiwlwTSStIiEYttd/9rGoCKVUao1cV2hjBGW36Euoqc3yim8L7ynS8VqI7qapJoZU5+ur+9eZwMSgAHWKKtH78VA79+MfFNFNwcY09scjoZOOyp5PxSlKcoWjsGU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OqL/UlYT; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777471570; c=relaxed/simple;
+	bh=uExTrrXv2ZF9hJiGpeUeEqQ4gYyS1a0Vzka3f+QUJXw=;
+	h=Date:To:From:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Ra+dOBY5MAHe97vNjAn63S8JNh9t6ne3k/PMkKhqGmel0bkx04OWkvChuwbxhgnJY5Q3PBbDTrlBGTeK8f9dOaeMr29BfXF6AKbIAjyUBoY8ahmRWabobgguoZqWJH/e9Zm1OLe4oz+S9vnL7PnUwU/3SVAMeH0759OsbEq7khc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=PMsvEJkb; arc=none smtp.client-ip=79.135.106.118
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OqL/UlYT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4242AC19425;
-	Wed, 29 Apr 2026 13:20:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777468812;
-	bh=WBIKlOKETVqEtql1+Yzk/jj+FrWANtHnrA8WI+d7PWk=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=OqL/UlYT8/yL8caVmjjltYa+hdLsEbO5IOitUCF+kl0IJnzAj6GolLqnmIfypQW9Q
-	 KCs+F+Q5xuGEMgJpE1zr5S+QJQQPQuZXj8ccA8vRfWVbmlBZ/ZgRaKMCeUDlJkOECv
-	 71cYfgXodQED7Z7WV+ngHFUSAKkJx4CyI+CdS7Ks9SsFEE4ZbpU8ZMLS7CGYoFvkqM
-	 rUzNVQYz5MEo/Q0x+6aR/QzST1yqEL8IMTwjUur00zR9fWoPMH52ECRpXrDD/BKfTS
-	 1NP1a3rfyjl4F6etV3UBIyFK+NHjsaT3lHIvLEJGi2j2w9HlvrQGdK8Dj+NVZQSjTG
-	 tAU23rb1hrrUg==
-From: Pratyush Yadav <pratyush@kernel.org>
-To: Pasha Tatashin <pasha.tatashin@soleen.com>
-Cc: Pratyush Yadav <pratyush@kernel.org>,  Mike Rapoport <rppt@kernel.org>,
-  Shuah Khan <shuah@kernel.org>,  Andrew Morton
- <akpm@linux-foundation.org>,  Usama Arif <usama.arif@linux.dev>,
-  linux-kernel@vger.kernel.org,  linux-kselftest@vger.kernel.org,
-  linux-mm@kvack.org
-Subject: Re: [PATCH v3 0/6] selftests/liveupdate: add memfd tests
-In-Reply-To: <afEKfQ0GUNVJ76a1@plex> (Pasha Tatashin's message of "Tue, 28 Apr
-	2026 19:31:04 +0000")
-References: <20260404102452.4091740-1-pratyush@kernel.org>
-	<afEKfQ0GUNVJ76a1@plex>
-Date: Wed, 29 Apr 2026 15:20:09 +0200
-Message-ID: <2vxzecjx52eu.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="PMsvEJkb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
+	s=protonmail3; t=1777471557; x=1777730757;
+	bh=HBA+prfYWAXuk4JZntWYfoOHN1pxfrVekP+qEbg6iDY=;
+	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+	b=PMsvEJkbQaYqAVIwHRtjSMFXJxBZAQ4RTAisXPFiCkx9YCdWUTEexdcpwx8xGzWh/
+	 brNk05b31Xe7CGpfSC5wrXfxTIIrWxmLJKf6XpK9vRjXzN85GkC0+eurqqvVfmMqMm
+	 eKNjvagdnr/4TdtGjRcqSxXyBz2r8uKHtqg9gL8TbMpmgC7G1QStKh14kmLlOur1M8
+	 X6RHaz7d+CTEf9Q0bfGCW+CfN+EkgvMFH5wdP+Bu2Y0kFXvQnxovZgxCmAgCUGfQxp
+	 mORv1K5HWK/QGxXCRelqzyQqnBOWhxnSBi/ZmjQn5UbzGYMUEFzKBzMZ4+uMf4drqp
+	 /uyDWp3Sgte7Q==
+Date: Wed, 29 Apr 2026 14:05:48 +0000
+To: david.laight.linux@gmail.com, riel@surriel.com, perry.yuan@amd.com, jgross@suse.com, ljs@kernel.org, justinstitt@google.com, hpa@zytor.com, shuah@kernel.org, nathan@kernel.org, sohil.mehta@intel.com, mathieu.desnoyers@efficios.com, brauner@kernel.org, ethantidmore06@gmail.com, dave.hansen@linux.intel.com, maciej.wieczor-retman@intel.com, mingo@redhat.com, bp@alien8.de, akpm@linux-foundation.org, peterz@infradead.org, viro@zeniv.linux.org.uk, superman.xpt@gmail.com, rdunlap@infradead.org, aliceryhl@google.com, ilpo.jarvinen@linux.intel.com, david@kernel.org, xin@zytor.com, seanjc@google.com, tglx@kernel.org, houwenlong.hwl@antgroup.com, yury.norov@gmail.com, rppt@kernel.org, oleg@redhat.com, nick.desaulniers+lkml@gmail.com, vmalik@redhat.com, morbo@google.com, ryan.roberts@arm.com, kees@kernel.org
+From: Maciej Wieczor-Retman <m.wieczorretman@pm.me>
+Cc: linux-kselftest@vger.kernel.org, linux-fsdevel@vger.kernel.org, x86@kernel.org, llvm@lists.linux.dev, linux-kernel@vger.kernel.org, m.wieczorretman@pm.me
+Subject: [PATCH v7 0/4] x86: Simplifying LAM
+Message-ID: <cover.1777470980.git.m.wieczorretman@pm.me>
+Feedback-ID: 164464600:user:proton
+X-Pm-Message-ID: 5d54fa1e5d74e57302a3cd6663e845502b4d8fb5
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 28 2026, Pasha Tatashin wrote:
+After ChkTag [1] announcement, it's worth preparing a stable x86 linear
+address masking (lam) user interface. One important aspect of lam is the
+tag width, and aligning it with other industry solutions can provide a
+more popular, generalized interface that other technologies could
+utilize.
 
-> On 04-04 10:24, Pratyush Yadav wrote:
->> From: "Pratyush Yadav (Google)" <pratyush@kernel.org>
->> 
->> Hi,
->> 
->> This series adds some tests for memfd preservation across a live update.
->> Currently memfd is only tested indirectly via luo_kexec_simple or
->> luo_multi_session. Add a dedicated test suite for it.
->> 
->> Patches 1 and 2 are preparatory, adding base framework and helpers, and
->> the other patches each add a test. Some of the code is taken from the
->> libluo patches [0] I sent a while ago.
->> 
->> [0] https://lore.kernel.org/linux-mm/20250723144649.1696299-33-pasha.tatashin@soleen.com/
->
-> Here are few observations that I noticed when I tried to run your tests:
->
-> 1. The '-h' tells you nothing about --stage argument:
->
-> root@liveupdate-vm:~/liveupdate# ./luo_memfd -h
-> Usage: ./luo_memfd [-h|-l|-d] [-t|-T|-v|-V|-f|-F|-r name]
-> 	-h       print help
-> 	-l       list all tests
-> 	-d       enable debug prints
->
-> 	-t name  include test
-> 	-T name  exclude test
-> 	-v name  include variant
-> 	-V name  exclude variant
-> 	-f name  include fixture
-> 	-F name  exclude fixture
-> 	-r name  run specified test
-> 	...
+ChkTag will use 4-bit tags and since that's the direction other memory
+tagging implementations seem to be taking too (for example Arm's MTE)
+it's reasonable to converge lam in linux to the same specification. Even
+though x86's LAM supports 6-bit tags it is beneficial to shorten lam to
+4 bits as ChkTag will likely be the main user of the interface and such
+connection should simplify things in the long run.
 
-Yeah, unfortunately that is a side effect of using test_harness_run(),
-which does not know anything about the options specific to our test.
+Change in the interface tries to cover the three following aspects:
+=09- Have the kernel use the same tag width as the underlying
+=09  hardware does. This should ensure consistent treatment of user
+=09  pointers across various user/kernel interfaces.
+=09- Present the user with a stable tag width value not dependent
+=09  on the maximum capabilities of the hardware used. This should
+=09  prevent any backward capability issues in case there are any
+=09  hardware changes in the future.
+=09- Export the hardware tag width through procfs for programs that
+=09  need to recreate kernel's treatment of user pointers
+=09  accurately such as gdb.
 
->
-> 2. '-l' does not work after you run stage1, do you keep /dev/liveupdate 
-> open? That is not needed, we only need to keep session open.
+Changing the tag width at the moment has no effect on userspace
+programs. Due to LAM being disabled until LASS is fully supported in the
+kernel there are yet no userspace projects relying on a specific LAM tag
+width. One known exception is the clang compiler and its hwasan support.
+It is however not a problem since there are both no users of hwasan on
+x86 yet and upon closer inspection (when working on x86 KASAN software
+tag-based mode) I found it's not working correctly and needs to be
+patched.
 
-Oh yeah, I keep forgetting that is no longer needed. The main process
-closes the FD but the forked daemons hold a reference. I can clean that
-up via a fixture.
+The patchset also cleans up some comments referencing LAM_U48 which was
+not implemented in the kernel and the comments shouldn't imply it can be
+enabled.
 
->
-> root@liveupdate-vm:~/liveupdate# ./luo_memfd -l
-> 1..0 # SKIP Failed to open /dev/liveupdate (Device or resource busy) device. Is LUO enabled?
->
-> 3. Stage 1 has proper [STAGE 1] prefix, but no [STAGE 2] prefix for 
+Patches are based on v7.1-rc1
 
-Because stage 2 has no prints, all the prints are coming from the
-selftest harness. Those same lines are also not prefixed in stage 1. If
-you'd like, I can add a print beforehand that shows which stage is
-running. Other than that, I don't see what else we can do. I don't want
-to modify the selftest harness.
+Changelog v7:
+- Redid quite a bit after Rick Edgecombe pointing out the inconsistent
+  treatment of user pointers internally.
+- Cover letter:
+=09- Added the third paragraph to the cover letter summarizing expected
+  =09  results of the interface changes.
+- 1/4:
+=09- Redid the untag mask handling and syscall return. Updated last
+=09  paragraph of the patch message.
+- 2/4:
+=09- Added a procfs patch to help make gdb like programs work with
+=09  LAM.
+- 3/4:
+=09- No changes
+- 4/4:
+=09- Made the selftest constants analogous to the kernel ones.
 
-> stage 2:
-> # Starting 4 tests from 1 test cases.
-> #  RUN           global.memfd_data ...
-> # [STAGE 1] Forking persistent child to hold sessions...
-> # [STAGE 1] Child PID: 245. Resources are pinned.
-> # [STAGE 1] You may now perform kexec reboot.
-> #            OK  global.memfd_data
-> ok 1 global.memfd_data
-> #  RUN           global.zero_memfd ...
-> # [STAGE 1] Forking persistent child to hold sessions...
-> # [STAGE 1] Child PID: 247. Resources are pinned.
-> # [STAGE 1] You may now perform kexec reboot.
-> #            OK  global.zero_memfd
-> ok 2 global.zero_memfd
-> #  RUN           global.preserved_ops ...
-> #            OK  global.preserved_ops
-> ok 3 global.preserved_ops
-> #  RUN           global.fallocate_memfd ...
-> # [STAGE 1] Forking persistent child to hold sessions...
-> # [STAGE 1] Child PID: 250. Resources are pinned.
-> # [STAGE 1] You may now perform kexec reboot.
-> #            OK  global.fallocate_memfd
-> ok 4 global.fallocate_memfd
-> # PASSED: 4 / 4 tests passed.
-> # Totals: pass:4 fail:0 xfail:0 xpass:0 skip:0 error:0
->
-> ./do_kexec
->
-> root@liveupdate-vm:~/liveupdate# ./luo_memfd
-> TAP version 13
-> 1..4
-> # Starting 4 tests from 1 test cases.
-> #  RUN           global.memfd_data ...
-> #            OK  global.memfd_data
-> ok 1 global.memfd_data
-> #  RUN           global.zero_memfd ...
-> #            OK  global.zero_memfd
-> ok 2 global.zero_memfd
-> #  RUN           global.preserved_ops ...
-> #      SKIP      test only expected to run on stage 1
-> #            OK  global.preserved_ops
-> ok 3 global.preserved_ops # SKIP test only expected to run on stage 1
-> #  RUN           global.fallocate_memfd ...
-> #            OK  global.fallocate_memfd
-> ok 4 global.fallocate_memfd
-> # PASSED: 4 / 4 tests passed.
-> # 1 skipped test(s) detected. Consider enabling relevant config options to improve coverage.
-> # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:1 error:0
->
-> 4. I also do not like that we now have duplicated stage parsing code in  
-> luo_test(), perhaps we should add our own  test_harness_run() variant 
-> that depends on stage, and use it in both current tests, and the new 
-> memfd tests.
+Changelog v6:
+- 1/3
+=09- Change define names so they match the arch_prctl() cases for
+=09  LAM.
+=09- Add more defines so they build into the GENMASK() more
+=09  properly.
+- 2/3
+=09- Add one reviewed-by.
+- 3/3
+=09- Update the patch subject after removing additional test cases
+=09  during v3.
+=09- Change bit width and untag mask defines so they match the
+=09  kernel ones in name and add GENMASK() to x86 selftests so
+=09  they match the kernel in form. Update the patch description.
 
-Sounds good in principle, but unfortunately ends up duplicating a lot of
-logic in test_harness_run() that is not a good idea IMO. We should work
-with the harness not fork off into our own.
+Changelog v5:
+- Rebase onto v7.0-rc7.
 
-I suppose we can refactor some of the logic there to split into
-functions that we can then use in our luo_test_harness_run(), but
-keeping the option parsing logic in sync is going to be difficult.
+Changelog v4:
+- Remove the 'default' wording from the cover letter and patch messages.
+- Add a paragraph to the cover letter about userspace impact.
 
-And for the duplicated logic, I agree. I thought about cleaning it up
-but was feeling lazy... Well now that you have called it out let me see
-what I can do.
+Changelog v3:
+- Remove the debugfs part and update the rest of the code and patch
+  messages accordingly.
 
-[...]
+Changelog v2:
+- Extend a char buffer in debugfs read callback to fit the format
+  string.
 
--- 
-Regards,
-Pratyush Yadav
+[1] https://community.intel.com/t5/Blogs/Tech-Innovation/open-intel/ChkTag-=
+x86-Memory-Safety/post/1721490
+
+Maciej Wieczor-Retman (4):
+  x86/process: Shorten the LAM tag width
+  x86/process: Add a procfs file with hardware address masking
+  x86/mm: Cleanup comments where LAM_U48 is mentioned
+  selftests/lam: Update LAM tag width and cleanup names
+
+ arch/x86/Kconfig                  |  1 +
+ arch/x86/include/asm/mmu.h        |  2 +-
+ arch/x86/include/asm/tlbflush.h   |  2 +-
+ arch/x86/kernel/process_64.c      | 30 ++++++++--
+ fs/proc/Kconfig                   |  4 ++
+ fs/proc/base.c                    |  6 ++
+ include/linux/uaccess.h           |  5 ++
+ tools/testing/selftests/x86/lam.c | 94 ++++++++++++++++---------------
+ 8 files changed, 92 insertions(+), 52 deletions(-)
+
+--=20
+2.53.0
+
+
