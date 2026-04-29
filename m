@@ -1,67 +1,67 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0D1C37AA77
-	for <linux-kselftest@vger.kernel.org>; Wed, 29 Apr 2026 14:34:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF2D2363C57
+	for <linux-kselftest@vger.kernel.org>; Wed, 29 Apr 2026 14:35:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777473285; cv=none; b=fT5FRodWAGtVmedgN4MxrAbcg28KFJv1jHpfdXbcON9DQvLIw65Dq6BZWe19tX2/AogW9lNZfab+X6kqVKflYDNRnCtgDw/UwhT8hB6oJHQGbWzYyYLujoUC4EMxHzuG3jQRUL45fP701xHyTjeRn/D+Y4aKEWspY7mJDMGlLrQ=
+	t=1777473330; cv=none; b=mHBDiF7n71z/iWgpx4KdaLApG8KmDKiKBF+ycuNYn85pvzUNqQZXSqmvGboHcoPG0c8NoSOpDMnuyiOf2MZCbyykTOrz6Fe+ppNC5JIUAwAzwVvpRHU5FVvnvG0DMfIyh9kagBhaBpOUInhzFApHZGh1XMrZo+eMcH1+aX1qRt4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777473285; c=relaxed/simple;
-	bh=QlnphXbIZwkpSF4vwnCRoGf/LwYmdqzZuMpKhZCGNVo=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=F/uj+M4jlIFx0VgbXdzkI/kEdeVu4yVIzuBnKKeUUFdYKkCcXDg81YRihXkRCycQNJZhChyJxNApVcsxCHkjW6/jWWOaGZG07RKyf89XtIcmvwRlnWl9GCuAyUxMhDXXyu000TDubmmsX8AuWbwQl1WFQDluejFUwci7wWh02EI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=ClcSAlIK; arc=none smtp.client-ip=209.85.128.54
+	s=arc-20240116; t=1777473330; c=relaxed/simple;
+	bh=pLz6jjDt3oVX0vZwPGXcR+Jm8CR4vEEQP0LB5b2GZUE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=siVlhTW0uzmo2nnO3f5Qg4yagd9lHjEcLNtZ1WnNjikr77m430AGzaDtc+BArAZnBHb8/RUchINjTjydjQ9sa5DXM/sqTcdUVbSdc+P73G7ABaNIUvCIj9VlFY9/QKn34C6k3yOv9DcjspDsWS/hab/hUfsyuhn+YHJG7eexZq8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=gb/2mZoI; arc=none smtp.client-ip=209.85.128.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="ClcSAlIK"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-488b3f8fa2bso9723425e9.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Apr 2026 07:34:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="gb/2mZoI"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4896c22fcbaso97058205e9.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Apr 2026 07:35:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1777473282; x=1778078082; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3pA8Vhc9DANl97GkJYN+mTuDBA8W99vr/NFCFT5xJ6I=;
-        b=ClcSAlIKLzRAo/E2uYKp2V05eXi4aIku8Da3n6jsmoHLG6XiN97weVDgVOAJ0HCyBW
-         hlKhjKXIMWi1MPLEbExUcgR5ALzEPpzzyL6pUAXhRpepFAah4pIWCVvHdyHbbWI141oQ
-         RyJQQwV4Ia4rchZCnckhSeXvNQ42ZSl0LxkZuATjqw2EiNrYcuTSCw99Oe8OWN0RG2Vb
-         b6PS7/Zo3F+AeUoRq3DoKFDxjrmxKBRigRWbiscuqg8lNjdnPPb0yxGFewDHwtbdiMgi
-         N8BZVZPDqKEWYOZzNwRVK9bGWux9CeadGz5MFrAEziu4x1p9yhQU90jPj+73l54GhD85
-         FzAA==
+        d=suse.com; s=google; t=1777473327; x=1778078127; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y51zaDTB8kvehUPw4hj3xyT4d7Oh4tjGjtgNyZysarw=;
+        b=gb/2mZoIwet2i2m8V+4vHddfrd0se9rADJXoEb3fX12fh1O2IJE0jkns6dzKbj9FBc
+         toCoz4oo3O3Zn8i9VXhZCDnSq8SS5WMdmmcikbc/l7fURVOhgY9T3KveAhvkIsPIVWmr
+         oKhc0Br8CRo48qWclHPS3/O4I2+G49QMlc2g4IoFtUm9xGMz4eQkjaelBJmdt8Noieqv
+         aezl9VSSzGbM9I1o11TQhsPLVoqbhceeq6aNng13lG5Iq7l8ozX4KYa8IKJwVcySU+B2
+         iGOvTM79udT9KePn8X7bOkl/UlO2ydYPb9j14l8S7XE9AfhjL/RILaVeUHM56wU6oyke
+         oDOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777473282; x=1778078082;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=3pA8Vhc9DANl97GkJYN+mTuDBA8W99vr/NFCFT5xJ6I=;
-        b=RNu2Xn5Dmr7MWKTF0Rv0WnWBI6YHE061BfFTN6Ckc3ovlYZAo4QL75nYEZF+yNXjHS
-         PtOCSb5px5TXc2pRePuCXgwsKw7h74B+/jRR0brMUcU7me21V2TjwMzgxuHh6V7J2dll
-         GL303KT0y4F4goAaKKtrZMMernFKJ3yJhvFpVQi7BdLwYH6wBVPORJLwVBwmS2MVoCD4
-         68IkuxtqeAg3gC+YXMIwPdfujCHh6WIrp1w4QEYh4tAP56tRzZ5GpPJK/XwHJT53TVBT
-         i3XmhpqERfbt2gIRSjClRJrJfv8lbdjgB67N+3+z0rsC0kyM5vb97Q+5VfsJIS0Bq9Kt
-         ermA==
-X-Forwarded-Encrypted: i=1; AFNElJ+s8yYmqJOPtaDfb0rbo+fG0IDTJueR1/eriHZk+22QFmI2J9f0JDgMtXy8atTuWyWi899yerqI/kF3SR6AbWM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxrpeh8CYdRqlTWnRyQeLvrabhTZ4YkHwKNbGVGp0U8T8px+JZY
-	k+CAJtuS5kGpwgBfDqaf6nYuc3Rr11Hs8AwN7rbbNa5b/42eLCvPp3jgzEY0SbRfS9A=
-X-Gm-Gg: AeBDieuht2nx7YURMkeOW3qg2bglcCPMioPQhtG6h1B8mOJQslHYQAVVw+kGQGxKyo1
-	tnnDo/mCKo/VsBt92SVr3WXcMSDOooXk/L5sERVHGpeovUHrpaBUS5iR8lhVnkAVs8mntGpmsbZ
-	fOx38YCzheHIRT0RUWb+bVLIi9l8WEqDKZMuygef0OAMoHA+p2IZtCFck77wg/uAQfyJ+Apb41G
-	Zug4ZEg/EozxYLvRaKuq0XM4YTw56N2O0hXNht3MRgsGEAGMmZZztP8lx6ukjVKAVyZ2iYsF0XQ
-	GhNhgk53fzamEBOdE78rKLiYGFDiEhMR9aDhMTWE43O25AVzmzGd5YkWrJj3xL+BcSyMjC0uPdw
-	yLvNfgUWov9UScwQsplgWBEHO5xKwN5qDMVK4fcJjJjN/2XE4w4O/Vx4CBg6474kBOIJ/kHkMTS
-	/Y+/b3+BTvX+3dgxvZ0mSZWsM4ym1LJ06Cf+g=
-X-Received: by 2002:a05:600c:29a:b0:486:fcc7:6811 with SMTP id 5b1f17b1804b1-48a7c81f998mr32567305e9.10.1777473282131;
-        Wed, 29 Apr 2026 07:34:42 -0700 (PDT)
-Received: from localhost ([2804:7f0:b765:105d:ce28:aaff:fe86:149c])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-62982135e26sm1155487137.3.2026.04.29.07.34.40
+        d=1e100.net; s=20251104; t=1777473327; x=1778078127;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Y51zaDTB8kvehUPw4hj3xyT4d7Oh4tjGjtgNyZysarw=;
+        b=jW+r4E390YiyhgWZp4ijd5FdSue1BFqvlicTLspUFozJG6TEIj1qBRaCN27d0M9SqO
+         l9scVw1I5rYxs3teQyvKEqtqwCaHxgpGy7EqJbD2GlaRefSYPS4Iefr/we8VjCOKkmFI
+         Mp/LEk7yCpb0aT5uLzW2SM/BWiwQUpGlqgxjfKkRERSOuDcw2t+N2Jy7mYCUvXhtq9xK
+         Cmj5GK6uLpGcSr4cUlloqFf1hfwAcmW2SB0YlN0p7WQ+oLooIfafeU/kLdtJThGVe2+I
+         xArZCUQDW2/U45nFkeHtoPH74cW7put1h14UoVxbXhAd5w41NBbfEGe7ptIaZFyLyYZu
+         C2cg==
+X-Forwarded-Encrypted: i=1; AFNElJ/3PFraHYQgozvYTF45TE5sT0AJmF4O32lAKWh2Ku1tVk46RBKbN6Ag8MZKdjYIfsIrb89KtqBCUOyZgyGhPhs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzt56nfGEtSYfmIN6v2p/LR4SXd/bAm2OkEdV0eohqM9H1p6tad
+	w1iTpwtB8TOtFUuR+fgpTjkl0p8m27sZmQbx49gJn+iy47/uz4sO3Y5DYSb/QwJ8h20jQ71WMeJ
+	/GnGOLnY=
+X-Gm-Gg: AeBDieveoH0MnnFpv4X82H/mN/D9ecrRxCKGI3b3Pyz465n2jH1ir3n6g6zwFpg8kdt
+	kMg3Ws4qKzmKrWNugk3EGRpkfuN8ejiCKl/rUx0sc1WIyEaKHrEH1QNCDqYwGS7pIgQrsIuXR7X
+	d2vlckJU5yq6GHMe988B/L5agy05F7Em6xAkMRUPqOi/zsvxLTpV67XWBmB3XYmV8UF1bL7oab2
+	xnAN/4LD6yyHehd+Z/daMkql+sRQqg9ZoBM5SD8QHPTTGtDnfxRkPpEPkyhGe7PvGm/uRR9s/0D
+	bSYSjYcN5nSyKNX46kVaX083ilSfwwPvLXKro19JuKyve+l+uOLqnQ5U/MNkJh4n2O3L0k+fGut
+	VIyCXOw+KIUQCBthIhPqUtvHKiPzRE4L7cK2kyzj8hDAiVz6ze/M18AorzC0DCilneTMEXwnmkA
+	tdd1gChwsXcBs7PEHoUalO+9MxoBnx0KZ1ZQ==
+X-Received: by 2002:a05:600c:8b2f:b0:48a:58ae:9933 with SMTP id 5b1f17b1804b1-48a77b1990dmr123430755e9.18.1777473327066;
+        Wed, 29 Apr 2026 07:35:27 -0700 (PDT)
+Received: from [127.0.0.1] ([2804:1bc4:224:7800:585c:db3a:fcb:e21f])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48a7c305371sm19982835e9.18.2026.04.29.07.35.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Apr 2026 07:34:41 -0700 (PDT)
-From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
-Date: Wed, 29 Apr 2026 11:33:53 -0300
-Subject: [PATCH bpf-next v9 11/11] selftests/bpf: Tolerate missing files
- during install
+        Wed, 29 Apr 2026 07:35:26 -0700 (PDT)
+From: Marcos Paulo de Souza <mpdesouza@suse.com>
+Subject: [PATCH v4 0/6] kselftests: livepatch: Adapt tests to be executed
+ on 4.12 kernels
+Date: Wed, 29 Apr 2026 11:35:14 -0300
+Message-Id: <20260429-lp-tests-old-fixes-v4-0-59b9741989d0@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -69,86 +69,87 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260429-selftests-bpf_misconfig-v9-11-c311f06b4791@suse.com>
-References: <20260429-selftests-bpf_misconfig-v9-0-c311f06b4791@suse.com>
-In-Reply-To: <20260429-selftests-bpf_misconfig-v9-0-c311f06b4791@suse.com>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
- Alan Maguire <alan.maguire@oracle.com>, 
- "Ricardo B. Marliere" <rbm@suse.com>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openssh-sha256; t=1777473237; l=2156;
- i=rbm@suse.com; h=from:subject:message-id;
- bh=QlnphXbIZwkpSF4vwnCRoGf/LwYmdqzZuMpKhZCGNVo=;
- b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
- x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QLX4yiW64I6RKHzS/sib+IHUvxGgX3Dyy9/zjZ0Sn3ohSM5MHnNmurZMfXtcOsbXtk6ntUEtcGs
- inByZDTwzLwg=
-X-Developer-Key: i=rbm@suse.com; a=openssh;
- fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIACIX8mkC/3XNQQ6CMBAF0KuQrq0pLVBx5T2MCzpMpQaBMEA0h
+ Ltb0ERicPkz898fGWHrkNgxGFmLgyNXVz5Eu4BBkVVX5C73mUkhE6FEysuGd0gd8brMuXUPJG7
+ TOM4MHBCkZr7YtLgcfO98eWfqzQ2hm6X5o3DU1e1zWR3C+e8zEKqtgSHkguswgyS3RslYnagn3
+ EN9Z7M/yK8Q/RGkF1SiQYOJhUjsj6BWgtSbgvICgFWQCqujCFbCNE0vp4SP90kBAAA=
+X-Change-ID: 20260309-lp-tests-old-fixes-f955abc8ec27
+To: Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
+ Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, 
+ Joe Lawrence <joe.lawrence@redhat.com>, Shuah Khan <shuah@kernel.org>
+Cc: live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Marcos Paulo de Souza <mpdesouza@suse.com>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1777473323; l=3307;
+ i=mpdesouza@suse.com; s=20231031; h=from:subject:message-id;
+ bh=pLz6jjDt3oVX0vZwPGXcR+Jm8CR4vEEQP0LB5b2GZUE=;
+ b=RvFJ8ZATzZZSn/ENJQW7KgJdICCNvPTpq2TqDO7YdfWGh1dexHKCGyWZcjuBPyXwO1JCpvZxl
+ rkA673k+5/ODysfhLJfqF+TTTyT+vNUNy7m2MKV0iwr6QCyXwEKMxIe
+X-Developer-Key: i=mpdesouza@suse.com; a=ed25519;
+ pk=/Ni/TsKkr69EOmdZXkp1Q/BlzDonbOBRsfPa18ySIwU=
 
-With partial builds, some TEST_GEN_FILES entries can be absent at install
-time. rsync treats missing source arguments as fatal and aborts kselftest
-installation.
+This is the third version of the patchset, now with far less changes. There
+are still somethings that I would like to work next, like adapting the
+newest test introduced in the last submsision, but this is something for
+a new iteration.
 
-Override INSTALL_SINGLE_RULE in selftests/bpf to use --ignore-missing-args,
-while keeping the existing bpf-specific INSTALL_RULE extension logic. Also
-add --ignore-missing-args to the TEST_INST_SUBDIRS rsync loop so that
-subdirectories with no .bpf.o files (e.g. when a test runner flavor was
-skipped) do not abort installation.
+Original cover-letter:
+These patches don't really change how the patches are run, just skip
+some tests on kernels that don't support a feature (like kprobe and
+livepatched living together) or when a livepatch sysfs attribute is
+missing.
 
-Note that the INSTALL_SINGLE_RULE override applies globally to all file
-categories including static source files (TEST_PROGS, TEST_FILES). These
-are version-controlled and should always be present, so the practical risk
-is negligible.
+These patches are based on printk/for-next branch.
 
-Signed-off-by: Ricardo B. Marlière <rbm@suse.com>
+Please review! Thanks!
+
+Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
 ---
- tools/testing/selftests/bpf/Makefile | 17 ++++++++++++++---
- 1 file changed, 14 insertions(+), 3 deletions(-)
+Changes in v4:
+- Patch 5 was changed in order to address a comment made by Sashiko, where
+  subsequent tests rewrite the variables that contain the modules being loaded.
+- Link to v3: https://patch.msgid.link/20260427-lp-tests-old-fixes-v3-0-ccf3c90f744c@suse.com
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index db4ff951fc88..2822f09c37eb 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -1023,12 +1023,23 @@ EXTRA_CLEAN := $(SCRATCH_DIR) $(HOST_SCRATCH_DIR)			\
- # Delete partially updated (corrupted) files on error
- .DELETE_ON_ERROR:
- 
-+# When permissive, tell rsync to ignore missing source arguments so that
-+# partial builds do not abort installation.
-+ifneq ($(PERMISSIVE),)
-+override define INSTALL_SINGLE_RULE
-+	$(if $(INSTALL_LIST),@mkdir -p $(INSTALL_PATH))
-+	$(if $(INSTALL_LIST),rsync -a --copy-unsafe-links --ignore-missing-args $(INSTALL_LIST) $(INSTALL_PATH)/)
-+endef
-+endif
-+
- DEFAULT_INSTALL_RULE := $(INSTALL_RULE)
- override define INSTALL_RULE
- 	$(DEFAULT_INSTALL_RULE)
--	@for DIR in $(TEST_INST_SUBDIRS); do		  \
--		mkdir -p $(INSTALL_PATH)/$$DIR;   \
--		rsync -a $(OUTPUT)/$$DIR/*.bpf.o $(INSTALL_PATH)/$$DIR;\
-+	@for DIR in $(TEST_INST_SUBDIRS); do				  \
-+		mkdir -p $(INSTALL_PATH)/$$DIR;				  \
-+		rsync -a $(if $(PERMISSIVE),--ignore-missing-args)	  \
-+			$(OUTPUT)/$$DIR/*.bpf.o				  \
-+			$(INSTALL_PATH)/$$DIR;				  \
- 	done
- endef
- 
+Changes in v3:
+- Patch 1 was changed to reorganize the ifdeffery to handle multiple archs syscall wrapper (Miroslav)
+- Patch 3 was changed to rework the commit message and to address function naming (Joe)
+- Patches 4, 5 and 6 where had the commit messages to include the kernel version where
+  the given sysfs attributes were included (Petr Mladek)
+- Link to v2: https://patch.msgid.link/20260413-lp-tests-old-fixes-v2-0-367c7cb5006f@suse.com
 
--- 
-2.54.0
+Changes in v2:
+- Patch descriptions were changed to remove "test-X", since it was polluting the commit subjects (Miroslav Benes)
+- Patch 8 was dropped since it was checking for a message from an out-of-tree patch. (Petr Mladek)
+- Patch 3 was dropped as should be treated as expected failure for older kernels. (Petr Mladek)
+- Patch 2 was changed to use y/n instead of 1/0, since it's more natural to use it.
+- Patch 1 was changed to handle ppc and loongson, and error out if dealing with a different architecture that sets
+  CONFIG_ARCH_HAS_SYSCALL_WRAPPER and haven't changed the test to include the proper wrapper prefix.
+- Patch 4 was changed to invert the return of the bash function to return 1 in failure, like
+  a normal bash function (Joe Lawrence)
+- Patches 5, 6 an 7 were changed to not split the tests, but to only run the tests
+  when the attribute were present (Miroslav Benes)
+- Link to v1: https://patch.msgid.link/20260313-lp-tests-old-fixes-v1-0-71ac6dfb3253@suse.com
+
+---
+Marcos Paulo de Souza (6):
+      selftests: livepatch: Check for ARCH_HAS_SYSCALL_WRAPPER config
+      selftests: livepatch: Replace true/false module parameter by y/n
+      selftests: livepatch: Introduce does_sysfs_exist function
+      selftests: livepatch: Check if patched sysfs attribute exists
+      selftests: livepatch: Check if replace sysfs attribute exists
+      selftests: livepatch: Check if stack_order sysfs attribute exists
+
+ tools/testing/selftests/livepatch/functions.sh     |  10 +
+ tools/testing/selftests/livepatch/test-kprobe.sh   |   8 +-
+ tools/testing/selftests/livepatch/test-sysfs.sh    | 222 +++++++++++----------
+ .../livepatch/test_modules/test_klp_syscall.c      |  27 ++-
+ 4 files changed, 155 insertions(+), 112 deletions(-)
+---
+base-commit: b8e6ad22f78aa279dece2f86efe6429953d36452
+change-id: 20260309-lp-tests-old-fixes-f955abc8ec27
+
+Best regards,
+--  
+Marcos Paulo de Souza <mpdesouza@suse.com>
 
