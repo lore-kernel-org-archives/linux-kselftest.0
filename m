@@ -1,54 +1,54 @@
-Received: from PA4PR04CU001.outbound.protection.outlook.com (mail-francecentralazon11023139.outbound.protection.outlook.com [40.107.162.139])
+Received: from PA4PR04CU001.outbound.protection.outlook.com (mail-francecentralazon11023137.outbound.protection.outlook.com [40.107.162.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF3BF3E0C51
-	for <linux-kselftest@vger.kernel.org>; Wed, 29 Apr 2026 10:29:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.162.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A46993D8913
+	for <linux-kselftest@vger.kernel.org>; Wed, 29 Apr 2026 10:29:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.162.137
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777458547; cv=fail; b=MiIp6c0wV8/aKxCQUbgvwYsyCkmVkpOAKxL75iJpO2kVRHBsjYykV+0dn5y2/gWOT3h4MoW3nY9vGodmzMjSD2p+2cuC2eI6GgoWfpGGT29joqwGcLLOs6scB6bdiI/1Qv93FvyrP/tWfKrG3QNu8+/gbj8FCAbIg67TcFPlWGc=
+	t=1777458554; cv=fail; b=BNEZbztGlgNpx8LuFzEkzUNo5YzpeDyKt/DP7OBac02qaEv6nQJLameRPnt4LPUf7Bhgz+kii7I5MencbT38EkyUBM9ZSHAODPHP3apkD9ZZKF4VVj9O+XJZbojijNaZZgExS+R4FvUlEveAQv3pqwtpF58IkIxlcJ/w6I4PpFQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777458547; c=relaxed/simple;
-	bh=n0E9ZuxeyzZjlPvwyGKyn6qim+9s7nGAV+O8LBqSxkw=;
+	s=arc-20240116; t=1777458554; c=relaxed/simple;
+	bh=2ZK0exoDpUCvWACH+6YaZBvCeh+4Mpii6AfIc9XSWoQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=mr8Y0/wLqaUFUDWWJ2ixzz8t4kSYVhWJVM/rXNlMT20fyIvukbUx/7sZUV/pkr6A8d+NBcUDp70c3XSX+p9XA8FOhs+JX//kn1a33pN8O/QRMvf1rn+CA+YWN0nQ7MROBVHml+T1aloH8JfoZ7P2p893lltcFdR8LOfyjPPZguk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=mbg/+1n7; arc=fail smtp.client-ip=40.107.162.139
+	 Content-Type:MIME-Version; b=uqjhVQI1P8tSEZkbaVZIDBs9Ps1XYDpISw6Awqmg98u2axhwnh5R81vpN7D2Iczl9EnMfEkQsJ3nYOa9MAg2/k813+u74ekd+2W/xmRo/4MT39apr62FTQ74wEBTJX36ihAGRR3xXSdekkRvjmhfBXfDjtYRcJxNVmpvKRPQmWY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=0JnyzCz5; arc=fail smtp.client-ip=40.107.162.137
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="mbg/+1n7"
+	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="0JnyzCz5"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=s/ROxdeaxBo7OmjJpNf2soUQNGp4QdkDJMkdrlhT96/KB/eYNrNJkKYT5XzOEzU8eCh6S6HPL2NuKbfUPwyIRq9Ejs3CFDVeLUvyWn7BgNhKO0C8NAvjZ3bxZPXgDhUzWaBFsZ2kMicu4vm5gOebTr+0OdW2BsCcLKik9HV9MxdSIIzChFWlJX879U/T9x4IBXnwHH8QB5VRBjyE7W/3aDBdqDJtDjTOrg/ApSkDDpKy5bbMEkgHo9N2u6LQ/FAyNDwTcekKlLoFjsa31wVfMkc4TzpRVtkDztZxmm+gZioJrcXjvmLem2Xnv13/5N1rSqmgRCEBXJlzE/DQVLV3Og==
+ b=n007ijE/B4hzl3v0YENgLldQ+dEme3huohuNAtVH87JV8qTr5sVt2/r9QzJmxIQA/kYfL16pClijJSgvc0uzTzhmvdAZ4nYK8plYza2JvraFFqZdiTf2/VT6FR4Vsor2o9OrdnlLkZ6YScgGQv3E1VDDvRkDYABseqNsZ4DQHnQtHpNqX3s+ZK3+M3fO7rYi14QicuIXwM8CbjQi1zXurIl/yuwwyABlHj7jvIBzqQ/UvPY+SqhHwLYJAxGFgwzhgjCQzfgmJeoOBtgpd7NIfzy7PlWucxKPCZf6oB2zCutYj83SCcAtZY49TcWe1bOA+rie6dfzQ90u4eHER6nbLA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gF43dGGeHmzDf2dtFoHejc6+BWwgQthMiCPf4ESBULs=;
- b=psrDFxig3CL1wUgOuZu/Sc1wz5qxEXuWxj9d+4uWzx2T+1RrtXqGNGCtzIjYkH8nbSW834ROIDl7mw6v5ox/FOrsMdhnbjfQ24xh0HP6Sb40dDUXe53ARp2dU5nXFnnIcC8VW0X2nGC6mxMb671VgR2bQ/9PiQ1A1VnWVtcQ8/g0t641T9d/2/EVpddIZbse2mbzQiJmc0tOSSNJWVrnSbnR9UB5fshb35B3O3tpU/0C0l18tNVX8Q3R9TPVHZxmKzpcy78BnrK+VDH1R+jTOVK79KULSqM00BeUujBqVtIS6AKejIBI0PaHGC/eLnd3I61IcGwjsm77T5TAvvknMg==
+ bh=i4/v1KTZhVKucyazu2peiUlaXnJU4vXoPg9tvQCBxjo=;
+ b=GTKKUw3pNuiYJih9D/aP5//NhFxlgpMXBxvDIifMW9UfAKFMEHF69C0/nIUNiVJlFNN83y7u8BOji/iC1VXYczwUi/JJFgwHgXP2JQ8NQmyv7AWe5wlrAdk3gjy/9wsRhq4lW+XdpPlb+OrCeKizrlvl+D3tRPlBTz18trULt0bcHHP0e4eLpb6dZDKlEEt7eRUNFHvUybdTFmJsc8Bz46t2GLbW+DltFaKO8TJx8TMWYUDzgNqVa0tJiCOCdZrDsr/7nIXI6Vnlv2xCXccUC2tp4fs319nMVoYsucPIhWnMsns2FyFIxg9DiRFuDOkP5ERl3PCN8Ih4SAbQEg7VJg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=virtuozzo.com; dmarc=pass action=none
  header.from=virtuozzo.com; dkim=pass header.d=virtuozzo.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=virtuozzo.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gF43dGGeHmzDf2dtFoHejc6+BWwgQthMiCPf4ESBULs=;
- b=mbg/+1n7LGIbLAI2DVIVYXa8nEiT66mEFtjLeZph8/Fwyhxh5QP4klDNBaRtRJ0fGZTFVm3sSaUMaBDX9/egz/vK6PgFFf4Yd0qxd2fiZR6gZQn7qUKOHKZZ4DjzqktXeNz29tgoqxx8Ef0mMumDtph0x84W8RdkT5L4pm9EoJ7fkqpBDYHSuyIn4OWuzzMCd5KOpRBf8+Y2nJC/UYX59/E7MwOY7vm91bV4OoOro+0mO7ijqEOP64rJOMizatNVGvMg1RyDf9Fb9rnNN0xavwRv3p3zMpdY3GrfblD5FosfLAWBK8CkJJNTOdT5MoP0v4tiZuECqtvCUBRPDarayA==
+ bh=i4/v1KTZhVKucyazu2peiUlaXnJU4vXoPg9tvQCBxjo=;
+ b=0JnyzCz5yePqgT1HJIxzRCR9pu3cAdUvoUyx8PXddQngFv/TCPwvQigG7eeKpAXs3Eyj+zoteUGdkCqrd7sG59hNvlAT2qYsTeTIpp0plPOKxhlKRRVBvO7JIv5trelQf5KMS+ZiXZ78E2TfY+usyxhoNxnvM1ra9a1WgmMB+IRJZv9MJk7y32mubkOfzUgR0u1valOYEbATOXTI5dqtEGFksJ+UmhC8V1dDTiblvUxBEV8FsXLSYh0bUzHkQofjEgXoouVj/y6WhSetKj2trwoMxw7Yae733G9hElBrbqDMPXhnY3yBPTgrAtM8LupUdt1P0HDfUzF3IfEaQbdNAA==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=virtuozzo.com;
 Received: from AS4PR08MB7555.eurprd08.prod.outlook.com (2603:10a6:20b:4fd::12)
  by DU4PR08MB11078.eurprd08.prod.outlook.com (2603:10a6:10:576::8) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9870.18; Wed, 29 Apr
- 2026 10:28:40 +0000
+ 2026 10:28:41 +0000
 Received: from AS4PR08MB7555.eurprd08.prod.outlook.com
  ([fe80::7d00:380e:b72:55e6]) by AS4PR08MB7555.eurprd08.prod.outlook.com
  ([fe80::7d00:380e:b72:55e6%4]) with mapi id 15.20.9870.016; Wed, 29 Apr 2026
- 10:28:40 +0000
+ 10:28:41 +0000
 From: Eva Kurchatova <eva.kurchatova@virtuozzo.com>
 To: linux-kselftest@vger.kernel.org
 Cc: eva.kurchatova@virtuozzo.com,
 	khorenko@virtuozzo.com
-Subject: [PATCH 10/15] selftests/epoll: remove unused variable 'pfd' in epoll59 test
-Date: Wed, 29 Apr 2026 13:28:06 +0300
-Message-ID: <20260429102811.47214-11-eva.kurchatova@virtuozzo.com>
+Subject: [PATCH 11/15] selftests/clone3: remove unused variables in clone3_cap_checkpoint_restore
+Date: Wed, 29 Apr 2026 13:28:07 +0300
+Message-ID: <20260429102811.47214-12-eva.kurchatova@virtuozzo.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260429102811.47214-1-eva.kurchatova@virtuozzo.com>
 References: <20260429102811.47214-1-eva.kurchatova@virtuozzo.com>
@@ -65,86 +65,106 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: AS4PR08MB7555:EE_|DU4PR08MB11078:EE_
-X-MS-Office365-Filtering-Correlation-Id: b49d804e-8bc7-446b-69b0-08dea5da146a
+X-MS-Office365-Filtering-Correlation-Id: b7480bae-c610-4dd8-37ac-08dea5da1517
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|1800799024|376014|366016|22082099003|18002099003|56012099003;
 X-Microsoft-Antispam-Message-Info:
-	Kf7curLsW3W6C9pMmcxEdoD5eApo34EgdFd7Nn1wvLz5dQoBtlNWrTawWGAexmlBrs2goPGBK/Vh70ZHhCGD0aNp+Zz1Ca6mWqMO0j/RGTVHtZGLxbXD8Os09gX7dpqRqUv/WWFcCsB95S/A914PYF+VgE2Oc8VGtEGtc4nm4uU8gDpBjzjjLU3OY7BMcdMOia9on4PKFmB4g25+jIV5eAFENaFZFOfROWnRuID3dWOG6Ji0FB3kkOUBgKppLrF/n7tLJdkQK+5JQhcycgXRwDC8tsqfS1iFpgZ03jxexFzLwjSnTDfUyTqJY75qb+tQCty/kpzupUkDl8DibWw6mRMXHKGWDKZgqyhq+4eIWOcArnWG8XpmZ2/xjMK/XEgv09lJA7f4mMUesSLqMbkVsdp5oFOFAGpMUEE+hAsEZ+NrMpUb8wl6oEvZ+b1Y5D70F4ywv1em2o6YsEeEaWQ3my5ZqOcWZjMu/IBNUgknBBlk/HNjbVnqHzQwRy+tsceIJMAUPoFJAnPvXl6sQmSf2Yf3NuTBz6Sup40vW+/IV3YaRN2y8ZvcbexcZBx5w26TDC+gPcqF3MePDrLxAiSeJKoWdBf78ls8M/+o5FqYparsr/DiT3ARZosqcFOa6VBO6sGieEAoKh8XyeB7VAcNt5UNM9r7HMW8Bc4JNBbRYfXyOWQ1a2jeYeE/SG1jYrsgv47KZfgT/9GZBgdr3MxGnaKceM4cFFyVGkTAxmeW2O4=
+	vj2/apciuThUy6v5B81s3knBNJo9tbIv3+pFgYek1F4PIClJJffWyd1Vk5QuaTGdkPIoMBfzn8Ly5g+KCVkQbn61dW24o51u8IRjC3rglXzqPlx+GvrLtOlCqQsZdAf01K5kh2V40/mdD9Q4XT3NYKbA0GcXEhEJmsKMB4nLGEk1RM7dAeQDEnnkmNuSqrPLWcBRpHfFvmuzytJ29936hOpZfnWlqM6TwWooG8gVCa8X3sj9bmgdS6UqwXb/P9rsTlj80pVnBjaLPJ57eTR8vO0JZ/CXaFE0fomDr+ZbUe6GpTdL0+qWPpZXpBHHNn69X0Ld1V+FlENcqsZEvTyWra+OUJQ2wV9bHBKIaTCC+9GKzDZl6rKCVXo60AT546TwewBmPw1QYNSRt5v7R726hf/RkzG+aK1TD41j/hDdEtJ14a3wYGG+sZXR/5zmgaBh3eHY5JGEkHl1EwX3Nx4GkX53rZZUsu/A8MWibk7C0Spc/NxwKVt7d9eMy9VcjjVexVENsCYlEaDcTOMNSJx+eYiBTT0rRPyaKXssdIMWhn0iMb5ivw2puktthnBIQoXDrm38UALtfdCo6uBGFpHv5oHRcvyUOkHkwDT1ehcb3TzLzOqP8yQ9zpLUmpY06EfZa9yzofAdjrJU4aOjf0HgkOpc7GyUrM35O0Wf2KALQFB7I5Yljm9PNBy7yxUfYqBaRAQLODKeX/8IY7N99iFMlUI2pgT941biwRGZJRmYqoU=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS4PR08MB7555.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(22082099003)(18002099003)(56012099003);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?NqxnIwR3jAg0ZM+hnIobB5M1mWf0OuB7xeNW8KsS5PQRPwdhu8mt4Itcgqnx?=
- =?us-ascii?Q?MHwtmm9l0UIScHF3udzh7a6dC8Akn8UzuT9giQM3e+YySiKbR948nuLkhL2L?=
- =?us-ascii?Q?sl+cWQCFB+qQDJ+b47f4iOvId+j1cL9EelHaS93EzWh3Owc81eFn1cxBoGAZ?=
- =?us-ascii?Q?EjDCR+v80Mg5URJOIr+Zu+wg8as9W6rWnwjyBj24jwcOtG7JN28xL6ktEMzx?=
- =?us-ascii?Q?jZ/p7YNn8PCkYS9qD6q9bRr4craqUNASErSaQiN/pb8EFSjggyrW7DdDaW/x?=
- =?us-ascii?Q?3HC8Z9+3aKpqL/6MNv5/WIx40IeAcW+qDXR7rQWEr9M4gxJqn6Mi4E302AHh?=
- =?us-ascii?Q?aT7w66DfzdqOPLGbxv1Bc3WnyeBQEKectuyudfX1iKISyD4GAgRLwHIb7NYC?=
- =?us-ascii?Q?HMpNP/2E91CqTPKJzUzEFNCPUeeikwWyrckKCOfo4EggGg8LLWYXlUkTAlCe?=
- =?us-ascii?Q?2ENi8rbp/Kqa3Pntp65bE0K35ADZBoBaiqZ12dgcNW1XBI+0fL37cjOYte+Y?=
- =?us-ascii?Q?StQ1EQ/gH4LiRwrwnqHN/kGiLcy9BmKik9zJ26iWO1xqU0gEXQFsFEDzgyLI?=
- =?us-ascii?Q?yr+/+3khO1JrDvv939dLJG81Bpt93oS82guGoP/bfV70a07UskCIyBcW9CqO?=
- =?us-ascii?Q?k+9ItBu9nSe2eLurEKwZFLTmwyqz1M9BC+TeVuaTl/zAcCm3PgKifoht/w2V?=
- =?us-ascii?Q?IK6hc+pRio0Oi+I2dcCiuuCNRzPxLJonptLWOThpF8wf2YP6Woi3UqFH0nbF?=
- =?us-ascii?Q?L/uEGviPC6lHTGulBMTJdqkAVWmg2DrjX+6vUubrbLUQOxjXcB3G+Fv7iTv4?=
- =?us-ascii?Q?Kd3F/9x6l5hJBVoyab/5nDZ2QnSP9SZVuzviTephBgEw4Sd3gur/P3rbwBDC?=
- =?us-ascii?Q?TjEdQ7sGB1ijL4kqToDV5OpVTQ8aszJvTorqXkAt3fBmgTkT6WgRQAdImQYe?=
- =?us-ascii?Q?O1Zx7RXvDiFgAak9RKI0SB5jY+q6yg5VxfQzbUbLC24aD033hb3xlJaOhqYT?=
- =?us-ascii?Q?HOrhZWxyhIA+478Cgpy4SV5QTJtRjY2sxKpkhluCE39rlADOSEWgQ37mJh+a?=
- =?us-ascii?Q?YMWI6maKnNQWk5ByPHxmq2haSjqnYUemk96ywlFoa94gnciG2W6JKOfuoTNm?=
- =?us-ascii?Q?JMf2D3S0t8XnHaTQozgcFGSO3md+7FrAQxT1801gEGFm57BchQa5JG2i0gRg?=
- =?us-ascii?Q?RMKzSj3JU/NRywdFLhEEzpzL7+N5p4g0hP0La66Ros0lvcUTMAzB1qS2gCBw?=
- =?us-ascii?Q?AROgNqi1yYUrjF3cY2VmymYNHdhl+fIglBhiDu4E8poL+J7WPVBesoy/TUfZ?=
- =?us-ascii?Q?V0Ux8tvioqCHVbAN4qVj2vMO6oo3zTd0NLjcYHekrJfOpaUaH3257fqCM1AS?=
- =?us-ascii?Q?JoDwRHQDNfyzhNVTW1PjCwp29MRIGIgboCCwn+yqVqSrMjK54DTGVdFULy8K?=
- =?us-ascii?Q?7mBfKEDFQ2ACnPQtNi7VcaLBj93oHHqbAqbscHct2I3d/IVYeRFx8HLsHfBj?=
- =?us-ascii?Q?GGSiRahqg58ujIfocgGMFYIscUrF1GBdPYDvoKBypDzQsAPczpFWoVcbC5AT?=
- =?us-ascii?Q?vg57dQJ386nRgaTQv0prWY1Hbu12JFiGySZG5PJatuE8L+cabc3Ah4xj1MRn?=
- =?us-ascii?Q?HPgxAxCup+tjIICVuaGUst2qGSGSHjGUGS+HFhz281SySpNE6zl713TzGwdY?=
- =?us-ascii?Q?+DjQg0HV2uP6AX8z9fy69orYiUb3pcZ6qi+w6QvSJgXxcbGbJAi7LG81NeH+?=
- =?us-ascii?Q?qUNXLXHMTMCQpb2/WdQFbtF0OyWkCmQ=3D?=
+	=?us-ascii?Q?y35vTDux/TcVALAC249fjYKRBlul0qbuFan9gF0FGilRfNHLFpI5zRtvbqBy?=
+ =?us-ascii?Q?wZEhPXkHdV6ZuESeYZOtPdLEsW1Y3Scd0g0xWGamQCnc3L8yZ0PzIpjacoIE?=
+ =?us-ascii?Q?dVVTgU48r/Cz+i7hAceuYQP7/Ij5tFKIWgTPVb//3oLNqXKoJSX3oqNopmzR?=
+ =?us-ascii?Q?gwcHNBR6Oq/blXv6SG6RVLOY0oXTWaiWwgxkQ3exckXIudvX+spxe4SMWII5?=
+ =?us-ascii?Q?faiZ0KzIvYBfXQ+kDCcDXzjkyq8d9Rpmipv8luIdtpFR6ObKMGixuagJm86Q?=
+ =?us-ascii?Q?WddRjsuVv1JFh2Ag7dqn4X3YDVia9UtKh749BP8wXOJ4mAS+p3iZ0FzoeB4R?=
+ =?us-ascii?Q?+cYdU4bgefkQSIQwZJSMhpuBCM+OYPDMUTApjm0dcUDO7G9EuzV+Vvz/xi6r?=
+ =?us-ascii?Q?o70Z6vb5T9ow/RwJHHwXgikGAkMpa9+oAabvxa6RW8g1rcZP+bZgXgpAe7sU?=
+ =?us-ascii?Q?qvi3lZhPmIjzBdikuJvfPpYXlbTV7LPRlkeIiwzTz0x+UO+Tvdb0dvwllypj?=
+ =?us-ascii?Q?Ytdk558COvQ+lVQNzUdm4E3dirLZVRqvGdH2EIeR6FnJ2kVfpNBQrSO7PV61?=
+ =?us-ascii?Q?qigubCo7qI/HxB7T5mszoWajyIShTtbPhI3qvCYN4OTcPQ+yeIDhfyp722Yo?=
+ =?us-ascii?Q?wLU4QtnTIDleP0gWurzGhYNHOqD9//MLFwtxS1E2yDAC+R0dbV3CmK3ezMb4?=
+ =?us-ascii?Q?YxriGRmnSmV8o1MMagCQ2pN/oA7aasU54SilUpROhZ3rERBPJ6op/TOZYzwg?=
+ =?us-ascii?Q?0CxMGXRrbPSq09fDjo+b04FAoHuBJkUnPBdkgvGLdymZVCW11mda0nWY1gIZ?=
+ =?us-ascii?Q?qkmQHaN2wiW21k74Jpzzqs8kQvLfqpaI+8wgPz7inVdHAcRBi5vJcpjT/5NR?=
+ =?us-ascii?Q?cefQ8z6W/QjW23z3xQKpGkQb1jmiXV53vMW6dB8w9kGeRL3MsWpqONGF0lsc?=
+ =?us-ascii?Q?PPHRFwdn/1icKh/T+44BjcY3x1zIhjgoV/culTn7LS6zw8nlXhmjAi33PvTs?=
+ =?us-ascii?Q?HsId63iVvIi/hYLk4D+nyxX0f3HpgmEukgQbeiSY2hS3M59gTPziF0m/POQy?=
+ =?us-ascii?Q?OWUGmNDWc5SOCWksnu1vvm+Plc1GuSLNQIPJH6Il3A4QUSChCsTODPIcQI2I?=
+ =?us-ascii?Q?ebBQHiV9fX3aPhqQR3sopqz7KzYiIao0HHYwX71YBhQqHyrYJdcLZRQoiehO?=
+ =?us-ascii?Q?bR2D4TVPssJiQLzjjXDC36Cqnu/HG2dcn0WLHA12a4HrkhXS7b5dNzbIU0QD?=
+ =?us-ascii?Q?aEdjW6dKfAnkG4L8XWAQ3q8TZYTi6N9NsqPYHYiitGgnoA3u01whmXaQ9QXB?=
+ =?us-ascii?Q?lgyswUng5BJFYv9SuY2xjTqzi3YYNYY/TZxlO+a+KjCKZ1UYa3QA6YBg4/jT?=
+ =?us-ascii?Q?5iGScU1cR0IM03IWt6SbaUr/iraq830LTfRU6qtaqNjoIH3xgL0xWIxrSpPa?=
+ =?us-ascii?Q?2DLfX/7qcnRhTaWJ1XSc8yqQcn575cgnoR6HGMelQBwKQFq2whKvZPND74uq?=
+ =?us-ascii?Q?/YoHxQQv8gB+VJM3qo23qJrHNbnX21uOx2tTV86cfdC4KXuoJjAUoRUMVwGA?=
+ =?us-ascii?Q?EgZAkfObLs5GLr+FWa8R2FBx/0LAVpgiLJH02tWui7aLpxPHLqHIXZNnZKDt?=
+ =?us-ascii?Q?rsggyCUnrhwiQazeq7xf+UhVn7wYH9vk9EKcpKK+3r+nO82RID+RhQyBfVHk?=
+ =?us-ascii?Q?k1VAeTcXF5FKBK8hr17I6Oc+BnCgSaBpEqzze/XLJPFvKI+9Yhrljl2zJ/+V?=
+ =?us-ascii?Q?SDM/U0WRs4yBln+3GO34RtI6rRDGgpA=3D?=
 X-OriginatorOrg: virtuozzo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b49d804e-8bc7-446b-69b0-08dea5da146a
+X-MS-Exchange-CrossTenant-Network-Message-Id: b7480bae-c610-4dd8-37ac-08dea5da1517
 X-MS-Exchange-CrossTenant-AuthSource: AS4PR08MB7555.eurprd08.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Apr 2026 10:28:40.1203
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Apr 2026 10:28:41.3372
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 0bc7f26d-0264-416e-a6fc-8352af79c58f
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7BYdDnGrS9pWMHLP1YKW/eK1HPtzj4kgdqP6ICO9oUB/HfgexugVkHdvXnPVRIz1p8I2tUQHZtHR+PeoUZUaxHAWzgn9Zi7iwye1j7xGUkw=
+X-MS-Exchange-CrossTenant-UserPrincipalName: EovieJL9sRnw1XKNlmYbIV+zuiNjLvxB64/0mEQAzEUh06VngPoxw92rvFMbuQG6xuxTFgllqxKIslg95AyE27JvVBuofETPmNKzpGPe5ME=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU4PR08MB11078
 
 From: Konstantin Khorenko <khorenko@virtuozzo.com>
 
-  epoll_wakeup_test.c: In function 'epoll59':
-  epoll_wakeup_test.c:3121:23: warning: unused variable 'pfd'
+  clone3_cap_checkpoint_restore.c: In function 'call_clone3_set_tid':
+  clone3_cap_checkpoint_restore.c:57:22: warning: unused variable 'tmp'
   [-Wunused-variable]
-   3121 |         struct pollfd pfd;
-        |                       ^~~
+     57 |                 char tmp = 0;
+        |                      ^~~
+  clone3_cap_checkpoint_restore.c:56:21: warning: unused variable 'ret'
+  [-Wunused-variable]
+     56 |                 int ret;
+        |                     ^~~
+  clone3_cap_checkpoint_restore.c: In function 'clone3_cap_checkpoint_restore':
+  clone3_cap_checkpoint_restore.c:138:13: warning: unused variable 'ret'
+  [-Wunused-variable]
+    138 |         int ret = 0;
+        |             ^~~
 
-Remove unused 'struct pollfd pfd' to fix -Wunused-variable warning.
+Remove unused variables 'ret' and 'tmp' to fix -Wunused-variable
+warnings.
 
 Signed-off-by: Konstantin Khorenko <khorenko@virtuozzo.com>
 ---
- tools/testing/selftests/filesystems/epoll/epoll_wakeup_test.c | 1 -
- 1 file changed, 1 deletion(-)
+ .../testing/selftests/clone3/clone3_cap_checkpoint_restore.c  | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/tools/testing/selftests/filesystems/epoll/epoll_wakeup_test.c b/tools/testing/selftests/filesystems/epoll/epoll_wakeup_test.c
-index 8bc57a2ef966..bb20da2ce60d 100644
---- a/tools/testing/selftests/filesystems/epoll/epoll_wakeup_test.c
-+++ b/tools/testing/selftests/filesystems/epoll/epoll_wakeup_test.c
-@@ -3118,7 +3118,6 @@ static void *epoll59_thread(void *ctx_)
- TEST(epoll59)
+diff --git a/tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c b/tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c
+index e82281efa273..fd4baa0695fa 100644
+--- a/tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c
++++ b/tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c
+@@ -53,9 +53,6 @@ static int call_clone3_set_tid(struct __test_metadata *_metadata,
+ 	}
+ 
+ 	if (pid == 0) {
+-		int ret;
+-		char tmp = 0;
+-
+ 		TH_LOG("I am the child, my PID is %d (expected %d)", getpid(), set_tid[0]);
+ 
+ 		if (set_tid[0] != getpid())
+@@ -135,7 +132,6 @@ TEST(clone3_cap_checkpoint_restore)
  {
- 	pthread_t emitter;
--	struct pollfd pfd;
- 	struct epoll_event e;
- 	struct epoll_mtcontext ctx = { 0 };
- 	int i, ret;
+ 	pid_t pid;
+ 	int status;
+-	int ret = 0;
+ 	pid_t set_tid[1];
+ 
+ 	test_clone3_supported();
 -- 
 2.54.0
 
