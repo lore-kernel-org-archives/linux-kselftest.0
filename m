@@ -1,75 +1,230 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB21B271A6D;
-	Wed, 29 Apr 2026 16:21:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA29C40FDBE;
+	Wed, 29 Apr 2026 17:21:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777479709; cv=none; b=DremDtZwX0CVZHlNCl+w/0RRUMzeUbC74fvIQ/e6lPg/KNsfg2QQe0REueo3WdqctmbsEkiJvgK6hNFxHLrL/hlbtQhisOBrVpbl/3yIbEhwURpSCByLttdmMkxMLDfH+hxewRrppITDaAVcF77QFtlPTWy+J1Xi55SV8K2OlC8=
+	t=1777483269; cv=none; b=g69sUaroHVOqy5LAedlMxjnW038gOCYuF9+EJu4aIYD6cfdZ9ImhOHJVjB2lPoVTXdD8rWpOCXgoSncy5WFVTb4tGHrcSCoRfqvqQQff+AAQkTAEwRYRKcjCzMG2HPajC3sMniujThgvzag3OM/himdbYugo5+BiL+esjOsHtHI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777479709; c=relaxed/simple;
-	bh=l5K7oHX9jfrr/M1Jo2X/4mVFOBjftjYEin7wHrumSPo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ulp2yLy7VfAqWqOq8wMB7/eYTpGCD45zWNyLkCOlSqE3bG4u87G4oqDCn5sDv6Mb2GM9igxhRG0ikeTuSfThBiB1RbDoPAq+EM2MZevIX2QcCXLB7zfJEC7ZN2QFr3j9/KR1FDj3aZEqSO5dlNboafOqUg2gQtO/TphyJCmHzQI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=ZcXczY8C; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	s=arc-20240116; t=1777483269; c=relaxed/simple;
+	bh=CMgPFvxlON4+7OLw+PdbUMI/e6AKAVVQsp6VOR38JjM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ZMPqoLKuxNgp9AiBhi0gNK4wkqEol1MN4ZP08oAHwxQtRsg5m9tYeOSIDqsusfVJddN/0fGz35vkoRgK9AINH9ofydPfHbVq9gblyivMhM6KTZfHHyVpOT5mQxX2XEIBoLGPiec1yrAnf4MqOxE3dUpNqoWZSQAWeAnzQ8K2mEE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LOdH6bKo; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="ZcXczY8C"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1777479704;
-	bh=l5K7oHX9jfrr/M1Jo2X/4mVFOBjftjYEin7wHrumSPo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZcXczY8CrXAtrS1aluZX55ZxdVAU7FbRP+TcM5C2srRelg+b9/FMqAK5g+Knjrtr7
-	 3lt1wLsmSVSeyndGrCdYNvslJg8FJrMlj2Zv0uXVMVZJ9EX5GQH1mN9J7ZeD/9dy3x
-	 FV6OuSaSSL7MRS5d5Ol7+GjFdZz81W/96B98RgSY=
-Date: Wed, 29 Apr 2026 18:21:44 +0200
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Sun Jian <sun.jian.kdev@gmail.com>
-Cc: shuah@kernel.org, linux-kselftest@vger.kernel.org, kees@kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] selftests/harness: harness-selftest: cover XFAIL_ADD
- ctor ordering
-Message-ID: <3734f485-79d3-4c62-8a1e-bad74c6a54f2@t-8ch.de>
-References: <20260309093752.808533-1-sun.jian.kdev@gmail.com>
- <20260309101044.809074-1-sun.jian.kdev@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LOdH6bKo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D25E3C19425;
+	Wed, 29 Apr 2026 17:20:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777483269;
+	bh=CMgPFvxlON4+7OLw+PdbUMI/e6AKAVVQsp6VOR38JjM=;
+	h=From:To:Cc:Subject:Date:From;
+	b=LOdH6bKog+tIlKyTj0RTLhtWyd6AugOJJh1f5pXfyWrv1PlA8mYS38Fw97PtGZhtL
+	 n6rlHNwYGvInyIbI9EGTfKLJ7QfaAZP+lzai2W+pkhFmuiX9UajPR+/RSnA1cZcYBf
+	 okHDI3w9q3UBSz9ZiH3cvahNWEW64DkH7d2hL+MoRN2Lwh2TAcOeho730mOm6DTx41
+	 +DDjI0E2jgGgCh13Fury48bWEf0LLDFLR5UrQun6XS/UZVGO7kob1vQtxe9WowIbHv
+	 L3T2b6qVSQL2sZKnF9aGVhZ/dgddSgppWA9HeKIY/IVUUosog7JvqEkzkvfi8Y8cZN
+	 x6aYzJPtg6yFQ==
+From: hawk@kernel.org
+To: netdev@vger.kernel.org
+Cc: hawk@kernel.org,
+	kernel-team@cloudflare.com,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	Chris Arges <carges@cloudflare.com>,
+	Mike Freemon <mfreemon@cloudflare.com>,
+	=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
+	=?UTF-8?q?Jonas=20K=C3=B6ppeler?= <j.koeppeler@tu-berlin.de>,
+	Breno Leitao <leitao@debian.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	bpf@vger.kernel.org
+Subject: [PATCH net-next v3 0/5] veth: add Byte Queue Limits (BQL) support
+Date: Wed, 29 Apr 2026 19:20:27 +0200
+Message-ID: <20260429172036.1028526-1-hawk@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260309101044.809074-1-sun.jian.kdev@gmail.com>
 
-Hi!
+From: Jesper Dangaard Brouer <hawk@kernel.org>
 
-On 2026-03-09 18:10:44+0800, Sun Jian wrote:
-> Add a fixture-based test with a single variant and mark it with
-> XFAIL_ADD(). The test intentionally fails and is expected to be
-> accounted as XFAIL, covering the constructor ordering dependency
-> between TEST_F() registration and XFAIL_ADD() registration.
-> 
-> Suggested-by: Thomas Weißschuh <linux@weissschuh.net>
-> Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
-> ---
-> v2:
-> - update Suggested-by address
-> - update harness-selftest.expected
-> - verify with 'make run_tests'
-> 
->  .../kselftest_harness/harness-selftest.c      | 23 ++++++++++
->  .../harness-selftest.expected                 | 43 +++++++++++--------
->  2 files changed, 47 insertions(+), 19 deletions(-)
+This series adds BQL (Byte Queue Limits) to the veth driver, reducing
+latency by dynamically limiting in-flight packets in the ptr_ring and
+moving buffering into the qdisc where AQM algorithms can act on it.
 
-Can you rebase this on kselftest/fixes?
-https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/log/?h=fixes
+Problem:
+  veth's 256-entry ptr_ring acts as a "dark buffer" -- packets queued
+  there are invisible to the qdisc's AQM.  Under load, the ring fills
+  completely (DRV_XOFF backpressure), adding up to 256 packets of
+  unmanaged latency before the qdisc even sees congestion.
 
-This doesn't apply anymore and I suspect the proposed ordering suffers
-from the issue fixed by commit 465b05bae5ac ("selftests: harness:
-Restore order of test functions")
+Solution:
+  BQL (STACK_XOFF) dynamically limits in-flight packets, stopping the
+  queue before the ring fills.  This keeps the ring shallow and pushes
+  excess packets into the qdisc, where sojourn-based AQM can measure
+  and drop them.
 
+  Test setup: veth pair, UDP flood, 13000 iptables rules in consumer
+  namespace (slows NAPI-64 cycle to ~6-7ms), ping measures RTT under load.
 
-Thomas
+                   BQL off                    BQL on
+  fq_codel:  RTT ~22ms, 4% loss         RTT ~1.3ms, 0% loss
+  sfq:       RTT ~24ms, 0% loss         RTT ~1.5ms, 0% loss
+
+  BQL reduces ping RTT by ~17x for both qdiscs.  Consumer throughput
+  is unchanged (~10K pps) -- BQL adds no overhead.
+
+CoDel bug discovered during BQL development:
+  Our original motivation for BQL was fq_codel ping loss observed under
+  load (4-26% depending on NAPI cycle time).  Investigating this led us
+  to discover a bug in the CoDel implementation: codel_dequeue() does
+  not reset vars->first_above_time when a flow goes empty, contrary to
+  the reference algorithm.  This causes stale CoDel state to persist
+  across empty periods in fq_codel's per-flow queues, penalizing sparse
+  flows like ICMP ping.  A fix for this has been applied to the net tree:
+    https://git.kernel.org/netdev/net/c/815980fe6dbb
+
+  BQL remains valuable independently: it reduces RTT by ~17x by moving
+  buffering from the dark ptr_ring into the qdisc.  Additionally, BQL
+  clears STACK_XOFF per-SKB as each packet completes, rather than
+  batch-waking after 64 packets (DRV_XOFF).  This keeps sojourn times
+  below fq_codel's target, preventing CoDel from entering dropping
+  state on non-congested flows in the first place.
+
+Key design decisions:
+  - Charge-under-lock in veth_xdp_rx(): The BQL charge must precede
+    the ptr_ring produce, because the NAPI consumer can run on another
+    CPU and complete the SKB immediately after it becomes visible.  To
+    avoid a pre-charge/undo pattern, the charge is done under the
+    ptr_ring producer_lock after confirming the ring is not full.  BQL
+    is only charged when produce is guaranteed to succeed, keeping
+    num_queued monotonically increasing.  HARD_TX_LOCK already
+    serializes dql_queued() (veth requires a qdisc for BQL); the
+    ptr_ring lock additionally would allow noqueue to work correctly.
+
+  - Per-SKB BQL tracking via pointer tag: A VETH_BQL_FLAG bit in the
+    ptr_ring pointer records whether each SKB was BQL-charged.  This is
+    necessary because the qdisc can be replaced live (noqueue->sfq or
+    vice versa) while SKBs are in-flight -- the completion side must
+    know the charge state that was decided at enqueue time.
+
+  - IFF_NO_QUEUE + BQL coexistence: A new dev->bql flag enables BQL
+    sysfs exposure for IFF_NO_QUEUE devices that opt in to DQL
+    accounting, without changing IFF_NO_QUEUE semantics.
+
+Background and acknowledgments:
+  Mike Freemon reported the veth dark buffer problem internally at
+  Cloudflare and showed that recompiling the kernel with a ptr_ring
+  size of 30 (down from 256) made fq_codel work dramatically better.
+  This was the primary motivation for a proper BQL solution that
+  achieves the same effect dynamically without a kernel rebuild.
+
+  Chris Arges wrote a reproducer for the dark buffer latency problem:
+    https://github.com/netoptimizer/veth-backpressure-performance-testing
+  This is where we first observed ping packets being dropped under
+  fq_codel, which became our secondary motivation for BQL.  In
+  production we switched to SFQ on veth devices as a workaround.
+
+  Jonas Koeppeler provided extensive testing and code review.
+  Together we discovered that the fq_codel ping loss was actually a
+  12-year-old CoDel bug (stale first_above_time in empty flows), not
+  caused by the dark buffer itself.  A fix has been applied to the net tree:
+    https://git.kernel.org/netdev/net/c/815980fe6dbb
+
+Patch overview:
+  1. net: add dev->bql flag to allow BQL sysfs for IFF_NO_QUEUE devices
+  2. veth: implement Byte Queue Limits (BQL) for latency reduction
+  3. veth: add tx_timeout watchdog as BQL safety net
+  4. net: sched: add timeout count to NETDEV WATCHDOG message
+  5. selftests: net: add veth BQL stress test
+
+Jesper Dangaard Brouer (5):
+  net: add dev->bql flag to allow BQL sysfs for IFF_NO_QUEUE devices
+  veth: implement Byte Queue Limits (BQL) for latency reduction
+  veth: add tx_timeout watchdog as BQL safety net
+  net: sched: add timeout count to NETDEV WATCHDOG message
+  selftests: net: add veth BQL stress test
+
+ .../networking/net_cachelines/net_device.rst  |   1 +
+ drivers/net/veth.c                            |  94 +-
+ include/linux/netdevice.h                     |   2 +
+ net/core/net-sysfs.c                          |   8 +-
+ net/sched/sch_generic.c                       |   8 +-
+ tools/testing/selftests/net/Makefile          |   3 +
+ tools/testing/selftests/net/config            |   1 +
+ tools/testing/selftests/net/napi_poll_hist.bt |  40 +
+ tools/testing/selftests/net/veth_bql_test.sh  | 821 ++++++++++++++++++
+ .../selftests/net/veth_bql_test_virtme.sh     | 124 +++
+ 10 files changed, 1086 insertions(+), 16 deletions(-)
+ create mode 100644 tools/testing/selftests/net/napi_poll_hist.bt
+ create mode 100755 tools/testing/selftests/net/veth_bql_test.sh
+ create mode 100755 tools/testing/selftests/net/veth_bql_test_virtme.sh
+
+V2: https://lore.kernel.org/all/20260413094442.1376022-1-hawk@kernel.org/
+
+Changes since V2:
+  - Patch 2 (veth BQL): fix syzbot WARNING in veth_napi_del_range():
+    clamp BQL reset loop to peer's real_num_tx_queues.  The loop was
+    iterating dev->real_num_rx_queues but indexing peer's txq[], which
+    goes out of bounds when the peer has fewer TX queues (e.g. veth
+    enslaved to a bond with XDP attached).
+  - Patch 5 (selftests): fix CONFIG_NET_SCH_SFQ alphabetical ordering
+    in net/config (Breno Leitao).
+
+V1: https://lore.kernel.org/all/20260324174719.1224337-1-hawk@kernel.org/
+
+Changes since V1:
+  - Patch 1 (dev->bql flag): add kdoc entry for @bql in struct net_device.
+  - Patch 2 (veth BQL): charge fixed VETH_BQL_UNIT (1) per packet instead
+    of skb->len.  veth has no link speed; the ptr_ring is packet-indexed.
+    Byte-based charging lets small packets sneak many entries into the ring.
+    Testing: min-size packet flood causes 3.7x ping RTT degradation with
+    skb->len vs no change with fixed-unit charging.
+  - Patch 3 (tx_timeout watchdog): fix race with peer NAPI: replace
+    netdev_tx_reset_queue() with clear_bit(STACK_XOFF) + netif_tx_wake_queue()
+    to avoid dql_reset() racing with concurrent dql_completed().
+  - Patch 5 (selftests): fix shellcheck warnings and infos:
+    - Quote variables passed to kill_process and exit.
+    - Declare and assign local variables separately (SC2155).
+    - Use read -r to avoid mangling backslashes (SC2162).
+    - Add shellcheck disable comments for intentional word splitting
+      (set -- $line, tc $qdisc $opts) and indirect invocation (trap).
+    - Make iptables-restore failure a hard FAIL instead of continuing.
+    - Add veth_bql_test.sh to TEST_PROGS in net/Makefile.
+    - Add veth_bql_test_virtme.sh to TEST_FILES (needs kernel build tree).
+    - Add napi_poll_hist.bt to TEST_FILES in net/Makefile.
+    - Add CONFIG_NET_SCH_SFQ=m to net/config (default qdisc is sfq).
+    - Reduce default test duration from 300s to 30s for kselftest CI.
+    - Fix virtme wrapper: empty args bug, check vmlinux instead of test path.
+  - Cover letter: update CoDel fix reference to merged commit in net tree.
+
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: Simon Horman <horms@kernel.org>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org
+Cc: Chris Arges <carges@cloudflare.com>
+Cc: Mike Freemon <mfreemon@cloudflare.com>
+Cc: Toke Høiland-Jørgensen <toke@toke.dk>
+Cc: Jonas Köppeler <j.koeppeler@tu-berlin.de>
+Cc: Breno Leitao <leitao@debian.org>
+Cc: kernel-team@cloudflare.com
+
+-- 
+2.43.0
+
