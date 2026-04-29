@@ -1,154 +1,262 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazon11011069.outbound.protection.outlook.com [52.101.70.69])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAA801A6836;
-	Wed, 29 Apr 2026 12:08:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777464528; cv=none; b=gP5TGHfXb2PQrCn54UDHD7rFwGHAJqJM0Co9dzCM5bSizZDteFO7nsvXA3oaDIqDYmOMUrEOjw/AeeJtGhBVBxpJOAG89bSEx8dJkFVPplGboP9F4/MsdJQQzfTeVACnRFX0BFeDpnsjYeI6X1wkV6QOhvCENte/4Q7Ebzqh/yU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777464528; c=relaxed/simple;
-	bh=ZF/XsrD0e0HGXVLkEQFaGIfDME5NQbbaeOlTvonjrmw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GykHWIxHVyCV9VuMIAztgnukSj49mGfsFb+CiKIU1vuGDGMSWoXvGOwTNxyN3ENIUQdOSMQ1UaNWKeZ1u2O3R5fXMbBNaZvmADLP57GvnLp3QC6JBlUQwTZNyLE1nO65VSqG/inUBkB1pGdvM5MZAkb40Axs+0pS/bS+ydvU9vc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=NFVXKl2J; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6A82330307;
+	Wed, 29 Apr 2026 12:12:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.70.69
+ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777464726; cv=fail; b=EuucQrj1F+8UoaoiqmrdPb3UMHvi+RuAoAtfCt/M2k03FnHsKE5RqelKe83VC0EKM+LHkETIi+fnWG/qTu5PRB+jOC7olt54WERMVDQ1EbFbcM/3UDcrZZFP9j5/J/bZeWQtTxO7Y3waSChjhJlc8JXKyOYcK5wMqp7BE5mo9BY=
+ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777464726; c=relaxed/simple;
+	bh=+Hhap5cqJvi6Vq/m4P7ntqOwwBwOfiPlget03iIiKiE=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=ubwyorm3DJn7OGTM+ilfbmV1GZEgB67j5h0Zb/ioP2JhB7BitOe9LzMNgPZUwkReJuGSVwRgv3b/CT2El+OMbg8gPpzRLUPVPVs5xFsEoJnZH02d5Im/p08uYRA8OdHtXXt1zu2Kn8KGP5PxcHv9YMNFAHRhQTCTP8GCD2iNnnc=
+ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=gOgj7KS5; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=gOgj7KS5; arc=fail smtp.client-ip=52.101.70.69
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="NFVXKl2J"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=XGhjKKkinCQ7SqO3jSiquNRsyFtuUhdkM2jGtjxk/GI=; b=NFVXKl2JhV5lwVFY+kI8hidbwh
-	XEkhC/HpVl3ejnKx96vsY4Pb+ikhVuK8P+E/6VVueBmWNGD3ncm343w9qm9vhluhlJGcznK4i7GyC
-	MNdCp8GmrJLE7F68pMGUGNvSHPv9+Lka/YPMjyBxRXcBX3ZYYiIIznUB0vOKN/aMnrVvC92msHGi/
-	BJ0Wb1UWR9fJCb4f6xBdwPfaSP+mf/vcdIyzP/ekIq1W9Ux1isyTQyxv/l3sQ1UvozlJgQ08v+gJf
-	wtOfGvyrdSkBk7LL92Q3Lc3EaR+My1JCxuEesYpkK/uAcwu6NZK0Eu8t8Jt8P94MJf8zCTr0dnaNw
-	fHZjNxzQ==;
-Received: from sslproxy07.your-server.de ([78.47.199.104])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wI3iU-0009K7-1O;
-	Wed, 29 Apr 2026 14:08:34 +0200
-Received: from localhost ([127.0.0.1])
-	by sslproxy07.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wI3iS-000CiM-2c;
-	Wed, 29 Apr 2026 14:08:32 +0200
-Message-ID: <f954a636-4d21-47c0-8afa-cc4b24adb0fb@iogearbox.net>
-Date: Wed, 29 Apr 2026 14:08:31 +0200
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="gOgj7KS5";
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="gOgj7KS5"
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
+ b=m7gPMhpLsUWuPz6KRXwOLO0gmV8JctLSMHQ9EdnPe181iyKm6es6vISK02QsvJUkx8OOg+8JNQv50/fuc0PvbwMYARVm8PW7rqbjqBr1hq1pLVaGN6FYJLeuj6/AF/XIVJ0oXrOF+j0YlUJmwSU/qUuG5PYyImw8VitrVXRYkrCyOGb5DO5D4ZLM4qyIYAW8HqBpgz+7cqKZD9JLnKHe9KlYGm4232tZ0AA5ElbD7VT16W+miitITFLUtTF2fx4SKCv94Zqryxy8xBD0Mo+E26b+zCQdPd1IE/p3XdONNcUmdV2HXhVYTp0eFVibpYRa5n5lCOh7kI1UmlaPrZIkjA==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hGa8Dv6c0oY7zA8rxxPyJ26KB+Qk8zyALnhp2lNUrkU=;
+ b=x+ya7j9Rakg/jd2a93QRzFC6B7SBFqNmqcdGIJNVlR0AEpBDXZfH67RFWfZasjTzVMwmSW9g3D4wT1eHTe89Z+OqPEedCpDgRczKIcz5dJ7dQK8XMUI7+eUralJXFe3TyjWsXyKeyfnqKvkxsUdzQS0qJ8tS3Oe85RJ8RWMNob1Ijtx+kdKJlHDNDYPNb+C2WftpR+kalnEshwdX+4/ZxVpVBEnS12FpqxEdJvW1NPgHTR1uU9CGHWKa1qs2LCfRg49OyAn51adEy7OsEEkw+q2zY5eOoUBmCffPjf+HsNCOCj/8Ynp0Mr5BDVLADmNwIGWlGoiHM0QqrAELS+Kdxg==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
+ 4.158.2.129) smtp.rcpttodomain=kernel.org smtp.mailfrom=arm.com; dmarc=pass
+ (p=none sp=none pct=100) action=none header.from=arm.com; dkim=pass
+ (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
+ dmarc=[1,1,header.from=arm.com])
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hGa8Dv6c0oY7zA8rxxPyJ26KB+Qk8zyALnhp2lNUrkU=;
+ b=gOgj7KS5eJJ0HNRSEZ43pWI5ZcZz2st71n0V2H+513oqxNAyM3twutAp9yMAXZV3Q5OHPTFseJS7bHLGev8ijfr3sgCqGlxh+F46emkNEyguFu8mO9V26O6afuMnQxHE+QjPpUvcRZ1O/Cg5Q/JShcs+EeylFwd7t836kd8CQ2E=
+Received: from DU7PR01CA0015.eurprd01.prod.exchangelabs.com
+ (2603:10a6:10:50f::13) by AM0PR08MB5508.eurprd08.prod.outlook.com
+ (2603:10a6:208:186::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9846.26; Wed, 29 Apr
+ 2026 12:11:56 +0000
+Received: from DU6PEPF00009529.eurprd02.prod.outlook.com
+ (2603:10a6:10:50f:cafe::15) by DU7PR01CA0015.outlook.office365.com
+ (2603:10a6:10:50f::13) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9846.30 via Frontend Transport; Wed,
+ 29 Apr 2026 12:11:56 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
+ smtp.mailfrom=arm.com; dkim=pass (signature was verified)
+ header.d=arm.com;dmarc=pass action=none header.from=arm.com;
+Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
+ 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
+ client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
+Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
+ DU6PEPF00009529.mail.protection.outlook.com (10.167.8.10) with Microsoft SMTP
+ Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9846.18 via
+ Frontend Transport; Wed, 29 Apr 2026 12:11:55 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=KvXZCI2xGJ4ZEcb2IWRgjmmYjT1Q+YAgTmGMWezmyh2WxHvES9LzV8lM2AZaf3f+Qhh5/xkbJ9/1FT/Axe5Vo14kwCGOuSZNWupkMvouD6wjANeipQan2hgmpu3MoTmwUqfTO9g9x8lKMT9o+NpzX6QLT0pBleZCnxDdY4aUx9DPX44iPuE9V15lLcCOJvchO2BbQF2Wa5Dof74KneA7VSdTTP2uVhV84eXLzqA+KBwLaodeg7nowq3D//HyytLX+OvAvbSMc48xIdPQbXbiBvZu+UcWylULrcoXRU+rXFFnQl1i0hbwA2QYFXxANHQmCUmNyiSC5QiVuNDdisYGTQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hGa8Dv6c0oY7zA8rxxPyJ26KB+Qk8zyALnhp2lNUrkU=;
+ b=GVLAXJRgRWx2ACtDaoy/+4gwwKZV7sk7NJ4/+dVHma/+QlvPhx6tyIBsWT6t05uTjZFuPe81OlARaflEWqTQK8pbEe7v5tSpoHGSodUqF8KC3QUMejgDNkNBWqbx0CNZaUHfHm0gyv3LgSjEyXMETlkjLjDZEHgSIfkEv3TxbmMnUEkHC6DkE0J9INfB0TIJ0KyG9kmVPDzSA5cx8qxvakgKEiJiGqUpvMfIHfeu/Nb/uanr9MGPu5h5E2K+RrVHk0O7lPqVWyscALxGR0yp7JgErH9oApEXy2WALelNi/5VbIm3mlqN2Vee0iaQpZfNZwcFpmDWA+3iEtxsK38hfQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
+ header.d=arm.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hGa8Dv6c0oY7zA8rxxPyJ26KB+Qk8zyALnhp2lNUrkU=;
+ b=gOgj7KS5eJJ0HNRSEZ43pWI5ZcZz2st71n0V2H+513oqxNAyM3twutAp9yMAXZV3Q5OHPTFseJS7bHLGev8ijfr3sgCqGlxh+F46emkNEyguFu8mO9V26O6afuMnQxHE+QjPpUvcRZ1O/Cg5Q/JShcs+EeylFwd7t836kd8CQ2E=
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+Received: from DU0PR08MB9203.eurprd08.prod.outlook.com (2603:10a6:10:417::12)
+ by AS8PR08MB8875.eurprd08.prod.outlook.com (2603:10a6:20b:5b7::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9870.18; Wed, 29 Apr
+ 2026 12:10:51 +0000
+Received: from DU0PR08MB9203.eurprd08.prod.outlook.com
+ ([fe80::f1e:73f2:57df:4047]) by DU0PR08MB9203.eurprd08.prod.outlook.com
+ ([fe80::f1e:73f2:57df:4047%2]) with mapi id 15.20.9870.016; Wed, 29 Apr 2026
+ 12:10:51 +0000
+Message-ID: <37b23ae0-0532-420c-b426-7f91bf35ac36@arm.com>
+Date: Wed, 29 Apr 2026 17:40:42 +0530
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 18/54] selftests/mm: uffd-stress: use kselftest
+ framework
+To: Mike Rapoport <rppt@kernel.org>, Andrew Morton
+ <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>
+Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
+ Barry Song <baohua@kernel.org>, Dev Jain <dev.jain@arm.com>,
+ Donet Tom <donettom@linux.ibm.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+ John Hubbard <jhubbard@nvidia.com>, "Liam R. Howlett"
+ <Liam.Howlett@oracle.com>, Lance Yang <lance.yang@linux.dev>,
+ Leon Romanovsky <leon@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ Luiz Capitulino <luizcap@redhat.com>, Mark Brown <broonie@kernel.org>,
+ Michal Hocko <mhocko@suse.com>, Nico Pache <npache@redhat.com>,
+ Peter Xu <peterx@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
+ Shuah Khan <shuah@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
+ Vlastimil Babka <vbabka@kernel.org>, Zi Yan <ziy@nvidia.com>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-mm@kvack.org
+References: <20260428204240.1924129-1-rppt@kernel.org>
+ <20260428204240.1924129-19-rppt@kernel.org>
+From: Sarthak Sharma <sarthak.sharma@arm.com>
+Content-Language: en-US
+In-Reply-To: <20260428204240.1924129-19-rppt@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MA5P287CA0215.INDP287.PROD.OUTLOOK.COM
+ (2603:1096:a01:1ab::8) To DU0PR08MB9203.eurprd08.prod.outlook.com
+ (2603:10a6:10:417::12)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 00/11] net: devmem: support devmem with netkit
- devices
-To: Bobby Eshleman <bobbyeshleman@gmail.com>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, Alex Shi <alexs@kernel.org>,
- Yanteng Si <si.yanteng@linux.dev>, Dongliang Mu <dzm91@hust.edu.cn>,
- Michael Chan <michael.chan@broadcom.com>,
- Pavan Chebbi <pavan.chebbi@broadcom.com>,
- Joshua Washington <joshwash@google.com>,
- Harshitha Ramamurthy <hramamurthy@google.com>,
- Saeed Mahameed <saeedm@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>,
- Mark Bloch <mbloch@nvidia.com>, Leon Romanovsky <leon@kernel.org>,
- Alexander Duyck <alexanderduyck@fb.com>, kernel-team@meta.com,
- Nikolay Aleksandrov <razor@blackwall.org>, Shuah Khan <shuah@kernel.org>,
- David Wei <dw@davidwei.uk>
-Cc: netdev@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Stanislav Fomichev <sdf@fomichev.me>, Mina Almasry <almasrymina@google.com>,
- Bobby Eshleman <bobbyeshleman@meta.com>
-References: <20260428-tcp-dm-netkit-v1-0-719280eba4d2@meta.com>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-In-Reply-To: <20260428-tcp-dm-netkit-v1-0-719280eba4d2@meta.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/27986/Wed Apr 29 08:25:43 2026)
+X-MS-TrafficTypeDiagnostic:
+	DU0PR08MB9203:EE_|AS8PR08MB8875:EE_|DU6PEPF00009529:EE_|AM0PR08MB5508:EE_
+X-MS-Office365-Filtering-Correlation-Id: e74399d6-0681-4e7a-ba84-08dea5e88193
+x-checkrecipientrouted: true
+NoDisclaimer: true
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted:
+ BCL:0;ARA:13230040|1800799024|7416014|376014|366016|18002099003|22082099003|56012099003;
+X-Microsoft-Antispam-Message-Info-Original:
+ 6fc+SfkAdYze1CVTNhDVbyDXw3nXdyHKLd1J9K8vt0N8HonBPTUq0K1v2LkAlnQZr9g1tULpMe1qQZpwjmbwKd6h8d0CmJtCyUZhm6vI0XfxUq0axKl4wfB3O2rxJro0mZDkMYKZySEYIeNh4UV/eJFL6M1Vrnf3ii2ZEEsvLRs4LePC9LNpE7cu3SsohLQOPb/iZIuBWvHsdyuDO8nSiz7J18K9WWYE6+K2+3kWucpH7A7B+ZgMChWVmK7/1rR3D+DtqR9HoXORgx44GJ7oVInn8tieTTzVgsvNRHrXsjVMvF8RfJLSiOwPqWf+dbUU6i8QnoGa1Gsw4L460c9UOG2Q7rOTEAYp27gKPsq6nOjkWSY6+WsAKLl2+3Nnt2qz+S4B6WV6TPf91lUIT0K1oulDXAWXuVuf6aaOq8xiiyfmgkBAPFRyGbOLczfNEI7oNNuaQXw7uBKrYOGbyxD8osZhs7VIzhORpbk1LT7z9F7zlCR2zLjPlsOg0U4d3cn9HC8mo7KblX+oQapeKh3fkPB8vJamaebSlO42shcHXndny+6rT954oRNSAMy4Fte9vjqOj8G9Dmi/GCcbNmaSzvXhDEsyOeUipxB4aKIXq5i2tRo6NeZ0Twa6uQhPfdYcs6KXpGuJ9zH7ISNuahjZ7TWSsm8rnGV2694gU6Om94E5NOfET5mq65M/X3jI+XpSsTGM2dwgP5+OKYswrb1y8GIhI4pXb5hM+yV5aTOCrvU=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9203.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(366016)(18002099003)(22082099003)(56012099003);DIR:OUT;SFP:1101;
+X-Exchange-RoutingPolicyChecked:
+ eZ+TdKYeh1fGvAq/BJPaY8OVVedgQNxwivWeCNcRjYmBm943NeUbthgEEYvp0YLiZhb/sGd2ZQrR94tKyrTaMnjU6SdY6dQxc+HwU/In+dYTJUjTcREPGU+aX71/RneDyztzYVX7xsfisd+u9DaFzdSZfigpvBMHT4z/AGGK7sJCjrghgw6xxhLY5VncN+jzypAHOiaL94V4UBwrptpenckxcNgx/XrVf/ilc21LctB0korhiPv0yoHah4sCwy+9jg4iXBbeUK/ejmHbFPl2PB7/pMp6ZmeZ5yHl13OsyIHICNZvtebo7uZR7qEB7V4WWPUFQZ5oJzf6RUc75MTCkA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR08MB8875
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ DU6PEPF00009529.eurprd02.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+	cbd6223b-dd76-44b9-c766-08dea5e85ac5
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700016|7416014|14060799003|376014|35042699022|82310400026|1800799024|56012099003|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	YV2XJNvCA2WOoNnOHdaLzaHyZ5zECA0jA59g6P2Z3YbEKIvTlv2DjmaNYakehrDHehX1pSov0QhxsU+yq0x2//1BKFXX7QKaXQE6aTzjkHbANIoTF3nBqe915iLYKNb7uV4+XrbhMb7yEldMQrfQNJtRGXXU34dsGFKFD4h+TV3WGmZbhxnlaKNnsNRtRjC5GDeYU34CKXNNhPpyF/KcV9tB4Dba+kgqF2SxcS57jVYFMg05UkLnM6JVPcgmnvkOyPdNm2/g4bI1ls5No/qA2XjuL58ETI90gL85JczrR7qXiWw6S6d1H7G5qXVN+5ofvXfbYClU+6K9rhSawmbZGUJM0nm2W5nTT6fQIDcGRifXc/oDGTg4Vp5sF4zGf3y/83/ddj3eI2mZy3kS0R0EGuPdcAfae0WT4doqJUD07Im3aOUU/lEEc4XK+ZjR5HIo7VMvxGnRu5UfgBgNgP7xI4eUlwCTMWW7SH4lSYleN5xCAXiFy0xEe4BWBNmrSnj28t+svbk1pzGaNx6qbGoe00XZiZNCpmTxoT8rw+oWz+Z2Zrc0P/69wA1HO8R85bWV80B8dgKuwx1SX/lct3QAxJeHRHvb1UGgJAflmJ3VMIwydcPYSOk6DF/DmjhJb+DgAaezdVNzjPYHTKRoGoM9BoeS00xoUy7AjciPfkcwPKprvZmhCyvLz0kwAMFTs5CaA6a3h9qAu51mSd6/hnfF27lCvRM6hRiE5ocXxcrizUT/8YWP/hNLlYUyd2D50AOT3QJ59db1jPjR859oa0e5nw==
+X-Forefront-Antispam-Report:
+	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700016)(7416014)(14060799003)(376014)(35042699022)(82310400026)(1800799024)(56012099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	VfkcA7uBGR3V9SM6wVgydWT+tWV10ZYmjysfN2vKW9YcXE95tNJ0BN/ve7XngfIRI7wvLH/A9GQze/nDsguGhn63yf3vOZT3MTekrT+6sbaOcyEm2GGZBuWzIYbGJAiJ8NoorQ+oNkg/30J5d9gf2M1dlFXIOlG/mF4py2dBcywUfYBDnxz78GRxtbcKUjKv3gmzWQ+fX2UelHEW6swK8mhZSYC8WktXN0fWNGyI7QsSOkgQyrR4GC9aCN3huCke1RNQXqD7K9WDv5IuGPOP1Ma2BqEkOCTi+lFJXxR5aCLOXrvhWQi1tNXfEQxO7aP8LTVtO3EmuYk/QZGRkwCj7Jh5K22XpmW7OAAB6gTo3ml/L+FT1CwDgrT8LisWMe+LzNT56sqoajZ1QT6snHl7p9UmHyhAEIIs4VEcl9Q/JCpA4kn69Tfv2SMWeWiUUxkP
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Apr 2026 12:11:55.7148
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e74399d6-0681-4e7a-ba84-08dea5e88193
+X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DU6PEPF00009529.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR08MB5508
 
-Hi Bobby,
 
-On 4/29/26 12:41 AM, Bobby Eshleman wrote:
-> This series enables TCP devmem TX through netkit devices.
+
+On 4/29/26 2:12 AM, Mike Rapoport wrote:
+> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 > 
-> Netkit now supports queue leasing. A physical NIC's RX queue can be
-> leased to a netkit guest interface inside a container namespace. This
-> gives the container a devmem-capable data path on the RX side (bind-rx,
-> etc...). On the TX side, the container process binds to its netkit guest
-> interface and sends traffic that netkit redirects (via BPF or ip
-> forwarding) to the physical NIC for DMA.
-[...]
-Thanks for working on this, after the RX queue leasing got merged, I've
-been looking into the same actually. :)
+> Convert uffd-stress test to use kselftest framework for reporting and
+> tracking successful and failing runs.
+> 
+> Reviewed-by: Mark Brown <broonie@kernel.org>
+> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 
-I think the NETMEM_TX_* enum approach seems reasonable.
+I've run the test before and after applying the patch. The patch
+correctly formats the output according to KTAP format with no change in
+results.
 
-What I have a PoC on is to build out TX queue leasing as first-class
-symmetric infrastructure to complement the RX queue leasing - basically
-I implemented an equivalent to the latter in netdev_nl_queue_create_doit
-et al, so you can have independent RX and TX leases and per-queue
-accountability, such that ynl queue-get op shows the full picture, and
-lastly we could also enable AF_XDP TX-only support through this infra.
+Tested-by: Sarthak Sharma <sarthak.sharma@arm.com>
 
-Would you be open to collab on integrating both and migrating the devmem
-code to work off an TX queue object? Next week is LSF/MM/BPF, are you
-there by any chance to catch up in person?
+> ---
+>  tools/testing/selftests/mm/uffd-stress.c | 41 +++++++++++-------------
+>  1 file changed, 19 insertions(+), 22 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/mm/uffd-stress.c b/tools/testing/selftests/mm/uffd-stress.c
+> index 700fbaa18d44..e92a85463eb1 100644
+> --- a/tools/testing/selftests/mm/uffd-stress.c
+> +++ b/tools/testing/selftests/mm/uffd-stress.c
+> @@ -286,19 +286,12 @@ static int userfaultfd_stress(uffd_global_test_opts_t *gopts)
+>  	pthread_attr_setstacksize(&attr, 16*1024*1024);
+>  
+>  	while (bounces--) {
+> -		printf("bounces: %d, mode:", bounces);
+> -		if (bounces & BOUNCE_RANDOM)
+> -			printf(" rnd");
+> -		if (bounces & BOUNCE_RACINGFAULTS)
+> -			printf(" racing");
+> -		if (bounces & BOUNCE_VERIFY)
+> -			printf(" ver");
+> -		if (bounces & BOUNCE_POLL)
+> -			printf(" poll");
+> -		else
+> -			printf(" read");
+> -		printf(", ");
+> -		fflush(stdout);
+> +		ksft_print_msg("bounces: %d, mode:%s%s%s%s, ",
+> +			       bounces,
+> +			       bounces & BOUNCE_RANDOM ? " rnd" : "",
+> +			       bounces & BOUNCE_RACINGFAULTS ? " racing" : "",
+> +			       bounces & BOUNCE_VERIFY ? " ver" : "",
+> +			       bounces & BOUNCE_POLL ? " poll" : " read");
+>  
+>  		if (bounces & BOUNCE_POLL)
+>  			fcntl(gopts->uffd, F_SETFL, gopts->uffd_flags | O_NONBLOCK);
+> @@ -456,6 +449,9 @@ int main(int argc, char **argv)
+>  	unsigned long nr_cpus;
+>  	size_t bytes;
+>  
+> +	ksft_print_header();
+> +	ksft_set_plan(1);
+> +
+>  	gopts = (uffd_global_test_opts_t *) malloc(sizeof(uffd_global_test_opts_t));
+>  
+>  	if (argc < 4)
+> @@ -484,10 +480,8 @@ int main(int argc, char **argv)
+>  	 * for racy extra reservation of hugepages.
+>  	 */
+>  	if (gopts->test_type == TEST_HUGETLB &&
+> -	   get_free_hugepages() < 2 * (bytes / gopts->page_size) + gopts->nr_parallel - 1) {
+> -		printf("skip: Skipping userfaultfd... not enough hugepages\n");
+> -		return KSFT_SKIP;
+> -	}
+> +	   get_free_hugepages() < 2 * (bytes / gopts->page_size) + gopts->nr_parallel - 1)
+> +		ksft_exit_skip("Skipping userfaultfd... not enough hugepages\n");
+>  
+>  	gopts->nr_pages_per_cpu = bytes / gopts->page_size / gopts->nr_parallel;
+>  	if (!gopts->nr_pages_per_cpu) {
+> @@ -503,9 +497,12 @@ int main(int argc, char **argv)
+>  	}
+>  	gopts->nr_pages = gopts->nr_pages_per_cpu * gopts->nr_parallel;
+>  
+> -	printf("nr_pages: %lu, nr_pages_per_cpu: %lu\n",
+> -	       gopts->nr_pages, gopts->nr_pages_per_cpu);
+> -	return userfaultfd_stress(gopts);
+> +	ksft_print_msg("nr_pages: %lu, nr_pages_per_cpu: %lu\n",
+> +		       gopts->nr_pages, gopts->nr_pages_per_cpu);
+> +
+> +	ksft_test_result(!userfaultfd_stress(gopts),
+> +			 "uffd-stress %s\n", argv[1]);
+> +	ksft_finished();
+>  }
+>  
+>  #else /* __NR_userfaultfd */
+> @@ -514,8 +511,8 @@ int main(int argc, char **argv)
+>  
+>  int main(void)
+>  {
+> -	printf("skip: Skipping userfaultfd test (missing __NR_userfaultfd)\n");
+> -	return KSFT_SKIP;
+> +	ksft_print_header();
+> +	ksft_exit_skip("missing __NR_userfaultfd definition\n");
+>  }
+>  
+>  #endif /* __NR_userfaultfd */
 
-Thanks a lot,
-Daniel
