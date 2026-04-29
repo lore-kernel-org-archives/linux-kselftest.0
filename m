@@ -1,66 +1,67 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 727273BD22B
-	for <linux-kselftest@vger.kernel.org>; Wed, 29 Apr 2026 09:04:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 284BD40DFDF
+	for <linux-kselftest@vger.kernel.org>; Wed, 29 Apr 2026 10:11:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777453471; cv=none; b=pcKwsWGegpnyTW9fysqsciXNK1R0lcU/lpl9VOompdc8QWmvlmQRHyvqi3LgXXSNOvF13oIiLS1sURG44oo6kgWcY1UOU2rTkQdhbAk2zEbjnbvfm/oZyMerFTnPvHjlonKfpmNiUCPiqLt1c37QAMyZ44ikM+4lkpfnxrmLR/s=
+	t=1777457469; cv=none; b=kAuKIA9xLwcxW7CxowM0jX5S8qXWW0T2mPbKnPQ9lfT7xuSwmds40ObLK//vVcIG0zGthAQddkACjnxyjSVrCRvwLTQtsno6+q1n9E+Q3GtF9YpCyc+qDWvyZqApeBEcvGGHVXfi6nvtBqKwHFUprOI0Z1uiLQboMOqyppo2B+Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777453471; c=relaxed/simple;
-	bh=qSb3SGcwsDkoHlK03XEymnt83+9LDsaxAxUN607t7f0=;
+	s=arc-20240116; t=1777457469; c=relaxed/simple;
+	bh=KLwWf95QYlXqjTRiTI/nyMeghq1jIrTTG2Jrgoqqb/s=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=k8DKysEkLWoQN6RIEyvCXL0XzeZVN5Sd/P1DWaYvCS1Hn7MaaE9AYFm5VIZBKBj0FK1qvZX00X4h9Dh929HnzWDc6pPgpOJD/aobVeKODLYHxirISwNhgRTfnn4eLLZsk6eSHHlKco0U0ZVROD9RCSIPi8w+7XWc60RNiZas8ZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org; spf=none smtp.mailfrom=blackwall.org; dkim=pass (2048-bit key) header.d=blackwall.org header.i=@blackwall.org header.b=BW2o4e6U; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=blackwall.org
+	 In-Reply-To:Content-Type; b=Gkf4iHixUX7TyZPVCRKgfcfG/7KNysxs4IwAeNTxIAfcp7Xq1Y1JcP1y0uhQK8UOCJPJPEL9A9P/zDYieSxtCPALMMd/cM7DVDbLRsMWbRXOHg3DpadEZpzV3YFLUZGxiqSC9KDizkGk9hlS19TfgvEd8KzqyVD0XokmJrvm2R4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ingeniumdigital.com; spf=pass smtp.mailfrom=ingeniumdigital.com; dkim=pass (2048-bit key) header.d=ingeniumdigital.com header.i=@ingeniumdigital.com header.b=Xz2UVnxa; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ingeniumdigital.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ingeniumdigital.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=blackwall.org header.i=@blackwall.org header.b="BW2o4e6U"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4891e5b9c1fso107392875e9.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Apr 2026 02:04:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=ingeniumdigital.com header.i=@ingeniumdigital.com header.b="Xz2UVnxa"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2ad9a9be502so77477655ad.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Apr 2026 03:11:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall.org; s=google; t=1777453468; x=1778058268; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=ingeniumdigital.com; s=google; t=1777457466; x=1778062266; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=dkrOQ/G+RJZornxNRPNTMjR8gIzBGAkvbEb+2nxyTLg=;
-        b=BW2o4e6UfLPAWck8gz2OITAGDUhrsdTFJBacHejebF3U6qk+YQlr05SJoNP/HvCtAn
-         sqNUHxaol/shN0b//ErMfRquzqvFPKIEP/53E1OkG59rCY+lEdYfAmnTgqm47VSCJHEW
-         s4mbe79bTiOFuD/cQSXMN6s+gdwh11Ly6DyQC7kow+1oHZXBFAeoiOwiiIxN2OISXSj3
-         AYPJIeedXgFUM+sdDLDu9OaWNp0LeRwPNBoZNpcVzpABEEsBXCz0fO/cN14EghTHaWm9
-         D0BZnT1eg5Hns0U4oxZLcgqQdmka/11q5qCiV2RwOvS0JbjijI/8B0gDz2zJ2QVUeI5Z
-         vdGQ==
+        bh=0R26ySyVwseh0XvD0z3+P5speK5gk4CAVoAQ5oLCLJI=;
+        b=Xz2UVnxaW9LQPQuEHuaS4DHlIn2123lJZ8S5CmasIy2qoiy9XmPT6HLjx+Z9cQrrEd
+         WIOKPuS9RQ1SKTkVqf7qpbRG6KkODRAfmbR/K/omQ8AW7Oqrwnntza1CJAvcA2QCVB/3
+         ZWvOsLsvvHUs70jtPHoH0hliD5IyFVxxSDidasAac832y5wSn5R+UN3hkZkJ8W/jHhfy
+         JmRY1I6jD/pMYHJwbJ/1CwJJU86zzVpiwuDnHXRIspYH/6dO5x3RREuOgV2w8EQLCBB+
+         aKfzoa8Toie4zUM3RL4uj0AyuuKJXORDpq5QXTaVtwgXyETuo2OlZkteMb8wp6xGOErs
+         Dhyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777453468; x=1778058268;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20251104; t=1777457466; x=1778062266;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=dkrOQ/G+RJZornxNRPNTMjR8gIzBGAkvbEb+2nxyTLg=;
-        b=AXUo1YqL6MlxR3uhhv2asXRqJFsNYnXxRdFk+vOSAJC2rIJ+pxYHH0+3FgcckeqNKP
-         nR5BXQ1jmasZ5NVCH34IaS6478ALmNpGgVPXMkLVx1C8L+MdRfHJr196yPwpi2Yezih7
-         JTgqhSGOPZCkG4uZBt+6EXD5xDmufsupm3WCH1V80dSixD0eh1bes7XXmew+9yCbBjZo
-         wLZMzjg7qjG4aD1aKh1gfnAUQ6pr5O+LEiCMtHVEAO/eSFU02p1rYzTfR7DYKT6JYMDl
-         3H3OtTR1fVu6+W0VSfR8epwtlW+854c/NhTgzTMzgu9Iln5sDH1PmUdAjWyY1okNgrln
-         PkTQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9shbxVa8cI1rkpL4MRG4qeodLft6syOgweFEcOBlWGOCXRbwfnWolwbAHvc0PCJ/glgwTQt+sM2BA2qrECmPU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx+tGLnLZpQ7SyoRvvv67KvaoskluzOkaCpPBTPTg/JongU3hjA
-	ci5jawF1L+OgULk/0zVISnzK9yePwLogNS6qUmog0iutxDWANdTRZsNtN96eRNUdEx4=
-X-Gm-Gg: AeBDiesXiesnSdXLFga9/fS833UfQCZySnGNGnD2zBog8YtZb17hfHmUjSiGrSueOb/
-	k7bMZ75pPQ86nfdKXBsFPOIl0QI9gy/lvJ/uYYUirDbCRqAMDwleSHY3YrZVQihgXIV3TMrRAZ2
-	QBuHNR1l6L9jwUUJj6G+DVyeCk7yCRcCv0eizPAJdTT9WVcLWzGL/G3QwBevvi9FMm/j7dStvJx
-	Xzu2J8/zcq8X+k8TIHsUNfDZ2ZVZ+Uo5iW0SVomxRSrRLi8chEn0D9mpfTcE+MOKdKw3mKJ8lH7
-	GOHeHH309VPi4CUpJxQny8MG2FoqIunpHQlSIfirhldCylPoNB+RfaGGxddfc9te9yMmPWLdUQf
-	646mMCiMnPvIhCUeOBHn7h7jNGheayAS5WhI60XIqL2KHPdRuQ2NHeaDvCx6iONSFPGG5Pax4dg
-	MU8/VFj7kMUhlEbRxbaiHlhnnyLiWMZnfPTQRbmrkYzS4/0bLVYNKPIXabieCT61WC
-X-Received: by 2002:a05:600c:4645:b0:48a:7aad:4425 with SMTP id 5b1f17b1804b1-48a7aad4537mr42583695e9.3.1777453467792;
-        Wed, 29 Apr 2026 02:04:27 -0700 (PDT)
-Received: from [192.168.0.161] (78-154-15-182.ip.btc-net.bg. [78.154.15.182])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48a7c2d3811sm20967725e9.3.2026.04.29.02.04.25
+        bh=0R26ySyVwseh0XvD0z3+P5speK5gk4CAVoAQ5oLCLJI=;
+        b=Wj8ATK05Ff5bb2z1HLENd/8csveC3st6mNF2B1Ur35LM5pCDjdQ86pqXjv1hU2yifx
+         BFHgKMsaKVwwZjT4HMrKD7TX75ti1Pwn6GInQ9YscaiiX7WbdY3B8KNMJzDLuvDmrCNT
+         gqs72W+St3LOz6NuAb6ZFYG/9c9zeUbBUsH/Cm1MNk/7WRCBaCN6g0eU1ceifJSipv1J
+         e8A1PApehAWMh4zMCVqcmIiVcpSTvPDHKCPpjaCoROjPfSloWRROf6WLRbkhJRpKogvq
+         grgcp8RWZ7NzmywO1i2Wyvj7VmAWhWl2mH5ygKCrptmI+zQGWi+jNeg44CdqcmyOOkAq
+         t50Q==
+X-Forwarded-Encrypted: i=1; AFNElJ+bafROJOgi3jmWSNqiNOXMzF3gkEarppubAlYJ5z3dj8btMJ5usCuXY4kgTSQzP5K61uSzx+Yq/gP8B1MfWNE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw7eYkhOrNev+wuW/lzXRxG3SpNQK155eCtU2C4aRRuFM0NcDtu
+	tG/fL+vGwU/6LdJAjHJPBm2jooii58z3DUaQsJLG+MLanYVWdlwsbTvwWlrv1brvKQ==
+X-Gm-Gg: AeBDiev63SPtrYfcHSJqQq2tHJiY1e9djG11Jvc37qh+W1U4G8KpCX2LYD0In0t3cIf
+	AmitFVIw8B8TiTTWHZc/qmkTjkRwxbpMW+Q8gbPSMPoGy41RaO5AKKtVTojm1W9PuVwW+RRQUqf
+	qR/AlHihXGsTGl9BmLzzmrLn01BupMwHJonY4+1woMrl6G+9IQJ162WgViiRxtswtfr3+8S73mK
+	/A4jW03/SuKb+Xar2vDHcikB8sylk3H/1dO3SkOflEA0X7/I3Hd3AAPx8U10YAhoX8Zz2bNQi6V
+	cq4X+quRLQTw5EravPyJZbCFlmXF0riigXq5U4myhJsUp5rF1T3nYyzi9kGBz/lixqgqFMO5duy
+	GQ6HbhtXnHUSUJnHwfwzzdB+cOh+o8ERZzC9YKkL9pM2aLNYc/+yDWbT73+pT2Vr9J2fsLEZVhp
+	GJN9STPARpDBGUOZ+7I5qT4t5L7/K+qEOadrSfEWzW+Is3gw5o5UmhpQkpuWKwYZE2vob4RWVFA
+	eQ8ryET1DK4KevQztMC
+X-Received: by 2002:a17:903:3503:b0:2b2:ec00:7966 with SMTP id d9443c01a7336-2b97c462381mr77953125ad.21.1777457466448;
+        Wed, 29 Apr 2026 03:11:06 -0700 (PDT)
+Received: from ?IPV6:2001:8003:8810:ea00:ed87:ca88:5326:e11d? ([2001:8003:8810:ea00:ed87:ca88:5326:e11d])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b988972dfasm17817855ad.72.2026.04.29.03.11.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Apr 2026 02:04:26 -0700 (PDT)
-Message-ID: <efa4eaf9-0c5f-4cea-ad9d-dd1052ccab76@blackwall.org>
-Date: Wed, 29 Apr 2026 12:04:25 +0300
+        Wed, 29 Apr 2026 03:11:05 -0700 (PDT)
+Message-ID: <279a16dd-f98f-44ef-9685-44537eac2892@ingeniumdigital.com>
+Date: Wed, 29 Apr 2026 18:10:58 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -68,113 +69,71 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 2/2] selftests: net: Add tests for ARP probe and
- DAD NS handling
-Content-Language: en-US, bg
-To: Danielle Ratson <danieller@nvidia.com>, netdev@vger.kernel.org
-Cc: idosch@nvidia.com, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
- bridge@lists.linux.dev, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260429062405.1386417-1-danieller@nvidia.com>
- <20260429062405.1386417-3-danieller@nvidia.com>
-From: Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <20260429062405.1386417-3-danieller@nvidia.com>
+Subject: Re: [PATCH 2/2] kunit: qemu_configs: Add or1k / openrisc
+ configuration
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+ Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>,
+ Rae Moar <raemoar63@gmail.com>
+Cc: linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kunit-dev@googlegroups.com
+References: <20260427-kunit-or1k-v1-0-9d3109e991e8@weissschuh.net>
+ <20260427-kunit-or1k-v1-2-9d3109e991e8@weissschuh.net>
+Content-Language: fr
+From: David Gow <david@ingeniumdigital.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+In-Reply-To: <20260427-kunit-or1k-v1-2-9d3109e991e8@weissschuh.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 29/04/2026 09:24, Danielle Ratson wrote:
-> Add test cases to verify that ARP probes and DAD Neighbor Solicitations
-> are handled correctly by the bridge neighbor suppression feature.
+Le 28/04/2026 à 12:04 AM, 'Thomas Weißschuh' via KUnit Development a écrit :
+> Add a basic configuration to run kunit tests on or1k / openrisc.
 > 
-> When neighbor suppression is enabled on a bridge VXLAN port, the bridge
-> should reply to ARP/NS messages on behalf of remote hosts when both FDB
-> and neighbor entries exist, and the answer is known. However, when
-> either the FDB or the neighbor exists, ARP probes / DAD NS should be
-> treated like regular ARP requests / NS and flood to VXLAN.
-> 
-> Add two new test functions:
-> 
-> neigh_suppress_arp_probe(): Tests ARP probe handling by triggering
-> duplicate address detection using arping -D. Verifies that probes are
-> flooded when the bridge doesn't know the answer, and suppressed when FDB
-> and neighbor entries exist.
-> 
-> neigh_suppress_dad_ns(): Tests DAD NS handling by constructing DAD NS
-> packets using mausezahn and verifies correct flooding/suppression
-> behavior.
-> 
-> Before the previous patch:
-> 
-> $ ./test_bridge_neigh_suppress.sh -t "neigh_suppress_arp_probe neigh_suppress_dad_ns"
-> 
-> Per-port ARP probe suppression
-> ------------------------------
-> TEST: ARP probe suppression                                         [ OK ]
-> TEST: "neigh_suppress" is on                                        [ OK ]
-> TEST: ARP probe suppression                                         [FAIL]
-> TEST: FDB and neighbor entry installation                           [ OK ]
-> TEST: arping                                                        [FAIL]
-> TEST: ARP probe suppression                                         [FAIL]
-> TEST: neighbor removal                                              [ OK ]
-> TEST: ARP probe suppression                                         [FAIL]
-> TEST: "neigh_suppress" is off                                       [ OK ]
-> TEST: ARP probe suppression                                         [FAIL]
-> 
-> Per-port DAD NS suppression
-> ---------------------------
-> TEST: DAD NS suppression                                            [ OK ]
-> TEST: "neigh_suppress" is on                                        [ OK ]
-> TEST: DAD NS suppression                                            [FAIL]
-> TEST: FDB and neighbor entry installation                           [ OK ]
-> TEST: DAD NS suppression                                            [FAIL]
-> TEST: neighbor removal                                              [ OK ]
-> TEST: DAD NS suppression                                            [FAIL]
-> TEST: DAD NS proxy NA reply                                         [FAIL]
-> TEST: "neigh_suppress" is off                                       [ OK ]
-> TEST: DAD NS suppression                                            [FAIL]
-> 
-> Tests passed:   10
-> Tests failed:   10
-> 
-> After the previous patch:
-> 
-> $ ./test_bridge_neigh_suppress.sh -t "neigh_suppress_arp_probe neigh_suppress_dad_ns"
-> 
-> Per-port ARP probe suppression
-> ------------------------------
-> TEST: ARP probe suppression                                         [ OK ]
-> TEST: "neigh_suppress" is on                                        [ OK ]
-> TEST: ARP probe suppression                                         [ OK ]
-> TEST: FDB and neighbor entry installation                           [ OK ]
-> TEST: arping                                                        [ OK ]
-> TEST: ARP probe suppression                                         [ OK ]
-> TEST: neighbor removal                                              [ OK ]
-> TEST: ARP probe suppression                                         [ OK ]
-> TEST: "neigh_suppress" is off                                       [ OK ]
-> TEST: ARP probe suppression                                         [ OK ]
-> 
-> Per-port DAD NS suppression
-> ---------------------------
-> TEST: DAD NS suppression                                            [ OK ]
-> TEST: "neigh_suppress" is on                                        [ OK ]
-> TEST: DAD NS suppression                                            [ OK ]
-> TEST: FDB and neighbor entry installation                           [ OK ]
-> TEST: DAD NS suppression                                            [ OK ]
-> TEST: neighbor removal                                              [ OK ]
-> TEST: DAD NS suppression                                            [ OK ]
-> TEST: DAD NS proxy NA reply                                         [ OK ]
-> TEST: "neigh_suppress" is off                                       [ OK ]
-> TEST: DAD NS suppression                                            [ OK ]
-> 
-> Tests passed:  20
-> Tests failed:   0
-> 
-> Signed-off-by: Danielle Ratson <danieller@nvidia.com>
+> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 > ---
->   .../net/test_bridge_neigh_suppress.sh         | 126 ++++++++++++++++++
->   1 file changed, 126 insertions(+)
-> 
 
-Acked-by: Nikolay Aleksandrov <razor@blackwall.org>
+Thanks very much. This works well here (assuming 
+CONFIG_KUNIT_FAULT_TESTS=n, and either a long timeout, or slow tests 
+skipped, as qemu-or1k is not fast on my machine).
+
+Reviewed-by: David Gow <david@davidgow.net>
+
+Do we want to split the series and take this patch via kselftest/kunit, 
+and the generate_compile_commands one separately, or just pick both up 
+in the same tree?
+
+Cheers,
+-- David
+
+>   tools/testing/kunit/qemu_configs/or1k.py | 18 ++++++++++++++++++
+>   1 file changed, 18 insertions(+)
+> 
+> diff --git a/tools/testing/kunit/qemu_configs/or1k.py b/tools/testing/kunit/qemu_configs/or1k.py
+> new file mode 100644
+> index 000000000000..dfbbad0f9076
+> --- /dev/null
+> +++ b/tools/testing/kunit/qemu_configs/or1k.py
+> @@ -0,0 +1,18 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +from ..qemu_config import QemuArchParams
+> +
+> +QEMU_ARCH = QemuArchParams(linux_arch='openrisc',
+> +			   kconfig='''
+> +CONFIG_SERIAL_8250=y
+> +CONFIG_SERIAL_8250_CONSOLE=y
+> +CONFIG_SERIAL_OF_PLATFORM=y
+> +CONFIG_POWER_RESET=y
+> +CONFIG_POWER_RESET_SYSCON=y
+> +''',
+> +			   qemu_arch='or1k',
+> +			   kernel_path='vmlinux',
+> +			   kernel_command_line='console=ttyS0',
+> +			   extra_qemu_params=[
+> +					    '-machine', 'virt',
+> +                        '-m', '512',
+> +			  ])
+> 
 
