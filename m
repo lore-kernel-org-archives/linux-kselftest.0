@@ -1,238 +1,186 @@
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63DF533F59E
-	for <linux-kselftest@vger.kernel.org>; Thu, 30 Apr 2026 16:52:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9D2842B75A
+	for <linux-kselftest@vger.kernel.org>; Thu, 30 Apr 2026 17:33:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777567940; cv=none; b=StyCiblu3xFbUdX7XRNULE13cxU0hJh9qfkZ3IDM4N0GbFaC7nqy15/Ygz2Hz52/dW1EOH2xXirTtfDDOj1fYmt9/YmvBEfybUgF8tu3YSG4DT5Ps0YBkFMwCGcMrWrRJr3r+rjKbpNXd2RAijARcFnI2RQPGu2SlwjMq6U8l48=
+	t=1777570424; cv=none; b=dkXNOcArUdTB6n8IRVLP+VBDQhbCR6Xeem1GYsGyQPGWaUDSOJBQIIECsyLUWG2zD3KNfy5/0jPpPKJgdWKDXmbIZydsDEqWNwIkMcgJhCQIJxVaXIB1nsUw6+4Gj6O28WgP7tTBoVDAnA2KxDfL2z6xkoZD6/mkbsM8johMZIM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777567940; c=relaxed/simple;
-	bh=5r2qpsebSMkvi3m6XvxmESYtctah89wmlMLrA/0+UFU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jO3HjHFb/VTxcGf5GXoB63EJpCSIYGPj7/ejHNItLOiwxusPoSq/YclUt33eswuojjNtvHE2qX500ZE4HPb2iVaXcSKClfVNMfV1EWtomcr4RauTpP289DlhhxSvjariizVF6a48JM84bV3UUuXWFfBPCgHGToc+LmZle8KGlw4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ey98PURv; arc=none smtp.client-ip=209.85.215.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1777570424; c=relaxed/simple;
+	bh=4k3DgSQ0WBAmpji4n40XI07xa43uXhv0QSkw3tIqCDs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CcNV1z0F3kMjjkgTXOdPyr1QkIMlhD17dBHdVHvDm62sKxbieU77ieykCiF3Up+5OIYoLCSCUGrIPm+51AMUCktvRuuyLTQQX5iSfrBvaVy/oClYD78NalZPmra1elIV6cmvrNJEDoSBRzXBu3di2Gz/pCdowgnD4So0MHHjB30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Mw06pZJU; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ey98PURv"
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-c76b9efc299so489899a12.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 30 Apr 2026 09:52:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777567939; x=1778172739; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Yz+m5ys36cUhA483WJwMNGt1SvzoVUKacxRP5e2sWBU=;
-        b=Ey98PURvpuuUo/13vjTP9+/CxPA/w7sG4xemOazsJVHhPRpQ2H/uAXr/Zfd0gstPZ7
-         zoVIsky8QgZ7je/zX4yfpEWnS+c5CmTgJjJsBTBuzN4NM6OVaDEvMDMIJCXh5fzee8Bs
-         wqnCGt2kqHkGB+X8Jolq5FFhxv0+/NukrfD+Vs0ExNMc9RMeS0xCFwmqifvZi/RmOjJ7
-         L3IUegXZKx58pe0Vz0m6tD5d0Wa9UKK/dA7mRqSNA31aY/JU9edelt+VZ+TyQNi72Hyq
-         nNw3sfxqh9RhuNnMy1EsFm4AB8Ft1DZI7ebdes34imn93dDgBaom7b0OfLcxwCZnGhf2
-         cp4A==
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Mw06pZJU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1777570422;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=nmMXCvWSvShhSGiDPE3bbKH2xIBX1MBTYvUc5Sk23wc=;
+	b=Mw06pZJUddj/w+OmOdYk0bDhVXb8pxnCbpCgPIyt5uJ/E218RxUoBooMj8bdlsZrKg8BaP
+	H7qCDLAE7KKyuFkUS1JGW0mHa+CpOPNi3CgxmVyjf5/gSBhh22hpU1B/2FGgJ+8PyzNinE
+	ESq3+wRBqGw8AHVLrR8h5ppEymlvUaQ=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-638-uF3l2E9YNreRP2M3xALA7w-1; Thu, 30 Apr 2026 13:33:40 -0400
+X-MC-Unique: uF3l2E9YNreRP2M3xALA7w-1
+X-Mimecast-MFC-AGG-ID: uF3l2E9YNreRP2M3xALA7w_1777570420
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-8ee454b1b8cso154494385a.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 30 Apr 2026 10:33:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777567939; x=1778172739;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Yz+m5ys36cUhA483WJwMNGt1SvzoVUKacxRP5e2sWBU=;
-        b=DkOXwtFHlLgubCBvXuoxoVReOhrbkRpw6wTyFADEno/No33wl5Ec53+lnNTXjiKXye
-         V/yTDm7Al4h4X3KJremaxaRBTK3NA1U09abDCdG5hV3GYgBGaTogOgqDdjwBbaP7WSiQ
-         C0vUXdc4FQRShS4Yt4Y2kRm0CIgtSfLZ3gxOMLWrFfra/uB1qmKKw8ZkKJUjod/IWlq3
-         bzuwiFzrcRxOBfCgJ6Nb49+/g+YUhFda5fLUHfcnQwndtFWziipCSing58HloMRfoklB
-         FslttEkuhYR0NN9uRZvQUDXazllMkTw0zJIDeFcQU37Wh+CE1T3l2YzEN47VuXCgAmS7
-         A1Hg==
-X-Forwarded-Encrypted: i=1; AFNElJ/R/u6sDxBlVJC1BmFxnY6/95qaykR37K5oSSiNTa123yH9eqOvIE7/PNETxUzkKs29ENWAVlQk8Ds5PaWjqss=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyMf6aIIIyiXsVEqSKlUXVvZpFbBP2Gzv++2YvO8TlWUgOo7GPh
-	IT7BNBfTq4StrxGTVSr0Uqn7JIGtmyRF1kpBDuUIfHHpebYG/Fwc6N7h
-X-Gm-Gg: AeBDievFdk433iiVDAbGCLsAiD9VBmmB/mQO63fJ+72P9JXDZpT5QZ9pFFqQMBVez1v
-	7Vv06GdnFImxgXPVUD2qdQdou97LhmERQdVc3i9YhGEjPyrNZCJvpVk8rPKi3kst0oz9jM8vAKk
-	gEnFyu6olqX8AbuLHkKoU3u8g+gzySNtzcC85TU9uEd54Uf/UyrqDzYZEC75iZoYLcHlhw+S5Ee
-	Txf6sqHTo/KtuLagDsC6NVWgjo7UUQMraUfoKuWWS+7nj2bU05l0G0NjV8+qbF16mHVADtpBbfN
-	CSnao3ojFUBki0bWSvdxYs79BjPtQDkdJTnWjLTcZAKlOHO1xZXKOO8vBxOPztWVvgeVFrFmuT/
-	YpHDx3eME/ZE5981lmyC+nyPbwCYxNsxzNcrc/zHeMJA5eOATlm/p7woJS/XKRyPMiChYZWXVmJ
-	n7Kf5IZSEKDrsR7YoF26eIiQUq2+qaRtWrULVFaHU=
-X-Received: by 2002:a05:6a21:6d95:b0:3a2:f14a:427e with SMTP id adf61e73a8af0-3a3cf82c8b0mr4540828637.43.1777567938653;
-        Thu, 30 Apr 2026 09:52:18 -0700 (PDT)
-Received: from localhost ([2a03:2880:7ff:70::])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c7ffbbbe8e9sm163022a12.10.2026.04.30.09.52.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Apr 2026 09:52:18 -0700 (PDT)
-From: Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>
-To: "David S . Miller" <davem@davemloft.net>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Dimitri Daskalakis <daskald@meta.com>,
-	David Wei <dw@davidwei.uk>,
-	Joe Damato <joe@dama.to>,
-	Dragos Tatulea <dtatulea@nvidia.com>,
-	Vishwanath Seshagiri <vishs@fb.com>,
-	Pavel Begunkov <asml.silence@gmail.com>,
-	Simon Horman <horms@kernel.org>,
-	Pavan Chebbi <pavan.chebbi@broadcom.com>,
-	Michael Chan <michael.chan@broadcom.com>,
-	Gal Pressman <gal@nvidia.com>,
-	linux-kselftest@vger.kernel.org,
-	netdev@vger.kernel.org
-Subject: [PATCH net-next] selftests: drv-net: Enable ntuple-filters if supported
-Date: Thu, 30 Apr 2026 09:52:17 -0700
-Message-ID: <20260430165217.3700469-1-dimitri.daskalakis1@gmail.com>
-X-Mailer: git-send-email 2.52.0
+        d=1e100.net; s=20251104; t=1777570420; x=1778175220;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nmMXCvWSvShhSGiDPE3bbKH2xIBX1MBTYvUc5Sk23wc=;
+        b=OaEuChtG7E31/xfGnT4AKZh4MuGovkgBLn1ARkBIABt2iqeqbtO6WpvNhKEFH3LWq/
+         inFoHDDWcw6k0TgkG43QxWPQXXeWkB2Slv+oECMH9yO2R/qVXrlr9kcqCwfIsxjsAvxA
+         BC0e+P2lhy5lWjih5bNCTkk6koXlfUf+EOHdRUEw2mRNUpy9LGl/fddXzH6y2Q2TN6lk
+         /kX+mAPdMr3uMc+oRZRCGkklDER0My1ODWXSrgUq/JJgmuN+koElKtbPpjSFja2bM2vI
+         Z/U019ZJQWWgzR+bOTfRutltJYOLYm6kMfcs8V6mPz42tzrsCpj+kGS8kxcRM7dSzK+4
+         obmg==
+X-Forwarded-Encrypted: i=1; AFNElJ/W+3+VKXMg5aqm/vXE11YKPaW6QT6kBVJ4ZXOWaytNWd8WOfMm0rDU9PMAGZVFxD5OU29fmiW2N+tdwKT6uIg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx59AL9U5NmyqAOwYgfkS9ZtdNtaVoTS47/QqICWVWnPzYqTrcL
+	gS93/kp0dGUEOqU5TDcdQ8vgEV/KatcaBzm9U7nRfr7+vfHTIoU2Vx3yFrC5LDuO9hei1J0fQGC
+	U4phDwTWMiebL+149FCboBBmXXsjEUBNS2jixHtwodUAwwFgyJ4iEhU+upq3NLA2Dbyko9g==
+X-Gm-Gg: AeBDievW9uh3Zcs5pbaK8nhNdJnPkQHeAyUeFvGo7wv6xvC/L2JFdOnGyK9YUIUS87p
+	2ET5lpjnh66xDDzLjNO/NCcWRdMG/HIgk7T82nTsM2gMz9RzhWVIwfcrit6X1jbzmHW2G6NX3nr
+	zsOEonGrGuXaH2YkIik2dyg/EgYsdCh8064ur9Bgjo3sIrhaFGZLRLOzYKSWyhX5X41RWdxplnF
+	kvNL1jLJToOewvFksk/8O1lNuVrgy+711JW3ggyJoj5dfI95IcBYzX58XdNXXP3tXv9iJo5iIPH
+	pimiUWkYHUxeP+f4IZu/XkkytRaMTwjRMwws2MDUxj+nc1nK2gWj4nEEAEKkcJ9WSeYHth5Bfjg
+	c9z0jQbhIEP2tzPF1EKDMevukg84CH/zyxzwrDWd8OG/yCgZwFsZ0Iibf5V0uOhDAKwvQarmDpG
+	A1nT2GD/IsUCasrgbPsjgs6tc=
+X-Received: by 2002:ac8:58d2:0:b0:50e:6054:bc with SMTP id d75a77b69052e-5102ab43dc2mr57370711cf.16.1777570420088;
+        Thu, 30 Apr 2026 10:33:40 -0700 (PDT)
+X-Received: by 2002:ac8:58d2:0:b0:50e:6054:bc with SMTP id d75a77b69052e-5102ab43dc2mr57369551cf.16.1777570419456;
+        Thu, 30 Apr 2026 10:33:39 -0700 (PDT)
+Received: from [192.168.2.110] (bras-base-aylmpq0104w-grc-22-70-53-202-134.dsl.bell.ca. [70.53.202.134])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-5103d1c657bsm812311cf.3.2026.04.30.10.33.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Apr 2026 10:33:39 -0700 (PDT)
+Message-ID: <1ad27a46-543b-4799-924a-c13147bf68ca@redhat.com>
+Date: Thu, 30 Apr 2026 13:33:37 -0400
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 25/54] selftests/mm: hugepage_settings: add APIs to get
+ and set nr_hugepages
+To: Mike Rapoport <rppt@kernel.org>, Andrew Morton
+ <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>
+Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
+ Barry Song <baohua@kernel.org>, Dev Jain <dev.jain@arm.com>,
+ Donet Tom <donettom@linux.ibm.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+ John Hubbard <jhubbard@nvidia.com>, "Liam R. Howlett"
+ <Liam.Howlett@oracle.com>, Lance Yang <lance.yang@linux.dev>,
+ Leon Romanovsky <leon@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ Mark Brown <broonie@kernel.org>, Michal Hocko <mhocko@suse.com>,
+ Nico Pache <npache@redhat.com>, Peter Xu <peterx@redhat.com>,
+ Ryan Roberts <ryan.roberts@arm.com>, Sarthak Sharma
+ <sarthak.sharma@arm.com>, Shuah Khan <shuah@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Vlastimil Babka <vbabka@kernel.org>,
+ Zi Yan <ziy@nvidia.com>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org
+References: <20260428204240.1924129-1-rppt@kernel.org>
+ <20260428204240.1924129-26-rppt@kernel.org>
+Content-Language: en-US, en-CA
+From: Luiz Capitulino <luizcap@redhat.com>
+In-Reply-To: <20260428204240.1924129-26-rppt@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Dimitri Daskalakis <daskald@meta.com>
+On 2026-04-28 16:42, Mike Rapoport wrote:
+> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+> 
+> Add APIs that allow reading and writing of
+> 
+> /sys/kernel/mm/hugepages/hugepages-NkB/nr_hugepages
+> 
+> to detect and change the amount of HugeTLB pages of different sizes.
+> 
+> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 
-Certain devices which support ntuple-filters do not enable the feature
-by default. The existing tests will skip (if they check for the feature),
-or fail if they blindly attempt to install rules. Therefore, attempt to turn
-on ntuple-filters if the device supports them.
+Reviewed-by: Luiz Capitulino <luizcap@redhat.com>
 
-Signed-off-by: Dimitri Daskalakis <daskald@meta.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
- tools/testing/selftests/drivers/net/gro.py         | 10 ++++++++++
- tools/testing/selftests/drivers/net/hw/gro_hw.py   | 10 ++++++++++
- tools/testing/selftests/drivers/net/hw/iou-zcrx.py | 12 ++++++++++++
- tools/testing/selftests/drivers/net/hw/ntuple.py   |  5 ++++-
- tools/testing/selftests/drivers/net/hw/rss_ctx.py  |  7 ++++---
- 5 files changed, 40 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/drivers/net/gro.py b/tools/testing/selftests/drivers/net/gro.py
-index 221f27e57147..5ffaa7bdbff4 100755
---- a/tools/testing/selftests/drivers/net/gro.py
-+++ b/tools/testing/selftests/drivers/net/gro.py
-@@ -132,11 +132,21 @@ def _get_queue_stats(cfg, queue_id):
-     return {}
- 
- 
-+def _require_ntuple(cfg):
-+    features = ethtool(f"-k {cfg.ifname}", json=True)[0]
-+    if not features["ntuple-filters"]["active"]:
-+        if features["ntuple-filters"]["fixed"]:
-+            raise KsftXfailEx("Device does not support ntuple-filters")
-+        ethtool(f"-K {cfg.ifname} ntuple-filters on")
-+        defer(ethtool, f"-K {cfg.ifname} ntuple-filters off")
-+
-+
- def _setup_isolated_queue(cfg):
-     """Set up an isolated queue for testing using ntuple filter.
- 
-     Remove queue 1 from the default RSS context and steer test traffic to it.
-     """
-+    _require_ntuple(cfg)
-     test_queue = 1
- 
-     qcnt = len(glob.glob(f"/sys/class/net/{cfg.ifname}/queues/rx-*"))
-diff --git a/tools/testing/selftests/drivers/net/hw/gro_hw.py b/tools/testing/selftests/drivers/net/hw/gro_hw.py
-index 10e08b22ee0e..70e76e3888bd 100755
---- a/tools/testing/selftests/drivers/net/hw/gro_hw.py
-+++ b/tools/testing/selftests/drivers/net/hw/gro_hw.py
-@@ -51,11 +51,21 @@ def _resolve_dmac(cfg, ipver):
-     return getattr(cfg, attr)
- 
- 
-+def _require_ntuple(cfg):
-+    features = ethtool(f"-k {cfg.ifname}", json=True)[0]
-+    if not features["ntuple-filters"]["active"]:
-+        if features["ntuple-filters"]["fixed"]:
-+            raise KsftSkipEx("Device does not support ntuple-filters")
-+        ethtool(f"-K {cfg.ifname} ntuple-filters on")
-+        defer(ethtool, f"-K {cfg.ifname} ntuple-filters off")
-+
-+
- def _setup_isolated_queue(cfg):
-     """Set up an isolated queue for testing using ntuple filter.
- 
-     Remove queue 1 from the default RSS context and steer test traffic to it.
-     """
-+    _require_ntuple(cfg)
-     test_queue = 1
- 
-     qcnt = len(glob.glob(f"/sys/class/net/{cfg.ifname}/queues/rx-*"))
-diff --git a/tools/testing/selftests/drivers/net/hw/iou-zcrx.py b/tools/testing/selftests/drivers/net/hw/iou-zcrx.py
-index e81724cb5542..d72b76ba0835 100755
---- a/tools/testing/selftests/drivers/net/hw/iou-zcrx.py
-+++ b/tools/testing/selftests/drivers/net/hw/iou-zcrx.py
-@@ -100,12 +100,22 @@ def rss(cfg):
-     defer(ethtool, f"-N {cfg.ifname} delete {flow_rule_id}")
- 
- 
-+def _require_ntuple(cfg):
-+    features = ethtool(f"-k {cfg.ifname}", json=True)[0]
-+    if not features["ntuple-filters"]["active"]:
-+        if features["ntuple-filters"]["fixed"]:
-+            raise KsftSkipEx("Device does not support ntuple-filters")
-+        ethtool(f"-K {cfg.ifname} ntuple-filters on")
-+        defer(ethtool, f"-K {cfg.ifname} ntuple-filters off")
-+
-+
- @ksft_variants([
-     KsftNamedVariant("single", single),
-     KsftNamedVariant("rss", rss),
- ])
- def test_zcrx(cfg, setup) -> None:
-     cfg.require_ipver('6')
-+    _require_ntuple(cfg)
- 
-     setup(cfg)
-     rx_cmd = f"{cfg.bin_local} -s -p {cfg.port} -i {cfg.ifname} -q {cfg.target}"
-@@ -121,6 +131,7 @@ def test_zcrx(cfg, setup) -> None:
- ])
- def test_zcrx_oneshot(cfg, setup) -> None:
-     cfg.require_ipver('6')
-+    _require_ntuple(cfg)
- 
-     setup(cfg)
-     rx_cmd = f"{cfg.bin_local} -s -p {cfg.port} -i {cfg.ifname} -q {cfg.target} -o 4"
-@@ -134,6 +145,7 @@ def test_zcrx_large_chunks(cfg) -> None:
-     """Test zcrx with large buffer chunks."""
- 
-     cfg.require_ipver('6')
-+    _require_ntuple(cfg)
- 
-     hp_file = "/proc/sys/vm/nr_hugepages"
-     with open(hp_file, 'r+', encoding='utf-8') as f:
-diff --git a/tools/testing/selftests/drivers/net/hw/ntuple.py b/tools/testing/selftests/drivers/net/hw/ntuple.py
-index 232733142c02..ef4604bfa8ef 100755
---- a/tools/testing/selftests/drivers/net/hw/ntuple.py
-+++ b/tools/testing/selftests/drivers/net/hw/ntuple.py
-@@ -22,7 +22,10 @@ class NtupleField(Enum):
- def _require_ntuple(cfg):
-     features = ethtool(f"-k {cfg.ifname}", json=True)[0]
-     if not features["ntuple-filters"]["active"]:
--        raise KsftSkipEx("Ntuple filters not enabled on the device: " + str(features["ntuple-filters"]))
-+        if features["ntuple-filters"]["fixed"]:
-+            raise KsftSkipEx("Device does not support ntuple-filters")
-+        ethtool(f"-K {cfg.ifname} ntuple-filters on")
-+        defer(ethtool, f"-K {cfg.ifname} ntuple-filters off")
- 
- 
- def _get_rx_cnts(cfg, prev=None):
-diff --git a/tools/testing/selftests/drivers/net/hw/rss_ctx.py b/tools/testing/selftests/drivers/net/hw/rss_ctx.py
-index 1243fe426d35..f36f76d6ca59 100755
---- a/tools/testing/selftests/drivers/net/hw/rss_ctx.py
-+++ b/tools/testing/selftests/drivers/net/hw/rss_ctx.py
-@@ -57,9 +57,10 @@ def ethtool_create(cfg, act, opts):
- def require_ntuple(cfg):
-     features = ethtool(f"-k {cfg.ifname}", json=True)[0]
-     if not features["ntuple-filters"]["active"]:
--        # ntuple is more of a capability than a config knob, don't bother
--        # trying to enable it (until some driver actually needs it).
--        raise KsftSkipEx("Ntuple filters not enabled on the device: " + str(features["ntuple-filters"]))
-+        if features["ntuple-filters"]["fixed"]:
-+            raise KsftSkipEx("Device does not support ntuple-filters")
-+        ethtool(f"-K {cfg.ifname} ntuple-filters on")
-+        defer(ethtool, f"-K {cfg.ifname} ntuple-filters off")
- 
- 
- def require_context_cnt(cfg, need_cnt):
--- 
-2.52.0
+> ---
+>   .../testing/selftests/mm/hugepage_settings.c  | 25 +++++++++++++++++++
+>   .../testing/selftests/mm/hugepage_settings.h  | 23 +++++++++++++++++
+>   2 files changed, 48 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/mm/hugepage_settings.c b/tools/testing/selftests/mm/hugepage_settings.c
+> index 8f563315b1fc..5961229b9931 100644
+> --- a/tools/testing/selftests/mm/hugepage_settings.c
+> +++ b/tools/testing/selftests/mm/hugepage_settings.c
+> @@ -464,3 +464,28 @@ unsigned long get_free_hugepages(void)
+>   	fclose(f);
+>   	return fhp;
+>   }
+> +
+> +static void hugetlb_sysfs_path(char *buf, size_t buflen,
+> +			       unsigned long size, const char *attr)
+> +{
+> +	snprintf(buf, buflen, "/sys/kernel/mm/hugepages/hugepages-%lukB/%s",
+> +		 size / 1024, attr);
+> +}
+> +
+> +unsigned long hugetlb_nr_pages(unsigned long size)
+> +{
+> +	char path[PATH_MAX];
+> +
+> +	hugetlb_sysfs_path(path, sizeof(path), size, "nr_hugepages");
+> +
+> +	return read_num(path);
+> +}
+> +
+> +void hugetlb_set_nr_pages(unsigned long size, unsigned long nr)
+> +{
+> +	char path[PATH_MAX];
+> +
+> +	hugetlb_sysfs_path(path, sizeof(path), size, "nr_hugepages");
+> +
+> +	write_num(path, nr);
+> +}
+> diff --git a/tools/testing/selftests/mm/hugepage_settings.h b/tools/testing/selftests/mm/hugepage_settings.h
+> index 9357d07e6c1b..d6f41a45e8ee 100644
+> --- a/tools/testing/selftests/mm/hugepage_settings.h
+> +++ b/tools/testing/selftests/mm/hugepage_settings.h
+> @@ -94,4 +94,27 @@ int detect_hugetlb_page_sizes(unsigned long sizes[], int max);
+>   unsigned long default_huge_page_size(void);
+>   unsigned long get_free_hugepages(void);
+>   
+> +unsigned long hugetlb_nr_pages(unsigned long size);
+> +void hugetlb_set_nr_pages(unsigned long size, unsigned long nr);
+> +
+> +static inline unsigned long hugetlb_nr_default_pages(void)
+> +{
+> +	unsigned long size = default_huge_page_size();
+> +
+> +	if (!size)
+> +		return 0;
+> +
+> +	return hugetlb_nr_pages(size);
+> +}
+> +
+> +static inline void hugetlb_set_nr_default_pages(unsigned long nr)
+> +{
+> +	unsigned long size = default_huge_page_size();
+> +
+> +	if (!size)
+> +		return;
+> +
+> +	hugetlb_set_nr_pages(size, nr);
+> +}
+> +
+>   #endif /* __THP_SETTINGS_H__ */
 
