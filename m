@@ -1,133 +1,128 @@
-Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
+Received: from mail-qt1-f193.google.com (mail-qt1-f193.google.com [209.85.160.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C82CA3B7767
-	for <linux-kselftest@vger.kernel.org>; Thu, 30 Apr 2026 21:21:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D3E93D0917
+	for <linux-kselftest@vger.kernel.org>; Thu, 30 Apr 2026 23:38:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777584085; cv=none; b=oqkUfbrL03Q3WQi1UkFAt7seG4ZI3eejZELPuyLdIYFx43W0/FXrsLKnQY3G8Zr9apk6PeJilPQ9XXDt731+Lh43u4t1cM3KzgBfCfC5uWxMpG0O8hVmnuaaI9Osef4A9BFA14D9eDWNlU33rmVkmlGex549VMetLfb8tHQRtF0=
+	t=1777592341; cv=none; b=sCmLWubHp/e/oM5Dodw4DqDgWmAcyTF/WIDdoQi3ypuj2b4q1hFMqB5CSmSvY9gl+KYqR+PGgTZ+4rK99B8NEjp0+dXjthoaXCOVeEIkHhKiYX5P4g0zxTH/lFio170lUAwrOZqURtHB+iG/Tx05j6dTUKTACH8o46BZtpYy4QE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777584085; c=relaxed/simple;
-	bh=spLgIvn0NH4l49cxYbH/NFY98s5AJjP+mD6xfK1Zc/w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=O3DHDWnfk3utJGsmglFGGlOiKpy7ndtfgO8+GvHOE4EAVAhYyhBhNdrUnlzohREUDjyCIfCdlslJfcVOi9bRJpUV/EPOofh5LyJvuUiOTpD5PXdSeAc/C5jYJRq8s+dj4l+AH2FIW+iT+BxUpTAR4oo9/bKJuFxpImHENfOw9r4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=EQ5vaj7q; arc=none smtp.client-ip=209.85.210.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="EQ5vaj7q"
-Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-7d4be94eeacso1435487a34.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 30 Apr 2026 14:21:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1777584081; x=1778188881; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DKXekugmcxOxqshMkbgYf6EhJCvVkmbBw/dLn2Qsiy4=;
-        b=EQ5vaj7qNtZJYwb8PX/VlqcsLbduLOqcf/d5kyqO+DilIaeQrrgVHZUFkAhZJxzSwN
-         Q3MNtD8eAmn+abIkCmSWR/5nDomY8YEFGd2Vhwz2iHXFoihJuTT67ITxeajn8YSF4VQn
-         Vo1QliIJ9c9LGo5z7mpWSJ/6TPRnuFRH4z0YY=
+	s=arc-20240116; t=1777592341; c=relaxed/simple;
+	bh=ebHuBoW02qHmf08ncQRJXUoPQIQLHDcgiezetLfnhO4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pC+QIUxCguH3x5I7VCECEaHis0yqzw3KFXPwASQCx22gGEGdB5nlqfqCvvZkRbvXSDxTQHeyvTdGs8JHMWEZ8VCDTBvz54Ymk6Uuvf/ZO4Vi8sqdEsioJxvpP4Y0f//hJhYFmLQuryunJRnyT7FUdla7s1NVDvvQ+ouoIL/+9xk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.160.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f193.google.com with SMTP id d75a77b69052e-50e594413c2so9536601cf.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 30 Apr 2026 16:38:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777584081; x=1778188881;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DKXekugmcxOxqshMkbgYf6EhJCvVkmbBw/dLn2Qsiy4=;
-        b=gxVstwgQE8ObRHdJW8nKN8wTGnzTkg34A3o9TXoVz7h6S7MpeAbpbjECUoPrpFIOG0
-         T1OACHQX67hAucV9gzYUJpIuhzj5809i8xissILUJMb5EZYmgZUd3LBAK7P+s22W+auW
-         5ooUIwfz+KDcmLt+rhTz8WtAszJA14upCN6KUPd90w2GLEEFiEXAwo5Rx5wBqCsY+B1q
-         2RDjxI+01qdfdGnJrXCnzHaHZ/lUEfv7j82beuzUXX/XOO5H0LJnUDmMVSKcxmuna2U+
-         +DwnWqCQB/w6GKyZREJjolnkYG1kgmk2uRXzsVg9+Qwgf0DINUgNGv5o1FOK5zxHTcUi
-         F7+Q==
-X-Forwarded-Encrypted: i=1; AFNElJ9W3+UhQdmLLpK8trrDF3S6eORqDBaNIpGaErEmokNm+EPJL40xJz3y4JBE2BOuRxeZeOYDeODIiUoev5Fjyyc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyeXOZAVmQMNu7hBQ6aHKBFE/zbT2iVowrKCfj1c9zqS9e/s41B
-	/aZ0YGV+Jrw+nCBp54o2ianG4umTitd1ikPLWV+ApXRG/uXdmhGxnt7EUsfklhagFKU=
-X-Gm-Gg: AeBDiesySm/bdt5KZ/47ALnDpYOSuo+DdXhq+kNI1ih2Wnt+/oMaU96UaN4CFbynxlI
-	Nrkz6wbXnzVFhO34RN/+s6tlWwkfkMPUtKWqb7aI02jgiUP91h3XKMc6Yhm/m04kUaAthPyWS4t
-	stpSMsjvwyDGdPjSyzZkPvUYN0aw94/mMO1LjM3Oct/Svn+Tk/PmU7m+iheUGt3VNk33Uu7hMpr
-	w7WjQhabwVQz53p8kwn/dr+lzyPB4TnFhfZX8298q1AtN99zC4S9RgZf+YHm+VB8C+qBKa08x3K
-	Wcf1JfyJ9dn+TwUuP9gjgrL+BHnFaopUbaGeaeb66vooRKHwUpjZmtykCcclto6JFdPjcpJUPB2
-	X9JG+62HOWgBMNbS8d2O0z9k9rOYKYoRDWX+a/9DnSX0uKbGTpUQgaepqBt4KGnTbjSn451MW1U
-	vTYRzrWO6n5sKWMfo4UgjkXG+yErA5+cgYANoMfQHTjg==
-X-Received: by 2002:a05:6830:2b22:b0:7d9:7209:4378 with SMTP id 46e09a7af769-7deba2a151cmr2957885a34.17.1777584081679;
-        Thu, 30 Apr 2026 14:21:21 -0700 (PDT)
-Received: from [192.168.1.14] ([38.15.57.99])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7decac8ef53sm713592a34.21.2026.04.30.14.21.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Apr 2026 14:21:21 -0700 (PDT)
-Message-ID: <f5357277-bb09-4a3e-a722-24c4af4925c3@linuxfoundation.org>
-Date: Thu, 30 Apr 2026 15:21:20 -0600
+        d=1e100.net; s=20251104; t=1777592338; x=1778197138;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XI5s/gjPC8JmnFz7SoHnBZF2JdcqfzQbMV/kK5cvcdo=;
+        b=KI77uKoYiYzoMEWj70vpN9M179aA5sB9/NrdSR2YLzM4sZlmcrnGbp0JNmyXptXAJM
+         pJwARyuYE6MCNYueJrg8jb4Z3kHvW4djKrPOp+hQMU+Ln6CdE6CdLIdVIuNy0A3IpPC7
+         BlG2fYAmj0QCp/IyYxrDrD+QoiqBubgjnZWPiSw+RoIZFSnYiKsSqrV762raES8SUg3A
+         2HrLoMYK5ueKxbwDK/V6YUqSHeK08/J2/VSTKmkjempGHgL02ZS2VGwEX7Z7FlzqnbEW
+         m5BnQ+0VgtmgB+HmgedUDkvGEl6WOydT/drxIAy5DpTJErFuO4z1/a7hpbv5ZZqK3vCZ
+         0ung==
+X-Forwarded-Encrypted: i=1; AFNElJ+mtrC4OGwXCV/kY4+AFNfgu28M0+pfMLHyL5A+Yd3Lhln3eXqxn3W1ijpOokkiwTl3iPZ9jYv+MxBjqsRH6x4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxjbun1PgzQOgRUON9eJbkW/aIrlt0vMOvQ6gEQvznAO/+533gx
+	YF/9lABKUma68mJ6tqA4ztlLpru42ZlOaBETcOl1h5ufVWAMCNkAkCqq
+X-Gm-Gg: AeBDieuxafkCyEYPbI2ubqVtyUlUoQ+gCi4fOAvIyfqqkQAQ2z6c+xYrhnHY+1Sr4Rj
+	vXOiQDPpmGgs6a7D0PnzZlze4NOKs9liOntLTM6gCSjbfX/jVDlpsWnyJ9RU3Gpj0neTbyNsXUq
+	5rEgCCONcLAlHt/Wtmgrh5627RzdA28OS7cIl2OcpZ3XFvEpmQqNidF9r5s9XN6KZzCowQEyT0Z
+	1+1PIP+UKvuCmaWKyEZ2s+XrQFd2+MFYKrqPG3vkScwIkWOIv2sAYugVqwIwcjm9nndhZHFwTp3
+	WXDwAwpG6EMtcNGimCHd6UVwGSMj6A5OgrrpQWXvItEZxOhuKRbaOwuhfp/akDWiqyS7pZpjAq6
+	cUstJ3/ZD3yp7tVC7FWx7aj7omYqJvp7qnrqbhuyICtDWS+g7z7oGrTEGV4/GIv5hhGIa8cNzXY
+	Ej+IH9dM3mZPguRpfCgchm3uolh62tgF9CzwbptOtqgStAb/SqIrXy/ccG9DphkdPjS9/sN/ahg
+	l6z3bOq
+X-Received: by 2002:a05:622a:248d:b0:50f:bd19:657b with SMTP id d75a77b69052e-5102d13e8ddmr62263561cf.10.1777592338555;
+        Thu, 30 Apr 2026 16:38:58 -0700 (PDT)
+Received: from im-t490s.redhat.com (89-24-32-159.nat.epc.tmcz.cz. [89.24.32.159])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-51040934199sm221cf.13.2026.04.30.16.38.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Apr 2026 16:38:58 -0700 (PDT)
+From: Ilya Maximets <i.maximets@ovn.org>
+To: netdev@vger.kernel.org
+Cc: Aaron Conole <aconole@redhat.com>,
+	Eelco Chaudron <echaudro@redhat.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Yuan Tan <tanyuan98@outlook.com>,
+	Yang Yang <n05ec@lzu.edu.cn>,
+	dev@openvswitch.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Ilya Maximets <i.maximets@ovn.org>
+Subject: [PATCH net v2 0/2] openvswitch: fix self-deadlock on release of tunnel vports
+Date: Fri,  1 May 2026 01:38:36 +0200
+Message-ID: <20260430233848.440994-1-i.maximets@ovn.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] selftests: runner: Avoid spurious warning about
- missing failures file
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Yohei Kojima <yk@y-koj.net>, Shuah Khan <shuah@kernel.org>,
- Brendan Jackman <jackmanb@google.com>, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260224-kselftest-fix-failures-file-v2-1-2bfb8f5cb6a8@linutronix.de>
- <ader8C3F2uOY7ro6@desktop.y-koj.net>
- <4915db6e-5bcf-4f70-b510-693f5d5b8678@linuxfoundation.org>
- <f4a213da-7016-4d87-a93f-ea205ab05aae@linuxfoundation.org>
- <20260429131021-f3cf0fba-0944-4a58-a69c-34df628c42d7@linutronix.de>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20260429131021-f3cf0fba-0944-4a58-a69c-34df628c42d7@linutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 4/29/26 05:12, Thomas Weißschuh wrote:
-> On Mon, Apr 27, 2026 at 10:20:43AM -0600, Shuah Khan wrote:
->> On 4/22/26 08:51, Shuah Khan wrote:
->>> On 4/9/26 07:38, Yohei Kojima wrote:
->>>> On Tue, Feb 24, 2026 at 04:37:56PM +0100, Thomas Weißschuh wrote:
->>>>> When runner.sh is *not* executed via run_kselftest.sh, the variable
->>>>> $kselftest_failures_file does not exist. This triggers a harmless but
->>>>> annyoing warning from runner.sh if a test fails:
->>>>>
->>>>> tools/testing/selftests/kselftest/runner.sh: line 50: : No such file or directory
->>>>>
->>>>> Silence the spurious warning.
->>>>>
->>>>> Fixes: d9e6269e3303 ("selftests/run_kselftest.sh: exit with error if tests fail")
->>>>> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
->>>>> Reviewed-By: Brendan Jackman <jackmanb@google.com>
->>>>
->>>> Hi all,
->>>>
->>>> It seems this patch hasn't been picked up yet, although it already got
->>>> reviewed by Brendan. This bug is also mentioned by a netdev maintainer
->>>> and several developers [1], so I think it would be nice to have this
->>>> patch merged.
->>>>
->>>> [1]: https://lore.kernel.org/lkml/20260112135326.7ce71119@kernel.org/
->>>>
->>>> I confirmed that it still applies to 7.0-rc7. I also tested it by adding
->>>> a failing test to net and namespaces selftests, and confirmed that the
->>>> error disappeared.
->>>>
->>>> Tested-by: Yohei Kojima <yk@y-koj.net>
->>>>
->>>
->>> Sorry for the delay.
->>>
->>> It disappeared in my Inbox - I will pick this up for Linux 7.1-rc2
->>
->> Please rebase on Linux 7.1-rc1 and send it to me?
-> 
-> This actually doesn't seem to be necessary anymore since commit 2964f6b816c2
-> ("selftests: Use ktap helpers for runner.sh"). So let's drop it.
-> 
-> 
+Two patches - the fix for the actual bug and the selftest that reproduces it.
+
+I missed the self-deadlock in the original patch that introduced the issue,
+because testing required code modification in the ovs-vswitchd to force it to
+use legacy tunnel ports.  I thought I made the change correctly, but apparently
+something went wrong and the tests were run with the standard LWT infra instead.
+The selftest added in this patch set will at least prevent this kind of mistakes
+in the future.
+
+I mentioned, however, that these tunnel vports are legacy and not actually used
+by ovs-vswitchd.  RTM_NEWLINK + COLLECT_METADATA is used in conjunction with the
+standard OVS_VPORT_TYPE_NETDEV instead since 2017.  The code to use the legacy
+tunnels still exists in ovs-vswitchd however, but only as a fallback for older
+kernels and we're planning to remove it in the next release.  I'll be sending an
+RFC to remove support for these legacy tunnel types from the kernel, as they
+serve no real purpose today and only increase the uAPI surface for CVEs, but
+we need to fix the known bugs for stable versions.
 
 
-Thanks for confirming.
+Version 2:
+  - Added Ack from Eelco to the first patch (not to the second as it
+    changed a little).
+  - Removed now unused import socket in the dpctl.py [pylint/ruff].
 
--- Shuah
+  - Regarding comments from both Sashiko instances on the selftest patch:
+
+    * The background process is not waited for / not killed.
+      If it hangs it will not be killable anyway, so it's not a problem.
+
+    * The 'gre' choice for dpctl.py --ptype is not fully handled for --lwt.
+      While this is not needed for this patch, I agree that it's not
+      fully consistent.  Added the proper handling in the TUNNEL_DEFAULTS
+      loop in this version.
+
+    * Python version concern for argparse.BooleanOptionalAction.
+      Python 3.9 is the oldest supported version and it has it, so it's
+      not an issue.  Creating extra detection will only complicate the
+      script with no real benefits.
+
+Version 1:
+  https://lore.kernel.org/netdev/20260429151756.4157670-1-i.maximets@ovn.org/
+
+Ilya Maximets (2):
+  openvswitch: vport: fix self-deadlock on release of tunnel ports
+  selftests: openvswitch: add tests for tunnel vport refcounting
+
+ net/openvswitch/vport-netdev.c                |  6 ++-
+ .../selftests/net/openvswitch/openvswitch.sh  | 37 +++++++++++++++++++
+ .../selftests/net/openvswitch/ovs-dpctl.py    | 19 +++++++---
+ 3 files changed, 55 insertions(+), 7 deletions(-)
+
+-- 
+2.53.0
 
