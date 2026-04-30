@@ -1,234 +1,179 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F40512F585
-	for <linux-kselftest@vger.kernel.org>; Thu, 30 Apr 2026 13:38:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E448428461
+	for <linux-kselftest@vger.kernel.org>; Thu, 30 Apr 2026 14:09:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777556283; cv=none; b=JQkQDiKRB/4spFGgFKLRNwxkzDuGKGPD20lf9KH1/XtPoly9OiPkdxKICiNJpEIqf2QBMoHrMo9wLo9zz97wbyShOU3Ike8ZxI0Mx/m9de9iklOBPx4OnKMlkswDSxHxq0LvySZSzuz5s+sUyU2NeHh4kwVgwZjHDrCQ5H3p/FM=
+	t=1777558163; cv=none; b=ghnhQlb8CUh9f/RbDvluWOGX9N/sqRSxqmtd0j9xSR/49q/KaSMF3gqXhfI9RjoQKiDze391AeKtqUT3nHp62S1RiWFWWX//AtCNI54AIYpWKnRBSc++2oEAoHmsUcgH4FL02M7AnnzdmIXerEmGgh5v5vV5IT6ryKyfRt3D8ek=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777556283; c=relaxed/simple;
-	bh=Wc+D8caaBVXx/76SzhM6rbIvQSOxiKy5eEeWre1Y7E4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Duz1RhsnkyE/4tfigdYIPNbq1Hh1dvtuQFuJkBYLNf7QegLSLfxM2RawmLSSXO+6z4lJSX/7GOlLUQNvBk4u3+ckxyfiQo/RX1K+8ulOw16awAeykoesualml8tORaAaE9zV61kOjCFFDRZGE5jhKedpIlkwlN9UmOi+aV7kFAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JK0ZZeQL; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1777558163; c=relaxed/simple;
+	bh=1qjZmmrF3I85CBh0a1JI7hHwk45mME8Vo8LYhHDlh9E=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:Subject:Cc:To:
+	 References:In-Reply-To; b=Tpn6mvKPqiMYnPrf6G5SuIBzYdE6Vnd7Lpl7SEchv4ITanZ9sKdhPHJ30nU7O/MRleqXJftiL9cXGSZNIRGhJwW/YwEojk/RzvAe4N/+SxR1TPlc2E3f2GYdtHJ454GVq2VbqU5PR3Aa8lrcaLAZQoECWl6gCy0vQX3z88DWXUw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=UXyVrVnn; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JK0ZZeQL"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1777556281;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Zvpc3ouiLend2nTOGgnsZ2P9GoiNqqJrDz+MQzcNl04=;
-	b=JK0ZZeQLimijOfE6lItSVkjM3C6tSXD49T0OUJ7V68sQer1Ea/OpaM7cCku9Y89WE5y91p
-	YCXVsA/BCVIGMHSwIP72wLTt+9j0s6MlFTmvkwvr8P5ruN8I1F5/ob1ZKLdXXXtmmsJODB
-	BK+DZ9jbZ10wpo33tkHQEbD3f6Yxzok=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-173-PDmhLZu9N42fROrD7Km7Zg-1; Thu, 30 Apr 2026 09:37:56 -0400
-X-MC-Unique: PDmhLZu9N42fROrD7Km7Zg-1
-X-Mimecast-MFC-AGG-ID: PDmhLZu9N42fROrD7Km7Zg_1777556276
-Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-8abd6e281c0so31134066d6.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 30 Apr 2026 06:37:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="UXyVrVnn"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-48a7fe4f40bso10047695e9.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 30 Apr 2026 07:09:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1777558159; x=1778162959; darn=vger.kernel.org;
+        h=in-reply-to:references:to:cc:subject:from:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Z9EL5be0hYDO4pBoXs2Ff2eHS7rc0zYolDGqpnGuRlY=;
+        b=UXyVrVnncE8QNLzp9VL/vLZwsewI6gKBwFRNrow35ZaxLdtajYxZ1f8CYLX6ut+YDR
+         2YuzJBOofJfhSM9AbhJp6ovkdFnN7dA51YS5Ig/3cLC2Pi3j3PJq6VTsTSfXD+ZDkK/R
+         vD8d1eO/zeHvUh7wLjYfgJl1uP/XU1+Qe/06vI3lPgH0q4UNk7R5925V32wHz8ea/tkq
+         6gRY/4e4uL6MnUph2VzXS3+j/ACQe8AMPSCuNTKEElyr1gizBAh5Vb2DgKLw/FjCzn2c
+         QV0syrnlFJI2dFx1onRKapzQ+UVL6mz2ksh5Fut3bsplzBo9674Jqp4A0rrbSLUtaUrS
+         rHMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777556276; x=1778161076;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Zvpc3ouiLend2nTOGgnsZ2P9GoiNqqJrDz+MQzcNl04=;
-        b=roPEo1ac2XYVM9SL1ejuOTuLfF/E5wTv8njaGKGDEoijGOAqJejBHbzBRizGW9V2r/
-         Xa/NEO0+8CfIN6mmMKvJdQyon2SOG0mS9cHgkVYHYZIfF9K2nBx3k5YK8KcdhheZ4+m6
-         X7TCDL0euWlU/+R2LZmoaFJH3Uzh936BRDE64eacE8w/6eW+i85UeEjGA7B5av4OI5zE
-         jLO/6ZlKTZ4Y8QUM2qBFe7MjrWtlUy9cFPv51/Dbf5Yzq0Dwe4gIalgbeba+0xs08HNy
-         vpXHkMvgK3qZNt7R6SlyiVTVLy0byCE7CrorC22lQQ9JrT/W3hRXYeJozJ4YfV4ouqH2
-         v9uA==
-X-Forwarded-Encrypted: i=1; AFNElJ95L/jFQmwQn1WsqAfPpidMSABUvK8rNciBDibU7eJLVRJftnMpm8Hib+rVSSgurXbUrJJvSgIZffNqOTUysFU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxI24tS2Oi38P8S8wTafrgVDZ6djEwXf4xZxVHu+yi50XXmF7LS
-	4ygjsfusWoXZ8XQh/Tt6YEgOLwa37pMstyyjBD/In0C+T86fp6/ltLUPQt6d4q4NwchfsdE1T43
-	SCK4H+Nkc04uT0TZ9nUqhRpWfS0T9eHOIfnWLwacfIC9HyJgtEpHsEUqU6oTiW4c2z+/4xA==
-X-Gm-Gg: AeBDievzBsb1Al1HwmK3+sf+bSbe9mEMcpB/ZpsA+Ob52A3Qe9C0LWCc7tjdOQGIk0j
-	w7s5F9HaA6RCBfja0BZZgQRxXxNskmIB8FBVWoALGwP7YJdY+jkshALxWYJoqlgAE9yYO9cvnnB
-	ypY4oR6Iz8+a/mX3HtCaeex2Ylm+5yHkG6iixdrpTiWzP6/wyKAINOUTaLfkMvKdMLnOHfIMyEI
-	ABvdQFQZRpF48x7E1PpG3Kx/VExzyqOdX/jRV+sujClQxNv0SJXkqwbd0iALGwl6HMpakZ3aNm4
-	YRQJQLwouO2FGTqkhLOmo5DPTnI2XrLh/zr4M2rUs/2OLXt/ephwm3BblT1RZOaJuZhTD8b/xlD
-	zAKppCGi7lkMVPGz8AKA9y/YSaDXIw3dLNNA=
-X-Received: by 2002:a05:622a:586:b0:509:2b02:c1bd with SMTP id d75a77b69052e-5102aad8a94mr44516001cf.12.1777556276113;
-        Thu, 30 Apr 2026 06:37:56 -0700 (PDT)
-X-Received: by 2002:a05:622a:586:b0:509:2b02:c1bd with SMTP id d75a77b69052e-5102aad8a94mr44515291cf.12.1777556275587;
-        Thu, 30 Apr 2026 06:37:55 -0700 (PDT)
-Received: from [192.168.2.110] ([70.53.202.134])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-5101aeb58desm48316071cf.29.2026.04.30.06.37.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Apr 2026 06:37:55 -0700 (PDT)
-Message-ID: <6b12453b-2683-41cc-bb4c-602eda6bf9d8@redhat.com>
-Date: Thu, 30 Apr 2026 09:37:43 -0400
+        d=1e100.net; s=20251104; t=1777558159; x=1778162959;
+        h=in-reply-to:references:to:cc:subject:from:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Z9EL5be0hYDO4pBoXs2Ff2eHS7rc0zYolDGqpnGuRlY=;
+        b=KGM4ThtcthkhDai4pmQM2deZIvh9Elhkf9Eqay2TiboTD9c8gk+rC75Wqy/6zbnBcU
+         Vx7IBSizPL4Rs5KcvXsUeBcYTyA1qo5K/ry0M6PNsWJpSvbksIKevx9rx7LXLMhjcOeB
+         t98//YRJ2F/s3aVrOTiEKD3x/pqJ/RwjWWK8s1KhTC82zr86soau8nK0FEkXzXDJQzdQ
+         pHxvyOrXnAbGdPrkBEPYIjS379d7kKFf0ie+Ze27QxT4Co+b/t/IivWONcsbX1yaCTg+
+         cTvn/9ZiiKFhnqRAcPaFOq+m2JTq8QEOGMuU2+0nddHfGmkjG9zUXfNSgNgq+dPQNbuX
+         CveA==
+X-Forwarded-Encrypted: i=1; AFNElJ8Z60WrY0KAQ0PaMADWZWzKAUqctANjX/ttPsGnQ3wNCB8qFLUnndQ73KKnKcBUbDcbgIBxWQxKPVVrVh3jVoI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw9wq+cbHYqFH7/5t0/oatAft2oBrOqRh/h8zamdgd0d71Uz8m4
+	rJkgq6dbESxDKXHA6RLeji+UCSUFixBvKKF5gEFOmyS5ZVCDuHVIEHbETSN/czcilyU=
+X-Gm-Gg: AeBDievg5aGv4tJ+PpJ6ve+TUPmVNZWw4wG6MfSDbXSJr9eLFM8Edgpkkd0QePKBBpv
+	OGBAzQH7JCb1janSffrOCB3vt4tNkCi6YAR8LI/uJ8SMsP2gIax39XiEBz+UiYGGIfPJ0bSIkiU
+	Wh2sYXAKm1VZJJv4tgSSP2nZN+VVFelroBkGl8OorpbmVQHK+gpcdGB7yM9jN11f1Kq0fwzDDNQ
+	A4MyqkY7h9Zen3b+6aj5F97jmrBRgFsRqTEMEd6sxpCKGwza+NM0ibfBtiGPSbJng3A4t6t5S7y
+	IzpSVmj22KVWNrXIvexeQ53gURFKXO+brsLALxMth1yiNm6AI7EI41Dd1I3vs6bhnwJMkOq6CN3
+	oTJgPcBUeONngxvFoCEED16eDaGBWIZQ+R7KWxRummERX8dIs8WKa/4+HDe1aLpM3s/1GXThfMU
+	NZr2CIn7cr78EA17rW6+EvrOs=
+X-Received: by 2002:a05:600c:8b22:b0:485:3a03:ceca with SMTP id 5b1f17b1804b1-48a844582c3mr54963025e9.23.1777558158451;
+        Thu, 30 Apr 2026 07:09:18 -0700 (PDT)
+Received: from localhost ([2804:7f0:b765:105d:2ecf:67ff:fe81:9da0])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12de31ab65fsm7755291c88.0.2026.04.30.07.09.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Apr 2026 07:09:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 04/54] selftests/mm: migration: properly cleanup
- fork()ed processes
-To: Mike Rapoport <rppt@kernel.org>, Andrew Morton
- <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>
-Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
- Barry Song <baohua@kernel.org>, Dev Jain <dev.jain@arm.com>,
- Donet Tom <donettom@linux.ibm.com>, Jason Gunthorpe <jgg@ziepe.ca>,
- John Hubbard <jhubbard@nvidia.com>, "Liam R. Howlett"
- <Liam.Howlett@oracle.com>, Lance Yang <lance.yang@linux.dev>,
- Leon Romanovsky <leon@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
- Mark Brown <broonie@kernel.org>, Michal Hocko <mhocko@suse.com>,
- Nico Pache <npache@redhat.com>, Peter Xu <peterx@redhat.com>,
- Ryan Roberts <ryan.roberts@arm.com>, Sarthak Sharma
- <sarthak.sharma@arm.com>, Shuah Khan <shuah@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Vlastimil Babka <vbabka@kernel.org>,
- Zi Yan <ziy@nvidia.com>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org
-References: <20260428204240.1924129-1-rppt@kernel.org>
- <20260428204240.1924129-5-rppt@kernel.org>
-Content-Language: en-US, en-CA
-From: Luiz Capitulino <luizcap@redhat.com>
-In-Reply-To: <20260428204240.1924129-5-rppt@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 30 Apr 2026 11:09:14 -0300
+Message-Id: <DI6JRYWASEYN.3I8Q81ZPUE1VE@suse.com>
+From: =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmU=?= <rbm@suse.com>
+Subject: Re: [PATCH bpf-next v10 02/11] selftests/bpf: Fix test_kmods KDIR
+ to honor O= and distro kernels
+Cc: <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>,
+ <alan.maguire@oracle.com>, <martin.lau@kernel.org>, <clm@meta.com>,
+ <ihor.solodrai@linux.dev>
+To: <bot+bpf-ci@kernel.org>, <rbm@suse.com>, <ast@kernel.org>,
+ <daniel@iogearbox.net>, <andrii@kernel.org>, <martin.lau@linux.dev>,
+ <eddyz87@gmail.com>, <memxor@gmail.com>, <song@kernel.org>,
+ <yonghong.song@linux.dev>, <jolsa@kernel.org>, <shuah@kernel.org>,
+ <nathan@kernel.org>, <nick.desaulniers+lkml@gmail.com>, <morbo@google.com>,
+ <justinstitt@google.com>
+X-Mailer: aerc 0.21.0-120-g22b95d38161f
+References: <20260430-selftests-bpf_misconfig-v10-2-cd302a31af16@suse.com>
+ <d1297f1c857e5430af42dcb3e4d05c7ddaff08470a43893cac0fbcb83ec51666@mail.kernel.org>
+In-Reply-To: <d1297f1c857e5430af42dcb3e4d05c7ddaff08470a43893cac0fbcb83ec51666@mail.kernel.org>
 
-On 2026-04-28 16:41, Mike Rapoport wrote:
-> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-> 
-> Several migration test use fork() to create worker processes. These
-> processes are later killed, but nothing collects their exit status and they
-> remain as zombies in the system.
-> 
-> Add a helper function that kills the worker processes, waitpid()s for
-> them and verifies the exit status.
-> 
-> Replace the loops that call kill() for each process with a call to that
-> helper.
-> 
-> The addition of waitpid() calls also makes sure the migrating process never
-> exits before the processes accessing the memory, so it's possible to drop
-> the call to prctl(PR_SET_PDEATHSIG, SIGHUP).
-> 
-> Reported-by: Luiz Capitulino <luizcap@redhat.com>
-> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+On Thu Apr 30, 2026 at 10:30 AM -03, bot+bpf-ci wrote:
+>> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selfte=
+sts/bpf/Makefile
+>> index 6094fe99b5f6..cc6ee7a2df93 100644
+>> --- a/tools/testing/selftests/bpf/Makefile
+>> +++ b/tools/testing/selftests/bpf/Makefile
+>
+> [ ... ]
+>
+>> diff --git a/tools/testing/selftests/bpf/test_kmods/Makefile b/tools/tes=
+ting/selftests/bpf/test_kmods/Makefile
+>> index 63c4d3f6a12f..031c7454ce65 100644
+>> --- a/tools/testing/selftests/bpf/test_kmods/Makefile
+>> +++ b/tools/testing/selftests/bpf/test_kmods/Makefile
+>> @@ -1,5 +1,16 @@
+>>  TEST_KMOD_DIR :=3D $(realpath $(dir $(abspath $(lastword $(MAKEFILE_LIS=
+T)))))
+>> -KDIR ?=3D $(abspath $(TEST_KMOD_DIR)/../../../../..)
+>> +SRCTREE_KDIR :=3D $(abspath $(TEST_KMOD_DIR)/../../../../..)
+>> +# Honor O=3D/KBUILD_OUTPUT only if they point at a prepared kernel buil=
+d
+>> +# directory (one containing Module.symvers); otherwise treat the value =
+as a
+>> +# selftests-only output directory and fall back to in-tree or distro he=
+aders.
+>> +# The parent bpf/Makefile resolves O=3D/KBUILD_OUTPUT to absolute paths=
+ before
+>> +# invoking this sub-make so relative paths still anchor to the user's
+>> +# invocation directory.
+>> +KMOD_O :=3D $(or $(O),$(KBUILD_OUTPUT))
+>> +KMOD_O_VALID :=3D $(if $(KMOD_O),$(if $(wildcard $(KMOD_O)/Module.symve=
+rs),$(KMOD_O)))
+>> +KDIR ?=3D $(if $(KMOD_O_VALID),$(SRCTREE_KDIR), \
+>> +	    $(if $(wildcard $(SRCTREE_KDIR)/Module.symvers),$(SRCTREE_KDIR), \
+>> +		/lib/modules/$(shell uname -r)/build))
+>
+> Will falling back to the host kernel headers cause compilation errors
+> when building in-tree test modules like bpf_testmod?
+>
+> Since bpf_testmod relies heavily on internal BPF structures,
+> experimental macros, and kfuncs that change frequently between kernel
+> releases, compiling it against /lib/modules/$(uname -r)/build on a
+> system where the running kernel does not exactly match the upstream
+> source tree will likely fail.
+
+This is only the fallback case (inspired by livepatch collection which uses
+this KDIR as default), the targeted invocation for this series is
+something like:
+
+  make -C /lib/modules/$(uname -r)/source/tools/testing/selftests \
+       O=3D/lib/modules/$(uname -r)/build SKIP_TARGETS=3D TARGETS=3Dbpf \
+       BPF_STRICT_BUILD=3D0
+
+The usual in-tree way of building vmlinux and then the selftests strictly
+would keep the same current behavior.
+
+>
+> If the host headers are present, the permissive skip check further down
+> in the file will pass since the directory exists. Because the
+> compilation failure is not ignored by the parent bpf/Makefile, won't
+> this abort the entire BPF selftests build with confusing C compilation
+> errors instead of silently skipping the unconfigured kernel tree?
+>
+> Should in-tree test modules avoid falling back to host distro headers to
+> prevent these version mismatches?
+
+Without the fallback, a user running from a tree matched to their installed
+kernel but without a prior in-tree build would lose bpf_testmod. Small
+niche, but the workaround (O=3D/lib/modules/$(uname -r)/build) might not be
+obvious. The fallback covers them at zero cost to everyone else, so I think
+it should stay.
+
+>
+> This was raised by Sashiko AI reviewer in v9:
+>
+>     https://lore.kernel.org/bpf/20260429194107.806B7C19425@smtp.kernel.or=
+g/
+>
+> The issue was acknowledged in v9 but has not been addressed in v10.
+>
+> [ ... ]
+>
+>
 > ---
->   tools/testing/selftests/mm/migration.c | 54 +++++++++++++-------------
->   1 file changed, 27 insertions(+), 27 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/mm/migration.c b/tools/testing/selftests/mm/migration.c
-> index 3630f2fb0800..76e380b74658 100644
-> --- a/tools/testing/selftests/mm/migration.c
-> +++ b/tools/testing/selftests/mm/migration.c
-> @@ -67,6 +67,24 @@ FIXTURE_TEARDOWN(migration)
->   	free(self->pids);
->   }
->   
-> +static bool kill_children(FIXTURE_DATA(migration) * self)
-> +{
-> +	int i, status;
-> +	pid_t pid;
-> +
-> +	for (i = 0; i < self->nthreads; i++) {
-> +		pid = self->pids[i];
-> +		if (kill(pid, SIGTERM))
-> +			return false;
-> +		if (pid != waitpid(pid, &status, 0))
-> +			return false;
-> +		if (!WIFSIGNALED(status) || WTERMSIG(status) != SIGTERM)
-> +			return false;
-> +	}
-
-Why do we stop at the first error? Wouldn't it be better to kill &
-collect all of them and then return false if at least one fails?
-
-> +
-> +	return true;
-> +}
-> +
->   int migrate(uint64_t *ptr, int n1, int n2)
->   {
->   	int ret, tmp;
-> @@ -160,20 +178,14 @@ TEST_F_TIMEOUT(migration, shared_anon, 2*RUNTIME)
->   	memset(ptr, 0xde, TWOMEG);
->   	for (i = 0; i < self->nthreads; i++) {
->   		pid = fork();
-> -		if (!pid) {
-> -			prctl(PR_SET_PDEATHSIG, SIGHUP);
-> -			/* Parent may have died before prctl so check now. */
-> -			if (getppid() == 1)
-> -				kill(getpid(), SIGHUP);
-
-This goes beyond this series, but I wonder if we should have this check
-in access_mem() in case the parent dies in migrate().
-
-> +		if (!pid)
->   			access_mem(ptr);
-> -		} else {
-> +		else
->   			self->pids[i] = pid;
-> -		}
->   	}
->   
->   	ASSERT_EQ(migrate(ptr, self->n1, self->n2), 0);
-> -	for (i = 0; i < self->nthreads; i++)
-> -		ASSERT_EQ(kill(self->pids[i], SIGTERM), 0);
-> +	ASSERT_EQ(kill_children(self), true);
->   }
->   
->   /*
-> @@ -236,20 +248,14 @@ TEST_F_TIMEOUT(migration, shared_anon_thp, 2*RUNTIME)
->   	memset(ptr, 0xde, pmdsize);
->   	for (i = 0; i < self->nthreads; i++) {
->   		pid = fork();
-> -		if (!pid) {
-> -			prctl(PR_SET_PDEATHSIG, SIGHUP);
-> -			/* Parent may have died before prctl so check now. */
-> -			if (getppid() == 1)
-> -				kill(getpid(), SIGHUP);
-> +		if (!pid)
->   			access_mem(ptr);
-> -		} else {
-> +		else
->   			self->pids[i] = pid;
-> -		}
->   	}
->   
->   	ASSERT_EQ(migrate(ptr, self->n1, self->n2), 0);
-> -	for (i = 0; i < self->nthreads; i++)
-> -		ASSERT_EQ(kill(self->pids[i], SIGTERM), 0);
-> +	ASSERT_EQ(kill_children(self), true);
->   }
->   
->   /*
-> @@ -300,20 +306,14 @@ TEST_F_TIMEOUT(migration, shared_anon_htlb, 2*RUNTIME)
->   	memset(ptr, 0xde, hugepage_size);
->   	for (i = 0; i < self->nthreads; i++) {
->   		pid = fork();
-> -		if (!pid) {
-> -			prctl(PR_SET_PDEATHSIG, SIGHUP);
-> -			/* Parent may have died before prctl so check now. */
-> -			if (getppid() == 1)
-> -				kill(getpid(), SIGHUP);
-> +		if (!pid)
->   			access_mem(ptr);
-> -		} else {
-> +		else
->   			self->pids[i] = pid;
-> -		}
->   	}
->   
->   	ASSERT_EQ(migrate(ptr, self->n1, self->n2), 0);
-> -	for (i = 0; i < self->nthreads; i++)
-> -		ASSERT_EQ(kill(self->pids[i], SIGTERM), 0);
-> +	ASSERT_EQ(kill_children(self), true);
->   }
->   
->   TEST_HARNESS_MAIN
-
+> AI reviewed your patch. Please fix the bug or email reply why it's not a =
+bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
+E.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/251670=
+06036
