@@ -1,168 +1,265 @@
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from cstnet.cn (smtp25.cstnet.cn [159.226.251.25])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A35A727F017
-	for <linux-kselftest@vger.kernel.org>; Thu, 30 Apr 2026 04:02:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 350E018FC80;
+	Thu, 30 Apr 2026 04:34:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777521747; cv=none; b=ayFoIGlRBI2cgKhokJZRd51WsAlwk59eZESaI1UogS2XjZihIyWr/49JPsSYYvD7rIZnZhqrFKNaLgowLYILr95aagT0NCQIFEu8xiWuU++eyv44LvV8gmuGYqSjtz+Eiy6bZW9TgI65USXE4yLFroU4x/r3L59qpzYriwvCeeM=
+	t=1777523662; cv=none; b=lK33ACYVqHNgJB+t1DRD4/HkbNMHfFJZW9ZQBQsU4rpTfWH5n43qc2Y50oFpPdTqc28hfAZU19727I9IqaGFvljWOd91K+vWpoFp2XPE8f/eMWtFC9Drbi17CzDQ8B69rJ+xaau/Hcm/fbX68Eh1vHzWr8mXY9NR3fLdBMsHID8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777521747; c=relaxed/simple;
-	bh=S9qKw++DwaSQqM9CRZbugJWSsqmeGsHl7EmLAtvoLb0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=TKfYPm/bBtjaQBkjtaJEs11Lyey7nIB9JXRC0R6jfzczWc5d59iWYPtL8T5ewdPYqTdnWvGj9GthwYuyTqss2D39yR7TepTmvZY6WvsCz21SVknXkZ3jEZfZhYtoMbiJNWH9eHdzdXTFIZ5GFk8YpGxmLwuVXL6lRImWtYR/mVI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j7HbN0wC; arc=none smtp.client-ip=209.85.215.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j7HbN0wC"
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-c7963df6f17so293568a12.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Apr 2026 21:02:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777521746; x=1778126546; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=fNAWw4AuVFxwgv1L7Dwy/JL7WXpBrh4g95GEue5eO0Y=;
-        b=j7HbN0wCpv2lrFWCi10zdBuXJ/9p/36ODxjPdPE2sPZsn0K6zcsp9q9vBtzgduyZ55
-         11XmVqQuljwHHCuNRKT0oG3T1mwSk64CIzw8uMRRtiOr2I4saTiKcbll56da47sWhjLh
-         Vmy0Xra+4KMC58OcMQxDbKrV4CW9Jo1a7eZVMiE06Jrqz9j0Si8kb4+Rf+CddAIedz3Q
-         7t6f2jhf05OrC0pa8x7ubK6R5i2yfz7A3NqQJJYbwqy1loQkhPhrSQCfchBP7/6lfbKb
-         eJaCYUPBp8RyrPY/IBNZb0ftbO3CfN7vP3HEihCrdQBQ3JI7JgXOYoNOAk0CJfflbGWf
-         tWEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777521746; x=1778126546;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fNAWw4AuVFxwgv1L7Dwy/JL7WXpBrh4g95GEue5eO0Y=;
-        b=h7RPAqaicW93XPCab6MPgfhZsxJqDJC7KT4qsI1NE4FgBzTASE4QD7grUJ6/BJtdf1
-         YK9FHkBOng6jGOhGLW5fwNT0BcMdb5Zmm94uma4bEwg/qQEUiwBWBUeHCT76d+9GDYL8
-         8yrLcKtc1plDYYkRG87McH0OeAui6rIBgpCAWe8q1BG27i2mL12pH0QCSUG2CTpKTEUS
-         bOGrP4FUY7L/7FbrdWEmwfQH5OM3/JcFjPEhJiStscqlMbpnfAxTiPTPd1elPKnB+Gug
-         7jR7dMY0rAC9So4Cbfk1ZH/lnV/NXInwtv2h9kCs1jyVCB3JpK+ZHTsrAGPGVxMMSFDR
-         xLTw==
-X-Gm-Message-State: AOJu0Yzf4rDwGLPOXYdgVCySERSiUKzOt1SfC3B9Jn9OsgoTvLepKd3y
-	HZIdc9rYOqOwQxxiABi+XQ4XTPf4j2W1yFjvOPSbKedloNRCA10fDExn
-X-Gm-Gg: AeBDiesKXT6AW6pwmQCupjpGo57998jZ1yOZBe20h2TukC3/LSMNPTxuIMEvqRZD9BB
-	ez4DV7WzgPzWdDvh8LsdDQe4QGSJxAhz9/s4mlapbJuAaHzSQ69fRXPbiMTmoiThFjHiJZDtFnP
-	wRoyXttWO8NbWn1H3VyS3oFoEDver5GX/ydAIb70ZAvet84fDc08d6WfeqssjCoEM8XuVs+dyVT
-	XWEz+i6EE6qArcj4RpbDA5T6C3Z32xSwuJGLVocqIsu/IWy5i7QqtnZ2/CgV3t0C12qtSg/uo3z
-	4rF2/jvrBciF1KPtE0vJJneAiQjMQY2zcX9QcMMCaHrMzel/cJz0eYpgYYDWGZJUrbeNUIXUGMz
-	jLa2ngzrglG5Tq6CJ5TE0seeFywEetJ/aR+6gJf2fDd/pS1Fb2CpQJCogJ5LIYiQXopkefxYaNj
-	uQG+Ap2l7NuuBfFgh28p1rB41o+gnmLYCVJayvjQyelmOf4+wEygLQXABXwFJfo3DQCv42vu38x
-	WZz5BzJ5K2C4EuUOgdoyp0iPLQMItnetv99
-X-Received: by 2002:a05:6a21:6da3:b0:3a2:dd7d:b8aa with SMTP id adf61e73a8af0-3a3cf600db2mr1294744637.20.1777521745925;
-        Wed, 29 Apr 2026 21:02:25 -0700 (PDT)
-Received: from localhost.localdomain ([117.71.53.159])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c7fd6514ec6sm3185142a12.31.2026.04.29.21.02.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Apr 2026 21:02:25 -0700 (PDT)
-From: Sun Jian <sun.jian.kdev@gmail.com>
-To: shuah@kernel.org
-Cc: linux-kselftest@vger.kernel.org,
-	kees@kernel.org,
+	s=arc-20240116; t=1777523662; c=relaxed/simple;
+	bh=lVH/o/wvIbAmHU9Ncn31aqgJu7ZUTF0l3hAbIddGMQc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QlzCnohGEcJL5oh1uo3QNgfryVMFKIzJNo/HGu1eA2465YHlz9UQNBQqOxDmcEdCXHl6X4S8lLfgJoi/vwmTfTtpcXumYcLhUibxiMI8v+E55WzrJBf42hXQoSNtNLEBE2lFNOQj/ChlI21LeegtGvt0OqiVQPuvtwx11evTj0k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
+Received: from localhost.localdomain (unknown [36.163.144.42])
+	by APP-05 (Coremail) with SMTP id zQCowAAXqg292_JpXhv9Dg--.5878S2;
+	Thu, 30 Apr 2026 12:34:06 +0800 (CST)
+From: Pengpeng Hou <pengpeng@iscas.ac.cn>
+To: Vadim Fedorenko <vadim.fedorenko@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux@weissschuh.net,
-	Sun Jian <sun.jian.kdev@gmail.com>,
-	Bjoern Doebel <doebel@amazon.de>
-Subject: [PATCH v3] selftests/harness: harness-selftest: cover XFAIL_ADD ctor ordering
-Date: Thu, 30 Apr 2026 12:02:07 +0800
-Message-ID: <20260430040207.296136-1-sun.jian.kdev@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	stable@vger.kernel.org,
+	Pengpeng Hou <pengpeng@iscas.ac.cn>
+Subject: [PATCH v3] bpf: crypto: snapshot params before string validation
+Date: Thu, 30 Apr 2026 12:34:04 +0800
+Message-ID: <20260430043404.58221-1-pengpeng@iscas.ac.cn>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:zQCowAAXqg292_JpXhv9Dg--.5878S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3WF1Duw4UWr17Jw4kGr1ftFb_yoWxWFykpF
+	yrW398Kw1rJr47CryxWF4rXF1rAFyxZF13GrW3GF1YyF9xXr92gF1IkrWUZFy3ta93Ww1Y
+	yrZYkrWUuw13JrDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9014x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+	6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+	Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+	I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+	4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
+	n2kIc2xKxwCY1x0262kKe7AKxVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
+	kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
+	67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
+	CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1x
+	MIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIda
+	VFxhVjvjDU0xZFpf9x0pRiSdgUUUUU=
+X-CM-SenderInfo: pshqw1xhqjqxpvfd2hldfou0/
 
-Add a fixture-based test with a single variant and mark it with
-XFAIL_ADD(). The test intentionally fails and is expected to be
-accounted as XFAIL, covering the constructor ordering dependency
-between TEST_F() registration and XFAIL_ADD() registration.
+bpf_crypto_ctx_create() receives a BPF-supplied params pointer. The
+current selftests use static initializers, but BPF programs can also
+build the struct in writable BPF memory before calling the kfunc. The
+verifier checks that the memory is accessible; it does not prove that
+the fixed type[] and algo[] fields are NUL-terminated strings.
 
-Suggested-by: Thomas Weißschuh <linux@weissschuh.net>
-Tested-by: Bjoern Doebel <doebel@amazon.de>
-Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
+Copy the params once into a local snapshot, validate the reserved fields
+and fixed-width strings there, and then use the same snapshot for all
+later checks and crypto API calls. This also keeps key_len and authsize
+stable across validation and use if params points at mutable BPF memory.
+
+Clear the local snapshot before returning because it contains key
+material.
+
+Add a selftest that fills algo[] completely and expects -EINVAL.
+
+Fixes: 3e1c6f35409f ("bpf: make common crypto API for TC/XDP programs")
+Cc: stable@vger.kernel.org
+Signed-off-by: Pengpeng Hou <pengpeng@iscas.ac.cn>
 ---
+Changes since v2: https://lore.kernel.org/all/20260424070105.1-bpf-crypto-v2-pengpeng@iscas.ac.cn/
+- clear the local params snapshot with memzero_explicit() on success and
+  error paths because it contains key material
+- remove the redundant fd > 0 check from the added selftest; skeleton
+  open_and_load() already validates the program, and fd 0 is valid
 
-v3:
-- Rebase on kselftest/fixes.
-- Refresh harness-selftest.expected after commit 465b05bae5ac
-  ("selftests: harness: Restore order of test functions").
-- Add Tested-by from Bjoern Doebel.
+ kernel/bpf/crypto.c                             | 49 ++++++++++++++++---------
+ tools/testing/selftests/bpf/prog_tests/crypto_sanity.c | 16 ++++++++
+ tools/testing/selftests/bpf/progs/crypto_sanity.c      | 28 ++++++++++++++
+ 3 files changed, 76 insertions(+), 17 deletions(-)
 
-v2:
-- update Suggested-by address
-- update harness-selftest.expected
-- verify with 'make run_tests'
-
- .../kselftest_harness/harness-selftest.c      | 23 +++++++++++++++++++
- .../harness-selftest.expected                 | 13 +++++++----
- 2 files changed, 32 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/kselftest_harness/harness-selftest.c b/tools/testing/selftests/kselftest_harness/harness-selftest.c
-index 3e3033d2745a..93b5a5bbf10a 100644
---- a/tools/testing/selftests/kselftest_harness/harness-selftest.c
-+++ b/tools/testing/selftests/kselftest_harness/harness-selftest.c
-@@ -158,6 +158,29 @@ TEST(test_result_skip) {
- 	ksft_test_result_skip("");
+diff --git a/kernel/bpf/crypto.c b/kernel/bpf/crypto.c
+index 51f89cecefb4..72e5707c1ead 100644
+--- a/kernel/bpf/crypto.c
++++ b/kernel/bpf/crypto.c
+@@ -147,31 +147,47 @@ bpf_crypto_ctx_create(const struct bpf_crypto_params *params, u32 params__sz,
+ 		      int *err)
+ {
+ 	const struct bpf_crypto_type *type;
++	struct bpf_crypto_params params_copy;
+ 	struct bpf_crypto_ctx *ctx;
+ 
+-	if (!params || params->reserved[0] || params->reserved[1] ||
+-	    params__sz != sizeof(struct bpf_crypto_params)) {
++	if (!params || params__sz != sizeof(params_copy)) {
+ 		*err = -EINVAL;
+ 		return NULL;
+ 	}
+ 
+-	type = bpf_crypto_get_type(params->type);
++	params_copy = *params;
++
++	if (params_copy.reserved[0] || params_copy.reserved[1]) {
++		*err = -EINVAL;
++		goto err_clear_params;
++	}
++
++	if (strnlen(params_copy.type, sizeof(params_copy.type)) ==
++	    sizeof(params_copy.type) ||
++	    strnlen(params_copy.algo, sizeof(params_copy.algo)) ==
++	    sizeof(params_copy.algo)) {
++		*err = -EINVAL;
++		goto err_clear_params;
++	}
++
++	type = bpf_crypto_get_type(params_copy.type);
+ 	if (IS_ERR(type)) {
+ 		*err = PTR_ERR(type);
+-		return NULL;
++		goto err_clear_params;
+ 	}
+ 
+-	if (!type->has_algo(params->algo)) {
++	if (!type->has_algo(params_copy.algo)) {
+ 		*err = -EOPNOTSUPP;
+ 		goto err_module_put;
+ 	}
+ 
+-	if (!!params->authsize ^ !!type->setauthsize) {
++	if (!!params_copy.authsize ^ !!type->setauthsize) {
+ 		*err = -EOPNOTSUPP;
+ 		goto err_module_put;
+ 	}
+ 
+-	if (!params->key_len || params->key_len > sizeof(params->key)) {
++	if (!params_copy.key_len ||
++	    params_copy.key_len > sizeof(params_copy.key)) {
+ 		*err = -EINVAL;
+ 		goto err_module_put;
+ 	}
+@@ -183,19 +198,19 @@ bpf_crypto_ctx_create(const struct bpf_crypto_params *params, u32 params__sz,
+ 	}
+ 
+ 	ctx->type = type;
+-	ctx->tfm = type->alloc_tfm(params->algo);
++	ctx->tfm = type->alloc_tfm(params_copy.algo);
+ 	if (IS_ERR(ctx->tfm)) {
+ 		*err = PTR_ERR(ctx->tfm);
+ 		goto err_free_ctx;
+ 	}
+ 
+-	if (params->authsize) {
+-		*err = type->setauthsize(ctx->tfm, params->authsize);
++	if (params_copy.authsize) {
++		*err = type->setauthsize(ctx->tfm, params_copy.authsize);
+ 		if (*err)
+ 			goto err_free_tfm;
+ 	}
+ 
+-	*err = type->setkey(ctx->tfm, params->key, params->key_len);
++	*err = type->setkey(ctx->tfm, params_copy.key, params_copy.key_len);
+ 	if (*err)
+ 		goto err_free_tfm;
+ 
+@@ -207,6 +222,7 @@ bpf_crypto_ctx_create(const struct bpf_crypto_params *params, u32 params__sz,
+ 
+ 	refcount_set(&ctx->usage, 1);
+ 
++	memzero_explicit(&params_copy, sizeof(params_copy));
+ 	return ctx;
+ 
+ err_free_tfm:
+@@ -215,7 +231,8 @@ bpf_crypto_ctx_create(const struct bpf_crypto_params *params, u32 params__sz,
+ 	kfree(ctx);
+ err_module_put:
+ 	module_put(type->owner);
+-
++err_clear_params:
++	memzero_explicit(&params_copy, sizeof(params_copy));
+ 	return NULL;
  }
  
-+FIXTURE(xfail_ctor_ordering) {
-+};
+diff --git a/tools/testing/selftests/bpf/prog_tests/crypto_sanity.c b/tools/testing/selftests/bpf/prog_tests/crypto_sanity.c
+index 42bd07f7218d..2ef1e276a63a 100644
+--- a/tools/testing/selftests/bpf/prog_tests/crypto_sanity.c
++++ b/tools/testing/selftests/bpf/prog_tests/crypto_sanity.c
+@@ -117,6 +117,18 @@ void test_crypto_sanity(void)
+ 	udp_test_port = skel->data->udp_test_port;
+ 	memcpy(skel->bss->key, crypto_key, sizeof(crypto_key));
+ 	snprintf(skel->bss->algo, 128, "%s", algo);
 +
-+FIXTURE_SETUP(xfail_ctor_ordering) {
++	pfd = bpf_program__fd(skel->progs.skb_crypto_setup_bad_algo);
++	err = bpf_prog_test_run_opts(pfd, &opts);
++	if (!ASSERT_OK(err, "skb_crypto_setup_bad_algo") ||
++	    !ASSERT_OK(opts.retval, "skb_crypto_setup_bad_algo retval"))
++		goto fail;
++
++	if (!ASSERT_OK(skel->bss->status, "skb_crypto_setup_bad_algo status"))
++		goto fail;
++
++	opts.retval = 0;
++
+ 	pfd = bpf_program__fd(skel->progs.skb_crypto_setup);
+ 	if (!ASSERT_GT(pfd, 0, "skb_crypto_setup fd"))
+ 		goto fail;
+diff --git a/tools/testing/selftests/bpf/progs/crypto_sanity.c b/tools/testing/selftests/bpf/progs/crypto_sanity.c
+index dfd8a258f14a..32977b797042 100644
+--- a/tools/testing/selftests/bpf/progs/crypto_sanity.c
++++ b/tools/testing/selftests/bpf/progs/crypto_sanity.c
+@@ -82,6 +82,34 @@ int skb_crypto_setup(void *ctx)
+ 	return 0;
+ }
+ 
++SEC("syscall")
++int skb_crypto_setup_bad_algo(void *ctx)
++{
++	struct bpf_crypto_params params = {
++		.type = "skcipher",
++		.key_len = 16,
++	};
++	struct bpf_crypto_ctx *cctx;
++	int err = 0;
++
++	status = 0;
++
++	__builtin_memset(params.algo, 'a', sizeof(params.algo));
++	__builtin_memcpy(&params.key, key, sizeof(key));
++
++	cctx = bpf_crypto_ctx_create(&params, sizeof(params), &err);
++	if (cctx) {
++		bpf_crypto_ctx_release(cctx);
++		status = -EIO;
++		return 0;
++	}
++
++	if (err != -EINVAL)
++		status = err;
++
++	return 0;
 +}
 +
-+FIXTURE_TEARDOWN(xfail_ctor_ordering) {
-+}
-+
-+FIXTURE_VARIANT(xfail_ctor_ordering) {
-+	int dummy;
-+};
-+
-+FIXTURE_VARIANT_ADD(xfail_ctor_ordering, only) {
-+	.dummy = 0,
-+};
-+
-+TEST_F(xfail_ctor_ordering, expected_fail) {
-+	ASSERT_EQ(1, 0);
-+}
-+
-+XFAIL_ADD(xfail_ctor_ordering, only, expected_fail);
-+
- int main(int argc, char **argv)
+ SEC("tc")
+ int decrypt_sanity(struct __sk_buff *skb)
  {
- 	/*
-diff --git a/tools/testing/selftests/kselftest_harness/harness-selftest.expected b/tools/testing/selftests/kselftest_harness/harness-selftest.expected
-index c0a68ec124f8..f8b7cb2812b6 100644
---- a/tools/testing/selftests/kselftest_harness/harness-selftest.expected
-+++ b/tools/testing/selftests/kselftest_harness/harness-selftest.expected
-@@ -1,6 +1,6 @@
- TAP version 13
--1..19
--# Starting 19 tests from 4 test cases.
-+1..20
-+# Starting 20 tests from 5 test cases.
- #  RUN           global.standalone_pass ...
- # harness-selftest.c:19:standalone_pass:before
- # harness-selftest.c:23:standalone_pass:after
-@@ -93,6 +93,11 @@ ok 18 fixture_parent.pass
- # pass: Test terminated by assertion
- #          FAIL  fixture_setup_failure.pass
- not ok 19 fixture_setup_failure.pass
--# FAILED: 12 / 19 tests passed.
-+#  RUN           xfail_ctor_ordering.only.expected_fail ...
-+# harness-selftest.c:179:expected_fail:Expected 1 (1) == 0 (0)
-+# expected_fail: Test terminated by assertion
-+#          FAIL  xfail_ctor_ordering.only.expected_fail
-+ok 20 xfail_ctor_ordering.only.expected_fail # XFAIL unknown
-+# FAILED: 13 / 20 tests passed.
- # 1 skipped test(s) detected. Consider enabling relevant config options to improve coverage.
--# Totals: pass:9 fail:7 xfail:1 xpass:1 skip:1 error:0
-+# Totals: pass:9 fail:7 xfail:2 xpass:1 skip:1 error:0
 -- 
-2.43.0
+2.50.1 (Apple Git-155)
 
