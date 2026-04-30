@@ -1,117 +1,134 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04D48342CB4;
-	Thu, 30 Apr 2026 12:02:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2CA23A1696
+	for <linux-kselftest@vger.kernel.org>; Thu, 30 Apr 2026 12:03:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777550537; cv=none; b=e4abriWBnV7LpNOUuSTzn5ErRO5qTbhSCMI+RYy4iZuMzYkKZFpGlsknFvAvpnf8FdmkntJFG4Wx3bjOb05fU7ZS24QuqDJkmCV8hDAIYo29cDTmjS2q8KYkspaCmgCZmhe80AreFFr/Er2OeKATyF8DcDWnrtRfbl8mO70Kuqc=
+	t=1777550605; cv=none; b=i6wMA50jgqzvFRIxpI/vEXAfmfRyCv7j+9vd/blrQjns2fCmIk07qcOl6BGqMOxlvlsQm4nLWf2Z+rdmlYqnYcetl+smYdZJr3VUa+Fnuy+cJ5YaKeGxMswna3dd8l4T8ESl4Y8t/oQ+hHLQExPOGGZZ9g1Z36zUULr9GfhI9Jc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777550537; c=relaxed/simple;
-	bh=DfIVt+5jRdwB3q68pELtsG2fw1U9ElqZANdJf9i3wFk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Yh+6lZbMELSx21biPGdbkOE4QlWLDqItxDC6QMvUjCsI4LrEMxTR1aMxFQ9+pTudsHHY7jsTWkY0N/trV9DpcMf91YvLuvJkjz+CqupXhd7PtQNEfTVWKCVWdkVN7TnM6PssSQ+VjkVP3vwrekEHbgmkQd1F7eCOeM9xOU7lAqI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=P5QbOYDu; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1777550605; c=relaxed/simple;
+	bh=duJWKLbfqTL4D1zNPPk5QveBYRxoms7eL2nTGNWcLqY=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=Z0XR+2CZH1qeb4R+gZIasYRYZ9eLg5fK5V7D+s1JCUiOaRefnwMUYxiF9dcpLcqpFhVrQ98OlCscQAzk6IHT9xflf1iHbNP+1XoKIZdggFZHy0M5cRexrMb2WyzZKs15FFcJPuh/iq//ui6zNmG1+eOgZlyN6ugXZ1a95oaqWm8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wakel.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=eoIk2JN9; arc=none smtp.client-ip=209.85.210.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wakel.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="P5QbOYDu"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1777550536; x=1809086536;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DfIVt+5jRdwB3q68pELtsG2fw1U9ElqZANdJf9i3wFk=;
-  b=P5QbOYDuztlxcb/p+cKad42MlSCpUkX2vX96yG6o09xwfIqOoZkQG+Wk
-   oSLoxXGVnXYeDneDfe2oIdKuwLhFGlpKeZdGQ1upz/kzg5toFKZ0duyly
-   AWRN2lgAMRIC2aZPy/6HcK5D8ydiSxkMZVeMehLsxR3uSCSE92cAFHTN1
-   kC9m3z64DDlWRzRFU55LN9w4M9prMmyQqOj3VKYBj8iA/77fIsQjne07w
-   9arnsZ6sbR9GiYdDAsWFVKv0zDqnTnjTOXYUQH4HJjwWpkMbRgIW43Vgy
-   34Czndt7MeTHIt78minuBsxKcgjVeJCAL30ZExl7k1496vk411ftAv0N1
-   g==;
-X-CSE-ConnectionGUID: 25P1yem2QaOqpS3EX4KXfQ==
-X-CSE-MsgGUID: 1WZyxdyUSfq1G4lGL+GnDQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11771"; a="78419998"
-X-IronPort-AV: E=Sophos;i="6.23,208,1770624000"; 
-   d="scan'208";a="78419998"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2026 05:02:15 -0700
-X-CSE-ConnectionGUID: ERLcUKGtSKKEJ7ZYT49e1g==
-X-CSE-MsgGUID: UvLhpo3tTeS/LXvSz4qhnw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,208,1770624000"; 
-   d="scan'208";a="236343975"
-Received: from zzombora-mobl1 (HELO localhost) ([10.245.244.42])
-  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2026 05:02:12 -0700
-Date: Thu, 30 Apr 2026 15:02:10 +0300
-From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>,
-	Andy Shevchenko <andy@kernel.org>, brgl@kernel.org,
-	driver-core@lists.linux.dev, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Subject: Re: [PATCH v4 1/3] driver core: platform: remove software node on
- release()
-Message-ID: <afNEwrHLNTA4ywrN@ashevche-desk.local>
-References: <20260430-swnode-remove-on-dev-unreg-v4-0-01574da0aed3@oss.qualcomm.com>
- <20260430-swnode-remove-on-dev-unreg-v4-1-01574da0aed3@oss.qualcomm.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eoIk2JN9"
+Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-82f8bbb4045so524921b3a.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 30 Apr 2026 05:03:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1777550603; x=1778155403; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=PvMj/MkllnjgvE6Y7N3WHrJDvNHvsjKi1M8BHUaGO3o=;
+        b=eoIk2JN9G0lyeyRKP9OQ4Tmjgi/XHJFUFEOiGH/rT+vjWi0kjVgOWKb+qY6I1IB7Fb
+         wxNDv9uZL2Uyy78H22fmrEGDpoyoSt5q0d9mwdFCgHy0hvzfnRZ8PeWDzwdEyGoYRq7Y
+         TxMjd4699QKuOgsNckmLFHI5UEdtlx9J7b486gPtkR+REwrcoIY975S4/EPvFyskH+ZF
+         88SbgwcJy1UVi/ySM5O9MP6pkU1M4ik5qllBKDgq52rjSS3L0KAfPaMuajVEk2Aj42no
+         in24wqfNSh1TOb/MuD2XFSyBxD64T1MlXjPpdASIx+8GVXK/ds13e40kzzg1QMku7hig
+         +Fgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777550603; x=1778155403;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PvMj/MkllnjgvE6Y7N3WHrJDvNHvsjKi1M8BHUaGO3o=;
+        b=WXtxlpIEbTxzD9+GKtsLU90iwU84KSAjP+5HxzNExEmNIpMERlDIMglIZm9gGxCkCS
+         icplqgvsyB9yTUeDFs8oHKDHwz/LY+DGtGlRKyAEX3b3/GVZOIUhZ+K/CXsz7Hq7EmKa
+         iybXTIwuhy3NCZL1c9D32jbQvMZ/6fxRQzu2YNkGJpfcMMX+ln9FtoiPV5IaIchUF5lv
+         p2zZ9fFBg7W6qqvAMaikIJ6djagLjv0CYjtBo3ugq/zNPsipXpiIUV6j+RVRDWPho+M7
+         C6T6GHm9e7wIlv6i8/Rp91RIS9lf+VgD4i3HOYIUqH321UK9BTgCBhYKn4lqRl6m5HHw
+         pO4w==
+X-Forwarded-Encrypted: i=1; AFNElJ9ZjO8P/Q4n6cZk2Cea0c8Ky8xSpQYlxMDRRR6w4OUDhyG5kuyehp4HDn+gXqB5QSpf5Vv1AR8wxBD888OitaY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwCAEAEMGhRIZjmTf+YzJ6DdH2LTDWwKYMjzsA0djcSmmJSJAoF
+	E19D40/i4rP0tWmngM2kOFAHAi6BK1HQodVs1DKaP7OeosHfpfX8f9hnfzSUo5inYQNc4pi4mKc
+	AIg==
+X-Received: from pfbgx2.prod.google.com ([2002:a05:6a00:1e02:b0:82f:b322:30fb])
+ (user=wakel job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:340a:b0:82f:1973:4b96
+ with SMTP id d2e1a72fcca58-834fdcdef18mr2884609b3a.26.1777550602832; Thu, 30
+ Apr 2026 05:03:22 -0700 (PDT)
+Date: Thu, 30 Apr 2026 20:03:13 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260430-swnode-remove-on-dev-unreg-v4-1-01574da0aed3@oss.qualcomm.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.54.0.545.g6539524ca2-goog
+Message-ID: <20260430120313.4078185-1-wakel@google.com>
+Subject: [PATCH] selftests: rtc: fix flaky date_read_loop test
+From: Wake Liu <wakel@google.com>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>, Shuah Khan <shuah@kernel.org>
+Cc: linux-rtc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Wake Liu <wakel@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Apr 30, 2026 at 09:46:04AM +0200, Bartosz Golaszewski wrote:
-> If we pass a software node to a newly created device using struct
-> platform_device_info, it will not be removed when the device is
-> released. This may happen when a module creating the device is removed
-> or on failure in platform_device_add().
-> 
-> When we try to reuse that software node in a subsequent call to
-> platform_device_register_full(), it will fails with -EBUSY. Add the
-> missing call to device_remove_software_node() in release path.
-> 
-> In addition to the above change, make sure that we still function
-> correctly if a software node is used as the primary firmware node as
-> well as disallow using two software nodes for platform devices as
-> device_add_software_node() does not handle this case correctly (in fact
-> a comment inside it states that only one software node per device is
-> allowed but it will not bail out if two are used so we need to handle it
-> here).
+The test case rtc.date_read_loop in rtctest.c fails intermittently because
+it checks that the RTC time does not advance by more than 1 second per loop
+iteration. However, the loop sleeps for 11ms via nanosleep(), and if the
+test thread is descheduled by the OS scheduler (e.g., under heavy system
+load in a VM), more than 1 second can elapse between consecutive RTC reads.
+This causes the next RTC time read to be 2 or more seconds ahead of the
+previous read, triggering a test assertion failure.
 
-...
+To make the test more resilient against OS scheduling delays, measure the
+real elapsed time between iterations using a monotonic clock
+(clock_gettime(CLOCK_MONOTONIC)), and compute the actual number of seconds
+elapsed (delta_s) between consecutive RTC reads. Then dynamically adjust
+the assertion to:
+ASSERT_GE(prev_rtc_read + delta_s + 1, rtc_read);
 
-> -	if (pdevinfo->swnode && pdevinfo->properties)
-> +	/*
-> +	 * Only one software node per device is allowed. Make sure we don't
-> +	 * accept or create two.
-> +	 */
-> +	if ((pdevinfo->swnode && pdevinfo->properties) ||
-> +	    (pdevinfo->swnode && is_software_node(pdevinfo->fwnode)) ||
-> +	    (pdevinfo->properties && is_software_node(pdevinfo->fwnode)))
->  		return ERR_PTR(-EINVAL);
+Signed-off-by: Wake Liu <wakel@google.com>
+---
+ tools/testing/selftests/rtc/rtctest.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-This makes me think of why we have these many ways of doing things...
-Perhaps we should kill pdevinfo::properties completely?
-
-Second thought is what about actually refusing this on the level of
-device_add_software_node()? And looking at it, we have that check
-there, why do we need it here then? Did we miss to check error code from
-device_add_software_node() somewhere?
-
+diff --git a/tools/testing/selftests/rtc/rtctest.c b/tools/testing/selftests/rtc/rtctest.c
+index 8047d9879039..54eb5c255a45 100644
+--- a/tools/testing/selftests/rtc/rtctest.c
++++ b/tools/testing/selftests/rtc/rtctest.c
+@@ -116,6 +116,7 @@ TEST_F_TIMEOUT(rtc, date_read_loop, READ_LOOP_DURATION_SEC + 2) {
+ 	long iter_count = 0;
+ 	struct rtc_time rtc_tm;
+ 	time_t start_rtc_read, prev_rtc_read;
++	struct timespec prev_mono, cur_mono;
+ 
+ 	if (self->fd == -1 && errno == ENOENT)
+ 		SKIP(return, "Skipping test since %s does not exist", rtc_file);
+@@ -126,25 +127,31 @@ TEST_F_TIMEOUT(rtc, date_read_loop, READ_LOOP_DURATION_SEC + 2) {
+ 
+ 	rc = ioctl(self->fd, RTC_RD_TIME, &rtc_tm);
+ 	ASSERT_NE(-1, rc);
++	clock_gettime(CLOCK_MONOTONIC, &prev_mono);
+ 	start_rtc_read = rtc_time_to_timestamp(&rtc_tm);
+ 	prev_rtc_read = start_rtc_read;
+ 
+ 	do  {
+ 		time_t rtc_read;
++		time_t delta_s = 0;
+ 
+ 		rc = ioctl(self->fd, RTC_RD_TIME, &rtc_tm);
+ 		ASSERT_NE(-1, rc);
++		clock_gettime(CLOCK_MONOTONIC, &cur_mono);
+ 
+ 		rtc_read = rtc_time_to_timestamp(&rtc_tm);
++		delta_s = cur_mono.tv_sec - prev_mono.tv_sec;
++
+ 		/* Time should not go backwards */
+ 		ASSERT_LE(prev_rtc_read, rtc_read);
+-		/* Time should not increase more then 1s at a time */
+-		ASSERT_GE(prev_rtc_read + 1, rtc_read);
++		/* Time should not increase more then elapsed time + 1s */
++		ASSERT_GE(prev_rtc_read + delta_s + 1, rtc_read);
+ 
+ 		/* Sleep 11ms to avoid killing / overheating the RTC */
+ 		nanosleep_with_retries(READ_LOOP_SLEEP_MS * 1000000);
+ 
+ 		prev_rtc_read = rtc_read;
++		prev_mono = cur_mono;
+ 		iter_count++;
+ 	} while (prev_rtc_read <= start_rtc_read + READ_LOOP_DURATION_SEC);
+ 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.54.0.545.g6539524ca2-goog
 
