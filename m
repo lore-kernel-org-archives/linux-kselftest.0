@@ -1,154 +1,203 @@
-Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29EBA477E40
-	for <linux-kselftest@vger.kernel.org>; Thu, 30 Apr 2026 16:02:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F2222D8DD6;
+	Thu, 30 Apr 2026 16:28:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777564976; cv=none; b=Agm4LxBQ+JrCaSUsrPw7vqnukrhLvnXavlID3N+1cSEhlntVJRGEM7NPJHQLI3QIJAIsW6JTwuv7K02WnfND2ybdTQdVS+GZ7oOhec52+/aYGEZQVghOGW/8twUyuc3MS5mmxlO7ADssI9ZFY52wmlmaNXdm2LV7bHpp7p/Zoyg=
+	t=1777566499; cv=none; b=DEP27cKY6CNioFzdQss97PJ66ExBV2LgE6KL+yyAwuKNJcGm3we3tqjs0y7UrmdPQkX6Ihx2IXPrYU3JnpG4WdUTeMiAgAHXSF/zTuOLGKkUzmWaXLYByBPL5dysn/N15VR7vRVy7F1GCudZo4mTvFGhSK4r2stpYy0UqoUVONA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777564976; c=relaxed/simple;
-	bh=0g4nJPTP+SRNnJ6VP5Kw4a/d4c+9xCSL8ZRFVgYSARs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=YXYOiC2xodiJeuA5Q4z/G7ChLyL9BLGixYYtZiAAU5al2G3+1TiP0HMSqpIcNT9Qo8SCkpyRacpflGEz8QpFuZ9xliZ98B61g+LISDQduj8weGLwbQAKeIN+qhnAxqEMOpSvzTvKOTxiMRb2eYXfSWoWF3I1PnhoFNrXkHYmSVU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=AR+CsJmj; arc=none smtp.client-ip=209.85.208.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1777566499; c=relaxed/simple;
+	bh=xuHLlRVx0WdFbm/ciuLaXhbgiLBbjPGhjCQyHiREPFU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=i0uvOdPqhrrjvOS0THjCtRgC0dgnCNv+PqShPBbZJ9WJ9vqDe8+X87MTtqxhf1Mz/AUPyGbBISnmChJJ7L3YG9lhFlYeXz6k0/I9Ew9rCeE1RA1vLWJ/o9QTrt2S8BXIpjtlXJ0JRxu/8CIWqunrO+aFRqAHd6YvwRYjHbM22jU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YrN/xFL8; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="AR+CsJmj"
-Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-38ea6a5a0b3so10649631fa.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 30 Apr 2026 09:02:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1777564973; x=1778169773; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FrFlzMIY8dqFl9fL6+GZm8ewKnQP1m4Ik6n37xpccCw=;
-        b=AR+CsJmjYqsNqqhjnEOBFw1ebkL99wjfEosDhiz7/9UxYaGZEo3eZGZa8yIanwOjCs
-         JXRNyC9B9jvHHDexLPvReSyAhEylwLWFxy40cteroArORM4vE7N+5z597eXSThRyYApP
-         xLXIaEczED/9zkHUj9O0Qh29x0dhvegP3z3RBxAj3PH/DeUh44Ff0wKbKxxDM+80hQlW
-         73rbDRRh6BDFrwWGJIQTolozJbNigK3/TlOgKcMz9EfCZibfeanZQPBbK1gwEtIkTcUM
-         cWuc2X1afQ8w/OkVKU7m1cK1pyU38ga9yefPQcbWDnpVEhJT9bNlqBkC1uC0580O6YNO
-         cRWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777564973; x=1778169773;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=FrFlzMIY8dqFl9fL6+GZm8ewKnQP1m4Ik6n37xpccCw=;
-        b=o+kf6XIBQvtHUPwmSvUdwSe0ob+hsQ0zeFI9Rs+GSTaUs5DioWbqFCv1HfUgfBe1zX
-         CxZHEQEoIRfKT1iE/kcFBYX5FxQt1Mm5DzkdTFRW72rQcpGmGoNXN8YLjP56J5lO+gyN
-         YMF3e+v+O+3p/r1O6c2PoiIo0j8vbOip36QGyDPP5CIwyIAQC0k0ec2xiOcoOpGkSXxe
-         AFSt4Ox9GMMuZ4QU8YoYmqRhwCrBEdwjJtqGGgCDj1fqN2s7raB6xzK4D1s0Ui+meBxG
-         bYExNdTGBXkUzP0wtXbu2tdY+uniqW6iNZBBNFlvid9COdVK70xr7j0GTW/EOvj014cf
-         AmhA==
-X-Forwarded-Encrypted: i=1; AFNElJ9wZOprUDpK8bm1sbLOTyehU/kNKNizzavBdDF5plzFGKN+HwpdARQ5ZxG0bh4Fi2UhRP6chZgwtDMacqiHC2g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwDMYYzJ8EMGAkEtrUuvYjhpwtldohdpgundoAg/pe5HIcXc5bu
-	V0yUFrMoWO6rRMV3S5PzyGcPpvppvnZryRaAyXOUihC83/YVNyDzIGTdpP/iZLj/pIw=
-X-Gm-Gg: AeBDiescLx24oJLBQM+G/+eWJ3l38Dt6bGErazTmFacJAC3yrQs7+cze+JqpYLUqnL5
-	dH/JIhngXLcrp55dtUSMaz+QZnrjwMTEoEVmjy0drM2wav5SMIHvrq3AShigFeoTG3S3jGE8VrV
-	Mu4p6GJk1DyvcKx9eXlvRnDm83bcxFUNuylWLWEkIJtmUnzWvDbjw8zc4gaq+BgkIR+YMnMT+yX
-	PfXFqWoFHdWNsh2MwZYCL4IEUfPFhp3XRtkRusVNeuuVaR8qqXH42kSk18Im8WcU38R7vBsWMFm
-	0QcPNAndyr0rm+36QWu3OJ4sv8F433CX6YcEbh4NnFvRJL4O2XcacROOFCyOX4qjGi/Y5Vdn4MD
-	KcCgBrZRoGZZEV9yjaYFsgQ400nNw5YIf7bqVmnAe3A3FgKZtRtjYiC7Hju//mtt1oeJ1A2+yPR
-	u1DYDYL8gI2aBfpvk+TgEnLuE8
-X-Received: by 2002:a2e:9dcf:0:b0:391:11de:dd6c with SMTP id 38308e7fff4ca-3934e27876fmr12461231fa.16.1777564973242;
-        Thu, 30 Apr 2026 09:02:53 -0700 (PDT)
-Received: from localhost ([2804:7f0:b765:105d:ce28:aaff:fe86:149c])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2ee38d79eb9sm610895eec.8.2026.04.30.09.02.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Apr 2026 09:02:52 -0700 (PDT)
-From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>
-Date: Thu, 30 Apr 2026 13:02:12 -0300
-Subject: [PATCH bpf-next v11 11/11] selftests/bpf: Tolerate missing files
- during install
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YrN/xFL8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57D60C2BCB3;
+	Thu, 30 Apr 2026 16:28:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777566499;
+	bh=xuHLlRVx0WdFbm/ciuLaXhbgiLBbjPGhjCQyHiREPFU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YrN/xFL8k5VgBaNpK5LHDdomvtjX9zCVPkilhGlJ304+ICekhhk+PzD5cl+IUNYPC
+	 Fb3ArpaMIEMLc7BN4CRT8wLsrRukGkGqIdV6/e0/HvTYYDgwyv33ejZZkfrXovYFDb
+	 8H5U5Q+A9fjAwkQ6w0+unT1EGKbSp2wGb8fKZWwyP5QN7bpfV6rq7zcVWdLkc2sqB4
+	 d7RLtD1z7tZd5SjYfvuSJzKmB6JEa2n7tZcdt4SYFGrvZtW3MnTTWWT6Mxk4T/Ze7J
+	 F15PRktsnx4etKx/CQ+OOLNsEqz0iqWHSrInTQjkOWQF97QosnVSo9S8pTfEeNY+qQ
+	 sxwcbCy+9/TRw==
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 68B4CF40080;
+	Thu, 30 Apr 2026 12:28:17 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-04.internal (MEProxy); Thu, 30 Apr 2026 12:28:17 -0400
+X-ME-Sender: <xms:IYPzabrEaTTcoVHbOU8Ie-jBwN9yekMCWj0oti8qKoYkC107BYdBPg>
+    <xme:IYPzaeqktlbosTGgF0RMQ9mIAVA3CRhYGBrVWa-VSfRhqNbyE6glOJAhz_NkDgB7u
+    010dtQL86rUaX2AO-bBdCM0yrbNsa1iO1Hql1F4XPk2XLJxHAZjmHc>
+X-ME-Received: <xmr:IYPzaR6Hg64kuEe3KSi2SIGLExTJCxZKXaWUaHqF8zwOxNk5hfwFAEdLMFr2Cg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgdekjeektdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecunecujfgurhepfffhvfevuffkfhggtggujgesthdtredttd
+    dtvdenucfhrhhomhepmfhirhihlhcuufhhuhhtshgvmhgruhcuoehkrghssehkvghrnhgv
+    lhdrohhrgheqnecuggftrfgrthhtvghrnhepgeetuedtjefhkeeuiefgudduvdfgvdeiue
+    eigeehheehudetuedtkeelhfeihedunecuffhomhgrihhnpehsrghshhhikhhordguvghv
+    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepkhhirh
+    hilhhlodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduieduudeivdeiheeh
+    qddvkeeggeegjedvkedqkhgrsheppehkvghrnhgvlhdrohhrghesshhhuhhtvghmohhvrd
+    hnrghmvgdpnhgspghrtghpthhtohepgeeipdhmohguvgepshhmthhpohhuthdprhgtphht
+    thhopegrkhhpmheslhhinhhugidqfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtoh
+    eprhhpphhtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehpvghtvghrgiesrhgvughh
+    rghtrdgtohhmpdhrtghpthhtohepuggrvhhiugeskhgvrhhnvghlrdhorhhgpdhrtghpth
+    htoheplhhjsheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhurhgvnhgssehgohho
+    ghhlvgdrtghomhdprhgtphhtthhopehvsggrsghkrgeskhgvrhhnvghlrdhorhhgpdhrtg
+    hpthhtoheplhhirghmrdhhohiflhgvthhtsehorhgrtghlvgdrtghomhdprhgtphhtthho
+    peiiihihsehnvhhiughirgdrtghomh
+X-ME-Proxy: <xmx:IYPzaV3LWTFN8XfRSCiRwGIC6e-pKYil930TJaa7zUHObc4fVT3QIw>
+    <xmx:IYPzadlAdJGUbc96HtR7fIZDC2Iy1FdPr5XLM6d7Nj0_Yp-TL4uufw>
+    <xmx:IYPzaegg5wt9LVrIuTqa6gy-ZRJ7gBH1_0_6b2QPw4xRK57zVnDpdg>
+    <xmx:IYPzaU2FMoS_d2ECU8W6GqFaKCAiG1a9OOh76eW6SUV8f-8qZ1knuQ>
+    <xmx:IYPzabYpwp038SUGhWJQqOEZL1x6wK5YoctLTEvtdxpDWv6eu7DBYYWJ>
+Feedback-ID: i10464835:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 30 Apr 2026 12:28:15 -0400 (EDT)
+Date: Thu, 30 Apr 2026 17:28:08 +0100
+From: Kiryl Shutsemau <kas@kernel.org>
+To: akpm@linux-foundation.org, rppt@kernel.org, peterx@redhat.com, 
+	david@kernel.org
+Cc: ljs@kernel.org, surenb@google.com, vbabka@kernel.org, 
+	Liam.Howlett@oracle.com, ziy@nvidia.com, corbet@lwn.net, skhan@linuxfoundation.org, 
+	seanjc@google.com, pbonzini@redhat.com, jthoughton@google.com, aarcange@redhat.com, 
+	sj@kernel.org, usama.arif@linux.dev, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kvm@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH 07/14] mm: handle VM_UFFD_RWP in khugepaged, rmap, and GUP
+Message-ID: <afOCAZ-dTQiLFN0y@thinkstation>
+References: <20260427114607.4068647-1-kas@kernel.org>
+ <20260427114607.4068647-8-kas@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260430-selftests-bpf_misconfig-v11-11-e11f7a8c4fdc@suse.com>
-References: <20260430-selftests-bpf_misconfig-v11-0-e11f7a8c4fdc@suse.com>
-In-Reply-To: <20260430-selftests-bpf_misconfig-v11-0-e11f7a8c4fdc@suse.com>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
- Alan Maguire <alan.maguire@oracle.com>, 
- "Ricardo B. Marliere" <rbm@suse.com>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openssh-sha256; t=1777564926; l=2156;
- i=rbm@suse.com; h=from:subject:message-id;
- bh=0g4nJPTP+SRNnJ6VP5Kw4a/d4c+9xCSL8ZRFVgYSARs=;
- b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
- x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QBSctWHKemMRwsrUhGlHgWOBzzJbhHVoeimaKLPlrUVLkf+65H78hcts5/x+c9oZ8Ecuvc8yUz6
- YyMVNTWCMBgU=
-X-Developer-Key: i=rbm@suse.com; a=openssh;
- fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260427114607.4068647-8-kas@kernel.org>
 
-With partial builds, some TEST_GEN_FILES entries can be absent at install
-time. rsync treats missing source arguments as fatal and aborts kselftest
-installation.
+sashiko.dev -- https://sashiko.dev/#/patchset/20260427114607.4068647-1-kas@kernel.org -- wrote:
+> > @@ -1084,9 +1092,29 @@ static __always_inline void __copy_present_ptes(struct vm_area_struct *dst_vma,
+> >  		pte_t pte, unsigned long addr, int nr)
+> >  {
+> >  	struct mm_struct *src_mm = src_vma->vm_mm;
+> > +	bool writable;
+> > +
+> > +	/*
+> > +	 * Snapshot writability before the RWP-disarm rewrite below: when the
+> > +	 * child is not RWP-armed, pte_modify(pte, dst_vma->vm_page_prot) can
+> > +	 * silently drop _PAGE_RW from a resolved (no-marker) writable PTE,
+> > +	 * so a later pte_write(pte) check would skip the COW wrprotect and
+> > +	 * leave the parent writable over a folio shared with the child.
+> > +	 */
+> > +	writable = pte_write(pte);
+> > +
+> > +	/*
+> > +	 * Child is not RWP-armed: restore accessible protection so the
+> > +	 * inherited PAGE_NONE does not cost a fault on first read.
+> > +	 */
+> > +	if (!userfaultfd_protected(dst_vma)) {
+> > +		if (userfaultfd_rwp(src_vma))
+> > +			pte = pte_modify(pte, dst_vma->vm_page_prot);
+> > +		pte = pte_clear_uffd(pte);
+> > +	}
+> Does this unconditional pte_modify() create invalid clean and writable PTEs
+> for shared mappings?
+>
+> Without checking pte_uffd(pte) first, this blindly modifies every present PTE
+> if the source VMA had RWP enabled. For shared writable mappings, vm_page_prot
+> includes _PAGE_RW. If a PTE was clean and mapped read-only to intercept the
+> first write for filesystem dirty-tracking, pte_modify() forces the write bit
+> on while preserving the clean state.
 
-Override INSTALL_SINGLE_RULE in selftests/bpf to use --ignore-missing-args,
-while keeping the existing bpf-specific INSTALL_RULE extension logic. Also
-add --ignore-missing-args to the TEST_INST_SUBDIRS rsync loop so that
-subdirectories with no .bpf.o files (e.g. when a test runner flavor was
-skipped) do not abort installation.
+Two reasons this is safe in practice:
 
-Note that the INSTALL_SINGLE_RULE override applies globally to all file
-categories including static source files (TEST_PROGS, TEST_FILES). These
-are version-controlled and should always be present, so the practical risk
-is negligible.
+1. RWP cannot reach a backing that uses the clean-RO + page_mkwrite()
+   dirty-tracking pattern. vma_can_userfault() admits RWP only on anon,
+   shmem and hugetlbfs (the ones with vm_uffd_ops); regular file-backed
+   shared mappings are rejected at register time.
 
-Signed-off-by: Ricardo B. Marlière <rbm@suse.com>
----
- tools/testing/selftests/bpf/Makefile | 17 ++++++++++++++---
- 1 file changed, 14 insertions(+), 3 deletions(-)
+2. For backings that *do* support shared writable + dirty tracking (i.e.
+   the ones RWP isn't enabled on), the fs sets vma->vm_page_prot to RO
+   precisely so the first write traps page_mkwrite(). pte_modify(pte,
+   dst_vma->vm_page_prot) would not add _PAGE_RW in that configuration
+   either.
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index a460f2ad3cff..9948a0a02bb9 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -1023,12 +1023,23 @@ EXTRA_CLEAN := $(SCRATCH_DIR) $(HOST_SCRATCH_DIR)			\
- # Delete partially updated (corrupted) files on error
- .DELETE_ON_ERROR:
- 
-+# When permissive, tell rsync to ignore missing source arguments so that
-+# partial builds do not abort installation.
-+ifneq ($(PERMISSIVE),)
-+override define INSTALL_SINGLE_RULE
-+	$(if $(INSTALL_LIST),@mkdir -p $(INSTALL_PATH))
-+	$(if $(INSTALL_LIST),rsync -a --copy-unsafe-links --ignore-missing-args $(INSTALL_LIST) $(INSTALL_PATH)/)
-+endef
-+endif
-+
- DEFAULT_INSTALL_RULE := $(INSTALL_RULE)
- override define INSTALL_RULE
- 	$(DEFAULT_INSTALL_RULE)
--	@for DIR in $(TEST_INST_SUBDIRS); do		  \
--		mkdir -p $(INSTALL_PATH)/$$DIR;   \
--		rsync -a $(OUTPUT)/$$DIR/*.bpf.o $(INSTALL_PATH)/$$DIR;\
-+	@for DIR in $(TEST_INST_SUBDIRS); do				  \
-+		mkdir -p $(INSTALL_PATH)/$$DIR;				  \
-+		rsync -a $(if $(PERMISSIVE),--ignore-missing-args)	  \
-+			$(OUTPUT)/$$DIR/*.bpf.o				  \
-+			$(INSTALL_PATH)/$$DIR;				  \
- 	done
- endef
- 
+> Hardware writes could then bypass page_mkwrite(), leaving the filesystem
+> unaware that the page is dirty, and potentially causing silent data loss
+> upon reclaim.
+> Could this also overwrite other important PTE states like NUMA hinting
+> or soft-dirty tracking?
+
+pte_modify() on the supported architectures preserves _PAGE_CHG_MASK,
+which covers _PAGE_DIRTY, _PAGE_ACCESSED, _PAGE_SOFT_DIRTY, and the PFN.
+NUMA hinting is encoded in the protection bits, so a transient hint
+state on a resolved (no-marker) PTE would be lost across this rewrite,
+but that's just a re-prime on the next NUMA scan, not a correctness
+issue.
+
+> @@ -298,6 +298,16 @@ static __always_inline void change_present_ptes(struct mmu_gather *tlb,
+>      else if (uffd_wp_resolve || uffd_rwp_resolve)
+>          ptent = pte_clear_uffd(ptent);
+>
+> +    /*
+> +     * The uffd bit on a VM_UFFD_RWP VMA carries PROT_NONE
+> +     * semantics. If mprotect() or NUMA hinting changed the
+> +     * base protection, restore PAGE_NONE so the PTE still
+> +     * traps on any access. pte_modify() preserves
+> +     * _PAGE_UFFD.
+> +     */
+> +    if (userfaultfd_rwp(vma) && pte_uffd(ptent))
+> +        ptent = pte_modify(ptent, PAGE_NONE);
+>
+> For VMAs registered with both UFFD WP and RWP, could this silently upgrade
+> Write-Protected pages to Read-Write-Protected?
+
+VM_UFFD_WP and VM_UFFD_RWP are mutually exclusive per VMA. The combination
+is rejected at registration time:
+
+  fs/userfaultfd.c, userfaultfd_register():
+        if ((vm_flags & VM_UFFD_WP) && (vm_flags & VM_UFFD_RWP))
+                goto out;       /* -EINVAL */
+
+and re-registration cannot drop either bit (also -EBUSY in the same
+function), so a PTE in a WP-armed VMA can never satisfy
+userfaultfd_rwp(vma); the new branch never fires there.
+
+[ ... ]
+> +        /* Re-arm RWP on the moved PTE if dst_vma is RWP-registered. */
+> +        if (userfaultfd_rwp(dst_vma)) {
+> +            orig_dst_pte = pte_modify(orig_dst_pte, PAGE_NONE);
+> +            orig_dst_pte = pte_mkuffd(orig_dst_pte);
+> +        }
+> +
+>          set_pte_at(mm, dst_addr, dst_pte, orig_dst_pte);
+>
+> Could applying PAGE_NONE unconditionally to newly moved pages trap
+> applications in an infinite fault loop?
+
+No -- the post-MOVE access is delivered as a normal RWP fault. In sync
+mode it goes to the registered handler, which resolves it with
+UFFDIO_RWPROTECT clearing MODE_RWP; in async mode the kernel resolves
+it in-kernel and the faulting thread continues. There is no loop.
+
+The semantics here are intentional: a VM_UFFD_RWP VMA has the contract
+that every present PTE is either an active marker or a tracked-and-
+resolved PTE whose next access will re-trap. UFFDIO_MOVE into such a
+VMA must keep that contract, otherwise the moved-in page would be a
+silent hole in the working-set view. UFFDIO_MOVE has no mode flag for
+"skip protection", by design -- the same way it has no flag to skip
+WP arming if dst_vma were WP-armed (and the equivalent could be added
+there if we ever decide UFFDIO_MOVE should preserve markers in WP
+VMAs too).
 
 -- 
-2.54.0
-
+  Kiryl Shutsemau / Kirill A. Shutemov
