@@ -1,185 +1,450 @@
-Received: from PA4PR04CU001.outbound.protection.outlook.com (mail-francecentralazon11013020.outbound.protection.outlook.com [40.107.162.20])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EEE919049B;
-	Thu, 30 Apr 2026 07:58:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.162.20
-ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777535914; cv=fail; b=J3MqMe9HSV93nKF96mR8rNrXCGRpxit24vhCFrF/PI8Jg4Bq0kgiJ7YEzLgruQ4dh4OGVQLaq6Y4otYrnBK+nvmlnGc28bEAgR6PYRiafGlQeyaR421y4sUbRk7R61+B9GK7nTSQPWIRSG+rw0m0it59FNYqr6d1Ku/EE9f+RrA=
-ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777535914; c=relaxed/simple;
-	bh=a9mD+Im1cKWCYS1wZryxsVntp0Vl8BlLiJLT06eMeZo=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=ciLPKzt6bGgYf86U+EPhctL27j1fpD8G7ryoBPc47Pe8/zBJ+MNNIG1V4tlce5rIqgPGEBu+1pOo355U+uUr+TfuyCzOrzl2b+opS6MHqAt6+I+1VWmnWoo6oMjOyMl6g9dhFTEQPV3GeciISLrgnFDqFfmKXolHu3wvAZjQVME=
-ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=o9kgwo2K; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=o9kgwo2K; arc=fail smtp.client-ip=40.107.162.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20B803AA1BB;
+	Thu, 30 Apr 2026 09:35:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777541711; cv=none; b=iGyTFZLwnMLWrovdz5WEvOsXio2P1eGVpNIIuyrd3C5p+FOH/Qn2/1l+sPyskxtQmQZUylyyU8ZhoQKvTq0qdnnnWYD+IeAEUALSX0IWyAO0r110NcTVpTRDjzsy/3jTgv4glvzCFR5MYBVe8PrQmrwi9SZTu7sDdmEx00n3Vlw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777541711; c=relaxed/simple;
+	bh=p4B32T8CwcpbhVg2D10Lz2whUf+XXJrrGQvZL2Wgbxs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZkS4z0HLfKWu6+nTanlfiWHvZX0WY8PJytKG04PZ0FSpInIQIXcYXWxUewjiNZXo9Y+fQIHzjey1HyjoeV3Z4muXQmV8Iekh73SFV/y+38ygI48U4pmpwKf+v7UyESTlfKKin8UQ9V8i9ydNHabmTlVzVzXToJeruCN7oEAflJM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=SfYhUjEo; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="o9kgwo2K";
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="o9kgwo2K"
-ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
- b=elFv1tmlbBECC4mSQZfq4j0ckrCGkusTiwwyOSiaLqZ6EjFHS2DKdyj9vJAHnYJIPMZf87FAvRbxACXwFi/2TDpAyOSBoZ2qbTd+ajVnOCQaL2gWJQ7FlLIpkNGNySVu3VKWZZvWQlhuZsCOy9v/YTwGnKLUrcnAZmLOhkz1bO7SHgZPNbixE/4CJDpveWuORGBhCNM8swDC5nN3BS7Zh8dxZiwZP53PYBqZVwVfrtx/a4Pbo4s1TS+qza0NSyZ7qrgVrau8LVzaZ+2rWRkK3LM91ycQ6t6Zl3vkuJU9BRvQivcn+d/N/ZjtBFmomb0hSDSPIXiq305alkHq2tkTCw==
-ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HvuwPg048xpLtmWVkp8j2VBvIEao02Y18I+j4v3peuA=;
- b=jCc0v8/3eJu3AX7i3xFB92Yhh3Nq9scSwuVqYRvfPrtCw4l+51SnTkfVIDGJVKzmpIp/9Wyxl51Ai1cY7qE7D5zPDBeCoc/uWHrh9t2AsH6mYcZ7J1DJECgZ9sNEAObNO0iio1E8u0dugt9V5E8hd/gPTfnaOd908d8EdP3w8pHnDYtVMsVHOLm06Sy39ANtRXGp3ogDk8JslaRtcr3SjCQmKLvU/BXaLcw/htotUZi8ulfSZOK6cRW9sE9nV6h4eK+n3b+sWzmzYuX8d2C2e3YDMoBF3qvAlay7Ohk5WAx2wu9S+b4YoqsVDoOHTFriHZ2bOhasFJF/lzMQXb9vUg==
-ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
- 4.158.2.129) smtp.rcpttodomain=kernel.org smtp.mailfrom=arm.com; dmarc=pass
- (p=none sp=none pct=100) action=none header.from=arm.com; dkim=pass
- (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
- spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
- dmarc=[1,1,header.from=arm.com])
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HvuwPg048xpLtmWVkp8j2VBvIEao02Y18I+j4v3peuA=;
- b=o9kgwo2KKNeaDF1NFhC30reiWwJnkYcFcO6vDBns1u4sZwY/zquUix5nIXf5UrrpqGDYiYnppRSiw3zlQAsaBQIJt4f12svi/Fbqxn4XbGutcUwzHbm+RBCwH3zSC92i05PEFs2LuCTSSJF8CDMMq0whBL4k4RzyuBY5ySIASj0=
-Received: from DUZPR01CA0245.eurprd01.prod.exchangelabs.com
- (2603:10a6:10:4b5::25) by AS2PR08MB9074.eurprd08.prod.outlook.com
- (2603:10a6:20b:5fc::18) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9870.20; Thu, 30 Apr
- 2026 07:58:23 +0000
-Received: from DB5PEPF00014B9D.eurprd02.prod.outlook.com
- (2603:10a6:10:4b5:cafe::aa) by DUZPR01CA0245.outlook.office365.com
- (2603:10a6:10:4b5::25) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9846.30 via Frontend Transport; Thu,
- 30 Apr 2026 07:58:23 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=arm.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
- client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
-Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
- DB5PEPF00014B9D.mail.protection.outlook.com (10.167.8.164) with Microsoft
- SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9846.18
- via Frontend Transport; Thu, 30 Apr 2026 07:58:23 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=JWkeQpxK7rG2p7p3bWxx1dS7IZzI3rS6UXcUQRIN+e9TESwfG6Vb+DRZOuGN8RfgFDqNf1BFvysh+v54GQ04KorA/kmVWj/DKpDL98y275MCp2MR6lSQYsiVbHsAEJOjfr3tLfacgVpF8JPO7Z6ZNUFo0VXmSxIyrQVMC4s5XpCqKiN4YpTBLV+EHCCGzG+Z7ttKpRUOU6SN4zNEhY9Nsm68jgJrOeYuK+zqxaxcEEIDRBpT1g5Q+sBjsu+OxBrr1FpJMc5wc0MSxxdEvNiyl4BNmJnS0YeNkBUdn5YBQ0DJpCkcM0qVZcpD1zULV55V/BBE8hHEr3B16ND6k9Sp7A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HvuwPg048xpLtmWVkp8j2VBvIEao02Y18I+j4v3peuA=;
- b=pl4/vp6oW/CgB0zszVvPz0/MkYwz+lF51BoiIKuX4XvwjVV6j7/RXZaYavRU8zmct8ZMsKZKekc0LqDHddaCo5NXL1A0fbXOTXDJjUwpIzHdTlh8UVq5KNnaAGNpJoB8ElsmmicZn2vc8O1q6Kuk738H17SpkFm1Ug4Zn19YiTgonfA/M3zc3tgj/zS8UpwniAulGVo06ory1RMWypFe0OUuqhQIrxMR9y+ln32MtyNDw5XbU7+KmrJw+sYtIwPnRC4KylYWNUG8O7Og+FUYbLRYde5p75mu1SWdStdVzivOC3IXkcibWA5hmG7lf4qkNFjLt6yNPsLuHndNVruytw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HvuwPg048xpLtmWVkp8j2VBvIEao02Y18I+j4v3peuA=;
- b=o9kgwo2KKNeaDF1NFhC30reiWwJnkYcFcO6vDBns1u4sZwY/zquUix5nIXf5UrrpqGDYiYnppRSiw3zlQAsaBQIJt4f12svi/Fbqxn4XbGutcUwzHbm+RBCwH3zSC92i05PEFs2LuCTSSJF8CDMMq0whBL4k4RzyuBY5ySIASj0=
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-Received: from DU0PR08MB9203.eurprd08.prod.outlook.com (2603:10a6:10:417::12)
- by DU4PR08MB11835.eurprd08.prod.outlook.com (2603:10a6:10:641::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9870.19; Thu, 30 Apr
- 2026 07:57:20 +0000
-Received: from DU0PR08MB9203.eurprd08.prod.outlook.com
- ([fe80::f1e:73f2:57df:4047]) by DU0PR08MB9203.eurprd08.prod.outlook.com
- ([fe80::f1e:73f2:57df:4047%2]) with mapi id 15.20.9870.020; Thu, 30 Apr 2026
- 07:57:19 +0000
-Message-ID: <3ee25654-2d3a-4c59-8ddd-2228c405329d@arm.com>
-Date: Thu, 30 Apr 2026 13:27:11 +0530
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 21/54] selftests/mm: add atexit() and signal handlers
- to thp_settings
-To: Mike Rapoport <rppt@kernel.org>, Andrew Morton
- <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>
-Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
- Barry Song <baohua@kernel.org>, Dev Jain <dev.jain@arm.com>,
- Donet Tom <donettom@linux.ibm.com>, Jason Gunthorpe <jgg@ziepe.ca>,
- John Hubbard <jhubbard@nvidia.com>, "Liam R. Howlett"
- <Liam.Howlett@oracle.com>, Lance Yang <lance.yang@linux.dev>,
- Leon Romanovsky <leon@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
- Luiz Capitulino <luizcap@redhat.com>, Mark Brown <broonie@kernel.org>,
- Michal Hocko <mhocko@suse.com>, Nico Pache <npache@redhat.com>,
- Peter Xu <peterx@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
- Shuah Khan <shuah@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Vlastimil Babka <vbabka@kernel.org>, Zi Yan <ziy@nvidia.com>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-mm@kvack.org
-References: <20260428204240.1924129-1-rppt@kernel.org>
- <20260428204240.1924129-22-rppt@kernel.org>
-From: Sarthak Sharma <sarthak.sharma@arm.com>
-Content-Language: en-US
-In-Reply-To: <20260428204240.1924129-22-rppt@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MA5P287CA0092.INDP287.PROD.OUTLOOK.COM
- (2603:1096:a01:1d4::8) To DU0PR08MB9203.eurprd08.prod.outlook.com
- (2603:10a6:10:417::12)
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="SfYhUjEo"
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63TKD6pv3160180;
+	Thu, 30 Apr 2026 09:33:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=Xfjjx5
+	w6Yd5s80ZmirtxSUhg/tG6jXGwL44q6sgHG3o=; b=SfYhUjEoOWZjKF0SbDSRqK
+	4H2g4EJKfLmeV+L34eGUqkpk0vfS4ThnwnNiNXFYpm743LD0OlAqABVqT6ntFAa5
+	p1D5IXZdj5NDZo45ahVrxrk4tM+juq7BAksGK65CYPGyUXZT3HO1RcaG4FqgBjmr
+	YXOPkpB70STdGKkOm+5azG27UEFVMarvB4Q3mSRGivJ7wHN00kwWO/0wlLR5Steu
+	UzxwqT4/NqF1x6M6KOrexYG2oyAoFL3FiI6xytEff+CwCdgzje+6nMBpjDxeLP+2
+	r5iIiiaq0VEaS4WqQtZJxoGQ+KWA5mRXH9C1xwHOlbT41Y2VIg4uogzUHm0s5QAg
+	==
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4drn44y2uh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 30 Apr 2026 09:33:54 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 63U9Noda017008;
+	Thu, 30 Apr 2026 09:33:53 GMT
+Received: from smtprelay05.wdc07v.mail.ibm.com ([172.16.1.72])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4ds9ehj756-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 30 Apr 2026 09:33:53 +0000 (GMT)
+Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
+	by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 63U9Xqqt19661340
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 30 Apr 2026 09:33:53 GMT
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id BA86A5805A;
+	Thu, 30 Apr 2026 09:33:52 +0000 (GMT)
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 48CC658060;
+	Thu, 30 Apr 2026 09:33:40 +0000 (GMT)
+Received: from [9.39.19.41] (unknown [9.39.19.41])
+	by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Thu, 30 Apr 2026 09:33:39 +0000 (GMT)
+Message-ID: <ea79d13b-66f2-4a94-ba8b-e3b3bc8e384a@linux.ibm.com>
+Date: Thu, 30 Apr 2026 15:03:37 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic:
-	DU0PR08MB9203:EE_|DU4PR08MB11835:EE_|DB5PEPF00014B9D:EE_|AS2PR08MB9074:EE_
-X-MS-Office365-Filtering-Correlation-Id: 43e4521e-c33b-4634-f74d-08dea68e40b3
-x-checkrecipientrouted: true
-NoDisclaimer: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted:
- BCL:0;ARA:13230040|366016|1800799024|7416014|376014|22082099003|56012099003|18002099003;
-X-Microsoft-Antispam-Message-Info-Original:
- 0rggnlYEKRLxiXcZjre0g3ciMkm9/HMKt8twhS7h4c+V9fcT40RqcR0GoxSyMwgGtXA3elQDXIc+5NMPLf3eRNN6RB1pyrhudjNKCUcNtTG+b4p0V5HoTvu82NTDvjfPvTvhrgIT0URxpBoritkLVC0jKfOzW+wwlLlkrsKLDHlhjgoyQ3VX1J9/0XKek8/Gj3AXzw35cJGc8bxZ4YULbdK1VlsLVYXOznD0myKADiOvpwkUU+n8Sn0Ez1XHLpqp5W3xSDaRCSQrJco8M+2FYFIpzWRRFNmXFwzCk7/4hSSKDyvGyWCXnlTxDfpGcGNeTWMsvvAFZZ70mcdqLcsQqTHRh0AuPQHluIkk7PSi/6r9IR0+g8fcIFX1J/thOHcx7S/9xSD8B5lRx7Tt20HTJdtfLI+ATky/tu3P9BsaZSunn4mfcrnMTHpgclbqpijcvDc0u3/o0xYE+zLdAfvBDZ2FRwjjjpk24iglX4k5pzER63qGWpsHhIarmwZVbbIrdoFEeW7vT+R+tiS3iZWMiHXAJ+189Y2CAdJR7FSDH4GthG+IXFF0M/I7j8vxqWhcbClLs5iofBLKYdvj0TeM2S7DT7SY3/+Ri1Jv8r1c4uu5S8RYEmiOrGqf2eNMB5axLjOt9sPBbCudsC/8VgKo4y5DFVzEakuAAsFqrUIAVn3ZGbopIJIi7JG+qIzfSOhnlstcapVR31xDrFs8UQNk7hpe2eHywVCSUnWiGQzXmBU=
-X-Forefront-Antispam-Report-Untrusted:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9203.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014)(22082099003)(56012099003)(18002099003);DIR:OUT;SFP:1101;
-X-Exchange-RoutingPolicyChecked:
- pJWq8ZOQS1EzCLeA5r98L40FI/MTxH9zwVLFA83BcsEUhESkLGXkBZYfXtPi5ytjC8TpUnYNV1h+2B0N5UjxmL8iycvvicv0Kyr72w/YgKmpfiXZHxMQEdZCVbnbujFU8/tC406xAzJK7D4OYioNVCvWWzFq60+f8KFAUBxdzQhbrY0Zn1fjuk3es9/8S+UZYI+VLncjGyGW3fANgY4MCGU7SWP+l3Eb2b1XRyCSAapfy4ATYvQpK06aNDn/KiFWgtyfsZm8wHO39z47W+qUlDTWRaoFMQOVbOtAbwfVzaef3KC+EiMEWxb56Pe8Vmwr4bZ+o7++LNL6umBHZA+i4Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU4PR08MB11835
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped:
- DB5PEPF00014B9D.eurprd02.prod.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs:
-	68116cc5-ea76-4c66-cf77-08dea68e1aa9
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|376014|7416014|35042699022|1800799024|36860700016|14060799003|18002099003|22082099003|56012099003;
-X-Microsoft-Antispam-Message-Info:
-	vZzN+TlQXs9UvK8128SjVXXLBBOXoUwItjeCFi3c+2KVXq0Iw8saU5t8wdQ3X+fxR18BoxPJw41c1JDN7TsQ+e0pdE6gG5Rgi+8z/y6XX3z89FwIUFlBz3g8fa5Uy0K8W2R2SLqfJD6yhXVphLh5Bv5JEm6HNedXLDFuqZLKUidvv5w3vREzqj2MGwFhFOLQVMQyHQKL0LmWJt/aoQzNTwT2SsHLkBZxUYlaizC/lynC7zaW5FZ+7kFQvCLhnjbjYht+DZFznUVv9tD1iZ3pndeLHI7Zt7QCujD+FnkW7A0xR8unnvxkD14FlcJGCUppARbnR35ISn5vn1H6KY3INGx4jhPwUzbZYcZF/vr+ph3K6hQZ54g+esaLi9hNVqg2Iojxo40N0B6GRAj4dflWpPQXdO/Z9ARUUzZ226GORUTMKKTKivGtfH6zRuyZFXa9FLT0NP+eHPHHy1KnLIr3IeTebV8MhXfPPqm1MIAEX127t6JsKtNQ4R6hymu2d7MuWFvNIMZpjtWmcr+WgptksAYnAGJjP+3ZXb7DmgYOf8DpIxN/3S1B3wGOTsxCQNxqV0b2mQRmg6z9Sj4+552aHxp2WHGkdAGpRtP9NwLoN3fPjnpMKBLoxcAr4ytTGKAa7cUTBARflEJBBzqDxs0Vb/NwbgAnavOkUoeqOnwaEAc70vJj0wy76Nni/Kk5BDdRKEbNAXgCuFrrO+p/bTF/8PI4wZqzGwShw8OfwfolYCXKBLneBQcYJpPivCjjXqWUyGlmhxyekvbclrKmAtY5bA==
-X-Forefront-Antispam-Report:
-	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(376014)(7416014)(35042699022)(1800799024)(36860700016)(14060799003)(18002099003)(22082099003)(56012099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	DcjmPSMOwP9RoOnOCYs8ZmeCL/RdiJPtb0RqgXCB9biAkmeYC8TkFCJn9glHKIBjQumE10t9xNcG8eDeDXYGHPMM+GVFvrr5L1zG3F8jyWsYa8JUS4ViJCbSOCw/CQ2OPwttgkJuK5Awx7+2olU86nMENdaVggWadMtIKDQdKDK8rS63f0ieHP06MqOzgBRWLmbRU0F116vDM9u6QNtxpZUECIIShDqyKkKziKxuzDzsZ7qVqh3owH07DEDffZWeOyXpTqQf3e3W0roSaT49evAHLnyAJWmrtapX/94//Jn0flLReBsbLWuyzr+GTpJ8hrR4x+nwYpnvQ4c7ZvB0+C5U1UnYSHbMTI3q1KpbJF2bjY98Ih9yU/n4ZYxEutar2t3uq8v4zl7KBSvGLWaDeF/g7wolpWRhJog6YXxlc2vzWqsGUFACnRek2gsiF+Nd
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Apr 2026 07:58:23.3232
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 43e4521e-c33b-4634-f74d-08dea68e40b3
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	DB5PEPF00014B9D.eurprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS2PR08MB9074
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 06/54] selftests/mm: merge map_hugetlb into
+ hugepage-mmap
+To: Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton
+ <akpm@linux-foundation.org>,
+        David Hildenbrand <david@kernel.org>
+Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Barry Song <baohua@kernel.org>, Dev Jain <dev.jain@arm.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Lance Yang <lance.yang@linux.dev>, Leon Romanovsky <leon@kernel.org>,
+        Lorenzo Stoakes <ljs@kernel.org>, Luiz Capitulino <luizcap@redhat.com>,
+        Mark Brown <broonie@kernel.org>, Michal Hocko <mhocko@suse.com>,
+        Nico Pache <npache@redhat.com>, Peter Xu <peterx@redhat.com>,
+        Ryan Roberts <ryan.roberts@arm.com>,
+        Sarthak Sharma
+ <sarthak.sharma@arm.com>,
+        Shuah Khan <shuah@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
+        Vlastimil Babka <vbabka@kernel.org>, Zi Yan <ziy@nvidia.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org
+References: <20260428204240.1924129-1-rppt@kernel.org>
+ <20260428204240.1924129-7-rppt@kernel.org>
+Content-Language: en-US
+From: Donet Tom <donettom@linux.ibm.com>
+In-Reply-To: <20260428204240.1924129-7-rppt@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-ORIG-GUID: rX7TwUIAX-tzM4LdbzoTQkCt3mUDb5V7
+X-Authority-Analysis: v=2.4 cv=Ft81OWrq c=1 sm=1 tr=0 ts=69f32203 cx=c_pps
+ a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
+ a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=iQ6ETzBq9ecOQQE5vZCe:22 a=VwQbUJbxAAAA:8
+ a=VnNF1IyMAAAA:8 a=QibCLqz7JAqtIrobe0sA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: 3jJpP9Y-djHcm38cCXBtjFFnTii2mGve
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDMwMDA5MiBTYWx0ZWRfXwCYFPpdlPUaS
+ nOHrG/Jw3vyxJWvV0TwQMpgAYs7VhEhLvi6dcMFJCJLk4xCyVSj5Y2/EG8krrKSFLx0GimiQpPa
+ Acq118z5rkHQrtaSqyhtkXGEswdKx8PtNEQXdlrQtssREQQN8umh4OM/oc0k8DtjLFYPF4AMKQR
+ BpUsaRg2qjBlGqrjhD2hUXMZiVdeN1zv4IUaDm+AipuF+7duT5M0/kdWiDb4WWahvN1jk54Zqyu
+ PdEVrOka9f5e82uI8MSonLCMY1VAv+eJ6IA/7xsppsXRh3AAp7pi7jADopFPBY0OAQNSud/nYOi
+ xMtjnNz4RI6REJ1YrsDlnZzZyqcC0Xi32S3A8q/5elIuLztC9+VR3tIaFzRAOBVn3kFgFBHGDd0
+ OLS+Qmf8FB8zhZ+P658BAjk7SizbbB36CBlnFOsf7exgcZSd236rDGRQoHla9gzL9tMHVcdu+Xd
+ TRiNO6f6bAWmX+AaQfQ==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-30_02,2026-04-28_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 lowpriorityscore=0 bulkscore=0 spamscore=0 impostorscore=0
+ clxscore=1011 malwarescore=0 phishscore=0 suspectscore=0 adultscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2604200000 definitions=main-2604300092
 
+Hi Mike
 
-
-On 4/29/26 2:12 AM, Mike Rapoport wrote:
+On 4/29/26 2:11 AM, Mike Rapoport wrote:
 > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-> 
-> khugepaged registers atexit() and signal handlers that ensure that THP
-> settings are restored regardless of how the test exited.
-> 
-> Make these handlers available for all users of thp_settings.
-> 
-> The call to thp_save_settings() installs thp_restore_settings as the
-> atexit() callback and makes sure that signals that kill a process would
-> still call exit() and atexit() callback.
-> 
-> Update child process in tests using thp_settings to use _exit() instead
-> of exit() to avoid altering THP settings in the middle of a test.
-> 
+>
+> Both tests create a hugettlb mapping, fill it with data and verify the
+> data, the only difference is that one uses file-backed memory and another
+> one uses anonymous memory.
+>
+> Merge both tests into a single file.
+>
 > Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+
+[]# ./hugetlb-mmap 1024 21
+TAP version 13
+# [INFO] detected hugetlb page size: 2048 KiB
+# [INFO] detected hugetlb page size: 1048576 KiB
+# 2048 kB hugepages
+1..2
+# Mapping 1024 Mbytes
+# Returned address is 0x7fff5fa00000
+# First hex is 0
+# First hex is 3020100
+ok 1 hugetlb anonymous mmap
+# Returned address is 0x7fff5fa00000
+# First hex is 0
+# First hex is 3020100
+ok 2 hugetlb file mmap
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+
+[]# ./hugetlb-mmap 1024 30
+TAP version 13
+# [INFO] detected hugetlb page size: 2048 KiB
+# [INFO] detected hugetlb page size: 1048576 KiB
+# 1048576 kB hugepages
+1..2
+# Mapping 1024 Mbytes
+# Returned address is 0x7fff40000000
+# First hex is 0
+# First hex is 3020100
+ok 1 hugetlb anonymous mmap
+# Returned address is 0x7fff40000000
+# First hex is 0
+# First hex is 3020100
+ok 2 hugetlb file mmap
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[]#
+
+
+looks good to me.
+
+Reviewed-by: Donet Tom <donettom@linux.ibm.com>
+
+
 > ---
-
-I ran the modified mm selftests after applying this patch and the THP
-settings are being correctly restored to their original values both on
-normal exit and when the test is being interrupted with Ctrl + C.
-
-Tested-by: Sarthak Sharma <sarthak.sharma@arm.com>
+>   tools/testing/selftests/mm/Makefile        |   1 -
+>   tools/testing/selftests/mm/hugepage-mmap.c | 111 ++++++++++++++++-----
+>   tools/testing/selftests/mm/map_hugetlb.c   |  88 ----------------
+>   tools/testing/selftests/mm/run_vmtests.sh  |   1 -
+>   4 files changed, 86 insertions(+), 115 deletions(-)
+>   delete mode 100644 tools/testing/selftests/mm/map_hugetlb.c
+>
+> diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+> index cd24596cdd27..cbda989f6b6a 100644
+> --- a/tools/testing/selftests/mm/Makefile
+> +++ b/tools/testing/selftests/mm/Makefile
+> @@ -70,7 +70,6 @@ TEST_GEN_FILES += hugepage-vmemmap
+>   TEST_GEN_FILES += khugepaged
+>   TEST_GEN_FILES += madv_populate
+>   TEST_GEN_FILES += map_fixed_noreplace
+> -TEST_GEN_FILES += map_hugetlb
+>   TEST_GEN_FILES += map_populate
+>   ifneq (,$(filter $(ARCH),arm64 riscv riscv64 x86 x86_64 loongarch32 loongarch64))
+>   TEST_GEN_FILES += memfd_secret
+> diff --git a/tools/testing/selftests/mm/hugepage-mmap.c b/tools/testing/selftests/mm/hugepage-mmap.c
+> index d543419de040..fa886ec148c2 100644
+> --- a/tools/testing/selftests/mm/hugepage-mmap.c
+> +++ b/tools/testing/selftests/mm/hugepage-mmap.c
+> @@ -15,6 +15,8 @@
+>   #include <unistd.h>
+>   #include <sys/mman.h>
+>   #include <fcntl.h>
+> +#include <linux/memfd.h>
+> +#include "vm_util.h"
+>   #include "kselftest.h"
+>   
+>   #define LENGTH (256UL*1024*1024)
+> @@ -25,54 +27,113 @@ static void check_bytes(char *addr)
+>   	ksft_print_msg("First hex is %x\n", *((unsigned int *)addr));
+>   }
+>   
+> -static void write_bytes(char *addr)
+> +static void write_bytes(char *addr, size_t length)
+>   {
+>   	unsigned long i;
+>   
+> -	for (i = 0; i < LENGTH; i++)
+> +	for (i = 0; i < length; i++)
+>   		*(addr + i) = (char)i;
+>   }
+>   
+> -static int read_bytes(char *addr)
+> +static bool verify_bytes(char *addr, size_t length)
+>   {
+>   	unsigned long i;
+>   
+>   	check_bytes(addr);
+> -	for (i = 0; i < LENGTH; i++)
+> +	for (i = 0; i < length; i++)
+>   		if (*(addr + i) != (char)i) {
+> -			ksft_print_msg("Error: Mismatch at %lu\n", i);
+> -			return 1;
+> +			ksft_print_msg("Error: Mismatch at %lu(%p)\n", i, addr);
+> +			return false;
+>   		}
+> -	return 0;
+> +
+> +	return true;
+>   }
+>   
+> -int main(void)
+> +static bool test_mmap(size_t length, int mmap_flags, int fd,
+> +		      const char *test_name)
+>   {
+>   	void *addr;
+> -	int fd, ret;
+>   
+> -	ksft_print_header();
+> -	ksft_set_plan(1);
+> +	addr = mmap(NULL, length, PROTECTION, mmap_flags, fd, 0);
+> +	if (addr == MAP_FAILED)
+> +		ksft_exit_fail_perror("mmap");
+> +
+> +	ksft_print_msg("Returned address is %p\n", addr);
+> +	check_bytes(addr);
+> +	write_bytes(addr, length);
+> +	if (!verify_bytes(addr, length))
+> +		ksft_exit_fail_msg("%s\n", test_name);
+> +
+> +	/* munmap() length of MAP_HUGETLB memory must be hugepage aligned */
+> +	if (munmap(addr, length))
+> +		ksft_exit_fail_perror("munmap");
+> +
+> +	return true;
+> +}
+> +
+> +static void test_anon_mmap(size_t length, int shift)
+> +{
+> +	const char *test_name = "hugetlb anonymous mmap";
+> +	int mmap_flags = MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB;
+> +	bool passed;
+> +
+> +	if (shift)
+> +		mmap_flags |= (shift & MAP_HUGE_MASK) << MAP_HUGE_SHIFT;
+> +
+> +	passed = test_mmap(length, mmap_flags, -1, test_name);
+> +	ksft_test_result(passed, "%s\n", test_name);
+> +}
+> +
+> +static void test_file_mmap(size_t length, int shift)
+> +{
+> +	const char *test_name = "hugetlb file mmap";
+> +	int mfd_flags = MFD_HUGETLB;
+> +	bool passed;
+> +	int fd;
+> +
+> +	if (shift)
+> +		mfd_flags |= (shift & MFD_HUGE_MASK) << MFD_HUGE_SHIFT;
+>   
+> -	fd = memfd_create("hugepage-mmap", MFD_HUGETLB);
+> +	fd = memfd_create("hugetlb-mmap", mfd_flags);
+>   	if (fd < 0)
+> -		ksft_exit_fail_msg("memfd_create() failed: %s\n", strerror(errno));
+> +		ksft_exit_fail_perror("memfd_create");
+> +
+> +	passed = test_mmap(length, MAP_SHARED, fd, test_name);
+> +
+> +	close(fd);
+> +	ksft_test_result(passed, "%s\n", test_name);
+> +}
+> +
+> +int main(int argc, char **argv)
+> +{
+> +	size_t hugepage_size;
+> +	size_t length = LENGTH;
+> +	int shift = 0;
+> +
+> +	ksft_print_header();
+> +	ksft_set_plan(2);
+> +
+> +	if (argc > 1)
+> +		length = atol(argv[1]) << 20;
+> +	if (argc > 2)
+> +		shift = atoi(argv[2]);
+>   
+> -	addr = mmap(NULL, LENGTH, PROTECTION, MAP_SHARED, fd, 0);
+> -	if (addr == MAP_FAILED) {
+> -		close(fd);
+> -		ksft_exit_fail_msg("mmap(): %s\n", strerror(errno));
+> +	if (shift) {
+> +		hugepage_size = (1 << shift);
+> +		ksft_print_msg("%u kB hugepages\n", 1 << (shift - 10));
+> +	} else {
+> +		hugepage_size = default_huge_page_size();
+> +		ksft_print_msg("Default size hugepages (%lu Kb)\n", hugepage_size >> 10);
+>   	}
+>   
+> -	ksft_print_msg("Returned address is %p\n", addr);
+> -	check_bytes(addr);
+> -	write_bytes(addr);
+> -	ret = read_bytes(addr);
+> +	/* munmap with fail if the length is not page aligned */
+> +	if (hugepage_size > length)
+> +		length = hugepage_size;
+>   
+> -	munmap(addr, LENGTH);
+> -	close(fd);
+> +	ksft_print_msg("Mapping %lu Mbytes\n", (unsigned long)length >> 20);
+>   
+> -	ksft_test_result(!ret, "Read same data\n");
+> +	test_anon_mmap(length, shift);
+> +	test_file_mmap(length, shift);
+>   
+> -	ksft_exit(!ret);
+> +	ksft_finished();
+>   }
+> diff --git a/tools/testing/selftests/mm/map_hugetlb.c b/tools/testing/selftests/mm/map_hugetlb.c
+> deleted file mode 100644
+> index aa409107611b..000000000000
+> --- a/tools/testing/selftests/mm/map_hugetlb.c
+> +++ /dev/null
+> @@ -1,88 +0,0 @@
+> -// SPDX-License-Identifier: GPL-2.0
+> -/*
+> - * Example of using hugepage memory in a user application using the mmap
+> - * system call with MAP_HUGETLB flag.  Before running this program make
+> - * sure the administrator has allocated enough default sized huge pages
+> - * to cover the 256 MB allocation.
+> - */
+> -#include <stdlib.h>
+> -#include <stdio.h>
+> -#include <unistd.h>
+> -#include <sys/mman.h>
+> -#include <fcntl.h>
+> -#include "vm_util.h"
+> -#include "kselftest.h"
+> -
+> -#define LENGTH (256UL*1024*1024)
+> -#define PROTECTION (PROT_READ | PROT_WRITE)
+> -
+> -static void check_bytes(char *addr)
+> -{
+> -	ksft_print_msg("First hex is %x\n", *((unsigned int *)addr));
+> -}
+> -
+> -static void write_bytes(char *addr, size_t length)
+> -{
+> -	unsigned long i;
+> -
+> -	for (i = 0; i < length; i++)
+> -		*(addr + i) = (char)i;
+> -}
+> -
+> -static void read_bytes(char *addr, size_t length)
+> -{
+> -	unsigned long i;
+> -
+> -	check_bytes(addr);
+> -	for (i = 0; i < length; i++)
+> -		if (*(addr + i) != (char)i)
+> -			ksft_exit_fail_msg("Mismatch at %lu\n", i);
+> -
+> -	ksft_test_result_pass("Read correct data\n");
+> -}
+> -
+> -int main(int argc, char **argv)
+> -{
+> -	void *addr;
+> -	size_t hugepage_size;
+> -	size_t length = LENGTH;
+> -	int flags = MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB;
+> -	int shift = 0;
+> -
+> -	hugepage_size = default_huge_page_size();
+> -	/* munmap with fail if the length is not page aligned */
+> -	if (hugepage_size > length)
+> -		length = hugepage_size;
+> -
+> -	ksft_print_header();
+> -	ksft_set_plan(1);
+> -
+> -	if (argc > 1)
+> -		length = atol(argv[1]) << 20;
+> -	if (argc > 2) {
+> -		shift = atoi(argv[2]);
+> -		if (shift)
+> -			flags |= (shift & MAP_HUGE_MASK) << MAP_HUGE_SHIFT;
+> -	}
+> -
+> -	if (shift)
+> -		ksft_print_msg("%u kB hugepages\n", 1 << (shift - 10));
+> -	else
+> -		ksft_print_msg("Default size hugepages\n");
+> -	ksft_print_msg("Mapping %lu Mbytes\n", (unsigned long)length >> 20);
+> -
+> -	addr = mmap(NULL, length, PROTECTION, flags, -1, 0);
+> -	if (addr == MAP_FAILED)
+> -		ksft_exit_fail_msg("mmap: %s\n", strerror(errno));
+> -
+> -	ksft_print_msg("Returned address is %p\n", addr);
+> -	check_bytes(addr);
+> -	write_bytes(addr, length);
+> -	read_bytes(addr, length);
+> -
+> -	/* munmap() length of MAP_HUGETLB memory must be hugepage aligned */
+> -	if (munmap(addr, length))
+> -		ksft_exit_fail_msg("munmap: %s\n", strerror(errno));
+> -
+> -	ksft_finished();
+> -}
+> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
+> index e2dc9ac87bfc..61b450032af8 100755
+> --- a/tools/testing/selftests/mm/run_vmtests.sh
+> +++ b/tools/testing/selftests/mm/run_vmtests.sh
+> @@ -292,7 +292,6 @@ CATEGORY="hugetlb" run_test ./hugepage-shm
+>   echo "$shmmax" > /proc/sys/kernel/shmmax
+>   echo "$shmall" > /proc/sys/kernel/shmall
+>   
+> -CATEGORY="hugetlb" run_test ./map_hugetlb
+>   CATEGORY="hugetlb" run_test ./hugepage-mremap
+>   CATEGORY="hugetlb" run_test ./hugepage-vmemmap
+>   CATEGORY="hugetlb" run_test ./hugetlb-madvise
