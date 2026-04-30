@@ -1,234 +1,180 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7B602641CA;
-	Thu, 30 Apr 2026 14:47:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A12323BA25C
+	for <linux-kselftest@vger.kernel.org>; Thu, 30 Apr 2026 14:54:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777560445; cv=none; b=eUwNi+HT4055Dro8+Vcbv91g7+hDhgmnWXgTgjSu0iXjQp7k+2xGI84XgVuPPcV8tFZfKNVdWbbViUF+lp3bo5tI4cvHiODjWi/gDY98xrB4+9J8OAWHUHNA6+TjV4bpHbz5irV3RWlUunmNBKzRDvUcwMxIxZC72MY6VFr7/00=
+	t=1777560871; cv=none; b=Jf7kFUysPHTie6QyVvxiHnfaq2V1QRR0NnH1utsapOWQfagez+NQ9w2Hd9Ema8m0uTWqAhsS8Idg79W46pNuTv1MhFUcy6qD7fpa5liEBDvgES5nqy/Pqd3bENU+sEU4KV8CpA+GWILJguFJVVDPAWqR0MAWkUiCZVnpBTcKwgI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777560445; c=relaxed/simple;
-	bh=264aTQoULBVWcUvPni2hxBum6EiIcWK0YAfHGvmCE2E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Es2bJycCbVUDzwaXbASocqzaiIkJUSHECsOa7mWfvQM6qI34knTNJeI/Zl012xiffAEsHbWi5FEa2PASqNneCpeMAskogGMd1nwQvEcYUXftyDiRgolmeVZ5MYrREydcivtRTICyRrM5qrSyKzcmmYyaUTJ9NufNUvNjjqdwjjM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YiNgLKTI; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777560871; c=relaxed/simple;
+	bh=LM7zZ3BKn/6jhx52cjuHs4HlBrG0AdmbYZ63UH8/riE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kuH8ksG7VCPJibOx4aySwyktZW580PmrVmXZo16xbXCPQurqH7MacnG4saR3YelHdF3i+WfAm/hCMJ+KkW0O4FuZe4vACjcnb6ISlHi7Vo8IdAaw0wYxSO6BW7PjHFbF/eMhVlBUQCzKM6VRTdTGQO+ymonie9HcfMJFd1+04Jw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WmAtOvDm; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YiNgLKTI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 309DBC2BCB3;
-	Thu, 30 Apr 2026 14:47:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777560443;
-	bh=264aTQoULBVWcUvPni2hxBum6EiIcWK0YAfHGvmCE2E=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YiNgLKTI0NC9lXL371WXRwAC3EKdkT/2mTAe3elDeEIcpos1O9ZYXg1ot3GHyxsIC
-	 1yFFlP2evF/7bdTL6EqkLDBecTePyowRBmZ7Hrf90yBaoN90bvLIyqVfB66wM1MvEf
-	 gjd6VeK79ytB2O4nxu5mUZ4g8FaO0wbVWP0DZasS60AU2avdPSBXA4fIWwlN27vzuT
-	 r6FXO4YRXHse8QNs4+MKzGldjLn/GSaOdCziJzeEujuibO4qwQne8mWoB1ohGn5SYM
-	 j1hYboR5eW/Nigs+HuJk6bOosot98kQl+0pOA53k9x9MYDad5vbEGCQxzIOgNdMsgu
-	 4zLQipgi6ol3g==
-Date: Thu, 30 Apr 2026 16:47:10 +0200
-From: Nicolas Schier <nsc@kernel.org>
-To: Sasha Levin <sashal@kernel.org>
-Cc: linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-kbuild@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	workflows@vger.kernel.org, tools@kernel.org, x86@kernel.org,
-	Thomas Gleixner <tglx@kernel.org>,
-	"Paul E . McKenney" <paulmck@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Cyril Hrubis <chrubis@suse.cz>, Kees Cook <kees@kernel.org>,
-	Jake Edge <jake@lwn.net>,
-	David Laight <david.laight.linux@gmail.com>,
-	Askar Safin <safinaskar@zohomail.com>,
-	Gabriele Paoloni <gpaoloni@redhat.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Christian Brauner <brauner@kernel.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Ingo Molnar <mingo@redhat.com>, Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH v3 2/9] kernel/api: enable kerneldoc-based API
- specifications
-Message-ID: <afNrbm8URHlClZ-8@levanger>
-Mail-Followup-To: Nicolas Schier <nsc@kernel.org>,
-	Sasha Levin <sashal@kernel.org>, linux-api@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, workflows@vger.kernel.org,
-	tools@kernel.org, x86@kernel.org, Thomas Gleixner <tglx@kernel.org>,
-	"Paul E . McKenney" <paulmck@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Cyril Hrubis <chrubis@suse.cz>, Kees Cook <kees@kernel.org>,
-	Jake Edge <jake@lwn.net>,
-	David Laight <david.laight.linux@gmail.com>,
-	Askar Safin <safinaskar@zohomail.com>,
-	Gabriele Paoloni <gpaoloni@redhat.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Christian Brauner <brauner@kernel.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Ingo Molnar <mingo@redhat.com>, Arnd Bergmann <arnd@arndb.de>
-References: <20260424165130.2306833-1-sashal@kernel.org>
- <20260424165130.2306833-3-sashal@kernel.org>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WmAtOvDm"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1777560868;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=7p5fXb8rzgGRGsySMmX1Wn2cmLsL9wBpLlARqjRpNoc=;
+	b=WmAtOvDmMLGgzn+gdfSfS3KR5ezUDBjRUq5FyNHZOpwhTLBgSheaic5ePwvDhMftrkNaqa
+	v53W5EpbQS96XkKJV+DQ/Nk7iXyXO1v/PUeYqThs4CS55aSVV0K0YVZHwwtA0wVCxcfAAR
+	c31y+J+VMVONq8IQKyluEyzb69SMRCY=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-249-ViSeJAxkOD6Jh-_johw1dg-1; Thu, 30 Apr 2026 10:54:27 -0400
+X-MC-Unique: ViSeJAxkOD6Jh-_johw1dg-1
+X-Mimecast-MFC-AGG-ID: ViSeJAxkOD6Jh-_johw1dg_1777560867
+Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-8b4bebd2b2aso5621076d6.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 30 Apr 2026 07:54:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777560867; x=1778165667;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7p5fXb8rzgGRGsySMmX1Wn2cmLsL9wBpLlARqjRpNoc=;
+        b=JK3IN4KRMSbbg2hsO+vDQOsV4pwCv0AT60/X5W0DmSyg6wdT6RSYPeLxKMjFjI7yna
+         HRqfgUzQrRB0cG3Ibysr7S+gXmx+mGN19ozavyfd/Sa7PvKV9eXMdjRzLkD7BFPbh6Tf
+         rulXDnKSfKU7fHntJSXOFMtFkx5ObQLdveJPvaY6f4z1yaBBQL6LEHeQ4vv1F0gSbTnu
+         bXU2RpLXS8MgryaGUP40UqjBx+X5MIETDNNwKT54YA03+kprYkyHh2B2EO+iRnomTnsv
+         U+S0Eieq4lcaaP4MlTIyYHulXS95r9r/vDydpQYPhnGEVwM/uEGGd0C7SDr11qR8vVfe
+         f+DQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/FdAg+h8zSM5mOu/89EFSfwM9RuLjcDcuOzHryj/87UPqk1N3L+0837ExNONivFBCucwaKdm65ZDDGY6uClmc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwPxtcDe8kcSYji0es8GViOwVz0CXxTSXTsMwQVqFDr+TLDT/0i
+	gxn2zPejwJ4+goZMGyPonP0Kj/m/8BKkx11zfV44cWZnohVdPkrfqLfa3ZOw1JHV2MGfFT9mC47
+	Q4lDqrA5NdHopi0fYsGZn6IxhhHe/UZVgtum3qVcbupsidCZPOJZ8ZZHPQ8pCkfziCvpHCQ==
+X-Gm-Gg: AeBDieu0h2Tttu3EJNF7N8hbn93xD0tvxijIP9WI+3wJRBtW3K5Qi8lU3Sy8RUvXqva
+	ffa1KTvXDkjDVAX/Dl8KDou3JjJHecqW2msGHg9rQCNKVRDXz8Nsdd0Omy09uI2IjIGjio8El8+
+	+42d0v3/yGWr+uQhVqIrTDZKPlPklrBTTMsimQUbSoz2i+YXX946gjmWj8JhJO+OUf/vTeBYlJc
+	aRF6YIjBwYyZ3ZTi/KhCFD2hoxDYD79tGWuudZeOoDX6oUgqKFmM+nJC6OBE3/2RiYC/3S6pgc2
+	ejp08raRJDB2cDM9syjyJmbu5JqgJkVNsdKkwRUfFraMDOxDihl7N+Q7jEK+9MShxehF+2Q94cZ
+	+nXlxFpfzBZCt2b5rl/MNZ0WxdGSRqMuDugc=
+X-Received: by 2002:a05:6214:5549:b0:89c:4b37:7106 with SMTP id 6a1803df08f44-8b4000f7fdbmr35628936d6.34.1777560867009;
+        Thu, 30 Apr 2026 07:54:27 -0700 (PDT)
+X-Received: by 2002:a05:6214:5549:b0:89c:4b37:7106 with SMTP id 6a1803df08f44-8b4000f7fdbmr35628096d6.34.1777560866347;
+        Thu, 30 Apr 2026 07:54:26 -0700 (PDT)
+Received: from [192.168.2.110] ([70.53.202.134])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8b3ff439c2csm19482476d6.23.2026.04.30.07.54.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Apr 2026 07:54:25 -0700 (PDT)
+Message-ID: <6f8de9a3-2adc-4d96-bc0e-5171bcbba60f@redhat.com>
+Date: Thu, 30 Apr 2026 10:54:14 -0400
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260424165130.2306833-3-sashal@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 04/54] selftests/mm: migration: properly cleanup
+ fork()ed processes
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ David Hildenbrand <david@kernel.org>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>, Barry Song <baohua@kernel.org>,
+ Dev Jain <dev.jain@arm.com>, Donet Tom <donettom@linux.ibm.com>,
+ Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Lance Yang <lance.yang@linux.dev>, Leon Romanovsky <leon@kernel.org>,
+ Lorenzo Stoakes <ljs@kernel.org>, Mark Brown <broonie@kernel.org>,
+ Michal Hocko <mhocko@suse.com>, Nico Pache <npache@redhat.com>,
+ Peter Xu <peterx@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
+ Sarthak Sharma <sarthak.sharma@arm.com>, Shuah Khan <shuah@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Vlastimil Babka <vbabka@kernel.org>,
+ Zi Yan <ziy@nvidia.com>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org
+References: <20260428204240.1924129-1-rppt@kernel.org>
+ <20260428204240.1924129-5-rppt@kernel.org>
+ <6b12453b-2683-41cc-bb4c-602eda6bf9d8@redhat.com>
+ <afNpxNsylkUUC0-Z@kernel.org>
+Content-Language: en-US, en-CA
+From: Luiz Capitulino <luizcap@redhat.com>
+In-Reply-To: <afNpxNsylkUUC0-Z@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Apr 24, 2026 at 12:51:22PM -0400, Sasha Levin wrote:
-> This patch adds support for extracting API specifications from
-> kernel-doc comments and generating C macro invocations for the
-> kernel API specification framework.
+On 2026-04-30 10:40, Mike Rapoport wrote:
+> On Thu, Apr 30, 2026 at 09:37:43AM -0400, Luiz Capitulino wrote:
+>> On 2026-04-28 16:41, Mike Rapoport wrote:
+>>> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+>>>
+>>> Several migration test use fork() to create worker processes. These
+>>> processes are later killed, but nothing collects their exit status and they
+>>> remain as zombies in the system.
+>>>
+>>> Add a helper function that kills the worker processes, waitpid()s for
+>>> them and verifies the exit status.
+>>>
+>>> Replace the loops that call kill() for each process with a call to that
+>>> helper.
+>>>
+>>> The addition of waitpid() calls also makes sure the migrating process never
+>>> exits before the processes accessing the memory, so it's possible to drop
+>>> the call to prctl(PR_SET_PDEATHSIG, SIGHUP).
+>>>
+>>> Reported-by: Luiz Capitulino <luizcap@redhat.com>
+>>> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+>>> ---
+>>>    tools/testing/selftests/mm/migration.c | 54 +++++++++++++-------------
+>>>    1 file changed, 27 insertions(+), 27 deletions(-)
+>>>
+>>> diff --git a/tools/testing/selftests/mm/migration.c b/tools/testing/selftests/mm/migration.c
+>>> index 3630f2fb0800..76e380b74658 100644
+>>> --- a/tools/testing/selftests/mm/migration.c
+>>> +++ b/tools/testing/selftests/mm/migration.c
+>>> @@ -67,6 +67,24 @@ FIXTURE_TEARDOWN(migration)
+>>>    	free(self->pids);
+>>>    }
+>>> +static bool kill_children(FIXTURE_DATA(migration) * self)
+>>> +{
+>>> +	int i, status;
+>>> +	pid_t pid;
+>>> +
+>>> +	for (i = 0; i < self->nthreads; i++) {
+>>> +		pid = self->pids[i];
+>>> +		if (kill(pid, SIGTERM))
+>>> +			return false;
+>>> +		if (pid != waitpid(pid, &status, 0))
+>>> +			return false;
+>>> +		if (!WIFSIGNALED(status) || WTERMSIG(status) != SIGTERM)
+>>> +			return false;
+>>> +	}
+>>
+>> Why do we stop at the first error? Wouldn't it be better to kill &
+>> collect all of them and then return false if at least one fails?
 > 
-> Changes include:
-> - New kdoc_apispec.py module for generating API spec macros
-> - Updates to kernel-doc.py to support -apispec output format
-> - Build system integration in Makefile.build
-> - Generator script for collecting all API specifications
-> - Support for API-specific sections in kernel-doc comments
+> Yep, makes sense.
+>   
+>>> +
+>>> +	return true;
+>>> +}
+>>> +
+>>>    int migrate(uint64_t *ptr, int n1, int n2)
+>>>    {
+>>>    	int ret, tmp;
+>>> @@ -160,20 +178,14 @@ TEST_F_TIMEOUT(migration, shared_anon, 2*RUNTIME)
+>>>    	memset(ptr, 0xde, TWOMEG);
+>>>    	for (i = 0; i < self->nthreads; i++) {
+>>>    		pid = fork();
+>>> -		if (!pid) {
+>>> -			prctl(PR_SET_PDEATHSIG, SIGHUP);
+>>> -			/* Parent may have died before prctl so check now. */
+>>> -			if (getppid() == 1)
+>>> -				kill(getpid(), SIGHUP);
+>>
+>> This goes beyond this series, but I wonder if we should have this check
+>> in access_mem() in case the parent dies in migrate().
 > 
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
->  Documentation/dev-tools/kernel-api-spec.rst |   11 +
->  scripts/Makefile.build                      |   31 +
->  scripts/Makefile.clean                      |    3 +
->  tools/docs/kernel-doc                       |    5 +
->  tools/lib/python/kdoc/kdoc_apispec.py       | 1249 +++++++++++++++++++
->  tools/lib/python/kdoc/kdoc_output.py        |    9 +-
->  tools/lib/python/kdoc/kdoc_parser.py        |   86 +-
->  7 files changed, 1389 insertions(+), 5 deletions(-)
->  create mode 100644 tools/lib/python/kdoc/kdoc_apispec.py
-> 
-> diff --git a/Documentation/dev-tools/kernel-api-spec.rst b/Documentation/dev-tools/kernel-api-spec.rst
-> index 395c2294d5209..479bc78797ba8 100644
-> --- a/Documentation/dev-tools/kernel-api-spec.rst
-> +++ b/Documentation/dev-tools/kernel-api-spec.rst
-> @@ -239,6 +239,17 @@ execution context, and return values. Parameter violations are reported via
->  ``pr_warn_ratelimited`` and return value violations via ``WARN_ONCE`` to avoid
->  flooding the kernel log.
->  
-> +.. warning::
-> +
-> +   Userspace errno is affected when this option is on. For syscalls that
-> +   violate their parameter specification, KAPI short-circuits the call and
-> +   returns ``-EINVAL`` from the validator **before** the real handler runs.
-> +   That errno can differ from what the real handler would have produced for
-> +   the same condition (for example, ``-ENOMEM`` from an allocation path or
-> +   ``-EFAULT`` from a deeper copy-in). ``CONFIG_KAPI_RUNTIME_CHECKS`` is a
-> +   debug-only option; do not enable it on production kernels or in
-> +   userspace-visible test environments where error-code fidelity matters.
-> +
->  Custom Validators
->  -----------------
->  
-> diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-> index 3652b85be5459..ef203e490c797 100644
-> --- a/scripts/Makefile.build
-> +++ b/scripts/Makefile.build
-> @@ -174,6 +174,37 @@ ifneq ($(KBUILD_EXTRA_WARN),)
->  endif
->  endif
->  
-> +# Generate API spec headers from kernel-doc comments
-> +ifeq ($(CONFIG_KAPI_SPEC),y)
-> +# Function to check if a file has API specifications
-> +has-apispec = $(shell grep -qE '^\s*\*\s*context-flags:' $(src)/$(1) 2>/dev/null && echo $(1))
-> +
-> +# Get base names without directory prefix
-> +c-objs-base := $(notdir $(real-obj-y) $(real-obj-m))
-> +# Filter to only .o files with corresponding .c source files
-> +c-files := $(foreach o,$(c-objs-base),$(if $(wildcard $(src)/$(o:.o=.c)),$(o:.o=.c)))
+> With added kill() + waitpid() this should not happen.
 
-Looks to me as if the two lines above are redundant, since 'find'
-(below) will find all files gathered in $(c-files).
+I was thinking in the case of a crash, but looking at it again it seems
+to be impossible so it's fine.
 
-
-> +# Also check for any additional .c files that contain API specs but are included
-> +extra-c-files := $(shell find $(src) -maxdepth 1 -name "*.c" -exec grep -l '^\s*\*\s*\(long-desc\|context-flags\|state-trans\):' {} \; 2>/dev/null | xargs -r basename -a)
-> +# Combine both lists and remove duplicates
-> +all-c-files := $(sort $(c-files) $(extra-c-files))
-> +# Only include files that actually have API specifications
-> +apispec-files := $(foreach f,$(all-c-files),$(call has-apispec,$(f)))
-> +# Generate apispec targets with proper directory prefix
-> +apispec-y := $(addprefix $(obj)/,$(apispec-files:.c=.apispec.h))
-
-To goal is to find any relevant C file in $(src)/ (but not deeper below)
-that holds KAPI documentation, right?
-
-I do not like the find call, as it picks up anything.  Might it make
-sense to evaluate $(obj-) along with $(obj-y) and $(obj-m) to pick up
-all C files that are references in kbuild?
-
-
-
-# in top definition block -- before 'include $(kbuild-file)' et al.
-obj- :=
-
-# below the definitions of real-obj-{y,m}
-real-obj-any := $(call real-search, $(obj-y) $(obj-m) $(obj-), .o, -objs -y -m -)
-
-has-apispec = $(shell grep -lE '^\s*\*\s*context-flags:' $(1) 2>/dev/null)
-apispec-y := $(patsubst $(src)/%.c, $(obj)/%.apispec.h, $(call has-apispec,
-		    $(patsubst $(obj)/%.o, $(src)/%.c, $(real-obj-any))))
-
-#...
-
-# Source files that include their own apispec.h need to depend on it
-$(apispec-y:.apispec.h=.o): $(obj)/%.o: $(obj)/%.apispec.h
-
-(untested)
-
-> +always-y += $(apispec-y)
-> +targets += $(apispec-y)
-> +
-> +quiet_cmd_apispec = APISPEC $@
-> +      cmd_apispec = PYTHONDONTWRITEBYTECODE=1 $(KERNELDOC) -apispec \
-> +                    $(KDOCFLAGS) $< > $@ || rm -f $@
-> +
-> +$(obj)/%.apispec.h: $(src)/%.c $(KERNELDOC) FORCE
-> +	$(call if_changed,apispec)
-> +
-> +# Source files that include their own apispec.h need to depend on it
-> +$(foreach f,$(apispec-files),$(eval $(obj)/$(f:.c=.o): $(obj)/$(f:.c=.apispec.h)))
-> +endif
-> +
->  # Compile C sources (.c)
->  # ---------------------------------------------------------------------------
->  
-> diff --git a/scripts/Makefile.clean b/scripts/Makefile.clean
-> index 6ead00ec7313b..f78dbbe637f27 100644
-> --- a/scripts/Makefile.clean
-> +++ b/scripts/Makefile.clean
-> @@ -35,6 +35,9 @@ __clean-files   := $(filter-out $(no-clean-files), $(__clean-files))
->  
->  __clean-files   := $(wildcard $(addprefix $(obj)/, $(__clean-files)))
->  
-> +# Also clean generated apispec headers (computed dynamically in Makefile.build)
-> +__clean-files   += $(wildcard $(obj)/*.apispec.h)
-
-We have a list of wildcard clean patterns in top-level Makefile
-(line 2114 ff.); please add '*.apispec.h' there instead.
-
-
-
-When I apply the series on top of v7.1, compilation fails with
-
-../fs/open.c:2148:10: fatal error: open.apispec.h: No such file or directory
-../fs/read_write.c:2519:10: fatal error: read_write.apispec.h: No such file or directory
-
-Kind regards,
-Nicolas
