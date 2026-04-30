@@ -1,77 +1,35 @@
-Received: from pdx-out-015.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-015.esa.us-west-2.outbound.mail-perimeter.amazon.com [50.112.246.219])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6FFE384236;
-	Thu, 30 Apr 2026 03:26:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=50.112.246.219
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3E1238B14D;
+	Thu, 30 Apr 2026 03:26:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777519587; cv=none; b=u5aibOqx8Th1AMH5w2sNm4F7OTnFALY0AzOlpZ/L08WIhlbIdQnYyjY5P+Brlh4zKULOiBaQa0XOU9Xc4dnrs3ReutXeJlVy/hTeS/S8YJHasNui/+HbySmrRYIijRdS5JQgNJ8CwlD9DU0Tz5Loa0BW4oRrzW5NJk9zc3K63kQ=
+	t=1777519595; cv=none; b=DceDVS+x7T3XPo7QpkDopvMnHe5XoszOqMNhc09KN2Vsq++s2V7XcQHPWLvONLOqZevJbr65EsZHHOmgxcgrrO5EPCwZyimgyXv1lh1Qvq+YygzS7iJX+Yr52UYX2vyA5gejZ4hdmAuqJpQmomF/OKOTusKu5Ue5N6Fw7yn6dqQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777519587; c=relaxed/simple;
-	bh=3TGtOzPn0RxyO/+/FxJXgX91uECyg93GeYIjrF2UsQs=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LZt2HolmeEfmUzi+2/C+xc8gri7UJs76GTG+iodExKTWpsUFLl1SibzPqqeLqdsTYvosJbhvC2TKeaJmofjTYWS+spggDGY+ODTHevxYcG4ZL4MwJ8Txrxs1tNBai5JkIwSEylInEvJmE2y+7xSgSlQu+Emk8zS/1lhu0qx0l5Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=ADVhxAvA; arc=none smtp.client-ip=50.112.246.219
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
+	s=arc-20240116; t=1777519595; c=relaxed/simple;
+	bh=v2FVe+EQzcRgy5kBHv31JJ1JABN71LAgpMDEFu1iEeQ=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=LHg37gOPM1/ceRozCJjFuMBIdAd1eK6zeITajowRh9f4UGHiSncREAnE2YnT0JKyky7a9HMnU5hPyTRJDvBA3z/N9EHH0yXRrsfXYcENo33IZy4l/lL4A+Sq28T98F7mM2jkd5EDscYKK5Anmj8yXs7SiV5dteqVrsf0VPKrqNI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kIzodHHo; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="ADVhxAvA"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1777519586; x=1809055586;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=QxX1R+bJTeGdHHpMlgT86lyJMRpGzOjKsh3iX3iumeM=;
-  b=ADVhxAvASkD9FNKLXwh8MrgkFZB1rbCNXPlbBXqPanY3m5znMOUjcxx8
-   YowWFJa92XG28Rdh3rkBbapeRviN7rfR/7hWHBfQujHmWGqzCUG83iP6w
-   NbqowRLSWrkSgUhMG8Wm4rXsc9EDVv+Vx1vidVIrSjUbRlKOyXOwcySD6
-   45pClqmB7opNBDiZPBPUBfvVecoyN6IvygZzsKc/zEsiEn3e7B5C8QjMI
-   GvTxz7hq5pTGNwgFDyVED90VjvM3Ss1T68sIW6tbKJ1+yR8fRaKAhiX/Y
-   8JszTigjaoR7dlePwl0IVZ84W4sXw1DpvJQEuZniONCBi7xs3wUmge4EX
-   A==;
-X-CSE-ConnectionGUID: yFmCUc1HTY+Eqn4RI3zs+g==
-X-CSE-MsgGUID: xT9VL42uTw+xyniHY3Lk8Q==
-X-IronPort-AV: E=Sophos;i="6.23,207,1770595200"; 
-   d="scan'208";a="18347843"
-Received: from ip-10-5-6-203.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.6.203])
-  by internal-pdx-out-015.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Apr 2026 03:26:23 +0000
-Received: from EX19MTAUWC001.ant.amazon.com [205.251.233.105:26826]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.4.227:2525] with esmtp (Farcaster)
- id 26dea6bb-e7d0-4d1d-aa44-5e464c24cba3; Thu, 30 Apr 2026 03:26:23 +0000 (UTC)
-X-Farcaster-Flow-ID: 26dea6bb-e7d0-4d1d-aa44-5e464c24cba3
-Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWC001.ant.amazon.com (10.250.64.174) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37;
- Thu, 30 Apr 2026 03:26:23 +0000
-Received: from dev-dsk-akiyano-1c-2138b29d.eu-west-1.amazon.com (172.19.83.6)
- by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37;
- Thu, 30 Apr 2026 03:26:18 +0000
-From: Arthur Kiyanovski <akiyano@amazon.com>
-To: David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
-	<netdev@vger.kernel.org>
-CC: Arthur Kiyanovski <akiyano@amazon.com>, Richard Cochran
-	<richardcochran@gmail.com>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
-	<pabeni@redhat.com>, David Woodhouse <dwmw2@infradead.org>, Thomas Gleixner
-	<tglx@linutronix.de>, Miroslav Lichvar <mlichvar@redhat.com>, Andrew Lunn
-	<andrew+netdev@lunn.ch>, Wen Gu <guwen@linux.alibaba.com>, Xuan Zhuo
-	<xuanzhuo@linux.alibaba.com>, David Woodhouse <dwmw@amazon.com>, "Yonatan
- Sarna" <ysarna@amazon.com>, Zorik Machulsky <zorik@amazon.com>, "Alexander
- Matushevsky" <matua@amazon.com>, Saeed Bshara <saeedb@amazon.com>, Matt
- Wilson <msw@amazon.com>, Anthony Liguori <aliguori@amazon.com>, Nafea Bshara
-	<nafea@amazon.com>, Evgeny Schmeilin <evgenys@amazon.com>, Netanel Belgazal
-	<netanel@amazon.com>, Ali Saidi <alisaidi@amazon.com>, Benjamin Herrenschmidt
-	<benh@amazon.com>, Noam Dagan <ndagan@amazon.com>, David Arinzon
-	<darinzon@amazon.com>, Evgeny Ostrovsky <evostrov@amazon.com>, Ofir Tabachnik
-	<ofirt@amazon.com>, Amit Bernstein <amitbern@amazon.com>,
-	<linux-kselftest@vger.kernel.org>, <shuah@kernel.org>,
-	<vadim.fedorenko@linux.dev>
-Subject: [PATCH v2 net-next 8/8] net: ena: Implement gettimexattrs64 callback for PTP attributes
-Date: Thu, 30 Apr 2026 03:25:05 +0000
-Message-ID: <20260430032507.11586-9-akiyano@amazon.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260430032507.11586-1-akiyano@amazon.com>
-References: <20260430032507.11586-1-akiyano@amazon.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kIzodHHo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BEADC2BCB8;
+	Thu, 30 Apr 2026 03:26:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777519595;
+	bh=v2FVe+EQzcRgy5kBHv31JJ1JABN71LAgpMDEFu1iEeQ=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=kIzodHHoxdLZ+cDEQj8Njp+uRU2rFvB5r8IfM+fIJ9hEZSG088leSKu/922hUPp85
+	 uMHN4hDlcpbFHClaWJFg4kZDURxZTq1inA7wHZImmThwHGfHBgEpKvrqi7ijJtqwdy
+	 5WH+gX1UuJLBbrZylZYd6CoFRANggv3/UfcfBb3+dpW1T1QlADsSguUSaj5Egn2fSz
+	 Bdi/bACXwgbbfMZegVFixj8x6oV9POowqUolYkPDN08WqNkOFsPo8VKMx1GwPrzfov
+	 j0EGamHpvvWNIqGxIFN2PoHCW88iEsn1BChR7+E1rQl0nVqgLLU8i9CPn6y4VH9hy+
+	 marnzTmOrauAw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B9EFF3809A07;
+	Thu, 30 Apr 2026 03:25:51 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -79,102 +37,49 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EX19D040UWB002.ant.amazon.com (10.13.138.89) To
- EX19D001UWA001.ant.amazon.com (10.13.138.214)
+Subject: Re: [PATCH v10 0/3] RISC-V: KVM: Validate SBI STA shmem alignment
+From: patchwork-bot+linux-riscv@kernel.org
+Message-Id: 
+ <177751955029.2274119.9759689276814198546.git-patchwork-notify@kernel.org>
+Date: Thu, 30 Apr 2026 03:25:50 +0000
+References: <20260303010859.1763177-1-xujiakai2025@iscas.ac.cn>
+In-Reply-To: <20260303010859.1763177-1-xujiakai2025@iscas.ac.cn>
+To: Jiakai Xu <xujiakai2025@iscas.ac.cn>
+Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+ kvm-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org,
+ kvm@vger.kernel.org, alex@ghiti.fr, pbonzini@redhat.com, shuah@kernel.org,
+ pjw@kernel.org, palmer@dabbelt.com, ajones@ventanamicro.com,
+ anup@brainfault.org, atish.patra@linux.dev, aou@eecs.berkeley.edu
 
-Implement the gettimexattrs64 callback in the ENA driver to support
-the PTP_SYS_OFFSET_EXTENDED_ATTRS ioctl.
+Hello:
 
-This enables applications to retrieve PHC timestamps with quality
-attributes through the standard PTP ioctl interface.
+This series was applied to riscv/linux.git (fixes)
+by Anup Patel <anup@brainfault.org>:
 
-The ENA device currently reports only error_bound.
-clock_status and timescale attributes are set to default values.
+On Tue,  3 Mar 2026 01:08:56 +0000 you wrote:
+> This series fixes a missing validation in the RISC-V KVM SBI
+> steal-time accounting (STA) register handling.
+> 
+> Patch 1 validates the configured SBI STA shared memory GPA at
+> KVM_SET_ONE_REG, enforcing the 64-byte alignment requirement
+> defined by the SBI specification or allowing INVALID_GPA to explicitly
+> disable steal-time accounting. This prevents invalid userspace state
+> from reaching runtime code paths and avoids WARN_ON() triggers during
+> KVM_RUN.
+> 
+> [...]
 
-Signed-off-by: Amit Bernstein <amitbern@amazon.com>
-Signed-off-by: Arthur Kiyanovski <akiyano@amazon.com>
----
- drivers/net/ethernet/amazon/ena/ena_phc.c | 59 +++++++++++++++++++----
- 1 file changed, 49 insertions(+), 10 deletions(-)
+Here is the summary with links:
+  - [v10,1/3] RISC-V: KVM: Validate SBI STA shmem alignment in kvm_sbi_ext_sta_set_reg()
+    https://git.kernel.org/riscv/c/fa9681ed5c6a
+  - [v10,2/3] KVM: selftests: Refactor UAPI tests into dedicated function
+    (no matching commit)
+  - [v10,3/3] RISC-V: KVM: selftests: Add RISC-V SBI STA shmem alignment tests
+    (no matching commit)
 
-diff --git a/drivers/net/ethernet/amazon/ena/ena_phc.c b/drivers/net/ethernet/amazon/ena/ena_phc.c
-index 2bcb5af..2ce5d45 100644
---- a/drivers/net/ethernet/amazon/ena/ena_phc.c
-+++ b/drivers/net/ethernet/amazon/ena/ena_phc.c
-@@ -25,6 +25,44 @@ static int ena_phc_feature_enable(struct ptp_clock_info *clock_info,
- 	return -EOPNOTSUPP;
- }
- 
-+static int ena_phc_gettimexattrs64(struct ptp_clock_info *clock_info,
-+				   struct timespec64 *ts,
-+				   struct ptp_system_timestamp *sts,
-+				   struct ptp_clock_attributes *att)
-+{
-+	struct ena_phc_info *phc_info =
-+		container_of(clock_info, struct ena_phc_info, clock_info);
-+	u32 error_bound_nsec;
-+	unsigned long flags;
-+	u64 timestamp_nsec;
-+	int rc;
-+
-+	spin_lock_irqsave(&phc_info->lock, flags);
-+
-+	ptp_read_system_prets(sts);
-+
-+	rc = ena_com_phc_get_timestamp(phc_info->adapter->ena_dev,
-+				       &timestamp_nsec,
-+				       &error_bound_nsec);
-+
-+	ptp_read_system_postts(sts);
-+
-+	spin_unlock_irqrestore(&phc_info->lock, flags);
-+
-+	if (rc)
-+		return rc;
-+
-+	*ts = ns_to_timespec64(timestamp_nsec);
-+
-+	if (att) {
-+		att->error_bound = error_bound_nsec;
-+		att->status = PTP_CLOCK_STATUS_UNKNOWN;
-+		att->timescale = PTP_TIMESCALE_UNKNOWN;
-+	}
-+
-+	return 0;
-+}
-+
- static int ena_phc_gettimex64(struct ptp_clock_info *clock_info,
- 			      struct timespec64 *ts,
- 			      struct ptp_system_timestamp *sts)
-@@ -62,16 +100,17 @@ static int ena_phc_settime64(struct ptp_clock_info *clock_info,
- }
- 
- static struct ptp_clock_info ena_ptp_clock_info = {
--	.owner		= THIS_MODULE,
--	.n_alarm	= 0,
--	.n_ext_ts	= 0,
--	.n_per_out	= 0,
--	.pps		= 0,
--	.adjtime	= ena_phc_adjtime,
--	.adjfine	= ena_phc_adjfine,
--	.gettimex64	= ena_phc_gettimex64,
--	.settime64	= ena_phc_settime64,
--	.enable		= ena_phc_feature_enable,
-+	.owner		   = THIS_MODULE,
-+	.n_alarm	   = 0,
-+	.n_ext_ts	   = 0,
-+	.n_per_out	   = 0,
-+	.pps		   = 0,
-+	.adjtime	   = ena_phc_adjtime,
-+	.adjfine	   = ena_phc_adjfine,
-+	.gettimexattrs64   = ena_phc_gettimexattrs64,
-+	.gettimex64	   = ena_phc_gettimex64,
-+	.settime64	   = ena_phc_settime64,
-+	.enable		   = ena_phc_feature_enable,
- };
- 
- /* Enable/Disable PHC by the kernel, affects on the next init flow */
+You are awesome, thank you!
 -- 
-2.47.3
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
