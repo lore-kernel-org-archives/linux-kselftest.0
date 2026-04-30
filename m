@@ -1,60 +1,85 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20B803AA1BB;
-	Thu, 30 Apr 2026 09:35:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 171333FE65D
+	for <linux-kselftest@vger.kernel.org>; Thu, 30 Apr 2026 10:04:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777541711; cv=none; b=iGyTFZLwnMLWrovdz5WEvOsXio2P1eGVpNIIuyrd3C5p+FOH/Qn2/1l+sPyskxtQmQZUylyyU8ZhoQKvTq0qdnnnWYD+IeAEUALSX0IWyAO0r110NcTVpTRDjzsy/3jTgv4glvzCFR5MYBVe8PrQmrwi9SZTu7sDdmEx00n3Vlw=
+	t=1777543483; cv=none; b=rvMUSUZMWQqgZf8cTNRyOlSReRX+ppwA1K6WO7cCmlddJvy20Mzf5ll47f4uVxYHU1jLiNBIjZ9ke0l2Y2Qey0zu2RCxE2gPLga+mJrjBEyAhI3X+JDt5roClyCc3nBDmQ0YOC1dzWt/vhB5PQGl37JjpTSz9WqVWyYLyHI7zzk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777541711; c=relaxed/simple;
-	bh=p4B32T8CwcpbhVg2D10Lz2whUf+XXJrrGQvZL2Wgbxs=;
+	s=arc-20240116; t=1777543483; c=relaxed/simple;
+	bh=P1D6A4ZZ/nk/jZDN2eR62W2Ir6JYW+HvVastsvEYnJc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZkS4z0HLfKWu6+nTanlfiWHvZX0WY8PJytKG04PZ0FSpInIQIXcYXWxUewjiNZXo9Y+fQIHzjey1HyjoeV3Z4muXQmV8Iekh73SFV/y+38ygI48U4pmpwKf+v7UyESTlfKKin8UQ9V8i9ydNHabmTlVzVzXToJeruCN7oEAflJM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=SfYhUjEo; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	 In-Reply-To:Content-Type; b=jGdXTfu7+HoiZsrR/Di/r0+nhOkSct8cJrvCoIGNq3ZnkXu7joSUj1rP07d2yeMTXG6bNpbdi/Jy38o4hjtDfhglJoJHSxjYoHunc8MemF9bTJo94C7xwXK2Re/MRZGSOjT7dkjpa2Lvr3NaabL2+vJLw18kkM3GeOgc6E0yIFU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZuQGiqjY; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=tDSFrHZe; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="SfYhUjEo"
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63TKD6pv3160180;
-	Thu, 30 Apr 2026 09:33:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=Xfjjx5
-	w6Yd5s80ZmirtxSUhg/tG6jXGwL44q6sgHG3o=; b=SfYhUjEoOWZjKF0SbDSRqK
-	4H2g4EJKfLmeV+L34eGUqkpk0vfS4ThnwnNiNXFYpm743LD0OlAqABVqT6ntFAa5
-	p1D5IXZdj5NDZo45ahVrxrk4tM+juq7BAksGK65CYPGyUXZT3HO1RcaG4FqgBjmr
-	YXOPkpB70STdGKkOm+5azG27UEFVMarvB4Q3mSRGivJ7wHN00kwWO/0wlLR5Steu
-	UzxwqT4/NqF1x6M6KOrexYG2oyAoFL3FiI6xytEff+CwCdgzje+6nMBpjDxeLP+2
-	r5iIiiaq0VEaS4WqQtZJxoGQ+KWA5mRXH9C1xwHOlbT41Y2VIg4uogzUHm0s5QAg
-	==
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4drn44y2uh-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 30 Apr 2026 09:33:54 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 63U9Noda017008;
-	Thu, 30 Apr 2026 09:33:53 GMT
-Received: from smtprelay05.wdc07v.mail.ibm.com ([172.16.1.72])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4ds9ehj756-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 30 Apr 2026 09:33:53 +0000 (GMT)
-Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
-	by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 63U9Xqqt19661340
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 30 Apr 2026 09:33:53 GMT
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id BA86A5805A;
-	Thu, 30 Apr 2026 09:33:52 +0000 (GMT)
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 48CC658060;
-	Thu, 30 Apr 2026 09:33:40 +0000 (GMT)
-Received: from [9.39.19.41] (unknown [9.39.19.41])
-	by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 30 Apr 2026 09:33:39 +0000 (GMT)
-Message-ID: <ea79d13b-66f2-4a94-ba8b-e3b3bc8e384a@linux.ibm.com>
-Date: Thu, 30 Apr 2026 15:03:37 +0530
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZuQGiqjY";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="tDSFrHZe"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1777543481;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=rkvdRE+ryZql2LrgVEX/b6XOK1Q1y4i0xKrftOVwIEs=;
+	b=ZuQGiqjYM/29n62R+uRCjLt73QIn2HmG4K+V/a2aCw1Pd331ELML4hX6Os/MCXjlCWHror
+	awD6YakuPd9ZuDUOnKiJG8wdi9XFBQmsOMMEX+KeFsb3gr7Z/HTVLWw91LAc+yf8BoRcx+
+	RDwvzGEarSzA4YLhKnati/yq8kN4uqs=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-635-Fp9R939LM927zVAB-LYGnA-1; Thu, 30 Apr 2026 06:04:39 -0400
+X-MC-Unique: Fp9R939LM927zVAB-LYGnA-1
+X-Mimecast-MFC-AGG-ID: Fp9R939LM927zVAB-LYGnA_1777543479
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-48a55ecc32cso6414115e9.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 30 Apr 2026 03:04:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1777543479; x=1778148279; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rkvdRE+ryZql2LrgVEX/b6XOK1Q1y4i0xKrftOVwIEs=;
+        b=tDSFrHZeAk490jIej+EBytvuaHpZov0EqMDFdeKa+d647eEoPpsuRIORGVXY3GK0XA
+         IJEmaajFb7XyxHwnQig1iky3Egu+GPKFK48nQJ+WA81gYtzhWDzWBZeHCrZSRY9fXF8w
+         lg3tkncjKFIyf1JRvR37siiwg04BZkab7NKBP4WRa3c8sQmLNrFd345JyUZk6ufCxw1w
+         cxzvWOsGrjM7Ojo8cGcvgmepq4BmknNGNEGO8kV0RpqJVNzm4aWQcfY9UsMxE8B1flzf
+         UCeCNq2+rXUjJncbLM7R9IfNJtlSYzaZ/+Tais5+SFSCqTEE3pWP4XfdmC01qFIyiYGS
+         Jl+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777543479; x=1778148279;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rkvdRE+ryZql2LrgVEX/b6XOK1Q1y4i0xKrftOVwIEs=;
+        b=AbMEwf1nnPM4BGJ8JLQESDOaTYS4w9zQ4z2tYuXtonErya9evWtYqJJbqqHrDKd+SL
+         mNvbEv/953LN9x0xAEpES1jckS5cAEBtYE7JOkGcUDVFY0CRyQTmazl+k0Z5pEcBmBW/
+         2i6OVr5jFekez3HHKZiXCTsGgiV1Zjf8TCofdLD/PZY/x8cryTiCemjQ74IOGEP/llix
+         Wv3Teri4B4z+DPXg+3l3JW6H8+6IrUW+OEvs9Tui1yFW9Jp+2aCVXbm6I/mFJo5ffp8b
+         OqMYVsu68nBEYUlg+LSkrcE/floqHkISoT6FdL9/DiCahkgF6yMWd3LrQtyIEVm37UvK
+         /AvA==
+X-Forwarded-Encrypted: i=1; AFNElJ8vqUku3kdGujBMWiZCLlINXPpCiOv8rv2blQYmeXHFl2Q31SofvKc1BeXoq8srugnCaJRFFB9QdNVUKYCgg9s=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz8y78pDKOK+0eFKfIqHRP1GSm8LqyrM/8tHQyb5XQW5NzDh5GO
+	u9Yt5hezS0RT7wgAQtiCy5Xw00ew+zOQlRuT68nwqqBIKR5ar+ehtw0zThycSROuzIdV3g9y80E
+	7j7qBCXLsdjcDmbU+fym5/nmfQgW+YP4yxX6+Slacrvy264lErxFRIJyDbFVagysUYXXdpA==
+X-Gm-Gg: AeBDietm2PdYS3EMVUSl3C9N379N9BKpILRLnEF6NOiP4mnjYtaUW6Y7NNoKyH5clH7
+	gr8nfXtaOl486jVRqP423PMtGI3Yjb2dsLzq6fZDdvc5nnmA7VfmwL3MXbEon76uuBsBwskdj2Y
+	qN90S8Qf7czFoIxqZrTkA+utQVNflfM1YtBzx59iAcyvKSkmh+GzdohQIWs8Fks6a4XGRL0o7sN
+	HHGXn2ww6S+OVo/AnTNEFGdkOf230LSorm8s4LkwYO0lruAAggMeTasXwGCPEHnoJsN48AaIJsc
+	FMiOnKZ4pwm8hlKe0/64QJT2/9JTty5hW4Vabp3VvljGsAtkhky0bvGdBnDTc7bjicvRXpnZXt9
+	OrYZUM78TvbT9K4pRaZRd4/g3n5KhGsKHPCa4DllrRCWpWdPeMaFO9CnhjsEEiISlFQ==
+X-Received: by 2002:a05:600c:6992:b0:48a:56de:d62a with SMTP id 5b1f17b1804b1-48a83d7b059mr40214015e9.11.1777543478520;
+        Thu, 30 Apr 2026 03:04:38 -0700 (PDT)
+X-Received: by 2002:a05:600c:6992:b0:48a:56de:d62a with SMTP id 5b1f17b1804b1-48a83d7b059mr40213275e9.11.1777543477963;
+        Thu, 30 Apr 2026 03:04:37 -0700 (PDT)
+Received: from [192.168.88.32] ([150.228.93.27])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48a82301adesm51714265e9.10.2026.04.30.03.04.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Apr 2026 03:04:37 -0700 (PDT)
+Message-ID: <2a136e4a-46d5-4527-ab6b-cf61384a8ffe@redhat.com>
+Date: Thu, 30 Apr 2026 12:04:36 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -62,389 +87,167 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 06/54] selftests/mm: merge map_hugetlb into
- hugepage-mmap
-To: Mike Rapoport <rppt@kernel.org>,
-        Andrew Morton
- <akpm@linux-foundation.org>,
-        David Hildenbrand <david@kernel.org>
-Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Barry Song <baohua@kernel.org>, Dev Jain <dev.jain@arm.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Lance Yang <lance.yang@linux.dev>, Leon Romanovsky <leon@kernel.org>,
-        Lorenzo Stoakes <ljs@kernel.org>, Luiz Capitulino <luizcap@redhat.com>,
-        Mark Brown <broonie@kernel.org>, Michal Hocko <mhocko@suse.com>,
-        Nico Pache <npache@redhat.com>, Peter Xu <peterx@redhat.com>,
-        Ryan Roberts <ryan.roberts@arm.com>,
-        Sarthak Sharma
- <sarthak.sharma@arm.com>,
-        Shuah Khan <shuah@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@kernel.org>, Zi Yan <ziy@nvidia.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org
-References: <20260428204240.1924129-1-rppt@kernel.org>
- <20260428204240.1924129-7-rppt@kernel.org>
+Subject: Re: [PATCH net-next v7 2/2] selftests: net: test PPPoE packets in
+ gro.sh
+To: Qingfang Deng <qingfang.deng@linux.dev>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Simon Horman <horms@kernel.org>, Willem de Bruijn <willemb@google.com>,
+ Petr Machata <petrm@nvidia.com>, Anubhav Singh <anubhavsinggh@google.com>,
+ Richard Gobert <richardbgobert@gmail.com>, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: linux-ppp@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>
+References: <20260428064717.74794-1-qingfang.deng@linux.dev>
+ <20260428064717.74794-2-qingfang.deng@linux.dev>
 Content-Language: en-US
-From: Donet Tom <donettom@linux.ibm.com>
-In-Reply-To: <20260428204240.1924129-7-rppt@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <20260428064717.74794-2-qingfang.deng@linux.dev>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-ORIG-GUID: rX7TwUIAX-tzM4LdbzoTQkCt3mUDb5V7
-X-Authority-Analysis: v=2.4 cv=Ft81OWrq c=1 sm=1 tr=0 ts=69f32203 cx=c_pps
- a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
- a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=iQ6ETzBq9ecOQQE5vZCe:22 a=VwQbUJbxAAAA:8
- a=VnNF1IyMAAAA:8 a=QibCLqz7JAqtIrobe0sA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: 3jJpP9Y-djHcm38cCXBtjFFnTii2mGve
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDMwMDA5MiBTYWx0ZWRfXwCYFPpdlPUaS
- nOHrG/Jw3vyxJWvV0TwQMpgAYs7VhEhLvi6dcMFJCJLk4xCyVSj5Y2/EG8krrKSFLx0GimiQpPa
- Acq118z5rkHQrtaSqyhtkXGEswdKx8PtNEQXdlrQtssREQQN8umh4OM/oc0k8DtjLFYPF4AMKQR
- BpUsaRg2qjBlGqrjhD2hUXMZiVdeN1zv4IUaDm+AipuF+7duT5M0/kdWiDb4WWahvN1jk54Zqyu
- PdEVrOka9f5e82uI8MSonLCMY1VAv+eJ6IA/7xsppsXRh3AAp7pi7jADopFPBY0OAQNSud/nYOi
- xMtjnNz4RI6REJ1YrsDlnZzZyqcC0Xi32S3A8q/5elIuLztC9+VR3tIaFzRAOBVn3kFgFBHGDd0
- OLS+Qmf8FB8zhZ+P658BAjk7SizbbB36CBlnFOsf7exgcZSd236rDGRQoHla9gzL9tMHVcdu+Xd
- TRiNO6f6bAWmX+AaQfQ==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-04-30_02,2026-04-28_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 lowpriorityscore=0 bulkscore=0 spamscore=0 impostorscore=0
- clxscore=1011 malwarescore=0 phishscore=0 suspectscore=0 adultscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2604200000 definitions=main-2604300092
 
-Hi Mike
-
-On 4/29/26 2:11 AM, Mike Rapoport wrote:
-> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
->
-> Both tests create a hugettlb mapping, fill it with data and verify the
-> data, the only difference is that one uses file-backed memory and another
-> one uses anonymous memory.
->
-> Merge both tests into a single file.
->
-> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-
-[]# ./hugetlb-mmap 1024 21
-TAP version 13
-# [INFO] detected hugetlb page size: 2048 KiB
-# [INFO] detected hugetlb page size: 1048576 KiB
-# 2048 kB hugepages
-1..2
-# Mapping 1024 Mbytes
-# Returned address is 0x7fff5fa00000
-# First hex is 0
-# First hex is 3020100
-ok 1 hugetlb anonymous mmap
-# Returned address is 0x7fff5fa00000
-# First hex is 0
-# First hex is 3020100
-ok 2 hugetlb file mmap
-# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
-
-[]# ./hugetlb-mmap 1024 30
-TAP version 13
-# [INFO] detected hugetlb page size: 2048 KiB
-# [INFO] detected hugetlb page size: 1048576 KiB
-# 1048576 kB hugepages
-1..2
-# Mapping 1024 Mbytes
-# Returned address is 0x7fff40000000
-# First hex is 0
-# First hex is 3020100
-ok 1 hugetlb anonymous mmap
-# Returned address is 0x7fff40000000
-# First hex is 0
-# First hex is 3020100
-ok 2 hugetlb file mmap
-# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
-[]#
-
-
-looks good to me.
-
-Reviewed-by: Donet Tom <donettom@linux.ibm.com>
-
-
+On 4/28/26 8:47 AM, Qingfang Deng wrote:
+> Add PPPoE test-cases to the GRO selftest. Only run a subset of
+> common_tests to avoid changing the hardcoded L3 offsets everywhere.
+> Add a new "pppoe_sid" test case to verify that packets with different
+> PPPoE session IDs are correctly identified as separate flows and not
+> coalesced.
+> 
+> Signed-off-by: Qingfang Deng <qingfang.deng@linux.dev>
 > ---
->   tools/testing/selftests/mm/Makefile        |   1 -
->   tools/testing/selftests/mm/hugepage-mmap.c | 111 ++++++++++++++++-----
->   tools/testing/selftests/mm/map_hugetlb.c   |  88 ----------------
->   tools/testing/selftests/mm/run_vmtests.sh  |   1 -
->   4 files changed, 86 insertions(+), 115 deletions(-)
->   delete mode 100644 tools/testing/selftests/mm/map_hugetlb.c
->
-> diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-> index cd24596cdd27..cbda989f6b6a 100644
-> --- a/tools/testing/selftests/mm/Makefile
-> +++ b/tools/testing/selftests/mm/Makefile
-> @@ -70,7 +70,6 @@ TEST_GEN_FILES += hugepage-vmemmap
->   TEST_GEN_FILES += khugepaged
->   TEST_GEN_FILES += madv_populate
->   TEST_GEN_FILES += map_fixed_noreplace
-> -TEST_GEN_FILES += map_hugetlb
->   TEST_GEN_FILES += map_populate
->   ifneq (,$(filter $(ARCH),arm64 riscv riscv64 x86 x86_64 loongarch32 loongarch64))
->   TEST_GEN_FILES += memfd_secret
-> diff --git a/tools/testing/selftests/mm/hugepage-mmap.c b/tools/testing/selftests/mm/hugepage-mmap.c
-> index d543419de040..fa886ec148c2 100644
-> --- a/tools/testing/selftests/mm/hugepage-mmap.c
-> +++ b/tools/testing/selftests/mm/hugepage-mmap.c
-> @@ -15,6 +15,8 @@
->   #include <unistd.h>
->   #include <sys/mman.h>
->   #include <fcntl.h>
-> +#include <linux/memfd.h>
-> +#include "vm_util.h"
->   #include "kselftest.h"
->   
->   #define LENGTH (256UL*1024*1024)
-> @@ -25,54 +27,113 @@ static void check_bytes(char *addr)
->   	ksft_print_msg("First hex is %x\n", *((unsigned int *)addr));
->   }
->   
-> -static void write_bytes(char *addr)
-> +static void write_bytes(char *addr, size_t length)
->   {
->   	unsigned long i;
->   
-> -	for (i = 0; i < LENGTH; i++)
-> +	for (i = 0; i < length; i++)
->   		*(addr + i) = (char)i;
->   }
->   
-> -static int read_bytes(char *addr)
-> +static bool verify_bytes(char *addr, size_t length)
->   {
->   	unsigned long i;
->   
->   	check_bytes(addr);
-> -	for (i = 0; i < LENGTH; i++)
-> +	for (i = 0; i < length; i++)
->   		if (*(addr + i) != (char)i) {
-> -			ksft_print_msg("Error: Mismatch at %lu\n", i);
-> -			return 1;
-> +			ksft_print_msg("Error: Mismatch at %lu(%p)\n", i, addr);
-> +			return false;
->   		}
-> -	return 0;
+> v7:
+>  - Do not run all the tests for PPPoE
+>  - Add a new test for PPPoE
+> v6: https://lore.kernel.org/netdev/20260326081127.61229-2-dqfext@gmail.com
+> 
+>  tools/testing/selftests/drivers/net/config |  2 +
+>  tools/testing/selftests/drivers/net/gro.py | 11 +++
+>  tools/testing/selftests/net/lib/gro.c      | 99 ++++++++++++++++++----
+>  3 files changed, 96 insertions(+), 16 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/drivers/net/config b/tools/testing/selftests/drivers/net/config
+> index fd16994366f4..07e386895b94 100644
+> --- a/tools/testing/selftests/drivers/net/config
+> +++ b/tools/testing/selftests/drivers/net/config
+> @@ -8,5 +8,7 @@ CONFIG_NETCONSOLE=m
+>  CONFIG_NETCONSOLE_DYNAMIC=y
+>  CONFIG_NETCONSOLE_EXTENDED_LOG=y
+>  CONFIG_NETDEVSIM=m
+> +CONFIG_PPP=y
+> +CONFIG_PPPOE=y
+>  CONFIG_VLAN_8021Q=m
+>  CONFIG_XDP_SOCKETS=y
+> diff --git a/tools/testing/selftests/drivers/net/gro.py b/tools/testing/selftests/drivers/net/gro.py
+> index 221f27e57147..ad7c80f7ba96 100755
+> --- a/tools/testing/selftests/drivers/net/gro.py
+> +++ b/tools/testing/selftests/drivers/net/gro.py
+> @@ -313,6 +313,12 @@ def _gro_variants():
+>          "ip_frag6", "ip_v6ext_same", "ip_v6ext_diff",
+>      ]
+>  
+> +    # Tests specific to PPPoE
+> +    pppoe_tests = [
+> +        "data_same", "data_lrg_sml", "data_sml_lrg", "data_lrg_1byte",
+> +        "data_burst", "pppoe_sid",
+> +    ]
 > +
-> +	return true;
->   }
->   
-> -int main(void)
-> +static bool test_mmap(size_t length, int mmap_flags, int fd,
-> +		      const char *test_name)
->   {
->   	void *addr;
-> -	int fd, ret;
->   
-> -	ksft_print_header();
-> -	ksft_set_plan(1);
-> +	addr = mmap(NULL, length, PROTECTION, mmap_flags, fd, 0);
-> +	if (addr == MAP_FAILED)
-> +		ksft_exit_fail_perror("mmap");
+>      for mode in ["sw", "hw", "lro"]:
+>          for protocol in ["ipv4", "ipv6", "ipip", "ip6ip6"]:
+>              for test_name in common_tests:
+> @@ -325,6 +331,11 @@ def _gro_variants():
+>                  for test_name in ipv6_tests:
+>                      yield mode, protocol, test_name
+>  
+> +    for mode in ["sw"]:
+> +        for protocol in ["pppoev4", "pppoev6"]:
+> +            for test_name in pppoe_tests:
+> +                yield mode, protocol, test_name
 > +
-> +	ksft_print_msg("Returned address is %p\n", addr);
-> +	check_bytes(addr);
-> +	write_bytes(addr, length);
-> +	if (!verify_bytes(addr, length))
-> +		ksft_exit_fail_msg("%s\n", test_name);
+>  
+>  @ksft_variants(_gro_variants())
+>  def test(cfg, mode, protocol, test_name):
+> diff --git a/tools/testing/selftests/net/lib/gro.c b/tools/testing/selftests/net/lib/gro.c
+> index 11b16ae5f0e8..0da55b757bcc 100644
+> --- a/tools/testing/selftests/net/lib/gro.c
+> +++ b/tools/testing/selftests/net/lib/gro.c
+> @@ -67,12 +67,14 @@
+>  #include <errno.h>
+>  #include <error.h>
+>  #include <getopt.h>
+> +#include <net/ethernet.h>
+> +#include <net/if.h>
+>  #include <linux/filter.h>
+>  #include <linux/if_packet.h>
+> +#include <linux/if_pppox.h>
+>  #include <linux/ipv6.h>
+>  #include <linux/net_tstamp.h>
+> -#include <net/ethernet.h>
+> -#include <net/if.h>
+> +#include <linux/ppp_defs.h>
+>  #include <netinet/in.h>
+>  #include <netinet/ip.h>
+>  #include <netinet/ip6.h>
+> @@ -134,6 +136,7 @@ static int total_hdr_len = -1;
+>  static int ethhdr_proto = -1;
+>  static bool ipip;
+>  static bool ip6ip6;
+> +static bool pppoe;
+>  static uint64_t txtime_ns;
+>  static int num_flows = 4;
+>  static bool order_check;
+> @@ -171,6 +174,22 @@ static void vlog(const char *fmt, ...)
+>  	}
+>  }
+>  
+> +static void fill_pppoelayer(void *buf, int payload_len, uint16_t sid)
+> +{
+> +	struct pppoe_ppp_hdr {
+> +		struct pppoe_hdr eh;
+> +		__be16 proto;
+> +	} *ph = buf;
 > +
-> +	/* munmap() length of MAP_HUGETLB memory must be hugepage aligned */
-> +	if (munmap(addr, length))
-> +		ksft_exit_fail_perror("munmap");
-> +
-> +	return true;
+> +	payload_len += sizeof(struct tcphdr);
+> +	ph->eh.type = 1;
+> +	ph->eh.ver = 1;
+> +	ph->eh.code = 0;
+> +	ph->eh.sid = htons(sid);
+> +	ph->eh.length = htons(payload_len + sizeof(ph->proto));
+> +	ph->proto = htons(proto == PF_INET ? PPP_IP : PPP_IPV6);
 > +}
 > +
-> +static void test_anon_mmap(size_t length, int shift)
-> +{
-> +	const char *test_name = "hugetlb anonymous mmap";
-> +	int mmap_flags = MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB;
-> +	bool passed;
-> +
-> +	if (shift)
-> +		mmap_flags |= (shift & MAP_HUGE_MASK) << MAP_HUGE_SHIFT;
-> +
-> +	passed = test_mmap(length, mmap_flags, -1, test_name);
-> +	ksft_test_result(passed, "%s\n", test_name);
-> +}
-> +
-> +static void test_file_mmap(size_t length, int shift)
-> +{
-> +	const char *test_name = "hugetlb file mmap";
-> +	int mfd_flags = MFD_HUGETLB;
-> +	bool passed;
-> +	int fd;
-> +
-> +	if (shift)
-> +		mfd_flags |= (shift & MFD_HUGE_MASK) << MFD_HUGE_SHIFT;
->   
-> -	fd = memfd_create("hugepage-mmap", MFD_HUGETLB);
-> +	fd = memfd_create("hugetlb-mmap", mfd_flags);
->   	if (fd < 0)
-> -		ksft_exit_fail_msg("memfd_create() failed: %s\n", strerror(errno));
-> +		ksft_exit_fail_perror("memfd_create");
-> +
-> +	passed = test_mmap(length, MAP_SHARED, fd, test_name);
-> +
-> +	close(fd);
-> +	ksft_test_result(passed, "%s\n", test_name);
-> +}
-> +
-> +int main(int argc, char **argv)
-> +{
-> +	size_t hugepage_size;
-> +	size_t length = LENGTH;
-> +	int shift = 0;
-> +
-> +	ksft_print_header();
-> +	ksft_set_plan(2);
-> +
-> +	if (argc > 1)
-> +		length = atol(argv[1]) << 20;
-> +	if (argc > 2)
-> +		shift = atoi(argv[2]);
->   
-> -	addr = mmap(NULL, LENGTH, PROTECTION, MAP_SHARED, fd, 0);
-> -	if (addr == MAP_FAILED) {
-> -		close(fd);
-> -		ksft_exit_fail_msg("mmap(): %s\n", strerror(errno));
-> +	if (shift) {
-> +		hugepage_size = (1 << shift);
-> +		ksft_print_msg("%u kB hugepages\n", 1 << (shift - 10));
-> +	} else {
-> +		hugepage_size = default_huge_page_size();
-> +		ksft_print_msg("Default size hugepages (%lu Kb)\n", hugepage_size >> 10);
->   	}
->   
-> -	ksft_print_msg("Returned address is %p\n", addr);
-> -	check_bytes(addr);
-> -	write_bytes(addr);
-> -	ret = read_bytes(addr);
-> +	/* munmap with fail if the length is not page aligned */
-> +	if (hugepage_size > length)
-> +		length = hugepage_size;
->   
-> -	munmap(addr, LENGTH);
-> -	close(fd);
-> +	ksft_print_msg("Mapping %lu Mbytes\n", (unsigned long)length >> 20);
->   
-> -	ksft_test_result(!ret, "Read same data\n");
-> +	test_anon_mmap(length, shift);
-> +	test_file_mmap(length, shift);
->   
-> -	ksft_exit(!ret);
-> +	ksft_finished();
->   }
-> diff --git a/tools/testing/selftests/mm/map_hugetlb.c b/tools/testing/selftests/mm/map_hugetlb.c
-> deleted file mode 100644
-> index aa409107611b..000000000000
-> --- a/tools/testing/selftests/mm/map_hugetlb.c
-> +++ /dev/null
-> @@ -1,88 +0,0 @@
-> -// SPDX-License-Identifier: GPL-2.0
-> -/*
-> - * Example of using hugepage memory in a user application using the mmap
-> - * system call with MAP_HUGETLB flag.  Before running this program make
-> - * sure the administrator has allocated enough default sized huge pages
-> - * to cover the 256 MB allocation.
-> - */
-> -#include <stdlib.h>
-> -#include <stdio.h>
-> -#include <unistd.h>
-> -#include <sys/mman.h>
-> -#include <fcntl.h>
-> -#include "vm_util.h"
-> -#include "kselftest.h"
-> -
-> -#define LENGTH (256UL*1024*1024)
-> -#define PROTECTION (PROT_READ | PROT_WRITE)
-> -
-> -static void check_bytes(char *addr)
-> -{
-> -	ksft_print_msg("First hex is %x\n", *((unsigned int *)addr));
-> -}
-> -
-> -static void write_bytes(char *addr, size_t length)
-> -{
-> -	unsigned long i;
-> -
-> -	for (i = 0; i < length; i++)
-> -		*(addr + i) = (char)i;
-> -}
-> -
-> -static void read_bytes(char *addr, size_t length)
-> -{
-> -	unsigned long i;
-> -
-> -	check_bytes(addr);
-> -	for (i = 0; i < length; i++)
-> -		if (*(addr + i) != (char)i)
-> -			ksft_exit_fail_msg("Mismatch at %lu\n", i);
-> -
-> -	ksft_test_result_pass("Read correct data\n");
-> -}
-> -
-> -int main(int argc, char **argv)
-> -{
-> -	void *addr;
-> -	size_t hugepage_size;
-> -	size_t length = LENGTH;
-> -	int flags = MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB;
-> -	int shift = 0;
-> -
-> -	hugepage_size = default_huge_page_size();
-> -	/* munmap with fail if the length is not page aligned */
-> -	if (hugepage_size > length)
-> -		length = hugepage_size;
-> -
-> -	ksft_print_header();
-> -	ksft_set_plan(1);
-> -
-> -	if (argc > 1)
-> -		length = atol(argv[1]) << 20;
-> -	if (argc > 2) {
-> -		shift = atoi(argv[2]);
-> -		if (shift)
-> -			flags |= (shift & MAP_HUGE_MASK) << MAP_HUGE_SHIFT;
-> -	}
-> -
-> -	if (shift)
-> -		ksft_print_msg("%u kB hugepages\n", 1 << (shift - 10));
-> -	else
-> -		ksft_print_msg("Default size hugepages\n");
-> -	ksft_print_msg("Mapping %lu Mbytes\n", (unsigned long)length >> 20);
-> -
-> -	addr = mmap(NULL, length, PROTECTION, flags, -1, 0);
-> -	if (addr == MAP_FAILED)
-> -		ksft_exit_fail_msg("mmap: %s\n", strerror(errno));
-> -
-> -	ksft_print_msg("Returned address is %p\n", addr);
-> -	check_bytes(addr);
-> -	write_bytes(addr, length);
-> -	read_bytes(addr, length);
-> -
-> -	/* munmap() length of MAP_HUGETLB memory must be hugepage aligned */
-> -	if (munmap(addr, length))
-> -		ksft_exit_fail_msg("munmap: %s\n", strerror(errno));
-> -
-> -	ksft_finished();
-> -}
-> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-> index e2dc9ac87bfc..61b450032af8 100755
-> --- a/tools/testing/selftests/mm/run_vmtests.sh
-> +++ b/tools/testing/selftests/mm/run_vmtests.sh
-> @@ -292,7 +292,6 @@ CATEGORY="hugetlb" run_test ./hugepage-shm
->   echo "$shmmax" > /proc/sys/kernel/shmmax
->   echo "$shmall" > /proc/sys/kernel/shmall
->   
-> -CATEGORY="hugetlb" run_test ./map_hugetlb
->   CATEGORY="hugetlb" run_test ./hugepage-mremap
->   CATEGORY="hugetlb" run_test ./hugepage-vmemmap
->   CATEGORY="hugetlb" run_test ./hugetlb-madvise
+>  static void setup_sock_filter(int fd)
+>  {
+>  	const int dport_off = tcp_offset + offsetof(struct tcphdr, dest);
+> @@ -412,11 +431,15 @@ static void create_packet(void *buf, int seq_offset, int ack_offset,
+>  
+>  	fill_networklayer(buf + inner_ip_off, payload_len, IPPROTO_TCP);
+>  	if (inner_ip_off > ETH_HLEN) {
+> -		int encap_proto = (proto == PF_INET) ?
+> -				  IPPROTO_IPIP : IPPROTO_IPV6;
+> +		if (pppoe) {
+> +			fill_pppoelayer(buf + ETH_HLEN, payload_len + ip_hdr_len, 0x1234);
+> +		} else {
+> +			int encap_proto = (proto == PF_INET) ?
+> +					  IPPROTO_IPIP : IPPROTO_IPV6;
+>  
+> -		fill_networklayer(buf + ETH_HLEN,
+> -				  payload_len + ip_hdr_len, encap_proto);
+> +			fill_networklayer(buf + ETH_HLEN,
+> +					  payload_len + ip_hdr_len, encap_proto);
+> +		}
+>  	}
+>  
+>  	fill_datalinklayer(buf);
+> @@ -526,7 +549,7 @@ static void send_flags(int fd, struct sockaddr_ll *daddr, int psh, int syn,
+>  static void send_data_pkts(int fd, struct sockaddr_ll *daddr,
+>  			   int payload_len1, int payload_len2)
+>  {
+> -	static char buf[ETH_HLEN + IP_MAXPACKET];
+> +	static char buf[MAX_HDR_LEN + IP_MAXPACKET];
+
+Why MAX_HDR_LEN? I think you should add a new define alike:
+
+#define L2_HLEN_MAX	(ETH_HLEN + PPPOE_SES_HLEN)
+
+/P
+
