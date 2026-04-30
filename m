@@ -1,169 +1,394 @@
-Received: from SJ2PR03CU001.outbound.protection.outlook.com (mail-westusazon11012068.outbound.protection.outlook.com [52.101.43.68])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03CB0221721;
-	Thu, 30 Apr 2026 15:18:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.43.68
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777562298; cv=fail; b=tB8IX1i8qmiseaz3XM4gfEf1btQ8zq8itSEe9npUsvEih1fEbPlfWuimRIkd6YV9hiQ85Jmrgclicn/8SFEqp+JHNjn+agOg4xPt4y4nOP9KwiIjwSy/Y8PzepX3aBM/SIYJWFyZHBeCFsmnitUPPzvY/KyGhM+dPr7shn5wZ5k=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777562298; c=relaxed/simple;
-	bh=b3HlJPLreTlG0sSeaa+rZN6Z+/L7ShrKEMAI5c/b1DA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Xr6ZIy7xstMb82S0DYGi3+qnUNmBoA6YS+0vCMOHtLgg2rQw1WgiHJyRW8cYMUcoAJuDT171yH+Xkf667U+Q1XLQ47Zysfej3a9C06qthRPOaU3/woQjvfnVVw8JD7HGyIR1Eug2bpdJPMreb+5o2IHJBN4ETZJ7Vmd2+9DasJw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=ArT3CvjN; arc=fail smtp.client-ip=52.101.43.68
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C59992F3C1F
+	for <linux-kselftest@vger.kernel.org>; Thu, 30 Apr 2026 15:26:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777562800; cv=none; b=doOv6NmziiMnfKrunyRXbw97j5ITwMBeSne7//MQ452AH+It77fSu+AwziNiFxT5Rfs0sopqVjG4eN1ePkVaxf5Iq0djSahVseJIi2wtw/ynBiQ35LEYZ+PL6TSn8EZPbjSeCdcybQppfPIToM1+J+UhYl+VCD0fawCVA2Bkbe4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777562800; c=relaxed/simple;
+	bh=JdFGXLTZgYBSWthfA6Yp3eJLSMbe8rUpbaLVx/8iLjc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Lxn+gdwvCDZhat6RGVtTfpPiuI0hdSHy57WDNtvKcFfymAOm4hEnN+xQGsfNtiVzx/nqQuBD7Xc/aW2Z2glwq+nL/UJnNWNbp3y8gAdMQuFP+0+t4p7FiZ4mb1N5JzDN2A3POiHFtUFUQq985RxguVNjkPU9ywPI2/6iaTuL4JQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=e94SryTM; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="ArT3CvjN"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=n+QGQ9QNnpNsQIy8cRurSbeEMTnSJq4AHFLm2lNyD/PUmKfLAyQgnpdPGQ6Cpd3MikmIse7WXs2OGWOc7mtL6YBFE529ToKSU5mRRTWAICbGQ2JcICd+AUsZPT/u73QFtQPSnI8gHP/e66xeQWDCDoHSrSju/VMgPWbxE2MmvXZpXyqtGExubc7QMJ2Ru5lYe6tUTowafeezv4YWhC5u8KqL1Kg4uQLy78CoPzILa+wTR7dTOWFSpdWI9Y3lLfgzTQZvhwsVwJhw5nZzcX9Cd8f5yURb6qkNkIjjnwGuHtnjid9jXR83wmjybJNkpk8VSFVDWrN3HTw0vCCg91Vgng==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=b3HlJPLreTlG0sSeaa+rZN6Z+/L7ShrKEMAI5c/b1DA=;
- b=yTgdLkGICEjV2GXfxhl/OhAHNxjLo9/c9TFEtERyLS9Wnz8Rbm/s3GGzje7DNgLyvkdS1sXBQ+XVM1Kw/dMbxRfUDWb6s4m8nsvWtNShbfKLJMG4E4xY1vcmah8/k0460yXhbAgAJ446OCbpoWiheDEHpQDmZCsMqnNQPDux+gnMQKsKG5l3O8pIJLiHD/aQbKG6TeNnAxPdugWKSwKeuC21DAar3H8dYowwyBE5xLGl3Ay5AVM6k06R/sJPDVQV41X9j5tu1TxrA+ZYl9cCla54a2JKuPckeBhgaW2uzKzZQ1H8pKt7xMEgTF6aXlf5rLBTT0zTRz63DxQh5sLYYQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=b3HlJPLreTlG0sSeaa+rZN6Z+/L7ShrKEMAI5c/b1DA=;
- b=ArT3CvjN8m7TvQ7tus14GYsmgnilrSJ8rUc0e81E5mcVPzATO81YqJAVF/0wlfbqczsR/Hxu0q7SaI+1SNDt0vYx+r4RBNxBlLUPImT26p0fBUDJEDCB/AUvclDHJr09On0KFteI8AKAVTARgIr3+dtUcNkOTinnJOmjWwVrBI1UPO668wZAIms0yBPdWh2dTeImu1m+TyuVp0pfR8e+5TathwZzI0Yzs0y/BmcYCDI6Qi1ef5Y0q0yz0MIAyfyZXGxRnIAgDc2dXPnoJMG5zz4AutWeNYHX5aLkVNiSG+Pb3lp1BkO+aGEcv2wbIRXVI65rW2M+Y6NL/jDrKKh3yw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DS7PR12MB9473.namprd12.prod.outlook.com (2603:10b6:8:252::5) by
- LV2PR12MB5968.namprd12.prod.outlook.com (2603:10b6:408:14f::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9870.22; Thu, 30 Apr 2026 15:18:12 +0000
-Received: from DS7PR12MB9473.namprd12.prod.outlook.com
- ([fe80::f01d:73d2:2dda:c7b2]) by DS7PR12MB9473.namprd12.prod.outlook.com
- ([fe80::f01d:73d2:2dda:c7b2%4]) with mapi id 15.20.9870.013; Thu, 30 Apr 2026
- 15:18:12 +0000
-From: Zi Yan <ziy@nvidia.com>
-To: Andrew Morton <akpm@linux-foundation.org>,
- David Hildenbrand <david@kernel.org>,
- "Matthew Wilcox (Oracle)" <willy@infradead.org>,
- Song Liu <songliubraving@fb.com>
-Cc: Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>,
- Alexander Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
- Lorenzo Stoakes <ljs@kernel.org>, Zi Yan <ziy@nvidia.com>,
- Baolin Wang <baolin.wang@linux.alibaba.com>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, Nico Pache <npache@redhat.com>,
- Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
- Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Shuah Khan <shuah@kernel.org>, <linux-btrfs@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
- <linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v5 13/14] mm/khugepaged: enable clean pagecache folio
- collapse for writable files
-Date: Thu, 30 Apr 2026 11:18:09 -0400
-X-Mailer: MailMate (2.0r6292)
-Message-ID: <CFECCB44-EEEA-4D3F-A505-3BA2C564C107@nvidia.com>
-In-Reply-To: <20260429153538.727855-9-ziy@nvidia.com>
-References: <20260429152924.727124-1-ziy@nvidia.com>
- <20260429153538.727855-9-ziy@nvidia.com>
-Content-Type: text/plain
-X-ClientProxiedBy: DM6PR02CA0143.namprd02.prod.outlook.com
- (2603:10b6:5:332::10) To DS7PR12MB9473.namprd12.prod.outlook.com
- (2603:10b6:8:252::5)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="e94SryTM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1777562797;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=/7qIWLPcjMTN4bDDZHUp9qSeDfxtoy9Fn4LiFM5JMGo=;
+	b=e94SryTMV9JszuXfS5A5dE5z5/FdaZ2XO223kHTM5buGFRvAEkpSV86S5jcNd9AgNSNJTB
+	ZJji3cMRv99loxuIGdXj0gQiy8LkBNq2Gdf/xbeVdKXrXPhscNRevlZXSwRAECbu2YkcUI
+	sizZULKbbk+bTtqGoAhK4ZJI21H+dOI=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-643-Ui7su4Q0OTqwvoxTiLurHw-1; Thu, 30 Apr 2026 11:26:35 -0400
+X-MC-Unique: Ui7su4Q0OTqwvoxTiLurHw-1
+X-Mimecast-MFC-AGG-ID: Ui7su4Q0OTqwvoxTiLurHw_1777562792
+Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-8eb21daf7ddso206186185a.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 30 Apr 2026 08:26:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777562792; x=1778167592;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/7qIWLPcjMTN4bDDZHUp9qSeDfxtoy9Fn4LiFM5JMGo=;
+        b=S/XXVT0p2+vXxCE7oNVjdiAsYjOopC66PrrS4QWOJ0mF6JoeX9I3AkaZ6A/MU6mH1Y
+         VYdEKmguwF2yOBi/XklabOvgY/XvZn+SLNegRflbsjVJ7GqSrkYq/TMG7SGO210NpRt7
+         4dFcCvrPvgR7kCPZcP2YfaDxO4dl4vCrqTyfA9IO7zLfj95GjEY/AMEPQJQtTok+KVoS
+         U0jUERdAvCn45Fgjonkb1AiDVdBLht61IxG0jxztgCxVYJ6bweWvn06msBHhPMlrM1Ig
+         DrwzoGyalhkg1HGgsXSt5jieHQOLG07wFyAS0wqRbR7V+BPjN8zKQ+0C5EC7AZshZiKT
+         8F7A==
+X-Forwarded-Encrypted: i=1; AFNElJ/QX/rAs3TuILTNx4uFCQ87BU+D5PqzjPz/eWwWn7GbxtjbskZU2FbD96fz6JUKAvHUSFTnC55+DvU8abOFDxk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx281AT3N5YmSKWh/uKWH05rkousmz53cPKFI0d+6FOBRw+Sk6m
+	9Tlo1M8QMDYcCMIo5zVGejiTLEiIPnUReZDIPa0GxIltCCJmqPCsgzlTI+ao60McqdrRbmU3XKn
+	1EKcAdcrwgGV04bUIHngbxiLddbVLmxPs7jMloBCt5AfdJ24QYejDHnFuwvMSoGR3UByd9w==
+X-Gm-Gg: AeBDiet/K2vwjC+AG92xMlIKrKt7uyYMgbTof23r8ksIub7RZhnLwwHnhGGSyP5RPIk
+	oex12s82g9+Tsn5yAz5OYFUkRBPzop4M/t86+JlrcY+w1Zwoppvs96PplnbgPSCSpnP44nWkYIK
+	ZSWY+lWDH4/ktPDcWhruvJzI31Az1Xz7EUmO+fI0ckjka2q/xfdhGoDqNFzXS4HW8OgszFIeW2B
+	U0ERKmHl4OshnkK9U8gB+3OP4kOcAZ4cW4aKh1j5GZbTbTJhX9xLy95Q5rnJ1L+JJWhWYkRLaTP
+	lqf0jL1xGsHH2UaQ29+g1EvrEPW07ZCgx+IrP7mcm1kX3zGGp/HC3a2oQO6PDf4ikzuyytSuNk+
+	HxGjTZ8hymKozgUFTlpXmTUQKGLjafvsZePoNb8Mwzq8V31t0IqOqzZ+kSBSDQT3+emlo6LvRyJ
+	s6vpoEvtWBlAAMHnPyg9Kwkp8=
+X-Received: by 2002:a05:620a:2890:b0:8cd:942e:82dc with SMTP id af79cd13be357-8fa89eed0f9mr536080485a.41.1777562792039;
+        Thu, 30 Apr 2026 08:26:32 -0700 (PDT)
+X-Received: by 2002:a05:620a:2890:b0:8cd:942e:82dc with SMTP id af79cd13be357-8fa89eed0f9mr536073885a.41.1777562791402;
+        Thu, 30 Apr 2026 08:26:31 -0700 (PDT)
+Received: from [192.168.2.110] (bras-base-aylmpq0104w-grc-22-70-53-202-134.dsl.bell.ca. [70.53.202.134])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8fba12659b0sm13129185a.27.2026.04.30.08.26.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Apr 2026 08:26:30 -0700 (PDT)
+Message-ID: <9df37bb8-c802-48bf-aef9-ef85e94601de@redhat.com>
+Date: Thu, 30 Apr 2026 11:26:19 -0400
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB9473:EE_|LV2PR12MB5968:EE_
-X-MS-Office365-Filtering-Correlation-Id: f4a52495-aab3-41c6-8de4-08dea6cbb1df
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|376014|7416014|1800799024|22082099003|56012099003|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	pbtETsOVx6sxX/MJpWH7JWVPozroNPHTRqA/BbegrqjDLB7hqWG7Kq3rkrMwiDlTXwgki2zTAzA2jqmxcURMv4COlAEfqK7166z+7mSsM6FY/r7pE9NEOnqX+lgrmxdYq5T5IpQKQ7vz9wiiqumCmND7RVOJ/UZGcZP+yJ3w7B1yGyP4/mnoQzShsNLf0H9FFC8kzfShf82ZXLfoxV3RK31qdGrryfR8Kijnd8nme6ImdmoiVPCCwg6+yn2BIHGT0yXnxzxZ9CcQU61ZC4+fzejdf8ejj8zipkljA89vnVcnogjLGBtbJH2k99dc+bRT084JTLpvfeJcHL2N25uV4hWpOS1OC2txMJH/95sgmTkkh9TSS+V1lngECTMxXEp/A4LmdAPvknNVLjW6tFXgB5NdQbuaPy7RrpT1F4HmT9fXqQ7QZWcrHMJI1y2vzmXUGKaTHwT9SLbTa5P7QKGiHMKQkxmjHDIRhjRzGu0g4+61Hm3vILoMJ6X5zaOymZywpp2PvTmzQ51hCmHTLH1I4wWrtN8LThz31BZeQ/9yRvV+70GXib2L3+htSFg6c8pDCRgr/ZRkqxTu01FWjr4JB9FOSmkEGWNP9T5isbwaXNlhR6ViLJEhwAvcgd3FWYoLfSGz1DlWcIQMnw3fIFjlONJy246cCIEjDVdWDBV7Iw0F0Bps5OdBz/9fXTRvRf0fL9/NPP8HxRtM4cTtXx566uQsehCdTsp7K6H0fuCHkbA=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB9473.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024)(22082099003)(56012099003)(18002099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?TTK+oWkglfa2KIAvRYxnDFsQQQ8WnF2dQuaHVPQNQK6nlKw5mic05t5a6CVI?=
- =?us-ascii?Q?Ue0//BmeJgT90kHZAgRG4Mtrs5yOBH6oT/AlMAE1rz2pcjQ8EnD/uQdeMjT2?=
- =?us-ascii?Q?/Lqn0jgP1Zmnaf8nvCujuBUNl0R3M7FOE3sLahUk6Z4AMHOOsc1K2eDMOGPb?=
- =?us-ascii?Q?SOt4ZCRclWUBSDjduwCca7DJOdPe0SLFikqFljDUvqMyjGps/dmWRVk40l2Z?=
- =?us-ascii?Q?OhNJTX9U6AbOU2OjQiDtGarse5yZelfPgNfWMXOvUFaXnpWdWAJZ7psG+cUR?=
- =?us-ascii?Q?0AZno6NjiLevS9xfs5FlsQuccRU1e7uxD+eTdN9Cuys2K+ja98gLR3f6CkR6?=
- =?us-ascii?Q?YfhESNMsA6fZa1z6YzrWT0jCuge68VbJPf+Jp8tc14itPh+0c+f7vO2QQWtV?=
- =?us-ascii?Q?E5JrLmsjMdXklUEbr8MqynAh+AntGkGJboZIjSHaDAsTKtoKQM1hpuZB85YT?=
- =?us-ascii?Q?jXNrpSLeemhiB/yU2kKbtUEbJxkU5hGgtreDRC/SYx/3qvBeBbuzNvsoU7Mz?=
- =?us-ascii?Q?T0z4d/rvo6BYOSansSN4bXP7chSdPT+59/EexuhSFNiO5/qsBXBck6tikKuT?=
- =?us-ascii?Q?6Nvnl6UoRAjqUl59k9jQLg7kcarzh8P3Pb+QWlFJG37jbInsAjACrcrU1ZO6?=
- =?us-ascii?Q?3EvglqJcc7B333hgKgkCL/2Lb5j9dm12wOo5brM9XcJweWP0k8+kbVCEXkjI?=
- =?us-ascii?Q?S8JBRUwlxCU3BQQDFbwEKlsuDIeqn1F5lwZkp8HuUlJ/QwIkPs/KMNlfv6mO?=
- =?us-ascii?Q?3eq88XUZldaLYRooP+XmD1dBrJFNSDQscDGXsTjNmYagCt5hQsh5WTrILxgz?=
- =?us-ascii?Q?Tuq999SdUpNrZxPUyYwdUzziTp5vda3Klmk0LLfL5VxNq3OB6XEgJ/bKQVUu?=
- =?us-ascii?Q?NGBz1IkCT7/AWal4r+e+h/Q1wFWeqfpCWbwWaZKzrRttQrCMcN4ubt2IACfO?=
- =?us-ascii?Q?ojmwst152jrXOOUGsrYvoMfNN6Ca+P8e6PZNHSLoafbu2i4ynpW3mlq77lG7?=
- =?us-ascii?Q?U77hERx0BlXSCKfsfnbvaUoc78RC5DtLogAGgQMbuXirEQaWfEYeHw2YFs91?=
- =?us-ascii?Q?dvSq1zFDPbD4jRaqBuUWQsVg8MbH67s8xpxJMr1ownx8DyCM7FuGwqtxC4ws?=
- =?us-ascii?Q?Ed2vgV/A4l8PZE0L6yFV4eUJoA9hAdXWEK59xYz+YjDPNUO+1b5gd1HMsknB?=
- =?us-ascii?Q?CDIPgE+gU37+YMvkGnGVfb7F2CnYw5xun5pVl6Fj0yIszNKC8+FVKoEoop1+?=
- =?us-ascii?Q?rwfZs+scWI16jna52iy85JepjESOBIhvYbHwhnEdxpaRa/MKsxNLH51j0jFB?=
- =?us-ascii?Q?XgCr7hppf05Gwk7LimVU4+ZeSSt+H9GaJ/pmmDR0ITX5sgLXibVZ0qFZcQtB?=
- =?us-ascii?Q?YLnKKtn4nGIQReu0vOl0TdeExkX48mCfNJ4NYUric4afRrYiscNMYvGXCNhd?=
- =?us-ascii?Q?oBKb1HZkhggU/IExwWnz0CRVHgFpeg+F0qhu9ofp2ZA4fn6ZYnfoPoRfNPOY?=
- =?us-ascii?Q?/seM60PV/f5rDxhvLndBonafZNTsOL8duAKpf06r1bd9jbMGjXC9S0nh/uo2?=
- =?us-ascii?Q?5ej+e/7VUDMNRKR5Kzoavp1rW0i84TJEn4RDSfQ5RGdI0Efcf44ytGKFFjYI?=
- =?us-ascii?Q?hdEcuYhuN6ux2LhvpIScXAeF5R8Ol34rXBlqFcWPC2ogwx3j4HIrD/P+dGl/?=
- =?us-ascii?Q?JznVAEiAStomUhpiCTgtuwdkSjjWr4gr/p1fG4VIgFq3W2sw?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f4a52495-aab3-41c6-8de4-08dea6cbb1df
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB9473.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Apr 2026 15:18:12.7229
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: MuIXbZRb7qbrrq+H4yF8bLuJsBalzVYvdcTriIgB4qNPhnO3aBPR/cRtUlDIJXDR
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5968
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 06/54] selftests/mm: merge map_hugetlb into
+ hugepage-mmap
+To: Mike Rapoport <rppt@kernel.org>, Andrew Morton
+ <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>
+Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
+ Barry Song <baohua@kernel.org>, Dev Jain <dev.jain@arm.com>,
+ Donet Tom <donettom@linux.ibm.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+ John Hubbard <jhubbard@nvidia.com>, "Liam R. Howlett"
+ <Liam.Howlett@oracle.com>, Lance Yang <lance.yang@linux.dev>,
+ Leon Romanovsky <leon@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ Mark Brown <broonie@kernel.org>, Michal Hocko <mhocko@suse.com>,
+ Nico Pache <npache@redhat.com>, Peter Xu <peterx@redhat.com>,
+ Ryan Roberts <ryan.roberts@arm.com>, Sarthak Sharma
+ <sarthak.sharma@arm.com>, Shuah Khan <shuah@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Vlastimil Babka <vbabka@kernel.org>,
+ Zi Yan <ziy@nvidia.com>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org
+References: <20260428204240.1924129-1-rppt@kernel.org>
+ <20260428204240.1924129-7-rppt@kernel.org>
+Content-Language: en-US, en-CA
+From: Luiz Capitulino <luizcap@redhat.com>
+In-Reply-To: <20260428204240.1924129-7-rppt@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 29 Apr 2026, at 11:35, Zi Yan wrote:
+On 2026-04-28 16:41, Mike Rapoport wrote:
+> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+> 
+> Both tests create a hugettlb mapping, fill it with data and verify the
+> data, the only difference is that one uses file-backed memory and another
+> one uses anonymous memory.
+> 
+> Merge both tests into a single file.
+> 
+> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 
-> collapse_file() is capable of collapsing pagecache folios from writable
-> files to PMD folios. Now enable clean pagecache folio collapse in addition
-> to read-only pagecache folio collapse by removing the
-> inode_is_open_for_write() from file_thp_enabled() and only performing
-> filemap_flush() if the file is read-only.
->
-> This means userspace needs to explicitly flush the content of pagecache
-> folios before khugepaged can collapse the folios, or use
-> madvise(MADV_COLLAPSE), which does the flush in the retry. The reason is
-> that blindly enabling dirty pagecache folio from writable files collapse
-> makes khugepaged flush these folios all the time. It is undesirable to
-> cause system level pagecache flushes.
->
-> To properly support dirty pagecache folio collapse, filemap_flush() needs
-> to be avoided. Potentially, merging associated buffer instead of dropping
-> it with filemap_release_folio() might be needed.
->
-> NOTE: this breaks khugepaged selftests for writable file pagecache
-> collapse, which is set to fail all the time. The next commit fix it.
+Reviewed-by: Luiz Capitulino <luizcap@redhat.com>
 
-Sashiko:
+> ---
+>   tools/testing/selftests/mm/Makefile        |   1 -
+>   tools/testing/selftests/mm/hugepage-mmap.c | 111 ++++++++++++++++-----
+>   tools/testing/selftests/mm/map_hugetlb.c   |  88 ----------------
+>   tools/testing/selftests/mm/run_vmtests.sh  |   1 -
+>   4 files changed, 86 insertions(+), 115 deletions(-)
+>   delete mode 100644 tools/testing/selftests/mm/map_hugetlb.c
+> 
+> diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+> index cd24596cdd27..cbda989f6b6a 100644
+> --- a/tools/testing/selftests/mm/Makefile
+> +++ b/tools/testing/selftests/mm/Makefile
+> @@ -70,7 +70,6 @@ TEST_GEN_FILES += hugepage-vmemmap
+>   TEST_GEN_FILES += khugepaged
+>   TEST_GEN_FILES += madv_populate
+>   TEST_GEN_FILES += map_fixed_noreplace
+> -TEST_GEN_FILES += map_hugetlb
+>   TEST_GEN_FILES += map_populate
+>   ifneq (,$(filter $(ARCH),arm64 riscv riscv64 x86 x86_64 loongarch32 loongarch64))
+>   TEST_GEN_FILES += memfd_secret
+> diff --git a/tools/testing/selftests/mm/hugepage-mmap.c b/tools/testing/selftests/mm/hugepage-mmap.c
+> index d543419de040..fa886ec148c2 100644
+> --- a/tools/testing/selftests/mm/hugepage-mmap.c
+> +++ b/tools/testing/selftests/mm/hugepage-mmap.c
+> @@ -15,6 +15,8 @@
+>   #include <unistd.h>
+>   #include <sys/mman.h>
+>   #include <fcntl.h>
+> +#include <linux/memfd.h>
+> +#include "vm_util.h"
+>   #include "kselftest.h"
+>   
+>   #define LENGTH (256UL*1024*1024)
+> @@ -25,54 +27,113 @@ static void check_bytes(char *addr)
+>   	ksft_print_msg("First hex is %x\n", *((unsigned int *)addr));
+>   }
+>   
+> -static void write_bytes(char *addr)
+> +static void write_bytes(char *addr, size_t length)
+>   {
+>   	unsigned long i;
+>   
+> -	for (i = 0; i < LENGTH; i++)
+> +	for (i = 0; i < length; i++)
+>   		*(addr + i) = (char)i;
+>   }
+>   
+> -static int read_bytes(char *addr)
+> +static bool verify_bytes(char *addr, size_t length)
+>   {
+>   	unsigned long i;
+>   
+>   	check_bytes(addr);
+> -	for (i = 0; i < LENGTH; i++)
+> +	for (i = 0; i < length; i++)
+>   		if (*(addr + i) != (char)i) {
+> -			ksft_print_msg("Error: Mismatch at %lu\n", i);
+> -			return 1;
+> +			ksft_print_msg("Error: Mismatch at %lu(%p)\n", i, addr);
+> +			return false;
+>   		}
+> -	return 0;
+> +
+> +	return true;
+>   }
+>   
+> -int main(void)
+> +static bool test_mmap(size_t length, int mmap_flags, int fd,
+> +		      const char *test_name)
+>   {
+>   	void *addr;
+> -	int fd, ret;
+>   
+> -	ksft_print_header();
+> -	ksft_set_plan(1);
+> +	addr = mmap(NULL, length, PROTECTION, mmap_flags, fd, 0);
+> +	if (addr == MAP_FAILED)
+> +		ksft_exit_fail_perror("mmap");
+> +
+> +	ksft_print_msg("Returned address is %p\n", addr);
+> +	check_bytes(addr);
+> +	write_bytes(addr, length);
+> +	if (!verify_bytes(addr, length))
+> +		ksft_exit_fail_msg("%s\n", test_name);
+> +
+> +	/* munmap() length of MAP_HUGETLB memory must be hugepage aligned */
+> +	if (munmap(addr, length))
+> +		ksft_exit_fail_perror("munmap");
+> +
+> +	return true;
+> +}
+> +
+> +static void test_anon_mmap(size_t length, int shift)
+> +{
+> +	const char *test_name = "hugetlb anonymous mmap";
+> +	int mmap_flags = MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB;
+> +	bool passed;
+> +
+> +	if (shift)
+> +		mmap_flags |= (shift & MAP_HUGE_MASK) << MAP_HUGE_SHIFT;
+> +
+> +	passed = test_mmap(length, mmap_flags, -1, test_name);
+> +	ksft_test_result(passed, "%s\n", test_name);
+> +}
+> +
+> +static void test_file_mmap(size_t length, int shift)
+> +{
+> +	const char *test_name = "hugetlb file mmap";
+> +	int mfd_flags = MFD_HUGETLB;
+> +	bool passed;
+> +	int fd;
+> +
+> +	if (shift)
+> +		mfd_flags |= (shift & MFD_HUGE_MASK) << MFD_HUGE_SHIFT;
+>   
+> -	fd = memfd_create("hugepage-mmap", MFD_HUGETLB);
+> +	fd = memfd_create("hugetlb-mmap", mfd_flags);
+>   	if (fd < 0)
+> -		ksft_exit_fail_msg("memfd_create() failed: %s\n", strerror(errno));
+> +		ksft_exit_fail_perror("memfd_create");
+> +
+> +	passed = test_mmap(length, MAP_SHARED, fd, test_name);
+> +
+> +	close(fd);
+> +	ksft_test_result(passed, "%s\n", test_name);
+> +}
+> +
+> +int main(int argc, char **argv)
+> +{
+> +	size_t hugepage_size;
+> +	size_t length = LENGTH;
+> +	int shift = 0;
+> +
+> +	ksft_print_header();
+> +	ksft_set_plan(2);
+> +
+> +	if (argc > 1)
+> +		length = atol(argv[1]) << 20;
+> +	if (argc > 2)
+> +		shift = atoi(argv[2]);
+>   
+> -	addr = mmap(NULL, LENGTH, PROTECTION, MAP_SHARED, fd, 0);
+> -	if (addr == MAP_FAILED) {
+> -		close(fd);
+> -		ksft_exit_fail_msg("mmap(): %s\n", strerror(errno));
+> +	if (shift) {
+> +		hugepage_size = (1 << shift);
+> +		ksft_print_msg("%u kB hugepages\n", 1 << (shift - 10));
+> +	} else {
+> +		hugepage_size = default_huge_page_size();
+> +		ksft_print_msg("Default size hugepages (%lu Kb)\n", hugepage_size >> 10);
+>   	}
+>   
+> -	ksft_print_msg("Returned address is %p\n", addr);
+> -	check_bytes(addr);
+> -	write_bytes(addr);
+> -	ret = read_bytes(addr);
+> +	/* munmap with fail if the length is not page aligned */
+> +	if (hugepage_size > length)
+> +		length = hugepage_size;
+>   
+> -	munmap(addr, LENGTH);
+> -	close(fd);
+> +	ksft_print_msg("Mapping %lu Mbytes\n", (unsigned long)length >> 20);
+>   
+> -	ksft_test_result(!ret, "Read same data\n");
+> +	test_anon_mmap(length, shift);
+> +	test_file_mmap(length, shift);
+>   
+> -	ksft_exit(!ret);
+> +	ksft_finished();
+>   }
+> diff --git a/tools/testing/selftests/mm/map_hugetlb.c b/tools/testing/selftests/mm/map_hugetlb.c
+> deleted file mode 100644
+> index aa409107611b..000000000000
+> --- a/tools/testing/selftests/mm/map_hugetlb.c
+> +++ /dev/null
+> @@ -1,88 +0,0 @@
+> -// SPDX-License-Identifier: GPL-2.0
+> -/*
+> - * Example of using hugepage memory in a user application using the mmap
+> - * system call with MAP_HUGETLB flag.  Before running this program make
+> - * sure the administrator has allocated enough default sized huge pages
+> - * to cover the 256 MB allocation.
+> - */
+> -#include <stdlib.h>
+> -#include <stdio.h>
+> -#include <unistd.h>
+> -#include <sys/mman.h>
+> -#include <fcntl.h>
+> -#include "vm_util.h"
+> -#include "kselftest.h"
+> -
+> -#define LENGTH (256UL*1024*1024)
+> -#define PROTECTION (PROT_READ | PROT_WRITE)
+> -
+> -static void check_bytes(char *addr)
+> -{
+> -	ksft_print_msg("First hex is %x\n", *((unsigned int *)addr));
+> -}
+> -
+> -static void write_bytes(char *addr, size_t length)
+> -{
+> -	unsigned long i;
+> -
+> -	for (i = 0; i < length; i++)
+> -		*(addr + i) = (char)i;
+> -}
+> -
+> -static void read_bytes(char *addr, size_t length)
+> -{
+> -	unsigned long i;
+> -
+> -	check_bytes(addr);
+> -	for (i = 0; i < length; i++)
+> -		if (*(addr + i) != (char)i)
+> -			ksft_exit_fail_msg("Mismatch at %lu\n", i);
+> -
+> -	ksft_test_result_pass("Read correct data\n");
+> -}
+> -
+> -int main(int argc, char **argv)
+> -{
+> -	void *addr;
+> -	size_t hugepage_size;
+> -	size_t length = LENGTH;
+> -	int flags = MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB;
+> -	int shift = 0;
+> -
+> -	hugepage_size = default_huge_page_size();
+> -	/* munmap with fail if the length is not page aligned */
+> -	if (hugepage_size > length)
+> -		length = hugepage_size;
+> -
+> -	ksft_print_header();
+> -	ksft_set_plan(1);
+> -
+> -	if (argc > 1)
+> -		length = atol(argv[1]) << 20;
+> -	if (argc > 2) {
+> -		shift = atoi(argv[2]);
+> -		if (shift)
+> -			flags |= (shift & MAP_HUGE_MASK) << MAP_HUGE_SHIFT;
+> -	}
+> -
+> -	if (shift)
+> -		ksft_print_msg("%u kB hugepages\n", 1 << (shift - 10));
+> -	else
+> -		ksft_print_msg("Default size hugepages\n");
+> -	ksft_print_msg("Mapping %lu Mbytes\n", (unsigned long)length >> 20);
+> -
+> -	addr = mmap(NULL, length, PROTECTION, flags, -1, 0);
+> -	if (addr == MAP_FAILED)
+> -		ksft_exit_fail_msg("mmap: %s\n", strerror(errno));
+> -
+> -	ksft_print_msg("Returned address is %p\n", addr);
+> -	check_bytes(addr);
+> -	write_bytes(addr, length);
+> -	read_bytes(addr, length);
+> -
+> -	/* munmap() length of MAP_HUGETLB memory must be hugepage aligned */
+> -	if (munmap(addr, length))
+> -		ksft_exit_fail_msg("munmap: %s\n", strerror(errno));
+> -
+> -	ksft_finished();
+> -}
+> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
+> index e2dc9ac87bfc..61b450032af8 100755
+> --- a/tools/testing/selftests/mm/run_vmtests.sh
+> +++ b/tools/testing/selftests/mm/run_vmtests.sh
+> @@ -292,7 +292,6 @@ CATEGORY="hugetlb" run_test ./hugepage-shm
+>   echo "$shmmax" > /proc/sys/kernel/shmmax
+>   echo "$shmall" > /proc/sys/kernel/shmall
+>   
+> -CATEGORY="hugetlb" run_test ./map_hugetlb
+>   CATEGORY="hugetlb" run_test ./hugepage-mremap
+>   CATEGORY="hugetlb" run_test ./hugepage-vmemmap
+>   CATEGORY="hugetlb" run_test ./hugetlb-madvise
 
-Is it acceptable to intentionally break the selftests in this commit? Each
-commit should be self-contained and not knowingly introduce test regressions,
-as this breaks bisectability.
-
-Answer:
-
-I am fine with squashing patch 14 into this one, but it is unlikely anyone
-gets a kernel at exact this commit.
-
-
-Best Regards,
-Yan, Zi
