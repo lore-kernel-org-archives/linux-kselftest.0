@@ -1,110 +1,234 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43A70428466;
-	Thu, 30 Apr 2026 13:30:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F40512F585
+	for <linux-kselftest@vger.kernel.org>; Thu, 30 Apr 2026 13:38:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777555855; cv=none; b=VLFegq0RmETxgf3B3bP3Y5pXYWJhiIJvFYHktOfgFfEUWPOCrN2OCpUi5fqbjjq7dHrV5jQdP/6r8zRS7vpLcHQGCiKYQiARAN3BpzHXc6CxwM098p2TnxXr8u8BGCBXRItURgO/0etN1qOPGlfOJsiLTV/LtAF6EA40/WYE9sM=
+	t=1777556283; cv=none; b=JQkQDiKRB/4spFGgFKLRNwxkzDuGKGPD20lf9KH1/XtPoly9OiPkdxKICiNJpEIqf2QBMoHrMo9wLo9zz97wbyShOU3Ike8ZxI0Mx/m9de9iklOBPx4OnKMlkswDSxHxq0LvySZSzuz5s+sUyU2NeHh4kwVgwZjHDrCQ5H3p/FM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777555855; c=relaxed/simple;
-	bh=ax+ZlzG3JzpEyOXWLGjBwvOJikwf72NuWSrlZfkyUjc=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=dqeAgQq7ggUubxy/u3wzqyWFC0RuAsN10wbU7S/E4cA3ojuZu4pxWOAKcIQbVj8NzaeeyehQgThFD3aCAHHSCfvzrLEbKvf9ozrEf625iJhYysAKECUgQmxyBYfyKxT3K99xZPUA8m7VxSEt/gtLB1O28Wvi5gSOLyNV/fzA49s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Nn4ZH4IM; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777556283; c=relaxed/simple;
+	bh=Wc+D8caaBVXx/76SzhM6rbIvQSOxiKy5eEeWre1Y7E4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Duz1RhsnkyE/4tfigdYIPNbq1Hh1dvtuQFuJkBYLNf7QegLSLfxM2RawmLSSXO+6z4lJSX/7GOlLUQNvBk4u3+ckxyfiQo/RX1K+8ulOw16awAeykoesualml8tORaAaE9zV61kOjCFFDRZGE5jhKedpIlkwlN9UmOi+aV7kFAU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JK0ZZeQL; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Nn4ZH4IM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D509C2BCB3;
-	Thu, 30 Apr 2026 13:30:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777555855;
-	bh=ax+ZlzG3JzpEyOXWLGjBwvOJikwf72NuWSrlZfkyUjc=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=Nn4ZH4IM8mAh7wzJ7Hs0EXFwva7EvObCD/4pI2dNyr3Rd8YvWnQlzsOuPxRpurhzd
-	 pW70HIQvfZfTMMqb1GWcwj6Fuv2Zy5IfF/unB3SHO1heMARKh1Phn9e7hPNSPDxL7C
-	 a+mOQKAwoExvgQOl6oucmjb9mRsbS7SCD9y2daHw+GFE/6+kARMVTrwPWX6MR0Y7oJ
-	 8bw793TBWO5W7zX5k3HdrJ0guU2H+FVT4YXyakStStq8ZN0Ri3LBsf2e1cu0D/HvWn
-	 BHH0QXvkCD0b0R5co8ZszOWdH1LbwJlDPRm0Ez0GMpUhUa2H1rtSwgcZClYopog+vh
-	 icong+Vjzp9ug==
-Content-Type: multipart/mixed; boundary="===============9109038514088101794=="
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JK0ZZeQL"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1777556281;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Zvpc3ouiLend2nTOGgnsZ2P9GoiNqqJrDz+MQzcNl04=;
+	b=JK0ZZeQLimijOfE6lItSVkjM3C6tSXD49T0OUJ7V68sQer1Ea/OpaM7cCku9Y89WE5y91p
+	YCXVsA/BCVIGMHSwIP72wLTt+9j0s6MlFTmvkwvr8P5ruN8I1F5/ob1ZKLdXXXtmmsJODB
+	BK+DZ9jbZ10wpo33tkHQEbD3f6Yxzok=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-173-PDmhLZu9N42fROrD7Km7Zg-1; Thu, 30 Apr 2026 09:37:56 -0400
+X-MC-Unique: PDmhLZu9N42fROrD7Km7Zg-1
+X-Mimecast-MFC-AGG-ID: PDmhLZu9N42fROrD7Km7Zg_1777556276
+Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-8abd6e281c0so31134066d6.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 30 Apr 2026 06:37:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777556276; x=1778161076;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Zvpc3ouiLend2nTOGgnsZ2P9GoiNqqJrDz+MQzcNl04=;
+        b=roPEo1ac2XYVM9SL1ejuOTuLfF/E5wTv8njaGKGDEoijGOAqJejBHbzBRizGW9V2r/
+         Xa/NEO0+8CfIN6mmMKvJdQyon2SOG0mS9cHgkVYHYZIfF9K2nBx3k5YK8KcdhheZ4+m6
+         X7TCDL0euWlU/+R2LZmoaFJH3Uzh936BRDE64eacE8w/6eW+i85UeEjGA7B5av4OI5zE
+         jLO/6ZlKTZ4Y8QUM2qBFe7MjrWtlUy9cFPv51/Dbf5Yzq0Dwe4gIalgbeba+0xs08HNy
+         vpXHkMvgK3qZNt7R6SlyiVTVLy0byCE7CrorC22lQQ9JrT/W3hRXYeJozJ4YfV4ouqH2
+         v9uA==
+X-Forwarded-Encrypted: i=1; AFNElJ95L/jFQmwQn1WsqAfPpidMSABUvK8rNciBDibU7eJLVRJftnMpm8Hib+rVSSgurXbUrJJvSgIZffNqOTUysFU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxI24tS2Oi38P8S8wTafrgVDZ6djEwXf4xZxVHu+yi50XXmF7LS
+	4ygjsfusWoXZ8XQh/Tt6YEgOLwa37pMstyyjBD/In0C+T86fp6/ltLUPQt6d4q4NwchfsdE1T43
+	SCK4H+Nkc04uT0TZ9nUqhRpWfS0T9eHOIfnWLwacfIC9HyJgtEpHsEUqU6oTiW4c2z+/4xA==
+X-Gm-Gg: AeBDievzBsb1Al1HwmK3+sf+bSbe9mEMcpB/ZpsA+Ob52A3Qe9C0LWCc7tjdOQGIk0j
+	w7s5F9HaA6RCBfja0BZZgQRxXxNskmIB8FBVWoALGwP7YJdY+jkshALxWYJoqlgAE9yYO9cvnnB
+	ypY4oR6Iz8+a/mX3HtCaeex2Ylm+5yHkG6iixdrpTiWzP6/wyKAINOUTaLfkMvKdMLnOHfIMyEI
+	ABvdQFQZRpF48x7E1PpG3Kx/VExzyqOdX/jRV+sujClQxNv0SJXkqwbd0iALGwl6HMpakZ3aNm4
+	YRQJQLwouO2FGTqkhLOmo5DPTnI2XrLh/zr4M2rUs/2OLXt/ephwm3BblT1RZOaJuZhTD8b/xlD
+	zAKppCGi7lkMVPGz8AKA9y/YSaDXIw3dLNNA=
+X-Received: by 2002:a05:622a:586:b0:509:2b02:c1bd with SMTP id d75a77b69052e-5102aad8a94mr44516001cf.12.1777556276113;
+        Thu, 30 Apr 2026 06:37:56 -0700 (PDT)
+X-Received: by 2002:a05:622a:586:b0:509:2b02:c1bd with SMTP id d75a77b69052e-5102aad8a94mr44515291cf.12.1777556275587;
+        Thu, 30 Apr 2026 06:37:55 -0700 (PDT)
+Received: from [192.168.2.110] ([70.53.202.134])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-5101aeb58desm48316071cf.29.2026.04.30.06.37.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Apr 2026 06:37:55 -0700 (PDT)
+Message-ID: <6b12453b-2683-41cc-bb4c-602eda6bf9d8@redhat.com>
+Date: Thu, 30 Apr 2026 09:37:43 -0400
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <9f76c238686812e3453aa5541d2a6db53ece8414508a8176a6e556d1eb372254@mail.kernel.org>
-In-Reply-To: <20260430-selftests-bpf_misconfig-v10-10-cd302a31af16@suse.com>
-References: <20260430-selftests-bpf_misconfig-v10-10-cd302a31af16@suse.com>
-Subject: Re: [PATCH bpf-next v10 10/11] selftests/bpf: Provide weak definitions for cross-test functions
-From: bot+bpf-ci@kernel.org
-To: rbm@suse.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,shuah@kernel.org,nathan@kernel.org,nick.desaulniers+lkml@gmail.com,morbo@google.com,justinstitt@google.com
-Cc: bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,llvm@lists.linux.dev,alan.maguire@oracle.com,rbm@suse.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 30 Apr 2026 13:30:52 +0000 (UTC)
-
---===============9109038514088101794==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 04/54] selftests/mm: migration: properly cleanup
+ fork()ed processes
+To: Mike Rapoport <rppt@kernel.org>, Andrew Morton
+ <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>
+Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
+ Barry Song <baohua@kernel.org>, Dev Jain <dev.jain@arm.com>,
+ Donet Tom <donettom@linux.ibm.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+ John Hubbard <jhubbard@nvidia.com>, "Liam R. Howlett"
+ <Liam.Howlett@oracle.com>, Lance Yang <lance.yang@linux.dev>,
+ Leon Romanovsky <leon@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ Mark Brown <broonie@kernel.org>, Michal Hocko <mhocko@suse.com>,
+ Nico Pache <npache@redhat.com>, Peter Xu <peterx@redhat.com>,
+ Ryan Roberts <ryan.roberts@arm.com>, Sarthak Sharma
+ <sarthak.sharma@arm.com>, Shuah Khan <shuah@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Vlastimil Babka <vbabka@kernel.org>,
+ Zi Yan <ziy@nvidia.com>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org
+References: <20260428204240.1924129-1-rppt@kernel.org>
+ <20260428204240.1924129-5-rppt@kernel.org>
+Content-Language: en-US, en-CA
+From: Luiz Capitulino <luizcap@redhat.com>
+In-Reply-To: <20260428204240.1924129-5-rppt@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-> index 35adc3f6d443..5a864cd8ad1b 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-> @@ -252,10 +252,17 @@ static void kprobe_multi_attach_api_subtest(void)
->  	kprobe_multi__destroy(skel);
->  }
->
-> -/* defined in prog_tests/uprobe_multi_test.c */
-> -void uprobe_multi_func_1(void);
-> -void uprobe_multi_func_2(void);
-> -void uprobe_multi_func_3(void);
-> +/*
-> + * Weak uprobe target stubs. noinline is required because
-> + * uprobe_multi_test_run() takes their addresses to configure the BPF
-> + * program's attachment points; an inlined function has no stable
-> + * address in the binary to probe. The strong definitions in
-> + * uprobe_multi_test.c take precedence when that translation unit is
-> + * linked.
-> + */
-> +noinline __weak void uprobe_multi_func_1(void) {}
-> +noinline __weak void uprobe_multi_func_2(void) {}
-> +noinline __weak void uprobe_multi_func_3(void) {}
+On 2026-04-28 16:41, Mike Rapoport wrote:
+> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+> 
+> Several migration test use fork() to create worker processes. These
+> processes are later killed, but nothing collects their exit status and they
+> remain as zombies in the system.
+> 
+> Add a helper function that kills the worker processes, waitpid()s for
+> them and verifies the exit status.
+> 
+> Replace the loops that call kill() for each process with a call to that
+> helper.
+> 
+> The addition of waitpid() calls also makes sure the migrating process never
+> exits before the processes accessing the memory, so it's possible to drop
+> the call to prctl(PR_SET_PDEATHSIG, SIGHUP).
+> 
+> Reported-by: Luiz Capitulino <luizcap@redhat.com>
+> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> ---
+>   tools/testing/selftests/mm/migration.c | 54 +++++++++++++-------------
+>   1 file changed, 27 insertions(+), 27 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/mm/migration.c b/tools/testing/selftests/mm/migration.c
+> index 3630f2fb0800..76e380b74658 100644
+> --- a/tools/testing/selftests/mm/migration.c
+> +++ b/tools/testing/selftests/mm/migration.c
+> @@ -67,6 +67,24 @@ FIXTURE_TEARDOWN(migration)
+>   	free(self->pids);
+>   }
+>   
+> +static bool kill_children(FIXTURE_DATA(migration) * self)
+> +{
+> +	int i, status;
+> +	pid_t pid;
+> +
+> +	for (i = 0; i < self->nthreads; i++) {
+> +		pid = self->pids[i];
+> +		if (kill(pid, SIGTERM))
+> +			return false;
+> +		if (pid != waitpid(pid, &status, 0))
+> +			return false;
+> +		if (!WIFSIGNALED(status) || WTERMSIG(status) != SIGTERM)
+> +			return false;
+> +	}
 
-Can compiler optimization passes like Identical Code Folding (ICF) merge
-these three structurally identical weak stub functions into a single
-memory address?
+Why do we stop at the first error? Wouldn't it be better to kill &
+collect all of them and then return false if at least one fails?
 
-If they are folded into a single address, bpf_program__attach_uprobe_multi()
-would attach three separate uprobes to the exact same offset, each with a
-different cookie. Calling any of the functions would then execute the shared
-address, triggering all three uprobes simultaneously:
+> +
+> +	return true;
+> +}
+> +
+>   int migrate(uint64_t *ptr, int n1, int n2)
+>   {
+>   	int ret, tmp;
+> @@ -160,20 +178,14 @@ TEST_F_TIMEOUT(migration, shared_anon, 2*RUNTIME)
+>   	memset(ptr, 0xde, TWOMEG);
+>   	for (i = 0; i < self->nthreads; i++) {
+>   		pid = fork();
+> -		if (!pid) {
+> -			prctl(PR_SET_PDEATHSIG, SIGHUP);
+> -			/* Parent may have died before prctl so check now. */
+> -			if (getppid() == 1)
+> -				kill(getpid(), SIGHUP);
 
-  uprobe_multi_test_run() {
-      uprobe_multi_func_1();  // triggers all 3 uprobes
-      uprobe_multi_func_2();  // triggers all 3 uprobes
-      uprobe_multi_func_3();  // triggers all 3 uprobes
-  }
+This goes beyond this series, but I wonder if we should have this check
+in access_mem() in case the parent dies in migrate().
 
-This would increment the BPF program counters multiple times per call,
-causing assertions like:
+> +		if (!pid)
+>   			access_mem(ptr);
+> -		} else {
+> +		else
+>   			self->pids[i] = pid;
+> -		}
+>   	}
+>   
+>   	ASSERT_EQ(migrate(ptr, self->n1, self->n2), 0);
+> -	for (i = 0; i < self->nthreads; i++)
+> -		ASSERT_EQ(kill(self->pids[i], SIGTERM), 0);
+> +	ASSERT_EQ(kill_children(self), true);
+>   }
+>   
+>   /*
+> @@ -236,20 +248,14 @@ TEST_F_TIMEOUT(migration, shared_anon_thp, 2*RUNTIME)
+>   	memset(ptr, 0xde, pmdsize);
+>   	for (i = 0; i < self->nthreads; i++) {
+>   		pid = fork();
+> -		if (!pid) {
+> -			prctl(PR_SET_PDEATHSIG, SIGHUP);
+> -			/* Parent may have died before prctl so check now. */
+> -			if (getppid() == 1)
+> -				kill(getpid(), SIGHUP);
+> +		if (!pid)
+>   			access_mem(ptr);
+> -		} else {
+> +		else
+>   			self->pids[i] = pid;
+> -		}
+>   	}
+>   
+>   	ASSERT_EQ(migrate(ptr, self->n1, self->n2), 0);
+> -	for (i = 0; i < self->nthreads; i++)
+> -		ASSERT_EQ(kill(self->pids[i], SIGTERM), 0);
+> +	ASSERT_EQ(kill_children(self), true);
+>   }
+>   
+>   /*
+> @@ -300,20 +306,14 @@ TEST_F_TIMEOUT(migration, shared_anon_htlb, 2*RUNTIME)
+>   	memset(ptr, 0xde, hugepage_size);
+>   	for (i = 0; i < self->nthreads; i++) {
+>   		pid = fork();
+> -		if (!pid) {
+> -			prctl(PR_SET_PDEATHSIG, SIGHUP);
+> -			/* Parent may have died before prctl so check now. */
+> -			if (getppid() == 1)
+> -				kill(getpid(), SIGHUP);
+> +		if (!pid)
+>   			access_mem(ptr);
+> -		} else {
+> +		else
+>   			self->pids[i] = pid;
+> -		}
+>   	}
+>   
+>   	ASSERT_EQ(migrate(ptr, self->n1, self->n2), 0);
+> -	for (i = 0; i < self->nthreads; i++)
+> -		ASSERT_EQ(kill(self->pids[i], SIGTERM), 0);
+> +	ASSERT_EQ(kill_children(self), true);
+>   }
+>   
+>   TEST_HARNESS_MAIN
 
-  ASSERT_EQ(skel->bss->uprobe_multi_func_1_result, 1, ...);
-
-to fail deterministically, as the result would be 3 instead of 1.
-
-Would it make sense to make these stubs structurally unique, perhaps by
-adding unique inline assembly to each?
-
-This concern was raised by sashiko-bot@kernel.org in v9:
-https://lore.kernel.org/bpf/20260429212931.44DD4C19425@smtp.kernel.org/
-
-[ ... ]
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25167006036
---===============9109038514088101794==--
