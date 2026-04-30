@@ -1,121 +1,142 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEFFB477E2D;
-	Thu, 30 Apr 2026 16:42:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1751234750B
+	for <linux-kselftest@vger.kernel.org>; Thu, 30 Apr 2026 16:46:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777567324; cv=none; b=PiCSxp8a0ICAJ+q265ASubj2Ck6Jjn1x/McglSSZV35R2Q76RWc3IM9ag63NHIubXLfXZYQNH7OQLj4BC8FjiMf/hgAlIEg3/D/kPi5IecNo8zKol13TbvmjEDEdbUqYMKhwrJkwtwFUtWxm2NjHNtesy8MsjATxpqrBnRHFVck=
+	t=1777567597; cv=none; b=Ey47GvXFNSu7kteCxQrz/zmDvxl8m8Nm4q5XWWAXIxkMXZQQSWCzgYMvrv8uRFiERfThOA2NcasZMVZFQOkRw18y/wcvEy1D2GnNpwCw5gnRGaTMwTC0+eKcybVepUvc3AquuimbXhVWFvM2Kn7ohvKiFL8uwQnGwq4ACU7JeX8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777567324; c=relaxed/simple;
-	bh=p4T/P+cg/+Opc0jMFVbXpIndKd5hyRAAi2QVvcmPkao=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=cOkvFI66TYKXG9AqKKP9bxjJs4uNhpa++uZpPRMYrRTLEJJxk1nGewQiAF75AzgojgWhGo+i5xnPIS7i3t7VDYKM1xGU5ET0Wd3uFItO4IIYIwpxgJXMqXN6HpnIQSgGWchfgQpZMAApgYeiZqLONug7LeyqnO0XKDX0wvgiN2Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l41aP/nC; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777567597; c=relaxed/simple;
+	bh=ee0AbLojRbTTk/miCV2NuwgchMwICYZkqYau2Z3hA7Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eH1BDmzbUFVlVAsCziorxLC9Z6z/ovK233EGanziO2TgphDGL5tzKWzB7oMPFkqbucJ1AtsZwy6z7IEWodDf/GKNY8VRVv+vF/Mv7Q91M24iVQtTKIqmelS4Uicy6k1hIdr9mhTb1kdY9ZUyk4934GqjPaLQCa3HNh6jKa1S4f0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=azAn6L1i; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l41aP/nC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0ACCC2BCB3;
-	Thu, 30 Apr 2026 16:42:00 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="azAn6L1i"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C6BCC4AF09;
+	Thu, 30 Apr 2026 16:46:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777567323;
-	bh=p4T/P+cg/+Opc0jMFVbXpIndKd5hyRAAi2QVvcmPkao=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=l41aP/nCKVEvjEtcCuk0FP679QF+oR6VmiNTV3WBNKbJTyGabRcbMjIq5A0iH7J4U
-	 WZvPnAL5Yri+vk3VQlCjgoI5qu5ONE35KswnB/1WLCaoK/BvKJHx+JCAmMeZ3K23Qy
-	 3uM5Wpw9dtBk3ayjwr1b6CPaI8+k33IhPIGeE1TdWEmOZZU39JX0jUhN9OTIY3mp6/
-	 QZUjlen4GUjA9ocT63bHqGsR0HRgpOcBsjSYSNNpiBllZN0tw6PeV5CiMfa/LAPdgE
-	 jEvew7z3xTiQfSMZaRJkR9Sw7vEViVPAZ7hEqZGKeydQtDybtk0Fux99gnDy+3DQDR
-	 6vDkE7VbAvD9Q==
-Content-Type: multipart/mixed; boundary="===============3289116302628097459=="
+	s=k20201202; t=1777567597;
+	bh=ee0AbLojRbTTk/miCV2NuwgchMwICYZkqYau2Z3hA7Y=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=azAn6L1iUdNMjBR/nMIlbjAMC4T4JXjm7euIYiwupXzXoD+p1UNnLQNbMY1iTrwCi
+	 8ncpAGo7ngDftJtz7P+7whwhqBWoVOPN0330D/MK7mBuNLKVHHYy2XEUXdHFdsvYK8
+	 v4MDa+x41RTR1f8gD/Ek31EjHbpMxrZ67Uyhr+Ls1KVgkZApqXjIaMSyiIleLjWBFW
+	 7G6C5GoFa8segxTvPDZ9gVgulrNqld/RlCKpEYEsG84SFXui/KGD4CzFuRieNjtxmf
+	 CwvwWHhAtcCAFhUfgSS+LsyyPZwaIT0bF3YdjoxfINm61a+xBlcKdB+NIs9t+3lmcZ
+	 U1wpLgZxH11Mw==
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 8CE60F40077;
+	Thu, 30 Apr 2026 12:46:35 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-05.internal (MEProxy); Thu, 30 Apr 2026 12:46:35 -0400
+X-ME-Sender: <xms:a4fzaWklB9_qC6ARRffXuIBykWYfDNpBWB3fZyj2yFXZKsD5w0WKvw>
+    <xme:a4fzaW0J6kMcpeUnOR_wb2xTZPR0ddfgFIUxa7coSpDbpL9vOXPUU3nGscfC07Qk_
+    N7V6BuUcusAas1CICjzyU8iJhMDwg3xadNrMCfDQz45gL05OrAKxDA_>
+X-ME-Received: <xmr:a4fzaeUEdxxbXZ98DK2422jJN2fe9u35X_xQE4nMH_I65X6jpxM7Q4VdIz-8dA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgdekjeekgecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecunecujfgurhepfffhvfevuffkfhggtggujgesthdtredttd
+    dtvdenucfhrhhomhepmfhirhihlhcuufhhuhhtshgvmhgruhcuoehkrghssehkvghrnhgv
+    lhdrohhrgheqnecuggftrfgrthhtvghrnhepgeetuedtjefhkeeuiefgudduvdfgvdeiue
+    eigeehheehudetuedtkeelhfeihedunecuffhomhgrihhnpehsrghshhhikhhordguvghv
+    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepkhhirh
+    hilhhlodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduieduudeivdeiheeh
+    qddvkeeggeegjedvkedqkhgrsheppehkvghrnhgvlhdrohhrghesshhhuhhtvghmohhvrd
+    hnrghmvgdpnhgspghrtghpthhtohepgeeipdhmohguvgepshhmthhpohhuthdprhgtphht
+    thhopegrkhhpmheslhhinhhugidqfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtoh
+    eprhhpphhtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehpvghtvghrgiesrhgvughh
+    rghtrdgtohhmpdhrtghpthhtohepuggrvhhiugeskhgvrhhnvghlrdhorhhgpdhrtghpth
+    htoheplhhjsheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhurhgvnhgssehgohho
+    ghhlvgdrtghomhdprhgtphhtthhopehvsggrsghkrgeskhgvrhhnvghlrdhorhhgpdhrtg
+    hpthhtoheplhhirghmrdhhohiflhgvthhtsehorhgrtghlvgdrtghomhdprhgtphhtthho
+    peiiihihsehnvhhiughirgdrtghomh
+X-ME-Proxy: <xmx:a4fzaRgje0pyPF-196nDwMNf8dKZ9M9H61cAp_VFpcLcb_uXRA2FAg>
+    <xmx:a4fzaXid3EPkfHefSAQvckbjL8Ngf61M6-lAbLdnTtuA6NiY3fpbAA>
+    <xmx:a4fzaZtqIQoDsK3NsnRf-iEfXV8pb6souY1mdAsGlNpdaFR40wh11A>
+    <xmx:a4fzaYS4PkzLN0qQ-4h4H5r_ieEp4AgsYp4HOdrc-kV8a8n122OuzA>
+    <xmx:a4fzaSFiq6my_hQpDiVOm03e_ObELM4NCxk0EBP113QEDhqtXVlYOe2r>
+Feedback-ID: i10464835:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 30 Apr 2026 12:46:34 -0400 (EDT)
+Date: Thu, 30 Apr 2026 17:46:33 +0100
+From: Kiryl Shutsemau <kas@kernel.org>
+To: akpm@linux-foundation.org, rppt@kernel.org, peterx@redhat.com, 
+	david@kernel.org
+Cc: ljs@kernel.org, surenb@google.com, vbabka@kernel.org, 
+	Liam.Howlett@oracle.com, ziy@nvidia.com, corbet@lwn.net, skhan@linuxfoundation.org, 
+	seanjc@google.com, pbonzini@redhat.com, jthoughton@google.com, aarcange@redhat.com, 
+	sj@kernel.org, usama.arif@linux.dev, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kvm@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH 08/14] userfaultfd: add UFFDIO_REGISTER_MODE_RWP and
+ UFFDIO_RWPROTECT plumbing
+Message-ID: <afOGUZ7iX11MGhli@thinkstation>
+References: <20260427114607.4068647-1-kas@kernel.org>
+ <20260427114607.4068647-9-kas@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <f07336b357836aa0d9b5017f4bdf56969d6cb4044b8df5fd9dc67baf593b761e@mail.kernel.org>
-In-Reply-To: <20260430-selftests-bpf_misconfig-v11-2-e11f7a8c4fdc@suse.com>
-References: <20260430-selftests-bpf_misconfig-v11-2-e11f7a8c4fdc@suse.com>
-Subject: Re: [PATCH bpf-next v11 02/11] selftests/bpf: Fix test_kmods KDIR to honor O= and distro kernels
-From: bot+bpf-ci@kernel.org
-To: rbm@suse.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,shuah@kernel.org,nathan@kernel.org,nick.desaulniers+lkml@gmail.com,morbo@google.com,justinstitt@google.com
-Cc: bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,llvm@lists.linux.dev,alan.maguire@oracle.com,rbm@suse.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 30 Apr 2026 16:42:00 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260427114607.4068647-9-kas@kernel.org>
 
---===============3289116302628097459==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+sashiko.dev -- https://sashiko.dev/#/patchset/20260427114607.4068647-1-kas@kernel.org -- wrote:
+> +    if (enable_rwp)
+> +        mm_cp_flags = MM_CP_UFFD_RWP;
+> +    else
+> +        mm_cp_flags = MM_CP_UFFD_RWP_RESOLVE | MM_CP_TRY_CHANGE_WRITABLE;
+>
+> Does this unconditionally apply MM_CP_TRY_CHANGE_WRITABLE to the entire range?
 
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index 6094fe99b5f6..cc6ee7a2df93 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
+Confirmed bug. RWP registration does not require VM_WRITE, so
 
-[ ... ]
+  mmap(PROT_READ)
+  UFFDIO_REGISTER(MODE_RWP)
+  UFFDIO_RWPROTECT(<range>, disable)
 
-> diff --git a/tools/testing/selftests/bpf/test_kmods/Makefile b/tools/testing/selftests/bpf/test_kmods/Makefile
-> index 63c4d3f6a12f..031c7454ce65 100644
-> --- a/tools/testing/selftests/bpf/test_kmods/Makefile
-> +++ b/tools/testing/selftests/bpf/test_kmods/Makefile
-> @@ -1,5 +1,16 @@
->  TEST_KMOD_DIR := $(realpath $(dir $(abspath $(lastword $(MAKEFILE_LIST)))))
-> -KDIR ?= $(abspath $(TEST_KMOD_DIR)/../../../../..)
-> +SRCTREE_KDIR := $(abspath $(TEST_KMOD_DIR)/../../../../..)
-> +# Honor O=/KBUILD_OUTPUT only if they point at a prepared kernel build
-> +# directory (one containing Module.symvers); otherwise treat the value as a
-> +# selftests-only output directory and fall back to in-tree or distro headers.
-> +# The parent bpf/Makefile resolves O=/KBUILD_OUTPUT to absolute paths before
-> +# invoking this sub-make so relative paths still anchor to the user's
-> +# invocation directory.
-> +KMOD_O := $(or $(O),$(KBUILD_OUTPUT))
-> +KMOD_O_VALID := $(if $(KMOD_O),$(if $(wildcard $(KMOD_O)/Module.symvers),$(KMOD_O)))
-> +KDIR ?= $(if $(KMOD_O_VALID),$(SRCTREE_KDIR), \
-> +	    $(if $(wildcard $(SRCTREE_KDIR)/Module.symvers),$(SRCTREE_KDIR), \
-> +		/lib/modules/$(shell uname -r)/build))
+trips WARN_ON_ONCE(!(vma->vm_flags & VM_WRITE)) inside
+maybe_change_pte_writable() on resolve.
 
-Will the automatic fallback to /lib/modules/$(uname -r)/build cause
-confusing build failures?
+The flag belongs inside the iteration, gated on
+vma_wants_manual_pte_write_upgrade(vma), matching mwriteprotect_range()
+(mm/userfaultfd.c:1003) and userfaultfd_clear_vma() (mm/userfaultfd.c:2182):
 
-Since bpf_testmod relies heavily on internal BPF structures, experimental
-macros, and kfuncs that change frequently between kernel releases, compiling
-it against host distro headers on a system where the running kernel does not
-match the upstream source tree will likely fail.
+        for_each_vma_range(vmi, dst_vma, end) {
+                unsigned long vma_start = max(dst_vma->vm_start, start);
+                unsigned long vma_end = min(dst_vma->vm_end, end);
+                unsigned int flags = mm_cp_flags;
 
-If the host headers are present, the permissive skip check further down in
-the file will pass since the directory exists. However, because the
-compilation failure is not ignored by the parent bpf/Makefile, this would
-abort the entire BPF selftests build with confusing C compilation errors
-instead of silently skipping the unconfigured kernel tree.
+                if (!enable_rwp && vma_wants_manual_pte_write_upgrade(dst_vma))
+                        flags |= MM_CP_TRY_CHANGE_WRITABLE;
 
-Should in-tree test modules avoid falling back to host distro headers to
-prevent these version mismatches?
+                change_protection(&tlb, dst_vma, vma_start, vma_end, flags);
+        }
 
-This concern was raised in v9 and v10 by bot+bpf-ci@kernel.org and
-sashiko-bot@kernel.org:
+Will fold for v2.
 
-  "Will falling back to the host kernel headers cause compilation errors
-  when building in-tree test modules like bpf_testmod? Since bpf_testmod
-  relies heavily on internal BPF structures, experimental macros, and
-  kfuncs that change frequently between kernel releases, compiling it
-  against /lib/modules/$(uname -r)/build on a system where the running
-  kernel does not exactly match the upstream source tree will likely fail.
-  If the host headers are present, the permissive skip check further down
-  in the file will pass since the directory exists. Because the compilation
-  failure is not ignored by the parent bpf/Makefile, won't this abort the
-  entire BPF selftests build with confusing C compilation errors instead of
-  silently skipping the unconfigured kernel tree? Should in-tree test
-  modules avoid falling back to host distro headers to prevent these
-  version mismatches?"
+> Since change_protection() walks and modifies page tables here, does this
+> need to call vma_start_write(vma) first?
 
-Reference: https://lore.kernel.org/bpf/d1297f1c857e5430af42dcb3e4d05c7ddaff08470a43893cac0fbcb83ec51666@mail.kernel.org/
+No.
 
-[ ... ]
+This is the same locking pattern as the pre-existing uffd_wp_range() call
+that the hunk replaces -- mmap_write_lock without vma_start_write(), which
+remains safe for the same reasons:
 
+  - mmap_write_lock excludes anything taking mmap_read_lock, including
+    MADV_DONTNEED and the other PTE-page-freeing paths (try_to_free_pte()
+    runs under mmap_read_lock + per-VMA locking, never standalone).
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+  - The remaining concurrent reader is the per-VMA-locked page fault
+    (lock_vma_under_rcu()), which walks PTEs under the PTE lock.
+    change_protection() also takes the PTE lock when updating, so the
+    two serialise. A fault that observes a transient pre-resolve PTE
+    just produces a normal fault delivery and resolves correctly.
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25176431268
---===============3289116302628097459==--
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
