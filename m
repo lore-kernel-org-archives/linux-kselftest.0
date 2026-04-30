@@ -1,62 +1,64 @@
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79EA6423A8C
-	for <linux-kselftest@vger.kernel.org>; Thu, 30 Apr 2026 13:28:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE235426684
+	for <linux-kselftest@vger.kernel.org>; Thu, 30 Apr 2026 13:28:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777555707; cv=none; b=TKzmqhKZdrKpEYq3elPxNqfBc3Z5DLLE5SLxCe7er1JJi8VcH16+UHoPcyPkGX1PR5PK4F4Fl+r38a6fJbGAPBOn9c4ze/d3+FliJWDdaffDIQe9hNwnx4LUj1qC0YEULFL3xt8mAzruopO12rD9QVrRMOD9QXIG1L2fQs9p0ZA=
+	t=1777555708; cv=none; b=WuFfv2tQMhhkRhLQ2LNAtpAisJAyJ4YBjWsFK+J17ymnM+DBi9qMaYAMEaPI2BhXGoOXxwFsaQ3qtQNyEbBDTxUajIWQeFHoCxOmIG8+K4L9R1hrERNehOCgPyAjEM3Z9lrLF7LuyZu+tkYulgEic4OQKaxVrlfdSCbVI01+oGs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777555707; c=relaxed/simple;
-	bh=6IRZDJj+r5sp+QVknT1l4Md6WM8TiqCR6LQHlxM2R3w=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=B9mnOctD5f6hsuUaiTwmkkYonhimfPrxEgjrioCdmgfYQdpc3eqyxfS+KHVKYB1UUW8/dBBe+vKTH4vTqafq7bz4HdDfJe77eBwal2dmDSI4K/e6oG74ZbzM1JsB7QAj8hb8r09Axr80Ph4n0jfxNhPnbm/uAJylkGYVpeqQ46A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RKaweblP; arc=none smtp.client-ip=209.85.128.175
+	s=arc-20240116; t=1777555708; c=relaxed/simple;
+	bh=dMTfBCWjd9C0Mkh/fV3Up94vE9QmfdGahx/8pgg2eUk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=CFbk4dnqDcs6xctXBcaih5WZHUkZg8Ut59yGS8OIz+3WjnXUEm2gxCTdAWsRYTjRAwM6VhQNpSnpFq0EXphIhXF8PUYGVk8ODC7lD53OZaVdTiME95lF/0h+Z5R6kc9SQG2E9Nyx+cEiNRaVyT4QWxxeiONPPZdvUvTE4pSUrDU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BMF3hyn2; arc=none smtp.client-ip=209.85.128.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RKaweblP"
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-79885f4a8ffso9807037b3.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 30 Apr 2026 06:28:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BMF3hyn2"
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-7b6ae2ea4a1so8846837b3.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 30 Apr 2026 06:28:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777555705; x=1778160505; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ey+vtW5zGSIcS5Imm4MD7T8reur80NswJgiOxTbyp3o=;
-        b=RKaweblPPPKB2u6vCMtKE8JKAFu7aHW4Mq1o7zNyOD7s9Q5r5LPKYtkz0RWLAv0IF3
-         kQPa330GniI+5e2QfTiBpMk6PMxeLrNfpxHOaqolFKJ0DZe2lW3N7ee7CXaQRwki0tpf
-         XX++sGG3NpG5GDJaRY9WcCzKvM04090lWNyHCB2W9xT934BF/xKBvSWktA3WcZ/26xUn
-         xkfz0cDOqvmCnwF9czR1/IXrnokAkb8mx2kfzxZZLTRAs9boZjtrsSSN28q6vpfmCmz4
-         cZmfjVD7CDyKRD3YWuCHTVxjXcegT8wpHR2DSvt2a00selJilFT0SmwHjdxP+U9qcudM
-         i8Bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777555705; x=1778160505;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1777555707; x=1778160507; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Ey+vtW5zGSIcS5Imm4MD7T8reur80NswJgiOxTbyp3o=;
-        b=s8YuHrJXf6xaOBTzJQ90eINTFwUhWpW1OEILWUQXBoCAmTxiQ8wQmZaxHYDnETIS6+
-         H0F4k13P+FKmLl6LkNkeuUkwnwpCzS5IbrqfTmYDiB5m4q8Emkvhr+hvop5fI2G98Fb6
-         bfA6C6ndPRV/qEaPP1oHvlo3UKn3jXXif/caYO7iT8aBM7rZp654YIst1mkJuMUhyDyu
-         v6QzFFm2vw8PRxdHPPYlZMswcjBe3MLIWpz+O6oWTuRRVM3XezSCOLE9xVg2SNLzcvEd
-         DoGi4mrL2JOSXbdEqrqwL06zi24LozuK6gBejq0E4r1j7JSNIKyvOppYhwwvdRifxbTl
-         Cw+w==
-X-Forwarded-Encrypted: i=1; AFNElJ9lMs6LROUnlT3wUGGnnS/ARbzsk3lMWgqZc4fwBrN7sAoTX2f93p5sFUrxoJZWKZVh6KGtt7HW0L101QZ7O34=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzf6StOk1uEPqi4406KmySjr5pBXJLUrEnoWuJ5ApZyUSmHLjtw
-	knW07VRI5Y02YbOHoUNQnRIwih7cbbogXoPUEzmwCiakUvJIKtVvqfRj
-X-Gm-Gg: AeBDietyB+l/pYZNHqdFYmrwlCwh8o2KN34OiRu5PnZ1SIQePuEVJvXGutVKVxtQ7fS
-	yhVS51fxReIT61wxSwmxuFaK9KC9AI3x+bO2hTjyZx7+3fby2ta1NxeTdBFd8CGVvbxdnGp/p2a
-	LjITGCA6GR3JQJBsWAHrk+JQymcp0NcgL8upL1S1ni9q+hx99Qu1FZfhxkSlNJ5iIFZjSSV1P8K
-	5/NBc7LMszOklgYfWOAj477g4p3e5dkjxTfzLDrIz9HD4Zd3Jd7J3llq/qGREobmP/DkFXEnRSF
-	mfsLhVgZ/ghTyfrtU2op7tEfO1090WkfSNnL8xBKBEVk0TmFJWNkKvtVMlePFPaRwnQW7uZB6CB
-	EhGGX0al9iBu3vox3KLBp+rVB9D1Ri0EVSEgz3m8pCrLNRcDlDTf8Z5IYtvVq1xrbGV7ZGTvvhH
-	GBOm7/n4eF+aTcaLmjxJkNVQzCQizINfcBLoUdEQqNvKSea4vN/YKvcu5YG0uWAQXvc0daaHLKI
-	io3XjIpbdbYQ/PDoH4pxEln8rvSg1o9zOeEbw==
-X-Received: by 2002:a05:690c:d1d:b0:7bd:6043:7eab with SMTP id 00721157ae682-7bd604387ffmr4540877b3.45.1777555705511;
-        Thu, 30 Apr 2026 06:28:25 -0700 (PDT)
+        bh=Q8jma2vIWpRhduHXFrOOjuW5x1NS6leEbUAYpZKRvsM=;
+        b=BMF3hyn2+x/5EkKvXMatF5nSQsIuE7w66UuGjuOHEW03q9znO41yZnJD4YBjhKOHiM
+         vlC3gYmt6NE4jutmLJ17cjJW0C9eCC6Xv79ELoGK0Uckn/2H0jFa8IkYEPFm9Ut9bbHi
+         3j6BeW+H1ZHdXNRaE11Cf5cSEuvozNPFO7jLcfJuL7rgavIbZxN9Ve+1IKhliOGmx6Tn
+         m9Huc4SoWff74fHoGtdY9RdKlOizioAP6MGIBWgW1fXScQI0cFwO4fNpkF85KMNa9kLE
+         SWlxfEpfxT+LwujMZIRjId+y2R0y57cQ5GrBWxapcrOQZj4GgbiN87trFTZlrPHr7g0q
+         lUNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777555707; x=1778160507;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Q8jma2vIWpRhduHXFrOOjuW5x1NS6leEbUAYpZKRvsM=;
+        b=c1tXNFTThBeV8f+FgTD/eX9Zyq11zOC4d+JkGOP0UyUbwohrSo8TbOlTo+2lHEm3gj
+         KoVBlSUH2vus8hcW1HPfRg7PM55Nvi8xusXTQ1Cl/HXbSFh9qKK74gMouyv/2LjFVWYe
+         xoA+IeomfyquaJswGthpbWSh6XkHFjCgNcNxJ74IeknXhPCdqZ8bfitHUIFTcvb8mm3n
+         xJV4/QdL31U6MMPaX9udxZCwznv6ffzFFhtAi6GCZ6w/c65QIBzXsTeM2GfteCNTNHRi
+         eqbFjrxbyivjpAr9ry7fL4Vwhv+WjpkRdD4IGu0locwUbfGaz+hd5QzwCxal0O+LXYUr
+         t5IQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+NvKqTgW9HHVJDOqy2GWDpJVeIVqUwemfUiDXVfPQso2kRKyQDmRy5wlNNuYdI4WJza/GpYzzq/ptotClFNsk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwYObL6vuXy5QzYkGBiMehTfPlBpF9pYH9IzKUth+dA1SH7Nlft
+	syPRJB6t5BAiU4Fh54n57J/0CcX4VuaCQn2Bs1KHQ+CURbHF/Vg0etLA
+X-Gm-Gg: AeBDieum7DfvtZH72Oyi9Y/0YvS1YzmVgFUwrIQ5lXppThnK1KEHpk8WJfbN8tQGY5/
+	spy3EcxxtP4ru0JZj/ptqctG4sN4qs5TDMVBtJI6/nK4bQvog6z4rySkjUpX09zTz5vlxH9nDoJ
+	MuR2C6j60MvbXoSGjTIkp3ocUDHy4k3INg2oUId5xUcfMS8fBZLY1uqvSGPKlPGSy4ZGS1U0EAk
+	4n/kCBzuzkPqHjjDfHxwaflEZiORNsOiG5XPIVTDGFHZ54Scrm8/KBJOTRRFQM8eBLH3MgEusLu
+	pkliLLoBynaPNYXkJWtvFDiFDpJT/c5SYMNn8RVkNwZgfTcopYQshrP7knsZfWZDsXuAGDo5sL2
+	g+m8rlh8hw50aceb4nB6Zuqgi4itL9Bu8q7lhIg3fdF8c+HuLMLMbfKwRPonn2+GKEfr+0D+kC3
+	ZLOzKH+JE2gXkoimrXLcNnZW+0nzHjjG2sUOzMHqyf1Sofd/Tcoe++xWDETafALDJZwV9xJQaQR
+	uYR47IqG2ZJHDaDn/RQboo6mRZ2Pc5Nnm/d0w==
+X-Received: by 2002:a05:690c:c50d:b0:7b2:2382:e309 with SMTP id 00721157ae682-7bd52963da2mr32039197b3.33.1777555706671;
+        Thu, 30 Apr 2026 06:28:26 -0700 (PDT)
 Received: from willemb.c.googlers.com.com (172.235.85.34.bc.googleusercontent.com. [34.85.235.172])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-7bd54b332fcsm8592957b3.16.2026.04.30.06.28.24
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-7bd54b332fcsm8592957b3.16.2026.04.30.06.28.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Apr 2026 06:28:24 -0700 (PDT)
+        Thu, 30 Apr 2026 06:28:25 -0700 (PDT)
 From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
 To: netdev@vger.kernel.org
 Cc: davem@davemloft.net,
@@ -67,10 +69,12 @@ Cc: davem@davemloft.net,
 	linux-kselftest@vger.kernel.org,
 	shuah@kernel.org,
 	Willem de Bruijn <willemb@google.com>
-Subject: [PATCH net-next v6 0/3] selftests: drv-net: convert so_txtime to drv-net
-Date: Thu, 30 Apr 2026 09:28:03 -0400
-Message-ID: <20260430132820.1944517-1-willemdebruijn.kernel@gmail.com>
+Subject: [PATCH net-next v6 1/3] selftests: net: py: support cmd verifying expected failure
+Date: Thu, 30 Apr 2026 09:28:04 -0400
+Message-ID: <20260430132820.1944517-2-willemdebruijn.kernel@gmail.com>
 X-Mailer: git-send-email 2.54.0.545.g6539524ca2-goog
+In-Reply-To: <20260430132820.1944517-1-willemdebruijn.kernel@gmail.com>
+References: <20260430132820.1944517-1-willemdebruijn.kernel@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -81,37 +85,51 @@ Content-Transfer-Encoding: 8bit
 
 From: Willem de Bruijn <willemb@google.com>
 
-In preparation for extending to pacing hardware offload, convert the
-so_txtime.sh test to a drv-net test that can be run against netdevsim
-and real hardware.
+Support negative tests, where cmd raises an exception if the command
+succeeded.
 
-Two preparatory patches
-1. support negative tests, where tests are expected to fail
-2. add a tc helper 
+Existing fail values are
 
-See individual patches for details.
+- True:            Pass if returncode == 0, raise Exception otherwise
+- False:           Pass unconditionally
+- None:            True iff not terminated explicitly
 
-Willem de Bruijn (3):
-  selftests: net: py: support cmd verifying expected failure
-  selftests: net: py: add tc utility
-  selftests: drv-net: convert so_txtime to drv-net
+Introduce a variant of True that inverses the condition:
 
- .../testing/selftests/drivers/net/.gitignore  |   1 +
- tools/testing/selftests/drivers/net/Makefile  |   2 +
- tools/testing/selftests/drivers/net/config    |   2 +
- .../selftests/drivers/net/lib/py/__init__.py  |   5 +-
- .../selftests/{ => drivers}/net/so_txtime.c   |  25 +++-
- .../selftests/drivers/net/so_txtime.py        |  95 +++++++++++++++
- tools/testing/selftests/net/.gitignore        |   1 -
- tools/testing/selftests/net/Makefile          |   2 -
- .../testing/selftests/net/lib/py/__init__.py  |   4 +-
- tools/testing/selftests/net/lib/py/utils.py   |  18 ++-
- tools/testing/selftests/net/so_txtime.sh      | 110 ------------------
- 11 files changed, 141 insertions(+), 124 deletions(-)
- rename tools/testing/selftests/{ => drivers}/net/so_txtime.c (96%)
- create mode 100755 tools/testing/selftests/drivers/net/so_txtime.py
- delete mode 100755 tools/testing/selftests/net/so_txtime.sh
+- 'verify_failed': Pass if returncode != 0, raise Exception otherwise
 
+We cannot reuse False for this, because existing tests rely on current
+behavior to pass unconditionally.
+
+Only suppress regular test failure. Python subprocess may set a
+negative return code on process crash or timeout. Those are not
+anticipated failures.
+
+Signed-off-by: Willem de Bruijn <willemb@google.com>
+---
+ tools/testing/selftests/net/lib/py/utils.py | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/net/lib/py/utils.py b/tools/testing/selftests/net/lib/py/utils.py
+index 6c44a3d2bbf7..ef31c0ba47fc 100644
+--- a/tools/testing/selftests/net/lib/py/utils.py
++++ b/tools/testing/selftests/net/lib/py/utils.py
+@@ -111,10 +111,14 @@ class cmd:
+ 
+         stdout, stderr = self._process_terminate(terminate=terminate,
+                                                  timeout=timeout)
+-        if self.proc.returncode != 0 and fail:
++
++        if (self.proc.returncode != 0 and fail and
++            (self.proc.returncode < 0 or fail != 'verify_failed')):
+             if len(stderr) > 0 and stderr[-1] == "\n":
+                 stderr = stderr[:-1]
+             raise CmdExitFailure("Command failed", self)
++        elif self.proc.returncode == 0 and fail == 'verify_failed':
++            raise CmdExitFailure("Command succeeded while should fail", self)
+ 
+     def __repr__(self):
+         def str_fmt(name, s):
 -- 
 2.54.0.545.g6539524ca2-goog
 
