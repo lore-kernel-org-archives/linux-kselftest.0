@@ -1,132 +1,105 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+Received: from mail-qv1-f73.google.com (mail-qv1-f73.google.com [209.85.219.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8DE52EA173
-	for <linux-kselftest@vger.kernel.org>; Thu, 30 Apr 2026 19:36:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79B283750D5
+	for <linux-kselftest@vger.kernel.org>; Thu, 30 Apr 2026 20:09:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777577816; cv=none; b=CWHKmvemviRp9EzLzJRokBZQ8tNYG/tdjh/U+d53VBjnNLPqCM8Lq+OEKszpMmLnMxoxZ95DgatPKHeTNsojpykZNse/EwQKQ9XX1TaZ6YtEupv751dGS2A5wt6R8yjd+oPJCVN2xXd674R6EUOx4hgI9RMQWfbR8BOikF+ckbY=
+	t=1777579766; cv=none; b=cmv5EyhnZkuxCOpQh5cN9OyFC+l2gwyoA3w8RT0M7bShXBJNy2MxiDIvhpL0TjVl9pe9Uv1KlzfEHuOz/KzQJFqfZGuqIvB1fF6d5tK5BLfmW72tOxyOfB/hivi+9WWZLJWuap7/YvnMHqlnUUVDCrLauVURcIsbWrzyj64xV7U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777577816; c=relaxed/simple;
-	bh=kUaXEcOy3Fb5on2h8tdsrwmdqxEnolVL9+3Df3P/8YY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X5NSOViEneSJN74b6SjGG1QECs4sw2BLMRde5rqPeYVMpVrPWJhy/bXE3kJB3OSbRb2Bf5sorGrJ6YuTJI3NvNOF7bDjrYSL++r2wiR+LYMD4js4OHVepQx9eB4r/jg4Z4MMoLdoAhPkkddIfvfEAiFDswGtG/TcvY2PtOHQKSM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b=aEfLqINT; arc=none smtp.client-ip=209.85.216.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
+	s=arc-20240116; t=1777579766; c=relaxed/simple;
+	bh=GwvBeaYNVi9Vk7p6KWVQG2M66/GVwO6Wi01R9iGNdfs=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=nBvPDhsrsqopD76hxPr3BL9phADtFwK23W6Aah7F1nBbNBrQmmN55bsHmX9Gxti44oa7/R2hfqncD5achgnEiPk8MlGezSsqzbN1fpDZIlSk3UtQw3FgQ1m3GVkSE8yFoLRs5TXqiM9bZGOGeAlwa2igbx3ZDsCQe/c5mYNmMJQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--sharmasagarika.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qOo8uw9S; arc=none smtp.client-ip=209.85.219.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--sharmasagarika.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b="aEfLqINT"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-35da9c0c007so1388287a91.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 30 Apr 2026 12:36:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qOo8uw9S"
+Received: by mail-qv1-f73.google.com with SMTP id 6a1803df08f44-8b02af4345fso47146366d6.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 30 Apr 2026 13:09:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dama-to.20251104.gappssmtp.com; s=20251104; t=1777577813; x=1778182613; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tsb2o8PCwX8XIiel3xz6873qrJeZ59wF+fwyebIss0E=;
-        b=aEfLqINTrzKDvsoK+UXuuZ4dTYv3bW7yqwtJKonmGlZ1Ak0m2JBGZtFEUpfODB2j9C
-         0obN8mKY82rUnXTN11w0FYJt6kyO5vQ7Co7dVXkudEQ8BpgqWxKOcZpGjt8QxPEV3SI6
-         UPLXVsHvld62tITXxmTSEdYRqxeIa++WfpMnn7hjHOgrqtxwZvk9kpnUfx0pM7inl0Yg
-         pMG3NGmy0SGbBY3b/EcfOMzYUIDiTVb6gRtt/1R8ywo4bTOiea5HEevbMcR1tvLgYMWK
-         NSaQQX96UIgUcuhZ0zisXFtb4d8z4v7iIo8TufIIqHqgfE0daVACPkfoNCE6HWcd16mn
-         Ot3A==
+        d=google.com; s=20251104; t=1777579762; x=1778184562; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=U3JbNeHZs2nqmGfKRlzFopk+R0yDvr5OmpdjEZK+dsE=;
+        b=qOo8uw9Stc68ewtzyk2mql2j8jYbLe/J4SjxhggblmVH+X+HSIgd3Sggiv3Utks3Ku
+         /ILc07kVmAULQUlYDQn9cn3pVBR3lZ+yWic53+IshhY+g7xOiotKcW27k0G2u2btlV7G
+         Hi7U/4kvhlQEWLu2cw9EfRkCgn/pNO4y4Y9uurKFBCZftUYCgL7Gp+1kDhWZE8zDRprD
+         OOe/fxmXZPUIov/FvjZBlozyK3Jhwm/e8NYCxZEfV1Yev2hNgkO/4x6JrHEeNVCdUU4t
+         ouSVpq+xG9SfPqBvtEndWssVh3i1I51Zb+gpY05igbftG8l8PPfTxk6tuv+jykqV+Xm5
+         D+YQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777577813; x=1778182613;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tsb2o8PCwX8XIiel3xz6873qrJeZ59wF+fwyebIss0E=;
-        b=ddAFS1zKaBhpA7yBF2g8991LqJSo0UjnxqbY8BQq8ifhXzRfQq2W9jXhJmM3Z6WOyL
-         GN6Obyu2/XCY5iTKeCcwhQYjdi0pFPiYBtzHUDI0bBzgQMvZC6Cc/+vJV12kV1Bdn2G9
-         qzf8Fq/k4fBbNestPCL4iG5pOJQ1QcJHt1hO9YiaiybY3a8Hm5enBqGNgOyqm+wT/Ufc
-         6EvvUUw+iDNjg2UdpTbitCoPFJcku6uioAHciHm6QAwXhqFnaEhhaWLhKpzniZdnsqSV
-         w8RhCVSfzbeSGZrkabwSLnBahMrNh080EwWktSl/Ibnn28IB3o3t7WkL30jMnGhS+OxZ
-         vLdw==
-X-Forwarded-Encrypted: i=1; AFNElJ/mfGGy4ZpWAX2m5q0DSGOd43RotnFi+ofGzHg+eOu6H4vUsQi71jqgjnmkkuNWcia017oEjBHxiJBuSeZcM5U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyeAyVZFGwlVuBZ+SIiuRzDa5VK2dfXirT7jF0ECjwppatxPPH1
-	UH24glu6IcwBLgNOzsPn5p30JWNDmkMlpa1bneJc+SJ/25DYpN1rEliu98v7ZRqV0J8=
-X-Gm-Gg: AeBDievgxQQtzmnk9j7IRVmLwqRl6dQ/b+dS9uv0EjnQR/ZNesCpgi4nrH6CglXD4d8
-	VZwo1qGRcj83eNchuLl15K79+r2tYZNPWngocfzyjtRLSZEelmQCvCTFVDr8BqnQ8QH/Gz8qmeT
-	p/+cT0M2wE1WgBNVWlinXK6ycYThGUUJtyFVwq4zoKDT2Buzj3b7uItI3AmwKcL1fHXzjGKVN3G
-	FnNJKkkNUKatKjjGNd7JmiapaTcGKAI4e8/Fl3oXUU3WDiCIGKvnqg9DoMYqbSO9FPY/RS5//yY
-	QZf6iVIyXxdqyYVGT79GDyWtyYiAPL83OzdVLQzbUaupUyu0ywqzjX4QGn8BVzcZcyp48O1eakU
-	BznmqYlODLZWXNa0+C3VSUAU4KHdZNHd86uA3gyXVqPCN/zI3xGWdTsliBkj41ZiytX0++bW3qV
-	/8rEIr4FP7JtuAfWA=
-X-Received: by 2002:a17:90b:2e42:b0:364:78a5:8d40 with SMTP id 98e67ed59e1d1-364c30bb1bdmr4231151a91.20.1777577813179;
-        Thu, 30 Apr 2026 12:36:53 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:4e::])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-364ebec73aasm221459a91.2.2026.04.30.12.36.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Apr 2026 12:36:52 -0700 (PDT)
-Date: Thu, 30 Apr 2026 12:36:51 -0700
-From: Joe Damato <joe@dama.to>
-To: Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>
-Cc: "David S . Miller" <davem@davemloft.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Dimitri Daskalakis <daskald@meta.com>, David Wei <dw@davidwei.uk>,
-	Dragos Tatulea <dtatulea@nvidia.com>,
-	Vishwanath Seshagiri <vishs@fb.com>,
-	Pavel Begunkov <asml.silence@gmail.com>,
-	Simon Horman <horms@kernel.org>,
-	Pavan Chebbi <pavan.chebbi@broadcom.com>,
-	Michael Chan <michael.chan@broadcom.com>,
-	Gal Pressman <gal@nvidia.com>, linux-kselftest@vger.kernel.org,
-	netdev@vger.kernel.org
-Subject: Re: [PATCH net-next] selftests: drv-net: Enable ntuple-filters if
- supported
-Message-ID: <afOvUznmpTEPBJrS@devvm20253.cco0.facebook.com>
-Mail-Followup-To: Joe Damato <joe@dama.to>,
-	Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Dimitri Daskalakis <daskald@meta.com>, David Wei <dw@davidwei.uk>,
-	Dragos Tatulea <dtatulea@nvidia.com>,
-	Vishwanath Seshagiri <vishs@fb.com>,
-	Pavel Begunkov <asml.silence@gmail.com>,
-	Simon Horman <horms@kernel.org>,
-	Pavan Chebbi <pavan.chebbi@broadcom.com>,
-	Michael Chan <michael.chan@broadcom.com>,
-	Gal Pressman <gal@nvidia.com>, linux-kselftest@vger.kernel.org,
-	netdev@vger.kernel.org
-References: <20260430165217.3700469-1-dimitri.daskalakis1@gmail.com>
+        d=1e100.net; s=20251104; t=1777579762; x=1778184562;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=U3JbNeHZs2nqmGfKRlzFopk+R0yDvr5OmpdjEZK+dsE=;
+        b=NPGz13P/DfHGxdA5XiXSYfRC33R2JTcRdshqyonRmJlDMF2v3aF3hm7qitrxZg2E/7
+         qFxjDGdrFy7M97/F1746du2rPLTY4C0NkDSKHOjjuABKAl4HHNW5tigFjBRJ9fnwdIQj
+         0DCe3iP91TNSWJaDxF/+tRl1j4pMAReyjuzEnT4/WPAb8fxdSi0AZAEk/Nsa7VV98LgV
+         QG3lr2yge2lNNjhsvZz2gsVnx5y+U9lN2I+1deQejB6BCtW4q+j8lkwp5HVrjrNOIb3T
+         tOs+0IsRj6OSNhjUI0VvHRrU7O+ZnWlrSQeABkKoQcgOfV0HHX5/sSjaeBbTLYwcmywg
+         X37Q==
+X-Forwarded-Encrypted: i=1; AFNElJ895efoCLH471V3HF4RZqQGuXHumUIlf7LYvX5JF4dXrd1yPwJkYowxjXRQvIa9rPNlFfSoIhFYtTx0zwOrM8I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyZ8ndgq4gMgmQQWlfmUrM0eEiYGREd3ZFSCTREisiS783FRF8P
+	v0uw2Sg8TNfjNIqNhfN76y6MbCQqVME1G8+0ihVr8spSlIDsLU4ZqEzJTSFKBn9rgMizYB8SroF
+	n7YLoJKQXU8CuyM3oVJGM0veV4RK8XM77r3KyJQ==
+X-Received: from qvbnw1.prod.google.com ([2002:a05:6214:3a01:b0:8a5:c5d:e50])
+ (user=sharmasagarika job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6214:e62:b0:8b0:2f3a:964b with SMTP id 6a1803df08f44-8b3fe70d01amr67305896d6.17.1777579762353;
+ Thu, 30 Apr 2026 13:09:22 -0700 (PDT)
+Date: Thu, 30 Apr 2026 20:08:59 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260430165217.3700469-1-dimitri.daskalakis1@gmail.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.54.0.545.g6539524ca2-goog
+Message-ID: <20260430200909.527827-1-sharmasagarika@google.com>
+Subject: [PATCH net v2 0/2] ipv6: fix ECMP route failover on carrier loss
+From: Sagarika Sharma <sharmasagarika@google.com>
+To: "David S . Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>, 
+	Kuniyuki Iwashima <kuniyu@google.com>, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Sagarika Sharma <sharmasagarika@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 30, 2026 at 09:52:17AM -0700, Dimitri Daskalakis wrote:
-> From: Dimitri Daskalakis <daskald@meta.com>
-> 
-> Certain devices which support ntuple-filters do not enable the feature
-> by default. The existing tests will skip (if they check for the feature),
-> or fail if they blindly attempt to install rules. Therefore, attempt to turn
-> on ntuple-filters if the device supports them.
-> 
-> Signed-off-by: Dimitri Daskalakis <daskald@meta.com>
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> ---
->  tools/testing/selftests/drivers/net/gro.py         | 10 ++++++++++
->  tools/testing/selftests/drivers/net/hw/gro_hw.py   | 10 ++++++++++
->  tools/testing/selftests/drivers/net/hw/iou-zcrx.py | 12 ++++++++++++
->  tools/testing/selftests/drivers/net/hw/ntuple.py   |  5 ++++-
->  tools/testing/selftests/drivers/net/hw/rss_ctx.py  |  7 ++++---
->  5 files changed, 40 insertions(+), 4 deletions(-)
+This patchset resolves an issue where established IPv6 connections are
+unable to transition to alternative ECMP nexthops upon carrier loss.
 
-I suppose a future cleanup might be able to add a generic helper for this for
-all of the ethtool settings (tx-udp-segmentation, ntuple, etc) to
-EthtoolFamily or something?
+Unlike IPv4, the IPv6 routing subsystem does not actively invalidate
+cached destinations during a NETDEV_CHANGE event. Sockets persist
+with dead routes, leading to stalled traffic or connection drops.
 
-That said:
+This series introduces a fix to trigger route invalidation by
+updating the route serial number on link carrier loss and provides
+a corresponding selftest to validate the failover behavior for IPv4
+and IPv6.
 
-Reviewed-by: Joe Damato <joe@dama.to>
+---
+v2:
+- Changes to selftest addressing Ido=E2=80=99s and sashiko=E2=80=99s sugges=
+tions:
+  require_command for socat and tcpdump, EXIT trap, lower threshold
+  for test success, and fix exit code.
+v1: https://lore.kernel.org/netdev/20260427224243.3499162-1-sharmasagarika@=
+google.com/
+
+Kuniyuki Iwashima (1):
+  selftest: net: Add test for TCP flow failover with ECMP routes.
+
+Sagarika Sharma (1):
+  ipv6: update route serial number on NETDEV_CHANGE
+
+ net/ipv6/route.c                              |   1 +
+ tools/testing/selftests/net/Makefile          |   1 +
+ .../selftests/net/tcp_ecmp_failover.sh        | 216 ++++++++++++++++++
+ 3 files changed, 218 insertions(+)
+ create mode 100755 tools/testing/selftests/net/tcp_ecmp_failover.sh
+
+--=20
+2.54.0.545.g6539524ca2-goog
+
