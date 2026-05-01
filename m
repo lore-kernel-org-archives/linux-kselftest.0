@@ -1,85 +1,100 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65FEF264A9D;
-	Fri,  1 May 2026 01:10:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F00A2D77E9;
+	Fri,  1 May 2026 01:20:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777597855; cv=none; b=E66cnE5q01t8ABQi/QUCaOcmdQ+N6AX7a3rKVh+l+OFFGtnJRXyy0iS5fop/Ldv3953QbacLS8tdatIcmJmJo4omE1gVKMHRmdkMhKiH4xac8QBR29WDcaP0kR8H3ScXWTp7geeQ6BWSCZ8M+UcmUppG6o1MuQOiNSXndG0fZDY=
+	t=1777598406; cv=none; b=e7Cz2qTX8zs3P5GKsvUZmZApSHe8CVlgbukREi6IdnXhCL8nu83bhul/Uw1QSEIPlMtTWqy7zR0NjIyra9+YkZIp4KOWqyww2bwMNa1Lm4JDkclD1uAih5xm+AuYWWPfyTZXQzS6iHkRV/vhArqMaKqynUPpYsAH6I9rvF2nDqI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777597855; c=relaxed/simple;
-	bh=vmLTIQiX9TJRhVtASF0t/qJzyLgi0syXKAtXCMwtE7k=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=lZclgeU8ONS3Jyw36Nc7PRp8vpxEeXjwKhqd8tyVgrgkNhDUsooQjM5zAPB+l9dLjckV4EQwTg78flW9FFF0hU1bYPyYXS0idyyqtpLbEt2h2cGV/0F32/nGHLxSxkReqZr6i4Z233RMu5txRcUWOWBbK7X46VViIxJcjPChBhs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cgsNhjTt; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777598406; c=relaxed/simple;
+	bh=ivC6NaGevzpeEC2uJ0LjCOFMFy1P1XbOvXJqLDETukY=;
+	h=Subject:From:To:Cc:Date:Message-ID:MIME-Version:Content-Type; b=JUQA6lQSAk2jYCvI+CVQX1Yv0Ajg2KZzUys+Gqn7A0Y2LLPt/tabveSFDNNvtrnkMWc2h3mNj0RqtAJydqDWLXz8m8kTGX2P2MNTu3DwOGtznejZVvFdlyUj8SeyUYMBYHCR73OUw0Lf12K5FWbSLLaX39PQTW6GoxDHwSv2A9k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=cVJ5Tr07; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cgsNhjTt"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 133CBC2BCB3;
-	Fri,  1 May 2026 01:10:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777597855;
-	bh=vmLTIQiX9TJRhVtASF0t/qJzyLgi0syXKAtXCMwtE7k=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=cgsNhjTtjT7SdWoxptk9DSUqZI6b3r98/5apYKxmFxlBpxjcUhAZAeb6yIAWzB9wS
-	 bj68o8T9G7BptSr4ekXnfk4ER8eceWmWJEIHU11J8aXBHk5fO7th8H7KDqOfhI1Lf2
-	 jZ7OLK992xV2cHNCdpO+zv5zlWahkKrUbhsuVXjsSNF/f5N4YfeOVLZqAl+tE/e39c
-	 V8Ynx3Zw6JFzgpRQLjq0nAbwWbISYWVCk5EcCZ0KxkpSWHzbv7ZXNcyiDd+279LEXE
-	 2sSmyOiGUEoNnptjgFYtDT5XIGJIEt0TV6/bbA+UgQu5I1OffWbZI5+ezKikPTBz4+
-	 uys4RsdUu1dcg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 6B9EF380CEC4;
-	Fri,  1 May 2026 01:10:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="cVJ5Tr07"
+Received: from skinsburskii-cloud-desktop.internal.cloudapp.net (unknown [4.155.116.186])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 2870D20B7165;
+	Thu, 30 Apr 2026 18:20:03 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 2870D20B7165
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1777598403;
+	bh=5o3nM5EVlRJoNz5ukY0K6ieimgMHdk0LSx+1vRWfGac=;
+	h=Subject:From:To:Cc:Date:From;
+	b=cVJ5Tr07tZ/FaAC6+vEXHo3ppds1Wokaw1f/8dI9rfLxXXR9l7Qtymk/6nQ2S0sI3
+	 bi4Tbzn71EGUOiBWgEC1Hfukic5GOgS9N7uDUMAp9FV3ptkAeYqSh9Psx1dy5lO747
+	 0hyEkPr02WK+j3tCMyeUe4Aehe6e2HCU0Hp8RxnQ=
+Subject: [PATCH 0/3] mm/hmm: Add mmap lock-drop support for userfaultfd-backed
+ mappings
+From: Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
+To: kys@microsoft.com, Liam.Howlett@oracle.com, akpm@linux-foundation.org,
+ akpm@linux-foundation.org, david@kernel.org, decui@microsoft.com,
+ haiyangz@microsoft.com, jgg@ziepe.ca, corbet@lwn.net, leon@kernel.org,
+ longli@microsoft.com, ljs@kernel.org, mhocko@suse.com, rppt@kernel.org,
+ shuah@kernel.org, skhan@linuxfoundation.org, surenb@google.com,
+ vbabka@kernel.org, wei.liu@kernel.org
+Cc: linux-doc@vger.kernel.org, linux-hyperv@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org
+Date: Fri, 01 May 2026 01:20:02 +0000
+Message-ID: 
+ <177759835313.221039.2807391868456411507.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
+User-Agent: StGit/0.19
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 0/2] bridge: Do not suppress ARP probes and DAD
- NS
- unconditionally
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177759780930.3275259.156910410362336088.git-patchwork-notify@kernel.org>
-Date: Fri, 01 May 2026 01:10:09 +0000
-References: <20260429062405.1386417-1-danieller@nvidia.com>
-In-Reply-To: <20260429062405.1386417-1-danieller@nvidia.com>
-To: Danielle Ratson <danieller@nvidia.com>
-Cc: netdev@vger.kernel.org, razor@blackwall.org, idosch@nvidia.com,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- horms@kernel.org, shuah@kernel.org, bridge@lists.linux.dev,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 
-Hello:
+This series extends the HMM framework to support userfaultfd-backed memory
+by allowing the mmap read lock to be dropped during hmm_range_fault().
 
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+Some page fault handlers — most notably userfaultfd — require the mmap lock
+to be released so that userspace can resolve the fault. The current HMM
+interface never sets FAULT_FLAG_ALLOW_RETRY, making it impossible to fault
+in pages from userfaultfd-registered regions.
 
-On Wed, 29 Apr 2026 09:24:03 +0300 you wrote:
-> When using bridge neighbor suppression in EVPN deployments, Duplicate
-> Address Detection (DAD) is currently broken for both IPv4 (ARP probes)
-> and IPv6 (DAD Neighbor Solicitations). This prevents proper address
-> conflict detection across the VXLAN fabric.
-> 
-> The neighbor suppression feature allows the bridge to reply to ARP/NS
-> messages on behalf of remote hosts when FDB and neighbor entries exist,
-> suppressing unnecessary flooding over the VXLAN overlay. However, the
-> current implementation unconditionally suppresses ARP probes and DAD NS,
-> which breaks DAD.
-> 
-> [...]
+This series follows the established int *locked pattern from
+get_user_pages_remote() in mm/gup.c. A new entry point,
+hmm_range_fault_unlockable(), accepts an int *locked parameter. When the
+mmap lock is dropped during fault resolution (VM_FAULT_RETRY or
+VM_FAULT_COMPLETED), the function returns 0 with *locked = 0, signalling
+the caller to restart its walk. The existing hmm_range_fault() is
+refactored into a thin wrapper that passes NULL, preserving current
+behavior for all existing callers.
 
-Here is the summary with links:
-  - [net-next,1/2] bridge: Do not suppress ARP probes and DAD NS unconditionally
-    https://git.kernel.org/netdev/net-next/c/fee1fc1d5a54
-  - [net-next,2/2] selftests: net: Add tests for ARP probe and DAD NS handling
-    https://git.kernel.org/netdev/net-next/c/a3f88d89f698
+Faulting hugetlb pages on the unlockable path is not supported because
+walk_hugetlb_range() unconditionally holds and releases
+hugetlb_vma_lock_read across the callback; if the mmap lock is dropped
+inside the callback, the VMA may be freed before the walk framework's
+unlock. Hugetlb pages already present in page tables are handled normally.
+Possible approaches to lift this limitation are documented in
+Documentation/mm/hmm.rst.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Patch 1 adds hmm_range_fault_unlockable() to the HMM core, refactors
+hmm_range_fault() into a wrapper, and updates Documentation/mm/hmm.rst.
+Patch 2 converts the mshv driver to use the new API, enabling
+userfaultfd-backed guest memory regions. Patch 3 adds a selftest exercising
+the unlockable path with a userfaultfd handler that fills pages via
+UFFDIO_COPY.
 
+---
+
+Stanislav Kinsburskii (3):
+      mm/hmm: Add hmm_range_fault_unlockable() for mmap lock-drop support
+      mshv: Use hmm_range_fault_unlockable() for userfaultfd support
+      selftests/mm: Add userfaultfd test for HMM unlockable path
+
+
+ Documentation/mm/hmm.rst               |   89 +++++++++++++++++++++
+ drivers/hv/mshv_regions.c              |  127 +++++++++++++++++++++----------
+ include/linux/hmm.h                    |    1 
+ lib/test_hmm.c                         |  122 +++++++++++++++++++++++++++++
+ lib/test_hmm_uapi.h                    |    1 
+ mm/hmm.c                               |   91 ++++++++++++++++++++--
+ tools/testing/selftests/mm/hmm-tests.c |  133 ++++++++++++++++++++++++++++++++
+ 7 files changed, 515 insertions(+), 49 deletions(-)
 
