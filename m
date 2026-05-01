@@ -1,75 +1,100 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2D263DA7EC;
-	Fri,  1 May 2026 16:48:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE0BF3EF0DE
+	for <linux-kselftest@vger.kernel.org>; Fri,  1 May 2026 17:01:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777654125; cv=none; b=C/Fs6VbG6zr/gK9b7+FMDLg42e703RVPxZL+llkJQ8vr8NOTrFMjf9MKgPTYvU4XNxHZ8cu3P12vOROlSmp69ulYVzQxwfofTUYlvAh1XPkw2MOiIak4rDqZmItBB4cF6F8gCyimJEVqEzMvWSrOGumBzIzSLs42fVsTckWlFHE=
+	t=1777654904; cv=none; b=HEJsbkGuZ+513mz/GGEbqn7aNQRos46TIjqn/wzsAYZ+LUBQfefbP53Q57so1U0+hOOy2QwQYiDTg/uikTjDGmXIZt58lcej498oLB7p23+hYjJlT9Ehjbtm2KecNrL5YKWS3vgRomuUyo6B2ntc/nS/NZjn88HaFPvShw5TbLI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777654125; c=relaxed/simple;
-	bh=0mhe5VO6bibA7BOMRyysUlyXRYgOpwf38PrIb8CTsm0=;
+	s=arc-20240116; t=1777654904; c=relaxed/simple;
+	bh=064idbmQIFqz04QrVYQYZzDXbFXPCliJXULxXIEQVro=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ut1YA7kI6HdYf1f7cYzHPuckz1vgOFV7G+veyw97qHsKyRGNmN/vW2uy9YXfTAHyDjlv5l2uLEBFplV/jf2HyfS+lAwo6Bdw41HdL7gYQ7/gjXrj82MPAPm1PpVrkDdkRXi9l8U5qn/yTLCfWDdTp6gtZNj4iFPTXecLPpiP+bg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=cOyG47tY; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	 MIME-Version; b=GWlBiIflk+v7YBycTzLehMk/+VNx32ZwBbqiE3vvD12pS9VyHCaE2iH1ylo/iBwGGaigqsuoqg/syoQbFlbPlSqW9nDiQxjoqOY3p8G/7IQsvgUa5PICUDwkyrh8sA1kSGSj7rEnc2dGYIzF3nWporxugfJkc7udMfWWooIH5MA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KzzsJh/s; arc=none smtp.client-ip=209.85.208.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="cOyG47tY"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7240F176A;
-	Fri,  1 May 2026 09:48:31 -0700 (PDT)
-Received: from gaia.lan (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5F49F3FB3E;
-	Fri,  1 May 2026 09:48:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1777654116; bh=0mhe5VO6bibA7BOMRyysUlyXRYgOpwf38PrIb8CTsm0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=cOyG47tYx2GM+V815gcxteslVYvLCr/JT7YyNNg9OXp8pk8PfZ6816/nXtBk6i61O
-	 03DNgK6VCRnQhXeO3jpN99bDGHeGw6krvxSPMbHG6doMc9rYTk7R2nXDCdf1tRNpvI
-	 3w+rwseFvJS7G2ypiaSJaivkB1YzcHNpkHP41vO8=
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: linux-arm-kernel@lists.infradead.org,
-	Kevin Brodsky <kevin.brodsky@arm.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	"David Hildenbrand (Arm)" <david@kernel.org>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Mark Brown <broonie@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Will Deacon <will@kernel.org>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KzzsJh/s"
+Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-38e68e4389cso22436061fa.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 01 May 2026 10:01:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1777654900; x=1778259700; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=064idbmQIFqz04QrVYQYZzDXbFXPCliJXULxXIEQVro=;
+        b=KzzsJh/scavAcz1GG6L1MY9xnAutWZAsGaBCQloYXkgMw600fcaUVbhU+4wTFX2r1e
+         5Li2vyl+yW9/VKqyjnbNES6diU55RKPG8xta7nUdQFfBTBLrWN2/yY/lcMob0OYfkzO1
+         bAqdWcn6XQd8zzdgQ4sEwulTrrZ1de0Ro2uR4qNUwQvEQRVG9I5HHolrVyfFFQ5/ISov
+         yXBNvfH9y3Td26QW3Zs/CR/qATpl8FSWUhh4jp8c7rMH0wYJNr9+FaAeax/85OGTUaYx
+         e6fDXiDq+/PZ+/dsSaOPtzCBrWEyASXwNec6y2GkN63e9XZy+khlByV3oJx5UDl/48EH
+         pesA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777654900; x=1778259700;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=064idbmQIFqz04QrVYQYZzDXbFXPCliJXULxXIEQVro=;
+        b=rPxqQ6H2Frv8eW5VyIReNssrqeMWL+keDOadMW7d8JtpQMm80Dp+oGNV2g3pH3e3iv
+         T35tcdUlcj6kVQ7JN+wtt8lLTP1i10kl/9UWHWgIoE/2MFM31nG57b0oYJa5JCi6bHMm
+         c0B1/yqNfKD7fMP3FKEYCGYmc3XBQdOyYFLdXTi9MAnmLeajJcpx0hJErlLFdYvsdeOz
+         QHeOkgRgvpc71QC8q3HZpbpk4xeqj6DJDjzoJ0qW8djRP+J8nVz/HH0SL+ZqdJQBVqUG
+         rnRbiagcV+FKrLdZCAKsFHh2OeHWdMDjqeWf/HWIjT/Gx4Mj3iYz4UiagdQTS0fXUK4Z
+         QaIw==
+X-Forwarded-Encrypted: i=1; AFNElJ8Tlbw/zmTyE/NaKtRLAesEb8MZxPIH0z8xR6WW9iF6I9SZBvTTtr0k3aAY76WhKdbqx42WizcFgJOtRAC+hjE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxAqnuIKO2Na/vO1mKfqgxWpF4QDtw4DOFoZ57QZQO2BFm0SAYh
+	Gx/NvllebTSvBJjZGPNOHjrf+3G9aqP9D+c/IDpnTdCm/jeHfrQqLQZA
+X-Gm-Gg: AeBDiesp8iXXMfIPHqK47stAAlHM1HA6L/BBDn1rf2rFCshBdZRdtKKmZPARshTNA2S
+	wdzcNpg+Qnm92AJET4Qj901xRcetIaLHhdhqCotESF2xyG8+z3XZMBW42hdnOs7JTJTP8ISGUBe
+	Yo9Hlfjgkvl9S7Es/iJN4J7aUKsWAS5gJdQHXeWvlnasPntDyaa5Y00gmSc/xqgQ1Xe0S6uwH+W
+	9GaskvcgMK0VE7ukR7N55njPtFBdiErOkkNtd4MmqhsjDPi3oxxShJf+NUWoK+7XIC5GFgeF7RN
+	/Vbg+JMhkMVE9yrw1UL2+6hquU7yXjxfp9blR0X1/zlf0VRuhz8Qxv3og5qgwrk3+yB7dz4Z6jS
+	1UziMctvmigWf48yNYeZpA8qdSlDblNIkhiUFQPZgE/GoJMs55guu2HmccXYkFi432RMg0VTpMv
+	5+EOWna1ktKZDxyBQFVdQySxoA7BZAFf3Ll1IRF3IxKd/wXy1mTwNTwI9oU8hUEGgv7TZHa28=
+X-Received: by 2002:a05:6512:3d94:b0:5a4:1904:711c with SMTP id 2adb3069b0e04-5a8522e3765mr3276021e87.29.1777654899294;
+        Fri, 01 May 2026 10:01:39 -0700 (PDT)
+Received: from va-HP-Pavilion-Desktop-595-p0xxx.mshome.net ([193.0.150.248])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5a85c2330easm632749e87.37.2026.05.01.10.01.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 May 2026 10:01:38 -0700 (PDT)
+From: Vastargazing <vebohr@gmail.com>
+To: matttbe@kernel.org
+Cc: martineau@kernel.org,
+	mptcp@lists.linux.dev,
+	netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: (subset) [PATCH v2 0/5] POE sigreturn fix and extra tests
-Date: Fri,  1 May 2026 17:48:24 +0100
-Message-ID: <177765401795.1247142.18437523935136255541.b4-ty@arm.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260427-poe_signal-v2-0-2bd9d6f16ab4@arm.com>
-References: <20260427-poe_signal-v2-0-2bd9d6f16ab4@arm.com>
+	shuah@kernel.org,
+	stable@vger.kernel.org,
+	fw@strlen.de
+Subject: Re: [PATCH] selftests: mptcp: add test for IPv6 subflow SLAB placement
+Date: Fri,  1 May 2026 20:01:36 +0300
+Message-ID: <20260501-reply-mptcp-v6-initcall@vebohr>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <44e564f8-d059-407b-8f5e-a149dd76dea3@kernel.org>
+References: <20260501151454.211598-1-vebohr@gmail.com> <44e564f8-d059-407b-8f5e-a149dd76dea3@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-On Mon, 27 Apr 2026 13:03:32 +0100, Kevin Brodsky wrote:
-> Commit 2e8a1acea859 ("arm64: signal: Improve POR_EL0 handling to
-> avoid uaccess failures") introduced special handling for EL0 registers
-> that impact uaccess. This did not however handle the case where a signal
-> handler removes the relevant record (poe_context for POE) from the
-> signal frame; this is clearly not typical behaviour but it is legal.
-> That commit resulted in arbitrary data from the kernel stack being
-> written to POR_EL0 in that case.
-> 
-> [...]
+Hi Matt,
 
-Applied to arm64 (for-next/fixes), thanks!
+Thanks for the review (and for cc'ing Florian - same mistake twice, noted).
 
-[1/5] arm64: signal: Preserve POR_EL0 if poe_context is missing
-      https://git.kernel.org/arm64/c/030e8a40fff6
+You're right on both. The 755 thing is on me, and i'm convinced the
+standalone script is too much for what's essentially a one-time init
+ordering issue - the fix commit is the safety net here.
 
-Will, if any objections, please shout.
+Withdrawing the patch.
 
--- 
-Catalin
+One question if you don't mind: if something similar came up again and
+a test *was* warranted, which existing script would be the natural
+home? mptcp_join.sh seemed closest since it exercises the accept path,
+but i'm not sure if checking /proc/slabinfo fits there or if there's a
+better mechanism for that kind of thing.
+
+Vastargazing
