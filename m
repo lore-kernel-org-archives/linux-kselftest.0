@@ -1,357 +1,222 @@
-Received: from mail-vk1-f173.google.com (mail-vk1-f173.google.com [209.85.221.173])
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DAC43093C1
-	for <linux-kselftest@vger.kernel.org>; Fri,  1 May 2026 17:17:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80FD230E0D6
+	for <linux-kselftest@vger.kernel.org>; Fri,  1 May 2026 17:31:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777655833; cv=none; b=l9eKjEu1s9GfDPHXxQWd6EdLjDZr/kgUlLF628GcvyYxqyh2w7onddBph+r3EJX8s0Sp3Gl0MmzvXxVasUGmnPRv73OX7ubycu8hlcfOdkN3OjosVTMBvf6JsYdnXsSo6/2gm8GlOSf5Kv1H2tF7Hpsi8KZtGaBXcp6SFAgTjys=
+	t=1777656703; cv=none; b=jF1z1SrNWmDhlbB9Itj8pvkhoAh+Te7WvJNgK/huE8xvMVr9+3SlCCO/Ag4rnZ+9U+0MmHMv9CfaqTRskjWBMuWlcKdpMe2SO223wyJ3er1We01XjjKYp3WR20Lfv1axFEc4wrRL+HrqOAMAl3pXtZorPPy6tu+zVG4sgqESlog=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777655833; c=relaxed/simple;
-	bh=xwsp5iLrZTea6MovIEVmsFdqYQsIpNreqjgakR/5M2A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZHLGPaSMVzUuTLDHwTsAozTwn83JtkIm3LsKyblC+Jp1RKxTxu9LiHSF6gFVZVwZOfJFAhFeJdJ/md998+J49d7dBCU0nYYv4EZgw4at9BHMaEl1B16l+IMqsKJcYdGRakef54W9ZAJ3STn2NA7JGIlwYmpvQUDqFpXyhoBi3MU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CoO5Pqnb; arc=none smtp.client-ip=209.85.221.173
+	s=arc-20240116; t=1777656703; c=relaxed/simple;
+	bh=GPJn3apAiATfWozyMoTFurVezJt7ECoPiWTiUW2+1Ak=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rzhbld5nWlwaE5/BhXLTsVc0Vx3cWjkp9Dwz74jAhjqs+YdDIT97QcDknOTfZzvEfB6B16lrKGc/lkurq2uI+HnefHN9F8ZjHQuqT+1uoogsL5+H+a3thPvuxTGTKbOgBNl97fvn+n+0SxjDXUqCnJY+KgdPtuQ2k72kwlu2+B8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ub+oYrwD; arc=none smtp.client-ip=209.85.216.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CoO5Pqnb"
-Received: by mail-vk1-f173.google.com with SMTP id 71dfb90a1353d-56a9a7e762bso1613900e0c.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 01 May 2026 10:17:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ub+oYrwD"
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-35e576110adso1570261a91.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 01 May 2026 10:31:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777655828; x=1778260628; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=DJodchoUfkckB4s8xFgqZ8OCBPEaMXgDR5WFvqCUTds=;
-        b=CoO5Pqnbdrmdsc+fJisfVD74jwkleQR/noytmtEjsK61KunABSmswchAYhT4z4qSAH
-         yzrsQD/uzOlWh7SApFIHTKC+5GWfAJTFhdjwm5O3rxnNOoF8SKHqmAjT0LlrNS4pO1CO
-         Pdn4y2aV00WoJfoEnRIkTHzsPMjChwjE14MhsY+965vMUTymygJTd84JDsMxYGqC7Vwn
-         H1v5SxfH9xdLQ2DZ/87XtPI3X3ZDYFuUloXOoj1w0aWCBTC4GyE+Kr78dwS7mTE0Qz1R
-         2LJnXgnN9kkRfimpHI2bI2a2MNYQd9MPQEPlBsnkoSbG55IvzOmhYQnfC/ZWV3/ZB5OA
-         3LkA==
+        d=gmail.com; s=20251104; t=1777656702; x=1778261502; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=eMiYNnBeGWnD4tEnQiWJxALYagtWxwAZ6KTfja4eTyg=;
+        b=Ub+oYrwDjLjL7rHLIiRLlsCo4a5rZ0k1TP9CiAdQFH1KEKltajlDngYCNKyNY4nRnI
+         pT6tzbGJzrpVlry2kYn2k+rb0KiyfwHijfoGE5rXQhW5DLIQSZgXHs/xWB+d2TKvsciP
+         7JZRs8pqkLllF/3syfqlRFobVjCvczZ8LO/X4iY7nwX9WZWr5zrpNZ0tJZxa+A/hYDYd
+         wah+pG6deRHi6shzi8OA4dJPthLvLXdIfb6tUSpV2UOLIBpC+2o22dpoiBhsYC78+2z9
+         IQ+wNeo486UPkqstQaLB6ujzLSrYB1Ud/GymfgxIZ0EniN2OiO7tqn+gdRfIjV6AGeyA
+         gsfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777655828; x=1778260628;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DJodchoUfkckB4s8xFgqZ8OCBPEaMXgDR5WFvqCUTds=;
-        b=rsKhC8Zx3CfmRZFFCDWAkoxl5iEIvuzWhOAvWX0/BRMHDFYPhWjqg2HdFs154vra6x
-         U6fgC7RjDvfIC8+VX9yvaoLxOl15fghXp46ek3kB8OBkk9h7JvQE6Vm0dnM9XkC33cYy
-         aFD45fhiQSyNVuXb18DdgJR1w9F9kHzxl/vzbUmd28yzJv3kpfG05vL8ZZmFJFiltsaw
-         /dNSCipe1rLc3ZjHX6XZ9LXgc+GIuIXtktsvzN6fOH4m+C4YLvZNxpfyvK/R+NjYsW4T
-         Di+9x9WGHonl4ciNZgYiCeSg7nB29OPEYiR3+mMCiv6Hg91ClMI5UMlWN1Bv1H4f6gpN
-         RDsw==
-X-Forwarded-Encrypted: i=1; AFNElJ9XbM++IINRHvGuW79A+ADsjSN1zZHywsEh6coxr+wt6o2zRUSexAKr+Dl+59FDnB8aLOPVzzhQ9/i2qCyrbZY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwoIeMlFLBB4O3OGtgvksYVzYgB/6IwdAnfxoyKQI7KOSCv1NUv
-	AxbUtRihm4DZrlVaajYexRE5U4Ls+7dCsHxILpaaNqAUrmmgOsJz+G1R22n8PirN
-X-Gm-Gg: AeBDietuojrLLXw5WwYSGOYZRZDDkhI7usGRliwlywvMlAHJlMNgzc0oBsLB3RPApEH
-	go9tQhJNqtk6oTPRB2W68AsEIU3Ljcq9dqkATLEob3Jku2bztcdncnsTuQFkPRKpjSoEh+ULf7L
-	JI6t57wCYLDJJKaIp8+ZDjwHwWfwWAbaeK6UdusrFLn9kNjphExut22zZIijC4Xfsfaq/Vsu4Dg
-	1ZNGhwx8QO/+OsqvaHNdeClGc/Kvnuge/IW2tQMrlo/CIWzDfobOFi49q4QPjoLkvpEtNfaDjRI
-	fdvE3gnmIAiCyHHbxDof1TbNmRmhHwhSsbUgiJnIXoUuJKgiQ03M16rP7txUvK5HQ2IQ438mkrp
-	LKxTtcHtbqzatHo8o1xSvkhVhkmxpQwC/d9pqBKHTIvACNFMZDFm1G/Twa0tySk3Do0KIutsL8b
-	NfcokHepHVDo/hi41fPJKY0sKctk3NfgLGfADc0a1Bi0sjlRzDvilZOIKQqA==
-X-Received: by 2002:a05:6122:d27:b0:56d:aa1f:e48a with SMTP id 71dfb90a1353d-5750c701da6mr187767e0c.12.1777655828173;
-        Fri, 01 May 2026 10:17:08 -0700 (PDT)
-Received: from devvm29614.prn0.facebook.com ([2a03:2880:f814:45::])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8b538b1d953sm33669716d6.3.2026.05.01.10.17.05
+        d=1e100.net; s=20251104; t=1777656702; x=1778261502;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eMiYNnBeGWnD4tEnQiWJxALYagtWxwAZ6KTfja4eTyg=;
+        b=ESUhfpAEwXX59I0tSW95W9ZrDD/sCrICaFjOtoHYYydhtedd/kMlE3bfQ6CVCoS35F
+         Aalt7q0SuI+uy6bDT5iG+GGWT5q780UgPQ6mhuoEezDPwHkd2pOG8BxyCq9EPHZbNTrK
+         xrFVQN1K9IKZRuj0cuhnLzmec4CLoeAHHXKuOXc3eRZEJUrDyLfvqafm/IdF8ueRiup6
+         tGQm4OXmSeGS+tyy5uNkGwgNPYyCd0hfLmF8ErL6rMBASF1WdeyHUnbO82peTpZoiqwI
+         PEHB+4huh7lmiXap3AaO4HW3Ex7/iCb+g9aERC/i6T5ixeA501iuCT5bU7ytnsuar7vm
+         cCfw==
+X-Forwarded-Encrypted: i=1; AFNElJ+0r2lVrpSPn3I+hhupVtfNmJvrgy9uabAqhDoGhwkUdxZojDm7a12Huo6D2uSlEAtOGuXbOFY3iaJrmln+et4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxHzSqJ73F/0OUH+Jx8WgaLtLZ7mKnzOj+roNfVJEIX5aVj711V
+	/tc5sQvS8rXEcqyQLMyb0dYeQ3ggfGAkDPw6VAxY+dtMyrjSwok6AYsq
+X-Gm-Gg: AeBDieuWS3o225W3439BeXR76OWA2nKOgl6VyYwAYXiMhQMLntZLHCvAsjaa3aYJQUp
+	KnAqMHVJA3narYEevM96JIft1Hc3fZfG+s8+uHF0Kztr11qnaqUkIEWP3OkgE96WxMWJEBdm9S9
+	UvRRSNutsLHwd2+FmU+Kl8duDmbfkXDh2ZW+Sok+II4A1AsPW7tobyaLo+6xzZvptLTFG3+qkRD
+	py1eOEvRfz8CCcM/PSA6B7Sj6xqlTELLvnPGU7I55FGNSkru4Au3aurVDu5bDDX9Esc81u/4ENs
+	JDmUgOVsY1aRJxiX+Hl1GiqggsIolpQEaNpfe/CSdd0N8aiipQOJ8/Tsz0voU3Z8ipEJqqJtzaz
+	u584kHy9/lzISAV4tj5XwBnbYdxCrw/+3juJ4DujV1DI0vi3AcgfahX1hkJ8rNtyuynHNa4K6Pr
+	8x1ENGc6MFtO/bciwf4IE+vFtzXhtfM0D0MBrF4bdFXxYP2mci4A==
+X-Received: by 2002:a17:90b:54cc:b0:35f:c6bf:2bba with SMTP id 98e67ed59e1d1-364c49a1ccemr7557565a91.11.1777656701718;
+        Fri, 01 May 2026 10:31:41 -0700 (PDT)
+Received: from DESKTOP-82PPU4A.localdomain ([202.8.116.84])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-364ebec73aasm2908906a91.2.2026.05.01.10.31.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 May 2026 10:17:07 -0700 (PDT)
-Date: Fri, 1 May 2026 10:17:03 -0700
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-To: Breno Leitao <leitao@debian.org>
-Cc: "David S. Miller" <davem@davemloft.net>,
+        Fri, 01 May 2026 10:31:40 -0700 (PDT)
+From: Ujjal Roy <royujjal@gmail.com>
+To: "David S . Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
 	Simon Horman <horms@kernel.org>,
-	Stefano Garzarella <sgarzare@redhat.com>,
-	Shuah Khan <shuah@kernel.org>, sdf.kernel@gmail.com,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	virtualization@lists.linux.dev, linux-kselftest@vger.kernel.org,
-	kernel-team@meta.com
-Subject: Re: [PATCH net-next 3/3] net: selftests: add getsockopt_iter
- regression tests
-Message-ID: <afTgD99BJQxR8YDc@devvm29614.prn0.facebook.com>
-References: <20260501-getsock_one-v1-0-810ce23ea70e@debian.org>
- <20260501-getsock_one-v1-3-810ce23ea70e@debian.org>
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Ido Schimmel <idosch@nvidia.com>,
+	David Ahern <dsahern@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Andy Roulin <aroulin@nvidia.com>,
+	Yong Wang <yongwang@nvidia.com>,
+	Petr Machata <petrm@nvidia.com>
+Cc: Ujjal Roy <ujjal@alumnux.com>,
+	bridge@lists.linux.dev,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next v5 0/5] net: bridge: mcast: support exponential field encoding
+Date: Fri,  1 May 2026 17:31:24 +0000
+Message-ID: <20260501173130.3486-1-royujjal@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260501-getsock_one-v1-3-810ce23ea70e@debian.org>
+Content-Transfer-Encoding: 8bit
 
-On Fri, May 01, 2026 at 08:52:53AM -0700, Breno Leitao wrote:
-> Add a single kselftest covering the proto_ops getsockopt_iter
-> conversions for AF_NETLINK and AF_VSOCK, using one fixture per protocol:
-> 
-> netlink:
-> 
-> NETLINK_PKTINFO covers the flag-style int path (exact size, oversize
-> clamp, undersize -EINVAL); NETLINK_LIST_MEMBERSHIPS covers the
-> size-discovery path that always reports the required buffer length back
-> via optlen, even when the user buffer is too small to receive any group
-> bits.
-> 
-> vsock:
-> SO_VM_SOCKETS_BUFFER_SIZE covers the u64 path (exact size, oversize
-> clamp, undersize -EINVAL).
-> 
-> Each fixture also exercises an unknown optname and a bogus level so
-> the returned-length / errno semantics preserved by the sockopt_t
-> conversion are pinned down.
-> 
-> Signed-off-by: Breno Leitao <leitao@debian.org>
+Description:
+This series addresses a mismatch in how multicast query
+intervals and response codes are handled across IPv4 (IGMPv3)
+and IPv6 (MLDv2). While decoding logic currently exists,
+the corresponding encoding logic is missing during query
+packet generation. This leads to incorrect intervals being
+transmitted when values exceed their linear thresholds.
 
-This all looks good to me. My only thought was
-SO_VM_SOCKETS_CONNECT_TIMEOUT_NEW/OLD would be a nice add-on for testing
-greater than u64, but probably overkill since you already have
-NETLINK_LIST_MEMBERSHIPS.
+The patches introduce a unified floating-point encoding
+approach based on RFC3376 and RFC3810, ensuring that large
+intervals are correctly represented in QQIC and MRC fields
+using the exponent-mantissa format.
 
-Code all looks reasonable.
+Key Changes:
+* ipv4: igmp: get rid of IGMPV3_{QQIC,MRC} and simplify calculation
+  Removes legacy macros in favor of a cleaner, unified
+  calculation for retrieving intervals from encoded fields,
+  improving code maintainability.
 
-Reviewed-by: Bobby Eshleman <bobbyeshleman@meta.com>
+* ipv6: mld: rename mldv2_mrc() and add mldv2_qqi()
+  Standardizes MLDv2 terminology by renaming mldv2_mrc()
+  to mldv2_mrd() (Maximum Response Delay) and introducing
+  a new API mldv2_qqi for QQI calculation, improving code
+  readability.
 
-> ---
->  tools/testing/selftests/net/Makefile          |   1 +
->  tools/testing/selftests/net/getsockopt_iter.c | 213 ++++++++++++++++++++++++++
->  2 files changed, 214 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-> index a275ed5840265..baa30287cf222 100644
-> --- a/tools/testing/selftests/net/Makefile
-> +++ b/tools/testing/selftests/net/Makefile
-> @@ -176,6 +176,7 @@ TEST_GEN_PROGS := \
->  	bind_timewait \
->  	bind_wildcard \
->  	epoll_busy_poll \
-> +	getsockopt_iter \
->  	icmp_rfc4884 \
->  	ipv6_fragmentation \
->  	proc_net_pktgen \
-> diff --git a/tools/testing/selftests/net/getsockopt_iter.c b/tools/testing/selftests/net/getsockopt_iter.c
-> new file mode 100644
-> index 0000000000000..179f9e84926fd
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/getsockopt_iter.c
-> @@ -0,0 +1,213 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Quick test for getsockopt{_iter} tests.
-> + *
-> + * Each fixture targets one converted protocol and pins down the
-> + * returned-length / errno semantics across buffer-size variations,
-> + * an unknown optname and a bogus level.
-> + *
-> + * - netlink: NETLINK_PKTINFO covers the flag-style int path; the
-> + *   NETLINK_LIST_MEMBERSHIPS cases cover the size-discovery path
-> + *   that always reports the required buffer length back via optlen,
-> + *   even when the user buffer is too small to receive any group bits.
-> + * - vsock:   SO_VM_SOCKETS_BUFFER_SIZE covers the u64 path.
-> + *
-> + * Author: Breno Leitao <leitao@debian.org>
-> + */
-> +
-> +#include <errno.h>
-> +#include <stdint.h>
-> +#include <stdio.h>
-> +#include <string.h>
-> +#include <unistd.h>
-> +#include <linux/netlink.h>
-> +#include <linux/rtnetlink.h>
-> +#include <linux/vm_sockets.h>
-> +#include <sys/socket.h>
-> +#include "kselftest_harness.h"
-> +
-> +#ifndef AF_VSOCK
-> +#define AF_VSOCK 40
-> +#endif
-> +
-> +/* ---------- netlink ---------- */
-> +
-> +FIXTURE(netlink)
-> +{
-> +	int fd;
-> +};
-> +
-> +FIXTURE_SETUP(netlink)
-> +{
-> +	int group = RTNLGRP_LINK;
-> +
-> +	self->fd = socket(AF_NETLINK, SOCK_RAW, NETLINK_ROUTE);
-> +	if (self->fd < 0)
-> +		SKIP(return, "AF_NETLINK socket: %s", strerror(errno));
-> +
-> +	/* Joining a multicast group grows nlk->ngroups so the
-> +	 * NETLINK_LIST_MEMBERSHIPS path has a non-zero size to report.
-> +	 */
-> +	if (setsockopt(self->fd, SOL_NETLINK, NETLINK_ADD_MEMBERSHIP,
-> +		       &group, sizeof(group)) < 0)
-> +		SKIP(return, "NETLINK_ADD_MEMBERSHIP: %s", strerror(errno));
-> +}
-> +
-> +FIXTURE_TEARDOWN(netlink)
-> +{
-> +	if (self->fd >= 0)
-> +		close(self->fd);
-> +}
-> +
-> +TEST_F(netlink, pktinfo_exact)
-> +{
-> +	int val = -1;
-> +	socklen_t optlen = sizeof(val);
-> +
-> +	ASSERT_EQ(0, getsockopt(self->fd, SOL_NETLINK, NETLINK_PKTINFO,
-> +				&val, &optlen));
-> +	ASSERT_EQ(sizeof(int), optlen);
-> +	ASSERT_TRUE(val == 0 || val == 1);
-> +}
-> +
-> +TEST_F(netlink, pktinfo_oversize_clamped)
-> +{
-> +	char buf[16] = {};
-> +	socklen_t optlen = sizeof(buf);
-> +
-> +	ASSERT_EQ(0, getsockopt(self->fd, SOL_NETLINK, NETLINK_PKTINFO,
-> +				buf, &optlen));
-> +	ASSERT_EQ(sizeof(int), optlen);
-> +}
-> +
-> +TEST_F(netlink, pktinfo_undersize)
-> +{
-> +	char buf[2] = {};
-> +	socklen_t optlen = sizeof(buf);
-> +
-> +	ASSERT_EQ(-1, getsockopt(self->fd, SOL_NETLINK, NETLINK_PKTINFO,
-> +				 buf, &optlen));
-> +	ASSERT_EQ(EINVAL, errno);
-> +}
-> +
-> +TEST_F(netlink, list_memberships_size_discovery)
-> +{
-> +	socklen_t optlen = 0;
-> +	char dummy;
-> +
-> +	ASSERT_EQ(0, getsockopt(self->fd, SOL_NETLINK,
-> +				NETLINK_LIST_MEMBERSHIPS,
-> +				&dummy, &optlen));
-> +	ASSERT_GT(optlen, 0);
-> +	ASSERT_EQ(0, optlen % sizeof(__u32));
-> +}
-> +
-> +TEST_F(netlink, list_memberships_full_read)
-> +{
-> +	__u32 buf[64] = {};
-> +	socklen_t optlen = sizeof(buf);
-> +
-> +	ASSERT_EQ(0, getsockopt(self->fd, SOL_NETLINK,
-> +				NETLINK_LIST_MEMBERSHIPS,
-> +				buf, &optlen));
-> +	ASSERT_GT(optlen, 0);
-> +	ASSERT_LE(optlen, sizeof(buf));
-> +	ASSERT_EQ(0, optlen % sizeof(__u32));
-> +}
-> +
-> +TEST_F(netlink, bad_level)
-> +{
-> +	int val;
-> +	socklen_t optlen = sizeof(val);
-> +
-> +	ASSERT_EQ(-1, getsockopt(self->fd, SOL_SOCKET + 1, NETLINK_PKTINFO,
-> +				 &val, &optlen));
-> +	ASSERT_EQ(ENOPROTOOPT, errno);
-> +}
-> +
-> +TEST_F(netlink, bad_optname)
-> +{
-> +	int val;
-> +	socklen_t optlen = sizeof(val);
-> +
-> +	ASSERT_EQ(-1, getsockopt(self->fd, SOL_NETLINK, 0x7fff,
-> +				 &val, &optlen));
-> +	ASSERT_EQ(ENOPROTOOPT, errno);
-> +}
-> +
-> +/* ---------- vsock ---------- */
-> +
-> +FIXTURE(vsock)
-> +{
-> +	int fd;
-> +};
-> +
-> +FIXTURE_SETUP(vsock)
-> +{
-> +	self->fd = socket(AF_VSOCK, SOCK_STREAM, 0);
-> +	if (self->fd < 0)
-> +		SKIP(return, "AF_VSOCK socket: %s", strerror(errno));
-> +}
-> +
-> +FIXTURE_TEARDOWN(vsock)
-> +{
-> +	if (self->fd >= 0)
-> +		close(self->fd);
-> +}
-> +
-> +TEST_F(vsock, buffer_size_exact)
-> +{
-> +	uint64_t val = 0;
-> +	socklen_t optlen = sizeof(val);
-> +
-> +	ASSERT_EQ(0, getsockopt(self->fd, AF_VSOCK,
-> +				SO_VM_SOCKETS_BUFFER_SIZE,
-> +				&val, &optlen));
-> +	ASSERT_EQ(sizeof(uint64_t), optlen);
-> +	ASSERT_GT(val, 0);
-> +}
-> +
-> +TEST_F(vsock, buffer_size_oversize_clamped)
-> +{
-> +	char buf[16] = {};
-> +	socklen_t optlen = sizeof(buf);
-> +
-> +	ASSERT_EQ(0, getsockopt(self->fd, AF_VSOCK,
-> +				SO_VM_SOCKETS_BUFFER_SIZE,
-> +				buf, &optlen));
-> +	ASSERT_EQ(sizeof(uint64_t), optlen);
-> +}
-> +
-> +TEST_F(vsock, buffer_size_undersize)
-> +{
-> +	char buf[4] = {};
-> +	socklen_t optlen = sizeof(buf);
-> +
-> +	ASSERT_EQ(-1, getsockopt(self->fd, AF_VSOCK,
-> +				 SO_VM_SOCKETS_BUFFER_SIZE,
-> +				 buf, &optlen));
-> +	ASSERT_EQ(EINVAL, errno);
-> +}
-> +
-> +TEST_F(vsock, bad_level)
-> +{
-> +	uint64_t val;
-> +	socklen_t optlen = sizeof(val);
-> +
-> +	ASSERT_EQ(-1, getsockopt(self->fd, SOL_SOCKET + 1,
-> +				 SO_VM_SOCKETS_BUFFER_SIZE,
-> +				 &val, &optlen));
-> +	ASSERT_EQ(ENOPROTOOPT, errno);
-> +}
-> +
-> +TEST_F(vsock, bad_optname)
-> +{
-> +	uint64_t val;
-> +	socklen_t optlen = sizeof(val);
-> +
-> +	ASSERT_EQ(-1, getsockopt(self->fd, AF_VSOCK, 0x7fff,
-> +				 &val, &optlen));
-> +	ASSERT_EQ(ENOPROTOOPT, errno);
-> +}
-> +
-> +TEST_HARNESS_MAIN
-> 
-> -- 
-> 2.52.0
-> 
+* ipv4: igmp: encode multicast exponential fields
+  Introduces the logic to dynamically calculate the exponent
+  and mantissa using bit-scan (fls). This ensures QQIC and
+  MRC fields (8-bit) are properly encoded when transmitting
+  query packets with intervals that exceed their respective
+  linear threshold value of 128 (for QQI/MRT).
+
+* ipv6: mld: encode multicast exponential fields
+  Applies similar encoding logic for MLDv2. This ensures
+  QQIC (8-bit) and MRC (16-bit) fields are properly encoded
+  when transmitting query packets with intervals that exceed
+  their respective linear thresholds (128 for QQI; 32768
+  for MRD).
+
+* selftests: net: bridge: add MRC and QQIC field encoding tests
+  Updates bridge selftests to validate both linear and non-linear
+  (exponential) encoding for MRC and QQIC fields, ensuring
+  protocol compliance across IGMPv3 and MLDv2.
+
+Impact:
+These changes ensure that multicast queriers and listeners
+stay synchronized on timing intervals, preventing protocol
+timeouts or premature group membership expiration caused
+by incorrectly formatted packet headers.
+
+Test results:
+Giving results only from modified API vlmc_query_intvl_test() and
+vlmc_query_response_intvl_test() of the script bridge_vlan_mcast.sh.
+
+Using old Linux code, here is the result:
+    - TEST: Vlan multicast snooping enable                                [ OK ]
+    - TEST: Vlan mcast_query_interval global option default value         [ OK ]
+    - TEST: Number of tagged IGMPv2 general query                         [ OK ]
+    - TEST: IGMPv3 QQIC linear value 60(s)                                [ OK ]
+    - TEST: MLDv2 QQIC linear value 60(s)                                 [ OK ]
+    - TEST: IGMPv3 QQIC non linear value 160(s)                           [FAIL]
+    -         Wrong QQIC in generated IGMPv3 general queries
+    - TEST: MLDv2 QQIC non linear value 160(s)                            [FAIL]
+    -         Wrong QQIC in generated MLDv2 general queries
+    - TEST: Vlan mcast_query_response_interval global option default value   [ OK ]
+    - TEST: IGMPv3 MRC linear value of 60(x0.1s)                          [ OK ]
+    - TEST: MLDv2 MRC linear value of 24000(ms)                           [ OK ]
+    - TEST: IGMPv3 MRC non linear value of 240(x0.1s)                     [FAIL]
+    -         Wrong MRC in generated IGMPv3 general queries
+    - TEST: MLDv2 MRC non linear value of 48000(ms)                       [FAIL]
+    -         Wrong MRC in generated MLDv2 general queries
+
+Linux code with this patchset, here is the result:
+    * TEST: Vlan multicast snooping enable                                [ OK ]
+    * TEST: Vlan mcast_query_interval global option default value         [ OK ]
+    * TEST: Number of tagged IGMPv2 general query                         [ OK ]
+    * TEST: IGMPv3 QQIC linear value 60(s)                                [ OK ]
+    * TEST: MLDv2 QQIC linear value 60(s)                                 [ OK ]
+    * TEST: IGMPv3 QQIC non linear value 160(s)                           [ OK ]
+    * TEST: MLDv2 QQIC non linear value 160(s)                            [ OK ]
+    * TEST: Vlan mcast_query_response_interval global option default value   [ OK ]
+    * TEST: IGMPv3 MRC linear value of 60(x0.1s)                          [ OK ]
+    * TEST: MLDv2 MRC linear value of 24000(ms)                           [ OK ]
+    * TEST: IGMPv3 MRC non linear value of 240(x0.1s)                     [ OK ]
+    * TEST: MLDv2 MRC non linear value of 48000(ms)                       [ OK ]
+
+v5:
+- Added 'Reviewed-by:' as requested
+- Modified script to fix AND logic in classifiers and updated comments
+- Passed expected value as argument rather than hard coding in script
+- Added minor comments for macros
+
+v4:
+- Removed binary application and related codes for selftests
+- Decided hard coded match based on extra arguments for selftests
+- Ran shellcheck on modified selftests code and fixed
+- Updated comments on patch[1,2,3,4] as per review
+- Added 'Reviewed-by:' as requested on patch4
+
+v3:
+- Updated the series title for better clarity; old one is here
+  https://lore.kernel.org/all/20260326150742.50289-1-royujjal@gmail.com/
+- Added key changes section for new selftests patch
+- Updated netdev style comments and addressed review comments
+- Fixed MLDv2 MRC conversion logic during query generation
+- Mentioned intervals in units wherever applicable
+- Dropped type casting and fixed indentations
+
+v2:
+- Retargeted the series to net-next as suggested
+- Fixed a compilation warning in the MLD rename change
+- Kept reverse xmas tree order in IGMP exponential encoding change
+- Added bridge selftests to validate IGMPv3 Query MRC and QQIC handling
+
+Ujjal Roy (5):
+  ipv4: igmp: get rid of IGMPV3_{QQIC,MRC} and simplify calculation
+  ipv6: mld: rename mldv2_mrc() and add mldv2_qqi()
+  ipv4: igmp: encode multicast exponential fields
+  ipv6: mld: encode multicast exponential fields
+  selftests: net: bridge: add MRC and QQIC field encoding tests
+
+ include/linux/igmp.h                          | 167 +++++++++++++++-
+ include/net/mld.h                             | 185 +++++++++++++++++-
+ net/bridge/br_multicast.c                     |  22 +--
+ net/ipv4/igmp.c                               |   6 +-
+ net/ipv6/mcast.c                              |  19 +-
+ .../net/forwarding/bridge_vlan_mcast.sh       | 140 ++++++++++++-
+ 6 files changed, 483 insertions(+), 56 deletions(-)
+
+
+base-commit: edf4bee4215a173c0534d1851d7523d827149f9e
+-- 
+2.43.0
+
