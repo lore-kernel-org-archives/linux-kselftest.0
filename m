@@ -1,196 +1,162 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D18073CA4A8;
-	Fri,  1 May 2026 15:25:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 989BF13E02A;
+	Fri,  1 May 2026 15:46:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777649152; cv=none; b=BgUqPQ+OKpyqZwwWsx0VKd75kmo7KVzDzona3/qEA1ggx5rfncL7qeLnqNQd3ggGusIRV71zKYpw0UbcFEP2ZbOFa5ZBNfj1Tr2+JmnlDVpQ/Nn2nM/rz9SOGgYQDiL0g3QN5aBPk58WnumFH9WKAEN5/X7AppuGiLuOIzRCXdE=
+	t=1777650361; cv=none; b=peICEMnvMxir0Eus1J4sHtR7slYruqyRW0cicBLZgUsKOjcxVreQ7hZvXH4VIC4rCuKc+HIDyPLTTzhJMw2riJWDRbXn14O0S4TosNLNr9+cDJqAY+R8+5xN5PcQJ+wQrqCY2rDg4rizLnWeJJVQo5KEn9BSrCWWCQRXtfaR4fw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777649152; c=relaxed/simple;
-	bh=ELgfGsxPvaqHD+H6X2GusUqMNBV/G7DowThnoh9IrVU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Fz48roqQoh4zYrMDpto8DMeD5zTlHB5IMsm1BITashVMZDnpTjgS8sif0NRoQh1trUC9MwzN4AI57jJfy+IqplJs/3brRJIw/rw0x2D4E2hBKsO9Ca2mYJCky2G9FsOQ2XFlqnoOAmjXjLW1wBBCqmO/hzN/zrfvERxiEYRz49U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BlrSp4wv; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777650361; c=relaxed/simple;
+	bh=LZDWViGmTKhCWD2dXNJkS+yut6Rys5QsqWiU9+4akSw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Sox9wzT/6DcFrGax9uE9htpqOSn1A+cCJXsXHKMFE5raeGZxBOAUhwhnUEKOUmrHv7lq78vDBrGDJuWPVf9LWnKtyLJEQYDuSdFjS70Dp4Xx8iLRU+s1CufjjemUbZ8+q7VDxHT7wVU+ZsutVIxlAjnc2TnB6r7ekUHPhSWZaJE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qRQhm9ud; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BlrSp4wv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F216C2BCB9;
-	Fri,  1 May 2026 15:25:44 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qRQhm9ud"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AA23C2BCB4;
+	Fri,  1 May 2026 15:45:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777649152;
-	bh=ELgfGsxPvaqHD+H6X2GusUqMNBV/G7DowThnoh9IrVU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BlrSp4wvE554fWFq+y+lP/HaALbT1NM9dBC4frlM3O+ech+F61RvM+MoV0HtNMJzM
-	 VUthzBW6dF2Fts9BrX5BleQunpinUP14ZsmYHB0O+w5RXLjZRC3h9uq8mkAEWKH9jy
-	 zkBD1Z2AHKNh1lNHuedOhqWRWiTqZtIZ1T02E75GMsNa4zip1WujKuFUfuBNZ6Ggd1
-	 E87KmYhHNLB9581PU+Ih8mGMV/I3xNV8Tre2uxp1Lkx+IYqV9C/kgqyH/PFxAkO33Y
-	 XmsBh8AIuM4+kSczqEpYEe8/KFiua8kkSJZQr+jfcMZzu7SGnQHRPmF8vga0K59e3j
-	 ruap77HSz5yCg==
-Date: Fri, 1 May 2026 17:25:41 +0200
-From: Mike Rapoport <rppt@kernel.org>
-To: Luiz Capitulino <luizcap@redhat.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Barry Song <baohua@kernel.org>, Dev Jain <dev.jain@arm.com>,
-	Donet Tom <donettom@linux.ibm.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-	John Hubbard <jhubbard@nvidia.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Lance Yang <lance.yang@linux.dev>,
-	Leon Romanovsky <leon@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
-	Mark Brown <broonie@kernel.org>, Michal Hocko <mhocko@suse.com>,
-	Nico Pache <npache@redhat.com>, Peter Xu <peterx@redhat.com>,
-	Ryan Roberts <ryan.roberts@arm.com>,
-	Sarthak Sharma <sarthak.sharma@arm.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Vlastimil Babka <vbabka@kernel.org>, Zi Yan <ziy@nvidia.com>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: Re: [PATCH v3 27/54] selftests/mm: hugepage_settings: add APIs for
- HugeTLB setup and teardown
-Message-ID: <afTF9RCy8eBoWYaj@kernel.org>
-References: <20260428204240.1924129-1-rppt@kernel.org>
- <20260428204240.1924129-28-rppt@kernel.org>
- <2f443474-4448-462e-bc1e-55bc657d70ba@redhat.com>
+	s=k20201202; t=1777650361;
+	bh=LZDWViGmTKhCWD2dXNJkS+yut6Rys5QsqWiU9+4akSw=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=qRQhm9ud5DUwCEOZeLinJbC1bOMRzuNtnoU7wuy3dvbcql+eXWFS33PQxFVNQDRj1
+	 9bbxuVpMNqpGjN8hjf+VsmbdPUZW8YlRp8F1vhA4KOomJ0DDsQtmxW2xOn4GyeBcnV
+	 v2G8tZCxksyiAZbcNMTqtUpMOfrWqXfbhgPYhX2pvw5fPhINn0trXrSt8Q6SCNhFH4
+	 pYkeHl1CCtn3W5V+EFihadmjzYtCj6NmSLuW6NFUl9bEWb3BL7b0Jl64lqV0jcBlWQ
+	 f/D51SHGLyAeB/qksjFm/mRKHS9HcNidvEYJbqHu+d8z/426/J9+A2zX/CjlrkVOO4
+	 ybimtCqrlgqYw==
+Message-ID: <44e564f8-d059-407b-8f5e-a149dd76dea3@kernel.org>
+Date: Fri, 1 May 2026 17:45:56 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2f443474-4448-462e-bc1e-55bc657d70ba@redhat.com>
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH] selftests: mptcp: add test for IPv6 subflow SLAB
+ placement
+Content-Language: fr
+To: Vastargazing <vebohr@gmail.com>, martineau@kernel.org
+Cc: mptcp@lists.linux.dev, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, shuah@kernel.org, stable@vger.kernel.org,
+ Florian Westphal <fw@strlen.de>
+References: <20260501151454.211598-1-vebohr@gmail.com>
+From: Matthieu Baerts <matttbe@kernel.org>
+Autocrypt: addr=matttbe@kernel.org; keydata=
+ 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
+ lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
+Organization: NGI0 Core
+In-Reply-To: <20260501151454.211598-1-vebohr@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Apr 30, 2026 at 02:31:48PM -0400, Luiz Capitulino wrote:
-> On 2026-04-28 16:42, Mike Rapoport wrote:
-> > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-> > 
-> > A lot of tests require free HugeTLB pages. Some need just a few default
-> > huge pages, some need a certain amount of memory available as HugeTLB, and
-> > some just skip lots of tests if huge pages of all supported sizes are not
-> > available.
-> > 
-> > This all resulted in a huge mess in run_vmtests.sh that sets up some huge
-> > pages, adjusts them later and restores some of the settings if the stars
-> > align.
-> > 
-> > Add APIs that allow saving the state of HugeTLB and setting up the desired
-> > amount of HugeTLB pages.
-> > 
-> > Saving the state also registers atexit() callback and signal handler that
-> > will ensure restoration of HugeTLB state.
-> > 
-> > Since many tests use both HugeTLB and THP, the atexit() callbacks and
-> > signal handler are restoring both.
-> > 
-> > For kselftest_harness tests that run fixture setups and test in child
-> > processes add a constructor that will save and restore settings in the main
-> > process.
-> > 
-> > Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> > ---
-> >   .../testing/selftests/mm/hugepage_settings.c  | 178 +++++++++++++++---
-> >   .../testing/selftests/mm/hugepage_settings.h  |  30 ++-
-> >   2 files changed, 183 insertions(+), 25 deletions(-)
-> > 
-> > diff --git a/tools/testing/selftests/mm/hugepage_settings.c b/tools/testing/selftests/mm/hugepage_settings.c
-> > index 4ae7332b5e1b..9d31b53dbc67 100644
-> > --- a/tools/testing/selftests/mm/hugepage_settings.c
-> > +++ b/tools/testing/selftests/mm/hugepage_settings.c
-> > @@ -306,31 +306,12 @@ void thp_restore_settings(void)
-> >   		thp_write_settings(&saved_settings);
-> >   }
-> > -static void thp_restore_settings_atexit(void)
-> > +static void __thp_save_settings(void)
-> >   {
-> > -	thp_restore_settings();
-> > -}
-> > -
-> > -static void thp_restore_settings_sighandler(int sig)
-> > -{
-> > -	/* exit() will invoke the thp_restore_settings_atexit handler. */
-> > -	exit(KSFT_FAIL);
-> > -}
-> > +	if (!thp_available())
-> > +		return;
-> > -void thp_save_settings(void)
-> > -{
-> >   	thp_read_settings(&saved_settings);
-> > -
-> > -	/*
-> > -	 * setup exit hooks to make sure THP settings are restored on graceful
-> > -	 * and error exits and signals
-> > -	 */
-> > -	atexit(thp_restore_settings_atexit);
-> > -	signal(SIGTERM, thp_restore_settings_sighandler);
-> > -	signal(SIGINT, thp_restore_settings_sighandler);
-> > -	signal(SIGHUP, thp_restore_settings_sighandler);
-> > -	signal(SIGQUIT, thp_restore_settings_sighandler);
-> > -
-> >   	thp_settings_saved = true;
-> >   }
-> > @@ -399,11 +380,31 @@ bool thp_is_enabled(void)
-> >   	return mode == 1 || mode == 3;
-> >   }
-> > +#define HUGETLB_MAX_NR_PAGESIZES 10
-> > +struct hugetlb_settings {
-> > +	unsigned long free_hugepages[HUGETLB_MAX_NR_PAGESIZES];
+Hi Vastargazing,
+
+(+cc Florian who did a similar review on netfilter ML)
+
+On 01/05/2026 17:14, Vastargazing wrote:
+> Add mptcp_v6_initcall.sh to verify that MPTCP IPv6 subflow child
+> sockets are allocated from the TCPv6 SLAB cache, not the kmalloc-4k
+> fallback.
 > 
-> It looks like we don't actually use this in the API or maybe I'm missing
-> something?
-
-Yes, it's used only in later patches.
-I felt it would be too churny to add users in this patch.
- 
-> Otherwise, the API looks great to me. But if you allow me to bikeshed :)
+> tcpv6_prot_override must copy tcpv6_prot after proto_register(&tcpv6_prot)
+> populates tcpv6_prot.slab. If the copy runs too early, override.slab
+> stays NULL (frozen by __ro_after_init) and subflow children fall back
+> to kmalloc-4k. This lacks SLAB_TYPESAFE_BY_RCU, allowing lockless
+> ehash lookups in __inet_lookup_established to read freed memory.
 > 
-> I think I'd do:
+> The test exercises the IPv6 accept path via MPTCP connections between
+> two network namespaces, then checks that the TCPv6 slab active object
+> count grew. On a fixed kernel, the delta is ~2 * NR_CONNS (one subflow
+> per side per connection); on a broken kernel, it stays near zero because
+> children land in kmalloc-4k instead.
 > 
-> struct hugetlb_state {
-> 	unsigned long nr_hugepages;
-> 	unsigned long size;
-> };
+> Topology: two netns connected via veth pair with /64 ULA addresses;
+> NR_CONNS parallel short-lived MPTCP connections are established and held
+> open long enough to sample /proc/slabinfo. The test skips if
+> CONFIG_MPTCP_IPV6 is absent (checked via kallsyms) or /proc/slabinfo is
+> unreadable.
 > 
-> struct hugetlb_settings {
-> 	struct hugetlb_state hstate[HUGETLB_MAX_PAGESIZES];
-> 	unsigned long default_size;
-> 	int nr_sizes;
-> };
+> Verified on Ubuntu 6.17 kernel predating the fix: TAP "not ok 1 ...
+> TCPv6 slab gains MPTCPv6 subflow children" with delta=0. On kernels
+> with the fix, delta is well above the threshold of NR_CONNS/2.
+Thank you for adding this new test, and for having validated
+9b55b253907e ("mptcp: fix slab-use-after-free in
+__inet_lookup_established").
 
-It might be slightly nicer abstraction but ...
- 
-> > +static void __hugetlb_save_settings(void)
-> > +{
-> > +	struct hugetlb_settings *settings = &hugetlb_saved_settings;
-> > +	int nr_sizes;
-> > +
-> > +	settings->default_size = default_huge_page_size();
-> > +	if (!settings->default_size)
-> > +		return;
-> > +
-> > +	nr_sizes = detect_hugetlb_page_sizes(settings->sizes,
-> > +					     HUGETLB_MAX_NR_PAGESIZES);
+(...)
 
-... this immediately becomes more complex.
+My following review comments are very similar to the ones shared by
+Florian for another on the Netfilter ML.
 
-> > +	if (!nr_sizes) {
-> > +		settings->default_size = 0;
-> > +		return;
-> > +	}
-> > +
-> > +	for (int i = 0; i < nr_sizes; i++) {
-> > +		unsigned long sz = settings->sizes[i];
-> > +
-> > +		if (!sz)
-> > +			continue;
-> > +
-> > +		settings->free_hugepages[i] = hugetlb_free_pages(sz);
-> > +		settings->nr_hugepages[i] = hugetlb_nr_pages(sz);
+> diff --git a/tools/testing/selftests/net/mptcp/mptcp_v6_initcall.sh b/tools/testing/selftests/net/mptcp/mptcp_v6_initcall.sh
+> new file mode 100644
 
-And this as well.
+This should say '755', else you get
 
+  # Warning: file mptcp_v6_initcall.sh is not executable
+
+(Plus our CI will not validate that test.)
+
+Me too, I'm not sure whether we should add regression tests for
+regression tests sake. Else we'll also quickly accumulate thousands of
+such scripts and test run time will explode. Globally, we prefer adding
+a new subtest instead of a full test.
+
+Here, you are validating an issue in the init code, that is very
+unlikely to change. If a test was needed during the submission of the
+original fix, I would have suggested adding a quick test in our
+packetdrill repo instead:
+
+  https://github.com/multipath-tcp/packetdrill
+
+An existing packetdrill test could be modified to check the slabs in v4
+and v6, but I'm still not convinced it is worth it.
+
+Cheers,
+Matt
 -- 
-Sincerely yours,
-Mike.
+Sponsored by the NGI0 Core fund.
+
