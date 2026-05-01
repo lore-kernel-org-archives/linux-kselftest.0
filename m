@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C2BA2E92D2;
-	Fri,  1 May 2026 07:03:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A18021767D;
+	Fri,  1 May 2026 07:28:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777619038; cv=none; b=aGKZ2Q+lqnfFLOm24eIVWmlORKksbMwtt1Ph5Ovbv2groGlAWjHW/qipfsjA95QqZd8S2q8GJ3PQRpxiQS1bYzgbPxTOYdkXaFxGKkg+JLgoBuqLCybPXDMS1Zpcic6BbLZBOPPIbfjqo5srz/df9wYD+B4S85Q+oEj+sG8jQ5A=
+	t=1777620535; cv=none; b=l7ZRa19yQa4DOVfNy28XNTYixNWAhp7ECWxwdFXYDKSq3us0mxhdpXQc1VD3vJo24sdzkfYhe4XhXNv9faCgVrX1Af+KTFmIh2CURlu0xUQdqfiAi3iJ7/HltEN+EGDBKA8pANp4aFnzcff9nL2iZ4NK7/pqN1DYWWEmOAjNfhY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777619038; c=relaxed/simple;
-	bh=J2NE0RqhzseSY+hH7I95i9F1rAkWIrEhJO5X80JgKKM=;
+	s=arc-20240116; t=1777620535; c=relaxed/simple;
+	bh=gHtu4eFjUZRmQUMrmjbJsuj2MVGkgojo6i+6CR5kDLg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qYuMVr5vEdWKw/7kp2fg5l2IzCzT6Wn5t7gZkOnTSItWrxlMe0oHveFE6B7ftGI4Jqj7Yv/PuSRQiQWjVksUULDcNpXSI5vqr9VfIG6F5taTU36DDvJ6O4TBwnB0N0Y7wwzTktHP/iktZauJQpNO23QlCllEjQpl75uT8ORc7U0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uNuppFfn; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=AsgAWZRUKqJAC+Xg1ARl+2fBS31WZI2lcypJtoIQvGdmR7FmXlXuxFUWlqXhkD2mKeV+TnaUOGj1f2GHqoj47UAEwxTjlqL/bzu5joKmzBzDI5IIVMPil5XFPbwTaOOzmRRC2UUDhf6u1ctYV3s+cUj4gBItZoT244ogrXQe54s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xa43aQYv; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uNuppFfn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62C95C2BCB7;
-	Fri,  1 May 2026 07:03:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xa43aQYv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A817C2BCB4;
+	Fri,  1 May 2026 07:28:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777619038;
-	bh=J2NE0RqhzseSY+hH7I95i9F1rAkWIrEhJO5X80JgKKM=;
+	s=k20201202; t=1777620534;
+	bh=gHtu4eFjUZRmQUMrmjbJsuj2MVGkgojo6i+6CR5kDLg=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=uNuppFfnAkKGkgAeyLvATs9FRYd//93GQvNh0PXyLITMYpWYIRhZK1JSPRm9rfNYc
-	 R5K6GBPlYzrDDwrEcKqeAjqstEHaFUS6TGeIcVYrSR/CNITOaoVilfLlONKZCDWg7r
-	 nSla9TSVqrJtgcbk1jmONZImdL8OxXBV0FWry2iAs3sXOF8GGRVwlM9e1PutUcY8vs
-	 vp+xnlXxU0/OUlDyRZHpmnkCjnFaXPo4oa+oTduVVX96//QmvWOmMmLFHCTZ7zUccJ
-	 6TpkmdrLy74uCAOmD/3uC2JB0z9eLZSxtXzpZAjQF+8LMchLnsn9Q4W1CRMQ1Z4JlK
-	 yZd7C3OQD3M4w==
-Message-ID: <5571f831-dccb-4cfe-a618-35eec53963d7@kernel.org>
-Date: Fri, 1 May 2026 09:03:53 +0200
+	b=Xa43aQYv2po2JC/SOCRrFJWkdwHcHJdY4kLdOLiEjWEHaeGxp7b3UWMaWnipRBDxa
+	 6ByZQvHTvW0riisxgeufSDEJM7Wm87XR58TfmuObgHonPJ9abK2bIHCmUBoUlUoN0S
+	 917ZDf21r5njNNBGrDuTrUAVLfPfG8VH7WjtTezfOiTyuU4JgNCbNfvSObyA24tBEs
+	 6+UXiFopTbQW3qlVk/ca85liR0L51NdxuXnbdwKf09PqsVR60YLlOcTSJ2/q4ng+YZ
+	 ecurVcoM10hRK73U6XR0wdOovrY04emSYPqJgEl4qss+rLc2ATyXmmFkWNyykkzVQr
+	 PwhPnTWLxW1mA==
+Message-ID: <f9292ffc-e62d-4048-879b-042ec4d7d0db@kernel.org>
+Date: Fri, 1 May 2026 09:28:49 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,48 +35,44 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v3 5/5] selftests: net: add veth BQL stress test
+Subject: Re: [PATCH net-next v3 0/5] veth: add Byte Queue Limits (BQL) support
 To: Jakub Kicinski <kuba@kernel.org>
 Cc: netdev@vger.kernel.org, kernel-team@cloudflare.com,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+ Chris Arges <carges@cloudflare.com>, Mike Freemon <mfreemon@cloudflare.com>,
+ =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
  =?UTF-8?Q?Jonas_K=C3=B6ppeler?= <j.koeppeler@tu-berlin.de>,
- Breno Leitao <leitao@debian.org>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+ Breno Leitao <leitao@debian.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, bpf@vger.kernel.org
 References: <20260429172036.1028526-1-hawk@kernel.org>
- <20260429172036.1028526-6-hawk@kernel.org>
- <20260430190058.5b20b15a@kernel.org>
+ <20260430185825.43b2d0aa@kernel.org>
 Content-Language: en-US
 From: Jesper Dangaard Brouer <hawk@kernel.org>
-In-Reply-To: <20260430190058.5b20b15a@kernel.org>
+In-Reply-To: <20260430185825.43b2d0aa@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
 
-On 01/05/2026 04.00, Jakub Kicinski wrote:
-> On Wed, 29 Apr 2026 19:20:32 +0200 hawk@kernel.org wrote:
->> A companion wrapper (veth_bql_test_virtme.sh) launches the test inside
->> a virtme-ng VM, with .config validation to prevent silent stalls.
->>
->> Usage:
->>    sudo ./veth_bql_test.sh [--duration 300] [--nrules 100]
->>                            [--qdisc sfq] [--qdisc-opts '...']
->>                            [--bql-disable] [--normal-napi]
->>                            [--qdisc-replace]
+On 01/05/2026 03.58, Jakub Kicinski wrote:
+> On Wed, 29 Apr 2026 19:20:27 +0200 hawk@kernel.org wrote:
+>> This series adds BQL (Byte Queue Limits) to the veth driver, reducing
+>> latency by dynamically limiting in-flight packets in the ptr_ring and
+>> moving buffering into the qdisc where AQM algorithms can act on it.
 > 
-> Not convinced we need to carry this in the tree.
+> Does not apply (am I remembering right that it's not the first time
+> this series doesn't apply?)
 
-I agree, I will drop the selftest in V4.
+Rebased posted
+  V4: https://lore.kernel.org/all/20260501071633.644353-1-hawk@kernel.org/
 
-The selftest have been very useful during *development* phase.
-The number of options also reveal that we (Jonas and I) have been using
-this beyond a selftest. The veth_bql_test_virtme.sh wrapper have been a
-huge help to accelerate test-based development cycles,  but it's not a
-selftest component per say. This have caught actual bugs in our BQL/DQL
-API usage, but all those BUGs are fixed in code.
-
-It makes a lot of sense to avoid having to maintain this code in tree.
-I can place it somewhere on GitHub, else it can be pulled from lore.
+The conflict was on tools/testing/selftests/net/config for a change 
+applied 16 Apr, and I send patchset 29 Apr.  So, yes it seems I forgot 
+to rebase for that period, sorry.
 
 --Jesper
+
