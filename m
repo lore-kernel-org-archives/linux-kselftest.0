@@ -1,665 +1,149 @@
-Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22AFF2F4A05
-	for <linux-kselftest@vger.kernel.org>; Fri,  1 May 2026 04:27:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B78527442;
+	Fri,  1 May 2026 06:49:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777609670; cv=none; b=bYbvn/GudzXGNXUT1nEN7Eefg/HeVxg/ZeBOpJSmqtiDCz5Kr5mJxkIOaiHNgRXI4geAGx6jIqamBxljDJVKLRBFCWDMroEkJ6Xifj0rkWfjiMS9q8rknk+dU8aePXHJdG1B7LrNeXNdrTL8ezOraUmt0+vsWBzaJbzF+7CF7FQ=
+	t=1777618192; cv=none; b=na0VrmsrV4pab6czTfjswOh4GxeoRlzt89FxzLgyCMznqpCN/R+54Ly8IuCU56NR6N4/pnlNGidT03Liw4cwArJHbmeapBIU6dx4jQkSeX+SNIfGiMjo/tnETBzQJ+f4qjVbQzoq5449wrSZKOZdzW+9nCmkoxSolx+UGjl5JMU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777609670; c=relaxed/simple;
-	bh=toqOm+86kNdSOarGOpWdeZf5k6y6zC6URP7ljkK0BxM=;
+	s=arc-20240116; t=1777618192; c=relaxed/simple;
+	bh=z8eCVsUhlLmlW30jiO7Aj4uHtxm18V1RXfcy7kxXkqk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JCk1It3FZazbU0zKxiaRSrd//Iv1lG527GstSCIEn1osfFwogCnULvFULy5uwG//Wl8E/HCqzf6pSxoddaNKChzH3Znk535HnDMItLZCSZ8gcYYyae4izIYlXRiWLgw+NoL8E4sUpIvBMar36Yo8HQp4Wah6qaD3iXsm4ePM+fY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ZlKZRJvA; arc=none smtp.client-ip=95.215.58.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 In-Reply-To:Content-Type; b=Z+KhpYaOgRwC1M1OnEeUolGe5LL1OGjbK2VUxbEeInE71VfuCn7qyWXVSj4VGjU7dMgCXaFeYjlo8qsvI84WtaAvhsa34PXrYTDKDWAz1WMnEhsJIw90EO/io5tuNV5wDZ3Vw1RrAzCXpVopBHG+KOG4K7vkGYdn29dCyEOD8OU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ffn2Pqie; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ZlKZRJvA"
-Message-ID: <4e4500c0-a524-41b4-9a40-935c412ec4a1@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1777609654;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=k7iQn2BUW1R5FAQK351wiFYPYzQJ3uqOINgVqrWOOio=;
-	b=ZlKZRJvAZPRmd9J8zX5/N5wdFmn0h+QG6eu/If8/3h7gHiuj7ZPTNsdSWLABflIdjCutw7
-	QXKPiMZh4+qClqUHj+FbOlUIBQlQYiz3Ynop9kRa52DdmsTy97iF84SrnwB7D1R2HyRt8P
-	NdldsRywraYY6NBlHGg3zTibAI1ebqg=
-Date: Thu, 30 Apr 2026 21:27:22 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ffn2Pqie"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB845C2BCB7;
+	Fri,  1 May 2026 06:49:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1777618191;
+	bh=z8eCVsUhlLmlW30jiO7Aj4uHtxm18V1RXfcy7kxXkqk=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Ffn2PqieHHbE0tk28vxpJZVuU4TSyBI1pd1/MA9JSjCt+PJ+fav5VX9GBKU16RaxL
+	 ukvGJn6YhKFWo6NwbSxacntzhWcRUufOAnOOJ4XoZZV0PQ9mbwqHbFUIs2QaM27+dy
+	 oGatIbtTnYdtBRUIEqQnoKZIROVMphC8u7VBPzeXrYSkyKCQVo1731WA2zeKIM0eNw
+	 3zPYAL0Lh1iJvIHnwZIFAoJNIeDxYIVoQ22V/nmcHV/vL3Tg5d3frQaq9ceuG9eitD
+	 wbKpd1lpyJYRsrOZMvKdU802jT20NhMPxTJjyb4zhST/NCNMSig3rbpDnb14vEOSR0
+	 o1SblmQooOyWQ==
+Message-ID: <761b47b6-c2f1-4fef-bfab-48ee1d0bbe47@kernel.org>
+Date: Fri, 1 May 2026 08:49:43 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v2] RDMA/CM: add RDMA CM observability regression scripts
-To: Chenguang Zhao <zhaochenguang@kylinos.cn>, Jason Gunthorpe
- <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
- Shuah Khan <shuah@kernel.org>, "yanjun.zhu@linux.dev" <yanjun.zhu@linux.dev>
-Cc: linux-rdma@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260428071216.1212775-1-zhaochenguang@kylinos.cn>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Zhu Yanjun <yanjun.zhu@linux.dev>
-In-Reply-To: <20260428071216.1212775-1-zhaochenguang@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 00/11] mm/damon: introduce DAMOS failed region quota
+ charge ratio
+To: SeongJae Park <sj@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ "Liam R. Howlett" <liam@infradead.org>,
+ Brendan Higgins <brendan.higgins@linux.dev>,
+ David Gow <davidgow@davidgow.net>, Jonathan Corbet <corbet@lwn.net>,
+ Lorenzo Stoakes <ljs@kernel.org>, Michal Hocko <mhocko@suse.com>,
+ Mike Rapoport <rppt@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Shuah Khan <skhan@linuxfoundation.org>,
+ Suren Baghdasaryan <surenb@google.com>, Vlastimil Babka <vbabka@kernel.org>,
+ damon@lists.linux.dev, kunit-dev@googlegroups.com,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org
+References: <20260501015604.83041-1-sj@kernel.org>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <20260501015604.83041-1-sj@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-在 2026/4/28 0:12, Chenguang Zhao 写道:
-> This adds a minimal RDMA CM selftest suite that captures observability
-> baselines and runs trace, counter-delta, and fault-injection-oriented
-> checks, plus a review-loop helper for repeated validation rounds.
+On 5/1/26 03:56, SeongJae Park wrote:
+> On Tue, 28 Apr 2026 08:24:24 -0700 SeongJae Park <sj@kernel.org> wrote:
 > 
-> Signed-off-by: Chenguang Zhao <zhaochenguang@kylinos.cn>
-> ---
->   v2:
->   - Move the test scripts to tools/testing/selftests/rdma
->     as suggested by Leon.
+>> Hello Andrew,
+>>
+>> On Tue, 28 Apr 2026 07:48:37 -0700 Andrew Morton <akpm@linux-foundation.org> wrote:
+>>
+>>>
+>>>
+>>> Add, thanks.
+>>>
+>>> As mentioned provately, Sashiko claims to have found things which it
+>>> didn't see in the RFC.
+>>>
+>>> 	https://sashiko.dev/#/patchset/20260428013402.115171-1-sj@kernel.org
+>>
+>> TL; DR: I find no blocker for this patch series from the Sashiko reviews.
+>>
+>> Now sashiko replies its reviews for DAMON patches to authors and
+>> damon@lists.linux.dev.  So I replied [1,2,3] my review of the reviews to those
+>> on damon@lists.linux.dev mailing list.  As I mentioned on the TL;DR, I find no
+>> blocker for this series.
+>>
+>> And I think you didn't see those because those are sent to only authors and
+>> damon@lists.linux.dev.
+>>
+>> I nowadays reply-all to original recipients only if Sashiko found a blocker.  I
+>> will also add short notice for non-RFC patches if Sashiko found zero issue.
 > 
->   - rdma_cm_baseline.sh:rdma_cm_baseline.sh: Captures baseline
->     observability data for RDMA CM, establishing a reference
->     point for testing.
-> 
->   - rdma_cm_counter_delta.sh: Monitors and reports counter deltas
->     during RDMA operations to detect unexpected behavior
-> 
->   - rdma_cm_fault_injection.sh: Performs fault injection to test
->     RDMA CM's handling of failures and error scenarios.
-> 
->   - rdma_cm_review_loop.sh: Automates repeated testing for continuous
->     validation of RDMA CM functionality.
-> 
->   - rdma_cm_trace_sequence.sh: Captures a trace sequence of RDMA
->     operations to ensure proper flow and aid in troubleshooting.
-> 
->   - rdma_common.sh: Contains shared utility functions used across
->     the above scripts for consistency and reusability.
-> ---
->   tools/testing/selftests/Makefile              |   1 +
->   tools/testing/selftests/rdma/Makefile         |  10 ++
->   tools/testing/selftests/rdma/config           |   6 +
->   .../selftests/rdma/rdma_cm_baseline.sh        |  58 ++++++++
->   .../selftests/rdma/rdma_cm_counter_delta.sh   |  72 ++++++++++
->   .../selftests/rdma/rdma_cm_fault_injection.sh |  95 +++++++++++++
->   .../selftests/rdma/rdma_cm_review_loop.sh     |  35 +++++
->   .../selftests/rdma/rdma_cm_trace_sequence.sh  |  83 ++++++++++++
->   tools/testing/selftests/rdma/rdma_common.sh   | 126 ++++++++++++++++++
->   9 files changed, 486 insertions(+)
->   create mode 100755 tools/testing/selftests/rdma/rdma_cm_baseline.sh
->   create mode 100755 tools/testing/selftests/rdma/rdma_cm_counter_delta.sh
->   create mode 100755 tools/testing/selftests/rdma/rdma_cm_fault_injection.sh
->   create mode 100755 tools/testing/selftests/rdma/rdma_cm_review_loop.sh
->   create mode 100755 tools/testing/selftests/rdma/rdma_cm_trace_sequence.sh
->   create mode 100755 tools/testing/selftests/rdma/rdma_common.sh
-> 
-> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-> index 6e59b8f63e41..5794d55a92b2 100644
-> --- a/tools/testing/selftests/Makefile
-> +++ b/tools/testing/selftests/Makefile
-> @@ -22,6 +22,7 @@ TARGETS += drivers/ntsync
->   TARGETS += drivers/s390x/uvdevice
->   TARGETS += drivers/net
->   TARGETS += drivers/net/bonding
-> +TARGETS += rdma
+> ... Now I think the short notice is only redundant and silly, as the full
+> review is available on damon@ list and the one who primarily interested in
+> (Andrew) understands that.  I feel like the short-notice reply-all only
+> increase unnecessary traffic and my redundant typing.  I will not do the short
+> notice broadcasting, unless someone makes a diffeernt voice.
 
-In the latest linux kernel, in the file tools/testing/selftests/Makefile
-"
-...
-  99 TARGETS += ptrace
-100 TARGETS += openat2
-101 TARGETS += rdma
-102 TARGETS += resctrl
-103 TARGETS += riscv
-104 TARGETS += rlimits
-...
-"
-rdma has already been in this file.
+For Damon Andrew should for now just trust your ACKs. If it has your ACK, it's
+good to go.
 
-I am wondering if this rdma still needs to be added into this file.
+In the future, I expect you would pick up the patches yourself, which is where
+you as the component maintainer would look for any blockers.
 
-Zhu Yanjun
+So for Damon patches I don't think we need the AI review notices from Andrew.
 
->   TARGETS += drivers/net/netconsole
->   TARGETS += drivers/net/team
->   TARGETS += drivers/net/virtio_net
-> diff --git a/tools/testing/selftests/rdma/Makefile b/tools/testing/selftests/rdma/Makefile
-> index 7dd7cba7a73c..04c52db4b9d9 100644
-> --- a/tools/testing/selftests/rdma/Makefile
-> +++ b/tools/testing/selftests/rdma/Makefile
-> @@ -4,4 +4,14 @@ TEST_PROGS := rxe_rping_between_netns.sh \
->   		rxe_socket_with_netns.sh \
->   		rxe_test_NETDEV_UNREGISTER.sh
->   
-> +TEST_PROGS += \
-> +	rdma_cm_baseline.sh \
-> +	rdma_cm_trace_sequence.sh \
-> +	rdma_cm_counter_delta.sh \
-> +	rdma_cm_fault_injection.sh
-> +
-> +TEST_FILES += \
-> +	rdma_common.sh \
-> +	rdma_cm_review_loop.sh
-> +
->   include ../lib.mk
-> diff --git a/tools/testing/selftests/rdma/config b/tools/testing/selftests/rdma/config
-> index 4ffb814e253b..e22141838c19 100644
-> --- a/tools/testing/selftests/rdma/config
-> +++ b/tools/testing/selftests/rdma/config
-> @@ -1,3 +1,9 @@
->   CONFIG_TUN
->   CONFIG_VETH
->   CONFIG_RDMA_RXE
-> +CONFIG_DEBUG_KERNEL
-> +CONFIG_FAULT_INJECTION
-> +CONFIG_SYSFS
-> +CONFIG_DEBUG_FS
-> +CONFIG_FAULT_INJECTION_DEBUG_FS
-> +CONFIG_FAILSLAB
-> diff --git a/tools/testing/selftests/rdma/rdma_cm_baseline.sh b/tools/testing/selftests/rdma/rdma_cm_baseline.sh
-> new file mode 100755
-> index 000000000000..b0d8b3e46470
-> --- /dev/null
-> +++ b/tools/testing/selftests/rdma/rdma_cm_baseline.sh
-> @@ -0,0 +1,58 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +set -euo pipefail
-> +
-> +SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-> +source "${SCRIPT_DIR}/rdma_common.sh"
-> +
-> +require_root
-> +require_cmd date
-> +require_cmd uname
-> +
-> +trace_dir="$(tracefs_dir || true)"
-> +counter_root="$(find_cm_counter_root || true)"
-> +out_dir="/tmp/rdma_cm_baseline.$(date +%s)"
-> +dmesg_lines=400
-> +dmesg_pattern="ib_cm|infiniband|rdma|roce|mlx|hns_roce|irdma|siw|rxe"
-> +
-> +mkdir -p "${out_dir}"
-> +
-> +log_info "writing baseline to ${out_dir}"
-> +
-> +{
-> +	echo "timestamp=$(date -u +%FT%TZ)"
-> +	echo "kernel=$(uname -r)"
-> +	echo "hostname=$(uname -n)"
-> +	echo "dmesg_lines=${dmesg_lines}"
-> +	echo "dmesg_pattern=${dmesg_pattern}"
-> +} >"${out_dir}/env.txt"
-> +
-> +if [[ -n "${trace_dir}" && -d "${trace_dir}/events/ib_cma" ]]; then
-> +	find "${trace_dir}/events/ib_cma" -maxdepth 2 -name enable -print \
-> +		>"${out_dir}/trace_events.list" 2>/dev/null || true
-> +else
-> +	log_warn "tracefs or ib_cma trace events are unavailable"
-> +fi
-> +
-> +if [[ -n "${counter_root}" ]]; then
-> +	{
-> +		echo "counter_root=${counter_root}"
-> +		for group in "${RDMA_COUNTER_GROUPS[@]}"; do
-> +			for attr in "${RDMA_COUNTER_ATTRS[@]}"; do
-> +				value="$(read_cm_counter "${counter_root}" "${group}" "${attr}")"
-> +				echo "${group}.${attr}=${value}"
-> +			done
-> +		done
-> +	} >"${out_dir}/cm_counters.before"
-> +else
-> +	log_warn "cm counters are unavailable under /sys/class/infiniband"
-> +fi
-> +
-> +if command -v dmesg >/dev/null 2>&1; then
-> +	dmesg | tail -n "${dmesg_lines}" | grep -E "${dmesg_pattern}" \
-> +		>"${out_dir}/dmesg.rdma.tail" || true
-> +fi
-> +
-> +log_info "baseline collection completed"
-> +exit 0
-> diff --git a/tools/testing/selftests/rdma/rdma_cm_counter_delta.sh b/tools/testing/selftests/rdma/rdma_cm_counter_delta.sh
-> new file mode 100755
-> index 000000000000..060adf9fe78a
-> --- /dev/null
-> +++ b/tools/testing/selftests/rdma/rdma_cm_counter_delta.sh
-> @@ -0,0 +1,72 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +set -euo pipefail
-> +
-> +SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-> +source "${SCRIPT_DIR}/rdma_common.sh"
-> +
-> +require_root
-> +counter_root="$(find_cm_counter_root || true)"
-> +counter_wait_sec=2
-> +
-> +if [[ -z "${counter_root}" ]]; then
-> +	log_warn "cm counters are unavailable under /sys/class/infiniband"
-> +	exit "${ksft_skip}"
-> +fi
-> +
-> +declare -A before after
-> +
-> +for group in "${RDMA_COUNTER_GROUPS[@]}"; do
-> +	for attr in "${RDMA_COUNTER_ATTRS[@]}"; do
-> +		key="${group}.${attr}"
-> +		before["${key}"]="$(read_cm_counter "${counter_root}" "${group}" "${attr}")"
-> +	done
-> +done
-> +
-> +if [[ "${counter_wait_sec}" != "0" ]]; then
-> +	log_info "waiting ${counter_wait_sec}s before workload"
-> +	sleep "${counter_wait_sec}"
-> +fi
-> +
-> +workload_rc=0
-> +run_workload || workload_rc=$?
-> +if [[ "${workload_rc}" -eq "${ksft_skip}" ]]; then
-> +	exit "${ksft_skip}"
-> +fi
-> +if [[ "${workload_rc}" -ne 0 ]]; then
-> +	log_err "workload failed with rc=${workload_rc}"
-> +	exit "${workload_rc}"
-> +fi
-> +
-> +for group in "${RDMA_COUNTER_GROUPS[@]}"; do
-> +	for attr in "${RDMA_COUNTER_ATTRS[@]}"; do
-> +		key="${group}.${attr}"
-> +		after["${key}"]="$(read_cm_counter "${counter_root}" "${group}" "${attr}")"
-> +		delta=$((after["${key}"] - before["${key}"]))
-> +		echo "${key}.delta=${delta}"
-> +		if ((delta < 0)); then
-> +			log_err "counter regressed: ${key}"
-> +			exit 1
-> +		fi
-> +	done
-> +done
-> +
-> +dup_limit=10
-> +retry_limit=10
-> +
-> +for attr in "${RDMA_COUNTER_ATTRS[@]}"; do
-> +	dup_delta=$((after["cm_rx_duplicates.${attr}"] - before["cm_rx_duplicates.${attr}"]))
-> +	retry_delta=$((after["cm_tx_retries.${attr}"] - before["cm_tx_retries.${attr}"]))
-> +
-> +	if ((dup_delta > dup_limit)); then
-> +		log_err "duplicate counter exceeds limit: ${attr}=${dup_delta}"
-> +		exit 1
-> +	fi
-> +	if ((retry_delta > retry_limit)); then
-> +		log_err "retry counter exceeds limit: ${attr}=${retry_delta}"
-> +		exit 1
-> +	fi
-> +done
-> +
-> +exit 0
-> diff --git a/tools/testing/selftests/rdma/rdma_cm_fault_injection.sh b/tools/testing/selftests/rdma/rdma_cm_fault_injection.sh
-> new file mode 100755
-> index 000000000000..0202ee901386
-> --- /dev/null
-> +++ b/tools/testing/selftests/rdma/rdma_cm_fault_injection.sh
-> @@ -0,0 +1,95 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +set -euo pipefail
-> +
-> +SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-> +source "${SCRIPT_DIR}/rdma_common.sh"
-> +
-> +require_root
-> +
-> +debugfs_fail="/sys/kernel/debug/failslab"
-> +recovery_wait_sec=2
-> +if [[ ! -d "${debugfs_fail}" ]]; then
-> +	log_warn "failslab is unavailable: ${debugfs_fail}"
-> +	exit "${ksft_skip}"
-> +fi
-> +
-> +for knob in probability interval times task-filter; do
-> +	if [[ ! -f "${debugfs_fail}/${knob}" ]]; then
-> +		log_warn "failslab knob missing: ${knob}"
-> +		exit "${ksft_skip}"
-> +	fi
-> +done
-> +
-> +orig_probability="$(cat "${debugfs_fail}/probability")"
-> +orig_interval="$(cat "${debugfs_fail}/interval")"
-> +orig_times="$(cat "${debugfs_fail}/times")"
-> +orig_task_filter="$(cat "${debugfs_fail}/task-filter")"
-> +
-> +restore_knobs()
-> +{
-> +	echo "${orig_probability}" >"${debugfs_fail}/probability" || true
-> +	echo "${orig_interval}" >"${debugfs_fail}/interval" || true
-> +	echo "${orig_times}" >"${debugfs_fail}/times" || true
-> +	echo "${orig_task_filter}" >"${debugfs_fail}/task-filter" || true
-> +}
-> +
-> +trap restore_knobs EXIT
-> +
-> +log_failslab_state()
-> +{
-> +	local state="$1"
-> +	local task_filter probability interval times
-> +
-> +	task_filter="$(cat "${debugfs_fail}/task-filter")"
-> +	probability="$(cat "${debugfs_fail}/probability")"
-> +	interval="$(cat "${debugfs_fail}/interval")"
-> +	times="$(cat "${debugfs_fail}/times")"
-> +
-> +	log_info "failslab ${state}: task-filter=${task_filter} probability=${probability}"
-> +	log_info "failslab ${state}: interval=${interval} times=${times}"
-> +}
-> +
-> +echo 1 >"${debugfs_fail}/task-filter"
-> +echo 1 >"${debugfs_fail}/probability"
-> +echo 100 >"${debugfs_fail}/interval"
-> +echo 1 >"${debugfs_fail}/times"
-> +log_failslab_state "enabled"
-> +
-> +if [[ -z "${CM_WORKLOAD_CMD:-}" && -n "${CM_VALIDATE_RECOVERY_CMD:-}" ]]; then
-> +	CM_WORKLOAD_CMD="${CM_VALIDATE_RECOVERY_CMD}"
-> +	log_warn "CM_WORKLOAD_CMD is not set; fallback to CM_VALIDATE_RECOVERY_CMD"
-> +fi
-> +
-> +injected_rc=0
-> +run_workload || injected_rc=$?
-> +if [[ "${injected_rc}" -eq "${ksft_skip}" ]]; then
-> +	exit "${ksft_skip}"
-> +fi
-> +log_info "workload rc under injection=${injected_rc}"
-> +
-> +echo 0 >"${debugfs_fail}/probability"
-> +echo 0 >"${debugfs_fail}/times"
-> +echo 0 >"${debugfs_fail}/task-filter"
-> +log_failslab_state "disabled"
-> +
-> +recovery_cmd="${CM_VALIDATE_RECOVERY_CMD:-${CM_WORKLOAD_CMD:-}}"
-> +if [[ -z "${recovery_cmd}" ]]; then
-> +	log_warn "CM_VALIDATE_RECOVERY_CMD and CM_WORKLOAD_CMD are both unset"
-> +	exit "${ksft_skip}"
-> +fi
-> +
-> +if [[ "${recovery_wait_sec}" != "0" ]]; then
-> +	log_info "waiting ${recovery_wait_sec}s before recovery workload"
-> +	sleep "${recovery_wait_sec}"
-> +fi
-> +
-> +log_info "running recovery workload: ${recovery_cmd}"
-> +if ! bash -c "${recovery_cmd}"; then
-> +	log_err "recovery workload failed after disabling fault injection"
-> +	log_err "hint: ensure remote server is restarted and listening for a second connection"
-> +	exit 1
-> +fi
-> +
-> +exit 0
-> diff --git a/tools/testing/selftests/rdma/rdma_cm_review_loop.sh b/tools/testing/selftests/rdma/rdma_cm_review_loop.sh
-> new file mode 100755
-> index 000000000000..c156090b17e3
-> --- /dev/null
-> +++ b/tools/testing/selftests/rdma/rdma_cm_review_loop.sh
-> @@ -0,0 +1,35 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +set -euo pipefail
-> +
-> +SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-> +cd "${SCRIPT_DIR}"
-> +
-> +declare -A rc
-> +
-> +run_step()
-> +{
-> +	local name="$1"
-> +	local cmd="$2"
-> +
-> +	echo "==== ${name} ===="
-> +	if bash -c "${cmd}"; then
-> +		rc["${name}"]=0
-> +	else
-> +		rc["${name}"]=$?
-> +	fi
-> +	echo "==== ${name} rc=${rc["${name}"]} ===="
-> +}
-> +
-> +run_step baseline "./rdma_cm_baseline.sh"
-> +run_step trace "./rdma_cm_trace_sequence.sh"
-> +run_step counters "./rdma_cm_counter_delta.sh"
-> +run_step fault_injection "./rdma_cm_fault_injection.sh"
-> +
-> +echo "==== summary ===="
-> +for name in baseline trace counters fault_injection; do
-> +	echo "${name}=${rc["${name}"]}"
-> +done
-> +
-> +exit 0
-> diff --git a/tools/testing/selftests/rdma/rdma_cm_trace_sequence.sh b/tools/testing/selftests/rdma/rdma_cm_trace_sequence.sh
-> new file mode 100755
-> index 000000000000..7e68289345e8
-> --- /dev/null
-> +++ b/tools/testing/selftests/rdma/rdma_cm_trace_sequence.sh
-> @@ -0,0 +1,83 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +set -euo pipefail
-> +
-> +SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-> +source "${SCRIPT_DIR}/rdma_common.sh"
-> +
-> +require_root
-> +require_cmd bash
-> +require_cmd grep
-> +
-> +trace_dir="$(tracefs_dir || true)"
-> +if [[ -z "${trace_dir}" ]]; then
-> +	log_warn "tracefs is unavailable"
-> +	exit "${ksft_skip}"
-> +fi
-> +
-> +if [[ ! -d "${trace_dir}/events/ib_cma" ]]; then
-> +	log_warn "ib_cma trace events are unavailable"
-> +	exit "${ksft_skip}"
-> +fi
-> +
-> +workload_rc=0
-> +
-> +cleanup_trace()
-> +{
-> +	local event
-> +
-> +	for event in icm_send_req icm_send_rep icm_send_rtu icm_recv_unknown_attr; do
-> +		[[ -f "${trace_dir}/events/ib_cma/${event}/enable" ]] && \
-> +			echo 0 >"${trace_dir}/events/ib_cma/${event}/enable"
-> +	done
-> +	[[ -f "${trace_dir}/events/ib_cma/enable" ]] && echo 0 >"${trace_dir}/events/ib_cma/enable"
-> +	echo 0 >"${trace_dir}/tracing_on"
-> +}
-> +
-> +trap cleanup_trace EXIT
-> +
-> +echo 0 >"${trace_dir}/tracing_on"
-> +echo >"${trace_dir}/trace"
-> +echo 1 >"${trace_dir}/events/ib_cma/enable"
-> +
-> +for event in icm_send_req icm_send_rep icm_send_rtu; do
-> +	if [[ -f "${trace_dir}/events/ib_cma/${event}/enable" ]]; then
-> +		echo 1 >"${trace_dir}/events/ib_cma/${event}/enable"
-> +	fi
-> +done
-> +
-> +echo 1 >"${trace_dir}/tracing_on"
-> +run_workload || workload_rc=$?
-> +echo 0 >"${trace_dir}/tracing_on"
-> +
-> +if [[ "${workload_rc}" -eq "${ksft_skip}" ]]; then
-> +	exit "${ksft_skip}"
-> +fi
-> +
-> +trace_log="/tmp/rdma_cm_trace.$(date +%s).log"
-> +cat "${trace_dir}/trace" >"${trace_log}"
-> +log_info "captured trace at ${trace_log}"
-> +
-> +if ! grep -Eq "icm_send_(req|rep|rtu)" "${trace_log}"; then
-> +	log_err "missing CM send trace events (req/rep/rtu)"
-> +	exit 1
-> +fi
-> +
-> +err_lines="$(grep "icm_.*_err" "${trace_log}" || true)"
-> +if [[ -n "${err_lines}" ]]; then
-> +	# DREP send failure while already in TIMEWAIT is a common teardown
-> +	# race and is tolerated for this smoke-style validation script.
-> +	untolerated_err_lines="$(
-> +		printf '%s\n' "${err_lines}" | \
-> +			grep -Ev "icm_send_drep_err: .*state=TIMEWAIT" || true
-> +	)"
-> +	if [[ -n "${untolerated_err_lines}" ]]; then
-> +		log_err "error trace event detected in ib_cma path"
-> +		printf '%s\n' "${untolerated_err_lines}" >&2
-> +		exit 1
-> +	fi
-> +	log_warn "only tolerated TIMEWAIT drep errors observed"
-> +fi
-> +
-> +exit 0
-> diff --git a/tools/testing/selftests/rdma/rdma_common.sh b/tools/testing/selftests/rdma/rdma_common.sh
-> new file mode 100755
-> index 000000000000..ee3d8b0d86b2
-> --- /dev/null
-> +++ b/tools/testing/selftests/rdma/rdma_common.sh
-> @@ -0,0 +1,126 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +ksft_skip=4
-> +RET=0
-> +
-> +RDMA_COUNTER_GROUPS=(
-> +	cm_tx_msgs
-> +	cm_tx_retries
-> +	cm_rx_msgs
-> +	cm_rx_duplicates
-> +)
-> +
-> +RDMA_COUNTER_ATTRS=(
-> +	req
-> +	mra
-> +	rej
-> +	rep
-> +	rtu
-> +	dreq
-> +	drep
-> +	sidr_req
-> +	sidr_rep
-> +	lap
-> +	apr
-> +)
-> +
-> +log_info()
-> +{
-> +	echo "INFO: $*"
-> +}
-> +
-> +log_warn()
-> +{
-> +	echo "WARN: $*" >&2
-> +}
-> +
-> +log_err()
-> +{
-> +	echo "ERROR: $*" >&2
-> +}
-> +
-> +require_root()
-> +{
-> +	if [[ "$(id -u)" -ne 0 ]]; then
-> +		log_warn "this test requires root privileges"
-> +		exit "${ksft_skip}"
-> +	fi
-> +}
-> +
-> +require_cmd()
-> +{
-> +	local cmd="$1"
-> +
-> +	command -v "${cmd}" >/dev/null 2>&1 || {
-> +		log_warn "missing required command: ${cmd}"
-> +		exit "${ksft_skip}"
-> +	}
-> +}
-> +
-> +tracefs_dir()
-> +{
-> +	if [[ -d /sys/kernel/tracing ]]; then
-> +		echo /sys/kernel/tracing
-> +	elif [[ -d /sys/kernel/debug/tracing ]]; then
-> +		echo /sys/kernel/debug/tracing
-> +	else
-> +		return 1
-> +	fi
-> +}
-> +
-> +find_cm_counter_root()
-> +{
-> +	local base
-> +	local port
-> +	local candidate
-> +
-> +	for base in /sys/class/infiniband/*; do
-> +		[[ -d "${base}" ]] || continue
-> +
-> +		for port in "${base}"/ports/*; do
-> +			[[ -d "${port}" ]] || continue
-> +			# RoCE / newer sysfs: cm_* groups live directly under ports/<N>/
-> +			if [[ -d "${port}/cm_tx_msgs" ]]; then
-> +				echo "${port}"
-> +				return 0
-> +			fi
-> +			# Legacy layout: under counters/ or hw_counters/
-> +			for candidate in "${port}/counters" "${port}/hw_counters"; do
-> +				[[ -d "${candidate}/cm_tx_msgs" ]] || continue
-> +				echo "${candidate}"
-> +				return 0
-> +			done
-> +		done
-> +	done
-> +
-> +	return 1
-> +}
-> +
-> +read_cm_counter()
-> +{
-> +	local root="$1"
-> +	local group="$2"
-> +	local attr="$3"
-> +	local path="${root}/${group}/${attr}"
-> +
-> +	if [[ -f "${path}" ]]; then
-> +		cat "${path}" 2>/dev/null
-> +	else
-> +		echo 0
-> +	fi
-> +}
-> +
-> +run_workload()
-> +{
-> +	local cmd="${CM_WORKLOAD_CMD:-}"
-> +
-> +	if [[ -z "${cmd}" ]]; then
-> +		log_warn "CM_WORKLOAD_CMD is not set"
-> +		return "${ksft_skip}"
-> +	fi
-> +
-> +	log_info "running workload: ${cmd}"
-> +	bash -c "${cmd}"
-> +}
-> +
+-- 
+Cheers,
 
+David
