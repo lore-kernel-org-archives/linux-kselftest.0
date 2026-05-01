@@ -1,336 +1,154 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f47.google.com (mail-dl1-f47.google.com [74.125.82.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A76443D171E;
-	Fri,  1 May 2026 15:53:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777650805; cv=none; b=MsfhqGJeEWRVmWavwjvCV+QlVf0ulWZQNGVivQtCYeIDfKG84vD4qFW1z9iEpPUYbPX4SQrEWieXnCwf3ayiwwHnrl/o35kYT9yTG5H+2an7E+oL5AA4eiL6YAh0A89g0Eo7XNUcDE7CHcBC1XrlE1+y7Pe8D0LCWRnV4Xe2QFY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777650805; c=relaxed/simple;
-	bh=FNs5J5Ppb9l1ztLphXVsPoaZSfqh9Dqf/9mSZ8ms9Cw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=MRlRBO4qbFDwxjUA9j8FZsMFAzoZpcAjvyrDV6vUV2Ry0JSAhjmZFq9o41WlR/LyCF+ZowIq32NCxJmQuTWF1pPRjJg+L3+ADiIfqci9vYn/z2P3nbXGiulNJvCx6kQVehyGFDYSO1E27wq/KshNjhJtFEDT4ime9dqJnR2GXqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=fFCZZBaM; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=debian.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B1273DCDBE
+	for <linux-kselftest@vger.kernel.org>; Fri,  1 May 2026 16:11:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.47
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777651911; cv=pass; b=PVxlMqKDETlhyKxaScEcEdRmidljkFAZcaseCZj5xDB8/WU/6y0NmuM/VGiuo2WQ+veOao+/L+W9Q1/ApDSh0jCMw83eU/vy4ZX0YBl5NYlyH5sN5OCxkY3gBmgQyv+Rw5weQ16Wsa9aA1MpKyIIQN/cjq2e9jkOcK07ZcoM6Go=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777651911; c=relaxed/simple;
+	bh=Lg3I4a5CVSLmEfFpzSrc+IJ6RbdpOOFMUy6frdtkKdg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=cd3LyxnBnolhtxiP+MgUaVi1i23dPOFrVeLSSy8QXQJLmmqrGwHvbhrHwnCOdXSTWEE7l2i5/zP8V3bJBz9itYvG1PpAdN/xlLlleapUwsxQRQLYskXHLFbcHsXzftn5eBLPMd+QIxj7usm6LR/wMRuLsuyFSfO3FfVEbMi6Yb0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=iuDKym33; arc=pass smtp.client-ip=74.125.82.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="fFCZZBaM"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:In-Reply-To:References:
-	Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:
-	From:Reply-To:Content-ID:Content-Description;
-	bh=+4lpJ9L4N91jikzY7fBps/QDWvLq2JJ9buQYKU46m78=; b=fFCZZBaM+1hmr4K4Gb5kLz0Lnt
-	LA2RWmIuC7GVr229/QCKKXCCRTmZaWiRfEpI6UuIn5k7ZZdXh2rMW3+tmwlipnxtOCTecFAnxGUkw
-	5CoB9REOEMxXOzzvDtSFi/wmmIaV4zrUQub+BdvlUs3AhpOvLttOEfofcmD3LxMv9GgH99ZdTTlSe
-	rYgtjZQfdPo11ZDoCNtHhtLsacPPnFDBFh4dmf9JC57XwGWAroDZifIfmQXwpGZ1ooKYZFPI/OyzY
-	Hl2qFLDRKxzcam0PVl+XaUW2kHKgmXvudjnsSYi3RbcdjLstT0FQQWdYP6R6eCnc+ahv5sMdg3qGB
-	vT9YMy/g==;
-Received: from authenticated user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wIqB7-008gYH-0i;
-	Fri, 01 May 2026 15:53:21 +0000
-From: Breno Leitao <leitao@debian.org>
-Date: Fri, 01 May 2026 08:52:53 -0700
-Subject: [PATCH net-next 3/3] net: selftests: add getsockopt_iter
- regression tests
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="iuDKym33"
+Received: by mail-dl1-f47.google.com with SMTP id a92af1059eb24-12c565dd3a7so2914419c88.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 01 May 2026 09:11:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1777651899; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Ni6KszBoWmZ7a2/ts0al6lnq5HNWgdrJg79M1dOWHP4fkkp3E56pCMNpWybMJ28Vi2
+         /bSxHw2newJV82x5NM3yZmTBNwGHuzfJYEtYv9x7KXYz8ppVIY/CnaN3dZu7y1FYaR1g
+         OM4saqN7Bh5gOiUCT8gKXBGK9LLwNv0xLNVr3i8uEHz0PzUra52D75lk53ZN/nMg/3fL
+         4QgOQebzcCOvqPWdjGGDqHmww1QAivibeaRGPhTDUW47OSBeUvB+JOyQv3doscGXApJ/
+         rBf+P1dWAEcfxKeWyxTJhfrFoCZFXMFILo8ruA7Rg9p7rmC5mU3ZaejkpHWRDlptGXeI
+         I0JA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=qUtLnk45BiKrXHINpVcyMQeBwCn16A0KrBFa2QFTWtI=;
+        fh=ksWM6LRN6NKxSea6MU/JRFas6i0XbDloxNKWWLIdlZo=;
+        b=ABJ5t99gUsxgjAHPBu1qDGbIHIzutTGFvsHVNHb/S7s15al9wXi99SmwMZcwDzo7ie
+         wPVe2dKsL3wwo5MR8OWybQIch2ITbMgB8kXnn/bhpBG0SFaQQAKp5UwL5eALo7OJ1tEK
+         QS16dCd8/GzlQBWPKbhBseTSUxJ3Jv9EfnDrWx0I9GfkfZUVRHrK5Tf2/KGM+olu+M5Z
+         GMKc4S3OQZAKCzqIK4l18cU5gs+B8CQyeg+U1Sbu8R+bpurwEPvPbE1TE/LOVGmgQZP8
+         58POuPxCJhi8LuBSX5jtLNhFQqABNC0dMLhUtTS1sd+3rjO+yTss/fmQYwCpZOovhlSl
+         bwZg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1777651899; x=1778256699; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qUtLnk45BiKrXHINpVcyMQeBwCn16A0KrBFa2QFTWtI=;
+        b=iuDKym332S3y8j2Dh8gx5+R6x5q9ow83jxo2eSebtwLzoL7A08OmajBfhFzWCdKifv
+         tSC2/qCqb0EUCeKQDXArWwsFbvxZshdj6+YxZkOwWJCHAlm9NTkqeDbUD5DhrBf+uT8b
+         7OVSxiC+3KhCsYvtennSRH1IZs6NYrEzCC0WKMmPy12hYAmghoqQEMvJSKgRc/MER5jp
+         SdoEm9F7/eDVT3mm6gVwb+36REfhqT1KtcCZSynk5T8jlVrrv2iHBADepDV4W4Fny6Ce
+         VqcOd4HzKiBmsbe9OdD/EaQKN8No8kqjD+EfMrTpOxVlFahLEr+8c0miMiEYERdd7FJz
+         H1Pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777651899; x=1778256699;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=qUtLnk45BiKrXHINpVcyMQeBwCn16A0KrBFa2QFTWtI=;
+        b=efbcDIgBDrUEVcT6QwPUVcKv+Z6pdOZ1RAxaWRgAacND6/7vcY004eOPAUYcW7HEep
+         M1cuVrTI+cX0F1VBcfUjzL+FQpOOvThhdQYJABTwfzpDKETT4bfxxy6QTi1sSfpRQjPV
+         NWAG49UhrnLxXg0qL9rl5X02S9MAI1K3vaGU4wyPOIe4OytdTER84ASwvapia8OsM1Gj
+         SerB/FEpuY46nuFjBisWlm+1L7ogK2omMfuGWwVUBEqve8QzM4Cv8RTHX0aR2ET0Covn
+         21fx4nLpBu6g9b9iTuz5nYlw+/ZOvgwFlED0JNKG4QFgKvSC6blQZgnwgqje7RromSpL
+         GZaA==
+X-Forwarded-Encrypted: i=1; AFNElJ/fgXQwOnakxpX8qb356MtQkCku5tdvSoaYzQzULc68hUlPMxdvuXkawRDsEd09elIe60SAm0oYlkEzNrcmix8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzOJ2w1mwJFx4ZKGmLheyhbf6KI3Q+OQOOi9rr1A2V0XrfzOc5N
+	+S5/65L1s9yxTGPBkmIowY4UA4RKYca2ua+V6wU+Saqj4aidwwvVYn0vTvdM7OVGmZhGfY6qVLM
+	RsAczYiuIOG4zdukSXYmUhRE7nzsM2Gen9Uqa/Ocu
+X-Gm-Gg: AeBDiet0Lu4gdiWemWh36COk7+ExUM4o5AMHvQSJCLuQTInT9wnlMfEFh5gW19WdhVY
+	Zkj0dOCd61uiOq6g2A1VfHpPNQEwYfKO9PuJZPZUSiBamdXM4GBD0Qe7Ms9Z1Qiyg7sSxdQlEik
+	ugkoUOCzEgrTXrDmsTP0k4iYrEsGRViXFvaTCnxmCjXvUy7IGEU0rzewUasj/36mfFFFAgtG930
+	lCj1iHzqOtyGRfYGJDy22TgRp1Ep8I1q8tMhmxHT8ILpMpS9YDwB1T8i9yANiUZ127e7icRU2/d
+	M4RxOw++MkAh82AE8+PY0vG1h0zO6L/UY6KFoxFV
+X-Received: by 2002:a05:7022:423:b0:12d:e126:b7c8 with SMTP id
+ a92af1059eb24-12deac411demr3607716c88.13.1777651898369; Fri, 01 May 2026
+ 09:11:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260501-getsock_one-v1-3-810ce23ea70e@debian.org>
-References: <20260501-getsock_one-v1-0-810ce23ea70e@debian.org>
-In-Reply-To: <20260501-getsock_one-v1-0-810ce23ea70e@debian.org>
-To: "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
- Stefano Garzarella <sgarzare@redhat.com>, Shuah Khan <shuah@kernel.org>, 
- sdf.kernel@gmail.com
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
- virtualization@lists.linux.dev, linux-kselftest@vger.kernel.org, 
- Breno Leitao <leitao@debian.org>, kernel-team@meta.com
-X-Mailer: b4 0.16-dev-453a6
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6606; i=leitao@debian.org;
- h=from:subject:message-id; bh=FNs5J5Ppb9l1ztLphXVsPoaZSfqh9Dqf/9mSZ8ms9Cw=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBp9MxewrftFm0LPPjxpzSxjMAg7cM99UVVX2RVP
- u1UFEqZZ1uJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCafTMXgAKCRA1o5Of/Hh3
- bejJD/9XqoP3ZXB/ndTEWq2fefaiWFjV05H4/wfeVb+oqfCIZ/JNGoAVZ4b5WbWekt09dB3Dvp3
- SJeCOa2t36EEDxyiMyZcvYfJ/iVc6kKqKPO98RH+mQXqxxV+PHyDb5EeHiHZBHdxN0zSQpm32Xe
- 9v74nag1d94PzXeRRcv+ZoGnu19btB4N+ciNG3EmlcveZ9asTJAkPSAQfJa0X3gF09CIczNvNYR
- wRSg2l80UB9sqaxCYqqcx0sG+aq8izvVHBrGaFFWlPaIKwDKP+2Pkb++pL5L+5NzSnPkpGW1sqZ
- ByjuqwE4g43bBpXQorzyLxEb0P/wRiI/cb3kCb5heb6gv5nogr55qRpLsnzpD1WeTSYiP97o8ot
- kC2UEpxAe+yfrYyGNyPAHSvFqogI54fkQRXRazld6mwYtucA2onWT5X/pGxuB0A83ls4HCSVjXv
- VxY51VGMOaEGg0ES0qsxAeCHA2ajcB1syA9QXlkHYnqea53PPsqcc/rMd4uWB/moNEixDt4FXXw
- DgM8uLX+PhjBr/nwzHm4jrKmOawt68MyF2OIOpy+/xjNcivbS+bx4djlsY2muoS7CmnT2h656nF
- 21Ji4pSTDmmK5A7glsUlCVYoRtPY2mFeWqndulCI5+ymAhyiB10kARen1LoOt64WEkFX6zDuKFK
- pzdKEUYnnR4iRwQ==
-X-Developer-Key: i=leitao@debian.org; a=openpgp;
- fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
-X-Debian-User: leitao
+References: <0-v1-dc5fa250ca1d+3213-mlx5st_jgg@nvidia.com>
+In-Reply-To: <0-v1-dc5fa250ca1d+3213-mlx5st_jgg@nvidia.com>
+From: David Matlack <dmatlack@google.com>
+Date: Fri, 1 May 2026 09:11:11 -0700
+X-Gm-Features: AVHnY4IcOZBEwRDeFauz0p7wo2ItTFGZpUDr4nDVbee6fBs6NBQ1Q0W5r-m7yp8
+Message-ID: <CALzav=ci8bi3=sY+F3HJTB5sOQ_pJ8Lm+kz0CDBBWVXry5P98w@mail.gmail.com>
+Subject: Re: [PATCH 00/11] mlx5 support for VFIO self test
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Alex Williamson <alex@shazbot.org>, kvm@vger.kernel.org, 
+	Leon Romanovsky <leon@kernel.org>, linux-kselftest@vger.kernel.org, 
+	linux-rdma@vger.kernel.org, Mark Bloch <mbloch@nvidia.com>, netdev@vger.kernel.org, 
+	Saeed Mahameed <saeedm@nvidia.com>, Shuah Khan <shuah@kernel.org>, Tariq Toukan <tariqt@nvidia.com>, 
+	patches@lists.linux.dev, Josh Hilke <jrhilke@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add a single kselftest covering the proto_ops getsockopt_iter
-conversions for AF_NETLINK and AF_VSOCK, using one fixture per protocol:
+On Thu, Apr 30, 2026 at 5:08=E2=80=AFPM Jason Gunthorpe <jgg@nvidia.com> wr=
+ote:
+>
+> Add an mlx5 driver to VFIO self test. This is largely a remix of the
+> existing VFIO mlx5 driver in rdma-core. It uses an RDMA loopback QP
+> to issue RDMA WRITE operations which effectively perform memory
+> copies using DMA. Since mlx5 has a stable programming ABI this
+> should work on devices from CX5 to current HW. The device FW must
+> support the QP loopback configuration.
 
-netlink:
+> This entire series was coded by Claude Code in about 4 days.
 
-NETLINK_PKTINFO covers the flag-style int path (exact size, oversize
-clamp, undersize -EINVAL); NETLINK_LIST_MEMBERSHIPS covers the
-size-discovery path that always reports the required buffer length back
-via optlen, even when the user buffer is too small to receive any group
-bits.
+Very exciting. Josh Hilke from Google is also working on using AI to
+create a selftest driver for Intel IGB NICs so VFIO selftests can run
+in QEMU [1]. So it's encouraging to see you were able to do it with
+mlx5.
 
-vsock:
-SO_VM_SOCKETS_BUFFER_SIZE covers the u64 path (exact size, oversize
-clamp, undersize -EINVAL).
+[1] https://www.qemu.org/docs/master/system/devices/igb.html
 
-Each fixture also exercises an unknown optname and a bogus level so
-the returned-length / errno semantics preserved by the sockopt_t
-conversion are pinned down.
+> For those interested, the flow I used was broadly a prompt sequence
+> sort of like:
+>
+>  - Hey Claude, go look at the falcon series, VFIO self test, the
+>    mlx5 driver, rdma-core and some PDF documentation and make a
+>    plan to put mlx5 under the selftest.
+>  - Write an rdma-core application using the built-in VFIO provider
+>    that can do the required memcpy operations that vfio selftests
+>    wants.
+>    (This resulted in a 1k loc C file that compiled and ran the
+>     first time but had a few bugs related to device programming
+>     that the AI resolved.)
+>  - Replace the rdma-core components with open-coded versions to
+>    create a fully stand-alone program that does the DMA memcpy.
+>  - Review and audit the thing.
+>  [Pause and de-slop it]
+>  - Make it work on a PF too (this is surprisingly hard!).
 
-Signed-off-by: Breno Leitao <leitao@debian.org>
----
- tools/testing/selftests/net/Makefile          |   1 +
- tools/testing/selftests/net/getsockopt_iter.c | 213 ++++++++++++++++++++++++++
- 2 files changed, 214 insertions(+)
+Can it work on CX VFs? We're interested in continuously performing
+memory copies across a Live Update using a VF via selftests to
+demonstrate SR-IOV preservation (when we eventually get there).
 
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index a275ed5840265..baa30287cf222 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -176,6 +176,7 @@ TEST_GEN_PROGS := \
- 	bind_timewait \
- 	bind_wildcard \
- 	epoll_busy_poll \
-+	getsockopt_iter \
- 	icmp_rfc4884 \
- 	ipv6_fragmentation \
- 	proc_net_pktgen \
-diff --git a/tools/testing/selftests/net/getsockopt_iter.c b/tools/testing/selftests/net/getsockopt_iter.c
-new file mode 100644
-index 0000000000000..179f9e84926fd
---- /dev/null
-+++ b/tools/testing/selftests/net/getsockopt_iter.c
-@@ -0,0 +1,213 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Quick test for getsockopt{_iter} tests.
-+ *
-+ * Each fixture targets one converted protocol and pins down the
-+ * returned-length / errno semantics across buffer-size variations,
-+ * an unknown optname and a bogus level.
-+ *
-+ * - netlink: NETLINK_PKTINFO covers the flag-style int path; the
-+ *   NETLINK_LIST_MEMBERSHIPS cases cover the size-discovery path
-+ *   that always reports the required buffer length back via optlen,
-+ *   even when the user buffer is too small to receive any group bits.
-+ * - vsock:   SO_VM_SOCKETS_BUFFER_SIZE covers the u64 path.
-+ *
-+ * Author: Breno Leitao <leitao@debian.org>
-+ */
-+
-+#include <errno.h>
-+#include <stdint.h>
-+#include <stdio.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <linux/netlink.h>
-+#include <linux/rtnetlink.h>
-+#include <linux/vm_sockets.h>
-+#include <sys/socket.h>
-+#include "kselftest_harness.h"
-+
-+#ifndef AF_VSOCK
-+#define AF_VSOCK 40
-+#endif
-+
-+/* ---------- netlink ---------- */
-+
-+FIXTURE(netlink)
-+{
-+	int fd;
-+};
-+
-+FIXTURE_SETUP(netlink)
-+{
-+	int group = RTNLGRP_LINK;
-+
-+	self->fd = socket(AF_NETLINK, SOCK_RAW, NETLINK_ROUTE);
-+	if (self->fd < 0)
-+		SKIP(return, "AF_NETLINK socket: %s", strerror(errno));
-+
-+	/* Joining a multicast group grows nlk->ngroups so the
-+	 * NETLINK_LIST_MEMBERSHIPS path has a non-zero size to report.
-+	 */
-+	if (setsockopt(self->fd, SOL_NETLINK, NETLINK_ADD_MEMBERSHIP,
-+		       &group, sizeof(group)) < 0)
-+		SKIP(return, "NETLINK_ADD_MEMBERSHIP: %s", strerror(errno));
-+}
-+
-+FIXTURE_TEARDOWN(netlink)
-+{
-+	if (self->fd >= 0)
-+		close(self->fd);
-+}
-+
-+TEST_F(netlink, pktinfo_exact)
-+{
-+	int val = -1;
-+	socklen_t optlen = sizeof(val);
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_NETLINK, NETLINK_PKTINFO,
-+				&val, &optlen));
-+	ASSERT_EQ(sizeof(int), optlen);
-+	ASSERT_TRUE(val == 0 || val == 1);
-+}
-+
-+TEST_F(netlink, pktinfo_oversize_clamped)
-+{
-+	char buf[16] = {};
-+	socklen_t optlen = sizeof(buf);
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_NETLINK, NETLINK_PKTINFO,
-+				buf, &optlen));
-+	ASSERT_EQ(sizeof(int), optlen);
-+}
-+
-+TEST_F(netlink, pktinfo_undersize)
-+{
-+	char buf[2] = {};
-+	socklen_t optlen = sizeof(buf);
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_NETLINK, NETLINK_PKTINFO,
-+				 buf, &optlen));
-+	ASSERT_EQ(EINVAL, errno);
-+}
-+
-+TEST_F(netlink, list_memberships_size_discovery)
-+{
-+	socklen_t optlen = 0;
-+	char dummy;
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_NETLINK,
-+				NETLINK_LIST_MEMBERSHIPS,
-+				&dummy, &optlen));
-+	ASSERT_GT(optlen, 0);
-+	ASSERT_EQ(0, optlen % sizeof(__u32));
-+}
-+
-+TEST_F(netlink, list_memberships_full_read)
-+{
-+	__u32 buf[64] = {};
-+	socklen_t optlen = sizeof(buf);
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, SOL_NETLINK,
-+				NETLINK_LIST_MEMBERSHIPS,
-+				buf, &optlen));
-+	ASSERT_GT(optlen, 0);
-+	ASSERT_LE(optlen, sizeof(buf));
-+	ASSERT_EQ(0, optlen % sizeof(__u32));
-+}
-+
-+TEST_F(netlink, bad_level)
-+{
-+	int val;
-+	socklen_t optlen = sizeof(val);
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_SOCKET + 1, NETLINK_PKTINFO,
-+				 &val, &optlen));
-+	ASSERT_EQ(ENOPROTOOPT, errno);
-+}
-+
-+TEST_F(netlink, bad_optname)
-+{
-+	int val;
-+	socklen_t optlen = sizeof(val);
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_NETLINK, 0x7fff,
-+				 &val, &optlen));
-+	ASSERT_EQ(ENOPROTOOPT, errno);
-+}
-+
-+/* ---------- vsock ---------- */
-+
-+FIXTURE(vsock)
-+{
-+	int fd;
-+};
-+
-+FIXTURE_SETUP(vsock)
-+{
-+	self->fd = socket(AF_VSOCK, SOCK_STREAM, 0);
-+	if (self->fd < 0)
-+		SKIP(return, "AF_VSOCK socket: %s", strerror(errno));
-+}
-+
-+FIXTURE_TEARDOWN(vsock)
-+{
-+	if (self->fd >= 0)
-+		close(self->fd);
-+}
-+
-+TEST_F(vsock, buffer_size_exact)
-+{
-+	uint64_t val = 0;
-+	socklen_t optlen = sizeof(val);
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, AF_VSOCK,
-+				SO_VM_SOCKETS_BUFFER_SIZE,
-+				&val, &optlen));
-+	ASSERT_EQ(sizeof(uint64_t), optlen);
-+	ASSERT_GT(val, 0);
-+}
-+
-+TEST_F(vsock, buffer_size_oversize_clamped)
-+{
-+	char buf[16] = {};
-+	socklen_t optlen = sizeof(buf);
-+
-+	ASSERT_EQ(0, getsockopt(self->fd, AF_VSOCK,
-+				SO_VM_SOCKETS_BUFFER_SIZE,
-+				buf, &optlen));
-+	ASSERT_EQ(sizeof(uint64_t), optlen);
-+}
-+
-+TEST_F(vsock, buffer_size_undersize)
-+{
-+	char buf[4] = {};
-+	socklen_t optlen = sizeof(buf);
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, AF_VSOCK,
-+				 SO_VM_SOCKETS_BUFFER_SIZE,
-+				 buf, &optlen));
-+	ASSERT_EQ(EINVAL, errno);
-+}
-+
-+TEST_F(vsock, bad_level)
-+{
-+	uint64_t val;
-+	socklen_t optlen = sizeof(val);
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, SOL_SOCKET + 1,
-+				 SO_VM_SOCKETS_BUFFER_SIZE,
-+				 &val, &optlen));
-+	ASSERT_EQ(ENOPROTOOPT, errno);
-+}
-+
-+TEST_F(vsock, bad_optname)
-+{
-+	uint64_t val;
-+	socklen_t optlen = sizeof(val);
-+
-+	ASSERT_EQ(-1, getsockopt(self->fd, AF_VSOCK, 0x7fff,
-+				 &val, &optlen));
-+	ASSERT_EQ(ENOPROTOOPT, errno);
-+}
-+
-+TEST_HARNESS_MAIN
+>  [Move to a kernel tree and copy all the .md files and .c program
+>   it made]
+>  - Hey Claude, look at all this stuff and make a broad plan to
+>    actually build a VFIO self test.
+>  - Here is my 1 sentence advice on what each patch should look
+>    like, make a detailed plan to make a patch for every one.
+>  [Pause and polish the patch plans]
+>  - Execute plan X then commit it [pause and de-slop each patch,
+>    repeat].
+>  [Review and final polish]
+>
+> It is based on a tree with the falcon series applied.
 
--- 
-2.52.0
-
+Thanks for sending, I look forward to reviewing!
