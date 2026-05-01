@@ -1,134 +1,112 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6702F239E76;
-	Fri,  1 May 2026 10:49:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93A6E3859E0
+	for <linux-kselftest@vger.kernel.org>; Fri,  1 May 2026 12:28:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777632587; cv=none; b=Smxh78cbKGFzgcHo5x1csFItILygYVA9ugEIWMKhTPIoO9neNBBSUCq6ZGZsGmsdQ01qtVDOaHkeh6VriolCDh974q8SB1C/No0IplpAKYqA6HtGrGtEbwSmLwt7muwW/7O1eXW8DCS/JBcqlumx1jeDucD+B4zxSILWASHFkxA=
+	t=1777638490; cv=none; b=hSd5f/+3y2eqFw16Nmn38HL5PztrVBJ1WIZ3lg01VRT+Sxhhqw2qPy/RNQWJ0XzbFAv/s1VDpigMr3K3VkU9j/7kEIpgLUNkzt+hLT/aZTeg54iTDaGei9uZxqVxx+4cJNRRYYLD7s+JrKrJd5pbzinDvHXQ7ck8GfjjSlkl/wM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777632587; c=relaxed/simple;
-	bh=HD0Tqz4C9rhRfdYYiP0rPWaWDc2g50e36CrYQM3nGxg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OEBdSnAGCSbxLnuRlfBs0RNeMF8KeXPXpGZeuur9yFl0p/59IDRWdx2RhGy5RgMdlkJ1ZaqYy01HcQGw5JP0OcN2T+cxXCbZtYmvv63bUciNau7XUb/9yKv661tPynjq7WwLE75158lkSkQi/dEY27kasOLrpVWEQf7+o5lwCtE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Nldl3APj; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777638490; c=relaxed/simple;
+	bh=OBmgcolYEQMKyYQrSi+CBFo9fbF6RvfMpIQNEXT146E=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uL5PeXTM7azOXaRDSJtKruOoP0bJAYD/4Nu70rG/hJlJdqLfAtds6LUkst+p5Ifww/EGIcAcGr5Tn+13ZZ+BRrX6e14nEc+ipkyySQyQO3EMt6v5l38BM4FZmlSbN/dv1lPW3oX6fHEe20E3kbgTQfCVEU7XngTuZ5ExPmdEcAk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Bdd9PcBc; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Nldl3APj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2258C2BCB7;
-	Fri,  1 May 2026 10:49:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777632587;
-	bh=HD0Tqz4C9rhRfdYYiP0rPWaWDc2g50e36CrYQM3nGxg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Nldl3APj4k5NmkwML5JQj613GISjS/YZoyiK+IuESCz8ABmPVGDtNq3wuNUYj02KJ
-	 IcJbzrvrsx6qxhZrPFxlR4FWQuzxmsGdEPefDRL/XSvA+UcZRv2gQLen0spFkcVxnd
-	 8N2zfkpiMz6pgRjPSgb08yQrAnRYyREBFGS/rOTVqxdRRcYUPWyQTtRRLz4PO+RaYZ
-	 XqgOcnlcWFUcTghQP/m8hQMWTfoJvgKBq9zKvpgfijDhBdn3GF0tD7UiIetarf+hcZ
-	 C6aruaZvFg8kcryazmZ1gekMVU0QVLLQjJa918n9QzNbQVPytOiu3BqfI7XL57UcIr
-	 16FOkfcrHNAiQ==
-Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 056D4F40074;
-	Fri,  1 May 2026 06:49:46 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-01.internal (MEProxy); Fri, 01 May 2026 06:49:46 -0400
-X-ME-Sender: <xms:SYX0aUN2D2see6JsS40UGsYzV-TdLmJIoE_g9iPSwiIE3WyqYRr9bA>
-    <xme:SYX0aYkXT7bYzRnP9wS09HSapObfGL_RGLY6QOzBLfW05HJEdNDudYlQLyUcGAQz1
-    AjY8_1BSXK6i507qIIh2nqPjNgcROTRh7iMAvsI0_3KDpTjNIqhdJY>
-X-ME-Received: <xmr:SYX0aQ3hlIZPTTT8WiOajqFwDvjDTdhDdwMnTdI7Tk9pgZO7LBEizDalMACTSg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgdeltddttdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecunecujfgurhepfffhvfevuffkfhggtggujgesthdtredttd
-    dtvdenucfhrhhomhepmfhirhihlhcuufhhuhhtshgvmhgruhcuoehkrghssehkvghrnhgv
-    lhdrohhrgheqnecuggftrfgrthhtvghrnhepgeetuedtjefhkeeuiefgudduvdfgvdeiue
-    eigeehheehudetuedtkeelhfeihedunecuffhomhgrihhnpehsrghshhhikhhordguvghv
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepkhhirh
-    hilhhlodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduieduudeivdeiheeh
-    qddvkeeggeegjedvkedqkhgrsheppehkvghrnhgvlhdrohhrghesshhhuhhtvghmohhvrd
-    hnrghmvgdpnhgspghrtghpthhtohepgeeipdhmohguvgepshhmthhpohhuthdprhgtphht
-    thhopegrkhhpmheslhhinhhugidqfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtoh
-    eprhhpphhtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehpvghtvghrgiesrhgvughh
-    rghtrdgtohhmpdhrtghpthhtohepuggrvhhiugeskhgvrhhnvghlrdhorhhgpdhrtghpth
-    htoheplhhjsheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhurhgvnhgssehgohho
-    ghhlvgdrtghomhdprhgtphhtthhopehvsggrsghkrgeskhgvrhhnvghlrdhorhhgpdhrtg
-    hpthhtoheplhhirghmrdhhohiflhgvthhtsehorhgrtghlvgdrtghomhdprhgtphhtthho
-    peiiihihsehnvhhiughirgdrtghomh
-X-ME-Proxy: <xmx:SYX0aQWUboTYJuenHlupRY5oXKxRFad0qCjOCqd2ipDOtnmc5LIeHw>
-    <xmx:SYX0abjT-apuXfagsXlOx9iXJqsmYwZ40ES9M2rQVqCMkZpmWyNU_w>
-    <xmx:SYX0aZiR_b-wOnqrSjoNscfFb0XJO1evInU80jKd-8PWJOZh6VlaKA>
-    <xmx:SYX0aTsc_kzHhUuCTmvCfgop52vsjeFj8_2IqgueZQPHX08DrfQ7sQ>
-    <xmx:SoX0aaQZTIsbv1sxChP51_hbWPQXxUuIv6vZ6urubn5rOiN5aUhVNIPR>
-Feedback-ID: i10464835:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 1 May 2026 06:49:44 -0400 (EDT)
-Date: Fri, 1 May 2026 11:49:38 +0100
-From: Kiryl Shutsemau <kas@kernel.org>
-To: akpm@linux-foundation.org, rppt@kernel.org, peterx@redhat.com, 
-	david@kernel.org
-Cc: ljs@kernel.org, surenb@google.com, vbabka@kernel.org, 
-	Liam.Howlett@oracle.com, ziy@nvidia.com, corbet@lwn.net, skhan@linuxfoundation.org, 
-	seanjc@google.com, pbonzini@redhat.com, jthoughton@google.com, aarcange@redhat.com, 
-	sj@kernel.org, usama.arif@linux.dev, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	kvm@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH 11/14] userfaultfd: add UFFD_FEATURE_RWP_ASYNC for async
- fault resolution
-Message-ID: <afSErJo82o1qUMqe@thinkstation>
-References: <20260427114607.4068647-1-kas@kernel.org>
- <20260427114607.4068647-12-kas@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bdd9PcBc"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2b25cf1b5f0so10371565ad.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 01 May 2026 05:28:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1777638489; x=1778243289; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rMtmjJ2k+w8uEBLIAQrkz6/bI6nhEEnnsMvMljpxvdE=;
+        b=Bdd9PcBc5OdjZZm3Fq0p0c130lTEO/gxPkTZP2874KmpbJPyck7FXZN436ciybcJFw
+         ceohFe4WfqdZOrtJ0VlCaCh17C/PWDHrX4mETFemSU/XLZTsEVfbIf1No63aYmZ/oH1H
+         6E7XuaaM9KUnYCXamFK0J9YhkWhnlzDyxSWw8AbLc/TMN97Xyn43byHx/tpEmhz1edR2
+         HiYygkooE5rNCNqzOSKLOUHecTKD/56uAqhAIBTtv74bxCSYN3fv8vhsPxKrcXRZL9wz
+         FNzjKJzBwJnTk/VeAxmj6ejP7bHB3UhhPQXPdsb4/eM6SIE7fmeVDcfxp/d9oyZGaa6b
+         CCGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777638489; x=1778243289;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rMtmjJ2k+w8uEBLIAQrkz6/bI6nhEEnnsMvMljpxvdE=;
+        b=CDxi9Q8KMujuwnErCOlv+1cXiVa0kArJEkTnB+PG/WeBJomtMlYRLFWwZbrJi2eYrs
+         cOXMjYBeR57woWxYpiPj/jT72nYQ15kjAQmEobdpOK7wQ7SMEiGXe9UMYNgUnWKphnay
+         wEfYrq1NVkaVxrRQyZCjqMrxpcabou8sJmde2gmlg99BP1BLuRkUl8EpZSTPSHzIKKy4
+         TvfvMu0ayV0ycbBr2eVxZYjdwOCJe/OvdpHgyUVbl3G2M0+xdsbXpRNaQP8trNiobV8w
+         yr+5hwoTX1/82IJ6/TwuT/b/j9ghbkstncpiUBzPd4bc3G3tFlGW5B8ShK4NPPcOUjxR
+         JJhw==
+X-Gm-Message-State: AOJu0YyVhPBuk6xSfvwXhhtpm+LZr+dohbeuDAPYPAtieDOWIOTQyrfN
+	BoWFhL+v8MjCC9cZPCdsgslj4wUpIugoY8NVofwm+nfFzLOyjrarPgRpiPC/eg6/nHI=
+X-Gm-Gg: AeBDieurnkziId8gvTNGTiPtixyMLVXxh6MqhMR9Vc81fQK+GdJvO+WYthL7JThx/Xe
+	iKwL13WkjfGyayJPiuMiKmzka18xmDVtHEqs5f0B+xRteLWhQB9pMpRXZGM1jzcpYei+h39UjmG
+	nkBp5qikcEjg+Z/oNFV9kAIlWyh9UiXslPnsurQiCCKUaMIUFGH4+6HHtnNvll8nRI4LVj+pnvh
+	w48pVOjAQ666wTt1EFTxRr3FpQkj0CuVKDZIG/BKz/cY8o8ls5keb4ZxCRwlZ/dGNmsXrrYMy88
+	P5XdKabR21m0+zHtn4nkifFx0oYqYSVuDIqOY97sWXgPNd2hcFBDhsMSRSw8dmQbFbCrzEJHQPp
+	58xXmiP3wklZm+v79gGcZBxNub1c+YsbEmpVayHGzl4/GXSSqQmR1dDuI6uTTEs0tI3Tq32Ni5K
+	YPkbyyiakStrDeeniXP/0hdvHt2YU=
+X-Received: by 2002:a17:902:7b8b:b0:2b4:6470:760d with SMTP id d9443c01a7336-2b9a23438c4mr52827555ad.14.1777638488824;
+        Fri, 01 May 2026 05:28:08 -0700 (PDT)
+Received: from houminxi ([38.207.130.223])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b9ca953894sm23370395ad.0.2026.05.01.05.28.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 May 2026 05:28:08 -0700 (PDT)
+From: Minxi Hou <houminxi@gmail.com>
+To: netdev@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org,
+	dev@openvswitch.org,
+	Minxi Hou <houminxi@gmail.com>
+Subject: [PATCH net-next 0/2] selftests: openvswitch: add pop_vlan test
+Date: Fri,  1 May 2026 20:27:54 +0800
+Message-ID: <20260501122756.3081754-1-houminxi@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260427114607.4068647-12-kas@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-sashiko.dev -- https://sashiko.dev/#/patchset/20260427114607.4068647-1-kas@kernel.org -- wrote:
-> commit 069c98442d3532bbf015817229b8db505210e97d
-> Author: Kiryl Shutsemau (Meta) <kas@kernel.org>
-> Subject: userfaultfd: add UFFD_FEATURE_RWP_ASYNC for async fault resolution
-[ ... ]
-> Does this sequence create a clean but writable PMD?
-> [ ... ] Could this result in modified data being silently discarded
-> instead of written back during page reclaim?
-> Usually, code paths establishing writable entries set the dirty bit
-> together with the write bit, for instance by using
-> pmd_mkwrite(pmd_mkdirty(pmd)).
+This series extends the ovs-dpctl.py flow parser to support vlan() and
+encap() match strings, then adds a test for the OVS datapath POP_VLAN
+action.
 
-The pattern intentionally mirrors do_numa_page() / numa_rebuild_single_mapping()
-which has been in the kernel for years using the same sequence:
+The ovs-dpctl.py flow parser currently cannot express VLAN-tagged flow
+matches.  The kernel unconditionally forces an exact match on VLAN TCI
+when parsing flow keys, and requires both OVS_KEY_ATTR_VLAN and
+OVS_KEY_ATTR_ENCAP for VLAN frame validation.  Without vlan()/encap()
+parsing, no VLAN flow match is possible from ovs-dpctl.py.
 
-  pte = pte_modify(old_pte, vma->vm_page_prot);
-  pte = pte_mkyoung(pte);
-  if (writable)
-          pte = pte_mkwrite(pte, vma);
+Patch 1 fixes two pre-existing nla_map type bugs: OVS_KEY_ATTR_VLAN
+was mapped to "uint16" instead of the correct big-endian "be16", and
+OVS_KEY_ATTR_ENCAP was mapped to "none" instead of "nested".  It then
+adds the vlan() and encap() flow string parsers, dpstr() display
+support, and proper ovskey instance returns for encap.
 
-with no pte_mkdirty(). The "writable" decision is fenced by
-can_change_pte_writable(), which keeps the result safe in both the
-shared and private cases:
+Patch 2 adds a test that uses kernel VLAN sub-interfaces to generate
+802.1Q tagged frames and verifies pop_vlan via pcap at the egress
+veth.  A negative check confirms tagged frames arrive intact without
+pop_vlan, then the positive check confirms the tag is stripped.
 
-  - Private (can_change_private_pte_writable): only allows the upgrade
-    for PageAnonExclusive pages.
+No regression in the existing OVS selftests.
 
-  - Shared (can_change_shared_pte_writable): returns true only when
-    pte_dirty(pte). The dirty bit lives in _PAGE_CHG_MASK, so the
-    earlier pte_modify(pte, vma->vm_page_prot) preserves it; the final
-    PTE is writable + dirty.
+Signed-off-by: Minxi Hou <houminxi@gmail.com>
 
-The same applies to the PMD path through can_change_pmd_writable().
-There is no "clean + writable" PTE/PMD escaping either branch.
+Minxi Hou (2):
+  selftests: openvswitch: add vlan() and encap() flow string parsing
+  selftests: openvswitch: add pop_vlan test
 
-> Similarly, does this create a clean but writable PTE?
-> If the PTE is made writable without calling pte_mkdirty(), it might
-> violate the invariant that writable PTEs must be dirty, [ ... ]
+ .../selftests/net/openvswitch/openvswitch.sh  | 132 ++++++++++++
+ .../selftests/net/openvswitch/ovs-dpctl.py    | 190 +++++++++++++++++-
+ 2 files changed, 320 insertions(+), 2 deletions(-)
 
-The "writable PTEs must be dirty" invariant is not a kernel-wide rule;
-it depends on the architecture and the code path. Where the kernel
-relies on pte_mkdirty() being called explicitly, can_change_pte_writable()
-returns false and this path is not taken. do_uffd_rwp() is the same
-shape as do_numa_page() and inherits its correctness arguments.
 
+base-commit: 4baf2415992e3051cb39b831191d12cb7e85ab60
 -- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+2.53.0
+
