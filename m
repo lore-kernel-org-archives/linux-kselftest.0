@@ -1,119 +1,131 @@
-Received: from mail-pj1-f67.google.com (mail-pj1-f67.google.com [209.85.216.67])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout-a6-smtp.messagingengine.com (fout-a6-smtp.messagingengine.com [103.168.172.149])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 008C33E2769
-	for <linux-kselftest@vger.kernel.org>; Fri,  1 May 2026 16:28:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8CA83D5225;
+	Fri,  1 May 2026 16:40:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.149
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777652900; cv=none; b=g4feClQiDT4g9lI92R/It087x8nCKw5zJdvPmQWMjSuHfSYG7MBRViUoEhGftbrw72ild/CGXPCOaKAMbEHiZTuc/GEkOe7YzBhidB+3fI0c8+Zsrz5TYt17fR6LKwuNS6jZnk5fpQNVUtwtb6iLf+gbhrcs/ts8FUTzTFM/amA=
+	t=1777653639; cv=none; b=nJTN+FEmNG+ofs5V205X1h1JHo3Ml8njx1v3MsexVv9iaLPdfaxQHE1NTfE3gmNWZZ4vwLruVplXFh+vMYFLY9gxYoWkmAUIkR5ETnaTOGL8zCyfH354SVoWfmJ3D7icpLrO1Dru0wYBH0hLxi0d5y3/KG8PRXXEAPmbykWZYIc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777652900; c=relaxed/simple;
-	bh=bCRKbF7xQHc64osfO4JM1wubcsdfQjudflP5eRVlikk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=iXAdYn536ZMXjXM5j2E34ujeUZDbDkjgD9odkhXamlHZHjU3G/nF+l1AF3biAJnzppjULA3YuEZmGwOu4+hgNHNNcSm3Qv6nTE69UxyL78lzywIV+y3ZmClRpTp2kTFwEk6hlwF1TLt6aoGXrIZEleG1WvTXqALtivER24EHVa0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rz0ezoVg; arc=none smtp.client-ip=209.85.216.67
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1777653639; c=relaxed/simple;
+	bh=oPTsl+/496bFh76vbS1ubzBHeDSAPNRi0MlcpI2817E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=U+ZVv/+EzOCx4UY+E75zoYg85vOTPU6AkJsaqIKoStxLbQDZ5jAeEpQz64cUNYzTQ7bmFwz6QDrAEfhmz2JTdZSrhDa5hltdDXkwyOTUKYQuCGbYO6Ysc04ybD4EId8NLkKg4QPOadl0GMINdPvFk6kuW0RE9OOalDdq9j9N49g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=bDC7G1JY; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=P4E3P4Bt; arc=none smtp.client-ip=103.168.172.149
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rz0ezoVg"
-Received: by mail-pj1-f67.google.com with SMTP id 98e67ed59e1d1-35f9ab079bdso1531786a91.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 01 May 2026 09:28:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777652886; x=1778257686; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=GT/RM0CFG1D1q5BzoHJa9xAcl2JxNOjlfH6pR++zzyo=;
-        b=rz0ezoVg1gctHGJMbSFT9u2pVGPbjoAh/0FzIlxIU9xqS5vECemEsaKZgwPYCHB5lz
-         m6tdZzVyow1XQC/vHIp/SXPtLWsb2cy2hxRYPYKCr0fZQL5cyJWSX+vFi0vxUVZrMjRD
-         TKkE/qsl7EPP6e78xMmVa5PV+bMWAm/j2T+g2+CzGrCFMuDq+AQMEBAsQ5RY4VsR5nKX
-         b/iWYbf8xq7UQdRxK/eFT/mj3JYo0X80ip7x6Pe7CNmPAdc/w9/osDrBQIvQeqSICyY+
-         e0ePMAlO5ZgqAQYW56JlO5Qiass8yTMTnJNSM4yebAiyOiCAGQYVtd5NxTahzQASltwL
-         SNvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777652886; x=1778257686;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GT/RM0CFG1D1q5BzoHJa9xAcl2JxNOjlfH6pR++zzyo=;
-        b=gUjORh5J/RjTQwqIC6fVZOcJ2E+0oogelT65qTgAHXTUuMJMpTjhIXc46d9UcA9Xc8
-         WzukEm07Aidt5FExspAKpMB7h7eVsSAlLc6k5EMhwbmsQhBZi9Wj2lPUbmrfmFNxM6Sp
-         YUQfkzDIzKwdJ/7AP7UQzR4ULjPtDSJAzs8bE9qtuiR9trFArNy5/AIteIgsFoU/k8M6
-         iGi5fe4L5ya3nySy77fzXCs7pcui0S3XEwrd1XTgmolt0Xy5bWB8MP24k3Z128AyasvN
-         WuVpaxI1C0QRea53W3EoaCT0Jym14mK2CxRPaTr4F3nr7uJzlvAccrjJbru3g8gXd1jc
-         Mnxw==
-X-Forwarded-Encrypted: i=1; AFNElJ9fCPeonKPEGbwHflhqDNR6ne/FB7VZh2iXDcfc9NS0sAHAACu8XEd1Qdhma8dD9v2bMY03qsr52o17NW6LPQ0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxGILv8Q9vWiSlEeLd1I9DU5XJ++FuuSJ1ghUaUklZIAIc/Qtf+
-	tSvjhlCCsNdHfa4fs/o8YTWl0+TX9XwJIkKn4pumwD0gxX5Dq5G62J8=
-X-Gm-Gg: AeBDieu95fOTbxmIcoHMp/LEsYT7KJhO+ZRmsS4uEl15EwM9hyhMTZUDjBpcYjSD31H
-	xQt4nxSut6bg8qP6cGG7xsYN7tj5TIAM8sbciFt6kidea+kPzf9qaBaOOIG0cGkzOTFUwFCO/sn
-	z98ifwIR0+LVvPG2LTna6wz+yTGxhpo54SYtqE4vRnKma5l+mHHM12Ckg78sErx7jmEWYrDOX6K
-	2EEou1ZZlk65aWA5z8Zdp5YlJCiPvlTELCYbayiG2VvRFcrntNIkmKAvPSJpkRjE42pIKNZ4Opm
-	8D2VIoE06n0aCrAmsYO05vP9J17LOuFT/fpHrFcXnrcPGyPUNAq7LPLQSXWwxDZVlhd8buO3j4B
-	TfHqZ1I0hVZkP2h8e+yK2KW4OOmZuMdjwvdQ9wM9RFCC4P9n+Knh/voneIU3/jNm4ZubqMI0tHO
-	RuQPoau4tzD9eFfc8kjD6S/rJaxA/C+DmnYz77+JUf3jlhRERHgXQf
-X-Received: by 2002:a17:90b:5830:b0:35f:be11:b3e0 with SMTP id 98e67ed59e1d1-364c2f20cd7mr9386102a91.2.1777652886086;
-        Fri, 01 May 2026 09:28:06 -0700 (PDT)
-Received: from localhost.localdomain ([59.16.109.172])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-364bdf54203sm6186720a91.7.2026.05.01.09.28.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 May 2026 09:28:05 -0700 (PDT)
-From: Jinseok Kim <always.starving0@gmail.com>
-To: brendan.higgins@linux.dev,
-	david@davidgow.net
-Cc: raemoar63@gmail.com,
-	skhan@linuxfoundation.org,
-	me@brighamcampbell.com,
-	jkoolstra@xs4all.nl,
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="bDC7G1JY";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="P4E3P4Bt"
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailfout.phl.internal (Postfix) with ESMTP id 51EB1EC00AD;
+	Fri,  1 May 2026 12:40:31 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-05.internal (MEProxy); Fri, 01 May 2026 12:40:31 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm1; t=1777653631; x=
+	1777740031; bh=EDzZJrBF0h84N+Gtj5o0fJbwTeT70yzNk/Y8SM68IW0=; b=b
+	DC7G1JY1tzExZduEO995/ESD+VNnu/KrSx7JhYOSmTVsEOMKkqzxuGMpicbQ80em
+	Wqx13fCwm+tThfzk0+pzWF75hfxJDHc3pi8uiNb3u8gyju5447qCPxMIY4d5LQ0g
+	kII9wLOHvwgw5kdumYNCJyA3NWmdK6YAYn7QfK+o7rl3/1HgMEc1zQDfL9cDhNyo
+	Y++upjGdsDIMJCEUiWqbvRZrsIFmoYbbuqH1xwL90aw3M8Vf5yXJVtYITVRN0vyz
+	C/kG5M5PxVRfBD98yiVqbihsqbqNGf28kXWde6UwnDGaC+KP7L5fHcU9CBQoiKgi
+	QVg6vxfx8upmTQggx2psQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+	1777653631; x=1777740031; bh=EDzZJrBF0h84N+Gtj5o0fJbwTeT70yzNk/Y
+	8SM68IW0=; b=P4E3P4BtuuHNMN79XJ2aVUD3zx3/BVjKaJtogChu7l/G8HTeQRT
+	Nyuu2kBFiTZKQXKo6B/UeG5dMIRSKJBH5fRuai+rsyz9wd1IkZGM2LiKRm7PH3RJ
+	WEOtjMkzpXH8fp240O0hAG6aA3+zOB6vyF3gdGodZ8ed3q8nc6viZ3q9q7CX7asM
+	HzVKDvGrr8w2BmzTX5+anRxk47A+rgGJjITPhj5qztp0PzX0GTeYYN4KfAfxqGIt
+	S9Dbn+wrse9tSZ/pvS4Zi66NamosmEDshQSfTd3RPPS+2FwLnknhdEgdqSep8Eks
+	lQ0oeN13EaxmpvJT2gH+AGYkg6x/BdXBnlA==
+X-ME-Sender: <xms:ftf0adt4OR1Pl7ZxS8dVFC9df0y3_juzHJ9YUmMWAM_hUCCPpXBW4A>
+    <xme:ftf0aTKDm3VeLQsp6ES5u7b-u4i7d8yRI_XGpUAMAjS_G2zKzCHHHFmxL1mN_MiC7
+    J3oUePw_impsgUw_zsV5pxQqlWwwSPztH3ZA3f-bYVfAvKjYXG0GlY>
+X-ME-Received: <xmr:ftf0aUqrG5MGzwGTEYSWqo_7k6CXx8UhykqdxhqZ13fi9n6Aw0Ug0ukOVxAH>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgdeltdejtdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecunecujfgurhepfffhvfevuffkfhggtggujgesthdtredttd
+    dtjeenucfhrhhomhepufgrsghrihhnrgcuffhusghrohgtrgcuoehsugesqhhuvggrshih
+    shhnrghilhdrnhgvtheqnecuggftrfgrthhtvghrnhepuefhhfffgfffhfefueeiudegtd
+    efhfekgeetheegheeifffguedvuefffefgudffnecuvehluhhsthgvrhfuihiivgeptden
+    ucfrrghrrghmpehmrghilhhfrhhomhepshgusehquhgvrghshihsnhgrihhlrdhnvghtpd
+    hnsggprhgtphhtthhopedufedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepkhhu
+    sggrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghvvghmsegurghvvghmlhhofh
+    htrdhnvghtpdhrtghpthhtohepnhgvthguvghvsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+    pdhrtghpthhtohepvgguuhhmrgiivghtsehgohhoghhlvgdrtghomhdprhgtphhtthhope
+    hprggsvghnihesrhgvughhrghtrdgtohhmpdhrtghpthhtoheprghnughrvgifodhnvght
+    uggvvheslhhunhhnrdgthhdprhgtphhtthhopehhohhrmhhssehkvghrnhgvlhdrohhrgh
+    dprhgtphhtthhopegsphhfsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohep
+    jhhohhhnrdhfrghsthgrsggvnhgusehgmhgrihhlrdgtohhm
+X-ME-Proxy: <xmx:ftf0aeVdqjBR69tUD6d6GY1ZWvntYS09CBO8xud9CgBsnt76kB--jQ>
+    <xmx:ftf0aR0GebU2wwF71G8yEE5JJ715hteOvKgvE1RR9zT_FlZV1OdhoQ>
+    <xmx:ftf0adTvQflkmo4ENF5Dpbkxpf2Ne-yCE6TzV_g7QsSKJ6SWSdcMFA>
+    <xmx:ftf0aVQdZm18VXqJpC580VHl7Q-N_iNyf58KxOZ5qC7LhsHUr__vpQ>
+    <xmx:f9f0absOJcs2rNO4ZceBOqI6mRlu5h6eJzW2650Fn0T0AgnW0BuI4x0b>
+Feedback-ID: i934648bf:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 1 May 2026 12:40:30 -0400 (EDT)
+Date: Fri, 1 May 2026 18:40:27 +0200
+From: Sabrina Dubroca <sd@queasysnail.net>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+	pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
+	bpf@vger.kernel.org, john.fastabend@gmail.com,
 	linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com,
-	linux-kernel@vger.kernel.org,
-	linux-kernel-mentees@lists.linux.dev
-Subject: [PATCH] kunit: Fix spelling mistakes in comments and messages
-Date: Sat,  2 May 2026 01:27:37 +0900
-Message-ID: <20260501162739.3861-1-always.starving0@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	=?utf-8?B?6ZKx5LiA6ZOt?= <yimingqian591@gmail.com>,
+	daniel@iogearbox.net, jonathan.lemon@gmail.com
+Subject: Re: [PATCH net 4/7] net: tls: fix off-by-one in sg_chain entry count
+ for wrapped sk_msg ring
+Message-ID: <afTXe_kAumf2vjvE@krikkit>
+References: <20260429222944.2139041-1-kuba@kernel.org>
+ <20260429222944.2139041-5-kuba@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260429222944.2139041-5-kuba@kernel.org>
 
-Fix two spelling mistakes in kunit tooling:
-  Bascially -> Basically
-  higer     -> higher
+[I'm slowly trying to catch up with the chunk of ktls patches that
+were posted in the past 3 days]
 
-Signed-off-by: Jinseok Kim <always.starving0@gmail.com>
----
- tools/testing/kunit/kunit_kernel.py | 2 +-
- tools/testing/kunit/kunit_parser.py | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+2026-04-29, 15:29:41 -0700, Jakub Kicinski wrote:
+[...]
+> Every other wrapped-ring arithmetic operation in the sk_msg subsystem
+> (sk_msg_iter_dist, sk_msg_iter_var_next, sk_msg_iter_var_prev,
+> bpf_msg_pull_data) correctly uses NR_MSG_FRAG_IDS as the ring modulus.
+> This sg_chain call is the sole remaining use of MAX_SKB_FRAGS for
+> ring-modulus arithmetic and was introduced after the ring expansion.
 
-diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-index 2869fcb19..58557c47d 100644
---- a/tools/testing/kunit/kunit_kernel.py
-+++ b/tools/testing/kunit/kunit_kernel.py
-@@ -218,7 +218,7 @@ def _get_qemu_ops(config_path: str,
- 	# exists (I learned this through experimentation and could not find it
- 	# anywhere in the Python documentation).
- 	#
--	# Bascially, we completely ignore the actual file location of the config
-+	# Basically, we completely ignore the actual file location of the config
- 	# we are loading and just tell Python that the module lives in the
- 	# QEMU_CONFIGS_DIR for import purposes regardless of where it actually
- 	# exists as a file.
-diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
-index 1c61a0ed7..0e1d2f498 100644
---- a/tools/testing/kunit/kunit_parser.py
-+++ b/tools/testing/kunit/kunit_parser.py
-@@ -268,7 +268,7 @@ def check_version(version_num: int, accepted_versions: List[int],
- 	if version_num < min(accepted_versions):
- 		test.add_error(printer, f'{version_type} version lower than expected!')
- 	elif version_num > max(accepted_versions):
--		test.add_error(printer, f'{version_type} version higer than expected!')
-+		test.add_error(printer, f'{version_type} version higher than expected!')
+[...]
+> diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
+> index 906a1998c630..600e13effaab 100644
+> --- a/net/tls/tls_sw.c
+> +++ b/net/tls/tls_sw.c
+> @@ -802,7 +802,7 @@ static int tls_push_record(struct sock *sk, int flags,
+>  
+>  	if (msg_pl->sg.end < msg_pl->sg.start) {
+>  		sg_chain(&msg_pl->sg.data[msg_pl->sg.start],
+> -			 MAX_SKB_FRAGS - msg_pl->sg.start + 1,
+> +			 NR_MSG_FRAG_IDS - msg_pl->sg.start + 1,
+>  			 msg_pl->sg.data);
 
- def parse_ktap_header(lines: LineStream, test: Test, printer: Printer) -> bool:
- 	"""
---
-2.43.0
+And get rid of the [start] / NR - start dance to make this code a bit
+clearer?
+
+This should maybe even be an skmsg helper to avoid "random" code
+making assumptions on the size of the sg.data array. The last
+paragraph in your commit message also tends to suggest that.
+
+-- 
+Sabrina
