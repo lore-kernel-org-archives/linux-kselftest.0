@@ -1,100 +1,66 @@
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE0BF3EF0DE
-	for <linux-kselftest@vger.kernel.org>; Fri,  1 May 2026 17:01:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C87A92D5925;
+	Fri,  1 May 2026 17:15:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777654904; cv=none; b=HEJsbkGuZ+513mz/GGEbqn7aNQRos46TIjqn/wzsAYZ+LUBQfefbP53Q57so1U0+hOOy2QwQYiDTg/uikTjDGmXIZt58lcej498oLB7p23+hYjJlT9Ehjbtm2KecNrL5YKWS3vgRomuUyo6B2ntc/nS/NZjn88HaFPvShw5TbLI=
+	t=1777655753; cv=none; b=rq7Gd8hZle/DGnAF4oRXrQC3tHmbS/jw30Ty/TiqbU/I+lKuFffVYmBEq+5fD+KJ9DM8aFebbAxcfIUhjYdOmKXtmzSd70rHscXHiRuOaqQ/UiP8TcZGCLOTMPbQK/ZtNTOqawCkK/kcvhd2ECzJCy8sZ8TFJ4S+icn01sDRxc4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777654904; c=relaxed/simple;
-	bh=064idbmQIFqz04QrVYQYZzDXbFXPCliJXULxXIEQVro=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GWlBiIflk+v7YBycTzLehMk/+VNx32ZwBbqiE3vvD12pS9VyHCaE2iH1ylo/iBwGGaigqsuoqg/syoQbFlbPlSqW9nDiQxjoqOY3p8G/7IQsvgUa5PICUDwkyrh8sA1kSGSj7rEnc2dGYIzF3nWporxugfJkc7udMfWWooIH5MA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KzzsJh/s; arc=none smtp.client-ip=209.85.208.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1777655753; c=relaxed/simple;
+	bh=VBfKfjpFRXFpsSPUWpVwQYKEyfMMNYFVVz7ZUushS/c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bp2iMYwt7l5FKuqKyQpVLQ1cUx53dJo9HH3UR3y/pSy/aGy4w2pP0AmBScA6yC6lnuHKhaK0oQ8u1eT0o9j/SiExmlHhEOo6+TmS4f8gFGL/BJH3J86Tye3yzAUYMUbzt+G3WP4Ao828LQ34bjMPJMnbgoPNXsZd0MGTM1UdkJg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=gqO6BQJ9; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KzzsJh/s"
-Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-38e68e4389cso22436061fa.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 01 May 2026 10:01:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777654900; x=1778259700; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=064idbmQIFqz04QrVYQYZzDXbFXPCliJXULxXIEQVro=;
-        b=KzzsJh/scavAcz1GG6L1MY9xnAutWZAsGaBCQloYXkgMw600fcaUVbhU+4wTFX2r1e
-         5Li2vyl+yW9/VKqyjnbNES6diU55RKPG8xta7nUdQFfBTBLrWN2/yY/lcMob0OYfkzO1
-         bAqdWcn6XQd8zzdgQ4sEwulTrrZ1de0Ro2uR4qNUwQvEQRVG9I5HHolrVyfFFQ5/ISov
-         yXBNvfH9y3Td26QW3Zs/CR/qATpl8FSWUhh4jp8c7rMH0wYJNr9+FaAeax/85OGTUaYx
-         e6fDXiDq+/PZ+/dsSaOPtzCBrWEyASXwNec6y2GkN63e9XZy+khlByV3oJx5UDl/48EH
-         pesA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777654900; x=1778259700;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=064idbmQIFqz04QrVYQYZzDXbFXPCliJXULxXIEQVro=;
-        b=rPxqQ6H2Frv8eW5VyIReNssrqeMWL+keDOadMW7d8JtpQMm80Dp+oGNV2g3pH3e3iv
-         T35tcdUlcj6kVQ7JN+wtt8lLTP1i10kl/9UWHWgIoE/2MFM31nG57b0oYJa5JCi6bHMm
-         c0B1/yqNfKD7fMP3FKEYCGYmc3XBQdOyYFLdXTi9MAnmLeajJcpx0hJErlLFdYvsdeOz
-         QHeOkgRgvpc71QC8q3HZpbpk4xeqj6DJDjzoJ0qW8djRP+J8nVz/HH0SL+ZqdJQBVqUG
-         rnRbiagcV+FKrLdZCAKsFHh2OeHWdMDjqeWf/HWIjT/Gx4Mj3iYz4UiagdQTS0fXUK4Z
-         QaIw==
-X-Forwarded-Encrypted: i=1; AFNElJ8Tlbw/zmTyE/NaKtRLAesEb8MZxPIH0z8xR6WW9iF6I9SZBvTTtr0k3aAY76WhKdbqx42WizcFgJOtRAC+hjE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxAqnuIKO2Na/vO1mKfqgxWpF4QDtw4DOFoZ57QZQO2BFm0SAYh
-	Gx/NvllebTSvBJjZGPNOHjrf+3G9aqP9D+c/IDpnTdCm/jeHfrQqLQZA
-X-Gm-Gg: AeBDiesp8iXXMfIPHqK47stAAlHM1HA6L/BBDn1rf2rFCshBdZRdtKKmZPARshTNA2S
-	wdzcNpg+Qnm92AJET4Qj901xRcetIaLHhdhqCotESF2xyG8+z3XZMBW42hdnOs7JTJTP8ISGUBe
-	Yo9Hlfjgkvl9S7Es/iJN4J7aUKsWAS5gJdQHXeWvlnasPntDyaa5Y00gmSc/xqgQ1Xe0S6uwH+W
-	9GaskvcgMK0VE7ukR7N55njPtFBdiErOkkNtd4MmqhsjDPi3oxxShJf+NUWoK+7XIC5GFgeF7RN
-	/Vbg+JMhkMVE9yrw1UL2+6hquU7yXjxfp9blR0X1/zlf0VRuhz8Qxv3og5qgwrk3+yB7dz4Z6jS
-	1UziMctvmigWf48yNYeZpA8qdSlDblNIkhiUFQPZgE/GoJMs55guu2HmccXYkFi432RMg0VTpMv
-	5+EOWna1ktKZDxyBQFVdQySxoA7BZAFf3Ll1IRF3IxKd/wXy1mTwNTwI9oU8hUEGgv7TZHa28=
-X-Received: by 2002:a05:6512:3d94:b0:5a4:1904:711c with SMTP id 2adb3069b0e04-5a8522e3765mr3276021e87.29.1777654899294;
-        Fri, 01 May 2026 10:01:39 -0700 (PDT)
-Received: from va-HP-Pavilion-Desktop-595-p0xxx.mshome.net ([193.0.150.248])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5a85c2330easm632749e87.37.2026.05.01.10.01.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 May 2026 10:01:38 -0700 (PDT)
-From: Vastargazing <vebohr@gmail.com>
-To: matttbe@kernel.org
-Cc: martineau@kernel.org,
-	mptcp@lists.linux.dev,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	shuah@kernel.org,
-	stable@vger.kernel.org,
-	fw@strlen.de
-Subject: Re: [PATCH] selftests: mptcp: add test for IPv6 subflow SLAB placement
-Date: Fri,  1 May 2026 20:01:36 +0300
-Message-ID: <20260501-reply-mptcp-v6-initcall@vebohr>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <44e564f8-d059-407b-8f5e-a149dd76dea3@kernel.org>
-References: <20260501151454.211598-1-vebohr@gmail.com> <44e564f8-d059-407b-8f5e-a149dd76dea3@kernel.org>
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="gqO6BQJ9"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=lmaggGKXjL+hs9vD7vyc+xo8l4bXJig4rJbrMoWWQLU=; b=gqO6BQJ9uH6K1zXtg5ggnRVHvu
+	oiIcgkEcsxv/g4xDbCbSN4qwY3e/FBYUF4i0kAmaYisTW5GM9X0ubuwhLN1Ff8W/I2pr3Uf+ADGgH
+	EpXZ9aG/WQXvDtORp7mVmvLL38EHjp3tIDtmZukdkNe7s9yiLl19WjAzhXABprcPVAIaKHptvaSjq
+	svSin3Oh4H2Ph2++hbuIM8dOo9yVQ4+glNejcwDs/ZxzvPAoaduomrP7L0apMEsuzpfj2Tnc0me7q
+	nmjr3HdAThIJGFw3x4dPmqsuocwe+SEFe4nptQVm+XkX/iifH8pMrADqdfDXhxtNUgpuA/+icz5pK
+	wnJIOIsw==;
+Received: from authenticated user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1wIrSm-008jKB-2S;
+	Fri, 01 May 2026 17:15:41 +0000
+Date: Fri, 1 May 2026 10:15:35 -0700
+From: Breno Leitao <leitao@debian.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@kernel.org>, 
+	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH v2 0/2] mm/kmemleak: dedupe verbose scan output
+Message-ID: <afTfg_FOcj3J2kgv@gmail.com>
+References: <20260424-kmemleak_dedup-v2-0-8bea649b2a92@debian.org>
+ <20260424103016.4ad3219ae815e45de62cfaf7@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260424103016.4ad3219ae815e45de62cfaf7@linux-foundation.org>
+X-Debian-User: leitao
 
-Hi Matt,
+On Fri, Apr 24, 2026 at 10:30:16AM -0700, Andrew Morton wrote:
+> On Fri, 24 Apr 2026 08:03:35 -0700 Breno Leitao <leitao@debian.org> wrote:
+>
+> AI review likes the kernel patch but worries about the selftest:
+> 	https://sashiko.dev/#/patchset/20260424-kmemleak_dedup-v2-0-8bea649b2a92@debian.org
 
-Thanks for the review (and for cc'ing Florian - same mistake twice, noted).
-
-You're right on both. The 755 thing is on me, and i'm convinced the
-standalone script is too much for what's essentially a one-time init
-ordering issue - the fix commit is the safety net here.
-
-Withdrawing the patch.
-
-One question if you don't mind: if something similar came up again and
-a test *was* warranted, which existing script would be the natural
-home? mptcp_join.sh seemed closest since it exercises the accept path,
-but i'm not sure if checking /proc/slabinfo fits there or if there's a
-better mechanism for that kind of thing.
-
-Vastargazing
+Ack! I will address then and respin, thanks for raising it.
+--breno
