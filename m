@@ -1,58 +1,49 @@
-Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7395B13777E
-	for <linux-kselftest@vger.kernel.org>; Fri,  1 May 2026 08:35:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64D8D7262A;
+	Fri,  1 May 2026 08:43:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777624554; cv=none; b=Cs9C4hh0T03XG+zOZtj2pshv+gY2/hfbC81VFWEXaqcif8KXUB0EV7KpLC2iGPsrNPgZFS4CPNGzihjgJCgB8F8y2aq2WgEyMJcpT2ssYaIaQqKIlk8r0PkoTZwEaeuBFKFy5s6MT5Kz+ZiTN6iprZIzS6dUiwxH6rTm5rznYU0=
+	t=1777624981; cv=none; b=datf1YF3tEYrfWeFuked+9prueFPC7x6hs8iFNSdOh4tBb6JpWSsdHbHwEw+p8Kjlr/SXUOjbIzGzBdEDuXpz4fdwxKeZujf9Y+XkofkdTHWm/ug1yMUJUUymwgyNTDyeyP6oAtm9UMRjxCtgdfCwGhUoPZchdNIABnhzjA12oM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777624554; c=relaxed/simple;
-	bh=5uUjvdANoRDxAMtAvPOt97+5/SEdZiKak88fKZP/n1U=;
+	s=arc-20240116; t=1777624981; c=relaxed/simple;
+	bh=XHGoYBSbV5xa7ZqsGVZi3EUAzMEbrmZsbivg8GRr+Lo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tOZOifyhx6oPjF/twFVbkVlgbYw3P0zxY12cJ9KF98lTCtCuKbJtF3oP/meVy0JbLwvBZzOMjQOBm/LpnUOeMk2afN7Q7L8/P7/DeM8dYGM0mdTggbW3suBhLkiOuDpxWv1xzXYDrBeHXVN4CmyqNS8Z+5a+mPRsqoGBWTO5W04=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=cOLsC5I5; arc=none smtp.client-ip=95.215.58.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 Content-Type:Content-Disposition:In-Reply-To; b=tCZt2dPla0DmO/NaoqEdikdyY49g5J4i5p/N4unlgkwcmRu9kP2zr5f8v/dJFKME+eEPeyqwUGmHXrGVF7x3YZTBd+bTuyDEL24QBFeiL9APuxp3DUPu31dRuN819U7lbg+PiZm2UeRsjYiu5CU/f7FsR6dzRXogLjEhISxykzU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=aiU7vvza; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="cOLsC5I5"
-Date: Fri, 1 May 2026 16:35:32 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1777624550;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=v76T1y5va9Nj+ALtFUiTGiUgpJr8tBYSU1F3DLUEPrU=;
-	b=cOLsC5I5OnSiJOFt5iIIxQqmHoWj8Fug/SFJ9IuJMkWgJuU5+a9hOgaExupQkhK+hqkMj4
-	wpVUvaUcFtb+LEj84r3l2Dy7motcEs2u2VGW0IuhFklTIbkbQXP0Aqu1ReNPw68f3kkobr
-	tCpQD7co4uPD6HIYN0oBM3eBrndmRdk=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Li Wang <li.wang@linux.dev>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Barry Song <baohua@kernel.org>, Dev Jain <dev.jain@arm.com>,
-	Donet Tom <donettom@linux.ibm.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-	John Hubbard <jhubbard@nvidia.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Lance Yang <lance.yang@linux.dev>,
-	Leon Romanovsky <leon@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
-	Luiz Capitulino <luizcap@redhat.com>,
-	Mark Brown <broonie@kernel.org>, Michal Hocko <mhocko@suse.com>,
-	Nico Pache <npache@redhat.com>, Peter Xu <peterx@redhat.com>,
-	Ryan Roberts <ryan.roberts@arm.com>,
-	Sarthak Sharma <sarthak.sharma@arm.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Vlastimil Babka <vbabka@kernel.org>, Zi Yan <ziy@nvidia.com>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: Re: [PATCH v3 05/54] selftests/mm: run_vmtests.sh: don't gate THP
- and KSM tests on HAVE_HUGEPAGES
-Message-ID: <afRl1Ja9ytVD3nUh@linux.dev>
-References: <20260428204240.1924129-1-rppt@kernel.org>
- <20260428204240.1924129-6-rppt@kernel.org>
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="aiU7vvza"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=75QipLhpY8NOK7to28Nf/hWM8FZV3CQYXlf6ZO0HbH0=; b=aiU7vvza7zrwnXPhQbgQS3YZK1
+	+RdFFHoX2mJe2e0mWeppW1UVkl0g025h4nugw1CQ400wortOSrAm7I4zr2j4+GgUJBBKwnn0jPycM
+	B/KPMiq9fC/Q+wLCND4GmhRQU42r4jWVPTxMNV/LzfglrYuccD+2C4O10JESUM3smeSTJG20a01np
+	H3quWBas8Zc7Y4VH6hVVDzFM4LBInTZxAAlWB6sYcY1kkp20rq9JXemYzZskmGhGUIbV/BfIxOtgo
+	RvffZNHeQeGJ5rfhqbUFi08boiUjZW/xTE+KeS5uzKiQJvKHqI2TgRhC1Fe9fp2GfqBrixAGhEvZs
+	SQdOs1EQ==;
+Received: from authenticated user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1wIjSY-008S94-1D;
+	Fri, 01 May 2026 08:42:54 +0000
+Date: Fri, 1 May 2026 01:42:47 -0700
+From: Breno Leitao <leitao@debian.org>
+To: hawk@kernel.org
+Cc: netdev@vger.kernel.org, kernel-team@cloudflare.com, 
+	Jonas =?utf-8?B?S8O2cHBlbGVy?= <j.koeppeler@tu-berlin.de>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v3 5/5] selftests: net: add veth BQL stress test
+Message-ID: <afRnXhsNMBRJ0LdB@gmail.com>
+References: <20260429172036.1028526-1-hawk@kernel.org>
+ <20260429172036.1028526-6-hawk@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -61,24 +52,14 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260428204240.1924129-6-rppt@kernel.org>
-X-Migadu-Flow: FLOW_OUT
+In-Reply-To: <20260429172036.1028526-6-hawk@kernel.org>
+X-Debian-User: leitao
 
-Mike Rapoport wrote:
+On Wed, Apr 29, 2026 at 07:20:32PM +0200, hawk@kernel.org wrote:
+> +compile_tools() {
+> +    echo "--- Compiling UDP flood tool ---"
+> +cat > "$TMPDIR"/udp_flood.c << 'CEOF'
 
-> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-> 
-> HAVE_HUGEPAGES indicates availability of free HugeTLB pages. It should not
-> be used to gate KSM test that merges transparent huge pages or
-> split_huge_page_test.
-> 
-> Remove check for HAVE_HUGEPAGES when running these tests.
-> 
-> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-
-Tested-by: Li Wang <li.wang@linux.dev>
-Reviewed-by: Li Wang <li.wang@linux.dev>
-
--- 
-Regards,
-Li Wang
+The biggest structural issue: the test ships ~250 lines of C source as
+heredocs and shells out to gcc at runtime to build them. This is not
+how selftests normally work.
