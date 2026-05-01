@@ -1,262 +1,187 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BE1B1A9F8D
-	for <linux-kselftest@vger.kernel.org>; Fri,  1 May 2026 19:30:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6B1936C5A1
+	for <linux-kselftest@vger.kernel.org>; Fri,  1 May 2026 21:21:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777663841; cv=none; b=WTKaWJdU+TVFAgqlSY2wIVzgsWYQpluErJ33mLF6F0ejNTWxYD8NRJkXEvrGiCSEGSakPbISeObX4t94lb36r8w16n79eJ0WPGDHaEEZELaz716K96UhmMxgmji61c+IzN2V9Ho2QbpRYGiEuNs3i21OwEaN2hP6Qd6OJEaXzLA=
+	t=1777670470; cv=none; b=gpvXQpnd7v8c7g8+O2HpRq9w9gzURKPRW8VU8K0r9Bb2tG5Tx1Oi984qH3v0/wF4z7ghOC5aFKXosG0s/7rI1N0v7+/mx2Ov+OVLfetCg2CECQsAuu5nIOaklnyNll3Er9WX+sEbdP1Y+VFQR2Dz6SR/Y7LPDwAG+oqv/eVF230=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777663841; c=relaxed/simple;
-	bh=t6gV8ZTVNcPcUe/WL1axDSqM/r1XnESKvaxKRDEPyZ8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Yiy5+8pZQ+UKC2wqF7/oAwhCbbBUPYCEJpi8wYBO4NqBcFyYJvcXzPKoibbwF7HsuhFlNR2GOEVpaaFGQyJq16zyJf8rfunA/3wnhyasJyQwDG1T7x/cgTAwPtqvRO990fRROqyyebkHlKOgD3R7+XUyJYHfgKTmUhhdFSFGUO8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YfxcLR+4; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1777670470; c=relaxed/simple;
+	bh=gbYFLTANvKgL0YLaobKU6Pf+SimnzpTiv2B12KmDMck=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=P0tBfyUwVyhZyKeeu3OfS1ueQXN2Nhddh1uH0OZylJ6qmv+Q+evuZF3tsORo0uOdYead0VwRZ2ob14rPKTnFXJEhR1GHc4fZwarMjoFr4Il70ZALypIwY3XsrmDcOSxtUPRHdFr+tgUezEWXMCv86OFTAcKwgzFTSA1PGXYwvwk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hfdHCQeN; arc=none smtp.client-ip=209.85.221.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YfxcLR+4"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1777663839;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=axtkg8lWUKLhKh8btqTTKn3GGcdeBh87rxcslGFSOgo=;
-	b=YfxcLR+4x7dlNQw47Rmcs1WY+/FoEgMGuRzqwjAkplH3NgCGQ7hhzjoob0Bn0FeNRQWFry
-	Ruo10+WOKGuc6M5Lns4WhnlJOKfvesK+ZyuWD0fqGnZuF4smQtqLXC7gxvlIxWLdce8JEG
-	M5O0elVp0GvGkLUkwmCgwXetsjpvp08=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-580-YQ20UlSjPFK1tBDalpnmeA-1; Fri, 01 May 2026 15:30:37 -0400
-X-MC-Unique: YQ20UlSjPFK1tBDalpnmeA-1
-X-Mimecast-MFC-AGG-ID: YQ20UlSjPFK1tBDalpnmeA_1777663836
-Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-8eaee67d1afso267521985a.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 01 May 2026 12:30:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hfdHCQeN"
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-448528f4e69so1320663f8f.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 01 May 2026 14:21:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1777670467; x=1778275267; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=E3Cu+Df2v8gmiZwpX0nD5Z+6tJtgNGySMwqyhPLW2dM=;
+        b=hfdHCQeNUln6gHwi1iBuwm14cFds+HdQDBOtrNoYNcD+kxhnUbEzJBWjnEvmGjHR0Y
+         yAlRWd8V0TM/DY5MU7upUq9oS68W1u8MztcoIk5yTXM2qpBdOLihOyfwUUXMorC8Isqf
+         YavOHcuYz22bGxMj6jStImcOjvmr4GDbJeHd6DlPPNMehYZBklbgKS+AZ8oy9c/qg5N2
+         sAgczoppa60yf5RPsdKadsakqR6DXtYzzwd9B5nOSo637ZhdRgtKEVkesBRt6mMaTqmM
+         jVAxizVSm1YjmLNIkk4y8Z3I3hv/YWtKTGIsaleDK7vVFoNND8vh3a/I7y6UPFkj/72t
+         A9pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777663836; x=1778268636;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=axtkg8lWUKLhKh8btqTTKn3GGcdeBh87rxcslGFSOgo=;
-        b=nUDA6xj6ZjmdxhKMwrGFdamKHgB7iKTi8Bstl1TB7I2lZO39+I3Xo1zXyrDBP0kd7h
-         h2+343yv6nxITPLjP8AzUQcXpx/3EbtXbDxq5pOsyFvu0j+SdSPFz0vu0O54zGBqM5tB
-         4QFDPD2+qRNBJvZPyN/1nUWJxAiQKYFKR03rxgSPe3Zte5mWpnzCxOuks0/h1WZ3wuy/
-         gMPzIQ9AJ9kIxWKnb9CkJVnZ7kF5sMc0fvYIwbTIP18yOS5D8jN0g6vC1Jt1rGINbW2/
-         MQ0FiG/ETXIaCXO6fqLzxJdeoxDDM9T8WgW9VUdGgoNyv6PqtP0tvqHh0GmkEI/x2Scy
-         pNnA==
-X-Forwarded-Encrypted: i=1; AFNElJ+0U7CtP8s8xltszu/NQOIZpUpCPkaKUmpEcogArmrmd8zpn/oIwjiBXkKKgrHT8mxf167AYSW7jCuqHKUzQD8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyupwwnAFIRAsowfKQ5NNbs13yAPfdi2PWlO2/8QafNpCU+57bx
-	msMkA67AZj9z+4FADCD4ZonSq2AoS5pTZvPKX+ZwIAZHi04fCbfLPkuqNa0X0bDNL4o/J1oungZ
-	kqAkJKE/760DKO2FoEUT4CiWU4u0o9B4P4ikkSj4oEzJilMwKrGLIwByGqVKxj/VP9HM1aw==
-X-Gm-Gg: AeBDietVYhJfw+L+QsC1eJ3NVf5iCErlpBGrfAfg+9CVKZ7i6tON55BqV+DdAYqu/MN
-	pNC2tiVL3dftCdc5crCblNGagS99Ax2kD9zKHERUnUKcf5SsODScXb+YeorNTeb/skvBCCZP8ES
-	3xqwzecgcb1Pun/upKV3vJsJPbyAdwfDmF7bQCgqoiPR3hECvXx4AFvF2huapulOuOFDnO59al5
-	48PkY94qNBWjbUvZetvuti2/f+fKZ8hbGrjgE13dAM1gbo+VkDA4eFpOjTh8lDfeVYypdBGvBBj
-	Nc00nVEwL2GM0Ew9che9psvITWP/Ab74mxq37crFtXhHJAr7MOOXMvxaKZ/J3NSnEDgBB9Y2mDD
-	2ZccSx4Pnr6o+b+urso0vrim5AYYyBF1PQNILiLeITXzVPgABzxh5HJ7NsGFUGgBBWXQ6r0UGWL
-	6t1sXdIExvzgM+A6qEgfIw/M4=
-X-Received: by 2002:a05:620a:28c1:b0:8ed:2b66:9ebd with SMTP id af79cd13be357-8fd15ecc8b2mr102078685a.9.1777663836060;
-        Fri, 01 May 2026 12:30:36 -0700 (PDT)
-X-Received: by 2002:a05:620a:28c1:b0:8ed:2b66:9ebd with SMTP id af79cd13be357-8fd15ecc8b2mr101915285a.9.1777663825495;
-        Fri, 01 May 2026 12:30:25 -0700 (PDT)
-Received: from [192.168.2.110] (bras-base-aylmpq0104w-grc-22-70-53-202-134.dsl.bell.ca. [70.53.202.134])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8fc2c91fb3bsm235197885a.41.2026.05.01.12.30.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 May 2026 12:30:25 -0700 (PDT)
-Message-ID: <22b1cadc-4b0d-4e2a-987c-e7a7bc2265eb@redhat.com>
-Date: Fri, 1 May 2026 15:30:18 -0400
+        d=1e100.net; s=20251104; t=1777670467; x=1778275267;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=E3Cu+Df2v8gmiZwpX0nD5Z+6tJtgNGySMwqyhPLW2dM=;
+        b=fwwKikg31r1dwr0jL1SpmqQQAPiBhA/ie1HW2gVbFAdVbnscQ8VDC+smbAzw/VGMjQ
+         EBBiFF7HVitFjposyNs0HJel/CUbQCO+jDWmAMIl77j20/ZC17+ItN9vENUlbdEmXtcW
+         3djWN53ape62NSmcbF4SVpaO9noRA64TX/J5yKfrikiwo+AtgaZuO845PDDOQWUW0kSl
+         +S1pWZDOW/C/Xd1Qj8nbR4bgEfChXUNsGAjxrXEF00ZFGIrYTyhKKBWNwHRoTgydA+jp
+         MPcgNhg5857HwMQWYICblFe7ztrx82YUkMmLo2fn4AQe+V23M51UUooIO0lpnCUjOoWH
+         tWzA==
+X-Forwarded-Encrypted: i=1; AFNElJ8ez4rf1WbFpacHMLhJuRJ9fjGLudJflgpz6DbgM3vxla+AmiDQgcDMAMmYBRdi1HHVUVnyw4N8zdXWs07OCmc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz7APn8TGLlYTGlqYtD48bABpQ/FVhl1+JWh8h6XJAC09HJF8FT
+	lHHq5JmWTUaFv2v2yrLP5D+N8H5H5wGKffsV4m4bi+erbF4Dz1M8I8X9
+X-Gm-Gg: AeBDiesCNlqsE3vsyPHEA/LkiUgTTlhXpRP7eyl6WIFh9e15gXTprXHh4hTm1XsR7VL
+	RZYiaFN2r8cTkqJsFrJSKoVYiTFMmZNpSY9WWFPcY+cFJY7Gz50jmbEAYberPkyThptL5z1Nl0I
+	0u3OCGA6yTZvKLnk+Iqv0P7kwdu3WMKLWow062bZnIEosVP4zxtV2cNgimZHughwZeFBS/fYU2o
+	pVE2Zuyd4yr7HKPhBO3LBJTlF72QPJTA940cpbCE4OpKtICvRinYYqRXCg5/oWSM6SmJNonvZaU
+	Vfhgjmrb8ay80pma2oDMhtmDrbbuiLuCJsoG/ztWwG5thltHeKPNpG0LLPCxid4ErZYLETjAJdk
+	xtF7773wV1A9W+NK5vT+aeZv7DAz5hFohoTSnbwk7lIxYcdUjKxzpe9JldBWkvhADhYgQYQjxAj
+	xCeSDtW3G8eJ3wzop5ClJcpFYpomsZbI/yiEvI+SsvQx1a4CPiTYpKJoJD/tFNvsrVJmZIccXS8
+	8I=
+X-Received: by 2002:a05:6000:288b:b0:43d:7a97:78b5 with SMTP id ffacd0b85a97d-44bb5e2deb9mr1495268f8f.33.1777670466885;
+        Fri, 01 May 2026 14:21:06 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-44a8f51bac8sm7514313f8f.16.2026.05.01.14.21.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 May 2026 14:21:06 -0700 (PDT)
+Date: Fri, 1 May 2026 22:21:05 +0100
+From: David Laight <david.laight.linux@gmail.com>
+To: Bobby Eshleman <bobbyeshleman@gmail.com>
+Cc: Breno Leitao <leitao@debian.org>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
+ <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
+ <horms@kernel.org>, Stefano Garzarella <sgarzare@redhat.com>, Shuah Khan
+ <shuah@kernel.org>, sdf.kernel@gmail.com, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, virtualization@lists.linux.dev,
+ linux-kselftest@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH net-next 2/3] vsock: convert to getsockopt_iter
+Message-ID: <20260501222105.747dea59@pumpkin>
+In-Reply-To: <afTjvM1P4gjPSvW8@devvm29614.prn0.facebook.com>
+References: <20260501-getsock_one-v1-0-810ce23ea70e@debian.org>
+	<20260501-getsock_one-v1-2-810ce23ea70e@debian.org>
+	<afTjvM1P4gjPSvW8@devvm29614.prn0.facebook.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 27/54] selftests/mm: hugepage_settings: add APIs for
- HugeTLB setup and teardown
-To: Mike Rapoport <rppt@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- David Hildenbrand <david@kernel.org>,
- Baolin Wang <baolin.wang@linux.alibaba.com>, Barry Song <baohua@kernel.org>,
- Dev Jain <dev.jain@arm.com>, Donet Tom <donettom@linux.ibm.com>,
- Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Lance Yang <lance.yang@linux.dev>, Leon Romanovsky <leon@kernel.org>,
- Lorenzo Stoakes <ljs@kernel.org>, Mark Brown <broonie@kernel.org>,
- Michal Hocko <mhocko@suse.com>, Nico Pache <npache@redhat.com>,
- Peter Xu <peterx@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
- Sarthak Sharma <sarthak.sharma@arm.com>, Shuah Khan <shuah@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Vlastimil Babka <vbabka@kernel.org>,
- Zi Yan <ziy@nvidia.com>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org
-References: <20260428204240.1924129-1-rppt@kernel.org>
- <20260428204240.1924129-28-rppt@kernel.org>
- <2f443474-4448-462e-bc1e-55bc657d70ba@redhat.com>
- <afTF9RCy8eBoWYaj@kernel.org>
-Content-Language: en-US, en-CA
-From: Luiz Capitulino <luizcap@redhat.com>
-In-Reply-To: <afTF9RCy8eBoWYaj@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On 2026-05-01 11:25, Mike Rapoport wrote:
-> On Thu, Apr 30, 2026 at 02:31:48PM -0400, Luiz Capitulino wrote:
->> On 2026-04-28 16:42, Mike Rapoport wrote:
->>> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
->>>
->>> A lot of tests require free HugeTLB pages. Some need just a few default
->>> huge pages, some need a certain amount of memory available as HugeTLB, and
->>> some just skip lots of tests if huge pages of all supported sizes are not
->>> available.
->>>
->>> This all resulted in a huge mess in run_vmtests.sh that sets up some huge
->>> pages, adjusts them later and restores some of the settings if the stars
->>> align.
->>>
->>> Add APIs that allow saving the state of HugeTLB and setting up the desired
->>> amount of HugeTLB pages.
->>>
->>> Saving the state also registers atexit() callback and signal handler that
->>> will ensure restoration of HugeTLB state.
->>>
->>> Since many tests use both HugeTLB and THP, the atexit() callbacks and
->>> signal handler are restoring both.
->>>
->>> For kselftest_harness tests that run fixture setups and test in child
->>> processes add a constructor that will save and restore settings in the main
->>> process.
->>>
->>> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
->>> ---
->>>    .../testing/selftests/mm/hugepage_settings.c  | 178 +++++++++++++++---
->>>    .../testing/selftests/mm/hugepage_settings.h  |  30 ++-
->>>    2 files changed, 183 insertions(+), 25 deletions(-)
->>>
->>> diff --git a/tools/testing/selftests/mm/hugepage_settings.c b/tools/testing/selftests/mm/hugepage_settings.c
->>> index 4ae7332b5e1b..9d31b53dbc67 100644
->>> --- a/tools/testing/selftests/mm/hugepage_settings.c
->>> +++ b/tools/testing/selftests/mm/hugepage_settings.c
->>> @@ -306,31 +306,12 @@ void thp_restore_settings(void)
->>>    		thp_write_settings(&saved_settings);
->>>    }
->>> -static void thp_restore_settings_atexit(void)
->>> +static void __thp_save_settings(void)
->>>    {
->>> -	thp_restore_settings();
->>> -}
->>> -
->>> -static void thp_restore_settings_sighandler(int sig)
->>> -{
->>> -	/* exit() will invoke the thp_restore_settings_atexit handler. */
->>> -	exit(KSFT_FAIL);
->>> -}
->>> +	if (!thp_available())
->>> +		return;
->>> -void thp_save_settings(void)
->>> -{
->>>    	thp_read_settings(&saved_settings);
->>> -
->>> -	/*
->>> -	 * setup exit hooks to make sure THP settings are restored on graceful
->>> -	 * and error exits and signals
->>> -	 */
->>> -	atexit(thp_restore_settings_atexit);
->>> -	signal(SIGTERM, thp_restore_settings_sighandler);
->>> -	signal(SIGINT, thp_restore_settings_sighandler);
->>> -	signal(SIGHUP, thp_restore_settings_sighandler);
->>> -	signal(SIGQUIT, thp_restore_settings_sighandler);
->>> -
->>>    	thp_settings_saved = true;
->>>    }
->>> @@ -399,11 +380,31 @@ bool thp_is_enabled(void)
->>>    	return mode == 1 || mode == 3;
->>>    }
->>> +#define HUGETLB_MAX_NR_PAGESIZES 10
->>> +struct hugetlb_settings {
->>> +	unsigned long free_hugepages[HUGETLB_MAX_NR_PAGESIZES];
->>
->> It looks like we don't actually use this in the API or maybe I'm missing
->> something?
-> 
-> Yes, it's used only in later patches.
+On Fri, 1 May 2026 10:32:44 -0700
+Bobby Eshleman <bobbyeshleman@gmail.com> wrote:
 
-I don't see it, the patch below builds fine (again, sorry in advance if
-I'm missing something obvious):
+> On Fri, May 01, 2026 at 08:52:52AM -0700, Breno Leitao wrote:
+> > Convert AF_VSOCK's getsockopt implementation to use the new
+> > getsockopt_iter callback with sockopt_t. The single
+> > vsock_connectible_getsockopt() callback is shared by both
+> > vsock_stream_ops and vsock_seqpacket_ops, so both proto_ops are
+> > updated to use .getsockopt_iter.
+> > 
+> > Key changes:
+> > - Replace (char __user *optval, int __user *optlen) with sockopt_t *opt
+> > - Use opt->optlen for buffer length (input) and returned size (output)
+> > - Use copy_to_iter() instead of put_user()/copy_to_user()
+> > 
+> > Signed-off-by: Breno Leitao <leitao@debian.org>
+> > ---
+> >  net/vmw_vsock/af_vsock.c | 16 +++++++---------
+> >  1 file changed, 7 insertions(+), 9 deletions(-)
+> > 
+> > diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+> > index 44037b066a5ff..d4a97eeb596e6 100644
+> > --- a/net/vmw_vsock/af_vsock.c
+> > +++ b/net/vmw_vsock/af_vsock.c
+> > @@ -155,6 +155,7 @@
+> >  #include <linux/random.h>
+> >  #include <linux/skbuff.h>
+> >  #include <linux/smp.h>
+> > +#include <linux/uio.h>
+> >  #include <linux/socket.h>
+> >  #include <linux/stddef.h>
+> >  #include <linux/sysctl.h>
+> > @@ -2091,8 +2092,7 @@ static int vsock_connectible_setsockopt(struct socket *sock,
+> >  
+> >  static int vsock_connectible_getsockopt(struct socket *sock,
+> >  					int level, int optname,
+> > -					char __user *optval,
+> > -					int __user *optlen)
+> > +					sockopt_t *opt)
+> >  {
+> >  	struct sock *sk = sock->sk;
+> >  	struct vsock_sock *vsk = vsock_sk(sk);
+> > @@ -2110,8 +2110,7 @@ static int vsock_connectible_getsockopt(struct socket *sock,
+> >  	if (level != AF_VSOCK)
+> >  		return -ENOPROTOOPT;
+> >  
+> > -	if (get_user(len, optlen))
+> > -		return -EFAULT;
+> > +	len = opt->optlen;
+> >  
+> >  	memset(&v, 0, sizeof(v));
+> >  
+> > @@ -2142,11 +2141,10 @@ static int vsock_connectible_getsockopt(struct socket *sock,
+> >  		return -EINVAL;
+> >  	if (len > lv)
+> >  		len = lv;
+> > -	if (copy_to_user(optval, &v, len))
+> > +	if (copy_to_iter(&v, len, &opt->iter_out) != len)
 
-diff --git a/tools/testing/selftests/mm/hugepage_settings.c b/tools/testing/selftests/mm/hugepage_settings.c
-index 097ba085f423..a023cfeb69c5 100644
---- a/tools/testing/selftests/mm/hugepage_settings.c
-+++ b/tools/testing/selftests/mm/hugepage_settings.c
-@@ -341,7 +341,6 @@ bool thp_is_enabled(void)
-  
-  #define HUGETLB_MAX_NR_PAGESIZES 10
-  struct hugetlb_settings {
--	unsigned long free_hugepages[HUGETLB_MAX_NR_PAGESIZES];
-  	unsigned long nr_hugepages[HUGETLB_MAX_NR_PAGESIZES];
-  	unsigned long sizes[HUGETLB_MAX_NR_PAGESIZES];
-  	unsigned long default_size;
-@@ -509,7 +508,6 @@ static void __hugetlb_save_settings(void)
-  		if (!sz)
-  			continue;
-  
--		settings->free_hugepages[i] = hugetlb_free_pages(sz);
-  		settings->nr_hugepages[i] = hugetlb_nr_pages(sz);
-  	}
-  
+I'd wrap that as copy_to_sockopt(&v, len, opt).
+or to make the edits easier: copy_to_sockopt(opt, &v, len).
+Then if someone decides to change the implementation none of the call
+sites need changing.
 
-> I felt it would be too churny to add users in this patch.
->   
->> Otherwise, the API looks great to me. But if you allow me to bikeshed :)
->>
->> I think I'd do:
->>
->> struct hugetlb_state {
->> 	unsigned long nr_hugepages;
->> 	unsigned long size;
->> };
->>
->> struct hugetlb_settings {
->> 	struct hugetlb_state hstate[HUGETLB_MAX_PAGESIZES];
->> 	unsigned long default_size;
->> 	int nr_sizes;
->> };
-> 
-> It might be slightly nicer abstraction but ...
->   
->>> +static void __hugetlb_save_settings(void)
->>> +{
->>> +	struct hugetlb_settings *settings = &hugetlb_saved_settings;
->>> +	int nr_sizes;
->>> +
->>> +	settings->default_size = default_huge_page_size();
->>> +	if (!settings->default_size)
->>> +		return;
->>> +
->>> +	nr_sizes = detect_hugetlb_page_sizes(settings->sizes,
->>> +					     HUGETLB_MAX_NR_PAGESIZES);
-> 
-> ... this immediately becomes more complex.
-> 
->>> +	if (!nr_sizes) {
->>> +		settings->default_size = 0;
->>> +		return;
->>> +	}
->>> +
->>> +	for (int i = 0; i < nr_sizes; i++) {
->>> +		unsigned long sz = settings->sizes[i];
->>> +
->>> +		if (!sz)
->>> +			continue;
->>> +
->>> +		settings->free_hugepages[i] = hugetlb_free_pages(sz);
->>> +		settings->nr_hugepages[i] = hugetlb_nr_pages(sz);
-> 
-> And this as well.
+-- David
 
-We'd need a little more code to handle those cases, may or may not be
-worth it. But enough bikesheding from my side :) the series is great as
-is.
+> >  		return -EFAULT;
+> >  
+> > -	if (put_user(len, optlen))
+> > -		return -EFAULT;
+> > +	opt->optlen = len;
+> >  
+> >  	return 0;
+> >  }
+> > @@ -2631,7 +2629,7 @@ static const struct proto_ops vsock_stream_ops = {
+> >  	.listen = vsock_listen,
+> >  	.shutdown = vsock_shutdown,
+> >  	.setsockopt = vsock_connectible_setsockopt,
+> > -	.getsockopt = vsock_connectible_getsockopt,
+> > +	.getsockopt_iter = vsock_connectible_getsockopt,
+> >  	.sendmsg = vsock_connectible_sendmsg,
+> >  	.recvmsg = vsock_connectible_recvmsg,
+> >  	.mmap = sock_no_mmap,
+> > @@ -2653,7 +2651,7 @@ static const struct proto_ops vsock_seqpacket_ops = {
+> >  	.listen = vsock_listen,
+> >  	.shutdown = vsock_shutdown,
+> >  	.setsockopt = vsock_connectible_setsockopt,
+> > -	.getsockopt = vsock_connectible_getsockopt,
+> > +	.getsockopt_iter = vsock_connectible_getsockopt,
+> >  	.sendmsg = vsock_connectible_sendmsg,
+> >  	.recvmsg = vsock_connectible_recvmsg,
+> >  	.mmap = sock_no_mmap,
+> > 
+> > -- 
+> > 2.52.0
+> >   
+> 
+> Reviewed-by: Bobby Eshleman <bobbyeshleman@meta.com>
+> 
 
