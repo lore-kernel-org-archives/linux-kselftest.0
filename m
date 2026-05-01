@@ -1,36 +1,55 @@
-Received: from cstnet.cn (smtp25.cstnet.cn [159.226.251.25])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E40991EEA31;
-	Fri,  1 May 2026 02:16:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E377B2236E3
+	for <linux-kselftest@vger.kernel.org>; Fri,  1 May 2026 02:21:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777601817; cv=none; b=PDoUA7dmhy8V5qlpOYE6KRvx2kafS+oJoNphnTXxOCx6fZ+grbLoPr5+cGhFGCQJ1Y0IzhgqFuX8RNlCJAepMQB/sGSU1lk7UQbsb0kobmzd21LRvOw/Ib+yWhRGj1Nxmz/so6L8iBjD35KfC4vvV7emlHylp6s+5oDZMIGTqdw=
+	t=1777602084; cv=none; b=JNjgCBurV3Bza9PAfmQHyvC3bZm64FWZoBn2x9/Wv5GM0W5ExRUEPydbglPHK17Py5M8bVCRlFL3TWMotFE+wKWBXHqZwzAdERu36UHfCVSoahYos9XL1FdD/vfQXcdr0UYTQ9qHSsk64vQbxXhBZ03JlVgWRIpWjrTvSGFVny0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777601817; c=relaxed/simple;
-	bh=f6gSBn9P/CgOI/34hVibjzE9zYcFXx2vZl9HyYKG72Y=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=BlvozWfPS/DEh+N97LLRg11PGQpsups1qS6OuX6eO60RDS37CjEePhkeEESU3zWSUTKVwbPPVFv3UMv9T8xV8m2igO8t6eePvagMthhjBwVV00y9OhoadWYSKFC0TTRlNWRdCeKTNDR7sGNr6VVRqhtQ5tviS3JGseibm/Yf2W4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
-Received: from fric.. (unknown [36.110.52.2])
-	by APP-05 (Coremail) with SMTP id zQCowAD3iw8LDfRpCp0UDw--.14623S2;
-	Fri, 01 May 2026 10:16:43 +0800 (CST)
-From: Jiakai Xu <xujiakai2025@iscas.ac.cn>
-To: kvm@vger.kernel.org,
+	s=arc-20240116; t=1777602084; c=relaxed/simple;
+	bh=nWZpn+zuYeF1V9x/teR05sIUTrIzFNN47Ulj38ZPNeA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=WQE5ban6P7z1M2F9jAzfm7PxRi8Yg0ajtceF9BPDvle7gvLAy/InI3d5APekd9p3gJkLiC2T+dDZU53c2M+G09yUS200Q9H4D7ihm67HVs3vVGydiy2JhKBeEabN9fIpKQnzee4aCcIcvC4gUz+gyCm4x3U+aqAPAficlz7khvQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=pFLCKW17; arc=none smtp.client-ip=91.218.175.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="pFLCKW17"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1777602080;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=NBtGLtjRvE4baHy0eRK4mwql+K6PPxqXdGnpl9fPIQ0=;
+	b=pFLCKW176QPS1YiBgSYn6EPexE20q/Nhgy7otY2RejVxCOOgcgct00JRvsqeP7snox6NOo
+	L0jeV/ZbzDieXaq2pKtdp48NdkClEIMNtOl1U0wUHV6rLg5k7Gc6uwrAZwD1WqMD4u2qf8
+	yRgg/5V2jD5mHAAOUVvV1ymCYwLzyc0=
+From: Li Wang <li.wang@linux.dev>
+To: akpm@linux-foundation.org,
+	hannes@cmpxchg.org,
+	mhocko@kernel.org,
+	roman.gushchin@linux.dev,
+	shakeel.butt@linux.dev,
+	muchun.song@linux.dev,
+	tj@kernel.org,
+	mkoutny@suse.com,
+	shuah@kernel.org
+Cc: cgroups@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Cc: Andrew Jones <andrew.jones@oss.qualcomm.com>,
-	Anup Patel <anup@brainfault.org>,
-	Jiakai Xu <xujiakai2025@iscas.ac.cn>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Mark Brown <broonie@kernel.org>,
-	Jiakai Xu <jiakaiPeanut@gmail.com>
-Subject: [PATCH] KVM: arm64: Add memslot for ST_GPA_BASE in check_steal_time_uapi()
-Date: Fri,  1 May 2026 02:16:39 +0000
-Message-Id: <20260501021639.2563219-1-xujiakai2025@iscas.ac.cn>
-X-Mailer: git-send-email 2.34.1
+	Waiman Long <longman@redhat.com>,
+	Christoph Lameter <cl@linux.com>,
+	Shakeel Butt <shakeelb@google.com>,
+	Vlastimil Babka <vbabka@suse.cz>
+Subject: [PATCH v2 1/2] selftests/cgroup: Fix hardcoded page size in test_percpu_basic
+Date: Fri,  1 May 2026 10:20:57 +0800
+Message-ID: <20260501022058.18024-2-li.wang@linux.dev>
+In-Reply-To: <20260501022058.18024-1-li.wang@linux.dev>
+References: <20260501022058.18024-1-li.wang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -38,58 +57,45 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:zQCowAD3iw8LDfRpCp0UDw--.14623S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7CFy3Gr1DGFWrAr4fuw17Wrg_yoW8XrW5pF
-	W8CFnxKryrtrnrt3WUCr4DXF45Gw4v9r1kJwnxXw13ur4rtrs2vrWIkr93Z3yUXa9Yqr1r
-	ZayxtF17urWDWaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUBF14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-	6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVWxJr
-	0_GcWlnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xv
-	F2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r
-	4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I
-	648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2
-	Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
-	6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0x
-	vE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE
-	42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6x
-	kF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUAxhLUUUUU=
-X-CM-SenderInfo: 50xmxthndljiysv6x2xfdvhtffof0/1tbiBwwOCWnz4uBbkwAAsc
+X-Migadu-Flow: FLOW_OUT
 
-The refactored check_steal_time_uapi() creates a temporary VM via
-vm_create_with_one_vcpu(), whose default memslot0 only covers GPA
-0..~2MB.  Setting st_ipa to ST_GPA_BASE (1 << 30) causes
-kvm_arm_pvtime_set_attr() to fail with EINVAL because gfn_to_hva()
-cannot find a valid memslot at the target GFN.
+MAX_VMSTAT_ERROR uses a hardcoded page size of 4096, which assumes
+4K pages. This causes test_percpu_basic to fail on systems where
+the kernel is configured with a larger page size, such as aarch64
+systems using 16K or 64K pages, where the maximum permissible
+discrepancy between memory.current and percpu charges is
+proportionally larger.
 
-Add a memslot at ST_GPA_BASE in the temporary VM, mirroring what
-the main test already does.
+Replace the hardcoded 4096 with sysconf(_SC_PAGESIZE) to correctly
+derive the page size at runtime regardless of the underlying
+architecture or kernel configuration.
 
-Reported-by: Mark Brown <broonie@kernel.org>
-Closes: https://lore.kernel.org/lkml/afM8WEe4gG5tL4fH@sirena.co.uk
-Signed-off-by: Jiakai Xu <xujiakai2025@iscas.ac.cn>
-Signed-off-by: Jiakai Xu <jiakaiPeanut@gmail.com>
-Fixes: 40351ed924dd30 ("KVM: selftests: Refactor UAPI tests into dedicated function")
+Signed-off-by: Li Wang <li.wang@linux.dev>
+Cc: Waiman Long <longman@redhat.com>
+Cc: Christoph Lameter <cl@linux.com>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: Michal Hocko <mhocko@kernel.org>
+Cc: Shakeel Butt <shakeelb@google.com>
+Cc: Tejun Heo <tj@kernel.org>
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Acked-by: Waiman Long <longman@redhat.com>
 ---
- tools/testing/selftests/kvm/steal_time.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ tools/testing/selftests/cgroup/test_kmem.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/kvm/steal_time.c b/tools/testing/selftests/kvm/steal_time.c
-index 7df2bc8eec02..2b01b466ddc1 100644
---- a/tools/testing/selftests/kvm/steal_time.c
-+++ b/tools/testing/selftests/kvm/steal_time.c
-@@ -213,6 +213,10 @@ static void check_steal_time_uapi(void)
+diff --git a/tools/testing/selftests/cgroup/test_kmem.c b/tools/testing/selftests/cgroup/test_kmem.c
+index eeabd34bf08..249d7911306 100644
+--- a/tools/testing/selftests/cgroup/test_kmem.c
++++ b/tools/testing/selftests/cgroup/test_kmem.c
+@@ -24,7 +24,7 @@
+  * the maximum discrepancy between charge and vmstat entries is number
+  * of cpus multiplied by 64 pages.
+  */
+-#define MAX_VMSTAT_ERROR (4096 * 64 * get_nprocs())
++#define MAX_VMSTAT_ERROR (sysconf(_SC_PAGESIZE) * 64 * get_nprocs())
  
- 	vm = vm_create_with_one_vcpu(&vcpu, NULL);
+ #define KMEM_DEAD_WAIT_RETRIES        80
  
-+	/* ST_GPA_BASE needs a valid memslot for gfn_to_hva() to succeed */
-+	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS, ST_GPA_BASE,
-+				    1, 1, 0);
-+
- 	struct kvm_device_attr dev = {
- 		.group = KVM_ARM_VCPU_PVTIME_CTRL,
- 		.attr = KVM_ARM_VCPU_PVTIME_IPA,
 -- 
-2.34.1
+2.54.0
 
