@@ -1,125 +1,110 @@
-Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
+Received: from fhigh-a3-smtp.messagingengine.com (fhigh-a3-smtp.messagingengine.com [103.168.172.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86B0629DB86;
-	Sat,  2 May 2026 02:56:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.242.92
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CDED1A9F97;
+	Sat,  2 May 2026 04:32:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777690620; cv=none; b=d2+spNCoTiqm0TKz/fpnNhzF9Q36dRSUhKZWgPuzlzMBFKfC3G6m0NtJY3QLM5e8pjkevk5ChQNc8jq8tMFmLw/lfK7YjfY8LDxQ/bYReWSeDIpvz+luBODZ4frOHR8Ik0ojrnKVAjnDyD1hflzFnSVgwZ6Bc1xNxLg/zXK4JoY=
+	t=1777696333; cv=none; b=Lryt8aV5tsi1Y6jtCDXQCsAOcMl290ojOX/waXZcJo0denoHsPNkBWJjZR0yDH5TkB20FQvZqpEfheXGSOc1Exno4LyF2rKTOK5DMTKi3cFXT+aYVXi+p4qoiFeXY7TcvhAPIdjrIHJ49uzKCAs6XraKLlDJrB7DO2X1nQeX84I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777690620; c=relaxed/simple;
-	bh=6MVjPCNpgQqVU9SXicKa3l3PnR35h9jy7An9u7iWfZc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LrxkfwwWTnmBtOgmqHYwiDjqvtYehc7C2A5WoPEhWTnPqQdgt9tuOFAMr2zK3oRb+76t3xCCi5DD4qht51UK64h6w5I22rG44R4Ervfm6cZJ2ejk1Gd9lWjjCCrj6TafXPRhcnBLs+8cjRqSMDG5qH/CcDbfpdzJ/yEgRKms/pc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net; spf=pass smtp.mailfrom=davidgow.net; dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b=Pk3Ody+O; dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b=GpCV5M8K; arc=none smtp.client-ip=203.29.242.92
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
+	s=arc-20240116; t=1777696333; c=relaxed/simple;
+	bh=VvzNqcyWvOSXIgK/Bn248L/jEf6SxdUEYXGuhkZRyNQ=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=m7savpaJtISdfieT8K0HSVe+O6SfhPyfoeJzsZA2wLKz5pdkxL+cjZtFlthkKT9q/6Aocj37LdAjTZXjbHcmzdnlmV/EHGrt6qG0K75TJHoxZTy2h9ezraVrS0iYgdGzAS+kLIkAwXRMFbwFMEO9dzUkvdQPV0WKypTaCaQ2d6k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org; spf=pass smtp.mailfrom=shazbot.org; dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b=ortqi6uW; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=HUtDmXXB; arc=none smtp.client-ip=103.168.172.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shazbot.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b="Pk3Ody+O";
-	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b="GpCV5M8K"
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
-	s=201606; t=1777690617;
-	bh=6MVjPCNpgQqVU9SXicKa3l3PnR35h9jy7An9u7iWfZc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Pk3Ody+OxuIizQ5+4H6BoeB7UUCyoULAslHzCUi+UBmfAa8BFa9Pqt+XmXJvcVq8b
-	 XTqs+nUbnQNKvHp7etFowG3JafSJV0LqG6FxRU7VcNOOmwxv6eg6lQwMn36TiU27dY
-	 coM0GhCxyaY3Ow8Uxml1A910GU/ip0iqr9Ob4LYeBbw6gErH4z9enLvjdiVliwiXdS
-	 jrdQ0O/8ACXdesAG1Tyj3rsAPZCO5N7BQAHkFDjQLkPV17MNBWiPBhJ3aBeDN7GpJ1
-	 5v6jsA//9l7rMs33yAVdsKLJqtQbniA8vFDRmGqnqGZR2HHW9SZb94H8lv36RMvN29
-	 cuJHO5JFUj0yZJIGhbG4gDE684hOMt/8F35MujYXSeYs4aAfT1hMXX9PzFKO7ADGP2
-	 qmJ2opeWoKTkAz/ZaC140Wl+Nuf6AqfAQA2/HdSoGj4vka14Qg5g94KI2VYTyHGvyL
-	 Boh37yj+jBeDiJ9iBD2cPn/7/qWcwFAkKbqju5/uzEYG/tLFOnQvKV4Ey12KoQDbj0
-	 weWi2/HNaWgbcZmPPi9zFqWymYxx70yFjyWyaliIm4+0UqOSeFxPxafU8atWOpu5OC
-	 1ll6xZVEqowV5FCXwCpgQq1GOWJYuMg0Sw9b/IffZmaE2y8VTU+1c3F6SRpsnIX5wU
-	 wDzPcxABQLV1N5wgNKPhMtH0=
-Received: by sphereful.davidgow.net (Postfix, from userid 119)
-	id 7ADB41E86C8; Sat,  2 May 2026 10:56:57 +0800 (AWST)
-X-Spam-Level: 
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
-	s=201606; t=1777690571;
-	bh=6MVjPCNpgQqVU9SXicKa3l3PnR35h9jy7An9u7iWfZc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=GpCV5M8KytOSRYZEcsfpG1el6yvUhHegPvKUlO7CJ3xHuUKXp8YfCqMXvim979lSc
-	 3c7L0VVhPGgw6Cu0+SSXWtOxXmcDSQXBXxeH3ONN21fZHRZx5IXtgEBzzVJB5fNcdq
-	 jugkCDcjNmJkYN9vZ9cgbKYKygLOLhtFNoHYFYjPRDoYGjJealhGhbYAeU3dbR0DBq
-	 bz7f1+k1YMW8HlNM43XCqHceEkXhrJ7ubCFv13MU91LplybtnlSfo2y8vR/J4yK5yi
-	 qBscx8XHMkj8utNbWvOt4x8MqddZ8c5uXQYpHT+16tZrEtYTobuyR1CvWIiUABsskY
-	 pOG73lrQ42VzKkc6TMcjNpY6h6ZvYjS5U1xTFT8TUr+oXht8Gb6CCh9mVCcu/APFPm
-	 7ixxSaBh5vJGLoxRTrybBwcaTcVeNg72z/fu7cVG/0GiTA+0GDTPyrg1mtKJqadvla
-	 2ZSs1ePqPWoYBcWjQLoq/smBRkni7ZmLcHgOi4GsUSd5hueKFcTQz9uCtFlcGcaAp7
-	 xhiPKDXJWwBDiHmxtOeZJRVpOnL+95Og8qUZ61I9tnec5XWVyz3DtEtOzzK+CVMaqe
-	 VlxlMj79vIs+MGV0Q6HCGdjHCWvVVuCsw/fQzKqGI1IDF7tWbqvjob5hi+i5xpUQh4
-	 95m5OHJOrN22QwZ/9dYIVeyM=
-Received: from [IPV6:2001:8003:8810:ea00:ed87:ca88:5326:e11d] (unknown [IPv6:2001:8003:8810:ea00:ed87:ca88:5326:e11d])
-	by sphereful.davidgow.net (Postfix) with ESMTPSA id D6B501E86C0;
-	Sat,  2 May 2026 10:56:11 +0800 (AWST)
-Message-ID: <131e1ff1-4d29-4e45-8f85-33e2a8983b2b@davidgow.net>
-Date: Sat, 2 May 2026 10:56:09 +0800
+	dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b="ortqi6uW";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="HUtDmXXB"
+Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 703E51400176;
+	Sat,  2 May 2026 00:32:10 -0400 (EDT)
+Received: from phl-imap-18 ([10.202.2.89])
+  by phl-compute-02.internal (MEProxy); Sat, 02 May 2026 00:32:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shazbot.org; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1777696330;
+	 x=1777782730; bh=BREJYA/ynimdlvkziKMjJqbroFR4YvUmHC1hcGjm9x8=; b=
+	ortqi6uWikQ8D9//DCJX6HdxN8qFN/wNEWu0GjtX/JPurb0gBkR4R/br/H8uDKTd
+	nmVrg/zHJo0fowP7PEuIKYgTWsjvTn/JdCJtKg4LDUDZerAGHgfF9Wi4dCDnEz/z
+	xo7Cu6HZlvV/3FeDd6e5zuviTb21KWNY546Y37/CojJP/NnsnHd7W6hCdYhaIWB2
+	ArmF0d7GHsn5B6tN9kr+tNJUVJ9hJfLXqTpV2a0cEtPuE1POhSO63SN8Qiz+45JU
+	D8R7mCSTm10le84gZO/UDNJ7N5uJWx1tlUX9FBoTm+TUhhqIbt5kMjahBTcPcbkn
+	JYkoZCpvAl2ZZlRXYr67xg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1777696330; x=
+	1777782730; bh=BREJYA/ynimdlvkziKMjJqbroFR4YvUmHC1hcGjm9x8=; b=H
+	UtDmXXBWutpUdoGrBRVkz3b0v9T8jZ9AxD3wms8UA4sCaccGEoiIGJpK176hlCs1
+	++oYIaUXtDgRouEW/wv6KP3LjaKSxpYEltfcSD3oZEfFP6TyMC99JLukz1YL/v4G
+	cjKGQjjPtr33m2OCkT0tTqbHjMzDxnYagJ1qStOR0GFdJeU7amfTXugPKwN62WUq
+	hiyssUkSzOmygpsS8dCbuuyOvMh1Kb5d+dg7nkr6nXgnPKgEUPja215mCA1Cw5S1
+	MsafOhxA8wAd/KM9YBS4Jec6jghW6ceGUIVgYIZwj1gCHRoczHzzL6q0RZXW//VV
+	iH4LIN0H3D4mzXmiHQclQ==
+X-ME-Sender: <xms:Sn71af8e8p1BZAIxzaNAVYGvLu3pfDMXKBpJ5rTpm9xoo5togOtt_A>
+    <xme:Sn71aWggk1gjkF9-EHfQIMZHiV4bsxMT7xaTeKwa00mLlxXLEKvL1_2UxMe9e0Wxv
+    hDOHgv0q7JWKiWysf5stfrURGwhzrGbcofLmOa0cnS1a18WrK_A>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgdelvddufecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpefoggffhffvvefkjghfufgtgfesthejredtredttdenucfhrhhomhepfdetlhgvgicu
+    hghilhhlihgrmhhsohhnfdcuoegrlhgvgiesshhhrgiisghothdrohhrgheqnecuggftrf
+    grthhtvghrnhepgfeffeelgffgffevffetteeivdettdfgvdeiveefjeeffeffveetjeet
+    udffgfevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    eprghlvgigsehshhgriigsohhtrdhorhhgpdhnsggprhgtphhtthhopeduvddpmhhouggv
+    pehsmhhtphhouhhtpdhrtghpthhtohepughmrghtlhgrtghksehgohhoghhlvgdrtghomh
+    dprhgtphhtthhopehlvghonheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhhuhgr
+    hheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepphgrthgthhgvsheslhhishhtshdrlh
+    hinhhugidruggvvhdprhgtphhtthhopehjghhgsehnvhhiughirgdrtghomhdprhgtphht
+    thhopehmsghlohgthhesnhhvihguihgrrdgtohhmpdhrtghpthhtohepshgrvggvughmse
+    hnvhhiughirgdrtghomhdprhgtphhtthhopehtrghrihhqthesnhhvihguihgrrdgtohhm
+    pdhrtghpthhtohepkhhvmhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:Sn71abxKiOXJB7RlQcQ0yz-wxuLtklAZqMqe2BAF8vmaUaUeZEd0oA>
+    <xmx:Sn71af8FJynU3OCbEob14bK3zdFzrZp2mhbGaDRk_tZAmL75iuQH9g>
+    <xmx:Sn71aZOKAri6LW5ABVGBIXnZ0WVwarqNA3Af0NJ3y5SX_iMTF7-AEQ>
+    <xmx:Sn71afoF33idoETcqH1XenMvYie6Fa-e0WkFHEuikluE6lh-pDs1Zw>
+    <xmx:Sn71aeZ3SmnZnKSEnikCL7LK8w_aZoWWQ1OImsJAmIbITGiETqVEP4kj>
+Feedback-ID: i03f14258:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 14AE715C008F; Sat,  2 May 2026 00:32:10 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] kunit: Fix spelling mistakes in comments and messages
-To: Jinseok Kim <always.starving0@gmail.com>, brendan.higgins@linux.dev
-Cc: raemoar63@gmail.com, skhan@linuxfoundation.org, me@brighamcampbell.com,
- jkoolstra@xs4all.nl, linux-kselftest@vger.kernel.org,
- kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
- linux-kernel-mentees@lists.linux.dev
-References: <20260501162739.3861-1-always.starving0@gmail.com>
-Content-Language: fr
-From: David Gow <david@davidgow.net>
-In-Reply-To: <20260501162739.3861-1-always.starving0@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-ThreadId: ALXc8_xz--ng
+Date: Fri, 01 May 2026 22:31:49 -0600
+From: "Alex Williamson" <alex@shazbot.org>
+To: "Jason Gunthorpe" <jgg@nvidia.com>, "David Matlack" <dmatlack@google.com>,
+ kvm@vger.kernel.org, "Leon Romanovsky" <leon@kernel.org>,
+ linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org,
+ "Mark Bloch" <mbloch@nvidia.com>, netdev@vger.kernel.org,
+ "Saeed Mahameed" <saeedm@nvidia.com>, "Shuah Khan" <shuah@kernel.org>,
+ "Tariq Toukan" <tariqt@nvidia.com>
+Cc: patches@lists.linux.dev
+Message-Id: <71afd479-71b4-4ab7-bcbe-3f7b53bd11f4@app.fastmail.com>
+In-Reply-To: <0-v1-dc5fa250ca1d+3213-mlx5st_jgg@nvidia.com>
+References: <0-v1-dc5fa250ca1d+3213-mlx5st_jgg@nvidia.com>
+Subject: Re: [PATCH 00/11] mlx5 support for VFIO self test
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-Le 02/05/2026 à 12:27 AM, Jinseok Kim a écrit :
-> Fix two spelling mistakes in kunit tooling:
->    Bascially -> Basically
->    higer     -> higher
-> 
-> Signed-off-by: Jinseok Kim <always.starving0@gmail.com>
-> ---
+On Thu, Apr 30, 2026, at 6:08 PM, Jason Gunthorpe wrote:
+> Add an mlx5 driver to VFIO self test. This is largely a remix of the
+> existing VFIO mlx5 driver in rdma-core. It uses an RDMA loopback QP
+> to issue RDMA WRITE operations which effectively perform memory
+> copies using DMA. Since mlx5 has a stable programming ABI this
+> should work on devices from CX5 to current HW. The device FW must
+> support the QP loopback configuration.
 
-Thanks!
+Does the PCI ID table in the series need some pruning then?  It includes CX4.
+Thanks,
 
-Reviewed-by: David Gow <david@davidgow.net>
-
-Cheers,
--- David
-
->   tools/testing/kunit/kunit_kernel.py | 2 +-
->   tools/testing/kunit/kunit_parser.py | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-> index 2869fcb19..58557c47d 100644
-> --- a/tools/testing/kunit/kunit_kernel.py
-> +++ b/tools/testing/kunit/kunit_kernel.py
-> @@ -218,7 +218,7 @@ def _get_qemu_ops(config_path: str,
->   	# exists (I learned this through experimentation and could not find it
->   	# anywhere in the Python documentation).
->   	#
-> -	# Bascially, we completely ignore the actual file location of the config
-> +	# Basically, we completely ignore the actual file location of the config
->   	# we are loading and just tell Python that the module lives in the
->   	# QEMU_CONFIGS_DIR for import purposes regardless of where it actually
->   	# exists as a file.
-> diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
-> index 1c61a0ed7..0e1d2f498 100644
-> --- a/tools/testing/kunit/kunit_parser.py
-> +++ b/tools/testing/kunit/kunit_parser.py
-> @@ -268,7 +268,7 @@ def check_version(version_num: int, accepted_versions: List[int],
->   	if version_num < min(accepted_versions):
->   		test.add_error(printer, f'{version_type} version lower than expected!')
->   	elif version_num > max(accepted_versions):
-> -		test.add_error(printer, f'{version_type} version higer than expected!')
-> +		test.add_error(printer, f'{version_type} version higher than expected!')
-> 
->   def parse_ktap_header(lines: LineStream, test: Test, printer: Printer) -> bool:
->   	"""
-> --
-> 2.43.0
-
+Alex
