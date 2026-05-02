@@ -1,316 +1,140 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from BN8PR05CU002.outbound.protection.outlook.com (mail-eastus2azon11011010.outbound.protection.outlook.com [52.101.57.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B06F91D7E41
-	for <linux-kselftest@vger.kernel.org>; Sat,  2 May 2026 13:19:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777727998; cv=none; b=IzEs3DjX26ivKvKslf20ohfdONNxXsUEA5CwiDN8yxc37xoIopao4x+pQ7Zpy2yTdil6P5yXbJPJ/8IucK2Sxjj+RkBGDM0BCl4J7DpXlKHHtAlFoWgtCkgz2gSVa43N5WFxycsdcF5fH8rRrdQj1ID6XgV9O9Xx8uN3MHR+Kl8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777727998; c=relaxed/simple;
-	bh=lxcyWp12IdlZXXKd8Ugl4on7xBBXleJuqVt+0M1OoPk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RWXE/u47HEcX0saJPzAvYuNh/CvL0dW6+F7+eLN3YJbGDTFRutSoW87ZlTIG4dZER6vbOChvx53FCbXVSLWNI7oEt/o4YH3DD5NU5NMZ+c/253nO8+2poYzpXrtwq+Gu0NDC8b7+RtE+maf0M21RomfPCVAKMloPf3krI+gdh5c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dPAAqsyb; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02599175A66;
+	Sat,  2 May 2026 13:40:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.57.10
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777729232; cv=fail; b=XtKOY8AwwD5siRHOV88IJVIya+NguoSJK7qeFTI0Dj1X6rKOBfFf3e4kl8voYCeKXL0KeLkrxlL5e8W1k2C6W5ZtDFhvz9OOCzrBMmC+kPHtOSL2ZCDOTom2+wRMWHjwvIOQE8eD67Eqo+MtWNjX3QCsSxt/n81Zk4eUXa0YeHY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777729232; c=relaxed/simple;
+	bh=nm3PVgMMxdPWcgzW3XERj2TYCZkN9Neyp36kF1ydPeg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=qZGWas6rK7C6eRK2midqO+rZim4bCeo9xlwXQeALjK6FBpLz2m6N2HLt5yEoh0uYQTkvQJW6nEdQI5TlGpx7deb2G2+NGq/ahQsjV3zBnV8VXf7ytweZq0iwohThtPRmv6CY6t8Yx/OD2vOL30t/kYruDJJM9xNYo6LCFjQTyAc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=AKYMD5qV; arc=fail smtp.client-ip=52.101.57.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dPAAqsyb"
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-82f8893bff3so1289654b3a.2
-        for <linux-kselftest@vger.kernel.org>; Sat, 02 May 2026 06:19:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777727996; x=1778332796; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2gfGrYQ7AWXi3RXTSR0Z1BGRv06bnLTOB4wH+tsRKV8=;
-        b=dPAAqsybsiX8QZ3ITlSHXnOzi+2xC6mnt78AYeFl2Xlm/wdBl/72cXJ/9lh3+2yAR/
-         i3RRjFXi0C/fnxPnn/RYSX5K2jV7BkEQe07rpqLBSF40sL1eoEaXcInIoLeHu4jTfz5w
-         UW3yYRA2h+JwMU4xos1t2N0wNJOfbbSO637Ffe3q+iRa94bzmEEQ0yXqEJlBEFaWHVdS
-         gTCEM5IboBAYZZHVRmCbNTPkcNtCpf6KLfWqzgSKunNrtlXg+OHvc93oUplo9HIjsJ7v
-         V9K9POv5sI8xX8QSVpryzZk+5WaTO+kM/a2qT1z6MIVPKdLAsqY8TZOjB1UILoajNK2/
-         rg4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777727996; x=1778332796;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=2gfGrYQ7AWXi3RXTSR0Z1BGRv06bnLTOB4wH+tsRKV8=;
-        b=rwncdYCWOjRUG4krhAKm8fPdhzf7KARoKBBHPr+pXqorpyBd2OBYu2bFr/udLStf3+
-         VbHmAi8PJ00o1m5Hl2/IzrFkSaq6irgkGh0uhVEjSyBceuGVMLPNu1DGODCYfDLK+CUN
-         NMgBNPiKnTFob8cx0s3piAy0z+6TmIFvH+gObso7mPXq0ImupWHygegcBbluhw0dHDZk
-         f6ZABNnQiI5qHTDob7Erw58SR9RKFYsKFaw8hPntMi3tGrju/P1id+TEAAngQ4UlVzFA
-         0yaT6goin+sSHKdQqRYoOWT8swLfC+bn6qbC0s5xYB2eP/uD7NxrvhBouLTclzyB8Arw
-         oP7w==
-X-Forwarded-Encrypted: i=1; AFNElJ9M0+mwY7fWDOdFuRZeh89DuIZ7uDrz2Vs+YRLNd48OC/2iyx63PYFACpnhD5l70jM/LIpJpYWIg8RnyWK7ZqM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwtMa3E8VPPy9rVKP/f6zRv3gVXTJTPQsDcealo7HUKt6GFj+8n
-	tsvvoVcb4/7OpARBo0zvKA8+Mva8MiRvqPKrpIejam7fvQ6R0XyMpGwk
-X-Gm-Gg: AeBDies1Thb4EiGoRDogW9ZSb4JOZHvddSD+Nt2jxJVRxrqKS2nnuGQjmMba/UqvLUo
-	KOCEByNw3xVtIGVyAu282L76TgqNSqfnlo4YO/5j7D7NIxJfeOMQ+br7Hm5yxoXgufOCOrxj77O
-	u8q+cWGkuPbc8eKYvMC7JbOwwNxV9R7o0y2SGXe/nLoChONjRUv2cY15Z5hrVdTL56fDhgXFfMg
-	rx81JJq5WNFGoN4hqtzHlR1Mf7sUMSJ1lZgTDeg5ONKXIBejNvfaJQ2Ll4ck3owz5b7pqC3t5YN
-	Ge3YebPSXNFBuoCZgo4BYk1gZHHzzcRzifFoyylsWS6FYFFmp+IqK4CmYvSvkGYViOkCs+W2Uno
-	3d6Poq5gE9tH3jfYDjn1sbv3f/yltSfEZXB0U63Yi2STsyerkgmaC/C9SZot/zSkn4SlD74lnPW
-	sX7XmKRlagqy+PENZrCCC6UbBVnqDaAlB8FZhVgBebHEwLX4CD3UpzImxP7Ujr
-X-Received: by 2002:a05:6a00:aa8c:b0:82c:6bcc:f3fa with SMTP id d2e1a72fcca58-8352d2b58c1mr2888895b3a.35.1777727996093;
-        Sat, 02 May 2026 06:19:56 -0700 (PDT)
-Received: from DESKTOP-82PPU4A.localdomain ([202.8.116.84])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-83515ad0176sm5553791b3a.39.2026.05.02.06.19.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 May 2026 06:19:55 -0700 (PDT)
-From: Ujjal Roy <royujjal@gmail.com>
-To: "David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	Ido Schimmel <idosch@nvidia.com>,
-	David Ahern <dsahern@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Andy Roulin <aroulin@nvidia.com>,
-	Yong Wang <yongwang@nvidia.com>,
-	Petr Machata <petrm@nvidia.com>
-Cc: Ujjal Roy <ujjal@alumnux.com>,
-	bridge@lists.linux.dev,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next v6 5/5] selftests: net: bridge: add MRC and QQIC field encoding tests
-Date: Sat,  2 May 2026 13:19:06 +0000
-Message-ID: <20260502131907.987-6-royujjal@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260502131907.987-1-royujjal@gmail.com>
-References: <20260502131907.987-1-royujjal@gmail.com>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="AKYMD5qV"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=LVjLFwgk7OClZ/hBdljG+y3YHas+R7ssLpWZ6iV8TBXOTUkHfy4YIyqrfzMl4X5s0XiQ6+c6rp0NTSIi3azCDH8hcCU/V3Goz/PQYvoSU4nakWkpmCM0yLIsz2aQUG8vd9OWMnrbbuyaQ43wVGgneEuB7pA4mR+DMTghqkpGsyNqN+WpiE0COVGWBN7O+Re7oOeiHtGpkpwbXKEL2h5m0IjoWv2+I2mOwbNC2iQ5ygkC/0JT6Dt2V+jaLrBW9qpDqceNECNloC/NbcO22zfsDAdVhSj23C+ZuzBoj6jAgtquEMx4i41jEWIKcJodoJIUd5U7abmGBzxa3gj08FClJA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lPLLxaN/HNkZxGxyFNnJeAly4uq4N4+5z3KTupex5I4=;
+ b=YuAnsKtjF0wYjxNMcIWGJeFN/bf85yjPOg3YEk7RPipNMXO1er7vSTV/NUs5R/bMxSnspyZj6uMAF5Xu+k/CbUN918VK/GSZpTHd7VGOy5kzBg2GBVRtjEqEeQadDDpxldnT41AUW/paSjfbmNc9UQY+tK6MLgHdDzO7PQRvIZFruxiDrnKguPomKxQNcfPS5w7zvxVpkLpJZ86nxJRn5RipYVLhsQfP1gDP6+h75sZmghgculx2FUeODW74qoV5iCiUXOfOS4rfNQDjDH1c9lWsfyaI6FSPaoOOfM3tHzscBCBtK8h7nViRLDHEUmUyLSv9dgIUottt2JMe2pAddA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lPLLxaN/HNkZxGxyFNnJeAly4uq4N4+5z3KTupex5I4=;
+ b=AKYMD5qVbtgcRZ+u31KN2hCcNvQTLeIhmizekyMd9x5+3PM1IQ7h4U+bN/Y4JqFzATfYP88Sx/jB3DbPfrba0T5AXPzpNstdsqNkbH6ZdOrDsQQynnDAEqOsvL2Y/FeK2hVN9dwE+yASsDETwEXZAD3RUppc/a01WN6b/7Hkw5fLyXyDitf4hZqQ4SZXWDtOtBYEMsobqtgFY8kRlIkVZSUFsYmbiNKTMCyspo1IybeqCKoNPDtskvWE3Bnk0xCHkTbSLAjdMFCXxd4n7f8aZtxpgLbFkZoRY6pysaFG4Au4f2qQGqmp1Wefz0e2UzD09n5B47UNI1wlBDZtAC78UQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV8PR12MB9620.namprd12.prod.outlook.com (2603:10b6:408:2a1::19)
+ by SN7PR12MB7953.namprd12.prod.outlook.com (2603:10b6:806:345::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9870.23; Sat, 2 May
+ 2026 13:40:26 +0000
+Received: from LV8PR12MB9620.namprd12.prod.outlook.com
+ ([fe80::299d:f5e0:3550:1528]) by LV8PR12MB9620.namprd12.prod.outlook.com
+ ([fe80::299d:f5e0:3550:1528%5]) with mapi id 15.20.9870.022; Sat, 2 May 2026
+ 13:40:26 +0000
+Date: Sat, 2 May 2026 10:40:24 -0300
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Alex Williamson <alex@shazbot.org>
+Cc: David Matlack <dmatlack@google.com>, kvm@vger.kernel.org,
+	Leon Romanovsky <leon@kernel.org>, linux-kselftest@vger.kernel.org,
+	linux-rdma@vger.kernel.org, Mark Bloch <mbloch@nvidia.com>,
+	netdev@vger.kernel.org, Saeed Mahameed <saeedm@nvidia.com>,
+	Shuah Khan <shuah@kernel.org>, Tariq Toukan <tariqt@nvidia.com>,
+	patches@lists.linux.dev
+Subject: Re: [PATCH 00/11] mlx5 support for VFIO self test
+Message-ID: <20260502134024.GC1381708@nvidia.com>
+References: <0-v1-dc5fa250ca1d+3213-mlx5st_jgg@nvidia.com>
+ <71afd479-71b4-4ab7-bcbe-3f7b53bd11f4@app.fastmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <71afd479-71b4-4ab7-bcbe-3f7b53bd11f4@app.fastmail.com>
+X-ClientProxiedBy: MN2PR18CA0001.namprd18.prod.outlook.com
+ (2603:10b6:208:23c::6) To LV8PR12MB9620.namprd12.prod.outlook.com
+ (2603:10b6:408:2a1::19)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV8PR12MB9620:EE_|SN7PR12MB7953:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1a8b3557-836b-4728-00ff-08dea8505da8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|376014|22082099003|18002099003|56012099003;
+X-Microsoft-Antispam-Message-Info:
+	/fI7RtQ6J2R6tUfxWAexS5pfHh1lK5GUaTkID68n8l9wbWtaYvgbO1acGaLzJGdQkO4x4bmsqy8UrIOCv0l0B3GLE59iD/jQt9MtqsDoiIwlTjL54eTPeLi7Dv+ALs3r9GQxQQ47+wtg+xgD5vkEP3KGLZMYeiDC7hl3FZBAPgUYI3opJ/VvkNPqqbzyb8iltY0dhIvdpyi5y3peUbcS/FWorCNDpFiOtRItcrUEGLi9EGr9DOE6d5W6IP+DXjAS7BqvpG9yqBBeC6OXY2aTBiJ/gX0zAa2UrTvAlMsMdCpNmuPfcmcz/p8jUwhI+guGjYCmK5dFNlk4FFRi8q0hELaP7Apl8epWhEnaIsLACM48+pL1wkDfuQYuKG3nFG2MA7NDDm3FN/kSAxyXajiuW5Tt5/QckQqZvmcxSNueMFUkeuvU3cOQx0jps/iKzZJ/K3iKmUY4agP0RlFcj2JtPK0wwTN/Bnx+OMfLSLBwdChfmJFM3DLrwt7MBmfaD3GIJv6utVhyFLn83dwPHyTcm5+oSnQpQxySzqdAtX6oTU4Fe1RH1bLqgCSPGeJyeDiqL2OhstSc8c4oa0tkn1VkX3sL5d9M04XcXq2saUHfhAqoW8zfLgLkreBtSQJpJcHS8RuORJX8pF9+weLb8RDVDtA++EPMLyUYZDO27tG2RePmkuPX975xF5Gihj+ywO08
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9620.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(22082099003)(18002099003)(56012099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?AWtf1Gs4myadVtoBxR3FwGW1AKLKIQh3KnyeD6h7656HPQfTlsTZ8K9OQ9xy?=
+ =?us-ascii?Q?d7vOxBtwjF/rdVOfVLIkBKeYccGJmc6Bzl3Cl3uRLCwV+gnbn1tywCWp9AZd?=
+ =?us-ascii?Q?wAy33ZrkDFZogjt9pzz5NsRb6srr65NkM2dgkAXpof5lad++SJCJ74fnhpbL?=
+ =?us-ascii?Q?RGP1ShFLtxix8/w1jTzgKuiMZA+jUuyzEdWMY8iD/AlVY3TADmc08Kc490Yd?=
+ =?us-ascii?Q?BcPwhzgrMQnPD+fWZRmqlzTDpFJojIngTTChtDGdpWk2xgeH1+yWFqraWnLG?=
+ =?us-ascii?Q?q4XGucArLwJg26jQcqvDxssvsrGyM17dfLbxuvuSMnb7FK9HmSHVFCb1XJZ7?=
+ =?us-ascii?Q?TxtxlRPkjJq7iqxsifwWqoTYz4N6M4skFGigXzs/HNX7f2WYNsKQ/HktF9sV?=
+ =?us-ascii?Q?RwocFR+3KkJtuqWZXhk1tC6y9I5pS0TbWpcCAoMyNrKc50vXpdSl3cR4uIEK?=
+ =?us-ascii?Q?amAL7/aNlpxEw7XCYffIiipJm7JLvn95LVU7Z1TK9WmSOcHLRDFGdEE7IHAp?=
+ =?us-ascii?Q?+2fVj8P5clPzozK6evztVoVGxI9E1eC0L03jyCAQG+W7JGoZGiJ3lbSMxhFm?=
+ =?us-ascii?Q?bpe5gNUKF94ZWSx4a8Vg+zA+W8get2CXB1W4KPLahY8jIM1FZY+6IxbQ4aQG?=
+ =?us-ascii?Q?ltBc9XSoYSufBBxhX0BRbfZmT9Z8h6UDHElmUS+HU4XxyOqIj+KjvM/uGvDt?=
+ =?us-ascii?Q?7/Qt8AyEEOb47uwJHt1aQsEc56CPqeAcld9VbgZXGdXZStzm4eDe350pe05v?=
+ =?us-ascii?Q?1YzqMm6qVoIddM9HauHaxuqghLAyAGJLSMyRY3870TfIX/A2hT5lMZD+nOcb?=
+ =?us-ascii?Q?h85Lc9KYA8xwjyHlJ+hZg/e/YZkczH6azfQm1bNSqiSLbS2rGjFB3Ji3T8sE?=
+ =?us-ascii?Q?meRaKB2DRsBXLiYUKhlJC3MkIMpI7rqyHCgX0oTuh2Hx7nh4nZ37DtUQjhpc?=
+ =?us-ascii?Q?0r2jg5pGMeQrDdxLYN/R2erx53Hgk1D50JDyMg+KFKg9MI3i0y57RVuuWXRQ?=
+ =?us-ascii?Q?R3w6Tx31WO3QJzuJFvp189JfuFkwMMleRkh0zNc4lBwzhCNDpT7KFvXx1n3R?=
+ =?us-ascii?Q?6mOWTtpBUyed54/vj6nM0hW7bZId3hU2u2G/7Uo2Sp7QrQ9TIL0nptCOklQh?=
+ =?us-ascii?Q?SnTx9yAd0IuO2JeMdm751oIY6FyA9rwVSquaYrW/UoiHfX8CvdoDhemtyRNR?=
+ =?us-ascii?Q?Ij6TB6s6MONMBu9ILIw5xkZ03r8x+3bCYQx4MCGzklK3WdLnvhFFzhnG4Ape?=
+ =?us-ascii?Q?Useg4ifcAS6wyZU1Gl3LwHWbJhp0AQ72N/OfBhm6Uvh1iYiFhQoWBW9wng/i?=
+ =?us-ascii?Q?B7b5ImSEqkKjn6bxc/loy8eXllHHG2f8a+ayFEQYMqTlbJ/d+dNdm9gsAak/?=
+ =?us-ascii?Q?MlB3o6828UNy/H7iZlemGKb99eJmouClyNUmIKJm6iasNEbe38kLGGOfXijd?=
+ =?us-ascii?Q?CiuzCP/bNtAgD6LaHj1kG0lDFm4X7ajMXyr3j9vxGv08OEInKnPkG3+I98Se?=
+ =?us-ascii?Q?Wf8dK1JHiGmUiIuNm7DtuoiZfyjUMAhfQ+65d4qHMclLQgT1IJR1CnV96zLv?=
+ =?us-ascii?Q?Ton2M9R/simxpEy7an3YH/R8uPrTKp6/gtY81xHm6lRG8BfckUaHct96HVGj?=
+ =?us-ascii?Q?/9tgXU83Fgwt5jGZI6L8U4csgM64mHmVDZtTaS+LVE7YZjQozyOpbQCKnOWb?=
+ =?us-ascii?Q?32o30xeAq5J6bqW9YOoM2aZFLOsQsrfQX/5r1lhH8652vWqP?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1a8b3557-836b-4728-00ff-08dea8505da8
+X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9620.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 May 2026 13:40:25.8863
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: AjP5Cw59N1Fjbp/BzvGsDjE5kQAiGPt5WBy7RxEXdKT9+W4FBXz34tw0urwLFySW
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7953
 
-Enhance vlmc_query_intvl_test and vlmc_query_response_intvl_test in
-bridge_vlan_mcast.sh to validate IGMPv3/MLDv2 protocol compliance for
-MRC and QQIC field encoding across both linear and exponential ranges.
+On Fri, May 01, 2026 at 10:31:49PM -0600, Alex Williamson wrote:
+> On Thu, Apr 30, 2026, at 6:08 PM, Jason Gunthorpe wrote:
+> > Add an mlx5 driver to VFIO self test. This is largely a remix of the
+> > existing VFIO mlx5 driver in rdma-core. It uses an RDMA loopback QP
+> > to issue RDMA WRITE operations which effectively perform memory
+> > copies using DMA. Since mlx5 has a stable programming ABI this
+> > should work on devices from CX5 to current HW. The device FW must
+> > support the QP loopback configuration.
+> 
+> Does the PCI ID table in the series need some pruning then?  It
+> includes CX4.  
 
-TEST: Vlan multicast snooping enable                                [ OK ]
-TEST: Vlan mcast_query_interval global option default value         [ OK ]
-TEST: Number of tagged IGMPv2 general query                         [ OK ]
-TEST: IGMPv3 QQIC linear value 60(s)                                [ OK ]
-TEST: MLDv2 QQIC linear value 60(s)                                 [ OK ]
-TEST: IGMPv3 QQIC non linear value 160(s)                           [ OK ]
-TEST: MLDv2 QQIC non linear value 160(s)                            [ OK ]
-TEST: Vlan mcast_query_response_interval global option default value   [ OK ]
-TEST: IGMPv3 MRC linear value of 60(x0.1s)                          [ OK ]
-TEST: MLDv2 MRC linear value of 24000(ms)                           [ OK ]
-TEST: IGMPv3 MRC non linear value of 240(x0.1s)                     [ OK ]
-TEST: MLDv2 MRC non linear value of 48000(ms)                       [ OK ]
+Maybe.. I don't actually know that it doesn't work on CX4 and before,
+I only was able to test as far back as CX5. I'm thinking to leave it
+and if someone does try it and it doesn't work then remove it.
 
-Reviewed-by: Nikolay Aleksandrov <razor@blackwall.org>
-Reviewed-by: Ido Schimmel <idosch@nvidia.com>
-Signed-off-by: Ujjal Roy <royujjal@gmail.com>
----
- .../net/forwarding/bridge_vlan_mcast.sh       | 140 +++++++++++++++++-
- 1 file changed, 132 insertions(+), 8 deletions(-)
-
-diff --git a/tools/testing/selftests/net/forwarding/bridge_vlan_mcast.sh b/tools/testing/selftests/net/forwarding/bridge_vlan_mcast.sh
-index e8031f68200a..07a377652a59 100755
---- a/tools/testing/selftests/net/forwarding/bridge_vlan_mcast.sh
-+++ b/tools/testing/selftests/net/forwarding/bridge_vlan_mcast.sh
-@@ -162,14 +162,27 @@ vlmc_query_cnt_setup()
- {
- 	local type=$1
- 	local dev=$2
-+	local match=($3)
- 
- 	if [[ $type == "igmp" ]]; then
--		tc filter add dev $dev egress pref 10 prot 802.1Q \
-+		# This matches: IP Protocol 2 (IGMP)
-+		tc filter add dev "$dev" egress pref 10 prot 802.1Q \
- 			flower vlan_id 10 vlan_ethtype ipv4 dst_ip 224.0.0.1 ip_proto 2 \
-+			action goto chain 1
-+		# AND Type 0x11 (Query) at offset 0 of IGMP header
-+		# 20 bytes IPv4 header + 4 bytes Router Alert option + IGMP[offset 0]
-+		tc filter add dev "$dev" egress pref 20 chain 1 prot 802.1Q u32 \
-+			match u8 0x11 0xff at 24 "${match[@]}" \
- 			action pass
- 	else
--		tc filter add dev $dev egress pref 10 prot 802.1Q \
-+		# This matches: ICMPv6
-+		tc filter add dev "$dev" egress pref 10 prot 802.1Q \
- 			flower vlan_id 10 vlan_ethtype ipv6 dst_ip ff02::1 ip_proto icmpv6 \
-+			action goto chain 1
-+		# AND Type 0x82 (Query) at offset 0 of MLD header
-+		# 40 bytes IPv6 header + 8 bytes Hop-by-hop option + MLD[offset 0]
-+		tc filter add dev "$dev" egress pref 20 chain 1 prot 802.1Q u32 \
-+			match u8 0x82 0xff at 48 "${match[@]}" \
- 			action pass
- 	fi
- 
-@@ -181,7 +194,39 @@ vlmc_query_cnt_cleanup()
- 	local dev=$1
- 
- 	ip link set dev br0 type bridge mcast_stats_enabled 0
--	tc filter del dev $dev egress pref 10
-+	tc filter del dev "$dev" egress pref 20 chain 1
-+	tc filter del dev "$dev" egress pref 10
-+}
-+
-+vlmc_query_get_intvl_match()
-+{
-+	local type=$1
-+	local version=$2
-+	local test=$3
-+	local enc_val=$4
-+
-+	if [ "$test" = "qqic" ]; then
-+		# QQIC is 8-bit floating point encoding for IGMPv3 and MLDv2
-+		if [ "${type}v${version}" = "igmpv3" ]; then
-+			# QQIC is at offset 9 of IGMP header
-+			# 20 bytes IPv4 header + 4 bytes Router Alert option + IGMP[offset 9]
-+			echo "match u8 $enc_val 0xff at 33"
-+		elif [ "${type}v${version}" = "mldv2" ]; then
-+			# QQIC is at offset 25 of MLD header
-+			# 40 bytes IPv6 header + 8 bytes Hop-by-hop option + MLD[offset 25]
-+			echo "match u8 $enc_val 0xff at 73"
-+		fi
-+	elif [ "$test" = "mrc" ]; then
-+		if [ "${type}v${version}" = "igmpv3" ]; then
-+			# MRC is 8-bit floating point encoding at offset 1 of IGMP header
-+			# 20 bytes IPv4 header + 4 bytes Router Alert option + IGMP[offset 1]
-+			echo "match u8 $enc_val 0xff at 25"
-+		elif [ "${type}v${version}" = "mldv2" ]; then
-+			# MRC is 16-bit floating point encoding at offset 4 of MLD header
-+			# 40 bytes IPv6 header + 8 bytes Hop-by-hop option + MLD[offset 4]
-+			echo "match u16 $enc_val 0xffff at 52"
-+		fi
-+	fi
- }
- 
- vlmc_check_query()
-@@ -191,9 +236,13 @@ vlmc_check_query()
- 	local dev=$3
- 	local expect=$4
- 	local time=$5
-+	local test=$6
-+	local enc_val=$7
-+	local intvl_match=""
- 	local ret=0
- 
--	vlmc_query_cnt_setup $type $dev
-+	intvl_match="$(vlmc_query_get_intvl_match "$type" "$version" "$test" "$enc_val")"
-+	vlmc_query_cnt_setup "$type" "$dev" "$intvl_match"
- 
- 	local pre_tx_xstats=$(vlmc_query_cnt_xstats $type $version $dev)
- 	bridge vlan global set vid 10 dev br0 mcast_snooping 1 mcast_querier 1
-@@ -201,7 +250,7 @@ vlmc_check_query()
- 	if [[ $ret -eq 0 ]]; then
- 		sleep $time
- 
--		local tcstats=$(tc_rule_stats_get $dev 10 egress)
-+		local tcstats=$(tc_rule_stats_get "$dev" 20 egress)
- 		local post_tx_xstats=$(vlmc_query_cnt_xstats $type $version $dev)
- 
- 		if [[ $tcstats != $expect || \
-@@ -448,8 +497,46 @@ vlmc_query_intvl_test()
- 	# 1 is sent immediately, then 2 more in the next 5 seconds
- 	vlmc_check_query igmp 2 $swp1 3 5
- 	check_err $? "Wrong number of tagged IGMPv2 general queries sent"
--	log_test "Vlan 10 mcast_query_interval option changed to 200"
-+	log_test "Number of tagged IGMPv2 general query"
-+
-+	RET=0
-+	bridge vlan global set vid 10 dev br0 mcast_snooping 1 mcast_igmp_version 3
-+	check_err $? "Could not set mcast_igmp_version in vlan 10"
-+	bridge vlan global set vid 10 dev br0 mcast_snooping 1 mcast_mld_version 2
-+	check_err $? "Could not set mcast_mld_version in vlan 10"
-+	bridge vlan global set vid 10 dev br0 mcast_snooping 1 mcast_query_interval 6000
-+	check_err $? "Could not set mcast_query_interval in vlan 10"
-+	# 1 is sent immediately, IGMPv3 QQIC should match with linear value 60 (0x3c)
-+	# which is 8-bit encoded value of 60 [units of seconds]
-+	vlmc_check_query igmp 3 $swp1 1 1 qqic 0x3c
-+	check_err $? "Wrong QQIC in generated IGMPv3 general queries"
-+	log_test "IGMPv3 QQIC linear value 60(s)"
-+
-+	RET=0
-+	# 1 is sent immediately, MLDv2 QQIC should match with linear value 60 (0x3c)
-+	# which is 8-bit encoded value of 60 [units of seconds]
-+	vlmc_check_query mld 2 $swp1 1 1 qqic 0x3c
-+	check_err $? "Wrong QQIC in generated MLDv2 general queries"
-+	log_test "MLDv2 QQIC linear value 60(s)"
-+
-+	RET=0
-+	bridge vlan global set vid 10 dev br0 mcast_snooping 1 mcast_query_interval 16000
-+	check_err $? "Could not set mcast_query_interval in vlan 10"
-+	# 1 is sent immediately, IGMPv3 QQIC should match with non linear value 132 (0x84)
-+	# which is 8-bit encoded value of 160 [units of seconds]
-+	vlmc_check_query igmp 3 $swp1 1 1 qqic 0x84
-+	check_err $? "Wrong QQIC in generated IGMPv3 general queries"
-+	log_test "IGMPv3 QQIC non linear value 160(s)"
- 
-+	RET=0
-+	# 1 is sent immediately, MLDv2 QQIC should match with non linear value 132 (0x84)
-+	# which is 8-bit encoded value of 160 [units of seconds]
-+	vlmc_check_query mld 2 $swp1 1 1 qqic 0x84
-+	check_err $? "Wrong QQIC in generated MLDv2 general queries"
-+	log_test "MLDv2 QQIC non linear value 160(s)"
-+
-+	bridge vlan global set vid 10 dev br0 mcast_snooping 1 mcast_igmp_version 2
-+	bridge vlan global set vid 10 dev br0 mcast_snooping 1 mcast_mld_version 1
- 	bridge vlan global set vid 10 dev br0 mcast_snooping 1 mcast_startup_query_count 2
- 	bridge vlan global set vid 10 dev br0 mcast_snooping 1 mcast_query_interval 12500
- }
-@@ -469,10 +556,47 @@ vlmc_query_response_intvl_test()
- 	log_test "Vlan mcast_query_response_interval global option default value"
- 
- 	RET=0
--	bridge vlan global set vid 10 dev br0 mcast_snooping 1 mcast_query_response_interval 200
-+	bridge vlan global set vid 10 dev br0 mcast_snooping 1 mcast_startup_query_count 0
-+	bridge vlan global set vid 10 dev br0 mcast_snooping 1 mcast_igmp_version 3
-+	check_err $? "Could not set mcast_igmp_version in vlan 10"
-+	bridge vlan global set vid 10 dev br0 mcast_snooping 1 mcast_mld_version 2
-+	check_err $? "Could not set mcast_mld_version in vlan 10"
-+	bridge vlan global set vid 10 dev br0 mcast_snooping 1 mcast_query_response_interval 600
-+	check_err $? "Could not set mcast_query_response_interval in vlan 10"
-+	# 1 is sent immediately, IGMPv3 MRC should match with linear value 60 (0x3c)
-+	# which is 8-bit encoded value of 60 [units of 0.1s = 6 seconds]
-+	vlmc_check_query igmp 3 $swp1 1 1 mrc 0x3c
-+	check_err $? "Wrong MRC in generated IGMPv3 general queries"
-+	log_test "IGMPv3 MRC linear value of 60(x0.1s)"
-+
-+	RET=0
-+	bridge vlan global set vid 10 dev br0 mcast_snooping 1 mcast_query_response_interval 2400
-+	check_err $? "Could not set mcast_query_response_interval in vlan 10"
-+	# 1 is sent immediately, MLDv2 MRC should match with linear value 0x5dc0 (24000)
-+	# which is 16-bit encoded value of 24000 [units of ms / 24 seconds]
-+	vlmc_check_query mld 2 $swp1 1 1 mrc 0x5dc0
-+	check_err $? "Wrong MRC in generated MLDv2 general queries"
-+	log_test "MLDv2 MRC linear value of 24000(ms)"
-+
-+	RET=0
-+	# 1 is sent immediately, IGMPv3 MRC should match with non linear value 142 (0x8e)
-+	# which is 8-bit encoded value of 240 [units of 0.1s = 24 seconds]
-+	vlmc_check_query igmp 3 $swp1 1 1 mrc 0x8e
-+	check_err $? "Wrong MRC in generated IGMPv3 general queries"
-+	log_test "IGMPv3 MRC non linear value of 240(x0.1s)"
-+
-+	RET=0
-+	bridge vlan global set vid 10 dev br0 mcast_snooping 1 mcast_query_response_interval 4800
- 	check_err $? "Could not set mcast_query_response_interval in vlan 10"
--	log_test "Vlan 10 mcast_query_response_interval option changed to 200"
-+	# 1 is sent immediately, MLDv2 MRC should match with non linear value 0x8770 (34672)
-+	# which is 16-bit encoded value of 48000 [units of ms / 48 seconds]
-+	vlmc_check_query mld 2 $swp1 1 1 mrc 0x8770
-+	check_err $? "Wrong MRC in generated MLDv2 general queries"
-+	log_test "MLDv2 MRC non linear value of 48000(ms)"
- 
-+	bridge vlan global set vid 10 dev br0 mcast_snooping 1 mcast_igmp_version 2
-+	bridge vlan global set vid 10 dev br0 mcast_snooping 1 mcast_mld_version 1
-+	bridge vlan global set vid 10 dev br0 mcast_snooping 1 mcast_startup_query_count 2
- 	bridge vlan global set vid 10 dev br0 mcast_snooping 1 mcast_query_response_interval 1000
- }
- 
--- 
-2.43.0
-
+Jason
