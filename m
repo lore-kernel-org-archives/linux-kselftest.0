@@ -1,162 +1,110 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F9AF155C97;
-	Sat,  2 May 2026 04:36:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86DD93594A;
+	Sat,  2 May 2026 05:41:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777696612; cv=none; b=pY0gzbclQly8l5HYsC3yepn7n5g+SgZ3czlx6XFnzovyy+t616Yz4pdjTobxGjXfFAya3jgaEY9UlFjjWlHwVCSPwIDtWNdLSeEQUNo3lBpz5IPj5gv9mMPqjRe1tsFOF2rOs8XzSz82hfUQdo45cDr6+Ep71TilpfkF+7sBAOo=
+	t=1777700471; cv=none; b=FdjHPFCwqk+5Y5rWMFFrkFQG1Zfm35VLTBpTmKdSTMRg/LhGqbcq2yVNLtBBKH5Jry2bYFfQXfVNgvkHX3Hhb17mq13pX95eqkmw7TJWBTWfxKIBGOrB3OxsM6T5O0Q3F4HBDmG9zC6XdjpyuefTWDGgcuzqsQcdme9oHf+yGQA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777696612; c=relaxed/simple;
-	bh=zolhHJ2pt/HuMbYoWDKt/Qpf9wHLyNZaEq9WM6A8T/g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=t3+h7AIjTHtu1thpvcGdnC7r14TZW0CS5JmlZ3GNP2Ox++mlgDnYRhV62M5jQJedzKjY/We60ycAi8Wy/G9p4Z03yl+viCYIjDWUzyO+BkxCdlQSEKvCd2hP3V2TScs2zRbwMHOSJnyiSLdml6nQR7TlAsnygmUAKCEjHdkL1HI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=khUhouRH; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777700471; c=relaxed/simple;
+	bh=/plK23aRo0ayFf8WWgHy9klYZ9azR4dJCj7ErIpxxQo=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ODJreRXbilrkksSqZW5aNoP6DhO6gHjPc6XIE4y+AsvoaShxH+WTl8VZq69cdMDxQlgSvwQbLG8CIUfEw1Y0kDyHC2ED8S0Brbi9qyQ93E3NVHuIpqJEYuF28qjZhxv7ZKrLVQdEXrFQgn+wllyezmcGTMlXTfUSCbixxtlr3Ig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qO6eNjDr; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="khUhouRH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BEFFC19425;
-	Sat,  2 May 2026 04:36:44 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qO6eNjDr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DC69C19425;
+	Sat,  2 May 2026 05:41:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777696612;
-	bh=zolhHJ2pt/HuMbYoWDKt/Qpf9wHLyNZaEq9WM6A8T/g=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=khUhouRHFXetPZownjlJj4oZgiqqxHq+Ezb6aMBWxNmAbbyg2CSseLu7M8Of9wTIi
-	 8ZPeDIjrC6Cjg9VPAAoQ5Xaa5hTvSsVi6BAkLQAh/umFl8x3zj/K6yEx1v6m/p6yZb
-	 92JpBKWi3CxecuI1V+J6sseusteO1FdkC6PDdfVepJkiXNfT2uTyd3QGQ0Hu+zbAQv
-	 r7/rL9EzUinG9AlODzSgPoPz4YVVk2IoKuDDzABQgRAod8pHNDt7X65Ftbx6Z2RPzI
-	 Nxunz0hzvDIvYkrDauANYBwzAwEztwr+qTC3OoVaJga4y75klCQ/vJd+Dk2P868q6y
-	 kr8q/ZkoNIj3A==
-Date: Sat, 2 May 2026 06:36:40 +0200
-From: Mike Rapoport <rppt@kernel.org>
-To: Luiz Capitulino <luizcap@redhat.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Barry Song <baohua@kernel.org>, Dev Jain <dev.jain@arm.com>,
-	Donet Tom <donettom@linux.ibm.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-	John Hubbard <jhubbard@nvidia.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Lance Yang <lance.yang@linux.dev>,
-	Leon Romanovsky <leon@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
-	Mark Brown <broonie@kernel.org>, Michal Hocko <mhocko@suse.com>,
-	Nico Pache <npache@redhat.com>, Peter Xu <peterx@redhat.com>,
-	Ryan Roberts <ryan.roberts@arm.com>,
-	Sarthak Sharma <sarthak.sharma@arm.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Vlastimil Babka <vbabka@kernel.org>, Zi Yan <ziy@nvidia.com>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: Re: [PATCH v3 27/54] selftests/mm: hugepage_settings: add APIs for
- HugeTLB setup and teardown
-Message-ID: <afV_WAK56lQKn_z1@kernel.org>
-References: <20260428204240.1924129-1-rppt@kernel.org>
- <20260428204240.1924129-28-rppt@kernel.org>
- <2f443474-4448-462e-bc1e-55bc657d70ba@redhat.com>
- <afTF9RCy8eBoWYaj@kernel.org>
- <22b1cadc-4b0d-4e2a-987c-e7a7bc2265eb@redhat.com>
+	s=k20201202; t=1777700471;
+	bh=/plK23aRo0ayFf8WWgHy9klYZ9azR4dJCj7ErIpxxQo=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+	b=qO6eNjDr8psBgKDgKZq9Jp7cT4JSFxKQsIi1VP1AjenFYtfyasBv8bFhG0CZmEUZx
+	 zn3fOHK8zYLouwr3rbwQad4gGLGC11QOidlFCr+hB+dnEAOkGJBsm5/pE29IzZ+Nc/
+	 x6Fg6gH/CuW+PkeFKAGEOTqJcrv0mOXjEYOdmdYmwXeF/bQnDJP4alUyA/HCOGP0Va
+	 Sk/kJHhmqK3VbxKGHmK/6VQXoHH/3bq9FJq3jy3Gg+R0sPLqzh0kdubb4xUr5tz8Qc
+	 tNOpd4WXWVn97+eNfq/bPObZj+NDDKUXbYQUeHiVMuPqGD4FMt2GbqJ9N3J7o3ar6I
+	 Qv6Pxaq/zSDuA==
+Message-ID: <9958903b1de52cff6d0d5531355da614cb66517e.camel@kernel.org>
+Subject: Re: [PATCH net-next v2 6/7] selftests: rds: Collect pcaps on timeout
+From: Allison Henderson <achender@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org, pabeni@redhat.com, edumazet@google.com, 
+ horms@kernel.org, linux-rdma@vger.kernel.org,
+ linux-kselftest@vger.kernel.org,  shuah@kernel.org
+Date: Fri, 01 May 2026 22:41:09 -0700
+In-Reply-To: <20260430024207.2452372-1-kuba@kernel.org>
+References: <20260428222716.2960871-7-achender@kernel.org>
+	 <20260430024207.2452372-1-kuba@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.3-0ubuntu1.1 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <22b1cadc-4b0d-4e2a-987c-e7a7bc2265eb@redhat.com>
 
-On Fri, May 01, 2026 at 03:30:18PM -0400, Luiz Capitulino wrote:
-> On 2026-05-01 11:25, Mike Rapoport wrote:
-> > > >    	return mode == 1 || mode == 3;
-> > > >    }
-> > > > +#define HUGETLB_MAX_NR_PAGESIZES 10
-> > > > +struct hugetlb_settings {
-> > > > +	unsigned long free_hugepages[HUGETLB_MAX_NR_PAGESIZES];
-> > > 
-> > > It looks like we don't actually use this in the API or maybe I'm missing
-> > > something?
-> > 
-> > Yes, it's used only in later patches.
-> 
-> I don't see it, the patch below builds fine (again, sorry in advance if
-> I'm missing something obvious):
+On Wed, 2026-04-29 at 19:42 -0700, Jakub Kicinski wrote:
+> This is an AI-generated review of your patch. The human sending this
+> email has considered the AI review valid, or at least plausible.
+> ---
+> selftests: rds: Collect pcaps on timeout
+>=20
+> This commit updates the RDS selftest to collect network packet captures
+> when a timeout occurs. It moves the packet capture cleanup logic into a
+> new helper function and calls it from the signal handler before exiting.
+>=20
+> > diff --git a/tools/testing/selftests/net/rds/test.py b/tools/testing/se=
+lftests/net/rds/test.py
+> > --- a/tools/testing/selftests/net/rds/test.py
+> > +++ b/tools/testing/selftests/net/rds/test.py
+> [ ... ]
+> > @@ -70,11 +70,21 @@ def netns_socket(netns, *sock_args):
+> >      u1.close()
+> >      return socket.fromfd(fds[0], *sock_args)
+> > =20
+> > +def collect_pcaps():
+> > +    """Stop tcpdump processes and move their pcaps into the log dir.""=
+"
+> > +    print("Stopping network packet captures")
+> > +    for proc, tmp_path, dest_path, fno in tcpdump_procs:
+> > +        proc.terminate()
+> > +        proc.wait()
+>=20
+> Could this proc.wait() block indefinitely and defeat the test timeout?
+>=20
+> If a child process is unresponsive, the timeout signal handler will get
+> stuck waiting for it. Using proc.wait(timeout=3D...) might ensure the
+> timeout path remains robust and doesn't hang the test infrastructure.
+Good catch, I will add a timeout
 
-You are right, I misunderstood you comment and I thought you referred to
-entire API being unused in this patch.
+>=20
+> > +        os.close(fno)
+> > +        shutil.move(tmp_path, dest_path)
+>=20
+> Can this cause unhandled exceptions if the timeout triggers during or
+> after the normal script cleanup phase?
+>=20
+> Because collect_pcaps() is called from both the normal execution path and
+> the timeout signal handler, it might be executed twice. Since it loops
+> over the global tcpdump_procs list without clearing processed items, a
+> second run will attempt to close already closed file descriptors and move
+> already moved files.
+>=20
+> In Python, this raises OSError (EBADF) and FileNotFoundError, which would
+> abort the signal handler with a traceback instead of executing the clean
+> sys.exit(1).
+I see, I think if we change the for loop to a while loop that pop() items o=
+ut of tcpdump_procs,=C2=A0that should make it safe
+to call twice, if the timeout fires during or after normal cleanup.
 
-free_hugepages is not used and it should not be a part of the saved state.
- 
-> diff --git a/tools/testing/selftests/mm/hugepage_settings.c b/tools/testing/selftests/mm/hugepage_settings.c
-> index 097ba085f423..a023cfeb69c5 100644
-> --- a/tools/testing/selftests/mm/hugepage_settings.c
-> +++ b/tools/testing/selftests/mm/hugepage_settings.c
-> @@ -341,7 +341,6 @@ bool thp_is_enabled(void)
->  #define HUGETLB_MAX_NR_PAGESIZES 10
->  struct hugetlb_settings {
-> -	unsigned long free_hugepages[HUGETLB_MAX_NR_PAGESIZES];
->  	unsigned long nr_hugepages[HUGETLB_MAX_NR_PAGESIZES];
->  	unsigned long sizes[HUGETLB_MAX_NR_PAGESIZES];
->  	unsigned long default_size;
-> @@ -509,7 +508,6 @@ static void __hugetlb_save_settings(void)
->  		if (!sz)
->  			continue;
-> -		settings->free_hugepages[i] = hugetlb_free_pages(sz);
->  		settings->nr_hugepages[i] = hugetlb_nr_pages(sz);
->  	}
-> 
-> > I felt it would be too churny to add users in this patch.
-> > > Otherwise, the API looks great to me. But if you allow me to bikeshed :)
-> > > 
-> > > I think I'd do:
-> > > 
-> > > struct hugetlb_state {
-> > > 	unsigned long nr_hugepages;
-> > > 	unsigned long size;
-> > > };
-> > > 
-> > > struct hugetlb_settings {
-> > > 	struct hugetlb_state hstate[HUGETLB_MAX_PAGESIZES];
-> > > 	unsigned long default_size;
-> > > 	int nr_sizes;
-> > > };
-> > 
-> > It might be slightly nicer abstraction but ...
-> > > > +static void __hugetlb_save_settings(void)
-> > > > +{
-> > > > +	struct hugetlb_settings *settings = &hugetlb_saved_settings;
-> > > > +	int nr_sizes;
-> > > > +
-> > > > +	settings->default_size = default_huge_page_size();
-> > > > +	if (!settings->default_size)
-> > > > +		return;
-> > > > +
-> > > > +	nr_sizes = detect_hugetlb_page_sizes(settings->sizes,
-> > > > +					     HUGETLB_MAX_NR_PAGESIZES);
-> > 
-> > ... this immediately becomes more complex.
-> > 
-> > > > +	if (!nr_sizes) {
-> > > > +		settings->default_size = 0;
-> > > > +		return;
-> > > > +	}
-> > > > +
-> > > > +	for (int i = 0; i < nr_sizes; i++) {
-> > > > +		unsigned long sz = settings->sizes[i];
-> > > > +
-> > > > +		if (!sz)
-> > > > +			continue;
-> > > > +
-> > > > +		settings->free_hugepages[i] = hugetlb_free_pages(sz);
-> > > > +		settings->nr_hugepages[i] = hugetlb_nr_pages(sz);
-> > 
-> > And this as well.
-> 
-> We'd need a little more code to handle those cases, may or may not be
-> worth it. But enough bikesheding from my side :) the series is great as
-> is.
-> 
-> 
 
--- 
-Sincerely yours,
-Mike.
+If that sounds good, I can send that in a v3.
+
+Thanks!
+Allison
+
+
