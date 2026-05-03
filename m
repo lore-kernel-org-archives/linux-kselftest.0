@@ -1,66 +1,66 @@
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 250603B6347
-	for <linux-kselftest@vger.kernel.org>; Sun,  3 May 2026 16:26:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE6493CCFCF
+	for <linux-kselftest@vger.kernel.org>; Sun,  3 May 2026 16:26:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777825590; cv=none; b=nbZd29gxPsLERFAVR2XqWFCPipQKGmOM/ZsvOZuy1clX81Ztu+NfCUfhUSSoTuJ8IP8nRtHJcoM8euhRrFLjrtggBCMTBtraZSRjlEtHgzp8XezdI1l8nljd43KYbw57+QtiZ57+GXXpDx8LPGv3AfLuGaU9eb2ocaOwa0TyMqk=
+	t=1777825595; cv=none; b=u0wAv8DXT5zQRxw2NTTyBXhZ2RHG7XQyzsxHDgk6oOgFQ2HxqdZOR/lLxpxE0yRo0eYwDvOGru8dSBtv7GhOcS/yqAiukIBIwXl/k75AiZq3fGSM4qK/Nb2SGn+qorHwn6AyRNlfm2lQj82esBbxW1YVvbWkxHptcZMtI8QGyw8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777825590; c=relaxed/simple;
-	bh=iWy4oAPkgs8cmIDV4jisE4x6QoSBLvsTaYWdsteovZQ=;
+	s=arc-20240116; t=1777825595; c=relaxed/simple;
+	bh=ytJNk6Sp5oqo2mhDyk8PHPFkvKfco1b3mZP7WKRR2TM=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=LtxaDyxHQEbm42MVkImuTEIqph8jgCxRotYc7UsueZfENhT+caEV3cSdfbL0relTsq1OB82MvM1SRpn0340wmSFxSweDjIq0v/3dHgt34Lt+j81UmvlgtRW2fbuA+wPAfCAeA6E7llKjOweWgMaB5OwKItB/ML3oFBWHkEm81CA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lacGE2xF; arc=none smtp.client-ip=209.85.210.178
+	 In-Reply-To:To:Cc; b=uFPTgY4Su+8hoe5draJeUjGITmnyx98fFjD6HieFkSbBmc3lg2Yj391yYhvkukZHUhAYO3q8dFY2AQ/gxuNd1WZAo4b5ECKjo2CHj8XitOl03Mh+3f8JpKqbwCpEF9twwjHM15q4Jp997a5HeKt7TvBbOBPKEKCbE8E4FjascqQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PI+J/Yob; arc=none smtp.client-ip=209.85.210.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lacGE2xF"
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-82f9fdfc965so1410103b3a.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 03 May 2026 09:26:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PI+J/Yob"
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-835399c11e0so291439b3a.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 03 May 2026 09:26:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777825587; x=1778430387; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1777825592; x=1778430392; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=M1OXlDvR00KN5EgUZsriT8WnGpvoPbCTL1Vxu0+S0hc=;
-        b=lacGE2xFykt6Xu7wbRjZDlNXdghNhKj1fJxnb2ATQUKvq8fZoqbVGcFO1CyoiDB2Mp
-         bk+DSoNGMT3IfRIiL9l21UeJkP9N5zwQeaO4itxEFu7EHs6XdUnOgsU9fxAe7bWG4cVN
-         SPTc0mEis0Vz9RDPuRNxhZ0BcQw+wfmIHiDiq9ELgQq8pG/tSvL3cBy5DOUr7t2KFmfY
-         qS1+bHQpGOWmgb9e83BbriRt65dcDumJ42DuYmsUXtn4baU6xWush8rFKFxvICAzcqVH
-         HXfHcLbURA5ill4+/9mPCmnmRo1691dvfE/8uwSJpjHhITL9KTm3wfz+9lrqZNv/tqET
-         4LOw==
+        bh=MGj4HzPbiY0MFbpVfiKxyLwbBa+PWzq3vhH8Hs94Z0I=;
+        b=PI+J/YobHQWKAp6UM4i8nBLtmtUsqtEnWVKsKYbttfAkw5fiA3mgH8ayDPK0n3R/4l
+         aLSJ9TShFc94a4PoIIFDzmuL9AyEKQ0WlufK6uA2rzjaw7C2lino5YUBDw8L/N4HvGjN
+         dNNbmY4+u1cYb2mE/u/LjLgijwl5LlF90fwJYO1YqMEbSrfoT7M7HXQUIdwfYtXwLZ+f
+         3ocoW8M2I2gvF47cT6yoflLG6qjyGf9WizYsZoF5RZJ3igabqbYm8QX/ZUh+Np+bIiFX
+         wVJHHM97Y9iNdG7Z7dotkW75GA92F3EXPbLpeejfnwbxI6iJXP2J+j38M+tC2mzN+nW0
+         dUPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777825587; x=1778430387;
+        d=1e100.net; s=20251104; t=1777825592; x=1778430392;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=M1OXlDvR00KN5EgUZsriT8WnGpvoPbCTL1Vxu0+S0hc=;
-        b=MSKIiPfVx0rBsyoD3PgehRG7GTn65AUv+nUCXa4UwYpRBu6RZ7/UteNGg1aZryANi3
-         0aTUlXKQVrVUW617ewqk83nP0dZEs53q8rVCl2/h3lXIberS+Aj2aT2JsN0HD/VdNRrt
-         6QDdNIgm8NlhBXZQDyiog8F81nvk4rMozLvMOOsUX5XWMczQ+q8kaGpJmEpgiSJ48SvC
-         648BArdNTZ+h8QQRWyKRMlIZ25ml4hieft7MIR/HwrakQ+v8WRTmgU85g3zp732HKW6j
-         3Ib/cx+YRXcpABOyDzF4hhYmPrGZuXj9RpKFllk9NKZJ0g9iXoWP6k7jgNTVxzPh4fx9
-         MKyQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9kCyb0iJ5k7FLWLpwWCMf3Ho+a9RvuLMFuJWdjyqRHev85OWEd0bqzlGNCUJySgSw0awaY5ddDXGlZHQ9ArVA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw90hg6A2hL+BRwbShBRB+ajrv5o5TJkGEewUCE0oDvbZm/fNDs
-	IXUX9WOYafWle4vxJOZDBMLKx93Dj/+qX7zspD91QhDuPBS4WGYTMS8UWTOLmY3V
-X-Gm-Gg: AeBDieuKYpe6nrROH+tK283+ZIhl3pnPW+S92KW+r2VdPOAywkH79R1dJyTWIvzbZSU
-	wpMr6CwcvtxixDSe5G1KNW8OkAEr9MukiauzYX6WX2/RwOb28HXfJ8FQEJKTALCblk0l8cQoYI6
-	/LtS+/LjgxSNK/QXGY5v3HTNME5AW7DflsfB6O8Djtk4cMJ9jrQ8mvsC0tkue1ZiVjUs0ELR9uY
-	Od8BhWt8wg9NmpAuJUnqDEO1zbbZntLqiMsHAm6or7XVnStCg9UzLe1Re5rVpl/k0MwGZYuTDYk
-	sJmJrWcnEXtlVfRlcmgQsaav9A5Ajj+4TNOdrbIx/JKNlpram4h/Wi4m2QCg0m/SPv5PquLOtEg
-	hlS3rGyhmPwIQEyQIWiKdT2NmkJlMP7WT+9erqquFUVpaolroJQoZ8Rh4pBQQHewSd83opR/IEV
-	JtHCwFYuV4/SJtCTFoNiXBwyPqKm1h/hzZHDUBMyrjhf/eMIEWLmfOnNg=
-X-Received: by 2002:a05:6a00:ab89:b0:82c:9c47:fef9 with SMTP id d2e1a72fcca58-8352d02558fmr5675855b3a.2.1777825587264;
-        Sun, 03 May 2026 09:26:27 -0700 (PDT)
+        bh=MGj4HzPbiY0MFbpVfiKxyLwbBa+PWzq3vhH8Hs94Z0I=;
+        b=AMYHon2fQgZJKc9818iXY7DfjNMpuU+pthbHsbqunVn7rKqCmLBRhUNbK5VaOLNM7e
+         2BOgehpFQ6S9A1refwXmv4OZXNJ8CkGkblMouAeuid0GiY+k5uS+qEIrzpDjqYzNXRbQ
+         NAhcXhW8W2ejbeCFdj4jeOJNZX7yJ0Og1cDzO+1ArYr+zQPJRe+UAQlHH7ju+sora64E
+         zPv+n85Zf+jo6wnQhrwdnVUoIZkxWPQkAC1sr0wlCVrP7amkeuJ+k9JHUIBezVsCOp2s
+         5LAmQss58j7oS222lLA04WNymw32Kef2TJTAc2Kf1crIwTofiau5/69TqXhQZrwgRxeR
+         G3mw==
+X-Forwarded-Encrypted: i=1; AFNElJ8w9Aerjb80rRmQtfBd/ATEL0PgSHB3NoGv7+Kb3kEHQ7Es80zUxJB2V0LNEKg2NXGyz3/LAmK741Ic7gEfUwM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz7HEik62oOOFp92xHUXEUo98KkQU57Ws6wMUH3yAEoUXSZpNMF
+	5LlzstpISl2FKSAhjTir/1gO1SWEvxpR4+VAtUmu0ffMWQjAEvbgtrrw
+X-Gm-Gg: AeBDiesSab8LN6mkTpdBKQlIiP2tVmA06lqzISd4HbkLkdfv1mqiiEHCCJyceozCxjC
+	EHJ4EViSvJRM08bsnyI0jb5PC3oH2TKTH0fHX3OyWq0gC51P6+sRDgdTOpf3qOvkEZcWk7Wx8Ci
+	+kl8Ghd2GL/Jm7CmShlWvTf/EaNrZNCcvH2oLrm4qN/GoB1yriwc38f+HfSjHkQpnmuxf/mUKg/
+	Xe6K2KlI+5iwfQJgdd+op+ROcqxHueKM6xYZSvBF9XTo/rCvlbWALQ7xlGn7AVRlt1iN2Ho+p6j
+	KH5EG28OoDYkq8xzBOG2WjZNvy1Xyp0QDNfrdDuJ0fNROVA04kfhsLtJ0hAjmmFSFBBPK080Iik
+	5lL6leunhumfZGXWXl+Ue1tA4K2WoK7lBmIqXH8i1lENq9ngkP8DxWbM8ZZY5T6dt0+P+n8ZyFN
+	eDB3El9UuW+xhmoI25fbobH0cO8P2N2zm/6WGa/YkYdhsyfF8LnuPeGus=
+X-Received: by 2002:a05:6a00:1407:b0:82a:7046:86a2 with SMTP id d2e1a72fcca58-8352d03beecmr6175792b3a.10.1777825592351;
+        Sun, 03 May 2026 09:26:32 -0700 (PDT)
 Received: from [163.43.103.131] ([163.43.103.131])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-83515b8500dsm9788911b3a.58.2026.05.03.09.26.24
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-83515b8500dsm9788911b3a.58.2026.05.03.09.26.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 May 2026 09:26:26 -0700 (PDT)
+        Sun, 03 May 2026 09:26:31 -0700 (PDT)
 From: Yuya Kusakabe <yuya.kusakabe@gmail.com>
-Date: Mon, 04 May 2026 01:25:58 +0900
-Subject: [PATCH 5/7] seg6: add End.M.GTP6.D.Di behavior
+Date: Mon, 04 May 2026 01:26:00 +0900
+Subject: [PATCH 7/7] Documentation: networking: add seg6_mobile guide
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -69,7 +69,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260504-srv6-mup-v1-v1-5-e0a6791575cb@gmail.com>
+Message-Id: <20260504-srv6-mup-v1-v1-7-e0a6791575cb@gmail.com>
 References: <20260504-srv6-mup-v1-v1-0-e0a6791575cb@gmail.com>
 In-Reply-To: <20260504-srv6-mup-v1-v1-0-e0a6791575cb@gmail.com>
 To: "David S. Miller" <davem@davemloft.net>, 
@@ -81,758 +81,291 @@ Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
  linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org, 
  Yuya Kusakabe <yuya.kusakabe@gmail.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=23751;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=11107;
  i=yuya.kusakabe@gmail.com; h=from:subject:message-id;
- bh=iWy4oAPkgs8cmIDV4jisE4x6QoSBLvsTaYWdsteovZQ=;
- b=owEBbQKS/ZANAwAIASrX0XUqXRtNAcsmYgBp93cix8Dun/ggRgtpWKfYXOpCMJZSSFkn9shdD
- 6fBwOVcNbCJAjMEAAEIAB0WIQTaB7usAfxNKMeqa6Yq19F1Kl0bTQUCafd3IgAKCRAq19F1Kl0b
- TZp+D/4o9ogpouWVAJIA2sLXi0b6k6j1MumI00wR6qEElI0uNb1jr57hPt0gtvRZZwyZBpGS3Cd
- Zss+mUK6Xg7E2S9bMEbsnEsmWIPnzZqMPPlJ9uJjrXRCnCq78Xh6kg4FTm3MSez4hqJKMa/VvCe
- /llF8BMY72jEk1B2xeBSqDVSoGLybHarIfx+MmCmBV47k4dznu+cXVfN9DtAqvw+8e6iHQ/uG91
- sl7GZAdx7wSNBEfou68xRM6y/GsxLftrYMSR5Fd9/rv+lVABktV4/BUOnsFmT/FrCNHRuZddncX
- SOL+lUqLP0JEVSIk3QxwgRCQ5F5rXmKTzPpgTzD5RnNaos1rD8+9MrHFrJJdOY38MJQ7Pcbc1Hz
- +AcSK07Mx4WNH7LjPoJp6oyum/G4L0DAJk32vqpDZQzh/thFDUAwONESb0ytK8MBPtigkc8J3mu
- Qz53hOZyuGdJIXBGXRXjOmoJvegh+xsC0oZX1M2DXM397wbA7HdZILmiHwMPk0Iq/zdAVwOvcq9
- Zpwr9Hx6u6qj4bnZMNQhN0aIEjw+XsY/y9w0obEZ5lN2/msz/cRl+m+guqJ/ySKAMSLD/BY6hEp
- s+rfLh+VZFK9SWlWz6kuygLjJb1LJgPQGkre8DReIDUSw0w4nFiw3EpdpG2RxPgIIG4t8QdCmAw
- m27iZMfMksf+kHg==
+ bh=ytJNk6Sp5oqo2mhDyk8PHPFkvKfco1b3mZP7WKRR2TM=;
+ b=owEBbQKS/ZANAwAIASrX0XUqXRtNAcsmYgBp93cjoBhU12NhAo5DhnO7WXlrPkNVwC8k27WVS
+ 6rre30V1mKJAjMEAAEIAB0WIQTaB7usAfxNKMeqa6Yq19F1Kl0bTQUCafd3IwAKCRAq19F1Kl0b
+ TSJhEAChTxUHMC+AEQPv+H3YRz1SHAK+o75w0CosXqUyoJ0NbRa7Za6+J5EncU42AvpkfKXtdEF
+ Csf+uSRPVSvZwb5U9Ny1bPh05hywD+RdRpTQUHx0KAFoCJix/9lbxnXfAcwEKDDTJdO42dm9UJc
+ N7WsKVR8ln+ppe2PNc24h4fOLaq08kOTf4UpNBUVLFURFEFy0F9ZWRfxluOzZ/hgt5FwIeKfAMk
+ mfDh4TGgpo8gyYnG7TLaJ49Qk/Ulx9WqYKfNeFbS2M0iZappIa9sum4ChlKQpeQTt8NjN+KtCpT
+ JILpoUGdSIqvUa1KP9bEnTKfMX0M2xOFEKrST5Q9uuGaNariDVZUn1GM6Oav4OlwGOhjfgrLWr6
+ I9HOHd/rq6nRoQP+kkEBuIZiDTctBM4JMeo2VbH9uTlwbwcQO8KsjxrVXjLXm8WytSy0ClUwk68
+ agn+8hTh/u1stcqdqtza71n5HNER4IUOHToRv/9sa+wT5DKO2WzBh9GLxptO/5J9WFyAA4A/8wH
+ eVQL125YfZz0iYz9tAqcZXUlPxYrYllOtreuC0o8HrPmXVQj0/FVlTme7i9lXchzPgJGjUfUYJZ
+ CPihrbry8qJJ04DcTWLvek3r/4OhphLgylhESaQv4QdhJDzSb9SoB5YrMceQpYSnCveyeN8BD+l
+ iGyWPBCWDcPigXw==
 X-Developer-Key: i=yuya.kusakabe@gmail.com; a=openpgp;
  fpr=DA07BBAC01FC4D28C7AA6BA62AD7D1752A5D1B4D
 
-Add the End.M.GTP6.D.Di drop-in mode variant of End.M.GTP6.D
-(RFC 9433 Section 6.4).  Unlike End.M.GTP6.D, the drop-in variant
-does NOT fold the GTP-U identifiers into Args.Mob.Session: the
-original outer IPv6 destination is preserved at SRH[0] of the new
-SRH, so the destination side can keep the original address
-untouched while still benefiting from SR Policy steering.
+Document the six RFC 9433 Mobile User Plane behaviors implemented
+by seg6_local, the SID layout used by the GTP behaviors, security
+considerations (HMAC, SR-domain perimeter filtering), netfilter
+integration with nf_hooks_lwtunnel, and the location of the
+selftests.
 
-The augmented SRH builder/destroyer is shared with End.M.GTP6.D.
-The TEID and QFI parsed out of the inbound GTP-U header are
-intentionally discarded for this variant (matching RFC 9433
-Section 6.4).
-
-When net.netfilter.nf_hooks_lwtunnel=1, the inner T-PDU traverses
-NF_INET_PRE_ROUTING between the GTP-U strip and the SRv6 push,
-mirroring End.DX4 / End.DX6.
-
-Non-T-PDU GTP-U messages are forwarded the same way as in
-End.M.GTP6.D: passed through via the lwtunnel's saved orig_input
-to a downstream peer that owns the GTP-U control plane.
-
-Configuration:
-
-  ip -6 route add 2001:db8:f::/64 \
-      encap seg6local action End.M.GTP6.D.Di \
-          srh segs 2001:db8:2::e,2001:db8:3::e \
-          src 2001:db8:2::1 \
-      dev <dev>
-
-Link: https://www.rfc-editor.org/rfc/rfc9433.html#section-6.4
+Link: https://www.rfc-editor.org/rfc/rfc9433
 Signed-off-by: Yuya Kusakabe <yuya.kusakabe@gmail.com>
 ---
- include/uapi/linux/seg6_local.h                    |   2 +
- net/ipv6/seg6_local.c                              | 222 +++++++++++
- tools/testing/selftests/net/Makefile               |   1 +
- .../selftests/net/srv6_end_m_gtp6_d_di_test.sh     | 426 +++++++++++++++++++++
- 4 files changed, 651 insertions(+)
+ Documentation/networking/index.rst       |   1 +
+ Documentation/networking/seg6_mobile.rst | 236 +++++++++++++++++++++++++++++++
+ 2 files changed, 237 insertions(+)
 
-diff --git a/include/uapi/linux/seg6_local.h b/include/uapi/linux/seg6_local.h
-index 7d3d3d245b47..326da65ad5aa 100644
---- a/include/uapi/linux/seg6_local.h
-+++ b/include/uapi/linux/seg6_local.h
-@@ -80,6 +80,8 @@ enum {
- 	SEG6_LOCAL_ACTION_END_M_GTP6_E	= 19,
- 	/* IPv6/GTP-U decap into SRv6 (RFC 9433 Section 6.3) */
- 	SEG6_LOCAL_ACTION_END_M_GTP6_D	= 20,
-+	/* IPv6/GTP-U decap into SRv6, drop-in mode (RFC 9433 Section 6.4) */
-+	SEG6_LOCAL_ACTION_END_M_GTP6_D_DI = 21,
- 
- 	__SEG6_LOCAL_ACTION_MAX,
- };
-diff --git a/net/ipv6/seg6_local.c b/net/ipv6/seg6_local.c
-index 6ac4de529c08..cecf87cc84e5 100644
---- a/net/ipv6/seg6_local.c
-+++ b/net/ipv6/seg6_local.c
-@@ -2577,6 +2577,216 @@ static void seg6_end_m_gtp6_d_aug_destroy(struct seg6_local_lwt *slwt)
- 	slwt->mobile_info.aug_srh = NULL;
- }
- 
-+/* Per-skb context preserved across the NF_INET_PRE_ROUTING hook on
-+ * the inner T-PDU exposed by End.M.GTP6.D.Di.  Only the original
-+ * outer DA is needed in the finish half (it is stamped into SRH[0]
-+ * after seg6_do_srh_encap()).
-+ */
-+struct seg6_mobile_gtp6_d_di_cb {
-+	struct in6_addr	orig_dst;
-+};
-+
-+#define SEG6_MOBILE_GTP6_D_DI_CB(skb)	\
-+	((struct seg6_mobile_gtp6_d_di_cb *)((skb)->cb))
-+
-+static int input_action_end_m_gtp6_d_di_finish(struct net *net,
-+					       struct sock *sk,
-+					       struct sk_buff *skb)
-+{
-+	struct seg6_mobile_gtp6_d_di_cb cb = *SEG6_MOBILE_GTP6_D_DI_CB(skb);
-+	struct dst_entry *orig_dst = skb_dst(skb);
-+	enum skb_drop_reason reason;
-+	const struct seg6_mobile_info *minfo;
-+	struct seg6_local_lwt *slwt;
-+	struct ipv6_sr_hdr *new_srh;
-+	int inner_proto;
-+	int err;
-+
-+	slwt = seg6_local_lwtunnel(orig_dst->lwtstate);
-+	minfo = &slwt->mobile_info;
-+
-+	inner_proto = (skb->protocol == htons(ETH_P_IP)) ? IPPROTO_IPIP
-+							 : IPPROTO_IPV6;
-+
-+	err = seg6_do_srh_encap(skb, minfo->aug_srh, inner_proto);
-+	if (err) {
-+		reason = (err == -ENOMEM) ? SKB_DROP_REASON_SEG6_MOBILE_NOMEM
-+					  : SKB_DROP_REASON_SEG6_MOBILE_BAD_INNER;
-+		goto drop;
-+	}
-+
-+	skb->protocol = htons(ETH_P_IPV6);
-+
-+	/* Stamp the prepended segments[0] (originally zeroed in
-+	 * minfo->aug_srh) with the saved original outer DA, in the
-+	 * in-skb SRH that seg6_do_srh_encap() just pushed.
-+	 */
-+	new_srh = (struct ipv6_sr_hdr *)(skb_network_header(skb) +
-+					 sizeof(struct ipv6hdr));
-+	new_srh->segments[0] = cb.orig_dst;
-+
-+	ipv6_hdr(skb)->saddr = minfo->src_addr;
-+
-+	skb_set_transport_header(skb, sizeof(struct ipv6hdr));
-+	nf_reset_ct(skb);
-+	skb_dst_drop(skb);
-+
-+	seg6_lookup_any_nexthop(skb, NULL, 0, false, slwt->oif);
-+	return dst_input(skb);
-+
-+drop:
-+	kfree_skb_reason(skb, reason);
-+	return -EINVAL;
-+}
-+
-+/* RFC 9433 Section 6.4 -- End.M.GTP6.D.Di
-+ * Drop-in interconnect variant of End.M.GTP6.D: instead of folding the
-+ * GTP-U identifiers into Args.Mob.Session, the original outer IPv6 DA
-+ * is preserved at SRH[0] so the destination side can keep the address
-+ * untouched.
-+ *
-+ * When net.netfilter.nf_hooks_lwtunnel=1 the inner T-PDU is exposed
-+ * to NF_INET_PRE_ROUTING after the GTP-U strip and before the SRv6
-+ * push, identical to End.M.GTP6.D.
-+ */
-+static int input_action_end_m_gtp6_d_di(struct sk_buff *skb,
-+					struct seg6_local_lwt *slwt)
-+{
-+	enum skb_drop_reason reason = SKB_DROP_REASON_SEG6_MOBILE_BAD_GTPU;
-+	unsigned int outer_len, inner_off;
-+	int gtp_hdrlen, inner_proto, inner_nfproto;
-+	struct in6_addr orig_dst;
-+	struct ipv6_sr_hdr *srh;
-+	struct ipv6hdr *ip6h;
-+	struct udphdr *uh;
-+	u32 teid;
-+	u8 inner_first, qfi;
-+
-+	BUILD_BUG_ON(sizeof(struct seg6_mobile_gtp6_d_di_cb) >
-+		     sizeof_field(struct sk_buff, cb));
-+
-+	srh = seg6_get_srh(skb, 0);
-+	if (srh && srh->segments_left != 0) {
-+		reason = SKB_DROP_REASON_SEG6_MOBILE_INVALID_SRH_SL;
-+		goto drop;
-+	}
-+
-+	if (!pskb_may_pull(skb, sizeof(struct ipv6hdr))) {
-+		reason = SKB_DROP_REASON_SEG6_MOBILE_BAD_INNER;
-+		goto drop;
-+	}
-+
-+	ip6h = ipv6_hdr(skb);
-+	orig_dst = ip6h->daddr;
-+
-+	/* Same dispatch as End.M.GTP6.D (RFC 9433 Section 6.4 reuses
-+	 * the S01-S11 logic from Section 6.3): GTP-U traffic is
-+	 * decapsulated and re-encapsulated, anything else falls
-+	 * through to End.
-+	 */
-+	{
-+		__be16 frag_off;
-+		u8 nh = ip6h->nexthdr;
-+		int upper_off;
-+
-+		upper_off = ipv6_skip_exthdr(skb, sizeof(*ip6h), &nh,
-+					     &frag_off);
-+		if (upper_off < 0) {
-+			/* Outer IPv6 ext-header walk failed; the GTP-U
-+			 * envelope below it is unreachable.
-+			 */
-+			reason = SKB_DROP_REASON_SEG6_MOBILE_BAD_GTPU;
-+			goto drop;
-+		}
-+
-+		if (nh != IPPROTO_UDP)
-+			return input_action_end(skb, slwt);
-+
-+		if (!pskb_may_pull(skb, upper_off + sizeof(*uh))) {
-+			reason = SKB_DROP_REASON_SEG6_MOBILE_BAD_GTPU;
-+			goto drop;
-+		}
-+
-+		ip6h = ipv6_hdr(skb);
-+		uh = (struct udphdr *)((u8 *)ip6h + upper_off);
-+		if (uh->dest != htons(GTP1U_PORT))
-+			return input_action_end(skb, slwt);
-+
-+		/* TEID/QFI are not consumed by the drop-in variant
-+		 * (RFC 9433 Section 6.4); seg6_mobile_parse_gtpu() is
-+		 * still required to compute the GTP-U header length so
-+		 * the outer chain (IPv6+UDP+GTP) can be popped correctly.
-+		 */
-+		gtp_hdrlen = seg6_mobile_parse_gtpu(skb,
-+						    upper_off + sizeof(*uh),
-+						    &teid, &qfi);
-+		if (gtp_hdrlen == -EOPNOTSUPP)
-+			return seg6_mobile_passthrough_non_tpdu(skb);
-+		if (gtp_hdrlen < 0) {
-+			reason = SKB_DROP_REASON_SEG6_MOBILE_BAD_GTPU;
-+			goto drop;
-+		}
-+		(void)teid;
-+		(void)qfi;
-+
-+		outer_len = upper_off + sizeof(*uh) + gtp_hdrlen;
-+	}
-+
-+	if (!pskb_may_pull(skb, outer_len + 1)) {
-+		reason = SKB_DROP_REASON_SEG6_MOBILE_BAD_INNER;
-+		goto drop;
-+	}
-+
-+	inner_off = outer_len;
-+	inner_first = *((u8 *)skb->data + inner_off);
-+	switch (inner_first >> 4) {
-+	case 4:
-+		inner_proto = IPPROTO_IPIP;
-+		inner_nfproto = NFPROTO_IPV4;
-+		break;
-+	case 6:
-+		inner_proto = IPPROTO_IPV6;
-+		inner_nfproto = NFPROTO_IPV6;
-+		break;
-+	default:
-+		reason = SKB_DROP_REASON_SEG6_MOBILE_BAD_INNER;
-+		goto drop;
-+	}
-+
-+	if (!pskb_may_pull(skb, outer_len +
-+			   ((inner_proto == IPPROTO_IPIP) ?
-+			    sizeof(struct iphdr) : sizeof(struct ipv6hdr)))) {
-+		reason = SKB_DROP_REASON_SEG6_MOBILE_BAD_INNER;
-+		goto drop;
-+	}
-+
-+	skb_pull_rcsum(skb, outer_len);
-+	skb_reset_network_header(skb);
-+
-+	skb->protocol = (inner_proto == IPPROTO_IPIP) ? htons(ETH_P_IP)
-+						      : htons(ETH_P_IPV6);
-+
-+	skb_set_transport_header(skb,
-+				 (inner_proto == IPPROTO_IPIP) ?
-+				 sizeof(struct iphdr) :
-+				 sizeof(struct ipv6hdr));
-+	nf_reset_ct(skb);
-+
-+	SEG6_MOBILE_GTP6_D_DI_CB(skb)->orig_dst = orig_dst;
-+
-+	if (static_branch_unlikely(&nf_hooks_lwtunnel_enabled))
-+		return NF_HOOK(inner_nfproto, NF_INET_PRE_ROUTING,
-+			       dev_net(skb->dev), NULL, skb, skb->dev,
-+			       NULL, input_action_end_m_gtp6_d_di_finish);
-+
-+	return input_action_end_m_gtp6_d_di_finish(dev_net(skb->dev), NULL,
-+						   skb);
-+
-+drop:
-+	kfree_skb_reason(skb, reason);
-+	return -EINVAL;
-+}
-+
- /* RFC 9433 Section 6.5 -- End.M.GTP6.E
-  * Receives an SRv6 packet whose current SID is an End.M.GTP6.E SID
-  * (Segments Left == 1) and re-encapsulates the inner payload in
-@@ -2920,6 +3130,18 @@ static struct seg6_action_desc seg6_action_table[] = {
- 			.destroy_state = seg6_end_m_gtp6_d_aug_destroy,
- 		},
- 	},
-+	{
-+		.action		= SEG6_LOCAL_ACTION_END_M_GTP6_D_DI,
-+		.attrs		= SEG6_F_ATTR(SEG6_LOCAL_SRH)		     |
-+				  SEG6_F_ATTR(SEG6_LOCAL_MOBILE_SRC_ADDR),
-+		.optattrs	= SEG6_F_LOCAL_COUNTERS |
-+				  SEG6_F_ATTR(SEG6_LOCAL_OIF),
-+		.input		= input_action_end_m_gtp6_d_di,
-+		.slwt_ops	= {
-+			.build_state = seg6_end_m_gtp6_d_aug_build,
-+			.destroy_state = seg6_end_m_gtp6_d_aug_destroy,
-+		},
-+	},
- 	{
- 		.action		= SEG6_LOCAL_ACTION_END_MAP,
- 		.attrs		= SEG6_F_ATTR(SEG6_LOCAL_NH6),
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index 70cec00aebdb..ad1e2ff3842f 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -84,6 +84,7 @@ TEST_PROGS := \
- 	sctp_vrf.sh \
- 	skf_net_off.sh \
- 	so_txtime.sh \
-+	srv6_end_m_gtp6_d_di_test.sh \
- 	srv6_end_m_gtp6_d_test.sh \
- 	srv6_end_m_gtp6_e_test.sh \
- 	srv6_end_m_gtp4_e_test.sh \
-diff --git a/tools/testing/selftests/net/srv6_end_m_gtp6_d_di_test.sh b/tools/testing/selftests/net/srv6_end_m_gtp6_d_di_test.sh
-new file mode 100755
-index 000000000000..e2101501e866
+diff --git a/Documentation/networking/index.rst b/Documentation/networking/index.rst
+index 44a422ad3b05..90fa0ad223da 100644
+--- a/Documentation/networking/index.rst
++++ b/Documentation/networking/index.rst
+@@ -108,6 +108,7 @@ Contents:
+    sctp
+    secid
+    seg6-sysctl
++   seg6_mobile
+    skbuff
+    smc-sysctl
+    sriov
+diff --git a/Documentation/networking/seg6_mobile.rst b/Documentation/networking/seg6_mobile.rst
+new file mode 100644
+index 000000000000..6a268bedf3be
 --- /dev/null
-+++ b/tools/testing/selftests/net/srv6_end_m_gtp6_d_di_test.sh
-@@ -0,0 +1,426 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Selftest for the SRv6 End.M.GTP6.D.Di drop-in behavior
-+# (RFC 9433 Section 6.4).
-+#
-+# Topology mirrors srv6_end_m_gtp6_d_test.sh.  The key difference is
-+# that the End.M.GTP6.D.Di action preserves the original outer IPv6
-+# destination address (here 2001:db8:f::dead) as the final SRH segment,
-+# rather than folding GTP-U identifiers into Args.Mob.Session.
++++ b/Documentation/networking/seg6_mobile.rst
+@@ -0,0 +1,236 @@
++.. SPDX-License-Identifier: GPL-2.0
 +
-+source lib.sh
++=================================
++SRv6 Mobile User Plane (RFC 9433)
++=================================
 +
-+readonly TIMEOUT=4
++This document describes the SRv6 Mobile User Plane (MUP) behaviors
++implemented by the ``seg6_local`` lightweight tunnel.  Six of the
++seven behaviors defined in `RFC 9433`_ are supported and configurable
++through ``ip route ... encap seg6local action ...``: End.MAP,
++End.M.GTP6.D, End.M.GTP6.D.Di, End.M.GTP6.E, End.M.GTP4.E, and
++H.M.GTP4.D.
 +
-+tcpdump_pid=""
-+have_vrf=0
++End.Limit (RFC 9433 Section 6.8) is unimplemented.
 +
-+cleanup()
-+{
-+	if [ -n "$tcpdump_pid" ]; then
-+		kill "$tcpdump_pid" 2>/dev/null
-+		wait "$tcpdump_pid" 2>/dev/null
-+	fi
-+	cleanup_all_ns
-+}
++.. _`RFC 9433`: https://www.rfc-editor.org/rfc/rfc9433
 +
-+trap cleanup EXIT
++Behaviors
++=========
 +
-+setup()
-+{
-+	setup_ns gnb srgw srupf lupf srupf_vrf
++End.MAP (`RFC 9433`_ Section 6.2)
++---------------------------------
 +
-+	ip -n "$gnb" link set lo up
-+	ip -n "$srgw" link set lo up
-+	ip -n "$srupf" link set lo up
-+	ip -n "$lupf" link set lo up
-+	ip -n "$srupf_vrf" link set lo up
++Endpoint with SID mapping.  Replaces the IPv6 destination address with
++the next SID; the SRH is left untouched.  Standard SRv6 endpoint hop
++limit handling applies (an ICMP Time Exceeded is emitted when the IPv6
++Hop Limit would reach zero per RFC 9433 Section 6.2 S01-S03; the Hop
++Limit is decremented per S04 before forwarding).  ``nh6`` selects the
++replacement SID::
 +
-+	ip link add veth-n3 netns "$gnb" type veth peer name veth-n3-srgw \
-+		netns "$srgw"
-+	ip -n "$gnb" addr add 2001:db8:1::2/64 dev veth-n3 nodad
-+	ip -n "$srgw" addr add 2001:db8:1::1/64 dev veth-n3-srgw nodad
-+	ip -n "$gnb" link set veth-n3 up
-+	ip -n "$srgw" link set veth-n3-srgw up
++    ip -6 route add 2001:db8:f::/64 \
++        encap seg6local action End.MAP nh6 2001:db8:2::e \
++        dev <dev>
 +
-+	# srgw <-> srupf  (SR-aware UPF, T-PDU SRv6 destination)
-+	ip link add veth-n9 netns "$srgw" type veth peer name veth-n9-srupf \
-+		netns "$srupf"
-+	ip -n "$srgw" addr add 2001:db8:2::1/64 dev veth-n9 nodad
-+	ip -n "$srupf" addr add 2001:db8:2::e/64 dev veth-n9-srupf nodad
-+	ip -n "$srgw" link set veth-n9 up
-+	ip -n "$srupf" link set veth-n9-srupf up
++End.M.GTP6.D (`RFC 9433`_ Section 6.3)
++--------------------------------------
 +
-+	# srgw <-> lupf  (legacy UPF, GTP-U control plane recipient)
-+	ip link add veth-n6 netns "$srgw" type veth peer name veth-n6-lupf \
-+		netns "$lupf"
-+	ip -n "$srgw" addr add 2001:db8:6::1/64 dev veth-n6 nodad
-+	ip -n "$lupf" addr add 2001:db8:6::e/64 dev veth-n6-lupf nodad
-+	ip -n "$srgw" link set veth-n6 up
-+	ip -n "$lupf" link set veth-n6-lupf up
++Encapsulation endpoint that consumes IPv6/UDP/GTP-U and emits SRv6.
++The new SRH is built from the configured segment list, with the
++original outer IPv6 destination ``D`` of the inbound GTP-U packet
++stamped at SRH ``segments[0]`` (the ultimate destination of the SR
++Policy).  The configured ``srh segs`` last entry is the remote
++End.M.GTP6.E SID and lands at SRH ``segments[1]``, the penultimate
++position required by RFC 9433 Section 6.5 Note; the kernel encodes
++``Args.Mob.Session`` into the locator-relative slice of that SID so
++that the egress End.M.GTP6.E peer can recover ``D`` (and hence the
++original gNB-side GTP-U destination) from ``segments[0]`` after its
++SRv6 strip::
 +
-+	ip netns exec "$srgw" sysctl -wq net.ipv6.conf.all.forwarding=1
++    ip -6 route add 2001:db8:f::/64 \
++        encap seg6local action End.M.GTP6.D \
++            srh segs 2001:db8:2::e \
++            src 2001:db8:2::1 \
++            sr_prefix_len 64 \
++        dev <dev>
 +
-+	local srupf_mac srgw_n9_mac lupf_mac
-+	srupf_mac=$(ip -n "$srupf" -j link show veth-n9-srupf | \
-+		python3 -c 'import sys, json; print(json.load(sys.stdin)[0]["address"])')
-+	srgw_n9_mac=$(ip -n "$srgw" -j link show veth-n9 | \
-+		python3 -c 'import sys, json; print(json.load(sys.stdin)[0]["address"])')
-+	lupf_mac=$(ip -n "$lupf" -j link show veth-n6-lupf | \
-+		python3 -c 'import sys, json; print(json.load(sys.stdin)[0]["address"])')
-+	ip -n "$srgw" -6 neigh replace 2001:db8:2::e dev veth-n9 \
-+		lladdr "$srupf_mac" nud permanent 2>/dev/null || true
-+	ip -n "$srupf" -6 neigh replace 2001:db8:2::1 dev veth-n9-srupf \
-+		lladdr "$srgw_n9_mac" nud permanent 2>/dev/null || true
-+	# Non-T-PDU passthrough: pre-resolve the Echo Request DA so the
-+	# srgw can hand the packet off to the legacy upf via veth-n6.
-+	ip -n "$srgw" -6 neigh replace 2001:db8:f::dead dev veth-n6 \
-+		lladdr "$lupf_mac" nud permanent 2>/dev/null || true
++``sr_prefix_len`` declares the locator length used by the remote
++End.M.GTP6.E SID and must match the prefix length configured on that
++remote endpoint; the SR Gateway has no way to discover the remote
++SID's locator length on its own.
 +
-+	ip -n "$gnb" -6 route add 2001:db8:f::/64 via 2001:db8:1::1
++The wire SRH for the example above is
++``[D, 2001:db8:2::e | Args.Mob.Session]``: ``segments[0]`` is the
++saved original outer IPv6 DA of the GTP-U packet, and
++``segments[1]`` is the End.M.GTP6.E SID at the egress UPF in the
++penultimate position required by RFC 9433 Section 6.5.
 +
-+	# dev veth-n6 is the legacy UPF leg for non-T-PDU passthrough; T-PDU
-+	# encap takes the IPv6 SR Policy path via a separate FIB lookup.
-+	ip -n "$srgw" -6 route add 2001:db8:f::/64 \
-+		encap seg6local action End.M.GTP6.D.Di \
-+			srh segs 2001:db8:2::e,2001:db8:3::e \
-+			src 2001:db8:2::1 \
-+		dev veth-n6
++End.M.GTP6.D.Di (`RFC 9433`_ Section 6.4)
++-----------------------------------------
 +
-+	ip -n "$srupf" -6 route add 2001:db8:3::/64 dev veth-n9-srupf
++Drop-in variant of End.M.GTP6.D that preserves the original IPv6
++destination address as ``segments[0]`` (the last in-transit SID in the
++new SRH) and discards TEID/QFI rather than folding them into
++Args.Mob.Session.  Useful when the upstream service expects the
++original destination to survive untouched::
 +
-+	# Per-route VRF case: a second SR-side upf in its own VRF.  The
-+	# End.M.GTP6.D.Di SID for this tenant binds the SRv6 underlay output
-+	# to the VRF via 'oif'.  Reported as [SKIP] when CONFIG_NET_VRF is not loaded.
-+	modprobe vrf 2>/dev/null
-+	if ip -n "$srgw" link add vrf-n9 type vrf table 100 2>/dev/null; then
-+		have_vrf=1
-+		ip -n "$srgw" link set dev vrf-n9 up
++    ip -6 route add 2001:db8:f::/64 \
++        encap seg6local action End.M.GTP6.D.Di \
++            srh segs 2001:db8:2::e,2001:db8:3::e \
++            src 2001:db8:2::1 \
++        dev <dev>
 +
-+		ip link add veth-n9-2 netns "$srgw" type veth peer name \
-+			veth-n9-2-srupf netns "$srupf_vrf"
-+		ip -n "$srgw" link set dev veth-n9-2 master vrf-n9
-+		ip -n "$srgw" addr add 2001:db8:4::1/64 dev veth-n9-2 nodad
-+		ip -n "$srupf_vrf" addr add 2001:db8:4::e/64 dev veth-n9-2-srupf \
-+			nodad
-+		ip -n "$srgw" link set dev veth-n9-2 up
-+		ip -n "$srupf_vrf" link set dev veth-n9-2-srupf up
++End.M.GTP6.E (`RFC 9433`_ Section 6.5)
++--------------------------------------
 +
-+		local upf_vrf_mac srgw_e2_mac
-+		upf_vrf_mac=$(ip -n "$srupf_vrf" -j link show \
-+			veth-n9-2-srupf | python3 -c \
-+			'import sys, json; print(json.load(sys.stdin)[0]["address"])')
-+		srgw_e2_mac=$(ip -n "$srgw" -j link show veth-n9-2 | \
-+			python3 -c \
-+			'import sys, json; print(json.load(sys.stdin)[0]["address"])')
-+		ip -n "$srgw" -6 neigh replace 2001:db8:4::e dev veth-n9-2 \
-+			lladdr "$upf_vrf_mac" nud permanent 2>/dev/null || true
-+		ip -n "$srupf_vrf" -6 neigh replace 2001:db8:4::1 \
-+			dev veth-n9-2-srupf lladdr "$srgw_e2_mac" nud permanent \
-+			2>/dev/null || true
++Egress endpoint that decapsulates SRv6 and emits IPv6/UDP/GTP-U.  The
++active SID carries the 40-bit ``Args.Mob.Session`` field defined in
++RFC 9433 Section 6.1 immediately after the locator; TEID and QFI are
++extracted from it.  The route prefix length implicitly declares the
++locator length on this end of the tunnel; no explicit
++``sr_prefix_len`` is required because the SID is locally instantiated
++by this route::
 +
-+		ip -n "$gnb" -6 route add 2001:db8:f0::/64 via 2001:db8:1::1
++    ip -6 route add 2001:db8:e::/64 \
++        encap seg6local action End.M.GTP6.E src 2001:db8:2::1 \
++        dev <dev>
 +
-+		ip -n "$srgw" -6 route add 2001:db8:f0::/64 \
-+			encap seg6local action End.M.GTP6.D.Di \
-+				srh segs 2001:db8:4::e,2001:db8:5::e \
-+				src 2001:db8:4::1 oif vrf-n9 \
-+			dev veth-n9-2
++The route prefix length must leave room for the 40-bit
++``Args.Mob.Session`` that immediately follows the locator, so the
++constraint ``prefix_len + 40 <= 128`` (i.e. ``prefix_len <= 88``)
++is enforced at install time.
 +
-+		ip -n "$srupf_vrf" -6 route add 2001:db8:5::/64 \
-+			dev veth-n9-2-srupf
-+	fi
-+}
++The optional ``pdu_type {dl|ul|<num>}`` attribute supplies the PDU
++Type field (3GPP TS 38.415 Section 5.5.2) of the GTP-U PDU Session
++Container.  When set, every emitted packet carries the container with
++that PDU Type and the QFI from ``Args.Mob.Session``; when unset the
++kernel emits a short GTPv1-U header with no container, regardless of
++the QFI.  ``pdu_type`` MUST be set on routes serving 5G N3 traffic;
++omitting it targets LTE-only / S1-U deployments.  Numeric ``<num>``
++in 0..15 is also accepted (per TS 38.415 the field is 4 bits wide;
++2..15 are currently reserved).
 +
-+check_dependencies()
-+{
-+	if ! command -v tcpdump >/dev/null; then
-+		echo "SKIP: tcpdump is required"; exit "$ksft_skip"
-+	fi
-+	if ! command -v python3 >/dev/null; then
-+		echo "SKIP: python3 is required"; exit "$ksft_skip"
-+	fi
-+	if ! python3 -c "import scapy.all" 2>/dev/null; then
-+		echo "SKIP: python3-scapy is required"; exit "$ksft_skip"
-+	fi
++End.M.GTP4.E (`RFC 9433`_ Section 6.6)
++--------------------------------------
 +
-+	if ! ip route help 2>&1 | grep -qF "End.M.GTP6.D.Di"; then
-+		echo "SKIP: iproute2 too old, missing seg6local action End.M.GTP6.D.Di"
-+		exit "$ksft_skip"
-+	fi
-+}
++Egress endpoint that decapsulates SRv6 and emits IPv4/UDP/GTP-U.
++The SID encodes the IPv4 destination per RFC 9433 Section 6.6
++Figure 9.  ``v4_mask_len`` declares the width of the IPv4 DA slice
++that immediately follows the locator (in 1..32, the constraint
++``locator + v4_mask_len + 40 <= 128`` is enforced at install time)::
 +
-+send_gtpu()
-+{
-+	local outer_dst="$1"
-+	local srgw_mac
++    ip -6 route add 2001:db8::/32 \
++        encap seg6local action End.M.GTP4.E \
++            src 2001:db8:2::1 v4_mask_len 32 \
++        dev <dev>
 +
-+	srgw_mac=$(ip -n "$srgw" -j link show veth-n3-srgw | \
-+		python3 -c 'import sys, json; print(json.load(sys.stdin)[0]["address"])')
++The IPv6 source address carries the IPv4 SA per RFC 9433 Section 6.6
++Figure 10.  ``v6_src_prefix_len`` declares the Source UPF Prefix
++length P in bits (1..127, default 64); the IPv4 SA slice is then
++``v4_mask_len`` bits wide starting at bit offset P.  The kernel
++always reads a 32-bit window from the configured ``src`` template at
++offset P (the upper ``v4_mask_len`` bits are overlaid with the
++recovered IPv4 SA), so the constraint ``v6_src_prefix_len <= 96``
++(equivalently ``v6_src_prefix_len + 32 <= 128``) is enforced at
++install time.  Bits outside the IPv4 SA slice are taken verbatim
++from the configured ``src`` template::
 +
-+	SRGW_MAC="$srgw_mac" OUTER_DST="$outer_dst" \
-+		ip netns exec "$gnb" python3 - <<'PY'
-+import os
-+from scapy.all import IPv6, UDP, IP, ICMP, sendp, Ether
-+mac = os.environ['SRGW_MAC']
-+outer_dst = os.environ['OUTER_DST']
-+gtpu = bytes.fromhex(
-+    "34 ff 00 24 00 00 01 23 00 00 00 85"
-+    "01 00 05 00")
-+inner = bytes(IP(src='10.0.0.1', dst='10.0.0.2') / ICMP())
-+pkt = (Ether(dst=mac) /
-+       IPv6(src='2001:db8:1::2', dst=outer_dst) /
-+       UDP(sport=2152, dport=2152) /
-+       (gtpu + inner))
-+sendp(pkt, iface='veth-n3', verbose=False)
-+PY
-+}
++    ip -6 route add 2001:db8::/32 \
++        encap seg6local action End.M.GTP4.E \
++            src 2001:db8:2::1 v4_mask_len 32 v6_src_prefix_len 64 \
++        dev <dev>
 +
-+send_gtpu_echo()
-+{
-+	local outer_dst="$1"
-+	local srgw_mac
++``pdu_type`` takes the same values and has the same effect as on
++End.M.GTP6.E (see above).
 +
-+	srgw_mac=$(ip -n "$srgw" -j link show veth-n3-srgw | \
-+		python3 -c 'import sys, json; print(json.load(sys.stdin)[0]["address"])')
++H.M.GTP4.D (`RFC 9433`_ Section 6.7)
++------------------------------------
 +
-+	SRGW_MAC="$srgw_mac" OUTER_DST="$outer_dst" \
-+		ip netns exec "$gnb" python3 - <<'PY'
-+import os
-+from scapy.all import IPv6, UDP, sendp, Ether
-+mac = os.environ['SRGW_MAC']
-+outer_dst = os.environ['OUTER_DST']
-+gtpu_echo = bytes.fromhex("32 01 00 04 00 00 00 00 42 42 00 00")
-+pkt = (Ether(dst=mac) /
-+       IPv6(src='2001:db8:1::2', dst=outer_dst) /
-+       UDP(sport=2152, dport=2152) /
-+       gtpu_echo)
-+sendp(pkt, iface='veth-n3', verbose=False)
-+PY
-+}
++Headend behavior that consumes IPv4/UDP/GTP-U and emits IPv6 with
++the SID encoding the original IPv4 destination plus Args.Mob.Session
++per RFC 9433 Section 6.7 Figure 11::
 +
-+run_echo_test()
-+{
-+	local outer_dst="$1"
-+	local out
-+	local rc
++    ip -4 route add 10.99.0.0/24 \
++        encap seg6local action H.M.GTP4.D \
++            nh6 2001:db8:: \
++            src 2001:db8:2::1 \
++            v4_mask_len 32 sr_prefix_len 32 \
++        dev <dev>
 +
-+	out=$(mktemp)
++The inbound IPv4 SA is encoded into the IPv6 SA using the same
++Figure 10 layout as End.M.GTP4.E (controlled by ``v6_src_prefix_len``,
++default 64).
 +
-+	ip netns exec "$lupf" tcpdump -U -nni veth-n6-lupf -w "$out" \
-+		'udp port 2152' 2>/dev/null &
-+	tcpdump_pid=$!
-+	sleep 1
++Per-route VRF / interface binding
++=================================
 +
-+	send_gtpu_echo "$outer_dst"
++The five GTP-related behaviors (End.M.GTP4.E, End.M.GTP6.E,
++End.M.GTP6.D, End.M.GTP6.D.Di and H.M.GTP4.D) accept the standard
++``oif`` ``seg6_local`` attribute to bind their egress lookup to a
++specific output interface or VRF device.  This lets operators keep
++the SRv6 underlay, the N3 reference point (toward gNB) and the N6
++reference point (toward the data network) on separate routing tables
++or VLAN sub-interfaces, which matches typical multi-tenant
++deployments::
 +
-+	sleep 1
-+	kill -INT "$tcpdump_pid" 2>/dev/null
-+	wait "$tcpdump_pid" 2>/dev/null
-+	tcpdump_pid=""
++    ip -6 route add 2001:db8:e::/64 \
++        encap seg6local action End.M.GTP6.E \
++            src 2001:db8:2::1 \
++            oif vrf-n3 \
++        dev <dev>
 +
-+	OUTER_DST="$outer_dst" python3 - "$out" <<'PYEOF'
-+import os, sys
-+from scapy.all import rdpcap, IPv6, UDP
++Without ``oif`` the egress lookup uses the default routing table.
 +
-+want_dst = os.environ['OUTER_DST']
-+pkts = rdpcap(sys.argv[1])
-+for p in pkts:
-+    if IPv6 not in p or UDP not in p:
-+        continue
-+    if p[UDP].sport != 2152 or p[UDP].dport != 2152:
-+        continue
-+    if p[IPv6].dst != want_dst:
-+        continue
-+    payload = bytes(p[UDP].payload)
-+    if len(payload) >= 2 and payload[1] == 0x01:
-+        sys.exit(0)
-+sys.exit("no GTPv1-U Echo Request observed at lupf "
-+         "(End.M.GTP6.D.Di failed to pass non-T-PDU through)")
-+PYEOF
-+	rc=$?
-+	rm -f "$out"
-+	return $rc
-+}
++Netfilter integration
++=====================
 +
-+capture_traffic()
-+{
-+	local capture_ns="$1"
-+	local capture_iface="$2"
-+	local outer_dst="$3"
-+	local out="$4"
++The five GTP-related behaviors expose IPv4 / IPv6 inner T-PDUs to
++``NF_INET_PRE_ROUTING`` between the outer strip and the new outer
++push (mirroring ``End.DX4`` / ``End.DX6``), so iptables / nftables /
++conntrack can apply policy on the inner 5-tuple before
++re-encapsulation.  Non-IP inner payloads bypass the hook and are
++re-encapsulated unchanged.
 +
-+	ip netns exec "$capture_ns" tcpdump -U -nni "$capture_iface" -w "$out" \
-+		'ip6' 2>/dev/null &
-+	tcpdump_pid=$!
-+	# Give tcpdump a brief moment to attach the BPF filter.
-+	sleep 1
++Enable with::
 +
-+	send_gtpu "$outer_dst"
++    sysctl -w net.netfilter.nf_hooks_lwtunnel=1
 +
-+	sleep 1
-+	kill -INT "$tcpdump_pid" 2>/dev/null
-+	wait "$tcpdump_pid" 2>/dev/null
-+	tcpdump_pid=""
-+}
++This sysctl is one-way: it cannot be cleared without reloading the
++kernel (see :doc:`nf_conntrack-sysctl`).
 +
-+run_test()
-+{
-+	local outer_dst="$1"			# GTP-U outer IPv6 DA
-+	local capture_ns="${2:-$srupf}"	# netns where SRv6 should land
-+	local capture_iface="${3:-veth-n9-srupf}"
-+	local out
++Example: drop traffic from a UE address on an ``End.M.GTP6.D`` SR
++Gateway::
 +
-+	out=$(mktemp)
-+	capture_traffic "$capture_ns" "$capture_iface" "$outer_dst" "$out"
++    nft add table ip filter
++    nft 'add chain ip filter prerouting \
++        { type filter hook prerouting priority 0; }'
++    nft add rule ip filter prerouting \
++        ip saddr 10.0.0.42 counter drop
 +
-+	# scapy field check: an SRv6 (RT6 type=4) packet must reach upf
-+	# and one of the SRH segments must contain the original outer DA
-+	# (preserved by the drop-in variant).
-+	OUTER_DST="$outer_dst" python3 - "$out" <<'PYEOF'
-+import os, sys
-+from scapy.all import rdpcap, IPv6, IPv6ExtHdrSegmentRouting
++GTP-U non-T-PDU handling
++========================
 +
-+outer_dst = os.environ['OUTER_DST'].lower()
-+pkts = rdpcap(sys.argv[1])
-+for p in pkts:
-+    if not (IPv6 in p and IPv6ExtHdrSegmentRouting in p):
-+        continue
-+    srh = p[IPv6ExtHdrSegmentRouting]
-+    if srh.type != 4:
-+        continue
-+    addrs = [str(a).lower() for a in srh.addresses]
-+    if outer_dst in addrs:
-+        sys.exit(0)
-+    sys.exit(f"original DA not in SRH segments: {addrs}")
-+sys.exit("no SRv6 (RT6 type=4) packet observed")
-+PYEOF
-+	local rc=$?
-+	rm -f "$out"
-+	return $rc
-+}
++The three GTP-U decap behaviors (``End.M.GTP6.D``,
++``End.M.GTP6.D.Di`` and ``H.M.GTP4.D``) only encapsulate ``T-PDU``
++frames (3GPP TS 29.281 Section 5.1, message type 255) into SRv6.
++Any other GTP-U message (``Echo Request``/``Echo Response``,
++``Error Indication``, ``Supported Extension Headers Notification``,
++...) is forwarded unchanged toward its IPv4 / IPv6 destination as
++a regular packet, so a downstream UPF that owns the GTP-U control
++plane can process it.
 +
-+# Verify that nf_hooks_lwtunnel=1 makes the inner T-PDU 5-tuple
-+# visible to nftables on the SR Gateway.  The nft rule matches on the
-+# inner IPv4 source address (10.0.0.1, set by send_gtpu()); a DROP
-+# verdict must prevent any SRv6 packet from reaching the upf, an
-+# ACCEPT verdict must let it through unchanged.
-+run_nf_test()
-+{
-+	local verdict="$1"		# drop | accept
-+	local expect_da="$2"	# preserved-DA address, empty when no packet expected
-+	local outer_dst="2001:db8:f::dead"
-+	local out
++The downstream UPF must therefore live behind the SR Gateway, on
++the IPv4 / IPv6 network the GTP-U destination is reachable through.
++Assigning the UPF's address to a local interface on the SR Gateway
++is not a supported topology: the SR Gateway cannot at the same
++time intercept ``T-PDU`` for SRv6 encapsulation and deliver
++non-T-PDU GTP-U to a local userspace socket addressed to the same
++destination.
 +
-+	ip netns exec "$srgw" nft flush chain ip filter prerouting
-+	ip netns exec "$srgw" nft add rule ip filter prerouting \
-+		ip saddr 10.0.0.1 "$verdict"
++Debugging
++=========
 +
-+	out=$(mktemp)
-+	capture_traffic "$srupf" "veth-n9-srupf" "$outer_dst" "$out"
-+
-+	if [ -n "$expect_da" ]; then
-+		OUTER_DST="$expect_da" python3 - "$out" <<'PYEOF'
-+import os, sys
-+from scapy.all import rdpcap, IPv6, IPv6ExtHdrSegmentRouting
-+
-+outer_dst = os.environ['OUTER_DST'].lower()
-+pkts = rdpcap(sys.argv[1])
-+for p in pkts:
-+    if not (IPv6 in p and IPv6ExtHdrSegmentRouting in p):
-+        continue
-+    srh = p[IPv6ExtHdrSegmentRouting]
-+    addrs = [str(a).lower() for a in srh.addresses]
-+    if outer_dst in addrs:
-+        sys.exit(0)
-+sys.exit("expected SRv6 packet not observed at upf despite nft accept")
-+PYEOF
-+	else
-+		python3 - "$out" <<'PYEOF'
-+import sys
-+from scapy.all import rdpcap, IPv6, IPv6ExtHdrSegmentRouting
-+
-+pkts = rdpcap(sys.argv[1])
-+for p in pkts:
-+    if IPv6 in p and IPv6ExtHdrSegmentRouting in p:
-+        sys.exit("SRv6 packet leaked to upf despite nft drop on inner")
-+sys.exit(0)
-+PYEOF
-+	fi
-+	local rc=$?
-+	rm -f "$out"
-+	return $rc
-+}
-+
-+main()
-+{
-+	local rc=0
-+
-+	check_dependencies
-+	setup
-+
-+	if run_test "2001:db8:f::dead"; then
-+		echo "TEST: End.M.GTP6.D.Di (default) [PASS]"
-+	else
-+		echo "TEST: End.M.GTP6.D.Di (default) [FAIL]"
-+		rc=1
-+	fi
-+
-+	if run_echo_test "2001:db8:f::dead"; then
-+		echo "TEST: End.M.GTP6.D.Di (non-T-PDU passthrough) [PASS]"
-+	else
-+		echo "TEST: End.M.GTP6.D.Di (non-T-PDU passthrough) [FAIL]"
-+		rc=1
-+	fi
-+
-+	# VRF binding: SRv6 underlay output goes through vrf-n9 (table 100).
-+	# Reported as [SKIP] when CONFIG_NET_VRF is not loaded.
-+	if [ "$have_vrf" = "1" ]; then
-+		if run_test "2001:db8:f0::dead" "$srupf_vrf" "veth-n9-2-srupf"; then
-+			echo "TEST: End.M.GTP6.D.Di (oif vrf-n9) [PASS]"
-+		else
-+			echo "TEST: End.M.GTP6.D.Di (oif vrf-n9) [FAIL]"
-+			rc=1
-+		fi
-+	else
-+		echo "TEST: End.M.GTP6.D.Di (oif vrf-n9) [SKIP] (CONFIG_NET_VRF not loaded)"
-+	fi
-+
-+	# Inner T-PDU netfilter hook: only meaningful when nft is present
-+	# and the kernel exposes net.netfilter.nf_hooks_lwtunnel.
-+	if command -v nft >/dev/null && \
-+	   ip netns exec "$srgw" sysctl -wq \
-+		net.netfilter.nf_hooks_lwtunnel=1 2>/dev/null; then
-+		ip netns exec "$srgw" nft add table ip filter
-+		ip netns exec "$srgw" nft \
-+			'add chain ip filter prerouting { type filter hook prerouting priority 0; }'
-+
-+		if run_nf_test drop ""; then
-+			echo "TEST: End.M.GTP6.D.Di (nft drop on inner) [PASS]"
-+		else
-+			echo "TEST: End.M.GTP6.D.Di (nft drop on inner) [FAIL]"
-+			rc=1
-+		fi
-+
-+		if run_nf_test accept "2001:db8:f::dead"; then
-+			echo "TEST: End.M.GTP6.D.Di (nft accept on inner) [PASS]"
-+		else
-+			echo "TEST: End.M.GTP6.D.Di (nft accept on inner) [FAIL]"
-+			rc=1
-+		fi
-+	else
-+		echo "TEST: End.M.GTP6.D.Di (inner-flow netfilter hook) [SKIP]" \
-+		     "(nft or nf_hooks_lwtunnel unavailable)"
-+	fi
-+
-+	if [ "$rc" -eq 0 ]; then
-+		echo "TEST: End.M.GTP6.D.Di [PASS]"
-+		exit "$ksft_pass"
-+	else
-+		echo "TEST: End.M.GTP6.D.Di [FAIL]"
-+		exit "$ksft_fail"
-+	fi
-+}
-+
-+main "$@"
++The SRv6 Mobile data path drops malformed or out-of-policy packets via
++the standard skb drop-reason infrastructure (``SEG6_MOBILE_*`` in
++``include/net/dropreason-core.h``) rather than silent ``-EINVAL``, so
++the cause is observable via the ``skb:kfree_skb`` tracepoint.
 
 -- 
 2.50.1
