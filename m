@@ -1,45 +1,46 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 423F59463;
-	Sat,  2 May 2026 16:39:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 212BF86329;
+	Sun,  3 May 2026 01:26:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777739940; cv=none; b=FT5LmOznR2Kk1ctdX+78sQbeB5ZOV/7O/lnifEyFYWWKnOiNUhdHEPr+5CdfbPxA1+PYcf/9kwzr+jjkxNqMKhGATrivKC+P522YkX0yzGhNQxQaU4JHAkCNPhafutxo3ihh+FxsKoAeLnDMNQNHtklcoume2ONghi5zVD21+Js=
+	t=1777771600; cv=none; b=sh/62fIQYSRPSbVS2zPkjPZTz8Xi8gEy0IWrCZYhr+tf/743xDieh+gkQ+Bh5VHBPNIBNAaZAgGZryizFLAPh+RFw3aZDw4I8QyLMNy7JsnVswgOo/83VxTU2RZ1eukGLeeASZgi197buX1UkCzQnMpgfyMxBNXa3IJZPx0gW5U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777739940; c=relaxed/simple;
-	bh=Z5nCRgne7eNYBRvJ4vlO/FCOvZarm4F5SNo4cIXNnXc=;
+	s=arc-20240116; t=1777771600; c=relaxed/simple;
+	bh=RnFDZamsttLUqXOACgPINZSnkXDGAnCNp70OoODu96E=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QutInUN4orcHA2qjeZORFIVMnYuNTjdE3VuKCEsdQQJkBRTasDV9ivYNMrQGyfkMxv+zOUZAZ1Y28Fs29b74f+qnBs7j22mbEMaQyRlrHvp9e4TSatFaa9AwNRH3vMwLQr2eBN5y5tTYPsGqCnpUUFiZOdESUrkGSc8DQJxNxrg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AJ8HIbHJ; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=KieMv4w1panFfEHOvgyxtb/8DjQi0hJMXQ1a01BzFtcAIdjiIkPI+qOHWsWKWALJH0FwdVoRbv0+eQcX7tGMFy0ZMhw51t9wmbK9wvoLD8Rwg6YDE8XYaVKxcQvsMVoSAI3X5/oeKGMOdpX5sWl0kqHnIfFvPbI77mg4f07VCAY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f9k5TN4H; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AJ8HIbHJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E561C19425;
-	Sat,  2 May 2026 16:38:59 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f9k5TN4H"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 110D5C19425;
+	Sun,  3 May 2026 01:26:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777739940;
-	bh=Z5nCRgne7eNYBRvJ4vlO/FCOvZarm4F5SNo4cIXNnXc=;
+	s=k20201202; t=1777771599;
+	bh=RnFDZamsttLUqXOACgPINZSnkXDGAnCNp70OoODu96E=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=AJ8HIbHJN841AEPhBO3qBsVjkjEtebLa7Dq8zYMPVE5dJEUi0aY4TX/ZQfWXjcS6v
-	 BuTRgGshVU8pj/m1unFCQgUuInCl1C2bvh71pEEnpuz3NOM166uFHCFluZIVQiw/Jh
-	 6QLGhn3TSmjvMtNnB2f8/EM4NAdYT70zBTbxtHnSnJEOgSn+TVKLnpLhvkRDsdQ2Wv
-	 4XSxjKK6LQ3tVVZaVkLtcFLfsobtj9oB6pkf0PAav+X0xNzRL9HAaEqMXSWryZQstq
-	 U/6LAGPytBPjMK5ssfuX1+rD6Bszuax2w6augnmUimieSvEO7DsZc3c2b/3L5lvyIs
-	 8hSjPr7vpaB5g==
-Date: Sat, 2 May 2026 09:38:58 -0700
+	b=f9k5TN4HDWAbh1YAQqpyuO9U1tPJfFAZ9Q0C5yt7XD8KCeRqiQmFay5PBnklHsFRC
+	 d2wAWcqxA6mFaTi8l2vp0BB5AlXKeVBc6AzmLkiY99EEUuBY1Qi3aI7Dik7n89wQO5
+	 kU7BhQIUAw37dLjrw9Q+7a9DejDRNNmObvT9OIyNzrLas9sKE+vMpmrn1lJh2nu8Pe
+	 BqqS4ZGId8hnnI5UX1Qep7FxZ1sBv0YyBVS9WSrZ+cVwnceQZ/BGvzB1dKFHjNnXSp
+	 4exSREE2oAvRTbdpDmbRNlMmbCO5J6I/uH16lRRsi1S5RO5eRNjecPv4KpXxxt4+vp
+	 ESNXjSxhhBuWA==
+Date: Sat, 2 May 2026 18:26:37 -0700
 From: Jakub Kicinski <kuba@kernel.org>
-To: Allison Henderson <achender@kernel.org>
-Cc: netdev@vger.kernel.org, pabeni@redhat.com, edumazet@google.com,
- horms@kernel.org, linux-rdma@vger.kernel.org,
- linux-kselftest@vger.kernel.org, shuah@kernel.org
-Subject: Re: [PATCH net-next v2 5/7] selftests: rds: Fix gcov and pcap
- collection
-Message-ID: <20260502093858.35b27793@kernel.org>
-In-Reply-To: <843faae8c03ce534fad28e73b155d33c84f69bee.camel@kernel.org>
-References: <20260428222716.2960871-6-achender@kernel.org>
-	<20260430024206.2452353-1-kuba@kernel.org>
-	<20260429194806.6ae176a9@kernel.org>
-	<843faae8c03ce534fad28e73b155d33c84f69bee.camel@kernel.org>
+To: Sabrina Dubroca <sd@queasysnail.net>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
+ bpf@vger.kernel.org, john.fastabend@gmail.com,
+ linux-kselftest@vger.kernel.org, =?UTF-8?B?6ZKx5LiA6ZOt?=
+ <yimingqian591@gmail.com>, daniel@iogearbox.net, jonathan.lemon@gmail.com
+Subject: Re: [PATCH net 4/7] net: tls: fix off-by-one in sg_chain entry
+ count for wrapped sk_msg ring
+Message-ID: <20260502182633.60d6a07e@kernel.org>
+In-Reply-To: <afTXe_kAumf2vjvE@krikkit>
+References: <20260429222944.2139041-1-kuba@kernel.org>
+	<20260429222944.2139041-5-kuba@kernel.org>
+	<afTXe_kAumf2vjvE@krikkit>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -49,26 +50,15 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Fri, 01 May 2026 22:43:04 -0700 Allison Henderson wrote:
-> > point #2 my vng does have an overlayfs mounted over /tmp so the
-> > mountpoint check doesn't trigger IDK if this is what you meant 
-> > or I have a different version.  
+On Fri, 1 May 2026 18:40:27 +0200 Sabrina Dubroca wrote:
+> > -			 MAX_SKB_FRAGS - msg_pl->sg.start + 1,
+> > +			 NR_MSG_FRAG_IDS - msg_pl->sg.start + 1,
+> >  			 msg_pl->sg.data);  
 > 
-> I did try using --overlay-rwdir, and I think that gives rw to the
-> guest, but it's ro to the host, so we dont get to keep the pcaps post
-> mortem.
-> 
-> What we can do, if it sounds ok to you, is set up a temp scratch area
-> in the rds_logs folder so it's not mounting over /tmp, and then
-> run.sh can handle the mount with a cleanup trap addressing Sashiko's
-> concern
-> 
-> Let me know what you think?
+> And get rid of the [start] / NR - start dance to make this code a bit
+> clearer?
 
-Oh, you need these files for a post mortem analysis? I missed that
-point. IDK if there's a well established way to save extra debug info
-from the tests. runner has per_test_log_dir but I don't think it's
-exposed to tests? Until ksft has such a thing I'd probably go with
-an extra env variable to point the test to a specific dir.
-Which dir will depend on the CI harness. If var is not set - don't
-output the logs or use /tmp and clean up when test exits.
+Heh, yes. In hindsight that is quite a silly construct..
+
+Let me apply the first 2 since the first fix is trivial and hopefully
+find some time to check what Sashiko was saying some time this well.
