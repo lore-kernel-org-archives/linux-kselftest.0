@@ -1,114 +1,176 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74D783A9D84;
-	Sun,  3 May 2026 21:52:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DDE8370D6D
+	for <linux-kselftest@vger.kernel.org>; Sun,  3 May 2026 22:12:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777845179; cv=none; b=rf1UEQc4a++hsIw9jUq/E1GWMptxpW651qV1KYZDyF8zxO2kSIZiqGoi2GRdRgWb99mInSC0gEmhCjsWulekSlzOjp/w8t/YJgkrbDf/Txd+T/Y+lpNREwcJHjuPleprpYu/JTthp83JNkopfc2txBz339cQuY6OArcD5eMP9SU=
+	t=1777846373; cv=none; b=dmSYgWWrzlbXilLdfmFUSbXwiuNVcKVIGqIvSSlN1UuHPYn1M+Xl68ebTWymJ3Eg9YT+K47QcSgb3WzI+4N+F6TmP/zkeshHM8MND4lYPTvOiiRy2U6LK/dbSLlIebu1eW5xdQpTbUEhZhiOtksWTW3X45XPZdzHb6m4torbofI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777845179; c=relaxed/simple;
-	bh=72SmyEyDLbiT7++hepSoCz6MaVfcFTfSnK6Vg/ULnSo=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=iWXfM9XGGrZXkvTpUHMl4CW8+8OMfJjrekYjkk7yx/iU4V4m98+XsvfIMH8z6iMPNwLrh7KqHZxSdv0dlJKzf6kZCps29A5wHYViliTqJovZthlx+X5idefGO9D6iJGEZc9iNExDkjX4mUi2jmiJlY9QVxClo14N2kTbdtnFtAM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NIukK26J; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777846373; c=relaxed/simple;
+	bh=amjNKDiByO8OXYXjgCXvacfURD9eqUFBCrcfV8+f06g=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=eFBtQTPOc8EIJneNpZ0sdEJoLJo80JgsichSYmReUiTe9eDiSfr3s2L5iw94g9EwFucvwQRlinIrVFWCOo0DfOcD91L4Gs2g9HHH1w1VtotivFCHL52eO8Hp67+NefyMT9d8SuVuaTY9ClNzLzdPejplk9MKMqhCnuaVzCnS/oU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=R2R0tcP7; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Wc+UCacn; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=R2R0tcP7; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Wc+UCacn; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NIukK26J"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40645C2BCC4;
-	Sun,  3 May 2026 21:52:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777845178;
-	bh=72SmyEyDLbiT7++hepSoCz6MaVfcFTfSnK6Vg/ULnSo=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=NIukK26JIkbEydwsy8SnFcdQycTfospEyi+XJPBki4SE1XVDLj6Hp4C7mys7CmE5i
-	 Al1yGkqzH0BH7S8MoM2/a8Ov/apQpGD9b68wVydCpvgEFCcrV4StzV5BK+IlYppcsY
-	 JR/RBWSsowp2hJwCaPN/YA/usRrAX86kky7WfFiDY60i+rd/Swh3ZXnObXfRrudab1
-	 Imr33IlORwX1BfodLQ/50/agc+/VhFaM+AqJK7i0Y2nuPv01jZ8su55u2Bt5gWlauD
-	 vPqRTu8Y+gnPfS4l5nmGoe4zBQ+S3fFjj/kPZ8GxneEb3PcNzGGy/mzdSxyIJCfnxK
-	 DZ/pwatjnG0CA==
-Content-Type: multipart/mixed; boundary="===============6494934059923081557=="
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="R2R0tcP7";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Wc+UCacn";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="R2R0tcP7";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Wc+UCacn"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id A1D4D6AF5C;
+	Sun,  3 May 2026 22:12:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1777846368; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=fQutdRSJ/DzsQ0IV3KpvTBpuYwE1y3MNPWni6jO1YNk=;
+	b=R2R0tcP7W6ubydvm2Dp/LNYFTEgZbU+0w4vxP3ojWOhbD0w0pP4lQydq3YiLo1TTrIKwI/
+	D/QvDZllNreoS3CqnjbLgZ9LRnixcu806/WuXnOluCoVidB8o4NtypQyzJXP1ZPNHAm8pk
+	nvaIFHkEBPxpMs7KrdspKTSu616CIoA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1777846368;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=fQutdRSJ/DzsQ0IV3KpvTBpuYwE1y3MNPWni6jO1YNk=;
+	b=Wc+UCacn4ADSYn3hoMv7ITQRP5E7tIQ1oMptdBErq/liePbvw22BJQN6I/eU450NExrI3i
+	Vt+i4yPo2lGjDJCg==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=R2R0tcP7;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=Wc+UCacn
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1777846368; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=fQutdRSJ/DzsQ0IV3KpvTBpuYwE1y3MNPWni6jO1YNk=;
+	b=R2R0tcP7W6ubydvm2Dp/LNYFTEgZbU+0w4vxP3ojWOhbD0w0pP4lQydq3YiLo1TTrIKwI/
+	D/QvDZllNreoS3CqnjbLgZ9LRnixcu806/WuXnOluCoVidB8o4NtypQyzJXP1ZPNHAm8pk
+	nvaIFHkEBPxpMs7KrdspKTSu616CIoA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1777846368;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=fQutdRSJ/DzsQ0IV3KpvTBpuYwE1y3MNPWni6jO1YNk=;
+	b=Wc+UCacn4ADSYn3hoMv7ITQRP5E7tIQ1oMptdBErq/liePbvw22BJQN6I/eU450NExrI3i
+	Vt+i4yPo2lGjDJCg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id F368D593A3;
+	Sun,  3 May 2026 22:12:47 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id W5EXOF/I92kabwAAD6G6ig
+	(envelope-from <fmancera@suse.de>); Sun, 03 May 2026 22:12:47 +0000
+From: Fernando Fernandez Mancera <fmancera@suse.de>
+To: netdev@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org,
+	horms@kernel.org,
+	pabeni@redhat.com,
+	kuba@kernel.org,
+	edumazet@google.com,
+	davem@davemloft.net,
+	idosch@nvidia.com,
+	dsahern@kernel.org,
+	Fernando Fernandez Mancera <fmancera@suse.de>,
+	=?UTF-8?q?=C5=81ukasz=20Stelmach?= <steelman@post.pl>
+Subject: [PATCH 1/2 net] ipv6: addrconf: fix temp address generation after prefix deprecation
+Date: Mon,  4 May 2026 00:11:40 +0200
+Message-ID: <20260503221139.3742-3-fmancera@suse.de>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <2cf158e1e197e0674095c692361a1adcd5190d5d8f89061fcac605ce0907eb2d@mail.kernel.org>
-In-Reply-To: <20260503211835.16103-3-dwindsor@gmail.com>
-References: <20260503211835.16103-3-dwindsor@gmail.com>
-Subject: Re: [PATCH v2 2/2] selftests/bpf: add tests for bpf_init_inode_xattr kfunc
-From: bot+bpf-ci@kernel.org
-To: dwindsor@gmail.com,andrii@kernel.org,eddyz87@gmail.com,ast@kernel.org,daniel@iogearbox.net,memxor@gmail.com,shuah@kernel.org
-Cc: martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Sun,  3 May 2026 21:52:57 +0000 (UTC)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Action: no action
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spamd-Result: default: False [-3.51 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-0.999];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	TO_DN_SOME(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b281:106:10:150:64:167:received,2a07:de40:b281:104:10:150:64:97:from];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,suse.de:mid,suse.de:email];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	DKIM_TRACE(0.00)[suse.de:+]
+X-Rspamd-Queue-Id: A1D4D6AF5C
+X-Spam-Flag: NO
+X-Spam-Score: -3.51
+X-Spam-Level: 
 
---===============6494934059923081557==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
+When a router temporarily deprecates an IPv6 prefix (either by sending a
+Router Advertisement with Preferred Lifetime = 0 or by letting the
+lifetime expire) and later restores it, the kernel permanently loses its
+ability to generate temporary privacy addresses (RFC 8981) for that
+prefix.
 
-PiBkaWZmIC0tZ2l0IGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Byb2dfdGVzdHMvZnNf
-a2Z1bmNzLmMgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvcHJvZ190ZXN0cy9mc19rZnVu
-Y3MuYwo+IC0tLSBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi9wcm9nX3Rlc3RzL2ZzX2tm
-dW5jcy5jCj4gKysrIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Byb2dfdGVzdHMvZnNf
-a2Z1bmNzLmMKPiBAQCAtOSw2ICs5LDcgQEAKPiAgI2luY2x1ZGUgPHRlc3RfcHJvZ3MuaD4KPiAg
-I2luY2x1ZGUgInRlc3RfZ2V0X3hhdHRyLnNrZWwuaCIKPiAgI2luY2x1ZGUgInRlc3Rfc2V0X3Jl
-bW92ZV94YXR0ci5za2VsLmgiCj4gKyNpbmNsdWRlICJ0ZXN0X2luaXRfaW5vZGVfeGF0dHIuc2tl
-bC5oIgo+ICAjaW5jbHVkZSAidGVzdF9mc3Zlcml0eS5za2VsLmgiCj4KPiAgc3RhdGljIGNvbnN0
-IGNoYXIgdGVzdGZpbGVbXSA9ICIvdG1wL3Rlc3RfcHJvZ3NfZnNfa2Z1bmNzIjsKPiBAQCAtMjY4
-LDYgKzI2OSw1MSBAQCBzdHJ1Y3QgZnN2ZXJpdHlfZW5hYmxlX2FyZyBhcmcgPSB7MH07Cj4gIAly
-ZW1vdmUodGVzdGZpbGUpOwo+ICB9Cj4KPiArc3RhdGljIHZvaWQgdGVzdF9pbml0X2lub2RlX3hh
-dHRyKHZvaWQpCj4gK3sKPiArCXN0cnVjdCB0ZXN0X2luaXRfaW5vZGVfeGF0dHIgKnNrZWwgPSBO
-VUxMOwo+ICsJaW50IGZkID0gLTEsIGVycjsKPiArCWNoYXIgdmFsdWVfb3V0WzMyXTsKCkNvdWxk
-IHZhbHVlX291dCBiZSByZWFkIHdoaWxlIHVuaW5pdGlhbGl6ZWQ/IElmIGdldHhhdHRyKCkgc3Vj
-Y2VlZHMgYnV0CnJldHVybnMgZmV3ZXIgYnl0ZXMgdGhhbiBleHBlY3RlZCwgdGhlIHNpemUgQVNT
-RVJUX0VRIGNoZWNrIHdpbGwgZmFpbCBidXQKZXhlY3V0aW9uIHdpbGwgY29udGludWUuCgpUaGUg
-c3Vic2VxdWVudCBzdHJuY21wKCkgbWlnaHQgdGhlbiByZWFkIHVuaW5pdGlhbGl6ZWQgc3RhY2sg
-bWVtb3J5LiBXb3VsZCBpdApiZSBiZXR0ZXIgdG8gemVyby1pbml0aWFsaXplIHRoaXMgYnVmZmVy
-LCBvciB1c2UgaWYgKCFBU1NFUlRfRVEoLi4uKSkgdG8KYWJvcnQgdGhlIHRlc3QgZWFybHk/Cgo+
-ICsJY29uc3QgY2hhciAqdGVzdGZpbGVfbmV3ID0gIi90bXAvdGVzdF9wcm9nc19mc19rZnVuY3Nf
-bmV3IjsKPiArCj4gKwlza2VsID0gdGVzdF9pbml0X2lub2RlX3hhdHRyX19vcGVuX2FuZF9sb2Fk
-KCk7Cj4gKwlpZiAoIUFTU0VSVF9PS19QVFIoc2tlbCwgInRlc3RfaW5pdF9pbm9kZV94YXR0cl9f
-b3Blbl9hbmRfbG9hZCIpKQo+ICsJCXJldHVybjsKPiArCj4gKwlza2VsLT5ic3MtPm1vbml0b3Jl
-ZF9waWQgPSBnZXRwaWQoKTsKPiArCWVyciA9IHRlc3RfaW5pdF9pbm9kZV94YXR0cl9fYXR0YWNo
-KHNrZWwpOwo+ICsJaWYgKCFBU1NFUlRfT0soZXJyLCAidGVzdF9pbml0X2lub2RlX3hhdHRyX19h
-dHRhY2giKSkKPiArCQlnb3RvIG91dDsKPiArCj4gKwkvKiBDcmVhdGUgYSBuZXcgZmlsZSDigJQg
-dGhpcyB0cmlnZ2VycyBpbm9kZV9pbml0X3NlY3VyaXR5ICovCj4gKwlmZCA9IG9wZW4odGVzdGZp
-bGVfbmV3LCBPX0NSRUFUIHwgT19SRFdSLCAwNjQ0KTsKCklmIHRoZSB0ZXN0IGZpbGUgYWxyZWFk
-eSBleGlzdHMgZnJvbSBhIHByZXZpb3VzIGZhaWxlZCBydW4sIHdpbGwgb3BlbigpIGp1c3QKb3Bl
-biB0aGUgZXhpc3RpbmcgZmlsZSB3aXRob3V0IHRyaWdnZXJpbmcgdGhlIGlub2RlX2luaXRfc2Vj
-dXJpdHkgaG9vaz8KClNpbmNlIHRoZSBob29rIG9ubHkgZmlyZXMgd2hlbiBhIG5ldyBpbm9kZSBp
-cyBpbnN0YW50aWF0ZWQsIHRoaXMgd291bGQgY2F1c2UKdGhlIHRlc3QgdG8gcGVyc2lzdGVudGx5
-IGZhaWwuIEFsc28sIHNpbmNlIHRoaXMgcnVucyBhcyByb290IGluIHRoZQp3b3JsZC13cml0YWJs
-ZSAvdG1wIGRpcmVjdG9yeSwgY291bGQgdGhpcyBwcmVkaWN0YWJsZSBwYXRoIGJlIHZ1bG5lcmFi
-bGUgdG8KYSBzeW1saW5rIGF0dGFjaz8KCldvdWxkIGFkZGluZyBPX0VYQ0wgdG8gdGhlIG9wZW4g
-ZmxhZ3MgZW5zdXJlIGJvdGggdGhhdCB0aGUgaG9vayBpcyB0cmlnZ2VyZWQKYW5kIHByZXZlbnQg
-c3ltbGluayBpc3N1ZXM/Cgo+ICsJaWYgKCFBU1NFUlRfR0UoZmQsIDAsICJjcmVhdGVfZmlsZSIp
-KQo+ICsJCWdvdG8gb3V0Owo+ICsKPiArCUFTU0VSVF9FUShza2VsLT5kYXRhLT5pbml0X3Jlc3Vs
-dCwgMCwgImluaXRfcmVzdWx0Iik7Cj4gKwo+ICsJLyogVGhlIGluaXR4YXR0cnMgY2FsbGJhY2sg
-cHJlcGVuZHMgInNlY3VyaXR5LiIgdG8gdGhlIG5hbWUgKi8KPiArCWVyciA9IGdldHhhdHRyKHRl
-c3RmaWxlX25ldywgInNlY3VyaXR5LmJwZi50ZXN0X2xhYmVsIiwgdmFsdWVfb3V0LAo+ICsJCSAg
-ICAgICBzaXplb2YodmFsdWVfb3V0KSk7Cj4gKwlpZiAoZXJyIDwgMCAmJiBlcnJubyA9PSBFTk9E
-QVRBKSB7CgpJZiB0aGUgdW5kZXJseWluZyAvdG1wIGZpbGVzeXN0ZW0gZG9lcyBub3Qgc3VwcG9y
-dCBleHRlbmRlZCBhdHRyaWJ1dGVzIGF0CmFsbCwgZ2V0eGF0dHIoKSByZXR1cm5zIC0xIHdpdGgg
-ZXJybm8gc2V0IHRvIEVPUE5PVFNVUFAgKG9yIEVOT1RTVVApLiBTaG91bGQKdGhpcyBjb25kaXRp
-b24gYWxzbyBiZSBoYW5kbGVkIHRvIGNvcnJlY3RseSBza2lwIHRoZSB0ZXN0IGluc3RlYWQgb2Yg
-ZmFpbGluZwpvbiB0aGUgbmV4dCBBU1NFUlRfR0UgY2hlY2s/Cgo+ICsJCXByaW50ZigiJXM6U0tJ
-UDpmaWxlc3lzdGVtIGRpZCBub3QgYXBwbHkgTFNNIHhhdHRyc1xuIiwKPiArCQkgICAgICAgX19m
-dW5jX18pOwo+ICsJCXRlc3RfX3NraXAoKTsKPiArCQlnb3RvIG91dDsKPiArCX0KPiArCWlmICgh
-QVNTRVJUX0dFKGVyciwgMCwgImdldHhhdHRyIikpCj4gKwkJZ290byBvdXQ7Cj4gKwo+ICsJQVNT
-RVJUX0VRKGVyciwgKGludClzaXplb2Yoc2tlbC0+ZGF0YS0+eGF0dHJfdmFsdWUpLCAieGF0dHJf
-c2l6ZSIpOwo+ICsJQVNTRVJUX0VRKHN0cm5jbXAodmFsdWVfb3V0LCAidGVzdF92YWx1ZSIsCj4g
-KwkJCSAgc2l6ZW9mKCJ0ZXN0X3ZhbHVlIikpLCAwLCAieGF0dHJfdmFsdWUiKTsKPiArCj4gK291
-dDoKPiArCWNsb3NlKGZkKTsKCklmIGFuIGVycm9yIG9jY3VycyBiZWZvcmUgdGhlIGZpbGUgaXMg
-b3BlbmVkIChlLmcuIGR1cmluZyBza2VsZXRvbiBsb2FkIG9yCmF0dGFjaCksIGZkIHdpbGwgYmUg
-LTEuIERvZXMgdGhpcyByZXN1bHQgaW4gYW4gdW5uZWNlc3NhcnkgY2xvc2UoLTEpIHdoaWNoCnJl
-dHVybnMgLUVCQURGPyBTaG91bGQgdGhpcyBiZSBndWFyZGVkIHdpdGggaWYgKGZkID49IDApPwoK
-PiArCXRlc3RfaW5pdF9pbm9kZV94YXR0cl9fZGVzdHJveShza2VsKTsKPiArCXJlbW92ZSh0ZXN0
-ZmlsZV9uZXcpOwo+ICt9CgoKLS0tCkFJIHJldmlld2VkIHlvdXIgcGF0Y2guIFBsZWFzZSBmaXgg
-dGhlIGJ1ZyBvciBlbWFpbCByZXBseSB3aHkgaXQncyBub3QgYSBidWcuClNlZTogaHR0cHM6Ly9n
-aXRodWIuY29tL2tlcm5lbC1wYXRjaGVzL3ZtdGVzdC9ibG9iL21hc3Rlci9jaS9jbGF1ZGUvUkVB
-RE1FLm1kCgpDSSBydW4gc3VtbWFyeTogaHR0cHM6Ly9naXRodWIuY29tL2tlcm5lbC1wYXRjaGVz
-L2JwZi9hY3Rpb25zL3J1bnMvMjUyOTEzODEyMzc=
+This happens because the address worker attempts to generate a
+replacement temporary address when the current one nears expiration. As
+the base prefix is deprecated already, the generation fails, burning the
+retry counter for temporary address generation of that prefix.
 
---===============6494934059923081557==--
+When the router eventually restores the prefix, the temporary address
+becomes active again. However, once it naturally expires, the kernel
+sees the exhausted retry limit and permanently stops generating new
+privacy addresses.
+
+Fix this by verifying that the base prefix has sufficient preferred
+lifetime remaining before attempting to generate a new temporary
+address. This prevents the worker from burning through its retry counter
+during temporary network deprecation events like a router reboot.
+
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Reported-by: Łukasz Stelmach <steelman@post.pl>
+Closes: https://lore.kernel.org/netdev/87340td30q.fsf%25steelman@post.pl/
+Signed-off-by: Fernando Fernandez Mancera <fmancera@suse.de>
+---
+ net/ipv6/addrconf.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
+index 5476b6536eb7..f6a3d9da3cb1 100644
+--- a/net/ipv6/addrconf.c
++++ b/net/ipv6/addrconf.c
+@@ -4654,9 +4654,11 @@ static void addrconf_verify_rtnl(struct net *net)
+ 			    !ifp->regen_count && ifp->ifpub) {
+ 				/* This is a non-regenerated temporary addr. */
+ 
++				unsigned long pub_age = (now - READ_ONCE(ifp->ifpub->tstamp)) / HZ;
+ 				unsigned long regen_advance = ipv6_get_regen_advance(ifp->idev);
+ 
+-				if (age + regen_advance >= ifp->prefered_lft) {
++				if (age + regen_advance >= ifp->prefered_lft &&
++				    pub_age + regen_advance < READ_ONCE(ifp->ifpub->prefered_lft)) {
+ 					struct inet6_ifaddr *ifpub = ifp->ifpub;
+ 					if (time_before(ifp->tstamp + ifp->prefered_lft * HZ, next))
+ 						next = ifp->tstamp + ifp->prefered_lft * HZ;
+-- 
+2.53.0
+
