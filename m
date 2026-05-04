@@ -1,130 +1,160 @@
-Received: from mail-dl1-f50.google.com (mail-dl1-f50.google.com [74.125.82.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A96572627
-	for <linux-kselftest@vger.kernel.org>; Mon,  4 May 2026 04:00:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B232A72627
+	for <linux-kselftest@vger.kernel.org>; Mon,  4 May 2026 04:02:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777867257; cv=none; b=QrKTy9K5sz98t8UdVV/sBUNLaQEI2FfS25Qz4FUmvndDPrjklWF/MEKdtCkL903AABMZF+3NOPn0TCTsMBOiH0mStdQ1ZR8wZHkbK4N6Ntd4MrbQGiqxEqvOSMOq+UV5X+cKPuV6xctx4ZXCOREmNNVJBKXssFgiJgEFGLGDxiU=
+	t=1777867324; cv=none; b=cgclxTWjbvs1V/prLbohWQhZXDLhXKWhYC8N2ny1WUSHWwEmj1NQEBhXi+vRofMStKnqyeS9GBNIOCD19XIR1sghcbIQ58FNdtMq56P8O8Ur3CJ4OUUGQkPeY/6hQw2pfZGN2TCAovLXyc/0+2+7yXAh7pL0wnS3Oglde/tQe3k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777867257; c=relaxed/simple;
-	bh=Lf1TLdGVOJXUigkA8oRYy3fs6i47dPPa9PnAZKcPDvI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=j51Gj9QRyPX1zRU2BiLR/vVIth50T3DcdnXkrhxnmLFAovMy9+jvfkMzxpELudcpj9OLs+Y1oruBgmqXq39bhy5TMoF89eC9krlGTMmeohRgwVu5RJ9Nz+KmVjOCc8jJjyde7TgyZsIc50MEj9tenh86zx55Nzq8JMAQYFGwHFY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=U9qSrFnV; arc=none smtp.client-ip=74.125.82.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
+	s=arc-20240116; t=1777867324; c=relaxed/simple;
+	bh=3P9PTGXQEqceejzlt4oB6hCgg6/9NoHPJVWEt1XjDfk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=iuMcRBzq2WKr8K031oJgkTfSSO1nQCsXoFuHH32aS+Huzadj/LiDqxhwojXNIJH05thRObLqhcDJbe69kNu53zysW/Ut4kCsOx19GlBqhgJblfZzP9MwMmqHOjdscAD/KqT0MmDVg/oxh7kx8geVhczVxhoE/zuD85N/X39kGYk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FA2GdEA7; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=ahR74mpf; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="U9qSrFnV"
-Received: by mail-dl1-f50.google.com with SMTP id a92af1059eb24-12c565dd3a7so7997415c88.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 03 May 2026 21:00:56 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FA2GdEA7";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="ahR74mpf"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1777867320;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=m+5Um6TFBnBOiuOAmXBNCCA71a07CLbH3rgRCp2jTGs=;
+	b=FA2GdEA7AU/UDp2rn9uFbP+1jdZL+jIkHxnneE4Ae/dhkbGW2E2utdJTGuJMihjCQD7ahv
+	3mr2Vw2erEkskoAWTTsZo5Cn/69S1zQ2v23cBsuRIdtAbQ/dWONr3hYFOZ+0HpbrOKk3L7
+	eQHBm87lIUZ+bTxAp8tsWVi9OdDs7W8=
+Received: from mail-yw1-f200.google.com (mail-yw1-f200.google.com
+ [209.85.128.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-573-pF_OT3b7NLyCbFjV_2WLrA-1; Mon, 04 May 2026 00:01:59 -0400
+X-MC-Unique: pF_OT3b7NLyCbFjV_2WLrA-1
+X-Mimecast-MFC-AGG-ID: pF_OT3b7NLyCbFjV_2WLrA_1777867319
+Received: by mail-yw1-f200.google.com with SMTP id 00721157ae682-7bd5c42192aso16176287b3.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 03 May 2026 21:01:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1777867255; x=1778472055; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=IGXGWwnAcL1bVeuWF2vhaOhBAT20XCLM8BlTLJN4/sY=;
-        b=U9qSrFnVoccKMTjlDHx76YtRO6qRyNjwxgX0cRaeLIDbSl3LBzQi4z6DER85g53COG
-         Y8/lCwp77dpNf+jP/QOwqDVay6iFRt/XZu5UJc6zrSbTvwLvdEhcNfkXseWYRL1YM6v2
-         C+qe4lXnknWpulPoI6om2ULo7brSESYUG/h8kfkk9KSBe8zTSta9D3/QIwWItiYfLUBA
-         xys530NJJjJL8Psj3un16krJraM3phsF3PLDhch6wM/npPpGBmgUMAZvYLSsIWvXSCHZ
-         wO4HR4YFqrjy0s9dRiFAcIZUEDPGIjs0i7df0iI0kUSPtH4uIp/7rQFzLCZ/dY565r44
-         BOng==
+        d=redhat.com; s=google; t=1777867319; x=1778472119; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=m+5Um6TFBnBOiuOAmXBNCCA71a07CLbH3rgRCp2jTGs=;
+        b=ahR74mpfjikES/sgx6xLa/BlnQXifJ4h6HXe6qLXrKtEC+bL/gABxFJjjNfMC+/5/+
+         nLzFjIYylBjQS6n19zZio8rwBbMNlVLjdJCyUuOPC4QnmMrzjdclBu7n1gQoAspU1ceb
+         tTrQOPRRr5ZBbRvkiy1c4gyyh7HMuhVAfJf0cW2ewvvT5HWPyI2ucfpBcTGTJW4YoYrK
+         Ciqn3wQbO6iQaR3BbY74WB2sf/sIWETkuMl5SDK/HhynLdPK4WMSldCyOr6+DnDEiSc1
+         mOAI6eEsXjYjx5x+CEPn1RhuLqLNo52XiK2DxOB3sebtOzUgUWZeEpLkszuiyy+lDtF2
+         lDjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777867255; x=1778472055;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IGXGWwnAcL1bVeuWF2vhaOhBAT20XCLM8BlTLJN4/sY=;
-        b=K19S20cDARHTLbkT0FFCkiw9vlAL/4XnAGS1kOUPy34T+/gJmuxeiBpGgI6gd5wiCM
-         eJSweiDIPZ/xtWaMpi7RLjZL4z5Ji/HxZLcYMyLr3t/ZS0CVZdzGYl28lJ1DyJaMADHR
-         EhdO3oyiwW10MlNOsoYRgSXM0jHJ0Md0zB1cNklwW7ZmYWsYoZm/x2ZUmBc9C1TrgPnJ
-         6FsYdW4WMwzHVa8R3e+sLhwtnWL82E5uMmQqjF+4ftmg3vcj0ytU5cDRtRCQCBYPJ5Sz
-         cUkMaG+kiPhntrA4+2PC0ZjvvxZawgLGhy9wRjAgRtQ78dvL2SGQSQFuWezJInOeG0su
-         flAg==
-X-Forwarded-Encrypted: i=1; AFNElJ82kTkIeQyqClf80L8q394wgkgGz3hpZ96+wW5t/l37V9jOjE6BbZJmDSATnpSJ1XISJ77SxPtSLn/FrzrD5h8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzfSaB07RUs5XGKTHrfPaJl2U6A3Xhv/rCjqDOJjglihBYfxi6E
-	P6Z10bTlqkMIF9ck6EWHEi3MRjsLihicKEJP1XsMpYKPzQXv7lTWxbfsK8R4s386DlQ=
-X-Gm-Gg: AeBDies1XyS9gPkpDfnMywAGfrnRmltiZe9BP4YCwA4A1yayd6Bybds3uO4gDTiiwxw
-	H8QiAn1TL0CWXQFlLQFmxKp4cu7Duxl4WmJMo63E1cKusz/V9oPde0UV+ZtWdb5uRkyUVqnB7UF
-	oIXO9zcSEun2NeA6d3JHb427AW2/pnzwfcGmkwpefOMWHLytmOIpUR14dc5J2x0oQl0RiKPeflA
-	S9OiKXu9pyUIES/Pwt3nuekD7WnGzxMvnnFX/INEMBqmCfhxg8aK1HXk5cANLvNkKleQvd3tUfN
-	GQayF7+pfW3g88JZrzlUuv8MrrkOFz36Xs6GbP0Uwy8Dgi67i9EaQzciZ76RoHqkHfeOm6VkaA+
-	Rbmjbhfw5T7Qlcw+9lHPzcTXrqCA2PBwb6F+zi3Vzky1CtQiNefDhmvzDX0XUSrshoXU7YzsK04
-	Vt1Kg3qkakBL4BmraXPG3MgnWlBEhlQ4CZxLPfziNklVnQNkahB2WIWQ==
-X-Received: by 2002:a05:7301:2c88:b0:2d9:7bc4:9578 with SMTP id 5a478bee46e88-2efba28ad29mr3924066eec.28.1777867255328;
-        Sun, 03 May 2026 21:00:55 -0700 (PDT)
-Received: from sw07.internal.sifive.com ([4.53.31.132])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2f28f7ba26dsm2234848eec.10.2026.05.03.21.00.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 May 2026 21:00:54 -0700 (PDT)
-From: Yong-Xuan Wang <yongxuan.wang@sifive.com>
-Date: Sun, 03 May 2026 21:00:53 -0700
-Subject: [PATCH] KVM: riscv: selftests: add check_supported_reg() into
- get-reg-list test
+        d=1e100.net; s=20251104; t=1777867319; x=1778472119;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=m+5Um6TFBnBOiuOAmXBNCCA71a07CLbH3rgRCp2jTGs=;
+        b=d8LRrtcwSqWAUtORHaki6IC9hmlP6Z5PB85lg6YWwQ2hpY7P7WrWuCm19cJKpmHK14
+         M/8yIMO+o6m4KdcvC20G6hq2T/Z3oQilEGEr3QDDNJTsEgeNAteP0aTMxnYi60P4x3vr
+         lTxvy6Kj0NguewJc2gOuPuslaRfALABY2E5hBKObuuYbwZnk+lox6ov9YFzmDOjWbkWl
+         c0KDBkbahtF+LC2+9B5ZoPNXOQ0OcMmBcKtX5LbrHVCkXBkmwCc2Skg68D0Ugyz/tTIl
+         VQ2Suem/RQjbwkkN29Ca6vHTXucQdsUXnPdogafWUpmDS43Y2S3/pG31RRiOucLNXWaw
+         yMwA==
+X-Forwarded-Encrypted: i=1; AFNElJ+erzmG5WZnJMj+1+pawktvWXZkua1bAH6I8Gus8JO9WpkdPhOenSrVrn64nMrMVor28eTGfUv4UbMsOxojcqg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwjqGkVMffihQA3bVwG+67obn1itou5NVwSO0lAdOozW6FI51Bq
+	Il8Ph4XdfgEOHbHZvxRzJul91srOBLbl3VDgkTvYhuBaKxMpEYLaUEsAL7NBQxPIH/ZCKFHdwD/
+	M3c+oRDhkAvNhPKCT3aJEfhLbGmoOi2P5gNabpkTvNt8b+zrUJnyo7ztlAAipYkw5xXyaqw==
+X-Gm-Gg: AeBDiesP5dEc+aFzvj3Q5GREFPrVqRuEg2floFE4Tujy/SzKxkniGI1veZrLyG5zWD4
+	i5zn6z/phfIqz3eEq5vpcYSSS++Ftt+i14umDnGsj49M7YRSmJ49YJwjCAqXHK+kFih+ZZmaM0m
+	SlQsCVGHqsj7QXGTHbzOR1dEKtt7R9LT9Y9wE+NEda1njLsGLItOoRWGDoEkhxh9xRIyJOL59Jj
+	BJqcZn7fgD240F4dGu5Ldswkv9B+aq+syDzy4LgQNmg5JY3SqU6Ab2VPTHp0N3wGvuu2TN3BsBM
+	XNSWsxKoLzr4Uh1AJqPf3+6zXdgnjnlCLveM+/U9wzG7Kkq3q5nU3tUPXCcYv9rYJC/Co2j2rH9
+	uSYGGLSq3fTiqopixQoaqmbxYFPcfITURRCb154Y9fRE3BuNDbvU7hrLWAEc4DGMh6Tw=
+X-Received: by 2002:a05:690c:289:b0:79a:b440:5c8d with SMTP id 00721157ae682-7bd76928ceamr64734337b3.11.1777867318933;
+        Sun, 03 May 2026 21:01:58 -0700 (PDT)
+X-Received: by 2002:a05:690c:289:b0:79a:b440:5c8d with SMTP id 00721157ae682-7bd76928ceamr64734087b3.11.1777867318535;
+        Sun, 03 May 2026 21:01:58 -0700 (PDT)
+Received: from [192.168.178.105] (78-0-206-107.adsl.net.t-com.hr. [78.0.206.107])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-7bd6654e464sm44456777b3.14.2026.05.03.21.01.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 03 May 2026 21:01:58 -0700 (PDT)
+Message-ID: <0c385b67-035a-4f66-8f3a-febd68a9318b@redhat.com>
+Date: Sun, 3 May 2026 22:02:30 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 05/14] mm: remove READ_ONLY_THP_FOR_FS Kconfig option
+To: Zi Yan <ziy@nvidia.com>, Andrew Morton <akpm@linux-foundation.org>,
+ David Hildenbrand <david@kernel.org>,
+ "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+ Song Liu <songliubraving@fb.com>
+Cc: Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>,
+ Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+ Lorenzo Stoakes <ljs@kernel.org>, Baolin Wang
+ <baolin.wang@linux.alibaba.com>, "Liam R. Howlett"
+ <Liam.Howlett@oracle.com>, Ryan Roberts <ryan.roberts@arm.com>,
+ Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
+ Lance Yang <lance.yang@linux.dev>, Vlastimil Babka <vbabka@kernel.org>,
+ Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
+ Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
+ linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org
+References: <20260429152924.727124-1-ziy@nvidia.com>
+ <20260429153538.727855-1-ziy@nvidia.com>
+Content-Language: en-US
+From: Nico Pache <npache@redhat.com>
+In-Reply-To: <20260429153538.727855-1-ziy@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260503-kvm-get_reg_list-v1-1-c16f9b572e9f@sifive.com>
-X-B4-Tracking: v=1; b=H4sIAPQZ+GkC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIzMDUwNj3eyyXN301JL4otT0+JzM4hJdgyQDE8NEI/O0JCNjJaC2gqLUtMw
- KsJHRsRB+cWlSVmpyCcgcpdpaAG7UtOd0AAAA
-X-Change-ID: 20260503-kvm-get_reg_list-0b041a27fb23
-To: Anup Patel <anup@brainfault.org>, Atish Patra <atish.patra@linux.dev>, 
- Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
- Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
- Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>
-Cc: kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, 
- linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, greentime.hu@sifive.com, 
- vincent.chen@sifive.com, zong.li@sifive.com, 
- Yong-Xuan Wang <yongxuan.wang@sifive.com>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1777867254; l=1079;
- i=yongxuan.wang@sifive.com; s=20260424; h=from:subject:message-id;
- bh=Lf1TLdGVOJXUigkA8oRYy3fs6i47dPPa9PnAZKcPDvI=;
- b=7nvgTYMW+T1cvFZRFfiH/KnS/HC7BuQ8+FdcPWt561AW6wqKNZmoD7aVpWGYlNINN8J9EnBDm
- jS8diatltGDC0HtBVXq0RWanmKSTkPsmK9C0EPxYHOS5VJ6GKCdC5Xp
-X-Developer-Key: i=yongxuan.wang@sifive.com; a=ed25519;
- pk=+8NCHB1ZJvZthQAmZspOAaqjo+/snaW8mFSiDx45HxY=
 
-Not all the registers in a sublist are supported on a platform, e.g. the
-SUBLIST_SBI_FWFT list. Add the check_supported_reg() to remove the false
-alarm of missing registers.
 
-Signed-off-by: Yong-Xuan Wang <yongxuan.wang@sifive.com>
----
- tools/testing/selftests/kvm/riscv/get-reg-list.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
 
-diff --git a/tools/testing/selftests/kvm/riscv/get-reg-list.c b/tools/testing/selftests/kvm/riscv/get-reg-list.c
-index 8d6b951434eb..d7cb9b5d37df 100644
---- a/tools/testing/selftests/kvm/riscv/get-reg-list.c
-+++ b/tools/testing/selftests/kvm/riscv/get-reg-list.c
-@@ -28,6 +28,18 @@ enum {
- 
- static bool isa_ext_cant_disable[KVM_RISCV_ISA_EXT_MAX];
- 
-+bool check_supported_reg(struct kvm_vcpu *vcpu, __u64 reg)
-+{
-+	int ret;
-+	u64 data;
-+
-+	ret = __vcpu_get_reg(vcpu, reg, &data);
-+	if (ret < 0)
-+		return false;
-+
-+	return true;
-+}
-+
- bool filter_reg(__u64 reg)
- {
- 	switch (reg & ~REG_MASK) {
+On 4/29/26 9:35 AM, Zi Yan wrote:
+> After removing READ_ONLY_THP_FOR_FS check in file_thp_enabled(),
+> khugepaged and MADV_COLLAPSE can run on FSes with PMD THP pagecache
+> support even without READ_ONLY_THP_FOR_FS enabled. Remove the Kconfig first
+> so that no one can use READ_ONLY_THP_FOR_FS as upcoming commits remove
+> mapping->nr_thps, which its safe guard mechanism relies on.
+> 
+> Signed-off-by: Zi Yan <ziy@nvidia.com>
+> Reviewed-by: Lorenzo Stoakes (Oracle) <ljs@kernel.org>
+> Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+> ---
+>   mm/Kconfig | 11 -----------
+>   1 file changed, 11 deletions(-)
+> 
+> diff --git a/mm/Kconfig b/mm/Kconfig
+> index e221fa1dc54d0..27dc5b0139ba6 100644
+> --- a/mm/Kconfig
+> +++ b/mm/Kconfig
+> @@ -936,17 +936,6 @@ config THP_SWAP
+>   
+>   	  For selection by architectures with reasonable THP sizes.
+>   
+> -config READ_ONLY_THP_FOR_FS
 
----
-base-commit: ddbf9c76c4020bf63a0799b00faad40caa3de6c2
-change-id: 20260503-kvm-get_reg_list-0b041a27fb23
+Yay its gone! Thanks for working on this :)
+
+Reviewed-by: Nico Pache <npache@redhat.com>
+
+> -	bool "Read-only THP for filesystems (EXPERIMENTAL)"
+> -	depends on TRANSPARENT_HUGEPAGE
+> -
+> -	help
+> -	  Allow khugepaged to put read-only file-backed pages in THP.
+> -
+> -	  This is marked experimental because it is a new feature. Write
+> -	  support of file THPs will be developed in the next few release
+> -	  cycles.
+> -
+>   config NO_PAGE_MAPCOUNT
+>   	bool "No per-page mapcount (EXPERIMENTAL)"
+>   	help
 
