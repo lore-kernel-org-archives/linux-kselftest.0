@@ -1,202 +1,182 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54E053D523C
-	for <linux-kselftest@vger.kernel.org>; Mon,  4 May 2026 13:05:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF9E43DEADB
+	for <linux-kselftest@vger.kernel.org>; Mon,  4 May 2026 14:05:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777899906; cv=none; b=Odz/85soZq3Exm7kx0TaTU/zcK3d8QvcHHvGvGGL/qcFqYK3aqcdfCUZhxO3z7fJqv57acwai8yP3aYCtFZaX2tjF0JvJdzplcpWT6x0DcbFtwjXbu1PAvidwFVSk6MAjfW9J9WOSDGFKAVkb/hZQ2KZ1nCCsi5HTvI+GTS+BK4=
+	t=1777903517; cv=none; b=Qcw4IhLlNbPPcz7su+ip4LE/t1wINl+LvtMBmzs9EtqAaqiZ5I8GaMPuaXs0ZdUjhDW3hmxIs+Yj2AH/v4cvAXSr8goCUt3MQl5hwTtsK0HwRDusjjawTEt7F9C4cV8JfCiaITI59UZwM9/1HME8DugmIfOifIGMzyZA4Rt7MXg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777899906; c=relaxed/simple;
-	bh=8/qYV9GNS+6nij6A5YaKpMRHxcuDhEeiDUgJC3C0OvA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=N4GhVfjivf6pmGbKOx0yIhyBSb5/fwls+rA/sle+7pBXJS142UtDuxbqggP9YZ31q7iv2oZYMMv+ectvS+ir549Vr53dj5hXYSOW91lwrn8cf2KrhrRI9OCOwgr1uoyerQlEQL//UZfMpbpsSOhrPprLo+xFLoWBOw/DkoeKS3k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Uk4MfaOc; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1777903517; c=relaxed/simple;
+	bh=pXz4oQgkx4G9mMv6vwbidmLfcUb8rv6BeQKuDKJGgGg=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:From:Subject:Cc:
+	 References:In-Reply-To; b=m7yEWWJnNmMHMynV9agX087G6s2W2XhtYXVdzv5acmxMYuuHlQlf3NIPzCWAoZtjEWmtRQJnSLDb2IMBDmYzf3UgeOAWyHd7vf0uiNXkqrHuX+spDTFXsjvNVst0NrOf87WjO4LTc/i8CfScuOm/dzeKBe+kagFI5HRo5s3d2vw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=AwBPhp05; arc=none smtp.client-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Uk4MfaOc"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1777899904;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lCpIucwug7LQBxR+zBCSrNGWbfwlTlZlRpoANQyu5ws=;
-	b=Uk4MfaOc6YGOaHUHKnl3JLlKxZIElpEQRjv+wt84fkbcc2KXJDJqFxI/NscXiG8IX3weyj
-	yVWHg6VaGoTwgEiNDLnCU94kYcz+TL7KR5D6ZIza3YDirzPi831KmTfAH4Ipi6R8eCVpba
-	NuZUHNUtH2kIeJSL6MORsLB8ub0+2SA=
-Received: from mail-oa1-f71.google.com (mail-oa1-f71.google.com
- [209.85.160.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-657-bzqcn5adNn-GCE1uF0z9gw-1; Mon, 04 May 2026 09:05:03 -0400
-X-MC-Unique: bzqcn5adNn-GCE1uF0z9gw-1
-X-Mimecast-MFC-AGG-ID: bzqcn5adNn-GCE1uF0z9gw_1777899903
-Received: by mail-oa1-f71.google.com with SMTP id 586e51a60fabf-415e1e9aa5dso6244914fac.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 04 May 2026 06:05:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="AwBPhp05"
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-67c2d57a5ceso2639137a12.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 04 May 2026 07:05:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1777903512; x=1778508312; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:subject:from:to:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bKrjnO573yeT71Xznme42qjXt1eFf7CZCN87a0J7YhM=;
+        b=AwBPhp05kgs2uhzI5JC4OJ3fH+Ens+EmO0FGH40tglXGQkOpfMq0ODRz35BObXXNAU
+         YygFgfpoH+ryfQT9Ap61KswlxyV8aVncU78s+bkqVNpTQsaxS8TILObUQ/FJSSy/qiZO
+         ymPCnvL2wKLzWZfsMXZ4pVE2z4LYvKJrleakjuyrjudoMRGrS+Jzy1hhoGuqsYkcnWez
+         sM2KqrCw5lihu47iPfidLRHZlv7x5joXnf//3fM0Ln9f7Djxc4L0p0ctMUdzXXUvznQK
+         zRyEv2nTrszVUr1u1i3+C5YOSLe4aqwSk60c8fQtgNUCgNQfKvEImUKN1kPf4OKyt0UF
+         xjrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777899902; x=1778504702;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lCpIucwug7LQBxR+zBCSrNGWbfwlTlZlRpoANQyu5ws=;
-        b=OMdXUdkQLbE0qruI0/Gpll+jucd0eJEZ3+KHgObhLnhuLpo7oQnIBDY9Nwh5+pcrwG
-         4MXXVbpgxWDapAX7GESZHqXn9Yj921Sc2Xd/cw9eDzG/hVwr7y4JP1yFtO3izOCACSlR
-         P6qIG36sm7fhSTFGzOXO6ltlHH0vsPQEnqESccEhynIKibbJJwEVrZi9N2z414IRCgLN
-         FZXESFnEusQZ67IwJ8fvm0oPho3HUemuwkVd4IER+4R0lRNCa5lCroA1x2R12JuoCOrh
-         5kXb+1HjZ+F8+WeHZfzVseY5IEMlUUCcM0bwJ1s7nVD1LBhvlP/dVtMmqniWJ6aTnk7U
-         /1hA==
-X-Forwarded-Encrypted: i=1; AFNElJ9sfgYLvKBY/V3tcB2cCpc0MTSrK2FYel+okxH97scCDZxMKbtGCdDBBh1+I7+ybhdLwpo3LNRK9uFEi9c1SR4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxmnLnGb90uhJxdTfm3oaso+bP9hCXus3SzhMmeX8OSMlQ1R8GO
-	CXxJioMJbB/sFgSSwuV9r6ylQ14xmA52syrQUJlH5d1RecQPC+fbk950WDKu7lt9yPe/JgxyuTi
-	A+j2pqF1eWXTIGs7U9+VHJGeNmfqHcYILp8pYDMdTTERd/idhy6c9nnDhLBgUIhs/QkP3qg==
-X-Gm-Gg: AeBDievrCRdFijm67D4KCpyPgctFCyMFXbAMCjm0V0UObZgPGa9iGfq+bT5k5h4yKk7
-	uUcxYKIitLlrkAEEXvfoxTJN0Sh1GQwguNX9ehLFwqGchoakaG3cikMBRNhDKioqUeYBfTfIbsD
-	dCl4iRIwzxa8ZuqxOdTnJ3OcpIOkFiEBPHFnylenlFtznQpYgM/7FHUMVnS9bJZbqbx8gKsrG0o
-	J/2SA1w8L3+ev9G87HcCRJONfDb+rGZ1BXd+ge9x8ELFEnz0PqnE/wrIdO5J1Bri0PEwFYK/iuo
-	+iqYHNZTklA7dDLnmHXhbxgWvOK/UcniflrLD9vPbt7yRn0WJ2WSo/WzcgEQtNnio4dp0mIUCL4
-	9yqc/7aQDxa1ewRW1zbzwatExb8bZr1p56+A=
-X-Received: by 2002:a05:6870:1687:b0:42c:259c:6c8a with SMTP id 586e51a60fabf-43475f95c61mr4835378fac.6.1777899901347;
-        Mon, 04 May 2026 06:05:01 -0700 (PDT)
-X-Received: by 2002:a05:6870:1687:b0:42c:259c:6c8a with SMTP id 586e51a60fabf-43475f95c61mr4835140fac.6.1777899899273;
-        Mon, 04 May 2026 06:04:59 -0700 (PDT)
-Received: from [192.168.2.110] ([70.53.202.134])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-51040b5e8b4sm106472551cf.23.2026.05.04.06.04.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 May 2026 06:04:58 -0700 (PDT)
-Message-ID: <a393e215-ea5e-4b84-9066-4afef36489a6@redhat.com>
-Date: Mon, 4 May 2026 09:04:47 -0400
+        d=1e100.net; s=20251104; t=1777903512; x=1778508312;
+        h=in-reply-to:references:cc:subject:from:to:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bKrjnO573yeT71Xznme42qjXt1eFf7CZCN87a0J7YhM=;
+        b=paImT20HTfMj2Y6I5/tNv6wQaZp7WcDQZ4ESmgByvs8Og9vG8J4vvhznUiQNq8MOt7
+         KM5ekxOyMjYOCBWWTxTbdaeaBbS1ddjYO5Ykxa5MygywpXNDe/i5lH/cMOzMDrCELwnU
+         jI7yjGzcBPHHITPtR6ufGvaeKhf+8G/xap9arv3jbhWu2DOfxdHn2IMKwvgGbqfHpmgg
+         DmCb83uBZYyhvG+7es7XhrHUZ/x9ljNcXEQsrFwxWTyIGmyF0wwkSCmk1YKaWctGJZOz
+         PF0Ls8EKeP+7NBuJjoUwfMjCnmyjSaIDxGKres/85sqK+wnHfHlQ8VTV+L0ilyhrZz2i
+         3bLg==
+X-Forwarded-Encrypted: i=1; AFNElJ+Jvrsvo2rwUkxAhaFifMkwfleKZ4J3nPBDxq5jHkHtvT06LyjTvliLC5cBhHSQpd9gUAmfSJrDWPQUWRl3R0w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxeLdpIp+H+kGUWlcpBKH31v/snw+3Du9DmySRZyZurJl5hd9Gi
+	amaSXme8vbZwmyrlCl7cN2sJCgcQF8jk4ARdZgNYH+xDDdImorGgycX/Ez2gZXe5W/g=
+X-Gm-Gg: AeBDievgLysQxVWny76FarAL9HgyG5QHDhvyoGjgk33H47diMvlYipScuk/x8pmF5/p
+	OB0oLE6f3tIcEeGZJ5WNVhFoAPlvEtJ0pVuMcI0C5oDsu2nkaYM0694cG++TMapVA9hliflcr98
+	OtEY8+YQv0ofrL8i39vCDn9j6nU9E/zZOvY+FrQf1UkzT1lVcnht9bt9ooGoJTU5pyrUW+jmxsg
+	fmj73hXvbuWE1g71a+Xir7jvH+K2WmOVncPpVLJtKxGiug2TOKYktrUbaMFbfTQCvTbnLeqaCKM
+	i8qxp6+T8V/qTY1AwuaOgwIMfnsDvHoP/vTgX0adJl+c8i3lWdWBLGaImAerPYXEf3Lsly3V2Eg
+	pmiOpiXXf8/+wB+GsLYQj+JRhgb2zY1hxDvr5QzuIvsGroadwvSUr2SEzDX4oqMu0R5qC2B1+ts
+	3lYW7YbT/Ui60Ii6oBh/+/Hg==
+X-Received: by 2002:a17:906:c103:b0:bc1:2cdb:5d02 with SMTP id a640c23a62f3a-bc12cdb93e1mr311959166b.20.1777903512085;
+        Mon, 04 May 2026 07:05:12 -0700 (PDT)
+Received: from localhost ([2804:7f0:b765:1294:2ecf:67ff:fe81:9da0])
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-95ce0b63bb8sm5402191241.12.2026.05.04.07.05.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 May 2026 07:05:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 27/54] selftests/mm: hugepage_settings: add APIs for
- HugeTLB setup and teardown
-To: Mike Rapoport <rppt@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- David Hildenbrand <david@kernel.org>,
- Baolin Wang <baolin.wang@linux.alibaba.com>, Barry Song <baohua@kernel.org>,
- Dev Jain <dev.jain@arm.com>, Donet Tom <donettom@linux.ibm.com>,
- Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Lance Yang <lance.yang@linux.dev>, Leon Romanovsky <leon@kernel.org>,
- Lorenzo Stoakes <ljs@kernel.org>, Mark Brown <broonie@kernel.org>,
- Michal Hocko <mhocko@suse.com>, Nico Pache <npache@redhat.com>,
- Peter Xu <peterx@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
- Sarthak Sharma <sarthak.sharma@arm.com>, Shuah Khan <shuah@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Vlastimil Babka <vbabka@kernel.org>,
- Zi Yan <ziy@nvidia.com>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org
-References: <20260428204240.1924129-1-rppt@kernel.org>
- <20260428204240.1924129-28-rppt@kernel.org>
- <2f443474-4448-462e-bc1e-55bc657d70ba@redhat.com>
- <afTF9RCy8eBoWYaj@kernel.org>
- <22b1cadc-4b0d-4e2a-987c-e7a7bc2265eb@redhat.com>
- <afV_WAK56lQKn_z1@kernel.org>
-Content-Language: en-US, en-CA
-From: Luiz Capitulino <luizcap@redhat.com>
-In-Reply-To: <afV_WAK56lQKn_z1@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 04 May 2026 11:05:08 -0300
+Message-Id: <DI9Y70J84P8Z.1PJMMFS86NGEC@suse.com>
+To: <bot+bpf-ci@kernel.org>, <rbm@suse.com>, <ast@kernel.org>,
+ <daniel@iogearbox.net>, <andrii@kernel.org>, <martin.lau@linux.dev>,
+ <eddyz87@gmail.com>, <memxor@gmail.com>, <song@kernel.org>,
+ <yonghong.song@linux.dev>, <jolsa@kernel.org>, <shuah@kernel.org>,
+ <nathan@kernel.org>, <nick.desaulniers+lkml@gmail.com>, <morbo@google.com>,
+ <justinstitt@google.com>
+From: =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmU=?= <rbm@suse.com>
+Subject: Re: [PATCH bpf-next v11 02/11] selftests/bpf: Fix test_kmods KDIR
+ to honor O= and distro kernels
+Cc: <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>,
+ <alan.maguire@oracle.com>, <martin.lau@kernel.org>, <clm@meta.com>,
+ <ihor.solodrai@linux.dev>
+X-Mailer: aerc 0.21.0-120-g22b95d38161f
+References: <20260430-selftests-bpf_misconfig-v11-2-e11f7a8c4fdc@suse.com>
+ <f07336b357836aa0d9b5017f4bdf56969d6cb4044b8df5fd9dc67baf593b761e@mail.kernel.org>
+In-Reply-To: <f07336b357836aa0d9b5017f4bdf56969d6cb4044b8df5fd9dc67baf593b761e@mail.kernel.org>
 
-On 2026-05-02 00:36, Mike Rapoport wrote:
-> On Fri, May 01, 2026 at 03:30:18PM -0400, Luiz Capitulino wrote:
->> On 2026-05-01 11:25, Mike Rapoport wrote:
->>>>>     	return mode == 1 || mode == 3;
->>>>>     }
->>>>> +#define HUGETLB_MAX_NR_PAGESIZES 10
->>>>> +struct hugetlb_settings {
->>>>> +	unsigned long free_hugepages[HUGETLB_MAX_NR_PAGESIZES];
->>>>
->>>> It looks like we don't actually use this in the API or maybe I'm missing
->>>> something?
->>>
->>> Yes, it's used only in later patches.
->>
->> I don't see it, the patch below builds fine (again, sorry in advance if
->> I'm missing something obvious):
-> 
-> You are right, I misunderstood you comment and I thought you referred to
-> entire API being unused in this patch.
-> 
-> free_hugepages is not used and it should not be a part of the saved state.
+Addressed in https://lore.kernel.org/bpf/DI6JRYWASEYN.3I8Q81ZPUE1VE@suse.co=
+m/
 
-Thanks, I'll try to be more specific next time.
-
->   
->> diff --git a/tools/testing/selftests/mm/hugepage_settings.c b/tools/testing/selftests/mm/hugepage_settings.c
->> index 097ba085f423..a023cfeb69c5 100644
->> --- a/tools/testing/selftests/mm/hugepage_settings.c
->> +++ b/tools/testing/selftests/mm/hugepage_settings.c
->> @@ -341,7 +341,6 @@ bool thp_is_enabled(void)
->>   #define HUGETLB_MAX_NR_PAGESIZES 10
->>   struct hugetlb_settings {
->> -	unsigned long free_hugepages[HUGETLB_MAX_NR_PAGESIZES];
->>   	unsigned long nr_hugepages[HUGETLB_MAX_NR_PAGESIZES];
->>   	unsigned long sizes[HUGETLB_MAX_NR_PAGESIZES];
->>   	unsigned long default_size;
->> @@ -509,7 +508,6 @@ static void __hugetlb_save_settings(void)
->>   		if (!sz)
->>   			continue;
->> -		settings->free_hugepages[i] = hugetlb_free_pages(sz);
->>   		settings->nr_hugepages[i] = hugetlb_nr_pages(sz);
->>   	}
->>
->>> I felt it would be too churny to add users in this patch.
->>>> Otherwise, the API looks great to me. But if you allow me to bikeshed :)
->>>>
->>>> I think I'd do:
->>>>
->>>> struct hugetlb_state {
->>>> 	unsigned long nr_hugepages;
->>>> 	unsigned long size;
->>>> };
->>>>
->>>> struct hugetlb_settings {
->>>> 	struct hugetlb_state hstate[HUGETLB_MAX_PAGESIZES];
->>>> 	unsigned long default_size;
->>>> 	int nr_sizes;
->>>> };
->>>
->>> It might be slightly nicer abstraction but ...
->>>>> +static void __hugetlb_save_settings(void)
->>>>> +{
->>>>> +	struct hugetlb_settings *settings = &hugetlb_saved_settings;
->>>>> +	int nr_sizes;
->>>>> +
->>>>> +	settings->default_size = default_huge_page_size();
->>>>> +	if (!settings->default_size)
->>>>> +		return;
->>>>> +
->>>>> +	nr_sizes = detect_hugetlb_page_sizes(settings->sizes,
->>>>> +					     HUGETLB_MAX_NR_PAGESIZES);
->>>
->>> ... this immediately becomes more complex.
->>>
->>>>> +	if (!nr_sizes) {
->>>>> +		settings->default_size = 0;
->>>>> +		return;
->>>>> +	}
->>>>> +
->>>>> +	for (int i = 0; i < nr_sizes; i++) {
->>>>> +		unsigned long sz = settings->sizes[i];
->>>>> +
->>>>> +		if (!sz)
->>>>> +			continue;
->>>>> +
->>>>> +		settings->free_hugepages[i] = hugetlb_free_pages(sz);
->>>>> +		settings->nr_hugepages[i] = hugetlb_nr_pages(sz);
->>>
->>> And this as well.
->>
->> We'd need a little more code to handle those cases, may or may not be
->> worth it. But enough bikesheding from my side :) the series is great as
->> is.
->>
->>
-> 
+On Thu Apr 30, 2026 at 1:42 PM -03, bot+bpf-ci wrote:
+>> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selfte=
+sts/bpf/Makefile
+>> index 6094fe99b5f6..cc6ee7a2df93 100644
+>> --- a/tools/testing/selftests/bpf/Makefile
+>> +++ b/tools/testing/selftests/bpf/Makefile
+>
+> [ ... ]
+>
+>> diff --git a/tools/testing/selftests/bpf/test_kmods/Makefile b/tools/tes=
+ting/selftests/bpf/test_kmods/Makefile
+>> index 63c4d3f6a12f..031c7454ce65 100644
+>> --- a/tools/testing/selftests/bpf/test_kmods/Makefile
+>> +++ b/tools/testing/selftests/bpf/test_kmods/Makefile
+>> @@ -1,5 +1,16 @@
+>>  TEST_KMOD_DIR :=3D $(realpath $(dir $(abspath $(lastword $(MAKEFILE_LIS=
+T)))))
+>> -KDIR ?=3D $(abspath $(TEST_KMOD_DIR)/../../../../..)
+>> +SRCTREE_KDIR :=3D $(abspath $(TEST_KMOD_DIR)/../../../../..)
+>> +# Honor O=3D/KBUILD_OUTPUT only if they point at a prepared kernel buil=
+d
+>> +# directory (one containing Module.symvers); otherwise treat the value =
+as a
+>> +# selftests-only output directory and fall back to in-tree or distro he=
+aders.
+>> +# The parent bpf/Makefile resolves O=3D/KBUILD_OUTPUT to absolute paths=
+ before
+>> +# invoking this sub-make so relative paths still anchor to the user's
+>> +# invocation directory.
+>> +KMOD_O :=3D $(or $(O),$(KBUILD_OUTPUT))
+>> +KMOD_O_VALID :=3D $(if $(KMOD_O),$(if $(wildcard $(KMOD_O)/Module.symve=
+rs),$(KMOD_O)))
+>> +KDIR ?=3D $(if $(KMOD_O_VALID),$(SRCTREE_KDIR), \
+>> +	    $(if $(wildcard $(SRCTREE_KDIR)/Module.symvers),$(SRCTREE_KDIR), \
+>> +		/lib/modules/$(shell uname -r)/build))
+>
+> Will the automatic fallback to /lib/modules/$(uname -r)/build cause
+> confusing build failures?
+>
+> Since bpf_testmod relies heavily on internal BPF structures, experimental
+> macros, and kfuncs that change frequently between kernel releases, compil=
+ing
+> it against host distro headers on a system where the running kernel does =
+not
+> match the upstream source tree will likely fail.
+>
+> If the host headers are present, the permissive skip check further down i=
+n
+> the file will pass since the directory exists. However, because the
+> compilation failure is not ignored by the parent bpf/Makefile, this would
+> abort the entire BPF selftests build with confusing C compilation errors
+> instead of silently skipping the unconfigured kernel tree.
+>
+> Should in-tree test modules avoid falling back to host distro headers to
+> prevent these version mismatches?
+>
+> This concern was raised in v9 and v10 by bot+bpf-ci@kernel.org and
+> sashiko-bot@kernel.org:
+>
+>   "Will falling back to the host kernel headers cause compilation errors
+>   when building in-tree test modules like bpf_testmod? Since bpf_testmod
+>   relies heavily on internal BPF structures, experimental macros, and
+>   kfuncs that change frequently between kernel releases, compiling it
+>   against /lib/modules/$(uname -r)/build on a system where the running
+>   kernel does not exactly match the upstream source tree will likely fail=
+.
+>   If the host headers are present, the permissive skip check further down
+>   in the file will pass since the directory exists. Because the compilati=
+on
+>   failure is not ignored by the parent bpf/Makefile, won't this abort the
+>   entire BPF selftests build with confusing C compilation errors instead =
+of
+>   silently skipping the unconfigured kernel tree? Should in-tree test
+>   modules avoid falling back to host distro headers to prevent these
+>   version mismatches?"
+>
+> Reference: https://lore.kernel.org/bpf/d1297f1c857e5430af42dcb3e4d05c7dda=
+ff08470a43893cac0fbcb83ec51666@mail.kernel.org/
+>
+> [ ... ]
+>
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a =
+bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
+E.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/251764=
+31268
 
