@@ -1,133 +1,146 @@
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+Received: from mail-ot1-f99.google.com (mail-ot1-f99.google.com [209.85.210.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D5843DE45C
-	for <linux-kselftest@vger.kernel.org>; Mon,  4 May 2026 14:05:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E423C3DFC79
+	for <linux-kselftest@vger.kernel.org>; Mon,  4 May 2026 14:53:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.99
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777903554; cv=none; b=gF6CKeiwuL2MPRDg2KUoY/2hiak1cIgVdB8Sy0LCcErLmGejp0DgJpRGUrJzg+RUZJn/ZRf4oaiIQ5ehOzPUAjBgf1BgqtFHrEAgz0APi1whnI0MiOdum3ybq2C55/TenYk4uOVZw6YCP6hOQz0U6XePpQCUXzRe+aTsl3dDfOM=
+	t=1777906421; cv=none; b=Wif5F9or1mMUIGR+VWiPC0+cjY90B7WYl2PhopCX2xAXA0jr6hVz8TVCj+4D8Wtg9nBh0TcWcfBeaOV+b/IELeGAqUCYDZYKvkYoah2B6D/DIiVrG1313EiTEyxDRvQDTDOVygcGHEm7gHgWF4DsKXmSodr/Y6eOv0fFZLaDbvc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777903554; c=relaxed/simple;
-	bh=puUQpxpOOMqnVd2eFLdmJ7ba/xPE6klpnVs5liK0em8=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:From:Subject:Cc:
-	 References:In-Reply-To; b=tMH0y5QgXhiOwBXHm3VUzKm7j1vaHMLfbzvzj/LGDoQjNMwYA8bjVLBfHekQ7NmDcYjCfhMP4jHXVJpsKrl8X3eUFpogsamtKrbjSNO8cYACEnEVLngELwkU7etq0vDIzWY1BppOPkr754LbuLgMxl3WvkzPDZD4umbXE6Btjco=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=DxNcDIBG; arc=none smtp.client-ip=209.85.218.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1777906421; c=relaxed/simple;
+	bh=Q2URSNx8B/upwfVANDhtXGow03GK4tWmrRjookPjOBA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RhNnwEqkrOmlU4REV4QVFgh/pbNOM3s9XI4QK05/iv6qwwErdIhl3wG172FoCC+kSJah69W1LQkYhCIrk6gR/LbGiH+fZ2oVFvADm41KgSB98mvtDHtAcslUx6SUEdQyHC8FCnMPRdQWf9bVpxKR2fljkRHZY0OYux/oNZw/F8Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=XaMIA6Fh; arc=none smtp.client-ip=209.85.210.99
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="DxNcDIBG"
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-bba0dde4f43so667198466b.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 04 May 2026 07:05:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1777903552; x=1778508352; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:subject:from:to:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qxH/n2fmjxOiVX9boi8Uf5ZeGO40PmkXCnUi1eKqyXY=;
-        b=DxNcDIBGFCSvjP3F8COyW4TYD3OkmV5R8C/gk5EGyNTePyZGoLPBOnRRGQpbEay0x2
-         CQhQif77TqeXgN6akSy9/YuXhUoqKNqZcZpXr/PbSPWNRV19iP6yUlQvVff8kHgi1I1B
-         +Yam1GTZ57agNtH6AZ6855pfGA8Y9JqQHqxQvIWypTAla3Q+bZ38YJ+9GSIyFXvl+gJY
-         qaxH7Tal91MSDstmAIZRCs257gxGhOiAB5ntK9awRSa2V7CBcUAgwC9O3AbVyzWKEH34
-         WoVGQq21sTLCv6oY8DFXNg9TjOST/MwVY3klj99ysVoR8tOYd47HFJjMGZmrAqiRCoBx
-         kZTw==
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="XaMIA6Fh"
+Received: by mail-ot1-f99.google.com with SMTP id 46e09a7af769-7dbd7a1e989so397087a34.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 04 May 2026 07:53:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777903552; x=1778508352;
-        h=in-reply-to:references:cc:subject:from:to:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qxH/n2fmjxOiVX9boi8Uf5ZeGO40PmkXCnUi1eKqyXY=;
-        b=BJbBN8JG9VZr9mV378xZwkBWb8o7NXqMDIfoypb9rz4OcKmt0kt1dql8SJR6/jT2Er
-         CCEQ0gb60C2u73tj54XDmeOlmRv577yTdxEuzIXrfv4MRVP4mZKpwxayj7m62N50t2ut
-         r7O7g+g8YixxG+29MvvwStysrlcxyQg/+Fe/bZytNhSDFBQ8hX2XUI/CKfiyam+lcrt+
-         OH2iijfnJ4b8sOU/tvM89S1OjHZTQH8SJ7u7vE+YR+CgyXh5+AnSDd4GIr2iLwOFHF+i
-         7/CiX1rO5/uctJCVifn2dcxZQPUkBtN2PX29LjCZ373HI50vBpyPZIySczK6a7ZiD5Ak
-         dNfg==
-X-Forwarded-Encrypted: i=1; AFNElJ9kc19cLlEhlUI036YY2yo0v2R544apPxo0wXPBRRLp7Ah20pPCncrhlR8jE03XJAwdokZVxm6mZgjdw5x4yA4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YymUKpm4JSnqfcnjL17R3FrpUBwphlNhSSJAPtk8Hw2hUz0boIf
-	FRab1GL7kyV8jybEMIu7jfeMSUrRo8h/8if62MZxa76T6G0hzKtU+aMFxsHiewbnIP4=
-X-Gm-Gg: AeBDietWkOpIAu0f9b4vtdgjVlR2lTe+iAJbVOxMz1F1E5Evekcf2Oy57V+XCgbh4tw
-	y1zdNCK6OsRsIWykfTq52Knl7eFx0g9CWQh0E+saiwLFoTuynr5d4emG6TZ/CsRawR0nK9sbosP
-	MMcNiJS/IMkwDEtefYlPSOtAbgHsXO08IM1CgO0E+imZmr1Nu6ga+m9zztaDeJNe5QZ1ZpSVkL7
-	yehPAJe8mtP0FbAUN899Bx/+RX98PafFvs4tPE11rgQtnojCioV2b94uqnbAHaJcbbE0tiGXi0k
-	jQ0Mb4HGCIGGysL/UCc5upW8zWnTwK+kPjZls/fOFWrE5JiRAuQhsUwvMMcyVAlE5lqFn5+8Pzf
-	AiC3DwX2szcbIIFt9hIM5M8FTG1qXMQj+a//vKCH7jH2rfGQKaWLHJ7QJb24NvSPXka9H0VZ0pu
-	FpAyKo4UjBMt9WhtrWUaspQQ==
-X-Received: by 2002:a17:907:3cd4:b0:bad:d530:dbf7 with SMTP id a640c23a62f3a-bbffd6c43bbmr534556066b.32.1777903551577;
-        Mon, 04 May 2026 07:05:51 -0700 (PDT)
-Received: from localhost ([2804:7f0:b765:1294:2ecf:67ff:fe81:9da0])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-574a6ee0b24sm6221372e0c.16.2026.05.04.07.05.50
+        d=1e100.net; s=20251104; t=1777906419; x=1778511219;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:dkim-signature:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dhl1El7Ec0BsiUHbTpDBR+jiTk0km6h08mEdzxE8DPs=;
+        b=ZHQ0hAAwYG3JfRCtzKUj2HrqCZX2zCZ0/rP1jCK8SpCd21y5obk6e1k+Z94GciTfwl
+         kyk+z5HQLdfclflAToy4Gux96YIHlofeFlp00sc+sxxV7Z+LpZRTF2dQggO9uxHuvzFM
+         MV1ekEF3J0BTmGmEKoV+7e7aVaiKGT7wK39WNSGFgvqWqKRCfk6NX9aTch4dkpuJNB4K
+         NtSmFdNcZ+BDiTdi9crCELb6UsTjLiJzW0XUGqFoX3MTvQl1k3NAFg1dX+bizUFlw8X5
+         2WVDJUaJb8qBcmFyf7zzrrpoBamqvPspvCT1vWAyX6zACWMFMZN+wHqk7ewotk/Fc60e
+         MCJA==
+X-Forwarded-Encrypted: i=1; AFNElJ9c54cBOzW0TgwPz6Zi7Vfwplqf38/Jw2Bfu+wre1/OM7hmSGlBbVzasEnhlw/2z613cFdTbgSB1oe9aC6X52c=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyDfoo5SMUeNJWtGH4UDnBq8LPwFPIPQrjTMBvf5CU2lDvlXFdm
+	1WqkoPqg8oSvKli5cVLodtyPSq9CE2gvX4T/Ly0d57ry1CGkpwo5XTit7GCmaeI00a1twlafLSC
+	AttYPwyA557r3NSMELehcYV7ztlLLivlegIfeqeDy6UZhOewcXbGUFjDaJp5SlMhdctmFV9EHpL
+	+BibM7bvkcjq1WGuna6rKW9vJvtBcL1IjEEkA7WSEl/v5He3Bn31RjUx2SI97A+W9Rs1Z+eoYid
+	22zWvWhI5g+mHycplfqb/6/McY=
+X-Gm-Gg: AeBDievz/KdLwMKU623NSKKEq9My3fqynjjVWbzQwfAGlqwp+oV0zouM+8wrGh3mcJM
+	K3c5yEIjAY+/L2ze+g6HD87INR9wcSsYyVcF9686XR15yYp9oUKLMfIDKSkzM55wX3E9muA95l+
+	NwTF9rbGS+jHXArt1z2orHR1qp+wvRiE7G2ZVl83KEv02Q+56X1JOmCcvdsX6PLI/+HKbC3vFKY
+	pJoPpqwsDqknMVUXs6lirXz0Ho8dLvbpNFF2fl8b/zVlKQRdORgHP8q3KAR7O519ZrPQJBuSXtY
+	NYL0zwUHzkPFRGTwZ0l16Lulxmtvk8Jzs3bkVrK2kTXAD0HaRAQqQz6HpFrStu5JGGvaTdjlwEk
+	eI5v2Vt6qvbWg8h4QX3DOIXf0X1fuJ7WP3RSPnVuUHT34gnxbFkbNojf5gIdsgJKbQhrWWiCdpo
+	fcYXNYHDuX2eRWjZgwbFUXNcmLFUb1GlQk9rFuRnwJsXGP90fB0QoyHjkYTni8I55A2rk3
+X-Received: by 2002:a05:6830:4407:b0:7de:427d:34a8 with SMTP id 46e09a7af769-7dee135e549mr3306804a34.3.1777906418705;
+        Mon, 04 May 2026 07:53:38 -0700 (PDT)
+Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com (address-144-49-247-21.dlp.protect.broadcom.com. [144.49.247.21])
+        by smtp-relay.gmail.com with ESMTPS id 46e09a7af769-7deca775fb1sm1323020a34.1.2026.05.04.07.53.38
+        for <linux-kselftest@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 04 May 2026 07:53:38 -0700 (PDT)
+X-Relaying-Domain: broadcom.com
+X-CFilter-Loop: Reflected
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-8edcc885cd3so118489785a.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 04 May 2026 07:53:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1777906418; x=1778511218; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dhl1El7Ec0BsiUHbTpDBR+jiTk0km6h08mEdzxE8DPs=;
+        b=XaMIA6FhQIPADsniLFXXEo3/UdtbuHYe1S6htY7y49WFiIVRXVbZYhEZtSl8FZ/zhO
+         XqlDxJ8SGe9UxCvhohGRYQnY6674//go1dVhKOr+mOGxRD5gANA4WHBlAI6s5IRg9Myv
+         TEAelggUS2mxZ/pH4bWd7TJwgB8+xpKSYMtvE=
+X-Forwarded-Encrypted: i=1; AFNElJ9RnTzWZdCxag/2zZSiGXP8clDL2ht1hdD0kQs0dP8Nvd15+yOdVyFtv8siNAUNEc9UXMTVv072kufr7jN9N6Y=@vger.kernel.org
+X-Received: by 2002:a05:620a:31a2:b0:8ee:f43a:bb63 with SMTP id af79cd13be357-8fd128ac3b1mr984132085a.0.1777906417770;
+        Mon, 04 May 2026 07:53:37 -0700 (PDT)
+X-Received: by 2002:a05:620a:31a2:b0:8ee:f43a:bb63 with SMTP id af79cd13be357-8fd128ac3b1mr984112285a.0.1777906414615;
+        Mon, 04 May 2026 07:53:34 -0700 (PDT)
+Received: from photon-d7fac424c0d3 ([192.19.161.250])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8fc2c91fb3bsm1046315985a.41.2026.05.04.07.53.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 May 2026 07:05:50 -0700 (PDT)
+        Mon, 04 May 2026 07:53:34 -0700 (PDT)
+From: Ankit Jain <ankit-aj.jain@broadcom.com>
+To: edumazet@google.com,
+	kuba@kernel.org,
+	netdev@vger.kernel.org
+Cc: davem@davemloft.net,
+	pabeni@redhat.com,
+	ncardwell@google.com,
+	kuniyu@google.com,
+	horms@kernel.org,
+	shuah@kernel.org,
+	quic_subashab@quicinc.com,
+	quic_stranche@quicinc.com,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	karen.badiryan@broadcom.com,
+	ajay.kaher@broadcom.com,
+	alexey.makhalov@broadcom.com,
+	vamsi-krishna.brahmajosyula@broadcom.com,
+	yin.ding@broadcom.com,
+	tapas.kundu@broadcom.com,
+	Ankit Jain <ankit-aj.jain@broadcom.com>
+Subject: [PATCH net v2 0/2] tcp: protect locked SO_RCVBUF from Silly Window Syndrome
+Date: Mon,  4 May 2026 14:49:43 +0000
+Message-ID: <20260504144945.13477-1-ankit-aj.jain@broadcom.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 04 May 2026 11:05:49 -0300
-Message-Id: <DI9Y7J0BSMZQ.1JG02IF9PP4QX@suse.com>
-To: <bot+bpf-ci@kernel.org>, <rbm@suse.com>, <ast@kernel.org>,
- <daniel@iogearbox.net>, <andrii@kernel.org>, <martin.lau@linux.dev>,
- <eddyz87@gmail.com>, <memxor@gmail.com>, <song@kernel.org>,
- <yonghong.song@linux.dev>, <jolsa@kernel.org>, <shuah@kernel.org>,
- <nathan@kernel.org>, <nick.desaulniers+lkml@gmail.com>, <morbo@google.com>,
- <justinstitt@google.com>
-From: =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmU=?= <rbm@suse.com>
-Subject: Re: [PATCH bpf-next v11 01/11] selftests/bpf: Add BPF_STRICT_BUILD
- toggle
-Cc: <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>,
- <alan.maguire@oracle.com>, <martin.lau@kernel.org>, <clm@meta.com>,
- <ihor.solodrai@linux.dev>
-X-Mailer: aerc 0.21.0-120-g22b95d38161f
-References: <20260430-selftests-bpf_misconfig-v11-1-e11f7a8c4fdc@suse.com>
- <62fa35211e90c3961079550e6b826dd1bee301e86838a03ab15cb0b4a631aa8d@mail.kernel.org>
-In-Reply-To: <62fa35211e90c3961079550e6b826dd1bee301e86838a03ab15cb0b4a631aa8d@mail.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
 
-On Thu Apr 30, 2026 at 1:41 PM -03, bot+bpf-ci wrote:
->> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selfte=
-sts/bpf/Makefile
->> --- a/tools/testing/selftests/bpf/Makefile
->> +++ b/tools/testing/selftests/bpf/Makefile
->> @@ -44,6 +44,12 @@
->>  SKIP_LIBBFD	?=3D
->>  SKIP_CRYPTO	?=3D
->>
->> +# When BPF_STRICT_BUILD is 1, any BPF object, skeleton, test object, or
->> +# benchmark compilation failure is fatal. Set to 0 to tolerate failures
->> +# and continue building the remaining tests.
->> +BPF_STRICT_BUILD ?=3D 1
->> +PERMISSIVE :=3D $(filter 0,$(BPF_STRICT_BUILD))
->                      ^^^^
->
-> The PERMISSIVE variable is defined here but never used anywhere in the
-> Makefile. The commit message claims "subsequent Makefile rules use to
-> make individual build steps non-fatal," but a search through the file
-> shows PERMISSIVE only appears at this definition line.
->
-> This makes the BPF_STRICT_BUILD=3D0 option documented in the commit messa=
-ge
-> non-functional. Users following the provided example will expect permissi=
-ve
-> mode to work, but it has no actual effect.
->
-> Should this commit include the Makefile rules that actually use PERMISSIV=
-E,
-> or is this feature incomplete?
+This series fixes a regression where locked SO_RCVBUF sockets suffer from
+Silly Window Syndrome (SWS).
 
-Users of this come later in the series. Kept as standalone commit for
-improving readability a bit.
+Recent memory fragmentation optimizations apply truesize penalties to the
+scaling_ratio. For applications locking SO_RCVBUF (like Java/Tomcat) and
+processing small packets, this drops the scaling_ratio to 1. This
+collapses the advertised window and causes 504 Gateway Timeouts.
 
->
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a =
-bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
-E.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/251764=
-31268
+Patch 1 bypasses this penalty for locked buffers unless skb->len > advmss.
+Patch 2 adds a packetdrill test.
+
+Link to v1:
+https://lore.kernel.org/all/20260427152756.1205-1-ankit-aj.jain@broadcom.com/
+
+v1 -> v2:
+ - Shifted protection from window_clamp to scaling_ratio based on Jakub
+   Kicinski's feedback.
+ - Added skb->len > advmss check to ensure large aggregate payloads (GRO)
+   are still penalized. This allows tcp_rcv_neg_window.pkt to pass.
+ - Added a new packetdrill test (Patch 2/2).
+
+Testing:
+ - Verified fix in a live Java/Tomcat environment (504 timeouts resolved).
+ - Verified deadlock prevention via the new tcp_locked_rcvbuf_sws.pkt.
+ - Passed upstream regression tests: tcp_rcv_neg_window.pkt,
+   tcp_rcv_wnd_shrink_allowed.pkt, tcp_rcv_wnd_shrink_nomem.pkt,
+   tcp_rcv_zero_wnd_fin.pkt, and tcp_rcv_big_endseq.pkt.
+
+Ankit Jain (2):
+  tcp: protect locked SO_RCVBUF from Silly Window Syndrome
+  selftests/net: add packetdrill test for locked SO_RCVBUF SWS
+
+ net/ipv4/tcp_input.c                          |  8 ++++-
+ .../net/packetdrill/tcp_locked_rcvbuf_sws.pkt | 34 +++++++++++++++++++
+ 2 files changed, 41 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_locked_rcvbuf_sws.pkt
+
+--
+2.53.0
 
