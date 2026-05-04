@@ -1,249 +1,321 @@
-Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazon11011012.outbound.protection.outlook.com [52.101.70.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0DD93AB284;
-	Mon,  4 May 2026 12:21:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.70.12
-ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777897289; cv=fail; b=o6zzf4MO44f9M0IzvD+su1DsrgBF+dO8AGFjbVzcAKsq62jn7Fyg2drOoctUEoY6XgFkalgZWIb36bv6urfBjNUXM3kAvRjFzEiWlbNbSkzeVpan/oWBDOKBfjkDHkll+X03QPB7RJzqjceMh/Kp7C6B90dIhD4BZHP6jEfMTMw=
-ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777897289; c=relaxed/simple;
-	bh=UtL+WLA/g38qG4PZxfuhzCdG8KwHJIgNhD23Rm4gXhE=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=ab6ddDnUHIlZeTg05qPZcXd/xW9dCag3uBCEAnPYX19wd3dWrFhDVX0Fynr+RDbDNIdFhsPz5l7rr9GBa6ANc1ZVC9RxCHFDua7oCGwbUNazUMp2WvgE2ckHk7qvk1ki7MWNuKstaMfFLdZs9/WjRSZHlDA4cB2XTkH+M3UT2ig=
-ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=VX9/rggr; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=VX9/rggr; arc=fail smtp.client-ip=52.101.70.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D6731A683E
+	for <linux-kselftest@vger.kernel.org>; Mon,  4 May 2026 12:31:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777897919; cv=none; b=JLlLRk/zsqHH5Jm1ae7ku83K3D87Vf5VZODPZmfGHoE2SAjkvYGRqvuyCXE5kcTuSpMTkPnYu3BxAFQNNFgkuqkUZV4KXlvcL5GUBFckpc6TucuIekG3H46RDhR+coIjTQqsx/JzHnm5G9mq+CdWxj/beOr/yYmG3DVsAB4CZqA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777897919; c=relaxed/simple;
+	bh=McscWhvJwj1zWE8TsujrK4pG5ZWM0ZKc3cGmYAHEVGs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GgWBdmQcnY4FIeKLVd8ESuEgtdL5c/auGm4xGQbcoZBHkjPlpciaCCQsWeCpPV3t41Yj04G247xzXqfTHunAEN87cv2vm6f7Hn0Z1PbZzs2J5K81AC3xZ6nG0bZlEFOqP1BD+Az64ROScgaYMxKc5H+Y4dJjx4NLb7cRahitmzY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=zJ0Ee1zO; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=CUnLkjH7; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=zJ0Ee1zO; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=CUnLkjH7; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="VX9/rggr";
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="VX9/rggr"
-ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
- b=WBpK19cAXYSVYX8c0vsYQ7APnXg18y/SWpoh3rLo5CQEUfi9YeQPlge8sn8aN2jy3U7oLigGrq6wDiak9gFh76bNrHryUD2rX88r2q1lUYWXhoK+Ro8h6Cpqse6YIjFjweECvG+Kyn0kGqblEmuAE6sbSJTkhAkeU4Hw9CdxMAJ6hue2DV43756480CR3Xmz8BHW0ypcOMWkupikVi9l94n6d9PJiPtrhCPRLr36f4lkMilRfS6YxekFKWcC7xVhiEBPxyDrilY5b3IrUsa0qyM0hcXGSRD/vADdY4/PE3bZ6aX/ubMHgsgiJOuAePCMWARhvxKladBHxLmtBSmOMQ==
-ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MsfL030AlBVO55RJBCiu6tC8HTDeZlNSzlJ1nTAELB4=;
- b=Dz5I7fp7qcMxucKVZROiRqFf7WBIuBjsMCoIVrSPNQMaMjam3ZHyYmiXSy2yG0JbF13iYyS7HaaGg+k8qArghzoQ9SKLUtzuYTpM2rfPX8pGjvAjcYhMEXa00z2MBNToULwtEOQVOlBB7jr8redau7dyxtoR3ZvuXiQCAWWyR1AFKMoI1LjFt/GYz9xnStvYStREINoqQ6EumU3HVC3YY8PfFFMK82thW/2e56aKmBscyTIKpOkGzYUqbIkoNZI/7MAbY30jhKoBYhftbtkBJ52vTx5mPaCLwCz4nmPemuhVgG3qK0z3ea9aOwGS/Vr3Ad4bYH9pIoXQ9G4D3N1QaA==
-ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
- 4.158.2.129) smtp.rcpttodomain=kernel.org smtp.mailfrom=arm.com; dmarc=pass
- (p=none sp=none pct=100) action=none header.from=arm.com; dkim=pass
- (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
- spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
- dmarc=[1,1,header.from=arm.com])
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MsfL030AlBVO55RJBCiu6tC8HTDeZlNSzlJ1nTAELB4=;
- b=VX9/rggrlS8BQTQFfQQ1OGhOd3wfsHb619Q+0c/KTOdF34DCTcrS9bx5Bm4ux9/6armYeuzN/VKJ5juuAHuj3hJ5JCn3RAgRqlhW1pW/DfUdxS0UvzG+hOf1KjybUj/u/BQOf6p1/1MPodjKHdl+whKo+VviZlE5Ef3RnRZD7Yg=
-Received: from AS4P250CA0003.EURP250.PROD.OUTLOOK.COM (2603:10a6:20b:5df::19)
- by AS8PR08MB8899.eurprd08.prod.outlook.com (2603:10a6:20b:5b6::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9870.25; Mon, 4 May
- 2026 12:21:19 +0000
-Received: from AMS1EPF00000047.eurprd04.prod.outlook.com
- (2603:10a6:20b:5df:cafe::f0) by AS4P250CA0003.outlook.office365.com
- (2603:10a6:20b:5df::19) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9870.25 via Frontend Transport; Mon,
- 4 May 2026 12:21:19 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=arm.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
- client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
-Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
- AMS1EPF00000047.mail.protection.outlook.com (10.167.16.135) with Microsoft
- SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9891.9
- via Frontend Transport; Mon, 4 May 2026 12:21:19 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Lif5LgvgV70YReEPgPRaR0xpXi6meERLR/yCYjxRwp67Y5mtI0Ao6Smt1HQJ9bCP9p8KkJE93+V0vIhk871dW2MFK9GJfLMKQc9zLF7zLzmILYCspfvlzc/jYKvZoHmA5o3p6qrRheKFpmbYPo3kEnEFJKlhlMbBjQ9hqZuED6w7z9EQnYADrHjbBH7679SYtiQk/HuodvvMbE61i3MIm/y/KXpZyDUl5HgO+EtJf1d/PUtkE7dQCYoEDdkTj9Qym6i1k7VJ/beWg3B779CkoDgXjNzQJP4xDGKjdKoiGt0SF8VTvEwobOCDXQOIvgoGRFCotYC6jM/lJavm7FZwWw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MsfL030AlBVO55RJBCiu6tC8HTDeZlNSzlJ1nTAELB4=;
- b=Ke3572OB+TStAd8m+Jbo+fnxaR/AIZI3ACqGiR7+oikCneZ1hF12p/ENtKpy1cXrFUHMaE2VM82uAsbhg/bVmkwv7USrDD03FHV9PeOqkdMuuW5sP1eryB/9GD3554JhanZWv6wy3M7Pq3HAKIpvsdMsOCriOHfIUxewswX4eu4KrpoEhB+n1R4BiKv97EdX5YFHcMHQdRnTFRO+6KgI2ecsdd2NWYxvBgc2Aohj8UsRp9ebUvWT4YNyz2inTYs3BxJCjU2hIXxGovWv4Pb0VryQoPSceUl0EvA05CaR7r9OSWRtYLAIRsaZ3Ci7yhk/SIMTCSGsv6jDqB+MRMJ/rg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MsfL030AlBVO55RJBCiu6tC8HTDeZlNSzlJ1nTAELB4=;
- b=VX9/rggrlS8BQTQFfQQ1OGhOd3wfsHb619Q+0c/KTOdF34DCTcrS9bx5Bm4ux9/6armYeuzN/VKJ5juuAHuj3hJ5JCn3RAgRqlhW1pW/DfUdxS0UvzG+hOf1KjybUj/u/BQOf6p1/1MPodjKHdl+whKo+VviZlE5Ef3RnRZD7Yg=
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-Received: from DU0PR08MB9203.eurprd08.prod.outlook.com (2603:10a6:10:417::12)
- by PAWPR08MB11160.eurprd08.prod.outlook.com (2603:10a6:102:46e::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9870.25; Mon, 4 May
- 2026 12:20:15 +0000
-Received: from DU0PR08MB9203.eurprd08.prod.outlook.com
- ([fe80::f1e:73f2:57df:4047]) by DU0PR08MB9203.eurprd08.prod.outlook.com
- ([fe80::f1e:73f2:57df:4047%2]) with mapi id 15.20.9870.023; Mon, 4 May 2026
- 12:20:15 +0000
-Message-ID: <ae5882a8-7cf9-46cb-a1ac-d04f501e2e62@arm.com>
-Date: Mon, 4 May 2026 17:50:06 +0530
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 35/54] selftests/mm: hugepage_dio: add setup of HugeTLB
- pages
-To: Mike Rapoport <rppt@kernel.org>, Andrew Morton
- <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>
-Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
- Barry Song <baohua@kernel.org>, Dev Jain <dev.jain@arm.com>,
- Donet Tom <donettom@linux.ibm.com>, Jason Gunthorpe <jgg@ziepe.ca>,
- John Hubbard <jhubbard@nvidia.com>, "Liam R. Howlett"
- <Liam.Howlett@oracle.com>, Lance Yang <lance.yang@linux.dev>,
- Leon Romanovsky <leon@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
- Luiz Capitulino <luizcap@redhat.com>, Mark Brown <broonie@kernel.org>,
- Michal Hocko <mhocko@suse.com>, Nico Pache <npache@redhat.com>,
- Peter Xu <peterx@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
- Shuah Khan <shuah@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Vlastimil Babka <vbabka@kernel.org>, Zi Yan <ziy@nvidia.com>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-mm@kvack.org
-References: <20260428204240.1924129-1-rppt@kernel.org>
- <20260428204240.1924129-36-rppt@kernel.org>
-From: Sarthak Sharma <sarthak.sharma@arm.com>
-Content-Language: en-US
-In-Reply-To: <20260428204240.1924129-36-rppt@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MA5PR01CA0092.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a01:1a8::13) To DU0PR08MB9203.eurprd08.prod.outlook.com
- (2603:10a6:10:417::12)
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="zJ0Ee1zO";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="CUnLkjH7";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="zJ0Ee1zO";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="CUnLkjH7"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id CDC625C548;
+	Mon,  4 May 2026 12:31:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1777897915; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=qdNZkpYkMDIfXPNch/T3ArSLzUSxwvRLRIbxxXTB5YI=;
+	b=zJ0Ee1zOTjPLWKD24yU9LZ3q7fBHTyxqFuBzFJ5DpZed5SbbVPS2bLsnnMSVLjzUJ9ZMEY
+	MbopH8pqggtRNOvz9zYx2/g/g+aMWKmtYmZHgAgkZ4GH8hSnu0D4z2CCzr1ELrsihK+IIS
+	C36E3fo882JztlCGeROVCKU9SB4msdw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1777897915;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=qdNZkpYkMDIfXPNch/T3ArSLzUSxwvRLRIbxxXTB5YI=;
+	b=CUnLkjH7mjstQFwUGf3yk9XVh+hZ8AShxIyeFGLvXvTGFWTRcNXVKE2ktPflFKx54zREp3
+	1sQP4skVS5N089Cg==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1777897915; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=qdNZkpYkMDIfXPNch/T3ArSLzUSxwvRLRIbxxXTB5YI=;
+	b=zJ0Ee1zOTjPLWKD24yU9LZ3q7fBHTyxqFuBzFJ5DpZed5SbbVPS2bLsnnMSVLjzUJ9ZMEY
+	MbopH8pqggtRNOvz9zYx2/g/g+aMWKmtYmZHgAgkZ4GH8hSnu0D4z2CCzr1ELrsihK+IIS
+	C36E3fo882JztlCGeROVCKU9SB4msdw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1777897915;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=qdNZkpYkMDIfXPNch/T3ArSLzUSxwvRLRIbxxXTB5YI=;
+	b=CUnLkjH7mjstQFwUGf3yk9XVh+hZ8AShxIyeFGLvXvTGFWTRcNXVKE2ktPflFKx54zREp3
+	1sQP4skVS5N089Cg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 38BAD593A3;
+	Mon,  4 May 2026 12:31:55 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id fAHoCruR+GnBXQAAD6G6ig
+	(envelope-from <fmancera@suse.de>); Mon, 04 May 2026 12:31:55 +0000
+From: Fernando Fernandez Mancera <fmancera@suse.de>
+To: netdev@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org,
+	horms@kernel.org,
+	pabeni@redhat.com,
+	kuba@kernel.org,
+	edumazet@google.com,
+	davem@davemloft.net,
+	idosch@nvidia.com,
+	dsahern@kernel.org,
+	Fernando Fernandez Mancera <fmancera@suse.de>
+Subject: [PATCH 1/3 net-next v3] ipv4: centralize devconf sysctl handling
+Date: Mon,  4 May 2026 14:31:41 +0200
+Message-ID: <20260504123143.6284-1-fmancera@suse.de>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic:
-	DU0PR08MB9203:EE_|PAWPR08MB11160:EE_|AMS1EPF00000047:EE_|AS8PR08MB8899:EE_
-X-MS-Office365-Filtering-Correlation-Id: 67433d0e-ed7e-4ced-c296-08dea9d7a5aa
-x-checkrecipientrouted: true
-NoDisclaimer: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted:
- BCL:0;ARA:13230040|366016|1800799024|376014|7416014|56012099003|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info-Original:
- luZoAGJBkKT6k9Gsuo724ZwDginICWOEqHw6RbFjX2Z0Uda9Jy61roxR9ja9lol/bV1TwvCpfhCGZIxMd3uYE9WHXoxlmeUYMfYCid/14+FV9kZRQB5uHq4MmGefdmF54JE+8iDTSfhNnoRKmEI7IoJfgPanYuuCJjR2kceXXPPFG6P9pz9bM2MRUbM4gnN0XyZTxKuJf/rprwUYWY82diSn71yLKFV1pXXZ3PFD6mxVt7wVMlJG7YT9kcdnrl4RhUE+04Rw7621UDqRc/hiqJXF+E5NY5E568tidFPl9YhrhVhMtRXSiwngXk44zj7CRAwwK2YHbitw/F5u8vX+jfaWVGwoIRVXvKmmOHLDc5pszIZoVwiKcKFKXNxE0OELcRTUHtJ7md6jQjsfBy7yH+80Iji4FltbGraYCc31E9+Xc7dV7JHKkyXQUWFxn4UkcdL5h3xDR9tcaCX0/ty3soAl8dcnzyKDHRGhIvxLfvmHJWSrIhuivnwMBWDYUKN5b7NYSG41MnVU9tAvqxZnrAqwwwNJFb6yDaqvoB00iLCggtGL+cFtx95cIAdpEWr6L+k4+cvgmtxqGYn1gFwb3JsRz0Gsu0aCvwLnweLa5jOElq30ogOBUUScAY8fi8K9YOqA8vRcLmBrjT/fVPCYKb0nZWHjRDnjnZkrRPjPNeRUunI0iCnMTBput4poxJLj
-X-Forefront-Antispam-Report-Untrusted:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9203.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(56012099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
-X-Exchange-RoutingPolicyChecked:
- QrIfQcJoSGrjazhd4KR7T9wnp3aw8FTQ7fzz91qHkTerhrdgrDtIJFSYYVONIaSxl4B+Yx1m0jxgkww1zrhE7t6oQZvqMydRQecGFQgl606QX+fQ/P/de7+2Jnhq08U/+PcbRRBT3Tu3BWlm5jSrHoDAV/I5qwV2PBLoGCVtHyGiey2hmmu3E6geVa8GknOfTtJTbTYbXr/+UBweZZAood724XxZjOlRNIGflKTEdlQIkyWoAgb30QcRjGRaQ/ap2/Wzeeq+VqUcHlRM5PmGKzmDbYv9wazJDmrOpe34zfDG+3i7YIdfw0y6naqNK/kULEStFG/O3wdhZy/bztg1bw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAWPR08MB11160
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped:
- AMS1EPF00000047.eurprd04.prod.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs:
-	8870618b-a76e-4491-c328-08dea9d77f1f
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|14060799003|1800799024|7416014|82310400026|35042699022|36860700016|22082099003|18002099003|56012099003;
-X-Microsoft-Antispam-Message-Info:
-	DljWaCNlVEZXfajNJ0Ga2bUa68meYOA1g0SroO//pISJvgeO1RsxZ9ol+l3Ze9mpa17CF2zF4ul913mK0pBTpMtRYLTSVDVIqQeaISzzH+i0paabWV0uTk0ZjyMt3Ijw3bVj+mczl0DnFb3a3EPRCKyJYIwE6gmvO41A7ctE4pUlGJ3po/qPcCxhHeqi9DeJKcpEQVJZYtcsHfTKvfEIFiuKozcM8RrS1zUxN6XaWXZHr74XfZ4JHZcley0L4+pwueBzznyUlM5CzDKoztvXGhh4QuOkH5LXpJCV87mwsW7tzf4Sn1/+SUfzqvW/ub/KiumhPsbF/Yxbs05CuRS6dHi753fsboPAogU4bTxz4+Qsj0m6pRuzMcrOvUi89yH3JJVlXrkK3etV2vFO7lHE0KEnlcjYG2zTvQREDDPMS3plCXPt2iAudqS029AnYzZFNGYy64vbxZPNy3enNuO4UE3KadY+I0n0WdvQUlmC7NiCdv0WlPCe1FQV8o0E0fRYe5629ug30yEsxCb7um7AVx6RLj6zMOh9JmiROyo6nX7uUWVgj7nIpwJwidMg27Skr1oG2BasibzFvSGZYCvcnqakvB0/U69XIrUCk/ykVv2CdHNUQGrgNrnCi92aGmDC9lRQ8WVeeHsPbyzYwumHPeP2AX3Q++yWeeTpPE+KJaK6icZGf75XT/0/98d7T1g3AhAhLfdcQjXP9ADJ7sK80eChwk4El3F7L0LXFoj+k9Q=
-X-Forefront-Antispam-Report:
-	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(14060799003)(1800799024)(7416014)(82310400026)(35042699022)(36860700016)(22082099003)(18002099003)(56012099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	PP8P4mHj4kYE7ZSFQ8Lp8Nesoli8KazIRtNBDkF4elK27m4VOhK33IyjPibi3eoyHSshY0AZCz8a/WNCkaN6KHkPoEmodLmc3yun5FVtyY6IGClxvAl2DRSbAWhG0UPh4Tc4dyjXTt2WNzWmOM1HhXAScVFtBJy+8+aj3S0Q8wuG3H8UOYWfn+2YiHv/s5bWr/4B0LHMNAraRxBDJXwd+I8jyjwJPTMvluIKyRQxspahFoOiohOEed9wox7CHM/mhbzJr/t9XKcU2L7cDU7Dvtl/BpFBY2s6C7vqXJCgaLyRCvS3z8uxnvgbwifOT7v/wqr0EB7/DQZUd/NDDFPWUwbKQgAaBASE1X7+1MxEXe8G992a2+gULnnrI/QFZ7oTqvdl6u8F98AC8xaTo41uciWzwDLTosZrHQYuFv7SMHBaikqVpo/p2iQMRdHAknv4
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2026 12:21:19.4702
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 67433d0e-ed7e-4ced-c296-08dea9d7a5aa
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	AMS1EPF00000047.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR08MB8899
+Content-Transfer-Encoding: 8bit
+X-Spam-Score: -2.80
+X-Spam-Level: 
+X-Spamd-Result: default: False [-2.80 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_MISSING_CHARSET(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	URIBL_BLOCKED(0.00)[suse.de:mid,suse.de:email,imap1.dmz-prg2.suse.org:helo];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid,suse.de:email,imap1.dmz-prg2.suse.org:helo];
+	RCVD_TLS_ALL(0.00)[]
+X-Spam-Flag: NO
 
-Hi Mike!
+The logic for handling IPv4 devconf sysctls is scattered. Notification
+and cache flushes are managed in devinet_conf_proc(), while a separate
+ipv4_doint_and_flush() function and DEVINET_SYSCTL_FLUSHING_ENTRY macro
+is used for properties that solely require a cache flush.
 
-On 4/29/26 2:12 AM, Mike Rapoport wrote:
-> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-> 
-> hugepage_dio test fails if there are no free huge pages prepared by a
-> wrapper script.
-> 
-> Add setup of HugeTLB pages to the test and make sure that the original
-> settings are restored on the test exit.
-> 
-> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> ---
->  tools/testing/selftests/mm/hugetlb_dio.c | 10 ++--------
->  1 file changed, 2 insertions(+), 8 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/mm/hugetlb_dio.c b/tools/testing/selftests/mm/hugetlb_dio.c
-> index 47019433ddaf..fb4600570e13 100644
-> --- a/tools/testing/selftests/mm/hugetlb_dio.c
-> +++ b/tools/testing/selftests/mm/hugetlb_dio.c
-> @@ -85,8 +85,6 @@ static void run_dio_using_hugetlb(int fd, unsigned int start_off,
->  
->  	/* Get the default huge page size */
->  	h_pagesize = default_huge_page_size();
-> -	if (!h_pagesize)
-> -		ksft_exit_fail_msg("Unable to determine huge page size\n");
->  
->  	/* Reset file position since fd is shared across tests */
->  	if (lseek(fd, 0, SEEK_SET) < 0)
-> @@ -94,10 +92,6 @@ static void run_dio_using_hugetlb(int fd, unsigned int start_off,
->  
->  	/* Get the free huge pages before allocation */
->  	free_hpage_b = hugetlb_free_default_pages();
-> -	if (free_hpage_b == 0) {
-> -		close(fd);
-> -		ksft_exit_skip("No free hugepage, exiting!\n");
-> -	}
->  
->  	/* Allocate a hugetlb page */
->  	orig_buffer = mmap(NULL, h_pagesize, mmap_prot, mmap_flags, -1, 0);
-> @@ -141,8 +135,8 @@ int main(void)
->  
->  	ksft_print_header();
->  
-> -	/* Check if huge pages are free */
-> -	if (!hugetlb_free_default_pages())
-> +	/* request a huge page */
-> +	if (!hugetlb_setup_default(1))
->  		ksft_exit_skip("No free hugepage, exiting\n");
+This patch refactors the sysctl handling by introducing a centralized
+helper, devinet_conf_post_set(). This new function evaluates the changed
+attribute and handles all necessary operations like triggering netlink
+notifications. It returns a boolean indicating whether a routing cache
+flush is required.
 
-Before applying the patch, I get the following output:
+Note that the boolean is necessary as this function will be re-used for
+netlink IPv4 devconf handling where the cache flushing must wait until
+all the attributes have been processed.
 
-TAP version 13
-1..4
-# No. Free pages before allocation : 112
-# No. Free pages after munmap : 112
-ok 1 free huge pages from 0-12288
-# No. Free pages before allocation : 112
-# No. Free pages after munmap : 112
-ok 2 free huge pages from 0-10240
-# No. Free pages before allocation : 112
-# No. Free pages after munmap : 112
-ok 3 free huge pages from 2048-12288
-# No. Free pages before allocation : 112
-# No. Free pages after munmap : 112
-ok 4 free huge pages from 2048-14336
-# Totals: pass:4 fail:0 xfail:0 xpass:0 skip:0 error:0
+Finally, this is introducing a small change in behavior for
+IPV4_DEVCONF_ROUTE_LOCALNET. As commit d0daebc3d622 ("ipv4: Add
+interface option to enable routing of 127.0.0.0/8") intended, the cache
+flush should only be performed when ROUTE_LOCALNET changes from 1 to 0.
+Unfortunately, this was not true because while implementing it the
+DEVINET_SYSCTL_FLUSHING_ENTRY was used for the attribute, making the
+code related to it on devinet_conf_proc() dead.
 
-After applying the patch, I get this:
+IPV4_DEVCONF_FORWARDING is still being handled separately as it requires
+more operations.
 
-TAP version 13
-# [INFO] detected hugetlb page size: 2048 KiB
-# [INFO] detected hugetlb page size: 32768 KiB
-# [INFO] detected hugetlb page size: 64 KiB
-# [INFO] detected hugetlb page size: 1048576 KiB
-1..0 # SKIP No free hugepage, exiting
+Signed-off-by: Fernando Fernandez Mancera <fmancera@suse.de>
+---
+v2: no changes
+v3: no changes
+---
+ net/ipv4/devinet.c | 127 ++++++++++++++++++++++++---------------------
+ 1 file changed, 68 insertions(+), 59 deletions(-)
 
-even when I have 112 free and 128 total hugepages of size 2MB (default
-for my system).
-
-Could it be because hugetlb_setup_default(1) here is trying to set the
-default hugetlb pool size to exactly 1, and then checking whether there
-is exactly 1 free hugepage, instead of simply checking whether at least
-1 free hugepage is available?
-
-
->  
->  	fd = open("/tmp", O_TMPFILE | O_RDWR | O_DIRECT, 0664);
+diff --git a/net/ipv4/devinet.c b/net/ipv4/devinet.c
+index 58fe7cb69545..8300516fb38f 100644
+--- a/net/ipv4/devinet.c
++++ b/net/ipv4/devinet.c
+@@ -2128,6 +2128,46 @@ static int inet_validate_link_af(const struct net_device *dev,
+ 	return 0;
+ }
+ 
++static bool devinet_conf_post_set(struct net *net, struct ipv4_devconf *cnf,
++				  int attr, int new, int old, int ifindex)
++{
++	if (new == old)
++		return false;
++
++	switch (attr) {
++	case IPV4_DEVCONF_ROUTE_LOCALNET:
++	case IPV4_DEVCONF_ACCEPT_LOCAL:
++		if (new == 0)
++			return true;
++		break;
++	case IPV4_DEVCONF_NOXFRM:
++	case IPV4_DEVCONF_NOPOLICY:
++	case IPV4_DEVCONF_PROMOTE_SECONDARIES:
++	case IPV4_DEVCONF_DROP_UNICAST_IN_L2_MULTICAST:
++	case IPV4_DEVCONF_BC_FORWARDING:
++		return true;
++	case IPV4_DEVCONF_RP_FILTER:
++		inet_netconf_notify_devconf(net, RTM_NEWNETCONF,
++					    NETCONFA_RP_FILTER,
++					    ifindex, cnf);
++		break;
++	case IPV4_DEVCONF_PROXY_ARP:
++		inet_netconf_notify_devconf(net, RTM_NEWNETCONF,
++					    NETCONFA_PROXY_NEIGH,
++					    ifindex, cnf);
++		break;
++	case IPV4_DEVCONF_IGNORE_ROUTES_WITH_LINKDOWN:
++		inet_netconf_notify_devconf(net, RTM_NEWNETCONF,
++					    NETCONFA_IGNORE_ROUTES_WITH_LINKDOWN,
++					    ifindex, cnf);
++		break;
++	default:
++		break;
++	}
++
++	return false;
++}
++
+ static int inet_set_link_af(struct net_device *dev, const struct nlattr *nla,
+ 			    struct netlink_ext_ack *extack)
+ {
+@@ -2509,44 +2549,31 @@ static int devinet_conf_proc(const struct ctl_table *ctl, int write,
+ 
+ 	if (write) {
+ 		struct ipv4_devconf *cnf = ctl->extra1;
+-		struct net *net = ctl->extra2;
+ 		int i = (int *)ctl->data - cnf->data;
++		struct net *net = ctl->extra2;
+ 		int ifindex;
+ 
+-		set_bit(i, cnf->state);
+-
+-		if (cnf == net->ipv4.devconf_dflt)
+-			devinet_copy_dflt_conf(net, i);
+-		if (i == IPV4_DEVCONF_ACCEPT_LOCAL - 1 ||
+-		    i == IPV4_DEVCONF_ROUTE_LOCALNET - 1)
+-			if ((new_value == 0) && (old_value != 0))
+-				rt_cache_flush(net);
++		/* These attributes are bypassing the tracking state,
++		 * for the rest track the state and propagate the changes
++		 * to default config
++		 */
++		switch (i + 1) {
++		case IPV4_DEVCONF_NOXFRM:
++		case IPV4_DEVCONF_NOPOLICY:
++		case IPV4_DEVCONF_PROMOTE_SECONDARIES:
++		case IPV4_DEVCONF_DROP_UNICAST_IN_L2_MULTICAST:
++			break;
++		default:
++			set_bit(i, cnf->state);
++			if (cnf == net->ipv4.devconf_dflt)
++				devinet_copy_dflt_conf(net, i);
++			break;
++		}
+ 
+-		if (i == IPV4_DEVCONF_BC_FORWARDING - 1 &&
+-		    new_value != old_value)
++		ifindex = devinet_conf_ifindex(net, cnf);
++		if (devinet_conf_post_set(net, cnf, i + 1, new_value,
++					  old_value, ifindex))
+ 			rt_cache_flush(net);
+-
+-		if (i == IPV4_DEVCONF_RP_FILTER - 1 &&
+-		    new_value != old_value) {
+-			ifindex = devinet_conf_ifindex(net, cnf);
+-			inet_netconf_notify_devconf(net, RTM_NEWNETCONF,
+-						    NETCONFA_RP_FILTER,
+-						    ifindex, cnf);
+-		}
+-		if (i == IPV4_DEVCONF_PROXY_ARP - 1 &&
+-		    new_value != old_value) {
+-			ifindex = devinet_conf_ifindex(net, cnf);
+-			inet_netconf_notify_devconf(net, RTM_NEWNETCONF,
+-						    NETCONFA_PROXY_NEIGH,
+-						    ifindex, cnf);
+-		}
+-		if (i == IPV4_DEVCONF_IGNORE_ROUTES_WITH_LINKDOWN - 1 &&
+-		    new_value != old_value) {
+-			ifindex = devinet_conf_ifindex(net, cnf);
+-			inet_netconf_notify_devconf(net, RTM_NEWNETCONF,
+-						    NETCONFA_IGNORE_ROUTES_WITH_LINKDOWN,
+-						    ifindex, cnf);
+-		}
+ 	}
+ 
+ 	return ret;
+@@ -2599,20 +2626,6 @@ static int devinet_sysctl_forward(const struct ctl_table *ctl, int write,
+ 	return ret;
+ }
+ 
+-static int ipv4_doint_and_flush(const struct ctl_table *ctl, int write,
+-				void *buffer, size_t *lenp, loff_t *ppos)
+-{
+-	int *valp = ctl->data;
+-	int val = *valp;
+-	int ret = proc_dointvec(ctl, write, buffer, lenp, ppos);
+-	struct net *net = ctl->extra2;
+-
+-	if (write && *valp != val)
+-		rt_cache_flush(net);
+-
+-	return ret;
+-}
+-
+ #define DEVINET_SYSCTL_ENTRY(attr, name, mval, proc) \
+ 	{ \
+ 		.procname	= name, \
+@@ -2633,9 +2646,6 @@ static int ipv4_doint_and_flush(const struct ctl_table *ctl, int write,
+ #define DEVINET_SYSCTL_COMPLEX_ENTRY(attr, name, proc) \
+ 	DEVINET_SYSCTL_ENTRY(attr, name, 0644, proc)
+ 
+-#define DEVINET_SYSCTL_FLUSHING_ENTRY(attr, name) \
+-	DEVINET_SYSCTL_COMPLEX_ENTRY(attr, name, ipv4_doint_and_flush)
+-
+ static struct devinet_sysctl_table {
+ 	struct ctl_table_header *sysctl_header;
+ 	struct ctl_table devinet_vars[IPV4_DEVCONF_MAX];
+@@ -2678,15 +2688,14 @@ static struct devinet_sysctl_table {
+ 					"ignore_routes_with_linkdown"),
+ 		DEVINET_SYSCTL_RW_ENTRY(DROP_GRATUITOUS_ARP,
+ 					"drop_gratuitous_arp"),
+-
+-		DEVINET_SYSCTL_FLUSHING_ENTRY(NOXFRM, "disable_xfrm"),
+-		DEVINET_SYSCTL_FLUSHING_ENTRY(NOPOLICY, "disable_policy"),
+-		DEVINET_SYSCTL_FLUSHING_ENTRY(PROMOTE_SECONDARIES,
+-					      "promote_secondaries"),
+-		DEVINET_SYSCTL_FLUSHING_ENTRY(ROUTE_LOCALNET,
+-					      "route_localnet"),
+-		DEVINET_SYSCTL_FLUSHING_ENTRY(DROP_UNICAST_IN_L2_MULTICAST,
+-					      "drop_unicast_in_l2_multicast"),
++		DEVINET_SYSCTL_RW_ENTRY(NOXFRM, "disable_xfrm"),
++		DEVINET_SYSCTL_RW_ENTRY(NOPOLICY, "disable_policy"),
++		DEVINET_SYSCTL_RW_ENTRY(PROMOTE_SECONDARIES,
++					"promote_secondaries"),
++		DEVINET_SYSCTL_RW_ENTRY(ROUTE_LOCALNET,
++					"route_localnet"),
++		DEVINET_SYSCTL_RW_ENTRY(DROP_UNICAST_IN_L2_MULTICAST,
++					"drop_unicast_in_l2_multicast"),
+ 	},
+ };
+ 
+-- 
+2.53.0
 
