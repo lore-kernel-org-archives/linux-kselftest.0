@@ -1,151 +1,278 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 844F329D264
-	for <linux-kselftest@vger.kernel.org>; Mon,  4 May 2026 08:17:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ABAA32ED5C;
+	Mon,  4 May 2026 08:25:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777882622; cv=none; b=L4mE42wvrcwLcueYdaW4hX6xNkzarGzC9axL2JLz5z2Fm/fXEgo+EexG2M3LYM5pTfOxez8eOATLCQgbzJiXU+H3VfKlrqPX8kqgOiNmYKGpCqtcX1Thwr2Vl2m7Allb0i9KdP6zMmuEtRRnjShJuKmw8RbY2YuEmnDL8Qz37P0=
+	t=1777883138; cv=none; b=rmd9cBk82+1p/ECW4JNGtBCfg1Qjy9F2guLGWCi4Im2CsBQ0qNlM6AHRQaqAu/QKmdX9hUVaUTTR7u/LrFyf6e6GfbBr73cNsc/YUA8qMHPlMaiKi3xQEHyWJCz3y0Y5OshngfWdz+tN1edW8ZOmnOVf8w9mhitngBcLTj4IcMI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777882622; c=relaxed/simple;
-	bh=3A1k5ni0B6qXjtjH+BjKMcAQh7v4i9bZoRl0/Tlxbu0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=R4O4tIK1jtpSC2fykzMIHefxRCVR3Whye7akIvbY8kW6AGpQ8WqUrrx2dcR6ojcha+MMq5KOeQ8JbExRZTkqx84VJ6MuWf6GJ9oqF9w59HCJobZQ3U/eUXkcT62AVZsaFLrzGuhLO8JwXqs+NnW8EkAmGK6DiKiDS54+OcVghOc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XyztMfaG; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1777883138; c=relaxed/simple;
+	bh=IdU5v5np8ZQ/2ZLDW0cI5NOTSR13a+ibTICZmb5ScIE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=F2OXX63y12p6gtbn7f1HI2SS1iemzfvSDv1ne9g5/odWlsMyWYKA1VwazZ0wvJG+u231aFYidkwrl05Vs9XlBIzp3P3hMoiQKxnV01eiIhD7PlUed6uLpB/dNSdGlIjFKtc7o1NWrz7dx4zF/HURrZ+bSRGsGkUBz/eORI7sv1s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=jnBSbP1k; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XyztMfaG"
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-837b39eb078so381482b3a.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 04 May 2026 01:17:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777882621; x=1778487421; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=EVbyjWaaT11NL9Dp5r+fBVJD7feswt259t9Gsa0JTNY=;
-        b=XyztMfaGVpAyvTPgLaJJizdpnFm1OoFw3/ilr4AR45uJu/BQ1Epj8znVdFwni5jqF1
-         qYI2+0Y5GZfH9RR9LnZSmKm4QCWdv60QTOMun5SNY4hHc/3eQDWp0VvS7q04kzVfFYo8
-         QwN3NADbvg08D4KSxR8hrH2cxf3vS4HciGIyy3vVofd1Okt6Vj1pRfncky3waXnyEItr
-         w9bWctkVQRWAr9kCEL4GpcS021vfOezoEQqo6LnxlxL/Evvd4T7TUhmFnpEgnigsM9lG
-         ajwgqAVf8PV3HjPWWrOqoWQ9zv0DkSVEZQmOejd4cjbh5TxIDr0huY1xg02g7n969WIh
-         BB5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777882621; x=1778487421;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EVbyjWaaT11NL9Dp5r+fBVJD7feswt259t9Gsa0JTNY=;
-        b=V4Tt7GAAP+5wDPg764eagsGSpo+N0etqlsCGdmjhUhAp/SkPzrXDWyBg2c2Q4v7JsQ
-         +xY57/TIXZNTKh2c9o1nsh6tFoE+cGgA0BBX4dKNUGg61TltC1Oi/CTgI3OJTRIzpZNx
-         eHOUEzTfCrYXXsTJfY3KAjlU+1xyjBpNoyJJFJzdq50w4fFxuBm6nOoPXB74jWEitNga
-         mObLm7iNqtzrs7vgIFNLTOqoG3LyNB0nl2Bud/bI3jJg5bJ9EsNjzdF3uZD4y8nNYXat
-         X1Yv6zfotzVsBwqr1U2B/Kf0eWkYWhxTKGnvpU7A2h8kRhoJEiaMGQNHEoH7hDAdO3m4
-         BlLA==
-X-Gm-Message-State: AOJu0Yzam/LZg9YBj36Y0RU9P+GVeDngwMQ115sWtP8tPK62xd1wYMbF
-	HUxFUR90eqDecw5ZdwU5ywFBmU2IHQ3DhzdVOtB7qZApzlpw1RKgc9cY
-X-Gm-Gg: AeBDieuisJvrcpUwgQUjRQIlgPyD0Ot6ubiVfL7JR26ULctQzK3Jn3FDZZavYPcDe8P
-	AYCIDXzRBQfDgE6vJi5Ucrztod4qBAku6saW/L1z2v70vlPCGUVZkM69pBgxXrxTX6MUumPz5tQ
-	Zs6UpzF4ZJglCUf0I9YcxfnzCYfJAAwYuwZj0cDD7c7rPiA009vOx69qOxIkrXQ4H5T1dWu2p/6
-	Hx2Xii+6Aq9TjpdRVIzMfnzthuRTi9pplK7nvOOvZs90go7JWrps+m5KrIBc48cWwp/FhEhfoKC
-	XS7X2Ktz/B6n2gwUNIFe24oxOnM0NxyqvxiCLRjbdlkjZ5WMI/pv8Sy1u3FvuVnwXC0MeRjHFJ4
-	teBo8+qn0nQJer+gv/M3Unn7l7qe182ozxAlMNa8BD/IyC7f79pXfONdiTHCS/vs7IRPz8Ssi81
-	pdVV51uVg5hnfWoNBO+8UtDYUOm4x8AiV/JDdy7Zg=
-X-Received: by 2002:a05:6a00:17a8:b0:837:80a:5aaa with SMTP id d2e1a72fcca58-837080a7537mr3460040b3a.45.1777882620904;
-        Mon, 04 May 2026 01:17:00 -0700 (PDT)
-Received: from vini ([2401:4900:8fcb:edbd:7155:edb6:dac:107e])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8352bfe7a49sm7644356b3a.46.2026.05.04.01.16.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 May 2026 01:17:00 -0700 (PDT)
-From: Vineet Agarwal <agarwal.vineet2006@gmail.com>
-To: shuah@kernel.org,
-	akpm@linux-foundation.org
-Cc: linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org,
-	david@kernel.org,
-	ljs@kernel.org,
-	Liam.Howlett@oracle.com,
-	vbabka@kernel.org,
-	rppt@kernel.org,
-	surenb@google.com,
-	mhocko@suse.com,
-	Vineet Agarwal <agarwal.vineet2006@gmail.com>
-Subject: [PATCH v4] selftests/mm: ksm-functional-tests: fix partial write handling
-Date: Mon,  4 May 2026 13:43:13 +0530
-Message-ID: <20260504081638.683223-1-agarwal.vineet2006@gmail.com>
-X-Mailer: git-send-email 2.54.0
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="jnBSbP1k"
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6446S7YF599575;
+	Mon, 4 May 2026 08:25:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=pp1; bh=IHNX7MRFT5w9RM/ynp0582/aI4ga
+	qLiwyHf7ehX1XfI=; b=jnBSbP1k3eLVfzsBiKLlDQzhPKUE+fQvwinC8TYKHi0n
+	DwD0NW38zIeYP938BmClheRkHVIfP8e4VEqSv7zGCRt3i4k1wnaxWZ9m3cqJ2R9a
+	mEJcraZaqxMMQTnzvuJihDRfOUcpwtS4V08OaWAVowoY4k7MKplYHSDVjafirGom
+	i9Z+fhhPwiMkkVXeCfLWgKemr5hmixLLdtcNBe59TvEFv+6bCKYEbxmL7S3sxShI
+	u3TA5F1+kw1bgeVHT+gXTrDT26iGwKgRS7BktOUhqlpZ+/L0IzVc1O//ekMmeYQy
+	6+fbQJ4FahzrHHzPt9EZmFc16S1Dy6156cdn4c7kQQ==
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4dw9y164d5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 04 May 2026 08:25:10 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 6448OOd2023531;
+	Mon, 4 May 2026 08:25:08 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4dwuyvve7w-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 04 May 2026 08:25:08 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6448P4SS52166976
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 4 May 2026 08:25:05 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id D5FC62004E;
+	Mon,  4 May 2026 08:25:04 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 883F62004F;
+	Mon,  4 May 2026 08:25:01 +0000 (GMT)
+Received: from li-3f69264c-2ce6-11b2-a85c-c3f414d24014.bl1-in.ibm.com (unknown [9.123.3.209])
+	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Mon,  4 May 2026 08:25:01 +0000 (GMT)
+From: Sayali Patil <sayalip@linux.ibm.com>
+To: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Ritesh Harjani <ritesh.list@gmail.com>
+Cc: David Hildenbrand <david@kernel.org>, Zi Yan <ziy@nvidia.com>,
+        Michal Hocko <mhocko@kernel.org>, Oscar Salvador <osalvador@suse.de>,
+        Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+        Dev Jain <dev.jain@arm.com>, Liam.Howlett@oracle.com,
+        linuxppc-dev@lists.ozlabs.org, Miaohe Lin <linmiaohe@huawei.com>,
+        Venkat Rao Bagalkote <venkat88@linux.ibm.com>,
+        Sayali Patil <sayalip@linux.ibm.com>
+Subject: [PATCH v6 00/14] selftests/mm: fix failures and robustness improvements
+Date: Mon,  4 May 2026 13:54:37 +0530
+Message-ID: <cover.1777877814.git.sayalip@linux.ibm.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-ORIG-GUID: R29VylnpmzWk06t4o6p-1eSokrDQIb0M
+X-Proofpoint-GUID: xCl2WFaP9RF3ZmxfC1TucYAXJWU_9KeK
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTA0MDA4NyBTYWx0ZWRfX0w77sA23xMZf
+ X9hb7uo086NCD910+27YnqeavrxSNIRnBg+yAatwzaDL6U/FF8nbQW/3EPzZDrz28/IRrRTEI3p
+ P14+zAj+co3GfYysyduwdaof7AesLnLiSAuAdsEgPMsG5EklaDKYj2fprNXaS+qgtpwgVtQ96hs
+ DZhVHiK6J70Nt8Pypn5TEatSiShxs2e/8GTGHPgX0w6oAKx2YdsSty4qsSlH3C6MVpuk+GlH84S
+ q5bjJsowz6caq8CjmOXlQgu9vdqwhCSt3Dov2zapETYjQ3Z5Ea4VfHpzEVYxXebjgeS8aoMGz5v
+ Q3dAmHJnbBiTd9qiCw3wtYdDswcTxEyfb2iU/9nI2dDnzdXn3Tkv76xkD4RgUZrC9zhUnQ565tn
+ 0sFaKjN46U2n/lWHhIgF7pFOrYATNMuJ1iLvxQnGFpedOsAgTVF4B3u9QftV/ve0gVcwNGNkIXO
+ fhCktGKl3kVtBysUEAw==
+X-Authority-Analysis: v=2.4 cv=UbFhjqSN c=1 sm=1 tr=0 ts=69f857e6 cx=c_pps
+ a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
+ a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=U7nrCbtTmkRpXpFmAIza:22 a=VwQbUJbxAAAA:8
+ a=VnNF1IyMAAAA:8 a=-DqwulyscF0aooa66S8A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=O8hF6Hzn-FEA:10
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-05-04_03,2026-04-30_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 spamscore=0 lowpriorityscore=0 malwarescore=0 suspectscore=0
+ adultscore=0 priorityscore=1501 bulkscore=0 phishscore=0 impostorscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2604200000 definitions=main-2605040087
 
-Update write() checks to properly detect and handle partial writes.
+Hi all,
 
-Previously, the write() calls used <= 0 to detect failure. This
-condition is never true for partial writes (ret > 0 but ret < len),
-so partial writes were silently treated as success.
+Powerpc systems with a 64K base page size exposed several issues while
+running mm selftests. Some tests assume specific hugetlb configurations,
+use incorrect interfaces, or fail instead of skipping when the required
+kernel features are not available.
 
-Fix this by verifying that write() returns the full expected length
-and treating any mismatch as failure.
+This series fixes these issues and improves test robustness.
 
-Signed-off-by: Vineet Agarwal <agarwal.vineet2006@gmail.com>
+Please review the patches and provide any feedback or suggestions for
+improvement.
 
-Changes in v4:
-- Simplify write() checks as suggested by Mike Rapoport
-- Remove temporary variables and use direct comparisons
-- Use a single len variable
+Thanks,
+Sayali
+
 ---
- .../selftests/mm/ksm_functional_tests.c       | 19 +++++++++++--------
- 1 file changed, 11 insertions(+), 8 deletions(-)
+v5->v6
+  - For "selftests/mm: restore default nr_hugepages value via exit trap
+    in charge_reserved_hugetlb.sh":
+    Extended trap to include INT and TERM in hugetlb tests to ensure
+    nr_hugepages is restored on signal-based exits.
+  - For "selftests/mm: restore default nr_hugepages value via exit trap
+    in hugetlb_reparenting_test.sh":
+    Extended trap to include INT and TERM in hugetlb tests to ensure
+    nr_hugepages is restored on signal-based exits.
+  - For "selftests/mm: fix cgroup task placement and drop memory.current
+    checks in hugetlb_reparenting_test.sh":
+    Updated the subshell invocation to pass variables as positional arguments
+    instead of interpolating them into the command string as per review comment.
+  - For "selftests/mm: move hwpoison setup into run_test() and silence modprobe
+    output for memory-failure category":
+    Updated the condition to avoid unconditional module removal and ensures it is
+    only unloaded if loaded by the test.
 
-diff --git a/tools/testing/selftests/mm/ksm_functional_tests.c b/tools/testing/selftests/mm/ksm_functional_tests.c
-index 8d874c4754f3..31c06c72203f 100644
---- a/tools/testing/selftests/mm/ksm_functional_tests.c
-+++ b/tools/testing/selftests/mm/ksm_functional_tests.c
-@@ -498,6 +498,7 @@ static void test_prctl_fork(void)
- static int start_ksmd_and_set_frequency(char *pages_to_scan, char *sleep_ms)
- {
- 	int ksm_fd;
-+	size_t len;
- 
- 	ksm_fd = open("/sys/kernel/mm/ksm/run", O_RDWR);
- 	if (ksm_fd < 0)
-@@ -506,11 +507,13 @@ static int start_ksmd_and_set_frequency(char *pages_to_scan, char *sleep_ms)
- 	if (write(ksm_fd, "1", 1) != 1)
- 		return -errno;
- 
--	if (write(pages_to_scan_fd, pages_to_scan, strlen(pages_to_scan)) <= 0)
--		return -errno;
-+	len = strlen(pages_to_scan);
-+	if (write(pages_to_scan_fd, pages_to_scan, len) != len)
-+		return -1;
- 
--	if (write(sleep_millisecs_fd, sleep_ms, strlen(sleep_ms)) <= 0)
--		return -errno;
-+	len = strlen(sleep_ms);
-+	if (write(sleep_millisecs_fd, sleep_ms, len) != len)
-+		return -1;
- 
- 	return 0;
- }
-@@ -526,11 +529,11 @@ static int stop_ksmd_and_restore_frequency(void)
- 	if (write(ksm_fd, "2", 1) != 1)
- 		return -errno;
- 
--	if (write(pages_to_scan_fd, "100", 3) <= 0)
--		return -errno;
-+	if (write(pages_to_scan_fd, "100", 3) != 3)
-+		return -1;
- 
--	if (write(sleep_millisecs_fd, "20", 2) <= 0)
--		return -errno;
-+	if (write(sleep_millisecs_fd, "20", 2) != 2)
-+		return -1;
- 
- 	return 0;
- }
+v5: https://lore.kernel.org/all/cover.1776150071.git.sayalip@linux.ibm.com/
+---
+---
+v4->v5
+  - For "selftests/mm: move hwpoison setup into run_test() and silence modprobe
+    output for memory-failure category":
+    Renamed LOADED_MOD to LOADED_HWPOISON_INJECT_MOD as per review comment.
+  - Dropped "selftests/cgroup: extend test_hugetlb_memcg.c to support all huge
+    page sizes":
+    Due to intermittent failures observed on some systems.
+  - Added Tested-by from Venkat for all patches.
+  - Added Reviewed-by from Zi yan for patches 7,8 and 13.
+  - Added Acked-by from Zi yan for patches 1 and 3.
+
+v4: https://lore.kernel.org/all/cover.1775466329.git.sayalip@linux.ibm.com/
+---
+v3->v4
+
+  - selftests/mm: restore default nr_hugepages value via EXIT
+    trap in charge_reserved_hugetlb.sh:
+    Updated to use an EXIT trap to restore the original nr_hugepages
+    once at script termination, ensuring reliable restoration on all
+    exit paths.
+
+  - selftest/mm: fix cgroup task placement and drop memory.current checks
+    in hugetlb_reparenting_test.sh:
+    Updated to use a deterministic synchronization method by migrating the
+    workload process within a wrapper subshell before calling exec() to 
+    ensure correct cgroup accounting.
+
+  - selftest/mm: align memory size to huge page size in hugepage-mremap
+    test:
+    Update test code directly to align memory allocations to the hugepage
+    size, rather than modifying run_vmtests.sh. This replaces the previous
+    commit “adjust hugepage-mremap test size for large huge pages” with
+    a cleaner, direct approach in the test itself.
+
+  - selftests/mm: ensure destination is hugetlb-backed in hugepage-mremap:
+    Updated to remove MAP_POPULATE flag for the mmap call as per review
+    comment.
+
+  - selftests/mm: skip uffd-wp-mremap if UFFD write-protect is unsupported:
+    Updated as per review comment to initialize features to zero and exit
+    on all uffd_get_features() failures, avoiding spurious test errors.
+
+  - selftests/mm: move hwpoison setup into run_test() and silence
+    modprobe output for memory-failure category:
+    Declared LOADED_MOD as local variable and avoided a redundant 
+    skip message when the module is not found.
+    Updated logic to set exitcode to ksft_skip only when no failure has
+    been recorded.
+
+  - selftests/cgroup: extend test_hugetlb_memcg.c to support all huge
+    page sizes:
+    Updated to skip on memory constraints instead of returning
+    EXIT_FAILURE.
+    Updated the logic to fully account for the scenario when the
+    per-CPU stock is empty and a refill charges MEMCG_CHARGE_BATCH. 
+    Updated to avoid overflow on 32-bit systems for memory.max value.
+
+  - Included "selftests/mm: restore default nr_hugepages value via
+    EXIT trap in hugetlb_reparenting_test.sh"
+
+  - Included "selftests/mm: free dynamically allocated PMD-sized
+    buffers in split_huge_page_test"
+
+  - Included "selftests/mm: clarify alternate unmapping in compaction_test"
+
+  - Dropped "selftests/mm: fix double increment in linked list cleanup in
+    compaction_test":
+    The behaviour is intentional.
+
+v3: https://lore.kernel.org/all/cover.1774591179.git.sayalip@linux.ibm.com/
+
+---
+v2->v3
+  - selftests/mm: skip uffd-wp-mremap if UFFD write-protect is unsupported:
+    Rename function to check_uffd_wp_feature_supported() as suggested in review.
+  - selftest/mm: fix cgroup task placement and drop memory.current checks
+    in hugetlb_reparenting_test.sh:
+    Drop memory.current validation from the hugetlb reparenting test.
+    Keep tolerance at 7MB (reverting earlier increase to 8MB in v1).
+  - Included "selftests/mm: allow PUD-level entries in compound testcase of hmm
+    tests" patch:
+    Extend the compound testcase checks to accept PUD-level mappings.
+  - Included "selftests/mm: replace hardcoded THP size with runtime PMD page size in
+    hmm tests" patch:
+    Use read_pmd_pagesize() instead of TWOMEG and cap maximum THPs in
+    benchmarks to avoid integer overflow.
+
+v2: https://lore.kernel.org/all/cover.1773305677.git.sayalip@linux.ibm.com/
+
+---
+v1->v2
+  - For "selftests/mm: ensure destination is hugetlb-backed in hugepage-mremap":
+    update FLAGS definition to MAP_HUGETLB | MAP_SHARED | MAP_POPULATE and
+    used it for mmap() calls as suggested during review.
+
+v1: https://lore.kernel.org/all/cover.1773134177.git.sayalip@linux.ibm.com/
+---
+
+Sayali Patil (14):
+  selftests/mm: restore default nr_hugepages value via exit trap in
+    charge_reserved_hugetlb.sh
+  selftests/mm: fix hugetlb pathname construction in
+    charge_reserved_hugetlb.sh
+  selftests/mm: restore default nr_hugepages value via exit trap in
+    hugetlb_reparenting_test.sh
+  selftests/mm: fix hugetlb pathname construction in
+    hugetlb_reparenting_test.sh
+  selftests/mm: fix cgroup task placement and drop memory.current checks
+    in hugetlb_reparenting_test.sh
+  selftests/mm: size tmpfs according to PMD page size in
+    split_huge_page_test
+  selftests/mm: free dynamically allocated PMD-sized buffers in
+    split_huge_page_test
+  selftest/mm: align memory size to huge page size in hugepage-mremap
+    test
+  selftest/mm: register existing mapping with userfaultfd in
+    hugepage-mremap
+  selftests/mm: ensure destination is hugetlb-backed in hugepage-mremap
+  selftests/mm: skip uffd-wp-mremap if UFFD write-protect is unsupported
+  selftests/mm: skip uffd-stress test when nr_pages_per_cpu is zero
+  selftests/mm: move hwpoison setup into run_test() and silence modprobe
+    output for memory-failure category
+  selftests/mm: clarify alternate unmapping in compaction_test
+
+ .../selftests/mm/charge_reserved_hugetlb.sh   | 45 +++++++++-----
+ tools/testing/selftests/mm/compaction_test.c  |  3 +
+ tools/testing/selftests/mm/hugepage-mremap.c  | 42 ++++++-------
+ .../selftests/mm/hugetlb_reparenting_test.sh  | 60 ++++++++++---------
+ tools/testing/selftests/mm/run_vmtests.sh     | 52 ++++++++++------
+ .../selftests/mm/split_huge_page_test.c       | 27 ++++++---
+ tools/testing/selftests/mm/uffd-stress.c      |  6 +-
+ tools/testing/selftests/mm/uffd-wp-mremap.c   | 13 ++++
+ 8 files changed, 153 insertions(+), 95 deletions(-)
+
 -- 
-2.54.0
+2.52.0
 
