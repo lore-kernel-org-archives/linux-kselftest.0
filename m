@@ -1,149 +1,99 @@
-Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92CEE32D0F5
-	for <linux-kselftest@vger.kernel.org>; Mon,  4 May 2026 20:45:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 974533246FE
+	for <linux-kselftest@vger.kernel.org>; Mon,  4 May 2026 20:56:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777927548; cv=none; b=cFS9CaMZPMCc0GdFr25xNeRuP2XJ3mOXTx9QS+LfA0VJMsmqkc1uC9Drh1xYzz/BRjPncB+eUlZhIaVlaih62fVkv9F8ik7OImqg8n4qcXZvoWOxv550/elecJfv64U/Zkogyf7YMKe96uDWG2aoqdOt6C/aUI4VcL9OC1mDlYk=
+	t=1777928167; cv=none; b=bJz4wrMGb6s9J0d28sOAgNzLwatuyceaIEVEAPMvwdxNL59vQTzkGq5IdphgJVqsVOxxO4HhvWIkuWQOnJIa902rFeVZSTdtR1NU8vd/g5PVJ2FOFryW5DbjLsL9cn2wpMrVnLDV1cC105MTVBoxoqppH/cGqHVUB87frk+Uccc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777927548; c=relaxed/simple;
-	bh=YZwMAR3uqET/bZH1qZJj95QcpN0V++SSyz4QoqNaiUk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=dsBQtxKiWBMCWvsGu3VesAKB0xzIKUPGGSH4v0299WU/rAjaw6DWBWY3zb5RG905RVnsSHF98rwV8Na+l8gsQcLKzm48orTUo7ncgKicNmaGq5nRV5i+I6fjSbLqBTcuOX+t1VdTR2UYFBG5HwgwL9PFesXST31TQ5S6xWS6B7Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U+9dnfDo; arc=none smtp.client-ip=209.85.161.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1777928167; c=relaxed/simple;
+	bh=6b0uhsWOUueBJikO+3RxwH3ywe4vOaHqBvUoJ1iBG10=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=G0d1YKlq+ijaadOgXP9HbbJMcY2z3Ot+LMkSZ1WjiHsOa34NvIcFcHK0z0Ybk1WeHnzkfxMbt0DE6zqBCVsVvrrio3WG80sJ+JTjhH2VFzAH/U0Cqvv0J9cmBrvXBwHTB2m5xIipY92cQHcM8IrxUGWzYyfedIBKs0L2Igd3bP4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=e8I0RQIW; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U+9dnfDo"
-Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-6949831a7bcso2503838eaf.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 04 May 2026 13:45:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="e8I0RQIW"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2ba17c8cfacso15284915ad.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 04 May 2026 13:56:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777927538; x=1778532338; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3nmzwB7G7wQji/lU/ygTPGmrlGNrlrcnn35fzNwdq90=;
-        b=U+9dnfDoUWfFxRDkfXIu6OMMgD7h/o5jK0z87sroarYMb4njliyxoIDWfMdFhdXaXs
-         wdmzWDL/VnfXvp6/c4GXJHMhI8Idzkyw0daOoM1YiQC2scseTZHODpGU+iMBSE+he/b+
-         6cYBBxc6eRElXH42gep1/69pn+Gv+L+Ho1T3qvfjN36DuJnxtIew3ajoHB4F5EFb7DMq
-         7vfflndq0yfRDbdv+duZnj3PNmJ+uGlwP3FgrEaYCOsJ9j7kchGLiww+78qE6XtTNMDi
-         BnU2WFOeVTcij0ldHSUHYHR4iHDkYcWmu/tTwmS5Opg50ZcpEjthFNxHY/z1KSI9IRId
-         IpRw==
+        d=google.com; s=20251104; t=1777928163; x=1778532963; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=uAEnOAPj5fUgAFUXnOyePT2fFfy+RA0tHhuCu8Z9sp0=;
+        b=e8I0RQIWCDwpXPl0zwFKbvPBkUL4uuvj/YzwuEeRwSD1/RzGp6Ds2YnVgBznjkvqXV
+         NgS/RiwiwRaZmkSJhvDrZ9wpsz61E3uI8uu6TFxaC27O8HUEWFMldbI27OjpAyJufE61
+         sHtQkwdVOz0ieMakt03HswwGvApprhDBUHTxMfhqkrpN14E5ya1ycHM4DvInNz+MaxDg
+         PoB18jN7QCmgr4sDXizPHaLnc42NHLHwUJ955HcezumMxiFHnmwh+bAoaSovB9J9/PVl
+         PzxgB//5/z4EwNoxQACSPFB2UWcw6K61C78Vx3ebh4F6o0IS9IJGnPFsZhrIQ7ap83RC
+         SQDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777927538; x=1778532338;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=3nmzwB7G7wQji/lU/ygTPGmrlGNrlrcnn35fzNwdq90=;
-        b=D3wJDlBToyvU5mzCAKz7/zvh7HSq90CiDP5s1FrjX9hD/xEKhopyKTi0yYF+EhctXU
-         mBc1yduQgUmb9At0wMFk4902S+rHV5iDPxVTl+DSiAz2yIdUDENUQ9YPNYH3HBO6U2Zg
-         PamzOFPQaJVcuLBY8Cbc9a2lGc+MAzs3L6GoItW8VguaBZGr1JQ7gSRGI/7scDePsznr
-         Tc8K6i9OGCRIrZS2hO4OAILfxmgsm9mhrpnDsZ4AmTGgWg7+OBjShfjL6Ip28ebhcChH
-         hCavgQa4p7cxfsGQAV6qws6KzApjZPOdPKbKL6/ZRUj5oGXcyBNgqINCp+Eq+3g5WOyl
-         lL6w==
-X-Forwarded-Encrypted: i=1; AFNElJ8jgv0RfBhwzNVaKnqWRVhtB3OidexL9kWJ1vXVuO6dXvGIA7hmiFDWra8zzbgcKh1M50Dmqom7ZW5yed4eUTU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzbMJLQAVndApMdYJOxpBh010JfJLtrRPPUKI507Tf7myBiLu2H
-	x8485STZVVY7Zq9ZevfJzqayqT77Kd1qzcfdIjWXbu+/bVtFJtnnMJC7
-X-Gm-Gg: AeBDieuK0XWziEZcCDmlwYoYzMZyFc9NX5bsxl/pJfQVaERR/bea4X1JlL3kpg5ahJo
-	MKIFfr72Bfywp1aJUSZs7lZ8P/Sjp3Q9bIjbFlK6JOIqm3fV4zMIwXdl73H/BuQ9fyhupJsG6cB
-	JsikCS58K73ylCpdULrHGWYjuXfjnDdrdirixCuyDMmaJknGG/n4Ej08P6KNETaD3i2rdwnXvLE
-	c8rCHgRxKWdMS0aqWJQq29zVJgNRAmgImgjoYBDiEqbIo4NXa5ONHtzQNUpAg0dndcynskrTnZh
-	NJUvW5MaD1D9d6JKoAOYyODql8uPzTyehO3NiHr/0jYdARq+tT3juMRnGJnFA/HWnHQOIL1Lfus
-	x81x8jOVYZOweZ7+Rh09Jh6DqepiCKJY90Myl2xrYF5tLKbo0M12ggpfymqrjjnrzAlGiw7bM/L
-	yLhx6EjM/ZwNvcuFCSwO1IAIPA8vkEHujA/xNj5pGIB1wMuo7ha4vtdC5yWhOwx0yLRl/DAPbD
-X-Received: by 2002:a05:6820:2908:b0:696:14c0:3f9f with SMTP id 006d021491bc7-696979ad3c5mr5336413eaf.11.1777927538248;
-        Mon, 04 May 2026 13:45:38 -0700 (PDT)
-Received: from [100.82.231.29] (c-98-38-17-99.hsd1.co.comcast.net. [98.38.17.99])
-        by smtp.googlemail.com with ESMTPSA id 006d021491bc7-69689266bacsm7144713eaf.0.2026.05.04.13.45.37
+        d=1e100.net; s=20251104; t=1777928163; x=1778532963;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uAEnOAPj5fUgAFUXnOyePT2fFfy+RA0tHhuCu8Z9sp0=;
+        b=FQrHhSoCk1sQSVR2cUF4Tpu1lSPkB8R43AUQuPkEOeA7AjxecQu0DxWKlzmheJTm7d
+         bi1I/XxdE9UOWFIYu8xieb5raxUIRkZTLn+TF+kNooDbabTNi4dxeRrQNKKcB2rkCYUB
+         osTnIGmCPGnZWIuyDHf9mJxI0CgwxH09JUbamZqqCBOV8h9UI8C9+qhE4PY/tziuAFxl
+         CGaYq+8Zg6gO8gsZ1A6Cq1CZPaN9Rh5B/OsUHpbykoXUZ5OwIibhuCCEdvll1j+MsBI0
+         2tGHJS15i1vQSrWWikPOS65BnS6GMBWMF9RPHGw3qbXutGWI/E82dkMobXUEgpKFFnwX
+         XNFw==
+X-Forwarded-Encrypted: i=1; AFNElJ+c4W8/6bSBhYFOv4MpQf8dOIcEhSkiQ71dJPX80uv92LVErN7shcSIf27FKKr9v20xHIDwpN7hrboHbYXrlOI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwZquMK5SuvvlFRNPPYpfBgyb1nbXqpMAmKDwNpBGZORNnFUZ16
+	ol3vK24Z4spmBXRwLZnX86rMESvn56Selye7B9uejurQ1djKQO6WL8Ka6A3DdFM/SA==
+X-Gm-Gg: AeBDiev8BOE3p6QkVuGJoT24uzuCRCo8KDcCk+Rh1xPjSPmOhgNtNYUf1OguvLs6LKR
+	3KZW2x6zhwQRSy6NusHWoK4s9eJYt8/XJAGzdy73ZKS873PIBIEgo1PSY8fkwqpQy6rWh3mke9e
+	bgxXnlxr04J0RtBHeealNoa196Uzz8A5UpT45e+ME35QuW23juKqYUXfkrNIMLz468Q3RVn4Xef
+	iKT/dytw+LAmeoBAFwjWD6yqtc8sEJDBnbTjjMTq9qw69ZE0H04ssOv0QKcbSqbEpZnzJKWAQ3A
+	UmFFCQYPq/2aXY/J62Ul7XIeKmgLVQ+MOs85bARm7ZlBnQ2308cnOF0IKvZNrchQakJve2aCG+p
+	mL9myWE54y1HsoOP3lKgXe/fk8zcI+X3huKAP/vBNSJKAugjGlF364lGuMQitwO3kc8jtvLb0bh
+	bQUtsNcniH8jvWrXnscDdPn2DnPJi7GT/bono/iBh5NKJxEK/UuOUh7oXRM51cQ9Z6QiUCOL9f1
+	Vzs8g==
+X-Received: by 2002:a17:902:f64a:b0:2b4:5a2e:98d9 with SMTP id d9443c01a7336-2ba53896e5bmr1405745ad.37.1777928162684;
+        Mon, 04 May 2026 13:56:02 -0700 (PDT)
+Received: from google.com (76.9.127.34.bc.googleusercontent.com. [34.127.9.76])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b9caa7e7besm116816715ad.12.2026.05.04.13.56.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 May 2026 13:45:37 -0700 (PDT)
-From: Jim Cromie <jim.cromie@gmail.com>
-Date: Mon, 04 May 2026 14:45:23 -0600
-Subject: [PATCH 17/17] dyndbg: change __dynamic_func_call_cls* macros into
- expressions
+        Mon, 04 May 2026 13:56:02 -0700 (PDT)
+Date: Mon, 4 May 2026 20:55:58 +0000
+From: David Matlack <dmatlack@google.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Alex Williamson <alex@shazbot.org>, kvm@vger.kernel.org,
+	Leon Romanovsky <leon@kernel.org>, linux-kselftest@vger.kernel.org,
+	linux-rdma@vger.kernel.org, Mark Bloch <mbloch@nvidia.com>,
+	netdev@vger.kernel.org, Saeed Mahameed <saeedm@nvidia.com>,
+	Shuah Khan <shuah@kernel.org>, Tariq Toukan <tariqt@nvidia.com>,
+	patches@lists.linux.dev
+Subject: Re: [PATCH 07/11] vfio: selftests: Allow drivers to specify required
+ region size
+Message-ID: <afkH3pMJKkIbElhI@google.com>
+References: <0-v1-dc5fa250ca1d+3213-mlx5st_jgg@nvidia.com>
+ <7-v1-dc5fa250ca1d+3213-mlx5st_jgg@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260504-dd-cleanups-2-v1-17-6fdd24040642@gmail.com>
-References: <20260504-dd-cleanups-2-v1-0-6fdd24040642@gmail.com>
-In-Reply-To: <20260504-dd-cleanups-2-v1-0-6fdd24040642@gmail.com>
-To: Andrew Morton <akpm@linux-foundation.org>, 
- Jason Baron <jbaron@akamai.com>, Luis Chamberlain <mcgrof@kernel.org>, 
- Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
- Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
- Shuah Khan <shuah@kernel.org>, Louis Chauvet <louis.chauvet@bootlin.com>
-Cc: linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Jim Cromie <jim.cromie@gmail.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1777927513; l=2145;
- i=jim.cromie@gmail.com; s=20260203; h=from:subject:message-id;
- bh=YZwMAR3uqET/bZH1qZJj95QcpN0V++SSyz4QoqNaiUk=;
- b=eISda3doke6ER4wdyvj6HcSygG7ahPVJyzRZLi0/2Xp1UhRLhMFfOJo3ZTRiElFtSC1U9xb7z
- NOeCSToXMEdBLWMSznSMQx3SVwpwr30T98dHODRqXEtoAIJAy012N13
-X-Developer-Key: i=jim.cromie@gmail.com; a=ed25519;
- pk=C6E5ODlPQo7ZBynATXH9wg7K6HxP0pIXyf4s38Qw0XE=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7-v1-dc5fa250ca1d+3213-mlx5st_jgg@nvidia.com>
 
-The Xe driver's XE_IOCTL_DBG macro calls drm_dbg() from inside an if
-(expression).  This breaks when CONFIG_DRM_USE_DYNAMIC_DEBUG=y because
-the invoked macro has a do-while-0 wrapper, and is not an expression.
+On 2026-04-30 09:08 PM, Jason Gunthorpe wrote:
+> Add a region_size field to struct vfio_pci_driver_ops so drivers can
+> declare how much DMA-mapped region they need. The mlx5 driver will
+> need ~18MB for firmware pages. Existing drivers leave region_size as
+> 0 and get the current default of SZ_2M.
 
-   if (cond && (drm_dbg("expr-form"),1)) {
-      ... do some more stuff
-   }
+I would like to get rid of the magic SZ_2M to make it easier for other
+tests to use the driver framework. Can you make this commit update all
+the drivers to set region_size? They can all use the same approach:
 
-Fix for this usage by changing __dynamic_func_call_cls{,_no_desc}
-macros into expressions, by replacing the do-while-0s with a ({ })
-wrapper.  In the common usage, the trailing ';' converts the
-expression into a statement.
-
-   drm_dbg("statement form");
-
-Reviewed-by: Louis Chauvet <louis.chauvet@bootlin.com>
-Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
----
- include/linux/dynamic_debug.h | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/include/linux/dynamic_debug.h b/include/linux/dynamic_debug.h
-index 027e96e0889b..3aa51e7f1938 100644
---- a/include/linux/dynamic_debug.h
-+++ b/include/linux/dynamic_debug.h
-@@ -224,24 +224,24 @@ void __dynamic_ibdev_dbg(struct _ddebug *descriptor,
-  * (|_cls):	adds in _DPRINT_CLASS_DFLT as needed
-  * (|_no_desc):	former gets callsite descriptor as 1st arg (for prdbgs)
-  */
--#define __dynamic_func_call_cls(id, cls, fmt, func, ...) do {	\
-+#define __dynamic_func_call_cls(id, cls, fmt, func, ...) ({	\
- 	DEFINE_DYNAMIC_DEBUG_METADATA_CLS(id, cls, fmt);	\
- 	if (DYNAMIC_DEBUG_BRANCH(id)) {				\
- 		func(&id, ##__VA_ARGS__);			\
- 		__dynamic_dump_stack(id);			\
- 	}							\
--} while (0)
-+})
- #define __dynamic_func_call(id, fmt, func, ...)				\
- 	__dynamic_func_call_cls(id, _DPRINTK_CLASS_DFLT, fmt,		\
- 				func, ##__VA_ARGS__)
- 
--#define __dynamic_func_call_cls_no_desc(id, cls, fmt, func, ...) do {	\
-+#define __dynamic_func_call_cls_no_desc(id, cls, fmt, func, ...) ({	\
- 	DEFINE_DYNAMIC_DEBUG_METADATA_CLS(id, cls, fmt);		\
- 	if (DYNAMIC_DEBUG_BRANCH(id)) {					\
- 		func(__VA_ARGS__);					\
- 		__dynamic_dump_stack(id);				\
- 	}								\
--} while (0)
-+})
- #define __dynamic_func_call_no_desc(id, fmt, func, ...)			\
- 	__dynamic_func_call_cls_no_desc(id, _DPRINTK_CLASS_DFLT,	\
- 					fmt, func, ##__VA_ARGS__)
-
--- 
-2.54.0
-
+  struct vfio_pci_driver_ops foo_driver = {
+          ...
+          .region_size = roundup_pow_of_two(sizeof(struct foo)),
+          ...
+  };
