@@ -1,154 +1,264 @@
-Received: from mail-ej1-f65.google.com (mail-ej1-f65.google.com [209.85.218.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from AM0PR02CU008.outbound.protection.outlook.com (mail-westeuropeazon11013042.outbound.protection.outlook.com [52.101.72.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADFD623FC41
-	for <linux-kselftest@vger.kernel.org>; Mon,  4 May 2026 11:43:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.65
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777895039; cv=none; b=VD8tKWYMIkukegz0HMJlW7dd28+PaAhoonnsLLY+EoutS+5jV9ANo6K4mxxEMs3iYnFtNfeAoe28SgSifl2MAoxSQkaGxZI4hW6lhKH/EccNFFG4YwMp9fscfXw8YMcccmgp+ZMfsRkiB6dMlJ22OdM89t8vPTs5vfV0XD0YY8s=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777895039; c=relaxed/simple;
-	bh=U4v0yuUMAoIUSHI2ykoTdV0jHk2IFugqerjA+IE84LY=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=PPwGNn5D9mzr3l4SQ4d/uDHqZBH/r8gGjvyDOclVtbRH+LF2Ky5/93yVjFp54t0N2l9g2dNIcEIPwzc1mNl2Qfm88WZV0aAE+nqO/M1FBEHacz3sAwLnEjme2XCYMMzKaMcpwcGitVy6skes0HRq8nz5Zhpzto5jD21hCRtuK9Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f65.google.com with SMTP id a640c23a62f3a-b9382e59c0eso634864466b.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 04 May 2026 04:43:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777895036; x=1778499836;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:cc:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BitYDc02mGdPLY7bb6uXCKEorSlQeFQtVxt67RJQ/v0=;
-        b=sTLrHe/5SAnUwcOUde+2LnPFjPyn3OVlxlfXFOlimunS3HbVGp3l13w7aLeLH25igv
-         jnpWBdKFs3EqKPoyoa7XzXwBAOwW9Qa8s4vCDCPSVsb2PVBPH9Qrdvb08wBbYgxUVEB2
-         Rdw98mejTnQQWLWwnKKqYDFjRGPzbS3HSQ27O3XuB2pw0myme8+oImtyw6Br4r61nHvs
-         0tAyIxmESsD8Atw1NfJ5nztG0jwEoxwoh0LNDMm4zzjxgsoKzzpM9tQ8PmLBJOxWpZQA
-         m7oZG6UynfBoL5+70PdeRdOcOgtZLuL2myRS+9qs7bBWg8qtfjKY+wPFvNiYmtPUpOUs
-         rS2w==
-X-Forwarded-Encrypted: i=1; AFNElJ/fqonGlff/G8l8LD4k1mNr5IG9P2vWgTT2zU0Xhkzkp0TAdLjbWfcyFXsRc1lCfjTdL9M8nEByF6C8wSL2/0o=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywz22HxQwt+LXqymO65Vy7J4J6fmYi5iwd3q+ckCpr2YK2mFYt7
-	DGk2yXvm9ts6OUTdI1m7XXWlEXMaEZUqLDmP/rj7bOZOJondIxwhppMx
-X-Gm-Gg: AeBDieuLFNEm9M6+vnBVkAFM24k9wn2ifv28PRgP/6QRZIZeBsSks2dGbsngWyjatZo
-	uGKrGVjPzaBbth4tDiYv6E5ccXWoL11HEvwEN6FQhKDMtgj7ax4RN4wvGrRI7dStDVEQ+jH27Aj
-	wDDniO9iFDXCzDPp8ZiynbAlMLMoZol1ewYNcIc9CwAhqlWr5OzhgSlETqp+cu6DnA9tcHC8PHO
-	5T3fBGloGrjROFiHBMZuhXjw2lRxKj9q4hMLI/iq4b5aliRWPX4FuwDFWT6j0iK/dngCWwRiIJM
-	9Foth4dVIJBeG6w1RsgxFe5qmiqslz7PVTOZ/z/3Cws7jUoHvkcaNSah8KbR5aiJCLc26PHqj1y
-	Ma9e2AerQ5Y9sBXx1G4v8dmGgkXoGr3suyDytvsoQ8muOjtliYLVAu72XYOyFq+vlkeGAvZm9ye
-	zyjYm2GAmT8dxXCy94iZmG+qBS7KJ5WYl8gipAecvqIuc4gf29r/ryFwy2xX3bvZbihg==
-X-Received: by 2002:a17:906:9fcb:b0:ba3:8a04:7688 with SMTP id a640c23a62f3a-bbffe0cc792mr429478966b.36.1777895035837;
-        Mon, 04 May 2026 04:43:55 -0700 (PDT)
-Received: from [192.168.88.241] (37-48-40-237.nat.epc.tmcz.cz. [37.48.40.237])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-bbe6d97e486sm392135766b.49.2026.05.04.04.43.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 May 2026 04:43:55 -0700 (PDT)
-Message-ID: <d9a9fcf7-07e2-4e26-afde-f1bec6108c40@ovn.org>
-Date: Mon, 4 May 2026 13:43:53 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 170793AA4F8;
+	Mon,  4 May 2026 11:47:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.72.42
+ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777895274; cv=fail; b=EXY1KgifuMG/rjA9E9lPoGVliyxjMAFe9BOwx0vHk5JXDX5g4sMR1C9DGMrjcGNvFnXelA75/B6B+jheWz1lFEiOcqbRNHZAuqENbBeL8U8C8f5/ATXe0kDsL9+4BZa3f7sF3+BxzQMb3sQNaHM9iTR9hsX1AI4BH9kEPrq/XfQ=
+ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777895274; c=relaxed/simple;
+	bh=FaRL9vK9/dCQoANpf3MKBY1q97xB0o7qF7w12bkmALg=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=CWPkmNO0AX7lGExTZiFkadjYuDrB051lSO+xmbziGKCllW3R9C3CEIsV7qR0Z5WIek4Vg4+xpkjNbHLwJ0QzCX5T4GYvDhY43igXIGWZo/tHX2eGrLLm2236vorXVWq+yPoms3gBcuMrhGOuZahIwEdQ4s1j+s9DNcFEvXS2GDY=
+ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=OaFSZt7S; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=OaFSZt7S; arc=fail smtp.client-ip=52.101.72.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="OaFSZt7S";
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="OaFSZt7S"
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
+ b=Y/9rBohg9Rg2RfEz43FacEHTcMiertuc+TPphOatqLiTIWvNsc2ovEP47v3nV6tr8XXa/im1smN9pfYxF+o6YM6ikc/S1peVaY0333a9gcseRMZHoMq7IX0VurK01LL2JZIN1R5Bj/f43cpcr1K4I8p+oNblQKGQMbUa2cD7CBjzCkBt3mhxzGwMT3KgOWe5OB28/WQH8JYwvAyYUrpyuIxhaikrpn5EOGo7HPYgxEFaTa7EY5s2jFW709TS0h+1GOu5N/1CYO7zBSj6FAgK/bSgCoZtBkDPioK0lJFDnx7yjkBtP3+IH5agC9EQQDeVlDVte2uMK6tjH4uCvYb/0w==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zAoxW9nBKu+S+1FoI3NQv7WyEFA8lcHiZj2YXVnDq1I=;
+ b=CJIq86txvMZmIaVAUHYDIcolvT6yoCGur2HqN1SqMHs5wlMUgIvubQoxrtIoyWvu4QVC0Hba92goDh2Qs7MXw0O0dSY7SHV1cbdQ9ICAfyJJNbyj5Y9BGfw8sQTpUuMyQ2+WqicC6QaFV+MHNTAShu/uNDUP4fqACUdT9cmHByZDtt8sVsA/pOTRf7kFvC/kAwmMwmxGuDRqryaV6pOneu88Xpl9tJa/kx/KJT4O4PpAQzCC+HZ8vL20gG2mof44sRbyk+cN5gYxvUTCWOZ+9rckuc1PbuS33+OEjRmd/RIZyChMKtmfqkzsNcFGGvsc68t1AghZgzn+LyJYuIN0Pg==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
+ 4.158.2.129) smtp.rcpttodomain=kernel.org smtp.mailfrom=arm.com; dmarc=pass
+ (p=none sp=none pct=100) action=none header.from=arm.com; dkim=pass
+ (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
+ dmarc=[1,1,header.from=arm.com])
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zAoxW9nBKu+S+1FoI3NQv7WyEFA8lcHiZj2YXVnDq1I=;
+ b=OaFSZt7SOfQI9FptREaNWn2XqJucL8Hrkdlodw5eQe8w0AVuGOx3qzJ1Rc3EfHvksG8gGuX6gLtonUfop+D0J5TVJ1Fi2eVECUIAmlhAoNBCszJIgiIZb011qYpfYO2zX3mzKEwLQGOCRXF8GDDuRjuuoloPAtVXqujIo4oLztw=
+Received: from DU7P194CA0005.EURP194.PROD.OUTLOOK.COM (2603:10a6:10:553::32)
+ by AS2PR08MB9596.eurprd08.prod.outlook.com (2603:10a6:20b:608::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9846.26; Mon, 4 May
+ 2026 11:47:44 +0000
+Received: from DB1PEPF000509F2.eurprd02.prod.outlook.com
+ (2603:10a6:10:553:cafe::ce) by DU7P194CA0005.outlook.office365.com
+ (2603:10a6:10:553::32) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9870.25 via Frontend Transport; Mon,
+ 4 May 2026 11:47:43 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
+ smtp.mailfrom=arm.com; dkim=pass (signature was verified)
+ header.d=arm.com;dmarc=pass action=none header.from=arm.com;
+Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
+ 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
+ client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
+Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
+ DB1PEPF000509F2.mail.protection.outlook.com (10.167.242.148) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9891.9
+ via Frontend Transport; Mon, 4 May 2026 11:47:42 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=QKEwn55kqQAhBCB/RWElx953qst5a6yBvA2nozF7xYnWdPnBRT7jZRU7HCzRuBjW9RLbugbpKNh3xV/msjcIB0Qv4yhqTurv42G323uec+gBsvOPuGzWNoKriXft5SGYmsTY0D9Cb6MeXFnoSSKxXmnLE6cORa2VOPtHK6ty7PSMAudKfl9IsWEz8Fx83mhvKdVTV7wLnLRpJGDRMzpU8TUbJqlaJ3qtjfMGfLb5cFuTZU+gsr2YXrn/xCgN5Blbge3U/M7+OEzC2DooxOMB8OCmazLL/Juns9oba7v0E4RRgfSy8By4NRwi8CPbZWMaq1EovaiNNjY2o5NeCgNnJw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zAoxW9nBKu+S+1FoI3NQv7WyEFA8lcHiZj2YXVnDq1I=;
+ b=VIsOF+UolUlBCp5OChrc0nDDlPUco6zOGQVeQLXyaVX12nAbU/j3yGyos6/+ss3WJVTx9VS8SmNhpRL7vadW7fK+jzjbIboQpY4tvLO13Wd2o/aoxLFLGyIQLA55LWT+2DjtSfxQJNkLvAbV1gLKiOxUlaBKNc97Y8+lFI70lojOTtmT02xBm9gCo3Hj3GBrwb6v7z4uiAksGRzSDGHqEBRVHwBW7WFj217CHewnIbFAk5OHTgCwbx1QvYaA2hfT9pwZ4DtaIY27it36FL9AnnO2OHUt+kIb4Suk0spdQjQ3cSrCNwvF33GRqJxWLIA+3WT/ue8/i8Z3GWk7WCrwFg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
+ header.d=arm.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zAoxW9nBKu+S+1FoI3NQv7WyEFA8lcHiZj2YXVnDq1I=;
+ b=OaFSZt7SOfQI9FptREaNWn2XqJucL8Hrkdlodw5eQe8w0AVuGOx3qzJ1Rc3EfHvksG8gGuX6gLtonUfop+D0J5TVJ1Fi2eVECUIAmlhAoNBCszJIgiIZb011qYpfYO2zX3mzKEwLQGOCRXF8GDDuRjuuoloPAtVXqujIo4oLztw=
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+Received: from DU0PR08MB9203.eurprd08.prod.outlook.com (2603:10a6:10:417::12)
+ by PAXPR08MB6494.eurprd08.prod.outlook.com (2603:10a6:102:154::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9870.25; Mon, 4 May
+ 2026 11:46:38 +0000
+Received: from DU0PR08MB9203.eurprd08.prod.outlook.com
+ ([fe80::f1e:73f2:57df:4047]) by DU0PR08MB9203.eurprd08.prod.outlook.com
+ ([fe80::f1e:73f2:57df:4047%2]) with mapi id 15.20.9870.023; Mon, 4 May 2026
+ 11:46:38 +0000
+Message-ID: <85e85faa-ad56-499d-b97f-bd336ee412cc@arm.com>
+Date: Mon, 4 May 2026 17:16:29 +0530
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 34/54] selftests/mm: hmm-tests: add setup of HugeTLB
+ pages
+To: Mike Rapoport <rppt@kernel.org>, Andrew Morton
+ <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>
+Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
+ Barry Song <baohua@kernel.org>, Dev Jain <dev.jain@arm.com>,
+ Donet Tom <donettom@linux.ibm.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+ John Hubbard <jhubbard@nvidia.com>, "Liam R. Howlett"
+ <Liam.Howlett@oracle.com>, Lance Yang <lance.yang@linux.dev>,
+ Leon Romanovsky <leon@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ Luiz Capitulino <luizcap@redhat.com>, Mark Brown <broonie@kernel.org>,
+ Michal Hocko <mhocko@suse.com>, Nico Pache <npache@redhat.com>,
+ Peter Xu <peterx@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
+ Shuah Khan <shuah@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
+ Vlastimil Babka <vbabka@kernel.org>, Zi Yan <ziy@nvidia.com>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-mm@kvack.org
+References: <20260428204240.1924129-1-rppt@kernel.org>
+ <20260428204240.1924129-35-rppt@kernel.org>
+From: Sarthak Sharma <sarthak.sharma@arm.com>
+Content-Language: en-US
+In-Reply-To: <20260428204240.1924129-35-rppt@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MAXPR01CA0106.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a00:5d::24) To DU0PR08MB9203.eurprd08.prod.outlook.com
+ (2603:10a6:10:417::12)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: i.maximets@ovn.org, Aaron Conole <aconole@redhat.com>,
- Eelco Chaudron <echaudro@redhat.com>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Yuan Tan <tanyuan98@outlook.com>, Yang Yang <n05ec@lzu.edu.cn>,
- dev@openvswitch.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net v2 0/2] openvswitch: fix self-deadlock on release of
- tunnel vports
-To: netdev@vger.kernel.org
-References: <20260430233848.440994-1-i.maximets@ovn.org>
-Content-Language: en-US
-From: Ilya Maximets <i.maximets@ovn.org>
-Autocrypt: addr=i.maximets@ovn.org; keydata=
- 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
-In-Reply-To: <20260430233848.440994-1-i.maximets@ovn.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-TrafficTypeDiagnostic:
+	DU0PR08MB9203:EE_|PAXPR08MB6494:EE_|DB1PEPF000509F2:EE_|AS2PR08MB9596:EE_
+X-MS-Office365-Filtering-Correlation-Id: ca004423-f851-486c-e3b0-08dea9d2f3ab
+x-checkrecipientrouted: true
+NoDisclaimer: true
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted:
+ BCL:0;ARA:13230040|1800799024|366016|7416014|376014|18002099003|22082099003|56012099003;
+X-Microsoft-Antispam-Message-Info-Original:
+ NV33F7xqBDn2nCz4pn5iJMRolpFFchu24tOH9paQZFFqPxla7H+dLoZeT7RQ7k/nEf0ZhsKXtJsximC0kPflqjyswbky9fnihtn6CVSAGenUMh4TywT78q0wANLSV0hFxvkzUAA4e7AAjEx8zLGqKyCyYFrjnhegf1O+QV/r/WTx/YTOTMxd31GTFht6kdfIjPMCUxrSdGy3+txG+xBChLG5vXLi4pHvNZe8kW0eL/V/OKq1l/GHmON80NID1BqSFPfcCP+M2Kl/k4YA4TseiEsvgPiseBwF9+GeY16Ob/y3WUnKaGZZ3uz00lhYg5atpYHDt8zPGw0j8CoDbT510jNIGG7Gsxde95jLgr4+9vVibX9NSucgCdLYqTv/UdJa1DaWp2gvHyFmKKl/puXZ650H9OmdjRUnhGDjZYJvLobnYwAFTd5XuaWb/av/Ouq2ODltVrGu/ZdmtS5dGHaLlUr0zM4bM3ZlZ4TWPJaGbZTk91k0I88lGfgCcT+mIbx6oB8D7zlp1VYJhJ+updvzT5FrmxnscS1Vpv2L8panOyZ/EMvTD5WtYAW56Tb+xvpOH1P2XOstzKQ92dx8yEu+WlYZisDCdLI/HyPQEzkk+GKWT1b0M4L2c/KQCzwnNk0o9XIY+UV+Eul0vkrpaM9atGY2pCu71O2YqsuuiWhYrgcYMatlhoScnCjENL8RIlKm
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9203.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014)(18002099003)(22082099003)(56012099003);DIR:OUT;SFP:1101;
+X-Exchange-RoutingPolicyChecked:
+ McTq2dyFVsxyJdM3yDu+F5fFa4r/YqbWPxoCzrc1pHKzOhNXWqphSjSrRRhm9tOykVHB10qJEbl0QYMIM17PGQrQC7uynnEb55VBOQAXIJH144gV92oAuf2RvY7sJ1frygWhZKds3ZmHZ36vHMHOXyoRoEmvtGe5bOlZ7xKIr8aLB2GQslmzg20geXnYJmGSjA4TJpAZWt8notkK4x0oKSnkz0XfUxvterlSmIx5Wr9VSRfJb/5bbKAgGOfaE0ij+VakmdeKJIvVrCcBdjC6wue42XMGZS8RGZs3lx/9NOr5Ff+W4hilGbs4KCcPMcmve1T5ZZE6TpzVTc3iznuO8w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR08MB6494
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ DB1PEPF000509F2.eurprd02.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+	06809161-266a-4d61-61ce-08dea9d2cccf
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|1800799024|14060799003|35042699022|7416014|36860700016|82310400026|56012099003|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	gwCXL2GFLRoLU245Mn3UZy00MKPUTi118bPbk8Hc1s5B59ydAJv0H6sRyXWllWlQNRVE04p71zCyMCFaIkqiFXEE457PNknofSbk0DlRDMD+PWW8w5pJ47DGMADaRE9DgKi2h/dLgH91LoZ34z2A/HhTtedTXBYlldFsqyVGCbaUPcqIASNcNX3DPSmt1pERYnFEHV/na8S7pbvB4qtBecWpmy2zwsAH0XgipP+ZHVX+NVAcw9qcEUtt4zej/Rh0L8mDbuA/NqbObDQS9FY4okihSmlBkfrROAI1Wb8mdwjDFaXvmE1PclsjRJG7ZOJPKL4aIRAnrfh9fvH37JfXf88+lq5EDanP3T1WXUpCLjTfP4NmyDNGqwnAH7oo5ZE9nLywA3yYRvMziXRD2bfwA+JY36KDx2LL6VaQVJLKUvXtNIx1Og77Xz6sa5ruA0GIlDTO1yBScz5Vl+c07WQtoYS5IUNBLY0BBBn1RoabgZSN+Pbp7Yt7Y/CL8T8kQ8X7Q4Ymvme+a5M8PpDMn2LpS4tDKpu6ddWEHrMPmiTTiRpf1cvYFtpU8kMU4C0IX/ydBwZB7k/nezdnfeCNhDew7ZyOi1mqHOIqGmW5jsN36dNMhSzkYKt2M8KmErvPepN4KWb0HhP+sxttT99RccRiaEp07+o8VpfA/jYpqkYpFTO0Zq8r/I2xjumvvk7hJrapy58u0vj/Mg6UFHcBCdxo1+FOWwLRfEZFIgEcAeBhskY=
+X-Forefront-Antispam-Report:
+	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(1800799024)(14060799003)(35042699022)(7416014)(36860700016)(82310400026)(56012099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	+CcMm3iCn2b54LTeu0SZLZESBTIENyHLzToCHcd12KjwJSZFx3jKaD8gYj5t1Uk+ceoDPDnQVxUI2j14FqDvx4i7MUazXhDF4sadMtWIat+mxETGxGzLWeIJ7IlpHoedJpImuRQVwSTLgYJiNm+JHvbU62r5eu8/jCi+BSP8DsGzZb4h+T12Osin99jii81Y4/GkYWemG8btP/eGGc28IGvkmAOUWLUO9fxowu8qa8bOHf0PB7XnoWwbwb92y4pV6JDnyT2+yplZiawHtk5GQZn0KC9W9NKi++HYCE09ZUUU7zbMORjCItG73lcQFH1Kiltcyj2oARE3dVGi2uJtzQQIEzf2o4qnIuESwHHGOFotRLHjzOxIe8cVybgF2StIZRGaTkyHLdzulw9ZRdkgIGheG8lRW3y7+f3pme2NhZVer1QTz9i7eeLRnJBu/3u7
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2026 11:47:42.8482
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ca004423-f851-486c-e3b0-08dea9d2f3ab
+X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DB1PEPF000509F2.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS2PR08MB9596
 
-On 5/1/26 1:38 AM, Ilya Maximets wrote:
-> Two patches - the fix for the actual bug and the selftest that reproduces it.
-> 
-> I missed the self-deadlock in the original patch that introduced the issue,
-> because testing required code modification in the ovs-vswitchd to force it to
-> use legacy tunnel ports.  I thought I made the change correctly, but apparently
-> something went wrong and the tests were run with the standard LWT infra instead.
-> The selftest added in this patch set will at least prevent this kind of mistakes
-> in the future.
-> 
-> I mentioned, however, that these tunnel vports are legacy and not actually used
-> by ovs-vswitchd.  RTM_NEWLINK + COLLECT_METADATA is used in conjunction with the
-> standard OVS_VPORT_TYPE_NETDEV instead since 2017.  The code to use the legacy
-> tunnels still exists in ovs-vswitchd however, but only as a fallback for older
-> kernels and we're planning to remove it in the next release.  I'll be sending an
-> RFC to remove support for these legacy tunnel types from the kernel, as they
-> serve no real purpose today and only increase the uAPI surface for CVEs, but
-> we need to fix the known bugs for stable versions.
-> 
-> 
-> Version 2:
->   - Added Ack from Eelco to the first patch (not to the second as it
->     changed a little).
->   - Removed now unused import socket in the dpctl.py [pylint/ruff].
-> 
->   - Regarding comments from both Sashiko instances on the selftest patch:
-> 
->     * The background process is not waited for / not killed.
->       If it hangs it will not be killable anyway, so it's not a problem.
+Hi Mike!
 
-Both sashiko instances still flag this.  Looks like the cover letter is not
-included in the prompt.
+On 4/29/26 2:12 AM, Mike Rapoport wrote:
+> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+> 
+> hmm-tests skips HugeTLB tests if there are no free huge pages prepared by a
+> wrapper script.
+> 
+> Add setup of HugeTLB pages to the test and make sure that the original
+> settings are restored on the test exit.
+> 
+> Since kselftest_harness runs fixture setup and the tests in child
+> processes, use HUGETLB_SETUP_DEFAULT_PAGES() that defines a constructor
+> that runs in the main process and add verification that there are enough
+> free huge pages to the tests that use them.
+> 
+> Replace exit() calls with _exit() to avoid restoring HugeTLB settings in
+> the middle of test and use SIGLILL to kill a child process in
+> hmm_cow_in_device test to avoid interference with signal handlers in
+> hugepage_restore_settings().
+> 
+> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> ---
+>  tools/testing/selftests/mm/hmm-tests.c | 22 +++++++++++++---------
+>  1 file changed, 13 insertions(+), 9 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/mm/hmm-tests.c b/tools/testing/selftests/mm/hmm-tests.c
+> index 409b11cad4bc..70c7ae989c01 100644
+> --- a/tools/testing/selftests/mm/hmm-tests.c
+> +++ b/tools/testing/selftests/mm/hmm-tests.c
+> @@ -69,6 +69,9 @@ enum {
+>  #ifndef FOLL_LONGTERM
+>  #define FOLL_LONGTERM   0x100 /* mapping lifetime is indefinite */
+>  #endif
+> +
+> +HUGETLB_SETUP_DEFAULT_PAGES(1)
+> +
+>  FIXTURE(hmm)
+>  {
+>  	int		fd;
+> @@ -632,7 +635,7 @@ TEST_F(hmm, anon_write_child)
+>  			}
+>  
+>  			close(child_fd);
+> -			exit(0);
+> +			_exit(0);
+>  		}
+>  	}
+>  }
+> @@ -712,7 +715,7 @@ TEST_F(hmm, anon_write_child_shared)
+>  		ASSERT_EQ(ptr[i], -i);
+>  
+>  	close(child_fd);
+> -	exit(0);
+> +	_exit(0);
+>  }
+>  
+>  /*
+> @@ -784,8 +787,9 @@ TEST_F(hmm, anon_write_hugetlbfs)
+>  	int *ptr;
+>  	int ret;
+>  
+> -	if (!default_hsize)
+> -		SKIP(return, "Huge page size could not be determined");
+> +	if (!hugetlb_free_default_pages())
+> +		SKIP(return, "Not enough huge pages");
+> +	default_hsize = default_huge_page_size();
 
-If someone thinks I should add the suggested kill on exit, I can, but it will
-not be effective in case the process hangs.
+default_hsize has already been initialized at declaration above, so this
+reassignment seems redundant. Shall we drop this?
 
-Best regards, Ilya Maximets.
+>  
+>  	size = ALIGN(TWOMEG, default_hsize);
+>  	npages = size >> self->page_shift;
+> @@ -1564,9 +1568,9 @@ TEST_F(hmm, compound)
+>  	unsigned long i;
+>  
+>  	/* Skip test if we can't allocate a hugetlbfs page. */
+> -
+> -	if (!default_hsize)
+> -		SKIP(return, "Huge page size could not be determined");
+> +	if (!hugetlb_free_default_pages())
+> +		SKIP(return, "Not enough huge pages");
+> +	default_hsize = default_huge_page_size();
+
+Same thing here as well.
+
+>  
+>  	size = ALIGN(TWOMEG, default_hsize);
+>  	npages = size >> self->page_shift;
+> @@ -2025,10 +2029,10 @@ TEST_F(hmm, hmm_cow_in_device)
+>  		ptr[i] = i;
+>  
+>  	/* Terminate child and wait */
+> -	EXPECT_EQ(0, kill(pid, SIGTERM));
+> +	EXPECT_EQ(0, kill(pid, SIGKILL));
+>  	EXPECT_EQ(pid, waitpid(pid, &status, 0));
+>  	EXPECT_NE(0, WIFSIGNALED(status));
+> -	EXPECT_EQ(SIGTERM, WTERMSIG(status));
+> +	EXPECT_EQ(SIGKILL, WTERMSIG(status));
+>  
+>  	/* Take snapshot to CPU pagetables */
+>  	ret = hmm_dmirror_cmd(self->fd, HMM_DMIRROR_SNAPSHOT, buffer, npages);
+
