@@ -1,95 +1,79 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 993543D1CB6
-	for <linux-kselftest@vger.kernel.org>; Mon,  4 May 2026 12:32:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B2BD1A683E
+	for <linux-kselftest@vger.kernel.org>; Mon,  4 May 2026 12:37:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777897931; cv=none; b=GNLN6lt2mb9yrO1ngm25pKuIaiw/S/sG8kJmlxI5uVOGPpbsJeUiVmdg5Db5l07i/5dbq56K6pioiexDRPHEgSJmQlf3WOE/4CS1iWAfkDjWrIZIPRhepk+A5E2/Mbi0OpUuHUHp2sNucopVTQ3zFwpA6JrpbO6CJ1UDHtUNAf0=
+	t=1777898245; cv=none; b=evBWuWU06md2T3z2gFetKGhnAtuVIAgOR2IC8+k1vXX4YzE8ckAdmXVjFipZHRszn2zc784RMSPrczVojwHs2ps64Qy7Q802RMYv0CX0zk4CWgnSmmuQeRti4Pe6OeqX6XuSFmfjTC7bEutb+HJNjBwBiRXPT0LCkFHvHigM/Jg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777897931; c=relaxed/simple;
-	bh=k4QL8qvkzMM84LE0VCc92a90Vt/42H1pZ5NNSERDBUU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YwYRVtWoXTvZVTv7C/4w4lPi/LOdkcjghZRUriemx02z5TPZDACnEq8PqecnNYUyjM13QI3AvTTm+vJQDFU7s3UkAwFTxsh5HTg1KtrqAfljg8AILH//7IpkkVtYU/r7qP4Wms72YZAANVbMRfBfzjKO5vi84dr3VyxPuWANiAw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=UjjImKM7; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=f2Am95ZI; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=O9MkyMDO; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=+N1UyPBC; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	s=arc-20240116; t=1777898245; c=relaxed/simple;
+	bh=bTuKn1DdihsBzgZCLCw2WFo+hdCwIzZvIiVGWxyeO0M=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UEtc8WypxJk53sDFdH/QTAxU96gKFGu1NqUegzN+3WtNLZMeJXmX43Tu1yDGpYknCWegnjIZlkSsQbD7IhkQ5R4g0RUEqIiibG7eBU2TmqmRIuHoicZ/bcm/IdELx0rrxcbwHeeaMzOeQEuAhtiWbrZlPa22D6TAdpFWKraX9S0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HDSKrjF4; arc=none smtp.client-ip=209.85.216.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="UjjImKM7";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="f2Am95ZI";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="O9MkyMDO";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="+N1UyPBC"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id EED385C547;
-	Mon,  4 May 2026 12:31:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1777897919; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=HpNtzM/lNNWKN+0w7GrcPbMne22lAOtj7Q4395GVrqI=;
-	b=UjjImKM7mC9/KENyStIBjExtWHbFcns/8VTU83lXw4snQOr6nNbdmJEC/lmCdVZuG6ZXTJ
-	RMzFhpS8m0p4Q47QzRRg8trCcl3bjvPz6kgo+9fSPQMUmRtTy0asC96pXPn2k9R/elh149
-	S34kfgFjuSxkjfBzhE2rWbj0kOztx7w=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1777897919;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=HpNtzM/lNNWKN+0w7GrcPbMne22lAOtj7Q4395GVrqI=;
-	b=f2Am95ZItL8unQKXIu55+eo84BDj+APiR2Ul2gwr02gwVVcQv1XXFO1Z5/7RHmEaF/rpdi
-	DGierZl6S5FyA9Dw==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1777897918; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=HpNtzM/lNNWKN+0w7GrcPbMne22lAOtj7Q4395GVrqI=;
-	b=O9MkyMDOghUtp+kyU+W9nYaYopMGkVARwD0OmTm8SHe2cymD8Tpqns5L872kGeXh6UbgvP
-	dkUl12M9ag+RVCI8zh1t0vWuoJjK3spym+N7vZxWLIFioi8fnFc92iwBj0Bl0Xz4XUiIHE
-	6HEcl+EoEU6fIqdwLv0Ne1osg18aJ3k=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1777897918;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=HpNtzM/lNNWKN+0w7GrcPbMne22lAOtj7Q4395GVrqI=;
-	b=+N1UyPBCfxId/ZI6twQ+X/CH+5tzCcQ3LcphZBlZEfsLF+i/ih8qlm1cQ4ODYE5jcZmaDm
-	VwIlNt6W8GU15ZAQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 5A222593A3;
-	Mon,  4 May 2026 12:31:58 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id AOgOE76R+GnBXQAAD6G6ig
-	(envelope-from <fmancera@suse.de>); Mon, 04 May 2026 12:31:58 +0000
-From: Fernando Fernandez Mancera <fmancera@suse.de>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HDSKrjF4"
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-364f65f6eaeso2714392a91.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 04 May 2026 05:37:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1777898244; x=1778503044; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=c9T1i7FdZhwacHJsq1bHlPf1QctcwfXVB2lsLVY3Qpg=;
+        b=HDSKrjF4S8DSUoB8amkx3Rts699x/Td14Z+oU2a+E6DkNlk1x3+JuPNUby8Yv8F3Li
+         /cBKY07/TtGAmd0v4F3Uhks/bgDqQRVI3iYNPHffv5ZuVFXbcNLWfeDxCsqyBoFtgs5p
+         UKY6S4Tykv9u8QDcPx6TsLlTA53FARBlpwBUwIvG/J1MS+pZDNZWnoQMt/1ebalcEpsS
+         zyjgui4e4OfI93OzaXsdsrOJSLBTuPc7njAqH/6po/fhYOMhrCAgVfj4rOBPW7CHWstX
+         SiIOK7mW01vttTXNgErJyZ5pZfEkb+ZJrMl7TcE2US+ydWEUl/Bme2BF3ytbV5KJMjtG
+         CqsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777898244; x=1778503044;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=c9T1i7FdZhwacHJsq1bHlPf1QctcwfXVB2lsLVY3Qpg=;
+        b=LwWA/bnYUYte9qB1E2uBuunj7EymWhoU7rgsquVObFoSezSqtirbidNqMEBHDk21KB
+         hKr61FSIjtFgciyQ8TqKlnp2E1sEOIjvIzxcAlgDcO1it62gP5pei7eeFBt3x//5ufke
+         azLdoteS4ocSARfOHKNThLvgeDpTjKsDcRZOz823/9YUAVAERt0BMZEn8iZiPLV3bycq
+         WKRRETYxYjv/1zjZO727nlnCPoMqlA6ZkYR1xMFZTsJuZ2HyrSWIsgZemYortLV188GT
+         j+DVzpdcDk2fVNYwHs3KwEwJ04x3LNVF9JZC9kebksYWtN4rjUzA8O9U3cD3dxqinY5N
+         i34w==
+X-Forwarded-Encrypted: i=1; AFNElJ8y1+BuKsHk5Q6atuMxo5AEIMp3g3Na71VLb8TIKXSkbt6AhMQbIMVQfOv7VSs0+pNpffnibcH780gntG06/6E=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxy3Er/4u5xrS9UXTPL1T9h9gkYLHeyOeXjItyVC5+h10dwoI2U
+	vFJwfo0o214wAAa4IG1d+OUpWymOnbQEy4wwTlMPEFhYZG8METKfFINJ
+X-Gm-Gg: AeBDievWmQP5/JHmYc6A5js1CdDN6IOJOVnSPqWCHScSO7KKBXrGUCpmSP5MG9i6f5m
+	+2CPinKDVwCLSyNFBaNvFMvHIWlWfLFKrnYDj6Gl6xh6TQ+y+NRPzhNYUxnCLkw59k2J5WEiCaw
+	M3x2LrhzcFpOM84g+Ia+xuDmH94sloumNnAZPVQ0C8oPFxDSiwUjcfmgSrBQBubpjPaWyva1Kw4
+	sPRFv1rwx7iY6KjDJvorLmBa6p8hYBC72sOyzowAWkYCH4avPWugVuIZwSBoKisqV5/esW1TL3R
+	YItUBkDs7gsOjGjI3HDqzkHvb50JA4l5N8NURokrrlq3Xh8k8O5+tItjj7xyDYyb5QPlfqY8W2D
+	xJUTrcy60XwOtA5tnxcDRn42FHXctEA2Lwzb9pbt7Ck1/vZnWULUPRfFcgct1JNT6MA0jdCLehw
+	Ba2mOxvxooLgcAl2Xuk/MDVyjNn85L9TGTh4VVQQ==
+X-Received: by 2002:a17:90b:44:b0:35f:b348:63e with SMTP id 98e67ed59e1d1-3650cdd0f75mr9531724a91.9.1777898243721;
+        Mon, 04 May 2026 05:37:23 -0700 (PDT)
+Received: from houminxi ([151.242.165.70])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-364f4558e0dsm5883550a91.2.2026.05.04.05.37.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 May 2026 05:37:23 -0700 (PDT)
+From: Minxi Hou <houminxi@gmail.com>
 To: netdev@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org,
-	horms@kernel.org,
-	pabeni@redhat.com,
-	kuba@kernel.org,
-	edumazet@google.com,
+Cc: aconole@redhat.com,
+	echaudro@redhat.com,
+	i.maximets@ovn.org,
 	davem@davemloft.net,
-	idosch@nvidia.com,
-	dsahern@kernel.org,
-	Fernando Fernandez Mancera <fmancera@suse.de>
-Subject: [PATCH 3/3 net-next v3] selftests: net: add test for IPv4 devconf netlink notifications
-Date: Mon,  4 May 2026 14:31:43 +0200
-Message-ID: <20260504123143.6284-3-fmancera@suse.de>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260504123143.6284-1-fmancera@suse.de>
-References: <20260504123143.6284-1-fmancera@suse.de>
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	shuah@kernel.org,
+	dev@openvswitch.org,
+	linux-kselftest@vger.kernel.org,
+	Minxi Hou <houminxi@gmail.com>
+Subject: [PATCH net-next v4 0/2] selftests: openvswitch: add pop_vlan test
+Date: Mon,  4 May 2026 20:37:11 +0800
+Message-ID: <20260504123713.555461-1-houminxi@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -97,152 +81,42 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Score: -6.80
-X-Spam-Level: 
-X-Spamd-Result: default: False [-6.80 / 50.00];
-	REPLY(-4.00)[];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-0.999];
-	MIME_GOOD(-0.10)[text/plain];
-	RCVD_COUNT_TWO(0.00)[2];
-	ARC_NA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid,suse.de:email,imap1.dmz-prg2.suse.org:helo];
-	URIBL_BLOCKED(0.00)[lib.py:url,imap1.dmz-prg2.suse.org:helo,suse.de:mid,suse.de:email];
-	FROM_EQ_ENVFROM(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	R_RATELIMIT(0.00)[to_ip_from(RLrr9ek4ud4f4qwi71m7motjzt)];
-	RCVD_TLS_ALL(0.00)[]
-X-Spam-Flag: NO
 
-Introduce a new test, `ipv4_devconf_notify`, to verify that the kernel
-sends the appropriate netlink notifications when IPv4 devconf parameters
-are modified.
+Add test_pop_vlan() to verify OVS kernel datapath pop_vlan action
+correctly strips 802.1Q VLAN tags from frames.
 
-Since YNL currently has a bug where it declares an array of u32 values
-instead of the nested attributes expected by the kernel for devconf set
-operations, a temporary hack (`patched_add_attr`) is included to
-pack the netlink attributes correctly.
+Patch 1 extends ovs-dpctl.py with vlan(vid=X,pcp=Y,cfi=Z) formatting
+and parsing, plus an encap_ovskey subclass for safe ENCAP NLA decoding.
+Patch 2 adds the selftest with baseline, negative, and positive checks.
 
-Signed-off-by: Fernando Fernandez Mancera <fmancera@suse.de>
----
-v3: added this patch to the series as requested by Paolo.
----
- tools/testing/selftests/net/rtnetlink.py | 75 ++++++++++++++++++++++--
- 1 file changed, 71 insertions(+), 4 deletions(-)
+Tested with vng on x86_64, all OVS selftests pass (including new
+test_pop_vlan).
 
-diff --git a/tools/testing/selftests/net/rtnetlink.py b/tools/testing/selftests/net/rtnetlink.py
-index e9ad5e88da97..99c5a3e7f1f0 100755
---- a/tools/testing/selftests/net/rtnetlink.py
-+++ b/tools/testing/selftests/net/rtnetlink.py
-@@ -1,17 +1,22 @@
- #!/usr/bin/env python3
- # SPDX-License-Identifier: GPL-2.0
- 
--from lib.py import ksft_exit, ksft_run, ksft_ge, RtnlAddrFamily
-+from lib.py import bkg, ip, ksft_exit, ksft_run, ksft_ge, ksft_true
-+from lib.py import NetNS, NetNSEnter, RtnlAddrFamily, RtnlFamily
- import socket
-+import struct
-+import time
-+import types
- 
- IPV4_ALL_HOSTS_MULTICAST = b'\xe0\x00\x00\x01'
- 
--def dump_mcaddr_check(rtnl: RtnlAddrFamily) -> None:
-+def dump_mcaddr_check() -> None:
-     """
-     Verify that at least one interface has the IPv4 all-hosts multicast address.
-     At least the loopback interface should have this address.
-     """
- 
-+    rtnl = RtnlAddrFamily()
-     addresses = rtnl.getmulticast({"ifa-family": socket.AF_INET}, dump=True)
- 
-     all_host_multicasts = [
-@@ -21,9 +26,71 @@ def dump_mcaddr_check(rtnl: RtnlAddrFamily) -> None:
-     ksft_ge(len(all_host_multicasts), 1,
-             "No interface found with the IPv4 all-hosts multicast address")
- 
-+def ipv4_devconf_notify() -> None:
-+    """
-+    Configure an interface and set ipv4-devconf values through netlink
-+    to verify that the appropriate netlink notifications are being sent.
-+    """
-+
-+    with NetNS() as ns:
-+        with NetNSEnter(str(ns)):
-+            rtnl = RtnlFamily()
-+
-+            ifname = "dummy1"
-+            ip(f"link add name {ifname} type dummy", ns=str(ns))
-+
-+            link_info = ip(f"link show dev {ifname}", ns=str(ns), json=True)
-+            ksft_true(bool(link_info), f"Failed to retrieve link info for {ifname}")
-+            ifindex = link_info[0]["ifindex"]
-+            notification_found = False
-+
-+            # YNL do not support netconf notifications yet
-+            with bkg(f"ip monitor", ns=str(ns)) as cmd_obj:
-+                original_add_attr = rtnl._add_attr
-+                time.sleep(0.5)
-+
-+                # Currently YNL has a bug for applying devconf values,
-+                # this hack fixes it. In essence, YNL is declaring an
-+                # array of u32 values, while kernel expects a nested attribute
-+                # on set operation.
-+                def patched_add_attr(self, space, name, value, search_attrs):
-+                    if name == 'conf' and value == b"MAGIC_CONF":
-+                        fwd_attr = struct.pack("=HHI", 8, 1, 1)
-+                        proxy_arp_attr = struct.pack("=HHI", 8, 3, 1)
-+                        rp_filter_attr = struct.pack("=HHI", 8, 8, 1)
-+                        ignore_routes_attr = struct.pack("=HHI", 8, 29, 1)
-+
-+                        return struct.pack("=HH", 36, 0x8001) + fwd_attr \
-+                                + proxy_arp_attr \
-+                                + rp_filter_attr \
-+                                + ignore_routes_attr
-+
-+                    return original_add_attr(space, name, value, search_attrs)
-+
-+                rtnl._add_attr = types.MethodType(patched_add_attr, rtnl)
-+
-+                req = {
-+                    "ifi-index": ifindex,
-+                    "af-spec": {
-+                        "inet": {
-+                            "conf": b"MAGIC_CONF"
-+                        }
-+                    }
-+                }
-+                rtnl.newlink(req)
-+                time.sleep(0.5)
-+
-+    ksft_true(f"inet {ifname} ignore_routes_with_linkdown on" in cmd_obj.stdout,
-+              f"No 'ignore_routes_with_linkdown on' notificiation found for interface {ifname}")
-+    ksft_true(f"inet {ifname} rp_filter strict" in cmd_obj.stdout,
-+              f"No 'rp_filter strict' notificiation found for interface {ifname}")
-+    ksft_true(f"inet {ifname} proxy_neigh on" in cmd_obj.stdout,
-+              f"No 'proxy_neigh on' notificiation found for interface {ifname}")
-+    ksft_true(f"inet {ifname} forwarding on" in cmd_obj.stdout,
-+              f"No 'forwarding on' notificiation found for interface {ifname}")
-+
- def main() -> None:
--    rtnl = RtnlAddrFamily()
--    ksft_run([dump_mcaddr_check], args=(rtnl, ))
-+    ksft_run([dump_mcaddr_check, ipv4_devconf_notify])
-     ksft_exit()
- 
- if __name__ == "__main__":
+v4:
+  - fix all checkpatch line-length warnings in new code
+  - fix pylint W0707: use explicit exception chaining (from exc)
+v3: https://lore.kernel.org/netdev/20260503120946.51869-1-houminxi@gmail.com/
+  - encap_ovskey: MPLS type "ovs_key_mpls" -> "array(ovs_key_mpls)"
+  - encap_ovskey: PRIORITY/IN_PORT set to "none" (metadata, not in ENCAP)
+  - _vlan_dpstr: cfi=0 falls back to tci=0x%04x for round-trip safety
+  - encap parse(): check return value for unrecognized trailing content
+  - vlan parser: boundary check + raise-from for exception chaining
+  - start_capture: || return $? to propagate ksft_skip correctly
+  - on_exit: moved after resource creation, not before
+  - ping success: changed from NOTE to FAIL + return 1
+  - VLAN interface creation: added || return 1 error propagation
+  - netns probe: distinguish EEXIST from missing CONFIG_NET_NS
+  - sbx_add: || return $ksft_skip -> || return $? (match sibling tests)
+v2: https://lore.kernel.org/netdev/20260501133924.3100680-1-houminxi@gmail.com/
+
+Minxi Hou (2):
+  selftests: openvswitch: add vlan() and encap() flow string parsing
+  selftests: openvswitch: add pop_vlan test
+
+ .../selftests/net/openvswitch/openvswitch.sh  | 196 +++++++++++++
+ .../selftests/net/openvswitch/ovs-dpctl.py    | 268 +++++++++++++++++-
+ 2 files changed, 456 insertions(+), 8 deletions(-)
+
 -- 
 2.53.0
 
