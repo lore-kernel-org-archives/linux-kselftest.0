@@ -1,126 +1,136 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD70B3E5EEC;
-	Mon,  4 May 2026 17:44:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA4993E3C60
+	for <linux-kselftest@vger.kernel.org>; Mon,  4 May 2026 17:58:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777916665; cv=none; b=c2vQO7YnJgFGHYTgwRxbVswOZ5FgzUoVG30fYqNRnvvle3Yu5OiVoL0ihMSSEO4oy/dugvFh/mHCvqgufipSBWgv6g975l6oeD/tg/LuWVCruLX8UqZK1vi7Oh25rMTj5E79Y1z7UG8u4FORB8K7F71KfAHHOUm1y3Rb549Gl7I=
+	t=1777917515; cv=none; b=Ye5+2+RpLonnLTJhL5+wuxJubm0yAnt+4ZNQHZeF0y24mm6FEYgDGL/AeWYhDM2cwUQPE5+hIumm4j7iv+rGEun4eFqlqurpHYe7C5uxGunegrc0d/ndvoXv8CXKsrieD9/G2rUW7WrbrUo3rZvVNV3aKhwijeV3RDEfvXdyqyE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777916665; c=relaxed/simple;
-	bh=SYt/6mfv1hxpYYXycGJME0LULXLMsMNt89zTsuYg9a8=;
+	s=arc-20240116; t=1777917515; c=relaxed/simple;
+	bh=kD3yc4dYnmsZzkT2YyM4BVb0HCX2pqsZW++VzilJknc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JM7A/63rsUyfXJidJ4kfKyF4w8hg40Y7BhBBXooEvIcf8bJcIqb4RWuVCs70JS2izCrCidA8trTJvYUNymYPEapFmyAYyWYsTzauWLwgjV++L7SwbvwzU5Hepc95bza8eR7DCRx0Fi+uJ/6EoSyt6b2U9Eeu61XL1kCX6CS+8y4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dtSNHWSg; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=TkBfCq/3YxCu3TJpKvr9TkzLPUT0a/8TZbrD3H1nOqtNuLhZP4gAsdT/Kz0R6Bs88g10mDECGtnRFBsMeM4YajUKWmmpB7O6KnPZVQYaGnS8bOx6mceqbf+nuu6neboBWr6xVTtT3Dlg1nd5NSvOJbtNJBLE3UXaqzyObDZ68Kg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=RtEEUcR6; arc=none smtp.client-ip=209.85.160.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dtSNHWSg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 682B4C2BCF4;
-	Mon,  4 May 2026 17:44:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777916665;
-	bh=SYt/6mfv1hxpYYXycGJME0LULXLMsMNt89zTsuYg9a8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=dtSNHWSgtw873XBDl2N7bBnR9SEfhi+tYvYYHuAQEUaZzqDeXQr8HqJqfwJeAuW84
-	 3wOhn4iM9AE+CFPktOtx3q+KxorvVLNPzw2rxZnqnJjx9Ruoah5IVurjxR2q1ouFsi
-	 Auh960XEgjRnCPmgfWbpLfXsQDaWz7YMKNb5PXWMKArFa4hlJ5uJSNYvqsPPrSt1jA
-	 0vJBvTS9Vi03YqwaxNAyypmyvWS0D4Iq2xnrkqNB1wrJLXtitreFzxOM4376tBD0cV
-	 tB66y+eWhwiWm2/YjefYdVIk2dDaW8HENslcbruP/txjbQVkfCDZ6ofRrdZdObbs/c
-	 VJjvLfG8REs0w==
-Message-ID: <04434fce-df13-4251-b873-60f6fa18474d@kernel.org>
-Date: Mon, 4 May 2026 19:44:19 +0200
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="RtEEUcR6"
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-415c8a4d2e6so1924819fac.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 04 May 2026 10:58:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1777917513; x=1778522313; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GvkNuWtDFHo1rGVLS1OVrL1SOAMrPEAfIsWzXam7WRA=;
+        b=RtEEUcR6y/0Q+yiA4qOB3BVrTh+awFd3q3dxqqSpYKChFpKb6XmcIztpQldT7IFMa1
+         Je1k/R4NEkG+TwjXoHavQjuFlWziPVq008ulBSu+Hobci9Ejgg/IUUKBztpK3fdxUZxQ
+         gq2IMLf7qY1H59yKlikYp0eJJB2oBfJAWeuKE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777917513; x=1778522313;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GvkNuWtDFHo1rGVLS1OVrL1SOAMrPEAfIsWzXam7WRA=;
+        b=BuPtrKkkMall3X/1CkmLuJqYxaJ2rdvKLykTPK+CGLlJ78uiCdA9kl604cX1FawqhP
+         7lYCbI+yZ9PBX+wUe58mHn8fnI/+t0ocLjgfIkOwzMQw3EryhUEbdC6R/yHKm5gJTLHU
+         8LWL9lL8GEKVSbt4SF36gpXJ4OxqDS0UMDJP+6friZwKXpsnG4MvXXTU2T6mFfHiAVIv
+         PNRagESrE5Ji2U66u2ICd6ONaLqAj01GlZhhS0RzPj5vw9AF6eTBVkvbRd+EoFQRcH3H
+         w5KA4Lgvj7zdbvJnalkhubT4UisUc8XsvE5YvHFOsAdfWY/UnQDTOnSdoASkAZvNhpfr
+         OPHg==
+X-Forwarded-Encrypted: i=1; AFNElJ+t7aQratMjEugeYBCJNTaVY3EgKYqrtgh6pD13HvNUnEYjv+K5cdrzVHxl2MufJMJvfGZihfuykpdMcscWDZY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxsy3P7U3k8FsLtZfOMfcCDwX/EgPslAWDF3TWZ3iNe6ISRXQ6W
+	9K3VeBrT9+3zvqiGfzqdZAmP/QoTbXvVmON/F6Wm/O7j7t4YzMHE015f8frZlVFnl6g=
+X-Gm-Gg: AeBDieuqJmftMVtDD2ra82cbrXdWWi/j3L8M76Oj94NV8+Eg8UE+n+XMtGL7SlsjgjY
+	MskohskdsmEJDFpBknVCmDfFGzAOer0uwo+MVfk3vlGcOXGimd/FCV+CmWL9GTMfbVcSLXQRhXK
+	Qw3k7K7AV+EyamVOvJIT/MC1Y8cvL05EyNWyWcW1wWUku8WvpjvxeuRLPRWw1OiPAjhTXcb+jXA
+	rS5u/bBiu/Q9q9zjSjKxxSYYsJlREyiUAfmmTgxW8U0ZSeXb09ouhGoMrgTlFdySFk8qxt+dxli
+	hHTCe3WQGpdyRqEzCbXKbONYlfktOFm5fLc51RT/dfQANJEna7d3CnQisJmn31m96KQHS2OiIHX
+	RYlWrFAio+UAnyz4nCpianIEmyZX7AHCWoNcFqwdTG3Cl7vk7aV9C4NiaTtFM2HRJ0cvA0vtCFW
+	ot1VoNd7/ST1xscfBJVwVi4fURvxaeZXphMhjYGKhY5Q==
+X-Received: by 2002:a05:6870:3329:b0:42c:1205:ef1 with SMTP id 586e51a60fabf-434761b92ebmr4940978fac.25.1777917512752;
+        Mon, 04 May 2026 10:58:32 -0700 (PDT)
+Received: from [192.168.1.14] ([38.15.57.99])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-43454d324a4sm11365948fac.14.2026.05.04.10.58.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 May 2026 10:58:32 -0700 (PDT)
+Message-ID: <234e4db0-c1be-4b91-969c-0008f058e4cb@linuxfoundation.org>
+Date: Mon, 4 May 2026 11:58:31 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH] selftests: mptcp: add test for IPv6 subflow SLAB
- placement
-Content-Language: fr
-To: Vastargazing <vebohr@gmail.com>
-Cc: martineau@kernel.org, mptcp@lists.linux.dev, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org, shuah@kernel.org, stable@vger.kernel.org,
- fw@strlen.de
-References: <20260501151454.211598-1-vebohr@gmail.com>
- <44e564f8-d059-407b-8f5e-a149dd76dea3@kernel.org>
- <20260501-reply-mptcp-v6-initcall@vebohr>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- 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
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <20260501-reply-mptcp-v6-initcall@vebohr>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests: kselftest: fix wrong test number in
+ ksft_exit_skip
+To: Sarthak Sharma <sarthak.sharma@arm.com>, shuah@kernel.org
+Cc: pbonzini@redhat.com, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260427112447.147985-1-sarthak.sharma@arm.com>
+ <7b424355-58bf-470f-ab5a-071ef9c5646f@linuxfoundation.org>
+ <604e0c71-0517-4f5f-b127-4b58755527b9@arm.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <604e0c71-0517-4f5f-b127-4b58755527b9@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Hi Vastargazing,
+On 4/27/26 23:10, Sarthak Sharma wrote:
+> Hi Shuah!
+> 
+> On 4/27/26 11:14 PM, Shuah Khan wrote:
+>> On 4/27/26 05:24, Sarthak Sharma wrote:
+>>> ksft_exit_skip() increments ksft_xskip before printing the KTAP
+>>> result. As a result, ksft_test_num() already includes the skipped
+>>> test.
+>>>
+>>> Adding 1 to ksft_test_num() increments the printed test number
+>>> again, producing an incorrect test number and wrong KTAP output.
+>>>
+>>> Drop the extra increment and print ksft_test_num() directly.
+>>
+>> I applied this patch to linux-kselftest fixes branch.
+>>
+>> I ran a few tests and couldn't really see the problem this patch
+>> fixes with and without the patch.
+>>
+>> Can you send me before and after for mm or timers test runs?
+> 
+> Sure, this will affect the output whenever a ksft_exit_skip() is called
+> after a ksft plan has been printed.
+> 
+> Let us look at acct_syscall test. When I run the test without root, I
+> get the following output before applying the patch:
+> 
+> TAP version 13
+> 1..1
+> ok 2 # SKIP This test needs root to run!
+> # 1 skipped test(s) detected. Consider enabling relevant config options
+> to improve coverage.
+> # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:1 error:0
+> 
+> where we should have observed ok 1 instead of ok 2.
+> 
+> When I run the test without root, after applying the patch, I get the
+> corrected output:
+> 
+> TAP version 13
+> 1..1
+> ok 1 # SKIP This test needs root to run!
+> # 1 skipped test(s) detected. Consider enabling relevant config options
+> to improve coverage.
+> # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:1 error:0
+> 
+> Since a lot of selftests are being formatted to give KTAP output right
+> now, this patch is expected to fix a larger number of tests once that
+> gets merged.
+> 
 
-On 01/05/2026 19:01, Vastargazing wrote:
+Sounds good.
 
-(...)
-
-> One question if you don't mind: if something similar came up again and
-> a test *was* warranted, which existing script would be the natural
-> home? mptcp_join.sh seemed closest since it exercises the accept path,
-> but i'm not sure if checking /proc/slabinfo fits there or if there's a
-> better mechanism for that kind of thing.
-It depends on what needs to be covered:
-
-- diag.sh: check various counters
-- mptcp_connect.sh: single path
-- mptcp_join.sh: multiple paths
-- mptcp_sockopt.sh: socket options
-- pm_netlink.sh: in-kernel path-manager
-- simult_flows.sh: small multiple paths perf tests
-- userspace_pm.sh : userspace path-manager
-- + kunit: token and crypto
-- + packetdrill: various tests
-
-So not mptcp_join.sh. Maybe diag.sh, or in packetdrill.
-
-Cheers,
-Matt
--- 
-Sponsored by the NGI0 Core fund.
-
+Thanks.
+-- Shuah
