@@ -1,228 +1,126 @@
-Received: from PH8PR06CU001.outbound.protection.outlook.com (mail-westus3azon11012038.outbound.protection.outlook.com [40.107.209.38])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 142FF37C909;
-	Mon,  4 May 2026 16:42:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.209.38
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777912926; cv=fail; b=nVdlDDaKHwSTuNi61r25TAz0u7wk2/YBBqTpykDGhSzVIOUiSNzNgGrPyHbeDEIhKwg1fOZDjYIgYQGt/IYPPvuLG76oVeLOSMtxaPnHJtw6XrI96e5Gh1gDPnFIYxe8CWZJ7jR5SjWskpmtoZN2YqlDFn75+5GgVZn6uUGwnR0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777912926; c=relaxed/simple;
-	bh=3fwE9ZgKO6CGGOpUMktiKZijkNmFSZnmUhjgaiFnATE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=Z4/vcNpITEtGkBfX/4Ux7MI0oPl7VS5GjYM8H/lsevlh4gnRMa4dAlCF/Ei965Ay/X3RX59vuLI99FedtX1fGHXDUFAG0kPOX8d7e+1pM3TTupMzRemP0Ve1bovLi8DEViOGIr1326ZvgdZeEqr00OYDqOzuz+QO6ZaLSQQgEVc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=ro/FQjoy; arc=fail smtp.client-ip=40.107.209.38
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B53BC3E3D99
+	for <linux-kselftest@vger.kernel.org>; Mon,  4 May 2026 17:41:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777916466; cv=none; b=HtCz06ErD0uZqYtMiKdULs9pW5wcIgw/OC+oKYumEokbwpx2F7O1mS+p4038e8XHZiWCHxMySqeFKxV5ITnWFx6JLYaSDC6TFUp+d4cgXoc3BxJWuQ0yTzNN6Cj2ntNl227O2/FPmn5V0Ew9uCSIccRRFyytZWjn52nPwxKBiR0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777916466; c=relaxed/simple;
+	bh=1UsReSX+8wdCLHB7KFJQ+E5VgWUto9I66Wc7oO8lIyc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aoy8CR9ar0NMDYcOOzLYTf0L3Gsd4Di4qnOXMrA1dEIIThCbgbVndGTP7J99xWSJy9Vncnn6WZ4AlTvsulMvUjsJDvnbZtJTzSFe92bjpJbZt4asIo9gIYobxY26NErqibQ1HuEPHnPnQShpJHbjhL6/gdBaG4Nc5mrc0ydzp0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=In0E+sY4; arc=none smtp.client-ip=209.85.128.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="ro/FQjoy"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Zo1W72y4AkkPxTAORCeE/d0DJYD6Z7N88wmCYz697ZjfTupcz5H5pauX5T6iUwSKDpTzN9boCptdIRu9hONfg8lUgT0Bz3nmmFuSY8AqYGKkJ1DXTzL2Yy/FJZFzsbg0J+J9AiVfAq/VWW/wVEBhFlrxVCl1MHlEZnasTtIgJ9fCWv2jushbowBr1ulB0GkoW0nJOIn8OmqwayO6PKt3ST9JOFooI4vS/aubkFZOMobWx6ra30LzcbHbZ+fh2LMNSUhUo2W26TOjyxBAfTVMcEg+6xtYdZhk4EZThhC1g1kUCbtUQ84T54UkLXlYqa5ZA64fAi1U8H+EeHHa+RV1uw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yTl7A/nsCIb7dOB9tjegsp+Jvuc0Bf1cFhyrXq+vK20=;
- b=VNFkmPvW9pohFa2lmm6tgRL26eEqZVFWz19pXvlDZA8sV4Q+ANuBSV5G8+m75HngwQ+EdatsguZtqmz9zVKH5uRgT/m3fhs5EVEdLM1Dh0F+gqS3RjgNuY4QvjYlVQCXXJqdJPwFgHhrb00n3qd8rLt/m8CQwPXNICBxMVzQRYdTbxmsFnarh0ja7ek92Q53uWjwwCH1jscXW3RO5j97SHrhVt7kHlAvk1vHTwSmcMJu9hWRSF5F6OlRqlLuIcrOitoHROJg2haELyur2Gvq+Dsb0ND6WpZD0tkxPjI+66IHSHyiJYlExOPiyTUVj29CIdx85FAQ9kNREojhmWKh8g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yTl7A/nsCIb7dOB9tjegsp+Jvuc0Bf1cFhyrXq+vK20=;
- b=ro/FQjoyMGMng/r41S9zqybYQ/q3e6BRx6XIl9GMVkMKAjEYuccQ2KY861I4UKtA/LR9LCQ2QspZEnP8eA2FUIUTwlA0JYytAWhdeq9ejxrI6iQEr8AkxB+PHJkxC5HZ8iOKgNMGvJPC0sw5h3ucmTThpj8hSNb5iJe4Ccm+LY2EhorxC6jhsrQMU5/9Uhj8/FquxDePuR6bnkTeve9yBVgOTg0connGe38h+zTiwWA75Qb9lx4nPHXYkUs6j2ub+j0kbPFyg6Z+XASaCUatnW0eD1qf5UqKI3o1KqXXlqie8IepP8fs4qc6S4ofte4W1MBCn9Lktm+gDc3ANdSGvQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from SA3PR12MB7901.namprd12.prod.outlook.com (2603:10b6:806:306::12)
- by PH7PR12MB5831.namprd12.prod.outlook.com (2603:10b6:510:1d6::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9870.25; Mon, 4 May
- 2026 16:41:59 +0000
-Received: from SA3PR12MB7901.namprd12.prod.outlook.com
- ([fe80::6f7f:5844:f0f7:acc2]) by SA3PR12MB7901.namprd12.prod.outlook.com
- ([fe80::6f7f:5844:f0f7:acc2%6]) with mapi id 15.20.9870.023; Mon, 4 May 2026
- 16:41:59 +0000
-Date: Mon, 4 May 2026 19:41:49 +0300
-From: Ido Schimmel <idosch@nvidia.com>
-To: Fernando Fernandez Mancera <fmancera@suse.de>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	horms@kernel.org, pabeni@redhat.com, kuba@kernel.org,
-	edumazet@google.com, davem@davemloft.net, dsahern@kernel.org
-Subject: Re: [PATCH 2/2 net] selftests: fib_tests: add temporary IPv6 address
- renewal test
-Message-ID: <20260504164149.GB385401@shredder>
-References: <20260503221139.3742-3-fmancera@suse.de>
- <20260503221139.3742-4-fmancera@suse.de>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260503221139.3742-4-fmancera@suse.de>
-X-ClientProxiedBy: TL0P290CA0008.ISRP290.PROD.OUTLOOK.COM
- (2603:1096:950:5::19) To SA3PR12MB7901.namprd12.prod.outlook.com
- (2603:10b6:806:306::12)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="In0E+sY4"
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-7bd4c61765dso47422127b3.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 04 May 2026 10:41:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1777916465; x=1778521265; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MVXd468iEVfxLrg6jVOPb84V8zxADSA4fIpheWYNkXw=;
+        b=In0E+sY40WjXr38vjuFwqy9YAP9Uo5UgBmqy3Qprdg5mlu2uyL3cy122gNEsaFn7dW
+         hemO1tPw3qQKb/8uImOiRWerTgkuXuMxY9hC5ksTd15rzo7mvVVgKwbO2iwXgj1M0DRS
+         tOz/dABDMi9XANL5ylOcZmTqAdGzRyX9eFFhieD8mhKYmdv0C4XnPJaRSdopimwHWP1C
+         wtpswnK194r2H0ywyWanBu80k9l9BwvH1QkO3dB1rQkAg+Li1zNA81PQdrLFspAbftCt
+         mUPWMh2QQPtS8e+PX8vL+Y99AaJllfysXy505pavZqqNorromYownMlnhXrwWxZi4Mtm
+         pZlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777916465; x=1778521265;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MVXd468iEVfxLrg6jVOPb84V8zxADSA4fIpheWYNkXw=;
+        b=q57UkEbYCnMzdcFeKk+XlCgC0Vy+hoUczAlthFORqveRwTW7MuL/j3VWnqK64dQaJQ
+         aRMdTfZPA2IDalrIk5SN9CaCmzOX614Dcc6JPZ13UIjp5TVmPfx+XhjFgzX1fHdSiFP+
+         pSMR8W0Bqw1V4BeD+eN2SOu6OWeS1gHIRAZ31Wed9hp5ORSuUsJIWevU7Tj49t1X5ZcG
+         10FXx00rbtmc38AsByb7X/F32tdIooCzAfdlkLHOvneZtkPo9F2Qee11l86SQKdCSlEa
+         JA4h/3Ee4Ex18R2FpbqpIMoBMhaS9okzdzTh9kzZGgzQujJwlhF5i3leVFdo7GCMSSvy
+         1Fig==
+X-Forwarded-Encrypted: i=1; AFNElJ9bnf+HobP4MElaxhsTeun7/+87JdhcXwhU0E9DEcKekeAwBA1FZLdyBYyINr7TRl55msbJCbOJhs/MH/rX2x0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxILarzChZIciHOz0qy+4ZwQmdNKxIdD2CWI0gkcfZKarw0Aklz
+	1URl7mizBo3Est1oRvEO/ARl6MAAtIGPTV6wO7CNzJyTej2H1xINxw90
+X-Gm-Gg: AeBDiesTO8uL6+jPqMl7LyRoMjRK8kXgNOCNHpFxrUjL0t/FRqVOYRbDveXDPMZZIqM
+	pSHczBKN9VVuyASV/E/v5aKtK6eX1eobt2Ul5c8Iw1zdo4820d1QAi3TslaiP+Ow0TjsZacjwhu
+	pD9QJ7ZapPUuFYM1xB/llokBQumkX6yfpsEWTqCTjxd5+fraAZj2uHid9XUxQshbi7xoyi/fNZk
+	Sf3p1RYYat15wHT9kROeoIHEIjhvJeuFw1CVOV3rFRmcA1ZeZGi7YFOUzgZek8FnY4LmwBQIEip
+	xLqZPVxyyP+KuWCyh1o6bW2cKYu8GDkenv4I33sxjP80ftT/NaT9mb8FGNaEgUGM7xo+3Q1BRIi
+	q+R+Lc0BbmVuiYmSXTOSZhFeAzusijh+KIUUQepRkRKq1Rt6PY6FXwsRo53AHhbbece037RHhGy
+	U6XezyjIpIkNfhh7RXMfH4S110n7pPZeagwYofA2YSMCMSoU91udgqcNgMAT2P9z8bXWx7ahaNT
+	o/UaS0qjX6cUZud01NEGM/RGNL0h232I6kkPw==
+X-Received: by 2002:a05:690c:c0b:b0:7b4:b591:e77e with SMTP id 00721157ae682-7bd76fdb62bmr112277547b3.18.1777916464547;
+        Mon, 04 May 2026 10:41:04 -0700 (PDT)
+Received: from willemb.c.googlers.com.com (172.235.85.34.bc.googleusercontent.com. [34.85.235.172])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-7bd6685d0cbsm51551767b3.35.2026.05.04.10.41.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 May 2026 10:41:02 -0700 (PDT)
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: netdev@vger.kernel.org
+Cc: davem@davemloft.net,
+	kuba@kernel.org,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	shuah@kernel.org,
+	Willem de Bruijn <willemb@google.com>
+Subject: [PATCH net-next v7 0/3] selftests: drv-net: convert so_txtime to drv-net
+Date: Mon,  4 May 2026 13:38:31 -0400
+Message-ID: <20260504174056.565319-1-willemdebruijn.kernel@gmail.com>
+X-Mailer: git-send-email 2.54.0.545.g6539524ca2-goog
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA3PR12MB7901:EE_|PH7PR12MB5831:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1f8c6121-096b-49f4-2b98-08dea9fc0fab
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|366016|376014|18002099003|22082099003|56012099003;
-X-Microsoft-Antispam-Message-Info:
-	9T21f88nd5VSSrW+AK+wxxf40KyCAVbj/j59hZ9HnOFVAazXzQm2YeedEw/5Jz/NCza5W53eqLvOUsNJVIo3Mt+tzE5bxm5UTuoHZdAUHswgsoILOh6XEcUsoS+y65X2KtT8IpbwirSKJArjwnWTOR0ixhPwaYSnOQLspC+dnB/LFZDegYbn7TWF1wPD7ikAND511dSU5qho9bne1WZlUoQrYGP/zn98ODnHn7AXm2ouX3l3HMfY057XJJGZTFg2OWplhn2Wkb2M9sniQ/O37P+lp+jhfvGBfrp3ZkNbjZ1QH7pht1VVNeX/HmWUq/9k0wyBTg/vC7LNb7tpP82fw4xMk/sT6lmW6Wd7EF7k2MX3GoECG+ZLp+WRUp7tfhMNEieOA85RCdKCOqxd+Vrd52x+Y9z5yqk1vRvBu9lFF1P1aVQ6qtfhCtpeMFsBPyGTtTg3cLZ84EW2s2iwJOFBLLVeIKUk9CrDnZYXm2IZcYrJLGJVQWURb35BiHFzUzwceZ7blziShRmjG349EaYty7/jHRUzgvugY4TlB0ARhCZyM5typMBWpKM0hh9wlHlQmkNYAXJwYG71HFl0wWlkRObEAwsgY9IANqEneEy+D0izQHg3M/QBAZLEkJaet9ECB8LViUAKbp2rabd3S+tr+wqoKTc0/OBBID1Ujon2gaxSoVth99cbGmoGWDMJrZdH
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA3PR12MB7901.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(18002099003)(22082099003)(56012099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?E7FB1rwzJIVFeJU2dvqshHpiH9Qy5psNfCyWkfLqNraotWBzP7ovnFUtoYsA?=
- =?us-ascii?Q?OwFR8zyrsBpMN39h5pHunvzUqA+j9+DrQnbDjP9M+KONYkV5iGoEpFz+GMQO?=
- =?us-ascii?Q?ab29UqXjXpLpSpnIaERWsY7uX04/2QlYFmo2wCqTSfny8jDr0fQNzjEwCa+s?=
- =?us-ascii?Q?h/u7Jt/XpV7VAKfsLbwPP6baUKdTOQ6mc/+RfUB0mj4LUhcZXA4/hDo/qnUY?=
- =?us-ascii?Q?rwyvYTzX3fPzKrtmYwASovwJlPzqDNKPYdt2rWD6E6PNWdXNU36wd0B9yBG6?=
- =?us-ascii?Q?tym11iX7xQziqumaFIy89qK4CfO8L87mcenLz2ggAVCdnu0tGDbzBD8sCOTy?=
- =?us-ascii?Q?SN+V+wdsTXtNLSMStTWlnPrCK5u64vT1+QDJFS4EO0BeDy+8NHu0eE8CsG1g?=
- =?us-ascii?Q?MD4QQSRx0RlkT+3hb4mAqpclZdfNll4QdrnGzim4ppBXKTjWsdQDpHInqZts?=
- =?us-ascii?Q?G4Ee1dnTRDVv4V1XlM0TC/s58AufQCkyj7iBmklsmQoTyLID/6OIi1Dxk6yk?=
- =?us-ascii?Q?Pw1A6yeH1XZaJH6GNbL6Y0g3n4AiMDzWNRF+JCtk3XTg2sJadPkz8L8GM2ky?=
- =?us-ascii?Q?t4Edt7+IW+Z8OpFWLj48Pi+rS1iWPdrRCIAjpbbvBgRu3KQ9SYFwXsDjQIkq?=
- =?us-ascii?Q?t+xOwzMQCTSZAY7JkhTdRUHZoOHq1IWPhsYLn7VYFX92Ym/g8MdUcDcU6/ej?=
- =?us-ascii?Q?9BiTsFRy0W3gc8zsg0jS0dcxf275wUq5HZZp9F/buiXrJHIMRRlmeyXeon2H?=
- =?us-ascii?Q?412o/a8mvTiob9AG8pdB3wsTMKXVejYTIkKDmTzHlUUl6PqXRFqspofHCaM0?=
- =?us-ascii?Q?Xw+27XY3FrudReegi3brNAYd72Ae3yC0Tfu282ELTP45AOMR2Uav25je6/1B?=
- =?us-ascii?Q?06vfqYmhAipoqplh3xT5DDt9ctgAPWBOrdFOPIR/0ZLN89RdNLpfnCas2p+N?=
- =?us-ascii?Q?WnnXa2e84OpivajH4aB5tX8JeGrS+U1EXCt3b7getxXXXX35stwpJyAHuu+9?=
- =?us-ascii?Q?fZdiCQ5lDvYOLPAHdwjtASYKk0NUkxa8BfbtfmGwFoWj5FWgcE9YNGNDFkGc?=
- =?us-ascii?Q?IAKQoCqLUPGll6eTqh9bWtW3wbR8x9IaItD4nEMfsAugqoykhtGn+WOWi/ZL?=
- =?us-ascii?Q?LPdvrIl+pH9iSCsno6miymN7sxOI9IBbhWddTmYXOwTw27ovdwoFlvnhSePa?=
- =?us-ascii?Q?VncphVmdrpzycJ29ksoQ16PqgKaRCqMznlwBxsl0jL0hPFfnsk6SPhSV7P7k?=
- =?us-ascii?Q?+bYmGFJdeTUpEfSSUq6MkG7W2MSdgR0oF1RKZUpj7qbLyDrjJfFBvaksSMEb?=
- =?us-ascii?Q?RsSneGLweQ2gfCA9hhEl79IRgyTyQsMU9deqCcF6iF00MwG0v6ZKvLKdNwxn?=
- =?us-ascii?Q?EB/7h7VXnQtBgLXybEY7ZdteRjjqRNyYMZ/WQW5tj+MY5uxEtX7Ri8RaiXLF?=
- =?us-ascii?Q?CL09aES7j6SgJTeMvNOh7uwWJF46FKSGJiUxIjHoCd5nhZYpeLku0xKbZEMJ?=
- =?us-ascii?Q?V4ouMdMw99UAvDqO5trLnrTDIHXLb0a53Ez8lW2v1aBgEajBpLhfWsKQQMRO?=
- =?us-ascii?Q?WK4lX1NtlYaJrXJi1cmHDNTSQZoDQzNFOB8FZKTV0WZJhNRIOVtoCtD6RV5K?=
- =?us-ascii?Q?izyZZXOWxuIEFaXQ9xMtLslhKRv8VrbrLTLqCQTkiWMnrZA3Hy3NB1c6gI4T?=
- =?us-ascii?Q?QO9tSIFzDGA5ZGMEdZpIvRATWE9lpPBiqDCb2brBLqTwgmfG?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1f8c6121-096b-49f4-2b98-08dea9fc0fab
-X-MS-Exchange-CrossTenant-AuthSource: SA3PR12MB7901.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2026 16:41:59.5956
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +8VTmxr118HTXSNetcy/ncBvFRRE1KolRnCFXWqZ+t0y7V6alqs5Hggo47xsxPkdlXryK+KxzJcKerHLLG0P1A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5831
+Content-Transfer-Encoding: 8bit
 
-On Mon, May 04, 2026 at 12:11:41AM +0200, Fernando Fernandez Mancera wrote:
-> Add a test to check that temporary IPv6 address is regenerated properly
-> after the base prefix is deprecated and restored.
-> 
-> Fib6 temporary address renewal test
->     TEST: IPv6 temporary address cleanly deprecated and regenerated     [ OK ]
+From: Willem de Bruijn <willemb@google.com>
 
-Thanks for the test, but I reverted the fix and it still passes :(
+In preparation for extending to pacing hardware offload, convert the
+so_txtime.sh test to a drv-net test that can be run against netdevsim
+and real hardware.
 
-> 
-> Signed-off-by: Fernando Fernandez Mancera <fmancera@suse.de>
-> ---
->  tools/testing/selftests/net/fib_tests.sh | 55 +++++++++++++++++++++++-
->  1 file changed, 54 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/net/fib_tests.sh b/tools/testing/selftests/net/fib_tests.sh
-> index af64f93bb2e1..6a6e545cb40d 100755
-> --- a/tools/testing/selftests/net/fib_tests.sh
-> +++ b/tools/testing/selftests/net/fib_tests.sh
-> @@ -12,7 +12,7 @@ TESTS="unregister down carrier nexthop suppress ipv6_notify ipv4_notify \
->         ipv4_route_metrics ipv4_route_v6_gw rp_filter ipv4_del_addr \
->         ipv6_del_addr ipv4_mangle ipv6_mangle ipv4_bcast_neigh fib6_gc_test \
->         ipv4_mpath_list ipv6_mpath_list ipv4_mpath_balance ipv6_mpath_balance \
-> -       ipv4_mpath_balance_preferred fib6_ra_to_static"
-> +       ipv4_mpath_balance_preferred fib6_ra_to_static fib6_temp_addr_renewal"
->  
->  VERBOSE=0
->  PAUSE_ON_FAIL=no
-> @@ -1611,6 +1611,58 @@ fib6_ra_to_static()
->  	cleanup &> /dev/null
->  }
->  
-> +fib6_temp_addr_renewal() {
-> +	setup
-> +
-> +	echo
-> +	echo "Fib6 temporary address renewal test"
-> +	set -e
-> +
-> +	# ra6 is required for the test. (ipv6toolkit)
-> +	if [ ! -x "$(command -v ra6)" ]; then
-> +	    echo "SKIP: ra6 not found."
-> +	    set +e
-> +	    cleanup &> /dev/null
-> +	    return
-> +	fi
-> +
-> +	# Create a pair of veth devices to send a RA message from one
-> +	# device to another.
-> +	$IP link add veth1 type veth peer name veth2
-> +	$IP link set dev veth1 up
-> +	$IP link set dev veth2 up
-> +
-> +	# Make veth1 ready to receive RA messages.
-> +	$NS_EXEC sysctl -wq net.ipv6.conf.veth1.accept_ra=2
-> +	$NS_EXEC sysctl -wq net.ipv6.conf.veth1.use_tempaddr=2
-> +	$NS_EXEC sysctl -wq net.ipv6.conf.veth1.temp_prefered_lft=15
-> +	$NS_EXEC sysctl -wq net.ipv6.conf.veth1.max_desync_factor=0
-> +
-> +	# Send a RA message with a prefix from veth2.
-> +	$NS_EXEC ra6 -i veth2 -s fe80::1 -d ff02::1 -P 2001:12::/64\#LA\#3600\#3600 -e
-> +	sleep 2
-> +
-> +	# Deprecate it
-> +	$NS_EXEC ra6 -i veth2 -s fe80::1 -d ff02::1 -P 2001:12::/64\#LA\#3600\#0 -e
-> +	sleep 2
-> +
-> +	# Restore it
-> +	$NS_EXEC ra6 -i veth2 -s fe80::1 -d ff02::1 -P 2001:12::/64\#LA\#3600\#3600 -e
-> +
-> +	ret=1
-> +	for i in $(seq 1 25); do
-> +		sleep 1
-> +		num_dep="$($IP -6 addr | grep -c "temporary deprecated" || true)"
-> +		num_tot="$($IP -6 addr | grep -c "temporary" || true)"
-> +
-> +		if [ "$num_dep" -eq 1 ] && [ "$num_tot" -ge 2 ]; then
-> +			ret=0
-> +			break
-> +		fi
-> +	done
-> +	log_test "$ret" 0 "IPv6 temporary address cleanly deprecated and regenerated"
+Two preparatory patches
+1. support negative tests, where tests are expected to fail
+2. add a tc helper 
 
-Missing:
+See individual patches for details and detailed changelog
 
-set +e
+Previous versions:
 
-cleanup &> /dev/null
+v6: https://lore.kernel.org/netdev/20260430132820.1944517-1-willemdebruijn.kernel@gmail.com/
+v5: https://lore.kernel.org/netdev/20260427201640.294694-1-willemdebruijn.kernel@gmail.com/
+v4: https://lore.kernel.org/netdev/20260409164238.661091-1-willemdebruijn.kernel@gmail.com/
+v3: https://lore.kernel.org/netdev/20260406025020.1636895-1-willemdebruijn.kernel@gmail.com/
+v2: https://lore.kernel.org/netdev/20260405014458.1038165-1-willemdebruijn.kernel@gmail.com/
+v1: https://lore.kernel.org/netdev/20260403175047.152646-1-willemdebruijn.kernel@gmail.com/
 
-Like in fib6_ra_to_static() and the skip path?
+Willem de Bruijn (3):
+  selftests: net: py: support cmd verifying expected failure
+  selftests: net: py: add tc utility
+  selftests: drv-net: convert so_txtime to drv-net
 
-> +}
-> +
->  # add route for a prefix, flushing any existing routes first
->  # expected to be the first step of a test
->  add_route()
-> @@ -3002,6 +3054,7 @@ do
->  	ipv6_mpath_balance)		ipv6_mpath_balance_test;;
->  	ipv4_mpath_balance_preferred)	ipv4_mpath_balance_preferred_test;;
->  	fib6_ra_to_static)		fib6_ra_to_static;;
-> +	fib6_temp_addr_renewal)		fib6_temp_addr_renewal;;
->  
->  	help) echo "Test names: $TESTS"; exit 0;;
->  	esac
-> -- 
-> 2.53.0
-> 
+ .../testing/selftests/drivers/net/.gitignore  |   1 +
+ tools/testing/selftests/drivers/net/Makefile  |   2 +
+ tools/testing/selftests/drivers/net/config    |   2 +
+ .../selftests/drivers/net/lib/py/__init__.py  |   5 +-
+ .../selftests/{ => drivers}/net/so_txtime.c   |  25 +++-
+ .../selftests/drivers/net/so_txtime.py        |  96 +++++++++++++++
+ tools/testing/selftests/net/.gitignore        |   1 -
+ tools/testing/selftests/net/Makefile          |   2 -
+ .../testing/selftests/net/lib/py/__init__.py  |   4 +-
+ tools/testing/selftests/net/lib/py/utils.py   |  51 ++++++--
+ tools/testing/selftests/net/so_txtime.sh      | 110 ------------------
+ 11 files changed, 166 insertions(+), 133 deletions(-)
+ rename tools/testing/selftests/{ => drivers}/net/so_txtime.c (96%)
+ create mode 100755 tools/testing/selftests/drivers/net/so_txtime.py
+ delete mode 100755 tools/testing/selftests/net/so_txtime.sh
+
+-- 
+2.54.0.545.g6539524ca2-goog
+
