@@ -1,32 +1,32 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A88592E040D;
-	Mon,  4 May 2026 07:52:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 775512AD16;
+	Mon,  4 May 2026 07:59:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777881126; cv=none; b=Ko+yPOO4uP0G0zNecjFdqvCwy8EIVvYuzMPLL+U/DlKdl7blVSh/u8N6W5TDpU3liC21B+SC9WeXLX3X3NR2LvRX9aUHERh/Km9BwlsrRdfDw0qwuAplYqXygeR3dOmTFGuDzNkhN2xuX0c0+4XZpttAf7P3XAhFCQGrSbl3cKI=
+	t=1777881586; cv=none; b=c7wEptD6wbTAOlKCDQ2+NY35zyh9pd/5lt1Cys4HyOA6PtjEkUuZFhX6ONZmAqj7cEeR6R7537gUAYAkCwb5mgEJGqXfRoyINiIKhEwf+vK0PwWS0aoSAiS+4YYmeMWvBq1neHtxHwaZp8iJbcPLBX7SAz/4CgFRLKzHIDnpwJY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777881126; c=relaxed/simple;
-	bh=JAZP0VOjK8IWWwLxaA6mVGJfOv+HCV3E8PZjNZL9e48=;
+	s=arc-20240116; t=1777881586; c=relaxed/simple;
+	bh=Z0FyTKWUyHMmgU1F1HDPTlLvaTh3LvI2R4javIhne/g=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=a//kQXOxK7X2UR7cWSKDu5iG7iJdGnbjO+BuhPMDl6VI2XoCURaNUDScukAxzUOwvgeNMZH88/h4WWVnQwy9k8TEjqEB3Yc0pO4WOI8a6ssivIUYBoBrEx5mB47hU16riaJamD4dxcHME9uX7jErvx9CufrNotVFy5MIbH4xz/M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=q0Ior458; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=B3WZhjzxYV5R8vN7PmlrVotv3gaRcBes4fAYRPfMFJgsaqYr/2jOYxQfq/6xp0j5++nGNRMMWPHGgPISZbEOMgEFEoUXnmw007I2EcLkc42L3kcP6x63gw1pj4na/TGN4TxJEvjuh7tnGEqeVEwCSgUZSiIugQCql+CJ6gzxnH0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xp0I8n21; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q0Ior458"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5ACBAC2BCB8;
-	Mon,  4 May 2026 07:51:58 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xp0I8n21"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A5E5C2BCB8;
+	Mon,  4 May 2026 07:59:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777881126;
-	bh=JAZP0VOjK8IWWwLxaA6mVGJfOv+HCV3E8PZjNZL9e48=;
+	s=k20201202; t=1777881586;
+	bh=Z0FyTKWUyHMmgU1F1HDPTlLvaTh3LvI2R4javIhne/g=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=q0Ior458+826MxxYajg8HR0bjSFxuUwS3Nf9kiAi2a/JGmfCYN8qf+G+Vry8JIdR1
-	 Jx5fSuZJjo1zQEJ7jHvSGj61vq15Ouq92kAYbbiXnslEXWhuLH2f+Ui8aVdYs6P56n
-	 J2Tpp7AHZzHec8lj0hq6Ej4EQ8h9DIAc4VHpYvf3vHx7z6GDYaYTZ5qWTTZRXcgKYs
-	 b9pL50XSXLOBzxEtOs4rtAFI+TK2wM6NgPhaEkt4pp6HAcXhrPEuasbZ86sFD6b45F
-	 kio9wDn04LWHISRVcqC2GICZIn+agnQpZ2kX9lY2s+edyQqCwDgWzbqg0jQC4PGpA4
-	 amMFHz69ELOQA==
-Date: Mon, 4 May 2026 09:51:54 +0200
+	b=Xp0I8n21lr/oh/1fyZjtCkraLJGJfkjbkamlq8icE+MNyykgTJm8mK+cCtsG9Su31
+	 IViW5lB/u491Dwd9UKoLItqOts9bb6WPZiBaU5iYUt9GM/pzIUVM/LKy1qhY0Qk4ql
+	 NjrmnqCF0tcZewXQenlKO9rbPWp/hz0JwbRnvR3Hld4yuKTmzTvLfzbsq6U0//I1KJ
+	 Eh7jhQCsOwYfCsb8rLFpnQu+VHhIHUPz5hVPXpNSXi0VjZLBOKtHBAFVHYKeXdxoPg
+	 dzU7ijHO8/ZH2GCO0gLWnU/O7U+Cu682DdgAbvCSPM+Eb/XUbP5RSLtcc0VnOwr3pE
+	 FgRwhLWt7Kp0w==
+Date: Mon, 4 May 2026 09:59:37 +0200
 From: Mike Rapoport <rppt@kernel.org>
 To: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
 Cc: akpm@linux-foundation.org, peterx@redhat.com, david@kernel.org,
@@ -38,52 +38,40 @@ Cc: akpm@linux-foundation.org, peterx@redhat.com, david@kernel.org,
 	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
 	linux-kselftest@vger.kernel.org, kvm@vger.kernel.org,
 	kernel-team@meta.com
-Subject: Re: [PATCH 02/14] mm: rename uffd-wp PTE bit macros to uffd
-Message-ID: <afhQGs1Y4vwtRVEH@kernel.org>
+Subject: Re: [PATCH 03/14] mm: rename uffd-wp PTE accessors to uffd
+Message-ID: <afhR6VvypoFQqDzL@kernel.org>
 References: <20260427114607.4068647-1-kas@kernel.org>
- <20260427114607.4068647-3-kas@kernel.org>
+ <20260427114607.4068647-4-kas@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260427114607.4068647-3-kas@kernel.org>
+In-Reply-To: <20260427114607.4068647-4-kas@kernel.org>
 
-On Mon, Apr 27, 2026 at 12:45:50PM +0100, Kiryl Shutsemau (Meta) wrote:
-> The uffd-wp PTE bit is about to gain a second consumer: userfaultfd
-> RWP will use the same bit to mark access-tracking PTEs, distinct
-> from mprotect(PROT_NONE) or NUMA-hinting PTEs. WP vs RWP semantics
-> come from the VMA flag; the bit is just "uffd has claimed this
-> entry." Drop the "_wp" suffix from the arch-private bit macros so
-> they reflect that.
+On Mon, Apr 27, 2026 at 12:45:51PM +0100, Kiryl Shutsemau (Meta) wrote:
+> Userfaultfd RWP will reuse the uffd-wp PTE bit to mark access-tracking
+> PTEs, alongside the write-protected ones it already marks. The bit's
+> meaning now depends on the VMA flag (WP or RWP), not on its name.
 > 
->   x86:   _PAGE_BIT_UFFD_WP  -> _PAGE_BIT_UFFD
->          _PAGE_UFFD_WP      -> _PAGE_UFFD
->          _PAGE_SWP_UFFD_WP  -> _PAGE_SWP_UFFD
->   arm64: PTE_UFFD_WP        -> PTE_UFFD
->          PTE_SWP_UFFD_WP    -> PTE_SWP_UFFD
->   riscv: _PAGE_UFFD_WP      -> _PAGE_UFFD
->          _PAGE_SWP_UFFD_WP  -> _PAGE_SWP_UFFD
+> Rename the kernel-internal names that describe the bit:
 > 
-> Pure mechanical rename — no behavior change.
+>   - pte/pmd/huge_pte accessors (and swap variants)
+>   - pgtable_supports_uffd() capability query
+>   - SCAN_PTE_UFFD khugepaged enum
+> 
+> The ftrace string emitted by mm_khugepaged_scan_pmd for this enum is
+> kept as "pte_uffd_wp" so existing trace-based tooling keeps matching.
+> 
+> Pure mechanical rename -- no behavior change.
 > 
 > Signed-off-by: Kiryl Shutsemau <kas@kernel.org>
 > Assisted-by: Claude:claude-opus-4-6
 
 Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-
-> ---
->  arch/arm64/include/asm/pgtable-prot.h |  8 ++++----
->  arch/arm64/include/asm/pgtable.h      | 12 ++++++------
->  arch/riscv/include/asm/pgtable-bits.h | 12 ++++++------
->  arch/riscv/include/asm/pgtable.h      | 14 +++++++-------
->  arch/x86/include/asm/pgtable.h        | 24 ++++++++++++------------
->  arch/x86/include/asm/pgtable_types.h  | 16 ++++++++--------
->  6 files changed, 43 insertions(+), 43 deletions(-)
 
 -- 
 Sincerely yours,
