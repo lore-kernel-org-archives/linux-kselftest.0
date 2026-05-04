@@ -1,239 +1,151 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2442D335067;
-	Mon,  4 May 2026 08:30:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7495D2EA468
+	for <linux-kselftest@vger.kernel.org>; Mon,  4 May 2026 08:39:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777883451; cv=none; b=pAAIZdJir/37QhP5CO78/k6I7MoUV2eQku+EnT71QYCWQzk6LX6ZcmlqNLoJERLAoGZCuk7AlMNHhUMNgJdXAQJg4no4V1BLV+9WIpTJe86yiTJn0ZyuYcRrIvsUW001AG6z+fitTOs8LrpaneUlo8/XRx05bg6a008WzSltI3Q=
+	t=1777883979; cv=none; b=IHWF02nVMu57iJsDF5KnX/CI/e1+raqhx5nRC4L9RdNsErViDFfcIIJ0FbTfE45bzKWJZZxKFHBQdWtHtWcp1ItcKZD0BRNNzRR6JJnNUxK9G/ToARj44XwhHoDlxHsSP0VD/r2g2ke2pbO0SO3NRVAElnj/v4bKRVZnaXFXYpk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777883451; c=relaxed/simple;
-	bh=LwQdcjDlXg0itHoPUyZh+mH36PaAEwMzM4SLAyBwvwM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=G0ffANYfYnsFwyQ7rDYbmwvd2GIRxH+XGWl8nNwjk5dpb/+ZMCQ+qb4BAqfJzjOsG+doEuh5OyHVik9LuepUv2U9h+lemQ/+3Gbkc17rSvL/Cf54S5ctvl+BrhmS/vjfhvX6Y73Poi9wFKvCBlSqqLw8/eBgeAMwCvLae4bXw3U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Oxby+El0; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1777883979; c=relaxed/simple;
+	bh=yJ3isu6hXRqj3+UJugPSYKRTpH3FBi2ttz36cNQsA4s=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=TApdFkDcrDRg/IrDHYfpYASa2urOb1uecSLA40g+kXJivhfQu3LimBK9v46NCq/9ws/K+M4cjUOzGrOVjv/mtreJqraI5ArV+6Em051/2Q1zBsm7BWPBd6OPG120ez9am4CcCXpmjVFMAbJTPMpjeztHdbnjcBNUmlpUyhlLnw4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=V3yQTNMv; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Oxby+El0"
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64466bKZ347004;
-	Mon, 4 May 2026 08:25:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=udzwYhTawzSzNQvyJ
-	pDKM0o+od4uW9MOHNJ2PUBQYQ0=; b=Oxby+El0Pp4s0EdXUR98RyUNRIfQOrYy3
-	pzQAOx4IkvMRs8b+k0bGwpxPR2JHG6iQSbOZ6g1xiPQb/OnCwDXJF6Fg63O2ez7V
-	7++vWf6xXm3Jj/XHMDyGaooUS6169fjQ3BZ79o+dcT9lEJe1stXynOrcNSkWvjcs
-	70np21cYPuTtC5GS+3hguKyWtgDeGr8giK50iwJUuM5kJa3tGcRggZGWsY4/92fO
-	4Sl6g+6SLJqHQKsJveWdewoisUckO4VELLiUH3dmnpyvCKW0Hya3y+4THTBhkZly
-	hGgJpmK2K0XrLzRKbNlyx6VoBPBg4ea5plsV2cJ4pXTamHORhGk8w==
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4dw9x4e3rj-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 04 May 2026 08:25:27 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 6448OOJx023544;
-	Mon, 4 May 2026 08:25:26 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4dwuyvve8s-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 04 May 2026 08:25:26 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6448PMw016974094
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 4 May 2026 08:25:22 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id A98B02004B;
-	Mon,  4 May 2026 08:25:22 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 7734020040;
-	Mon,  4 May 2026 08:25:19 +0000 (GMT)
-Received: from li-3f69264c-2ce6-11b2-a85c-c3f414d24014.bl1-in.ibm.com (unknown [9.123.3.209])
-	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Mon,  4 May 2026 08:25:19 +0000 (GMT)
-From: Sayali Patil <sayalip@linux.ibm.com>
-To: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Ritesh Harjani <ritesh.list@gmail.com>
-Cc: David Hildenbrand <david@kernel.org>, Zi Yan <ziy@nvidia.com>,
-        Michal Hocko <mhocko@kernel.org>, Oscar Salvador <osalvador@suse.de>,
-        Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-        Dev Jain <dev.jain@arm.com>, Liam.Howlett@oracle.com,
-        linuxppc-dev@lists.ozlabs.org, Miaohe Lin <linmiaohe@huawei.com>,
-        Venkat Rao Bagalkote <venkat88@linux.ibm.com>,
-        Sayali Patil <sayalip@linux.ibm.com>
-Subject: [PATCH v6 05/14] selftests/mm: fix cgroup task placement and drop memory.current checks in hugetlb_reparenting_test.sh
-Date: Mon,  4 May 2026 13:54:42 +0530
-Message-ID: <02b37fe7c40a6be0cd6064c6eb70c83680ce04d9.1777877814.git.sayalip@linux.ibm.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <cover.1777877814.git.sayalip@linux.ibm.com>
-References: <cover.1777877814.git.sayalip@linux.ibm.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="V3yQTNMv"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1777883976;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=OXMJcNXcYKJnBsGpi0Xvu31OxRYiE4MQSQGjJq48ni4=;
+	b=V3yQTNMvsj8jHDmMpnq/uuXf05hp+ZgYY7e9pXlKqNTjROfthl30imvUt45kGuiM+blLji
+	6zU/8Wrvx3evXukoEiX5qHNfHbNc1WC7MN0sRFMfYgke5co0dTJzqn0B9NhnU1woD3b4sj
+	4/CNaqTFde3zNKIFvnoN/37ccAeUj6I=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-176-__1zxbWDP8Kwped1kdK_BA-1; Mon,
+ 04 May 2026 04:39:33 -0400
+X-MC-Unique: __1zxbWDP8Kwped1kdK_BA-1
+X-Mimecast-MFC-AGG-ID: __1zxbWDP8Kwped1kdK_BA_1777883971
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8D26C18003FC;
+	Mon,  4 May 2026 08:39:31 +0000 (UTC)
+Received: from [192.168.1.153] (headnet01.pony-001.prod.iad2.dc.redhat.com [10.2.32.101])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 005351800446;
+	Mon,  4 May 2026 08:39:28 +0000 (UTC)
+From: Albert Esteve <aesteve@redhat.com>
+Subject: [PATCH v3 0/4] cgroup: dmem: add selftest helper, coverage, and VM
+ runner
+Date: Mon, 04 May 2026 10:39:22 +0200
+Message-Id: <20260504-kunit_cgroups-v3-0-4eac90b76f91@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTA0MDA4NyBTYWx0ZWRfX6fwUAXzLn8Wg
- gM1UPeQpfoh9urHFpsMgwjs4Xm7BkcS453CNno8NIrXOxkJ+OOySmtO5UQX8j9KbVM8gSvDLN1G
- seQEfKyNoLtswGJDVmDRC86B9g4+6HSmQLVDzr46Vd8YUoFRgPIGC7l76C7qu0mjLe2Z/W85AV4
- Lep6vVH+nEliWN3TxOlEOecHAfh303VO4eIuocVBw16mrPfHO7mygrVzN+nZZk1g6C/AfKA2ndm
- iqegq6/FvFDqTUPTn8gqPNbVIqqPoAc1ILXHTqrrlBCT/pAdzcd/m92rzVtlD4g11va43p68WLJ
- pBrTtXVsfJ9C0MGL53lIv4opoQcsxgctnYGSA/LMf1Uk8Zea38pMYryufVepKqz18VVRHSKHdCH
- j5Iv2KTX/l7eKej2j4BGMwZP9RgJ6b9tf+K0hCRxH2MtALOsSf0mTPUqyIksFpuOLQ0hxsDbnXL
- NDSPWi0jB+M8UEjr88g==
-X-Proofpoint-ORIG-GUID: nsocRD-UhZ-GCoaVCj8_XEVJj2D_UOIq
-X-Proofpoint-GUID: cWw37LaJLFRDrRdP35Z8bqy0X4bxkhUz
-X-Authority-Analysis: v=2.4 cv=W7UIkxWk c=1 sm=1 tr=0 ts=69f857f8 cx=c_pps
- a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
- a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=uAbxVGIbfxUO_5tXvNgY:22 a=VnNF1IyMAAAA:8 a=fW5kwVfrStG9UF1TlMAA:9
- a=O8hF6Hzn-FEA:10
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-05-04_03,2026-04-30_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 adultscore=0 lowpriorityscore=0 malwarescore=0
- suspectscore=0 spamscore=0 clxscore=1015 phishscore=0 bulkscore=0
- impostorscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2604200000
- definitions=main-2605040087
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/13M0QrCIBiG4VsZHmf86tLZUfcREdO5TSIdukkxd
+ u+5EUQ7/D54nxlFE6yJ6FzMKJhko/UuD3YokO5r1xlsm7wRBcqBkQo/JmfHu+6Cn4aIRatAScN
+ LIALlZgimta/Nu97y7m0cfXhvfCLr+5Wo2EmJYMBSEMW0YLIGuATT9PV41P6JVirRX15Sss9pz
+ pXiXJyaipZS/+XLsnwAQ6cvS+oAAAA=
+X-Change-ID: 20260318-kunit_cgroups-7fb0b9e64017
+To: Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
+ =?utf-8?q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Albert Esteve <aesteve@redhat.com>, 
+ mripard@redhat.com, Eric Chanudet <echanude@redhat.com>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1777883968; l=3129;
+ i=aesteve@redhat.com; s=20260303; h=from:subject:message-id;
+ bh=yJ3isu6hXRqj3+UJugPSYKRTpH3FBi2ttz36cNQsA4s=;
+ b=sK5dMvKkXt9QAi5e9jaw4wYph84kRS8T20ZmztaVM+KpluMJrubB2s68y7EP5sHgQuFzLxR+m
+ +cUSrU+rqX/DRNUPkT4fyzcyMI7B1+YFwHiCbZ9+kJj35uFxRtAKmxp
+X-Developer-Key: i=aesteve@redhat.com; a=ed25519;
+ pk=YSFz6sOHd2L45+Fr8DIvHTi6lSIjhLZ5T+rkxspJt1s=
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-The test currently moves the calling shell ($$) into the target cgroup
-before executing write_to_hugetlbfs. This results in the shell and any
-intermediate allocations being charged to the cgroup, introducing noise
-and nondeterminism in accounting. It also requires moving the shell back
-to the root cgroup after execution.
+Hi all,
 
-Spawn a helper process that joins the target cgroup and
-exec()'s write_to_hugetlbfs. This ensures that only the workload is
-accounted to the cgroup and avoids unintended charging from the shell.
+This small series adds practical test coverage for the dmem
+cgroup controller.
 
-The test currently validates both hugetlb usage and memory.current.
-However, memory.current includes internal memcg allocations and
-per-CPU batched accounting (MEMCG_CHARGE_BATCH), which are not
-synchronized and can vary across systems, leading to
-non-deterministic results.
+The motivation came from following the recent dmem API discussion in
+thread [1]. That discussion considered changing the dmem API and
+adding a new knob. Currently there are no dedicated tests covering
+dmem behaviour, which makes such changes riskier.
 
-Since hugetlb memory is accounted via hugetlb.<size>.current,
-memory.current is not a reliable indicator here. Drop memory.current
-checks and rely only on hugetlb controller statistics for stable
-and accurate validation.
+Adding selftests has an additional challenge: dmem charging paths
+are driver-driven today, so regression testing is harder unless a
+suitable driver is present in the test environment.
 
-Fixes: 29750f71a9b4 ("hugetlb_cgroup: add hugetlb_cgroup reservation tests")
-Signed-off-by: Sayali Patil <sayalip@linux.ibm.com>
+This series addresses that by adding:
+- a kernel-side selftest helper module to trigger charge/uncharge
+  from userspace in a controlled way,
+- cgroup selftests covering dmem accounting and protection semantics
+  (including dmem.max enforcement and byte-granularity checks),
+- a virtme-based VM runner for repeatable execution of the dmem tests.
+
+The goal is to make dmem behavior easier to validate when evolving the API
+and implementation, while keeping tests deterministic and driver-independent.
+
+Thanks.
+
+[1] - https://lore.kernel.org/all/aZoHfloupKvF2oSu@fedora/
+
+Signed-off-by: Albert Esteve <aesteve@redhat.com>
 ---
- .../selftests/mm/hugetlb_reparenting_test.sh  | 42 ++++++++-----------
- 1 file changed, 18 insertions(+), 24 deletions(-)
+Changes in v3:
+- Set charged flag on unexpected over-limit charge success.
+- Add CONFIG_DMEM_SELFTEST=m to selftest config.
+- Simplify -v to a boolean; single -v was a no-op.
+- Unquote kernel_opt to avoid empty-string arg to vng.
+- Document -b in usage() output.
+- Link to v2: https://lore.kernel.org/r/20260421-kunit_cgroups-v2-0-bb6675d8249c@redhat.com
 
-diff --git a/tools/testing/selftests/mm/hugetlb_reparenting_test.sh b/tools/testing/selftests/mm/hugetlb_reparenting_test.sh
-index d724b6e45432..95f517c3bd16 100755
---- a/tools/testing/selftests/mm/hugetlb_reparenting_test.sh
-+++ b/tools/testing/selftests/mm/hugetlb_reparenting_test.sh
-@@ -105,22 +105,17 @@ function assert_with_retry() {
- }
- 
- function assert_state() {
--  local expected_a="$1"
--  local expected_a_hugetlb="$2"
--  local expected_b=""
-+  local expected_a_hugetlb="$1"
-   local expected_b_hugetlb=""
- 
--  if [ ! -z ${3:-} ] && [ ! -z ${4:-} ]; then
--    expected_b="$3"
--    expected_b_hugetlb="$4"
-+  if [ ! -z ${2:-} ]; then
-+    expected_b_hugetlb="$2"
-   fi
- 
--  assert_with_retry "$CGROUP_ROOT/a/memory.$usage_file" "$expected_a"
-   assert_with_retry \
- 	  "$CGROUP_ROOT/a/hugetlb.${MB_DISPLAY}${UNIT}.$usage_file" "$expected_a_hugetlb"
- 
--  if [[ -n "$expected_b" && -n "$expected_b_hugetlb" ]]; then
--    assert_with_retry "$CGROUP_ROOT/a/b/memory.$usage_file" "$expected_b"
-+  if [[ -n "$expected_b_hugetlb" ]]; then
-     assert_with_retry \
- 	  "$CGROUP_ROOT/a/b/hugetlb.${MB_DISPLAY}${UNIT}.$usage_file" "$expected_b_hugetlb"
-   fi
-@@ -154,18 +149,17 @@ write_hugetlbfs() {
-   local size="$3"
- 
-   if [[ $cgroup2 ]]; then
--    echo $$ >$CGROUP_ROOT/$cgroup/cgroup.procs
-+    cg_file="$CGROUP_ROOT/$cgroup/cgroup.procs"
-   else
-     echo 0 >$CGROUP_ROOT/$cgroup/cpuset.mems
-     echo 0 >$CGROUP_ROOT/$cgroup/cpuset.cpus
--    echo $$ >"$CGROUP_ROOT/$cgroup/tasks"
--  fi
--  ./write_to_hugetlbfs -p "$path" -s "$size" -m 0 -o
--  if [[ $cgroup2 ]]; then
--    echo $$ >$CGROUP_ROOT/cgroup.procs
--  else
--    echo $$ >"$CGROUP_ROOT/tasks"
-+    cg_file="$CGROUP_ROOT/$cgroup/tasks"
-   fi
-+
-+  # Spawn helper to join cgroup before exec to ensure correct cgroup accounting
-+  bash -c 'echo $$ > "$1"; exec ./write_to_hugetlbfs -p "$2" -s "$3" -m 0 -o' _ \
-+	  "$cg_file" "$path" "$size" & pid=$!
-+  wait "$pid"
-   echo
- }
- 
-@@ -203,21 +197,21 @@ if [[ ! $cgroup2 ]]; then
-   write_hugetlbfs a "$MNT"/test $size
- 
-   echo Assert memory charged correctly for parent use.
--  assert_state 0 $size 0 0
-+  assert_state $size 0
- 
-   write_hugetlbfs a/b "$MNT"/test2 $size
- 
-   echo Assert memory charged correctly for child use.
--  assert_state 0 $(($size * 2)) 0 $size
-+  assert_state $(($size * 2)) $size
- 
-   rmdir "$CGROUP_ROOT"/a/b
-   echo Assert memory reparent correctly.
--  assert_state 0 $(($size * 2))
-+  assert_state $(($size * 2))
- 
-   rm -rf "$MNT"/*
-   umount "$MNT"
-   echo Assert memory uncharged correctly.
--  assert_state 0 0
-+  assert_state 0
- 
-   cleanup
- fi
-@@ -231,16 +225,16 @@ echo write
- write_hugetlbfs a/b "$MNT"/test2 $size
- 
- echo Assert memory charged correctly for child only use.
--assert_state 0 $(($size)) 0 $size
-+assert_state $(($size)) $size
- 
- rmdir "$CGROUP_ROOT"/a/b
- echo Assert memory reparent correctly.
--assert_state 0 $size
-+assert_state $size
- 
- rm -rf "$MNT"/*
- umount "$MNT"
- echo Assert memory uncharged correctly.
--assert_state 0 0
-+assert_state 0
- 
- cleanup
- 
+Changes in v2:
+- Fix debugfs_create_dir() error check
+- Fix module teardown race: call dmem_selftest_remove() before
+  uncharging so debugfs files are torn down
+- Use IS_ERR_OR_NULL() in selftest() sanity check
+- Add CONFIG_CGROUP_DMEM=y to the cgroup selftest config
+- Replace config-file parsing in check_guest_requirements() with
+  a direct check of /sys/fs/cgroup/cgroup.controllers
+- Add new patch 4 (from Eric Chanudet): vmtest-dmem.sh -b flag
+  to configure and build a local kernel tree
+- Link to v1: https://lore.kernel.org/r/20260327-kunit_cgroups-v1-0-971b3c739a00@redhat.com
+
+---
+Albert Esteve (3):
+      cgroup: Add dmem_selftest module
+      selftests: cgroup: Add dmem selftest coverage
+      selftests: cgroup: Add vmtest-dmem runner based on hid vmtest
+
+Eric Chanudet (1):
+      selftests: cgroup: handle vmtest-dmem -b to test locally built kernel
+
+ init/Kconfig                                  |  12 +
+ kernel/cgroup/Makefile                        |   1 +
+ kernel/cgroup/dmem_selftest.c                 | 199 +++++++++++
+ tools/testing/selftests/cgroup/.gitignore     |   1 +
+ tools/testing/selftests/cgroup/Makefile       |   2 +
+ tools/testing/selftests/cgroup/config         |   2 +
+ tools/testing/selftests/cgroup/test_dmem.c    | 492 ++++++++++++++++++++++++++
+ tools/testing/selftests/cgroup/vmtest-dmem.sh | 230 ++++++++++++
+ 8 files changed, 939 insertions(+)
+---
+base-commit: 80234b5ab240f52fa45d201e899e207b9265ef91
+change-id: 20260318-kunit_cgroups-7fb0b9e64017
+
+Best regards,
 -- 
-2.52.0
+Albert Esteve <aesteve@redhat.com>
 
