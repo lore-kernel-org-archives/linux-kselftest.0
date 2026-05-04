@@ -1,159 +1,232 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from PA4PR04CU001.outbound.protection.outlook.com (mail-francecentralazon11013048.outbound.protection.outlook.com [40.107.162.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F6FF30C601;
-	Mon,  4 May 2026 10:04:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777889042; cv=none; b=bdJj0NdbDgHzoIle6Ia78yiuwRxX/5mXyp98Y2EGuYSgruhrIETPV515Ae7iYZeXXdKzrKcAyPkNW9kZU6v8Ih8IrbJD/HPlIhtHEnZnj4v3TIeaIL976aBzkHAFFHph0hMFvtR7ljObobakghzrnoO95KFzwie/fpIgfSgvIrI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777889042; c=relaxed/simple;
-	bh=nuDbG8GlnJh+Hy802qd/7OVIem8MvSn13WgorSUCV9A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ta+rEwCxtzMp+ZkgiDoHv53SdQjPBV98YniVi+0ejUYTE/pEZMy+2Ql7i1zZ85bJKg2bGjV8mi26AkhwMcfYcAltQw9sTARqmYYQNeC7ImnCRS8DryS6lP+3jP3+QhCu8BaMXEkwuy3VHXuOvexjqsRku/x0A2u23jOWBx2Uq4Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J/Xx9CbG; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 097543921DB;
+	Mon,  4 May 2026 10:08:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.162.48
+ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777889339; cv=fail; b=ZIPZXg1fCsypkAUYijCQw9HO1bdYGGrKoNIOUXVSk0I1MTdr6JR/HGijlNd5sDiCNEsH4xMdCSHC3/c/GCYza29FdirO4MRu2fgjYOwoI1Z6ViIoHfOU16iISXSkTeKxrAxjLz9Lb9GjSWbwFlBBkmiK850hxByZ2iK8qb+vsfA=
+ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777889339; c=relaxed/simple;
+	bh=a99HHEs4QJBzEd3DZ0oD1EeIZv6gevKHEMTnwB9eyx4=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=P6gv9LGevfWMGkUVL3s8EyeIajd0ptFyt0r6NyA7maZyRlq7asPW9mAKVfouBRbJ1lH4T26ZHsxdsVeuEtwKq6QXzIg4SxgV+XKRTjBl8Emd7uINrA1ETieIUgHI9dADcJ+XYXNDZLbrYBbxJ4Q/Ph+LkX/V/Q7yuWdugP9WulM=
+ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=Ux0iMaI8; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=Ux0iMaI8; arc=fail smtp.client-ip=40.107.162.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J/Xx9CbG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6D73C2BCB8;
-	Mon,  4 May 2026 10:04:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777889042;
-	bh=nuDbG8GlnJh+Hy802qd/7OVIem8MvSn13WgorSUCV9A=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=J/Xx9CbG8R1a+pO1Uv1sGTs/BBrGbjew/2kuzfuHpGp61YQkRXzbFAN8/gl7CvZxB
-	 P2lIWZezpUbdr7VzrImntVmUH0Zm5kYQL1xg6r087F4fNluReD8dAFASnJ3dwJOEE/
-	 GeRUx6G/V53QZzavGAhqziL7v2XdZB5buP3T5g/+qrIjhYGdAc+FtIvrb8VbFlgMXW
-	 O0shTol9EYATc2GIV3ebKl6GHNfbGr8M2B3s6LK5QCvBc+a8ckQRoNaDjWwZWqahOb
-	 eAsZ6lZoZnfDe67CEtkK/gnN+knScpaxl8Q+1tVFCtQq6WA6wT0tbU95YVPCn+dj+V
-	 N/JdLBwBrNyNA==
-Date: Mon, 4 May 2026 12:03:59 +0200
-From: Maxime Ripard <mripard@kernel.org>
-To: Albert Esteve <aesteve@redhat.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, Paul Walmsley <pjw@kernel.org>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Alexandre Ghiti <alex@ghiti.fr>, linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, dri-devel@lists.freedesktop.org, 
-	workflows@vger.kernel.org, linux-riscv@lists.infradead.org, linux-doc@vger.kernel.org, 
-	peterz@infradead.org, Guenter Roeck <linux@roeck-us.net>, 
-	Linux Kernel Functional Testing <lkft@linaro.org>, Dan Carpenter <dan.carpenter@linaro.org>, 
-	=?utf-8?B?TWHDrXJh?= Canal <mcanal@igalia.com>, Alessandro Carminati <acarmina@redhat.com>, 
-	Simona Vetter <simona.vetter@ffwll.ch>
-Subject: Re: [PATCH v8 3/4] drm: Suppress intentional warning backtraces in
- scaling unit tests
-Message-ID: <20260504-tentacled-free-lobster-38d8d9@houat>
-References: <20260504-kunit_add_support-v8-0-3e5957cdd235@redhat.com>
- <20260504-kunit_add_support-v8-3-3e5957cdd235@redhat.com>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="Ux0iMaI8";
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="Ux0iMaI8"
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
+ b=scUAKiuCOak9DS95xs2q/b89ZEIRSmpQ7Iq42HmAifkPybMNP+zqowbdy3cEEDcINnepxxaMJ3xsu4rFO37HIet8zQXBYEPTqAQYDwdPI3RnX1yASnpLqYDbg/p1AEKZlVmXogdzGxd7TuDFp2kRMmf6WqAxakr+TLlTfNDu+XFXW7Np2Nyg0EKKqpGa9LtkNloYQrhBNgj5c0qWbmpjDuTfjtoYeer5sf/jE29PcoJnKhHxvdQvhrIz5xHUaoTcPhXNqlEnqv95Db+GlXNi+88DR3MlGT/APLlb1NBM3k3nvQ7kUP5sDf9pQwDtzm23LYEo0xbrEkjTJ5/vmoZQxA==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Ub6ZL2tIcHwar9sNIuSCmy+/Vnt+jHpKR7DQxRMuYy0=;
+ b=R6ph0LDjNZ7OVa/pfYxabWAx/mU3wCtaPDLuYAiW2O54YmpEzfkFf9jpCCIxNsUrmAWtS3zpzPy7Vz6D+Qr6MnB/uUcEkeriIjeEj1RuMZovSKcvpxxm4FEWAWSQCwCg+ukf7VTT6GFLFAdgH4iD0dq53gFkWUYXPEmRnZ+7H+Ty+uR0u3l1emrrTsq/SboV1juVyMqDmpddo3Ebiq7F5XiP5zVqshEMg5Z+n7L4OihqtJCJU+3YKGEgZ7/Joqf1nKd3THboPcRTHk071f6gIEejPmjRm1RKwvycbVIbD49thVBX+7okdm+TZMDJYtDngzebr3DGvbyIgq6KgD3lww==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
+ 4.158.2.129) smtp.rcpttodomain=kernel.org smtp.mailfrom=arm.com; dmarc=pass
+ (p=none sp=none pct=100) action=none header.from=arm.com; dkim=pass
+ (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
+ dmarc=[1,1,header.from=arm.com])
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Ub6ZL2tIcHwar9sNIuSCmy+/Vnt+jHpKR7DQxRMuYy0=;
+ b=Ux0iMaI8GkWUHBStbtfG23cm2hB91ZcLDsGgJN/7g8ScAPmKg0kTMFsOKH+vm4oi82INc7kU4L72jW2jT9jYbCcsIZXbJ17QVzOO7bz4CKp+FfmNlFBZ26A5bprUHLGtXQGL13/rh95NFbHXwbOHpSvOz+kGzkBVtvWyDv8hhuw=
+Received: from CWLP123CA0229.GBRP123.PROD.OUTLOOK.COM (2603:10a6:400:19f::16)
+ by PR3PR08MB5578.eurprd08.prod.outlook.com (2603:10a6:102:83::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9870.25; Mon, 4 May
+ 2026 10:08:47 +0000
+Received: from AM4PEPF00027A5D.eurprd04.prod.outlook.com
+ (2603:10a6:400:19f:cafe::3d) by CWLP123CA0229.outlook.office365.com
+ (2603:10a6:400:19f::16) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9870.25 via Frontend Transport; Mon,
+ 4 May 2026 10:08:47 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
+ smtp.mailfrom=arm.com; dkim=pass (signature was verified)
+ header.d=arm.com;dmarc=pass action=none header.from=arm.com;
+Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
+ 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
+ client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
+Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
+ AM4PEPF00027A5D.mail.protection.outlook.com (10.167.16.69) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9891.9
+ via Frontend Transport; Mon, 4 May 2026 10:08:46 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Z+uu7G7avTL4iW91Rkyv0Ch3B6NWIiepztolMBpjixgWGzFoxVrcq8LYGZhT9evarEHs8PRJU2m2zDeLdV32UYuErSONmo0IIBvJzzXxhETtBXbORp3BM5Zx7ReNGl+AlSsbEOkqSZtprrqvkejweVpe2jsHLLBEvdYQ0oM6poCudycqRDCaXhs+G0OleW0Yg0hiusl39a5aoDRMFns5N33yXemz4WUSwrkg/BpnNYuFZTvMQbFiBzcdgOIVJ5c8ozbn7MiSjtfyRljuC7YE2GoaYv2qZLtAvM6HaXoUfqEC0GkKxWYLiB3M3i21sxqtq064n7i0ORTBmCu4yULjzg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Ub6ZL2tIcHwar9sNIuSCmy+/Vnt+jHpKR7DQxRMuYy0=;
+ b=qKPq/so1O00DyRvHMUM+a4QubMkxgjQNPnWLg3BxeEF8rf19UikjIs+4MJyjmd1Mlz5QlimQ7ZX4qsWgNtcy7LVsKnReqLFE4TteKxUKD4N0nLwnd1KXz4G1L93yv64Jgr4E0IOPpZ0IklA3mAmFBmET1QCSlyO1MVdQERNuoj/4LPG8iMDKCSipxdfTQA8ilhrnuMR5RRoucW4bDMqy3yOODC9W5m+3IUuMorsoj7CsAqar1IlS5c8N6AjByyh3qL6xrf+2ox+zKKO8Vioock9e9WX2ryZvNJxtc5LHaOAthwdO7fwpk8PAStzEVjwh78wcPbVjvKr0OAi658u3Pg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
+ header.d=arm.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Ub6ZL2tIcHwar9sNIuSCmy+/Vnt+jHpKR7DQxRMuYy0=;
+ b=Ux0iMaI8GkWUHBStbtfG23cm2hB91ZcLDsGgJN/7g8ScAPmKg0kTMFsOKH+vm4oi82INc7kU4L72jW2jT9jYbCcsIZXbJ17QVzOO7bz4CKp+FfmNlFBZ26A5bprUHLGtXQGL13/rh95NFbHXwbOHpSvOz+kGzkBVtvWyDv8hhuw=
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+Received: from DU0PR08MB9203.eurprd08.prod.outlook.com (2603:10a6:10:417::12)
+ by AS2PR08MB9545.eurprd08.prod.outlook.com (2603:10a6:20b:60e::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9846.26; Mon, 4 May
+ 2026 10:07:40 +0000
+Received: from DU0PR08MB9203.eurprd08.prod.outlook.com
+ ([fe80::f1e:73f2:57df:4047]) by DU0PR08MB9203.eurprd08.prod.outlook.com
+ ([fe80::f1e:73f2:57df:4047%2]) with mapi id 15.20.9870.023; Mon, 4 May 2026
+ 10:07:40 +0000
+Message-ID: <daa3e21f-0c48-456e-a4a8-198a8c907b9d@arm.com>
+Date: Mon, 4 May 2026 15:37:31 +0530
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 30/54] selftests/mm: compaction_test: use HugeTLB
+ helpers ...
+To: Mike Rapoport <rppt@kernel.org>, Andrew Morton
+ <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>
+Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
+ Barry Song <baohua@kernel.org>, Dev Jain <dev.jain@arm.com>,
+ Donet Tom <donettom@linux.ibm.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+ John Hubbard <jhubbard@nvidia.com>, "Liam R. Howlett"
+ <Liam.Howlett@oracle.com>, Lance Yang <lance.yang@linux.dev>,
+ Leon Romanovsky <leon@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ Luiz Capitulino <luizcap@redhat.com>, Mark Brown <broonie@kernel.org>,
+ Michal Hocko <mhocko@suse.com>, Nico Pache <npache@redhat.com>,
+ Peter Xu <peterx@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
+ Shuah Khan <shuah@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
+ Vlastimil Babka <vbabka@kernel.org>, Zi Yan <ziy@nvidia.com>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-mm@kvack.org
+References: <20260428204240.1924129-1-rppt@kernel.org>
+ <20260428204240.1924129-31-rppt@kernel.org>
+From: Sarthak Sharma <sarthak.sharma@arm.com>
+Content-Language: en-US
+In-Reply-To: <20260428204240.1924129-31-rppt@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MA1P287CA0007.INDP287.PROD.OUTLOOK.COM
+ (2603:1096:a00:35::24) To DU0PR08MB9203.eurprd08.prod.outlook.com
+ (2603:10a6:10:417::12)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha384;
-	protocol="application/pgp-signature"; boundary="l72gnrb7cm3zxy4o"
-Content-Disposition: inline
-In-Reply-To: <20260504-kunit_add_support-v8-3-3e5957cdd235@redhat.com>
+X-MS-TrafficTypeDiagnostic:
+	DU0PR08MB9203:EE_|AS2PR08MB9545:EE_|AM4PEPF00027A5D:EE_|PR3PR08MB5578:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9097419f-1b9c-45d6-55a6-08dea9c52174
+x-checkrecipientrouted: true
+NoDisclaimer: true
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted:
+ BCL:0;ARA:13230040|376014|7416014|366016|1800799024|18002099003|22082099003|56012099003;
+X-Microsoft-Antispam-Message-Info-Original:
+ 767K5GkBV9F8nQHu3tpD1ThvTPXmrE92sZkGSxbaY9UHRZGcHLLa28Sj+0gS3myQ/g/gfHl6FnevuII60exqzMErTBgCEzcYivUDY+TDDO/Fv13ecl1srTw3ORYb79/EdS4Cqzxrf8ysFEyzBsT6q4SxxLpCxmPu+fAxJ0nJmFwBTVAID40y5oF84Kv1i/cFSr6Ii5wnqmRU7jXcyhkYZ7hVt5Khw66n4qQp1DLuAzD78GI3qTl4GSuGtMRDlAz8GzgeJn376uXBiXvsm0dYrD3DZ8YL9pdlLaJsgPwbh7CmwasHfjtO9gyA0SMhogDxnHgJfTqghO2LzKECJEgUMOdWCeRYyXkiGGJqRbzMwsKCYlENEV1UfMq4+9VqZBNQohAaFKRtLq+3cJh5swHQlrHTD2vRzWeXD/RiTYM6B8I7wew3o2gm4Gl0gxQLJxQBiM/HGPqiVEGuif9Uk0L74Uvc2JE53tJfWcVuHWUpy62aFSsbkAZ3dL5TognUIIBj+RCfHKJn3J17AUGGwH2G/D+F3N/pbLV28qRiQaStKis4DKotVAePlawJmKgRlunWtGJZn8k2K6OIFekTnHRfZz2eGftLZUcU5iftCBphGFzaLU2O/nDLsMRN4cvhyzmJ3rnmcgS/ifoAQzYnE2vYekyxX5dxzwpjkJOKc5nUc083uUHhp+RyJ1I13HWABQ6Z
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9203.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024)(18002099003)(22082099003)(56012099003);DIR:OUT;SFP:1101;
+X-Exchange-RoutingPolicyChecked:
+ U16upLbK7sZE3LTw4pFVL45tZJtJKTDLy+fy6a9WVCkDx6YP802TQtkYr9VUhfDUmAqcNtZAmYB2TYJyP0XOTE0URu9h6DshGXwXewGjgHI9gNkvF0pXAbbS1siZ0+f2ee4L0DDz0my5BrGnk3mjwk1/100XnSoWml9PhNuxfBRFd6U40WftpEfMiHFozG+mDKhu+q+pX4/y5t863JkS2QUlMvvsjLgajdqN3904Yvg9AmNnHh+xy1so2a9bXa4lSQf+OunvTLSPGnJ+98H1zrf77dXGg1i0yEtlF6BdC8RSP7X33We9CtaCp/AMnGEgXMPu2WESFI8GQSNRQl7PdA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS2PR08MB9545
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ AM4PEPF00027A5D.eurprd04.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+	bb688eab-4279-42b1-3923-08dea9c4f99c
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|14060799003|7416014|376014|36860700016|82310400026|35042699022|18002099003|22082099003|56012099003;
+X-Microsoft-Antispam-Message-Info:
+	Df7XWqW4vAeCpQlbpEExjAVXm20uLAT/UDsVStpGk1mdv8kKEfbQ3p4dSrO5+l9yBrQEyGSyQ3d61fB5R1+Q3EdS2LXtlnqyYf3yhgUUJDruDTfSGpZwSf+85ztYxVqxIepmsNo9687kFm20o9IlNyJ4BD4T4SvkAbl3czN4Ku4qeRANH++lwEEaKpqQGDxTxWkFbhL+tWJLmQLOH+YTlSjtm2GJgq62XMTwo5A1UhrkCFEX1MTZ/xwiuakgRvV4EUnuvTR8ZhPAoS+HwWSLZRCaPO97FAgZNv84CfhIyCph1ffAwzZrFU6it7ysoaKp4tFArryv+fn0H6MMP16txoM0PG87Up3ateu4tVNk+xbygH856g8Tfr1wKJ6QCcgKXZ5mqyt4mHx//Z653t0IQFqgiZQc6QTfwQQq51RFzPTD6v8auwHXvjiNJwMgmOcCTCYZfymvoNswwzCMHP9XLpOw2kKd1NfH2VSAD6DMJNODYzwapGzUImnV0/9dcUK7y6vJV1pcF+iWv4SwSwicB0F9hoKCHC1HRT/MI2skHajAHARqUQR1vtji3V/efr8VJES5H0CdDPCe+zDcui7r/pIosdyS1KBbvCxkyk6FlaRvIwRQVB5g3r+kgWAqFUy1x5vco3/95eh9mUWzzo55W4FUkKWvk66x/RTU0LLGYiO49QhNFaD/TAb7rX4BAquiAP+F63owMvc3YRuTS1CeonuiL/jXpD/wzP5mEMLNKUg=
+X-Forefront-Antispam-Report:
+	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(14060799003)(7416014)(376014)(36860700016)(82310400026)(35042699022)(18002099003)(22082099003)(56012099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	9DhyOhnxgg1nq4YEIqFideE8z+ApPa1CBjNsgT78pMf/3ummKNxp6ArvYkTVXSV7INx9DQzRhIOn9OzWAdhWkWVvMuIddxpRms31gX27LlusavNDHd4wcO2c8IJJDxX+k+AgSpxguQ4zEqhKBmO5gOdbjEjIJYMKyaldiVwXzIP9Lr2Prxw2obmeqSjPAV60paB6t+vTR8tP4KATR/4fVfH9HUPeELJw63kFnHZ65i8J2Yf4MD2zVhxKzulS5EWA38T+aBaDQU5pw7pWSvscPxc160HkGj1isr+IG3cUslHbgmgch5gvg9BqrD9zxsyUwde7MflWYMwgFIjLg75vM64PWFsR3SJoMZbtfbI7ZIBQJ1lVscWAZnkqmUFdbu6AYolSNU+qxBEqpa4fRv+u8pfwQEp7p9IKzvPBOAQXu+b6UbpDZP1cCLwvIQarEFG/
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 May 2026 10:08:46.7107
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9097419f-1b9c-45d6-55a6-08dea9c52174
+X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	AM4PEPF00027A5D.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR3PR08MB5578
 
+Hi Mike!
 
---l72gnrb7cm3zxy4o
-Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v8 3/4] drm: Suppress intentional warning backtraces in
- scaling unit tests
-MIME-Version: 1.0
-
-Hi,
-
-On Mon, May 04, 2026 at 09:41:27AM +0200, Albert Esteve wrote:
-> From: Guenter Roeck <linux@roeck-us.net>
->=20
-> The drm_test_rect_calc_hscale and drm_test_rect_calc_vscale unit tests
-> intentionally trigger warning backtraces by providing bad parameters to
-> the tested functions. What is tested is the return value, not the existen=
-ce
-> of a warning backtrace. Suppress the backtraces to avoid clogging the
-> kernel log and distraction from real problems.
->=20
-> Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> Acked-by: Dan Carpenter <dan.carpenter@linaro.org>
-> Acked-by: Ma=EDra Canal <mcanal@igalia.com>
-> Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-> Cc: David Airlie <airlied@gmail.com>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> Signed-off-by: Alessandro Carminati <acarmina@redhat.com>
-> Acked-by: David Gow <david@davidgow.net>
-> Signed-off-by: Albert Esteve <aesteve@redhat.com>
+On 4/29/26 2:12 AM, Mike Rapoport wrote:
+> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+> 
+> ... instead of open coded access of HugeTLB parameters via /proc.
+> 
+> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 > ---
->  drivers/gpu/drm/tests/drm_rect_test.c | 23 +++++++++++++++++++----
->  1 file changed, 19 insertions(+), 4 deletions(-)
->=20
-> diff --git a/drivers/gpu/drm/tests/drm_rect_test.c b/drivers/gpu/drm/test=
-s/drm_rect_test.c
-> index 17e1f34b76101..818e16e80c8f9 100644
-> --- a/drivers/gpu/drm/tests/drm_rect_test.c
-> +++ b/drivers/gpu/drm/tests/drm_rect_test.c
-> @@ -409,8 +409,16 @@ static void drm_test_rect_calc_hscale(struct kunit *=
-test)
->  	const struct drm_rect_scale_case *params =3D test->param_value;
->  	int scaling_factor;
-> =20
-> -	scaling_factor =3D drm_rect_calc_hscale(&params->src, &params->dst,
-> -					      params->min_range, params->max_range);
-> +	/*
-> +	 * drm_rect_calc_hscale() generates a warning backtrace whenever bad
-> +	 * parameters are passed to it. This affects all unit tests with an
-> +	 * error code in expected_scaling_factor.
-> +	 */
-> +	kunit_warning_suppress(test) {
-> +		scaling_factor =3D drm_rect_calc_hscale(&params->src, &params->dst,
-> +						      params->min_range,
-> +						      params->max_range);
-> +	}
-> =20
->  	KUNIT_EXPECT_EQ(test, scaling_factor, params->expected_scaling_factor);
+>  tools/testing/selftests/mm/compaction_test.c | 113 +++----------------
+>  1 file changed, 17 insertions(+), 96 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/mm/compaction_test.c b/tools/testing/selftests/mm/compaction_test.c
+> index 30209c40b697..962a50c3d66f 100644
+> --- a/tools/testing/selftests/mm/compaction_test.c
+> +++ b/tools/testing/selftests/mm/compaction_test.c
+> @@ -17,6 +17,7 @@
+>  #include <string.h>
+>  
+> @@ -161,48 +120,10 @@ int check_compaction(unsigned long mem_free, unsigned long hugepage_size,
+>  	ret = 0;
+>  
+>   close_fd:
+
+A small nit, should we rename close_fd: to out: now? After this change
+the label no longer closes an fd and is the common exit path, so
+close_fd feels a bit misleading.
+
+> -	close(fd);
+> - out:
+>  	ksft_test_result(ret == 0, "check_compaction\n");
+>  	return ret;
 >  }
-> @@ -420,8 +428,15 @@ static void drm_test_rect_calc_vscale(struct kunit *=
-test)
->  	const struct drm_rect_scale_case *params =3D test->param_value;
->  	int scaling_factor;
-> =20
-> -	scaling_factor =3D drm_rect_calc_vscale(&params->src, &params->dst,
-> -					      params->min_range, params->max_range);
-> +	/*
-> +	 * drm_rect_calc_vscale() generates a warning backtrace whenever bad
-> +	 * parameters are passed to it. This affects all unit tests with an
-> +	 * error code in expected_scaling_factor.
-> +	 */
-> +	kunit_warning_suppress(test) {
-> +		scaling_factor =3D drm_rect_calc_vscale(&params->src, &params->dst,
-> +						      params->min_range, params->max_range);
-> +	}
-> =20
->  	KUNIT_EXPECT_EQ(test, scaling_factor, params->expected_scaling_factor);
->  }
+>  
+> -int set_zero_hugepages(unsigned long *initial_nr_hugepages)
+> -{
+> -	int fd, ret = -1;
+> -	char nr_hugepages[20] = {0};
+> -
+> -	fd = open("/proc/sys/vm/nr_hugepages", O_RDWR | O_NONBLOCK);
+> -	if (fd < 0) {
+> -		ksft_print_msg("Failed to open /proc/sys/vm/nr_hugepages: %s\n",
+> -			       strerror(errno));
+> -		goto out;
+> -	}
+> -	if (read(fd, nr_hugepages, sizeof(nr_hugepages)) <= 0) {
+> -		ksft_print_msg("Failed to read from /proc/sys/vm/nr_hugepages: %s\n",
+> -			       strerror(errno));
+> -		goto close_fd;
+> -	}
+> -
+> -	lseek(fd, 0, SEEK_SET);
+> -
+> -	/* Start with the initial condition of 0 huge pages */
+> -	if (write(fd, "0", sizeof(char)) != sizeof(char)) {
+> -		ksft_print_msg("Failed to write 0 to /proc/sys/vm/nr_hugepages: %s\n",
+> -			       strerror(errno));
+> -		goto close_fd;
+> -	}
+> -
+> -	*initial_nr_hugepages = strtoul(nr_hugepages, NULL, 10);
+> -	ret = 0;
+> -
+> - close_fd:
+> -	close(fd);
+> -
+> - out:
+> -	return ret;
+> -}
+> -
 
-For both I think we should add KUNIT_EXPECT_SUPPRESSED_WARNING_COUNT calls,=
- no?
 
-Maxime
-
---l72gnrb7cm3zxy4o
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iJUEABMJAB0WIQTkHFbLp4ejekA/qfgnX84Zoj2+dgUCafhvCgAKCRAnX84Zoj2+
-dntHAYDS1y58bfYV6HBC/xGmy3ScNb3JXQaPk5lj+sGTSfkg+TOU32fyuZTWHM4Q
-EHySwfABfjO0e9VfrYX1GC6pOKjJuf+UHNoIMlbjFKSia25t5hZS0ZmG+kAkG3OI
-3vkSD8iAXA==
-=kzTF
------END PGP SIGNATURE-----
-
---l72gnrb7cm3zxy4o--
