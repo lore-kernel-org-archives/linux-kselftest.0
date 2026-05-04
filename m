@@ -1,227 +1,95 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFB7C3624B3;
-	Mon,  4 May 2026 21:43:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7C8C35DA6D
+	for <linux-kselftest@vger.kernel.org>; Mon,  4 May 2026 21:48:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777931021; cv=none; b=sJPaVf/8vslI21e/YnhSqSLgqfjyCJgwZyuIONEM4MHJPnyk4/8lfjyXw/6gHKecP34g2uLG6SLoPz8vvCI+31iAovMNDZ4VjEouadCQRvn1ZmXWlPa+j0cjO5pZvyb6lLpRtnv7byXJpQfvNmoNovInm+0lHMVUOBFN56ydr1I=
+	t=1777931329; cv=none; b=lP28w2gDfIXF0ifNos48RsuHVJq2lY9Xv5t56qR/GUj0jFUJRdHmuE4eCskNqQlTgPuvKd7WgUDPUCYYd9atbNAKqjoV/uN6nIOk6cGlAuP9hjwjkNlz6ajC3T0/ap2+O56Ljf50PrTFvySHZ4OzHZhiEGSx9PTYYJ1ppLfD+78=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777931021; c=relaxed/simple;
-	bh=9Ptp10PVdxM5901DDTI7Qpmca/trm2cZRPvlKUxSONQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fzGIufhKdi4HdaVKnJzZI+mqXoTo1U+Rei4y+/YWUyhP5F3Udi239PKaiJLT0NgnEWmRw9fnccN1ko7+KE6wrHrDmVGyfKPYVBMOkZv5E6Onxp/jm7KKoCpGTGvepyElkiCRqrk3/Wcr3aU12+bViumdmeidVpyWQnhvgGrQAE8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z2WdCDwH; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777931329; c=relaxed/simple;
+	bh=LEfOvRpQYcrDqT5+S4ih49Shh2djX8a2POcizZgtyEE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gPcS2S8Swk1kQHtBN5AD2/4Ftj2timGVRTvoq9nlD2Fi78kDmozafx9V/yvf0HnrZ3PXcvKmiVX3HY2XbPfYiB/qOycxMEwlgyjdWNoml+Vai2ycul4qXFWr2JbrKnavLQKs8g7kCdYp/AjzOJdP7aLTcrncS+44rV3a40YnL6c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=adKnOEFo; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z2WdCDwH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 230E9C2BCB9;
-	Mon,  4 May 2026 21:43:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777931021;
-	bh=9Ptp10PVdxM5901DDTI7Qpmca/trm2cZRPvlKUxSONQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Z2WdCDwHhwGsr1t0zH//zBJ75Hj7dyz/GqDhgfTNpIGLWfxC7/PNaqPPYToBZipuV
-	 8/INhvrafqP9yxnVdbjn4pv8TW8TB/f41RsZMLSCo3KmmxABr1Ure5S/pMgukZGH/f
-	 /jxe5+WFcqezAPEDNHF8Z4ZxtAiA+keDcQ0D3Sh5ml89pnX2amoNnfoioTTajG84X7
-	 vrhzCdZhWHsCFXHppkhV6TOnU+ocY0+CP0ULUCArrWnzGce1Xe7yn5igolhKzXYJDW
-	 RVVxOpU2CV0iS20BVMaCiQ3OldDRcj9DQ0zN9XByDBzxzcwhvsQP1fVeTVTBhqLNTc
-	 EA7jCyn+BaFkQ==
-From: Jakub Kicinski <kuba@kernel.org>
-To: davem@davemloft.net
-Cc: netdev@vger.kernel.org,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	andrew+netdev@lunn.ch,
-	horms@kernel.org,
-	donald.hunter@gmail.com,
-	shuah@kernel.org,
-	matttbe@kernel.org,
-	hawk@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	maxime.chevallier@bootlin.com,
-	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next v2 2/2] selftests: net: add tests for filtered dumps of page pool
-Date: Mon,  4 May 2026 14:43:36 -0700
-Message-ID: <20260504214336.613107-2-kuba@kernel.org>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260504214336.613107-1-kuba@kernel.org>
-References: <20260504214336.613107-1-kuba@kernel.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="adKnOEFo"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2b941cd869cso26768655ad.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 04 May 2026 14:48:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1777931328; x=1778536128; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=vleGyxmKxeO4GNIP1qujBMrg4IEFuG1bs35WPUgfDlk=;
+        b=adKnOEFoXz8qKyDlRnCzuv19P42xuHX1j5IMWit1iPOaACz58vLrro7+KtChAqMHi4
+         NN0kxyh6ALYhlQPMtHP5elg8BDhKa/STk1m40G4b1+uyyDWrFybAu4s0AKgUWN+Iu+gv
+         7drE30Tz3QjQmQj85S9V3p9GxoQd1iJUfjXgMZAmOYsI+0Sb76almUULwwTvJk+ZOfo+
+         vJynjbc3R+DgLb6ACaqfjvG62vFHcwsZ6Uv+NEVai6jqefs3VdFCDonF83jqLhSAabkN
+         BiK3rPc2fD6Gva8X7ep67gmyVKygxwyPymokKyKyPqKDCQmPUQ1yxsQ5oZHhEakGEH/q
+         8ZzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777931328; x=1778536128;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vleGyxmKxeO4GNIP1qujBMrg4IEFuG1bs35WPUgfDlk=;
+        b=Xc7cNAHjKJ4ypVqOOViMo8ht83eeRsy0FxYFpRixwsetANs/nRLlAD3bV10yHZoYoC
+         UoVW8yjEHkdqz2R247cRMt3iyyFMIp07jvPvE/1d3aqqw56DODu16UM5AP8XJ5+28sQN
+         rqfpTNh718/gATyf9o/JrNvJ6rgI25iZfxrw6RwnV69M4TTwHvM6z6FWQqo1QuoxyyPJ
+         yEcm0WUYHSTldnY1/xnY5IOTw81k5lXHYyRKt81UIXLcV/cMwm6FAiJHW7A0lPLoJs/j
+         V2Tl9EabYMpzIZv1S6P6xQUyFHRHrVrq14mKVQ8WTtn2zBYSEPXle8FxVREsTOqY4rPn
+         828g==
+X-Forwarded-Encrypted: i=1; AFNElJ+7TrCf7hPXCvFukyuUN78Ii/GNVNyD2tbiaTHGOLqNm8AMWjhXGQv305nh9BL02j2/qelD6DOe+8QVnS0+tyc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyz7WsVqksaeYg3on85GTgTrDrZppFilZb7+aEnWkFsDu3Jm58V
+	220A4y/meChEh4bQVjk5sWKXdcyAcL+MkAa6UHsdCYYaYeyZqDvcqGTitlkpwinIaA==
+X-Gm-Gg: AeBDievcDD38pCA0RN1Jhx8Smb6ODybu3dUVuvWMCEFn7LYoOh+R7PthTBjT4h3jd6J
+	eFfY8L7gIJvWeRKqhToqcIsxN1XaUQXZGhp+9Q+NByS1o0EQaRiHdsVipPBKkMb/x5e/8cOyZ6y
+	p3R7KOL/WvZzInbRq0tHePIpJCeX0Bt7sRGWFBG7FLs9ZvCzL0cHzJNO6aVRfO/rGZRiqV02SmT
+	iwkmceYwFOdrovmZ4noOKSTc/oqjHRCvUaQXDvdwBdJkVrfBrwszbPZY4PffsJAUHTHPa3OJ0iD
+	K+sLP1nYtA84zSiMCd5OAD/MyPJdci1RQIFNOJvY+kl6wAk9PvafrVS8e3MrnkOUw5sjg/itHmZ
+	UurDjLGBW65ft0IEEvg0gjrFigcF05Zz6Bs2IQ1G0ekDug61+jDmcApIUK/pZPNueQrxHsTdFc8
+	qljoO2/EXHlvuiDLT1oNTBpU7N5ViP2vi3m0usebeUAPPyVbkgIQvqA98syITCVwq3sw0zNy4/3
+	EaYNQ==
+X-Received: by 2002:a17:903:40d1:b0:2b0:ccad:de1a with SMTP id d9443c01a7336-2b9f260b4a7mr121673915ad.30.1777931327578;
+        Mon, 04 May 2026 14:48:47 -0700 (PDT)
+Received: from google.com (76.9.127.34.bc.googleusercontent.com. [34.127.9.76])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b9caa7ebc6sm115903505ad.5.2026.05.04.14.48.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 May 2026 14:48:47 -0700 (PDT)
+Date: Mon, 4 May 2026 21:48:43 +0000
+From: David Matlack <dmatlack@google.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Alex Williamson <alex@shazbot.org>, kvm@vger.kernel.org,
+	Leon Romanovsky <leon@kernel.org>, linux-kselftest@vger.kernel.org,
+	linux-rdma@vger.kernel.org, Mark Bloch <mbloch@nvidia.com>,
+	netdev@vger.kernel.org, Saeed Mahameed <saeedm@nvidia.com>,
+	Shuah Khan <shuah@kernel.org>, Tariq Toukan <tariqt@nvidia.com>,
+	patches@lists.linux.dev
+Subject: Re: [PATCH 05/11] selftests: Add additional kernel functions to
+ tools/include/
+Message-ID: <afkUO56H6KPy5afA@google.com>
+References: <0-v1-dc5fa250ca1d+3213-mlx5st_jgg@nvidia.com>
+ <5-v1-dc5fa250ca1d+3213-mlx5st_jgg@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5-v1-dc5fa250ca1d+3213-mlx5st_jgg@nvidia.com>
 
-Add tests for page pool dumps of a specific ifindex.
+On 2026-04-30 09:08 PM, Jason Gunthorpe wrote:
+> These are needed by the VFIO mlx5 selftest in the following patches,
+> which includes some headers from mlx5 and also needs a few more
+> MMIO-related features.
+> 
+> - DECLARE_FLEX_ARRAY in new tools/include/linux/stddef.h (wraps
+>   existing __DECLARE_FLEX_ARRAY from uapi/linux/stddef.h)
 
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
-v2:
- - add CONFIG_PAGE_POOL_STATS=y to the config
-v1: https://lore.kernel.org/20260319035649.2396137-2-kuba@kernel.org
----
- tools/testing/selftests/net/config       |   1 +
- tools/testing/selftests/net/nl_netdev.py | 119 ++++++++++++++++++++++-
- 2 files changed, 118 insertions(+), 2 deletions(-)
+Is this needed? I don't see it used anywhere.
 
-diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
-index 94d722770420..d07c5ac5cab7 100644
---- a/tools/testing/selftests/net/config
-+++ b/tools/testing/selftests/net/config
-@@ -117,6 +117,7 @@ CONFIG_OPENVSWITCH=m
- CONFIG_OPENVSWITCH_GENEVE=m
- CONFIG_OPENVSWITCH_GRE=m
- CONFIG_OPENVSWITCH_VXLAN=m
-+CONFIG_PAGE_POOL_STATS=y
- CONFIG_PROC_SYSCTL=y
- CONFIG_PSAMPLE=m
- CONFIG_RPS=y
-diff --git a/tools/testing/selftests/net/nl_netdev.py b/tools/testing/selftests/net/nl_netdev.py
-index eff55c64a012..ceb44c8e1fec 100755
---- a/tools/testing/selftests/net/nl_netdev.py
-+++ b/tools/testing/selftests/net/nl_netdev.py
-@@ -9,7 +9,7 @@ import errno
- from os import system
- from lib.py import ksft_run, ksft_exit
- from lib.py import ksft_eq, ksft_ge, ksft_ne, ksft_raises, ksft_busy_wait
--from lib.py import NetdevFamily, NetdevSimDev, NlError, ip
-+from lib.py import NetdevFamily, NetdevSimDev, NlError, defer, ip
- 
- 
- def empty_check(nf) -> None:
-@@ -255,6 +255,117 @@ from lib.py import NetdevFamily, NetdevSimDev, NlError, ip
-         nsim.dfs_write("pp_hold", "y")
- 
- 
-+def page_pool_dump_ifindex(nf) -> None:
-+    """Test page pool dump filtering by ifindex."""
-+    nsimdev1 = NetdevSimDev(queue_count=3)
-+    rm_nsim1 = defer(nsimdev1.remove)
-+    nsimdev2 = NetdevSimDev(queue_count=5)
-+    defer(nsimdev2.remove)
-+
-+    nsim1 = nsimdev1.nsims[0]
-+    nsim2 = nsimdev2.nsims[0]
-+
-+    ip(f"link set dev {nsim1.ifname} up")
-+    ip(f"link set dev {nsim2.ifname} up")
-+
-+    # Unfiltered dump should have pools from both devices
-+    all_pp = nf.page_pool_get({}, dump=True)
-+    pp1_all = [pp for pp in all_pp
-+               if pp.get("ifindex") == nsim1.ifindex]
-+    pp2_all = [pp for pp in all_pp
-+               if pp.get("ifindex") == nsim2.ifindex]
-+    ksft_ge(len(pp1_all), 1)
-+    ksft_ge(len(pp2_all), 1)
-+
-+    # Filtered dump should only return pools for that device
-+    pp1_flt = nf.page_pool_get({'ifindex': nsim1.ifindex}, dump=True)
-+    ksft_eq(pp1_flt, pp1_all)
-+
-+    pp2_flt = nf.page_pool_get({'ifindex': nsim2.ifindex}, dump=True)
-+    ksft_eq(pp2_flt, pp2_all)
-+
-+    # Non-existent ifindex should return empty dump
-+    pp_none = nf.page_pool_get({'ifindex': 12345678}, dump=True)
-+    ksft_eq(len(pp_none), 0)
-+
-+    # Device down - no pools for that ifindex
-+    ip(f"link set dev {nsim1.ifname} down")
-+    pp1_down = nf.page_pool_get({'ifindex': nsim1.ifindex}, dump=True)
-+    ksft_eq(len(pp1_down), 0)
-+
-+    # Remove device, dump by its old ifindex should return empty
-+    old_ifindex = nsim1.ifindex
-+    rm_nsim1.exec()
-+    pp1_gone = nf.page_pool_get({'ifindex': old_ifindex}, dump=True)
-+    ksft_eq(len(pp1_gone), 0)
-+
-+
-+def page_pool_ifindex_leak_check(nf) -> None:
-+    """Test that zombie page pools don't show up under the original ifindex."""
-+    nsimdev = NetdevSimDev()
-+    rm_nsim = defer(nsimdev.remove)
-+    nsim = nsimdev.nsims[0]
-+
-+    ip(f"link set dev {nsim.ifname} up")
-+    nsim.dfs_write("pp_hold", "y")
-+
-+    pp_up = nf.page_pool_get({'ifindex': nsim.ifindex}, dump=True)
-+    ksft_ge(len(pp_up), 1)
-+
-+    # Remove device with leaked page - pool becomes zombie (orphaned to lo)
-+    old_ifindex = nsim.ifindex
-+    rm_nsim.exec()
-+
-+    # Zombie pool should NOT appear under the original device
-+    pp_down = nf.page_pool_get({'ifindex': old_ifindex}, dump=True)
-+    ksft_eq(len(pp_down), 0)
-+
-+    # But it should appear in an unfiltered dump (under loopback)
-+    pp_all = nf.page_pool_get({}, dump=True)
-+    orphans = [pp for pp in pp_all
-+               if "detach-time" in pp and "ifindex" not in pp]
-+    ksft_ge(len(orphans), 1)
-+
-+
-+def page_pool_stats_ifindex_check(nf) -> None:
-+    """Test page pool stats dump filtering by ifindex."""
-+    nsimdev1 = NetdevSimDev(queue_count=3)
-+    defer(nsimdev1.remove)
-+    nsimdev2 = NetdevSimDev(queue_count=5)
-+    defer(nsimdev2.remove)
-+
-+    nsim1 = nsimdev1.nsims[0]
-+    nsim2 = nsimdev2.nsims[0]
-+
-+    ip(f"link set dev {nsim1.ifname} up")
-+    ip(f"link set dev {nsim2.ifname} up")
-+
-+    # Unfiltered stats dump
-+    all_stats = nf.page_pool_stats_get({}, dump=True)
-+    s1_all = [s for s in all_stats
-+              if s.get("info", {}).get("ifindex") == nsim1.ifindex]
-+    s2_all = [s for s in all_stats
-+              if s.get("info", {}).get("ifindex") == nsim2.ifindex]
-+    ksft_ge(len(s1_all), 1)
-+    ksft_ge(len(s2_all), 1)
-+
-+    # Filtered stats dump
-+    s1_flt = nf.page_pool_stats_get({'info': {'ifindex': nsim1.ifindex}},
-+                                    dump=True)
-+    ksft_eq(s1_flt, s1_all)
-+
-+    # Non-existent ifindex should return empty
-+    s_none = nf.page_pool_stats_get({'info': {'ifindex': 12345678}}, dump=True)
-+    ksft_eq(len(s_none), 0)
-+
-+    # info.id should be rejected for stats dump
-+    with ksft_raises(NlError) as cm:
-+        nf.page_pool_stats_get({'info': {'id': s1_all[0]['info']['id']}},
-+                               dump=True)
-+    ksft_eq(cm.exception.nl_msg.error, -errno.EINVAL)
-+    ksft_eq(cm.exception.nl_msg.extack['bad-attr'], '.info.id')
-+
-+
- def main() -> None:
-     """ Ksft boiler plate main """
-     nf = NetdevFamily()
-@@ -265,7 +376,11 @@ from lib.py import NetdevFamily, NetdevSimDev, NlError, ip
-               napi_set_threaded,
-               dev_set_threaded,
-               nsim_rxq_reset_down,
--              page_pool_check],
-+              page_pool_check,
-+              page_pool_dump_ifindex,
-+              page_pool_ifindex_leak_check,
-+              page_pool_stats_ifindex_check
-+              ],
-              args=(nf, ))
-     ksft_exit()
- 
--- 
-2.54.0
-
+  $ git grep DECLARE_FLEX_ARRAY tools/testing/selftests/vfio
