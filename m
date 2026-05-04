@@ -1,204 +1,114 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AB123D3016
-	for <linux-kselftest@vger.kernel.org>; Mon,  4 May 2026 19:52:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DA3831B114
+	for <linux-kselftest@vger.kernel.org>; Mon,  4 May 2026 20:24:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777924330; cv=none; b=LFcvPcdaMKTYSrcnMMLpZQoDH9dHBJhWSYKBPfzRCHlXnXmpVTytEUnpP7s4pLMKz12mc0DNJOXmeA4zDc2ax19cSh2EUnWsMf59phoKnXbDwiJ3KfUxkO2OW+Ubh2LHveSiaXzVWq36RM55Bbz5xwwtSbJRBqVxUeyiQxMc7GU=
+	t=1777926284; cv=none; b=pn9GboC6vmQ4CR6rZiTObTLn08urJndEp8H9ADoPf3IvhIUeXux7dmSHXtsCXK/qD4m+v6TJyHZl3YT/rddEozk9YMkFjCWAzPIcz621KDMXvb3ACBxyFAiJLe246XbXRbgfEmiat0uZdRAj3CuiQJcQi24XKE5qE3yJFSN4szQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777924330; c=relaxed/simple;
-	bh=ZOkI2KoY1aZFxo8wYQRFJdO9vey2IEblCOWAdWz7b0w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VfmtVduWe5BkTET8jCy3/+FXHQBjmbK6CK5gj7Ct2kzBMlshQQu4aOHXE8TQl4cHfIgcXMrzLZ2+haaWUcIrKWc38YA8WYQXRPGWU3/EEto5cC+OsB6o1/KVBsONW0R3UKLo/AOzeA4reJrdSDrK/vR9bEgAiI+sw9/vTEpEItk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=lSooANlW; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=sgv4ZHVc; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=lSooANlW; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=sgv4ZHVc; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	s=arc-20240116; t=1777926284; c=relaxed/simple;
+	bh=zOav8ZaMYbNbj6qwrovxDSOR8ggG40qxMC3t7Ts9gW0=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=EjsMjJwSugFEsTWXY1c+8Q574IppF34dqt+Pcf6B4peHmU61WFKZijmzQOzxRvFGdkKjtJrgBygzym7YpD5fxKQtfQK5e79knHxRhDnrMWagFxLSDf2jp2+oVhcNcUB5ZEVMlewJg1XnEbXqIuaQjaLAnnWy4MzDg20L76gFB1E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KsctYC8P; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="lSooANlW";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="sgv4ZHVc";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="lSooANlW";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="sgv4ZHVc"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KsctYC8P"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1777926282;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=QeDkXbPaUg0Eyt+G1glq5ihHly+Yq7goyY5wJc9DJbk=;
+	b=KsctYC8PZpRR/UzYB1sYjhqtbcZu6VzN9zKdEK9ToFk8ykxMRF33JnOPgMn8IWgA7K6DGk
+	HHFTihrgHhQh2dpUhQD6MpAQIqzwGMGmOcypK5g1RJIJYpflm87gxzEv5b6EK/5OaIpg/t
+	Ss83otr9ChAb5UzaSqtW896FfTeFkAk=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-583-KDKkanG2O7yw5l9qCc4jRA-1; Mon,
+ 04 May 2026 16:24:38 -0400
+X-MC-Unique: KDKkanG2O7yw5l9qCc4jRA-1
+X-Mimecast-MFC-AGG-ID: KDKkanG2O7yw5l9qCc4jRA_1777926277
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 57CF56B51F;
-	Mon,  4 May 2026 19:52:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1777924327; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=0zgM5u8YCb5xoXS+CbpDrP3b/ehGc0c5IHa/dg5esmE=;
-	b=lSooANlWpXFSQQFXZiYIEZMDQvZtWWw79uDD/tsYab5EQWjEQXDZDqAXOCilxy4M3cs623
-	wRn18YDFn4tQAMU7L6UGBkkoDYQXZ3z/UI526Dy3y27hgD3ufOMAhquJN34tcFIAJO9k88
-	1+FYv3EPGMHOCpKiIzniJysLMIFh3DY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1777924327;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=0zgM5u8YCb5xoXS+CbpDrP3b/ehGc0c5IHa/dg5esmE=;
-	b=sgv4ZHVcMz4K/w7PGBn0Vgm5M8GaH4R5D9oa6/zTSChwWJ7XlCOcGLRmUwAvQyMeGj9uHp
-	u5i1a4hTreyw76CQ==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=lSooANlW;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=sgv4ZHVc
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1777924327; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=0zgM5u8YCb5xoXS+CbpDrP3b/ehGc0c5IHa/dg5esmE=;
-	b=lSooANlWpXFSQQFXZiYIEZMDQvZtWWw79uDD/tsYab5EQWjEQXDZDqAXOCilxy4M3cs623
-	wRn18YDFn4tQAMU7L6UGBkkoDYQXZ3z/UI526Dy3y27hgD3ufOMAhquJN34tcFIAJO9k88
-	1+FYv3EPGMHOCpKiIzniJysLMIFh3DY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1777924327;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=0zgM5u8YCb5xoXS+CbpDrP3b/ehGc0c5IHa/dg5esmE=;
-	b=sgv4ZHVcMz4K/w7PGBn0Vgm5M8GaH4R5D9oa6/zTSChwWJ7XlCOcGLRmUwAvQyMeGj9uHp
-	u5i1a4hTreyw76CQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id BEC67593A3;
-	Mon,  4 May 2026 19:52:06 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id eiinK+b4+GnxHAAAD6G6ig
-	(envelope-from <fmancera@suse.de>); Mon, 04 May 2026 19:52:06 +0000
-Message-ID: <2532adc0-262e-433a-9b69-df6d49f662c4@suse.de>
-Date: Mon, 4 May 2026 21:51:51 +0200
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id B316B1956088;
+	Mon,  4 May 2026 20:24:36 +0000 (UTC)
+Received: from RHTRH0061144 (unknown [10.22.64.157])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D1D781800480;
+	Mon,  4 May 2026 20:24:32 +0000 (UTC)
+From: Aaron Conole <aconole@redhat.com>
+To: Ilya Maximets <i.maximets@ovn.org>
+Cc: netdev@vger.kernel.org,  Eelco Chaudron <echaudro@redhat.com>,  "David
+ S. Miller" <davem@davemloft.net>,  Eric Dumazet <edumazet@google.com>,
+  Jakub Kicinski <kuba@kernel.org>,  Paolo Abeni <pabeni@redhat.com>,
+  Simon Horman <horms@kernel.org>,  Shuah Khan <shuah@kernel.org>,  Yuan
+ Tan <tanyuan98@outlook.com>,  Yang Yang <n05ec@lzu.edu.cn>,
+  dev@openvswitch.org,  linux-kernel@vger.kernel.org,
+  linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net v2 0/2] openvswitch: fix self-deadlock on release of
+ tunnel vports
+In-Reply-To: <d9a9fcf7-07e2-4e26-afde-f1bec6108c40@ovn.org> (Ilya Maximets's
+	message of "Mon, 4 May 2026 13:43:53 +0200")
+References: <20260430233848.440994-1-i.maximets@ovn.org>
+	<d9a9fcf7-07e2-4e26-afde-f1bec6108c40@ovn.org>
+Date: Mon, 04 May 2026 16:24:30 -0400
+Message-ID: <f7t8q9yylc1.fsf@redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2 net] ipv6: addrconf: fix temp address generation after
- prefix deprecation
-To: Ido Schimmel <idosch@nvidia.com>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- horms@kernel.org, pabeni@redhat.com, kuba@kernel.org, edumazet@google.com,
- davem@davemloft.net, dsahern@kernel.org, =?UTF-8?Q?=C5=81ukasz_Stelmach?=
- <steelman@post.pl>
-References: <20260503221139.3742-3-fmancera@suse.de>
- <20260504163549.GA385401@shredder>
-Content-Language: en-US
-From: Fernando Fernandez Mancera <fmancera@suse.de>
-In-Reply-To: <20260504163549.GA385401@shredder>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Level: 
-X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-3.51 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,suse.de:email,suse.de:mid,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo];
-	URIBL_BLOCKED(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,suse.de:dkim,suse.de:email,suse.de:mid];
-	DKIM_TRACE(0.00)[suse.de:+]
-X-Rspamd-Queue-Id: 57CF56B51F
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Spam-Flag: NO
-X-Spam-Score: -3.51
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-On 5/4/26 6:35 PM, Ido Schimmel wrote:
-> On Mon, May 04, 2026 at 12:11:40AM +0200, Fernando Fernandez Mancera wrote:
->> When a router temporarily deprecates an IPv6 prefix (either by sending a
->> Router Advertisement with Preferred Lifetime = 0 or by letting the
->> lifetime expire) and later restores it, the kernel permanently loses its
->> ability to generate temporary privacy addresses (RFC 8981) for that
->> prefix.
->>
->> This happens because the address worker attempts to generate a
->> replacement temporary address when the current one nears expiration. As
->> the base prefix is deprecated already, the generation fails, burning the
->> retry counter for temporary address generation of that prefix.
->>
->> When the router eventually restores the prefix, the temporary address
->> becomes active again. However, once it naturally expires, the kernel
->> sees the exhausted retry limit and permanently stops generating new
->> privacy addresses.
-> 
-> It's not clear to me to which "retry counter" you are referring to. Are
-> you referring to the counter of the temporary address or to that of the
-> "public address" from which it was generated?
-> 
-> AFAICT, in the case of temporary addresses (those w/o "mngtmpaddr") this
-> isn't really a counter, but a boolean that tells you if an address was
-> already spawned from this address.
-> 
->>
->> Fix this by verifying that the base prefix has sufficient preferred
->> lifetime remaining before attempting to generate a new temporary
->> address. This prevents the worker from burning through its retry counter
->> during temporary network deprecation events like a router reboot.
-> 
-> Again, I think that "retry counter" here is confusing. IIUC, what
-> happens is that the kernel marks the temporary address as having spawned
-> an address ('ifp->regen_count++'), then tries to spawn an address by
-> calling ipv6_create_tempaddr(), which fails because the preferred
-> lifetime of the public address is 0.
-> 
+Ilya Maximets <i.maximets@ovn.org> writes:
 
-Yes, you are right. I used the word counter as the variable was 
-ifp->regen_count although for temporary addresses it is just a boolean. 
-Let me modify the commit message to make it clear.
+> On 5/1/26 1:38 AM, Ilya Maximets wrote:
+>> Two patches - the fix for the actual bug and the selftest that reproduces it.
+>> 
+>> I missed the self-deadlock in the original patch that introduced the issue,
+>> because testing required code modification in the ovs-vswitchd to force it to
+>> use legacy tunnel ports.  I thought I made the change correctly, but apparently
+>> something went wrong and the tests were run with the standard LWT infra instead.
+>> The selftest added in this patch set will at least prevent this kind of mistakes
+>> in the future.
+>> 
+>> I mentioned, however, that these tunnel vports are legacy and not actually used
+>> by ovs-vswitchd.  RTM_NEWLINK + COLLECT_METADATA is used in conjunction with the
+>> standard OVS_VPORT_TYPE_NETDEV instead since 2017.  The code to use the legacy
+>> tunnels still exists in ovs-vswitchd however, but only as a fallback for older
+>> kernels and we're planning to remove it in the next release.  I'll be sending an
+>> RFC to remove support for these legacy tunnel types from the kernel, as they
+>> serve no real purpose today and only increase the uAPI surface for CVEs, but
+>> we need to fix the known bugs for stable versions.
+>> 
+>> 
+>> Version 2:
+>>   - Added Ack from Eelco to the first patch (not to the second as it
+>>     changed a little).
+>>   - Removed now unused import socket in the dpctl.py [pylint/ruff].
+>> 
+>>   - Regarding comments from both Sashiko instances on the selftest patch:
+>> 
+>>     * The background process is not waited for / not killed.
+>>       If it hangs it will not be killable anyway, so it's not a problem.
+>
+> Both sashiko instances still flag this.  Looks like the cover letter is not
+> included in the prompt.
+>
+> If someone thinks I should add the suggested kill on exit, I can, but it will
+> not be effective in case the process hangs.
 
-Thanks Ido for reviewing!
+One option is to put a comment in the test itself documenting this kind
+of behavior.  At least, then the model might not flag it.  I don't feel
+strongly about that, however.
 
->>
->> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
->> Reported-by: Łukasz Stelmach <steelman@post.pl>
->> Closes: https://lore.kernel.org/netdev/87340td30q.fsf%25steelman@post.pl/
->> Signed-off-by: Fernando Fernandez Mancera <fmancera@suse.de>
->> ---
->>   net/ipv6/addrconf.c | 4 +++-
->>   1 file changed, 3 insertions(+), 1 deletion(-)
->>
->> diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
->> index 5476b6536eb7..f6a3d9da3cb1 100644
->> --- a/net/ipv6/addrconf.c
->> +++ b/net/ipv6/addrconf.c
->> @@ -4654,9 +4654,11 @@ static void addrconf_verify_rtnl(struct net *net)
->>   			    !ifp->regen_count && ifp->ifpub) {
->>   				/* This is a non-regenerated temporary addr. */
->>   
->> +				unsigned long pub_age = (now - READ_ONCE(ifp->ifpub->tstamp)) / HZ;
->>   				unsigned long regen_advance = ipv6_get_regen_advance(ifp->idev);
->>   
->> -				if (age + regen_advance >= ifp->prefered_lft) {
->> +				if (age + regen_advance >= ifp->prefered_lft &&
->> +				    pub_age + regen_advance < READ_ONCE(ifp->ifpub->prefered_lft)) {
->>   					struct inet6_ifaddr *ifpub = ifp->ifpub;
->>   					if (time_before(ifp->tstamp + ifp->prefered_lft * HZ, next))
->>   						next = ifp->tstamp + ifp->prefered_lft * HZ;
->> -- 
->> 2.53.0
->>
+> Best regards, Ilya Maximets.
 
