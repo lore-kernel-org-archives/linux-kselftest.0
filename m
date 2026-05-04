@@ -1,33 +1,72 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2272D379973;
-	Mon,  4 May 2026 12:58:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54E053D523C
+	for <linux-kselftest@vger.kernel.org>; Mon,  4 May 2026 13:05:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777899539; cv=none; b=TiJ1ZCLDCpJq70Ik06OlOYE8ntUCnHa/N5O9FHe1E1GkB6dUpdYylRApYgvUoqvWssZ1Nr0d76Kw7vXA+4JNMFQIXu1bUG5hfvrza2RLog+wzbBYaICp+v1L/Rxv3DCx8oFw6xYzYxJqJjKqJXjCVa9H2mMvD6Adbuygw/GXLPc=
+	t=1777899906; cv=none; b=Odz/85soZq3Exm7kx0TaTU/zcK3d8QvcHHvGvGGL/qcFqYK3aqcdfCUZhxO3z7fJqv57acwai8yP3aYCtFZaX2tjF0JvJdzplcpWT6x0DcbFtwjXbu1PAvidwFVSk6MAjfW9J9WOSDGFKAVkb/hZQ2KZ1nCCsi5HTvI+GTS+BK4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777899539; c=relaxed/simple;
-	bh=dTNnqcGn0PR/T/HRUi9r3/g0/tDxUH4NaHjL6r0XTbk=;
+	s=arc-20240116; t=1777899906; c=relaxed/simple;
+	bh=8/qYV9GNS+6nij6A5YaKpMRHxcuDhEeiDUgJC3C0OvA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EKY1xpMlXr/bocNb6dVXyJVSCRt5ixtS5Hx9QWyHx4VvlUesf0jHf5g6EMJ2c4NeUtnEdZLFvrtyUSeW7Ksy2SBhajHJdR5RsDIolkvtjc9SUSeV+D3KZiGZqOx2a3Rn2/Qx/UGoDOudn1iqz5EtAfVXCD2TosoYBKPaG3LtlCI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k+pnsy4f; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=N4GhVfjivf6pmGbKOx0yIhyBSb5/fwls+rA/sle+7pBXJS142UtDuxbqggP9YZ31q7iv2oZYMMv+ectvS+ir549Vr53dj5hXYSOW91lwrn8cf2KrhrRI9OCOwgr1uoyerQlEQL//UZfMpbpsSOhrPprLo+xFLoWBOw/DkoeKS3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Uk4MfaOc; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k+pnsy4f"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 179F1C2BCB8;
-	Mon,  4 May 2026 12:58:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777899539;
-	bh=dTNnqcGn0PR/T/HRUi9r3/g0/tDxUH4NaHjL6r0XTbk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=k+pnsy4fWPkXwfVMksDv+bMO+YyWftFmJ0jKoxspeeKx3X88cZjWmGCV5KY4k1Hf2
-	 s/W/gJv9Am5Sp2k27ywUsBH/kLCQSar6mWpoWJocfSZRO/lPdlvCv8z5fVSi9R7Ww9
-	 cWkmFEGgxC3IN3iT5gbpAxLnuK1wBjdX04WntgzGm2+5V4KK2OBklCc7yZJzxgIrIJ
-	 muSGIOXoEeZJNpJLVIelzuqciPM0Gh/9y+F5kDE4wD6NAc1k/K4h0JMnglGjUqA+xq
-	 qwxsorPjrCido/ndEjugddMooAR4PLQ0HqDQ1UJgG5GK4FYrKD/rNn6l3dz7Qqznb/
-	 Vl1FDlafmDQzw==
-Message-ID: <e33d2060-1636-4291-90d9-d715a622f462@kernel.org>
-Date: Mon, 4 May 2026 14:58:53 +0200
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Uk4MfaOc"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1777899904;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=lCpIucwug7LQBxR+zBCSrNGWbfwlTlZlRpoANQyu5ws=;
+	b=Uk4MfaOc6YGOaHUHKnl3JLlKxZIElpEQRjv+wt84fkbcc2KXJDJqFxI/NscXiG8IX3weyj
+	yVWHg6VaGoTwgEiNDLnCU94kYcz+TL7KR5D6ZIza3YDirzPi831KmTfAH4Ipi6R8eCVpba
+	NuZUHNUtH2kIeJSL6MORsLB8ub0+2SA=
+Received: from mail-oa1-f71.google.com (mail-oa1-f71.google.com
+ [209.85.160.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-657-bzqcn5adNn-GCE1uF0z9gw-1; Mon, 04 May 2026 09:05:03 -0400
+X-MC-Unique: bzqcn5adNn-GCE1uF0z9gw-1
+X-Mimecast-MFC-AGG-ID: bzqcn5adNn-GCE1uF0z9gw_1777899903
+Received: by mail-oa1-f71.google.com with SMTP id 586e51a60fabf-415e1e9aa5dso6244914fac.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 04 May 2026 06:05:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777899902; x=1778504702;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lCpIucwug7LQBxR+zBCSrNGWbfwlTlZlRpoANQyu5ws=;
+        b=OMdXUdkQLbE0qruI0/Gpll+jucd0eJEZ3+KHgObhLnhuLpo7oQnIBDY9Nwh5+pcrwG
+         4MXXVbpgxWDapAX7GESZHqXn9Yj921Sc2Xd/cw9eDzG/hVwr7y4JP1yFtO3izOCACSlR
+         P6qIG36sm7fhSTFGzOXO6ltlHH0vsPQEnqESccEhynIKibbJJwEVrZi9N2z414IRCgLN
+         FZXESFnEusQZ67IwJ8fvm0oPho3HUemuwkVd4IER+4R0lRNCa5lCroA1x2R12JuoCOrh
+         5kXb+1HjZ+F8+WeHZfzVseY5IEMlUUCcM0bwJ1s7nVD1LBhvlP/dVtMmqniWJ6aTnk7U
+         /1hA==
+X-Forwarded-Encrypted: i=1; AFNElJ9sfgYLvKBY/V3tcB2cCpc0MTSrK2FYel+okxH97scCDZxMKbtGCdDBBh1+I7+ybhdLwpo3LNRK9uFEi9c1SR4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxmnLnGb90uhJxdTfm3oaso+bP9hCXus3SzhMmeX8OSMlQ1R8GO
+	CXxJioMJbB/sFgSSwuV9r6ylQ14xmA52syrQUJlH5d1RecQPC+fbk950WDKu7lt9yPe/JgxyuTi
+	A+j2pqF1eWXTIGs7U9+VHJGeNmfqHcYILp8pYDMdTTERd/idhy6c9nnDhLBgUIhs/QkP3qg==
+X-Gm-Gg: AeBDievrCRdFijm67D4KCpyPgctFCyMFXbAMCjm0V0UObZgPGa9iGfq+bT5k5h4yKk7
+	uUcxYKIitLlrkAEEXvfoxTJN0Sh1GQwguNX9ehLFwqGchoakaG3cikMBRNhDKioqUeYBfTfIbsD
+	dCl4iRIwzxa8ZuqxOdTnJ3OcpIOkFiEBPHFnylenlFtznQpYgM/7FHUMVnS9bJZbqbx8gKsrG0o
+	J/2SA1w8L3+ev9G87HcCRJONfDb+rGZ1BXd+ge9x8ELFEnz0PqnE/wrIdO5J1Bri0PEwFYK/iuo
+	+iqYHNZTklA7dDLnmHXhbxgWvOK/UcniflrLD9vPbt7yRn0WJ2WSo/WzcgEQtNnio4dp0mIUCL4
+	9yqc/7aQDxa1ewRW1zbzwatExb8bZr1p56+A=
+X-Received: by 2002:a05:6870:1687:b0:42c:259c:6c8a with SMTP id 586e51a60fabf-43475f95c61mr4835378fac.6.1777899901347;
+        Mon, 04 May 2026 06:05:01 -0700 (PDT)
+X-Received: by 2002:a05:6870:1687:b0:42c:259c:6c8a with SMTP id 586e51a60fabf-43475f95c61mr4835140fac.6.1777899899273;
+        Mon, 04 May 2026 06:04:59 -0700 (PDT)
+Received: from [192.168.2.110] ([70.53.202.134])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-51040b5e8b4sm106472551cf.23.2026.05.04.06.04.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 May 2026 06:04:58 -0700 (PDT)
+Message-ID: <a393e215-ea5e-4b84-9066-4afef36489a6@redhat.com>
+Date: Mon, 4 May 2026 09:04:47 -0400
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,82 +74,129 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4] selftests/mm: ksm-functional-tests: fix partial write
- handling
-To: Vineet Agarwal <agarwal.vineet2006@gmail.com>, shuah@kernel.org,
- akpm@linux-foundation.org
-Cc: linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, ljs@kernel.org, Liam.Howlett@oracle.com,
- vbabka@kernel.org, rppt@kernel.org, surenb@google.com, mhocko@suse.com
-References: <20260504081638.683223-1-agarwal.vineet2006@gmail.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <20260504081638.683223-1-agarwal.vineet2006@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [PATCH v3 27/54] selftests/mm: hugepage_settings: add APIs for
+ HugeTLB setup and teardown
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ David Hildenbrand <david@kernel.org>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>, Barry Song <baohua@kernel.org>,
+ Dev Jain <dev.jain@arm.com>, Donet Tom <donettom@linux.ibm.com>,
+ Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Lance Yang <lance.yang@linux.dev>, Leon Romanovsky <leon@kernel.org>,
+ Lorenzo Stoakes <ljs@kernel.org>, Mark Brown <broonie@kernel.org>,
+ Michal Hocko <mhocko@suse.com>, Nico Pache <npache@redhat.com>,
+ Peter Xu <peterx@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
+ Sarthak Sharma <sarthak.sharma@arm.com>, Shuah Khan <shuah@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Vlastimil Babka <vbabka@kernel.org>,
+ Zi Yan <ziy@nvidia.com>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org
+References: <20260428204240.1924129-1-rppt@kernel.org>
+ <20260428204240.1924129-28-rppt@kernel.org>
+ <2f443474-4448-462e-bc1e-55bc657d70ba@redhat.com>
+ <afTF9RCy8eBoWYaj@kernel.org>
+ <22b1cadc-4b0d-4e2a-987c-e7a7bc2265eb@redhat.com>
+ <afV_WAK56lQKn_z1@kernel.org>
+Content-Language: en-US, en-CA
+From: Luiz Capitulino <luizcap@redhat.com>
+In-Reply-To: <afV_WAK56lQKn_z1@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 5/4/26 10:13, Vineet Agarwal wrote:
-> Update write() checks to properly detect and handle partial writes.
+On 2026-05-02 00:36, Mike Rapoport wrote:
+> On Fri, May 01, 2026 at 03:30:18PM -0400, Luiz Capitulino wrote:
+>> On 2026-05-01 11:25, Mike Rapoport wrote:
+>>>>>     	return mode == 1 || mode == 3;
+>>>>>     }
+>>>>> +#define HUGETLB_MAX_NR_PAGESIZES 10
+>>>>> +struct hugetlb_settings {
+>>>>> +	unsigned long free_hugepages[HUGETLB_MAX_NR_PAGESIZES];
+>>>>
+>>>> It looks like we don't actually use this in the API or maybe I'm missing
+>>>> something?
+>>>
+>>> Yes, it's used only in later patches.
+>>
+>> I don't see it, the patch below builds fine (again, sorry in advance if
+>> I'm missing something obvious):
 > 
-> Previously, the write() calls used <= 0 to detect failure. This
-> condition is never true for partial writes (ret > 0 but ret < len),
-> so partial writes were silently treated as success.
+> You are right, I misunderstood you comment and I thought you referred to
+> entire API being unused in this patch.
 > 
-> Fix this by verifying that write() returns the full expected length
-> and treating any mismatch as failure.
-> 
-> Signed-off-by: Vineet Agarwal <agarwal.vineet2006@gmail.com>
+> free_hugepages is not used and it should not be a part of the saved state.
+
+Thanks, I'll try to be more specific next time.
+
+>   
+>> diff --git a/tools/testing/selftests/mm/hugepage_settings.c b/tools/testing/selftests/mm/hugepage_settings.c
+>> index 097ba085f423..a023cfeb69c5 100644
+>> --- a/tools/testing/selftests/mm/hugepage_settings.c
+>> +++ b/tools/testing/selftests/mm/hugepage_settings.c
+>> @@ -341,7 +341,6 @@ bool thp_is_enabled(void)
+>>   #define HUGETLB_MAX_NR_PAGESIZES 10
+>>   struct hugetlb_settings {
+>> -	unsigned long free_hugepages[HUGETLB_MAX_NR_PAGESIZES];
+>>   	unsigned long nr_hugepages[HUGETLB_MAX_NR_PAGESIZES];
+>>   	unsigned long sizes[HUGETLB_MAX_NR_PAGESIZES];
+>>   	unsigned long default_size;
+>> @@ -509,7 +508,6 @@ static void __hugetlb_save_settings(void)
+>>   		if (!sz)
+>>   			continue;
+>> -		settings->free_hugepages[i] = hugetlb_free_pages(sz);
+>>   		settings->nr_hugepages[i] = hugetlb_nr_pages(sz);
+>>   	}
+>>
+>>> I felt it would be too churny to add users in this patch.
+>>>> Otherwise, the API looks great to me. But if you allow me to bikeshed :)
+>>>>
+>>>> I think I'd do:
+>>>>
+>>>> struct hugetlb_state {
+>>>> 	unsigned long nr_hugepages;
+>>>> 	unsigned long size;
+>>>> };
+>>>>
+>>>> struct hugetlb_settings {
+>>>> 	struct hugetlb_state hstate[HUGETLB_MAX_PAGESIZES];
+>>>> 	unsigned long default_size;
+>>>> 	int nr_sizes;
+>>>> };
+>>>
+>>> It might be slightly nicer abstraction but ...
+>>>>> +static void __hugetlb_save_settings(void)
+>>>>> +{
+>>>>> +	struct hugetlb_settings *settings = &hugetlb_saved_settings;
+>>>>> +	int nr_sizes;
+>>>>> +
+>>>>> +	settings->default_size = default_huge_page_size();
+>>>>> +	if (!settings->default_size)
+>>>>> +		return;
+>>>>> +
+>>>>> +	nr_sizes = detect_hugetlb_page_sizes(settings->sizes,
+>>>>> +					     HUGETLB_MAX_NR_PAGESIZES);
+>>>
+>>> ... this immediately becomes more complex.
+>>>
+>>>>> +	if (!nr_sizes) {
+>>>>> +		settings->default_size = 0;
+>>>>> +		return;
+>>>>> +	}
+>>>>> +
+>>>>> +	for (int i = 0; i < nr_sizes; i++) {
+>>>>> +		unsigned long sz = settings->sizes[i];
+>>>>> +
+>>>>> +		if (!sz)
+>>>>> +			continue;
+>>>>> +
+>>>>> +		settings->free_hugepages[i] = hugetlb_free_pages(sz);
+>>>>> +		settings->nr_hugepages[i] = hugetlb_nr_pages(sz);
+>>>
+>>> And this as well.
+>>
+>> We'd need a little more code to handle those cases, may or may not be
+>> worth it. But enough bikesheding from my side :) the series is great as
+>> is.
+>>
+>>
 > 
 
-Thanks!
-
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
-
--- 
-Cheers,
-
-David
