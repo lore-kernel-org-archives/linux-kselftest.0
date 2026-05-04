@@ -1,65 +1,65 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2830535BDA8;
-	Mon,  4 May 2026 09:11:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B7D835C197;
+	Mon,  4 May 2026 09:11:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777885887; cv=none; b=EEYGprAVLjZu0vBp6WpkpyVIduzB7pXqqg2E7Blr6RQwJX4G9VWSC5ZopKcckm+IGQSAoxOHGAIgYUOvDE0DaADe9IkPpiociBsgEEggmBKgTu20afVjMcsasWvFEp46/1MmcIkBVUtz/Bz7cuoHlRVYCPKyTAhiOyw8wJWRwZc=
+	t=1777885890; cv=none; b=fqaQiChCmRJXQ62AAE2NP1dLw7u/bbjVtn4Wcw5c4wAmy1B0ROsmqo45/tCjNSFtwx8UvFVS0i6wEC7iZPrSo4UJbhgXub40I980wolSZIpuD3EswfdEU66pwS5OZdye+WPWt5jP8pSC2OMSv/Z/WCjNdq9eWqF1m4guwkwzQus=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777885887; c=relaxed/simple;
-	bh=U2/DR/N8lofsI3rqWwK1p53WUAkIjUvkT+oJNDGgIYM=;
+	s=arc-20240116; t=1777885890; c=relaxed/simple;
+	bh=AN5eHcgUWNQZFf4Ztt6bsPYWP2Q+ZWyk5n/OS9iI2sc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=S6X3emKlPHjlAPj08FWuDCED77sz+lBbZDqYY0MBnVPDTp5R1365DdWugcTjVAyBlceUKeK05jDQzGtOFMsnBxKqNWFbKdDGGrIuiEM4dMs/h8grnEAEDgOY3+5isLNQoHKfaKkvbcvi865MQW8tyqmAE+BLw5kWWDZrNVea5C0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=rzpG1e2C; arc=none smtp.client-ip=148.163.158.5
+	 MIME-Version; b=k7xySkfTfWgVcxWdeY8DOQSccx66kM5qhy56ore59Hmyz8OQ4Eylyjyvu9rxU0zn5WS1nMQEeeoou+r2ce3KDKlNQaxg/TL37otmEQMYG6Sk+khv9t+F9UtTLd90SKLR6DrzQm+0b3FU2efCyLLaSJuOM4LRqHokZwuErMRDnFw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=M7Guab/h; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="rzpG1e2C"
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 643Kl0V93279333;
-	Mon, 4 May 2026 09:11:20 GMT
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="M7Guab/h"
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6442tF7G068020;
+	Mon, 4 May 2026 09:11:21 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=uVBCdFlyMQ1V6MUtu
-	wPKBgnAngZgz58IaT05OqVtHI4=; b=rzpG1e2CGiWiPal63UGg0n8vqK4Rrvbez
-	p1VZZjElDPxpLRmCMZ4ljOdxq17CadnirTR9PrUNrQAbAhy6HATmYmAJBdJoMM8h
-	sgrYtqsiUhA17b9MUMMY3sBcWBB8SVO1oegzOfICfIr7gFxm+C/Xku16streG6Kv
-	zzuC+ITlqm+iqUU07tBtyHudRM3S0fiAF2SGeOC1czpyAolaXiEnmzdZFHCNchCw
-	K5KoCZaW0dEm5IKEJ+h26gb0fX2NTtkBWuszFtDFypCm55y/sQ0e/ySsK0gILmgU
-	+lIiQSgOCFRTqutmHJFJI7xfsBsJFxZq+4Ddhmoxr0w1wAzPGCkDw==
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4dw9xxe20k-1
+	:mime-version:references:subject:to; s=pp1; bh=jm2w8eq1FHMdDz3aG
+	4TKoSi7OYPVag1/QptiIakzkcQ=; b=M7Guab/hF7A18bW90wQmaYLM2oR1SFL80
+	arCpJhW27YtIXqUzxgWAD1g040yZWIpkg5x9HoeluqxcQWPlH1ISxmid6cHc16cb
+	lnHgeGQA80Hih+uslLry7N9XR4TWTDtbekEbAhfcNm+cr3MTWEveDPzWID8Z/G5F
+	rYWxEKKgyc3Gd5OqN4i7K4NnEoVDw1VjNfptrtKU5FrtvNpqcDp4QjEkmd9VYQ7C
+	h6QKLjrvr/E0gtMuoZcMRFl/FL3p1brmdZ9WMDfUo10VcVoU/on/qJAnbNct/GRL
+	jEMZFl6lBAiHyYSAYqCqQKg5x5m6pUseBjHZ8UH5T08CP8Hm0JwOA==
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4dw9y168ru-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 04 May 2026 09:11:19 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64499Zbc004421;
-	Mon, 4 May 2026 09:11:19 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4dwuyvvjq0-1
+	Mon, 04 May 2026 09:11:21 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64499V0E025969;
+	Mon, 4 May 2026 09:11:20 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4dwx9y472j-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 04 May 2026 09:11:19 +0000 (GMT)
+	Mon, 04 May 2026 09:11:20 +0000 (GMT)
 Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6449BFO356689010
+	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6449BHLM30605840
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 4 May 2026 09:11:15 GMT
+	Mon, 4 May 2026 09:11:17 GMT
 Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 5640520040;
+	by IMSVA (Postfix) with ESMTP id 326012004B;
+	Mon,  4 May 2026 09:11:17 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id A058720040;
 	Mon,  4 May 2026 09:11:15 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 94D282004B;
-	Mon,  4 May 2026 09:11:13 +0000 (GMT)
 Received: from aboo.bl1-in.ibm.com (unknown [9.123.14.187])
 	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Mon,  4 May 2026 09:11:13 +0000 (GMT)
+	Mon,  4 May 2026 09:11:15 +0000 (GMT)
 From: Aboorva Devarajan <aboorvad@linux.ibm.com>
 To: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
         linux-mm@kvack.org, linux-kselftest@vger.kernel.org
 Cc: Sayali Patil <sayalip@linux.ibm.com>, linux-kernel@vger.kernel.org,
         Aboorva Devarajan <aboorvad@linux.ibm.com>
-Subject: [PATCH 2/3] selftests/mm: remove hardcoded THP sizing assumptions in hmm tests
-Date: Mon,  4 May 2026 14:41:07 +0530
-Message-ID: <e90a1bb96096bfc6a7062dcafcb8c1e1dee05de0.1777870179.git.aboorvad@linux.ibm.com>
+Subject: [PATCH 3/3] selftests/mm: fix exclusive_cow test fork() handling
+Date: Mon,  4 May 2026 14:41:08 +0530
+Message-ID: <f3884dcd77212d9a9f3498f0863f73ce861897cd.1777870179.git.aboorvad@linux.ibm.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <cover.1777870179.git.aboorvad@linux.ibm.com>
 References: <cover.1777870179.git.aboorvad@linux.ibm.com>
@@ -71,167 +71,103 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTA0MDA5NyBTYWx0ZWRfX4Ce7Mg2HBbJT
- j8Qe/FwUv4MOtlWOCR0HA7k8E5wj+eOWk7o7cQI3bhgrFIb31MXB8+wutCnDTsir/vlVNcnYrsy
- T2pSqSgVb/VGmoR3q5UDmC74bTAttQc48XnYww+9fuzsPQzsx7gj2dQioRb5+bR71qUu+0nmpDw
- 0yZ/2aLQQeUM71caCKU1/DN7cJ/c0ZZBQhnYYxBwHuDoeM5gruKe/F99/VBgTBYkXZepFkRIU7M
- 1/b98dwWT6BSuFPs3FztFzN1J1BrSduSJjA+K8lb9cRSRh5p2JecYtMxv1BcEoupb8/91+WvWsO
- rk4XaXe0NgvQfQAXN3FHFMlP6+ZqhaTq7axbXcJojSp+r7DT8s83/C9Si0tlum/fefAJu1MxaHj
- gwsjv0JDFBI4klfkFFdlYL+CRMcNr9scBPgzEsnCum8X9/l55LH+D2xCAz8pwVDay9dGezUgpsY
- Pxt68d8880F3uolZAAw==
-X-Proofpoint-ORIG-GUID: tbQtdIaClcfvD8ppY-xugGVIW4tjpR7a
-X-Proofpoint-GUID: tbQtdIaClcfvD8ppY-xugGVIW4tjpR7a
-X-Authority-Analysis: v=2.4 cv=ctWrVV4i c=1 sm=1 tr=0 ts=69f862b7 cx=c_pps
- a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
+X-Proofpoint-ORIG-GUID: CLrEPZepVvPWW--8jC581KAg740SAxfb
+X-Proofpoint-GUID: CLrEPZepVvPWW--8jC581KAg740SAxfb
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTA0MDA5NyBTYWx0ZWRfX7828XjCc7lDp
+ W8qiv4I7CvqzBOmj/pcjx0dkovueJ/A9+xgYOCoCwlsC+YoB4oKjwjrKNNrHTiYcJEm0BUUsjlh
+ pkIaOOhPEy+t/n8kABgOC3+DftyLjCiwpNUC11c1fJ5CucRN7wUj4X+m4c4CEHlgFbl0hPMEIWg
+ dTWx1GZ30G1ZUS+IqWR/96+6imawGwcF32NujWVlWOMht7C/eq5jdJydaOGRsMsef9qreffaGya
+ /2fKwqcZZiwQzoE4jJCIKRTPWfHRRCHJQF9Puwx/AbL4GtjP0HvwFHMUKZwgkkFPDxjntAHvn87
+ WewUU7C1VN+0NGzl2bZOx4Xia3xIqpho7ptYiZGT5KAOB4yM0w80K+qIQOKhlFsawAxE335+JiW
+ XCbTn0h8TOFffsQyM1ACwTuD3qwKLJwakCwuyqS1m+X3zh10v77+aRmHkn4UVIOADN7yIi+OGB9
+ Q+sHi9QHCXs5amEwBXQ==
+X-Authority-Analysis: v=2.4 cv=UbFhjqSN c=1 sm=1 tr=0 ts=69f862b9 cx=c_pps
+ a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
  a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=V8glGbnc2Ofi9Qvn3v5h:22 a=VnNF1IyMAAAA:8 a=77g_uzDykyn2lBTOjWkA:9
+ a=U7nrCbtTmkRpXpFmAIza:22 a=VnNF1IyMAAAA:8 a=YKbGnN07TdQTFoDUIKcA:9
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-05-04_03,2026-04-30_02,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 lowpriorityscore=0 adultscore=0 clxscore=1015
- suspectscore=0 impostorscore=0 spamscore=0 malwarescore=0 phishscore=0
- bulkscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.22.0-2604200000
- definitions=main-2605040097
+ clxscore=1011 spamscore=0 lowpriorityscore=0 malwarescore=0 suspectscore=0
+ adultscore=0 priorityscore=1501 bulkscore=0 phishscore=0 impostorscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2604200000 definitions=main-2605040097
 
-From: Sayali Patil <sayalip@linux.ibm.com>
+The test ignores the return value of fork(), so both the parent and
+the (newly created) child run the COW verification loops and then
+call hmm_buffer_free() before returning into the kselftest harness,
+which _exit()s each side.  This duplicated teardown sequence has
+been observed to manifest as a SIGSEGV in the test child, e.g.:
 
-migrate_partial_unmap_fault() and migrate_remap_fault() currently use
-hardcoded offsets based on a 2MB PMD size. Likewise,
-benchmark_thp_migration() assumes a fixed 2MB THP size when generating
-test buffer sizes.
+  hmm-tests[360141]: segfault (11) at 0 nip 10006964 lr 1000ac3c code 1
+  in hmm-tests[6964,10000000+30000]
 
-Derive offsets and test sizes from the runtime PMD page size returned
-by read_pmd_pagesize(). This allows the tests to adapt correctly on
-systems where PMD-sized THP differs from 2MB.
+Fix this by adopting the same fork()-then-wait pattern already used
+by the nearby anon_write_child / anon_write_child_shared tests in
+this file: the child performs the COW verification and then _exit(0)s
+so it does not run the test teardown, while the parent independently
+verifies COW, waits for the child, and only then frees the buffer.
 
-Also replace the fixed 1MB unmap size with a PMD-relative value derived
-from the runtime PMD size.
-
-Additionally, cap the maximum number of THPs used in benchmark tests to
-avoid integer overflow when computing large buffer sizes. On systems
-with larger PMD sizes, multiplying a fixed THP count can exceed
-INT_MAX. Compute the maximum number of THPs at runtime as
-(INT_MAX / thp_size) and use the smaller of that value and 128 when
-constructing the largest benchmark buffer.
-
-Fixes: 24c2c5b8ffbd ("selftests/mm/hmm-tests: partial unmap, mremap and anon_write tests")
-Fixes: 271a7b2e3c13 ("selftests/mm/hmm-tests: new throughput tests including THP")
-Signed-off-by: Sayali Patil <sayalip@linux.ibm.com>
+Fixes: b659baea75469 ("mm: selftests for exclusive device memory")
 Signed-off-by: Aboorva Devarajan <aboorvad@linux.ibm.com>
 ---
- tools/testing/selftests/mm/hmm-tests.c | 44 +++++++++++++++-----------
- 1 file changed, 25 insertions(+), 19 deletions(-)
+ tools/testing/selftests/mm/hmm-tests.c | 30 +++++++++++++++++++++++---
+ 1 file changed, 27 insertions(+), 3 deletions(-)
 
 diff --git a/tools/testing/selftests/mm/hmm-tests.c b/tools/testing/selftests/mm/hmm-tests.c
-index 6dc839866dfe..1e5c1432ef6b 100644
+index 1e5c1432ef6b..c5000d53b604 100644
 --- a/tools/testing/selftests/mm/hmm-tests.c
 +++ b/tools/testing/selftests/mm/hmm-tests.c
-@@ -21,6 +21,7 @@
- #include <strings.h>
- #include <time.h>
- #include <pthread.h>
-+#include <limits.h>
- #include <sys/types.h>
- #include <sys/stat.h>
- #include <sys/mman.h>
-@@ -2332,12 +2333,13 @@ TEST_F(hmm, migrate_partial_unmap_fault)
- 	struct hmm_buffer *buffer;
- 	unsigned long npages;
- 	unsigned long size = read_pmd_pagesize();
-+	unsigned long unmap_size = size / 2;
-+	unsigned long offsets[] = { 0, size / 4, size / 2 };
+@@ -1866,6 +1866,8 @@ TEST_F(hmm, exclusive_cow)
  	unsigned long i;
- 	void *old_ptr;
- 	void *map;
  	int *ptr;
- 	int ret, j, use_thp;
--	int offsets[] = { 0, 512 * ONEKB, ONEMEG };
+ 	int ret;
++	pid_t pid;
++	int status;
  
- 	for (use_thp = 0; use_thp < 2; ++use_thp) {
- 		for (j = 0; j < ARRAY_SIZE(offsets); ++j) {
-@@ -2379,12 +2381,12 @@ TEST_F(hmm, migrate_partial_unmap_fault)
- 			for (i = 0, ptr = buffer->mirror; i < size / sizeof(*ptr); ++i)
- 				ASSERT_EQ(ptr[i], i);
+ 	npages = ALIGN(HMM_BUFFER_SIZE, self->page_size) >> self->page_shift;
+ 	ASSERT_NE(npages, 0);
+@@ -1894,14 +1896,36 @@ TEST_F(hmm, exclusive_cow)
+ 	ASSERT_EQ(ret, 0);
+ 	ASSERT_EQ(buffer->cpages, npages);
  
--			munmap(buffer->ptr + offsets[j], ONEMEG);
-+			munmap(buffer->ptr + offsets[j], unmap_size);
+-	fork();
++	pid = fork();
++	if (pid == -1)
++		ASSERT_EQ(pid, 0);
  
- 			/* Fault pages back to system memory and check them. */
- 			for (i = 0, ptr = buffer->ptr; i < size / sizeof(*ptr); ++i)
- 				if (i * sizeof(int) < offsets[j] ||
--				    i * sizeof(int) >= offsets[j] + ONEMEG)
-+				    i * sizeof(int) >= offsets[j] + unmap_size)
- 					ASSERT_EQ(ptr[i], i);
- 
- 			buffer->ptr = old_ptr;
-@@ -2398,12 +2400,12 @@ TEST_F(hmm, migrate_remap_fault)
- 	struct hmm_buffer *buffer;
- 	unsigned long npages;
- 	unsigned long size = read_pmd_pagesize();
-+	unsigned long offsets[] = { 0, size / 4, size / 2 };
- 	unsigned long i;
- 	void *old_ptr, *new_ptr = NULL;
- 	void *map;
- 	int *ptr;
- 	int ret, j, use_thp, dont_unmap, before;
--	int offsets[] = { 0, 512 * ONEKB, ONEMEG };
- 
- 	for (before = 0; before < 2; ++before) {
- 		for (dont_unmap = 0; dont_unmap < 2; ++dont_unmap) {
-@@ -2806,8 +2808,12 @@ static inline int run_migration_benchmark(int fd, int use_thp, size_t buffer_siz
- TEST_F_TIMEOUT(hmm, benchmark_thp_migration, 120)
- {
- 	struct benchmark_results thp_results, regular_results;
--	size_t thp_size = 2 * 1024 * 1024; /* 2MB - typical THP size */
-+	size_t thp_size = read_pmd_pagesize();
- 	int iterations = 5;
-+	size_t max_thps, num_thps;
+-	/* Fault pages back to system memory and check them. */
++	if (pid == 0) {
++		/*
++		 * Child: fault pages back and verify COW, then _exit().
++		 * On ASSERT failure the harness calls abort(); the parent
++		 * reports it via the WIFEXITED/WEXITSTATUS checks below.
++		 */
++		for (i = 0, ptr = buffer->ptr; i < size / sizeof(*ptr); ++i)
++			ASSERT_EQ(ptr[i]++, i);
 +
-+	max_thps = INT_MAX / thp_size;
-+	num_thps = (max_thps > 128) ? 128 : max_thps;
++		for (i = 0, ptr = buffer->ptr; i < size / sizeof(*ptr); ++i)
++			ASSERT_EQ(ptr[i], i + 1);
++
++		_exit(0);
++	}
++
++	/* Parent: also increment to verify COW works for both processes. */
+ 	for (i = 0, ptr = buffer->ptr; i < size / sizeof(*ptr); ++i)
+ 		ASSERT_EQ(ptr[i]++, i);
  
- 	printf("\nHMM THP Migration Benchmark\n");
- 	printf("---------------------------\n");
-@@ -2815,23 +2821,23 @@ TEST_F_TIMEOUT(hmm, benchmark_thp_migration, 120)
+ 	for (i = 0, ptr = buffer->ptr; i < size / sizeof(*ptr); ++i)
+-		ASSERT_EQ(ptr[i], i+1);
++		ASSERT_EQ(ptr[i], i + 1);
++
++	/* Parent: wait for child and then free the buffer. */
++	ASSERT_EQ(waitpid(pid, &status, 0), pid);
++	ASSERT_TRUE(WIFEXITED(status));
++	ASSERT_EQ(WEXITSTATUS(status), 0);
  
- 	/* Test different buffer sizes */
- 	size_t test_sizes[] = {
--		thp_size / 4,      /* 512KB - smaller than THP */
--		thp_size / 2,      /* 1MB - half THP */
--		thp_size,          /* 2MB - single THP */
--		thp_size * 2,      /* 4MB - two THPs */
--		thp_size * 4,      /* 8MB - four THPs */
--		thp_size * 8,       /* 16MB - eight THPs */
--		thp_size * 128,       /* 256MB - one twenty eight THPs */
-+		thp_size / 4,      /* quarter THP */
-+		thp_size / 2,      /* half THP */
-+		thp_size,          /* single THP */
-+		thp_size * 2,      /* two THPs */
-+		thp_size * 4,      /* four THPs */
-+		thp_size * 8,       /* eight THPs */
-+		thp_size * num_thps, /* max THPs without overflow */
- 	};
- 
- 	static const char *const test_names[] = {
--		"Small Buffer (512KB)",
--		"Half THP Size (1MB)",
--		"Single THP Size (2MB)",
--		"Two THP Size (4MB)",
--		"Four THP Size (8MB)",
--		"Eight THP Size (16MB)",
--		"One twenty eight THP Size (256MB)"
-+		"Small Buffer",
-+		"Half THP Size",
-+		"Single THP Size",
-+		"Two THP Size",
-+		"Four THP Size",
-+		"Eight THP Size",
-+		"Large Buffer"
- 	};
- 
- 	int num_tests = ARRAY_SIZE(test_sizes);
+ 	hmm_buffer_free(buffer);
+ }
 -- 
 2.54.0
 
