@@ -1,198 +1,239 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07E593E4C9E
-	for <linux-kselftest@vger.kernel.org>; Mon,  4 May 2026 18:35:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE1E52D8DC3
+	for <linux-kselftest@vger.kernel.org>; Mon,  4 May 2026 19:45:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777919731; cv=none; b=Qoh3ag9R+j4s/htAuhgaHEC7MXQxp6wMToNd03zcfcEFUm2rugSrBtSpFXLkBOdRCVeOmBgVRS3CgmKHHM7uFQAPBsRqPZenIyqwkRrzqiTeME6D+1Keq0Boec5xlOw8q2IQRHwpKxfxQpSB8Psbjw4zjKX9tChtM5PMxeEWQ2s=
+	t=1777923933; cv=none; b=qjEg7aDT3vITBsSM53PzTBvBs+oR3JsXs1Z/XJ7Z2jJ5ZwmU3yTPW/d6GS81g2JDsIqDfXho7rKDOnryuPHw1UzLZ/Gz17198rqEgYnRbnJExqQ86EgUXYPwHHFopFXtVG+94/M5aWMF8q5k07Rs54Obn1VHIfI9MqIc+CVmnPo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777919731; c=relaxed/simple;
-	bh=ZvTXbQvvVARQQXEwnJaBzX4ewSTwJzx3zawM/8FKYoo=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Cut/0O862G/uattr1ZdKCi7wX3PASceAEcrRYjYNZzgK8za/BWprI0KQ5VbP84MHTBO0emtw5V/wO0BmGKPRhzi0gQQuWbBMP55mlExDZtghwclL9DENWrGE/XeM72frbokWBoK6rO6x48EBpXH6sXCG/z7vln6SbYkLp4jMMUo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=P87wQR3h; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1777923933; c=relaxed/simple;
+	bh=KQ+7KHXKleAsHDns41TC+7RjSnGN2oCzmjY3uhY0+ZU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=II6zQopvf5CiVc2d4u4t1v4vzuwhUg1+YWORuXUW7eluqOeVA0OrpTnv9zlrSgYc0MwcxJmg/I+0ycBcw1ZiLLoOaMdB0LFJdviICmeQda4B0UzEp3Yv7TyDf1QIYs9o3LLs7sx2DBAEaCEuuuu0od+wlsSl5wCjQ9fKp6ujluA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=IC0vt6EJ; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=ZoNRnuIm; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=IC0vt6EJ; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=ZoNRnuIm; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="P87wQR3h"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-488b8bc6bc9so27501005e9.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 04 May 2026 11:35:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1777919728; x=1778524528; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RYEFtul8vd0vBjHaC+i5w2P21RsoXDngoLSxAnb1syM=;
-        b=P87wQR3hvOACpwTGLleegcbEsY6eNiCD0x5hV7zNWXJXoTINZ4h5iI5O7djvYA5f+A
-         KR8ONyRE/LwAIpyEjTxeJWjr/ruzXOI7UmYfx4iVcqPghkcFl0gztdcC0LVOsxTB+8h0
-         /x2vG33g2KOHNxykEzcXPCVAILcwB53lCSU5JAcnAVQjULFONfLNvh/s3q/EBvVuaeRs
-         U/fbZoS+/VVI9hefQbqPJl0PluqjmraXI7x14ESkEZKMRMKSzNVCEq+F938rJqo95euD
-         MOeLzj1rzxvrM4bxwpXrF7ASj9W87JyRXj48pPqNAuYDYy5dPIL/YXFgcWHflQ+er8+x
-         gEPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777919728; x=1778524528;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=RYEFtul8vd0vBjHaC+i5w2P21RsoXDngoLSxAnb1syM=;
-        b=hej/cNaWmkiGp40cNmPUHHZYXbwL4N1lvaFPhSiueTxwucTdLjUmq+yvy8Gj6oPXCs
-         qng/OIZuFfsxH/Rkylxs4ZwnVfl9uqld/KnB03kCul9pfRqMED5zJejER4GwoHMTvaQi
-         AEjAZjsSe212YPGyUZjhc7vmd3JovEYjwnFuRsjC5ysVma7CyZRE6ibOf8JISW1Ftu7Y
-         ItuT2FXtKrWwzeuS+kHh5E7n/De6wF2poE0W78p3kDy5rHMVjkXo1gbt3AWJvEVMkM31
-         2QgONfB0dVa+DSiJBrLibGQut7LsODHivJzwUNmMkzVw4dempAHQh+nIOS/3lio4hX2f
-         e/SA==
-X-Forwarded-Encrypted: i=1; AFNElJ/aelgrI/Z/l0fBdd9z2VWl/Tb8OSHQWjOpxSH+lQx/O4EFAFnhl4VMw0v7PjnJuG2rot3Ap+4HnjvxIXWuLho=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz/nYWvOZ1YbZezPTTnOj42eZdQW+QV7GjmWUTSesoYk7MQK0e7
-	haXeo0Cn8/L0C7nJqTH0s6iz+afCKlXlDViOwlW0HAT1yHqf0+UxWCWivzdexPVtQ5A=
-X-Gm-Gg: AeBDietWF5ZlGbRZ589j996TPop4ZbhgyQocfcfYSSg/YqiIIXasczYMyR7cASRaN40
-	AN0jlbr1o6jMH4BSbELSozTmXZTQtSjONfcpc6hjffD1qfG5WPCJi8lOFw1rd7dO9uaPZo8Q2Vc
-	Nx+kz7bRXVu8riNHSerJ1h/9s3basoz6ZCLOsjWxr7cp5LrBwof0ms+5U/8+OKKwtTkTEsRiSBJ
-	z869OmYNucRPrVhWEi2UfVxr5i9pQijhWmuClvtfthIZePszgEi9yaR/st/0KWKLWeeYqQ3hkO0
-	vbJkwGMfL9dd5GmCpGE5Ykt8kFI/iiIqj4FEaawp3iK5JA4GNn4+JiqJaRea6i6We2Gc9K/5nD0
-	5QmLMZ3bEq0iSTwIyu1VKgnzx/LWxBwYpbUPDVEHFIUskP1bAgLtpEB97EH0mTGrEIuSx88dIyX
-	6V7YZEK8kHjEACI791Tomdbzfd2FU6RuN06g==
-X-Received: by 2002:a05:600c:c095:b0:487:12c:e7e1 with SMTP id 5b1f17b1804b1-48a98637de2mr170634125e9.11.1777919728436;
-        Mon, 04 May 2026 11:35:28 -0700 (PDT)
-Received: from [127.0.0.1] ([2804:1bc4:224:7800:585c:db3a:fcb:e21f])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-44a98b76eddsm26745511f8f.34.2026.05.04.11.35.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 May 2026 11:35:28 -0700 (PDT)
-From: Marcos Paulo de Souza <mpdesouza@suse.com>
-Date: Mon, 04 May 2026 15:34:47 -0300
-Subject: [PATCH v5 6/6] selftests: livepatch: Check if stack_order sysfs
- attribute exists
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="IC0vt6EJ";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="ZoNRnuIm";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="IC0vt6EJ";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="ZoNRnuIm"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 3A8026B2D0;
+	Mon,  4 May 2026 19:45:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1777923930; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=N6503Bp9N1pbt6myxpERER1lLrpAG3W8C/49lI7OrVs=;
+	b=IC0vt6EJTiirXmeC1zKoxy5VOLPuGKhdk29Yv1I/HzLbb1haJndB0cRT8y7+ylTTFroy21
+	Cdu2/ezIbvsYAERZfpeFW1gwe05gLJ6vGKXWyPIQkwqeobaIZLcBVCc2kPmLrY8L81CEGe
+	Xr+qSEEFi7xMFsOhYdskumRH3MiOGOs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1777923930;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=N6503Bp9N1pbt6myxpERER1lLrpAG3W8C/49lI7OrVs=;
+	b=ZoNRnuImMq7a89/e9jrAIPe+RdDdQr0GtQJmVszX2vXcMPjB3F8w13bmXdOI4lt52FUDOs
+	pFgPkOQMp81ypEAg==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1777923930; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=N6503Bp9N1pbt6myxpERER1lLrpAG3W8C/49lI7OrVs=;
+	b=IC0vt6EJTiirXmeC1zKoxy5VOLPuGKhdk29Yv1I/HzLbb1haJndB0cRT8y7+ylTTFroy21
+	Cdu2/ezIbvsYAERZfpeFW1gwe05gLJ6vGKXWyPIQkwqeobaIZLcBVCc2kPmLrY8L81CEGe
+	Xr+qSEEFi7xMFsOhYdskumRH3MiOGOs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1777923930;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=N6503Bp9N1pbt6myxpERER1lLrpAG3W8C/49lI7OrVs=;
+	b=ZoNRnuImMq7a89/e9jrAIPe+RdDdQr0GtQJmVszX2vXcMPjB3F8w13bmXdOI4lt52FUDOs
+	pFgPkOQMp81ypEAg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id B6494593A3;
+	Mon,  4 May 2026 19:45:29 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id Ax7AKVn3+Gk/FgAAD6G6ig
+	(envelope-from <fmancera@suse.de>); Mon, 04 May 2026 19:45:29 +0000
+Message-ID: <87ebe3d5-7dd1-4ee9-a870-1f4d1eb6574a@suse.de>
+Date: Mon, 4 May 2026 21:45:19 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2 net] selftests: fib_tests: add temporary IPv6 address
+ renewal test
+To: Ido Schimmel <idosch@nvidia.com>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ horms@kernel.org, pabeni@redhat.com, kuba@kernel.org, edumazet@google.com,
+ davem@davemloft.net, dsahern@kernel.org
+References: <20260503221139.3742-3-fmancera@suse.de>
+ <20260503221139.3742-4-fmancera@suse.de> <20260504164149.GB385401@shredder>
+Content-Language: en-US
+From: Fernando Fernandez Mancera <fmancera@suse.de>
+In-Reply-To: <20260504164149.GB385401@shredder>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260504-lp-tests-old-fixes-v5-6-0be26d94ab9a@suse.com>
-References: <20260504-lp-tests-old-fixes-v5-0-0be26d94ab9a@suse.com>
-In-Reply-To: <20260504-lp-tests-old-fixes-v5-0-0be26d94ab9a@suse.com>
-To: Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
- Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, 
- Joe Lawrence <joe.lawrence@redhat.com>, Shuah Khan <shuah@kernel.org>
-Cc: live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Marcos Paulo de Souza <mpdesouza@suse.com>, 
- marcos@mpdesouza.com
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1777919697; l=3644;
- i=mpdesouza@suse.com; s=20231031; h=from:subject:message-id;
- bh=ZvTXbQvvVARQQXEwnJaBzX4ewSTwJzx3zawM/8FKYoo=;
- b=MXIRvCBUPAt1B8d+Ub66kDeZOy+KYi/sFRWYhXtX4PVbgZDg9tmKGz+KegOVLCLPEnNS7YQ50
- fYgaRWKlDmHA532Wmwp/RnPTr3WHqx47d1Fukc3LM7mobwTBD14ObX8
-X-Developer-Key: i=mpdesouza@suse.com; a=ed25519;
- pk=/Ni/TsKkr69EOmdZXkp1Q/BlzDonbOBRsfPa18ySIwU=
+X-Spam-Level: 
+X-Spamd-Result: default: False [-3.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	MID_RHS_MATCH_FROM(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.de:mid,suse.de:email]
+X-Spam-Flag: NO
+X-Spam-Score: -3.30
 
-The commit 3dae09de4061 ("livepatch: Add stack_order sysfs attribute"),
-merged in v6.14, introduced a new sysfs attribute.
+On 5/4/26 6:41 PM, Ido Schimmel wrote:
+> On Mon, May 04, 2026 at 12:11:41AM +0200, Fernando Fernandez Mancera wrote:
+>> Add a test to check that temporary IPv6 address is regenerated properly
+>> after the base prefix is deprecated and restored.
+>>
+>> Fib6 temporary address renewal test
+>>      TEST: IPv6 temporary address cleanly deprecated and regenerated     [ OK ]
+> 
+> Thanks for the test, but I reverted the fix and it still passes :(
+> 
 
-In order to run the selftests on older kernels, check if given kernel
-has support for the attribute. If the attribute is not supported, skip
-the checks.
+Ugh sorry for that. I lowered the sleep time so it takes less time to 
+run and I messed up the test. It seems 2 seconds isn't enough and to 
+reliable reproduce it, 3 seconds are required.
 
-Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
----
- tools/testing/selftests/livepatch/test-sysfs.sh | 43 ++++++++++++++-----------
- 1 file changed, 25 insertions(+), 18 deletions(-)
+I am reposting with the test fixed, sorry again for the noise.
 
-diff --git a/tools/testing/selftests/livepatch/test-sysfs.sh b/tools/testing/selftests/livepatch/test-sysfs.sh
-index fed656021271..3b16285c6e67 100755
---- a/tools/testing/selftests/livepatch/test-sysfs.sh
-+++ b/tools/testing/selftests/livepatch/test-sysfs.sh
-@@ -10,6 +10,7 @@ MOD_LIVEPATCH3=test_klp_syscall
- 
- HAS_PATCH_ATTR=0
- HAS_REPLACE_ATTR=0
-+HAS_STACK_ORDER_ATTR=0
- 
- setup_config
- 
-@@ -23,8 +24,6 @@ check_sysfs_rights "$MOD_LIVEPATCH" "" "drwxr-xr-x"
- check_sysfs_rights "$MOD_LIVEPATCH" "enabled" "-rw-r--r--"
- check_sysfs_value  "$MOD_LIVEPATCH" "enabled" "1"
- check_sysfs_rights "$MOD_LIVEPATCH" "force" "--w-------"
--check_sysfs_rights "$MOD_LIVEPATCH" "stack_order" "-r--r--r--"
--check_sysfs_value  "$MOD_LIVEPATCH" "stack_order" "1"
- check_sysfs_rights "$MOD_LIVEPATCH" "transition" "-r--r--r--"
- check_sysfs_value  "$MOD_LIVEPATCH" "transition" "0"
- 
-@@ -39,6 +38,12 @@ if does_sysfs_exist "$MOD_LIVEPATCH" "replace"; then
- 	HAS_REPLACE_ATTR=1
- fi
- 
-+if does_sysfs_exist "$MOD_LIVEPATCH" "stack_order"; then
-+	check_sysfs_rights "$MOD_LIVEPATCH" "stack_order" "-r--r--r--"
-+	check_sysfs_value  "$MOD_LIVEPATCH" "stack_order" "1"
-+	HAS_STACK_ORDER_ATTR=1
-+fi
-+
- disable_lp $MOD_LIVEPATCH
- 
- unload_lp $MOD_LIVEPATCH
-@@ -149,33 +154,34 @@ livepatch: '$MOD_ATOMIC_REPLACE': unpatching complete
- % rmmod $MOD_ATOMIC_REPLACE"
- fi
- 
--start_test "sysfs test stack_order value"
-+if [[ "$HAS_STACK_ORDER_ATTR" == "1" ]]; then
-+	start_test "sysfs test stack_order value"
- 
--load_lp $MOD_LIVEPATCH
-+	load_lp $MOD_LIVEPATCH
- 
--check_sysfs_value  "$MOD_LIVEPATCH" "stack_order" "1"
-+	check_sysfs_value  "$MOD_LIVEPATCH" "stack_order" "1"
- 
--load_lp $MOD_LIVEPATCH2
-+	load_lp $MOD_LIVEPATCH2
- 
--check_sysfs_value  "$MOD_LIVEPATCH2" "stack_order" "2"
-+	check_sysfs_value  "$MOD_LIVEPATCH2" "stack_order" "2"
- 
--load_lp $MOD_LIVEPATCH3
-+	load_lp $MOD_LIVEPATCH3
- 
--check_sysfs_value  "$MOD_LIVEPATCH3" "stack_order" "3"
-+	check_sysfs_value  "$MOD_LIVEPATCH3" "stack_order" "3"
- 
--disable_lp $MOD_LIVEPATCH2
--unload_lp $MOD_LIVEPATCH2
-+	disable_lp $MOD_LIVEPATCH2
-+	unload_lp $MOD_LIVEPATCH2
- 
--check_sysfs_value  "$MOD_LIVEPATCH" "stack_order" "1"
--check_sysfs_value  "$MOD_LIVEPATCH3" "stack_order" "2"
-+	check_sysfs_value  "$MOD_LIVEPATCH" "stack_order" "1"
-+	check_sysfs_value  "$MOD_LIVEPATCH3" "stack_order" "2"
- 
--disable_lp $MOD_LIVEPATCH3
--unload_lp $MOD_LIVEPATCH3
-+	disable_lp $MOD_LIVEPATCH3
-+	unload_lp $MOD_LIVEPATCH3
- 
--disable_lp $MOD_LIVEPATCH
--unload_lp $MOD_LIVEPATCH
-+	disable_lp $MOD_LIVEPATCH
-+	unload_lp $MOD_LIVEPATCH
- 
--check_result "% insmod test_modules/$MOD_LIVEPATCH.ko
-+	check_result "% insmod test_modules/$MOD_LIVEPATCH.ko
- livepatch: enabling patch '$MOD_LIVEPATCH'
- livepatch: '$MOD_LIVEPATCH': initializing patching transition
- livepatch: '$MOD_LIVEPATCH': starting patching transition
-@@ -215,5 +221,6 @@ livepatch: '$MOD_LIVEPATCH': starting unpatching transition
- livepatch: '$MOD_LIVEPATCH': completing unpatching transition
- livepatch: '$MOD_LIVEPATCH': unpatching complete
- % rmmod $MOD_LIVEPATCH"
-+fi
- 
- exit 0
+>>
+>> Signed-off-by: Fernando Fernandez Mancera <fmancera@suse.de>
+>> ---
+>>   tools/testing/selftests/net/fib_tests.sh | 55 +++++++++++++++++++++++-
+>>   1 file changed, 54 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/tools/testing/selftests/net/fib_tests.sh b/tools/testing/selftests/net/fib_tests.sh
+>> index af64f93bb2e1..6a6e545cb40d 100755
+>> --- a/tools/testing/selftests/net/fib_tests.sh
+>> +++ b/tools/testing/selftests/net/fib_tests.sh
+>> @@ -12,7 +12,7 @@ TESTS="unregister down carrier nexthop suppress ipv6_notify ipv4_notify \
+>>          ipv4_route_metrics ipv4_route_v6_gw rp_filter ipv4_del_addr \
+>>          ipv6_del_addr ipv4_mangle ipv6_mangle ipv4_bcast_neigh fib6_gc_test \
+>>          ipv4_mpath_list ipv6_mpath_list ipv4_mpath_balance ipv6_mpath_balance \
+>> -       ipv4_mpath_balance_preferred fib6_ra_to_static"
+>> +       ipv4_mpath_balance_preferred fib6_ra_to_static fib6_temp_addr_renewal"
+>>   
+>>   VERBOSE=0
+>>   PAUSE_ON_FAIL=no
+>> @@ -1611,6 +1611,58 @@ fib6_ra_to_static()
+>>   	cleanup &> /dev/null
+>>   }
+>>   
+>> +fib6_temp_addr_renewal() {
+>> +	setup
+>> +
+>> +	echo
+>> +	echo "Fib6 temporary address renewal test"
+>> +	set -e
+>> +
+>> +	# ra6 is required for the test. (ipv6toolkit)
+>> +	if [ ! -x "$(command -v ra6)" ]; then
+>> +	    echo "SKIP: ra6 not found."
+>> +	    set +e
+>> +	    cleanup &> /dev/null
+>> +	    return
+>> +	fi
+>> +
+>> +	# Create a pair of veth devices to send a RA message from one
+>> +	# device to another.
+>> +	$IP link add veth1 type veth peer name veth2
+>> +	$IP link set dev veth1 up
+>> +	$IP link set dev veth2 up
+>> +
+>> +	# Make veth1 ready to receive RA messages.
+>> +	$NS_EXEC sysctl -wq net.ipv6.conf.veth1.accept_ra=2
+>> +	$NS_EXEC sysctl -wq net.ipv6.conf.veth1.use_tempaddr=2
+>> +	$NS_EXEC sysctl -wq net.ipv6.conf.veth1.temp_prefered_lft=15
+>> +	$NS_EXEC sysctl -wq net.ipv6.conf.veth1.max_desync_factor=0
+>> +
+>> +	# Send a RA message with a prefix from veth2.
+>> +	$NS_EXEC ra6 -i veth2 -s fe80::1 -d ff02::1 -P 2001:12::/64\#LA\#3600\#3600 -e
+>> +	sleep 2
+>> +
+>> +	# Deprecate it
+>> +	$NS_EXEC ra6 -i veth2 -s fe80::1 -d ff02::1 -P 2001:12::/64\#LA\#3600\#0 -e
+>> +	sleep 2
+>> +
+>> +	# Restore it
+>> +	$NS_EXEC ra6 -i veth2 -s fe80::1 -d ff02::1 -P 2001:12::/64\#LA\#3600\#3600 -e
+>> +
+>> +	ret=1
+>> +	for i in $(seq 1 25); do
+>> +		sleep 1
+>> +		num_dep="$($IP -6 addr | grep -c "temporary deprecated" || true)"
+>> +		num_tot="$($IP -6 addr | grep -c "temporary" || true)"
+>> +
+>> +		if [ "$num_dep" -eq 1 ] && [ "$num_tot" -ge 2 ]; then
+>> +			ret=0
+>> +			break
+>> +		fi
+>> +	done
+>> +	log_test "$ret" 0 "IPv6 temporary address cleanly deprecated and regenerated"
+> 
+> Missing:
+> 
+> set +e
+> 
+> cleanup &> /dev/null
+> 
+> Like in fib6_ra_to_static() and the skip path?
 
--- 
-2.54.0
+Oops, thanks!
+
+> 
+>> +}
+>> +
+>>   # add route for a prefix, flushing any existing routes first
+>>   # expected to be the first step of a test
+>>   add_route()
+>> @@ -3002,6 +3054,7 @@ do
+>>   	ipv6_mpath_balance)		ipv6_mpath_balance_test;;
+>>   	ipv4_mpath_balance_preferred)	ipv4_mpath_balance_preferred_test;;
+>>   	fib6_ra_to_static)		fib6_ra_to_static;;
+>> +	fib6_temp_addr_renewal)		fib6_temp_addr_renewal;;
+>>   
+>>   	help) echo "Test names: $TESTS"; exit 0;;
+>>   	esac
+>> -- 
+>> 2.53.0
+>>
+> 
 
