@@ -1,379 +1,195 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D2F8232395
-	for <linux-kselftest@vger.kernel.org>; Mon,  4 May 2026 16:14:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777911295; cv=pass; b=C9wSgIOhqvL3zTNbD64F+x4/D2jXJRs/1seVhGtifCGsEk9/slcZdxtuiC5Hy1jfZYL0zRy6nYCTZJ5A+hhZWa6vpTWnFj5hyvuse3vhR2PvkN+9NoFeSe/9esk4MJabaknFCneojMedtJm+E2lUDwKGj5kj+HNkjlQOZewBVZk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777911295; c=relaxed/simple;
-	bh=DminP7KHVm63UIC2HtxfneHs0LQ298REtw9Ib4YAqLs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jbO/b/XhMWIvwk6PvLuerGnrM4MifNMbrtIohhRZzUN3U9w9v8y9bjpw858hwc18BcrjNoiuPpxLlmj4CViX0eyaIOnLbnj+S2hnytyM/hEJ23IB1Fc9OhvCUDCGjW25nILuJ8mWSFs5qGxf0iAjGfBvCNbKAYiWFlh8U+xGtVE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jjbAiS4k; arc=pass smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 327F53E3146
+	for <linux-kselftest@vger.kernel.org>; Mon,  4 May 2026 16:30:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777912222; cv=none; b=msNdtr1PJeZq81rbRpTYyPfMVY5QK7gDbevEG9QUvZDK6S9YRFnIUbqKIUV8oRSdmL1UhS2a6IyNUyvL2pwSL+d0tZbEKzQkXChV92sfdjO9WZG6vqV99ElkYwAGI6K3XpSmSbNIsplsz+iZ6QYwT2ZmzeP5RPXF5oQGOr+16Ds=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777912222; c=relaxed/simple;
+	bh=t/WDX834jlVF7DP9Ia8VfOzsGAXwCxpfBKZASbwEbQI=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=qLRoINLRE/lI8fuS2ziSO0y5cKPgVZ0rPcAnfSRDgpIsVLc/IYjar25GQZ8du0w/4ZMZxayj1saq09vyqsfD9mVQ6HsY4NWYHWFg9dRzQCDiLf42TAha8Blw20MXxkfKNKyuKFWNAXZf+sd8TTQPsdO5iGzegyS5VVhwi7fyWqw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dqp/CT2o; arc=none smtp.client-ip=209.85.210.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jjbAiS4k"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-488af9fdaa7so21624415e9.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 04 May 2026 09:14:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1777911292; cv=none;
-        d=google.com; s=arc-20240605;
-        b=LiyOSOK5nCpSWlvvgq4EukHtsPBIE4i3z0nfc38wp2fLJ0Mkc14cHi3a403dBXf9r6
-         3rcx/6oC2e6llC6Znk3DYaX0bHrhZcMpSmZoUIu9zEbUTPrpd9OW/UyPrdIfMzHkmLsl
-         ASwyxna3VIHxYAlYvu4nP3cFLmOg5sKZtPTTIsOVB8nMP60faDpVuXwKxIIUsmXVBSFt
-         RPE6BRttmxhOJMILxr8qkEXG/g4EKf939L6CMIXlpJDeJQ/FavgyqGX4Xcpe2vCyyov5
-         BZfMnTqLW4ScLo1O/9t6lpwk5jsTpM/v7ABNrSWqwwrBrj+V94iFIaM8d8wY2WyzeEqe
-         OyXg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Uctyhl2fep2pE4Eu8P5giabdChdRC1urKFD3GIrdlNU=;
-        fh=QBQ7lynH/7LE4LwfEYFFtETbCBSQms5knMPY5lyRNrU=;
-        b=d35amBU5+WAJJ3F8lAAwsiNvrXeueE/vb2GgkEH4sQBrOYNSE5eikEc4CU/IYyFEfp
-         pMDo5Y1rbyKZaLSZqsbxyh2/+RGFoB2ZtKQpI0YccWDv3u4C0kt+3A4PToJ415PeCgIg
-         +A/W06f0as6nHbm9fvRoAHOPr6sudNc8rnHg5f9A5OtRcyVtYcZVhHrOjmVG1MMJEoVp
-         vmcUyEs8m+BEmOCXN1voAnhUqnbgItFvnADXRYZ6LVvVcnKdbGyt4Jy7lEqVUxU2ofXK
-         ruhrXlaUwH5hTUQ4DozGiMN/l74ImSxKy2eARKUgAU/6Zmssu5PtRud9+oXktZEdBZoP
-         +LIA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dqp/CT2o"
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-82f8bf96b46so1939385b3a.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 04 May 2026 09:30:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1777911292; x=1778516092; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Uctyhl2fep2pE4Eu8P5giabdChdRC1urKFD3GIrdlNU=;
-        b=jjbAiS4ktJYA3tfqTyKCsL/krzaQwVFF7itDi7cMIYE/nUy7WeASyzpoaR/8ropESt
-         Lg7BSaoCPZRY3U2ExIGF+OmHqS6a17Sv/aVAU8/c8/EBbuPS4TBJbntsCGAM/N0BsPQ3
-         B/+1GEoGII8l6UGFY+YSbO3AZ4uad3E/nSAebqgkeT0K5G9ZiwsBSImIPc5wKQmy1+OX
-         o5Uw7TEuDM5P5qfZlaOTyzi41sEhsvy+tUbHxexRfq9WmYm9ezyokBCiLv5DWwi0gfHS
-         yYku8Duvfp5wBSrKSRVkxKQ+6BtxELaINoMUpWayvHBzdaXon4c3GDrEBkkqOfEIfp5g
-         d7Cw==
+        d=gmail.com; s=20251104; t=1777912218; x=1778517018; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3qM+FJU1H6+E/i7TldQkDydNXf9wDxrZlqG3KlzPKhQ=;
+        b=dqp/CT2oVY/cprtvk0NRc4TNsmnl6ojCgqBHJxBkXedqee7k5lUTf9I8F4DGHNAYZo
+         vRcJyMGqATpYngx+p6gnjPggxMFlD+ckIAoL5BeXB1z5WQRw1rvOiGNwvXpxO0YLXSh4
+         jqI+8vvJSK2zmgNG0BJT4rCtCYmCtxuvvhbhwxbAXlKfpHoYvsoWY9O1IXhxE8pYzFXJ
+         o7VzgdOu393T+zXVAlNOETDfqlnfARVtIcsGkiWUlex81kLzokZcpW0SlVHOxM4+5dZX
+         MlhTMhic/S8ImWFOjhU4k5VE0CBrtJG9I+dXDcbG/kJ0pZBmCtdVMy/gIe/NvKrLFYKw
+         kc7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777911292; x=1778516092;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Uctyhl2fep2pE4Eu8P5giabdChdRC1urKFD3GIrdlNU=;
-        b=aG1psZsilCBLLmnxuzFgdV2aM3rnJe4jGdp5+xdSCjiEfgPfR6Ss2PEpmNq3jaxJRB
-         1KW1051EsvkJtQiFQPuPObc4ljGIkmkpPsNwH4WipOdqGl/y5KuITgDIOd0p7hqP1QYE
-         qw99HeIqSZvWr9aHUrpwGA5tSgUPx+gsFOV6Hl1wrliaT/zOyU0UiQOhBw7d17eKxpZM
-         bLlAamKh5YtsfWxUtRV6TjN2I9MemqS/0EH2i4JuqTonVwu7hqEizoqslkKJbqBlgitD
-         YqQWdyWWEVFJ/Zgvx9IBF3OPXX86M+9JoKBvX7JxLPCVl8WUotuGIabxFDHONNJSr2qt
-         pabA==
-X-Forwarded-Encrypted: i=1; AFNElJ+Cf+9ZdGuSwCbC7M4eXfx6eMF9jusNhTvmqZ6buvdGYct4MnNr7ITDe2KoAFlFmHymvGY6VlXDZ02l2x6uUZA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzWDtFg0qKGwqLeefcAStsBDptfUs+VfS+bbT5PdbjDRSGeTTjy
-	0WYBbAsuUAD62rUp5AbG0aWcAjTwXV+oK16s8YkPl146tyi7wuZhSegK28kA80PF7ufrEdZKlk4
-	Tu7v7Py35VtWs6AvVfqlQwBVRSGc0qPs=
-X-Gm-Gg: AeBDietcoPXYMTQYG1YCbrV6DQfWXnrQ/fA8kR06J6SLW/JGJgZhHrZdjnzfs22W+P+
-	7iUheRIQqfGy97cGIQ9AG2vPK9thFkMZzqo/Zx6Pggb2SOIL+L/eIGrIAhCkfanPuuu8MYTMJwF
-	07fh29nvC6NihJIeGOJGOMQOSimqaK+xJXbdbrEJlNzGoW1KCPHnqD7qJbGrGFQDVrkNznxwjwi
-	NKgO6a/WtpW+H+fRsgQMmQ4899PU1rYzentgWKGjUuMgMeFpIsq5gmJxHTww+B36L30RfFTr7qT
-	QHaHVifAoEc1uwW61g==
-X-Received: by 2002:a05:600c:c170:b0:48a:7aad:4425 with SMTP id
- 5b1f17b1804b1-48a9852e515mr163196585e9.3.1777911291577; Mon, 04 May 2026
- 09:14:51 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1777912218; x=1778517018;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3qM+FJU1H6+E/i7TldQkDydNXf9wDxrZlqG3KlzPKhQ=;
+        b=dIwNHnu43GfAzSPshWBFXq36hhugZ+EdeajijQNHe8xuAVUUTlt/eRPuJTqyMwIFK7
+         g/Y2g2qyGOpgX+BGqhY9jFDVUtUo9bX+ErjRGxTUqXEA92KdGUWSR/nAP5RFCMP5rhdd
+         Ysvi1CAs+Xqo5yZ6XwxxAcbiKfMXQPod2oTd8Sudko2xrm7OMiWaRgD9CO33htWfCNsv
+         PfqxbU65veU4ZBO/4TV1DEyJuWG1tmeGwH1xZUueV9Lw29PiyyDEgNBIRYPnu8rN/x9v
+         f0zC6MyqdPtGgWXz+Da2oamQhfIvTyjT8dLQyjYuz3iBsFBC7cDqsSYHOHoqJpirtc31
+         IlxQ==
+X-Forwarded-Encrypted: i=1; AFNElJ8OnwIaIexADIaj1CNtVxm4XORVX2NslYXzS0hBUhYm2wZUNN+mKoIHLPfZzU3vfkQ5cW7NOK292b6po9w1Hfc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyr9ltz2V/DO18m1LxLAZV4DgzHn904FmXRIHBsffPVK0yTMH3G
+	lJlsvfpFYos5imExmqZkJBu8r/QaysZBqgRoJaIIfr9c7II31zrTdihJ
+X-Gm-Gg: AeBDieuLBzRa5HMsuVlT/rcIaWuku7QuiJ54FIoHVJiENMJ1G0P7fyKAylPQuxpHc5c
+	fIVl+n5/Pg/nq7gLDi1XpY+bLeQ8oOOc/pyJXt53k3gF7tvsR+3U2eysE7ImKGIK5Rkb0/MV/pB
+	DxT+s85fgPo3OluE3FIm9KVnznXJtKFxqvYRSuhG0Oh+WPc0X/JpCNgTbqSEErcKclz2gKF6P+N
+	aWJdTTCEgTOGMbwtVQjrdddJ02a/diG1M/1VGdZK4VUyQqDmFwdXTKOX7iJ6DjIyBIYcz+XMqk3
+	jvUKOjgltJ816qn8wqIKV+95ZZkeppdtEiUOGbbVub37+Ax3pPNNT/ZWpyDMWrkYYxNBAzQGYCZ
+	ob5S+c3tQR5tuXInHrtbYTyPAIcbQTHIPDMyb2n1kwk66/bXSmxEZWsegr55mALXtvN3SHcmazA
+	5PpADcje//v831vKuPl9rcHXfeqIDrkMGcYDSgYt3cxoVj
+X-Received: by 2002:a05:6a00:1826:b0:82c:9f7e:518c with SMTP id d2e1a72fcca58-8352d2029a7mr11070469b3a.25.1777912217603;
+        Mon, 04 May 2026 09:30:17 -0700 (PDT)
+Received: from [163.43.103.131] ([163.43.103.131])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-837081abadfsm4998663b3a.42.2026.05.04.09.30.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 May 2026 09:30:16 -0700 (PDT)
+From: Yuya Kusakabe <yuya.kusakabe@gmail.com>
+Subject: [PATCH v2 0/7] seg6: add SRv6 Mobile User Plane (RFC 9433)
+ behaviors
+Date: Tue, 05 May 2026 01:30:10 +0900
+Message-Id: <20260505-seg6-mobile-v2-0-9e8022bdfdb6@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260501133924.3100680-1-houminxi@gmail.com> <20260501133924.3100680-3-houminxi@gmail.com>
- <f7tlddzxjex.fsf@redhat.com>
-In-Reply-To: <f7tlddzxjex.fsf@redhat.com>
-From: =?UTF-8?B?5L6v5pWP54aZ?= <houminxi@gmail.com>
-Date: Tue, 5 May 2026 00:14:25 +0800
-X-Gm-Features: AVHnY4KaIFLNi-Dh9lc5p5n5R2gxHKTnaPAl-7T1qHjZz0uGcOSuz6uNUhVgKIk
-Message-ID: <CAJ0BgHdsS1sykUqhDY2rzucmnszTLbF11y4cvUoD+mOjp7jO5Q@mail.gmail.com>
-Subject: Re: [PATCH net-next v2 2/2] selftests: openvswitch: add pop_vlan test
-To: Aaron Conole <aconole@redhat.com>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	dev@openvswitch.org, Eelco Chaudron <echaudro@redhat.com>, 
-	Ilya Maximets <i.maximets@ovn.org>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJLJ+GkC/02NQQ6CMBREr0L+2pq2sQVdeQ/DotQPfAOUtNBoC
+ He3xY3JbF4y82aDgJ4wwK3YwGOkQG5KIE8F2N5MHTJ6JgbJpeaKX1jATrPRNTQga8sKZSVRC2U
+ hLWaPLb0P26P+cVibF9olK3Kjp7A4/znuosi9P7OPybzOLIoczpAbXV6FKpVt7t1oaDhbN0K97
+ /sXNrrPNLgAAAA=
+X-Change-ID: 20260504-seg6-mobile-f78e282e615c
+To: "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+ Andrea Mayer <andrea.mayer@uniroma2.it>, Shuah Khan <shuah@kernel.org>, 
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>
+Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org, 
+ Yuya Kusakabe <yuya.kusakabe@gmail.com>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4494;
+ i=yuya.kusakabe@gmail.com; h=from:subject:message-id;
+ bh=t/WDX834jlVF7DP9Ia8VfOzsGAXwCxpfBKZASbwEbQI=;
+ b=owEBbQKS/ZANAwAIASrX0XUqXRtNAcsmYgBp+MmUQ4uOSFqsLABgLmDA8N1QVqzEsjuuzcydr
+ OUus2wHYGSJAjMEAAEIAB0WIQTaB7usAfxNKMeqa6Yq19F1Kl0bTQUCafjJlAAKCRAq19F1Kl0b
+ Td83D/9GDmmQ/cP9O1v5vS9LMuoKdTKQR+f0681wFU1mdnXDZ06hGhkVw1X4bAxCXfNcVN7dtVX
+ H/d3CLCYXEf69WAKByDWhE32nRCiEu+YhfT1J/8DxHQrrIC5UBfG3V3tLSHRhk1Pwu8gfY97/sT
+ J+0hhla376kMaRymSW28ZzV0qEd3euKLipVgYakvf9NPZVgFy54NTdjLRoL+enROqSx1Ge4Xt02
+ frxwNRaPNcvUL2PpZ1eRTRVeaudwRKm0Rv+0WK3P/FvpZnpbUPLidt+3LcjVLaNRTigCqXStCmA
+ vQq5SVYv3+i1OBNvSKUs3CtvEmvD6nndY92/z20OErmG/r10QlYJro5+iOs3b9MeuQKaOoO0dfE
+ wsKUps2XJK/j+SBUKGHCibJ/XkiVQMMBsXe30NPRrmIMo0KNuf4AYcjDWhIeIHvj+OCp1nPhjum
+ vDZLGtqOnE/UtmarlQx9pFzJrlyP3T9NmcPhT8Xm4bp3qsTF4e1Htr5iJaOmHDvuuoVwM75uFSp
+ vUY2fJv6WD09narTNivy8rG7RsGe5douEBRiW/jd0ykyD/bgEBMBFnl0gbO6mlahIy4VUQptPMV
+ 5B9jP4de03ndLKS80KD9kv2HSPbluxsyCDm7WJV22/kWe3F2jpu6WVbaRivkFzeAztPRNH8mkJ+
+ ZJ4APW8Grq+4LWg==
+X-Developer-Key: i=yuya.kusakabe@gmail.com; a=openpgp;
+ fpr=DA07BBAC01FC4D28C7AA6BA62AD7D1752A5D1B4D
 
-Hi Aaron,
+This series adds the in-kernel data path for the SRv6 Mobile User
+Plane (MUP) architecture defined in RFC 9433.  SRv6 MUP integrates
+GTP-U mobile traffic into an SRv6 transport domain by mapping the
+5-tuple (TEID, QFI, R, U, PDU Session ID) into a single SID, allowing
+operators to replace the GTP-U overlay between the gNB and the
+upstream UPF with native SRv6 forwarding while keeping the radio side
+unchanged.
 
-Thanks for the detailed review!
+The series implements the six MUP behaviors that an SRv6 MUP gateway
+typically needs:
 
-> Weird that this is here.  All other tests would also not work if there
-> were no netns or OVS module.  Why were these added?
+  End.MAP         (RFC 9433 Section 6.2) -- swap DA with the next SID
+                                            without consuming the SRH
+  End.M.GTP6.D    (Section 6.3) -- IPv6/GTP-U to SRv6 headend encap
+  End.M.GTP6.D.Di (Section 6.4) -- drop-in mode variant of the above
+                                   (preserves the original outer DA at
+                                   SRH[0] and discards TEID/QFI)
+  End.M.GTP6.E    (Section 6.5) -- SRv6 to IPv6/GTP-U egress encap
+  End.M.GTP4.E    (Section 6.6) -- SRv6 to IPv4/GTP-U egress encap
+  H.M.GTP4.D      (Section 6.7) -- IPv4/GTP-U to SRv6 headend encap
 
-You're right, the modprobe and netns pre-checks are unnecessary.
-run_test already gates on the module, and ovs_add_netns_and_veths
-will fail naturally if netns isn't available.  I'll remove both
-pre-flight blocks in v5.
+End.Limit (RFC 9433 Section 6.8) is intentionally out of scope.
 
-> We don't like to make extra files when not requested.  For example,
-> this is making some pcap file but do we need it?
+All behaviors plug into the existing seg6_local lwtunnel framework, so
+they are configurable through the standard "ip route ... encap
+seg6local action ..." interface.  No new netlink families are
+introduced -- the new SEG6_LOCAL_MOBILE_* attributes extend
+SEG6_LOCAL_MAX in an add-only way, and the new SEG6_LOCAL_ACTION_*
+values are appended.
 
-Agreed. The pcap capture was overly cautious, ping success/failure
-already tells us whether the VLAN tag was correctly stripped (or not).
+The egress behaviors (End.M.GTP4.E and End.M.GTP6.E) accept an
+optional per-route pdu_type attribute that is the sole control
+for inserting the GTP-U PDU Session Container (3GPP TS 38.415 Section
+5.5.2).  When pdu_type is set (dl/ul/0..15), every emitted GTP-U
+packet carries the container with that PDU Type and the QFI extracted
+from Args.Mob.Session.  When pdu_type is unset, the egress emits
+a short GTPv1-U header with no container.  pdu_type must be
+configured on egress routes serving 5G N3 traffic; omitting it is
+intended only for LTE-only / S1-U-style deployments where no PDU
+Session Container is exchanged.
 
-> We also have a specific spawn function `ovs_netns_spawn_daemon` that
-> should take care of cleaning up at least the PID.
+The matching iproute2 patch series has been posted to iproute2-next:
+https://lore.kernel.org/netdev/20260505-seg6-mobile-v2-0-93291b7b0134@gmail.com/
 
-Understood. I'll use existing helpers rather than rolling custom
-infrastructure.
+Link: https://www.rfc-editor.org/rfc/rfc9433
 
-> Do we really need these tcpdump checks?  The ping commands above
-> should already capture when we are expecting tagged / untagged
-> traffic.
+Signed-off-by: Yuya Kusakabe <yuya.kusakabe@gmail.com>
+---
+Changes in v2 (all reported by netdev CI, except the End.MAP one
+which was caught while reviewing v1):
+- patch 1 (End.MAP): drop the explicit hop_limit decrement and
+  the hop_limit <= 1 ICMPv6 Time Exceeded check; ip6_forward()
+  on the way out already does both, so the explicit ones caused
+  a double decrement (verified hlim=64 -> 62 instead of 63).
+  Now consistent with End / End.X / End.M.GTP*.
+- patch 3 (End.M.GTP6.E): add missing #include
+  <net/ip6_checksum.h> to fix clang / allmodconfig build.
+- selftests: silence shellcheck false positives (SC2034/SC2154)
+  and sort TEST_PROGS entries alphabetically.
+- Link to v1: https://lore.kernel.org/netdev/20260504-srv6-mup-v1-v1-0-e0a6791575cb@gmail.com
 
-Makes sense.  In v5 I'll drop the start_capture/stop_capture helpers
-entirely and rely solely on ping results:
+---
+Yuya Kusakabe (7):
+      seg6: add End.MAP behavior
+      seg6: add End.M.GTP4.E behavior
+      seg6: add End.M.GTP6.E behavior
+      seg6: add End.M.GTP6.D behavior
+      seg6: add End.M.GTP6.D.Di behavior
+      seg6: add H.M.GTP4.D behavior
+      Documentation: networking: add seg6_mobile guide
 
-  - Baseline: ping without VLAN flow succeeds (ARP resolution works)
-  - Negative: ping with tagged traffic and no pop_vlan fails
-  - Positive: ping with tagged traffic and pop_vlan succeeds
+ Documentation/networking/index.rst                 |    1 +
+ Documentation/networking/seg6_mobile.rst           |  236 ++
+ include/net/dropreason-core.h                      |   40 +
+ include/uapi/linux/seg6_local.h                    |   17 +
+ net/ipv6/seg6_local.c                              | 2660 ++++++++++++++++++--
+ tools/testing/selftests/net/Makefile               |    6 +
+ .../selftests/net/srv6_end_m_gtp4_e_test.sh        |  486 ++++
+ .../selftests/net/srv6_end_m_gtp6_d_di_test.sh     |  427 ++++
+ .../selftests/net/srv6_end_m_gtp6_d_test.sh        |  497 ++++
+ .../selftests/net/srv6_end_m_gtp6_e_test.sh        |  402 +++
+ tools/testing/selftests/net/srv6_end_map_test.sh   |  103 +
+ .../testing/selftests/net/srv6_h_m_gtp4_d_test.sh  |  487 ++++
+ 12 files changed, 5155 insertions(+), 207 deletions(-)
+---
+base-commit: 98878ed91b68a3150126fccef125ee7b1bb86ab2
+change-id: 20260504-seg6-mobile-f78e282e615c
 
-This will significantly simplify the test.
+Best regards,
+--  
+Yuya Kusakabe <yuya.kusakabe@gmail.com>
 
-I was previously working as QE, so my instinct was to add
-defensive pre-checks and packet-level capture for every test.
-I'm still adjusting to the kernel selftest convention of keeping
-tests minimal and relying on existing infrastructure.
-
-Appreciate the guidance.
-
-Combined with the depth-check removal from patch 1/2 feedback, v5 will
-be a much leaner series.
-
-B,R
-Minxi
-
-Aaron Conole <aconole@redhat.com> =E4=BA=8E2026=E5=B9=B45=E6=9C=884=E6=97=
-=A5=E5=91=A8=E4=B8=80 23:51=E5=86=99=E9=81=93=EF=BC=9A
->
-> Hi Minxi,
->
-> Thanks for the test (and the support infra in 1/2).  Questions below.
->
-> Minxi Hou <houminxi@gmail.com> writes:
->
-> > Add a test for the OVS datapath POP_VLAN action.  The test uses
-> > the VLAN sub-interface of a veth pair to generate 802.1Q tagged
-> > frames and verifies that pop_vlan correctly strips the VLAN tag
-> > before delivery via pcap frame capture.
-> >
-> > The test has two verifications:
-> > - Negative: forward tagged frames without pop_vlan, verify the
-> >   VLAN tag is still present on the egress interface.
-> > - Positive: apply pop_vlan, verify the tag is removed and an
-> >   untagged ICMP echo request arrives at the egress interface.
-> >
-> > Static ARP entries avoid the complexity of VLAN-tagged ARP
-> > resolution (the egress side has no VLAN sub-interface and cannot
-> > process tagged ARP).
-> >
-> > Signed-off-by: Minxi Hou <houminxi@gmail.com>
-> > ---
-> > v1 -> v2: rebase to latest net-next/main, drop --base=3Dauto
-> >
-> >  .../selftests/net/openvswitch/openvswitch.sh  | 132 ++++++++++++++++++
-> >  1 file changed, 132 insertions(+)
-> >
-> > diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh b/t=
-ools/testing/selftests/net/openvswitch/openvswitch.sh
-> > index b327d3061ed5..cd614ff7b740 100755
-> > --- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
-> > +++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-> > @@ -27,6 +27,7 @@ tests=3D"
-> >       upcall_interfaces                       ovs: test the upcall inte=
-rfaces
-> >       tunnel_metadata                         ovs: test extraction of t=
-unnel metadata
-> >       drop_reason                             drop: test drop reasons a=
-re emitted
-> > +     pop_vlan                                        vlan-pop: POP_VLA=
-N action strips 802.1Q tag
->
-> nit: The whitespace alignment above is slightly off.
->
-> >       psample                                 psample: Sampling packets=
- with psample"
-> >
-> >  info() {
-> > @@ -830,6 +831,137 @@ test_tunnel_metadata() {
-> >       return 0
-> >  }
-> >
-> > +test_pop_vlan() {
-> > +     modprobe -q openvswitch 2>/dev/null || true
-> > +     [ -d /sys/module/openvswitch ] || return $ksft_skip
-> > +     ip netns add __test_pop_vlan_netns__ 2>/dev/null || \
-> > +             { info "CONFIG_NET_NS missing"; return $ksft_skip; }
-> > +     ip netns del __test_pop_vlan_netns__ 2>/dev/null
->
-> Weird that this is here.  All other tests would also not work if there
-> were no netns or OVS module.  Why were these added?
->
-> > +     modprobe -q 8021q 2>/dev/null || true
-> > +     [ -d /sys/module/8021q ] || { info "CONFIG_VLAN_8021Q missing"; r=
-eturn $ksft_skip; }
-> > +
-> > +     local sbx=3D"test_pop_vlan"
-> > +     sbx_add "$sbx" || return $ksft_skip
-> > +     ovs_add_dp "$sbx" vlandp || return 1
-> > +
-> > +     # --- baseline: untagged forwarding ---
-> > +     ovs_add_netns_and_veths "$sbx" vlandp ns1 veth1 ns1veth 192.0.2.1=
-/24 || return 1
-> > +     ovs_add_netns_and_veths "$sbx" vlandp ns2 veth2 ns2veth 192.0.2.2=
-/24 || return 1
-> > +
-> > +     # ARP + IPv4 bidirectional (all untagged)
-> > +     ovs_add_flow "$sbx" vlandp \
-> > +             'in_port(1),eth(),eth_type(0x0806),arp()' '2' || return 1
-> > +     ovs_add_flow "$sbx" vlandp \
-> > +             'in_port(2),eth(),eth_type(0x0806),arp()' '1' || return 1
-> > +     ovs_add_flow "$sbx" vlandp \
-> > +             'in_port(1),eth(),eth_type(0x0800),ipv4()' '2' || return =
-1
-> > +     ovs_add_flow "$sbx" vlandp \
-> > +             'in_port(2),eth(),eth_type(0x0800),ipv4()' '1' || return =
-1
-> > +     ip netns exec ns1 ping -c 3 -W 2 192.0.2.2 || return 1
-> > +
-> > +     # --- POP_VLAN test ---
-> > +     # Register cleanup before creating resources (safe on failure pat=
-hs)
-> > +     on_exit "ip -n ns1 link del ns1veth.10 2>/dev/null || true
-> > +              ip -n ns2 addr del 198.51.100.2/24 dev ns2veth 2>/dev/nu=
-ll || true"
-> > +
-> > +     # ns1: VLAN sub-interface generates tagged frames
-> > +     ip -n ns1 link add link ns1veth name ns1veth.10 type vlan id 10
-> > +     ip -n ns1 addr add 198.51.100.1/24 dev ns1veth.10
-> > +     ip -n ns1 link set ns1veth.10 up
-> > +
-> > +     # ns2: no VLAN sub-interface. POP delivers untagged frames to ns2=
-veth
-> > +     ip -n ns2 addr add 198.51.100.2/24 dev ns2veth
-> > +
-> > +     # veth disable VLAN offload + GRO (ensure kernel software tag pro=
-cessing)
-> > +     if command -v ethtool >/dev/null 2>&1; then
-> > +             ip netns exec ns1 ethtool -k ns1veth 2>/dev/null | grep -=
-q vlan-offload && \
-> > +                     ip netns exec ns1 ethtool -K ns1veth rx-vlan-offl=
-oad off \
-> > +                             tx-vlan-offload off gro off 2>/dev/null |=
-| true
-> > +             ip netns exec ns2 ethtool -k ns2veth 2>/dev/null | grep -=
-q vlan-offload && \
-> > +                     ip netns exec ns2 ethtool -K ns2veth rx-vlan-offl=
-oad off \
-> > +                             tx-vlan-offload off gro off 2>/dev/null |=
-| true
-> > +     fi
-> > +
-> > +     ovs_del_flows "$sbx" vlandp
-> > +
-> > +     # Static ARP avoids VLAN-tagged ARP complexity (ns2 has no VLAN
-> > +     # sub-interface, so tagged ARP would be invisible to ns2).
-> > +     local ns1veth10mac ns2mac
-> > +     ns1veth10mac=3D$(ip -n ns1 link show ns1veth.10 | \
-> > +             awk '/link\/ether/ {print $2}')
-> > +     ns2mac=3D$(ip -n ns2 link show ns2veth | \
-> > +             awk '/link\/ether/ {print $2}')
-> > +     [ -n "$ns1veth10mac" ] && echo "$ns1veth10mac" | \
-> > +             grep -qE "^([0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}$" || return=
- 1
-> > +     [ -n "$ns2mac" ] && echo "$ns2mac" | \
-> > +             grep -qE "^([0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}$" || return=
- 1
-> > +     ip -n ns1 neigh replace 198.51.100.2 lladdr "$ns2mac" \
-> > +             dev ns1veth.10 nud permanent || return 1
-> > +     ip -n ns2 neigh replace 198.51.100.1 lladdr "$ns1veth10mac" \
-> > +             dev ns2veth nud permanent || return 1
-> > +
-> > +     # --- Negative check: fwd without pop_vlan, VLAN tag stays ---
-> > +     ovs_add_flow "$sbx" vlandp \
-> > +             'in_port(1),eth(),eth_type(0x8100),vlan(vid=3D10),encap(e=
-th_type(0x0800),ipv4(src=3D198.51.100.1,proto=3D1),icmp())' \
-> > +             '2' || return 1
-> > +
-> > +     local pcap_no_pop
-> > +     pcap_no_pop=3D$(mktemp --suffix=3D.pcap)
-> > +     on_exit "rm -f $pcap_no_pop"
-> > +     ip netns exec ns2 tcpdump -nei ns2veth -w "$pcap_no_pop" -U &
-> > +     local tpid_no_pop=3D$!
-> > +     on_exit "kill $tpid_no_pop 2>/dev/null || true"
-> > +     sleep $((WAIT_TIMEOUT / 5 < 2 ? 2 : WAIT_TIMEOUT / 5))
-> > +
->
-> We don't like to make extra files when not requested.  For example, this
-> is making some pcap file but do we need it?  We also have a specific
-> spawn function `ovs_netns_spawn_daemon` that should take care of
-> cleaning up at least the PID.
->
-> > +     ip netns exec ns1 ping -I ns1veth.10 -c 3 -W 1 198.51.100.2 \
-> > +             >/dev/null 2>&1 || true
-> > +     kill $tpid_no_pop 2>/dev/null || true; wait $tpid_no_pop 2>/dev/n=
-ull || true
-> > +
-> > +     # assert: VLAN tag still present (no pop_vlan in action)
-> > +     tcpdump -nr "$pcap_no_pop" 'vlan' 2>/dev/null | grep -q . || {
-> > +             info "FAIL: negative check: no VLAN tag (expected tag pre=
-sent)"; return 1
-> > +     }
-> > +
-> > +     ovs_del_flows "$sbx" vlandp
-> > +
-> > +     # --- Positive: pop_vlan strips tag ---
-> > +     ovs_add_flow "$sbx" vlandp \
-> > +             'in_port(1),eth(),eth_type(0x8100),vlan(vid=3D10),encap(e=
-th_type(0x0800),ipv4(src=3D198.51.100.1,proto=3D1),icmp())' \
-> > +             'pop_vlan,2' || return 1
-> > +     ovs_add_flow "$sbx" vlandp \
-> > +             'in_port(2),eth(),eth_type(0x0800),ipv4()' '1' || return =
-1
-> > +
-> > +     local pcap
-> > +     pcap=3D$(mktemp --suffix=3D.pcap)
-> > +     on_exit "rm -f $pcap"
-> > +     ip netns exec ns2 tcpdump -nei ns2veth -w "$pcap" -U &
-> > +     local tpid=3D$!
-> > +     on_exit "kill $tpid 2>/dev/null || true"
-> > +     sleep $((WAIT_TIMEOUT / 5 < 2 ? 2 : WAIT_TIMEOUT / 5))
-> > +
-> > +     # ping reply unreachable: ns1veth.10 only accepts tagged frames,
-> > +     # ns2 sends untagged reply -> dropped by ns1veth.10.
-> > +     local ping_rc=3D0
-> > +     ip netns exec ns1 ping -I ns1veth.10 -c 3 -W 1 198.51.100.2 \
-> > +             >/dev/null 2>&1 || ping_rc=3D$?
-> > +     kill $tpid 2>/dev/null || true; wait $tpid 2>/dev/null || true
-> > +
-> > +     # ping failure is expected (reply path asymmetric)
-> > +     [ "$ping_rc" -ne 0 ] || \
-> > +             info "NOTE: ping succeeded unexpectedly (reply reached ns=
-1veth.10)"
-> > +
-> > +     # assert: no VLAN tag (POP succeeded), untagged ICMP echo request=
- arrived
-> > +     tcpdump -nr "$pcap" 'vlan' 2>/dev/null | grep -q . && {
-> > +             info "FAIL: POP_VLAN: VLAN tag still present"; return 1
-> > +     }
-> > +     tcpdump -nr "$pcap" 'icmp and icmp[icmptype]=3D8' \
-> > +             2>/dev/null | grep -q . || {
-> > +             info "FAIL: POP_VLAN: no untagged ICMP echo request"; ret=
-urn 1
-> > +     }
->
-> Do we really need these tcpdump checks?  The ping commands above should
-> already capture when we are expecting tagged / untagged traffic.
->
-> > +     return 0
-> > +}
-> > +
-> >  run_test() {
-> >       (
-> >       tname=3D"$1"
->
