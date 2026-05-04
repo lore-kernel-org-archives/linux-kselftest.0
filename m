@@ -1,155 +1,153 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93C62306B3B
-	for <linux-kselftest@vger.kernel.org>; Mon,  4 May 2026 07:42:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B1EF309F1D
+	for <linux-kselftest@vger.kernel.org>; Mon,  4 May 2026 07:42:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777880535; cv=none; b=Gn/l8llKdHMbKsvSZmvWnzMGvgmqfAZpb5nbiuCTvSCVcAkjZWkgktdZPhdldyFLblXy/KYvxPmVy1NqVZGD3KJwpK8btMalmro87PzSPy1wI+4UmE6zatfCFlDcG0lLHtsZREve4oOxXbp+427++VujU5Oo0kD9KRphHY4l4Dw=
+	t=1777880541; cv=none; b=isVywLOqArRTRtoTQOYhSoyt5eSj6CU8ANefzcBALLGpeegQhpUV+4R/9o9sE7JcIDi4i9tDoYoCSL17v1ziRsn8e/s1ihiVBJG+YufpNZuYOumZfHE509PKh8w1tKppniJrKcT8q4ZBc/SS5bmGD2duDJU3v0sSOKW7jKYG0oc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777880535; c=relaxed/simple;
-	bh=8CmZDGYXicehtCZjE1XNTtDp93zzvSMc/ymRifgJo64=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=YrGMK0ULq1sTrLrUEDMpmn+H/5iew48EzuqauI0Io7kPaeVRVdX6MvI2yD3XT/vg00V/p4zEAta9skshgZxHr0Eoh5KY5raHY3aRQDnp1+L6R2wFvWWB+ftxsn+iCDr1F+cStl8crbnL0SLu6N+6ZGjK5c+h0n7wrXLH+GrhXzY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MzyTVGeT; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1777880541; c=relaxed/simple;
+	bh=hHzDI6EMEZ3+srDe6h4vdcHCJcs8q+VRUhyZDMfJZv0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EWdKhQbn4g1ty4fPrVcU99+1rRDMqNSUPRXBTlFAMowWKoAJSLpFuxmlmpenpf7MsnVGHYugAHa0yzx9YB9PJwFhTixzany9NFb5NgwK9ScVR3cRi2VLPmNzXgXgS1cby7hQZdkmh4NY10oah3vnwLEdmGg92y28D7jfIUt4+ds=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org; spf=none smtp.mailfrom=blackwall.org; dkim=pass (2048-bit key) header.d=blackwall.org header.i=@blackwall.org header.b=WeYFLsZN; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=blackwall.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MzyTVGeT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1777880531;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gOKf73DcJr3/JAze0LuQpsRljfWR1d0ve3pogQMoikE=;
-	b=MzyTVGeTvjkVe7Zoa2wZTLtgQPUOD6PpNRJBryEDtjH+N3MW3WqukeddkNRw87hqJd4giH
-	iLwT+Eo/ynr+KzA/pCpafYl1kvx2EjgDB0MACVkANsdqA848lvQorbylm70TUVofHw4Ey0
-	C8ds56qXt4cDTwEYqwkE3kc1F4Hg2og=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-577-oRkOntUwMsyWrjHIIS31fQ-1; Mon,
- 04 May 2026 03:42:09 -0400
-X-MC-Unique: oRkOntUwMsyWrjHIIS31fQ-1
-X-Mimecast-MFC-AGG-ID: oRkOntUwMsyWrjHIIS31fQ_1777880525
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id AE5E21956088;
-	Mon,  4 May 2026 07:42:04 +0000 (UTC)
-Received: from [192.168.1.153] (headnet01.pony-001.prod.iad2.dc.redhat.com [10.2.32.101])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CE79D1955D84;
-	Mon,  4 May 2026 07:41:56 +0000 (UTC)
-From: Albert Esteve <aesteve@redhat.com>
-Date: Mon, 04 May 2026 09:41:27 +0200
-Subject: [PATCH v8 3/4] drm: Suppress intentional warning backtraces in
- scaling unit tests
+	dkim=pass (2048-bit key) header.d=blackwall.org header.i=@blackwall.org header.b="WeYFLsZN"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-48d102471a4so2944575e9.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 04 May 2026 00:42:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=blackwall.org; s=google; t=1777880537; x=1778485337; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DNrn/1ULknS0mXajard4wubGCARfDXT/OU6gNTwLGDM=;
+        b=WeYFLsZNLykqUHyRDgLBoibh9HFqW64z29hoVdecEZdhZ224ktKyvg0tM76GDA3JPp
+         hUciyqHp6pD2rOdzI3hikSXeJJsDtZdjtg7qgfWMHOT5IiUM5sHs44+yRw+45Mecx4pB
+         LLF6OcY0+uOFmrqztAM0RyulUwzZ4msCLP+DGJ7OjebDy4PZtWrH03YFghOOnRyfMsRW
+         +a9FUhInnHPS9Dl59H214Lr/j7KAG77/fJu5SIq/EzswNYedqP9E3P7uHzcp6bjZ0LIV
+         lvfwpjdd0LeUKqXclNOspQD670JQdWYW0syIP+cB76TMrzgyJ7a3Nvk4whsxLrGjd/2u
+         HrHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777880537; x=1778485337;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DNrn/1ULknS0mXajard4wubGCARfDXT/OU6gNTwLGDM=;
+        b=aD/eky3DhAP1bw7jxnTCLEiqx5kNbpDDGqF1DB4IPQZ9WbKl8Hj0jWeG56uI4KkWq4
+         dmFK/jFrUbHjwUSkkRB9r0r67oiN5i4vLqBwr9YI6iu3tpPWfEtrKEf3nxOLIG9lXyK/
+         SYOFW6ZKyLhHE8vZL4fKciMPunf8FDfkB3gG0NG+2XQDzRh7r6mQBWOpodpQbz9c2swS
+         WgabQKpGoLSPtX11/Y6LTAc+thgQcTd0KacQpivyODIC2tf8IzccgDr47xN+AIkj4CId
+         u76Kj41PnW8vzGPyeHhnceVvl72ayEkyA2k03mCidydtRq+uK6lc+ISSVmHvYFCELeZP
+         DmEw==
+X-Forwarded-Encrypted: i=1; AFNElJ/+TPmeMqEtTDo/AeDsTVfGncNCYiVW9gbOQ6bJtHNdzkm4U02ViFAB/YDEHcKZRWdr3o0/x0BX3YDIJV1W6PM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzhtgWI7VdsOMcAjDOyILMuLcKUPoiHq6d/VX3V3K04B1Xva6bh
+	hflOdjRHeotPIYTNYUB0LNxy/PUWso8Yyv7trqF9pDmD3LRwT+dJglOcVg24+3hYs1w=
+X-Gm-Gg: AeBDiesxFNA2bcKn04kTlV3Yds0+BzC1sEISkOxgXAn44KxfHT8DbSTV6A46136IMii
+	uadqzoN/DVOO9VPvGVkHTgEoT+ikaJYxMkq4AuW8+kVc9cFRMzskOBEcl2jOTVzd4FcHxx0AbS8
+	NzEqnvOcm8b8mczS/UoiYXDB/aMH8R6DNmakAxiLY2aB+JTfjKngnUcoJ+E7jziZ+MAh0HD/5Ql
+	RpbyZqLVB+6lyGRgYF+n6/RHGfZB2TA1BkSeGLl+RSG/dHyElgaBpMieTjefYc2Z2cbVpZyj21b
+	sm6CO9v4u0ThOPciVuP7FfI8B3tH98tFcTpQr6DjiOfzZsm7326n/C9AzvDwZcVcZJLior4WzKK
+	fpSD5DkrhbFiI+Gn9kHoXPi2DwCeSS/0gLlruSsex+47yNHRmkqu7/kBgtg/cZBrK3XeRviaNhX
+	dvC3qem66YbCBWEMo4P6dWG9uT49GCm7KwnAIIbJBvnwDqUNxtEG08QzIApzGm7YcpQyI4HjK4n
+	Oc=
+X-Received: by 2002:a05:600c:4342:b0:485:2a85:e5ec with SMTP id 5b1f17b1804b1-48c6d455f69mr68414675e9.2.1777880537124;
+        Mon, 04 May 2026 00:42:17 -0700 (PDT)
+Received: from [192.168.0.161] (78-154-15-182.ip.btc-net.bg. [78.154.15.182])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48a8fe3cae3sm100998215e9.0.2026.05.04.00.42.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 May 2026 00:42:16 -0700 (PDT)
+Message-ID: <ed569c78-129b-4db4-8a73-e1728a6d5032@blackwall.org>
+Date: Mon, 4 May 2026 10:42:14 +0300
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260504-kunit_add_support-v8-3-3e5957cdd235@redhat.com>
-References: <20260504-kunit_add_support-v8-0-3e5957cdd235@redhat.com>
-In-Reply-To: <20260504-kunit_add_support-v8-0-3e5957cdd235@redhat.com>
-To: Arnd Bergmann <arnd@arndb.de>, 
- Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, 
- Rae Moar <raemoar63@gmail.com>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
- Andrew Morton <akpm@linux-foundation.org>, Paul Walmsley <pjw@kernel.org>, 
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
- Alexandre Ghiti <alex@ghiti.fr>
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
- dri-devel@lists.freedesktop.org, workflows@vger.kernel.org, 
- linux-riscv@lists.infradead.org, linux-doc@vger.kernel.org, 
- peterz@infradead.org, Guenter Roeck <linux@roeck-us.net>, 
- Linux Kernel Functional Testing <lkft@linaro.org>, 
- Dan Carpenter <dan.carpenter@linaro.org>, 
- =?utf-8?q?Ma=C3=ADra_Canal?= <mcanal@igalia.com>, 
- Alessandro Carminati <acarmina@redhat.com>, 
- Albert Esteve <aesteve@redhat.com>, Simona Vetter <simona.vetter@ffwll.ch>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1777880489; l=2693;
- i=aesteve@redhat.com; s=20260303; h=from:subject:message-id;
- bh=bGqCNzhIOGnVl/NfnUqExLX0/n0ZkI03UY6zDNsA5Oc=;
- b=Jb29iLKaaVTR7v5Dlr1/i2Ay+tOHiXVtL5zSM8WqXh29zv8ysgXgUHMDrE0l6z7IQH7slKIiX
- vNIBwlPkSVqAHz8EpMgT6x8oGYb3Y71H/+mI7IaMSCNPTqLSIsvuS26
-X-Developer-Key: i=aesteve@redhat.com; a=ed25519;
- pk=YSFz6sOHd2L45+Fr8DIvHTi6lSIjhLZ5T+rkxspJt1s=
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next 4/6] bridge: Add port-level netlink handling for
+ neigh_forward_grat
+Content-Language: en-US, bg
+To: Danielle Ratson <danieller@nvidia.com>, netdev@vger.kernel.org
+Cc: donald.hunter@gmail.com, kuba@kernel.org, davem@davemloft.net,
+ edumazet@google.com, pabeni@redhat.com, horms@kernel.org, idosch@nvidia.com,
+ andrew+netdev@lunn.ch, shuah@kernel.org, ast@fiberby.net,
+ liuhangbin@gmail.com, daniel@iogearbox.net, aroulin@nvidia.com,
+ fmaurer@redhat.com, sdf.kernel@gmail.com, sd@queasysnail.net,
+ kees@kernel.org, nickgarlis@gmail.com, amorenoz@redhat.com,
+ alasdair@mcwilliam.dev, johannes.wiesboeck@aisec.fraunhofer.de,
+ petrm@nvidia.com, linux-kernel@vger.kernel.org, bridge@lists.linux.dev,
+ linux-kselftest@vger.kernel.org
+References: <20260503073532.2138165-1-danieller@nvidia.com>
+ <20260503073532.2138165-5-danieller@nvidia.com>
+From: Nikolay Aleksandrov <razor@blackwall.org>
+In-Reply-To: <20260503073532.2138165-5-danieller@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Guenter Roeck <linux@roeck-us.net>
+On 03/05/2026 10:35, Danielle Ratson wrote:
+> Add netlink handlers for the port-level neigh_forward_grat option via
+> IFLA_BRPORT_NEIGH_FORWARD_GRAT attribute.
+> 
+> The default value of OFF preserves existing behavior, i.e. gratuitous ARP
+> and unsolicited NA are suppressed when neigh_suppress is enabled. Users can
+> explicitly set it to ON to allow these packets through.
+> 
+> Example for enabling control via 'bridge link' command:
+>   # bridge link set dev eth0 neigh_suppress on
+>   # bridge link set dev eth0 neigh_forward_grat on
+> 
+> Signed-off-by: Danielle Ratson <danieller@nvidia.com>
+> Reviewed-by: Ido Schimmel <idosch@nvidia.com>
+> Reviewed-by: Petr Machata <petrm@nvidia.com>
+> ---
+>   net/bridge/br_netlink.c | 8 +++++++-
+>   1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/net/bridge/br_netlink.c b/net/bridge/br_netlink.c
+> index 6fd5386a1d64..898326c201ef 100644
+> --- a/net/bridge/br_netlink.c
+> +++ b/net/bridge/br_netlink.c
+> @@ -190,6 +190,7 @@ static inline size_t br_port_info_size(void)
+>   		+ nla_total_size(1)	/* IFLA_BRPORT_LOCKED */
+>   		+ nla_total_size(1)	/* IFLA_BRPORT_MAB */
+>   		+ nla_total_size(1)	/* IFLA_BRPORT_NEIGH_VLAN_SUPPRESS */
+> +		+ nla_total_size(1)	/* IFLA_BRPORT_NEIGH_FORWARD_GRAT */
+>   		+ nla_total_size(sizeof(struct ifla_bridge_id))	/* IFLA_BRPORT_ROOT_ID */
+>   		+ nla_total_size(sizeof(struct ifla_bridge_id))	/* IFLA_BRPORT_BRIDGE_ID */
+>   		+ nla_total_size(sizeof(u16))	/* IFLA_BRPORT_DESIGNATED_PORT */
+> @@ -282,7 +283,9 @@ static int br_port_fill_attrs(struct sk_buff *skb,
+>   	    nla_put_u8(skb, IFLA_BRPORT_LOCKED, !!(p->flags & BR_PORT_LOCKED)) ||
+>   	    nla_put_u8(skb, IFLA_BRPORT_MAB, !!(p->flags & BR_PORT_MAB)) ||
+>   	    nla_put_u8(skb, IFLA_BRPORT_NEIGH_VLAN_SUPPRESS,
+> -		       !!(p->flags & BR_NEIGH_VLAN_SUPPRESS)))
+> +		       !!(p->flags & BR_NEIGH_VLAN_SUPPRESS)) ||
+> +	    nla_put_u8(skb, IFLA_BRPORT_NEIGH_FORWARD_GRAT,
+> +		       !!(p->flags & BR_NEIGH_FORWARD_GRAT)))
+>   		return -EMSGSIZE;
+>   
+>   	timerval = br_timer_value(&p->message_age_timer);
+> @@ -902,6 +905,7 @@ static const struct nla_policy br_port_policy[IFLA_BRPORT_MAX + 1] = {
+>   	[IFLA_BRPORT_MCAST_MAX_GROUPS] = { .type = NLA_U32 },
+>   	[IFLA_BRPORT_NEIGH_VLAN_SUPPRESS] = NLA_POLICY_MAX(NLA_U8, 1),
+>   	[IFLA_BRPORT_BACKUP_NHID] = { .type = NLA_U32 },
+> +	[IFLA_BRPORT_NEIGH_FORWARD_GRAT] = NLA_POLICY_MAX(NLA_U8, 1),
+>   };
+>   
+>   /* Change the state of the port and notify spanning tree */
+> @@ -970,6 +974,8 @@ static int br_setport(struct net_bridge_port *p, struct nlattr *tb[],
+>   	br_set_port_flag(p, tb, IFLA_BRPORT_MAB, BR_PORT_MAB);
+>   	br_set_port_flag(p, tb, IFLA_BRPORT_NEIGH_VLAN_SUPPRESS,
+>   			 BR_NEIGH_VLAN_SUPPRESS);
+> +	br_set_port_flag(p, tb, IFLA_BRPORT_NEIGH_FORWARD_GRAT,
+> +			 BR_NEIGH_FORWARD_GRAT);
+>   
+>   	if ((p->flags & BR_PORT_MAB) &&
+>   	    (!(p->flags & BR_PORT_LOCKED) || !(p->flags & BR_LEARNING))) {
 
-The drm_test_rect_calc_hscale and drm_test_rect_calc_vscale unit tests
-intentionally trigger warning backtraces by providing bad parameters to
-the tested functions. What is tested is the return value, not the existence
-of a warning backtrace. Suppress the backtraces to avoid clogging the
-kernel log and distraction from real problems.
-
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-Acked-by: Dan Carpenter <dan.carpenter@linaro.org>
-Acked-by: Maíra Canal <mcanal@igalia.com>
-Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-Cc: David Airlie <airlied@gmail.com>
-Cc: Daniel Vetter <daniel@ffwll.ch>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Alessandro Carminati <acarmina@redhat.com>
-Acked-by: David Gow <david@davidgow.net>
-Signed-off-by: Albert Esteve <aesteve@redhat.com>
----
- drivers/gpu/drm/tests/drm_rect_test.c | 23 +++++++++++++++++++----
- 1 file changed, 19 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/gpu/drm/tests/drm_rect_test.c b/drivers/gpu/drm/tests/drm_rect_test.c
-index 17e1f34b76101..818e16e80c8f9 100644
---- a/drivers/gpu/drm/tests/drm_rect_test.c
-+++ b/drivers/gpu/drm/tests/drm_rect_test.c
-@@ -409,8 +409,16 @@ static void drm_test_rect_calc_hscale(struct kunit *test)
- 	const struct drm_rect_scale_case *params = test->param_value;
- 	int scaling_factor;
- 
--	scaling_factor = drm_rect_calc_hscale(&params->src, &params->dst,
--					      params->min_range, params->max_range);
-+	/*
-+	 * drm_rect_calc_hscale() generates a warning backtrace whenever bad
-+	 * parameters are passed to it. This affects all unit tests with an
-+	 * error code in expected_scaling_factor.
-+	 */
-+	kunit_warning_suppress(test) {
-+		scaling_factor = drm_rect_calc_hscale(&params->src, &params->dst,
-+						      params->min_range,
-+						      params->max_range);
-+	}
- 
- 	KUNIT_EXPECT_EQ(test, scaling_factor, params->expected_scaling_factor);
- }
-@@ -420,8 +428,15 @@ static void drm_test_rect_calc_vscale(struct kunit *test)
- 	const struct drm_rect_scale_case *params = test->param_value;
- 	int scaling_factor;
- 
--	scaling_factor = drm_rect_calc_vscale(&params->src, &params->dst,
--					      params->min_range, params->max_range);
-+	/*
-+	 * drm_rect_calc_vscale() generates a warning backtrace whenever bad
-+	 * parameters are passed to it. This affects all unit tests with an
-+	 * error code in expected_scaling_factor.
-+	 */
-+	kunit_warning_suppress(test) {
-+		scaling_factor = drm_rect_calc_vscale(&params->src, &params->dst,
-+						      params->min_range, params->max_range);
-+	}
- 
- 	KUNIT_EXPECT_EQ(test, scaling_factor, params->expected_scaling_factor);
- }
-
--- 
-2.53.0
+Acked-by: Nikolay Aleksandrov <razor@blackwall.org>
 
