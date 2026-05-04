@@ -1,187 +1,123 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86D6F34253B
-	for <linux-kselftest@vger.kernel.org>; Mon,  4 May 2026 08:39:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3947D346A13;
+	Mon,  4 May 2026 09:11:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777883988; cv=none; b=IBGKipgI2RNB5iwmtQM2I9m0UiAYKHuoJ0P/wcUiEDKAMQ99myvdk0dDG01iz6U9/hTMvJtNDmPiBUHD6FqS9XEg/WvvtgU4U4HvX7pDrxbIFVmRwug/o6DCb0EyCXrV8+AKSf7SRz4GnhzKHfhe1fPqWddSqeUfI9Ab6XUvyOY=
+	t=1777885883; cv=none; b=JG5tUFOt423GTAaEpCDaeyUIQXQkKwkd2XUbC8YAeCk3b34OuU+EZl1eb4fMSZoBPHUSI7KUhYiqyevBMgs4+84zJQiJnDJIBzfwd9PRpCoGYA/ZOSiDWXUI+Wc6Vbl54R5UcOMBWf7UtAB6D4nSCopnqg6x0jD+cpGY1BweNTA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777883988; c=relaxed/simple;
-	bh=2RTP13Nu7Z4tEtxogQgWd3CW8wKZRNhB047xK4y1OSk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=dKGlLtgTDgEwd4WeLqwDhDLvRB7Jc9Kdnj6Tfb6AOnJBVsdHyia3VM/bvQEe+P/cBxMyW5LrGyjgGaVvmqpXTmJ3qxvh4G0NJw60bdmxWJAWfEnFILl8rc/5YyLbzWjtnKr67SK3EJCRbwz2IPSX0iRXP9cf70rZ9foz05eqdUA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YEQuNPsk; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1777885883; c=relaxed/simple;
+	bh=G5VkZTPiZ9eFO2wxScepjroUpqxzhBoTF1Sz0NepLiE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Hs3pbfQ/oXTO9G3amVZkNfimUNz10shXc34UpS3ALzkfsbXOe5t0IPsp12l1smZK1Yh6MF9DAKspPh6sWVwAVMFvhVfhcGUWqjbOLpGvkAxpHW9eJQ8WjESyHv+BxKzlQUuqHQBqSQrizJGppZ4ds8N+BydxAYC3pLyhE1CPESg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=AJVpEaBh; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YEQuNPsk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1777883986;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=1FCmw5PTtSXzNIV6yVE0OtGGUXuOUm+K8ky9wYITGY8=;
-	b=YEQuNPsk0QqOBbBQEGjMGsN/XNe0ce5yLqA3G/PQw1D7ccl7ocQaF36zkHPYq143x5N5Iy
-	+F5Gu7nLrHAlARVuNA3xe0dOukNA66ZkOh+ZLRh6NFhA3wYIoZ2rLmbUbzN64oA/9YaZeP
-	U7EcqzmSYbL5gJw2F7+fbaTnmOe0jfA=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-327-IuvFYTI_OCaecIwOPj80oQ-1; Mon,
- 04 May 2026 04:39:43 -0400
-X-MC-Unique: IuvFYTI_OCaecIwOPj80oQ-1
-X-Mimecast-MFC-AGG-ID: IuvFYTI_OCaecIwOPj80oQ_1777883981
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 62DA6195608C;
-	Mon,  4 May 2026 08:39:41 +0000 (UTC)
-Received: from [192.168.1.153] (headnet01.pony-001.prod.iad2.dc.redhat.com [10.2.32.101])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 259E21800347;
-	Mon,  4 May 2026 08:39:38 +0000 (UTC)
-From: Albert Esteve <aesteve@redhat.com>
-Date: Mon, 04 May 2026 10:39:26 +0200
-Subject: [PATCH v3 4/4] selftests: cgroup: handle vmtest-dmem -b to test
- locally built kernel
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="AJVpEaBh"
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64484Ibf1010395;
+	Mon, 4 May 2026 09:11:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=9wiDU/yHrm108gVQhopEZG7BPuvKV+l2/i7eawOnq
+	/U=; b=AJVpEaBhf/zjq5DjxxcVADM4SD/ze/ibqu89AVSBkknH8S7z9uQJW/DjR
+	Ic49GEV09XsHS8wKlW1ftuY6YbqvAmGDHBUZWDud2a/wuOoQHiAojKRJJAG4119z
+	r+bpPS3bHdlGM8UKJjMGO4h021XMw66fEewzxKjojOsESYh6Mem9ayREutciaE0u
+	Sx4lEem23LM4FqosElVNBhPQcseebWSO9BZc/JzkcocooG2gAKdeV1qSTU7aIjRd
+	YsNmSa/8yyyGkEtKvxgUrztH4FctWUJ/ChorTWw7MN5i5bfiocE8TpzhVoEPAGNZ
+	SE0aeGVVSFBQCLptfmnsjBdtmK1rw==
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4dw9y4e2y0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 04 May 2026 09:11:16 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64499Rwp005941;
+	Mon, 4 May 2026 09:11:15 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4dww3gvcq9-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 04 May 2026 09:11:15 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6449BBP434931018
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 4 May 2026 09:11:11 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 5ECB920043;
+	Mon,  4 May 2026 09:11:11 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id B9BD320040;
+	Mon,  4 May 2026 09:11:09 +0000 (GMT)
+Received: from aboo.bl1-in.ibm.com (unknown [9.123.14.187])
+	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Mon,  4 May 2026 09:11:09 +0000 (GMT)
+From: Aboorva Devarajan <aboorvad@linux.ibm.com>
+To: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Cc: Sayali Patil <sayalip@linux.ibm.com>, linux-kernel@vger.kernel.org,
+        Aboorva Devarajan <aboorvad@linux.ibm.com>
+Subject: [PATCH 0/3] selftests/mm: assorted fixes for hmm-tests
+Date: Mon,  4 May 2026 14:41:05 +0530
+Message-ID: <cover.1777870179.git.aboorvad@linux.ibm.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260504-kunit_cgroups-v3-4-4eac90b76f91@redhat.com>
-References: <20260504-kunit_cgroups-v3-0-4eac90b76f91@redhat.com>
-In-Reply-To: <20260504-kunit_cgroups-v3-0-4eac90b76f91@redhat.com>
-To: Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
- =?utf-8?q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
- Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Albert Esteve <aesteve@redhat.com>, 
- mripard@redhat.com, Eric Chanudet <echanude@redhat.com>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1777883968; l=3222;
- i=aesteve@redhat.com; s=20260303; h=from:subject:message-id;
- bh=5hsHacvz/JuYV7yLWF/sNuSW9yMcwd+DRLDYe4UgWBM=;
- b=v3BtPSCdpKlecFOBGNnBJRWFTR7dDWB4TkXbPzSuXKpw1MxZctKXcdTgQgKZegLjznHx9K8HQ
- Q8XxjB+ed+7BTynlEn+JXGVup51q1PfE+zsXrIUKZIhSpRauDEWtsJY
-X-Developer-Key: i=aesteve@redhat.com; a=ed25519;
- pk=YSFz6sOHd2L45+Fr8DIvHTi6lSIjhLZ5T+rkxspJt1s=
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTA0MDA5NyBTYWx0ZWRfX+eWJQ6jZGvm/
+ ZpdGNbxPlLKY7tYyz3LRHCNBSN0r7Yqp4AFAGX1dKnyjHrXk29V5QqPRvB86unnxd6f2wi2qwKh
+ IGPaO6pj0K5KVv1pBvnnSaQn61EyazfFonmUEg+nyvaoSPzBPFYsDP4VRZr7K26BIFEzmVbmQBg
+ HsNamw5uq+VJSmHI+ZcJaDL/CSU5Pj7rnblmq9YggRfz1fCn43m8B2TIpA01J7qpoNIDoJW4Cfy
+ Z7pwiKp7u1USmJsFJOgiCJDgXKlwK++cFgb8EPAj0LoBabwmr71LpbN7E61Coo8NttvwnHkz6Y2
+ aJRCvHLmr4pSNGs2QGOhF3KpLsyX0jZ8Idr+XmKMtAOz9rnHjnVLFJYOcRKWYfc/wHtP7h+vHiW
+ vlkTJuBpqNsI0JAOJv7MlO2jHBDj4maJmFbwE+uucnhw2PLhZ6QE1cuNvSCh477ArLFnWP46B+L
+ JhKz4kB0Zko0ZKqR98A==
+X-Authority-Analysis: v=2.4 cv=J4GaKgnS c=1 sm=1 tr=0 ts=69f862b4 cx=c_pps
+ a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
+ a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
+ a=RzCfie-kr_QcCd8fBx8p:22 a=M2d22ONcT9KgptbevxoA:9
+X-Proofpoint-GUID: uV2WjqPChciwyHDFa1D9KT7BjH_8Hqr0
+X-Proofpoint-ORIG-GUID: uV2WjqPChciwyHDFa1D9KT7BjH_8Hqr0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-05-04_03,2026-04-30_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 clxscore=1011 malwarescore=0 bulkscore=0 suspectscore=0
+ priorityscore=1501 spamscore=0 phishscore=0 adultscore=0 lowpriorityscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2604200000 definitions=main-2605040097
 
-From: Eric Chanudet <echanude@redhat.com>
+Hi all,
 
-Currently vmtest-dmem.sh relies on the host's running kernel or a
-pre-built one when booting the virtme-ng VM, with no option to
-configure and build a local kernel tree directly.
+This series fixes a few issues in hmm-tests that show up when
+page-size and huge-page configuration differ from the hardcoded
+assumptions the tests were written for (PMD/THP sizing, default
+hugepage size, and related cases).
 
-This adds friction to the development cycle: the user must manually
-run vng --kconfig with the correct config fragment, build the kernel,
-and pass the result to the script.
+It also includes a minor fix to exclusive_cow: the test ignored the
+return value of fork(), so both parent and child ran the same teardown
+path.
 
-Add a -b flag that automates this workflow.  When set, handle_build()
-configures the kernel using vng --kconfig with the selftest config
-fragment, builds it with make -j$(nproc), and vm_start() passes the
-local tree to vng --run so the VM boots the freshly built kernel.
+Please let us know if you have any comments.
 
-Signed-off-by: Eric Chanudet <echanude@redhat.com>
-Signed-off-by: Albert Esteve <aesteve@redhat.com>
----
- tools/testing/selftests/cgroup/vmtest-dmem.sh | 35 ++++++++++++++++++++++++++-
- 1 file changed, 34 insertions(+), 1 deletion(-)
+Thanks,
+Aboorva
 
-diff --git a/tools/testing/selftests/cgroup/vmtest-dmem.sh b/tools/testing/selftests/cgroup/vmtest-dmem.sh
-index 9524dbddb06b7..b6e4777285c1b 100755
---- a/tools/testing/selftests/cgroup/vmtest-dmem.sh
-+++ b/tools/testing/selftests/cgroup/vmtest-dmem.sh
-@@ -23,6 +23,7 @@ readonly WAIT_TOTAL=$((WAIT_PERIOD * WAIT_PERIOD_MAX))
- readonly QEMU_PIDFILE="$(mktemp /tmp/qemu_dmem_vmtest_XXXX.pid)"
- readonly QEMU_OPTS=" --pidfile ${QEMU_PIDFILE} "
- 
-+BUILD=0
- QEMU="qemu-system-$(uname -m)"
- VERBOSE=0
- SHELL_MODE=0
-@@ -31,6 +32,7 @@ GUEST_TREE="${GUEST_TREE:-$KERNEL_CHECKOUT}"
- usage() {
- 	echo
- 	echo "$0 [OPTIONS]"
-+	echo "  -b        Build kernel from source tree before booting"
- 	echo "  -q <qemu> QEMU binary/path (default: ${QEMU})"
- 	echo "  -s        Start interactive shell in VM"
- 	echo "  -v        Verbose output (vng boot logs on stdout)"
-@@ -72,17 +74,46 @@ check_deps() {
- 	done
- }
- 
-+handle_build() {
-+	if [[ ! "${BUILD}" -eq 1 ]]; then
-+		return
-+	fi
-+
-+	if [[ ! -d "${KERNEL_CHECKOUT}" ]]; then
-+		echo "-b requires vmtest-dmem.sh called from the kernel source tree" >&2
-+		exit 1
-+	fi
-+
-+	pushd "${KERNEL_CHECKOUT}" &>/dev/null
-+
-+	if ! vng --kconfig --config "${SCRIPT_DIR}"/config; then
-+		die "failed to generate .config for kernel source tree (${KERNEL_CHECKOUT})"
-+	fi
-+
-+	if ! make -j"$(nproc)"; then
-+		die "failed to build kernel from source tree (${KERNEL_CHECKOUT})"
-+	fi
-+
-+	popd &>/dev/null
-+}
-+
- vm_start() {
- 	local logfile=/dev/null
- 	local verbose_opt=""
-+	local kernel_opt=""
- 
- 	if [[ "${VERBOSE}" -eq 1 ]]; then
- 		verbose_opt="--verbose"
- 		logfile=/dev/stdout
- 	fi
- 
-+	if [[ "${BUILD}" -eq 1 ]]; then
-+		kernel_opt="${KERNEL_CHECKOUT}"
-+	fi
-+
- 	vng \
- 		--run \
-+		${kernel_opt} \
- 		${verbose_opt} \
- 		--qemu-opts="${QEMU_OPTS}" \
- 		--qemu="$(command -v "${QEMU}")" \
-@@ -165,10 +196,11 @@ run_test() {
- 	vm_ssh -- "cd '${GUEST_TREE}' && ./tools/testing/selftests/cgroup/test_dmem"
- }
- 
--while getopts ":hvq:s" o; do
-+while getopts ":hvq:sb" o; do
- 	case "${o}" in
- 	v) VERBOSE=1 ;;
- 	q) QEMU="${OPTARG}" ;;
-+	b) BUILD=1 ;;
- 	s) SHELL_MODE=1 ;;
- 	h|*) usage ;;
- 	esac
-@@ -177,6 +209,7 @@ done
- trap cleanup EXIT
- 
- check_deps
-+handle_build
- echo "Booting virtme-ng VM..."
- vm_start
- vm_wait_for_ssh
+Aboorva Devarajan (1):
+  selftests/mm: fix exclusive_cow test fork() handling
+
+Sayali Patil (2):
+  selftests/mm: allow PUD-level entries in compound testcase of hmm
+    tests
+  selftests/mm: remove hardcoded THP sizing assumptions in hmm tests
+
+ tools/testing/selftests/mm/hmm-tests.c | 86 +++++++++++++++++---------
+ 1 file changed, 58 insertions(+), 28 deletions(-)
 
 -- 
-2.53.0
+2.54.0
 
