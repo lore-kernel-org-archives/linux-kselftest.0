@@ -1,64 +1,64 @@
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DC943E3DAB
-	for <linux-kselftest@vger.kernel.org>; Mon,  4 May 2026 17:41:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 854443E4C7A
+	for <linux-kselftest@vger.kernel.org>; Mon,  4 May 2026 17:41:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777916468; cv=none; b=eOmwip5TUK7n7SWuFd/IenLr3DhBpwt55VThidQI0PXvjIknJdBjm+0F1e9xv/tV8ofoww65kW8HzPJpPV7T8MlMGiBVczk3kdJpNF8q6k+9uwONxyZlSEilqhmt4rY20lnWAGLPSzX158ijJx1BanqKR9zX8WJsRPNPoasqSzU=
+	t=1777916469; cv=none; b=ZsEmnfpqnFcKf9UbKcCin2R31uVJ6gzrAUReGYHhnFsyKJB2gdt/z5eUw8SvgopWHD4VwX/eAepcScMs7KgKqdzJKriswHiyG3NPRr+Jg8ikYHII+jSMTch3Nf4REvV3Z1yqBCLaxSJgpRZdxotiSYGetbVy1gASKhhX0m3zV8c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777916468; c=relaxed/simple;
-	bh=yq71j9wctcNGytKHj/p59ys2+HWuYWPLuioDe7KxcfY=;
+	s=arc-20240116; t=1777916469; c=relaxed/simple;
+	bh=ufkONH4lXdgrenYZU9xGx8aA3dUY2Vs/P/4JdsvRg+8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Q9f4WRIGGO/h399GiKI9BpBybw28lPD0q9Kbc3fH1B82GkFiEGU7/fK4rNiTNVogCsNsM4DOLwakOljy50uEFDCIzO8gMnDZjCVR4Xh/ZU9tXhH2C+FLWtAY5zfhhZAYvm/WwLbBBUx/imJ5FY/n+KuwlQ2f6mpFVyFOzAWFHeU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iSq8SzfP; arc=none smtp.client-ip=209.85.128.170
+	 MIME-Version; b=Fc0LfMrITdBaWul/f88qlX5AbPpU/6LoiKqvxgEAQSJpyipuoajrAVt1tahfQsuU6kOhlfniOyCPTQynx7QmWvhXvnTywWVGZyCLSpzvt/tna/tM5I4pBt2uSCXMmFrzUP/NX9F2C+9fdvNev6Kxdw+4gMaYHmQ0RRIXb5uuH5U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oY5yEO2Y; arc=none smtp.client-ip=209.85.128.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iSq8SzfP"
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-794719afcd4so39700157b3.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 04 May 2026 10:41:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oY5yEO2Y"
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-7bd5e373d07so35760357b3.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 04 May 2026 10:41:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20251104; t=1777916466; x=1778521266; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=eUIUmXE0+wLRQ6+GiVrpuUgnRpPQKDTF515rzrT7DLA=;
-        b=iSq8SzfPKz0mX9YyftW9gtPz8BfmQzNheWMZIFgwq5nZjGUKEPccDtZQLss+xOo5QN
-         vSWYynvrr6Je2RGD4wVLOM/haSA7OSaNlo/L2uJoqYIgtteNEcbgulf8ztZI7DDJfLUt
-         cc6io303Ooz/FRQK7Mbz2NzPC15JGwDwgQKbKCTZYqWCjRlxiJyABisx8gEIqVrZzWDb
-         Z1ckWWn9sMZnKT6VdP/mVknn9VO627zZxrjng2dGHZxh0V1vBfa1ANwsWijyrvR6RD9/
-         wPdk9LnRvmuRiiLaxnLTYPCEvZJEgYb/EXQ/7RVQPGG/FJqqel8p2MLAGnmkCN2E+Jyc
-         a/VQ==
+        bh=ZVl8pNWWJ1FZhRJZlr6BIN+M7SkdqpWm1WnyYftGcVM=;
+        b=oY5yEO2Y1r8qJyJLft9tVECCiJ80oT56tXpDR9Vo2R9JHQT9vwrKeXwUWr56Rn1Ts1
+         eLNqvAgQ4BKegWdOQhToOCpEs9VTZ7He75XUlPjIvb6T8/AA+COF1zjBOtbAGlXq3nx/
+         OHD+En8gedA4Dnil8uiFK5htXOWOr6jI34UzLpvDU9I4C6FF1TGSG+AB12K59pEVLT1L
+         10hPWjjk6uW9MRdfmAsdivmDlQHEf2O/gOaNIuPU80r8xQvCHzXxvCrXthIwE+jwaAke
+         UegToVbmXD31VTE/vebP71+K2frD6DOZ1EkkowROcprOTgA3RthCNmzXlYW/CVIR1fwP
+         CBAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20251104; t=1777916466; x=1778521266;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=eUIUmXE0+wLRQ6+GiVrpuUgnRpPQKDTF515rzrT7DLA=;
-        b=npdRHKDUQ3YXCTr7sSE0ZzqihFqGq2zweqm2Swzmrx8/a7ENb7+wbucJCYdW2MpMPT
-         6EEpNeMStrfxNw7rWOBPtILhx9+x0nGdOejl9+ss4AD0QF1XbugtYEy7R4Fm9i4NchJ3
-         N1gcDkvjv4kvenn7w8Lcy17TT04wsJmsTA9OD+9cjPI/tt/pHinp4bvR9eau/OewioyO
-         m0fs/2gUOKCNZfDD14KmA85eT7wTjctxR/wDUDu+CUsNmtL5PjsDr9pHnGYdzSZS5kr8
-         1YLgqkC0f9DjFju7n3jab9bma2r7jxquGTMBILW9XJn2p1oGGdXEDeKimEPbeFnZ896E
-         z39w==
-X-Forwarded-Encrypted: i=1; AFNElJ87xZMafXU6vpLpjbxIrge6Ltd2zUUquY8P+Rjab7uj/wFAZvSSgrmk6EslLh8XmaFxVIQ+QJ5iCpIbQBILIPI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyTAYENDYPH3IoqUOGKTLynaGvmabtgRBIOxsBKe8wF0YzPWsr5
-	1V1FePOF2e1X6dkPT1nFvxtL/SQZ47Hn34y27AD/+2SCBvjQ+zPPQYX/pFYMqw==
-X-Gm-Gg: AeBDievj8yeKI3jsTbtvVGM1FJ7tS/l+RWgelZYhLRI7q92Vtb8sQsI1slQ8jH1YhyQ
-	8UjyHHjGE8l8IX75p5MsZbfbHx11EHVh1+yFhEgeaMA5QRfGrYN0F6+Vj6p/0pDacjHV/xjpeGm
-	A68aONFIDO6w+Ut7zgYSWAOnr1js2B+3mKWy6jjbdlfTNK0k+qx7dL5xnXLS7qQmDN1u4tKrULR
-	tj/SfceVL0qJ8J1j6RsFKYE7YjgdEZqYUPELyUJca3aVwob+AlDMQunNobiurQEasrudcYLHkRV
-	2OI4bqmQKRs51YY6lORGkpXhVFT2V5EfhC3VMriXjwTTI115CQKkypOkhQ/7ADwVbTVfR1GH0DT
-	48zPHRw3Nyzh8spny90CX7uDdJQFPYQ7sPWxARy/4wyxsn/xe5pbqLIkUq5llN+EVrd+W38gUpm
-	ypkcBmsodqlrG4CYIUbyu8C/fGb0KDcqGj8exFBFhXTlDo4bM+oYxZ1g8gEiwPHnZ4YwvEvRg3v
-	0neQ5QyrN6xsElEqx0cXVXu5QOdUZte7RgaJ9liy+Y2u74s
-X-Received: by 2002:a05:690c:c6cb:b0:7ba:f414:cd18 with SMTP id 00721157ae682-7bd7712f9f6mr78850767b3.41.1777916465601;
-        Mon, 04 May 2026 10:41:05 -0700 (PDT)
+        bh=ZVl8pNWWJ1FZhRJZlr6BIN+M7SkdqpWm1WnyYftGcVM=;
+        b=k9VWMVhwSqlyEbjGkUaa82hOrHWH+7eE6TiX4XAlAutbvlxeNfXm8INM3x+DVD5cXz
+         klccwXG05sGmEa5shXzvwiXN/xtqD2m47dAbak6tp2SghLWwr8p8Ia6e3jqq3WmpP5yU
+         dk6VZqZ0ZnkzIUT5Xzi5nO0YN1cQULltvChQiMyUKyL8W3fUw92TKKKPnXSXDCe5A4Lv
+         FJnWyrVgBXXg92JMoQn+3ixyznUS2q8LzBm5yBT1EFZuMrmaxuTyzFyF5ltnRkYjmjbu
+         kkgEq5YPed6rbUdZD38SWGw2GSQEm5fs0lwtLSRuBO9+CvlK15n01qtDXqkS6EZ+4sZC
+         8fBw==
+X-Forwarded-Encrypted: i=1; AFNElJ89M+ewQ2GV1qTtOy2RaPtEsZCqGBYpXfI+GuGk7Ni9ETFVAtTF4mUbp9RXXf7AO7ecrVItRdUzA0ZbSH5VGvk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxakMKz98rNv+FLHjBYxGR0oNBekmgADI5pfSqQelzIa11t3Ym6
+	jy2eSWriReUsK1a45e/DgmfSmFZhT1p65KvzBAk/IX5BvD/wrf7Xpq9v
+X-Gm-Gg: AeBDieuUwg0YQPtb7uJpOu3+iNUUIe7smuQYBrsFpuHp7lgf3Mz45kLLPFjYfARQV2T
+	U2wH48HAGr7edNBkMluwKs0OV7qOWqHiSXbbRAs5Q2OoSJ/pCxEW/G1GQu9YwBKcnIwWtbg+bqj
+	pT1PstG9/g7unubOH3bKKM176YJMQfDhCVYgWSDGOFbeNT32/AQqUyhf/usE3sHfESqE/0qh8kP
+	J1t2osg+4GVJXY/EDqAViuOiS3OfMZYKM7W+v6piOSJ+OkF0Uft1qU2F/ZTtZ0ng7pjSMr1yiP1
+	8vQL3Aju1/+tsWOyREHJceJt/1uf/qHOVS/u7Rur6GT9ebnauauEhkhwbwsw/zNUBTZLhNmeNNX
+	4vExW+RVryiaOmhDqsKzTVxMjuhA+8PRKx8JdM86eRKpABct+yK2ThoPGveefXtpdS1aMPAE9sM
+	FVkk0u7fqkStUEmbHTRPPH14H/iA1Ax/H9aI6fTj+07iJRN5IGIG3ZKftfTHtvlqyql+bqGA3Ar
+	1eMeK0Lonien4gEzgG696r8AVN9vvmp98p5YG/QspDwr91y
+X-Received: by 2002:a05:690c:a01c:b0:7b8:bc4e:ac3 with SMTP id 00721157ae682-7bd77104b4emr103087397b3.26.1777916466466;
+        Mon, 04 May 2026 10:41:06 -0700 (PDT)
 Received: from willemb.c.googlers.com.com (172.235.85.34.bc.googleusercontent.com. [34.85.235.172])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-7bd6685d0cbsm51551767b3.35.2026.05.04.10.41.04
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-7bd6685d0cbsm51551767b3.35.2026.05.04.10.41.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 May 2026 10:41:04 -0700 (PDT)
+        Mon, 04 May 2026 10:41:06 -0700 (PDT)
 From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
 To: netdev@vger.kernel.org
 Cc: davem@davemloft.net,
@@ -69,9 +69,9 @@ Cc: davem@davemloft.net,
 	linux-kselftest@vger.kernel.org,
 	shuah@kernel.org,
 	Willem de Bruijn <willemb@google.com>
-Subject: [PATCH net-next v7 1/3] selftests: net: py: support cmd verifying expected failure
-Date: Mon,  4 May 2026 13:38:32 -0400
-Message-ID: <20260504174056.565319-2-willemdebruijn.kernel@gmail.com>
+Subject: [PATCH net-next v7 2/3] selftests: net: py: add tc utility
+Date: Mon,  4 May 2026 13:38:33 -0400
+Message-ID: <20260504174056.565319-3-willemdebruijn.kernel@gmail.com>
 X-Mailer: git-send-email 2.54.0.545.g6539524ca2-goog
 In-Reply-To: <20260504174056.565319-1-willemdebruijn.kernel@gmail.com>
 References: <20260504174056.565319-1-willemdebruijn.kernel@gmail.com>
@@ -85,137 +85,95 @@ Content-Transfer-Encoding: 8bit
 
 From: Willem de Bruijn <willemb@google.com>
 
-Support negative tests, where cmd raises an exception if the command
-succeeded.
+Add a wrapper similar to existing ip, ethtool, ... commands.
 
-Add optional argument expect_fail to cmd and bkg. Where fail fails the
-test on unexpected error, expect_fail fails it on unexpected success.
+Tc takes a slightly different syntax. Account for that.
 
-Both fail on negative return code. Python subprocess may set a
-negative return code on process crash or timeout. Those are never
-anticipated failures.
+The first user is the next patch in this series, converting so_txtime
+to drv-net. Pacing offload is supported by selected qdiscs only.
 
 Signed-off-by: Willem de Bruijn <willemb@google.com>
-
 ---
+ .../testing/selftests/drivers/net/lib/py/__init__.py |  5 +++--
+ tools/testing/selftests/net/lib/py/__init__.py       |  4 ++--
+ tools/testing/selftests/net/lib/py/utils.py          | 12 +++++++++++-
+ 3 files changed, 16 insertions(+), 5 deletions(-)
 
-In this design fail and expect_fail are two complementary tests.
-If both are set to true, an exception would always be raised.
-
-This is contrast to the previous approach, where fail enables
-fail_on_unexpected_returncode and expect_fail modifies what that
-unexpected_returncode value range is.
-
----
-
-v6 -> v7
-  - convert from 'verify_failed' value for fail, to separate variable
-
-v4 -> v5
-  - initial version of standalone patch
----
- tools/testing/selftests/net/lib/py/utils.py | 39 +++++++++++++++------
- 1 file changed, 29 insertions(+), 10 deletions(-)
-
+diff --git a/tools/testing/selftests/drivers/net/lib/py/__init__.py b/tools/testing/selftests/drivers/net/lib/py/__init__.py
+index 2b5ec0505672..09aac4ce67bc 100644
+--- a/tools/testing/selftests/drivers/net/lib/py/__init__.py
++++ b/tools/testing/selftests/drivers/net/lib/py/__init__.py
+@@ -23,7 +23,8 @@ try:
+         NlError, RtnlFamily, DevlinkFamily, PSPFamily, Netlink
+     from net.lib.py import CmdExitFailure
+     from net.lib.py import bkg, cmd, bpftool, bpftrace, defer, ethtool, \
+-        fd_read_timeout, ip, rand_port, rand_ports, wait_port_listen, wait_file
++        fd_read_timeout, ip, rand_port, rand_ports, tc, wait_port_listen, \
++        wait_file
+     from net.lib.py import bpf_map_set, bpf_map_dump, bpf_prog_map_ids
+     from net.lib.py import KsftSkipEx, KsftFailEx, KsftXfailEx
+     from net.lib.py import ksft_disruptive, ksft_exit, ksft_pr, ksft_run, \
+@@ -36,7 +37,7 @@ try:
+                "NlError", "RtnlFamily", "DevlinkFamily", "PSPFamily", "Netlink",
+                "CmdExitFailure",
+                "bkg", "cmd", "bpftool", "bpftrace", "defer", "ethtool",
+-               "fd_read_timeout", "ip", "rand_port", "rand_ports",
++               "fd_read_timeout", "ip", "rand_port", "rand_ports", "tc",
+                "wait_port_listen", "wait_file",
+                "bpf_map_set", "bpf_map_dump", "bpf_prog_map_ids",
+                "KsftSkipEx", "KsftFailEx", "KsftXfailEx",
+diff --git a/tools/testing/selftests/net/lib/py/__init__.py b/tools/testing/selftests/net/lib/py/__init__.py
+index 7c81d86a7e97..64a8c1ed4950 100644
+--- a/tools/testing/selftests/net/lib/py/__init__.py
++++ b/tools/testing/selftests/net/lib/py/__init__.py
+@@ -14,7 +14,7 @@ from .netns import NetNS, NetNSEnter
+ from .nsim import NetdevSim, NetdevSimDev
+ from .utils import CmdExitFailure, fd_read_timeout, cmd, bkg, defer, \
+     bpftool, ip, ethtool, bpftrace, rand_port, rand_ports, wait_port_listen, \
+-    wait_file, tool
++    wait_file, tool, tc
+ from .bpf import bpf_map_set, bpf_map_dump, bpf_prog_map_ids
+ from .ynl import NlError, NlctrlFamily, YnlFamily, \
+     EthtoolFamily, NetdevFamily, RtnlFamily, RtnlAddrFamily
+@@ -29,7 +29,7 @@ __all__ = ["KSRC",
+            "NetNS", "NetNSEnter",
+            "CmdExitFailure", "fd_read_timeout", "cmd", "bkg", "defer",
+            "bpftool", "ip", "ethtool", "bpftrace", "rand_port", "rand_ports",
+-           "wait_port_listen", "wait_file", "tool",
++           "wait_port_listen", "wait_file", "tool", "tc",
+            "bpf_map_set", "bpf_map_dump", "bpf_prog_map_ids",
+            "NetdevSim", "NetdevSimDev",
+            "NetshaperFamily", "DevlinkFamily", "PSPFamily", "NlError",
 diff --git a/tools/testing/selftests/net/lib/py/utils.py b/tools/testing/selftests/net/lib/py/utils.py
-index 6c44a3d2bbf7..b68d4607114d 100644
+index b68d4607114d..be9408a77168 100644
 --- a/tools/testing/selftests/net/lib/py/utils.py
 +++ b/tools/testing/selftests/net/lib/py/utils.py
-@@ -23,6 +23,10 @@ class CmdExitFailure(Exception):
-         self.cmd = cmd_obj
+@@ -239,7 +239,10 @@ class defer:
+ def tool(name, args, json=None, ns=None, host=None):
+     cmd_str = name + ' '
+     if json:
+-        cmd_str += '--json '
++        if name == 'tc':
++            cmd_str += '-json '
++        else:
++            cmd_str += '--json '
+     cmd_str += args
+     cmd_obj = cmd(cmd_str, ns=ns, host=host)
+     if json:
+@@ -257,6 +260,13 @@ def ip(args, json=None, ns=None, host=None):
+     return tool('ip', args, json=json, host=host)
  
  
-+class CmdExitZeroFailure(CmdExitFailure):
-+    """ Command succeeded (returned zero exit code), but expected failure. """
++def tc(args, json=None, ns=None, host=None):
++    """ Helper to call tc with standard set of optional args. """
++    if ns:
++        args = f'-netns {ns} ' + args
++    return tool('tc', args, json=json, host=host)
 +
 +
- def fd_read_timeout(fd, timeout):
-     rlist, _, _ = select.select([fd], [], [], timeout)
-     if rlist:
-@@ -39,8 +43,9 @@ class cmd:
+ def ethtool(args, json=None, ns=None, host=None):
+     return tool('ethtool', args, json=json, ns=ns, host=host)
  
-     Use bkg() instead to run a command in the background.
-     """
--    def __init__(self, comm, shell=None, fail=True, ns=None, background=False,
--                 host=None, timeout=5, ksft_ready=None, ksft_wait=None):
-+    def __init__(self, comm, shell=None, fail=True, expect_fail=False, ns=None,
-+                 background=False, host=None, timeout=5, ksft_ready=None,
-+                 ksft_wait=None):
-         if ns:
-             comm = f'ip netns exec {ns} ' + comm
- 
-@@ -88,7 +93,8 @@ class cmd:
-                     self._process_terminate(terminate=terminate, timeout=1)
-                     raise CmdInitFailure("Did not receive ready message", self)
-         if not background:
--            self.process(terminate=False, fail=fail, timeout=timeout)
-+            self.process(terminate=False, fail=fail, expect_fail=expect_fail,
-+                         timeout=timeout)
- 
-     def _process_terminate(self, terminate, timeout):
-         if terminate:
-@@ -102,7 +108,7 @@ class cmd:
- 
-         return stdout, stderr
- 
--    def process(self, terminate=True, fail=None, timeout=5):
-+    def process(self, terminate=True, fail=None, expect_fail=False, timeout=5):
-         if fail is None:
-             fail = not terminate
- 
-@@ -111,10 +117,19 @@ class cmd:
- 
-         stdout, stderr = self._process_terminate(terminate=terminate,
-                                                  timeout=timeout)
--        if self.proc.returncode != 0 and fail:
-+
-+        # Fail on unexpected test failure if fail.
-+        # Fail on unexpected test success if expect_fail.
-+        # Fail on negative returncode if either:
-+        # Set by subprocess on crash or signal, this is never expected failure.
-+        if (self.proc.returncode != 0 and fail or
-+            (self.proc.returncode < 0 and expect_fail)):
-             if len(stderr) > 0 and stderr[-1] == "\n":
-                 stderr = stderr[:-1]
-             raise CmdExitFailure("Command failed", self)
-+        elif self.proc.returncode == 0 and expect_fail:
-+            raise CmdExitZeroFailure("Command succeeded (expected fail)", self)
-+
- 
-     def __repr__(self):
-         def str_fmt(name, s):
-@@ -157,14 +172,17 @@ class bkg(cmd):
- 
-         with bkg("my_binary", ksft_wait=5):
-     """
--    def __init__(self, comm, shell=None, fail=None, ns=None, host=None,
--                 exit_wait=False, ksft_ready=None, ksft_wait=None):
-+    def __init__(self, comm, shell=None, fail=None, expect_fail=None,
-+                 ns=None, host=None, exit_wait=False, ksft_ready=None,
-+                 ksft_wait=None):
-         super().__init__(comm, background=True,
--                         shell=shell, fail=fail, ns=ns, host=host,
--                         ksft_ready=ksft_ready, ksft_wait=ksft_wait)
-+                         shell=shell, fail=fail, expect_fail=expect_fail,
-+                         ns=ns, host=host, ksft_ready=ksft_ready,
-+                         ksft_wait=ksft_wait)
-         self.terminate = not exit_wait and not ksft_wait
-         self._exit_wait = exit_wait
-         self.check_fail = fail
-+        self.expect_fail = expect_fail
- 
-         if shell and self.terminate:
-             print("# Warning: combining shell and terminate is risky!")
-@@ -179,7 +197,8 @@ class bkg(cmd):
-         # since forcing termination silences failures with fail=None
-         if self.proc.poll() is None:
-             terminate = terminate or (self._exit_wait and ex_type is not None)
--        return self.process(terminate=terminate, fail=self.check_fail)
-+        return self.process(terminate=terminate, fail=self.check_fail,
-+                            expect_fail=self.expect_fail)
- 
- 
- GLOBAL_DEFER_QUEUE = []
 -- 
 2.54.0.545.g6539524ca2-goog
 
