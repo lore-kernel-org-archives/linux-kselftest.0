@@ -1,131 +1,109 @@
-Received: from mail-pg1-f225.google.com (mail-pg1-f225.google.com [209.85.215.225])
+Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 810FA2D5A19
-	for <linux-kselftest@vger.kernel.org>; Tue,  5 May 2026 18:27:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.225
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EC8431A7E4
+	for <linux-kselftest@vger.kernel.org>; Tue,  5 May 2026 18:41:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778005645; cv=none; b=uamXRoEtzxQTAJ5Zm7MsIkRvywyjwAcGwWQ/EufJ1BeY1PHYGeuqiMhD9hs+LcHKrV/pr27NN2uFx/d95O8tCVgUgE1LXSWOr73JQuegghTFmKb4ZUPQnVik5KZFZ7HwCYTwhLhO8cEBIF3uhfHirLUTCQZNsq3Aw4nwhgtk9Ds=
+	t=1778006521; cv=none; b=tS0Xk0qrZ+ciiWKmHrr1PKiwZIibDNcO9zsWnr9CI+9UtHgLeu9wLFY/bDsKnpjKZLISGvnSnR0DyI2Uyl26hQsrb0AksgjXmix+UBfVYI7gYacZfosnubIjVm6RxIAECBSN0VhzTtJ3bX2mAKIC0kSw5huayehOilZ/gswnNn8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778005645; c=relaxed/simple;
-	bh=h2AlK+8MmYvPuW3IDG1cxyc7bUV8nvXUFzn2jnDpp6A=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nNvJKpMW0v2TrPe3DhUKFtKmduF5Mua/0+as9xMCTyumyqn6yh9NiYRI50Zcw0kQ+iW6I5iWkd9HuzIRa/8+ARaamItRbwpnWSPaDvV/pK9rIEdYDvHxAxZls0pHzVj5eC05IuvxU6vUpkaKCcNKG8cTr7dfOSZbSHRr95aMdi8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=TWlmJD/f; arc=none smtp.client-ip=209.85.215.225
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+	s=arc-20240116; t=1778006521; c=relaxed/simple;
+	bh=PxhdK7gj2zjUC6Zs48u/3dPbyPUC8JEb6+TGJXFmU9Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HVBa1Kxb8LkXOhHoTKur6BwxiHOjhHSYwOewMilHnsCZSRTvPucvFGFnqJTfDICuJ6EUb8cf2mxDWd038gjVC5rbAadsucS8mgyBamw1ongqIMagsZWwH7CfRu9XldLDqAk51QkstYIuT8DPRaESjomYb4R8if6XikyHwnzUjRY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=FkE2pe3J; arc=none smtp.client-ip=209.85.210.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="TWlmJD/f"
-Received: by mail-pg1-f225.google.com with SMTP id 41be03b00d2f7-c8006f8ab97so110949a12.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 05 May 2026 11:27:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778005644; x=1778610444;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:dkim-signature:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nGNm7c854bmsEYSmmRpo3hBYxzAKRiuBt/6viyvE9RM=;
-        b=eSg9sda+Y0kBOad80eISMUYu3YDpeOJ5Ldsydh9LMWEgMsSCtyG24+KgANZJH9PYPR
-         dAHSBir+sUUSvJxfN8iqC4Mf43dBESpDWQ7LEmB9QP3EONci6nfC61Ms39G/+H8OSY1f
-         Wn1iUUZXmerY3oBkZbmkQnFCQ59ZJu0TULu3ryDXsNI4hBajY5EnItL5ZwUE0bD9SipF
-         LVJ7+4bzOeiBsdJDJihgydEYatmKF3+Qgc1OWN1fEngsUZ6QlzAS65t+DKDJcD1t1zoV
-         ZL1KSSmc6zisVX1CUp8PVYd1l4oSmvsjNu+INGT/Va5x7V1KOiHk9jozvFOcLtnQSc41
-         UNfw==
-X-Forwarded-Encrypted: i=1; AFNElJ+XN0V50BtJ419Rodjds40gsbL6Vuygv3R8F1rJdlLjPZ0sG90c/QVTL3yxn5+yXTv5euZYUf0/TF3ORmNyjJU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw8H3B0RoIe7y+iSXuC/VrZg11j1zzxVN5146cteYN6zJCD8o+X
-	p9fSaR/bmSqvQrNPkQqKoprjV0wO9QNOE3vqJ3glIDPOl8AsTZWow6smznU9zSz/sCOY9V1M321
-	QSKWRzL3xK4CcH7zLrRIN9/w6JQkSg3hR0HyemTDYiuCXE2/7EJ+FnDsxq0h+7ZmH8SP9i4wQrn
-	ymCUMMUPxFbw2or5QOC5EHDinCrMQEr909j8jE8CqHduww7Ktwc6zrDc2M4ncfuifgAO1bsLcKO
-	aaWMveI7YkmdZsYG6vFQfiatxQ=
-X-Gm-Gg: AeBDietqZmjr/5HplGvQarr8L7cQFRK8Onk1p8+86U8gPg3Iv/5kSE5h4HDFlAw/NT7
-	Y6DxmzIiaJplvMyfgZtGHtBMyk9p2ALBAQj84HROrkgQqExxdpACO7c3elchJxfLpd31dysn8nd
-	7IWvCpDhAuiSwTOKuZ7W/P1CYDlnwJN22uQPuCPGMqiiIZDeZNS8GLleGP6PcckDnK5fvhAsWdq
-	/U70bPvQX/ZICvpxAXUBurpM3buu4aMd0JCq+hjpxb9QdJVulCRomJdE8h6gdy5BcM66IP+pY83
-	dFpZGCcium+fVu4tSrGs7d8Rykn3lTTXgOlSwsRZsnfHCevDqku0GRuCvH/wd7wTJO9faAEkseR
-	+ifl/Lom4wisOGnzikqcwwv6jxodmh9Nwf35x49ZFId4uMTev41IqZfVWi6pzUbX+eyV6EBXna1
-	Xs0PeJ0iqfQAV8Az2I72P2JksbyTn30EelfkBhCj3eOjpzyu9ukoMfpkvAegbO3FD7iy0M
-X-Received: by 2002:a17:903:3ba4:b0:2b2:48a5:45c3 with SMTP id d9443c01a7336-2ba78b1fcf6mr682245ad.1.1778005643831;
-        Tue, 05 May 2026 11:27:23 -0700 (PDT)
-Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com (address-144-49-247-16.dlp.protect.broadcom.com. [144.49.247.16])
-        by smtp-relay.gmail.com with ESMTPS id d9443c01a7336-2b9ca9c6b45sm9106925ad.13.2026.05.05.11.27.23
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 05 May 2026 11:27:23 -0700 (PDT)
-X-Relaying-Domain: broadcom.com
-X-CFilter-Loop: Reflected
-Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-8b3fecf1e02so6891306d6.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 05 May 2026 11:27:23 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="FkE2pe3J"
+Received: by mail-ot1-f41.google.com with SMTP id 46e09a7af769-7dbec19732eso4277140a34.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 05 May 2026 11:41:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1778005642; x=1778610442; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nGNm7c854bmsEYSmmRpo3hBYxzAKRiuBt/6viyvE9RM=;
-        b=TWlmJD/fcJT1MZPj75aqWVeWnzjzrf6PsNjZmvGHMuhHCGMgQ0Ul72gJK4GuNMb9DX
-         MiHzWxZIhfZ+UHr/XNXZ7eHEz9WcT0Wk2H9YTlNUi5AWfJ1HgYHQTUgI8IB4A/3Gz/gM
-         +VFic31X8XOafKkvaXvkgq41i04VvcC3gWWMo=
-X-Forwarded-Encrypted: i=1; AFNElJ/WTm81pxxEQmRFFCMqwBdHvipDht5oe9FLRKXhW3ntFsJjE/+oKoxTDh/lF7JELrhH2aalCF5R3Zd9d17ofGU=@vger.kernel.org
-X-Received: by 2002:ad4:5d4d:0:b0:8ac:afca:a68f with SMTP id 6a1803df08f44-8baf24a16a3mr45786796d6.1.1778005642411;
-        Tue, 05 May 2026 11:27:22 -0700 (PDT)
-X-Received: by 2002:ad4:5d4d:0:b0:8ac:afca:a68f with SMTP id 6a1803df08f44-8baf24a16a3mr45786396d6.1.1778005641958;
-        Tue, 05 May 2026 11:27:21 -0700 (PDT)
-Received: from photon-d7fac424c0d3 ([192.19.161.250])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8b53c6b688csm170263516d6.33.2026.05.05.11.27.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 May 2026 11:27:21 -0700 (PDT)
-From: Ankit Jain <ankit-aj.jain@broadcom.com>
-To: edumazet@google.com
-Cc: kuba@kernel.org,
-	netdev@vger.kernel.org,
-	davem@davemloft.net,
-	pabeni@redhat.com,
-	ncardwell@google.com,
-	kuniyu@google.com,
-	horms@kernel.org,
-	shuah@kernel.org,
-	quic_subashab@quicinc.com,
-	quic_stranche@quicinc.com,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	karen.badiryan@broadcom.com,
-	ajay.kaher@broadcom.com,
-	alexey.makhalov@broadcom.com,
-	vamsi-krishna.brahmajosyula@broadcom.com,
-	yin.ding@broadcom.com,
-	tapas.kundu@broadcom.com
-Subject: Re: [PATCH net v2 2/2] selftests/net: add packetdrill test for locked SO_RCVBUF SWS
-Date: Tue,  5 May 2026 18:23:29 +0000
-Message-ID: <20260505182329.15353-1-ankit-aj.jain@broadcom.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <CANn89iK_SrGx4UuN-_h8LY0DFBwf8+hStba7vdjFnEogvo=N7A@mail.gmail.com>
-References: <CANn89iK_SrGx4UuN-_h8LY0DFBwf8+hStba7vdjFnEogvo=N7A@mail.gmail.com>
+        d=linuxfoundation.org; s=google; t=1778006518; x=1778611318; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Me8gsx2QO5esJCBY5A9GXybByVneJGu1Qo6HjDO3dyA=;
+        b=FkE2pe3JMgqpGnc37SluJvmHwfhTNhqIsqQLKRiP9Hf/jMQpVM14UXxQZ7ovfmS7EQ
+         QbU1mD2Li+CHg/FQHAyEqPZNSxgJdE5HwW0FTQfPkb+YzKS8QJ8B+Szaqg75MH5fingM
+         8ivfXUZaiPlqUvD5wZh1lslWwataEO0kATYw0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778006518; x=1778611318;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Me8gsx2QO5esJCBY5A9GXybByVneJGu1Qo6HjDO3dyA=;
+        b=IGEyMVo9B1GHPRYOmppgzoGRUDnghi2krxAWykXOgT7fJM2H3kSoB/ssN407jdRabx
+         Quk2XOAssOgnaPxdj1NlyE9DMAy+Mf3A0DuUX9dOEiJ3MWwK6Xfo8w7jYzcTczTzJ7Ra
+         JYr8xE2iXo1whyUjCnJ6okBV4ficCBUAaypdhMz76oNg8Ac3j7/g/Nb8ZlQOLv6npOOr
+         mP1W5un/n5FSOE9riSMbilSfDwlX/SEAP7nGC5dSGnqQYY/TcGsgcXsAA4IpZu8s7CI9
+         BLv4+75n22EgXJ/Nj5fN1SmIWCyYRghe+KC8lIxQsRdfLknefVNkcbfPnuhJYzbm3dIF
+         Bqnw==
+X-Forwarded-Encrypted: i=1; AFNElJ8DjzyhW2LgMO6inER5E6WcJhcj9tzyqQRuQ/Jnj426UoBkpMzvUwjD/EVpfR8DtGg0U+/a4VTqQ8L9dUFeMJw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy+m0OMp9Pgg2gT5cIyrZr3HAAiirLitIf+eDF/WElxdd38Zfp3
+	YbCXAznSWm/vbgfQVpss1BFhHS3GiSbsFub8F5eWP9P58b2noEGemsulLvAtc6W3Mew=
+X-Gm-Gg: AeBDiescJ6ud9q150Q8AlqEKrD604RP57gxiBaC0NQwEda3V/78ZDcStsPfvI2wgjzG
+	iJn2xzaTfTAzel9USNdSkh3zvfpc9Pr4xOYKMVpzIF57UdnPY3sf2WU8oz81LDPE2PvMNeKX8I2
+	UQy7BX+LPQclWreJ2q9BV1kC+AmPQDleoGQAvmkgeWRxJpnbQfQYajD1G4MbAzkdeO6CBFRu3V/
+	D/MRZIcQlxEV55q9Qm1oRYELt67paL5IYNqNzG1i4Su6nbsQaoEvtXmsVdq8rd00StUNQjBzVf0
+	6Qq0EbSsahYiHvBDMP70Cmh/YJlHTIa8H8e6Glw3DkQusuwi6ReJLT/yXQDf2EDLh5zEJFP0IAB
+	rkQm21cIpHHTgUXGrd53LEPoLdLJ38pdj8WjtEirvUck4ElbH3M7aEii8yP6bah4AYX5YWfSq2a
+	GQBRsTQLiV/6mxIEQcpXfNtOKAt3IBFuJQlrXuXs8P0Q==
+X-Received: by 2002:a05:6830:82e3:b0:7d7:d510:4bf9 with SMTP id 46e09a7af769-7dee12e360cmr9447027a34.12.1778006518012;
+        Tue, 05 May 2026 11:41:58 -0700 (PDT)
+Received: from [192.168.1.14] ([38.15.57.99])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7decac8ef53sm10778237a34.21.2026.05.05.11.41.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 May 2026 11:41:57 -0700 (PDT)
+Message-ID: <8bf165df-faca-4765-9492-613dff06e43d@linuxfoundation.org>
+Date: Tue, 5 May 2026 12:41:56 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] kselftest: fix doc for ksft_test_result_report()
+To: Woradorn Laodhanadhaworn <woradorn.laon@gmail.com>, shuah@kernel.org
+Cc: broonie@kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kernel-mentees@lists.linux.dev,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20260505182213.22924-1-woradorn.laon@gmail.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20260505182213.22924-1-woradorn.laon@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Thanks for the review.
-
-> I do not see the SWS effect you want to avoid in the first place.
+On 5/5/26 12:22, Woradorn Laodhanadhaworn wrote:
+> Fix documentation to reference ksft_test_result_report() instead of
+> ksft_test_result().
 > 
-> This test is an ad-hoc test about your change, but I still do not see
-> why recomputing tp->ratio every time the rcvmss is increased is an
-> issue on loopback interface.
+> Signed-off-by: Woradorn Laodhanadhaworn <woradorn.laon@gmail.com>
+> ---
+>   tools/testing/selftests/kselftest.h | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
+> index 6d809f08ab7b..b50a8478d4d3 100644
+> --- a/tools/testing/selftests/kselftest.h
+> +++ b/tools/testing/selftests/kselftest.h
+> @@ -346,9 +346,9 @@ void ksft_test_result_code(int exit_code, const char *test_name,
+>   }
+>   
+>   /**
+> - * ksft_test_result() - Report test success based on truth of condition
+> + * ksft_test_result_report() - Report test result based on a kselftest exit code
+>    *
+> - * @condition: if true, report test success, otherwise failure.
+> + * @result: a kselftest exit code
+>    */
+>   #define ksft_test_result_report(result, fmt, ...) do {		\
+>   	switch (result) {					\
 
-For the packetdrill script, it is taking more time. To actually show
-the window dropping to 0, I have to write a long script with many
-packets and application reads. This is because TCP does not shrink the
-right edge of an already open window.
+Applied to linx_kselftest next branch for Linux 7.2-rc1
 
-Since the C-code fix in Patch 1 is tested and working fine, should I
-send v3 with just the code fix first? I can work on the packetdrill
-script and send it later in a separate patch. Or should I wait and
-send both together?
-
-Kindly suggest how I should proceed.
-
-Thanks,
-Ankit
+thanks,
+-- Shuah
