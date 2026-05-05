@@ -1,85 +1,52 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f66.google.com (mail-ej1-f66.google.com [209.85.218.66])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F8AE426EC8
-	for <linux-kselftest@vger.kernel.org>; Tue,  5 May 2026 13:25:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B5813624AA
+	for <linux-kselftest@vger.kernel.org>; Tue,  5 May 2026 13:28:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777987512; cv=none; b=MmjB+qTV0tACuy518thk01C2f1CNWFT3cI68HNU67R2Ccr4DJnFQ7TPoVTsdEWlGiOHTRUcf4PuVF6bc6TXkiUKcBgoSL2ysOECKc/66z2WgLjkk/TA9ON3VQEGXGbzPrNkwyjEfiaQ2XpNvBnLY9qM/yXDlA497Gt5VGG+mkUQ=
+	t=1777987712; cv=none; b=t4+AoYuPOjtuH5xAAkOHpXH+cMRX3GeadC0etZDrkwQqjA5bR3SUYScKqSpSoMDFAR4Fd89ffgZ8xiLlOC+rx/1rMfGj+p3zQ9Bb2sQq5fpcTg2juOVfUXUXpG86hiHEoGK/qlXVGEVCZivvGu6LxYFeX1x/jyCjoCgFG930svg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777987512; c=relaxed/simple;
-	bh=jjZLXZ3VotsREl0DsXpKQ2oakkN57MTZvYPzwH0Ls2k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=c7qpkgOQCAAEM9wp7eW45aQrUGcXg7TR0cFf/aMbQCvr3BzNsyvtzFzKRstBuEMbFVKx7e74rziMr2aJgA0hA76MHZiBl0EsPKlOxyRoqjwVY9lcZ7QhQ8hX45WOInfaqRIgknMGOC8hUlpUJKOngcel/3oi4M0XWFQ3IyaIKoQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=F/rQKfw4; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=RSbAZWNK; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="F/rQKfw4";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="RSbAZWNK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1777987510;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=NP4rX7b9FZY0fbLuEXjv0M/HU/D303qx0QGgZMGR6PY=;
-	b=F/rQKfw44ND0UxQx4zU36JjWTX2WGK54KXd4A4bqIp5FoffPtt3lW0Eaq25SnZCCTEBb7N
-	7a++H+y3H30vR+/cjFPmXQ87O/L4HnRM/kZvERp8pM1s+cFeeY2Xs1YouNz8WXcL7fvjqE
-	TrGxeY3UaSvyY+isg+TxUhTlfmHfSw0=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-365-ybxufkdxM820RUwoj5EsgA-1; Tue, 05 May 2026 09:25:09 -0400
-X-MC-Unique: ybxufkdxM820RUwoj5EsgA-1
-X-Mimecast-MFC-AGG-ID: ybxufkdxM820RUwoj5EsgA_1777987508
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-488d8deb75fso44644605e9.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 05 May 2026 06:25:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1777987508; x=1778592308; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NP4rX7b9FZY0fbLuEXjv0M/HU/D303qx0QGgZMGR6PY=;
-        b=RSbAZWNKOBtk1YZfL2WtNVTZ5LEzuj/UPWoewmvx11gZ+L+IvudxwavgNIgnsFPgf4
-         lLFoJeDtBic3Qy81NlU3/mVEEYrsM+RfcPF1tUUWgW0HdMyVspLdQWGDpPu0/CtJFHr3
-         h7V0jgDr8uhOxwKrgxatkId2EKz5eMmshuH1NDFcZD+p63i1gLydhdbzjQtVlKkpc5dS
-         RO2aShSCW/ANHQtIecEmGo2NFFCRI0S7WaT/1jhGQNFEfDO6OopMrzvl7a+52tQY+iyO
-         cqzaz09TbTcAzvFkIgoEayXeBMZCBj4GW3Nt87sF0cS+6Xi9trzBOsjDd7abXp5OpERa
-         bp5g==
+	s=arc-20240116; t=1777987712; c=relaxed/simple;
+	bh=x5TgU5SBySfoeXKBw0QL6h3y9dq2clju9sczVk0IMPQ=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=qPtWsVYS99WJ0aopm4Qp6K70Eb3UZ22apUuJyCUxoxreLA9JttOmJzVs4JbElQob4X52+MzoTc4QVefbmn9DmKTm6bHRNu0g6OnasNXWjHyqa1ktcfmdDb2vUuEULsG0fTct5Tw2mqcSbCISzMK1QR2o57B2mdXehtc5FB35lkc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f66.google.com with SMTP id a640c23a62f3a-bc1f3a393c0so296751666b.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 05 May 2026 06:28:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777987508; x=1778592308;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NP4rX7b9FZY0fbLuEXjv0M/HU/D303qx0QGgZMGR6PY=;
-        b=ZSauxgpaCCqqkkzE116uXK/EtlnywcXDsf362gF7ywf2emsUsw5CINbjAcQ7dhQwg3
-         rs0cLryEgSL5TEESR4P3iiOUDAFqIJONrFklzFlmi6uLMvNSr0/HVy2xQVDkLfPQjcwo
-         XrO2LcMC34G+8sQJbTvkVvB0jk/tqd9ofqp5Q/iFNxQZIoN1ipClIHbxaIO+mllj4tjU
-         auAYWrhC9QSDXdy42LGqHC84KSXznrrzgLCaGTKIpwkzcDHaFkqg/xolQA7aZpSY9ObU
-         33E7LDr351FqxnT9lcxwmX+xbjniTHksNX7OuxgpEhFJC5W5PKR+EFv8q5Ku5OcEefGP
-         GkEw==
-X-Forwarded-Encrypted: i=1; AFNElJ9SOEfoc7Cat8jC1CcHE1aSyOYftxmpL1NkSykVXXXxzqhJtC+wj2HvKUkCpLhvBsgt/zA2wrqVsWFdtxt6qhM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyldRaLOIqpaOs3LAAvTDjT66RbwI6bDuhzfDl59H4bL3/5T5La
-	UhrTIMkKJYKY1bhqteiXAB01bioq2Xi/HnsQSKz9cfVekJSSWTVUIolpxwbsZJ7d+UC/3Omjkbz
-	WVZ3h1iVQTvjAJ1WI87m2VTu6CGxMh7kejU4nNnHv0Y9qRYTiVzSWI4kRJ5LQG1ilPM4blQ==
-X-Gm-Gg: AeBDiesS3UwjIS3X1RBThJY/45DmgyKLvSRfT9N4XA+w09wOfY7/FPEqnxRSrxUPcb/
-	OFSYiOI2VHnYuB3cvIrVSvK5hj0c2XPngZ4DRoU8t1EC6cw21hUzMbAnAw+HpO/fz9DZGirBDKR
-	CN6zi90CFTinYvAWSBbbEhpkooML7KtpN990VW08sDR6wqUZw/fJKUTTBk9yz/yOvAaNdmYK494
-	rTdJxJHZUdHFfARTo4Lli9Ta2mLVN4LPFhbx8YgKiPMGOiaCE1BivKSK+f2r3IfT9b4UjXvulE6
-	/TTRxd3YqDvzMY8L2HPKlQ+3mbxcH+ijtQDB+P9AdwIgZzEGA2Sv8ZsLAbkcdvyYnb6F1jgpoX6
-	CreqfsrYku1tMSkHAdWQYPY1Y3WdJ1wE/WcjRMdN1OegxGGb6rd6+tFLfwtmhpqs+DrI=
-X-Received: by 2002:a05:600c:4f47:b0:488:b8bc:6a32 with SMTP id 5b1f17b1804b1-48a988be27dmr259135665e9.23.1777987507830;
-        Tue, 05 May 2026 06:25:07 -0700 (PDT)
-X-Received: by 2002:a05:600c:4f47:b0:488:b8bc:6a32 with SMTP id 5b1f17b1804b1-48a988be27dmr259134965e9.23.1777987507268;
-        Tue, 05 May 2026 06:25:07 -0700 (PDT)
-Received: from [192.168.88.32] ([212.105.155.47])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48a82308d77sm464849375e9.14.2026.05.05.06.25.05
+        d=1e100.net; s=20251104; t=1777987710; x=1778592510;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:to:subject:cc:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DCXgMseI2sOZrSwXLdW2jyT6y6fLj2BxLcRv5Mj/3pc=;
+        b=YrcRLEFTxUyBGBvM6Fn/IDr4kb3TbAbwA2yHuN4XFW7MHov3MvE4Kka3bt+XEcSG5J
+         TGWBObfWi9guXDryDd3y7tzwZIlUFTNLgly1NJBwhmuQpGIXTQMKrujKFTx37FmKsKAr
+         0YhDqmWk2pJ6R+CIe5qgA6PrEaTGoSrRPyOh763J+25Onwz07x9CxG/RIorGbpr83Kpk
+         1dDrSX2B/KNKLc0UNmjqklv1wGU8VXDPgYqNw3MrtolW3slGP9XXYKmXsuZgsbB1uNuw
+         9DajKcYfXC/WWB51M4v93QXXMWP4swDKNH8HmXRcJNQtIuCM2z1y76kkXex/z9CtfNV6
+         We8Q==
+X-Forwarded-Encrypted: i=1; AFNElJ9Zfi4KWtTYRMSWL1iTO5R8pFt52pPFJkjFl893EHdR9kkYwX4yy5zZkKuaZ0oPjvVRBNq88QMcFYYlFvx2XyU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxN/zi4SJFanc36M6TqVbDp9/WmuOQxMhpIL4A6x5j5TVERzv08
+	BV4D8JpJrRN4gsi6q2GLeQjpGDw8ZClOC3r2G4ONcK8+AUceCuowVm1C
+X-Gm-Gg: AeBDievG/S39dU9yqUQB9jV7ZHWLfUfSWD/9RgLPqQwcUQgqzsh2V3aBxh8N+f3pvUE
+	LvAiUq13JDJCi8INeGTaQvd1Nemk4nk0Fp0MJEZfbmJhslk8wS6RP7qTu2G9az+og8whuuoHxez
+	QYSVHGcdVs7gwmUjPQ+O5p4QYwbAfwR65tIycu3o4djJW+KVOOjq6OueG8Ba2UVyqEqcKUPUQnW
+	cEWgSKVZOvwtShi3wfntpLNmEZ2YnpQovmwLarBJQkQq87sbKwl9kYYyv5GxcKf7tKdm7iruRmx
+	WvMJ/UCAT2EhFQ0zC1QkTlIBtuPDRxNegAdIfmfn4ntLlCHCishnIw40glXuJFBjI7FH2ZK0ML1
+	Hj/OOOu4VsfNWFQ/BDCBeMNBT2Ohj7C+upGCgJpaJ2mMM9xAv9MINNeVR6JRKxsvO7kiIP2BVvg
+	y5aMh+rNATFGtbUJH5MPHIbSYNSGgXbE9q5qopdCEKyjbirId89jIMIMt+ihAqwHtAFw==
+X-Received: by 2002:a17:906:eec1:b0:ba8:28de:697 with SMTP id a640c23a62f3a-bbff8ed484fmr782134566b.9.1777987709601;
+        Tue, 05 May 2026 06:28:29 -0700 (PDT)
+Received: from [192.168.88.241] (37-48-40-237.nat.epc.tmcz.cz. [37.48.40.237])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-bc17f1eea7asm263903966b.58.2026.05.05.06.28.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 May 2026 06:25:06 -0700 (PDT)
-Message-ID: <0f5da49c-7ed6-4547-9f89-bb3c3d62c3c3@redhat.com>
-Date: Tue, 5 May 2026 15:25:05 +0200
+        Tue, 05 May 2026 06:28:29 -0700 (PDT)
+Message-ID: <aa08ff00-ba0d-4f1f-a85d-8afc2c6fd11f@ovn.org>
+Date: Tue, 5 May 2026 15:28:27 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -87,67 +54,112 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net v2 2/2] selftests: openvswitch: add tests for tunnel
- vport refcounting
-To: Ilya Maximets <i.maximets@ovn.org>, netdev@vger.kernel.org
-Cc: Aaron Conole <aconole@redhat.com>, Eelco Chaudron <echaudro@redhat.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+Cc: i.maximets@ovn.org, Aaron Conole <aconole@redhat.com>,
+ Eelco Chaudron <echaudro@redhat.com>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
  Jakub Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>,
  Shuah Khan <shuah@kernel.org>, Yuan Tan <tanyuan98@outlook.com>,
  Yang Yang <n05ec@lzu.edu.cn>, dev@openvswitch.org,
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net v2 2/2] selftests: openvswitch: add tests for tunnel
+ vport refcounting
+To: Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
 References: <20260430233848.440994-1-i.maximets@ovn.org>
  <20260430233848.440994-3-i.maximets@ovn.org>
+ <0f5da49c-7ed6-4547-9f89-bb3c3d62c3c3@redhat.com>
 Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <20260430233848.440994-3-i.maximets@ovn.org>
+From: Ilya Maximets <i.maximets@ovn.org>
+Autocrypt: addr=i.maximets@ovn.org; keydata=
+ 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
+In-Reply-To: <0f5da49c-7ed6-4547-9f89-bb3c3d62c3c3@redhat.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 5/1/26 1:38 AM, Ilya Maximets wrote:
-> @@ -830,6 +831,42 @@ test_tunnel_metadata() {
->  	return 0
->  }
->  
-> +test_tunnel_refcount() {
-> +	sbxname="test_tunnel_refcount"
-> +	sbx_add "${sbxname}" || return 1
-> +
-> +	ovs_sbx "${sbxname}" ip netns add trefns || return 1
-> +	on_exit "ovs_sbx ${sbxname} ip netns del trefns"
-> +
-> +	for tun_type in gre vxlan geneve; do
-> +		info "testing ${tun_type} tunnel vport refcount"
-> +
-> +		ovs_sbx "${sbxname}" ip netns exec trefns \
-> +			python3 $ovs_base/ovs-dpctl.py \
-> +			add-dp dp-${tun_type} || return 1
-> +
-> +		ovs_sbx "${sbxname}" ip netns exec trefns \
-> +			python3 $ovs_base/ovs-dpctl.py \
-> +			add-if --no-lwt -t ${tun_type} \
-> +			dp-${tun_type} ovs-${tun_type}0 || return 1
-> +
-> +		ovs_wait ip -netns trefns link show \
-> +			ovs-${tun_type}0 >/dev/null 2>&1 || return 1
-> +
-> +		info "deleting dp - may hang if reference counting is broken"
-> +		ovs_sbx "${sbxname}" ip netns exec trefns \
-> +			python3 $ovs_base/ovs-dpctl.py \
-> +			del-dp dp-${tun_type} &
-> +
-> +		dev_removed() {
-> +			! ip -netns trefns link show "$1" >/dev/null 2>&1
-> +		}
-> +		ovs_wait dev_removed dp-${tun_type} || return 1
-> +		ovs_wait dev_removed ovs-${tun_type}0 || return 1
+On 5/5/26 3:25 PM, Paolo Abeni wrote:
+> On 5/1/26 1:38 AM, Ilya Maximets wrote:
+>> @@ -830,6 +831,42 @@ test_tunnel_metadata() {
+>>  	return 0
+>>  }
+>>  
+>> +test_tunnel_refcount() {
+>> +	sbxname="test_tunnel_refcount"
+>> +	sbx_add "${sbxname}" || return 1
+>> +
+>> +	ovs_sbx "${sbxname}" ip netns add trefns || return 1
+>> +	on_exit "ovs_sbx ${sbxname} ip netns del trefns"
+>> +
+>> +	for tun_type in gre vxlan geneve; do
+>> +		info "testing ${tun_type} tunnel vport refcount"
+>> +
+>> +		ovs_sbx "${sbxname}" ip netns exec trefns \
+>> +			python3 $ovs_base/ovs-dpctl.py \
+>> +			add-dp dp-${tun_type} || return 1
+>> +
+>> +		ovs_sbx "${sbxname}" ip netns exec trefns \
+>> +			python3 $ovs_base/ovs-dpctl.py \
+>> +			add-if --no-lwt -t ${tun_type} \
+>> +			dp-${tun_type} ovs-${tun_type}0 || return 1
+>> +
+>> +		ovs_wait ip -netns trefns link show \
+>> +			ovs-${tun_type}0 >/dev/null 2>&1 || return 1
+>> +
+>> +		info "deleting dp - may hang if reference counting is broken"
+>> +		ovs_sbx "${sbxname}" ip netns exec trefns \
+>> +			python3 $ovs_base/ovs-dpctl.py \
+>> +			del-dp dp-${tun_type} &
+>> +
+>> +		dev_removed() {
+>> +			! ip -netns trefns link show "$1" >/dev/null 2>&1
+>> +		}
+>> +		ovs_wait dev_removed dp-${tun_type} || return 1
+>> +		ovs_wait dev_removed ovs-${tun_type}0 || return 1
+> 
+> FTR, here sashiko laments that if the reference counting is broken and
+> the del-dp process hangs, this could leave the background del-dp python
+> process running indefinitely.
+> 
+> I guess that if reference counting is broken inside the kernel, very
+> likely an host/VM reboot is needed, and the above does not matter.
 
-FTR, here sashiko laments that if the reference counting is broken and
-the del-dp process hangs, this could leave the background del-dp python
-process running indefinitely.
-
-I guess that if reference counting is broken inside the kernel, very
-likely an host/VM reboot is needed, and the above does not matter.
-
-/P
-
+Yes, I have a note about that in the cover letter.
