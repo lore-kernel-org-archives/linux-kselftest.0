@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81DFE175A87;
-	Tue,  5 May 2026 15:01:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 122DA481651;
+	Tue,  5 May 2026 15:01:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777993287; cv=none; b=kxZo0kiK5nTVks1wSV0OnmQ4bML71PR3zcb9A7bFGKQ8Y5dGLSpDtx10GsRQ8MDfFJ0iPIy9rSUytwrcBLokD3U+ZLyejpZdPMT/qhb2jE2d0sT4CjMQ3tMQtfWtMBUDgJtFdT8sWgebOyNKAx6q9wzhfNooye/oN8FSDQR4WX8=
+	t=1777993311; cv=none; b=CG37yzyaeUBgFv7HXlQBsOqj52Adhz+NzE3rRlBe90WEmBhiXGaBY7/eWXcXhL2WoG+EnYOaI2FahGTAvLiF8zx10jc170FU4njPaE5RQUe44gYfbgLRO7GggJYIMqQa5kK3iYVfzJt9tEIf6b6HNwI+Sl1GyCyMn12PlG/7y90=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777993287; c=relaxed/simple;
-	bh=RfIY+/4lIX0lJsO9zD2c8kAfjhuWI0FcPTJxp5L6K2c=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Br50WjpHGy5uNO9GKE++EeGYCXNISJTwmNpGq15nRePA0Hc41tGEkZTzY4yUL6kGVMmkZ9N+iwRkm9EEqJu21fztGLJNbYDk+BTPIUQR7qD7Tb2EWh31vmbSrrUmlz3CAGwlAs+gMzOPCFUl+H/DjySKpw4Z3t8pzoQX7XFDI+w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DK2k94Zd; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1777993311; c=relaxed/simple;
+	bh=psg6PuHKEap4S5ZDHfd73t2Q2RVWzttWnMP4s8gpVik=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=aLz7la3r6NSD1rYMMxih1Mp8JyYATXERDiraWVFhBs4z7NjQ+ls5JycLL92b6+boRRMkMJtcjYt9cqDiOm6ZU3IzO137kyS9xWuP7EZYV9dP2vNqUVUQ5Q7uLxLiujzEIZMuoRECItIvXNi7kdZVRBUadDAVZ14w+gZThCc6tJk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pOr0LpLF; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DK2k94Zd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A13F4C2BCC7;
-	Tue,  5 May 2026 15:01:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pOr0LpLF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A407DC2BCF4;
+	Tue,  5 May 2026 15:01:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777993287;
-	bh=RfIY+/4lIX0lJsO9zD2c8kAfjhuWI0FcPTJxp5L6K2c=;
-	h=From:Subject:Date:To:Cc:From;
-	b=DK2k94Zdh8M4TXW65NOS8s4UF/jQ3lKoUwgV+0371pKtdcTZlWDS36CQt2f8g04y2
-	 ngv4ztlii5cfRu1vHcKycRsAaTXjEQy0qUAmNtGjlsRMQmV3tE9n4XEgYoojmWuiAB
-	 3qnd42mwqFL0W8tzMTUOmYnHe1VHQ2QnR4AvsuY6BvWFQuV3zq7oYnNCX+Uzx+/VH+
-	 ucaYyjK7vexqcdUIBqBbxm4sqtSNuMfQO9pFZ4kWCB5lufWqGvNVpgJrYDObwaSrpc
-	 8OiC5xhtQwo6E8Xh/xOPDQ0VmCAYR3ucMq3pacO2Y7MdQlquk9yrOTmglrpLsIBNv/
-	 mYMCunvr4qT5Q==
+	s=k20201202; t=1777993310;
+	bh=psg6PuHKEap4S5ZDHfd73t2Q2RVWzttWnMP4s8gpVik=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=pOr0LpLFWRp7B7jlv7b1c4BjY7iAqXGau7GSz+dIb1gYQU9dMMGJbAv0efAR8NYP8
+	 OLrDyz1ztDjFXTxYhv1I3FYeAslT8oa3eyAHLoBUS5mZ++JlpDPJCAwyNosbarTUWy
+	 FX5W8j/oMBgatPn2uy7PZocb/I8ywGfjWYT7YanThgYU2WY/3eTYdcS6xppA9EqfEw
+	 e3YrHNza7OWwDfLh+66EZnKv9nsQBKKBOZb2n0e0t7QM3WY4IWJcIKiK/51R6GXgup
+	 VNFmj3S26gfaeb0LxbDpOAUQeU8e6bkqFtyL+MIpkpcRdkHa/FWS7xxSFUUzb+CzJj
+	 6XkF9fHTkg8vg==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Subject: [PATCH net 00/11] mptcp: pm: misc. fixes for v7.1-rc3
-Date: Tue, 05 May 2026 17:00:48 +0200
-Message-Id: <20260505-net-mptcp-pm-fixes-7-1-rc3-v1-0-fca8091060a4@kernel.org>
+Date: Tue, 05 May 2026 17:00:58 +0200
+Subject: [PATCH net 10/11] selftests: mptcp: check output: catch cmd errors
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -37,10 +37,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yWM0QrCMBAEf6XcswdJW03xV8QHm656QmPIRSmU/
- runPs6yMyspikDp2KxU8BaVZzLwu4bi/ZJuYJmMqXXtwe1dzwmV51xj5jzzVRYoB/ZcYsfop8G
- HIXTOgSyQC34H809kHp3/o77GB2L9ZmnbPnXE0AaDAAAA
-X-Change-ID: 20260504-net-mptcp-pm-fixes-7-1-rc3-e4d81787300e
+Message-Id: <20260505-net-mptcp-pm-fixes-7-1-rc3-v1-10-fca8091060a4@kernel.org>
+References: <20260505-net-mptcp-pm-fixes-7-1-rc3-v1-0-fca8091060a4@kernel.org>
+In-Reply-To: <20260505-net-mptcp-pm-fixes-7-1-rc3-v1-0-fca8091060a4@kernel.org>
 To: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, 
  "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
  Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
@@ -50,67 +49,122 @@ Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev,
  stable@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
  linux-kselftest@vger.kernel.org
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2096; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=RfIY+/4lIX0lJsO9zD2c8kAfjhuWI0FcPTJxp5L6K2c=;
- b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDJ/sVmtTQ7qefTggk1ry2n+B4+9mLduuSC5qlii5OQao
- adSTa3CHaUsDGJcDLJiiizSbZH5M59X8ZZ4+VnAzGFlAhnCwMUpABNp+83wP3BXlmmV4DoePpOl
- 11gvPz0pouR/MMSye97puzWMFdqy/xgZdvM/CX6k37rR8+WPb8+0sxoi0/kKF4QWvT7a1vPMc9E
- iXgA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3950; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=psg6PuHKEap4S5ZDHfd73t2Q2RVWzttWnMP4s8gpVik=;
+ b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDJ/sTm3SQQ7hOc5ORaevPhnt6X8iT+WEfPNbLhv/NjMn
+ RDeYdLZUcrCIMbFICumyCLdFpk/83kVb4mXnwXMHFYmkCEMXJwCMJGNWgy/mO9ELDnm8PhFhMlv
+ w8AAhZfMi7h7xLuuFz8wnm7/N4olnuF/mtnx/ncxpqedOxeJul75I1sju2b6X6cEzZNK9s/W/Gf
+ hAQA=
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-Here are various fixes, mainly related to ADD_ADDRs:
+Using '${?}' inside the if-statement to check the returned value from
+the command that was evaluated as part of the if-statement is not
+correct: here, '${?}' will be linked to the previous instruction, not
+the one that is expected here (${cmd}).
 
-- Patch 1: save ADD_ADDR for rtx with ID0 when needed. A fix for v6.1.
+Instead, simply mark the error, except if an error is expected. If
+that's the case, 1 can be passed as the 4th argument of this helper.
+Three checks from pm_netlink.sh expect an error.
 
-- Patch 2: remove unneeded exception for ID 0. A fix for v5.10.
+While at it, improve the error message when the command unexpectedly
+fails or succeeds.
 
-- Patches 3-5: fix potential data-race and leaks during ADD_ADDR rtx. A
-  fix for v5.10.
+Note that we could expect a specific returned value, but the checks
+currently expecting an error can be used with 'ip mptcp' or 'pm_nl_ctl',
+and these two tools don't return the same error code.
 
-- Patch 6: resched blocked ADD_ADDR rtx after a more appropriated
-  timeout, not after 15 seconds. A fix for v5.10.
-
-- Patch 7: skip inactive subflows when when looking at the max RTO. A
-  fix for v6.18.
-
-- Patch 8: avoid iterating over all subflows when there is no need to. A
-  fix for v6.18.
-
-- Patch 9: skip closed subflows when looking at sending MP_PRIO. A fix
-  for v5.17.
-
-- Patch 10: properly catch errors when using check_output() in the
-  selftests. A fix for v6.9.
-
-- Patch 11: skip the 'unknown' flag test when 'ip mptcp' is used. A fix
-  for v6.10.
-
+Fixes: 2d0c1d27ea4e ("selftests: mptcp: add mptcp_lib_check_output helper")
+Cc: stable@vger.kernel.org
+Reviewed-by: Mat Martineau <martineau@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
-Matthieu Baerts (NGI0) (11):
-      mptcp: pm: kernel: correctly retransmit ADD_ADDR ID 0
-      mptcp: pm: ADD_ADDR rtx: allow ID 0
-      mptcp: pm: ADD_ADDR rtx: fix potential data-race
-      mptcp: pm: ADD_ADDR rtx: always decrease sk refcount
-      mptcp: pm: ADD_ADDR rtx: free sk if last
-      mptcp: pm: ADD_ADDR rtx: resched blocked ADD_ADDR quicker
-      mptcp: pm: ADD_ADDR rtx: skip inactive subflows
-      mptcp: pm: ADD_ADDR rtx: return early if no retrans
-      mptcp: pm: prio: skip closed subflows
-      selftests: mptcp: check output: catch cmd errors
-      selftests: mptcp: pm: restrict 'unknown' check to pm_nl_ctl
-
- net/mptcp/pm.c                                  | 62 +++++++++++++++++--------
- net/mptcp/pm_kernel.c                           | 13 ++++--
- tools/testing/selftests/net/mptcp/mptcp_lib.sh  | 16 ++++---
- tools/testing/selftests/net/mptcp/pm_netlink.sh | 20 +++++---
- 4 files changed, 73 insertions(+), 38 deletions(-)
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org
 ---
-base-commit: 07d99587396024932e02474c3a5bede71d108454
-change-id: 20260504-net-mptcp-pm-fixes-7-1-rc3-e4d81787300e
+ tools/testing/selftests/net/mptcp/mptcp_lib.sh  | 16 ++++++++++------
+ tools/testing/selftests/net/mptcp/pm_netlink.sh | 10 ++++++----
+ 2 files changed, 16 insertions(+), 10 deletions(-)
 
-Best regards,
---  
-Matthieu Baerts (NGI0) <matttbe@kernel.org>
+diff --git a/tools/testing/selftests/net/mptcp/mptcp_lib.sh b/tools/testing/selftests/net/mptcp/mptcp_lib.sh
+index 5fea7e7df628..989a5975dcea 100644
+--- a/tools/testing/selftests/net/mptcp/mptcp_lib.sh
++++ b/tools/testing/selftests/net/mptcp/mptcp_lib.sh
+@@ -474,20 +474,24 @@ mptcp_lib_wait_local_port_listen() {
+ 	wait_local_port_listen "${@}" "tcp"
+ }
+ 
++# $1: error file, $2: cmd, $3: expected msg, [$4: expected error]
+ mptcp_lib_check_output() {
+ 	local err="${1}"
+ 	local cmd="${2}"
+ 	local expected="${3}"
++	local exp_error="${4:-0}"
+ 	local cmd_ret=0
+ 	local out
+ 
+-	if ! out=$(${cmd} 2>"${err}"); then
+-		cmd_ret=${?}
+-	fi
++	out=$(${cmd} 2>"${err}") || cmd_ret=1
+ 
+-	if [ ${cmd_ret} -ne 0 ]; then
+-		mptcp_lib_pr_fail "command execution '${cmd}' stderr"
+-		cat "${err}"
++	if [ "${cmd_ret}" != "${exp_error}" ]; then
++		mptcp_lib_pr_fail "unexpected returned code for '${cmd}', info:"
++		if [ "${exp_error}" = 0 ]; then
++			cat "${err}"
++		else
++			echo "${out}"
++		fi
+ 		return 2
+ 	elif [ "${out}" = "${expected}" ]; then
+ 		return 0
+diff --git a/tools/testing/selftests/net/mptcp/pm_netlink.sh b/tools/testing/selftests/net/mptcp/pm_netlink.sh
+index 123d9d7a0278..b69f30fcb91e 100755
+--- a/tools/testing/selftests/net/mptcp/pm_netlink.sh
++++ b/tools/testing/selftests/net/mptcp/pm_netlink.sh
+@@ -122,10 +122,12 @@ check()
+ 	local cmd="$1"
+ 	local expected="$2"
+ 	local msg="$3"
++	local exp_error="$4"
+ 	local rc=0
+ 
+ 	mptcp_lib_print_title "$msg"
+-	mptcp_lib_check_output "${err}" "${cmd}" "${expected}" || rc=${?}
++	mptcp_lib_check_output "${err}" "${cmd}" "${expected}" "${exp_error}" ||
++		rc=${?}
+ 	if [ ${rc} -eq 2 ]; then
+ 		mptcp_lib_result_fail "${msg} # error ${rc}"
+ 		ret=${KSFT_FAIL}
+@@ -158,13 +160,13 @@ check "show_endpoints" \
+ 			    "3,10.0.1.3,signal backup")" "dump addrs"
+ 
+ del_endpoint 2
+-check "get_endpoint 2" "" "simple del addr"
++check "get_endpoint 2" "" "simple del addr" 1
+ check "show_endpoints" \
+ 	"$(format_endpoints "1,10.0.1.1" \
+ 			    "3,10.0.1.3,signal backup")" "dump addrs after del"
+ 
+ add_endpoint 10.0.1.3 2>/dev/null
+-check "get_endpoint 4" "" "duplicate addr"
++check "get_endpoint 4" "" "duplicate addr" 1
+ 
+ add_endpoint 10.0.1.4 flags signal
+ check "get_endpoint 4" "$(format_endpoints "4,10.0.1.4,signal")" "id addr increment"
+@@ -173,7 +175,7 @@ for i in $(seq 5 9); do
+ 	add_endpoint "10.0.1.${i}" flags signal >/dev/null 2>&1
+ done
+ check "get_endpoint 9" "$(format_endpoints "9,10.0.1.9,signal")" "hard addr limit"
+-check "get_endpoint 10" "" "above hard addr limit"
++check "get_endpoint 10" "" "above hard addr limit" 1
+ 
+ del_endpoint 9
+ for i in $(seq 10 255); do
+
+-- 
+2.53.0
 
