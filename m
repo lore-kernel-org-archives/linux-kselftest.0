@@ -1,235 +1,352 @@
-Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A34FA48C41D
-	for <linux-kselftest@vger.kernel.org>; Tue,  5 May 2026 16:32:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.179
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777998736; cv=none; b=Una6oA253RKIMM4jV/bzzdItsZhoYwSqUcFWSCFFih+C6eI0chMgNZC7wBZmCPVEuzbBOxxrmM6P8dMDCpNBAXOspYkcffoNIeb9Gb3VVbi0Wfoqz9wTiBPxtZOB2UHZvUV4r1KN8ESqft6RKS1xko4DpWi6MpQDaZDOOjkFO3c=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777998736; c=relaxed/simple;
-	bh=GJGEWEuf1mltMI7Baya/uLbOVwDlPRX3aZa9klR0aM8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kSXR1Q8CTL6MCxoXx15buUmHAGpIJiHSj80AwZq0XQpIerqHbXzexjWTjPzjY+2I85nEutOwh1m7zvRVZvrto4HDH1R3ZGy5djVrvH9NKdc1m/Ussr5sFcZT12aBRsBp5SyV3T/Iy6DUGOn7FTCrKcGbJHuwin4LRCJDYe5+TIo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=R2q+MhYJ; arc=none smtp.client-ip=209.85.222.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5A01492182
+	for <linux-kselftest@vger.kernel.org>; Tue,  5 May 2026 17:42:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.175
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778002926; cv=pass; b=YgFUudrjHeajH5mgl3Hh1E1bZGzRM1HDd97DSyWbfk44xTyhW7q3KKHHFoec/KrxNjmJK7fyrBAjztGub9W4DYPBZGeWdP3dwRP4XC0bQH42JRXHKiQ8WL9k5yYUQzqM+0kAXy0C1cI97esRbQp1jatobwgRoa9XUe9Q25BkBQI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778002926; c=relaxed/simple;
+	bh=6j/IDrdL+PvT/1eb7cvJPKzLra2WDu8IW8sjkzp3LNo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=G5ZQbNEd5eLOVGGNybuVfIVNo6qwhr4EcGtkXNgQO/tZerpJ7lDpQJX1GwBvXeY8At++aa/+zC6/RZRbE7p0rXlBRLPm2hczwgT+JYDmxyMYYPoH4HBvFM9vSL5OSfMneRDyWNi5HFQAPsfo+hz2lEMahogI/1isPF+RvuuRCj4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=S/3uD/85; arc=pass smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="R2q+MhYJ"
-Received: by mail-qk1-f179.google.com with SMTP id af79cd13be357-8eab809593cso541462485a.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 05 May 2026 09:32:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="S/3uD/85"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2b2e8b95bdbso11525ad.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 05 May 2026 10:42:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778002924; cv=none;
+        d=google.com; s=arc-20240605;
+        b=JnwAof+azYbHC+mr29pD+HAWWT3o9PASSApFU9rugAagh6oJ3EzSp3ASpBVZAhMs9A
+         9cI5tZOhlYasOVOmjBZIDk+qLpGxJP0BDhcZSwb45KGCvVCIPVraZxN3rAQksUAkfK45
+         cAKbbJpVhnN/YkzXOtJdxIEQQRU6GSCUwBOlHLrQhRXz7TDQ6FBa+RFKmHAv1AMI/AtR
+         ZSfUfSgnN/immpDhzlX0Y8/ozfO53yFrE/QG4Wg3KIdVUME6fi5Oq9B2N/y13n+6IihU
+         qbSL5kHejdKlZHoVIDRLX8iY/lFW6nIpm5pdcUILhHtWeQJGhciRSiYceeSoPbAknATl
+         vfOA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=54klkLtO1z981HVzGmd4prOw9eXZMZmqAEmK52seTfw=;
+        fh=nnA2lC9srLp1dErGWgz3UibRfsHCgF8fNWVyvDf/I+o=;
+        b=VPlRk3Jh7HAkSTey0vDjCEkYYQFJY72n7l8ar2jN9aQF2a36CVPOEjFo+QhicPdrjK
+         7fzR8vTvYXf872oevoLcsCRjXEYZ2HuDcmwdY5+qcMWY2iiB2PmZ+U/lpGdvrNQb38Bc
+         Ucu9q0+Z34V83b+cIlXvdlLGLfffNS1dJavj+JdGHRfxoa976qlsalUDZ5/YGHzFDo+7
+         HppAF/4AIAZ+ISgS5VywlWU+ul0lYWg56bsk3CSBCIrkSeUzjIEnzMc498fZJpn5dnPe
+         2ZLC2gsGXH1bKnZuf9QrPjH4IJhZtUWHGaGDaglnmPmVkO+r1Tf1lewoDnTDpAC7wZfj
+         2hSQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1777998733; x=1778603533; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=q6yeaFiPlZGZf41NsmyX0In93MXNmdncNWDHYjC/idU=;
-        b=R2q+MhYJs/lM0AQ1CKX+MDTa6F8MLJn8ldkGPAvdokfVk5unUwwlYZtj0A3NysC6S6
-         sxPV9779E85Ym+zwhYEcIxojIdS8Q2hyjC1HmqiWY7V3sfXD2eDVdUsgZFSNyAlwVtke
-         TiYKgmL1iCZUPr0W42eNU8k+B3/K5kgPkiZyZBZRio6g+mm1Eae3UHMCAtO9a3cnDLuk
-         hiWnd/XDwgOs/Q3HHqYIb/oMJKRbWV3wedMzPONNyWIEcR7SmuJbH6hcwb0hIuyJhOvk
-         PjR84vBmPFZN0msWGf8gOMnyova/ATAznDlJKU29TTXlsah6d2nQB1m7wZnU54sCSANa
-         N/SA==
+        d=google.com; s=20251104; t=1778002924; x=1778607724; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=54klkLtO1z981HVzGmd4prOw9eXZMZmqAEmK52seTfw=;
+        b=S/3uD/85381H66y+E8HCR19b5oNB7jhq7sSh1aX61ydfYNC+kYTz+yYlySkXdZFXQc
+         Pvun9WRo/5OPe7mNVhzB0BFGt0Wt+woUvAfCjELIaPW3Vm8drQCqjQbXv91XyaswMMlD
+         MNT6fje3WvY6y6YogWhaRQsYLV7znflRcbe/llFYep/V82BYnNUiKbk62Ey4BdKhYSCf
+         yOYLMvz2MsKdHvKyvLONEsMws4UwqC/8/eAJzBLJIAsz+orJ8g196flnyELZ2l+zRzq4
+         upTEcMUbd2gpo+01y7+4giCwRpbakIXsivd+YQYSbT3y+vuSL6VlJrHj0OIDdQLni6jm
+         bikg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777998733; x=1778603533;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=q6yeaFiPlZGZf41NsmyX0In93MXNmdncNWDHYjC/idU=;
-        b=giXAM48PDg768fSpzsDOqgg2wJ0DXfXea4vqZn3wmCrZ740EhR0+RCPPiYs3uv+xTe
-         Nd1yi6mnOqKHgg+HztrfiI6DCHeqhv4acL+fFkexKi/+xJBoCei2aRKWB65X4C4Rf0kh
-         SnEo95Lk35wXECcO68aLDincAaRKcaeEqHIgzdyywCiSbiTP03rboqvhN+1iowLSoR/b
-         QTTgasQx223/Z84xDDydWHhX5Etfl0Avc77p1bb+YiUmDqnp+MzNLnpbjtMZQoLee9F4
-         bcuokIuFPfd21TZETHLfJ9IIZdq6UA4S5YPxgBvkkgjKtdnPKlP34w9e4PvOUOKYfFii
-         D9QA==
-X-Forwarded-Encrypted: i=1; AFNElJ9OFfMG5tdOVmZyWhvjkoGa4MskD3H08ITlkt7c6wvrrWKedeyi/g72rh372sXcGyIkrltJ+x3gRTRztk4Mmo0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwzUo2QXq/wUWt58chfdKCH4cL66bemtORYkFzpcw2lfBuAJGmK
-	friXvf718b+C7aDeko/rNyxD0rweA3bNk8RxtYV2mLpa8F+nTUZm50KSdWjEq8maiBE=
-X-Gm-Gg: AeBDieu3AT6olxKODqFMpKvEoSy4WLaGy4ZSgKi/uU1+1vHvV7A8BdxEdKEn1yQ/lJo
-	/BbqB4gQzMLOqVD43Ekv4CncBvMzMIRyumK4HUMspHvldM32I79E1QJlnKzR7i5ANVPXOKclg3e
-	aBI91tuxs8YcygrNXv9kHizO9vQRqmojLWHFdlJVI8E0O0brOsJ1MSdJrNhpOX6hwFxFCqiixez
-	AE/TpsKxYYAk48i/8MuJEoheB2bcgiTIPzG9wHmqN3eWU7q0Su0zJdO8+vGnZn2udbqUBsNfXGD
-	TWB5j2FsB/fFu3IRA2j7dqnTUyuxMCWedWI6/ijAcaRHGHEvDKwQifXc9TCzrvMwAklvxcFYbGb
-	peOvwz1GlKtsVco0Z95TjKIk7ePxe1J9s8ah7u/ik5LHXLk+doVmO+xmGb/CbJScuC9CwUszyS6
-	7MzpR7HnBke9Oln+rwfGBIY6szu1M2cLd+YICfwkOFoVA4zp3yeltABJ9cDj3yzQ==
-X-Received: by 2002:a05:622a:424a:b0:50f:b137:3099 with SMTP id d75a77b69052e-5104bf42473mr215787061cf.33.1777998733271;
-        Tue, 05 May 2026 09:32:13 -0700 (PDT)
-Received: from plex ([71.181.43.54])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-51040b8174csm145009111cf.25.2026.05.05.09.32.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 May 2026 09:32:12 -0700 (PDT)
-Date: Tue, 5 May 2026 16:32:11 +0000
-From: Pasha Tatashin <pasha.tatashin@soleen.com>
-To: Pratyush Yadav <pratyush@kernel.org>
-Cc: Pasha Tatashin <pasha.tatashin@soleen.com>, 
-	Mike Rapoport <rppt@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, Usama Arif <usama.arif@linux.dev>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v3 0/6] selftests/liveupdate: add memfd tests
-Message-ID: <afoatCn99vvnr-cH@plex>
-References: <20260404102452.4091740-1-pratyush@kernel.org>
- <afEKfQ0GUNVJ76a1@plex>
- <2vxzecjx52eu.fsf@kernel.org>
- <afT5FDAXmcIfz-wI@plex>
+        d=1e100.net; s=20251104; t=1778002924; x=1778607724;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=54klkLtO1z981HVzGmd4prOw9eXZMZmqAEmK52seTfw=;
+        b=bHPfwWvvDBvIo2YZN/AEhbCVQQIOl9Ct24GhCxWFIlHD3IfoT1qAbCFIHNsg+TDrQC
+         MadHqpdYiXv1aXFLJVtObUnxKVhUW7q/OWa1NMtt1v8WByNPZKJFSEWRckHH9Q4nz5Nd
+         uIh52aF8XSJBR9Y7KV0clCvgrHrsOGSVl8/XlMZ8I+wNbHcT0urzBsQoPSXP7klkG7ab
+         3WPCkJxaM3mRKGKZUVwiTXOVnocxHxtkRHc9HdVlSKcjlMqkfGNKY9J7bnUF+Lh5tzzc
+         ghu9GDV9YsLC0gEMt/bbV9xy8sRD8TSuFck+GdRP6IirXx+5UjhPE1R22NzGsUFhUlYU
+         alDg==
+X-Forwarded-Encrypted: i=1; AFNElJ8vS2q1pQ+HE2p75jvK76g79heOlr8hzBqMY3Mo7+Y/L81bSUtv5+rPOt7u5lLoOORCypPUiciH/INaCiFTIl4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw2LXccMdU1/p+rZ5bsY8n1N1mIaQGMttOJuvSOD01/ALaUD4jL
+	+OtyWH0PeFvbUBkXSmf1N7QTS47Ub+FNIM/XnvxUyUVpFEwNMcORfnwLdBdXAREkQZOQk/bxgF3
+	PC+zbn90bcFz/GJ/fEKt2Y2kl9m8mvI8irsD4zVr7
+X-Gm-Gg: AeBDieubPC8h4MJ2YmKCsRyqz6OAVEYpVaHocmBTcXCornuVZoUeP/pKdd9ONg1xii9
+	yaX3+EqygUNie+wCYUaO8KwAhV6/fgTO/5zBC5jnX+f5L7Os7ikJltHUmAulRur7SREqEc++0FG
+	QCXQgb7hlTSHyG7L3QHaP6JQ3B3Na8kD/vLln9bnSE0XQ5h0oX6d1ImqfmKvF6NniwwHInX1qGp
+	T/qnbuSwg3FtQZxIIUW1FT5Q8JQcvsw7E+Gj7nYvrXFsxpmZInjuxCZrsiqrFM6n8mhaE/gPlaX
+	Nj9A0M+tmpeYBUiCj3hPy/PYHo/2cbiWTDii4WN4XOZDRGeDLND6J3G9WNqnk/n4477IUs3aSPX
+	3KZEgD/XeEbBUtlxVO6RrP6IxrI8=
+X-Received: by 2002:a17:902:74c2:b0:294:ecba:c8e with SMTP id
+ d9443c01a7336-2ba780a1488mr111905ad.3.1778002923640; Tue, 05 May 2026
+ 10:42:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <afT5FDAXmcIfz-wI@plex>
+References: <20260504-tcp-dm-netkit-v2-0-56d52ac72fd4@meta.com> <20260504-tcp-dm-netkit-v2-1-56d52ac72fd4@meta.com>
+In-Reply-To: <20260504-tcp-dm-netkit-v2-1-56d52ac72fd4@meta.com>
+From: Harshitha Ramamurthy <hramamurthy@google.com>
+Date: Tue, 5 May 2026 10:41:52 -0700
+X-Gm-Features: AVHnY4JVYQoMkZPle2iQADTNvkeoWF6dMpqpqNjmlqRgreICUU5dyZus5I1HOgw
+Message-ID: <CAEAWyHcLSE8YJXrjRx+fxjGPY=vL=C4fC44MiFwdUyRiDx1a3w@mail.gmail.com>
+Subject: Re: [PATCH net-next v2 1/6] net: add netmem_tx modes that indicate
+ dma capability
+To: Bobby Eshleman <bobbyeshleman@gmail.com>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Alex Shi <alexs@kernel.org>, 
+	Yanteng Si <si.yanteng@linux.dev>, Dongliang Mu <dzm91@hust.edu.cn>, 
+	Michael Chan <michael.chan@broadcom.com>, Pavan Chebbi <pavan.chebbi@broadcom.com>, 
+	Joshua Washington <joshwash@google.com>, Saeed Mahameed <saeedm@nvidia.com>, 
+	Tariq Toukan <tariqt@nvidia.com>, Mark Bloch <mbloch@nvidia.com>, Leon Romanovsky <leon@kernel.org>, 
+	Alexander Duyck <alexanderduyck@fb.com>, kernel-team@meta.com, 
+	Daniel Borkmann <daniel@iogearbox.net>, Nikolay Aleksandrov <razor@blackwall.org>, 
+	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, Stanislav Fomichev <sdf@fomichev.me>, 
+	Mina Almasry <almasrymina@google.com>, Bobby Eshleman <bobbyeshleman@meta.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 05-01 19:08, Pasha Tatashin wrote:
-> On 04-29 15:20, Pratyush Yadav wrote:
-> > On Tue, Apr 28 2026, Pasha Tatashin wrote:
-> > 
-> > > On 04-04 10:24, Pratyush Yadav wrote:
-> > >> From: "Pratyush Yadav (Google)" <pratyush@kernel.org>
-> > >> 
-> > >> Hi,
-> > >> 
-> > >> This series adds some tests for memfd preservation across a live update.
-> > >> Currently memfd is only tested indirectly via luo_kexec_simple or
-> > >> luo_multi_session. Add a dedicated test suite for it.
-> > >> 
-> > >> Patches 1 and 2 are preparatory, adding base framework and helpers, and
-> > >> the other patches each add a test. Some of the code is taken from the
-> > >> libluo patches [0] I sent a while ago.
-> > >> 
-> > >> [0] https://lore.kernel.org/linux-mm/20250723144649.1696299-33-pasha.tatashin@soleen.com/
-> > >
-> > > Here are few observations that I noticed when I tried to run your tests:
-> > >
-> > > 1. The '-h' tells you nothing about --stage argument:
-> > >
-> > > root@liveupdate-vm:~/liveupdate# ./luo_memfd -h
-> > > Usage: ./luo_memfd [-h|-l|-d] [-t|-T|-v|-V|-f|-F|-r name]
-> > > 	-h       print help
-> > > 	-l       list all tests
-> > > 	-d       enable debug prints
-> > >
-> > > 	-t name  include test
-> > > 	-T name  exclude test
-> > > 	-v name  include variant
-> > > 	-V name  exclude variant
-> > > 	-f name  include fixture
-> > > 	-F name  exclude fixture
-> > > 	-r name  run specified test
-> > > 	...
-> > 
-> > Yeah, unfortunately that is a side effect of using test_harness_run(),
-> > which does not know anything about the options specific to our test.
-> > 
-> > >
-> > > 2. '-l' does not work after you run stage1, do you keep /dev/liveupdate 
-> > > open? That is not needed, we only need to keep session open.
-> > 
-> > Oh yeah, I keep forgetting that is no longer needed. The main process
-> > closes the FD but the forked daemons hold a reference. I can clean that
-> > up via a fixture.
-> > 
-> > >
-> > > root@liveupdate-vm:~/liveupdate# ./luo_memfd -l
-> > > 1..0 # SKIP Failed to open /dev/liveupdate (Device or resource busy) device. Is LUO enabled?
-> > >
-> > > 3. Stage 1 has proper [STAGE 1] prefix, but no [STAGE 2] prefix for 
-> > 
-> > Because stage 2 has no prints, all the prints are coming from the
-> > selftest harness. Those same lines are also not prefixed in stage 1. If
-> > you'd like, I can add a print beforehand that shows which stage is
-> 
-> Yes, please, add a least one [STAGE 2] print.
-> 
-> > running. Other than that, I don't see what else we can do. I don't want
-> > to modify the selftest harness.
-> > 
-> > > stage 2:
-> > > # Starting 4 tests from 1 test cases.
-> > > #  RUN           global.memfd_data ...
-> > > # [STAGE 1] Forking persistent child to hold sessions...
-> > > # [STAGE 1] Child PID: 245. Resources are pinned.
-> > > # [STAGE 1] You may now perform kexec reboot.
-> > > #            OK  global.memfd_data
-> > > ok 1 global.memfd_data
-> > > #  RUN           global.zero_memfd ...
-> > > # [STAGE 1] Forking persistent child to hold sessions...
-> > > # [STAGE 1] Child PID: 247. Resources are pinned.
-> > > # [STAGE 1] You may now perform kexec reboot.
-> > > #            OK  global.zero_memfd
-> > > ok 2 global.zero_memfd
-> > > #  RUN           global.preserved_ops ...
-> > > #            OK  global.preserved_ops
-> > > ok 3 global.preserved_ops
-> > > #  RUN           global.fallocate_memfd ...
-> > > # [STAGE 1] Forking persistent child to hold sessions...
-> > > # [STAGE 1] Child PID: 250. Resources are pinned.
-> > > # [STAGE 1] You may now perform kexec reboot.
-> > > #            OK  global.fallocate_memfd
-> > > ok 4 global.fallocate_memfd
-> > > # PASSED: 4 / 4 tests passed.
-> > > # Totals: pass:4 fail:0 xfail:0 xpass:0 skip:0 error:0
-> > >
-> > > ./do_kexec
-> > >
-> > > root@liveupdate-vm:~/liveupdate# ./luo_memfd
-> > > TAP version 13
-> > > 1..4
-> > > # Starting 4 tests from 1 test cases.
-> > > #  RUN           global.memfd_data ...
-> > > #            OK  global.memfd_data
-> > > ok 1 global.memfd_data
-> > > #  RUN           global.zero_memfd ...
-> > > #            OK  global.zero_memfd
-> > > ok 2 global.zero_memfd
-> > > #  RUN           global.preserved_ops ...
-> > > #      SKIP      test only expected to run on stage 1
-> > > #            OK  global.preserved_ops
-> > > ok 3 global.preserved_ops # SKIP test only expected to run on stage 1
-> > > #  RUN           global.fallocate_memfd ...
-> > > #            OK  global.fallocate_memfd
-> > > ok 4 global.fallocate_memfd
-> > > # PASSED: 4 / 4 tests passed.
-> > > # 1 skipped test(s) detected. Consider enabling relevant config options to improve coverage.
-> > > # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:1 error:0
-> > >
-> > > 4. I also do not like that we now have duplicated stage parsing code in  
-> > > luo_test(), perhaps we should add our own  test_harness_run() variant 
-> > > that depends on stage, and use it in both current tests, and the new 
-> > > memfd tests.
+On Mon, May 4, 2026 at 5:27=E2=80=AFPM Bobby Eshleman <bobbyeshleman@gmail.=
+com> wrote:
+>
+> From: Bobby Eshleman <bobbyeshleman@meta.com>
+>
+> Devices that support netmem TX previously set dev->netmem_tx =3D true.
+> This was checked in validate_xmit_unreadable_skb() to drop unreadable
+> skbs (skbs with dmabuf-backed frags) before they reach drivers that
+> would mishandle them or devices that would not have the iommu mappings
+> for them.
+>
+> Some virtual devices like netkit (or ifb) never DMA and never touch frag
+> contents, as they essentially just forward the skb to another device.
+> They are unable to forward unreadable skbs, however, because they fail
+> to pass TX validation checks on dev->netmem_tx. This single bit flag
+> doesn't give the TX validator enough information to differentiate
+> devices that will attempt DMA on the unreadable skb and those that will
+> simply route it untouched.
+>
+> This patch fixes this issue by adding an additional bit to netmem_tx, so
+> that drivers can indicate 1) if they have netmem support, and 2) if they
+> do, are they DMA-capable or not?
+>
+> Replace the boolean with a 2-bit enum:
+>
+> NETMEM_TX_NONE   - no netmem TX support (drop unreadable skbs)
+> NETMEM_TX_DMA    - full support, device does DMA
+> NETMEM_TX_NO_DMA - pass-through, device never DMAs
+>
+> Update drivers to reflect these definitions. NIC drivers use
+> NETMEM_TX_DMA, and netkit uses NETMEM_TX_NO_DMA.
+>
+> Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
+> ---
+> Changes in v2:
+> - Squash driver conversion patches (2-5) into patch 1 (Jakub)
+> ---
+>  Documentation/networking/net_cachelines/net_device.rst |  2 +-
+>  Documentation/networking/netmem.rst                    |  8 +++++++-
+>  Documentation/translations/zh_CN/networking/netmem.rst |  7 ++++++-
+>  drivers/net/ethernet/broadcom/bnxt/bnxt.c              |  2 +-
+>  drivers/net/ethernet/google/gve/gve_main.c             |  2 +-
+>  drivers/net/ethernet/mellanox/mlx5/core/en_main.c      |  2 +-
+>  drivers/net/ethernet/meta/fbnic/fbnic_netdev.c         |  2 +-
+>  drivers/net/netkit.c                                   |  1 +
+>  include/linux/netdevice.h                              | 11 +++++++++--
+>  9 files changed, 28 insertions(+), 9 deletions(-)
+>
+> diff --git a/Documentation/networking/net_cachelines/net_device.rst b/Doc=
+umentation/networking/net_cachelines/net_device.rst
+> index 1c19bb7705df..c85784259544 100644
+> --- a/Documentation/networking/net_cachelines/net_device.rst
+> +++ b/Documentation/networking/net_cachelines/net_device.rst
+> @@ -10,7 +10,7 @@ Type                                Name               =
+         fastpath_tx_acce
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>  unsigned_long:32                    priv_flags                  read_mos=
+tly                             __dev_queue_xmit(tx)
+>  unsigned_long:1                     lltx                        read_mos=
+tly                             HARD_TX_LOCK,HARD_TX_TRYLOCK,HARD_TX_UNLOCK=
+(tx)
+> -unsigned long:1                     netmem_tx:1;                read_mos=
+tly
+> +unsigned long:2                     netmem_tx:2;                read_mos=
+tly
+>  char                                name[16]
+>  struct netdev_name_node*            name_node
+>  struct dev_ifalias*                 ifalias
+> diff --git a/Documentation/networking/netmem.rst b/Documentation/networki=
+ng/netmem.rst
+> index b63aded46337..217869d1108d 100644
+> --- a/Documentation/networking/netmem.rst
+> +++ b/Documentation/networking/netmem.rst
+> @@ -95,4 +95,10 @@ Driver TX Requirements
+>     netdev@, or reach out to the maintainers and/or almasrymina@google.co=
+m for
+>     help adding the netmem API.
+>
+> -2. Driver should declare support by setting `netdev->netmem_tx =3D true`
+> +2. Driver should declare support by setting `netdev->netmem_tx` to the
+> +   appropriate mode:
+> +
+> +   - `NETMEM_TX_DMA`: for physical devices that perform DMA.
+> +
+> +   - `NETMEM_TX_NO_DMA`: for virtual or passthrough devices that do
+> +     not DMA, but still support handling of netmem-backed skbs.
+> diff --git a/Documentation/translations/zh_CN/networking/netmem.rst b/Doc=
+umentation/translations/zh_CN/networking/netmem.rst
+> index fe351a240f02..320f3eacf51b 100644
+> --- a/Documentation/translations/zh_CN/networking/netmem.rst
+> +++ b/Documentation/translations/zh_CN/networking/netmem.rst
+> @@ -89,4 +89,9 @@ dma-mapping API =E5=8E=BB=E5=A4=84=E7=90=86=E3=80=82
+>  =E4=BD=BF=E7=94=A8=E6=9F=90=E4=B8=AA=E8=BF=98=E4=B8=8D=E5=AD=98=E5=9C=A8=
+=E7=9A=84 netmem API=EF=BC=8C=E4=BD=A0=E5=8F=AF=E4=BB=A5=E8=87=AA=E8=A1=8C=
+=E6=B7=BB=E5=8A=A0=E5=B9=B6=E6=8F=90=E4=BA=A4=E5=88=B0 netdev@=EF=BC=8C=E4=
+=B9=9F=E5=8F=AF=E4=BB=A5=E8=81=94=E7=B3=BB=E7=BB=B4=E6=8A=A4
+>  =E4=BA=BA=E5=91=98=E6=88=96=E8=80=85=E5=8F=91=E9=80=81=E9=82=AE=E4=BB=B6=
+=E8=87=B3 almasrymina@google.com =E5=AF=BB=E6=B1=82=E5=B8=AE=E5=8A=A9=E3=80=
+=82
+>
+> -2. =E9=A9=B1=E5=8A=A8=E7=A8=8B=E5=BA=8F=E5=BA=94=E9=80=9A=E8=BF=87=E8=AE=
+=BE=E7=BD=AE netdev->netmem_tx =3D true =E6=9D=A5=E8=A1=A8=E6=98=8E=E8=87=
+=AA=E8=BA=AB=E6=94=AF=E6=8C=81 netmem =E5=8A=9F=E8=83=BD=E3=80=82
+> +2. =E9=A9=B1=E5=8A=A8=E7=A8=8B=E5=BA=8F=E5=BA=94=E5=B0=86 `netdev->netme=
+m_tx` =E8=AE=BE=E7=BD=AE=E4=B8=BA=E9=80=82=E5=BD=93=E7=9A=84=E6=A8=A1=E5=BC=
+=8F=EF=BC=9A
+> +
+> +   - `NETMEM_TX_DMA`=EF=BC=9A=E9=80=82=E7=94=A8=E4=BA=8E=E6=89=A7=E8=A1=
+=8C DMA =E7=9A=84=E7=89=A9=E7=90=86=E8=AE=BE=E5=A4=87=E3=80=82
+> +
+> +   - `NETMEM_TX_NO_DMA`=EF=BC=9A=E9=80=82=E7=94=A8=E4=BA=8E=E4=B8=8D=E6=
+=89=A7=E8=A1=8C DMA =E7=9A=84=E8=99=9A=E6=8B=9F=E6=88=96=E9=80=8F=E4=BC=A0=
+=E8=AE=BE=E5=A4=87=EF=BC=8C=E4=BD=86=E4=BB=8D=E6=94=AF=E6=8C=81
+> +     =E5=A4=84=E7=90=86 netmem =E6=94=AF=E6=8C=81=E7=9A=84 skb=E3=80=82
+> diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethe=
+rnet/broadcom/bnxt/bnxt.c
+> index 8c55874f44ca..ed9c22dc4a5a 100644
+> --- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+> +++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+> @@ -17120,7 +17120,7 @@ static int bnxt_init_one(struct pci_dev *pdev, co=
+nst struct pci_device_id *ent)
+>         dev->queue_mgmt_ops =3D &bnxt_queue_mgmt_ops_unsupp;
+>         if (BNXT_SUPPORTS_QUEUE_API(bp))
+>                 dev->queue_mgmt_ops =3D &bnxt_queue_mgmt_ops;
+> -       dev->netmem_tx =3D true;
+> +       dev->netmem_tx =3D NETMEM_TX_DMA;
+>
+>         rc =3D register_netdev(dev);
+>         if (rc)
+> diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/eth=
+ernet/google/gve/gve_main.c
+> index 424d973c97f2..dd2b8f087163 100644
+> --- a/drivers/net/ethernet/google/gve/gve_main.c
+> +++ b/drivers/net/ethernet/google/gve/gve_main.c
+> @@ -2894,7 +2894,7 @@ static int gve_probe(struct pci_dev *pdev, const st=
+ruct pci_device_id *ent)
+>                 goto abort_with_wq;
+>
+>         if (!gve_is_gqi(priv) && !gve_is_qpl(priv))
+> -               dev->netmem_tx =3D true;
+> +               dev->netmem_tx =3D NETMEM_TX_DMA;
 
-One more comment:
+Acked-by: Harshitha Ramamurthy <hramamurthy@google.com>
 
-root@liveupdate-vm:~/liveupdate# ./luo_memfd --stage 2
-Bail out! Stage mismatch: expected 2, got 1
-# Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
-
-Should be: excpected 1, got 2..
-
-
-> > 
-> > Sounds good in principle, but unfortunately ends up duplicating a lot of
-> > logic in test_harness_run() that is not a good idea IMO. We should work
-> > with the harness not fork off into our own.
-> > 
-> > I suppose we can refactor some of the logic there to split into
-> > functions that we can then use in our luo_test_harness_run(), but
-> > keeping the option parsing logic in sync is going to be difficult.
-> > 
-> > And for the duplicated logic, I agree. I thought about cleaning it up
-> > but was feeling lazy... Well now that you have called it out let me see
-> > what I can do.
-> 
-> The main point is that the luo_sessions and luo_memfds tests should use 
-> a common framework, whether that's luo_test_harness_run() or the generic 
-> test_harness_run(). I don't have a definitive answer for this, so I 
-> recommend tinkering with it to see what works best.
-> 
-> Pasha
-> 
-> > 
-> > [...]
-> > 
-> > -- 
-> > Regards,
-> > Pratyush Yadav
+>
+>         err =3D register_netdev(dev);
+>         if (err)
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/=
+net/ethernet/mellanox/mlx5/core/en_main.c
+> index 5a46870c4b74..fc49aae38807 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+> @@ -5924,7 +5924,7 @@ static void mlx5e_build_nic_netdev(struct net_devic=
+e *netdev)
+>
+>         netdev->priv_flags       |=3D IFF_UNICAST_FLT;
+>
+> -       netdev->netmem_tx =3D true;
+> +       netdev->netmem_tx =3D NETMEM_TX_DMA;
+>
+>         netif_set_tso_max_size(netdev, GSO_MAX_SIZE);
+>         mlx5e_set_xdp_feature(priv);
+> diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_netdev.c b/drivers/net=
+/ethernet/meta/fbnic/fbnic_netdev.c
+> index c406a3b56b37..138e522ef9b9 100644
+> --- a/drivers/net/ethernet/meta/fbnic/fbnic_netdev.c
+> +++ b/drivers/net/ethernet/meta/fbnic/fbnic_netdev.c
+> @@ -752,7 +752,7 @@ struct net_device *fbnic_netdev_alloc(struct fbnic_de=
+v *fbd)
+>         netdev->netdev_ops =3D &fbnic_netdev_ops;
+>         netdev->stat_ops =3D &fbnic_stat_ops;
+>         netdev->queue_mgmt_ops =3D &fbnic_queue_mgmt_ops;
+> -       netdev->netmem_tx =3D true;
+> +       netdev->netmem_tx =3D NETMEM_TX_DMA;
+>
+>         fbnic_set_ethtool_ops(netdev);
+>
+> diff --git a/drivers/net/netkit.c b/drivers/net/netkit.c
+> index 5e2eecc3165d..0ad6a806d7d5 100644
+> --- a/drivers/net/netkit.c
+> +++ b/drivers/net/netkit.c
+> @@ -466,6 +466,7 @@ static void netkit_setup(struct net_device *dev)
+>         dev->priv_flags |=3D IFF_NO_QUEUE;
+>         dev->priv_flags |=3D IFF_DISABLE_NETPOLL;
+>         dev->lltx =3D true;
+> +       dev->netmem_tx =3D NETMEM_TX_NO_DMA;
+>
+>         dev->netdev_ops     =3D &netkit_netdev_ops;
+>         dev->ethtool_ops    =3D &netkit_ethtool_ops;
+> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+> index 0e1e581efc5a..11d68e75eb4f 100644
+> --- a/include/linux/netdevice.h
+> +++ b/include/linux/netdevice.h
+> @@ -1788,6 +1788,12 @@ enum netdev_stat_type {
+>         NETDEV_PCPU_STAT_DSTATS, /* struct pcpu_dstats */
+>  };
+>
+> +enum netmem_tx_mode {
+> +       NETMEM_TX_NONE,         /* no netmem TX support */
+> +       NETMEM_TX_DMA,          /* DMA-capable netmem TX (real HW) */
+> +       NETMEM_TX_NO_DMA,       /* no DMA, e.g. passthrough for virtual d=
+evs */
+> +};
+> +
+>  enum netdev_reg_state {
+>         NETREG_UNINITIALIZED =3D 0,
+>         NETREG_REGISTERED,      /* completed register_netdevice */
+> @@ -1809,7 +1815,8 @@ enum netdev_reg_state {
+>   *     @lltx:          device supports lockless Tx. Deprecated for real =
+HW
+>   *                     drivers. Mainly used by logical interfaces, such =
+as
+>   *                     bonding and tunnels
+> - *     @netmem_tx:     device support netmem_tx.
+> + *     @netmem_tx:     device netmem TX mode (NETMEM_TX_NONE, NETMEM_TX_=
+DMA,
+> + *                     or NETMEM_TX_NO_DMA).
+>   *
+>   *     @name:  This is the first field of the "visible" part of this str=
+ucture
+>   *             (i.e. as seen by users in the "Space.c" file).  It is the=
+ name
+> @@ -2132,7 +2139,7 @@ struct net_device {
+>         struct_group(priv_flags_fast,
+>                 unsigned long           priv_flags:32;
+>                 unsigned long           lltx:1;
+> -               unsigned long           netmem_tx:1;
+> +               unsigned long           netmem_tx:2;
+>         );
+>         const struct net_device_ops *netdev_ops;
+>         const struct header_ops *header_ops;
+>
+> --
+> 2.52.0
+>
