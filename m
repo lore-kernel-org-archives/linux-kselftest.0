@@ -1,103 +1,73 @@
-Received: from mail-vs1-f100.google.com (mail-vs1-f100.google.com [209.85.217.100])
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB24D4A3414
-	for <linux-kselftest@vger.kernel.org>; Tue,  5 May 2026 18:23:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D52641DED5C
+	for <linux-kselftest@vger.kernel.org>; Tue,  5 May 2026 18:23:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778005385; cv=none; b=DrIJlj5xmaB/Ty00c2Us6GHLIWua+yBYWrnwA73cE45IujM7I9wHrFsmOPiwlbrqm7SRyduNRynV0xrrFdlV21EuPRTmHFH4BjA+E69HHQJiNObWJIGo/d/CpvGQptzkiuNObaiCeBPKHme4wCHeg2qzxYZC2l8ODOnxgz++yOY=
+	t=1778005405; cv=none; b=XbP/U9PxEIH4mIObyb5AErwZ6zFsmHZCDAOK1yvU+PNVWq7dbnSd/wiIw1g9jB2XV/lxX+TAnjLYhcK6jvlR1QEUsIViDtjSqVBXIz19T9uIAY/py9AWCH5Av+4aQ+xp6OKDDl4CyKi0B/U4XfyHeY2uXqnlfyyyQr+CnPW6fE0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778005385; c=relaxed/simple;
-	bh=GgkkRdICe7DfLGShMiCKE1jBH4nLY83u4kIozlYXyIY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ByJ30zyweugXJ7XcuL9WtiGR0FszsawDNutSACI+i/YYzmzBcEkmK3EughHJPJVJrpsNqDMH31R6pL0cPXsgtDO8WyvuuPK2bkza8Hf6/7oU4vYLcH5yynzcSwBZCqS9SR6g1pSMyvewB27l/HGmpFz+fG1LWcmLtOksJtyI25Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=fOTiD8/g; arc=none smtp.client-ip=209.85.217.100
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+	s=arc-20240116; t=1778005405; c=relaxed/simple;
+	bh=3idjY7q8VZaKR5zK5Erme2evT7lSxrnzywEyJMy9X2Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=X5hf3IEg5iKWBrXopBRUDDVTHT0PynxWi59Yhv0Gr2Ekldpanx8MZCuNIUa1YFswxmG7dEcdn0A7XRPfarpSPIZjfAeOd7xUYpmWlmRv8I30RTUx8S9nDxJxSAtxEQULxYfcLmY90my42TYbeBILrCsS8+WXJ9WGZEwsa9A/6II=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EDtHU8cP; arc=none smtp.client-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="fOTiD8/g"
-Received: by mail-vs1-f100.google.com with SMTP id ada2fe7eead31-630f4c42abcso20908137.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 05 May 2026 11:23:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778005383; x=1778610183;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:dkim-signature:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0TctQ/QPTybZnX6Hj/EaRyQr5V49De/CNOWCLe2wy8Y=;
-        b=XyXmZ4bfNX81JKI+3kRg5gkhMZcM3JO+fpf2bhdXTMQtGTTMgl8IgG1vp9lpvdJCJs
-         G0rcQLYmp38vEERYetAAjwZQioBpQU2EgMwKCC5rs8KI1+ZRQO+xMDff1Ob5OzVyw+iw
-         AT+86TOTd7nSSVpG/nw7J0sxfU2p68+mzSAmuugJZG+JWa3Vsn1OjNF6nG8CQf8Ake4H
-         HRpkE4BZUur8GmJIWyu/0OWLp03IQJalgeup9c2dXE7TxM3bZiuMTxbePF16E48Gk1S6
-         I96eLmF5O7Zs5wiaX8as5quBJZL75vfTn84b00VmGADTJqnL5iUSJvvndASHYaiFfG7V
-         TGZw==
-X-Forwarded-Encrypted: i=1; AFNElJ9BMRMkkaLr1aYHz7tA/jcus7V5ioXjTKKs3g7gVaz6Ae2LIexXYJ0Dq//ONzkQzqWdCAXfFeRzbBv6dzTZV+w=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwLXFEzVT07eCS1S4EP4ob6yqqrP2i0jpENnYDl9P+dOi8RQPXb
-	NRuROEi2xSUEL7uLDjaUrPEtjPU7tA82zF+2rAYlHPktGBrcj0PeYk3lL032Q1DGpMp5tL2Vis1
-	a6Yfoto5An0IRq1ZuOHQstsmZvdl3QHYoYonnxI8rLBLjL/TE9zZuzOZPdipk1NlcDCLN29NqzS
-	rqNLl61WmQjql4bTI9sDTyKr5WLYxf2WbECyo75xwUALtTNCggTqXMNsfg42HWGJjWXOY0KVgtA
-	drjjdxa6zMroHC1DeiPIq27cxM=
-X-Gm-Gg: AeBDiev2Am9hFhcJiovfCI/uxmUzbjYMNbUZlRL1qLcorfZzDRBRq97+/El/2E3SQw5
-	93oycCg3imjUZ1FJxvO+I/+JOc2EZ+xAJP4f20zLQClsra62MC0XTJOXL6wfn3ZmJGStWnXsMmy
-	94NmvPSwxUDM3XDOyelQbi7HSoGsP8mvhkxPrQiHkqCQXX9+KzlPVXNZIGDjmS8y3SzJDshvBK8
-	N5EYWvr1Scpka924zdbgHyy+m8vj36V9pc8TiQZXhKQ1EmwOWJylceuZcbsDnfFqvfa0aW6140l
-	MT3O34qPInVCBTYR3QWmOwZzpjp5oXmMyiYS1KT0ZnMF60jk7C5SgA97Tcn7Mp9iPt/cmsnt9PH
-	TeLNQt5dSaMtOARrJLHP4m7z699MTl0kGk4QCuDQdmmHCy/Uvgpm6hzgyy7sk1uwzGcv6CLr4IC
-	s/8TfYsGaDDo4AKZaAkDf66KRlW2Nb5FIYCbe3Pu6fL6D5fXbTdJxsWBvOHnbJTsJ18sqKHzA=
-X-Received: by 2002:a05:6102:1259:b0:62f:fed:d334 with SMTP id ada2fe7eead31-62f0fedd3b9mr1964435137.4.1778005382599;
-        Tue, 05 May 2026 11:23:02 -0700 (PDT)
-Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com (address-144-49-247-121.dlp.protect.broadcom.com. [144.49.247.121])
-        by smtp-relay.gmail.com with ESMTPS id ada2fe7eead31-62bfc18c2e4sm1056771137.12.2026.05.05.11.23.01
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 05 May 2026 11:23:02 -0700 (PDT)
-X-Relaying-Domain: broadcom.com
-X-CFilter-Loop: Reflected
-Received: by mail-dy1-f197.google.com with SMTP id 5a478bee46e88-2c156660643so1154555eec.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 05 May 2026 11:23:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EDtHU8cP"
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-82faf871346so3496237b3a.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 05 May 2026 11:23:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1778005380; x=1778610180; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1778005403; x=1778610203; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=DWTJjKGnCUFekx/y0zBWtgZOF85zFt7y6+neh4e6+dU=;
+        b=EDtHU8cPcRi2CX1OBmOZzMaCBtW8Nu484q+1OEfNxrGOo3rFnVckTyra3SjyxvNJ/2
+         ZyJYwO/ikcSe8Dmmnjd7UdfQHAoCDMpR5tAWMdBdfx452RCeDSc7N+qbKnj0jwXSb2CL
+         KbI2NbcXRTBD3/AaIMcsGy2poFww6xNJlpkFMMUC4f4NcVtP+8hxwOoJ0AF/16ZLogZd
+         iBM4IfRlxj/6uyv9tYViBgktTps2052e8oEPnqnjM/XngiacPRzW6su86jM4qCKxn23Y
+         +8qFPP+NVvKy3qshcl2rDHcO+MQkblDJqeK3fkzq0Lp7tt5QdUOPexcnZyG+c136fmlC
+         T9Vw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778005403; x=1778610203;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0TctQ/QPTybZnX6Hj/EaRyQr5V49De/CNOWCLe2wy8Y=;
-        b=fOTiD8/gvF5VMRj3RaMOr3DSGhe+/YPS04HzkjdWckC0r4ooyvbURIIESLkKUinUKR
-         CRplkPLEcfxFIClzK0KCCo78gOISbZ5IaK3VfmYTswYEvauEbJfhhmUO2KaVsmbh+S8V
-         tIeIecMSasACPKMFtntha8o3p0Nh0CeCh9IbQ=
-X-Forwarded-Encrypted: i=1; AFNElJ8MB274+QyxxcLJUrkMDS1/+WS2ZAB7YskoANtIGSzE+QMx7BaQXHuXSXty6Rg+MGUovHeSFkJRup+3QulP8ew=@vger.kernel.org
-X-Received: by 2002:a05:7022:68a6:b0:12b:f899:7178 with SMTP id a92af1059eb24-1318eb48053mr80661c88.7.1778005380611;
-        Tue, 05 May 2026 11:23:00 -0700 (PDT)
-X-Received: by 2002:a05:7022:68a6:b0:12b:f899:7178 with SMTP id a92af1059eb24-1318eb48053mr80643c88.7.1778005379959;
-        Tue, 05 May 2026 11:22:59 -0700 (PDT)
-Received: from photon-d7fac424c0d3 ([192.19.161.250])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12df8424ef1sm27629462c88.9.2026.05.05.11.22.59
+        bh=DWTJjKGnCUFekx/y0zBWtgZOF85zFt7y6+neh4e6+dU=;
+        b=f+ssLIyV2GygeWBEwJDkMnYITf3WHuSJ5rHzrFocmg+2OXhax8BnaQy9XKWOqaAbMU
+         yppSnCawvXY0/Y5KZBLtMh94aSCZ3pqgoilEkkBPFHI3CZNHm+CfITEugu7RaLHUPktH
+         cnYNpSZrwQrceAT3dbY7hXTiNywvTzRoD86cv8k3HhwXxyKLuQOH0PHFYu+jTDQcieje
+         bbOF+1str7rwhEe8RflKw6LgULNbJ2rTnDbF7SMmim4s43+t4y13nfxTe+8g3WArObcp
+         aLsxcs7C7dowOCd1rFzGywfrJ0GtNlEZyYw5pHf5WxaBfB2WoQmZDPGnvScyuLkfiaoU
+         A6Tw==
+X-Forwarded-Encrypted: i=1; AFNElJ90kRor+GyPipnBYPkD3pUR/ycWIocz3Nd1XtCwL76eI3t+XC4Uu8jDQwldGT6kGHqQ6u4vPhYImWPBdo/S0ao=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyRYtMgbLiSTxsokl6eEA6MOA6g8fSwPIXpkLvAtvpWDrqLJTKD
+	3tcB2e1dU0fOTFQrW9djPD3OdVqPYAKD/+vqLhyRoxX19jDip8rORsKg
+X-Gm-Gg: AeBDiesLE/qIFgeYxAC38EFprkSlgK9aRBcoFSymb/jjyJpbzdQ3gfAcIvnpXjJQnkp
+	54iLfz1B9UIxlDpDph4bCH6d9ZFvAoAehxo2jzQIwqteJ2jT933IapNoO+dKxWLkmbbfUHO7TaU
+	pq5UMrPmaRHmrZtXCw5OcCWPpi1dOm/2zNFhrkhaozo5ZRHLlOaYrh1Df75YV+DOSOnmMmGfd9n
+	T1mbFFswhfefpsz1vo1JGMdzq3sUhsHBcsFI94YSbJCYUxE7lAC5PJtbOp/yK6VCXFGCmMMQf5s
+	Z8E/q+d38makqh8JeTtnQo9xy6rdUPy+0CZBDWywHYVkkWD3sw3kMrR6DRMqqylIgE4j/XmqwoM
+	9ZkuIDkPjhOh+Z27HepYlqDIaTnmb0tqRNBX4PJJk4i/C/rqDIJl+tLCA2cUWtoyPQ13/VUgn9+
+	opitT7jnRwk39T6iPc0BBFcJkpK1+PQnw2nCmiFN5WO8ttCpIJcQmfdNFID/w=
+X-Received: by 2002:a05:6a00:1822:b0:82f:3ecc:c42f with SMTP id d2e1a72fcca58-839246caa8amr4509989b3a.40.1778005403184;
+        Tue, 05 May 2026 11:23:23 -0700 (PDT)
+Received: from mo-Inspiron-5559.. ([2001:fb1:d8:b0d8:5f5a:b3a6:e7fc:e897])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-83965646254sm3081784b3a.10.2026.05.05.11.23.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 May 2026 11:22:59 -0700 (PDT)
-From: Ankit Jain <ankit-aj.jain@broadcom.com>
-To: edumazet@google.com
-Cc: kuba@kernel.org,
-	netdev@vger.kernel.org,
-	davem@davemloft.net,
-	pabeni@redhat.com,
-	ncardwell@google.com,
-	kuniyu@google.com,
-	horms@kernel.org,
-	shuah@kernel.org,
-	quic_subashab@quicinc.com,
-	quic_stranche@quicinc.com,
+        Tue, 05 May 2026 11:23:22 -0700 (PDT)
+From: Woradorn Laodhanadhaworn <woradorn.laon@gmail.com>
+To: shuah@kernel.org
+Cc: broonie@kernel.org,
+	skhan@linuxfoundation.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	karen.badiryan@broadcom.com,
-	ajay.kaher@broadcom.com,
-	alexey.makhalov@broadcom.com,
-	vamsi-krishna.brahmajosyula@broadcom.com,
-	yin.ding@broadcom.com,
-	tapas.kundu@broadcom.com
-Subject: Re: [PATCH net v2 1/2] tcp: protect locked SO_RCVBUF from Silly Window Syndrome
-Date: Tue,  5 May 2026 18:19:19 +0000
-Message-ID: <20260505181919.15308-1-ankit-aj.jain@broadcom.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <CANn89iKcaOK6rrY=m0SVfXdx3jTRXCE3T+jNQpw434UZ8oxtpw@mail.gmail.com>
-References: <CANn89iKcaOK6rrY=m0SVfXdx3jTRXCE3T+jNQpw434UZ8oxtpw@mail.gmail.com>
+	linux-kernel-mentees@lists.linux.dev,
+	woradorn.laon@gmail.com
+Subject: [PATCH] kselftest: fix doc for ksft_test_result_report()
+Date: Wed,  6 May 2026 01:22:13 +0700
+Message-ID: <20260505182213.22924-1-woradorn.laon@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -105,21 +75,31 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
 
-Hi Eric,
+Fix documentation to reference ksft_test_result_report() instead of
+ksft_test_result().
 
-Thanks for the review and suggestion.
+Signed-off-by: Woradorn Laodhanadhaworn <woradorn.laon@gmail.com>
+---
+ tools/testing/selftests/kselftest.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> Testing tp->advmss is not doing what you want I think.
-> 
-> A remote peer can send GRO packets with tiny segments, regardless of
-> tp->advmss
-> 
-> If GRO is what you are looking for, why not testing (skb->len > len) ?
+diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
+index 6d809f08ab7b..b50a8478d4d3 100644
+--- a/tools/testing/selftests/kselftest.h
++++ b/tools/testing/selftests/kselftest.h
+@@ -346,9 +346,9 @@ void ksft_test_result_code(int exit_code, const char *test_name,
+ }
+ 
+ /**
+- * ksft_test_result() - Report test success based on truth of condition
++ * ksft_test_result_report() - Report test result based on a kselftest exit code
+  *
+- * @condition: if true, report test success, otherwise failure.
++ * @result: a kselftest exit code
+  */
+ #define ksft_test_result_report(result, fmt, ...) do {		\
+ 	switch (result) {					\
+-- 
+2.43.0
 
-I tested your suggested `skb->len > len` logic on our reproduction
-setup. It works perfectly and the 504 timeouts are completely resolved.
-
-Thanks,
-Ankit
