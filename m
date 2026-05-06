@@ -1,29 +1,29 @@
-Received: from OSPPR02CU001.outbound.protection.outlook.com (mail-norwayeastazon11013014.outbound.protection.outlook.com [40.107.159.14])
+Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11010058.outbound.protection.outlook.com [52.101.84.58])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68EAD3FE341;
-	Wed,  6 May 2026 11:04:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.159.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D328261B8A;
+	Wed,  6 May 2026 11:19:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.84.58
 ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778065493; cv=fail; b=de5VTi9Uf8PLKnvkgmAnHQSKsBDkRnwjMd5R3uiQCMVmZ9kmHzJfkauEQ9EG/3w5ppu4JWJ2G6jHcnNSvAtAur/Zu0EUmKhpNk+m6/CA0Rc5+K8pg71wxqFcES1n8X/D0k6WUJlQEB3cfnO1L00k2mLqdiUkB6P6LvXmph/hMmM=
+	t=1778066356; cv=fail; b=Pys2m3qsZgZwIgYeEPnPyZ/zFrnk//rurp4EwFbXJCgSqRdP5sm+qG+H7CW+AHEKgQS/OoQ+AptyD5czyrbQs3keTemdv7QCBGiyB+j+R1jRzvZj4h+mXbWetKhQcECjkx4N85ZyCgVRyZPsIsxMIpUNyI9eFvLeQhqLIYVnZO0=
 ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778065493; c=relaxed/simple;
-	bh=VFqk0NtaHKmcKqg5qQizb+6SAmS0+avY7At94co/KHc=;
+	s=arc-20240116; t=1778066356; c=relaxed/simple;
+	bh=r8YRMma2RMUqU44cFtueH4mL2Fqh2mpW+az5LPoEyKU=;
 	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=XSxffoEg6i71o0yBn8Fxse0V77IPuTXOOWk2dQc/BuJUJoD3LhMzAjrFKCOqhdrll7wt3ImyR0nHmsvea7KuzmbHGe0JhI7v+jOM9GHqSc3sbpzW8PzadTMAjB+3XxQD+jnZJVm/P828hf4GoQww8M5kp89OIxJ+NWPrKVZNqWY=
-ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=GzngxbHR; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=GzngxbHR; arc=fail smtp.client-ip=40.107.159.14
+	 Content-Type:MIME-Version; b=oEEGOpS8aAOc/YWwjSOCswRRc6geQMK22KvfGQ4u2ReB0hpPrXtAWM5pkX3mcmbe6xfVrj4bZlNUTbd8s5Fqa73KoBHC0Np5VYYXhNFcwd/in8N49PgtHaq6I2yZhg/SJG9D2SkDje7NOTELcr7ZnPbHLwvdMiV0dIeyPUoj5cc=
+ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=R8Q+7Bnb; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=R8Q+7Bnb; arc=fail smtp.client-ip=52.101.84.58
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="GzngxbHR";
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="GzngxbHR"
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="R8Q+7Bnb";
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="R8Q+7Bnb"
 ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
- b=AniRTt41B1FxYlen2Veb7asIrCvL9N2t+Q85N29u43FKf5MQ5o3mh0coxEjdtM4QsJhbT+KK67wOBy+1GaJ6ruF72qxHZ6hJGkY5aeoHjboBv9oomJO4YS0YHX1zqtSE0V6oeFbWK566X1EteoGFlZaykgiZeBC+I3Hx/UPNElwkJbtzs4kMrk2yK3PoDTSj8p4AdQYOf+rSIBz24gCXtHJK/hf1KhzbT6FkPWexS2b2u4pAOdoMaBkX6qzDMP8JKgUnoNDW4b/njt+CQS4q1UAONpPYbO5CEu26+5IEsxYFKBMmemXEcpr3brJGEsByVleRdGTAma4jVcEmxNxGxw==
+ b=W+rbO4hYFiDmsE307SjW/VqpsjM4Q0nIT5wUSw3DKewV3E0vFHvepHYtNNjOcNgz28vYXneTwSSdV0HWqvQJVJH7qFJ7PBCKz3XehUg3HGBvzpK6SaoqFp+KqLHyGr2tCmD5Sp+cNItmCjt7II/AtCmUGWBs9BOznZnEMghSV7YNDayPocJeNAWxrKNFZ4DfTHyvRCSQQ3U+iU355LANRV5R1YQ4/+2iqgreY3V26XYyT+bxvAHBo28rJWbDBxu0QRsE58QkD5ATOGbojkJjw65vHo04it6um6MlhrTm883My65Tx0sbdfNYvMcINSkDoyFhvimDyCxoz1By+slRgA==
 ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4G+3kTb1h/vUnnYSHPgTjGuaSbq673UD28urxJg27qc=;
- b=auWx7pQ9NO648oTrUdasctzYndO91Fmx0lWMAUhbgyfv4UkgAZZXLVChpngXD2j66FPi6doyONwIVQ2+B4vl1zU3HvNA45AsqPmvRFxEG1OnmloTemYWuWqATfbT4Ei5J4btuGpcO9PqP5GWzhywn+SdI7nSG17YLZvrNowb7yQi1a3vQbgNYCZ6WyxhL/+N6T1EzQo/YxawVjOE/0s9Q/LOZUSvsFcnw3aJhu0nBNOAwTQ+Es6lQdMT5DgxFbdi+c2e6pbQUh5PxbmwqA4kHFEBmBSV26ZblQTV33fqHFiaymt1okpTANDCNRiKQi0q08bczQ1TvtbW5AgaMc3mgg==
+ bh=K4lXTRXfU6C5gyc/dESCTyKsyves2pEr7t81Emzguqs=;
+ b=UFg4qRh8WOrrfolwZuFAAeP0U+mNnV4L6oQDQx2PfbJoccuGcV621cMNbeeaAdRcK0YxPbM9vtT99cA745P5VTDtdimCopUa8fnLp44kNwNGMsWSBGedJo6eGnXYrTsNNExYKbEptks622/Ix2pTBm5o4XlZPPQPFJzx9EusXwhMntHyzWNIH4K7Gv2jVf11jDV05tZsrk8KW+PyWyT5tKV+lLvSwsxrQta575cLOalPWrYpN2LPMY424cYh0J5tBADuX9tY6vkTaHGYS9lLJ+OaA9YUqO8xifuUpsvm5nxVAUe/mr7+Mlw/j2i0CAODeWkMYdHIUMIHqkF9JDke3Q==
 ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
  4.158.2.129) smtp.rcpttodomain=kernel.org smtp.mailfrom=arm.com; dmarc=pass
  (p=none sp=none pct=100) action=none header.from=arm.com; dkim=pass
@@ -32,18 +32,18 @@ ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
  dmarc=[1,1,header.from=arm.com])
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4G+3kTb1h/vUnnYSHPgTjGuaSbq673UD28urxJg27qc=;
- b=GzngxbHR2I0Uf58Mt782whP5QFb56KnZRsrT8Hh4UwdHv6JmxokdZPdpmjCRafzMCvvB82BZeDvhZotklRmrC1dfS0ZTi6yLhU92u7IJgEjmcfkdZ+7tu9rWZ/5HqZ46SmbuSNWjaMuJoqzNGwJdlakRHS+0rZohxBuxGRg9boo=
-Received: from AM4PR0302CA0013.eurprd03.prod.outlook.com (2603:10a6:205:2::26)
- by GVXPR08MB11763.eurprd08.prod.outlook.com (2603:10a6:150:313::16) with
+ bh=K4lXTRXfU6C5gyc/dESCTyKsyves2pEr7t81Emzguqs=;
+ b=R8Q+7BnbmfY4gnM6zHiMb/yCMIJy7a4ti0GHw/xiZkbIUFDbe6uh3m1uWGCbnz4UD0236LfcoIqjWoqv+aZ1YJlrnHObhmueMRS2QR/zYNrggxC1iyYPByHWJa3ASiT0Q6RBqgfVL0Y2VnfdFH+DRgnGJWRC2dUldRXnrtoUYmg=
+Received: from DU6P191CA0063.EURP191.PROD.OUTLOOK.COM (2603:10a6:10:53e::19)
+ by GV1PR08MB8083.eurprd08.prod.outlook.com (2603:10a6:150:95::18) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9870.25; Wed, 6 May
- 2026 11:04:41 +0000
-Received: from AM3PEPF0000A796.eurprd04.prod.outlook.com
- (2603:10a6:205:2:cafe::54) by AM4PR0302CA0013.outlook.office365.com
- (2603:10a6:205:2::26) with Microsoft SMTP Server (version=TLS1_3,
+ 2026 11:19:01 +0000
+Received: from DB1PEPF000509F3.eurprd02.prod.outlook.com
+ (2603:10a6:10:53e:cafe::44) by DU6P191CA0063.outlook.office365.com
+ (2603:10a6:10:53e::19) with Microsoft SMTP Server (version=TLS1_3,
  cipher=TLS_AES_256_GCM_SHA384) id 15.20.9891.15 via Frontend Transport; Wed,
- 6 May 2026 11:04:41 +0000
+ 6 May 2026 11:19:01 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
  smtp.mailfrom=arm.com; dkim=pass (signature was verified)
  header.d=arm.com;dmarc=pass action=none header.from=arm.com;
@@ -51,39 +51,39 @@ Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
  4.158.2.129 as permitted sender) receiver=protection.outlook.com;
  client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
 Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
- AM3PEPF0000A796.mail.protection.outlook.com (10.167.16.101) with Microsoft
+ DB1PEPF000509F3.mail.protection.outlook.com (10.167.242.149) with Microsoft
  SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9891.9
- via Frontend Transport; Wed, 6 May 2026 11:04:41 +0000
+ via Frontend Transport; Wed, 6 May 2026 11:19:01 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=RM2RgL8/vKHAnC8+kBp+FlhJE6mLjjQVolHKqSYh6jnx1/v8zHPA73UxLogtqTImRK+BoYLAf1q3QgL3H3yK729UPzhfcXzo4C5upA9zGwYpGKYlTIyty/HNeyiR3KWdRXq7ScsRnbs88iiuqXk7MwhB1830E9b6XvaxbDG9PqHZNct/T0/JChn21FJfvj7ZCTN6zQIzhVZqhvYTSZi6kPmh8cB4LDWOngAQ+mysk8nMYDkdbErV52fNQI+3G4IbjFJ+eihYElUDUF6oq/aZiGxaBsKAkSM8pwSY0lA5CYCubWOsst7niieccpJthb1CCD3to8nvxBKEOD3xkYausw==
+ b=A/txiHH5CGN18Rs053WAuI3cyI20ND7NBCzwEw9ihm/wRctxoPZl8X5Pkya+NppSEKbGtEzlHyQ+PLfWVbE95AgZzBkwe+fwUKBwtpG0dYZrWtwUJlrVrcEtzjBgqrKF1KbplkxQRbe47secvo66kQapvUjSXT2SkUyo3p5QJQrnuphxzLIQZ5HXi1wpzhW9LsyowBMVSX4W/OFdQ9ek3G8mUBHb3ELraKQ+Rx69aDFDlm0hbJG98JUVaCGt1trUZ1arl5qRjMeraQl2MIdIWfpf6ANLOZtGv3MBz/aJJx249NNWkwxJssat0xOqpvBIjVJJXA/1AL0s3FDMI84qQA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4G+3kTb1h/vUnnYSHPgTjGuaSbq673UD28urxJg27qc=;
- b=pnngf77C77ZbuyTUb0APZr1V7N0dPArv6FzRg9uZfHu/vxU3HwXGXa3e7R+ptCOzoO5Ik7oF36yDlJUU0TRVbNzSkS4qIT8cFa/ur9gy1Zxl3UWR/sZbFj3lyW9gHsmFZTilX8BK2pOiFyxZ+8EJWJwxkh8Hy97Z5tr1r9wcIZ/yELUDVyAhJVN05RQFLsxSq3KuC6GT8roDZrj5N9mfDvf9dmKCetFNUQeRdHE1GGQWS0M/ix92YPIfO5yofgTodEAnFgDVZ1NsUK2TwsNQF+DgulLlUH3xctx0xvp7KeM2dWRcNpVNDDt+17L0fTMpd6gFdVCSg2ezRYNcHKZbvw==
+ bh=K4lXTRXfU6C5gyc/dESCTyKsyves2pEr7t81Emzguqs=;
+ b=gTKUn/ixjhPonQ7eC5jwdbZTKd6QJD84xlCqNwfO5GREz8niWMdkrLIAJ4gO3l3pzvwzc3oqrl+qtZGn3bhgNUZGDn0e/sBP+gQyu40TsRzeRiOYsPWfcGyvrUa5JtZ4PdvGVDGcMjoVLjcTJfI56p8P4PgYdsK/X9eySykAjpBEwYcYNTeMilN6YaZ2iM/u+DVbMPvwLVK/EGy9IP+iaiutFQOJD+nWnt5dccyH1R/TlC6fF9sswVXy5ef+g7ekYXdzzK1sHli8VRFQR1yH3UFdjoBgxpOBOQqRIxQyoV0n+rPeSFpM147Z8rG5u7djCEG+MqT81WwSTueQ942lsQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
  header.d=arm.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4G+3kTb1h/vUnnYSHPgTjGuaSbq673UD28urxJg27qc=;
- b=GzngxbHR2I0Uf58Mt782whP5QFb56KnZRsrT8Hh4UwdHv6JmxokdZPdpmjCRafzMCvvB82BZeDvhZotklRmrC1dfS0ZTi6yLhU92u7IJgEjmcfkdZ+7tu9rWZ/5HqZ46SmbuSNWjaMuJoqzNGwJdlakRHS+0rZohxBuxGRg9boo=
+ bh=K4lXTRXfU6C5gyc/dESCTyKsyves2pEr7t81Emzguqs=;
+ b=R8Q+7BnbmfY4gnM6zHiMb/yCMIJy7a4ti0GHw/xiZkbIUFDbe6uh3m1uWGCbnz4UD0236LfcoIqjWoqv+aZ1YJlrnHObhmueMRS2QR/zYNrggxC1iyYPByHWJa3ASiT0Q6RBqgfVL0Y2VnfdFH+DRgnGJWRC2dUldRXnrtoUYmg=
 Authentication-Results-Original: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=arm.com;
 Received: from DU0PR08MB9203.eurprd08.prod.outlook.com (2603:10a6:10:417::12)
- by DBBPR08MB6236.eurprd08.prod.outlook.com (2603:10a6:10:20c::10) with
+ by DBBPR08MB10699.eurprd08.prod.outlook.com (2603:10a6:10:52f::12) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9891.15; Wed, 6 May
- 2026 11:03:36 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9870.25; Wed, 6 May
+ 2026 11:17:57 +0000
 Received: from DU0PR08MB9203.eurprd08.prod.outlook.com
  ([fe80::f1e:73f2:57df:4047]) by DU0PR08MB9203.eurprd08.prod.outlook.com
  ([fe80::f1e:73f2:57df:4047%2]) with mapi id 15.20.9891.008; Wed, 6 May 2026
- 11:03:36 +0000
-Message-ID: <8b789c84-0949-4afd-8112-15cfb0a4f1d2@arm.com>
-Date: Wed, 6 May 2026 16:33:26 +0530
+ 11:17:57 +0000
+Message-ID: <63cd599f-681b-43a8-b5f7-d4cfd78b9dd2@arm.com>
+Date: Wed, 6 May 2026 16:47:48 +0530
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 26/54] selftests/mm: hugepage_settings: rename
- get_free_hugepages()
+Subject: Re: [PATCH v3 27/54] selftests/mm: hugepage_settings: add APIs for
+ HugeTLB setup and teardown
 To: Mike Rapoport <rppt@kernel.org>, Andrew Morton
  <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>
 Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
@@ -100,14 +100,14 @@ Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
  linux-mm@kvack.org
 References: <20260428204240.1924129-1-rppt@kernel.org>
- <20260428204240.1924129-27-rppt@kernel.org>
+ <20260428204240.1924129-28-rppt@kernel.org>
 From: Sarthak Sharma <sarthak.sharma@arm.com>
 Content-Language: en-US
-In-Reply-To: <20260428204240.1924129-27-rppt@kernel.org>
+In-Reply-To: <20260428204240.1924129-28-rppt@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MA5PR01CA0241.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a01:1f4::15) To DU0PR08MB9203.eurprd08.prod.outlook.com
+X-ClientProxiedBy: MA5P287CA0133.INDP287.PROD.OUTLOOK.COM
+ (2603:1096:a01:1d2::7) To DU0PR08MB9203.eurprd08.prod.outlook.com
  (2603:10a6:10:417::12)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -116,240 +116,78 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-TrafficTypeDiagnostic:
-	DU0PR08MB9203:EE_|DBBPR08MB6236:EE_|AM3PEPF0000A796:EE_|GVXPR08MB11763:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8447697d-2310-4e4e-f208-08deab5f45fb
+	DU0PR08MB9203:EE_|DBBPR08MB10699:EE_|DB1PEPF000509F3:EE_|GV1PR08MB8083:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2980a894-4204-4f82-3565-08deab61464d
 x-checkrecipientrouted: true
 NoDisclaimer: true
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam-Untrusted:
- BCL:0;ARA:13230040|7416014|376014|366016|1800799024|56012099003|18002099003|22082099003;
+ BCL:0;ARA:13230040|366016|376014|7416014|1800799024|22082099003|18002099003|56012099003;
 X-Microsoft-Antispam-Message-Info-Original:
- 3hgeF7mTLneefUkNK/kAGiUh33/6pte42z2AFVJVTKdtLZTfuQGuN/jOstkMyCFyL7MYECuaXb9Hx0x6U2wL132qYiM0w/ahbOw6bWLt7jhyP5z+X6Qdd/aov9EZryws4LBj9Bu9FY1znDX7SxCF5gFp5+kIAY1lk7mXjSyP1fl2F0SzF9kxc12h5gVANUVqrOe210GdsqhSJ5I/zl1na8GasJOrAq73uQskNcySA4121q7342bPDK42+siuDy6BsR+KA0BKmAgGLojF8T5df7i/x8FKe9prV7yVMIHdWSS7/QgaX4h5NloE1wR07YisiUvsQWDubf0toRJgm/QZLZ/LVlOuEFFiCtmW1PFMm6YipnCKWNELGidRt7f8CNtXC+gCq9yBRVCcKWaM1jnvG/4knaF+18MjtgqkU4Nz9p10bJ8wouT66WSUhFryLzoDRtHX0Z7Telze+S3x7TFr40LS+9xiSfacHKBYDjwBr9WCjpfZyt6y6YW8JC1vQqpd89gjgU6t1ka1N28Ubgi5NFGNrYynwYhZsAL6vVRqnSKR6Be7ZkbKtRF79O1F0khYljKY/V4WnJaRJwos7hEnQtsRkbcWpmaQ2qU7IvJ9tdIcXB1WkLK9j32td0a8nJw3oqu94zwK5B0/uiHJr9QWmj99U7R7hUi3jeICJxRO+BbBEs04t9TEKr+DkO1hWE01
+ Yuo1mHKj8ErZgCRRnMdxIzAu9meZdvR/7Fm6ji8HZ9redPl92UJKGK7qyAaKxE4b/3ILSejmAbhxSKGk6Rfk0LlRPjf/GdUjSV3IKyTtpaKeuBak9GBD7VkTZwAbz9vZIqrC/T3U4cVgSlXQ35uy5OY4L2UibXWR5Z6Wx3ixxZjLOGVIz6CV/jJr8674RbS3mPFL5hPldHN9gafBxg5504kbfrXtQwucOYVeJNCNUO+ta/yWWMdRq2akwURLHUxrjTN260GhUsmzbRj+KdQk7xEL3lTHl2Asb/z+GoWrtFVbbk7ULLYAvl7yEvpd7Y3iZD/WzKP44UikLj1TcwWYinHTgkTHmwi8OYLLtV1rknIRk8jhprb2eoCO7IIqA9vC8FUrSQQxBbQS8h4W7GLwpG38GWElCb5dvijxGQGnGGruUE0I2RAiT4WIA1kmmPgyE8vocEIlar/LSK/z/ft6K1bwW0bx11ZybfnrFV3we/0o4cieRmG5zCuUaOtUFgA8mIeK5qSnB5OwCCLgGCl85sK5h7QM7g+6oHGcr9DcPF89aVk96VQysSuaRHyz0Yiky3abBY8RvymsLG5yqgmDwDMTcfBRBOVt8Lmm9PxWwrkGtObxpwVmqkWC2caqobyuM7tb7/9CUl0rPRJE8rEwqqFq5NXUtdmaMYUCEmZbvj5kOfbI5HPfGMQRQsqhSKZq
 X-Forefront-Antispam-Report-Untrusted:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9203.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024)(56012099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9203.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024)(22082099003)(18002099003)(56012099003);DIR:OUT;SFP:1101;
 X-Exchange-RoutingPolicyChecked:
- T5nEM6Iz//4a0/cqjQkLAua/hz5GT/MoQtxlEMxZYALXXUXZIaPT52FUS1MWdMkzFt4Ke5YEnragkRWOnGVnfHFCTMD6C3FTapopxtosiuOpMExtxjszsNhFUTB6607kClUY8JW8OZRCGdre9YAdbLxUeXmOKSD/gBVCbeS23//AiiWnnVKCTXfbbI4YMEdkFkpwkEn2cx9syduv9sLzgEn8OE/xE0cYjNuj7Vggo3iuKRa+JPhy8DFbzDHvm+8NPchCX8ypr5N4ixpEn2NvutvCrMUU67TYsUO1IaopNVKomfVLuOIBwGOQgmxpmt9mD4EDkfGHkQwd9awhwSn50g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR08MB6236
+ k/qMZx8mTszjKsg0EmfhDAqLSh/4aBWQiyiYyp9K7nvS5d5txRz3YJpui1w7mtaj01hnOESrTaOn51UsffLAOMhcN09Ry1v1i3617fZOk8Jgvt07zW2C1YZLcx9VXYg4EknflnNF2r2NmM0zE5TrgO6FZ3wE/jURV6G+B//LtiDXf8XzJZJZHsyc/rwfptFbXFiPwejEmtL5vUH/lnW12ICMu6qWEHXfS5psafBbj45Jm2uNbvKUZjkf8aKFbDAon60bC664ZlSUujLwuIsKSnN8wSIhzWvQ08r+PFGOlj7t6jfCrC7G4tXDeaJccbhUCteiE6crjk0+HMTeDwiqFA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR08MB10699
 X-EOPAttributedMessage: 0
 X-MS-Exchange-Transport-CrossTenantHeadersStripped:
- AM3PEPF0000A796.eurprd04.prod.outlook.com
+ DB1PEPF000509F3.eurprd02.prod.outlook.com
 X-MS-PublicTrafficType: Email
 X-MS-Office365-Filtering-Correlation-Id-Prvs:
-	2dc613cb-137b-4878-707a-08deab5f1ecc
+	db124cb1-4205-4a0f-7381-08deab611fca
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|376014|7416014|14060799003|35042699022|1800799024|36860700016|22082099003|18002099003|56012099003;
+	BCL:0;ARA:13230040|36860700016|1800799024|14060799003|376014|7416014|82310400026|35042699022|22082099003|56012099003|18002099003;
 X-Microsoft-Antispam-Message-Info:
-	ZA5KoqCwxWMLB8jP24jz5/CTvUhtuababCdL4JYj3Po/qOQHQofHIbl9RWyWeFGd7J6eaJjXAgw4x8do9/w/vYycF1CIPH7Lw40HoLfwMqGfzrny8f5nX62OMBfRVWgLHdyzfVH23rMj+8BdxJMN0xhpMR0VCSRAew+CnioF5ESoAm+Z+LLv0Ti33CRm7ppo2oImU6amMiitVsLKRU3+uvGu51bwVhuh+4pVv0DpCVLRgTNl9Hgx0ugQeCt3z7Gmgc25zhmhMMn4uJUNglPw2kSE8xz/8gAzj4AfoFL4n7DbX+zVrElwnJkBvCgUoArgeHzHK8NnNMot/y6aAqvjZOQWXh54+vDhxulcyEfy0AWP96TggyYlPrtsnGolqQoLkxIJ4wqF18QVzOePPZDfwjqI+82bcSv3H0NqRato55mzafldMZZkRxGFfSL/ji0K4jgjIATc3awOb0dKX/iGs8o6S/WicuAuBcrHchd6C5A+CnCpth9tU/vHk/0TVTW89Fqs+OUt+YDGYXh/e2wpSdjZtihRY6eetVYAooLMslYQBMqANm0H8Uya0JWLfNyJFvXZf6hjNHQTyiizUgX6QTDGrRcpY+MWqAevgMDQiHp7v59pdadDaaLsc81+Z09RCu/MoFxQSBI/si3/92uLhLal4q92Rih7Y5K0H0Co997FsftRnZR921wItqFh8C3A0M7xnPO/6SIA1szU3rHMOU4qgVrd+AyFIpHVuXc23ho=
+	zqmAtn/lLo/+ihjbF/SgaL9ULrW1VueuiYKqQSMMYpKCDz7Rj6Y0S+M5kELvkO0xu7K/DD1plHbiecilXNS/xcLux6036cS7zODiExDh4+TuOl7zVDsoO/oDaLL6ZoUgsF1xeh7DuNw66zTXrjtfEUSpJjyZurOTcFzT8ZtCMF4DftoCe0r3XzJ1u97MCvVyZoz9p7MC9wIsWuoTM0wOAUS27mCbwAjG2oMGvhHmuzQl/UL39qpr0ieNmrwUBlQobKcX4ggGBbErHFbNfIABpOh63XCCwW19QVIG9fR+rYNW3l7N3YdLpGfhDg/ZUtcPzg8wtqhccuJzP+sTggCDkvZ9IzR30uV0LhEMrcNIWTqc1WoKYf5jmN2pdPC7ZqHvdOv6STcXvMgDk+AHTd1Q3umeTTR8p9WKrW7H7NAMqMZlGx+0SFNxc3W16NUj7hJ4C30+y+nJITq0mOhRkY9khgx4OhBGbpg2MqLon7gjRh1DeZPFtdPVk7W9hHnzz+WnL3Porhl0pAvWL/tE4cbtqurEcxgmTDK1m+9Et/K9I9BphVTc4XyMwIf/7Q2HL2UQFU8UKYxFUKzlJ120CijCCdruV+VTYCJzFtBCI5jLyK/KRb4vI4abPkrMokPArM44sHDv6tt/8DJZkXZ1Vl3SWfFjrXv0BYWKfu+R3wMtCyoBh5ds6eZ0rq7u9JCERqC34N1Dz8+IzN4H2OfxcFIdMx399qU4gR2OSuJJoDeUOQs=
 X-Forefront-Antispam-Report:
-	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(376014)(7416014)(14060799003)(35042699022)(1800799024)(36860700016)(22082099003)(18002099003)(56012099003);DIR:OUT;SFP:1101;
+	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700016)(1800799024)(14060799003)(376014)(7416014)(82310400026)(35042699022)(22082099003)(56012099003)(18002099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	lmjdrskAHIPeBN6h4l6rLBj67xcuCiFfTf4pst3/g+s3x9uJxmuJAOYy8JuCSUWNJD5wkBq1nOQN5qCPIMr/SzjXLp7JnFLRYVV0EDqTN1APRbNlPZaPmcTS66GLjDxE/GWyrkqA3Ckif12ayTneP/HaFzWVy2lpsz8PpxrbBrKHufZFRWByanFL/HmgdKPLIPmwLw/6DwZ6vALp/WcB0fvIYW+Clc2SR+Y1iggaMR++x2L9qyBhIQq0OPuBcBP4OVllvo8kenYisPo51BKWzJeULlitGYJD8C2NLc0WfBWKNvskCABy2+lSAbdnu05Q9sklmGRF8LASvgf+EupA9vZfQsUMQGJW2IxjFH8VMQDfnaorojUGv5ulYqjU5mBVYpof3A2YWn4YUlcT5I3Uf5eecLEz2UBrR0wFp08eD3aXB9rCxJNKQ/78at4BpCuG
+	0HltBVW3vKyT+sMsyDRP2yH5BYvPpN0tjCcmhYRYn7VuYqYlNA9VX5/p2NWy6GbX/05/HL74lr79/gcxTkWp918V44eRC9JuLhAIDUzgtQYqaIubYw0B5E0m0aXf+AYqlgzm+konnf+Hkj329ppLbEqh1hjLSg8TPu2X9Wanx8yByKPd4TjmaBfr4vRUcX/x0FcGXDGSCa1T4ReZWV0C8Gz3yg+3FxZ4sFNsqIwSIa6/HF20a1rLBhfa1ACCfujrR5F3QlpnTgrJwn0VIpbJtROi/WuNrbStBnMNbN0vajVYdET/eBqxAXNXVagLvptz88tQ1fOCZ2c9MtRX9aA7qgciT3EMhvYuLfXrbXoZepNq25dqxdZIAKJDUWBCFpaBMcc2Ss9q03ttrX/lL5RgipL/+JX+SHbD8hVG/cQArGIPCAVso3awN21d8YpYIUqT
 X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 May 2026 11:04:41.6441
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 May 2026 11:19:01.1766
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8447697d-2310-4e4e-f208-08deab5f45fb
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2980a894-4204-4f82-3565-08deab61464d
 X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	AM3PEPF0000A796.eurprd04.prod.outlook.com
+	DB1PEPF000509F3.eurprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVXPR08MB11763
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR08MB8083
 
 
 
 On 4/29/26 2:12 AM, Mike Rapoport wrote:
 > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 > 
-> ... to hugetlb_free_default_hugepages() for consistency with
-> hugetlb_nr_default_pages().
+> A lot of tests require free HugeTLB pages. Some need just a few default
+> huge pages, some need a certain amount of memory available as HugeTLB, and
+> some just skip lots of tests if huge pages of all supported sizes are not
+> available.
+> 
+> This all resulted in a huge mess in run_vmtests.sh that sets up some huge
+> pages, adjusts them later and restores some of the settings if the stars
+> align.
+> 
+> Add APIs that allow saving the state of HugeTLB and setting up the desired
+> amount of HugeTLB pages.
+> 
+> Saving the state also registers atexit() callback and signal handler that
+> will ensure restoration of HugeTLB state.
+> 
+> Since many tests use both HugeTLB and THP, the atexit() callbacks and
+> signal handler are restoring both.
+> 
+> For kselftest_harness tests that run fixture setups and test in child
+> processes add a constructor that will save and restore settings in the main
+> process.
 > 
 > Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-
-Small nit, the commit message says hugetlb_free_default_hugepages() but
-the actual function added is hugetlb_free_default_pages().
-
-This change looks good to me. All modified tests produce the same output
-as before the patch.
-
-Tested-by: Sarthak Sharma <sarthak.sharma@arm.com>
-
 > ---
->  .../testing/selftests/mm/hugepage_settings.c  | 28 ++++++-------------
->  .../testing/selftests/mm/hugepage_settings.h  | 12 +++++++-
->  tools/testing/selftests/mm/hugetlb-madvise.c  |  4 +--
->  tools/testing/selftests/mm/hugetlb_dio.c      |  6 ++--
->  .../selftests/mm/hugetlb_fault_after_madv.c   |  2 +-
->  .../selftests/mm/hugetlb_madv_vs_map.c        |  2 +-
->  tools/testing/selftests/mm/uffd-stress.c      |  2 +-
->  7 files changed, 28 insertions(+), 28 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/mm/hugepage_settings.c b/tools/testing/selftests/mm/hugepage_settings.c
-> index 5961229b9931..4ae7332b5e1b 100644
-> --- a/tools/testing/selftests/mm/hugepage_settings.c
-> +++ b/tools/testing/selftests/mm/hugepage_settings.c
-> @@ -446,25 +446,6 @@ unsigned long default_huge_page_size(void)
->  	return hps;
->  }
->  
-> -unsigned long get_free_hugepages(void)
-> -{
-> -	unsigned long fhp = 0;
-> -	char *line = NULL;
-> -	size_t linelen = 0;
-> -	FILE *f = fopen("/proc/meminfo", "r");
-> -
-> -	if (!f)
-> -		return fhp;
-> -	while (getline(&line, &linelen, f) > 0) {
-> -		if (sscanf(line, "HugePages_Free:      %lu", &fhp) == 1)
-> -			break;
-> -	}
-> -
-> -	free(line);
-> -	fclose(f);
-> -	return fhp;
-> -}
-> -
->  static void hugetlb_sysfs_path(char *buf, size_t buflen,
->  			       unsigned long size, const char *attr)
->  {
-> @@ -489,3 +470,12 @@ void hugetlb_set_nr_pages(unsigned long size, unsigned long nr)
->  
->  	write_num(path, nr);
->  }
-> +
-> +unsigned long hugetlb_free_pages(unsigned long size)
-> +{
-> +	char path[PATH_MAX];
-> +
-> +	hugetlb_sysfs_path(path, sizeof(path), size, "free_hugepages");
-> +
-> +	return read_num(path);
-> +}
-> diff --git a/tools/testing/selftests/mm/hugepage_settings.h b/tools/testing/selftests/mm/hugepage_settings.h
-> index d6f41a45e8ee..57fbf2f57e13 100644
-> --- a/tools/testing/selftests/mm/hugepage_settings.h
-> +++ b/tools/testing/selftests/mm/hugepage_settings.h
-> @@ -92,10 +92,10 @@ bool thp_is_enabled(void);
->  
->  int detect_hugetlb_page_sizes(unsigned long sizes[], int max);
->  unsigned long default_huge_page_size(void);
-> -unsigned long get_free_hugepages(void);
->  
->  unsigned long hugetlb_nr_pages(unsigned long size);
->  void hugetlb_set_nr_pages(unsigned long size, unsigned long nr);
-> +unsigned long hugetlb_free_pages(unsigned long size);
->  
->  static inline unsigned long hugetlb_nr_default_pages(void)
->  {
-> @@ -117,4 +117,14 @@ static inline void hugetlb_set_nr_default_pages(unsigned long nr)
->  	hugetlb_set_nr_pages(size, nr);
->  }
->  
-> +static inline unsigned long hugetlb_free_default_pages(void)
-> +{
-> +	unsigned long size = default_huge_page_size();
-> +
-> +	if (!size)
-> +		return 0;
-> +
-> +	return hugetlb_free_pages(size);
-> +}
-> +
->  #endif /* __THP_SETTINGS_H__ */
-> diff --git a/tools/testing/selftests/mm/hugetlb-madvise.c b/tools/testing/selftests/mm/hugetlb-madvise.c
-> index 316384d919db..3c08eb6db6a2 100644
-> --- a/tools/testing/selftests/mm/hugetlb-madvise.c
-> +++ b/tools/testing/selftests/mm/hugetlb-madvise.c
-> @@ -27,7 +27,7 @@
->  
->  #define validate_free_pages(exp_free)					\
->  	do {								\
-> -		unsigned long fhp = get_free_hugepages();		\
-> +		unsigned long fhp = hugetlb_free_default_pages();		\
->  		if (fhp != (exp_free))					\
->  			ksft_exit_fail_msg("Unexpected number of free "	\
->  				"huge pages %ld, expected %ld line %d\n", \
-> @@ -68,7 +68,7 @@ int main(int argc, char **argv)
->  	if (!base_page_size)
->  		ksft_exit_fail_msg("Unable to determine base page size\n");
->  
-> -	free_hugepages = get_free_hugepages();
-> +	free_hugepages = hugetlb_free_default_pages();
->  	if (free_hugepages < MIN_FREE_PAGES)
->  		ksft_exit_skip("Not enough free huge pages (have %lu, need %d)\n", free_hugepages, MIN_FREE_PAGES);
->  
-> diff --git a/tools/testing/selftests/mm/hugetlb_dio.c b/tools/testing/selftests/mm/hugetlb_dio.c
-> index 81e3f7bc8e76..47019433ddaf 100644
-> --- a/tools/testing/selftests/mm/hugetlb_dio.c
-> +++ b/tools/testing/selftests/mm/hugetlb_dio.c
-> @@ -93,7 +93,7 @@ static void run_dio_using_hugetlb(int fd, unsigned int start_off,
->  		ksft_exit_fail_perror("lseek failed\n");
->  
->  	/* Get the free huge pages before allocation */
-> -	free_hpage_b = get_free_hugepages();
-> +	free_hpage_b = hugetlb_free_default_pages();
->  	if (free_hpage_b == 0) {
->  		close(fd);
->  		ksft_exit_skip("No free hugepage, exiting!\n");
-> @@ -121,7 +121,7 @@ static void run_dio_using_hugetlb(int fd, unsigned int start_off,
->  	munmap(orig_buffer, h_pagesize);
->  
->  	/* Get the free huge pages after unmap*/
-> -	free_hpage_a = get_free_hugepages();
-> +	free_hpage_a = hugetlb_free_default_pages();
->  
->  	ksft_print_msg("No. Free pages before allocation : %d\n", free_hpage_b);
->  	ksft_print_msg("No. Free pages after munmap : %d\n", free_hpage_a);
-> @@ -142,7 +142,7 @@ int main(void)
->  	ksft_print_header();
->  
->  	/* Check if huge pages are free */
-> -	if (!get_free_hugepages())
-> +	if (!hugetlb_free_default_pages())
->  		ksft_exit_skip("No free hugepage, exiting\n");
->  
->  	fd = open("/tmp", O_TMPFILE | O_RDWR | O_DIRECT, 0664);
-> diff --git a/tools/testing/selftests/mm/hugetlb_fault_after_madv.c b/tools/testing/selftests/mm/hugetlb_fault_after_madv.c
-> index abc3904c5268..c718dd065d53 100644
-> --- a/tools/testing/selftests/mm/hugetlb_fault_after_madv.c
-> +++ b/tools/testing/selftests/mm/hugetlb_fault_after_madv.c
-> @@ -78,7 +78,7 @@ int main(void)
->  	ksft_print_msg("[INFO] detected default hugetlb page size: %zu KiB\n",
->  		       huge_page_size / 1024);
->  
-> -	free_hugepages = get_free_hugepages();
-> +	free_hugepages = hugetlb_free_default_pages();
->  	if (free_hugepages != 1) {
->  		ksft_exit_skip("This test needs one and only one page to execute. Got %lu\n",
->  			       free_hugepages);
-> diff --git a/tools/testing/selftests/mm/hugetlb_madv_vs_map.c b/tools/testing/selftests/mm/hugetlb_madv_vs_map.c
-> index ac60b4f18784..dfbd71a7f709 100644
-> --- a/tools/testing/selftests/mm/hugetlb_madv_vs_map.c
-> +++ b/tools/testing/selftests/mm/hugetlb_madv_vs_map.c
-> @@ -89,7 +89,7 @@ int main(void)
->  	ksft_print_header();
->  	ksft_set_plan(1);
->  
-> -	free_hugepages = get_free_hugepages();
-> +	free_hugepages = hugetlb_free_default_pages();
->  
->  	if (free_hugepages != 1)
->  		ksft_exit_skip("This test needs one and only one page to execute. Got %lu\n",
-> diff --git a/tools/testing/selftests/mm/uffd-stress.c b/tools/testing/selftests/mm/uffd-stress.c
-> index e92a85463eb1..7e37cf3d27f6 100644
-> --- a/tools/testing/selftests/mm/uffd-stress.c
-> +++ b/tools/testing/selftests/mm/uffd-stress.c
-> @@ -480,7 +480,7 @@ int main(int argc, char **argv)
->  	 * for racy extra reservation of hugepages.
->  	 */
->  	if (gopts->test_type == TEST_HUGETLB &&
-> -	   get_free_hugepages() < 2 * (bytes / gopts->page_size) + gopts->nr_parallel - 1)
-> +	   hugetlb_free_default_pages() < 2 * (bytes / gopts->page_size) + gopts->nr_parallel - 1)
->  		ksft_exit_skip("Skipping userfaultfd... not enough hugepages\n");
->  
->  	gopts->nr_pages_per_cpu = bytes / gopts->page_size / gopts->nr_parallel;
 
+Looks good to me.
+
+Reviewed-by: Sarthak Sharma <sarthak.sharma@arm.com>
