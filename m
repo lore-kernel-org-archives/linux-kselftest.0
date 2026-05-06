@@ -1,226 +1,163 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38EE32D837C;
-	Wed,  6 May 2026 03:48:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C38D1D9A5F
+	for <linux-kselftest@vger.kernel.org>; Wed,  6 May 2026 05:24:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778039305; cv=none; b=BhZEHqvn6+pdIchFB92nWLAn1YmjW+4hAUdFtrSmPei6hABdV7UtahVUvG6TqebnU2fzH1EwPgyK0HyC5qJgON3Bc3dkeDjCCmXenW+8GnlTw7D77RJ6qmyfKSxURrudQGo6keszFnzvpIWwacZWmjRqiMiTdN+FEBg1RZleZ58=
+	t=1778045075; cv=none; b=m6OPGo7ZoVibxyunmoK9hYVUPnYLUKLG6iG8YfwZvjWh8FtFNOgZDmW8BRq88fhLn5UfVmi7zJNtTWjYpXbPIf5q+VcQPb2KPYhp0EF8X+fFh0xpi5lYmI6pEoRxigX3mYPKK56wOZj6TZAIAwNHzbeEEQYtuPC4+hl18KH2jEw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778039305; c=relaxed/simple;
-	bh=ykCTtBq8SINm08DR+LJ7xSso/DvgbtTJ05mRiQz/nlU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QHF/MqwbYzMpQZwdaV1A7VxUS6YWTBfuRaRXX3Ph3mgsnL56TZ/OMvIImhlvG0R4nHOST08idgrZhFVFT8zd+wROaVnwpZbOoAbMQO6GGuaB+kXCgzbCl0YI8VMCjtY95+zTuvELguHTdsal2cXMDRJD0UvsMeOWpXr54VbSUkQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iTaaf2p0; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778045075; c=relaxed/simple;
+	bh=XSi9GE6KzTKtL3JnuU0hOJ2FsXccbvvkotBnn36FK8A=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ZFkMRMR60n6DshPawDzWtXtFNEXYVsv1O7eawzXWgRdnyqWBfiptzjeCUGCyUw37KlB+TGi0Or1huquwzmO38GpSIew06RBp6A32UjxeAzXNm7SuppUzuQqeZmgBcASCzr62w8XIDbKEZmw/H/WuKJFk/kIFXaF7y8QO/1O2e4s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=b9UhZIT1; arc=none smtp.client-ip=95.215.58.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iTaaf2p0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D611C2BCC4;
-	Wed,  6 May 2026 03:48:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778039305;
-	bh=ykCTtBq8SINm08DR+LJ7xSso/DvgbtTJ05mRiQz/nlU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=iTaaf2p0DyXw3VuIpjGvyY7SiPbpfxaVDjAPj35JCCszDPzJ/KsBGsy3lS3UKfOXk
-	 xntyC2rhc6cs4QzJyf0warLqS1iDpjufy/wESBbLPeYYg0/HIII4FKYelYEgnI0XbE
-	 Js8lCBfDuayPrmeVv7AtcAEJt/RuUhXt27cvhdQDiKnM918uEBqZYti0iRMpxSZqKN
-	 0RtzXZKS+6N53i+0cGgV0oZM/k5wt2tUdBW/Hl9kQ9YIOjO6Fs4ivOnjrjAqLY95fC
-	 2nL59MS5tyNFUhuYygbzOgBRyzrbAzZ0Oxqru6D1zPp5fujqTo8Dg13aO1kbESPOL5
-	 3HKnrgP+9bpOg==
-From: Jakub Kicinski <kuba@kernel.org>
-To: davem@davemloft.net
-Cc: netdev@vger.kernel.org,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	andrew+netdev@lunn.ch,
-	horms@kernel.org,
-	Jakub Kicinski <kuba@kernel.org>,
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="b9UhZIT1"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1778045069;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=s1w2c8Ff4EBVaptmWDiNW5OHkzAexKcOkjAxIk43isM=;
+	b=b9UhZIT1mho4iJRIe/NF0Wb22N6oKuFN0uCmJ90L+9ONYFTY/ERbctell74yYE4Bg3x2Km
+	jVwm94U2l7uI56nzb3Vu1s3FTQ2JNxPBlIqnC2nJpohkb7saC3QqMYOLYWMRQ3vl9TZ0oV
+	mPEz18rGt+0O+mTEvVaQ+SsgfULNh7w=
+From: Lance Yang <lance.yang@linux.dev>
+To: ziy@nvidia.com
+Cc: akpm@linux-foundation.org,
+	david@kernel.org,
+	willy@infradead.org,
+	songliubraving@fb.com,
+	clm@fb.com,
+	dsterba@suse.com,
+	viro@zeniv.linux.org.uk,
+	brauner@kernel.org,
+	jack@suse.cz,
+	ljs@kernel.org,
+	baolin.wang@linux.alibaba.com,
+	Liam.Howlett@oracle.com,
+	npache@redhat.com,
+	ryan.roberts@arm.com,
+	dev.jain@arm.com,
+	baohua@kernel.org,
+	lance.yang@linux.dev,
+	vbabka@kernel.org,
+	rppt@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
 	shuah@kernel.org,
+	linux-btrfs@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next v3 2/2] selftests: net: add tests for filtered dumps of page pool
-Date: Tue,  5 May 2026 20:48:21 -0700
-Message-ID: <20260506034821.1710113-2-kuba@kernel.org>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260506034821.1710113-1-kuba@kernel.org>
-References: <20260506034821.1710113-1-kuba@kernel.org>
+Subject: Re: [PATCH v5 02/14] mm/khugepaged: add folio dirty check after try_to_unmap()
+Date: Wed,  6 May 2026 13:23:57 +0800
+Message-Id: <20260506052357.91716-1-lance.yang@linux.dev>
+In-Reply-To: <20260429152924.727124-3-ziy@nvidia.com>
+References: <20260429152924.727124-3-ziy@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Add tests for page pool dumps of a specific ifindex.
 
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
-v2:
- - add CONFIG_PAGE_POOL_STATS=y to the config
-v1: https://lore.kernel.org/20260319035649.2396137-2-kuba@kernel.org
----
-CC: shuah@kernel.org
-CC: linux-kselftest@vger.kernel.org
----
- tools/testing/selftests/net/config       |   1 +
- tools/testing/selftests/net/nl_netdev.py | 119 ++++++++++++++++++++++-
- 2 files changed, 118 insertions(+), 2 deletions(-)
+On Wed, Apr 29, 2026 at 11:29:12AM -0400, Zi Yan wrote:
+>This check ensures the correctness of read-only PMD folio collapse
+>after it is enabled for all FSes supporting PMD pagecache folios and
+>replaces READ_ONLY_THP_FOR_FS.
+>
+>READ_ONLY_THP_FOR_FS only supports read-only fd and uses mapping->nr_thps
+>and inode->i_writecount to prevent any write to read-only to-be-collapsed
+>folios. In upcoming commits, READ_ONLY_THP_FOR_FS will be removed and the
+>aforementioned mechanism will go away too. To ensure khugepaged functions
+>as expected after the changes, skip if any folio is dirty after
+>try_to_unmap(), since a dirty folio at that point means this read-only
+>folio can get writes between try_to_unmap() and try_to_unmap_flush() via
+>cached TLB entries and khugepaged does not support writable pagecache folio
+>collapse yet.
+>
+>Signed-off-by: Zi Yan <ziy@nvidia.com>
+>Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+>Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+>---
+> mm/khugepaged.c | 28 ++++++++++++++++++++++++----
+> 1 file changed, 24 insertions(+), 4 deletions(-)
+>
+>diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+>index 6808f2b48d864..71209a72195ab 100644
+>--- a/mm/khugepaged.c
+>+++ b/mm/khugepaged.c
+>@@ -2327,8 +2327,7 @@ static enum scan_result collapse_file(struct mm_struct *mm, unsigned long addr,
+> 				}
+> 			} else if (folio_test_dirty(folio)) {
+> 				/*
+>-				 * khugepaged only works on read-only fd,
+>-				 * so this page is dirty because it hasn't
+>+				 * This page is dirty because it hasn't
+> 				 * been flushed since first write. There
+> 				 * won't be new dirty pages.
+> 				 *
+>@@ -2386,8 +2385,8 @@ static enum scan_result collapse_file(struct mm_struct *mm, unsigned long addr,
+> 		if (!is_shmem && (folio_test_dirty(folio) ||
+> 				  folio_test_writeback(folio))) {
+> 			/*
+>-			 * khugepaged only works on read-only fd, so this
+>-			 * folio is dirty because it hasn't been flushed
+>+			 * khugepaged only works on clean file-backed folios,
+>+			 * so this folio is dirty because it hasn't been flushed
+> 			 * since first write.
+> 			 */
+> 			result = SCAN_PAGE_DIRTY_OR_WRITEBACK;
+>@@ -2431,6 +2430,27 @@ static enum scan_result collapse_file(struct mm_struct *mm, unsigned long addr,
+> 			goto out_unlock;
+> 		}
+> 
+>+		/*
+>+		 * At this point, the folio is locked and unmapped. If the PTE
+>+		 * was dirty, try_to_unmap() has transferred the dirty bit to
+>+		 * the folio and we must not collapse it into a clean
+>+		 * file-backed folio.
+>+		 *
+>+		 * If the folio is clean here, no one can write it until we
+>+		 * drop the folio lock. A write through a stale TLB entry came
+>+		 * from a clean PTE and must fault because the PTE has been
+>+		 * cleared; the fault path has to take the folio lock before
 
-diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
-index 94d722770420..d07c5ac5cab7 100644
---- a/tools/testing/selftests/net/config
-+++ b/tools/testing/selftests/net/config
-@@ -117,6 +117,7 @@ CONFIG_OPENVSWITCH=m
- CONFIG_OPENVSWITCH_GENEVE=m
- CONFIG_OPENVSWITCH_GRE=m
- CONFIG_OPENVSWITCH_VXLAN=m
-+CONFIG_PAGE_POOL_STATS=y
- CONFIG_PROC_SYSCTL=y
- CONFIG_PSAMPLE=m
- CONFIG_RPS=y
-diff --git a/tools/testing/selftests/net/nl_netdev.py b/tools/testing/selftests/net/nl_netdev.py
-index eff55c64a012..ceb44c8e1fec 100755
---- a/tools/testing/selftests/net/nl_netdev.py
-+++ b/tools/testing/selftests/net/nl_netdev.py
-@@ -9,7 +9,7 @@ import errno
- from os import system
- from lib.py import ksft_run, ksft_exit
- from lib.py import ksft_eq, ksft_ge, ksft_ne, ksft_raises, ksft_busy_wait
--from lib.py import NetdevFamily, NetdevSimDev, NlError, ip
-+from lib.py import NetdevFamily, NetdevSimDev, NlError, defer, ip
- 
- 
- def empty_check(nf) -> None:
-@@ -255,6 +255,117 @@ from lib.py import NetdevFamily, NetdevSimDev, NlError, ip
-         nsim.dfs_write("pp_hold", "y")
- 
- 
-+def page_pool_dump_ifindex(nf) -> None:
-+    """Test page pool dump filtering by ifindex."""
-+    nsimdev1 = NetdevSimDev(queue_count=3)
-+    rm_nsim1 = defer(nsimdev1.remove)
-+    nsimdev2 = NetdevSimDev(queue_count=5)
-+    defer(nsimdev2.remove)
-+
-+    nsim1 = nsimdev1.nsims[0]
-+    nsim2 = nsimdev2.nsims[0]
-+
-+    ip(f"link set dev {nsim1.ifname} up")
-+    ip(f"link set dev {nsim2.ifname} up")
-+
-+    # Unfiltered dump should have pools from both devices
-+    all_pp = nf.page_pool_get({}, dump=True)
-+    pp1_all = [pp for pp in all_pp
-+               if pp.get("ifindex") == nsim1.ifindex]
-+    pp2_all = [pp for pp in all_pp
-+               if pp.get("ifindex") == nsim2.ifindex]
-+    ksft_ge(len(pp1_all), 1)
-+    ksft_ge(len(pp2_all), 1)
-+
-+    # Filtered dump should only return pools for that device
-+    pp1_flt = nf.page_pool_get({'ifindex': nsim1.ifindex}, dump=True)
-+    ksft_eq(pp1_flt, pp1_all)
-+
-+    pp2_flt = nf.page_pool_get({'ifindex': nsim2.ifindex}, dump=True)
-+    ksft_eq(pp2_flt, pp2_all)
-+
-+    # Non-existent ifindex should return empty dump
-+    pp_none = nf.page_pool_get({'ifindex': 12345678}, dump=True)
-+    ksft_eq(len(pp_none), 0)
-+
-+    # Device down - no pools for that ifindex
-+    ip(f"link set dev {nsim1.ifname} down")
-+    pp1_down = nf.page_pool_get({'ifindex': nsim1.ifindex}, dump=True)
-+    ksft_eq(len(pp1_down), 0)
-+
-+    # Remove device, dump by its old ifindex should return empty
-+    old_ifindex = nsim1.ifindex
-+    rm_nsim1.exec()
-+    pp1_gone = nf.page_pool_get({'ifindex': old_ifindex}, dump=True)
-+    ksft_eq(len(pp1_gone), 0)
-+
-+
-+def page_pool_ifindex_leak_check(nf) -> None:
-+    """Test that zombie page pools don't show up under the original ifindex."""
-+    nsimdev = NetdevSimDev()
-+    rm_nsim = defer(nsimdev.remove)
-+    nsim = nsimdev.nsims[0]
-+
-+    ip(f"link set dev {nsim.ifname} up")
-+    nsim.dfs_write("pp_hold", "y")
-+
-+    pp_up = nf.page_pool_get({'ifindex': nsim.ifindex}, dump=True)
-+    ksft_ge(len(pp_up), 1)
-+
-+    # Remove device with leaked page - pool becomes zombie (orphaned to lo)
-+    old_ifindex = nsim.ifindex
-+    rm_nsim.exec()
-+
-+    # Zombie pool should NOT appear under the original device
-+    pp_down = nf.page_pool_get({'ifindex': old_ifindex}, dump=True)
-+    ksft_eq(len(pp_down), 0)
-+
-+    # But it should appear in an unfiltered dump (under loopback)
-+    pp_all = nf.page_pool_get({}, dump=True)
-+    orphans = [pp for pp in pp_all
-+               if "detach-time" in pp and "ifindex" not in pp]
-+    ksft_ge(len(orphans), 1)
-+
-+
-+def page_pool_stats_ifindex_check(nf) -> None:
-+    """Test page pool stats dump filtering by ifindex."""
-+    nsimdev1 = NetdevSimDev(queue_count=3)
-+    defer(nsimdev1.remove)
-+    nsimdev2 = NetdevSimDev(queue_count=5)
-+    defer(nsimdev2.remove)
-+
-+    nsim1 = nsimdev1.nsims[0]
-+    nsim2 = nsimdev2.nsims[0]
-+
-+    ip(f"link set dev {nsim1.ifname} up")
-+    ip(f"link set dev {nsim2.ifname} up")
-+
-+    # Unfiltered stats dump
-+    all_stats = nf.page_pool_stats_get({}, dump=True)
-+    s1_all = [s for s in all_stats
-+              if s.get("info", {}).get("ifindex") == nsim1.ifindex]
-+    s2_all = [s for s in all_stats
-+              if s.get("info", {}).get("ifindex") == nsim2.ifindex]
-+    ksft_ge(len(s1_all), 1)
-+    ksft_ge(len(s2_all), 1)
-+
-+    # Filtered stats dump
-+    s1_flt = nf.page_pool_stats_get({'info': {'ifindex': nsim1.ifindex}},
-+                                    dump=True)
-+    ksft_eq(s1_flt, s1_all)
-+
-+    # Non-existent ifindex should return empty
-+    s_none = nf.page_pool_stats_get({'info': {'ifindex': 12345678}}, dump=True)
-+    ksft_eq(len(s_none), 0)
-+
-+    # info.id should be rejected for stats dump
-+    with ksft_raises(NlError) as cm:
-+        nf.page_pool_stats_get({'info': {'id': s1_all[0]['info']['id']}},
-+                               dump=True)
-+    ksft_eq(cm.exception.nl_msg.error, -errno.EINVAL)
-+    ksft_eq(cm.exception.nl_msg.extack['bad-attr'], '.info.id')
-+
-+
- def main() -> None:
-     """ Ksft boiler plate main """
-     nf = NetdevFamily()
-@@ -265,7 +376,11 @@ from lib.py import NetdevFamily, NetdevSimDev, NlError, ip
-               napi_set_threaded,
-               dev_set_threaded,
-               nsim_rxq_reset_down,
--              page_pool_check],
-+              page_pool_check,
-+              page_pool_dump_ifindex,
-+              page_pool_ifindex_leak_check,
-+              page_pool_stats_ifindex_check
-+              ],
-              args=(nf, ))
-     ksft_exit()
- 
--- 
-2.54.0
+Yeah, try_to_unmap_one() also already documents the required arch
+guarantee for a clean cached TLB entry after the PTE is cleared.
 
+			/*
+			 * We clear the PTE but do not flush so potentially
+			 * a remote CPU could still be writing to the folio.
+			 * If the entry was previously clean then the
+			 * architecture must guarantee that a clear->dirty
+			 * transition on a cached TLB entry is written through
+			 * and traps if the PTE is unmapped.
+			 */
+
+Lesson learned :)
+
+>+		 * installing a writable mapping. Buffered write paths also
+>+		 * have to take the folio lock before modifying file contents
+>+		 * without a mapping, typically via write_begin_get_folio().
+>+		 */
+>+		if (!is_shmem && folio_test_dirty(folio)) {
+>+			result = SCAN_PAGE_DIRTY_OR_WRITEBACK;
+>+			xas_unlock_irq(&xas);
+>+			folio_putback_lru(folio);
+>+			goto out_unlock;
+>+		}
+
+LGTM.
+Reviewed-by: Lance Yang <lance.yang@linux.dev>
