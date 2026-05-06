@@ -1,365 +1,319 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from CO1PR03CU002.outbound.protection.outlook.com (mail-westus2azon11010030.outbound.protection.outlook.com [52.101.46.30])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 948173F1676;
-	Wed,  6 May 2026 12:58:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778072339; cv=none; b=CUpaS0lNGGtHSQufnXQZSKUIlwFx/MuYewP25qWGYMdruCuiJybdJ59jSOu+1qhp2Q4lH8Ujgyrh5VmKxg5pGUzxPaftgSEqJVgYKHKtdQ29icL9l9n2RL5+MZtic1ABgU7pGtwztUAqYbvlFuJxgsZVaa8BUl6AggGh+2bxTco=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778072339; c=relaxed/simple;
-	bh=HNC66DdFx4sxkSUiDErSM+03OizehuxGGcWPFdtoziU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=MLrNyKNnNcgXog4Far6zNMfj9SGq8uzmuH9Vn4mHsYS3WrinX5oZFyOjdSa50jgMNW7chgc0txpNWlXFpCUmATeQ8x50PblLaxVLuTaPEcwQ4D33boInSyaauQeow85Gr5nOHAuIjnBHUh4ojwRvpCdE49qIPDWhnw8SZ7hwUao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=jraVxtYN; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD7FD3FA5C8;
+	Wed,  6 May 2026 13:11:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.46.30
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778073112; cv=fail; b=bwu0BNCAZrf8tz5YLHXukp5rEDC/DgV1Lu36PgbRUBH1XpkRLdyfKPxxkERW1RZqAerYOSq2BXGXs/7xEAgjfcnonZSuj9qIykMGw/nX1/STVrkK5Y3FpqN64ym0p/A066WwpbIeqOXfPdQeCvlWAsfp4dBaeuhD3wZ0Lk81U5g=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778073112; c=relaxed/simple;
+	bh=z5l5q7/AXkH3CM8ZbtArV5uafSx8eAIkbfE2Eg4dLr4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Btriuw4+AQgpTo7c/ZJI25KxX32PNyj8m7FOuO4WvGS+QjLCjs0kWaNa+AngWp7YCOTFa0aDILuBmvauWQx6Kn5u/KG0WdDBAMtg6IZcApgiGjDz94ict2wIN+uzdkwwpKkeOmTqf1GlDey2EbrHXc8uKKHnDbc8VWCp9UnWQqQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=HC5URyod; arc=fail smtp.client-ip=52.101.46.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="jraVxtYN"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:In-Reply-To:References:
-	Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:
-	From:Reply-To:Content-ID:Content-Description;
-	bh=2hsVRlQ0/XX4Lvi0I/xpVpRnUAFS0o/pLAACrLv+p0o=; b=jraVxtYN1uxjFGa7BOQO0ljKe3
-	P2D5GD57RerSjRBpXmC0xoHyF0G6mm7q3OA/5McgtVadBlKrbkgsQK8QQNx7C8Y4iWeVzrrXM97QH
-	0V0iGe+tv3QOcBVJuJeoEQ5rR8B3/ihiQpJepwzjpISZa7ZTNF6/zad8/fhc3X2jwW3nU+FS42wEx
-	P4oEHhYkteY7p//mLjtFKhITI4xfahDoTlMi2pw8DhDe+zuowE0046d/h/DBX0yNW+PKbN3fSgSl6
-	EXXvFKDvQI36DU/Wv6jc+6coG+73yBzxV4Y3YxKLpmWuqlLgdWQWmQB6w92EAafmZ8qB8tB4/A2ET
-	2P7zhS/g==;
-Received: from authenticated user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wKbpv-003bXE-0D;
-	Wed, 06 May 2026 12:58:47 +0000
-From: Breno Leitao <leitao@debian.org>
-Date: Wed, 06 May 2026 05:58:25 -0700
-Subject: [PATCH v3 2/2] selftests/mm: add kmemleak verbose dedup test
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="HC5URyod"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=fkj+gbdJDK5swYaZvmxRD4GKBFwPLZdM48j6X1EQUoUWoS+qNnACQZgIKs3T8snHyarVrZeHm4PqRC7dqWSxDSaCqwpL26tPq75ANnsvVgsju9h0YsBGhCuAN+2LVVRtEaQ4rfUF4l4giZXACc2/b96SmKhL2ggOu95CA91MMfzVFjJ4BTsw/N5dGvy8R31fqUxj7P7QKmB1v1ipm2NO01Lsm7tyFFUGi4UiH5pYZ25CjCX2NOwiC162YBFo4fHqkd3Kk6KEWHn+yvL5eAkjGqttvJr0TrNrOqMO+d5De0fsPLD9Gms3ng72Hv65TSHK7Cmo82L0kce71R/OOnV9OQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KUdU/YKm9HXcsDHE+sXepmxr1a2IyKG+Rsq1uP3oH5s=;
+ b=kJs8Upr9MfyeSbIDhN2P5FPH4Ju0BIYjphBmC8a40JlZXYE8fV82bX+2q/RRaqh2NlOcGRmJkEB8ORucn5R2L1F9L+rTItZjvwjoVivn9DzRuI81Y45v6Ox6efd4QP2N+wmaDxbz/86m38GUjNxeXnI2x07T/Cd/Kt+bR57pQdN6Z8xMdVw6/idzGo07pggEXIOislORBbX9ef49TvFmm02qNC5peJ+od/GEHB+Qv56uXTVRoGmRVclQDOhHKG9aaJNZoY8nAcZn5M0gryImXgbRehRPqPJ5y3kselKrS5/iUi3Y7N/Qa/D4bBNvR1SLNcW9UJoeo1oB2xJyLmEKyg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KUdU/YKm9HXcsDHE+sXepmxr1a2IyKG+Rsq1uP3oH5s=;
+ b=HC5URyodmRh7quciAhj+jRwwRTQ8DXXSjxqeSboEBc3P27PyZrB4oqx6OSb325q8Oh4rlzPfhy/yAYkjFYVfh8CxP2J+iWemy/Ykksxm9AQG8DFW/mxLPyfPHPVrK1S4RWtvvRUfXdphuSCkzl8GHgHwWnU8vIjx0JL9lHobC5ydsfUWMXT7D33EIRB3pcBfQSB9hBwZUoZWtIZBiY3Ds1xybNkZcLak53D8xozk8tctMGxgqI+4Ie7H8YNbb2iGVtCM+H1rEFShlHebLrzUiil6WuFIqlB3LtKMGvCcNF1iphAZC1MeLkBi4yBS6fmlMTrzb41r324pHvtDKaNgEw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DS7PR12MB9473.namprd12.prod.outlook.com (2603:10b6:8:252::5) by
+ SA1PR12MB7039.namprd12.prod.outlook.com (2603:10b6:806:24e::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9891.15; Wed, 6 May 2026 13:11:43 +0000
+Received: from DS7PR12MB9473.namprd12.prod.outlook.com
+ ([fe80::f01d:73d2:2dda:c7b2]) by DS7PR12MB9473.namprd12.prod.outlook.com
+ ([fe80::f01d:73d2:2dda:c7b2%4]) with mapi id 15.20.9870.023; Wed, 6 May 2026
+ 13:11:43 +0000
+From: Zi Yan <ziy@nvidia.com>
+To: Nico Pache <npache@redhat.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ David Hildenbrand <david@kernel.org>,
+ "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+ Song Liu <songliubraving@fb.com>, Chris Mason <clm@fb.com>,
+ David Sterba <dsterba@suse.com>, Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+ Lorenzo Stoakes <ljs@kernel.org>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
+ Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
+ Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Shuah Khan <shuah@kernel.org>, linux-btrfs@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v5 11/14] selftests/mm: remove READ_ONLY_THP_FOR_FS in
+ khugepaged
+Date: Wed, 06 May 2026 21:11:30 +0800
+X-Mailer: MailMate (2.0r6292)
+Message-ID: <E2400A6C-C0F8-44FB-B8F8-92B5371737B6@nvidia.com>
+In-Reply-To: <52285e2c-af42-4c0d-9926-017f80b6614c@redhat.com>
+References: <20260429152924.727124-1-ziy@nvidia.com>
+ <20260429153538.727855-7-ziy@nvidia.com>
+ <52285e2c-af42-4c0d-9926-017f80b6614c@redhat.com>
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: CH2PR14CA0031.namprd14.prod.outlook.com
+ (2603:10b6:610:56::11) To DS7PR12MB9473.namprd12.prod.outlook.com
+ (2603:10b6:8:252::5)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260506-kmemleak_dedup-v3-2-2d36aafc34da@debian.org>
-References: <20260506-kmemleak_dedup-v3-0-2d36aafc34da@debian.org>
-In-Reply-To: <20260506-kmemleak_dedup-v3-0-2d36aafc34da@debian.org>
-To: Andrew Morton <akpm@linux-foundation.org>, 
- David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
- Shuah Khan <shuah@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
- "Liam R. Howlett" <liam@infradead.org>, 
- "Liam R. Howlett" <liam@infradead.org>
-Cc: linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
- linux-kselftest@vger.kernel.org, kernel-team@meta.com, 
- Breno Leitao <leitao@debian.org>
-X-Mailer: b4 0.16-dev-453a6
-X-Developer-Signature: v=1; a=openpgp-sha256; l=11971; i=leitao@debian.org;
- h=from:subject:message-id; bh=HNC66DdFx4sxkSUiDErSM+03OizehuxGGcWPFdtoziU=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBp+zr4xjlpSgfZccRUtxvPoN9gmYDCYd9w3aw+e
- haQcdA4/OuJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCafs6+AAKCRA1o5Of/Hh3
- bRu5EACbe2n8sEFVlNV7iME6df0isHCDSn9g0/XMeEPxc3C9rVN3X/KCR3WTqXg5HDIgVlM8zMn
- KNQ9TbwE+VRtuGTNUhxikalOHsFzl6QhU3SYP7ZnEkhCDcCvS/LiFvqp+2dqMZ6nBHJcGguHWsF
- UTn+fLGDoCex4pFRXJKjBP9N8eARUMp2/dvV01IOMD4wBi+u/sIobZnAYA0BgNvOm1e4Kls5j0n
- o1uFDeSSnCtBpFRP7kd08z+pbcU4gwJGWmhJyzxDmCIrQa4HWzU3wdzwiVOgSolo9f3Nw8vjEFu
- kaaONZAN+HLAw0xF1f00n2/NRM/gEANQ6+eirWbOROio9dULbAilMBC7qRaIbEicd4raN0g351u
- olihrQNNagsWFNHMd9zZFoN8m+WRbf4N3ZH59FfB2xFGKNlFrsesdmK9iYyuaZMRe/pNbfOKopK
- Ae5ub2JKgxHjcdMK68zd+wjaYWm4aNS3tYwDIjn4PRXLnjbLsmXdLfeYSTwQSUSUva+vOC2reDU
- 7+MkdTa9IKXYhQ3157AYtWzbAphAlDaZMxwODAKi23uWa+q02Ec3izpIFI9LHy+kluEAYLKbmcL
- xKzmZoOfps5bLawFRahPyf+p7Ch14CYFB0Hm4OOnaAjbdQxU+1eOpvmTGIZBohCw+eCrd0s6f6+
- GQY8qP7qKPnSHkA==
-X-Developer-Key: i=leitao@debian.org; a=openpgp;
- fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
-X-Debian-User: leitao
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR12MB9473:EE_|SA1PR12MB7039:EE_
+X-MS-Office365-Filtering-Correlation-Id: b09991b2-dda6-445d-4f4e-08deab710492
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|10070799003|1800799024|366016|56012099003|18002099003|22082099003;
+X-Microsoft-Antispam-Message-Info:
+	Rsmuz2cJ0RWfENkfLNKBfEEnsmhFT3h01uIpSD86nndasUy/n5NLxdsAZLhvB8zfxubcIDh0nSaXYBGV/vzOKesrhvyzSwdmRKdsPPWzrRdlwRHxgaqKwsF0j6Kny1CDt/2UNutS/7BzI3oRvyPJYc937XuZejwXzTA8sCeWDcQ3rJ3SEVyBSxv2ayAzzhoaXkmiQSguNStEN9Poawtk+4eI+3GT398tZ1YiF1B5zzdkI/kMMVnUqedPTWDRNMUTyS2BjcJ4TWH+AXbIx1eFz9iyfxsai9eRnP6tFGDWH1cUv/oSdbSPt+l7O0EzuqgAIM+m15Bvhk/W2AFAVsid734KYoD6HvsKru5MSa8G596onunXGsk7dy06k9KuShWO2PvyYd6N6xdZS/SwvuTeTDeDU/gAVQOsZC022Jb53lMoMaipOrxu5RQ/tYQkd+trSITf6tITZcVOdCexQOQ2Hdo9SSbTaAuFqNEfqiTYKfwX7zAo9TQ/YB8rFyclIgZ8V0j1Zml+EVHkPjeJAgD29V0JeyoZEixOXlfUdRkvQ9Nebo2l4oelVNNjTiLMswLShHceiR6Ds/RHY9wHxQSBlbtCDxBWgVbYmKMCfPL1cQVaxD+NTIm9uc4l4W1jGx9ow6HmjqY81BzLXsVgUzw4mqCUqytsWVirdqePpfejeSInRTQibRaZwIyQqyeNH4MI
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB9473.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(10070799003)(1800799024)(366016)(56012099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?tPQxvL0PsTbnOf7l/iocQIH6+yhxa7xkIbPbhg5azEVwtK2g2O2gp2J/0aD2?=
+ =?us-ascii?Q?SCdoUA9t+QwDcTECtpJZN8MTbtPChX6tzHiiZkeXWnTYbX7yFwfQX7hFAnEA?=
+ =?us-ascii?Q?70kmerexhdkiUx/v1/GmSiqjquDQsE3idQu37/C58vLLw3dQU0OWAZ0KG3Im?=
+ =?us-ascii?Q?IbVYbItcEWDpXgWMgv8WKyVFvslkChQ50DGy2NnS00XS2mrwsi+n57rARHuV?=
+ =?us-ascii?Q?o491lxhV+3sFHika/bb9AQTHwR40bdlBlHjuRAEUz1JyTc87G1x5XpUFiQ9n?=
+ =?us-ascii?Q?LrURG1L8of0fWoYn33Hxj5Ip4nuu+SlfYjA3Myk87GwqinV0myrkNSYbQpy6?=
+ =?us-ascii?Q?aYdbFU5KHACUi0gWk2wSbJiA43L7j/6sRHsA8TGPViz3cY+Aj9/SZg3nb6ch?=
+ =?us-ascii?Q?ROjumzSr1oy7smcBuZUudOAUx+4IHTI5E8jQ72xvC8Rrw3mL+5U0InJkrxY3?=
+ =?us-ascii?Q?qPLdOIUxnz+pndCZM7jWF6n3XcCJnTVtfnJlpg+o/jIoKfEpaYNNnTqg85bt?=
+ =?us-ascii?Q?PIbcgfLjjx4XyEFa9hCA1rw7dkvMBBz4OvwAvYv8Cd2yLjR1E+bed9p4iPKQ?=
+ =?us-ascii?Q?ZuSLHa+4XdXVzdXsuoXztHecbni//8bxb3PI0s0e9cQBgJ/cjYTz1E98s6KK?=
+ =?us-ascii?Q?+a71LSidjCpmL2wcetvLpXLv4rDwiyVGnmj8JJUaWEoUg58YhkHb3KM8zt6r?=
+ =?us-ascii?Q?w5AdeQAunbcNMbEypJtupt5vyrpI0+meRyqG16U3498zjosoTWun7fGPFtwn?=
+ =?us-ascii?Q?Pa4tyCelGrf8PPmxXGyGu3ZuYEfKLHGc7Wv1ckCh0NxKbzEqCyUDJQPgnvem?=
+ =?us-ascii?Q?9ClkCR7wVULDqB1yBlrhI9owDt6p6wgvfayVxjDTrgz107VKw/4nD9CQYnL3?=
+ =?us-ascii?Q?cIjmidg+Yk0EuSWvXv9WlhEldaBlDHhPX1wYhVKRLNCSmfSqkCS7hvU0G52N?=
+ =?us-ascii?Q?pMS0EH1WpbZbghZzi3+XY/11XnacR9WByMw3+4p6n4LS0175qx581/gmsed9?=
+ =?us-ascii?Q?68rF7p/PEuSuX41xCogfR51ex9DiRAIHgtAGNs37CXiOrFAJloDoKq0VeL3y?=
+ =?us-ascii?Q?0yoE9IdsU0hpy243YNLFKzm463/d02HT/gqt5Z0kzRwvgpb8yByoGdpAeK7r?=
+ =?us-ascii?Q?yr1xP70T09OxQCV11vIN0ms7OyxjBRBuiMpgSfh+vQ3sAP1olLD5C1kMxsTk?=
+ =?us-ascii?Q?/NmgRUmBVOryO2inJtt6HVZA3y0Nm9mi3e63Ssb8RdbuXWgWiMTaDtfCP/7k?=
+ =?us-ascii?Q?RgI/AnfEUt4jHGGuMxempY5uVdJ+Dg97asmv9WamjM6wkwsQrvWvjpGKS+UI?=
+ =?us-ascii?Q?WFj5zBDPW5kNwZDFOlPYmOqAQQtHCV4vHvTL4GX0EGb5u0/cvv1tL+ODexlk?=
+ =?us-ascii?Q?2zEvbS7Xo9mKUkMSIS38kHj3Y1vNu+OJgaEWumAQil/eVySstAA8lAD7pT4e?=
+ =?us-ascii?Q?PdLurRqf6nNHcMf4WG6PECvl0xoIZAwRg/iEMRQEysDS18llOcg+BP3aFbpX?=
+ =?us-ascii?Q?LjzzgdEOLoN26XHzbHv5/Hvw8KIOjQtlLcNVXRMTwX4T+bQcXn5LeJmtWi14?=
+ =?us-ascii?Q?QXiILwon5vMTMaOM2nANW8djEaURihebZvIoTBT9cObX3j+4SXkW5HmHTD4f?=
+ =?us-ascii?Q?FFxaoC8U2PEfiXp1DP7QOatmPX+hQCZWBf5dVVUkEOI5DYxuIEh/kNgmgbAr?=
+ =?us-ascii?Q?gQ+pNI5QXRmJCuG1UpEkIGtxIzd5xgf8osWeJOYIX8xwPIGAQ6mI8Vdpe986?=
+ =?us-ascii?Q?5E7adxOAO/hRtWbsTdKDhk/pTe1rabtYYUsBHK19fNy0NGWdmdbS?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b09991b2-dda6-445d-4f4e-08deab710492
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB9473.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 May 2026 13:11:43.1177
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: irFQ+tTmu/XMVU/vCXjd+lRN4f2tcFAt87ybJB1gjOl6Lh7MWVZQ7P/IiBRFdaT1
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7039
 
-Add a regression test for the per-scan verbose dedup added in the
-preceding commit. The test loads samples/kmemleak's helper module
-(CONFIG_SAMPLE_KMEMLEAK=m) to generate orphan allocations, several of
-which share an allocation backtrace, runs four kmemleak scans with
-verbose printing enabled, then walks dmesg looking for two
-"unreferenced object" reports within a single scan that share an
-identical backtrace - which would mean dedup failed to collapse them.
+On 4 May 2026, at 12:23, Nico Pache wrote:
 
-The test is intentionally permissive on detection but strict on
-regressions:
+> On 4/29/26 9:35 AM, Zi Yan wrote:
+>> Change the requirement to a file system with large folio support and t=
+he
+>> supported order needs to include PMD_ORDER.
+>>
+>> Also add tests of opening a file with read write permission and popula=
+ting
+>> folios with writes. Reuse the XFS image from split_huge_page_test.
+>>
+>> Signed-off-by: Zi Yan <ziy@nvidia.com>
+>> ---
+>>   tools/testing/selftests/mm/khugepaged.c   | 131 +++++++++++++++-----=
+--
+>>   tools/testing/selftests/mm/run_vmtests.sh |  12 +-
+>>   2 files changed, 102 insertions(+), 41 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/s=
+elftests/mm/khugepaged.c
+>> index a6bb9d50363d2..80b913185c643 100644
+>> --- a/tools/testing/selftests/mm/khugepaged.c
+>> +++ b/tools/testing/selftests/mm/khugepaged.c
+>> @@ -49,7 +49,8 @@ struct mem_ops {
+>>   	const char *name;
+>>   };
+>>  -static struct mem_ops *file_ops;
+>> +static struct mem_ops *read_only_file_ops;
+>> +static struct mem_ops *read_write_file_ops;
+>>   static struct mem_ops *anon_ops;
+>>   static struct mem_ops *shmem_ops;
+>>  @@ -112,7 +113,8 @@ static void restore_settings(int sig)
+>>   static void save_settings(void)
+>>   {
+>>   	printf("Save THP and khugepaged settings...");
+>> -	if (file_ops && finfo.type =3D=3D VMA_FILE)
+>> +	if ((read_only_file_ops || read_write_file_ops) &&
+>> +	    finfo.type =3D=3D VMA_FILE)
+>>   		thp_set_read_ahead_path(finfo.dev_queue_read_ahead_path);
+>>   	thp_save_settings();
+>>  @@ -364,11 +366,14 @@ static bool anon_check_huge(void *addr, int nr_=
+hpages)
+>>   	return check_huge_anon(addr, nr_hpages, hpage_pmd_size);
+>>   }
+>>  -static void *file_setup_area(int nr_hpages)
+>> +static void *file_setup_area_common(int nr_hpages, bool read_only)
+>>   {
+>>   	int fd;
+>>   	void *p;
+>>   	unsigned long size;
+>> +	int open_opt =3D read_only ? O_RDONLY : O_RDWR;
+>> +	int mmap_prot =3D read_only ? PROT_READ : (PROT_READ | PROT_WRITE);
+>> +	int mmap_opt =3D read_only ? MAP_PRIVATE : MAP_SHARED;
+>>    	unlink(finfo.path);  /* Cleanup from previous failed tests */
+>>   	printf("Creating %s for collapse%s...", finfo.path,
+>> @@ -399,14 +404,15 @@ static void *file_setup_area(int nr_hpages)
+>>   	munmap(p, size);
+>>   	success("OK");
+>>  -	printf("Opening %s read only for collapse...", finfo.path);
+>> -	finfo.fd =3D open(finfo.path, O_RDONLY, 777);
+>> +	printf("Opening %s %s for collapse...", finfo.path,
+>> +	       read_only ? "read only" : "read-write");
+>> +	finfo.fd =3D open(finfo.path, open_opt, 777);
+>>   	if (finfo.fd < 0) {
+>>   		perror("open()");
+>>   		exit(EXIT_FAILURE);
+>>   	}
+>> -	p =3D mmap(BASE_ADDR, size, PROT_READ,
+>> -		 MAP_PRIVATE, finfo.fd, 0);
+>> +	p =3D mmap(BASE_ADDR, size, mmap_prot,
+>> +		 mmap_opt, finfo.fd, 0);
+>>   	if (p =3D=3D MAP_FAILED || p !=3D BASE_ADDR) {
+>>   		perror("mmap()");
+>>   		exit(EXIT_FAILURE);
+>> @@ -418,6 +424,16 @@ static void *file_setup_area(int nr_hpages)
+>>   	return p;
+>>   }
+>>  +static void *file_setup_read_only_area(int nr_hpages)
+>> +{
+>> +	return file_setup_area_common(nr_hpages, /* read_only=3D */ true);
+>> +}
+>> +
+>> +static void *file_setup_read_write_area(int nr_hpages)
+>> +{
+>> +	return file_setup_area_common(nr_hpages, /* read_only=3D */ false);
+>> +}
+>> +
+>>   static void file_cleanup_area(void *p, unsigned long size)
+>>   {
+>>   	munmap(p, size);
+>> @@ -425,14 +441,25 @@ static void file_cleanup_area(void *p, unsigned =
+long size)
+>>   	unlink(finfo.path);
+>>   }
+>>  -static void file_fault(void *p, unsigned long start, unsigned long e=
+nd)
+>> +static void file_fault_common(void *p, unsigned long start, unsigned =
+long end,
+>> +		int madv_ops)
+>>   {
+>> -	if (madvise(((char *)p) + start, end - start, MADV_POPULATE_READ)) {=
 
- - PASS when no duplicates are observed, regardless of whether the
-   dedup summary line ("... and N more object(s) with the same
-   backtrace") was actually emitted. Per-CPU chunk reuse, slab
-   freelist pointers, kernel stack residue and CONFIG_DEBUG_KMEMLEAK_
-   AUTO_SCAN can all keep most of the orphans "still referenced" or
-   reported across many separate scans, so the dedup path may have
-   nothing to fold within one scan. That is not a regression.
+>> +	if (madvise(((char *)p) + start, end - start, madv_ops)) {
+>>   		perror("madvise(MADV_POPULATE_READ");
+>>   		exit(EXIT_FAILURE);
+>>   	}
+>>   }
+>>  +static void file_fault_read(void *p, unsigned long start, unsigned l=
+ong end)
+>> +{
+>> +	file_fault_common(p, start, end, MADV_POPULATE_READ);
+>> +}
+>> +
+>> +static void file_fault_write(void *p, unsigned long start, unsigned l=
+ong end)
+>> +{
+>> +	file_fault_common(p, start, end, MADV_POPULATE_WRITE);
+>> +}
+>> +
+>>   static bool file_check_huge(void *addr, int nr_hpages)
+>>   {
+>>   	switch (finfo.type) {
+>> @@ -488,10 +515,18 @@ static struct mem_ops __anon_ops =3D {
+>>   	.name =3D "anon",
+>>   };
+>>  -static struct mem_ops __file_ops =3D {
+>> -	.setup_area =3D &file_setup_area,
+>> +static struct mem_ops __read_only_file_ops =3D {
+>> +	.setup_area =3D &file_setup_read_only_area,
+>>   	.cleanup_area =3D &file_cleanup_area,
+>> -	.fault =3D &file_fault,
+>> +	.fault =3D &file_fault_read,
+>> +	.check_huge =3D &file_check_huge,
+>> +	.name =3D "file",
+>> +};
+>> +
+>> +static struct mem_ops __read_write_file_ops =3D {
+>> +	.setup_area =3D &file_setup_read_write_area,
+>> +	.cleanup_area =3D &file_cleanup_area,
+>> +	.fault =3D &file_fault_write,
+>>   	.check_huge =3D &file_check_huge,
+>>   	.name =3D "file",
+>>   };
+>> @@ -504,6 +539,18 @@ static struct mem_ops __shmem_ops =3D {
+>>   	.name =3D "shmem",
+>>   };
+>>  +static bool is_tmpfs(struct mem_ops *ops)
+>> +{
+>> +	return (ops =3D=3D &__read_only_file_ops ||
+>> +		ops =3D=3D &__read_write_file_ops) &&
+>> +	       finfo.type =3D=3D VMA_SHMEM;
+>> +}
+>> +
+>> +static bool is_anon(struct mem_ops *ops)
+>> +{
+>> +	return ops =3D=3D &__anon_ops;
+>> +}
+>> +
+>>   static void __madvise_collapse(const char *msg, char *p, int nr_hpag=
+es,
+>>   			       struct mem_ops *ops, bool expect)
+>>   {
+>> @@ -512,6 +559,10 @@ static void __madvise_collapse(const char *msg, c=
+har *p, int nr_hpages,
+>>    	printf("%s...", msg);
+>>  +	/* read&write file collapse always fail */
+>
+> Just to confirm, you are adding the write part here so that before comm=
+it 13 & 14, the behavior is that it will fail. Whereas after with patch 1=
+3/14, we expect this behavior to be supported correct?
+Yes.
 
- - PASS reports whether dedup actually fired, so a passing run on a
-   well-behaved environment is still informative.
+>
+> Thanks for working on this :)
+>
+> I plan on testing the selftests changes at some point this week (if I f=
+ind some downtime during LSFMM), and finishing my review here.
+>
+Thanks.
 
- - FAIL when two same-backtrace reports land in a single scan (clear
-   dedup regression).
 
- - FAIL when kmemleak's own per-scan tally counts leaks but the
-   verbose path emits zero "unreferenced object" lines - that catches
-   a regression in the verbose printer itself, which would otherwise
-   pass the duplicate check trivially.
-
- - SKIP when kmemleak is absent, disabled at runtime, or the helper
-   module is not built.
-
-The dmesg parser anchors stack-frame matching to the indentation
-kmemleak uses for them (4+ spaces under "kmemleak: ") so unrelated
-kmemleak warnings landing between reports do not get lumped into the
-backtrace key and mask a duplicate.
-
-Signed-off-by: Breno Leitao <leitao@debian.org>
----
- tools/testing/selftests/mm/Makefile               |   1 +
- tools/testing/selftests/mm/ksft_kmemleak_dedup.sh | 222 ++++++++++++++++++++++
- 2 files changed, 223 insertions(+)
-
-diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-index 18779045b7f69..41053fdaad88d 100644
---- a/tools/testing/selftests/mm/Makefile
-+++ b/tools/testing/selftests/mm/Makefile
-@@ -151,6 +151,7 @@ TEST_PROGS += ksft_gup_test.sh
- TEST_PROGS += ksft_hmm.sh
- TEST_PROGS += ksft_hugetlb.sh
- TEST_PROGS += ksft_hugevm.sh
-+TEST_PROGS += ksft_kmemleak_dedup.sh
- TEST_PROGS += ksft_ksm.sh
- TEST_PROGS += ksft_ksm_numa.sh
- TEST_PROGS += ksft_madv_guard.sh
-diff --git a/tools/testing/selftests/mm/ksft_kmemleak_dedup.sh b/tools/testing/selftests/mm/ksft_kmemleak_dedup.sh
-new file mode 100755
-index 0000000000000..d019502444901
---- /dev/null
-+++ b/tools/testing/selftests/mm/ksft_kmemleak_dedup.sh
-@@ -0,0 +1,222 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Regression test for kmemleak's per-scan verbose dedup.
-+#
-+# Loads samples/kmemleak's helper module to generate orphan allocations
-+# (some of which share an allocation backtrace), runs a few kmemleak
-+# scans with verbose printing enabled, and verifies that no two
-+# "unreferenced object" reports within a single scan share the same
-+# backtrace - which would mean dedup failed to collapse them.
-+#
-+# This test is intentionally permissive: the kmemleak-test module's
-+# leaks frequently get reported across many separate scans (per-CPU
-+# chunk reuse, slab freelist pointers, kernel stack residue), so dedup
-+# may never have anything to fold within one scan. That is not a
-+# regression. The test only fails when it actually catches dedup not
-+# happening on input that should have triggered it - i.e. two reports
-+# with identical backtraces in the same scan.
-+#
-+# Author: Breno Leitao <leitao@debian.org>
-+
-+ksft_skip=4
-+KMEMLEAK=/sys/kernel/debug/kmemleak
-+VERBOSE_PARAM=/sys/module/kmemleak/parameters/verbose
-+MODULE=kmemleak-test
-+
-+skip() {
-+	echo "SKIP: $*"
-+	exit $ksft_skip
-+}
-+
-+fail() {
-+	echo "FAIL: $*"
-+	exit 1
-+}
-+
-+pass() {
-+	echo "PASS: $*"
-+	exit 0
-+}
-+
-+[ "$(id -u)" -eq 0 ] || skip "must run as root"
-+[ -r "$KMEMLEAK" ] || skip "no kmemleak debugfs (CONFIG_DEBUG_KMEMLEAK)"
-+[ -w "$VERBOSE_PARAM" ] || skip "kmemleak verbose param missing"
-+modinfo "$MODULE" >/dev/null 2>&1 ||
-+	skip "$MODULE not built (CONFIG_SAMPLE_KMEMLEAK)"
-+
-+# The verdict depends entirely on dmesg contents, so a silently-empty
-+# dmesg (dmesg_restrict=1 with CAP_SYSLOG dropped, restricted container,
-+# etc.) would let the script report PASS without parsing anything. Probe
-+# both read and clear up front and skip cleanly if either is denied.
-+dmesg >/dev/null 2>&1 ||
-+	skip "cannot read dmesg (need CAP_SYSLOG or dmesg_restrict=0)"
-+dmesg -C >/dev/null 2>&1 ||
-+	skip "cannot clear dmesg (need CAP_SYSLOG or dmesg_restrict=0)"
-+
-+# kmemleak can be present but disabled at runtime (boot arg kmemleak=off,
-+# or it self-disabled after an internal error). In that state writes other
-+# than "clear" return EPERM, so probe once and skip if so.
-+if ! echo scan > "$KMEMLEAK" 2>/dev/null; then
-+	skip "kmemleak is disabled (check dmesg or kmemleak= boot arg)"
-+fi
-+
-+prev_verbose=$(cat "$VERBOSE_PARAM")
-+# shellcheck disable=SC2317  # invoked indirectly via trap
-+cleanup() {
-+	echo "$prev_verbose" > "$VERBOSE_PARAM" 2>/dev/null
-+	rmmod "$MODULE" 2>/dev/null
-+	# Drain the leak set we generated. Subsequent selftests (e.g.
-+	# tools/testing/selftests/net/netfilter/nft_interface_stress.sh)
-+	# fail on any non-empty kmemleak report, so leaving the helper
-+	# module's intentional leaks behind would poison the rest of a
-+	# kselftest run.
-+	#
-+	# Caveat: kmemleak_clear() only greys objects that have already
-+	# been reported (OBJECT_REPORTED && unreferenced_object()). Helper
-+	# allocations that stayed "still referenced" throughout the test
-+	# (stale pointers in per-CPU chunks, slab freelists, kernel stacks)
-+	# were never reported and are therefore not greyed by this clear -
-+	# they remain tracked and a later scan can still surface them. Such
-+	# leftovers are inherent to the kmemleak-test sample module and are
-+	# not specific to this test; consumers that fail on any kmemleak
-+	# output (rather than on the test-specific backtraces) need to be
-+	# robust to that, or this test should be excluded from the run.
-+	echo clear > "$KMEMLEAK" 2>/dev/null
-+}
-+trap cleanup EXIT
-+
-+echo 1 > "$VERBOSE_PARAM"
-+
-+# Drain the existing leak set so the next scan only reports our objects.
-+echo clear > "$KMEMLEAK"
-+
-+# Re-clear dmesg now (the up-front probe also cleared it, but anything
-+# logged between then and here - module unload chatter, the probe scan,
-+# the verbose-param write - would otherwise pollute the parse window).
-+dmesg -C >/dev/null
-+
-+# If the module was left loaded by a previous aborted run, modprobe would
-+# be a no-op and the init function would not run, so no new leaks would be
-+# generated. Force a clean state first.
-+rmmod "$MODULE" 2>/dev/null
-+modprobe "$MODULE" || skip "failed to load $MODULE"
-+# Removing the module orphans the list elements without freeing them.
-+rmmod "$MODULE"    || skip "failed to unload $MODULE"
-+
-+# Run a handful of scans so kmemleak has the chance to age and report
-+# the orphans. We do not require any particular number to be reported:
-+# the regression check below operates on whatever lands in dmesg.
-+#
-+# Note: with CONFIG_DEBUG_KMEMLEAK_AUTO_SCAN=y the kernel's own scan
-+# thread can report and mark these orphans (OBJECT_REPORTED) before our
-+# manual scans run, after which our scans will see nothing. The
-+# lower-bound check below catches the case where that happens and the
-+# manual scans also produce nothing.
-+SCAN_COUNT=4
-+SCAN_SLEEP=6
-+for _ in $(seq 1 "$SCAN_COUNT"); do
-+	echo scan > "$KMEMLEAK"
-+	sleep "$SCAN_SLEEP"
-+done
-+
-+# Strip the leading "[   nnn.nnnnnn] " dmesg timestamp prefix. Without
-+# this, two identical stack frames printed from two reports in the same
-+# scan would produce different per-frame strings (different timestamps)
-+# and the duplicate-backtrace check below would not match them, silently
-+# passing a real dedup regression. Doing the strip here makes the rest
-+# of the parser timestamp-agnostic regardless of what dmesg defaults to.
-+log=$(dmesg | sed 's/^\[[^]]*\] //')
-+
-+# After running the workload (modprobe + scans), dmesg should contain at
-+# least the helper module's pr_info lines and our manual-scan output. An
-+# empty capture here means dmesg succeeded earlier but is now denying us
-+# the buffer (race with dmesg_restrict toggling, etc.); refuse to give a
-+# verdict on no evidence.
-+[ -n "$log" ] || skip "dmesg returned empty after running workload"
-+
-+# Lower bound: if kmemleak's own per-scan tally counted leaks but the
-+# verbose path emitted no "unreferenced object" line, the verbose printer
-+# itself is regressed - fail rather than silently passing on no input.
-+new_leaks=$(echo "$log" |
-+	sed -n 's/.*kmemleak: \([0-9]\+\) new suspected.*/\1/p' |
-+	awk '{s+=$1} END{print s+0}')
-+printed=$(echo "$log" | grep -c 'kmemleak: unreferenced object')
-+if [ "$new_leaks" -gt 0 ] && [ "$printed" -eq 0 ]; then
-+	fail "verbose path broken: $new_leaks leaks counted, 0 printed in $SCAN_COUNT scans"
-+fi
-+
-+# Walk the log: split into per-scan chunks at "N new suspected memory
-+# leaks" boundaries; within each chunk, capture each "unreferenced
-+# object" report's backtrace and check that no backtrace is reported
-+# more than once. A duplicate within a single scan means dedup failed
-+# to collapse two leaks that share an allocation site.
-+violations=$(echo "$log" | awk '
-+	function flush_block() {
-+		if (in_block) {
-+			# Skip empty backtraces: leaks with trace_handle == 0
-+			# (early-boot allocations or stack_depot_save() failures
-+			# under memory pressure) are intentionally not deduped,
-+			# so multiple such reports in one scan are expected and
-+			# must not be flagged as a regression.
-+			if (bt != "")
-+				seen[bt]++
-+			in_block = 0
-+			collecting = 0
-+			bt = ""
-+		}
-+	}
-+	function check_and_reset(   b) {
-+		for (b in seen)
-+			if (seen[b] > 1)
-+				printf("backtrace seen %d times in one scan:\n%s\n",
-+				       seen[b], b)
-+		delete seen
-+	}
-+	# Scan boundary: the per-scan summary line.
-+	/kmemleak: [0-9]+ new suspected memory leaks/ {
-+		flush_block()
-+		check_and_reset()
-+		next
-+	}
-+	# Start of a new "unreferenced object" report.
-+	/kmemleak: unreferenced object/ {
-+		flush_block()
-+		in_block = 1
-+		next
-+	}
-+	# Inside a report, the "backtrace (crc ...):" line switches us to
-+	# backtrace-collecting mode.
-+	in_block && /kmemleak:[[:space:]]+backtrace \(crc/ {
-+		collecting = 1
-+		next
-+	}
-+	# Once collecting, capture only deeply-indented "kmemleak: " lines
-+	# (stack frames have 4+ spaces of indentation under "kmemleak: ";
-+	# headers and the "... and N more" tail line have less). This stops
-+	# unrelated kmemleak warns landing between reports from being lumped
-+	# into the backtrace key, which would mask a genuine duplicate.
-+	in_block && collecting && /kmemleak:[[:space:]]{4,}/ {
-+		bt = bt $0 "\n"
-+		next
-+	}
-+	END {
-+		flush_block()
-+		check_and_reset()
-+	}
-+')
-+
-+if [ -n "$violations" ]; then
-+	echo "$violations"
-+	fail "kmemleak dedup regression: same backtrace reported more than once in a single scan"
-+fi
-+
-+# Count the dedup summary lines so the report distinguishes "dedup
-+# actually fired" from "no same-backtrace leaks turned up to dedup".
-+dedup_lines=$(echo "$log" | grep -c 'more object(s) with the same backtrace')
-+
-+if [ "$dedup_lines" -gt 0 ]; then
-+	pass "no dedup violations across $SCAN_COUNT scans; dedup fired ($dedup_lines summary line(s) observed)"
-+else
-+	pass "no dedup violations across $SCAN_COUNT scans; dedup had nothing to collapse"
-+fi
-
--- 
-2.52.0
-
+Best Regards,
+Yan, Zi
