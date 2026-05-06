@@ -1,84 +1,77 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42850267B89;
-	Wed,  6 May 2026 01:21:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 994772848A7;
+	Wed,  6 May 2026 02:00:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778030465; cv=none; b=G/1bLZwn1DtkHXaokKMB75BD9uTBbL5C0Dlqgeu8cnxuBwkmmPsVPW14ocATeTKy5iMOcHKafOLY9O0MxLXdlpWM7aNCnWRtq3xDzTkNJR3h8KPLE5TWzNGK4N/ylnsJ9fGjsn2R4YjjvY3aCkf11EbRiZLoSn8mco9UVPtf+WE=
+	t=1778032846; cv=none; b=G3IfT3tXDwrWQtYloAOpX4FDUxoZt9zm5Z3BAmjZavJiVN7uZMRT4jhwBwkVHI1qt9hVbTi9X7dwYADcso4X3PnYXjOtzS4rZttSmR3Zl9ZTsuzfmNxhS818eQjOe3BKsUISE/L3f9HTB50uRevYOvUeizMd69w68g6ObK89G5g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778030465; c=relaxed/simple;
-	bh=WG2A+Swh5jbEoHIfgwn/6sVRAWH5O5i0grAZx8kNtlU=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=uVYMg5KER8fPPnYfsuKsrrNXs5An+fQI4nf8H0A1EbDwia5QK4IrYUJUMpfelTX105OlQTL+XPgoUeGuj5mQBQOj1sT2IKXNuwgigN+T2bU557WlBG/CmJqoFKQ+B58ER0OnxcSQ9RwCAfZAhmD1nJ3cs4whDiZvlQxT+OGPhqA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y8/cRtyu; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778032846; c=relaxed/simple;
+	bh=Tpn1+GLPOFLHfW94Gj/ouzTOmClJD5e1kKuEtI4CZLQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=P/cMtVAl82oUGa6Xl/rpw50yOHTXFZ346Nj2BfWfJbiSftZfdLKYVGb+Xke64OsqSNsznp0kvD5X2JrMzf9zH4F46JUACyuPAJ8o0z+PAvPQgmEHfJV9JiShXCEy0Eo/+Gqmr4VxX/3KkgI45wGiGRIW8Boxw1p9MGMRPhjq1Wc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NzlYjG5I; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y8/cRtyu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20700C2BCB4;
-	Wed,  6 May 2026 01:21:05 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NzlYjG5I"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EB46C2BCB4;
+	Wed,  6 May 2026 02:00:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778030465;
-	bh=WG2A+Swh5jbEoHIfgwn/6sVRAWH5O5i0grAZx8kNtlU=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=Y8/cRtyu+gKa0YfdMLiNVrqMEw3qxGsN+sKwUcxsxx++Qew3sDn2gZH9I0eG4I6Pp
-	 nFoPzMP+AmUukRxHVkwqNqqp3YjlZNuGoEeTpYm+YkxksKM60kSBehgG93M6fxJ8WH
-	 4jofRQoct7eSXW3tNfVsaWwSE4MoVFtsrYJ0Stmqi7eY17VHzk2uuRegCiG+oUhIVN
-	 oOlw3ClaMJYiMOZXC4c6lSOKVyt1VYU0A0DEgj/x81BoTEvzG4iKbGfwR+2Eb+4Gx4
-	 p+aXiHwtq5q4zYfz7jn1Hq+t00YY4qCGc9W/FO8EfLyml74ojqjQG18tbBBt6yxdYv
-	 +o2U1DkFzEOUQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7CF333930780;
-	Wed,  6 May 2026 01:20:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1778032846;
+	bh=Tpn1+GLPOFLHfW94Gj/ouzTOmClJD5e1kKuEtI4CZLQ=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=NzlYjG5Iu8CZf1apZG127EADiOV8FJGmoRYlVrLssPGA1XIS04pDFqXFyUWZwhYUR
+	 aXG5chJRmG/B5OeCEaRB/BPxTq5E+CiD4aTrgEe2dTlOpjMqJPpOFElfNYknVlTzPw
+	 eej8d6eo2j7Xi0JxXOsHrhiDLe3K/TLviD6t35y/kiafCuQhbSo5WTdOkOfdFy3J/D
+	 3u0WLMKnnuYud3qKe3fmnKrm3WomloaE8+GcnaCEEPaEP2x+5M9SBarq2CQ0nJnczK
+	 NwQRHyHj2X7uyHd3zXz09bzU1doo0eUrFARlsYxCyAkSOgCT3rMfY6vvOL1EQfXhIA
+	 SKtohhG+ytRvw==
+Date: Tue, 5 May 2026 19:00:44 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Danielle Ratson <danieller@nvidia.com>
+Cc: <netdev@vger.kernel.org>, <donald.hunter@gmail.com>,
+ <davem@davemloft.net>, <edumazet@google.com>, <pabeni@redhat.com>,
+ <horms@kernel.org>, <razor@blackwall.org>, <idosch@nvidia.com>,
+ <andrew+netdev@lunn.ch>, <shuah@kernel.org>, <ast@fiberby.net>,
+ <liuhangbin@gmail.com>, <daniel@iogearbox.net>, <aroulin@nvidia.com>,
+ <fmaurer@redhat.com>, <sdf.kernel@gmail.com>, <sd@queasysnail.net>,
+ <kees@kernel.org>, <nickgarlis@gmail.com>, <amorenoz@redhat.com>,
+ <alasdair@mcwilliam.dev>, <johannes.wiesboeck@aisec.fraunhofer.de>,
+ <petrm@nvidia.com>, <linux-kernel@vger.kernel.org>,
+ <bridge@lists.linux.dev>, <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH net-next 1/6] bridge: uapi: Add neigh_forward_grat
+ netlink attributes
+Message-ID: <20260505190044.0608dfb1@kernel.org>
+In-Reply-To: <20260503073532.2138165-2-danieller@nvidia.com>
+References: <20260503073532.2138165-1-danieller@nvidia.com>
+	<20260503073532.2138165-2-danieller@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v7 0/3] selftests: drv-net: convert so_txtime to
- drv-net
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177803041504.2335725.15765124651385983466.git-patchwork-notify@kernel.org>
-Date: Wed, 06 May 2026 01:20:15 +0000
-References: <20260504174056.565319-1-willemdebruijn.kernel@gmail.com>
-In-Reply-To: <20260504174056.565319-1-willemdebruijn.kernel@gmail.com>
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
- edumazet@google.com, pabeni@redhat.com, horms@kernel.org,
- linux-kselftest@vger.kernel.org, shuah@kernel.org, willemb@google.com
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hello:
+On Sun, 3 May 2026 10:35:27 +0300 Danielle Ratson wrote:
+> --- a/Documentation/netlink/specs/rt-link.yaml
+> +++ b/Documentation/netlink/specs/rt-link.yaml
+> @@ -1700,6 +1700,9 @@ attribute-sets:
+>        -
+>          name: backup-nhid
+>          type: u32
+> +      -
+> +        name: neigh-forward-grat
+> +        type: flag
 
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+I think this should be u8 ? neigh-vlan-suppress looks buggy too
 
-On Mon,  4 May 2026 13:38:31 -0400 you wrote:
-> From: Willem de Bruijn <willemb@google.com>
-> 
-> In preparation for extending to pacing hardware offload, convert the
-> so_txtime.sh test to a drv-net test that can be run against netdevsim
-> and real hardware.
-> 
-> Two preparatory patches
-> 1. support negative tests, where tests are expected to fail
-> 2. add a tc helper
-> 
-> [...]
+flag is a type without a payload, the presence of the attr is
+the entire information
 
-Here is the summary with links:
-  - [net-next,v7,1/3] selftests: net: py: support cmd verifying expected failure
-    https://git.kernel.org/netdev/net-next/c/d9c1e7dc4ada
-  - [net-next,v7,2/3] selftests: net: py: add tc utility
-    https://git.kernel.org/netdev/net-next/c/49bf9e5e7c7c
-  - [net-next,v7,3/3] selftests: drv-net: convert so_txtime to drv-net
-    https://git.kernel.org/netdev/net-next/c/5c6baef3885c
-
-You are awesome, thank you!
+None of the AIs seem to catch this, I think you may have over-split
+this submission a little bit. This patch may have been better off
+squashed into patch 4 ?
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+pw-bot: cr
