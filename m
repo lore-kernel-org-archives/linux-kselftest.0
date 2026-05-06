@@ -1,29 +1,29 @@
-Received: from AM0PR02CU008.outbound.protection.outlook.com (mail-westeuropeazon11013059.outbound.protection.outlook.com [52.101.72.59])
+Received: from DUZPR83CU001.outbound.protection.outlook.com (mail-northeuropeazon11012004.outbound.protection.outlook.com [52.101.66.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 932953DC4CB;
-	Wed,  6 May 2026 09:04:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.72.59
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6A283DFC68;
+	Wed,  6 May 2026 09:14:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.66.4
 ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778058262; cv=fail; b=YB36F/eQFSZOLoTH74owmSWjHbnXtmBrSHRJjb00sLK1ziVsvr/LyNc2pyFw7ZAO69ADuG6JSQCp0JQCNoaZb+i+KueIGQ92vAOSUKaQCpdWXjzB9hE3GiCT8kxOxgO7k0mstF9KATNDkgsKRrUDBCVgZaro6Pown8/+Sr8XgEU=
+	t=1778058867; cv=fail; b=Lr/mUy6C3wO0YXcYk81kNPqcNopDjrPRtLCXsCmNxQM2lvCaZhELmC5weGfTVIxxef2pYA1+hfooeD1V5UkiLvEKB6D4t2iitVGPFXhGwkybxiu1jTiA/nW+v+j2hGv5rTyv8o6fnitopO39Sx8q34HGSR1GJg4aK5KQDcrvyrM=
 ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778058262; c=relaxed/simple;
-	bh=FE+k2WZMbH/dDLgNiRH+M7/9H9dzRDy+sefubPWS1eg=;
+	s=arc-20240116; t=1778058867; c=relaxed/simple;
+	bh=RQT9znO0QwOWyjk7zppxDYOyfW0xe1Ts+l4oZy0f14w=;
 	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=YuSPeTpQ8YX4qEEQIzL7Bn/hangsknLq35uspBwtsBlPSv/j4DKp+7HFhQ2T33DER+MED1RvKaMJyma9QeiMCaOJT+0KRD6RjKYhN8v4jQn2zX/VjqsapCgCFqYBZjNuICaJiLfMldtpm1as4jzuzSluoWnZA/59IR03DkcDygs=
-ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=S1i4z70e; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=S1i4z70e; arc=fail smtp.client-ip=52.101.72.59
+	 Content-Type:MIME-Version; b=rsd0idPWndtrfamTRBMmWDBSJDahv77eUs6j8PB9m6YMzQFtwKLEOQDp63UzOG/kMB0MbjNPQpgocd/5F01vdmClGGuVJc6C6NJn48E7C7WBgBtJSaJott4hOI+1W7m5nmecQzWW3zuTjGD00Ao9VrML44bEgFL/BEEXfsjpSc4=
+ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=M7Gl84Se; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=M7Gl84Se; arc=fail smtp.client-ip=52.101.66.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="S1i4z70e";
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="S1i4z70e"
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="M7Gl84Se";
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="M7Gl84Se"
 ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
- b=JldKN2bXf9OR6Ya6CDqPCjuNWGQQZmON7KACaJa1Op9tQEQgANrqh5bOXLFefQ9IstCRUbzqNxMz7L589XVp6aUbdASW/CaBSwYlmIW1z/mb0erxuHBJ5U0F3IFfXAJOMl/DiJSecgFAoxFtp6abIIBXiXD7eHVzHqgDTg5kVA/4bOXYOjsO5Bd0hyVDDK6dRZmkb51yKhxy4GXrE9RdX9FcAA6YFXC2uU6F3dHtZC9ljeevLhF/eEVAokUQKYTEssZXOW+GKkwTNY3pv6q9wHkRG/Wg7bfunkUDdLJvQoMxGxiRi3kUS0x6Ic0RIjhwLh2b/x7mCpUAVSzGYx6zjg==
+ b=zM4etLyvyMP+MgwET5zn4/totQNAJx597zxK+Xsg2nf+BYFhOeIbXH+sn6AIqugimGQgUg3l2lyGvDfHr6IkRKSS79KPDZaknZMMLYyJuakkBefqRH1TDbbZocELqxjV4YwDA7jR3mREDIXrCpkTCW9ag/i/T7uAoxnJ5GY55KV6r8hLjntFYaI/4TZ5lAU+/O0uyn8qR3dR819juJm7xu2M0z2FxjhG2Bhy2zZv9cfL+gHp1UPy5Bg8K4HsG2di56VyyvBjdCvod+ZsnZYrvNXeY1tr/fTGsSpbC0BVeIjWV3shKAWGyNJxGuSw/ufdz7dWZq5RGJDsZ0q1lrPRUQ==
 ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wdFJczdn/Ohjs20vZffoVp3d8HM31N8Z+cictB+Z7Ss=;
- b=VN4J4qyK9j0gu2m3ILt6YEvCZ93H8g0kGDYb7ytFZXeThRc6r+3ZgvjZFi2ftcl6712VN7tFHChOuaV9+OqQZsS2/96m1mVZ59eeIy/fKWFl8lNt9pW98E2Ja6Rgm6qsQxmR3UHIG7QDBTPDHeDE9fhs/0fx3Wc9/23Q1uVStl+VyIUz3zN3k00YSHWPzqVD8Z6PntOyx/8eornNeUfMgNx2+OJaGkKJ1m/EP5N3uog1G3e7YtjJR3yVsew1NR/PSQC+585mOxhcNO54qAGtkEowlYnooVuH5uU+0qu0jPcBmI9WDQrA/bbPtYXYjl8hOReyP5mWU+LM5emzh5uSlw==
+ bh=NHmVQebsm4rI7kRZVIei2hsBcnM71YQD2hAVEOdcbfY=;
+ b=zCPVtvT1JVCnVrYFeh/+pd6ajgFPbT2YPq5Bs4+D7jjPBrPTymJ/qynSA4epcMQwSPjRzrj/oebaIbsos9nzofJh0NuBIMIuBNqh5f4OBKLVWyIrPAKomvhaHmU02Ucbz6eiZPaxlmp+kOktw7xdrbGR6mzGXIjlYANnCJY3wWoa7nssiB/UzqcYlb+PJ7Ae3lYuGn8kKDL8GTuxFMP0X5/JajJHrfv1EafGLdUVRA5moJEHB/d8IIVkOreYzc4SlSJSYEzEyr5ruYnTxYO/Cwj1op753psbTBr/MW96nqANtd2uzFS6b9acGiJv3a3YYAJZ8ezdMXNyu6j3+52wZg==
 ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
  4.158.2.129) smtp.rcpttodomain=kernel.org smtp.mailfrom=arm.com; dmarc=pass
  (p=none sp=none pct=100) action=none header.from=arm.com; dkim=pass
@@ -32,18 +32,18 @@ ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
  dmarc=[1,1,header.from=arm.com])
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wdFJczdn/Ohjs20vZffoVp3d8HM31N8Z+cictB+Z7Ss=;
- b=S1i4z70eQRoXkLo0rT7YqWA7PBB1vk63P1QhXr1I2EnYmVye5TNs/P+hEDOO2BJ9YoHWrYVuHC+SEpxbLDZNqhy5rjZ+fRI81QfyqPikC4EpzhG+RRBRNqbTC3GDqNiX49QTIVJDsxEMR49DMC6rMcLwFDWlJ4+8WScKmi0x2vw=
-Received: from DB9PR06CA0028.eurprd06.prod.outlook.com (2603:10a6:10:1db::33)
- by AMBPR08MB11589.eurprd08.prod.outlook.com (2603:10a6:20b:6ee::22) with
- Microsoft SMTP Server (version=TLS1_2,
+ bh=NHmVQebsm4rI7kRZVIei2hsBcnM71YQD2hAVEOdcbfY=;
+ b=M7Gl84SeGQKWS4t1LwkW+wjRutw5ENuDSg+0/F2p2Zoh51GXAkkKfDhd2C3fNPc+Jkc3HCxw+520YjVM9/WXpDJVUpjoccYgAWCzc3BqFRLiJBd05u6ydhqd1kkIfxF9QKTHL5MFuU2GMS4mM79yl3MIQb6U9WIgNfXimuG38RI=
+Received: from DUZPR01CA0029.eurprd01.prod.exchangelabs.com
+ (2603:10a6:10:46b::18) by VI0PR08MB10760.eurprd08.prod.outlook.com
+ (2603:10a6:800:20d::7) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9870.25; Wed, 6 May
- 2026 09:04:13 +0000
-Received: from DU6PEPF0000B622.eurprd02.prod.outlook.com
- (2603:10a6:10:1db:cafe::9a) by DB9PR06CA0028.outlook.office365.com
- (2603:10a6:10:1db::33) with Microsoft SMTP Server (version=TLS1_3,
+ 2026 09:14:13 +0000
+Received: from DB1PEPF000509E6.eurprd03.prod.outlook.com
+ (2603:10a6:10:46b:cafe::92) by DUZPR01CA0029.outlook.office365.com
+ (2603:10a6:10:46b::18) with Microsoft SMTP Server (version=TLS1_3,
  cipher=TLS_AES_256_GCM_SHA384) id 15.20.9891.15 via Frontend Transport; Wed,
- 6 May 2026 09:04:13 +0000
+ 6 May 2026 09:14:13 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
  smtp.mailfrom=arm.com; dkim=pass (signature was verified)
  header.d=arm.com;dmarc=pass action=none header.from=arm.com;
@@ -51,39 +51,39 @@ Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
  4.158.2.129 as permitted sender) receiver=protection.outlook.com;
  client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
 Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
- DU6PEPF0000B622.mail.protection.outlook.com (10.167.8.139) with Microsoft
- SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9891.9
- via Frontend Transport; Wed, 6 May 2026 09:04:12 +0000
+ DB1PEPF000509E6.mail.protection.outlook.com (10.167.242.56) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9870.22
+ via Frontend Transport; Wed, 6 May 2026 09:14:12 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=fsiyRK8mBcOJDNM3ps8NMIhHkesBUL55j/H58BiQ66Z4bhW4xWTa1SnSW3PKX3O88Oe6BoA8jBztzHBb3xmLNp4SWrcZvWSe7gyZbxlj+lhDK+fIBSVe5ztRxt7qpzLuLb7/fRuBPfVl435GGQ7koBeo//F9pfYtr4P2/Wpdm9Cb37ws3gSmrNeZv2k+v88ou3sYZqkNx1Cg6koRbNP9T1jgPZrQPW4bx41XwvdH2yN3LlfxMT9KvJv6x6VfSSRCR0r2jMkADMxyfsEW0x7TdA83uTkTYAJtygsXcKT4SRxiV8K3668dhN2k6mPDs2aosrw2KV0fvc0IZfW9eQRDrA==
+ b=ROhaIFV6jD/Pvg0R5GrPy2DZRSPRfsoD6ZzDkBuj/NFq53ppKJ5lfnROCMyzhawxFALRl7rJYb5XWQJoYJF6kAfDo+FpIXst7yOdciZQliSp/bG9vD4OH0K3P69wHuqBYnTeRFsVEeBaID6+Gf7VFoUPEsbQaoRwyPP42jo1gUc01VCeMZGZPU6tb0u/RipGV5Wb7IvXwXkbERY0B2SV9FXaktMOE9oizVSPbmXQOJEMXo0uleIj4XBSRCiU+zR1nmG5zMHEiK23J/EQe11gtXyhjUhJNhECIdKNvTgmyiyisPx285Ifq4gn1itKNcYNhhK1AxOe0UjcQYH3THZ4Gg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wdFJczdn/Ohjs20vZffoVp3d8HM31N8Z+cictB+Z7Ss=;
- b=NT1qkiGoIBiam/dWR0gEWLyIxZ6C/JaoGJIW9isDMK0Q8dozEMHc6wBd8kQykLZk623r8hqJbsnMDH68GTHs4shw2ce4rkcr8tM2v9M1wjKzjg37rw/ajTfhM5zgE/OnWx7fl1Vz/DlMQ31g0arBeU+tT/8rxtI/cmPFMhWAWEcQqvmF2S+LGZBiCehiSD9U1TAymHAhuysLxQmgDbHr8DAsxmv4QvX1dvV90+r7732F1+31sQni0FJA7Lxtk0DXQZ5aplKnU09IarLyzRJzLYOhZYv2QjKnxY+N7Bh+f6sB6HLekHgTIAnHg+mi6GY+qiqo3fDx+VzWsXpDkJDRxw==
+ bh=NHmVQebsm4rI7kRZVIei2hsBcnM71YQD2hAVEOdcbfY=;
+ b=UFOn3tuvaWm4IIfM+QuLra8twXu6in2gpouE5vDhHY8S+vSy9apDUBQwPYB94ywMDWnSFUzlsHVg/yf1bKGF7UXN2Z4JKShohMyuOgmxllKsC88oonV6i4nNsu6Ed2lpuQ/qmPweCR9hr/cWXQcTzG7b83NvBTtIsH6RQzLFs8iUO3JdO7SNwj0g74E1H4m8fPixmPCQ5YPizjAfsCLNHXJQ7ZrA6FXbDI02JJcJdqt/XPjTHyxfiJj17w3pwVKV76gAPo5XTpKROT6RUXUPbLMHDFYG2+libQ0H+iLrwf7nvrIWwOeMYb7rlIeeKxoXGblKmdFuVGC2M/wLUMYBaQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
  header.d=arm.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wdFJczdn/Ohjs20vZffoVp3d8HM31N8Z+cictB+Z7Ss=;
- b=S1i4z70eQRoXkLo0rT7YqWA7PBB1vk63P1QhXr1I2EnYmVye5TNs/P+hEDOO2BJ9YoHWrYVuHC+SEpxbLDZNqhy5rjZ+fRI81QfyqPikC4EpzhG+RRBRNqbTC3GDqNiX49QTIVJDsxEMR49DMC6rMcLwFDWlJ4+8WScKmi0x2vw=
+ bh=NHmVQebsm4rI7kRZVIei2hsBcnM71YQD2hAVEOdcbfY=;
+ b=M7Gl84SeGQKWS4t1LwkW+wjRutw5ENuDSg+0/F2p2Zoh51GXAkkKfDhd2C3fNPc+Jkc3HCxw+520YjVM9/WXpDJVUpjoccYgAWCzc3BqFRLiJBd05u6ydhqd1kkIfxF9QKTHL5MFuU2GMS4mM79yl3MIQb6U9WIgNfXimuG38RI=
 Authentication-Results-Original: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=arm.com;
 Received: from DU0PR08MB9203.eurprd08.prod.outlook.com (2603:10a6:10:417::12)
- by AS8PR08MB6486.eurprd08.prod.outlook.com (2603:10a6:20b:33c::20) with
+ by AS2PR08MB10227.eurprd08.prod.outlook.com (2603:10a6:20b:647::17) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9870.25; Wed, 6 May
- 2026 09:03:06 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9891.15; Wed, 6 May
+ 2026 09:13:08 +0000
 Received: from DU0PR08MB9203.eurprd08.prod.outlook.com
  ([fe80::f1e:73f2:57df:4047]) by DU0PR08MB9203.eurprd08.prod.outlook.com
  ([fe80::f1e:73f2:57df:4047%2]) with mapi id 15.20.9891.008; Wed, 6 May 2026
- 09:03:06 +0000
-Message-ID: <55d8222f-4c87-4c80-90fb-86c3d6c6638d@arm.com>
-Date: Wed, 6 May 2026 14:32:57 +0530
+ 09:13:08 +0000
+Message-ID: <8e3f3a91-7683-42bc-882d-6769d7e2dd5b@arm.com>
+Date: Wed, 6 May 2026 14:42:58 +0530
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 20/54] selftests/mm: va_high_addr_switch: use kselftest
- framework
+Subject: Re: [PATCH v3 22/54] selftests/mm: rename thp_settings.[ch] to
+ hugepage_settings.[ch]
 To: Mike Rapoport <rppt@kernel.org>, Andrew Morton
  <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>
 Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
@@ -100,14 +100,14 @@ Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
  linux-mm@kvack.org
 References: <20260428204240.1924129-1-rppt@kernel.org>
- <20260428204240.1924129-21-rppt@kernel.org>
+ <20260428204240.1924129-23-rppt@kernel.org>
 From: Sarthak Sharma <sarthak.sharma@arm.com>
 Content-Language: en-US
-In-Reply-To: <20260428204240.1924129-21-rppt@kernel.org>
+In-Reply-To: <20260428204240.1924129-23-rppt@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MA5P287CA0047.INDP287.PROD.OUTLOOK.COM
- (2603:1096:a01:175::9) To DU0PR08MB9203.eurprd08.prod.outlook.com
+X-ClientProxiedBy: MA5P287CA0059.INDP287.PROD.OUTLOOK.COM
+ (2603:1096:a01:1d3::10) To DU0PR08MB9203.eurprd08.prod.outlook.com
  (2603:10a6:10:417::12)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -116,150 +116,256 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-TrafficTypeDiagnostic:
-	DU0PR08MB9203:EE_|AS8PR08MB6486:EE_|DU6PEPF0000B622:EE_|AMBPR08MB11589:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5725ff9e-9618-43ac-87ff-08deab4e714f
+	DU0PR08MB9203:EE_|AS2PR08MB10227:EE_|DB1PEPF000509E6:EE_|VI0PR08MB10760:EE_
+X-MS-Office365-Filtering-Correlation-Id: a9f4bc78-9129-4d7e-a1b4-08deab4fd6de
 x-checkrecipientrouted: true
 NoDisclaimer: true
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam-Untrusted:
- BCL:0;ARA:13230040|366016|7416014|376014|1800799024|18002099003|56012099003|22082099003;
+ BCL:0;ARA:13230040|1800799024|366016|7416014|376014|22082099003|56012099003|18002099003;
 X-Microsoft-Antispam-Message-Info-Original:
- +WZD9D+w0D0SALeO3OXcr+/MGqeYOMt5iibGcL46GYS5vzFtAEzLD3aJkejbjKDzI5rqm6cJ+byt0A97zYkVaXIKLOR6gVeAgIBb9PTtkj5uztyd34M1fVc8NdpvmyQ1sAMnySMn+CiJZh+74orNp+RGzfDOO2d1LPd1JfcF+NvipXG37nbi8Ui6tOrrC17qVt5UAZOcjL1PKDMSzfPiooIwISgZY+Ch41t2DFjx4fHq8cq7tE+E3JA6ct2JWENyUCT32eEJ8xZenLqcC0vRxJs49gTA00eXRhIKD2TkfZf0UzEWQylpMbbDnBgy7nbC3A2/9tdFIMtpnglkYF4SwkEyYrQ77dHo3dY75v7tYuHmLlUXg88NNxI2qEsbLDuMnreZw0g7jjTKovALmo52YC2wRWj8WckYRF2zCHQvDQQEDRhRScJrh9l7akSpyt7uMSUVdiY+3uOf3bLAS9HKsbCWV52HUrYAzvbA/fMDjw1ckX0V7Wl7f30QuKjsS5nu8oOmVxIDPw4cDm2n97NHZ9J8rsh1BsCphJ7hu+QL7NvHlaglDvFWbFu8bY06/sJsWG7GSHNHhJX0RrL60jccb4grw1cSe/xVhPbvmzZJl5xLXLjVXcWlj2wjD3ihaYQ90zYRS89xEG3CesE/n04ZSVDbGTNrgY0Mqs+ru2vmec9lqDZkA5Oqn0MfZbYM0umw
+ AErFtIGilYz951fF6qlZe4MMX2/PY1BvVWEod+mrz61f3L1j1WJO3SU16Zg4i1fWqyy7jSPDTxsSE2Mxzbp3O1eMbXTsMYNx9qL+kkQFAHjXv/zzvZUGuArNuzJ7l0HtCYZypUK7b4PlIyl56CGKmMJnMZy7H9cAmNznWsUkuO8FIxkvWXX4L85LidNayhk5W85zaK3e4MzSC9/c+iZyUhKarg2OCw2JSLNQUvrmj0o0QOv4tJw0GHrPskQ8FGz+oMsNhV+tadcrrBPqxT8/UTpcXfARmxhZAGcGpvJHAIdLsxVtJ6JEboIJs3WBtjaH6mGFwZgBD0sjfbhwlZxP1l8fCG02R5D+i5bLrLLNh/nF9RKoSicaPQtwhjRhu4p/tgFx68NwLJOu31V0vvzBh9aJxyRnv4Vdb4n8VP3UcMWIyLTev8KsqsnADWilIM9Kwqj4Hu1j6Z5eIpuTuxX45+R54h8rgBWYPqS6BGmFjg2A7tSMhiOjLQsdxm7zdGfd8rxkWCZDCiYvImgyV5asaP3h+kFsMRol3/8iuPVDfdkISjHuyZnrCh6Ay+EFzluF+YoAPSmMrcksK59f59Wj7GyR4BMvnXfRHEgILKk0z81yBoQpqsjLOske6aAwHEcZ6wPuH5oNLuAzcNnRQmgsm1KPEUl5LZMqhD9QbfNbboBdepqnuHx0+f4qys/d7R7K
 X-Forefront-Antispam-Report-Untrusted:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9203.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024)(18002099003)(56012099003)(22082099003);DIR:OUT;SFP:1101;
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9203.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014)(22082099003)(56012099003)(18002099003);DIR:OUT;SFP:1101;
 X-Exchange-RoutingPolicyChecked:
- FA4VY7pcADTNklVTcsw54vGXivd4cTVmpazcLVjbwvFor0CYWCZ7zhUjMUK1Ma6cQLSy4mUDv308fESLeUCOUXdMntdBttQzDp0BqJmG8r8tjeiC+dF6xLXeGJsQ+jHNFoBRBqhdakQbVMG7xKMRFgybuehKp21rzafKTL9/iRMg3DDOX7hJaNqEe/uBP/W4ppOBX/RF6Y25TXi0/A/JCR6qHb0CoE275oQOYMcREUk2OnLDYml0wZh97o5PmQ96CXzEgB28QOyP+Ijg78sECFDC3q0HWI1r1zWjqFW3ZHxYCMRFgYGSrbo5evKA0a5mijFBTnOKRcKVnZCqi0bGmQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR08MB6486
+ LFUH4gclBNopNvGutSOEkhzklvYsDg10JRWEh6E7jKYzurI7YSJI7t/v/ce69r8aPvOMOMwgR0rJHiSWTTu4jtUAwwLcEIIA6ON6Uuz5TbZVDXATTa/hHj1XKuO0i4joKjfj86w/gONMM5+MoJAf4EQYkbRPm8hPSIsDod8HBYaY27SwGv4323LkJiaNon7mYRN9gSOmUcmpjFFfJOWTmTfAd/iZ+i15MdYV3Xkk3CAZdGOnZAb4cmCRr7YEmp0njPMu6U8Tt4h+fh5AHp/zbAEwc6ZMloNWAEMTBbQrVS+p9tA7Vv0K4i9hCvpu5P1x3GrZosEONaH5flW03ZPVJQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS2PR08MB10227
 X-EOPAttributedMessage: 0
 X-MS-Exchange-Transport-CrossTenantHeadersStripped:
- DU6PEPF0000B622.eurprd02.prod.outlook.com
+ DB1PEPF000509E6.eurprd03.prod.outlook.com
 X-MS-PublicTrafficType: Email
 X-MS-Office365-Filtering-Correlation-Id-Prvs:
-	6a330248-e438-43be-98ac-08deab4e4950
+	9bfa2587-1798-408c-162a-08deab4fb03a
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700016|376014|7416014|82310400026|1800799024|35042699022|14060799003|22082099003|18002099003|56012099003;
+	BCL:0;ARA:13230040|7416014|36860700016|35042699022|82310400026|14060799003|1800799024|376014|18002099003|56012099003|22082099003;
 X-Microsoft-Antispam-Message-Info:
-	vndYM0YLrMwbn/das65jlshCCtwpPM3bGmVn4obmESzuZJQCnrq3D765w14AG0WjDcpZ43Ohq1jzT+k0e7rkmGBH6i+JAjxM0mIzaU0YbJYCRqp7Jy4cEoK/kgkyfg3bTcJZTPAVowu9QUtT3TkKBhTMGg6kqtsCuooxx2ZJ6Hl+BoFwOItPl0oRn0TflRfQRD5lFX7/PcaigYtx7DyBCa/pRIvrgtGGh/EEU4LnoDQAvHXaHMtMrykdV4sLTaqVpE3dP+FpsBbr2PZS6rtaTPwe+7pwKHIYl+11mYGyLubVcHLES3rRkFKOU+uiFjrGsxxmrn8V0/RjZBoeusJZlDYA5HwlibZZnOmeFjHO77u3fA3Pl1ak6soA39YGBbabQ94ciMA4c3Nec7BoQvWg5QwXcVnDiJspTgv1YepzDOwLG/WhCXuZJOdKmDROijZsrZ73iLbKSQ2ErchJUms07epewWV8xbLlJ3hCmBEMYMXJMSNv3UPtYzHzgHAOz1mJv91FCumJazlzGjbipx7xWS5ByP2kfyWxWsuFv/ihhYpE9xd4jzU8NEKKCF/WHti0x+q9Kmr89zMOZPoqTvK+84SEYVexhNPyGFHE567SvgQ62my2B4XVhNHf0nUmLnJDMUqW1EYx8LW6Qy6/xBIxzz7yGIr7AoNuwzfuLhQs3oVek9DZgaQVYXJPAraS0gOirGJvus1wepU93bMIrMwZCN4e/weoqvupmYAA0illAeo=
+	MceZQMNPoZ7ic74rkU3t9IGUs1YVHBR78JI2xznFOWXG3/+uU4tMIGN+R+KNK6kyXPOyhaaZEIcLRTO04kKCRskm5zAoiO/KRAH7fOL39D9mNx0hatWYWQuaF6DJmq3SPGjOvquXknHmLQXmKMQg1knLpk+3DF62mE2PXzQL6S70Aekkj2whL5RSTmc8zxaWUl20+c63axhxHQxexuPBVCmCef8UK/WsV/IDOD/pnRAi9gKNW+FfVwPjAse8ASBj76qzGI1mVbFyTiwbWfx3PTgIGowg7IOEl30TwNJ+GVJVAJa7exLPjiZXVx/B2Xu+vBADWRbrieg31BedPw+6Uc42qApVtG7Hrm5aEwSPq3kS+zUcRYiL2RRlL9vtEi491+djXT/0ZzanjMETQsS7krBMeZk8D9O2ivlohHjd1u7BADHeKC+pFIUSR7EiFYjibjwUvHCIQSPcjsW6mhKzWyG85bHVTUFfWMznEAOflTdjlNri3aUdSrNq8fBsEdOKOVu+3+OX7poqXT1fA4Yx1iW4ma7/RTgclmWNiPZR01l1l+bjP9iGkdlzkR4NkKcv4lsvM2PsR/gkpikLTv39eCyypHCcMcE69+SkZvdGmr7G5LIw5nsVY7DF1GMLH0rOSp9G7vURCTBIounOSY1Dq0H3ApBa+djRgcICYriWLUiodccc4fwRTkFM43nRcpoerUJr0LPf1DMjrF6+2Uvt9qOW7bILGRH9JdLJmfQ7ZSk=
 X-Forefront-Antispam-Report:
-	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700016)(376014)(7416014)(82310400026)(1800799024)(35042699022)(14060799003)(22082099003)(18002099003)(56012099003);DIR:OUT;SFP:1101;
+	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(7416014)(36860700016)(35042699022)(82310400026)(14060799003)(1800799024)(376014)(18002099003)(56012099003)(22082099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	3LZs7zkHGThnebw/6z5YZQjeAWSiLMnK/VyGoCV57V40wXyNUi1LiLx5e6XLC0Bintu/k5HDdSMeBahqP7gqW09L7EBZbSNWDxsqWpgglOQ8LwB9zi0Vdbg/gfajAI3bnX3oKaFYdhPgnseH0XLDpK6cEYfb5IXSi5HXk+M6BbXAzWj5JsfGdvS2oefCipzk5EQapCoqq43E9IJssH4q1CfAQ75chB3/T/RshZC5/hMRNv4bUDQXbXf7JEP08yXiO3wP3ru7477DOeSzdiRwl3JrbpUjWZG1LEGQ7TJnHJaHrVE8HnbRFcEkMvE3mk9nR0lzI+Fgxt/3dn3mn4t6b+q18l4OFtzSN+mEmPE4JOJmGRUMZFLPjsrsHBIrOz9OOjtX5+9UAuABHUSqXJrvvbL6czoSqrnmdl0FoPmdWe2xte7wkggWuZ0wDSMx/MmM
+	sIdPzEL+GY3EDzzZygNEMFF/B4fuA83WVg86c/esUQrJe8B5HjKpxSPD948zi5Yyhe3nL4Q/te7u5ChCS6GA1nquWJm8djC6Wq3UVykkDAgmdmKEKXBC/v3bVLSam1oubjRRePqOZS3N83+mPQuvmiMUbnlumdeKoRdlyM8viLZfVRjclppt+grRajr1edwVxKzDWOC2AOSjsGI6jlKFQEKQKKngVoGXk4VejWFfiZUtJCBxBl4FRlvQPvkwrF9otX7ZVBVoakGTUrjnGz0RagT18iayWi8THHJRH4UNLYtdAJZ0hvvgSfYxVB4W9dg/KaC+i21IZg/5/4X1xFkCaJDx2t/+Xhx8aHJv3n06xxxkqCKlpQY8dmnGOUYbq0c9gea2GDUP/xGtx7phe3MIC2b1xunGklNYIa23RLgH3dgR+w8A8zZaRqf8kjKVMC+7
 X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 May 2026 09:04:12.9037
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 May 2026 09:14:12.7662
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5725ff9e-9618-43ac-87ff-08deab4e714f
+X-MS-Exchange-CrossTenant-Network-Message-Id: a9f4bc78-9129-4d7e-a1b4-08deab4fd6de
 X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	DU6PEPF0000B622.eurprd02.prod.outlook.com
+	DB1PEPF000509E6.eurprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AMBPR08MB11589
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI0PR08MB10760
 
 
 
 On 4/29/26 2:12 AM, Mike Rapoport wrote:
 > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 > 
-> Convert va_high_addr_switch test to use kselftest framework for
-> reporting and tracking successful and failing runs.
+> ... for upcoming addition of HugeTLB helpers.
 > 
 > Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 
-I have run this test before and after applying the patch. It correctly
-converts the test output into KTAP format with no change in results.
+Looks good to me.
 
-Tested-by: Sarthak Sharma <sarthak.sharma@arm.com>
+Reviewed-by: Sarthak Sharma <sarthak.sharma@arm.com>
 
 > ---
->  .../selftests/mm/va_high_addr_switch.c        | 41 +++++++++----------
->  1 file changed, 20 insertions(+), 21 deletions(-)
+>  tools/testing/selftests/mm/Makefile                           | 4 ++--
+>  tools/testing/selftests/mm/cow.c                              | 2 +-
+>  tools/testing/selftests/mm/folio_split_race_test.c            | 2 +-
+>  tools/testing/selftests/mm/guard-regions.c                    | 2 +-
+>  .../selftests/mm/{thp_settings.c => hugepage_settings.c}      | 2 +-
+>  .../selftests/mm/{thp_settings.h => hugepage_settings.h}      | 0
+>  tools/testing/selftests/mm/khugepaged.c                       | 2 +-
+>  tools/testing/selftests/mm/ksm_tests.c                        | 2 +-
+>  tools/testing/selftests/mm/migration.c                        | 2 +-
+>  tools/testing/selftests/mm/prctl_thp_disable.c                | 2 +-
+>  tools/testing/selftests/mm/soft-dirty.c                       | 2 +-
+>  tools/testing/selftests/mm/split_huge_page_test.c             | 2 +-
+>  tools/testing/selftests/mm/transhuge-stress.c                 | 2 +-
+>  tools/testing/selftests/mm/uffd-wp-mremap.c                   | 2 +-
+>  14 files changed, 14 insertions(+), 14 deletions(-)
+>  rename tools/testing/selftests/mm/{thp_settings.c => hugepage_settings.c} (99%)
+>  rename tools/testing/selftests/mm/{thp_settings.h => hugepage_settings.h} (100%)
 > 
-> diff --git a/tools/testing/selftests/mm/va_high_addr_switch.c b/tools/testing/selftests/mm/va_high_addr_switch.c
-> index 51401e081b20..5d38735ea60e 100644
-> --- a/tools/testing/selftests/mm/va_high_addr_switch.c
-> +++ b/tools/testing/selftests/mm/va_high_addr_switch.c
-> @@ -257,40 +257,35 @@ void testcases_init(void)
->  	switch_hint = addr_switch_hint;
->  }
+> diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+> index a6955660a806..a1d103b38485 100644
+> --- a/tools/testing/selftests/mm/Makefile
+> +++ b/tools/testing/selftests/mm/Makefile
+> @@ -186,8 +186,8 @@ TEST_FILES += write_hugetlb_memory.sh
 >  
-> -static int run_test(struct testcase *test, int count)
-> +static void run_test(struct testcase *test, int count)
->  {
->  	void *p;
-> -	int i, ret = KSFT_PASS;
-> +	int i;
+>  include ../lib.mk
 >  
->  	for (i = 0; i < count; i++) {
->  		struct testcase *t = test + i;
+> -$(TEST_GEN_PROGS): vm_util.c thp_settings.c
+> -$(TEST_GEN_FILES): vm_util.c thp_settings.c
+> +$(TEST_GEN_PROGS): vm_util.c hugepage_settings.c
+> +$(TEST_GEN_FILES): vm_util.c hugepage_settings.c
 >  
->  		p = mmap(t->addr, t->size, PROT_READ | PROT_WRITE, t->flags, -1, 0);
-> -
-> -		printf("%s: %p - ", t->msg, p);
-> -
->  		if (p == MAP_FAILED) {
-> -			printf("FAILED\n");
-> -			ret = KSFT_FAIL;
-> +			ksft_perror("MAP_FAILED");
-> +			ksft_test_result_fail("%s\n", t->msg);
->  			continue;
->  		}
+>  $(OUTPUT)/uffd-stress: uffd-common.c
+>  $(OUTPUT)/uffd-unit-tests: uffd-common.c
+> diff --git a/tools/testing/selftests/mm/cow.c b/tools/testing/selftests/mm/cow.c
+> index 6abdcb30aba8..4321f4208fe3 100644
+> --- a/tools/testing/selftests/mm/cow.c
+> +++ b/tools/testing/selftests/mm/cow.c
+> @@ -29,7 +29,7 @@
+>  #include "../../../../mm/gup_test.h"
+>  #include "kselftest.h"
+>  #include "vm_util.h"
+> -#include "thp_settings.h"
+> +#include "hugepage_settings.h"
 >  
->  		if (t->low_addr_required && p >= (void *)(switch_hint)) {
-> -			printf("FAILED\n");
-> -			ret = KSFT_FAIL;
-> +			ksft_print_msg("%p not below switch hint\n", p);
-> +			ksft_test_result_fail("%s\n", t->msg);
->  		} else {
->  			/*
->  			 * Do a dereference of the address returned so that we catch
->  			 * bugs in page fault handling
->  			 */
->  			memset(p, 0, t->size);
-> -			printf("OK\n");
-> +			ksft_test_result_pass("%s\n", t->msg);
->  		}
->  		if (!t->keep_mapped)
->  			munmap(p, t->size);
->  	}
-> -
-> -	return ret;
->  }
+>  static size_t pagesize;
+>  static int pagemap_fd;
+> diff --git a/tools/testing/selftests/mm/folio_split_race_test.c b/tools/testing/selftests/mm/folio_split_race_test.c
+> index ff026f183ac7..7ede4793c778 100644
+> --- a/tools/testing/selftests/mm/folio_split_race_test.c
+> +++ b/tools/testing/selftests/mm/folio_split_race_test.c
+> @@ -25,7 +25,7 @@
+>  #include <unistd.h>
+>  #include "vm_util.h"
+>  #include "kselftest.h"
+> -#include "thp_settings.h"
+> +#include "hugepage_settings.h"
 >  
->  #ifdef __aarch64__
-> @@ -322,19 +317,23 @@ static int supported_arch(void)
+>  uint64_t page_size;
+>  uint64_t pmd_pagesize;
+> diff --git a/tools/testing/selftests/mm/guard-regions.c b/tools/testing/selftests/mm/guard-regions.c
+> index 48e8b1539be3..feb50b415f52 100644
+> --- a/tools/testing/selftests/mm/guard-regions.c
+> +++ b/tools/testing/selftests/mm/guard-regions.c
+> @@ -21,7 +21,7 @@
+>  #include <sys/uio.h>
+>  #include <unistd.h>
+>  #include "vm_util.h"
+> -#include "thp_settings.h"
+> +#include "hugepage_settings.h"
 >  
->  int main(int argc, char **argv)
->  {
-> -	int ret, hugetlb_ret = KSFT_PASS;
-> +	bool run_hugetlb = false;
-> +
-> +	ksft_print_header();
+>  #include "../pidfd/pidfd.h"
 >  
->  	if (!supported_arch())
-> -		return KSFT_SKIP;
-> +		ksft_exit_skip("Architecture not supported\n");
-> +
-> +	if (argc == 2 && !strcmp(argv[1], "--run-hugetlb"))
-> +		run_hugetlb = true;
+> diff --git a/tools/testing/selftests/mm/thp_settings.c b/tools/testing/selftests/mm/hugepage_settings.c
+> similarity index 99%
+> rename from tools/testing/selftests/mm/thp_settings.c
+> rename to tools/testing/selftests/mm/hugepage_settings.c
+> index f38ba8a27b30..87ecb309b430 100644
+> --- a/tools/testing/selftests/mm/thp_settings.c
+> +++ b/tools/testing/selftests/mm/hugepage_settings.c
+> @@ -8,7 +8,7 @@
+>  #include <unistd.h>
 >  
->  	testcases_init();
+>  #include "vm_util.h"
+> -#include "thp_settings.h"
+> +#include "hugepage_settings.h"
 >  
-> -	ret = run_test(testcases, sz_testcases);
-> -	if (argc == 2 && !strcmp(argv[1], "--run-hugetlb"))
-> -		hugetlb_ret = run_test(hugetlb_testcases, sz_hugetlb_testcases);
-> +	ksft_set_plan(sz_testcases + (run_hugetlb ? sz_hugetlb_testcases : 0));
-> +
-> +	run_test(testcases, sz_testcases);
-> +	if (run_hugetlb)
-> +		run_test(hugetlb_testcases, sz_hugetlb_testcases);
+>  #define THP_SYSFS "/sys/kernel/mm/transparent_hugepage/"
+>  #define MAX_SETTINGS_DEPTH 4
+> diff --git a/tools/testing/selftests/mm/thp_settings.h b/tools/testing/selftests/mm/hugepage_settings.h
+> similarity index 100%
+> rename from tools/testing/selftests/mm/thp_settings.h
+> rename to tools/testing/selftests/mm/hugepage_settings.h
+> diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
+> index ef3b6464ff3f..7563d7600ce7 100644
+> --- a/tools/testing/selftests/mm/khugepaged.c
+> +++ b/tools/testing/selftests/mm/khugepaged.c
+> @@ -22,7 +22,7 @@
+>  #include "linux/magic.h"
 >  
-> -	if (ret == KSFT_PASS && hugetlb_ret == KSFT_PASS)
-> -		return KSFT_PASS;
-> -	else
-> -		return KSFT_FAIL;
-> +	ksft_finished();
->  }
+>  #include "vm_util.h"
+> -#include "thp_settings.h"
+> +#include "hugepage_settings.h"
+>  
+>  #define BASE_ADDR ((void *)(1UL << 30))
+>  static unsigned long hpage_pmd_size;
+> diff --git a/tools/testing/selftests/mm/ksm_tests.c b/tools/testing/selftests/mm/ksm_tests.c
+> index 752a2c0d06ab..fb355f869401 100644
+> --- a/tools/testing/selftests/mm/ksm_tests.c
+> +++ b/tools/testing/selftests/mm/ksm_tests.c
+> @@ -15,7 +15,7 @@
+>  #include "kselftest.h"
+>  #include <include/vdso/time64.h>
+>  #include "vm_util.h"
+> -#include "thp_settings.h"
+> +#include "hugepage_settings.h"
+>  
+>  #define KSM_SYSFS_PATH "/sys/kernel/mm/ksm/"
+>  #define KSM_FP(s) (KSM_SYSFS_PATH s)
+> diff --git a/tools/testing/selftests/mm/migration.c b/tools/testing/selftests/mm/migration.c
+> index 76e380b74658..0212cd5bde6e 100644
+> --- a/tools/testing/selftests/mm/migration.c
+> +++ b/tools/testing/selftests/mm/migration.c
+> @@ -5,7 +5,7 @@
+>   */
+>  
+>  #include "kselftest_harness.h"
+> -#include "thp_settings.h"
+> +#include "hugepage_settings.h"
+>  
+>  #include <strings.h>
+>  #include <pthread.h>
+> diff --git a/tools/testing/selftests/mm/prctl_thp_disable.c b/tools/testing/selftests/mm/prctl_thp_disable.c
+> index ca27200596a4..d8d9d1de57b8 100644
+> --- a/tools/testing/selftests/mm/prctl_thp_disable.c
+> +++ b/tools/testing/selftests/mm/prctl_thp_disable.c
+> @@ -14,7 +14,7 @@
+>  #include <sys/wait.h>
+>  
+>  #include "kselftest_harness.h"
+> -#include "thp_settings.h"
+> +#include "hugepage_settings.h"
+>  #include "vm_util.h"
+>  
+>  #ifndef PR_THP_DISABLE_EXCEPT_ADVISED
+> diff --git a/tools/testing/selftests/mm/soft-dirty.c b/tools/testing/selftests/mm/soft-dirty.c
+> index bcfcac99b436..c426c4636ef5 100644
+> --- a/tools/testing/selftests/mm/soft-dirty.c
+> +++ b/tools/testing/selftests/mm/soft-dirty.c
+> @@ -9,7 +9,7 @@
+>  
+>  #include "kselftest.h"
+>  #include "vm_util.h"
+> -#include "thp_settings.h"
+> +#include "hugepage_settings.h"
+>  
+>  #define PAGEMAP_FILE_PATH "/proc/self/pagemap"
+>  #define TEST_ITERATIONS 10000
+> diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
+> index 500d07c4938b..cc99294bdd5a 100644
+> --- a/tools/testing/selftests/mm/split_huge_page_test.c
+> +++ b/tools/testing/selftests/mm/split_huge_page_test.c
+> @@ -21,7 +21,7 @@
+>  #include <time.h>
+>  #include "vm_util.h"
+>  #include "kselftest.h"
+> -#include "thp_settings.h"
+> +#include "hugepage_settings.h"
+>  
+>  uint64_t pagesize;
+>  unsigned int pageshift;
+> diff --git a/tools/testing/selftests/mm/transhuge-stress.c b/tools/testing/selftests/mm/transhuge-stress.c
+> index 7a9f1035099b..8eb0c5630e7e 100644
+> --- a/tools/testing/selftests/mm/transhuge-stress.c
+> +++ b/tools/testing/selftests/mm/transhuge-stress.c
+> @@ -17,7 +17,7 @@
+>  #include <sys/mman.h>
+>  #include "vm_util.h"
+>  #include "kselftest.h"
+> -#include "thp_settings.h"
+> +#include "hugepage_settings.h"
+>  
+>  int backing_fd = -1;
+>  int mmap_flags = MAP_ANONYMOUS | MAP_NORESERVE | MAP_PRIVATE;
+> diff --git a/tools/testing/selftests/mm/uffd-wp-mremap.c b/tools/testing/selftests/mm/uffd-wp-mremap.c
+> index 516c35d236e1..9d67b11c2f28 100644
+> --- a/tools/testing/selftests/mm/uffd-wp-mremap.c
+> +++ b/tools/testing/selftests/mm/uffd-wp-mremap.c
+> @@ -8,7 +8,7 @@
+>  #include <linux/mman.h>
+>  #include <sys/mman.h>
+>  #include "kselftest.h"
+> -#include "thp_settings.h"
+> +#include "hugepage_settings.h"
+>  #include "uffd-common.h"
+>  
+>  static int pagemap_fd;
 
