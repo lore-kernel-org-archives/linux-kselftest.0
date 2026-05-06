@@ -1,128 +1,145 @@
-Received: from canpmsgout08.his.huawei.com (canpmsgout08.his.huawei.com [113.46.200.223])
+Received: from pdx-out-002.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-002.esa.us-west-2.outbound.mail-perimeter.amazon.com [44.246.1.125])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4129036F41C;
-	Wed,  6 May 2026 07:18:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.223
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C51F83E123A;
+	Wed,  6 May 2026 08:08:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=44.246.1.125
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778051885; cv=none; b=PuyyZxOFnyiydhh+uO1KwSJ8ID1ILLigXru7iyPHH/yyeGTXIEhg9lmlF6v2cMgtxbamfNk10cQnZd3dGmLxQSVUzQbeo7SJ7nE6ITj84dM+UQH1GirTcTVansTXwt59ydFdMbCnNev5ek6HXwI3TMF/2UYS2Hxk0pxFolNybb4=
+	t=1778054902; cv=none; b=HR3WOs7Ja2eh1TvGbXchV5JIFq0KEV/8X2D979+F034arWQ6wqgREKDP4KEXw4Mt5sCNJcE61akfIfh9YlJutbLO6kZOcjAooo3ZkXLQ9mtUIxjNVJeSp0bEJPHiZftJYmW0WZUdAwS2u2tp+2cMIhEoUFlHC0AEAZbvcDGLRSo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778051885; c=relaxed/simple;
-	bh=vtrz/HzLT/XZfHjsIyYqtE2HHqznXgOWYj2RjuzVc3M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=h52AzI5Xk6pRMJs3mhnjkDvKBTIWwaiIlm6AOg7kaOF/W6dnvtiHhL1Oym2aNHJ5zdItPnB5UFYoT0K3ebfaEjdnFoYQ1t17hdky1F1/T8oQFtOQOERaclBC6o0S9xf6j02hgbDku1gy6n1lbBwF8RGfOQuLn7BpEWslyiwMt/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=YNVZl++u; arc=none smtp.client-ip=113.46.200.223
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1778054902; c=relaxed/simple;
+	bh=LakSgXK9xZWfp62uOJDjuByvdgT3HOkvb9TfiFQGvLA=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=TVG39jySvJ/+3ee7DQECwTBZ09B3nHnwfKA1bs6/JCudtcE2X1XMsLcEeWjP9ohBlOFjIA+KoUEc8F62Jvg1Ai/80p1MHnuY0DBvvvsvz/z4kVCzTaRKFmLXL4g/iS7lSANmj4cxHMOL9vBqHOHjg66z2SzDNC66KUKP9jc6gsE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=XmfCuIXA; arc=none smtp.client-ip=44.246.1.125
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="YNVZl++u"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=j7OoOHB9ZeRPphxXVnwAj4bNVeeDK0KkFiEVcVNSXqU=;
-	b=YNVZl++ulB7Lj+02fluir6bwhbtbxqLMkPxn2pz6YWGVOXXm6saH+jt7RQqwZU12KHe1Is2Rh
-	RRqUA9DRKbaUlfL2QrdDiPZs+Cs8pMYDuZFAD4sgMtBDdKs/UrbAJ/5SbrU4Wz6Ju4uWhs070Dm
-	5kW4p86Fc5a5TcUqPb3OrXQ=
-Received: from mail.maildlp.com (unknown [172.19.163.163])
-	by canpmsgout08.his.huawei.com (SkyGuard) with ESMTPS id 4g9RPj28kwzmV69;
-	Wed,  6 May 2026 15:11:21 +0800 (CST)
-Received: from kwepemk500005.china.huawei.com (unknown [7.202.194.90])
-	by mail.maildlp.com (Postfix) with ESMTPS id DF5934048B;
-	Wed,  6 May 2026 15:17:53 +0800 (CST)
-Received: from [10.67.120.222] (10.67.120.222) by
- kwepemk500005.china.huawei.com (7.202.194.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Wed, 6 May 2026 15:17:53 +0800
-Message-ID: <e4a2b49a-0efe-4942-9683-9c9a5af1b12a@huawei.com>
-Date: Wed, 6 May 2026 15:17:52 +0800
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="XmfCuIXA"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1778054900; x=1809590900;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=bfdMAsgvM6p8hWk2sdmIXhE1O1tOVF0HFNlReXBroqU=;
+  b=XmfCuIXAF6d7b2BBCfezzI6lhB2W3xRFdTJ58T7uFoDIjOQRXC/wdaZY
+   ThKAkg+TdefJtTnaGAg4Wu+hZk0qtvw3DpMIVGO7XTouuWs8WbfODJmtt
+   BxGb4uhnzZxBGiIPEPhiz6+LuQnrTTdtWBDPGCgje78IZBtJGAnXt30Nx
+   FBUmVOzjTRUr4uZDqVNBU7hqMbLE4D2TfkHcUDdaMGuHHfYBlvxnzrcL9
+   GY8aA5L3yMpDf0cqksUWxseGsaEG/g5O+G72uJLm6AP8BPfZd6sAhNLVK
+   UewJGEb4jl7vd3wAvmrnP5xMZ/hKYzU9VdAAleMG+HOszeHEouwQAyZ+H
+   g==;
+X-CSE-ConnectionGUID: MmMFvwZCQLewcyBwlWjNrw==
+X-CSE-MsgGUID: dKPa6oOPR+SZmZUz/KuDQg==
+X-IronPort-AV: E=Sophos;i="6.23,219,1770595200"; 
+   d="scan'208";a="18975878"
+Received: from ip-10-5-9-48.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.9.48])
+  by internal-pdx-out-002.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2026 08:08:18 +0000
+Received: from EX19MTAUWA002.ant.amazon.com [205.251.233.178:20934]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.20.153:2525] with esmtp (Farcaster)
+ id 4c3798b6-d4c5-412e-bccc-51de55c2e359; Wed, 6 May 2026 08:08:17 +0000 (UTC)
+X-Farcaster-Flow-ID: 4c3798b6-d4c5-412e-bccc-51de55c2e359
+Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
+ EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37;
+ Wed, 6 May 2026 08:08:17 +0000
+Received: from dev-dsk-itazur-1b-11e7fc0f.eu-west-1.amazon.com (172.19.66.53)
+ by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37;
+ Wed, 6 May 2026 08:08:03 +0000
+From: Takahiro Itazuri <itazur@amazon.com>
+To: <seanjc@google.com>, <ljs@kernel.org>
+CC: <Liam.Howlett@oracle.com>, <ackerleytng@google.com>,
+	<agordeev@linux.ibm.com>, <ajones@ventanamicro.com>,
+	<akpm@linux-foundation.org>, <alex@ghiti.fr>, <andrii@kernel.org>,
+	<aou@eecs.berkeley.edu>, <ast@kernel.org>, <baolu.lu@linux.intel.com>,
+	<borntraeger@linux.ibm.com>, <bp@alien8.de>, <bpf@vger.kernel.org>,
+	<catalin.marinas@arm.com>, <chenhuacai@kernel.org>, <corbet@lwn.net>,
+	<coxu@redhat.com>, <daniel@iogearbox.net>, <dave.hansen@linux.intel.com>,
+	<david@kernel.org>, <derekmn@amazon.com>, <dev.jain@arm.com>,
+	<eddyz87@gmail.com>, <gerald.schaefer@linux.ibm.com>, <gor@linux.ibm.com>,
+	<haoluo@google.com>, <hca@linux.ibm.com>, <hpa@zytor.com>,
+	<itazur@amazon.co.uk>, <jackabt@amazon.co.uk>, <jackmanb@google.com>,
+	<jannh@google.com>, <jgg@ziepe.ca>, <jgross@suse.com>, <jhubbard@nvidia.com>,
+	<jiayuan.chen@shopee.com>, <jmattson@google.com>, <joey.gouly@arm.com>,
+	<john.fastabend@gmail.com>, <jolsa@kernel.org>, <jthoughton@google.com>,
+	<kalyazin@amazon.co.uk>, <kas@kernel.org>, <kernel@xen0n.name>,
+	<kpsingh@kernel.org>, <kvm@vger.kernel.org>, <kvmarm@lists.linux.dev>,
+	<lenb@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-doc@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-mm@kvack.org>, <linux-pm@vger.kernel.org>,
+	<linux-riscv@lists.infradead.org>, <linux-s390@vger.kernel.org>,
+	<loongarch@lists.linux.dev>, <lorenzo.stoakes@oracle.com>, <luto@kernel.org>,
+	<maobibo@loongson.cn>, <martin.lau@linux.dev>, <maz@kernel.org>,
+	<mhocko@suse.com>, <mingo@redhat.com>, <mlevitsk@redhat.com>,
+	<nikita.kalyazin@linux.dev>, <oupton@kernel.org>, <palmer@dabbelt.com>,
+	<patrick.roy@linux.dev>, <pavel@kernel.org>, <pbonzini@redhat.com>,
+	<peterx@redhat.com>, <peterz@infradead.org>, <pfalcato@suse.de>,
+	<pjw@kernel.org>, <prsampat@amd.com>, <rafael@kernel.org>,
+	<riel@surriel.com>, <rppt@kernel.org>, <ryan.roberts@arm.com>,
+	<sdf@fomichev.me>, <shijie@os.amperecomputing.com>,
+	<skhan@linuxfoundation.org>, <song@kernel.org>, <surenb@google.com>,
+	<suzuki.poulose@arm.com>, <svens@linux.ibm.com>, <tabba@google.com>,
+	<tglx@kernel.org>, <thuth@redhat.com>, <urezki@gmail.com>,
+	<vannapurve@google.com>, <vbabka@kernel.org>, <will@kernel.org>,
+	<willy@infradead.org>, <wu.fei9@sanechips.com.cn>, <x86@kernel.org>,
+	<yang@os.amperecomputing.com>, <yangyicong@hisilicon.com>,
+	<yonghong.song@linux.dev>, <yosry@kernel.org>, <yu-cheng.yu@intel.com>,
+	<yuzenghui@huawei.com>, <zhengqi.arch@bytedance.com>
+Subject: Re: [PATCH v12 00/16] Direct Map Removal Support for guest_memfd
+Date: Wed, 6 May 2026 08:07:52 +0000
+Message-ID: <20260506080753.14517-1-itazur@amazon.com>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <aeennZlV60k81OBf@google.com>
+References: <aeennZlV60k81OBf@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/6] selftests/resctrl: Introduced linked list
- management for IMC counters
-To: Reinette Chatre <reinette.chatre@intel.com>, <tony.luck@intel.com>,
-	<Dave.Martin@arm.com>, <james.morse@arm.com>, <babu.moger@amd.com>,
-	<shuah@kernel.org>, <tan.shaopeng@fujitsu.com>, <fenghuay@nvidia.com>,
-	<ben.horgan@arm.com>, <jonathan.cameron@huawei.com>, <zengheng4@huawei.com>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kselftest@vger.kernel.org>, <linuxarm@huawei.com>
-CC: <xiaqinxin@huawei.com>, <prime.zeng@hisilicon.com>,
-	<wangyushan12@huawei.com>, <xuwei5@huawei.com>, <fanghao11@huawei.com>,
-	<wangzhou1@hisilicon.com>
-References: <20260410093352.3988125-1-wuyifan50@huawei.com>
- <20260410093352.3988125-2-wuyifan50@huawei.com>
- <b1d3a653-79a5-44db-8d57-c052ae537823@intel.com>
-From: wuyifan <wuyifan50@huawei.com>
-In-Reply-To: <b1d3a653-79a5-44db-8d57-c052ae537823@intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
- kwepemk500005.china.huawei.com (7.202.194.90)
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: EX19D037UWB002.ant.amazon.com (10.13.138.121) To
+ EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
-Hi Reinette,
+Hi Lorenzo and Sean,
 
-On 4/23/2026 12:02 AM, Reinette Chatre wrote:
-> Hi Yifan,
+Apologies for the delayed reply =E2=80=94 Nikita is leaving Amazon, and I'm
+taking over this series going forward. Thanks for your patience.
+
+On Tue, Apr 21, 2026 at 01:40:00PM +0000, Lorenzo Stoakes wrote:
+> Hm, given this touches a fair bit of mm, I wonder if we shouldn't try to =
+do this
+> through the mm tree?
+
+On Tue, Apr 21, 2026 at 04:36:00PM +0000, Sean Christopherson wrote:
+> Yeah, when the time comes, the mm pieces definitely need to go through th=
+e mm
+> tree.  Ideally, I think this would be merged in two separate parts, with =
+all mm
+> changes going through the mm tree, and then the KVM changes through the K=
+VM tree
+> using a stable topic branch/tag from Andrew.
+
+Thanks for the guidance. The split makes sense to me; I'm planning to
+follow this approach with patches 1-6 (mm) going through the mm tree
+and patches 7-16 (KVM) through the KVM tree on top of a stable
+branch/tag from mm. I'll confirm the exact boundary and coordination
+details as I prepare the repost.
+
+On Tue, Apr 21, 2026 at 01:40:00PM +0000, Lorenzo Stoakes wrote:
+> In any case, we definitely need a rebase on something not-next :) if not =
+mm then
+> Linus's tree at least maybe?
 >
-> On 4/10/26 2:33 AM, Yifan Wu wrote:
->> @@ -113,6 +115,7 @@ static int parse_imc_read_bw_events(char *imc_dir, unsigned int type,
->>   				    unsigned int *count)
->>   {
->>   	char imc_events_dir[PATH_MAX], imc_counter_cfg[PATH_MAX];
->> +	struct imc_counter_config *imc_counter;
->>   	unsigned int orig_count = *count;
->>   	char cas_count_cfg[1024];
->>   	struct dirent *ep;
->> @@ -167,11 +170,17 @@ static int parse_imc_read_bw_events(char *imc_dir, unsigned int type,
->>   			ksft_print_msg("Maximum iMC count exceeded\n");
->>   			goto out_close;
->>   		}
->> +		imc_counter = calloc(1, sizeof(*imc_counter));
->> +		if (!imc_counter) {
->> +			ksft_perror("Unable to allocate memory for iMC counters\n");
->> +			goto out_close;
->> +		}
->>   
->>   		imc_counters_config[*count].type = type;
->>   		get_read_event_and_umask(cas_count_cfg, *count);
->>   		/* Do not fail after incrementing *count. */
->>   		*count += 1;
->> +		list_add(&imc_counter->entry, &imc_counters_list);
->>   	}
->>   	if (*count == orig_count) {
->>   		ksft_print_msg("Unable to find events in %s\n", imc_events_dir);
-> Should cleanup_read_mem_bw_imc() be called on error exit path?
-Thank you for your suggestion. When parse_imc_read_bw_events() exits with an
-error, the linked list imc_counters_list will be cleaned up in 
-test_cleanup().
+> I'm seeing a lot of conflicts against mm-unstable, it can't b4 shazam eve=
+n patch
+> 1 and in Linus's tree it's failing at an mm patch (mm: introduce
+> AS_NO_DIRECT_MAP).
 
-main()
-└── run_single_test()
-     ├── mbm_run_test()
-     │   └── resctrl_val()
-     │       └── mbm_init()
-     │           └── initialize_read_mem_bw_imc()
-     │               └── enumerate_imcs()
-     │                   └── read_from_imc_dir()
-     │                       └── parse_imc_read_bw_events()
-     │                           └── calloc()
-     └── test_cleanup()
-         └── mbm_test_cleanup()
-             └── cleanup_read_mem_bw_imc()
+I'll rebase onto v7.1-rc1 and resolve the conflicts as part of the split.
 
-Calling cleanup_read_mem_bw_imc() in the error exit path may be intended
-to prevent resource leaks. However, this results in the function being 
-called
-repeatedly in both the error exit branch and test_cleanup().
-
-Is there any specific intention behind calling it in 
-parse_imc_read_bw_events()?
-Or should the cleanup be uniformly handled in test_cleanup()?
-
-Yifan
-
+Takahiro
 
