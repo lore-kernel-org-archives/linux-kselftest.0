@@ -1,50 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8822E1A683F;
-	Wed,  6 May 2026 01:00:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42850267B89;
+	Wed,  6 May 2026 01:21:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778029237; cv=none; b=JQbZKHpiXcXJpaMyUgiCGvFvDJz1v9oO42h/cdhFz6ZhbhII/JG9WRi5/LdQHZ5LSS80kKKSqB9PDcQTxEEHbM5HCo5ciUiXVLUPBZ+UANWVu2abNKRGM5khZG9LNyfw0YZiPR+FFAhEJD870ykuzxIXW7GLrA+0ZVaBrZ4s8Xk=
+	t=1778030465; cv=none; b=G/1bLZwn1DtkHXaokKMB75BD9uTBbL5C0Dlqgeu8cnxuBwkmmPsVPW14ocATeTKy5iMOcHKafOLY9O0MxLXdlpWM7aNCnWRtq3xDzTkNJR3h8KPLE5TWzNGK4N/ylnsJ9fGjsn2R4YjjvY3aCkf11EbRiZLoSn8mco9UVPtf+WE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778029237; c=relaxed/simple;
-	bh=5HENGzZkN4GkNqTCb3WRp2m8uqHpquztXJ3hV0fm0aw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IMCNoCDE9hItISBrsIi/t7rp4XiR30KTd1xyXU0RI/5n05FCIXfjiQs7wc2ibuQu/KtCenemlrc37A4/2WhiFWQfkaO/BFXQ3Tzd5petPWXwmIFI48j4+32UBXWwHc5gRHdJvrzpYyVomQPW3FpenzNFDe8m5R55uxYKyjz747k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JMViL6P2; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778030465; c=relaxed/simple;
+	bh=WG2A+Swh5jbEoHIfgwn/6sVRAWH5O5i0grAZx8kNtlU=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=uVYMg5KER8fPPnYfsuKsrrNXs5An+fQI4nf8H0A1EbDwia5QK4IrYUJUMpfelTX105OlQTL+XPgoUeGuj5mQBQOj1sT2IKXNuwgigN+T2bU557WlBG/CmJqoFKQ+B58ER0OnxcSQ9RwCAfZAhmD1nJ3cs4whDiZvlQxT+OGPhqA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y8/cRtyu; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JMViL6P2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCC74C2BCB4;
-	Wed,  6 May 2026 01:00:36 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y8/cRtyu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20700C2BCB4;
+	Wed,  6 May 2026 01:21:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778029237;
-	bh=5HENGzZkN4GkNqTCb3WRp2m8uqHpquztXJ3hV0fm0aw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=JMViL6P24NIVjuyYPDBUcN71ndJz2VRzZgp+FMAHpWJxQmhJ61iHLv1FhVW2utEoU
-	 +dQ+9gODkVE9IbzACxVckg3PkzNiVSARxJB90xkU+nZ1frQCAbY5xf+tvFs0Luy6Wt
-	 c2PPHS7O5b+Yhz6RVQkiVS9ApLKaqAFuUnqpzDLQ0qCq5eu3FxUkKFk/iAtkuYoGL4
-	 gVt/gG9Axd1X5lynpguWCqBgR0dB9ATzyYKQwBm1a5B4BvXdE4sifDPwl/k1ze8Dm7
-	 36qlsXmrCi3UmKf+DpwLNisFWq2uI7FiseGQE71uNNwbTk25ZIlz/LF3qTEVvpZ8jJ
-	 c9FsmSfreWJZg==
-From: Jakub Kicinski <kuba@kernel.org>
-To: antonio@openvpn.net
-Cc: Jakub Kicinski <kuba@kernel.org>,
-	netdev@vger.kernel.org,
-	edumazet@google.com,
-	sd@queasysnail.net,
-	davem@davemloft.net,
-	pabeni@redhat.com,
-	ralf@mandelbit.com,
-	andrew+netdev@lunn.ch,
-	horms@kernel.org,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net 2/3] ovpn: ensure packet delivery happens with BH disabled
-Date: Tue,  5 May 2026 18:00:35 -0700
-Message-ID: <20260506010035.1563280-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260504230305.2681646-3-antonio@openvpn.net>
-References: <20260504230305.2681646-3-antonio@openvpn.net>
+	s=k20201202; t=1778030465;
+	bh=WG2A+Swh5jbEoHIfgwn/6sVRAWH5O5i0grAZx8kNtlU=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=Y8/cRtyu+gKa0YfdMLiNVrqMEw3qxGsN+sKwUcxsxx++Qew3sDn2gZH9I0eG4I6Pp
+	 nFoPzMP+AmUukRxHVkwqNqqp3YjlZNuGoEeTpYm+YkxksKM60kSBehgG93M6fxJ8WH
+	 4jofRQoct7eSXW3tNfVsaWwSE4MoVFtsrYJ0Stmqi7eY17VHzk2uuRegCiG+oUhIVN
+	 oOlw3ClaMJYiMOZXC4c6lSOKVyt1VYU0A0DEgj/x81BoTEvzG4iKbGfwR+2Eb+4Gx4
+	 p+aXiHwtq5q4zYfz7jn1Hq+t00YY4qCGc9W/FO8EfLyml74ojqjQG18tbBBt6yxdYv
+	 +o2U1DkFzEOUQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7CF333930780;
+	Wed,  6 May 2026 01:20:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,66 +37,48 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v7 0/3] selftests: drv-net: convert so_txtime to
+ drv-net
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177803041504.2335725.15765124651385983466.git-patchwork-notify@kernel.org>
+Date: Wed, 06 May 2026 01:20:15 +0000
+References: <20260504174056.565319-1-willemdebruijn.kernel@gmail.com>
+In-Reply-To: <20260504174056.565319-1-willemdebruijn.kernel@gmail.com>
+To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+ edumazet@google.com, pabeni@redhat.com, horms@kernel.org,
+ linux-kselftest@vger.kernel.org, shuah@kernel.org, willemb@google.com
 
-This is an AI-generated review of your patch. The human sending this
-email has considered the AI review valid, or at least plausible.
----
-ovpn: ensure packet delivery happens with BH disabled
+Hello:
 
-This commit wraps gro_cells_receive() and dev_dstats_rx_add() with
-local_bh_disable() and local_bh_enable() in ovpn_netdev_write(). This
-prevents deadlocks and per-cpu state corruption when packet delivery occurs
-in process context for TCP connections.
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-> diff --git a/drivers/net/ovpn/io.c b/drivers/net/ovpn/io.c
-> --- a/drivers/net/ovpn/io.c
-> +++ b/drivers/net/ovpn/io.c
-> @@ -91,12 +91,18 @@ static void ovpn_netdev_write(struct ovpn_peer *peer, struct sk_buff *skb)
->  
->  	/* cause packet to be "received" by the interface */
->  	pkt_len = skb->len;
-> +	/* we may get here in process context in case of TCP connections,
-> +	 * therefore we have to disable BHs to ensure gro_cells_receive()
-> +	 * and dev_dstats_rx_add() do not get corrupted or enter deadlock
-> +	 */
-> +	local_bh_disable();
->  	ret = gro_cells_receive(&peer->ovpn->gro_cells, skb);
->  	if (likely(ret == NET_RX_SUCCESS)) {
->  		/* update RX stats with the size of decrypted packet */
->  		ovpn_peer_stats_increment_rx(&peer->vpn_stats, pkt_len);
->  		dev_dstats_rx_add(peer->ovpn->dev, pkt_len);
->  	}
-> +	local_bh_enable();
->  }
+On Mon,  4 May 2026 13:38:31 -0400 you wrote:
+> From: Willem de Bruijn <willemb@google.com>
+> 
+> In preparation for extending to pacing hardware offload, convert the
+> so_txtime.sh test to a drv-net test that can be run against netdevsim
+> and real hardware.
+> 
+> Two preparatory patches
+> 1. support negative tests, where tests are expected to fail
+> 2. add a tc helper
+> 
+> [...]
 
-This protects the success path, but do the error and drop paths also need
-BH protection?
+Here is the summary with links:
+  - [net-next,v7,1/3] selftests: net: py: support cmd verifying expected failure
+    https://git.kernel.org/netdev/net-next/c/d9c1e7dc4ada
+  - [net-next,v7,2/3] selftests: net: py: add tc utility
+    https://git.kernel.org/netdev/net-next/c/49bf9e5e7c7c
+  - [net-next,v7,3/3] selftests: drv-net: convert so_txtime to drv-net
+    https://git.kernel.org/netdev/net-next/c/5c6baef3885c
 
-If ovpn_decrypt_post() is called in process context for TCP connections, an
-error condition jumps to the drop label:
-
-ovpn_decrypt_post() {
-        ...
-        if (unlikely(ret < 0))
-                goto drop;
-        ...
-drop:
-        if (unlikely(skb))
-                dev_dstats_rx_dropped(peer->ovpn->dev);
-        ...
-}
-
-Since dev_dstats_rx_dropped() updates the same per-CPU dstats structure
-without disabling bottom halves, could it still be vulnerable to softirq
-preemption and stat corruption?
-
-Additionally, do the TX paths in the TCP implementation have similar issues?
-It looks like ovpn_tcp_send_skb() and ovpn_tcp_send_sock_skb() might call
-dev_dstats_tx_dropped() without disabling bottom halves.
-
-Similarly, ovpn_tcp_send_sock() uses preempt_disable() around
-dev_dstats_tx_add(), which does not prevent softirqs from running upon
-return from a hardware interrupt on the same CPU. Does this leave a similar
-race window open?
+You are awesome, thank you!
 -- 
-pw-bot: cr
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
