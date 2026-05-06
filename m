@@ -1,95 +1,91 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3D423EFD27
-	for <linux-kselftest@vger.kernel.org>; Wed,  6 May 2026 15:36:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B5FB3F0AB2;
+	Wed,  6 May 2026 15:38:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778081779; cv=none; b=OMBVdP3jSsxWGOzFA6Op9eizGxbkpHYRYMHBrWX2KKTs1rBoB9uIo4WhrfGywtwaTp6UuD3VYJn+uOPNELV+XoT5WqKb51TIyJFotD2zcuzC54pS9/RAfRREZ4nuoaXV6f4olL4PL+p7d+fUzRBlWEoNOa/Cjm1/L9Nw214Ljfk=
+	t=1778081927; cv=none; b=G8jwHI2HEmkTUGL3AE/673I5LQaf8scmFTtKK+ad+1S5Lgw36dGSo2fmPK8DRvf+JtY39pvX9bvZwZoavd4WuQ7fr7FTw/9AECStcTFDKGPzKKMNSROTjC4ST2JfalgwqEjUdGfh+/nqVtIo1K+vbFgCFpwsw4nCYbpkPVY05Xw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778081779; c=relaxed/simple;
-	bh=CwP7g+L7tmTM1gOICXchU65OK9ZzlG0f6YkTuUwv3XI=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=QDeMOwqRUHcjfofU+6Hc/6V0H+eHj/To0y0wyP6dZrHHuQj/hOddm/51JcNHNiJQGzeKA6T/hhK/X8tDf5hvMk7dX0DbuL1suBjLVi1dfIb5nmqcUdYfgKugwAPqE01xOPywc7CFCdx4UPWtLbwtt+/M4H0Fpim9moqUjVVUZdQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=J/9Gf0dp; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1778081927; c=relaxed/simple;
+	bh=7EWOYQgB1u32sEFotlMXBCyVmyDnIdAZLQsC0sUnM+M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=B92fy9Ybtv9DgQ96zpouYPLLaBoOm2LcPNa+qly4Dq2klqtkMM3A8mkLGlgFajsPvKR5XwUREiidzYvOVZgZPU4ZOX0FkFGMKJV+hEXSj6fp1vIa0rlHv4oWpY3OffuCkblFUFvRzWP3uw6p0HrpECy+n9tDOld8ZF0duFHVmKo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=qjjIyhLA; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="J/9Gf0dp"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1778081772;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=P0UoDCQban7BwMooeGuUu7b8/86Tvw53i5NmMB+ICeI=;
-	b=J/9Gf0dpu8vRPt9NfUGCYwWXvoRWWdcLzQjTcXh5OzFMI4LwRb+gd45k86FYxfpApcDivm
-	QnVbcrjm2pmF6byBRLOObLhagBtudlAJmdj//7YbmKCNoXl+cM8k9Yxpfr6UsnIit3exTw
-	bbLzg3JyTYjZ2zeUU4OmuQLYBgdLtCw=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-179-Oj-mcXI6Mm21pizt2v4p5w-1; Wed,
- 06 May 2026 11:36:06 -0400
-X-MC-Unique: Oj-mcXI6Mm21pizt2v4p5w-1
-X-Mimecast-MFC-AGG-ID: Oj-mcXI6Mm21pizt2v4p5w_1778081765
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C3E9419560B4;
-	Wed,  6 May 2026 15:36:04 +0000 (UTC)
-Received: from RHTRH0061144 (unknown [10.22.65.142])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 32CC318001CE;
-	Wed,  6 May 2026 15:36:02 +0000 (UTC)
-From: Aaron Conole <aconole@redhat.com>
-To: Minxi Hou <houminxi@gmail.com>
-Cc: netdev@vger.kernel.org,  echaudro@redhat.com,  i.maximets@ovn.org,
-  davem@davemloft.net,  edumazet@google.com,  kuba@kernel.org,
-  pabeni@redhat.com,  horms@kernel.org,  shuah@kernel.org,
-  dev@openvswitch.org,  linux-kselftest@vger.kernel.org,
-  linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v5 2/2] selftests: openvswitch: add pop_vlan test
-In-Reply-To: <20260505124957.1239812-3-houminxi@gmail.com> (Minxi Hou's
-	message of "Tue, 5 May 2026 20:49:57 +0800")
-References: <20260505124957.1239812-1-houminxi@gmail.com>
-	<20260505124957.1239812-3-houminxi@gmail.com>
-Date: Wed, 06 May 2026 11:36:00 -0400
-Message-ID: <f7tjytgtusf.fsf@redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="qjjIyhLA"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=HBfSkJ+ZAj0IKZzbsOscWzm5w5IqhoP97yR5c6JXd3k=; b=qjjIyhLAYnp6+fzWGNQYHTDfMM
+	dcIQug2wJEoUes3iojqwilgyNfsTZZsNzrml2u7hAOlBUPV0mOaX18+f+P7JfyKKGQkap35JtApTr
+	GGMWo3Xeu1KhmejaIkkUaEHNyTRQFTpchGsurCCHxS/W3A4q7GtjSQyRzJdIMykPhyoWB2bgEwAZD
+	m0/7Y2fFAL27EFjrhAWkplpJLJIfpj/o/rPphT1s1BC/ybLVL4N3JUjn27m2jUVvlV+km7EtU3wC/
+	cp8mO5EBcC1Fn9qKDps0TKo3abv9aNbX/P+QdjiTrVIoKxEy6ZEtW/v159/j/NKqqzC8qbh7psgKR
+	7A+SG5KA==;
+Received: from authenticated user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1wKeKL-003glf-12;
+	Wed, 06 May 2026 15:38:21 +0000
+Date: Wed, 6 May 2026 08:38:15 -0700
+From: Breno Leitao <leitao@debian.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Miaohe Lin <linmiaohe@huawei.com>, 
+	Naoya Horiguchi <nao.horiguchi@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, David Hildenbrand <david@kernel.org>, 
+	Lorenzo Stoakes <ljs@kernel.org>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
+	linux-mm@kvack.org, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH v5 3/4] Documentation: document
+ panic_on_unrecoverable_memory_failure sysctl
+Message-ID: <aftfTpgyLRhXPSLm@gmail.com>
+References: <20260424-ecc_panic-v5-0-a35f4b50425c@debian.org>
+ <20260424-ecc_panic-v5-3-a35f4b50425c@debian.org>
+ <20260424054840.a63d80ed01b968caf9d9ef64@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260424054840.a63d80ed01b968caf9d9ef64@linux-foundation.org>
+X-Debian-User: leitao
 
-Minxi Hou <houminxi@gmail.com> writes:
+On Fri, Apr 24, 2026 at 05:48:40AM -0700, Andrew Morton wrote:
+> On Fri, 24 Apr 2026 05:24:01 -0700 Breno Leitao <leitao@debian.org> wrote:
+> 
+> > Add documentation for the new vm.panic_on_unrecoverable_memory_failure
+> > sysctl, describing the three categories of failures that trigger a
+> > panic and noting which kernel page types are not yet covered.
+> > 
+> >
+> > ...
+> >
+> > +When enabled, this sysctl triggers a panic on three categories of
+> > +unrecoverable failures: reserved kernel pages, non-buddy kernel pages
+> > +with zero refcount (e.g. tail pages of high-order allocations), and
+> > +pages whose state cannot be classified as recoverable.
+> 
+> Before someone asks, I wonder if we should make this a bitfield thing,
+> so people can select which of the above three should get the panic
+> treatment.
 
-> Add test_pop_vlan() to verify OVS kernel datapath pop_vlan action
-> correctly strips 802.1Q VLAN tags from frames.
->
-> Test structure:
-> - Baseline: untagged forwarding validates basic connectivity.
-> - Negative: forward without pop_vlan, tagged frame is invisible
->   to ns2 (no VLAN sub-interface), ping fails.
-> - Positive: pop_vlan strips tag on forward path, push_vlan
->   restores tag on return path, ping succeeds.
->
-> Use static ARP entries to avoid VLAN-tagged ARP complexity.
-> Rely on ping success/failure for verification =E2=80=94 no tcpdump or
-> pcap files needed.
->
-> Signed-off-by: Minxi Hou <houminxi@gmail.com>
-> ---
+That's an interesting idea, though I think the necessary infrastructure
+doesn't exist yet. As discussed in this thread, even distinguishing
+non-userspace pages from userspace pages presents non-trivial challenges.
 
-Thanks for adding this.  I'm still a little unclear about the explicit
-modprobe for 8021q.  Is it really needed?  I thought the request to add
-a vlan tagged interface should auto-load that module (unless it is
-blacklisted or something).  I guess this is an attempt to short-circuit
-the skip, but maybe it would be better to configure an interface and if
-that fails, then either fail the test or skip the test.
+Implementing a bitfield-based approach would require significant
+groundwork. If we want to pursue that direction, it might make sense to
+defer this patchset and focus on building that infrastructure first.
 
+My preference would be to start with the coarse-grained approach
+(current approach) and refine it incrementally based on actual needs.
