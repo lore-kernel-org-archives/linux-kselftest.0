@@ -1,145 +1,127 @@
-Received: from pdx-out-002.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-002.esa.us-west-2.outbound.mail-perimeter.amazon.com [44.246.1.125])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C51F83E123A;
-	Wed,  6 May 2026 08:08:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=44.246.1.125
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CE9D25A2B5;
+	Wed,  6 May 2026 08:16:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778054902; cv=none; b=HR3WOs7Ja2eh1TvGbXchV5JIFq0KEV/8X2D979+F034arWQ6wqgREKDP4KEXw4Mt5sCNJcE61akfIfh9YlJutbLO6kZOcjAooo3ZkXLQ9mtUIxjNVJeSp0bEJPHiZftJYmW0WZUdAwS2u2tp+2cMIhEoUFlHC0AEAZbvcDGLRSo=
+	t=1778055408; cv=none; b=tToeNCLKGziQ6Tv3bBI9W4myZcS90hpg26S8NPRy6v6E27diughT6oZlJfjmRp5tPhVbNxU/LA7TTQi3HaD+IrPJdzA2oKKCHBNvJheTpZwL2OSKAiRxDKIsC+4SvJdWnbTFfNPp8Gfig/O+jsSTWlPWHah/YgoOJ/6A2QNnjPI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778054902; c=relaxed/simple;
-	bh=LakSgXK9xZWfp62uOJDjuByvdgT3HOkvb9TfiFQGvLA=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=TVG39jySvJ/+3ee7DQECwTBZ09B3nHnwfKA1bs6/JCudtcE2X1XMsLcEeWjP9ohBlOFjIA+KoUEc8F62Jvg1Ai/80p1MHnuY0DBvvvsvz/z4kVCzTaRKFmLXL4g/iS7lSANmj4cxHMOL9vBqHOHjg66z2SzDNC66KUKP9jc6gsE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=XmfCuIXA; arc=none smtp.client-ip=44.246.1.125
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
+	s=arc-20240116; t=1778055408; c=relaxed/simple;
+	bh=NCNNyNpPk0K3+XgcIaeUBdZWrabivq0krWZutyXJVp0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Q8vGJknjBQTlKk1wCcOV9Jj+qQI/X31eEwoHk+OfQ9IkIf+owaJ+OV0fnlbth2opQbdwRL3Uhr9r2fyEkKkGxO/YAZ8QkK00iSQLVV8pWNIJVaHBaaKxSEQ54m50YENg3qexQIjT2L0WT8MVkomNjaWESHVF/NgYkrDgzM85Es4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AadYe4PJ; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="XmfCuIXA"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1778054900; x=1809590900;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=bfdMAsgvM6p8hWk2sdmIXhE1O1tOVF0HFNlReXBroqU=;
-  b=XmfCuIXAF6d7b2BBCfezzI6lhB2W3xRFdTJ58T7uFoDIjOQRXC/wdaZY
-   ThKAkg+TdefJtTnaGAg4Wu+hZk0qtvw3DpMIVGO7XTouuWs8WbfODJmtt
-   BxGb4uhnzZxBGiIPEPhiz6+LuQnrTTdtWBDPGCgje78IZBtJGAnXt30Nx
-   FBUmVOzjTRUr4uZDqVNBU7hqMbLE4D2TfkHcUDdaMGuHHfYBlvxnzrcL9
-   GY8aA5L3yMpDf0cqksUWxseGsaEG/g5O+G72uJLm6AP8BPfZd6sAhNLVK
-   UewJGEb4jl7vd3wAvmrnP5xMZ/hKYzU9VdAAleMG+HOszeHEouwQAyZ+H
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AadYe4PJ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1778055406; x=1809591406;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NCNNyNpPk0K3+XgcIaeUBdZWrabivq0krWZutyXJVp0=;
+  b=AadYe4PJBnhUydVZHECav4WHmAFc0LyxAtJoA8A+3yMEqL/OUuSfID8j
+   LWvn5DlrizQbgnyjWSgbVGqb3mTblLy61XiwZiqwpan2lVFXoRXGiEGjM
+   3eyjYwbh6S3IrRSQfDxF/qwHrjXNfSLd5X4la5cme2SaXMOXz1GjLr15g
+   RrrDIbyNgZFMCuFaUDAaFMEbZWlMQOsa8Ogv21HcANy0or+k/SIxzU6lX
+   v7pkuwhs2r8pTdGqydBcTz1pNQRbbiPEczYHXN+30wY70jnthIPYzWAT/
+   Fx0a0a9blE6XPdXbPI60R3IW7RJ66ApXng5bnOlRRbHJLEF3idI1x0Skc
    g==;
-X-CSE-ConnectionGUID: MmMFvwZCQLewcyBwlWjNrw==
-X-CSE-MsgGUID: dKPa6oOPR+SZmZUz/KuDQg==
-X-IronPort-AV: E=Sophos;i="6.23,219,1770595200"; 
-   d="scan'208";a="18975878"
-Received: from ip-10-5-9-48.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.9.48])
-  by internal-pdx-out-002.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2026 08:08:18 +0000
-Received: from EX19MTAUWA002.ant.amazon.com [205.251.233.178:20934]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.20.153:2525] with esmtp (Farcaster)
- id 4c3798b6-d4c5-412e-bccc-51de55c2e359; Wed, 6 May 2026 08:08:17 +0000 (UTC)
-X-Farcaster-Flow-ID: 4c3798b6-d4c5-412e-bccc-51de55c2e359
-Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37;
- Wed, 6 May 2026 08:08:17 +0000
-Received: from dev-dsk-itazur-1b-11e7fc0f.eu-west-1.amazon.com (172.19.66.53)
- by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37;
- Wed, 6 May 2026 08:08:03 +0000
-From: Takahiro Itazuri <itazur@amazon.com>
-To: <seanjc@google.com>, <ljs@kernel.org>
-CC: <Liam.Howlett@oracle.com>, <ackerleytng@google.com>,
-	<agordeev@linux.ibm.com>, <ajones@ventanamicro.com>,
-	<akpm@linux-foundation.org>, <alex@ghiti.fr>, <andrii@kernel.org>,
-	<aou@eecs.berkeley.edu>, <ast@kernel.org>, <baolu.lu@linux.intel.com>,
-	<borntraeger@linux.ibm.com>, <bp@alien8.de>, <bpf@vger.kernel.org>,
-	<catalin.marinas@arm.com>, <chenhuacai@kernel.org>, <corbet@lwn.net>,
-	<coxu@redhat.com>, <daniel@iogearbox.net>, <dave.hansen@linux.intel.com>,
-	<david@kernel.org>, <derekmn@amazon.com>, <dev.jain@arm.com>,
-	<eddyz87@gmail.com>, <gerald.schaefer@linux.ibm.com>, <gor@linux.ibm.com>,
-	<haoluo@google.com>, <hca@linux.ibm.com>, <hpa@zytor.com>,
-	<itazur@amazon.co.uk>, <jackabt@amazon.co.uk>, <jackmanb@google.com>,
-	<jannh@google.com>, <jgg@ziepe.ca>, <jgross@suse.com>, <jhubbard@nvidia.com>,
-	<jiayuan.chen@shopee.com>, <jmattson@google.com>, <joey.gouly@arm.com>,
-	<john.fastabend@gmail.com>, <jolsa@kernel.org>, <jthoughton@google.com>,
-	<kalyazin@amazon.co.uk>, <kas@kernel.org>, <kernel@xen0n.name>,
-	<kpsingh@kernel.org>, <kvm@vger.kernel.org>, <kvmarm@lists.linux.dev>,
-	<lenb@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-doc@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-mm@kvack.org>, <linux-pm@vger.kernel.org>,
-	<linux-riscv@lists.infradead.org>, <linux-s390@vger.kernel.org>,
-	<loongarch@lists.linux.dev>, <lorenzo.stoakes@oracle.com>, <luto@kernel.org>,
-	<maobibo@loongson.cn>, <martin.lau@linux.dev>, <maz@kernel.org>,
-	<mhocko@suse.com>, <mingo@redhat.com>, <mlevitsk@redhat.com>,
-	<nikita.kalyazin@linux.dev>, <oupton@kernel.org>, <palmer@dabbelt.com>,
-	<patrick.roy@linux.dev>, <pavel@kernel.org>, <pbonzini@redhat.com>,
-	<peterx@redhat.com>, <peterz@infradead.org>, <pfalcato@suse.de>,
-	<pjw@kernel.org>, <prsampat@amd.com>, <rafael@kernel.org>,
-	<riel@surriel.com>, <rppt@kernel.org>, <ryan.roberts@arm.com>,
-	<sdf@fomichev.me>, <shijie@os.amperecomputing.com>,
-	<skhan@linuxfoundation.org>, <song@kernel.org>, <surenb@google.com>,
-	<suzuki.poulose@arm.com>, <svens@linux.ibm.com>, <tabba@google.com>,
-	<tglx@kernel.org>, <thuth@redhat.com>, <urezki@gmail.com>,
-	<vannapurve@google.com>, <vbabka@kernel.org>, <will@kernel.org>,
-	<willy@infradead.org>, <wu.fei9@sanechips.com.cn>, <x86@kernel.org>,
-	<yang@os.amperecomputing.com>, <yangyicong@hisilicon.com>,
-	<yonghong.song@linux.dev>, <yosry@kernel.org>, <yu-cheng.yu@intel.com>,
-	<yuzenghui@huawei.com>, <zhengqi.arch@bytedance.com>
-Subject: Re: [PATCH v12 00/16] Direct Map Removal Support for guest_memfd
-Date: Wed, 6 May 2026 08:07:52 +0000
-Message-ID: <20260506080753.14517-1-itazur@amazon.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <aeennZlV60k81OBf@google.com>
-References: <aeennZlV60k81OBf@google.com>
+X-CSE-ConnectionGUID: AA9CXVO2QFmlX0TBqc1+7Q==
+X-CSE-MsgGUID: aGx5o453TA+pIiCyAosYKw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11777"; a="78984965"
+X-IronPort-AV: E=Sophos;i="6.23,219,1770624000"; 
+   d="scan'208";a="78984965"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2026 01:16:45 -0700
+X-CSE-ConnectionGUID: NxtYpZ15TXqKC9AZyIcvUw==
+X-CSE-MsgGUID: uSOnlEW2TMu8GydP9Yz6iQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,219,1770624000"; 
+   d="scan'208";a="266428886"
+Received: from ly-workstation.sh.intel.com (HELO ly-workstation) ([10.239.182.64])
+  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2026 01:16:44 -0700
+Date: Wed, 6 May 2026 16:16:40 +0800
+From: "Lai, Yi" <yi1.lai@intel.com>
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: brauner@kernel.org, shuah@kernel.org, areber@redhat.com,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	yi1.lai@linux.intel.com
+Subject: Re: [PATCH] selftests/clone3: Fix capability dropping by using
+ standard libcap API
+Message-ID: <afr46ClR+mm7cAGV@ly-workstation>
+References: <20260310031415.151531-1-yi1.lai@intel.com>
+ <b098d65a-bb67-4399-87e6-3fc5a2f086a1@linuxfoundation.org>
+ <acxw3gZcmX8Hmiuh@ly-workstation>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: EX19D037UWB002.ant.amazon.com (10.13.138.121) To
- EX19D001UWA001.ant.amazon.com (10.13.138.214)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <acxw3gZcmX8Hmiuh@ly-workstation>
 
-Hi Lorenzo and Sean,
-
-Apologies for the delayed reply =E2=80=94 Nikita is leaving Amazon, and I'm
-taking over this series going forward. Thanks for your patience.
-
-On Tue, Apr 21, 2026 at 01:40:00PM +0000, Lorenzo Stoakes wrote:
-> Hm, given this touches a fair bit of mm, I wonder if we shouldn't try to =
-do this
-> through the mm tree?
-
-On Tue, Apr 21, 2026 at 04:36:00PM +0000, Sean Christopherson wrote:
-> Yeah, when the time comes, the mm pieces definitely need to go through th=
-e mm
-> tree.  Ideally, I think this would be merged in two separate parts, with =
-all mm
-> changes going through the mm tree, and then the KVM changes through the K=
-VM tree
-> using a stable topic branch/tag from Andrew.
-
-Thanks for the guidance. The split makes sense to me; I'm planning to
-follow this approach with patches 1-6 (mm) going through the mm tree
-and patches 7-16 (KVM) through the KVM tree on top of a stable
-branch/tag from mm. I'll confirm the exact boundary and coordination
-details as I prepare the repost.
-
-On Tue, Apr 21, 2026 at 01:40:00PM +0000, Lorenzo Stoakes wrote:
-> In any case, we definitely need a rebase on something not-next :) if not =
-mm then
-> Linus's tree at least maybe?
+On Wed, Apr 01, 2026 at 09:11:59AM +0800, Lai, Yi wrote:
+> On Tue, Mar 31, 2026 at 02:10:09PM -0600, Shuah Khan wrote:
+> > On 3/9/26 21:14, Yi Lai wrote:
+> > > The clone3_cap_checkpoint_restore.c selftest defined its own 'struct
+> > > libcap' to manually cast and manipulate the internal memory layout of
+> > > the opaque 'cap_t' type.
+> > > 
+> > > Starting with libcap v2.60 (commit aca076443591 "Make cap_t operations
+> > > thread safe"), a '__u8 mutex' was added to the beginning of the internal
+> > > 'struct _cap_struct'. This structural shift breaks the selftest's custom
+> > > struct layout assumptions, causing capability corruption and leading to
+> > > failures during test execution.
+> > > 
+> > > Fix this by removing the custom struct definition and use the standard
+> > > cap_set_flag() API.
+> > 
+> > What king of failures are you seeing? Can you send the failures from
+> > the run?
+> > 
+> 
+> I can reproduce the failure on CentOS Stream 10 with libcap 2.69:
+> 
+> TAP version 13
+> 1..1
+> # Starting 1 tests from 1 test cases.
+> #  RUN           global.clone3_cap_checkpoint_restore ...
+> # clone3() syscall supported
+> # clone3_cap_checkpoint_restore.c:151:clone3_cap_checkpoint_restore:Child has PID 10647
+> cap_set_proc: Operation not permitted
+> # clone3_cap_checkpoint_restore.c:160:clone3_cap_checkpoint_restore:Expected set_capability() (-1) == 0 (0)
+> # clone3_cap_checkpoint_restore.c:161:clone3_cap_checkpoint_restore:Could not set CAP_CHECKPOINT_RESTORE
+> # clone3_cap_checkpoint_restore: Test terminated by assertion
+> #          FAIL  global.clone3_cap_checkpoint_restore
+> not ok 1 global.clone3_cap_checkpoint_restore
+> # FAILED: 0 / 1 tests passed.
+> # Totals: pass:0 fail:1 xfail:0 xpass:0 skip:0 error:0
+> 
+> After applying the proposed fix patch that uses standard libcap APIs,
+> the test passes in my test environment. It also passes on CentOS Stream
+> 9 with libcap 2.48 (<2.60).
 >
-> I'm seeing a lot of conflicts against mm-unstable, it can't b4 shazam eve=
-n patch
-> 1 and in Linus's tree it's failing at an mm patch (mm: introduce
-> AS_NO_DIRECT_MAP).
 
-I'll rebase onto v7.1-rc1 and resolve the conflicts as part of the split.
+Hi Shuah,
 
-Takahiro
+Do you have concerns in terms of this fix? Please let me know if any
+suggestions.
 
+Thank you,
+Yi Lai
+ 
+> Regards,
+> Yi Lai
+> 
+> > > 
+> > > Fixes: 1d27a0be16d6 ("selftests: add clone3() CAP_CHECKPOINT_RESTORE test")
+> > > Signed-off-by: Yi Lai <yi1.lai@intel.com>
+> > > ---
+> > 
+> > thanks,
+> > -- Shuah
