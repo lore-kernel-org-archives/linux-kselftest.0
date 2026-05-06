@@ -1,290 +1,165 @@
-Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11010039.outbound.protection.outlook.com [52.101.69.39])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 502B725F98B;
-	Wed,  6 May 2026 08:59:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.69.39
-ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778057967; cv=fail; b=q2r/RgW2CJcgK9nY9rHaB8FrzvZb5FMB3FHkVkgswGXNxEIp04LA4uI8NjiocCk39zD4Qni3p1AZqMZCPfa4M+AcVDef5buWi8yN8D+tZ/U4cQFuqT/W+3K4Lwxj7GuP6WfRB1tLlynBswkkdEFo1HVOn6HKXJprLehplLm9a7M=
-ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778057967; c=relaxed/simple;
-	bh=tXjDZ73C0gUqtzRksxZdG2eupxm5jIPEFOellSYifBU=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=noBuv0ysPyB5jL7GKod1GKMShBy6HvtPjtR/RLzbGPPq7kFwb8MCdf9Lelga0AjKlb/6MyICNFS28kuhKdZPRqaG6Ti2YoOBfYV7fC0tIpT9K19JOAjrNokwPChepM8J+CvlL+qt2TkHggNoFSuEUB7Y9wP3zKztRY2lFOmgQ/M=
-ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=DRlh400h; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=DRlh400h; arc=fail smtp.client-ip=52.101.69.39
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A033E23507C
+	for <linux-kselftest@vger.kernel.org>; Wed,  6 May 2026 09:00:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778058027; cv=none; b=B5JZb6veCk/6PR06KyQY3tqhdhivWb4j4/3SaORpVD5mB2jcpC87jV70DCBngZ9mi4ywH4ZEIrU6TOTcGfhjxroi4ozAe2j+RB94tyalEIQlit4Ej1m+OR1WATEbKG8MDnN+BxO1NdxfUFzGoxLv0UqsYF+pLo/nk+CeLJ1dfq0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778058027; c=relaxed/simple;
+	bh=zogRSKbT2YEyQa6ZwtvKmN1PdpfDg0KGCKvLIqkt8zU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=d/mG/sfAiGkMa95mPkq48377gML9weI2VuuPTR6sBxFjqCyvtiqShDuM8Axgo65BVtGJv7i5Z0NesaeuvX3b31X/lOukpaChjfs0qnVDpqPd6EjkbEM02kgCWKR/O2V7DBPHOf71YGp+ffNJJCPlD+eys16XN/nWZUmzr3NSwaA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=EIojI86A; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="DRlh400h";
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="DRlh400h"
-ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
- b=SGmjC8FPCHZn2wwnqfdlDAKxWsLPXbEQLXx5GHzrxRqTH7kHpKjFNJ1jSRLFkhaTu1SQhAr23NPV/T4GJc15IcwviZGoR6gHIVmqTZX95JUJekeRP1PPgw+7AGOJS0EwcMkeaftwvOtBRqLJVI03hvtaX/wYwWRYOyDU/lPBpDDQDQqyghLbg0fbVpn/gaD16MpjQX3xgcEyPm0ewLJ6m+Zh+9KblJ5ayMZSTc+OlicliwQGXmU0ZUrmUstPbGDUVNAEqordZ4++4unIHidPXjHDGtjVqt+KZS7XH0feeL9iU8z5iZR1K3KSIRCrDJ0AdMPgtAEi9g4or20viWkWig==
-ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GShkpkdjVof2AkExZ8P++AdpEuTmRQ24CmQcU23pB1c=;
- b=WZU19LHo/oc8xHjoJ1/uLfHF9gKEYclGuplBNxEiZz8jUK9AfayZPA1mGuI8tla9gFdDcdTRbjVG2tA5PfeGwWu12/5iARFd5NCQSOyJodbKpPhCDy0B7z9ab6wTbNOfq3vm5Vt+58IMx7LP8K53mzkWFuHQuOdFmdU5T7RuLSuOKBDg9QlLPjmOXUeQatnHulJgrH2v0OVFJP1saVE6esLNCKuxyiV1CKGHZZmGCioboXgfINYqOm8bGv3SD+UBvpoaHLTwn0mMZ5wRGRNIEDsLGPeCpb+HbphOiFN5L0HfTYe3afov3J8PXYhjCB7YUzBgwX+bT5uAIbo2V/rjPQ==
-ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
- 4.158.2.129) smtp.rcpttodomain=kernel.org smtp.mailfrom=arm.com; dmarc=pass
- (p=none sp=none pct=100) action=none header.from=arm.com; dkim=pass
- (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
- spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
- dmarc=[1,1,header.from=arm.com])
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GShkpkdjVof2AkExZ8P++AdpEuTmRQ24CmQcU23pB1c=;
- b=DRlh400hR0UHrQmsVnVpAeFI6czagFGZr6FgBMrIj7e6q2E2KrS6Mxzej4Mio0KPY8ds0w1L32630BHtTudbQLH9CQ6Wh+Ncl0t57aY6jOrDRQ8rebdXd+nUA5qI1cVrnBUX4bR+A0VUC8157vbwTY6xiBAOw6/qTSoNH24LfXA=
-Received: from DU2PR04CA0252.eurprd04.prod.outlook.com (2603:10a6:10:28e::17)
- by DU0PR08MB8662.eurprd08.prod.outlook.com (2603:10a6:10:402::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9891.15; Wed, 6 May
- 2026 08:59:12 +0000
-Received: from DU2PEPF00028D03.eurprd03.prod.outlook.com
- (2603:10a6:10:28e:cafe::e8) by DU2PR04CA0252.outlook.office365.com
- (2603:10a6:10:28e::17) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9891.16 via Frontend Transport; Wed,
- 6 May 2026 08:59:12 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=arm.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
- client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
-Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
- DU2PEPF00028D03.mail.protection.outlook.com (10.167.242.187) with Microsoft
- SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9891.9
- via Frontend Transport; Wed, 6 May 2026 08:59:12 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=L5+WOdJ2IVsE+/+VXBPWRg+88rk1Fj7GDD544N+aH+NxanXFoskOfhukdqp2nqPiyhWwVurnP0tkQSJqTwJ+RNRLq9SjUUFnzBCwbf8YfXhOVGmQ/nieFsUeoNYVLSeh1yYkwHUiujFRLJrjX5MHVMHw3KJM0nX1I1rPtqCUxr1ZbXnBjdXuMT7CFVtGu6TOdd61t1LivkzuKrBIzwq4fN/STahAZNdtGILf/3g+gW8YNZcFn60BE2hn1FOVLg6dSk+iqqiAvhYb8dTdh7j4FigxD3kiMVXS7i2FcrgdUzH+uSHRVw0UiqFYuXWXU8DNJtK2RFpiLTfz8V1VK5AuUw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GShkpkdjVof2AkExZ8P++AdpEuTmRQ24CmQcU23pB1c=;
- b=kMP2bDlv4z7d0qlKlOxs74sQPcW6QELmyUXQMf5odvorB0jtlxTbo4FLi/XHikaMUirCbDhuV0yXZqNTp83WptVFKm+YEWeQgoGJ/3W7IP96F4AwYhsNkm3dcvOEfw9PiKXhiSoPGNMpgAUYtMnKhqdIPU+SOaIx8ikh9qcwQRmhffu2o0Zm/6O8FasVw2K7If/BxpixGkN4FotnKt5GCHSukARwrfr8mgpQTCL9Qj/dWmOATI5gAi4EMqef/JNQIpgoDww6fhRJyBfTGSCo7rq/5Us2CbkEZ+CP+jRr9DiCeF2FEmVzOxO9J3o1ubAVHds65WE86SVbNjmlxrTEyg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GShkpkdjVof2AkExZ8P++AdpEuTmRQ24CmQcU23pB1c=;
- b=DRlh400hR0UHrQmsVnVpAeFI6czagFGZr6FgBMrIj7e6q2E2KrS6Mxzej4Mio0KPY8ds0w1L32630BHtTudbQLH9CQ6Wh+Ncl0t57aY6jOrDRQ8rebdXd+nUA5qI1cVrnBUX4bR+A0VUC8157vbwTY6xiBAOw6/qTSoNH24LfXA=
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-Received: from DU0PR08MB9203.eurprd08.prod.outlook.com (2603:10a6:10:417::12)
- by AS2PR08MB8695.eurprd08.prod.outlook.com (2603:10a6:20b:55e::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9891.15; Wed, 6 May
- 2026 08:58:08 +0000
-Received: from DU0PR08MB9203.eurprd08.prod.outlook.com
- ([fe80::f1e:73f2:57df:4047]) by DU0PR08MB9203.eurprd08.prod.outlook.com
- ([fe80::f1e:73f2:57df:4047%2]) with mapi id 15.20.9891.008; Wed, 6 May 2026
- 08:58:07 +0000
-Message-ID: <01fc006c-4a41-40ef-81e5-fd9f1963a0e5@arm.com>
-Date: Wed, 6 May 2026 14:27:58 +0530
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 17/54] selftests/mm: protection_keys: use kselftest
- framework
-To: Mike Rapoport <rppt@kernel.org>, Andrew Morton
- <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>
-Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
- Barry Song <baohua@kernel.org>, Dev Jain <dev.jain@arm.com>,
- Donet Tom <donettom@linux.ibm.com>, Jason Gunthorpe <jgg@ziepe.ca>,
- John Hubbard <jhubbard@nvidia.com>, "Liam R. Howlett"
- <Liam.Howlett@oracle.com>, Lance Yang <lance.yang@linux.dev>,
- Leon Romanovsky <leon@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
- Luiz Capitulino <luizcap@redhat.com>, Mark Brown <broonie@kernel.org>,
- Michal Hocko <mhocko@suse.com>, Nico Pache <npache@redhat.com>,
- Peter Xu <peterx@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
- Shuah Khan <shuah@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Vlastimil Babka <vbabka@kernel.org>, Zi Yan <ziy@nvidia.com>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-mm@kvack.org
-References: <20260428204240.1924129-1-rppt@kernel.org>
- <20260428204240.1924129-18-rppt@kernel.org>
-From: Sarthak Sharma <sarthak.sharma@arm.com>
-Content-Language: en-US
-In-Reply-To: <20260428204240.1924129-18-rppt@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MA5P287CA0239.INDP287.PROD.OUTLOOK.COM
- (2603:1096:a01:1b1::15) To DU0PR08MB9203.eurprd08.prod.outlook.com
- (2603:10a6:10:417::12)
+	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="EIojI86A"
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-48a7fe4f40bso65970285e9.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 06 May 2026 02:00:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=openvpn.net; s=google; t=1778058024; x=1778662824; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=QUYhRXDlYEk80ahGSMbtQqKK9Q8bw4kPq0dgl12UhVI=;
+        b=EIojI86AQuKGvtedDuCzFICSPGzX05HOCj/Js+ZdgMAMuRhHZ4rwFxvMZCjTU4+zLF
+         G9mJINVdASrBGJj2+HYrm1yqg1hHKzp2ek9JCQJJIg7YAB5P7bRx1QZ0qxqpMFPl61wG
+         cNowv9O3UlsoXFfbjJUAoha4592KCvZviuyDX8JuYY/nnrMBlgJOa5EekXpganOA/anv
+         Lkdur3AYcUb5l3iy4s/Qd/3ErZQ1J5J88L/wf/UsruEa0Iy9x1/ctiT9CgN384UXgiRG
+         EuEwPrjm/+tg/gm0trS72PM0AhW/AkeoLeMZFLDRIKUF5VQYgkaN+hU+o1zWBCkqG3LD
+         TJ7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778058024; x=1778662824;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QUYhRXDlYEk80ahGSMbtQqKK9Q8bw4kPq0dgl12UhVI=;
+        b=EVYq9+7GmIVArK1chgbBOmDNGvTf8pHEH//FmF1syDhqykGXgs6kQrTyzbuWVCsIL0
+         qQbBREAryccLDrlx402XGwngg2WJFWHLjLHRDLXCbi45qvfElBGeDuWtWCQsLL0KYuvq
+         BO9mbgsB8isS+HVEfCdr4ylrx6GAWAE+Xo5ZiufdN+tQTJZKqEgExMdvo3bah4ClteBz
+         a/DrpTxTi1b1GHciynRc8prbzNF5KSmwNLSRkLRS0V4HDd68XYE0SHOxvqIpKyttIET4
+         J9JcehvDQsO+ICJA57vUUIiVLHUKAEe/068cipLQWhsjooQCvSGTtHg9WRwxFcuIDGBa
+         2vWQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/TT0XY1aunipa7g+TPnYtjfZTCgAyToqb99p1hwzQ/SYwgUdqVEF2K8suADbgAObWnW9+jSeXNto1MzQHqxKA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzWhMigc9SOcXrP1XNoLQkQBHFMGxzQReC+rBLNXosQlHalsb2y
+	Av9vuQV31KmJUh2oRj3zYZ6T14aul7je4jBBZrojYWekXzNX3jclNodhRttucyJbGnqkwRt4jO0
+	1rB0qlzo4F4fhKeyn7vAAU2K5Clc3KupZUu1ZGA5iyB5oY9TD6PGmjF80sz0gHdY=
+X-Gm-Gg: AeBDietjO7GnE0XF5shOZDHNAmvsH/ZHu+O1xHkF5oc45v2v5cHEm1CahbGEe3xNEF0
+	RPJmolCEsJOwEyBu78PmqWMYn1CYIhkyjjAdt3n4IkiXRmSsQs2Sio7UD1wwU772nQOLN0WFn0f
+	5V4Rh59QRF35CDTTmO0fXK7QcRRk2X6kAZyCyOszslov4jhMgx+w8ZzWb0jc0Ai/luu6khoFIHr
+	IBaeQJjMrikAlckAE25s5jbStaJ4NyUDUkdblH6tRxqrjQ+R/y1qihkBags4+cENxIWq3LbK6AC
+	apTblBWOKwyhbYFCfW4+XaoNF7x/gWG72cCu3l1utj5cUb1CLsZudw+gwP7tNVEVMBh6DwYBjGo
+	tYFxn5G8ERauGM/S2JKI3UqdkgB822bfGOe1QvWwbwZer9h9dknA9Q+oZlBL54VK+/DTnxmN7sL
+	ozscgEzg8TqEJR3rtTw5frA70cRso5lunE7EZpp6ckF9J8p1bJQzxK5d+Hlw==
+X-Received: by 2002:a05:600c:c082:b0:489:6c22:e081 with SMTP id 5b1f17b1804b1-48e51dd3a1bmr33321355e9.0.1778058023788;
+        Wed, 06 May 2026 02:00:23 -0700 (PDT)
+Received: from ?IPV6:2001:67c:2fbc:1:a11f:2463:c7c3:c35c? ([2001:67c:2fbc:1:a11f:2463:c7c3:c35c])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48e530fe317sm17036145e9.4.2026.05.06.02.00.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 May 2026 02:00:21 -0700 (PDT)
+Message-ID: <9ffc1db1-3b67-453e-ae43-e986fdad3694@openvpn.net>
+Date: Wed, 6 May 2026 11:00:20 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic:
-	DU0PR08MB9203:EE_|AS2PR08MB8695:EE_|DU2PEPF00028D03:EE_|DU0PR08MB8662:EE_
-X-MS-Office365-Filtering-Correlation-Id: aa83fea5-4fe0-4c2a-68ce-08deab4dbe19
-x-checkrecipientrouted: true
-NoDisclaimer: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted:
- BCL:0;ARA:13230040|7416014|376014|1800799024|366016|56012099003|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info-Original:
- D/KW0K60zj2s+mlW8Gkkh2MKJO7GRsZH3/WvFTXjnqQJpmsI4FIyxW1gMVJ8d0EiLe84xVSccOl3/Z1NBTa2No8S0vzyol4Fi+kwgHIjmXoq1cDR1EoJ5XkxEP/nmb3q7n9KdsLCkFeeztBJzDUHqXnwf+nrPgk9Rr0mgW9/toQcItZTOmbYlp042IvtNEIQB9Uf0+5k9CHRzedDSWYmohTQA97h2Lww864oWCschVG23AuOGVP4Xr1Gt5XGG2W2dJ2F+W/dOrFJo4dWmCMmPLGn8CWPT9UTkOhqahuCjsxkhWTT1YbEF3OOH3wl+aRE5CQFJM6cXcopRv45DQXc47B0F1otkXgKsuFUcsDf/YxZZnLRvKf9SCXPj1E8SKn//8Mxo6lRZDUYJN3+7usTwLXHvnhn61UQ/AzGPMG5vlPbJADoaKT8wsNGUbpZ6/X/M0ajN25SSoq29N+60/As5Z3sJF04AGrvVmOYWlC33Mkf0mKv7swv14fxYihXTxZk1KEpRKwFqOTUgzFl6jTNs4orF3OZ0YXTt/FFGHbFLNdXxv2gU4hJEg6dB9lRSEhAfz5QXDHsSGFRsnaVl9xbVuNcOB/w8xrI0f4aNHJIRT6C2/A9hhqZSz4EWWg2vjnD3iWJShoenoTeFh0q8aJ+2X1Kk+HzRefMPIR9g22v4unBTKEzYs+5IlOcEDQFZFpT
-X-Forefront-Antispam-Report-Untrusted:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9203.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016)(56012099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
-X-Exchange-RoutingPolicyChecked:
- wouQ5taFZH4bo+S6rd8Bj1FiBXxBFVSL0hHt1OhEPsGysXtC1etzagnBZmy/9XUKLs/ZQOl1/iuuv+P/rcXmzu2LwJneoVxr16XEwVbZDcrT3ug8fR9QQCAiGHBT8m+9lRiAkmTkC9nInHV1On+s+YmQIb6qL+CYaNI4VUtoTvg2BxF0CYLjAsz0iZIBV/VomtUadE+exKbnz6Kz3lhUKxbLrF85lRsayLtl/m3Ol3pJ9fFHQwTQpCPhV6GXk1ceRiPjvnUF9/XyWu4nEJ5MYxoAfLseq6SIWHPe5thfoDvupwG4aLgnUITQ9epvQ55g0wxEdNLwmFES8QQj11CX5g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS2PR08MB8695
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped:
- DU2PEPF00028D03.eurprd03.prod.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs:
-	f1a7ac5b-0b21-4a52-e9e2-08deab4d9741
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|14060799003|7416014|1800799024|36860700016|35042699022|82310400026|18002099003|56012099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	9URCdKnn051LSUnkl/bxXjrzew9Lnj0ydtyYtNig7p7ocjh02HzG/+Udp2Xg1hDhcxbG+2pyWsu4prq8ZZFK43s4CUt06EQgVPD9wRpjkggfo25x+jRVPhXsyTpLkDrMl0UIlvwhqUE025TGRtSfeiFXgzQDGetU72BjQRUxWbt7ZmSAG0nSr/cHAJExDjW+jnpk0RMCrhu+1pTO5QzdDuH1td4s+lvsswTzc+RiMFiwpkQiLiW71qasfH41xDTPDNwOzWvGKOQvG+FV4UYtHMMjY2hYPngkZ7X/TdqbAHBCD6tlKwsYsvytrLeG4K1VE5c7urrUj6av7ftIumATFWxTcu9tD6kqYwaKddrynS7IVeTl5ogfmXR6svAaArvh1wXRG6m/8Ep/tDzQ8ggZhcffgNMkKgYuUcDBZkns4FzFVhrVhva7ZHkZ1FrK/FOuzGtEpAauJBjXvNbiEeJ3ulSew2B4n1HoAX9kHS2vzdkHqQgXgWl4BOnsBJX8AILNqRbtzDefjL0ZPFy/St8VeVBAg98vYuozeGAx/zD4fvXuJ3hCzhkqmkHizlSkNP4gxV8G+XQqdxdfYPZaA02jqNBNeFFI//x/5ZcnsQeZR8gDuyW98I4jVV7miI4M2z/y1XI0aSWsCx3H+zHEZubP/dfeJdnvARSNnkNw5sBSFAy80MKbzBFsqR5pmPCH8o3kmLdHP+/USWXxYhu/w70SvMuRKzg0WXBUKj0JKBCGZHY=
-X-Forefront-Antispam-Report:
-	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(14060799003)(7416014)(1800799024)(36860700016)(35042699022)(82310400026)(18002099003)(56012099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	EQ0fLJJ/uZNKLyjcOzRpP6+Z5qkrjmxxUubpzFzn2/y2rwdYxd802SKi0xnhqQbbt3yKSRJKkrG5f7cXM78Z0M/fZRLFt+Q0ud4tSHhctY36R+u650gYa1zuSDEP0IB6TXSrgWnRfRbrq/lmMkYrOnGxaIzXv5bTa+XdlONaJ4A8W9FPn2YWzlKsxTz18KIbyjvjQRUZ3nMLDl0/H/bz5vZ+m/e1Pz7JLVgBSMT4BDFnUgP+zJinhgly6gWHuz//GNV7hU/1p71pNNQVehe6ShL1+h69olTOdXEDoJbmR8EiVY79xWIwtXASCd6+Gni26QDbW2nBlbECJB4g3phrqYNuX6hrspS2bbaUWfbmaXaHVCNt7g2cFZr5rY3li7aU4a8kLA9dW6TD5Elsz6C6ZpzILBw1U6P+dIlyNeeDUSDjT8xjMiZE4K7VASkihI1d
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 May 2026 08:59:12.2206
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: aa83fea5-4fe0-4c2a-68ce-08deab4dbe19
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	DU2PEPF00028D03.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR08MB8662
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net 2/3] ovpn: ensure packet delivery happens with BH
+ disabled
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org, edumazet@google.com, sd@queasysnail.net,
+ davem@davemloft.net, pabeni@redhat.com, ralf@mandelbit.com,
+ andrew+netdev@lunn.ch, horms@kernel.org, shuah@kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260504230305.2681646-3-antonio@openvpn.net>
+ <20260506010035.1563280-1-kuba@kernel.org>
+Content-Language: en-US
+From: Antonio Quartulli <antonio@openvpn.net>
+Autocrypt: addr=antonio@openvpn.net; keydata=
+ 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
+Organization: OpenVPN Inc.
+In-Reply-To: <20260506010035.1563280-1-kuba@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
+Hi Jakub
 
-
-On 4/29/26 2:12 AM, Mike Rapoport wrote:
-> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+On 06/05/2026 03:00, Jakub Kicinski wrote:
+[...]
+> This protects the success path, but do the error and drop paths also need
+> BH protection?
 > 
-> Convert protection_keys test to use kselftest framework for reporting
-> and tracking successful and failing runs.
+> If ovpn_decrypt_post() is called in process context for TCP connections, an
+> error condition jumps to the drop label:
 > 
-> Adjust dprintf0() printouts to use "#" in the beginning of the line for
-> TAP compatibility.
+> ovpn_decrypt_post() {
+>          ...
+>          if (unlikely(ret < 0))
+>                  goto drop;
+>          ...
+> drop:
+>          if (unlikely(skb))
+>                  dev_dstats_rx_dropped(peer->ovpn->dev);
+>          ...
+> }
 > 
-> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-
-I have run the test before and after applying the patch. It correctly
-converts the test output into KTAP format.
-
-Tested-by: Sarthak Sharma <sarthak.sharma@arm.com>
-
-> ---
->  tools/testing/selftests/mm/pkey-helpers.h    |  6 +++--
->  tools/testing/selftests/mm/protection_keys.c | 26 +++++++++++---------
->  2 files changed, 19 insertions(+), 13 deletions(-)
+> Since dev_dstats_rx_dropped() updates the same per-CPU dstats structure
+> without disabling bottom halves, could it still be vulnerable to softirq
+> preemption and stat corruption?
 > 
-> diff --git a/tools/testing/selftests/mm/pkey-helpers.h b/tools/testing/selftests/mm/pkey-helpers.h
-> index 7c29f075e40b..ae010b075417 100644
-> --- a/tools/testing/selftests/mm/pkey-helpers.h
-> +++ b/tools/testing/selftests/mm/pkey-helpers.h
-> @@ -71,10 +71,12 @@ static inline void sigsafe_printf(const char *format, ...)
->  extern void abort_hooks(void);
->  #define pkey_assert(condition) do {		\
->  	if (!(condition)) {			\
-> -		dprintf0("assert() at %s::%d test_nr: %d iteration: %d\n", \
-> +		dprintf0("# assert() at %s::%d test_nr: %d iteration: %d\n", \
->  				__FILE__, __LINE__,	\
->  				test_nr, iteration_nr);	\
-> -		dprintf0("errno at assert: %d", errno);	\
-> +		dprintf0("# errno at assert: %d\n", errno);	\
-> +		ksft_test_result_fail("test %d (iteration %d)\n",	\
-> +				      test_nr, iteration_nr);		\
->  		abort_hooks();			\
->  		exit(__LINE__);			\
->  	}					\
-> diff --git a/tools/testing/selftests/mm/protection_keys.c b/tools/testing/selftests/mm/protection_keys.c
-> index 80c6124e8378..d617b41dda6b 100644
-> --- a/tools/testing/selftests/mm/protection_keys.c
-> +++ b/tools/testing/selftests/mm/protection_keys.c
-> @@ -136,6 +136,7 @@ static void tracing_off(void)
->  
->  void abort_hooks(void)
->  {
-> +	fflush(stdout);
->  	fprintf(stderr, "running %s()...\n", __func__);
->  	tracing_off();
->  #ifdef SLEEP_ON_ABORT
-> @@ -370,8 +371,8 @@ static void signal_handler(int signum, siginfo_t *si, void *vucontext)
->  	if ((si->si_code == SEGV_MAPERR) ||
->  	    (si->si_code == SEGV_ACCERR) ||
->  	    (si->si_code == SEGV_BNDERR)) {
-> -		printf("non-PK si_code, exiting...\n");
-> -		exit(4);
-> +		dprintf0("# non-PK si_code: %d, exiting...\n", si->si_code);
-> +		exit(1);
->  	}
->  
->  	si_pkey_ptr = siginfo_get_pkey_ptr(si);
-> @@ -719,7 +720,7 @@ static void setup_hugetlbfs(void)
->  	long hpagesz_mb;
->  
->  	if (geteuid() != 0) {
-> -		fprintf(stderr, "WARNING: not run as root, can not do hugetlb test\n");
-> +		ksft_print_msg("WARNING: not run as root, can not do hugetlb test\n");
->  		return;
->  	}
->  
-> @@ -855,7 +856,7 @@ void expected_pkey_fault(int pkey)
->  
->  #define do_not_expect_pkey_fault(msg)	do {			\
->  	if (last_pkey_faults != pkey_faults)			\
-> -		dprintf0("unexpected PKey fault: %s\n", msg);	\
-> +		dprintf0("# unexpected PKey fault: %s\n", msg);	\
->  	pkey_assert(last_pkey_faults == pkey_faults);		\
->  } while (0)
->  
-> @@ -1753,7 +1754,7 @@ static void run_tests_once(void)
->  		tracing_off();
->  		close_test_fds();
->  
-> -		printf("test %s PASSED (iteration %d)\n", pkey_tests[test_nr].name, iteration_nr);
-> +		ksft_test_result_pass("test %s (iteration %d)\n", pkey_tests[test_nr].name, iteration_nr);
->  		dprintf1("======================\n\n");
->  	}
->  	iteration_nr++;
-> @@ -1773,27 +1774,30 @@ int main(void)
->  
->  	setup_handlers();
->  
-> -	printf("has pkeys: %d\n", pkeys_supported);
-> +	ksft_print_header();
->  
->  	if (!pkeys_supported) {
->  		int size = PAGE_SIZE;
->  		int *ptr;
->  
-> -		printf("running PKEY tests for unsupported CPU/OS\n");
-> +		ksft_set_plan(1);
-> +		ksft_print_msg("running PKEY tests for unsupported CPU/OS\n");
->  
->  		ptr  = mmap(NULL, size, PROT_NONE, MAP_ANONYMOUS|MAP_PRIVATE, -1, 0);
->  		assert(ptr != (void *)-1);
->  		test_mprotect_pkey_on_unsupported_cpu(ptr, 1);
-> -		exit(0);
-> +		ksft_test_result_pass("pkey on unsupported CPU/OS\n");
-> +		ksft_finished();
->  	}
->  
-> +	ksft_set_plan(ARRAY_SIZE(pkey_tests) * nr_iterations);
-> +
->  	pkey_setup_shadow();
-> -	printf("startup pkey_reg: %016llx\n", read_pkey_reg());
-> +	ksft_print_msg("startup pkey_reg: %016llx\n", read_pkey_reg());
->  	setup_hugetlbfs();
->  
->  	while (nr_iterations-- > 0)
->  		run_tests_once();
->  
-> -	printf("done (all tests OK)\n");
-> -	return 0;
-> +	ksft_finished();
->  }
+
+Actually we were already looking into this.
+However, since this needs a separate analysis, I wanted to get this 
+fixed in a follow up patch.
+
+Would it be ok to pull this PR as is, so we don't hold back the 
+outstanding fixes?
+
+Then we will address the issue highlighted by Sashiko in a new patch.
+The problem is similar, but may need to be fixed differently.
+
+
+Regards,
+
+-- 
+Antonio Quartulli
+OpenVPN Inc.
 
