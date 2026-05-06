@@ -1,80 +1,47 @@
-Received: from out162-62-57-64.mail.qq.com (out162-62-57-64.mail.qq.com [162.62.57.64])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0080A26AC3
-	for <linux-kselftest@vger.kernel.org>; Wed,  6 May 2026 03:35:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38EE32D837C;
+	Wed,  6 May 2026 03:48:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778038538; cv=none; b=DqSKNwLQAyQUvs3PRjstTcTjDjt3YYwfkyccVUob4bwYsQ6TxTgKv9WO6Uqf0MYKP+On+PXszPrx5UKzPSEQGBXuqimrhASTq0IGTxA3R/ciXcXvRq0fiFhP8WmeCpujShmMvFz6uOqY73Amc1NIPbNB24SOciqA9O/X3BrpdlU=
+	t=1778039305; cv=none; b=BhZEHqvn6+pdIchFB92nWLAn1YmjW+4hAUdFtrSmPei6hABdV7UtahVUvG6TqebnU2fzH1EwPgyK0HyC5qJgON3Bc3dkeDjCCmXenW+8GnlTw7D77RJ6qmyfKSxURrudQGo6keszFnzvpIWwacZWmjRqiMiTdN+FEBg1RZleZ58=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778038538; c=relaxed/simple;
-	bh=FEJxm6XNG05yUoH3Q/u6mf1fdRhki27oUHGVH5dqOhY=;
-	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=DckfAAO4TXq3uJ9g+4SWbUyrR8PQITKLS9W/NKSPg6/8M6Mw8u6Xw3e9JjWeVJrhcJbeNf3J73oWjhU8oaZNPXRMWdUI7vDIqZMVxZuSColmUWQWTAG1v52shNHq1SIVKevI7z2DgwxyHcU9KdI4roArcnpR3HfSrOz+6z8fJEA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=ujUPVugl; arc=none smtp.client-ip=162.62.57.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
+	s=arc-20240116; t=1778039305; c=relaxed/simple;
+	bh=ykCTtBq8SINm08DR+LJ7xSso/DvgbtTJ05mRiQz/nlU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=QHF/MqwbYzMpQZwdaV1A7VxUS6YWTBfuRaRXX3Ph3mgsnL56TZ/OMvIImhlvG0R4nHOST08idgrZhFVFT8zd+wROaVnwpZbOoAbMQO6GGuaB+kXCgzbCl0YI8VMCjtY95+zTuvELguHTdsal2cXMDRJD0UvsMeOWpXr54VbSUkQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iTaaf2p0; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="ujUPVugl"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1778038531;
-	bh=FEJxm6XNG05yUoH3Q/u6mf1fdRhki27oUHGVH5dqOhY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=ujUPVuglqJqJfu3ecVc72Xal0tPHVi7kEMVeItRMtwYD1TfpYxr4PIfLgnsvD51kO
-	 SRC7tK0Y5CJsDhQYfDGawcvkiouHu9QodnRWymAR5u8muVB1xW178rAvR6RscP+3uN
-	 w2Cv4V6E9GqHEQ07s/hOEsbjXnvoEek7QQyVRNGU=
-Received: from meizu-Precision-3660.meizu.com ([112.91.84.73])
-	by newxmesmtplogicsvrsza73-0.qq.com (NewEsmtp) with SMTP
-	id 8DBA9009; Wed, 06 May 2026 11:35:27 +0800
-X-QQ-mid: xmsmtpt1778038527tz1eamx9w
-Message-ID: <tencent_86DB55E71C2B0FEC8BAB8BA6C88E9B679C05@qq.com>
-X-QQ-XMAILINFO: NbgegmlEc3Juy83jGeki1B94Pb6KB9Jrz3GPb0RZkvonQZMb9TlZ3issqTafNy
-	 J6KOhtVYzH+jjNItMkuW9EC/GzRyRm9qik0Z96U6f0g0saWu0Gr9e4lPmIEIB0UdBgFB1QcOUmfb
-	 e8AJAnnD0CUs1Q2hUb0fXYPC+5mjvZl65Ac3vEdn7tQD62SFPUZPVOtxpJ3vK/EsyLMslV4SdOU/
-	 /FQ1HyAP3KCzotbnCLkY8cF2Gv2MFHqvjIEjJ6oq4IxHdm6D6O+eaW/dRlklzcJXtNVfGpFT4uFt
-	 n0BVR58lmmEQTRxB/jruDwMz8lIMStU4VfbEAXlV7N7CvP+Yy9JIdU+97V5/GTtPGweSKMOpARfB
-	 6gA2wvg9aR9oLIlJTe3224juiDROZ96Ft2vDsI30iMHMZOL6I/56qp2sAbRKa6XZVrwb9h7wwulf
-	 Yjq7qjIhm1D0vPW/C/jrSrz/fN21AAGmxOqB4w/MR3ARyaeZZSSEiKLtvH7idxCfI7+ZaEC6Ac4O
-	 5SV7vkunRY/CwxY1AMtEIZvdi13CI++VIvHS3P3M7s3RC/L5JrzdhMNwrAVVWzr/2s+BvlnVAMhq
-	 Tg7VKXrT/brtbdmIjgGL7Mg60suwpKdgNJmDMd1wNQiulgoPRS4cXem5n17yap6bOlS9f+2esiml
-	 85SanLVhMtxsym79tyZLVgiJIbjw2hfL0ndMY2V/XVug/LNpeokeed716Fse6keuLxe4IGd5Kpgh
-	 Vjvp8q3I7+6L82IOKwKPSrred2xZxixQCDe+0vLc97JQGZrucIUOYByBNA/ktd806RcbfxZFkErU
-	 W5GPdHhGdmYQllI/bBgDHjXBtx+sYOJ3vKc8BTltZQuL8J3NcByde9Qt4hirCOZyKBD+zOXo3WEv
-	 jaVkZt5GQ/HJwpmfm6EuBlJqxy79HCWxEkloLGUDnLIwqGMByE/uHJV2Ul6AkyQcZJp7EFfAcTwY
-	 aH+1ylhlLOXiR6X8DwiG5K0B2Qjjtjz+DTARR9KvSUstfr/5EzSTT+DOZ5DQC9pKyEv4Lli1djBE
-	 upTOp3m8LSDUqLbvAeCLw1V0e7uA362zEUjCaLg7S9yfwAJ/jf56QVasc6N1vBOakNOTk89hJmab
-	 k9IlW8LbeAAaRIxp0=
-X-QQ-XMRINFO: OWPUhxQsoeAVwkVaQIEGSKwwgKCxK/fD5g==
-From: Yuwen Chen <ywen.chen@foxmail.com>
-To: akpm@linux-foundation.org
-Cc: andrealmeid@igalia.com,
-	bigeasy@linutronix.de,
-	colin.i.king@gmail.com,
-	dave@stgolabs.net,
-	dvhart@infradead.org,
-	edliaw@google.com,
-	justinstitt@google.com,
-	kernel-team@android.com,
-	licayy@foxmail.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	luto@mit.edu,
-	mingo@redhat.com,
-	morbo@google.com,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	peterz@infradead.org,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iTaaf2p0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D611C2BCC4;
+	Wed,  6 May 2026 03:48:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778039305;
+	bh=ykCTtBq8SINm08DR+LJ7xSso/DvgbtTJ05mRiQz/nlU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=iTaaf2p0DyXw3VuIpjGvyY7SiPbpfxaVDjAPj35JCCszDPzJ/KsBGsy3lS3UKfOXk
+	 xntyC2rhc6cs4QzJyf0warLqS1iDpjufy/wESBbLPeYYg0/HIII4FKYelYEgnI0XbE
+	 Js8lCBfDuayPrmeVv7AtcAEJt/RuUhXt27cvhdQDiKnM918uEBqZYti0iRMpxSZqKN
+	 0RtzXZKS+6N53i+0cGgV0oZM/k5wt2tUdBW/Hl9kQ9YIOjO6Fs4ivOnjrjAqLY95fC
+	 2nL59MS5tyNFUhuYygbzOgBRyzrbAzZ0Oxqru6D1zPp5fujqTo8Dg13aO1kbESPOL5
+	 3HKnrgP+9bpOg==
+From: Jakub Kicinski <kuba@kernel.org>
+To: davem@davemloft.net
+Cc: netdev@vger.kernel.org,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	andrew+netdev@lunn.ch,
+	horms@kernel.org,
+	Jakub Kicinski <kuba@kernel.org>,
 	shuah@kernel.org,
-	tglx@kernel.org,
-	usama.anjum@collabora.com,
-	wakel@google.com,
-	ywen.chen@foxmail.com
-Subject: Re: [RESEND PATCH v3] selftests/futex: fix the failed futex_requeue test issue
-Date: Wed,  6 May 2026 11:35:27 +0800
-X-OQ-MSGID: <20260506033527.3984556-1-ywen.chen@foxmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260430164127.b8d68639a5c1708411cf7508@linux-foundation.org>
-References: <20260430164127.b8d68639a5c1708411cf7508@linux-foundation.org>
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next v3 2/2] selftests: net: add tests for filtered dumps of page pool
+Date: Tue,  5 May 2026 20:48:21 -0700
+Message-ID: <20260506034821.1710113-2-kuba@kernel.org>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260506034821.1710113-1-kuba@kernel.org>
+References: <20260506034821.1710113-1-kuba@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -83,40 +50,177 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-on Thu, 30 Apr 2026 16:41:27 -0700, Andrew Morton wrote:
+Add tests for page pool dumps of a specific ifindex.
 
-> So you're saying that this test is generally flakey and annoying?
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+---
+v2:
+ - add CONFIG_PAGE_POOL_STATS=y to the config
+v1: https://lore.kernel.org/20260319035649.2396137-2-kuba@kernel.org
+---
+CC: shuah@kernel.org
+CC: linux-kselftest@vger.kernel.org
+---
+ tools/testing/selftests/net/config       |   1 +
+ tools/testing/selftests/net/nl_netdev.py | 119 ++++++++++++++++++++++-
+ 2 files changed, 118 insertions(+), 2 deletions(-)
 
-Yes, this test item fails occasionally on the Android platform.
-
-The following are some responses to the code review of AI :
-
-> Does this leak the pthread_barrier_t resource? Since pthread_barrier_init()
-> is called to synchronize the newly created thread, should there be a matching
-> pthread_barrier_destroy() after the threads successfully rendezvous?
-
-Yes, the resource was not reclaimed by calling pthread_barrier_destroy here,
-and this issue has been resolved in the latest version.
-
-> If thread creation fails, EXPECT_EQ logs a failure but permits the test
-> execution to continue. This leaves the thread ID as 0, which would cause
-> subsequent functions to operate on uninitialized state. Could this lead to
-> cascading failures instead of safely halting the test, and should it remain
-> an ASSERT_EQ?
-
-Yes, this is a problem. It has also been resolved in the latest version.
-
-> Is it safe to ignore the return value of futex_wait_for_thread() here?
-> If the /proc filesystem is not mounted or accessible, opening
-> /proc/[tid]/wchan fails and returns -EIO instantly. Because the return
-> value is unhandled and the fallback sleep was removed, the parent thread
-> could immediately proceed to futex_cmp_requeue().
-> This seems to reintroduce the race condition the commit sought to fix. Should
-> there be a check on the return value to ensure the test handles environments
-> without /proc properly, or perhaps a fallback delay?
-
-Yes, the situation when the /proc/[pid]/wchan file does not exist should be
-taken into consideration.
-
-yuwen
+diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
+index 94d722770420..d07c5ac5cab7 100644
+--- a/tools/testing/selftests/net/config
++++ b/tools/testing/selftests/net/config
+@@ -117,6 +117,7 @@ CONFIG_OPENVSWITCH=m
+ CONFIG_OPENVSWITCH_GENEVE=m
+ CONFIG_OPENVSWITCH_GRE=m
+ CONFIG_OPENVSWITCH_VXLAN=m
++CONFIG_PAGE_POOL_STATS=y
+ CONFIG_PROC_SYSCTL=y
+ CONFIG_PSAMPLE=m
+ CONFIG_RPS=y
+diff --git a/tools/testing/selftests/net/nl_netdev.py b/tools/testing/selftests/net/nl_netdev.py
+index eff55c64a012..ceb44c8e1fec 100755
+--- a/tools/testing/selftests/net/nl_netdev.py
++++ b/tools/testing/selftests/net/nl_netdev.py
+@@ -9,7 +9,7 @@ import errno
+ from os import system
+ from lib.py import ksft_run, ksft_exit
+ from lib.py import ksft_eq, ksft_ge, ksft_ne, ksft_raises, ksft_busy_wait
+-from lib.py import NetdevFamily, NetdevSimDev, NlError, ip
++from lib.py import NetdevFamily, NetdevSimDev, NlError, defer, ip
+ 
+ 
+ def empty_check(nf) -> None:
+@@ -255,6 +255,117 @@ from lib.py import NetdevFamily, NetdevSimDev, NlError, ip
+         nsim.dfs_write("pp_hold", "y")
+ 
+ 
++def page_pool_dump_ifindex(nf) -> None:
++    """Test page pool dump filtering by ifindex."""
++    nsimdev1 = NetdevSimDev(queue_count=3)
++    rm_nsim1 = defer(nsimdev1.remove)
++    nsimdev2 = NetdevSimDev(queue_count=5)
++    defer(nsimdev2.remove)
++
++    nsim1 = nsimdev1.nsims[0]
++    nsim2 = nsimdev2.nsims[0]
++
++    ip(f"link set dev {nsim1.ifname} up")
++    ip(f"link set dev {nsim2.ifname} up")
++
++    # Unfiltered dump should have pools from both devices
++    all_pp = nf.page_pool_get({}, dump=True)
++    pp1_all = [pp for pp in all_pp
++               if pp.get("ifindex") == nsim1.ifindex]
++    pp2_all = [pp for pp in all_pp
++               if pp.get("ifindex") == nsim2.ifindex]
++    ksft_ge(len(pp1_all), 1)
++    ksft_ge(len(pp2_all), 1)
++
++    # Filtered dump should only return pools for that device
++    pp1_flt = nf.page_pool_get({'ifindex': nsim1.ifindex}, dump=True)
++    ksft_eq(pp1_flt, pp1_all)
++
++    pp2_flt = nf.page_pool_get({'ifindex': nsim2.ifindex}, dump=True)
++    ksft_eq(pp2_flt, pp2_all)
++
++    # Non-existent ifindex should return empty dump
++    pp_none = nf.page_pool_get({'ifindex': 12345678}, dump=True)
++    ksft_eq(len(pp_none), 0)
++
++    # Device down - no pools for that ifindex
++    ip(f"link set dev {nsim1.ifname} down")
++    pp1_down = nf.page_pool_get({'ifindex': nsim1.ifindex}, dump=True)
++    ksft_eq(len(pp1_down), 0)
++
++    # Remove device, dump by its old ifindex should return empty
++    old_ifindex = nsim1.ifindex
++    rm_nsim1.exec()
++    pp1_gone = nf.page_pool_get({'ifindex': old_ifindex}, dump=True)
++    ksft_eq(len(pp1_gone), 0)
++
++
++def page_pool_ifindex_leak_check(nf) -> None:
++    """Test that zombie page pools don't show up under the original ifindex."""
++    nsimdev = NetdevSimDev()
++    rm_nsim = defer(nsimdev.remove)
++    nsim = nsimdev.nsims[0]
++
++    ip(f"link set dev {nsim.ifname} up")
++    nsim.dfs_write("pp_hold", "y")
++
++    pp_up = nf.page_pool_get({'ifindex': nsim.ifindex}, dump=True)
++    ksft_ge(len(pp_up), 1)
++
++    # Remove device with leaked page - pool becomes zombie (orphaned to lo)
++    old_ifindex = nsim.ifindex
++    rm_nsim.exec()
++
++    # Zombie pool should NOT appear under the original device
++    pp_down = nf.page_pool_get({'ifindex': old_ifindex}, dump=True)
++    ksft_eq(len(pp_down), 0)
++
++    # But it should appear in an unfiltered dump (under loopback)
++    pp_all = nf.page_pool_get({}, dump=True)
++    orphans = [pp for pp in pp_all
++               if "detach-time" in pp and "ifindex" not in pp]
++    ksft_ge(len(orphans), 1)
++
++
++def page_pool_stats_ifindex_check(nf) -> None:
++    """Test page pool stats dump filtering by ifindex."""
++    nsimdev1 = NetdevSimDev(queue_count=3)
++    defer(nsimdev1.remove)
++    nsimdev2 = NetdevSimDev(queue_count=5)
++    defer(nsimdev2.remove)
++
++    nsim1 = nsimdev1.nsims[0]
++    nsim2 = nsimdev2.nsims[0]
++
++    ip(f"link set dev {nsim1.ifname} up")
++    ip(f"link set dev {nsim2.ifname} up")
++
++    # Unfiltered stats dump
++    all_stats = nf.page_pool_stats_get({}, dump=True)
++    s1_all = [s for s in all_stats
++              if s.get("info", {}).get("ifindex") == nsim1.ifindex]
++    s2_all = [s for s in all_stats
++              if s.get("info", {}).get("ifindex") == nsim2.ifindex]
++    ksft_ge(len(s1_all), 1)
++    ksft_ge(len(s2_all), 1)
++
++    # Filtered stats dump
++    s1_flt = nf.page_pool_stats_get({'info': {'ifindex': nsim1.ifindex}},
++                                    dump=True)
++    ksft_eq(s1_flt, s1_all)
++
++    # Non-existent ifindex should return empty
++    s_none = nf.page_pool_stats_get({'info': {'ifindex': 12345678}}, dump=True)
++    ksft_eq(len(s_none), 0)
++
++    # info.id should be rejected for stats dump
++    with ksft_raises(NlError) as cm:
++        nf.page_pool_stats_get({'info': {'id': s1_all[0]['info']['id']}},
++                               dump=True)
++    ksft_eq(cm.exception.nl_msg.error, -errno.EINVAL)
++    ksft_eq(cm.exception.nl_msg.extack['bad-attr'], '.info.id')
++
++
+ def main() -> None:
+     """ Ksft boiler plate main """
+     nf = NetdevFamily()
+@@ -265,7 +376,11 @@ from lib.py import NetdevFamily, NetdevSimDev, NlError, ip
+               napi_set_threaded,
+               dev_set_threaded,
+               nsim_rxq_reset_down,
+-              page_pool_check],
++              page_pool_check,
++              page_pool_dump_ifindex,
++              page_pool_ifindex_leak_check,
++              page_pool_stats_ifindex_check
++              ],
+              args=(nf, ))
+     ksft_exit()
+ 
+-- 
+2.54.0
 
