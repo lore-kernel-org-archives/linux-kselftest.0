@@ -1,117 +1,355 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from OSPPR02CU001.outbound.protection.outlook.com (mail-norwayeastazon11013014.outbound.protection.outlook.com [40.107.159.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4484636B076
-	for <linux-kselftest@vger.kernel.org>; Wed,  6 May 2026 10:23:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778063004; cv=none; b=jKxpYIpOdp+gHyb4BUVvZkVD/6Sj+akEzdshgV9wwIriqeUp8g04uFLYUMXEkj/RyTSZiYw7QZ/RVxG1w51CFUN8RgGMy+vvs3aQ2tpgxk7Jm4IOydG0aJdbC322bLYBd1qyyyDnz4jyzS2SOaUIXYaGvWsf2VRw7iIBdVZE2XU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778063004; c=relaxed/simple;
-	bh=hE1y4kmNtGeYAv67zS4+OoQ1t7uYKSkNfK3zwD7Fhf0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AlWvHkPgikykn8Eng+UCaKiilgJEW7ogmlZjNcZPXQ2zTseGdmQGbBfs7TtbskIS6MaTGzKAv6gTThRS+d8dyFWneYKunPyyyWpFU8hkXlcgEP58yCJ4s6np+2/sxsTIBvkPG5h909rBSJzGRPmC8GWRoqNvE1NeleaMpctmOtc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=ZPvEcp/6; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68EAD3FE341;
+	Wed,  6 May 2026 11:04:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.159.14
+ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778065493; cv=fail; b=de5VTi9Uf8PLKnvkgmAnHQSKsBDkRnwjMd5R3uiQCMVmZ9kmHzJfkauEQ9EG/3w5ppu4JWJ2G6jHcnNSvAtAur/Zu0EUmKhpNk+m6/CA0Rc5+K8pg71wxqFcES1n8X/D0k6WUJlQEB3cfnO1L00k2mLqdiUkB6P6LvXmph/hMmM=
+ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778065493; c=relaxed/simple;
+	bh=VFqk0NtaHKmcKqg5qQizb+6SAmS0+avY7At94co/KHc=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=XSxffoEg6i71o0yBn8Fxse0V77IPuTXOOWk2dQc/BuJUJoD3LhMzAjrFKCOqhdrll7wt3ImyR0nHmsvea7KuzmbHGe0JhI7v+jOM9GHqSc3sbpzW8PzadTMAjB+3XxQD+jnZJVm/P828hf4GoQww8M5kp89OIxJ+NWPrKVZNqWY=
+ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=GzngxbHR; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=GzngxbHR; arc=fail smtp.client-ip=40.107.159.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="ZPvEcp/6"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-48d146705b4so22452905e9.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 06 May 2026 03:23:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1778063002; x=1778667802; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vyuimllbRFDBrd/zLQpQ1lykL+0Cgk5rh3xGvQeZlAE=;
-        b=ZPvEcp/62ZAHSPf2QDKAPjNrHySVflsqlrZZ8OXvPdUriXEvRw6bTaXNH8loYHVPp/
-         rf76WZJna/Mug6AoLTDveLq0uqpbUTcoDP4K/1XoA/fG4x9l3Sos9pdRDWF4ZOW0Dx3p
-         KHZHAYg/zfvDccOc9vkpiHLS8Hy+bTVSrLk0ZngH//OG20vzq9UxRUfcJGlbnIWzSC9a
-         1sJoezSs7XxI1FrLI787Dohn8cgRSIec38RwztDPGObygdtYXi6tKtdDP9nmhQEeTWuK
-         DqPnqDRDMXfZ7eHVNI+OleIeYTOIZwdGz/Ff9gA9SZYAvkWtpwoVrcM5cdH51DeR0GKT
-         wu7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778063002; x=1778667802;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vyuimllbRFDBrd/zLQpQ1lykL+0Cgk5rh3xGvQeZlAE=;
-        b=hUGmGv/RCyDywtcrxpIWpluhBpYVt2lfkJ47cg4Cq5a4poNIbkaibPst7KBEzX40iW
-         dE6bw3apGJ9kgYkEiJz9Mf/7Rv9PnEzJ0/dLnSpV30hzB4+evFUVDaT5os/iUwa6zYzM
-         3RCN0Jh26N0Blhn+IiqNTKrqMG3kEUqqS5Hp1/0ehdfkoNAVp6TEh8d1xXbGpItmnvAY
-         1eDjX0REjCBxhnHBiluHBX8yluMGNpjgbgDkrwInftvKxyOpwfbf6quFlGX95OFxBo07
-         rL9PCEactv/DNf0VhsPZ0xud+zUPESICA/VeOSF4aFY67ywN2QYMa/LGWUflrWALRV99
-         DF1g==
-X-Forwarded-Encrypted: i=1; AFNElJ9NfWkjR+1V6oTjZ3IneI+rQNBu+/8XS1K91XGJH/g2bK2+HNQapkL4fsIgKET+MMp8uKCGOaUKOCy6haDcynw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyvt5A/7HxGp0VN2XI80xSrXNtscgZJ3isTu4YKyW4EqY6X3aYS
-	7xPRbG9/ymznOVAM8NPJvF35T2eBpsjoxG3hM3QrajaAVKN34H05TbL1qAyTmUeNhr0=
-X-Gm-Gg: AeBDietpIWdLX9M5OnUg+V/Z05uAOPsfVar3d5uZR0MQZVgiq1bhGRUXjygqZDxYRiE
-	Qpc7FJe31mVee1HI747TqKTax8Efxs8Y+wA8CCw1iT/QRdskRWP2hL9AdF4dyd/s9CQp5uMiGbi
-	x/oc6QIsnepNB3rS5rTyqG1jAoeyxiWZBKcjRW2oQoFLeLzFkifQ9ExLcEqmL4vf5dHhqFNsXjy
-	Ro2KsC24XXZ0LA6hg3yvr+ogI6xughI7TjLOCG7H6Ne3+ffIhNWlIJ0K8Xt1GwupfUHpcF6fhv0
-	RIns0eIYCv6j21WKabdEyeoy/lPFVsrFzvC0Nx+NqulqkikccISkoKmwL2dff0ncBt/7LptwaW4
-	xTkkvX4t/DyJnXZVtwuLq2GYpLAV5CTfToaZ0YLMUuwhZyDzCFAmHWo2yoqku2//R+mTmlic3NC
-	+CB/u3tT3Bm65HFY0B9OAZjbmDliwJdeOXtn7B
-X-Received: by 2002:a05:600c:c48f:b0:48a:568f:ae6b with SMTP id 5b1f17b1804b1-48e51f2a790mr50341575e9.7.1778063001669;
-        Wed, 06 May 2026 03:23:21 -0700 (PDT)
-Received: from pathway.suse.cz ([176.114.240.130])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48e538ca8c0sm35025085e9.13.2026.05.06.03.23.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 May 2026 03:23:20 -0700 (PDT)
-Date: Wed, 6 May 2026 12:23:18 +0200
-From: Petr Mladek <pmladek@suse.com>
-To: Marcos Paulo de Souza <mpdesouza@suse.com>
-Cc: Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>,
-	Miroslav Benes <mbenes@suse.cz>,
-	Joe Lawrence <joe.lawrence@redhat.com>,
-	Shuah Khan <shuah@kernel.org>, live-patching@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	marcos@mpdesouza.com
-Subject: Re: [PATCH v5 0/6] kselftests: livepatch: Adapt tests to be executed
- on 4.12 kernels
-Message-ID: <afsWlkqDboHezQ5R@pathway.suse.cz>
-References: <20260504-lp-tests-old-fixes-v5-0-0be26d94ab9a@suse.com>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="GzngxbHR";
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="GzngxbHR"
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
+ b=AniRTt41B1FxYlen2Veb7asIrCvL9N2t+Q85N29u43FKf5MQ5o3mh0coxEjdtM4QsJhbT+KK67wOBy+1GaJ6ruF72qxHZ6hJGkY5aeoHjboBv9oomJO4YS0YHX1zqtSE0V6oeFbWK566X1EteoGFlZaykgiZeBC+I3Hx/UPNElwkJbtzs4kMrk2yK3PoDTSj8p4AdQYOf+rSIBz24gCXtHJK/hf1KhzbT6FkPWexS2b2u4pAOdoMaBkX6qzDMP8JKgUnoNDW4b/njt+CQS4q1UAONpPYbO5CEu26+5IEsxYFKBMmemXEcpr3brJGEsByVleRdGTAma4jVcEmxNxGxw==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4G+3kTb1h/vUnnYSHPgTjGuaSbq673UD28urxJg27qc=;
+ b=auWx7pQ9NO648oTrUdasctzYndO91Fmx0lWMAUhbgyfv4UkgAZZXLVChpngXD2j66FPi6doyONwIVQ2+B4vl1zU3HvNA45AsqPmvRFxEG1OnmloTemYWuWqATfbT4Ei5J4btuGpcO9PqP5GWzhywn+SdI7nSG17YLZvrNowb7yQi1a3vQbgNYCZ6WyxhL/+N6T1EzQo/YxawVjOE/0s9Q/LOZUSvsFcnw3aJhu0nBNOAwTQ+Es6lQdMT5DgxFbdi+c2e6pbQUh5PxbmwqA4kHFEBmBSV26ZblQTV33fqHFiaymt1okpTANDCNRiKQi0q08bczQ1TvtbW5AgaMc3mgg==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
+ 4.158.2.129) smtp.rcpttodomain=kernel.org smtp.mailfrom=arm.com; dmarc=pass
+ (p=none sp=none pct=100) action=none header.from=arm.com; dkim=pass
+ (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
+ dmarc=[1,1,header.from=arm.com])
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4G+3kTb1h/vUnnYSHPgTjGuaSbq673UD28urxJg27qc=;
+ b=GzngxbHR2I0Uf58Mt782whP5QFb56KnZRsrT8Hh4UwdHv6JmxokdZPdpmjCRafzMCvvB82BZeDvhZotklRmrC1dfS0ZTi6yLhU92u7IJgEjmcfkdZ+7tu9rWZ/5HqZ46SmbuSNWjaMuJoqzNGwJdlakRHS+0rZohxBuxGRg9boo=
+Received: from AM4PR0302CA0013.eurprd03.prod.outlook.com (2603:10a6:205:2::26)
+ by GVXPR08MB11763.eurprd08.prod.outlook.com (2603:10a6:150:313::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9870.25; Wed, 6 May
+ 2026 11:04:41 +0000
+Received: from AM3PEPF0000A796.eurprd04.prod.outlook.com
+ (2603:10a6:205:2:cafe::54) by AM4PR0302CA0013.outlook.office365.com
+ (2603:10a6:205:2::26) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9891.15 via Frontend Transport; Wed,
+ 6 May 2026 11:04:41 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
+ smtp.mailfrom=arm.com; dkim=pass (signature was verified)
+ header.d=arm.com;dmarc=pass action=none header.from=arm.com;
+Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
+ 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
+ client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
+Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
+ AM3PEPF0000A796.mail.protection.outlook.com (10.167.16.101) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9891.9
+ via Frontend Transport; Wed, 6 May 2026 11:04:41 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=RM2RgL8/vKHAnC8+kBp+FlhJE6mLjjQVolHKqSYh6jnx1/v8zHPA73UxLogtqTImRK+BoYLAf1q3QgL3H3yK729UPzhfcXzo4C5upA9zGwYpGKYlTIyty/HNeyiR3KWdRXq7ScsRnbs88iiuqXk7MwhB1830E9b6XvaxbDG9PqHZNct/T0/JChn21FJfvj7ZCTN6zQIzhVZqhvYTSZi6kPmh8cB4LDWOngAQ+mysk8nMYDkdbErV52fNQI+3G4IbjFJ+eihYElUDUF6oq/aZiGxaBsKAkSM8pwSY0lA5CYCubWOsst7niieccpJthb1CCD3to8nvxBKEOD3xkYausw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4G+3kTb1h/vUnnYSHPgTjGuaSbq673UD28urxJg27qc=;
+ b=pnngf77C77ZbuyTUb0APZr1V7N0dPArv6FzRg9uZfHu/vxU3HwXGXa3e7R+ptCOzoO5Ik7oF36yDlJUU0TRVbNzSkS4qIT8cFa/ur9gy1Zxl3UWR/sZbFj3lyW9gHsmFZTilX8BK2pOiFyxZ+8EJWJwxkh8Hy97Z5tr1r9wcIZ/yELUDVyAhJVN05RQFLsxSq3KuC6GT8roDZrj5N9mfDvf9dmKCetFNUQeRdHE1GGQWS0M/ix92YPIfO5yofgTodEAnFgDVZ1NsUK2TwsNQF+DgulLlUH3xctx0xvp7KeM2dWRcNpVNDDt+17L0fTMpd6gFdVCSg2ezRYNcHKZbvw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
+ header.d=arm.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4G+3kTb1h/vUnnYSHPgTjGuaSbq673UD28urxJg27qc=;
+ b=GzngxbHR2I0Uf58Mt782whP5QFb56KnZRsrT8Hh4UwdHv6JmxokdZPdpmjCRafzMCvvB82BZeDvhZotklRmrC1dfS0ZTi6yLhU92u7IJgEjmcfkdZ+7tu9rWZ/5HqZ46SmbuSNWjaMuJoqzNGwJdlakRHS+0rZohxBuxGRg9boo=
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+Received: from DU0PR08MB9203.eurprd08.prod.outlook.com (2603:10a6:10:417::12)
+ by DBBPR08MB6236.eurprd08.prod.outlook.com (2603:10a6:10:20c::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9891.15; Wed, 6 May
+ 2026 11:03:36 +0000
+Received: from DU0PR08MB9203.eurprd08.prod.outlook.com
+ ([fe80::f1e:73f2:57df:4047]) by DU0PR08MB9203.eurprd08.prod.outlook.com
+ ([fe80::f1e:73f2:57df:4047%2]) with mapi id 15.20.9891.008; Wed, 6 May 2026
+ 11:03:36 +0000
+Message-ID: <8b789c84-0949-4afd-8112-15cfb0a4f1d2@arm.com>
+Date: Wed, 6 May 2026 16:33:26 +0530
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 26/54] selftests/mm: hugepage_settings: rename
+ get_free_hugepages()
+To: Mike Rapoport <rppt@kernel.org>, Andrew Morton
+ <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>
+Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
+ Barry Song <baohua@kernel.org>, Dev Jain <dev.jain@arm.com>,
+ Donet Tom <donettom@linux.ibm.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+ John Hubbard <jhubbard@nvidia.com>, "Liam R. Howlett"
+ <Liam.Howlett@oracle.com>, Lance Yang <lance.yang@linux.dev>,
+ Leon Romanovsky <leon@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ Luiz Capitulino <luizcap@redhat.com>, Mark Brown <broonie@kernel.org>,
+ Michal Hocko <mhocko@suse.com>, Nico Pache <npache@redhat.com>,
+ Peter Xu <peterx@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
+ Shuah Khan <shuah@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
+ Vlastimil Babka <vbabka@kernel.org>, Zi Yan <ziy@nvidia.com>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-mm@kvack.org
+References: <20260428204240.1924129-1-rppt@kernel.org>
+ <20260428204240.1924129-27-rppt@kernel.org>
+From: Sarthak Sharma <sarthak.sharma@arm.com>
+Content-Language: en-US
+In-Reply-To: <20260428204240.1924129-27-rppt@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MA5PR01CA0241.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a01:1f4::15) To DU0PR08MB9203.eurprd08.prod.outlook.com
+ (2603:10a6:10:417::12)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260504-lp-tests-old-fixes-v5-0-0be26d94ab9a@suse.com>
+X-MS-TrafficTypeDiagnostic:
+	DU0PR08MB9203:EE_|DBBPR08MB6236:EE_|AM3PEPF0000A796:EE_|GVXPR08MB11763:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8447697d-2310-4e4e-f208-08deab5f45fb
+x-checkrecipientrouted: true
+NoDisclaimer: true
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted:
+ BCL:0;ARA:13230040|7416014|376014|366016|1800799024|56012099003|18002099003|22082099003;
+X-Microsoft-Antispam-Message-Info-Original:
+ 3hgeF7mTLneefUkNK/kAGiUh33/6pte42z2AFVJVTKdtLZTfuQGuN/jOstkMyCFyL7MYECuaXb9Hx0x6U2wL132qYiM0w/ahbOw6bWLt7jhyP5z+X6Qdd/aov9EZryws4LBj9Bu9FY1znDX7SxCF5gFp5+kIAY1lk7mXjSyP1fl2F0SzF9kxc12h5gVANUVqrOe210GdsqhSJ5I/zl1na8GasJOrAq73uQskNcySA4121q7342bPDK42+siuDy6BsR+KA0BKmAgGLojF8T5df7i/x8FKe9prV7yVMIHdWSS7/QgaX4h5NloE1wR07YisiUvsQWDubf0toRJgm/QZLZ/LVlOuEFFiCtmW1PFMm6YipnCKWNELGidRt7f8CNtXC+gCq9yBRVCcKWaM1jnvG/4knaF+18MjtgqkU4Nz9p10bJ8wouT66WSUhFryLzoDRtHX0Z7Telze+S3x7TFr40LS+9xiSfacHKBYDjwBr9WCjpfZyt6y6YW8JC1vQqpd89gjgU6t1ka1N28Ubgi5NFGNrYynwYhZsAL6vVRqnSKR6Be7ZkbKtRF79O1F0khYljKY/V4WnJaRJwos7hEnQtsRkbcWpmaQ2qU7IvJ9tdIcXB1WkLK9j32td0a8nJw3oqu94zwK5B0/uiHJr9QWmj99U7R7hUi3jeICJxRO+BbBEs04t9TEKr+DkO1hWE01
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9203.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024)(56012099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
+X-Exchange-RoutingPolicyChecked:
+ T5nEM6Iz//4a0/cqjQkLAua/hz5GT/MoQtxlEMxZYALXXUXZIaPT52FUS1MWdMkzFt4Ke5YEnragkRWOnGVnfHFCTMD6C3FTapopxtosiuOpMExtxjszsNhFUTB6607kClUY8JW8OZRCGdre9YAdbLxUeXmOKSD/gBVCbeS23//AiiWnnVKCTXfbbI4YMEdkFkpwkEn2cx9syduv9sLzgEn8OE/xE0cYjNuj7Vggo3iuKRa+JPhy8DFbzDHvm+8NPchCX8ypr5N4ixpEn2NvutvCrMUU67TYsUO1IaopNVKomfVLuOIBwGOQgmxpmt9mD4EDkfGHkQwd9awhwSn50g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR08MB6236
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ AM3PEPF0000A796.eurprd04.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+	2dc613cb-137b-4878-707a-08deab5f1ecc
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|376014|7416014|14060799003|35042699022|1800799024|36860700016|22082099003|18002099003|56012099003;
+X-Microsoft-Antispam-Message-Info:
+	ZA5KoqCwxWMLB8jP24jz5/CTvUhtuababCdL4JYj3Po/qOQHQofHIbl9RWyWeFGd7J6eaJjXAgw4x8do9/w/vYycF1CIPH7Lw40HoLfwMqGfzrny8f5nX62OMBfRVWgLHdyzfVH23rMj+8BdxJMN0xhpMR0VCSRAew+CnioF5ESoAm+Z+LLv0Ti33CRm7ppo2oImU6amMiitVsLKRU3+uvGu51bwVhuh+4pVv0DpCVLRgTNl9Hgx0ugQeCt3z7Gmgc25zhmhMMn4uJUNglPw2kSE8xz/8gAzj4AfoFL4n7DbX+zVrElwnJkBvCgUoArgeHzHK8NnNMot/y6aAqvjZOQWXh54+vDhxulcyEfy0AWP96TggyYlPrtsnGolqQoLkxIJ4wqF18QVzOePPZDfwjqI+82bcSv3H0NqRato55mzafldMZZkRxGFfSL/ji0K4jgjIATc3awOb0dKX/iGs8o6S/WicuAuBcrHchd6C5A+CnCpth9tU/vHk/0TVTW89Fqs+OUt+YDGYXh/e2wpSdjZtihRY6eetVYAooLMslYQBMqANm0H8Uya0JWLfNyJFvXZf6hjNHQTyiizUgX6QTDGrRcpY+MWqAevgMDQiHp7v59pdadDaaLsc81+Z09RCu/MoFxQSBI/si3/92uLhLal4q92Rih7Y5K0H0Co997FsftRnZR921wItqFh8C3A0M7xnPO/6SIA1szU3rHMOU4qgVrd+AyFIpHVuXc23ho=
+X-Forefront-Antispam-Report:
+	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(376014)(7416014)(14060799003)(35042699022)(1800799024)(36860700016)(22082099003)(18002099003)(56012099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	lmjdrskAHIPeBN6h4l6rLBj67xcuCiFfTf4pst3/g+s3x9uJxmuJAOYy8JuCSUWNJD5wkBq1nOQN5qCPIMr/SzjXLp7JnFLRYVV0EDqTN1APRbNlPZaPmcTS66GLjDxE/GWyrkqA3Ckif12ayTneP/HaFzWVy2lpsz8PpxrbBrKHufZFRWByanFL/HmgdKPLIPmwLw/6DwZ6vALp/WcB0fvIYW+Clc2SR+Y1iggaMR++x2L9qyBhIQq0OPuBcBP4OVllvo8kenYisPo51BKWzJeULlitGYJD8C2NLc0WfBWKNvskCABy2+lSAbdnu05Q9sklmGRF8LASvgf+EupA9vZfQsUMQGJW2IxjFH8VMQDfnaorojUGv5ulYqjU5mBVYpof3A2YWn4YUlcT5I3Uf5eecLEz2UBrR0wFp08eD3aXB9rCxJNKQ/78at4BpCuG
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 May 2026 11:04:41.6441
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8447697d-2310-4e4e-f208-08deab5f45fb
+X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	AM3PEPF0000A796.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVXPR08MB11763
 
-On Mon 2026-05-04 15:34:41, Marcos Paulo de Souza wrote:
-> This is the fifth version of the patchset, which fixes the last Sashiko
-> comment, about overwriting MOD_LIVEPATCH global variable and using a
-> local variable to avoid module load clashing when an older kernel
-> don't support some sysfs attributes.
+
+
+On 4/29/26 2:12 AM, Mike Rapoport wrote:
+> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 > 
-> Original cover-letter:
-> These patches don't really change how the patches are run, just skip
-> some tests on kernels that don't support a feature (like kprobe and
-> livepatched living together) or when a livepatch sysfs attribute is
-> missing.
+> ... to hugetlb_free_default_hugepages() for consistency with
+> hugetlb_nr_default_pages().
 > 
+> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+
+Small nit, the commit message says hugetlb_free_default_hugepages() but
+the actual function added is hugetlb_free_default_pages().
+
+This change looks good to me. All modified tests produce the same output
+as before the patch.
+
+Tested-by: Sarthak Sharma <sarthak.sharma@arm.com>
+
 > ---
-> Marcos Paulo de Souza (6):
->       selftests: livepatch: Check for ARCH_HAS_SYSCALL_WRAPPER config
->       selftests: livepatch: Replace true/false module parameter by y/n
->       selftests: livepatch: Introduce does_sysfs_exist function
->       selftests: livepatch: Check if patched sysfs attribute exists
->       selftests: livepatch: Check if replace sysfs attribute exists
->       selftests: livepatch: Check if stack_order sysfs attribute exists
+>  .../testing/selftests/mm/hugepage_settings.c  | 28 ++++++-------------
+>  .../testing/selftests/mm/hugepage_settings.h  | 12 +++++++-
+>  tools/testing/selftests/mm/hugetlb-madvise.c  |  4 +--
+>  tools/testing/selftests/mm/hugetlb_dio.c      |  6 ++--
+>  .../selftests/mm/hugetlb_fault_after_madv.c   |  2 +-
+>  .../selftests/mm/hugetlb_madv_vs_map.c        |  2 +-
+>  tools/testing/selftests/mm/uffd-stress.c      |  2 +-
+>  7 files changed, 28 insertions(+), 28 deletions(-)
 > 
->  tools/testing/selftests/livepatch/functions.sh     |  10 +
->  tools/testing/selftests/livepatch/test-kprobe.sh   |   8 +-
->  tools/testing/selftests/livepatch/test-sysfs.sh    | 219 +++++++++++----------
->  .../livepatch/test_modules/test_klp_syscall.c      |  27 ++-
->  4 files changed, 153 insertions(+), 111 deletions(-)
+> diff --git a/tools/testing/selftests/mm/hugepage_settings.c b/tools/testing/selftests/mm/hugepage_settings.c
+> index 5961229b9931..4ae7332b5e1b 100644
+> --- a/tools/testing/selftests/mm/hugepage_settings.c
+> +++ b/tools/testing/selftests/mm/hugepage_settings.c
+> @@ -446,25 +446,6 @@ unsigned long default_huge_page_size(void)
+>  	return hps;
+>  }
+>  
+> -unsigned long get_free_hugepages(void)
+> -{
+> -	unsigned long fhp = 0;
+> -	char *line = NULL;
+> -	size_t linelen = 0;
+> -	FILE *f = fopen("/proc/meminfo", "r");
+> -
+> -	if (!f)
+> -		return fhp;
+> -	while (getline(&line, &linelen, f) > 0) {
+> -		if (sscanf(line, "HugePages_Free:      %lu", &fhp) == 1)
+> -			break;
+> -	}
+> -
+> -	free(line);
+> -	fclose(f);
+> -	return fhp;
+> -}
+> -
+>  static void hugetlb_sysfs_path(char *buf, size_t buflen,
+>  			       unsigned long size, const char *attr)
+>  {
+> @@ -489,3 +470,12 @@ void hugetlb_set_nr_pages(unsigned long size, unsigned long nr)
+>  
+>  	write_num(path, nr);
+>  }
+> +
+> +unsigned long hugetlb_free_pages(unsigned long size)
+> +{
+> +	char path[PATH_MAX];
+> +
+> +	hugetlb_sysfs_path(path, sizeof(path), size, "free_hugepages");
+> +
+> +	return read_num(path);
+> +}
+> diff --git a/tools/testing/selftests/mm/hugepage_settings.h b/tools/testing/selftests/mm/hugepage_settings.h
+> index d6f41a45e8ee..57fbf2f57e13 100644
+> --- a/tools/testing/selftests/mm/hugepage_settings.h
+> +++ b/tools/testing/selftests/mm/hugepage_settings.h
+> @@ -92,10 +92,10 @@ bool thp_is_enabled(void);
+>  
+>  int detect_hugetlb_page_sizes(unsigned long sizes[], int max);
+>  unsigned long default_huge_page_size(void);
+> -unsigned long get_free_hugepages(void);
+>  
+>  unsigned long hugetlb_nr_pages(unsigned long size);
+>  void hugetlb_set_nr_pages(unsigned long size, unsigned long nr);
+> +unsigned long hugetlb_free_pages(unsigned long size);
+>  
+>  static inline unsigned long hugetlb_nr_default_pages(void)
+>  {
+> @@ -117,4 +117,14 @@ static inline void hugetlb_set_nr_default_pages(unsigned long nr)
+>  	hugetlb_set_nr_pages(size, nr);
+>  }
+>  
+> +static inline unsigned long hugetlb_free_default_pages(void)
+> +{
+> +	unsigned long size = default_huge_page_size();
+> +
+> +	if (!size)
+> +		return 0;
+> +
+> +	return hugetlb_free_pages(size);
+> +}
+> +
+>  #endif /* __THP_SETTINGS_H__ */
+> diff --git a/tools/testing/selftests/mm/hugetlb-madvise.c b/tools/testing/selftests/mm/hugetlb-madvise.c
+> index 316384d919db..3c08eb6db6a2 100644
+> --- a/tools/testing/selftests/mm/hugetlb-madvise.c
+> +++ b/tools/testing/selftests/mm/hugetlb-madvise.c
+> @@ -27,7 +27,7 @@
+>  
+>  #define validate_free_pages(exp_free)					\
+>  	do {								\
+> -		unsigned long fhp = get_free_hugepages();		\
+> +		unsigned long fhp = hugetlb_free_default_pages();		\
+>  		if (fhp != (exp_free))					\
+>  			ksft_exit_fail_msg("Unexpected number of free "	\
+>  				"huge pages %ld, expected %ld line %d\n", \
+> @@ -68,7 +68,7 @@ int main(int argc, char **argv)
+>  	if (!base_page_size)
+>  		ksft_exit_fail_msg("Unable to determine base page size\n");
+>  
+> -	free_hugepages = get_free_hugepages();
+> +	free_hugepages = hugetlb_free_default_pages();
+>  	if (free_hugepages < MIN_FREE_PAGES)
+>  		ksft_exit_skip("Not enough free huge pages (have %lu, need %d)\n", free_hugepages, MIN_FREE_PAGES);
+>  
+> diff --git a/tools/testing/selftests/mm/hugetlb_dio.c b/tools/testing/selftests/mm/hugetlb_dio.c
+> index 81e3f7bc8e76..47019433ddaf 100644
+> --- a/tools/testing/selftests/mm/hugetlb_dio.c
+> +++ b/tools/testing/selftests/mm/hugetlb_dio.c
+> @@ -93,7 +93,7 @@ static void run_dio_using_hugetlb(int fd, unsigned int start_off,
+>  		ksft_exit_fail_perror("lseek failed\n");
+>  
+>  	/* Get the free huge pages before allocation */
+> -	free_hpage_b = get_free_hugepages();
+> +	free_hpage_b = hugetlb_free_default_pages();
+>  	if (free_hpage_b == 0) {
+>  		close(fd);
+>  		ksft_exit_skip("No free hugepage, exiting!\n");
+> @@ -121,7 +121,7 @@ static void run_dio_using_hugetlb(int fd, unsigned int start_off,
+>  	munmap(orig_buffer, h_pagesize);
+>  
+>  	/* Get the free huge pages after unmap*/
+> -	free_hpage_a = get_free_hugepages();
+> +	free_hpage_a = hugetlb_free_default_pages();
+>  
+>  	ksft_print_msg("No. Free pages before allocation : %d\n", free_hpage_b);
+>  	ksft_print_msg("No. Free pages after munmap : %d\n", free_hpage_a);
+> @@ -142,7 +142,7 @@ int main(void)
+>  	ksft_print_header();
+>  
+>  	/* Check if huge pages are free */
+> -	if (!get_free_hugepages())
+> +	if (!hugetlb_free_default_pages())
+>  		ksft_exit_skip("No free hugepage, exiting\n");
+>  
+>  	fd = open("/tmp", O_TMPFILE | O_RDWR | O_DIRECT, 0664);
+> diff --git a/tools/testing/selftests/mm/hugetlb_fault_after_madv.c b/tools/testing/selftests/mm/hugetlb_fault_after_madv.c
+> index abc3904c5268..c718dd065d53 100644
+> --- a/tools/testing/selftests/mm/hugetlb_fault_after_madv.c
+> +++ b/tools/testing/selftests/mm/hugetlb_fault_after_madv.c
+> @@ -78,7 +78,7 @@ int main(void)
+>  	ksft_print_msg("[INFO] detected default hugetlb page size: %zu KiB\n",
+>  		       huge_page_size / 1024);
+>  
+> -	free_hugepages = get_free_hugepages();
+> +	free_hugepages = hugetlb_free_default_pages();
+>  	if (free_hugepages != 1) {
+>  		ksft_exit_skip("This test needs one and only one page to execute. Got %lu\n",
+>  			       free_hugepages);
+> diff --git a/tools/testing/selftests/mm/hugetlb_madv_vs_map.c b/tools/testing/selftests/mm/hugetlb_madv_vs_map.c
+> index ac60b4f18784..dfbd71a7f709 100644
+> --- a/tools/testing/selftests/mm/hugetlb_madv_vs_map.c
+> +++ b/tools/testing/selftests/mm/hugetlb_madv_vs_map.c
+> @@ -89,7 +89,7 @@ int main(void)
+>  	ksft_print_header();
+>  	ksft_set_plan(1);
+>  
+> -	free_hugepages = get_free_hugepages();
+> +	free_hugepages = hugetlb_free_default_pages();
+>  
+>  	if (free_hugepages != 1)
+>  		ksft_exit_skip("This test needs one and only one page to execute. Got %lu\n",
+> diff --git a/tools/testing/selftests/mm/uffd-stress.c b/tools/testing/selftests/mm/uffd-stress.c
+> index e92a85463eb1..7e37cf3d27f6 100644
+> --- a/tools/testing/selftests/mm/uffd-stress.c
+> +++ b/tools/testing/selftests/mm/uffd-stress.c
+> @@ -480,7 +480,7 @@ int main(int argc, char **argv)
+>  	 * for racy extra reservation of hugepages.
+>  	 */
+>  	if (gopts->test_type == TEST_HUGETLB &&
+> -	   get_free_hugepages() < 2 * (bytes / gopts->page_size) + gopts->nr_parallel - 1)
+> +	   hugetlb_free_default_pages() < 2 * (bytes / gopts->page_size) + gopts->nr_parallel - 1)
+>  		ksft_exit_skip("Skipping userfaultfd... not enough hugepages\n");
+>  
+>  	gopts->nr_pages_per_cpu = bytes / gopts->page_size / gopts->nr_parallel;
 
-For the entire patchset:
-
-Reviewed-by: Petr Mladek <pmladek@suse.com>
-
-It seems to be ready for linux-next.
-
-Best Regards,
-Petr
