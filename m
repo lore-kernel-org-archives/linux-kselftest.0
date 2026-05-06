@@ -1,206 +1,207 @@
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from DM5PR21CU001.outbound.protection.outlook.com (mail-centralusazon11011041.outbound.protection.outlook.com [52.101.62.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F5B7477E53
-	for <linux-kselftest@vger.kernel.org>; Wed,  6 May 2026 13:12:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.54
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778073171; cv=none; b=FKunkEOYsWUQfuyBfz5REI6rSsKPnAlwvvLjYdae5Q8KnAwbUPZgwaMNxoiCH5U3tD63K2FtBppZ5oZynPGrs2A9inhntrL1w2uFv5SDmz/UB6fC5wfUGhFVgBskb3wPkFOdDFWwXjpJLnGRPJpQFDPbj4TbX5Ovq5J31HFBvrY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778073171; c=relaxed/simple;
-	bh=7anuFwbxVPib5Qwdrz+mL3upuMV9kt6FzTMasaXomEY=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A131223E342;
+	Wed,  6 May 2026 13:15:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.62.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778073345; cv=fail; b=ivSomx3kMPrhb3Z7DO4nH/0Kq3ukQnlUcy4tZvcN/XEN4PTdvsncoh/bm7newLioMfBgvM9+41wckl9l8RU0fnCmdEZ5SkDxWXe3rqjtTyFrlmH6MaZyRjQASdkfLgIODr7/c579R33ZwnVzvRofahI3s12g4zYWUPL+/m9L7Ag=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778073345; c=relaxed/simple;
+	bh=tct1lKkh/5+wEh+7tcKoGGyrrqX1Gb5KVMSUqHSuAUs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Uxh6LzttX/3wQO/sDQPiwOioPQJYopavEgJqMPX0TofZHucjQ4cmWMS7n6fo6O//OpIJbq1dDslbis+vZSB5egO/I/jlEiupMAU1f3tDwZB5Px/8uSlOxE8HqY0EH6hyC4oBzTeteKA0p5aHl/7wS3zuiceC3QojePIrwYSQxT4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ndtEbbpy; arc=none smtp.client-ip=209.85.160.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:MIME-Version; b=r6E1mbz+NBZA0dHN770SLjypckXF2P1STPdxU9DwyJ5xj675F9Jhdd0PwtlsZlEE01erMymiH8EGT6+H+KQv4elqlcNwE7OZmHDcUk4qZx93/TxiWCgTKJSNZ29iQur+SDn3uORuaDxI49/9FFZQNyAXZWOzy+NA6cBbt+eqULM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=R3lKYbAo; arc=fail smtp.client-ip=52.101.62.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ndtEbbpy"
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-43496e6a964so2629516fac.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 06 May 2026 06:12:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778073169; x=1778677969; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TtDHstlKXDMwZVDImgv2Go/2LwRbeKrLJRmqWEJNiDM=;
-        b=ndtEbbpyjL6PTXhGzuuXUUNYgkpn41uTsrQGl96ZzWth1JedXi82z/MV7y/CWRkfLY
-         yLJ0Suk7lsfSJrOWqEuWxkHv8wN/8uhAAYS8rY+U5HBuSlqEtoAFyPDsW8EdYiSTTsHP
-         +8eW5XDBXIoxNY0nUcbafblovAtET+oV3wjHGEVEPCedkIGHaU3F25rnFEwzVxu0DzsI
-         DYn9XvYaJWVHpz1MGANLgMpOX/iC/r7A98KdkWsoWvvUQr5laCmeJVwkPE0S2Pc7yfp9
-         Pzo2flvKcUBJ+dtajWe/rziU8/usCKaYm8YOK/ZbO7p6wGsi6diarzyN/dlB5Vn7J4mB
-         hN1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778073169; x=1778677969;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=TtDHstlKXDMwZVDImgv2Go/2LwRbeKrLJRmqWEJNiDM=;
-        b=OcTGjO04M90TcDQbbKmWykjzsiEbqlzLI7FZoCt6JUUcOOFmroG+jLPyswpSwc9Zo2
-         yVXYZ4xpBjIRD2fIWKcqY2yylkxdYTgjzvQeCgQFhJhq3FRd4TMYMBs7KgoEay3kL36s
-         SJkWBcM1e++BPX9Rv0dTsMIGhbQmy41XAgylcaVkPosI3bV4k4+LWAu5rbujvlOwve+X
-         kIp0MqT4pJ+J1kK/ABIp9SD8yBTx/575LScdz4vE3xY5LN5tdEhA6eu478r7TnJBpki7
-         WO1GiJ9a/bHq1zMuOzS9t3NBYzFjJsqyvnSBfUXV19vyOSQH2A+BV5QPwfz8AfXCpn2f
-         vOZA==
-X-Forwarded-Encrypted: i=1; AFNElJ/BI1VVQZOsXs8WQXylsKYthqqynStYP8aSZznDTtIqGFdU1nvLyQ0Px5XjxSe5C+kzg5FcWI5ySF9u0nBpZEg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxa6nxrhDPhhiQA1qAyJQyLB10NP9ey6El9UQCsdYeIHmD7KwfN
-	OelbuqkkmJhMG7HvXU2x5jsRV7pnFmMPrVKDQcvpNESSGcux1kXhf3lV
-X-Gm-Gg: AeBDiesc1ZMf522ytLOmQ6V8LXt0pjeI2uUhXFMweuTS5EmXKiw84Z18ZYtu5F4KblC
-	aEs1UdIakD6sucD//VuD5iLNwO+DTVRayXF2Md7Uy7v623knoeDQ55WcO3FaC6FYCCmO8952ItJ
-	6NjjzcDb+pgYCObM61ljKZf5Hxtl/igF1jG3S3JPSzLpNQOzLEoI4wYmZx7N2P1uHub/VihInDE
-	Cdi6zSHk2rFnPKY8Sm3X/mKcBZu4D3VbxhwT/yYfDDw8/m2kHpr8qNDh5WTn6K1qFXcbkcVl5Gi
-	41T2Zc6Ad2mGYcUqRDtffLVowdMBRIn3MZ9RxdG6rtWstsOn+zcVBPveab2R7EJGYFAdsCS8PHz
-	AHoKTc8WGgS+ZBny7Yy5IM43HsVDJubrJytYJDAnHHuAhg01PyLVcht+xNyWY8qnjv5FLDPcQVM
-	haIbBE2wmt3KJQccHQHU/tWCw6xw==
-X-Received: by 2002:a05:6870:c18e:b0:42d:c200:4214 with SMTP id 586e51a60fabf-434f663b9ecmr1936790fac.18.1778073169035;
-        Wed, 06 May 2026 06:12:49 -0700 (PDT)
-Received: from houminxi ([72.244.37.221])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-434548d9decsm17327859fac.3.2026.05.06.06.12.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 May 2026 06:12:48 -0700 (PDT)
-From: Minxi Hou <houminxi@gmail.com>
-To: netdev@vger.kernel.org
-Cc: aconole@redhat.com,
-	echaudro@redhat.com,
-	i.maximets@ovn.org,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	shuah@kernel.org,
-	dev@openvswitch.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Minxi Hou <houminxi@gmail.com>
-Subject: [PATCH net-next v6 2/2] selftests: openvswitch: add pop_vlan test
-Date: Wed,  6 May 2026 21:12:18 +0800
-Message-ID: <20260506131218.1880852-3-houminxi@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260506131218.1880852-1-houminxi@gmail.com>
-References: <20260506131218.1880852-1-houminxi@gmail.com>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="R3lKYbAo"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=PEQ5+GpVwesSGKECG0iYwppvm72cu+KdWcaGXiaUaRmanr2dRxQuWKYfK3me9JD7xGEOsu0rmaAD/oaDCDjQbgR5vgMfSgZEVPujfrqCZNtm5KJj16uZO4/1cifhfCIB3lJ/jEBzuGVe6wBtDXlcG1LpyQK2kMKw1ITZSoBDNvXSID7hsepnTdB+2FugzC7qJVfEtppwwStHgFljfFM/va9aOi3BG3mL9ej/TyvHjXjOGpGsIDq8zpaFgBmjIDfP7lIpAPiGaNe3AbtvyKPTWkKrT6WNfQqjmd9SriuBbUPDgUNlUXoHSw9sY4uywTwW/neW5i3VorrWZctKf2erhA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tKm+I75MqLH5FFybicnKVsUpbZee1tWk0U07zyqmmS0=;
+ b=r73wRiAofZrvZoifx1D9wA9z6lUoAkh8pDmNN4dBBFSG/5CU/w5LVvSIDNrQFzS2n5GaLgG5TxWQVGfpCFAHiXbTQsee073+QIDy+cxDbQpOxPXKraaAqh7DedJRdJ2ypun1cCEzvVJPncTb0KrHgEoNTAnj/HtUc0NWDx4bFIof2Ys3CuwkMHbOI55AtIgkg/XMuTnoBzp+7K9vqvkT76XQAI/NzdDp3f8ig3YcLJdneuC0u8J5dJO0xznf21E3p754oaqqhErPOv379v5dT/z9h78Rr9ziKUk0dVG4whv4PNhFn/mwjQ5r14ixbjTn0+zdB0A/vz2OksGbsgLO5A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tKm+I75MqLH5FFybicnKVsUpbZee1tWk0U07zyqmmS0=;
+ b=R3lKYbAoevIWf5Zb2pXKox7i1dvQUBFVu/A0M2kqlzlITvs93DlQod3jOQqocDEpOtvuo4pp0UHTTpaZbAy8bAqpSNuKaKYX//9fgesPKqD68kyOngYCSD4G1FsHypKDTkmlPkujhB7DZQ7JkWkkKZ5yrrpMVbshNM7aNLWTEi3CNfJ6pwjVjliXts5564whVWkZm6iIq4kpIQCFJqzEx6g75aXps7urxc0UTiUK79iTbAH3XQrmxx8+XsoAlgnIb358p+Cx4zxTWSA9JgC3O5ZaUfHwPLeAuppe1iwjZuOPhKaAK0HoWuDEVKYtRp+FsNsOa4zCe+TOxxEojLSAsg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DS7PR12MB9473.namprd12.prod.outlook.com (2603:10b6:8:252::5) by
+ PH0PR12MB8152.namprd12.prod.outlook.com (2603:10b6:510:292::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9891.15; Wed, 6 May
+ 2026 13:15:39 +0000
+Received: from DS7PR12MB9473.namprd12.prod.outlook.com
+ ([fe80::f01d:73d2:2dda:c7b2]) by DS7PR12MB9473.namprd12.prod.outlook.com
+ ([fe80::f01d:73d2:2dda:c7b2%4]) with mapi id 15.20.9870.023; Wed, 6 May 2026
+ 13:15:39 +0000
+From: Zi Yan <ziy@nvidia.com>
+To: Nico Pache <npache@redhat.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ David Hildenbrand <david@kernel.org>,
+ "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+ Song Liu <songliubraving@fb.com>, Chris Mason <clm@fb.com>,
+ David Sterba <dsterba@suse.com>, Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+ Lorenzo Stoakes <ljs@kernel.org>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
+ Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
+ Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Shuah Khan <shuah@kernel.org>, linux-btrfs@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v5 11/14] selftests/mm: remove READ_ONLY_THP_FOR_FS in
+ khugepaged
+Date: Wed, 06 May 2026 21:15:22 +0800
+X-Mailer: MailMate (2.0r6292)
+Message-ID: <61FB928B-03FD-4852-BED5-4E453ABB706A@nvidia.com>
+In-Reply-To: <7e42faea-9f55-4722-a426-94be7fc3a49b@redhat.com>
+References: <20260429152924.727124-1-ziy@nvidia.com>
+ <20260429153538.727855-7-ziy@nvidia.com>
+ <7e42faea-9f55-4722-a426-94be7fc3a49b@redhat.com>
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: YQBPR0101CA0311.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:6c::14) To DS7PR12MB9473.namprd12.prod.outlook.com
+ (2603:10b6:8:252::5)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR12MB9473:EE_|PH0PR12MB8152:EE_
+X-MS-Office365-Filtering-Correlation-Id: a5ecec89-78ce-4ec9-682b-08deab719137
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|7416014|376014|10070799003|366016|56012099003|18002099003|22082099003;
+X-Microsoft-Antispam-Message-Info:
+	keEp3pXRmMO2A6imwdN7WXiyvKurWZVaNGv70G0/M09hVKXWGjlc2RIx1OApWoNy+q16vRLddCYEAD7vxPhL5NcgM3CuF9K5SgnmaX3xI7lRmcxDSIF5U7ybIK1Vr9Ta06uNCNAIep0FSLI7h+3s1mY6ewOjDux4+Cis4y8+aIa+yLM4y2iT9FcLwM/wUFTX4J1HUh3ASkMBtfHah0XR1XmjT+7uavvB5EwIRSUB1iajJrKm79JOnml+eC7mHxD6pfHdAsRSSo7VqAUL7oVI6TKn6HJzeGWRNs9U4PhA7nfsgcJ98zTPXF6M+CmjApvtkaf1JMDkfpcGoEyWh/RZljkgROwS6iiCg+Q02OBH8wczu//GI9YA5PvqisenJbg0YNibEdU0fCxXODF6nSD6eTfJDMatD0uk/lAgkzcQ0IDgYE7PqLGbabPPOh1/l+w4lQmTJR+VX9ic/tTzHni0WiZqSHLAU47vzsvVqV10KsBf/UhFm/2AtcYzvXan1X1kohYzwT2p7KzD2enndt1IrwqFbhH8lBWr324K8els/Iij+Noj0hVSUDabVzJthz0/RlhjR1pnQiu6bCPlAca/rw8aa0qOOrO7M4IwwYfqc7yQJwnl6bGjxVmhTJ7pDDHjhRtVYCv8r+5q/x043kkcNcT0uW63gCgEsHWQI8f1jj4LMpcyuJ9KHxxwDsafu7g8
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB9473.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(10070799003)(366016)(56012099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?xPq8830KIRgTBxsfJ+PtNVrXXma37FQwtLaCVvJ97ffalrz7Lptb0sSzGb4U?=
+ =?us-ascii?Q?hl949MA5qnCP1kxsFwNr2ug1PLeUYXzfxdSfgjCeS/phIwu/Od7h+0EuKTbV?=
+ =?us-ascii?Q?TVxBhGmp0UhuqOhV05IgtxIGQX/sO+kDa0QkJ1hk1gH4ZbU3Uok+FakBw8o6?=
+ =?us-ascii?Q?i4Q/1PaIYgxFI+7l5t5IcIl0LL5Pr/hYca7aIA2SO/SGE+nrqcifDRnl4Gab?=
+ =?us-ascii?Q?xmPRKhYM5v+9hQm66FYqyTtq4lZWxJONHAir/ydfO4c6XrkyG3glC2yGt7+j?=
+ =?us-ascii?Q?S0rundVAB3j3AdIgFwYk47l2vGPUn3WAy/ZRfla4bYqeJo7s4skFk9SEcmQg?=
+ =?us-ascii?Q?If6hUHH9LZQNgVbhgZJ52Snb5lz11UyMnrKa9AJMu2f/z17mVcamvagAXnY3?=
+ =?us-ascii?Q?CO4I88ZElbmyTFvZqfV3J3Mw7QOUCq72iv5zbxS0xBhOmrVcQnRpRvEws6RN?=
+ =?us-ascii?Q?rQkd7CHVgMIgyLy0cTZVCNnR8wTNuj2y1V5KlzsAmVRqwEvle93tCLJuMaCH?=
+ =?us-ascii?Q?7CrdHNBE42IP+IGmGGvo4tBk2mAn+54PBezXuyKLNY2zE/1p7zb16iB5OKJt?=
+ =?us-ascii?Q?eWJW/hFxORMR0QLFu8SdnPv8X56yRsb31Ay/nIvBiupk1QvkpEb9/cPLWwL/?=
+ =?us-ascii?Q?vB3tvrpLOfz6OqJV85V/xiNnuvayn70qbW4MVgAuWcDxiq6G8PWXXNtJ68vb?=
+ =?us-ascii?Q?RgKiTBgzL3GKVUXuGTzqYuOZNNSlSxcFFeh0bBZHNIGX6oU3RiT8bOM5HrKb?=
+ =?us-ascii?Q?gh0KL6C9Dey5+pz1uagKpqhDl93ris2gFQ+Ny/dca6Osb3Tp6YYXxzBnph6A?=
+ =?us-ascii?Q?5M0+qUGeQAVhToeFh6pPCvmNeN+Al7OBiqwxNpstPL9Hlh6cmm5vCkatxGUK?=
+ =?us-ascii?Q?Yg/yeTzG7Fg60+ZI6x2EdJfLgYuvgKBXMkKfTQy4Wnd5Qx60qpYhCTpFn/5T?=
+ =?us-ascii?Q?1eWlqvi+yhyKzeNgqbWjPU9iS6EZmOV+UVxokr09ppKe+J+8KMHYP6toGOhc?=
+ =?us-ascii?Q?SbW1YsRieNBh0RUN4aczrgbyM8WzWHfVMBEo4/ngZqZVOTU439Y393EqPE7j?=
+ =?us-ascii?Q?bsGhVSmj8bgeQdwj5B8PuBIpH3Yb0uIJYXQcKx7cpdE/aGnu36yeG8oD8Xnl?=
+ =?us-ascii?Q?nFGqthMZDr7/wMM4xTut6Drh3Ua2yOkrS5ugrNd5OKBYxPMqJprohpn2W0PH?=
+ =?us-ascii?Q?J5RYJRVTTB9+L1l7s5GzKgNKTlsWWS3iNuVuHk4A/50XYQY/FmXiwFfb/Tl5?=
+ =?us-ascii?Q?EmIiByt1juSkH3SmUF76oQcv/HQ2lsJg3N7d3g/j7E60GRbhvvrp9JlcSV92?=
+ =?us-ascii?Q?ntfLGCkl08sokngU8nAvF4Q7pjEJFJhMbM5vF/DEE2PSL1VONOOhInIZCBVt?=
+ =?us-ascii?Q?Tjvwh3BFzPYi9Dv52pJAaJOh5tmKgZT7KuTttA6wBWl5ROto+/9V1TPDEGky?=
+ =?us-ascii?Q?Fvc9vh13C1+W/oJImE41sEMloi7NshhbuOqNDHTWGJZj9olXFmYqgB/3ybV+?=
+ =?us-ascii?Q?oUPsMFqR7liHIHegss+UHRNM6TF6F9q6oHvqymJdIz49sJKROcYVJAaoFs5J?=
+ =?us-ascii?Q?uyeujNvNxTwhpsmEdQlxcQqprHgMqzdS/4WZp59NfiSamkjgTvp7LwBCn/RG?=
+ =?us-ascii?Q?dSd32Uqb+Dx3fe3rox58kWJZDvxOSeeX3DG3TpFEWVmT+Wb58YGXpUzO/PMF?=
+ =?us-ascii?Q?ZMi5gs+690tPbg0Hh3k+CYPr1tew57qSiOel1BUMnMtMr5heuuczU+Q/JuHD?=
+ =?us-ascii?Q?xxHx6bOajhnP5LcMhOgpL80HqoNDiGqw2fDmPonnvFnlVsogalg/?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a5ecec89-78ce-4ec9-682b-08deab719137
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB9473.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 May 2026 13:15:39.0410
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: tYV/j14PttpOj/WVfhvJ0Rb9T5Gjx3CDKGj2vc80dX369dWC+Ca7EHpNhRzKtMr8
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB8152
 
-Add test_pop_vlan() to verify OVS kernel datapath pop_vlan action
-correctly strips 802.1Q VLAN tags from frames.
+On 4 May 2026, at 18:11, Nico Pache wrote:
 
-Test structure:
-- Baseline: untagged forwarding validates basic connectivity.
-- Negative: forward without pop_vlan, tagged frame is invisible
-  to ns2 (no VLAN sub-interface), ping fails.
-- Positive: pop_vlan strips tag on forward path, push_vlan
-  restores tag on return path, ping succeeds.
+> On 4/29/26 9:35 AM, Zi Yan wrote:
+>> Change the requirement to a file system with large folio support and t=
+he
+>> supported order needs to include PMD_ORDER.
+>>
+>> Also add tests of opening a file with read write permission and popula=
+ting
+>> folios with writes. Reuse the XFS image from split_huge_page_test.
+>>
+>> Signed-off-by: Zi Yan <ziy@nvidia.com>
+>> ---
+>>   tools/testing/selftests/mm/khugepaged.c   | 131 +++++++++++++++-----=
+--
+>>   tools/testing/selftests/mm/run_vmtests.sh |  12 +-
+>>   2 files changed, 102 insertions(+), 41 deletions(-)
+>>
 
-Use static ARP entries to avoid VLAN-tagged ARP complexity.
-Rely on ping success/failure for verification -- no tcpdump or
-pcap files needed.
+<snip>
 
-Signed-off-by: Minxi Hou <houminxi@gmail.com>
----
- .../selftests/net/openvswitch/openvswitch.sh  | 77 +++++++++++++++++++
- 1 file changed, 77 insertions(+)
+>> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing=
+/selftests/mm/run_vmtests.sh
+>> index 3b61677fe9840..854c5c3e3a6ae 100755
+>> --- a/tools/testing/selftests/mm/run_vmtests.sh
+>> +++ b/tools/testing/selftests/mm/run_vmtests.sh
+>> @@ -490,8 +490,6 @@ CATEGORY=3D"thp" run_test ./khugepaged all:shmem
+>>    CATEGORY=3D"thp" run_test ./khugepaged -s 4 all:shmem
+>>  -CATEGORY=3D"thp" run_test ./transhuge-stress -d 20
+>> -
+>>   # Try to create XFS if not provided
+>>   if [ -z "${SPLIT_HUGE_PAGE_TEST_XFS_PATH}" ]; then
+>>       if [ "${HAVE_HUGEPAGES}" =3D "1" ]; then
+>> @@ -508,6 +506,14 @@ if [ -z "${SPLIT_HUGE_PAGE_TEST_XFS_PATH}" ]; the=
+n
+>>       fi
+>>   fi
+>>  +if [ -n "${SPLIT_HUGE_PAGE_TEST_XFS_PATH}" ]; then
+>> +CATEGORY=3D"thp" run_test ./khugepaged all:file ${SPLIT_HUGE_PAGE_TES=
+T_XFS_PATH}
+>> +else
+>> +	count_total=3D$(( count_total + 1 ))
+>> +	count_skip=3D$(( count_skip + 1 ))
+>> +	echo "[SKIP] ./khugepaged all:file" | tap_prefix
+>
+> This leads selftest runs to always litter the output with SKIP when run=
+ning this with the wrapper
+>
+> make -C tools/testing/selftests TARGETS=3Dmm run_tests
 
-diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-index b327d3061ed5..a5636881760b 100755
---- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
-+++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-@@ -27,6 +27,7 @@ tests="
- 	upcall_interfaces			ovs: test the upcall interfaces
- 	tunnel_metadata				ovs: test extraction of tunnel metadata
- 	drop_reason				drop: test drop reasons are emitted
-+	pop_vlan				vlan: POP_VLAN action strips tag
- 	psample					psample: Sampling packets with psample"
- 
- info() {
-@@ -830,6 +831,82 @@ test_tunnel_metadata() {
- 	return 0
- }
- 
-+test_pop_vlan() {
-+	modprobe -q 8021q 2>/dev/null || true
-+	[ -d /sys/module/8021q ] || \
-+		{ info "CONFIG_VLAN_8021Q missing"; return $ksft_skip; }
-+
-+	local sbx="test_pop_vlan"
-+	sbx_add "$sbx" || return $?
-+	ovs_add_dp "$sbx" vlandp || return 1
-+
-+	ovs_add_netns_and_veths "$sbx" vlandp \
-+		ns1 veth1 ns1veth 192.0.2.1/24 || return 1
-+	ovs_add_netns_and_veths "$sbx" vlandp \
-+		ns2 veth2 ns2veth 192.0.2.2/24 || return 1
-+
-+	# Baseline: untagged bidirectional forwarding
-+	ovs_add_flow "$sbx" vlandp \
-+		'in_port(1),eth(),eth_type(0x0806),arp()' '2' || return 1
-+	ovs_add_flow "$sbx" vlandp \
-+		'in_port(2),eth(),eth_type(0x0806),arp()' '1' || return 1
-+	ovs_add_flow "$sbx" vlandp \
-+		'in_port(1),eth(),eth_type(0x0800),ipv4()' '2' || return 1
-+	ovs_add_flow "$sbx" vlandp \
-+		'in_port(2),eth(),eth_type(0x0800),ipv4()' '1' || return 1
-+	ovs_sbx "$sbx" ip netns exec ns1 ping -c 3 -W 2 \
-+		192.0.2.2 || return 1
-+
-+	# VLAN topology: ns1 uses VLAN sub-interface, ns2 is plain
-+	ip -n ns1 link add link ns1veth name ns1veth.10 \
-+		type vlan id 10 || return 1
-+	on_exit "ip -n ns1 link del ns1veth.10 2>/dev/null"
-+	ip -n ns1 addr add 198.51.100.1/24 dev ns1veth.10 || return 1
-+	ip -n ns1 link set ns1veth.10 up || return 1
-+	ip -n ns2 addr add 198.51.100.2/24 dev ns2veth || return 1
-+
-+	ovs_del_flows "$sbx" vlandp
-+
-+	# Static ARP: avoids VLAN-tagged ARP complexity
-+	local ns1veth10mac ns2mac
-+	ns1veth10mac=$(ip -n ns1 link show ns1veth.10 \
-+		| awk '/link\/ether/ {print $2}')
-+	ns2mac=$(ip -n ns2 link show ns2veth \
-+		| awk '/link\/ether/ {print $2}')
-+	ip -n ns1 neigh replace 198.51.100.2 lladdr "$ns2mac" \
-+		dev ns1veth.10 nud permanent || return 1
-+	ip -n ns2 neigh replace 198.51.100.1 \
-+		lladdr "$ns1veth10mac" \
-+		dev ns2veth nud permanent || return 1
-+
-+	local vlan_match='in_port(1),eth(),eth_type(0x8100),'
-+	vlan_match+='vlan(vid=10),'
-+	vlan_match+='encap(eth_type(0x0800),'
-+	vlan_match+='ipv4(src=198.51.100.1,proto=1),icmp())'
-+
-+	# Negative: forward without pop_vlan -- tagged frame
-+	# is invisible to ns2 (no VLAN sub-interface), ping fails
-+	ovs_add_flow "$sbx" vlandp "$vlan_match" '2' || return 1
-+	ovs_sbx "$sbx" ip netns exec ns1 ping -I ns1veth.10 \
-+		-c 3 -W 1 198.51.100.2 >/dev/null 2>&1 \
-+		&& { info "FAIL: ping should fail without pop_vlan"
-+		     return 1; }
-+
-+	ovs_del_flows "$sbx" vlandp
-+
-+	# Positive: pop_vlan strips tag on forward path,
-+	# push_vlan restores tag on return path -- ping succeeds
-+	ovs_add_flow "$sbx" vlandp \
-+		"$vlan_match" 'pop_vlan,2' || return 1
-+	ovs_add_flow "$sbx" vlandp \
-+		'in_port(2),eth(),eth_type(0x0800),ipv4()' \
-+		'push_vlan(vid=10,pcp=0,tpid=0x8100),1' || return 1
-+	ovs_sbx "$sbx" ip netns exec ns1 ping -I ns1veth.10 \
-+		-c 3 -W 2 198.51.100.2 || return 1
-+
-+	return 0
-+}
-+
- run_test() {
- 	(
- 	tname="$1"
--- 
-2.53.0
+Yes, this is intended to let people know one case is not tested and skipp=
+ed if XFS cannot be created.
 
+>
+>> +fi
+>> +
+>>   CATEGORY=3D"thp" run_test ./split_huge_page_test ${SPLIT_HUGE_PAGE_T=
+EST_XFS_PATH}
+>>    if [ -n "${MOUNTED_XFS}" ]; then
+>> @@ -516,6 +522,8 @@ if [ -n "${MOUNTED_XFS}" ]; then
+>>       rm -f ${XFS_IMG}
+>>   fi
+>>  +CATEGORY=3D"thp" run_test ./transhuge-stress -d 20
+>> +
+>>   CATEGORY=3D"thp" run_test ./folio_split_race_test
+>>    CATEGORY=3D"migration" run_test ./migration
+
+
+Best Regards,
+Yan, Zi
