@@ -1,85 +1,84 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37DF73E4C95
-	for <linux-kselftest@vger.kernel.org>; Wed,  6 May 2026 15:30:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39C47406277
+	for <linux-kselftest@vger.kernel.org>; Wed,  6 May 2026 15:32:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778081451; cv=none; b=eLsMwcUPpUJ8Y/ezLKgZyPte00bbcDpVUBl6ERjU/Ds/CouW54ZSyIj2c3RcHb7RAssEssIeqCEIaPh6irp8YURiSN/oN8ndN/EPYn9UniO3E8tqh0zdqmQ1W1Qyy72hbJ3iD/4aFRJRoteVjFB9p+F2O7Lb9zbkzhHDFoBqoCo=
+	t=1778081546; cv=none; b=icmvR3pc1415jcnZh7FjE9+s4nDud0BD2BmcLO3rN3H/oHfc/CZjbBFQnMUqiqK6dYvdUKfG5LLeFb+sXEXOw9FX+giwWxYkvtM2sl66HjuLb7biCHgBHhm8xWEeJ/eCUIwIhd/N5pVzOphR6OhXRnd4hXsdTE655NdL1w45gyI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778081451; c=relaxed/simple;
-	bh=+CVOJ1B8PW2INcgWflXAEelcpfaLxfm0F4gfkFsTUVc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=k4ViCFj80A3c4v6w6Hafvsl3Oh6SUJ9SMWzTW8TDnTfebctNGC6BNidBByFGVkgcn44P+mPJtqqqaWs/I+0232uRNnRZ5cUNswvcxtZVvEcv5wu5XwK3hJb/60M9CHKMvjZ/IRaaxDw0PVzmLRMmXS4HP2/f8JWpaC0n323sP2Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=i5AwRLjG; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=IQduzks/; arc=none smtp.client-ip=170.10.133.124
+	s=arc-20240116; t=1778081546; c=relaxed/simple;
+	bh=6B1JDvhMshkikE3fZUzsq/DnpD+6Z8qzfXdxsT5eDSE=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=DCEk3eigQeY5DlUYXvT6K0iSzjCaxhvnH99umVsmDrN0j6TF9VE2I9dyC6IN40i1r0whX7/uRzGDlwzSRS7FGXuEnxrhCQZjGTeZD/t3NEGEx44eLvweYlRxcyC7rwIojnaj83Ftr1NbYG/5DH7Ij0GVe9rdwy3ZIDyltEkuUyg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZO9TXiOP; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=poI9nu6q; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="i5AwRLjG";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="IQduzks/"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZO9TXiOP";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="poI9nu6q"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1778081441;
+	s=mimecast20190719; t=1778081538;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=+CVOJ1B8PW2INcgWflXAEelcpfaLxfm0F4gfkFsTUVc=;
-	b=i5AwRLjGWP3hw96aGCujhSYWGReQ1YI0xCY2x061n2bEpfbAljEcceAQnivKFty4yFv/Lv
-	2J/BUNmGtz5/Ei692yf4rMCVXs2lb4upUjorL25PWRwmH/blRRv/RAWTabaFALsFlJhdH0
-	hFY0nBYJjFfx0rUxdb4fbwBdZpMK11A=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=BWPJjdL+Se4qf22augp+8U/7BbRvhUfZs7hvq4GmhQ8=;
+	b=ZO9TXiOPDXhttOA0Ln1RQVrrdbF+J+Fv3Se36tSA2UZmr5IRyXr5JS6QUB+TweTiQYq37q
+	7RSWkUFL7eGIs1dlWY+ktd1PqewbRKsMVTO+4TZV5559LVyPejeDltvdZjPNPhJZqkR5RK
+	2ZCERacy6L+q/gQWHOF+SeTYQDRndPQ=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-20-8w5fHAa3PKm5Wpxmj6B9qQ-1; Wed, 06 May 2026 11:30:36 -0400
-X-MC-Unique: 8w5fHAa3PKm5Wpxmj6B9qQ-1
-X-Mimecast-MFC-AGG-ID: 8w5fHAa3PKm5Wpxmj6B9qQ_1778081435
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-44dad1b938fso2380235f8f.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 06 May 2026 08:30:36 -0700 (PDT)
+ us-mta-197-7Fmz6nFaMCCJC3HPSMg_bg-1; Wed, 06 May 2026 11:32:16 -0400
+X-MC-Unique: 7Fmz6nFaMCCJC3HPSMg_bg-1
+X-Mimecast-MFC-AGG-ID: 7Fmz6nFaMCCJC3HPSMg_bg_1778081534
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-488d8deb75fso54919565e9.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 06 May 2026 08:32:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1778081435; x=1778686235; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+CVOJ1B8PW2INcgWflXAEelcpfaLxfm0F4gfkFsTUVc=;
-        b=IQduzks/Aa3aQaPzCE80LHVAZPXvbZTwM/vpj/hMvQmTU6swShunYWjcxZybpFm+dI
-         mE7jomw6t1SCKfSjVjxrdJ45E2HixtJ+lNwVP4uxZ1RiBUnLjVXfmyKNaE37q7BlikTh
-         sS06jcmPZJgGAdPIWdSPSGccsRSGzoDMM9coq0IeWfbibDYoD19+T8PkQcJgk+afAjAf
-         JdxUDfvFc0ew+fGGFCiejhqcu7TU5uKPuM818JId9SMJ5Rshlsfb8zgXX7QdAAVTnCKC
-         N1gefwEztcOrXNjt3jCnfRKy/AkumanO3wxTPvwniDtU++5CIbGZbvYiuA8/wgiuQHua
-         GwHA==
+        d=redhat.com; s=google; t=1778081534; x=1778686334; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=BWPJjdL+Se4qf22augp+8U/7BbRvhUfZs7hvq4GmhQ8=;
+        b=poI9nu6qHVNBnpI7t8Or5YOFC9c+vV1IzskQTsWQF9+6YMLFO+xZBU3HY0TZyvb1/8
+         Qb/raVLmD3TrfI7YEmeQhBr1F2QWZGlE9SP9Q9P+VmGqRK42NFu6JBLLLuy09O+uxN3a
+         8/IJDGuMSL+IXQvO50e00e4YI0hX3l32VRpBeCEA6kEWtn/x77fUG5JjYRCtfL/LFQTz
+         INMTA7wCFvBIfji/r+XTEBaQpZG89TiL7kbl5p33dhUEpQO7b8wszbyNDDf08S8EOXWi
+         Ip/dPIBY2aoEtl+nfke0dHjzX/1lP/G5qGwAtJfamsRetynpNjVpdurizLI+JwGMxni5
+         9bYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778081435; x=1778686235;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+CVOJ1B8PW2INcgWflXAEelcpfaLxfm0F4gfkFsTUVc=;
-        b=ihbduS4zxeprx2pRsobW+a6ki3zh+Ja2Sv/NlBb3nR+r5nXopKFdF7AiNANm5p3ZlM
-         Jc8xW5GEH4thruO1GtOPo3J9CymWop+WxD5C4HBdoLzH5xr1o/WCbO/jVnN14SLMJLKv
-         eu6Z5ZLVVWUtmbRKXLpA2g2J55Pg+4f1HLyMncE13PG+QVk7Es0+N0OVfeJHwf/gqO1m
-         8bgKAobrPVhb+8SbUHBwvId1p6QdzveyixIW2VeXe9hQaaI51wTIrOhYpujPP6hrpEAb
-         8vFtxFH2+WnGnAkkLe8LRDgFJjvlbytROBdyHnidpn4jyIIYO9X2ikydh1aL2hQxYoI6
-         BEOg==
-X-Forwarded-Encrypted: i=1; AFNElJ8EEg2+ufwj7mWRficEVhNNrmjqh4v/CBV2+9+UcGT1JF0bsXykY50HS9cagULbXHYeJZ4+iuKNDjm6sZPBbxs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy18RLGZnCMLr3R5Ng70/5KVB0PLRWrSbz0veoxHjClVWmT9ow+
-	oJxgZ7QRbuPbGmmyX2gKJbyph5O8DU5e+qNBCL7BKgpstRkbgc7OixQZ6MxT/ZZegYzFX7VdRNe
-	VYwkGSDHiPLJXlR1nOam5zmmVd2pq++Glla3xn+/Hy/Euqwq/y6kyZ5GYMopvg4BMHXp6mg==
-X-Gm-Gg: AeBDievBP6HI6p1vZ460vgN6iCZb3a/e4Slo6YZg70dUmU2PY0Hi1UHOP7VAKI/LtFD
-	To63M8LgirNYrI+/kYalflfOFGLXKxsT3UYmkiiwkbYbHsRNNiH7gD+wBFTLDWGcmZ+gFVbizrB
-	A7q/w+dXoQchOikHUNHTjVqqjd0Ya/ZMbLeZ/jwV0Vp7SiNeuLFWEkmLTc/gRkPV78eOAW2mx8Q
-	vBgCozM8rkjvq6Bo2Rg9UKS/056FlcVnDzw6KXR56vZFM66Uli6deY/GkXBiPl3W9fLT8iCPaoX
-	iUERuRXFq/8iJvyu/4sn0W/lS6Zwq0h4r4G+e1fQ1AzB2jy4KZOMJIP+RwY7yFPJgdK9heug1VT
-	zD3Cyr6hvG7m5Nsf7e0gsAkcrfkECYktn6dM7Jb62buHkyAUfWXuV2S04rbycblHJeBQ=
-X-Received: by 2002:a05:600c:4f53:b0:486:fb0b:ad79 with SMTP id 5b1f17b1804b1-48e51f4456cmr67008465e9.20.1778081434834;
-        Wed, 06 May 2026 08:30:34 -0700 (PDT)
-X-Received: by 2002:a05:600c:4f53:b0:486:fb0b:ad79 with SMTP id 5b1f17b1804b1-48e51f4456cmr67007475e9.20.1778081434293;
-        Wed, 06 May 2026 08:30:34 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1778081534; x=1778686334;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BWPJjdL+Se4qf22augp+8U/7BbRvhUfZs7hvq4GmhQ8=;
+        b=WhyL25A4Nz9EX/eJXlkecXeDfUvlhkwqCyXCnmC5xGz8Qune0gtrBIE6cxypY1JTM/
+         cbKYEuSQz0WEOuDpq9BEdC9S40p4DJX7F+2kf3dXjezNwy4xN9+A45r+L6fUPQYNIkga
+         6UtCCjR6TVtn4Pih8aX88QUIUu2JYND6RqkL2omLHoyaBd3AE8d5JpiFrc+94k9FSpG6
+         /s0UN6WsGJO+hI8nT1vReYFkQZdxjk2GG9R6l2ZKYMuvPbuUjuCNVgJPbDqf8nnnFLGS
+         AFZYkMFbPMrQNJ0IebFLJHnath8Jp6YgObr7y/02e9bVzWvpHIp67hrZ+ys2ZI66ygpt
+         8tuA==
+X-Forwarded-Encrypted: i=1; AFNElJ/BwjZ4ry3fE3Dy0FiDsF8Hqrguqtiw/UeHZwYVDgM4j1DjK7GsUJTE+9voIVITN2tXyamoZokpIbR5wdwgxfs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzMSZeHLky36B3WPeIY8rFcy4sPRlMicvgBq+mmE7IC49SxWfga
+	5tOlEpGp2M+T63M9QOkPLG0FL8B5NxHtq9T6HNOzOIvGHAFnzMsHOJ0vIWtUxhEybfK5E/+k9Xz
+	UVcRd6VSC3V3pu03HflAWCv+jn6UWn5rJnwNGSztByHaaGB7SMZqPcxsxxgO8XKd7ic4qSA==
+X-Gm-Gg: AeBDievN03uXA0N2CVBKuD7xXOVkKHzpcrdiZePofPjyLH1UbSjNg/qiMB4TyWCjsvO
+	v0rs8HJAMMTDK09rfVVDUm71O4OMqBV3Pm/LV9Z1CKSHIMbwU7tQ1kqshd3IdrciOa4xNX3BSRw
+	Ka4QfWvvJPkBudegClplzLj9S0uoYU5CpiFz0piMWpfwEfiFHDp7iblIjLfiXH7K38rhhQG3RyG
+	PsGoMzn0ymEXRqzlxr5qRT2yeR8zN9NmSPW8uPc3yA1rK+yca3JFQ9kbhH7oVnqVWAwEcLMCAtP
+	IF5clFtrz7STsWX40y6GLyn8Qx5YMuw0Ciu2JM4j0QU+heWJOh3x2lZP1wQmsfDFb40T1Ug1Wi6
+	JYnqRTwl/BhxEvi7WqK/31H7Gv99vWCk6Kq4InhvjQvgdFOpvgw9Ndn5E2GE/NdQHROc=
+X-Received: by 2002:a05:600c:4996:b0:48a:5821:5ffc with SMTP id 5b1f17b1804b1-48e51e0bb6dmr41569965e9.2.1778081533816;
+        Wed, 06 May 2026 08:32:13 -0700 (PDT)
+X-Received: by 2002:a05:600c:4996:b0:48a:5821:5ffc with SMTP id 5b1f17b1804b1-48e51e0bb6dmr41569375e9.2.1778081533302;
+        Wed, 06 May 2026 08:32:13 -0700 (PDT)
 Received: from [192.168.88.32] ([150.228.25.151])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48e5311f891sm31160105e9.4.2026.05.06.08.30.33
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48e53116a9fsm28671565e9.8.2026.05.06.08.32.10
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 May 2026 08:30:33 -0700 (PDT)
-Message-ID: <ae14591f-f93e-4947-b3d4-af4c441d8229@redhat.com>
-Date: Wed, 6 May 2026 17:30:32 +0200
+        Wed, 06 May 2026 08:32:12 -0700 (PDT)
+Message-ID: <af591664-bb26-4b1b-93cf-cbcc68763d5e@redhat.com>
+Date: Wed, 6 May 2026 17:32:10 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -87,25 +86,37 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net 01/12] net: shaper: drop redundant xa_lock()
- bracketing
-To: Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net
-Cc: netdev@vger.kernel.org, edumazet@google.com, andrew+netdev@lunn.ch,
- horms@kernel.org, shuah@kernel.org, linux-kselftest@vger.kernel.org
-References: <20260506000628.1501691-1-kuba@kernel.org>
- <20260506000628.1501691-2-kuba@kernel.org>
-Content-Language: en-US
+Subject: Re: [PATCH net 04/12] net: shaper: try to avoid violating RCU
 From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <20260506000628.1501691-2-kuba@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org, edumazet@google.com, andrew+netdev@lunn.ch,
+ horms@kernel.org, shuah@kernel.org, linux-kselftest@vger.kernel.org,
+ davem@davemloft.net
+References: <20260506000628.1501691-1-kuba@kernel.org>
+ <20260506000628.1501691-5-kuba@kernel.org>
+ <59b26f1e-efd5-488e-8738-15e96b9c79e4@redhat.com>
+Content-Language: en-US
+In-Reply-To: <59b26f1e-efd5-488e-8738-15e96b9c79e4@redhat.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 5/6/26 2:06 AM, Jakub Kicinski wrote:
-> The shaper insertion code is written in a way that suggests that
-> perhaps it was expecting readers to be fenced off by xa_lock.
+On 5/6/26 5:22 PM, Paolo Abeni wrote:
+> On 5/6/26 2:06 AM, Jakub Kicinski wrote:
+>> net_shaper_commit() overrides nodes which may be concurrently read
+>> under RCU. This is not a huge deal since the entries only contain
+>> config, worst case user will see inconsistent config params. But
+>> we should try to avoid this obvious RCU violation. Try to allocate
+>> a new node. Since commit() can't fail fall back to overriding.
+>>
+>> Full fix is probably not worth the complexity, struct net_shaper
+>> is around 80B, and the allocation is with GFP_KERNEL.
+> 
+> I'm not sure if even this variant is worthy?!? The scheduler tree dump
+> could be still inconsistent, as the dump is not atomic. IMHO e.g.
+> inconsistent weights in the same WRR group would be as bad as
+> inconsistent values inside the single shaper.
 
-FTR, the code was shaped (pun intended :) that way to avoid acquiring
-multiple times the xa_lock when not needed. Sort of evil early optimization.
+I mean: I would simply avoid addressing this RCU violation.
 
 /P
 
