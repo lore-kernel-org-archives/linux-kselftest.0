@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7BCF358D3D;
-	Wed,  6 May 2026 22:35:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B2F2366DA4;
+	Wed,  6 May 2026 22:35:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778106903; cv=none; b=FDuyfPQHE6TzhVNSbPoi3JCTGrH4vCYfmB4lHPq3kxdhTu0cWeLQupLdYFWWq/r+3B6geNCvWVQdLmV87bh2nsypd8YRIqjRjcrCobsxuaVIEibFGI7J3wPd1SIATMwZO1okUG5XLVqd5ybeRA2iQZ2tK7Fj/7hCQVG8HNS7eGQ=
+	t=1778106946; cv=none; b=IYwGYS/tMj/fZ8yf+rRSKF8fQd8UeOcdbIOQrtD6Rdpw1BvpHSE196CZEdEF+xCfZ6xrr6ZNb5sBv3323FhP1w7zdE/xFCcg3a8nAoE0wrxnpxWFqrkVQYJ/o4TDe166xUL+umHZQ5q7mEKgt2O9jMGsq0m9KHS9OKLzJhls6M0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778106903; c=relaxed/simple;
-	bh=WfZgw+TSYwuuWZco9UUiaSzl0XhRcbOTgHLl0PrSIY0=;
+	s=arc-20240116; t=1778106946; c=relaxed/simple;
+	bh=hz3DyMLXYZmQ+CF5gL15MQqU5AYkOuUceBKveR4ovJ0=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hDExhdrJvRtOSe7+QhDEFikqcjZH6HF4yyif03KFK1vCly3JWqgaKzjFl05Y8arpA0ATjpMn8MzEjghDdyURyDGOyYW57GbaZyy1WNzHiae4R9gjE0qh5jhJ/1W14LTypPrO9Or83GRxxI1RngBnqvRBHXVOHR/xPxFzuyzaG0E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CpdjeXb6; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=jzcBbf7Kiq1KCSR1dc3+jj0AVsifXWyGYMxVzue5kodFkq6p6OzgyEDdkxwDx8fa3epvAj9thkUv8jDAv20GIVdKTqsUjtus+dNajRam3b/i45ND66n1zvtyILBxaeKHxqrBsZZ1kkzoYisS4Zm9sWoUtP5rt+CzQP0M1DHrhsU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dsTabKNg; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CpdjeXb6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2606AC2BCB0;
-	Wed,  6 May 2026 22:35:03 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dsTabKNg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB534C2BCB0;
+	Wed,  6 May 2026 22:35:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778106903;
-	bh=WfZgw+TSYwuuWZco9UUiaSzl0XhRcbOTgHLl0PrSIY0=;
+	s=k20201202; t=1778106946;
+	bh=hz3DyMLXYZmQ+CF5gL15MQqU5AYkOuUceBKveR4ovJ0=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=CpdjeXb6LhJnBfNGKPsNIwjICNhJmzQnnM8OOUFoISRbz87mMXevUCJKXaq6HiWE+
-	 OmttBba0Yk/68exmOTloibYTblSSCl5EFCbxG5gY37AkPwPS9J4QTnmmvrALduwsqp
-	 ivZOwkUQcsZW89GcQtOT3tunEPunc7elJxHqmI0Ff/cvXMcEufWWfL6bAtTt8fhPfh
-	 BA/a4z/Oxi62zK9uK4KwgFcXWEIFaByo5n2FzjJXcxuwBlHF3YzRd4cWEqkvjUh6yS
-	 YHpVaKSfsJi0IAvCT4wh6F94bh0X8hJkNBkw09bfWTYZUTx/A5N9ulFskI7nl/OzxC
-	 8FZZvzTxS7AAw==
-Date: Wed, 6 May 2026 15:35:02 -0700
+	b=dsTabKNgurTICP/yWqT4cvG7jXsDDi5QtUPkeYskwbaIhxRuKH6pGq7n8eNndpIEM
+	 KZ6CEtHuXtv6+xs9ZWoAujb3PPtq1F5gFur0EgGQGD3vqCz5ncaqSW3EVvzSzAs+DE
+	 C/k3sSNDAV1I71c0z1M0h3vp6cni0QaMa81RN4tZncw7XgMyWw9t+LbDL8EQRs4Oeb
+	 yc8iYVSSkEKOv7fCYU9zx/f6NIkmQxnG6PpgerbVgg7ZqAGtAUgaoxuErEMi9NnRSf
+	 ioO0XqVJGrfaKucB0sqnC3OQe90AdEfzAFk6Kk/5iGXct2raKmZm087GHufCmzpctP
+	 MMi7rFjbENU/g==
+Date: Wed, 6 May 2026 15:35:45 -0700
 From: Jakub Kicinski <kuba@kernel.org>
-To: Paolo Abeni <pabeni@redhat.com>
-Cc: netdev@vger.kernel.org, edumazet@google.com, andrew+netdev@lunn.ch,
- horms@kernel.org, shuah@kernel.org, linux-kselftest@vger.kernel.org,
- davem@davemloft.net
-Subject: Re: [PATCH net 04/12] net: shaper: try to avoid violating RCU
-Message-ID: <20260506153502.57ffd9aa@kernel.org>
-In-Reply-To: <af591664-bb26-4b1b-93cf-cbcc68763d5e@redhat.com>
+To: Breno Leitao <leitao@debian.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
+ shuah@kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net 06/12] selftests: drv-net: add shaper test for
+ duplicate leaves
+Message-ID: <20260506153545.2850c295@kernel.org>
+In-Reply-To: <aftup9Pe-RnDZVUi@gmail.com>
 References: <20260506000628.1501691-1-kuba@kernel.org>
-	<20260506000628.1501691-5-kuba@kernel.org>
-	<59b26f1e-efd5-488e-8738-15e96b9c79e4@redhat.com>
-	<af591664-bb26-4b1b-93cf-cbcc68763d5e@redhat.com>
+	<20260506000628.1501691-7-kuba@kernel.org>
+	<aftup9Pe-RnDZVUi@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -48,24 +48,20 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Wed, 6 May 2026 17:32:10 +0200 Paolo Abeni wrote:
-> On 5/6/26 5:22 PM, Paolo Abeni wrote:
-> > On 5/6/26 2:06 AM, Jakub Kicinski wrote:  
-> >> net_shaper_commit() overrides nodes which may be concurrently read
-> >> under RCU. This is not a huge deal since the entries only contain
-> >> config, worst case user will see inconsistent config params. But
-> >> we should try to avoid this obvious RCU violation. Try to allocate
-> >> a new node. Since commit() can't fail fall back to overriding.
-> >>
-> >> Full fix is probably not worth the complexity, struct net_shaper
-> >> is around 80B, and the allocation is with GFP_KERNEL.  
-> > 
-> > I'm not sure if even this variant is worthy?!? The scheduler tree dump
-> > could be still inconsistent, as the dump is not atomic. IMHO e.g.
-> > inconsistent weights in the same WRR group would be as bad as
-> > inconsistent values inside the single shaper.  
+On Wed, 6 May 2026 09:40:07 -0700 Breno Leitao wrote:
+> > @@ -453,7 +471,10 @@ from lib.py import cmd
+> >                    basic_groups,
+> >                    qgroups,
+> >                    delegation,
+> > -                  queue_update], args=(cfg, NetshaperFamily()))
+> > +                  queue_update,
+> > +                  dup_leaves
+> > +                  ],  
 > 
-> I mean: I would simply avoid addressing this RCU violation.
+> Nit: dup_leaves], on a single line matches the surrounding style and
+> avoids the dangling bracket on its own line. Not worth a respin on its
+> own.
 
-Alright. I'll add a comment instead (fix just the ordering WRT 
-to the VALID flag)
+It was intentional to avoid having to touch the lines when adding more
+tests. Now that I think about it again I should probably keep the tests
+sorted and add a trailing ,
