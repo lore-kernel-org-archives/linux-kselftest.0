@@ -1,195 +1,173 @@
-Received: from iad-out-007.esa.us-east-1.outbound.mail-perimeter.amazon.com (iad-out-007.esa.us-east-1.outbound.mail-perimeter.amazon.com [3.221.209.22])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01DA43FBEDD;
-	Wed,  6 May 2026 18:44:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=3.221.209.22
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778093042; cv=fail; b=SKRiqGRBZM4aaEuMPD6Kv3UdEwd1ME+t9kN+EVEm5vpLg9yxQbRveYEn0NeDhP1Z53TKjlrIA4Tv8yXBP9V107qs317T8Sp1pQ04M/V/nsj+8bGObWI2WYl66znvXRezolTCOVHKgDcSTmmCXj3gXBpoPIpaY+JUTpP5GRV7XmA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778093042; c=relaxed/simple;
-	bh=tYrlD8VkZ+HQUhPOmmL2meDnP9XN5yQj/cTVzpcnou8=;
-	h=Subject:From:To:CC:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=t9lHc0P/ZbgjA63JdDp7X2yk9YT0rcG0lfutRUecihD8S+7G1fYPevjAdQXOPFSKG1yS91dcrEsPp/sY5TxOAO9s8qMtl4oZZqoHeFGr466lQYl7sqPEcDMPn//bHtJ4z4WwGJcfXFjVgnek2EAZGTQQbP04TmrvoVwQP6xv7ek=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=hKRycLqY; arc=fail smtp.client-ip=3.221.209.22
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07B963B2FF4
+	for <linux-kselftest@vger.kernel.org>; Wed,  6 May 2026 22:00:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778104862; cv=none; b=qKMs3b0tLBv7XA11a7xz4SD+x/d6B1+H47uGpocC3tXKVfWl+7dXKQyujTee9/47Pgy83i4QUVO2rx/xZpLDC5bwBslL2Cr+tfHauP/fyycDAcUR4WZ/5zfszakOCFY1HYgc950WeYumCCk+f5oj74qRsqBf+ryNo5HVlNnilqI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778104862; c=relaxed/simple;
+	bh=IXZ4d32H+jOcp8VYWQpphT/u7pzhnl3CNMsqVR/2JKo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=A+84mSjYRnOLtIk35mrNDdx4L8TdSmPzVdYE47rqhqJ3kzVS8hnkWhY7ZUGLU90rvWUsOVdJG/OvhfjYyeMZKDLYboXfQbme1DvgUfOBetffcwFnzWzPqPs4/CUqMZd8ZKEHikt50NbVGVOOJFn+zSAQyE1yXIW7bClV2A3xhkY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=SR6oKNSl; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=J0vqaUAz; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="hKRycLqY"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="SR6oKNSl";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="J0vqaUAz"
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 646FF6Go443144
+	for <linux-kselftest@vger.kernel.org>; Wed, 6 May 2026 22:00:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=aZPxIliVcF9OGztv2uIgcJGk
+	CT8mmquqC1ZufniuUCE=; b=SR6oKNSlVvu5Oi4g7EAbzQbJqL70VeUZkFFoQr7d
+	jBTGJhE+nNHV7VIPGBmbgJvVk94vulDk4vSyBaQdr0VA5aT4g8uEpcUXXT7q0JoP
+	OLCwAnATUfCoKhuBlsGJh/kce1HoHHTpuvlgE5+SRwwPboydQTvpPsxucipuWjpQ
+	FolwM6ppk6NBKBrvz+2DXaJ2ByuHnVvXZqsQDQ2fCsQREk9X3qC1J5H+Bg9UUqVE
+	BBM+drUf+fkYJo30GFOq8SF3eOyE7GEYV2IQkMpPevkjuyf2D4P6FmTY8vPwBJeD
+	ugUnK83b7jyBxEYuha1Q/Q7wi+mIbCd2p0uK02UclJEZMw==
+Received: from mail-dy1-f197.google.com (mail-dy1-f197.google.com [74.125.82.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4e0299jvc8-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-kselftest@vger.kernel.org>; Wed, 06 May 2026 22:00:58 +0000 (GMT)
+Received: by mail-dy1-f197.google.com with SMTP id 5a478bee46e88-2ba8013a9e3so324944eec.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 06 May 2026 15:00:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1778093041; x=1809629041;
-  h=from:to:cc:date:message-id:references:in-reply-to:
-   content-transfer-encoding:mime-version:subject;
-  bh=tYrlD8VkZ+HQUhPOmmL2meDnP9XN5yQj/cTVzpcnou8=;
-  b=hKRycLqYSNWkSe8NPftUhi8tHF1Rld+N8S3vG4UXL9Dqy7pREShfgFWT
-   5L/Llv7eXnH24oPmqL9DF4H2WXRP/AD/CLlC2e7CHqqAaTNsuEk1gmOc8
-   P+9u3bYZUPsLcsfjlFANIi0x4aHt6mTmgvF4HdKRDdrZXkKzI+KtE/alY
-   d+Uoz7VWufM4SJTeSUZGfRz9Gs01H5rPGyyPf9Vx6EqSq7V5qim+upDRv
-   zC4NYcOLPda9lHWm7XIZYbKaWgpyWwM3ADSBfwBZJySJJSqQeayINPIU+
-   KVetxqwvD6rH/D9msZLnA/4a+2LWPvFuUBo1lKVEfOhSlSIXuiWAsK8AX
-   w==;
-X-CSE-ConnectionGUID: v53mDIPVQVmVk6CBQ2eo3w==
-X-CSE-MsgGUID: BscRL2vFRRWPrUSRZYcUxg==
-X-IronPort-AV: E=Sophos;i="6.23,220,1770595200"; 
-   d="scan'208";a="18059999"
-Subject: RE: [PATCH v2 net-next 0/8] ptp: Add PHC timestamp quality attributes
-Thread-Topic: [PATCH v2 net-next 0/8] ptp: Add PHC timestamp quality attributes
-Received: from ip-10-4-13-79.ec2.internal (HELO smtpout.naws.us-east-1.prod.farcaster.email.amazon.dev) ([10.4.13.79])
-  by internal-iad-out-007.esa.us-east-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2026 18:43:57 +0000
-Received: from EX19MTAUEC001.ant.amazon.com [52.94.133.134:14924]
- by smtpin.naws.us-east-1.prod.farcaster.email.amazon.dev [10.0.34.7:2525] with esmtp (Farcaster)
- id b45225bf-0fc8-40ad-b4f7-49f61273a334; Wed, 6 May 2026 18:43:57 +0000 (UTC)
-X-Farcaster-Flow-ID: b45225bf-0fc8-40ad-b4f7-49f61273a334
-Received: from EX19EXOUEC002.ant.amazon.com (10.252.135.179) by
- EX19MTAUEC001.ant.amazon.com (10.252.135.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37;
- Wed, 6 May 2026 18:43:56 +0000
-Received: from DM5PR08CU004.outbound.protection.outlook.com (10.252.135.199)
- by EX19EXOUEC002.ant.amazon.com (10.252.135.179) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37
- via Frontend Transport; Wed, 6 May 2026 18:43:56 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=orX/y27HMl3XRAQr+76DtdGjOICjvisvXYJo540HN1fRYZf4HdxktfZIuhc0Fyx69mTra/7MQj+s3zz+gaa+76Qg6wmgpfWTPy0cUpBrY7p3Y6V3G0axHxT4iJCSQqYLBw/PtxGszjXuzyFe2bbOMJdB5sXRpEKDef0PuqoqXO5WcZojJcww61XthibrIB+qCgp8758Z0xgtfh4NljHFR5vRDIR7R1XW8qYrywoFrbbULnVaHRNRHCs9Ppvj/a6y4Lwwl9guG8HGw0pOV0w8oqaAFkOSII+xRUOvz2901mLZDU8tQnX/t8x4AIsJkH7rQz4QoYqHgVkFMjCBckGD1w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tYrlD8VkZ+HQUhPOmmL2meDnP9XN5yQj/cTVzpcnou8=;
- b=HCruPDSj3/LAw5cNc/uw54VJgMCMij41xfGcwcTTYPNhkHtNye3MoFkmVWVKxu8urr/2LeK3jhF7zXXaHyyPofetFif+hByDC6sk26JepPOhf5MkQatGrw7K7S6DDnKPvBleOhDHURFdyXUD5ZvpYME/PXsQyKFDrbVRkWdvKPCgjZJ4XPiaKSs5Yst7DEWXyAgdC9JJhow6CLWX5dPw06j5TSNLuF7X8Lsd0BKQqt1TWa5ZMLUj6WBhqzAdYZRGie4TvCGpIENRT7uil1kEtirWjlJAeeUyn8ooEfrl1DEek1Y+ZEb+aLb16r0XQDo2zpsX6xDZVfds9k0pqPo+hA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amazon.com; dmarc=pass action=none header.from=amazon.com;
- dkim=pass header.d=amazon.com; arc=none
-Received: from SA1PR18MB4664.namprd18.prod.outlook.com (2603:10b6:806:1d7::5)
- by SA3PR18MB5273.namprd18.prod.outlook.com (2603:10b6:806:2f9::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9891.15; Wed, 6 May
- 2026 18:43:44 +0000
-Received: from SA1PR18MB4664.namprd18.prod.outlook.com
- ([fe80::972c:f0e:7126:9112]) by SA1PR18MB4664.namprd18.prod.outlook.com
- ([fe80::972c:f0e:7126:9112%6]) with mapi id 15.20.9846.016; Wed, 6 May 2026
- 18:43:44 +0000
-From: "Kiyanovski, Arthur" <akiyano@amazon.com>
-To: Simon Horman <horms@kernel.org>
-CC: David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>, Richard Cochran
-	<richardcochran@gmail.com>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
-	<pabeni@redhat.com>, David Woodhouse <dwmw2@infradead.org>, Thomas Gleixner
-	<tglx@linutronix.de>, Miroslav Lichvar <mlichvar@redhat.com>, Andrew Lunn
-	<andrew+netdev@lunn.ch>, Wen Gu <guwen@linux.alibaba.com>, Xuan Zhuo
-	<xuanzhuo@linux.alibaba.com>, "Woodhouse, David" <dwmw@amazon.co.uk>, "Sarna,
- Yuval" <ysarna@amazon.com>, "Machulsky, Zorik" <zorik@amazon.com>,
-	"Matushevsky, Alexander" <matua@amazon.com>, "Bshara, Saeed"
-	<saeedb@amazon.com>, "Wilson, Matt" <msw@amazon.com>, "Liguori, Anthony"
-	<aliguori@amazon.com>, "Bshara, Nafea" <nafea@amazon.com>, "Schmeilin,
- Evgeny" <evgenys@amazon.com>, "Belgazal, Netanel" <netanel@amazon.com>,
-	"Saidi, Ali" <alisaidi@amazon.com>, "Herrenschmidt, Benjamin"
-	<benh@amazon.com>, "Dagan, Noam" <ndagan@amazon.com>, "Arinzon, David"
-	<darinzon@amazon.com>, "Ostrovsky, Evgeny" <evostrov@amazon.com>, "Tabachnik,
- Ofir" <ofirt@amazon.com>, "Bernstein, Amit" <amitbern@amazon.com>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"shuah@kernel.org" <shuah@kernel.org>, "vadim.fedorenko@linux.dev"
-	<vadim.fedorenko@linux.dev>
-Thread-Index: AQHc2FEIaS8LE0+2H0qreoYSpWOGbLX/NC0AgAIqmUA=
-Date: Wed, 6 May 2026 18:43:33 +0000
-Deferred-Delivery: Wed, 6 May 2026 18:42:51 +0000
-Message-ID: <SA1PR18MB46642903B432AA7D7500BFFFD93F2@SA1PR18MB4664.namprd18.prod.outlook.com>
-References: <20260430032507.11586-1-akiyano@amazon.com>
- <20260505093444.GQ15617@horms.kernel.org>
-In-Reply-To: <20260505093444.GQ15617@horms.kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amazon.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA1PR18MB4664:EE_|SA3PR18MB5273:EE_
-x-ms-office365-filtering-correlation-id: 2192ef46-e8d0-487d-5db8-08deab9f66ae
-x-ld-processed: 5280104a-472d-4538-9ccf-1e1d0efe8b1b,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|366016|376014|7416014|1800799024|56012099003|22082099003|18002099003|38070700021;
-x-microsoft-antispam-message-info: XopCSuJaPfQZlCvs3iiFXc9bh6clzMojnSECFIVJEavCaXqOwUuLylBmzaVNG6TQW41mvTBCo0zW6YZajHKyVnWgxXk/ryMP15ewBwIU/Nq2oIC4/ZGtSiaKFJSck/iRTJAZxlQduU2JWYYvjdl3Zb4lUYVOu+qF7DqPivs0KhQnm4MFWeDAriC4u7ts/0bvdu/C2QYYtzlE/Tn8jh6U2ZUXIgynR/Os7uBYUdZo/yIj/ULJa4Eoo5x8ID+0RBsKBdyq/sZ7SCZg5yDWeKIfhKM5TjgXAUl+GeN5T2v0qGq281SlDUeT+5fZsUs8HJ/TD/5nQJUinzhHIwB7hX3DY2dPpjvPXyNd6CpO6VfBa0DcjEGhCeRMjBXOZjWkC6Qm/GcHJBfdV75vrkbwTqPwPLxDoMqo8D2qUzctZKjLDRE4nirxtwbXR7MZo6oNiuVj5CFD2qxzQGlUJOpALZT2IHsWeNwmESQHAtvUcoU1vSdNrhikJSbSqS0KdnSm9f83lTCs6c8JQd13wNDxrdxkboIrse87WfPSbsmcrPzifoSjY5hyrkqgsHE3QE6tI3HdDDELbwg/OTeYZ6V/LoF3Ivhi2IGe76bdwDmpT6HkhuskcupHZ9WSDQ8LIvjK7pSAEpnI0LSC6eVl8YiqCfRjKbH69SiOQE4FUyYA41vjyosoeU0L/OlRfn2j59g/N481xaUOFGO49P7AGrlAZ+QDmqP82xskNImkJMmhIZWkRTUVWiM+t2padcjQzpKlekP2
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR18MB4664.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024)(56012099003)(22082099003)(18002099003)(38070700021);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?7wdx8P0lubNSGeyKL/HGRNCOPd4BUpj+8np72fcPpteCI9tOtJTco3PZSbZp?=
- =?us-ascii?Q?Inlb0qzFFPG2d3mufH0wNSlYjmVss7DwsZhNqc7Q0DE4SLczpkPQqa9xHDu7?=
- =?us-ascii?Q?MaKP5LHgMMvgW+K2Vbxz/Zeo1togBSRjXc5mmoU9iWzV8h7ka/Nis9TPzyAZ?=
- =?us-ascii?Q?/gJ5h2GOucypbgnaaXGkHJWZH/nZXAzag9by1o33ccEKhUlS0ipGdW0ZYvOn?=
- =?us-ascii?Q?hmDDlEDcLkoGYAQquzBwvUNui0j8PEuEbXLG1BaV+lTqdYgoW2fjSCfjgkjq?=
- =?us-ascii?Q?wxBFTMyvq5Uy2/JMNEMDGWNdT9KaQOtnRfZ/bhV1VLhTr9P3qdgh+DvSK0vX?=
- =?us-ascii?Q?B18CB1LeadxOFxbiG4hpNnLAAlMs/drw65p7Z0TinFLVbuCQmm4oqcVV2xS6?=
- =?us-ascii?Q?CLxYxhxTyOVh/+gNWhlwe6bcFOSnVLcY0WkbNtkFXi5OJClA/MyVuiHoHieV?=
- =?us-ascii?Q?sol+5GHK1F6soJl66yQntXyA3bgm0MN1X2cJe2PlFXVa7qv6KVtXMUpjpNGQ?=
- =?us-ascii?Q?zPQQ9O/ulkm2ax5HuVxr8wt6cLxWSMJ9XLGocKfW+dqSZlsy3Qg9uguGaNhn?=
- =?us-ascii?Q?3E5jj6TOHcAy1joPyPnMpT7xFBIVVwrhSdBwKf+f2LwqNt3KO6goRpj73L+8?=
- =?us-ascii?Q?GN1wVCqHFMLxIxiBEuM0uWdhV51FIE6H8PyYCxrK20gbBKUxND7cH83Yvcyj?=
- =?us-ascii?Q?59+Jh/uSXCskn8jad6ea4tOKmh5CeOLPYVozyoBaHvcJ6gPhXPAvQ03Tuvj0?=
- =?us-ascii?Q?FHfxKVVn/nfb7INHN738z+z6yYhIVLP0oChjWtKsgVe2ekmIYvmHhwOA3npo?=
- =?us-ascii?Q?2m0hdVtysgh2YPeVGASPdm50oMYJzZWbKLNUTj0G8ZhWUKhAD2OCW0X1YBbS?=
- =?us-ascii?Q?4jCDgzrJKjhHi4onD0FuiEjgrt9k+e4a41P/XuDz8G023uylwOxfqgGxS0WK?=
- =?us-ascii?Q?0TzcUWU+5w6QQNny5a5kUgXNuLsAgCb3604cz/VBd404ANNlt8hZYdOqki5g?=
- =?us-ascii?Q?HB/Q6FsvLmJm8/VGOnVrrrlR19g8+yXbGKeSbe4bEGDYefOi+OSCDdgHT7KS?=
- =?us-ascii?Q?xsqxlhA/qNWSyP36+75EbOhUCGOlqG/MGgOGDactDzxshCbwxolyQB/vefbH?=
- =?us-ascii?Q?vx7yKgfYxr4TR9h2UXWCCDs5egIqYbtPsZujFK8ijjC171jRjjNeWjBDekGE?=
- =?us-ascii?Q?o4dQpzarJDNa+qPDHaXEVk5+NRy8EvisEZVs6+h9ZQD+gkF1ybkXxZyBnS1n?=
- =?us-ascii?Q?XWs7BrJAC/IJvvMFaUXJiWOaz7CHrlgTjz+OYgvob8EitxmVIViN4ts4sO+2?=
- =?us-ascii?Q?SBjRStA7TbzfC2UzvhQus2JXzH7wHDBbiEYRdx/w337oMrFpmcDEC2AyIPOu?=
- =?us-ascii?Q?j+rXRA28DqwRAfMKXl/r1d79jfGMP03QBZKBEZU2R1jLEX187wWid6yEOhs3?=
- =?us-ascii?Q?FDc9RDfFFNlxHEv3mMvs37r522dCR/DQGxpco3ICNYucm+ks/8q5tS7vKqO3?=
- =?us-ascii?Q?N1tm8v1WVXbF0zEKP/lR6tlwORXz8pf9lfzYtX7Y4CwjCbDXqR2GHh9h+qpe?=
- =?us-ascii?Q?+pCN7+/vB6iTi9oxSdj/r+m0A35rMzBd3gYAPRHGupmKjFljGFF+MrGS3g0w?=
- =?us-ascii?Q?P4JtsCYo85jJxTzFvAnzQFhXBPYKmFSWrAzbW/rkgfUIylsbcAlM03LuSL03?=
- =?us-ascii?Q?1B6YoK6K3OmT+qrwo5qXkKR72d8v9RzpTkixpTIK9Rkvfeu4joB63c70uX05?=
- =?us-ascii?Q?uIZZpx5ZjQ=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        d=oss.qualcomm.com; s=google; t=1778104857; x=1778709657; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=aZPxIliVcF9OGztv2uIgcJGkCT8mmquqC1ZufniuUCE=;
+        b=J0vqaUAzyWV0wsBCQGYgYamis80/tEbKs+DFuunhgB0x2Fwyviy2/sQcsXmlLwULaZ
+         BkTTMe9N4/merJdbIG+z9TM3KpiWFzUdNhaXU4CCphbtycHxys2+7uXFGLpstqoFgA7h
+         tzE8xB5ayhXbHru4jpTqJC+H8ab774Y4w93KdSbTvP6h754kczSmwnlBgN+KV+ws9bAx
+         FJuWhvXIGSUfArlsW1iqWKsUL5dncIx2PByNRhaaU9NHrYCJ0pe27ILctzBFxE9miDXE
+         f/kbYuR4IbQXF0T34iqQH5rfdgESx4SGBkuUel2jv7613820n4SFWipq1T1BuRBC7hLA
+         45AQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778104857; x=1778709657;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aZPxIliVcF9OGztv2uIgcJGkCT8mmquqC1ZufniuUCE=;
+        b=nQaLHE6HGnj5QWdSNsPAY5QCBQPdTufVUz4wcynHMV+KLWVCd+/tQDdlnOdrMfrDaB
+         dbOH5ilztHV+o8CII0z0G7ECAAht1N+xqz6yhIJTCBUO9XkjrjsYWLf8HZUdTJolWJ3P
+         roNciSLDf0Lv81DDBjARhnJ/Rs3yN6M905GH1dyPov5xwG1ChXUZeTOLrwvUSLbpJ7Fv
+         Q2B1hKbqcPyM6B+6PbNck9TsyZ8qgnY93/k75oyDhKxgU2PFezeZEEF1jjaapTFbPtkf
+         BS7crIzYHDDAvYlV6KWii7oJunJ+cFC9yAMEQYQ3Ut7jvWRMavSVlgsO6Rv9BNt5SmZJ
+         5BWw==
+X-Forwarded-Encrypted: i=1; AFNElJ+jU/m3m0lQJCoJkemABZNWRxbUFwUPhQoYkXFLPSuvgAxB1i8rwoOxxhKF+URFqn/I6Pdcr04cumPqhsBWdQU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxKhcTADdWJnD8oM6wzFwM/E03+xGeDcNsonUw0mjo87T8ayR0j
+	4cdqQk4sfsKUY0f8qPP5gB6fcXk1cUtNXlUGJGqIHmuHa1hB2bcEcGVqeQqtW/zSLwcdo77GpA1
+	GA3xiO5vS17SjeSR46O1olLJ3lnlsoVVR/tcPHiIbw7HvlqT8Psx1GKwqAxQ0RVt76+fs1ZM=
+X-Gm-Gg: AeBDiesPwKylh21ugJxSwS4izQTTb4T9GjE1lBWGJYIqZOF9aGqH7fh2bT57R6gtehd
+	bsXPsWm3gnmCxlb4vefhgixaZJSiToEnuDaVxnCxrgfFeMe0/EadfRLHnzZZX40mD/eYEXp9vFf
+	YKaDrguckIc957Yw2+N/E0cqyxZhAL+0R5oQoi8T04YhaDWSY9hZWHxMTSOmg6W7c4yXFXcPznT
+	K3IomUxJyrTRcMHGxT3+JmOF1zzB1kSBxW6pIT3RB7Wh5erRv8c0Sx36O+t6NOY9dxTJ/GtPR5t
+	T/xPeA+QRP+gZ7F0Ew22JRKlWrHdmrfvnzH55Fd5bnOq0YxR0eNKZlns3/NgENuZSoGV/OjKfgN
+	573yyDWvsbM6uRElLm/e4TdnUkItFcc3fbCLHLbvdeg==
+X-Received: by 2002:a05:7301:9f03:b0:2f4:3a9c:819f with SMTP id 5a478bee46e88-2f54d79b972mr2873491eec.20.1778104857217;
+        Wed, 06 May 2026 15:00:57 -0700 (PDT)
+X-Received: by 2002:a05:7301:9f03:b0:2f4:3a9c:819f with SMTP id 5a478bee46e88-2f54d79b972mr2873464eec.20.1778104856617;
+        Wed, 06 May 2026 15:00:56 -0700 (PDT)
+Received: from localhost ([140.82.166.162])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2f5707734a0sm5901626eec.31.2026.05.06.15.00.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 May 2026 15:00:56 -0700 (PDT)
+Date: Wed, 6 May 2026 17:00:54 -0500
+From: Andrew Jones <andrew.jones@oss.qualcomm.com>
+To: Yong-Xuan Wang <yongxuan.wang@sifive.com>
+Cc: Anup Patel <anup@brainfault.org>, Atish Patra <atish.patra@linux.dev>,
+        Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, greentime.hu@sifive.com,
+        vincent.chen@sifive.com, zong.li@sifive.com
+Subject: Re: [PATCH] KVM: riscv: selftests: add check_supported_reg() into
+ get-reg-list test
+Message-ID: <kysjvcg5shcuhgsd44znceenfjw65djs4wviwp3psruq4t7n4c@ppj62upl26wf>
+References: <20260503-kvm-get_reg_list-v1-1-c16f9b572e9f@sifive.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Exchange-RoutingPolicyChecked: wA8a+Z7TjNmH9vFBUsXdVvlORbsmhWrZ2fTbY84VggU3FEDOWX41U3kL0qIFva1/NZxnDWcBMR9NvQURY9+g5U+v0xiDMdR+Y5+wPUwmBpgoZu2a6OQoqL8NU6mcAZbLm09bE65SpApvc93FV+hqR+Je+pHVq5hswMobpal8nChXTOSJQPC0MoJBWqfZig8fiKVCNHivrDIf7i9aYZ+E+JWED22HZHGpf8hoPbaMXfOAhbBEprwZhO2rQhN7FCMtLn6J+DbVOJEw6CH9Nc28jBvCtrjLyqcwUV9gNlsTXDkE3pbLLindKhTgHcajpOp7jup7dHgsE5U0TIARVOD/lA==
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR18MB4664.namprd18.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2192ef46-e8d0-487d-5db8-08deab9f66ae
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 May 2026 18:43:44.3408
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 5280104a-472d-4538-9ccf-1e1d0efe8b1b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: yzYeltb7iqLYL328xIXo8K4qOp59Bjwr/KA7VGv2pobokuEDa7qOYMOt1FKkPlT/6crYJOhSU44dmVn/UOQzjQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR18MB5273
-X-OriginatorOrg: amazon.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260503-kvm-get_reg_list-v1-1-c16f9b572e9f@sifive.com>
+X-Authority-Analysis: v=2.4 cv=fMMJG5ae c=1 sm=1 tr=0 ts=69fbba1a cx=c_pps
+ a=Uww141gWH0fZj/3QKPojxA==:117 a=cvcws7F5//HeuvjG1O1erQ==:17
+ a=kj9zAlcOel0A:10 a=NGcC8JguVDcA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=_glEPmIy2e8OvE2BGh3C:22
+ a=pFyQfRViAAAA:8 a=wBkBAAe1paUrZEgFcZ0A:9 a=CjuIK1q_8ugA:10
+ a=PxkB5W3o20Ba91AHUih5:22 a=oJz5jJLG1JtSoe7EL652:22
+X-Proofpoint-ORIG-GUID: w4f9keKgPOzf-TFrOKGyW2uagNxkid0D
+X-Proofpoint-GUID: w4f9keKgPOzf-TFrOKGyW2uagNxkid0D
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTA2MDIxNSBTYWx0ZWRfX+VLt7lT4l6gv
+ waOIhrEk7IxIvngwJ4+4W8gThmpCqA9CR3srZmCp4ISibiP6Xc/JZLUyRBY1bTeK6kQpd63lfQc
+ 46TdUA1rFAoQTCKLkifLmV8MZYRnVohbhJMQyDalYfhhI/uzV4YT0AgtY4bMZouDPVgsz0FGsS5
+ /OCkU1HuKH4NLytbdqEEJMKW5pxus2dO/jvjIlg4EwQBAxFASoxdob5G565amTk5ptpyT9f6q+8
+ kUJeDUcDn8bOQNh1us0O9qMuv/MDAnGFi2J6urR/eX1YVhdec7IKrd7t5DKdZjoVwLD4tBjRTxb
+ VnxtV+rZ6GmJKCgwi50niM7fUebGRmaQzlzeAR4t+pqKUixVzhlipmDbQ+0Lx63LMUxqC3hyd1T
+ a8gs5SRTpogD/c+XEqbnjt7wUHrabSznRE2S6DdiLuOiYKEZKlr7QpCYyVztff2/AJT8CmQmQW8
+ zeAu3QgSur0X6PwEZbA==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-05-06_02,2026-05-06_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ adultscore=0 phishscore=0 priorityscore=1501 suspectscore=0
+ lowpriorityscore=0 bulkscore=0 impostorscore=0 spamscore=0 malwarescore=0
+ clxscore=1015 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2604200000
+ definitions=main-2605060215
 
+On Sun, May 03, 2026 at 09:00:53PM -0700, Yong-Xuan Wang wrote:
+> Not all the registers in a sublist are supported on a platform, e.g. the
+> SUBLIST_SBI_FWFT list. Add the check_supported_reg() to remove the false
+> alarm of missing registers.
+> 
+> Signed-off-by: Yong-Xuan Wang <yongxuan.wang@sifive.com>
+> ---
+>  tools/testing/selftests/kvm/riscv/get-reg-list.c | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/kvm/riscv/get-reg-list.c b/tools/testing/selftests/kvm/riscv/get-reg-list.c
+> index 8d6b951434eb..d7cb9b5d37df 100644
+> --- a/tools/testing/selftests/kvm/riscv/get-reg-list.c
+> +++ b/tools/testing/selftests/kvm/riscv/get-reg-list.c
+> @@ -28,6 +28,18 @@ enum {
+>  
+>  static bool isa_ext_cant_disable[KVM_RISCV_ISA_EXT_MAX];
+>  
+> +bool check_supported_reg(struct kvm_vcpu *vcpu, __u64 reg)
+> +{
+> +	int ret;
+> +	u64 data;
+> +
+> +	ret = __vcpu_get_reg(vcpu, reg, &data);
+> +	if (ret < 0)
+> +		return false;
+> +
+> +	return true;
+> +}
+> +
 
+arm64 implements this function to only return false when a register's
+corresponding feature register isn't present or it indicates the feature
+isn't present. The above would return false for all missing registers,
+even when they shouldn't be. OIOW, the above makes for_each_missing_reg()
+useless for riscv.
 
-> -----Original Message-----
-> From: Simon Horman <horms@kernel.org>
-> Sent: Tuesday, May 5, 2026 2:35 AM>=20
->=20
->=20
-> On Thu, Apr 30, 2026 at 03:24:57AM +0000, Arthur Kiyanovski wrote:
-> > This series adds quality attributes to PTP Hardware Clock (PHC)
-> > timestamps, allowing userspace to obtain error bound, clock status,
-> > timescale, and raw counter values alongside timestamps in a single
-> > call.
->=20
-> Hi Arthur,
->=20
-> There is an extensive AI generated review of this patchset available on
-> sashiko.dev. I would appreciate it if you could look over that as it does=
- seem
-> to me that many of the issues raised are relevant to the progress of this
-> patchset.
->=20
-> ...
-
-Hi Simon,
-
-Thank you for the heads up.
-I will take a look and post an updated version.
+When its OK for registers to be missing, then we need some way to
+determine that. If a sublist has optional registers then it should
+be broken into multiple sublists. Then, this function can be implemented
+to return false for registers in the sublists of optional registers when
+we have determined those sublists won't be present.
 
 Thanks,
-Arthur
+drew
