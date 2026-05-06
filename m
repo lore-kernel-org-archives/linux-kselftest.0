@@ -1,163 +1,128 @@
-Received: from SA9PR02CU001.outbound.protection.outlook.com (mail-southcentralusazon11013020.outbound.protection.outlook.com [40.93.196.20])
+Received: from canpmsgout08.his.huawei.com (canpmsgout08.his.huawei.com [113.46.200.223])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA98632E141;
-	Wed,  6 May 2026 07:03:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.196.20
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778051030; cv=fail; b=NLNo8EUOQ+Lo6Mzhc7mjW3+Z+6YeBKEErLsQead8q4Ia5UuOT8Xf/Z3ORsAZ2DmloKjKzKlbG9vfbNKkU/hVqhnPOSHK/nnay2wxzyhvLtY71RUhy6gz/0O5nJA/cAV+tLbBpSyUHKLU0zIek7XukycZfxYwvLASzvt044XKyqM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778051030; c=relaxed/simple;
-	bh=09TARG2AYzZZjcYNmcI3LZXLrHwibksTJifrdYWq+wU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=hRdvDUMeo8Oq65JHaONuliRyRNRuxjk/MizlN8XWzH5EdftW53KgNz9uvdBdzNUafC8KH4TFQ5Ku9N9ne9V1HklzdZekiAgRwc0YnsIs0jcRQcHrsspAxSLHfdS5hyzDRYXJdikZmpGZpp9stdK7r1J3m6odFH6jdeUgaOqU3z4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=CxynK1iS; arc=fail smtp.client-ip=40.93.196.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4129036F41C;
+	Wed,  6 May 2026 07:18:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.223
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778051885; cv=none; b=PuyyZxOFnyiydhh+uO1KwSJ8ID1ILLigXru7iyPHH/yyeGTXIEhg9lmlF6v2cMgtxbamfNk10cQnZd3dGmLxQSVUzQbeo7SJ7nE6ITj84dM+UQH1GirTcTVansTXwt59ydFdMbCnNev5ek6HXwI3TMF/2UYS2Hxk0pxFolNybb4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778051885; c=relaxed/simple;
+	bh=vtrz/HzLT/XZfHjsIyYqtE2HHqznXgOWYj2RjuzVc3M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=h52AzI5Xk6pRMJs3mhnjkDvKBTIWwaiIlm6AOg7kaOF/W6dnvtiHhL1Oym2aNHJ5zdItPnB5UFYoT0K3ebfaEjdnFoYQ1t17hdky1F1/T8oQFtOQOERaclBC6o0S9xf6j02hgbDku1gy6n1lbBwF8RGfOQuLn7BpEWslyiwMt/o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=YNVZl++u; arc=none smtp.client-ip=113.46.200.223
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="CxynK1iS"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=HGS1Y24bliPZsWUWrfcB5BKJadqNjCc1BghuHu9BExuns6mHmFDABIJOyX8Bx6MZ7p1VqhsVakkmwXEMAmEYwRd/UxXragrUd0sJzjn68xxvQSbgLqorjUjzhVxRNaRnc67j9ka2yPk+DTcysfgeQWOJmEBRDpiRXrSyeTzGYmZCewM2ifDLM9bdznrvY1SGohV/n0cGi0DuCnDunqQ1LQpeY/GytP0gm2U9JK95obHomsYFyg5tm21L9kRxI3bukhdTMSGCVzbok1LA4qdUq1+XeHrRIjw4IN/UajCxSJnYXcLWSNqjjtUNPRRsXp2iyUZADrtLCLDbAYDFmz95nA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oL8Sz3IyIJfPG2jaaAsEZ94wmQP8MBjpZsOMWuFBw3k=;
- b=Ux4i68vqcLcISgXiTP2E/JcAE/CAdn3h5uNVuPAN/rtTeQP2FZchaOlKQBEwNkHc+NZsXWiqS3CpTXRu/T1aZiIv4oJzheyUNq+Jk5CeWvwNx76w6Gvpw5Wir5Ro6p8TtXMEBrdXh33mmMXqJjT/gCSqGITsBl0OngFcvQcuyMeYIYygNTbhdtus6Pl1eYR9C4AZrSvrxuDDm09vZ8DRx4h4wf5hOfoMqE5STGO2uSufBB+7iYHK+bAQ/jSZ4F8vgJGUZ/nMEOCe9+8dCmT3sDLUejmblHN7maXUo19okIc2qaE8n9UwSOuK+YtVcdvQ/WMYeofHJQAkd9lhVcb7Cw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oL8Sz3IyIJfPG2jaaAsEZ94wmQP8MBjpZsOMWuFBw3k=;
- b=CxynK1iSAD3/dq5FBCQrDxs7VC/CJDGXa+t/ZMjj4d33W7MKdkyEenz74K7adD6jbndCM1+5RhQH1sa5ELvdOtYxafao2m5HtdgVtjKjtVUahW+A+b1losz0ZOhT3vzHvYHOFCDZN3F616+rX836DLg+Iy7fIrBwSpGbWJsIwI195WaQPfasBgwZrx0Pxuk4JmDzgc4gw4eyJEDrBPtNm0edQjwjw9ahuKXX+IJeMsDkaoQzwA0Cqfh08KXhjQm+KbPGW/8jN9mDgV0rjTYgYYoO+ucYX6yjw3sDYIwGT0J6HMn6jiCmhzFvzmqJX4UCtkcXJ5449L+Fkr3njZXAsA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from SA3PR12MB7901.namprd12.prod.outlook.com (2603:10b6:806:306::12)
- by IA0PR12MB9012.namprd12.prod.outlook.com (2603:10b6:208:485::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9891.15; Wed, 6 May
- 2026 07:03:44 +0000
-Received: from SA3PR12MB7901.namprd12.prod.outlook.com
- ([fe80::6f7f:5844:f0f7:acc2]) by SA3PR12MB7901.namprd12.prod.outlook.com
- ([fe80::6f7f:5844:f0f7:acc2%6]) with mapi id 15.20.9891.008; Wed, 6 May 2026
- 07:03:43 +0000
-Date: Wed, 6 May 2026 10:03:34 +0300
-From: Ido Schimmel <idosch@nvidia.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Danielle Ratson <danieller@nvidia.com>, netdev@vger.kernel.org,
-	donald.hunter@gmail.com, davem@davemloft.net, edumazet@google.com,
-	pabeni@redhat.com, horms@kernel.org, razor@blackwall.org,
-	andrew+netdev@lunn.ch, shuah@kernel.org, ast@fiberby.net,
-	liuhangbin@gmail.com, daniel@iogearbox.net, aroulin@nvidia.com,
-	fmaurer@redhat.com, sdf.kernel@gmail.com, sd@queasysnail.net,
-	kees@kernel.org, nickgarlis@gmail.com, amorenoz@redhat.com,
-	alasdair@mcwilliam.dev, johannes.wiesboeck@aisec.fraunhofer.de,
-	petrm@nvidia.com, linux-kernel@vger.kernel.org,
-	bridge@lists.linux.dev, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next 1/6] bridge: uapi: Add neigh_forward_grat
- netlink attributes
-Message-ID: <20260506070334.GA617302@shredder>
-References: <20260503073532.2138165-1-danieller@nvidia.com>
- <20260503073532.2138165-2-danieller@nvidia.com>
- <20260505190044.0608dfb1@kernel.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260505190044.0608dfb1@kernel.org>
-X-ClientProxiedBy: FR2P281CA0082.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:9b::9) To SA3PR12MB7901.namprd12.prod.outlook.com
- (2603:10b6:806:306::12)
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="YNVZl++u"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=j7OoOHB9ZeRPphxXVnwAj4bNVeeDK0KkFiEVcVNSXqU=;
+	b=YNVZl++ulB7Lj+02fluir6bwhbtbxqLMkPxn2pz6YWGVOXXm6saH+jt7RQqwZU12KHe1Is2Rh
+	RRqUA9DRKbaUlfL2QrdDiPZs+Cs8pMYDuZFAD4sgMtBDdKs/UrbAJ/5SbrU4Wz6Ju4uWhs070Dm
+	5kW4p86Fc5a5TcUqPb3OrXQ=
+Received: from mail.maildlp.com (unknown [172.19.163.163])
+	by canpmsgout08.his.huawei.com (SkyGuard) with ESMTPS id 4g9RPj28kwzmV69;
+	Wed,  6 May 2026 15:11:21 +0800 (CST)
+Received: from kwepemk500005.china.huawei.com (unknown [7.202.194.90])
+	by mail.maildlp.com (Postfix) with ESMTPS id DF5934048B;
+	Wed,  6 May 2026 15:17:53 +0800 (CST)
+Received: from [10.67.120.222] (10.67.120.222) by
+ kwepemk500005.china.huawei.com (7.202.194.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Wed, 6 May 2026 15:17:53 +0800
+Message-ID: <e4a2b49a-0efe-4942-9683-9c9a5af1b12a@huawei.com>
+Date: Wed, 6 May 2026 15:17:52 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA3PR12MB7901:EE_|IA0PR12MB9012:EE_
-X-MS-Office365-Filtering-Correlation-Id: b196ef58-5fd1-45eb-7191-08deab3d9c2b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|376014|366016|1800799024|56012099003|18002099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	Hqs2tbC+kYEh5vDv4MPJItsXD2enLK59rknUIXQfIOC5kY5rNLx48YM6q/po9tah1US7n/Atm7VpQYrC8ScirPSTE/rua7Ug7YCbuj7EB7zB5a6Q3AbKLemohFuQHS1bc3udgTHyum9aeUBJe8EljJ1X+ZTuA5+F8Fjqw62Io5Q9o0cSjVb4jR9HfJxw1DxstVEpLOOAoFHmR9w7/B0TQlherx52jO+lVBMlxPgYETY98nyaChbsBiHiTbIkEOo+KZV1qJl1UK0mcVGK/KwOzSQYdh3urnzVHIqYBtypZ7a9QuzAuUx6PTgNC79h9h1skoC1nny4Y9pqRQ30INCqo8fOeJeNqB3xjvl0qqpzO+c4MlnGIJA7xxAdMSmYqmnBxyNKNPR0kEnv16bjcubYW4EGcNb0asZRXtzACRLntjWr5RO9Q/eWQAciPRAzdZejejc7Gz3y4G2Zqv6FezRJkVJsbXrLbwql18hk0uTyCigsj885x6Jf/+Wji3Q4hBBr1g66pzGFbGbyKYgPBAJmm2k5uyhHwzVfB7zarzjCciikHh8mrsRcBP7x9Bes3WhrBwE4PoWOfwnQl6qx+A7FxgH5c/tqF5dOj6wBcoCwko46pXwAcdTPSMTuocseXuNEOxFdrDnnVkJLxiswWT4aPiCeqBGZ0WBtIWSkttDySNy6o7nk2ML38yAwNfBC7LlH
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA3PR12MB7901.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024)(56012099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?v9y6nqpQ+wG4IVpqejR1n4mQZ7vc+XznkyzPBORDVwvngC9Uk/Ez++3km/5F?=
- =?us-ascii?Q?kujz7w9FZFyiTVGtWrCKL0v3tVJ662V7CaqXpXfI2PseVuTG5OBLqekv7tRQ?=
- =?us-ascii?Q?X4dRiynIKEkCinZ/X2Fu/S0KaqhdKs6Jb+UQW0xbU8bpNMXc1/cT4gKwEOcw?=
- =?us-ascii?Q?5s7S4OouEHM16nDUMw3Ma6DvK4gOAI6wAsqVWCtvsQBCWpgpknyt69fSCK4s?=
- =?us-ascii?Q?TiKWiFsCEhVlllBay0Wnz/g55k1TuTWtIWlzTwT9rM5M2s1ntyF99I0rt2pa?=
- =?us-ascii?Q?SJw5Se61YeLokX3pbCW6JlCbUrsDKamUFJPzR7cliBAvecviwZvN17m1gOEy?=
- =?us-ascii?Q?ZeYwQxK3FCWzA4ktH6VUd7dY+6abeQsxD/Why+/KhbrJqnP/Bojq1BaoEsee?=
- =?us-ascii?Q?nQUre59Bn7yPKx1H6cWeSuIc5a6zbHphjda/X0UpiN59b+lsa6oAcim1g8xo?=
- =?us-ascii?Q?YzrYdUbQl2c9VKBJjd1Xz2q8SBoZkRuvxuNV0mqOLwmU7vq8QkuJWwkEUcNZ?=
- =?us-ascii?Q?SUZjZo7ZfaOcKiRwYwNTMCmNF6S12O8opTopOP2hRSdzeXUWleFz0HwQ/hWP?=
- =?us-ascii?Q?MUvqiEtwaoKkc1y9kYbyC3uZtIVUBaFspo4Q5htFBB68l2A3gKg5blNeJkb9?=
- =?us-ascii?Q?svWdoQNl4EKYuXQmI9NKeQYX8FeLC46ORgK+588houBqih1CsA4xZ+jrcPjo?=
- =?us-ascii?Q?/3kqSIh3kqCCTSa8jvyOX0UeDz7OlAWJpb8OOMFX/gLNkU4sjaPppPHqLfyB?=
- =?us-ascii?Q?7Vi1KvZlX+EYfTcqcw9V8R4Cc6sGiFGZ3i5JZnHnL1F3wMFXHOYKZgf1kfWF?=
- =?us-ascii?Q?5DRFae6PY+jiHj+fdkspIEE7U2gANDrwK9bViTWXIZ7j5pKJOO/UgAlXsiw4?=
- =?us-ascii?Q?edEW38uE6OnL0BMP9GSL+7+beOWPalIRcyBSh9DIkcEjnC0DsP/xrfGDLv51?=
- =?us-ascii?Q?SNc/hc3CkH0szCwOnapEQh9ROezJSbyDZh+NQ1l4gc8wIDfRWrEpIBRnwVrU?=
- =?us-ascii?Q?ou2aQCRbKqZSDPfMOSYJTsNkZS6r/mTDsbhukboEA0DsbVsruEnmT2PO5Qu/?=
- =?us-ascii?Q?0D8iZGbBFd+jmhmJUADsDuNyCP0diC7qjARhRwX4R9RbH1rEfFoScsmr95qG?=
- =?us-ascii?Q?trNkHY/1h5l8Ct8RzjKrLRuSrneD4/Y0pfdP8mEdXWuH0bDHzITfrqGPIyB1?=
- =?us-ascii?Q?P+ITcaqopclU1PtO7LTI7z8ZrDnv1YXLOjex1WWQa/yZ+/ZQUF0F+rYtJZ7O?=
- =?us-ascii?Q?E65vp4p8cG53bb/oJ31UNhZUmBQx9weVSh062N/spaZCvhBb7zPrQVXuZCUA?=
- =?us-ascii?Q?Guzhf+NyoFR3qxq3pz/GO9qhOHiA0fipjTCtxB17+3hm7x/9D+obPXlwM49i?=
- =?us-ascii?Q?AhAjVinQs7YSkN0S5sx8EPPIr/+d09JXglQ2jTlO9eAgyzNEAiAoZSy6omQC?=
- =?us-ascii?Q?nNm3WAROqOno49s2S3fMhs7jQ1uAFu0aCzypDKJQxmg4TxWg9u+jSJ8hdP9b?=
- =?us-ascii?Q?kx5CTouwZgSBpenT9kB/ETaMSCsIGoEX4ykAJsVXiYSM5ba1+HRDitKwG9+M?=
- =?us-ascii?Q?c4n7bICG+OX3CYUQn9jXjAHlwPG6fsjt3wAtD/ZI9AuvDxiRQ/LleBF1b9KD?=
- =?us-ascii?Q?Vy5yyiyDXHy+XbHM/aMH4X5g6N1OiZLx6/op7Vjf6ISLLrUJRJAbSDodJQW4?=
- =?us-ascii?Q?u7Kq+8zBSptwvNaxK1Ux1D0jKMNXwUnm7zD+A/2gN3++A3/H?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b196ef58-5fd1-45eb-7191-08deab3d9c2b
-X-MS-Exchange-CrossTenant-AuthSource: SA3PR12MB7901.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 May 2026 07:03:43.7371
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: wKKZH+l0abU8t7JPcxB8bXTkEzQd7c1/RSXf0K4BBc3JKLuwv8Z/RXlhBAxGr1ctDLkUXRRuzKwR136ZUPNoWw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB9012
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/6] selftests/resctrl: Introduced linked list
+ management for IMC counters
+To: Reinette Chatre <reinette.chatre@intel.com>, <tony.luck@intel.com>,
+	<Dave.Martin@arm.com>, <james.morse@arm.com>, <babu.moger@amd.com>,
+	<shuah@kernel.org>, <tan.shaopeng@fujitsu.com>, <fenghuay@nvidia.com>,
+	<ben.horgan@arm.com>, <jonathan.cameron@huawei.com>, <zengheng4@huawei.com>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kselftest@vger.kernel.org>, <linuxarm@huawei.com>
+CC: <xiaqinxin@huawei.com>, <prime.zeng@hisilicon.com>,
+	<wangyushan12@huawei.com>, <xuwei5@huawei.com>, <fanghao11@huawei.com>,
+	<wangzhou1@hisilicon.com>
+References: <20260410093352.3988125-1-wuyifan50@huawei.com>
+ <20260410093352.3988125-2-wuyifan50@huawei.com>
+ <b1d3a653-79a5-44db-8d57-c052ae537823@intel.com>
+From: wuyifan <wuyifan50@huawei.com>
+In-Reply-To: <b1d3a653-79a5-44db-8d57-c052ae537823@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
+ kwepemk500005.china.huawei.com (7.202.194.90)
 
-On Tue, May 05, 2026 at 07:00:44PM -0700, Jakub Kicinski wrote:
-> On Sun, 3 May 2026 10:35:27 +0300 Danielle Ratson wrote:
-> > --- a/Documentation/netlink/specs/rt-link.yaml
-> > +++ b/Documentation/netlink/specs/rt-link.yaml
-> > @@ -1700,6 +1700,9 @@ attribute-sets:
-> >        -
-> >          name: backup-nhid
-> >          type: u32
-> > +      -
-> > +        name: neigh-forward-grat
-> > +        type: flag
-> 
-> I think this should be u8 ? neigh-vlan-suppress looks buggy too
+Hi Reinette,
 
-I pointed this out during internal review, but assumed I am missing
-something since almost all the attributes use flag when they are in fact
-u8. We can fix neigh-forward-grat to use u8 in v2 and change the rest in
-net. To be clear, I believe the following should be converted from flag
-to u8:
+On 4/23/2026 12:02 AM, Reinette Chatre wrote:
+> Hi Yifan,
+>
+> On 4/10/26 2:33 AM, Yifan Wu wrote:
+>> @@ -113,6 +115,7 @@ static int parse_imc_read_bw_events(char *imc_dir, unsigned int type,
+>>   				    unsigned int *count)
+>>   {
+>>   	char imc_events_dir[PATH_MAX], imc_counter_cfg[PATH_MAX];
+>> +	struct imc_counter_config *imc_counter;
+>>   	unsigned int orig_count = *count;
+>>   	char cas_count_cfg[1024];
+>>   	struct dirent *ep;
+>> @@ -167,11 +170,17 @@ static int parse_imc_read_bw_events(char *imc_dir, unsigned int type,
+>>   			ksft_print_msg("Maximum iMC count exceeded\n");
+>>   			goto out_close;
+>>   		}
+>> +		imc_counter = calloc(1, sizeof(*imc_counter));
+>> +		if (!imc_counter) {
+>> +			ksft_perror("Unable to allocate memory for iMC counters\n");
+>> +			goto out_close;
+>> +		}
+>>   
+>>   		imc_counters_config[*count].type = type;
+>>   		get_read_event_and_umask(cas_count_cfg, *count);
+>>   		/* Do not fail after incrementing *count. */
+>>   		*count += 1;
+>> +		list_add(&imc_counter->entry, &imc_counters_list);
+>>   	}
+>>   	if (*count == orig_count) {
+>>   		ksft_print_msg("Unable to find events in %s\n", imc_events_dir);
+> Should cleanup_read_mem_bw_imc() be called on error exit path?
+Thank you for your suggestion. When parse_imc_read_bw_events() exits with an
+error, the linked list imc_counters_list will be cleaned up in 
+test_cleanup().
 
-mode, guard, protect, fast-leave, learning, unicast-flood, proxyarp,
-learning-sync, proxyarp-wifi, mcast-flood, mcast-to-ucast, vlan-tunnel,
-bcast-flood, neigh-suppress, isolated, mrp-ring-open, mrp-in-open,
-locked, mab, neigh-vlan-suppress
+main()
+└── run_single_test()
+     ├── mbm_run_test()
+     │   └── resctrl_val()
+     │       └── mbm_init()
+     │           └── initialize_read_mem_bw_imc()
+     │               └── enumerate_imcs()
+     │                   └── read_from_imc_dir()
+     │                       └── parse_imc_read_bw_events()
+     │                           └── calloc()
+     └── test_cleanup()
+         └── mbm_test_cleanup()
+             └── cleanup_read_mem_bw_imc()
 
-> flag is a type without a payload, the presence of the attr is
-> the entire information
-> 
-> None of the AIs seem to catch this, I think you may have over-split
-> this submission a little bit. This patch may have been better off
-> squashed into patch 4 ?
+Calling cleanup_read_mem_bw_imc() in the error exit path may be intended
+to prevent resource leaks. However, this results in the function being 
+called
+repeatedly in both the error exit branch and test_cleanup().
 
-Related: The AI also did not catch that the spec was missing (easy to
-forget for rtnetlink). Do you think it's worth adding to review-prompts?
+Is there any specific intention behind calling it in 
+parse_imc_read_bw_events()?
+Or should the cleanup be uniformly handled in test_cleanup()?
+
+Yifan
+
+
