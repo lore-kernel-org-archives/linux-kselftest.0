@@ -1,84 +1,119 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36D7530AD1A;
-	Wed,  6 May 2026 16:40:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19A8930595B;
+	Wed,  6 May 2026 17:27:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778085618; cv=none; b=ozx+Mo72c2MFq46Cl6CIzoi531ZtoE4CgWoC9RkQENdP2BhD1aIvmK65DalOvLMcb/+0W7lt5o2LNvVqXUNf5YGMMxFyQkFWAPfYq6toldrA2M0+40kp7+akMfW78r2WuukAWYxnWC6S6Po+zq/mFkYU3ojtOyQZ80NxW7YRR9s=
+	t=1778088436; cv=none; b=H9ZuIZjmvSx/0Ne0K0wDwZapW7RLE5j0Ombfx5v2Qn5cjy+65g3pLV4cKeIER7w0QTYjEwaGbOOi9iHGOmeetAS7EJE9JS1nZk3WRdDb8Q3WuKdy68Qkdr97Fh83NmzNCkt3OYXwx0Gzj0SzCWG8bOfkQXeEOvBOyxLgUTYRPsA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778085618; c=relaxed/simple;
-	bh=WJgk2Ud143ybxxwA23ONGYfK/rf/ODmAVezDf2d79qY=;
+	s=arc-20240116; t=1778088436; c=relaxed/simple;
+	bh=HmDSB8RGwVj0i6+IcLEKJKC3r5SqoF2IF/ST6ULFU5k=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iRtLCHVlvdBXSXAhtcZYjL7Dm2Q401bTeF5vi10BQ0DSWWlmARi2ZLQULZOZde1ozUU0RjMwm35If39nAkC8bNpbC7IN+thefZ9o8ktNsV7LVwb/pyER9FT6eUrVMTI1uL/QV2Uix0UHZQyjdevrzIZG5k0PX997t3SzqA+pXTM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=lASLo3Zh; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=qzE50hlTUwwHiiUHA1BaopqHBIZpq5++QqnJfzadlsUgUJPe12Ax08v8zx+wDPkYxbJZT/VRVDA/nGzUjKJdXcVxEH4DBHsQzRkuuRwo+7Jn/nlunfWKxeIoxLEsnhyra+NrNklPyyW3IQXg+O+oJXcVnF2bso8NRql4GkDXTnE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LsoZapBs; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="lASLo3Zh"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=301ybvqyl9q5c6ax1tiRGijMUv+Dhp/XnNZ3B+v4SMw=; b=lASLo3ZhQBeRjN6JXWVmKr/747
-	xJWox68RHNlUQDeFObP6ej1v1QiF2FasB1cjjB7/zF2dD7kgM2paj3zydPUVYxkkkNGFGTYmHzfDz
-	E3BQd/DyabdetjHlkHz24kH0pQIT78qcTjdUhFbHk+y5DOIj6JJPhJ6VRYDtcGQroLgt1ZJiDLOj+
-	xiMFyWBER41xeWAOThqvbnzrhtcusyIC6WPDNZExFW3JG4KbCI1oXFvGuURVTxKFzvRfpP1V/DX18
-	faCP7YuCSYyIpdr6n77+IkkjRiLV0hFzwj714vyGKhEPiTg3NCTF1l4jOFLCJ2qfJyj+MQTVoLXdv
-	EcBYoA2A==;
-Received: from authenticated user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wKfIB-003jKB-28;
-	Wed, 06 May 2026 16:40:11 +0000
-Date: Wed, 6 May 2026 09:40:07 -0700
-From: Breno Leitao <leitao@debian.org>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com, 
-	pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org, shuah@kernel.org, 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LsoZapBs"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 476CBC2BCB0;
+	Wed,  6 May 2026 17:27:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778088435;
+	bh=HmDSB8RGwVj0i6+IcLEKJKC3r5SqoF2IF/ST6ULFU5k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=LsoZapBs6yowkuRKg3FX+deiQgEzzTuVpKSya3Hw5fH4WGu+0t8FG7x973zAJvwLF
+	 uW96m0AIo55ILZk0w0aZzRmUvKVPJtzU0EIuooGlelpMH8pJiJgpC1MNmnE3x3nIB3
+	 Hy02Z9T1nV3l6yxG2pmg30zRB4PymXqWVkakE0uvj0APBkKmoDfExIDpbJ5/hn3Ndg
+	 9VLTh7QGvc07UgZglJOPiuVzr57E4UFs19x1zGmp/Ly3TUmii020ROS9/BWTCQT3iE
+	 xagDUUYZj3GXds47tcDWufFyuz8Zq/hibafbcyBswon8WIA3wk+NTPmINtJzRCpyG7
+	 sRX2DVPbukHgQ==
+Date: Wed, 6 May 2026 19:27:13 +0200
+From: Lorenzo Bianconi <lorenzo@kernel.org>
+To: Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Felix Fietkau <nbd@nbd.name>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Simon Horman <horms@kernel.org>, David Ahern <dsahern@kernel.org>,
+	Ido Schimmel <idosch@nvidia.com>,
+	Pablo Neira Ayuso <pablo@netfilter.org>,
+	Florian Westphal <fw@strlen.de>, Phil Sutter <phil@nwl.cc>,
+	Shuah Khan <shuah@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, netdev@vger.kernel.org,
+	netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
 	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net 06/12] selftests: drv-net: add shaper test for
- duplicate leaves
-Message-ID: <aftup9Pe-RnDZVUi@gmail.com>
-References: <20260506000628.1501691-1-kuba@kernel.org>
- <20260506000628.1501691-7-kuba@kernel.org>
+Subject: Re: [PATCH nf-next 0/4] Add IPv4 over IPv6 flowtable SW acceleration
+Message-ID: <aft58U5Y0iQGi2JS@lore-desk>
+References: <20260505-b4-flowtable-sw-accel-ip6ip-v1-0-9ac39ccc9ea9@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="dBWX7q7eS4V4GZda"
+Content-Disposition: inline
+In-Reply-To: <20260505-b4-flowtable-sw-accel-ip6ip-v1-0-9ac39ccc9ea9@kernel.org>
+
+
+--dBWX7q7eS4V4GZda
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260506000628.1501691-7-kuba@kernel.org>
-X-Debian-User: leitao
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 05, 2026 at 05:06:22PM -0700, Jakub Kicinski wrote:
-> Add test exercising duplicate leaves.
-> 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> Similar to IPIP and IP6I6 tunnels, introduce sw acceleration for IPv4 over
+> IPv6 tunnels in the netfilter flowtable infrastructure.
 
-Reviewed-by: Breno Leitao <leitao@debian.org>
+Please drop this revision, I spotted a bug in MTU configuration in
+nf_flow_offload_forward(). I will post v2 fixing the issue and adding
+SIT support.
 
-> diff --git a/tools/testing/selftests/drivers/net/shaper.py b/tools/testing/selftests/drivers/net/shaper.py
-> index 11310f19bfa0..f7872c931bf6 100755
-> --- a/tools/testing/selftests/drivers/net/shaper.py
-> +++ b/tools/testing/selftests/drivers/net/shaper.py
+Regards,
+Lorenzo
 
+>=20
+> ---
+> Lorenzo Bianconi (4):
+>       net: netfilter: Add ether_type to net_device_path_ctx
+>       net: netfilter: Add encap_proto to flow_offload_tunnel
+>       net: netfilter: Add IPv4 over IPv6 tunnel flowtable acceleration
+>       selftests: netfilter: nft_flowtable.sh: Add IPv4 over IPv6 flowtabl=
+e selftest
+>=20
+>  drivers/net/ethernet/airoha/airoha_ppe.c           |  14 ++-
+>  drivers/net/ethernet/mediatek/mtk_ppe_offload.c    |  13 ++-
+>  include/linux/netdevice.h                          |   5 +-
+>  include/net/netfilter/nf_flow_table.h              |   1 +
+>  net/core/dev.c                                     |   6 +-
+>  net/ipv4/ipip.c                                    |   1 +
+>  net/ipv6/ip6_tunnel.c                              |   6 +-
+>  net/netfilter/nf_flow_table_core.c                 |  14 ++-
+>  net/netfilter/nf_flow_table_ip.c                   | 129 +++++++++++++++=
++-----
+>  net/netfilter/nf_flow_table_path.c                 |  16 +--
+>  .../selftests/net/netfilter/nft_flowtable.sh       |  26 +++++
+>  11 files changed, 174 insertions(+), 57 deletions(-)
+> ---
+> base-commit: c1e5127b577c6b88fa48e532616932ae978528d5
+> change-id: 20260505-b4-flowtable-sw-accel-ip6ip-7101034cd147
+>=20
+> Best regards,
+> --=20
+> Lorenzo Bianconi <lorenzo@kernel.org>
+>=20
 
->  def main() -> None:
->      with NetDrvEnv(__file__, queue_count=4) as cfg:
->          cfg.queues = False
-> @@ -453,7 +471,10 @@ from lib.py import cmd
->                    basic_groups,
->                    qgroups,
->                    delegation,
-> -                  queue_update], args=(cfg, NetshaperFamily()))
-> +                  queue_update,
-> +                  dup_leaves
-> +                  ],
+--dBWX7q7eS4V4GZda
+Content-Type: application/pgp-signature; name=signature.asc
 
-Nit: dup_leaves], on a single line matches the surrounding style and
-avoids the dangling bracket on its own line. Not worth a respin on its
-own.
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCaft58QAKCRA6cBh0uS2t
+rLWvAP99BJDDX3b8y2+zfNm18ZUstMl46XX8mPMDwCOvVThzcgD+N51Qsadb2Qk5
+NtKNQbi/t3ChjT3OgvGfw//o+PK0rwg=
+=93pw
+-----END PGP SIGNATURE-----
+
+--dBWX7q7eS4V4GZda--
