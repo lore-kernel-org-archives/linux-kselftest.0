@@ -1,121 +1,108 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D8EF3F9F36;
-	Thu,  7 May 2026 13:40:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BA553AF672
+	for <linux-kselftest@vger.kernel.org>; Thu,  7 May 2026 14:08:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778161255; cv=none; b=CFQ+4XgTS+iNbr/+13Ru5IRN0TbZ7AqoGyALpJMUmSp8Pg/QAYbcs70wswW4SAb0szdKYC9+PhctyHIZ4WJUjzKdCgH/PPq/5tJPQaxmrOrY7QRR0cVycqVZSjZbEKkxEM/YjBKBBelKxvrBzupG5UpPuKwkNr5khrIlL9ZfWF0=
+	t=1778162884; cv=none; b=dudzfOPaz2EziePmmHzdBZ7ec49oz6mgG4Xq/VC1sI4Ncgbqlj0A2gGGJuvRwXTAKlVBZJlCOGNzRNEPILR3FXwA8EzyywdYfW1s5NVRxZmkc/fA24S76n2oP95aWsFNpN/QCBbvlMtKX4Q/5axXIUVqaXKwsFW36j9rgYbRVM8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778161255; c=relaxed/simple;
-	bh=0FHyVkyi+oT3tdJ6Ve/Ey5ZbOMLeo98h5Ctga3Reg1Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Nv2LvSWh25Rmh9CimGGxdir/VOgpzPDnSIFuE4hB/0hqkzoNOPqlH8erSoQ97nmdrfu7JCgCsrjaA6ZjC4Z1m8v5UZpBB6fTqWt/JBCYCofhk4fAfRyku2IU1VHcpRr6H3Tl3AMvGDychcmO3Gl9hZ0uXQ2s1wFprGSx5PEABXU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pA/I/viA; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778162884; c=relaxed/simple;
+	bh=W+3hLwQ0hj3qVORYRs5AQRweLebKBlAvazuaaX7+sK4=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=Tdlpfu0KpMTG/k5SLQStXyEEMdsrj5h8dWAJO8KZtFIWgF2olhhSav31VNW6puB//rIiD1Q7j0c25wPjzkp22uTQ0foe6awtycu7lkfz/20PIWgYZvbveVWEmLpE5viUCBwCqHovDWZPElRFe7wxlm9s6K4Kpbt3CXqOsKLot4k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=KalME8XP; arc=none smtp.client-ip=209.85.215.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pA/I/viA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24B8BC2BCB2;
-	Thu,  7 May 2026 13:40:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778161255;
-	bh=0FHyVkyi+oT3tdJ6Ve/Ey5ZbOMLeo98h5Ctga3Reg1Q=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pA/I/viA6Rh3l7mRfHWkAEDcYUZI4dprk8ie6mmkl8AWSvuBUpwFEpVqt3lb6Asn3
-	 lFbIEFYTtCfHQACKJkvCUsktCD/N5uLniwd3A4E54DoHtHjew7MEdA9Ta2QAKQVP1U
-	 M3gn3lkkbHwpoy6HjQ4DUi2YV0K7EDwBdF2WT95mpEkYSVslhEZGvFXySmeYLLoRLL
-	 x14a2KqHuNfSIprdjFioyM2qD1qi1sfj+DQ0tCjoF67Yl6kykAVtMJmHXkLGYOySbA
-	 YgcT8y7WeJn0eM6zuI/BUSZtRulpIE/yUrDvVwuFMdtqR3t6T+HTBIywXCpwxJKxv3
-	 7Ku/dRwhnfXRQ==
-Date: Thu, 7 May 2026 09:40:44 -0400
-From: Sasha Levin <sashal@kernel.org>
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: corbet@lwn.net, akpm@linux-foundation.org, skhan@linuxfoundation.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] killswitch: add per-function short-circuit mitigation
- primitive
-Message-ID: <afyWXIsqqgMpxVIb@laps>
-References: <20260507070547.2268452-1-sashal@kernel.org>
- <2026050739-football-dreamy-351f@gregkh>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KalME8XP"
+Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-b62da7602a0so591232a12.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 07 May 2026 07:08:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1778162883; x=1778767683; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=zsPYNiTO0d4dTuGIfilD1PNNAucYT/R7gdAoYKJvfdM=;
+        b=KalME8XPcZqYn98z4fA4p+PVvSKWMgDz5wrgcASx/mHqhg3xozdPHx69TZ8Z+wtDZo
+         EO7Kqg4q+rlKda5e6IMB0hM5mkKoXKfW27adYoLHwSVcv9Mx/IZdtKx69KUBC6q99BAo
+         82IAPc7oksvFmIR6uMq3Z9/hKjmv7qM0Q7kLU/+wXiXu93Bs2bl763ysn6fr75EHXIID
+         BSdWElp/aENoy1btSgbpOlOiz+ukBA8N8kNJQEjO0CDvTQ8Owu/jsUeO7ugGCe5MhRg/
+         9ibPYIAFRi8ytCyXmIYmHBgTd7TvXeGizeezt3yl04GmdovEK3fjMaeyEtqD64mLHVp2
+         tS2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778162883; x=1778767683;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zsPYNiTO0d4dTuGIfilD1PNNAucYT/R7gdAoYKJvfdM=;
+        b=reLKvAlWnCv3HC/s/bazfDVND75VUs4wwy/FdZ26PZAqBek9QXai+gdhUnIhpaHXRG
+         EpD2Mwjpepj91Eed+GsT8vAFM6KZ8MAKggfJa+kRSl02w6/ENIP3hvlFCaYcEMqtV41R
+         kuAxItXl2fcF9lIqXcdDryXUEZ1OW2YOLqUNmjPgQafff8m2vQmpxaOX3pkYCdi6gGUV
+         tAtSeHhwlCSuYm86bo6fHll54SdrJJOK+HYFdIbLY0FlANCnpbchtnyAfWC3lnQy5kPl
+         tKmCrXyzoYazP8+85V82MvN5ZIpuM6N+k4VVKmGwSVMlUgjqaWgSVdnMl++t8NS5uGu7
+         Th2A==
+X-Forwarded-Encrypted: i=1; AFNElJ8LAcLiGxVUetaznHxSEr2GWxxhYVqSF+iva61hTHq/nUwiygqeSe2+m55s4jP8PGCzBHg9Ti1syEP5VdwmB74=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJEQfYM+iOHeodshQpeolB/ojO4UybIIh7oa2LKRbo18HZXjVw
+	mag8xsfdbK8u8ad1aLKHg6WhJ7PjvNjr7ApkE1+vKJOSJ5RikN49l05yAdCtG6+3PU/xrfmNAV8
+	MISrvOQ==
+X-Received: from pgct20.prod.google.com ([2002:a05:6a02:5294:b0:c79:5e8e:1248])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:a11d:b0:3a1:ed2a:1a4f
+ with SMTP id adf61e73a8af0-3aa5a960e38mr8783458637.16.1778162882616; Thu, 07
+ May 2026 07:08:02 -0700 (PDT)
+Date: Thu, 7 May 2026 07:08:02 -0700
+In-Reply-To: <e03f092dfbb7d391a6bf2797ba01e122ba080bcd.camel@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <2026050739-football-dreamy-351f@gregkh>
+Mime-Version: 1.0
+References: <e03f092dfbb7d391a6bf2797ba01e122ba080bcd.camel@infradead.org>
+Message-ID: <afycwi4KT6xrQhMX@google.com>
+Subject: Re: [PATCH] KVM: SVM: Always intercept ICEBP, add INT1 selftests
+From: Sean Christopherson <seanjc@google.com>
+To: David Woodhouse <dwmw2@infradead.org>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Andrew Cooper <andrew.cooper3@citrix.com>, "Saenz Julienne, Nicolas" <nsaenz@amazon.es>, 
+	Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+Content-Type: text/plain; charset="us-ascii"
 
-On Thu, May 07, 2026 at 12:47:43PM +0200, Greg KH wrote:
->On Thu, May 07, 2026 at 03:05:45AM -0400, Sasha Levin wrote:
->> When a (security) issue goes public, fleets stay exposed until a patched kernel
->> is built, distributed, and rebooted into.
->>
->> For many such issues the simplest mitigation is to stop calling the buggy
->> function. Killswitch provides that. An admin writes:
->>
->>     echo "engage af_alg_sendmsg -1" \
->>         > /sys/kernel/security/killswitch/control
->>
->> After this, af_alg_sendmsg() returns -EPERM on every call without
->> running its body. The mitigation takes effect immediately, and is dropped on
->> the next reboot.
->>
->> A lot of recent kernel issues sit in code paths most installs only have enabled
->> to support a relative minority of users: AF_ALG, ksmbd, nf_tables, vsock, ax25,
->> and friends.
->>
->> For most users, the cost of "this socket family stops working for the day" is
->> much smaller than the cost of running a known vulnerable kernel until the fix
->> land.
->>
->> Assisted-by: Claude:claude-opus-4-7
->> Signed-off-by: Sasha Levin <sashal@kernel.org>
->
->This is kind of funny, but understandable.  Odds are a distro would want
->to pick this up so that they can enable this for when their kernel
->updates do not get out to users quick enough.
+On Thu, May 07, 2026, David Woodhouse wrote:
+> From: David Woodhouse <dwmw@amazon.co.uk>
+> 
+> ICEBP (INT1, opcode 0xF1) generates a #DB that is architecturally a
+> trap, but on SVM it was not always intercepted. Unconditionally
+> intercept ICEBP on SVM to match VMX behaviour and ensure correct
+> event delivery semantics.
+> 
+> Add two selftests exercising ICEBP:
+> 
+>  - int1_ept_test: verifies that ICEBP works correctly when the
+>    exception stack page is not present (EPT/NPT fault during #DB
+>    delivery). The IST stack is evicted via MADV_DONTNEED before
+>    executing INT1.
+> 
+>  - int1_task_gate_test: verifies ICEBP delivery through a 32-bit
+>    task gate, exercising the legacy task-switch path for #DB.
+> 
+> Tested on Intel Sapphire Rapids and AMD Genoa. Without the SVM fix,
+> int1_task_gate_test fails on AMD with EIP pointing at ICEBP instead
+> of after it. With the fix, both tests pass on both platforms.
 
-I figure that even if the new kernel does go out in a timely manner, there are
-still days (weeks? months?) between when a new kernel is available and when the
-user reboots.
+Hmm, but KVM unconditionally intercepts task switches.  Is this effectively working
+around a bug in task_switch_interception()?
 
-Might as well try and improve their chances of survival during that period :)
+> Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
+> ---
+>  arch/x86/kvm/svm/svm.c                        |  21 ++
+>  tools/testing/selftests/kvm/Makefile.kvm      |   2 +
+>  .../testing/selftests/kvm/x86/int1_ept_test.c | 116 +++++++
+>  .../selftests/kvm/x86/int1_task_gate_test.c   | 298 ++++++++++++++++++
+>  4 files changed, 437 insertions(+)
+>  create mode 100644 tools/testing/selftests/kvm/x86/int1_ept_test.c
 
->One question:
->
->> +struct ks_attr {
->> +	struct list_head	list;
->> +	struct kprobe		kp;
->> +	atomic_long_t		retval;
->
->Why is this an atomic value?  Shouldn't it be whatever the userspace
->return type is?
-
-The return register is `long` on every arch.
-
-While testing this, I added the ability to modify the return value after we
-create a killswitch, and figured that it could be a useful thing to keep in the
-code.
-
-But then I got worried about a race between a user changing the return value of
-the killswitch and some program trying to execute the code, and getting some
-combination of the old and the new return value.
-
-Is that a real concern? I'm not sure - but making this atomic was cheap enough.
-
->> +	/* false once disengaged; per-fn file ops then return -EIDRM. */
->> +	bool			engaged;
->> +	unsigned long __percpu	*hits;
->> +	struct dentry		*dir;
->> +	/* engaged_list holds one ref; each open per-fn fd holds one. */
->> +	refcount_t		refcnt;
->
->Why is a refcnt needed?  Why not use a kref instead?
-
-Ugh... no good reason, I can switch to a kref.
-
--- 
-Thanks,
-Sasha
+int1_host_page_fault_test?  I definitely dont' want to call it "ept" since it's
+valid for both Intel (EPT) and AMD (NPT), but int1_tdp_test isn't accurate either
+since the test is also valid for shadow paging (at least, as written).
