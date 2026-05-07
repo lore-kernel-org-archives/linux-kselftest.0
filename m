@@ -1,97 +1,132 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA69C3E928F;
-	Thu,  7 May 2026 10:47:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F10C3EF0DC;
+	Thu,  7 May 2026 10:58:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778150865; cv=none; b=sS8LaKPiL158X7lWz4vDGOy0l+o4h/rsf24djFYq8JXXwEkM6zNIGNnQIoC6Kn4x9pb0u3xkmWMUoEb3720dbsYQDTra7Rpg8Sl+lZo5CC1Dq9H3VSa011x5ec99MwjUC9klsgm85moOvNfoaaWltHVU0BCzdptlJDPzUKLFcBw=
+	t=1778151494; cv=none; b=EMIQ4vdT4uLmnHcDiWvoojQf1As5iE40cHFmCq2sK5caSrsrhDslzCOkXf0LP8mrp1ArwNGexLzC/HG5gXHiv1VrHGgunMmaOmrp5uRHk4GdJMbOChU7A6HaBH+5F8a08eiAwlPnoGO7PNd7RKimYx09RecH4i0KfbdILnWRuf4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778150865; c=relaxed/simple;
-	bh=SL/Uzqz/QGgF/VweKAgSNoRQLTvda/ncyjudgCEBgRo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NixXWDazN+pRQYKvklCqh4QeOk3Jcs1Gso6gFVj5a8FJyVa6lR0Dw+V0Tr9T+xj/qMrxNorlv71nWNjjDLTc/RCTRCoioYPAlcXMi4VqNpPS6e5ygT5MGSINB70YWPaXPX/z6NSI5/vI3MX5SyqEZwJF7hQOm1VevCKbohOOgT8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=FfYWQsHm; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778151494; c=relaxed/simple;
+	bh=9OUTdGAhrGO7HPSBpW+FABM8Uhcs8lMyfb3Gcx7O1yM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=rFVytJ2FCxgwMGHGNRaldWLBwr/QnBbeiYrsxFEl7SZZELlItHKWvX2MtS8D+zirrwC530Wpfw0ZumLAngM3VtDIhlZ8qKYgZB68MECmLyutcW/swf69lAhES4oMB9GFEoIupZcCYJAFCQlkq/rJ+SklTzeaAKFD3H+6i2hZBJ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=TRPQwHEb; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="FfYWQsHm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DE7BC2BCB8;
-	Thu,  7 May 2026 10:47:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1778150865;
-	bh=SL/Uzqz/QGgF/VweKAgSNoRQLTvda/ncyjudgCEBgRo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FfYWQsHmOktZ2TmkIshnu17gSrdX0iSYCPdI04qYxIGtue/fQKrL6170OdOk8vs68
-	 jilmS3xkTXbfr9kBXo7qXJfkfHLYnvQsORJtY9Tjpp/VGFu7XPmGPZ91SF+0dCCF1a
-	 ulz/iJTOBgX1TiZuHms854YYHJ2iQKEIVh9KDxRI=
-Date: Thu, 7 May 2026 12:47:43 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Sasha Levin <sashal@kernel.org>
-Cc: corbet@lwn.net, akpm@linux-foundation.org, skhan@linuxfoundation.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] killswitch: add per-function short-circuit mitigation
- primitive
-Message-ID: <2026050739-football-dreamy-351f@gregkh>
-References: <20260507070547.2268452-1-sashal@kernel.org>
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="TRPQwHEb"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:Message-Id:Date:Subject:From:Reply-To:Content-ID:
+	Content-Description:In-Reply-To:References;
+	bh=jR+Qe4bynPS3peoy/mcVrEPP6Gm0C/vr5e+MmwGl5ho=; b=TRPQwHEbcN8UjRFWdupJhNdPKi
+	LO4iQm5CuuDWxfhkH43OR453aUjRm5wEN8FtYcKsIO1Zv0sBW8Ro3fzRlLD6HLqHplxP4d/StAbJL
+	/L3mCyNRBAid/5L3ULi/Le1mXyisNeQJodfCKi8cMVSper0vFv8uwLJTRCQTYEmG65b2mxjMdoTzQ
+	1v5+aOuxEmYe7PgvTQqafFJbZMcGpQ/gF0EtMgQC/A0osOHsAWKCgMu8Tu9stI3FLB3Aes40N6Zlp
+	l7WBqG+FE9KfuIDlLYMWE0/5MZg+9bticy0Vu1hncydHkKi3njRmIQHZZ0jmJ3Bb1pzMMnDwnGGyY
+	aIUi8OGQ==;
+Received: from authenticated user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1wKwQX-004Jne-2Y;
+	Thu, 07 May 2026 10:57:58 +0000
+From: Breno Leitao <leitao@debian.org>
+Subject: [PATCH net-next v2 0/5] net: convert four more protocols to
+ getsockopt_iter
+Date: Thu, 07 May 2026 03:57:49 -0700
+Message-Id: <20260507-getsock_two-v2-0-5873111d9c12@debian.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260507070547.2268452-1-sashal@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAC5w/GkC/22NQQ6CMBBFr9LMmpqBAgor72GIacsIo0lr2ooYw
+ t0NuHX9339vgUiBKUIrFgg0cWTvoBVFJsCO2g0kuYdWQIFFjRVWcqAUvX1c09tLbXSfN3WplKo
+ hE/AMdON5t13AUZKO5gTdb4kvcyebNtnGjhyTD589POX7429jyiXK0ho8qlNTIeG5J8PaHXwYo
+ FvX9Qth+enQwwAAAA==
+X-Change-ID: 20260505-getsock_two-abad19643336
+To: Jeremy Kerr <jk@codeconstruct.com.au>, 
+ Matt Johnston <matt@codeconstruct.com.au>, Martin Schiller <ms@dev.tdt.de>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: linux-x25@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Breno Leitao <leitao@debian.org>, kernel-team@meta.com, 
+ Stanislav Fomichev <sdf@fomichev.me>, 
+ Bobby Eshleman <bobbyeshleman@meta.com>
+X-Mailer: b4 0.16-dev-453a6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1947; i=leitao@debian.org;
+ h=from:subject:message-id; bh=9OUTdGAhrGO7HPSBpW+FABM8Uhcs8lMyfb3Gcx7O1yM=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBp/HAwmiaQEBXEHCXbpgGdD/hq0K6qRUISkzQSJ
+ lYB/g1Fz1WJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCafxwMAAKCRA1o5Of/Hh3
+ bbNBEACVeSN/aZEWHrjkqWMXYmo/akAK6yqqHSNbyH4wZyFvAC9uA/mzXfsfS1Ve6CVTOSnj6GS
+ IHgcbcmlBDcpTZybO6fnRcO1lx3n/zpc/aWTz7/osUTtjvjrTeOrp7usfJcbyDHIADEY/nhnLsS
+ yfAtbVzaSogHCxcbsDzgDOd9RlU0RxHzdOtinhlDlfqnjPliVmwc/FBnWauvewb6xjIImjdHa+e
+ Nc/QujUfUDERzSvjrj3EGfzGcPg9JHPkn+p1W5nm6ExLnfhikqRkN7EMxWisUJ8vS+Q7TnfW3kS
+ 7MF08fzSz/ZM54fSyBrXpigY5MNgl+nVfyRLrnUiLy37NNs+Qs6j8QKb4FuvrvlvsyVIEy9+0uW
+ ZWMvH+DU+QyvvHrlx9fBhkPFFpkV45KjJEyZ5I+hzBi5JKhco/n6BTd4P0X0aHP6iWWs0bFPK8B
+ SeeTAVJ6lD67m0OKMQSM1TVJluqezZpo4aIaetwcr9CsZuxP9EPRNwK1D0BJ5P3Yhy1FrchH8vi
+ cnz+2thpz8E2JO8StSrQp7N/KlcFT4N0yVhziX80zXhovpiZUlwJ7BdrIrpXCFF+J1EF8S2ehCL
+ vFTwejuG3Z8qKMQExhNDy9LYurNVdiPtS5v4WSr/Mc7xCi7TzVHCfPe2mUniS872p0NxuAY2RSv
+ 8vYAOswmuKiaQTA==
+X-Developer-Key: i=leitao@debian.org; a=openpgp;
+ fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
+X-Debian-User: leitao
 
-On Thu, May 07, 2026 at 03:05:45AM -0400, Sasha Levin wrote:
-> When a (security) issue goes public, fleets stay exposed until a patched kernel
-> is built, distributed, and rebooted into.
-> 
-> For many such issues the simplest mitigation is to stop calling the buggy
-> function. Killswitch provides that. An admin writes:
-> 
->     echo "engage af_alg_sendmsg -1" \
->         > /sys/kernel/security/killswitch/control
-> 
-> After this, af_alg_sendmsg() returns -EPERM on every call without
-> running its body. The mitigation takes effect immediately, and is dropped on
-> the next reboot.
-> 
-> A lot of recent kernel issues sit in code paths most installs only have enabled
-> to support a relative minority of users: AF_ALG, ksmbd, nf_tables, vsock, ax25,
-> and friends.
-> 
-> For most users, the cost of "this socket family stops working for the day" is
-> much smaller than the cost of running a known vulnerable kernel until the fix
-> land.
-> 
-> Assisted-by: Claude:claude-opus-4-7
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
+Continue the work to convert protocols to the new getsockopt_iter API.
 
-This is kind of funny, but understandable.  Odds are a distro would want
-to pick this up so that they can enable this for when their kernel
-updates do not get out to users quick enough.
+Convert four additional getsockopt implementations to the new
+sockopt_t/getsockopt_iter callback:
 
-One question:
+  - MCTP
+  - LLC
+  - X.25
+  - KCM
 
-> +struct ks_attr {
-> +	struct list_head	list;
-> +	struct kprobe		kp;
-> +	atomic_long_t		retval;
+These are mechanical, ABI-preserving conversions following the same
+pattern as the previously converted protocols (af_packet, can/raw,
+af_netlink, af_vsock): the (char __user *optval, int __user *optlen)
+pair is replaced with a single sockopt_t *opt that carries the buffer
+length on input and the returned size on output, and exposes an iov_iter
+for the copy-out path. put_user()/copy_to_user() pairs are replaced with
+a single copy_to_iter() per option, and the wrapper in
+do_sock_getsockopt() handles writing optlen back to userspace.
 
-Why is this an atomic value?  Shouldn't it be whatever the userspace
-return type is?
+I picked these four because each is small and self-contained.
 
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+Changes in v2:
+- Fix kdoc as suggested by Jakub.
+- Drop the CAN patches; they will be sent separately through the
+  linux-can tree.
+- Add X.25 and KCM conversions, keeping the series at four protocols.
+- Link to v1: https://patch.msgid.link/20260505-getsock_two-v1-0-4cb0738950e0@debian.org
 
-> +	/* false once disengaged; per-fn file ops then return -EIDRM. */
-> +	bool			engaged;
-> +	unsigned long __percpu	*hits;
-> +	struct dentry		*dir;
-> +	/* engaged_list holds one ref; each open per-fn fd holds one. */
-> +	refcount_t		refcnt;
+---
+Breno Leitao (5):
+      mctp: convert to getsockopt_iter
+      llc: convert to getsockopt_iter
+      x25: convert to getsockopt_iter
+      kcm: convert to getsockopt_iter
+      selftests: net: getsockopt_iter: cleanup
 
-Why is a refcnt needed?  Why not use a kref instead?
+ net/kcm/kcmsock.c                             |  16 ++--
+ net/llc/af_llc.c                              |  18 ++---
+ net/mctp/af_mctp.c                            |  10 +--
+ net/x25/af_x25.c                              |  16 ++--
+ tools/testing/selftests/net/getsockopt_iter.c | 109 +++++++++++++++++++++++---
+ 5 files changed, 124 insertions(+), 45 deletions(-)
+---
+base-commit: c1e5127b577c6b88fa48e532616932ae978528d5
+change-id: 20260505-getsock_two-abad19643336
 
-thanks,
+Best regards,
+--  
+Breno Leitao <leitao@debian.org>
 
-greg k-h
