@@ -1,77 +1,149 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-186.mta1.migadu.com (out-186.mta1.migadu.com [95.215.58.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 291291F09AD;
-	Thu,  7 May 2026 02:34:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0776A40DFD6
+	for <linux-kselftest@vger.kernel.org>; Thu,  7 May 2026 03:30:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778121264; cv=none; b=kxEXuHtQWBBZqx7X93t8MkUTE8dD5DiWa93kHEypb3HlcwWw7T3fY2pXALzq+xCPmb+inYlcJEiwP6cIKH8oFV/sU9MYsC9D/3Z7xcTRQyWWtM3+Yrg4ECcCENkMDE1qxAlZjzKoS8wtKYzv7wOymLO8fGYJBVom9WrnIrQ8lvM=
+	t=1778124651; cv=none; b=CmQz0JdJfkQQpDw/ByYtdj6k4wDrI3MeI9eCfBFtj26WL9K4fP2mGkefnL7P2cnKTApLt/yQmaIv2NfoC3wTSmBoRZHAF12nWGpx/DKFGl1nO+NjjNAULl2AJ3feiLljSgmaNPIz1NA8roym6PK9pkW4HJXlsZQN9Rveb4lrvec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778121264; c=relaxed/simple;
-	bh=vjgPoeXfSi+YgnWA1u+rAs1TE4c2HHNyQfEdIDXFtQQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=L3F/FEn6N5dJ2yCw+ne1sAU9oxO+/rRm8+df5Mr+ocdmKCAT+wk/+cfetO8VFFM20SfVJk/ZVHJoEnAUxhF5ddxE3mRxTLMBZ7LCPzVxGUD9hE4a7awX8I1FrgEgHYEen2ksgqSbEoXkxqYglLfnsK+VEy20U38R50xHMPNzRp4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iaCW80Yg; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778124651; c=relaxed/simple;
+	bh=jqKPQiXpW98oldrpDjDj8FIZFTLmhrpfzebJ9KHHGwI=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=NWFcUaSnItlV5wMRDhBDqdF7KL1d44BEQ+SyODAr+8/u70or18cChKV4akQtrMiUbhylupzSaTW3KC4Dfbx0Ep5DfLB7fyTWW++2js+8vER3ZOK+bMVXf1qcCvA6aczReNwk/YciW7l39aKOiARPhtMNLXg+SbvrX68GRJa2f0U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=wKNe1+eN; arc=none smtp.client-ip=95.215.58.186
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iaCW80Yg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B356EC2BCB0;
-	Thu,  7 May 2026 02:34:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778121263;
-	bh=vjgPoeXfSi+YgnWA1u+rAs1TE4c2HHNyQfEdIDXFtQQ=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=iaCW80Yg8m0KtPSNXOr35aRsKOAAPbPuiiHLNaA1Mqmn0sIcbyqqcJ2PbeadnBLHn
-	 CYbXLpghPdriX44ALoln9cco58y8329MRzHT+KT4ZQeOVOdyKHWRXZr3I0JdHTV2V/
-	 lC0By9QLMUBvP/srEFDcFCgR/TGRTHwWOsQ5LKSn3PYDF9lkRNl6uZQKqTo+VqHxKc
-	 XtthISAjndyVhkug+PwA5whej9Ump1KAY+JdZIpa2TCseTpNVQ2RnzJTp4bSgPqV5S
-	 nw/1Ok7yE9KAGcncBEbQu9WDBmjsU3ZWTUTZGeoBxLL1phMDxI+mgoYvZYwpwtmH/1
-	 QRhs/Ifvnonig==
-Date: Wed, 6 May 2026 19:34:20 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Bobby Eshleman <bobbyeshleman@gmail.com>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
- <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Jonathan Corbet
- <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Alex Shi
- <alexs@kernel.org>, Yanteng Si <si.yanteng@linux.dev>, Dongliang Mu
- <dzm91@hust.edu.cn>, Michael Chan <michael.chan@broadcom.com>, Pavan Chebbi
- <pavan.chebbi@broadcom.com>, Joshua Washington <joshwash@google.com>,
- Harshitha Ramamurthy <hramamurthy@google.com>, Saeed Mahameed
- <saeedm@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>, Mark Bloch
- <mbloch@nvidia.com>, Leon Romanovsky <leon@kernel.org>, Alexander Duyck
- <alexanderduyck@fb.com>, kernel-team@meta.com, Daniel Borkmann
- <daniel@iogearbox.net>, Nikolay Aleksandrov <razor@blackwall.org>, Shuah
- Khan <shuah@kernel.org>, netdev@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, Stanislav Fomichev
- <sdf@fomichev.me>, Mina Almasry <almasrymina@google.com>, Bobby Eshleman
- <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v2 2/6] net: devmem: support TX over
- NETMEM_TX_NO_DMA devices
-Message-ID: <20260506193420.575e1806@kernel.org>
-In-Reply-To: <20260504-tcp-dm-netkit-v2-2-56d52ac72fd4@meta.com>
-References: <20260504-tcp-dm-netkit-v2-0-56d52ac72fd4@meta.com>
-	<20260504-tcp-dm-netkit-v2-2-56d52ac72fd4@meta.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="wKNe1+eN"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1778124646;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=gyZVzRsxXhQaw+/BT2qurWH8p+SNTVYpiB+XsnLougQ=;
+	b=wKNe1+eNgeqPd05y2iLWXfahEWECb2xBV6LFtMbhJ/SgQmjH9tQEUCZeFHpSXAQKhrRJOp
+	Azr0VuQ3gyPGc04emwvgd4V9ks6rWAWm5Z/ewD5QSMupmexgbMlVW5cYJy3E1Q/wRixsWK
+	2D2oc9njborSjMOUdqtqKxJWTK4j0aA=
+From: Lance Yang <lance.yang@linux.dev>
+To: npache@redhat.com,
+	ziy@nvidia.com
+Cc: akpm@linux-foundation.org,
+	david@kernel.org,
+	willy@infradead.org,
+	songliubraving@fb.com,
+	clm@fb.com,
+	dsterba@suse.com,
+	viro@zeniv.linux.org.uk,
+	brauner@kernel.org,
+	jack@suse.cz,
+	ljs@kernel.org,
+	baolin.wang@linux.alibaba.com,
+	Liam.Howlett@oracle.com,
+	ryan.roberts@arm.com,
+	dev.jain@arm.com,
+	baohua@kernel.org,
+	lance.yang@linux.dev,
+	vbabka@kernel.org,
+	rppt@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	shuah@kernel.org,
+	linux-btrfs@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v5 01/14] mm/khugepaged: remove READ_ONLY_THP_FOR_FS check
+Date: Thu,  7 May 2026 11:29:56 +0800
+Message-Id: <20260507032956.51667-1-lance.yang@linux.dev>
+In-Reply-To: <aa778cfc-b7f8-4100-89bb-d2b2ef8e1138@redhat.com>
+References: <aa778cfc-b7f8-4100-89bb-d2b2ef8e1138@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Mon, 04 May 2026 17:27:49 -0700 Bobby Eshleman wrote:
-> +	if (bind_dev != netdev)
-> +		netdev_lock(bind_dev);
-> +	dma_dev = netdev_queue_get_dma_dev(bind_dev, 0, NETDEV_QUEUE_TYPE_TX);
-> +	if (bind_dev != netdev)
-> +		netdev_unlock(bind_dev);
-> +	binding = net_devmem_bind_dmabuf(bind_dev,
-> +					 bind_dev != netdev ? netdev : NULL,
-> +					 dma_dev, DMA_TO_DEVICE, dmabuf_fd,
-> +					 priv, info->extack);
 
-Not sure if it matters but are we intentionally releasing the bind_dev
-lock before calling net_devmem_bind_dmabuf() ? Previously more code here
-was covered by the physical netdev's lock.
+On Sun, May 03, 2026 at 09:48:40PM -0600, Nico Pache wrote:
+>
+>
+>On 4/29/26 9:29 AM, Zi Yan wrote:
+>> collapse_file() requires FSes supporting large folio with at least
+>> PMD_ORDER, so replace the READ_ONLY_THP_FOR_FS check with that.
+>> MADV_COLLAPSE ignores shmem huge config, so exclude the check for shmem.
+>> 
+>> While at it, replace VM_BUG_ON with VM_WARN_ON_ONCE.
+>> 
+>> Add a helper function mapping_pmd_folio_support() for FSes supporting large
+>> folio with at least PMD_ORDER.
+>> 
+>> Signed-off-by: Zi Yan <ziy@nvidia.com>
+>> Reviewed-by: Lance Yang <lance.yang@linux.dev>
+>> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+>> ---
+>>   include/linux/pagemap.h | 26 ++++++++++++++++++++++++++
+>>   mm/khugepaged.c         | 10 ++++++++--
+>>   2 files changed, 34 insertions(+), 2 deletions(-)
+>> 
+>> diff --git a/include/linux/pagemap.h b/include/linux/pagemap.h
+>> index 1f50991b43e3b..1fed3414fe9b8 100644
+>> --- a/include/linux/pagemap.h
+>> +++ b/include/linux/pagemap.h
+>> @@ -513,6 +513,32 @@ static inline bool mapping_large_folio_support(const struct address_space *mappi
+>>   	return mapping_max_folio_order(mapping) > 0;
+>>   }
+>>   
+>> +/**
+>> + * mapping_pmd_folio_support() - Check if a mapping support PMD-sized folio
+>> + * @mapping: The address_space
+>> + *
+>> + * Some file supports large folio but does not support as large as PMD order.
+>> + * If a PMD-sized pagecache folio is attempted to be created on a filesystem,
+>> + * this check needs to be performed first.
+>> + *
+>> + * Return: true - PMD-sized folio is supported, false - PMD-sized folio is not
+>> + * supported.
+>> + */
+>> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+>> +static inline bool mapping_pmd_folio_support(const struct address_space *mapping)
+>> +{
+>> +	/* AS_FOLIO_ORDER is only reasonable for pagecache folios */
+>> +	VM_WARN_ON_ONCE((unsigned long)mapping & FOLIO_MAPPING_ANON);
+>> +
+>> +	return mapping_max_folio_order(mapping) >= PMD_ORDER;
+>
+>Probably a stupid question, but I dont know FS thats well.
+>
+>Here we are checking that the max allowed folio order is greater than 
+>(or eq) to the PMD_ORDER. Yet the function asks if PMD specifically is 
+>supported. In the future could we have some FS that does not support PMD 
+>orders, but does support larger orders (eg. PUD)?
+
+Good point.
+
+IIUC, mapping_max_folio_order() means "maximum supported order" not
+"the only supported order", so mapping_pmd_folio_support() just means
+"PMD order is within the supported range".
+
+Also, mapping_set_large_folios() sets the range to:
+
+mapping_set_folio_order_range(mapping, 0, MAX_PAGECACHE_ORDER);
+
+and __filemap_get_folio_mpol() treats max as a cap, then falls back down
+towards min.
+
+That said, if we want the helper name to mean "PMD order specifically is
+supported", the more future-proof test would be:
+
+mapping_min_folio_order(mapping) <= PMD_ORDER &&
+mapping_max_folio_order(mapping) >= PMD_ORDER
+
+Thoughs?
