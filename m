@@ -1,101 +1,87 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2557D26AF4;
-	Thu,  7 May 2026 01:31:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69D6E26AF4;
+	Thu,  7 May 2026 01:35:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778117474; cv=none; b=rRP0p/4l8voms6BbWt0feGUdSwv5rFT9262QAFrxDuBTnJAoMgRcpOpK0zKLpWuug5jMRxkpr5MZDOvgEwfYi24ae3jZjExA28wZRjwK0lpz5hb++yNQm1eyEvDVziSzQ+EPQXuTjFY5fIwv4fEC3+kRV0JuSJQOH7EZY+6hMqc=
+	t=1778117711; cv=none; b=FMgUll9uIyz29dttKqegDMCwUuAWMhPfi/bWcrfwOvRjt8TkgYcEibsBgLHrNEt+ywxbH4ZFEH+spr7Cio7jrjNMPsI5pW4/nbl3fl5a0M1jxuvjSizBlC0r+eyw2fSaHDpgt8zisQ/xwztFxg/O1qDHYlHLUcAyWdFngIY2NUg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778117474; c=relaxed/simple;
-	bh=KNR/1UcnqVRthTheFUaU76nP9k370T8nKog7TDR6YVc=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=paWfzdQ5ADHhZI0nWQWHuyO8RNK1LhEyCA5D9fB8INAip+1GgmXQmjgnGmtHCKFPv3aa1hkRuGHbUP/cWA/3IXYboSzu9mNzgpKKzS+ThrleJsVqnG5L/wzGk2XrQd4Nr8JTSzQ5r/3riV469lMslmlG8Dn79isbiMlxg4W/LD4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ss0m+OrS; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778117711; c=relaxed/simple;
+	bh=0O3G2lmMP/Ms3BjmJlMlwXPElBarsrFRXkD/Kf50ycA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=J3y0HehFwKfXRkjO/DYL2i25bk5arXxVSd5Z7l5Gupmpzd+yyOtNSCPgFyNvLtAV7kMETD/sNsjNDkG25O3btqboz2vXsxBBY1z9k356u9tX6JHpMOOBJYgx0Oh3s9wqxLZnlmwPsEWbQ8a3jovpQKktqjfqM2RqTSxgMYOiqUs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bo4lhO+R; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ss0m+OrS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC48AC2BCB0;
-	Thu,  7 May 2026 01:31:13 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bo4lhO+R"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D327CC2BCB0;
+	Thu,  7 May 2026 01:35:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778117473;
-	bh=KNR/1UcnqVRthTheFUaU76nP9k370T8nKog7TDR6YVc=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=ss0m+OrShS5624gSh8QZDABIKiwMZsGlm/0Z4nxzaJk4sdqIJ0aQeiwweivL6QfAQ
-	 MOupPZYquHMmZ835FfxQlLb0XAzoeNPIBO55GOVbtHvJaEirjyhGQ+sfl1LEcz77gf
-	 ZeaJdZQ9gFn6mCfzUjBzE89cA+dKgDZEQAULGy1jEyRbIqjiUlX4MKsU+ThBJ7L0Uw
-	 +1y+gZIq7fxgHOLFb7/aUpt7U+Kcqf4s8qRlgH5AhE4rqQDyrYcWRhCK9UqSt9ThpK
-	 r2TR7uH+pC2Bm6+qz494v2noa52ElNsmqzW523m9VSGDaP1/DQ9Bw3KMsERooBpk4d
-	 AdmBi8bFkkmVw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7CE39393089F;
-	Thu,  7 May 2026 01:30:24 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1778117711;
+	bh=0O3G2lmMP/Ms3BjmJlMlwXPElBarsrFRXkD/Kf50ycA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Bo4lhO+RL3OO3IL1WEVSQSJOG6fF9WGBUGDl1kLrgeLAlSdCP3QYVcnE4NuoVGgzx
+	 g/7S893cwQQScmZfG31DQxx68sx4bTQFZHRCsTwzCRmi+//kYfehhLjej857kjGKkw
+	 NIJh31AF9QUw5NAc+v+Oh5Qzvy4+gxzz9T7eDm6LA5FIarqpaZqxpC27gC1vQmZe/u
+	 sJVA6qJ0Zuni9umvr592++g0ZN8dmb+hscUphG+dgFXZGnFVgbS6UsWBGfLSpOSyCO
+	 L3bybhVhSm6beqQIsZ76iqr5uLyrA9/G1RZshor/k2LWf4WOOQtysKNisk0+1XT4OR
+	 VLUAyE0cS1iNw==
+Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
+	id B29CF1AC5890; Thu, 07 May 2026 02:35:07 +0100 (BST)
+Date: Thu, 7 May 2026 10:35:07 +0900
+From: Mark Brown <broonie@kernel.org>
+To: Jiakai Xu <xujiakai2025@iscas.ac.cn>
+Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Andrew Jones <andrew.jones@oss.qualcomm.com>,
+	Anup Patel <anup@brainfault.org>,
+	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+	Jiakai Xu <jiakaiPeanut@gmail.com>
+Subject: Re: [PATCH] KVM: arm64: Add memslot for ST_GPA_BASE in
+ check_steal_time_uapi()
+Message-ID: <afvsSxLDBz6HDkCs@sirena.co.uk>
+References: <20260501021639.2563219-1-xujiakai2025@iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net 00/11] mptcp: pm: misc. fixes for v7.1-rc3
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177811742303.3291094.15207378562960024252.git-patchwork-notify@kernel.org>
-Date: Thu, 07 May 2026 01:30:23 +0000
-References: <20260505-net-mptcp-pm-fixes-7-1-rc3-v1-0-fca8091060a4@kernel.org>
-In-Reply-To: 
- <20260505-net-mptcp-pm-fixes-7-1-rc3-v1-0-fca8091060a4@kernel.org>
-To: Matthieu Baerts <matttbe@kernel.org>
-Cc: martineau@kernel.org, geliang@kernel.org, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- cpaasch@openai.com, netdev@vger.kernel.org, mptcp@lists.linux.dev,
- linux-kernel@vger.kernel.org, stable@vger.kernel.org, shuah@kernel.org,
- linux-kselftest@vger.kernel.org
-
-Hello:
-
-This series was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Tue, 05 May 2026 17:00:48 +0200 you wrote:
-> Here are various fixes, mainly related to ADD_ADDRs:
-> 
-> - Patch 1: save ADD_ADDR for rtx with ID0 when needed. A fix for v6.1.
-> 
-> - Patch 2: remove unneeded exception for ID 0. A fix for v5.10.
-> 
-> - Patches 3-5: fix potential data-race and leaks during ADD_ADDR rtx. A
->   fix for v5.10.
-> 
-> [...]
-
-Here is the summary with links:
-  - [net,01/11] mptcp: pm: kernel: correctly retransmit ADD_ADDR ID 0
-    https://git.kernel.org/netdev/net/c/b12014d2d36e
-  - [net,02/11] mptcp: pm: ADD_ADDR rtx: allow ID 0
-    https://git.kernel.org/netdev/net/c/03f324f3f1f7
-  - [net,03/11] mptcp: pm: ADD_ADDR rtx: fix potential data-race
-    https://git.kernel.org/netdev/net/c/5cd6e0ad79d2
-  - [net,04/11] mptcp: pm: ADD_ADDR rtx: always decrease sk refcount
-    https://git.kernel.org/netdev/net/c/9634cb35af17
-  - [net,05/11] mptcp: pm: ADD_ADDR rtx: free sk if last
-    https://git.kernel.org/netdev/net/c/b7b9a4615697
-  - [net,06/11] mptcp: pm: ADD_ADDR rtx: resched blocked ADD_ADDR quicker
-    https://git.kernel.org/netdev/net/c/3cf12492891c
-  - [net,07/11] mptcp: pm: ADD_ADDR rtx: skip inactive subflows
-    https://git.kernel.org/netdev/net/c/c6d395e2de13
-  - [net,08/11] mptcp: pm: ADD_ADDR rtx: return early if no retrans
-    https://git.kernel.org/netdev/net/c/62a9b19dce77
-  - [net,09/11] mptcp: pm: prio: skip closed subflows
-    https://git.kernel.org/netdev/net/c/166b78344031
-  - [net,10/11] selftests: mptcp: check output: catch cmd errors
-    https://git.kernel.org/netdev/net/c/65db7b27b90e
-  - [net,11/11] selftests: mptcp: pm: restrict 'unknown' check to pm_nl_ctl
-    https://git.kernel.org/netdev/net/c/53705ddfa184
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="v1++ER88l8OUwD5L"
+Content-Disposition: inline
+In-Reply-To: <20260501021639.2563219-1-xujiakai2025@iscas.ac.cn>
+X-Cookie: Truckers welcome.
 
 
+--v1++ER88l8OUwD5L
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Fri, May 01, 2026 at 02:16:39AM +0000, Jiakai Xu wrote:
+> The refactored check_steal_time_uapi() creates a temporary VM via
+> vm_create_with_one_vcpu(), whose default memslot0 only covers GPA
+> 0..~2MB.  Setting st_ipa to ST_GPA_BASE (1 << 30) causes
+> kvm_arm_pvtime_set_attr() to fail with EINVAL because gfn_to_hva()
+> cannot find a valid memslot at the target GFN.
+
+Tested-by: Mark Brown <broonie@kernel.org>
+
+It'd be good to get this merged, this is a mainline regression.
+
+--v1++ER88l8OUwD5L
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmn77EoACgkQJNaLcl1U
+h9AK7Af/XR+d37P6uL0n0Fx8fm4VK+ZmK0hvIRclQwkMsoHT3vhklNUChbZVyi2C
+fpSUXPczpk17MkZQSRBLvF1KfEoUlFxTlu8fdPevOv22vaTkveC4dwNF95/M+vEH
+B51YF/vUfjcEMtlXtkE77eBJ6+5OPhJuJc0QE1yzY9HbaXXiIUnuOmHKYwFm+V9U
+Uinp/GOTEb9FO50Ks3MG1tVSsurpXJgp0Pz39qyDP0PfTTi56bCjQJdI8KnfmL/G
+iehiXZB/YJoGhID+U66QMQR3gHlh3QXTzSEZ8xg1g9jIIVA0Su8fIIycvQ/ntjCo
+XlB7jVGTFAg63YWfT5CiF+18/brE4w==
+=JSA7
+-----END PGP SIGNATURE-----
+
+--v1++ER88l8OUwD5L--
