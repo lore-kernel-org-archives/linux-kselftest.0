@@ -1,45 +1,49 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3187530B501;
-	Wed,  6 May 2026 23:11:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0112A4A07;
+	Thu,  7 May 2026 00:25:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778109097; cv=none; b=JKyASCjQgU2dvmz3yW28SJ23VQxlbNGj+p9aAiPhv0YMe6WhJ9mSK5qqNGyaJ2TLpP/rmcRerSUK5bj2LC7PGHg1wW90XubsoUqTQYBwgTZLNsA81dt95w6q4sn/lP8EEb7A8m/ZgbnRf0dP+cpeOTCKmV+J12TF2elUBb5KuEA=
+	t=1778113528; cv=none; b=B0kTPmSZY81y6p8rNkMVXvPJmqBvU6VM31izrFH7zyvHcgfxz5dYt8aAVnLV2KNycPtvIu4vYnWJNcC536ovLkqzUxU2pe48rChMxoxn8eF1nA694H4io/DMPgvrhtamqeIRlexoR/aKz5pqdYZWaqk/yFI3qt6hKlEc9b6r5I8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778109097; c=relaxed/simple;
-	bh=z9+vpVvtGh3BJ+OblrI/f59Z5QRRDLi6Egfts89i6k8=;
+	s=arc-20240116; t=1778113528; c=relaxed/simple;
+	bh=RtSJVkZEpOYr4SVwJMf3beHk57TF98Ft48y2/lsGKDA=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NmgT+SSu3pIyc9j6SRLnX+mXiP+ZG7UJ9FEKgxn8iE/DcT0DEjNpFqOTg5I+P89c3Se5emdaE3eMcYHH0amMYl9UUh5ZdRPrcirdkQsxMrAEVgDlhDQPyktkwyBuYYzv1eUBbRZDgmgQBvU6yOc9BBHvd1vXrXI01kSRcVB2WhU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c10RidK5; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=GYI50ZRXVAwkMV+h5DIm2hQCjyrUT7Jlf/WrRYpM+LW7PWXEGgQ/dp94p2giUnyujiYQpn1o+jekfyuprCwcNRPWjhZfpuhLNi/A3Er4I+2V2WuJ4BqN4bF0+XdxPTzDpzrOFZdiMbRH8u6ILNqQpU28V3oBkZcn6SLBD1YxOH8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LGP1OeeB; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c10RidK5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5219AC2BCB0;
-	Wed,  6 May 2026 23:11:36 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LGP1OeeB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEBB8C2BCB0;
+	Thu,  7 May 2026 00:25:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778109096;
-	bh=z9+vpVvtGh3BJ+OblrI/f59Z5QRRDLi6Egfts89i6k8=;
+	s=k20201202; t=1778113527;
+	bh=RtSJVkZEpOYr4SVwJMf3beHk57TF98Ft48y2/lsGKDA=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=c10RidK59FF1IzXQz5hrvJKwLc+VGOC2rDG0Qw4jvUdcxAHgp1lgVMC378W3UEFqh
-	 /yfBvKXer+ppn+hY96ZZYhtpwpYM9USr8AitW8XC0PPAyb/Yt2pv94gNiqMVReGaPJ
-	 J1znWCxe9urzlOEyWLDZ9a921I81OPgbq97mYhPs8P66kt0wlH32SQprcfOqY+Siqo
-	 BwaDtC5kNzyN14U1RJ8Q5xtPSR7wMSOFVWCxxqHeQ7VtCA1ihLMb0Y1VZVNqa9Z4bA
-	 VCkxitaqjZ6MIeRikwdWM/vcs2F87QXeSO1M8QGBtzUoqWJjC+ZepYH4ioD5lUKA0o
-	 D+Z/IobhvD1/Q==
-Date: Wed, 6 May 2026 16:11:35 -0700
+	b=LGP1OeeBT3ZaDJOe0c+cTtwSfJG01Hg7QOiJluZ04pLuAuY9n1647Hgr/gdizAjt8
+	 vaPwBh+pXrE7F+8cUxkrlzaaeVEaM8wokIYCEAg9fxWbV0VPFDGCvUmlxQWtA/vOx2
+	 p5pfsONac2yx6WijCbIODX0Z90UCl8hgd6Q7uXrbIhgohqXMsLi9RPJXl95KY5z59v
+	 BQuMv6li3xF0enJaNFtn9dwnII7cvjPpMYw5LMjGhBB8cRSBbTWdZxJAV/qd1+VhZk
+	 AytNMczcqLsGILEJhitcvnh/4qjmtbB1MhnIr+5ZfN8TWBORO6djXxKX3auMwu1jua
+	 5G2iZB0gyGELQ==
+Date: Wed, 6 May 2026 17:25:25 -0700
 From: Jakub Kicinski <kuba@kernel.org>
-To: Antonio Quartulli <antonio@openvpn.net>
-Cc: netdev@vger.kernel.org, edumazet@google.com, sd@queasysnail.net,
- davem@davemloft.net, pabeni@redhat.com, ralf@mandelbit.com,
- andrew+netdev@lunn.ch, horms@kernel.org, shuah@kernel.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net 2/3] ovpn: ensure packet delivery happens with BH
- disabled
-Message-ID: <20260506161135.1db08c2d@kernel.org>
-In-Reply-To: <9ffc1db1-3b67-453e-ae43-e986fdad3694@openvpn.net>
-References: <20260504230305.2681646-3-antonio@openvpn.net>
-	<20260506010035.1563280-1-kuba@kernel.org>
-	<9ffc1db1-3b67-453e-ae43-e986fdad3694@openvpn.net>
+To: Breno Leitao <leitao@debian.org>
+Cc: Oliver Hartkopp <socketcan@hartkopp.net>, Marc Kleine-Budde
+ <mkl@pengutronix.de>, Robin van der Gracht <robin@protonic.nl>, Oleksij
+ Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de, Jeremy Kerr
+ <jk@codeconstruct.com.au>, Matt Johnston <matt@codeconstruct.com.au>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
+ <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kernel-team@meta.com
+Subject: Re: [PATCH net-next 4/5] llc: convert to getsockopt_iter
+Message-ID: <20260506172525.27323c23@kernel.org>
+In-Reply-To: <20260505-getsock_two-v1-4-4cb0738950e0@debian.org>
+References: <20260505-getsock_two-v1-0-4cb0738950e0@debian.org>
+	<20260505-getsock_two-v1-4-4cb0738950e0@debian.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -49,34 +53,19 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Wed, 6 May 2026 11:00:20 +0200 Antonio Quartulli wrote:
-> > ovpn_decrypt_post() {
-> >          ...
-> >          if (unlikely(ret < 0))
-> >                  goto drop;
-> >          ...
-> > drop:
-> >          if (unlikely(skb))
-> >                  dev_dstats_rx_dropped(peer->ovpn->dev);
-> >          ...
-> > }
-> > 
-> > Since dev_dstats_rx_dropped() updates the same per-CPU dstats structure
-> > without disabling bottom halves, could it still be vulnerable to softirq
-> > preemption and stat corruption?
-> >   
+On Tue, 05 May 2026 04:12:41 -0700 Breno Leitao wrote:
+> Convert LLC socket's getsockopt implementation to use the new
+> getsockopt_iter callback with sockopt_t.
 > 
-> Actually we were already looking into this.
-> However, since this needs a separate analysis, I wanted to get this 
-> fixed in a follow up patch.
-> 
-> Would it be ok to pull this PR as is, so we don't hold back the 
-> outstanding fixes?
-> 
-> Then we will address the issue highlighted by Sashiko in a new patch.
-> The problem is similar, but may need to be fixed differently.
+> Key changes:
+> - Replace (char __user *optval, int __user *optlen) with sockopt_t *opt
+> - Use opt->optlen for buffer length (input) and returned size (output)
+> - Use copy_to_iter() instead of put_user()/copy_to_user()
+> - Add linux/uio.h for copy_to_iter()
 
+kdoc needs to be adjusted here.
 
-Ugh, fair. The way the AI formatted the output made me think
-it's an error path in the same function, which would make sense 
-to address with a single patch.. Pulling now.
+When you repost could you split the CAN stuff out and send it 
+to Marc and co. ? We don't normally take CAN patches directly.
+-- 
+pw-bot: cr
