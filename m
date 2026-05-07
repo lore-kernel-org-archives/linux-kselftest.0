@@ -1,122 +1,149 @@
-Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
+Received: from mail-qt1-f226.google.com (mail-qt1-f226.google.com [209.85.160.226])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CD1539098C
-	for <linux-kselftest@vger.kernel.org>; Thu,  7 May 2026 15:39:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 723BE44BCB6
+	for <linux-kselftest@vger.kernel.org>; Thu,  7 May 2026 15:51:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.226
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778168346; cv=none; b=sV18/zzzaW6EqrokD4abTU4qSgJ2NpgGcfQ27pyVbP5eK3orEqPay8clx6B/pSP/G9KljNjbuJ9X4O69DTJwkzSA+1fl9l+yCqWDH6aSz46uJBikvmbtQkFNFILDzqLL4eGE4HsZ28niV3wtSIPlTS+xtcwtgmCr+CWAxdJ8o2A=
+	t=1778169096; cv=none; b=vAtbqjfAicQnV5z0yUFKruITKq/ubh1GBq9Y9qEH5unGbUe1AEB1KsuRxi4xv8qe16DCskTBgTsROKsAsi5TiWZPNPDpjyaNQW8RMVNMnQl7JDKDtfeaqQsMVj7mII/c3aecRPOl6F3kGtyTc/WGomkbK8kxTJ351MH9aEJvh5M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778168346; c=relaxed/simple;
-	bh=I7bHVcUPCbFavnPQE9NIAPWTbSlQISkdMWu7R9FX+Ss=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=U1Zg5jzD3Ljc/wdBQC/Z7I3F6SE9IMvk4MHFQ9siNubS2f97jzRm6o+ggy8Qhw8G2H2Lnxi8G/PNiddk2S5NejkPvBo5tzPwKVca1FK1NjG2CtkFffwIrwvn+IelQr3g1LG/lQg3D8rN2kEwI1Sr+V22VLQ4nElK9M2S+e/9g9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lELMVwd2; arc=none smtp.client-ip=209.85.222.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1778169096; c=relaxed/simple;
+	bh=T1es+NUo7iUHfYNW7MbhVaFEpDoDjGvfl8mP6hP0Drs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HlZ+ZdXtcwuNv1168SFwelKRZIEvMZOsUJ3rcN/CJ4pzi7jkHV0u7r84FKlvMM6WGcO56t8GAxxoCzqxB06M8r4EfElha50tNhYbibbRZ/GT+UU1RKoITX7Mn95hfADELuxn3J2H4u3rLHfCrTIp2QM2XWwFCMr7cVVTx74Ecu0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=gxruH3tk; arc=none smtp.client-ip=209.85.160.226
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lELMVwd2"
-Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-8ef2118b478so100241985a.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 07 May 2026 08:39:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778168344; x=1778773144; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hQASz0K9bAEWsvTANOg3uGMuZOgruzesi2JgdTAVAkE=;
-        b=lELMVwd2v+v3Y2UjmN0rjzuYIZkTeRK8VqQUHf+rI68gGfgcG8NCRLWnzDSU7Ejg3a
-         Fkw6my+S6bAF/4E4hCUawNWJPvhr1TNcPhPRWjqkvLDfn3aOBNptDGyNH86WSvyJo283
-         sWtpk53zfbttBN4gwE+xdhjPtewc4RWBahS89D/lN22YvuzFwhbBxwkjAQV+wl+AgeCk
-         lXNzb4qXqs00gTDv0uytVS0ClClxoEGzxVnEniq0d3y4Gw9GHs0fmfn66iThHtOpR7TJ
-         l3wCy1J1YODPtn2r0c+N3ZstW4mN3WeMU4SFG3zlY2trp4eE2dESUXTSK8mMG8ZRqvme
-         3PWQ==
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="gxruH3tk"
+Received: by mail-qt1-f226.google.com with SMTP id d75a77b69052e-51013ab8e3bso1395851cf.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 07 May 2026 08:51:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778168344; x=1778773144;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20251104; t=1778169094; x=1778773894;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:dkim-signature:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=hQASz0K9bAEWsvTANOg3uGMuZOgruzesi2JgdTAVAkE=;
-        b=aLZCacfz9gly84CjMHpYB9Q6Xr/D+9NwcD2AU7ndVyc6wM2hoKynYYMN8xw3QJABcW
-         GCePzxiLF21SiCqhdzR3QLdmTQn12j0xIoUTSiCeKi3ivEvxD7/2bOWOY777hGhpbmjL
-         tL++v93EKD+0mrHhWWpoC009CsB3P12oWe1ctgwzfaBr6DPH9WODw7KxwSAZleiA/kat
-         cwZFLvltwtId1Atnog+K+kduRfQ8DYc3o4c0k5Jy0q0ojtZhhQNUUpBmg3YbvDg8wcSU
-         8VaqGCyvfxVh0y3aWM0yoFsfLhazn3pw1KVhZgPOC083xxTb6V+980axKQgEWI9ZcoDd
-         QFkQ==
-X-Forwarded-Encrypted: i=1; AFNElJ8ZY2nN/07NRM9aRm1BS82qVNzeLw3ENAoALwLvjwVyoJRlOgwvG3AOFyfLHkvDJq1+/5KFc1oIfZhb0v8QlOA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwxNC+P/U1MKpko4V6vb35LALLw353K1KWn84CbpnY8t0lOJOQ9
-	Fw8YodbYjpgcbXqsyl36ZifworNjApLoCZLmbUcjDnlccS/Qr36mUHds
-X-Gm-Gg: AeBDieusEeVytCmmLPrgAVKJgJcwsRAxQRyWDCluinoPmPcIWESl4WYZR+LrZPp49e4
-	LhM9+3rdBfSSOfmvl97F4gAp0Z5TkfS3gnZS/Bj+aAjE/5nM7j3XBwsr5JLWJcJX4oBFCwNRl/Y
-	AKE8/X9yqvPCPe8wFb7GJ6yS7jaJTTx+JewAPA73WlzDP1NmE/pbVQpcowL4FQA3TMJZnMP5FWd
-	Z5JfiLC6mX2Aj9JOYuPzo+d7l4NWEW6866rL/alZhwQYEDY/Ni5e/po5lV+GRhpwJz73D22VeId
-	l90M7u0ytgNZ9FANQT/E8FPdcP4IJk4M8NayWPxzxLDtoYPkYIjovVY4yeilShK5486XkT+JDt9
-	NFAJTFX8a/BbHWYg5wah98EWTWBb4BoeHtF5dxy1YDR9lt/0OJDmInDNnXgqYPaw71tJQ92M5U9
-	X2RiEOX0fojRXlI7CsWOtxHSRkZp2MP1IVC2GIJkkHGLvTrF4Tw8jWxo0h6A==
-X-Received: by 2002:a05:620a:440f:b0:8ed:11b9:1ecb with SMTP id af79cd13be357-904d4b58929mr1205520185a.20.1778168344205;
-        Thu, 07 May 2026 08:39:04 -0700 (PDT)
-Received: from devvm29614.prn0.facebook.com ([2a03:2880:f800:13::])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8fc293837b5sm2153539785a.10.2026.05.07.08.38.59
+        bh=Ax1Aa73Yhe1dRK53NtIJp2y9KXXpNOfAjqoEk54yGok=;
+        b=FBr6rzccy4Gf+Zz+0X/juc8oiU13l61IqHg8gtCy64MGD8qiuzEyX/zrLVtT299mOm
+         4I6BIBwvwUifvRxJuqtRKXA0Rl4TxzD9HC2ZaXxCzkSPwe+sZ6nFLal5y/iI+iIyWb8Y
+         J4bDWA9dknvX8Xc2/3LgJe/aaQDB9WPPgyFa/M++8YfhTE5fedGXaai5dGTOP+lDnfqv
+         md7jt3DtNbP4+y2tKIp0mXKUegn1hdpGFIzsfW+Mrz83eJvjicEaKozhzQ6TsCpMp3pv
+         hwCXi0EVk7d8m+K3qYoiVytxP01uOc2rmYsAy4FqvAHgqlq/4MIx+HIM0qAmOwlRPkLE
+         aYWQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/oWmH/7UxH2XQWbkqD3GL0jRMKfO5qzG/wZivFR97ktQAuqYked2KRHbJpdom3Gbc0oXzaDftvgaDvsQllZ1c=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw/GzAtWNcMhgElTNaWw3r2veac2ZSNIIgpekKHzrs52Tmz5PAc
+	MJI3FVlmgEa6wnS8vL6liB6hjQSPIQAaDVfhKRTVTVu7ttZ6UONpQOUzjm93aAln66C6xXFxrAv
+	ozDs9zYQ1G0KBI9T4NOkZjpdf08j4GXfARPQ365RZadck6J1vAU37V6niXIaGAP/ddYREqLy1ot
+	Jr14Zkz7gWlXU2sMbLDMfd0rr38G0bpIVhd+Ao5fmUjVl6MKav+Qlov3DmnTLpF8LFVdotd34be
+	Z7B5r2ZmeIhBH5M6kbKCZeReEc=
+X-Gm-Gg: AeBDietZGH34WoMzWCNyY+6F85brxfKjQXyHnT29FdUzb8VBYOPIWYSAg52IXG/q1Uk
+	bh4RR0ACJM+yTVmrCchjoRXL0Xj3RHhbSfdDwrsgcrFY3sLhbqH0TW8EHGTW8RJuGJgXXMhXGYE
+	VZB5zUvjMGZ+qXwyAOToHEuXEcUqRqM/gycd1DuU5p9ZqAOmvtBO5qvci4a/CpqlEoCfeap6DJ8
+	f8PljS7oVrNs6flEQWnmjInVMhN3BzMFWr8KWF5DE4GtvIAgbQMZDKa8XZbv/dAkBnVXRqxcpY+
+	anDl/pR8Zc6tEvD67nar7yKnpenXrQGA4aTLFDyQ3GlI43xy0Yi+Lne7b0YKmae2cZR7GC90KWQ
+	acHu7ZojIbgbGAd2miGi+eUJ/6Rwk26QPHJa+vpcM3gyBBqHq7lwG0mU9R8Kk+vaX2R44JVqs6X
+	k2tuMeYnO4aosxMcNWxkYGbrxBCdeFcsJ6Di1euc302rIvOi1DMO/43QCLrz3i
+X-Received: by 2002:ac8:5c8f:0:b0:50d:aa1f:68be with SMTP id d75a77b69052e-51464ab1828mr68809351cf.4.1778169094161;
+        Thu, 07 May 2026 08:51:34 -0700 (PDT)
+Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com (address-144-49-247-121.dlp.protect.broadcom.com. [144.49.247.121])
+        by smtp-relay.gmail.com with ESMTPS id 6a1803df08f44-8b537f74ed7sm16615816d6.6.2026.05.07.08.51.33
+        for <linux-kselftest@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 07 May 2026 08:51:34 -0700 (PDT)
+X-Relaying-Domain: broadcom.com
+X-CFilter-Loop: Reflected
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-8eb6880430dso28898985a.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 07 May 2026 08:51:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1778169093; x=1778773893; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ax1Aa73Yhe1dRK53NtIJp2y9KXXpNOfAjqoEk54yGok=;
+        b=gxruH3tk/6ZLQp3HaN3RH6W/SfXEH8kK8jNBbUMJtKVjNqLhJI7V30n1needsmEKWv
+         ghMeZ5dxY4lGadYDV8TEnsqIK6SyY4l9T7fjqNWC/AMmJQRuwhGIMD8viTMXCvjj1Lfx
+         K2rNAfTQvTZh3A3mz9i4h7tLywlbB8oOq7VtI=
+X-Forwarded-Encrypted: i=1; AFNElJ+W9kdcmbNFpPUOuJReeWcIBloVcIxmoj4mFybC36dzRSPk6jlqeTmjMytY1bv7dl94k2q5LPX5HBNilF4QrUI=@vger.kernel.org
+X-Received: by 2002:a05:620a:1726:b0:8d7:ed38:8189 with SMTP id af79cd13be357-90517dc628dmr724171685a.0.1778169093237;
+        Thu, 07 May 2026 08:51:33 -0700 (PDT)
+X-Received: by 2002:a05:620a:1726:b0:8d7:ed38:8189 with SMTP id af79cd13be357-90517dc628dmr724167785a.0.1778169092652;
+        Thu, 07 May 2026 08:51:32 -0700 (PDT)
+Received: from photon-d7fac424c0d3 ([192.19.161.250])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-90642b76d39sm240711885a.2.2026.05.07.08.51.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 May 2026 08:39:02 -0700 (PDT)
-Date: Thu, 7 May 2026 08:38:56 -0700
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>, Alex Shi <alexs@kernel.org>,
-	Yanteng Si <si.yanteng@linux.dev>, Dongliang Mu <dzm91@hust.edu.cn>,
-	Michael Chan <michael.chan@broadcom.com>,
-	Pavan Chebbi <pavan.chebbi@broadcom.com>,
-	Joshua Washington <joshwash@google.com>,
-	Harshitha Ramamurthy <hramamurthy@google.com>,
-	Saeed Mahameed <saeedm@nvidia.com>,
-	Tariq Toukan <tariqt@nvidia.com>, Mark Bloch <mbloch@nvidia.com>,
-	Leon Romanovsky <leon@kernel.org>,
-	Alexander Duyck <alexanderduyck@fb.com>, kernel-team@meta.com,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-rdma@vger.kernel.org, bpf@vger.kernel.org,
+        Thu, 07 May 2026 08:51:32 -0700 (PDT)
+From: Ankit Jain <ankit-aj.jain@broadcom.com>
+To: edumazet@google.com,
+	netdev@vger.kernel.org
+Cc: kuba@kernel.org,
+	davem@davemloft.net,
+	pabeni@redhat.com,
+	ncardwell@google.com,
+	kuniyu@google.com,
+	horms@kernel.org,
+	shuah@kernel.org,
+	quic_subashab@quicinc.com,
+	quic_stranche@quicinc.com,
 	linux-kselftest@vger.kernel.org,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Mina Almasry <almasrymina@google.com>,
-	Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v2 2/6] net: devmem: support TX over
- NETMEM_TX_NO_DMA devices
-Message-ID: <afyyEJNbrBem8igi@devvm29614.prn0.facebook.com>
-References: <20260504-tcp-dm-netkit-v2-0-56d52ac72fd4@meta.com>
- <20260504-tcp-dm-netkit-v2-2-56d52ac72fd4@meta.com>
- <20260506193420.575e1806@kernel.org>
+	linux-kernel@vger.kernel.org,
+	karen.badiryan@broadcom.com,
+	ajay.kaher@broadcom.com,
+	alexey.makhalov@broadcom.com,
+	vamsi-krishna.brahmajosyula@broadcom.com,
+	yin.ding@broadcom.com,
+	tapas.kundu@broadcom.com,
+	Ankit Jain <ankit-aj.jain@broadcom.com>
+Subject: [PATCH net v3 0/2] tcp: protect locked SO_RCVBUF from Silly Window Syndrome
+Date: Thu,  7 May 2026 15:48:04 +0000
+Message-ID: <20260507154806.18635-1-ankit-aj.jain@broadcom.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260506193420.575e1806@kernel.org>
+Content-Transfer-Encoding: 8bit
+X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
 
-On Wed, May 06, 2026 at 07:34:20PM -0700, Jakub Kicinski wrote:
-> On Mon, 04 May 2026 17:27:49 -0700 Bobby Eshleman wrote:
-> > +	if (bind_dev != netdev)
-> > +		netdev_lock(bind_dev);
-> > +	dma_dev = netdev_queue_get_dma_dev(bind_dev, 0, NETDEV_QUEUE_TYPE_TX);
-> > +	if (bind_dev != netdev)
-> > +		netdev_unlock(bind_dev);
-> > +	binding = net_devmem_bind_dmabuf(bind_dev,
-> > +					 bind_dev != netdev ? netdev : NULL,
-> > +					 dma_dev, DMA_TO_DEVICE, dmabuf_fd,
-> > +					 priv, info->extack);
-> 
-> Not sure if it matters but are we intentionally releasing the bind_dev
-> lock before calling net_devmem_bind_dmabuf() ? Previously more code here
-> was covered by the physical netdev's lock.
+This patch series fixes Silly Window Syndrome (SWS) for sockets using 
+locked SO_RCVBUF.
 
-True, lock needs to be held at least until after binding. I have this
-fixed in the next rev.
+When applications like Tomcat lock SO_RCVBUF, receiving small packets 
+causes the memory truesize penalty to drop the scaling_ratio to 1. 
+This shrinks the internal window clamp and leads to 504 Gateway Timeouts.
 
-Best,
-Bobby
+Patch 1 bypasses this penalty for locked sockets, except for GRO packets.
+Patch 2 adds a packetdrill test to validate this fix.
+
+Link to v1:
+https://lore.kernel.org/all/20260427152756.1205-1-ankit-aj.jain@broadcom.com/
+Link to v2:
+https://lore.kernel.org/all/20260504144945.13477-1-ankit-aj.jain@broadcom.com/
+
+v2 -> v3:
+ - Changed GRO detection from checking tp->advmss to skb->len > len 
+   based on Eric Dumazet's suggestion. This correctly detects GRO 
+   packets even if they contain tiny segments.
+ - Updated packetdrill script. Removed the ad-hoc mss 48 configuration. 
+   It now uses a standard 1460 MSS and sends varying packet sizes 
+   (600, 700, 800 bytes) to naturally trigger the scaling_ratio 
+   recalculation.
+
+Testing:
+ - Verified fix in a live Java/Tomcat environment (504 timeouts resolved).
+ - Passed the newly added packetdrill test demonstrating the clamp bypass.
+ - Passed upstream regression tests: tcp_rcv_neg_window.pkt,
+   tcp_rcv_wnd_shrink_allowed.pkt, tcp_rcv_wnd_shrink_nomem.pkt,
+   tcp_rcv_zero_wnd_fin.pkt, and tcp_rcv_big_endseq.pkt
+
+Ankit Jain (2):
+  tcp: protect locked SO_RCVBUF from Silly Window Syndrome
+  selftests/net: add packetdrill test for locked SO_RCVBUF SWS
+
+ net/ipv4/tcp_input.c                          |  7 ++++-
+ .../net/packetdrill/tcp_locked_rcvbuf_sws.pkt | 29 +++++++++++++++++++
+ 2 files changed, 35 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_locked_rcvbuf_sws.pkt
+
+-- 
+2.53.0
+
