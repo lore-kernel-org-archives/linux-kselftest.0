@@ -1,75 +1,77 @@
-Received: from mail-qt1-f226.google.com (mail-qt1-f226.google.com [209.85.160.226])
+Received: from mail-oo1-f97.google.com (mail-oo1-f97.google.com [209.85.161.97])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 723BE44BCB6
-	for <linux-kselftest@vger.kernel.org>; Thu,  7 May 2026 15:51:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.226
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78A3B3F0AB9
+	for <linux-kselftest@vger.kernel.org>; Thu,  7 May 2026 15:51:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.97
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778169096; cv=none; b=vAtbqjfAicQnV5z0yUFKruITKq/ubh1GBq9Y9qEH5unGbUe1AEB1KsuRxi4xv8qe16DCskTBgTsROKsAsi5TiWZPNPDpjyaNQW8RMVNMnQl7JDKDtfeaqQsMVj7mII/c3aecRPOl6F3kGtyTc/WGomkbK8kxTJ351MH9aEJvh5M=
+	t=1778169108; cv=none; b=ubwrVycOy+26wqfAaVr68qKZyE5voaGdoaRgWi0lCaebll0cvq04RPeGq7f1vvDB4f1YgYKqZt/39qquMwf+/6UgYI+9yZ9Vqqg7MW+V3JVhOlbzUSYZLmqX6PbDuBKN4EcFR6tcpGlMoO2SqHZCwAOp2asqixIGMLx51EgXQP8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778169096; c=relaxed/simple;
-	bh=T1es+NUo7iUHfYNW7MbhVaFEpDoDjGvfl8mP6hP0Drs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HlZ+ZdXtcwuNv1168SFwelKRZIEvMZOsUJ3rcN/CJ4pzi7jkHV0u7r84FKlvMM6WGcO56t8GAxxoCzqxB06M8r4EfElha50tNhYbibbRZ/GT+UU1RKoITX7Mn95hfADELuxn3J2H4u3rLHfCrTIp2QM2XWwFCMr7cVVTx74Ecu0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=gxruH3tk; arc=none smtp.client-ip=209.85.160.226
+	s=arc-20240116; t=1778169108; c=relaxed/simple;
+	bh=M15uTKwN3yvrhy6+C4e1xest8u1tFHkbzRM6zHTj0ow=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=qdPAjcjY+Pmu+cz9EBu0J3rrPNTerJPnn1I32GsQ05bqmYspUABDQS83yMM5s2Y10rYkY2Adly/kkmZYEeU3SwG2eYEysI4T7THkOspKzmpWP8xVUFKuXqcgrW2B3LhHWg+I/0tCBoojUbM1B2CRBKwJhebpMhaeniaE4hGj3p0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=Gdxekxqm; arc=none smtp.client-ip=209.85.161.97
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="gxruH3tk"
-Received: by mail-qt1-f226.google.com with SMTP id d75a77b69052e-51013ab8e3bso1395851cf.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 07 May 2026 08:51:35 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="Gdxekxqm"
+Received: by mail-oo1-f97.google.com with SMTP id 006d021491bc7-6949872d84cso49209eaf.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 07 May 2026 08:51:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778169094; x=1778773894;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:dkim-signature:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ax1Aa73Yhe1dRK53NtIJp2y9KXXpNOfAjqoEk54yGok=;
-        b=FBr6rzccy4Gf+Zz+0X/juc8oiU13l61IqHg8gtCy64MGD8qiuzEyX/zrLVtT299mOm
-         4I6BIBwvwUifvRxJuqtRKXA0Rl4TxzD9HC2ZaXxCzkSPwe+sZ6nFLal5y/iI+iIyWb8Y
-         J4bDWA9dknvX8Xc2/3LgJe/aaQDB9WPPgyFa/M++8YfhTE5fedGXaai5dGTOP+lDnfqv
-         md7jt3DtNbP4+y2tKIp0mXKUegn1hdpGFIzsfW+Mrz83eJvjicEaKozhzQ6TsCpMp3pv
-         hwCXi0EVk7d8m+K3qYoiVytxP01uOc2rmYsAy4FqvAHgqlq/4MIx+HIM0qAmOwlRPkLE
-         aYWQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/oWmH/7UxH2XQWbkqD3GL0jRMKfO5qzG/wZivFR97ktQAuqYked2KRHbJpdom3Gbc0oXzaDftvgaDvsQllZ1c=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/GzAtWNcMhgElTNaWw3r2veac2ZSNIIgpekKHzrs52Tmz5PAc
-	MJI3FVlmgEa6wnS8vL6liB6hjQSPIQAaDVfhKRTVTVu7ttZ6UONpQOUzjm93aAln66C6xXFxrAv
-	ozDs9zYQ1G0KBI9T4NOkZjpdf08j4GXfARPQ365RZadck6J1vAU37V6niXIaGAP/ddYREqLy1ot
-	Jr14Zkz7gWlXU2sMbLDMfd0rr38G0bpIVhd+Ao5fmUjVl6MKav+Qlov3DmnTLpF8LFVdotd34be
-	Z7B5r2ZmeIhBH5M6kbKCZeReEc=
-X-Gm-Gg: AeBDietZGH34WoMzWCNyY+6F85brxfKjQXyHnT29FdUzb8VBYOPIWYSAg52IXG/q1Uk
-	bh4RR0ACJM+yTVmrCchjoRXL0Xj3RHhbSfdDwrsgcrFY3sLhbqH0TW8EHGTW8RJuGJgXXMhXGYE
-	VZB5zUvjMGZ+qXwyAOToHEuXEcUqRqM/gycd1DuU5p9ZqAOmvtBO5qvci4a/CpqlEoCfeap6DJ8
-	f8PljS7oVrNs6flEQWnmjInVMhN3BzMFWr8KWF5DE4GtvIAgbQMZDKa8XZbv/dAkBnVXRqxcpY+
-	anDl/pR8Zc6tEvD67nar7yKnpenXrQGA4aTLFDyQ3GlI43xy0Yi+Lne7b0YKmae2cZR7GC90KWQ
-	acHu7ZojIbgbGAd2miGi+eUJ/6Rwk26QPHJa+vpcM3gyBBqHq7lwG0mU9R8Kk+vaX2R44JVqs6X
-	k2tuMeYnO4aosxMcNWxkYGbrxBCdeFcsJ6Di1euc302rIvOi1DMO/43QCLrz3i
-X-Received: by 2002:ac8:5c8f:0:b0:50d:aa1f:68be with SMTP id d75a77b69052e-51464ab1828mr68809351cf.4.1778169094161;
-        Thu, 07 May 2026 08:51:34 -0700 (PDT)
-Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com (address-144-49-247-121.dlp.protect.broadcom.com. [144.49.247.121])
-        by smtp-relay.gmail.com with ESMTPS id 6a1803df08f44-8b537f74ed7sm16615816d6.6.2026.05.07.08.51.33
+        d=1e100.net; s=20251104; t=1778169106; x=1778773906;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:dkim-signature:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BtLl8kOWvPMx0S+t/a7Mz9vgLX46fqlMMw8qeaNu9sU=;
+        b=H+2EhiMn+6lJM9z/Uh3cKgL70VhYxX1UKg5LK6592me99PIqFfWoCFLpNtyyiaicF0
+         YmAFIn1Kwi74P05z+GigtM0ypGQuUMp8dsmq8iHPqy2R+XoN3P8yvTdPbRswferFBw2B
+         orMK0DpGGG1QK8o4U1U2YLUtNeAnJYWWww8pjegn/GmVZ3CJ+q2zRtFKHjegqe8FsrPL
+         JS3UyCr2nQHFquU5gnI4aEfkOyA7fVYgnde/1Q1lVDnvRTp0ljEHkJTW8+MhItim5904
+         tDSfveUlY1ajaSxjI10Us2ySIREo3mfWsOfccTqzirLFBBZgHMgJ5Brq+A+DO7hbtSVl
+         FtXg==
+X-Forwarded-Encrypted: i=1; AFNElJ+03Ir1mqt+AOPqv8PvSdT+UkEfPQJKxG6b1nm64X/MXPogfn7DYSjluMue8NZ774iHRB2ZZQDKOLltE2X8Ft0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwQc9xtqt2SwY7r/YpsNtU0pur0YSDp2S6xZMH/BkQRY6jEA3zq
+	64BygDpP5Ol7Zy/nN7OZwakK4GHBtNKxwj/eU6izjQOtsfeoIYjCrtuU/mQwuMzw7avQf8nmaKY
+	D1G91z5GWxhgZENLOCOF4UdYc2SZbpBLxQvxvXF3xT0gte++G7U252CdQkXDLvekR63iz/ORIs+
+	krWBKT29ZUH77DIAYt3Y8lfZW1WWpQT9IWpbL8+JQcX8fP4ixFum3jkvEhz+8LdxqtRiM4lvnk6
+	kE7r1Ed2kUWAh0TOotYoKoRMWM=
+X-Gm-Gg: AeBDiesu5/xdszxoTjk1jpksqU9UNZYLqBJmidtoMoQQh6FItQUP2hmstbrTe3i1h22
+	4uzZ1huwFnTXxeZIYrLL1ABhocrw7sPr9d8+CxXIGCnH4KZiZuFodnFVeUp5AMvAKnCKT8HJe/A
+	jLAz9q4VXWOZEwxq2pgFdpTnV0XAzAnrX9oqsx95k7wSWG+xWbIjvnIvKhSnF8naGRo9r+0kPrq
+	RLQ7uXueWQeWmlB0tREez4fpeSzWg4R/2UsNKTjSR6hFpTpAEYYr3u/PMWZqCB3e3g4YF9C6Ay9
+	ErZKjrzupzhEwfBKZQQNgyBjJHaDNdg7Su0JiTXIWzZAcA7PRTI/r20a55y7zxwwqs1YebEQuOo
+	nh07184GbJ2ZDC+rgwudmCteGO38j1j+Rsv/yp2yzMeCq6cuGITMNdjWqiAQiGsUZvibc4q6TlK
+	Z/DhpeHA==
+X-Received: by 2002:a05:6830:4423:b0:7d9:b2dc:334a with SMTP id 46e09a7af769-7e1e2d30b55mr3084266a34.3.1778169106203;
+        Thu, 07 May 2026 08:51:46 -0700 (PDT)
+Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com ([144.49.247.127])
+        by smtp-relay.gmail.com with ESMTPS id 006d021491bc7-699b224c59bsm69153eaf.12.2026.05.07.08.51.45
         for <linux-kselftest@vger.kernel.org>
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 07 May 2026 08:51:34 -0700 (PDT)
+        Thu, 07 May 2026 08:51:46 -0700 (PDT)
 X-Relaying-Domain: broadcom.com
 X-CFilter-Loop: Reflected
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-8eb6880430dso28898985a.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 07 May 2026 08:51:33 -0700 (PDT)
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-8eb6880430dso28903485a.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 07 May 2026 08:51:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1778169093; x=1778773893; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ax1Aa73Yhe1dRK53NtIJp2y9KXXpNOfAjqoEk54yGok=;
-        b=gxruH3tk/6ZLQp3HaN3RH6W/SfXEH8kK8jNBbUMJtKVjNqLhJI7V30n1needsmEKWv
-         ghMeZ5dxY4lGadYDV8TEnsqIK6SyY4l9T7fjqNWC/AMmJQRuwhGIMD8viTMXCvjj1Lfx
-         K2rNAfTQvTZh3A3mz9i4h7tLywlbB8oOq7VtI=
-X-Forwarded-Encrypted: i=1; AFNElJ+W9kdcmbNFpPUOuJReeWcIBloVcIxmoj4mFybC36dzRSPk6jlqeTmjMytY1bv7dl94k2q5LPX5HBNilF4QrUI=@vger.kernel.org
-X-Received: by 2002:a05:620a:1726:b0:8d7:ed38:8189 with SMTP id af79cd13be357-90517dc628dmr724171685a.0.1778169093237;
-        Thu, 07 May 2026 08:51:33 -0700 (PDT)
-X-Received: by 2002:a05:620a:1726:b0:8d7:ed38:8189 with SMTP id af79cd13be357-90517dc628dmr724167785a.0.1778169092652;
-        Thu, 07 May 2026 08:51:32 -0700 (PDT)
+        d=broadcom.com; s=google; t=1778169105; x=1778773905; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BtLl8kOWvPMx0S+t/a7Mz9vgLX46fqlMMw8qeaNu9sU=;
+        b=GdxekxqmEJ3Rx7hl0zllmscamtHQJ4J7UOFpKkbkp8NKpIqdhNX+OiXH8X/Hzzob18
+         TOwtRgpjTi54fGeYUicnI7/N8nW+9bJkSWnn5Mq9B0SwpwsuqYoe/1R0HSqV2tb8ALB8
+         RePp0S+PgS1JWMB0e6eANZfN4feGMDtfAbuV8=
+X-Forwarded-Encrypted: i=1; AFNElJ92/lS0ReyZX2NjOXnNbp/5KF4xOMn/Pcw2PSHUsdng0lq9okzHMEdjbMXpfeLdj9q4CNCGEDQX8i455NEcVJI=@vger.kernel.org
+X-Received: by 2002:a05:620a:4406:b0:8cf:d953:b4ec with SMTP id af79cd13be357-9051dafefc0mr754138085a.3.1778169105103;
+        Thu, 07 May 2026 08:51:45 -0700 (PDT)
+X-Received: by 2002:a05:620a:4406:b0:8cf:d953:b4ec with SMTP id af79cd13be357-9051dafefc0mr754133685a.3.1778169104463;
+        Thu, 07 May 2026 08:51:44 -0700 (PDT)
 Received: from photon-d7fac424c0d3 ([192.19.161.250])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-90642b76d39sm240711885a.2.2026.05.07.08.51.30
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-90642b76d39sm240711885a.2.2026.05.07.08.51.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 May 2026 08:51:32 -0700 (PDT)
+        Thu, 07 May 2026 08:51:44 -0700 (PDT)
 From: Ankit Jain <ankit-aj.jain@broadcom.com>
 To: edumazet@google.com,
 	netdev@vger.kernel.org
@@ -91,10 +93,12 @@ Cc: kuba@kernel.org,
 	yin.ding@broadcom.com,
 	tapas.kundu@broadcom.com,
 	Ankit Jain <ankit-aj.jain@broadcom.com>
-Subject: [PATCH net v3 0/2] tcp: protect locked SO_RCVBUF from Silly Window Syndrome
-Date: Thu,  7 May 2026 15:48:04 +0000
-Message-ID: <20260507154806.18635-1-ankit-aj.jain@broadcom.com>
+Subject: [PATCH net v3 1/2] tcp: protect locked SO_RCVBUF from Silly Window Syndrome
+Date: Thu,  7 May 2026 15:48:05 +0000
+Message-ID: <20260507154806.18635-2-ankit-aj.jain@broadcom.com>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260507154806.18635-1-ankit-aj.jain@broadcom.com>
+References: <20260507154806.18635-1-ankit-aj.jain@broadcom.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -104,46 +108,44 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
 
-This patch series fixes Silly Window Syndrome (SWS) for sockets using 
-locked SO_RCVBUF.
+When an application locks SO_RCVBUF, it disables TCP window auto-tuning.
+However, the kernel still applies dynamic truesize penalties to the
+scaling_ratio.
 
-When applications like Tomcat lock SO_RCVBUF, receiving small packets 
-causes the memory truesize penalty to drop the scaling_ratio to 1. 
-This shrinks the internal window clamp and leads to 504 Gateway Timeouts.
+For small packets, this penalty drops the scaling_ratio to 1. This
+reduces the advertised window and causes Silly Window Syndrome (SWS)
+along with 504 Gateway Timeouts in applications like Tomcat.
 
-Patch 1 bypasses this penalty for locked sockets, except for GRO packets.
-Patch 2 adds a packetdrill test to validate this fix.
+This patch bypasses the truesize penalty if SOCK_RCVBUF_LOCK is set.
+To prevent memory exhaustion from large aggregate payloads, the penalty
+is still applied for GRO packets (skb->len > len).
 
-Link to v1:
-https://lore.kernel.org/all/20260427152756.1205-1-ankit-aj.jain@broadcom.com/
-Link to v2:
-https://lore.kernel.org/all/20260504144945.13477-1-ankit-aj.jain@broadcom.com/
+Fixes: a2cbb1603943 ("tcp: Update window clamping condition")
+Reported-by: Karen Badiryan <karen.badiryan@broadcom.com>
+Signed-off-by: Ankit Jain <ankit-aj.jain@broadcom.com>
+---
+ net/ipv4/tcp_input.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-v2 -> v3:
- - Changed GRO detection from checking tp->advmss to skb->len > len 
-   based on Eric Dumazet's suggestion. This correctly detects GRO 
-   packets even if they contain tiny segments.
- - Updated packetdrill script. Removed the ad-hoc mss 48 configuration. 
-   It now uses a standard 1460 MSS and sends varying packet sizes 
-   (600, 700, 800 bytes) to naturally trigger the scaling_ratio 
-   recalculation.
-
-Testing:
- - Verified fix in a live Java/Tomcat environment (504 timeouts resolved).
- - Passed the newly added packetdrill test demonstrating the clamp bypass.
- - Passed upstream regression tests: tcp_rcv_neg_window.pkt,
-   tcp_rcv_wnd_shrink_allowed.pkt, tcp_rcv_wnd_shrink_nomem.pkt,
-   tcp_rcv_zero_wnd_fin.pkt, and tcp_rcv_big_endseq.pkt
-
-Ankit Jain (2):
-  tcp: protect locked SO_RCVBUF from Silly Window Syndrome
-  selftests/net: add packetdrill test for locked SO_RCVBUF SWS
-
- net/ipv4/tcp_input.c                          |  7 ++++-
- .../net/packetdrill/tcp_locked_rcvbuf_sws.pkt | 29 +++++++++++++++++++
- 2 files changed, 35 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/net/packetdrill/tcp_locked_rcvbuf_sws.pkt
-
+diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
+index d5c9e65d9760..4b1832b3face 100644
+--- a/net/ipv4/tcp_input.c
++++ b/net/ipv4/tcp_input.c
+@@ -240,8 +240,13 @@ static void tcp_measure_rcv_mss(struct sock *sk, const struct sk_buff *skb)
+ 		/* Note: divides are still a bit expensive.
+ 		 * For the moment, only adjust scaling_ratio
+ 		 * when we update icsk_ack.rcv_mss.
++		 *
++		 * Bypass truesize penalty for locked SO_RCVBUF to prevent
++		 * window collapse. Still apply it to GRO packets.
+ 		 */
+-		if (unlikely(len != icsk->icsk_ack.rcv_mss)) {
++		if (unlikely(len != icsk->icsk_ack.rcv_mss &&
++			     (!(sk->sk_userlocks & SOCK_RCVBUF_LOCK) ||
++			      skb->len > len))) {
+ 			u64 val = (u64)skb->len << TCP_RMEM_TO_WIN_SCALE;
+ 			u8 old_ratio = tcp_sk(sk)->scaling_ratio;
+ 
 -- 
 2.53.0
 
