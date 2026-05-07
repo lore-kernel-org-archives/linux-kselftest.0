@@ -1,92 +1,182 @@
-Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F5B836655B
-	for <linux-kselftest@vger.kernel.org>; Thu,  7 May 2026 12:48:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 700983AB275;
+	Thu,  7 May 2026 12:51:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778158133; cv=none; b=c0wB+l+ln0XjA8zZ7UODXBGCaI/NiYjDXF93GsSTxtSf49tXOJuhxpvhkpd9PEi5IOM8d8p/hn9m/umuK+sScwEWdkhQaKI1KTO6z55S5TpD0lzIv9CHw9/S9XiGci/wHfMLyNWu9gYNU6QWJgvU+EL2dScDUrr31ELktOeQfzQ=
+	t=1778158274; cv=none; b=fAVCMaeM+QMXeODoF7LnsU61z+fNKgDWLFYLEopNAYoddBG9ULChkvRp6+QqgHHbDyPlTBmKRo1y5MLizjyUxc/dsI+FgFHE8Ecd+HYnb/7zpU0NmvoAc7wTE2p9WcVwIThMkKxJFZoPx3X6zy0iJihqfg77K19Q0PltXNO2GlM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778158133; c=relaxed/simple;
-	bh=pSSRQxdxncErXCf+M8Abk9qqkUbDfMbi4JtFvztGRiI=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=oPcFl//ekmeQWkudnPp/l6uZc8woZE8RRTOmT1TcQ49XDuoRTZv9C75o7zWGLchbLAgFCX4BL9uqFDEZoPBm5+NYn4yXneAbCEGR9rJU3wkn1qJ1ooN3HlnJdliyWbPgUh8H0lvCZ+Dh+E7CKRLaudQeLsEIRH86F0w2nj/YLuQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=qvfqq0Mr; arc=none smtp.client-ip=91.218.175.185
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1778158274; c=relaxed/simple;
+	bh=1lnrq1fNp6vpO52lnRddsXLflsbrNwQL37aAeCzE3xM=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=HLBK3ummZpwRZDYMjb8hygsFSlZ4Ue3TOoUvGJ6lbLt3ipdm5xuSgls/5CPUPqi/V4k5Z5l6hOPrqe1hNFcMEsGFYtZUdcb+GFQHtVW2yyiIeoRbV06TGAeV+qn73+kS74VgJP0iMQnzT5ZPGyV6lHQuxADifj63oxFW9rKG+aQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KmOTSwXF; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="qvfqq0Mr"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1778158118;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=pSSRQxdxncErXCf+M8Abk9qqkUbDfMbi4JtFvztGRiI=;
-	b=qvfqq0MrdFu3htA7X+3DVI9J1HnuCZPsjnH7d6qjDFNBVDjVLceHRm7h5Pi/HTENRr1KAO
-	GRyWvfieSYK0eVhvrs+/NmN2z8p4SYTudIZTFlHTapyXKurKDPrHvMT7J5CFmBGp8vl/HO
-	4tcRj1efiuk7XV//++Nf13mg5oiWCj0=
-From: Lance Yang <lance.yang@linux.dev>
-To: ziy@nvidia.com
-Cc: akpm@linux-foundation.org,
-	david@kernel.org,
-	willy@infradead.org,
-	songliubraving@fb.com,
-	clm@fb.com,
-	dsterba@suse.com,
-	viro@zeniv.linux.org.uk,
-	brauner@kernel.org,
-	jack@suse.cz,
-	ljs@kernel.org,
-	baolin.wang@linux.alibaba.com,
-	Liam.Howlett@oracle.com,
-	npache@redhat.com,
-	ryan.roberts@arm.com,
-	dev.jain@arm.com,
-	baohua@kernel.org,
-	lance.yang@linux.dev,
-	vbabka@kernel.org,
-	rppt@kernel.org,
-	surenb@google.com,
-	mhocko@suse.com,
-	shuah@kernel.org,
-	linux-btrfs@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KmOTSwXF"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1778158273; x=1809694273;
+  h=from:to:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=1lnrq1fNp6vpO52lnRddsXLflsbrNwQL37aAeCzE3xM=;
+  b=KmOTSwXFPwgnetc4ok2JrBWJ4eqmPo4v4NBybOOwtoCWZsf8cZuaLgw/
+   99NKu2FOWGWvV4eAWkxTlL7PRuIvri3iagQH+PTwcx6EByRK/D4HiKRT7
+   5xjD5KlohxA4+ioIJ0UhO4ys0ZLPJoOURJGOqqPAvwN1xtKbnbZPsGevl
+   bV2sZv6EGszTv1GPAcLxzL56Uzsg+cSdTIIkphPfOMXOjNlPBahI6Frsg
+   nNXA5UZtDw+bjpACAfWyq1pB8VKuNPPVyMbyUGH448JtUUtFU1DY47N24
+   xp/dtSOQwjtK73jsakq7AwY7DLAk3YoVpEeSQw+N5pGrpha5EzEnAEwR8
+   A==;
+X-CSE-ConnectionGUID: vkQwE2PtT8iMStqiVgvlOQ==
+X-CSE-MsgGUID: 4fel3f4nQTuxDimJDfMotQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11778"; a="78823039"
+X-IronPort-AV: E=Sophos;i="6.23,221,1770624000"; 
+   d="scan'208";a="78823039"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2026 05:51:12 -0700
+X-CSE-ConnectionGUID: xXtSLtBmSpGmWRbpO6dMZA==
+X-CSE-MsgGUID: ZdvvuSkKR8CXthyymtC8HA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,221,1770624000"; 
+   d="scan'208";a="236371396"
+Received: from ly-workstation.sh.intel.com ([10.239.182.64])
+  by orviesa008.jf.intel.com with ESMTP; 07 May 2026 05:51:09 -0700
+From: Yi Lai <yi1.lai@intel.com>
+To: Zhu Yanjun <zyjzyj2000@gmail.com>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Leon Romanovsky <leon@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-rdma@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 05/14] mm: remove READ_ONLY_THP_FOR_FS Kconfig option
-Date: Thu,  7 May 2026 20:48:24 +0800
-Message-Id: <20260507124824.96209-1-lance.yang@linux.dev>
-In-Reply-To: <20260429153538.727855-1-ziy@nvidia.com>
-References: <20260429153538.727855-1-ziy@nvidia.com>
+	yi1.lai@linux.intel.com,
+	yi1.lai@intel.com
+Subject: [PATCH] selftests/rdma: explicitly skip tests when required modules are missing
+Date: Thu,  7 May 2026 20:51:06 +0800
+Message-ID: <20260507125106.3114167-1-yi1.lai@intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
+Currently, the rdma rxe selftests fail with an exit code of 1 when
+required kernel modules are not present. This causes spurious failures
+in environments where these modules might not be compiled or available.
 
-On Wed, Apr 29, 2026 at 11:35:28AM -0400, Zi Yan wrote:
->After removing READ_ONLY_THP_FOR_FS check in file_thp_enabled(),
->khugepaged and MADV_COLLAPSE can run on FSes with PMD THP pagecache
->support even without READ_ONLY_THP_FOR_FS enabled. Remove the Kconfig first
->so that no one can use READ_ONLY_THP_FOR_FS as upcoming commits remove
->mapping->nr_thps, which its safe guard mechanism relies on.
->
->Signed-off-by: Zi Yan <ziy@nvidia.com>
->Reviewed-by: Lorenzo Stoakes (Oracle) <ljs@kernel.org>
->Acked-by: David Hildenbrand (Arm) <david@kernel.org>
->Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
->---
+Include the standard kselftest 'ktap_helpers.sh' and replace the
+hardcoded error exits with '$KSFT_SKIP'. This ensures the tests are
+properly marked as skipped rather than failed.
 
-READ_ONLY_THP_FOR_FS lost its job now that mapping_pmd_folio_support()
-does the gating ;)
+Signed-off-by: Yi Lai <yi1.lai@intel.com>
+---
+ tools/testing/selftests/rdma/rxe_ipv6.sh                   | 6 ++++--
+ tools/testing/selftests/rdma/rxe_rping_between_netns.sh    | 7 +++++++
+ tools/testing/selftests/rdma/rxe_socket_with_netns.sh      | 6 ++++++
+ tools/testing/selftests/rdma/rxe_test_NETDEV_UNREGISTER.sh | 6 ++++--
+ 4 files changed, 21 insertions(+), 4 deletions(-)
 
-LGTM.
-Reviewed-by: Lance Yang <lance.yang@linux.dev>
+diff --git a/tools/testing/selftests/rdma/rxe_ipv6.sh b/tools/testing/selftests/rdma/rxe_ipv6.sh
+index b7059bfd6d7c..32dad687a044 100755
+--- a/tools/testing/selftests/rdma/rxe_ipv6.sh
++++ b/tools/testing/selftests/rdma/rxe_ipv6.sh
+@@ -8,6 +8,8 @@ RXE_NAME="rxe6"
+ PORT=4791
+ IP6_ADDR="2001:db8::1/64"
+ 
++source "$(dirname "$0")/../kselftest/ktap_helpers.sh"
++
+ exec > /dev/null
+ 
+ # Cleanup function to run on exit (even on failure)
+@@ -21,8 +23,8 @@ trap cleanup EXIT
+ # 1. Prerequisites check
+ for mod in tun veth rdma_rxe; do
+     if ! modinfo "$mod" >/dev/null 2>&1; then
+-        echo "Error: Kernel module '$mod' not found."
+-        exit 1
++        echo "SKIP: Kernel module '$mod' not found." >&2
++        exit $KSFT_SKIP
+     fi
+ done
+ 
+diff --git a/tools/testing/selftests/rdma/rxe_rping_between_netns.sh b/tools/testing/selftests/rdma/rxe_rping_between_netns.sh
+index e5b876f58c6e..e7554fbb8951 100755
+--- a/tools/testing/selftests/rdma/rxe_rping_between_netns.sh
++++ b/tools/testing/selftests/rdma/rxe_rping_between_netns.sh
+@@ -8,6 +8,8 @@ IP_A="1.1.1.1"
+ IP_B="1.1.1.2"
+ PORT=4791
+ 
++source "$(dirname "$0")/../kselftest/ktap_helpers.sh"
++
+ exec > /dev/null
+ 
+ # --- Cleanup Routine ---
+@@ -27,6 +29,11 @@ if [[ $EUID -ne 0 ]]; then
+    exit 1
+ fi
+ 
++if ! modinfo rdma_rxe >/dev/null 2>&1; then
++    echo "SKIP: Kernel module 'rdma_rxe' not found." >&2
++    exit $KSFT_SKIP
++fi
++
+ modprobe rdma_rxe || { echo "Failed to load rdma_rxe"; exit 1; }
+ 
+ # --- Setup Network Topology ---
+diff --git a/tools/testing/selftests/rdma/rxe_socket_with_netns.sh b/tools/testing/selftests/rdma/rxe_socket_with_netns.sh
+index 002e5098f751..9478657c02c1 100755
+--- a/tools/testing/selftests/rdma/rxe_socket_with_netns.sh
++++ b/tools/testing/selftests/rdma/rxe_socket_with_netns.sh
+@@ -4,6 +4,8 @@
+ PORT=4791
+ MODS=("tun" "rdma_rxe")
+ 
++source "$(dirname "$0")/../kselftest/ktap_helpers.sh"
++
+ exec > /dev/null
+ 
+ # --- Helper: Cleanup Routine ---
+@@ -26,6 +28,10 @@ if [[ $EUID -ne 0 ]]; then
+ fi
+ 
+ for m in "${MODS[@]}"; do
++    if ! modinfo "$m" >/dev/null 2>&1; then
++        echo "SKIP: Kernel module '$m' not found." >&2
++        exit $KSFT_SKIP
++    fi
+     modprobe "$m" || { echo "Error: Failed to load $m"; exit 1; }
+ done
+ 
+diff --git a/tools/testing/selftests/rdma/rxe_test_NETDEV_UNREGISTER.sh b/tools/testing/selftests/rdma/rxe_test_NETDEV_UNREGISTER.sh
+index 021ca451499d..8c18cea7535c 100755
+--- a/tools/testing/selftests/rdma/rxe_test_NETDEV_UNREGISTER.sh
++++ b/tools/testing/selftests/rdma/rxe_test_NETDEV_UNREGISTER.sh
+@@ -5,6 +5,8 @@ DEV_NAME="tun0"
+ RXE_NAME="rxe0"
+ RDMA_PORT=4791
+ 
++source "$(dirname "$0")/../kselftest/ktap_helpers.sh"
++
+ exec > /dev/null
+ 
+ # --- Cleanup Routine ---
+@@ -19,8 +21,8 @@ trap cleanup EXIT
+ 
+ # 1. Dependency Check
+ if ! modinfo rdma_rxe >/dev/null 2>&1; then
+-    echo "Error: rdma_rxe module not found."
+-    exit 1
++    echo "SKIP: rdma_rxe module not found." >&2
++    exit $KSFT_SKIP
+ fi
+ 
+ modprobe rdma_rxe
+-- 
+2.43.0
+
