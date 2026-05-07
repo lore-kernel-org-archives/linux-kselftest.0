@@ -1,178 +1,110 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B50764C77A9;
-	Thu,  7 May 2026 20:22:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A8B82F8EA2
+	for <linux-kselftest@vger.kernel.org>; Thu,  7 May 2026 20:34:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778185373; cv=none; b=PuqsZ5wGenLwZ1UVeJFhyqRnDKNDRqmHFpErvjr1Z101toSN3VEXiivOn43VtfJecZ9TTpD1Qr39Pi2DLKB4WXbTRgkoUjabzOn0TGcP0WuEyCD8lZKw5RhSgvw6v9mFOqu1k4dbUQzubpvG5i/oWkQeYRqIx9GRrsjUoE4qO44=
+	t=1778186077; cv=none; b=m5MUxNtR10r9TubIooWNiMi9rZpPCk05vrX2x0Iqq6IERh6SCe+XB3mP3vTf7fqHNdz7AatjZQPGrIj15VO1+OGKbPpnI9ozF3x93T6R1hVC47mNw7T5UvUzRnDKygpxA/7HbC4Au9Ha3uMdC1kr/hFfk0R4MOEShFgi1YQwrZw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778185373; c=relaxed/simple;
-	bh=YsF8COWix+6Yxb8XQMDjxkfCqLW4zILwB+rmik6M5mQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=hWdWehf0X/hW/0pzaoxriyF71oRyBcMtO8s+2GJW0qOSuAfJcZ87AnU2Pt8IIW7uR7a1B8W9e3N9KYOIoa2sjFpiCPCowRb4WgkjWGUipEUkH3E1I8g6HulILwvv12E59sWVg++ym5uZ/uXrZSORk3xyJgvNffdlJXGWdvDOsC8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XQ0fVhTD; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778186077; c=relaxed/simple;
+	bh=EmaFnaJMd6RXOTK/VecAQDt9Nc0voXI5PxK5gicU1M0=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=NmCbJ0BRCzI+os1UYSqIeqAq+e2s115V3v2p3J0a0Tvo0VO+XkIepx2d0KYNTDjHYdkeS/dVHEnNy//cgxLJTaLyZddDkhj2y47W4299+Ix4KPw6zVUZyEWgOM7JufH/Qh/jVLM6HpiFhNw+aNGYDLjdlpJHOzuQcQdpbSPKL4g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mYOcSjkL; arc=none smtp.client-ip=209.85.216.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XQ0fVhTD"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 94EEBC2BCF5;
-	Thu,  7 May 2026 20:22:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778185373;
-	bh=YsF8COWix+6Yxb8XQMDjxkfCqLW4zILwB+rmik6M5mQ=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=XQ0fVhTDhJP6SPeSC4SMnPAACq1rJ+oht5+P74v03LqecI7lrnv0WGsLBrhHbJqlv
-	 Ll4yiSxTGAP3oFJwEwkdvrFr39szvMAu39mOyhBE0MJ3DGMnNCZn+ubaIZ6Qrr6HtO
-	 gho6fLSvZBgHa6+aadC1+c4g6QvcTA4cSnGedwixWa5G3wptq6ReVY5mgich+HYd0c
-	 OmGxPlVRcVgZl9+q2EzxyezbuHWGtDD+V9i2oCnG7A5/YZQctd8Bt0ofoAL6nINofm
-	 iJe0D52FSoUiU5/ef1lsj9YmIjm/2JtywOEyVOfAsIAvFRs2hwPpiFa/PFAKHxseCj
-	 OjIWzW0G2PSUw==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8702FCD343F;
-	Thu,  7 May 2026 20:22:53 +0000 (UTC)
-From: Ackerley Tng via B4 Relay <devnull+ackerleytng.google.com@kernel.org>
-Date: Thu, 07 May 2026 13:23:02 -0700
-Subject: [PATCH v6 43/43] KVM: selftests: Update private memory exits test
- to work with per-gmem attributes
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mYOcSjkL"
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-3663d5e9bf4so507637a91.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 07 May 2026 13:34:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1778186075; x=1778790875; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=wMq4ZGb8sxP9J+x/Ocr+9N7VOn891ReIc+MoQxb2Bzc=;
+        b=mYOcSjkLW5HZdVrE8m4EWoPTcq/zRfLcPTyLhphl8kDetBZeAvG8WrK4VVHmoTEkdb
+         cIBr/aoUceNqUa3/NYprLp+gC4hrwdvSKET4Y7fIY8ap0oROhMe/3Oxy0dmMWOQK/tmF
+         B9X7vzPnJmFSlNHSIKfq89IKS07vADUY7zvruCFbNTHo2gQWvGZ8dqSFkpSu531JUT6o
+         +B5PyHaI2YGu6vDeRuYW6bIn6cZ/w+KIh3LMp3lhfGf7zVHZmp9M1ZyvVGfVLrNGe943
+         og7zOhdsgUeZJIp8W69fR3mUsoVyalXMAw6zLGRAx1LPS1XQQMelc0qthmSUkrPEzvUM
+         /m+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778186075; x=1778790875;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wMq4ZGb8sxP9J+x/Ocr+9N7VOn891ReIc+MoQxb2Bzc=;
+        b=IfuirmN1FYtYj8C7R1a025NsqnnHDr78qWWwOr+DlEOiJuvi0zzB+1/idFzgR3XaYG
+         NPRwTFSmt0A0DBqmZsWXCki2wIAGc5bYRlkEpRN6aAgGM1at1pVCGVRKLJ/HofOfJH9n
+         hmictjujlWNFE6yUwF3ieq133bfKdcDBHs3qC9yZ+jqc0N80OQr7SeAQBNa+F++bg2XF
+         Zm9X5itXpjQWora/SfmRM/C22hUXHPzFJ1oVFuqjQSBf1L/oKEYMDiAl2uLOECY08HHd
+         RmO3j0zWFfeSpjoaWuvxCO33Abvo6j2QceeGPEYHSWrx3wkLWLDB3p5r10ClrO2/7TOR
+         wbkg==
+X-Forwarded-Encrypted: i=1; AFNElJ/xeXgPGkCCuzTyE9IqF7w6B+2yvrB8PrakxCdJY0sU+SLFHvNvOiRXcSIMiHw/uT1/Esuo/JvJZzgfKQ/Ipu8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxurVrscL6JEr0IQJ43DsTUoWPViCdyHo7B1/MFtfH9uVhFFMMA
+	08rF7uS9F+YSa6IGj4iW6Sbzx+Wkb0XbpyrSP+qh07OBSGlO6FE7T6gblUVjmMem0xKcPXjxpii
+	x8I28UQRpoupryRjrhkzInmzrWA==
+X-Received: from pgbcs6.prod.google.com ([2002:a05:6a02:4186:b0:c7e:68a1:910c])
+ (user=ackerleytng job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6a20:1584:b0:39c:c07:1450 with SMTP id adf61e73a8af0-3aa5a9da657mr10646690637.42.1778186074357;
+ Thu, 07 May 2026 13:34:34 -0700 (PDT)
+Date: Thu,  7 May 2026 13:34:21 -0700
+In-Reply-To: <20260507-gmem-inplace-conversion-v6-0-91ab5a8b19a4@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260507-gmem-inplace-conversion-v6-43-91ab5a8b19a4@google.com>
+Mime-Version: 1.0
 References: <20260507-gmem-inplace-conversion-v6-0-91ab5a8b19a4@google.com>
-In-Reply-To: <20260507-gmem-inplace-conversion-v6-0-91ab5a8b19a4@google.com>
-To: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com, 
- brauner@kernel.org, chao.p.peng@linux.intel.com, david@kernel.org, 
- ira.weiny@intel.com, jmattson@google.com, jthoughton@google.com, 
- michael.roth@amd.com, oupton@kernel.org, pankaj.gupta@amd.com, 
- qperret@google.com, rick.p.edgecombe@intel.com, rientjes@google.com, 
- shivankg@amd.com, steven.price@arm.com, tabba@google.com, 
- willy@infradead.org, wyihan@google.com, yan.y.zhao@intel.com, 
- forkloop@google.com, pratyush@kernel.org, suzuki.poulose@arm.com, 
- aneesh.kumar@kernel.org, liam@infradead.org, 
- Paolo Bonzini <pbonzini@redhat.com>, 
- Sean Christopherson <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>, 
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
- "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
- Masami Hiramatsu <mhiramat@kernel.org>, 
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
- Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
- Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
- Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
- Nhat Pham <nphamcs@gmail.com>, Baoquan He <bhe@redhat.com>, 
- Barry Song <baohua@kernel.org>, Axel Rasmussen <axelrasmussen@google.com>, 
- Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>, 
- Youngjun Park <youngjun.park@lge.com>, Qi Zheng <qi.zheng@linux.dev>, 
- Shakeel Butt <shakeel.butt@linux.dev>, Kiryl Shutsemau <kas@kernel.org>, 
- Jason Gunthorpe <jgg@ziepe.ca>, Vlastimil Babka <vbabka@kernel.org>
-Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
- linux-coco@lists.linux.dev, Ackerley Tng <ackerleytng@google.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1778185365; l=3772;
- i=ackerleytng@google.com; s=20260225; h=from:subject:message-id;
- bh=ilZNigktr30OWW+44f6wWT3BpvfT+Tlf9WIw7xVQWhA=;
- b=RQQ4ZC6yPw+UZAXfzoD0aKRDxzFge3XopvPgK6qmJWMHQatSwRktfz4EuYp2f+79LWhBgyK0g
- Fz0LXdKV1VPD5JTPG0+IaBIN6RgGKSBh9m0iv9m1sl3WAOpntYe9Zwh
-X-Developer-Key: i=ackerleytng@google.com; a=ed25519;
- pk=sAZDYXdm6Iz8FHitpHeFlCMXwabodTm7p8/3/8xUxuU=
-X-Endpoint-Received: by B4 Relay for ackerleytng@google.com/20260225 with
- auth_id=649
-X-Original-From: Ackerley Tng <ackerleytng@google.com>
-Reply-To: ackerleytng@google.com
+X-Mailer: git-send-email 2.54.0.563.g4f69b47b94-goog
+Message-ID: <cover.1778185936.git.ackerleytng@google.com>
+Subject: [POC PATCH 0/5] guest_memfd in-place conversion selftests for SNP
+From: Ackerley Tng <ackerleytng@google.com>
+To: devnull+ackerleytng.google.com@kernel.org
+Cc: ackerleytng@google.com, aik@amd.com, akpm@linux-foundation.org, 
+	andrew.jones@linux.dev, aneesh.kumar@kernel.org, axelrasmussen@google.com, 
+	baohua@kernel.org, bhe@redhat.com, binbin.wu@linux.intel.com, bp@alien8.de, 
+	brauner@kernel.org, chao.p.peng@linux.intel.com, chrisl@kernel.org, 
+	corbet@lwn.net, dave.hansen@linux.intel.com, david@kernel.org, 
+	forkloop@google.com, hpa@zytor.com, ira.weiny@intel.com, jgg@ziepe.ca, 
+	jmattson@google.com, jthoughton@google.com, kas@kernel.org, 
+	kasong@tencent.com, kvm@vger.kernel.org, liam@infradead.org, 
+	linux-coco@lists.linux.dev, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org, 
+	mathieu.desnoyers@efficios.com, mhiramat@kernel.org, michael.roth@amd.com, 
+	mingo@redhat.com, nphamcs@gmail.com, oupton@kernel.org, pankaj.gupta@amd.com, 
+	pbonzini@redhat.com, pratyush@kernel.org, qi.zheng@linux.dev, 
+	qperret@google.com, rick.p.edgecombe@intel.com, rientjes@google.com, 
+	rostedt@goodmis.org, seanjc@google.com, shakeel.butt@linux.dev, 
+	shikemeng@huaweicloud.com, shivankg@amd.com, shuah@kernel.org, 
+	skhan@linuxfoundation.org, steven.price@arm.com, suzuki.poulose@arm.com, 
+	tabba@google.com, tglx@kernel.org, vannapurve@google.com, vbabka@kernel.org, 
+	weixugc@google.com, willy@infradead.org, wyihan@google.com, x86@kernel.org, 
+	yan.y.zhao@intel.com, youngjun.park@lge.com, yuanchu@google.com
+Content-Type: text/plain; charset="UTF-8"
 
-From: Sean Christopherson <seanjc@google.com>
+With these POC patches, I was able to test the set memory
+attributes/conversion ioctls with SNP.
 
-Skip setting memory to private in the private memory exits test when using
-per-gmem memory attributes, as memory is initialized to private by default
-for guest_memfd, and using vm_mem_set_private() on a guest_memfd instance
-requires creating guest_memfd with GUEST_MEMFD_FLAG_MMAP (which is totally
-doable, but would need to be conditional and is ultimately unnecessary).
+After allowing src_addr to be NULL, SNP_LAUNCH_UPDATE can accept NULL
+for source address and the SNP VM runs fine. :)
 
-Expect an emulated MMIO instead of a memory fault exit when attributes are
-per-gmem, as deleting the memslot effectively drops the private status,
-i.e. the GPA becomes shared and thus supports emulated MMIO.
+Ackerley Tng (5):
+  KVM: selftests: Initialize guest_memfd with INIT_SHARED
+  KVM: selftests: Use guest_memfd memory contents in-place for SNP
+    launch update
+  KVM: selftests: Make guest_code_xsave more friendly
+  KVM: selftests: Allow specifying CoCo-privateness while mapping a page
+  KVM: selftests: Test conversions for SNP
 
-Skip the "memslot not private" test entirely, as private vs. shared state
-for x86 software-protected VMs comes from the memory attributes themselves,
-and so when doing in-place conversions there can never be a disconnect
-between the expected and actual states.
+ .../selftests/kvm/include/x86/processor.h     |   2 +
+ tools/testing/selftests/kvm/lib/kvm_util.c    |  12 +-
+ .../testing/selftests/kvm/lib/x86/processor.c |  13 +-
+ tools/testing/selftests/kvm/lib/x86/sev.c     |   3 +-
+ .../selftests/kvm/x86/sev_smoke_test.c        | 222 +++++++++++++++++-
+ 5 files changed, 234 insertions(+), 18 deletions(-)
 
-Signed-off-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Ackerley Tng <ackerleytng@google.com>
----
- .../selftests/kvm/x86/private_mem_kvm_exits_test.c | 36 ++++++++++++++++++----
- 1 file changed, 30 insertions(+), 6 deletions(-)
-
-diff --git a/tools/testing/selftests/kvm/x86/private_mem_kvm_exits_test.c b/tools/testing/selftests/kvm/x86/private_mem_kvm_exits_test.c
-index 10db9fe6d9063..70ed16066c63e 100644
---- a/tools/testing/selftests/kvm/x86/private_mem_kvm_exits_test.c
-+++ b/tools/testing/selftests/kvm/x86/private_mem_kvm_exits_test.c
-@@ -62,8 +62,9 @@ static void test_private_access_memslot_deleted(void)
- 
- 	virt_map(vm, EXITS_TEST_GVA, EXITS_TEST_GPA, EXITS_TEST_NPAGES);
- 
--	/* Request to access page privately */
--	vm_mem_set_private(vm, EXITS_TEST_GPA, EXITS_TEST_SIZE);
-+	/* Request to access page privately. */
-+	if (!kvm_has_gmem_attributes)
-+		vm_mem_set_private(vm, EXITS_TEST_GPA, EXITS_TEST_SIZE);
- 
- 	pthread_create(&vm_thread, NULL,
- 		       (void *(*)(void *))run_vcpu_get_exit_reason,
-@@ -74,10 +75,26 @@ static void test_private_access_memslot_deleted(void)
- 	pthread_join(vm_thread, &thread_return);
- 	exit_reason = (u32)(u64)thread_return;
- 
--	TEST_ASSERT_EQ(exit_reason, KVM_EXIT_MEMORY_FAULT);
--	TEST_ASSERT_EQ(vcpu->run->memory_fault.flags, KVM_MEMORY_EXIT_FLAG_PRIVATE);
--	TEST_ASSERT_EQ(vcpu->run->memory_fault.gpa, EXITS_TEST_GPA);
--	TEST_ASSERT_EQ(vcpu->run->memory_fault.size, EXITS_TEST_SIZE);
-+	/*
-+	 * If attributes are tracked per-gmem, deleting the memslot that points
-+	 * at the gmem instance effectively makes the memory shared, and so the
-+	 * read should trigger emulated MMIO.
-+	 *
-+	 * If attributes are tracked per-VM, deleting the memslot shouldn't
-+	 * affect the private attribute, and so KVM should generate a memory
-+	 * fault exit (emulated MMIO on private GPAs is disallowed).
-+	 */
-+	if (kvm_has_gmem_attributes) {
-+		TEST_ASSERT_EQ(exit_reason, KVM_EXIT_MMIO);
-+		TEST_ASSERT_EQ(vcpu->run->mmio.phys_addr, EXITS_TEST_GPA);
-+		TEST_ASSERT_EQ(vcpu->run->mmio.len, sizeof(u64));
-+		TEST_ASSERT_EQ(vcpu->run->mmio.is_write, false);
-+	} else {
-+		TEST_ASSERT_EQ(exit_reason, KVM_EXIT_MEMORY_FAULT);
-+		TEST_ASSERT_EQ(vcpu->run->memory_fault.flags, KVM_MEMORY_EXIT_FLAG_PRIVATE);
-+		TEST_ASSERT_EQ(vcpu->run->memory_fault.gpa, EXITS_TEST_GPA);
-+		TEST_ASSERT_EQ(vcpu->run->memory_fault.size, EXITS_TEST_SIZE);
-+	}
- 
- 	kvm_vm_free(vm);
- }
-@@ -88,6 +105,13 @@ static void test_private_access_memslot_not_private(void)
- 	struct kvm_vcpu *vcpu;
- 	u32 exit_reason;
- 
-+	/*
-+	 * Accessing non-private memory as private with a software-protected VM
-+	 * isn't possible when doing in-place conversions.
-+	 */
-+	if (kvm_has_gmem_attributes)
-+		return;
-+
- 	vm = vm_create_shape_with_one_vcpu(protected_vm_shape, &vcpu,
- 					   guest_repeatedly_read);
- 
-
--- 
+--
 2.54.0.563.g4f69b47b94-goog
-
-
