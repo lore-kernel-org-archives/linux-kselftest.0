@@ -1,87 +1,106 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69D6E26AF4;
-	Thu,  7 May 2026 01:35:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E42C81E0DE8;
+	Thu,  7 May 2026 02:30:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778117711; cv=none; b=FMgUll9uIyz29dttKqegDMCwUuAWMhPfi/bWcrfwOvRjt8TkgYcEibsBgLHrNEt+ywxbH4ZFEH+spr7Cio7jrjNMPsI5pW4/nbl3fl5a0M1jxuvjSizBlC0r+eyw2fSaHDpgt8zisQ/xwztFxg/O1qDHYlHLUcAyWdFngIY2NUg=
+	t=1778121028; cv=none; b=WHtniuMuJ6cE9S3+ODO/yacuzIXKj9CS7X/2ZyUhvL9Dp5Z9a1hsZPN4/BeJdRnKKvnymKdaHJnoPUv8MyUkN2Cof0bXzFwzXYlSJL0mM2CSLKzE1AJA6LidcZBNZ1SUY0x6KgNTkkCt0UKHmq7gSOqj0Sdr7eHfPv0jLlX7Bi0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778117711; c=relaxed/simple;
-	bh=0O3G2lmMP/Ms3BjmJlMlwXPElBarsrFRXkD/Kf50ycA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J3y0HehFwKfXRkjO/DYL2i25bk5arXxVSd5Z7l5Gupmpzd+yyOtNSCPgFyNvLtAV7kMETD/sNsjNDkG25O3btqboz2vXsxBBY1z9k356u9tX6JHpMOOBJYgx0Oh3s9wqxLZnlmwPsEWbQ8a3jovpQKktqjfqM2RqTSxgMYOiqUs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bo4lhO+R; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778121028; c=relaxed/simple;
+	bh=Xu/sb4xohkh/2ZBNeaA7TkCiXvEecSSvF061dFMhZ6c=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=BD4/le96UPw0manTEbeFUbzHr1xr7i3iPwoDkv9IZMJP6HsoR+7BWAIbHtsNeoqJpvdapQMXWt13Unmq5gocOxqJaGAkbvMheJ79+9y2kGSMuzwjf/8/BCBxk0e8BOFI2G2FwBmVTPzQuNA+CHKIl9WoPhfbZRQdxPS1PTACuzs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X6gnKpLn; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bo4lhO+R"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D327CC2BCB0;
-	Thu,  7 May 2026 01:35:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X6gnKpLn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DD0AC2BCB0;
+	Thu,  7 May 2026 02:30:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778117711;
-	bh=0O3G2lmMP/Ms3BjmJlMlwXPElBarsrFRXkD/Kf50ycA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Bo4lhO+RL3OO3IL1WEVSQSJOG6fF9WGBUGDl1kLrgeLAlSdCP3QYVcnE4NuoVGgzx
-	 g/7S893cwQQScmZfG31DQxx68sx4bTQFZHRCsTwzCRmi+//kYfehhLjej857kjGKkw
-	 NIJh31AF9QUw5NAc+v+Oh5Qzvy4+gxzz9T7eDm6LA5FIarqpaZqxpC27gC1vQmZe/u
-	 sJVA6qJ0Zuni9umvr592++g0ZN8dmb+hscUphG+dgFXZGnFVgbS6UsWBGfLSpOSyCO
-	 L3bybhVhSm6beqQIsZ76iqr5uLyrA9/G1RZshor/k2LWf4WOOQtysKNisk0+1XT4OR
-	 VLUAyE0cS1iNw==
-Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
-	id B29CF1AC5890; Thu, 07 May 2026 02:35:07 +0100 (BST)
-Date: Thu, 7 May 2026 10:35:07 +0900
-From: Mark Brown <broonie@kernel.org>
-To: Jiakai Xu <xujiakai2025@iscas.ac.cn>
-Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Andrew Jones <andrew.jones@oss.qualcomm.com>,
-	Anup Patel <anup@brainfault.org>,
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	Jiakai Xu <jiakaiPeanut@gmail.com>
-Subject: Re: [PATCH] KVM: arm64: Add memslot for ST_GPA_BASE in
- check_steal_time_uapi()
-Message-ID: <afvsSxLDBz6HDkCs@sirena.co.uk>
-References: <20260501021639.2563219-1-xujiakai2025@iscas.ac.cn>
+	s=k20201202; t=1778121027;
+	bh=Xu/sb4xohkh/2ZBNeaA7TkCiXvEecSSvF061dFMhZ6c=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=X6gnKpLnM83cot+e2MIZ2NJ7IIQ0P+PmkNIXeUa2HYJm7mpxazwzgBOyQ6BwvtBCA
+	 hllGczx763fUwS9Ns0aqgU0/yw9/fw7nbVNQxHgQZULMm58PKKyivX3gY3RP9fDjYA
+	 vlXel1bQ5kBo1v1ztqdQNCOU/s9n/hfiOGJluDwU9rPPlEAIXKUydoGZmZeaPFparl
+	 Hd2fn8n/Xyz3O8MN6WdYUHKhdWw+UOk53akDJuMwiCJo5M8FQnxOBEHBi7siI3zSTm
+	 qaUzrB1c9iQtvpld2cOF/0JL7jU74QgV8OVfLIM7uEmhJ2a196D7U6X+RdgjENgE4s
+	 96L+Re1iVpqkw==
+Date: Wed, 6 May 2026 19:30:25 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Bobby Eshleman <bobbyeshleman@gmail.com>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
+ <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Jonathan Corbet
+ <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Alex Shi
+ <alexs@kernel.org>, Yanteng Si <si.yanteng@linux.dev>, Dongliang Mu
+ <dzm91@hust.edu.cn>, Michael Chan <michael.chan@broadcom.com>, Pavan Chebbi
+ <pavan.chebbi@broadcom.com>, Joshua Washington <joshwash@google.com>,
+ Harshitha Ramamurthy <hramamurthy@google.com>, Saeed Mahameed
+ <saeedm@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>, Mark Bloch
+ <mbloch@nvidia.com>, Leon Romanovsky <leon@kernel.org>, Alexander Duyck
+ <alexanderduyck@fb.com>, kernel-team@meta.com, Daniel Borkmann
+ <daniel@iogearbox.net>, Nikolay Aleksandrov <razor@blackwall.org>, Shuah
+ Khan <shuah@kernel.org>, netdev@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, Stanislav Fomichev
+ <sdf@fomichev.me>, Mina Almasry <almasrymina@google.com>, Bobby Eshleman
+ <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next v2 1/6] net: add netmem_tx modes that indicate
+ dma capability
+Message-ID: <20260506193025.78aba2dc@kernel.org>
+In-Reply-To: <20260504-tcp-dm-netkit-v2-1-56d52ac72fd4@meta.com>
+References: <20260504-tcp-dm-netkit-v2-0-56d52ac72fd4@meta.com>
+	<20260504-tcp-dm-netkit-v2-1-56d52ac72fd4@meta.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="v1++ER88l8OUwD5L"
-Content-Disposition: inline
-In-Reply-To: <20260501021639.2563219-1-xujiakai2025@iscas.ac.cn>
-X-Cookie: Truckers welcome.
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
+On Mon, 04 May 2026 17:27:48 -0700 Bobby Eshleman wrote:
+> --- a/drivers/net/netkit.c
+> +++ b/drivers/net/netkit.c
+> @@ -466,6 +466,7 @@ static void netkit_setup(struct net_device *dev)
+>  	dev->priv_flags |= IFF_NO_QUEUE;
+>  	dev->priv_flags |= IFF_DISABLE_NETPOLL;
+>  	dev->lltx = true;
+> +	dev->netmem_tx = NETMEM_TX_NO_DMA;
+>  
+>  	dev->netdev_ops     = &netkit_netdev_ops;
+>  	dev->ethtool_ops    = &netkit_ethtool_ops;
+> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+> index 0e1e581efc5a..11d68e75eb4f 100644
+> --- a/include/linux/netdevice.h
+> +++ b/include/linux/netdevice.h
+> @@ -1788,6 +1788,12 @@ enum netdev_stat_type {
+>  	NETDEV_PCPU_STAT_DSTATS, /* struct pcpu_dstats */
+>  };
+>  
+> +enum netmem_tx_mode {
+> +	NETMEM_TX_NONE,		/* no netmem TX support */
+> +	NETMEM_TX_DMA,		/* DMA-capable netmem TX (real HW) */
+> +	NETMEM_TX_NO_DMA,	/* no DMA, e.g. passthrough for virtual devs */
 
---v1++ER88l8OUwD5L
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Now there's a little too much here, let's move the NO_DMA changes to
+another patch. Just convert the netmem_tx to an enum and change the
+existing drivers in patch 1.
 
-On Fri, May 01, 2026 at 02:16:39AM +0000, Jiakai Xu wrote:
-> The refactored check_steal_time_uapi() creates a temporary VM via
-> vm_create_with_one_vcpu(), whose default memslot0 only covers GPA
-> 0..~2MB.  Setting st_ipa to ST_GPA_BASE (1 << 30) causes
-> kvm_arm_pvtime_set_attr() to fail with EINVAL because gfn_to_hva()
-> cannot find a valid memslot at the target GFN.
+Next patch has:
 
-Tested-by: Mark Brown <broonie@kernel.org>
+> @@ -1164,16 +1197,30 @@ int netdev_nl_bind_tx_doit(struct sk_buff *skb, struct genl_info *info)
+>  		goto err_unlock_netdev;
+>  	}
+>  
+> -	if (!netdev->netmem_tx) {
+> +	if (netdev->netmem_tx == NETMEM_TX_NONE) {
+>  		err = -EOPNOTSUPP;
+>  		NL_SET_ERR_MSG(info->extack,
+>  			       "Driver does not support netmem TX");
+>  		goto err_unlock_netdev;
+>  	}
 
-It'd be good to get this merged, this is a mainline regression.
-
---v1++ER88l8OUwD5L
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmn77EoACgkQJNaLcl1U
-h9AK7Af/XR+d37P6uL0n0Fx8fm4VK+ZmK0hvIRclQwkMsoHT3vhklNUChbZVyi2C
-fpSUXPczpk17MkZQSRBLvF1KfEoUlFxTlu8fdPevOv22vaTkveC4dwNF95/M+vEH
-B51YF/vUfjcEMtlXtkE77eBJ6+5OPhJuJc0QE1yzY9HbaXXiIUnuOmHKYwFm+V9U
-Uinp/GOTEb9FO50Ks3MG1tVSsurpXJgp0Pz39qyDP0PfTTi56bCjQJdI8KnfmL/G
-iehiXZB/YJoGhID+U66QMQR3gHlh3QXTzSEZ8xg1g9jIIVA0Su8fIIycvQ/ntjCo
-XlB7jVGTFAg63YWfT5CiF+18/brE4w==
-=JSA7
------END PGP SIGNATURE-----
-
---v1++ER88l8OUwD5L--
+which also should have been in patch 1.
