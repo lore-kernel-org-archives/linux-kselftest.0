@@ -1,83 +1,210 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from OSPPR02CU001.outbound.protection.outlook.com (mail-norwayeastazon11013066.outbound.protection.outlook.com [40.107.159.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 129AF3C0626;
-	Thu,  7 May 2026 09:30:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778146208; cv=none; b=UXx5vrZlRVzSkzPV1tkqTNn8Z/f2I2R2+eyMROXkbE6X8mIxjr18sUlK8OXAxt+v6anrKPLl4jY6XEbBdGRiMYrVqomPjEpOjncUrPOVBieFnS3mRdkLwUmsbh94xChTeud1vBJgg9tD0nKTJ1zb36YUw79KdzqTmYMDK63mUxY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778146208; c=relaxed/simple;
-	bh=hVRt+EAWGZVEQz7LOHcYNX6mPd9YkZtZrgHEgkxI9CY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YEOUIEdTqYUj6FMjtIkeq1QdbzafXb+UKJsYmpsbhifqhIOTwbptJldsOin7phLJQXVemStH+0M2rK1Hh7LqatndiGAlvHkbDORT0VeKgEjt/Q1+MOQ0mCts+uLCMt0nkNlVQjbkoUDq9GiTHFDZMtaVzlnuNuAfXAU/+SqN7NE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=IiMxxy4U; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FBBF3845BE;
+	Thu,  7 May 2026 09:55:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.159.66
+ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778147727; cv=fail; b=mGMUHA9c7znC6tCiKf2u6lVFiDusHHx4vFUP2Vrp0JuT3+7KhIwWQErgVboeIDqF7ZnjXOVWkKTcsHDTM8dTIDnW0qllSDkCtUK2oQG9QOI+hPelmZQgQRreCn3Npm2aAgPZFcmeqzsRtcD2pw3j2fDaUGdndj+whq0KK8cIkw0=
+ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778147727; c=relaxed/simple;
+	bh=cCyZMQE7lYu6NcJfQSlXMs4obFZH2w2yYO99IFD8t3E=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=ileR1yQH5dPwPYKQ51ANkt00K3/zMD1B6+/WBzsPzGfoan8SmJrp+F8MRC833LS8M6cET3ZP2cen4dQQoKU5CafM4i6qkAhw3QMPK7vUi4caB00gk/c/UL+clzE+Q9SMDeZOAENvKhNhshl7hdXoryZEgQvEVwKy1C+kZAbtxeY=
+ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=XCOKbjDv; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=XCOKbjDv; arc=fail smtp.client-ip=40.107.159.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="IiMxxy4U"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=WHxYVQsjtbfSlN5AZ3VKGsGbC3uLpkeeoyWo9tT19ng=; b=IiMxxy4UQJ69rcHVkCNVXemjTY
-	+wPHs5BxgYds22l4qyHm/FBuLNIRyx800VWSmGl2ipW7N7cmu+LQt4hHUEYxie3sThqQeUPXby41x
-	wzCNRar3ruj94VgT4jjU988b9ukEmWUDs3dmLfUmrpkGyJzE8myfwyD2qSiqhynpk85GzqZvos9Xm
-	6hTHxtDlqaLNlh8Jn6QrqoxTSu5KHndjuWyUMbauUzFoAcv+uAsaJ+JJiX8EUAD8LtYx0k1jCrwi6
-	wEubKCEB8i0c2hMwUVAUquqgT1EkNMx2iYqGbOeMMu2EUb9OGsBK0il+nf53sGl6bmhr/i6oR/5L3
-	11eZaYuQ==;
-Received: from authenticated user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wKv3C-004Gkj-0h;
-	Thu, 07 May 2026 09:29:46 +0000
-Date: Thu, 7 May 2026 02:29:40 -0700
-From: Breno Leitao <leitao@debian.org>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Oliver Hartkopp <socketcan@hartkopp.net>, 
-	Marc Kleine-Budde <mkl@pengutronix.de>, Robin van der Gracht <robin@protonic.nl>, 
-	Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de, Jeremy Kerr <jk@codeconstruct.com.au>, 
-	Matt Johnston <matt@codeconstruct.com.au>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH net-next 4/5] llc: convert to getsockopt_iter
-Message-ID: <afxbT1ylYWnih_f4@gmail.com>
-References: <20260505-getsock_two-v1-0-4cb0738950e0@debian.org>
- <20260505-getsock_two-v1-4-4cb0738950e0@debian.org>
- <20260506172525.27323c23@kernel.org>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="XCOKbjDv";
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="XCOKbjDv"
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
+ b=UiEXs/3UHqNEDOSgQIaNkiNcrG8bh1PYRY18zf7Uoy2wDULhQ7c2PrkrdGKqA3dqNBi5MxWaOtb8dzCh6ykk1Jq5bimz5T3O7pSLV+2douwyjpa7ks/QPJwjQmN5Bvuaig5/v34jXlSmoMZC7U8aHoc72wDXAt53nc51FqieWFhjn5Z8oTyKVVbwrqDZXJZm3e3ajgLtyJhGlY9fQN6w1bSihu5BOevI7YZhxaK4ikd4EBYP/SC6GqliAaR0MRwHO9W25EHQ2yGXX5pClbQjWJDKOrg1+UMmfF90UoafVINfHJA2/S8ZbET3oRxrGIFg+9L9gTC7XHzUjT+NB5fQ3A==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZCrkm9Tb3cLSXCUWuwoQZ2oVF0wmVwIBgZOsxh4yZ0U=;
+ b=QOLPu8UGjspHC+ObPSRXRwo4EDSeRL5zYwCA8uPEokfflNPtcWM17kLaJKzHfwepwDjoeIOsIwO+IYQoIG83j+ZKyMKQK1vZMfUDH8jGN0CfV0x9FsAPFgq0AnmXQdU7NUlDO5C0bBNh2aOx1O4PXQwZjLHmejHH+M3cXp3mPJCQlrQLlBOhpTgrpmvKIEeQUKoT0urA38qID6SGz/LdKFLW5kAPwmiQXixMh8SW+f5UNlAubFhR5uJxEe7XjKPmNBucLfasmnvJ4eUjyEKTnWYSmOD2SBNdSD5FZcoLPMRDmBWcKKATqd6rKCpJRDdMoeZ7XXmWG9vtSbvGmAz9+w==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
+ 4.158.2.129) smtp.rcpttodomain=kernel.org smtp.mailfrom=arm.com; dmarc=pass
+ (p=none sp=none pct=100) action=none header.from=arm.com; dkim=pass
+ (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
+ dmarc=[1,1,header.from=arm.com])
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZCrkm9Tb3cLSXCUWuwoQZ2oVF0wmVwIBgZOsxh4yZ0U=;
+ b=XCOKbjDvQSJfKzNzjHwL6LhRfjrH0EupUqLwC34eKYSM1FM9QIoVoT2E/tv2hWBp0pGNuXsyTpvsiCNvSYchyjJ4u00834UlguyTqktEBNe/+AOeOu07jViuuclIB5B+vrhIYOk8JBH1+F1+3Fh/v1tSq2KMGKGFiz3zqJa3Cec=
+Received: from CWLP265CA0436.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:1d7::6)
+ by VE1PR08MB5664.eurprd08.prod.outlook.com (2603:10a6:800:1ae::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9846.17; Thu, 7 May
+ 2026 09:55:14 +0000
+Received: from AMS1EPF00000042.eurprd04.prod.outlook.com
+ (2603:10a6:400:1d7:cafe::3c) by CWLP265CA0436.outlook.office365.com
+ (2603:10a6:400:1d7::6) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9891.15 via Frontend Transport; Thu,
+ 7 May 2026 09:55:14 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
+ smtp.mailfrom=arm.com; dkim=pass (signature was verified)
+ header.d=arm.com;dmarc=pass action=none header.from=arm.com;
+Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
+ 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
+ client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
+Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
+ AMS1EPF00000042.mail.protection.outlook.com (10.167.16.39) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9891.9
+ via Frontend Transport; Thu, 7 May 2026 09:55:14 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=t/7xb+fkfMv9RdZLkBdluMJ5n9WrUattr4ZjkzBRbuTsf/o4VwSPqv6KDmsV8NKXd0QRtz31ClStEETOvkdwENAgUV09zHtUYx4lRedToS8SpQn2MilcSLhFTOWVx8d1nthaI7NykFiRSpMhsEU8+zW48HL4yofEimI3uaPtpJeJ5aVwSfJjwRYaJEvpZfr7odyW4RR3afWt+R5TTCWR8mCmiYNh4g68h4Yhyoo5i46jH8zec36znxx2VbnGfCIGkuIzc6vZxjYx38Xe0FBsV/gCzZwu3BRvZULPBF3KV8sVxp2I3e4bnRQ3YmsQbYHJCmUdc0Mp/2mAxgYH7V4JBg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZCrkm9Tb3cLSXCUWuwoQZ2oVF0wmVwIBgZOsxh4yZ0U=;
+ b=DZY3KDCzY90pyib5rLgQZkaX/6bOKkRDeNuX8nTlyGIC4XVrk6yUN/M3vBIyHd4v8meFBU+MISf80Px1DblzSUZMGjDr6XNAHIB8cHGGKy7duxXm/z+b92c6Bet96r86faV0V612yZe8h9B7V8CyUunn4mFAvh5qq/gVuznVzDXfq6b4LG73YuPWQCUw7xzSpVDvOJQ6oWOBgsBbZSt7BvTmkV5TJ+RpXxGYpKMoGf9vBqH3MymnzimwKq+1lETZBFDKzPN+ORhaKWZHnzEGSLJXKbYitm3YIqQM6mSfjmMoTuMlWxfaqDuVcMHdPhsXNfWMtrgVQpB8lFOuNQNUxw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
+ header.d=arm.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZCrkm9Tb3cLSXCUWuwoQZ2oVF0wmVwIBgZOsxh4yZ0U=;
+ b=XCOKbjDvQSJfKzNzjHwL6LhRfjrH0EupUqLwC34eKYSM1FM9QIoVoT2E/tv2hWBp0pGNuXsyTpvsiCNvSYchyjJ4u00834UlguyTqktEBNe/+AOeOu07jViuuclIB5B+vrhIYOk8JBH1+F1+3Fh/v1tSq2KMGKGFiz3zqJa3Cec=
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+Received: from DU0PR08MB9203.eurprd08.prod.outlook.com (2603:10a6:10:417::12)
+ by GV2PR08MB8486.eurprd08.prod.outlook.com (2603:10a6:150:bc::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9891.17; Thu, 7 May
+ 2026 09:54:07 +0000
+Received: from DU0PR08MB9203.eurprd08.prod.outlook.com
+ ([fe80::f1e:73f2:57df:4047]) by DU0PR08MB9203.eurprd08.prod.outlook.com
+ ([fe80::f1e:73f2:57df:4047%2]) with mapi id 15.20.9891.008; Thu, 7 May 2026
+ 09:54:06 +0000
+Message-ID: <c543e394-bc52-494e-830e-6f4fb3037fe1@arm.com>
+Date: Thu, 7 May 2026 15:23:56 +0530
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 36/54] selftests/mm: hugetlb_fault_after_madv: add
+ setup of HugeTLB pages
+To: Mike Rapoport <rppt@kernel.org>, Andrew Morton
+ <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>
+Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
+ Barry Song <baohua@kernel.org>, Dev Jain <dev.jain@arm.com>,
+ Donet Tom <donettom@linux.ibm.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+ John Hubbard <jhubbard@nvidia.com>, "Liam R. Howlett"
+ <Liam.Howlett@oracle.com>, Lance Yang <lance.yang@linux.dev>,
+ Leon Romanovsky <leon@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ Luiz Capitulino <luizcap@redhat.com>, Mark Brown <broonie@kernel.org>,
+ Michal Hocko <mhocko@suse.com>, Nico Pache <npache@redhat.com>,
+ Peter Xu <peterx@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
+ Shuah Khan <shuah@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
+ Vlastimil Babka <vbabka@kernel.org>, Zi Yan <ziy@nvidia.com>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-mm@kvack.org
+References: <20260428204240.1924129-1-rppt@kernel.org>
+ <20260428204240.1924129-37-rppt@kernel.org>
+From: Sarthak Sharma <sarthak.sharma@arm.com>
+Content-Language: en-US
+In-Reply-To: <20260428204240.1924129-37-rppt@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MA5P287CA0137.INDP287.PROD.OUTLOOK.COM
+ (2603:1096:a01:1d2::13) To DU0PR08MB9203.eurprd08.prod.outlook.com
+ (2603:10a6:10:417::12)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260506172525.27323c23@kernel.org>
-X-Debian-User: leitao
+X-MS-TrafficTypeDiagnostic:
+	DU0PR08MB9203:EE_|GV2PR08MB8486:EE_|AMS1EPF00000042:EE_|VE1PR08MB5664:EE_
+X-MS-Office365-Filtering-Correlation-Id: ca4f369e-2c2d-440e-96a5-08deac1ebc4f
+x-checkrecipientrouted: true
+NoDisclaimer: true
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted:
+ BCL:0;ARA:13230040|366016|1800799024|376014|7416014|18002099003|22082099003|56012099003;
+X-Microsoft-Antispam-Message-Info-Original:
+ xNjViau2ngFmXnpZrQPpqKOJvhKk69znOjTJoqLgBes92r/QliSWC78MdHjsedn6kkzM5kw6Jfyec3tLXlunFgo4wwFHde316xzbmaEK1Mei9Ax0aB66mQ6o71Bdwmqg141jODwL7rxYsAtJK/kF0dqDRE8j88ZswRv5Tx/3b1rx9A1Cl7pP75r2JroWbX82XttYNPbg+ROAICaLt3LG0mxk2Eb4k+dIZS6B/X+sPXWWwdwgDnNoNJy7eT8bXyflE+PFcDPBYNUTzmBpddjh+fBWwWro+huMGntEL8ujp8IPzsEaOlNzAPh1SgNkGJhgdIdFauKVMr0wVJ4CN2rjE2D2qsLHCTVCQohvUi4QD64YsgVdM9LUPI8htIk90u7833G/Q2wjrUc60HMbHbPLETVjkWxJhuwRF36cARz8d6FCgr1s+ajaNGc61fGq2W+WI/wLFUG1CgOJ4qPucbknmkEMq5LX1h0yiw6FnokiEMsnJW7eGAQV7vQMFCI4yJJzLeEpYMDKv5JJotiUxXOAlSmpE2gawgWmsO0Sq0V7GQqZ5JWTYkgLi6KNtuz/oLtTZ43haXnuYizB0X9k83+xmGi1QSJNjbx2FFs9lxyPw7Kq9ZgGdwcD/26FDEmnc0PZ8whrK2b/NhEZ1NSFKnzNBGVRQ3WclfNkOTK4eqN2oioympii47cT6ESwVAKuXaju
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9203.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(18002099003)(22082099003)(56012099003);DIR:OUT;SFP:1101;
+X-Exchange-RoutingPolicyChecked:
+ T0r25dspN4/2RQ4yqwh9QkCVHhU6f+wgnTGV02PEExdyd97V4PnK12Vs2Qv+HZNzdU3Cu/KSslsbcHv3bMql93KXaPFGpT1Ta5o2kDLeWAZoPDlAFHmPzbD9RUgkRmBxUAkRUsIKwH52dYlqBBPaa3W+znheMl/Uh5VEl5Ra+3rdQirUiCbLBrH2+4RCZSrVjdTs/InS6fw88PcufVQWQyFW/9D1Vfj0vs5rBqnnLlvWhk0wcXuphSjFEZYY607hMAhiznoX4qnQWunhEP7MOFB1B1oxdnQpqj1R8pIkCLZnivXSaYvM4gtWduuxyLbcSm9o6u0XKF/bojj1r8cUnw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV2PR08MB8486
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ AMS1EPF00000042.eurprd04.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+	44104a48-0144-4ab7-2793-08deac1e9387
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700016|82310400026|7416014|376014|14060799003|1800799024|35042699022|22082099003|56012099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	YiKVvdBX3VCk0tDhEmWGC9MlZzakZ/JS2sikBi02p5g1PeuaMW9Rwc5Ns70MupG6ZkhhxWgI81VOMGoj+PgdGyr/oNvxi+dMFNvJLcWqkSASRny3YpxLt0rquYna/BEkOgcHPfcIqi7V1HPdEIYurVp+SJg0VpnLs8mpD0/kymsQitlpgyispv9E5EK4nLNEOvqyZyvRh9/pwAc/po2M7kxG1Msvq3EUqJWEvfO+JSceQtCuG34e4WQVTp0DfFO6jnyMA8ELrUrK/vRTJC2Mk34efVyuQtfuDt3TJcwjpPuLV4OHxE222W3r58RsOg+ILgzeoClQ1AJ8Ct4BIhjRE2NNQEvw5Rm70wKyJu+EGPJ/qy/z+1pc+tP00aEH6GXwO/eVvBQE1xFxv92toyouxGHT4Lr6hyYxwjGtWMbTdCOdyUGoaXyjcIB7xVUMBiqeU0GOcCH1qVYvrtHTorS6Z4DWD21Ul1Q1+k1XxEAGULSQKEaxW6n0eegndpnEHe5x9Sqe0ZV8FUQonXU+/Gd1piC1iX+T7/NjBkSsPApdwHBq4IemuIvLvHtF0w4RlVSOBVevrDad1NHXbRRmrarYLMNFBDJsAJACWMUnr2NmqufD6ud+J0C1oOZJ5kKvKHNyIFeTkxP8vf/mIWKQDmsDTIw+mQfJmPvCvYmXgnA+ny+2NEJPKzJPXUFtmlzFkcZBm6I/9/SL9B5odptXVzjdDRfHorYBqCPriM1PHmU6k0Y=
+X-Forefront-Antispam-Report:
+	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700016)(82310400026)(7416014)(376014)(14060799003)(1800799024)(35042699022)(22082099003)(56012099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	YhemJH6rylGngJKHjzLZ82rdj2sL1tgwN4rSmBm6Y+/hJDRA6KgLjVt8FykQh9E4vin3h29cagobODvwF2/Bz5uqVK9fnVufTJ6ItnHmu9UplWnGwXWhFcCDhuZk8R3vhdUEa9vzRZvtYpwWTPuztJ+MvhxBul1JwVDwmMBRCElLOGok/2F4s4paQX2zS61MILDwUtV7FSGBwm2L6HGdLiNbi9+88b4XqMcbFbnQKK4gp+Yhzwd6igvcYAmRXd31i+v0a/6ft+vrIiFv/gERcUbDs0KA2neM3mG+Mw3j6//aiZ3sYalCKGzuL1G4trcnSB1vqQ4xcGbsjFmih/Ub4uOk/vA1FMcrqAcHNGCXhAkCZcsqw3HM+Onph67g7thLlILu2W0kIG2Wnka9fYnAdjOeXR88PYj4pYjYuUuwlNl7Raz+DKXd3pon9kHGHIvg
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 May 2026 09:55:14.0554
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ca4f369e-2c2d-440e-96a5-08deac1ebc4f
+X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	AMS1EPF00000042.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR08MB5664
 
-On Wed, May 06, 2026 at 05:25:25PM -0700, Jakub Kicinski wrote:
-> On Tue, 05 May 2026 04:12:41 -0700 Breno Leitao wrote:
-> > Convert LLC socket's getsockopt implementation to use the new
-> > getsockopt_iter callback with sockopt_t.
-> > 
-> > Key changes:
-> > - Replace (char __user *optval, int __user *optlen) with sockopt_t *opt
-> > - Use opt->optlen for buffer length (input) and returned size (output)
-> > - Use copy_to_iter() instead of put_user()/copy_to_user()
-> > - Add linux/uio.h for copy_to_iter()
+
+
+On 4/29/26 2:12 AM, Mike Rapoport wrote:
+> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 > 
-> kdoc needs to be adjusted here.
+> hugetlb_fault_after_madv test skips testing if there are no free huge
+> pages prepared by a wrapper script.
+> 
+> Add setup of HugeTLB pages to the test and make sure that the original
+> settings are restored on the test exit.
+> 
+> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 
-Good catch, I will update!
+I have run the test before and after applying the patch. Before the
+patch, the test skipped if there was not exactly 1 free hugepage
+available. After the patch, it correctly allocates one hugepage and the
+test passes successfully, restoring the original hugepage settings on exit.
 
-> When you repost could you split the CAN stuff out and send it 
-> to Marc and co. ? We don't normally take CAN patches directly.
+Tested-by: Sarthak Sharma <sarthak.sharma@arm.com>
 
-Ack, I will split this series in two, one for CAN and one for non-CAN
-drivers.
+> ---
+>  tools/testing/selftests/mm/hugetlb_fault_after_madv.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/mm/hugetlb_fault_after_madv.c b/tools/testing/selftests/mm/hugetlb_fault_after_madv.c
+> index c718dd065d53..481863cc5fda 100644
+> --- a/tools/testing/selftests/mm/hugetlb_fault_after_madv.c
+> +++ b/tools/testing/selftests/mm/hugetlb_fault_after_madv.c
+> @@ -54,7 +54,6 @@ void *madv(void *unused)
+>  
+>  int main(void)
+>  {
+> -	unsigned long free_hugepages;
+>  	pthread_t thread1, thread2;
+>  	/*
+>  	 * On kernel 6.4, we are able to reproduce the problem with ~1000
+> @@ -78,10 +77,9 @@ int main(void)
+>  	ksft_print_msg("[INFO] detected default hugetlb page size: %zu KiB\n",
+>  		       huge_page_size / 1024);
+>  
+> -	free_hugepages = hugetlb_free_default_pages();
+> -	if (free_hugepages != 1) {
+> +	if (!hugetlb_setup_default(1)) {
+>  		ksft_exit_skip("This test needs one and only one page to execute. Got %lu\n",
+> -			       free_hugepages);
+> +			       hugetlb_free_default_pages());
+>  	}
+>  
+>  	while (max--) {
 
-Thanks for the review,
---breno
