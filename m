@@ -1,123 +1,74 @@
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F5762C0F69
-	for <linux-kselftest@vger.kernel.org>; Thu,  7 May 2026 15:16:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E8E839D6D4;
+	Thu,  7 May 2026 15:21:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.79.88.28
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778166974; cv=none; b=tl9WWju/1BEJjdA9zoCL5pArrtJ6LKPSAEYeix7JHAZwOZI+n67iIH25h5jlCU9FshN1sPnzW21pYV1WeylhSy6pcRjb/j/NtHqDZ4ylkvDUC1sT4crk8O3BR8d/pi/IlaMmd9lwIQhWlfJLIrdrOp5J/uApHZXBQ0xxsVtjF0g=
+	t=1778167292; cv=none; b=iSWbQnX1hGj/u4L+GWXDhaYJBvDN3+V8HhahT+nj+GISYAS8bvfpb7H8CyyM7m68GO9KxRqUEbFM14qV4COUrBzJ8VL8Cqyutk2OJCisb22W73gs6p1Goae43h2k7V7H3iVAHkABgzdEsiBv1hg52Q45vW/o1bc0Q7naDITuLtk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778166974; c=relaxed/simple;
-	bh=rTCe/spzl8sWpB3JyRf/iV71VHlHbV7Vj/syx8S65PM=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=aHOqdOnhppHgJH75DVF6XULFlAAJdXArTGcGTudGOnxNCOby7qfkScx1DCNmAZWDiRx/+Rcb4tQOLAbUuAt7JOOf3t+OC2On/jihj34sB+T8EYqpQfB4KGipoupY/exq7JZ/NtVdTT8K2DqLtMZJ32i8MZ3V9ToEs2vpA9tKrbU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=eHWLxclP; arc=none smtp.client-ip=209.85.214.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1778167292; c=relaxed/simple;
+	bh=tgQiX65MaDTd0e0pppV5eTZfP9m73Ez7zUWY/PyEnyQ=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=W6E/WIlBDj1IDnY8GFjWVJA5ky/UE42lD/opFCZasEDQLyeiPmkA3VwyZ74ZHQNY3DyTU9A3TtNKKGicNVClZ9AU9TAqXj4DbWSyKhmGhPjZlSus6CyDIy/nTYp3tmuF4LCnF89Z2AjTiD1vtl5nMg9lR8TX5hiAhBj+mtWfons=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net; spf=pass smtp.mailfrom=lwn.net; dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b=LYKwtqFg; arc=none smtp.client-ip=45.79.88.28
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lwn.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eHWLxclP"
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2b7aba0af02so11968965ad.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 07 May 2026 08:16:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1778166973; x=1778771773; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AEFnU0WkIB6rhSU+Wp/xuz/eWKdC0rOvy0WXKBVzD/Q=;
-        b=eHWLxclP0nDHJN3WJlYk0E6f6vpqi0w3eW3J6CrCHKMyJPst+ab0Dip+ZYIDJwmlyw
-         lalZazT0dU868342fwQSSKaWOK4cT5oN03RJZv2Frn9dvL/h4PUQ6JhMqYnGebUuKHN7
-         axdJRqOXC3qVfuiB4+U3gjAAgybVpieNBtvBvmFiD6h4O0cCM5cnTBkWaU7o765YPzIk
-         sc9TgRQU/Ks8jL71HD1VtQgtsbhGLjqqM1/ysDhIRCfb7Lqx++Afd/dEvktANyzZIC7q
-         Jbd+uC4JQ+fMTat5FjFHyZIC9A0b2ECVCQHkUlx8S0B7T5j+RPgkMn8bA/XU0MCtbU6/
-         br7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778166973; x=1778771773;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=AEFnU0WkIB6rhSU+Wp/xuz/eWKdC0rOvy0WXKBVzD/Q=;
-        b=IJTu1d/LuW3Q0N28AmKWunt8Y2+GNF55Mt7mJKZupCEQvQpMLxwKNQbAN/PbCFnkVR
-         57LPLY2rE2hQLM3gVsPsiBZJ05Fqec9fU2ctJ0MySTryPSXPT8Lz22pkZJDpX2kg3RLe
-         7Dwu7dOzGhdd2qprYOx8ltXKVR1YoxhctdgT1YDbgwRqiv/0l0cOUYE0l/Gx57QMRFjF
-         0zBy2fzDHfCqjbGqdZ+pyZsHawLZZIuwfNN2+CogfcyoWLB+/wIgJsWGTDjLZZf9s9u8
-         KrjBeE/Jb1r8qu7m6uWEav+pfCbrnA/Aj5rEOUFmPhrawTmgIXKrARzG4zsSLmYZNyCo
-         20ow==
-X-Forwarded-Encrypted: i=1; AFNElJ+kT9AmzlXl0kMimXYS61oSN+BjvdEOJWih0UxwpY9M995ouUPGNo2kFwEFPVILBRPkMIt6g/Z1dOpW57SFqG0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxz08G5Em1E+nV+i9wBxz3LU2h+D5t/Q3boIDFsQn/AGz08kdYZ
-	fANBUJlkeHOtfEL5MNgj42F5uXz1G2pi95Ky3EzfyXACIbuWnZfP5SXpKmGonNKEoclbSwuVwHh
-	zBR/DBQ==
-X-Received: from plpk14.prod.google.com ([2002:a17:903:3dae:b0:2b0:5102:ab9e])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:f78a:b0:2b2:4cd2:e16c
- with SMTP id d9443c01a7336-2ba798c165fmr85567325ad.20.1778166972445; Thu, 07
- May 2026 08:16:12 -0700 (PDT)
-Date: Thu, 7 May 2026 08:16:11 -0700
-In-Reply-To: <beff5bd9-ae7c-4f2e-a718-7c8e92e78e4e@citrix.com>
+	dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b="LYKwtqFg"
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 586124108F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+	t=1778167284; bh=DEzm1tZe4DktoqZvyeXcW1Sgc7YEkjL6yYSQZXCykhg=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=LYKwtqFgf566PtxHtp2WVCo/srD52ANWYiOoQAh2eAnn+lLwAljR5LenO6ZNeUHPZ
+	 U/OOspwmkY0mXc+9DPQ2Kikfn1fX9yyqidl5Q9y8CoCn7pi5UNvhLBaqhA4DYAI7oB
+	 S7yCCO9CXGBnvGRVQ+bRl1+Vfl9Ic19ZS4/2UvvSvnAtpcNlTe1JJQHJxR0CHrtLFj
+	 po/EQ8WnKz3Z2VuZayB4yFoRmisExpyrQJcExSuDgT6Fwas27YSSQDps6Ju3kYjV0m
+	 YPoGwR1Crqz8fJsqQw46PmpwjA6lO45J5O+/NP0bcNFmAp5zePqAFSHY2v9UGzIyAU
+	 qGR4ZOpMNc7aQ==
+Received: from localhost (unknown [205.220.129.21])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by ms.lwn.net (Postfix) with ESMTPSA id 586124108F;
+	Thu,  7 May 2026 15:21:23 +0000 (UTC)
+From: Jonathan Corbet <corbet@lwn.net>
+To: Sasha Levin <sashal@kernel.org>, akpm@linux-foundation.org
+Cc: skhan@linuxfoundation.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ gregkh@linuxfoundation.org, Sasha Levin <sashal@kernel.org>
+Subject: Re: [PATCH] killswitch: add per-function short-circuit mitigation
+ primitive
+In-Reply-To: <20260507070547.2268452-1-sashal@kernel.org>
+References: <20260507070547.2268452-1-sashal@kernel.org>
+Date: Thu, 07 May 2026 09:21:15 -0600
+Message-ID: <87v7cz8cus.fsf@trenco.lwn.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <e03f092dfbb7d391a6bf2797ba01e122ba080bcd.camel@infradead.org>
- <afycwi4KT6xrQhMX@google.com> <beff5bd9-ae7c-4f2e-a718-7c8e92e78e4e@citrix.com>
-Message-ID: <afysu56g2dTFla6-@google.com>
-Subject: Re: [PATCH] KVM: SVM: Always intercept ICEBP, add INT1 selftests
-From: Sean Christopherson <seanjc@google.com>
-To: Andrew Cooper <andrew.cooper3@citrix.com>
-Cc: David Woodhouse <dwmw2@infradead.org>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	"Saenz Julienne, Nicolas" <nsaenz@amazon.es>, Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Content-Type: text/plain
 
-On Thu, May 07, 2026, Andrew Cooper wrote:
-> On 07/05/2026 3:08 pm, Sean Christopherson wrote:
-> > On Thu, May 07, 2026, David Woodhouse wrote:
-> >> From: David Woodhouse <dwmw@amazon.co.uk>
-> >>
-> >> ICEBP (INT1, opcode 0xF1) generates a #DB that is architecturally a
-> >> trap, but on SVM it was not always intercepted. Unconditionally
-> >> intercept ICEBP on SVM to match VMX behaviour and ensure correct
-> >> event delivery semantics.
-> >>
-> >> Add two selftests exercising ICEBP:
-> >>
-> >>  - int1_ept_test: verifies that ICEBP works correctly when the
-> >>    exception stack page is not present (EPT/NPT fault during #DB
-> >>    delivery). The IST stack is evicted via MADV_DONTNEED before
-> >>    executing INT1.
-> >>
-> >>  - int1_task_gate_test: verifies ICEBP delivery through a 32-bit
-> >>    task gate, exercising the legacy task-switch path for #DB.
-> >>
-> >> Tested on Intel Sapphire Rapids and AMD Genoa. Without the SVM fix,
-> >> int1_task_gate_test fails on AMD with EIP pointing at ICEBP instead
-> >> of after it. With the fix, both tests pass on both platforms.
-> > Hmm, but KVM unconditionally intercepts task switches.  Is this effecti=
-vely working
-> > around a bug in task_switch_interception()?
->=20
-> Not really.=C2=A0 It's a bug/misfeature in AMD CPUs.
->=20
-> When you get TASK_SWITCH (which always has fault semantics), you look at
-> the vectoring event type to decide whether it was logically caused by a
-> trap, and therefore whether to move %rip forwards before entering the
-> new task.
->=20
-> AMD CPUs don't distinguish instruction-induced #DBs (i.e. ICEBP) from
-> exception-induced #DBs (all others), and also don't report an
-> instruction length for an ICEBP-induced TASK_SWITCH.
+Sasha Levin <sashal@kernel.org> writes:
 
-Heh, that explains why I couldn't find an equivalent of INTR_TYPE_PRIV_SW_E=
-XCEPTION
-in the SVM code.
+> When a (security) issue goes public, fleets stay exposed until a patched kernel
+> is built, distributed, and rebooted into.
+>
+> For many such issues the simplest mitigation is to stop calling the buggy
+> function. Killswitch provides that. An admin writes:
+>
+>     echo "engage af_alg_sendmsg -1" \
+>         > /sys/kernel/security/killswitch/control
+>
+> After this, af_alg_sendmsg() returns -EPERM on every call without
+> running its body. The mitigation takes effect immediately, and is dropped on
+> the next reboot.
 
-> The workaround is to intercept ICEBP unconditionally, handle the
-> FAULT->TRAP conversion in the hypervisor, at which point the #DB-induced
-> TASK_SWITCH occurs with %rip on the correct instruction boundary whether
-> it was instruction-induced or exception-induced.
->=20
-> ~Andrew
+A quick look suggests that you're not checking lockdown status.  I don't
+doubt for a second that this thing could be used to bypass lockdown - by
+shorting out security_locked_down() if nothing else.  I'm guessing that
+might not prove entirely popular.
+
+jon
