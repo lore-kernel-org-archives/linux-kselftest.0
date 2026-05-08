@@ -1,60 +1,40 @@
-Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
+Received: from canpmsgout07.his.huawei.com (canpmsgout07.his.huawei.com [113.46.200.222])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 310EA346FD2;
-	Fri,  8 May 2026 10:11:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.242.92
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7F543630B7;
+	Fri,  8 May 2026 10:14:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.222
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778235102; cv=none; b=gynrUoh2sxhh6LryAuvVwVdX6ZWG66T453DF5F4BX99XG1j8Ad6QUK3+ip0IEsWLRyvmI3WlZX0hl0uHql8x3N2++ke5SAr2BMZ6A97R+29J4MrbVmXDYQkU5+If9wFsMnSOsdbYviuld8+5Xco0MhgwQfGyffIKkPkT+30g0BY=
+	t=1778235273; cv=none; b=clsOy3OGSEfcMWY5TW3xUjBlMrseVx3Sik10n02DYYSQnsI0P8h2kshKk87bBVLYhu2emFsPIDc6awb09fjdi5l1Kn2oaNHrfVYaf4J2otcNuCG/M61xqqh6c+nt/1yw1CgnWADqwL9SQU9As9JKSJGmWE1KMQ3xCN/vSGpRaes=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778235102; c=relaxed/simple;
-	bh=KgtJhIGG/oabZEQ8m54wP2EOXP+m+YCNMNV/vnXzHgE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JqeArMK1XAX8rP7j3n9Y8a3Frnnx/iNf149F1rVdLPSbRslBV0UzpSGaeYSwbrKAYgpl1h2HEVNjp0O60QGkLWZmXBsZJsIMwNVl58zlPG+FtL2I+i/7MuTijUPC7NiepMbeXzfzRW/uh/jptMkgnKy9k/a7lW6jCc9e5MJsdEQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net; spf=pass smtp.mailfrom=davidgow.net; dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b=LL4S6QMY; dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b=JyDnB/3g; arc=none smtp.client-ip=203.29.242.92
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
+	s=arc-20240116; t=1778235273; c=relaxed/simple;
+	bh=AJXgI93wCWVTpBA6B44Z0rGcRsbuaucw0oQT6A1AmFY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=YWhngICNduF79Lueex1adVfSgkAOTL/fsuWhbZTQdKwoiNV+Al/EA427++g9dmvzjqXVFIG/IkA4DecoDUP0c0YxC8YCWA1yi3MlejVg0cVNOZb/geznBtM4ZDfm2UKzh+Gu1R6mugc24YS5tCn1eR5/6TyV6Mnv+dADc4q9bVM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=mlqfXGjD; arc=none smtp.client-ip=113.46.200.222
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b="LL4S6QMY";
-	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b="JyDnB/3g"
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
-	s=201606; t=1778235091;
-	bh=KgtJhIGG/oabZEQ8m54wP2EOXP+m+YCNMNV/vnXzHgE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=LL4S6QMYashScmsoCk44KAQT2dRaWUHFwPFJ+244cDHhQCGrER4GhQm+Y4/68g2D0
-	 HLMgJsiDkc2gpjg9A5EBgptunfZ87aidO9OeUtcvYvkY1RJihLuPugNCcxarGTARiv
-	 /At57ouGNWPDqfsnsApWIMU5xyDeJOjislGncYGsZ1/HXzJbMc61T7kmhGbq6PuvW2
-	 OUxxS/YEC2waCnYyfnbl5OtH5XakviyJQCX01yL0f7HRdu9qZwHziMUaJJhgifjhRJ
-	 FWDK/Fus13hzir99K7P6UGxGeP4okKfK06sTR8B6ycgM0+R5WEqB+00rpvkWJF8zJQ
-	 hi9G2oomu6pt661d1Lx7sUmx5P+LQZ3B0NKP8AyhZeIqTPRvO0My73dRZcWv/LVP9Q
-	 gdHjCi97DD0RqlybJ6POfR9Brh5u5R/JzUnCfEt9zQIvERPJKwBFISGBqamph1XeS6
-	 tJCoKIL6Hy17NSwVyV/T9pGS9swKV9+2QmwY/5FPBV24YeEH/TDiDKLtMUH4UvSYN8
-	 eVF8MYtTbmb4pi7kkrMZyV/A2r7b8+76F281AqKqlrLHkNP5Jj8FvPPmBP0t9q7KOK
-	 wXSmKFoAAqmL6JqjjmnzpyFABWSSXymVP6Qv3+kgI1ylFUziB2cRZLvIkBz3tzQf/Q
-	 fOXus4i/o4lZUqiacAA0yYFI=
-Received: by sphereful.davidgow.net (Postfix, from userid 119)
-	id E28A41D804A; Fri,  8 May 2026 18:11:31 +0800 (AWST)
-X-Spam-Level: 
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
-	s=201606; t=1778235015;
-	bh=KgtJhIGG/oabZEQ8m54wP2EOXP+m+YCNMNV/vnXzHgE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=JyDnB/3gcDJfziHe3f8A/O6Bu3GBBOJHpG1l5DzaUEeBLF9mes/1cxeluMYxYLZjx
-	 7wRGZqvjczAcu7mghJ7VUiaJS7PsX2oJidB/NeChXXjnyq4mG/Y+yKvOjbGPCojZWi
-	 ySbUDU7c1/Ry+qWm/53P3tEq32V3CpeYxTsl14MqrU3rXc7/T9lb4OTsSxz0a5Lljq
-	 aopW8IQbgGsKLUVL2UF9jppv7GobQheeY1dQ4oIGmmQtSSIg5FsCwfm+r71bhZlpuc
-	 mlF2GoPzw6ntA4EjrmrvUMbUQ00c71ITlxrpf4ZD9bAkgsfFUWbXN+C+TWXBefJQmY
-	 S7Z20br9i6I4/SzkZwUKXpKua8JuVvI9vzRqsyTuUVpLUFlrD6nX5wzcmEZ/+crdj+
-	 cQUcvhyUXBi0WamxaWtHBYqgrrcsSuA4ipngc2JVzGf8JyLdzQ763awja+seUOWy2k
-	 QqykxE0iTulPFm+d6duMPkGhbAnRXsH4by6mRNhJ+1mo8bgtz/Sjk/wzMd201RRHOH
-	 sK1cN9FkKTvVd7EnYkSMTlw5Tfd9VFTIEVSJeQS4k05+wEjnIDp1Y8UR+Hqi5iaXk8
-	 jFAvhgustva340mXva8bAJibP/faX71gmOEFLUhxEkeFhMaKetHtlgvVT/JknOexyR
-	 ogCYSyRnGM6QZOVypnOQoNms=
-Received: from [10.19.105.19] (the2438111.lnk.telstra.net [203.45.164.113])
-	by sphereful.davidgow.net (Postfix) with ESMTPSA id D56481D803D;
-	Fri,  8 May 2026 18:10:14 +0800 (AWST)
-Message-ID: <a66dc316-5c3c-447a-946c-ac02f523c8b9@davidgow.net>
-Date: Fri, 8 May 2026 18:10:13 +0800
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="mlqfXGjD"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=C6e0z9Fq3rKswkTRf1vtuOywIXadBc/5Ah9+zbapMCU=;
+	b=mlqfXGjDyOprcq5nmRLPit/wOEgenglgNVHFK3NOu17/nwWnZiDNUx22T348cGpphJOGrhFtJ
+	fOXes6jBxahks92vMwElvTaXKUtqsf1DyvCSQAujVp07gVGv/lCVqNXsrlqWstuD5XYvAIQaeJd
+	93Z8DMg6k1x+Djr5CWzOO6E=
+Received: from mail.maildlp.com (unknown [172.19.163.127])
+	by canpmsgout07.his.huawei.com (SkyGuard) with ESMTPS id 4gBlCL2jyGzLlSC;
+	Fri,  8 May 2026 18:06:54 +0800 (CST)
+Received: from kwepemk500005.china.huawei.com (unknown [7.202.194.90])
+	by mail.maildlp.com (Postfix) with ESMTPS id F031D40572;
+	Fri,  8 May 2026 18:14:27 +0800 (CST)
+Received: from [10.67.120.222] (10.67.120.222) by
+ kwepemk500005.china.huawei.com (7.202.194.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Fri, 8 May 2026 18:14:27 +0800
+Message-ID: <86683f18-2d11-4e20-a3b3-736da89e8cf1@huawei.com>
+Date: Fri, 8 May 2026 18:14:26 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -62,156 +42,65 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 1/4] bug/kunit: Core support for suppressing warning
- backtraces
-To: Albert Esteve <aesteve@redhat.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, Brendan Higgins
- <brendan.higgins@linux.dev>, Rae Moar <raemoar63@gmail.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Andrew Morton <akpm@linux-foundation.org>, Paul Walmsley <pjw@kernel.org>,
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Alexandre Ghiti <alex@ghiti.fr>, linux-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kunit-dev@googlegroups.com, dri-devel@lists.freedesktop.org,
- workflows@vger.kernel.org, linux-riscv@lists.infradead.org,
- linux-doc@vger.kernel.org, peterz@infradead.org,
- Alessandro Carminati <acarmina@redhat.com>,
- Guenter Roeck <linux@roeck-us.net>, Kees Cook <kees@kernel.org>
-References: <20260504-kunit_add_support-v8-0-3e5957cdd235@redhat.com>
- <20260504-kunit_add_support-v8-1-3e5957cdd235@redhat.com>
- <c5c28f16-3940-4960-84e6-33f5479a5450@davidgow.net>
- <CADSE00KLhyUpRD031-YveOv+o71jJ-NojX6VteSyF+SqxG0n4g@mail.gmail.com>
- <CADSE00L5OCSNH_XsUHSvi_wAwZWiC2=bUGmiXVAu-LZ=XtvDjQ@mail.gmail.com>
-Content-Language: en-US
-From: David Gow <david@davidgow.net>
-In-Reply-To: <CADSE00L5OCSNH_XsUHSvi_wAwZWiC2=bUGmiXVAu-LZ=XtvDjQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2 1/6] selftests/resctrl: Introduced linked list
+ management for IMC counters
+To: Reinette Chatre <reinette.chatre@intel.com>, <tony.luck@intel.com>,
+	<Dave.Martin@arm.com>, <james.morse@arm.com>, <babu.moger@amd.com>,
+	<shuah@kernel.org>, <tan.shaopeng@fujitsu.com>, <fenghuay@nvidia.com>,
+	<ben.horgan@arm.com>, <jonathan.cameron@huawei.com>, <zengheng4@huawei.com>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kselftest@vger.kernel.org>, <linuxarm@huawei.com>
+CC: <xiaqinxin@huawei.com>, <prime.zeng@hisilicon.com>,
+	<wangyushan12@huawei.com>, <xuwei5@huawei.com>, <fanghao11@huawei.com>,
+	<wangzhou1@hisilicon.com>
+References: <20260410093352.3988125-1-wuyifan50@huawei.com>
+ <20260410093352.3988125-2-wuyifan50@huawei.com>
+ <b1d3a653-79a5-44db-8d57-c052ae537823@intel.com>
+ <e4a2b49a-0efe-4942-9683-9c9a5af1b12a@huawei.com>
+ <4d600e39-686d-4f0f-8a74-6d55bffac70a@intel.com>
+From: wuyifan <wuyifan50@huawei.com>
+In-Reply-To: <4d600e39-686d-4f0f-8a74-6d55bffac70a@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
+ kwepemk500005.china.huawei.com (7.202.194.90)
 
-Le 08/05/2026 à 14:52, Albert Esteve a écrit :
-> On Wed, May 6, 2026 at 12:11 PM Albert Esteve <aesteve@redhat.com> wrote:
->>
->> On Wed, May 6, 2026 at 11:40 AM David Gow <david@davidgow.net> wrote:
->>>
->>> Le 04/05/2026 à 3:41 PM, Albert Esteve a écrit :
->>>> From: Alessandro Carminati <acarmina@redhat.com>
->>>>
->>>> Some unit tests intentionally trigger warning backtraces by passing bad
->>>> parameters to kernel API functions. Such unit tests typically check the
->>>> return value from such calls, not the existence of the warning backtrace.
->>>>
->>>> Such intentionally generated warning backtraces are neither desirable
->>>> nor useful for a number of reasons:
->>>> - They can result in overlooked real problems.
->>>> - A warning that suddenly starts to show up in unit tests needs to be
->>>>     investigated and has to be marked to be ignored, for example by
->>>>     adjusting filter scripts. Such filters are ad hoc because there is
->>>>     no real standard format for warnings. On top of that, such filter
->>>>     scripts would require constant maintenance.
->>>>
->>>> Solve the problem by providing a means to suppress warning backtraces
->>>> originating from the current kthread while executing test code. Since
->>>> each KUnit test runs in its own kthread, this effectively scopes
->>>> suppression to the test that enabled it. Limit changes to generic code
->>>> to the absolute minimum.
->>>>
->>>> Implementation details:
->>>> Suppression is integrated into the existing KUnit hooks infrastructure
->>>> in test-bug.h, reusing the kunit_running static branch for zero
->>>> overhead when no tests are running.
->>>>
->>>> Suppression is checked at three points in the warning path:
->>>> - In warn_slowpath_fmt(), the check runs before any output, fully
->>>>     suppressing both message and backtrace. This covers architectures
->>>>     without __WARN_FLAGS.
->>>> - In __warn_printk(), the check suppresses the warning message text.
->>>>     This covers architectures that define __WARN_FLAGS but not their own
->>>>     __WARN_printf (arm64, loongarch, parisc, powerpc, riscv, sh), where
->>>>     the message is printed before the trap enters __report_bug().
->>>> - In __report_bug(), the check runs before __warn() is called,
->>>>     suppressing the backtrace and stack dump.
->>>>
->>>> To avoid double-counting on architectures where both __warn_printk()
->>>> and __report_bug() run for the same warning, kunit_is_suppressed_warning()
->>>> takes a bool parameter: true to increment the suppression counter
->>>> (used in warn_slowpath_fmt and __report_bug), false to check only
->>>> (used in __warn_printk).
->>>>
->>>> The suppression state is dynamically allocated via kunit_kzalloc() and
->>>> tied to the KUnit test lifecycle via kunit_add_action(), ensuring
->>>> automatic cleanup at test exit. Writer-side access to the global
->>>> suppression list is serialized with a spinlock; readers use RCU.
->>>>
->>>> Three API forms are provided:
->>>> - kunit_warning_suppress(test) { ... }: scoped, uses __cleanup for
->>>>     automatic teardown on scope exit, kunit_add_action() as safety net
->>>>     for abnormal exits (e.g. kthread_exit from failed assertions).
->>>>     Suppression handle is only accessible inside the block.
->>>> - KUNIT_START/END_SUPPRESSED_WARNING(test): manual macros for larger
->>>>     blocks or when warning counts need to be checked after suppression
->>>>     ends. Limited to one pair per scope.
->>>> - kunit_start/end_suppress_warning(test): direct functions returning
->>>>     an explicit handle, for retaining the handle within the test,
->>>>     or for cross-function usage.
->>>>
->>>> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
->>>> Signed-off-by: Alessandro Carminati <acarmina@redhat.com>
->>>> Reviewed-by: Kees Cook <kees@kernel.org>
->>>> Signed-off-by: Albert Esteve <aesteve@redhat.com>
->>>> ---
->>>
->>> This looks pretty good to me, thanks.
->>>
->>> Reviewed-by: David Gow <david@davidgow.net>
->>>
->>> It's maybe slightly over-the-top to now have three different ways of
->>> enabling warning suppression: I'd probably personally get rid of
->>> KUNIT_START/END_SUPPRESSED_WARNING() if we had to lose one. But if
->>> there's a real reason to prefer keeping all three, it's not actually a
->>> problem to do so.
->>
->> Thanks for the review!
->>
->> I think the three forms earn their keep: the scoped form is the go-to
->> for most cases, but the macros avoid indentation without requiring
->> users to manage a raw pointer. I initially removed the macros and
->> added them back later. Direct calls to the functions will be less
->> frequent, used only when you need the handle.
->>
->> That said, if it becomes a maintenance burden, the macros are the
->> easiest to drop since they're thin wrappers. Let me know if you prefer
->> them to be dropped, and I will send a v9 with that and the
->> `KUNIT_EXPECT_SUPPRESSED_WARNING_COUNT` additions to the drm test
->> patch.
->>
->> BR,
->> Albert.
->>
->>>
->>> Regardless, this series is looking pretty ready to me. Let me know if
->>> you're planning a v9, otherwise we'll take this when you're ready.
-> 
-> I have been thinking, and despite my last response arguing against it,
-> I think I will send that v9 and remove
-> KUNIT_START/END_SUPPRESSED_WARNING(). Since the scoped approach with a
-> reduced extent should be the default style for most cases, the direct
-> calls can cover any other use cases without needing macros. Plus,
-> since macros set the handler name for you, it seems odd not to be able
-> to use them more than once per test.
+Hi Reinette
 
-Yeah, that was a part of my thought: all of the possible uses of 
-KUNIT_START/END_SUPPRESSED_WARNING() can be replaced with the scoped 
-version except for the one case where you want to check the number of 
-warnings specifically after the scope. I'm not sure the latter would be 
-common, and in the few places it's useful, the direct calls are not 
-_that_ much more difficult to use.
+On 5/8/2026 12:13 AM, Reinette Chatre wrote:
+>> Calling cleanup_read_mem_bw_imc() in the error exit path may be intended
+>> to prevent resource leaks. However, this results in the function being called
+>> repeatedly in both the error exit branch and test_cleanup().
+> You are correct and calling it repeatedly is ok. When cleanup_read_mem_bw_imc() is
+> called from test_cleanup() after a failure in parse_imc_read_bw_events() then it
+> will find that the list is empty and just be a no-op. This is safe.
+>
+>> Is there any specific intention behind calling it in parse_imc_read_bw_events()?
+> The motivation behind calling it in parse_imc_read_bw_events() is to not leave this
+> memory allocated when this function fails. A function having a single responsibility
+> is easier to use and maintain since a caller does not need to take into account that
+> when the function fails it also needs to have additional responsibility to clean up
+> the state left behind by it.
+>
+> There may be some patterns where caller needs to clean up after a failure but that is
+> usually done in an obvious way where the caller_immediately_ does the cleanup on failure
+> but here this dependency is well hidden in this implementation with test_cleanup() being
+> called so far from parse_imc_read_bw_events(). This hidden dependency makes this code
+> difficult to use and maintain.
+>
+>> Or should the cleanup be uniformly handled in test_cleanup()?
+> Handling it only in test_cleanup() may work in current execution flow but if the code is
+> ever re-factored this would result in a memory leak. It is not custom that callers need
+> to clean up state when a function fails and since this allocation is buried deep within the
+> execution flow I see this as a latent bug just waiting to be triggered.
 
-> I hope that's ok. After that I think it should be ready (at least from my side).
-> 
-Sounds good: assuming no last-minute disasters, we'll take v9 then.
+Thank you for the detailed explanation. I understand the rationale now.
 
-Cheers,
--- David
+I will explicitly add cleanup calls in the error exit path in the next 
+version.
+
+Best regards,
+
+Yifan
+
+
