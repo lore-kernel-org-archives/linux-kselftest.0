@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2E1537A486;
-	Fri,  8 May 2026 19:32:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 303AC13A86C;
+	Fri,  8 May 2026 19:40:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778268752; cv=none; b=CyHSQkPT8rfDVogYXE9PrWMpEitb8/KXawCKX6WDGpC7M9lwOnNS7O1oICpabDs918SroXvRB604YC08VRwcUeYo/KnRbtNqHw/h6QDVv2Z6gsjXSIY140pAFozTAe8Dt6Tpm+vAJrds9/HOfoApRJqgCFq6kYsthYPnh7x5FCg=
+	t=1778269209; cv=none; b=NILF9zDJHUWKdddZkzYvo72kdn32kQS27gzfyGEqsKmlmsEnx0gvxhqqtwTlUtdYVD2TSdAVe3yNkaBZ5dxyO83+cKTOdvQGjaq5ro9FEO+mvRGeTkPeGPuPPyDrYVxQKd31a8/MuJTxg039neW/qjYq5wggn2eAp+s0ngHszEo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778268752; c=relaxed/simple;
-	bh=mf3xIXdCzeOhP9frGFps0vjsjTjlmNGDQAPmsKzCUKw=;
+	s=arc-20240116; t=1778269209; c=relaxed/simple;
+	bh=bEvGjngPqBRZCRr5j8qzVVNl7z2K7O10AOSptjW9O80=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bbDAuSF77Lw6EAwzSy7MRN3MofTSvW+jxNs5fkFl/041P57RgumyANoEBQu2ydmamrRyqlQAzDMQFmfxrqKltWDuhjKa24zn6VfHwmIvRwP60p15923shxc7ZdCRf++lebmDXYN0PyFHOex60ED1jvxJaRuU9i/AN2f2erIc0wQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DNCDjxZc; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=KKE2q6SZR+WPayBv3RPYExUVhTdo/hpOvVT3S5XWeKUUSO8Nw/dR2/GtfnWljQVGberhsAljNPm1jiu0xteV7C9Y7YqKHkYLfGC641mSBEUuVh9kx4NwHV0MibwoNWaBozKrPr7m3+bjnlj/o9g14zQlrmlIP/U02X4Qy6vV3eQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SBQl+v1b; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DNCDjxZc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D301C2BCB0;
-	Fri,  8 May 2026 19:32:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SBQl+v1b"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8E9CC2BCB0;
+	Fri,  8 May 2026 19:40:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778268752;
-	bh=mf3xIXdCzeOhP9frGFps0vjsjTjlmNGDQAPmsKzCUKw=;
+	s=k20201202; t=1778269208;
+	bh=bEvGjngPqBRZCRr5j8qzVVNl7z2K7O10AOSptjW9O80=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=DNCDjxZcWWH8QxOBe9VogEAa6lyUYHy+XWyKY4sJLh8AjB0g9eRDd3q25RxM3yf8/
-	 HpKOx2KY4FR4iWM3x71bFYY+FptpZQHI2/TFTqra49WqaM/mFfEju5124z9daB6KZ0
-	 cXmxg1IZqDr6GGpivA/7b1e/NviqYKFR8LJdO5YvTbJJ2hgozCPOuUS7iYJnf6Uq02
-	 WJlNTnc1VElzA3tu8x2M4Slvd+ZnyWT2JlnX7qd2jarhHLBWvXXUs1MIwiWWft+CmZ
-	 2110p64TIXwwUon+NTkaPJrIYrWwrzjJp1T217slHRQm/dIT1tAW7YB43ExMmTBbq8
-	 rXK4tRcveNvQw==
-Message-ID: <b6717dee-486b-4c61-8ec8-0e4269959469@kernel.org>
-Date: Fri, 8 May 2026 21:32:25 +0200
+	b=SBQl+v1bR7jR2dnGJULf2Jju99Rm/OtQ0W4c8kKHsUGraUwF4B5mXIRHRN5421WyY
+	 8Zw9o3blCEjNi9rqBlfGkx/6V/AHiDYhNZ3HiEmvYBUD5lhK89eOTldXPW5Z3jy9tz
+	 Qs8xSIZUersqClg5HRXkl3yYOmZV4rCKUiTAIwEq67EtQzKzJEfBsUrnDOol4lTxfq
+	 XCiiwTcwSYkxnGbu8R5ykiFfxnvOzk221t4U0lL6YNXvilYJekcUSHd2I691A0j3A2
+	 tTSdvTYtb0KVCBkYZe01wq5nBd04/Szq3gjTRFkOfUWeRUUday7DpZn9xYHN2na3aj
+	 tivyvj0NJhQMw==
+Message-ID: <ed7f1254-f669-477c-8005-78c380aa35c7@kernel.org>
+Date: Fri, 8 May 2026 21:39:56 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,14 +35,25 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] selftests/mm: use pattern matching in .gitignore
-To: Yosry Ahmed <yosry@kernel.org>, pratmal@google.com
-Cc: akpm@linux-foundation.org, shuah@kernel.org, yosryahmed@google.com,
- ljs@kernel.org, Liam.Howlett@oracle.com, vbabka@kernel.org, rppt@kernel.org,
- surenb@google.com, mhocko@suse.com, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260505152228.124065-1-pratmal@google.com>
- <CAO9r8zMWmk3HdJOW=DbtCoZrTjjFJ-ErAwOvG=8qG9bL00Xwyw@mail.gmail.com>
+Subject: Re: [PATCH v5 01/14] mm/khugepaged: remove READ_ONLY_THP_FOR_FS check
+To: Zi Yan <ziy@nvidia.com>, Andrew Morton <akpm@linux-foundation.org>,
+ "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+ Song Liu <songliubraving@fb.com>
+Cc: Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>,
+ Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+ Lorenzo Stoakes <ljs@kernel.org>, Baolin Wang
+ <baolin.wang@linux.alibaba.com>, "Liam R. Howlett"
+ <Liam.Howlett@oracle.com>, Nico Pache <npache@redhat.com>,
+ Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
+ Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
+ Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Shuah Khan <shuah@kernel.org>, linux-btrfs@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+References: <20260429152924.727124-1-ziy@nvidia.com>
+ <20260429152924.727124-2-ziy@nvidia.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -89,35 +100,109 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <CAO9r8zMWmk3HdJOW=DbtCoZrTjjFJ-ErAwOvG=8qG9bL00Xwyw@mail.gmail.com>
+In-Reply-To: <20260429152924.727124-2-ziy@nvidia.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 5/8/26 20:34, Yosry Ahmed wrote:
-> On Tue, May 5, 2026 at 8:22 AM <pratmal@google.com> wrote:
->>
->> From: Pratyush Mallick <pratmal@google.com>
->>
->> The current .gitignore hardcodes each generated test binary by name,
->> requiring updates every time a new test is added.
->>
->> Switch to the patten-matching approach similar to KVM:selftests.
->> Ignore everything by default and then allow source extensions (.c, .h, .sh)
->> and tracked non-source files.
->>
->> To avoid un-ignoring the generated headers, rename local_config.h to
->> local_config.h_gen.
->>
->> Acked-by: Lorenzo Stoakes <ljs@kernel.org>
->> Reviewed-by: Yosry Ahmed <yosryahmed@google.com>
->> Reviewed-by: David Hildenbrand <david@kernel.org>
+On 4/29/26 17:29, Zi Yan wrote:
+> collapse_file() requires FSes supporting large folio with at least
+> PMD_ORDER, so replace the READ_ONLY_THP_FOR_FS check with that.
+> MADV_COLLAPSE ignores shmem huge config, so exclude the check for shmem.
 > 
-> I think these need to be sorted out (as I mentioned privately).
+> While at it, replace VM_BUG_ON with VM_WARN_ON_ONCE.
 > 
-> Also, we probably need to split this into two patches: one renaming
-> local_config.h and one updating .gitignore.
+> Add a helper function mapping_pmd_folio_support() for FSes supporting large
+> folio with at least PMD_ORDER.
+> 
+> Signed-off-by: Zi Yan <ziy@nvidia.com>
+> Reviewed-by: Lance Yang <lance.yang@linux.dev>
+> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+> ---
+>  include/linux/pagemap.h | 26 ++++++++++++++++++++++++++
+>  mm/khugepaged.c         | 10 ++++++++--
+>  2 files changed, 34 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/linux/pagemap.h b/include/linux/pagemap.h
+> index 1f50991b43e3b..1fed3414fe9b8 100644
+> --- a/include/linux/pagemap.h
+> +++ b/include/linux/pagemap.h
+> @@ -513,6 +513,32 @@ static inline bool mapping_large_folio_support(const struct address_space *mappi
+>  	return mapping_max_folio_order(mapping) > 0;
+>  }
 
-Yeah we could, but no strong opinion from my side.
+Some smaller doc improvements:
+
+>  
+> +/**
+> + * mapping_pmd_folio_support() - Check if a mapping support PMD-sized folio
+
+"supports"
+
+> + * @mapping: The address_space
+> + *
+> + * Some file supports large folio but does not support as large as PMD order.
+
+"While some mappings support large folios, they might not support PMD-sized folios."
+
+> + * If a PMD-sized pagecache folio is attempted to be created on a filesystem,
+> + * this check needs to be performed first.
+
+I'd rather just add (relate to the previous sentence):
+
+"This function checks whether a mapping supports PMD-sized folios. For example,
+khugepaged needs this information before attempting to collapsing THPs".
+
+> + *
+> + * Return: true - PMD-sized folio is supported, false - PMD-sized folio is not
+> + * supported.
+
+I'd say "folios are supported" and end up with:
+
+"True if PMD-sized folios are supported, otherwise false."
+
+> + */
+> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+> +static inline bool mapping_pmd_folio_support(const struct address_space *mapping)
+> +{
+> +	/* AS_FOLIO_ORDER is only reasonable for pagecache folios */
+> +	VM_WARN_ON_ONCE((unsigned long)mapping & FOLIO_MAPPING_ANON);
+> +
+> +	return mapping_max_folio_order(mapping) >= PMD_ORDER;
+
+Agreed that this should check for ==, although in practice it would currently
+not make a difference.
+
+> +}
+> +#else
+> +static inline bool mapping_pmd_folio_support(const struct address_space *mapping)
+> +{
+> +	return false;
+> +}
+> +#endif
+> +
+>  /* Return the maximum folio size for this pagecache mapping, in bytes. */
+>  static inline size_t mapping_max_folio_size(const struct address_space *mapping)
+>  {
+> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+> index e112525c4aa9c..6808f2b48d864 100644
+> --- a/mm/khugepaged.c
+> +++ b/mm/khugepaged.c
+> @@ -2235,8 +2235,14 @@ static enum scan_result collapse_file(struct mm_struct *mm, unsigned long addr,
+>  	int nr_none = 0;
+>  	bool is_shmem = shmem_file(file);
+>  
+> -	VM_BUG_ON(!IS_ENABLED(CONFIG_READ_ONLY_THP_FOR_FS) && !is_shmem);
+> -	VM_BUG_ON(start & (HPAGE_PMD_NR - 1));
+> +	/*
+> +	 * MADV_COLLAPSE ignores shmem huge config, so do not check shmem
+> +	 *
+> +	 * TODO: once shmem always calls mapping_set_large_folios() on its
+> +	 * mapping, the shmem check can be removed.
+> +	 */
+
+TODO LGTM.
+
+Acked-by: David Hildenbrand (Arm) <david@kernel.org>
 
 -- 
 Cheers,
