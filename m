@@ -1,114 +1,202 @@
-Received: from mail-pl1-f196.google.com (mail-pl1-f196.google.com [209.85.214.196])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 016463FB7EF
-	for <linux-kselftest@vger.kernel.org>; Fri,  8 May 2026 15:03:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B2F63FB071;
+	Fri,  8 May 2026 15:05:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778252633; cv=none; b=My/TEjcMNhG1H+J9OZnLfBMVoRhzYsmNqOA4TEsBnFsIrzY6ukENv097b5PanyPDoultRTd8xfdL82VRZThyXTRIRnWymqGPm7QdYGdv3+Nx3ZiyAHgcvzeqY9MWWjsr/JaF5J77veyCYtld1Zhv1FIpSRCgXL7PLmfY5YR5Ae8=
+	t=1778252701; cv=none; b=eJpAKqfsHC/EPG88MBQeK17FaT+b0Cb9V1iGVY2jcg8ou6vB+lx6E5qq7DpEafINBOtTEvBF6XBkornNhxDc0bVr/yvlC3M3A3k30/Y6ncobuVTB4i8gaWhyKB2MRkTxsejAMnx8neO3pcUtWH1UgVZXeFFAUtTOw0WPEVs4s8s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778252633; c=relaxed/simple;
-	bh=KD3nw7Ltczkx1jI5uovKefPtMpE0/TaBF2VlVH6+8Tw=;
+	s=arc-20240116; t=1778252701; c=relaxed/simple;
+	bh=pHhXaYIL6lMr7VyVYgXjxrjXvNYn0pBdbl82D6nEY1o=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X021+TzXIAUy1w/iaxGGmg1Ih1+SU6KirbDaQpW/TVN0k1FUXtIDGjxXh8T9ACpfbiTzEWDxpdjzOgecxl2xNKnopifK6ObOSqm0TzZeKB3O3aHOXSeCr7rxlfNASyadfxuO5YgILtc5q1gwX8eWeXOw/k7VBpCkJv/I1LnVIqM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZprT7Gbz; arc=none smtp.client-ip=209.85.214.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=bdz69sQG1DkU1NGyLS3Hwg4CBtKzYVSA5bnkEwYKYEe46TEM5ffZxfyuwcJJjpS6wZCIf6eZObK+2z4BcEnCWvwL537rRnAIhynW9sw+q6Aoi5tthu7KFy/ml3A4fQp9lKmhMZOeFkJdifgpp2VPSsWfO8at+fibVbfzT2r42ys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jJ7xyntZ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZprT7Gbz"
-Received: by mail-pl1-f196.google.com with SMTP id d9443c01a7336-2ba6485d219so14093605ad.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 08 May 2026 08:03:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778252631; x=1778857431; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=du2JzkQKqlNU0D+Gab0Zj7x2Js35Jp0EtokGh0n5n4I=;
-        b=ZprT7Gbz23RwV74LMuTjFmcaqjhFvlQTecnvgQAQLFEnUpd0aHMYunxGW4YNy0VxWr
-         HG5MKDlj52fiHFcmw6Tgx/T9QUKf+6i6SaeNE0yvX3x8xD53kOF7sxaItyX4yev9AeNC
-         22CH6q02MVLexWSx+nXSLfWTuxvsa34syJ1i7Tld9x97W95X7UK5oiWuuvbygP8wqZNl
-         on43jDx6CMT3zkR5RXESsBKizjtCzQH/Zy/aBpsqisGxcSWQaAHadH/JlYssp7zPwopt
-         2y0/bsWPBjgyPtea5ttmqhXa3ofs5cOXAF5CZfR5j0pqQ33ongsMZwtz5+VFYsrqaJAH
-         1yzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778252631; x=1778857431;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=du2JzkQKqlNU0D+Gab0Zj7x2Js35Jp0EtokGh0n5n4I=;
-        b=spbm1sHUtG4DaExtVwO+Bu8uQWSaHU4H5p9plsMYUB/0t2JZ8xMWVhMg5eB13TP1Io
-         R1Ahf2/ZXNn34lOZy3RM9iKnrhBeJ+fqtyIM4P6I+1YeNURNxHKxRuqbG7McLRfW6j6H
-         FpwZiFaG/YVbgW/0oyquByA7Un3Smysd+hVA1VRCf1WHUzW18PhiwxLC6upuN9f9RHoO
-         +h1TSLxI/JLLmkt1o+CC0k83QP2xHK+4cmHMP8MgG5COnW/RK6W5xPHrBsYyAVifvSqg
-         ZEE90ybRr9EGtOHvvcH39Oq71wNIznlGrJxA5OFb+wboIeI5pgFlcz7eTl3UtXlaTF9j
-         tFVg==
-X-Forwarded-Encrypted: i=1; AFNElJ9t/JoqslwFSaXKXv1cAyE6TDsg466nnID3FRBkdByiPu6jSbQPpwK6pApFZCqGlJyAVitCsUEuAfNdA4hjpjk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyFPYUXsdU0wcEaBNUH92vz6FNrj7pIZIdlchohtyv0vPlR/LsH
-	hEQGfeCWUAvsUJ1PhvfktcR5fb20WqWRtYRSryeoeDlgjJq167haUtIu
-X-Gm-Gg: Acq92OFod39ky9RH+JdZSZcnucMkWtObKK7yqjtdovde0e01JLVMrS89O5Y1afErzmY
-	qwATDOLgR0SnX7+BnEYYho2qEinSOV8V0UqmbdYjeLoYEnjv8syA/IbeJqSiEticsGdVGmTL5mS
-	qdlix0cStQWiKPip4XDCDZGOv6P3KZAAl15Gv4LHzZW6CN0Hte+NLWcHIOhhzPfXDHol5JCxmoK
-	HRL6Gyq19ULW9qgqqXdwugfFJNUd8aw+n/J8G4xjvTFjED8KTIx903KJoqITUddLeAtZesd2IGY
-	LTFdiYwOhZifMUyQro8BKgXc5YyvpYh/myEEPyDh58okF/5qTU7/9iekGqrIWXBGxsUrSLnclV+
-	pPLJMaTuzSjFIKhZgedWyYRHrTvVCh7tj8sABbOZWKtY3lOWsAKcdkColZdCD7KIBjlaCnD8ZmQ
-	mzhEgQ49/7n7HXUodnvDEzN3bjoy4=
-X-Received: by 2002:a17:903:64f:b0:2b0:41bf:ca83 with SMTP id d9443c01a7336-2ba798c27a9mr92826425ad.23.1778252629752;
-        Fri, 08 May 2026 08:03:49 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:49::])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2baf1e9fd64sm22598665ad.69.2026.05.08.08.03.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 May 2026 08:03:49 -0700 (PDT)
-Date: Fri, 8 May 2026 08:03:48 -0700
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: Bobby Eshleman <bobbyeshleman@gmail.com>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Alex Shi <alexs@kernel.org>, Yanteng Si <si.yanteng@linux.dev>, 
-	Dongliang Mu <dzm91@hust.edu.cn>, Michael Chan <michael.chan@broadcom.com>, 
-	Pavan Chebbi <pavan.chebbi@broadcom.com>, Joshua Washington <joshwash@google.com>, 
-	Harshitha Ramamurthy <hramamurthy@google.com>, Saeed Mahameed <saeedm@nvidia.com>, 
-	Tariq Toukan <tariqt@nvidia.com>, Mark Bloch <mbloch@nvidia.com>, 
-	Leon Romanovsky <leon@kernel.org>, Alexander Duyck <alexanderduyck@fb.com>, kernel-team@meta.com, 
-	Daniel Borkmann <daniel@iogearbox.net>, Nikolay Aleksandrov <razor@blackwall.org>, 
-	Shuah Khan <shuah@kernel.org>, dw@davidwei.uk, mohsin.bashr@gmail.com, willemb@google.com, 
-	jiang.kun2@zte.com.cn, xu.xin16@zte.com.cn, wang.yaxin@zte.com.cn, 
-	netdev@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-rdma@vger.kernel.org, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Stanislav Fomichev <sdf@fomichev.me>, Mina Almasry <almasrymina@google.com>, 
-	Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v3 8/8] selftests: drv-net: add netkit devmem
- tests
-Message-ID: <af37TYtuxGHh7crM@devvm7509.cco0.facebook.com>
-References: <20260507-tcp-dm-netkit-v3-0-52821445867c@meta.com>
- <20260507-tcp-dm-netkit-v3-8-52821445867c@meta.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jJ7xyntZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C81ACC2BCB0;
+	Fri,  8 May 2026 15:04:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778252700;
+	bh=pHhXaYIL6lMr7VyVYgXjxrjXvNYn0pBdbl82D6nEY1o=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jJ7xyntZWU58Of0vyAiLFFEf2zOU9qg0NMn1RaF/ZqBdWkU7NlK9DAHDMGeFngvHw
+	 /R0rPd+GiRT2CWWIGMgC+yZEEkyOW5pY/IiltvtesqkM6o0ilZO9jN7bEoICq/nXE1
+	 4HqiK5RaOl0sPiL9zam1U6Q8wxNIbsrISWt0qJjSW9VmCM0F2idhPWcguh4bNyrVYa
+	 LAjlAYDCSVTCjQU6PomeHgbxLi5rhvQWuzkNrGVzs8iR35InVb4gcCMgR9Kb5ZWQsP
+	 R1zsdv19/yGy6/CQOyTq+sWjy1I34AfHCwL6nxWuUtobpDP5A6zvtml82i4AGaCSzL
+	 Qp7JX4tFckgkg==
+Date: Fri, 8 May 2026 16:04:54 +0100
+From: Lorenzo Stoakes <ljs@kernel.org>
+To: Chen Wandun <chenwandun1@gmail.com>
+Cc: "David Hildenbrand (Arm)" <david@kernel.org>, 
+	akpm@linux-foundation.org, shuah@kernel.org, zokeefe@google.com, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 1/2] mm/khugepaged: fix spurious -EINVAL from sub-PMD
+ MADV_COLLAPSE range
+Message-ID: <af37aPMyMV8JSIPH@lucifer>
+References: <20260507070558.3064142-1-chenwandun@lixiang.com>
+ <20260507070558.3064142-2-chenwandun@lixiang.com>
+ <9eea2afb-8c35-47eb-b1de-6a08503c9679@kernel.org>
+ <af30otSSGbPxHbxM@lucifer>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260507-tcp-dm-netkit-v3-8-52821445867c@meta.com>
+In-Reply-To: <af30otSSGbPxHbxM@lucifer>
 
-On 05/07, Bobby Eshleman wrote:
-> From: Bobby Eshleman <bobbyeshleman@meta.com>
-> 
-> Add nk_devmem.py with four tests for TCP devmem through a netkit device:
-> 
-> These tests are just duplicates of the original devmem tests, with some
-> adjusted parameters such as telling ncdevmem to avoid device setup
-> (since it only has access to netkit, not a phys device).
-> 
-> Each test uses NetDrvContEnv with primary_rx_redirect=True to set up the
-> BPF redirect program on the primary netkit interface.
-> 
-> The NIC (HDS, RSS, queue lease) is configured once in main() before
-> ksft_run() and torn down in a finally block via cleanup_nic(), mirroring
-> the nk_qlease.py pattern. This avoids re-toggling NIC settings around
-> every test case.
-> 
-> Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
+On Fri, May 08, 2026 at 04:02:37PM +0100, Lorenzo Stoakes wrote:
+> On Fri, May 08, 2026 at 02:27:37PM +0200, David Hildenbrand (Arm) wrote:
+> > On 5/7/26 09:05, Chen Wandun wrote:
+> > > madvise_collapse() computes the THP-aligned window:
+> > >
+> > >   hstart = (start + ~HPAGE_PMD_MASK) & HPAGE_PMD_MASK  /* round up  */
+> > >   hend   =  end   &  HPAGE_PMD_MASK                    /* round down */
+> > >
+> > > Previously this was done after kmalloc_obj(), so problem arose when
+> > > the range contained no complete PMD-aligned window (hstart >= hend).
+> > >
+> > > When hstart > hend, (hend - hstart) wraps unsigned to a huge value, the
+> > > final comparison fails and -EINVAL is returned instead of 0.  Consider
+>
+> I think both should return -EINVAL.
 
-Acked-by: Stanislav Fomichev <sdf@fomichev.me>
+Correction: I changed my mind (see below), and think == should return 0 simply
+for compatibility reasons. Though honestly both really should have been -EINVAL
+from the start...
+
+>
+> > > two single-page calls on a 2 MiB-aligned address:
+> > >
+> > >     /* hstart == hend == aligned  ->  0 == 0  ->  returns 0 */
+> > >     madvise(aligned, PAGE_SIZE, MADV_COLLAPSE);
+>
+> What's aligned? You're putting a random variable name in there? Presumably a PMD-aligned address?
+>
+> > >
+> > >     /* hstart = aligned + 2MiB, hend = aligned
+> > >      * (hend - hstart) wraps unsigned  ->  returns -EINVAL */
+> > >     madvise(aligned + PAGE_SIZE, PAGE_SIZE, MADV_COLLAPSE);
+> > >
+> > > Both calls cover less than one THP and collapse nothing; both should
+> > > return 0.
+>
+> Disagree.
+>
+> >
+> > Okay, so we talk about a "userspace is being stupid" scenario.
+>
+> Yes!
+>
+> I feel that -EINVAL is correct for hend > hstart, and I think it might even be a
+> userland A[BP]I break to change it (maybe somebody, somewhere is being foolish
+> enough to use this to also validate input ranges).
+>
+> The weirdness is when hstart == hend being 0 but that's sort of established
+> behaviour I guess.
+>
+> >
+> > >
+> > > In addition, kmalloc_obj(), mmgrab() and lru_add_drain_all() were all
+> > > called before discovering there was nothing to do, only for the code
+> > > to kfree() and return immediately after.
+> >
+> > Just a comment as you motivate here why this is suboptimal: we do not care about
+> > a "userspace is being stupid" scenario being fast.
+>
+> Yes, in general - so what? The user is doing stupid things, so the user wins
+> stupid prizes?
+>
+> >
+> > >
+> > > Fix both by computing hstart/hend after thp_vma_allowable_order() but
+> > > before kmalloc_obj(), and returning 0 early when hstart >= hend.
+> > >
+> > > Fixes: 7d8faaf15545 ("mm/madvise: introduce MADV_COLLAPSE sync hugepage collapse")
+> >
+> > Fixes: is likely ok, but I don't think we want to treat this as a hotfix or CC
+> > stable.
+>
+> I'm not sure I want a fixes here, this isn't really fixing anything. This isn't
+> a bug afaik, it's just us not handling this brilliantly, but (possibly by
+> mistake) getting the right output.
+>
+> >
+> > > Signed-off-by: Chen Wandun <chenwandun@lixiang.com>
+>
+> I put this patch through AI detection and it's telling me there's an 80% chance
+> this whole thing is LLM-generated, which is making me grumpy.
+>
+> Can you confirm that this is, in fact, your own work? Plagiarism is not a nice
+> thing to do, and THP doesn't need more traffic, we're overloaded as it is.
+>
+> > > ---
+> > >  mm/khugepaged.c | 9 ++++++---
+> > >  1 file changed, 6 insertions(+), 3 deletions(-)
+> > >
+> > > diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+> > > index b8452dbdb043..92473d93e837 100644
+> > > --- a/mm/khugepaged.c
+> > > +++ b/mm/khugepaged.c
+> > > @@ -2836,6 +2836,12 @@ int madvise_collapse(struct vm_area_struct *vma, unsigned long start,
+> > >  	if (!thp_vma_allowable_order(vma, vma->vm_flags, TVA_FORCED_COLLAPSE, PMD_ORDER))
+> > >  		return -EINVAL;
+> > >
+> > > +	hstart = (start + ~HPAGE_PMD_MASK) & HPAGE_PMD_MASK;
+> > > +	hend = end & HPAGE_PMD_MASK;
+>
+> See below re: conflict.
+>
+> > > +
+> > > +	if (hstart >= hend)
+> > > +		return 0;
+>
+> 	if (hstart > hend)
+> 		return -EINVAL;
+> 	/* For compatibility, users may rely on this. */
+> 	if (hstart == hend)
+> 		return 0;
+>
+> Is probably better.
+>
+> But I'm not sure what the point is if we're already doing this behaviour?
+>
+> > > +
+> > >  	cc = kmalloc_obj(*cc);
+> > >  	if (!cc)
+> > >  		return -ENOMEM;
+> > > @@ -2845,9 +2851,6 @@ int madvise_collapse(struct vm_area_struct *vma, unsigned long start,
+> > >  	mmgrab(mm);
+> > >  	lru_add_drain_all();
+> > >
+> > > -	hstart = (start + ~HPAGE_PMD_MASK) & HPAGE_PMD_MASK;
+> > > -	hend = end & HPAGE_PMD_MASK;
+> > > -
+> > >  	for (addr = hstart; addr < hend; addr += HPAGE_PMD_SIZE) {
+> > >  		enum scan_result result = SCAN_FAIL;
+> > >
+> >
+> > In general, LGTM, but see for conflict:
+> > https://lore.kernel.org/all/20260409014323.2385982-1-ye.liu@linux.dev/
+>
+> Please use mm-unstable as a basis for your mm work Chen, this is something you
+> need to fix, the patch above has been around for a while and is in
+> mm-unstable.
+>
+> You have patches in mm already so you should know better by now.
+>
+> But I'm really not sure I'm in favour of this anyway. I'll defer to David but
+> this feels useless to me.
+>
+> >
+> >
+> > --
+> > Cheers,
+> >
+> > David
+>
+> Thanks, Lorenzo
