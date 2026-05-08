@@ -1,67 +1,67 @@
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
+Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C48F7261B92
-	for <linux-kselftest@vger.kernel.org>; Fri,  8 May 2026 02:28:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8AE1283FF5
+	for <linux-kselftest@vger.kernel.org>; Fri,  8 May 2026 02:28:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778207310; cv=none; b=QqcXo85CSEExhRdw0jYul85t1WPocPK55xk3m3QkJL6z/0An8nB1Rqb6Cw5FYAeJYwaz5naVQvVa4DNdSe94LdN/nQzh/CYWaWOLCrvhSvvkHx1eauBVw3dw7qbBzj4WIIaezNNU5JZRLwjhP9sDyXzI8z8M9LK2QEinPEa7fq0=
+	t=1778207311; cv=none; b=Rrp2O3vznllONEMk4IQktCReFquhqA1CNA/Xzi2PK1NCHbe3C4VPOa8117HojqG9dbWVMUAs4PRp3nQ1sJbYn3e4EQs114jeZq7MiKGFdmka1WuND0onUz7BAvk9/br81AtdF3s+Cg73Z/q4+Yb2p9uCdiC/rRAAA6uo2s+S5Ko=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778207310; c=relaxed/simple;
-	bh=mRrVZ6uZ30MBcrGg/JUf1vadHPFlXqtkRqYN4sTjhTI=;
+	s=arc-20240116; t=1778207311; c=relaxed/simple;
+	bh=wr5nOXXQbhXEnUpfkQ7Zz1wqfSv32AZh5IA6v1MiYWI=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=nXuzL/Zkz0nWLhE2j639I2PmkpRuzQi2UlcPPYppw2pQsSw60hDOR4V/k5duWhIU1nZwuWs2xYIiIXZpVPb19NJciKLbYhRLuzBfphjeuBuHOyCPmlgN+qn3F35x/zpfWgoHqvH1SfI0u7fO9VS0GcyGBLQmW9FpeKcRwYjo5OE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qztNr3Sf; arc=none smtp.client-ip=209.85.222.171
+	 In-Reply-To:To:Cc; b=mzlUY7NsjdT53cMZAvgUKZOV9SHs46DVH0Vl9fLlg36nd1bwjQmAIXITlfoY1jN4RiMbXtxxMPtLZF58D9NdtfUA2fpaMPDlx43mrONufgrpPlycrYjR4ukopz1sh+eBe36tG3krltB18NLTGkvuWlVI2xTdWNu/Q0uBVc/mcPk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ie0ipZKK; arc=none smtp.client-ip=209.85.222.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qztNr3Sf"
-Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-8eae9229110so203585785a.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 07 May 2026 19:28:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ie0ipZKK"
+Received: by mail-qk1-f177.google.com with SMTP id af79cd13be357-8d4f78fc9f6so158273385a.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 07 May 2026 19:28:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778207301; x=1778812101; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1778207306; x=1778812106; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=stnI15SnX1ppHc39pta6JW4ijwXwltLNVPNKZ2aNoUA=;
-        b=qztNr3SfnYWRbTjZ2DecgPJ4O4gE2c+TCNQxDbZere0lyk4Q6xcZYbLJmlH7FidATC
-         ZGm4bTlu+MBKpjs9oXOOcZd35s0o4X3zjCh85Y9ernKP5Ce5oHBOHa6dydR7jNsvLGhO
-         vqRJx5p6FPWeRuXJ5Q0vbiLlt6V+JJo9TReAGn+S+CER1c9tL5j8OG0eHI8b6C7fXwnF
-         FItYT3lC/EPElXo78nQCUC66Vhfbi506SjT0dSsGQCnSXQYoe63LbSiX+PZbxQKKmCYQ
-         U9g11fx4QNiW3VG6ysm1RSyggB2Aw7jG+rfzLae1MRxIU9I8ZwY3B1jcCKKywS32jQPX
-         5uNg==
+        bh=aWcQzpCH4lUDwqOSoMTuBZLXwluzgAdtBYZzZZPaRJY=;
+        b=Ie0ipZKKZsKfD9pFeSwmi5yyvI93riVlntxEIZz457M997K6+OT1JRr2ZCMznuMH9N
+         Q2GFfMftnUNPeRYXlgkJRwS68bKJiVLvxsBAw5Rq0mvJ2OYE41psu8GHozLt9UKK++dR
+         c26FrhzitJeewNLL3UbkOmEVItWNy2RQDzHn10YCi8XhSxsBdjhcIyzF8xBb+eM3xsRm
+         u0UFjVholqSZPETOcWgbozvEWTgZsB0Uh+aXV0EieTsqzaz7YT+kcQsFS5NZ2LmVcvj7
+         4d1LpLwSQh6dqiT849d1K0SbaARG3OgOcqBtCWvgswjr5gnSnB4zvEnn7tHeIV3F0YnW
+         +5fQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778207301; x=1778812101;
+        d=1e100.net; s=20251104; t=1778207306; x=1778812106;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=stnI15SnX1ppHc39pta6JW4ijwXwltLNVPNKZ2aNoUA=;
-        b=OinuZF+O7bN6S4N49JZJlNh5Nzt1uVquTxVa8wuDdyE8d3AmLyimRMLGG1XbwyatDj
-         i5pLZPvLflrk7yl+K9Jtw1G3j3Po7LEMDSoO0AloTADH70FWIewE4fpRhfnXGKttaq/Q
-         5x1hI5iNfuFciAjKYg6C+HJaiWxWntN82O0Y1nplLZsNr3qM4Xyv71Of6QT/sNfvpKu5
-         n0K/xW9DL5CO3Uz0wPBay31HFA3arx7qwaidVoLRi1HmUFrCAGxKV+ctOc99uWgUoO8C
-         PW3uf9LTCIJxEVi8EaeVDIVqsBn4gKeOnpQs/drf51XpS1EuMk/VyE2tSLkgVw0R6b/R
-         WgaQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+0vTDrng8FabJIF6r4am1Vditr2E5BQVl996OL/BTRmZk9qUUw3wcq6Xo9RwsxOtyin0vFIAedIsVkRp+zYwQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx8h23L++QryMO78Zzf71o4DCvboUuUO/zqQ13os257USoDQ5uI
-	1eOdEZOOzsyltG3p5wuL2zvQLGYwmT9v7MacHRsuduQoEKTg5bDrcQfC
-X-Gm-Gg: AeBDieu1suONb+bs4giAVc+SyZdv8hxZ0+7PYy+Tb+9/EH5wo5SVY7u9rnWuRpGm0vR
-	cqr5A5/Gdu3wULw3fSbJgywjWCjMtt/iEHC5VHQ1t+GynCCZMgvDZ192czybR2QyHz/wFYqxi1L
-	lOpzJ0Yq/cewNIJhFgO8VPXrDoynCVH1ZKF6DZWRIwbRHVKDiHx3qmET+/GHLswtwS0xMFkMAyb
-	zRHR/z2z8bNUdO7V8kF9H5mE2hXG3dmlZek9Qp/J9Q99FQxi4NLIpwyko1ImwqOZgjwUMaDNNc9
-	2eSgkW6ACn/PLqjG0dT0MLs2SCEe3rBoP9xzmxYv1/2Lq0CmxmxmKJznW/YjPIj8qorNiTXiIxQ
-	ENzviAsisYFFqI9eelp6yQn40Upyg2Om4kykAbBtlzlCEtNLbE6vhCIAsrEMi8gR06OkQ2fMm8n
-	O80bR05xvg0cZv5Axmv+v7kQ==
-X-Received: by 2002:a05:620a:29ca:b0:8e8:ffd2:efa5 with SMTP id af79cd13be357-904d4391f52mr1517946385a.11.1778207300712;
-        Thu, 07 May 2026 19:28:20 -0700 (PDT)
-Received: from localhost ([2a03:2880:f800:3f::])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-907b966f5f1sm63166985a.8.2026.05.07.19.28.20
+        bh=aWcQzpCH4lUDwqOSoMTuBZLXwluzgAdtBYZzZZPaRJY=;
+        b=NFSRBRZurY2eS0M/44JcqZYbWm8RdS71WZahRXWTHCy5z/DFsZZY5MVr4z5r4KgGuD
+         oMmPwgjTiZH1SIXq5Fqu3XSWkBbi5F4vR0p25UURNR9iRcB3AnBPE+WJeYmuzp6zSuM0
+         TuNeNw6L0eYrCHjVdqdzwfO51VZBgKXWdhAdHCP5CdZeFqhhCAjJJMum4BWW9OezBQOo
+         J9CPzYY5N8NwKfPf6QDAm4SOLAt/SFsbjaLmq+1YtDCJW653RFyWrjB7kbC1zZBRPky0
+         D1rz9sdWVSxHdhLYHycYBvt3xGdpWbAyGjkxO7dt8YHUHze5c2V44zMBo1jmpFSyqFIe
+         MNRw==
+X-Forwarded-Encrypted: i=1; AFNElJ+NiVOgn/nbOGYhBdd7flGIl3bv87yPBuKZNY/WjYGWvqkTDTPLHvgT96ghTyeqIzVtwfH5SnuVBX/XDxM7C1E=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyS1D8px2q5QwXcgqlIhSrFGHA23zgHZKqVYoTYfKgT7dbp6MtB
+	KMHiF0CCvdaDx+QxsZDc1exDrQ/e/xiyV1yEZLb0H4/UZRauRapA/Hwe
+X-Gm-Gg: AeBDieui+++DWGtnz3fT7XkMT7D+kSKDy7MQA+RrR1LpQsQNu/aq/jVB6k2vbqyRESm
+	PRHLYBJGN7txeotlPW54P3wLqAsJl0x9SCCpyjpPuDUd5H8x1i1RA/hnUXmgmuGLFs9+a+0x2wD
+	oRN4IwT4J64pqrFz5+Eh4QxuBbgzEDHvqXqX0uv7fxbzGYh5T1EIpfs4eo+uSQaWow58MSk5LeN
+	Bed96hefJ2G1SHEyXmTjK0LYyHuKbCQsFnhj9LfLX8Q0tdN8lrHSmMYkLXjR11oX3Olw4vOkNej
+	T0kOUhiftbbeATfEPJ14kl0lFyko3o7hWS8V1q/Y+W24ARpSHUBuH7Dvvy552ASUjx6NasynD65
+	oRonAgwSYtdKxNoS667i3xvqvCXGwSlWuhbTbR7kgvo57iR0FYzt5ZI2EBFMQlWQho0mJ04n3Ns
+	wfiBuycfA2RVA/xfMVYfIr
+X-Received: by 2002:a05:620a:448e:b0:8cd:871c:909d with SMTP id af79cd13be357-904d69e05d9mr1551888485a.53.1778207305584;
+        Thu, 07 May 2026 19:28:25 -0700 (PDT)
+Received: from localhost ([2a03:2880:f800:b::])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-907b9380925sm63082585a.11.2026.05.07.19.28.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 May 2026 19:28:20 -0700 (PDT)
+        Thu, 07 May 2026 19:28:25 -0700 (PDT)
 From: Bobby Eshleman <bobbyeshleman@gmail.com>
-Date: Thu, 07 May 2026 19:27:49 -0700
-Subject: [PATCH net-next v3 4/8] selftests: drv-net: ncdevmem: add -n flag
- to skip NIC configuration
+Date: Thu, 07 May 2026 19:27:51 -0700
+Subject: [PATCH net-next v3 6/8] selftests: drv-net: refactor devmem
+ command builders into lib module
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,7 +70,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260507-tcp-dm-netkit-v3-4-52821445867c@meta.com>
+Message-Id: <20260507-tcp-dm-netkit-v3-6-52821445867c@meta.com>
 References: <20260507-tcp-dm-netkit-v3-0-52821445867c@meta.com>
 In-Reply-To: <20260507-tcp-dm-netkit-v3-0-52821445867c@meta.com>
 To: Andrew Lunn <andrew+netdev@lunn.ch>, 
@@ -117,131 +117,396 @@ X-Mailer: b4 0.14.3
 
 From: Bobby Eshleman <bobbyeshleman@meta.com>
 
-Add a -n (skip_config) flag that causes ncdevmem to skip NIC
-configuration when operating as an RX server. When -n is passed,
-ncdevmem skips configuring header split, RSS, and flow steering, as well
-as their teardown on exit.
+Adding netkit-based devmem tests is a straight-forward copy of devmem
+test commands plus some args for the nk cases, so this patch breaks out
+these command builders into helpers used by both.
 
-This allows ksft tests to pre-configure the NIC in the host namespace
-before launching ncdevmem in the guest namespace. This is needed for
-netkit devmem tests where the test harness namespace has direct access
-to the NIC and the ncdevmem namespace does not.
+Though we tried to avoid libraries to avoid increasing the barrier of
+entry/complexity (see selftests/drivers/net/README.md, section "Avoid
+libraries and frameworks"), factoring out these functions seemed like
+the lesser of two evils in this case of using the same commands, just
+with slightly different args per environment.
+
+I experimented with just having all of the tests in the same file to
+avoid having helpers in a library file, but because ksft_run() is
+limited to a single call per file, and the new tests will require
+different environments (NetDrvContEnv/NetDrvEpEnv), it would have been
+necessary to have each test set up its own environment instead of
+sharing one for the entire ksft_run() run. This came at the cost of
+ballooning the test time (from under 5s to 30s on my test system), so to
+strike a balance these tests were placed in separate files so they could
+keep a shared environment across a single ksft_run() run shared across
+all tests using the same env type (introduced in subsequent patches).
+
+The helpers work transparently with both plain and netkit environments
+by inspecting cfg for netkit-specific attributes (netns, nk_queue,
+etc...).
 
 Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
 ---
- tools/testing/selftests/drivers/net/hw/ncdevmem.c | 58 +++++++++++++----------
- 1 file changed, 34 insertions(+), 24 deletions(-)
+Changes in v4:
+- Make socat_send() always bind the source; drop its bind= parameter
+  and the matching bind=not_ns at the run_rx call site.
+- Drop socat_send()'s nodelay= arg; have buf_size>0 imply TCP_NODELAY
+  since they are only meaningful together.
+- configure_nic(): stash originals on cfg instead of using defer(); add
+  paired cleanup_nic() helper. Drop the per-test configure_nic() calls
+  from run_rx/run_tx/run_tx_chunks/run_rx_hds; the netkit test file
+  invokes configure_nic/cleanup_nic once around ksft_run().
+- make cfg.devmem_supported and cfg.devmem_probed public attrs (no '_')
+  for sake of linting
+- general cleanup of the code, linting fixes
 
-diff --git a/tools/testing/selftests/drivers/net/hw/ncdevmem.c b/tools/testing/selftests/drivers/net/hw/ncdevmem.c
-index e098d6534c3c..d96e8a3b5a65 100644
---- a/tools/testing/selftests/drivers/net/hw/ncdevmem.c
-+++ b/tools/testing/selftests/drivers/net/hw/ncdevmem.c
-@@ -93,6 +93,7 @@ static char *port;
- static size_t do_validation;
- static int start_queue = -1;
- static int num_queues = -1;
-+static int skip_config;
- static char *ifname;
- static unsigned int ifindex;
- static unsigned int dmabuf_id;
-@@ -828,7 +829,7 @@ static struct netdev_queue_id *create_queues(void)
+Changes in v3:
+- In setup_test, drop the unused cfg.listen_ns = getattr(cfg, 'netns',
+  None) assignment.
+- In run_rx, pass flow_steer=not_ns to ncdevmem_rx and bind=not_ns to
+  socat_send to avoid changing functionality (we want just a straight
+  refactor here)
+
+Changes in v2:
+- Move require_devmem() into individual test functions so KsftSkipEx goes up to
+  ksft_run() (Sashiko)
+- in ncdevmem_rx(), move -v 7 to take effect for both netns and
+  non-netns when verify=True
+---
+ tools/testing/selftests/drivers/net/hw/devmem.py   |  77 ++------
+ .../selftests/drivers/net/hw/lib/py/devmem.py      | 218 +++++++++++++++++++++
+ 2 files changed, 231 insertions(+), 64 deletions(-)
+
+diff --git a/tools/testing/selftests/drivers/net/hw/devmem.py b/tools/testing/selftests/drivers/net/hw/devmem.py
+index ee863e90d1e0..dbc1e6a27b6a 100755
+--- a/tools/testing/selftests/drivers/net/hw/devmem.py
++++ b/tools/testing/selftests/drivers/net/hw/devmem.py
+@@ -2,91 +2,40 @@
+ # SPDX-License-Identifier: GPL-2.0
  
- static int do_server(struct memory_buffer *mem)
- {
--	struct ethtool_rings_get_rsp *ring_config;
-+	struct ethtool_rings_get_rsp *ring_config = NULL;
- 	char ctrl_data[sizeof(int) * 20000];
- 	size_t non_page_aligned_frags = 0;
- 	struct sockaddr_in6 client_addr;
-@@ -851,27 +852,29 @@ static int do_server(struct memory_buffer *mem)
- 		return -1;
- 	}
+ from os import path
+-from lib.py import ksft_run, ksft_exit
+-from lib.py import ksft_eq, KsftSkipEx
++from lib.py import ksft_run, ksft_exit, ksft_disruptive
+ from lib.py import NetDrvEpEnv
+-from lib.py import bkg, cmd, rand_port, wait_port_listen
+-from lib.py import ksft_disruptive
+-
+-
+-def require_devmem(cfg):
+-    if not hasattr(cfg, "_devmem_probed"):
+-        probe_command = f"{cfg.bin_local} -f {cfg.ifname}"
+-        cfg._devmem_supported = cmd(probe_command, fail=False, shell=True).ret == 0
+-        cfg._devmem_probed = True
+-
+-    if not cfg._devmem_supported:
+-        raise KsftSkipEx("Test requires devmem support")
++from lib.py.devmem import setup_test, run_rx, run_tx, run_tx_chunks, run_rx_hds
  
--	ring_config = get_ring_config();
--	if (!ring_config) {
--		pr_err("Failed to get current ring configuration");
--		return -1;
--	}
-+	if (!skip_config) {
-+		ring_config = get_ring_config();
-+		if (!ring_config) {
-+			pr_err("Failed to get current ring configuration");
-+			return -1;
-+		}
  
--	if (configure_headersplit(ring_config, 1)) {
--		pr_err("Failed to enable TCP header split");
--		goto err_free_ring_config;
--	}
-+		if (configure_headersplit(ring_config, 1)) {
-+			pr_err("Failed to enable TCP header split");
-+			goto err_free_ring_config;
-+		}
+ @ksft_disruptive
+ def check_rx(cfg) -> None:
+-    require_devmem(cfg)
+-
+-    port = rand_port()
+-    socat = f"socat -u - TCP{cfg.addr_ipver}:{cfg.baddr}:{port},bind={cfg.remote_baddr}:{port}"
+-    listen_cmd = f"{cfg.bin_local} -l -f {cfg.ifname} -s {cfg.addr} -p {port} -c {cfg.remote_addr} -v 7"
+-
+-    with bkg(listen_cmd, exit_wait=True) as ncdevmem:
+-        wait_port_listen(port)
+-        cmd(f"yes $(echo -e \x01\x02\x03\x04\x05\x06) | \
+-            head -c 1K | {socat}", host=cfg.remote, shell=True)
+-
+-    ksft_eq(ncdevmem.ret, 0)
++    """Run the devmem RX test."""
++    run_rx(cfg)
  
--	/* Configure RSS to divert all traffic from our devmem queues */
--	if (configure_rss()) {
--		pr_err("Failed to configure rss");
--		goto err_reset_headersplit;
--	}
-+		/* Configure RSS to divert all traffic from our devmem queues */
-+		if (configure_rss()) {
-+			pr_err("Failed to configure rss");
-+			goto err_reset_headersplit;
-+		}
  
--	/* Flow steer our devmem flows to start_queue */
--	if (configure_flow_steering(&server_sin)) {
--		pr_err("Failed to configure flow steering");
--		goto err_reset_rss;
-+		/* Flow steer our devmem flows to start_queue */
-+		if (configure_flow_steering(&server_sin)) {
-+			pr_err("Failed to configure flow steering");
-+			goto err_reset_rss;
-+		}
- 	}
+ @ksft_disruptive
+ def check_tx(cfg) -> None:
+-    require_devmem(cfg)
+-
+-    port = rand_port()
+-    listen_cmd = f"socat -U - TCP{cfg.addr_ipver}-LISTEN:{port}"
+-
+-    with bkg(listen_cmd, host=cfg.remote, exit_wait=True) as socat:
+-        wait_port_listen(port, host=cfg.remote)
+-        cmd(f"echo -e \"hello\\nworld\"| {cfg.bin_local} -f {cfg.ifname} -s {cfg.remote_addr} -p {port}", shell=True)
+-
+-    ksft_eq(socat.stdout.strip(), "hello\nworld")
++    """Run the devmem TX test."""
++    run_tx(cfg)
  
- 	if (bind_rx_queue(ifindex, mem->fd, create_queues(), num_queues, &ys)) {
-@@ -1052,13 +1055,17 @@ static int do_server(struct memory_buffer *mem)
- err_unbind:
- 	ynl_sock_destroy(ys);
- err_reset_flow_steering:
--	reset_flow_steering();
-+	if (!skip_config)
-+		reset_flow_steering();
- err_reset_rss:
--	reset_rss();
-+	if (!skip_config)
-+		reset_rss();
- err_reset_headersplit:
--	restore_ring_config(ring_config);
-+	if (!skip_config)
-+		restore_ring_config(ring_config);
- err_free_ring_config:
--	ethtool_rings_get_rsp_free(ring_config);
-+	if (!skip_config)
-+		ethtool_rings_get_rsp_free(ring_config);
- 	return err;
- }
  
-@@ -1404,7 +1411,7 @@ int main(int argc, char *argv[])
- 	int is_server = 0, opt;
- 	int ret, err = 1;
+ @ksft_disruptive
+ def check_tx_chunks(cfg) -> None:
+-    require_devmem(cfg)
+-
+-    port = rand_port()
+-    listen_cmd = f"socat -U - TCP{cfg.addr_ipver}-LISTEN:{port}"
+-
+-    with bkg(listen_cmd, host=cfg.remote, exit_wait=True) as socat:
+-        wait_port_listen(port, host=cfg.remote)
+-        cmd(f"echo -e \"hello\\nworld\"| {cfg.bin_local} -f {cfg.ifname} -s {cfg.remote_addr} -p {port} -z 3", shell=True)
+-
+-    ksft_eq(socat.stdout.strip(), "hello\nworld")
++    """Run the devmem TX chunking test."""
++    run_tx_chunks(cfg)
  
--	while ((opt = getopt(argc, argv, "Lls:c:p:v:q:t:f:z:")) != -1) {
-+	while ((opt = getopt(argc, argv, "Lls:c:p:v:q:t:f:z:n")) != -1) {
- 		switch (opt) {
- 		case 'L':
- 			fail_on_linear = true;
-@@ -1436,6 +1443,9 @@ int main(int argc, char *argv[])
- 		case 'z':
- 			max_chunk = atoi(optarg);
- 			break;
-+		case 'n':
-+			skip_config = 1;
-+			break;
- 		case '?':
- 			fprintf(stderr, "unknown option: %c\n", optopt);
- 			break;
+ 
+ def check_rx_hds(cfg) -> None:
+-    """Test HDS splitting across payload sizes."""
+-    require_devmem(cfg)
+-
+-    for size in [1, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192]:
+-        port = rand_port()
+-        listen_cmd = f"{cfg.bin_local} -L -l -f {cfg.ifname} -s {cfg.addr} -p {port}"
+-
+-        with bkg(listen_cmd, exit_wait=True) as ncdevmem:
+-            wait_port_listen(port)
+-            cmd(f"dd if=/dev/zero bs={size} count=1 2>/dev/null | " +
+-                f"socat -b {size} -u - TCP{cfg.addr_ipver}:{cfg.baddr}:{port},nodelay",
+-                host=cfg.remote, shell=True)
+-
+-        ksft_eq(ncdevmem.ret, 0, f"HDS failed for payload size {size}")
++    """Run the HDS test."""
++    run_rx_hds(cfg)
+ 
+ 
+ def main() -> None:
++    """Run the devmem test cases."""
+     with NetDrvEpEnv(__file__) as cfg:
+-        cfg.bin_local = path.abspath(path.dirname(__file__) + "/ncdevmem")
+-        cfg.bin_remote = cfg.remote.deploy(cfg.bin_local)
+-
++        setup_test(cfg, path.abspath(path.dirname(__file__) + "/ncdevmem"))
+         ksft_run([check_rx, check_tx, check_tx_chunks, check_rx_hds],
+-                 args=(cfg, ))
++                 args=(cfg,))
+     ksft_exit()
+ 
+ 
+diff --git a/tools/testing/selftests/drivers/net/hw/lib/py/devmem.py b/tools/testing/selftests/drivers/net/hw/lib/py/devmem.py
+new file mode 100644
+index 000000000000..d3e7a3645cba
+--- /dev/null
++++ b/tools/testing/selftests/drivers/net/hw/lib/py/devmem.py
+@@ -0,0 +1,218 @@
++# SPDX-License-Identifier: GPL-2.0
++"""Shared helpers for devmem TCP selftests."""
++
++import re
++
++from net.lib.py import (bkg, cmd, defer, ethtool, rand_port, wait_port_listen,
++                        ksft_eq, KsftSkipEx, NetNSEnter, EthtoolFamily,
++                        NetdevFamily)
++
++
++def require_devmem(cfg):
++    """Probe ncdevmem on cfg.ifname and SKIP the test if devmem isn't supported."""
++    if not hasattr(cfg, "devmem_probed"):
++        probe_command = f"{cfg.bin_local} -f {cfg.ifname}"
++        cfg.devmem_supported = cmd(probe_command, fail=False, shell=True).ret == 0
++        cfg.devmem_probed = True
++
++    if not cfg.devmem_supported:
++        raise KsftSkipEx("Test requires devmem support")
++
++
++def configure_nic(cfg):
++    """Channels, rings, RSS, queue lease for netkit devmem."""
++    cfg.require_ipver('6')
++    ethnl = EthtoolFamily()
++
++    channels = ethnl.channels_get({'header': {'dev-index': cfg.ifindex}})
++    channels = channels['combined-count']
++    if channels < 2:
++        raise KsftSkipEx(
++            'Test requires NETIF with at least 2 combined channels'
++        )
++
++    rings = ethnl.rings_get({'header': {'dev-index': cfg.ifindex}})
++    cfg.orig_rx_rings = rings['rx']
++    cfg.orig_hds_thresh = rings.get('hds-thresh', 0)
++    cfg.orig_data_split = rings.get('tcp-data-split', 'unknown')
++
++    ethnl.rings_set({'header': {'dev-index': cfg.ifindex},
++                     'tcp-data-split': 'enabled',
++                     'hds-thresh': 0,
++                     'rx': min(64, cfg.orig_rx_rings)})
++
++    cfg.src_queue = channels - 1
++    ethtool(f"-X {cfg.ifname} equal {cfg.src_queue}")
++
++    with NetNSEnter(str(cfg.netns)):
++        netdevnl = NetdevFamily()
++        lease_result = netdevnl.queue_create({
++            "ifindex": cfg.nk_guest_ifindex,
++            "type": "rx",
++            "lease": {
++                "ifindex": cfg.ifindex,
++                "queue": {"id": cfg.src_queue, "type": "rx"},
++                "netns-id": 0,
++            },
++        })
++        cfg.nk_queue = lease_result['id']
++
++
++def cleanup_nic(cfg):
++    """Undo configure_nic() by restoring RSS and ring settings."""
++    ethtool(f"-X {cfg.ifname} default")
++    EthtoolFamily().rings_set({'header': {'dev-index': cfg.ifindex},
++                               'tcp-data-split': cfg.orig_data_split,
++                               'hds-thresh': cfg.orig_hds_thresh,
++                               'rx': cfg.orig_rx_rings})
++
++
++def set_flow_rule(cfg, port):
++    """Install a flow rule steering to src_queue and return the flow rule ID."""
++    output = ethtool(
++        f"-N {cfg.ifname} flow-type tcp6 dst-port {port}"
++        f" action {cfg.src_queue}"
++    ).stdout
++    return int(re.search(r'ID (\d+)', output).group(1))
++
++
++def ncdevmem_rx(cfg, port, verify=True, fail_on_linear=False, flow_steer=False):
++    """Build the ncdevmem RX listener command."""
++    if hasattr(cfg, 'netns'):
++        flow_rule_id = set_flow_rule(cfg, port)
++        defer(ethtool, f"-N {cfg.ifname} delete {flow_rule_id}")
++
++        ifname = cfg.nk_guest_ifname
++        addr = cfg.nk_guest_ipv6
++        extras = [f"-t {cfg.nk_queue}", "-q 1", "-n"]
++    else:
++        ifname = cfg.ifname
++        addr = cfg.addr
++        extras = []
++        if flow_steer:
++            extras.append(f"-c {cfg.remote_addr}")
++
++    if verify:
++        extras.append("-v 7")
++    if fail_on_linear:
++        extras.append("-L")
++
++    parts = [cfg.bin_local, "-l", f"-f {ifname}", f"-s {addr}",
++             f"-p {port}", *extras]
++    return " ".join(parts)
++
++
++def ncdevmem_tx(cfg, port, chunk_size=0):
++    """Build the ncdevmem TX send command."""
++    if hasattr(cfg, 'netns'):
++        ifname = cfg.nk_guest_ifname
++        addr = cfg.remote_addr_v['6']
++        extras = ["-t 0", "-q 1", "-n"]
++    else:
++        ifname = cfg.ifname
++        addr = cfg.remote_addr
++        extras = []
++
++    if chunk_size:
++        extras.append(f"-z {chunk_size}")
++
++    parts = [cfg.bin_local, f"-f {ifname}", f"-s {addr}",
++             f"-p {port}", *extras]
++    return " ".join(parts)
++
++
++def socat_send(cfg, port, buf_size=0):
++    """Socat command for sending to the devmem listener.
++
++    When buf_size > 0, force one TCP segment per write of exactly that size by
++    setting socat's buffer (-b) and disabling Nagle (TCP_NODELAY).
++    """
++    proto = f"TCP{cfg.addr_ipver}"
++
++    if hasattr(cfg, 'netns'):
++        addr = f"[{cfg.nk_guest_ipv6}]"
++    else:
++        addr = cfg.baddr
++
++    suffix = f",bind={cfg.remote_baddr}:{port}"
++
++    buf = ""
++    if buf_size:
++        buf = f"-b {buf_size}"
++        suffix += ",nodelay"
++
++    return f"socat {buf} -u - {proto}:{addr}:{port}{suffix}"
++
++
++def socat_listen(cfg, port):
++    """Socat listen command for TX tests."""
++    return f"socat -U - TCP{cfg.addr_ipver}-LISTEN:{port}"
++
++
++def setup_test(cfg, bin_local):
++    """Stash the local ncdevmem path on cfg and deploy it to the remote."""
++    cfg.bin_local = bin_local
++    cfg.bin_remote = cfg.remote.deploy(cfg.bin_local)
++
++
++def run_rx(cfg):
++    """Run the devmem RX test."""
++    require_devmem(cfg)
++    port = rand_port()
++    socat = socat_send(cfg, port)
++    data_pipe = (f"yes $(echo -e \x01\x02\x03\x04\x05\x06) | head -c 1K"
++                 f" | {socat}")
++    netns = getattr(cfg, "netns", None)
++
++    listen_cmd = ncdevmem_rx(cfg, port, flow_steer=not hasattr(cfg, 'netns'))
++    with bkg(listen_cmd, exit_wait=True, ns=netns) as ncdevmem:
++        wait_port_listen(port, proto="tcp", ns=netns)
++        cmd(data_pipe, host=cfg.remote, shell=True)
++    ksft_eq(ncdevmem.ret, 0)
++
++
++def run_tx(cfg):
++    """Run the devmem TX test."""
++    require_devmem(cfg)
++    netns = getattr(cfg, "netns", None)
++    port = rand_port()
++    tx_cmd = ncdevmem_tx(cfg, port)
++    listen_cmd = socat_listen(cfg, port)
++
++    with bkg(listen_cmd, host=cfg.remote, exit_wait=True) as socat:
++        wait_port_listen(port, host=cfg.remote)
++        cmd(f"bash -c 'echo -e \"hello\\nworld\" | {tx_cmd}'", ns=netns, shell=True)
++    ksft_eq(socat.stdout.strip(), "hello\nworld")
++
++
++def run_tx_chunks(cfg):
++    """Run the devmem TX chunking test."""
++    require_devmem(cfg)
++    netns = getattr(cfg, "netns", None)
++    port = rand_port()
++    tx_cmd = ncdevmem_tx(cfg, port, chunk_size=3)
++    listen_cmd = socat_listen(cfg, port)
++
++    with bkg(listen_cmd, host=cfg.remote, exit_wait=True) as socat:
++        wait_port_listen(port, host=cfg.remote)
++        cmd(f"bash -c 'echo -e \"hello\\nworld\" | {tx_cmd}'", ns=netns, shell=True)
++    ksft_eq(socat.stdout.strip(), "hello\nworld")
++
++
++def run_rx_hds(cfg):
++    """Run the HDS test by running devmem RX across a segment size sweep."""
++    require_devmem(cfg)
++    netns = getattr(cfg, "netns", None)
++
++    for size in [1, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192]:
++        port = rand_port()
++
++        listen_cmd = ncdevmem_rx(cfg, port, verify=False,
++                                 fail_on_linear=True)
++        socat = socat_send(cfg, port, buf_size=size)
++
++        with bkg(listen_cmd, exit_wait=True, ns=netns) as ncdevmem:
++            wait_port_listen(port, proto="tcp", ns=netns)
++            cmd(f"dd if=/dev/zero bs={size} count=1 2>/dev/null | "
++                f"{socat}", host=cfg.remote, shell=True)
++        ksft_eq(ncdevmem.ret, 0, f"HDS failed for payload size {size}")
 
 -- 
 2.53.0-Meta
