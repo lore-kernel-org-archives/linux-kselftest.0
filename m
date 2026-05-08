@@ -1,178 +1,526 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30EB32F2607;
-	Fri,  8 May 2026 12:27:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 178513DD51F
+	for <linux-kselftest@vger.kernel.org>; Fri,  8 May 2026 12:36:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778243262; cv=none; b=kxMQvXzco2rAUkPTNeELIYadca+H5wG93KtTFZ/Ud6KF727shkKSDAepXNPEkKLQhTG5yUWImizP4SBjdbRZVmN91VZiu8kVnvfztSJW+TxbRsefZt9RoRAX2L4lH6YLcx1Uq1Ss/xY2rckd8pLcZjk6wHgVJBK+sJJxU771Y24=
+	t=1778243773; cv=none; b=Gak/vcdFZGR6X1JCiPdHh9IImiq4DKmYlmTCIeKoirj7ZniOy9EHNxOM08oi2Z9veZjjbl8WC7TWr7HjDmw6URwbE5tC9pxMoCNYBVG2Zlkujm/S4QiXbb3SiST+wdZ43Xc6wZHsrl337a/9xX4g7w3FKTq3smk9qiEaa9NFa4E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778243262; c=relaxed/simple;
-	bh=ma++l05+jUjyVj+lcNXmwxDuxjpw7p6B1P8IKC8yMQM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dyiH4+YIwhqm26BIqmPV+iUj8ibgzyLqnf62pEYyWgZMo3j0SRh5PoAjB3QBQVfOqwzrXiS61Uvlgd4nZ5qkvdykDR4MXsj2nWkNAY2IwyTQyFLjbfeIgFCZ14NpI9+NlFy81gYCzDuC6e5DWcIMf6tEE3ZAgDdTwLJE3eHqm2U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WCEWqKKR; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778243773; c=relaxed/simple;
+	bh=3xxbKM8vbG08j740C7iq/B/wbeWFQxySna8jLsk8rXY=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=Vj6vKzWdSzxXhj6V5Z72aOZW5FTZ+m3/J07NjD5UAa3IfOjw7zOFEStyCh2m9flBlsLrBUCboNdtAdFVnXbJAQ8jUiTnPsz1Y5uSkkXgUQDes/uILGou7jp8++SsUkzH58n+SfwuZcnJbz6gR7d78GjGIJnXWtYin/VLNQJqIPM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=VyEb0Axs; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WCEWqKKR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 628E5C2BCB8;
-	Fri,  8 May 2026 12:27:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778243261;
-	bh=ma++l05+jUjyVj+lcNXmwxDuxjpw7p6B1P8IKC8yMQM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=WCEWqKKRcUw+sjbMY4GB6hIhqhRig1T9LBpWmxd+nA8f2RNcGBllNRagKqI5FzPkN
-	 26WsO52bPsw5CHqjgtS4Rb3u2xUKya8vRxfVeFNKd2KLSLATsgfDBq4hpeNNIGXjZ8
-	 2PO/vCswnxE0EQxQfrGL6LXYvtSayT9AeTQQOonJB5Ru/dqN2pcozNQcOwxcSJKQf2
-	 GNvCRoso9B+/d6WwdVo4BS3ASXlLDzKauJCdFBiNLDBYCqY52n0jXnZLa+JiGGt0TQ
-	 GkErbG4t1NjoO/5a6oA4L8mPV3eO5mJDGDKtOE4Ufpkawu0K1TjSQmla59Tw4OqsG9
-	 jEniXbBkz1QTA==
-Message-ID: <9eea2afb-8c35-47eb-b1de-6a08503c9679@kernel.org>
-Date: Fri, 8 May 2026 14:27:37 +0200
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VyEb0Axs"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1778243770;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=4CFvEVAz8m7sZ6g46baskyZcaIYwuKamZfrB4xYmx+Q=;
+	b=VyEb0AxsoTFurLtbouop9+ph75XiX9jYU/Z/AaoJ9/+UuKTfJ3y87CZTma5hwrFiHlPAmB
+	SPxfukRBq0YYNWB1sJ7/6VaY/R6h5h/HNKb05x0xLnPihPXe8GCFqLTKGXaaTidAQG32I2
+	3j9/Yvllpupj2PHWFhgRcGjR7DrKAh4=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-547-bf-H66GlNUycITeye1H2Og-1; Fri,
+ 08 May 2026 08:36:06 -0400
+X-MC-Unique: bf-H66GlNUycITeye1H2Og-1
+X-Mimecast-MFC-AGG-ID: bf-H66GlNUycITeye1H2Og_1778243765
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CD94619560BB;
+	Fri,  8 May 2026 12:36:04 +0000 (UTC)
+Received: from RHTRH0061144 (unknown [10.22.65.142])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 121451944B20;
+	Fri,  8 May 2026 12:36:01 +0000 (UTC)
+From: Aaron Conole <aconole@redhat.com>
+To: Minxi Hou <houminxi@gmail.com>
+Cc: netdev@vger.kernel.org,  echaudro@redhat.com,  i.maximets@ovn.org,
+  davem@davemloft.net,  edumazet@google.com,  kuba@kernel.org,
+  pabeni@redhat.com,  horms@kernel.org,  shuah@kernel.org,
+  dev@openvswitch.org,  linux-kselftest@vger.kernel.org,
+  linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v7 1/2] selftests: openvswitch: add vlan() and
+ encap() flow string parsing
+In-Reply-To: <20260507131541.2331771-2-houminxi@gmail.com> (Minxi Hou's
+	message of "Thu, 7 May 2026 21:15:40 +0800")
+References: <20260507131541.2331771-1-houminxi@gmail.com>
+	<20260507131541.2331771-2-houminxi@gmail.com>
+Date: Fri, 08 May 2026 08:36:00 -0400
+Message-ID: <f7tlddurscv.fsf@redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] mm/khugepaged: fix spurious -EINVAL from sub-PMD
- MADV_COLLAPSE range
-To: Chen Wandun <chenwandun1@gmail.com>, akpm@linux-foundation.org,
- ljs@kernel.org, shuah@kernel.org, zokeefe@google.com
-Cc: linux-kernel@vger.kernel.org, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org
-References: <20260507070558.3064142-1-chenwandun@lixiang.com>
- <20260507070558.3064142-2-chenwandun@lixiang.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- xsFNBFXLn5EBEAC+zYvAFJxCBY9Tr1xZgcESmxVNI/0ffzE/ZQOiHJl6mGkmA1R7/uUpiCjJ
- dBrn+lhhOYjjNefFQou6478faXE6o2AhmebqT4KiQoUQFV4R7y1KMEKoSyy8hQaK1umALTdL
- QZLQMzNE74ap+GDK0wnacPQFpcG1AE9RMq3aeErY5tujekBS32jfC/7AnH7I0v1v1TbbK3Gp
- XNeiN4QroO+5qaSr0ID2sz5jtBLRb15RMre27E1ImpaIv2Jw8NJgW0k/D1RyKCwaTsgRdwuK
- Kx/Y91XuSBdz0uOyU/S8kM1+ag0wvsGlpBVxRR/xw/E8M7TEwuCZQArqqTCmkG6HGcXFT0V9
- PXFNNgV5jXMQRwU0O/ztJIQqsE5LsUomE//bLwzj9IVsaQpKDqW6TAPjcdBDPLHvriq7kGjt
- WhVhdl0qEYB8lkBEU7V2Yb+SYhmhpDrti9Fq1EsmhiHSkxJcGREoMK/63r9WLZYI3+4W2rAc
- UucZa4OT27U5ZISjNg3Ev0rxU5UH2/pT4wJCfxwocmqaRr6UYmrtZmND89X0KigoFD/XSeVv
- jwBRNjPAubK9/k5NoRrYqztM9W6sJqrH8+UWZ1Idd/DdmogJh0gNC0+N42Za9yBRURfIdKSb
- B3JfpUqcWwE7vUaYrHG1nw54pLUoPG6sAA7Mehl3nd4pZUALHwARAQABzS5EYXZpZCBIaWxk
- ZW5icmFuZCAoQ3VycmVudCkgPGRhdmlkQGtlcm5lbC5vcmc+wsGQBBMBCAA6AhsDBQkmWAik
- AgsJBBUKCQgCFgICHgUCF4AWIQQb2cqtc1xMOkYN/MpN3hD3AP+DWgUCaYJt/AIZAQAKCRBN
- 3hD3AP+DWriiD/9BLGEKG+N8L2AXhikJg6YmXom9ytRwPqDgpHpVg2xdhopoWdMRXjzOrIKD
- g4LSnFaKneQD0hZhoArEeamG5tyo32xoRsPwkbpIzL0OKSZ8G6mVbFGpjmyDLQCAxteXCLXz
- ZI0VbsuJKelYnKcXWOIndOrNRvE5eoOfTt2XfBnAapxMYY2IsV+qaUXlO63GgfIOg8RBaj7x
- 3NxkI3rV0SHhI4GU9K6jCvGghxeS1QX6L/XI9mfAYaIwGy5B68kF26piAVYv/QZDEVIpo3t7
- /fjSpxKT8plJH6rhhR0epy8dWRHk3qT5tk2P85twasdloWtkMZ7FsCJRKWscm1BLpsDn6EQ4
- jeMHECiY9kGKKi8dQpv3FRyo2QApZ49NNDbwcR0ZndK0XFo15iH708H5Qja/8TuXCwnPWAcJ
- DQoNIDFyaxe26Rx3ZwUkRALa3iPcVjE0//TrQ4KnFf+lMBSrS33xDDBfevW9+Dk6IISmDH1R
- HFq2jpkN+FX/PE8eVhV68B2DsAPZ5rUwyCKUXPTJ/irrCCmAAb5Jpv11S7hUSpqtM/6oVESC
- 3z/7CzrVtRODzLtNgV4r5EI+wAv/3PgJLlMwgJM90Fb3CB2IgbxhjvmB1WNdvXACVydx55V7
- LPPKodSTF29rlnQAf9HLgCphuuSrrPn5VQDaYZl4N/7zc2wcWM7BTQRVy5+RARAA59fefSDR
- 9nMGCb9LbMX+TFAoIQo/wgP5XPyzLYakO+94GrgfZjfhdaxPXMsl2+o8jhp/hlIzG56taNdt
- VZtPp3ih1AgbR8rHgXw1xwOpuAd5lE1qNd54ndHuADO9a9A0vPimIes78Hi1/yy+ZEEvRkHk
- /kDa6F3AtTc1m4rbbOk2fiKzzsE9YXweFjQvl9p+AMw6qd/iC4lUk9g0+FQXNdRs+o4o6Qvy
- iOQJfGQ4UcBuOy1IrkJrd8qq5jet1fcM2j4QvsW8CLDWZS1L7kZ5gT5EycMKxUWb8LuRjxzZ
- 3QY1aQH2kkzn6acigU3HLtgFyV1gBNV44ehjgvJpRY2cC8VhanTx0dZ9mj1YKIky5N+C0f21
- zvntBqcxV0+3p8MrxRRcgEtDZNav+xAoT3G0W4SahAaUTWXpsZoOecwtxi74CyneQNPTDjNg
- azHmvpdBVEfj7k3p4dmJp5i0U66Onmf6mMFpArvBRSMOKU9DlAzMi4IvhiNWjKVaIE2Se9BY
- FdKVAJaZq85P2y20ZBd08ILnKcj7XKZkLU5FkoA0udEBvQ0f9QLNyyy3DZMCQWcwRuj1m73D
- sq8DEFBdZ5eEkj1dCyx+t/ga6x2rHyc8Sl86oK1tvAkwBNsfKou3v+jP/l14a7DGBvrmlYjO
- 59o3t6inu6H7pt7OL6u6BQj7DoMAEQEAAcLBfAQYAQgAJgIbDBYhBBvZyq1zXEw6Rg38yk3e
- EPcA/4NaBQJonNqrBQkmWAihAAoJEE3eEPcA/4NaKtMQALAJ8PzprBEXbXcEXwDKQu+P/vts
- IfUb1UNMfMV76BicGa5NCZnJNQASDP/+bFg6O3gx5NbhHHPeaWz/VxlOmYHokHodOvtL0WCC
- 8A5PEP8tOk6029Z+J+xUcMrJClNVFpzVvOpb1lCbhjwAV465Hy+NUSbbUiRxdzNQtLtgZzOV
- Zw7jxUCs4UUZLQTCuBpFgb15bBxYZ/BL9MbzxPxvfUQIPbnzQMcqtpUs21CMK2PdfCh5c4gS
- sDci6D5/ZIBw94UQWmGpM/O1ilGXde2ZzzGYl64glmccD8e87OnEgKnH3FbnJnT4iJchtSvx
- yJNi1+t0+qDti4m88+/9IuPqCKb6Stl+s2dnLtJNrjXBGJtsQG/sRpqsJz5x1/2nPJSRMsx9
- 5YfqbdrJSOFXDzZ8/r82HgQEtUvlSXNaXCa95ez0UkOG7+bDm2b3s0XahBQeLVCH0mw3RAQg
- r7xDAYKIrAwfHHmMTnBQDPJwVqxJjVNr7yBic4yfzVWGCGNE4DnOW0vcIeoyhy9vnIa3w1uZ
- 3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
- CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
- qIws/H2t
-In-Reply-To: <20260507070558.3064142-2-chenwandun@lixiang.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-On 5/7/26 09:05, Chen Wandun wrote:
-> madvise_collapse() computes the THP-aligned window:
-> 
->   hstart = (start + ~HPAGE_PMD_MASK) & HPAGE_PMD_MASK  /* round up  */
->   hend   =  end   &  HPAGE_PMD_MASK                    /* round down */
-> 
-> Previously this was done after kmalloc_obj(), so problem arose when
-> the range contained no complete PMD-aligned window (hstart >= hend).
-> 
-> When hstart > hend, (hend - hstart) wraps unsigned to a huge value, the
-> final comparison fails and -EINVAL is returned instead of 0.  Consider
-> two single-page calls on a 2 MiB-aligned address:
-> 
->     /* hstart == hend == aligned  ->  0 == 0  ->  returns 0 */
->     madvise(aligned, PAGE_SIZE, MADV_COLLAPSE);
-> 
->     /* hstart = aligned + 2MiB, hend = aligned
->      * (hend - hstart) wraps unsigned  ->  returns -EINVAL */
->     madvise(aligned + PAGE_SIZE, PAGE_SIZE, MADV_COLLAPSE);
-> 
-> Both calls cover less than one THP and collapse nothing; both should
-> return 0.
+Minxi Hou <houminxi@gmail.com> writes:
 
-Okay, so we talk about a "userspace is being stupid" scenario.
-
-> 
-> In addition, kmalloc_obj(), mmgrab() and lru_add_drain_all() were all
-> called before discovering there was nothing to do, only for the code
-> to kfree() and return immediately after.
-
-Just a comment as you motivate here why this is suboptimal: we do not care about
-a "userspace is being stupid" scenario being fast.
-
-> 
-> Fix both by computing hstart/hend after thp_vma_allowable_order() but
-> before kmalloc_obj(), and returning 0 early when hstart >= hend.
-> 
-> Fixes: 7d8faaf15545 ("mm/madvise: introduce MADV_COLLAPSE sync hugepage collapse")
-
-Fixes: is likely ok, but I don't think we want to treat this as a hotfix or CC
-stable.
-
-> Signed-off-by: Chen Wandun <chenwandun@lixiang.com>
+> Add VLAN TCI formatting and parsing support to ovs-dpctl.py:
+>
+> - Add _vlan_dpstr() to decompose TCI into vid/pcp/cfi fields,
+>   with raw tci=0x%04x fallback when cfi=0 for round-trip safety.
+> - Add _parse_vlan_from_flowstr() boundary check for missing ')'.
+> - Add encap_ovskey subclass restricting nla_map to L2-L4 attributes
+>   (slots 0-21) that appear inside 802.1Q ENCAP, with metadata
+>   attributes set to "none".
+> - Check parse() return value for unrecognized trailing content.
+> - Support callable format functions in dpstr() output.
+> - Change OVS_KEY_ATTR_VLAN type from uint16 to be16 to match the
+>   kernel __be16 wire format; uint16 decodes in host byte order,
+>   which gives wrong values on little-endian architectures.
+> - Change OVS_KEY_ATTR_ENCAP type from none to encap_ovskey to
+>   enable recursive parsing of 802.1Q encapsulated flow keys.
+> - Add push_vlan action class with fields matching kernel struct
+>   ovs_action_push_vlan (vlan_tpid, vlan_tci as network-order u16).
+> - Add push_vlan dpstr format and parse with range validation
+>   (vid 0-4095, pcp 0-7, tpid 0-0xFFFF) and CFI forced to 1.
+> - Remove MAX_ENCAP_DEPTH constant and depth tracking -- the
+>   bracket-depth counter in the encap parser already handles
+>   nesting; the global depth limit was unnecessary.
+>
+> Signed-off-by: Minxi Hou <houminxi@gmail.com>
 > ---
->  mm/khugepaged.c | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
-> 
-> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-> index b8452dbdb043..92473d93e837 100644
-> --- a/mm/khugepaged.c
-> +++ b/mm/khugepaged.c
-> @@ -2836,6 +2836,12 @@ int madvise_collapse(struct vm_area_struct *vma, unsigned long start,
->  	if (!thp_vma_allowable_order(vma, vma->vm_flags, TVA_FORCED_COLLAPSE, PMD_ORDER))
->  		return -EINVAL;
+>  .../selftests/net/openvswitch/ovs-dpctl.py    | 322 +++++++++++++++++-
+>  1 file changed, 312 insertions(+), 10 deletions(-)
+
+Just some minor nit.  The messages below for parsing are a bit
+inconsistent - sometimes they print::
+
+  missing ')' at end
+
+Sometimes::
+
+  missing ')'
+
+And the push_vlan message probably should have 'push_vlan()'
+
+If you want to respin, that would make it friendlier - but this is also
+a debug / testing tool, so I'm less concerned with consistency there.
+Still I have a thought on the shell script in patch 2/2.
+
+With that:
+
+Reviewed-by: Aaron Conole <aconole@redhat.com>
+
+> diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
+> index 848f61fdcee0..98d68277b9e7 100644
+> --- a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
+> +++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
+> @@ -370,7 +370,7 @@ class ovsactions(nla):
+>          ("OVS_ACTION_ATTR_OUTPUT", "uint32"),
+>          ("OVS_ACTION_ATTR_USERSPACE", "userspace"),
+>          ("OVS_ACTION_ATTR_SET", "ovskey"),
+> -        ("OVS_ACTION_ATTR_PUSH_VLAN", "none"),
+> +        ("OVS_ACTION_ATTR_PUSH_VLAN", "push_vlan"),
+>          ("OVS_ACTION_ATTR_POP_VLAN", "flag"),
+>          ("OVS_ACTION_ATTR_SAMPLE", "sample"),
+>          ("OVS_ACTION_ATTR_RECIRC", "uint32"),
+> @@ -427,6 +427,9 @@ class ovsactions(nla):
 >  
-> +	hstart = (start + ~HPAGE_PMD_MASK) & HPAGE_PMD_MASK;
-> +	hend = end & HPAGE_PMD_MASK;
+>              return actstr
+>  
+> +    class push_vlan(nla):
+> +        fields = (("vlan_tpid", "!H"), ("vlan_tci", "!H"))
 > +
-> +	if (hstart >= hend)
-> +		return 0;
+>      class sample(nla):
+>          nla_flags = NLA_F_NESTED
+>  
+> @@ -633,6 +636,14 @@ class ovsactions(nla):
+>                  print_str += "ct_clear"
+>              elif field[0] == "OVS_ACTION_ATTR_POP_VLAN":
+>                  print_str += "pop_vlan"
+> +            elif field[0] == "OVS_ACTION_ATTR_PUSH_VLAN":
+> +                datum = self.get_attr(field[0])
+> +                tpid = datum["vlan_tpid"]
+> +                tci = datum["vlan_tci"]
+> +                vid = tci & 0x0FFF
+> +                pcp = (tci >> 13) & 0x7
+> +                print_str += "push_vlan(vid=%d,pcp=%d" \
+> +                    ",tpid=0x%04x)" % (vid, pcp, tpid)
+>              elif field[0] == "OVS_ACTION_ATTR_POP_ETH":
+>                  print_str += "pop_eth"
+>              elif field[0] == "OVS_ACTION_ATTR_POP_NSH":
+> @@ -726,7 +737,57 @@ class ovsactions(nla):
+>                      actstr = actstr[strspn(actstr, ", ") :]
+>                      parsed = True
+>  
+> -            if parse_starts_block(actstr, "clone(", False):
+> +            if parse_starts_block(actstr, "push_vlan(", False):
+> +                actstr = actstr[len("push_vlan("):]
+> +                vid = 0
+> +                pcp = 0
+> +                tpid = 0x8100
+> +                if ")" not in actstr:
+> +                    raise ValueError(
+> +                        "push_vlan: missing ')'")
+> +                paren = actstr.index(")")
+> +                if not actstr[:paren].strip():
+> +                    raise ValueError("push_vlan: no fields")
+> +                for kv in actstr[:paren].split(","):
+> +                    if "=" not in kv:
+> +                        raise ValueError(
+> +                            "push_vlan: bad field '%s'"
+> +                            % kv.strip())
+> +                    k = kv[:kv.index("=")].strip()
+> +                    v = kv[kv.index("=") + 1:].strip()
+> +                    if k == "vid":
+> +                        vid = int(v, 0)
+> +                        if vid < 0 or vid > 0xFFF:
+> +                            raise ValueError(
+> +                                "push_vlan: vid=%d out of "
+> +                                "range (0-4095)" % vid)
+> +                    elif k == "pcp":
+> +                        pcp = int(v, 0)
+> +                        if pcp < 0 or pcp > 7:
+> +                            raise ValueError(
+> +                                "push_vlan: pcp=%d out of "
+> +                                "range (0-7)" % pcp)
+> +                    elif k == "tpid":
+> +                        tpid = int(v, 0)
+> +                        if tpid < 0 or tpid > 0xFFFF:
+> +                            raise ValueError(
+> +                                "push_vlan: tpid=0x%x out "
+> +                                "of range (0-0xffff)" % tpid)
+> +                    else:
+> +                        raise ValueError(
+> +                            "push_vlan: unknown key '%s'"
+> +                            % k)
+> +                tci = (vid & 0x0FFF) | ((pcp & 0x7) << 13) \
+> +                    | 0x1000
+> +                pvact = self.push_vlan()
+> +                pvact["vlan_tpid"] = tpid
+> +                pvact["vlan_tci"] = tci
+> +                self["attrs"].append(
+> +                    ["OVS_ACTION_ATTR_PUSH_VLAN", pvact])
+> +                actstr = actstr[paren + 1:]
+> +                parsed = True
 > +
->  	cc = kmalloc_obj(*cc);
->  	if (!cc)
->  		return -ENOMEM;
-> @@ -2845,9 +2851,6 @@ int madvise_collapse(struct vm_area_struct *vma, unsigned long start,
->  	mmgrab(mm);
->  	lru_add_drain_all();
+> +            elif parse_starts_block(actstr, "clone(", False):
+>                  parencount += 1
+>                  subacts = ovsactions()
+>                  actstr = actstr[len("clone("):]
+> @@ -901,11 +962,11 @@ class ovskey(nla):
+>      nla_flags = NLA_F_NESTED
+>      nla_map = (
+>          ("OVS_KEY_ATTR_UNSPEC", "none"),
+> -        ("OVS_KEY_ATTR_ENCAP", "none"),
+> +        ("OVS_KEY_ATTR_ENCAP", "encap_ovskey"),
+>          ("OVS_KEY_ATTR_PRIORITY", "uint32"),
+>          ("OVS_KEY_ATTR_IN_PORT", "uint32"),
+>          ("OVS_KEY_ATTR_ETHERNET", "ethaddr"),
+> -        ("OVS_KEY_ATTR_VLAN", "uint16"),
+> +        ("OVS_KEY_ATTR_VLAN", "be16"),
+>          ("OVS_KEY_ATTR_ETHERTYPE", "be16"),
+>          ("OVS_KEY_ATTR_IPV4", "ovs_key_ipv4"),
+>          ("OVS_KEY_ATTR_IPV6", "ovs_key_ipv6"),
+> @@ -1636,6 +1697,194 @@ class ovskey(nla):
+>      class ovs_key_mpls(nla):
+>          fields = (("lse", ">I"),)
 >  
-> -	hstart = (start + ~HPAGE_PMD_MASK) & HPAGE_PMD_MASK;
-> -	hend = end & HPAGE_PMD_MASK;
-> -
->  	for (addr = hstart; addr < hend; addr += HPAGE_PMD_SIZE) {
->  		enum scan_result result = SCAN_FAIL;
+> +    # 802.1Q CFI (Canonical Format Indicator) bit, always set for Ethernet
+> +    _VLAN_CFI_MASK = 0x1000
+> +
+> +    @staticmethod
+> +    def _vlan_dpstr(tci):
+> +        """Format VLAN TCI as vid=X,pcp=Y,cfi=Z or tci=0xNNNN.
+> +
+> +        When cfi=1 (standard Ethernet VLAN), outputs decomposed
+> +        vid/pcp/cfi fields. When cfi=0 (truncated VLAN header),
+> +        falls back to raw tci=0x%04x to ensure round-trip
+> +        correctness: the parser auto-adds cfi=1 for vid/pcp
+> +        format, so cfi=0 would be lost on re-parse."""
+> +        vid = tci & 0x0FFF
+> +        pcp = (tci >> 13) & 0x7
+> +        cfi = (tci >> 12) & 0x1
+> +        if cfi:
+> +            return "vid=%d,pcp=%d,cfi=%d" % (vid, pcp, cfi)
+> +        return "tci=0x%04x" % tci
+> +
+> +    @staticmethod
+> +    def _parse_vlan_from_flowstr(flowstr):
+> +        """Parse vlan(tci=X) or vlan(vid=X[,pcp=Y,cfi=Z]) from flowstr.
+> +
+> +        Returns (remaining_flowstr, key_tci, mask_tci).
+> +        TCI values use standard bit layout (VID bits 0-11,
+> +        CFI bit 12, PCP bits 13-15); byte order conversion to
+> +        big-endian happens in pyroute2 be16 NLA serialization.
+> +        The mask covers only the fields the caller specified:
+> +        vid -> 0x0FFF, pcp -> 0xE000, cfi -> 0x1000, tci -> 0xFFFF.
+> +
+> +        The tci= key sets the raw TCI bitfield (no CFI validation) to allow
+> +        non-Ethernet use cases.  Use cfi=1 for standard Ethernet VLAN matching.
+> +        """
+> +        tci = 0
+> +        mask = 0
+> +        has_tci = False
+> +        has_vid = has_pcp = has_cfi = False
+> +        _tci_mix_err = "vlan(): 'tci' cannot be mixed " \
+> +                       "with 'vid'/'pcp'/'cfi'"
+> +        first = True
+> +        while True:
+> +            flowstr = flowstr.lstrip()
+> +            if not flowstr:
+> +                raise ValueError("vlan(): missing ')'")
+> +            if flowstr[0] == ')':
+> +                break
+> +            if not first:
+> +                flowstr = flowstr[1:]  # skip ','
+> +                if not flowstr:
+> +                    raise ValueError("vlan(): missing ')' after trailing comma")
+> +                flowstr = flowstr.lstrip()
+> +                if flowstr and flowstr[0] == ')':
+> +                    break
+> +                if flowstr and flowstr[0] == ',':
+> +                    raise ValueError(
+> +                        "vlan(): empty or extra comma in field list")
+> +            first = False
+> +
+> +            eq = flowstr.find('=')
+> +            if eq == -1:
+> +                raise ValueError(
+> +                    "vlan(): expected key=value, got '%s'" % flowstr)
+> +            key = flowstr[:eq].strip()
+> +            flowstr = flowstr[eq + 1:]
+> +
+> +            end = flowstr.find(',')
+> +            end2 = flowstr.find(')')
+> +            if end == -1 and end2 == -1:
+> +                raise ValueError("vlan(): missing ')'")
+> +            if end == -1 or (end2 != -1 and end2 < end):
+> +                end = end2
+> +            val = flowstr[:end].strip()
+> +            flowstr = flowstr[end:]
+> +
+> +            if not val:
+> +                raise ValueError("vlan(): empty value for key '%s'" % key)
+> +            try:
+> +                v = int(val, 16) if val.startswith(('0x', '0X')) else int(val)
+> +            except ValueError as exc:
+> +                raise ValueError(
+> +                    "vlan(): invalid value '%s' for key '%s'"
+> +                    % (val, key)) from exc
+> +
+> +            if key == 'tci':
+> +                if has_tci:
+> +                    raise ValueError("vlan(): duplicate 'tci'")
+> +                if has_vid or has_pcp or has_cfi:
+> +                    raise ValueError(_tci_mix_err)
+> +                if v > 0xFFFF or v < 0:
+> +                    raise ValueError("vlan(): tci=0x%x out of range" % v)
+> +                tci = v
+> +                mask = 0xFFFF
+> +                has_tci = True
+> +            elif key == 'vid':
+> +                if has_tci:
+> +                    raise ValueError(_tci_mix_err)
+> +                if has_vid:
+> +                    raise ValueError("vlan(): duplicate 'vid'")
+> +                if v < 0 or v > 0xFFF:
+> +                    raise ValueError("vlan(): vid=%d out of range (0-4095)" % v)
+> +                tci |= v
+> +                mask |= 0x0FFF
+> +                has_vid = True
+> +            elif key == 'pcp':
+> +                if has_tci:
+> +                    raise ValueError(_tci_mix_err)
+> +                if has_pcp:
+> +                    raise ValueError("vlan(): duplicate 'pcp'")
+> +                if v < 0 or v > 7:
+> +                    raise ValueError("vlan(): pcp=%d out of range (0-7)" % v)
+> +                tci |= (v & 0x7) << 13
+> +                mask |= 0xE000
+> +                has_pcp = True
+> +            elif key == 'cfi':
+> +                if has_tci:
+> +                    raise ValueError(_tci_mix_err)
+> +                if has_cfi:
+> +                    raise ValueError("vlan(): duplicate 'cfi'")
+> +                if v != 1:
+> +                    raise ValueError("vlan(): cfi must be 1 for Ethernet")
+> +                tci |= ovskey._VLAN_CFI_MASK
+> +                mask |= ovskey._VLAN_CFI_MASK
+> +                has_cfi = True
+> +            else:
+> +                raise ValueError("vlan(): unknown key '%s'" % key)
+> +
+> +        flowstr = flowstr[1:]  # skip ')'
+> +        # Catch immediate '))' (user error).  A ')' after ',' is consumed
+> +        # by parse()'s strspn(flowstr, "), ") inter-field separator stripping.
+> +        if flowstr.lstrip().startswith(')'):
+> +            raise ValueError("vlan(): unmatched ')'")
+> +        # parse() strips trailing ',', ')', ' ' as inter-field separators,
+> +        # so we do not need to call strspn here.
+> +
+> +        if mask == 0:
+> +            raise ValueError("vlan(): no fields specified, "
+> +                             "use vlan(vid=X[,pcp=Y,cfi=Z]) or vlan(tci=X)")
+> +        if not has_tci:
+> +            tci |= ovskey._VLAN_CFI_MASK
+> +            mask |= ovskey._VLAN_CFI_MASK
+> +        return flowstr, tci, mask
+> +
+> +    @staticmethod
+> +    def _parse_encap_from_flowstr(flowstr):
+> +        """Parse encap(inner_flow) from flowstr.
+> +
+> +        Returns (remaining_flowstr, inner_key_dict, inner_mask_dict)
+> +        where each dict has an 'attrs' key for recursive NLA encoding.
+> +        Parenthesis-depth tracking handles nested encap() calls but not
+> +        quoted strings containing literal parentheses.
+> +        """
+> +        depth = 1
+> +        end = -1
+> +        for i, c in enumerate(flowstr):
+> +            if c == '(':
+> +                depth += 1
+> +            elif c == ')':
+> +                depth -= 1
+> +                if depth < 0:
+> +                    raise ValueError(
+> +                        "encap(): unmatched ')' at position %d" % i)
+> +                if depth == 0:
+> +                    end = i
+> +                    break
+> +
+> +        if end == -1:
+> +            if depth > 1:
+> +                raise ValueError("encap(): missing ')' at end")
+> +            raise ValueError("encap(): missing closing ')'")
+> +
+> +        inner_str = flowstr[:end].strip()
+> +        if not inner_str:
+> +            raise ValueError("encap(): empty inner flow")
+> +
+> +        flowstr = flowstr[end + 1:]
+> +        if flowstr.lstrip().startswith(')'):
+> +            raise ValueError("encap(): unmatched ')' after encap()")
+> +
+> +        inner_key = encap_ovskey()
+> +        inner_mask = encap_ovskey()
+> +        remaining = inner_key.parse(inner_str, inner_mask)
+> +        if remaining and re.search(r'[^\s,)]', remaining):
+> +            raise ValueError(
+> +                "encap(): unrecognized trailing "
+> +                "content '%s'" % remaining.strip())
+> +
+> +        return flowstr, inner_key, inner_mask
+> +
+>      def parse(self, flowstr, mask=None):
+>          for field in (
+>              ("OVS_KEY_ATTR_PRIORITY", "skb_priority", intparse),
+> @@ -1657,6 +1906,16 @@ class ovskey(nla):
+>                  "eth_type",
+>                  lambda x: intparse(x, "0xffff"),
+>              ),
+> +            (
+> +                "OVS_KEY_ATTR_VLAN",
+> +                "vlan",
+> +                ovskey._parse_vlan_from_flowstr,
+> +            ),
+> +            (
+> +                "OVS_KEY_ATTR_ENCAP",
+> +                "encap",
+> +                ovskey._parse_encap_from_flowstr,
+> +            ),
+>              (
+>                  "OVS_KEY_ATTR_IPV4",
+>                  "ipv4",
+> @@ -1794,6 +2053,9 @@ class ovskey(nla):
+>                  True,
+>              ),
+>              ("OVS_KEY_ATTR_ETHERNET", None, None, False, False),
+> +            ("OVS_KEY_ATTR_VLAN", "vlan", ovskey._vlan_dpstr,
+> +                lambda x: False, True),
+> +            ("OVS_KEY_ATTR_ENCAP", None, None, False, False),
+>              (
+>                  "OVS_KEY_ATTR_ETHERTYPE",
+>                  "eth_type",
+> @@ -1821,22 +2083,61 @@ class ovskey(nla):
+>              v = self.get_attr(field[0])
+>              if v is not None:
+>                  m = None if mask is None else mask.get_attr(field[0])
+> +                fmt = field[2]  # str format or callable
+>                  if field[4] is False:
+>                      print_str += v.dpstr(m, more)
+>                      print_str += ","
+>                  else:
+>                      if m is None or field[3](m):
+> -                        print_str += field[1] + "("
+> -                        print_str += field[2] % v
+> -                        print_str += "),"
+> +                        val = fmt(v) if callable(fmt) else fmt % v
+> +                        print_str += field[1] + "(" + val + "),"
+>                      elif more or m != 0:
+> -                        print_str += field[1] + "("
+> -                        print_str += (field[2] % v) + "/" + (field[2] % m)
+> -                        print_str += "),"
+> +                        if callable(fmt):
+> +                            val = fmt(v) + "/" + fmt(m)
+> +                        else:
+> +                            val = (fmt % v) + "/" + (fmt % m)
+> +                        print_str += field[1] + "(" + val + "),"
 >  
+>          return print_str
+>  
+>  
+> +class encap_ovskey(ovskey):
+> +    """Inner flow key attributes valid inside 802.1Q ENCAP.
+> +
+> +    Only L2-L4 key attributes (slots 0-21) appear inside ENCAP.
+> +    Metadata-only attributes (SKB_MARK, DP_HASH, RECIRC_ID, etc.)
+> +    are set to "none" -- they never appear inside ENCAP per
+> +    ovs_nla_put_vlan() in net/openvswitch/flow_netlink.c.
+> +
+> +    nla_map indexes must match OVS_KEY_ATTR_* enum values in
+> +    include/uapi/linux/openvswitch.h.
+> +    """
+> +    nla_map = (
+> +        ("OVS_KEY_ATTR_UNSPEC", "none"),
+> +        ("OVS_KEY_ATTR_ENCAP", "none"),  # placeholder, parsed by ovskey
+> +        ("OVS_KEY_ATTR_PRIORITY", "none"),  # skb metadata, not in ENCAP
+> +        ("OVS_KEY_ATTR_IN_PORT", "none"),  # skb metadata, not in ENCAP
+> +        ("OVS_KEY_ATTR_ETHERNET", "ethaddr"),
+> +        ("OVS_KEY_ATTR_VLAN", "be16"),
+> +        ("OVS_KEY_ATTR_ETHERTYPE", "be16"),
+> +        ("OVS_KEY_ATTR_IPV4", "ovs_key_ipv4"),
+> +        ("OVS_KEY_ATTR_IPV6", "ovs_key_ipv6"),
+> +        ("OVS_KEY_ATTR_TCP", "ovs_key_tcp"),
+> +        ("OVS_KEY_ATTR_UDP", "ovs_key_udp"),
+> +        ("OVS_KEY_ATTR_ICMP", "ovs_key_icmp"),
+> +        ("OVS_KEY_ATTR_ICMPV6", "ovs_key_icmpv6"),
+> +        ("OVS_KEY_ATTR_ARP", "ovs_key_arp"),
+> +        ("OVS_KEY_ATTR_ND", "ovs_key_nd"),
+> +        ("OVS_KEY_ATTR_SKB_MARK", "none"),  # metadata, not in ENCAP
+> +        ("OVS_KEY_ATTR_TUNNEL", "none"),  # tunnel metadata, not in ENCAP
+> +        ("OVS_KEY_ATTR_SCTP", "ovs_key_sctp"),
+> +        ("OVS_KEY_ATTR_TCP_FLAGS", "be16"),
+> +        ("OVS_KEY_ATTR_DP_HASH", "none"),  # metadata, not in ENCAP
+> +        ("OVS_KEY_ATTR_RECIRC_ID", "none"),  # metadata, not in ENCAP
+> +        ("OVS_KEY_ATTR_MPLS", "array(ovs_key_mpls)"),
+> +    )
+> +
+> +
+>  class OvsPacket(GenericNetlinkSocket):
+>      OVS_PACKET_CMD_MISS = 1  # Flow table miss
+>      OVS_PACKET_CMD_ACTION = 2  # USERSPACE action
+> @@ -2576,6 +2877,7 @@ def print_ovsdp_full(dp_lookup_rep, ifindex, ndb=NDB(), vpl=OvsVport()):
+>  
+>  
+>  def main(argv):
+> +    nlmsg_atoms.encap_ovskey = encap_ovskey
+>      nlmsg_atoms.ovskey = ovskey
+>      nlmsg_atoms.ovsactions = ovsactions
 
-In general, LGTM, but see for conflict:
-https://lore.kernel.org/all/20260409014323.2385982-1-ye.liu@linux.dev/
-
-
--- 
-Cheers,
-
-David
