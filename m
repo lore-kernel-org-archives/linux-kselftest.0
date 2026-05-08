@@ -1,112 +1,106 @@
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.uniroma2.it (smtp.uniroma2.it [160.80.4.37])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02F0A64AA4
-	for <linux-kselftest@vger.kernel.org>; Thu,  7 May 2026 23:50:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8623A2F8E8E;
+	Fri,  8 May 2026 01:32:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=160.80.4.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778197829; cv=none; b=SpJkA/kkpDUKXGS3NHTYAD0n/ofg5CjFVSNQAWdTHZgf3YUZsygDvP/+WwI2Mu7t679jHpauQCjaRQw7/qQGMgoo2jZZptdX9X7xY7JZA41OVHkxe8qtA93PazrfjreLo0KZT2dILhIPPhXDA9uhifjWxE7GE9n3rPS9dk5UrG8=
+	t=1778203978; cv=none; b=mECS9EdTsUqJ7wIWZoDAQ+FF6R+H+lO7wrSGf42I/L/3gOHN9mSZczucK84BWe29sBp6ipybcll3QS70lB5xgYfIexUzHckxSBnYXRyhaaXsUR1uhZevqkNcjqOUyxJTISZKXVmE8PrZRlWEN9H03hMrCP0l2miFlQcTodfaH0w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778197829; c=relaxed/simple;
-	bh=073lgMhvjqclFH0EuFFz9TjdG45UkQ6Q2ldEN4q+umQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=g5LvCIigXyy3VowxFTjpf3HfMKDbeQy4dulJ0pX/BY5vhV4oyHt1Z1n72tHAUqlwGVJfzAjlgffKZduEYJG5cStwtop4ocYbzaQZXzSWzHipdLpfunBt5VBX//fgB3ZMELYBitcJG7AHz1tOwZvOad46foTlevkVqJkhvLt9x5o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TY9Tw92w; arc=none smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1778203978; c=relaxed/simple;
+	bh=59Ozai3wYSqFATx+O1Q6wvL8WwOweG+EID5bZRCzz9c=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=oLk/nN1tEU377aDQ+tCGRWPgQWpbtALqJyDuM90proS5o+smESFw+KmBF969w1ShXLPVnErw8KIquqhCqkMnmnPrA7o23p4lnRjajSXG/mS5LW54uugobzSIxjlkAs7o+NBVXHX3rCeUM+SkLxE3AMSEWEcKaa6H8ptTJMLUWZI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniroma2.it; spf=pass smtp.mailfrom=uniroma2.it; dkim=permerror (0-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b=0cAFHZ2i; dkim=pass (2048-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b=Cdxm7D/1; arc=none smtp.client-ip=160.80.4.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniroma2.it
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniroma2.it
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TY9Tw92w"
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-43d73422431so1152862f8f.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 07 May 2026 16:50:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778197826; x=1778802626; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=kpF9qxsJ2ZNxYIIifs8ofBMQ7yvnZFOLxS/oCrWEgcA=;
-        b=TY9Tw92wh2llyXLA6+0anjYWZxGnFWZn+qiZ2GwdPtvIeScuF1QPqmjQ8q/bgq36Lx
-         Dc14TPRcEtS3xD3teem+DDQh3tLO8a6SHQVW0ODfunmy02/EqrmI3T995cciut6vTQCI
-         607QB0pFMSTfxaruiyaSYGSF2ONbfsbDJVNAC6JbYqVhkIoKEOhDiU0iiYiyn8tVHe7O
-         MjlWZiRfImF8kzqX9zil3/gxDZMzmPRdeLrp5Cd3ECTkSYsh3QuUZQRmxvOCXRwnVU9b
-         DeeGeZltQbMP+5h2suSaR0CoTW+y933OoiQaIrvtC+n2KSMkIAasdS3QfjZMAHUrvB9R
-         gNSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778197826; x=1778802626;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kpF9qxsJ2ZNxYIIifs8ofBMQ7yvnZFOLxS/oCrWEgcA=;
-        b=JsDknXb8RW6UOv+WwApiFZU5Huu7hu0szadkyuKJ3g6vTMfHDso+ZzvIQppe2MLPoY
-         p7mxusqAlo+QcI9pl5wCH7Sxgtpl/+svrdIM2Xz0lb2HNd1Fb1ExuyEk1Sj/emnKj/96
-         29otcNIH2h/V9FLM/n/0aO9aThCzyePM53cm4fCNQoZIJgxPEL+8I5ZOLGufCy4uBIVG
-         434shXnAQUAByTxBDZsdb1HqhoQKvrRNZkAXOA6Bayw7Y52KQJaZ+YIOwYH7m7EtfGG+
-         U/bKh5y+CIMlhBZMzgx939PiXvag37BvwgWwDxdDzwYKyMcvCmun9FJu/8dOOB927Pbg
-         iElg==
-X-Forwarded-Encrypted: i=1; AFNElJ+DpMeyKVgVZ6johnM99mMezvJM4R5NpzquhiO7Cc7OFOS8K36cfALoEeDPncMgofo6jlnJeK686xjFp2N5hxY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzTUxSUGG+t8nhOJX2lIiz6v4L2fj3ryYkyKeQWT+2RwM7wociu
-	C7d7K9sR66gJhSJJxKi38nI6l1Y2J9HrcT4pxKmGoxpQwpuPe0M7Mij9
-X-Gm-Gg: Acq92OEjE/je7goDF7ft9Is5QLTSsE5zB5pvcjaE/b/se4EVOL6/H1nvOMe2UwoyWOH
-	VqcMGuoRYpvySF9FiXIuWPkzKMsZlhYknDBOA6KA2X7IWU4vHoJilIdfqlKaPEQUWgXvt7cCcal
-	01PZ8GBymsbMfGBZELMA4GBFOA73QjW7FF4CNqwDmY7DML2YmRAVf118Y93kMDKPj/4UWZcemKE
-	ozk1Kzuo98vMrpSrGxIf2k5CpVsgqNL1tVNV4qzJTW+yvlizxayhFjIRNWeDez7/4IssCEHJ4Di
-	BWMPmUcHsptAuZ9VLYXM1dgdbxtJ7kr/oyDZgb+jEVMWnxoexmwf5prz8Ru8FIwgfswIm0Br+MG
-	32NA3n3ihC4wYQYoovq/+amMKQPoNmyR1eYivzYPbZS22ek0H5KPf3UHjWRORA96yCJIgA2B2D8
-	eDYoKcviylYEwDKZLI+r+J/SXgRYBMQZAGOzgb
-X-Received: by 2002:a05:6000:40da:b0:43f:e452:f391 with SMTP id ffacd0b85a97d-4515b056a89mr17178086f8f.6.1778197826208;
-        Thu, 07 May 2026 16:50:26 -0700 (PDT)
-Received: from hisam ([2407:d000:508:aa0:8b94:9971:991b:e7aa])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45417bb84fesm2075198f8f.35.2026.05.07.16.50.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 May 2026 16:50:25 -0700 (PDT)
-From: Hisam Mehboob <hisamshar@gmail.com>
-To: acme@kernel.org
-Cc: shuah@kernel.org,
-	seanjc@google.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Hisam Mehboob <hisamshar@gmail.com>,
-	Aqib Faruqui <aqibaf@amazon.com>
-Subject: [PATCH] tools/include/linux/bitops.h: undef PAGE_SIZE after including limits.h
-Date: Fri,  8 May 2026 04:48:55 +0500
-Message-ID: <20260507234854.273536-2-hisamshar@gmail.com>
-X-Mailer: git-send-email 2.51.0
+	dkim=permerror (0-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b="0cAFHZ2i";
+	dkim=pass (2048-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b="Cdxm7D/1"
+Received: from smtpauth-2019-1.uniroma2.it (smtpauth-2019-1.uniroma2.it [160.80.5.46])
+	by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 6481WFoU032065;
+	Fri, 8 May 2026 03:32:20 +0200
+Received: from lubuntu-18.04 (host-87-6-211-104.retail.telecomitalia.it [87.6.211.104])
+	by smtpauth-2019-1.uniroma2.it (Postfix) with ESMTPSA id BC9011208B1;
+	Fri,  8 May 2026 03:32:10 +0200 (CEST)
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=uniroma2.it;
+	s=ed201904; t=1778203931; h=from:from:sender:reply-to:subject:subject:date:date:
+	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+	 content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=DbsB1NBcnWTkhw9ytK5amjtDdrA8CRqzSQfmN5DZrT8=;
+	b=0cAFHZ2iClqvBVEj1k6Dk/wRxs36qpYT1cD5W7OSfUPKIjGj416OK1Uz+gCCcJvspcOGdi
+	OlEnJ2bSKVJqFrBA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniroma2.it; s=rsa201904;
+	t=1778203931; h=from:from:sender:reply-to:subject:subject:date:date:
+	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+	 content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=DbsB1NBcnWTkhw9ytK5amjtDdrA8CRqzSQfmN5DZrT8=;
+	b=Cdxm7D/1Go0IWxQMP/p+XKxTmOzvXlyrOxisyqt5qhK4f7hv0ExY9yHqqyu9UbyFW6RmDv
+	nz64ExHAGrkR2xAaqdIQ3FoiBRZ/UtiCaO/dZ6kgLXqyEPgYbbrrqKe/SdsWl3OvfPMgfC
+	mqZTlvqGsam5/oiUd4fLrLldJ8hQiM8+hEKwHCaaie+SE0XndoBjRZpIoYhPHlh4PtknUA
+	lin26JL3SLkYDb56XZ9CG6F7LFNinJcci/TyO9DYcGgH1CHELGEduKgq4zjVDregqZKfRu
+	vxZcygOsLTywV1cFjtt8UCoOI9D+xB+TwrfGEqJHdzeCToIen2n/KMe/QJrL7g==
+Date: Fri, 8 May 2026 03:32:10 +0200
+From: Andrea Mayer <andrea.mayer@uniroma2.it>
+To: Yuya Kusakabe <yuya.kusakabe@gmail.com>
+Cc: Jakub Kicinski <kuba@kernel.org>, "David S. Miller"
+ <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>, Paolo Abeni
+ <pabeni@redhat.com>,
+        Simon Horman <horms@kernel.org>, Shuah Khan
+ <shuah@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan
+ <skhan@linuxfoundation.org>,
+        "linux-kernel@vger.kernel.org"
+ <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org"
+ <netdev@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org"
+ <linux-kselftest@vger.kernel.org>,
+        "linux-doc@vger.kernel.org"
+ <linux-doc@vger.kernel.org>,
+        Justin Iurman <justin.iurman@gmail.com>, stefano.salsano@uniroma2.it,
+        Andrea Mayer <andrea.mayer@uniroma2.it>
+Subject: Re: [PATCH v2 0/7] seg6: add SRv6 Mobile User Plane (RFC 9433)
+ behaviors
+Message-Id: <20260508033210.5149db4fc3977d33937e6942@uniroma2.it>
+In-Reply-To: <20260504182833.344d7b33@kernel.org>
+References: <20260505-seg6-mobile-v2-0-9e8022bdfdb6@gmail.com>
+	<20260504163915.4a8b028e@kernel.org>
+	<CAGCJULP83NnaX6HAqwb3umDXsxN8LH48_gPpJ_3gG8_xA96QNQ@mail.gmail.com>
+	<20260504182833.344d7b33@kernel.org>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
+X-Virus-Status: Clean
 
-musl libc defines PAGE_SIZE as a signed int in <limits.h>
-under _GNU_SOURCE, conflicting with kernel headers that
-require an unsigned 64-bit definition:
+On Mon, 4 May 2026 18:28:33 -0700
+Jakub Kicinski <kuba@kernel.org> wrote:
 
-  include/x86/processor.h:372:9: warning: 'PAGE_SIZE' redefined
-  /usr/include/x86_64-linux-musl/limits.h:97:9: note: this is the
-  location of the previous definition
+> On Tue, 5 May 2026 10:22:58 +0900 Yuya Kusakabe wrote:
+> > Just to confirm the workflow you'd prefer: should I repost the
+> > current series immediately as [PATCH RFC net-next v3 ...], or wait
+> > for technical review on v2 to land and fold it into a v3 RFC?
+> 
+> Let's wait for reviews (adding Justin to CC as well FWIW)
 
-Undefine PAGE_SIZE immediately after the #include <limits.h> to
-prevent musl's definition from leaking into kernel headers. This
-is a no-op on glibc, which does not define PAGE_SIZE in <limits.h>.
+Hi Yuya,
 
-Reported-by: Aqib Faruqui <aqibaf@amazon.com>
-Link: https://lore.kernel.org/kvm/aL8e0MMa4U2-nstQ@google.com/
-Signed-off-by: Hisam Mehboob <hisamshar@gmail.com>
----
- tools/include/linux/bitops.h | 1 +
- 1 file changed, 1 insertion(+)
+just a heads-up: I am going through the series (kernel and iproute2)
+and will send detailed comments within the next few days. It is a
+substantial addition so I want to take the time to review it properly.
 
-diff --git a/tools/include/linux/bitops.h b/tools/include/linux/bitops.h
-index b4e4cd071f8c..62117a77ceb5 100644
---- a/tools/include/linux/bitops.h
-+++ b/tools/include/linux/bitops.h
-@@ -4,6 +4,7 @@
- 
- #include <asm/types.h>
- #include <limits.h>
-+#undef PAGE_SIZE
- #ifndef __WORDSIZE
- #define __WORDSIZE (__SIZEOF_LONG__ * 8)
- #endif
--- 
-2.51.0
-
+Thanks,
+Andrea
