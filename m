@@ -1,257 +1,111 @@
-Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com [209.85.217.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95A152F83A0
-	for <linux-kselftest@vger.kernel.org>; Fri,  8 May 2026 16:11:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6145C3E63BA;
+	Fri,  8 May 2026 16:13:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778256683; cv=none; b=Vy/RE39iqHAWAoN5DXzdTOjYUQTnzIF1OBM6N2TczcDp7YYT6bSgrll6/fFoQemKuP8qGKJucq4UhSLdeomiQMtqOqqTlb36gnWaQOuTKkmW6wEeOszwfTImxGE4hWfRAY+7M3zsLV+l5wxphMM1aAgWmZxd9Kc7b2klzC6EQCM=
+	t=1778256832; cv=none; b=KRhuvQGtsT6Z1YO4DYJ/i0nLjfLvRgGSEhS0TgwgQrMGZomvQ9Iu64bbHFKY63cnKvCsh/iYp4Nh8nAqiZpBxCzX5QR9zSrdKb+QqiZ46UONn6A5Fogs2mftcNi0W0zGDTe5KiYwBQZTKdhHY1fhh2G53Aa8/mRckY6tKSa/kGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778256683; c=relaxed/simple;
-	bh=H6Z+8CT3KjwWjNMFY6XYXNpX9S3GKUwrUsjc+V6VlCE=;
+	s=arc-20240116; t=1778256832; c=relaxed/simple;
+	bh=EfKpSzPlmDhnHrj66KMeaKjnbqtdxjqOaV6980bqwuI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n1wXALkxVQyWvnOEyvX+yNK6x/N/6TuvA1UIhrVbQ95n8a3SI8Z5n7xZDjjr1s/kBo2NPId9vS5Ngs1OYVt7/r+MvAseB8esDGrrxVm+sXqTh7xTgxbhBJSWd/CyF0rIuwlfvPa10KTAQs1wXYQVBX41fYpc43tHzoiTy1Iq+JA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GqbVe/7Y; arc=none smtp.client-ip=209.85.217.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=dQ0myI2ic64Q4qtMwqe+AGCFBAHs9KJZqY1aSdh46W8/yUOw5c3KpRpRfKg6GMQpyeGrITYio7klpIfPybxxeLJ3mpJK5mEMwouksklhe78bEgwZS9zOgyvJXImPXTOb2eJvZojf9WlY+Azp3YQ8Yp7Rrf0zYHImmbXQBWBHAgQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=olHxizBk; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GqbVe/7Y"
-Received: by mail-vs1-f41.google.com with SMTP id ada2fe7eead31-6313c800372so684383137.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 08 May 2026 09:11:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778256679; x=1778861479; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=6vdBcradM8S03iinDWnSXeMPjIWLpbzTHbnVlnltxq4=;
-        b=GqbVe/7YgabRsfx+ARki2K+jqMFHzQAg5niJlng8/wpcze/h3pTF4SoatmMJPyHB7D
-         /qNTHu1lVyE7mH9yKgbdm4ooIC2WUCq3XMpaXC6iH4j5k/vDldGibNvEIqbVNdLxqiPi
-         YH9fqJiGwTGW11itHd7LpOvvPKE1KAXrZK+HUNX6ClakxuHMEw1TnirPzvAhClx7ngGa
-         QtNxIliGYzFR29HuAe1iYaPfpSiaUrMr4e92u35Ne0L/R9XWJpz7nJxbNXKfGFNmiofw
-         QuowoaDCgsZ7lo7H+UD3MPNCMkZKODcRWgr3UT8n2AnLaBFagpAprzK5tjrQKe1dT9Kj
-         d1Kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778256679; x=1778861479;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6vdBcradM8S03iinDWnSXeMPjIWLpbzTHbnVlnltxq4=;
-        b=hoZ5ccAETBreT6v2+i7MZT3KcvZN8kvEgxDEXDCIWv6GJNPufVbFztQmqjdbyzUWQv
-         hceVI3yHrMApkipuv9d5jnAtYfzGkkXvgUEF2HbR2oiWZ+qwCX1+c6zrK3UL20yzYwyU
-         JtrkHc0v/cNVPw3Y9OTWsReaq7M+m997KaMxSif1wNpWevIdv3SzCxG15QG7loblNonx
-         pFOp0MLBxY1DMsBCVWBV7j8LjRZZgabLF0WmZod1I4PGnZSAPSlpP2twdVCpfRFZBhYe
-         lNRoZhZBtYaqInSRBZHfOPYqKAsfsqJEo9PGSrFJQR48bFjawLQq2K4mm4aqXXxPvBZR
-         ldHg==
-X-Forwarded-Encrypted: i=1; AFNElJ9LGZYF5H2KtcSXmn0y9DfK1DhRpOdYe6Z+vb5LYiQRALDe/dqd72zRf46AGqD+E3kF2Tfawvp9eSRt50wTH60=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz6MTkJsjrY5JjmT1CeP+4V8nTMMlcdAY74IEmp037WWcaJgz58
-	Ctgqt+chv6Vn2CpolHNWdvKrQLzGLr7fqxMBELxKP8oxIVT2eBptX/LB
-X-Gm-Gg: Acq92OGP3CIPtQcVW7zsnEYHYWeGNBYYnJAY7Ovnd9aJUozDXDyNcDNpOa1NlgbvXBu
-	1CA+6S7fOzRwwlLMJBoZOy4CUuMKmG1G86kkNmps56E3OTf9dZP4jrTa9o93MQO+vJGYd8cKYID
-	/uCzrfWNLXnAhZUkllsQ57JfYr+KKZOvNlIWE5K6FefFkgkVtcd9CuIf0CLZScdfmG9nCjKaRUS
-	LAs7XiTcMfljvXoyLKfJ+lv+91f+p+nyQjxoa2JrX7G1vdQ+Yzi8mufgo6Hz3VOiV6WugVI7/+l
-	tVzH8qgOe3iYjlKvaKT9gnBlG5nMBUpx8IsNAu6KMEoRQVxT9FwIvccSJhxvuq5hj9vC1FdeFDx
-	xRG759bJizReLAtk9UVS1wjlqeyPgBgASpKDo02xn38CMppAG5dBkk6bGIsa7WRjKoA6bzF09ME
-	fWtJ3pK68gLqqRrfFmmkg6FnN7o2hnIrMWsm1WCg0VF0Y9B+Y=
-X-Received: by 2002:a67:e114:0:b0:631:4e9a:ba3 with SMTP id ada2fe7eead31-6314e9a142fmr1065827137.21.1778256679486;
-        Fri, 08 May 2026 09:11:19 -0700 (PDT)
-Received: from devvm29614.prn0.facebook.com ([2a03:2880:f800:35::])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-907b8bae450sm239133785a.21.2026.05.08.09.11.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 May 2026 09:11:18 -0700 (PDT)
-Date: Fri, 8 May 2026 09:11:12 -0700
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-To: Stanislav Fomichev <sdf.kernel@gmail.com>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>, Alex Shi <alexs@kernel.org>,
-	Yanteng Si <si.yanteng@linux.dev>, Dongliang Mu <dzm91@hust.edu.cn>,
-	Michael Chan <michael.chan@broadcom.com>,
-	Pavan Chebbi <pavan.chebbi@broadcom.com>,
-	Joshua Washington <joshwash@google.com>,
-	Harshitha Ramamurthy <hramamurthy@google.com>,
-	Saeed Mahameed <saeedm@nvidia.com>,
-	Tariq Toukan <tariqt@nvidia.com>, Mark Bloch <mbloch@nvidia.com>,
-	Leon Romanovsky <leon@kernel.org>,
-	Alexander Duyck <alexanderduyck@fb.com>, kernel-team@meta.com,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	Shuah Khan <shuah@kernel.org>, dw@davidwei.uk,
-	mohsin.bashr@gmail.com, willemb@google.com, jiang.kun2@zte.com.cn,
-	xu.xin16@zte.com.cn, wang.yaxin@zte.com.cn, netdev@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="olHxizBk"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2D24C2BCC7;
+	Fri,  8 May 2026 16:13:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778256832;
+	bh=EfKpSzPlmDhnHrj66KMeaKjnbqtdxjqOaV6980bqwuI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=olHxizBkhgCbEY1Pf3vxiVVzQR/IgeaSzfq7F00VsFV5X6k2QmtYRKPT8xK/lKez8
+	 ofFrrjeNr1C2DQUqsGWGRg3sE41QA5O6eNKL1AcAuSPJLAVDMWueHYy6PVLta1oxbb
+	 idxua5qK+u5aeSp9sTA/UzEwWCLrKn2LYXbS+5ug8V0RWk7q57L7gnmzNVVh/2Nkpy
+	 nSUB8A7ZmS4oW6tAbaOYPpiagimsFlqp+WLrVjCXnE+QKNpmwWHUrOsVpMF/rM9tze
+	 ThSM/Rj3bIR/R+HnN8yKpFyWGEWCepy+H+xB98iSrhAypn3VBKPKm2qBUleoVr/Kgs
+	 wC1vCDdjEPpOA==
+Date: Fri, 8 May 2026 12:13:50 -0400
+From: Sasha Levin <sashal@kernel.org>
+To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Joshua Peisach <jpeisach@ubuntu.com>, corbet@lwn.net,
+	akpm@linux-foundation.org, skhan@linuxfoundation.org,
 	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-rdma@vger.kernel.org, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Mina Almasry <almasrymina@google.com>,
-	Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v3 1/8] net: convert netmem_tx flag to enum
-Message-ID: <af4LILMY6qEav7Ul@devvm29614.prn0.facebook.com>
-References: <20260507-tcp-dm-netkit-v3-0-52821445867c@meta.com>
- <20260507-tcp-dm-netkit-v3-1-52821445867c@meta.com>
- <af35ekIjYDXIDWVR@devvm7509.cco0.facebook.com>
+	linux-kselftest@vger.kernel.org, gregkh@linuxfoundation.org
+Subject: Re: [PATCH] killswitch: add per-function short-circuit mitigation
+ primitive
+Message-ID: <af4LvqtLu-yeor-v@laps>
+References: <20260507070547.2268452-1-sashal@kernel.org>
+ <DIDEQIFQF1EW.11CESAK4JL4PR@ubuntu.com>
+ <af4Fwxndqv2knLov@localhost.localdomain>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <af35ekIjYDXIDWVR@devvm7509.cco0.facebook.com>
+In-Reply-To: <af4Fwxndqv2knLov@localhost.localdomain>
 
-On Fri, May 08, 2026 at 07:56:42AM -0700, Stanislav Fomichev wrote:
-> On 05/07, Bobby Eshleman wrote:
-> > From: Bobby Eshleman <bobbyeshleman@meta.com>
-> > 
-> > Devices that support netmem TX previously set dev->netmem_tx = true.
-> > This was checked in validate_xmit_unreadable_skb() to drop unreadable
-> > skbs (skbs with dmabuf-backed frags) before they reach drivers that
-> > would mishandle them or devices that would not have the iommu mappings
-> > for them.
-> > 
-> > A subsequent patch will introduce a third state for virtual devices
-> > that forward unreadable skbs without ever performing DMA on them. To
-> > prepare for that, convert the boolean dev->netmem_tx into an enum:
-> > 
-> > NETMEM_TX_NONE   - no netmem TX support (drop unreadable skbs)
-> > NETMEM_TX_DMA    - full support, device does DMA
-> > 
-> > Update the existing NIC drivers (bnxt, gve, mlx5, fbnic) and the
-> > validators in net/core to use the new enum. No functional change.
-> > 
-> > Acked-by: Harshitha Ramamurthy <hramamurthy@google.com>
-> > Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
-> > ---
-> > Changes in v3:
-> > - Split NO_DMA changes into subsequent commit (Jakub)
-> > - Move !netdev->netmem_tx -> netdev->netmem_tx ==
-> >   NETMEM_TX_NONE conversions to this patch (Jakub)
-> > 
-> > Changes in v2:
-> > - Squash driver conversion patches (2-5) into patch 1 (Jakub)
-> > ---
-> >  Documentation/networking/netmem.rst                    | 5 ++++-
-> >  Documentation/translations/zh_CN/networking/netmem.rst | 4 +++-
-> >  drivers/net/ethernet/broadcom/bnxt/bnxt.c              | 2 +-
-> >  drivers/net/ethernet/google/gve/gve_main.c             | 2 +-
-> >  drivers/net/ethernet/mellanox/mlx5/core/en_main.c      | 2 +-
-> >  drivers/net/ethernet/meta/fbnic/fbnic_netdev.c         | 2 +-
-> >  include/linux/netdevice.h                              | 8 +++++++-
-> >  net/core/dev.c                                         | 2 +-
-> >  net/core/netdev-genl.c                                 | 2 +-
-> >  9 files changed, 20 insertions(+), 9 deletions(-)
-> > 
-> > diff --git a/Documentation/networking/netmem.rst b/Documentation/networking/netmem.rst
-> > index b63aded46337..5ccadba4f373 100644
-> > --- a/Documentation/networking/netmem.rst
-> > +++ b/Documentation/networking/netmem.rst
-> > @@ -95,4 +95,7 @@ Driver TX Requirements
-> >     netdev@, or reach out to the maintainers and/or almasrymina@google.com for
-> >     help adding the netmem API.
-> >  
-> > -2. Driver should declare support by setting `netdev->netmem_tx = true`
-> > +2. Driver should declare support by setting `netdev->netmem_tx` to the
-> > +   appropriate mode:
-> > +
-> > +   - `NETMEM_TX_DMA`: for physical devices that perform DMA.
-> > diff --git a/Documentation/translations/zh_CN/networking/netmem.rst b/Documentation/translations/zh_CN/networking/netmem.rst
-> > index fe351a240f02..9c84423b7528 100644
-> > --- a/Documentation/translations/zh_CN/networking/netmem.rst
-> > +++ b/Documentation/translations/zh_CN/networking/netmem.rst
-> > @@ -89,4 +89,6 @@ dma-mapping API 去处理。
-> >  使用某个还不存在的 netmem API，你可以自行添加并提交到 netdev@，也可以联系维护
-> >  人员或者发送邮件至 almasrymina@google.com 寻求帮助。
-> >  
-> > -2. 驱动程序应通过设置 netdev->netmem_tx = true 来表明自身支持 netmem 功能。
-> > +2. 驱动程序应将 `netdev->netmem_tx` 设置为适当的模式：
-> > +
-> > +   - `NETMEM_TX_DMA`：适用于执行 DMA 的物理设备。
-> > diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-> > index 8c55874f44ca..ed9c22dc4a5a 100644
-> > --- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-> > +++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-> > @@ -17120,7 +17120,7 @@ static int bnxt_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
-> >  	dev->queue_mgmt_ops = &bnxt_queue_mgmt_ops_unsupp;
-> >  	if (BNXT_SUPPORTS_QUEUE_API(bp))
-> >  		dev->queue_mgmt_ops = &bnxt_queue_mgmt_ops;
-> > -	dev->netmem_tx = true;
-> > +	dev->netmem_tx = NETMEM_TX_DMA;
-> >  
-> >  	rc = register_netdev(dev);
-> >  	if (rc)
-> > diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/ethernet/google/gve/gve_main.c
-> > index 424d973c97f2..dd2b8f087163 100644
-> > --- a/drivers/net/ethernet/google/gve/gve_main.c
-> > +++ b/drivers/net/ethernet/google/gve/gve_main.c
-> > @@ -2894,7 +2894,7 @@ static int gve_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
-> >  		goto abort_with_wq;
-> >  
-> >  	if (!gve_is_gqi(priv) && !gve_is_qpl(priv))
-> > -		dev->netmem_tx = true;
-> > +		dev->netmem_tx = NETMEM_TX_DMA;
-> >  
-> >  	err = register_netdev(dev);
-> >  	if (err)
-> > diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-> > index 5a46870c4b74..fc49aae38807 100644
-> > --- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-> > +++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-> > @@ -5924,7 +5924,7 @@ static void mlx5e_build_nic_netdev(struct net_device *netdev)
-> >  
-> >  	netdev->priv_flags       |= IFF_UNICAST_FLT;
-> >  
-> > -	netdev->netmem_tx = true;
-> > +	netdev->netmem_tx = NETMEM_TX_DMA;
-> >  
-> >  	netif_set_tso_max_size(netdev, GSO_MAX_SIZE);
-> >  	mlx5e_set_xdp_feature(priv);
-> > diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_netdev.c b/drivers/net/ethernet/meta/fbnic/fbnic_netdev.c
-> > index c406a3b56b37..138e522ef9b9 100644
-> > --- a/drivers/net/ethernet/meta/fbnic/fbnic_netdev.c
-> > +++ b/drivers/net/ethernet/meta/fbnic/fbnic_netdev.c
-> > @@ -752,7 +752,7 @@ struct net_device *fbnic_netdev_alloc(struct fbnic_dev *fbd)
-> >  	netdev->netdev_ops = &fbnic_netdev_ops;
-> >  	netdev->stat_ops = &fbnic_stat_ops;
-> >  	netdev->queue_mgmt_ops = &fbnic_queue_mgmt_ops;
-> > -	netdev->netmem_tx = true;
-> > +	netdev->netmem_tx = NETMEM_TX_DMA;
-> >  
-> >  	fbnic_set_ethtool_ops(netdev);
-> >  
-> > diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-> > index 0e1e581efc5a..580bccb118a0 100644
-> > --- a/include/linux/netdevice.h
-> > +++ b/include/linux/netdevice.h
-> > @@ -1788,6 +1788,11 @@ enum netdev_stat_type {
-> >  	NETDEV_PCPU_STAT_DSTATS, /* struct pcpu_dstats */
-> >  };
-> >  
-> > +enum netmem_tx_mode {
-> > +	NETMEM_TX_NONE,		/* no netmem TX support */
-> > +	NETMEM_TX_DMA,		/* DMA-capable netmem TX (real HW) */
-> > +};
-> > +
-> >  enum netdev_reg_state {
-> >  	NETREG_UNINITIALIZED = 0,
-> >  	NETREG_REGISTERED,	/* completed register_netdevice */
-> > @@ -1809,7 +1814,8 @@ enum netdev_reg_state {
-> >   *	@lltx:		device supports lockless Tx. Deprecated for real HW
-> >   *			drivers. Mainly used by logical interfaces, such as
-> >   *			bonding and tunnels
-> > - *	@netmem_tx:	device support netmem_tx.
-> > + *	@netmem_tx:	device netmem TX mode (NETMEM_TX_NONE or
-> > + *			NETMEM_TX_DMA).
-> 
-> 
-> nit: if you happen to repost, listing enum values here seems too much?
-> 
-> "device netmem TX mode" should be enough
+On Fri, May 08, 2026 at 11:48:19AM -0400, Mathieu Desnoyers wrote:
+>On 08-May-2026 11:40:54 AM, Joshua Peisach wrote:
+>> On Thu May 7, 2026 at 3:05 AM EDT, Sasha Levin wrote:
+>> >
+>> > For many such issues the simplest mitigation is to stop calling the buggy
+>> > function. Killswitch provides that. An admin writes:
+>> >
+>> >     echo "engage af_alg_sendmsg -1" \
+>> >         > /sys/kernel/security/killswitch/control
+>> >
+>> > After this, af_alg_sendmsg() returns -EPERM on every call without
+>> > running its body. The mitigation takes effect immediately, and is dropped on
+>> > the next reboot.
+>> >
+>> > A lot of recent kernel issues sit in code paths most installs only have enabled
+>> > to support a relative minority of users: AF_ALG, ksmbd, nf_tables, vsock, ax25,
+>> > and friends.
+>> >
+>> > For most users, the cost of "this socket family stops working for the day" is
+>> > much smaller than the cost of running a known vulnerable kernel until the fix
+>> > land.
+>>
+>> I like the concept - but is there any way to ensure that important functions
+>> like malloc aren't being patched? Or some way to make sure that what is being
+>> patched will not kill the entire kernel?
+>>
+>> I know this probably boils down to "operator has to use it correctly", but just
+>> wondering if this was considered.
 
-Will do!
+So I thought about it, and realized it would be very difficult to decide on
+this list of functions, and even more difficult to keep it maintained over time
+(functions get added, removed, refactored, ...).
 
+>I like the idea too, it should help prevent a few devops burnouts in the
+>coming weeks.
+>
+>One possible approach to prevent "footgun" type of killswitch use would
+>be to first apply a statistics collection killswitch handler that does
+>not change the behavior: it checks whether the target function is
+>invoked at all on the system for a given period of time. Then it applies
+>the killswitch if it was not invoked during that period. Overall
+>sequence:
+>
+>- pre-soak killswitch for e.g. 30s, checking whether the function is
+>  invoked at all. (period would be user-configurable)
+>- if no calls were detected, engage killswitch, else report failure to
+>  the user.
+>
+>This should prevent footguns such as trying to killswitch fork, malloc
+>or other core functions which are inherently required.
+
+Why not just use our good old tracing infra? Set tracepoints where ever you
+want, collect any data you might need, and engage the killswitch when you're
+happy with the data you have?
+
+It feels a bit weird adding something like this into killswitch.
+
+-- 
 Thanks,
-Bobby
+Sasha
