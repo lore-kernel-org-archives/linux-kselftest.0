@@ -1,148 +1,196 @@
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 691343A1DB
-	for <linux-kselftest@vger.kernel.org>; Fri,  8 May 2026 02:52:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED2F52ECEB9
+	for <linux-kselftest@vger.kernel.org>; Fri,  8 May 2026 03:22:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778208764; cv=none; b=VfiNcV3KBjuJJsXu4djsBn0N+fKMkqOVEB3CcLf3ougLeYjy+/DLTDZMM+LsBLoMbEam/R8JJX/3nEFV8MycIge1QvqKxxfFTFp0ByPcfaM7aw+9FKkU0Y5/+fN2fuEdrYM6YnEwDSOFic1j1epHpowM+nWbE98a64nCmxXGtPM=
+	t=1778210552; cv=none; b=pxA8I2CQAoQsJ9VmNGttIw2018I6Rf/9B7N/txd/IYmNyeJIXlEHtrLtWVucJwIj1YfL3x95WgZo1DI0Z4axEP66thqKbKb6exhcof646hCYN6SOe3UIkpQNhk09q/KV4ysaVnF5wc+dK2KeEFBULCqLzY+B6s1bCgFCBSsKQFc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778208764; c=relaxed/simple;
-	bh=TxFqk8i+4b6dEi3VGsPCyT6UMh99EcS5+9xa5h8ZEmA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DxZiRkBu9RrWJ6w0i9/sbnsgwdRWW0tUESUAXRR3mJs/L5Hi4h7ZETQn9DaK1jgN0wsBe8TkGOlsdJaDUwXUDsVSqDUsfoM9vZF7U4jm9nn9Dx4M9c1WV+M0pOhK+3nKK9Toms0FnJlCJiJnQMh6cUpqPdgs/9AeqLttZ2uoimU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Qd1qlXli; arc=none smtp.client-ip=209.85.208.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1778210552; c=relaxed/simple;
+	bh=cN2NZsPCZ+NPj8HeApyRS2bD0oPy84AtT4tkry2rUeQ=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=dTc4VT85g+Y+ZcNCoBz8JnS4BEu6r9OYb48oIxPnGNJ8l5232CnEVpermNyaHtBcaa+Lk4HDDIWQ1s2AQVfYCV2pmiKXEl+Q0z8W2iIMbN9ptX6S1wGpAFgD4qdsfxQK36W6BpSJV+90Hw385P7d8ONIR4G4J6MrQ0j7GzsWB04=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=t5zg37wR; arc=none smtp.client-ip=91.218.175.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qd1qlXli"
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-67e9e343b22so915635a12.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 07 May 2026 19:52:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778208762; x=1778813562; darn=vger.kernel.org;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GXo8YRKGAQ0gGQsS3CnfFEP5ggHykysOGobJBcjxhWg=;
-        b=Qd1qlXliLfZ849CmHV+HjAVyD4ZF5SV6Cmf29ECSofNbg0K8Yu6jMtNHVO3Zxd/AMH
-         MuABcvUrioFKZkHOjKAy5eJTKaGKk1F4/u+jOtUvGwdFeJ73NiKhSrEgZVpXe+jGuk6v
-         /ikzuFTMRJUnG55XQIp8Vt3E/fnZcBWQCZFqXMv9Dw+FVPD/gStCsr8T5H+3zo31l3AR
-         HNDbdoeijQBjpXIIEaWA3tEUbkoUSaqpz7LY5ztn5d/m1Sb3XUJg45vFL+Rx6HXGNHfp
-         ENkmpB0oJ/kHEi9Ibl4I4MCbhhgMWGHuaie4h0ZMbtLRNmxk3GRCGyjuDuqFAr4vzts5
-         HmHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778208762; x=1778813562;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :reply-to:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GXo8YRKGAQ0gGQsS3CnfFEP5ggHykysOGobJBcjxhWg=;
-        b=dCeq9RfXhm1JprcaQh37gLbYXOeux1rCQh7GEOIE4zSPaeCB4DYNQrg2cYHLjs1BK4
-         YCUlI2F6YX84rFYH/+PysvhbgS2y4DnLnaeNRpiCuTMKqSxMnr6tuOAdkV1a3bl4FqI5
-         AdYhUsiWuXLdgPLwc0q6C52rJ/ZsLw+1ujKgwGr7VPPFiKGYwvCToNa8gOFdDen1coXv
-         NFTo1BZjxGrnnZ9k4OGya4244jsI7T6P7UCYfR+zraJCOtu7cxMRDJDi1TkaVEjutApR
-         9NdRgc1nnfkkPXanzCTOQQ7anCP91IFkACsIGXVtNAVp6br9yM5R7B9aGQQf2+iM8C82
-         YWqA==
-X-Forwarded-Encrypted: i=1; AFNElJ+1ifxedNtlGfAA6ICI/iSSrV/DIZlSFdzbozlT6R3Q0A1HwshgYja9f9sOXTQhjV9qVm2muguo8ywHu2B99s8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx6IPmw6Y8kHT0VFLOza62A+x3c0cICt+SAv6rCk1aXR0H186yE
-	kcBwvBQ6dogtoWzw5LUkd4Sbh4RMkBt878cTXZiPlRq/n+dgCrp4yAPw
-X-Gm-Gg: Acq92OF5p5z6tGMeAZwAkA5m7a/8HIfaFaAzM2LPsogd9q/QB4kqMYoF9Ph3wiSqBxd
-	tX8ZWASUibwhIAiuvhuELcVHTx1G9mA8WCdWA2jCKp4ggIw5ruAJKguDD8+G9APpGznJeRzNzUd
-	Zm3GIDmlNiObRXAcLX4RUQ21tHlSZT1ol5D/w1bajARv8mOnFWEhgaRwFAJbx1MJH8lE+iWYtRN
-	UvcHMAj/3/XaCbs36pavJAug0rM16T+5M0AxKJPwu7jdGQnbQcuf45eV3a35XlrrZ25TJ5761eZ
-	STD13DPHThuCjBJ4SybS7znsISrTETsfyNi/u5MYKuTvQwVmjok6aVOpakNy+QXM/feH3NEE04r
-	NWxd8Tp4WeFj+3NqbiQk5QqAAqO584RQRcHR1PT1qSmRgPcE0uCb1UtKjG3MOiFPLuFGrQRWUJX
-	9J6jqHd49Heb17eW3diCCP4d/gyS/HJc0w
-X-Received: by 2002:a50:fa8d:0:b0:676:988e:8eb6 with SMTP id 4fb4d7f45d1cf-67d648a9ed2mr3977298a12.26.1778208761525;
-        Thu, 07 May 2026 19:52:41 -0700 (PDT)
-Received: from localhost ([185.92.221.13])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-67ef0e1a221sm102651a12.24.2026.05.07.19.52.39
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 07 May 2026 19:52:40 -0700 (PDT)
-Date: Fri, 8 May 2026 02:52:39 +0000
-From: Wei Yang <richard.weiyang@gmail.com>
-To: Zi Yan <ziy@nvidia.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	Song Liu <songliubraving@fb.com>, Chris Mason <clm@fb.com>,
-	David Sterba <dsterba@suse.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Nico Pache <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
-	Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
-	Lance Yang <lance.yang@linux.dev>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
-	linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="t5zg37wR"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1778210537;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=wqUUL+VHHoIu9SyW+orjOwBUwI3UsHllP1V3Z2CU+IA=;
+	b=t5zg37wRIuKTrW/5lg0BSEqNo8L3v4xPjbhoV6bHvRNz13QWylSn8qauXE6+zKHcJSQANp
+	jp9luISk18+wxOZRamsdJL0qIOxN4APvOlWAhn1g7RSxImujb3UBWwwUkTiEh17p2EdHFo
+	VZuhgjVWaiaFj1sMAxKLx/fSdmwjk+I=
+From: Qingfang Deng <qingfang.deng@linux.dev>
+To: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Felix Maurer <fmaurer@redhat.com>,
+	Qingfang Deng <qingfang.deng@linux.dev>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Petr Machata <petrm@nvidia.com>,
+	linux-kernel@vger.kernel.org,
+	linux-ppp@vger.kernel.org,
+	netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 05/14] mm: remove READ_ONLY_THP_FOR_FS Kconfig option
-Message-ID: <20260508025239.ooz5kc5a3n372ebb@master>
-Reply-To: Wei Yang <richard.weiyang@gmail.com>
-References: <20260429152924.727124-1-ziy@nvidia.com>
- <20260429153538.727855-1-ziy@nvidia.com>
+Subject: [PATCH net-next] selftests: net: add tests for PPPoL2TP
+Date: Fri,  8 May 2026 11:21:49 +0800
+Message-ID: <20260508032158.67887-1-qingfang.deng@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260429153538.727855-1-ziy@nvidia.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Wed, Apr 29, 2026 at 11:35:28AM -0400, Zi Yan wrote:
->After removing READ_ONLY_THP_FOR_FS check in file_thp_enabled(),
->khugepaged and MADV_COLLAPSE can run on FSes with PMD THP pagecache
->support even without READ_ONLY_THP_FOR_FS enabled. Remove the Kconfig first
->so that no one can use READ_ONLY_THP_FOR_FS as upcoming commits remove
->mapping->nr_thps, which its safe guard mechanism relies on.
->
->Signed-off-by: Zi Yan <ziy@nvidia.com>
->Reviewed-by: Lorenzo Stoakes (Oracle) <ljs@kernel.org>
->Acked-by: David Hildenbrand (Arm) <david@kernel.org>
->Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
->---
-> mm/Kconfig | 11 -----------
-> 1 file changed, 11 deletions(-)
->
->diff --git a/mm/Kconfig b/mm/Kconfig
->index e221fa1dc54d0..27dc5b0139ba6 100644
->--- a/mm/Kconfig
->+++ b/mm/Kconfig
->@@ -936,17 +936,6 @@ config THP_SWAP
-> 
-> 	  For selection by architectures with reasonable THP sizes.
-> 
->-config READ_ONLY_THP_FOR_FS
->-	bool "Read-only THP for filesystems (EXPERIMENTAL)"
->-	depends on TRANSPARENT_HUGEPAGE
->-
->-	help
->-	  Allow khugepaged to put read-only file-backed pages in THP.
->-
->-	  This is marked experimental because it is a new feature. Write
->-	  support of file THPs will be developed in the next few release
->-	  cycles.
->-
+Add ping, iperf3, and recursion tests for PPPoL2TP.
 
-Hi,
+Assisted-by: Gemini:gemini-3-flash
+Signed-off-by: Qingfang Deng <qingfang.deng@linux.dev>
+---
+ tools/testing/selftests/net/ppp/Makefile    |  1 +
+ tools/testing/selftests/net/ppp/config      |  3 +
+ tools/testing/selftests/net/ppp/pppol2tp.sh | 93 +++++++++++++++++++++
+ 3 files changed, 97 insertions(+)
+ create mode 100755 tools/testing/selftests/net/ppp/pppol2tp.sh
 
-I see hugepage_enabled() in khugepaged.c still use READ_ONLY_THP_FOR_FS.
-
-> config NO_PAGE_MAPCOUNT
-> 	bool "No per-page mapcount (EXPERIMENTAL)"
-> 	help
->-- 
->2.53.0
->
-
+diff --git a/tools/testing/selftests/net/ppp/Makefile b/tools/testing/selftests/net/ppp/Makefile
+index b39b0abadde6..6036fa134351 100644
+--- a/tools/testing/selftests/net/ppp/Makefile
++++ b/tools/testing/selftests/net/ppp/Makefile
+@@ -5,6 +5,7 @@ top_srcdir = ../../../../..
+ TEST_PROGS := \
+ 	ppp_async.sh \
+ 	pppoe.sh \
++	pppol2tp.sh \
+ # end of TEST_PROGS
+ 
+ TEST_FILES := \
+diff --git a/tools/testing/selftests/net/ppp/config b/tools/testing/selftests/net/ppp/config
+index b45d25c5b970..8bc3b7c33d5c 100644
+--- a/tools/testing/selftests/net/ppp/config
++++ b/tools/testing/selftests/net/ppp/config
+@@ -1,4 +1,6 @@
+ CONFIG_IPV6=y
++CONFIG_L2TP=m
++CONFIG_NETKIT=y
+ CONFIG_PACKET=y
+ CONFIG_PPP=m
+ CONFIG_PPP_ASYNC=m
+@@ -6,4 +8,5 @@ CONFIG_PPP_BSDCOMP=m
+ CONFIG_PPP_DEFLATE=m
+ CONFIG_PPPOE=m
+ CONFIG_PPPOE_HASH_BITS_4=y
++CONFIG_PPPOL2TP=m
+ CONFIG_VETH=y
+diff --git a/tools/testing/selftests/net/ppp/pppol2tp.sh b/tools/testing/selftests/net/ppp/pppol2tp.sh
+new file mode 100755
+index 000000000000..5ddcc6c41c33
+--- /dev/null
++++ b/tools/testing/selftests/net/ppp/pppol2tp.sh
+@@ -0,0 +1,93 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++
++source ppp_common.sh
++
++NK_SERVER="nk0"
++NK_CLIENT="nk1"
++OUTER_IP_SERVER="172.16.1.1"
++OUTER_IP_CLIENT="172.16.1.2"
++
++PPPOL2TP_DIR=$(mktemp -d /tmp/pppol2tp.XXXXXX)
++
++# shellcheck disable=SC2329
++cleanup() {
++	cleanup_all_ns
++	rm -rf "$PPPOL2TP_DIR"
++}
++
++trap cleanup EXIT
++
++require_command xl2tpd
++ppp_common_init
++modprobe -q l2tp_ppp
++
++# Create the netkit pair
++ip -netns "$NS_CLIENT" link add "$NK_CLIENT" type netkit
++ip -netns "$NS_CLIENT" link set "$NK_SERVER" netns "$NS_SERVER"
++ip -netns "$NS_SERVER" link set "$NK_SERVER" up
++ip -netns "$NS_CLIENT" link set "$NK_CLIENT" up
++ip -netns "$NS_SERVER" address add dev "$NK_SERVER" "$OUTER_IP_SERVER" peer "$OUTER_IP_CLIENT"
++ip -netns "$NS_CLIENT" address add dev "$NK_CLIENT" "$OUTER_IP_CLIENT" peer "$OUTER_IP_SERVER"
++
++# Generate configuration files
++cat > "$PPPOL2TP_DIR/l2tp-server.conf" <<EOF
++[global]
++listen-addr = $OUTER_IP_SERVER
++access control = no
++
++[lns default]
++ip range = $IP_CLIENT
++local ip = $IP_SERVER
++require authentication = no
++require chap = no
++require pap = no
++ppp debug = yes
++pppoptfile = $(pwd)/pppoe-server-options
++EOF
++
++cat > "$PPPOL2TP_DIR/l2tp-client.conf" <<EOF
++[global]
++listen-addr = $OUTER_IP_CLIENT
++access control = no
++
++[lac server]
++lns = $OUTER_IP_SERVER
++require authentication = no
++require chap = no
++require pap = no
++ppp debug = yes
++pppoptfile = $(pwd)/pppoe-server-options
++EOF
++
++# Start the L2TP Server
++ip netns exec "$NS_SERVER" xl2tpd -D -c "$PPPOL2TP_DIR/l2tp-server.conf" \
++	-p "$PPPOL2TP_DIR/l2tp-server.pid" -C "$PPPOL2TP_DIR/l2tp-server.control" &
++
++# Start the L2TP Client
++ip netns exec "$NS_CLIENT" xl2tpd -D -c "$PPPOL2TP_DIR/l2tp-client.conf" \
++	-p "$PPPOL2TP_DIR/l2tp-client.pid" -C "$PPPOL2TP_DIR/l2tp-client.control" &
++
++# Wait for xl2tpd to start and open their control pipes
++slowwait 2 [ -p "$PPPOL2TP_DIR/l2tp-server.control" ]
++slowwait 2 [ -p "$PPPOL2TP_DIR/l2tp-client.control" ]
++
++# Connect LAC to LNS
++echo "c server" > "$PPPOL2TP_DIR/l2tp-client.control"
++
++ppp_test_connectivity
++
++log_test "PPPoL2TP"
++
++# Recursion test
++# Delete route to LNS IP
++ip -netns "$NS_CLIENT" route del "$OUTER_IP_SERVER"
++# Add default route through ppp0
++ip -netns "$NS_CLIENT" route add default dev ppp0
++# ping (we expect the ping to fail but not deadlock the system)
++ip netns exec "$NS_CLIENT" ping -c 1 "$IP_SERVER" -w 1
++check_fail $?
++
++log_test "PPPoL2TP Recursion"
++
++exit "$EXIT_STATUS"
 -- 
-Wei Yang
-Help you, Help me
+2.43.0
+
