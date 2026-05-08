@@ -1,153 +1,66 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C2FD2F4A18
-	for <linux-kselftest@vger.kernel.org>; Fri,  8 May 2026 17:26:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F9B081AA8;
+	Fri,  8 May 2026 17:32:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778261210; cv=none; b=Kfu7HfBvDvXSCzo8ljQZxBI5pJ10Lj+HXdFyXtWk5wNcDmSqZCvOtkVrNhZc402aRqD5s3gJYhg8tObsYWoH4jJlRBw8FqLmmJ1MefF4wEpZ/AZoYMFa0wbGlLDPzO8TTsR91mCj82OmFLnP6tagJbSwdqdeLy9dNLSvLqrakrc=
+	t=1778261542; cv=none; b=S0/0075ESS5nlJt120T+22oevDBCEKg4p8XNJpKWatUCvDqEQsp4V9DbQiKqg1vfmN4adAFkf+75fOZQmdpg9eGOhp+yLEps1uY7qnZPlBWzTnahkwwqtr5TFqIz0WMeO6aRMN6/f583HWpR6AFMdv66mle10iHXdoKkAKXzeUM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778261210; c=relaxed/simple;
-	bh=Jm7pHPykzXvhlBTyVsKD/1Cl9+n7bKEt4iRr0kDgMTM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qed9jGzS78nC0UQYrrALPixNuVULc6XMOK2utF98hZOHdpWw5jKrGoZKvRA7J0GBJtCrJCZtmucHZHG7aROQlNaxbM2Tvu5q19a3+ao77gA8RG6e0Vv3TemBPytrz3mxeebD+1gr3faJTmsSV6GHlK0UdVvSGmZvhZgmttVqaDE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YnBlO14E; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1778261542; c=relaxed/simple;
+	bh=hVPRSg/Aw0I1iOxX29ZJQVzFj0tLkTvJRdEgtd6gtFQ=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=KOItpEaEQi++iBml158VTCUvu6sTIbB7c137AHq1vjujYGYbB9jTSDiumnVMLFwJ71a0r2xRwcaePHizM43nCAOd1X/lkWiHcAI+TA5Gw8VP/AFSpOetDJj60iBlmfwE1me0a76TMeoegyWVN3kHzV9mvWJMIp7manKR4ZSKlFw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=cIjwvtvU; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YnBlO14E"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1778261208;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ibh7LjPfvBLgT/tpVXxRHveeXcSku8wakGYGI8sSKuc=;
-	b=YnBlO14ExB2pmoiTaqJqdNe4135bSmiv2umranDTsmzJoNa0oy5P6LxHZYM1c0jvbV8m7Y
-	dPBEiaknNkHlP+iz7IR0nepnOyzfIz0tG1yTmH4p2deDC9xHdnm3fDUmSGcMi03zXzP48Z
-	XCF2X739A0HQQPGhJUw2uMEK5i48iDY=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-246-lGVe0lkNNNW2OdIvNWCSWQ-1; Fri,
- 08 May 2026 13:26:44 -0400
-X-MC-Unique: lGVe0lkNNNW2OdIvNWCSWQ-1
-X-Mimecast-MFC-AGG-ID: lGVe0lkNNNW2OdIvNWCSWQ_1778261203
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id B3B54195608F;
-	Fri,  8 May 2026 17:26:42 +0000 (UTC)
-Received: from thinkpad (headnet01.pony-001.prod.iad2.dc.redhat.com [10.2.32.101])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5F75219560A2;
-	Fri,  8 May 2026 17:26:39 +0000 (UTC)
-Date: Fri, 8 May 2026 19:26:36 +0200
-From: Felix Maurer <fmaurer@redhat.com>
-To: Qingfang Deng <qingfang.deng@linux.dev>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Petr Machata <petrm@nvidia.com>, linux-kernel@vger.kernel.org,
-	linux-ppp@vger.kernel.org, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next] selftests: net: add tests for PPPoL2TP
-Message-ID: <af4czAjnz--nOUYf@thinkpad>
-References: <20260508032158.67887-1-qingfang.deng@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="cIjwvtvU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36103C2BCB0;
+	Fri,  8 May 2026 17:32:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1778261541;
+	bh=hVPRSg/Aw0I1iOxX29ZJQVzFj0tLkTvJRdEgtd6gtFQ=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=cIjwvtvUImu7UJUAxjtcmuA/pRzJ7AAThBot1FXPvuxh/gq3FKF152tCWY9BcRscQ
+	 IT5yOPpH7MAoFkpgf4gFE78JZcCSamL/xFz8GQl9Nw55LGdLBqwqk/VO3hvuyN0B5i
+	 BaUT7wXFf6L1LOPx82+PG9GOWSD2vcRnthOL5zYQ=
+Date: Fri, 8 May 2026 10:32:20 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
+Cc: rppt@kernel.org, peterx@redhat.com, david@kernel.org, ljs@kernel.org,
+ surenb@google.com, vbabka@kernel.org, Liam.Howlett@oracle.com,
+ ziy@nvidia.com, corbet@lwn.net, skhan@linuxfoundation.org,
+ seanjc@google.com, pbonzini@redhat.com, jthoughton@google.com,
+ aarcange@redhat.com, sj@kernel.org, usama.arif@linux.dev,
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kvm@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH v2 00/14] userfaultfd: working set tracking for VM guest
+ memory
+Message-Id: <20260508103220.aa46427b6f4c5d0247d2afb0@linux-foundation.org>
+In-Reply-To: <cover.1778254670.git.kas@kernel.org>
+References: <cover.1778254670.git.kas@kernel.org>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260508032158.67887-1-qingfang.deng@linux.dev>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Fri, May 08, 2026 at 11:21:49AM +0800, Qingfang Deng wrote:
-> Add ping, iperf3, and recursion tests for PPPoL2TP.
->
-> Assisted-by: Gemini:gemini-3-flash
-> Signed-off-by: Qingfang Deng <qingfang.deng@linux.dev>
-> ---
->  tools/testing/selftests/net/ppp/Makefile    |  1 +
->  tools/testing/selftests/net/ppp/config      |  3 +
->  tools/testing/selftests/net/ppp/pppol2tp.sh | 93 +++++++++++++++++++++
->  3 files changed, 97 insertions(+)
->  create mode 100755 tools/testing/selftests/net/ppp/pppol2tp.sh
->
-> diff --git a/tools/testing/selftests/net/ppp/Makefile b/tools/testing/selftests/net/ppp/Makefile
-> index b39b0abadde6..6036fa134351 100644
-> --- a/tools/testing/selftests/net/ppp/Makefile
-> +++ b/tools/testing/selftests/net/ppp/Makefile
-> @@ -5,6 +5,7 @@ top_srcdir = ../../../../..
->  TEST_PROGS := \
->  	ppp_async.sh \
->  	pppoe.sh \
-> +	pppol2tp.sh \
->  # end of TEST_PROGS
->
->  TEST_FILES := \
-> diff --git a/tools/testing/selftests/net/ppp/config b/tools/testing/selftests/net/ppp/config
-> index b45d25c5b970..8bc3b7c33d5c 100644
-> --- a/tools/testing/selftests/net/ppp/config
-> +++ b/tools/testing/selftests/net/ppp/config
-> @@ -1,4 +1,6 @@
->  CONFIG_IPV6=y
-> +CONFIG_L2TP=m
-> +CONFIG_NETKIT=y
->  CONFIG_PACKET=y
->  CONFIG_PPP=m
->  CONFIG_PPP_ASYNC=m
-> @@ -6,4 +8,5 @@ CONFIG_PPP_BSDCOMP=m
->  CONFIG_PPP_DEFLATE=m
->  CONFIG_PPPOE=m
->  CONFIG_PPPOE_HASH_BITS_4=y
-> +CONFIG_PPPOL2TP=m
->  CONFIG_VETH=y
-> diff --git a/tools/testing/selftests/net/ppp/pppol2tp.sh b/tools/testing/selftests/net/ppp/pppol2tp.sh
-> new file mode 100755
-> index 000000000000..5ddcc6c41c33
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/ppp/pppol2tp.sh
-> @@ -0,0 +1,93 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +source ppp_common.sh
-> +
-> +NK_SERVER="nk0"
-> +NK_CLIENT="nk1"
-> +OUTER_IP_SERVER="172.16.1.1"
-> +OUTER_IP_CLIENT="172.16.1.2"
-> +
-> +PPPOL2TP_DIR=$(mktemp -d /tmp/pppol2tp.XXXXXX)
-> +
-> +# shellcheck disable=SC2329
-> +cleanup() {
-> +	cleanup_all_ns
-> +	rm -rf "$PPPOL2TP_DIR"
-> +}
-> +
-> +trap cleanup EXIT
-> +
-> +require_command xl2tpd
-> +ppp_common_init
-> +modprobe -q l2tp_ppp
-> +
-> +# Create the netkit pair
-> +ip -netns "$NS_CLIENT" link add "$NK_CLIENT" type netkit
-> +ip -netns "$NS_CLIENT" link set "$NK_SERVER" netns "$NS_SERVER"
-> +ip -netns "$NS_SERVER" link set "$NK_SERVER" up
-> +ip -netns "$NS_CLIENT" link set "$NK_CLIENT" up
-> +ip -netns "$NS_SERVER" address add dev "$NK_SERVER" "$OUTER_IP_SERVER" peer "$OUTER_IP_CLIENT"
-> +ip -netns "$NS_CLIENT" address add dev "$NK_CLIENT" "$OUTER_IP_CLIENT" peer "$OUTER_IP_SERVER"
+On Fri,  8 May 2026 16:55:12 +0100 "Kiryl Shutsemau (Meta)" <kas@kernel.org> wrote:
 
-Is there a particular reason to create the test setup with a netkit pair
-instead of the more standard veth pairs?
+> This series adds userfaultfd support for tracking the working set of
+> VM guest memory, so a VMM can identify cold pages and evict them to
+> tiered or remote storage.
+> 
+> v1: https://lore.kernel.org/all/20260427114607.4068647-1-kas@kernel.org/
 
-Thanks,
-   Felix
+Thanks.  I'll duck v2 for now, await more review.
+
+> Assisted-by: Claude:claude-opus-4-6
+
+For my education, and perhaps for others: can you please explain how
+you used Claude in the preparation of this series?
 
