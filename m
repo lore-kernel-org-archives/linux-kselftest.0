@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D734033A71B;
-	Fri,  8 May 2026 12:23:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30EB32F2607;
+	Fri,  8 May 2026 12:27:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778243026; cv=none; b=kEQhXKv4kwecRNH48QkPN7oCCKcq2AnLHAe7efl81sPXMpoFRmaPKUAVoy5k/Itj43dRO5/YCUlzGex1N8Tb/9oUF670crqREDzhhZHAo5E0cXwUfE2lYbIeYds6ZfRpdMPucWh7pt9bTKjHByrsaCaUqpo9e5eDz0ElfPxTf+w=
+	t=1778243262; cv=none; b=kxMQvXzco2rAUkPTNeELIYadca+H5wG93KtTFZ/Ud6KF727shkKSDAepXNPEkKLQhTG5yUWImizP4SBjdbRZVmN91VZiu8kVnvfztSJW+TxbRsefZt9RoRAX2L4lH6YLcx1Uq1Ss/xY2rckd8pLcZjk6wHgVJBK+sJJxU771Y24=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778243026; c=relaxed/simple;
-	bh=s6tGTUaX5JCjVeOsD5Mbqpz/lOTnCe2Wdvu98w/3EP8=;
+	s=arc-20240116; t=1778243262; c=relaxed/simple;
+	bh=ma++l05+jUjyVj+lcNXmwxDuxjpw7p6B1P8IKC8yMQM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Gp32IwV/1c9lyTHog4KrOFEOzhVBjgB1LAoAWIJUpynMxJ+2rVVLixgCr/6IhRNS/rxmhcZoN/fQtl/I8VQgPS+RbDnPfIbbAREfrNovBONIETbDbrFILAyT2UVJPpsuAmrdk4eZ/qSTNO7WDEjA73jhzMZU2/LU+FBH06azq0c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P4/rF3ZS; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=dyiH4+YIwhqm26BIqmPV+iUj8ibgzyLqnf62pEYyWgZMo3j0SRh5PoAjB3QBQVfOqwzrXiS61Uvlgd4nZ5qkvdykDR4MXsj2nWkNAY2IwyTQyFLjbfeIgFCZ14NpI9+NlFy81gYCzDuC6e5DWcIMf6tEE3ZAgDdTwLJE3eHqm2U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WCEWqKKR; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P4/rF3ZS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4752C2BCB0;
-	Fri,  8 May 2026 12:23:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WCEWqKKR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 628E5C2BCB8;
+	Fri,  8 May 2026 12:27:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778243026;
-	bh=s6tGTUaX5JCjVeOsD5Mbqpz/lOTnCe2Wdvu98w/3EP8=;
+	s=k20201202; t=1778243261;
+	bh=ma++l05+jUjyVj+lcNXmwxDuxjpw7p6B1P8IKC8yMQM=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=P4/rF3ZSylK+dBUn1xj86IryMJaFVSWYryQkubG/z59q5KlNELky4PZ+r/+crs+3/
-	 x0fiFk8gCSwBCSmUIuer6Nh57SBsgRlLSj2h+W/S9YQnj4i4psF2+6eTxqqFcr2hei
-	 RE6Nerb9ueRW98FtkrpIDj2W8P1dnxuG9jYVj2H2KiyW5gJgpIHHmyi/OKVysbk9lT
-	 oOvf67FK2U+4t4iJo5U/xrql5kBpn6/Q9fqgJhZxh/fWH2GLiERdc07aBflBERS+MA
-	 kDosDukktUDSaWtlsu+Q7XaTOD1rdDyaRDEear7F3Eqg4K6g0kJllG6kvx2lCAi/gL
-	 8PpvF9vRbTNag==
-Message-ID: <bdc711fc-c625-4696-b6bc-28461c0c80f2@kernel.org>
-Date: Fri, 8 May 2026 14:23:41 +0200
+	b=WCEWqKKRcUw+sjbMY4GB6hIhqhRig1T9LBpWmxd+nA8f2RNcGBllNRagKqI5FzPkN
+	 26WsO52bPsw5CHqjgtS4Rb3u2xUKya8vRxfVeFNKd2KLSLATsgfDBq4hpeNNIGXjZ8
+	 2PO/vCswnxE0EQxQfrGL6LXYvtSayT9AeTQQOonJB5Ru/dqN2pcozNQcOwxcSJKQf2
+	 GNvCRoso9B+/d6WwdVo4BS3ASXlLDzKauJCdFBiNLDBYCqY52n0jXnZLa+JiGGt0TQ
+	 GkErbG4t1NjoO/5a6oA4L8mPV3eO5mJDGDKtOE4Ufpkawu0K1TjSQmla59Tw4OqsG9
+	 jEniXbBkz1QTA==
+Message-ID: <9eea2afb-8c35-47eb-b1de-6a08503c9679@kernel.org>
+Date: Fri, 8 May 2026 14:27:37 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,13 +35,14 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] selftests/mm: add MADV_COLLAPSE sub-PMD range tests
+Subject: Re: [PATCH 1/2] mm/khugepaged: fix spurious -EINVAL from sub-PMD
+ MADV_COLLAPSE range
 To: Chen Wandun <chenwandun1@gmail.com>, akpm@linux-foundation.org,
  ljs@kernel.org, shuah@kernel.org, zokeefe@google.com
 Cc: linux-kernel@vger.kernel.org, linux-mm@kvack.org,
  linux-kselftest@vger.kernel.org
 References: <20260507070558.3064142-1-chenwandun@lixiang.com>
- <20260507070558.3064142-3-chenwandun@lixiang.com>
+ <20260507070558.3064142-2-chenwandun@lixiang.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -88,19 +89,88 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20260507070558.3064142-3-chenwandun@lixiang.com>
+In-Reply-To: <20260507070558.3064142-2-chenwandun@lixiang.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 5/7/26 09:05, Chen Wandun wrote:
-> Add madv_collapse_range to verify the fix for the spurious -EINVAL
-> returned by madvise_collapse() when the madvised range contains no
-> complete PMD-aligned window.
+> madvise_collapse() computes the THP-aligned window:
+> 
+>   hstart = (start + ~HPAGE_PMD_MASK) & HPAGE_PMD_MASK  /* round up  */
+>   hend   =  end   &  HPAGE_PMD_MASK                    /* round down */
+> 
+> Previously this was done after kmalloc_obj(), so problem arose when
+> the range contained no complete PMD-aligned window (hstart >= hend).
+> 
+> When hstart > hend, (hend - hstart) wraps unsigned to a huge value, the
+> final comparison fails and -EINVAL is returned instead of 0.  Consider
+> two single-page calls on a 2 MiB-aligned address:
+> 
+>     /* hstart == hend == aligned  ->  0 == 0  ->  returns 0 */
+>     madvise(aligned, PAGE_SIZE, MADV_COLLAPSE);
+> 
+>     /* hstart = aligned + 2MiB, hend = aligned
+>      * (hend - hstart) wraps unsigned  ->  returns -EINVAL */
+>     madvise(aligned + PAGE_SIZE, PAGE_SIZE, MADV_COLLAPSE);
+> 
+> Both calls cover less than one THP and collapse nothing; both should
+> return 0.
 
-Do we really need 141 LOC of test to verify a "userspace is being stupid" scenario?
+Okay, so we talk about a "userspace is being stupid" scenario.
 
-Nothing was really broken, it's just a suboptimal return value, or what am I
-missing?
+> 
+> In addition, kmalloc_obj(), mmgrab() and lru_add_drain_all() were all
+> called before discovering there was nothing to do, only for the code
+> to kfree() and return immediately after.
+
+Just a comment as you motivate here why this is suboptimal: we do not care about
+a "userspace is being stupid" scenario being fast.
+
+> 
+> Fix both by computing hstart/hend after thp_vma_allowable_order() but
+> before kmalloc_obj(), and returning 0 early when hstart >= hend.
+> 
+> Fixes: 7d8faaf15545 ("mm/madvise: introduce MADV_COLLAPSE sync hugepage collapse")
+
+Fixes: is likely ok, but I don't think we want to treat this as a hotfix or CC
+stable.
+
+> Signed-off-by: Chen Wandun <chenwandun@lixiang.com>
+> ---
+>  mm/khugepaged.c | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
+> 
+> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+> index b8452dbdb043..92473d93e837 100644
+> --- a/mm/khugepaged.c
+> +++ b/mm/khugepaged.c
+> @@ -2836,6 +2836,12 @@ int madvise_collapse(struct vm_area_struct *vma, unsigned long start,
+>  	if (!thp_vma_allowable_order(vma, vma->vm_flags, TVA_FORCED_COLLAPSE, PMD_ORDER))
+>  		return -EINVAL;
+>  
+> +	hstart = (start + ~HPAGE_PMD_MASK) & HPAGE_PMD_MASK;
+> +	hend = end & HPAGE_PMD_MASK;
+> +
+> +	if (hstart >= hend)
+> +		return 0;
+> +
+>  	cc = kmalloc_obj(*cc);
+>  	if (!cc)
+>  		return -ENOMEM;
+> @@ -2845,9 +2851,6 @@ int madvise_collapse(struct vm_area_struct *vma, unsigned long start,
+>  	mmgrab(mm);
+>  	lru_add_drain_all();
+>  
+> -	hstart = (start + ~HPAGE_PMD_MASK) & HPAGE_PMD_MASK;
+> -	hend = end & HPAGE_PMD_MASK;
+> -
+>  	for (addr = hstart; addr < hend; addr += HPAGE_PMD_SIZE) {
+>  		enum scan_result result = SCAN_FAIL;
+>  
+
+In general, LGTM, but see for conflict:
+https://lore.kernel.org/all/20260409014323.2385982-1-ye.liu@linux.dev/
+
 
 -- 
 Cheers,
