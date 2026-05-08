@@ -1,106 +1,113 @@
-Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A5D8410D00
-	for <linux-kselftest@vger.kernel.org>; Fri,  8 May 2026 17:07:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 315672EBDDE;
+	Fri,  8 May 2026 17:12:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778260049; cv=none; b=SCaPqpv5d1ULz/psagUSKFTNBOwZRwEf+OBHhMAP3SrPiTluDlMe/SBgIrp17oIRgG4K4Yqfw6oboe4shsPr0T3yzXlNTfbtna4qWYne7K+TzoRreSvDiJhSK42YVxZWe0qjHTjjUyfPPn+2ZGINKS+NjG3OsW/qCKB+sQNtlSY=
+	t=1778260335; cv=none; b=Vwox4LdQasRUQDWyqPdNQsJvGEFN7Wc3dJ83aogzJ/fUlijJgkKRkfK/Ytu0N8ar8pWSWUdGvqWFsVWSQq4cnCKnNzVd4nwo8QQcjRVLdvNUvM9iMmaiZSq0K7MMUPRTag54luGKIY72TPw4JifUrm1LiiEOMJKr9qq2HLbKTTw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778260049; c=relaxed/simple;
-	bh=+26E9CbE37jv7Fg8ytpJOSAeNgt95r8WPVH7/l19efQ=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=qAKXmL4rswKqHuKdcB3VPxmtlNWpFbeRppHObtYNhtv8CNbtsmndj4ru4wqv1Fu+Yx0Y70ga7dJh9Vq7vFlVTA30sYHB6aUq1nQZmJITYrE7O6q6nlOvk1MXr2Kj19wVJBtvocUOG6KU5FEGFfjBBjX9coAOHAaL2vawsLAuJhA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jmattson.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JUbccXuF; arc=none smtp.client-ip=209.85.215.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jmattson.bounces.google.com
+	s=arc-20240116; t=1778260335; c=relaxed/simple;
+	bh=EsTFf7qnfgE+DcO+/SX3IscCKG+dFx0MhM0eybb1Br0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nisdx1pJakQ9SV3zpnY6rBN6QCSqXO05c4sQh/LZVjBU2sqfK9UuO1gI/e0anzePYUOGfH+RHQZDldd+AAixSLhDIyx6x75dPQN44JhQ1QZTXfiFM5PTmh+3c9f5cMblLJAkZMk4y6dAKX3x5M198K+P+AQGPe3qPzgA4Vi1FFY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=lBWwwRz6; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JUbccXuF"
-Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-c8234c06a10so1165786a12.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 08 May 2026 10:07:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1778260046; x=1778864846; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PQE3P6HpTGBqI9wxzvuYOH/BPNcSAUGenCPQXQBGxb4=;
-        b=JUbccXuFpfN8x6JYnGudaDa7B9u2huAYx96yiME/J8Q7Cyrr5225S3lG72ju11ylkF
-         f9Zy/9G1fRv702//9cCPaS+buiw++j6umwEO8cfw/esD28lbbhD+oGJLHe7/SWSSfAHd
-         LL6iDJn0zOJiCbNMvRSThOA1pLG8rf/nnfJ0geKO5kz1sQH3EQw2WrlfVJ1ioLsRuDkL
-         gxHmtsewZc9I5n1nRxNYX0Lyh4q3yYPFruDO+zfGrE3PfzknkY6fgVmWYngRU54ikPSd
-         nMbcV7FuiwsjezEFQmCd//x14bMqdFBPPfHgO9oT3So0UpGZPJW1gOUuC8E7aSUqtWAI
-         /R/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778260046; x=1778864846;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PQE3P6HpTGBqI9wxzvuYOH/BPNcSAUGenCPQXQBGxb4=;
-        b=WxT3VDdkcnc6lPhhhU9pCmLHUQKK3l0/Zs+VGQBrYHDUPLRGjlUrgQbV9WVrtZWulY
-         4VT4Yr30u5GMLrEEWi+6lVleBo8t66e+6Y7urR7FHC8GIbaD3+8HQ0ciLRsy2dssisDd
-         Datdykd71cpn8LW3yVwJo8Q38GLpkf+KpNmfUClPPN42HMuec8STlwAAgvM0oveiFuu0
-         R0ARYH9Z7GES3P6Q/OdPkr7TVyUEGuFh+gQwveqOi4SXxFMNCBopTsHDzcTg51+qyrM+
-         J8mSFUW3cFNjmRtNacnKBfMB77l9++5x7+n4xm6NWAGcAQ5+Dp54zhNOnvVEIZ4qSKbs
-         RQtQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/yV3L5/D1RbUAmTSrdTO1w2JvAyaqgBO/h07jPmlQYjx8JICqQ29ALdG6MMAbzO1GLk3oWFVjRTjbg7vq1j8E=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzNHZjpHYk0LEUJFiPjuGH9fje9YTaNLPpS/5lxLGSyFKjlHGh7
-	+zpedEZbOTBQL9g/QYpjs1spn9sypBayu+e9qZP/5+4Pe38pgwWMhlFVirG+LBm42HSaABAFNaq
-	C0Y8vlP7B4C8aDA==
-X-Received: from pgbg18.prod.google.com ([2002:a63:5212:0:b0:c73:bdbf:6a66])
- (user=jmattson job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a20:7d86:b0:3a2:d79c:416c with SMTP id adf61e73a8af0-3aa5a9b09admr15325660637.32.1778260045679;
- Fri, 08 May 2026 10:07:25 -0700 (PDT)
-Date: Fri,  8 May 2026 10:07:04 -0700
-In-Reply-To: <20260508170714.489136-1-jmattson@google.com>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="lBWwwRz6"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 342B8152B;
+	Fri,  8 May 2026 10:12:07 -0700 (PDT)
+Received: from J2N7QTR9R3 (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BB5373F836;
+	Fri,  8 May 2026 10:12:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1778260332; bh=EsTFf7qnfgE+DcO+/SX3IscCKG+dFx0MhM0eybb1Br0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=lBWwwRz6a7nQ+hxFzW7BK5GC6EHeiTMOdrBs3x9Zf5HTznIGt5K+jW1zVvoJHdbDf
+	 GHGt2GY6xACd/0ZcKFbLVIVzwtYMQBc8CCkJF4lqxpcJadMZQzJeBdhVyTKl0C0v8I
+	 0fUH7k+0aNuGeZVlRsbF/WzGoxbSJyITngBWIpRk=
+Date: Fri, 8 May 2026 18:12:01 +0100
+From: Mark Rutland <mark.rutland@arm.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	Oliver Upton <oupton@kernel.org>, Dave Martin <Dave.Martin@arm.com>,
+	Fuad Tabba <tabba@google.com>, Ben Horgan <ben.horgan@arm.com>,
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Peter Maydell <peter.maydell@linaro.org>,
+	Eric Auger <eric.auger@redhat.com>
+Subject: Re: [PATCH v10 01/30] arm64/sysreg: Update SMIDR_EL1 to DDI0601
+ 2025-06
+Message-ID: <af4ZYVFsbYlEfdOu@J2N7QTR9R3>
+References: <20260306-kvm-arm64-sme-v10-0-43f7683a0fb7@kernel.org>
+ <20260306-kvm-arm64-sme-v10-1-43f7683a0fb7@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260508170714.489136-1-jmattson@google.com>
-X-Mailer: git-send-email 2.54.0.563.g4f69b47b94-goog
-Message-ID: <20260508170714.489136-4-jmattson@google.com>
-Subject: [PATCH v2 3/3] KVM: selftests: Update hwcr_msr_test for CPUID
- faulting bit
-From: Jim Mattson <jmattson@google.com>
-To: Sean Christopherson <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Clayton Pence <ctpence@google.com>
-Cc: Jim Mattson <jmattson@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260306-kvm-arm64-sme-v10-1-43f7683a0fb7@kernel.org>
 
-Add BIT_ULL(35) (CpuidUserDis) to the valid mask in hwcr_msr_test, now that
-KVM accepts writes to this bit when the guest CPUID advertises
-CpuidUserDis.
+On Fri, Mar 06, 2026 at 05:00:53PM +0000, Mark Brown wrote:
+> Update the definition of SMIDR_EL1 in the sysreg definition to reflect the
+> information in DD0601 2025-06. This includes somewhat more generic ways of
+> describing the sharing of SMCUs, more information on supported priorities
+> and provides additional resolution for describing affinity groups.
 
-Signed-off-by: Jim Mattson <jmattson@google.com>
----
- tools/testing/selftests/kvm/x86/hwcr_msr_test.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+FWIW, these are all in ARM DDI 0487 M.b:
 
-diff --git a/tools/testing/selftests/kvm/x86/hwcr_msr_test.c b/tools/testing/selftests/kvm/x86/hwcr_msr_test.c
-index 8e20a03b3329..5357281e6e4e 100644
---- a/tools/testing/selftests/kvm/x86/hwcr_msr_test.c
-+++ b/tools/testing/selftests/kvm/x86/hwcr_msr_test.c
-@@ -10,11 +10,11 @@
- 
- void test_hwcr_bit(struct kvm_vcpu *vcpu, unsigned int bit)
- {
--	const u64 ignored = BIT_ULL(3) | BIT_ULL(6) | BIT_ULL(8);
--	const u64 valid = BIT_ULL(18) | BIT_ULL(24);
--	const u64 legal = ignored | valid;
--	u64 val = BIT_ULL(bit);
--	u64 actual;
-+	const uint64_t ignored = BIT_ULL(3) | BIT_ULL(6) | BIT_ULL(8);
-+	const uint64_t valid = BIT_ULL(18) | BIT_ULL(24) | BIT_ULL(35);
-+	const uint64_t legal = ignored | valid;
-+	uint64_t val = BIT_ULL(bit);
-+	uint64_t actual;
- 	int r;
- 
- 	r = _vcpu_set_msr(vcpu, MSR_K7_HWCR, val);
--- 
-2.54.0.563.g4f69b47b94-goog
+  https://developer.arm.com/documentation/ddi0487/mb/
 
+Is anything later in the series going to depend on these fields, or
+would everything behave correctly with the existing RES0 field
+definitions?
+
+> Reviewed-by: Fuad Tabba <tabba@google.com>
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
+>  arch/arm64/tools/sysreg | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/tools/sysreg b/arch/arm64/tools/sysreg
+> index 9d1c21108057..b6586accf344 100644
+> --- a/arch/arm64/tools/sysreg
+> +++ b/arch/arm64/tools/sysreg
+> @@ -3655,11 +3655,15 @@ Field	3:0	BS
+>  EndSysreg
+>  
+>  Sysreg	SMIDR_EL1	3	1	0	0	6
+> -Res0	63:32
+> +Res0	63:60
+> +Field	59:56	NSMC
+> +Field	55:52	HIP
+
+Reading the ARM ARM, HIP is arguably a backwards-incompatible change.
+
+Do we expect to expose that to VMs, or just hide priorities entirely? I
+suspect we probably want to require that the guest sees
+SMIDR_EL1.SMPS==0, and not care about any of that.
+
+Mark.
+
+> +Field	51:32	AFFINITY2
+>  Field	31:24	IMPLEMENTER
+>  Field	23:16	REVISION
+>  Field	15	SMPS
+> -Res0	14:12
+> +Field	14:13	SH
+> +Res0	12
+>  Field	11:0	AFFINITY
+>  EndSysreg
+>  
+> 
+> -- 
+> 2.47.3
+> 
