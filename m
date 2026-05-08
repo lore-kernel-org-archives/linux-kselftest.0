@@ -1,50 +1,60 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A16F2D0615;
-	Fri,  8 May 2026 17:20:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C2FD2F4A18
+	for <linux-kselftest@vger.kernel.org>; Fri,  8 May 2026 17:26:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778260838; cv=none; b=IntMlXFb1Rfa6rkj3iXc+iZ7pssluYm2SBkmxwY4A2oJ2+k7N5ruscwdJ9xQjGh7YD/vxbXJYnhXfezf/MH1T/+hHrRTaV5U5VyWmUI4DfyPMaIBPkWMRTnWWZn3XaPTMYRWqsEnTwKutKvXOrr97cPHu2rUxqFXlCKDQK5TNtA=
+	t=1778261210; cv=none; b=Kfu7HfBvDvXSCzo8ljQZxBI5pJ10Lj+HXdFyXtWk5wNcDmSqZCvOtkVrNhZc402aRqD5s3gJYhg8tObsYWoH4jJlRBw8FqLmmJ1MefF4wEpZ/AZoYMFa0wbGlLDPzO8TTsR91mCj82OmFLnP6tagJbSwdqdeLy9dNLSvLqrakrc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778260838; c=relaxed/simple;
-	bh=VIpaIdq08wjRpBWfnPXJEwTJDQEICZVJcS3hyR9NLpo=;
+	s=arc-20240116; t=1778261210; c=relaxed/simple;
+	bh=Jm7pHPykzXvhlBTyVsKD/1Cl9+n7bKEt4iRr0kDgMTM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bijdqjxBZN971rr6OTSk8YuAIvqbQ/4+rrRyxtxoPxyyX7ERGIvPVFnUyffcRrImGYvemvaRC9eHqqDhfukbsICugG7HDe64Hzlgm970HG1JMMpNxzChOADvz4exA5nLBjahBKE0Z3qVeAJ4wMSHZxPGz+mIuH3ixNKts+hLE6I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=oZlzpBvM; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=qed9jGzS78nC0UQYrrALPixNuVULc6XMOK2utF98hZOHdpWw5jKrGoZKvRA7J0GBJtCrJCZtmucHZHG7aROQlNaxbM2Tvu5q19a3+ao77gA8RG6e0Vv3TemBPytrz3mxeebD+1gr3faJTmsSV6GHlK0UdVvSGmZvhZgmttVqaDE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YnBlO14E; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="oZlzpBvM"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5F3DC22D7;
-	Fri,  8 May 2026 10:20:30 -0700 (PDT)
-Received: from J2N7QTR9R3 (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A1A783F836;
-	Fri,  8 May 2026 10:20:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1778260835; bh=VIpaIdq08wjRpBWfnPXJEwTJDQEICZVJcS3hyR9NLpo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=oZlzpBvM3kB4R3YSBeQz6gKgJmqfggBligCcpTqgEZXTpNWvuOS6tcb8YSZFF1+Fp
-	 kWnWUogxR1+d6Lsf9g9rsdrHZqLJNTKjJ1N1dWhsJRabhzYObA4PglPOeM69C9nq/z
-	 qCOQcg0gdCUWunQoEjjmnB+fLCkzhxF+ZBpNE7M4=
-Date: Fri, 8 May 2026 18:20:27 +0100
-From: Mark Rutland <mark.rutland@arm.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	Oliver Upton <oupton@kernel.org>, Dave Martin <Dave.Martin@arm.com>,
-	Fuad Tabba <tabba@google.com>, Ben Horgan <ben.horgan@arm.com>,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Peter Maydell <peter.maydell@linaro.org>,
-	Eric Auger <eric.auger@redhat.com>
-Subject: Re: [PATCH v10 15/30] KVM: arm64: Support SME control registers
-Message-ID: <af4bWxiOogfPz_dp@J2N7QTR9R3>
-References: <20260306-kvm-arm64-sme-v10-0-43f7683a0fb7@kernel.org>
- <20260306-kvm-arm64-sme-v10-15-43f7683a0fb7@kernel.org>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YnBlO14E"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1778261208;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ibh7LjPfvBLgT/tpVXxRHveeXcSku8wakGYGI8sSKuc=;
+	b=YnBlO14ExB2pmoiTaqJqdNe4135bSmiv2umranDTsmzJoNa0oy5P6LxHZYM1c0jvbV8m7Y
+	dPBEiaknNkHlP+iz7IR0nepnOyzfIz0tG1yTmH4p2deDC9xHdnm3fDUmSGcMi03zXzP48Z
+	XCF2X739A0HQQPGhJUw2uMEK5i48iDY=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-246-lGVe0lkNNNW2OdIvNWCSWQ-1; Fri,
+ 08 May 2026 13:26:44 -0400
+X-MC-Unique: lGVe0lkNNNW2OdIvNWCSWQ-1
+X-Mimecast-MFC-AGG-ID: lGVe0lkNNNW2OdIvNWCSWQ_1778261203
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id B3B54195608F;
+	Fri,  8 May 2026 17:26:42 +0000 (UTC)
+Received: from thinkpad (headnet01.pony-001.prod.iad2.dc.redhat.com [10.2.32.101])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5F75219560A2;
+	Fri,  8 May 2026 17:26:39 +0000 (UTC)
+Date: Fri, 8 May 2026 19:26:36 +0200
+From: Felix Maurer <fmaurer@redhat.com>
+To: Qingfang Deng <qingfang.deng@linux.dev>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Petr Machata <petrm@nvidia.com>, linux-kernel@vger.kernel.org,
+	linux-ppp@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next] selftests: net: add tests for PPPoL2TP
+Message-ID: <af4czAjnz--nOUYf@thinkpad>
+References: <20260508032158.67887-1-qingfang.deng@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,104 +63,91 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260306-kvm-arm64-sme-v10-15-43f7683a0fb7@kernel.org>
+In-Reply-To: <20260508032158.67887-1-qingfang.deng@linux.dev>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-On Fri, Mar 06, 2026 at 05:01:07PM +0000, Mark Brown wrote:
-> SME is configured by the system registers SMCR_EL1 and SMCR_EL2, add
-> definitions and userspace access for them.  These control the SME vector
-> length in a manner similar to that for SVE and also have feature enable
-> bits for SME2 and FA64.  A subsequent patch will add management of them
-> for guests as part of the general floating point context switch, as is
-> done for the equivalent SVE registers.
-> 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
+On Fri, May 08, 2026 at 11:21:49AM +0800, Qingfang Deng wrote:
+> Add ping, iperf3, and recursion tests for PPPoL2TP.
+>
+> Assisted-by: Gemini:gemini-3-flash
+> Signed-off-by: Qingfang Deng <qingfang.deng@linux.dev>
 > ---
->  arch/arm64/include/asm/kvm_emulate.h  | 14 ++++++++++++
->  arch/arm64/include/asm/kvm_host.h     |  2 ++
->  arch/arm64/include/asm/vncr_mapping.h |  1 +
->  arch/arm64/kvm/sys_regs.c             | 42 ++++++++++++++++++++++++++++++++++-
->  4 files changed, 58 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/include/asm/kvm_emulate.h b/arch/arm64/include/asm/kvm_emulate.h
-> index 5bf3d7e1d92c..7a11dd7d554c 100644
-> --- a/arch/arm64/include/asm/kvm_emulate.h
-> +++ b/arch/arm64/include/asm/kvm_emulate.h
-> @@ -89,6 +89,14 @@ static inline void kvm_inject_nested_sve_trap(struct kvm_vcpu *vcpu)
->  	kvm_inject_nested_sync(vcpu, esr);
->  }
->  
-> +static inline void kvm_inject_nested_sme_trap(struct kvm_vcpu *vcpu)
-> +{
-> +	u64 esr = FIELD_PREP(ESR_ELx_EC_MASK, ESR_ELx_EC_SME) |
-> +		  ESR_ELx_IL;
+>  tools/testing/selftests/net/ppp/Makefile    |  1 +
+>  tools/testing/selftests/net/ppp/config      |  3 +
+>  tools/testing/selftests/net/ppp/pppol2tp.sh | 93 +++++++++++++++++++++
+>  3 files changed, 97 insertions(+)
+>  create mode 100755 tools/testing/selftests/net/ppp/pppol2tp.sh
+>
+> diff --git a/tools/testing/selftests/net/ppp/Makefile b/tools/testing/selftests/net/ppp/Makefile
+> index b39b0abadde6..6036fa134351 100644
+> --- a/tools/testing/selftests/net/ppp/Makefile
+> +++ b/tools/testing/selftests/net/ppp/Makefile
+> @@ -5,6 +5,7 @@ top_srcdir = ../../../../..
+>  TEST_PROGS := \
+>  	ppp_async.sh \
+>  	pppoe.sh \
+> +	pppol2tp.sh \
+>  # end of TEST_PROGS
+>
+>  TEST_FILES := \
+> diff --git a/tools/testing/selftests/net/ppp/config b/tools/testing/selftests/net/ppp/config
+> index b45d25c5b970..8bc3b7c33d5c 100644
+> --- a/tools/testing/selftests/net/ppp/config
+> +++ b/tools/testing/selftests/net/ppp/config
+> @@ -1,4 +1,6 @@
+>  CONFIG_IPV6=y
+> +CONFIG_L2TP=m
+> +CONFIG_NETKIT=y
+>  CONFIG_PACKET=y
+>  CONFIG_PPP=m
+>  CONFIG_PPP_ASYNC=m
+> @@ -6,4 +8,5 @@ CONFIG_PPP_BSDCOMP=m
+>  CONFIG_PPP_DEFLATE=m
+>  CONFIG_PPPOE=m
+>  CONFIG_PPPOE_HASH_BITS_4=y
+> +CONFIG_PPPOL2TP=m
+>  CONFIG_VETH=y
+> diff --git a/tools/testing/selftests/net/ppp/pppol2tp.sh b/tools/testing/selftests/net/ppp/pppol2tp.sh
+> new file mode 100755
+> index 000000000000..5ddcc6c41c33
+> --- /dev/null
+> +++ b/tools/testing/selftests/net/ppp/pppol2tp.sh
+> @@ -0,0 +1,93 @@
+> +#!/bin/bash
+> +# SPDX-License-Identifier: GPL-2.0
 > +
-> +	kvm_inject_nested_sync(vcpu, esr);
+> +source ppp_common.sh
+> +
+> +NK_SERVER="nk0"
+> +NK_CLIENT="nk1"
+> +OUTER_IP_SERVER="172.16.1.1"
+> +OUTER_IP_CLIENT="172.16.1.2"
+> +
+> +PPPOL2TP_DIR=$(mktemp -d /tmp/pppol2tp.XXXXXX)
+> +
+> +# shellcheck disable=SC2329
+> +cleanup() {
+> +	cleanup_all_ns
+> +	rm -rf "$PPPOL2TP_DIR"
 > +}
-
-This implicilty has the SMTC field as 0b000, which is correct for traps
-of SMCR_EL{1,2} due to SMEN, but wouldn't be right for other traps (e.g.
-traps of ZT0).
-
-If we only use this for traps of SMCR_EL{1,2}, that's ok, but I think
-it's worth a comment, and possibly a more specific name. Perhaps
-kvm_inject_nested_sme_smen_trap() for now.
-
-[...]
-
-> +static bool access_smcr_el2(struct kvm_vcpu *vcpu,
-> +			    struct sys_reg_params *p,
-> +			    const struct sys_reg_desc *r)
-> +{
-> +	unsigned int vq;
-> +	u64 smcr;
 > +
-> +	if (guest_hyp_sme_traps_enabled(vcpu)) {
-> +		kvm_inject_nested_sme_trap(vcpu);
-> +		return false;
-> +	}
+> +trap cleanup EXIT
 > +
-> +	if (!p->is_write) {
-> +		p->regval = __vcpu_sys_reg(vcpu, SMCR_EL2);
-> +		return true;
-> +	}
+> +require_command xl2tpd
+> +ppp_common_init
+> +modprobe -q l2tp_ppp
 > +
-> +	smcr = p->regval & ~SMCR_ELx_RES0;
-> +	if (!vcpu_has_fa64(vcpu))
-> +		smcr &= ~SMCR_ELx_FA64;
-> +	if (!vcpu_has_sme2(vcpu))
-> +		smcr &= ~SMCR_ELx_EZT0;
-> +
-> +	vq = SYS_FIELD_GET(SMCR_ELx, LEN, smcr) + 1;
-> +	vq = min(vq, vcpu_sme_max_vq(vcpu));
-> +	smcr &= ~SMCR_ELx_LEN_MASK;
-> +	smcr |= SYS_FIELD_PREP(SMCR_ELx, LEN, vq - 1);
+> +# Create the netkit pair
+> +ip -netns "$NS_CLIENT" link add "$NK_CLIENT" type netkit
+> +ip -netns "$NS_CLIENT" link set "$NK_SERVER" netns "$NS_SERVER"
+> +ip -netns "$NS_SERVER" link set "$NK_SERVER" up
+> +ip -netns "$NS_CLIENT" link set "$NK_CLIENT" up
+> +ip -netns "$NS_SERVER" address add dev "$NK_SERVER" "$OUTER_IP_SERVER" peer "$OUTER_IP_CLIENT"
+> +ip -netns "$NS_CLIENT" address add dev "$NK_CLIENT" "$OUTER_IP_CLIENT" peer "$OUTER_IP_SERVER"
 
-I'm not sure this sanitization is correct or necessary, and the same
-concern applies to ZCR_ELx.LEN.
+Is there a particular reason to create the test setup with a netkit pair
+instead of the more standard veth pairs?
 
-AFAICT, none of the values for the SMCR_ELx.LEN and ZCR_ELx.LEN fields
-are reserved or unallocated. Thus all the bits of those fields should be
-stateful, and a read should observe the last value written, regardless
-of the effective value of the field.
+Thanks,
+   Felix
 
-That means that the following at EL2 or vEL2 shouldn't produce a
-warning:
-		
-	int len_write, len_read;
-
-	for (len_write = 0; len_write < 16; len_write++) {
-		write_sysreg_s(len_write, SYS_SMCR_EL2);
-
-		len_read = read_sysreg_s(SYS_SMCR_EL2) & SMCR_ELx_LEN_MASK;
-		WARN_ON(len_read != len_write);
-	}
-
-Either what we're doing is wrong, or the architcture requires a
-clarification to say that values corresponding to unimplmented vector
-lengths are reserved.
-
-If those bit are always stateful, the the logic to sanitize the LEN
-field shouldn't live here, and that will need to happen when consuming
-the effective value.
-
-Mark.
