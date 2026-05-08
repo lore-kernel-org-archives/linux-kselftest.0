@@ -1,116 +1,165 @@
-Received: from mail-pl1-f196.google.com (mail-pl1-f196.google.com [209.85.214.196])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EAB23FBEAD
-	for <linux-kselftest@vger.kernel.org>; Fri,  8 May 2026 15:03:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A2C03F9F4D
+	for <linux-kselftest@vger.kernel.org>; Fri,  8 May 2026 15:03:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778252617; cv=none; b=bpif26F14m2edHCnxVCd6dwGG1R+/4KwLcyEpU6ofmIOtasHxJ5XlsWSB7MHtzvOyzoDlPkaOVyfaGoNiaQe9u7EZnzBB63wBdPiH+WGDQf2fo0vK4LJ/dZVhOpt4iRb9aevus+hD8E3xLqo18POf9bkRogReWne7vn7xv9Ur9Y=
+	t=1778252623; cv=none; b=g2ZetVEtImNTB+IhRe1dw5i64iX2jDVDl4i5bLvMR2SWQI3P3s6t7GEtYBeYCGMAk7RKxDZLRFA2D5c3AgnPaW3fwVfgszjAoxYlaLiLIOhl6AWCSVQH77nIGI7e5+LngDaoimposHHRzdXMfmsiljhpa9GsRnzqZ09BEofrJDc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778252617; c=relaxed/simple;
-	bh=t0Nlu+VexUsTkUu/gem9W65q4/pks24oKx+COgMx/io=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JFgvpRwHEFdtuW6za7vIHwZ7rmqI1wS9xEjPdC61bPnQOw0/f5T8oe2pHwnS5FGg3deAMp4byHDOAbv4hPpu20iiSJlAUqwNYzw0xWBUg3/o80hpG1mBXLo4I+2IgU21CgTrWUJ3acE2nnqBz6OGxXjfZiwPfHtLAQQcuNu5m+4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M1DV9bSP; arc=none smtp.client-ip=209.85.214.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1778252623; c=relaxed/simple;
+	bh=9Jr7X225ntyiXyFzcdBTfnRDfWaznp2nm4xcOiyEXNs=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=jkJwXtuNkPU3Fay+aqCwheihlH7Bu00hXQWj88tJAQL38BqKEKfv2lN6/qNOwUM5JTXMJY5T7lY5KASwsG7TLwxZShhQFFRpI9hDX3mNSj8Sr3LcwtzgGgUjRzLzSUXNFSLy8JxHt1BBpt+kUMhSYoQmqHrAOCsOYrdJu4tFzUc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ip1xIDxd; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M1DV9bSP"
-Received: by mail-pl1-f196.google.com with SMTP id d9443c01a7336-2ba928852a5so14542645ad.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 08 May 2026 08:03:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778252613; x=1778857413; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=v4XSckC+6HeNNAT2ObXLyFDVqOgPjF3vQM49fr0+IcA=;
-        b=M1DV9bSPdIpo1HCzS+chpKLRw9yZEaLHH4hWt/8vF7kwxIMdWiQ56TFDetp2fD3dHK
-         R0u+n+5f4iBWZtmqUudWXsg0H8PaVHkUHak4NyF4Yl/tD9W5Q83ulCRhidXVrpgwF1zy
-         OxnEv1kIXlzfCWOaLDPy/oadOs/Vnb/U/6AFDW6eOaaZEx/e9U2TiiVYVT0MOCDY7TlL
-         C5LkiulOrgIE+dbWiLgv+jXSyxNRbrdi7pje/7CMtnoub8nb+Fa/L6vaaBQZ9ozgoVvQ
-         9Ia6bUMPwXknOYTSdI9JX8ETBTps+Uue9bS/EYFde3ymahVl65AjQ81p4ufqD8Cn23Aq
-         FXjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778252613; x=1778857413;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=v4XSckC+6HeNNAT2ObXLyFDVqOgPjF3vQM49fr0+IcA=;
-        b=MKXYhvKDpzGIvpKL6zOpO1PGymBR87pMzDm97nUXUt4SUuRNlulCl9/dW/0KMTUOB0
-         cg/z2sljWxc32m88hIuHz5hryr1/V4wOhIDhE3QXptjtMfxkx9AUy6yzuVRvP6IF+VGY
-         2hD9/OnVNlD55OOsKe8A2OS7zE3iCYGIkmBfZCFnWNVNkhWft1sQNCGoIFIx9Dh2kAtW
-         YTWiieSMwSlPel8zLNpLRhYXo5e+g54+3O6NxYJR9tEi2nCkBIEWjnwWQSihOXEzGsqJ
-         cOv47vkE6Qfn1OPYtgapcIgiRJKCTHjKrHhnUTREqzFLJP202jxdoqQAEzDXtFDXtJeQ
-         09eA==
-X-Forwarded-Encrypted: i=1; AFNElJ8Or/KQKY8NaIycn/TYKRgD4NuCZjmDs92I0CCi3K0NcreY3LNI6QKkZ7zTQp0u6hsTa9YNRzRfCJIUBUDYqp8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz4egBbUZ2HfbcaGTVW0fTXcolyY+NlBxyDkqvcIpMB7rNi5r0l
-	8+RpY7+nPLYwD9YHf/RsMTA8M2PWnZVPRI1m7b6RZM2LXY/dIoaV9sUR
-X-Gm-Gg: Acq92OFjo4NpeSpqrvEfHTv4JZCiJm14O4affoPe/RxrKP50otmfhpZEWMv+Rt4yeHO
-	3qeQjhSTYyCvfBnr2lPYgAV5Fue58xMVQucfbwMe5uF9P8ZfKafsKWUGeP04oTkYAdvB9woTal/
-	zeo9dyGU4wZ+vUhjBhFv3ZuElvjNcSoiBOwQ38CQLFWDfR9d4jOdz0iVa8JhKIlm7dtIvHWnOi+
-	kUN9v0Ur8r2z6TJR4hVBAZTy1NhHwIQXSJFCm0ymmzaABflpJGyhwR0UIUYbYLcVTHdww072rAR
-	quoW2vdSEZYZ9OJIWowztyIbC/0GVuoR/n9NEbkvQrxd1XyUfoJRduapjAFcA9nwWG0hJvSTxfZ
-	0zPxWmcLPu2Glj2GkuAMBNQIAV5j3+LbF8VTt/50RYUgG4oNouu1lnUQlKLVB5SA5ioqC3I8HgB
-	l7
-X-Received: by 2002:a17:903:4b0d:b0:2b0:bed1:46f7 with SMTP id d9443c01a7336-2ba799d5f4dmr143685845ad.37.1778252613411;
-        Fri, 08 May 2026 08:03:33 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:4::])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2baf1ecc4bbsm24477685ad.84.2026.05.08.08.03.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 May 2026 08:03:32 -0700 (PDT)
-Date: Fri, 8 May 2026 08:03:32 -0700
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: Bobby Eshleman <bobbyeshleman@gmail.com>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Alex Shi <alexs@kernel.org>, Yanteng Si <si.yanteng@linux.dev>, 
-	Dongliang Mu <dzm91@hust.edu.cn>, Michael Chan <michael.chan@broadcom.com>, 
-	Pavan Chebbi <pavan.chebbi@broadcom.com>, Joshua Washington <joshwash@google.com>, 
-	Harshitha Ramamurthy <hramamurthy@google.com>, Saeed Mahameed <saeedm@nvidia.com>, 
-	Tariq Toukan <tariqt@nvidia.com>, Mark Bloch <mbloch@nvidia.com>, 
-	Leon Romanovsky <leon@kernel.org>, Alexander Duyck <alexanderduyck@fb.com>, kernel-team@meta.com, 
-	Daniel Borkmann <daniel@iogearbox.net>, Nikolay Aleksandrov <razor@blackwall.org>, 
-	Shuah Khan <shuah@kernel.org>, dw@davidwei.uk, mohsin.bashr@gmail.com, willemb@google.com, 
-	jiang.kun2@zte.com.cn, xu.xin16@zte.com.cn, wang.yaxin@zte.com.cn, 
-	netdev@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-rdma@vger.kernel.org, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Stanislav Fomichev <sdf@fomichev.me>, Mina Almasry <almasrymina@google.com>, 
-	Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v3 7/8] selftests: drv-net: add
- primary_rx_redirect support to NetDrvContEnv
-Message-ID: <af37O7TXJm9wPl1h@devvm7509.cco0.facebook.com>
-References: <20260507-tcp-dm-netkit-v3-0-52821445867c@meta.com>
- <20260507-tcp-dm-netkit-v3-7-52821445867c@meta.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ip1xIDxd"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1778252620;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=pTM5bDRFu2LnEWelZ4UVeTQriZB7mfNT46GLFzc2/xE=;
+	b=ip1xIDxdv5dIenGbBZpuGs4XDiHqHX9BAhrIjHVIe5+xQbWWnLR6ZBh7NskL/DxV/eMjfB
+	nfRKtv1DaLWqXZAH757RxjSqS6k3CYt30yVjiWTi7EC71F36B0wx6SHrz2VokKITkB8Fr6
+	NXiQk9FpWO3bsiNSKcIkj/8IfygvwhM=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-113-CspO-cBrOmeqIlR5CcKP1A-1; Fri,
+ 08 May 2026 11:03:31 -0400
+X-MC-Unique: CspO-cBrOmeqIlR5CcKP1A-1
+X-Mimecast-MFC-AGG-ID: CspO-cBrOmeqIlR5CcKP1A_1778252605
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id BB9FC19560B7;
+	Fri,  8 May 2026 15:03:24 +0000 (UTC)
+Received: from [192.168.1.153] (headnet01.pony-001.prod.iad2.dc.redhat.com [10.2.32.101])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D8224180075F;
+	Fri,  8 May 2026 15:03:17 +0000 (UTC)
+From: Albert Esteve <aesteve@redhat.com>
+Date: Fri, 08 May 2026 17:02:47 +0200
+Subject: [PATCH v9 3/4] drm: Suppress intentional warning backtraces in
+ scaling unit tests
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260507-tcp-dm-netkit-v3-7-52821445867c@meta.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20260508-kunit_add_support-v9-3-99df7aa880f6@redhat.com>
+References: <20260508-kunit_add_support-v9-0-99df7aa880f6@redhat.com>
+In-Reply-To: <20260508-kunit_add_support-v9-0-99df7aa880f6@redhat.com>
+To: Arnd Bergmann <arnd@arndb.de>, 
+ Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, 
+ Rae Moar <raemoar63@gmail.com>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+ Andrew Morton <akpm@linux-foundation.org>, Paul Walmsley <pjw@kernel.org>, 
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+ Alexandre Ghiti <alex@ghiti.fr>
+Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+ dri-devel@lists.freedesktop.org, workflows@vger.kernel.org, 
+ linux-riscv@lists.infradead.org, linux-doc@vger.kernel.org, 
+ peterz@infradead.org, Guenter Roeck <linux@roeck-us.net>, 
+ Linux Kernel Functional Testing <lkft@linaro.org>, 
+ =?utf-8?q?Ma=C3=ADra_Canal?= <mcanal@igalia.com>, 
+ Alessandro Carminati <acarmina@redhat.com>, 
+ Albert Esteve <aesteve@redhat.com>, Dan Carpenter <error27@gmail.com>, 
+ Simona Vetter <simona.vetter@ffwll.ch>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1778252571; l=3273;
+ i=aesteve@redhat.com; s=20260303; h=from:subject:message-id;
+ bh=OzxKDl7juzBnGFv8nRO4KYyX446iqYsOHsLTSHCA/XY=;
+ b=eRPZlXY0oZGNDAQpUv/i+XN1tRR4oFcuvNsNePj/TPFZTO4ljQZ5s0YOyA05Z0ONI4q4xTFKo
+ R+2fJodStnmDnC9kzZ4GrIUOUC3P+HSFidoOMOuCg2vOOBDrpbup0Ao
+X-Developer-Key: i=aesteve@redhat.com; a=ed25519;
+ pk=YSFz6sOHd2L45+Fr8DIvHTi6lSIjhLZ5T+rkxspJt1s=
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-On 05/07, Bobby Eshleman wrote:
-> From: Bobby Eshleman <bobbyeshleman@meta.com>
-> 
-> When sending from a namespace that has access to a netkit device with a
-> leased queue, the nk primary in the host namespace needs to redirect its
-> RX to the physical device. This patch adds that redirection bpf program
-> and teaches the harness to install it.
-> 
-> Add primary_rx_redirect=False parameter to NetDrvContEnv.__init__().
-> When enabled, _attach_primary_rx_redirect_bpf() attaches a new BPF TC
-> program (nk_primary_rx_redirect.bpf.c) to the primary (host-side) netkit
-> interface. The program redirects non-ICMPv6 IPv6 packets to the physical
-> NIC via bpf_redirect_neigh(), with the physical ifindex configured via
-> the .bss map. ICMPv6 is left on the host's netkit primary so IPv6
-> neighbor discovery still work locally.
-> 
-> Extract _find_bss_map_id() from _attach_bpf() into a reusable helper so
-> other BPF attachment methods can use it.
-> 
-> Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
+From: Guenter Roeck <linux@roeck-us.net>
 
-Acked-by: Stanislav Fomichev <sdf@fomichev.me>
+The drm_test_rect_calc_hscale and drm_test_rect_calc_vscale unit tests
+intentionally trigger warning backtraces by providing bad parameters to
+the tested functions. What is tested is the return value, not the existence
+of a warning backtrace. Suppress the backtraces to avoid clogging the
+kernel log and distraction from real problems. Additionally, the
+suppression API allows to actually ensure a warning was triggered,
+without parsing any kernel logs and keeping them clean.
+
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Acked-by: Dan Carpenter <dan.carpenter@linaro.org>
+Acked-by: Maíra Canal <mcanal@igalia.com>
+Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+Cc: David Airlie <airlied@gmail.com>
+Cc: Daniel Vetter <daniel@ffwll.ch>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Alessandro Carminati <acarmina@redhat.com>
+Acked-by: David Gow <david@davidgow.net>
+Signed-off-by: Albert Esteve <aesteve@redhat.com>
+---
+ drivers/gpu/drm/tests/drm_rect_test.c | 27 +++++++++++++++++++++++----
+ 1 file changed, 23 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/gpu/drm/tests/drm_rect_test.c b/drivers/gpu/drm/tests/drm_rect_test.c
+index 17e1f34b76101..809e73cb74498 100644
+--- a/drivers/gpu/drm/tests/drm_rect_test.c
++++ b/drivers/gpu/drm/tests/drm_rect_test.c
+@@ -407,10 +407,20 @@ KUNIT_ARRAY_PARAM(drm_rect_scale, drm_rect_scale_cases, drm_rect_scale_case_desc
+ static void drm_test_rect_calc_hscale(struct kunit *test)
+ {
+ 	const struct drm_rect_scale_case *params = test->param_value;
++	int expected_warnings = params->expected_scaling_factor == -EINVAL;
+ 	int scaling_factor;
+ 
+-	scaling_factor = drm_rect_calc_hscale(&params->src, &params->dst,
+-					      params->min_range, params->max_range);
++	/*
++	 * drm_rect_calc_hscale() generates a warning backtrace whenever bad
++	 * parameters are passed to it. This affects unit tests with -EINVAL
++	 * error code in expected_scaling_factor.
++	 */
++	kunit_warning_suppress(test) {
++		scaling_factor = drm_rect_calc_hscale(&params->src, &params->dst,
++						      params->min_range,
++						      params->max_range);
++		KUNIT_EXPECT_SUPPRESSED_WARNING_COUNT(test, expected_warnings);
++	}
+ 
+ 	KUNIT_EXPECT_EQ(test, scaling_factor, params->expected_scaling_factor);
+ }
+@@ -418,10 +428,19 @@ static void drm_test_rect_calc_hscale(struct kunit *test)
+ static void drm_test_rect_calc_vscale(struct kunit *test)
+ {
+ 	const struct drm_rect_scale_case *params = test->param_value;
++	int expected_warnings = params->expected_scaling_factor == -EINVAL;
+ 	int scaling_factor;
+ 
+-	scaling_factor = drm_rect_calc_vscale(&params->src, &params->dst,
+-					      params->min_range, params->max_range);
++	/*
++	 * drm_rect_calc_vscale() generates a warning backtrace whenever bad
++	 * parameters are passed to it. This affects unit tests with -EINVAL
++	 * error code in expected_scaling_factor.
++	 */
++	kunit_warning_suppress(test) {
++		scaling_factor = drm_rect_calc_vscale(&params->src, &params->dst,
++						      params->min_range, params->max_range);
++		KUNIT_EXPECT_SUPPRESSED_WARNING_COUNT(test, expected_warnings);
++	}
+ 
+ 	KUNIT_EXPECT_EQ(test, scaling_factor, params->expected_scaling_factor);
+ }
+
+-- 
+2.53.0
+
