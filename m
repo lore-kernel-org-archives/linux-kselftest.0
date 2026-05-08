@@ -1,94 +1,186 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 583A87261C;
-	Fri,  8 May 2026 03:34:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A59E1337B81;
+	Fri,  8 May 2026 04:21:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778211290; cv=none; b=MOYAyQOHrvxLpj3vMECBqpPQd3/q3Cx5UAws00cBiWRhyVgNjnnr8MbuqAEM6yFBkarPJCmAFqOXq0vJJRcDdLFzBkCog2m01btTe4skTRrJRhVb6rFmBn1pdwovJuz1mNufXzoP89rAUukQ5zXXbY+lrv4bnIhaoqxNxc9I9Fg=
+	t=1778214107; cv=none; b=heNjSTRFBCr/Q8fSiSNynDHIFRRZyuVQH3gzlfvXkTPi51UXaNZJjfuwAqu++nIJPjCorzuB62JZGRtSdvWohZd96XT5r2HE24bIeB9pNNruKTxJ/lYXGO9jlS7OSWmqJO5Fa4oLp2MptW4KTf9KJ68PrOCxAhqGJWbSitkQAAk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778211290; c=relaxed/simple;
-	bh=kSX2u1I3f0Tn1NlMiYtehd71oqmpsdrqM5KGOMu2Yp8=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ma97aaBwbE95vKawa0XaOAfsuhuFIw5xotk5ieONd5OpVoN5Nn44RK7AGfHG25chY9/3/t1p4Dsvbz3qXzOJqwZrzlQT8Zif+1q3icN6XFeQKij1+dDAJJHQQxb6VEcGA0QRwpRBdI1JXQFYiSRJug0sE1xpqUg9nzFXTMG72+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: da6372244a8e11f1aa26b74ffac11d73-20260508
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
-	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
-	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
-	HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME
-	IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_TRUSTED, SA_EXISTED
-	SN_TRUSTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS
-	CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO, GTI_C_BU
-	AMN_GOOD, ABX_MISS_RDNS
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:8ccf84f5-c22c-4b56-a741-74252e47ac63,IP:10,
-	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-	N:release,TS:5
-X-CID-INFO: VERSION:1.3.12,REQID:8ccf84f5-c22c-4b56-a741-74252e47ac63,IP:10,UR
-	L:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:5
-X-CID-META: VersionHash:e7bac3a,CLOUDID:79f0ebbbad2a746af007f2672fafc150,BulkI
-	D:26050811344413JNI6JL,BulkQuantity:0,Recheck:0,SF:17|19|38|66|78|102|127|
-	850|898,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk:nil
-	,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:
-	0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: da6372244a8e11f1aa26b74ffac11d73-20260508
-X-User: lihongfu@kylinos.cn
-Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
-	(envelope-from <lihongfu@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 1267940299; Fri, 08 May 2026 11:34:43 +0800
-From: Hongfu Li <lihongfu@kylinos.cn>
-To: longman@redhat.com,
-	chenridong@huaweicloud.com,
-	tj@kernel.org,
-	hannes@cmpxchg.org,
-	mkoutny@suse.com,
-	shuah@kernel.org
-Cc: cgroups@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Hongfu Li <lihongfu@kylinos.cn>
-Subject: [PATCH] selftests/cgroup: Fix incorrect variable check in online_cpus()
-Date: Fri,  8 May 2026 11:34:53 +0800
-Message-Id: <20260508033453.1425026-1-lihongfu@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1778214107; c=relaxed/simple;
+	bh=hZFFo2SGrx6LmiIKgUIUS7/uYs2bLO16WIcddipNSnU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=dCIRNS+PBp3muQu2NHGHhhzHNe3r0Gd1SnOVAGIQP64I3JiWQIvVn8W5Qs8jVV9dpoIT6Wtt22hSSVgn5m5uTvCHkImJRtCIBHHmlAPX85cRMEc3KyrsJLQHkf2axOBH6LEji0Dq1h5/EaIOY6gxPB4N0+wAFVePwS8Vaq80JpM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=M1fB2Jan; arc=none smtp.client-ip=91.218.175.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="M1fB2Jan"
+Message-ID: <63aa67fb-5c8b-42be-a38f-cd5a92ac528a@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1778214074;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=zpa4juc56fuOlDJ+f1Z6X2ImYQ7FBgx9urtCPnddnzE=;
+	b=M1fB2JannvLy6rdk7+faFulHOKCcMDSFbVqkZuduk7l9uJHeaO63dsszSYDzAO8e+00+vV
+	kfzTphFGpYIzouZoAvuiY2sIOG2zp6n3eYsXdDMbHjy4yG3nqR3IfRH9067gMRRar8fgHP
+	mi72rpwXbjh72yUkW8Ay9CHsytBRC9g=
+Date: Thu, 7 May 2026 21:21:09 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH] selftests/rdma: explicitly skip tests when required
+ modules are missing
+To: Yi Lai <yi1.lai@intel.com>, Zhu Yanjun <zyjzyj2000@gmail.com>,
+ Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, linux-rdma@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ yi1.lai@linux.intel.com, "yanjun.zhu@linux.dev" <yanjun.zhu@linux.dev>
+References: <20260507125106.3114167-1-yi1.lai@intel.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Zhu Yanjun <yanjun.zhu@linux.dev>
+In-Reply-To: <20260507125106.3114167-1-yi1.lai@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-"OFFLINE_CPUS" is a literal string that is always non-empty. It should
-be "$OFFLINE_CPUS" to check the variable's value instead.
 
-Signed-off-by: Hongfu Li <lihongfu@kylinos.cn>
----
- tools/testing/selftests/cgroup/test_cpuset_prs.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+在 2026/5/7 5:51, Yi Lai 写道:
+> Currently, the rdma rxe selftests fail with an exit code of 1 when
+> required kernel modules are not present. This causes spurious failures
+> in environments where these modules might not be compiled or available.
+>
+> Include the standard kselftest 'ktap_helpers.sh' and replace the
+> hardcoded error exits with '$KSFT_SKIP'. This ensures the tests are
+> properly marked as skipped rather than failed.
+tools/testing/selftests/rdma/rxe_rping_between_netns.sh:30:modprobe 
+rdma_rxe || { echo "Failed to load rdma_rxe"; exit 1; }
+tools/testing/selftests/rdma/rxe_socket_with_netns.sh:29: modprobe "$m" 
+|| { echo "Error: Failed to load $m"; exit 1; }
 
-diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-index a56f4153c64d..df89ddfa073f 100755
---- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-+++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-@@ -617,7 +617,7 @@ set_ctrl_state_noerr()
- 
- online_cpus()
- {
--	[[ -n "OFFLINE_CPUS" ]] && {
-+	[[ -n "$OFFLINE_CPUS" ]] && {
- 		for C in $OFFLINE_CPUS
- 		do
- 			write_cpu_online ${C}=1
+In the above script files, if modprobe fails, exit 1;
+
+I am wondering if we need to replace error code 1 with $KSFT_SKIP.
+
+Except the above, I am fine with this commit.
+
+Reviewed-by: Zhu Yanjun <yanjun.zhu@linux.dev>
+
+Zhu Yanjun
+
+>
+> Signed-off-by: Yi Lai <yi1.lai@intel.com>
+> ---
+>   tools/testing/selftests/rdma/rxe_ipv6.sh                   | 6 ++++--
+>   tools/testing/selftests/rdma/rxe_rping_between_netns.sh    | 7 +++++++
+>   tools/testing/selftests/rdma/rxe_socket_with_netns.sh      | 6 ++++++
+>   tools/testing/selftests/rdma/rxe_test_NETDEV_UNREGISTER.sh | 6 ++++--
+>   4 files changed, 21 insertions(+), 4 deletions(-)
+>
+> diff --git a/tools/testing/selftests/rdma/rxe_ipv6.sh b/tools/testing/selftests/rdma/rxe_ipv6.sh
+> index b7059bfd6d7c..32dad687a044 100755
+> --- a/tools/testing/selftests/rdma/rxe_ipv6.sh
+> +++ b/tools/testing/selftests/rdma/rxe_ipv6.sh
+> @@ -8,6 +8,8 @@ RXE_NAME="rxe6"
+>   PORT=4791
+>   IP6_ADDR="2001:db8::1/64"
+>   
+> +source "$(dirname "$0")/../kselftest/ktap_helpers.sh"
+> +
+>   exec > /dev/null
+>   
+>   # Cleanup function to run on exit (even on failure)
+> @@ -21,8 +23,8 @@ trap cleanup EXIT
+>   # 1. Prerequisites check
+>   for mod in tun veth rdma_rxe; do
+>       if ! modinfo "$mod" >/dev/null 2>&1; then
+> -        echo "Error: Kernel module '$mod' not found."
+> -        exit 1
+> +        echo "SKIP: Kernel module '$mod' not found." >&2
+> +        exit $KSFT_SKIP
+>       fi
+>   done
+>   
+> diff --git a/tools/testing/selftests/rdma/rxe_rping_between_netns.sh b/tools/testing/selftests/rdma/rxe_rping_between_netns.sh
+> index e5b876f58c6e..e7554fbb8951 100755
+> --- a/tools/testing/selftests/rdma/rxe_rping_between_netns.sh
+> +++ b/tools/testing/selftests/rdma/rxe_rping_between_netns.sh
+> @@ -8,6 +8,8 @@ IP_A="1.1.1.1"
+>   IP_B="1.1.1.2"
+>   PORT=4791
+>   
+> +source "$(dirname "$0")/../kselftest/ktap_helpers.sh"
+> +
+>   exec > /dev/null
+>   
+>   # --- Cleanup Routine ---
+> @@ -27,6 +29,11 @@ if [[ $EUID -ne 0 ]]; then
+>      exit 1
+>   fi
+>   
+> +if ! modinfo rdma_rxe >/dev/null 2>&1; then
+> +    echo "SKIP: Kernel module 'rdma_rxe' not found." >&2
+> +    exit $KSFT_SKIP
+> +fi
+> +
+>   modprobe rdma_rxe || { echo "Failed to load rdma_rxe"; exit 1; }
+>   
+>   # --- Setup Network Topology ---
+> diff --git a/tools/testing/selftests/rdma/rxe_socket_with_netns.sh b/tools/testing/selftests/rdma/rxe_socket_with_netns.sh
+> index 002e5098f751..9478657c02c1 100755
+> --- a/tools/testing/selftests/rdma/rxe_socket_with_netns.sh
+> +++ b/tools/testing/selftests/rdma/rxe_socket_with_netns.sh
+> @@ -4,6 +4,8 @@
+>   PORT=4791
+>   MODS=("tun" "rdma_rxe")
+>   
+> +source "$(dirname "$0")/../kselftest/ktap_helpers.sh"
+> +
+>   exec > /dev/null
+>   
+>   # --- Helper: Cleanup Routine ---
+> @@ -26,6 +28,10 @@ if [[ $EUID -ne 0 ]]; then
+>   fi
+>   
+>   for m in "${MODS[@]}"; do
+> +    if ! modinfo "$m" >/dev/null 2>&1; then
+> +        echo "SKIP: Kernel module '$m' not found." >&2
+> +        exit $KSFT_SKIP
+> +    fi
+>       modprobe "$m" || { echo "Error: Failed to load $m"; exit 1; }
+>   done
+>   
+> diff --git a/tools/testing/selftests/rdma/rxe_test_NETDEV_UNREGISTER.sh b/tools/testing/selftests/rdma/rxe_test_NETDEV_UNREGISTER.sh
+> index 021ca451499d..8c18cea7535c 100755
+> --- a/tools/testing/selftests/rdma/rxe_test_NETDEV_UNREGISTER.sh
+> +++ b/tools/testing/selftests/rdma/rxe_test_NETDEV_UNREGISTER.sh
+> @@ -5,6 +5,8 @@ DEV_NAME="tun0"
+>   RXE_NAME="rxe0"
+>   RDMA_PORT=4791
+>   
+> +source "$(dirname "$0")/../kselftest/ktap_helpers.sh"
+> +
+>   exec > /dev/null
+>   
+>   # --- Cleanup Routine ---
+> @@ -19,8 +21,8 @@ trap cleanup EXIT
+>   
+>   # 1. Dependency Check
+>   if ! modinfo rdma_rxe >/dev/null 2>&1; then
+> -    echo "Error: rdma_rxe module not found."
+> -    exit 1
+> +    echo "SKIP: rdma_rxe module not found." >&2
+> +    exit $KSFT_SKIP
+>   fi
+>   
+>   modprobe rdma_rxe
+
 -- 
-2.25.1
+Best Regards,
+Yanjun.Zhu
 
