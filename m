@@ -1,34 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DD38410D36;
-	Fri,  8 May 2026 17:40:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39B6A413236;
+	Fri,  8 May 2026 17:40:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778262025; cv=none; b=i0HAS7EoH9XOfh3DTP6TqLK9NtETcZUmCu/BpcDgYzbPS/IskzSc6YE0U6hayur4lfI0dWgG7JdXt3/8JiQz1nehffdxVn2rB/3TbARPHcwVsHxrb3yGCuM/6eT1L7BQf1+veaKm+xdfx5gqOZ2vncriShq1QW15x7S/7x+ERRk=
+	t=1778262040; cv=none; b=nFMeogymOmOfGuA8yX21vGsapaSptc6+r7fScfBz06w4v4jANE5NtMOJK26URGdVsFWd6+J9DTdbBUs22cCqVMb7VeAn6pGxs+WU45d5tIvz/hYWiaTDG4XCAS3eh4tn9fPO2/tMA/VGcucATj21ws1qrQCP8GLxmBIVV6PN+hE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778262025; c=relaxed/simple;
-	bh=djDWZ/MHnIHGN/6+CsSoHzZgeOd2vJrN4iKTIdki/ws=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=OSoT2c2/6OCl1NPNRXk4pV3qYtdPh5DJc+w70ilTAritV9s7yViYgP7/FHTYruVAQoqjqQp9yIEMH2Ek05h7bdLJBf1N+AzXfse71ZwUloMrWetQlctkq9Y/EhRcLIj0PXSefJQzfgdnnor7IazP9VqMCN/Q0mxDf5wc4oDTqNI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T6fEarwk; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778262040; c=relaxed/simple;
+	bh=JEJPS1+boQOCZ53oINqHyPXexdvauP9zSb2cgQldesM=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=eN5e/jq281IHHS0Xuk0Z1AV/n3ZP5J0GfI791Xnr1JFIZux4rtP73lZ9Xvmz8jIIBYycBrlBOGy6CFSq7Afcge7ECe2dVVEYrqEzadYcqkajPTOhuDKOYdva0f+0On/z0Y4/6YcWvN2nCLFyjpRaRQ4pVinfsMwiuMXXascM/rQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CaAuDJL4; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T6fEarwk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37BF0C2BCB0;
-	Fri,  8 May 2026 17:40:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CaAuDJL4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E48D9C2BCB0;
+	Fri,  8 May 2026 17:40:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778262025;
-	bh=djDWZ/MHnIHGN/6+CsSoHzZgeOd2vJrN4iKTIdki/ws=;
-	h=From:Subject:Date:To:Cc:From;
-	b=T6fEarwktXiptA8Kiz9sOAKykMvRos9O7h36N6zNHZI8c6lir6knidIYHkkxNSfDX
-	 9vSl+jKtOOOXNMg6YgrUQwQNmipNBzZzPQilnWvB5L0O+gJtEuh6QLKmVNZTS5B3Bp
-	 KE3Ms2n1ZUtUIEi8wd2w1rclCzdh2pZJNt1U4QfPjbbkIszBm5wxRTXwG1Y/SvyA6n
-	 HClERfV5WO89YUZCYErGROHwjscJLTn2JTNqbxDMlUi9tiu/M2dYKhoEE/qkWc42+Q
-	 1CQ3Vz3H33LAP5tSFx7dfHxnAWk1EU3Ps0s+hs58D73i64zZZKTBrLLX3LXiQ+QIyC
-	 Nznq0nqmXBcrg==
+	s=k20201202; t=1778262035;
+	bh=JEJPS1+boQOCZ53oINqHyPXexdvauP9zSb2cgQldesM=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=CaAuDJL4Fkxkmhwkcrw5a0fb+rhxCsjt9ropvf0UQWrACe3yGt+JBAYU3bj15EBIm
+	 WEUg9FaXUgammdTkHTaPR805bM7wzMD55evKzXIKdFTE6K6Li6mObKBZJzcjQup6zW
+	 Z35E1iRQ1wGds5Vgmq7KqkYj1g7P/7SNGgHfErf2BaZGKmoVZVWQQ+JYM+ZesvX2Ga
+	 CDQ/9bQQk4Gs6QQKso0lgQ7vFuy6AUHuN02jlrQEolIy/4ZFtK1C7P6ytCLO15anek
+	 OlmGfIXAVZi9uW01UagtRDmOKbgcJwarhpRXGjKaIBGmw+pqZP2bmvIHjtjJq0R1iO
+	 rVpqTQILabIJA==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Subject: [PATCH net-next 0/8] mptcp: pm: in-kernel: increase limits
-Date: Fri, 08 May 2026 17:40:45 +0200
-Message-Id: <20260508-net-next-mptcp-pm-inc-limits-v1-0-c84e3fdf9b6a@kernel.org>
+Date: Fri, 08 May 2026 17:40:50 +0200
+Subject: [PATCH net-next 5/8] selftests: mptcp: join: allow changing ifaces
+ nr per test
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -37,10 +38,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/zWMQQrCMBBFr1Jm7cAYTCleRVy0cWqnNDFkRimU3
- t2ouPiLx+e9DZSLsMK52aDwS1QeqcLx0ECY+nRnlFtlcORa8tRhYqtbDWO2kDFHlBRwkSimOHT
- O96MnPhFBTeTCo6zf/AX+Jlx/jz6HmYN96rDvb1ZCykiKAAAA
-X-Change-ID: 20260508-net-next-mptcp-pm-inc-limits-b825af50e400
+Message-Id: <20260508-net-next-mptcp-pm-inc-limits-v1-5-c84e3fdf9b6a@kernel.org>
+References: <20260508-net-next-mptcp-pm-inc-limits-v1-0-c84e3fdf9b6a@kernel.org>
+In-Reply-To: <20260508-net-next-mptcp-pm-inc-limits-v1-0-c84e3fdf9b6a@kernel.org>
 To: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, 
  "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
  Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
@@ -49,55 +49,71 @@ Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev,
  linux-kernel@vger.kernel.org, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
  Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1912; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=djDWZ/MHnIHGN/6+CsSoHzZgeOd2vJrN4iKTIdki/ws=;
- b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDL/KTAc3ZQR8Opv4+2whcf3f5ArEYvfWSvyZtH/kN1zz
- 3+5OyeHtaOUhUGMi0FWTJFFui0yf+bzKt4SLz8LmDmsTCBDGLg4BWAiNz8x/NMr2Lyezd3Q6FWr
- /eF1geyTLNp7Gi6m1TVVSz3zPGvNksXwV2JfPOf/As+Jiyu0t+VVcnmmTL7zjD9wGpuImowk76t
- 37AA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2052; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=JEJPS1+boQOCZ53oINqHyPXexdvauP9zSb2cgQldesM=;
+ b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDL/KTCr8y5e/WBr6u4ZC463J85Y63q5dltXVVnQ1KO5J
+ SFSB7fkd5SyMIhxMciKKbJIt0Xmz3xexVvi5WcBM4eVCWQIAxenAEzkGxsjw5TYRI+Lzj7bGhMF
+ FvhIpj5/tuGSep+KBWv/Tr5dqs9KZRj+1z9cU64hLjMr7J2E7d2I9L70k4Jvy4s337uYsftyzKd
+ JfAA=
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-Allow switching from 8 to 64 for the maximum number of subflows and
-accepted ADD_ADDR, and from 8 to 255 for the number of MPTCP endpoints.
+By default, 4 network interfaces are created per subtest in a dedicated
+net namespace. Each netns has a dedicated pair of v4 and v6 addresses.
+Future tests will need more.
 
-The previous limit of 8 subflows makes sense in most cases. Using more
-subflows will very likely *not* improve the situation, and could even
-decrease the performances. But there are no technical limitations nor
-performance impact to raise this limit, so let's do it: this will allow
-people with very specific use-cases, and researchers to easily create
-more subflows, and measure the performance impact by themselves.
+Simply always creating more network interfaces per test will increase
+the execution time for all other tests, for no other benefits. So now it
+is possible to change this number only when needed, by setting ifaces_nr
+when calling 'reset' and 'init_shapers', e.g.
 
-- Patches 1-2: increase subflows and accepted ADD_ADDR limits.
+  ifaces_nr=8 reset "Subtest title"
+  ifaces_nr=8 init_shapers
 
-- Patches 3-4: increase endpoints limit.
+Note that it might also be interesting to decrease the default value to
+2 to reduce the setup time, especially when a debug kernel config is
+being used.
 
-- Patches 5-7: validate the new limits: 64 subflows, 255 endpoints.
-
-- Patch 8: selftests: use send()/recv() instead of sendto()/recvfrom().
-
+Reviewed-by: Mat Martineau <martineau@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
-Matthieu Baerts (NGI0) (8):
-      mptcp: pm: in-kernel: explicitly limit batches to array size
-      mptcp: pm: in-kernel: increase all limits to 64
-      mptcp: pm: kernel: allow flushing more than 8 endpoints
-      mptcp: pm: in-kernel: increase endpoints limit
-      selftests: mptcp: join: allow changing ifaces nr per test
-      selftests: mptcp: join: validate 8x8 subflows
-      selftests: mptcp: pm: validate new limits
-      selftests: mptcp: pm: use simpler send/recv forms
-
- net/mptcp/pm_kernel.c                           | 77 +++++++++++++++++--------
- tools/testing/selftests/net/mptcp/mptcp_join.sh | 33 ++++++++++-
- tools/testing/selftests/net/mptcp/pm_netlink.sh | 56 +++++++++++-------
- tools/testing/selftests/net/mptcp/pm_nl_ctl.c   |  8 +--
- 4 files changed, 121 insertions(+), 53 deletions(-)
+To: Shuah Khan <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org
 ---
-base-commit: 6a4c4656b0d2d4056a1f0c35442db4e8a5cf8021
-change-id: 20260508-net-next-mptcp-pm-inc-limits-b825af50e400
+ tools/testing/selftests/net/mptcp/mptcp_join.sh | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Best regards,
---  
-Matthieu Baerts (NGI0) <matttbe@kernel.org>
+diff --git a/tools/testing/selftests/net/mptcp/mptcp_join.sh b/tools/testing/selftests/net/mptcp/mptcp_join.sh
+index beec41f6662a..28da9df797ae 100755
+--- a/tools/testing/selftests/net/mptcp/mptcp_join.sh
++++ b/tools/testing/selftests/net/mptcp/mptcp_join.sh
+@@ -63,6 +63,7 @@ unset fastclose
+ unset fullmesh
+ unset speed
+ unset bind_addr
++unset ifaces_nr
+ unset join_syn_rej
+ unset join_csum_ns1
+ unset join_csum_ns2
+@@ -146,7 +147,7 @@ init_partial()
+ 	# ns1eth4    ns2eth4
+ 
+ 	local i
+-	for i in $(seq 1 4); do
++	for i in $(seq 1 "${ifaces_nr:-4}"); do
+ 		ip link add ns1eth$i netns "$ns1" type veth peer name ns2eth$i netns "$ns2"
+ 		ip -net "$ns1" addr add 10.0.$i.1/24 dev ns1eth$i
+ 		ip -net "$ns1" addr add dead:beef:$i::1/64 dev ns1eth$i nodad
+@@ -165,7 +166,7 @@ init_partial()
+ init_shapers()
+ {
+ 	local i
+-	for i in $(seq 1 4); do
++	for i in $(seq 1 "${ifaces_nr:-4}"); do
+ 		tc -n $ns1 qdisc add dev ns1eth$i root netem rate 20mbit delay 1ms
+ 		tc -n $ns2 qdisc add dev ns2eth$i root netem rate 20mbit delay 1ms
+ 	done
+
+-- 
+2.53.0
 
