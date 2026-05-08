@@ -1,119 +1,94 @@
-Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 380312367D9;
-	Fri,  8 May 2026 03:23:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 583A87261C;
+	Fri,  8 May 2026 03:34:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778210601; cv=none; b=a2SQMCNHGufRZQT/Q2HSmU2tHqLnH72tPQEEoaRPT+aFuk+SN6fgD5IaH4UH341FQ35XR3murXP0o2Szgt7LBDVZ9ZMaezeNWwE6o0E69yYpDk3xU+TZCM5IIKbI70Jlzu6WL7idzI5L1XEwnNchHVF4mB8YpkijD9SGiNlhPbA=
+	t=1778211290; cv=none; b=MOYAyQOHrvxLpj3vMECBqpPQd3/q3Cx5UAws00cBiWRhyVgNjnnr8MbuqAEM6yFBkarPJCmAFqOXq0vJJRcDdLFzBkCog2m01btTe4skTRrJRhVb6rFmBn1pdwovJuz1mNufXzoP89rAUukQ5zXXbY+lrv4bnIhaoqxNxc9I9Fg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778210601; c=relaxed/simple;
-	bh=Eh/FGNLHBEzDwfvjLfBu7vuOLl6EgBouX/FSElG8v8c=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=KL1Al9/Tc3PEvlTWYw55peN+/iT7apyVeePJH6o0v8HPG6R3LGYkL8urY+RsN152TokHbuuCldS+LIT9yzUcgyZ++LMwHFFCK8tnpL77hn0TpqIqxWUELQH034TEoFn9wZSvMEjSiSDBpNDxVzhUOMw2W2s3Evlr9EZLICfgTJA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=aLNfjoRb; arc=none smtp.client-ip=95.215.58.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="aLNfjoRb"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1778210588;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=wamRUvxjWlqEsV1JMZy9Va3V7zbfvaQwt51lgTFp7hg=;
-	b=aLNfjoRbLy/9OdKerp4shVKvFDT3cB579XDdW6LZGs+NefsYE5jd7oumC3mDsweRauB5lj
-	LoQ6mI57hKDtlXBt292fCUa1VEOR8cLHq3qrHr/xXvhszjg8JjvjuX01NI+nF9lUor63dp
-	q+5thdb6fjyQQVBoHkEUuV34QCAJKXs=
-From: Lance Yang <lance.yang@linux.dev>
-To: richard.weiyang@gmail.com,
-	ziy@nvidia.com,
-	akpm@linux-foundation.org
-Cc: david@kernel.org,
-	willy@infradead.org,
-	songliubraving@fb.com,
-	clm@fb.com,
-	dsterba@suse.com,
-	viro@zeniv.linux.org.uk,
-	brauner@kernel.org,
-	jack@suse.cz,
-	ljs@kernel.org,
-	baolin.wang@linux.alibaba.com,
-	Liam.Howlett@oracle.com,
-	npache@redhat.com,
-	ryan.roberts@arm.com,
-	dev.jain@arm.com,
-	baohua@kernel.org,
-	lance.yang@linux.dev,
-	vbabka@kernel.org,
-	rppt@kernel.org,
-	surenb@google.com,
-	mhocko@suse.com,
-	shuah@kernel.org,
-	linux-btrfs@vger.kernel.org,
+	s=arc-20240116; t=1778211290; c=relaxed/simple;
+	bh=kSX2u1I3f0Tn1NlMiYtehd71oqmpsdrqM5KGOMu2Yp8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ma97aaBwbE95vKawa0XaOAfsuhuFIw5xotk5ieONd5OpVoN5Nn44RK7AGfHG25chY9/3/t1p4Dsvbz3qXzOJqwZrzlQT8Zif+1q3icN6XFeQKij1+dDAJJHQQxb6VEcGA0QRwpRBdI1JXQFYiSRJug0sE1xpqUg9nzFXTMG72+0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: da6372244a8e11f1aa26b74ffac11d73-20260508
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
+	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
+	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
+	HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME
+	IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_TRUSTED, SA_EXISTED
+	SN_TRUSTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS
+	CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO, GTI_C_BU
+	AMN_GOOD, ABX_MISS_RDNS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.12,REQID:8ccf84f5-c22c-4b56-a741-74252e47ac63,IP:10,
+	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+	N:release,TS:5
+X-CID-INFO: VERSION:1.3.12,REQID:8ccf84f5-c22c-4b56-a741-74252e47ac63,IP:10,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:5
+X-CID-META: VersionHash:e7bac3a,CLOUDID:79f0ebbbad2a746af007f2672fafc150,BulkI
+	D:26050811344413JNI6JL,BulkQuantity:0,Recheck:0,SF:17|19|38|66|78|102|127|
+	850|898,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk:nil
+	,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:
+	0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: da6372244a8e11f1aa26b74ffac11d73-20260508
+X-User: lihongfu@kylinos.cn
+Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
+	(envelope-from <lihongfu@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 1267940299; Fri, 08 May 2026 11:34:43 +0800
+From: Hongfu Li <lihongfu@kylinos.cn>
+To: longman@redhat.com,
+	chenridong@huaweicloud.com,
+	tj@kernel.org,
+	hannes@cmpxchg.org,
+	mkoutny@suse.com,
+	shuah@kernel.org
+Cc: cgroups@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 05/14] mm: remove READ_ONLY_THP_FOR_FS Kconfig option
-Date: Fri,  8 May 2026 11:22:53 +0800
-Message-Id: <20260508032253.1659-1-lance.yang@linux.dev>
-In-Reply-To: <20260508025239.ooz5kc5a3n372ebb@master>
-References: <20260508025239.ooz5kc5a3n372ebb@master>
+	Hongfu Li <lihongfu@kylinos.cn>
+Subject: [PATCH] selftests/cgroup: Fix incorrect variable check in online_cpus()
+Date: Fri,  8 May 2026 11:34:53 +0800
+Message-Id: <20260508033453.1425026-1-lihongfu@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
+"OFFLINE_CPUS" is a literal string that is always non-empty. It should
+be "$OFFLINE_CPUS" to check the variable's value instead.
 
-On Fri, May 08, 2026 at 02:52:39AM +0000, Wei Yang wrote:
->On Wed, Apr 29, 2026 at 11:35:28AM -0400, Zi Yan wrote:
->>After removing READ_ONLY_THP_FOR_FS check in file_thp_enabled(),
->>khugepaged and MADV_COLLAPSE can run on FSes with PMD THP pagecache
->>support even without READ_ONLY_THP_FOR_FS enabled. Remove the Kconfig first
->>so that no one can use READ_ONLY_THP_FOR_FS as upcoming commits remove
->>mapping->nr_thps, which its safe guard mechanism relies on.
->>
->>Signed-off-by: Zi Yan <ziy@nvidia.com>
->>Reviewed-by: Lorenzo Stoakes (Oracle) <ljs@kernel.org>
->>Acked-by: David Hildenbrand (Arm) <david@kernel.org>
->>Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
->>---
->> mm/Kconfig | 11 -----------
->> 1 file changed, 11 deletions(-)
->>
->>diff --git a/mm/Kconfig b/mm/Kconfig
->>index e221fa1dc54d0..27dc5b0139ba6 100644
->>--- a/mm/Kconfig
->>+++ b/mm/Kconfig
->>@@ -936,17 +936,6 @@ config THP_SWAP
->> 
->> 	  For selection by architectures with reasonable THP sizes.
->> 
->>-config READ_ONLY_THP_FOR_FS
->>-	bool "Read-only THP for filesystems (EXPERIMENTAL)"
->>-	depends on TRANSPARENT_HUGEPAGE
->>-
->>-	help
->>-	  Allow khugepaged to put read-only file-backed pages in THP.
->>-
->>-	  This is marked experimental because it is a new feature. Write
->>-	  support of file THPs will be developed in the next few release
->>-	  cycles.
->>-
->
->Hi,
->
->I see hugepage_enabled() in khugepaged.c still use READ_ONLY_THP_FOR_FS.
->
+Signed-off-by: Hongfu Li <lihongfu@kylinos.cn>
+---
+ tools/testing/selftests/cgroup/test_cpuset_prs.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Yes, I noticed that[1] as well. Maybe it was dropped by accident :)
+diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+index a56f4153c64d..df89ddfa073f 100755
+--- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
++++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+@@ -617,7 +617,7 @@ set_ctrl_state_noerr()
+ 
+ online_cpus()
+ {
+-	[[ -n "OFFLINE_CPUS" ]] && {
++	[[ -n "$OFFLINE_CPUS" ]] && {
+ 		for C in $OFFLINE_CPUS
+ 		do
+ 			write_cpu_online ${C}=1
+-- 
+2.25.1
 
-[1] https://lore.kernel.org/linux-mm/20260507044938.12529-1-lance.yang@linux.dev/
