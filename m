@@ -1,112 +1,155 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63D19421EEB;
-	Fri,  8 May 2026 17:40:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2D3D322C6D
+	for <linux-kselftest@vger.kernel.org>; Fri,  8 May 2026 17:40:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778262045; cv=none; b=KX8LWU41VCn8Qw6HDyw9CeVzm+hCq2N4fD0+TiXbTlDplu5r8m2yT3YPCHWIOMy9w05OYfxg4VWxSZZNGEzsfvtgDPNJAAUqZTjklZF31KIs5aWgAk++6C8XTcT20ZJxavqBwcHIIuXpH5fPfbKDrer8pgrOEvtDtjsLYV3Fil0=
+	t=1778262059; cv=none; b=cOochPnHg7JbKb9XqAEQVCy+0Z66s7RZawRcWM5f+6YvoFnrSncYqhfJv0ChPiEKaFdfhgz3xdCVAWw6J5XkdSejMh6JVaI4O1lvRI9YgQoNGXB6nnTFxi5Z3dkomUiDhuOVrGswVldTVb5qQIciilONxtssqza8XbcMBvEWnzM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778262045; c=relaxed/simple;
-	bh=325C5AQXZLCkra1M3X28PDkJPHJO5DOfdGSOM4n3fqI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=QZw4YAq1foBMnChiQIOzR2u2cg070PwV9xor7szHsavajiazM9cjyu5B6hYXYihbwegjIFtd1IOc2y9brTXwOHUppRXB4mAuxa1ROKTaRdakr+w+s0OpoHBspO51kbfWVhQBkDHE2hD9hxKfR6y9TcbQZJn3k72F0rRzP7edkbc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RxsXy9OU; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778262059; c=relaxed/simple;
+	bh=zYlTeDh9G9IT4nS+zWqxNxxmSss2n8WYffkvXEx9Akw=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=CDDhpzVqDy/Csol29cWTEH3NKWbb+CLqor3Fas8i5WhtXuIMF3lCb904OvSFryq/jircYgExzM+f92mEf6k/sXDNJdiPmpGpcjJmuTFdo746sPhUn1TEMVV1/fgtlQrZJZwu6KC0o1stoJdiFwE+TOw9XxMu8rY4KW2HE7wexBo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=XdMv1nBY; arc=none smtp.client-ip=209.85.210.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RxsXy9OU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07D9CC2BCB0;
-	Fri,  8 May 2026 17:40:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778262043;
-	bh=325C5AQXZLCkra1M3X28PDkJPHJO5DOfdGSOM4n3fqI=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=RxsXy9OUY3PKH34jfATIN07hmB8BvAvUgeS6Ipi/VG+8jKX/iiNOh6hMXAUJcU4v/
-	 344KFqM50FSM0UuypiQYqhhiTze2NXoSTEKMs2qUcCWI+SRTd85vQijx1q3cf2KNGT
-	 qXa/cRD01lt48m3LDeeEBgxBe4KpehrvUtLfq/Xk4/Eiu9lWyxh0pFYqDSOP2Y8lMm
-	 kxQ0eathffirhwC+qb24dBvSc4/1Ot+Ew2GVOKc7RWrd07W+EEuCGbdoqfjIYWaUDm
-	 n9W1//nhtj3pKCZPnPys8/CrpYMXykilidHEk7LyLYsYhbVvPksHh7lkyTcFpgt0tQ
-	 +7JHB1Fq4Z7SA==
-From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Fri, 08 May 2026 17:40:53 +0200
-Subject: [PATCH net-next 8/8] selftests: mptcp: pm: use simpler send/recv
- forms
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="XdMv1nBY"
+Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-82f7bec24fdso1455552b3a.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 08 May 2026 10:40:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1778262057; x=1778866857; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=uhr4BNU/ilo4uYM728zx4k0/Id92bF2OOCtFb+maHuk=;
+        b=XdMv1nBYootU71I8CC7idKoT/q4s58ElcQcNrrSb8qo3Lm1TbCwJMn1iT0rT6UhqTi
+         00TqgaGCcfGiiuy5Iq14bMrIc7PAd8gDBc83/luLvScZobTZQlQ7GYukU0Z4Egi3z5Pm
+         hsd5OTUodnJI/xDf+5O9A0yA322l+MmCQnnbdgEVb/0lurgQ1I4dYlZrf7TnjizCi8rC
+         5ffGcnqRAuV1I38RGHEU6GegmWCuql/dqgZA8ypovvpIC26qd2iaxhgKtZaPGlgJVHSy
+         2JJfk9ynavCkyodLfDGapmewkFVtD9eszEkVbKXy3jwo+HzgkWQzTTYB6B9ghlAXatwS
+         S48A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778262057; x=1778866857;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uhr4BNU/ilo4uYM728zx4k0/Id92bF2OOCtFb+maHuk=;
+        b=PDlYNYfPqfJ0dchnOTswvR8BgdEBPbSSdK23CChuXxtslXlqaXWXMdYARjduI70W7A
+         uGOelXYDzj7utdXQjSdpZY1T0i6J8y3oxz5yeW1b1tU2pNkN2N/o2SWJZj/ubQD3htnW
+         b/in/f1hKubbPatEaE85Ik76oyh39SR423bCkhyPKHYy+Ows82iDwalegIJnvDCR7Xt6
+         YdESx1bkb2y7hQ6wDAQEYL4CEaBK3UnuDQCUlJH9JmP6btu6hWhvbb9VN74AuJ+FnBId
+         ylPW4f1vYpFohIxgXYNFWCtpg2ngQZW9xKF0MCrHGzgfh+F0aL9H64hoNFXou9ob2phH
+         vYQA==
+X-Forwarded-Encrypted: i=1; AFNElJ/snSFqoWfh7LYcsi6nxjpWUhah9i4PMy296Yp2gjgC1SmtWE5YzImGBR4uVJ4eR5WWs9AKJncnzuQfOuTJqGk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxb9bkGr+ngaxZaoDUuYb9H8c3v8sjJu8kHCFx/QqNNaAa0az/h
+	fieCEK/YLTWGMA01p59zVncY93/tmZuvXbFIzlDXcStct8h+tmsgIs+TYLeYHqMcWeUy73+H1ki
+	FbOEokQ==
+X-Received: from pfjg10.prod.google.com ([2002:a05:6a00:b8a:b0:835:62a8:bbc])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:2998:b0:839:46b8:86be
+ with SMTP id d2e1a72fcca58-83a5d686f07mr13095922b3a.33.1778262056375; Fri, 08
+ May 2026 10:40:56 -0700 (PDT)
+Date: Fri, 8 May 2026 10:40:55 -0700
+In-Reply-To: <foi2zvv5qrfdcspnx4fstrvzl74m6xp6zrsw5omlbprxh4jrhx@vxnwk7fr46gu>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260508-net-next-mptcp-pm-inc-limits-v1-8-c84e3fdf9b6a@kernel.org>
-References: <20260508-net-next-mptcp-pm-inc-limits-v1-0-c84e3fdf9b6a@kernel.org>
-In-Reply-To: <20260508-net-next-mptcp-pm-inc-limits-v1-0-c84e3fdf9b6a@kernel.org>
-To: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>
-Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev, 
- linux-kernel@vger.kernel.org, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1856; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=325C5AQXZLCkra1M3X28PDkJPHJO5DOfdGSOM4n3fqI=;
- b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDL/KbC1n7UOl00PbwpT5Na99bIo5ojLYW/V9N4IB4PtR
- X9msj7oKGVhEONikBVTZJFui8yf+byKt8TLzwJmDisTyBAGLk4BmMjs6Qz/FGyECj0OfZ2o/8d+
- 30Svjb7aNbs3bjhSc9rc6UfjXoGrpowMZ15sd5v6ynQy86orqcdPTJKzvf7tjsk/91TRvbW/4q3
- 1uAE=
-X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
- fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
+Mime-Version: 1.0
+References: <20260326-gmem-inplace-conversion-v4-0-e202fe950ffd@google.com>
+ <20260326-gmem-inplace-conversion-v4-10-e202fe950ffd@google.com>
+ <2r4mmfiuisw26qymahnbh2oxqkkrywqev477kc4rlkcyx7tels@c7ple7kdgpo3>
+ <CAEvNRgFkusZeKxGctUpTTbYjdi7nZL1ZZar-gT7XRUOCZ2xtpw@mail.gmail.com>
+ <eiiecl7jvywvqb4drq7cchmcabcrdka25wxr77uavxqineeedm@rfcnhdz6xoxf>
+ <3blpenhpvysb2ig7efegedx4v3flppl5ftnz6vhpqlatfk3ycn@vmmhs7mvjieg>
+ <CAEvNRgGbMhkX310CkFY_M5x-zod=BDTiuznrZ0XvFPUK7weL1A@mail.gmail.com> <foi2zvv5qrfdcspnx4fstrvzl74m6xp6zrsw5omlbprxh4jrhx@vxnwk7fr46gu>
+Message-ID: <af4gJ6xZ3e7UXOuO@google.com>
+Subject: Re: [PATCH RFC v4 10/44] KVM: guest_memfd: Add support for KVM_SET_MEMORY_ATTRIBUTES2
+From: Sean Christopherson <seanjc@google.com>
+To: Michael Roth <michael.roth@amd.com>
+Cc: Ackerley Tng <ackerleytng@google.com>, aik@amd.com, andrew.jones@linux.dev, 
+	binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com, 
+	david@kernel.org, ira.weiny@intel.com, jmattson@google.com, 
+	jthoughton@google.com, oupton@kernel.org, pankaj.gupta@amd.com, 
+	qperret@google.com, rick.p.edgecombe@intel.com, rientjes@google.com, 
+	shivankg@amd.com, steven.price@arm.com, tabba@google.com, willy@infradead.org, 
+	wyihan@google.com, yan.y.zhao@intel.com, forkloop@google.com, 
+	pratyush@kernel.org, suzuki.poulose@arm.com, aneesh.kumar@kernel.org, 
+	Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
+	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+	Nhat Pham <nphamcs@gmail.com>, Baoquan He <bhe@redhat.com>, Barry Song <baohua@kernel.org>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
+	Wei Xu <weixugc@google.com>, Jason Gunthorpe <jgg@ziepe.ca>, Vlastimil Babka <vbabka@kernel.org>, 
+	kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org
+Content-Type: text/plain; charset="us-ascii"
 
-Instead of sendto() and recvfrom() which the NL address that was already
-provided before.
+On Wed, Apr 29, 2026, Michael Roth wrote:
+> On Fri, Apr 24, 2026 at 12:08:45PM -0700, Ackerley Tng wrote:
+> > Michael Roth <michael.roth@amd.com> writes:
+> > 
+> > Thank you for your patches!
+> > 
+> > >
+> > > [...snip...]
+> > >
+> > >>
+> > >> I also did some minor updates (prefixed with a "[squash]" tag) to advertise
+> > >> the KVM_SET_MEMORY_ATTRIBUTES2_PRESERVED flag so it can be used by
+> > >
+> > > Though I'm not sure how we deal with it if SNP/TDX at some point become
+> > > capable of using the PRESERVED flag *after* populate... but maybe that's
+> > > too unlikely to worry about? If we wanted to address it though, we could
+> > > have both PRESERVED and PRESERVED_BEFORE_LAUNCH so they can be
+> > > enumerated separately from the start.
+> > >
+> > 
+> > Not sure how likely it is, but if SNP and TDX can honor PRESERVE
+> > semantics after populate, I think we could implement support under a new
+> > flag like CIPHER.
+> 
+> That works, but it still makes things *slightly* awkward due to special-casing
+> the PRESERVE semantics for 1 guest type vs. another.
 
-Just simpler and easier to read without the to/from variants.
+Summarizing this week's PUCK call[*]:
 
-While at it, fix a checkpatch warning by removing multiple assignments.
+Scrap PRESERVE and ZERO, and simply rely on vendor specific semantics.
 
-Reviewed-by: Mat Martineau <martineau@kernel.org>
-Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
----
-To: Shuah Khan <shuah@kernel.org>
-Cc: linux-kselftest@vger.kernel.org
----
- tools/testing/selftests/net/mptcp/pm_nl_ctl.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+My desire to enforce PRESERVE and ZERO semantics and avoid relying on vendor specific
+behavior (i.e. on trusted firmware semantics) is a pipe dream.  Unless KVM does
+a truly insane amount of per-gfn tracking, KVM can't know the state of memory for
+a given page, and so can't guarantee PRESERVE or ZERO will be honored.
 
-diff --git a/tools/testing/selftests/net/mptcp/pm_nl_ctl.c b/tools/testing/selftests/net/mptcp/pm_nl_ctl.c
-index 99eecccbf0c8..78180da1efcc 100644
---- a/tools/testing/selftests/net/mptcp/pm_nl_ctl.c
-+++ b/tools/testing/selftests/net/mptcp/pm_nl_ctl.c
-@@ -217,8 +217,6 @@ static int capture_events(int fd, int event_group)
- /* do a netlink command and, if max > 0, fetch the reply ; nh's size >1024B */
- static int do_nl_req(int fd, struct nlmsghdr *nh, int len, int max)
- {
--	struct sockaddr_nl nladdr = { .nl_family = AF_NETLINK };
--	socklen_t addr_len;
- 	void *data = nh;
- 	int rem, ret;
- 	int err = 0;
-@@ -230,15 +228,15 @@ static int do_nl_req(int fd, struct nlmsghdr *nh, int len, int max)
- 	}
- 
- 	nh->nlmsg_len = len;
--	ret = sendto(fd, data, len, 0, (void *)&nladdr, sizeof(nladdr));
-+	ret = send(fd, data, len, 0);
- 	if (ret != len)
- 		error(1, errno, "send netlink: %uB != %uB\n", ret, len);
- 
--	addr_len = sizeof(nladdr);
--	rem = ret = recvfrom(fd, data, max, 0, (void *)&nladdr, &addr_len);
-+	ret = recv(fd, data, max, 0);
- 	if (ret < 0)
- 		error(1, errno, "recv netlink: %uB\n", ret);
- 
-+	rem = ret;
- 	/* Beware: the NLMSG_NEXT macro updates the 'rem' argument */
- 	for (; NLMSG_OK(nh, rem); nh = NLMSG_NEXT(nh, rem)) {
- 		if (nh->nlmsg_type == NLMSG_DONE)
+If userspace requests PRESERVE, just because it's _possible_ to preserve contents
+(e.g. during the pre-boot phase on TDX), doesn't mean the contents are _guaranteed_
+to be preserved.  If userspace doesn't actually ADD the memory to the guest's
+initial image, then the contents won't be preserved.  Ditto for SNP.
 
--- 
-2.53.0
+To guarantee PRESERVE, KVM would need to track per-gfn information to know if the
+memory was actually preserved.  And enforcing PRESERVE would be all kinds of crazy;
+KVM would have to kill the VM or something?  And that would still require userspace
+to be aware of vendor specific details.
 
+The same holds true for ZERO.  On a private=>shared conversion, KVM can't guarantee
+the memory is zeroed by trusted firmware unless KVM tracks, per-gfn, whether or
+not the memory was actually fully assigned to the guest.  E.g. if userspace does
+shared=>private and then private=>shared(ZERO), without the memory being faulted
+into the guest, then the TDX-Module won't have "seen" the page and so wont' have
+zeroed it on the private=>shared conversion.
+
+And trying to special case SNP's "validated CPUID" behavior, where memory can be
+preserved on private=>shared after a failed shared=>private, would also require
+tracking that the page was never actually converted to private.
+
+Note, regarding ZERO, someone (Mike? Ackerley?) pointed out that userspace typically
+doesn't rely on the kernel to zero memory, and so supporting ZERO for private=>shared
+isn't really all that valuable in the first place.
+
+[*] https://drive.google.com/file/d/1w0ifzh5PmNViJ1SKru9jK9x52MybXSNa/view?usp=drive_link
