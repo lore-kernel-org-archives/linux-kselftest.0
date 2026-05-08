@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29BBA2E7BD3;
-	Fri,  8 May 2026 19:29:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2E1537A486;
+	Fri,  8 May 2026 19:32:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778268584; cv=none; b=LFTWeJ1eduwQ0TBhfu0HOrPpWoS09LGvCyFalh/z26CZT3EvAnKFIvEbAFR3tp4FiTFuS8C4Q3HVaUp7hLC7a5qNyJ9cxCqxLGDgA0ERbr9BiDSPaHWHsUXPtzPpPmI8srD6XXNi0VdYFKrJuo4aZ88p5hopUBtsm6VBEGPsyec=
+	t=1778268752; cv=none; b=CyHSQkPT8rfDVogYXE9PrWMpEitb8/KXawCKX6WDGpC7M9lwOnNS7O1oICpabDs918SroXvRB604YC08VRwcUeYo/KnRbtNqHw/h6QDVv2Z6gsjXSIY140pAFozTAe8Dt6Tpm+vAJrds9/HOfoApRJqgCFq6kYsthYPnh7x5FCg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778268584; c=relaxed/simple;
-	bh=DvOFdRiUFMeuZD8y+14WyIcjv9e/aXkrpGSFI2MeDCs=;
+	s=arc-20240116; t=1778268752; c=relaxed/simple;
+	bh=mf3xIXdCzeOhP9frGFps0vjsjTjlmNGDQAPmsKzCUKw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kA5PpxS8FRWaxqaY7bOaBlOhI1frX3eLiZeqRJmGdrac46QIZyaOaEFA+oYR/etmfwpC2h/gXHtgdy2WXbQ5uiylLCcwozkhXid1A5vn8J1RfyYFVf2tkTGflRBNLIwwjYME0ToKZ2QUypy+TWLK75WOTADvtvhincBm+7qC98I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NYCjmB8Z; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=bbDAuSF77Lw6EAwzSy7MRN3MofTSvW+jxNs5fkFl/041P57RgumyANoEBQu2ydmamrRyqlQAzDMQFmfxrqKltWDuhjKa24zn6VfHwmIvRwP60p15923shxc7ZdCRf++lebmDXYN0PyFHOex60ED1jvxJaRuU9i/AN2f2erIc0wQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DNCDjxZc; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NYCjmB8Z"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BAF8C2BCB0;
-	Fri,  8 May 2026 19:29:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DNCDjxZc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D301C2BCB0;
+	Fri,  8 May 2026 19:32:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778268583;
-	bh=DvOFdRiUFMeuZD8y+14WyIcjv9e/aXkrpGSFI2MeDCs=;
+	s=k20201202; t=1778268752;
+	bh=mf3xIXdCzeOhP9frGFps0vjsjTjlmNGDQAPmsKzCUKw=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=NYCjmB8ZphGxAmlYSGsmpjEjq6irXQGh39QWaFPq+buycS5sVIog4/k+nuZVTAmIj
-	 sqJltnYeiz189lDSwzBqzLuJCAwPUAomyRNAO+5zVt28zKVGMsi62bDts5zgn5pu9l
-	 chZ4Z9sKT6wgfHlb1v0m2HkyBvH+OgKXLL+7a4xIok3r7Q3flC9THfiSILZCLJ6LXf
-	 RvEfP/oi9ShH0Ddw6XmUn2RW+6Ik+6aFTXI/HghAJ4EZzIUazBelXziA5rsfWRUShm
-	 +X6tRmnkJ55Zb6Nkt+fhJYKzPAhIpwzSOZOCcCEtA/6vO9FVQZGWTcNqi0Zug8tQWw
-	 OB1486nsghd/g==
-Message-ID: <f50cba12-743e-4f68-bff4-d3387b63dde2@kernel.org>
-Date: Fri, 8 May 2026 21:29:38 +0200
+	b=DNCDjxZcWWH8QxOBe9VogEAa6lyUYHy+XWyKY4sJLh8AjB0g9eRDd3q25RxM3yf8/
+	 HpKOx2KY4FR4iWM3x71bFYY+FptpZQHI2/TFTqra49WqaM/mFfEju5124z9daB6KZ0
+	 cXmxg1IZqDr6GGpivA/7b1e/NviqYKFR8LJdO5YvTbJJ2hgozCPOuUS7iYJnf6Uq02
+	 WJlNTnc1VElzA3tu8x2M4Slvd+ZnyWT2JlnX7qd2jarhHLBWvXXUs1MIwiWWft+CmZ
+	 2110p64TIXwwUon+NTkaPJrIYrWwrzjJp1T217slHRQm/dIT1tAW7YB43ExMmTBbq8
+	 rXK4tRcveNvQw==
+Message-ID: <b6717dee-486b-4c61-8ec8-0e4269959469@kernel.org>
+Date: Fri, 8 May 2026 21:32:25 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,15 +35,14 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] mm/khugepaged: fix spurious -EINVAL from sub-PMD
- MADV_COLLAPSE range
-To: Lorenzo Stoakes <ljs@kernel.org>, Chen Wandun <chenwandun1@gmail.com>
-Cc: akpm@linux-foundation.org, shuah@kernel.org, zokeefe@google.com,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org
-References: <20260507070558.3064142-1-chenwandun@lixiang.com>
- <20260507070558.3064142-2-chenwandun@lixiang.com>
- <9eea2afb-8c35-47eb-b1de-6a08503c9679@kernel.org> <af30otSSGbPxHbxM@lucifer>
+Subject: Re: [PATCH v2] selftests/mm: use pattern matching in .gitignore
+To: Yosry Ahmed <yosry@kernel.org>, pratmal@google.com
+Cc: akpm@linux-foundation.org, shuah@kernel.org, yosryahmed@google.com,
+ ljs@kernel.org, Liam.Howlett@oracle.com, vbabka@kernel.org, rppt@kernel.org,
+ surenb@google.com, mhocko@suse.com, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260505152228.124065-1-pratmal@google.com>
+ <CAO9r8zMWmk3HdJOW=DbtCoZrTjjFJ-ErAwOvG=8qG9bL00Xwyw@mail.gmail.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -90,24 +89,35 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <af30otSSGbPxHbxM@lucifer>
+In-Reply-To: <CAO9r8zMWmk3HdJOW=DbtCoZrTjjFJ-ErAwOvG=8qG9bL00Xwyw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+On 5/8/26 20:34, Yosry Ahmed wrote:
+> On Tue, May 5, 2026 at 8:22 AM <pratmal@google.com> wrote:
 >>
->> In general, LGTM, but see for conflict:
->> https://lore.kernel.org/all/20260409014323.2385982-1-ye.liu@linux.dev/
+>> From: Pratyush Mallick <pratmal@google.com>
+>>
+>> The current .gitignore hardcodes each generated test binary by name,
+>> requiring updates every time a new test is added.
+>>
+>> Switch to the patten-matching approach similar to KVM:selftests.
+>> Ignore everything by default and then allow source extensions (.c, .h, .sh)
+>> and tracked non-source files.
+>>
+>> To avoid un-ignoring the generated headers, rename local_config.h to
+>> local_config.h_gen.
+>>
+>> Acked-by: Lorenzo Stoakes <ljs@kernel.org>
+>> Reviewed-by: Yosry Ahmed <yosryahmed@google.com>
+>> Reviewed-by: David Hildenbrand <david@kernel.org>
 > 
-> Please use mm-unstable as a basis for your mm work Chen, this is something you
-> need to fix, the patch above has been around for a while and is in
-> mm-unstable.
+> I think these need to be sorted out (as I mentioned privately).
 > 
-> You have patches in mm already so you should know better by now.
-> 
-> But I'm really not sure I'm in favour of this anyway. I'll defer to David but
-> this feels useless to me.
-I don't enjoy the underflow in the return statement, so I think we should just
-clean that up.
+> Also, we probably need to split this into two patches: one renaming
+> local_config.h and one updating .gitignore.
+
+Yeah we could, but no strong opinion from my side.
 
 -- 
 Cheers,
