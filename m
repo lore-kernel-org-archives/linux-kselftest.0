@@ -1,165 +1,69 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A2C03F9F4D
-	for <linux-kselftest@vger.kernel.org>; Fri,  8 May 2026 15:03:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4BBC401A3F;
+	Fri,  8 May 2026 15:03:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778252623; cv=none; b=g2ZetVEtImNTB+IhRe1dw5i64iX2jDVDl4i5bLvMR2SWQI3P3s6t7GEtYBeYCGMAk7RKxDZLRFA2D5c3AgnPaW3fwVfgszjAoxYlaLiLIOhl6AWCSVQH77nIGI7e5+LngDaoimposHHRzdXMfmsiljhpa9GsRnzqZ09BEofrJDc=
+	t=1778252626; cv=none; b=c+vIE54EAm3MJ7hEzdfsvsy6aKwFpu1lubxpH44mHsQK1uHVrkSFnZ8CcGsS0147wKQ/ToThS4lsVPKHvtSvFl0wJgG463/M0VYu4AZMdbHWSml9YqvocbrBNl2b/ZzxbEoT9JxtTJz+fvnvQdXQI22di8EebHQw8RtaCSC1pl4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778252623; c=relaxed/simple;
-	bh=9Jr7X225ntyiXyFzcdBTfnRDfWaznp2nm4xcOiyEXNs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=jkJwXtuNkPU3Fay+aqCwheihlH7Bu00hXQWj88tJAQL38BqKEKfv2lN6/qNOwUM5JTXMJY5T7lY5KASwsG7TLwxZShhQFFRpI9hDX3mNSj8Sr3LcwtzgGgUjRzLzSUXNFSLy8JxHt1BBpt+kUMhSYoQmqHrAOCsOYrdJu4tFzUc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ip1xIDxd; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1778252626; c=relaxed/simple;
+	bh=/xqi+t2S8bWuBI+lmZfv0DLDQPE9yHqQarZErY3arIQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tkOuRYtx78GtUgbRimsvs5uvifNIPDrEz6WuZZf6JFaqaRiPpjgwxXK5n8OleidleIFlMU+Tot1vzkoANGvV+/zLjFseieuwbb2HzWPQcBYfizJqM8hJaQucwu2E7zjBYROAyD0Ovtj3BczPOXgFaQAjCVKZguAXrIqDjzJekPQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dWm7f/4Y; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ip1xIDxd"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1778252620;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=pTM5bDRFu2LnEWelZ4UVeTQriZB7mfNT46GLFzc2/xE=;
-	b=ip1xIDxdv5dIenGbBZpuGs4XDiHqHX9BAhrIjHVIe5+xQbWWnLR6ZBh7NskL/DxV/eMjfB
-	nfRKtv1DaLWqXZAH757RxjSqS6k3CYt30yVjiWTi7EC71F36B0wx6SHrz2VokKITkB8Fr6
-	NXiQk9FpWO3bsiNSKcIkj/8IfygvwhM=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-113-CspO-cBrOmeqIlR5CcKP1A-1; Fri,
- 08 May 2026 11:03:31 -0400
-X-MC-Unique: CspO-cBrOmeqIlR5CcKP1A-1
-X-Mimecast-MFC-AGG-ID: CspO-cBrOmeqIlR5CcKP1A_1778252605
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id BB9FC19560B7;
-	Fri,  8 May 2026 15:03:24 +0000 (UTC)
-Received: from [192.168.1.153] (headnet01.pony-001.prod.iad2.dc.redhat.com [10.2.32.101])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D8224180075F;
-	Fri,  8 May 2026 15:03:17 +0000 (UTC)
-From: Albert Esteve <aesteve@redhat.com>
-Date: Fri, 08 May 2026 17:02:47 +0200
-Subject: [PATCH v9 3/4] drm: Suppress intentional warning backtraces in
- scaling unit tests
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dWm7f/4Y"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3298EC2BCC9;
+	Fri,  8 May 2026 15:03:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778252626;
+	bh=/xqi+t2S8bWuBI+lmZfv0DLDQPE9yHqQarZErY3arIQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=dWm7f/4YhEkoV89JHb4HXlztE3GYoywZdD/GDe3nQLAz78X6KuzxPJU5qPGdXENvC
+	 H3ytTh90wVwGo+quMZZO3CUvDuqgkXdQYYrcwdXXldL3HtJH9WcQxvynzbUEFP1jzo
+	 OMrmXESr1ryU01xq0jgVnuypCHc9O8K7tAqTjnwVRyGJZNtOXaVScZvZZcIo1OfZrw
+	 58zvy9CIegVaeCJQ8VVF/KmWrHMEwuDBaA5vftgSt2aKHeHXXOHJAFEPhEOjHH0Ei6
+	 lmPYgxdMmqtiAQuIn1z1zwZQAecmsPK9bdGdQTLedQN4AARMPgjfludsMagPrQ6nLw
+	 YNR1yySBEi5xQ==
+Date: Fri, 8 May 2026 16:03:39 +0100
+From: Lorenzo Stoakes <ljs@kernel.org>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: Chen Wandun <chenwandun1@gmail.com>, akpm@linux-foundation.org, 
+	shuah@kernel.org, zokeefe@google.com, linux-kernel@vger.kernel.org, 
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 2/2] selftests/mm: add MADV_COLLAPSE sub-PMD range tests
+Message-ID: <af37QMPPJPkOeMJM@lucifer>
+References: <20260507070558.3064142-1-chenwandun@lixiang.com>
+ <20260507070558.3064142-3-chenwandun@lixiang.com>
+ <bdc711fc-c625-4696-b6bc-28461c0c80f2@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260508-kunit_add_support-v9-3-99df7aa880f6@redhat.com>
-References: <20260508-kunit_add_support-v9-0-99df7aa880f6@redhat.com>
-In-Reply-To: <20260508-kunit_add_support-v9-0-99df7aa880f6@redhat.com>
-To: Arnd Bergmann <arnd@arndb.de>, 
- Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, 
- Rae Moar <raemoar63@gmail.com>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
- Andrew Morton <akpm@linux-foundation.org>, Paul Walmsley <pjw@kernel.org>, 
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
- Alexandre Ghiti <alex@ghiti.fr>
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
- dri-devel@lists.freedesktop.org, workflows@vger.kernel.org, 
- linux-riscv@lists.infradead.org, linux-doc@vger.kernel.org, 
- peterz@infradead.org, Guenter Roeck <linux@roeck-us.net>, 
- Linux Kernel Functional Testing <lkft@linaro.org>, 
- =?utf-8?q?Ma=C3=ADra_Canal?= <mcanal@igalia.com>, 
- Alessandro Carminati <acarmina@redhat.com>, 
- Albert Esteve <aesteve@redhat.com>, Dan Carpenter <error27@gmail.com>, 
- Simona Vetter <simona.vetter@ffwll.ch>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1778252571; l=3273;
- i=aesteve@redhat.com; s=20260303; h=from:subject:message-id;
- bh=OzxKDl7juzBnGFv8nRO4KYyX446iqYsOHsLTSHCA/XY=;
- b=eRPZlXY0oZGNDAQpUv/i+XN1tRR4oFcuvNsNePj/TPFZTO4ljQZ5s0YOyA05Z0ONI4q4xTFKo
- R+2fJodStnmDnC9kzZ4GrIUOUC3P+HSFidoOMOuCg2vOOBDrpbup0Ao
-X-Developer-Key: i=aesteve@redhat.com; a=ed25519;
- pk=YSFz6sOHd2L45+Fr8DIvHTi6lSIjhLZ5T+rkxspJt1s=
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bdc711fc-c625-4696-b6bc-28461c0c80f2@kernel.org>
 
-From: Guenter Roeck <linux@roeck-us.net>
+On Fri, May 08, 2026 at 02:23:41PM +0200, David Hildenbrand (Arm) wrote:
+> On 5/7/26 09:05, Chen Wandun wrote:
+> > Add madv_collapse_range to verify the fix for the spurious -EINVAL
+> > returned by madvise_collapse() when the madvised range contains no
+> > complete PMD-aligned window.
+>
+> Do we really need 141 LOC of test to verify a "userspace is being stupid" scenario?
+>
+> Nothing was really broken, it's just a suboptimal return value, or what am I
+> missing?
 
-The drm_test_rect_calc_hscale and drm_test_rect_calc_vscale unit tests
-intentionally trigger warning backtraces by providing bad parameters to
-the tested functions. What is tested is the return value, not the existence
-of a warning backtrace. Suppress the backtraces to avoid clogging the
-kernel log and distraction from real problems. Additionally, the
-suppression API allows to actually ensure a warning was triggered,
-without parsing any kernel logs and keeping them clean.
+Agreed, drop this please.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-Acked-by: Dan Carpenter <dan.carpenter@linaro.org>
-Acked-by: Maíra Canal <mcanal@igalia.com>
-Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-Cc: David Airlie <airlied@gmail.com>
-Cc: Daniel Vetter <daniel@ffwll.ch>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Alessandro Carminati <acarmina@redhat.com>
-Acked-by: David Gow <david@davidgow.net>
-Signed-off-by: Albert Esteve <aesteve@redhat.com>
----
- drivers/gpu/drm/tests/drm_rect_test.c | 27 +++++++++++++++++++++++----
- 1 file changed, 23 insertions(+), 4 deletions(-)
+>
+> --
+> Cheers,
+>
+> David
 
-diff --git a/drivers/gpu/drm/tests/drm_rect_test.c b/drivers/gpu/drm/tests/drm_rect_test.c
-index 17e1f34b76101..809e73cb74498 100644
---- a/drivers/gpu/drm/tests/drm_rect_test.c
-+++ b/drivers/gpu/drm/tests/drm_rect_test.c
-@@ -407,10 +407,20 @@ KUNIT_ARRAY_PARAM(drm_rect_scale, drm_rect_scale_cases, drm_rect_scale_case_desc
- static void drm_test_rect_calc_hscale(struct kunit *test)
- {
- 	const struct drm_rect_scale_case *params = test->param_value;
-+	int expected_warnings = params->expected_scaling_factor == -EINVAL;
- 	int scaling_factor;
- 
--	scaling_factor = drm_rect_calc_hscale(&params->src, &params->dst,
--					      params->min_range, params->max_range);
-+	/*
-+	 * drm_rect_calc_hscale() generates a warning backtrace whenever bad
-+	 * parameters are passed to it. This affects unit tests with -EINVAL
-+	 * error code in expected_scaling_factor.
-+	 */
-+	kunit_warning_suppress(test) {
-+		scaling_factor = drm_rect_calc_hscale(&params->src, &params->dst,
-+						      params->min_range,
-+						      params->max_range);
-+		KUNIT_EXPECT_SUPPRESSED_WARNING_COUNT(test, expected_warnings);
-+	}
- 
- 	KUNIT_EXPECT_EQ(test, scaling_factor, params->expected_scaling_factor);
- }
-@@ -418,10 +428,19 @@ static void drm_test_rect_calc_hscale(struct kunit *test)
- static void drm_test_rect_calc_vscale(struct kunit *test)
- {
- 	const struct drm_rect_scale_case *params = test->param_value;
-+	int expected_warnings = params->expected_scaling_factor == -EINVAL;
- 	int scaling_factor;
- 
--	scaling_factor = drm_rect_calc_vscale(&params->src, &params->dst,
--					      params->min_range, params->max_range);
-+	/*
-+	 * drm_rect_calc_vscale() generates a warning backtrace whenever bad
-+	 * parameters are passed to it. This affects unit tests with -EINVAL
-+	 * error code in expected_scaling_factor.
-+	 */
-+	kunit_warning_suppress(test) {
-+		scaling_factor = drm_rect_calc_vscale(&params->src, &params->dst,
-+						      params->min_range, params->max_range);
-+		KUNIT_EXPECT_SUPPRESSED_WARNING_COUNT(test, expected_warnings);
-+	}
- 
- 	KUNIT_EXPECT_EQ(test, scaling_factor, params->expected_scaling_factor);
- }
-
--- 
-2.53.0
-
+Thanks, Lorenzo
