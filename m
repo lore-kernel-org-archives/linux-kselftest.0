@@ -1,66 +1,103 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F9B081AA8;
-	Fri,  8 May 2026 17:32:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DD38410D36;
+	Fri,  8 May 2026 17:40:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778261542; cv=none; b=S0/0075ESS5nlJt120T+22oevDBCEKg4p8XNJpKWatUCvDqEQsp4V9DbQiKqg1vfmN4adAFkf+75fOZQmdpg9eGOhp+yLEps1uY7qnZPlBWzTnahkwwqtr5TFqIz0WMeO6aRMN6/f583HWpR6AFMdv66mle10iHXdoKkAKXzeUM=
+	t=1778262025; cv=none; b=i0HAS7EoH9XOfh3DTP6TqLK9NtETcZUmCu/BpcDgYzbPS/IskzSc6YE0U6hayur4lfI0dWgG7JdXt3/8JiQz1nehffdxVn2rB/3TbARPHcwVsHxrb3yGCuM/6eT1L7BQf1+veaKm+xdfx5gqOZ2vncriShq1QW15x7S/7x+ERRk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778261542; c=relaxed/simple;
-	bh=hVPRSg/Aw0I1iOxX29ZJQVzFj0tLkTvJRdEgtd6gtFQ=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=KOItpEaEQi++iBml158VTCUvu6sTIbB7c137AHq1vjujYGYbB9jTSDiumnVMLFwJ71a0r2xRwcaePHizM43nCAOd1X/lkWiHcAI+TA5Gw8VP/AFSpOetDJj60iBlmfwE1me0a76TMeoegyWVN3kHzV9mvWJMIp7manKR4ZSKlFw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=cIjwvtvU; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778262025; c=relaxed/simple;
+	bh=djDWZ/MHnIHGN/6+CsSoHzZgeOd2vJrN4iKTIdki/ws=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=OSoT2c2/6OCl1NPNRXk4pV3qYtdPh5DJc+w70ilTAritV9s7yViYgP7/FHTYruVAQoqjqQp9yIEMH2Ek05h7bdLJBf1N+AzXfse71ZwUloMrWetQlctkq9Y/EhRcLIj0PXSefJQzfgdnnor7IazP9VqMCN/Q0mxDf5wc4oDTqNI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T6fEarwk; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="cIjwvtvU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36103C2BCB0;
-	Fri,  8 May 2026 17:32:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1778261541;
-	bh=hVPRSg/Aw0I1iOxX29ZJQVzFj0tLkTvJRdEgtd6gtFQ=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=cIjwvtvUImu7UJUAxjtcmuA/pRzJ7AAThBot1FXPvuxh/gq3FKF152tCWY9BcRscQ
-	 IT5yOPpH7MAoFkpgf4gFE78JZcCSamL/xFz8GQl9Nw55LGdLBqwqk/VO3hvuyN0B5i
-	 BaUT7wXFf6L1LOPx82+PG9GOWSD2vcRnthOL5zYQ=
-Date: Fri, 8 May 2026 10:32:20 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
-Cc: rppt@kernel.org, peterx@redhat.com, david@kernel.org, ljs@kernel.org,
- surenb@google.com, vbabka@kernel.org, Liam.Howlett@oracle.com,
- ziy@nvidia.com, corbet@lwn.net, skhan@linuxfoundation.org,
- seanjc@google.com, pbonzini@redhat.com, jthoughton@google.com,
- aarcange@redhat.com, sj@kernel.org, usama.arif@linux.dev,
- linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kvm@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH v2 00/14] userfaultfd: working set tracking for VM guest
- memory
-Message-Id: <20260508103220.aa46427b6f4c5d0247d2afb0@linux-foundation.org>
-In-Reply-To: <cover.1778254670.git.kas@kernel.org>
-References: <cover.1778254670.git.kas@kernel.org>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T6fEarwk"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37BF0C2BCB0;
+	Fri,  8 May 2026 17:40:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778262025;
+	bh=djDWZ/MHnIHGN/6+CsSoHzZgeOd2vJrN4iKTIdki/ws=;
+	h=From:Subject:Date:To:Cc:From;
+	b=T6fEarwktXiptA8Kiz9sOAKykMvRos9O7h36N6zNHZI8c6lir6knidIYHkkxNSfDX
+	 9vSl+jKtOOOXNMg6YgrUQwQNmipNBzZzPQilnWvB5L0O+gJtEuh6QLKmVNZTS5B3Bp
+	 KE3Ms2n1ZUtUIEi8wd2w1rclCzdh2pZJNt1U4QfPjbbkIszBm5wxRTXwG1Y/SvyA6n
+	 HClERfV5WO89YUZCYErGROHwjscJLTn2JTNqbxDMlUi9tiu/M2dYKhoEE/qkWc42+Q
+	 1CQ3Vz3H33LAP5tSFx7dfHxnAWk1EU3Ps0s+hs58D73i64zZZKTBrLLX3LXiQ+QIyC
+	 Nznq0nqmXBcrg==
+From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+Subject: [PATCH net-next 0/8] mptcp: pm: in-kernel: increase limits
+Date: Fri, 08 May 2026 17:40:45 +0200
+Message-Id: <20260508-net-next-mptcp-pm-inc-limits-v1-0-c84e3fdf9b6a@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/zWMQQrCMBBFr1Jm7cAYTCleRVy0cWqnNDFkRimU3
+ t2ouPiLx+e9DZSLsMK52aDwS1QeqcLx0ECY+nRnlFtlcORa8tRhYqtbDWO2kDFHlBRwkSimOHT
+ O96MnPhFBTeTCo6zf/AX+Jlx/jz6HmYN96rDvb1ZCykiKAAAA
+X-Change-ID: 20260508-net-next-mptcp-pm-inc-limits-b825af50e400
+To: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>
+Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev, 
+ linux-kernel@vger.kernel.org, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1912; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=djDWZ/MHnIHGN/6+CsSoHzZgeOd2vJrN4iKTIdki/ws=;
+ b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDL/KTAc3ZQR8Opv4+2whcf3f5ArEYvfWSvyZtH/kN1zz
+ 3+5OyeHtaOUhUGMi0FWTJFFui0yf+bzKt4SLz8LmDmsTCBDGLg4BWAiNz8x/NMr2Lyezd3Q6FWr
+ /eF1geyTLNp7Gi6m1TVVSz3zPGvNksXwV2JfPOf/As+Jiyu0t+VVcnmmTL7zjD9wGpuImowk76t
+ 37AA=
+X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-On Fri,  8 May 2026 16:55:12 +0100 "Kiryl Shutsemau (Meta)" <kas@kernel.org> wrote:
+Allow switching from 8 to 64 for the maximum number of subflows and
+accepted ADD_ADDR, and from 8 to 255 for the number of MPTCP endpoints.
 
-> This series adds userfaultfd support for tracking the working set of
-> VM guest memory, so a VMM can identify cold pages and evict them to
-> tiered or remote storage.
-> 
-> v1: https://lore.kernel.org/all/20260427114607.4068647-1-kas@kernel.org/
+The previous limit of 8 subflows makes sense in most cases. Using more
+subflows will very likely *not* improve the situation, and could even
+decrease the performances. But there are no technical limitations nor
+performance impact to raise this limit, so let's do it: this will allow
+people with very specific use-cases, and researchers to easily create
+more subflows, and measure the performance impact by themselves.
 
-Thanks.  I'll duck v2 for now, await more review.
+- Patches 1-2: increase subflows and accepted ADD_ADDR limits.
 
-> Assisted-by: Claude:claude-opus-4-6
+- Patches 3-4: increase endpoints limit.
 
-For my education, and perhaps for others: can you please explain how
-you used Claude in the preparation of this series?
+- Patches 5-7: validate the new limits: 64 subflows, 255 endpoints.
+
+- Patch 8: selftests: use send()/recv() instead of sendto()/recvfrom().
+
+Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+---
+Matthieu Baerts (NGI0) (8):
+      mptcp: pm: in-kernel: explicitly limit batches to array size
+      mptcp: pm: in-kernel: increase all limits to 64
+      mptcp: pm: kernel: allow flushing more than 8 endpoints
+      mptcp: pm: in-kernel: increase endpoints limit
+      selftests: mptcp: join: allow changing ifaces nr per test
+      selftests: mptcp: join: validate 8x8 subflows
+      selftests: mptcp: pm: validate new limits
+      selftests: mptcp: pm: use simpler send/recv forms
+
+ net/mptcp/pm_kernel.c                           | 77 +++++++++++++++++--------
+ tools/testing/selftests/net/mptcp/mptcp_join.sh | 33 ++++++++++-
+ tools/testing/selftests/net/mptcp/pm_netlink.sh | 56 +++++++++++-------
+ tools/testing/selftests/net/mptcp/pm_nl_ctl.c   |  8 +--
+ 4 files changed, 121 insertions(+), 53 deletions(-)
+---
+base-commit: 6a4c4656b0d2d4056a1f0c35442db4e8a5cf8021
+change-id: 20260508-net-next-mptcp-pm-inc-limits-b825af50e400
+
+Best regards,
+--  
+Matthieu Baerts (NGI0) <matttbe@kernel.org>
 
