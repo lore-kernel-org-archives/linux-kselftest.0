@@ -1,228 +1,148 @@
-Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 741472C0285
-	for <linux-kselftest@vger.kernel.org>; Fri,  8 May 2026 02:28:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 691343A1DB
+	for <linux-kselftest@vger.kernel.org>; Fri,  8 May 2026 02:52:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778207315; cv=none; b=gUfgOlwGMpusWJL735v5AbKrttoEq30Hih7ABdlIKkzTRuNpXyQk6XVZYjNOICSp1qwePrf+s7cJF0RsPtXCLadZygrBsJu9yrVcA+R4//vIZsZx/TQDghZjAkGrFS879rQE16K7lc0FzY5YxKiG1JUVfwjrikawMgTwVck5FqI=
+	t=1778208764; cv=none; b=VfiNcV3KBjuJJsXu4djsBn0N+fKMkqOVEB3CcLf3ougLeYjy+/DLTDZMM+LsBLoMbEam/R8JJX/3nEFV8MycIge1QvqKxxfFTFp0ByPcfaM7aw+9FKkU0Y5/+fN2fuEdrYM6YnEwDSOFic1j1epHpowM+nWbE98a64nCmxXGtPM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778207315; c=relaxed/simple;
-	bh=n7tJve6PSP03zrqEiNRPQpgyL5Of2UxSvSD8zaqgtxU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=QSvpO7x51U0mm7b4iZIiJ1a5fLk8ZJI2nixCDo/nH7KOyZSHi+QzviSlnc4urMdkIRhMfC5zfnDR9ntp93whelfJXhIsYxiDvNbasJBsuc+IVpU7hW876m7tOx/Y1/twLxEa6QmB1mrv/6VSXE6GxqOcGBXP08u4KiyLFVUptz0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CUrh6Ic9; arc=none smtp.client-ip=209.85.219.49
+	s=arc-20240116; t=1778208764; c=relaxed/simple;
+	bh=TxFqk8i+4b6dEi3VGsPCyT6UMh99EcS5+9xa5h8ZEmA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DxZiRkBu9RrWJ6w0i9/sbnsgwdRWW0tUESUAXRR3mJs/L5Hi4h7ZETQn9DaK1jgN0wsBe8TkGOlsdJaDUwXUDsVSqDUsfoM9vZF7U4jm9nn9Dx4M9c1WV+M0pOhK+3nKK9Toms0FnJlCJiJnQMh6cUpqPdgs/9AeqLttZ2uoimU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Qd1qlXli; arc=none smtp.client-ip=209.85.208.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CUrh6Ic9"
-Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-8b6dd874471so19632396d6.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 07 May 2026 19:28:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qd1qlXli"
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-67e9e343b22so915635a12.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 07 May 2026 19:52:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778207310; x=1778812110; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dXA1dxVApJgTc6+2n8TQWi9uv8RI7qdSUELHLNuyKvU=;
-        b=CUrh6Ic9M3t2F3UbV8S4dQY58uu4g0KGDl+yntHgetpwybawUW+HDyLQFkZ43ddXPr
-         6U13l9URBGfTLCoYhmCp2HbHFoxjltj0wO9LWOHyeLNGC59sFtZHyXs/EkFRYnduh8SY
-         RKn/cibXHGzXrKnPzZuErnScbQ1Jwo2P5hQLEDOR80HJmicgBxgIrj7kHcfn0taTGzxA
-         2t6+nLP/MWawRKEj2BWoxmTMDFxwkV+AIniQeF3VvVBMphhfzDFkL0PnNRfso7FiySdY
-         Yc/p30iIhxsUFdp/bag84dp6IRa5jsPESuHQt9ve5URFkCXOpYDek1DSg408CfkiIlcp
-         R06w==
+        d=gmail.com; s=20251104; t=1778208762; x=1778813562; darn=vger.kernel.org;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GXo8YRKGAQ0gGQsS3CnfFEP5ggHykysOGobJBcjxhWg=;
+        b=Qd1qlXliLfZ849CmHV+HjAVyD4ZF5SV6Cmf29ECSofNbg0K8Yu6jMtNHVO3Zxd/AMH
+         MuABcvUrioFKZkHOjKAy5eJTKaGKk1F4/u+jOtUvGwdFeJ73NiKhSrEgZVpXe+jGuk6v
+         /ikzuFTMRJUnG55XQIp8Vt3E/fnZcBWQCZFqXMv9Dw+FVPD/gStCsr8T5H+3zo31l3AR
+         HNDbdoeijQBjpXIIEaWA3tEUbkoUSaqpz7LY5ztn5d/m1Sb3XUJg45vFL+Rx6HXGNHfp
+         ENkmpB0oJ/kHEi9Ibl4I4MCbhhgMWGHuaie4h0ZMbtLRNmxk3GRCGyjuDuqFAr4vzts5
+         HmHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778207310; x=1778812110;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=dXA1dxVApJgTc6+2n8TQWi9uv8RI7qdSUELHLNuyKvU=;
-        b=U3pJnboqJICrxzZBKhJ2B7/oQ9lyOcNYcOgRwPASIvQGdSqO0MFAuH0Iy2oyAgpTOh
-         4BRYuwJhtxKUVnp0zmz1X6Tx94KYIaa1aA4M+l/HAjEOL2IV1NA2PKqsbSJAUjMUPvB+
-         hTMaxNC9PLrPYKv4DHEHfy3enQctENLiTtzdM2t7aMUY4xlfGM+teD8br927v3OvTvyN
-         7ivdhf9atRANXkgdzeT4fmObrrLPHaOHr3HfKqxBZ8gysny0bH3bP0gYH5FOOQDVRUeS
-         T2D2APSvtXhMpX7/USj9WgxeDF92rGqFtNdOUVVFtLI96PVVR3zq3tyaTQuFTfo3CK3x
-         FVcw==
-X-Forwarded-Encrypted: i=1; AFNElJ9qUfW0BqLhGiat3i+Ksw5KlJcldiot4RGjCTi6P6nYePhPJJCgxh0MZpba803wXw2E7T93MajcB2B7/GglI+c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzcgUMzxsuCyRGzx8x6WgCOw5nM1J+sjK4p/ueRn0sQKpmPFtE+
-	SJ3VV87nVEIwDNpn+Voc7xFLiUvRGvbgLHAa2RSItAK5K/20WQNMKzVd
-X-Gm-Gg: Acq92OGqgcMMGJS4ytrsIgXkW4TjGPjEjJ0BmalYIq1tLxhe8tksSNTgMiR6CI+iZ45
-	Uw1RtHQnlAcFSS+UXdDd6BR0eTTxkwGxVqeinTTlx0859WwO4LoVp2zHgouEH1VG158mmO4HPpE
-	1wGtVVgXHbctaD78l9wCI1d42b96e4XRNaMgLg/aSBKFkT/cSGqfKEGAENqOWO76mXG8PltSBu7
-	qK7DEEnmw6Auw9rDPV4zfPoFKVs9C076c0zWWGS3jaz5itxeNZ55J57VBCZA+JO4knvqqFKO85O
-	5w2y6kjMkzOeGQ7im8fiC68MlBV565WZetaJl2cMp8eO94341MrW+Y6PZK6XIYrgSRo7YVrOFQm
-	uLf0iBBuJDdTyvI4LByBkq/bRPEXi4VhpUny2lHbAKydSU4tf8WAFAZ8SeyYka4PpkPMv+s0lR8
-	vJHf87M3bVY+tvdxxnZhA=
-X-Received: by 2002:a05:6214:320f:b0:8ac:a6a5:1f41 with SMTP id 6a1803df08f44-8bc443d5c2cmr162619636d6.27.1778207309884;
-        Thu, 07 May 2026 19:28:29 -0700 (PDT)
-Received: from localhost ([2a03:2880:ff:73::])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8bf3a33fab4sm5419346d6.23.2026.05.07.19.28.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 May 2026 19:28:29 -0700 (PDT)
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-Date: Thu, 07 May 2026 19:27:53 -0700
-Subject: [PATCH net-next v3 8/8] selftests: drv-net: add netkit devmem
- tests
+        d=1e100.net; s=20251104; t=1778208762; x=1778813562;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :reply-to:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GXo8YRKGAQ0gGQsS3CnfFEP5ggHykysOGobJBcjxhWg=;
+        b=dCeq9RfXhm1JprcaQh37gLbYXOeux1rCQh7GEOIE4zSPaeCB4DYNQrg2cYHLjs1BK4
+         YCUlI2F6YX84rFYH/+PysvhbgS2y4DnLnaeNRpiCuTMKqSxMnr6tuOAdkV1a3bl4FqI5
+         AdYhUsiWuXLdgPLwc0q6C52rJ/ZsLw+1ujKgwGr7VPPFiKGYwvCToNa8gOFdDen1coXv
+         NFTo1BZjxGrnnZ9k4OGya4244jsI7T6P7UCYfR+zraJCOtu7cxMRDJDi1TkaVEjutApR
+         9NdRgc1nnfkkPXanzCTOQQ7anCP91IFkACsIGXVtNAVp6br9yM5R7B9aGQQf2+iM8C82
+         YWqA==
+X-Forwarded-Encrypted: i=1; AFNElJ+1ifxedNtlGfAA6ICI/iSSrV/DIZlSFdzbozlT6R3Q0A1HwshgYja9f9sOXTQhjV9qVm2muguo8ywHu2B99s8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx6IPmw6Y8kHT0VFLOza62A+x3c0cICt+SAv6rCk1aXR0H186yE
+	kcBwvBQ6dogtoWzw5LUkd4Sbh4RMkBt878cTXZiPlRq/n+dgCrp4yAPw
+X-Gm-Gg: Acq92OF5p5z6tGMeAZwAkA5m7a/8HIfaFaAzM2LPsogd9q/QB4kqMYoF9Ph3wiSqBxd
+	tX8ZWASUibwhIAiuvhuELcVHTx1G9mA8WCdWA2jCKp4ggIw5ruAJKguDD8+G9APpGznJeRzNzUd
+	Zm3GIDmlNiObRXAcLX4RUQ21tHlSZT1ol5D/w1bajARv8mOnFWEhgaRwFAJbx1MJH8lE+iWYtRN
+	UvcHMAj/3/XaCbs36pavJAug0rM16T+5M0AxKJPwu7jdGQnbQcuf45eV3a35XlrrZ25TJ5761eZ
+	STD13DPHThuCjBJ4SybS7znsISrTETsfyNi/u5MYKuTvQwVmjok6aVOpakNy+QXM/feH3NEE04r
+	NWxd8Tp4WeFj+3NqbiQk5QqAAqO584RQRcHR1PT1qSmRgPcE0uCb1UtKjG3MOiFPLuFGrQRWUJX
+	9J6jqHd49Heb17eW3diCCP4d/gyS/HJc0w
+X-Received: by 2002:a50:fa8d:0:b0:676:988e:8eb6 with SMTP id 4fb4d7f45d1cf-67d648a9ed2mr3977298a12.26.1778208761525;
+        Thu, 07 May 2026 19:52:41 -0700 (PDT)
+Received: from localhost ([185.92.221.13])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-67ef0e1a221sm102651a12.24.2026.05.07.19.52.39
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 07 May 2026 19:52:40 -0700 (PDT)
+Date: Fri, 8 May 2026 02:52:39 +0000
+From: Wei Yang <richard.weiyang@gmail.com>
+To: Zi Yan <ziy@nvidia.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
+	Song Liu <songliubraving@fb.com>, Chris Mason <clm@fb.com>,
+	David Sterba <dsterba@suse.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Nico Pache <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
+	Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
+	Lance Yang <lance.yang@linux.dev>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
+	linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v5 05/14] mm: remove READ_ONLY_THP_FOR_FS Kconfig option
+Message-ID: <20260508025239.ooz5kc5a3n372ebb@master>
+Reply-To: Wei Yang <richard.weiyang@gmail.com>
+References: <20260429152924.727124-1-ziy@nvidia.com>
+ <20260429153538.727855-1-ziy@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260507-tcp-dm-netkit-v3-8-52821445867c@meta.com>
-References: <20260507-tcp-dm-netkit-v3-0-52821445867c@meta.com>
-In-Reply-To: <20260507-tcp-dm-netkit-v3-0-52821445867c@meta.com>
-To: Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <skhan@linuxfoundation.org>, Alex Shi <alexs@kernel.org>, 
- Yanteng Si <si.yanteng@linux.dev>, Dongliang Mu <dzm91@hust.edu.cn>, 
- Michael Chan <michael.chan@broadcom.com>, 
- Pavan Chebbi <pavan.chebbi@broadcom.com>, 
- Joshua Washington <joshwash@google.com>, 
- Harshitha Ramamurthy <hramamurthy@google.com>, 
- Saeed Mahameed <saeedm@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>, 
- Mark Bloch <mbloch@nvidia.com>, Leon Romanovsky <leon@kernel.org>, 
- Alexander Duyck <alexanderduyck@fb.com>, kernel-team@meta.com, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- Nikolay Aleksandrov <razor@blackwall.org>, Shuah Khan <shuah@kernel.org>, 
- Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <skhan@linuxfoundation.org>, Alex Shi <alexs@kernel.org>, 
- Yanteng Si <si.yanteng@linux.dev>, Dongliang Mu <dzm91@hust.edu.cn>, 
- Michael Chan <michael.chan@broadcom.com>, 
- Pavan Chebbi <pavan.chebbi@broadcom.com>, 
- Joshua Washington <joshwash@google.com>, 
- Harshitha Ramamurthy <hramamurthy@google.com>, 
- Saeed Mahameed <saeedm@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>, 
- Mark Bloch <mbloch@nvidia.com>, Leon Romanovsky <leon@kernel.org>, 
- Alexander Duyck <alexanderduyck@fb.com>, kernel-team@meta.com, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- Nikolay Aleksandrov <razor@blackwall.org>, Shuah Khan <shuah@kernel.org>
-Cc: dw@davidwei.uk, sdf.kernel@gmail.com, mohsin.bashr@gmail.com, 
- willemb@google.com, jiang.kun2@zte.com.cn, xu.xin16@zte.com.cn, 
- wang.yaxin@zte.com.cn, netdev@vger.kernel.org, linux-doc@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org, 
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Stanislav Fomichev <sdf@fomichev.me>, Mina Almasry <almasrymina@google.com>, 
- netdev@vger.kernel.org, linux-doc@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org, 
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Bobby Eshleman <bobbyeshleman@meta.com>
-X-Mailer: b4 0.14.3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260429153538.727855-1-ziy@nvidia.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
 
-From: Bobby Eshleman <bobbyeshleman@meta.com>
+On Wed, Apr 29, 2026 at 11:35:28AM -0400, Zi Yan wrote:
+>After removing READ_ONLY_THP_FOR_FS check in file_thp_enabled(),
+>khugepaged and MADV_COLLAPSE can run on FSes with PMD THP pagecache
+>support even without READ_ONLY_THP_FOR_FS enabled. Remove the Kconfig first
+>so that no one can use READ_ONLY_THP_FOR_FS as upcoming commits remove
+>mapping->nr_thps, which its safe guard mechanism relies on.
+>
+>Signed-off-by: Zi Yan <ziy@nvidia.com>
+>Reviewed-by: Lorenzo Stoakes (Oracle) <ljs@kernel.org>
+>Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+>Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+>---
+> mm/Kconfig | 11 -----------
+> 1 file changed, 11 deletions(-)
+>
+>diff --git a/mm/Kconfig b/mm/Kconfig
+>index e221fa1dc54d0..27dc5b0139ba6 100644
+>--- a/mm/Kconfig
+>+++ b/mm/Kconfig
+>@@ -936,17 +936,6 @@ config THP_SWAP
+> 
+> 	  For selection by architectures with reasonable THP sizes.
+> 
+>-config READ_ONLY_THP_FOR_FS
+>-	bool "Read-only THP for filesystems (EXPERIMENTAL)"
+>-	depends on TRANSPARENT_HUGEPAGE
+>-
+>-	help
+>-	  Allow khugepaged to put read-only file-backed pages in THP.
+>-
+>-	  This is marked experimental because it is a new feature. Write
+>-	  support of file THPs will be developed in the next few release
+>-	  cycles.
+>-
 
-Add nk_devmem.py with four tests for TCP devmem through a netkit device:
+Hi,
 
-These tests are just duplicates of the original devmem tests, with some
-adjusted parameters such as telling ncdevmem to avoid device setup
-(since it only has access to netkit, not a phys device).
+I see hugepage_enabled() in khugepaged.c still use READ_ONLY_THP_FOR_FS.
 
-Each test uses NetDrvContEnv with primary_rx_redirect=True to set up the
-BPF redirect program on the primary netkit interface.
-
-The NIC (HDS, RSS, queue lease) is configured once in main() before
-ksft_run() and torn down in a finally block via cleanup_nic(), mirroring
-the nk_qlease.py pattern. This avoids re-toggling NIC settings around
-every test case.
-
-Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
----
-Changes in v4:
-- Call configure_nic()/cleanup_nic() once around ksft_run() rather than
-  relying on per-test configuration inside the run_* helpers.
-
-Changes in v3:
-- Reorder os.path expressions
-- Drop @ksft_disruptive from check_nk_rx_hds to mirror the original
-  check_rx_hds in devmem.py
-
-Changes in v2:
-- Add nk_devmem.py to TEST_PROGS in Makefile (Sashiko)
----
- tools/testing/selftests/drivers/net/hw/Makefile    |  1 +
- .../testing/selftests/drivers/net/hw/nk_devmem.py  | 55 ++++++++++++++++++++++
- 2 files changed, 56 insertions(+)
-
-diff --git a/tools/testing/selftests/drivers/net/hw/Makefile b/tools/testing/selftests/drivers/net/hw/Makefile
-index 85ca4d1ecf9e..2f78c6aec397 100644
---- a/tools/testing/selftests/drivers/net/hw/Makefile
-+++ b/tools/testing/selftests/drivers/net/hw/Makefile
-@@ -34,6 +34,7 @@ TEST_PROGS = \
- 	irq.py \
- 	loopback.sh \
- 	nic_timestamp.py \
-+	nk_devmem.py \
- 	nk_netns.py \
- 	nk_qlease.py \
- 	ntuple.py \
-diff --git a/tools/testing/selftests/drivers/net/hw/nk_devmem.py b/tools/testing/selftests/drivers/net/hw/nk_devmem.py
-new file mode 100755
-index 000000000000..0e36a0fa9688
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/hw/nk_devmem.py
-@@ -0,0 +1,55 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
-+"""Test devmem TCP with netkit."""
-+
-+import os
-+from lib.py import ksft_run, ksft_exit, ksft_disruptive
-+from lib.py import NetDrvContEnv
-+from lib.py.devmem import (setup_test, require_devmem, configure_nic,
-+                           cleanup_nic, run_rx, run_tx, run_tx_chunks,
-+                           run_rx_hds)
-+
-+
-+@ksft_disruptive
-+def check_nk_rx(cfg) -> None:
-+    """Run the devmem RX test through netkit."""
-+    run_rx(cfg)
-+
-+
-+@ksft_disruptive
-+def check_nk_tx(cfg) -> None:
-+    """Run the devmem TX test through netkit."""
-+    run_tx(cfg)
-+
-+
-+@ksft_disruptive
-+def check_nk_tx_chunks(cfg) -> None:
-+    """Run the devmem TX chunking test through netkit."""
-+    run_tx_chunks(cfg)
-+
-+
-+def check_nk_rx_hds(cfg) -> None:
-+    """Run the HDS test through netkit."""
-+    run_rx_hds(cfg)
-+
-+
-+def main() -> None:
-+    """Configure the NIC once, then run the netkit devmem test cases."""
-+    with NetDrvContEnv(__file__, rxqueues=2, primary_rx_redirect=True) as cfg:
-+        setup_test(cfg,
-+                   os.path.join(os.path.dirname(os.path.abspath(__file__)),
-+                                "ncdevmem"))
-+
-+        require_devmem(cfg)
-+        configure_nic(cfg)
-+        try:
-+            ksft_run([check_nk_rx, check_nk_tx, check_nk_tx_chunks,
-+                      check_nk_rx_hds], args=(cfg,))
-+        finally:
-+            cleanup_nic(cfg)
-+
-+    ksft_exit()
-+
-+
-+if __name__ == "__main__":
-+    main()
+> config NO_PAGE_MAPCOUNT
+> 	bool "No per-page mapcount (EXPERIMENTAL)"
+> 	help
+>-- 
+>2.53.0
+>
 
 -- 
-2.53.0-Meta
-
+Wei Yang
+Help you, Help me
