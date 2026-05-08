@@ -1,176 +1,347 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E9F4221DB3;
-	Fri,  8 May 2026 20:14:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C6EF221DB3
+	for <linux-kselftest@vger.kernel.org>; Fri,  8 May 2026 20:14:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778271241; cv=none; b=kkYPtTDum72NQ8XvKCc626jd71xwbk4kS9TnjZAMtBaJyA5ozdOtAx9L937LKCLd/are55JePb47XNB7iAOWNuXHYXLfUnvJkEbR8I0WSQBL4N+nqZRRoWWQV+cb5tR+hBz1pCkw006zDGucLmT912ty5EOMRLO4AGjHg1lJOkk=
+	t=1778271255; cv=none; b=CUilvK4MwnjrmLeXEPYe0XLl5HfYJcWL+1o3Cts7eCkkouc+VrZXwhk3v0uNAubaHvr4pVmX5N5oyy/PrOxPwaEx9Vq0T3bUfYpSvSIx3vTtJV3GaK7J/9qeZIOsHoiREAZXN4JlffLYgaaKqJxQHqPUebscFej92nLXWFR23so=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778271241; c=relaxed/simple;
-	bh=hxYgkYjG67gsdnfV7iJptPK6UKCqEsrTTyrjyXlkR1c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eyWEOF1/sgj06Z6Uxx2oJ1KR2D8Gcw0m77QBdT9cGC5DtHXpxQ+NOyjEqNhGGmAJ3PF5oKipGAi+fzR60TjTEf/2460XdwZWShdLbB/ciLNRDxFC26NgsbqtAemKgvLkntnzbINP1Wzwc9d9hxBY5NhpHwzE9SEvZ5/06J7lWpU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LHtvnfbU; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778271255; c=relaxed/simple;
+	bh=RS45nGaa2xfpxH8/SkFIMEiC/EompSfjijdiBnxEf+Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Yj1qAjr73ZOVtcxfT4UzlFgNCV/apHSy50nuwoyQthsneA//75sDaIWv9ddGgsd9RL0wrpAzqzKlRJaDkUEVc6PfdYSMs5ZTgplJwRaRseKrSZfOpTrV8qXfbAOIN+ikPoLmI8JS9jbokfAjl/W3QtRGARn3AnVNZlM3QuhPXXA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CVJPwjkN; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LHtvnfbU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C735C2BCB0;
-	Fri,  8 May 2026 20:13:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778271241;
-	bh=hxYgkYjG67gsdnfV7iJptPK6UKCqEsrTTyrjyXlkR1c=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=LHtvnfbUnAn1itMO5JnsxJvmwUVGU8cIc09e/GNdS5u0N99UZQaOCu1FUn5eHyLFz
-	 kiU1yWY7UdIgcbhFWm7ChdnCjgQoBWHtva/iyb0ZXmrpL7koLNRthngO4y0yswIGhO
-	 gBpNjkIkRCIu4C4olmSvuEFzfuQOYLoXP/evhxI5czz1aKF/LlwtwFCqwQwVLe2HP1
-	 WrQ6sctqlZh29QqtfiYzSuvlvwmjcnEMCegSO4qlxxZlKGVV4pmFzhRgPr2wAvgADU
-	 V/0MOSyp24Uwypku5XAbLe7Gcbntnvmp6eV6HY7xVvKUyKnOp8mtXHsJdL/tnjixjT
-	 M3ekFqMx+v39A==
-Message-ID: <b8a3c3eb-f241-40fe-9121-4ae5a1097807@kernel.org>
-Date: Fri, 8 May 2026 22:13:50 +0200
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CVJPwjkN"
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2b458ca2296so16470645ad.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 08 May 2026 13:14:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1778271253; x=1778876053; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=QwE6EAn1RnwC3qP85ag91J2sbQhIq4l6SOE5wwfoP3s=;
+        b=CVJPwjkN4+GrlFbHL+265ZQ0BVhHmk1PEQlH8Lk1fslR2X2yVQ/myd1qJRATMFCxsZ
+         hVHWNM9U5dEXOLefcPdPBA3m9WYvi4sSoA1gZpy2Q7AlNtDxFoIjHXUt2fvBnEkWKiMW
+         Pgi55NNDNtyH4EjQf2Q6bfN47vyej7QOPDFb4hoPfVzqYFAVjanGpZHEQ0yA7HEsLbGc
+         VdL3uFqkScK6xZ3iIgjZFEj/+ReNFM3fHWjc6RNKrZg/FHg1p/Ik44YFamQ2inOCNEFv
+         rsGXxAnsOVGzDIDKBd9PmpIfA7qj+pu2YXM68QXbHvpU4Oj+vu3/6jVEnYNsVdgsy/XN
+         5tOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778271253; x=1778876053;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QwE6EAn1RnwC3qP85ag91J2sbQhIq4l6SOE5wwfoP3s=;
+        b=qPwCJ4sXePH3DeJS8pD67O/HRXTF090yHEh11cteNgQRc/31RxZdD2wn6i+geB3zeQ
+         VASrPHl9tHXnS4pssqzOZPrReLn0fs/J4wNABU/ncv3O4HQ2sP3ZboR+HzUz/lrvm5ZF
+         eNkSoJwbQaSWcnXP+cH3ujG1N/XRPd7LNn7Xfo/MIcjgd6eXaPNGEQV9aUzlNBIEuKC0
+         Xsiq3QLe7yiEPcjp1ooknAz17fDHfoTOpaWAkp4QAnLTu3vP2v58cOdZcDaziWatzY7J
+         drQIQ1k91Bg+nO4vdaPBVvMRnsP0B/ybP7MG2piQRokdV5Q/fqj46bnEV9THrtua89wZ
+         Uhmg==
+X-Forwarded-Encrypted: i=1; AFNElJ+ZlZ3ywRnhhr5YLNtTU/b9pB7O6ABdh5YqV2R7X/eRF9Sw4jXCvmbl8ku6tUndyQa5POG1dTK+1YPMihncwlg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyhqM1ZJjwIJRmpJzpRh2iXlpU9/yAHBCrNPnGzxGcJjtgc6+fh
+	FYcOll4w+qowazV49TWlifutkkitteDvHSc7zIee1jiTvngoC++978ZuWKgL5dD1tg==
+X-Gm-Gg: Acq92OFas1Va082GAKGbbVvVo1Yj7oq1JYM6FFnOeUQB4h6N+A2iEiK355ipqSPAu7V
+	U/v/k4MfFHVAbeY8fINH9e05hz5ROehau/GDEg5i+QCSbjGJ1MZxryLB2OYt3rIjVw3Y6QhvY0q
+	Tc47cxe3TbIoElU84GJBGsxeVhmlG35LBSY26b8L9oPox02YDjpl1QFLL6yGQ0OOdF59ZpSgpcB
+	yflmCv+R3JRzwRpoXIm/Ecf90YHPn41I0HmBL1/9VYSRwFtswRmjT8c9t6WaQTHTBU4RmhRAEH8
+	z9+uJLSaxOiIf/N5lDc8zJHV5mw0hFoNLQBDliMyJC1vXB0i/W7mlSHy82X1zxi1Q98oX92Q/NR
+	ED4/nJOt8tcTJwOAcIpxM1/59qguReHwLigj7BaC1C4HzMcyIaxAKUSivVu7iT8YOA2SEha3jiJ
+	goE8gk06KFh9kT3lxlOysBk6DGD1dSAqihPNnVtO2RBXBDOxv1F+e8FEsKqa1YvDAhlkSNqk84D
+	s3YKdjqQHQ=
+X-Received: by 2002:a17:902:e549:b0:2b4:6367:7b86 with SMTP id d9443c01a7336-2baf0e5d92dmr45426795ad.37.1778271252255;
+        Fri, 08 May 2026 13:14:12 -0700 (PDT)
+Received: from google.com (56.149.168.34.bc.googleusercontent.com. [34.168.149.56])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2baf1d27109sm31559395ad.1.2026.05.08.13.14.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 May 2026 13:14:11 -0700 (PDT)
+Date: Fri, 8 May 2026 20:14:08 +0000
+From: David Matlack <dmatlack@google.com>
+To: Samiullah Khawaja <skhawaja@google.com>
+Cc: Aex Williamson <alex@shazbot.org>, Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 2/2] vfio: selftests: Add iommufd multi iommu test
+Message-ID: <af5EEN8PhVz4pTdE@google.com>
+References: <20260505221518.619123-1-skhawaja@google.com>
+ <20260505221518.619123-3-skhawaja@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 13/14] mm/khugepaged: enable clean pagecache folio
- collapse for writable files
-To: Zi Yan <ziy@nvidia.com>, Andrew Morton <akpm@linux-foundation.org>,
- "Matthew Wilcox (Oracle)" <willy@infradead.org>,
- Song Liu <songliubraving@fb.com>
-Cc: Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>,
- Alexander Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
- Lorenzo Stoakes <ljs@kernel.org>, Baolin Wang
- <baolin.wang@linux.alibaba.com>, "Liam R. Howlett"
- <Liam.Howlett@oracle.com>, Nico Pache <npache@redhat.com>,
- Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
- Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Shuah Khan <shuah@kernel.org>, linux-btrfs@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-References: <20260429152924.727124-1-ziy@nvidia.com>
- <20260429153538.727855-9-ziy@nvidia.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <20260429153538.727855-9-ziy@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260505221518.619123-3-skhawaja@google.com>
 
-On 4/29/26 17:35, Zi Yan wrote:
-> collapse_file() is capable of collapsing pagecache folios from writable
-> files to PMD folios. Now enable clean pagecache folio collapse in addition
-> to read-only pagecache folio collapse by removing the
-> inode_is_open_for_write() from file_thp_enabled() and only performing
-> filemap_flush() if the file is read-only.
+On 2026-05-05 10:14 PM, Samiullah Khawaja wrote:
+> Add a test for iommufd to verify creation of multiple iommus using an
+> already setup iommufd and switch between them.
 > 
-> This means userspace needs to explicitly flush the content of pagecache
-> folios before khugepaged can collapse the folios, or use
-> madvise(MADV_COLLAPSE), which does the flush in the retry. The reason is
-> that blindly enabling dirty pagecache folio from writable files collapse
-> makes khugepaged flush these folios all the time. It is undesirable to
-> cause system level pagecache flushes.
-> 
-> To properly support dirty pagecache folio collapse, filemap_flush() needs
-> to be avoided. Potentially, merging associated buffer instead of dropping
-> it with filemap_release_folio() might be needed.
-> 
-> NOTE: this breaks khugepaged selftests for writable file pagecache
-> collapse, which is set to fail all the time. The next commit fix it.
-> 
-> Signed-off-by: Zi Yan <ziy@nvidia.com>
+> Signed-off-by: Samiullah Khawaja <skhawaja@google.com>
 > ---
->  mm/huge_memory.c | 2 +-
->  mm/khugepaged.c  | 9 ++++++++-
->  2 files changed, 9 insertions(+), 2 deletions(-)
+>  tools/testing/selftests/vfio/Makefile         |   1 +
+>  .../vfio/vfio_iommufd_multi_iommu_test.c      | 203 ++++++++++++++++++
+>  2 files changed, 204 insertions(+)
+>  create mode 100644 tools/testing/selftests/vfio/vfio_iommufd_multi_iommu_test.c
 > 
-> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-> index 9b3abb98a7e51..e1e9d59db6e70 100644
-> --- a/mm/huge_memory.c
-> +++ b/mm/huge_memory.c
-> @@ -97,7 +97,7 @@ static inline bool file_thp_enabled(struct vm_area_struct *vma)
->  	if (!mapping_pmd_folio_support(vma->vm_file->f_mapping))
->  		return false;
->  
-> -	return !inode_is_open_for_write(inode) && S_ISREG(inode->i_mode);
-> +	return S_ISREG(inode->i_mode);
->  }
->  
->  /* If returns true, we are unable to access the VMA's folios. */
-> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-> index 1ee15b48962a3..fb7ff643973cc 100644
-> --- a/mm/khugepaged.c
-> +++ b/mm/khugepaged.c
-> @@ -2345,7 +2345,14 @@ static enum scan_result collapse_file(struct mm_struct *mm, unsigned long addr,
->  				 * forcing writeback in loop.
->  				 */
->  				xas_unlock_irq(&xas);
-> -				filemap_flush(mapping);
-> +				/*
-> +				 * Only flush for read-only files. Writable
-> +				 * files can have their folios dirty at any
-> +				 * time; blindly flushing them would cause
-> +				 * undesirable system-wide writeback.
-> +				 */
+> diff --git a/tools/testing/selftests/vfio/Makefile b/tools/testing/selftests/vfio/Makefile
+> index 0684932d91bf..24bdeaad590f 100644
+> --- a/tools/testing/selftests/vfio/Makefile
+> +++ b/tools/testing/selftests/vfio/Makefile
+> @@ -8,6 +8,7 @@ else
+>  CFLAGS = $(KHDR_INCLUDES)
+>  TEST_GEN_PROGS += vfio_dma_mapping_test
+>  TEST_GEN_PROGS += vfio_dma_mapping_mmio_test
+> +TEST_GEN_PROGS += vfio_iommufd_multi_iommu_test
+>  TEST_GEN_PROGS += vfio_iommufd_setup_test
+>  TEST_GEN_PROGS += vfio_pci_device_test
+>  TEST_GEN_PROGS += vfio_pci_device_init_perf_test
+> diff --git a/tools/testing/selftests/vfio/vfio_iommufd_multi_iommu_test.c b/tools/testing/selftests/vfio/vfio_iommufd_multi_iommu_test.c
+> new file mode 100644
+> index 000000000000..7199c662637c
+> --- /dev/null
+> +++ b/tools/testing/selftests/vfio/vfio_iommufd_multi_iommu_test.c
+> @@ -0,0 +1,203 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +#include <sys/ioctl.h>
+> +#include <sys/mman.h>
+> +
+> +#include <linux/sizes.h>
+> +#include <linux/vfio.h>
+> +
+> +#include <libvfio.h>
+> +
+> +#include "kselftest_harness.h"
+> +
+> +static const char *device_bdf;
+> +
+> +#define IOMMU_DEFAULT 0
+> +#define IOMMU_WITH_PT 1
+> +#define IOMMU_WITHOUT_PT 2
+> +
+> +static void region_setup(struct iommu *iommu,
+> +			 struct iova_allocator *iova_allocator,
+> +			 struct dma_region *region, u64 size)
+> +{
+> +	const int flags = MAP_SHARED | MAP_ANONYMOUS;
+> +	const int prot = PROT_READ | PROT_WRITE;
+> +	void *vaddr;
+> +
+> +	vaddr = mmap(NULL, size, prot, flags, -1, 0);
+> +	VFIO_ASSERT_NE(vaddr, MAP_FAILED);
+> +
+> +	region->vaddr = vaddr;
+> +	region->iova = iova_allocator_alloc(iova_allocator, size);
+> +	region->size = size;
+> +
+> +	iommu_map(iommu, region);
+> +}
+> +
+> +static void region_teardown(struct iommu *iommu, struct dma_region *region)
+> +{
+> +	iommu_unmap(iommu, region);
+> +	VFIO_ASSERT_EQ(munmap(region->vaddr, region->size), 0);
+> +}
 
-That comment should really be merged in the comment above.
+Can you create library helpers in the library to share with
+vfio_pci_driver_test.c?
 
-Also, there we say "khugepaged only works on read-only fd" ... which is now just
-wrong?
+  dma_region_setup()
+  dma_region_teardown()
 
-Please revise that whole comment as you incorporate your comment.
+> +
+> +FIXTURE(vfio_iommufd_multi_iommu_test) {
+> +	struct iommu *iommu;
+> +	struct vfio_pci_device *device;
+> +	struct iova_allocator *iova_allocator;
+> +	struct dma_region memcpy_region;
+> +	void *vaddr;
+> +
+> +	u64 size;
+> +	void *src;
+> +	void *dst;
+> +	iova_t src_iova;
+> +	iova_t dst_iova;
+> +};
+> +
+> +FIXTURE_SETUP(vfio_iommufd_multi_iommu_test)
+> +{
+> +	struct vfio_pci_driver *driver;
+> +
+> +	self->iommu = iommu_init("iommufd");
 
-Apart from that I guess this is fine ... or we'll learn rather quickly, haha.
+MODE_IOMMUFD
 
--- 
-Cheers,
+> +	self->device = vfio_pci_device_init(device_bdf, self->iommu);
+> +	self->iova_allocator = iova_allocator_init(self->iommu);
+> +
+> +	driver = &self->device->driver;
+> +
+> +	region_setup(self->iommu, self->iova_allocator, &self->memcpy_region, SZ_1G);
+> +	region_setup(self->iommu, self->iova_allocator, &driver->region, SZ_2M);
+> +
+> +	if (driver->ops)
+> +		vfio_pci_driver_init(self->device);
+> +
+> +	self->size = self->memcpy_region.size / 2;
+> +	self->src = self->memcpy_region.vaddr;
+> +	self->dst = self->src + self->size;
+> +
+> +	self->src_iova = to_iova(self->device, self->src);
+> +	self->dst_iova = to_iova(self->device, self->dst);
+> +}
+> +
+> +FIXTURE_TEARDOWN(vfio_iommufd_multi_iommu_test)
+> +{
+> +	struct vfio_pci_driver *driver = &self->device->driver;
+> +
+> +	if (driver->ops)
+> +		vfio_pci_driver_remove(self->device);
+> +
+> +	region_teardown(self->iommu, &self->memcpy_region);
+> +	region_teardown(self->iommu, &driver->region);
+> +
+> +	iova_allocator_cleanup(self->iova_allocator);
+> +	vfio_pci_device_cleanup(self->device);
+> +	iommu_cleanup(self->iommu);
+> +}
+> +
+> +FIXTURE_VARIANT(vfio_iommufd_multi_iommu_test) {
+> +	u32 start_iommu;
+> +	u32 end_iommu;
+> +};
+> +
+> +#define ADD_IOMMU_VARIANT(S, E) \
+> +	FIXTURE_VARIANT_ADD(vfio_iommufd_multi_iommu_test, S##_to_##E) { \
+> +		.start_iommu = IOMMU_##S, \
+> +		.end_iommu = IOMMU_##E \
+> +	};
+> +
+> +#define ADD_ALL_VARIANTS(S) \
+> +	ADD_IOMMU_VARIANT(S, DEFAULT) \
+> +	ADD_IOMMU_VARIANT(S, WITH_PT) \
+> +	ADD_IOMMU_VARIANT(S, WITHOUT_PT)
+> +
+> +ADD_ALL_VARIANTS(DEFAULT)
+> +ADD_ALL_VARIANTS(WITH_PT)
+> +ADD_ALL_VARIANTS(WITHOUT_PT)
+> +
+> +static struct iommu *setup_variant_iommu(struct iommu *fixture_iommu,
+> +					 u32 dev_id, u32 type)
+> +{
+> +	switch (type) {
+> +	case IOMMU_WITH_PT:
+> +		return iommufd_iommu_init(fixture_iommu->iommufd, dev_id,
+> +					  IOMMUFD_IOMMU_INIT_CREATE_PT);
+> +	case IOMMU_WITHOUT_PT:
+> +		return iommufd_iommu_init(fixture_iommu->iommufd, dev_id, 0);
+> +	default:
+> +		return fixture_iommu;
+> +	}
+> +}
+> +
+> +static void test_memcpy(struct vfio_pci_device *device, void *src, void *dst,
+> +			iova_t src_iova, iova_t dst_iova, u64 size, char val)
+> +{
+> +	if (!device->driver.ops)
+> +		return;
+> +
+> +	memset(src, val, size);
+> +	memset(dst, 0, size);
+> +
+> +	vfio_pci_driver_memcpy_start(device, src_iova, dst_iova, size, 100);
 
-David
+Why do 100 copies?
+
+> +	VFIO_ASSERT_EQ(vfio_pci_driver_memcpy_wait(device), 0);
+> +	VFIO_ASSERT_EQ(memcmp(src, dst, size), 0);
+> +}
+> +
+> +TEST_F(vfio_iommufd_multi_iommu_test, memcpy)
+> +{
+> +	struct dma_region memcpy_region1, driver_region1;
+> +	struct dma_region memcpy_region2, driver_region2;
+> +	struct iommu *iommu1;
+> +	struct iommu *iommu2;
+> +
+> +	iommu1 = setup_variant_iommu(self->iommu, self->device->dev_id,
+> +				     variant->start_iommu);
+> +	if (iommu1 != self->iommu) {
+> +		memcpy_region1 = self->memcpy_region;
+> +		driver_region1 = self->device->driver.region;
+> +
+> +		iommu_map(iommu1, &memcpy_region1);
+
+Can you make a helper to copy dma_region into a new iommu? It should set
+up the new struct dma_region based on the old one, re-initialize the
+link field, and then call iommu_map().
+
+> +		iommu_map(iommu1, &driver_region1);
+> +
+> +		vfio_pci_device_attach_iommu(self->device, iommu1);
+> +	}
+> +
+> +	test_memcpy(self->device, self->src, self->dst, self->src_iova,
+> +		    self->dst_iova, self->size, 'x');
+
+nit: You can pass in self to avoid unpacking it in every call to
+test_memcpy(). The type would be:
+
+  struct _test_data_vfio_iommufd_multi_iommu_test *self
+
+> +
+> +	iommu2 = setup_variant_iommu(self->iommu, self->device->dev_id,
+> +				     variant->end_iommu);
+> +	if (iommu2 != self->iommu) {
+> +		memcpy_region2 = self->memcpy_region;
+> +		driver_region2 = self->device->driver.region;
+> +
+> +		iommu_map(iommu2, &memcpy_region2);
+> +		iommu_map(iommu2, &driver_region2);
+> +	}
+> +
+> +	vfio_pci_device_attach_iommu(self->device, iommu2);
+> +	test_memcpy(self->device, self->src, self->dst, self->src_iova,
+> +		    self->dst_iova, self->size, 'a');
+
+test_memcpy() zeroes self->dst every time so do you need to use a
+different character for each call?
+
+> +
+> +	vfio_pci_device_attach_iommu(self->device, iommu1);
+> +	test_memcpy(self->device, self->src, self->dst, self->src_iova,
+> +		    self->dst_iova, self->size, '1');
+> +
+> +	if (iommu1 != self->iommu) {
+> +		/* attach back to default iommu for cleanup */
+> +		vfio_pci_device_attach_iommu(self->device, self->iommu);
+> +		iommu_unmap(iommu1, &memcpy_region1);
+> +		iommu_unmap(iommu1, &driver_region1);
+> +		iommu_cleanup(iommu1);
+> +	}
+> +
+> +	if (iommu2 != self->iommu) {
+> +		iommu_unmap(iommu2, &memcpy_region2);
+> +		iommu_unmap(iommu2, &driver_region2);
+
+nit: You don't need to unmap before cleanup. Is this just to exercise
+that unmap works on the variant iommus?
+
+> +		iommu_cleanup(iommu2);
+> +	}
+> +}
+> +
+> +int main(int argc, char *argv[])
+> +{
+> +	device_bdf = vfio_selftests_get_bdf(&argc, argv);
+> +
+> +	return test_harness_run(argc, argv);
+> +}
+> -- 
+> 2.54.0.545.g6539524ca2-goog
+> 
