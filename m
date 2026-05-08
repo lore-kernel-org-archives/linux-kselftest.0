@@ -1,198 +1,108 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C113539900C;
-	Fri,  8 May 2026 11:24:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D734033A71B;
+	Fri,  8 May 2026 12:23:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778239490; cv=none; b=S52zQ5LGaTQ9BB4b4b4eKi7AjpkVB+py55NZN+euJatis+83xs3de3LZChaHFot2AKGJ5GvvBbBUsRHSuYgkXYEtzoXY+5BHS6bFDaIkrD9V9MGHPAFZ3Y7zqvXoI5TMRkKshb0J11M2fABlG3/w5rVpwX7M7t+YsL6YMLema10=
+	t=1778243026; cv=none; b=kEQhXKv4kwecRNH48QkPN7oCCKcq2AnLHAe7efl81sPXMpoFRmaPKUAVoy5k/Itj43dRO5/YCUlzGex1N8Tb/9oUF670crqREDzhhZHAo5E0cXwUfE2lYbIeYds6ZfRpdMPucWh7pt9bTKjHByrsaCaUqpo9e5eDz0ElfPxTf+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778239490; c=relaxed/simple;
-	bh=LmcXKGmix6NqzwFcXeQHOfXRs3XmSPEct8iSLJAkMJQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YsQd+xsEUVBIz6YHX226lcwLi1ZyDEH6C+OZXGyAZcHeSmJESgmoMMu/9RyqZDIfSGKim+L0izaJVghn7rVhB3wchb/JxNcalVZWXuc0N++4L7cvkV4Dp5Wu0X0yHyqT/JZ9Se255czizd9KXDLEKXX98YUG1Y68QdiI1DwBgKk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jQeoPxec; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1778243026; c=relaxed/simple;
+	bh=s6tGTUaX5JCjVeOsD5Mbqpz/lOTnCe2Wdvu98w/3EP8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Gp32IwV/1c9lyTHog4KrOFEOzhVBjgB1LAoAWIJUpynMxJ+2rVVLixgCr/6IhRNS/rxmhcZoN/fQtl/I8VQgPS+RbDnPfIbbAREfrNovBONIETbDbrFILAyT2UVJPpsuAmrdk4eZ/qSTNO7WDEjA73jhzMZU2/LU+FBH06azq0c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P4/rF3ZS; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jQeoPxec"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1778239489; x=1809775489;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=LmcXKGmix6NqzwFcXeQHOfXRs3XmSPEct8iSLJAkMJQ=;
-  b=jQeoPxecYsf2bqW/Uh/OrHNjZjY7bZGjv4gXLzQSKiZERNstM2fdkmw+
-   WNNTiVg+8xApSJwmos2TiylqX+txF++sEzzPLkqKjEe6NLdmlhK1kFBoZ
-   tDraMxp9Hpl+6sF0hEm6gFm+7jXO1WRQQFnHo/908yFMuSwvFq/qzMOfS
-   86SisxrAkDRYaT1ZBqgTxKyLZOno+pKcejvbZexc8XB6PcTY0n+PbjzPu
-   ZwPljS8uN2Qs8SHT8kuA4r/EumzRElBZPvKvdKl3peZ2RyxziQy92nCJz
-   TyDV34TdUH/CWeaKw1wnAv3jS8uEHVvIogR/5MMBsd2j2rXUsfH/rkiKc
-   Q==;
-X-CSE-ConnectionGUID: ksSTN0FgSI6JjCkCrbcAwg==
-X-CSE-MsgGUID: /H84a1XUSryt491aOlCY7A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11779"; a="83076772"
-X-IronPort-AV: E=Sophos;i="6.23,223,1770624000"; 
-   d="scan'208";a="83076772"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2026 04:24:48 -0700
-X-CSE-ConnectionGUID: 2sIEqEivS8WgVEGEnW1aAg==
-X-CSE-MsgGUID: C0v1TcwcSAGEJrX9tV4Ykg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.23,223,1770624000"; 
-   d="scan'208";a="260472007"
-Received: from ly-workstation.sh.intel.com (HELO ly-workstation) ([10.239.182.64])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2026 04:24:46 -0700
-Date: Fri, 8 May 2026 19:24:43 +0800
-From: "Lai, Yi" <yi1.lai@intel.com>
-To: Zhu Yanjun <yanjun.zhu@linux.dev>
-Cc: Zhu Yanjun <zyjzyj2000@gmail.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-	Leon Romanovsky <leon@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	linux-rdma@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, yi1.lai@linux.intel.com
-Subject: Re: [PATCH] selftests/rdma: explicitly skip tests when required
- modules are missing
-Message-ID: <af3H+/9cdaUTEgi1@ly-workstation>
-References: <20260507125106.3114167-1-yi1.lai@intel.com>
- <63aa67fb-5c8b-42be-a38f-cd5a92ac528a@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P4/rF3ZS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4752C2BCB0;
+	Fri,  8 May 2026 12:23:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778243026;
+	bh=s6tGTUaX5JCjVeOsD5Mbqpz/lOTnCe2Wdvu98w/3EP8=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=P4/rF3ZSylK+dBUn1xj86IryMJaFVSWYryQkubG/z59q5KlNELky4PZ+r/+crs+3/
+	 x0fiFk8gCSwBCSmUIuer6Nh57SBsgRlLSj2h+W/S9YQnj4i4psF2+6eTxqqFcr2hei
+	 RE6Nerb9ueRW98FtkrpIDj2W8P1dnxuG9jYVj2H2KiyW5gJgpIHHmyi/OKVysbk9lT
+	 oOvf67FK2U+4t4iJo5U/xrql5kBpn6/Q9fqgJhZxh/fWH2GLiERdc07aBflBERS+MA
+	 kDosDukktUDSaWtlsu+Q7XaTOD1rdDyaRDEear7F3Eqg4K6g0kJllG6kvx2lCAi/gL
+	 8PpvF9vRbTNag==
+Message-ID: <bdc711fc-c625-4696-b6bc-28461c0c80f2@kernel.org>
+Date: Fri, 8 May 2026 14:23:41 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <63aa67fb-5c8b-42be-a38f-cd5a92ac528a@linux.dev>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] selftests/mm: add MADV_COLLAPSE sub-PMD range tests
+To: Chen Wandun <chenwandun1@gmail.com>, akpm@linux-foundation.org,
+ ljs@kernel.org, shuah@kernel.org, zokeefe@google.com
+Cc: linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org
+References: <20260507070558.3064142-1-chenwandun@lixiang.com>
+ <20260507070558.3064142-3-chenwandun@lixiang.com>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <20260507070558.3064142-3-chenwandun@lixiang.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, May 07, 2026 at 09:21:09PM -0700, Zhu Yanjun wrote:
-> 
-> 在 2026/5/7 5:51, Yi Lai 写道:
-> > Currently, the rdma rxe selftests fail with an exit code of 1 when
-> > required kernel modules are not present. This causes spurious failures
-> > in environments where these modules might not be compiled or available.
-> > 
-> > Include the standard kselftest 'ktap_helpers.sh' and replace the
-> > hardcoded error exits with '$KSFT_SKIP'. This ensures the tests are
-> > properly marked as skipped rather than failed.
-> tools/testing/selftests/rdma/rxe_rping_between_netns.sh:30:modprobe rdma_rxe
-> || { echo "Failed to load rdma_rxe"; exit 1; }
-> tools/testing/selftests/rdma/rxe_socket_with_netns.sh:29: modprobe "$m" || {
-> echo "Error: Failed to load $m"; exit 1; }
-> 
-> In the above script files, if modprobe fails, exit 1;
-> 
-> I am wondering if we need to replace error code 1 with $KSFT_SKIP.
->
+On 5/7/26 09:05, Chen Wandun wrote:
+> Add madv_collapse_range to verify the fix for the spurious -EINVAL
+> returned by madvise_collapse() when the madvised range contains no
+> complete PMD-aligned window.
 
-Thanks for the review.
+Do we really need 141 LOC of test to verify a "userspace is being stupid" scenario?
 
-At this point, the module's existence is already verified using modinfo.
-In my opinion, a failure at modprobe here implies an active operational
-error, so returning 1 to highlight the malfunction seems reasonable.
+Nothing was really broken, it's just a suboptimal return value, or what am I
+missing?
 
-Regards,
-Yi Lai 
-> Except the above, I am fine with this commit.
-> 
-> Reviewed-by: Zhu Yanjun <yanjun.zhu@linux.dev>
-> 
-> Zhu Yanjun
-> 
-> > 
-> > Signed-off-by: Yi Lai <yi1.lai@intel.com>
-> > ---
-> >   tools/testing/selftests/rdma/rxe_ipv6.sh                   | 6 ++++--
-> >   tools/testing/selftests/rdma/rxe_rping_between_netns.sh    | 7 +++++++
-> >   tools/testing/selftests/rdma/rxe_socket_with_netns.sh      | 6 ++++++
-> >   tools/testing/selftests/rdma/rxe_test_NETDEV_UNREGISTER.sh | 6 ++++--
-> >   4 files changed, 21 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/tools/testing/selftests/rdma/rxe_ipv6.sh b/tools/testing/selftests/rdma/rxe_ipv6.sh
-> > index b7059bfd6d7c..32dad687a044 100755
-> > --- a/tools/testing/selftests/rdma/rxe_ipv6.sh
-> > +++ b/tools/testing/selftests/rdma/rxe_ipv6.sh
-> > @@ -8,6 +8,8 @@ RXE_NAME="rxe6"
-> >   PORT=4791
-> >   IP6_ADDR="2001:db8::1/64"
-> > +source "$(dirname "$0")/../kselftest/ktap_helpers.sh"
-> > +
-> >   exec > /dev/null
-> >   # Cleanup function to run on exit (even on failure)
-> > @@ -21,8 +23,8 @@ trap cleanup EXIT
-> >   # 1. Prerequisites check
-> >   for mod in tun veth rdma_rxe; do
-> >       if ! modinfo "$mod" >/dev/null 2>&1; then
-> > -        echo "Error: Kernel module '$mod' not found."
-> > -        exit 1
-> > +        echo "SKIP: Kernel module '$mod' not found." >&2
-> > +        exit $KSFT_SKIP
-> >       fi
-> >   done
-> > diff --git a/tools/testing/selftests/rdma/rxe_rping_between_netns.sh b/tools/testing/selftests/rdma/rxe_rping_between_netns.sh
-> > index e5b876f58c6e..e7554fbb8951 100755
-> > --- a/tools/testing/selftests/rdma/rxe_rping_between_netns.sh
-> > +++ b/tools/testing/selftests/rdma/rxe_rping_between_netns.sh
-> > @@ -8,6 +8,8 @@ IP_A="1.1.1.1"
-> >   IP_B="1.1.1.2"
-> >   PORT=4791
-> > +source "$(dirname "$0")/../kselftest/ktap_helpers.sh"
-> > +
-> >   exec > /dev/null
-> >   # --- Cleanup Routine ---
-> > @@ -27,6 +29,11 @@ if [[ $EUID -ne 0 ]]; then
-> >      exit 1
-> >   fi
-> > +if ! modinfo rdma_rxe >/dev/null 2>&1; then
-> > +    echo "SKIP: Kernel module 'rdma_rxe' not found." >&2
-> > +    exit $KSFT_SKIP
-> > +fi
-> > +
-> >   modprobe rdma_rxe || { echo "Failed to load rdma_rxe"; exit 1; }
-> >   # --- Setup Network Topology ---
-> > diff --git a/tools/testing/selftests/rdma/rxe_socket_with_netns.sh b/tools/testing/selftests/rdma/rxe_socket_with_netns.sh
-> > index 002e5098f751..9478657c02c1 100755
-> > --- a/tools/testing/selftests/rdma/rxe_socket_with_netns.sh
-> > +++ b/tools/testing/selftests/rdma/rxe_socket_with_netns.sh
-> > @@ -4,6 +4,8 @@
-> >   PORT=4791
-> >   MODS=("tun" "rdma_rxe")
-> > +source "$(dirname "$0")/../kselftest/ktap_helpers.sh"
-> > +
-> >   exec > /dev/null
-> >   # --- Helper: Cleanup Routine ---
-> > @@ -26,6 +28,10 @@ if [[ $EUID -ne 0 ]]; then
-> >   fi
-> >   for m in "${MODS[@]}"; do
-> > +    if ! modinfo "$m" >/dev/null 2>&1; then
-> > +        echo "SKIP: Kernel module '$m' not found." >&2
-> > +        exit $KSFT_SKIP
-> > +    fi
-> >       modprobe "$m" || { echo "Error: Failed to load $m"; exit 1; }
-> >   done
-> > diff --git a/tools/testing/selftests/rdma/rxe_test_NETDEV_UNREGISTER.sh b/tools/testing/selftests/rdma/rxe_test_NETDEV_UNREGISTER.sh
-> > index 021ca451499d..8c18cea7535c 100755
-> > --- a/tools/testing/selftests/rdma/rxe_test_NETDEV_UNREGISTER.sh
-> > +++ b/tools/testing/selftests/rdma/rxe_test_NETDEV_UNREGISTER.sh
-> > @@ -5,6 +5,8 @@ DEV_NAME="tun0"
-> >   RXE_NAME="rxe0"
-> >   RDMA_PORT=4791
-> > +source "$(dirname "$0")/../kselftest/ktap_helpers.sh"
-> > +
-> >   exec > /dev/null
-> >   # --- Cleanup Routine ---
-> > @@ -19,8 +21,8 @@ trap cleanup EXIT
-> >   # 1. Dependency Check
-> >   if ! modinfo rdma_rxe >/dev/null 2>&1; then
-> > -    echo "Error: rdma_rxe module not found."
-> > -    exit 1
-> > +    echo "SKIP: rdma_rxe module not found." >&2
-> > +    exit $KSFT_SKIP
-> >   fi
-> >   modprobe rdma_rxe
-> 
-> -- 
-> Best Regards,
-> Yanjun.Zhu
-> 
+-- 
+Cheers,
+
+David
