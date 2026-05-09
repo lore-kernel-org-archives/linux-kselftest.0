@@ -1,61 +1,235 @@
-Received: from cygnus.enyo.de (cygnus.enyo.de [79.140.189.114])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E5AD1E49F;
-	Sat,  9 May 2026 12:35:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.140.189.114
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 405C52FC037
+	for <linux-kselftest@vger.kernel.org>; Sat,  9 May 2026 13:10:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778330152; cv=none; b=ug/V3p/S76Lk8S0lCc1EuYehGuoWKetiB5qz9NZFF6MpPc9iaFZaN6qEtVuGUgF8+/32NGhbwT2A8ZEE+tI4MG9X2Ab+ZQTc7R/HRALiyr4N084sHahL5nS4vemQQ7LUsd1/qRaOMZFJDtw2525ddh71kSTH8MyagNnRajcuVqU=
+	t=1778332218; cv=none; b=qeMCucszUaXu4AWDQHlccSoW+vt61Gt3VPRg+LO+dfG58hVlntrKbsrFx4qD8UtZ5uXGptUmaDJnn9r5kJ4gIbz9N2Aha6BgMr4IKoqGOKf1sx4jNLQK7Xwq6TESYx5hYjZpJQ+5Qx4c301nIXjmJFVGYjThJOXglJd5HLyBZvc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778330152; c=relaxed/simple;
-	bh=dA8qeLx7sAMr3sfR0A9AuZoQc5FZDHMi9PENj+xCDtw=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=ecGlmuCp5wPjTBHmcFm0sdnDeqUIOw8ybfEuF8ugR0hR3Scj1lGlRDTsdvbequTu8esKpm4tUJr32HPguMpe8Uy7bVSGC4SFTqrWk8kF8jNoil8fmS4XdvpO5FrRngzHffehT0KKYWUHHaw5ONHKdJCHzyn0sekIYT7LHrUEC8I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=deneb.enyo.de; spf=pass smtp.mailfrom=deneb.enyo.de; arc=none smtp.client-ip=79.140.189.114
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=deneb.enyo.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=deneb.enyo.de
-Received: from [172.17.203.2] (port=48887 helo=deneb.enyo.de)
-	by albireo.enyo.de ([172.17.140.2]) with esmtps (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	id 1wLgO0-0000000060f-3vFM;
-	Sat, 09 May 2026 12:02:24 +0000
-Received: from fw by deneb.enyo.de with local (Exim 4.98.2)
-	(envelope-from <fw@deneb.enyo.de>)
-	id 1wLgO0-00000000KvJ-37ts;
-	Sat, 09 May 2026 14:02:24 +0200
-From: Florian Weimer <fw@deneb.enyo.de>
-To: Sasha Levin <sashal@kernel.org>
-Cc: corbet@lwn.net,  akpm@linux-foundation.org,  skhan@linuxfoundation.org,
-  linux-doc@vger.kernel.org,  linux-kernel@vger.kernel.org,
-  linux-kselftest@vger.kernel.org,  gregkh@linuxfoundation.org
-Subject: Re: [PATCH v2] killswitch: add per-function short-circuit
- mitigation primitive
-In-Reply-To: <20260508195749.1885522-1-sashal@kernel.org> (Sasha Levin's
-	message of "Fri, 8 May 2026 15:57:48 -0400")
-References: <20260508195749.1885522-1-sashal@kernel.org>
-Date: Sat, 09 May 2026 14:02:24 +0200
-Message-ID: <87ecjku6y7.fsf@mid.deneb.enyo.de>
+	s=arc-20240116; t=1778332218; c=relaxed/simple;
+	bh=UM1YTVWKCXjwkowt3WjEd184ybys8RxDPu1C31uIsnA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=jBVrbif7Y7B33NgFD2eNRMmjCoktcgkNjR2yaX8W1zi/55a5Rimu5AH7eS1NBY+bgJ4zbd2iPsKGU1kY+EdSlGCMk7Q0x/S8+lC5CNtuRF/fJhWn6kqRo+iEhaVJaWCnun1idVoSOfPQmbG1aGuG/VGdzBclN4xl9TG9itbSu40=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=dfWW4Is3; arc=none smtp.client-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="dfWW4Is3"
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-836ed29d1e5so1245067b3a.2
+        for <linux-kselftest@vger.kernel.org>; Sat, 09 May 2026 06:10:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1778332215; x=1778937015; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=A3NyDBs4ghD74Azq1zzFPGUm5QlcBDwy4o68+WiOzU4=;
+        b=dfWW4Is3N28283+If5USHbp2VAQF9w7mBCsSBT2Umff6F2aCHFvxGTDkSrZN1Pz+0M
+         +tkOG0Ap86At5w3aAKNYPPCM9BqSkQEcQY9HYx3U1JfF/wFltcyztP/nq81r0kVWoeM6
+         DRACsP1SUD95x1z7/YbmVn+a8eOPtQbuLUYy4NtNelFZ9LmakqKmFdLOKZuclayRpeRj
+         99O+pFvwomt6JZcMfciVJiPVxuGq1GzX/Nlxz4zbI94/R92B7PHTk7HQN1SLnbjyQz1q
+         mHLuWKL41I6AQ05XsA7SLX4Tf3hYNeNvFTk9TdBUh1cwo/3juSBeEAtUdye071nfOeww
+         XfRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778332215; x=1778937015;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=A3NyDBs4ghD74Azq1zzFPGUm5QlcBDwy4o68+WiOzU4=;
+        b=C3LlWuWUHmII38afJ141CRKOPTM6BZzydHVyoDfiR+vxKJa/kuTNm6ltMe1I2I7Hft
+         lroFbQnNlhfQptNgCrbU3yMf7RLfLdX4cOFyC3CFI1w2ZfWcLaMw2JijGd2ravnK+wUN
+         A3nZbAnRrWlFpBDAsioI3LQA4BAMRS5t4HzFloU4KXj1A1EOshbXIPmKUrXASrZvlha3
+         o4p01iUjoIcwJ4JbTUv4FIYmJea+9v07u57DFym4wsdFTruJo5e0zJ7A08xtB/VHBsNM
+         EwRQwb2im8BiVdwKgRlRYpUeTlUA/yml1jleXPZHTPKbzb3UAinHFK7nWLbBNGt0/gNq
+         vwkQ==
+X-Forwarded-Encrypted: i=1; AFNElJ8yOPba2IcqY4Ss184EHDxTQQFjjnpKz2AAvDVZ5kAtu0ui1PsC15qngxdmTLpNDcsmT0VqMYIUaeukurN7cOo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxl0JmsR35s22pYn1bzC7NpQogxDQcRfl0Y0/hZyTEoIeFi3Rl1
+	rUdSwXnhOb2O3vXQjrfXjKa2o3qzzKTtWGgpdxCw2/qQE9wR2eAfoTGxZzmI/ABX7U0=
+X-Gm-Gg: Acq92OG612XSdEJZZvtgscWbC03l7j3LdX/JNyiG5cVoKxGkI4IDk7Kpsu8P0WUzr/B
+	CLtdW+UdMyWD9GdtcTHPVdwW/ct+RF6LjSJpgrMVCyYhGdQoID02Co5unZn/as3d4xiWCUP4r/M
+	Z6maYlLiWL1EU1mzLZlfrNl0BNlRSpQ/gnzgGUBQzxj241/c7ovzJDzB7A9K0BuIvqL63ITzzwS
+	8xtLBEexl+t3pOMm69CFWf0SiT0J+tNvFhkZ7BjUMn91ISG4SqYpUPbojuLtFKqWZ8QLbpdWZc9
+	JVevP2L7XrEyPaTSMn5GLwe9ONSGp9yFl5f+iJJXnBKoAJm3GbxzpZWPRU8im2DAloSKxGuJe1y
+	D0ZyXn7k6dXe/KFuGRq+Oo27aMKBJPuQkU3lFBNeDrpC5mtI4nNFK9eIl67jBHZR5+k0fpcIput
+	n9pmGT9fEYoha+5PgyZ1fY4pQnNCA8C4yGN3rO7lFdWwjeATsbzLoYKqdRQEh4P1tPC/Q=
+X-Received: by 2002:a05:6a00:2d0c:b0:82f:4f67:1ff6 with SMTP id d2e1a72fcca58-83a5b6c460fmr15827882b3a.4.1778332215217;
+        Sat, 09 May 2026 06:10:15 -0700 (PDT)
+Received: from FJ7FR2JRQ3.bytedance.net ([155.117.34.6])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-839679c86b3sm18552855b3a.28.2026.05.09.06.10.07
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Sat, 09 May 2026 06:10:14 -0700 (PDT)
+From: Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>
+To: linux-riscv@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	kvm@vger.kernel.org,
+	kvm-riscv@lists.infradead.org,
+	Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	Conor Dooley <conor@kernel.org>,
+	=?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@rivosinc.com>,
+	Himanshu Chauhan <himanshu@thechauhan.dev>,
+	Will Deacon <will@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Atish Patra <atish.patra@linux.dev>,
+	Anup Patel <anup@brainfault.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Yunhui Cui <cuiyunhui@bytedance.com>,
+	Zhu Yuan <yuanzhu@bytedance.com>,
+	Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>
+Subject: [PATCH v9 0/5] riscv: add SBI Supervisor Software Events support
+Date: Sat,  9 May 2026 21:09:57 +0800
+Message-ID: <cover.1778331862.git.zhangzhanpeng.jasper@bytedance.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-* Sasha Levin:
 
-> When a kernel (security) issue goes public, fleets stay exposed until a patched
-> kernel is built, distributed, and rebooted into.
->
-> For many such issues the simplest mitigation is to stop calling the buggy
-> function. Killswitch provides that. An admin writes:
->
->     echo "engage af_alg_sendmsg -1" \
->         > /sys/kernel/security/killswitch/control
->
-> After this, af_alg_sendmsg() returns -EPERM on every call without
-> running its body. The mitigation takes effect immediately, and is dropped on
-> the next reboot -- by which point a patched kernel is hopefully in place.
+This series continues Clément's SBI Supervisor Software Events (SSE)
+Linux support. Most of the framework is still Clément's work; many
+thanks to him for bringing the series this far. Clément reached out and
+suggested that I could continue the upstream work, so I am picking up
+the series from here.
 
-Do you expect this to be safe to enable in kernel lockdown mode (i.e.,
-with typical Secure Boot configurations in distributions)?
+SSE gives the SBI a firmware-to-S/HS-mode event delivery path that does
+not depend on ordinary S-mode interrupt delivery. This is useful for
+NMI-style platform events and for PMU overflow delivery through firmware.
+
+This respin mainly fixes two issues:
+
+  - KVM Context Corruption
+
+    An SSE can interrupt HS-mode code around guest execution, run a
+    synthetic SSE handler, and then complete back through firmware.  The
+    handler episode must be transparent to Linux-owned trap and
+    virtualization state.  This version folds the stvec and hstatus
+    preservation into the Linux SSE entry wrapper, rather than relying on
+    OpenSBI to keep extra hidden resume state. This follows the earlier
+    discussion [1].
+
+  - SSE Handler's SSTATUS Leakage
+
+    With CONFIG_RISCV_PMU_SBI_SSE, perf can use the local PMU overflow
+    SSE event instead of the ordinary PMU interrupt. This makes the PMU
+    overflow handler a real hot path for SSE: workloads such as
+    "perf top" can enter the SSE handler and completion paths at a high
+    rate. The previous code did not preserve the interrupted
+    sstatus.SIE/SPIE/SPP state separately from the synthetic handler
+    trap-return state, so high-frequency PMU-SSE delivery could quickly
+    expose the leakage. One observed failure mode was an "environment
+    call from U-mode" panic. This series addresses that by making the
+    SSE entry wrapper preserve the live sstatus state around the handler
+    before completing the event.
+
+The selftest has also been extended to cover the high-frequency PMU-SSE
+patterns that exposed these bugs.  The new stress modes exercise repeated
+handler entry and completion, SBI calls from a handler, PMU stop/start
+activity, and re-injection.
+
+How to test:
+
+  Build a kernel with at least:
+
+    CONFIG_RISCV_SBI_SSE=y
+    CONFIG_RISCV_PMU_SBI=y
+    CONFIG_RISCV_PMU_SBI_SSE=y
+
+  Build the selftest module against that kernel and run the smoke test:
+
+    ./run_sse_test.sh
+
+  Then run the stress layers.  Use stress=1 to run them after the smoke
+  test, or stress=2 to run only the stress layers:
+
+    ./run_sse_test.sh stress={0,1,2}
+
+Known limitations and follow-up work:
+
+SSE is a relatively large extension which builds synthetic supervisor
+contexts and then resumes the interrupted context through firmware. This
+series fixes the issues found so far in that entry/completion path, but I
+think it still needs more testing and review. There may still be corner
+cases in the constructed handler context or in the state restored after
+completion that this series does not cover yet.
+
+The next planned area is virtualization support. Follow-up work is
+expected to distinguish host and guest PMU-SSE samples, and to support
+delivering SSE events to guests, i.e. the KVM-SSE work from earlier
+revisions.
+
+[1] https://lore.kernel.org/r/9290f53d-3545-4299-9781-c1c558f71158@rivosinc.com
+
+---
+
+Changes in v9:
+  - Picked up Clément's v8 series and rebased it onto the current RISC-V
+    for-next branch.
+  - Fixed KVM Context Corruption by keeping stvec and hstatus stable across
+    the synthetic SSE handler episode.
+  - Fixed SSE Handler's SSTATUS Leakage, where interrupted
+    sstatus.SIE/SPIE/SPP state could be confused with the handler
+    trap-return state under high-frequency PMU-SSE delivery.
+  - Extended the SSE selftest with stress={0,1,2} modes that cover repeated
+    handler entry, SBI calls, PMU activity and re-injection, and fixed event
+    registration and attribute-buffer lifetime corner cases.
+  - Updated MAINTAINERS for the RISC-V SSE driver.
+
+Previous versions:
+  v8:
+    https://lore.kernel.org/r/20251105082639.342973-1-cleger@rivosinc.com
+
+Clément Léger (5):
+  riscv: add SBI SSE extension definitions
+  riscv: add support for SBI Supervisor Software Events extension
+  drivers: firmware: add riscv SSE support
+  perf: RISC-V: add support for SSE event
+  selftests/riscv: add SSE test module
+
+ MAINTAINERS                                   |  17 +
+ arch/riscv/include/asm/asm.h                  |  14 +-
+ arch/riscv/include/asm/sbi.h                  |  61 ++
+ arch/riscv/include/asm/scs.h                  |   7 +
+ arch/riscv/include/asm/sse.h                  |  47 ++
+ arch/riscv/include/asm/switch_to.h            |  14 +
+ arch/riscv/include/asm/thread_info.h          |   1 +
+ arch/riscv/kernel/Makefile                    |   1 +
+ arch/riscv/kernel/asm-offsets.c               |  14 +
+ arch/riscv/kernel/sbi_sse.c                   | 162 ++++
+ arch/riscv/kernel/sbi_sse_entry.S             | 187 +++++
+ drivers/firmware/Kconfig                      |   1 +
+ drivers/firmware/Makefile                     |   1 +
+ drivers/firmware/riscv/Kconfig                |  15 +
+ drivers/firmware/riscv/Makefile               |   3 +
+ drivers/firmware/riscv/riscv_sbi_sse.c        | 694 ++++++++++++++++
+ drivers/perf/Kconfig                          |  10 +
+ drivers/perf/riscv_pmu.c                      |  23 +
+ drivers/perf/riscv_pmu_sbi.c                  |  71 +-
+ include/linux/perf/riscv_pmu.h                |   5 +
+ include/linux/riscv_sbi_sse.h                 |  57 ++
+ tools/testing/selftests/riscv/Makefile        |   2 +-
+ tools/testing/selftests/riscv/sse/Makefile    |   5 +
+ .../selftests/riscv/sse/module/Makefile       |  16 +
+ .../riscv/sse/module/riscv_sse_test.c         | 769 ++++++++++++++++++
+ .../selftests/riscv/sse/run_sse_test.sh       |  48 ++
+ 26 files changed, 2231 insertions(+), 14 deletions(-)
+ create mode 100644 arch/riscv/include/asm/sse.h
+ create mode 100644 arch/riscv/kernel/sbi_sse.c
+ create mode 100644 arch/riscv/kernel/sbi_sse_entry.S
+ create mode 100644 drivers/firmware/riscv/Kconfig
+ create mode 100644 drivers/firmware/riscv/Makefile
+ create mode 100644 drivers/firmware/riscv/riscv_sbi_sse.c
+ create mode 100644 include/linux/riscv_sbi_sse.h
+ create mode 100644 tools/testing/selftests/riscv/sse/Makefile
+ create mode 100644 tools/testing/selftests/riscv/sse/module/Makefile
+ create mode 100644 tools/testing/selftests/riscv/sse/module/riscv_sse_test.c
+ create mode 100644 tools/testing/selftests/riscv/sse/run_sse_test.sh
+
+-- 
+2.50.1 (Apple Git-155)
