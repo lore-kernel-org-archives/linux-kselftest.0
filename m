@@ -1,38 +1,38 @@
 Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA35A3D6CB9;
-	Sat,  9 May 2026 22:48:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AA293D0905;
+	Sat,  9 May 2026 22:48:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778366932; cv=none; b=hi1SnIC0Gx3K8L/L5yeLtD/xSQCk53YLr0of2seJQqGnqaciiLxN7e1dtSgi6ySvrRHLuLslLtTLZOX9pk/b7cHJZFQ9ISOQ4TBneD554cNjNTSP5SDbpoTy1Ctd2Fox7jgyn0YmT4aTjF25NpDzFwkJt3Wom1QYH1aZrHReb2c=
+	t=1778366933; cv=none; b=FA/F7c0o37tEBL8k1wtL+M7fcqKfIECUB9INXekOsfc4hQU/Zw418d3OABSZ6XigZXB/QAe5xovlckSFwLI3ok++uJ0sIVhCPVnj/p4OQjInsKa+AKrDbg2Z97hkIWXH2jFyQUFbH+tZtvGRDyphWfIJPZCCxmPVq1k6gI//fqY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778366932; c=relaxed/simple;
-	bh=7vckRRnPou82Ed5g6NW9Jv360JZE7tXnzfeLcwJrqh8=;
+	s=arc-20240116; t=1778366933; c=relaxed/simple;
+	bh=y5XHubKRijH+0QFFBVk2nnYjfubeV0gDmwE9H1D2510=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=vGC99MdHecWtbDZaIFbLg2rAJaMqnGqj8UT4FkBu2S2lYcfw+8YOOKzW7srKpZZIFaSHnzRGJISMn9v2nnyJpltlfLLq1C++Woooq4ggPq43Rz7cuCFVpDHgWvUv96oIbcWFKJDQwVPOzj9c8xaDrRg5SLqGZzdKd3U/f1GPwtc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=oYH6BxSE; arc=none smtp.client-ip=90.155.50.34
+	 MIME-Version; b=ZHUjlSG54jB/rEUF+Ram7kraW9u7DEz+JSEJt7XKnxhwaW6Qx2UV9ljJIf5NhM7tUDmVFuDTzIqi9b8iNGdxGNEsmJL6WVlm+IHSX5IyTRM3AQhK5s1AuCro1fLJAhC05mBc9NbVOAJEXdASpRGpmEw3CgYxE5XGT1FqPLKFg84=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=torvBl2I; arc=none smtp.client-ip=90.155.50.34
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="oYH6BxSE"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="torvBl2I"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=casper.20170209; h=Sender:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:To:
-	From:Reply-To:Cc:Content-ID:Content-Description;
-	bh=ryZ6RDjir7eBEFWKcHfpnqGgBXXchIxkMDMcoDjTga0=; b=oYH6BxSE1/APIWTTtlkr9hOcnO
-	GVYavHsEtJ1rcc7nBZtYhkeXnYPtdBB0VJfIJ1yTlSI/efp3CMvNOrSGpTjYv+L3IkYoJU2jM+k9w
-	D1JozTm+DSVNSXz8TrpuEO+XGJFQJHZVDEdzqV9324DIRBPFASZorppyCmEWb1PGax+JBNaviBtfe
-	rtlmPRds0TKNavS5M8SBASEBFeeib8EYiDyB9u4bnAhgHEgz3gM3+1IXGJntw4buZeRH+mSoezzun
-	a9HG9lmrKzQe8EMNelYypA8qTUCAdCJcXoHPWJVu3c8AaBGq6ROOlyg7Bgte+C2xigcy3oxXFr7bB
-	8v+W0vfw==;
+	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:To:From:Reply-To:
+	Cc:Content-Type:Content-ID:Content-Description;
+	bh=cVUBIMjJ1XQ+25DjUmKRxKTuLcXblZ+qoogoFwNKcIc=; b=torvBl2IxVi6KiT3kAGIroWI4I
+	UHAsuTdRPh4qRitOygfigQ1bAbUUG7McF3OzIG9i9a0E5Fdpf7W2dxYsdi2T+3Da7wSe5wrhAU0Hu
+	UXTwlv8WaP3QzacDy4C4jM3KVH7+Pp5XHWGBU/9KK0WTB73LlGyLWuyHeZv0hc5Kyz465wyPP1mlc
+	lhDLx6WzRZ83hVWzBaedx016ZIz5E3feT+mmNponeRyijVADq9F52nSgTNfk9oNhSl0O0YtolH7OG
+	473u+7Q9XkH2jKKZnfrEAA5BnEuleCjxcuQLdk9/M+yQswQjTCyZ3FIwzZHbaOwIrPfMtA7EknKKU
+	2zPWQIJA==;
 Received: from [2001:8b0:10b:1::425] (helo=i7.infradead.org)
 	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1wLqTD-000000060LE-0JLi;
-	Sat, 09 May 2026 22:48:27 +0000
+	id 1wLqTD-000000060LL-20sT;
+	Sat, 09 May 2026 22:48:30 +0000
 Received: from dwoodhou by i7.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1wLqTC-0000000DhIL-3UdM;
-	Sat, 09 May 2026 23:48:26 +0100
+	id 1wLqTD-0000000DhIr-0oMS;
+	Sat, 09 May 2026 23:48:27 +0100
 From: David Woodhouse <dwmw2@infradead.org>
 To: Paolo Bonzini <pbonzini@redhat.com>,
 	Jonathan Corbet <corbet@lwn.net>,
@@ -61,9 +61,9 @@ To: Paolo Bonzini <pbonzini@redhat.com>,
 	linux-kernel@vger.kernel.org,
 	xen-devel@lists.xenproject.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v4 17/30] KVM: x86: Simplify and comment kvm_get_time_scale()
-Date: Sat,  9 May 2026 23:46:43 +0100
-Message-ID: <20260509224824.3264567-18-dwmw2@infradead.org>
+Subject: [PATCH v4 25/30] KVM: x86/xen: Prevent runstate times from becoming negative
+Date: Sat,  9 May 2026 23:46:51 +0100
+Message-ID: <20260509224824.3264567-26-dwmw2@infradead.org>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20260509224824.3264567-1-dwmw2@infradead.org>
 References: <20260509224824.3264567-1-dwmw2@infradead.org>
@@ -73,107 +73,83 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: David Woodhouse <dwmw2@infradead.org>
 X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 
 From: David Woodhouse <dwmw@amazon.co.uk>
 
-The kvm_get_time_scale() function was entirely opaque. Add comments
-explaining what it does: compute a fixed-point multiplier and shift for
-converting TSC ticks to nanoseconds via pvclock_scale_delta().
+When kvm_xen_update_runstate() is invoked to set a vCPU's runstate, the
+time spent in the previous runstate is accounted. This is based on the
+delta between the current KVM clock time, and the previous value stored
+in vcpu->arch.xen.runstate_entry_time.
 
-Rename the local variables from the cryptic tps64/tps32/scaled64 to
-base_hz_u64/base32/scaled_hz_u64 to make the code self-documenting.
-The "tps32" name stood for "Ticks Per Second" but was misleading since
-it held the shifted base frequency, not a tick count.
+If the KVM clock goes backwards, that delta will be negative. Or, since
+it's an unsigned 64-bit integer, very *large*. Linux guests deal with
+that particularly badly, reporting 100% steal time for ever more (well,
+for *centuries* at least, until the delta has been consumed).
 
-No functional change.
+So when a negative delta is detected, just refrain from updating the
+runstates until the KVM clock catches up with runstate_entry_time again.
+
+Also clamp steal_ns to delta_ns to prevent steal time from exceeding
+the total elapsed time, and handle negative steal_ns (which can happen
+if run_delay goes backwards across a scheduler update).
+
+The userspace APIs for setting the runstate times do not allow them to
+be set past the current KVM clock, but userspace can still adjust the
+KVM clock *after* setting the runstate times, which would cause this
+situation to occur.
 
 Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
 Reviewed-by: Paul Durrant <paul@xen.org>
 ---
- arch/x86/kvm/x86.c | 55 +++++++++++++++++++++++++++++++++-------------
- 1 file changed, 40 insertions(+), 15 deletions(-)
+ arch/x86/kvm/xen.c | 19 ++++++++++++++-----
+ 1 file changed, 14 insertions(+), 5 deletions(-)
 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 8e4993ef4f6b..980fc22ee05b 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -2472,32 +2472,57 @@ static uint32_t div_frac(uint32_t dividend, uint32_t divisor)
- 	return dividend;
- }
- 
--static void kvm_get_time_scale(uint64_t scaled_hz, uint64_t base_hz,
-+static void kvm_get_time_scale(u64 scaled_hz, u64 base_hz,
- 			       s8 *pshift, u32 *pmultiplier)
+diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
+index 82e34edbfdbd..fef52b8ea26a 100644
+--- a/arch/x86/kvm/xen.c
++++ b/arch/x86/kvm/xen.c
+@@ -586,24 +586,33 @@ void kvm_xen_update_runstate(struct kvm_vcpu *v, int state)
  {
--	uint64_t scaled64;
--	int32_t  shift = 0;
--	uint64_t tps64;
--	uint32_t tps32;
-+	u64 scaled_hz_u64 = scaled_hz;
-+	s32 shift = 0;
-+	u64 base_hz_u64;
-+	u32 base32;
+ 	struct kvm_vcpu_xen *vx = &v->arch.xen;
+ 	u64 now = get_kvmclock_ns(v->kvm);
+-	u64 delta_ns = now - vx->runstate_entry_time;
+ 	u64 run_delay = current->sched_info.run_delay;
++	s64 delta_ns = now - vx->runstate_entry_time;
++	s64 steal_ns = run_delay - vx->last_steal;
  
--	tps64 = base_hz;
--	scaled64 = scaled_hz;
--	while (tps64 > scaled64*2 || tps64 & 0xffffffff00000000ULL) {
--		tps64 >>= 1;
-+	/*
-+	 * This function calculates a fixed-point multiplier and shift such
-+	 * that:
-+	 *   time_ns = (tsc_cycles << shift) * multiplier >> 32
-+	 *
-+	 * Where tsc_cycles tick at base_hz, and time_ns should count at
-+	 * scaled_hz (typically NSEC_PER_SEC for a TSC→nanoseconds conversion).
-+	 *
-+	 * The multiplier is: (scaled_hz << 32) / base_hz, adjusted by shift
-+	 * to keep everything in range.
-+	 */
-+
-+	base_hz_u64 = base_hz;
+ 	if (unlikely(!vx->runstate_entry_time))
+ 		vx->current_runstate = RUNSTATE_offline;
+ 
++	vx->last_steal = run_delay;
 +
 +	/*
-+	 * Start by shifting base_hz right until it fits in 32 bits, and
-+	 * is lower than double the target rate. This introduces a negative
-+	 * shift value which would result in pvclock_scale_delta() shifting
-+	 * the actual tick count right before performing the multiplication.
++	 * If KVM clock time went backwards, stop updating until it
++	 * catches up (or the runstates are reset by userspace).
 +	 */
-+	while (base_hz_u64 > scaled_hz_u64 * 2 || base_hz_u64 >> 32) {
-+		base_hz_u64 >>= 1;
- 		shift--;
++	if (delta_ns < 0)
++		return;
++
+ 	/*
+ 	 * Time waiting for the scheduler isn't "stolen" if the
+ 	 * vCPU wasn't running anyway.
+ 	 */
+-	if (vx->current_runstate == RUNSTATE_running) {
+-		u64 steal_ns = run_delay - vx->last_steal;
++	if (vx->current_runstate == RUNSTATE_running && steal_ns > 0) {
++		if (steal_ns > delta_ns)
++			steal_ns = delta_ns;
+ 
+ 		delta_ns -= steal_ns;
+-
+ 		vx->runstate_times[RUNSTATE_runnable] += steal_ns;
  	}
+-	vx->last_steal = run_delay;
  
--	tps32 = (uint32_t)tps64;
--	while (tps32 <= scaled64 || scaled64 & 0xffffffff00000000ULL) {
--		if (scaled64 & 0xffffffff00000000ULL || tps32 & 0x80000000)
--			scaled64 >>= 1;
-+	/* Now the shifted base_hz fits in 32 bits. */
-+	base32 = (u32)base_hz_u64;
-+
-+	/*
-+	 * Next, shift scaled_hz right until it fits in 32 bits, and ensure
-+	 * that the shifted base_hz is not larger (so that the result of the
-+	 * final division also fits in 32 bits).
-+	 */
-+	while (base32 <= scaled_hz_u64 || scaled_hz_u64 >> 32) {
-+		if (scaled_hz_u64 >> 32 || base32 & BIT(31))
-+			scaled_hz_u64 >>= 1;
- 		else
--			tps32 <<= 1;
-+			base32 <<= 1;
- 		shift++;
- 	}
- 
- 	*pshift = shift;
--	*pmultiplier = div_frac(scaled64, tps32);
-+	*pmultiplier = div_frac(scaled_hz_u64, base32);
- }
- 
- #ifdef CONFIG_X86_64
+ 	vx->runstate_times[vx->current_runstate] += delta_ns;
+ 	vx->current_runstate = state;
 -- 
 2.51.0
 
