@@ -1,63 +1,88 @@
-Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD9E419D092;
-	Sat,  9 May 2026 01:14:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4065A24B28;
+	Sat,  9 May 2026 01:40:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778289258; cv=none; b=CW3Nm7MJWJLBEAD5LCV8vVcn64p2y9od+QU4q6AktMoBxZ1KWAPquCove0ZEr1j/WHhZ4aNL3u6iSJlRXyzgYlWtEZKJEA8VdV7x7fNdwbemK5frixETWkPNlUvv/ZsZwzfHCLOo8Ou5PL29H2+NeuXy5dHX3zDrlbd0u61Wtn0=
+	t=1778290816; cv=none; b=mat11ovrNhSZuo4wpYiaPdcSwjawsSgfmrGtIpraLe8z5LU5xNd79cp8S0cdrEgxdVEgZ9/1FsAMshHtoyS3+bkxEuR4bOAUMsp/cJyGyHwuXf3EMYv8iZiAgEPVhWGewdXKzHKLPmkd1WV/YydFYqM2Y1eUyb1tHgjZgTpI/I0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778289258; c=relaxed/simple;
-	bh=XRHNcLq5Tj1i0M+Gmb8T2rSQFwfwqj9JUey+Y69ED9U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fxquXersO269kiemtQTl1sR1s+FDvo/GDW83e/ninH72mOK0RyzcOSQ9qt3S30ADpiPszHkWkZ+8tKYz1uUaomfqNSVVY0F+RtElXSC2l/rClvQgqZZq0KDPh/Sy4AZGuvVVS8IFLirfmkMBsRit0e7jgJckjoEUoFzGen75xog=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ivtK7cwN; arc=none smtp.client-ip=91.218.175.185
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1778290816; c=relaxed/simple;
+	bh=TUFTog92tEeX98e78g00IQMeZ8O7lXVqGfZNQakNPYY=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=NYlvxDKFulwNQ3vqkfl44k5Qv5qCsz2RwRBh2JRn9ejr3VxZ0DLHWrZPzs3zkrPOkZW5gFg9EIInBAFe1szCgDOjZBEjp9dXzMZYXKsfzzY0PD8qE7tvBtgH1KaPuJCBteeLDAsy7xcKfmmUI7PMKVPQOZIfZMyrrmS0YGTK2Hg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=WKtpfPY1; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ivtK7cwN"
-Message-ID: <a8036fda-3509-437e-b787-4376992a0359@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1778289253;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=qQf4QhBnU6nphvM2y/gxe0oUuO7UtOdH2zT46D3ROV0=;
-	b=ivtK7cwN6Gmt/Rw7yU22E5yzq1ad9CHhMzTs9ST6/KJ+AyoI3d1FJLGxfw4cuVZjdYR7n+
-	OsydfGIebDbj8s7wUYItWwxR1yxLAfOL09hQ6qUkEdErLagCIXmHMfrGBZNpuu0BfORitG
-	/8H4UINJ+seuBn13D7GknZKgIuovGZ4=
-Date: Sat, 9 May 2026 09:13:58 +0800
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="WKtpfPY1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67AA7C2BCB0;
+	Sat,  9 May 2026 01:40:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1778290815;
+	bh=TUFTog92tEeX98e78g00IQMeZ8O7lXVqGfZNQakNPYY=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=WKtpfPY1r/HZvGYFDOshFwM8nDuqgoa2GYqBTIqvhwgl/CgLb97xjAPDvdL0ywVyS
+	 SQVOv9gt2RnWWXcmNeM5h5T6IOH4rhwROVJxKdMLOb3GDIUV8L3KUaAKxLtLY6iKdf
+	 gFKa9Pzp7gGHAFyKs2XoyyQO6+wbADehQ7/TsMlQ=
+Date: Fri, 8 May 2026 18:40:14 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Jim Cromie <jim.cromie@gmail.com>
+Cc: Jason Baron <jbaron@akamai.com>, Luis Chamberlain <mcgrof@kernel.org>,
+ Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, Sami
+ Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
+ Shuah Khan <shuah@kernel.org>, Louis Chauvet <louis.chauvet@bootlin.com>,
+ linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, =?UTF-8?Q?=C5=81ukasz?= Bartosik
+ <ukaszb@chromium.org>
+Subject: Re: [PATCH 00/17] dynamic-debug cleanups refactors maintenance
+Message-Id: <20260508184014.c8a7f718c7b221701829762b@linux-foundation.org>
+In-Reply-To: <20260504-dd-cleanups-2-v1-0-6fdd24040642@gmail.com>
+References: <20260504-dd-cleanups-2-v1-0-6fdd24040642@gmail.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Subject: Re: [PATCH net-next] selftests: net: add tests for PPPoL2TP
-To: Felix Maurer <fmaurer@redhat.com>
-Cc: "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Shuah Khan <shuah@kernel.org>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- Petr Machata <petrm@nvidia.com>, linux-kernel@vger.kernel.org,
- linux-ppp@vger.kernel.org, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260508032158.67887-1-qingfang.deng@linux.dev>
- <af4czAjnz--nOUYf@thinkpad>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Qingfang Deng <qingfang.deng@linux.dev>
-In-Reply-To: <af4czAjnz--nOUYf@thinkpad>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 
-On 2026/5/9 1:26, Felix Maurer wrote:
-> Is there a particular reason to create the test setup with a netkit pair
-> instead of the more standard veth pairs?
+On Mon, 04 May 2026 14:45:06 -0600 Jim Cromie <jim.cromie@gmail.com> wrote:
 
+> This series is nearly all maintenance: it refactors/splits functions,
+> tightens an internal callchain, drops linked-listing where an
+> array,length is already available, reduces verbose=3 logging for
+> usability, and reorganizes several structs for better organization.
+> 
+> Getting these into linux-next for integration testing would clear the
+> deck for fixing Dynamic-debug classmaps, which is needed to restore
+> the un-BROKEN status of DRM_USE_DYNAMIC_DEBUG.
+> 
+> Theyre on master at v7.1-rc2
+> 
+> The "modules" intersection is on the re-composing of struct
+> ddebug_info, which is a member in struct module, and maps a module's
+> __dyndbg* elf sections.
+> 
+> The user visible change to /proc/dynamic_debug/control is s/class
+> unknown/class:_UNKNOWN_/, which is a more visible/greppable indication
+> of incomplete class definitions.
+> 
+> Coder visible change is to drop the enum ddebug_class_map_type's
+> unused vals - namely: DD_CLASS_TYPE_DISJOINT_NAMES
+> & DD_CLASS_TYPE_LEVEL_NAMES
+> 
+> These allowed more symbolic named inputs:
+>   echo +DRM_UT_CORE > /sys/module/drm/parameters/debug
+> 
+> But theyre unused 3 years later, and probably not worth keeping.
+> With a removal commit in the log, its easy enough to restore them later.
 
-L2TP does not need an outer ethernet header so I choose netkit instead 
-of veth.
+Thanks, Jim.
+
+I'll queue this for some runtime testing in linux-next.  But AI review
+really went to town over it:
+
+	https://sashiko.dev/#/patchset/20260504-dd-cleanups-2-v1-0-6fdd24040642@gmail.com
+
 
