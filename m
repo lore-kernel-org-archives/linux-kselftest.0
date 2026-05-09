@@ -1,96 +1,355 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B8B0223336;
-	Sat,  9 May 2026 02:01:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D42A381AF1
+	for <linux-kselftest@vger.kernel.org>; Sat,  9 May 2026 03:05:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778292083; cv=none; b=oAAcAi4BOlezoqPSXU3Aw8UMw6gCbSZpa2GzUnrXqxIMt4w0o+nLEsdSlmkt+YP6h99t4SZG/6tbHF1ix3h2FyWgOwpGPqYE/G17s5M9BXrG+f71WMmHs1qKSWRGcKE50GMueHykl0yC5ydMI1aYagyCPB0J6riuKICAVsyMGc4=
+	t=1778295946; cv=none; b=KL66lAqzMDXTf1zw2gNFzrVqyxgsb1+TJXR9estpWmjK+gFJY1pljRyYXxWiZhibWMo+PoDD0iC0gmdmNsG7mXs2GpjSSH+l4LYHsOa5tmJvyYPmpaZdmObTXjm6PmLmD9pcy0EF5NstDGPMbHJGhVZJj3A0zxW+7V7O9Xfbnhg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778292083; c=relaxed/simple;
-	bh=jt6lryaGKyOvWm0q033qIcf+/Metp4GbE7ZbSxbQy8I=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=o03awHOSYlDdjjieKr7tICfdJM2OGQkBIoL99QKO0TghZ9KUmLw0xfWfY3g0gNiCH5TACWfV7rVIwEEzTVvCUsE7vmMeBueu82PEe4NfSTLhbi1X20w5sQwcjuzNpop3IQyJSoqw0i913F3HqW69s6tgqcI3HsEPPUkMIo9EvV8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=nbdZsafx; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778295946; c=relaxed/simple;
+	bh=fTDQLcIZudAaiePFSZqDOEEOx+pbuAUCZbxSrWn5K1A=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=JKligKTInm5lBJBVia/uwCnpKrD3Dz7O2f6zP0YiwPbFXWPjCCmKx1YbZDdmxA5nhiMGND1LPpcTTjZcKSnhVrnhOdK4Hj3ONqm6T1eoFjhYSDmNXzqbW/yKZYVsaXhjsk8TFT4Uky1IUuIZI4pLxIfAb9zstekhhymjBOFLaOU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=mcR3tiqP; arc=none smtp.client-ip=91.218.175.185
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="nbdZsafx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E55CC2BCB0;
-	Sat,  9 May 2026 02:01:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1778292082;
-	bh=jt6lryaGKyOvWm0q033qIcf+/Metp4GbE7ZbSxbQy8I=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=nbdZsafxWobZ798ggoFLWJwW3n9yi3509s1rTfwbwdteYs4FOOOMV5wcoQFmLZgUx
-	 QFuum1JF8VljwelNW6vdVddJtvzeY9l8GTKgRyqhivrgvaQZ8XUMxO0C0Y9l25tbKL
-	 k9zXBUjeHqFFudRCZZBqDoKj4Ig/0BzsHPMPN810=
-Date: Fri, 8 May 2026 19:01:21 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Jim Cromie <jim.cromie@gmail.com>
-Cc: Jason Baron <jbaron@akamai.com>, Luis Chamberlain <mcgrof@kernel.org>,
- Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, Sami
- Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
- Shuah Khan <shuah@kernel.org>, Louis Chauvet <louis.chauvet@bootlin.com>,
- linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
- linux-kselftest@vger.kernel.org, =?UTF-8?Q?=C5=81ukasz?= Bartosik
- <ukaszb@chromium.org>
-Subject: Re: [PATCH 00/17] dynamic-debug cleanups refactors maintenance
-Message-Id: <20260508190121.3461706b01f6079bbacdd167@linux-foundation.org>
-In-Reply-To: <20260504-dd-cleanups-2-v1-0-6fdd24040642@gmail.com>
-References: <20260504-dd-cleanups-2-v1-0-6fdd24040642@gmail.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="mcR3tiqP"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1778295942;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8AC7pELr/ORQYqNLuSMF/s5KplYjBYm6jXnxD2M3oVk=;
+	b=mcR3tiqP2OuT2aCOGlFEfgZ1gRegzYq6sudQNHz2ikAbeX+sugRk0nhYFYNZK57hobKn6p
+	RokUWjMF5eG0iQxOY+/8+UgPzyTL3tWhtZNN/NXicp9kQtTiLMzFmdWnZA6HYR3jwrMkdO
+	g6hmJgCY5gPjqfnLMQ9IKVJxr1Qku1U=
+From: Qingfang Deng <qingfang.deng@linux.dev>
+To: Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Simon Horman <horms@kernel.org>,
+	Willem de Bruijn <willemb@google.com>,
+	Petr Machata <petrm@nvidia.com>,
+	Richard Gobert <richardbgobert@gmail.com>,
+	Anubhav Singh <anubhavsinggh@google.com>,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: linux-ppp@vger.kernel.org,
+	Pablo Neira Ayuso <pablo@netfilter.org>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Felix Fietkau <nbd@nbd.name>,
+	Qingfang Deng <qingfang.deng@linux.dev>
+Subject: [PATCH net-next v9 2/2] selftests: net: test PPPoE packets in gro.sh
+Date: Sat,  9 May 2026 11:04:53 +0800
+Message-ID: <20260509030507.387050-2-qingfang.deng@linux.dev>
+In-Reply-To: <20260509030507.387050-1-qingfang.deng@linux.dev>
+References: <20260509030507.387050-1-qingfang.deng@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Mon, 04 May 2026 14:45:06 -0600 Jim Cromie <jim.cromie@gmail.com> wrote:
+Add PPPoE test-cases to the GRO selftest. Only run a subset of
+common_tests to avoid changing the hardcoded L3 offsets everywhere.
+Add a new "pppoe_sid" test case to verify that packets with different
+PPPoE session IDs are correctly identified as separate flows and not
+coalesced.
 
-> This series is nearly all maintenance: it refactors/splits functions,
-> tightens an internal callchain, drops linked-listing where an
-> array,length is already available, reduces verbose=3 logging for
-> usability, and reorganizes several structs for better organization.
-> 
-> Getting these into linux-next for integration testing would clear the
-> deck for fixing Dynamic-debug classmaps, which is needed to restore
-> the un-BROKEN status of DRM_USE_DYNAMIC_DEBUG.
-> 
-> Theyre on master at v7.1-rc2
-> 
-> The "modules" intersection is on the re-composing of struct
-> ddebug_info, which is a member in struct module, and maps a module's
-> __dyndbg* elf sections.
-> 
-> The user visible change to /proc/dynamic_debug/control is s/class
-> unknown/class:_UNKNOWN_/, which is a more visible/greppable indication
-> of incomplete class definitions.
+Signed-off-by: Qingfang Deng <qingfang.deng@linux.dev>
+---
+v9: fix buffer length in send_changed_pppoe_sid()
+v8: https://lore.kernel.org/netdev/20260501035102.293031-2-qingfang.deng@linux.dev
+ - add a new macro L2_HLEN_MAX for PPPoE
+v7: https://lore.kernel.org/netdev/20260428064717.74794-2-qingfang.deng@linux.dev
+ - Do not run all the tests for PPPoE
+ - Add a new test for PPPoE
+v6: https://lore.kernel.org/netdev/20260326081127.61229-2-dqfext@gmail.com
+ tools/testing/selftests/drivers/net/config |   2 +
+ tools/testing/selftests/drivers/net/gro.py |  11 +++
+ tools/testing/selftests/net/lib/gro.c      | 100 +++++++++++++++++----
+ 3 files changed, 97 insertions(+), 16 deletions(-)
 
-Wait.  We can't make userspace-visible changes?
+diff --git a/tools/testing/selftests/drivers/net/config b/tools/testing/selftests/drivers/net/config
+index 2309109a94ec..617de8aaf551 100644
+--- a/tools/testing/selftests/drivers/net/config
++++ b/tools/testing/selftests/drivers/net/config
+@@ -10,5 +10,7 @@ CONFIG_NETCONSOLE_EXTENDED_LOG=y
+ CONFIG_NETDEVSIM=m
+ CONFIG_NET_SCH_ETF=m
+ CONFIG_NET_SCH_FQ=m
++CONFIG_PPP=y
++CONFIG_PPPOE=y
+ CONFIG_VLAN_8021Q=m
+ CONFIG_XDP_SOCKETS=y
+diff --git a/tools/testing/selftests/drivers/net/gro.py b/tools/testing/selftests/drivers/net/gro.py
+index 5ffaa7bdbff4..fd158c775b1c 100755
+--- a/tools/testing/selftests/drivers/net/gro.py
++++ b/tools/testing/selftests/drivers/net/gro.py
+@@ -323,6 +323,12 @@ def _gro_variants():
+         "ip_frag6", "ip_v6ext_same", "ip_v6ext_diff",
+     ]
+ 
++    # Tests specific to PPPoE
++    pppoe_tests = [
++        "data_same", "data_lrg_sml", "data_sml_lrg", "data_lrg_1byte",
++        "data_burst", "pppoe_sid",
++    ]
++
+     for mode in ["sw", "hw", "lro"]:
+         for protocol in ["ipv4", "ipv6", "ipip", "ip6ip6"]:
+             for test_name in common_tests:
+@@ -335,6 +341,11 @@ def _gro_variants():
+                 for test_name in ipv6_tests:
+                     yield mode, protocol, test_name
+ 
++    for mode in ["sw"]:
++        for protocol in ["pppoev4", "pppoev6"]:
++            for test_name in pppoe_tests:
++                yield mode, protocol, test_name
++
+ 
+ @ksft_variants(_gro_variants())
+ def test(cfg, mode, protocol, test_name):
+diff --git a/tools/testing/selftests/net/lib/gro.c b/tools/testing/selftests/net/lib/gro.c
+index 11b16ae5f0e8..fa35dfc8e790 100644
+--- a/tools/testing/selftests/net/lib/gro.c
++++ b/tools/testing/selftests/net/lib/gro.c
+@@ -67,12 +67,14 @@
+ #include <errno.h>
+ #include <error.h>
+ #include <getopt.h>
++#include <net/ethernet.h>
++#include <net/if.h>
+ #include <linux/filter.h>
+ #include <linux/if_packet.h>
++#include <linux/if_pppox.h>
+ #include <linux/ipv6.h>
+ #include <linux/net_tstamp.h>
+-#include <net/ethernet.h>
+-#include <net/if.h>
++#include <linux/ppp_defs.h>
+ #include <netinet/in.h>
+ #include <netinet/ip.h>
+ #include <netinet/ip6.h>
+@@ -102,6 +104,7 @@
+ #define MAX_LARGE_PKT_CNT ((IP_MAXPACKET - (MAX_HDR_LEN - ETH_HLEN)) /	\
+ 			   (ASSUMED_MTU - (MAX_HDR_LEN - ETH_HLEN)))
+ #define MIN_EXTHDR_SIZE 8
++#define L2_HLEN_MAX	(ETH_HLEN + PPPOE_SES_HLEN)
+ #define EXT_PAYLOAD_1 "\x00\x00\x00\x00\x00\x00"
+ #define EXT_PAYLOAD_2 "\x11\x11\x11\x11\x11\x11"
+ 
+@@ -134,6 +137,7 @@ static int total_hdr_len = -1;
+ static int ethhdr_proto = -1;
+ static bool ipip;
+ static bool ip6ip6;
++static bool pppoe;
+ static uint64_t txtime_ns;
+ static int num_flows = 4;
+ static bool order_check;
+@@ -171,6 +175,22 @@ static void vlog(const char *fmt, ...)
+ 	}
+ }
+ 
++static void fill_pppoelayer(void *buf, int payload_len, uint16_t sid)
++{
++	struct pppoe_ppp_hdr {
++		struct pppoe_hdr eh;
++		__be16 proto;
++	} *ph = buf;
++
++	payload_len += sizeof(struct tcphdr);
++	ph->eh.type = 1;
++	ph->eh.ver = 1;
++	ph->eh.code = 0;
++	ph->eh.sid = htons(sid);
++	ph->eh.length = htons(payload_len + sizeof(ph->proto));
++	ph->proto = htons(proto == PF_INET ? PPP_IP : PPP_IPV6);
++}
++
+ static void setup_sock_filter(int fd)
+ {
+ 	const int dport_off = tcp_offset + offsetof(struct tcphdr, dest);
+@@ -412,11 +432,15 @@ static void create_packet(void *buf, int seq_offset, int ack_offset,
+ 
+ 	fill_networklayer(buf + inner_ip_off, payload_len, IPPROTO_TCP);
+ 	if (inner_ip_off > ETH_HLEN) {
+-		int encap_proto = (proto == PF_INET) ?
+-				  IPPROTO_IPIP : IPPROTO_IPV6;
++		if (pppoe) {
++			fill_pppoelayer(buf + ETH_HLEN, payload_len + ip_hdr_len, 0x1234);
++		} else {
++			int encap_proto = (proto == PF_INET) ?
++					  IPPROTO_IPIP : IPPROTO_IPV6;
+ 
+-		fill_networklayer(buf + ETH_HLEN,
+-				  payload_len + ip_hdr_len, encap_proto);
++			fill_networklayer(buf + ETH_HLEN,
++					  payload_len + ip_hdr_len, encap_proto);
++		}
+ 	}
+ 
+ 	fill_datalinklayer(buf);
+@@ -526,7 +550,7 @@ static void send_flags(int fd, struct sockaddr_ll *daddr, int psh, int syn,
+ static void send_data_pkts(int fd, struct sockaddr_ll *daddr,
+ 			   int payload_len1, int payload_len2)
+ {
+-	static char buf[ETH_HLEN + IP_MAXPACKET];
++	static char buf[L2_HLEN_MAX + IP_MAXPACKET];
+ 
+ 	create_packet(buf, 0, 0, payload_len1, 0);
+ 	write_packet(fd, buf, total_hdr_len + payload_len1, daddr);
+@@ -1071,6 +1095,20 @@ static void send_fragment6(int fd, struct sockaddr_ll *daddr)
+ 	write_packet(fd, buf, bufpkt_len, daddr);
+ }
+ 
++static void send_changed_pppoe_sid(int fd, struct sockaddr_ll *daddr)
++{
++	static char buf[MAX_HDR_LEN + PAYLOAD_LEN];
++	int pkt_size = total_hdr_len + PAYLOAD_LEN;
++	struct pppoe_hdr *hdr = (struct pppoe_hdr *)(buf + ETH_HLEN);
++
++	create_packet(buf, 0, 0, PAYLOAD_LEN, 0);
++	write_packet(fd, buf, pkt_size, daddr);
++
++	create_packet(buf, PAYLOAD_LEN, 0, PAYLOAD_LEN, 0);
++	hdr->sid = htons(0x4321);
++	write_packet(fd, buf, pkt_size, daddr);
++}
++
+ static void bind_packetsocket(int fd)
+ {
+ 	struct sockaddr_ll daddr = {};
+@@ -1121,9 +1159,10 @@ static void recv_error(int fd, int rcv_errno)
+ static void check_recv_pkts(int fd, int *correct_payload,
+ 			    int correct_num_pkts)
+ {
+-	static char buffer[IP_MAXPACKET + ETH_HLEN + 1];
+-	struct iphdr *iph = (struct iphdr *)(buffer + ETH_HLEN);
+-	struct ipv6hdr *ip6h = (struct ipv6hdr *)(buffer + ETH_HLEN);
++	static char buffer[IP_MAXPACKET + L2_HLEN_MAX + 1];
++	int nhoff = ETH_HLEN + (pppoe ? PPPOE_SES_HLEN : 0);
++	struct iphdr *iph = (struct iphdr *)(buffer + nhoff);
++	struct ipv6hdr *ip6h = (struct ipv6hdr *)(buffer + nhoff);
+ 	struct tcphdr *tcph;
+ 	bool bad_packet = false;
+ 	int tcp_ext_len = 0;
+@@ -1140,7 +1179,7 @@ static void check_recv_pkts(int fd, int *correct_payload,
+ 
+ 	while (1) {
+ 		ip_ext_len = 0;
+-		pkt_size = recv(fd, buffer, IP_MAXPACKET + ETH_HLEN + 1, 0);
++		pkt_size = recv(fd, buffer, sizeof(buffer), 0);
+ 		if (pkt_size < 0)
+ 			recv_error(fd, errno);
+ 
+@@ -1183,9 +1222,10 @@ static void check_recv_pkts(int fd, int *correct_payload,
+ 
+ static void check_capacity_pkts(int fd)
+ {
+-	static char buffer[IP_MAXPACKET + ETH_HLEN + 1];
+-	struct iphdr *iph = (struct iphdr *)(buffer + ETH_HLEN);
+-	struct ipv6hdr *ip6h = (struct ipv6hdr *)(buffer + ETH_HLEN);
++	static char buffer[IP_MAXPACKET + L2_HLEN_MAX + 1];
++	int nhoff = ETH_HLEN + (pppoe ? PPPOE_SES_HLEN : 0);
++	struct iphdr *iph = (struct iphdr *)(buffer + nhoff);
++	struct ipv6hdr *ip6h = (struct ipv6hdr *)(buffer + nhoff);
+ 	int num_pkt = 0, num_coal = 0, pkt_idx;
+ 	const char *fail_reason = NULL;
+ 	int flow_order[num_flows * 2];
+@@ -1203,7 +1243,7 @@ static void check_capacity_pkts(int fd)
+ 
+ 	while (1) {
+ 		ip_ext_len = 0;
+-		pkt_size = recv(fd, buffer, IP_MAXPACKET + ETH_HLEN + 1, 0);
++		pkt_size = recv(fd, buffer, sizeof(buffer), 0);
+ 		if (pkt_size < 0)
+ 			recv_error(fd, errno);
+ 
+@@ -1499,6 +1539,12 @@ static void gro_sender(void)
+ 		usleep(fin_delay_us);
+ 		write_packet(txfd, fin_pkt, total_hdr_len, &daddr);
+ 
++	/* PPPoE sub-tests */
++	} else if (strcmp(testname, "pppoe_sid") == 0) {
++		send_changed_pppoe_sid(txfd, &daddr);
++		usleep(fin_delay_us);
++		write_packet(txfd, fin_pkt, total_hdr_len, &daddr);
++
+ 	} else {
+ 		error(1, 0, "Unknown testcase: %s", testname);
+ 	}
+@@ -1716,6 +1762,12 @@ static void gro_receiver(void)
+ 	} else if (strcmp(testname, "capacity") == 0) {
+ 		check_capacity_pkts(rxfd);
+ 
++	} else if (strcmp(testname, "pppoe_sid") == 0) {
++		correct_payload[0] = PAYLOAD_LEN;
++		correct_payload[1] = PAYLOAD_LEN;
++		printf("different PPPoE session ID doesn't coalesce: ");
++		check_recv_pkts(rxfd, correct_payload, 2);
++
+ 	} else {
+ 		error(1, 0, "Test case error: unknown testname %s", testname);
+ 	}
+@@ -1734,6 +1786,8 @@ static void parse_args(int argc, char **argv)
+ 		{ "ipv6", no_argument, NULL, '6' },
+ 		{ "ipip", no_argument, NULL, 'e' },
+ 		{ "ip6ip6", no_argument, NULL, 'E' },
++		{ "pppoev4", no_argument, NULL, 'p' },
++		{ "pppoev6", no_argument, NULL, 'P' },
+ 		{ "num-flows", required_argument, NULL, 'n' },
+ 		{ "rx", no_argument, NULL, 'r' },
+ 		{ "saddr", required_argument, NULL, 's' },
+@@ -1745,7 +1799,7 @@ static void parse_args(int argc, char **argv)
+ 	};
+ 	int c;
+ 
+-	while ((c = getopt_long(argc, argv, "46d:D:eEi:n:rs:S:t:ov", opts, NULL)) != -1) {
++	while ((c = getopt_long(argc, argv, "46d:D:eEi:n:pPrs:S:t:ov", opts, NULL)) != -1) {
+ 		switch (c) {
+ 		case '4':
+ 			proto = PF_INET;
+@@ -1765,6 +1819,16 @@ static void parse_args(int argc, char **argv)
+ 			proto = PF_INET6;
+ 			ethhdr_proto = htons(ETH_P_IPV6);
+ 			break;
++		case 'p':
++			pppoe = true;
++			proto = PF_INET;
++			ethhdr_proto = htons(ETH_P_PPP_SES);
++			break;
++		case 'P':
++			pppoe = true;
++			proto = PF_INET6;
++			ethhdr_proto = htons(ETH_P_PPP_SES);
++			break;
+ 		case 'd':
+ 			addr4_dst = addr6_dst = optarg;
+ 			break;
+@@ -1812,6 +1876,10 @@ int main(int argc, char **argv)
+ 	} else if (ip6ip6) {
+ 		tcp_offset = ETH_HLEN + sizeof(struct ipv6hdr) * 2;
+ 		total_hdr_len = tcp_offset + sizeof(struct tcphdr);
++	} else if (pppoe) {
++		tcp_offset = ETH_HLEN + PPPOE_SES_HLEN +
++			(proto == PF_INET ? sizeof(struct iphdr) : sizeof(struct ipv6hdr));
++		total_hdr_len = tcp_offset + sizeof(struct tcphdr);
+ 	} else if (proto == PF_INET) {
+ 		tcp_offset = ETH_HLEN + sizeof(struct iphdr);
+ 		total_hdr_len = tcp_offset + sizeof(struct tcphdr);
+-- 
+2.43.0
 
-> Coder visible change is to drop the enum ddebug_class_map_type's
-> unused vals - namely: DD_CLASS_TYPE_DISJOINT_NAMES
-> & DD_CLASS_TYPE_LEVEL_NAMES
-> 
-> These allowed more symbolic named inputs:
->   echo +DRM_UT_CORE > /sys/module/drm/parameters/debug
-> 
-> But theyre unused 3 years later, and probably not worth keeping.
-> With a removal commit in the log, its easy enough to restore them later.
-> 
-> ...
-> 
->  MAINTAINERS                                        |   1 +
->  include/linux/dynamic_debug.h                      | 106 ++---
->  kernel/module/main.c                               |  12 +-
->  lib/dynamic_debug.c                                | 504 ++++++++++-----------
->  lib/test_dynamic_debug.c                           |  28 +-
->  tools/testing/selftests/Makefile                   |   1 +
->  tools/testing/selftests/dynamic_debug/Makefile     |   9 +
->  tools/testing/selftests/dynamic_debug/config       |   7 +
->  .../selftests/dynamic_debug/dyndbg_selftest.sh     | 257 +++++++++++
->  9 files changed, 582 insertions(+), 343 deletions(-)
-
-No Documentation/ updates?
