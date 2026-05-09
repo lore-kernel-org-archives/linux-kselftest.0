@@ -1,105 +1,111 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B94113635E;
-	Sat,  9 May 2026 08:04:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A8DB2EF67A
+	for <linux-kselftest@vger.kernel.org>; Sat,  9 May 2026 09:47:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778313844; cv=none; b=qI1JIfJn8djLEQlkcXC6GTEoQVZ8n7Rrimb+PaNvxI38MeZy8T3aUZnD5mnwQO8MPGsfLrG2iy9SiC67Ufwi25wYFpyn9LnHCAnqkDoqcENTlMaUtJ1b9qwM8k+oX5d2kbFHPWP4WlwCh+pADCvDFMU5Or1AoM0BQhHHQR2FBLY=
+	t=1778320075; cv=none; b=rU5yaCIiGetEfjekQ0fsGwaV8X1tWjJklb4RbfCdJ6ABTku4HIhTLIaZxlBZFlSZiUUV7VHCYuP2zDEk4wN/cYbITx9Lm6AwHtm/IpyWZGGl8pTn3bIs96AyE9LoQl+YGrJ59zRheneqI3ILntwfnFw4hK3f0e9qQRpzcXIabFk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778313844; c=relaxed/simple;
-	bh=/O9cZ2fytIFd66MD8865ULmaHKE9QqsKud6qAmxoo7Y=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=AX2yEUwI1/ZJ8UUONF8ukhc8d79XjWOehjGki//xdSrQwWvuO9TuwGIUIi64RoK08IRJp0r4SKqGSD10ayxR81woINou4+OgviJ91Zcz/ZfKPptIVsyvO7gABUjzh8dtoyjH3NYWrYVT1rCwwf1d4CB2COpTE10OyoAwEK7JwpY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: a11f982c4b7d11f1aa26b74ffac11d73-20260509
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
-	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
-	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
-	HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME
-	IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_TRUSTED, SA_EXISTED
-	SN_TRUSTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS
-	CIE_BAD, CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO
-	GTI_C_BU, AMN_GOOD, ABX_MISS_RDNS
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:cd8a9cf8-a779-41a3-a30d-d61e3cb7095e,IP:10,
-	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-	N:release,TS:5
-X-CID-INFO: VERSION:1.3.12,REQID:cd8a9cf8-a779-41a3-a30d-d61e3cb7095e,IP:10,UR
-	L:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:5
-X-CID-META: VersionHash:e7bac3a,CLOUDID:c334d390ae321df87028effc417639e4,BulkI
-	D:26050916035763506HYQ,BulkQuantity:0,Recheck:0,SF:17|19|38|66|78|102|127|
-	850|898,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk:nil
-	,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:
-	0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: a11f982c4b7d11f1aa26b74ffac11d73-20260509
-X-User: lihongfu@kylinos.cn
-Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
-	(envelope-from <lihongfu@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 492315837; Sat, 09 May 2026 16:03:57 +0800
-From: Hongfu Li <lihongfu@kylinos.cn>
-To: tj@kernel.org,
-	hannes@cmpxchg.org,
-	mkoutny@suse.com,
+	s=arc-20240116; t=1778320075; c=relaxed/simple;
+	bh=Dw/zO6gTpfSfiKIhfRGQmXoXpyyuQlLwb6uGxJBRyz0=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=W5mCuczzpr5KvdZW4VFHjl9Fah88ks1VaQ+/r7tJaUKrKfZf5dDfV3iePHe2scpSpM2WajZhXulRH7EL5UjUmvW2oKY3NrIw2Mqn0PNO4m775LsnhBxDS9KEycJTh0EzmA+eFl5gnAbJ0/dIWku6xkrYI+iS5oYxG5ecMU0USAA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Bv+/YluI; arc=none smtp.client-ip=91.218.175.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Bv+/YluI"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1778320061;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=h+2pbbVhcPs+O/UiB7Rv0YgrC1Aa3k1+qfWtc56gjcQ=;
+	b=Bv+/YluIxCYzSWDM6r6xXnJk3cZ60VwXTBhEg+4vuryOYu/VZDOfcWSHl1NSKzTOcVVZU8
+	N9ONn4g9u+bODF/pZpn25LdsBJtLjb3Ou92xRIuM1uxUmaFFksXUmB6YQrRN19fXWWwItv
+	lIQKSwkasHds8/Mds4ZEe9zq3Hvn3fM=
+From: Lance Yang <lance.yang@linux.dev>
+To: chenwandun1@gmail.com
+Cc: akpm@linux-foundation.org,
+	david@kernel.org,
+	ljs@kernel.org,
 	shuah@kernel.org,
-	seanjc@google.com,
-	jthoughton@google.com,
-	zhangguopeng@kylinos.cn
-Cc: cgroups@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
+	zokeefe@google.com,
 	linux-kernel@vger.kernel.org,
-	Hongfu Li <lihongfu@kylinos.cn>
-Subject: [PATCH] selftests/cgroup: Fix cg_read_strcmp() empty string comparison
-Date: Sat,  9 May 2026 16:03:28 +0800
-Message-Id: <20260509080328.632007-1-lihongfu@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	Lance Yang <lance.yang@linux.dev>
+Subject: Re: [PATCH 0/2] mm/khugepaged: fix sub-PMD MADV_COLLAPSE range handling
+Date: Sat,  9 May 2026 17:47:32 +0800
+Message-Id: <20260509094732.83643-1-lance.yang@linux.dev>
+In-Reply-To: <20260507070558.3064142-1-chenwandun@lixiang.com>
+References: <20260507070558.3064142-1-chenwandun@lixiang.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-cg_read_strcmp() allocated a buffer sized to strlen(expected) + 1,
-then passed it to read_text() which calls read(fd, buf, size-1).
+Hi,
 
-When comparing against an empty string (""), strlen("") = 0 gives a
-1-byte buffer, and read() is asked to read 0 bytes.  The file content
-is never actually read, so strcmp("", buf) always returns 0 regardless
-of the real content.  This caused cg_test_proc_killed() to always
-report the cgroup as empty immediately, making OOM tests pass without
-verifying that processes were killed.
+scripts/get_maintainer.pl is your friend :)
+Please use it to Cc the relevant maintainers and reviewers next time.
 
-Signed-off-by: Hongfu Li <lihongfu@kylinos.cn>
----
- tools/testing/selftests/cgroup/lib/cgroup_util.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Cheers, Lance
 
-diff --git a/tools/testing/selftests/cgroup/lib/cgroup_util.c b/tools/testing/selftests/cgroup/lib/cgroup_util.c
-index 6a7295347e90..42f54936f4bb 100644
---- a/tools/testing/selftests/cgroup/lib/cgroup_util.c
-+++ b/tools/testing/selftests/cgroup/lib/cgroup_util.c
-@@ -106,8 +106,9 @@ int cg_read_strcmp(const char *cgroup, const char *control,
- 	/* Handle the case of comparing against empty string */
- 	if (!expected)
- 		return -1;
--	else
--		size = strlen(expected) + 1;
-+
-+	/* needs size > 1, otherwise cg_read() reads 0 bytes */
-+	size = (expected[0] == '\0') ? 2 : strlen(expected) + 1;
- 
- 	buf = malloc(size);
- 	if (!buf)
--- 
-2.25.1
-
+On Thu, May 07, 2026 at 03:05:56PM +0800, Chen Wandun wrote:
+>madvise_collapse() computes a THP-aligned window from the caller's range:
+>
+>  hstart = (start + ~HPAGE_PMD_MASK) & HPAGE_PMD_MASK  /* round up  */
+>  hend   =  end   &  HPAGE_PMD_MASK                    /* round down */
+>
+>When the caller's range is smaller than one PMD (2 MiB) and/or not
+>PMD-aligned, hstart can end up greater than hend.  In that case the
+>collapsing loop is correctly skipped, but the return value was computed
+>as ((hend - hstart) >> HPAGE_PMD_SHIFT): with hstart > hend the
+>subtraction wraps unsigned, producing a huge value, the comparison
+>"thps != 0" fires, and -EINVAL is returned instead of 0.
+>
+>A concrete example:
+>
+>  /* both cover less than one THP; both should return 0 */
+>  madvise(aligned, PAGE_SIZE, MADV_COLLAPSE);             /* OK, returns 0 */
+>  madvise(aligned + PAGE_SIZE, PAGE_SIZE, MADV_COLLAPSE); /* returns -EINVAL */
+>
+>The fix moves the hstart/hend calculation before kmalloc_obj() and
+>returns 0 early when hstart >= hend.  This also avoids the kmalloc,
+>mmgrab(), and lru_add_drain_all() calls for ranges that trivially
+>contain no PMD window.  The same effect could be achieved by only
+>guarding the final return expression, but early-return keeps the
+>no-op path free of the allocator and drain overhead.
+>
+>Patch 1 fixes the kernel bug.
+>Patch 2 adds a selftest with two cases covering the hstart == hend
+>(aligned, was already correct) and hstart > hend (unaligned, was
+>broken) scenarios.
+>
+>Chen Wandun (2):
+>  mm/khugepaged: fix spurious -EINVAL from sub-PMD MADV_COLLAPSE range
+>  selftests/mm: add MADV_COLLAPSE sub-PMD range tests
+>
+> mm/khugepaged.c                               |   9 +-
+> tools/testing/selftests/mm/.gitignore         |   1 +
+> tools/testing/selftests/mm/Makefile           |   2 +
+> .../selftests/mm/ksft_madv_collapse.sh        |   4 +
+> .../selftests/mm/madv_collapse_range.c        | 141 ++++++++++++++++++
+> tools/testing/selftests/mm/run_vmtests.sh     |   5 +
+> 6 files changed, 159 insertions(+), 3 deletions(-)
+> create mode 100755 tools/testing/selftests/mm/ksft_madv_collapse.sh
+> create mode 100644 tools/testing/selftests/mm/madv_collapse_range.c
+>
+>-- 
+>2.43.0
+>
+>
