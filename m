@@ -1,355 +1,167 @@
-Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f68.google.com (mail-pj1-f68.google.com [209.85.216.68])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D42A381AF1
-	for <linux-kselftest@vger.kernel.org>; Sat,  9 May 2026 03:05:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26BFE311C2F
+	for <linux-kselftest@vger.kernel.org>; Sat,  9 May 2026 05:56:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.68
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778295946; cv=none; b=KL66lAqzMDXTf1zw2gNFzrVqyxgsb1+TJXR9estpWmjK+gFJY1pljRyYXxWiZhibWMo+PoDD0iC0gmdmNsG7mXs2GpjSSH+l4LYHsOa5tmJvyYPmpaZdmObTXjm6PmLmD9pcy0EF5NstDGPMbHJGhVZJj3A0zxW+7V7O9Xfbnhg=
+	t=1778306191; cv=none; b=SosLCT3UyRpjY5gZh5KaXRaragATL9RndNEX7WcVdxQu5CjWS/poJRAWRjHY/jyYz9GEHsETLhzVyyJmh7aU18fMV7V7Z93jUFQlQ3qL6zNMbNoUPZD/9sBFCNFPH8kce+rcPB3eCjtjDRvWqHEmh2P2a0+sdvr4Vk8L/NRfwlk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778295946; c=relaxed/simple;
-	bh=fTDQLcIZudAaiePFSZqDOEEOx+pbuAUCZbxSrWn5K1A=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JKligKTInm5lBJBVia/uwCnpKrD3Dz7O2f6zP0YiwPbFXWPjCCmKx1YbZDdmxA5nhiMGND1LPpcTTjZcKSnhVrnhOdK4Hj3ONqm6T1eoFjhYSDmNXzqbW/yKZYVsaXhjsk8TFT4Uky1IUuIZI4pLxIfAb9zstekhhymjBOFLaOU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=mcR3tiqP; arc=none smtp.client-ip=91.218.175.185
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1778306191; c=relaxed/simple;
+	bh=K84PeIaf8u2Q3Z7pnulmUb9BcD2A3RhjSwCeSxsIWtw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=W8l8PjlmXZDZQR7zRmSNR+g6DZeCuiY+UqqvJ5fL/nJbJOBvI5pA3N9vAM2AegN/A4y8jr5cZ9V+YSt/cZqOHPM5KIn93UYw7y23XHZXtg8RKz3OOrCJqwmzXBSk+CIhK38Rb73TnsRLEQIV+uPz6rqdmWsn7dpXDYc8kzrvhBo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Rutv54EN; arc=none smtp.client-ip=209.85.216.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="mcR3tiqP"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1778295942;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8AC7pELr/ORQYqNLuSMF/s5KplYjBYm6jXnxD2M3oVk=;
-	b=mcR3tiqP2OuT2aCOGlFEfgZ1gRegzYq6sudQNHz2ikAbeX+sugRk0nhYFYNZK57hobKn6p
-	RokUWjMF5eG0iQxOY+/8+UgPzyTL3tWhtZNN/NXicp9kQtTiLMzFmdWnZA6HYR3jwrMkdO
-	g6hmJgCY5gPjqfnLMQ9IKVJxr1Qku1U=
-From: Qingfang Deng <qingfang.deng@linux.dev>
-To: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Simon Horman <horms@kernel.org>,
-	Willem de Bruijn <willemb@google.com>,
-	Petr Machata <petrm@nvidia.com>,
-	Richard Gobert <richardbgobert@gmail.com>,
-	Anubhav Singh <anubhavsinggh@google.com>,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: linux-ppp@vger.kernel.org,
-	Pablo Neira Ayuso <pablo@netfilter.org>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Felix Fietkau <nbd@nbd.name>,
-	Qingfang Deng <qingfang.deng@linux.dev>
-Subject: [PATCH net-next v9 2/2] selftests: net: test PPPoE packets in gro.sh
-Date: Sat,  9 May 2026 11:04:53 +0800
-Message-ID: <20260509030507.387050-2-qingfang.deng@linux.dev>
-In-Reply-To: <20260509030507.387050-1-qingfang.deng@linux.dev>
-References: <20260509030507.387050-1-qingfang.deng@linux.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Rutv54EN"
+Received: by mail-pj1-f68.google.com with SMTP id 98e67ed59e1d1-365d4d2f9c1so1779727a91.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 08 May 2026 22:56:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778306189; x=1778910989; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=oMVyy/IaM9CfR7aJopsUJkLNBd+P1jAwfTc6GxmGXeU=;
+        b=Rutv54ENfC7rPGNlFoPIk21POeyLDYeLFgT3CJjOZ37ozq0Kgpt1bI5KyJIG8x+x1U
+         leX3M1LLB18ZCJlmOkXErZq9jcUPgGtZKJ08kdcJbMpMdPiyS5YBLTrSDNnZjl/jUAnB
+         9VJGpF/6wd9R5bKoMfB0BoimcmyU++ujzF1KeI0WLvUgwFEtxDoGeYE5a7WgYbJLYETD
+         BXeTF0q9Cs0qW3Y4a50Gag6aADRe2ADgP8084v5QwhnYSnH37VTEG38fYBERKXCurdSX
+         gywRNQCR/1D+3bbWq+FDATggyhXHDe+3DFQfikH/tfDzcALCeCg36epauwp2FxRJmzPw
+         9+dA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778306189; x=1778910989;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oMVyy/IaM9CfR7aJopsUJkLNBd+P1jAwfTc6GxmGXeU=;
+        b=Tr8xxjXJyZhgKKnD6/ofK4aKdEoibnjT8dFsO1/6mWJE82PG7vKN/64Gl6ZYTgEIi5
+         W04vS/00NT/OxFbk5osSOkN3cdLrTU6TNampxt3rwGeXgSQofleBPA+6GP4GYrzZn0cz
+         6vnvrZMqCUn9T3nuABlk2dxZ2gg3mDyBLFVF5qvqFvgYpKFew/+6PPDNjel2QnzitZ6D
+         MfD2//7UJGpxJ4CI3VRpJvEDLwdl4Bq/wbve6KRdtIsNZg3YiApa+gA3f3qB0Q+yIt7g
+         0cwnR3E4mUa9uDgUJQeWwtNmzMJIXsQEkSssG1kkw6qEm1J38gMGCw85dpbh5o8oiIpG
+         pfJw==
+X-Forwarded-Encrypted: i=1; AFNElJ/cZ8alD+gC8Db9Rg/yz0GvvL9r5nGkeMsFfKLY4r88XWJ9jutqkgVCxLrbNHGrO8iEF+yVz/PWtIkv+ZDhst0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzO/lAwIYMu90852RJZbxzaXK8wnUnxMSfHDTmnj2hl89xcH279
+	RKVANBbc6TcZGCmdTl1Nswxl9gzL4IKLWV2xCevZks5Pa+8poPJBoEbm
+X-Gm-Gg: Acq92OF8DTRVhkmdtt1kqTi4JcFU/9JKUE2z6dWvR6L3FxEbhTiFVkAAerj6ifEoVq5
+	bUkl0ilGaV2Y6TnCDGDr6NTxzu5V3+BE7oE6e8aQUq8HmbC6ep7SNMb0LGjUe8f09pplvQAi6zs
+	FLmKdYXUXQrzxzy6QXMklXIlivDV9cetLkb/CGgueEjZUyvibdUTff8W90k/bBTdLd2mIkdxmm5
+	WwH7gcZGGbGwTigpAWqnRl7xh+lTX69zyTkJ1Tc7v9qTgnrM3ZRsfWVWxj5SPfifr7GlJ1PmKJw
+	8KTw8QkD8c07XuIt2RMoH0KC9ZZQfuRswEqmbbqqyI2zSoR0dOY6jblssC+C753zaPl7LY9LJmd
+	HHv1nWk6ZWPd5gJgVZ/+7ks14bAEOZz7jtbM6QS1EK7yUcVizIYJ/t9dRGMgGzSX0QlvWhLZlRr
+	5yRu1WEF2taM0XK+Gq7MEOGTl0RxFr//A=
+X-Received: by 2002:a17:90b:3c8f:b0:359:8e5e:43de with SMTP id 98e67ed59e1d1-365ac47e3ecmr16022750a91.22.1778306189319;
+        Fri, 08 May 2026 22:56:29 -0700 (PDT)
+Received: from [10.125.112.20] ([210.184.73.204])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-367bd392d2fsm1009154a91.0.2026.05.08.22.56.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 May 2026 22:56:28 -0700 (PDT)
+Message-ID: <9e20b388-7952-4d3b-93e1-27b3885ba5d3@gmail.com>
+Date: Sat, 9 May 2026 13:56:22 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] mm/khugepaged: fix spurious -EINVAL from sub-PMD
+ MADV_COLLAPSE range
+To: "David Hildenbrand (Arm)" <david@kernel.org>, akpm@linux-foundation.org,
+ ljs@kernel.org, shuah@kernel.org, zokeefe@google.com
+Cc: linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org
+References: <20260507070558.3064142-1-chenwandun@lixiang.com>
+ <20260507070558.3064142-2-chenwandun@lixiang.com>
+ <9eea2afb-8c35-47eb-b1de-6a08503c9679@kernel.org>
+Content-Language: en-US
+From: Wandun <chenwandun1@gmail.com>
+In-Reply-To: <9eea2afb-8c35-47eb-b1de-6a08503c9679@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Add PPPoE test-cases to the GRO selftest. Only run a subset of
-common_tests to avoid changing the hardcoded L3 offsets everywhere.
-Add a new "pppoe_sid" test case to verify that packets with different
-PPPoE session IDs are correctly identified as separate flows and not
-coalesced.
 
-Signed-off-by: Qingfang Deng <qingfang.deng@linux.dev>
----
-v9: fix buffer length in send_changed_pppoe_sid()
-v8: https://lore.kernel.org/netdev/20260501035102.293031-2-qingfang.deng@linux.dev
- - add a new macro L2_HLEN_MAX for PPPoE
-v7: https://lore.kernel.org/netdev/20260428064717.74794-2-qingfang.deng@linux.dev
- - Do not run all the tests for PPPoE
- - Add a new test for PPPoE
-v6: https://lore.kernel.org/netdev/20260326081127.61229-2-dqfext@gmail.com
- tools/testing/selftests/drivers/net/config |   2 +
- tools/testing/selftests/drivers/net/gro.py |  11 +++
- tools/testing/selftests/net/lib/gro.c      | 100 +++++++++++++++++----
- 3 files changed, 97 insertions(+), 16 deletions(-)
 
-diff --git a/tools/testing/selftests/drivers/net/config b/tools/testing/selftests/drivers/net/config
-index 2309109a94ec..617de8aaf551 100644
---- a/tools/testing/selftests/drivers/net/config
-+++ b/tools/testing/selftests/drivers/net/config
-@@ -10,5 +10,7 @@ CONFIG_NETCONSOLE_EXTENDED_LOG=y
- CONFIG_NETDEVSIM=m
- CONFIG_NET_SCH_ETF=m
- CONFIG_NET_SCH_FQ=m
-+CONFIG_PPP=y
-+CONFIG_PPPOE=y
- CONFIG_VLAN_8021Q=m
- CONFIG_XDP_SOCKETS=y
-diff --git a/tools/testing/selftests/drivers/net/gro.py b/tools/testing/selftests/drivers/net/gro.py
-index 5ffaa7bdbff4..fd158c775b1c 100755
---- a/tools/testing/selftests/drivers/net/gro.py
-+++ b/tools/testing/selftests/drivers/net/gro.py
-@@ -323,6 +323,12 @@ def _gro_variants():
-         "ip_frag6", "ip_v6ext_same", "ip_v6ext_diff",
-     ]
- 
-+    # Tests specific to PPPoE
-+    pppoe_tests = [
-+        "data_same", "data_lrg_sml", "data_sml_lrg", "data_lrg_1byte",
-+        "data_burst", "pppoe_sid",
-+    ]
-+
-     for mode in ["sw", "hw", "lro"]:
-         for protocol in ["ipv4", "ipv6", "ipip", "ip6ip6"]:
-             for test_name in common_tests:
-@@ -335,6 +341,11 @@ def _gro_variants():
-                 for test_name in ipv6_tests:
-                     yield mode, protocol, test_name
- 
-+    for mode in ["sw"]:
-+        for protocol in ["pppoev4", "pppoev6"]:
-+            for test_name in pppoe_tests:
-+                yield mode, protocol, test_name
-+
- 
- @ksft_variants(_gro_variants())
- def test(cfg, mode, protocol, test_name):
-diff --git a/tools/testing/selftests/net/lib/gro.c b/tools/testing/selftests/net/lib/gro.c
-index 11b16ae5f0e8..fa35dfc8e790 100644
---- a/tools/testing/selftests/net/lib/gro.c
-+++ b/tools/testing/selftests/net/lib/gro.c
-@@ -67,12 +67,14 @@
- #include <errno.h>
- #include <error.h>
- #include <getopt.h>
-+#include <net/ethernet.h>
-+#include <net/if.h>
- #include <linux/filter.h>
- #include <linux/if_packet.h>
-+#include <linux/if_pppox.h>
- #include <linux/ipv6.h>
- #include <linux/net_tstamp.h>
--#include <net/ethernet.h>
--#include <net/if.h>
-+#include <linux/ppp_defs.h>
- #include <netinet/in.h>
- #include <netinet/ip.h>
- #include <netinet/ip6.h>
-@@ -102,6 +104,7 @@
- #define MAX_LARGE_PKT_CNT ((IP_MAXPACKET - (MAX_HDR_LEN - ETH_HLEN)) /	\
- 			   (ASSUMED_MTU - (MAX_HDR_LEN - ETH_HLEN)))
- #define MIN_EXTHDR_SIZE 8
-+#define L2_HLEN_MAX	(ETH_HLEN + PPPOE_SES_HLEN)
- #define EXT_PAYLOAD_1 "\x00\x00\x00\x00\x00\x00"
- #define EXT_PAYLOAD_2 "\x11\x11\x11\x11\x11\x11"
- 
-@@ -134,6 +137,7 @@ static int total_hdr_len = -1;
- static int ethhdr_proto = -1;
- static bool ipip;
- static bool ip6ip6;
-+static bool pppoe;
- static uint64_t txtime_ns;
- static int num_flows = 4;
- static bool order_check;
-@@ -171,6 +175,22 @@ static void vlog(const char *fmt, ...)
- 	}
- }
- 
-+static void fill_pppoelayer(void *buf, int payload_len, uint16_t sid)
-+{
-+	struct pppoe_ppp_hdr {
-+		struct pppoe_hdr eh;
-+		__be16 proto;
-+	} *ph = buf;
-+
-+	payload_len += sizeof(struct tcphdr);
-+	ph->eh.type = 1;
-+	ph->eh.ver = 1;
-+	ph->eh.code = 0;
-+	ph->eh.sid = htons(sid);
-+	ph->eh.length = htons(payload_len + sizeof(ph->proto));
-+	ph->proto = htons(proto == PF_INET ? PPP_IP : PPP_IPV6);
-+}
-+
- static void setup_sock_filter(int fd)
- {
- 	const int dport_off = tcp_offset + offsetof(struct tcphdr, dest);
-@@ -412,11 +432,15 @@ static void create_packet(void *buf, int seq_offset, int ack_offset,
- 
- 	fill_networklayer(buf + inner_ip_off, payload_len, IPPROTO_TCP);
- 	if (inner_ip_off > ETH_HLEN) {
--		int encap_proto = (proto == PF_INET) ?
--				  IPPROTO_IPIP : IPPROTO_IPV6;
-+		if (pppoe) {
-+			fill_pppoelayer(buf + ETH_HLEN, payload_len + ip_hdr_len, 0x1234);
-+		} else {
-+			int encap_proto = (proto == PF_INET) ?
-+					  IPPROTO_IPIP : IPPROTO_IPV6;
- 
--		fill_networklayer(buf + ETH_HLEN,
--				  payload_len + ip_hdr_len, encap_proto);
-+			fill_networklayer(buf + ETH_HLEN,
-+					  payload_len + ip_hdr_len, encap_proto);
-+		}
- 	}
- 
- 	fill_datalinklayer(buf);
-@@ -526,7 +550,7 @@ static void send_flags(int fd, struct sockaddr_ll *daddr, int psh, int syn,
- static void send_data_pkts(int fd, struct sockaddr_ll *daddr,
- 			   int payload_len1, int payload_len2)
- {
--	static char buf[ETH_HLEN + IP_MAXPACKET];
-+	static char buf[L2_HLEN_MAX + IP_MAXPACKET];
- 
- 	create_packet(buf, 0, 0, payload_len1, 0);
- 	write_packet(fd, buf, total_hdr_len + payload_len1, daddr);
-@@ -1071,6 +1095,20 @@ static void send_fragment6(int fd, struct sockaddr_ll *daddr)
- 	write_packet(fd, buf, bufpkt_len, daddr);
- }
- 
-+static void send_changed_pppoe_sid(int fd, struct sockaddr_ll *daddr)
-+{
-+	static char buf[MAX_HDR_LEN + PAYLOAD_LEN];
-+	int pkt_size = total_hdr_len + PAYLOAD_LEN;
-+	struct pppoe_hdr *hdr = (struct pppoe_hdr *)(buf + ETH_HLEN);
-+
-+	create_packet(buf, 0, 0, PAYLOAD_LEN, 0);
-+	write_packet(fd, buf, pkt_size, daddr);
-+
-+	create_packet(buf, PAYLOAD_LEN, 0, PAYLOAD_LEN, 0);
-+	hdr->sid = htons(0x4321);
-+	write_packet(fd, buf, pkt_size, daddr);
-+}
-+
- static void bind_packetsocket(int fd)
- {
- 	struct sockaddr_ll daddr = {};
-@@ -1121,9 +1159,10 @@ static void recv_error(int fd, int rcv_errno)
- static void check_recv_pkts(int fd, int *correct_payload,
- 			    int correct_num_pkts)
- {
--	static char buffer[IP_MAXPACKET + ETH_HLEN + 1];
--	struct iphdr *iph = (struct iphdr *)(buffer + ETH_HLEN);
--	struct ipv6hdr *ip6h = (struct ipv6hdr *)(buffer + ETH_HLEN);
-+	static char buffer[IP_MAXPACKET + L2_HLEN_MAX + 1];
-+	int nhoff = ETH_HLEN + (pppoe ? PPPOE_SES_HLEN : 0);
-+	struct iphdr *iph = (struct iphdr *)(buffer + nhoff);
-+	struct ipv6hdr *ip6h = (struct ipv6hdr *)(buffer + nhoff);
- 	struct tcphdr *tcph;
- 	bool bad_packet = false;
- 	int tcp_ext_len = 0;
-@@ -1140,7 +1179,7 @@ static void check_recv_pkts(int fd, int *correct_payload,
- 
- 	while (1) {
- 		ip_ext_len = 0;
--		pkt_size = recv(fd, buffer, IP_MAXPACKET + ETH_HLEN + 1, 0);
-+		pkt_size = recv(fd, buffer, sizeof(buffer), 0);
- 		if (pkt_size < 0)
- 			recv_error(fd, errno);
- 
-@@ -1183,9 +1222,10 @@ static void check_recv_pkts(int fd, int *correct_payload,
- 
- static void check_capacity_pkts(int fd)
- {
--	static char buffer[IP_MAXPACKET + ETH_HLEN + 1];
--	struct iphdr *iph = (struct iphdr *)(buffer + ETH_HLEN);
--	struct ipv6hdr *ip6h = (struct ipv6hdr *)(buffer + ETH_HLEN);
-+	static char buffer[IP_MAXPACKET + L2_HLEN_MAX + 1];
-+	int nhoff = ETH_HLEN + (pppoe ? PPPOE_SES_HLEN : 0);
-+	struct iphdr *iph = (struct iphdr *)(buffer + nhoff);
-+	struct ipv6hdr *ip6h = (struct ipv6hdr *)(buffer + nhoff);
- 	int num_pkt = 0, num_coal = 0, pkt_idx;
- 	const char *fail_reason = NULL;
- 	int flow_order[num_flows * 2];
-@@ -1203,7 +1243,7 @@ static void check_capacity_pkts(int fd)
- 
- 	while (1) {
- 		ip_ext_len = 0;
--		pkt_size = recv(fd, buffer, IP_MAXPACKET + ETH_HLEN + 1, 0);
-+		pkt_size = recv(fd, buffer, sizeof(buffer), 0);
- 		if (pkt_size < 0)
- 			recv_error(fd, errno);
- 
-@@ -1499,6 +1539,12 @@ static void gro_sender(void)
- 		usleep(fin_delay_us);
- 		write_packet(txfd, fin_pkt, total_hdr_len, &daddr);
- 
-+	/* PPPoE sub-tests */
-+	} else if (strcmp(testname, "pppoe_sid") == 0) {
-+		send_changed_pppoe_sid(txfd, &daddr);
-+		usleep(fin_delay_us);
-+		write_packet(txfd, fin_pkt, total_hdr_len, &daddr);
-+
- 	} else {
- 		error(1, 0, "Unknown testcase: %s", testname);
- 	}
-@@ -1716,6 +1762,12 @@ static void gro_receiver(void)
- 	} else if (strcmp(testname, "capacity") == 0) {
- 		check_capacity_pkts(rxfd);
- 
-+	} else if (strcmp(testname, "pppoe_sid") == 0) {
-+		correct_payload[0] = PAYLOAD_LEN;
-+		correct_payload[1] = PAYLOAD_LEN;
-+		printf("different PPPoE session ID doesn't coalesce: ");
-+		check_recv_pkts(rxfd, correct_payload, 2);
-+
- 	} else {
- 		error(1, 0, "Test case error: unknown testname %s", testname);
- 	}
-@@ -1734,6 +1786,8 @@ static void parse_args(int argc, char **argv)
- 		{ "ipv6", no_argument, NULL, '6' },
- 		{ "ipip", no_argument, NULL, 'e' },
- 		{ "ip6ip6", no_argument, NULL, 'E' },
-+		{ "pppoev4", no_argument, NULL, 'p' },
-+		{ "pppoev6", no_argument, NULL, 'P' },
- 		{ "num-flows", required_argument, NULL, 'n' },
- 		{ "rx", no_argument, NULL, 'r' },
- 		{ "saddr", required_argument, NULL, 's' },
-@@ -1745,7 +1799,7 @@ static void parse_args(int argc, char **argv)
- 	};
- 	int c;
- 
--	while ((c = getopt_long(argc, argv, "46d:D:eEi:n:rs:S:t:ov", opts, NULL)) != -1) {
-+	while ((c = getopt_long(argc, argv, "46d:D:eEi:n:pPrs:S:t:ov", opts, NULL)) != -1) {
- 		switch (c) {
- 		case '4':
- 			proto = PF_INET;
-@@ -1765,6 +1819,16 @@ static void parse_args(int argc, char **argv)
- 			proto = PF_INET6;
- 			ethhdr_proto = htons(ETH_P_IPV6);
- 			break;
-+		case 'p':
-+			pppoe = true;
-+			proto = PF_INET;
-+			ethhdr_proto = htons(ETH_P_PPP_SES);
-+			break;
-+		case 'P':
-+			pppoe = true;
-+			proto = PF_INET6;
-+			ethhdr_proto = htons(ETH_P_PPP_SES);
-+			break;
- 		case 'd':
- 			addr4_dst = addr6_dst = optarg;
- 			break;
-@@ -1812,6 +1876,10 @@ int main(int argc, char **argv)
- 	} else if (ip6ip6) {
- 		tcp_offset = ETH_HLEN + sizeof(struct ipv6hdr) * 2;
- 		total_hdr_len = tcp_offset + sizeof(struct tcphdr);
-+	} else if (pppoe) {
-+		tcp_offset = ETH_HLEN + PPPOE_SES_HLEN +
-+			(proto == PF_INET ? sizeof(struct iphdr) : sizeof(struct ipv6hdr));
-+		total_hdr_len = tcp_offset + sizeof(struct tcphdr);
- 	} else if (proto == PF_INET) {
- 		tcp_offset = ETH_HLEN + sizeof(struct iphdr);
- 		total_hdr_len = tcp_offset + sizeof(struct tcphdr);
--- 
-2.43.0
+On 5/8/26 20:27, David Hildenbrand (Arm) wrote:
+> On 5/7/26 09:05, Chen Wandun wrote:
+>> madvise_collapse() computes the THP-aligned window:
+>>
+>>    hstart = (start + ~HPAGE_PMD_MASK) & HPAGE_PMD_MASK  /* round up  */
+>>    hend   =  end   &  HPAGE_PMD_MASK                    /* round down */
+>>
+>> Previously this was done after kmalloc_obj(), so problem arose when
+>> the range contained no complete PMD-aligned window (hstart >= hend).
+>>
+>> When hstart > hend, (hend - hstart) wraps unsigned to a huge value, the
+>> final comparison fails and -EINVAL is returned instead of 0.  Consider
+>> two single-page calls on a 2 MiB-aligned address:
+>>
+>>      /* hstart == hend == aligned  ->  0 == 0  ->  returns 0 */
+>>      madvise(aligned, PAGE_SIZE, MADV_COLLAPSE);
+>>
+>>      /* hstart = aligned + 2MiB, hend = aligned
+>>       * (hend - hstart) wraps unsigned  ->  returns -EINVAL */
+>>      madvise(aligned + PAGE_SIZE, PAGE_SIZE, MADV_COLLAPSE);
+>>
+>> Both calls cover less than one THP and collapse nothing; both should
+>> return 0.
+> Okay, so we talk about a "userspace is being stupid" scenario.
+>
+>> In addition, kmalloc_obj(), mmgrab() and lru_add_drain_all() were all
+>> called before discovering there was nothing to do, only for the code
+>> to kfree() and return immediately after.
+> Just a comment as you motivate here why this is suboptimal: we do not care about
+> a "userspace is being stupid" scenario being fast.
+>
+>> Fix both by computing hstart/hend after thp_vma_allowable_order() but
+>> before kmalloc_obj(), and returning 0 early when hstart >= hend.
+>>
+>> Fixes: 7d8faaf15545 ("mm/madvise: introduce MADV_COLLAPSE sync hugepage collapse")
+> Fixes: is likely ok, but I don't think we want to treat this as a hotfix or CC
+> stable.
+Yes, agree, I would drop this Fixes tag in v2 to avoid any confusion.
+>
+>> Signed-off-by: Chen Wandun <chenwandun@lixiang.com>
+>> ---
+>>   mm/khugepaged.c | 9 ++++++---
+>>   1 file changed, 6 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+>> index b8452dbdb043..92473d93e837 100644
+>> --- a/mm/khugepaged.c
+>> +++ b/mm/khugepaged.c
+>> @@ -2836,6 +2836,12 @@ int madvise_collapse(struct vm_area_struct *vma, unsigned long start,
+>>   	if (!thp_vma_allowable_order(vma, vma->vm_flags, TVA_FORCED_COLLAPSE, PMD_ORDER))
+>>   		return -EINVAL;
+>>   
+>> +	hstart = (start + ~HPAGE_PMD_MASK) & HPAGE_PMD_MASK;
+>> +	hend = end & HPAGE_PMD_MASK;
+>> +
+>> +	if (hstart >= hend)
+>> +		return 0;
+>> +
+>>   	cc = kmalloc_obj(*cc);
+>>   	if (!cc)
+>>   		return -ENOMEM;
+>> @@ -2845,9 +2851,6 @@ int madvise_collapse(struct vm_area_struct *vma, unsigned long start,
+>>   	mmgrab(mm);
+>>   	lru_add_drain_all();
+>>   
+>> -	hstart = (start + ~HPAGE_PMD_MASK) & HPAGE_PMD_MASK;
+>> -	hend = end & HPAGE_PMD_MASK;
+>> -
+>>   	for (addr = hstart; addr < hend; addr += HPAGE_PMD_SIZE) {
+>>   		enum scan_result result = SCAN_FAIL;
+>>   
+> In general, LGTM, but see for conflict:
+> https://lore.kernel.org/all/20260409014323.2385982-1-ye.liu@linux.dev/
+Thanks for your review, I will fix the conflict and send v2 version.
+
+Best regards,
+Wandun
+>
+>
 
