@@ -1,38 +1,38 @@
 Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94148372B3B;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97559382F0C;
 	Sat,  9 May 2026 22:48:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778366929; cv=none; b=EuAEDuUIYr2cvpF8LeLv2o+LSFQzmP1xLtenXWt5OjnyCtOFVZwjS/LDOQrI0fE8LTe8JxHJW54j6uh3FvbLRtaL1AipLRp2c0d+pKMtc8WbpcMI06INUPSADPT85HFu9OpGbvw64v0VDskMD3ms/hb4tNy8mQFW6txVTisjx+E=
+	t=1778366930; cv=none; b=jgo/vbRdHdB2NgeTPs0Hgr4DW+a0a6K4ZSKlMYIqajNgjuNEDBGpx9n+nMthXEKsxh7/06LC9/gecQYouCKo26/32dd13HK67an59+/E3U+ogs8qr+wxTI4ZpokUAN+Ggle83txjFxv8ax71oYMZ1A4Qk6W/+ceMJ+G0wNrTDGc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778366929; c=relaxed/simple;
-	bh=6dnFN/4lAFm15A7TGXHna3ObAaSAz5Kpq5sKkFQfu6A=;
+	s=arc-20240116; t=1778366930; c=relaxed/simple;
+	bh=AmxgKuqJyMj7L9wIW65zlG8LlX5uDfHPdEtL1NKBN18=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=i2cWO1UHthceOkMCAXmoXN+70Kdpm0KQd4aO0g4VJWKRax89CASttSQulhThe1i8/ao12qTrg+qm7Fbt6IAe6mbrKCZoQ9OGlhFd7BzswUccWksSKny/eZJ3ukVuoGV3vU9ZhKa8RbisspuYLoejEMnSIEo3Lq9GGNlZqFc6E88=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=desiato.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=JwWsCSTN; arc=none smtp.client-ip=90.155.92.199
+	 MIME-Version; b=sIlCi+opCrgv+CacRF7KzBqn0q4C9Tl2JTTGIfpJ/0+et3LedCAxjEyOBLmjilObP1aBIdJIKzwC+8NIh5rMbZLhub3sygWyzri9xL/imYam9O18RRTavTX1RJ5gKHiCNCLTGI9JTWs0sO0usTdLYsbqVADRBxJycSeXCQTki20=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=desiato.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=F8o2huYC; arc=none smtp.client-ip=90.155.92.199
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=desiato.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="JwWsCSTN"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="F8o2huYC"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:To:From:Reply-To:
 	Cc:Content-Type:Content-ID:Content-Description;
-	bh=CvARcxGjW2rk76ZnbjloHmvArQA7vOXWK2cN1ZjzCjA=; b=JwWsCSTN0jP5CaRFdIC/kq7DJK
-	1ckbZPZwhNr+bWo+2Nhf9ylITeR8BeXmgLFP+SLIQy4R3DZLic8UmfJCBL5L/HKQUEiJRG0E/oNuN
-	+lwLHmVzILBn/0iCKWTWSrft7nOvyYmtLxwuFUVmSHB8ERSs5oQFnzVtmRGkTjYFBlwInjCp4Xkjk
-	DZsdQFZY+Wi0hj8gEaa+ri3S19xehlprECPd42H2HjvqS913SmW4HTcoBeS5SSq8WxjSdNReZYJMO
-	P7XDr1BLUNqOsGb6V0VGGUsZ6d3Y6v65PQFbi1ulY6TtP16QxEvcTW/cb1Z5dK786u3iT28gS5bBR
-	/Fo08+AA==;
+	bh=VZW3BYOsJBjCxrX0Ak3Y7mLfSYoVJvjVzeACh4h0wdA=; b=F8o2huYCyGm1b+IKEhxif0OKZe
+	1/VjHOyqiLIQDr1VUqRvk7k4ZwOHLp8x2xUQoPmNubIdn/Y9PGOOKLUCPS0Bd6huZraf2VXT69Tcy
+	PrYoG0wU7gMusTyFns2Sk+299Y82Z4fHtRYuTFtZd8fvUT/6x9Lu9Uqy/UPrHonTZFD7kEszHE5Es
+	s0CbR3wEQ7PbLtr3p6fRXS1cxQxf/q+QIwcW3ESwiOvm2ZnZymrCuIOOmVlJ0ZsoEgLs3M07cKcok
+	GwmW2q+R9tkBkUh3woXo6m/KggKAhiNjMtxICUNY9cdd96vI/ocFJGk0T4R8oFSPGI1cygwDPHqGH
+	zDppAOQA==;
 Received: from [2001:8b0:10b:1::425] (helo=i7.infradead.org)
 	by desiato.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1wLqTD-00000008wzM-0Uid;
+	id 1wLqTD-00000008wz9-0U27;
 	Sat, 09 May 2026 22:48:28 +0000
 Received: from dwoodhou by i7.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1wLqTD-0000000DhIv-0xnG;
-	Sat, 09 May 2026 23:48:27 +0100
+	id 1wLqTC-0000000DhHd-1ExZ;
+	Sat, 09 May 2026 23:48:26 +0100
 From: David Woodhouse <dwmw2@infradead.org>
 To: Paolo Bonzini <pbonzini@redhat.com>,
 	Jonathan Corbet <corbet@lwn.net>,
@@ -61,9 +61,9 @@ To: Paolo Bonzini <pbonzini@redhat.com>,
 	linux-kernel@vger.kernel.org,
 	xen-devel@lists.xenproject.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v4 26/30] KVM: x86: Avoid redundant masterclock updates from multiple vCPUs
-Date: Sat,  9 May 2026 23:46:52 +0100
-Message-ID: <20260509224824.3264567-27-dwmw2@infradead.org>
+Subject: [PATCH v4 06/30] KVM: x86: Explicitly disable TSC scaling without CONSTANT_TSC
+Date: Sat,  9 May 2026 23:46:32 +0100
+Message-ID: <20260509224824.3264567-7-dwmw2@infradead.org>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20260509224824.3264567-1-dwmw2@infradead.org>
 References: <20260509224824.3264567-1-dwmw2@infradead.org>
@@ -79,127 +79,53 @@ X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato
 
 From: David Woodhouse <dwmw@amazon.co.uk>
 
-When a masterclock update is triggered (e.g. by the clocksource change
-notifier), KVM_REQ_MASTERCLOCK_UPDATE is set on all vCPUs. Without this
-fix, each vCPU independently processes the request and redundantly
-re-executes the entire pvclock_update_vm_gtod_copy() sequence, serialized
-only by tsc_write_lock. Each redundant re-snapshot of the master clock
-reference point introduces potential clock drift.
+KVM does make an attempt to cope with non-constant TSC, and has
+notifiers to handle host TSC frequency changes. However, it *only*
+adjusts the KVM clock, and doesn't adjust TSC frequency scaling when
+the host changes.
 
-Fix this by having __kvm_start_pvclock_update() check, after acquiring
-the lock, whether the requesting vCPU's KVM_REQ_MASTERCLOCK_UPDATE is
-still set. If another vCPU already did the update and cleared it, bail
-out. Otherwise, clear the request on all other vCPUs before proceeding.
+This is presumably because non-constant TSCs were fixed in hardware
+long before TSC scaling was implemented, so there should never be real
+CPUs which have TSC scaling but *not* CONSTANT_TSC.
 
-The caller in vcpu_enter_guest() now uses kvm_test_request() (non-clearing)
-since the clearing is done inside __kvm_start_pvclock_update() under the
-lock.
+Such a combination could potentially happen in some odd L1 nesting
+environment, but it isn't worth trying to support it. Just make the
+dependency explicit.
 
-Suggested-by: Dongli Zhang <dongli.zhang@oracle.com>
 Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
+Reviewed-by: Paul Durrant <paul@xen.org>
 ---
- arch/x86/kvm/x86.c | 56 ++++++++++++++++++++++++++++++++++++----------
- 1 file changed, 44 insertions(+), 12 deletions(-)
+ arch/x86/kvm/svm/svm.c | 3 ++-
+ arch/x86/kvm/vmx/vmx.c | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 7d9ec0638d28..77dfd4455a4e 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -3259,10 +3259,39 @@ static void kvm_make_mclock_inprogress_request(struct kvm *kvm)
- 	kvm_make_all_cpus_request(kvm, KVM_REQ_MCLOCK_INPROGRESS);
- }
+diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+index e7fdd7a9c280..7817752533fe 100644
+--- a/arch/x86/kvm/svm/svm.c
++++ b/arch/x86/kvm/svm/svm.c
+@@ -5546,7 +5546,8 @@ static __init int svm_hardware_setup(void)
+ 				     XFEATURE_MASK_BNDCSR);
  
--static void __kvm_start_pvclock_update(struct kvm *kvm)
-+static void kvm_clear_mclock_inprogress_request(struct kvm *kvm)
- {
-+	struct kvm_vcpu *vcpu;
-+	unsigned long i;
-+
-+	kvm_for_each_vcpu(i, vcpu, kvm)
-+		kvm_clear_request(KVM_REQ_MCLOCK_INPROGRESS, vcpu);
-+}
-+
-+static bool __kvm_start_pvclock_update(struct kvm *kvm, struct kvm_vcpu *requesting_vcpu)
-+{
-+	struct kvm_vcpu *vcpu;
-+	unsigned long i;
-+
- 	raw_spin_lock_irq(&kvm->arch.tsc_write_lock);
-+
-+	/*
-+	 * If another vCPU already did the update while we were waiting
-+	 * for the lock, our request will have been cleared. Bail out.
-+	 */
-+	if (requesting_vcpu &&
-+	    !kvm_test_request(KVM_REQ_MASTERCLOCK_UPDATE, requesting_vcpu)) {
-+		kvm_clear_mclock_inprogress_request(kvm);
-+		raw_spin_unlock_irq(&kvm->arch.tsc_write_lock);
-+		return false;
-+	}
-+
-+	/* The update is VM-wide; prevent other vCPUs from redoing it. */
-+	kvm_for_each_vcpu(i, vcpu, kvm)
-+		kvm_clear_request(KVM_REQ_MASTERCLOCK_UPDATE, vcpu);
-+
- 	write_seqcount_begin(&kvm->arch.pvclock_sc);
-+	return true;
- }
+ 	if (tsc_scaling) {
+-		if (!boot_cpu_has(X86_FEATURE_TSCRATEMSR)) {
++		if (!boot_cpu_has(X86_FEATURE_TSCRATEMSR) ||
++		    !boot_cpu_has(X86_FEATURE_CONSTANT_TSC)) {
+ 			tsc_scaling = false;
+ 		} else {
+ 			pr_info("TSC scaling supported\n");
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index 5c2c33a5f7dc..4f6035d72bbe 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -8696,7 +8696,7 @@ __init int vmx_hardware_setup(void)
+ 	if (!enable_apicv || !cpu_has_vmx_ipiv())
+ 		enable_ipiv = false;
  
- static void kvm_start_pvclock_update(struct kvm *kvm)
-@@ -3270,7 +3299,7 @@ static void kvm_start_pvclock_update(struct kvm *kvm)
- 	kvm_make_mclock_inprogress_request(kvm);
+-	if (cpu_has_vmx_tsc_scaling())
++	if (cpu_has_vmx_tsc_scaling() && boot_cpu_has(X86_FEATURE_CONSTANT_TSC))
+ 		kvm_caps.has_tsc_control = true;
  
- 	/* no guest entries from this point */
--	__kvm_start_pvclock_update(kvm);
-+	__kvm_start_pvclock_update(kvm, NULL);
- }
- 
- static void kvm_end_pvclock_update(struct kvm *kvm)
-@@ -3279,22 +3308,25 @@ static void kvm_end_pvclock_update(struct kvm *kvm)
- 	struct kvm_vcpu *vcpu;
- 	unsigned long i;
- 
--	write_seqcount_end(&ka->pvclock_sc);
--	raw_spin_unlock_irq(&ka->tsc_write_lock);
- 	kvm_for_each_vcpu(i, vcpu, kvm)
- 		kvm_make_request(KVM_REQ_CLOCK_UPDATE, vcpu);
- 
- 	/* guest entries allowed */
--	kvm_for_each_vcpu(i, vcpu, kvm)
--		kvm_clear_request(KVM_REQ_MCLOCK_INPROGRESS, vcpu);
-+	kvm_clear_mclock_inprogress_request(kvm);
-+
-+	write_seqcount_end(&ka->pvclock_sc);
-+	raw_spin_unlock_irq(&ka->tsc_write_lock);
- }
- 
--static void kvm_update_masterclock(struct kvm *kvm)
-+static void kvm_update_masterclock(struct kvm *kvm, struct kvm_vcpu *vcpu)
- {
- 	kvm_hv_request_tsc_page_update(kvm);
--	kvm_start_pvclock_update(kvm);
--	pvclock_update_vm_gtod_copy(kvm);
--	kvm_end_pvclock_update(kvm);
-+	kvm_make_mclock_inprogress_request(kvm);
-+
-+	if (__kvm_start_pvclock_update(kvm, vcpu)) {
-+		pvclock_update_vm_gtod_copy(kvm);
-+		kvm_end_pvclock_update(kvm);
-+	}
- }
- 
- /*
-@@ -11485,8 +11517,8 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
- 			kvm_mmu_free_obsolete_roots(vcpu);
- 		if (kvm_check_request(KVM_REQ_MIGRATE_TIMER, vcpu))
- 			__kvm_migrate_timers(vcpu);
--		if (kvm_check_request(KVM_REQ_MASTERCLOCK_UPDATE, vcpu))
--			kvm_update_masterclock(vcpu->kvm);
-+		if (kvm_test_request(KVM_REQ_MASTERCLOCK_UPDATE, vcpu))
-+			kvm_update_masterclock(vcpu->kvm, vcpu);
- 		if (kvm_check_request(KVM_REQ_GLOBAL_CLOCK_UPDATE, vcpu))
- 			kvm_gen_kvmclock_update(vcpu);
- 		if (kvm_check_request(KVM_REQ_CLOCK_UPDATE, vcpu)) {
+ 	kvm_caps.max_tsc_scaling_ratio = KVM_VMX_TSC_MULTIPLIER_MAX;
 -- 
 2.51.0
 
