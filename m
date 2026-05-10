@@ -1,212 +1,124 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8D9235F189
-	for <linux-kselftest@vger.kernel.org>; Sun, 10 May 2026 08:15:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778400950; cv=none; b=Qn8dSC1TMmZfFzr3IyAao9FscN0ec3tjsLY1DxU1ConeCTEWIjtRpr3KBuGj5Ow2Sioc+YEdwrwgAgobu8EA7QzfYGYhXiZbmFKkljChL2f/PvkUsFYp/34eOnO+9SqzlboyO22UKJYW/qF6JkMQbAWvVUbZAUn8XCe+SjjliuM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778400950; c=relaxed/simple;
-	bh=rqdP1dVHU2d5Wwe1A02epIYY7UuprbmmmJ5IdRaVijk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=OO0SZl/YcoK1dKi83Akc/QkqUVyfhAcNQvB9bnZMun4L7g52LY7xajA7AKihOlylLPPbhZjFSNctMjMnWbN9U2hhpMQnphqZBA1xfKSHRk6wLTftSd8JYcnm0Yn66faaRiBXI86mAsvtHKZV2pNEWoFy5CTOHKcE0q4DgtCacr0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=eILlLV/w; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=OtJhikpK; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=eILlLV/w; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=OtJhikpK; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18D202BE7DD
+	for <linux-kselftest@vger.kernel.org>; Sun, 10 May 2026 12:02:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.47
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778414581; cv=pass; b=OXq1Q+mnNW6zgR6WziIr89rfyUI38SyNgILHgU6qxqs56u51N7abPjDyKShoRXY20oPS1btLv9Tiw53a90qDkP87Mwpc/YR8YdNnejQyWs0hFlA605J3yMMNkUhcvvJNtGM1ZmXrPqQWpgNYDddr1/ZWKVAoSecybxerB79KutE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778414581; c=relaxed/simple;
+	bh=bH+A1pcJNHbsEm31+G4EJAAN3LgMlSAJINOZTIByCpo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=L6hB01BFQWpOurtcTts+PIn1qcCIaYNAA4O3qvGaz8YykNzlC0i0VSgq/eMCjb5lUQ9L+AgmBMGLKS0vCSpzHcY08goJfavajXzG6xI0vp0MGd+LNSH/8VdaxUEMgHrOY7lTQdVE4vLPCw6ng123WUIpzqXCEVsXY2ZHtbxKOGw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fO0pJrO8; arc=pass smtp.client-ip=209.85.218.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="eILlLV/w";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="OtJhikpK";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="eILlLV/w";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="OtJhikpK"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 5D47B6B4AB;
-	Sun, 10 May 2026 08:15:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1778400943; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gcSX08BpEo4UlsqWRJioDN4Re3zSnDtP4ShcRwE1jVA=;
-	b=eILlLV/wqenzWpkvXX8AdEapFBmzYm4WUaquwdkORkvOyPXnOMHY9i+9r1C8si+A5UimYw
-	DPZtETMU5Kz+JQeh7VHhc+45uQpp/KJmY20gJ5qX9ETADbqQnuk8VkkHcUGMmoiLavez6c
-	c3Mi+j7+TDKUTRIWDZey4a/cr3h/uSQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1778400943;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gcSX08BpEo4UlsqWRJioDN4Re3zSnDtP4ShcRwE1jVA=;
-	b=OtJhikpK1DajUfx0LGbBYDXokGgieFiu9X7r+zgTeCdPXB7G4DHBKpHWdF6icyUNS34xAc
-	yh16Yf5oJgMJSCBg==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b="eILlLV/w";
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=OtJhikpK
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1778400943; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gcSX08BpEo4UlsqWRJioDN4Re3zSnDtP4ShcRwE1jVA=;
-	b=eILlLV/wqenzWpkvXX8AdEapFBmzYm4WUaquwdkORkvOyPXnOMHY9i+9r1C8si+A5UimYw
-	DPZtETMU5Kz+JQeh7VHhc+45uQpp/KJmY20gJ5qX9ETADbqQnuk8VkkHcUGMmoiLavez6c
-	c3Mi+j7+TDKUTRIWDZey4a/cr3h/uSQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1778400943;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gcSX08BpEo4UlsqWRJioDN4Re3zSnDtP4ShcRwE1jVA=;
-	b=OtJhikpK1DajUfx0LGbBYDXokGgieFiu9X7r+zgTeCdPXB7G4DHBKpHWdF6icyUNS34xAc
-	yh16Yf5oJgMJSCBg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id BD09A593A3;
-	Sun, 10 May 2026 08:15:42 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id wBJDK64+AGrIDgAAD6G6ig
-	(envelope-from <fmancera@suse.de>); Sun, 10 May 2026 08:15:42 +0000
-From: Fernando Fernandez Mancera <fmancera@suse.de>
-To: netdev@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org,
-	horms@kernel.org,
-	pabeni@redhat.com,
-	kuba@kernel.org,
-	edumazet@google.com,
-	dsahern@kernel.org,
-	davem@davemloft.net,
-	Fernando Fernandez Mancera <fmancera@suse.de>,
-	Nicolas Dichtel <nicolas.dichtel@6wind.com>
-Subject: [PATCH 2/3 net-next v4] ipv4: handle devconf post-set actions on netlink updates
-Date: Sun, 10 May 2026 10:15:27 +0200
-Message-ID: <20260510081528.5257-2-fmancera@suse.de>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260510081528.5257-1-fmancera@suse.de>
-References: <20260510081528.5257-1-fmancera@suse.de>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fO0pJrO8"
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-ba6838e76f2so441196866b.2
+        for <linux-kselftest@vger.kernel.org>; Sun, 10 May 2026 05:02:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778414578; cv=none;
+        d=google.com; s=arc-20240605;
+        b=jcEsRYWD/HHy/DZNcBz+f7zBExzyFJCw4PB1tPLJSXFjZmDZ9D9AaZ+tBARPu08Xe2
+         MOjvj/s+eT7tMYWFcJuc1yXyi/5AO6IBleLi1uuwW3yY1CTtORrZWRphirlb2AYzTIy/
+         Tg6a13W+q20afvdbeBYNFEEQcYAyyAWAT8DRlsb3yVSrRW1UYoG9+Va5EPOkOQIlY61r
+         YgEtwFc5E/GMHm8LQfgw6HCxWA8WvSm1Pd2KsdB02hudm/iDKVbw5vMGtEg+zxxwqrUo
+         TPup29nS8Y6kDLYCO1Y7Qf7pisPu641Ft1uxeJy7o9/3d0YS4P6BmqZTpaPmMnLOleM5
+         lYmQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=Vmli1MjJU1iPg6tCzc8RsiqsXAYEqteoIsuCG5nm0hc=;
+        fh=mC2syfBs+t4vNKU5ioHdlpLXUz4dVcziaV44tTCktgM=;
+        b=DZ9EZVTYriu+340RXqG8gTRiePxB7TBwYDC3yxgsaZ57+aB1nr0QIy1Q+GKMnhRPtN
+         0/UVxM/DI/weglF+xlsEBwcBc4AXh5BDT13A2LFtF+BU/q8pUHANXWZOB3r3ihlEjI7k
+         nJMlnyx6AIFxA5Jt7REiFStishmQvEH0YtWupbD51p/oKQjuFD2jPdT+KLeHhU4mfZK1
+         I39vHl+4bPqBaBI3sl8Ncx9wYnqY/U4lNIQpVT6EsQqw3coiKxcWap2EHEWZVIBelGIK
+         YO9zP6PfOkbGVYLEfQInyFygqRxwIdJlVW984leT87jdiZg8o80phuYPpZvBA08JX8uh
+         0/XA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778414578; x=1779019378; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vmli1MjJU1iPg6tCzc8RsiqsXAYEqteoIsuCG5nm0hc=;
+        b=fO0pJrO8ujKdOeYAdQyNU3+8Vm0rnTWHF7763Kct16qI84G4j3Xzo+XVwJpN7NKMrf
+         TO6g7oBiNUrXU8H7Se7tTM+BqJOXbOjlXEqZNun8vGKTwQ81pbfnbptOYIzsFbzGBnZw
+         9Zv+wa8pOf7abXoV7MVJBpuZUvzyZ5FiuAzUmfoLJP4/d1vePAl/P8PzPOz8ZE558CSy
+         XJpeM1BY8r/J/GELM8VoXH+PCF+iXh2sU2AfRAdaoYkrfqMNFTKQvZLsCfFk2uTbVm6H
+         FBBg+mkzWMzvkt/QD8YWa/Wlnccoc5A9xc8cUXVirru3X7G/0uydm7yWkQPGz0WfmTvm
+         Wyiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778414578; x=1779019378;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Vmli1MjJU1iPg6tCzc8RsiqsXAYEqteoIsuCG5nm0hc=;
+        b=bg9PE7r86Z6rpHvHanybs7hkPJDklSF4iOWVM4OEOafZieFBpylS78n615SF4Glq8L
+         m+JrnfOZEmCvlx76hW46VFXv7gu75sdDwN09FUhTv5TbncxA0pUA+tw6vL5V3AJUSmJx
+         wCP/naZ6h4rwcy/uf07Z4zcv6ulU0YxCyBa79+Rnw1lgAX91xuVsNqGkyo9Mir9QcQTb
+         AQFbjpMt2KirxB3rEH0fuYvB9jzLZQvPijmk7JjPL25ZP6H2KqLLmHN6DnOKXwv8oQvZ
+         OBlrmaI+nFaFtJse3yQxuCFR2JvFsfvqqxk/BiUy2jGh7pmeUuu4CKge/UP0UWh4usA7
+         vnag==
+X-Forwarded-Encrypted: i=1; AFNElJ9gfIcTZwxzHrPtAhauK+V4slRV+zNPNJ9I9GilduTmKXUWpFtwBeEj8pURodMQkitdWQOkvu80crTxLLBZYD4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz5STNzHTR3ywYgO5qcOJJqERrdh7b1wSG47ws/hin0gkyqbYUy
+	WiVWmEZqqezl0O6QXzvVblbvRn2fJC3hPTqdVqPfQtahNuHeA2EMh6jysoYpO05V7tK5IYR1SMc
+	ZYhzuqUBBD2SLmGAnFl7iOoqtGu+LpFM=
+X-Gm-Gg: Acq92OFmP9QXCKQcsIKYnXReEbDVObxnPLZIRWOMTnNEHXsmPrBI7ioAbcTXi0nvwoM
+	uOz76QhabwhZ6A5YvEWtrgGRQYKRUtYd5K+HIUGV0F6viaLDvJlLHec49z0WARzbaDKoY1/I/UV
+	mgLCLVH93uRKuwyf9gyRVDAPCEQwGt+F1MGYUC++GdLm7+Xm+oudSRIHcoC3xTkd2xNMfxtaGn9
+	2CmZEYxcLMjDnZtqe1nlGV1aHnHQc34m2t8LG9M8MtWBw8TuzUjcQJ1ObzXT+iH4MTRPskDgIFG
+	p4eku2AC1QIM5+xdOGwXyKozby8YxaV0z/Fey/+Hcg==
+X-Received: by 2002:a17:906:eec6:b0:bc3:ae9a:15 with SMTP id
+ a640c23a62f3a-bc56b94225bmr1059279966b.9.1778414578150; Sun, 10 May 2026
+ 05:02:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Level: 
-X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-3.01 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,6wind.com:email,suse.de:dkim,suse.de:email,suse.de:mid];
-	ARC_NA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	RCVD_TLS_ALL(0.00)[];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	DKIM_TRACE(0.00)[suse.de:+]
-X-Rspamd-Queue-Id: 5D47B6B4AB
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Spam-Flag: NO
-X-Spam-Score: -3.01
+References: <20260505-seg6-mobile-v2-0-9e8022bdfdb6@gmail.com>
+ <20260504163915.4a8b028e@kernel.org> <CAGCJULP83NnaX6HAqwb3umDXsxN8LH48_gPpJ_3gG8_xA96QNQ@mail.gmail.com>
+ <20260504182833.344d7b33@kernel.org> <20260508033210.5149db4fc3977d33937e6942@uniroma2.it>
+ <CAGCJULP_dTSjXQqyOYXckkmtd-HAPo4UT2V0WQofOZaJYLgENw@mail.gmail.com>
+In-Reply-To: <CAGCJULP_dTSjXQqyOYXckkmtd-HAPo4UT2V0WQofOZaJYLgENw@mail.gmail.com>
+From: Yuya Kusakabe <yuya.kusakabe@gmail.com>
+Date: Sun, 10 May 2026 21:02:46 +0900
+X-Gm-Features: AVHnY4IcF3vmMhSO8SdPuE7-fCfzpzAXRJRVY1ZnbUg0Ri8QL_dBkXa2fNxxouU
+Message-ID: <CAGCJULMSMrcWmQUZ-RoWB8uAivZ2DZdefED7nShMpUNBzPBLFQ@mail.gmail.com>
+Subject: Re: [PATCH v2 0/7] seg6: add SRv6 Mobile User Plane (RFC 9433) behaviors
+To: Andrea Mayer <andrea.mayer@uniroma2.it>
+Cc: Jakub Kicinski <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>, 
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, 
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>, Justin Iurman <justin.iurman@gmail.com>, 
+	stefano.salsano@uniroma2.it
+Content-Type: text/plain; charset="UTF-8"
 
-When IPv4 device configuration parameters are updated via netlink, the
-kernel currently only updates the value. This bypasses several
-post-modification actions that occur when these same parameters are
-updated via sysctl, such as flushing the routing cache or emitting
-RTM_NEWNETCONF notifications.
+On Fri, May 8, 2026 at 10:32 AM Andrea Mayer <andrea.mayer@uniroma2.it> wrote:
+> just a heads-up: I am going through the series (kernel and iproute2)
+> and will send detailed comments within the next few days. It is a
+> substantial addition so I want to take the time to review it properly.
 
-This patch addresses the inconsistency by calling the
-devinet_conf_post_set() helper inside inet_set_link_af(). If a flush is
-required, we defer it until the netlink attribute parsing loop
-completes.
+Quick note from my side before you spend more time on patch 4/7:
 
-This ensures consistent behavior and side-effects for devconf changes,
-regardless of whether they are initiated via sysctl or netlink.
+While preparing v3 I noticed that v2's patch 4/7 ("End.M.GTP6.D")
+implements RFC 9433 Section 6.4 (D.Di) by mistake -- it shares the
+SRH-augmenting builder with patch 5/7 and preserves the original
+outer DA in segments[0].  Per Section 6.3 it should push the SR
+Policy verbatim and write Args.Mob.Session into segments[0].
+Already fixed in the local v3 branch.
 
-Reviewed-by: Nicolas Dichtel <nicolas.dichtel@6wind.com>
-Signed-off-by: Fernando Fernandez Mancera <fmancera@suse.de>
----
-v2: handled forwarding notification and disabling LRO
-v3: no changes
-v4: no changes
----
- net/ipv4/devinet.c | 29 +++++++++++++++++++++++++++--
- 1 file changed, 27 insertions(+), 2 deletions(-)
+Feel free to skip the End.M.GTP6.D-specific comments on v2 patch
+4/7; patch 5/7 (D.Di) is unaffected.  Per Jakub's guidance I will
+hold the v3 repost until your review lands.
 
-diff --git a/net/ipv4/devinet.c b/net/ipv4/devinet.c
-index 8300516fb38f..a35b72662e43 100644
---- a/net/ipv4/devinet.c
-+++ b/net/ipv4/devinet.c
-@@ -2161,6 +2161,20 @@ static bool devinet_conf_post_set(struct net *net, struct ipv4_devconf *cnf,
- 					    NETCONFA_IGNORE_ROUTES_WITH_LINKDOWN,
- 					    ifindex, cnf);
- 		break;
-+	case IPV4_DEVCONF_FORWARDING:
-+		if (new == 1) {
-+			/* it is safe to use container_of() because forwarding case
-+			 * is only used by the netlink path
-+			 */
-+			struct in_device *idev = container_of(cnf, struct in_device, cnf);
-+
-+			netif_disable_lro(idev->dev);
-+		}
-+
-+		inet_netconf_notify_devconf(net, RTM_NEWNETCONF,
-+					    NETCONFA_FORWARDING,
-+					    ifindex, cnf);
-+		return true;
- 	default:
- 		break;
- 	}
-@@ -2173,6 +2187,8 @@ static int inet_set_link_af(struct net_device *dev, const struct nlattr *nla,
- {
- 	struct in_device *in_dev = __in_dev_get_rtnl(dev);
- 	struct nlattr *a, *tb[IFLA_INET_MAX+1];
-+	struct net *net = dev_net(dev);
-+	bool flush_cache = false;
- 	int rem;
- 
- 	if (!in_dev)
-@@ -2182,8 +2198,17 @@ static int inet_set_link_af(struct net_device *dev, const struct nlattr *nla,
- 		return -EINVAL;
- 
- 	if (tb[IFLA_INET_CONF]) {
--		nla_for_each_nested(a, tb[IFLA_INET_CONF], rem)
--			ipv4_devconf_set(in_dev, nla_type(a), nla_get_u32(a));
-+		nla_for_each_nested(a, tb[IFLA_INET_CONF], rem) {
-+			int old_value = ipv4_devconf_get(in_dev, nla_type(a));
-+			int new_value = nla_get_u32(a);
-+
-+			ipv4_devconf_set(in_dev, nla_type(a), new_value);
-+			if (devinet_conf_post_set(net, &in_dev->cnf, nla_type(a), new_value,
-+						  old_value, dev->ifindex))
-+				flush_cache = true;
-+		}
-+		if (flush_cache)
-+			rt_cache_flush(net);
- 	}
- 
- 	return 0;
--- 
-2.53.0
-
+Thanks,
+Yuya
