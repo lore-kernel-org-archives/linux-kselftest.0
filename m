@@ -1,53 +1,43 @@
-Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EE1E3ACF15;
-	Sun, 10 May 2026 16:44:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.252.153.129
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E25D7366066;
+	Sun, 10 May 2026 16:52:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778431464; cv=none; b=iBTIoe3n4NOj/azTCp3FrCT72QSeKaPW4izKupZfzbu+FfJNM3fGSPLi7LOAodcOsdl6baVsy1YCLLXpB8V78jprYkOYXJ4i0AZEEQGRbuRF0GN+mFaf9nScAxOhuj8nGpAyr65M8skDcfJBMeQs3Mv7Qb64krErlh3A6d7OT7Y=
+	t=1778431968; cv=none; b=dvuBgamsIqTOUcTIicjj9eazEP/fmE5Iyejw/ulUDTeZGxOndNDW7JHQgfSkZ/pgnqvweOnnExnIFGR1eRtCDtHQgYWi1oBxus/p79nsgu4GDlG76bzUryYMFeYkANKxLhEQpZMIuOykpOAV4ZnCjlzLbd8TBfklVUa85lkSR2w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778431464; c=relaxed/simple;
-	bh=RpmaRYY3PJernLi+mHT5wcbgojVG+s9emQiFmp8vQRE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=EdW8rtyWjzCM3JsseVeonTAksJQYBShhc/wqiYlGPC8z/WcT/xB3blNom6fTFKrRqkqT/Aph/wBLhlyq8j6MMFiOKZy//hvl0LrB1c+dNwdC7jOlvCVdvozlhtfh54iqq/2+83Nuum1KAH0Y444VHuVCLiKfB/Tnvsg1b6sjV3M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riseup.net; spf=pass smtp.mailfrom=riseup.net; dkim=pass (1024-bit key) header.d=riseup.net header.i=@riseup.net header.b=lqk3pod7; arc=none smtp.client-ip=198.252.153.129
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riseup.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riseup.net
+	s=arc-20240116; t=1778431968; c=relaxed/simple;
+	bh=Wt27c8yUp4nBvAgbQgl0CFl+X/lZLklaSUaR5eqjmvs=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=uw1TMp+3UYMJru8ZOfzAiHQcjkXRtD2uPwi0Cf4nQLgO61yNe099RLyUUF+a1dTLczu+l4t9EDsldrcPscmVxvx2XQ3+FsZH0+bg/xZ07SRYMB2VzPRWRwSQjzGXWcswTx4er3SBHzzkMa4dyaCnHDjEDo1tyFT3os8jhdcEwJw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FIttxXmA; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=riseup.net header.i=@riseup.net header.b="lqk3pod7"
-Received: from fews01-sea.riseup.net (fews01-sea-pn.riseup.net [10.0.1.109])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx1.riseup.net (Postfix) with ESMTPS id 4gD7x10FkKzDqSf;
-	Sun, 10 May 2026 16:44:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=riseup.net; s=squak;
-	t=1778431461; bh=5T6leDP8tmF3XvpwD7l+rnfsgJdFuQTS47BKmtBbf7E=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=lqk3pod7Nf5wp43CXQJ6MYEpIucBqZQvSc8kOWAV4yDkUSlZ3gX8L0J9cQbwgk2wu
-	 b00OY6SujXnDN8JgP5bODlIMuV/jVeO3XvMuN4Jc/hEOCgQ3lRwbpd/5x/O/xD0WrC
-	 z5rpH/miZT1VDYMppByY34X9WaL1XQMVmFojnsjQ=
-X-Riseup-User-ID: EA9A6AE0E301AC6588F85268079748D01CA43CB25B8D93121CAEFDF9351872E6
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-	 by fews01-sea.riseup.net (Postfix) with ESMTPSA id 4gD7wx6jfRz1yDs;
-	Sun, 10 May 2026 16:44:17 +0000 (UTC)
-From: =?UTF-8?q?=C3=8D=C3=B1igo=20Huguet?= <ihuguet@riseup.net>
-To: Jakub Kicinski <kuba@kernel.org>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Sabrina Dubroca <sd@queasysnail.net>,
-	Filip Pokryvka <fpokryvk@redhat.com>,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	=?UTF-8?q?=C3=8D=C3=B1igo=20Huguet?= <ihuguet@riseup.net>
-Subject: [PATCH net-next 5/5] selftest: netdevsim: suppress socat warnings
-Date: Sun, 10 May 2026 18:43:37 +0200
-Message-ID: <20260510164337.7611-6-ihuguet@riseup.net>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FIttxXmA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1ECB1C2BCB8;
+	Sun, 10 May 2026 16:52:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778431967;
+	bh=Wt27c8yUp4nBvAgbQgl0CFl+X/lZLklaSUaR5eqjmvs=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=FIttxXmA5kNnMDJMvEg20SClCNuHwC/DVB5d2v18vbh69NMUhI7FikVh+CRwhjTAa
+	 U/Nl74e6J9SFTja4yVfJjLiWTx5YYFUUkFrCcKSfifQXDhW6/kA9KcJx9Shy4bi2l+
+	 TtV7MmVYKm14+b2mpIY5kr3Wynz/gUqMcvuExikWH33QC4J7g8nBvbRiuaU+51UwfC
+	 x254TXt2edbCLEat+WTKaWBQCKgolTAfQyMp0fVQNLqz3STzjCLesRTXKeYb4umXC0
+	 CnFaKd6yvq64GepcU0dKosiEzhVpaiQ/k6gke5Z59vauuYOdSSpBkbejHEJxdJHceT
+	 ilmra89xu9YXg==
+Date: Sun, 10 May 2026 09:52:46 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: =?UTF-8?B?w43DsWlnbw==?= Huguet <ihuguet@riseup.net>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S . Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
+ <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, Sabrina Dubroca
+ <sd@queasysnail.net>, Filip Pokryvka <fpokryvk@redhat.com>,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next 0/5] netdevsim: get link via ethtool, set via
+ sysfs
+Message-ID: <20260510095246.5c8f6d0b@kernel.org>
 In-Reply-To: <20260510164337.7611-1-ihuguet@riseup.net>
 References: <20260510164337.7611-1-ihuguet@riseup.net>
 Precedence: bulk
@@ -57,44 +47,19 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
 
-When executing the peer.sh selftest, socat emits these 2 warnings:
-  socat[116839] W address is opened in read-write mode but only supports read-only
-  socat[116833] W exiting on signal 15
+On Sun, 10 May 2026 18:43:32 +0200 =C3=8D=C3=B1igo Huguet wrote:
+> Allow to read the carrier status of a netdevsim device via ethtool, like
+> most of Ethernet devices allow.
+>=20
+> Also, allow to set its carrier status via sysfs. Currently it's only
+> possible by linking a peer device and setting its admin state to
+> UP/DOWN. By editing the carrier status via sysfs tests that need to
+> check carrier related stuff may be simpler.
+>=20
+> The third patch add the proper selftest for both things, and the fourth
+> and fifth fix a few small bugs in the selftest itself.
 
-The first one is because socat tries to open in read-write mode by
-default, but STDIN can only be opened in read mode. Fix it by adding the
--u option (unidirectional left-to-right).
-
-The second is because 'kill' is used to terminate the first socat process.
-Suppress this warning by redirecting its stderr to /dev/null
-
-Signed-off-by: Íñigo Huguet <ihuguet@riseup.net>
----
- tools/testing/selftests/drivers/net/netdevsim/peer.sh | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/drivers/net/netdevsim/peer.sh b/tools/testing/selftests/drivers/net/netdevsim/peer.sh
-index ec96015bc9eb..183a130c6e4b 100755
---- a/tools/testing/selftests/drivers/net/netdevsim/peer.sh
-+++ b/tools/testing/selftests/drivers/net/netdevsim/peer.sh
-@@ -210,13 +210,13 @@ assert_carrier_up nscl "$NSIM_DEV_2_NAME"
- # send/recv packets
- 
- tmp_file=$(mktemp)
--ip netns exec nssv socat TCP-LISTEN:1234,fork $tmp_file &
-+ip netns exec nssv socat TCP-LISTEN:1234,fork $tmp_file 2>/dev/null &
- pid=$!
- res=0
- 
- wait_local_port_listen nssv 1234 tcp
- 
--echo "HI" | ip netns exec nscl socat STDIN TCP:192.168.1.1:1234
-+echo "HI" | ip netns exec nscl socat -u STDIN TCP:192.168.1.1:1234
- 
- count=$(cat $tmp_file | wc -c)
- if [[ $count -ne 3 ]]; then
--- 
-2.53.0
-
+Could you please explain your motivation? Feels quite trivial,
+so it's not immediately obvious why we need tests.
