@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 917DF32ED39;
-	Sun, 10 May 2026 19:29:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A93230E0FB;
+	Sun, 10 May 2026 19:29:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778441350; cv=none; b=tBPi1Ltm3eUD5s5TgSRjT199qtK3NHzagZE2yBvfhEG+ANGfwG+1x5NTnN+SWiVzE4t0UdIuM16UKIFfCsIcWMxZgKq5doCUIyVJT4Ur2XraBzN5/iYKBN9kU77a9e3EAiYEtZoZL9tL7JyDTcBxxDHaUWDHVOWIR7QGUkC3Uww=
+	t=1778441351; cv=none; b=THM9lGJqe0JnyOax28iam9wq0QCkh7b/j245275gEdjiQBe2vNRAH3tgcF9ba6gBhRMzmKOR5gtH6kxI/Kl7EQ1eC7pPViGbQNWGtQIheAR4bjSbfq94jRegDwQ3OI3mvSqR0ajeUDEQu/NkksiXMh5LRJH+ifZ5iTXEGTKYOu0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778441350; c=relaxed/simple;
-	bh=NTXa2OzAR6LsAdljQYCQySpolQ9D92t/0E8nlVDX1iA=;
+	s=arc-20240116; t=1778441351; c=relaxed/simple;
+	bh=ulH3VHS2YbgcvT8ePyIjSHRGnYpsHGT6k+KARYDWE5E=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=OagAT8QQmYCY7i/StOv/0MSk8c1RRQIoCCzeuF78me4VlxVgydPUge40RXnVG4k+pEb2Uz3xsmcIWtyJqQ2ZBSsjKoinagaQvDyEGKrDKUzAetxfeyjXAq/LComrgw7eEVWoGjh536rFQYxfjCyAyP7ujwvzjkwFx3HKwc594kk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QI0WKghc; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=DgxzFvUTVc7B4kOp8SW3RWVr9CYuzCBcF48kXo0aIfr7/gKbhR2UllBXuUyy4RfiBwYa4KoTEK3+Bco3XaR3z09GE1FRVze9wKnwClx1+z15uQKB7sbzzY33n09qP354z02ucYkB7qhxptaBwJaiWBocL+hCnJOwlb3qIQsmL6o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DI/WKJbL; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QI0WKghc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10FF6C2BCB8;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DI/WKJbL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DC94C32781;
 	Sun, 10 May 2026 19:29:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1778441350;
-	bh=NTXa2OzAR6LsAdljQYCQySpolQ9D92t/0E8nlVDX1iA=;
+	bh=ulH3VHS2YbgcvT8ePyIjSHRGnYpsHGT6k+KARYDWE5E=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=QI0WKghcpPlLzUriSz6h+EQ/s6S518f0NVXlc2uVF8d2SgfGrDPDOi2ZZQp01DM0i
-	 CWm5qqZ11ILs1zNuuVr5m1xEad7ESo6wTxzIEXRLfSZ141+i9AXZ+cUcf6D/wfIdcK
-	 fTY0qq68+4wxgD9gIqSbI1Z8HZF98qTm1kdkuVs46VwhVKmAPFSRikVCDbnrrvtyUk
-	 7YS5CHQA3rPmgi4OeK98Dx4IASsihL0PWYtM0Oi040B2CBXg3bgPylMuHGPmM7LPW2
-	 Sj4nkpl9zU6aweDds8eWxkpIgkM0dBvK1PK6Kq3ARnP+bTFzdGAuC9V07kY9YCtgzD
-	 6pXGKiZ9BgLjg==
+	b=DI/WKJbL/kbw/Opa3tMEZNA8Lx0PTvTEwgfkvCT7X4cXrmTHV6VOktasP9z56SAzg
+	 c+HMpzOT2O10d7OaWvE0+pUDI6BRM4Gbqk7+xG8FaLfWqsTjwYRf0CgAEeJ6QoDPGt
+	 Ju4LAwVqDwi9ptc64mQVKx8EgSB2KouOuWk+7TQESy2WgkNGCYVcGiTOgDnQKNl4II
+	 eJJSqdtkAaD0W7Yvo3S/zNHqUWP1TnC3ZIqi4E2qrL8nB9oofafEnkULn5RUGZLCJ6
+	 dlCTpTwJra2B+2FErsLxZb0LL2Hy4yuTR9UtO/y8WMlrKL3d/TE2+e7oSOvmyK9u9L
+	 ndL8BoJy5BrUA==
 From: Jakub Kicinski <kuba@kernel.org>
 To: davem@davemloft.net
 Cc: netdev@vger.kernel.org,
@@ -36,9 +36,9 @@ Cc: netdev@vger.kernel.org,
 	shuah@kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net v2 03/10] net: shaper: reject duplicate leaves in GROUP request
-Date: Sun, 10 May 2026 12:28:57 -0700
-Message-ID: <20260510192904.3987113-4-kuba@kernel.org>
+Subject: [PATCH net v2 04/10] selftests: drv-net: add shaper test for duplicate leaves
+Date: Sun, 10 May 2026 12:28:58 -0700
+Message-ID: <20260510192904.3987113-5-kuba@kernel.org>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260510192904.3987113-1-kuba@kernel.org>
 References: <20260510192904.3987113-1-kuba@kernel.org>
@@ -50,108 +50,62 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-net_shaper_nl_group_doit() does not deduplicate NET_SHAPER_A_LEAVES
-entries. When userspace supplies the same leaf handle twice, the same
-old-parent pointer lands twice in old_nodes[]. The cleanup loop double
-frees the parent. Of course the same parent may still be in old_nodes[]
-twice if we are moving multiple of its leaves.
+Add test exercising duplicate leaves.
 
-Note that this patch also implicitly fixes the fact that the
-i >= leaves_count path forgets to set ret.
-
-Fixes: 5d5d4700e75d ("net-shapers: implement NL group operation")
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
- net/shaper/shaper.c | 60 +++++++++++++++++++++++++++++++++------------
- 1 file changed, 45 insertions(+), 15 deletions(-)
+ tools/testing/selftests/drivers/net/shaper.py | 24 +++++++++++++++++--
+ 1 file changed, 22 insertions(+), 2 deletions(-)
 
-diff --git a/net/shaper/shaper.c b/net/shaper/shaper.c
-index 86319ddbf290..c8960821cf23 100644
---- a/net/shaper/shaper.c
-+++ b/net/shaper/shaper.c
-@@ -941,6 +941,46 @@ static int net_shaper_handle_cmp(const struct net_shaper_handle *a,
- 	return memcmp(a, b, sizeof(*a));
- }
+diff --git a/tools/testing/selftests/drivers/net/shaper.py b/tools/testing/selftests/drivers/net/shaper.py
+index 11310f19bfa0..e39d270e688d 100755
+--- a/tools/testing/selftests/drivers/net/shaper.py
++++ b/tools/testing/selftests/drivers/net/shaper.py
+@@ -1,7 +1,10 @@
+ #!/usr/bin/env python3
+ # SPDX-License-Identifier: GPL-2.0
  
-+static int net_shaper_parse_leaves(struct net_shaper_binding *binding,
-+				   struct genl_info *info,
-+				   const struct net_shaper *node,
-+				   struct net_shaper *leaves,
-+				   int leaves_count)
-+{
-+	struct nlattr *attr;
-+	int i, j, ret, rem;
+-from lib.py import ksft_run, ksft_exit, ksft_eq, ksft_true, KsftSkipEx
++import errno
 +
-+	i = 0;
-+	nla_for_each_attr_type(attr, NET_SHAPER_A_LEAVES,
-+			       genlmsg_data(info->genlhdr),
-+			       genlmsg_len(info->genlhdr), rem) {
-+		if (WARN_ON_ONCE(i >= leaves_count))
-+			return -EINVAL;
-+
-+		ret = net_shaper_parse_leaf(binding, attr, info,
-+					    node, &leaves[i]);
-+		if (ret)
-+			return ret;
-+
-+		/* Reject duplicates */
-+		for (j = 0; j < i; j++) {
-+			if (net_shaper_handle_cmp(&leaves[i].handle,
-+						  &leaves[j].handle))
-+				continue;
-+
-+			NL_SET_ERR_MSG_ATTR_FMT(info->extack, attr,
-+						"Duplicate leaf shaper %d:%d",
-+						leaves[i].handle.scope,
-+						leaves[i].handle.id);
-+			return -EINVAL;
-+		}
-+
-+		i++;
-+	}
-+
-+	return 0;
-+}
-+
- static int net_shaper_parent_from_leaves(int leaves_count,
- 					 const struct net_shaper *leaves,
- 					 struct net_shaper *node,
-@@ -1197,10 +1237,9 @@ int net_shaper_nl_group_doit(struct sk_buff *skb, struct genl_info *info)
- 	struct net_shaper **old_nodes, *leaves, node = {};
- 	struct net_shaper_hierarchy *hierarchy;
- 	struct net_shaper_binding *binding;
--	int i, ret, rem, leaves_count;
-+	int i, ret, leaves_count;
- 	int old_nodes_count = 0;
- 	struct sk_buff *msg;
--	struct nlattr *attr;
++from lib.py import ksft_run, ksft_exit
++from lib.py import ksft_eq, ksft_raises, ksft_true, KsftSkipEx
+ from lib.py import EthtoolFamily, NetshaperFamily
+ from lib.py import NetDrvEnv
+ from lib.py import NlError
+@@ -438,6 +441,21 @@ from lib.py import cmd
+         nl_shaper.delete({'ifindex': cfg.ifindex,
+                           'handle': {'scope': 'queue', 'id': i}})
  
- 	if (GENL_REQ_ATTR_CHECK(info, NET_SHAPER_A_LEAVES))
- 		return -EINVAL;
-@@ -1228,19 +1267,10 @@ int net_shaper_nl_group_doit(struct sk_buff *skb, struct genl_info *info)
- 	if (ret)
- 		goto free_leaves;
++def dup_leaves(cfg, nl_shaper) -> None:
++    """ Ensure that the kernel rejects duplicate leaves. """
++    if not cfg.groups:
++        raise KsftSkipEx("device does not support node scope")
++
++    with ksft_raises(NlError) as cm:
++        nl_shaper.group({
++                   'ifindex': cfg.ifindex,
++                   'leaves':[{'handle': {'scope': 'queue', 'id': 0}},
++                             {'handle': {'scope': 'queue', 'id': 0}}],
++                   'handle': {'scope':'node'},
++                   'metric': 'bps',
++                   'bw-max': 10000})
++    ksft_eq(cm.exception.error, errno.EINVAL)
++
+ def main() -> None:
+     with NetDrvEnv(__file__, queue_count=4) as cfg:
+         cfg.queues = False
+@@ -453,7 +471,9 @@ from lib.py import cmd
+                   basic_groups,
+                   qgroups,
+                   delegation,
+-                  queue_update], args=(cfg, NetshaperFamily()))
++                  dup_leaves,
++                  queue_update],
++                 args=(cfg, NetshaperFamily()))
+     ksft_exit()
  
--	i = 0;
--	nla_for_each_attr_type(attr, NET_SHAPER_A_LEAVES,
--			       genlmsg_data(info->genlhdr),
--			       genlmsg_len(info->genlhdr), rem) {
--		if (WARN_ON_ONCE(i >= leaves_count))
--			goto free_leaves;
--
--		ret = net_shaper_parse_leaf(binding, attr, info,
--					    &node, &leaves[i]);
--		if (ret)
--			goto free_leaves;
--		i++;
--	}
-+	ret = net_shaper_parse_leaves(binding, info, &node,
-+				      leaves, leaves_count);
-+	if (ret)
-+		goto free_leaves;
  
- 	/* Prepare the msg reply in advance, to avoid device operation
- 	 * rollback on allocation failure.
 -- 
 2.54.0
 
