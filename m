@@ -1,72 +1,85 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 569C73E0C45;
-	Sat,  9 May 2026 22:49:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8543113A86C
+	for <linux-kselftest@vger.kernel.org>; Sun, 10 May 2026 08:15:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778366958; cv=none; b=Qc8FxoCreSn+DIQeuEOGcjX5RlvarC0uP09OHzPa5SrtIxAEXCF/o2Sk+igaofuKoMtEsCOEQYrz9c2LViFeDzPpdSjWK4wdAlUYMacCt0hP/mmfwNpH1RnpS/+a31VKtxksBMX+rbHu4kb7J3DTjflfsNbBL1A7+vUeHPtwQIM=
+	t=1778400944; cv=none; b=Erh/DX8ApMwawIU3S18hnhhFQsLocmLALtUZ+SFwDPv+pAmPEt/3GDKK0/WAOwdA6rsA/X5SCWQ71dNvFcbvh5SRFC5ZUcTTgR0pidZO/e7LO0G8lkIPDXPfshYcnz1tvyUDhFI4nGEUiln6bYbmzXQQbIdVt40RvAwCPGi2FPw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778366958; c=relaxed/simple;
-	bh=JDA5+1Tqe0bAUIcEuNpnm50QbTVOp/8UU7ylw2FU3hA=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HmdmbU0NkdMYlWJQnYxUCMt/m+KgYDf0rIqllG+gkAVlbmcnlACUaBq6sVcjI/GXZv5dkYaXwNshYtONImDS0gevF0JR2icEommDAojMstNx8z+xzewyWYgY623nRHE+UaJgMdn00laTgTNlJdyT6La+jQFK4Yidzq8WKs6vov4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=desiato.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=bkTTeIeQ; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=desiato.srs.infradead.org
+	s=arc-20240116; t=1778400944; c=relaxed/simple;
+	bh=QKbeZQnTNT2+ixsxtrSX7WIxy3w1pw/1vwCw8npyY5M=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OxX8P3HbLrwf+dOHU4ZBd8oKqaICzlst1P16akL1ycbdQQ0+PFMejCrHUgdDG+6TCJRlIE8hZqSKPrnnoNsZskPjsl03KvspZpVrALlj344IO7Ifk8xcpobqEKllAWsYnYI2BbtSlhg0X7z4OIQjLrlFNvYXDw6agnywB1zl130=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=YBK1Monn; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=itXjGzmp; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=YgvDZ1x2; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=p4R7HGRh; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="bkTTeIeQ"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding:
-	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:To:From:Reply-To:
-	Cc:Content-Type:Content-ID:Content-Description;
-	bh=LepzYKC8zChWcqxDUMiFOK7RmizpFH9hCCvlIfnf3aY=; b=bkTTeIeQ6yjciV79dnwOCTS3X8
-	kWPljQM5uuCcLf9xYvOMvxwp0BudJtlKdezBUn+2HsrUtDHGE8X85ygS5I9M1clK6zpm2ifFrsLyI
-	6vHlr9bbTcd192RWw5BeCaycQCXib9QwDp+uVtaExyL6cHh0l//vCGieuOmQt3Zb6k0V42gUmdzy2
-	v+X/RNkqyGK6O828YYwwQwcGi7JC5ICV2+sjdn6xRCbShFs6B4a8UPDR2YF3J0Ue6G7OcdLr2c0KW
-	mS9Em/atYVqzn+EMq4KLzVjs83ETumOZCG//oet13+jOZDJ2WZbahqUjO1qRQftiPO8dK8pbrQTVE
-	zPdP0YPA==;
-Received: from [2001:8b0:10b:1::425] (helo=i7.infradead.org)
-	by desiato.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1wLqTD-00000008wzI-0OeQ;
-	Sat, 09 May 2026 22:48:28 +0000
-Received: from dwoodhou by i7.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1wLqTC-0000000DhIH-3IBh;
-	Sat, 09 May 2026 23:48:26 +0100
-From: David Woodhouse <dwmw2@infradead.org>
-To: Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Sean Christopherson <seanjc@google.com>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Vitaly Kuznetsov <vkuznets@redhat.com>,
-	Juergen Gross <jgross@suse.com>,
-	Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-	David Woodhouse <dwmw2@infradead.org>,
-	Paul Durrant <paul@xen.org>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Sascha Bischoff <Sascha.Bischoff@arm.com>,
-	Marc Zyngier <maz@kernel.org>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Jack Allister <jalliste@amazon.com>,
-	Dongli Zhang <dongli.zhang@oracle.com>,
-	joe.jin@oracle.com,
-	kvm@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	xen-devel@lists.xenproject.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH v4 16/30] KVM: x86: Restructure kvm_guest_time_update() for TSC upscaling
-Date: Sat,  9 May 2026 23:46:42 +0100
-Message-ID: <20260509224824.3264567-17-dwmw2@infradead.org>
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="YBK1Monn";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="itXjGzmp";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="YgvDZ1x2";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="p4R7HGRh"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 6A9166B366;
+	Sun, 10 May 2026 08:15:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1778400940; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=sxObztbhk40giDLEzUKLgFKG+24CAROXC+z7S4M3pgs=;
+	b=YBK1MonnoxrNgEhpzO77eSzU9AwXevaqfOyJFsFXa8wFt+LW7ZKQhBHiMwKw4S5Oapoi9x
+	YJKW/1s9iNnRLMJKl+ltDpJfemOIzKri3YG0XmDSAoOcFLPGPIuCHaatnbWG9o6wJfJQGG
+	GJ46Z+4DXDb8h1+/Bs+kgpVkgexZjTg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1778400940;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=sxObztbhk40giDLEzUKLgFKG+24CAROXC+z7S4M3pgs=;
+	b=itXjGzmpZg6+ilZOwh4zuXdeWWs5jaMDo4mSLgs/pIXFg4ijETgZeHXadGalwbjCBTcpyU
+	2cMVzoQja+S0kDDA==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=YgvDZ1x2;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=p4R7HGRh
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1778400939; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=sxObztbhk40giDLEzUKLgFKG+24CAROXC+z7S4M3pgs=;
+	b=YgvDZ1x2pa79XSVZhJ3pDAo0A6ML2cN7AUyCRIJD1PRv9mrHWSOKYwQsi2IAjPc6EHqwDf
+	hgEC+Q0aQfLLWKTB/GhucMVRG6TBeaqBicS3Kwws2xaFdB/n3Xk+y5cUJ34ivc5B6+JOGl
+	6nNbm29Jj+xQLI8yVEpT1dnNPQMLXW4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1778400939;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=sxObztbhk40giDLEzUKLgFKG+24CAROXC+z7S4M3pgs=;
+	b=p4R7HGRh1WBGcUSAtSrUlYrcnIMDtqTbJPWP8Khls8e6PbOYMp1xU5UXcXzm0buIOwErQ6
+	AkKP7beMEf8pTGDw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id C8D66593A3;
+	Sun, 10 May 2026 08:15:38 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id vxsSLqo+AGrIDgAAD6G6ig
+	(envelope-from <fmancera@suse.de>); Sun, 10 May 2026 08:15:38 +0000
+From: Fernando Fernandez Mancera <fmancera@suse.de>
+To: netdev@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org,
+	horms@kernel.org,
+	pabeni@redhat.com,
+	kuba@kernel.org,
+	edumazet@google.com,
+	dsahern@kernel.org,
+	davem@davemloft.net,
+	Fernando Fernandez Mancera <fmancera@suse.de>,
+	Nicolas Dichtel <nicolas.dichtel@6wind.com>
+Subject: [PATCH 1/3 net-next v4] ipv4: centralize devconf sysctl handling
+Date: Sun, 10 May 2026 10:15:26 +0200
+Message-ID: <20260510081528.5257-1-fmancera@suse.de>
 X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260509224824.3264567-1-dwmw2@infradead.org>
-References: <20260509224824.3264567-1-dwmw2@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -74,140 +87,244 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Sender: David Woodhouse <dwmw2@infradead.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Flag: NO
+X-Spam-Score: -3.01
+X-Rspamd-Action: no action
+X-Spamd-Result: default: False [-3.01 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,suse.de:email,suse.de:dkim,suse.de:mid,6wind.com:email];
+	ARC_NA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	RCVD_TLS_ALL(0.00)[];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	DKIM_TRACE(0.00)[suse.de:+]
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Rspamd-Queue-Id: 6A9166B366
+X-Spam-Level: 
 
-From: David Woodhouse <dwmw@amazon.co.uk>
+The logic for handling IPv4 devconf sysctls is scattered. Notification
+and cache flushes are managed in devinet_conf_proc(), while a separate
+ipv4_doint_and_flush() function and DEVINET_SYSCTL_FLUSHING_ENTRY macro
+is used for properties that solely require a cache flush.
 
-Restructure kvm_guest_time_update() so that kernel_ns/host_tsc are
-always "now" when doing TSC catchup, then swap in the master clock
-reference values afterward for the hv_clock.
+This patch refactors the sysctl handling by introducing a centralized
+helper, devinet_conf_post_set(). This new function evaluates the changed
+attribute and handles all necessary operations like triggering netlink
+notifications. It returns a boolean indicating whether a routing cache
+flush is required.
 
-This makes the TSC upscaling code considerably simpler: the catchup
-adjustment is computed as the delta between what the guest TSC *should*
-be at "now" and what it actually is, rather than mixing "now" and
-"master clock reference" timestamps.
+Note that the boolean is necessary as this function will be re-used for
+netlink IPv4 devconf handling where the cache flushing must wait until
+all the attributes have been processed.
 
-The seqcount loop now also contains the kvm_get_time_and_clockread()
-call (matching get_kvmclock's pattern), with the same WARN for
-unexpected failure.
+Finally, this is introducing a small change in behavior for
+IPV4_DEVCONF_ROUTE_LOCALNET. As commit d0daebc3d622 ("ipv4: Add
+interface option to enable routing of 127.0.0.0/8") intended, the cache
+flush should only be performed when ROUTE_LOCALNET changes from 1 to 0.
+Unfortunately, this was not true because while implementing it the
+DEVINET_SYSCTL_FLUSHING_ENTRY was used for the attribute, making the
+code related to it on devinet_conf_proc() dead.
 
-Based on a suggestion by Sean Christopherson.
+IPV4_DEVCONF_FORWARDING is still being handled separately as it requires
+more operations.
 
-Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
+Reviewed-by: Nicolas Dichtel <nicolas.dichtel@6wind.com>
+Signed-off-by: Fernando Fernandez Mancera <fmancera@suse.de>
 ---
- arch/x86/kvm/x86.c | 67 ++++++++++++++++++++++++++++++++--------------
- 1 file changed, 47 insertions(+), 20 deletions(-)
+v2: no changes
+v3: no changes
+v4: no changes
+---
+ net/ipv4/devinet.c | 127 ++++++++++++++++++++++++---------------------
+ 1 file changed, 68 insertions(+), 59 deletions(-)
 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index e281c49561fa..8e4993ef4f6b 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -3363,39 +3363,51 @@ int kvm_guest_time_update(struct kvm_vcpu *v)
- 	struct kvm_arch *ka = &v->kvm->arch;
- 	s64 kernel_ns;
- 	u64 tsc_timestamp, host_tsc;
-+	u64 master_host_tsc = 0;
-+	s64 master_kernel_ns = 0;
- 	bool use_master_clock;
+diff --git a/net/ipv4/devinet.c b/net/ipv4/devinet.c
+index 58fe7cb69545..8300516fb38f 100644
+--- a/net/ipv4/devinet.c
++++ b/net/ipv4/devinet.c
+@@ -2128,6 +2128,46 @@ static int inet_validate_link_af(const struct net_device *dev,
+ 	return 0;
+ }
  
--	kernel_ns = 0;
--	host_tsc = 0;
--
- 	/*
- 	 * If the host uses TSC clock, then passthrough TSC as stable
- 	 * to the guest.
- 	 */
- 	do {
- 		seq = read_seqcount_begin(&ka->pvclock_sc);
++static bool devinet_conf_post_set(struct net *net, struct ipv4_devconf *cnf,
++				  int attr, int new, int old, int ifindex)
++{
++	if (new == old)
++		return false;
 +
- 		use_master_clock = ka->use_master_clock;
--		if (use_master_clock) {
--			host_tsc = ka->master_cycle_now;
--			kernel_ns = ka->master_kernel_ns;
--		}
-+
-+		/*
-+		 * The TSC read and the call to get_cpu_tsc_khz() must happen
-+		 * on the same CPU.
-+		 */
-+		get_cpu();
-+
-+		tgt_tsc_hz = (u64)get_cpu_tsc_khz() * 1000;
-+
-+		if (use_master_clock &&
-+		    !kvm_get_time_and_clockread(&kernel_ns, &host_tsc) &&
-+		    WARN_ON_ONCE(!read_seqcount_retry(&ka->pvclock_sc, seq)))
-+			use_master_clock = false;
-+
-+		put_cpu();
-+
-+		if (!use_master_clock)
-+			break;
-+
-+		master_host_tsc = ka->master_cycle_now;
-+		master_kernel_ns = ka->master_kernel_ns;
- 	} while (read_seqcount_retry(&ka->pvclock_sc, seq));
- 
--	/* Keep irq disabled to prevent changes to the clock */
--	local_irq_save(flags);
--	tgt_tsc_hz = (u64)get_cpu_tsc_khz() * 1000;
- 	if (unlikely(tgt_tsc_hz == 0)) {
--		local_irq_restore(flags);
- 		kvm_make_request(KVM_REQ_CLOCK_UPDATE, v);
- 		return 1;
- 	}
-+
- 	if (!use_master_clock) {
- 		host_tsc = rdtsc();
- 		kernel_ns = get_kvmclock_base_ns();
- 	}
- 
--	tsc_timestamp = kvm_read_l1_tsc(v, host_tsc);
--
- 	/*
- 	 * We may have to catch up the TSC to match elapsed wall clock
- 	 * time for two reasons, even if kvmclock is used.
-@@ -3404,17 +3416,32 @@ int kvm_guest_time_update(struct kvm_vcpu *v)
- 	 *      entry to avoid unknown leaps of TSC even when running
- 	 *      again on the same CPU.  This may cause apparent elapsed
- 	 *      time to disappear, and the guest to stand still or run
--	 *	very slowly.
-+	 *      very slowly.
- 	 */
- 	if (vcpu->tsc_catchup) {
--		u64 tsc = compute_guest_tsc(v, kernel_ns);
--		if (tsc > tsc_timestamp) {
--			adjust_tsc_offset_guest(v, tsc - tsc_timestamp);
--			tsc_timestamp = tsc;
--		}
-+		s64 adjustment;
-+
-+		/*
-+		 * Calculate the delta between what the guest TSC *should* be
-+		 * and what it actually is according to kvm_read_l1_tsc().
-+		 */
-+		adjustment = compute_guest_tsc(v, kernel_ns) -
-+			     kvm_read_l1_tsc(v, host_tsc);
-+		if (adjustment > 0)
-+			adjust_tsc_offset_guest(v, adjustment);
- 	}
- 
--	local_irq_restore(flags);
-+	/*
-+	 * Now that TSC upscaling is out of the way, the remaining calculations
-+	 * are all relative to the reference time that's placed in hv_clock.
-+	 * If the master clock is NOT in use, the reference time is "now".  If
-+	 * master clock is in use, the reference time comes from there.
-+	 */
-+	if (use_master_clock) {
-+		host_tsc = master_host_tsc;
-+		kernel_ns = master_kernel_ns;
++	switch (attr) {
++	case IPV4_DEVCONF_ROUTE_LOCALNET:
++	case IPV4_DEVCONF_ACCEPT_LOCAL:
++		if (new == 0)
++			return true;
++		break;
++	case IPV4_DEVCONF_NOXFRM:
++	case IPV4_DEVCONF_NOPOLICY:
++	case IPV4_DEVCONF_PROMOTE_SECONDARIES:
++	case IPV4_DEVCONF_DROP_UNICAST_IN_L2_MULTICAST:
++	case IPV4_DEVCONF_BC_FORWARDING:
++		return true;
++	case IPV4_DEVCONF_RP_FILTER:
++		inet_netconf_notify_devconf(net, RTM_NEWNETCONF,
++					    NETCONFA_RP_FILTER,
++					    ifindex, cnf);
++		break;
++	case IPV4_DEVCONF_PROXY_ARP:
++		inet_netconf_notify_devconf(net, RTM_NEWNETCONF,
++					    NETCONFA_PROXY_NEIGH,
++					    ifindex, cnf);
++		break;
++	case IPV4_DEVCONF_IGNORE_ROUTES_WITH_LINKDOWN:
++		inet_netconf_notify_devconf(net, RTM_NEWNETCONF,
++					    NETCONFA_IGNORE_ROUTES_WITH_LINKDOWN,
++					    ifindex, cnf);
++		break;
++	default:
++		break;
 +	}
-+	tsc_timestamp = kvm_read_l1_tsc(v, host_tsc);
++
++	return false;
++}
++
+ static int inet_set_link_af(struct net_device *dev, const struct nlattr *nla,
+ 			    struct netlink_ext_ack *extack)
+ {
+@@ -2509,44 +2549,31 @@ static int devinet_conf_proc(const struct ctl_table *ctl, int write,
  
- 	/* With all the info we got, fill in the values */
+ 	if (write) {
+ 		struct ipv4_devconf *cnf = ctl->extra1;
+-		struct net *net = ctl->extra2;
+ 		int i = (int *)ctl->data - cnf->data;
++		struct net *net = ctl->extra2;
+ 		int ifindex;
+ 
+-		set_bit(i, cnf->state);
+-
+-		if (cnf == net->ipv4.devconf_dflt)
+-			devinet_copy_dflt_conf(net, i);
+-		if (i == IPV4_DEVCONF_ACCEPT_LOCAL - 1 ||
+-		    i == IPV4_DEVCONF_ROUTE_LOCALNET - 1)
+-			if ((new_value == 0) && (old_value != 0))
+-				rt_cache_flush(net);
++		/* These attributes are bypassing the tracking state,
++		 * for the rest track the state and propagate the changes
++		 * to default config
++		 */
++		switch (i + 1) {
++		case IPV4_DEVCONF_NOXFRM:
++		case IPV4_DEVCONF_NOPOLICY:
++		case IPV4_DEVCONF_PROMOTE_SECONDARIES:
++		case IPV4_DEVCONF_DROP_UNICAST_IN_L2_MULTICAST:
++			break;
++		default:
++			set_bit(i, cnf->state);
++			if (cnf == net->ipv4.devconf_dflt)
++				devinet_copy_dflt_conf(net, i);
++			break;
++		}
+ 
+-		if (i == IPV4_DEVCONF_BC_FORWARDING - 1 &&
+-		    new_value != old_value)
++		ifindex = devinet_conf_ifindex(net, cnf);
++		if (devinet_conf_post_set(net, cnf, i + 1, new_value,
++					  old_value, ifindex))
+ 			rt_cache_flush(net);
+-
+-		if (i == IPV4_DEVCONF_RP_FILTER - 1 &&
+-		    new_value != old_value) {
+-			ifindex = devinet_conf_ifindex(net, cnf);
+-			inet_netconf_notify_devconf(net, RTM_NEWNETCONF,
+-						    NETCONFA_RP_FILTER,
+-						    ifindex, cnf);
+-		}
+-		if (i == IPV4_DEVCONF_PROXY_ARP - 1 &&
+-		    new_value != old_value) {
+-			ifindex = devinet_conf_ifindex(net, cnf);
+-			inet_netconf_notify_devconf(net, RTM_NEWNETCONF,
+-						    NETCONFA_PROXY_NEIGH,
+-						    ifindex, cnf);
+-		}
+-		if (i == IPV4_DEVCONF_IGNORE_ROUTES_WITH_LINKDOWN - 1 &&
+-		    new_value != old_value) {
+-			ifindex = devinet_conf_ifindex(net, cnf);
+-			inet_netconf_notify_devconf(net, RTM_NEWNETCONF,
+-						    NETCONFA_IGNORE_ROUTES_WITH_LINKDOWN,
+-						    ifindex, cnf);
+-		}
+ 	}
+ 
+ 	return ret;
+@@ -2599,20 +2626,6 @@ static int devinet_sysctl_forward(const struct ctl_table *ctl, int write,
+ 	return ret;
+ }
+ 
+-static int ipv4_doint_and_flush(const struct ctl_table *ctl, int write,
+-				void *buffer, size_t *lenp, loff_t *ppos)
+-{
+-	int *valp = ctl->data;
+-	int val = *valp;
+-	int ret = proc_dointvec(ctl, write, buffer, lenp, ppos);
+-	struct net *net = ctl->extra2;
+-
+-	if (write && *valp != val)
+-		rt_cache_flush(net);
+-
+-	return ret;
+-}
+-
+ #define DEVINET_SYSCTL_ENTRY(attr, name, mval, proc) \
+ 	{ \
+ 		.procname	= name, \
+@@ -2633,9 +2646,6 @@ static int ipv4_doint_and_flush(const struct ctl_table *ctl, int write,
+ #define DEVINET_SYSCTL_COMPLEX_ENTRY(attr, name, proc) \
+ 	DEVINET_SYSCTL_ENTRY(attr, name, 0644, proc)
+ 
+-#define DEVINET_SYSCTL_FLUSHING_ENTRY(attr, name) \
+-	DEVINET_SYSCTL_COMPLEX_ENTRY(attr, name, ipv4_doint_and_flush)
+-
+ static struct devinet_sysctl_table {
+ 	struct ctl_table_header *sysctl_header;
+ 	struct ctl_table devinet_vars[IPV4_DEVCONF_MAX];
+@@ -2678,15 +2688,14 @@ static struct devinet_sysctl_table {
+ 					"ignore_routes_with_linkdown"),
+ 		DEVINET_SYSCTL_RW_ENTRY(DROP_GRATUITOUS_ARP,
+ 					"drop_gratuitous_arp"),
+-
+-		DEVINET_SYSCTL_FLUSHING_ENTRY(NOXFRM, "disable_xfrm"),
+-		DEVINET_SYSCTL_FLUSHING_ENTRY(NOPOLICY, "disable_policy"),
+-		DEVINET_SYSCTL_FLUSHING_ENTRY(PROMOTE_SECONDARIES,
+-					      "promote_secondaries"),
+-		DEVINET_SYSCTL_FLUSHING_ENTRY(ROUTE_LOCALNET,
+-					      "route_localnet"),
+-		DEVINET_SYSCTL_FLUSHING_ENTRY(DROP_UNICAST_IN_L2_MULTICAST,
+-					      "drop_unicast_in_l2_multicast"),
++		DEVINET_SYSCTL_RW_ENTRY(NOXFRM, "disable_xfrm"),
++		DEVINET_SYSCTL_RW_ENTRY(NOPOLICY, "disable_policy"),
++		DEVINET_SYSCTL_RW_ENTRY(PROMOTE_SECONDARIES,
++					"promote_secondaries"),
++		DEVINET_SYSCTL_RW_ENTRY(ROUTE_LOCALNET,
++					"route_localnet"),
++		DEVINET_SYSCTL_RW_ENTRY(DROP_UNICAST_IN_L2_MULTICAST,
++					"drop_unicast_in_l2_multicast"),
+ 	},
+ };
  
 -- 
-2.51.0
+2.53.0
 
