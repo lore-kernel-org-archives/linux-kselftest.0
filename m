@@ -1,198 +1,400 @@
-Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 591A32D949B
-	for <linux-kselftest@vger.kernel.org>; Sun, 10 May 2026 20:33:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 855FF336891;
+	Sun, 10 May 2026 20:59:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778445232; cv=none; b=J8UpgIVWrCaq/pQO2R6GTiI7h27r9twGDXq+RXG0A65KNBAcqe/ipZRkdH3QbE5MAikPxQ8u2ReG9nR7OOiH6jKumkayh86cIg+lwF4yCWbevx3Ru+Rg7FZzbBJpaTQgmfxba1+tQ8z3CXN0VbjbC4orIgD/e/FtI6hfnZsepTI=
+	t=1778446768; cv=none; b=dgKg+zZCAnQczyZ8TznITHbHTdaU/wzxHrW+eK8l03cA/gef5GGZ+DpmfmTMYwtQNeUeDpQaJy4C+udIXZwIKrCbPuKMitv0vMbeJbK0XzHott045veA9/JbUMXRjxrwIQw73o48aF+VhI1gDhyB0jZcBUtX4i18RPi+DS87d5Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778445232; c=relaxed/simple;
-	bh=2wUKSUSHE9scw9qUgXRw9l/unI/4n7ehob9Z2USC7nM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ectqCW2UOSe64V2a1fAXxZ8gdXQ2IqRs/Wm30yIcxk8Hbg5Yx+F7XXG3aZWPLYjJsqOdRm+n3pCzBTKQWXRRaop7rk9THl8avgYe9l/5+fkMV6q5RUgGxaSkYX0iedKeBiwqlkiWgG1frc+cBZQ6lOt91cUPIFqem8iKhUuDLnU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ncJkTBM8; arc=none smtp.client-ip=95.215.58.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1778446768; c=relaxed/simple;
+	bh=QTCwTLn+GoIXYh+lQ6MWVDF9Kg1IE32TrPcaVmg9APM=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=BOMSgMMSC1/OIJBodyq9ggac26b/CnUzR1BoM3tnSRwuhtwxaEshCtPcGnAz4rJod2TRSzrpO0icC1UaQG+Z4IcIvuZO8FYkW5Zw3kgwO0bwkOBKFghJK77oSVJ0aw2kMXhIYjDkgvFcWbh8fJ3R8cid3TDR70gZwAmlSi42Z80=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=vgVEtbex; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ncJkTBM8"
-Message-ID: <d7de2f17-af2d-4b6a-be65-f009d78e3d20@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1778445218;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=mfKcMPHY9ZAK6g9Oz7/PqAZZMUwyLIAqYyCYd/6iX70=;
-	b=ncJkTBM8dnCNpZlfbou7tRQnvzbA5UHpRuL6tjhpE8qRJElAZt+w4X/jfwsa+TPwXOg7d3
-	k6ZFIC1gZ36v/S33lAXeBRU9+khsKtxurPyC3l46D4P+ppuriVat8xTa0i2qwxUqTlzujK
-	I/2d/vw9sboE6jITMTS+qCOnfoXsNl4=
-Date: Sun, 10 May 2026 13:33:18 -0700
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="vgVEtbex"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
+	In-Reply-To:Date:To:From:Subject:Message-ID:Sender:Reply-To:Cc:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=2fh66ArsKe8U1Q1vazOhgHC7ZL/RSaZ7Onoha+m5hJY=; b=vgVEtbex1j5sE2mCcKtcKlE90c
+	nPwt7nAiy4w+dbfimkczHzK87JFH4kM4KgZjrdWnOLksjWypfG3VOs67WLsDD8y03Qqi0InQ2OtXC
+	WYZXB/uvdNqa016XglX2VV6uCC+d7mD0aGi2i+5qfchaeHrFdf3sty4Lsrompyku6pTWNTcvjbBA6
+	vihKszwBl4Nffc6cDeaKKXKEBO+wjUBJltWD5cvYUZtDGAAQUqK1UtUUNUWfxZBhQojEcmQ/90YKn
+	QoO8kKJeV0kpegy7ENLQBcdbTpTH2LoKfQiCkFZBbchm6mcPDsPNSw83iPAmkMo3HqEc0TBTVKeya
+	FAE5luUA==;
+Received: from 54-240-197-234.amazon.com ([54.240.197.234] helo=u09cd745991455d.ant.amazon.com)
+	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
+	id 1wMBER-00000007GKB-3RrH;
+	Sun, 10 May 2026 20:58:36 +0000
+Message-ID: <0c199440c2cfd56a4c8e451134c6a0b1137507d6.camel@infradead.org>
+Subject: [PATCH v4 33/30] KVM: selftests: Add Xen runstate migration test
+From: David Woodhouse <dwmw2@infradead.org>
+To: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
+ Shuah Khan <skhan@linuxfoundation.org>, Sean Christopherson
+ <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar
+ <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,  Dave Hansen
+ <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin"
+ <hpa@zytor.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, Juergen Gross
+ <jgross@suse.com>, Boris Ostrovsky <boris.ostrovsky@oracle.com>, David
+ Woodhouse <dwmw2@infradead.org>, Paul Durrant <paul@xen.org>, Jonathan
+ Cameron <jic23@kernel.org>, Sascha Bischoff <Sascha.Bischoff@arm.com>, Marc
+ Zyngier <maz@kernel.org>, Dongli Zhang <dongli.zhang@oracle.com>, Jack
+ Allister <jalliste@amazon.com>, Joe Jin <joe.jin@oracle.com>, Joey Gouly
+ <joey.gouly@arm.com>, kvm@vger.kernel.org,  linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org,  xen-devel@lists.xenproject.org,
+ linux-kselftest@vger.kernel.org
+Date: Sun, 10 May 2026 21:56:35 +0100
+In-Reply-To: <20260509224824.3264567-1-dwmw2@infradead.org>
+References: <20260509224824.3264567-1-dwmw2@infradead.org>
+Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
+	boundary="=-SFVUe3tfsnRVPe9dwb/j"
+User-Agent: Evolution 3.52.3-0ubuntu1.1 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH net-next v3 0/8] net: devmem: support devmem with netkit
- devices
-To: Bobby Eshleman <bobbyeshleman@gmail.com>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, Alex Shi <alexs@kernel.org>,
- Yanteng Si <si.yanteng@linux.dev>, Dongliang Mu <dzm91@hust.edu.cn>,
- Michael Chan <michael.chan@broadcom.com>,
- Pavan Chebbi <pavan.chebbi@broadcom.com>,
- Joshua Washington <joshwash@google.com>,
- Harshitha Ramamurthy <hramamurthy@google.com>,
- Saeed Mahameed <saeedm@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>,
- Mark Bloch <mbloch@nvidia.com>, Leon Romanovsky <leon@kernel.org>,
- Alexander Duyck <alexanderduyck@fb.com>, kernel-team@meta.com,
- Daniel Borkmann <daniel@iogearbox.net>,
- Nikolay Aleksandrov <razor@blackwall.org>, Shuah Khan <shuah@kernel.org>,
- "yanjun.zhu@linux.dev" <yanjun.zhu@linux.dev>
-Cc: dw@davidwei.uk, sdf.kernel@gmail.com, mohsin.bashr@gmail.com,
- willemb@google.com, jiang.kun2@zte.com.cn, xu.xin16@zte.com.cn,
- wang.yaxin@zte.com.cn, netdev@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Stanislav Fomichev <sdf@fomichev.me>, Mina Almasry <almasrymina@google.com>,
- Bobby Eshleman <bobbyeshleman@meta.com>
-References: <20260507-tcp-dm-netkit-v3-0-52821445867c@meta.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Zhu Yanjun <yanjun.zhu@linux.dev>
-In-Reply-To: <20260507-tcp-dm-netkit-v3-0-52821445867c@meta.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 
-在 2026/5/7 19:27, Bobby Eshleman 写道:
-> This series enables TCP devmem TX through netkit devices.
-> 
-> Netkit now supports queue leasing. A physical NIC's RX queue can be
-> leased to a netkit guest interface inside a container namespace. This
-> gives the container a devmem-capable data path on the RX side (bind-rx,
-> etc...). On the TX side, the container process binds to its netkit guest
-> interface and sends traffic that netkit redirects (via BPF or ip
-> forwarding) to the physical NIC for DMA.
-> 
-> Two things in the existing devmem TX path prevent this from working:
-> 
-> 1. validate_xmit_unreadable_skb() requires dev->netmem_tx before it will
->     forward a dmabuf-backed (unreadable) skb. This protects skbs from
->     landing on devices that don't have the IOMMU mappings for the backing
->     dmabuf or that don't speak netmem. Netkit, however, does not support
->     DMA, doesn't attempt to read unreadable skb pages and so doesn't
->     break netmem (it is pure skb routing and redirection). It is
->     functionally capable of routing unreadable skbs, but there is no way
->     for the TX validation pathway to distinguish between a device that
->     will actually attempt DMA-ing the skb and another device
->     (like netkit) that does not DMA but also does not break
->     netmem.
-> 
-> 2. bind_tx_doit uses the bound device as the DMA device.  When the user
->     binds devmem TX to the netkit guest, the bind handler attempts to
->     create DMA mappings against netkit, which has no DMA capability and
->     no IOMMU mappings.
-> 
-> This series solves these problems as follows:
-> 
-> 1. Extend netmem_tx to two bits, assigned to one of three values:
-> 
->     NETMEM_TX_NONE   - netmem not supported
->     NETMEM_TX_DMA    - netmem supported and performs DMA
->     NETMEM_TX_NO_DMA - netmem supported, but does not DMA
-> 
->     With these bits, phys devices can set NETMEM_TX_DMA and devices like
->     netkit set NETMEM_TX_NO_DMA. The validation TX path ensures that any
->     DMA-capable netdev exactly matches the bound device, guaranteeing the
->     correct mapping of the bound dmabuf. The validation TX path also
->     allows devices with NETMEM_TX_NO_DMA to pass, knowing these devices
->     will not misuse netmem or run into IOMMU faults. After redirection or
->     routing and the skb finally makes its way through the stack to a
->     physical device's TX path, the above NETMEM_TX_DMA check is performed
->     again to guarantee the device has the appropriate binding/mappings.
-> 
-> 2. On TX bind, the bind handler recognizes NETMEM_TX_NO_DMA devices and
->     finds the phys TX device and binds to that instead. For the netkit
->     case, if it has been leased a queue from a DMA-capable device
->     already, then the bind action is performed on the DMA-capable device
->     instead and the dmabuf is mapped correctly.
-> 
-> ---
-> Changes in v3:
-> - Fix validate_xmit_unreadable_skb() logic for non-devmem
->    unreadable niovs (should not be dropped) (Sashiko)
-> - Simplify lock handling in bind_tx, no premature release (Jakub)
-> - split NO_DMA changes into separate patch (Jakub)
-> - fixed some pylint issues, one required an additional patch ("selftests:
->    drv-net: make attr _nk_guest_ifname public") to rename a variable from
->    private to public
-> - see per-patch changelist for more detailed changes
-> - Link to v2: https://lore.kernel.org/r/20260504-tcp-dm-netkit-v2-0-56d52ac72fd4@meta.com
-> 
-> Changes in v2:
-> - Squash driver conversion patches (2-5) into patch 1 (Jakub)
-> - In validate_xmit_unreadable_skb() to check netmem_tx mode before inspecting
->    frags (Jakub)
-> - Lock bind_dev around netdev_queue_get_dma_dev() when bind_dev != netdev to
->    fix lockdep (Sashiko)
-> - Move require_devmem() into individual test functions so KsftSkipEx goes up to
->    ksft_run() (Sashiko)
-> - Add nk_devmem.py to TEST_PROGS in Makefile (Sashiko)
-> - Link to v1:
->    https://lore.kernel.org/all/20260428-tcp-dm-netkit-v1-0-719280eba4d2@meta.com/
-> 
-> Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
-> 
-> ---
-> Bobby Eshleman (8):
->        net: convert netmem_tx flag to enum
->        net: netkit: declare NETMEM_TX_NO_DMA mode
->        net: devmem: support TX over NETMEM_TX_NO_DMA devices
 
-I applied this patchset in my local kernel tree and built a new kernel 
-image. I loaded this new kernel image in my test environment. It seems 
-that all the testcases can pass.
+--=-SFVUe3tfsnRVPe9dwb/j
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-I think that this patchset would not cause any regression problem in my 
-test environment.
+From: David Woodhouse <dwmw@amazon.co.uk>
 
-Zhu Yanjun
+Test that Xen runstate (steal time) is correctly accounted across a
+simulated live migration using KVM_XEN_VCPU_ATTR and KVM_[GS]ET_CLOCK_GUEST=
+.
 
->        selftests: drv-net: ncdevmem: add -n flag to skip NIC configuration
->        selftests: drv-net: make attr _nk_guest_ifname public
->        selftests: drv-net: refactor devmem command builders into lib module
->        selftests: drv-net: add primary_rx_redirect support to NetDrvContEnv
->        selftests: drv-net: add netkit devmem tests
-> 
->   .../networking/net_cachelines/net_device.rst       |   2 +-
->   Documentation/networking/netmem.rst                |   8 +-
->   .../translations/zh_CN/networking/netmem.rst       |   7 +-
->   drivers/net/ethernet/broadcom/bnxt/bnxt.c          |   2 +-
->   drivers/net/ethernet/google/gve/gve_main.c         |   2 +-
->   drivers/net/ethernet/mellanox/mlx5/core/en_main.c  |   2 +-
->   drivers/net/ethernet/meta/fbnic/fbnic_netdev.c     |   2 +-
->   drivers/net/netkit.c                               |   1 +
->   include/linux/netdevice.h                          |  11 +-
->   net/core/dev.c                                     |   5 +-
->   net/core/devmem.c                                  |   6 +-
->   net/core/devmem.h                                  |   9 +-
->   net/core/netdev-genl.c                             |  65 +++++-
->   tools/testing/selftests/drivers/net/hw/Makefile    |   1 +
->   tools/testing/selftests/drivers/net/hw/devmem.py   |  77 ++------
->   .../selftests/drivers/net/hw/lib/py/devmem.py      | 218 +++++++++++++++++++++
->   tools/testing/selftests/drivers/net/hw/ncdevmem.c  |  58 +++---
->   .../testing/selftests/drivers/net/hw/nk_devmem.py  |  55 ++++++
->   .../drivers/net/hw/nk_primary_rx_redirect.bpf.c    |  39 ++++
->   .../testing/selftests/drivers/net/hw/nk_qlease.py  |   8 +-
->   tools/testing/selftests/drivers/net/lib/py/env.py  | 109 ++++++++---
->   21 files changed, 549 insertions(+), 138 deletions(-)
-> ---
-> base-commit: 790ead9394860e7d70c5e0e50a35b243e909a618
-> change-id: 20260423-tcp-dm-netkit-2bd78b638d30
-> 
-> Best regards,
+The test simulates what a real VMM does during migration:
+1. Creates a VM with Xen HVM config and runstate tracking
+2. Runs the guest to accumulate some kvmclock time
+3. Saves clock (KVM_GET_CLOCK_GUEST), TSC offset, and runstate
+4. Marks the saved state as RUNSTATE_runnable (vCPU not running)
+5. Destroys the source VM
+6. Sleeps 10ms (simulating migration network transfer time)
+7. Creates a new VM and restores all state precisely as saved
+8. Runs the guest and verifies the migration gap appears as steal
 
+The kernel accounts the gap because: on vcpu_load, it transitions from
+RUNSTATE_runnable to RUNSTATE_running, computing delta =3D kvmclock_now -
+state_entry_time. Since kvmclock has advanced past the saved entry time
+(real time elapsed during migration), the delta is added to time_runnable.
+
+Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
+---
+ .../selftests/kvm/x86/xen_migration_test.c    | 194 ++++++++++++++++++
+ 1 file changed, 194 insertions(+)
+ create mode 100644 tools/testing/selftests/kvm/x86/xen_migration_test.c
+
+diff --git a/tools/testing/selftests/kvm/x86/xen_migration_test.c b/tools/t=
+esting/selftests/kvm/x86/xen_migration_test.c
+new file mode 100644
+index 000000000000..37e8ace00611
+--- /dev/null
++++ b/tools/testing/selftests/kvm/x86/xen_migration_test.c
+@@ -0,0 +1,194 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Test Xen runstate (steal time) preservation across simulated migration.
++ *
++ * Verifies that the kernel correctly accounts the migration gap as
++ * steal time (runnable) when runstate data is saved and restored
++ * precisely, but real time elapses during the migration.
++ *
++ * The key insight: userspace saves the runstate with state=3DRUNSTATE_run=
+nable
++ * (the vCPU is not running during migration). On restore, the kernel sees
++ * that kvmclock has advanced past state_entry_time, and accounts the
++ * difference as time spent in the runnable state.
++ */
++#include <inttypes.h>
++#include <stdint.h>
++#include <stdio.h>
++#include <string.h>
++#include <unistd.h>
++
++#include "test_util.h"
++#include "kvm_util.h"
++#include "processor.h"
++
++#include <asm/pvclock-abi.h>
++
++#define SHINFO_GPA	0xc0000000ULL
++#define RUNSTATE_GPA	(SHINFO_GPA + 0x1000)
++
++#define RUNSTATE_running  0
++#define RUNSTATE_runnable 1
++#define RUNSTATE_blocked  2
++#define RUNSTATE_offline  3
++
++struct vcpu_runstate_info {
++	uint32_t state;
++	uint64_t state_entry_time;
++	uint64_t time[4];
++} __attribute__((packed));
++
++static void guest_code(void)
++{
++	volatile struct vcpu_runstate_info *rs =3D
++		(void *)(unsigned long)RUNSTATE_GPA;
++
++	/* Report runstate times =E2=80=94 no need to enable kvmclock MSR,
++	 * the kernel writes runstate using its internal kvmclock. */
++	GUEST_SYNC_ARGS(0, rs->time[RUNSTATE_runnable],
++			rs->time[RUNSTATE_running], 0, 0);
++}
++
++static struct kvm_vm *create_xen_vm(struct kvm_vcpu **vcpu)
++{
++	struct kvm_vm *vm;
++	int xen_caps;
++
++	vm =3D vm_create_with_one_vcpu(vcpu, guest_code);
++
++	xen_caps =3D kvm_check_cap(KVM_CAP_XEN_HVM);
++	TEST_REQUIRE(xen_caps & KVM_XEN_HVM_CONFIG_SHARED_INFO);
++	TEST_REQUIRE(xen_caps & KVM_XEN_HVM_CONFIG_RUNSTATE);
++
++	/* Map pages */
++	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS,
++				    SHINFO_GPA, 1, 2, 0);
++	virt_map(vm, SHINFO_GPA, SHINFO_GPA, 2);
++
++	/* Enable Xen HVM with MSR interception (enables runstate tracking) */
++	struct kvm_xen_hvm_config cfg =3D {
++		.flags =3D KVM_XEN_HVM_CONFIG_INTERCEPT_HCALL,
++		.msr =3D 0x40000000,
++	};
++	vm_ioctl(vm, KVM_XEN_HVM_CONFIG, &cfg);
++
++	/* Set shared_info */
++	struct kvm_xen_hvm_attr ha =3D {
++		.type =3D KVM_XEN_ATTR_TYPE_SHARED_INFO,
++		.u.shared_info.gfn =3D SHINFO_GPA >> 12,
++	};
++	vm_ioctl(vm, KVM_XEN_HVM_SET_ATTR, &ha);
++
++	/* Set runstate address */
++	struct kvm_xen_vcpu_attr rs_addr =3D {
++		.type =3D KVM_XEN_VCPU_ATTR_TYPE_RUNSTATE_ADDR,
++		.u.gpa =3D RUNSTATE_GPA,
++	};
++	vcpu_ioctl(*vcpu, KVM_XEN_VCPU_SET_ATTR, &rs_addr);
++
++	return vm;
++}
++
++int main(void)
++{
++	struct pvclock_vcpu_time_info pvti;
++	struct kvm_xen_vcpu_attr runstate_save;
++	struct kvm_vcpu *vcpu;
++	struct kvm_vm *vm;
++	struct ucall uc;
++	uint64_t tsc_offset;
++	int ret;
++
++	/* =3D=3D=3D SOURCE SIDE =3D=3D=3D */
++	pr_info("=3D=3D=3D Source: create VM and run guest =3D=3D=3D\n");
++	vm =3D create_xen_vm(&vcpu);
++
++	/* Run guest once to accumulate some runstate time */
++	vcpu_run(vcpu);
++	TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_IO);
++	TEST_ASSERT_EQ(get_ucall(vcpu, &uc), UCALL_SYNC);
++
++	pr_info("  Guest sees: runnable=3D%" PRIu64 " running=3D%" PRIu64 "\n",
++		uc.args[2], uc.args[3]);
++
++	/* Save clock state */
++	ret =3D __vcpu_ioctl(vcpu, KVM_GET_CLOCK_GUEST, &pvti);
++	TEST_ASSERT(!ret, "KVM_GET_CLOCK_GUEST failed");
++
++	/* Save TSC offset */
++	tsc_offset =3D vcpu_get_msr(vcpu, MSR_IA32_TSC_ADJUST);
++
++	/* Save runstate =E2=80=94 the vCPU is now "runnable" (not running) */
++	runstate_save.type =3D KVM_XEN_VCPU_ATTR_TYPE_RUNSTATE_DATA;
++	vcpu_ioctl(vcpu, KVM_XEN_VCPU_GET_ATTR, &runstate_save);
++
++	/*
++	 * Transition to runnable state before saving =E2=80=94 the vCPU is
++	 * not running during migration.
++	 */
++	runstate_save.u.runstate.state =3D RUNSTATE_runnable;
++
++	pr_info("  Saved runstate: running=3D%" PRIu64 " runnable=3D%" PRIu64
++		" entry=3D%" PRIu64 "\n",
++		(uint64_t)runstate_save.u.runstate.time_running,
++		(uint64_t)runstate_save.u.runstate.time_runnable,
++		(uint64_t)runstate_save.u.runstate.state_entry_time);
++
++	uint64_t saved_runnable =3D runstate_save.u.runstate.time_runnable;
++
++	kvm_vm_release(vm);
++
++	/* =3D=3D=3D MIGRATION GAP =3D=3D=3D */
++	pr_info("=3D=3D=3D Simulating migration (sleeping 10ms) =3D=3D=3D\n");
++	usleep(10000);
++
++	/* =3D=3D=3D DESTINATION SIDE =3D=3D=3D */
++	pr_info("=3D=3D=3D Destination: create new VM and restore =3D=3D=3D\n");
++	vm =3D create_xen_vm(&vcpu);
++
++	/* Restore TSC offset */
++	vcpu_set_msr(vcpu, MSR_IA32_TSC_ADJUST, tsc_offset);
++
++	/* Restore clock =E2=80=94 kvmclock will now be ~10ms ahead of the snapsh=
+ot */
++	vcpu_ioctl(vcpu, KVM_SET_CLOCK_GUEST, &pvti);
++
++	/* Restore runstate exactly as saved (state=3Drunnable) */
++	runstate_save.type =3D KVM_XEN_VCPU_ATTR_TYPE_RUNSTATE_DATA;
++	ret =3D __vcpu_ioctl(vcpu, KVM_XEN_VCPU_SET_ATTR, &runstate_save);
++	TEST_ASSERT(!ret, "Restore runstate failed: errno %d", errno);
++
++	/*
++	 * Run the guest. When the vCPU enters vcpu_run, the kernel
++	 * transitions from RUNSTATE_runnable to RUNSTATE_running.
++	 * It computes: delta =3D kvmclock_now - state_entry_time
++	 * This delta (which includes the migration gap) is added to
++	 * time_runnable (steal time).
++	 */
++	vcpu_run(vcpu);
++	TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_IO);
++	TEST_ASSERT_EQ(get_ucall(vcpu, &uc), UCALL_SYNC);
++
++	uint64_t guest_runnable =3D uc.args[2];
++	uint64_t guest_running =3D uc.args[3];
++
++	pr_info("  Guest sees: runnable=3D%" PRIu64 " running=3D%" PRIu64 "\n",
++		guest_runnable, guest_running);
++
++	uint64_t steal_increase =3D guest_runnable - saved_runnable;
++	pr_info("  Steal time increase: %" PRIu64 " ns (migration gap)\n",
++		steal_increase);
++
++	/*
++	 * The steal time increase should be at least 10ms (the sleep)
++	 * but not more than 5s (allowing for VM creation overhead).
++	 * The actual gap is from the source's state_entry_time to the
++	 * destination's kvmclock "now" at vcpu_load time.
++	 */
++	TEST_ASSERT(steal_increase >=3D 10000000ULL &&
++		    steal_increase < 5000000000ULL,
++		    "Steal time increase %" PRIu64 " ns not in expected range "
++		    "[10ms, 5s]", steal_increase);
++
++	kvm_vm_release(vm);
++	pr_info("PASS: Migration gap correctly accounted as steal time\n");
++	return 0;
++}
+--=20
+2.43.0
+
+
+
+--=-SFVUe3tfsnRVPe9dwb/j
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
+
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCD9Aw
+ggSOMIIDdqADAgECAhAOmiw0ECVD4cWj5DqVrT9PMA0GCSqGSIb3DQEBCwUAMGUxCzAJBgNVBAYT
+AlVTMRUwEwYDVQQKEwxEaWdpQ2VydCBJbmMxGTAXBgNVBAsTEHd3dy5kaWdpY2VydC5jb20xJDAi
+BgNVBAMTG0RpZ2lDZXJ0IEFzc3VyZWQgSUQgUm9vdCBDQTAeFw0yNDAxMzAwMDAwMDBaFw0zMTEx
+MDkyMzU5NTlaMEExCzAJBgNVBAYTAkFVMRAwDgYDVQQKEwdWZXJva2V5MSAwHgYDVQQDExdWZXJv
+a2V5IFNlY3VyZSBFbWFpbCBHMjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMjvgLKj
+jfhCFqxYyRiW8g3cNFAvltDbK5AzcOaR7yVzVGadr4YcCVxjKrEJOgi7WEOH8rUgCNB5cTD8N/Et
+GfZI+LGqSv0YtNa54T9D1AWJy08ZKkWvfGGIXN9UFAPMJ6OLLH/UUEgFa+7KlrEvMUupDFGnnR06
+aDJAwtycb8yXtILj+TvfhLFhafxroXrflspavejQkEiHjNjtHnwbZ+o43g0/yxjwnarGI3kgcak7
+nnI9/8Lqpq79tLHYwLajotwLiGTB71AGN5xK+tzB+D4eN9lXayrjcszgbOv2ZCgzExQUAIt98mre
+8EggKs9mwtEuKAhYBIP/0K6WsoMnQCcCAwEAAaOCAVwwggFYMBIGA1UdEwEB/wQIMAYBAf8CAQAw
+HQYDVR0OBBYEFIlICOogTndrhuWByNfhjWSEf/xwMB8GA1UdIwQYMBaAFEXroq/0ksuCMS1Ri6en
+IZ3zbcgPMA4GA1UdDwEB/wQEAwIBhjAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIweQYI
+KwYBBQUHAQEEbTBrMCQGCCsGAQUFBzABhhhodHRwOi8vb2NzcC5kaWdpY2VydC5jb20wQwYIKwYB
+BQUHMAKGN2h0dHA6Ly9jYWNlcnRzLmRpZ2ljZXJ0LmNvbS9EaWdpQ2VydEFzc3VyZWRJRFJvb3RD
+QS5jcnQwRQYDVR0fBD4wPDA6oDigNoY0aHR0cDovL2NybDMuZGlnaWNlcnQuY29tL0RpZ2lDZXJ0
+QXNzdXJlZElEUm9vdENBLmNybDARBgNVHSAECjAIMAYGBFUdIAAwDQYJKoZIhvcNAQELBQADggEB
+ACiagCqvNVxOfSd0uYfJMiZsOEBXAKIR/kpqRp2YCfrP4Tz7fJogYN4fxNAw7iy/bPZcvpVCfe/H
+/CCcp3alXL0I8M/rnEnRlv8ItY4MEF+2T/MkdXI3u1vHy3ua8SxBM8eT9LBQokHZxGUX51cE0kwa
+uEOZ+PonVIOnMjuLp29kcNOVnzf8DGKiek+cT51FvGRjV6LbaxXOm2P47/aiaXrDD5O0RF5SiPo6
+xD1/ClkCETyyEAE5LRJlXtx288R598koyFcwCSXijeVcRvBB1cNOLEbg7RMSw1AGq14fNe2cH1HG
+W7xyduY/ydQt6gv5r21mDOQ5SaZSWC/ZRfLDuEYwggWbMIIEg6ADAgECAhAH5JEPagNRXYDiRPdl
+c1vgMA0GCSqGSIb3DQEBCwUAMEExCzAJBgNVBAYTAkFVMRAwDgYDVQQKEwdWZXJva2V5MSAwHgYD
+VQQDExdWZXJva2V5IFNlY3VyZSBFbWFpbCBHMjAeFw0yNDEyMzAwMDAwMDBaFw0yODAxMDQyMzU5
+NTlaMB4xHDAaBgNVBAMME2R3bXcyQGluZnJhZGVhZC5vcmcwggIiMA0GCSqGSIb3DQEBAQUAA4IC
+DwAwggIKAoICAQDali7HveR1thexYXx/W7oMk/3Wpyppl62zJ8+RmTQH4yZeYAS/SRV6zmfXlXaZ
+sNOE6emg8WXLRS6BA70liot+u0O0oPnIvnx+CsMH0PD4tCKSCsdp+XphIJ2zkC9S7/yHDYnqegqt
+w4smkqUqf0WX/ggH1Dckh0vHlpoS1OoxqUg+ocU6WCsnuz5q5rzFsHxhD1qGpgFdZEk2/c//ZvUN
+i12vPWipk8TcJwHw9zoZ/ZrVNybpMCC0THsJ/UEVyuyszPtNYeYZAhOJ41vav1RhZJzYan4a1gU0
+kKBPQklcpQEhq48woEu15isvwWh9/+5jjh0L+YNaN0I//nHSp6U9COUG9Z0cvnO8FM6PTqsnSbcc
+0j+GchwOHRC7aP2t5v2stVx3KbptaYEzi4MQHxm/0+HQpMEVLLUiizJqS4PWPU6zfQTOMZ9uLQRR
+ci+c5xhtMEBszlQDOvEQcyEG+hc++fH47K+MmZz21bFNfoBxLP6bjR6xtPXtREF5lLXxp+CJ6KKS
+blPKeVRg/UtyJHeFKAZXO8Zeco7TZUMVHmK0ZZ1EpnZbnAhKE19Z+FJrQPQrlR0gO3lBzuyPPArV
+hvWxjlO7S4DmaEhLzarWi/ze7EGwWSuI2eEa/8zU0INUsGI4ywe7vepQz7IqaAovAX0d+f1YjbmC
+VsAwjhLmveFjNwIDAQABo4IBsDCCAawwHwYDVR0jBBgwFoAUiUgI6iBOd2uG5YHI1+GNZIR//HAw
+HQYDVR0OBBYEFFxiGptwbOfWOtMk5loHw7uqWUOnMDAGA1UdEQQpMCeBE2R3bXcyQGluZnJhZGVh
+ZC5vcmeBEGRhdmlkQHdvb2Rob3Uuc2UwFAYDVR0gBA0wCzAJBgdngQwBBQEBMA4GA1UdDwEB/wQE
+AwIF4DAdBgNVHSUEFjAUBggrBgEFBQcDAgYIKwYBBQUHAwQwewYDVR0fBHQwcjA3oDWgM4YxaHR0
+cDovL2NybDMuZGlnaWNlcnQuY29tL1Zlcm9rZXlTZWN1cmVFbWFpbEcyLmNybDA3oDWgM4YxaHR0
+cDovL2NybDQuZGlnaWNlcnQuY29tL1Zlcm9rZXlTZWN1cmVFbWFpbEcyLmNybDB2BggrBgEFBQcB
+AQRqMGgwJAYIKwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmRpZ2ljZXJ0LmNvbTBABggrBgEFBQcwAoY0
+aHR0cDovL2NhY2VydHMuZGlnaWNlcnQuY29tL1Zlcm9rZXlTZWN1cmVFbWFpbEcyLmNydDANBgkq
+hkiG9w0BAQsFAAOCAQEAQXc4FPiPLRnTDvmOABEzkIumojfZAe5SlnuQoeFUfi+LsWCKiB8Uextv
+iBAvboKhLuN6eG/NC6WOzOCppn4mkQxRkOdLNThwMHW0d19jrZFEKtEG/epZ/hw/DdScTuZ2m7im
+8ppItAT6GXD3aPhXkXnJpC/zTs85uNSQR64cEcBFjjoQDuSsTeJ5DAWf8EMyhMuD8pcbqx5kRvyt
+JPsWBQzv1Dsdv2LDPLNd/JUKhHSgr7nbUr4+aAP2PHTXGcEBh8lTeYea9p4d5k969pe0OHYMV5aL
+xERqTagmSetuIwolkAuBCzA9vulg8Y49Nz2zrpUGfKGOD0FMqenYxdJHgDCCBZswggSDoAMCAQIC
+EAfkkQ9qA1FdgOJE92VzW+AwDQYJKoZIhvcNAQELBQAwQTELMAkGA1UEBhMCQVUxEDAOBgNVBAoT
+B1Zlcm9rZXkxIDAeBgNVBAMTF1Zlcm9rZXkgU2VjdXJlIEVtYWlsIEcyMB4XDTI0MTIzMDAwMDAw
+MFoXDTI4MDEwNDIzNTk1OVowHjEcMBoGA1UEAwwTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJ
+KoZIhvcNAQEBBQADggIPADCCAgoCggIBANqWLse95HW2F7FhfH9bugyT/danKmmXrbMnz5GZNAfj
+Jl5gBL9JFXrOZ9eVdpmw04Tp6aDxZctFLoEDvSWKi367Q7Sg+ci+fH4KwwfQ8Pi0IpIKx2n5emEg
+nbOQL1Lv/IcNiep6Cq3DiyaSpSp/RZf+CAfUNySHS8eWmhLU6jGpSD6hxTpYKye7PmrmvMWwfGEP
+WoamAV1kSTb9z/9m9Q2LXa89aKmTxNwnAfD3Ohn9mtU3JukwILRMewn9QRXK7KzM+01h5hkCE4nj
+W9q/VGFknNhqfhrWBTSQoE9CSVylASGrjzCgS7XmKy/BaH3/7mOOHQv5g1o3Qj/+cdKnpT0I5Qb1
+nRy+c7wUzo9OqydJtxzSP4ZyHA4dELto/a3m/ay1XHcpum1pgTOLgxAfGb/T4dCkwRUstSKLMmpL
+g9Y9TrN9BM4xn24tBFFyL5znGG0wQGzOVAM68RBzIQb6Fz758fjsr4yZnPbVsU1+gHEs/puNHrG0
+9e1EQXmUtfGn4InoopJuU8p5VGD9S3Ikd4UoBlc7xl5yjtNlQxUeYrRlnUSmdlucCEoTX1n4UmtA
+9CuVHSA7eUHO7I88CtWG9bGOU7tLgOZoSEvNqtaL/N7sQbBZK4jZ4Rr/zNTQg1SwYjjLB7u96lDP
+sipoCi8BfR35/ViNuYJWwDCOEua94WM3AgMBAAGjggGwMIIBrDAfBgNVHSMEGDAWgBSJSAjqIE53
+a4blgcjX4Y1khH/8cDAdBgNVHQ4EFgQUXGIam3Bs59Y60yTmWgfDu6pZQ6cwMAYDVR0RBCkwJ4ET
+ZHdtdzJAaW5mcmFkZWFkLm9yZ4EQZGF2aWRAd29vZGhvdS5zZTAUBgNVHSAEDTALMAkGB2eBDAEF
+AQEwDgYDVR0PAQH/BAQDAgXgMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEFBQcDBDB7BgNVHR8E
+dDByMDegNaAzhjFodHRwOi8vY3JsMy5kaWdpY2VydC5jb20vVmVyb2tleVNlY3VyZUVtYWlsRzIu
+Y3JsMDegNaAzhjFodHRwOi8vY3JsNC5kaWdpY2VydC5jb20vVmVyb2tleVNlY3VyZUVtYWlsRzIu
+Y3JsMHYGCCsGAQUFBwEBBGowaDAkBggrBgEFBQcwAYYYaHR0cDovL29jc3AuZGlnaWNlcnQuY29t
+MEAGCCsGAQUFBzAChjRodHRwOi8vY2FjZXJ0cy5kaWdpY2VydC5jb20vVmVyb2tleVNlY3VyZUVt
+YWlsRzIuY3J0MA0GCSqGSIb3DQEBCwUAA4IBAQBBdzgU+I8tGdMO+Y4AETOQi6aiN9kB7lKWe5Ch
+4VR+L4uxYIqIHxR7G2+IEC9ugqEu43p4b80LpY7M4KmmfiaRDFGQ50s1OHAwdbR3X2OtkUQq0Qb9
+6ln+HD8N1JxO5nabuKbymki0BPoZcPdo+FeRecmkL/NOzzm41JBHrhwRwEWOOhAO5KxN4nkMBZ/w
+QzKEy4PylxurHmRG/K0k+xYFDO/UOx2/YsM8s138lQqEdKCvudtSvj5oA/Y8dNcZwQGHyVN5h5r2
+nh3mT3r2l7Q4dgxXlovERGpNqCZJ624jCiWQC4ELMD2+6WDxjj03PbOulQZ8oY4PQUyp6djF0keA
+MYIDuzCCA7cCAQEwVTBBMQswCQYDVQQGEwJBVTEQMA4GA1UEChMHVmVyb2tleTEgMB4GA1UEAxMX
+VmVyb2tleSBTZWN1cmUgRW1haWwgRzICEAfkkQ9qA1FdgOJE92VzW+AwDQYJYIZIAWUDBAIBBQCg
+ggE3MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI2MDUxMDIwNTYz
+NVowLwYJKoZIhvcNAQkEMSIEIJd25+ZIyferprxmR1GEWUQ16lvRwmFQqpqO3JBs05w4MGQGCSsG
+AQQBgjcQBDFXMFUwQTELMAkGA1UEBhMCQVUxEDAOBgNVBAoTB1Zlcm9rZXkxIDAeBgNVBAMTF1Zl
+cm9rZXkgU2VjdXJlIEVtYWlsIEcyAhAH5JEPagNRXYDiRPdlc1vgMGYGCyqGSIb3DQEJEAILMVeg
+VTBBMQswCQYDVQQGEwJBVTEQMA4GA1UEChMHVmVyb2tleTEgMB4GA1UEAxMXVmVyb2tleSBTZWN1
+cmUgRW1haWwgRzICEAfkkQ9qA1FdgOJE92VzW+AwDQYJKoZIhvcNAQEBBQAEggIAq0XfF1F/vGl4
+ykxCAI8ARC9jXo1En12d0TM1qf9Wxkv+8j0AfMJYLQe53Kge9JpbFEnGB6PghymF4224d16SJ/pQ
+RWm5fg7PihYsJftwuidWXpupVu6VDWH/B2lNBHBuU03C7l74QOIzdoTDUkzXIWFAr3hyGM3nIgXx
+0K7w6PEAGs154XmbOO/UOTQZX3WkV7Mwww4EN60UpMU/YPMq1x+RzOoetR56oTYp6+AOlQOLmqUb
+Ag4lNYyCG0cDUn9CbdD9eqzZMT/PwMatJDEiv/BOzl+/6rDc2a15+hqH72m3XcpmmKp45ViTuxiE
+LoNwzaXt9Yyzi38PEMu4zJ29+BRDWXoBsQj0xtkeLgWUv1muPVLdnPe0yCK8wZgPmiC4aaQLkmpA
+oc+WZYcchNtmplpp4Iag/E+kciux37AlhIOO7tz3Rxcf2Yrkac8pVY+XNiidy06rDbAZB0o9Uzlh
+1uCMWzmXr0P9BO7IgzHHgONMAf5pTduMHGcMwGgsJI6tdRHoLk212G5DY4j0p4LIxuQkyPy1sb/o
+bSITFOIZRDZ9fm2K9yf8O+49YCHBZWlcyaSv8OOL30/ZsZFZXW8aOhWbojoVs/ao4AyixEVwB4hB
+Jd9aivPSMVAJ1fPMK1rA1jCKVKRruDxA58wfb2N8t80T0+xAVdpiauNaZVwjJ2sAAAAAAAA=
+
+
+--=-SFVUe3tfsnRVPe9dwb/j--
