@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A1AF355F28;
-	Sun, 10 May 2026 17:21:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EFAD8635D;
+	Sun, 10 May 2026 17:31:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778433677; cv=none; b=dkhFMP4obx5yzRRGPggUNNJV3h8dp4sTWUTadxeIlSmpZgzxb142EbOxKJ+zJH92QMObm7I3V0kxkOiW7IeL02EuH5p3z4XenMk/vRYwyFyEeaSqO4AQmy01cb57z9DnOYrCMoR0R3uhd25NiViziB7W/1HxonCGaEyLaqijLGk=
+	t=1778434263; cv=none; b=HhIeWOI2+vBAT7Te+2qcYnC9vDJ6kAmTIWn568BI3XyB0ZF9erM5rbn4zLe0Sailat3xdeSzksfTmRH4c8mWbOS9mUcSpnOoZzgYTlmQIUSOPDE6dfILNHxtDi7nMmUYqNqmb+TScPmxMz4t7Ux5jwnSeAKm2thfGwHS6QetqFY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778433677; c=relaxed/simple;
-	bh=iMNBtNMM6qK67zwkQsw5VnancBPqyT2EurscxBqQCOw=;
+	s=arc-20240116; t=1778434263; c=relaxed/simple;
+	bh=zclz00P2RXzk0iut/vDC+fZ5PNjL1f7ECX+axT82ogk=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=BPJ/iFdU8nuXIb6UlecHyoevQ2Yn0PA4MxRjhY5jOZfjgN9FaU3g+mV9OUtlCKmpoLkOdSEpSlYciLjKoft6LpDw5bDJLzdXpA/aQ/QfQ5o7jWQybrGJqvos6LVVjhQGvTJIESFlrF2HaN5QqRFdYRhJNo4n4+VfK1egDL9jPqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I0N4qA7Q; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=ZCPlxE7ikLZeX2W2x3y8WnqAEFfhtuBuj1uRjzmp26QlziNDUv7bY+rgBg8oBYU/7uvf0wgSlIE61MMjLsbqimDUTLKKcO4PwCg/8WnUeCFapZuqb6sxES4A4pzRhKfWidEACWOFdFMZz5/NOCgdrxLAashqN65VvI0DWS5xbQU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e4j40NZ5; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I0N4qA7Q"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34ED6C2BCB8;
-	Sun, 10 May 2026 17:21:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e4j40NZ5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06B7EC2BCB8;
+	Sun, 10 May 2026 17:31:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778433677;
-	bh=iMNBtNMM6qK67zwkQsw5VnancBPqyT2EurscxBqQCOw=;
+	s=k20201202; t=1778434263;
+	bh=zclz00P2RXzk0iut/vDC+fZ5PNjL1f7ECX+axT82ogk=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=I0N4qA7QbwGWoD4CtVz456cj0a70u7R//UibTHhRrXuth7qeqE3okkXArNkFTS8oV
-	 x4jOgYU6Lz42HeUSy5K2EmnxSy7r2lrSIQQPD+7NjUML3N5x8r4J05fua4DDIdsHjD
-	 rms6Dx9Bq/cFAcj4lAAhPCQ3ThnN8lHM0H9grtdYUHw/2/BaGzgcmL2XrOtXJY8MUK
-	 PA3lk5+RxPGd1Z8BtmFPq4S6vD6q8dVw8OHRzTpjbgizKCA48bmJNRHaWMpwfZDce2
-	 QHnbuSTDPnurupjPVAclG2ncdHUKnU5mKCeKV7OhvBKSCPXVUOa0wSOIzKoP8v0a+I
-	 qDkr/6veUYpqw==
+	b=e4j40NZ5Jxpte5AHw8vdTYTpu2SoYMrAGSGdMJocjmx1ZoZEubPg+vuIuMZ/pwqd2
+	 u0J4hNsROrC/wBzfC0/Loeo2mguPFK+i8RuH04fykmTGntSt3isC9UikEKHPIajtX4
+	 mTKV4bL1upL2/Vxptv3Uh0pw0Nql3iq2kDT/pN3pjCgCOKd7w4S7yKkBN+8g30HQy3
+	 9yuDjyxzX/0A4y/3xGlIRMgkpgBMKIINFae22d9UKS1txoILYWsDme0ziyO9vO431b
+	 SkWAY0JU0jqIgCglclQWGWCDwX1xVp5FBd7rA5+tUlH0WpoIvxxb4H2mfpRDT67ERP
+	 OsxLcu1zlmPmw==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B9EE93930020;
-	Sun, 10 May 2026 17:20:25 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7CEC63930020;
+	Sun, 10 May 2026 17:30:11 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -37,51 +37,44 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v2 0/5] net: convert four more protocols to
- getsockopt_iter
+Subject: Re: [PATCH net-next v1 0/3] Log clean up and TAP follow ups
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <177843362429.1437390.7026110472657102659.git-patchwork-notify@kernel.org>
-Date: Sun, 10 May 2026 17:20:24 +0000
-References: <20260507-getsock_two-v2-0-5873111d9c12@debian.org>
-In-Reply-To: <20260507-getsock_two-v2-0-5873111d9c12@debian.org>
-To: Breno Leitao <leitao@debian.org>
-Cc: jk@codeconstruct.com.au, matt@codeconstruct.com.au, ms@dev.tdt.de,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- horms@kernel.org, shuah@kernel.org, linux-x25@vger.kernel.org,
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org, kernel-team@meta.com, sdf@fomichev.me,
- bobbyeshleman@meta.com
+ <177843421005.1439575.2959535937305070033.git-patchwork-notify@kernel.org>
+Date: Sun, 10 May 2026 17:30:10 +0000
+References: <20260507233213.556182-1-achender@kernel.org>
+In-Reply-To: <20260507233213.556182-1-achender@kernel.org>
+To: Allison Henderson <achender@kernel.org>
+Cc: netdev@vger.kernel.org, pabeni@redhat.com, edumazet@google.com,
+ kuba@kernel.org, horms@kernel.org, linux-rdma@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, shuah@kernel.org
 
 Hello:
 
 This series was applied to netdev/net-next.git (main)
 by Jakub Kicinski <kuba@kernel.org>:
 
-On Thu, 07 May 2026 03:57:49 -0700 you wrote:
-> Continue the work to convert protocols to the new getsockopt_iter API.
+On Thu,  7 May 2026 16:32:10 -0700 you wrote:
+> Hi all,
 > 
-> Convert four additional getsockopt implementations to the new
-> sockopt_t/getsockopt_iter callback:
-> 
->   - MCTP
->   - LLC
->   - X.25
->   - KCM
+> This is a follow up series to the  "Log collection, TAP compliance and
+> cleanups" set.  The sashiko report had made some points that I thought
+> was worth addressing.  This patch set fixes a few more TAP compliance
+> prints in the check_gcov* routines.  Also since the user must now pass
+> in the log folder to collect logs, log clean up is tightened to only
+> remove rds* prefixed artifacts instead of the entire folder.  Lastly a
+> the signal handler alarm should be disarmed after the completes to
+> avoid multiple calls to the stop_pcaps routine.
 > 
 > [...]
 
 Here is the summary with links:
-  - [net-next,v2,1/5] mctp: convert to getsockopt_iter
-    https://git.kernel.org/netdev/net-next/c/85f22f66f303
-  - [net-next,v2,2/5] llc: convert to getsockopt_iter
-    https://git.kernel.org/netdev/net-next/c/e0a917bca147
-  - [net-next,v2,3/5] x25: convert to getsockopt_iter
-    https://git.kernel.org/netdev/net-next/c/447edcb0e4be
-  - [net-next,v2,4/5] kcm: convert to getsockopt_iter
-    https://git.kernel.org/netdev/net-next/c/8aaaa32a7965
-  - [net-next,v2,5/5] selftests: net: getsockopt_iter: cleanup
-    https://git.kernel.org/netdev/net-next/c/c8c2bd2bcf67
+  - [net-next,v1,1/3] selftests: rds: Fix stale log clean up
+    https://git.kernel.org/netdev/net-next/c/4840467c84de
+  - [net-next,v1,2/3] selftests: rds: Fix TAP-prefixed prints in check_gcov*
+    https://git.kernel.org/netdev/net-next/c/490778834a42
+  - [net-next,v1,3/3] selftests: rds: Disarm signal alarm on test completion
+    https://git.kernel.org/netdev/net-next/c/08724ab1dc17
 
 You are awesome, thank you!
 -- 
