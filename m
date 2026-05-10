@@ -1,37 +1,37 @@
 Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A65DB3B27F5;
-	Sun, 10 May 2026 16:44:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BCEC3B27DD;
+	Sun, 10 May 2026 16:44:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.252.153.129
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778431451; cv=none; b=rOVemD8/KchZqVqNDBCh9YSRN/GIanFafrRT0RVPmUClUpJNSEW3MkJsTNznTA5Z9v+iahzQsbV+x5QEroXYlfbUjGmsW3bAv6wvWPJ6oKUNd9CyIvanlnx2PTyhDEclXqz2FhHb0NBUaZB1CSRhlVoOr1Xnj2v3AC/m0Ed+C8A=
+	t=1778431452; cv=none; b=r6GpYUHiJ2/G2rji6MzVTWGQViFpuO0bdS/zkGnybYfTF2c1qitPz13iHIoBeWK2Va8/kRWF63GgGBMCxVfAWgDhc2ZHPI56NQwJrt+PnIkwmxN7I3lJefTkVZvHuWgp4uOBcpTXfguVtIN6YP+qkwVSgqwlqFc6KgWj6Tznlvw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778431451; c=relaxed/simple;
-	bh=4/+8QLEncpuEUOX7PYCCSu0mx8Wt5d/8m7jFzOWwAyw=;
+	s=arc-20240116; t=1778431452; c=relaxed/simple;
+	bh=FKLE7ejqghDYJ/w85WEZJrDaGoQqUHvNQ24XD2b+mFQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=TLr3msNx0jwCsRjiloyISx1c4lR9a3obpfI57FLdYIjPyTxPG6vx7t6masBwdIBxjStDgsOD9YfJUpia5CqqMKOpvz7MYh9kXHeW10CyNSkux74B8Sisc1k1jopdDG6xpQH86MFAcw9sMzqq+DMdI9lOWF1sq+4bU7grxqE6cbc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riseup.net; spf=pass smtp.mailfrom=riseup.net; dkim=pass (1024-bit key) header.d=riseup.net header.i=@riseup.net header.b=l54nS5wC; arc=none smtp.client-ip=198.252.153.129
+	 MIME-Version; b=SNe2TkcInGwIUJn6ojT6cH7CF+Q+DrdHNVWpqzIZ8kKP08+bRYpwxPBkzUNHCU9RlkjxnXWc8MwEoDov75ApTwEcnKdjyBna9ApjZmXOCdNeTl1Eum0g4IvtSL1l/ofsi3vP5YNsiQlpLqfhg9K6MXFagltt3LTMkttbAYJ6E70=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riseup.net; spf=pass smtp.mailfrom=riseup.net; dkim=pass (1024-bit key) header.d=riseup.net header.i=@riseup.net header.b=RRl8BJi4; arc=none smtp.client-ip=198.252.153.129
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riseup.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riseup.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=riseup.net header.i=@riseup.net header.b="l54nS5wC"
+	dkim=pass (1024-bit key) header.d=riseup.net header.i=@riseup.net header.b="RRl8BJi4"
 Received: from fews01-sea.riseup.net (fews01-sea-pn.riseup.net [10.0.1.109])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx1.riseup.net (Postfix) with ESMTPS id 4gD7wm6V7GzDqRS;
-	Sun, 10 May 2026 16:44:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=riseup.net; s=squak;
-	t=1778431449; bh=9Dfuf2Fb5LqtwjiOhAGj85YmoBeMhXw0q2RtB+ZpCP0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=l54nS5wCwgV5uREiqWzT2M+LghiaxH7VYvxLsvCx+/mrq343BcDUR93VV7umlLIIL
-	 YFsDDKY0XaP5EIEaYfYGHv30dR5CwgMGSp/UlWrVcPI3Uc2L57MNy2fwVi8Vo/UC8o
-	 hwZPbnQAnt+FAB/TfJ3DZLlF/19pZMGhKnLD9o9s=
-X-Riseup-User-ID: BEE4564464BC4EADF34C685272FF5A21964A9420FB28BA70DD76A19C63D9ABD3
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-	 by fews01-sea.riseup.net (Postfix) with ESMTPSA id 4gD7wj11dfz1yDs;
+	by mx1.riseup.net (Postfix) with ESMTPS id 4gD7wh5cplzDqLl;
 	Sun, 10 May 2026 16:44:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=riseup.net; s=squak;
+	t=1778431445; bh=cDBCDSiXpvET2XJyOFjfqyw5G0DnmnMMUfuclS7LHK0=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=RRl8BJi4QTvXaTxsdADxVR4HogdBZYieU5H3FlSHu8cVlfxxLbPh/MYXUZ3gT3RT/
+	 SxKV5ZpbzAuIqJMoF0mqO31BEoj8gg4aTAG2lMFUtBMm66Ze0hpTg9jdPQ1DmAeh8g
+	 NaABhZanX2moCYpWfbiVX6Dbozp/YIicf9pPY11g=
+X-Riseup-User-ID: 998381A68B107694913F38E59B8B9B4AB69066767B0BD33FE9FF442520EA5DCF
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+	 by fews01-sea.riseup.net (Postfix) with ESMTPSA id 4gD7wd0ZGSz1yZk;
+	Sun, 10 May 2026 16:44:00 +0000 (UTC)
 From: =?UTF-8?q?=C3=8D=C3=B1igo=20Huguet?= <ihuguet@riseup.net>
 To: Jakub Kicinski <kuba@kernel.org>,
 	Andrew Lunn <andrew+netdev@lunn.ch>,
@@ -45,9 +45,9 @@ Cc: Sabrina Dubroca <sd@queasysnail.net>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	=?UTF-8?q?=C3=8D=C3=B1igo=20Huguet?= <ihuguet@riseup.net>
-Subject: [PATCH net-next 2/5] netdevsim: allow changing carrier state via sysfs
-Date: Sun, 10 May 2026 18:43:34 +0200
-Message-ID: <20260510164337.7611-3-ihuguet@riseup.net>
+Subject: [PATCH net-next 1/5] netdevsim: Add ethtool get_link support
+Date: Sun, 10 May 2026 18:43:33 +0200
+Message-ID: <20260510164337.7611-2-ihuguet@riseup.net>
 In-Reply-To: <20260510164337.7611-1-ihuguet@riseup.net>
 References: <20260510164337.7611-1-ihuguet@riseup.net>
 Precedence: bulk
@@ -56,70 +56,31 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Currently it is only possible to change it by linking a peer netdevsim
-and setting the peer's state to down.
+From: Filip Pokryvka <fpokryvk@redhat.com>
 
-Allow to change the carrier state when having a single netdevsim device
-without any peer, by writing to it's carrier attribute in sysfs:
-/sys/bus/netdevsim/devices/netdevsimX/net/eniYynpZ/carrier. This might
-be useful for carrier related tests where a peer device is not needed
-for anything else.
+Add ethtool get_link callback to netdevsim. They are devices that have
+the concept of a carrier, so it makes sense that it can be queried via
+ethtool too, like ethernet devices.
 
-If it's linked with a peer, change the carrier of both, while they stay
-administratively up. The alternative would be to return EOPNOTSUPP, but
-that doesn't seem very intuitive. Also, there is no reason why it should
-not be supported, it simulates the cable being cut or disconnected, for
-example.
-
-Signed-off-by: Íñigo Huguet <ihuguet@riseup.net>
+Signed-off-by: Filip Pokryvka <fpokryvk@redhat.com>
 ---
- drivers/net/netdevsim/netdev.c | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+ drivers/net/netdevsim/ethtool.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/netdevsim/netdev.c b/drivers/net/netdevsim/netdev.c
-index a750768912b5..4f77c9171b06 100644
---- a/drivers/net/netdevsim/netdev.c
-+++ b/drivers/net/netdevsim/netdev.c
-@@ -616,6 +616,28 @@ static void nsim_shaper_cap(struct net_shaper_binding *binding,
- 	*flags = ULONG_MAX;
- }
- 
-+static int nsim_change_carrier(struct net_device *dev, bool new_carrier)
-+{
-+	struct netdevsim *ns = netdev_priv(dev);
-+	struct netdevsim *peer;
-+
-+	netdev_assert_locked(dev);
-+
-+	peer = rtnl_dereference(ns->peer);
-+
-+	if (new_carrier) {
-+		netif_carrier_on(dev);
-+		if (peer)
-+			netif_carrier_on(peer->netdev);
-+	} else {
-+		netif_carrier_off(dev);
-+		if (peer)
-+			netif_carrier_off(peer->netdev);
-+	}
-+
-+	return 0;
-+}
-+
- static const struct net_shaper_ops nsim_shaper_ops = {
- 	.set			= nsim_shaper_set,
- 	.delete			= nsim_shaper_del,
-@@ -645,6 +667,7 @@ static const struct net_device_ops nsim_netdev_ops = {
- 	.ndo_stop		= nsim_stop,
- 	.ndo_vlan_rx_add_vid	= nsim_vlan_rx_add_vid,
- 	.ndo_vlan_rx_kill_vid	= nsim_vlan_rx_kill_vid,
-+	.ndo_change_carrier     = nsim_change_carrier,
- 	.net_shaper_ops		= &nsim_shaper_ops,
- };
- 
+diff --git a/drivers/net/netdevsim/ethtool.c b/drivers/net/netdevsim/ethtool.c
+index 36a201533aae..4d47eb989c24 100644
+--- a/drivers/net/netdevsim/ethtool.c
++++ b/drivers/net/netdevsim/ethtool.c
+@@ -209,6 +209,7 @@ static const struct ethtool_ops nsim_ethtool_ops = {
+ 	.supported_coalesce_params	= ETHTOOL_COALESCE_ALL_PARAMS,
+ 	.supported_ring_params		= ETHTOOL_RING_USE_TCP_DATA_SPLIT |
+ 					  ETHTOOL_RING_USE_HDS_THRS,
++	.get_link			= ethtool_op_get_link,
+ 	.get_pause_stats	        = nsim_get_pause_stats,
+ 	.get_pauseparam		        = nsim_get_pauseparam,
+ 	.set_pauseparam		        = nsim_set_pauseparam,
 -- 
 2.53.0
 
