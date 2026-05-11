@@ -1,260 +1,109 @@
-Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C77FC3FF89A
-	for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 15:30:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEACF29B8D0;
+	Mon, 11 May 2026 15:32:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778513457; cv=none; b=br1OfWS3ryDRS9osZCeee6++VIXi8WRLPJjNrurfm9Xb6v44YpXKDw9rVQjcw6MpL69VggCWX3pnOwombWJSGVQUwzeUbnJod9POXAnRSvV7D1BU9V7PlE8mWoN3t0502KURjzBc+AMF0F+j69jKUE7lQ2Tln7vRxnfRXsZ9v5M=
+	t=1778513578; cv=none; b=Iv9zQTD310V5i3NZzQo3xgk0x0gRdn+AYRqY005iBJps3YH78lfThGJV6oj/K7sTmeLGBQmv0g0y1MXAc/tXdFVG/LmJOiywzuSF/Jo7+iL0+lUEz76M11vl32gwmgE9RWagRpbgdJQTkmkhfrazkNKPgQpdUs987opywpqs5Rc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778513457; c=relaxed/simple;
-	bh=sfKJZJ8ctcHAZCmfJQeymzJppmwIwJF9EO7P/NWJ/hQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=h2pH7UtXrSIaycKcB5qTq/5TAl3RNXgnM2m1/SnU41hf1CGdWn1nI/I4ln7L6jdsU3xBkP7aZSvd/WMdQsWROzjoW7Fo8nUEQ+5uZi7tZ0SBlxGPoBZNF8CjdkLBn+ky+ZJLNF8GUuL85GybACROse2PjVd3YjR6kKi20JOm99s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=h09Qrrv7; arc=none smtp.client-ip=91.218.175.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1778513578; c=relaxed/simple;
+	bh=oY/dHyH+Y8UtkwvZvzcd4kYBZgahoB9UOj/6bh+miOI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FSllAH9oJiPa+rNkZk1M9OSkti0/JMv6ubvk6xarxbpK81ziEVtCMumEICKK1c36T3a7sfePPgtkObQwEL8b1YKy0dIXrPAtLJT5p8xHH7g7zqKGaKYcI4zM4J6fCZ86Tj6BGsN6VTWpyQYxsQ3GYXts62DW5eY1fwtu8jY06vU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f163O4vD; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="h09Qrrv7"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1778513452;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=UBCKOVce/S8UBOdaCxeu/letmftudNtjxh9CrdzjR3Q=;
-	b=h09Qrrv7bUJDzQ+xMY8rrtt8Ah40KO5yTlwBMCpvqk6Gf6q0zuKW5alfYL3fE10n6CewcR
-	0tDDXgzEc9qNEayPAG0EA8WptY+FPCE9qhKatLhLR7eO8Y46hHp4oM022nIu8y2el0da1M
-	+ubvN6Ka1fOdtG+H1DZZkrwsqthy824=
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Christian Brauner <brauner@kernel.org>,
-	Seth Forshee <sforshee@kernel.org>,
-	Yuichiro Tsuji <yuichtsu@amazon.com>,
-	Andrey Albershteyn <aalbersh@redhat.com>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	Willem de Bruijn <willemb@google.com>,
-	Jason Xing <kerneljasonxing@gmail.com>,
-	Tao Chen <chen.dylane@linux.dev>,
-	Mykyta Yatsenko <yatsenko@meta.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Anton Protopopov <a.s.protopopov@gmail.com>,
-	Amery Hung <ameryhung@gmail.com>,
-	Rong Tao <rongtao@cestc.cn>,
-	linux-kernel@vger.kernel.org,
-	linux-api@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next v13 8/8] selftests/bpf: Add tests to verify map create failure log
-Date: Mon, 11 May 2026 23:28:17 +0800
-Message-ID: <20260511152817.89191-9-leon.hwang@linux.dev>
-In-Reply-To: <20260511152817.89191-1-leon.hwang@linux.dev>
-References: <20260511152817.89191-1-leon.hwang@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f163O4vD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E3F0C2BCB0;
+	Mon, 11 May 2026 15:32:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778513578;
+	bh=oY/dHyH+Y8UtkwvZvzcd4kYBZgahoB9UOj/6bh+miOI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=f163O4vDyOPdc0JOyCKRpy0lRzjCWKbjjKUkj/3k83d2qiJTRJijGRViJ7jxmVH8u
+	 haHq3+i8v3z88OUkEpqNcCbpuk/F7rvLI1b/b0hQaRVBpnrCpj1jfukHSBkLq9Mghj
+	 oHeswfHFyQKQiuNg1AuajeDj4CgD4Pmvzi1N4pBrq1vH6z0ODsIRieCvN2DJ4VNv51
+	 StU3TkCqXGxEE9TRIX++ykRNNCb+FgPu6X3kw3GgMfNzm45/ZwR8P6Qt+cxH4VCWbu
+	 rtCCwnxtOBWt1NljSVkAWD5rX8qyDZjwwOpEqpKk8v/YcTTaUQmCTRo6sGg1W7fWlM
+	 2aeYKrAoTmVNQ==
+Date: Mon, 11 May 2026 16:32:54 +0100
+From: Lorenzo Stoakes <ljs@kernel.org>
+To: Jann Horn <jannh@google.com>
+Cc: fujunjie <fujunjie1@qq.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] mm/mremap: unmap full fixed target for multi-VMA moves
+Message-ID: <agH1ZSdX_7QF8P_I@lucifer>
+References: <tencent_863C8A01F3C81EBA238F375B16065CBACF08@qq.com>
+ <agHmO4i4YUhs3cSG@lucifer>
+ <CAG48ez1sLtSKVQLHbLO5usBgMgjyOGhbX29pKEfku4Ht05HffA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+In-Reply-To: <CAG48ez1sLtSKVQLHbLO5usBgMgjyOGhbX29pKEfku4Ht05HffA@mail.gmail.com>
 
-Add tests to verify that the kernel reports the expected error messages
-and correct log_true_size when map creation fails.
+On Mon, May 11, 2026 at 05:19:50PM +0200, Jann Horn wrote:
+> On Mon, May 11, 2026 at 5:05 PM Lorenzo Stoakes <ljs@kernel.org> wrote:
+> > On Thu, May 07, 2026 at 06:24:45PM +0000, fujunjie wrote:
+> > > When MREMAP_FIXED moves a range spanning multiple VMAs, remap_move()
+> > > iterates over the source VMAs and skips source holes.  For each source
+> > > VMA segment it narrows vrm->new_len to that segment length before calling
+> > > mremap_to(), so the MREMAP_FIXED destination unmap is also limited to the
+> > > current segment.
+> > >
+> > > If the source range contains holes and the destination range is already
+> > > mapped, the destination subranges corresponding to those source holes can
+> > > therefore survive the move.  That violates MREMAP_FIXED semantics, where
+> > > the destination range is supposed to be unmapped before the move, and it
+> > > also means that preserved source gaps do not necessarily become gaps in
+> > > the destination.  Userspace can then observe mappings at destination
+> > > addresses that should have become holes.
+> >
+> > Hmmm I think it's a bit debateable honestly. The ability to handle there being
+> > gaps is a _new thing_, so there are no semantics to speak of. Prevoiusly
+> > mremap() simply required that you only span across a single VMA.
+>
+> FWIW, I think mremap() on a source region with gaps is such a
+> hazardous operation that nearly no userspace code should be doing it -
+> gaps are areas in which any mmap() call without a fixed address could
+> place unrelated mappings (unless stack VMAs are involved, which would
+> also be a weird scenario), so to use it safely, you have to, among
+> other things, make sure not to use libc malloc() at a time when that
+> could place an allocation in the gap (which means you also can't use
+> printf(), and so on, unless you have swapped out the memory
+> allocator), and make sure that you have no other threads that could be
+> doing that, and so on. There are rare circumstances under which it
+> could be safe, but I think it is almost always better to have a
+> PROT_NONE anonymous VMA or such as a placeholder.
 
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
----
- .../selftests/bpf/prog_tests/map_init.c       | 166 ++++++++++++++++++
- 1 file changed, 166 insertions(+)
+Well, we're holding the mmap write lock so none of that could happen
+_during_ the operation right?
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/map_init.c b/tools/testing/selftests/bpf/prog_tests/map_init.c
-index 14a31109dd0e..5c61c8e37306 100644
---- a/tools/testing/selftests/bpf/prog_tests/map_init.c
-+++ b/tools/testing/selftests/bpf/prog_tests/map_init.c
-@@ -212,3 +212,169 @@ void test_map_init(void)
- 	if (test__start_subtest("pcpu_lru_map_init"))
- 		test_pcpu_lru_map_init();
- }
-+
-+static void test_map_create(enum bpf_map_type map_type, const char *map_name,
-+			    struct bpf_map_create_opts *opts, const char *exp_msg)
-+{
-+	const int key_size = 4, value_size = 4, max_entries = 1;
-+	char log_buf[128];
-+	int fd;
-+	LIBBPF_OPTS(bpf_log_opts, log_opts);
-+
-+	log_buf[0] = '\0';
-+	log_opts.buf = log_buf;
-+	log_opts.size = sizeof(log_buf);
-+	log_opts.level = 1;
-+	opts->log_opts = &log_opts;
-+	fd = bpf_map_create(map_type, map_name, key_size, value_size, max_entries, opts);
-+	if (!ASSERT_LT(fd, 0, "bpf_map_create")) {
-+		close(fd);
-+		return;
-+	}
-+
-+	ASSERT_STREQ(log_buf, exp_msg, "log_buf");
-+	ASSERT_EQ(log_opts.true_size, strlen(exp_msg) + 1, "true_size");
-+}
-+
-+static void test_map_create_array(struct bpf_map_create_opts *opts, const char *exp_msg)
-+{
-+	test_map_create(BPF_MAP_TYPE_ARRAY, "test_map_create", opts, exp_msg);
-+}
-+
-+static void test_invalid_vmlinux_value_type_id_struct_ops(void)
-+{
-+	const char *msg = "btf_vmlinux_value_type_id can only be used with struct_ops maps.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts,
-+		    .btf_vmlinux_value_type_id = 1,
-+	);
-+
-+	test_map_create_array(&opts, msg);
-+}
-+
-+static void test_invalid_vmlinux_value_type_id_kv_type_id(void)
-+{
-+	const char *msg = "btf_vmlinux_value_type_id is mutually exclusive with btf_key_type_id and btf_value_type_id.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts,
-+		    .btf_vmlinux_value_type_id = 1,
-+		    .btf_key_type_id = 1,
-+	);
-+
-+	test_map_create(BPF_MAP_TYPE_STRUCT_OPS, "test_map_create", &opts, msg);
-+}
-+
-+static void test_invalid_value_type_id(void)
-+{
-+	const char *msg = "Invalid btf_value_type_id.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts,
-+		    .btf_key_type_id = 1,
-+	);
-+
-+	test_map_create_array(&opts, msg);
-+}
-+
-+static void test_invalid_map_extra(void)
-+{
-+	const char *msg = "Invalid map_extra.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts,
-+		    .map_extra = 1,
-+	);
-+
-+	test_map_create_array(&opts, msg);
-+}
-+
-+static void test_invalid_numa_node(void)
-+{
-+	const char *msg = "Invalid numa_node.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts,
-+		    .map_flags = BPF_F_NUMA_NODE,
-+		    .numa_node = 0xFF,
-+	);
-+
-+	test_map_create_array(&opts, msg);
-+}
-+
-+static void test_invalid_map_type(void)
-+{
-+	const char *msg = "Invalid map_type.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts);
-+
-+	test_map_create(__MAX_BPF_MAP_TYPE, "test_map_create", &opts, msg);
-+}
-+
-+static void test_invalid_token_fd(void)
-+{
-+	const char *msg = "Invalid map_token_fd.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts,
-+		    .map_flags = BPF_F_TOKEN_FD,
-+		    .token_fd = 0xFF,
-+	);
-+
-+	test_map_create_array(&opts, msg);
-+}
-+
-+static void test_invalid_map_name(void)
-+{
-+	const char *msg = "Invalid map_name.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts);
-+
-+	test_map_create(BPF_MAP_TYPE_ARRAY, "test-!@#", &opts, msg);
-+}
-+
-+static void test_invalid_btf_fd(void)
-+{
-+	const char *msg = "Invalid btf_fd.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts,
-+		    .btf_fd = -1,
-+		    .btf_key_type_id = 1,
-+		    .btf_value_type_id = 1,
-+	);
-+
-+	test_map_create_array(&opts, msg);
-+}
-+
-+static void test_excl_prog_hash_size_1(void)
-+{
-+	const char *msg = "Invalid excl_prog_hash_size.\n";
-+	const char *hash = "DEADCODE";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts,
-+		    .excl_prog_hash = hash,
-+	);
-+
-+	test_map_create_array(&opts, msg);
-+}
-+
-+static void test_excl_prog_hash_size_2(void)
-+{
-+	const char *msg = "Invalid excl_prog_hash_size.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts,
-+		    .excl_prog_hash_size = 1,
-+	);
-+
-+	test_map_create_array(&opts, msg);
-+}
-+
-+void test_map_create_failure(void)
-+{
-+	if (test__start_subtest("invalid_vmlinux_value_type_id_struct_ops"))
-+		test_invalid_vmlinux_value_type_id_struct_ops();
-+	if (test__start_subtest("invalid_vmlinux_value_type_id_kv_type_id"))
-+		test_invalid_vmlinux_value_type_id_kv_type_id();
-+	if (test__start_subtest("invalid_value_type_id"))
-+		test_invalid_value_type_id();
-+	if (test__start_subtest("invalid_map_extra"))
-+		test_invalid_map_extra();
-+	if (test__start_subtest("invalid_numa_node"))
-+		test_invalid_numa_node();
-+	if (test__start_subtest("invalid_map_type"))
-+		test_invalid_map_type();
-+	if (test__start_subtest("invalid_token_fd"))
-+		test_invalid_token_fd();
-+	if (test__start_subtest("invalid_map_name"))
-+		test_invalid_map_name();
-+	if (test__start_subtest("invalid_btf_fd"))
-+		test_invalid_btf_fd();
-+	if (test__start_subtest("invalid_excl_prog_hash_size_1"))
-+		test_excl_prog_hash_size_1();
-+	if (test__start_subtest("invalid_excl_prog_hash_size_2"))
-+		test_excl_prog_hash_size_2();
-+}
--- 
-2.54.0
+You might debate also the fact we hold that for an extended period.
 
+Honestly I probably shouldn't have allowed for this, I've had to do at
+least one fixup relating to it I seem to recall and the semantics are
+_clearly_ confusing.
+
+>
+> I think the right documentation for this is "do not use this on a
+> source region with gaps, it is technically possible but extremely
+> hazardous".
+
+Yeah, I mean on reflection, allowing it was probably a mistake.
+
+The real use case was 'my VMAs are fragmented and I don't want to have to
+know about VMA merge rules in order to move them', i.e. no gaps.
+
+I will do a manpage update and indicate that it probably shouldn't be used
+but if it is, the sematics are such that gaps are not propagated (i.e. it
+is as if you mremap()'d each individually).
+
+Cheers, Lorenzo
