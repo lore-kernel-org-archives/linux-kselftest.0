@@ -1,32 +1,32 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C72543264D9;
-	Mon, 11 May 2026 08:26:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9460630AD1C;
+	Mon, 11 May 2026 08:28:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778487963; cv=none; b=BTO6XWIcxzlJclfYLTdumvTkg4OtL/zhFRY8Y0dJfEkafwlg7X1sTqQGjQtTinsrDjaMzrxslgXrUWfkAKCos74FfOlV7awwi/wkprrOEO3bXBkEEDudOy/tmfZLFP9sRUhzwL15rwyA8ScSag+cFXKJWH7qclmHXsCF/Hc4q30=
+	t=1778488132; cv=none; b=qTg5ysNc7xFOMJnmJPHw7S76iS69YznjDTyHbOtr1U28MgPXuIHjHZFf2sxGJr34hmMub5hRew2qhAQulcZyzd/B9csGqGxqgBkbji7Tn+OvHfvWdVB7LA6I8oL1vhht5HsB4MCWYS61//WVx+EGk93crAkeHWA2xP6+xG4k7KE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778487963; c=relaxed/simple;
-	bh=ZDQHQLuS8vxCZNeF0Ws0yf2AAH+PPN2lndIWRaleKbs=;
+	s=arc-20240116; t=1778488132; c=relaxed/simple;
+	bh=iozcmjeAP6nUALBo5HVeYq0TXjJRgbdJ7Nhs9vISU1s=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Fzfb7EGtD2p0sjLNxdzF0o2BAAmmpuhcD30oOlUJz7Cu7y0ECMadgzTgqXgNqn5FrErHz73j1pzbYKepKlimCs3S6eJGQsXAY0YKtM8k5IMuJCRxXNByYrSJE5WelGi5kDUqX95qtCF0zErqtpiO6S2MxuXN+jR/dzRA42FcWwM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ax0unyIU; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=Gwr+9Jib8I5jqDtQFOmGumJuw1dyp1hiItxpqPhzHQ7EG0hrgqNQ1Hu59Z9vSYNNAaUjCXa/9rp6hYVzlS4rO0jafU58kQhsrh51vEJLaYxW4mjrZlhV3NeKsqeqO4gx724D1Yhz1iuY7pYdLQGkXsW3120I3aJwXo1AcExIZfY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oJhCk7dS; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ax0unyIU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FF52C2BCB0;
-	Mon, 11 May 2026 08:25:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oJhCk7dS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 074DDC2BCF5;
+	Mon, 11 May 2026 08:28:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778487962;
-	bh=ZDQHQLuS8vxCZNeF0Ws0yf2AAH+PPN2lndIWRaleKbs=;
+	s=k20201202; t=1778488130;
+	bh=iozcmjeAP6nUALBo5HVeYq0TXjJRgbdJ7Nhs9vISU1s=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ax0unyIUwrRzYEOomZasRiJU217mNdPoVVP6q2CixVpusu8IPhKniQZT2CEAT/z+M
-	 SWAy+Umhg0c1hWX3gJMlz9454TLUzRX0WiwB8HILKVnZ8EsmBuLf+ViQ7DqniWvBga
-	 65X+KXKS16KECvfckRJ00w3cDpj96sfOEXO4fm63pGnZZi6WdK44Jwz+Ib5et5PxwA
-	 b00scRHQkOKDxPJ8NEKoWXN15+guBJHOxHkD04qgmk6LYZUgRzWcCRUCevdUG0Yc2Q
-	 trw9OIXC3R8sC0Tzp/viOilsoWGB5CjWgr1zseYTuzll14N4EieIaEodivYsjZ7mYS
-	 clipQTrv++wRQ==
-Date: Mon, 11 May 2026 11:25:51 +0300
+	b=oJhCk7dShIW/oMMoKij4Ca32+sU9UI6r15MDLfTGp2dwojSWsZ+M8I2Ytayski5Kf
+	 QRNb+SNdhZzARNckyjO8uRXM7Gyh7q9Vgf5iogek3QhPI3wrD8dqQKQ4lptuO75NPJ
+	 hKlPUgo/k/0NArrTVJtZf5kT13EUBkNFi+7KQCUQ0xZpqWW7KgEeUZ0U8H5vz46+JB
+	 OR5Gev5TZlZzbi2b9F8RE5UUwdEFF2LFqiwgly3v4T6M+MN2Db+ZOJf+W/Wk7C9CL8
+	 7DkBJ2xrrVqgU2SslIQ1IAdxNWKwYjbiHaOx2Kngr9LR3ZiamlGCfCCU2KkJdsGxBb
+	 I2JdEeRTkrJ5Q==
+Date: Mon, 11 May 2026 11:28:39 +0300
 From: Mike Rapoport <rppt@kernel.org>
 To: Sarthak Sharma <sarthak.sharma@arm.com>
 Cc: Andrew Morton <akpm@linux-foundation.org>,
@@ -46,12 +46,12 @@ Cc: Andrew Morton <akpm@linux-foundation.org>,
 	Vlastimil Babka <vbabka@kernel.org>, Zi Yan <ziy@nvidia.com>,
 	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
 	linux-mm@kvack.org
-Subject: Re: [PATCH v3 42/54] selftests/mm: hugetlb-soft-online: add setup of
+Subject: Re: [PATCH v3 49/54] selftests/mm: uffd-unit-tests: add setup of
  HugeTLB pages
-Message-ID: <agGSj9-IJXVNJOI6@kernel.org>
+Message-ID: <agGTN2MVcGsZULz-@kernel.org>
 References: <20260428204240.1924129-1-rppt@kernel.org>
- <20260428204240.1924129-43-rppt@kernel.org>
- <55538154-c46a-4504-a976-ce66e2555534@arm.com>
+ <20260428204240.1924129-50-rppt@kernel.org>
+ <2d31eca4-9ecc-4a7f-9359-2c605858ce11@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -60,37 +60,35 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <55538154-c46a-4504-a976-ce66e2555534@arm.com>
+In-Reply-To: <2d31eca4-9ecc-4a7f-9359-2c605858ce11@arm.com>
 
 Hi Sarthak,
 
-On Tue, May 05, 2026 at 12:45:52PM +0530, Sarthak Sharma wrote:
-> Hi Mike!
-> 
+On Tue, May 05, 2026 at 05:18:38PM +0530, Sarthak Sharma wrote:
 > On 4/29/26 2:12 AM, Mike Rapoport wrote:
-> > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-> > 
-> > hugetlb-soft-online test uses open coded access to /proc to determine
-> > availability of huge pages and fails if there are no enough free huget
-> > pages..
-> > 
-> > Replace open coded access to /proc with hugepage helpers and add setup
-> > of HugeTLB pages to the test and make sure that the original settings
-> > are restored on the test exit.
-> > 
-> > Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> > @@ -1771,7 +1794,7 @@ int main(int argc, char *argv[])
+> >  			uffd_test_case_ops = test->test_case_ops;
+> >  
+> >  			if (mem_type->mem_flag & (MEM_HUGETLB_PRIVATE | MEM_HUGETLB)) {
+> > -				gopts.page_size = default_huge_page_size();
+> > +				gopts.page_size = hugepage_size;
+> >  				if (gopts.page_size == 0) {
+> >  					uffd_test_skip("huge page size is 0, feature missing?");
 > 
-> The test is hugetlb-soft-offline, so let's change the commit title and
-> commit message to say "offine" instead of "online".
+> A small nit, after this patch, uffd_setup_hugetlb() can return 0 in 2 cases:
+> 
+> a) default_huge_page_size() == 0
+> b) hugetlb_free_default_pages() < nr_hugepages
+> 
+> The skip message only covers the first case and would be misleading for
+> the second case. Should we differentiate both these using different skip
+> messages?
 
-Good catch :)
+I'm more inclined to have a single "Not enough huge pages" message to keep
+the things simple.
  
-> I have run the test before and after applying the patch. Before the
-> patch, it failed with an mmap error when hugepages were not
-> preallocated. After applying the patch, the test correctly allocates the
-> required hugepages and the test passes.
+> >  					continue;
 > 
-> Tested-by: Sarthak Sharma <sarthak.sharma@arm.com>
 
 -- 
 Sincerely yours,
