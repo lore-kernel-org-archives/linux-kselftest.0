@@ -1,337 +1,132 @@
-Received: from mail-dl1-f45.google.com (mail-dl1-f45.google.com [74.125.82.45])
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67C75346E51
-	for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 20:21:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 740C8296BDC
+	for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 20:25:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778530892; cv=none; b=miIXXBYeTF022Vz+C6ZwA40JAiVO9zN6CajJXeMxNQ22/OpC7myPYpIjH8fj672DmEhLtMjaRZ7EpD28PA2u0yFm1FQLCrTMfVaoX8raFImzP4p+9ONoNPtPihAlFiUYmjTgGlSLa7lNfHoteh2tKl4/b8odfOjnPCRwXbF927I=
+	t=1778531126; cv=none; b=ZfFU8r5FhWA47gUx9AbYa49l0HJurfukluXI+El2gJZyZ6osjDI+WuaO6P7o7ztZFfZaUXshMpHbsLstJ4D++APa/b5riUWYsEfgR/3Fv9hC447efKxz2+JRQEeLA8jwU03Reg9MohOg7R9WF4QUwchvqnQoG+vuMWIOkrV0oII=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778530892; c=relaxed/simple;
-	bh=rCA9LdOkqF3iTNr8B3UsnH8Z1ETK6NiPONAJ9dtl9DM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mMD5U3Q/bGFNQNAx/LmzpEix9M8geq2cm/4PXgkVEEuEFHVrtTbVLB0uKYPpTKenZQQ+VPRitOQ1HKvxvcO7go/TTJRoG6ddqqo69D2oMKhVx1Dq/NYa7bKsfdFDrVGjoeLJmffZtichLY2S1W8nNf0AjPgW+PCOjQoK/XWZt1I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rM4bn5Px; arc=none smtp.client-ip=74.125.82.45
+	s=arc-20240116; t=1778531126; c=relaxed/simple;
+	bh=521gsLNZI0xfO2hjPJqLM5mszW96I4o8u1KGULWbsik=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=h8gQtz3JY/NON9xpETOhz0ryMdt3AzcAM6zL1adRduCv/hnltE3ZiH8twOmvciSmdctr1alMwA8WUz4IwW7UK8D4JUpnfnu7wYNiKeiqIGBE6FEjzSBifxz7a4GyTXzC1YeYDgC9FNQ3RSewtLBfYFfnRMhtfDIkf3h/zir7TLc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=LF4Pjgxs; arc=none smtp.client-ip=209.85.210.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rM4bn5Px"
-Received: by mail-dl1-f45.google.com with SMTP id a92af1059eb24-132cccd3d77so72c88.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 13:21:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="LF4Pjgxs"
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-83cecc22d5fso2066626b3a.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 13:25:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1778530889; x=1779135689; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JP+cdDjozehYE+Tdzt7VKCFaFUFZARCc2f/zXd4rdVE=;
-        b=rM4bn5PxG50BiXTdCNOohSGWYjNU43tkB8yOeMLReKbJYqjHWhma0gVX8+N9FLUUn6
-         kEarirxwwKwRuQWS4wafLQ2WfufDOOfCn1qF5a1gqysGwkcKmm4VzSli/H+VMsdvubY1
-         4MHff4AktfnW+gAdgVYNfTa2/0iR/CgclYvPFpmNce3k/yycvmdvmppriZwzSK8Xlr1D
-         M0YJqSOfH4Q/Z975A3e+YnZrN+LU87e4kfjnoyLhJV/cczS43/qcz3odeR/e1EqbxQTx
-         515zwqrlT12auk0iNT6Tt3dVEkgZLcRZc29oq1KYu3E/RJYrMZmSCW43jmmIoKIj0pkT
-         T61w==
+        d=google.com; s=20251104; t=1778531125; x=1779135925; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=QLnZXwKW2Zx/GnqxpPz3sv+qj2y6viXFGtk3ScJJhFM=;
+        b=LF4Pjgxssh5+36UflX45Q3uuZUPT3q/pNr5Z4vNRAtN0TxZofNbioD/zNjEUWsmrfA
+         6TBCcxfbEorg+gPe5QOrEQdgYVp0ceyoXJOlBk09ABeege6ufrRjXfUUwJ1NU3bc/EYU
+         9VEUK8k9c31ReN+t6SrcPiHMfXXx93l8nWmMs1hN1Irgpy7PZJYkgnrWVFd2io9MNJNk
+         UQFkLfwzCnPeo5ZgI5QpYIuEG4Vsl6ilarCRzcxTJk6NM2FIDz9H5iBvYBoWA57bhdO/
+         8OxhLmpTK/5sNH/u+3vVPGvlPgAhc91hMzy7vSm37DxgTCKMu2/zDV8G9FKDXFIzlpQC
+         sR8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778530889; x=1779135689;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JP+cdDjozehYE+Tdzt7VKCFaFUFZARCc2f/zXd4rdVE=;
-        b=bRhtd19eOyrfnSln4d5Z90IL/EJlbBTHOBF0z+h62pM8DvdizRP7LsPZqEmc5AFK0a
-         X/PjjbiF0rtsoNpb6T4PKI03DLjeSNUhPybbpPR5ra/AOSoG9OYatIdBL0askzv082Le
-         4sIqrySgOBB0Hvl6Zb1vAlTDASPHWbY1UiSUWllMIZqQnYTcOPxnDr6BYDqi2BzzWrtq
-         sNVqZjQS14ZEZZkImqe4U4NlfEbGT/19wB+COOkcnJrwrEry9UpSL5p5Tq36ZXtHbUjl
-         3yy+86pAHcWOVGMNjvu1LOOcjYtgx7TkPxdM/hHlN8zEgWOLCQblmoO444EEYlwfOf7q
-         mS8g==
-X-Forwarded-Encrypted: i=1; AFNElJ/VTfKiS//ckU9r8dUyVzDvvrfdp5kFFnB+Q7rvFHZxRvlXNb1YdmMf2eOQMsiukQYk0UPJ2LtNf12iJScNhME=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy+u10sciswr3Xox9RZJehZUe5hfcj/88r5ibtpTXp8HcVx3zXh
-	uB2jM/jNXZjEmrW0vPsUnteuIRP3XmzO5OZhpRHWdoNejCcTc1fGAwFrvIdo3yoxIArEXLC/jDT
-	NZ1NAGA==
-X-Gm-Gg: Acq92OE9tNaFSHLxQlRe9G2UWRP/SHT5wzkmx2ouBtzKqGsqb2R/V7ecus7iu9gvoI2
-	anii/jh3WDuItPqe7GKYVa0hWmTWJQbZHyzcyBanDFEsbJD09CDsl8unkKDiJrRqoRMQIU0JSi6
-	bUT63RgTTnfZacvw2460aUqfKypNhSP7NOo/mfIYJG+lHB0rtAnQ0X+3Qj16U//IFc2QxZzeXy3
-	/z8pYcJ6VSs5Pd4LcO7uJiIZxlxUOVXYRPXGKRxanhQtqTJgvWi399HaHerxoc72NsvoiCw1+R0
-	TfOP0Ff0jismsIymVfaL/+4tBcH412WAmsxJ5s/BjaodCz5YFz0h4c00LTVVdlahmzRBFFMd8+S
-	2hufRWlE1qZxhCouRX0hS8tNNq6Uh4vJtI+7MvgwKgnIZGCo0uCn99rx71lLFSI3J3t0lf8wd+8
-	YKpRL2Cp4HXbQRCprOzBeHtNN+8xZqcncqP+VotFCLEYEkckArjx6kgZOwmVhB0prk1oHZ+Q==
-X-Received: by 2002:a05:7022:e0f:b0:12c:8f55:cd0d with SMTP id a92af1059eb24-1333e1ade52mr95673c88.8.1778530888754;
-        Mon, 11 May 2026 13:21:28 -0700 (PDT)
-Received: from google.com (153.46.83.34.bc.googleusercontent.com. [34.83.46.153])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1327865a1a4sm16012499c88.10.2026.05.11.13.21.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 May 2026 13:21:28 -0700 (PDT)
-Date: Mon, 11 May 2026 20:21:22 +0000
-From: Samiullah Khawaja <skhawaja@google.com>
-To: David Matlack <dmatlack@google.com>
-Cc: Aex Williamson <alex@shazbot.org>, Shuah Khan <shuah@kernel.org>, 
-	Alex Mastro <amastro@fb.com>, Raghavendra Rao Ananta <rananta@google.com>, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] vfio: selftests: Add support of creating multiple
- iommus from iommufd
-Message-ID: <agI2EFvBwKUHaHVi@google.com>
-References: <20260505221518.619123-1-skhawaja@google.com>
- <20260505221518.619123-2-skhawaja@google.com>
- <af4or28EA6PGEd12@google.com>
+        d=1e100.net; s=20251104; t=1778531125; x=1779135925;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QLnZXwKW2Zx/GnqxpPz3sv+qj2y6viXFGtk3ScJJhFM=;
+        b=tGLNzE8UzfBGm6KDfNNwuy6i5biSlibW/DaGydh+h7i/lTLGD3+fo4ZL2oQoTanXOE
+         BwIImqIcKKbWIBr4YOShEF4eLIf5zQybuw3ObIBqD1gytxoccuR01ByfNERVMSrNjUhk
+         MWvzjJVxaGB9P+KS7c3jBfaBtM9HBhkykeH1aly7rRzNFevuIAuv67A4sHtZRDwfZ6E8
+         y6yk2jwnp3tV38HjFU9lV0T1BpNvguEOYG9rPuPHu9SbSkektzWy5oDsdFzonsld/tIm
+         gaUv2+Wpx0m5KW3YSgGJTZ6gtJrno1lnkrAoENsSq1g/Tm88poxpRbD5LZ7ktN8S98tF
+         oI2w==
+X-Forwarded-Encrypted: i=1; AFNElJ8zyajIyeGQkS9KZlGJf6Q5A2u10g0B3qqAitPe1ai/q/pmxx2LbsL5+GCViMXALjU8Qt0h+lnRHq3h45DrEoo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyYRBIGAAXUkUip2KRIoIWQToVRY0g04sEcFNjIECpd94vD1ACL
+	Wr1ybttseaH+Won8nx/xDeD002TQZDqlzO/rg2lJKZTNBMOWhVZv8uR+6/b3gqb6aXi9t31ERWw
+	1UhFqzQ==
+X-Received: from pfbg13.prod.google.com ([2002:a05:6a00:ae0d:b0:838:f05:69ac])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:124d:b0:82f:5d4f:7355
+ with SMTP id d2e1a72fcca58-83a5d96c238mr24170546b3a.33.1778531124515; Mon, 11
+ May 2026 13:25:24 -0700 (PDT)
+Date: Mon, 11 May 2026 13:25:23 -0700
+In-Reply-To: <CA+EHjTw1z7ROF7u0fKqxDGao7S1kELxNWtyWhLoPQx5uwVfuWQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <af4or28EA6PGEd12@google.com>
+Mime-Version: 1.0
+References: <20260511113759.610924-1-tabba@google.com> <20260511113759.610924-3-tabba@google.com>
+ <agHugdIrptaXZW-2@google.com> <CA+EHjTw1z7ROF7u0fKqxDGao7S1kELxNWtyWhLoPQx5uwVfuWQ@mail.gmail.com>
+Message-ID: <agI7M7rZ_NZJyjhj@google.com>
+Subject: Re: [PATCH 2/2] KVM: selftests: Fix FD double-close in kvm_vm_release()
+From: Sean Christopherson <seanjc@google.com>
+To: Fuad Tabba <tabba@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, Marc Zyngier <maz@kernel.org>, 
+	Oliver Upton <oupton@kernel.org>, Will Deacon <will@kernel.org>, 
+	Ackerley Tng <ackerleytng@google.com>, David Matlack <dmatlack@google.com>, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-On Fri, May 08, 2026 at 06:17:19PM +0000, David Matlack wrote:
->On 2026-05-05 10:14 PM, Samiullah Khawaja wrote:
->> IOMMUFD allows creating multiple IOAS and HWPTs under one iommufd, Add
->> API to init a struct iommu using an already opened iommufd. The API
->> internally creates a new IOAS and also a new HWPT as an option based on
->> the flags passed to the function.
->>
->> Signed-off-by: Samiullah Khawaja <skhawaja@google.com>
->> ---
->>  .../vfio/lib/include/libvfio/iommu.h          |  5 ++
->>  .../lib/include/libvfio/vfio_pci_device.h     |  2 +
->>  tools/testing/selftests/vfio/lib/iommu.c      | 62 +++++++++++++++++--
->>  .../selftests/vfio/lib/vfio_pci_device.c      | 22 ++++++-
->>  4 files changed, 84 insertions(+), 7 deletions(-)
->>
+On Mon, May 11, 2026, Fuad Tabba wrote:
+> On Mon, 11 May 2026 at 15:58, Sean Christopherson <seanjc@google.com> wrote:
+> >
+> > On Mon, May 11, 2026, Fuad Tabba wrote:
+> > > kvm_vm_release() closes vmp->fd and vmp->kvm_fd unconditionally, and
+> > > kvm_vm_free() calls kvm_vm_release() at teardown.  A test that calls
+> > > kvm_vm_release() and then kvm_vm_free() without a
+> > > vm_recreate_with_one_vcpu() in between double-closes both FDs.
+> >
+> > That's a test bug, no?
+> 
+> Fair point.  Let me describe the actual use case and then I'd like
+> your guidance on which way to fix it.
+> 
+> The pKVM selftests I'm preparing need to verify that protected guest
+> memory is zeroed when the VM is destroyed before the host regains
+> visibility of those pages.  The test pattern is:
+> 
+>   vm_userspace_mem_region_add(vm, ..., GPA_BASE, 1, GPA_PAGES, 0);
+>   /* run protected guest, which writes/shares/unshares its memory */
+>   ...
+>   TEST_ASSERT(get_proc_locked_vm_size() > GPA_SIZE);   /* still pinned */
+> 
+>   kvm_vm_release(vm);                                  /* trigger destroy */
+> 
+>   /* host_mem is still mmap'd in the test process; pKVM should have
+>    * zeroed it before unpinning */
+>   TEST_ASSERT(is_zero(region->host_mem, GPA_PAGES * PAGE_SIZE));
+> 
+>   kvm_vm_free(vm);                                     /* tidy up */
+>   TEST_ASSERT(get_proc_locked_vm_size() == 0);
+> 
+> I used kvm_vm_release() because it's the only public API that closes
+> vm->fd to trigger kernel-side destruction.  But the existing callers
+> follow it with vm_recreate_with_one_vcpu(), so the "release + later
+> kvm_vm_free()" path isn't exercised today.
+> 
+> I see three ways to make this clean:
+>   a) This patch: kvm_vm_release() becomes idempotent for its three
+>      FDs, matching the kvm_stats_release() idiom it already invokes.
+>   b) Leave kvm_vm_release() as-is and add a dedicated helper, e.g.
+>      kvm_vm_destroy_kernel(), that closes vm->fd to trigger kernel
+>      destruction while leaving the kvm_vm struct intact for
+>      post-destruction inspection.  kvm_vm_free() learns to handle the
+>      half-released state.
+>   c) Something else entirely, e.g., the test should manage vm->fd
+>      directly and not rely on library helpers for this pattern.
 
-[snip]
->>  int __iommu_map(struct iommu *iommu, struct dma_region *region);
->> diff --git a/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h b/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h
->> index 2858885a89bb..1143ceb6a9b8 100644
->> --- a/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h
->> +++ b/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h
->> @@ -19,6 +19,7 @@ struct vfio_pci_device {
->>  	const char *bdf;
->>  	int fd;
->>  	int group_fd;
->> +	u32 dev_id;
->
->Please introduce an initialize this field in its own patch and, in the
->commit message, explain why it is being added and  how it will be used.
+    d) Fully kill the VM; validate the semantics with an explict mmap().
 
-Agreed. Will do in next revision.
->
->>
->>  	struct iommu *iommu;
->>
->> @@ -65,6 +66,7 @@ void vfio_pci_config_access(struct vfio_pci_device *device, bool write,
->>  #define vfio_pci_config_writew(_d, _o, _v) vfio_pci_config_write(_d, _o, _v, u16)
->>  #define vfio_pci_config_writel(_d, _o, _v) vfio_pci_config_write(_d, _o, _v, u32)
->>
->> +void vfio_pci_device_attach_iommu(struct vfio_pci_device *device, struct iommu *iommu);
->>  void vfio_pci_irq_enable(struct vfio_pci_device *device, u32 index,
->>  			 u32 vector, int count);
->>  void vfio_pci_irq_disable(struct vfio_pci_device *device, u32 index);
->> diff --git a/tools/testing/selftests/vfio/lib/iommu.c b/tools/testing/selftests/vfio/lib/iommu.c
->> index 035dac069d60..644c049cf9f0 100644
->> --- a/tools/testing/selftests/vfio/lib/iommu.c
->> +++ b/tools/testing/selftests/vfio/lib/iommu.c
->> @@ -408,6 +408,18 @@ struct iommu_iova_range *iommu_iova_ranges(struct iommu *iommu, u32 *nranges)
->>  	return ranges;
->>  }
->>
+The entire point of the test you are writing is to verfiy that a guest_memfd VMA
+doesn't somehow cause KVM to leak state.  So, make that obvious instead of abusing
+APIs that kinda sorta do what you want, but not really.
 
-[snip]
->> +struct iommu *iommufd_iommu_init(int iommufd, u32 dev_id, u32 flags)
->> +{
->> +	struct iommu *iommu;
->> +
->> +	iommu = iommu_alloc("iommufd");
->
->Use MODE_IOMMUFD instead of string literal.
+	mem = kvm_mmap(region->mmap_size, PROT_READ | PROT_WRITE, MAP_SHARED,
+		       region->guest_memfd);
 
-Agreed. Will update this.
->
->> +
->> +	iommu->iommufd = dup(iommufd);
->> +	VFIO_ASSERT_GT(iommu->iommufd, 0);
->> +
->> +	iommu->ioas_id = iommufd_ioas_alloc(iommu->iommufd);
->
->Please avoid duplicating this code. e.g. Something like this:
+	...
 
-Agreed. Will update this.
->
->diff --git a/tools/testing/selftests/vfio/lib/iommu.c b/tools/testing/selftests/vfio/lib/iommu.c
->index 644c049cf9f0..4909cda5c840 100644
->--- a/tools/testing/selftests/vfio/lib/iommu.c
->+++ b/tools/testing/selftests/vfio/lib/iommu.c
->@@ -443,6 +443,19 @@ static struct iommu *iommu_alloc(const char *iommu_mode)
->        return iommu;
-> }
->
->+static void iommufd_init(struct iommu *iommu, int iommufd)
->+{
->+       /*
->+        * Require device->iommufd to be >0 so that a simple non-0 check can be
->+        * used to check if iommufd is enabled. In practice open() will never
->+        * return 0 unless stdin is closed.
->+        */
->+       VFIO_ASSERT_GT(iommufd, 0);
->+
->+       iommu->iommufd = iommufd;
->+       iommu->ioas_id = iommufd_ioas_alloc(iommu->iommufd);
->+}
->+
-> struct iommu *iommu_init(const char *iommu_mode)
-> {
->        const char *container_path;
->@@ -459,15 +472,7 @@ struct iommu *iommu_init(const char *iommu_mode)
->                version = ioctl(iommu->container_fd, VFIO_GET_API_VERSION);
->                VFIO_ASSERT_EQ(version, VFIO_API_VERSION, "Unsupported version: %d\n", version);
->        } else {
->-               /*
->-                * Require device->iommufd to be >0 so that a simple non-0 check can be
->-                * used to check if iommufd is enabled. In practice open() will never
->-                * return 0 unless stdin is closed.
->-                */
->-               iommu->iommufd = open("/dev/iommu", O_RDWR);
->-               VFIO_ASSERT_GT(iommu->iommufd, 0);
->-
->-               iommu->ioas_id = iommufd_ioas_alloc(iommu->iommufd);
->+               iommufd_init(iommu, open("/dev/iommu", O_RDWR));
->        }
->
->        return iommu;
->@@ -478,11 +483,7 @@ struct iommu *iommufd_iommu_init(int iommufd, u32 dev_id, u32 flags)
->        struct iommu *iommu;
->
->        iommu = iommu_alloc("iommufd");
->-
->-       iommu->iommufd = dup(iommufd);
->-       VFIO_ASSERT_GT(iommu->iommufd, 0);
->-
->-       iommu->ioas_id = iommufd_ioas_alloc(iommu->iommufd);
->+       iommufd_init(iommu, dup(iommufd));
->
->        if (flags & IOMMUFD_IOMMU_INIT_CREATE_PT)
->                iommu->hwpt_id = iommufd_hwpt_alloc(iommu, dev_id);
->
->> +
->> +	if (flags & IOMMUFD_IOMMU_INIT_CREATE_PT)
->> +		iommu->hwpt_id = iommufd_hwpt_alloc(iommu, dev_id);
->
->Does this need to be part of iommufd_iommu_init()? Maybe it would be
->better to expose a separate helper to allocate a HWPT for a given struct
->iommu *.
+	kvm_vm_free(vm);
 
-Hmm.. that is interesting.. I think we can have following immediate
-possibilities when creating a struct iommu (there will be more down the
-road, but can be handled in similar way):
-
-- create using struct iommu with a new IOAS.
-- create using struct iommu with existing IOAS but new HWPT.
-- create using struct iommu with new IOAS and new HWPT.
-
-I think I should probably add following flags:
-
-IOMMUFD_IOMMU_INIT_CREATE_IOPT (IO Page Table) or _PT
-IOMMUFD_IOMMU_INIT_CREATE_IOAS (IO address Space) or _AS
-
-At least one of those should be required when creating new struct iommu
-from an existing one. WDYT?
->
->This would enable use of HWPTs in iommus constructed by iommu_init() as
->well, which someone may want to do in the future.
->
->If you go this route, please introduce this in its own commit.
-
-Both flags can be introduced in same commit or should be separate?
->
->> +
->> +	return iommu;
->> +}
->> +
->> +static void iommufd_cleanup(struct iommu *iommu)
->> +{
->> +	struct iommu_destroy args = {
->> +		.size = sizeof(args),
->> +	};
->> +
->> +	if (iommu->hwpt_id) {
->> +		args.id = iommu->hwpt_id;
->> +		ioctl_assert(iommu->iommufd, IOMMU_DESTROY, &args);
->> +	}
->> +
->> +	args.id = iommu->ioas_id;
->> +	ioctl_assert(iommu->iommufd, IOMMU_DESTROY, &args);
->
->
->Please create a helper function to do IOMMU_DESTROY ioctl. Then here you
->can just do:
->
->  if (iommu->hwpt_id)
->          iommufd_iommu_destroy(iommu, iommu->hwpt_id);
->
->  iommfd_iommu_destroy(iommu, iommu->ioas_id);
-
-Looks great. Will do.
->
->> +
->> +	VFIO_ASSERT_EQ(close(iommu->iommufd), 0);
->> +}
->> +
->>  void iommu_cleanup(struct iommu *iommu)
->>  {
->>  	if (iommu->iommufd)
->> -		VFIO_ASSERT_EQ(close(iommu->iommufd), 0);
->> +		iommufd_cleanup(iommu);
->>  	else
->>  		VFIO_ASSERT_EQ(close(iommu->container_fd), 0);
->>
-
-[snip]
->> +void vfio_pci_device_attach_iommu(struct vfio_pci_device *device, struct iommu *iommu)
->> +{
->> +	u32 pt_id = iommu->ioas_id;
->> +
->> +	/* Only iommufd supports changing struct iommu attachments */
->> +	VFIO_ASSERT_TRUE(iommu->iommufd);
->> +
->> +	if (iommu->hwpt_id)
->> +		pt_id = iommu->hwpt_id;
->
->nit: This can be folded into the variable declaration.
->
->  const u32 pt_id = iommu->hwpt_id ?: iommu->ioas_id;
-
-Agreed
->
->> +
->> +	VFIO_ASSERT_NE(pt_id, 0);
->
->Why is this check needed?
-
-I think it is redundant. I will remove it.
->
->> +	vfio_device_attach_iommufd_pt(device->fd, pt_id);
->> +	device->iommu = iommu;
->> +}
->
->Please introduce vfio_pci_device_attach_iommu() in its own patch.
-
-Agreed. Will do.
->
->> +
->>  static void vfio_pci_iommufd_setup(struct vfio_pci_device *device, const char *bdf)
->>  {
->>  	const char *cdev_path = vfio_pci_get_cdev_path(bdf);
->> @@ -350,8 +366,8 @@ static void vfio_pci_iommufd_setup(struct vfio_pci_device *device, const char *b
->>  	VFIO_ASSERT_GE(device->fd, 0);
->>  	free((void *)cdev_path);
->>
->> -	vfio_device_bind_iommufd(device->fd, device->iommu->iommufd);
->> -	vfio_device_attach_iommufd_pt(device->fd, device->iommu->ioas_id);
->> +	device->dev_id = vfio_device_bind_iommufd(device->fd, device->iommu->iommufd);
->> +	vfio_pci_device_attach_iommu(device, device->iommu);
->>  }
->>
->>  struct vfio_pci_device *vfio_pci_device_init(const char *bdf, struct iommu *iommu)
->> --
->> 2.54.0.545.g6539524ca2-goog
->>
-
-Thanks,
-Sami
+	TEST_ASSERT(is_zero(mem, ...));
