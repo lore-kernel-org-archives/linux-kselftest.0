@@ -1,144 +1,137 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11F9D3E558D;
-	Mon, 11 May 2026 12:47:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8FAA3A1CE6
+	for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 13:07:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778503662; cv=none; b=M8h0DK9KOFwT9m75QzPBNkuBDFU2ycSdJtMnhvEHBagjO23PpRs4ChmdG0KQ+gsDgdIyHx1XMxBxtjdleaRUlDV/yjqt5NphLyJ/QuMhxF7vUeAP7WdAG5t8jqxJIUHek6+FgWRcEupQQofBURuBa2vZfq/4UKl1wXjrBwmiQQo=
+	t=1778504876; cv=none; b=PNPmfKbvzz3G5Qy3wgWlXv8MRdgb3cER/kWxzh9t0qMdRcod3cGP/7UwnHCOvonqkQqeJ3T1DjjRoRehDQGu0eyvyS8dBJq1y3h1HrLXl8rAVygliy75okrTxzZKUOYM4Y2Nai4AXaCnRmmUNLQ3h5uPkLfFGoYdmb068WHHgG0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778503662; c=relaxed/simple;
-	bh=qByFLGVe72rTgzx4RNADis8ATo7lw2Q1IJlWwe202SM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Y5CTDb1zGp4CayVJ2cs28MyWpAVVJVSGZ9KNoTdcsspdL/2sO+2Ej0NpxpZnnyCActZ+9ErziVV9kZOBkXncWKXHdnmIxLKnKtV+jY7sc250WqVcAo615SSK/phsFBh73ajXWDSbv1N4rXj2XnhCn4XGmoqSdtVaDd4JEJNJxaA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vMm+tJlf; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778504876; c=relaxed/simple;
+	bh=Ve14qOZB6IijyDTsiUWPeGOsSOLkx/bw4m6bBMVawZI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hn2PWCLUUQKixiOcGdNo+f48yF9ObcfME49HNMM//XTTUwOhnig0GqbfLSQgJLEnwc2woTekPVrtrj5ANDWkiXg3shoOUf6AFOScNCCgYobfJQJjMWFyAicX7EZB5+Q++Z4rQeBQp2sAPVn+g6cNWvm2QA38nWARhTRd7vKp9+E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Sgx4Hd7t; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vMm+tJlf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5ABA0C2BCC9;
-	Mon, 11 May 2026 12:47:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778503661;
-	bh=qByFLGVe72rTgzx4RNADis8ATo7lw2Q1IJlWwe202SM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=vMm+tJlf0KqF5tq3PABUCWaZAb074MhjWjqY+BZbZVFwfwG/ev+CCws2dBMA/GOAe
-	 B9RMCwdrMehqc6WVfjccnog//+xXgEjpz7VJ0q3v50X3bic8VPLCwF3TUMzw1tUr05
-	 7TObAuuiIZR930Xt++jqz66SHq6BrhGMdkrevJjSYTKzdOxyb6zR1njxLLneD616Z5
-	 x73PpLJW/OOsrH22EKVsy+FJjBmUeRW2FkKcf6HJMOFicq0fYc23Aw1M5FiEXusXFs
-	 +0Ulb617Zgt7/XLKTcQj0mKjRLy9yk4ACpIP0cQqf0OCdoDNUUNlVbIGrbNcm371wT
-	 iAFRAaWwR5YLQ==
-Message-ID: <dcc6c2ee-6670-42e8-9cd7-6bc999f1bf7f@kernel.org>
-Date: Mon, 11 May 2026 14:47:38 +0200
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Sgx4Hd7t"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-488d2079582so46298395e9.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 06:07:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1778504873; x=1779109673; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=dy6auEdvCgEB/rpn78rKFNSXFt4boyLgJAQZRyoszRY=;
+        b=Sgx4Hd7t/RaHjeot9to0FZJbg69DzCtbk3E4JQijbOL6WRKzProjRkyTJvxfdyLrA0
+         MNndxcNIIvFHpnVEdiGykqkcLf4TUrFD8D6haDgQVgTvcuJM2EZE6FvVSI/OKrpCFeoP
+         fkvdfGJmgR/xakZVyXfJ9D3ujIqir2k9ATayT2ATTHzm/42Q/glhPo5Yok0k0N3tYz4T
+         jnPnB0Z0Ro1JhL8Ho0lmTpMa6hrpKv1XN0CCIddQv335vKPmDYtx97yMt5PYuniTRns3
+         C//lwPmsm9N5RcBi5PXTso/FhhwcvrJa+eOZAvT6N9TdHl4qEOg+IgNV500RroAz4EIS
+         n1CQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778504873; x=1779109673;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dy6auEdvCgEB/rpn78rKFNSXFt4boyLgJAQZRyoszRY=;
+        b=A+7zvbZLA5r1h6aa1cCqyfVrFR/ru/8dcwThmmqObSLcSq9Amo4HgkiVQ4x6wjytXk
+         /3lVmC6e/h6HJzPtg2YGaKww9qU+HfaLt6Ts7MDnWduJ6Yu7zKt8S3jACXPAb8Dm/qUe
+         DtqlyTHnOaix7arFaWdJJexjOfN8673p0TnKXfVBLVyT1texl1TylF75bGY+sBCMCTws
+         7q7+LzElb9dGJGd384KnumO+XSl5lgClE2xwwFBkDjRvgBoR7NtMoPSErvQFIpYMY3Yn
+         ZWEmgH64xGIAiNaDy6rGPzvXbVskn783bBzjznNgBI4zE3pznMLKayJFwXXxKFQ+vxKb
+         giPA==
+X-Forwarded-Encrypted: i=1; AFNElJ9S+fAGtUSeiL9/z6CUfRXHx26XkP/bnYD4EyDy8AQ4N/qgCzTrrmndaOHsQa0NgFHrizOtj3A8LLhSdIlB8TE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyWbHm56BgwG2z7EE0gUk8Jlgu7j+ssowL34wSAnWtJU3VX69HS
+	woiTSL0Re8Fe9t9bTq8Ni6M7OlZz5y2HQsRCbSyuNdoOlDaFEnJvv2Q6BdDZZ9uxrWgH10m4bQt
+	XH4prc34=
+X-Gm-Gg: Acq92OEK57x0aTUfZzQw5dsEfngiUd1xxQZxelQZqQhEVmBhstSb7R1//BGaHqMLz6m
+	6LpM6NvicTtpsItScE/JSQEv8z52wU4+TEryWCWdkkyEwhA34rbFnNV3etwd5vatL1Dg7/RbYaa
+	kZeK7Ev4XeYokaMvgnTvdGU2SZn21fkolepVZywsubpI47qO8ffQI9CzC1qQvIkXMhnfiUehPQp
+	bb+tKulz++o5ULeMRT77q6Z0v5QJu9T2E3wCpD9HZM0JlX92KQIwIeETmjhmpzy7FhMUHfM6lra
+	bmV9KiOnFCqT1kD/msm/SWNUjX7nxgJd6xV3Rt/QPrlwjfpEkLPMXdeS2WugorI4d46UMtHzTR+
+	hNVxgEB4EPzpukrO9+lrnyQ8z3lYL4BC3jWizHJGL8d0+n3Z9EOfezUPBCorjY2EOSzlMlpc8SR
+	kDKzaQ0GDvUdPlM6UsOleRqsYcPj8p7P31jK9z
+X-Received: by 2002:a05:600c:4512:b0:489:284:44ab with SMTP id 5b1f17b1804b1-48e51e1deedmr377040195e9.12.1778504873215;
+        Mon, 11 May 2026 06:07:53 -0700 (PDT)
+Received: from localhost (109-81-87-110.rct.o2.cz. [109.81.87.110])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48e7040a9a9sm321328475e9.9.2026.05.11.06.07.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 May 2026 06:07:52 -0700 (PDT)
+Date: Mon, 11 May 2026 15:07:51 +0200
+From: Michal Hocko <mhocko@suse.com>
+To: Breno Leitao <leitao@debian.org>
+Cc: Sasha Levin <sashal@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>, corbet@lwn.net,
+	skhan@linuxfoundation.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	gregkh@linuxfoundation.org
+Subject: Re: [PATCH] killswitch: add per-function short-circuit mitigation
+ primitive
+Message-ID: <agHUp8ulaWJ75WU5@tiehlicka>
+References: <20260507070547.2268452-1-sashal@kernel.org>
+ <20260508135630.a380e3c187b59e4c04e6f358@linux-foundation.org>
+ <af5Z2IvtS5pVorSl@laps>
+ <agG_PZ3qcl6TwLnL@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/mm: handle fork() failure in migration tests
-To: Hu Song <husong@kylinos.cn>, akpm@linux-foundation.org, shuah@kernel.org,
- linux-kselftest@vger.kernel.org
-Cc: ljs@kernel.org, liam@infradead.org, vbabka@kernel.org, rppt@kernel.org,
- surenb@google.com, mhocko@suse.com, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org
-References: <20260511093433.2372985-1-husong@kylinos.cn>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <20260511093433.2372985-1-husong@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <agG_PZ3qcl6TwLnL@gmail.com>
 
-On 5/11/26 11:34, Hu Song wrote:
-> From: Song Hu <husong@kylinos.cn>
+On Mon 11-05-26 04:41:38, Breno Leitao wrote:
+> On Fri, May 08, 2026 at 05:47:04PM -0400, Sasha Levin wrote:
+> > On Fri, May 08, 2026 at 01:56:30PM -0700, Andrew Morton wrote:
+> > > On Thu,  7 May 2026 03:05:45 -0400 Sasha Levin <sashal@kernel.org> wrote:
+> > >
+> > > > When a (security) issue goes public, fleets stay exposed until a patched kernel
+> > > > is built, distributed, and rebooted into.
+> > > >
+> > > > For many such issues the simplest mitigation is to stop calling the buggy
+> > > > function. Killswitch provides that. An admin writes:
+> > > >
+> > > >     echo "engage af_alg_sendmsg -1" \
+> > > >         > /sys/kernel/security/killswitch/control
+> > >
+> > > It certainly sounds useful, but what would I know.  How do we hunt down
+> > > suitable operations people (aka "target audience") to find out how
+> > > useful this is to them?
+> >
+> > I'm not entierly sure here... If folks have suggestions on folks to loop in,
+> > that'll be great!
 > 
-> When fork() fails and returns -1, the code falls into the else branch
-> and stores -1 into self->pids[i]. Later, kill(-1, SIGTERM) is called
-> which sends SIGTERM to every process the user has permission to signal,
-> potentially killing the entire user session.
+> I work with these issues at Meta, and this approach would address a real
+> need we have.
 > 
-> Add an explicit check for fork() returning -1 (pid < 0). On failure,
-> clean up any already-forked children before failing the test via
-> ASSERT_GE(pid, 0). This fix is applied to all three fork() call sites
-> in shared_anon, shared_anon_thp, and shared_anon_htlb tests.
+> While livepatch could theoretically solve this problem, it's less suited
+> for rapid mitigation for a couple of reasons:
 > 
-> Signed-off-by: Hu Song <husong@kylinos.cn>
-> ---
->  tools/testing/selftests/mm/migration.c | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
+> 1) Livepatch rollout is inherently slower due to the blast radius if a
+>    bug exists in the livepatch mechanism itself.
 > 
-> diff --git a/tools/testing/selftests/mm/migration.c b/tools/testing/selftests/mm/migration.c
-> index 60e78bbfc0e3..f433e4f195ad 100644
-> --- a/tools/testing/selftests/mm/migration.c
-> +++ b/tools/testing/selftests/mm/migration.c
-> @@ -163,6 +163,11 @@ TEST_F_TIMEOUT(migration, shared_anon, 2*RUNTIME)
->  	memset(ptr, 0xde, TWOMEG);
->  	for (i = 0; i < self->nthreads - 1; i++) {
->  		pid = fork();
-> +		if (pid < 0) {
-> +			while (--i >= 0)
-> +				kill(self->pids[i], SIGTERM);
+> 2) It's common to run hundreds of different kernel versions across a
+>    fleet. Since livepatch is kernel-specific, a single CVE suddenly
+>    requires building and deploying hundreds of individual livepatches—
+>    far less practical than a simple sysfs write.
 
+LP is certainly a more laborous solution. I guess this is quite clear.
+It is also much safer option as it deals with all implementation details
+like consistency. All that is not done for fun. I am really wondering
+how admins are expected to a) know which kernel functions are ok/safe to
+disable and b) when it is safe to do so without introducing unsafe
+kernel state or introduce an outright bug that way.
 
-
-> +			ASSERT_GE(pid, 0);
-> +		}
->  		if (!pid) {
-
-I think "else if" reads nicer here.
-
-But why do we care about cleaning up the other processes? IIUC, we don't do that
-explicitly if e.g.,
-
-	ASSERT_EQ(migrate(ptr, self->n1, self->n2), 0);
-
-fails?
-
-
+Thiking about this I can see how waiting for an official LP can be time
+consuming and sometimes creating those is far from trivial. But would it
+make sense to have automated LP creation tooling available that would
+allow to return early from a function and relly on the existing
+infrastructure to do the right thing?
 -- 
-Cheers,
-
-David
+Michal Hocko
+SUSE Labs
