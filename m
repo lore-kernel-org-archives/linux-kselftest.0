@@ -1,54 +1,54 @@
-Received: from mail-dy1-f202.google.com (mail-dy1-f202.google.com [74.125.82.202])
+Received: from mail-dl1-f73.google.com (mail-dl1-f73.google.com [74.125.82.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E4D843DA59
-	for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 17:35:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB4C945BD5E
+	for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 17:35:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778520908; cv=none; b=ppZyYtdbnUui7unHRekJ/OTLQBaIK1jOVgGOUowlbixDKJeg810nfwt7k1T/dE5I9IJEcISzvukPq6js+N9mi2lrAVDuzNU5ewH1uz4/lJhs16/9AQMTguMmScefgXSP90Cdx4zrtIT2M419orYXz1Y/E4IhdIBOf7VUbZiakBI=
+	t=1778520910; cv=none; b=LAp2agL6LDYVeFS4RJSMz53ssTWx2PaqspH0NPiThLcWs6XMZlwHSsSW2kRg0vkj4y/H2VMrRQTUmkmfniXuwBd2/WqzQQ/1vEdndLeOqVFM3VPkTOgOc81d0icgIM/47DKJTMb1KFdD4o+4renbCV/2924uqfOoaTY+YXQ9tCU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778520908; c=relaxed/simple;
-	bh=MVId46DsyO/71Ut4uRbFT5PuxmvQZIzwL7wQt6UCLH0=;
+	s=arc-20240116; t=1778520910; c=relaxed/simple;
+	bh=MfsmcPJ1mIXzyAIpmm2w07mkj6DwO36NreAgUezazJE=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=bI9IAzyvyaukXAzos8C+Lw8q3I9UYiDsad8EBgbpXK5wDsj65aqTXB1pxBNCg0MFNySutaUS1hJBnrzwWYV6qMEmRYyfgK8pGV8MCFm7D5tqUaXEgFQSUhqozM/75Fc8uT4UvQnzgPKsiX48xUEZS4luYbeva+y1wpIbYwozjcM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--pratmal.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=K4LktsOD; arc=none smtp.client-ip=74.125.82.202
+	 To:Cc:Content-Type; b=g4wIcqJ8AGeTZR8+OevpAWuFmK9QfUehXLDalkEq/mJH2L10GuJLYyUcvqdAXoq/92d2netSzcGcPr9KqOwm5jDtlJaLa/uFFvjfrIofYS26GrVHlaQvU4aTg4M84lpZJ7EAUJyB3vZLAAK1kHZ5vYD4k5pS8IGMfebPk2zJddk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--pratmal.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gZ8dnyoH; arc=none smtp.client-ip=74.125.82.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--pratmal.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="K4LktsOD"
-Received: by mail-dy1-f202.google.com with SMTP id 5a478bee46e88-2ee5b73c5f2so4978456eec.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 10:35:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gZ8dnyoH"
+Received: by mail-dl1-f73.google.com with SMTP id a92af1059eb24-132a8f93432so4544669c88.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 10:35:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1778520906; x=1779125706; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1778520909; x=1779125709; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=iMFaYjsKt3zyNcL9dbclqKxgsJAOumGvBRCpsgs54Z8=;
-        b=K4LktsODLQPwtR8U19fQFTZ4xvJuMOwdm5aagip6grp+frZPYI9O+N3Z37AjIuqueD
-         2fuvwCuST7J8E42pD6ljFdvi+DLsKusjjboUs5q8zxq+8/Mw4JMKMmsh5PEPQAKcgNJH
-         4y/0N48aLycu5YXyphT8ZtExSpU+0IuTtFuRyWWMM7T4CJeOld/YEp3E9sHtU81/pSai
-         dpycZGU7NyG+MaRUUlc9Hb0NQCgQ3MJH3tS0JAwWFehcG0i0iAaVFad1BLtUuY12trkO
-         MyBlgmCl9VTUSiUfKUvovma/+08SxaRK/q5Oby+qlT3FYo/68RdLClvgJtyuiOBruzKq
-         u6SA==
+        bh=oXZTF46pWxFDLw2H92ISedrm06zB7QVPEnfycFkUHV0=;
+        b=gZ8dnyoHH26gjmMlRf8TXVdasv5kAj5JlZn6tpvh+gO/iYEYcu/sZrEnKUMnWKwkRT
+         oBUGyOKlOJ+ViiBT/7JrWSWEG6vNl5OLquN/T2BLd+Ij0A5Zu0DDnSbdx9DamAqCeL3H
+         CzwVxpGkXe0KF4fwdVb5w9T87hukd7yfVgBU73103GTEj0ub8N0OrrqwJ7wKgzWKciH0
+         UyPy2zfD66MFSCAGbHUT22bWBR++r9HPjqGiyUYkwcLk0sL69wzA6jvAfPyEIC7rnsQy
+         eH7qctSAAXYT/CJ4aA2/TIJoqh7Akw3ILxvzX03seN5E+c4oyXOW9an0n///nj9Y/BJ1
+         O+4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778520906; x=1779125706;
+        d=1e100.net; s=20251104; t=1778520909; x=1779125709;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iMFaYjsKt3zyNcL9dbclqKxgsJAOumGvBRCpsgs54Z8=;
-        b=q8H8bQrtjIr+7v+5UtQk96dsxomemYC61hV1jaT9jLv0TiuBs2hDmYqiDpW/XRyjx5
-         k6K5Tii6ElUFe4OuiIxupccAmtpCVOxB0AzUQ/jR9l5H87E/LqXcou8EAYC6zC08/HIP
-         Q0NKKiXpWRKmMg/LgGJohcBkpYGdbGHXvWuXdgaYhd3vJnqD41Ys0VMi0xBhfbjlIpvk
-         Aj/NFpWeT9PeV404BnSNefXxj74EG30oFhtkbixjKT0FqjS5ylX2AZlEUqR1fWC55f9m
-         hLfIbGMcASEBjleYJ7aL1oW4GV1RoByoJN23sL2QWsIV4JLEFLRq6gJaxRe62N5jHepl
-         RzRQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9cHMePIRYx9EcdeucQxogKzf0akTdNsijZkkuexVx6617C21ybKfK2KUGUMuB+2swKR1cCc83IGgg3p8KpCsQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwiGWbyGgfz+uH3/kFFPecym2P09Sg1Rsi2k3t6e0xWTWPMfkh5
-	igMFMr998f1wmZeWjxxUqzrIjWKDdcjzlEP279Cd/hKqMhqE4EkhxkLi2FHv5y+Uw1m46ajeBYm
-	R4kHMTZvUuQ==
-X-Received: from dybvv23.prod.google.com ([2002:a05:7300:f897:b0:2fc:f65c:1e7f])
- (user=pratmal job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7300:d704:b0:2c1:7b61:8731
- with SMTP id 5a478bee46e88-2f5490931d5mr13087576eec.10.1778520905905; Mon, 11
- May 2026 10:35:05 -0700 (PDT)
-Date: Mon, 11 May 2026 17:34:10 +0000
+        bh=oXZTF46pWxFDLw2H92ISedrm06zB7QVPEnfycFkUHV0=;
+        b=HPE4t/cjQhiArO9qurre4pbqrSALa6MOR3q2I48zPkxEr67iy3R7YP7GYvzlBVXPUb
+         diuy1Igd0TBj0umFkUCbzmDkmyQMNyFHNXeGT33PDTTkUyKyuuHSCOi3SCgGhPhE04Dm
+         lAf0eY4emZo3qJZzrtuSjOjgF5GwGEgGnitnXIvlJFNbFZcwcfhDpLO7+BYiKwo4y9UY
+         Y9rIk0bFm9Dqzp4jhhPbch+/D5JPnSOd/4lywoR9+usRzzaBtS3g/A7jA16TRg0ny6Di
+         4ogpF6T2OVX0lNuSmMl3roGPfhQ1NWjoVzR145ZILGixNsl6QiBbPFBAZKJKGoytv2Ga
+         CnOw==
+X-Forwarded-Encrypted: i=1; AFNElJ+Dp5TV0I6znLz1j9sB2zTvkqb24bDqtzJpeEFfckMk1f4Kb09MKEBoUk+5jKzmX90n2bV/H9Nhkn3547HzohA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxHnUASpxZTSkvnNQbbpnnImV6aXj1MYp2lQNyUQQp8SQN8Zz9C
+	KgEEtHTY+T26uY4WpdQnFLMZfg0kCAsNix0FYOfNGc2wlK+BYbKn5vw17t2UoBghGzT3xocYuG4
+	dc7UA4foMOQ==
+X-Received: from dlbtx10.prod.google.com ([2002:a05:7022:fc0a:b0:132:8d92:4d73])
+ (user=pratmal job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:ec4:b0:12a:6902:ddb8
+ with SMTP id a92af1059eb24-131965af2c5mr11922224c88.4.1778520908571; Mon, 11
+ May 2026 10:35:08 -0700 (PDT)
+Date: Mon, 11 May 2026 17:34:11 +0000
 In-Reply-To: <20260511173411.267628-1-pratmal@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -58,8 +58,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260511173411.267628-1-pratmal@google.com>
 X-Mailer: git-send-email 2.54.0.563.g4f69b47b94-goog
-Message-ID: <20260511173411.267628-2-pratmal@google.com>
-Subject: [PATCH v3 1/2] selftests/mm: use pattern matching in .gitignore
+Message-ID: <20260511173411.267628-3-pratmal@google.com>
+Subject: [PATCH v3 2/2] selftests/mm: rename local_config.h to local_config.h_gen
 From: pratmal@google.com
 To: akpm@linux-foundation.org, shuah@kernel.org
 Cc: yosry@kernel.org, david@kernel.org, ljs@kernel.org, 
@@ -71,102 +71,89 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: Pratyush Mallick <pratmal@google.com>
 
-The current .gitignore hardcodes each generated test binary by name,
-requiring updates every time a new test is added.
+Because local_config.h is a generated build artifact, un-ignoring all
+.h files causes it to incorrectly show up as an untracked file in git
+status.
 
-Switch to the patten-matching approach similar to KVM:selftests.
-Ignore everything by default and then allow source extensions (.c, .h, .sh)
-and tracked non-source files.
-
-Note that un-ignoring *.h files causes the generated local_config.h
-build artifact to incorrectly become untracked. A subsequent patch
-will rename this header to resolve the issue.
+Rename it to local_config.h_gen so it no longer matches the !*.h
+inclusion rule.
 
 Reviewed-by: Lorenzo Stoakes <ljs@kernel.org>
 Acked-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-Suggested-by: Yosry Ahmed <yosry@kernel.org>
+Suggested-by: David Hildenbrand <david@kernel.org>
 Signed-off-by: Pratyush Mallick <pratmal@google.com>
 ---
- tools/testing/selftests/mm/.gitignore | 71 ++++-----------------------
- 1 file changed, 9 insertions(+), 62 deletions(-)
+ tools/testing/selftests/mm/Makefile        | 6 +++---
+ tools/testing/selftests/mm/check_config.sh | 2 +-
+ tools/testing/selftests/mm/cow.c           | 2 +-
+ tools/testing/selftests/mm/gup_longterm.c  | 2 +-
+ 4 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/.gitignore b/tools/testing/selftests/mm/.gitignore
-index 83ad9454dd9d..fcd892ed21e3 100644
---- a/tools/testing/selftests/mm/.gitignore
-+++ b/tools/testing/selftests/mm/.gitignore
-@@ -1,63 +1,10 @@
- # SPDX-License-Identifier: GPL-2.0-only
--cow
--hugepage-mmap
--hugepage-mremap
--hugepage-shm
--hugepage-vmemmap
--hugetlb-madvise
--hugetlb-read-hwpoison
--hugetlb-soft-offline
--khugepaged
--map_hugetlb
--map_populate
--thuge-gen
--compaction_test
--memory-failure
--migration
--mlock2-tests
--mrelease_test
--mremap_dontunmap
--mremap_test
--on-fault-limit
--transhuge-stress
--pagemap_ioctl
--pfnmap
--process_madv
--*.tmp*
--protection_keys
--protection_keys_32
--protection_keys_64
--madv_populate
--uffd-stress
--uffd-unit-tests
--uffd-wp-mremap
--mlock-intersect-test
--mlock-random-test
--virtual_address_range
--gup_test
--va_128TBswitch
--map_fixed_noreplace
--write_to_hugetlbfs
--hmm-tests
--memfd_secret
--soft-dirty
--split_huge_page_test
--ksm_tests
--local_config.h
--local_config.mk
--ksm_functional_tests
--mdwe_test
--gup_longterm
--mkdirty
--va_high_addr_switch
--hugetlb_fault_after_madv
--hugetlb_madv_vs_map
--mseal_test
--droppable
--hugetlb_dio
--pkey_sighandler_tests_32
--pkey_sighandler_tests_64
--guard-regions
--merge
--prctl_thp_disable
--rmap
-+*
-+!/**/
-+!*.c
-+!*.h
-+!*.sh
-+!.gitignore
-+!Makefile
-+!config
-+!settings
+diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+index 7a5de4e9bf52..32f4b016b74f 100644
+--- a/tools/testing/selftests/mm/Makefile
++++ b/tools/testing/selftests/mm/Makefile
+@@ -5,7 +5,7 @@
+ # script so kunit knows to run it, and add it to the list below.
+ # If you do not YOUR TESTS WILL NOT RUN IN THE CI.
+ 
+-LOCAL_HDRS += $(selfdir)/mm/local_config.h $(top_srcdir)/mm/gup_test.h
++LOCAL_HDRS += $(selfdir)/mm/local_config.h_gen $(top_srcdir)/mm/gup_test.h
+ LOCAL_HDRS += $(selfdir)/mm/mseal_helpers.h
+ 
+ include local_config.mk
+@@ -259,10 +259,10 @@ $(OUTPUT)/migration: LDLIBS += -lnuma
+ 
+ $(OUTPUT)/rmap: LDLIBS += -lnuma
+ 
+-local_config.mk local_config.h: check_config.sh
++local_config.mk local_config.h_gen: check_config.sh
+ 	CC="$(CC)" CFLAGS="$(CFLAGS)" ./check_config.sh
+ 
+-EXTRA_CLEAN += local_config.mk local_config.h
++EXTRA_CLEAN += local_config.mk local_config.h_gen
+ 
+ ifeq ($(IOURING_EXTRA_LIBS),)
+ all: warn_missing_liburing
+diff --git a/tools/testing/selftests/mm/check_config.sh b/tools/testing/selftests/mm/check_config.sh
+index b84c82bbf875..b46bf2d2e7f8 100755
+--- a/tools/testing/selftests/mm/check_config.sh
++++ b/tools/testing/selftests/mm/check_config.sh
+@@ -4,7 +4,7 @@
+ # Probe for libraries and create header files to record the results. Both C
+ # header files and Makefile include fragments are created.
+ 
+-OUTPUT_H_FILE=local_config.h
++OUTPUT_H_FILE=local_config.h_gen
+ OUTPUT_MKFILE=local_config.mk
+ 
+ tmpname=$(mktemp)
+diff --git a/tools/testing/selftests/mm/cow.c b/tools/testing/selftests/mm/cow.c
+index d9c69c04b67d..87710c5a2d3c 100644
+--- a/tools/testing/selftests/mm/cow.c
++++ b/tools/testing/selftests/mm/cow.c
+@@ -21,7 +21,7 @@
+ #include <sys/wait.h>
+ #include <linux/memfd.h>
+ 
+-#include "local_config.h"
++#include "local_config.h_gen"
+ #ifdef LOCAL_CONFIG_HAVE_LIBURING
+ #include <liburing.h>
+ #endif /* LOCAL_CONFIG_HAVE_LIBURING */
+diff --git a/tools/testing/selftests/mm/gup_longterm.c b/tools/testing/selftests/mm/gup_longterm.c
+index f61150d28eb2..00ea0dd2f655 100644
+--- a/tools/testing/selftests/mm/gup_longterm.c
++++ b/tools/testing/selftests/mm/gup_longterm.c
+@@ -21,7 +21,7 @@
+ #include <linux/magic.h>
+ #include <linux/memfd.h>
+ 
+-#include "local_config.h"
++#include "local_config.h_gen"
+ #ifdef LOCAL_CONFIG_HAVE_LIBURING
+ #include <liburing.h>
+ #endif /* LOCAL_CONFIG_HAVE_LIBURING */
 -- 
 2.54.0.563.g4f69b47b94-goog
 
