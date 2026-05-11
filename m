@@ -1,220 +1,119 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 013E03FE35E
-	for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 14:49:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C6913FF889
+	for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 14:51:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778510982; cv=none; b=tBP0OuuNuTFnkFQc4vzDwNAuiMF97b60s+3YJSV/RXavigPgrRcRuWxLvW6ygfks9L0+fIdiMFfBinYvma+X9qCDHDuwxCZtyH+c5O+TJvMf2jebV33xDXApbxVrdj0v5ySjl5dMytxSm2gDonijwFRMfmK8XvhnD93gLsRBbQ8=
+	t=1778511064; cv=none; b=mfBIqLlBJnTlw5wsMcR/5ThknT/rqqL91EHmsfsa8pcCFwdizsQecEAgrgKK7EqBusYVPWhRdH3gwr1rI7u8TLCSkDtMFqa6JhX1WPQkWdBnlVALnXEvchKPS9jt7qIsowVOg6bnEy7uDDxJuOePa/4oigPnj6uPAgKEpj+26hI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778510982; c=relaxed/simple;
-	bh=gMZcBmHoLH5063KYF9NKsy9Tpdrk0FyoPinO83KeiGA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KSpWYlU7rrbForO00axZ8Z1aEA6Lh/fAadBTP7I9VGSOuVjx0//FZgnHvUUFu3YyAZQ0IgUfI7rgh7XnJ33B1JiZzZMsqUsqFjCGbJSWZxR4JD2M1wuviJiMXWMy8NOPAn3CRvkmi4C8I5reXqi4lJvC3ruNLmyDyyXapjPs3JM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ViGST4HI; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1778511064; c=relaxed/simple;
+	bh=3b5Gy4LOWv3PDMN5ZONadC6shz2zFT3ZNBZe+VDO9iY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VMXneUEr32if7MK8tEUgwXOiTZJqakotq6gSv6PgO61MvxTbegWpjmUf+UPLtR4ggQiluT5X4VR3xElwOhBh/m6Uhc//SPphTqCx25UmYHcrJr5wvli6aEjkVfFQqAZRxT8NOgQncKBiHfU0lSyoQ6M78YH2E2yNny9Dsa5Cs+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fYU67d9c; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ViGST4HI"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4891d7164ddso25434215e9.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 07:49:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1778510979; x=1779115779; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6uflrulgEFIn9x44XDb2ne6l2kjOQ5bKLrwMyk01QUg=;
-        b=ViGST4HIk3bqHQpVU1NidNJgHUA7QR/K7zLAxKPbGDovJXBv6frHXSZSafPu3XfoN5
-         eVcUWw+NOOzJJ0TWepVR+XhsG+hVDlgynlhz1GDLKwwJVITQjkjQpmt698kFrNTh0Rom
-         p5PumOiWWzMLdPFsgmsDagw2TMsDOxghxUrJ70SCfd76lQ1n0O+GS7HdWrpM9WcBocuH
-         SSqYSsK8SEcox/L/J2IrFTW77UoPSH51yr7wUagNTM/jaBue0c5KuuhhKsjeZty18ahW
-         2fBYVX8iyj5cwLCnDvSocnjAZpZ/s40w+G7KYWQDQGDZ4gNHTR1XxTMTq58VIkLIEpwK
-         9hPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778510979; x=1779115779;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6uflrulgEFIn9x44XDb2ne6l2kjOQ5bKLrwMyk01QUg=;
-        b=rJvYfrX2+61OG5SJyfrJkBXRtmcyYjLEo0wu7cDtmOT5WLYUYzchY4WOfdHEyY2KpT
-         OufmDvYOq2it16y1ZM7PnOtpdo5RJyBhqccUOvIgUJEKCds+GrKgSghpjdkU7Y0xZoD5
-         M4S94Y2AOTpGZ/FT1fOz9LUPqVUf4z7D739zPeCiy7+A27xnn02eQMHY9YoBIu8H8DMy
-         K3MzZapQdpdIbZz9JlqR8x7GHIvQbX870++Agbm3RDBM610ItJfiuKAlvRGi+HqMZSpP
-         sGQsZx92krH5lXO6x7Po0vm0G1rFYv/aZjEY0B8sC3t4/GRBVDIzlDjBVQb/omkPGCSd
-         UIRw==
-X-Forwarded-Encrypted: i=1; AFNElJ8uvubRJc64s52qVUwoo1BTAFDxmP7wjxvDI5ACNx7GUWR+bsSknQiABjyXt6HqvMXsevHThkpgFaOwe1CeIKY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyaj7yEFlV8EHn43PFznhzmzyB0xgn7GDijlAXCrLIfH0i1CFPX
-	kk5mmQRyNSKGfwGsROCqCdvbGajW0htw2JOh8K/+wuiHyKWk5Ho9EbUBJlWe4/bNVMM=
-X-Gm-Gg: Acq92OEKkMM7vIiIkl+ovTEQBhISqIOPCN9xwtFzt6a+ZtYaG+v8V+hDES2PKXp18KU
-	oRxN6Mqp/fql5LmZOxvZyObZSrNi+cI+d4K/a/wkZh8W5tg/8WiPe+GIBPpN2TEPat31eMW53ez
-	HJfIRWrs94Cs/cpwnmhAW4VVW15yYwWCyfaX+8TvFppjDE3dSZqAZRo9F0sX+OedZIqYnF8h4QY
-	syrpQQg0qWJz9avB6S9IKF1t5b7E+7PHdjEUsXruVQkQ1fFb50XbGfpCD/OLdstUfkOVT1ryYRm
-	Ws6PeuGyOyMKt8gh2MH5OCPqmA56ZvlmniWMvZEOX71mlxRCtjOJD0goLbHfAsrG6a7k1siVEzc
-	xtl1ded9KBzXgZ/eH3U20vt0Q/mvd4IlWLaeoUwxl4EpFVaJEFUs2XdfmFSUAIhFUO+lkgixyKi
-	X1Ie4EiYrdjm4egiA7mMzQ6yTZUv4O6THn7I4/aOyCPKcKqaFNQg==
-X-Received: by 2002:a05:600c:33a9:b0:487:2439:b7c8 with SMTP id 5b1f17b1804b1-48e51e0bb9amr250632005e9.1.1778510979404;
-        Mon, 11 May 2026 07:49:39 -0700 (PDT)
-Received: from [192.168.1.3] ([185.48.77.170])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48e702e5516sm293146665e9.7.2026.05.11.07.49.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 May 2026 07:49:38 -0700 (PDT)
-Message-ID: <ad02327b-01b6-4ed9-b9bb-e2c6ed4b2890@linaro.org>
-Date: Mon, 11 May 2026 15:49:37 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fYU67d9c"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37D54C2BCF7
+	for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 14:51:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778511064;
+	bh=3b5Gy4LOWv3PDMN5ZONadC6shz2zFT3ZNBZe+VDO9iY=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=fYU67d9clwaTqnSxMk9ZbjtQoVcpGY/lS3dx4a5LeB63lPz/oK5uFhArwm4YLgZBQ
+	 5lMO3HAQWc8ZhhgZjkkM75C7FcEt7s1UT+1kTVptqVCva6UM38ig9raEX7BGK5GXDV
+	 2+/rD+HP1Wi881e1cWf3muPq7mJCVSpIjcv78bXOb6iiGXY44QvUJtSAqqzc2PakAs
+	 5qf4qIODjlz2lNxEoAEhJChmY87AUbxCNBRISoKLIqD9frRMsMNH4XW10qMwjnUQ+o
+	 syqpOaotvo+9XW+D1/Ghjd5HkHLSX+Ae23nybB7IG6+zpwe7Zv/8jL7/c+GZj2J5/6
+	 1TgQjNNwbtFlQ==
+Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-3939d2bd739so38807531fa.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 07:51:04 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AFNElJ8MMY/BZP6XLaL4dc5R3Gp/w/rOGAxsh+5B57QljI0IfEMYHorqGEFMivdCdHsSVh3zyiMls/5vfsb9u9ckhBk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzdZqp89fP9RGGG/aaIil0lAZaRfRiS2jLDUF1+2IAZEidYy50s
+	sNSH1vmYbjv4f6TjqjjKcxHjN+Gbeo5xWoHb7xmxNrRBFzIyIxWhs2IojRZ+zEtuAfCoO4O1VpE
+	PY0JUXjnKiebEygof8CgX5+3DN5KLcJBflmLU/C5aTQ==
+X-Received: by 2002:a05:651c:982:b0:38a:4401:d2ac with SMTP id
+ 38308e7fff4ca-393c41c97d2mr82572171fa.17.1778511062837; Mon, 11 May 2026
+ 07:51:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 10/20] KVM: arm64: Context swap Partitioned PMU guest
- registers
-To: Colton Lewis <coltonlewis@google.com>
-Cc: Alexandru Elisei <alexandru.elisei@arm.com>,
- Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
- Russell King <linux@armlinux.org.uk>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>,
- Mingwei Zhang <mizhang@google.com>, Joey Gouly <joey.gouly@arm.com>,
- Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu
- <yuzenghui@huawei.com>, Mark Rutland <mark.rutland@arm.com>,
- Shuah Khan <shuah@kernel.org>,
- Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
- linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kvm@vger.kernel.org
-References: <20260504211813.1804997-1-coltonlewis@google.com>
- <20260504211813.1804997-11-coltonlewis@google.com>
-Content-Language: en-US
-From: James Clark <james.clark@linaro.org>
-In-Reply-To: <20260504211813.1804997-11-coltonlewis@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20260430-swnode-remove-on-dev-unreg-v4-0-01574da0aed3@oss.qualcomm.com>
+ <20260430-swnode-remove-on-dev-unreg-v4-1-01574da0aed3@oss.qualcomm.com>
+ <afNEwrHLNTA4ywrN@ashevche-desk.local> <CAMRc=McH0zKz87z0TwPFrzZHMW6psytMaLZybM3pUk6OvUfo9Q@mail.gmail.com>
+ <CAMRc=Mc_huU0HxHpD+RMNWeX2Sg84-LEg8y96BcF_qdtPr31eA@mail.gmail.com>
+ <DIFWH6TWTOOT.37CW17JHKWBQR@kernel.org> <CAMRc=MeiL+MeFsiPrWja2qJx=zU3RXKLL7CDccX1epXWgNtvdA@mail.gmail.com>
+ <DIFX59JPJI9U.1Y41563GD6YJL@kernel.org>
+In-Reply-To: <DIFX59JPJI9U.1Y41563GD6YJL@kernel.org>
+From: Bartosz Golaszewski <brgl@kernel.org>
+Date: Mon, 11 May 2026 16:50:50 +0200
+X-Gmail-Original-Message-ID: <CAMRc=MfBnbSUxwjVjf81K-W8uQ8ecXmK=8=FkRqVvK+6AipQuw@mail.gmail.com>
+X-Gm-Features: AVHnY4JWbeYWH-pjUxRjbO7pS6F8QxJJ_85GfwjN4Tyy1zumbbQq0kZQFKAa_mE
+Message-ID: <CAMRc=MfBnbSUxwjVjf81K-W8uQ8ecXmK=8=FkRqVvK+6AipQuw@mail.gmail.com>
+Subject: Re: [PATCH v4 1/3] driver core: platform: remove software node on release()
+To: Danilo Krummrich <dakr@kernel.org>
+Cc: Andy Shevchenko <andriy.shevchenko@intel.com>, 
+	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Brendan Higgins <brendan.higgins@linux.dev>, 
+	David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>, 
+	Andy Shevchenko <andy@kernel.org>, driver-core@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Mon, May 11, 2026 at 4:31=E2=80=AFPM Danilo Krummrich <dakr@kernel.org> =
+wrote:
+>
+> On Mon May 11, 2026 at 4:17 PM CEST, Bartosz Golaszewski wrote:
+> > On Mon, 11 May 2026 16:00:23 +0200, Danilo Krummrich <dakr@kernel.org> =
+said:
+> >> On Mon May 11, 2026 at 9:33 AM CEST, Bartosz Golaszewski wrote:
+> >>> Danilo: if there are no further comments, can you pick it up for v7.1=
+?
+> >>
+> >> It seems that sashiko has a valid concern in [1]; can you confirm?
+> >>
+> >> [1] https://sashiko.dev/#/patchset/20260430-swnode-remove-on-dev-unreg=
+-v4-0-01574da0aed3%40oss.qualcomm.com
+> >>
+> >
+> > Yes, I explained it here[1]. Basically it's similar to how we need to c=
+all
+> > platform_device_add_data() for devices created with platform_device_all=
+oc().
+> >
+> > We can consider adding platform_device_add_software_node() once there's
+> > a potential user but for now I'd just leave it like this.
+>
+> But there are users that already need this, no? There is Xe [1] and Surfa=
+ce GPE
+> [2], or am I missing something?
+>
+> [1] https://elixir.bootlin.com/linux/v7.1-rc2/source/drivers/gpu/drm/xe/x=
+e_i2c.c#L99
+> [2] https://elixir.bootlin.com/linux/v7.1-rc2/source/drivers/platform/sur=
+face/surface_gpe.c#L308
 
+Right, I was not aware of these. That could indeed cause a regression.
+I'd like to fix the problem in v7.1 but also keep it minimal so adding
+platform_device_add_software_node() and updating drivers to using it
+may be the next step but for now: how about adding
+platform_device_release_full() which would call
+device_remove_software_node() and then the existing
+platform_device_release()? We'd replace the .release callback of
+struct device in platform_device_register_full() but if the user just
+uses platform_device_alloc(), they would keep the regular .release()
+that doesn't remove the software node?
 
-On 04/05/2026 10:18 pm, Colton Lewis wrote:
-> Save and restore newly untrapped registers that can be directly
-> accessed by the guest when the PMU is partitioned.
-> 
-> * PMEVCNTRn_EL0
-> * PMCCNTR_EL0
-> * PMSELR_EL0
-> * PMCR_EL0
-> * PMCNTEN_EL0
-> * PMINTEN_EL1
-> 
-> If we know we are not partitioned (that is, using the emulated vPMU),
-> then return immediately. A later patch will make this lazy so the
-> context swaps don't happen unless the guest has accessed the PMU.
-> 
-> PMEVTYPER is handled in a following patch since we must apply the KVM
-> event filter before writing values to hardware.
-> 
-> PMOVS guest counters are cleared to avoid the possibility of
-> generating spurious interrupts when PMINTEN is written. This is fine
-> because the virtual register for PMOVS is always the canonical value.
-> 
-> Signed-off-by: Colton Lewis <coltonlewis@google.com>
-> ---
->   arch/arm/include/asm/arm_pmuv3.h |   4 +
->   arch/arm64/kvm/arm.c             |   2 +
->   arch/arm64/kvm/pmu-direct.c      | 169 +++++++++++++++++++++++++++++++
->   include/kvm/arm_pmu.h            |  16 +++
->   4 files changed, 191 insertions(+)
-> 
-> diff --git a/arch/arm/include/asm/arm_pmuv3.h b/arch/arm/include/asm/arm_pmuv3.h
-> index 42d62aa48d0a6..eebc89bdab7a1 100644
-> --- a/arch/arm/include/asm/arm_pmuv3.h
-> +++ b/arch/arm/include/asm/arm_pmuv3.h
-> @@ -235,6 +235,10 @@ static inline bool kvm_pmu_is_partitioned(struct arm_pmu *pmu)
->   {
->   	return false;
->   }
-> +static inline u64 kvm_pmu_host_counter_mask(struct arm_pmu *pmu)
-> +{
-> +	return ~0;
-> +}
->   
->   /* PMU Version in DFR Register */
->   #define ARMV8_PMU_DFR_VER_NI        0
-> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-> index 410ffd41fd73a..a942f2bc13fc4 100644
-> --- a/arch/arm64/kvm/arm.c
-> +++ b/arch/arm64/kvm/arm.c
-> @@ -680,6 +680,7 @@ void kvm_arch_vcpu_load(struct kvm_vcpu *vcpu, int cpu)
->   		kvm_vcpu_load_vhe(vcpu);
->   	kvm_arch_vcpu_load_fp(vcpu);
->   	kvm_vcpu_pmu_restore_guest(vcpu);
-> +	kvm_pmu_load(vcpu);
->   	if (kvm_arm_is_pvtime_enabled(&vcpu->arch))
->   		kvm_make_request(KVM_REQ_RECORD_STEAL, vcpu);
->   
-> @@ -721,6 +722,7 @@ void kvm_arch_vcpu_put(struct kvm_vcpu *vcpu)
->   	kvm_timer_vcpu_put(vcpu);
->   	kvm_vgic_put(vcpu);
->   	kvm_vcpu_pmu_restore_host(vcpu);
-> +	kvm_pmu_put(vcpu);
->   	if (vcpu_has_nv(vcpu))
->   		kvm_vcpu_put_hw_mmu(vcpu);
->   	kvm_arm_vmid_clear_active();
-> diff --git a/arch/arm64/kvm/pmu-direct.c b/arch/arm64/kvm/pmu-direct.c
-> index 63ac72910e4b5..360d022d918d5 100644
-> --- a/arch/arm64/kvm/pmu-direct.c
-> +++ b/arch/arm64/kvm/pmu-direct.c
-> @@ -9,6 +9,7 @@
->   #include <linux/perf/arm_pmuv3.h>
->   
->   #include <asm/arm_pmuv3.h>
-> +#include <asm/kvm_emulate.h>
->   
->   /**
->    * has_host_pmu_partition_support() - Determine if partitioning is possible
-> @@ -98,3 +99,171 @@ u8 kvm_pmu_hpmn(struct kvm_vcpu *vcpu)
->   
->   	return *host_data_ptr(nr_event_counters);
->   }
-> +
-> +/**
-> + * kvm_pmu_host_counter_mask() - Compute bitmask of host-reserved counters
-> + * @pmu: Pointer to arm_pmu struct
-> + *
-> + * Compute the bitmask that selects the host-reserved counters in the
-> + * {PMCNTEN,PMINTEN,PMOVS}{SET,CLR} registers. These are the counters
-> + * in HPMN..N
-> + *
-> + * Return: Bitmask
-> + */
-> +u64 kvm_pmu_host_counter_mask(struct arm_pmu *pmu)
-> +{
-> +	u8 nr_counters = *host_data_ptr(nr_event_counters);
-> +
-> +	if (kvm_pmu_is_partitioned(pmu))
-> +		return GENMASK(nr_counters - 1, pmu->max_guest_counters);
-> +
-> +	return ARMV8_PMU_CNT_MASK_ALL;
-> +}
-> +
-> +/**
-> + * kvm_pmu_guest_counter_mask() - Compute bitmask of guest-reserved counters
-> + * @pmu: Pointer to arm_pmu struct
-> + *
-> + * Compute the bitmask that selects the guest-reserved counters in the
-> + * {PMCNTEN,PMINTEN,PMOVS}{SET,CLR} registers. These are the counters
-> + * in 0..HPMN and the cycle and instruction counters.
-> + *
-> + * Return: Bitmask
-> + */
-> +u64 kvm_pmu_guest_counter_mask(struct arm_pmu *pmu)
-> +{
-> +	if (kvm_pmu_is_partitioned(pmu))
-> +		return ARMV8_PMU_CNT_MASK_C | GENMASK(pmu->max_guest_counters - 1, 0);
-> +
-> +	return 0;
-> +}
+That would go into v7.1 and then I'd provide
+platform_device_add_software_node(), use it in all drivers that need
+it, and then we'd remove platform_device_release_full() and go back to
+a single, unified release callback?
 
-Minor nit: slightly inconsistent use of types. Returns a u64 but doesn't 
-use GENMASK_ULL and is also usually saved into a long when it's called.
+Does it make sense?
 
+Bart
