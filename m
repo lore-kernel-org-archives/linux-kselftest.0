@@ -1,167 +1,99 @@
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 963D4402B8F
-	for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 15:41:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778514064; cv=pass; b=b+J9ah2ZLC6IKwXpsBbd8QdAXtxQJD7nagJrXEdnZcNnWiR7PxD4qxVLN/MDnEqHEkvrXw1nTDwzspChDwW31M6z9IhqUM36De9pdE5P/akIeoh2LPaC9A61E7KFwW0hHQuqLWs3XWv0XrgQRReBwzWn9FAIyIlS3cckQFP+2rk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778514064; c=relaxed/simple;
-	bh=ufOOEfTlvP04cNgy2oV7GSg0scHY29TiT5FrCMkncRQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qJn3XQ+Pb/3qGGJaDHcIcGXhO4xwhXXq4KxcO1EJTFn0VvCLvV6LkQYx0ZYmAIDQXdvdBhAg94GPxYCKIkKg9f/3rsP+V+MKm12eodDIltA0ppmK8tgHNn92/hO2FzeeJuoac9WqU/S9blx6mGbYb3nVGjVhTUmnxqFEYXz0na8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rxnX0drk; arc=pass smtp.client-ip=209.85.208.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06F1E40DFC7;
+	Mon, 11 May 2026 15:42:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778514132; cv=none; b=gTSjF/qq6PC9md25EJIHcBfb6EcRGi1gluKwj6X0fLC/ufQ0x5QrLvc6YTEW/3qK1GRBiU/oLqquR1hVms7r9ltVKsynFyQOOh1JOtlYLjCMFWnlyo1WFfXdgVFmM71tqavO47vf/EXTKRHMHlbPNBbDPmVCZt85a/0bv1+2B24=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778514132; c=relaxed/simple;
+	bh=hBJtPARJGHieC4e15Lf/L6a2nrslNmrmwY7VOCOkYp8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mIMNMnTvMnOnPU4rGx8TUlv2v5l0HBM2cQw78axRAxMSO9H5j3aUU52VRCTkEAoJMFEUeZmm57L7rhnbPlXzFT8ssjDO26oGmubtUrmSOtbGFndvC4AGaf+AnzAu4Q7w+TAWsbLIx/3vVdMGUQ+6VOvVK4rkE2X4HRj4YBknOYQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=eQnLgeqE; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rxnX0drk"
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-671588ab0cfso175a12.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 08:41:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778514061; cv=none;
-        d=google.com; s=arc-20240605;
-        b=PEAdlsUi0L4yRGS17ODhteL42Iap/3LsRGawVmfMeCgXM8tyI64MKC6slh5OhvEdEo
-         5gN8I0ORrGVJz68reUktlCgu6Dzk87gp2+Z8mdq/Jeu6UEvfZGEimdUc15rDgmPWJ2C0
-         LLzGLbjP1vKHkV7T6YP0uyphgnGuHu2C2tkjMBtxcqeG4k5YL/x+lEanW0kR4jnngGzE
-         JUn46ZHrvBzo+5aTHffvtrhXPcY4oVMeKBy+90L4/9u9UHBJtGra6HEWuggukh8Buvo+
-         lS6vZZk9JQEIMEB4fYXZbMchTLWxM0Xqz2Oq2/lP1MnqG10zpgzcixmN9QWCaRqWLpup
-         Gg1w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=ufOOEfTlvP04cNgy2oV7GSg0scHY29TiT5FrCMkncRQ=;
-        fh=fla4G/yqCcw13oT6iLnoUYvAaWN58gBvbw82T4Ti1mo=;
-        b=CUMmODnGyc8rQvMd8cHtSlyLnRPSAbC7tCx9Q4cbCIPIFKVHrAp4XMXrMWP6jPpV3x
-         nu4OOSqntjzCxd4l9R0eMKA6mbEgkGYgYPIMvZXzC0hzB7tkJK+gks7L8ePZ9+jIrepM
-         nepVChc33i9Ka00TYlGybixZe5vKxc3R6Un324EjOc2PKPKwaw141UFrXTXacDVhC4ea
-         CavgLNzJE+FY2N8ClQ1rEsyT2P+tP0D4YVWlaUJ2gqwHnS2TJ56W0RGWLNf1fdGFeY5y
-         jqiiFWM5t+F9FVaXmcyc5HEAT8CjmuMUgb4mfH7N5PP8+NS3S4PiAJG0waYo1gtxmVhk
-         MdJw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1778514061; x=1779118861; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ufOOEfTlvP04cNgy2oV7GSg0scHY29TiT5FrCMkncRQ=;
-        b=rxnX0drk5INQmo4jkpunlGSwqA9rtFYuUJgC93N1LubyQIpMRBp8mucEahpkTcrz0o
-         u6Tktl5xycpaqfg2o7X4qmEq+wc8B8rJXaXsE7T8hnmmh4m7BWbrzAZPznLjLEsH2osU
-         /V0ckpUj506mcI+fDNH5MdnSy7NkF+BPFOYfxYHrTJsxV6YJxIlUraZafRxEHwLX/Qdi
-         QpbgPrrYLCtQKYx4TuqLm48bOjFnLImDW5noGj7Q2cKUkvGUh97SzLEedeB1UDZZWyeF
-         BJD4cP9Se8FFBjlnLi+nO13jDrlftWAdCJHhRf28XRrPkouUlezC5pkagd5wkGaDpaFV
-         GQMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778514061; x=1779118861;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=ufOOEfTlvP04cNgy2oV7GSg0scHY29TiT5FrCMkncRQ=;
-        b=Kk9o1VqmxqGP4Vh+WaQYpuSKgoR6+CgUuMMAMUCXutlq4Og0MTZxc+a7EFdLCs0adi
-         Xm2hZ65hMwMWccwUV0ToY5tDjQHCM1eicrSpyBwrd2eG1PfM7+dyJM586iXfSWQ9z80F
-         lTLThqXxlQ4daz2K/PzhQ+4crLMttseSh7Qc+eUnEnAJYngIrM9nf9rtmUSaH60nuohj
-         lPGdUnEoxZ63HaSjeuSKaQotJKw1luo77qMCeWNmOs57PHoaz1YYXaPwZdufUQBeoMmw
-         xztyqmIWM+9/WEfQ3YZc3A7NX8YgWEZ8WyrcY1w0nbJ6ATwTrPkYnPkyWaOfDzMS8ydC
-         8ynA==
-X-Forwarded-Encrypted: i=1; AFNElJ/gMJ798g4FJKmiOAqmAxeaR9gM3T6eMUdddIN8YLKjXvwk20qjPXFx6mDJt9uj3yeHH4ur15oi23+SWTPUrjI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzAtXn5SPzw4o9eFVLBuZuT2xCjBD4S5VdTzlaTH3JXATXfZTib
-	Qd34ShhZVlZQUq5RiXB3vYRW5b+PZhWGttfY+BhVQjHbBL7Cf5F2lcEctGuQ1yVTQduT4iYPPRP
-	JUGqcs9HAnvvB9OA72WU6xsbePRA+oD4KRgV7VFUl
-X-Gm-Gg: Acq92OHVketx2VAlnIuQRyl7Xaux+VSYfXVvInLcxzLxIUTfodLn6Lk00D81Upk7a+O
-	nB4IDRKrBfTaseHwCxOuWx065TQUe6eb1S3427120XJ06mXLb3KaCYQsVQDYnl98Z0vvKcmeHcs
-	ZtVWyzSwxybL/GCJ3dtgsvkG+xk9/G7CcUhWSAQwcLXyjWj+lpgFzCY0k/RaxNNBPe+kf3ObpW4
-	s1rSNq2YEKmoOFAtc2Q9zuchbrp+flezG9FlLGtFq9NtpmJ8NNN4Oy4EhuROAmsV7qZoN2Ch1vY
-	5NR6qztKdFgy0TSgUcNFwOacaf9VUT5zRevfSQV6eaeil867
-X-Received: by 2002:a05:6402:614:b0:670:2007:668c with SMTP id
- 4fb4d7f45d1cf-67f59b78c3dmr88770a12.4.1778514060584; Mon, 11 May 2026
- 08:41:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="eQnLgeqE"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=wrLNUPV9+W+5iFwARPpGhQy5+Ze0IUVAAWbwzbDM9Q8=; b=eQnLgeqEU1/WK8BzdVwICDvSzR
+	Pwvd8UMjGhi8qnP3fGq/cRIWUQIXAfBbIdZUCQNmd/TKrlTZfUSeTy1AbdOERS7mHD0ugGu7Ov6Zn
+	tjpxpSNKTl7kXmyd1e+NZQBbCMdmB8xyQyf4rDmS/avckEdQgRHO9Lk5RGpWelRVCxs50+D4gEiP8
+	Vs+ETA/RsFbKCnHCEp6UGc2bgnKhXE5NFPUP1BRxU+MLwP0DBC/1HVHibmm76LEg/hbfEudiGcXRX
+	//i0cDvp2kYlNBFg9SEh4Zj7fpNe7J1tlSArWoyNd1dfHue2ujzibYE+OISmqqmEA22mIe7xHq7z9
+	dfZYrMKw==;
+Received: from authenticated user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1wMSlf-001hYn-18;
+	Mon, 11 May 2026 15:42:03 +0000
+Date: Mon, 11 May 2026 08:41:58 -0700
+From: Breno Leitao <leitao@debian.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
+	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, "Liam R. Howlett" <liam@infradead.org>, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	kernel-team@meta.com
+Subject: Re: [PATCH v3 0/2] mm/kmemleak: dedupe verbose scan output
+Message-ID: <agH4girwVSEIMFAs@gmail.com>
+References: <20260506-kmemleak_dedup-v3-0-2d36aafc34da@debian.org>
+ <20260508151729.682551a2b2739e8b5d15ade2@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <tencent_863C8A01F3C81EBA238F375B16065CBACF08@qq.com>
- <agHmO4i4YUhs3cSG@lucifer> <CAG48ez1sLtSKVQLHbLO5usBgMgjyOGhbX29pKEfku4Ht05HffA@mail.gmail.com>
- <agH1ZSdX_7QF8P_I@lucifer>
-In-Reply-To: <agH1ZSdX_7QF8P_I@lucifer>
-From: Jann Horn <jannh@google.com>
-Date: Mon, 11 May 2026 17:40:24 +0200
-X-Gm-Features: AVHnY4JxEXoj7n_mRqXAKWqPwktvE7KbhSXwMMRM-MFeHT-iUzf-b5d6qJOEOUg
-Message-ID: <CAG48ez17evhhcoDKF6AoPqzYZwGuFCkVAsc-0bBzevf0LHYNxA@mail.gmail.com>
-Subject: Re: [PATCH] mm/mremap: unmap full fixed target for multi-VMA moves
-To: Lorenzo Stoakes <ljs@kernel.org>
-Cc: fujunjie <fujunjie1@qq.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260508151729.682551a2b2739e8b5d15ade2@linux-foundation.org>
+X-Debian-User: leitao
 
-On Mon, May 11, 2026 at 5:32=E2=80=AFPM Lorenzo Stoakes <ljs@kernel.org> wr=
-ote:
-> On Mon, May 11, 2026 at 05:19:50PM +0200, Jann Horn wrote:
-> > On Mon, May 11, 2026 at 5:05=E2=80=AFPM Lorenzo Stoakes <ljs@kernel.org=
-> wrote:
-> > > Hmmm I think it's a bit debateable honestly. The ability to handle th=
-ere being
-> > > gaps is a _new thing_, so there are no semantics to speak of. Prevoiu=
-sly
-> > > mremap() simply required that you only span across a single VMA.
-> >
-> > FWIW, I think mremap() on a source region with gaps is such a
-> > hazardous operation that nearly no userspace code should be doing it -
-> > gaps are areas in which any mmap() call without a fixed address could
-> > place unrelated mappings (unless stack VMAs are involved, which would
-> > also be a weird scenario), so to use it safely, you have to, among
-> > other things, make sure not to use libc malloc() at a time when that
-> > could place an allocation in the gap (which means you also can't use
-> > printf(), and so on, unless you have swapped out the memory
-> > allocator), and make sure that you have no other threads that could be
-> > doing that, and so on. There are rare circumstances under which it
-> > could be safe, but I think it is almost always better to have a
-> > PROT_NONE anonymous VMA or such as a placeholder.
->
-> Well, we're holding the mmap write lock so none of that could happen
-> _during_ the operation right?
+On Fri, May 08, 2026 at 03:17:29PM -0700, Andrew Morton wrote:
+> On Wed, 06 May 2026 05:58:23 -0700 Breno Leitao <leitao@debian.org> wrote:
+> 
+> > In this version, I am not touching the kernel code, but, just fixing
+> > the selftest, as sashiko reported some issues, and I am addressing them
+> > in here.
+> > 
+> > https://sashiko.dev/#/patchset/20260424-kmemleak_dedup-v2-0-8bea649b2a92%40debian.org
+> > 
+> > NOTE: Additional testing has revealed that lockdep detects a potential lock
+> > inversion issue on kmemleak and legacy console.
+> > 
+> > The problem occurs because the function holds &object->lock (a raw spinlock)
+> > while invoking printk to report the leak. This printk requires the legacy
+> > console_owner lock, which remains in active use despite the ongoing transition
+> > to the nbcon framework.
+> > 
+> > Concurrently, console drivers such as hvc (hypervisor virtual console) acquire
+> > the console_owner lock and may subsequently free memory. This kfree() operation
+> > calls into kmemleak's __delete_object(), which in turn acquires object->lock.
+> > 
+> > Although these code paths hold locks from different object instances, lockdep
+> > operates on lock classes rather than individual instances. Since all
+> > kmemleak_object->lock instances belong to the same lock class, lockdep
+> > identifies this as a circular dependency, even though the actual deadlock
+> > scenario cannot occur in practice (?!).
+> > 
+> > This problem was not introduced by this patchset/selftest, but, it is exposing
+> > it. I plan to solve it once this patchset is done.
+> 
+> None of the above is usable for a [0/N] - it all pertains to the
+> ongoing development process and should formally be below the ^---$
+> separator.  Because it isn't relevant to the permanent kernel record.
+> 
+> The v2 series had a nice cover letter, so I stole that.  Please check
+> that the below remains the truth, the whole truth, etc.
 
-Not during the operation, but right before the operation. So from the
-userspace perspective, you have to know that there are no concurrent
-threads that could be creating memory mappings at non-fixed addresses,
-and you have to know that no mappings can have been created in the
-memory range between when you checked that it's empty and when you
-make the syscall.
+Ack, That remains correct.
 
-> You might debate also the fact we hold that for an extended period.
-
-Eh, I mean, that's also true if you call mmap() with MAP_FIXED on a
-gigantic virtual address region with lots of populated PTEs in it or
-such, or if you call mprotect() on a big region. I don't think it is
-problematic that there are some very chonky MM syscalls you can make
-that will hold the mmap_lock for a long time, as long as we don't
-expect heavily multithreaded code to be doing those operations
-frequently. (Being able to keep the mmap lock held in write mode for a
-long time can be useful as an exploitation trick in some cases, but I
-don't think that's easy enough to fix to be worth the trouble of
-addressing it.)
-
-> Honestly I probably shouldn't have allowed for this, I've had to do at
-> least one fixup relating to it I seem to recall and the semantics are
-> _clearly_ confusing.
->
-> >
-> > I think the right documentation for this is "do not use this on a
-> > source region with gaps, it is technically possible but extremely
-> > hazardous".
->
-> Yeah, I mean on reflection, allowing it was probably a mistake.
->
-> The real use case was 'my VMAs are fragmented and I don't want to have to
-> know about VMA merge rules in order to move them', i.e. no gaps.
->
-> I will do a manpage update and indicate that it probably shouldn't be use=
-d
-> but if it is, the sematics are such that gaps are not propagated (i.e. it
-> is as if you mremap()'d each individually).
-
-Thanks!
+I just updated the cover letter to reflect the changes, but in the
+future I will keep the overall goal of the patchset.
