@@ -1,208 +1,129 @@
-Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
+Received: from mail-yx1-f54.google.com (mail-yx1-f54.google.com [74.125.224.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5454D25393B
-	for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 03:29:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE55736D51B
+	for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 03:43:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778470163; cv=none; b=moJmFNF1UxAWekYZbxJ86UlVCiYudKnN/BxpX7dJwYhoCzkFnnnaGZZZ6KMBsCczMkvEILSFcERfnjfXe9HCgJFsUTJUavxF1Yag9u6UsqXurUvK1KfpwQbfvb5QrlU+m+v93/ZThRmsbviv70hVELpKiZQaWT8gkPb6CUsDkcs=
+	t=1778470998; cv=none; b=g8SA460HPdmLXyKiLL5i9Hojq5D1UfZPkMeE1CuRVc+aZbvhCjKDBYk9Z+Gqn1TCxBXjxgHxjTQ9poH4JKDvISbpMoUtdBCpnRNaPi1MG/q/nAM+LlwvvvcmIa86sM4+M0JGiwUvnpQQn3KgF+3zNJJBSYKpbTiWhfyKd9oI9SU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778470163; c=relaxed/simple;
-	bh=uARdaHq3AAQjZuZeOgb45uXepUqXDbV/qJDqRcrrBbw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UGE6QN2x6CqqLGLOptfgOaIS6bmCxgz1pRKuTMgirPkvrw1pmbIUDpU3NTlTyNXW5fyZHOUOHDbsz5rsMQ2cfQvD8CAnjymA7Li8TZQLN1Tkd3pBTVXvFPxW5szU/GQtIla511/cHpub8s4R/Wn3vO49MQ644SaDozjAxYsaRt8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=YRS0xspX; arc=none smtp.client-ip=74.125.82.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
+	s=arc-20240116; t=1778470998; c=relaxed/simple;
+	bh=H4fkwwbYxPKm1ypzT6bOcfX/lK43QRojgcILtVu2XFY=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=GMxGBcIngxWNzd9KSIJSGvEDkXHTwe0S4CuIQPDlAODE3yZGCTAgFdNNf0sAcAaVLLivtVsvt5HV6rTW0miSRr+TMkAp2wJHyCM9S2DyBfA8vowSh/7upYabMjfTQy/+mKfB6qb/HjOW6rtJi3N8KGWruCJOPZwqNNqFD1MP26c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c33Ih2Zo; arc=none smtp.client-ip=74.125.224.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="YRS0xspX"
-Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-2c15849aa2cso4652698eec.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 10 May 2026 20:29:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c33Ih2Zo"
+Received: by mail-yx1-f54.google.com with SMTP id 956f58d0204a3-651bc83e74aso3837137d50.2
+        for <linux-kselftest@vger.kernel.org>; Sun, 10 May 2026 20:43:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1778470160; x=1779074960; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y/0AIvK8BCcj8XqdwEdcIT92Ta29adSchEewMFBK5y0=;
-        b=YRS0xspX4RcxijsD+IYjLxdeXwvrdzbxwemyCuQn/cRbQTJ2/PEq6icfdpfKKMD0K8
-         iigA7o+ak9bCA1T589/PVgW4MoZvNZtv3aFsRO+2DssubWtmi33Nb8a0nRSb9XGrwANv
-         Z/aUGkyf6u/SVdLslnVUL/syL7vDXE/RkUAJZ0XKjciQnWfNmW3BeHFUM4xBc9CJIqrX
-         /LWoGbnK5rfH5zSWEsaQ+3oy/MeMXfdrtmL2pZRETVYAksxXYVTRsyMHFCTL45bz66sH
-         xeLiD2CcggnPiaLDpHT7UHp4M/0j9mc7Uqz+/CGmnqrNAoblQ4tk804e1sZcVHs8NtyG
-         l7xA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778470160; x=1779074960;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1778470997; x=1779075797; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Y/0AIvK8BCcj8XqdwEdcIT92Ta29adSchEewMFBK5y0=;
-        b=nipWrfOTEEHEbO6Sr1nd9f6d0Ps8bqUsv7Znxga08NPu7karUcdT8XfT4wv5xf3nfV
-         Rxfk5jdfV5TUAtFEMltoMIuY+uKHcxdLoCPXMK83Z4faH6RO7+U4dDB7BzDU8ClQmvkH
-         TCuLIUJiHLwsjSDRHTcXOuDEB0F3abvMK1ppxGOOfnclRCYJwjOmTa6/vcdPyeI6IeP5
-         ARTYJh36DKUOA2PLk/UOr2pbTD4U21KkdKvye+yUkaJqGUwTI4AoajwBcbYHgbkiJ/T/
-         P9aLv5sWAYFdHJwYNzFaybcoQhWrC2P8clYupz9rVq7FphTsg4V3CmQxcQmb83OBIEJY
-         3Z0A==
-X-Forwarded-Encrypted: i=1; AFNElJ9PE9cwJMZL2xZBHEhFtm06jm3xbmb9QWWeUBGQVBYkiD1uc55kZ1xWHD4mvnvQJARACea0IG2VfFXQf5GKbXk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyo9J2hMtPTxgxD1S+DAam9PFFozAakQtc2gUADOodjmepXxu/j
-	7/AtX4ebUgsbDylHLB+sPmO6sYjYNuwd/N1ymzFCfoPQx4HTzrcccqKEYHUM5l8L5oY=
-X-Gm-Gg: Acq92OHu3djWnrbQtUfGJ/BJyRnit62BMi2vfBEHStF6SgdQxr+eQ69t/hx9ne2RCkY
-	VCkcmfqb/B2trW9MuyOG9YN9hnZyA1JybEDzETN5Vy3gHxIYmmvwuTP7olt6kcLBU7UBjPhKEEm
-	XmYQbqKvCf4x8qg/aIHJLVqa/e9/7ObZKRHtHC7DZoSAZ99AYMjphTNOwfR8+z2jYP50Q1fasHf
-	RqU1QPYWV3JEHeD06F/u/h5z6ZL5g9CGWYJtWWwzbywWdg9xHuNNMvEJTQmHC7hESSIyhdpBkOX
-	xHZAbvLyYhFI4lqLvzWejvWoEBqkDiS26WAAySBDLbKoOlvT3NPTXf5W1roQBa4gwAWbLPebXSc
-	3S6AUSbkxAoh1rujlCnwy3so7R+mFO2RO/IGIqHYpIN9X2ilDGVjtCykYHpbENHhPlE1Zo/2db7
-	Hf3/MAO43w1A436vJgj5c9uA0s+QQeq1gvT6I=
-X-Received: by 2002:a05:7301:128b:b0:2d3:f3fc:bb6b with SMTP id 5a478bee46e88-2f5482664b0mr11091502eec.1.1778470160415;
-        Sun, 10 May 2026 20:29:20 -0700 (PDT)
-Received: from sw04.internal.sifive.com ([4.53.31.132])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2f8859eafc2sm15049827eec.4.2026.05.10.20.29.19
+        bh=yGClT6yKjio/U/X8taFr0YcBozUqn3DwsEV9alBjdFQ=;
+        b=c33Ih2ZobpX0DhdBIiNyacY1orXTAn4rgx7mk0lUYWoa6mnNJZxV/TOXeNiUY9rhlr
+         5g4iaV4Hb0/FYuGHxzDyeaUlwiCeQ8C9DZTr887rytbBMp7ivA4D45Jz0C7IsSnqeR41
+         2zLv6yC/vod83+GoF0HmJS9Fptg1vW8Y01+ea8zyHfGdLuLOH6+/oiTbSpCdv26Cokxr
+         P3ywRejaG8O8HHtDlyvYMLNHph6SR7675L0DXgsWCr6daLhBToNszN8UqJhcjdKPbBzO
+         01ZUSjokqww7GwtX9B8eDbFqa60WD5pdpqCUKv9+MCyI3ctarGUnZ/9IegGK0ie/LSeS
+         YJhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778470997; x=1779075797;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yGClT6yKjio/U/X8taFr0YcBozUqn3DwsEV9alBjdFQ=;
+        b=UgIt9VPw3kjXozIeYSnwVJgzhXKSj5KHNLCRryS6HBRb5xu3qyTmSqSPTtq2X6WA35
+         ogQieKJiYFTpcD8yOMvgeI/GSn0fYw46huC/H9oz9pVSgnOY0hcU5N7LuemkDAN/x5Q/
+         0fgxfTLqoaPpvF2tnfVfXVe/Wh5UIWeT0q8OBw2LUn0oedB3ZwRTWzGsgkyLpzJ/CPP+
+         RTQYqEAoWLRwncqjXIrL6/CtsGR+7OxhAzmmmjHtJ5Hamstd5HSQeXmNuRHBkGQTiLF/
+         tSAvFU0HkzHZc8SFJZRU9UvcZCoxsFLEn079WrQVvA2Sbfk9oGFRZassgxr3tUqLGOhJ
+         k+fg==
+X-Forwarded-Encrypted: i=1; AFNElJ8wPvtp8RlC5GyqEABS8NnBNmc80fnWj/pzRAKlRWrg4sJS67t4GO0YOsnMm6uQzSyzSPrLmNUIdPUMVi0HUws=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxjfYA3HiOpBW4YnohpQKgiwJa466yC9t1FKTQ2Pe/D4BwXJzgO
+	jq2oWxO8U68lWhBG01/mtr6L28LrjqJ+NI2/10sS3UPC9uN8ccKt94e4
+X-Gm-Gg: Acq92OF2qmnYA0dXNedZ/NVkCYZvKBwk45WBhXCvOZE5L4Ks7+nguVmLwb5oshSlrho
+	bABWGuC9sXZum0yUMqMemgJtA8GPQr9xR92TID+/RD9nwpMg5hyNcurWJiec6tLY3k1eamacDLk
+	jRGUhyvm4/puDKBibzZMALvTex27lSUsSnjtv9j2qP9LMaKrNxTeVHdNfkFCwVnzIC7UuuLDiWB
+	b7FVPbSb37hcMJVbnwd/GxuFHJzQkTsktsiDsGMLpgFSoyn7hK4voiFZe+sD+paEL6yYb/oNRAH
+	q0V0Sp7zIUbUfQUGHAp2Gc2KgpSCRXk44IBGcwgNZOpELrH3CA1flyZtHYKBErVurCO8ZRuv55q
+	A/YH6zb1mjLJXomTzHf0vlKjPp+XLPDZvjfAfUNZ5MYbTp2qPjQrem8gdr8754TQCnlmCby/BES
+	/oRYW+ltOzqXcKX97yvLJXohlCvxQkWk/ddhg4L3ufx7TIKQX+o4xlQCAkAV+FRQtCIFyZBvCh/
+	RyOgOdDJ9GAQ4vkJf3WADVbsw==
+X-Received: by 2002:a05:690e:1759:b0:657:e42c:f25 with SMTP id 956f58d0204a3-65c79df9fdemr16415508d50.49.1778470996712;
+        Sun, 10 May 2026 20:43:16 -0700 (PDT)
+Received: from gmail.com (172.235.85.34.bc.googleusercontent.com. [34.85.235.172])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-65d969fb85csm4673774d50.2.2026.05.10.20.43.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 May 2026 20:29:19 -0700 (PDT)
-From: Zong Li <zong.li@sifive.com>
-To: pjw@kernel.org,
-	palmer@dabbelt.com,
-	aou@eecs.berkeley.edu,
-	alex@ghiti.fr,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Cc: Zong Li <zong.li@sifive.com>
-Subject: [PATCH] selftests/riscv: fix compiler output flag spacing in all Makefiles
-Date: Sun, 10 May 2026 20:29:17 -0700
-Message-ID: <20260511032917.3542802-1-zong.li@sifive.com>
-X-Mailer: git-send-email @GIT_VERSION@
+        Sun, 10 May 2026 20:43:15 -0700 (PDT)
+Date: Sun, 10 May 2026 23:43:15 -0400
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>, 
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc: netdev@vger.kernel.org, 
+ davem@davemloft.net, 
+ edumazet@google.com, 
+ pabeni@redhat.com, 
+ horms@kernel.org, 
+ linux-kselftest@vger.kernel.org, 
+ shuah@kernel.org, 
+ Willem de Bruijn <willemb@google.com>
+Message-ID: <willemdebruijn.kernel.112c88eb7daa1@gmail.com>
+In-Reply-To: <20260510174219.74aeee6d@kernel.org>
+References: <20260504174056.565319-1-willemdebruijn.kernel@gmail.com>
+ <20260510174219.74aeee6d@kernel.org>
+Subject: Re: [PATCH net-next v7 0/3] selftests: drv-net: convert so_txtime to
+ drv-net
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-Standardize the compiler output flag format across all RISC-V
-selftests by adding a space between '-o' and '$@'.
+Jakub Kicinski wrote:
+> On Mon,  4 May 2026 13:38:31 -0400 Willem de Bruijn wrote:
+> > From: Willem de Bruijn <willemb@google.com>
+> > 
+> > In preparation for extending to pacing hardware offload, convert the
+> > so_txtime.sh test to a drv-net test that can be run against netdevsim
+> > and real hardware.
+> > 
+> > Two preparatory patches
+> > 1. support negative tests, where tests are expected to fail
+> > 2. add a tc helper 
+> > 
+> > See individual patches for details and detailed changelog
+> 
+> Hi Willem! Looks like we have some flakiness here:
+> 
+> https://netdev.bots.linux.dev/contest.html?executor=vmksft-net-drv-dbg&test=so-txtime-py
 
-Although '-o$@' is perfectly valid for GCC/Clang to parse, But
-changing it to '-o $@' with a space could align with the GNU
-official documentation conventions, improves readability by
-visually separating the flag from the target variable, and
-ensures consistency with other architectures
+Argh sorry. I should have run dbg mode, but hadn't.
 
-Currently, RISC-V selftests use '-o$@' (without space) in 13
-instances across 6 Makefiles, while all other architectures
-consistently use '-o $@' (with space). This inconsistency makes
-RISC-V an outlier in the kernel's selftest infrastructure.
+The previous version skips all receiver errors if KSFT_MACHINE_SLOW is
+set, as of commit a7ee79b9c455 ("selftests: net: cope with slow env in
+so_txtime.sh test").
 
-Signed-off-by: Zong Li <zong.li@sifive.com>
----
- tools/testing/selftests/riscv/abi/Makefile       |  2 +-
- tools/testing/selftests/riscv/cfi/Makefile       |  2 +-
- tools/testing/selftests/riscv/hwprobe/Makefile   |  6 +++---
- tools/testing/selftests/riscv/mm/Makefile        |  2 +-
- tools/testing/selftests/riscv/sigreturn/Makefile |  2 +-
- tools/testing/selftests/riscv/vector/Makefile    | 12 ++++++------
- 6 files changed, 13 insertions(+), 13 deletions(-)
+This achieves the same in the new version and seems to indeed mask all
+the timing (and other) errors in debug mode.
 
-diff --git a/tools/testing/selftests/riscv/abi/Makefile b/tools/testing/selftests/riscv/abi/Makefile
-index ed82ff9c664e..041114675ad5 100644
---- a/tools/testing/selftests/riscv/abi/Makefile
-+++ b/tools/testing/selftests/riscv/abi/Makefile
-@@ -7,4 +7,4 @@ TEST_GEN_PROGS := pointer_masking
- include ../../lib.mk
- 
- $(OUTPUT)/pointer_masking: pointer_masking.c
--	$(CC) -static -o$@ $(CFLAGS) $(LDFLAGS) $^
-+	$(CC) -static -o $@ $(CFLAGS) $(LDFLAGS) $^
-diff --git a/tools/testing/selftests/riscv/cfi/Makefile b/tools/testing/selftests/riscv/cfi/Makefile
-index 93b4738c0e2e..418b4b5325a5 100644
---- a/tools/testing/selftests/riscv/cfi/Makefile
-+++ b/tools/testing/selftests/riscv/cfi/Makefile
-@@ -16,7 +16,7 @@ ifeq ($(shell $(CC) $(CFLAGS) -nostdlib -xc /dev/null -o /dev/null > /dev/null 2
- TEST_GEN_PROGS := cfitests
- 
- $(OUTPUT)/cfitests: cfitests.c shadowstack.c
--	$(CC) -o$@ $(CFLAGS) $(LDFLAGS) $^
-+	$(CC) -o $@ $(CFLAGS) $(LDFLAGS) $^
- else
- 
- $(shell echo "Toolchain doesn't support CFI, skipping CFI kselftest." >&2)
-diff --git a/tools/testing/selftests/riscv/hwprobe/Makefile b/tools/testing/selftests/riscv/hwprobe/Makefile
-index cec81610a5f2..71e3f26c541b 100644
---- a/tools/testing/selftests/riscv/hwprobe/Makefile
-+++ b/tools/testing/selftests/riscv/hwprobe/Makefile
-@@ -9,10 +9,10 @@ TEST_GEN_PROGS := hwprobe cbo which-cpus
- include ../../lib.mk
- 
- $(OUTPUT)/hwprobe: hwprobe.c sys_hwprobe.S
--	$(CC) -static -o$@ $(CFLAGS) $(LDFLAGS) $^
-+	$(CC) -static -o $@ $(CFLAGS) $(LDFLAGS) $^
- 
- $(OUTPUT)/cbo: cbo.c sys_hwprobe.S
--	$(CC) -static -o$@ $(CFLAGS) $(LDFLAGS) $^
-+	$(CC) -static -o $@ $(CFLAGS) $(LDFLAGS) $^
- 
- $(OUTPUT)/which-cpus: which-cpus.c sys_hwprobe.S
--	$(CC) -static -o$@ $(CFLAGS) $(LDFLAGS) $^
-+	$(CC) -static -o $@ $(CFLAGS) $(LDFLAGS) $^
-diff --git a/tools/testing/selftests/riscv/mm/Makefile b/tools/testing/selftests/riscv/mm/Makefile
-index 4664ed79e20b..24122453e3d0 100644
---- a/tools/testing/selftests/riscv/mm/Makefile
-+++ b/tools/testing/selftests/riscv/mm/Makefile
-@@ -12,4 +12,4 @@ TEST_PROGS := run_mmap.sh
- include ../../lib.mk
- 
- $(OUTPUT)/mm: mmap_default.c mmap_bottomup.c mmap_tests.h
--	$(CC) -o$@ $(CFLAGS) $(LDFLAGS) $^
-+	$(CC) -o $@ $(CFLAGS) $(LDFLAGS) $^
-diff --git a/tools/testing/selftests/riscv/sigreturn/Makefile b/tools/testing/selftests/riscv/sigreturn/Makefile
-index eb8bac9279a8..8c77508641f3 100644
---- a/tools/testing/selftests/riscv/sigreturn/Makefile
-+++ b/tools/testing/selftests/riscv/sigreturn/Makefile
-@@ -9,4 +9,4 @@ TEST_GEN_PROGS := sigreturn
- include ../../lib.mk
- 
- $(OUTPUT)/sigreturn: sigreturn.c
--	$(CC) -static -o$@ $(CFLAGS) $(LDFLAGS) $^
-+	$(CC) -static -o $@ $(CFLAGS) $(LDFLAGS) $^
-diff --git a/tools/testing/selftests/riscv/vector/Makefile b/tools/testing/selftests/riscv/vector/Makefile
-index 326dafd739bf..7e0017b3fb8b 100644
---- a/tools/testing/selftests/riscv/vector/Makefile
-+++ b/tools/testing/selftests/riscv/vector/Makefile
-@@ -11,29 +11,29 @@ include ../../lib.mk
- TEST_GEN_OBJ := $(patsubst %.c, $(OUTPUT)/%.o, $(TEST_GEN_LIBS))
- 
- $(OUTPUT)/sys_hwprobe.o: ../hwprobe/sys_hwprobe.S
--	$(CC) -static -c -o$@ $(CFLAGS) $^
-+	$(CC) -static -c -o $@ $(CFLAGS) $^
- 
- $(OUTPUT)/v_helpers.o: v_helpers.c
--	$(CC) -static -c -o$@ $(CFLAGS) $^
-+	$(CC) -static -c -o $@ $(CFLAGS) $^
- 
- $(OUTPUT)/vstate_prctl: vstate_prctl.c $(OUTPUT)/sys_hwprobe.o $(OUTPUT)/v_helpers.o
--	$(CC) -static -o$@ $(CFLAGS) $(LDFLAGS) $^
-+	$(CC) -static -o $@ $(CFLAGS) $(LDFLAGS) $^
- 
- $(OUTPUT)/vstate_exec_nolibc: vstate_exec_nolibc.c
- 	$(CC) -nostdlib -static -include ../../../../include/nolibc/nolibc.h \
- 		-Wall $(CFLAGS) $(LDFLAGS) $^ -o $@ -lgcc
- 
- $(OUTPUT)/v_initval: v_initval.c $(OUTPUT)/sys_hwprobe.o $(OUTPUT)/v_helpers.o
--	$(CC) -static -o$@ $(CFLAGS) $(LDFLAGS) $^
-+	$(CC) -static -o $@ $(CFLAGS) $(LDFLAGS) $^
- 
- $(OUTPUT)/v_exec_initval_nolibc: v_exec_initval_nolibc.c
- 	$(CC) -nostdlib -static -include ../../../../include/nolibc/nolibc.h \
- 		-Wall $(CFLAGS) $(LDFLAGS) $^ -o $@ -lgcc
- 
- $(OUTPUT)/vstate_ptrace: vstate_ptrace.c $(OUTPUT)/sys_hwprobe.o $(OUTPUT)/v_helpers.o
--	$(CC) -static -o$@ $(CFLAGS) $(LDFLAGS) $^
-+	$(CC) -static -o $@ $(CFLAGS) $(LDFLAGS) $^
- 
- $(OUTPUT)/validate_v_ptrace: validate_v_ptrace.c $(OUTPUT)/sys_hwprobe.o $(OUTPUT)/v_helpers.o
--	$(CC) -static -o$@ $(CFLAGS) $(LDFLAGS) $^
-+	$(CC) -static -o $@ $(CFLAGS) $(LDFLAGS) $^
- 
- EXTRA_CLEAN += $(TEST_GEN_OBJ)
--- 
-2.43.7
+	@@ -24,8 +25,12 @@ def test_so_txtime(cfg, clockid, ipver, args_tx, args_rx, expect_success):
+	     cmd_rx = f"{cmd_base} {args_rx} -r"
+	     cmd_tx = f"{cmd_base} {args_tx}"
+	 
+	+    expect_fail = not expect_success
+	+    if os.environ.get('KSFT_MACHINE_SLOW'):
+	+        expect_success = False
+	+
+	     with bkg(cmd_rx, host=cfg.remote, fail=expect_success,
+	-             expect_fail=(not expect_success), exit_wait=True):
+	+             expect_fail=expect_fail, exit_wait=True):
+		 cmd(cmd_tx)
 
