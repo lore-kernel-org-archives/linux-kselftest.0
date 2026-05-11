@@ -1,105 +1,105 @@
-Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E567402426
-	for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 15:45:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E235B402BBA;
+	Mon, 11 May 2026 15:46:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778514305; cv=none; b=LPmZJLFQ5NH5ARIAzSOA07c/cG5eRcLkcpN6AEgq70qejS6y6L43NBjtWeUuk+YJCYxxhKvmpKT4TNM9XzTsL6TAt6SBGs1Lo5tgFdnsg9Qji9TCdG5u3EaMUMJ2sZksabwpDOHzEVYHoSMzr9XbiO0YMTaxroT8uEcwMdbbIow=
+	t=1778514411; cv=none; b=gymwjdbBXI774hcyoIkYJh1VWmeou/ggKN8f8PFPKhvjqWx85efCBS6jVijLBuX3juXdOH/vnE66clVkAu1Enwhfpo0wKlDKSpYqeJUUOwlE85k+FtjWEisgkzsRvMMhpQt2MQdPwJ/tbbv4hwpavck93JXm6bz5qY6Ay5l5VUs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778514305; c=relaxed/simple;
-	bh=iU2gjtj7qbeTkgu4CbWGG/n6OHB2sDsVv1qEvA+SQj8=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=iRqFhSw5Mi/M8debvOC+N8tCcKN6dwxK6+lR7tHzHjYSOCHdSHS5hJL3f+Gyex8ZEuVIpfLhPnrgO/FSEKgycHeZ1ZZdTvcjPvS2S9tfXHt6aQPJw0H6SrMTFsutNNIw+5/zgSK/c1m17LVxmqPMBaVK3/FFF4h2mdDNAh1oqOc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Mx96AbU4; arc=none smtp.client-ip=209.85.215.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1778514411; c=relaxed/simple;
+	bh=7sqpX/RGgiQGlcXoNsGZI8XmaqwweqJXC66BEehtjaE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=YItFVWB7lIkpXcyyDBH3xd54M8NNAZ4+aOpI0Yfmi80OaE2wGqlXx86A43bWlaUmKKE0vky9y5UhFMMBzSBVsvNmTiOVMXkdeKSE1a1gW3uIwaSkfwPqK7IRUR+Zq9N/VFt2SI4i3ONb/24671w/io3nso+hw8lTMbp2xtL7XwM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ByKj8eDy; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Mx96AbU4"
-Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-c709551ec08so5393500a12.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 08:45:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1778514304; x=1779119104; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=quGxZdDzePyFN1sqDarFe9CnYNHrO/hP4QASdHelPT4=;
-        b=Mx96AbU42KfmXQwcoagbaf/NvWrVoJQR4YbzP8yRJ07a9bv0GaGbcRMq3ZC6QWcQyb
-         HHwnWb2rtFlrh2mrHj3akAantQQGiTbxyQvtigszO6QpdUsmm7D+S6KDlncKBymsI/Rq
-         AOA9IpXf0pP+kmcNRpyIfSMFcp+2HwF/b9cr2Q5SnFLvZ7im7hWrNpSoxreGSVroo/Z3
-         EoSDxurluc0RULGXe9NEezVNicx+BeRNN2ogAxCiU4omxy2eV9EYD7jHY+hxHZWUQB3h
-         bO87r3f4G5TmzxjiLq1kvskoRBEExWo4sWKRn8V3kUyGogDYNWUQT3bgPrYubdyl/+Rb
-         dwMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778514304; x=1779119104;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=quGxZdDzePyFN1sqDarFe9CnYNHrO/hP4QASdHelPT4=;
-        b=JCyz9fpoJtghDzEpUpHx0SoXPnQX6AKE0zh77LfH0JHfoVImdK63PnzSISkpS67SHX
-         pht8LhmG4wZFWHBGm1I46S3SDgwN4jIwIH2vW34jVHEM6yQOtFdNi6rZTq0V6n0EgOTL
-         SidivumqPUIX81Bw7svJeeKYMcoFxH5AtaWZn9RRV87GkOnivfrw4HkVJqixZ2vjhzxz
-         BidcteJ4pojnLN1SQVYzzgoS6jI3LK6zZre9Ycn+8y+dbXLvYE/jMdaE3fSeT/yS5Bbx
-         5moa+r5YV1U4MbqDOwp+yGLdtrp2fIFH+ASnROoEwEoSZ+h7N0lnGLdbbLjuemKPkCDw
-         gJew==
-X-Forwarded-Encrypted: i=1; AFNElJ/vAS7R5xhr78b2KxUjIJdq1V6BpCGFup9n9M4A276Ao5/ulMBHFx7bCaXg/M8X/8rZzp6nYA7wfix7Hf8hrDQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzLPZrZUxmiWyxVtyDW2YN7K1xxdvP0A0r+Xe7uVG3t2XjmhwtN
-	lx8fziwfnGBRSx0n8XJT05RWv1/+1i7tXnHj6Gg2Cp5e9MaXcSWjEOOB2Pf3N3ZFBrl7r1Lc86a
-	CN1JTrw==
-X-Received: from pfbg8.prod.google.com ([2002:a05:6a00:ae08:b0:83e:b5cc:11c3])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:729a:b0:3a3:a55f:407c
- with SMTP id adf61e73a8af0-3aa5a911f3cmr27765927637.16.1778514303443; Mon, 11
- May 2026 08:45:03 -0700 (PDT)
-Date: Mon, 11 May 2026 08:45:02 -0700
-In-Reply-To: <cover.1766066076.git.houwenlong.hwl@antgroup.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ByKj8eDy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A661BC2BCB0;
+	Mon, 11 May 2026 15:46:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778514410;
+	bh=7sqpX/RGgiQGlcXoNsGZI8XmaqwweqJXC66BEehtjaE=;
+	h=From:Subject:Date:To:Cc:From;
+	b=ByKj8eDy/sajVMez24k171DDOg94hEs8RiwJd8SGiO4pvsFBKDh3T2BW5Z2xcqyNX
+	 31F543lXn/SNSZdatVJcPga0beXKS4+UXKF6g41sgJK5P3oXpP5VbL2RVVlra6ZzoS
+	 iwkag3FkD37RYm/Zor00L5iTjtkbZkHL07+rIXwkfKhFxCUDWlZQwAEY5V7FOIDMrd
+	 5nDWTjqSZBBRdjVYau2++grz1ONTf0JgA9TUiMwovwwQKXILa+hd1+Atx1SWPzbiou
+	 4eh8hgsT+b6sH4+FlZlTHgDeYwqQ3aWmlpwZGS9uKiw5bxLgcxIOojGM1icEkZmQge
+	 0jwn9U8hSds7Q==
+From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+Subject: [PATCH net 0/5] mptcp: misc fixes for v7.1-rc4
+Date: Mon, 11 May 2026 17:46:26 +0200
+Message-Id: <20260511-net-mptcp-misc-fixes-7-1-rc4-v1-0-5ee57cb2b7eb@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <cover.1766066076.git.houwenlong.hwl@antgroup.com>
-Message-ID: <agH5fjWOfWO1L8u1@google.com>
-Subject: Re: [PATCH v2 0/9] KVM: x86: Improve the handling of debug exceptions
- during instruction emulation
-From: Sean Christopherson <seanjc@google.com>
-To: Hou Wenlong <houwenlong.hwl@antgroup.com>
-Cc: kvm@vger.kernel.org, Lai Jiangshan <jiangshan.ljs@antgroup.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yWM0QrCMBAEf6XcswdJiBX8FfFBrxs9oTHkUhFK/
+ 92oj7PszEqGqjA6DitVvNT0mTv43UByv+QbWKfOFFwY3d57zmg8lyaFZzXhpG8YH9hzlcgIY3R
+ pikhBqCdKxe/QCyfqJp3/oy3XB6R9w7RtHy96DuqFAAAA
+X-Change-ID: 20260511-net-mptcp-misc-fixes-7-1-rc4-e2640fd4ef2c
+To: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>
+Cc: Eric Dumazet <edumaze@google.com>, netdev@vger.kernel.org, 
+ mptcp@lists.linux.dev, linux-kernel@vger.kernel.org, 
+ "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
+ Shardul Bankar <shardul.b@mpiricsoftware.com>, stable@vger.kernel.org, 
+ Li Xiasong <lixiasong1@huawei.com>, Shuah Khan <shuah@kernel.org>, 
+ linux-kselftest@vger.kernel.org, Gang Yan <yangang@kylinos.cn>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1507; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=7sqpX/RGgiQGlcXoNsGZI8XmaqwweqJXC66BEehtjaE=;
+ b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGLIYfz4+ujZ1H6vK2hZ7W/MH87zW/PHp/W9aWpq136rnt
+ GRE5hPZjlIWBjEuBlkxRRbptsj8mc+reEu8/Cxg5rAygQxh4OIUgIn85GNk+GWseSzKymvXt9j3
+ 25Pcg1aqXV3KNO3tu8pTLwvucb0vUGX477Gb7/H/CTklXxuuTtik3x2YpbHnfeRJb/MfvpdM2u0
+ 7eQE=
+X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-On Thu, Dec 18, 2025, Hou Wenlong wrote:
-> Hou Wenlong (9):
->   KVM: x86: Capture "struct x86_exception" in
->     inject_emulated_exception()
->   KVM: x86: Set guest DR6 by kvm_queue_exception_p() in instruction
->     emulation
->   KVM: x86: Check guest debug in DR access instruction emulation
->   KVM: x86: Only check effective code breakpoint in emulation
->   KVM: x86: Consolidate KVM_GUESTDBG_SINGLESTEP check into the
->     kvm_inject_emulated_db()
->   KVM: x86: Move kvm_set_rflags() up before kvm_vcpu_do_singlestep()
->   KVM: VMX: Refresh 'PENDING_DBG_EXCEPTIONS.BS' bit during instruction
->     emulation
->   KVM: selftests: Verify guest debug DR7.GD checking during instruction
->     emulation
->   KVM: selftests: Verify 'BS' bit checking in pending debug exception
->     during VM entry
-> 
->  arch/x86/include/asm/kvm-x86-ops.h            |   1 +
->  arch/x86/include/asm/kvm_host.h               |   1 +
->  arch/x86/kvm/emulate.c                        |  14 +--
->  arch/x86/kvm/kvm_emulate.h                    |   7 +-
->  arch/x86/kvm/vmx/main.c                       |   9 ++
->  arch/x86/kvm/vmx/vmx.c                        |  15 ++-
->  arch/x86/kvm/vmx/x86_ops.h                    |   1 +
->  arch/x86/kvm/x86.c                            | 116 ++++++++++--------
->  arch/x86/kvm/x86.h                            |   7 ++
->  .../selftests/kvm/include/x86/processor.h     |   3 +-
->  tools/testing/selftests/kvm/x86/debug_regs.c  |  72 ++++++++++-
->  11 files changed, 178 insertions(+), 68 deletions(-)
+Here are various unrelated fixes:
 
-One goof and some nits on patch 3, but I'll fix them up when applying, i.e. no
-need for a v3.  I'll probably also add some comments and elaborate on some of
-the changelogs.
+- Patch 1: avoid dropping partial packets. A previous version has been
+  sent a few week ago. A fix for 5.10.
+
+- Patches 2-3: stop ADD_ADDR timer when an ADD_ADDR can never been sent
+  due to insufficient option space. A fix for v5.10.
+
+- Patch 4: reset rcv_wnd_sent on disconnect, just in case the next
+  connection falls back to TCP. A fix for 5.17.
+
+- Patch 5: update window_clamp when SO_RCVBUF is set during the
+  connection. A fix similar to a recent one on TCP side, for v6.6.
+
+Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+---
+Gang Yan (1):
+      mptcp: update window_clamp on subflows when SO_RCVBUF is set
+
+Li Xiasong (2):
+      mptcp: pm: fix ADD_ADDR timer infinite retry on option space insufficient
+      selftests: mptcp: join: cover ADD_ADDR tx drop and list progress
+
+Paolo Abeni (1):
+      mptcp: reset rcv wnd on disconnect
+
+Shardul Bankar (1):
+      mptcp: do not drop partial packets
+
+ net/mptcp/pm.c                                  | 56 ++++++++++++++++++++-----
+ net/mptcp/protocol.c                            | 25 ++++++++---
+ net/mptcp/sockopt.c                             | 10 ++++-
+ tools/testing/selftests/net/mptcp/mptcp_join.sh | 31 ++++++++++++++
+ 4 files changed, 105 insertions(+), 17 deletions(-)
+---
+base-commit: a450063ef86b9967234ca1f896c0d77400c74f11
+change-id: 20260511-net-mptcp-misc-fixes-7-1-rc4-e2640fd4ef2c
+
+Best regards,
+--  
+Matthieu Baerts (NGI0) <matttbe@kernel.org>
+
