@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 392C143C061;
-	Mon, 11 May 2026 16:30:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E82D42B747;
+	Mon, 11 May 2026 16:30:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778517048; cv=none; b=j/ZaAqXJSVJ2r061XMDd7N0h2C9KaMfEdUMo1yp/0Lwmzagcn64f2PhgX0ZHSRVlc1ndy/6oeUNs17Wv6aFBjgFcQSQGzdpW5it/WB3BEigM5AuVvK6L1Ekep6F9FS7++y39D7HIQtFmB3hpIaVV1mPwGzeokX3SB+qWKX4vQ0A=
+	t=1778517054; cv=none; b=B77jF4zS5IGxIechyn7dHhMyEC8/P2ujoT11mTsKOr2ECuD7yrO6fdU6a05EbQS1GZS2appyTqj858IKrO/ElC3tGYOsuzR1xI+e8pVnphdKCRu55pupX8KFlyYaLCNuuoNjLhjxaAytF6IqpORWfslRMjuOtrZPCC2GJ7/oBeM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778517048; c=relaxed/simple;
-	bh=+OsbLUb461dtYPcOPTpsH3a+LL4wXaeYYZI9beSzW7I=;
+	s=arc-20240116; t=1778517054; c=relaxed/simple;
+	bh=4CvakidC4k3PlHx7PmzyhHnywybONIxudHvw8PNsZ80=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=L0eCTVpjPTKrC6/2QWqWZzR2TUG/DBaMHoYPxJwN/dS8ytBA91QbE8jp/eX7A1jGt934X/9l5KUY8fRFd7gNE8m1KJLUk7P5/L4VKYHnsx9HArz7Y+8imKNG2rdUS3/MzcanjcDx7bh93ygxq5e2BWwusMb4aH1YN+Vocv1lgI0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K6C3t1ml; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=dO5F/6b9EwfMARbRv/pDRYniFtFyudjteNgPFqXETn44pfnhN4NATNh0qQbBLFD9vmc13+CGal9SxtGxjlWyFXKaYl8W6ffInqtI6VyUpVAdjScH1W3DsHxF0n1+88BZUj571IPpcV79oYIRoOLXlIcN+wFcbXBazmfcIVTqduk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NU9JP2JG; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K6C3t1ml"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8079C2BCB0;
-	Mon, 11 May 2026 16:30:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NU9JP2JG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61ADEC2BCB0;
+	Mon, 11 May 2026 16:30:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778517047;
-	bh=+OsbLUb461dtYPcOPTpsH3a+LL4wXaeYYZI9beSzW7I=;
+	s=k20201202; t=1778517054;
+	bh=4CvakidC4k3PlHx7PmzyhHnywybONIxudHvw8PNsZ80=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=K6C3t1mlQbzbHhVQCBix0ZarGNuH0rSPqphj5hLzKRLiGXZfjES5IjZNy6PNZX7vi
-	 0Aoh1xQj7RdxC85U+M7gI45KtW9m3uTMtOt/ZuLz1V7i65eo35c+muY+Y972d/I+uA
-	 KKPv/FLWRh/hZzfd/PkSdVn92OUGU5VOkcdQUpkKZ57JsLcHSu3OUQZGNIT0GUfIMA
-	 jBE8qWbnLpbhMrtweHftQxFl/4Wza/OMHnbOnpf5Rj5k4LA4Tsuu05oW39ewQGrvpp
-	 /5djdQKUVAy2KLRJiyYlZSGoeCor8gxboEp6pkrnHLs7WF3GbnxkLBwxWIVOOAbr/J
-	 kOGRYKKCzuslg==
+	b=NU9JP2JGlKdbkF1govg9E7TLsQjSR5kMC6HLa5ggp6nmcki1dBrodS+sKXCxaPTVB
+	 SHFBZ+oh/fpxHBNks6a7LIBmSkJ6QSsW7nNv5QXwuSyJsnwbBZ9RkGHslDykycu3U9
+	 DcKycPA9eX1qwsKo8gVAI3J6VpMcwMxC+F0To9rCGdmafFO0qon/YT3psLmuHVZE3j
+	 wfQBeYuKpF1Wuzvg6nqBIOIV2RCwkTw3uFnaR+qTta7efvhffa4pyU+lH3KotaE+qx
+	 +xoGvueKHl+kCfQYuaxJfo2A0I4+Y/gcYqjOJZycIPT5skLl5/B7JVKHGJQWunKGEU
+	 y17O9oVDetZyw==
 From: Mike Rapoport <rppt@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	David Hildenbrand <david@kernel.org>
@@ -55,9 +55,9 @@ Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-mm@kvack.org
-Subject: [PATCH v4 18/55] selftests/mm: uffd-common: use kselftest framework
-Date: Mon, 11 May 2026 19:28:02 +0300
-Message-ID: <20260511162840.375890-19-rppt@kernel.org>
+Subject: [PATCH v4 19/55] selftests/mm: uffd-stress: use kselftest framework
+Date: Mon, 11 May 2026 19:28:03 +0300
+Message-ID: <20260511162840.375890-20-rppt@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260511162840.375890-1-rppt@kernel.org>
 References: <20260511162840.375890-1-rppt@kernel.org>
@@ -71,50 +71,96 @@ Content-Transfer-Encoding: 8bit
 
 From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-Update err() and errexit() to use ksft_print_msg() and ksft_exit_fail().
+Convert uffd-stress test to use kselftest framework for reporting and
+tracking successful and failing runs.
 
-This is preparatory change required to update userfaulfd tests to use
-kselftest framework.
-
+Reviewed-by: Mark Brown <broonie@kernel.org>
+Tested-by: Sarthak Sharma <sarthak.sharma@arm.com>
+Tested-by: Luiz Capitulino <luizcap@redhat.com>
 Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 ---
- tools/testing/selftests/mm/uffd-common.h | 17 ++++++++---------
- 1 file changed, 8 insertions(+), 9 deletions(-)
+ tools/testing/selftests/mm/uffd-stress.c | 40 +++++++++++-------------
+ 1 file changed, 19 insertions(+), 21 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/uffd-common.h b/tools/testing/selftests/mm/uffd-common.h
-index 844a85ab31eb..0723843a7626 100644
---- a/tools/testing/selftests/mm/uffd-common.h
-+++ b/tools/testing/selftests/mm/uffd-common.h
-@@ -40,21 +40,20 @@
+diff --git a/tools/testing/selftests/mm/uffd-stress.c b/tools/testing/selftests/mm/uffd-stress.c
+index 700fbaa18d44..0ce493dac354 100644
+--- a/tools/testing/selftests/mm/uffd-stress.c
++++ b/tools/testing/selftests/mm/uffd-stress.c
+@@ -286,18 +286,12 @@ static int userfaultfd_stress(uffd_global_test_opts_t *gopts)
+ 	pthread_attr_setstacksize(&attr, 16*1024*1024);
  
- #define UFFD_FLAGS	(O_CLOEXEC | O_NONBLOCK | UFFD_USER_MODE_ONLY)
+ 	while (bounces--) {
+-		printf("bounces: %d, mode:", bounces);
+-		if (bounces & BOUNCE_RANDOM)
+-			printf(" rnd");
+-		if (bounces & BOUNCE_RACINGFAULTS)
+-			printf(" racing");
+-		if (bounces & BOUNCE_VERIFY)
+-			printf(" ver");
+-		if (bounces & BOUNCE_POLL)
+-			printf(" poll");
+-		else
+-			printf(" read");
+-		printf(", ");
++		ksft_print_msg("bounces: %d, mode:%s%s%s%s, ",
++			       bounces,
++			       bounces & BOUNCE_RANDOM ? " rnd" : "",
++			       bounces & BOUNCE_RACINGFAULTS ? " racing" : "",
++			       bounces & BOUNCE_VERIFY ? " ver" : "",
++			       bounces & BOUNCE_POLL ? " poll" : " read");
+ 		fflush(stdout);
  
--#define _err(fmt, ...)						\
--	do {							\
--		int ret = errno;				\
--		fprintf(stderr, "ERROR: " fmt, ##__VA_ARGS__);	\
--		fprintf(stderr, " (errno=%d, @%s:%d)\n",	\
--			ret, __FILE__, __LINE__);		\
-+#define _err(fmt, ...)							\
-+	do {								\
-+		int ret = errno;					\
-+		ksft_print_msg("ERROR: " fmt " (errno=%d, @%s:%d)\n",	\
-+			       ##__VA_ARGS__, ret, __FILE__, __LINE__); \
- 	} while (0)
+ 		if (bounces & BOUNCE_POLL)
+@@ -461,6 +455,9 @@ int main(int argc, char **argv)
+ 	if (argc < 4)
+ 		usage();
  
--#define errexit(exitcode, fmt, ...)		\
-+#define errexit(fmt, ...)			\
- 	do {					\
- 		_err(fmt, ##__VA_ARGS__);	\
--		exit(exitcode);			\
-+		ksft_exit_fail();		\
- 	} while (0)
++	ksft_print_header();
++	ksft_set_plan(1);
++
+ 	if (signal(SIGALRM, sigalrm) == SIG_ERR)
+ 		err("failed to arm SIGALRM");
+ 	alarm(ALARM_INTERVAL_SECS);
+@@ -484,10 +481,8 @@ int main(int argc, char **argv)
+ 	 * for racy extra reservation of hugepages.
+ 	 */
+ 	if (gopts->test_type == TEST_HUGETLB &&
+-	   get_free_hugepages() < 2 * (bytes / gopts->page_size) + gopts->nr_parallel - 1) {
+-		printf("skip: Skipping userfaultfd... not enough hugepages\n");
+-		return KSFT_SKIP;
+-	}
++	   get_free_hugepages() < 2 * (bytes / gopts->page_size) + gopts->nr_parallel - 1)
++		ksft_exit_skip("Skipping userfaultfd... not enough hugepages\n");
  
--#define err(fmt, ...) errexit(1, fmt, ##__VA_ARGS__)
-+#define err(fmt, ...) errexit(fmt, ##__VA_ARGS__)
+ 	gopts->nr_pages_per_cpu = bytes / gopts->page_size / gopts->nr_parallel;
+ 	if (!gopts->nr_pages_per_cpu) {
+@@ -503,9 +498,12 @@ int main(int argc, char **argv)
+ 	}
+ 	gopts->nr_pages = gopts->nr_pages_per_cpu * gopts->nr_parallel;
  
- struct uffd_global_test_opts {
- 	unsigned long nr_parallel, nr_pages, nr_pages_per_cpu, page_size;
+-	printf("nr_pages: %lu, nr_pages_per_cpu: %lu\n",
+-	       gopts->nr_pages, gopts->nr_pages_per_cpu);
+-	return userfaultfd_stress(gopts);
++	ksft_print_msg("nr_pages: %lu, nr_pages_per_cpu: %lu\n",
++		       gopts->nr_pages, gopts->nr_pages_per_cpu);
++
++	ksft_test_result(!userfaultfd_stress(gopts),
++			 "uffd-stress %s\n", argv[1]);
++	ksft_finished();
+ }
+ 
+ #else /* __NR_userfaultfd */
+@@ -514,8 +512,8 @@ int main(int argc, char **argv)
+ 
+ int main(void)
+ {
+-	printf("skip: Skipping userfaultfd test (missing __NR_userfaultfd)\n");
+-	return KSFT_SKIP;
++	ksft_print_header();
++	ksft_exit_skip("missing __NR_userfaultfd definition\n");
+ }
+ 
+ #endif /* __NR_userfaultfd */
 -- 
 2.53.0
 
