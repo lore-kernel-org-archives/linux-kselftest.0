@@ -1,83 +1,132 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 845D62C3252;
-	Mon, 11 May 2026 09:10:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E04C377019;
+	Mon, 11 May 2026 09:34:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778490601; cv=none; b=BZ0qwxZcwFmAsbccRIFuFAgUA5v+Dl+3EkytIAyIGeqECyTmsJL9XTRAf9HcA/R4Z45eASo33NEv67w7e1Hmw32XJhYSnETrMVNOp2CphnUuOyM6/fZ1uGisfsKhR1HVq3AuYUsOFIHmoLUmw99vLZkoT8WmU/VKO/6oEWmE02U=
+	t=1778492089; cv=none; b=GQbk2kDeHC54zGc3esypCDUZpQ/wvNi3/WYfbx7V4Cf1T/gHGQEHtyfZXbIW07YLCQ1nfbjs0P1QwKfLq8uZoYRxcwD7WHPh4PGKQ+FXdrEWw/A4MzV9wyIu2b73Nvn3jvV2DnFu7fkCRRj2LYCkgZW36Ru1LMiG6aCRyL2AVE4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778490601; c=relaxed/simple;
-	bh=4bwXYwWvMKrxNVbxygkcM9Chw9qJHhERedGimX3TO5A=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=jrwrhMrf1FpCr2ECKjI6+xFpqaZO4E3WevUiKuDiZ1SmCjX61t0NAix3308PzpGV6Jxj2YIK/ScvL2Jbgrn2AVbZo5joYnNYNRc+2+i4Yg94yi68ubLCK5AqDycZHTuPcW7f/bjq4cr5QJ9IfNgwDcGiWGeB/agKb/rbhePlUk4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ifg8cFZ7; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ifg8cFZ7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A834C2BCB0;
-	Mon, 11 May 2026 09:09:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778490601;
-	bh=4bwXYwWvMKrxNVbxygkcM9Chw9qJHhERedGimX3TO5A=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Ifg8cFZ77aXQ/+l0pvGRib5NweqhXAsaveT0uaeAoIEUV/zFC8UtktMLkLHulw1OP
-	 WaqLNK0oWztErX625uV+fEWzRVBRn3nYakMhw9iQkVzG+bJynwn0ZZ60Vtz8xaUJJi
-	 UUxmMDGjXc2bPz1x4BfPN9xxoCcJKKLQBRrW37oftJqrGt+ev67bbdSNOZTKoPLL2Y
-	 qc4Rc0vX/xO1TujmHymrhCQ0AXaXae6oyAHTXpMZlgbMvPCSmY8yrbVWxj2ISczb76
-	 bRrBrMkKLzjvjT6j+2Pdled+kg4+jk/Yd/1JXWjGx1gKqgOV5rLrmweMCfYyGVlSO9
-	 7yOX2y52Wv0lA==
-From: Christian Brauner <brauner@kernel.org>
-To: linux-kselftest@vger.kernel.org,
-	Bjoern Doebel <doebel@amazon.com>
-Cc: Christian Brauner <brauner@kernel.org>,
-	ptikhomirov@virtuozzo.com,
+	s=arc-20240116; t=1778492089; c=relaxed/simple;
+	bh=tiRVBMhI2CQwyqfiV3DQodODHuvGnw4TTTZ+ekju1eI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=fE71hsHqqlXnB6pJd7eNKulqaOQDb4ZIJNqVSCGwI5azh2kUH559M1JcsXCjQzMKtlZIdv0z/ycHq7owqiKdoT0UmcXxpaPSdn6B6MD5tFPmSd/PuQ8F6bqbXtnRowFguoA93ZjgmA/NhgQZgAZD1J/uHYOCuHbzNtanWiV99jg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: a1b290c84d1c11f1aa26b74ffac11d73-20260511
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
+	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
+	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
+	HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME
+	IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_EXISTED, SN_EXISTED
+	SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS, CIE_GOOD, CIE_GOOD_SPF
+	GTI_FG_BS, GTI_RG_INFO, GTI_C_BU, AMN_GOOD, ABX_MISS_RDNS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.12,REQID:0fc4e0f0-23eb-4d29-8ac2-b74e43484955,IP:10,
+	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:5,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:15
+X-CID-INFO: VERSION:1.3.12,REQID:0fc4e0f0-23eb-4d29-8ac2-b74e43484955,IP:10,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+	elease,TS:15
+X-CID-META: VersionHash:e7bac3a,CLOUDID:cc85dbbe211b15cd94e675c15e8cd947,BulkI
+	D:260511173440PI1CYFO6,BulkQuantity:0,Recheck:0,SF:19|38|66|72|78|102|127|
+	850|898,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk:nil
+	,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:
+	0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FSD
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: a1b290c84d1c11f1aa26b74ffac11d73-20260511
+X-User: husong@kylinos.cn
+Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
+	(envelope-from <husong@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 120949529; Mon, 11 May 2026 17:34:39 +0800
+From: Hu Song <husong@kylinos.cn>
+To: akpm@linux-foundation.org,
+	david@kernel.org,
 	shuah@kernel.org,
-	linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH v2] selftests/pid_namespace: compute pid_max test limits dynamically
-Date: Mon, 11 May 2026 11:09:51 +0200
-Message-ID: <20260511-gemsen-geier-8203a30617d3@brauner>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260422201151.3830506-1-doebel@amazon.com>
-References: <20260422201151.3830506-1-doebel@amazon.com>
+	linux-kselftest@vger.kernel.org
+Cc: ljs@kernel.org,
+	liam@infradead.org,
+	vbabka@kernel.org,
+	rppt@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	Song Hu <husong@kylinos.cn>,
+	linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests/mm: handle fork() failure in migration tests
+Date: Mon, 11 May 2026 17:34:32 +0800
+Message-Id: <20260511093433.2372985-1-husong@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1420; i=brauner@kernel.org; h=from:subject:message-id; bh=4bwXYwWvMKrxNVbxygkcM9Chw9qJHhERedGimX3TO5A=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWQxznn8Xd10qU/ZioWnC87sV2vj391nLNOuk70n2fx3d G9kxN0THaUsDGJcDLJiiiwO7Sbhcst5KjYbZWrAzGFlAhnCwMUpABP50MnwV7qwmf3DyqSl8+8F bTY7pZd9Z0d4r9Xylu4Tlq9DNBSW+TMyLPMRsjpta1Ii4bilxfiM7PSGnIwtnwr9DGuS51crdFx gAAA=
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 Content-Transfer-Encoding: 8bit
 
-On Wed, 22 Apr 2026 20:11:51 +0000, Bjoern Doebel wrote:
-> The pid_max kselftest hardcodes pid_max values of 400 and 500, but the
-> kernel enforces a minimum of PIDS_PER_CPU_MIN * num_possible_cpus().
-> On machines with many possible CPUs (e.g. nr_cpu_ids=128 yields a
-> minimum of 1024), writing 400 or 500 to /proc/sys/kernel/pid_max
-> returns EINVAL and all three tests fail.
-> 
-> Compute these limits the same way as the kernel does and set outer_limit
-> and inner_limit dynamically based on the result. Original test semantics
-> are preserved (outer < inner, nested namespace capped by parent).
-> 
-> [...]
+From: Song Hu <husong@kylinos.cn>
 
-Applied to the kernel-7.2.misc branch of the vfs/vfs.git tree.
-Patches in the kernel-7.2.misc branch should appear in linux-next soon.
+When fork() fails and returns -1, the code falls into the else branch
+and stores -1 into self->pids[i]. Later, kill(-1, SIGTERM) is called
+which sends SIGTERM to every process the user has permission to signal,
+potentially killing the entire user session.
 
-Please report any outstanding bugs that were missed during review in a
-new review to the original patch series allowing us to drop it.
+Add an explicit check for fork() returning -1 (pid < 0). On failure,
+clean up any already-forked children before failing the test via
+ASSERT_GE(pid, 0). This fix is applied to all three fork() call sites
+in shared_anon, shared_anon_thp, and shared_anon_htlb tests.
 
-It's encouraged to provide Acked-bys and Reviewed-bys even though the
-patch has now been applied. If possible patch trailers will be updated.
+Signed-off-by: Hu Song <husong@kylinos.cn>
+---
+ tools/testing/selftests/mm/migration.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-Note that commit hashes shown below are subject to change due to rebase,
-trailer updates or similar. If in doubt, please check the listed branch.
+diff --git a/tools/testing/selftests/mm/migration.c b/tools/testing/selftests/mm/migration.c
+index 60e78bbfc0e3..f433e4f195ad 100644
+--- a/tools/testing/selftests/mm/migration.c
++++ b/tools/testing/selftests/mm/migration.c
+@@ -163,6 +163,11 @@ TEST_F_TIMEOUT(migration, shared_anon, 2*RUNTIME)
+ 	memset(ptr, 0xde, TWOMEG);
+ 	for (i = 0; i < self->nthreads - 1; i++) {
+ 		pid = fork();
++		if (pid < 0) {
++			while (--i >= 0)
++				kill(self->pids[i], SIGTERM);
++			ASSERT_GE(pid, 0);
++		}
+ 		if (!pid) {
+ 			prctl(PR_SET_PDEATHSIG, SIGHUP);
+ 			/* Parent may have died before prctl so check now. */
+@@ -235,6 +240,11 @@ TEST_F_TIMEOUT(migration, shared_anon_thp, 2*RUNTIME)
+ 	memset(ptr, 0xde, TWOMEG);
+ 	for (i = 0; i < self->nthreads - 1; i++) {
+ 		pid = fork();
++		if (pid < 0) {
++			while (--i >= 0)
++				kill(self->pids[i], SIGTERM);
++			ASSERT_GE(pid, 0);
++		}
+ 		if (!pid) {
+ 			prctl(PR_SET_PDEATHSIG, SIGHUP);
+ 			/* Parent may have died before prctl so check now. */
+@@ -295,6 +305,11 @@ TEST_F_TIMEOUT(migration, shared_anon_htlb, 2*RUNTIME)
+ 	memset(ptr, 0xde, TWOMEG);
+ 	for (i = 0; i < self->nthreads - 1; i++) {
+ 		pid = fork();
++		if (pid < 0) {
++			while (--i >= 0)
++				kill(self->pids[i], SIGTERM);
++			ASSERT_GE(pid, 0);
++		}
+ 		if (!pid) {
+ 			prctl(PR_SET_PDEATHSIG, SIGHUP);
+ 			/* Parent may have died before prctl so check now. */
+-- 
+2.25.1
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
-branch: kernel-7.2.misc
-
-[1/1] selftests/pid_namespace: compute pid_max test limits dynamically
-      https://git.kernel.org/vfs/vfs/c/d324c5416a63
