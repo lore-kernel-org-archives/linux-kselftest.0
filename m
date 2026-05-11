@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D303402BA0;
-	Mon, 11 May 2026 16:29:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E84F8428822;
+	Mon, 11 May 2026 16:29:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778516956; cv=none; b=VeQMaVYu5704ZiJHyC6xKryIJX/c6TFYGw/NRjLygUYC+HjKVCssWngXIgkabozeIb7q7KlbVu0183vTvGwQUHXGwu7tUG4tnnaa6oHog3MksSppnoVRMsvqa0y6w6aZ0XDri4hQrhVyO25PY3Pb5vUfN2d9PT7KbwHdliHRj7k=
+	t=1778516963; cv=none; b=ONxG/Zn/kSvNFAcHf4ciZJlcKNhg+nxsImdSP37QN3QzHjIi2xN0cyXIl4vD/oT2l/V2M41vY/oIrslyhg+YS0ChrtAS4q7bjugkwOWlPhA7x7ZvSxO/a/piWkutpROmPPBq9CQWOtb680hChQyLoaiYOsPxP/6YQjVncfHopHU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778516956; c=relaxed/simple;
-	bh=D3ucbWX1umJfXHKxzz94PIX6u8f6Y5ITK227CSAANgg=;
+	s=arc-20240116; t=1778516963; c=relaxed/simple;
+	bh=zhjARy9ljfabBxOe2IlzFCWLsSTMxyOB0v613c3jUpo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=deHqxzctn11seg1dLA+wFHuizb0wgB3de48zd0YU03+h9rQHIPGZXdfFU4JPw8+ZxQk2GdLgjEXlrO7Cx8AYaNIux7CK3xTdsa8RbmhQkpm/ZtAx42Sw3shakU4o9MR5iXfyj+ypuzhWIR9dxNjjSVI9z8EHLk182VDOb6fZ4Gk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ElzUc2q9; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=Kx8kGzdfCxbKGJ/0QyjAAeHvpOKxE+SjE6uFrj6BYNFGejjZZpO88Bn3tgPM42QO+TXuUJf4JdQCSWqP8cnWEczO7R5BcsaCmM7IPY0te1qCBlVZC6LF1gF0OHAos9TJBzuT0mfVMTaxn7RlI09e5w5Uieov51KZDklcnOWlMi4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fl+YKUVU; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ElzUc2q9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F33B5C2BCC9;
-	Mon, 11 May 2026 16:29:09 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fl+YKUVU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C2D3C2BCF5;
+	Mon, 11 May 2026 16:29:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778516956;
-	bh=D3ucbWX1umJfXHKxzz94PIX6u8f6Y5ITK227CSAANgg=;
+	s=k20201202; t=1778516962;
+	bh=zhjARy9ljfabBxOe2IlzFCWLsSTMxyOB0v613c3jUpo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ElzUc2q9icB8fVCWT3YXVt6seSEwj6pXFOTBb9Sv60fVqzSgolcvFWBKj2MMYtrsc
-	 S8UieN7pOCcupgZ5Hu1TbxkciuGtPKqRKg1sGRE1AqfK8+uylDD7oTWoSYMaTiZoTn
-	 qXMdhrGVXzqk0iRKXaR/u8VxDZcn1P9oOKjeGeaqPu1m2zjhbjKnEaUwDC4mFiAKYo
-	 nsvp8NmgMq+1YydIPkZggBuaO4IBehAIgjqkjtWPKTYxvsHWij0qjrv9CqzVaI+iX0
-	 jl91WkkyVzTPLvVwp5ISjTh54Ynx7Y+dSU55yruRVfIrraQVtg+E5DiCm9s69aBo/X
-	 aQY9IAUvnSWWw==
+	b=fl+YKUVUg+j7xgkf+CKEpIeEb9gvv+l/mxRhCRLm4URzO9NL0YyNuT9qJokTu5gQh
+	 FpUlDzTHkRjNCM8rEekjrupWlaQdbqksFVaLeG2U0JUphQb8S4kE+mB90NiREIIipi
+	 EdbxcA2cyRu1ywJPaBwiNpWZGPBhZiac4GcplFIxqZSefT5dIuiFIu92Oa7P0QVsn8
+	 peqPdPklgsLv49VWMExhKaxfj74qr+5QH538MQzO+FzanupyFaDbESKykOb9/RvQKo
+	 yFOuW7yc+ivYkHRCiQ25Su52N9V8UfdoJnLqE15REjPcp3CBQE9iqs8L7FRLVDcDcr
+	 pENXAZoQKonOQ==
 From: Mike Rapoport <rppt@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	David Hildenbrand <david@kernel.org>
@@ -55,9 +55,9 @@ Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-mm@kvack.org
-Subject: [PATCH v4 04/55] selftests/mm: migration: properly cleanup fork()ed processes
-Date: Mon, 11 May 2026 19:27:48 +0300
-Message-ID: <20260511162840.375890-5-rppt@kernel.org>
+Subject: [PATCH v4 05/55] selftests/mm: run_vmtests.sh: don't gate THP and KSM tests on HAVE_HUGEPAGES
+Date: Mon, 11 May 2026 19:27:49 +0300
+Message-ID: <20260511162840.375890-6-rppt@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260511162840.375890-1-rppt@kernel.org>
 References: <20260511162840.375890-1-rppt@kernel.org>
@@ -71,123 +71,60 @@ Content-Transfer-Encoding: 8bit
 
 From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-Several migration test use fork() to create worker processes. These
-processes are later killed, but nothing collects their exit status and they
-remain as zombies in the system.
+HAVE_HUGEPAGES indicates availability of free HugeTLB pages. It should not
+be used to gate KSM test that merges transparent huge pages or
+split_huge_page_test.
 
-Add a helper function that kills the worker processes, waitpid()s for
-them and verifies the exit status.
+Remove check for HAVE_HUGEPAGES when running these tests.
 
-Replace the loops that call kill() for each process with a call to that
-helper.
-
-Reported-by: Luiz Capitulino <luizcap@redhat.com>
+Tested-by: Li Wang <li.wang@linux.dev>
+Reviewed-by: Li Wang <li.wang@linux.dev>
 Tested-by: Luiz Capitulino <luizcap@redhat.com>
 Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 ---
- tools/testing/selftests/mm/migration.c | 47 +++++++++++++++++++-------
- 1 file changed, 35 insertions(+), 12 deletions(-)
+ tools/testing/selftests/mm/run_vmtests.sh | 22 +++++++++-------------
+ 1 file changed, 9 insertions(+), 13 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/migration.c b/tools/testing/selftests/mm/migration.c
-index 16ffd3c55ee0..e504829df6b6 100644
---- a/tools/testing/selftests/mm/migration.c
-+++ b/tools/testing/selftests/mm/migration.c
-@@ -67,6 +67,29 @@ FIXTURE_TEARDOWN(migration)
- 	free(self->pids);
- }
+diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
+index d8468451b3a3..e2dc9ac87bfc 100755
+--- a/tools/testing/selftests/mm/run_vmtests.sh
++++ b/tools/testing/selftests/mm/run_vmtests.sh
+@@ -436,9 +436,7 @@ CATEGORY="memfd_secret" run_test ./memfd_secret
+ fi
  
-+static bool kill_children(FIXTURE_DATA(migration) * self)
-+{
-+	bool err = false;
-+	pid_t pid;
-+	int i;
-+
-+	for (i = 0; i < self->nthreads; i++) {
-+		int status = 0;
-+
-+		pid = self->pids[i];
-+		if (pid < 0)
-+			continue;
-+		if (kill(pid, SIGTERM))
-+			err = true;
-+		if (pid != waitpid(pid, &status, 0))
-+			err = true;
-+		if (!WIFSIGNALED(status) || WTERMSIG(status) != SIGTERM)
-+			err = true;
-+	}
-+
-+	return !err;
-+}
-+
- int migrate(uint64_t *ptr, int n1, int n2)
- {
- 	int ret, tmp;
-@@ -151,7 +174,7 @@ TEST_F_TIMEOUT(migration, shared_anon, 2*RUNTIME)
- {
- 	pid_t pid;
- 	uint64_t *ptr;
--	int i;
-+	int i, err;
+ # KSM KSM_MERGE_TIME_HUGE_PAGES test with size of 100
+-if [ "${HAVE_HUGEPAGES}" = "1" ]; then
+-	CATEGORY="ksm" run_test ./ksm_tests -H -s 100
+-fi
++CATEGORY="ksm" run_test ./ksm_tests -H -s 100
+ # KSM KSM_MERGE_TIME test with size of 100
+ CATEGORY="ksm" run_test ./ksm_tests -P -s 100
+ # KSM MADV_MERGEABLE test with 10 identical pages
+@@ -493,16 +491,14 @@ CATEGORY="thp" run_test ./transhuge-stress -d 20
  
- 	ptr = mmap(NULL, TWOMEG, PROT_READ | PROT_WRITE,
- 		MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-@@ -171,9 +194,9 @@ TEST_F_TIMEOUT(migration, shared_anon, 2*RUNTIME)
- 		}
- 	}
- 
--	ASSERT_EQ(migrate(ptr, self->n1, self->n2), 0);
--	for (i = 0; i < self->nthreads; i++)
--		ASSERT_EQ(kill(self->pids[i], SIGTERM), 0);
-+	err = migrate(ptr, self->n1, self->n2);
-+	ASSERT_EQ(kill_children(self), true);
-+	ASSERT_EQ(err, 0);
- }
- 
- /*
-@@ -217,7 +240,7 @@ TEST_F_TIMEOUT(migration, shared_anon_thp, 2*RUNTIME)
- 	uint64_t pmdsize;
- 	pid_t pid;
- 	uint64_t *ptr;
--	int i;
-+	int i, err;
- 
- 	if (!thp_is_enabled())
- 		SKIP(return, "Transparent Hugepages not available");
-@@ -247,9 +270,9 @@ TEST_F_TIMEOUT(migration, shared_anon_thp, 2*RUNTIME)
- 		}
- 	}
- 
--	ASSERT_EQ(migrate(ptr, self->n1, self->n2), 0);
--	for (i = 0; i < self->nthreads; i++)
--		ASSERT_EQ(kill(self->pids[i], SIGTERM), 0);
-+	err = migrate(ptr, self->n1, self->n2);
-+	ASSERT_EQ(kill_children(self), true);
-+	ASSERT_EQ(err, 0);
- }
- 
- /*
-@@ -287,7 +310,7 @@ TEST_F_TIMEOUT(migration, shared_anon_htlb, 2*RUNTIME)
- 	unsigned long hugepage_size;
- 	pid_t pid;
- 	uint64_t *ptr;
--	int i;
-+	int i, err;
- 
- 	hugepage_size = default_huge_page_size();
- 	if (!hugepage_size)
-@@ -311,9 +334,9 @@ TEST_F_TIMEOUT(migration, shared_anon_htlb, 2*RUNTIME)
- 		}
- 	}
- 
--	ASSERT_EQ(migrate(ptr, self->n1, self->n2), 0);
--	for (i = 0; i < self->nthreads; i++)
--		ASSERT_EQ(kill(self->pids[i], SIGTERM), 0);
-+	err = migrate(ptr, self->n1, self->n2);
-+	ASSERT_EQ(kill_children(self), true);
-+	ASSERT_EQ(err, 0);
- }
- 
- TEST_HARNESS_MAIN
+ # Try to create XFS if not provided
+ if [ -z "${SPLIT_HUGE_PAGE_TEST_XFS_PATH}" ]; then
+-    if [ "${HAVE_HUGEPAGES}" = "1" ]; then
+-	if test_selected "thp"; then
+-	    if grep xfs /proc/filesystems &>/dev/null; then
+-		XFS_IMG=$(mktemp /tmp/xfs_img_XXXXXX)
+-		SPLIT_HUGE_PAGE_TEST_XFS_PATH=$(mktemp -d /tmp/xfs_dir_XXXXXX)
+-		truncate -s 314572800 ${XFS_IMG}
+-		mkfs.xfs -q ${XFS_IMG}
+-		mount -o loop ${XFS_IMG} ${SPLIT_HUGE_PAGE_TEST_XFS_PATH}
+-		MOUNTED_XFS=1
+-	    fi
++    if test_selected "thp"; then
++	if grep xfs /proc/filesystems &>/dev/null; then
++	    XFS_IMG=$(mktemp /tmp/xfs_img_XXXXXX)
++	    SPLIT_HUGE_PAGE_TEST_XFS_PATH=$(mktemp -d /tmp/xfs_dir_XXXXXX)
++	    truncate -s 314572800 ${XFS_IMG}
++	    mkfs.xfs -q ${XFS_IMG}
++	    mount -o loop ${XFS_IMG} ${SPLIT_HUGE_PAGE_TEST_XFS_PATH}
++	    MOUNTED_XFS=1
+ 	fi
+     fi
+ fi
 -- 
 2.53.0
 
