@@ -1,139 +1,113 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FAEB35E947
-	for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 16:56:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0351A43DA39;
+	Mon, 11 May 2026 17:01:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778518609; cv=none; b=fbrhZhWXclY+ZgvC4NivPPhh/4bUd1ol7CveamGnDeZPzUYQU8ptmEope8YHPZplM5GskeApPqJdvTsGrXyHYMWtCh7ZGATOzUgkLpnFWswT1P/PJwVNYbGaDM7Q+YLKoPd1sZ0UUTzUC/3thGKz6Yb9ERwhE/4kdgkvnAeUUcQ=
+	t=1778518869; cv=none; b=JkAqb3GGuHgpyoeAVzRdnuE/CeT8r3TDEiT86AcKmOXTH0n3N3tZq8OOkCxRwgIbb1F0tObu1rvrY2je0j9G9u5CtRJj3ZS7TYBP88hC6hmNMti/k/9EwQpurLygV3tGp1MYr4dNmiVHjvB1zX4BbXD0d94HdHwcjDRZR81zzJk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778518609; c=relaxed/simple;
-	bh=+oJ7STnEtpKwtmejEWsf59x3beDlWs0H1oLi3fdVOMk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KKCUD+oHqms1HX172nRbwCRTa72Qr7O2mMqYakhzREX2ONTQ5bgyhe7rQQx3Ax3rlXGG98ugvFXgV9IVECixroqC2kSG3Cn+DTUcMqcjyjHXaczTx+7hNKo388ybldgxFb5dVIYARdvPwHhT7VSb2UDXBXu/UcAsLgsy6XONifs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DlyMBdmd; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1778518869; c=relaxed/simple;
+	bh=wKGeZ0Nop1wSGOlsNGEAE45FijcZcu5Se/bdA0P/Wgk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aO8DwCLTtJnFXut1oCOSFTu+ZaAyMTmPQqY7Kf7Ngpu2bu/7SaNL7wEh0imNf8zjMVotaguwCid6/X7K2n2EbfijdIWR29FfH2aoYhuYxSjM0SBFkqhYp3FgRSIb0A1aDvsQkf/RgqIHDGsPAQBNstK01P4TXGQdEvF9RAwmt4I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=eL465Lrr; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DlyMBdmd"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1778518607;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=7y9NxSIhRHF9X0V2ZdIsFo+JjL4jCLcQKYoOc1OsOQU=;
-	b=DlyMBdmdAAIAy+4WFhpWGyujxdEFAgIjXMuM1Y1sEB4OZJpXI/g92KCnyqBv3mlswTaw5Y
-	PJ2aK5RLgPfV6Vh6a24Qsqh7peUvrBVtcZRtd3dkaQZlBaYm1NZLXgoS2hDtRrl6UJdAFH
-	cP/FXQbcMlAk9LTp8CMel6ZYmEuorW4=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-642-NWrdrH2HORWv48V6eSUyJw-1; Mon,
- 11 May 2026 12:56:39 -0400
-X-MC-Unique: NWrdrH2HORWv48V6eSUyJw-1
-X-Mimecast-MFC-AGG-ID: NWrdrH2HORWv48V6eSUyJw_1778518596
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 91CF4180034C;
-	Mon, 11 May 2026 16:56:34 +0000 (UTC)
-Received: from [10.44.34.38] (unknown [10.44.34.38])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 0829118004A3;
-	Mon, 11 May 2026 16:56:16 +0000 (UTC)
-Message-ID: <baff82ca-6321-4b16-aa61-b2d6d60b6535@redhat.com>
-Date: Mon, 11 May 2026 18:56:15 +0200
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="eL465Lrr"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=aFtsHVC/6TRth3Uw59YFiPg/UrRnQ2u+G8ngzZnxZMs=; b=eL465Lrrm+j+xfjTnlKMdZ/DAa
+	geoWQSm8MENk7VBAVb93m/9hh2vTFsOYfx7JbDv7o4+Yg4Bab7ojvNGeG7aflMg6CQvuNBZTmU9MX
+	ClR6ipU7jfpNZNXeLaVLZzdgtRAZox35QlGfkYHEf98Vh0+BIsiudZ/RdaXRQ8j4bAyl9yXH8u67F
+	S/w/XCr9os++i5uwzCP0Ck5O2UyX6x0HmA/bwgjs9v7WWhEwV38Rus49KmtxJOXh9qsP0um8zKyJJ
+	7JkmjUfeZPokXbDDdKKrIcvq1+l5Y5GMir/tlYiicLNYT4YmqzAIXD7ZOU79c+8AHUwhcmsgVO+8O
+	JN6My3Ew==;
+Received: from authenticated user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1wMU09-001kOh-1w;
+	Mon, 11 May 2026 17:01:05 +0000
+Date: Mon, 11 May 2026 10:01:00 -0700
+From: Breno Leitao <leitao@debian.org>
+To: Fernando Fernandez Mancera <fmancera@suse.de>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	horms@kernel.org, pabeni@redhat.com, kuba@kernel.org, edumazet@google.com, 
+	dsahern@kernel.org, davem@davemloft.net
+Subject: Re: [PATCH 2/2 net v4] selftests: fib_tests: add temporary IPv6
+ address renewal test
+Message-ID: <agIKdx3q9ewyhq7r@gmail.com>
+References: <20260511122645.6233-2-fmancera@suse.de>
+ <20260511122645.6233-3-fmancera@suse.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Documentation: KVM: Document guest-visible compatibility
- expectations
-To: David Woodhouse <dwmw2@infradead.org>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, kvm@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- Sean Christopherson <seanjc@google.com>, Jim Mattson <jmattson@google.com>,
- Marc Zyngier <maz@kernel.org>
-Cc: Oliver Upton <oupton@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
- Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu
- <yuzenghui@huawei.com>, Catalin Marinas <catalin.marinas@arm.com>,
- Will Deacon <will@kernel.org>, Raghavendra Rao Ananta <rananta@google.com>,
- Eric Auger <eric.auger@redhat.com>, Kees Cook <kees@kernel.org>,
- Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>,
- linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
- linux-kselftest@vger.kernel.org
-References: <6856b269d2af706eae397e0cf9c1231f89d9a932.camel@infradead.org>
- <6afc4b95-3c15-4d71-877d-19b84e91ce05@redhat.com>
- <57bc082f4824d6114d3156744c25986effc29aca.camel@infradead.org>
-Content-Language: en-US
-From: Paolo Bonzini <pbonzini@redhat.com>
-Autocrypt: addr=pbonzini@redhat.com; keydata=
- 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
-In-Reply-To: <57bc082f4824d6114d3156744c25986effc29aca.camel@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260511122645.6233-3-fmancera@suse.de>
+X-Debian-User: leitao
 
-On 5/11/26 18:38, David Woodhouse wrote:
-> Not *everything* is in CPUID; one recent exception that comes to mind
-> is the SUPPRESS_EOI_BROADCAST quirk. But on x86 we preserve the
-> existing behaviour of older kernels — even when that behaviour doesn't
-> make much sense, as with SUPPRESS_EOI_BROADCAST where older KVM would
-> *advertise* the feature, but not actually *implement* it. Nevertheless,
-> that remains the default behaviour of future kernels unless userspace
-> explicitly opts in to fully enable (or disable) the feature.
+On Mon, May 11, 2026 at 02:26:46PM +0200, Fernando Fernandez Mancera wrote:
+> Add a test to check that temporary IPv6 address is regenerated properly
+> after the base prefix is deprecated and restored.
 > 
-> But this documentation update isn't even asking for that compatible-by-
-> default behaviour, even though that is the right thing to do. It's only
-> asking that it be *possible* to reinstate the old behaviour, for
-> userspace that *knows* about the change and explicitly wants to go back
-> to the old way to remain compatible.
+> Fib6 temporary address renewal test
+>     TEST: IPv6 temporary address cleanly deprecated and regenerated     [ OK ]
+> 
+> Signed-off-by: Fernando Fernandez Mancera <fmancera@suse.de>
+> ---
+> v2: adjusted the sleep so there is enough time for the issue to trigger,
+> added cleanup at the end
+> v3: no changes
+> v4: no changes
+> ---
+>  tools/testing/selftests/net/fib_tests.sh | 59 +++++++++++++++++++++++-
+>  1 file changed, 58 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/net/fib_tests.sh b/tools/testing/selftests/net/fib_tests.sh
+> index af64f93bb2e1..8f10de0eb985 100755
+> --- a/tools/testing/selftests/net/fib_tests.sh
+> +++ b/tools/testing/selftests/net/fib_tests.sh
+> @@ -12,7 +12,7 @@ TESTS="unregister down carrier nexthop suppress ipv6_notify ipv4_notify \
+>         ipv4_route_metrics ipv4_route_v6_gw rp_filter ipv4_del_addr \
+>         ipv6_del_addr ipv4_mangle ipv6_mangle ipv4_bcast_neigh fib6_gc_test \
+>         ipv4_mpath_list ipv6_mpath_list ipv4_mpath_balance ipv6_mpath_balance \
+> -       ipv4_mpath_balance_preferred fib6_ra_to_static"
+> +       ipv4_mpath_balance_preferred fib6_ra_to_static fib6_temp_addr_renewal"
+>  
+>  VERBOSE=0
+>  PAUSE_ON_FAIL=no
+> @@ -1611,6 +1611,62 @@ fib6_ra_to_static()
+>  	cleanup &> /dev/null
+>  }
+>  
+> +fib6_temp_addr_renewal() {
+> +	setup
+> +
+> +	echo
+> +	echo "Fib6 temporary address renewal test"
+> +	set -e
+> +
+> +	# ra6 is required for the test. (ipv6toolkit)
+> +	if [ ! -x "$(command -v ra6)" ]; then
+> +	    echo "SKIP: ra6 not found."
+> +	    set +e
+> +	    cleanup &> /dev/null
+> +	    return
+> +	fi
 
-Yep, these are the "quirks"---if it's too early for Arm to commit to 
-that, I guess it's fine.
+Should you check for ra6 before the "setup" above?
 
-However, independent of this patch which I (obviously) believe is a good 
-idea, I'd like to understand how far it is, assuming 1) no quirks 2) 
-same CPU host.
+Also, kselftest convention is to exit with $ksft_skip (4) rather than just
+return so that the framework reports SKIP rather than PASS with 0 tests.
 
-By the way, you didn't Cc Marc...
-
-Paolo
+A bare return here will make the test silently disappear from CI on hosts
+without ipv6toolkit.
 
