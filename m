@@ -1,76 +1,63 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9914A30EF92;
-	Mon, 11 May 2026 22:31:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B1BC356771;
+	Mon, 11 May 2026 22:43:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778538719; cv=none; b=BbTINwwY/i6jxwFIOXtXUXMwPgwffmQLFyBK7Cxuiy3aOZqwVMc64WMS6ZtbdJ2tnJRn8S7jwRJYqck1uQ5g1SXvJ1w9HypYBpBaeW9Dm5d8p1A5bXOgfi6PxzSGLAPIVVnmW3au9a0GNpvD4jWa9nlmkRCbqB6DpEHX05ZxQS0=
+	t=1778539423; cv=none; b=mNdw84Z6R9SRimpFs+O3K4JyQnOsOKJM3DY4MSLaIAMZREInWuBQvdKPa7aZO7KQZpE41yFBPXhfuo8yJ/0CUGYswz8y6W+yFWrA70VjT1OYBAyE2Mrz26CS/rO8iMcTrTOnjUZ0HC2lxQlgDVJxOYSN27q91zBlGNeedze6/tc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778538719; c=relaxed/simple;
-	bh=f9BcVCkaWUGp7bONaHdPiA7vTuTkWS/NeEmdZAr0Vl8=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=JJsn88Bt2vHZyh4RdVnffF7EemZ89AtFOlzTk78eZ7IzC5ZsMlULh3PbS7L0/Ue70EwjhSTvzO5GLo737e6UexN8XxwoWinqhRhSvxultmCc/qp5ME8Sz6cWu48GV0n95rxhmLtGw7e2JehxbyrW3EavGFJMMHaD6Bp8LWPG9Dg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=N5nzfqYU; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778539423; c=relaxed/simple;
+	bh=iE6fCYjh6nZBmn/sFKSShgObnvw3FHyD3lza4Tnnwlk=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=cScNRFDSpkEAC9EERypl0JTcoaD/PqLpcd4TOlKJweq4t7oavTFn/CK8zFRiDFexiKek1Z/k3K3YOezDXN7cgTGxFfq1/+L0WDs8xKqeNxAyDDYkDPrEnkTSNCLyE0pMH6N1hHqWFXA7Xgz/0CtzkLIua4M3NCmJlYfWgRsRo9E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ux4eTbUC; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="N5nzfqYU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB003C2BCB0;
-	Mon, 11 May 2026 22:31:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1778538719;
-	bh=f9BcVCkaWUGp7bONaHdPiA7vTuTkWS/NeEmdZAr0Vl8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=N5nzfqYUNVqnt07VsMz+fG5TVSwLpJYOkviYktgycKHl6l0qjHlArM2nvfarw6toW
-	 mVZ/5pvTNAq5+3KxgY2XOpqeKbe2O3cYCDjAbK8lRR1VK3VK9cbE+HbpRhtrDXQOim
-	 KVtY0Ovx4jWIValrAIOP9vHTt6eoed9QmLzrQCNY=
-Date: Mon, 11 May 2026 15:31:58 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Michal Hocko <mhocko@suse.com>
-Cc: Breno Leitao <leitao@debian.org>, Sasha Levin <sashal@kernel.org>,
- corbet@lwn.net, skhan@linuxfoundation.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- gregkh@linuxfoundation.org
-Subject: Re: [PATCH] killswitch: add per-function short-circuit mitigation
- primitive
-Message-Id: <20260511153158.bad58633e2c8d247322ebb4b@linux-foundation.org>
-In-Reply-To: <agHUp8ulaWJ75WU5@tiehlicka>
-References: <20260507070547.2268452-1-sashal@kernel.org>
-	<20260508135630.a380e3c187b59e4c04e6f358@linux-foundation.org>
-	<af5Z2IvtS5pVorSl@laps>
-	<agG_PZ3qcl6TwLnL@gmail.com>
-	<agHUp8ulaWJ75WU5@tiehlicka>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ux4eTbUC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B55B9C2BCB0;
+	Mon, 11 May 2026 22:43:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778539422;
+	bh=iE6fCYjh6nZBmn/sFKSShgObnvw3FHyD3lza4Tnnwlk=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=ux4eTbUCFWTzNzu+necApj5ykb/xPZrgWnqnE2UF6P9ThK8firLEFiIQX/8BFRJst
+	 LdUUIdAzJwn7JMu/LQ1nuSTnRPQqnKRfgLlSi7j42JxwkR17WVmOjb6Uk5XBLHhCn1
+	 V8ZFXR9Mq4WG/JsV9dQSH0MzNwSEVfpn3URl52U7+q/lQw6rnQ+3Xlgchd20XITE5U
+	 0pkTMiAvsRoTssiBvuZu3/Yvh5AjJDkt0mnRQnXaaQouXPBPUAqBBomPGJ2ap2DGjG
+	 yMjA2i7DNwGjCYW4QCMC994f6UJSpfWBuldZsIGXKuoBZbZ/LG7g9IHUmcQwgMmiqQ
+	 AJsfEoeJfyE0g==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7D05B39308B3;
+	Mon, 11 May 2026 22:42:50 +0000 (UTC)
+Subject: Re: [GIT PULL] kunit fixes update for Linux 7.1-rc4
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <ff508236-2150-489c-a815-66961074fc60@linuxfoundation.org>
+References: <ff508236-2150-489c-a815-66961074fc60@linuxfoundation.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <ff508236-2150-489c-a815-66961074fc60@linuxfoundation.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux_kselftest-kunit-fixes-7.1-rc4
+X-PR-Tracked-Commit-Id: 8f80b5b227ef9ea422080487715c841856339aed
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 50897c955902c93ae71c38698abb910525ebdc89
+Message-Id: <177853936904.2491237.4989055086711022455.pr-tracker-bot@kernel.org>
+Date: Mon, 11 May 2026 22:42:49 +0000
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, shuah <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, David Gow <david@davidgow.net>, Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <raemoar63@gmail.com>, linux-kernel@vger.kernel.org, "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
-On Mon, 11 May 2026 15:07:51 +0200 Michal Hocko <mhocko@suse.com> wrote:
+The pull request you sent on Mon, 11 May 2026 16:16:47 -0600:
 
-> > 2) It's common to run hundreds of different kernel versions across a
-> >    fleet. Since livepatch is kernel-specific, a single CVE suddenly
-> >    requires building and deploying hundreds of individual livepatches—
-> >    far less practical than a simple sysfs write.
-> 
-> LP is certainly a more laborous solution.
+> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux_kselftest-kunit-fixes-7.1-rc4
 
-<another please-educate-akpm email>
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/50897c955902c93ae71c38698abb910525ebdc89
 
-Does a livepatch *have* to be distributed as a ready-to-load kernel
-module?
+Thank you!
 
-Is it not possible to distribute a "livepatch" to the fleet as a single
-string?  Send out "make function some_bad_function() return -EINVAL"
-and let scripting on each machine figure out how to locally write,
-build, sign and install such a livepatch?
-
-That would require that each machine locally contains enough data for
-it to be able to build a kernel for the currently-running kernel, and
-that each machine contains a build environment.
-
-I *think* this is feasible on distro-based machines?  But perhaps not
-on stripped-down hyperscalar boxen?
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
