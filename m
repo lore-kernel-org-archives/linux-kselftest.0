@@ -1,129 +1,115 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDCB83DD522;
-	Mon, 11 May 2026 13:40:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A12A83BFE33;
+	Mon, 11 May 2026 13:41:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778506830; cv=none; b=QCHkBdPYvscEicj4nBZU3r6rGXHe3hhWSWFeOEddWL3vHLe3tpk505jM5xlPjJI/vNHBLEfcQcn8KN6SV+mK36wLoqXcr/9F3SPDe05yOhWXmMYwTP0vt1NfztVMEcKgZj/2AaVADKHIbIVMaHRngCuQSnnXfvPKyX2i2PCZX6o=
+	t=1778506869; cv=none; b=KDin0qyUGId2izQudeduslVT0n5xIk3ZY6qxPeM6Zh9ZKemfrRCYRUjEQjNP0Eqc1zDhTdVTUOJhLKea4h6RgfroKaP10TlTR9OyN6G9ILqxwcyvKULWgO4XoSgaXxtBA6FFavOpyXqvTLxRsTNKXoW/LdoV1+l/1YmnJYPi1Gs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778506830; c=relaxed/simple;
-	bh=HetL7fwL88YbNiLLCNv2HBHdNqdmtHPgs5HbLx9YVCo=;
+	s=arc-20240116; t=1778506869; c=relaxed/simple;
+	bh=A665MEVXMZekT0cld9H2rty4M2R4mWBaSCWPSm3L9Y8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gP0uHHXhfiVhWEKhDPsHIHyNhuKiw0dQ/tmEG636lkFBy5dTHrVHhBN2xb6xbh4ioGzaXbesz/+6HlfRvLgAHL5WEX8kpOqMDlHYgXKBR3ETN8/nBI6Y63+Qs+AG0pfJoiG1ktvwaugVMN025AVPkBZLqlCNm4bIfo5TzfxTUUI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=meJvWriC; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=B1DcRGU2N4hV4YKDGrngjQRTgam3zrtTz1L8m95jKMuemcLNT30YyLhHwdE0/uPl3PnKlamhgzgFEDZ1zwwblpSrEzDjnHOYyvPty64zdh8oHds01vVHFK2p1wutGWDseg0t+gjR0xlav1KPSDFcydXRi0JJPnoxnr3BdWy4sGo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MtqpnJEy; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="meJvWriC"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-	Reply-To:Content-ID:Content-Description;
-	bh=KA30ajxPuAZxlVx+oW1ephR/e4yqdZ0I6hebdfKsqw4=; b=meJvWriC8hyPN2Nz+wZVWxIyUa
-	a/TAVOI0lzz9pFZtUiPpqsP/ogn6fHDMKF4oX3yy38uLhp+XxKSusjILf/E4p6zYJHxPoj46TwmHs
-	UdgOOX8jOQRcfAKmsicpsL/vioeuKPYM0eml2tBXqOpSzEgBvtL17k9qbjTpaOvYCO8GFSwE3eSuZ
-	6S5nzfhZ/k6zP7AkEF0AuwVFL7rsvxvnr8mlD+unWemVwoxGVIi8vrs7k8ylaYehb9JYEqEbyWfdB
-	QgBYgMSCHk8kbha3Ro2pSfwQWQWTqohdgywapGLhYvFxAtGtfoOcqOManMtRd0AIa6U+41b0mtXAe
-	tgBBcaGQ==;
-Received: from authenticated user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wMQrt-001dfv-32;
-	Mon, 11 May 2026 13:40:22 +0000
-Date: Mon, 11 May 2026 06:40:16 -0700
-From: Breno Leitao <leitao@debian.org>
-To: Michal Hocko <mhocko@suse.com>
-Cc: Sasha Levin <sashal@kernel.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, corbet@lwn.net, skhan@linuxfoundation.org, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	gregkh@linuxfoundation.org, ivaz@meta.com
-Subject: Re: [PATCH] killswitch: add per-function short-circuit mitigation
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MtqpnJEy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C844C2BCB0;
+	Mon, 11 May 2026 13:41:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778506869;
+	bh=A665MEVXMZekT0cld9H2rty4M2R4mWBaSCWPSm3L9Y8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=MtqpnJEyKc1kDH9q8n+RQr9BQRZU1pOL/9fx9BqM/FsxwTK5H4JtjtptAHZXZez3/
+	 EceBNxmwaDmnGKCClzKTwK/jYDPvqjfzg1h1ePZht7Njo4vNaZ62eH+5keG2Tizf73
+	 L+fAOyBxT6zARoDYYNSLjqZO8YWaigzZpA0wigzMtrAYGRiY8nW25TdyeIur/ELYo6
+	 BHNn5KlY0ex6sZpX1/QMX+nFwpKLRbfBYz6eOmahN7GQiYbEeZ7DpyTwv8WYSPXAcS
+	 xoSWpVnU4JCQ1PkdPyEUoby+jDRPHsqNskHhOvCMLKyDsBnC9s0queYLgqKiRjoPhW
+	 LVytkOgeInsgQ==
+Date: Mon, 11 May 2026 09:41:07 -0400
+From: Sasha Levin <sashal@kernel.org>
+To: Breno Leitao <leitao@debian.org>
+Cc: corbet@lwn.net, akpm@linux-foundation.org, skhan@linuxfoundation.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, gregkh@linuxfoundation.org
+Subject: Re: [PATCH v2] killswitch: add per-function short-circuit mitigation
  primitive
-Message-ID: <agHW-lYKoWmuBLDQ@gmail.com>
-References: <20260507070547.2268452-1-sashal@kernel.org>
- <20260508135630.a380e3c187b59e4c04e6f358@linux-foundation.org>
- <af5Z2IvtS5pVorSl@laps>
- <agG_PZ3qcl6TwLnL@gmail.com>
- <agHUp8ulaWJ75WU5@tiehlicka>
+Message-ID: <agHcc4s-xj83dzty@laps>
+References: <20260508195749.1885522-1-sashal@kernel.org>
+ <agHSFo0yqypa9vk9@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <agHUp8ulaWJ75WU5@tiehlicka>
-X-Debian-User: leitao
+In-Reply-To: <agHSFo0yqypa9vk9@gmail.com>
 
-Hello Michal,
-
-On Mon, May 11, 2026 at 03:07:51PM +0200, Michal Hocko wrote:
-> > I work with these issues at Meta, and this approach would address a real
-> > need we have.
-> >
-> > While livepatch could theoretically solve this problem, it's less suited
-> > for rapid mitigation for a couple of reasons:
-> >
-> > 1) Livepatch rollout is inherently slower due to the blast radius if a
-> >    bug exists in the livepatch mechanism itself.
-> >
-> > 2) It's common to run hundreds of different kernel versions across a
-> >    fleet. Since livepatch is kernel-specific, a single CVE suddenly
-> >    requires building and deploying hundreds of individual livepatches—
-> >    far less practical than a simple sysfs write.
+On Mon, May 11, 2026 at 06:14:27AM -0700, Breno Leitao wrote:
+>helo Sasha,
 >
-> LP is certainly a more laborous solution. I guess this is quite clear.
+>First of all, Thanks for this feature, this is useful to me, and I am
+>interested in it. Feel free to copy me and I can test the next revisions
 >
-> It is also much safer option as it deals with all implementation details
-> like consistency. All that is not done for fun. I am really wondering
-> how admins are expected to a) know which kernel functions are ok/safe to
-> disable and b) when it is safe to do so without introducing unsafe
-> kernel state or introduce an outright bug that way.
+>On Fri, May 08, 2026 at 03:57:48PM -0400, Sasha Levin wrote:
+>
+>> +config KILLSWITCH
+>> +	bool "Killswitch: short-circuit a kernel function as a CVE mitigation"
+>> +	depends on SECURITYFS
+>> +	depends on KPROBES && HAVE_KPROBES_ON_FTRACE
+>> +	depends on HAVE_FUNCTION_ERROR_INJECTION
+>> +	select FUNCTION_ERROR_INJECTION
+>> +	help
+>> +	  Provide an admin-facing mechanism to make a chosen kernel function
+>> +	  return a fixed value without executing its body, as a temporary
+>> +	  mitigation for a security bug before a real fix is available.
+>> +
+>> +	  Operators write "engage <symbol> <retval> [reason]" to
+>
+>Should [reason] be shown at "engaged" ? I was expecting it, and in fact find it
+>very useful, but I don't see it.
+>
+>	# echo "engage __x64_sys_getuid 12 CVE-2026-99999-INCIDENT-4242" > /sys/kernel/security/killswitch/control
+>	# cat /sys/kernel/security/killswitch/engaged
+>	__x64_sys_getuid retval=12 hits=12
 
-You raise a valid concern. There's no simple answer. Making these decisions
-requires deep understanding of both the code and the potential consequences.
+This was a woopsie on my end: originally I planned to have a reason field, but
+then decided to drop it to keep the patch simple. However, I forgot to fix up
+the kconfig help text :(
 
-The value proposition here (IMO) is the ability to completely disable a
-code path by returning an error code (such as -EINVAL or -EBUSY) at key
-entry points, rather than attempting surgical modifications.
+If you think it'll be useful, I'm happy to add it back.
 
-While this approach is far from perfect, it can serve as an effective
-stopgap measure until a proper fix is deployed or a livepatch becomes
-available.
+>> +#if IS_ENABLED(CONFIG_KUNIT)
+>> +#include <kunit/test.h>
+>> +
+>> +/* Non-static so kallsyms resolves them without CONFIG_KALLSYMS_ALL. */
+>> +int ks_kunit_target_int(int x);
+>> +void *ks_kunit_target_ptr(int x);
+>> +
+>> +/* noipa keeps the call out-of-line and uneliminated. */
+>> +__attribute__((__noipa__)) int ks_kunit_target_int(int x)
+>> +{
+>> +	return x + 1;
+>> +}
+>> +
+>> +__attribute__((__noipa__)) void *ks_kunit_target_ptr(int x)
+>> +{
+>> +	return ERR_PTR(-EIO);
+>> +}
+>
+>When compiling with LLVM=1, I get the following error:
+>
+>        kernel/killswitch.c:708:16: error: unknown attribute '__noipa__' ignored [-Werror,-Wunknown-attributes]
+>        708 | __attribute__((__noipa__)) int ks_kunit_target_int(int x)
+>        |                ^~~~~~~~~
+>        kernel/killswitch.c:713:16: error: unknown attribute '__noipa__' ignored [-Werror,-Wunknown-attributes]
+>        713 | __attribute__((__noipa__)) void *ks_kunit_target_ptr(int x)
+>        |                ^~~~~~~~~
 
-> Thiking about this I can see how waiting for an official LP can be time
-> consuming and sometimes creating those is far from trivial. But would it
-> make sense to have automated LP creation tooling available that would
-> allow to return early from a function and relly on the existing
-> infrastructure to do the right thing?
+Will fix, thanks!
 
-Absolutely. I view this as a progression of mitigation strategies, where
-the ultimate goal is deploying a properly fixed kernel, but reaching that
-endpoint may require intermediate steps.
-
-1) Fix and deploy a new kernel:
-   * Pros: Lowest risk, permanent solution
-   * Cons:
-   	- Requires reboot and extended downtime
-
-2) Livepatch:
-   * Pros: Complete mitigation, clean approach, zero downtime
-   * Cons:
-	- Time-intensive rollout (requires bake time and health checks)
-	- Demands manual patch creation and review for each kernel version
-	  (i.e., kernel developer involvement is essential)
-
-3) This approach (killswitch):
-   * Pros: Immediate deployment capability
-   	- Security engineers familiar with kernel code can act independently
-   * Cons:
-	- Risk of instability if the operator misjudges the impact
-
-In short, I see killswitch as a complementary tool in the security
-toolbox, not a universal solution.
-
---breno
+-- 
+Thanks,
+Sasha
