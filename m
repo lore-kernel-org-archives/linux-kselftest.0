@@ -1,129 +1,123 @@
-Received: from mail-yx1-f54.google.com (mail-yx1-f54.google.com [74.125.224.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE55736D51B
-	for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 03:43:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FDAE33B97A;
+	Mon, 11 May 2026 06:08:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778470998; cv=none; b=g8SA460HPdmLXyKiLL5i9Hojq5D1UfZPkMeE1CuRVc+aZbvhCjKDBYk9Z+Gqn1TCxBXjxgHxjTQ9poH4JKDvISbpMoUtdBCpnRNaPi1MG/q/nAM+LlwvvvcmIa86sM4+M0JGiwUvnpQQn3KgF+3zNJJBSYKpbTiWhfyKd9oI9SU=
+	t=1778479706; cv=none; b=L2Wsw9HlZ19N8XahonCw3rw/qjXp2Yep4TuK/G/Il0QmduMoS8o66O+fClRW0pJMTDqhWVeTxUSzXXbdWwl0GWdHEdmCoO4UIW2MyyXdckIofLHoRzeucVh1oRG2539IdsRP5RmgJ6WBsUhawk5Nj2DLV+OFBKVH/uTHykriR0g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778470998; c=relaxed/simple;
-	bh=H4fkwwbYxPKm1ypzT6bOcfX/lK43QRojgcILtVu2XFY=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=GMxGBcIngxWNzd9KSIJSGvEDkXHTwe0S4CuIQPDlAODE3yZGCTAgFdNNf0sAcAaVLLivtVsvt5HV6rTW0miSRr+TMkAp2wJHyCM9S2DyBfA8vowSh/7upYabMjfTQy/+mKfB6qb/HjOW6rtJi3N8KGWruCJOPZwqNNqFD1MP26c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c33Ih2Zo; arc=none smtp.client-ip=74.125.224.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c33Ih2Zo"
-Received: by mail-yx1-f54.google.com with SMTP id 956f58d0204a3-651bc83e74aso3837137d50.2
-        for <linux-kselftest@vger.kernel.org>; Sun, 10 May 2026 20:43:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778470997; x=1779075797; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yGClT6yKjio/U/X8taFr0YcBozUqn3DwsEV9alBjdFQ=;
-        b=c33Ih2ZobpX0DhdBIiNyacY1orXTAn4rgx7mk0lUYWoa6mnNJZxV/TOXeNiUY9rhlr
-         5g4iaV4Hb0/FYuGHxzDyeaUlwiCeQ8C9DZTr887rytbBMp7ivA4D45Jz0C7IsSnqeR41
-         2zLv6yC/vod83+GoF0HmJS9Fptg1vW8Y01+ea8zyHfGdLuLOH6+/oiTbSpCdv26Cokxr
-         P3ywRejaG8O8HHtDlyvYMLNHph6SR7675L0DXgsWCr6daLhBToNszN8UqJhcjdKPbBzO
-         01ZUSjokqww7GwtX9B8eDbFqa60WD5pdpqCUKv9+MCyI3ctarGUnZ/9IegGK0ie/LSeS
-         YJhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778470997; x=1779075797;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yGClT6yKjio/U/X8taFr0YcBozUqn3DwsEV9alBjdFQ=;
-        b=UgIt9VPw3kjXozIeYSnwVJgzhXKSj5KHNLCRryS6HBRb5xu3qyTmSqSPTtq2X6WA35
-         ogQieKJiYFTpcD8yOMvgeI/GSn0fYw46huC/H9oz9pVSgnOY0hcU5N7LuemkDAN/x5Q/
-         0fgxfTLqoaPpvF2tnfVfXVe/Wh5UIWeT0q8OBw2LUn0oedB3ZwRTWzGsgkyLpzJ/CPP+
-         RTQYqEAoWLRwncqjXIrL6/CtsGR+7OxhAzmmmjHtJ5Hamstd5HSQeXmNuRHBkGQTiLF/
-         tSAvFU0HkzHZc8SFJZRU9UvcZCoxsFLEn079WrQVvA2Sbfk9oGFRZassgxr3tUqLGOhJ
-         k+fg==
-X-Forwarded-Encrypted: i=1; AFNElJ8wPvtp8RlC5GyqEABS8NnBNmc80fnWj/pzRAKlRWrg4sJS67t4GO0YOsnMm6uQzSyzSPrLmNUIdPUMVi0HUws=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxjfYA3HiOpBW4YnohpQKgiwJa466yC9t1FKTQ2Pe/D4BwXJzgO
-	jq2oWxO8U68lWhBG01/mtr6L28LrjqJ+NI2/10sS3UPC9uN8ccKt94e4
-X-Gm-Gg: Acq92OF2qmnYA0dXNedZ/NVkCYZvKBwk45WBhXCvOZE5L4Ks7+nguVmLwb5oshSlrho
-	bABWGuC9sXZum0yUMqMemgJtA8GPQr9xR92TID+/RD9nwpMg5hyNcurWJiec6tLY3k1eamacDLk
-	jRGUhyvm4/puDKBibzZMALvTex27lSUsSnjtv9j2qP9LMaKrNxTeVHdNfkFCwVnzIC7UuuLDiWB
-	b7FVPbSb37hcMJVbnwd/GxuFHJzQkTsktsiDsGMLpgFSoyn7hK4voiFZe+sD+paEL6yYb/oNRAH
-	q0V0Sp7zIUbUfQUGHAp2Gc2KgpSCRXk44IBGcwgNZOpELrH3CA1flyZtHYKBErVurCO8ZRuv55q
-	A/YH6zb1mjLJXomTzHf0vlKjPp+XLPDZvjfAfUNZ5MYbTp2qPjQrem8gdr8754TQCnlmCby/BES
-	/oRYW+ltOzqXcKX97yvLJXohlCvxQkWk/ddhg4L3ufx7TIKQX+o4xlQCAkAV+FRQtCIFyZBvCh/
-	RyOgOdDJ9GAQ4vkJf3WADVbsw==
-X-Received: by 2002:a05:690e:1759:b0:657:e42c:f25 with SMTP id 956f58d0204a3-65c79df9fdemr16415508d50.49.1778470996712;
-        Sun, 10 May 2026 20:43:16 -0700 (PDT)
-Received: from gmail.com (172.235.85.34.bc.googleusercontent.com. [34.85.235.172])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-65d969fb85csm4673774d50.2.2026.05.10.20.43.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 May 2026 20:43:15 -0700 (PDT)
-Date: Sun, 10 May 2026 23:43:15 -0400
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>, 
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: netdev@vger.kernel.org, 
- davem@davemloft.net, 
- edumazet@google.com, 
- pabeni@redhat.com, 
- horms@kernel.org, 
- linux-kselftest@vger.kernel.org, 
- shuah@kernel.org, 
- Willem de Bruijn <willemb@google.com>
-Message-ID: <willemdebruijn.kernel.112c88eb7daa1@gmail.com>
-In-Reply-To: <20260510174219.74aeee6d@kernel.org>
-References: <20260504174056.565319-1-willemdebruijn.kernel@gmail.com>
- <20260510174219.74aeee6d@kernel.org>
-Subject: Re: [PATCH net-next v7 0/3] selftests: drv-net: convert so_txtime to
- drv-net
+	s=arc-20240116; t=1778479706; c=relaxed/simple;
+	bh=Kq9+irIQ+Aybd2yCzFk8K/Gk+K5vfmjQpmy4GsHmGy0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=PghddgEKDxFBhtYXYGwzFgJUbJs0vBZyJslmBFqlty7YzUJegiMF8m8jmTPmUf9ElglubrHTYP70JIS0u++8upJEiY29eCLbsxuEjHNZsinwWdHF6vdJG/yOKrPgQ/qxM+eur6foBGqfULEjaOaLKvAQ4DY4jS8/tyukIiaF3XA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: cdd4ab544cff11f1aa26b74ffac11d73-20260511
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
+	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
+	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
+	HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME
+	IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_TRUSTED, SA_EXISTED
+	SN_TRUSTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS
+	CIE_BAD, CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO
+	GTI_C_BU, AMN_GOOD, ABX_MISS_RDNS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.12,REQID:af430201-01df-4919-835e-98a5072227c1,IP:10,
+	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+	N:release,TS:5
+X-CID-INFO: VERSION:1.3.12,REQID:af430201-01df-4919-835e-98a5072227c1,IP:10,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:5
+X-CID-META: VersionHash:e7bac3a,CLOUDID:1904734c7ddded50cbbd212d5c935b79,BulkI
+	D:2605111408189JNWAS71,BulkQuantity:0,Recheck:0,SF:17|19|38|66|78|102|127|
+	850|898,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk:nil
+	,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:
+	0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: cdd4ab544cff11f1aa26b74ffac11d73-20260511
+X-User: lihongfu@kylinos.cn
+Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
+	(envelope-from <lihongfu@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 768878464; Mon, 11 May 2026 14:08:17 +0800
+From: Hongfu Li <lihongfu@kylinos.cn>
+To: tj@kernel.org,
+	hannes@cmpxchg.org,
+	mkoutny@suse.com,
+	shuah@kernel.org,
+	jthoughton@google.com,
+	seanjc@google.com,
+	zhangguopeng@kylinos.cn
+Cc: cgroups@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Hongfu Li <lihongfu@kylinos.cn>
+Subject: [PATCH] selftests/cgroup: Add NULL check after malloc in cgroup_util.c
+Date: Mon, 11 May 2026 14:08:53 +0800
+Message-Id: <20260511060853.1873161-1-lihongfu@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Jakub Kicinski wrote:
-> On Mon,  4 May 2026 13:38:31 -0400 Willem de Bruijn wrote:
-> > From: Willem de Bruijn <willemb@google.com>
-> > 
-> > In preparation for extending to pacing hardware offload, convert the
-> > so_txtime.sh test to a drv-net test that can be run against netdevsim
-> > and real hardware.
-> > 
-> > Two preparatory patches
-> > 1. support negative tests, where tests are expected to fail
-> > 2. add a tc helper 
-> > 
-> > See individual patches for details and detailed changelog
-> 
-> Hi Willem! Looks like we have some flakiness here:
-> 
-> https://netdev.bots.linux.dev/contest.html?executor=vmksft-net-drv-dbg&test=so-txtime-py
+Add NULL checks after malloc() in three helper functions to prevent
+NULL pointer dereference on memory allocation failure.
+- cg_name()
+- cg_name_indexed()
+- cg_control()
 
-Argh sorry. I should have run dbg mode, but hadn't.
+These functions allocate memory with malloc() but previously called
+snprintf() unconditionally, which would trigger undefined behavior
+if allocation fails.
 
-The previous version skips all receiver errors if KSFT_MACHINE_SLOW is
-set, as of commit a7ee79b9c455 ("selftests: net: cope with slow env in
-so_txtime.sh test").
+Signed-off-by: Hongfu Li <lihongfu@kylinos.cn>
+---
+ tools/testing/selftests/cgroup/lib/cgroup_util.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-This achieves the same in the new version and seems to indeed mask all
-the timing (and other) errors in debug mode.
-
-	@@ -24,8 +25,12 @@ def test_so_txtime(cfg, clockid, ipver, args_tx, args_rx, expect_success):
-	     cmd_rx = f"{cmd_base} {args_rx} -r"
-	     cmd_tx = f"{cmd_base} {args_tx}"
-	 
-	+    expect_fail = not expect_success
-	+    if os.environ.get('KSFT_MACHINE_SLOW'):
-	+        expect_success = False
-	+
-	     with bkg(cmd_rx, host=cfg.remote, fail=expect_success,
-	-             expect_fail=(not expect_success), exit_wait=True):
-	+             expect_fail=expect_fail, exit_wait=True):
-		 cmd(cmd_tx)
+diff --git a/tools/testing/selftests/cgroup/lib/cgroup_util.c b/tools/testing/selftests/cgroup/lib/cgroup_util.c
+index 6a7295347e90..0c5e6d4bbc3a 100644
+--- a/tools/testing/selftests/cgroup/lib/cgroup_util.c
++++ b/tools/testing/selftests/cgroup/lib/cgroup_util.c
+@@ -59,7 +59,8 @@ char *cg_name(const char *root, const char *name)
+ 	size_t len = strlen(root) + strlen(name) + 2;
+ 	char *ret = malloc(len);
+ 
+-	snprintf(ret, len, "%s/%s", root, name);
++	if (ret)
++		snprintf(ret, len, "%s/%s", root, name);
+ 
+ 	return ret;
+ }
+@@ -69,7 +70,8 @@ char *cg_name_indexed(const char *root, const char *name, int index)
+ 	size_t len = strlen(root) + strlen(name) + 10;
+ 	char *ret = malloc(len);
+ 
+-	snprintf(ret, len, "%s/%s_%d", root, name, index);
++	if (ret)
++		snprintf(ret, len, "%s/%s_%d", root, name, index);
+ 
+ 	return ret;
+ }
+@@ -79,7 +81,8 @@ char *cg_control(const char *cgroup, const char *control)
+ 	size_t len = strlen(cgroup) + strlen(control) + 2;
+ 	char *ret = malloc(len);
+ 
+-	snprintf(ret, len, "%s/%s", cgroup, control);
++	if (ret)
++		snprintf(ret, len, "%s/%s", cgroup, control);
+ 
+ 	return ret;
+ }
+-- 
+2.25.1
 
