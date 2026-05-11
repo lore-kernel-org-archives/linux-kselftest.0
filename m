@@ -1,137 +1,131 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A79243CECD
-	for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 16:08:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7109426EAD
+	for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 16:10:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778515738; cv=none; b=c64WC9sbuLaxkNpqR6xHFuaKvij4+Rpsg6uzt5PPsBvAWNYCTpAvl5wFQZmhTjDmnu6rpmFakUxVi9H+s4NKFA1ZYeQ6BOdZXB4nvXVSTTzgQmTG3eE2MGNPJMyugpOgCz7508Hi2UZrfUhFsKUzsbU0C/SHD72+ZARYW0MZE8k=
+	t=1778515825; cv=none; b=QdprvHugdmVSr/bL28zPMjXpiqgDZK/ZvVRfSkErlCH0o65i1fD7KCf9TNg3PHrQvHbpzSEenf0eonjbrhHRCfcs3zkpyq9THo3LYIqEX03X0f6T9wmeRxtKgL/MhVyT/TXVGuN9+o/aAx2eoekZJdrpuvyVApCGknUFfS5/SNQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778515738; c=relaxed/simple;
-	bh=HI/UnGrm/4SRY0s10k1WXENBF1WjaceEuaVjGrogGMM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=u+/QWwh8DhV1oS5BJg9rVgQl4KRpgrQLqMY1q6iAiK/ASqbP08HTCtzhz9TxLyMVSpw1WVqZWRb7BYFJNKQbqZzXwNW8RgSRZEN1nEj8AWprgzxFMDKtK49kbOjnPXKeyYit8ex4LS72BFtFsG+35p3su/bVia+T/ch+3WI/200=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g073bAtm; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778515825; c=relaxed/simple;
+	bh=OmvtPFStqV16YJcLxeDtexAgfQAtOiiq7qfNn3U/6xI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AQUhm6c9c5kVKajx6ftj3pchWsujktUEWPhCw9M4twBCt3n7OzUMYuAUjF8rzM9VrPi8uCnZrK069OXm0oxo8BXOap+bNfN+Y42AeoNqalEPVZAmqTckfDD9gL3R6Da+/YIxiV61TB0zOF+dW6PfjElCQr1MyqE4Cw+RoBZCUb4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=BO4d5rk1; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g073bAtm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4048EC2BD00
-	for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 16:08:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778515738;
-	bh=HI/UnGrm/4SRY0s10k1WXENBF1WjaceEuaVjGrogGMM=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=g073bAtmUOFfqV7MjCB3Arwyc1vq4f/UUofTReGtmMvhZRK2tE+JacTePTjGJD8v9
-	 ZgSiQzDNnD7MN6x1q0VsmuVf0+usOfuy3FPw63bqfBKcv/OhOLWncpr3DVq5z/PJXh
-	 KCHpodpbwR7ckfJTz8OHmm5XwWUoFzvF+5Os7KbEveImBTj852KpTX5lkXmRO8JB5Y
-	 p8zgt8RyERCtdjprOmGLs5UbH8y8YPWrYYdZBdmdNjg1KWG0xhurr184V2vMt4Aay1
-	 wPVI6AOkDlOIYE1pj1a2nHpRPjN9hQrEhG06bqnZylPUm+guVX0ztXmzODbYs3qCDT
-	 s7o47OVxF7EAQ==
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-5a8d1f43432so1466383e87.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 09:08:58 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AFNElJ//nucW1Uqt5/mEF+Ke6BMqrSBHzI5bODox+cPFhpv/C2qNT63Y1l4Q4oqdLGuNCrNjGzE9irIsBeep5Sl8o+I=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywo0xOnx+EDRSKmfLJcs1+XLkBmFbC/7FbZIEptkKtqsxHb3gzY
-	Z2ETwz6PRAUB4FgOkQm6T0anXd4pK4Z5PNf+WiUGcXqxpGmt7RSwaqrdCOCQ+ahVMp1JNJwk2k0
-	fVTNCo+x71nX5/7DNDcdDAD8+gQd241cIl+BFl5/1Kw==
-X-Received: by 2002:a05:6512:6d6:b0:5a4:6dd:87 with SMTP id
- 2adb3069b0e04-5a887ad9a16mr8022760e87.2.1778515736764; Mon, 11 May 2026
- 09:08:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="BO4d5rk1"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-488ba840146so40353385e9.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 09:10:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1778515822; x=1779120622; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=OQS2pqCl4CIffFZYG4lF0Zb7HM0F6Dphiww0tGWvLbM=;
+        b=BO4d5rk1MeYPDxmoKxd3BVxwNwZoDHaUmBxmM34dERnhRpcwRJvHXAdxUgsvN44axx
+         zdg85Dnv8bKwtz0j0hGxvSY+7tWXqghVrsiHif64QNeOBrusxHWzhQ2H5eU7iYdpn0N+
+         8qZuMOm00YrI6mWNi5cpLC8/8CGzJ4k3Y7gnWy0MRBeybFsMguosxN+08Ed8rxtKpeq8
+         RmNDdu9lb3iMakktHPhIpGw1JDBeiFb85gaOWD/Tk3YIPQiDM7CTha1qTi7fn3L1njE1
+         qQ3y/VeCTwtgaYAB+3eN8QWi1lQXyxbEMW3cWuYo9yy2ym2E4feCIokzBmf5oguvCjj4
+         SVYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778515822; x=1779120622;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OQS2pqCl4CIffFZYG4lF0Zb7HM0F6Dphiww0tGWvLbM=;
+        b=o080IQs6wtN0jO7nZk9lG1i+jRpW3nmqhfa7LRFeOFIh1r2Lxw9TVPXlubfRsekNY3
+         PDjI5Lc34HM8PaQ/C7gutAt1SCTEapuN21hZMpV0dDoJGTTgx9nOMQ4xjqAmuUZoTXFk
+         8GH1+/a+Y4LPi6pY97G64661y072giBi7d9Eot7xinI35KV1I51mdFan1m45CW8fVtQL
+         Dq1PfnpL1jaNpw2jajIpGlx5wZNfF3ZnYlGT5uF1Ylv32LkyKpWVLEIYA7JLsVvWwClw
+         gAT1oW0lDKoNvt7RWt3q0RvTp7/jPBo3g5lc7OKXCITy2VGe74gfje6RiSlrI05QiI/j
+         7Xfg==
+X-Forwarded-Encrypted: i=1; AFNElJ9dTJ8R20Bk7C5P/VBE2HiJk2eA4BQP8vK24ygxBIBT0RePLwwoeePXneYE7Ae975WQuBFo/akRbJiAGa1ixXU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yza+AdOyUvljQKyvSYAXxZnPrzJp/kfAWPKyqR46Hx0q8wbrdls
+	s/6N625YgUFYF//Jcu4lRvLqjRkaTXs8Cue0dZRmaU7hw4MNWF33WUQzZ/fEl9RSdaQ=
+X-Gm-Gg: Acq92OG8ilbGWnatRfBun24aLTSmmbK1jsw87x53AzIDsrx/gjCd5Vas/wqwRNOy+rj
+	CbIieFCfNv4sosmKBL2HkkGFLo2AqRBSNLvlIRTH2yFwAG8NzsJSRSE7+y1aLElrzrY8VAg3Okg
+	bxoCNDiPNEe+vbWoqgaFSO/vFTB3x+qav4HLVVGvUBSJdiHnJeUrO06EPSIElQ4pbscQRl6EYWs
+	W7t9wEiN2+/HO8BYc5YWLZHpRqKLSrAHL8Bd2q3DlXOvMunrn9Ih52WXZkWH0RhjjwTy0kANXXo
+	tZ8eBMmrnQgQ8wpVoo3SHvqfPTVAHbFsj07C6xv6u8j4CgsziUu/P0fKBoU29Qohph6noH6utvi
+	xpTN5nXj3GhkVw6xTVOs9FbA22r5D0jeU3qWlgWk0AU+//+uj5nm05XwE9dWmTHZIeRpO3PQ3W6
+	6NP4fkNd9rSWqF4L1hMhz9BdflTztXj421TbD6bUnCNBwqNc0=
+X-Received: by 2002:a05:600d:1:b0:48e:7f1c:8760 with SMTP id 5b1f17b1804b1-48e7f1c87bdmr94074745e9.27.1778515822123;
+        Mon, 11 May 2026 09:10:22 -0700 (PDT)
+Received: from localhost (109-81-87-110.rct.o2.cz. [109.81.87.110])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48e702e0c70sm214374865e9.6.2026.05.11.09.10.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 May 2026 09:10:21 -0700 (PDT)
+Date: Mon, 11 May 2026 18:10:20 +0200
+From: Michal Hocko <mhocko@suse.com>
+To: Sasha Levin <sashal@kernel.org>
+Cc: Breno Leitao <leitao@debian.org>,
+	Andrew Morton <akpm@linux-foundation.org>, corbet@lwn.net,
+	skhan@linuxfoundation.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	gregkh@linuxfoundation.org
+Subject: Re: [PATCH] killswitch: add per-function short-circuit mitigation
+ primitive
+Message-ID: <agH_bGUTvWm2h5g4@tiehlicka>
+References: <20260507070547.2268452-1-sashal@kernel.org>
+ <20260508135630.a380e3c187b59e4c04e6f358@linux-foundation.org>
+ <af5Z2IvtS5pVorSl@laps>
+ <agG_PZ3qcl6TwLnL@gmail.com>
+ <agHUp8ulaWJ75WU5@tiehlicka>
+ <agHcFCRVSn5ra5Kc@laps>
+ <agHeZPA3eHhJHIsQ@tiehlicka>
+ <agHgDgwu8H9Opzpl@laps>
+ <agHm9Vj7bPPCRS1g@tiehlicka>
+ <agH7_QBPLWKTZucB@laps>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260430-swnode-remove-on-dev-unreg-v4-0-01574da0aed3@oss.qualcomm.com>
- <20260430-swnode-remove-on-dev-unreg-v4-1-01574da0aed3@oss.qualcomm.com>
- <afNEwrHLNTA4ywrN@ashevche-desk.local> <CAMRc=McH0zKz87z0TwPFrzZHMW6psytMaLZybM3pUk6OvUfo9Q@mail.gmail.com>
- <CAMRc=Mc_huU0HxHpD+RMNWeX2Sg84-LEg8y96BcF_qdtPr31eA@mail.gmail.com>
- <DIFWH6TWTOOT.37CW17JHKWBQR@kernel.org> <CAMRc=MeiL+MeFsiPrWja2qJx=zU3RXKLL7CDccX1epXWgNtvdA@mail.gmail.com>
- <DIFX59JPJI9U.1Y41563GD6YJL@kernel.org> <CAMRc=MfBnbSUxwjVjf81K-W8uQ8ecXmK=8=FkRqVvK+6AipQuw@mail.gmail.com>
- <DIFXTWSAEDHD.RMJBLY7XXEXU@kernel.org>
-In-Reply-To: <DIFXTWSAEDHD.RMJBLY7XXEXU@kernel.org>
-From: Bartosz Golaszewski <brgl@kernel.org>
-Date: Mon, 11 May 2026 18:08:44 +0200
-X-Gmail-Original-Message-ID: <CAMRc=MeLa_pMy5cMwTBCr+TLhg2HyxrYBXEHXC2emm04iVnfGg@mail.gmail.com>
-X-Gm-Features: AVHnY4JawaaCEnkyiNFpPNw6Fw0HbGkCHbjjTC9tMBcTdovwkdrWnmhHpgsuskE
-Message-ID: <CAMRc=MeLa_pMy5cMwTBCr+TLhg2HyxrYBXEHXC2emm04iVnfGg@mail.gmail.com>
-Subject: Re: [PATCH v4 1/3] driver core: platform: remove software node on release()
-To: Danilo Krummrich <dakr@kernel.org>
-Cc: Andy Shevchenko <andriy.shevchenko@intel.com>, 
-	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Brendan Higgins <brendan.higgins@linux.dev>, 
-	David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>, 
-	Andy Shevchenko <andy@kernel.org>, driver-core@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <agH7_QBPLWKTZucB@laps>
 
-On Mon, May 11, 2026 at 5:04=E2=80=AFPM Danilo Krummrich <dakr@kernel.org> =
-wrote:
->
-> On Mon May 11, 2026 at 4:50 PM CEST, Bartosz Golaszewski wrote:
-> > On Mon, May 11, 2026 at 4:31=E2=80=AFPM Danilo Krummrich <dakr@kernel.o=
-rg> wrote:
-> >>
-> >> On Mon May 11, 2026 at 4:17 PM CEST, Bartosz Golaszewski wrote:
-> >> > On Mon, 11 May 2026 16:00:23 +0200, Danilo Krummrich <dakr@kernel.or=
-g> said:
-> >> >> On Mon May 11, 2026 at 9:33 AM CEST, Bartosz Golaszewski wrote:
-> >> >>> Danilo: if there are no further comments, can you pick it up for v=
-7.1?
-> >> >>
-> >> >> It seems that sashiko has a valid concern in [1]; can you confirm?
-> >> >>
-> >> >> [1] https://sashiko.dev/#/patchset/20260430-swnode-remove-on-dev-un=
-reg-v4-0-01574da0aed3%40oss.qualcomm.com
-> >> >>
-> >> >
-> >> > Yes, I explained it here[1]. Basically it's similar to how we need t=
-o call
-> >> > platform_device_add_data() for devices created with platform_device_=
-alloc().
-> >> >
-> >> > We can consider adding platform_device_add_software_node() once ther=
-e's
-> >> > a potential user but for now I'd just leave it like this.
-> >>
-> >> But there are users that already need this, no? There is Xe [1] and Su=
-rface GPE
-> >> [2], or am I missing something?
-> >>
-> >> [1] https://elixir.bootlin.com/linux/v7.1-rc2/source/drivers/gpu/drm/x=
-e/xe_i2c.c#L99
-> >> [2] https://elixir.bootlin.com/linux/v7.1-rc2/source/drivers/platform/=
-surface/surface_gpe.c#L308
-> >
-> > Right, I was not aware of these. That could indeed cause a regression.
-> > I'd like to fix the problem in v7.1 but also keep it minimal so adding
-> > platform_device_add_software_node() and updating drivers to using it
-> > may be the next step but for now: how about adding
-> > platform_device_release_full() which would call
-> > device_remove_software_node() and then the existing
-> > platform_device_release()? We'd replace the .release callback of
-> > struct device in platform_device_register_full() but if the user just
-> > uses platform_device_alloc(), they would keep the regular .release()
-> > that doesn't remove the software node?
-> >
-> > That would go into v7.1 and then I'd provide
-> > platform_device_add_software_node(), use it in all drivers that need
-> > it, and then we'd remove platform_device_release_full() and go back to
-> > a single, unified release callback?
-> >
-> > Does it make sense?
->
-> If it is just those two (and at least I did not find any other drivers) i=
-t might
-> be easier to just add platform_device_add_software_node(), use it within =
-those
-> two drivers and still land it for v7.1.
->
-> I feel like this change turns out simpler and less error prone than the a=
-bove
-> workaround to keep changes local to the driver core.
+On Mon 11-05-26 11:55:41, Sasha Levin wrote:
+> On Mon, May 11, 2026 at 04:25:57PM +0200, Michal Hocko wrote:
+> > On Mon 11-05-26 09:56:30, Sasha Levin wrote:
+> > > On Mon, May 11, 2026 at 03:49:24PM +0200, Michal Hocko wrote:
+> > > > On Mon 11-05-26 09:39:32, Sasha Levin wrote:
+> > > > > On Mon, May 11, 2026 at 03:07:51PM +0200, Michal Hocko wrote:
+> > > > > In a similar way to how they would know if a given livepatch is safe to apply -
+> > > > > ideally it would be communicated by the vendor/distro/kernel team.
+> > > >
+> > > > You have missed my point. KLP takes an extra steps to make sure patching
+> > > > a particular function is safe to modify or to put the change into the
+> > > > effect.
+> > > 
+> > > Safety checks like making sure the patched function is on the stack, or did you
+> > > mean something else?
+> > 
+> > Yes, exactly what LP infrastructure already provides.
+> 
+> But do we actually need it here?
 
-Sounds good, I'll do this then.
+If not then you can simply systemtap or use BPF to inject the code. In
+other words we have several ways how to runtime modify the kernel so
+before yet another interface is provided (with a non-trivial amount of
+code and very limited functionality) you should really start by
+describing why none of the existing one is fitting well.
 
-Bart
+I do understand your argument that solutions based on loading a module
+might have an additional step to deal with (AFAIK you do not need to
+build your own kernel to deploy your key) is that a brohibitive
+roadblock? We also do have fault injection which is much less convenient
+because of all the existing constraines but can those be elevated?
+
+So nothing really against playing with ideas nad LLMs to generated a
+quick PoC. That is all good but for this to be considered more seriously
+I think we really need to think deeper whether the existing
+infrastructure is really not fitting and if not whether it could be
+changed to cover more usecase like the one you have mentioned here and I
+believe it is something worth thinking about.
+-- 
+Michal Hocko
+SUSE Labs
