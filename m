@@ -1,185 +1,155 @@
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFD513DBD55
-	for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 17:07:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB16243E9CB
+	for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 17:10:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778519240; cv=none; b=aHFx4+P6XyuySXHc3OrECiFeCCDVNqQoLIa/YBYVwd7X4q1k5TtQ4hsV+3P5FGQpk8XdnnE3J6Aksz3sOESfnkI5Cm6QoJPZ1t2kU9qtUGGnZzDx2liHwwjdmMTjTPAPLBUldS383ysflhol68K3N5hHXbGSVUdUxPvJc6diBN0=
+	t=1778519451; cv=none; b=jZ5FT7T+DxTqUuewB37bEuMCa2Aa55bs1ACc+jdimyUAIGkatGgDZ/CjImo9zNFEkh7ClFx5weWO7vsVCSNoH1vjBwa/ZkT/DpW9H+wglH88DcpJYQ5KJgc1ZcZJCORh7oGbawv9arNKSnNF+GeilfHT4WEP8wEo+AOIA4aIJ9Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778519240; c=relaxed/simple;
-	bh=ttyzlAsQV2LCBXMCefThV0JUVjJzRehzxN0uxmPQx3k=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=mldctw5e2YycF0Q0OjwO5qixBPb9Uy1QNbJjwJ0XI5pvdaRh3MYk9cYpKs735UCdBiPbgtivspBdPQzTIdxrwT6K0DD+HcdU6arw0Tr6T1xo5yrFSMkouLeGchABOf73svFlC/PTh4MR/yltsD8bzYQ4eUMdgsdZDqS5lSvtKHY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=an9J+f36; arc=none smtp.client-ip=209.85.160.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1778519451; c=relaxed/simple;
+	bh=xEf0DcTeuh8O7q7xkn5lS+B/P1HAUfQRMFjpy4xw5iQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ufDOGUprlh329tJ9H2SzRY5khG6vVl5xqupLXS5cnUFuRPl7bCBSWbwFexzkqWOH+AZYngkXSc7YUjW6FNB8gzvKF4VcN3kadgqAwjDSLVLOSZsC2V5CrqNJ5j0N4X0tA0KfI52bcg8OQTguEtfxHiPneP1CbgSCaf6EhuiRTOE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=T4kf8jSe; arc=none smtp.client-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="an9J+f36"
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-43496e6a964so3380430fac.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 10:07:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="T4kf8jSe"
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-44a74032ff8so3405020f8f.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 10:10:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778519238; x=1779124038; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JuqFpulg8Nqo7DOFhcbTfsrDVhgNxZLwGvrCkArInQA=;
-        b=an9J+f36HD8PwfYW0Ir4GuH815hrAhaeL6N8MUZKQiDRqK1vWyenuvvAXwPim0PZUX
-         PBGKfNzNNBuaByPVVsAgiKV2Iuyh2GBFweD7xiIjZwYf0d9KyrYHlS6J57w5vYXDTx6+
-         12z/Y/6KYr1LbyL10cW94Qgn+XfnavmdAZEk+dmJRwZPmRoK/IkqLPNsiRi63hGkahEU
-         H+iG9SUlhESH4uWHmtiJxuFSygMP2N+Sa4u0Xb7M3MnmpDcaeGqrm7LvvMtgX25rv43J
-         F/uJARN3hjZVeQV2R6cVawNxlerQ1J0qfGDXX5cyqN39vNnuDC7taPrEiKmMuEkFcOS3
-         /5QA==
+        d=suse.com; s=google; t=1778519448; x=1779124248; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4WseMM2s1lBw35z6Gvcd4yWHkkkXHH2E0/2CJvqDOO4=;
+        b=T4kf8jSeOB6D1KH4+hz17L8PlZJvkCcLExTX6fIa3So+FxmRGa4ATaLAVDI6tLpw7G
+         Rl9rdWd9+QTz3OPYpx1XD4GLjTTj8gl43dhMFgAeddowgyy6TX2HhsKBzwgFF9Tme4UC
+         AkBz1IuOF+jSnHtpcdl25bSI+8+aWLlziCiPbMuz1Y/pFDiFMFIOaOvsAoT+FC1X1+FZ
+         gdlnJuMHpgWlo/rZyHtvLb+eWRhyHu/3Kx33HgER2+YuJGQ3Ty+2waY5fqTwgaSBONcL
+         uvEoy9bD6ZVRW1Mx/JrHTWsRD1llv7x/I+eMMr2sRdoVE+71UHzuSuv1HFmx3f3RXE6P
+         uHfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778519238; x=1779124038;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JuqFpulg8Nqo7DOFhcbTfsrDVhgNxZLwGvrCkArInQA=;
-        b=Y6fjfmKr051Q4I5y0NydlyxkxjQj+cpcyN1ZnL3ckU05dQWhrundafyrik5P8IGAvC
-         VFv8J6Hw5RrjiIIAN7XDEXPBf5q6USdWvdFHDvcBJH4UfBDJ0QepMzHFSPccu8LZ77zJ
-         OUsmhvhBPQ/xP9TFxkCXsx/T2yAxMDE2HPN9aPWFeBTlsM0Aq83kA2AAdXXV8KrjmlHr
-         l+6t7ndXfJ2HILG9R+Kx+yRWewBxs/Dc1aBZ8zSwG8fFVSZpzhZZmP1PUxKOL44V5IjI
-         FTYKBd6nOX5EKPEGH4lTf62c0qaz198/CFMtqARc/DrntgUZBnhoE0nQ/Bz4TiFN7NR2
-         MBuQ==
-X-Forwarded-Encrypted: i=1; AFNElJ8zRkwrQ7DZuCJdnxVgkciOiILcsmDqKGxAtKAQBrFuvRML37VLfErB4dLYPxQhc2V9Zsmf6T1fzw9gWSDgKf0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz/UThc19wKEicWZWeMycGZ66u2AZciLU4oBLFgOlUuLBE2x6Q3
-	2udExiGWKz+mfRhNEfX40kOgtVi3cQN4zw0QHeqeQc0iPIW8pLS4uOlw
-X-Gm-Gg: Acq92OEjuKDEwjzWu3KmPfEpDY1RbLTrIuwB65dC2rEJqOJnl80H/ky7tgHTiXdjQsz
-	QgPabiW6NXQpqsSggXWd14tiay8IXdttOsv/KpFCkPz4uFmra0qvoCZN4mZP4YGb2asMW8VLPb0
-	4n0FKtTMv887R6zrhUOp8tsjUuev/l51jEm0j0OIAiCsL7c4h8YuJCMorq/owiaD7Dkze8fP9Ow
-	bcIlcFuRzE0/ia/MarqQ5vcnp3pDBMQg7j6KcTUqBg1WFjktjLd7PWJcGyndAMGOuKJxhJuf/hR
-	G4ESKe1+b6EWNIH8/9EiufRG061tVstNsjEh5scnlvWyIQgjM0gMOu8kUBAOF3MQPh0o2Eh8obF
-	fpraeBhMNpK8u7PD/1d4q7fwImdeFL/t+MKf4jErNk2iy0S2uO1wpqsnN88Le3mK5mNebOojW6P
-	FD6hkjfUgON0NAX7yITHUgHclbLSMK9lwTOS0w3xMgpmOVX60/e2WjFgCJ+xU2oYgB5xG8sykLk
-	jtvo0B+glB6QEMLIpSEn6wzZng=
-X-Received: by 2002:a05:6870:5119:b0:433:ffeb:4525 with SMTP id 586e51a60fabf-434f66bae6emr15403715fac.26.1778519237637;
-        Mon, 11 May 2026 10:07:17 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:4::])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-43557109b7dsm9702493fac.5.2026.05.11.10.07.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 May 2026 10:07:17 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1778519448; x=1779124248;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4WseMM2s1lBw35z6Gvcd4yWHkkkXHH2E0/2CJvqDOO4=;
+        b=XuLZTFox9Ry5Y2+8RExVKlql83XlW8bQGKD3jdwQyVfDugO/m6j9x+AIoeNc/NxF+K
+         NjCkOOY9XAUhlTCjQDfUrV3bws4jF8PENWQeGqo5YL7LzUwUn3kxGm4bmwoIGrv7zzqa
+         ag5R1rTWLjZAWvXZD3xlZu9+tgXkb+2oOVv7045M1kS4kukzJMpiNbcU+rmWmDKmFT1L
+         nClqZgKR9AIOm6cLfpAnsK6ruX+f1VgqgCeY2hiDEOtt89qC1RwYnHZQD631++93iLbZ
+         twhXOwB6FQYiBm9lRUlUxx4kZsapGxXHJYpksPEyn38zZ/bgOE+ImPVmNj9bzwjY1kpT
+         zZVw==
+X-Forwarded-Encrypted: i=1; AFNElJ+y/8ealXTUtKGEvSsRE7AK86vTmOHbm4ckmQLKqetW+z4w0MPBfGnSC5CDLq5llaB6QjtTxUNi0q31HrMFoTQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwFbRcAquTelIR4aco2OuE6zsWoSKhuFuAI45TQLNNVyq8QrpJo
+	bRSe5eWWRi0/1NZMbMmNdo29PxKcIPlWwiO9eXAzIxOV7oivHgce1qJ2qaSEI0FQ2Wk=
+X-Gm-Gg: Acq92OEKDcjpl0OkQXQ4MaD9ep69UuwyeT2s3MdjInR4/CrdNWv54AadC2Sfkper3eC
+	MQHiimUS16967ljA/7WEKnaFOkYY74EvyCYiPwGRD7Kmuk505S9Ml1+pAuEbzwIiYNr+yL/WfE/
+	3B5S2MTW8qiVrYyRhCE8z7Nck3K+Y/B3da2Ywvx8HliV0ORpEwJriGXOy1L0tMYy5objOMp8s2P
+	FQD6jAB+Xm6YcxE0xEugdqWQ1Q8MXRTD+5pwYrRVch6xmMQXuLiwdBpADXmovy9U0fwMx9NONGD
+	f/vHtPBb8SuY+zzeFdP1ylvPmyQ6hjuVwzQNoRZMgj50lazzPrZbxDXP6kcTCBoD/1ft+WYA0pD
+	LRRX3NKP6wZm/NXpdAjoDc711xgRMgzjZW1J1F+wH4TEJhdY7OEIUBpYl4Ykz2oqflzfU6rLXNs
+	efu70P+6TCGtPmm2uUkw+WKhpC9NWboHnoX2EQ
+X-Received: by 2002:a05:6000:230e:b0:45a:c0e1:37b with SMTP id ffacd0b85a97d-45ac0e103bemr696373f8f.32.1778519448144;
+        Mon, 11 May 2026 10:10:48 -0700 (PDT)
+Received: from localhost (109-81-87-110.rct.o2.cz. [109.81.87.110])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45491bae13csm26175978f8f.29.2026.05.11.10.10.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 May 2026 10:10:47 -0700 (PDT)
+Date: Mon, 11 May 2026 19:10:46 +0200
+From: Michal Hocko <mhocko@suse.com>
+To: Sasha Levin <sashal@kernel.org>
+Cc: Breno Leitao <leitao@debian.org>,
+	Andrew Morton <akpm@linux-foundation.org>, corbet@lwn.net,
+	skhan@linuxfoundation.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	gregkh@linuxfoundation.org
+Subject: Re: [PATCH] killswitch: add per-function short-circuit mitigation
+ primitive
+Message-ID: <agINlnNN4ubZgyiN@tiehlicka>
+References: <af5Z2IvtS5pVorSl@laps>
+ <agG_PZ3qcl6TwLnL@gmail.com>
+ <agHUp8ulaWJ75WU5@tiehlicka>
+ <agHcFCRVSn5ra5Kc@laps>
+ <agHeZPA3eHhJHIsQ@tiehlicka>
+ <agHgDgwu8H9Opzpl@laps>
+ <agHm9Vj7bPPCRS1g@tiehlicka>
+ <agH7_QBPLWKTZucB@laps>
+ <agH_bGUTvWm2h5g4@tiehlicka>
+ <agIHsN9tiIHnVTeV@laps>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 11 May 2026 10:07:15 -0700
-Message-Id: <DIG0G9IFXF42.3O4K6XV8RGQBG@gmail.com>
-Cc: <ast@kernel.org>, <daniel@iogearbox.net>, <john.fastabend@gmail.com>,
- <andrii@kernel.org>, <martin.lau@linux.dev>, <eddyz87@gmail.com>,
- <song@kernel.org>, <yonghong.song@linux.dev>, <kpsingh@kernel.org>,
- <sdf@fomichev.me>, <haoluo@google.com>, <jolsa@kernel.org>,
- <shuah@kernel.org>, <brauner@kernel.org>, <sforshee@kernel.org>,
- <yuichtsu@amazon.com>, <aalbersh@redhat.com>, <willemb@google.com>,
- <kerneljasonxing@gmail.com>, <chen.dylane@linux.dev>, <yatsenko@meta.com>,
- <memxor@gmail.com>, <a.s.protopopov@gmail.com>, <ameryhung@gmail.com>,
- <rongtao@cestc.cn>, <linux-kernel@vger.kernel.org>,
- <linux-api@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <kernel-patches-bot@fb.com>, <martin.lau@kernel.org>, <clm@meta.com>,
- <ihor.solodrai@linux.dev>
-Subject: Re: [PATCH bpf-next v13 6/8] bpf: Add syscall common attributes
- support for map_create
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: <bot+bpf-ci@kernel.org>, <leon.hwang@linux.dev>, <bpf@vger.kernel.org>
-X-Mailer: aerc
-References: <20260511152817.89191-7-leon.hwang@linux.dev>
- <fad54bcc2f9363f61cda44680e7189ad7a510d81dc52f444a4c30a3fcd37df1d@mail.kernel.org>
-In-Reply-To: <fad54bcc2f9363f61cda44680e7189ad7a510d81dc52f444a4c30a3fcd37df1d@mail.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <agIHsN9tiIHnVTeV@laps>
 
-On Mon May 11, 2026 at 9:19 AM PDT, bot+bpf-ci wrote:
->> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
->> index 8433430dedb7..c15a4c26a43b 100644
->> --- a/include/linux/bpf_verifier.h
->> +++ b/include/linux/bpf_verifier.h
->
-> [ ... ]
->
->> diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
->> index fd12ad5a0338..62fe6ed18374 100644
->> --- a/kernel/bpf/log.c
->> +++ b/kernel/bpf/log.c
->
-> [ ... ]
->
->> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
->> index 2fa05ba8f161..54b43e16848a 100644
->> --- a/kernel/bpf/syscall.c
->> +++ b/kernel/bpf/syscall.c
->
-> [ ... ]
->
->> @@ -1611,6 +1632,31 @@ static int map_create(union bpf_attr *attr, bpfpt=
-r_t uattr)
->>  	return err;
->>  }
->>
->> +static int map_create(union bpf_attr *attr, bpfptr_t uattr, struct bpf_=
-common_attr *attr_common,
->> +		      bpfptr_t uattr_common, u32 size_common)
->> +{
->> +	struct bpf_verifier_log *log;
->> +	struct bpf_log_attr attr_log;
->> +	int err, ret;
->> +
->> +	log =3D bpf_log_attr_create_vlog(&attr_log, attr_common, uattr_common,=
- size_common);
->> +	if (IS_ERR(log))
->> +		return PTR_ERR(log);
->> +
->> +	err =3D __map_create(attr, uattr, log);
->> +
->> +	ret =3D bpf_log_attr_finalize(&attr_log, log);
->> +	if (ret) {
->> +		if (err >=3D 0)
->> +			close_fd(err);
->> +		err =3D ret;
->
-> When bpf_log_attr_finalize() returns an error (say -ENOSPC for log buffer
-> truncation or -EFAULT for copy_to_user failure) after __map_create() alre=
-ady
-> returned a negative error (for example -EINVAL from CHECK_ATTR or -EPERM =
-from
-> security checks), does it make sense to overwrite the original map creati=
-on
-> error with the log finalization error?
->
-> The result is that userspace receives -ENOSPC or -EFAULT instead of the
-> actual reason the map creation failed. A user with an undersized log buff=
-er
-> might retry with a larger buffer expecting success, when the real issue i=
-s
-> that the map creation itself was rejected for a different reason.
->
-> Looking at bpf_check() in kernel/bpf/verifier.c (around the verifier log
-> finalization), it uses similar logic with 'err =3D ret;' reassignment. Ho=
-wever,
-> that doesn't appear to have the preserve-original-error comment that woul=
-d
-> clarify the intended behavior for this scenario.
+On Mon 11-05-26 12:45:36, Sasha Levin wrote:
+> Could you describe an existing infrastructure I can use here?
 
-I guess sinle line comment wouldn't hurt.
+I think it would help to CC maintainers of subsystems that provide
+kernel modification functionality. They will surely have a better
+insight than me.
 
->
->> +	}
->> +
->> +free:
->
-> Does anything use this free: label? The only exit path before it is the e=
-arly
-> return for IS_ERR(log), which correctly returns directly since log is an =
-error
-> pointer and doesn't need cleanup. There doesn't seem to be any 'goto free=
-;'
-> statement in the function.
->
-> With -Wunused-label enabled by default in the kernel build (part of -Wall=
-),
-> this will generate a compiler warning. When building with -Werror (common=
- in
-> CI configurations and allmodconfig builds), this would break the build.
+> Let's look at
+> this recent "Copy Fail" thing as an example.
+> 
+> I can obviously build my own kernel and enroll my own key, but 99.9% of our
+> users won't be doing that.
+> Livepatching, or manually building a module that just injects a kprobe is out
+> of the question as we previously agreed.
 
-good point. pls fix.
+Onless I am mistaken you can enroll your own key through MOK. But you
+are right that this is an additional step. But the real question is
+whether this is a major road block for users of this specific feature.
+
+> systemtap falls into the same bucket as building my own module.
+> 
+> BPF doesn't help because bpf_override_return() requires the target to be on the
+> same within_error_injection_list() whitelist as fault injection, and the CVE
+> targets never are. Some of our fleet doesn't even have BPF enabled either, but
+> that's the smaller objection.
+> 
+> I can't use fault injection because:
+> 
+>  a. It's almost never built in production/distro kernels, and I suspect this
+> won't change.
+>  b. The functions I need are not whitelisted.
+>  c. Even if (a) and (b) were addressed, fault injection would still need a
+> securityfs front-end, a cmdline parser, a module-unload notifier, a taint flag,
+> and audit on engage and disengage. By the time those land in fail_function and
+> tie into/refactor the fault injection code, the net diff is bigger than this
+> proposal.
+
+I cannot comment on fault injection imeplementation details of course
+but I have to say that the whitelist nature is something that makes its
+use very limited. Maybe this is a good opportunity to change the
+approach.
+
+> 
+> In my case I can remove the module, but not if I run a distro that shipped with
+> CONFIG_CRYPTO_USER_API_AEAD=y (like RHEL/SUSE).
+
+If you look at copy fail[2], IIRC algif_aead, esp[46] and rxrcp are all
+modules that could be blacklisted.
+
+> I can use "initcall_blacklist=" hack and reboot, but as things stand today,
+> I'll need to be rebooting few times a day.
+
+with your just disable some functions in the kernel you might need to
+reboot even more. But more seriously...
+
+> Even if I'm okay with rebooting that often (and I really really would prefer
+> not to), this doesn't solve the issues of a larger fleet of servers that can't
+> just reboot that often.
+> 
+> What am I missing?
+
+For one, you are missing more maintainers of code modification infrastructures. 
+-- 
+Michal Hocko
+SUSE Labs
