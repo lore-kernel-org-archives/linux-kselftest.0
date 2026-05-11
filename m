@@ -1,99 +1,105 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06F1E40DFC7;
-	Mon, 11 May 2026 15:42:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E567402426
+	for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 15:45:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778514132; cv=none; b=gTSjF/qq6PC9md25EJIHcBfb6EcRGi1gluKwj6X0fLC/ufQ0x5QrLvc6YTEW/3qK1GRBiU/oLqquR1hVms7r9ltVKsynFyQOOh1JOtlYLjCMFWnlyo1WFfXdgVFmM71tqavO47vf/EXTKRHMHlbPNBbDPmVCZt85a/0bv1+2B24=
+	t=1778514305; cv=none; b=LPmZJLFQ5NH5ARIAzSOA07c/cG5eRcLkcpN6AEgq70qejS6y6L43NBjtWeUuk+YJCYxxhKvmpKT4TNM9XzTsL6TAt6SBGs1Lo5tgFdnsg9Qji9TCdG5u3EaMUMJ2sZksabwpDOHzEVYHoSMzr9XbiO0YMTaxroT8uEcwMdbbIow=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778514132; c=relaxed/simple;
-	bh=hBJtPARJGHieC4e15Lf/L6a2nrslNmrmwY7VOCOkYp8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mIMNMnTvMnOnPU4rGx8TUlv2v5l0HBM2cQw78axRAxMSO9H5j3aUU52VRCTkEAoJMFEUeZmm57L7rhnbPlXzFT8ssjDO26oGmubtUrmSOtbGFndvC4AGaf+AnzAu4Q7w+TAWsbLIx/3vVdMGUQ+6VOvVK4rkE2X4HRj4YBknOYQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=eQnLgeqE; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	s=arc-20240116; t=1778514305; c=relaxed/simple;
+	bh=iU2gjtj7qbeTkgu4CbWGG/n6OHB2sDsVv1qEvA+SQj8=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=iRqFhSw5Mi/M8debvOC+N8tCcKN6dwxK6+lR7tHzHjYSOCHdSHS5hJL3f+Gyex8ZEuVIpfLhPnrgO/FSEKgycHeZ1ZZdTvcjPvS2S9tfXHt6aQPJw0H6SrMTFsutNNIw+5/zgSK/c1m17LVxmqPMBaVK3/FFF4h2mdDNAh1oqOc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Mx96AbU4; arc=none smtp.client-ip=209.85.215.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="eQnLgeqE"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=wrLNUPV9+W+5iFwARPpGhQy5+Ze0IUVAAWbwzbDM9Q8=; b=eQnLgeqEU1/WK8BzdVwICDvSzR
-	Pwvd8UMjGhi8qnP3fGq/cRIWUQIXAfBbIdZUCQNmd/TKrlTZfUSeTy1AbdOERS7mHD0ugGu7Ov6Zn
-	tjpxpSNKTl7kXmyd1e+NZQBbCMdmB8xyQyf4rDmS/avckEdQgRHO9Lk5RGpWelRVCxs50+D4gEiP8
-	Vs+ETA/RsFbKCnHCEp6UGc2bgnKhXE5NFPUP1BRxU+MLwP0DBC/1HVHibmm76LEg/hbfEudiGcXRX
-	//i0cDvp2kYlNBFg9SEh4Zj7fpNe7J1tlSArWoyNd1dfHue2ujzibYE+OISmqqmEA22mIe7xHq7z9
-	dfZYrMKw==;
-Received: from authenticated user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wMSlf-001hYn-18;
-	Mon, 11 May 2026 15:42:03 +0000
-Date: Mon, 11 May 2026 08:41:58 -0700
-From: Breno Leitao <leitao@debian.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
-	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, "Liam R. Howlett" <liam@infradead.org>, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	kernel-team@meta.com
-Subject: Re: [PATCH v3 0/2] mm/kmemleak: dedupe verbose scan output
-Message-ID: <agH4girwVSEIMFAs@gmail.com>
-References: <20260506-kmemleak_dedup-v3-0-2d36aafc34da@debian.org>
- <20260508151729.682551a2b2739e8b5d15ade2@linux-foundation.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Mx96AbU4"
+Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-c709551ec08so5393500a12.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 08:45:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1778514304; x=1779119104; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=quGxZdDzePyFN1sqDarFe9CnYNHrO/hP4QASdHelPT4=;
+        b=Mx96AbU42KfmXQwcoagbaf/NvWrVoJQR4YbzP8yRJ07a9bv0GaGbcRMq3ZC6QWcQyb
+         HHwnWb2rtFlrh2mrHj3akAantQQGiTbxyQvtigszO6QpdUsmm7D+S6KDlncKBymsI/Rq
+         AOA9IpXf0pP+kmcNRpyIfSMFcp+2HwF/b9cr2Q5SnFLvZ7im7hWrNpSoxreGSVroo/Z3
+         EoSDxurluc0RULGXe9NEezVNicx+BeRNN2ogAxCiU4omxy2eV9EYD7jHY+hxHZWUQB3h
+         bO87r3f4G5TmzxjiLq1kvskoRBEExWo4sWKRn8V3kUyGogDYNWUQT3bgPrYubdyl/+Rb
+         dwMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778514304; x=1779119104;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=quGxZdDzePyFN1sqDarFe9CnYNHrO/hP4QASdHelPT4=;
+        b=JCyz9fpoJtghDzEpUpHx0SoXPnQX6AKE0zh77LfH0JHfoVImdK63PnzSISkpS67SHX
+         pht8LhmG4wZFWHBGm1I46S3SDgwN4jIwIH2vW34jVHEM6yQOtFdNi6rZTq0V6n0EgOTL
+         SidivumqPUIX81Bw7svJeeKYMcoFxH5AtaWZn9RRV87GkOnivfrw4HkVJqixZ2vjhzxz
+         BidcteJ4pojnLN1SQVYzzgoS6jI3LK6zZre9Ycn+8y+dbXLvYE/jMdaE3fSeT/yS5Bbx
+         5moa+r5YV1U4MbqDOwp+yGLdtrp2fIFH+ASnROoEwEoSZ+h7N0lnGLdbbLjuemKPkCDw
+         gJew==
+X-Forwarded-Encrypted: i=1; AFNElJ/vAS7R5xhr78b2KxUjIJdq1V6BpCGFup9n9M4A276Ao5/ulMBHFx7bCaXg/M8X/8rZzp6nYA7wfix7Hf8hrDQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzLPZrZUxmiWyxVtyDW2YN7K1xxdvP0A0r+Xe7uVG3t2XjmhwtN
+	lx8fziwfnGBRSx0n8XJT05RWv1/+1i7tXnHj6Gg2Cp5e9MaXcSWjEOOB2Pf3N3ZFBrl7r1Lc86a
+	CN1JTrw==
+X-Received: from pfbg8.prod.google.com ([2002:a05:6a00:ae08:b0:83e:b5cc:11c3])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:729a:b0:3a3:a55f:407c
+ with SMTP id adf61e73a8af0-3aa5a911f3cmr27765927637.16.1778514303443; Mon, 11
+ May 2026 08:45:03 -0700 (PDT)
+Date: Mon, 11 May 2026 08:45:02 -0700
+In-Reply-To: <cover.1766066076.git.houwenlong.hwl@antgroup.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260508151729.682551a2b2739e8b5d15ade2@linux-foundation.org>
-X-Debian-User: leitao
+Mime-Version: 1.0
+References: <cover.1766066076.git.houwenlong.hwl@antgroup.com>
+Message-ID: <agH5fjWOfWO1L8u1@google.com>
+Subject: Re: [PATCH v2 0/9] KVM: x86: Improve the handling of debug exceptions
+ during instruction emulation
+From: Sean Christopherson <seanjc@google.com>
+To: Hou Wenlong <houwenlong.hwl@antgroup.com>
+Cc: kvm@vger.kernel.org, Lai Jiangshan <jiangshan.ljs@antgroup.com>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-On Fri, May 08, 2026 at 03:17:29PM -0700, Andrew Morton wrote:
-> On Wed, 06 May 2026 05:58:23 -0700 Breno Leitao <leitao@debian.org> wrote:
+On Thu, Dec 18, 2025, Hou Wenlong wrote:
+> Hou Wenlong (9):
+>   KVM: x86: Capture "struct x86_exception" in
+>     inject_emulated_exception()
+>   KVM: x86: Set guest DR6 by kvm_queue_exception_p() in instruction
+>     emulation
+>   KVM: x86: Check guest debug in DR access instruction emulation
+>   KVM: x86: Only check effective code breakpoint in emulation
+>   KVM: x86: Consolidate KVM_GUESTDBG_SINGLESTEP check into the
+>     kvm_inject_emulated_db()
+>   KVM: x86: Move kvm_set_rflags() up before kvm_vcpu_do_singlestep()
+>   KVM: VMX: Refresh 'PENDING_DBG_EXCEPTIONS.BS' bit during instruction
+>     emulation
+>   KVM: selftests: Verify guest debug DR7.GD checking during instruction
+>     emulation
+>   KVM: selftests: Verify 'BS' bit checking in pending debug exception
+>     during VM entry
 > 
-> > In this version, I am not touching the kernel code, but, just fixing
-> > the selftest, as sashiko reported some issues, and I am addressing them
-> > in here.
-> > 
-> > https://sashiko.dev/#/patchset/20260424-kmemleak_dedup-v2-0-8bea649b2a92%40debian.org
-> > 
-> > NOTE: Additional testing has revealed that lockdep detects a potential lock
-> > inversion issue on kmemleak and legacy console.
-> > 
-> > The problem occurs because the function holds &object->lock (a raw spinlock)
-> > while invoking printk to report the leak. This printk requires the legacy
-> > console_owner lock, which remains in active use despite the ongoing transition
-> > to the nbcon framework.
-> > 
-> > Concurrently, console drivers such as hvc (hypervisor virtual console) acquire
-> > the console_owner lock and may subsequently free memory. This kfree() operation
-> > calls into kmemleak's __delete_object(), which in turn acquires object->lock.
-> > 
-> > Although these code paths hold locks from different object instances, lockdep
-> > operates on lock classes rather than individual instances. Since all
-> > kmemleak_object->lock instances belong to the same lock class, lockdep
-> > identifies this as a circular dependency, even though the actual deadlock
-> > scenario cannot occur in practice (?!).
-> > 
-> > This problem was not introduced by this patchset/selftest, but, it is exposing
-> > it. I plan to solve it once this patchset is done.
-> 
-> None of the above is usable for a [0/N] - it all pertains to the
-> ongoing development process and should formally be below the ^---$
-> separator.  Because it isn't relevant to the permanent kernel record.
-> 
-> The v2 series had a nice cover letter, so I stole that.  Please check
-> that the below remains the truth, the whole truth, etc.
+>  arch/x86/include/asm/kvm-x86-ops.h            |   1 +
+>  arch/x86/include/asm/kvm_host.h               |   1 +
+>  arch/x86/kvm/emulate.c                        |  14 +--
+>  arch/x86/kvm/kvm_emulate.h                    |   7 +-
+>  arch/x86/kvm/vmx/main.c                       |   9 ++
+>  arch/x86/kvm/vmx/vmx.c                        |  15 ++-
+>  arch/x86/kvm/vmx/x86_ops.h                    |   1 +
+>  arch/x86/kvm/x86.c                            | 116 ++++++++++--------
+>  arch/x86/kvm/x86.h                            |   7 ++
+>  .../selftests/kvm/include/x86/processor.h     |   3 +-
+>  tools/testing/selftests/kvm/x86/debug_regs.c  |  72 ++++++++++-
+>  11 files changed, 178 insertions(+), 68 deletions(-)
 
-Ack, That remains correct.
-
-I just updated the cover letter to reflect the changes, but in the
-future I will keep the overall goal of the patchset.
+One goof and some nits on patch 3, but I'll fix them up when applying, i.e. no
+need for a v3.  I'll probably also add some comments and elaborate on some of
+the changelogs.
