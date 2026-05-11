@@ -1,145 +1,170 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 414FD3BD63D
-	for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 09:50:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=170.10.133.124
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778493050; cv=pass; b=Jmn039kPbf2QTWmaB1WmWPDrSlI12mxv7YmCn7/NMOI+okKZCFSzBmm8WY+NxnPgwOZOj8cr1Ps9BdDWREuOq/yMJ+CQt5m8NVdDlKpVmiz5Gi55jjomrBEUYsr7MBY3zkqaW3Ndcr7kXSaudPEHeXH/QdmQ4D0rxe5HvluX810=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778493050; c=relaxed/simple;
-	bh=TyZ0hxf2iniFxRampZvCNdzcdN7Urpbpg3cYJjymmNs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tPM6n9RWoRjGr2s7s5grSDiV+Zh+WXP3C84cp1xyv3TpYhAuQ9A2NTu0KHNMXsyb0ahEqwoSz/gArb50+8/LcHKQbUXXDjW19gWawcbZQQ7f28IFWVJWNggPUf2EDEAfG1ycUUZZvMciWrHR3lrUGgaVc42aJeqZk18acRUSj9k=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ez4G0l1U; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=iGYIg1UJ; arc=pass smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7C1D3D16F2;
+	Mon, 11 May 2026 10:23:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778494995; cv=none; b=O8APuBlx/qH3bfR8+uel3VuDWknr/U7hAlk41N4FUVyIXn6BOxj4qh8O/dlbVc4Y+TtsiSyCgvy0UZJsZdZLtO24TmhI/g5mo8pLLH07PRXtoYdgFuBsWnm8w2ALRNwhNxcAtImLP+Cfe3gIRCjEZ7+fye9HbgfXJZO3g7wUdNM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778494995; c=relaxed/simple;
+	bh=65WOtYri162fIJG2Eg2MVA6gXjS757lnBTE4mW0pIew=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CYMFSSiQFCGDXmBENe3r3cUXkjc30RWAupEktcATwgoqYxumIeqbFBoowJl0LC+zqOFe6Az8GEybk6asSiP9cqi9MBuzu2rn3mbKn+1Bbicza3/zgpqT6NR0AXOBYrOpCcPFb+UOfg8o2Cv4XKuYiuOWKhl4BNZgx4iqqn+UOdU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=K+fzA263; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ez4G0l1U";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="iGYIg1UJ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1778493048;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=TyZ0hxf2iniFxRampZvCNdzcdN7Urpbpg3cYJjymmNs=;
-	b=ez4G0l1U6aEyGlJ+he356XorfAo8lsc9M0mRhoE9ceWRxSJvUt4eC19v9WQc+pckPzJi0h
-	+D1D2Uw+Q70vtJahsp31s8MooBznIcxQBV/rF8pogMrjWk8igdaiz4KT4eCNNZM9QXLoXy
-	JJIwP2ASyQC4fRbU1eiWSpmkQkTtMlw=
-Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com
- [209.85.208.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-424-2ZtunOrWPBObQw9TZxOApw-1; Mon, 11 May 2026 05:50:46 -0400
-X-MC-Unique: 2ZtunOrWPBObQw9TZxOApw-1
-X-Mimecast-MFC-AGG-ID: 2ZtunOrWPBObQw9TZxOApw_1778493045
-Received: by mail-lj1-f197.google.com with SMTP id 38308e7fff4ca-393c9ff86c8so15668701fa.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 02:50:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778493045; cv=none;
-        d=google.com; s=arc-20240605;
-        b=g1xSAOvFAMBPx0BfT9Erta31c7Sww5MDP5yGiXwI87BluGZOFexFrzQGbLb+3CUMFt
-         uFEubCMQcmTGmyqhMnP7HzXYj3FvgJfBaNx5VM90U1+xCwDb7XnUiM/5uq6c3PEy1bhl
-         IolGCeqtnuJJs5wdH7Au/w7EpHR+gUIFVaZcO+vmPkaks75QR/nAdk5fDykkQNWpoVJB
-         QS6ViKgG+QDg7zk/uVcnbW5byL7uCcfVlFFmXqFfc4u+IpKVRbrcDr5k6bRSVrpHc6cF
-         +7ZO2ZKSn3VNAJGXxn3uHZTOB55KyuLXDl2HJOnynnGM92szml1s+J1x/huiXv5CNY8W
-         v3og==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=TyZ0hxf2iniFxRampZvCNdzcdN7Urpbpg3cYJjymmNs=;
-        fh=jwsfxdsFrvUFZhMkTAyWQrbMKwdyizCpYh3YoINUuMo=;
-        b=WYrnGMOxdmSZ9n27GjO9QgZM3UkrgilDD/VNfSbvthRQ9A9FiqWpg8N2mqJzSJZt5u
-         R6fsI/f3x0dFdS/PxJiQ0nyYLViLzQG7O+DF0+JcTJYcqt+14Ev49NhFv2XA0gme4Osk
-         9MXb+QzVrm77E0mb3vwm+Js2cCDhOMl9C2Fxh50ovUFILBaL4StJacy3QKswTnxpaa7K
-         7ejzQGihUJi5PCCR95YtFbQ+/DV19G9DXUeo/xpOYmnzF9s/yxoX/dcT4SNN7LjZzFQO
-         EK1Jqdu+cIbrYKk/jAUjslZYhwgSxQyJ/KxuASlcvosuhEuhzJP4a7VLMGvbWxCgrEBk
-         tW/w==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1778493045; x=1779097845; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TyZ0hxf2iniFxRampZvCNdzcdN7Urpbpg3cYJjymmNs=;
-        b=iGYIg1UJFu7vIx9Pk44jKpM/yR8klyjVVkMJiPqq09Ma5jaq3n6UdrO5EigGilQnVE
-         7LnJAsWKbeMlhNBlKt8ssr+dfLBwl+vB4lF7e/gTMgJoVaLtws4gupjy7CIwVAuvZaID
-         gJbkucpNTq8MiVVvdBiIj4UtfiE1Lpq9cNLl5CkleUCh9LnT38g1d2nWdprk5+joSUoc
-         f6kycTGlXhY2YTNSZF+/MqXq8KYXeNLdH9hJtmrYWT7d4KOcWw69uX7KXoJl0L9faDXl
-         O05OoZwFUg/ddTJ+GFyHaJD28zNrQMgiOeCS4cagA6zFFmC2zELd/BLspNme4wkG8Jxw
-         n/zA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778493045; x=1779097845;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=TyZ0hxf2iniFxRampZvCNdzcdN7Urpbpg3cYJjymmNs=;
-        b=Y6vg8s/yKpJAufjfEpDVjQlOmCoXaCAEVF2Jw7HMWYVRemsgaRU8nlWSjnb1AmXLvB
-         SJYRDbIOJUHfvpBRK+v8DRlka5taeXNqtZHsja1RVSPL7hKBK+1U3uBBXojrCrkgZU6w
-         sMnJQrM3mitl0aH4aZANFGj5DKXzj8uZBI/CMKTLgWHLLpteC/YKmJ18jHW7TVKwPjGg
-         7A9apPBxcYrgTSAaNMVxq8Auv3yMKqEpzIvlorp8so14UyIie60CqtW6Xhv+2u5nk3wp
-         rXnAAprdmdgdvkU32U+UXPoRIAxszrOHn5LAuArY+FPjvr2eGmMKEyRHPxaNCSNbPXCz
-         Kg4w==
-X-Forwarded-Encrypted: i=1; AFNElJ8OgPmLwTBTUJ84crKonShDw/db8lROCevJyYwvecIc8btd9SfqfytjCQK9bwDJLB1PNTGci5Wg3nogeYFq8vE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy+IZ8+LuKUpjgnx568dUvrehrxIC26p7j/Wv6uF9QS81nHHg9k
-	jfrxWkw8GvV/8BYatNc/UZuv4Vo/JWY8Inow0/Jrez74B46mOY+mauyl01l2eoutzv3p4IQBR50
-	Rkd4S7eOT8zuvo5HD9/yNEDwLYM0WFbQtb4Q5p0OrP+n0LKH112zhoB/1w18HcedxSU0U3QuYh0
-	r90NRGjqDFkngS+e2pLtZHtbbWdU3i+AEiwPgdsa3pv7Bf
-X-Gm-Gg: Acq92OGiJrBcQtqd91dHD2KLWGqtOTZzBjfxkvTSxWwLn4e6w+9VG6H+grvlm7k2m51
-	27bXHqiQ8x0qVd7jPC8YG+kc2CruELCz+joX7m3zaGH9g2ABNo1Z4jFOiuRYlngNRCpzpxdl7hi
-	Fdv2TIcNJhhEUW2VtaqnpNpA8DSKsYBTYz1t/bEvDAv4uC7aaqKnlAWu8hVxTXD3femYWO3nBcQ
-	hAQng==
-X-Received: by 2002:a05:6512:3046:b0:5a4:56:aa88 with SMTP id 2adb3069b0e04-5a887ce5cb9mr8074549e87.27.1778493044704;
-        Mon, 11 May 2026 02:50:44 -0700 (PDT)
-X-Received: by 2002:a05:6512:3046:b0:5a4:56:aa88 with SMTP id
- 2adb3069b0e04-5a887ce5cb9mr8074540e87.27.1778493044330; Mon, 11 May 2026
- 02:50:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="K+fzA263"
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64B7D9Wl1991346;
+	Mon, 11 May 2026 10:22:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=LyziTp
+	DawUQZ1AMfG5vG1IZmo3cKN9STSmA1nTF6oJI=; b=K+fzA263+QEvQph2uMRl7F
+	ySJm+zKH/fKL2SbyG4cTdbCVDD+4qWmJRz7MK++Geuhlaq++1Y72/XdS6O0b9IVo
+	sLHE3LBu1gc0KzUDNtNMPtWtpuRA4jK+V2fIld25zKFXKVIE5wB7hxwOfRmnJXSJ
+	uq7QqsmpYWEHkDV18dfjC2L6+0Msa1CyK2U3wGCs2dIcMdRRdvAXZaJmcFUh62yW
+	CAFtKNpv63nLZASWIeF1qWJItqFIwFYpPPlUUrA1D3HzYIlIVfRwux8ZBhgNfU8U
+	aruqVMtt4BrtG3aLs6r97iq0GHl8eaLDyZq1I30B1XjYkvS+Y1ZfT4ptlcWaTbQw
+	==
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4e1tbhqf24-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 11 May 2026 10:22:48 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64BA9SK5025964;
+	Mon, 11 May 2026 10:22:47 GMT
+Received: from smtprelay04.dal12v.mail.ibm.com ([172.16.1.6])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4e2fmvvvkx-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 11 May 2026 10:22:47 +0000 (GMT)
+Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
+	by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 64BAMkDo26804810
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 11 May 2026 10:22:47 GMT
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id DADC75805D;
+	Mon, 11 May 2026 10:22:46 +0000 (GMT)
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id A989B58068;
+	Mon, 11 May 2026 10:22:42 +0000 (GMT)
+Received: from [9.123.6.34] (unknown [9.123.6.34])
+	by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Mon, 11 May 2026 10:22:42 +0000 (GMT)
+Message-ID: <3d66e75c-4039-40a8-a8d9-e8db62c13b16@linux.ibm.com>
+Date: Mon, 11 May 2026 15:52:41 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260510164337.7611-1-ihuguet@riseup.net> <20260510095246.5c8f6d0b@kernel.org>
-In-Reply-To: <20260510095246.5c8f6d0b@kernel.org>
-From: =?UTF-8?B?w43DsWlnbyBIdWd1ZXQ=?= <ihuguet@redhat.com>
-Date: Mon, 11 May 2026 11:50:32 +0200
-X-Gm-Features: AVHnY4KpEIM0JZ6n7jbTbprKPPeQ-2CVzz4QuyQAwivI33Sd8j48Nhm6mgqEVfo
-Message-ID: <CACT4oucitAa05V11KD0d2mQYc7h1L36zDGumnRYXn6+6XUa=QA@mail.gmail.com>
-Subject: Re: [PATCH net-next 0/5] netdevsim: get link via ethtool, set via sysfs
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: =?UTF-8?B?w43DsWlnbyBIdWd1ZXQ=?= <ihuguet@riseup.net>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, "David S . Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Sabrina Dubroca <sd@queasysnail.net>, Filip Pokryvka <fpokryvk@redhat.com>, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/mm: handle fork() failure in migration tests
+To: Hu Song <husong@kylinos.cn>, akpm@linux-foundation.org, david@kernel.org,
+        shuah@kernel.org, linux-kselftest@vger.kernel.org
+Cc: ljs@kernel.org, liam@infradead.org, vbabka@kernel.org, rppt@kernel.org,
+        surenb@google.com, mhocko@suse.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20260511093433.2372985-1-husong@kylinos.cn>
+Content-Language: en-US
+From: Donet Tom <donettom@linux.ibm.com>
+In-Reply-To: <20260511093433.2372985-1-husong@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Authority-Analysis: v=2.4 cv=ZdQt8MVA c=1 sm=1 tr=0 ts=6a01adf8 cx=c_pps
+ a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
+ a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=Y2IxJ9c9Rs8Kov3niI8_:22 a=y8b2V3OV3dnl5RsapYEA:9
+ a=QEXdDO2ut3YA:10
+X-Proofpoint-ORIG-GUID: Nufk4kqobnzr1nYYrQ10GQO2dmESkzab
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTExMDExMSBTYWx0ZWRfXwoTAcSb3B1Pf
+ uMZU7xldHbYY82PDgptAUc5KjVUtnXyg7x3OixxRsOHV0ahERKEkQDG+skLSB8a6WuIUvGtHoMs
+ 0wBs0QCxsHWxoi8SskOEaFcoyAZ0EORS+t0FbR7lyUwbe6hVcFyPMdHapWC6Fk0rdXiW6moFZYD
+ cc93MoJzCoPlGovuw5/aVpE9imAaJ50JMHjg+SOhiw8w9Fyx/+pnLmE2oYa4WaE51soZTY/WXDH
+ WmqSmlLJfmRKA7D+CgbMCYdxgSBfTljooyOyEOeJXDjSP6Pe7ccGNciDdZLcxr0qXCTv6oWlRgW
+ s0mIi3Us4Z0NKrJqgT4m//J1i+BG1g5sTNef9rwr+q3+Y6iPTq7FjoAi3pVkO7nvN9uuPIbOqew
+ cvsxjGEaXqYxskBrAoFShBN9RQGRfhKConxZxBRCNUTsPDPwDX662ef8SGKmD2ICH+1FlPRwLpp
+ khJhJdZ0J3yCMw0m6Mw==
+X-Proofpoint-GUID: oLciyCfTsNXsZAGfTXt8saeO8uDDd909
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-05-11_03,2026-05-08_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 spamscore=0 phishscore=0 lowpriorityscore=0 bulkscore=0
+ priorityscore=1501 malwarescore=0 suspectscore=0 clxscore=1011 adultscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2604200000 definitions=main-2605110111
 
-Hi Jakub,
+Hi
 
-On Sun, May 10, 2026 at 6:52=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wr=
-ote:
-> Could you please explain your motivation? Feels quite trivial,
-> so it's not immediately obvious why we need tests.
+On 5/11/26 3:04 PM, Hu Song wrote:
+> From: Song Hu <husong@kylinos.cn>
 >
+> When fork() fails and returns -1, the code falls into the else branch
+> and stores -1 into self->pids[i]. Later, kill(-1, SIGTERM) is called
+> which sends SIGTERM to every process the user has permission to signal,
+> potentially killing the entire user session.
+>
+> Add an explicit check for fork() returning -1 (pid < 0). On failure,
+> clean up any already-forked children before failing the test via
+> ASSERT_GE(pid, 0). This fix is applied to all three fork() call sites
+> in shared_anon, shared_anon_thp, and shared_anon_htlb tests.
+>
+> Signed-off-by: Hu Song <husong@kylinos.cn>
 
-We use netdevsim for some userspace CI testing here at Red Hat. Specificall=
-y,
-There are some tests that require reacting to carrier changes on a device
-matched by permanent MAC address from userspace. As veths don't have a
-permanent MAC address, we need netdevsim for this test case.
+I am seeing the below issue in checkpatch.pl.
 
-As you say, it's pretty trivial, but IMHO there's nothing against it, as it
-will help to resemble better a typical Ethernet device.
+WARNING: From:/Signed-off-by: email name mismatch: 'From: Song Hu 
+<husong@kylinos.cn>' != 'Signed-off-by: Hu Song <husong@kylinos.cn>'
 
-Note: we know that there's no guarantee regarding netdevsim's uAPI and we'r=
-e
-ready to adapt for any change, but the truth is that there's no reasonable
-replacement of netdevsim for these kinds of cases where veth is not enough.
+-Donet
 
-
-
---=20
-=C3=8D=C3=B1igo Huguet
-
+> ---
+>   tools/testing/selftests/mm/migration.c | 15 +++++++++++++++
+>   1 file changed, 15 insertions(+)
+>
+> diff --git a/tools/testing/selftests/mm/migration.c b/tools/testing/selftests/mm/migration.c
+> index 60e78bbfc0e3..f433e4f195ad 100644
+> --- a/tools/testing/selftests/mm/migration.c
+> +++ b/tools/testing/selftests/mm/migration.c
+> @@ -163,6 +163,11 @@ TEST_F_TIMEOUT(migration, shared_anon, 2*RUNTIME)
+>   	memset(ptr, 0xde, TWOMEG);
+>   	for (i = 0; i < self->nthreads - 1; i++) {
+>   		pid = fork();
+> +		if (pid < 0) {
+> +			while (--i >= 0)
+> +				kill(self->pids[i], SIGTERM);
+> +			ASSERT_GE(pid, 0);
+> +		}
+>   		if (!pid) {
+>   			prctl(PR_SET_PDEATHSIG, SIGHUP);
+>   			/* Parent may have died before prctl so check now. */
+> @@ -235,6 +240,11 @@ TEST_F_TIMEOUT(migration, shared_anon_thp, 2*RUNTIME)
+>   	memset(ptr, 0xde, TWOMEG);
+>   	for (i = 0; i < self->nthreads - 1; i++) {
+>   		pid = fork();
+> +		if (pid < 0) {
+> +			while (--i >= 0)
+> +				kill(self->pids[i], SIGTERM);
+> +			ASSERT_GE(pid, 0);
+> +		}
+>   		if (!pid) {
+>   			prctl(PR_SET_PDEATHSIG, SIGHUP);
+>   			/* Parent may have died before prctl so check now. */
+> @@ -295,6 +305,11 @@ TEST_F_TIMEOUT(migration, shared_anon_htlb, 2*RUNTIME)
+>   	memset(ptr, 0xde, TWOMEG);
+>   	for (i = 0; i < self->nthreads - 1; i++) {
+>   		pid = fork();
+> +		if (pid < 0) {
+> +			while (--i >= 0)
+> +				kill(self->pids[i], SIGTERM);
+> +			ASSERT_GE(pid, 0);
+> +		}
+>   		if (!pid) {
+>   			prctl(PR_SET_PDEATHSIG, SIGHUP);
+>   			/* Parent may have died before prctl so check now. */
