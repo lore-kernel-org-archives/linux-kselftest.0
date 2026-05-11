@@ -1,47 +1,75 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f45.google.com (mail-dl1-f45.google.com [74.125.82.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA16F37F744;
-	Mon, 11 May 2026 20:12:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67C75346E51
+	for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 20:21:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778530352; cv=none; b=HCr/7yLDwoXPOcOkMijySaqunByiJZfgMEU5iGFzTLJUuW3P8q/RKMkSwwfaOILHTJ9RZgxu1QX2FLI30kJuIDPxASbir99sDF8NwCluDr0QhWc2ug3itUEDbWoRkVmeFaxWcQ9B9Xe8yjcqKW/hr33WVMmL+fA2BgANwgX8ndU=
+	t=1778530892; cv=none; b=miIXXBYeTF022Vz+C6ZwA40JAiVO9zN6CajJXeMxNQ22/OpC7myPYpIjH8fj672DmEhLtMjaRZ7EpD28PA2u0yFm1FQLCrTMfVaoX8raFImzP4p+9ONoNPtPihAlFiUYmjTgGlSLa7lNfHoteh2tKl4/b8odfOjnPCRwXbF927I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778530352; c=relaxed/simple;
-	bh=7xmR3Oo6zJp0RpoQm/v+WdlUTzXkks+QvhatNJQCp6o=;
+	s=arc-20240116; t=1778530892; c=relaxed/simple;
+	bh=rCA9LdOkqF3iTNr8B3UsnH8Z1ETK6NiPONAJ9dtl9DM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=j5HFJTqqMEPGQoqSHboueh5TZ47DbE/AjRRO6Q8+//V3OhJt/8fg9nm4MPx1Qzr1SZRIC4BopMN6xx1HXxAhLidH9owGcNaLejhCVstz5FwfwLnScD/PnEbfJgmKDIXkCA3SHhtv4adIcj258GjcYUyrYLwL17ORtlZ0cSckVS8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IR5bzBJ/; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=mMD5U3Q/bGFNQNAx/LmzpEix9M8geq2cm/4PXgkVEEuEFHVrtTbVLB0uKYPpTKenZQQ+VPRitOQ1HKvxvcO7go/TTJRoG6ddqqo69D2oMKhVx1Dq/NYa7bKsfdFDrVGjoeLJmffZtichLY2S1W8nNf0AjPgW+PCOjQoK/XWZt1I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rM4bn5Px; arc=none smtp.client-ip=74.125.82.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IR5bzBJ/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55003C2BCB0;
-	Mon, 11 May 2026 20:12:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778530352;
-	bh=7xmR3Oo6zJp0RpoQm/v+WdlUTzXkks+QvhatNJQCp6o=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=IR5bzBJ/YxjULJTo/YqMhy36k64zo9tLGyXYm5/qTUOe/6t8yaUPQLAe0aN8WHquc
-	 CQugBenAShdg1x3TTu20jPld6S19KS26zcozsMF5llCOaoEtr9gNZTioKW8dQcHDXl
-	 qHuF7tZBcGY/SKLa3vZ9uX2SE01Yr/4GDd02afrldroD87FJV5HowJ/KqGSiURdn89
-	 ECVo7rNXFt89O19KYY2+2aMxRX/J3pd5FWcLF4JUPDkKP8AYi8EWfSMFvzuUGHeJ+s
-	 0aAy3/JsmU9flb7mobE49t1KZ1ll8FKuUReRoZtE8eIndhmRuZqVuYYT/5VJeUE1B8
-	 pCsEpZcBWVVnw==
-Date: Mon, 11 May 2026 16:12:30 -0400
-From: Sasha Levin <sashal@kernel.org>
-To: Anthony Iliopoulos <ailiop@suse.com>
-Cc: Florian Weimer <fw@deneb.enyo.de>, corbet@lwn.net,
-	akpm@linux-foundation.org, skhan@linuxfoundation.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, gregkh@linuxfoundation.org
-Subject: Re: [PATCH v2] killswitch: add per-function short-circuit mitigation
- primitive
-Message-ID: <agI4Lrr58QpN_ukz@laps>
-References: <20260508195749.1885522-1-sashal@kernel.org>
- <87ecjku6y7.fsf@mid.deneb.enyo.de>
- <af8pw54Y-Q18kSR0@laps>
- <agGweC12aloH8DBq@foo>
- <agG6PnVAFMsb3iiz@laps>
- <agIQjd78N_6NMN2U@technoir>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rM4bn5Px"
+Received: by mail-dl1-f45.google.com with SMTP id a92af1059eb24-132cccd3d77so72c88.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 13:21:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1778530889; x=1779135689; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JP+cdDjozehYE+Tdzt7VKCFaFUFZARCc2f/zXd4rdVE=;
+        b=rM4bn5PxG50BiXTdCNOohSGWYjNU43tkB8yOeMLReKbJYqjHWhma0gVX8+N9FLUUn6
+         kEarirxwwKwRuQWS4wafLQ2WfufDOOfCn1qF5a1gqysGwkcKmm4VzSli/H+VMsdvubY1
+         4MHff4AktfnW+gAdgVYNfTa2/0iR/CgclYvPFpmNce3k/yycvmdvmppriZwzSK8Xlr1D
+         M0YJqSOfH4Q/Z975A3e+YnZrN+LU87e4kfjnoyLhJV/cczS43/qcz3odeR/e1EqbxQTx
+         515zwqrlT12auk0iNT6Tt3dVEkgZLcRZc29oq1KYu3E/RJYrMZmSCW43jmmIoKIj0pkT
+         T61w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778530889; x=1779135689;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JP+cdDjozehYE+Tdzt7VKCFaFUFZARCc2f/zXd4rdVE=;
+        b=bRhtd19eOyrfnSln4d5Z90IL/EJlbBTHOBF0z+h62pM8DvdizRP7LsPZqEmc5AFK0a
+         X/PjjbiF0rtsoNpb6T4PKI03DLjeSNUhPybbpPR5ra/AOSoG9OYatIdBL0askzv082Le
+         4sIqrySgOBB0Hvl6Zb1vAlTDASPHWbY1UiSUWllMIZqQnYTcOPxnDr6BYDqi2BzzWrtq
+         sNVqZjQS14ZEZZkImqe4U4NlfEbGT/19wB+COOkcnJrwrEry9UpSL5p5Tq36ZXtHbUjl
+         3yy+86pAHcWOVGMNjvu1LOOcjYtgx7TkPxdM/hHlN8zEgWOLCQblmoO444EEYlwfOf7q
+         mS8g==
+X-Forwarded-Encrypted: i=1; AFNElJ/VTfKiS//ckU9r8dUyVzDvvrfdp5kFFnB+Q7rvFHZxRvlXNb1YdmMf2eOQMsiukQYk0UPJ2LtNf12iJScNhME=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy+u10sciswr3Xox9RZJehZUe5hfcj/88r5ibtpTXp8HcVx3zXh
+	uB2jM/jNXZjEmrW0vPsUnteuIRP3XmzO5OZhpRHWdoNejCcTc1fGAwFrvIdo3yoxIArEXLC/jDT
+	NZ1NAGA==
+X-Gm-Gg: Acq92OE9tNaFSHLxQlRe9G2UWRP/SHT5wzkmx2ouBtzKqGsqb2R/V7ecus7iu9gvoI2
+	anii/jh3WDuItPqe7GKYVa0hWmTWJQbZHyzcyBanDFEsbJD09CDsl8unkKDiJrRqoRMQIU0JSi6
+	bUT63RgTTnfZacvw2460aUqfKypNhSP7NOo/mfIYJG+lHB0rtAnQ0X+3Qj16U//IFc2QxZzeXy3
+	/z8pYcJ6VSs5Pd4LcO7uJiIZxlxUOVXYRPXGKRxanhQtqTJgvWi399HaHerxoc72NsvoiCw1+R0
+	TfOP0Ff0jismsIymVfaL/+4tBcH412WAmsxJ5s/BjaodCz5YFz0h4c00LTVVdlahmzRBFFMd8+S
+	2hufRWlE1qZxhCouRX0hS8tNNq6Uh4vJtI+7MvgwKgnIZGCo0uCn99rx71lLFSI3J3t0lf8wd+8
+	YKpRL2Cp4HXbQRCprOzBeHtNN+8xZqcncqP+VotFCLEYEkckArjx6kgZOwmVhB0prk1oHZ+Q==
+X-Received: by 2002:a05:7022:e0f:b0:12c:8f55:cd0d with SMTP id a92af1059eb24-1333e1ade52mr95673c88.8.1778530888754;
+        Mon, 11 May 2026 13:21:28 -0700 (PDT)
+Received: from google.com (153.46.83.34.bc.googleusercontent.com. [34.83.46.153])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1327865a1a4sm16012499c88.10.2026.05.11.13.21.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 May 2026 13:21:28 -0700 (PDT)
+Date: Mon, 11 May 2026 20:21:22 +0000
+From: Samiullah Khawaja <skhawaja@google.com>
+To: David Matlack <dmatlack@google.com>
+Cc: Aex Williamson <alex@shazbot.org>, Shuah Khan <shuah@kernel.org>, 
+	Alex Mastro <amastro@fb.com>, Raghavendra Rao Ananta <rananta@google.com>, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] vfio: selftests: Add support of creating multiple
+ iommus from iommufd
+Message-ID: <agI2EFvBwKUHaHVi@google.com>
+References: <20260505221518.619123-1-skhawaja@google.com>
+ <20260505221518.619123-2-skhawaja@google.com>
+ <af4or28EA6PGEd12@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -50,152 +78,260 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <agIQjd78N_6NMN2U@technoir>
+In-Reply-To: <af4or28EA6PGEd12@google.com>
 
-On Mon, May 11, 2026 at 07:23:25PM +0200, Anthony Iliopoulos wrote:
->On Mon, May 11, 2026 at 07:15:10AM -0400, Sasha Levin wrote:
->> The mechanism is the same, but I don't think reusing fail_function works for
->> what killswitch is trying to do.
->
->How so? The kprobe handler is essentially the same. Setting the
->whitelisting aside, it is currently possible to do:
->
->echo af_alg_sendmsg > /sys/kernel/debug/fail_function/inject
->echo 0xffffffffffffffff > /sys/kernel/debug/fail_function/af_alg_sendmsg/retval
->echo 100 > /sys/kernel/debug/fail_function/probability
->echo -1 > /sys/kernel/debug/fail_function/times
->
->and that will return -EPERM, taint the kernel, and log the stacktrace on
->dmesg on every rejected call.
-
-Sure, the kprobe mechanism is the same under the hood. The differences are in
-the policy layer.
-
->> > Given that this achieves the exact same result, then why don't we consider
->> > simply removing the whitelisting restriction from fail_function altogether
->> > and use that instead? The only thing missing then would be the boot param
->> > parsing and setup.
+On Fri, May 08, 2026 at 06:17:19PM +0000, David Matlack wrote:
+>On 2026-05-05 10:14 PM, Samiullah Khawaja wrote:
+>> IOMMUFD allows creating multiple IOAS and HWPTs under one iommufd, Add
+>> API to init a struct iommu using an already opened iommufd. The API
+>> internally creates a new IOAS and also a new HWPT as an option based on
+>> the flags passed to the function.
 >>
->> fail_function lives in debugfs, and on a typical Secure Boot distro debugfs is
->> itself blocked by LOCKDOWN_DEBUGFS at integrity level. Dropping the whitelist
->> doesn't help when the operator can't write to the file in the first place.
->
->Agreed, for this to work fail_function would also need to parse boot
->params similarly.
->
->> Killswitch is in securityfs so that engaging it can be its own lockdown
->> decision rather than being lumped in with everything debugfs exposes.
->
->Sure but it makes no difference when a kernel is locked at integrity it
->will anyway block either solution, this makes no practical difference.
-
-It does for observability. Even when the engage path is blocked by integrity
-lockdown, the user still has to be able to inspect the killswitch state: which
-engagements were applied from the boot cmdline, how many times each has fired,
-whether the kernel is tainted by killswitch. /sys/kernel/security/ stays
-readable under integrity lockdown while /sys/kernel/debug is restricted by
-LOCKDOWN_DEBUGFS as a whole tree.
-
->> Fault injection in general isn't enabled on production kernels - having to
->> enable CONFIG_FUNCTION_ERROR_INJECTION will drag in that entire infra into
->> kernels that don't need it.
->
->There's very little code that CONFIG_FUNCTION_ERROR_INJECTION brings in
->apart from the override_function_with_return trampoline and
->lib/error-inject.c which becomes obsolete without the need to whitelist.
->
->Your proposal also depends on FUNCTION_ERROR_INJECTION necessarily.
-
-To be precise about what's being dragged in: killswitch does select
-FUNCTION_ERROR_INJECTION, but it does *not* select CONFIG_FAULT_INJECTION (the
-broader probability/interval framework that distros stay away from).
-
->The only thing that would be missing and not usually compiled in is
->CONFIG_FAIL_FUNCTION that just implements the debugfs ops interface
->which you are exposing via securityfs instead.
-
-This understates what "use fail_function instead" actually requires in a distro
-Kconfig. CONFIG_FAIL_FUNCTION depends on FAULT_INJECTION_DEBUG_FS, which
-depends on FAULT_INJECTION, which is the broader framework that doesn't get
-built into production kernels. So a "rebuild fail_function for production" path
-is three configs prod users say no to today (FAULT_INJECTION +
-FAULT_INJECTION_DEBUG_FS + FAIL_FUNCTION).
-
->> > This way we'll be removing a few hundred lines of code instead of adding
->> > more duplication, while enabling the same functionality.
+>> Signed-off-by: Samiullah Khawaja <skhawaja@google.com>
+>> ---
+>>  .../vfio/lib/include/libvfio/iommu.h          |  5 ++
+>>  .../lib/include/libvfio/vfio_pci_device.h     |  2 +
+>>  tools/testing/selftests/vfio/lib/iommu.c      | 62 +++++++++++++++++--
+>>  .../selftests/vfio/lib/vfio_pci_device.c      | 22 ++++++-
+>>  4 files changed, 84 insertions(+), 7 deletions(-)
 >>
->> I'm not even sure there would be hundreds of lines saved here...
+
+[snip]
+>>  int __iommu_map(struct iommu *iommu, struct dma_region *region);
+>> diff --git a/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h b/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h
+>> index 2858885a89bb..1143ceb6a9b8 100644
+>> --- a/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h
+>> +++ b/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h
+>> @@ -19,6 +19,7 @@ struct vfio_pci_device {
+>>  	const char *bdf;
+>>  	int fd;
+>>  	int group_fd;
+>> +	u32 dev_id;
 >
->I'm talking specifically about whitelisting which would essentially be
->useless:
+>Please introduce an initialize this field in its own patch and, in the
+>commit message, explain why it is being added and  how it will be used.
+
+Agreed. Will do in next revision.
 >
->wc -l lib/error-inject.c include/asm-generic/error-injection.h include/linux/error-injection.h
-> 246 lib/error-inject.c
->  43 include/asm-generic/error-injection.h
->  28 include/linux/error-injection.h
-> 317 total
+>>
+>>  	struct iommu *iommu;
+>>
+>> @@ -65,6 +66,7 @@ void vfio_pci_config_access(struct vfio_pci_device *device, bool write,
+>>  #define vfio_pci_config_writew(_d, _o, _v) vfio_pci_config_write(_d, _o, _v, u16)
+>>  #define vfio_pci_config_writel(_d, _o, _v) vfio_pci_config_write(_d, _o, _v, u32)
+>>
+>> +void vfio_pci_device_attach_iommu(struct vfio_pci_device *device, struct iommu *iommu);
+>>  void vfio_pci_irq_enable(struct vfio_pci_device *device, u32 index,
+>>  			 u32 vector, int count);
+>>  void vfio_pci_irq_disable(struct vfio_pci_device *device, u32 index);
+>> diff --git a/tools/testing/selftests/vfio/lib/iommu.c b/tools/testing/selftests/vfio/lib/iommu.c
+>> index 035dac069d60..644c049cf9f0 100644
+>> --- a/tools/testing/selftests/vfio/lib/iommu.c
+>> +++ b/tools/testing/selftests/vfio/lib/iommu.c
+>> @@ -408,6 +408,18 @@ struct iommu_iova_range *iommu_iova_ranges(struct iommu *iommu, u32 *nranges)
+>>  	return ranges;
+>>  }
+>>
+
+[snip]
+>> +struct iommu *iommufd_iommu_init(int iommufd, u32 dev_id, u32 flags)
+>> +{
+>> +	struct iommu *iommu;
+>> +
+>> +	iommu = iommu_alloc("iommufd");
 >
->plus a hundred or so annotations of ALLOW_ERROR_INJECT and a tiny bit of
->image space savings from dropping that whitelist section from the binary.
+>Use MODE_IOMMUFD instead of string literal.
 
-Whether the whitelist is "useless" depends on the framing of what it
-was for. In the context of fail_functiom, it isn't a security feature, and
-never has been. It's a debugging guardrail in lib/error-inject.c that stops
-developers from fault-injecting on functions that don't expect failure
-injection during testing. Any kernel that has FAULT_INJECTION compiled in has
-already opted out of treating security as the primary concern in that build.
-
-Killswitch doesn't change the whitelist role: kernel/killswitch.c doesn't go
-through within_error_injection_list, fail_function still gets to keep its
-developer guardrail for testing, BPF's bpf_override_return still uses it too.
-
-In production kernels (where FAULT_INJECTION=n) the whitelist isn't
-running anyway. In debug/test kernels (where it is on) it remains useful for
-exactly the testing purpose it was added for.
-
->> The pieces that make killswitch what it is (cmdline parser,
->> LOCKDOWN_KILLSWITCH, TAINT_KILLSWITCH, audit on engage and disengage, the
->> module-unload notifier, etc) add up to roughly 200 lines that would move into
->> fail_function unchanged. I really don't think we'd end up with much of a line
->> delta.
+Agreed. Will update this.
 >
->All of that apart from the cmdline parser is already present in the
->fault/error injection code, directly or indirectly. I can see though the
->appeal of having killswitch cleanly separated from anything else, but
->perhaps changing the existing code is more approachable.
+>> +
+>> +	iommu->iommufd = dup(iommufd);
+>> +	VFIO_ASSERT_GT(iommu->iommufd, 0);
+>> +
+>> +	iommu->ioas_id = iommufd_ioas_alloc(iommu->iommufd);
+>
+>Please avoid duplicating this code. e.g. Something like this:
 
-Mostly, sure. Things that are missing are the module handling, for example.
+Agreed. Will update this.
+>
+>diff --git a/tools/testing/selftests/vfio/lib/iommu.c b/tools/testing/selftests/vfio/lib/iommu.c
+>index 644c049cf9f0..4909cda5c840 100644
+>--- a/tools/testing/selftests/vfio/lib/iommu.c
+>+++ b/tools/testing/selftests/vfio/lib/iommu.c
+>@@ -443,6 +443,19 @@ static struct iommu *iommu_alloc(const char *iommu_mode)
+>        return iommu;
+> }
+>
+>+static void iommufd_init(struct iommu *iommu, int iommufd)
+>+{
+>+       /*
+>+        * Require device->iommufd to be >0 so that a simple non-0 check can be
+>+        * used to check if iommufd is enabled. In practice open() will never
+>+        * return 0 unless stdin is closed.
+>+        */
+>+       VFIO_ASSERT_GT(iommufd, 0);
+>+
+>+       iommu->iommufd = iommufd;
+>+       iommu->ioas_id = iommufd_ioas_alloc(iommu->iommufd);
+>+}
+>+
+> struct iommu *iommu_init(const char *iommu_mode)
+> {
+>        const char *container_path;
+>@@ -459,15 +472,7 @@ struct iommu *iommu_init(const char *iommu_mode)
+>                version = ioctl(iommu->container_fd, VFIO_GET_API_VERSION);
+>                VFIO_ASSERT_EQ(version, VFIO_API_VERSION, "Unsupported version: %d\n", version);
+>        } else {
+>-               /*
+>-                * Require device->iommufd to be >0 so that a simple non-0 check can be
+>-                * used to check if iommufd is enabled. In practice open() will never
+>-                * return 0 unless stdin is closed.
+>-                */
+>-               iommu->iommufd = open("/dev/iommu", O_RDWR);
+>-               VFIO_ASSERT_GT(iommu->iommufd, 0);
+>-
+>-               iommu->ioas_id = iommufd_ioas_alloc(iommu->iommufd);
+>+               iommufd_init(iommu, open("/dev/iommu", O_RDWR));
+>        }
+>
+>        return iommu;
+>@@ -478,11 +483,7 @@ struct iommu *iommufd_iommu_init(int iommufd, u32 dev_id, u32 flags)
+>        struct iommu *iommu;
+>
+>        iommu = iommu_alloc("iommufd");
+>-
+>-       iommu->iommufd = dup(iommufd);
+>-       VFIO_ASSERT_GT(iommu->iommufd, 0);
+>-
+>-       iommu->ioas_id = iommufd_ioas_alloc(iommu->iommufd);
+>+       iommufd_init(iommu, dup(iommufd));
+>
+>        if (flags & IOMMUFD_IOMMU_INIT_CREATE_PT)
+>                iommu->hwpt_id = iommufd_hwpt_alloc(iommu, dev_id);
+>
+>> +
+>> +	if (flags & IOMMUFD_IOMMU_INIT_CREATE_PT)
+>> +		iommu->hwpt_id = iommufd_hwpt_alloc(iommu, dev_id);
+>
+>Does this need to be part of iommufd_iommu_init()? Maybe it would be
+>better to expose a separate helper to allocate a HWPT for a given struct
+>iommu *.
 
+Hmm.. that is interesting.. I think we can have following immediate
+possibilities when creating a struct iommu (there will be more down the
+road, but can be handled in similar way):
 
-Concretely to merge killswitch and fail_function we need:
+- create using struct iommu with a new IOAS.
+- create using struct iommu with existing IOAS but new HWPT.
+- create using struct iommu with new IOAS and new HWPT.
 
-   1. Boot cmdline parser (agreed).
-   2. A new lockdown reason in the integrity class plus its lockdown_reasons[]
-      string.
-   3. Moving from debugfs to securityfs (or standing up a parallel securityfs
-      interface).
-   4. Module-unload notifier.
-   5. Taint flag.
-   6. Audit logging on engage and disengage.
-   7. Fixing up fail_function's API (probability, interval, times) with the
-      engage/disengage model.
-   8. Production users enabling FAULT_INJECTION + FAULT_INJECTION_DEBUG_FS +
-      FAIL_FUNCTION, none of which they do today.
+I think I should probably add following flags:
 
->- fail_function would become somewhat redundant since the same
->  functionality would be achieved via the securityfs (or just bpf, which
->  is already the case).
+IOMMUFD_IOMMU_INIT_CREATE_IOPT (IO Page Table) or _PT
+IOMMUFD_IOMMU_INIT_CREATE_IOAS (IO address Space) or _AS
 
-There are already several ways to override a function at runtime: livepatch,
-fail_function, BPF kprobe override, an out-of-tree kprobe module. The
-underlying machinery is largely the same across all of them. We keep them as
-separate facilities because they serve different audiences and different policy
-needs, not because each one uses a different underlying technology.
+At least one of those should be required when creating new struct iommu
+from an existing one. WDYT?
+>
+>This would enable use of HWPTs in iommus constructed by iommu_init() as
+>well, which someone may want to do in the future.
+>
+>If you go this route, please introduce this in its own commit.
 
-By the "same capability, therefore redundant" logic, fail_function should
-already be redundant with livepatch or BPF since both can replace a function's
-body with whatever you want.
+Both flags can be introduced in same commit or should be separate?
+>
+>> +
+>> +	return iommu;
+>> +}
+>> +
+>> +static void iommufd_cleanup(struct iommu *iommu)
+>> +{
+>> +	struct iommu_destroy args = {
+>> +		.size = sizeof(args),
+>> +	};
+>> +
+>> +	if (iommu->hwpt_id) {
+>> +		args.id = iommu->hwpt_id;
+>> +		ioctl_assert(iommu->iommufd, IOMMU_DESTROY, &args);
+>> +	}
+>> +
+>> +	args.id = iommu->ioas_id;
+>> +	ioctl_assert(iommu->iommufd, IOMMU_DESTROY, &args);
+>
+>
+>Please create a helper function to do IOMMU_DESTROY ioctl. Then here you
+>can just do:
+>
+>  if (iommu->hwpt_id)
+>          iommufd_iommu_destroy(iommu, iommu->hwpt_id);
+>
+>  iommfd_iommu_destroy(iommu, iommu->ioas_id);
 
--- 
+Looks great. Will do.
+>
+>> +
+>> +	VFIO_ASSERT_EQ(close(iommu->iommufd), 0);
+>> +}
+>> +
+>>  void iommu_cleanup(struct iommu *iommu)
+>>  {
+>>  	if (iommu->iommufd)
+>> -		VFIO_ASSERT_EQ(close(iommu->iommufd), 0);
+>> +		iommufd_cleanup(iommu);
+>>  	else
+>>  		VFIO_ASSERT_EQ(close(iommu->container_fd), 0);
+>>
+
+[snip]
+>> +void vfio_pci_device_attach_iommu(struct vfio_pci_device *device, struct iommu *iommu)
+>> +{
+>> +	u32 pt_id = iommu->ioas_id;
+>> +
+>> +	/* Only iommufd supports changing struct iommu attachments */
+>> +	VFIO_ASSERT_TRUE(iommu->iommufd);
+>> +
+>> +	if (iommu->hwpt_id)
+>> +		pt_id = iommu->hwpt_id;
+>
+>nit: This can be folded into the variable declaration.
+>
+>  const u32 pt_id = iommu->hwpt_id ?: iommu->ioas_id;
+
+Agreed
+>
+>> +
+>> +	VFIO_ASSERT_NE(pt_id, 0);
+>
+>Why is this check needed?
+
+I think it is redundant. I will remove it.
+>
+>> +	vfio_device_attach_iommufd_pt(device->fd, pt_id);
+>> +	device->iommu = iommu;
+>> +}
+>
+>Please introduce vfio_pci_device_attach_iommu() in its own patch.
+
+Agreed. Will do.
+>
+>> +
+>>  static void vfio_pci_iommufd_setup(struct vfio_pci_device *device, const char *bdf)
+>>  {
+>>  	const char *cdev_path = vfio_pci_get_cdev_path(bdf);
+>> @@ -350,8 +366,8 @@ static void vfio_pci_iommufd_setup(struct vfio_pci_device *device, const char *b
+>>  	VFIO_ASSERT_GE(device->fd, 0);
+>>  	free((void *)cdev_path);
+>>
+>> -	vfio_device_bind_iommufd(device->fd, device->iommu->iommufd);
+>> -	vfio_device_attach_iommufd_pt(device->fd, device->iommu->ioas_id);
+>> +	device->dev_id = vfio_device_bind_iommufd(device->fd, device->iommu->iommufd);
+>> +	vfio_pci_device_attach_iommu(device, device->iommu);
+>>  }
+>>
+>>  struct vfio_pci_device *vfio_pci_device_init(const char *bdf, struct iommu *iommu)
+>> --
+>> 2.54.0.545.g6539524ca2-goog
+>>
+
 Thanks,
-Sasha
+Sami
