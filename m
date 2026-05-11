@@ -1,185 +1,167 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F54140242A;
-	Mon, 11 May 2026 15:39:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778513988; cv=none; b=XMjPwIXU9xRxZdOrUPjl+i4pbWNU1wp+TzaNKakcNDg1myr6Nqa6LIOp8a6xy0GD79ryi4VKrov34ezeYZaqu2PpqncamKYnxrUQlFkOdq/IJC2eUOVxr2bEjV85iiT0Kb3U3Kz8xlzX0qGKQ2otzD8A2CHh0Qz1pBqXRdJfqBY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778513988; c=relaxed/simple;
-	bh=Q+ABac2nobHr/s0/5BCHnN9Y3bSYo92z/wSIvYBKopg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=DNtgp8mGtuQKKWg0MdInh5yTTFM3Ui8d8DHrmWdNbk9TO7XnAyYX3tGGKNcbEjslr51cTLn7QGRQBIuyLU/r76YAhCbC3+l9lBK46bCa3bOM/9PQELdKHrx9Je4KZRCDAJIIUmaUc0MIK58o1nd/VzVTGd04hPQi/7Hfsu6E84o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=wHpPbeXo; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 963D4402B8F
+	for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 15:41:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.54
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778514064; cv=pass; b=b+J9ah2ZLC6IKwXpsBbd8QdAXtxQJD7nagJrXEdnZcNnWiR7PxD4qxVLN/MDnEqHEkvrXw1nTDwzspChDwW31M6z9IhqUM36De9pdE5P/akIeoh2LPaC9A61E7KFwW0hHQuqLWs3XWv0XrgQRReBwzWn9FAIyIlS3cckQFP+2rk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778514064; c=relaxed/simple;
+	bh=ufOOEfTlvP04cNgy2oV7GSg0scHY29TiT5FrCMkncRQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qJn3XQ+Pb/3qGGJaDHcIcGXhO4xwhXXq4KxcO1EJTFn0VvCLvV6LkQYx0ZYmAIDQXdvdBhAg94GPxYCKIkKg9f/3rsP+V+MKm12eodDIltA0ppmK8tgHNn92/hO2FzeeJuoac9WqU/S9blx6mGbYb3nVGjVhTUmnxqFEYXz0na8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rxnX0drk; arc=pass smtp.client-ip=209.85.208.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="wHpPbeXo"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:In-Reply-To:References:
-	Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:
-	From:Reply-To:Content-ID:Content-Description;
-	bh=C+tCS04YBf4yWLUQhQUZajCDPpB2s5wPhqtGUXXQBCg=; b=wHpPbeXoMK5MT1JH7k3UWAIHXT
-	YPhq7Iw77BUECX985/6TGJ3de5iiLXQETl29UH4yo9QyzbhHFF3vL75PGK2h5+vNAzZa8dmfx9fro
-	/F75vzIx3aP1KX/3AoJJ0mDB8HdZ/Bv5fyu82u6M7NxvBIGURg3ucKJiwiwtMa1j9NWU+9fFvAjEo
-	jSi+muMc+aodWrzb84/a4beXBV+F0vGCL6p2NR/0Hp8S497GKSJdAwz3moLL2hR+JsFb17zgKLw0V
-	QKhyOUzgJ6F0BBNA6KTPNdSbyr8ULW9j59BLU5MxdLmn8Yq5RcqCCfMXCqr5eYdgLY9EmoMDsPDw6
-	mThJA90Q==;
-Received: from authenticated user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wMSjO-001hVi-1k;
-	Mon, 11 May 2026 15:39:42 +0000
-From: Breno Leitao <leitao@debian.org>
-Date: Mon, 11 May 2026 08:38:38 -0700
-Subject: [PATCH v6 4/4] Documentation: document
- panic_on_unrecoverable_memory_failure sysctl
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rxnX0drk"
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-671588ab0cfso175a12.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 08:41:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778514061; cv=none;
+        d=google.com; s=arc-20240605;
+        b=PEAdlsUi0L4yRGS17ODhteL42Iap/3LsRGawVmfMeCgXM8tyI64MKC6slh5OhvEdEo
+         5gN8I0ORrGVJz68reUktlCgu6Dzk87gp2+Z8mdq/Jeu6UEvfZGEimdUc15rDgmPWJ2C0
+         LLzGLbjP1vKHkV7T6YP0uyphgnGuHu2C2tkjMBtxcqeG4k5YL/x+lEanW0kR4jnngGzE
+         JUn46ZHrvBzo+5aTHffvtrhXPcY4oVMeKBy+90L4/9u9UHBJtGra6HEWuggukh8Buvo+
+         lS6vZZk9JQEIMEB4fYXZbMchTLWxM0Xqz2Oq2/lP1MnqG10zpgzcixmN9QWCaRqWLpup
+         Gg1w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=ufOOEfTlvP04cNgy2oV7GSg0scHY29TiT5FrCMkncRQ=;
+        fh=fla4G/yqCcw13oT6iLnoUYvAaWN58gBvbw82T4Ti1mo=;
+        b=CUMmODnGyc8rQvMd8cHtSlyLnRPSAbC7tCx9Q4cbCIPIFKVHrAp4XMXrMWP6jPpV3x
+         nu4OOSqntjzCxd4l9R0eMKA6mbEgkGYgYPIMvZXzC0hzB7tkJK+gks7L8ePZ9+jIrepM
+         nepVChc33i9Ka00TYlGybixZe5vKxc3R6Un324EjOc2PKPKwaw141UFrXTXacDVhC4ea
+         CavgLNzJE+FY2N8ClQ1rEsyT2P+tP0D4YVWlaUJ2gqwHnS2TJ56W0RGWLNf1fdGFeY5y
+         jqiiFWM5t+F9FVaXmcyc5HEAT8CjmuMUgb4mfH7N5PP8+NS3S4PiAJG0waYo1gtxmVhk
+         MdJw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1778514061; x=1779118861; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ufOOEfTlvP04cNgy2oV7GSg0scHY29TiT5FrCMkncRQ=;
+        b=rxnX0drk5INQmo4jkpunlGSwqA9rtFYuUJgC93N1LubyQIpMRBp8mucEahpkTcrz0o
+         u6Tktl5xycpaqfg2o7X4qmEq+wc8B8rJXaXsE7T8hnmmh4m7BWbrzAZPznLjLEsH2osU
+         /V0ckpUj506mcI+fDNH5MdnSy7NkF+BPFOYfxYHrTJsxV6YJxIlUraZafRxEHwLX/Qdi
+         QpbgPrrYLCtQKYx4TuqLm48bOjFnLImDW5noGj7Q2cKUkvGUh97SzLEedeB1UDZZWyeF
+         BJD4cP9Se8FFBjlnLi+nO13jDrlftWAdCJHhRf28XRrPkouUlezC5pkagd5wkGaDpaFV
+         GQMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778514061; x=1779118861;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=ufOOEfTlvP04cNgy2oV7GSg0scHY29TiT5FrCMkncRQ=;
+        b=Kk9o1VqmxqGP4Vh+WaQYpuSKgoR6+CgUuMMAMUCXutlq4Og0MTZxc+a7EFdLCs0adi
+         Xm2hZ65hMwMWccwUV0ToY5tDjQHCM1eicrSpyBwrd2eG1PfM7+dyJM586iXfSWQ9z80F
+         lTLThqXxlQ4daz2K/PzhQ+4crLMttseSh7Qc+eUnEnAJYngIrM9nf9rtmUSaH60nuohj
+         lPGdUnEoxZ63HaSjeuSKaQotJKw1luo77qMCeWNmOs57PHoaz1YYXaPwZdufUQBeoMmw
+         xztyqmIWM+9/WEfQ3YZc3A7NX8YgWEZ8WyrcY1w0nbJ6ATwTrPkYnPkyWaOfDzMS8ydC
+         8ynA==
+X-Forwarded-Encrypted: i=1; AFNElJ/gMJ798g4FJKmiOAqmAxeaR9gM3T6eMUdddIN8YLKjXvwk20qjPXFx6mDJt9uj3yeHH4ur15oi23+SWTPUrjI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzAtXn5SPzw4o9eFVLBuZuT2xCjBD4S5VdTzlaTH3JXATXfZTib
+	Qd34ShhZVlZQUq5RiXB3vYRW5b+PZhWGttfY+BhVQjHbBL7Cf5F2lcEctGuQ1yVTQduT4iYPPRP
+	JUGqcs9HAnvvB9OA72WU6xsbePRA+oD4KRgV7VFUl
+X-Gm-Gg: Acq92OHVketx2VAlnIuQRyl7Xaux+VSYfXVvInLcxzLxIUTfodLn6Lk00D81Upk7a+O
+	nB4IDRKrBfTaseHwCxOuWx065TQUe6eb1S3427120XJ06mXLb3KaCYQsVQDYnl98Z0vvKcmeHcs
+	ZtVWyzSwxybL/GCJ3dtgsvkG+xk9/G7CcUhWSAQwcLXyjWj+lpgFzCY0k/RaxNNBPe+kf3ObpW4
+	s1rSNq2YEKmoOFAtc2Q9zuchbrp+flezG9FlLGtFq9NtpmJ8NNN4Oy4EhuROAmsV7qZoN2Ch1vY
+	5NR6qztKdFgy0TSgUcNFwOacaf9VUT5zRevfSQV6eaeil867
+X-Received: by 2002:a05:6402:614:b0:670:2007:668c with SMTP id
+ 4fb4d7f45d1cf-67f59b78c3dmr88770a12.4.1778514060584; Mon, 11 May 2026
+ 08:41:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260511-ecc_panic-v6-4-183012ba7d4b@debian.org>
-References: <20260511-ecc_panic-v6-0-183012ba7d4b@debian.org>
-In-Reply-To: <20260511-ecc_panic-v6-0-183012ba7d4b@debian.org>
-To: Miaohe Lin <linmiaohe@huawei.com>, 
- Naoya Horiguchi <nao.horiguchi@gmail.com>, 
- Andrew Morton <akpm@linux-foundation.org>, Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <skhan@linuxfoundation.org>, 
- David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
- Shuah Khan <shuah@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
- Masami Hiramatsu <mhiramat@kernel.org>, 
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
- "Liam R. Howlett" <liam@infradead.org>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Breno Leitao <leitao@debian.org>, linux-trace-kernel@vger.kernel.org, 
- kernel-team@meta.com
-X-Mailer: b4 0.16-dev-d5d98
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4250; i=leitao@debian.org;
- h=from:subject:message-id; bh=Q+ABac2nobHr/s0/5BCHnN9Y3bSYo92z/wSIvYBKopg=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqAfggExFOzTNiSrshYAhWzivg+fyoMl0UHn1Ol
- k/baPddoo2JAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCagH4IAAKCRA1o5Of/Hh3
- bSYoD/9wpkfhqpU3NW837qbyKkH5PtTXq/mLXGB9M/kyPbi/lbjrhtclHCid5vxa0hjuNNXSWM+
- rjYPOBkE5+yr3G3fvTQ6x0ilNHObfL/mIlrbudRUeyD/AdWO5Py0u3BGlXS7EmgKsUNhNRCydwq
- LLUKeo9F6zk1uaTsdttH0fH0whh1OUIfSYawJwMN3yhybIyoiiPyZM8LpodWjJPgIKE8X37wKMK
- CU0IrV9EqhOo+5Xpdp+TSi1YNJm4WPqt25g1p6GcP8Bv9+JNsKl9nFzfJxJ67nY3Yb8580z5kQy
- FjbsK7ev9NciRGRpptWMCCe3Jct0m8nm6gqTJvNXpHMrh5UfX7woZ3NpkmP4+dIZvVFWGQe7sqo
- RiFoPB7UxxevtzgkBglm6ac8kqQ6dAqfbPWAxSmwJ7U/B72jONwFccgvj/DgSXWWNNES3Avc8IL
- FBGIWQmkD4Yht6YtpDvz5pTgVibcRT0mopLbGxZel8PGK+8ROneMoK0pv+94JcDcYCZkOHj7RHy
- 477VvpdIPxBxaj3ew8chVn1yvFb0wApmgnpR2vwwungePtd8UTo5o8jFebr7PrDUGGyiTvcytUz
- TMUHDk09qF+spb7VnVYTx/nEkoOi7NucFih/niGo88XheO1J6daCVgLpFrSBdydI88Y8HJBgw4Y
- d+Rhi92mvN4p4Jw==
-X-Developer-Key: i=leitao@debian.org; a=openpgp;
- fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
-X-Debian-User: leitao
+References: <tencent_863C8A01F3C81EBA238F375B16065CBACF08@qq.com>
+ <agHmO4i4YUhs3cSG@lucifer> <CAG48ez1sLtSKVQLHbLO5usBgMgjyOGhbX29pKEfku4Ht05HffA@mail.gmail.com>
+ <agH1ZSdX_7QF8P_I@lucifer>
+In-Reply-To: <agH1ZSdX_7QF8P_I@lucifer>
+From: Jann Horn <jannh@google.com>
+Date: Mon, 11 May 2026 17:40:24 +0200
+X-Gm-Features: AVHnY4JxEXoj7n_mRqXAKWqPwktvE7KbhSXwMMRM-MFeHT-iUzf-b5d6qJOEOUg
+Message-ID: <CAG48ez17evhhcoDKF6AoPqzYZwGuFCkVAsc-0bBzevf0LHYNxA@mail.gmail.com>
+Subject: Re: [PATCH] mm/mremap: unmap full fixed target for multi-VMA moves
+To: Lorenzo Stoakes <ljs@kernel.org>
+Cc: fujunjie <fujunjie1@qq.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add documentation for the new vm.panic_on_unrecoverable_memory_failure
-sysctl, describing which failures trigger a panic (kernel-owned pages
-the handler cannot recover) and which are intentionally left out
-(transient allocator races and unclassified pages).
+On Mon, May 11, 2026 at 5:32=E2=80=AFPM Lorenzo Stoakes <ljs@kernel.org> wr=
+ote:
+> On Mon, May 11, 2026 at 05:19:50PM +0200, Jann Horn wrote:
+> > On Mon, May 11, 2026 at 5:05=E2=80=AFPM Lorenzo Stoakes <ljs@kernel.org=
+> wrote:
+> > > Hmmm I think it's a bit debateable honestly. The ability to handle th=
+ere being
+> > > gaps is a _new thing_, so there are no semantics to speak of. Prevoiu=
+sly
+> > > mremap() simply required that you only span across a single VMA.
+> >
+> > FWIW, I think mremap() on a source region with gaps is such a
+> > hazardous operation that nearly no userspace code should be doing it -
+> > gaps are areas in which any mmap() call without a fixed address could
+> > place unrelated mappings (unless stack VMAs are involved, which would
+> > also be a weird scenario), so to use it safely, you have to, among
+> > other things, make sure not to use libc malloc() at a time when that
+> > could place an allocation in the gap (which means you also can't use
+> > printf(), and so on, unless you have swapped out the memory
+> > allocator), and make sure that you have no other threads that could be
+> > doing that, and so on. There are rare circumstances under which it
+> > could be safe, but I think it is almost always better to have a
+> > PROT_NONE anonymous VMA or such as a placeholder.
+>
+> Well, we're holding the mmap write lock so none of that could happen
+> _during_ the operation right?
 
-Signed-off-by: Breno Leitao <leitao@debian.org>
----
- Documentation/admin-guide/sysctl/vm.rst | 70 +++++++++++++++++++++++++++++++++
- 1 file changed, 70 insertions(+)
+Not during the operation, but right before the operation. So from the
+userspace perspective, you have to know that there are no concurrent
+threads that could be creating memory mappings at non-fixed addresses,
+and you have to know that no mappings can have been created in the
+memory range between when you checked that it's empty and when you
+make the syscall.
 
-diff --git a/Documentation/admin-guide/sysctl/vm.rst b/Documentation/admin-guide/sysctl/vm.rst
-index 97e12359775c9..802c51ba8c43b 100644
---- a/Documentation/admin-guide/sysctl/vm.rst
-+++ b/Documentation/admin-guide/sysctl/vm.rst
-@@ -67,6 +67,7 @@ Currently, these files are in /proc/sys/vm:
- - page-cluster
- - page_lock_unfairness
- - panic_on_oom
-+- panic_on_unrecoverable_memory_failure
- - percpu_pagelist_high_fraction
- - stat_interval
- - stat_refresh
-@@ -925,6 +926,75 @@ panic_on_oom=2+kdump gives you very strong tool to investigate
- why oom happens. You can get snapshot.
- 
- 
-+panic_on_unrecoverable_memory_failure
-+======================================
-+
-+When a hardware memory error (e.g. multi-bit ECC) hits a kernel page
-+that cannot be recovered by the memory failure handler, the default
-+behaviour is to ignore the error and continue operation.  This is
-+dangerous because the corrupted data remains accessible to the kernel,
-+risking silent data corruption or a delayed crash when the poisoned
-+memory is next accessed.
-+
-+When enabled, this sysctl triggers a panic on kernel-owned pages that
-+the memory failure handler cannot recover: reserved pages
-+(``PageReserved``) and stable kernel pages that hwpoison cannot handle
-+(slab, vmalloc, page tables, kernel stacks, and similar non-LRU,
-+non-buddy pages).
-+
-+Other failure paths are intentionally left out because they can be
-+reached by transient races with the page allocator (an in-flight
-+buddy allocation has refcount 0 and is no longer on the buddy free
-+list, briefly), and panicking on them would risk killing the box for
-+a page that was actually destined for userspace where the standard
-+SIGBUS recovery path applies. Pages whose state could not be
-+classified at all are also not covered, since an unknown state is
-+not a sound basis for a panic decision.
-+
-+For many environments it is preferable to panic immediately with a clean
-+crash dump that captures the original error context, rather than to
-+continue and face a random crash later whose cause is difficult to
-+diagnose.
-+
-+Use cases
-+---------
-+
-+This option is most useful in environments where unattributed crashes
-+are expensive to debug or where data integrity must take precedence
-+over availability:
-+
-+* Large fleets, where multi-bit ECC errors on kernel pages are observed
-+  regularly and post-mortem analysis of an unrelated downstream crash
-+  (often seconds to minutes after the original error) consumes
-+  significant engineering effort.
-+
-+* Systems configured with kdump, where panicking at the moment of the
-+  hardware error produces a vmcore that still contains the faulting
-+  address, the affected page state, and the originating MCE/GHES
-+  record — context that is typically lost by the time a delayed crash
-+  occurs.
-+
-+* High-availability clusters that rely on fast, deterministic node
-+  failure for failover, and prefer an immediate panic over silent data
-+  corruption propagating to replicas or persistent storage.
-+
-+* Kernel and platform developers reproducing hwpoison issues with
-+  tools such as ``mce-inject`` or error-injection debugfs interfaces,
-+  where panicking on the unrecoverable path makes regressions
-+  immediately visible instead of surfacing as later, unrelated
-+  failures.
-+
-+= =====================================================================
-+0 Try to continue operation (default).
-+1 Panic immediately.  If the ``panic`` sysctl is also non-zero then the
-+  machine will be rebooted.
-+= =====================================================================
-+
-+Example::
-+
-+     echo 1 > /proc/sys/vm/panic_on_unrecoverable_memory_failure
-+
-+
- percpu_pagelist_high_fraction
- =============================
- 
+> You might debate also the fact we hold that for an extended period.
 
--- 
-2.53.0-Meta
+Eh, I mean, that's also true if you call mmap() with MAP_FIXED on a
+gigantic virtual address region with lots of populated PTEs in it or
+such, or if you call mprotect() on a big region. I don't think it is
+problematic that there are some very chonky MM syscalls you can make
+that will hold the mmap_lock for a long time, as long as we don't
+expect heavily multithreaded code to be doing those operations
+frequently. (Being able to keep the mmap lock held in write mode for a
+long time can be useful as an exploitation trick in some cases, but I
+don't think that's easy enough to fix to be worth the trouble of
+addressing it.)
 
+> Honestly I probably shouldn't have allowed for this, I've had to do at
+> least one fixup relating to it I seem to recall and the semantics are
+> _clearly_ confusing.
+>
+> >
+> > I think the right documentation for this is "do not use this on a
+> > source region with gaps, it is technically possible but extremely
+> > hazardous".
+>
+> Yeah, I mean on reflection, allowing it was probably a mistake.
+>
+> The real use case was 'my VMAs are fragmented and I don't want to have to
+> know about VMA merge rules in order to move them', i.e. no gaps.
+>
+> I will do a manpage update and indicate that it probably shouldn't be use=
+d
+> but if it is, the sematics are such that gaps are not propagated (i.e. it
+> is as if you mremap()'d each individually).
+
+Thanks!
