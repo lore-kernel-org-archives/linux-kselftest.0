@@ -1,76 +1,100 @@
-Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87DCD3FFAAA
-	for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 14:58:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98240402444;
+	Mon, 11 May 2026 14:59:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778511492; cv=none; b=bM8J02Wg3nTHi80P6ha8sqkkejCqMbSZkBzcHU6TPlzTrxxSxI9fhJvMAjbTYTR69tYCQ+FcT1k3mU503909aGejhFAcjPIKikOqcDbRtAh91X1m2Z87BVrIK5agiMn47i7W70nc25EwXvYU5H+QVvch+oFz0qafw2Acus9gMCI=
+	t=1778511554; cv=none; b=co2qbMB5yuhAalkvaiKZYV0ZxhPpo+ddNaSw7nVZAkWpsiOYAZH5A6cLuAodS5CW16Jux/wy7MEpYZJje+HM7pM0A58kwkQAd/Nm3bm/H+eDaAQ0dEt50UCIQ4jYCsDNFGSN0CakpZkdOv7CyjPZhBBV6vpFtfZia1ieY4rFbm8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778511492; c=relaxed/simple;
-	bh=HyctA9ruJdLXQrNgXC3tYUZI/xC2gvKU0L16p9xW3Qw=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=TpV2DN1IDDOoE3ILdRFGe2BwIYRAWf94RfxmvWAtjRPQrKdsitwn6GvX8NzrHM8OuXOVCZ7/JD7IFLmNKPVUJX4q+Mgj3BYkD11tLaVwOu5vabPJvI9Yyy2RC0YqyTNQC32ErRDpAwY3VV26nkGHzdLKqHSyYAe4cOLJTcm2ipk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Kia6gF8i; arc=none smtp.client-ip=209.85.210.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1778511554; c=relaxed/simple;
+	bh=RVzl5euHWlrFeYWaPgVmNtPOGAoszfCB1xdHEgvKugY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Dc7BUiIbTWEHMb8amR/v0BBu1NE8GBQOBaYVtLesxquRrVmV/SExgFMSEWtGlOxbmJZ/ClHyZCT4+kpbQFx+X+4TE7fkFkR/gnNsztuKhr3i1ZSBK6IF/P43oso2XJbvH2YuepfVL4rdjborer4OXSvGSL0z4BLsNi4j1a1ijXE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=O40GmaiQ; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Kia6gF8i"
-Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-82f9429f49cso5468920b3a.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 07:58:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1778511491; x=1779116291; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6Fy1wa5nHs9JHTWKOBvA60eVfLFvSI4Hq1+Dct5OtgI=;
-        b=Kia6gF8iX7QKfuStbqtQfUbwBXn6ZQN4jWhWDDY2bQc+jdDnTXmuMU/CK4M2XHb5+z
-         l+5YBx7aixOrN6w9HWzG3nIx0kUIMpOjlgBjaRSctbA9Z1EN8a2e5yzmJZCp+kmL8I/q
-         +IxxrlUwz1PIvuAk5Z/VNGmLpSniz0LM5xR0xIm7b0WII5RNiz3D4kqm92KaA58p8/CD
-         m/P4C81tuajTxvJozYMk6DlKKS9UiRJ5kAoWL/56fpWwfyVDD3/L1V/cx643sb7pdtYq
-         kTFJDFZ4xWdDskr2Rq/cV+Xc9eq7Ls24A583oOGM9cQZeCHTTXjFSMwo0e4yvb8KKKfB
-         YrRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778511491; x=1779116291;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6Fy1wa5nHs9JHTWKOBvA60eVfLFvSI4Hq1+Dct5OtgI=;
-        b=YxEQq4RN1vgYLQp4ZS3ZTc8HePDLH4wMsn6NTMZmak9NChhjYSiKYr3T+On1gKGFu7
-         jOUiNBe+B2gZLSTIwjdv9FtUKlzQ92ktqSSDGxqFcwe1iRpKJUVQMjzo42bRGrPTF+YW
-         5SiT85Z0dPoxaGCXwf5lxP47VY2AvgEzkdt/57yKkBq2PiER43N5sOqzOiXPqfpHT5lm
-         eWolW8Ub80fJ1oTAUIBk24d87IeZDK/q5wPrc9hWmlYu1zxdMILS3hWpqdLbLR00J+MK
-         Vl99kHNcLu+aWdONexfwRjmQyu6Ua0bMlplKBIrQ5VAgbMbO9GLFF6cuecKadgCjZNz2
-         eXpQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+Dy4i/1/ALB1Qv5E4b2pPftcdxT+zM5S/9PxCQB0T1rAfzVeg22sJwcSX3ry40TYCmeScQcF846TcoAP3Sz1E=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwCzuCe2imMSES6x+h3PF3GuKkUDFisXjtstUblmSM2sj+00rMD
-	VxP0xnThkiyeBnoIfNrUUiU6QZP+wX7GcrO8ffFwvPfukGLyZVA6NpU6ddT2G96cd/FSyrSuiKM
-	5OL0HbQ==
-X-Received: from pfbdu7.prod.google.com ([2002:a05:6a00:2b47:b0:82f:7242:4cb9])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:1989:b0:837:db4e:a35d
- with SMTP id d2e1a72fcca58-83e3afd78dbmr9504363b3a.23.1778511490544; Mon, 11
- May 2026 07:58:10 -0700 (PDT)
-Date: Mon, 11 May 2026 07:58:09 -0700
-In-Reply-To: <20260511113759.610924-3-tabba@google.com>
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="O40GmaiQ"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+	Reply-To:Content-ID:Content-Description;
+	bh=BVxqP+WZYYmuf+JZcJQLw0/ZVaGLASkbs+ai8cu7+xI=; b=O40GmaiQg0doxpFVgahy4FlehJ
+	c63QN8OMSCwe9GiwwoBmvi3xvqBNc9ZmMVDwpj+eYPHsMZDus8iCPT5PRd0x2ECTjqdSuWsxQ6a1a
+	77g2UkpvLAKJKkcKv7JX1KgXOx2GQ8KYlppQ3b/Dt+FB0Q/N5gd8xxmTD2qcLU10Z0Fk9CXcjaS95
+	Am8dNdzPKcKrk6rmOI0Th4mlZWNgK3A3FkTTBsMRtw1K6LINbUgvcoV63lPUefqTA51irCubKOPhW
+	CItElULogaLm1uu8yLEZ4Ym+v6rqq/5AX6etASQm56nF2UHYm918NMrsxxi7eq5pqRH0CVYyb5QWC
+	rcn7sklw==;
+Received: from authenticated user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1wMS67-001gE2-0S;
+	Mon, 11 May 2026 14:59:07 +0000
+Date: Mon, 11 May 2026 07:59:02 -0700
+From: Breno Leitao <leitao@debian.org>
+To: Sasha Levin <sashal@kernel.org>
+Cc: corbet@lwn.net, akpm@linux-foundation.org, skhan@linuxfoundation.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	gregkh@linuxfoundation.org
+Subject: Re: [PATCH v2] killswitch: add per-function short-circuit mitigation
+ primitive
+Message-ID: <agHrzsQzBw2yJZp-@gmail.com>
+References: <20260508195749.1885522-1-sashal@kernel.org>
+ <agHSFo0yqypa9vk9@gmail.com>
+ <agHcc4s-xj83dzty@laps>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260511113759.610924-1-tabba@google.com> <20260511113759.610924-3-tabba@google.com>
-Message-ID: <agHugdIrptaXZW-2@google.com>
-Subject: Re: [PATCH 2/2] KVM: selftests: Fix FD double-close in kvm_vm_release()
-From: Sean Christopherson <seanjc@google.com>
-To: Fuad Tabba <tabba@google.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, Marc Zyngier <maz@kernel.org>, 
-	Oliver Upton <oupton@kernel.org>, Will Deacon <will@kernel.org>, 
-	Ackerley Tng <ackerleytng@google.com>, David Matlack <dmatlack@google.com>, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <agHcc4s-xj83dzty@laps>
+X-Debian-User: leitao
 
-On Mon, May 11, 2026, Fuad Tabba wrote:
-> kvm_vm_release() closes vmp->fd and vmp->kvm_fd unconditionally, and
-> kvm_vm_free() calls kvm_vm_release() at teardown.  A test that calls
-> kvm_vm_release() and then kvm_vm_free() without a
-> vm_recreate_with_one_vcpu() in between double-closes both FDs.
+On Mon, May 11, 2026 at 09:41:07AM -0400, Sasha Levin wrote:
+> On Mon, May 11, 2026 at 06:14:27AM -0700, Breno Leitao wrote:
+> > helo Sasha,
+> >
+> > First of all, Thanks for this feature, this is useful to me, and I am
+> > interested in it. Feel free to copy me and I can test the next revisions
+> >
+> > On Fri, May 08, 2026 at 03:57:48PM -0400, Sasha Levin wrote:
+> >
+> > > +config KILLSWITCH
+> > > +	bool "Killswitch: short-circuit a kernel function as a CVE mitigation"
+> > > +	depends on SECURITYFS
+> > > +	depends on KPROBES && HAVE_KPROBES_ON_FTRACE
+> > > +	depends on HAVE_FUNCTION_ERROR_INJECTION
+> > > +	select FUNCTION_ERROR_INJECTION
+> > > +	help
+> > > +	  Provide an admin-facing mechanism to make a chosen kernel function
+> > > +	  return a fixed value without executing its body, as a temporary
+> > > +	  mitigation for a security bug before a real fix is available.
+> > > +
+> > > +	  Operators write "engage <symbol> <retval> [reason]" to
+> >
+> > Should [reason] be shown at "engaged" ? I was expecting it, and in fact find it
+> > very useful, but I don't see it.
+> >
+> > 	# echo "engage __x64_sys_getuid 12 CVE-2026-99999-INCIDENT-4242" > /sys/kernel/security/killswitch/control
+> > 	# cat /sys/kernel/security/killswitch/engaged
+> > 	__x64_sys_getuid retval=12 hits=12
+>
+> This was a woopsie on my end: originally I planned to have a reason field, but
+> then decided to drop it to keep the patch simple. However, I forgot to fix up
+> the kconfig help text :(
+>
+> If you think it'll be useful, I'm happy to add it back.
 
-That's a test bug, no?
+I see the value in having a reason field, but at the same time this is
+just a small detail in the grand scheme here. That said, starting with
+a simpler implementation and adding it later—once the feature sees
+production use seems like a reasonable approach.
+
+Thanks,
+--breno
