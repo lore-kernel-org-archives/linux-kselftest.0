@@ -1,132 +1,138 @@
-Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
+Received: from mail-wm1-f67.google.com (mail-wm1-f67.google.com [209.85.128.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 740C8296BDC
-	for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 20:25:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778531126; cv=none; b=ZfFU8r5FhWA47gUx9AbYa49l0HJurfukluXI+El2gJZyZ6osjDI+WuaO6P7o7ztZFfZaUXshMpHbsLstJ4D++APa/b5riUWYsEfgR/3Fv9hC447efKxz2+JRQEeLA8jwU03Reg9MohOg7R9WF4QUwchvqnQoG+vuMWIOkrV0oII=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778531126; c=relaxed/simple;
-	bh=521gsLNZI0xfO2hjPJqLM5mszW96I4o8u1KGULWbsik=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=h8gQtz3JY/NON9xpETOhz0ryMdt3AzcAM6zL1adRduCv/hnltE3ZiH8twOmvciSmdctr1alMwA8WUz4IwW7UK8D4JUpnfnu7wYNiKeiqIGBE6FEjzSBifxz7a4GyTXzC1YeYDgC9FNQ3RSewtLBfYFfnRMhtfDIkf3h/zir7TLc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=LF4Pjgxs; arc=none smtp.client-ip=209.85.210.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8263B39FCCF
+	for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 20:44:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.67
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778532295; cv=pass; b=p776/0/TVptcP1ahlJRovbTZFdVS/SPUhYcJSEcwgZIjN50FQAonv+s5+48yyeLdxHvfipPjMmOyAZ2mR32kOWGsXeOTrvL1kG+Uv1FxQFC7FYhaRXdYk4P6K0w6+0rZoP07+f8p7kfvSxGJXT10g7scI8O0xqZTdvLCV5PV8ho=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778532295; c=relaxed/simple;
+	bh=Lsx7HNxS24AkVUOKYhryh8TJ0MlTzkkNg4zqi1eTIJA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Vz0Z3qsgHVVzlkGX0LcsfUb8FsSTd7cO3atHwDpZOr5+RYOO11dztHLoHh89v0Z/7+VtUe5H7wtMJbSFDYoXNDvhh+2tE/1+rndKi2/nKtM5ydT4/jkTskrzNpHsbRLowaup8JqIKlyvMTiEQFRSLLG+On8JQLrO8KNxud2nXzM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BzKQ7LAI; arc=pass smtp.client-ip=209.85.128.67
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="LF4Pjgxs"
-Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-83cecc22d5fso2066626b3a.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 13:25:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BzKQ7LAI"
+Received: by mail-wm1-f67.google.com with SMTP id 5b1f17b1804b1-488b150559bso37031155e9.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 13:44:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778532292; cv=none;
+        d=google.com; s=arc-20240605;
+        b=YjZJzwvWABtr0kdJtjp/QSLH036v1VxB0pK6dFEWBGcdShImKUXLSO8Gyo4w+e+WX9
+         /E2mfFFqVQEAPfDmllWHodCK4VeAp+f3nDO6s+7Fy617PsLki2WjeO9fbwiI2LCJMFWd
+         TKQGwcfG4wns/88Csvbni5rsBV26XnkxskHFac5tT/hJULv2LxYG1Q/ZE5uh5Bx21RJZ
+         vq6WXj+NwHLOv336y7iSq0/CzxiRILegVYo2A3VH5J3SRMLaJr6DOgf3go+DSeRLeBOO
+         hhKv1EVEMDJFwGj2Z0KTQai8v4KuY8uqJDblkryWYmSwCbIOKHN7bA3Ecz7PcHAMCNeL
+         HUFw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=HxXhE1E3zIMNXAZQMW7578XkRyn0VMcl/G/klUEmemo=;
+        fh=q+tl+aCrYI0U9ucR4wklw8QtESXroxFNjI0YEWi32Ek=;
+        b=fwcGe/alT1/R9kn/BspEfMjI48gOxvKNFOISDPsblscrKlBaceCB3jXsH0Hk6LbeWn
+         /RvQRNK2/fQvayFOSPhcPgSXiG6c/B0VbMNMF1SaAkDbLb4ko5ZbQqSFD8wjbZf8q0An
+         NlpSqjNQpCVf7+b0oqSVVXTpjRQIdiHbF14OX0c3ywoTsNDRMoG/aBAzGLFStm7f4Yvk
+         b7dvbc1W9xl1Qq6lTaF4qEUdvzRLA7F7JTr3Oc4nwNijfA0127trRW528q/V+tELHh3K
+         fryF8TndTZkj+xQsyTJOJqhWRtWHlysft3jNG+bf+c2wxe7uFoGaAiiq3pxzN9czburH
+         j4aw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1778531125; x=1779135925; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QLnZXwKW2Zx/GnqxpPz3sv+qj2y6viXFGtk3ScJJhFM=;
-        b=LF4Pjgxssh5+36UflX45Q3uuZUPT3q/pNr5Z4vNRAtN0TxZofNbioD/zNjEUWsmrfA
-         6TBCcxfbEorg+gPe5QOrEQdgYVp0ceyoXJOlBk09ABeege6ufrRjXfUUwJ1NU3bc/EYU
-         9VEUK8k9c31ReN+t6SrcPiHMfXXx93l8nWmMs1hN1Irgpy7PZJYkgnrWVFd2io9MNJNk
-         UQFkLfwzCnPeo5ZgI5QpYIuEG4Vsl6ilarCRzcxTJk6NM2FIDz9H5iBvYBoWA57bhdO/
-         8OxhLmpTK/5sNH/u+3vVPGvlPgAhc91hMzy7vSm37DxgTCKMu2/zDV8G9FKDXFIzlpQC
-         sR8g==
+        d=gmail.com; s=20251104; t=1778532292; x=1779137092; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=HxXhE1E3zIMNXAZQMW7578XkRyn0VMcl/G/klUEmemo=;
+        b=BzKQ7LAIwJQtT0aeOWNZqHH1f+PCFAzdkmrnO2iHVUsgy+fDoAoSYkJLQZ1QuN+8aV
+         9FTD2nOJjmBZgNuRqTK3zOw/q8x/FN1lKCuljNZ1blK4IdNRGvwCGTPm9D039iPQhBdH
+         AkXYxkFaFN+x+V4dEwIQHUj9MpU0WraHLbXppY5p9T/UwqSWV9Rl9vOCFVI2tws3zV+r
+         6weM0j8rJdUyE45Xa40aX/+evfZ+QOEWikCFYJBt6gQQ45DrW6H3Ac2gGIrICfEOc3QD
+         noRTLMVBOBY3W4vodSXyfynk6OTJs59wpxk70Ng/3noQBK88RLA1q4JXQKSSqvEW6p9L
+         KVgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778531125; x=1779135925;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QLnZXwKW2Zx/GnqxpPz3sv+qj2y6viXFGtk3ScJJhFM=;
-        b=tGLNzE8UzfBGm6KDfNNwuy6i5biSlibW/DaGydh+h7i/lTLGD3+fo4ZL2oQoTanXOE
-         BwIImqIcKKbWIBr4YOShEF4eLIf5zQybuw3ObIBqD1gytxoccuR01ByfNERVMSrNjUhk
-         MWvzjJVxaGB9P+KS7c3jBfaBtM9HBhkykeH1aly7rRzNFevuIAuv67A4sHtZRDwfZ6E8
-         y6yk2jwnp3tV38HjFU9lV0T1BpNvguEOYG9rPuPHu9SbSkektzWy5oDsdFzonsld/tIm
-         gaUv2+Wpx0m5KW3YSgGJTZ6gtJrno1lnkrAoENsSq1g/Tm88poxpRbD5LZ7ktN8S98tF
-         oI2w==
-X-Forwarded-Encrypted: i=1; AFNElJ8zyajIyeGQkS9KZlGJf6Q5A2u10g0B3qqAitPe1ai/q/pmxx2LbsL5+GCViMXALjU8Qt0h+lnRHq3h45DrEoo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyYRBIGAAXUkUip2KRIoIWQToVRY0g04sEcFNjIECpd94vD1ACL
-	Wr1ybttseaH+Won8nx/xDeD002TQZDqlzO/rg2lJKZTNBMOWhVZv8uR+6/b3gqb6aXi9t31ERWw
-	1UhFqzQ==
-X-Received: from pfbg13.prod.google.com ([2002:a05:6a00:ae0d:b0:838:f05:69ac])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:124d:b0:82f:5d4f:7355
- with SMTP id d2e1a72fcca58-83a5d96c238mr24170546b3a.33.1778531124515; Mon, 11
- May 2026 13:25:24 -0700 (PDT)
-Date: Mon, 11 May 2026 13:25:23 -0700
-In-Reply-To: <CA+EHjTw1z7ROF7u0fKqxDGao7S1kELxNWtyWhLoPQx5uwVfuWQ@mail.gmail.com>
+        d=1e100.net; s=20251104; t=1778532292; x=1779137092;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HxXhE1E3zIMNXAZQMW7578XkRyn0VMcl/G/klUEmemo=;
+        b=dlPVF+sibaHqYGhvHvcSk5DBlsrDUaP7syxhlCkKwhvvDWuYUELLyO5aV9YMYrbEHk
+         qCowlGWDvyuHm6aKknYxW0jRUgLJTyUOz8ogin1MSOUXXjoxVNkXC/Q/NoPbxoP6xUiR
+         h3evpWPVRpJjne6oRN4rBVIf6b4qphWqWm3yYCxc0RMUjKcOoWiMK3fzxsaoKiqenc1h
+         Z8QeMKK+RoFcJGxZqb8gDAGsCn6P5EZ6hmJlYM8XRImQ0SxEePYj5NmmnSovyfGRXUoK
+         /9a8D/HFsv8Z1AZXhYRUa5fIWiwwba8KCjTZe9DWhXZmi+QtU34DEizKvPwsdZImAt3Y
+         NulQ==
+X-Forwarded-Encrypted: i=1; AFNElJ8ZPnYZKtiw6IA4eqtPNO1hLSKkxiD2DAKTDnmHJ0DSU3tj+pshwcsrD9r2C0eMz4x/1aVd3OuJAuB8J1d/nK0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyuOZf89nTHfv243DVKaF2OCn9i+7senL1Dnd7iGCJdq0q7NYxE
+	tK2i+bvTjAggvs4H9Y3zoVuz5uGe7vmRlBOzsxGoOQG2ptOGhaEGnPIDCvNNKFcyJw7QdWDZVzr
+	JLieD4YGqFstJGSTK8fkZbC9Unxc8T/k=
+X-Gm-Gg: Acq92OFJIb3LgQ/2S6ftpsjGIW1Lx3xCwAX1pxX5yjJx8C0EiT4X8bfhCE5829HhiHN
+	Hzyjwnb2syizTArxCioIJ+6Vy8BmkSNCXYyofLqUJyNh03pe38EYVSPkLcBUif1BewgPZhmLcOi
+	o592B8m+P8zOxNx2ImugT50MorQRYVk1EWV1cF+d0O86wbz6Ys+/XRuDp3r4mKhqqQCqtBPttbO
+	+x5rFmTI8LGYlonK/vKEW6kx205wYoB2XcpMS5LpmDQH9Es39tin01TIhvlEukpl/d9afSx6UzY
+	/7fbhFK7jyT/19J9V8T14nkoY3NG7mzGhUx8oPgUNDaCbks7NbNUMGEFYT5qaVaITPN9ogCRc7k
+	8Olgcm7E4Kl7MLSYmoOggnD2rpoUmU7AC2LTne4sT/d3L912fcv5n+SYFfA==
+X-Received: by 2002:a05:600c:34cd:b0:489:1c5f:3a9e with SMTP id
+ 5b1f17b1804b1-48e706f3688mr182545995e9.13.1778532291754; Mon, 11 May 2026
+ 13:44:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260511113759.610924-1-tabba@google.com> <20260511113759.610924-3-tabba@google.com>
- <agHugdIrptaXZW-2@google.com> <CA+EHjTw1z7ROF7u0fKqxDGao7S1kELxNWtyWhLoPQx5uwVfuWQ@mail.gmail.com>
-Message-ID: <agI7M7rZ_NZJyjhj@google.com>
-Subject: Re: [PATCH 2/2] KVM: selftests: Fix FD double-close in kvm_vm_release()
-From: Sean Christopherson <seanjc@google.com>
-To: Fuad Tabba <tabba@google.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, Marc Zyngier <maz@kernel.org>, 
-	Oliver Upton <oupton@kernel.org>, Will Deacon <will@kernel.org>, 
-	Ackerley Tng <ackerleytng@google.com>, David Matlack <dmatlack@google.com>, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+References: <20260511174559.659782-1-wusamuel@google.com>
+In-Reply-To: <20260511174559.659782-1-wusamuel@google.com>
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date: Mon, 11 May 2026 22:44:15 +0200
+X-Gm-Features: AVHnY4LE3o2vqBaZVgI10g6eDtVh6QEf9MBs5iW-S47AwW-UDvT4urkZRxmTfSI
+Message-ID: <CAP01T74KQ6bie5o++i_gHM19J+s2RzDyM6=w87=oUZgPagPejw@mail.gmail.com>
+Subject: Re: [PATCH v4 0/2] Support BPF traversal of wakeup sources
+To: Samuel Wu <wusamuel@google.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, kernel-team@android.com, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, driver-core@lists.linux.dev, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, May 11, 2026, Fuad Tabba wrote:
-> On Mon, 11 May 2026 at 15:58, Sean Christopherson <seanjc@google.com> wrote:
-> >
-> > On Mon, May 11, 2026, Fuad Tabba wrote:
-> > > kvm_vm_release() closes vmp->fd and vmp->kvm_fd unconditionally, and
-> > > kvm_vm_free() calls kvm_vm_release() at teardown.  A test that calls
-> > > kvm_vm_release() and then kvm_vm_free() without a
-> > > vm_recreate_with_one_vcpu() in between double-closes both FDs.
-> >
-> > That's a test bug, no?
-> 
-> Fair point.  Let me describe the actual use case and then I'd like
-> your guidance on which way to fix it.
-> 
-> The pKVM selftests I'm preparing need to verify that protected guest
-> memory is zeroed when the VM is destroyed before the host regains
-> visibility of those pages.  The test pattern is:
-> 
->   vm_userspace_mem_region_add(vm, ..., GPA_BASE, 1, GPA_PAGES, 0);
->   /* run protected guest, which writes/shares/unshares its memory */
->   ...
->   TEST_ASSERT(get_proc_locked_vm_size() > GPA_SIZE);   /* still pinned */
-> 
->   kvm_vm_release(vm);                                  /* trigger destroy */
-> 
->   /* host_mem is still mmap'd in the test process; pKVM should have
->    * zeroed it before unpinning */
->   TEST_ASSERT(is_zero(region->host_mem, GPA_PAGES * PAGE_SIZE));
-> 
->   kvm_vm_free(vm);                                     /* tidy up */
->   TEST_ASSERT(get_proc_locked_vm_size() == 0);
-> 
-> I used kvm_vm_release() because it's the only public API that closes
-> vm->fd to trigger kernel-side destruction.  But the existing callers
-> follow it with vm_recreate_with_one_vcpu(), so the "release + later
-> kvm_vm_free()" path isn't exercised today.
-> 
-> I see three ways to make this clean:
->   a) This patch: kvm_vm_release() becomes idempotent for its three
->      FDs, matching the kvm_stats_release() idiom it already invokes.
->   b) Leave kvm_vm_release() as-is and add a dedicated helper, e.g.
->      kvm_vm_destroy_kernel(), that closes vm->fd to trigger kernel
->      destruction while leaving the kvm_vm struct intact for
->      post-destruction inspection.  kvm_vm_free() learns to handle the
->      half-released state.
->   c) Something else entirely, e.g., the test should manage vm->fd
->      directly and not rely on library helpers for this pattern.
+On Mon, 11 May 2026 at 19:50, Samuel Wu <wusamuel@google.com> wrote:
+>
+> This patchset adds requisite kfuncs for BPF programs to safely traverse
+> wakeup_sources, and puts a config flag around the sysfs interface.
+>
+> Currently, a traversal of wakeup sources require going through
+> /sys/class/wakeup/* or /d/wakeup_sources/*. The repeated syscalls to query
+> sysfs is inefficient, as there can be hundreds of wakeup_sources, with each
+> wakeup source also having multiple attributes. debugfs is unstable and
+> insecure.
+>
+> Adding kfuncs to lock/unlock wakeup sources allows BPF program to safely
+> traverse the wakeup sources list, and a kfunc to get head of wakeup
+> sources list is needed to start traversing the list.
+>
+> On a quiescent Pixel 6 traversing 150 wakeup_sources, I am seeing ~34x
+> speedup (sampled 75 times in table below). For a device under load, the
+> speedup is greater.
+> +-------+----+----------+----------+
+> |       | n  | AVG (ms) | STD (ms) |
+> +-------+----+----------+----------+
+> | sysfs | 75 | 44.9     | 12.6     |
+> +-------+----+----------+----------+
+> | BPF   | 75 | 1.3      | 0.7      |
+> +-------+----+----------+----------+
+>
+> The initial attempts for BPF traversal of wakeup_sources was with BPF
+> iterators [1]. However, BPF already allows for traversing of a simple list
+> with bpf_for(), and this current patchset has the added benefit of being
+> ~2-3x more performant than BPF iterators.
 
-    d) Fully kill the VM; validate the semantics with an explict mmap().
+This looks good to me, you can add for the set:
+Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-The entire point of the test you are writing is to verfiy that a guest_memfd VMA
-doesn't somehow cause KVM to leak state.  So, make that obvious instead of abusing
-APIs that kinda sorta do what you want, but not really.
-
-	mem = kvm_mmap(region->mmap_size, PROT_READ | PROT_WRITE, MAP_SHARED,
-		       region->guest_memfd);
-
-	...
-
-	kvm_vm_free(vm);
-
-	TEST_ASSERT(is_zero(mem, ...));
+>
+> [...]
