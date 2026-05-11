@@ -1,218 +1,141 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30FA53033EA
-	for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 15:15:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778512502; cv=none; b=bfk1jdoFdKet3PML1Ai8KMGyLqxcM+CRpzfLrPtjp+vCqaoWuHkrPtg7EG0+UZoynQFscgpXk7f1p1eX2OF9M2DgE+qR7UWARFNSDL9qRte8JJxeSLFs2L2LCWZzy+vqF4O047o/DTy65pS5fB2a3+pUPaRDao/SQltH9VAWhxM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778512502; c=relaxed/simple;
-	bh=hzDHO2geL5UT1GbX8y8vqoSOsjXy+ECCYRicoP1YYUk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mdE2rRl4DR1aediVSkSpn0OIqD4n0ykCfagQp7vb2+O8Xh4Xl6Q3OpzMqR35bQICLh8loBOCmEsE6v9LvWay5egc+xJHgI9lf5CfWlOqzHCHRjgS8/rmTxEbdFIQZ8zaTPVh3rzGAcTdIzGcCEH5W22qZtkJ6Y2KNfhYb2bL5ME=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZATvnm8h; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B2442D94A0
+	for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 15:20:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.47
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778512831; cv=pass; b=kLnLRb+E+mLIVrV16JGqbEYcMrdFoODJ9XL+tpv/tciQSeuvtAa7fKh5Kgra84rgIKlgiRlAcZ3MCKHQnYXPMKEnDqkkKAB6wNw+CTQX1UKn9idfDOGVWjBJx08j6J+VxglnNTZGzw5df/2ATFweM385VGlvOmtZlMo69Oa2nGg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778512831; c=relaxed/simple;
+	bh=V8k4Cc0VITBpmnahmVzeaPg71KkhDPZXJsHnUUdJ2g8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QXCuTMqwFKg0vAlAhb24WDy+vPLmA/sSBVdM2eeTxOnPsfnJdr1yS7nuPfRYPm6LmKoOUOT+TVCsx0zrFoPdtDzwayNqUkDwFHohLDt97DSBloW/S1RTuu4G1RxeAFOrHQK/rXLXZMIcwuvf+DW5we2PLllUbRaCojRX3fKxHMg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fzR1Y+nv; arc=pass smtp.client-ip=209.85.208.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZATvnm8h"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1778512500;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=bHbDw2kQDVt9bJG46JUREywkjRHfZCqW19vv3OS9bjw=;
-	b=ZATvnm8htfK+K1UULPPgHf/rU8ukFXIF+oyPaHY9noE1VRCR8sNs2g29mCD5x0KelF1dmG
-	Gxt+Up8d13aAu2Mh3xZ/lQubq4vOpKcAfhDLbyh2Olg2ktwOPn6RJ4mckRfOstfZ3aLyYz
-	bwDNFGs8SM6KQE1wJ6TfibxUU4hhLqg=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-689-AdPGODgCPFCfv-AnQdUCAw-1; Mon,
- 11 May 2026 11:14:56 -0400
-X-MC-Unique: AdPGODgCPFCfv-AnQdUCAw-1
-X-Mimecast-MFC-AGG-ID: AdPGODgCPFCfv-AnQdUCAw_1778512493
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CE1291955EB1;
-	Mon, 11 May 2026 15:14:51 +0000 (UTC)
-Received: from [10.44.34.38] (unknown [10.44.34.38])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 50A331800286;
-	Mon, 11 May 2026 15:14:43 +0000 (UTC)
-Message-ID: <6afc4b95-3c15-4d71-877d-19b84e91ce05@redhat.com>
-Date: Mon, 11 May 2026 17:14:42 +0200
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fzR1Y+nv"
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-67c1eea6b4dso352a12.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 08:20:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778512828; cv=none;
+        d=google.com; s=arc-20240605;
+        b=E5LewesZeQ/XH2lhb3cpfO6uLVj2WGvP9tr06kqUFOZdVzQz+IAhG8vbrZBibzdSV+
+         mThPkg0oCaK0p7m3Eigs7xDvlzVVsiF95CT87HyIkVZQfjL1Bb6ZEvdcqCA2YhVOHAA0
+         kmTUj9b4a92S5ux+6PE/a9hgdezQEtZDjT9Uy9vvu58YTN3nRUsGX6HDLfy9O8G2k8g1
+         BRBwqJvjFt6+/LrDQ6lOtn6yV/+CQVh4TONzN8i1q/brlxkDHNSiAPphD1OjvFs7JPxc
+         UM0k+PoxumABpHAd990+QanFVNr9NWqffQpYFy81kID3zX+ZUEJx4mTs9ldFuVsDdqSh
+         UiRg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=X2dG1kfOBx0HJptuC6o6ArS4LPW49PGnYr8UK3AxYy8=;
+        fh=CRUweqA7gVM9DkOX0c+ft8sf9BtTDaiyTJN6te9uIug=;
+        b=YWo3lf7copaxK+yLlxSCHd3E/OlBWJayDPaPCr4zcKd7t+t3WU/G9WHhKxGZiWhaet
+         LdRw6JdnTOioqf4t7f8Jr5MzB4ppWiiBpWb/WdtSdc/3mav3FMbyx4bew44OVQIihNC1
+         xPuNtOtKExlrq0643fKjyLAWI0+/Zvef0koP8lssqDSIS2tSXM1c4HSCfScNeBagA404
+         23EcvFc9OENxzodxvndMXQlgc7osw10w0/WTCy4awijHuRkGrYDfb1Njq+1B2ubjLUux
+         xa184yJhV35LrpzOppga0lWSM8aNuiMkqLESij0HwMScPIGVcmmDZJeO1H2RYHE18vuG
+         0hrg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1778512828; x=1779117628; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=X2dG1kfOBx0HJptuC6o6ArS4LPW49PGnYr8UK3AxYy8=;
+        b=fzR1Y+nvZqu+sXtXxjNT+1Q1lL7FlueLSjmUClODX9NNu4cQkPJw4p+J8yHKabOigG
+         mONPhKwmEYCBmC7BsU+07Cbw/G4fyhMyMkg6pVgQKA7HY7koQCdXJgZBhXiUGBr8G1lG
+         eDADm2NLUjfTKJfJ6d8YJ0Hu6b5Qxzk3bXzdY7dBYsChBoi2qiTMEH4BSH3+6cEGd3GZ
+         7AUh8h2KromLlHISoG/t5WJZg6dJpwdGF+5674XOmHty7VGX1O10n/CjYuC1jCGsR3RK
+         /z1qR5n5uBg7E4HQKjaM/bfP4O31PZ37YtpAv/etB1f6pSjptXUM+PIQJfPMpylBOlk7
+         01hw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778512828; x=1779117628;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=X2dG1kfOBx0HJptuC6o6ArS4LPW49PGnYr8UK3AxYy8=;
+        b=JcLOanhokCdo97I6Ws+bibnScPRxFnDF5fQBf7xiVj0XaOQ01bUoaUtGrpTJY3xodE
+         GpWfttCM/HPC1rebasykzzKDdCu0HXFk5pqWneOCb/QrSHQcYxXVM5Dnh8Cf6s2cxC6d
+         lVyU/pva5xvMmlCwZHBEuDRcc5bWWDx5HM9TCraXnPfV4iAXzor/JJufGNefqeDXKg/T
+         fRlcXQQPLLBl+lfP6zXdnxye/9Kw24kZOqMWBaipvnPVnWvCLiKeBN/oni/Xepzjcqbf
+         ePbZGvu2UFMVFYvMRC6PLdw3UTMP+/BjO+IFX2GE39O6iS2yKoII05N44obIpwa+yAw/
+         L5VQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+65LJnk+InIjcE7D0VdQsCwir7V/+uqj0MAjXty29Uu4pWxfRvzbFv6LNawntE3v+TCerndblIwmVnBeDMUMA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwZ70wAZpwFIC8AQn2aylOq4cV8TFgNnvaIQoNzx1BPXFnVfNx/
+	aRGY+ATKY76By/tN46ZTI3jVhEkwXNfs3HMSNwZhF0NsusMKJoeIQZ2pvZ9RdcFqOrH63s30h1p
+	5u6quMiEqbeUl68YuSPJqp3Tt9A2sPjv/IynMJ5id
+X-Gm-Gg: Acq92OHzWc3SgZSY13gwkFeiR7K7oUEcU8Df4hC/k2nDOwJRK8K0bjCYVDwNtY5KkDw
+	b3acBxxQknqmUbJGkfSFiIcOAZGyQcV6iYyj9KKH7/zAuAQ0tMxqq/aoL+1CQdIfYGcelqD+FUy
+	qGFbzOXGVhDpL3cedJO0ZWCUpjxK4bXw/j83zSt5s9ph0RJUheQtYvXqGErbC7d47hfkwtXMude
+	l+UV6Ad6xiZuSl7TqEeQwxLeRyxUxGe5btvwvK1TUZ6lpksf0pFuSt3GRF+AdP/S8nDKG7vaCUr
+	elzMpATszUrGkSzRna8geQL5jIG8DeeABH/n53eJoCknPKTs
+X-Received: by 2002:aa7:d44d:0:b0:670:9e9f:1a5e with SMTP id
+ 4fb4d7f45d1cf-67f5998f71dmr103041a12.2.1778512827673; Mon, 11 May 2026
+ 08:20:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Documentation: KVM: Document guest-visible compatibility
- expectations
-To: David Woodhouse <dwmw2@infradead.org>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, kvm@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- Sean Christopherson <seanjc@google.com>, Jim Mattson <jmattson@google.com>
-Cc: Oliver Upton <oupton@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
- Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu
- <yuzenghui@huawei.com>, Catalin Marinas <catalin.marinas@arm.com>,
- Will Deacon <will@kernel.org>, Raghavendra Rao Ananta <rananta@google.com>,
- Eric Auger <eric.auger@redhat.com>, Kees Cook <kees@kernel.org>,
- Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>,
- linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
- linux-kselftest@vger.kernel.org
-References: <6856b269d2af706eae397e0cf9c1231f89d9a932.camel@infradead.org>
-Content-Language: en-US
-From: Paolo Bonzini <pbonzini@redhat.com>
-Autocrypt: addr=pbonzini@redhat.com; keydata=
- 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
-In-Reply-To: <6856b269d2af706eae397e0cf9c1231f89d9a932.camel@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+References: <tencent_863C8A01F3C81EBA238F375B16065CBACF08@qq.com> <agHmO4i4YUhs3cSG@lucifer>
+In-Reply-To: <agHmO4i4YUhs3cSG@lucifer>
+From: Jann Horn <jannh@google.com>
+Date: Mon, 11 May 2026 17:19:50 +0200
+X-Gm-Features: AVHnY4InzSL2AhuukjCngXl0RYuPKjoMy6hvuirqqPJQVud7h9Nv7GrmkhXycBU
+Message-ID: <CAG48ez1sLtSKVQLHbLO5usBgMgjyOGhbX29pKEfku4Ht05HffA@mail.gmail.com>
+Subject: Re: [PATCH] mm/mremap: unmap full fixed target for multi-VMA moves
+To: Lorenzo Stoakes <ljs@kernel.org>
+Cc: fujunjie <fujunjie1@qq.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 5/11/26 10:57, David Woodhouse wrote:
-> From: David Woodhouse <dwmw@amazon.co.uk>
-> 
-> Document the expectation that KVM maintains guest-visible compatibility
-> across host kernel upgrades and rollbacks.  Specifically:
-> 
->   - State saved/restored via KVM ioctls must be sufficient for live
->     migration (and live update) between kernel versions.
-> 
->   - Where a new kernel introduces a guest-visible change, it provides a
->     mechanism for userspace to select the previous behaviour.
-> 
->   - This allows both forward migration (upgrade) and backward migration
->     (rollback) of guests.
-> 
-> These expectations have been implicitly required on x86 but were not
-> explicitly documented. Harmonise the expectations across all of KVM.
+On Mon, May 11, 2026 at 5:05=E2=80=AFPM Lorenzo Stoakes <ljs@kernel.org> wr=
+ote:
+> On Thu, May 07, 2026 at 06:24:45PM +0000, fujunjie wrote:
+> > When MREMAP_FIXED moves a range spanning multiple VMAs, remap_move()
+> > iterates over the source VMAs and skips source holes.  For each source
+> > VMA segment it narrows vrm->new_len to that segment length before calli=
+ng
+> > mremap_to(), so the MREMAP_FIXED destination unmap is also limited to t=
+he
+> > current segment.
+> >
+> > If the source range contains holes and the destination range is already
+> > mapped, the destination subranges corresponding to those source holes c=
+an
+> > therefore survive the move.  That violates MREMAP_FIXED semantics, wher=
+e
+> > the destination range is supposed to be unmapped before the move, and i=
+t
+> > also means that preserved source gaps do not necessarily become gaps in
+> > the destination.  Userspace can then observe mappings at destination
+> > addresses that should have become holes.
+>
+> Hmmm I think it's a bit debateable honestly. The ability to handle there =
+being
+> gaps is a _new thing_, so there are no semantics to speak of. Prevoiusly
+> mremap() simply required that you only span across a single VMA.
 
-One big part of achieving this on x86 is the handling of CPUID.  Despite 
-all the mess that KVM_SET_CPUID2 is (and sometimes the underlying 
-architecture too, as Jim Mattson would certainly agree), KVM is 
-generally able to provide a consistent view of its configuration to the 
-guest.  This doesn't quite extend to compatibility across vendors, but 
-it does work across processor generations from either Intel or AMD.
+FWIW, I think mremap() on a source region with gaps is such a
+hazardous operation that nearly no userspace code should be doing it -
+gaps are areas in which any mmap() call without a fixed address could
+place unrelated mappings (unless stack VMAs are involved, which would
+also be a weird scenario), so to use it safely, you have to, among
+other things, make sure not to use libc malloc() at a time when that
+could place an allocation in the gap (which means you also can't use
+printf(), and so on, unless you have swapped out the memory
+allocator), and make sure that you have no other threads that could be
+doing that, and so on. There are rare circumstances under which it
+could be safe, but I think it is almost always better to have a
+PROT_NONE anonymous VMA or such as a placeholder.
 
-I understand that Arm traditionally had much more trouble than x86 with 
-vendor-specified behavior that goes beyond the set of architectural 
-features, so we may need to tune the expectations.  However, I agree 
-with David that this is needed at least as long as the host CPU does not 
-change.
-
-Thanks,
-
-Paolo
-
-> Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
-> ---
->   Documentation/virt/kvm/api.rst              | 14 ++++++++++++++
->   Documentation/virt/kvm/review-checklist.rst | 20 ++++++++++++++------
->   2 files changed, 28 insertions(+), 6 deletions(-)
-> 
-> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-> index 269970221797..864f3daa7acb 100644
-> --- a/Documentation/virt/kvm/api.rst
-> +++ b/Documentation/virt/kvm/api.rst
-> @@ -97,6 +97,20 @@ Instead, kvm defines extension identifiers and a facility to query
->   whether a particular extension identifier is available.  If it is, a
->   set of ioctls is available for application use.
->   
-> +KVM will ensure that the state that can be saved and restored via the
-> +KVM ioctls is sufficient to allow migration of a running guest between
-> +host kernels while maintaining full compatibility of the guest-visible
-> +device model.  This includes migration to newer kernels (upgrade) and
-> +to older kernels (rollback), provided that the older kernel supports
-> +the set of features exposed to the guest.  Where a new kernel version
-> +introduces a guest-visible change, it will provide a mechanism (such
-> +as a capability or a device attribute) that allows userspace to select
-> +the previous behaviour.  This serves two purposes: guests migrated
-> +from an older kernel can continue to run with their original
-> +observable environment, and new guests launched on the newer kernel
-> +can be configured to match the feature set of the older kernel, so
-> +that they remain migratable to the older kernel in case of rollback.
-> +
->   
->   4. API description
->   ==================
-> diff --git a/Documentation/virt/kvm/review-checklist.rst b/Documentation/virt/kvm/review-checklist.rst
-> index 053f00c50d66..f0fbe1577a90 100644
-> --- a/Documentation/virt/kvm/review-checklist.rst
-> +++ b/Documentation/virt/kvm/review-checklist.rst
-> @@ -18,22 +18,30 @@ Review checklist for kvm patches
->   5.  New features must default to off (userspace should explicitly request them).
->       Performance improvements can and should default to on.
->   
-> -6.  New cpu features should be exposed via KVM_GET_SUPPORTED_CPUID2,
-> +6.  Guest-visible changes must not break migration compatibility.  A guest
-> +    migrated from an older kernel must be able to run with its original
-> +    observable environment, and a guest launched on a newer kernel must be
-> +    configurable to match the older kernel's feature set for rollback.
-> +    Where a change alters guest-visible behaviour, provide a mechanism
-> +    (capability, device attribute, etc.) for userspace to select the
-> +    previous behaviour.
-> +
-> +7.  New cpu features should be exposed via KVM_GET_SUPPORTED_CPUID2,
->       or its equivalent for non-x86 architectures
->   
-> -7.  The feature should be testable (see below).
-> +8.  The feature should be testable (see below).
->   
-> -8.  Changes should be vendor neutral when possible.  Changes to common code
-> +9.  Changes should be vendor neutral when possible.  Changes to common code
->       are better than duplicating changes to vendor code.
->   
-> -9.  Similarly, prefer changes to arch independent code than to arch dependent
-> +10. Similarly, prefer changes to arch independent code than to arch dependent
->       code.
->   
-> -10. User/kernel interfaces and guest/host interfaces must be 64-bit clean
-> +11. User/kernel interfaces and guest/host interfaces must be 64-bit clean
->       (all variables and sizes naturally aligned on 64-bit; use specific types
->       only - u64 rather than ulong).
->   
-> -11. New guest visible features must either be documented in a hardware manual
-> +12. New guest visible features must either be documented in a hardware manual
->       or be accompanied by documentation.
->   
->   Testing of KVM code
-
+I think the right documentation for this is "do not use this on a
+source region with gaps, it is technically possible but extremely
+hazardous".
