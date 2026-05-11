@@ -1,141 +1,155 @@
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B2442D94A0
-	for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 15:20:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A909D2F7AC1
+	for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 15:20:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.172
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778512831; cv=pass; b=kLnLRb+E+mLIVrV16JGqbEYcMrdFoODJ9XL+tpv/tciQSeuvtAa7fKh5Kgra84rgIKlgiRlAcZ3MCKHQnYXPMKEnDqkkKAB6wNw+CTQX1UKn9idfDOGVWjBJx08j6J+VxglnNTZGzw5df/2ATFweM385VGlvOmtZlMo69Oa2nGg=
+	t=1778512837; cv=pass; b=KccsBqWwIGOpDUXV699ymfF1PlFm93EyXRf/YWXtnbKtTCpPYOgrjv3JCQGZr7zczvlaT8uv1PStO17PmwnH8BhjgEbEEVHwHu7ARXrBqk3osJDis1LS6R+niNgdNqMzRNzoeLmw3mgyvrwYXoa89dyq9dPHkJTetVsC2eqEO1k=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778512831; c=relaxed/simple;
-	bh=V8k4Cc0VITBpmnahmVzeaPg71KkhDPZXJsHnUUdJ2g8=;
+	s=arc-20240116; t=1778512837; c=relaxed/simple;
+	bh=Xz4fYGbS7i/Q6Qi38Fw9U1gRgtcym24JZtgZTH7Ivpg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QXCuTMqwFKg0vAlAhb24WDy+vPLmA/sSBVdM2eeTxOnPsfnJdr1yS7nuPfRYPm6LmKoOUOT+TVCsx0zrFoPdtDzwayNqUkDwFHohLDt97DSBloW/S1RTuu4G1RxeAFOrHQK/rXLXZMIcwuvf+DW5we2PLllUbRaCojRX3fKxHMg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fzR1Y+nv; arc=pass smtp.client-ip=209.85.208.47
+	 To:Cc:Content-Type; b=InaJKWyBOENAz3iDzObWz1HKAuckCq+RKs8yd8wXSLUn4hkYiTCL043yS04PLUa5+XelyaLj2l56QS9bn5ZwCvGdxIW6m6RdxMfohkrtbL1BMXYXUZKIcl2c/2H6Y5KcwOa+9ChqG+4RP7RwAIL1xWLCSOjKWe7/2il6T6z6gzs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=oIYYIH/0; arc=pass smtp.client-ip=209.85.160.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fzR1Y+nv"
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-67c1eea6b4dso352a12.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 08:20:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778512828; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="oIYYIH/0"
+Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-50e61648f10so8031cf.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 08:20:35 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778512834; cv=none;
         d=google.com; s=arc-20240605;
-        b=E5LewesZeQ/XH2lhb3cpfO6uLVj2WGvP9tr06kqUFOZdVzQz+IAhG8vbrZBibzdSV+
-         mThPkg0oCaK0p7m3Eigs7xDvlzVVsiF95CT87HyIkVZQfjL1Bb6ZEvdcqCA2YhVOHAA0
-         kmTUj9b4a92S5ux+6PE/a9hgdezQEtZDjT9Uy9vvu58YTN3nRUsGX6HDLfy9O8G2k8g1
-         BRBwqJvjFt6+/LrDQ6lOtn6yV/+CQVh4TONzN8i1q/brlxkDHNSiAPphD1OjvFs7JPxc
-         UM0k+PoxumABpHAd990+QanFVNr9NWqffQpYFy81kID3zX+ZUEJx4mTs9ldFuVsDdqSh
-         UiRg==
+        b=CsoiKlASCU62f/Ly2RKACvpG7+EbENGXmuKluD1InEFMyylWeeAB0CLfhj4PkNq6G/
+         F3RTUm5e0qZBUVz0btOdqgn0x0hVoO2wpIXA0oVTnfbj016G1bppJi8MeZqglWkYrDiT
+         qUlvNQ4WlXN/aAs5zlMB7dYc449QTyt9aM7kqEfWqVpRfCaYgaOMDrytJYepBgDl3lOM
+         EjA7r/yE/crbTcSCUbb4xzGZdDqnaOs2LxP9CVezATJzWeQ426gxMqTLtqLWbrD1+ac8
+         BYW9vbYifjxtFTexfR6GlOsKWKPqV/EH3HpNirc8NZ/xF0amVNu3wV0ok5N0+GbE+DYs
+         UOtw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=X2dG1kfOBx0HJptuC6o6ArS4LPW49PGnYr8UK3AxYy8=;
-        fh=CRUweqA7gVM9DkOX0c+ft8sf9BtTDaiyTJN6te9uIug=;
-        b=YWo3lf7copaxK+yLlxSCHd3E/OlBWJayDPaPCr4zcKd7t+t3WU/G9WHhKxGZiWhaet
-         LdRw6JdnTOioqf4t7f8Jr5MzB4ppWiiBpWb/WdtSdc/3mav3FMbyx4bew44OVQIihNC1
-         xPuNtOtKExlrq0643fKjyLAWI0+/Zvef0koP8lssqDSIS2tSXM1c4HSCfScNeBagA404
-         23EcvFc9OENxzodxvndMXQlgc7osw10w0/WTCy4awijHuRkGrYDfb1Njq+1B2ubjLUux
-         xa184yJhV35LrpzOppga0lWSM8aNuiMkqLESij0HwMScPIGVcmmDZJeO1H2RYHE18vuG
-         0hrg==;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=y5WEI3bc+jKa5pFUDTyUeMXlg9f3nphKAR2eDCdRxOs=;
+        fh=CflVhOHcmFw7guUFuEl0Vn9r941i49N8TV7cRLnnFyw=;
+        b=Ij3dILTKx0+mpa/Pjeko9KjK32DIKYjX07wAqlwBl+vdom78zV3LIa79wmh0GuAMJ2
+         ji3k1wA9znjoh9nKJUKo/bSVPTfrsXgtY+9QnJFe5vGTKz2yxF1zrupdxFk6BeXnt5HS
+         Vz0g3Wf4oy0lV0nnAYWC3QQ45x2xB0Qlhy0D00oaMVyY0dJ16rmxHdQUuH2H25lbkBCA
+         0dPL9zjFyfnjnYb1eNoXuPs2Nzvyt7tFmT5ER2MyrnL1TuE8vKREBuKFEOrEQO5IGWTr
+         mbwwy8jbSdfkhRaTv1k51RxcM7TIFozGf3zRR/3g7itkCu/LHcnuDlVoJsmK8UNCPly9
+         T5GQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1778512828; x=1779117628; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=X2dG1kfOBx0HJptuC6o6ArS4LPW49PGnYr8UK3AxYy8=;
-        b=fzR1Y+nvZqu+sXtXxjNT+1Q1lL7FlueLSjmUClODX9NNu4cQkPJw4p+J8yHKabOigG
-         mONPhKwmEYCBmC7BsU+07Cbw/G4fyhMyMkg6pVgQKA7HY7koQCdXJgZBhXiUGBr8G1lG
-         eDADm2NLUjfTKJfJ6d8YJ0Hu6b5Qxzk3bXzdY7dBYsChBoi2qiTMEH4BSH3+6cEGd3GZ
-         7AUh8h2KromLlHISoG/t5WJZg6dJpwdGF+5674XOmHty7VGX1O10n/CjYuC1jCGsR3RK
-         /z1qR5n5uBg7E4HQKjaM/bfP4O31PZ37YtpAv/etB1f6pSjptXUM+PIQJfPMpylBOlk7
-         01hw==
+        d=google.com; s=20251104; t=1778512834; x=1779117634; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=y5WEI3bc+jKa5pFUDTyUeMXlg9f3nphKAR2eDCdRxOs=;
+        b=oIYYIH/0AlhWSmOV/8humSiDKOr8H3eHmdiCR7ChUQzr4Iz5n9vPUjeK+im49G9Ya3
+         /ZuS5nPJgLMd4dH+OPN0YoAY8+gvgN++3NbJPW/Qsr7pOfSbNzCRNzU0shuwc/44KIHq
+         Kt12VmdJ/3gB4qQKAfU29sbAUgVvE+N9l5EE5/ffKICMrxzsfAwCjkSRT5F4qaX0vYnh
+         2Us8kfCXC7/vT/W5My4j3VoQqhB3Bp673t6mA0pkpblkjAuzwzIq2ZSn9pB79SnJNo3t
+         9PhDvsIGVe26arsIaumzFFNea5SSWm71zb54yMr5Mn9Ik5SvQelHq7YZNx0dN2qo9wDH
+         lBqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778512828; x=1779117628;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=X2dG1kfOBx0HJptuC6o6ArS4LPW49PGnYr8UK3AxYy8=;
-        b=JcLOanhokCdo97I6Ws+bibnScPRxFnDF5fQBf7xiVj0XaOQ01bUoaUtGrpTJY3xodE
-         GpWfttCM/HPC1rebasykzzKDdCu0HXFk5pqWneOCb/QrSHQcYxXVM5Dnh8Cf6s2cxC6d
-         lVyU/pva5xvMmlCwZHBEuDRcc5bWWDx5HM9TCraXnPfV4iAXzor/JJufGNefqeDXKg/T
-         fRlcXQQPLLBl+lfP6zXdnxye/9Kw24kZOqMWBaipvnPVnWvCLiKeBN/oni/Xepzjcqbf
-         ePbZGvu2UFMVFYvMRC6PLdw3UTMP+/BjO+IFX2GE39O6iS2yKoII05N44obIpwa+yAw/
-         L5VQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+65LJnk+InIjcE7D0VdQsCwir7V/+uqj0MAjXty29Uu4pWxfRvzbFv6LNawntE3v+TCerndblIwmVnBeDMUMA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwZ70wAZpwFIC8AQn2aylOq4cV8TFgNnvaIQoNzx1BPXFnVfNx/
-	aRGY+ATKY76By/tN46ZTI3jVhEkwXNfs3HMSNwZhF0NsusMKJoeIQZ2pvZ9RdcFqOrH63s30h1p
-	5u6quMiEqbeUl68YuSPJqp3Tt9A2sPjv/IynMJ5id
-X-Gm-Gg: Acq92OHzWc3SgZSY13gwkFeiR7K7oUEcU8Df4hC/k2nDOwJRK8K0bjCYVDwNtY5KkDw
-	b3acBxxQknqmUbJGkfSFiIcOAZGyQcV6iYyj9KKH7/zAuAQ0tMxqq/aoL+1CQdIfYGcelqD+FUy
-	qGFbzOXGVhDpL3cedJO0ZWCUpjxK4bXw/j83zSt5s9ph0RJUheQtYvXqGErbC7d47hfkwtXMude
-	l+UV6Ad6xiZuSl7TqEeQwxLeRyxUxGe5btvwvK1TUZ6lpksf0pFuSt3GRF+AdP/S8nDKG7vaCUr
-	elzMpATszUrGkSzRna8geQL5jIG8DeeABH/n53eJoCknPKTs
-X-Received: by 2002:aa7:d44d:0:b0:670:9e9f:1a5e with SMTP id
- 4fb4d7f45d1cf-67f5998f71dmr103041a12.2.1778512827673; Mon, 11 May 2026
- 08:20:27 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1778512834; x=1779117634;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=y5WEI3bc+jKa5pFUDTyUeMXlg9f3nphKAR2eDCdRxOs=;
+        b=AI6jyMrrE2dJ9QmUdjukUEmHJT5fAn9k/l/ooMa5W1T9ltwGtROI0e66Qw2X+Zw+XM
+         5oy88xlvjol9PiOy2LBk27OIgPjQKO7IDwt2BNa81EBNYvVwU03W/ARROedr2YmSyuH2
+         aIHxv10uFtUC1oDVzwpdwfa3NHhJxwfbysYvdyFAyKupJarkNFMWvH0fmSKXRhZE5Ky9
+         WshMMxj3qARz1jbzoI3IlruhpLGqP1LHP5XnGm4q86r43z3598rBI3GBfoFk8UfeRO2q
+         xN4aZ55aK4wjjARBWj2SFRjG9ekXtrstjwdsRcT4tqYtWMrBHj0czhigzadoverL4uF0
+         KOEg==
+X-Forwarded-Encrypted: i=1; AFNElJ9sFfMrwd6OclJ3RDfPwBcK9/0Xj3cSJUEUUOZUGp4cZbIyq+MNh4OMcvaIXvwZZ0AnPP/RGSgMzXG3l25UT/8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwKXS0rRfhya9W57YhGQlrkMev9FyLtde8YgqKbYrp9KYtVvNuC
+	I8S2SAzdiFJYEoO5iRP40aKl4vHsVQAmYxn79d/BOTnwG1ww2kRWTkDF+TgshwnEsEUxKVctrNs
+	yMuNBG0stdaQ7SnUM3xlnAPO4r4sWQMySU6og3Oah
+X-Gm-Gg: Acq92OEcXCzlBVjlpwK0mhWbtqAEZ3YyMB1121jXXPvyCORVE1pdc86pfhOkYVz3C7Q
+	Bkfvx82jtsEpNG3ycjC3bfiDrJzUXjOZvPI0PQER5fvk72K6eOELjmcLrOl9GrRzBM8QUE4zhZA
+	E2hDGOBXsmN0GN7kSgRN55obkbLFr8DL+um6eOOtq1EyacAHpkv6lcoZuYG6LrbdL75GpLuw4cz
+	UM89nDMV/0c+PPfXNTHF98TvUmr1FCcTpEqeMG/6Eye/r7Ex2w1B4++/A+axerneG0433K1Zdxe
+	PPE4sUZ9L59jY1whK8k=
+X-Received: by 2002:a05:622a:152:b0:50d:edb1:6bd1 with SMTP id
+ d75a77b69052e-514a04b4d5emr2366971cf.13.1778512832483; Mon, 11 May 2026
+ 08:20:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <tencent_863C8A01F3C81EBA238F375B16065CBACF08@qq.com> <agHmO4i4YUhs3cSG@lucifer>
-In-Reply-To: <agHmO4i4YUhs3cSG@lucifer>
-From: Jann Horn <jannh@google.com>
-Date: Mon, 11 May 2026 17:19:50 +0200
-X-Gm-Features: AVHnY4InzSL2AhuukjCngXl0RYuPKjoMy6hvuirqqPJQVud7h9Nv7GrmkhXycBU
-Message-ID: <CAG48ez1sLtSKVQLHbLO5usBgMgjyOGhbX29pKEfku4Ht05HffA@mail.gmail.com>
-Subject: Re: [PATCH] mm/mremap: unmap full fixed target for multi-VMA moves
-To: Lorenzo Stoakes <ljs@kernel.org>
-Cc: fujunjie <fujunjie1@qq.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
+References: <20260511113759.610924-1-tabba@google.com> <20260511113759.610924-3-tabba@google.com>
+ <agHugdIrptaXZW-2@google.com>
+In-Reply-To: <agHugdIrptaXZW-2@google.com>
+From: Fuad Tabba <tabba@google.com>
+Date: Mon, 11 May 2026 16:19:55 +0100
+X-Gm-Features: AVHnY4K0xwc8Hb8-5C7f-YejfzbLAhjXF8he_JFEhS_49b6vZjQIeDztW1ArGj4
+Message-ID: <CA+EHjTw1z7ROF7u0fKqxDGao7S1kELxNWtyWhLoPQx5uwVfuWQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] KVM: selftests: Fix FD double-close in kvm_vm_release()
+To: Sean Christopherson <seanjc@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, Marc Zyngier <maz@kernel.org>, 
+	Oliver Upton <oupton@kernel.org>, Will Deacon <will@kernel.org>, 
+	Ackerley Tng <ackerleytng@google.com>, David Matlack <dmatlack@google.com>, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, May 11, 2026 at 5:05=E2=80=AFPM Lorenzo Stoakes <ljs@kernel.org> wr=
-ote:
-> On Thu, May 07, 2026 at 06:24:45PM +0000, fujunjie wrote:
-> > When MREMAP_FIXED moves a range spanning multiple VMAs, remap_move()
-> > iterates over the source VMAs and skips source holes.  For each source
-> > VMA segment it narrows vrm->new_len to that segment length before calli=
-ng
-> > mremap_to(), so the MREMAP_FIXED destination unmap is also limited to t=
-he
-> > current segment.
-> >
-> > If the source range contains holes and the destination range is already
-> > mapped, the destination subranges corresponding to those source holes c=
-an
-> > therefore survive the move.  That violates MREMAP_FIXED semantics, wher=
-e
-> > the destination range is supposed to be unmapped before the move, and i=
-t
-> > also means that preserved source gaps do not necessarily become gaps in
-> > the destination.  Userspace can then observe mappings at destination
-> > addresses that should have become holes.
+On Mon, 11 May 2026 at 15:58, Sean Christopherson <seanjc@google.com> wrote:
 >
-> Hmmm I think it's a bit debateable honestly. The ability to handle there =
-being
-> gaps is a _new thing_, so there are no semantics to speak of. Prevoiusly
-> mremap() simply required that you only span across a single VMA.
+> On Mon, May 11, 2026, Fuad Tabba wrote:
+> > kvm_vm_release() closes vmp->fd and vmp->kvm_fd unconditionally, and
+> > kvm_vm_free() calls kvm_vm_release() at teardown.  A test that calls
+> > kvm_vm_release() and then kvm_vm_free() without a
+> > vm_recreate_with_one_vcpu() in between double-closes both FDs.
+>
+> That's a test bug, no?
 
-FWIW, I think mremap() on a source region with gaps is such a
-hazardous operation that nearly no userspace code should be doing it -
-gaps are areas in which any mmap() call without a fixed address could
-place unrelated mappings (unless stack VMAs are involved, which would
-also be a weird scenario), so to use it safely, you have to, among
-other things, make sure not to use libc malloc() at a time when that
-could place an allocation in the gap (which means you also can't use
-printf(), and so on, unless you have swapped out the memory
-allocator), and make sure that you have no other threads that could be
-doing that, and so on. There are rare circumstances under which it
-could be safe, but I think it is almost always better to have a
-PROT_NONE anonymous VMA or such as a placeholder.
+Fair point.  Let me describe the actual use case and then I'd like
+your guidance on which way to fix it.
 
-I think the right documentation for this is "do not use this on a
-source region with gaps, it is technically possible but extremely
-hazardous".
+The pKVM selftests I'm preparing need to verify that protected guest
+memory is zeroed when the VM is destroyed before the host regains
+visibility of those pages.  The test pattern is:
+
+  vm_userspace_mem_region_add(vm, ..., GPA_BASE, 1, GPA_PAGES, 0);
+  /* run protected guest, which writes/shares/unshares its memory */
+  ...
+  TEST_ASSERT(get_proc_locked_vm_size() > GPA_SIZE);   /* still pinned */
+
+  kvm_vm_release(vm);                                  /* trigger destroy */
+
+  /* host_mem is still mmap'd in the test process; pKVM should have
+   * zeroed it before unpinning */
+  TEST_ASSERT(is_zero(region->host_mem, GPA_PAGES * PAGE_SIZE));
+
+  kvm_vm_free(vm);                                     /* tidy up */
+  TEST_ASSERT(get_proc_locked_vm_size() == 0);
+
+I used kvm_vm_release() because it's the only public API that closes
+vm->fd to trigger kernel-side destruction.  But the existing callers
+follow it with vm_recreate_with_one_vcpu(), so the "release + later
+kvm_vm_free()" path isn't exercised today.
+
+I see three ways to make this clean:
+  a) This patch: kvm_vm_release() becomes idempotent for its three
+     FDs, matching the kvm_stats_release() idiom it already invokes.
+  b) Leave kvm_vm_release() as-is and add a dedicated helper, e.g.
+     kvm_vm_destroy_kernel(), that closes vm->fd to trigger kernel
+     destruction while leaving the kvm_vm struct intact for
+     post-destruction inspection.  kvm_vm_free() learns to handle the
+     half-released state.
+  c) Something else entirely, e.g., the test should manage vm->fd
+     directly and not rely on library helpers for this pattern.
+
+I lean (a). (b) doesn't really avoid the change, as kvm_vm_free()
+still calls kvm_vm_release() internally, so either kvm_vm_release()
+gains these guards, or kvm_vm_free() grows new "already half-released"
+state, or kvm_vm_destroy_kernel() open-codes the same guarded closes
+on every FD it touches.  (a) is the minimal form, and it lines up
+vmp->fd / vmp->kvm_fd with vmp->stats.fd, which kvm_vm_release()
+already handles this way via kvm_stats_release().  But happy to take
+(b) or (c) if you'd rather not broaden kvm_vm_release()'s contract.
+
+Cheers,
+/fuad
