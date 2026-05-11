@@ -1,114 +1,92 @@
-Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B02A9374E59
-	for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 11:38:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B49379CD;
+	Mon, 11 May 2026 11:41:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778499486; cv=none; b=LmTJWInX99W325vD6N4Sz1JazbWrYTzVoIQlOZkNihq/fAyTX1gH627oMsrHwrdgMhqDP7kRACMJ/i8UooKAcrl1MLuWOwj2lvJLfhY0dKNF7miItlehC5QpIf5a0xlJr+sdSBE7JJH7AH0swXHpSnySKNI/C3o538c+8qFI5bo=
+	t=1778499709; cv=none; b=f02BhikkQ9qmUkWSMmzX/jYEteNCHKA2cpX1HhuZ26D7OvvzScwvVWPU+Xtkas4nz1A70ZBvFJsCHzkxROIkwf9bN2L7k+M5jD0rQexjnvmjrnELgXB4yXmuVCsI9RIdRTpA6R6BDEtIM4zBGkm7WfMAbG8shj32voyziXUDRGY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778499486; c=relaxed/simple;
-	bh=EOWmfLNuS8z2erR5IqiGNX4TFSQ82cXVDTp98cptEII=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=mHBo6srRL8l8ZGx1TkVzdGLGC5YqPP0WtrkWpdeOUYM6UjbHjlQAMiEl2ohcMLlkxJ69YNBBaBziElnppwV0Nb3a2OaIsrXOXCuokR4o6M3wF00MqjNT/wZUQH2Wh0Hh4NuTK4OXNqoBWjoxkYRYOOFF7HJ2uDBN7pw+Mxlk41g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tabba.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jgo+LHj4; arc=none smtp.client-ip=209.85.128.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tabba.bounces.google.com
+	s=arc-20240116; t=1778499709; c=relaxed/simple;
+	bh=OJMSavFVC1MyyyWnXiT4GqHeUbTHA3ZWWM5+jx5Ex48=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uyozf7J6kAqL75ocBOjop8DM5fDIg6gLJqb9v5ZRE/CaxzCnjVzbOHKz9piK8fqDw8QCYWeDSCehb4Mmb/wE9l/vzfyHy+yQqqUpQcMmIFJwEtw5ReeQIeq6iQ6hevhbCVJR1nGSq8q6m+sg9JiV4k8bIaEmC4OtmTZoFy3MFFg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=tFbypn25; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jgo+LHj4"
-Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-48e6af7a9cdso17958095e9.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 04:38:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1778499482; x=1779104282; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=135gcqRF2uJesg3YaRFV8E4Vlot8XdxjYp/uZeTNldQ=;
-        b=jgo+LHj4sdm92JVUYbyWHxWDVAQ1yBt/SftnMUx2G5PRVgDd3wYvbjXAe/N/7KAQby
-         K6r8c4jYShhJ1HmTr9S/s/smwcQP1P1xnM4QZxw+KuF2/Z6bAGk6MaRXWRbn3hcKprul
-         sONiacZkl/BEYYWxf9au5RPzcvUB9p3kVPjIVPEz2uXrQWff8RidgtK0rZrs5C3p4olr
-         xR1k/m3auNgoq9XaZt+YqNeGEH/y4Lwl82nE+SWEJdrccXbc2uKib5/Xz4E11v+LQc/K
-         k3g/CW9X6cLhjB5dqkGMjZFWiPu4VYrAt1b8tddROV68W6ZA6nNu5etnQajKmTNT2tT3
-         zdBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778499482; x=1779104282;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=135gcqRF2uJesg3YaRFV8E4Vlot8XdxjYp/uZeTNldQ=;
-        b=PPdzwZpd6qP/8RFQf2tJCo5kRwITygm1oHgQPEfR5Q60eiANxw9z4Gt7NNSGeh3G1l
-         spPk4dmGFX/JINb2VBHNPjUEFH/LkwvcwY1bAf0s5HdMzmlCTqJi0McvIHNb34Q2PdeG
-         DMM2AgcPTvxKsMXo7k5mABIMP624KaD66jpUBMKY38GcXjmU88PzuEYQlsnr0ExctJCj
-         P+wj8OTlrV9qFmuovl2pdSuRjdYG1izBV6XL31rS79b8uwnAoY4hyddCblpO2b3H99OO
-         /JTwaqjJrJIUFDgxyRmGWTFrpJb7/SZTQ1cOxibhcV6x1ke9FH/zsHPFFcNi/RVoXWvX
-         aQAg==
-X-Forwarded-Encrypted: i=1; AFNElJ/UzgRwdELFiNZnlzIiZfndtFMdRqituuo5l5AOA4SaDF6f5OBUQwCLOVxFEHuRNc5QrAJYEStmHJ19i7NYALI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzhTXWh6RJN0jRRsIrSWIMaxOa/3wtKLXZJ8U4ZaUQXgFJ55z1T
-	ai+yOyLC3LzLvT9DbPKp81+qN6820HD7dIb85LWIYVw/JltwQeGpnDroTS3SqPjcKUbSRlUDvqQ
-	40g==
-X-Received: from wmor7.prod.google.com ([2002:a05:600c:4587:b0:488:a6d9:e91a])
- (user=tabba job=prod-delivery.src-stubby-dispatcher) by 2002:a05:600c:a305:b0:488:8bdd:cfcc
- with SMTP id 5b1f17b1804b1-48e51dd6025mr266717105e9.0.1778499482188; Mon, 11
- May 2026 04:38:02 -0700 (PDT)
-Date: Mon, 11 May 2026 12:37:59 +0100
-In-Reply-To: <20260511113759.610924-1-tabba@google.com>
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="tFbypn25"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+	Reply-To:Content-ID:Content-Description;
+	bh=XiQPBK0lNObi9c/+Lg9kspYh1nn10mRSGToStEZf490=; b=tFbypn259IMXV4LmmxhZX+rN8H
+	fDeTQKe0XTJ8e0bCl3JQWQbZVzZNyFZIyOutRllwHvD3kpb4U96sAVS/BeXG2sR3kOb02FtHfmr7/
+	JgXi1S1vZqFZ6KtRYiJiamBEiOyB+KjEIkZY2hJNZ/VnFEWlxs50uuXKBzSRKFqtVUhGSHxaq/ceg
+	Aeo1b/JhiX5Xxw3j+ctMoqssyXRdRJmlGLv44U53Ok9QXTe7IbcsZTAly+Hau4QUJ102QgYbBlXo/
+	JNOzYHZQ4lePO/7+zYBFitq+Dz1V/Y1n/tGtLgD4O8uepfQFfYB1Kr6cJoYbBi1jKsHFEUaJSh7JM
+	4TI49noA==;
+Received: from authenticated user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1wMP14-001ZbI-29;
+	Mon, 11 May 2026 11:41:42 +0000
+Date: Mon, 11 May 2026 04:41:38 -0700
+From: Breno Leitao <leitao@debian.org>
+To: Sasha Levin <sashal@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, corbet@lwn.net, 
+	skhan@linuxfoundation.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, gregkh@linuxfoundation.org
+Subject: Re: [PATCH] killswitch: add per-function short-circuit mitigation
+ primitive
+Message-ID: <agG_PZ3qcl6TwLnL@gmail.com>
+References: <20260507070547.2268452-1-sashal@kernel.org>
+ <20260508135630.a380e3c187b59e4c04e6f358@linux-foundation.org>
+ <af5Z2IvtS5pVorSl@laps>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260511113759.610924-1-tabba@google.com>
-X-Mailer: git-send-email 2.54.0.563.g4f69b47b94-goog
-Message-ID: <20260511113759.610924-3-tabba@google.com>
-Subject: [PATCH 2/2] KVM: selftests: Fix FD double-close in kvm_vm_release()
-From: Fuad Tabba <tabba@google.com>
-To: Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson <seanjc@google.com>, 
-	Shuah Khan <shuah@kernel.org>
-Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, Will Deacon <will@kernel.org>, 
-	Ackerley Tng <ackerleytng@google.com>, David Matlack <dmatlack@google.com>, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <af5Z2IvtS5pVorSl@laps>
+X-Debian-User: leitao
 
-kvm_vm_release() closes vmp->fd and vmp->kvm_fd unconditionally, and
-kvm_vm_free() calls kvm_vm_release() at teardown.  A test that calls
-kvm_vm_release() and then kvm_vm_free() without a
-vm_recreate_with_one_vcpu() in between double-closes both FDs.  Since
-kvm_close() asserts on close() failure, the second close trips
-TEST_ASSERT and aborts the test, or, if the FD was recycled, silently
-closes an unrelated file.
+On Fri, May 08, 2026 at 05:47:04PM -0400, Sasha Levin wrote:
+> On Fri, May 08, 2026 at 01:56:30PM -0700, Andrew Morton wrote:
+> > On Thu,  7 May 2026 03:05:45 -0400 Sasha Levin <sashal@kernel.org> wrote:
+> >
+> > > When a (security) issue goes public, fleets stay exposed until a patched kernel
+> > > is built, distributed, and rebooted into.
+> > >
+> > > For many such issues the simplest mitigation is to stop calling the buggy
+> > > function. Killswitch provides that. An admin writes:
+> > >
+> > >     echo "engage af_alg_sendmsg -1" \
+> > >         > /sys/kernel/security/killswitch/control
+> >
+> > It certainly sounds useful, but what would I know.  How do we hunt down
+> > suitable operations people (aka "target audience") to find out how
+> > useful this is to them?
+>
+> I'm not entierly sure here... If folks have suggestions on folks to loop in,
+> that'll be great!
 
-Guard the two closes in kvm_vm_release() by checking each FD against
--1 and resetting it to -1 after closing, matching the existing
-kvm_stats_release() idiom.  Existing in-tree callers all pass through
-vm_recreate_with_one_vcpu() before teardown, so they reassign the FDs
-and do not hit the bug today.
+I work with these issues at Meta, and this approach would address a real
+need we have.
 
-Fixes: fa3899add105 ("kvm: selftests: add basic test for state save and restore")
-Signed-off-by: Fuad Tabba <tabba@google.com>
----
- tools/testing/selftests/kvm/lib/kvm_util.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+While livepatch could theoretically solve this problem, it's less suited
+for rapid mitigation for a couple of reasons:
 
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index 2a76eca7029d..e44223714fd4 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -793,8 +793,14 @@ void kvm_vm_release(struct kvm_vm *vmp)
- 	list_for_each_entry_safe(vcpu, tmp, &vmp->vcpus, list)
- 		vm_vcpu_rm(vmp, vcpu);
- 
--	kvm_close(vmp->fd);
--	kvm_close(vmp->kvm_fd);
-+	if (vmp->fd >= 0) {
-+		kvm_close(vmp->fd);
-+		vmp->fd = -1;
-+	}
-+	if (vmp->kvm_fd >= 0) {
-+		kvm_close(vmp->kvm_fd);
-+		vmp->kvm_fd = -1;
-+	}
- 
- 	/* Free cached stats metadata and close FD */
- 	kvm_stats_release(&vmp->stats);
--- 
-2.54.0.563.g4f69b47b94-goog
+1) Livepatch rollout is inherently slower due to the blast radius if a
+   bug exists in the livepatch mechanism itself.
+
+2) It's common to run hundreds of different kernel versions across a
+   fleet. Since livepatch is kernel-specific, a single CVE suddenly
+   requires building and deploying hundreds of individual livepatches—
+   far less practical than a simple sysfs write.
 
