@@ -1,64 +1,99 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCD2C42A9D;
-	Mon, 11 May 2026 00:42:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CFD126ADC;
+	Mon, 11 May 2026 01:39:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778460140; cv=none; b=JuUkGS4pzIuW9EunkVeNBUEVOgVkJRYHG7HZtAJEW6Evc+nfjb/OzB2KIT++kXrQN+JopgJk3uzlsFyMgVf6Y9h+HBAPjuVcy2iEbxii26QRMP7c08Jws1VstE5aJX0e75XGtj3a69dD3OJHDk4hnNTEC+cJEsYxsDZmJ8c/buQ=
+	t=1778463570; cv=none; b=s9NLJvwbVJDGiOcPv9RjEGt9mLjZR9tJEed9WYUUerENb9LSNmu3qGuLx7AU64dpFxBfwC93NUUfVfl12+QEr6QzextnnBwc7wBqLedc/aa31ILbaIFmKm5Rxfz/Ode1YVww/B7V4m0TZfCDZoleRw6QxkfSIRM+9rW6AyRPeqo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778460140; c=relaxed/simple;
-	bh=9rUKkR0erbor0suC4kFXyAGwRJCbVzfR/ii5ArlAwVk=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=lLviE9uV3qHqepe0RTqEpCchMJUSfThUKANj4K0zb+3MWtF6usclvzPSC52caXBW9qEMBDAH4HtNDgm/ecdno18ota3lKFRNL9qKaSdw3CQbOQN8O1/8umZJFLspOaqiT6YY35V9MHf33BdNGV5EPkbLjvMc5u3XuLamvI+gKTU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=blszMWad; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="blszMWad"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0D79C2BCB8;
-	Mon, 11 May 2026 00:42:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778460140;
-	bh=9rUKkR0erbor0suC4kFXyAGwRJCbVzfR/ii5ArlAwVk=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=blszMWaddQSHfrqiSHb6kWo+Ge/hRAeDAOSf0DbFp2Sy1FDnL5ZYQOuiznI8xkp+j
-	 nF+EcyYo3gxMTaYSUnvGvGE2vR2BuOmLH75g2qJhzvpl47S8PVo+XYsm6IBi5dLZ02
-	 +VuIDUHdk+KvcsNnoSqJwOXt9ik3PQlfTygOlGtldXv9CQ5srx5wiCwGkZuSD+5rDL
-	 B2TTcoqk503lOgoaUOVnPcb7Dbf0iNnsBywx3WC6M9yJK0IMA0GSFQbvZpodnemAWP
-	 EQdTReHB9MLMherDhUMfng1s362vw73thH7hohvXOT8b9INymTLX1V0hjG5t7uMnUg
-	 d9DPfygT4VeQA==
-Date: Sun, 10 May 2026 17:42:19 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
- pabeni@redhat.com, horms@kernel.org, linux-kselftest@vger.kernel.org,
- shuah@kernel.org, Willem de Bruijn <willemb@google.com>
-Subject: Re: [PATCH net-next v7 0/3] selftests: drv-net: convert so_txtime
- to drv-net
-Message-ID: <20260510174219.74aeee6d@kernel.org>
-In-Reply-To: <20260504174056.565319-1-willemdebruijn.kernel@gmail.com>
-References: <20260504174056.565319-1-willemdebruijn.kernel@gmail.com>
+	s=arc-20240116; t=1778463570; c=relaxed/simple;
+	bh=tnhesp8e1XK8gMbvfmmmFFE8731jOxegRJEiav3yrE0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=auF4VWw+dHLs8CKdP1YSfJN/prSvS7VrDGxIY31byULu6PiQFhjJRg45M04/k/2E0saT21TpH1/kNQ63L2BOAckgvI3DuqyFsREXv3xy65K2TkeKv8YP05l7+Zx5lm+7cxLOcxI5eZ0rSrQTDr6gj66iXR3w/CHdfnwNHfduOnc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 3bfe6bfe4cda11f1aa26b74ffac11d73-20260511
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
+	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
+	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
+	HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME
+	IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_TRUSTED, SA_EXISTED
+	SN_TRUSTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS
+	CIE_BAD, CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO
+	GTI_C_BU, AMN_GOOD, ABX_MISS_RDNS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.12,REQID:658cd9fd-43b0-427a-bc4f-3803227afb76,IP:10,
+	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+	N:release,TS:5
+X-CID-INFO: VERSION:1.3.12,REQID:658cd9fd-43b0-427a-bc4f-3803227afb76,IP:10,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:5
+X-CID-META: VersionHash:e7bac3a,CLOUDID:ce2721a90e4bc5af600efde2338b19e6,BulkI
+	D:260511093923L34JIGOB,BulkQuantity:0,Recheck:0,SF:17|19|38|66|78|102|127|
+	850|898,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk:nil
+	,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:
+	0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 3bfe6bfe4cda11f1aa26b74ffac11d73-20260511
+X-User: lihongfu@kylinos.cn
+Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
+	(envelope-from <lihongfu@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 2016642569; Mon, 11 May 2026 09:39:21 +0800
+From: Hongfu Li <lihongfu@kylinos.cn>
+To: longman@redhat.com,
+	chenridong@huaweicloud.com,
+	tj@kernel.org,
+	hannes@cmpxchg.org,
+	mkoutny@suse.com,
+	shuah@kernel.org
+Cc: cgroups@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Hongfu Li <lihongfu@kylinos.cn>
+Subject: [PATCH] selftests/cgroup: fix string comparison in write_test
+Date: Mon, 11 May 2026 09:39:57 +0800
+Message-Id: <20260511013957.1749665-1-lihongfu@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Mon,  4 May 2026 13:38:31 -0400 Willem de Bruijn wrote:
-> From: Willem de Bruijn <willemb@google.com>
-> 
-> In preparation for extending to pacing hardware offload, convert the
-> so_txtime.sh test to a drv-net test that can be run against netdevsim
-> and real hardware.
-> 
-> Two preparatory patches
-> 1. support negative tests, where tests are expected to fail
-> 2. add a tc helper 
-> 
-> See individual patches for details and detailed changelog
+Use string comparison (!=) instead of numeric comparison (-ne) for
+cpuset values like "0-1".
+For example:
+$ [[ "0-1" != "2-3" ]] && echo "true" || echo "false"
+true
+$ [[ "0-1" -ne "2-3" ]] && echo "true" || echo "false"
+false
 
-Hi Willem! Looks like we have some flakiness here:
+Signed-off-by: Hongfu Li <lihongfu@kylinos.cn>
+---
+ tools/testing/selftests/cgroup/test_cpuset_v1_base.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-https://netdev.bots.linux.dev/contest.html?executor=vmksft-net-drv-dbg&test=so-txtime-py
+diff --git a/tools/testing/selftests/cgroup/test_cpuset_v1_base.sh b/tools/testing/selftests/cgroup/test_cpuset_v1_base.sh
+index 42a6628fb8bc..1c0444729e70 100755
+--- a/tools/testing/selftests/cgroup/test_cpuset_v1_base.sh
++++ b/tools/testing/selftests/cgroup/test_cpuset_v1_base.sh
+@@ -18,7 +18,7 @@ write_test() {
+ 	echo "testing $interface $value"
+ 	echo $value > $dir/$interface
+ 	new=$(cat $dir/$interface)
+-	[[ $value -ne $(cat $dir/$interface) ]] && {
++	[[ "$value" != "$new" ]] && {
+ 		echo "$interface write $value failed: new:$new"
+ 		exit 1
+ 	}
+-- 
+2.25.1
+
