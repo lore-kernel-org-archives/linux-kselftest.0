@@ -1,30 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FE2B3D667D;
-	Mon, 11 May 2026 16:28:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1B753D410D;
+	Mon, 11 May 2026 16:28:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778516930; cv=none; b=S9Zkr+y8U07pVLdHM/tQu3aFwyT83H8XyLBthDZrUU11RM8GJU+WjhdgUte6d7/7dYhjyqolWnoQZCtCEyRAi6btafwmUQ1oxt7weUIkrw+3jdB1yAQUgoFFdF0xXjKAaMrfKpnpeQissgSNyub1FQGDzRTqzy8cMrO9IhUYCZs=
+	t=1778516936; cv=none; b=lfzvr8mqFRVoOmLXQe3COGXjSn7pG/B5+tiP8mIVnLp+GAhqELwi/C59CkOLNIrNN1VxpLpH4F/tayCFu4KsKqQhJ531SYL2a6N5J0IdEEM7vqx4OlCoWYdd0u7PFYnQEwwqkqDdWEx+VrdIhJOefLDWz8yOKGXyksdR/Dzp1BY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778516930; c=relaxed/simple;
-	bh=+no3+xKhYj4yN1zC8P472TW32hg0wI8oEgLQagvwFgo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qsDntKbbbHtQ86z7r+ImlqBXojBlHxHGsbuCyk2/hOyTAxtiIVXw2W/GnhEk4qvxqhG7ESCK3OdNva7uchgKYZ3VVcb51rebgcXdtyI/cPZKl/w00BE0IjzyHiQ/XFyTN8xdcMqLRmd2Q8ZcXLhwkhAmp/EXFi0DyPkvWowIpLM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ocKsSSY+; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778516936; c=relaxed/simple;
+	bh=yYoPhsk9Y08XlKnFDSwEbmRzMpt62PawpVHiZcaxIcM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=UiZL42VBfJ5bF9NcljcPnFgNWOnFA+TMI8GBBUcuEm62UldKOd+LHB9uI1AwrqeRVitResX5NyzArtBbLno5fVW49APCN3PVkHgbJGtLE/MtwoNTaUeCG4UIbvqC67egEcdnNUfITXiOojUC/X0j3G5EtVjLDxuzfbLtH2B8GF8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rOJzuJZh; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ocKsSSY+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1DC2C2BCB0;
-	Mon, 11 May 2026 16:28:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rOJzuJZh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53511C2BCB0;
+	Mon, 11 May 2026 16:28:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778516929;
-	bh=+no3+xKhYj4yN1zC8P472TW32hg0wI8oEgLQagvwFgo=;
-	h=From:To:Cc:Subject:Date:From;
-	b=ocKsSSY+KYK+4R26X7KKnfGhqH/nrJLmE3wnlQ5oKy0PRoIo56s1EoC5CEaQ0UEJd
-	 TFsWplymFjFD5thFhB67wqQkG0315rEpigkzFf3D1F9lFm4X7eJiElR/oYSUn99HvQ
-	 RjpLoXqE+wn33ipw9CXg+xMJoj4EeoNiGBkGmb64KMHEzkMiiy+MW/g+pnosawWI8l
-	 wVbxFrSVtUk/VidFd9iTxnyAzDPJCDagE8LjMVLscwA24cw7WxARX9hP+dPyBG+HF6
-	 DUHroA+FlWg2vFXedw4XdmiM5iBjE0SihOdPmpyo0ts0B+jLAaIGCnG+T+VcAownlJ
-	 izzPCD2ORxkVQ==
+	s=k20201202; t=1778516936;
+	bh=yYoPhsk9Y08XlKnFDSwEbmRzMpt62PawpVHiZcaxIcM=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=rOJzuJZhLe7c8QR0fEQht2CNhgwN3iYrNBE2nB+JfBAxbaf4HyGHYyK0QEQPi1+aG
+	 OazlEDyQCOt19iCINDDAng4KTjZQht8m7vxtZW5LO8enAg6KnskUIf4sjhhifP6cr4
+	 WD3+KF/Uz8rQ/xoNh2Zrv9vux3/rOIrxL4pIRALQRgVg7hue5bJLTtyP2SGWrvDKxA
+	 9RwV6fgMgMiW4EjMMT+BCYzTAvnsG09Pogr1iTF5aVC3JVYR214Iz6aA5uwo9RgqHJ
+	 7881aqw/BdYOHywxDMaMTZRgqLp8P7+/4OBTwmSnugcukkSFLK1rhvD9gGqAffRYzd
+	 BihqZ+QCuCgrg==
 From: Mike Rapoport <rppt@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	David Hildenbrand <david@kernel.org>
@@ -54,10 +55,12 @@ Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-mm@kvack.org
-Subject: [PATCH v4 00/55] make MM selftests more CI friendly
-Date: Mon, 11 May 2026 19:27:44 +0300
-Message-ID: <20260511162840.375890-1-rppt@kernel.org>
+Subject: [PATCH v4 01/55] selftests/mm: hugetlb-read-hwpoison: add SIGBUS handler
+Date: Mon, 11 May 2026 19:27:45 +0300
+Message-ID: <20260511162840.375890-2-rppt@kernel.org>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260511162840.375890-1-rppt@kernel.org>
+References: <20260511162840.375890-1-rppt@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -68,180 +71,52 @@ Content-Transfer-Encoding: 8bit
 
 From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-Hi,
+Injection of a memory error with madvise() causes SIGBUS, which terminates
+the hugetlb-read-hwpoison test prematurely.
 
-There's a lot of dancing around HugeTLB settings in run_vmtests.sh.
-Some test need just a few default huge pages, some require at least 256 MB, and
-some just skip lots of tests if huge pages of all supported sizes are not
-available.
+Add a dummy SIGBUS handler to allow the test to continue regardless of
+SIGBUS.
 
-The goal of this set is to make tests deal with HugeTLB setup and teardown.
+Tested-by: Sarthak Sharma <sarthak.sharma@arm.com>
+Tested-by: Li Wang <li.wang@linux.dev>
+Reviewed-by: Li Wang <li.wang@linux.dev>
+Tested-by: Luiz Capitulino <luizcap@redhat.com>
+Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+---
+ tools/testing/selftests/mm/hugetlb-read-hwpoison.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-There are already convenient helpers that allow easy reading and writing of
-/proc and /sysfs, so adding a few APIs that will detect and update HugeTLB
-settings shouldn't be a big deal. But these nice helpers use kselftest
-framework, and many of HugeTLB (and even THP) test don't, so as a result this
-patchset also includes a lot of churn for conversion of those tests to
-kselftest framework (patches 7-19).
-
-The series break out:
-patches 1-5:   small fixes
-patch 6:       merge of hugetlb mmap tests
-patch 7:       renaming of hugepage-* to hugetlb-*
-patches 8-21:  mechanical conversion to kselftest framework
-patches 22-28: extension of thp_settings to hugepage_settings to also include
-               HugeTLB helpers
-patches 29-30: add helpers for setting up SHM limits in hugetlb-shm and
-               thuge-gen tests
-patches 31-53: integrate the new APIs in all the tests that use HugeTLB
-patches 54-55: drop HugeTLB setup from run_vmtests.sh
-
---
-@Andrew, I think it's good to go now.
-
-I'm sure Sashiko will still have somehting to say, but there is really a lot of
-room for imporvement in our selftests and with Sashiko being overly pedantic
-we'd be stuck forever.
-
-v4 changes:
-* rework fork()ed process cleanup in migration test to be more robust
-* rework HugeTLB setup to use free pages before allocating new ones,
-  add hugetlb_setup_default_exact() for compaction test
-* guard against double save/restore of THP and HugeTLB settings
-* convert uffd error macros to use ksft reporting
-* fix ksft reporting in several tests
-* gracefully bail out if default huge page size is 0 in several tests
-  and gup_test
-* add more tags, thanks everyone!
-
-v3: https://lore.kernel.org/all/20260428204240.1924129-1-rppt@kernel.org
-* add patches that fix cleanup of fork()ed processes in migration test
-* drop MADV_REMOVE changes to khugepage test
-* properly setup memfd for non-default hugepages in hugetlb-mmap test
-* add forgotten hugetlb_save_settings() to hugetlb_setup()
-* fixes for ksft reporting
-* rebase on v7.1-rc1
-* add more tags, thanks everyone!
-
-v2: https://lore.kernel.org/all/20260418105539.1261536-1-rppt@kernel.org
-* fix hugetlb mmap tests to actually test file mappings
-* increase maximal tests number in khugepaged
-* add tags, thanks everyone!
-
-v1: https://lore.kernel.org/all/20260406141735.2179309-1-rppt@kernel.org
-
-Mike Rapoport (Microsoft) (55):
-  selftests/mm: hugetlb-read-hwpoison: add SIGBUS handler
-  selftests/mm: migration: don't assume huge page is TWOMEG
-  selftests/mm: migration: make nthreads represent number of working threads
-  selftests/mm: migration: properly cleanup fork()ed processes
-  selftests/mm: run_vmtests.sh: don't gate THP and KSM tests on HAVE_HUGEPAGES
-  selftests/mm: merge map_hugetlb into hugepage-mmap
-  selftests/mm: rename hugepage-* tests to hugetlb-*
-  selftests/mm: hugetlb-shm: use kselftest framework
-  selftests/mm: hugetlb-vmemmap: use kselftest framework
-  selftests/mm: hugetlb-madvise: use kselftest framework
-  selftests/mm: hugetlb_madv_vs_map: use kselftest framework
-  selftests/mm: hugetlb-read-hwpoison: use kselftest framework
-  selftests/mm: khugepaged: group tests in an array
-  selftests/mm: khugepaged: use ksefltest framework
-  selftests/mm: ksm_tests: use kselftest framework
-  selftests/mm: protection_keys: use descriptive test names in the output
-  selftests/mm: protection_keys: use kselftest framework
-  selftests/mm: uffd-common: use kselftest framework
-  selftests/mm: uffd-stress: use kselftest framework
-  selftests/mm: uffd-unit-tests: use kselftest framework
-  selftests/mm: va_high_addr_switch: use kselftest framework
-  selftests/mm: add atexit() and signal handlers to thp_settings
-  selftests/mm: rename thp_settings.[ch] to hugepage_settings.[ch]
-  selftests/mm: move HugeTLB helpers to hugepage_settings
-  selftests/mm: hugepage_settings: use unsigned long in detect_hugetlb_page_size
-  selftests/mm: hugepage_settings: add APIs to get and set nr_hugepages
-  selftests/mm: hugepage_settings: rename and rework get_free_hugepages()
-  selftests/mm: hugepage_settings: add APIs for HugeTLB setup and teardown
-  selftests/mm: move read_file(), read_num() and write_num() to vm_util
-  selftests/mm: vm_util: add helpers to set and restore shm limits
-  selftests/mm: compaction_test: use HugeTLB helpers ...
-  selftests/mm: cow: add setup of HugeTLB pages
-  selftests/mm: gup_longterm: add setup of HugeTLB pages
-  selftests/mm: gup_test: add setup of HugeTLB pages
-  selftests/mm: hmm-tests: add setup of HugeTLB pages
-  selftests/mm: hugepage_dio: add setup of HugeTLB pages
-  selftests/mm: hugetlb_fault_after_madv: add setup of HugeTLB pages
-  selftests/mm: hugetlb-madvise: add setup of HugeTLB pages
-  selftests/mm: hugetlb_madv_vs_map: add setup of HugeTLB pages
-  selftests/mm: hugetlb-mmap: add setup of HugeTLB pages
-  selftests/mm: hugetlb-mremap: add setup of HugeTLB pages
-  selftests/mm: hugetlb-shm: add setup of HugeTLB pages
-  selftests/mm: hugetlb-soft-offline: add setup of HugeTLB pages
-  selftests/mm: hugetlb-vmemmap: add setup of HugeTLB pages
-  selftests/mm: migration: add setup of HugeTLB pages
-  selftests/mm: pagemap_ioctl: add setup of HugeTLB pages
-  selftests/mm: protection_keys: use library code for HugeTLB setup
-  selftests/mm: thuge-gen: add setup of HugeTLB pages
-  selftests/mm: uffd-stress: use hugetlb_save and alloc huge pages
-  selftests/mm: uffd-unit-tests: add setup of HugeTLB pages
-  selftests/mm: uffd-wp-mremap: add setup of HugeTLB pages
-  selftests/mm: va_high_addr_switch: add setup of HugeTLB pages
-  selftests/mm: va_high_addr_switch.sh: drop huge pages setup
-  selftests/mm: run_vmtests.sh: free memory if available memory is low
-  selftests/mm: run_vmtests.sh: drop detection and setup of HugeTLB
-
- Documentation/admin-guide/mm/hugetlbpage.rst  |  15 +-
- tools/testing/selftests/mm/.gitignore         |   4 +
- tools/testing/selftests/mm/Makefile           |  13 +-
- tools/testing/selftests/mm/compaction_test.c  | 115 +-----
- tools/testing/selftests/mm/cow.c              |  31 +-
- .../selftests/mm/folio_split_race_test.c      |  25 +-
- tools/testing/selftests/mm/guard-regions.c    |   2 +-
- tools/testing/selftests/mm/gup_longterm.c     |   5 +-
- tools/testing/selftests/mm/gup_test.c         |  15 +
- tools/testing/selftests/mm/hmm-tests.c        |  24 +-
- tools/testing/selftests/mm/hugepage-mmap.c    |  78 ----
- .../{thp_settings.c => hugepage_settings.c}   | 316 +++++++++++++--
- .../{thp_settings.h => hugepage_settings.h}   |  82 +++-
- tools/testing/selftests/mm/hugetlb-madvise.c  | 215 ++++------
- tools/testing/selftests/mm/hugetlb-mmap.c     | 143 +++++++
- .../{hugepage-mremap.c => hugetlb-mremap.c}   |  15 +-
- .../selftests/mm/hugetlb-read-hwpoison.c      | 121 +++---
- .../mm/{hugepage-shm.c => hugetlb-shm.c}      |  69 ++--
- .../selftests/mm/hugetlb-soft-offline.c       |  45 +--
- .../{hugepage-vmemmap.c => hugetlb-vmemmap.c} |  46 +--
- tools/testing/selftests/mm/hugetlb_dio.c      |  15 +-
- .../selftests/mm/hugetlb_fault_after_madv.c   |   9 +-
- .../selftests/mm/hugetlb_madv_vs_map.c        |  22 +-
- tools/testing/selftests/mm/khugepaged.c       | 380 ++++++++----------
- tools/testing/selftests/mm/ksm_tests.c        | 182 ++++-----
- tools/testing/selftests/mm/map_hugetlb.c      |  88 ----
- tools/testing/selftests/mm/migration.c        | 147 ++++---
- tools/testing/selftests/mm/pagemap_ioctl.c    |  13 +-
- tools/testing/selftests/mm/pkey-helpers.h     |  15 +-
- .../testing/selftests/mm/prctl_thp_disable.c  |   2 +-
- tools/testing/selftests/mm/protection_keys.c  | 130 +++---
- tools/testing/selftests/mm/run_vmtests.sh     | 174 ++------
- tools/testing/selftests/mm/soft-dirty.c       |   2 +-
- .../selftests/mm/split_huge_page_test.c       |   2 +-
- tools/testing/selftests/mm/thuge-gen.c        |  96 +----
- tools/testing/selftests/mm/transhuge-stress.c |   2 +-
- tools/testing/selftests/mm/uffd-common.h      |  18 +-
- tools/testing/selftests/mm/uffd-stress.c      |  43 +-
- tools/testing/selftests/mm/uffd-unit-tests.c  | 138 ++++---
- tools/testing/selftests/mm/uffd-wp-mremap.c   |  20 +-
- .../selftests/mm/va_high_addr_switch.c        |  42 +-
- .../selftests/mm/va_high_addr_switch.sh       |  41 +-
- tools/testing/selftests/mm/vm_util.c          | 134 +++---
- tools/testing/selftests/mm/vm_util.h          |  15 +-
- 44 files changed, 1500 insertions(+), 1609 deletions(-)
- delete mode 100644 tools/testing/selftests/mm/hugepage-mmap.c
- rename tools/testing/selftests/mm/{thp_settings.c => hugepage_settings.c} (58%)
- rename tools/testing/selftests/mm/{thp_settings.h => hugepage_settings.h} (51%)
- create mode 100644 tools/testing/selftests/mm/hugetlb-mmap.c
- rename tools/testing/selftests/mm/{hugepage-mremap.c => hugetlb-mremap.c} (92%)
- rename tools/testing/selftests/mm/{hugepage-shm.c => hugetlb-shm.c} (55%)
- rename tools/testing/selftests/mm/{hugepage-vmemmap.c => hugetlb-vmemmap.c} (76%)
- delete mode 100644 tools/testing/selftests/mm/map_hugetlb.c
-
-
-base-commit: 254f49634ee16a731174d2ae34bc50bd5f45e731
---
+diff --git a/tools/testing/selftests/mm/hugetlb-read-hwpoison.c b/tools/testing/selftests/mm/hugetlb-read-hwpoison.c
+index 46230462ad48..ad3198b444ce 100644
+--- a/tools/testing/selftests/mm/hugetlb-read-hwpoison.c
++++ b/tools/testing/selftests/mm/hugetlb-read-hwpoison.c
+@@ -10,6 +10,7 @@
+ #include <sys/statfs.h>
+ #include <errno.h>
+ #include <stdbool.h>
++#include <signal.h>
+ 
+ #include "kselftest.h"
+ 
+@@ -261,6 +262,10 @@ static int create_hugetlbfs_file(struct statfs *file_stat)
+ 	return -1;
+ }
+ 
++static void sigbus_handler(int sig)
++{
++}
++
+ int main(void)
+ {
+ 	int fd;
+@@ -273,6 +278,7 @@ int main(void)
+ 	};
+ 	size_t i;
+ 
++	signal(SIGBUS, sigbus_handler);
+ 	for (i = 0; i < ARRAY_SIZE(wr_chunk_sizes); ++i) {
+ 		printf("Write/read chunk size=0x%lx\n",
+ 		       wr_chunk_sizes[i]);
+-- 
 2.53.0
+
