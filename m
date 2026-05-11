@@ -1,83 +1,71 @@
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB16243E9CB
-	for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 17:10:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 381D644E040
+	for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 17:23:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778519451; cv=none; b=jZ5FT7T+DxTqUuewB37bEuMCa2Aa55bs1ACc+jdimyUAIGkatGgDZ/CjImo9zNFEkh7ClFx5weWO7vsVCSNoH1vjBwa/ZkT/DpW9H+wglH88DcpJYQ5KJgc1ZcZJCORh7oGbawv9arNKSnNF+GeilfHT4WEP8wEo+AOIA4aIJ9Y=
+	t=1778520220; cv=none; b=uCKwo8EBdzRLHPmFaLgeS14Xd8/LCM42nNTc/egFCkto8KERzp1czD/9a8oa9mzT171kOvXOeE9U4cAgagZjYTFRlbkcb2uXVuGWMsTi+/gZmYmeUdpFhABaTk6ufU5w21Umk7onLi1w+vwtJImUfaz6i4Iq5MfbUgl+nrauOec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778519451; c=relaxed/simple;
-	bh=xEf0DcTeuh8O7q7xkn5lS+B/P1HAUfQRMFjpy4xw5iQ=;
+	s=arc-20240116; t=1778520220; c=relaxed/simple;
+	bh=HYJUFll3XSBkLjGvCt2tKZdporDIDvggiHykAh6+xzc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ufDOGUprlh329tJ9H2SzRY5khG6vVl5xqupLXS5cnUFuRPl7bCBSWbwFexzkqWOH+AZYngkXSc7YUjW6FNB8gzvKF4VcN3kadgqAwjDSLVLOSZsC2V5CrqNJ5j0N4X0tA0KfI52bcg8OQTguEtfxHiPneP1CbgSCaf6EhuiRTOE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=T4kf8jSe; arc=none smtp.client-ip=209.85.221.47
+	 Content-Type:Content-Disposition:In-Reply-To; b=X6KcOmsMiLhG0TPUnCPwPAoUYbh4W5LmA1tRTS3YIUoloR1FdVn32+kjKBVSrDl5kRB5Uqfpmao70MQwX8Vr6aJ7CkBRTG2e4laEh2HcqnrSdWN+nhGT8PbrNcqDONuRKRAaa/0BUTACBXtpCIbEd3tY0laoaL/Vpjs0QMoYzFI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=Ppn8o/8T; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=ftZs2aGS; arc=none smtp.client-ip=195.135.223.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="T4kf8jSe"
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-44a74032ff8so3405020f8f.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 10:10:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1778519448; x=1779124248; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4WseMM2s1lBw35z6Gvcd4yWHkkkXHH2E0/2CJvqDOO4=;
-        b=T4kf8jSeOB6D1KH4+hz17L8PlZJvkCcLExTX6fIa3So+FxmRGa4ATaLAVDI6tLpw7G
-         Rl9rdWd9+QTz3OPYpx1XD4GLjTTj8gl43dhMFgAeddowgyy6TX2HhsKBzwgFF9Tme4UC
-         AkBz1IuOF+jSnHtpcdl25bSI+8+aWLlziCiPbMuz1Y/pFDiFMFIOaOvsAoT+FC1X1+FZ
-         gdlnJuMHpgWlo/rZyHtvLb+eWRhyHu/3Kx33HgER2+YuJGQ3Ty+2waY5fqTwgaSBONcL
-         uvEoy9bD6ZVRW1Mx/JrHTWsRD1llv7x/I+eMMr2sRdoVE+71UHzuSuv1HFmx3f3RXE6P
-         uHfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778519448; x=1779124248;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4WseMM2s1lBw35z6Gvcd4yWHkkkXHH2E0/2CJvqDOO4=;
-        b=XuLZTFox9Ry5Y2+8RExVKlql83XlW8bQGKD3jdwQyVfDugO/m6j9x+AIoeNc/NxF+K
-         NjCkOOY9XAUhlTCjQDfUrV3bws4jF8PENWQeGqo5YL7LzUwUn3kxGm4bmwoIGrv7zzqa
-         ag5R1rTWLjZAWvXZD3xlZu9+tgXkb+2oOVv7045M1kS4kukzJMpiNbcU+rmWmDKmFT1L
-         nClqZgKR9AIOm6cLfpAnsK6ruX+f1VgqgCeY2hiDEOtt89qC1RwYnHZQD631++93iLbZ
-         twhXOwB6FQYiBm9lRUlUxx4kZsapGxXHJYpksPEyn38zZ/bgOE+ImPVmNj9bzwjY1kpT
-         zZVw==
-X-Forwarded-Encrypted: i=1; AFNElJ+y/8ealXTUtKGEvSsRE7AK86vTmOHbm4ckmQLKqetW+z4w0MPBfGnSC5CDLq5llaB6QjtTxUNi0q31HrMFoTQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwFbRcAquTelIR4aco2OuE6zsWoSKhuFuAI45TQLNNVyq8QrpJo
-	bRSe5eWWRi0/1NZMbMmNdo29PxKcIPlWwiO9eXAzIxOV7oivHgce1qJ2qaSEI0FQ2Wk=
-X-Gm-Gg: Acq92OEKDcjpl0OkQXQ4MaD9ep69UuwyeT2s3MdjInR4/CrdNWv54AadC2Sfkper3eC
-	MQHiimUS16967ljA/7WEKnaFOkYY74EvyCYiPwGRD7Kmuk505S9Ml1+pAuEbzwIiYNr+yL/WfE/
-	3B5S2MTW8qiVrYyRhCE8z7Nck3K+Y/B3da2Ywvx8HliV0ORpEwJriGXOy1L0tMYy5objOMp8s2P
-	FQD6jAB+Xm6YcxE0xEugdqWQ1Q8MXRTD+5pwYrRVch6xmMQXuLiwdBpADXmovy9U0fwMx9NONGD
-	f/vHtPBb8SuY+zzeFdP1ylvPmyQ6hjuVwzQNoRZMgj50lazzPrZbxDXP6kcTCBoD/1ft+WYA0pD
-	LRRX3NKP6wZm/NXpdAjoDc711xgRMgzjZW1J1F+wH4TEJhdY7OEIUBpYl4Ykz2oqflzfU6rLXNs
-	efu70P+6TCGtPmm2uUkw+WKhpC9NWboHnoX2EQ
-X-Received: by 2002:a05:6000:230e:b0:45a:c0e1:37b with SMTP id ffacd0b85a97d-45ac0e103bemr696373f8f.32.1778519448144;
-        Mon, 11 May 2026 10:10:48 -0700 (PDT)
-Received: from localhost (109-81-87-110.rct.o2.cz. [109.81.87.110])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45491bae13csm26175978f8f.29.2026.05.11.10.10.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 May 2026 10:10:47 -0700 (PDT)
-Date: Mon, 11 May 2026 19:10:46 +0200
-From: Michal Hocko <mhocko@suse.com>
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="Ppn8o/8T";
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="ftZs2aGS"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id E84CC5D4BA;
+	Mon, 11 May 2026 17:23:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1778520215; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ZIuycZuqU7w5gAlpgfql0KoA1oChA0h/EzoFK2I3ZCA=;
+	b=Ppn8o/8TUB1oG3w+dB7fJl0BC3+BSKE55mIia9CE/Uc1Nzs7MGN+Z+w3FiUPeTy49NCoGY
+	XoahOXqKX2DJjo/xVxBQQIvT+N25lYzoA8Nm7NPot6aNhFJImOQrSQAWgfEhVdEYjMoNt8
+	u03yXeKCeaUFdwz6XQHt7Rba48Uldx4=
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.com header.s=susede1 header.b=ftZs2aGS
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1778520214; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ZIuycZuqU7w5gAlpgfql0KoA1oChA0h/EzoFK2I3ZCA=;
+	b=ftZs2aGScDRbkIlQT/mhP08KgOyGShlWieKkMYWvWeDvIQPr9eK6d2GczqGSlIxC7ROTPj
+	s4dCxpdr4nuGE2shYVOq0SjocwobEI2tYLPbPRPorPeh3GNz7Lras0rA1fDGaxMvKiFIrz
+	z0a7N8ZQTnKgz6rNhA0qmUTnoPguGKQ=
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 5031D593A3;
+	Mon, 11 May 2026 17:23:34 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id KI9ZEJYQAmqyFAAAD6G6ig
+	(envelope-from <ailiop@suse.com>); Mon, 11 May 2026 17:23:34 +0000
+Date: Mon, 11 May 2026 19:23:25 +0200
+From: Anthony Iliopoulos <ailiop@suse.com>
 To: Sasha Levin <sashal@kernel.org>
-Cc: Breno Leitao <leitao@debian.org>,
-	Andrew Morton <akpm@linux-foundation.org>, corbet@lwn.net,
-	skhan@linuxfoundation.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	gregkh@linuxfoundation.org
-Subject: Re: [PATCH] killswitch: add per-function short-circuit mitigation
+Cc: Florian Weimer <fw@deneb.enyo.de>, corbet@lwn.net,
+	akpm@linux-foundation.org, skhan@linuxfoundation.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, gregkh@linuxfoundation.org
+Subject: Re: [PATCH v2] killswitch: add per-function short-circuit mitigation
  primitive
-Message-ID: <agINlnNN4ubZgyiN@tiehlicka>
-References: <af5Z2IvtS5pVorSl@laps>
- <agG_PZ3qcl6TwLnL@gmail.com>
- <agHUp8ulaWJ75WU5@tiehlicka>
- <agHcFCRVSn5ra5Kc@laps>
- <agHeZPA3eHhJHIsQ@tiehlicka>
- <agHgDgwu8H9Opzpl@laps>
- <agHm9Vj7bPPCRS1g@tiehlicka>
- <agH7_QBPLWKTZucB@laps>
- <agH_bGUTvWm2h5g4@tiehlicka>
- <agIHsN9tiIHnVTeV@laps>
+Message-ID: <agIQjd78N_6NMN2U@technoir>
+References: <20260508195749.1885522-1-sashal@kernel.org>
+ <87ecjku6y7.fsf@mid.deneb.enyo.de>
+ <af8pw54Y-Q18kSR0@laps>
+ <agGweC12aloH8DBq@foo>
+ <agG6PnVAFMsb3iiz@laps>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -86,70 +74,165 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <agIHsN9tiIHnVTeV@laps>
+In-Reply-To: <agG6PnVAFMsb3iiz@laps>
+X-Spam-Flag: NO
+X-Spam-Score: -4.01
+X-Rspamd-Action: no action
+X-Spamd-Result: default: False [-4.01 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.com:s=susede1];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ARC_NA(0.00)[];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	MISSING_XM_UA(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,suse.com:dkim];
+	DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	DKIM_TRACE(0.00)[suse.com:+]
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Rspamd-Queue-Id: E84CC5D4BA
+X-Spam-Level: 
 
-On Mon 11-05-26 12:45:36, Sasha Levin wrote:
-> Could you describe an existing infrastructure I can use here?
-
-I think it would help to CC maintainers of subsystems that provide
-kernel modification functionality. They will surely have a better
-insight than me.
-
-> Let's look at
-> this recent "Copy Fail" thing as an example.
+On Mon, May 11, 2026 at 07:15:10AM -0400, Sasha Levin wrote:
+> On Mon, May 11, 2026 at 12:33:28PM +0200, Anthony Iliopoulos wrote:
+> > On Sat, May 09, 2026 at 08:34:11AM -0400, Sasha Levin wrote:
+> > > On Sat, May 09, 2026 at 02:02:24PM +0200, Florian Weimer wrote:
+> > > > * Sasha Levin:
+> > > >
+> > > > > When a kernel (security) issue goes public, fleets stay exposed until a patched
+> > > > > kernel is built, distributed, and rebooted into.
+> > > > >
+> > > > > For many such issues the simplest mitigation is to stop calling the buggy
+> > > > > function. Killswitch provides that. An admin writes:
+> > > > >
+> > > > >     echo "engage af_alg_sendmsg -1" \
+> > > > >         > /sys/kernel/security/killswitch/control
+> > > > >
+> > > > > After this, af_alg_sendmsg() returns -EPERM on every call without
+> > > > > running its body. The mitigation takes effect immediately, and is dropped on
+> > > > > the next reboot -- by which point a patched kernel is hopefully in place.
+> > > >
+> > > > Do you expect this to be safe to enable in kernel lockdown mode (i.e.,
+> > > > with typical Secure Boot configurations in distributions)?
+> > > 
+> > > Yes: under lockdown, killswitch has to be configured on the cmdline. Runtime
+> > > engage is gated on the new LOCKDOWN_KILLSWITCH reason.
+> > 
+> > Basically this proposal allows for any function to be overridden on a
+> > production kernel as long as no lockdown level is enabled, which is quite
+> > dangerous.
+> > 
+> > Assuming this is acceptable (which I am not sure it should be), then this
+> > is equivalent to the existing error injection code that we already have in
+> > the kernel (CONFIG_FAIL_FUNCTION) minus the explicit whitelisting on a per
+> > function basis required to permit injection.
 > 
-> I can obviously build my own kernel and enroll my own key, but 99.9% of our
-> users won't be doing that.
-> Livepatching, or manually building a module that just injects a kprobe is out
-> of the question as we previously agreed.
+> The mechanism is the same, but I don't think reusing fail_function works for
+> what killswitch is trying to do.
 
-Onless I am mistaken you can enroll your own key through MOK. But you
-are right that this is an additional step. But the real question is
-whether this is a major road block for users of this specific feature.
+How so? The kprobe handler is essentially the same. Setting the
+whitelisting aside, it is currently possible to do:
 
-> systemtap falls into the same bucket as building my own module.
+echo af_alg_sendmsg > /sys/kernel/debug/fail_function/inject
+echo 0xffffffffffffffff > /sys/kernel/debug/fail_function/af_alg_sendmsg/retval
+echo 100 > /sys/kernel/debug/fail_function/probability
+echo -1 > /sys/kernel/debug/fail_function/times
+
+and that will return -EPERM, taint the kernel, and log the stacktrace on
+dmesg on every rejected call.
+
+> > Given that this achieves the exact same result, then why don't we consider
+> > simply removing the whitelisting restriction from fail_function altogether
+> > and use that instead? The only thing missing then would be the boot param
+> > parsing and setup.
 > 
-> BPF doesn't help because bpf_override_return() requires the target to be on the
-> same within_error_injection_list() whitelist as fault injection, and the CVE
-> targets never are. Some of our fleet doesn't even have BPF enabled either, but
-> that's the smaller objection.
+> fail_function lives in debugfs, and on a typical Secure Boot distro debugfs is
+> itself blocked by LOCKDOWN_DEBUGFS at integrity level. Dropping the whitelist
+> doesn't help when the operator can't write to the file in the first place.
+
+Agreed, for this to work fail_function would also need to parse boot
+params similarly.
+
+> Killswitch is in securityfs so that engaging it can be its own lockdown
+> decision rather than being lumped in with everything debugfs exposes.
+
+Sure but it makes no difference when a kernel is locked at integrity it
+will anyway block either solution, this makes no practical difference.
+
+> Fault injection in general isn't enabled on production kernels - having to
+> enable CONFIG_FUNCTION_ERROR_INJECTION will drag in that entire infra into
+> kernels that don't need it.
+
+There's very little code that CONFIG_FUNCTION_ERROR_INJECTION brings in
+apart from the override_function_with_return trampoline and
+lib/error-inject.c which becomes obsolete without the need to whitelist.
+
+Your proposal also depends on FUNCTION_ERROR_INJECTION necessarily.
+
+The only thing that would be missing and not usually compiled in is
+CONFIG_FAIL_FUNCTION that just implements the debugfs ops interface
+which you are exposing via securityfs instead.
+
+> > This way we'll be removing a few hundred lines of code instead of adding
+> > more duplication, while enabling the same functionality.
 > 
-> I can't use fault injection because:
-> 
->  a. It's almost never built in production/distro kernels, and I suspect this
-> won't change.
->  b. The functions I need are not whitelisted.
->  c. Even if (a) and (b) were addressed, fault injection would still need a
-> securityfs front-end, a cmdline parser, a module-unload notifier, a taint flag,
-> and audit on engage and disengage. By the time those land in fail_function and
-> tie into/refactor the fault injection code, the net diff is bigger than this
-> proposal.
+> I'm not even sure there would be hundreds of lines saved here...
 
-I cannot comment on fault injection imeplementation details of course
-but I have to say that the whitelist nature is something that makes its
-use very limited. Maybe this is a good opportunity to change the
-approach.
+I'm talking specifically about whitelisting which would essentially be
+useless:
 
-> 
-> In my case I can remove the module, but not if I run a distro that shipped with
-> CONFIG_CRYPTO_USER_API_AEAD=y (like RHEL/SUSE).
+wc -l lib/error-inject.c include/asm-generic/error-injection.h include/linux/error-injection.h
+ 246 lib/error-inject.c
+  43 include/asm-generic/error-injection.h
+  28 include/linux/error-injection.h
+ 317 total
 
-If you look at copy fail[2], IIRC algif_aead, esp[46] and rxrcp are all
-modules that could be blacklisted.
+plus a hundred or so annotations of ALLOW_ERROR_INJECT and a tiny bit of
+image space savings from dropping that whitelist section from the binary.
 
-> I can use "initcall_blacklist=" hack and reboot, but as things stand today,
-> I'll need to be rebooting few times a day.
+> The pieces that make killswitch what it is (cmdline parser,
+> LOCKDOWN_KILLSWITCH, TAINT_KILLSWITCH, audit on engage and disengage, the
+> module-unload notifier, etc) add up to roughly 200 lines that would move into
+> fail_function unchanged. I really don't think we'd end up with much of a line
+> delta.
 
-with your just disable some functions in the kernel you might need to
-reboot even more. But more seriously...
+All of that apart from the cmdline parser is already present in the
+fault/error injection code, directly or indirectly. I can see though the
+appeal of having killswitch cleanly separated from anything else, but
+perhaps changing the existing code is more approachable.
 
-> Even if I'm okay with rebooting that often (and I really really would prefer
-> not to), this doesn't solve the issues of a larger fleet of servers that can't
-> just reboot that often.
-> 
-> What am I missing?
+> That said, the kprobe and override machinery underneath both of these is fair
+> game for a shared helper that fail_function and killswitch both build on. We can
+> look at extracting that as a follow-up once killswitch lands, but it's a
+> separate piece of work from the policy questions in this thread.
 
-For one, you are missing more maintainers of code modification infrastructures. 
--- 
-Michal Hocko
-SUSE Labs
+Sure, but my point is that if this is acceptable, then it follows that:
+
+- whitelisting becomes irrelevant (even if fail_function remains
+  separate), since the exact same capability will be exposed via the
+  killswitch interface for all functions anyway, so why would we need it
+  to protect error-injection
+
+and subsequently:
+
+- fail_function would become somewhat redundant since the same
+  functionality would be achieved via the securityfs (or just bpf, which
+  is already the case).
+
+Regards,
+Anthony
