@@ -1,81 +1,111 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A2DC3093A6;
-	Mon, 11 May 2026 14:31:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 264A5308F15
+	for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 14:36:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778509915; cv=none; b=LT+4FX01G2QZ6fAm6lBFGVdHHybsGQhx7ZVRqcQTn8Ucqc23WJ0Oo6Mj36JMLiXA5GPI22NPPP5GLKS6NgqjuaCrVGeCNfq6fzRY94VVpKXSjpIY02gRZTNrUMVmh4Wc7Ju125RMNy6GuItardXw1JLUvCeZ0uYziISUzEGRobc=
+	t=1778510210; cv=none; b=O1Xbd3zmGVbPmBZaFy2++HqvKXj0L2NLYCmbrb1HWGjHt1Erc7pG56F8k1qw8bCkRWzUE7fjVZusTr14uAOEQiHJhW0GInDOlM0DmwKVyl+jLJ8isi9i9hH1B3qwELAgdd6sEOz6vvjz23MKcdhdUQETN3+vF4Amu1baoNkaJFA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778509915; c=relaxed/simple;
-	bh=8v4KE2KRo2HE0fobFmYT57AIdsiSReZ7GhIBsHolgrk=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=KbGRSLntdMODqo8TmlScaO362n9MkmtdQo+HM009oYLMdzMqx3GshX3edw5DOzN+C/Nha+sN0spwjuCYRzY3y8Hs9QMAZ2C1GeRb/K4JLClP0KzDs/R7B/3GdLRlw7E/qifTCxwsIhGqAl6P438qXO3ZAC468x83xaZDzimm3z4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HBOSTKmn; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778510210; c=relaxed/simple;
+	bh=OCWkO9kiaVtlkjvw4jaBUr/0GwYS4dSFaaNA889cWuI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ac+qoUYTg2Qd/IdHKCd9hg9gNT3F9LjxDvmtjOaeRf/vdnZllUmnrDp9o7yeYAJAVH9nffxqIxXeN/FWwXYgBZRrgbQ2s3gqoVA4JQUSRBTqApVmSbCGGDTYuo62aWTaJZIrIt2nxklcWdDgGO/H43bRzKYwmNniOgwnmFuyTLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qVwyXVXD; arc=none smtp.client-ip=209.85.208.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HBOSTKmn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1807BC2BCB0;
-	Mon, 11 May 2026 14:31:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778509914;
-	bh=8v4KE2KRo2HE0fobFmYT57AIdsiSReZ7GhIBsHolgrk=;
-	h=Date:Subject:Cc:To:From:References:In-Reply-To:From;
-	b=HBOSTKmnhj33V0nUdj71dzfNEmq3D9TOrPatRGeRiavQ61fC0bJkij0n5BBMnByDn
-	 IjcXZAvuaZh5I5SYb10zILcaBvNcjub+2BC5ruLihW6YJpZif8VKqJnkCkJQy2teP6
-	 I2+hXQqg1Y206FkWQpDt3Jd63GpCD1G+0ElhKKuDdxKZyAfhmjkIZPu/39ogOsMxRp
-	 Qp7qK1oHVWutd6rMXOjGnT1xlTY1zaa6pmo1Jg7Jm0HCuUuUI3nyo4Igyi96I8QY6B
-	 3RWP6iLMaOU+NS7A8HQLmPo35XAYUiVOHz4x/zLeJHEEKUUnby97x9kVApXXuZtULT
-	 UdGQQ/s9EwerA==
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qVwyXVXD"
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-6804e24803bso1361648a12.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 07:36:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778510207; x=1779115007; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OvCAfW/ab6cqkSL7XlF/lvlNJfGaNVLCaQnRtMsWK2M=;
+        b=qVwyXVXDXjOa+6c6PwSXZJxOkTjw/lPS7mWwagdfLA2KQrGISLN2rec/57KMU/o2I5
+         ifAlrcfsU59+Qg03Xp7nYuZzPm6dWn9Mg++MhRM/6kADpxa/K4mYTEY+icnLoaIKo+7x
+         cIO+chUzyLebYOxwmbNFm0RDZ6eq5ZweDWcsROX+PlFbboxI2vJS2va8tleDO1+r2Rq6
+         7LZYDFAKAAjP6bEX1BvsJl058ZCog3KAvZdSSdAvi/JXY23hQ9ywYjeZFOfVLeJEAkX2
+         T+w7PlT/Bc8oCLZdJntfBKLC8odkmQz4xyeonwcvvFJV56kDKM5BPR+DQcbKbn6mZLLu
+         rTMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778510207; x=1779115007;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OvCAfW/ab6cqkSL7XlF/lvlNJfGaNVLCaQnRtMsWK2M=;
+        b=KMHDJU936JGogmDp6it9Ei52BGMhNGHCZQqGc7oDl6J66siP35Q0mQchP4GP7fWR1N
+         v6uO89JG8n7QZ7Zg8jAclV3YBUAReUPQiLpyH7hMjV0nStiO38arZl0jwgHUmScrwlEU
+         ikInp0vi9ammz7zSfdFibQBoXilyuz9kGtglogi7h0c1vMZZV7Np53nk/FJabqgN1Kta
+         DB/WgufGVYzYTaJ1QdYYMFzWuRtGMPYGSRk7QF0foBu2bzrr5ysqm5T5CeO+rRIUXK5F
+         ntu+OXklDJp5KjJIrm+n/1iscT3s4DG06DUgJLKhkt6sOdiqlnVeQ/Gn+rTq+35CVN5y
+         0eUQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/Wy4LMTyo4mr0wIozqOO99oe9iH7oFJol8k2I78pDNReURTE0wuRn8A86LtPC3iyaOHHSluWTxqFrwgt67QUc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw+Dtk83E7Ud5OaoFCBsHlBHF2QwrX+u9D0v4euz651SCVeQMmu
+	+G85W9H20d1qqkl3Hxmp20LQY4+Dx32b6Ehc/MPxqrgU5qIvneena8DC
+X-Gm-Gg: Acq92OH2taKd82ziEIYqIzzA5MVDOuSwnrIrkVK2HWR2O32X+fG6wYqDSaKzakd03j8
+	DHk6j8NzMSF5f2D/KPVZ3QsZaslpmdJPYMzUk2LBrc4TP7PXyv45zEkL/OBR91Njo87ozUV6to8
+	z6sCUlizXOARRWiTXWo3Ot1t/9qQhnMMI9ywP564OhSHxgLEcJApLxJB8c9Azk5lD761MlGDQDs
+	pq9g7w7pRHZKdY+eQ7sfz3uE99VJ2iHn8sLo4B2N0kSSPKc40DmvRs/c5i+GTHdOvBl+yX1SOab
+	m6MvRtT4ZXB6ORx+CGxroRRy29oVlO/GIZdiTZmZYg1UK0kADmNzp/WQZV97ui3gYmMzH/ajtr+
+	ojkTDjIQxaB3+rIybKAigt50xDJ4yqtKVrh9dZatOysBrFUPhi4zqm12K9ThNWAfMpNnAB1Vt9M
+	CZokWVXJ8i/pdjI6+n61/vj2WQFg2oX3T4QAv9rKl+n4lYdmhvbZ1zZqRkjDdobQ3+2HSTAjL4t
+	aTx0tOopfl1MCfHKc01jwQiGy8=
+X-Received: by 2002:a05:6402:3809:b0:670:8add:2b98 with SMTP id 4fb4d7f45d1cf-67ef07ba8f0mr7220503a12.14.1778510207251;
+        Mon, 11 May 2026 07:36:47 -0700 (PDT)
+Received: from arch-piotr.tailb7ebba.ts.net (226.55.classcom.pl. [195.150.55.226])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-67ef0e1c044sm3651347a12.27.2026.05.11.07.36.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 May 2026 07:36:46 -0700 (PDT)
+From: Piotr Zarycki <piotr.zarycki@gmail.com>
+To: seanjc@google.com,
+	pbonzini@redhat.com
+Cc: shuah@kernel.org,
+	kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Piotr Zarycki <piotr.zarycki@gmail.com>
+Subject: [PATCH] KVM: selftests: sync_regs_test: use KVM_SYNC_X86_VALID_FIELDS
+Date: Mon, 11 May 2026 16:34:26 +0200
+Message-ID: <20260511143426.1242013-1-piotr.zarycki@gmail.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 11 May 2026 16:31:50 +0200
-Message-Id: <DIFX59JPJI9U.1Y41563GD6YJL@kernel.org>
-Subject: Re: [PATCH v4 1/3] driver core: platform: remove software node on
- release()
-Cc: "Andy Shevchenko" <andriy.shevchenko@intel.com>, "Bartosz Golaszewski"
- <bartosz.golaszewski@oss.qualcomm.com>, "Greg Kroah-Hartman"
- <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- "Dmitry Torokhov" <dmitry.torokhov@gmail.com>, "Brendan Higgins"
- <brendan.higgins@linux.dev>, "David Gow" <david@davidgow.net>, "Rae Moar"
- <raemoar63@gmail.com>, "Andy Shevchenko" <andy@kernel.org>,
- <driver-core@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>
-To: "Bartosz Golaszewski" <brgl@kernel.org>
-From: "Danilo Krummrich" <dakr@kernel.org>
-References: <20260430-swnode-remove-on-dev-unreg-v4-0-01574da0aed3@oss.qualcomm.com> <20260430-swnode-remove-on-dev-unreg-v4-1-01574da0aed3@oss.qualcomm.com> <afNEwrHLNTA4ywrN@ashevche-desk.local> <CAMRc=McH0zKz87z0TwPFrzZHMW6psytMaLZybM3pUk6OvUfo9Q@mail.gmail.com> <CAMRc=Mc_huU0HxHpD+RMNWeX2Sg84-LEg8y96BcF_qdtPr31eA@mail.gmail.com> <DIFWH6TWTOOT.37CW17JHKWBQR@kernel.org> <CAMRc=MeiL+MeFsiPrWja2qJx=zU3RXKLL7CDccX1epXWgNtvdA@mail.gmail.com>
-In-Reply-To: <CAMRc=MeiL+MeFsiPrWja2qJx=zU3RXKLL7CDccX1epXWgNtvdA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Mon May 11, 2026 at 4:17 PM CEST, Bartosz Golaszewski wrote:
-> On Mon, 11 May 2026 16:00:23 +0200, Danilo Krummrich <dakr@kernel.org> sa=
-id:
->> On Mon May 11, 2026 at 9:33 AM CEST, Bartosz Golaszewski wrote:
->>> Danilo: if there are no further comments, can you pick it up for v7.1?
->>
->> It seems that sashiko has a valid concern in [1]; can you confirm?
->>
->> [1] https://sashiko.dev/#/patchset/20260430-swnode-remove-on-dev-unreg-v=
-4-0-01574da0aed3%40oss.qualcomm.com
->>
->
-> Yes, I explained it here[1]. Basically it's similar to how we need to cal=
-l
-> platform_device_add_data() for devices created with platform_device_alloc=
-().
->
-> We can consider adding platform_device_add_software_node() once there's
-> a potential user but for now I'd just leave it like this.
+Use KVM_SYNC_X86_VALID_FIELDS instead of open-coding the same three
+flags, ensuring the test stays in sync with any future additions.
 
-But there are users that already need this, no? There is Xe [1] and Surface=
- GPE
-[2], or am I missing something?
+Signed-off-by: Piotr Zarycki <piotr.zarycki@gmail.com>
+---
+ tools/testing/selftests/kvm/x86/sync_regs_test.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-[1] https://elixir.bootlin.com/linux/v7.1-rc2/source/drivers/gpu/drm/xe/xe_=
-i2c.c#L99
-[2] https://elixir.bootlin.com/linux/v7.1-rc2/source/drivers/platform/surfa=
-ce/surface_gpe.c#L308
+diff --git a/tools/testing/selftests/kvm/x86/sync_regs_test.c b/tools/testing/selftests/kvm/x86/sync_regs_test.c
+index e0c52321f87c..8f9239f9d357 100644
+--- a/tools/testing/selftests/kvm/x86/sync_regs_test.c
++++ b/tools/testing/selftests/kvm/x86/sync_regs_test.c
+@@ -79,7 +79,7 @@ static void compare_vcpu_events(struct kvm_vcpu_events *left,
+ {
+ }
+ 
+-#define TEST_SYNC_FIELDS   (KVM_SYNC_X86_REGS|KVM_SYNC_X86_SREGS|KVM_SYNC_X86_EVENTS)
++#define TEST_SYNC_FIELDS   KVM_SYNC_X86_VALID_FIELDS
+ #define INVALID_SYNC_FIELD 0x80000000
+ 
+ /*
+@@ -255,7 +255,6 @@ KVM_ONE_VCPU_TEST(sync_regs_test, req_and_verify_all_valid, guest_code)
+ 	struct kvm_regs regs;
+ 
+ 	/* Request and verify all valid register sets. */
+-	/* TODO: BUILD TIME CHECK: TEST_ASSERT(KVM_SYNC_X86_NUM_FIELDS != 3); */
+ 	run->kvm_valid_regs = TEST_SYNC_FIELDS;
+ 	vcpu_run(vcpu);
+ 	TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_IO);
+-- 
+2.54.0
+
