@@ -1,41 +1,73 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 552AB191F91;
-	Mon, 11 May 2026 15:05:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 427272F1FE3
+	for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 15:09:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778511952; cv=none; b=NlPWyayOUx4wMR8+QB1zvwDxxa6bYZ+fRWVZryNc1mgWUgE88RC6vpNNlfNG1hh/iEHzUcdvVb60OcNCYWpPf3xlBDAF+bTMIZNiXxZbYw/C6A48LCE2sREbMNHflUhltWtRegu9nEXU97u7QJeBIJX7RvsI3XrDvlomnCs/Cns=
+	t=1778512169; cv=none; b=emQWQdQDGnt8mwUwOx4xtL78tmEZ2dVbYRfVp+cZZGEfzCWT4r6HNOHEnYsXT3diXJ+gx8n88Foi2ViZxzNaWlB5YzDFibIUgHIS2erCXzw57d2ykN0nn4K7JtwzYFePis2KWGx5FLosXKQe+HGGdAsIpW/v05SABZ0Jk2AvIyU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778511952; c=relaxed/simple;
-	bh=9nq15krdie2tt10iXFZRJtxrgUilXi8K8bqxQyDmbDc=;
+	s=arc-20240116; t=1778512169; c=relaxed/simple;
+	bh=bg9GTPM4qZhMdSfg11A/iGfcWjT8zOB9yw1Am0GGvQQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CpgWpQtBlidsHXCBvMJ2cDtb+9mJQScVGkxoCB3yGsRok3zqM8vmtHSbuK+ausGOiE6URILzrM3ADz+zMpgCe4WQVPGqBim5PMiqZNCr5aralfEkSO33vVMCdu3RaCpq6QBM6+YxMRyvLZl3aEuqy/ZJNMs/MhJoGY5AYF7ypDI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UqQRWa7u; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=cdaEAVl63hFsPsWUgTU11wWsyOpfSqOdtkIR0yjVkK31SS84/0gGUkmGBNKpofE2tmgY/RhLYu7VZzALOICwKPhkphwp7+fSwA7SnxFJfD+JB8I0lQvO7nD6glalex9IE8QgG6oIjtxuOl7eEUfWOduSFh+hXUXWRuPfv6ZpCMI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XQXayTiz; arc=none smtp.client-ip=209.85.208.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UqQRWa7u"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE152C2BCB0;
-	Mon, 11 May 2026 15:05:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778511952;
-	bh=9nq15krdie2tt10iXFZRJtxrgUilXi8K8bqxQyDmbDc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UqQRWa7u5mrpeYBzz6ABC7lL0Eh7sK/6uFPQzj72vk97V5xaN5eICVnBSVDH08c98
-	 Y9Hne+nVS/5XQIQhV0db1rG10s1xdPDQ0JNIRe0+4KAriFIqrHbSajz/4ecJYtvXEy
-	 7oypcsjdIJQijbx2ChHwx40QlNCTleaVu4M7/iCGoh8Pq+h2Ryjgq3PawRVhlM78Iq
-	 T2PP8xidb4t4uYPyvIHkT4hIRrxPauIT21khoYU8ZdbMAyK696MVMomufVtDP6A4PC
-	 5ivCwYcPmxcG1Udlb0rys3xhJ6GmAg7wjQtUihyDc8mkpkMAh4m44Riq+sclUNGAKq
-	 du/BDGAgumaeQ==
-Date: Mon, 11 May 2026 16:05:47 +0100
-From: Lorenzo Stoakes <ljs@kernel.org>
-To: fujunjie <fujunjie1@qq.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@kernel.org>, 
-	Jann Horn <jannh@google.com>, Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] mm/mremap: unmap full fixed target for multi-VMA moves
-Message-ID: <agHmO4i4YUhs3cSG@lucifer>
-References: <tencent_863C8A01F3C81EBA238F375B16065CBACF08@qq.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XQXayTiz"
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-67bce1840f1so6967688a12.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 08:09:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778512167; x=1779116967; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=qOSaj4W1IEQKE4qx0BHHr2CD6pWbcRcUhaSAZDeDA+g=;
+        b=XQXayTiz2JobX/nWyKgZPEmxSzluuS9aefX76sDxT3ibyakvBtZiCSqHXrVD1hKevT
+         MFC7I3UxVgJKoMRIYmJdG4vISgwjJ2uNVP+j5FWx8GqDYv2sFVgR7yQaEuwpS1NUILnO
+         3GuAmQu/5BeC9IYnJmdxOum39lk4syzSCR2tp8gsG3xSV05WDaXgQEaPKIR5krpzGPSE
+         UAsu+6DN9c/nBWlCGhpFg2FFjvqnqxFTMUczf77pgq5TUppNZw4JcKaxxCDGXcYi9If0
+         +UEKwStjNB9N5ETtpzY4rm7K4kfL59n1sNLoNtFp0hwbJzOIK+ycm9sqKARccaF0wFDR
+         XSHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778512167; x=1779116967;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qOSaj4W1IEQKE4qx0BHHr2CD6pWbcRcUhaSAZDeDA+g=;
+        b=KyMR/V/I1qqhE7PdFJefYEj0KNJ4ke3NAFFxffNml4v9LvYuQLf5yWc8wupoM3sMZG
+         fuYkFNDbXhpOAV6lzqb4YGHpNfvQi4MbYd2eFPjggrhqyESFtKpjq9N/fgkDCr+WqNzX
+         hdAioDtVv3G1M4xwzZcWtzOLfxk0YQ3sn7BF3IIjsb6pvIitEZPWxsPx+i/1286woko5
+         tp3cz55++XmHRyeBnNtjetiT36hXpVJHDUObZcB1cmBPbzk70GsZ/jgHJ35bWuukqalw
+         L17bftioaxCP9wyXf4VyR6mvCdaSPfpEmFDsLR0tZcql/U2fwCA2gjrhSBGeSYrr3KaE
+         5cxw==
+X-Forwarded-Encrypted: i=1; AFNElJ+PyrjTjFIlqjyCdncFO6/zTVTtLbpIvn4VzCggOUjq2MUGB/X8SI8QAdWJ3bgQUo/lt+RZeQaaOlWb4lIBr4g=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz/3vtKSQ6Q04FYXCuEYn8TwbnMMPIk8VKafKklnzpCwz47SViu
+	tF+axsGaR3UMM5+Q+emA1LyWHlWah8YaGR4miPA2hVINdXmaZs8XSSP7
+X-Gm-Gg: Acq92OGnjAfGZzhhPn6yUM+t6eaB36B2gVq2UpCj/Cnmnrq3DbbbH04DFhf5OIoH2U3
+	aEP9aQQmZDATwOaWJnEhCzWbGJ+3nF35Z6cX6VokYoMZWUI0HyU2OtuWNxkeuD+bo1X5PP0qG7m
+	Q6fjuig5tXFSKC+5idryG8Jh+TGJ5HZFrbs9Zm8NvxCsKuifyOknMaO6NLwDVKFib43n3s8tMUc
+	lqy4Epp7RKOdN3oMsYu8d73RaKve8d0lYBENB9+jHHGM4oUG5Yvv1A77zZYOkZm10U03CaY8EWW
+	BW1p3Tbab1perJUZaDHTkazo6RVenOu9+HbNJaHzfn8vHZl/XMRmi+AaCpOoa15Vt9FJaDHycB+
+	hsxkCLMn/DSa5yzr9/UVbWMx6Nk4jyVmNJkewGPQMMeFK8TA+iV3TEmqhhN0mxLunIZbxoJ45Sc
+	PGpwhMctsvsDcusPihUEy+kiqAc1+HjnNDC6Pvfefiu+PCEWDMldMbXDFXzDCTSYPBFhvPSVRel
+	x6RepzCfIjF
+X-Received: by 2002:a05:6402:2749:b0:66d:d2f9:520c with SMTP id 4fb4d7f45d1cf-67d645baa54mr11817516a12.19.1778512166447;
+        Mon, 11 May 2026 08:09:26 -0700 (PDT)
+Received: from localhost (226.55.classcom.pl. [195.150.55.226])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-67ef0e0d4bdsm3938024a12.23.2026.05.11.08.09.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 May 2026 08:09:25 -0700 (PDT)
+Date: Mon, 11 May 2026 17:09:25 +0200
+From: Piotr Zarycki <piotr.zarycki@gmail.com>
+To: Sean Christopherson <seanjc@google.com>
+Cc: pbonzini@redhat.com, shuah@kernel.org, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: selftests: sync_regs_test: use
+ KVM_SYNC_X86_VALID_FIELDS
+Message-ID: <agHwV8Btww3ku3Xf@arch-piotr>
+References: <20260511143426.1242013-1-piotr.zarycki@gmail.com>
+ <agHuMh96_kDr3ENG@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -44,355 +76,49 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <tencent_863C8A01F3C81EBA238F375B16065CBACF08@qq.com>
+In-Reply-To: <agHuMh96_kDr3ENG@google.com>
 
-On Thu, May 07, 2026 at 06:24:45PM +0000, fujunjie wrote:
-> When MREMAP_FIXED moves a range spanning multiple VMAs, remap_move()
-> iterates over the source VMAs and skips source holes.  For each source
-> VMA segment it narrows vrm->new_len to that segment length before calling
-> mremap_to(), so the MREMAP_FIXED destination unmap is also limited to the
-> current segment.
->
-> If the source range contains holes and the destination range is already
-> mapped, the destination subranges corresponding to those source holes can
-> therefore survive the move.  That violates MREMAP_FIXED semantics, where
-> the destination range is supposed to be unmapped before the move, and it
-> also means that preserved source gaps do not necessarily become gaps in
-> the destination.  Userspace can then observe mappings at destination
-> addresses that should have become holes.
+On Mon, May 11, 2026 at 07:56:50AM -0700, Sean Christopherson wrote:
+> On Mon, May 11, 2026, Piotr Zarycki wrote:
+> > Use KVM_SYNC_X86_VALID_FIELDS instead of open-coding the same three
+> > flags, ensuring the test stays in sync with any future additions.
+> > 
+> > Signed-off-by: Piotr Zarycki <piotr.zarycki@gmail.com>
+> > ---
+> >  tools/testing/selftests/kvm/x86/sync_regs_test.c | 3 +--
+> >  1 file changed, 1 insertion(+), 2 deletions(-)
+> > 
+> > diff --git a/tools/testing/selftests/kvm/x86/sync_regs_test.c b/tools/testing/selftests/kvm/x86/sync_regs_test.c
+> > index e0c52321f87c..8f9239f9d357 100644
+> > --- a/tools/testing/selftests/kvm/x86/sync_regs_test.c
+> > +++ b/tools/testing/selftests/kvm/x86/sync_regs_test.c
+> > @@ -79,7 +79,7 @@ static void compare_vcpu_events(struct kvm_vcpu_events *left,
+> >  {
+> >  }
+> >  
+> > -#define TEST_SYNC_FIELDS   (KVM_SYNC_X86_REGS|KVM_SYNC_X86_SREGS|KVM_SYNC_X86_EVENTS)
+> > +#define TEST_SYNC_FIELDS   KVM_SYNC_X86_VALID_FIELDS
+> 
+> Explicitly defining the set of fields to test is very deliberate.  (a) we want
+> to detect ABI breakage, e.g. if KVM removes a valid field.  (b) if a field is
+> added in the future, the test likely needs to be updated, i.e. would break if
+> KVM extends KVM_SYNC_X86_VALID_FIELDS.  (c) KVM_SYNC_X86_VALID_FIELDS probably
+> shouldn't be defined in a uapi header; for all intents and purposes it's a KVM-
+> internal details.
+> 
+> >  #define INVALID_SYNC_FIELD 0x80000000
+> >  
+> >  /*
+> > @@ -255,7 +255,6 @@ KVM_ONE_VCPU_TEST(sync_regs_test, req_and_verify_all_valid, guest_code)
+> >  	struct kvm_regs regs;
+> >  
+> >  	/* Request and verify all valid register sets. */
+> > -	/* TODO: BUILD TIME CHECK: TEST_ASSERT(KVM_SYNC_X86_NUM_FIELDS != 3); */
+> >  	run->kvm_valid_regs = TEST_SYNC_FIELDS;
+> >  	vcpu_run(vcpu);
+> >  	TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_IO);
+> > -- 
+> > 2.54.0
+> > 
 
-Hmmm I think it's a bit debateable honestly. The ability to handle there being
-gaps is a _new thing_, so there are no semantics to speak of. Prevoiusly
-mremap() simply required that you only span across a single VMA.
-
-And the idea is that we're, conceptually, batching up an operation like moving:
-
-|----|     |-------|  |-----|
-|    |     |       |  |     |
-|----|     |-------|  |-----|
-
-To:
-
-                                        |----|     |-------|  |-----|
-                                        |    |     |       |  |     |
-                                        |----|     |-------|  |-----|
-
-Now if there was an existing VMA:
-
-                                    |...................................|
-                                    |                                   |
-                                    |...................................|
-
-The result of iterating through each and moving them individually would be:
-
-                                    |...|----|.....|-------|..|-----|...|
-                                    |   |    |     |       |  |     |   |
-                                    |...|----|.....|-------|..|-----|...|
-
-So it's not obvious that the source range spanning holes is actually indicative
-of the caller wanting an unmap in each of these places.
-
-The only semantics there, really, are that you are going to unmap the ranges the
-destination VMA is going to span, which of course this still does.
-
-I would argue that the semantics of 'aggregate does the same as if you were to
-perform the operation individually on VMAs' trumps somebody assuming you're
-'moving the gaps'.
-
-So I think it's really not obvious that we should be treating unmapped areas as
-if they were VMAs and to move 'space' too...
-
-I'm also concerned that now we're changing a fundamental behaviour that users
-might rely upon (as weird as it sounds). I mean changing this would arguably be
-breaking userland.
-
-Really the intent was to allow somebody to not have to worry about unmerged
-VMAs, for cases where the VMAs _have no gaps_, and the ability to tolerate gaps
-was added as a nice-to-have.
-
-You also have to account for the fact that a partial failure may occur, at which
-point you've done a rather strange, partial, unmap.
-
-Is there an actual use case that wants this behaviour?
-
->
-> Unmap the full fixed target range once before moving the first source
-> segment in the multi-VMA move path.  Split mremap_to() into a wrapper that
-> performs the MREMAP_FIXED target unmap and a lower-level __mremap_to()
-> helper that assumes any required target unmap has already been handled.
-> Then the multi-VMA path can call __mremap_to() after clearing the full
-> fixed target, while the single-VMA path continues to use mremap_to().
->
-> Use a common unmap_fixed_target() helper for both the ordinary mremap_to()
-> target unmap and the full-range target unmap.  This keeps the existing
-> iterator invalidation and source VMA reload behaviour in one place.  The
-> full target unmap still uses the existing uf_unmap_early path for
-> userfaultfd unmap notifications.
->
-> Extend the multi-VMA mremap selftest to check that the destination pages
-> corresponding to source holes are unmapped after mremap().  This covers
-> both MREMAP_FIXED and MREMAP_FIXED |
-> MREMAP_DONTUNMAP.
->
-> Fixes: d23cb648e365 ("mm/mremap: permit mremap() move of multiple VMAs")
-> Cc: stable@vger.kernel.org # 6.17+
-> Signed-off-by: fujunjie <fujunjie1@qq.com>
-> ---
->  mm/mremap.c                              | 92 +++++++++++++++++-------
->  tools/testing/selftests/mm/mremap_test.c | 52 ++++++++++++++
->  2 files changed, 118 insertions(+), 26 deletions(-)
->
-> diff --git a/mm/mremap.c b/mm/mremap.c
-> index e9c8b1d05832..e91fff2ba3ce 100644
-> --- a/mm/mremap.c
-> +++ b/mm/mremap.c
-> @@ -1430,37 +1430,39 @@ static unsigned long shrink_vma(struct vma_remap_struct *vrm,
->  	return 0;
->  }
->
-> +static unsigned long unmap_fixed_target(struct vma_remap_struct *vrm,
-> +					unsigned long addr, unsigned long len)
-> +{
-> +	struct mm_struct *mm = current->mm;
-> +	unsigned long err;
-> +
-> +	err = do_munmap(mm, addr, len, vrm->uf_unmap_early);
-> +	vrm->vma = NULL; /* Invalidated. */
-> +	vrm->vmi_needs_invalidate = true;
-> +	if (err)
-> +		return err;
-> +
-> +	/*
-> +	 * If we remap a portion of a VMA elsewhere in the same VMA, this can
-> +	 * invalidate the old VMA. Reset.
-> +	 */
-> +	vrm->vma = vma_lookup(mm, vrm->addr);
-> +	if (!vrm->vma)
-> +		return -EFAULT;
-> +
-> +	return 0;
-> +}
-
-It might be nice to factor this out even if we don't take this patch...
-
-Be good to also update the unmap_source_vma() case to to use it if we can. We'd
-want in that case though to figure out if we want to lookup the VMA though, and
-then optionally have a VMI... anyway :)
-
-> +
->  /*
-> - * mremap_to() - remap a vma to a new location.
-> + * __mremap_to() - remap a vma to a new location, assuming any required
-> + * MREMAP_FIXED target unmap has already been handled.
->   * Returns: The new address of the vma or an error.
->   */
-> -static unsigned long mremap_to(struct vma_remap_struct *vrm)
-> +static unsigned long __mremap_to(struct vma_remap_struct *vrm)
->  {
->  	struct mm_struct *mm = current->mm;
->  	unsigned long err;
->
-> -	if (vrm->flags & MREMAP_FIXED) {
-> -		/*
-> -		 * In mremap_to().
-> -		 * VMA is moved to dst address, and munmap dst first.
-> -		 * do_munmap will check if dst is sealed.
-> -		 */
-> -		err = do_munmap(mm, vrm->new_addr, vrm->new_len,
-> -				vrm->uf_unmap_early);
-> -		vrm->vma = NULL; /* Invalidated. */
-> -		vrm->vmi_needs_invalidate = true;
-> -		if (err)
-> -			return err;
-> -
-> -		/*
-> -		 * If we remap a portion of a VMA elsewhere in the same VMA,
-> -		 * this can invalidate the old VMA. Reset.
-> -		 */
-> -		vrm->vma = vma_lookup(mm, vrm->addr);
-> -		if (!vrm->vma)
-> -			return -EFAULT;
-> -	}
-> -
->  	if (vrm->remap_type == MREMAP_SHRINK) {
->  		err = shrink_vma(vrm, /* drop_lock= */false);
->  		if (err)
-> @@ -1486,6 +1488,23 @@ static unsigned long mremap_to(struct vma_remap_struct *vrm)
->  	return move_vma(vrm);
->  }
->
-> +/*
-> + * mremap_to() - remap a vma to a new location.
-> + * Returns: The new address of the vma or an error.
-> + */
-> +static unsigned long mremap_to(struct vma_remap_struct *vrm)
-> +{
-> +	unsigned long err;
-> +
-> +	if (vrm->flags & MREMAP_FIXED) {
-> +		err = unmap_fixed_target(vrm, vrm->new_addr, vrm->new_len);
-> +		if (err)
-> +			return err;
-> +	}
-> +
-> +	return __mremap_to(vrm);
-> +}
-> +
->  static int vma_expandable(struct vm_area_struct *vma, unsigned long delta)
->  {
->  	unsigned long end = vma->vm_end + delta;
-> @@ -1882,9 +1901,11 @@ static unsigned long remap_move(struct vma_remap_struct *vrm)
->  	unsigned long start = vrm->addr;
->  	unsigned long end = vrm->addr + vrm->old_len;
->  	unsigned long new_addr = vrm->new_addr;
-> +	unsigned long new_len = vrm->new_len;
->  	unsigned long target_addr = new_addr;
->  	unsigned long res = -EFAULT;
->  	unsigned long last_end;
-> +	bool fixed_target_unmapped = false;
->  	bool seen_vma = false;
->
->  	VMA_ITERATOR(vmi, current->mm, start);
-> @@ -1939,8 +1960,27 @@ static unsigned long remap_move(struct vma_remap_struct *vrm)
->  		}
->
->  		res_vma = check_prep_vma(vrm);
-> -		if (!res_vma)
-> -			res_vma = mremap_to(vrm);
-> +		/*
-> +		 * remap_move() narrows vrm->new_len to the current source VMA
-> +		 * segment before calling mremap_to(). For sparse source ranges
-> +		 * this would leave target ranges corresponding to source holes
-> +		 * mapped.
-> +		 *
-> +		 * If the requested source range extends beyond the first VMA,
-> +		 * unmap the full fixed target range once, using the original
-> +		 * new_addr/new_len, before moving any segment.
-> +		 */
-
-Hmm yeah one batched up operation to unmap the whole range? That's not correct
-from the point of view of partial failure cases, now you're unmapping _the whole
-range_.
-
-I think it's not useful to reference the 'narrowing', I think it's confusing to
-use 'new_len' to mean 'unnarrowed new_len', which of course has to be equal to
-old_len to even be here.
-
-You'd need to rename that to something sensible, like range_len.
-
-Also that original length might include a trailing space _after_ the end of the
-range.
-
-So you might end up unmapping stuff _past the end of the range_ of the range you
-are moving, which might unmap real stuff, which is completely incorrect.
-
-Honestly I'm really thinking that we don't want this behaviour. It's simpler to
-treat this as aggregated mremap()'s, and if a user needs this kind of behaviour
-they can unmap the target range themselves, it's not difficult.
-
-Maybe the real TODO here is to update the man page to make this clear.
-
-> +		if (!res_vma && !seen_vma && vma->vm_end < end) {
-> +			res_vma = unmap_fixed_target(vrm, new_addr, new_len);
-> +			if (!res_vma)
-> +				fixed_target_unmapped = true;
-> +		}
-> +		if (!res_vma) {
-> +			if (fixed_target_unmapped)
-> +				res_vma = __mremap_to(vrm);
-> +			else
-> +				res_vma = mremap_to(vrm);
-> +		}
-
-I don't love this, we're taking an already badly named function (mea culpa,
-though in <kinda> my defence I was continuing a tradition at least :)
-
-And now you're adding more complexity and more state just to figure out if you
-need to unmap here, yeah again, I think the existing behaviour is better
-overall.
-
->  		if (IS_ERR_VALUE(res_vma))
->  			return res_vma;
->
-> diff --git a/tools/testing/selftests/mm/mremap_test.c b/tools/testing/selftests/mm/mremap_test.c
-> index 308576437228..ebbe1aa42ef0 100644
-> --- a/tools/testing/selftests/mm/mremap_test.c
-> +++ b/tools/testing/selftests/mm/mremap_test.c
-> @@ -419,6 +419,54 @@ static bool is_multiple_vma_range_ok(unsigned int pattern_seed,
->  	return true;
->  }
->
-> +static bool is_range_unmapped(void *addr, size_t size)
-> +{
-> +	void *ptr;
-> +
-> +	ptr = mmap(addr, size, PROT_NONE,
-> +		   MAP_PRIVATE | MAP_ANON | MAP_FIXED_NOREPLACE, -1, 0);
-> +	if (ptr == MAP_FAILED) {
-> +		if (errno == EEXIST)
-> +			ksft_print_msg("range %p-%p is still mapped\n",
-> +				       addr, (char *)addr + size);
-> +		else
-> +			perror("mmap MAP_FIXED_NOREPLACE");
-> +		return false;
-> +	}
-> +
-> +	if (ptr != addr) {
-> +		ksft_print_msg("mmap MAP_FIXED_NOREPLACE returned %p, expected %p\n",
-> +			       ptr, addr);
-> +		munmap(ptr, size);
-> +		return false;
-> +	}
-> +
-> +	if (munmap(ptr, size)) {
-> +		perror("munmap MAP_FIXED_NOREPLACE probe");
-> +		return false;
-> +	}
-> +
-> +	return true;
-> +}
-
-This is not a great way of figuring that out, you can use the procmap_query
-stuff to figure out it out from vm_util.h, see open_procmap(), query_procmap(),
-find_vma_procmap(), etc.
-
-> +
-> +static bool multiple_vma_holes_unmapped(char *ptr, unsigned long page_size)
-> +{
-> +	static const int holes[] = { 1, 3, 7, 9 };
-> +	int i;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(holes); i++) {
-> +		char *addr = &ptr[holes[i] * page_size];
-> +
-> +		if (!is_range_unmapped(addr, page_size)) {
-> +			ksft_print_msg("target hole page %d is mapped\n",
-> +				       holes[i]);
-> +			return false;
-> +		}
-> +	}
-> +
-> +	return true;
-> +}
-> +
->  static void mremap_move_multiple_vmas(unsigned int pattern_seed,
->  				      unsigned long page_size,
->  				      bool dont_unmap)
-> @@ -529,6 +577,10 @@ static void mremap_move_multiple_vmas(unsigned int pattern_seed,
->  		success = false;
->  		goto out_unmap;
->  	}
-> +	if (!multiple_vma_holes_unmapped(tgt_ptr, page_size)) {
-> +		success = false;
-> +		goto out_unmap;
-> +	}
->
->  out_unmap:
->  	if (munmap(tgt_ptr, 2 * size))
->
-> base-commit: 1b55f8358e35a67bf3969339ea7b86988af92f66
-> --
-> 2.34.1
->
-
-Cheers, Lorenzo
+Thanks for the explanation. What's the preferred way to implement the build-time check mentioned in the TODO? 
