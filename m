@@ -1,87 +1,71 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A02E3FCB34
-	for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 14:17:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 474703FBEAC;
+	Mon, 11 May 2026 14:20:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778509073; cv=none; b=Wqm5CaPUrrBEemFJ2BFANYHsyE2Fnz3zOnh+Z0L6dXYebanIALMy0FLExxJZJY5O2CeQpsEjF05gREwHBjgGsBKVhnWgXO4i6JxSn/NhxdI4bAblap05kf6uOQsseHWOLccRb9ZNwLRN0yHMWwsh2ymm2Gd0Dmvldn51uMXkChY=
+	t=1778509207; cv=none; b=gpO9Nr5+yJuqkppeZywH8v9D7b1BJJQpRdSy7y3Ps4E7T3RnzWOd4EV8mLGBsnXz509/NEH/9m+YTCz/qRF9YtO1rk3nmpDDbEojDm4scfdKox/UsasiEj8+U1ucy4y63tDAcPckLdVZck0NTuurYEQ8ZD3Tg29MPRNO74E4at0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778509073; c=relaxed/simple;
-	bh=tWCQMWSCIU1JwQksCEE89vFumxajGqRDTss9nzohQP4=;
-	h=From:In-Reply-To:MIME-Version:References:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CcEaW5kZukokioeUvP01/922ghQ5VF7LD2lmeWK5c0diDpM37zvBe2hpYKSpzc7EtzGbMTCfFJww8gjMIHL8lhRfA7b2Mc2h2zTXB5FmNbaJXuJenxT9ql6LOo+d3zIJaZjxAGwWBP+TAC0QiIi5EkNY8DRE5BJF8wRC5JpbJJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s6/l46LS; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778509207; c=relaxed/simple;
+	bh=vbogRMdR9OUH7DCV2N4+RVbNkjefHZiazkEXy1KYeuA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qFVhyp+Tji6715KVZS6Hm4kzkhRAT1wTX5ZwsbFQDjZ7RhPLbYTZCrtg7fKG0wV3WLwuQihJoCYlNgKu65sYLQZpdSORtNBhxyChndnRFy8Y/OBbfooOuie3c+W0R38EwwDnl31L3ysQ9c3syjVysIPPm+PAC8QnBYbDQ1Qn/2g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=sHp0LQMU; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s6/l46LS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FCC4C2BCF7
-	for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 14:17:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778509073;
-	bh=tWCQMWSCIU1JwQksCEE89vFumxajGqRDTss9nzohQP4=;
-	h=From:In-Reply-To:References:Date:Subject:To:Cc:From;
-	b=s6/l46LS8Wj1RE+IVf9xy3VzAorPDHt/9jb1MeDqKmFG6P3R+1cOiNCbQr9DiGe7w
-	 pvUyOZRfpfWat1DN3P5gPEJXW12nfB7ajHQu/W+i24v2xwcGhnPVMn2J9A6MrV7YMR
-	 Xq9TeNdHjj7xmWe7Pl0+Lt4Etu57vqpJjQvOidpzCF/Qk/EA8MUu6oslFD870nT3NF
-	 XtWQY4GQsnVCjQUnRg8mDoTnPOfVvkdiU6unuIz8fd6BCUmEphdC57gCnJsjNNbabk
-	 VtEufkQWhpcWtDgiXoBo8s1yKLQt5I+2MzqyQmCjmH3si37BZAGcQiYVWhngD0gmTX
-	 jEKN79sWgi7FA==
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-39378db197aso44701971fa.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 07:17:53 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AFNElJ8XvSy1BU+QOvHuFVH5gZkXwYZP9p73pYiG0UKsDS/OvDSGNNngTcYa3gUxRaw1RQQXiJk0Or0C4YgpBXR02z4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyfKGOPva8FfNV7IZU/6zrWr64WkajGElRnknJr9K43qCQizUrU
-	TqXVtm7zp3WfFLCG8R9K74lQQAdRL+retTlmhbDuSufXHiYKIcxfDdjqgijeTrrzPsQMrGHYni6
-	2680pq1xt2VK2aUY6qELm6AldftP/hIeZbzo8NCVWtA==
-X-Received: by 2002:a05:6512:3d04:b0:5a1:d352:a49 with SMTP id
- 2adb3069b0e04-5a8b747b7ebmr2589014e87.41.1778509071937; Mon, 11 May 2026
- 07:17:51 -0700 (PDT)
-Received: from 969154062570 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 11 May 2026 07:17:49 -0700
-Received: from 969154062570 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 11 May 2026 07:17:49 -0700
-From: Bartosz Golaszewski <brgl@kernel.org>
-In-Reply-To: <DIFWH6TWTOOT.37CW17JHKWBQR@kernel.org>
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="sHp0LQMU"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=o7m1iQPEWMTmTOeyzulh1g+n1fA1cwkN0Gd2HkUrqvY=; b=sHp0LQMURu6gNbu7zWA7wS/9n1
+	ZiNVJ5naWWfvHvaGfQwuGEDSVA133mm8ZWtvRGV39R1DN8YL8oUOtGrv5VJWc5t9CP3FzQRW2emNi
+	aZqk58F9ViUYjsFuRIEe3zH4BQ/YcGAH3A3tZ+OOumIqkqalIo8nM1eBuASlncDdOnMxGe29HbHb1
+	A+04lyEfOYuZGWP6umwPOMswduHr7VxSNxhMC08YzggdLy6xlEZbhBxXzEFO+8HKA+wgDA9LYo1Rn
+	URREoJrYvc/6i43QdGEufzbqortylb46jAq3A7acKgQBIkLFJA0ANYPlMYgGsLIOhvk14m0eGejXv
+	I/ENCbeg==;
+Received: from authenticated user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1wMRU8-001exK-34;
+	Mon, 11 May 2026 14:19:53 +0000
+Date: Mon, 11 May 2026 07:19:47 -0700
+From: Breno Leitao <leitao@debian.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Marcel Holtmann <marcel@holtmann.org>, 
+	Luiz Augusto von Dentz <luiz.dentz@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH net-next 6/7] selftests: net: getsockopt_iter: cover SCO
+ BT_CODEC conversion
+Message-ID: <agHlZ-J5VjqJZTE4@gmail.com>
+References: <20260511-getsock_three-v1-0-1461fa8786ab@debian.org>
+ <20260511-getsock_three-v1-6-1461fa8786ab@debian.org>
+ <20260511064729.11c507b1@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260430-swnode-remove-on-dev-unreg-v4-0-01574da0aed3@oss.qualcomm.com>
- <20260430-swnode-remove-on-dev-unreg-v4-1-01574da0aed3@oss.qualcomm.com>
- <afNEwrHLNTA4ywrN@ashevche-desk.local> <CAMRc=McH0zKz87z0TwPFrzZHMW6psytMaLZybM3pUk6OvUfo9Q@mail.gmail.com>
- <CAMRc=Mc_huU0HxHpD+RMNWeX2Sg84-LEg8y96BcF_qdtPr31eA@mail.gmail.com> <DIFWH6TWTOOT.37CW17JHKWBQR@kernel.org>
-Date: Mon, 11 May 2026 07:17:49 -0700
-X-Gmail-Original-Message-ID: <CAMRc=MeiL+MeFsiPrWja2qJx=zU3RXKLL7CDccX1epXWgNtvdA@mail.gmail.com>
-X-Gm-Features: AVHnY4LNfVOZzGtnHEuvlnWv66y_mqFueWFoaAxy3hLiq7T56xfhHM7e7I8mKaQ
-Message-ID: <CAMRc=MeiL+MeFsiPrWja2qJx=zU3RXKLL7CDccX1epXWgNtvdA@mail.gmail.com>
-Subject: Re: [PATCH v4 1/3] driver core: platform: remove software node on release()
-To: Danilo Krummrich <dakr@kernel.org>
-Cc: Andy Shevchenko <andriy.shevchenko@intel.com>, 
-	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Brendan Higgins <brendan.higgins@linux.dev>, 
-	David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>, 
-	Andy Shevchenko <andy@kernel.org>, driver-core@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	Bartosz Golaszewski <brgl@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260511064729.11c507b1@kernel.org>
+X-Debian-User: leitao
 
-On Mon, 11 May 2026 16:00:23 +0200, Danilo Krummrich <dakr@kernel.org> said:
-> On Mon May 11, 2026 at 9:33 AM CEST, Bartosz Golaszewski wrote:
->> Danilo: if there are no further comments, can you pick it up for v7.1?
->
-> It seems that sashiko has a valid concern in [1]; can you confirm?
->
-> [1] https://sashiko.dev/#/patchset/20260430-swnode-remove-on-dev-unreg-v4-0-01574da0aed3%40oss.qualcomm.com
->
+On Mon, May 11, 2026 at 06:47:29AM -0700, Jakub Kicinski wrote:
+> On Mon, 11 May 2026 03:41:51 -0700 Breno Leitao wrote:
+> >  tools/testing/selftests/net/getsockopt_iter.c | 65 +++++++++++++++++++++++++++
+> 
+> please don't add Bluetooth tests under net/ (or at least they must
+> cleanly XFAIL if Bluetooth is not enabled). Also Bluetooth has its
+> own tree so not net-next in the subject.
 
-Yes, I explained it here[1]. Basically it's similar to how we need to call
-platform_device_add_data() for devices created with platform_device_alloc().
+Sorry about it. I will update.
 
-We can consider adding platform_device_add_software_node() once there's
-a potential user but for now I'd just leave it like this.
-
-Bartosz
-
-[1] https://lore.kernel.org/all/CAMRc=MdR+xKCP5e+RiF-MvHvD9-z-Vxno=0B7nmOm+1oS6TDMQ@mail.gmail.com/
+Thanks,
+--breno
