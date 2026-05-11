@@ -1,51 +1,59 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A59EC344DB5;
-	Mon, 11 May 2026 10:33:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 795AE3D75DB
+	for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 10:33:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778495590; cv=none; b=KP3QGSx0p5RNfXhbXKUHxmCXMrDad7ux6HAsqCJ/igcSVzHhaNSWToOzqnoNut7d3WPgtEZLA4Eem1u3CByehkFlC9Ubza+Ha/Ic06Sn4awtnqFNSM47wGAmB1TLs+pZ7DtGytZcAmUJYJLzp4mxYp/xfzcpPqgR9Wspn5EiLi4=
+	t=1778495613; cv=none; b=G+hJYpbl0v25pzjIiaHMVo/y/Iv9AWREwb0jaFn5XF8cSyy5eyIHzLTOeHiTuowvzRfcrR3H5tAAr9i70beLqDQsvmCfrSsG72D/wafYwC534i4mpNJuSlvvMNgQ7iXtqiYTKLkoqsUucw6SXNT/kIDRX7iQ+psvtC3fuoZQwBQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778495590; c=relaxed/simple;
-	bh=1zz4iLlSqYaMCJbIXCtz3FcQ975CxkzT/YCCW/dIHjk=;
+	s=arc-20240116; t=1778495613; c=relaxed/simple;
+	bh=paKqw+AxbYX8Ac7JYkYZuyWmkzfQCaRJN4HHMNZ2eOE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PpNJh9ObKZDnGdGLHsnl6q7MJ2YX7RKSHZ5tgBUteBpFRJJdQutbizTxF3gIOslruZYHrTK+eVv/1osLbZgEoWz+KlexTV6+5a5rMOHEqlMjPMmaSjmo2/8yvjwiT6itASAYVGnZ015Q4wDBipAPtKi9Yc24E6l8zMDI2a5BFC4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=O7ITqkFu; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=S2ncDUeiaL+XQjkLXYMFbIlZtgCD5on1gpmZlwVqkrGK61y6S+cGMJc+EhQSFcvVQ8p3Tb4SGmRcIQNCz7i6orxnsCzJUCLA5pc+WicZwHFDSoSSi+JDexzHUvHAqR+Eg+dQITKGUegSQBbvqWZhex02cP+bB8tRVOlazvI60iA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=vN8lnB2V; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=vN8lnB2V; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="O7ITqkFu"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BD44816F2;
-	Mon, 11 May 2026 03:33:02 -0700 (PDT)
-Received: from J2N7QTR9R3.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8F6913F7B4;
-	Mon, 11 May 2026 03:33:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1778495588; bh=1zz4iLlSqYaMCJbIXCtz3FcQ975CxkzT/YCCW/dIHjk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=O7ITqkFurFuZ39Lwji9sC3GZKl/uLGBGRadYsCOz6TCBeQ6JyE4TxYQl3HPrOy1Ok
-	 tmz2tGrWARYyWqYgV/BXEhy6202SV/JSuCbRjSPq4XXYhqqVi6OmRZKIWlmmJoXqwH
-	 cLsH18Zz4yGDg1Kaj/BYZPQRnSB5j7UOpJCVAAeo=
-Date: Mon, 11 May 2026 11:32:56 +0100
-From: Mark Rutland <mark.rutland@arm.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	Oliver Upton <oupton@kernel.org>, Dave Martin <Dave.Martin@arm.com>,
-	Fuad Tabba <tabba@google.com>, Ben Horgan <ben.horgan@arm.com>,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Peter Maydell <peter.maydell@linaro.org>,
-	Eric Auger <eric.auger@redhat.com>
-Subject: Re: [PATCH v10 04/30] arm64/fpsimd: Determine maximum virtualisable
- SME vector length
-Message-ID: <agGwWE2hcj9O4EGu@J2N7QTR9R3.cambridge.arm.com>
-References: <20260306-kvm-arm64-sme-v10-0-43f7683a0fb7@kernel.org>
- <20260306-kvm-arm64-sme-v10-4-43f7683a0fb7@kernel.org>
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="vN8lnB2V";
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="vN8lnB2V"
+Received: from foo (unknown [IPv6:2a07:de40:b306:2000::2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 85AFD68611;
+	Mon, 11 May 2026 10:33:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1778495609; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=dJ2zZxs/5ZIKE08XTANU853dRSSk0fWTqi6tGbGlOE0=;
+	b=vN8lnB2Vh3PR0Tmw4DG4IBoa/8im3GOXpjghq/UJDqT1HEXyNaHCb6NLDr74D6qMv4fz1m
+	q1CWYByw5Ui8+rLi/GUd8ogSEijBOakmdnvyUifBpqsa9yWBWXeA93fRJZjlrkGEUpip22
+	NUnDZXdaBaEQWANHXY8Uw6nAsK90cCw=
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.com header.s=susede1 header.b=vN8lnB2V
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1778495609; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=dJ2zZxs/5ZIKE08XTANU853dRSSk0fWTqi6tGbGlOE0=;
+	b=vN8lnB2Vh3PR0Tmw4DG4IBoa/8im3GOXpjghq/UJDqT1HEXyNaHCb6NLDr74D6qMv4fz1m
+	q1CWYByw5Ui8+rLi/GUd8ogSEijBOakmdnvyUifBpqsa9yWBWXeA93fRJZjlrkGEUpip22
+	NUnDZXdaBaEQWANHXY8Uw6nAsK90cCw=
+Date: Mon, 11 May 2026 12:33:28 +0200
+From: Anthony Iliopoulos <ailiop@suse.com>
+To: Sasha Levin <sashal@kernel.org>
+Cc: Florian Weimer <fw@deneb.enyo.de>, corbet@lwn.net,
+	akpm@linux-foundation.org, skhan@linuxfoundation.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, gregkh@linuxfoundation.org
+Subject: Re: [PATCH v2] killswitch: add per-function short-circuit mitigation
+ primitive
+Message-ID: <agGweC12aloH8DBq@foo>
+References: <20260508195749.1885522-1-sashal@kernel.org>
+ <87ecjku6y7.fsf@mid.deneb.enyo.de>
+ <af8pw54Y-Q18kSR0@laps>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -54,177 +62,87 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260306-kvm-arm64-sme-v10-4-43f7683a0fb7@kernel.org>
+In-Reply-To: <af8pw54Y-Q18kSR0@laps>
+X-Spamd-Result: default: False [17.36 / 50.00];
+	SPAM_FLAG(5.00)[];
+	NEURAL_SPAM_LONG(3.50)[1.000];
+	BAYES_HAM(-3.00)[100.00%];
+	HFILTER_HELO_5(3.00)[foo];
+	NEURAL_SPAM_SHORT(2.97)[0.991];
+	HFILTER_HOSTNAME_UNKNOWN(2.50)[];
+	RDNS_NONE(2.00)[];
+	ONCE_RECEIVED(1.20)[];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.com:s=susede1];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	FROM_EQ_ENVFROM(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	ARC_NA(0.00)[];
+	RCVD_COUNT_ZERO(0.00)[0];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	DKIM_TRACE(0.00)[suse.com:+];
+	MISSING_XM_UA(0.00)[];
+	DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b306:2000::2:from];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:dkim]
+X-Spamd-Bar: +++++++++++++++++
+X-Rspamd-Queue-Id: 85AFD68611
+X-Spam-Score: 17.36
+X-Spam-Level: *****************
+X-Rspamd-Action: add header
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spam-Flag: YES
+X-Spam: Yes
 
-On Fri, Mar 06, 2026 at 05:00:56PM +0000, Mark Brown wrote:
-> As with SVE we can only virtualise SME vector lengths that are supported by
-> all CPUs in the system, implement similar checks to those for SVE. 
-
-So far so good.
-
-> Since unlike SVE there are no specific vector lengths that are
-> architecturally required the handling is subtly different, we report a
-> system where this happens with a maximum vector length of
-> SME_VQ_INVALID.
-
-I think something went wrong during copyediting here.
-
-A system where *what* happens?
-
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
->  arch/arm64/include/asm/fpsimd.h |  2 ++
->  arch/arm64/kernel/fpsimd.c      | 21 ++++++++++++++++++++-
->  2 files changed, 22 insertions(+), 1 deletion(-)
+On Sat, May 09, 2026 at 08:34:11AM -0400, Sasha Levin wrote:
+> On Sat, May 09, 2026 at 02:02:24PM +0200, Florian Weimer wrote:
+> > * Sasha Levin:
+> > 
+> > > When a kernel (security) issue goes public, fleets stay exposed until a patched
+> > > kernel is built, distributed, and rebooted into.
+> > > 
+> > > For many such issues the simplest mitigation is to stop calling the buggy
+> > > function. Killswitch provides that. An admin writes:
+> > > 
+> > >     echo "engage af_alg_sendmsg -1" \
+> > >         > /sys/kernel/security/killswitch/control
+> > > 
+> > > After this, af_alg_sendmsg() returns -EPERM on every call without
+> > > running its body. The mitigation takes effect immediately, and is dropped on
+> > > the next reboot -- by which point a patched kernel is hopefully in place.
+> > 
+> > Do you expect this to be safe to enable in kernel lockdown mode (i.e.,
+> > with typical Secure Boot configurations in distributions)?
 > 
-> diff --git a/arch/arm64/include/asm/fpsimd.h b/arch/arm64/include/asm/fpsimd.h
-> index e97729aa3b2f..0cd8a866e844 100644
-> --- a/arch/arm64/include/asm/fpsimd.h
-> +++ b/arch/arm64/include/asm/fpsimd.h
-> @@ -69,6 +69,8 @@ static inline void cpacr_restore(unsigned long cpacr)
->  #define ARCH_SVE_VQ_MAX ((ZCR_ELx_LEN_MASK >> ZCR_ELx_LEN_SHIFT) + 1)
->  #define SME_VQ_MAX	((SMCR_ELx_LEN_MASK >> SMCR_ELx_LEN_SHIFT) + 1)
->  
-> +#define SME_VQ_INVALID	(SME_VQ_MAX + 1)
+> Yes: under lockdown, killswitch has to be configured on the cmdline. Runtime
+> engage is gated on the new LOCKDOWN_KILLSWITCH reason.
 
-Does using (SME_VQ_MAX + 1) for this make something easier than if we
-used 0?
+Basically this proposal allows for any function to be overridden on a
+production kernel as long as no lockdown level is enabled, which is quite
+dangerous.
 
-My thinking is that 0 will be easier/clearer overall, since we can write
-checks of the form:
+Assuming this is acceptable (which I am not sure it should be), then this
+is equivalent to the existing error injection code that we already have in
+the kernel (CONFIG_FAIL_FUNCTION) minus the explicit whitelisting on a per
+function basis required to permit injection.
 
-	if (!info->max_virtualisable_vl) {
-		/* SME is not virtualisable */
-	}
+Given that this achieves the exact same result, then why don't we consider
+simply removing the whitelisting restriction from fail_function altogether
+and use that instead? The only thing missing then would be the boot param
+parsing and setup.
 
-... or:
+This way we'll be removing a few hundred lines of code instead of adding
+more duplication, while enabling the same functionality.
 
-	if (some_vl <= max_virtualisable_vl) {
-		/* Check properties of a virtualisable VL */
-	}
+[As a bonus, this would also make the existing framework more practical to
+ use for testing arbitrary function failures. I have been carrying a debug
+ only patch to that effect for a while, which basically just shorts the
+ whitelisting check when CONFIG_FUNCTION_ERROR_INJECTION_ALLOW_ALL=y.]
 
-... and there's less scope for error.
-
-> +
->  struct task_struct;
->  
->  extern void fpsimd_save_state(struct user_fpsimd_state *state);
-> diff --git a/arch/arm64/kernel/fpsimd.c b/arch/arm64/kernel/fpsimd.c
-> index 2af0e0c5b9f4..49c050ef6db9 100644
-> --- a/arch/arm64/kernel/fpsimd.c
-> +++ b/arch/arm64/kernel/fpsimd.c
-> @@ -1218,7 +1218,8 @@ void cpu_enable_sme(const struct arm64_cpu_capabilities *__always_unused p)
->  void __init sme_setup(void)
->  {
->  	struct vl_info *info = &vl_info[ARM64_VEC_SME];
-> -	int min_bit, max_bit;
-> +	DECLARE_BITMAP(tmp_map, SVE_VQ_MAX);
-> +	int min_bit, max_bit, b;
->  
->  	if (!system_supports_sme())
->  		return;
-> @@ -1249,12 +1250,30 @@ void __init sme_setup(void)
->  	 */
->  	set_sme_default_vl(find_supported_vector_length(ARM64_VEC_SME, 32));
->  
-> +	bitmap_andnot(tmp_map, info->vq_partial_map, info->vq_map,
-> +		      SVE_VQ_MAX);
-> +
-> +	b = find_last_bit(tmp_map, SVE_VQ_MAX);
-> +	if (b >= SVE_VQ_MAX)
-> +		/* All VLs virtualisable */
-> +		info->max_virtualisable_vl = sve_vl_from_vq(ARCH_SVE_VQ_MAX);
-
-I don't think this is right.
-
-This test tells us that all VLs implemented by boot CPUs are
-virtualisable. That set of VLs doesn't necessarily include the
-architectural maximum VL.
-
-IIUC that's not a problem for KVM, since KVM enforces that a guest's
-maximum VL is an implemented VL. However, this is a problem for
-vec_verify_vq_map().
-
-Consider the case where all boot CPUs support only 128-bit, but later we
-try to online a CPU that supports 128-bit and 256-bit. That CPU will be
-rejected by vec_verify_vq_map().
-
-Note that this isn't broken for SVE today as sve_setup() follows this up
-with:
-
-	if (info->max_virtualisable_vl > info->max_vl)
-		info->max_virtualisable_vl = info->max_vl;
-
-... but that won't be sufficient for streaming mode VLs given there's no
-guarantee that smaller streaming VLs are implemented.
-
-> +	else if (b == SVE_VQ_MAX - 1)
-> +		/* No virtualisable VLs */
-> +		info->max_virtualisable_vl = sve_vl_from_vq(SME_VQ_INVALID);
-
-Similarly, I think this is broken for vec_verify_vq_map(). Consider a
-case with two boot CPUs, where one boot CPU only supports 128-bit, and
-the other boot cpu only supports 256-bit. If either CPU is hotplugged
-out and then back in, it will be rejected by vec_verify_vq_map().
-
-We don't have a similar problem for SVE since that's not architecturally
-possible.
-
-> +	else
-> +		info->max_virtualisable_vl = sve_vl_from_vq(__bit_to_vq(b +  1));
-
-This looks suspicious.
-
-At this point we know that 'b' represents the smallest VL which is
-partially supported. The next bit is almost never a power of two, is not
-guaranteed to be an implemented VL, and is not guaranteed to be larger
-than an implemented VL.
-
-Imagine you have two CPUs:
-
-* CPU x supports 128-bit.
-* CPU y supports 128-bit and 512-bit.
-
-The algorithm above will find 512-bit as the smallest partically
-supported VL. For that, VQ==4 and b==12.
-
-If max_virtualisable_vl is chosen as b+1, then that's b==13 and VQ==3,
-which corresponds to a (not architecturally supported) 384-bit VL, which
-is bigger than the architecturally-valid 256 bit VL that neither CPU
-supports.
-
-As with the other cases above, that's broken for vec_verify_vq_map(),
-but I think KVM will gracefully handle this.
-
-To solve all of the above, I think what we actually want to do is find
-the largest uniformly implemented VL which is smaller than the smallest
-partially implemented VL.
-
->  	pr_info("SME: minimum available vector length %u bytes per vector\n",
->  		info->min_vl);
->  	pr_info("SME: maximum available vector length %u bytes per vector\n",
->  		info->max_vl);
->  	pr_info("SME: default vector length %u bytes per vector\n",
->  		get_sme_default_vl());
-> +
-> +	/* KVM decides whether to support mismatched systems. Just warn here: */
-> +	if (info->max_virtualisable_vl < info->max_vl ||
-> +	    info->max_virtualisable_vl == sve_vl_from_vq(SME_VQ_INVALID))
-> +		pr_warn("SME: unvirtualisable vector lengths present\n");
-
-If we used 0 instead of (SME_VQ_MAX + 1), this would just be:
-
-	if (info->max_virtualisable_vl < info->max_vl)
-		pr_warn(...);
-
-As above, I think using 0 would be preferable.
-
-Mark.
-
->  }
->  
->  void sme_suspend_exit(void)
-> 
-> -- 
-> 2.47.3
-> 
+Regards,
+Anthony
