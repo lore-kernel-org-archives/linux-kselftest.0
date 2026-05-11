@@ -1,59 +1,53 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 795AE3D75DB
-	for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 10:33:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 889273D6CDA;
+	Mon, 11 May 2026 10:40:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778495613; cv=none; b=G+hJYpbl0v25pzjIiaHMVo/y/Iv9AWREwb0jaFn5XF8cSyy5eyIHzLTOeHiTuowvzRfcrR3H5tAAr9i70beLqDQsvmCfrSsG72D/wafYwC534i4mpNJuSlvvMNgQ7iXtqiYTKLkoqsUucw6SXNT/kIDRX7iQ+psvtC3fuoZQwBQ=
+	t=1778496010; cv=none; b=iA9MVkWqnwXsz0hFij9nJpkqDHH3Fe0Zbht+LiDGbuzbHDofPE2GoWSISunI0qUE+r4icNiE3O92AOSiKk5YB4UXRoiakeXlzuszlw88tnH8Ju1mO2AJ3pwJFQKGtujNYxr8x2FkJh0X7dKh/XFK5URHxw/YdMMrwa2qCfq8/Dk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778495613; c=relaxed/simple;
-	bh=paKqw+AxbYX8Ac7JYkYZuyWmkzfQCaRJN4HHMNZ2eOE=;
+	s=arc-20240116; t=1778496010; c=relaxed/simple;
+	bh=qIBIaoZMw/edt0QBmUc5C+O+459IgUULanpiPn179Hg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S2ncDUeiaL+XQjkLXYMFbIlZtgCD5on1gpmZlwVqkrGK61y6S+cGMJc+EhQSFcvVQ8p3Tb4SGmRcIQNCz7i6orxnsCzJUCLA5pc+WicZwHFDSoSSi+JDexzHUvHAqR+Eg+dQITKGUegSQBbvqWZhex02cP+bB8tRVOlazvI60iA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=vN8lnB2V; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=vN8lnB2V; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=C7LT++jCdfnFBcmwj2nG9Mm/GKISIoxS2Y6qbiFek4QYAOnke+Ikmdo+nM1H6l202hKpTougioe6WxxWWj+RE/fGYoJGe3nW01fY4ON/lzLtCi5Gcvq6VRahl3XPFdk78KRLpRy3nUPPxxfnkRTacKOFfMywEKZFVTrB5jfiFtI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=AZqdSIPc; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="vN8lnB2V";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="vN8lnB2V"
-Received: from foo (unknown [IPv6:2a07:de40:b306:2000::2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 85AFD68611;
-	Mon, 11 May 2026 10:33:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1778495609; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=dJ2zZxs/5ZIKE08XTANU853dRSSk0fWTqi6tGbGlOE0=;
-	b=vN8lnB2Vh3PR0Tmw4DG4IBoa/8im3GOXpjghq/UJDqT1HEXyNaHCb6NLDr74D6qMv4fz1m
-	q1CWYByw5Ui8+rLi/GUd8ogSEijBOakmdnvyUifBpqsa9yWBWXeA93fRJZjlrkGEUpip22
-	NUnDZXdaBaEQWANHXY8Uw6nAsK90cCw=
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.com header.s=susede1 header.b=vN8lnB2V
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1778495609; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=dJ2zZxs/5ZIKE08XTANU853dRSSk0fWTqi6tGbGlOE0=;
-	b=vN8lnB2Vh3PR0Tmw4DG4IBoa/8im3GOXpjghq/UJDqT1HEXyNaHCb6NLDr74D6qMv4fz1m
-	q1CWYByw5Ui8+rLi/GUd8ogSEijBOakmdnvyUifBpqsa9yWBWXeA93fRJZjlrkGEUpip22
-	NUnDZXdaBaEQWANHXY8Uw6nAsK90cCw=
-Date: Mon, 11 May 2026 12:33:28 +0200
-From: Anthony Iliopoulos <ailiop@suse.com>
-To: Sasha Levin <sashal@kernel.org>
-Cc: Florian Weimer <fw@deneb.enyo.de>, corbet@lwn.net,
-	akpm@linux-foundation.org, skhan@linuxfoundation.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, gregkh@linuxfoundation.org
-Subject: Re: [PATCH v2] killswitch: add per-function short-circuit mitigation
- primitive
-Message-ID: <agGweC12aloH8DBq@foo>
-References: <20260508195749.1885522-1-sashal@kernel.org>
- <87ecjku6y7.fsf@mid.deneb.enyo.de>
- <af8pw54Y-Q18kSR0@laps>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="AZqdSIPc"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 75A2E16F2;
+	Mon, 11 May 2026 03:40:03 -0700 (PDT)
+Received: from J2N7QTR9R3.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F384E3F836;
+	Mon, 11 May 2026 03:40:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1778496008; bh=qIBIaoZMw/edt0QBmUc5C+O+459IgUULanpiPn179Hg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=AZqdSIPcNDUt2vsK0aBBMNGq9ftbYQkLtJzZEzpQyfsNIjrAIFSQvILVMNzfskFEI
+	 3FSQiqKU+OjtNIqZZdvzkW0W9FwO3XyBsK96xa0zZ+jH7MmqlpmVwr9Vzdo88s+c3e
+	 Y04PU7WiXTlkgUqc0fJH/a8rXBHvUWHvl79a6z4o=
+Date: Mon, 11 May 2026 11:40:02 +0100
+From: Mark Rutland <mark.rutland@arm.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	Oliver Upton <oupton@kernel.org>, Dave Martin <Dave.Martin@arm.com>,
+	Fuad Tabba <tabba@google.com>, Ben Horgan <ben.horgan@arm.com>,
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Peter Maydell <peter.maydell@linaro.org>,
+	Eric Auger <eric.auger@redhat.com>
+Subject: Re: [PATCH v10 01/30] arm64/sysreg: Update SMIDR_EL1 to DDI0601
+ 2025-06
+Message-ID: <agGyAvutI1GOCQkI@J2N7QTR9R3.cambridge.arm.com>
+References: <20260306-kvm-arm64-sme-v10-0-43f7683a0fb7@kernel.org>
+ <20260306-kvm-arm64-sme-v10-1-43f7683a0fb7@kernel.org>
+ <af4ZYVFsbYlEfdOu@J2N7QTR9R3>
+ <af6DH_j7pyEm4HyI@sirena.co.uk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -62,87 +56,58 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <af8pw54Y-Q18kSR0@laps>
-X-Spamd-Result: default: False [17.36 / 50.00];
-	SPAM_FLAG(5.00)[];
-	NEURAL_SPAM_LONG(3.50)[1.000];
-	BAYES_HAM(-3.00)[100.00%];
-	HFILTER_HELO_5(3.00)[foo];
-	NEURAL_SPAM_SHORT(2.97)[0.991];
-	HFILTER_HOSTNAME_UNKNOWN(2.50)[];
-	RDNS_NONE(2.00)[];
-	ONCE_RECEIVED(1.20)[];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[suse.com:s=susede1];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	FROM_EQ_ENVFROM(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	ARC_NA(0.00)[];
-	RCVD_COUNT_ZERO(0.00)[0];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	DKIM_TRACE(0.00)[suse.com:+];
-	MISSING_XM_UA(0.00)[];
-	DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	DNSWL_BLOCKED(0.00)[2a07:de40:b306:2000::2:from];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:dkim]
-X-Spamd-Bar: +++++++++++++++++
-X-Rspamd-Queue-Id: 85AFD68611
-X-Spam-Score: 17.36
-X-Spam-Level: *****************
-X-Rspamd-Action: add header
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Spam-Flag: YES
-X-Spam: Yes
+In-Reply-To: <af6DH_j7pyEm4HyI@sirena.co.uk>
 
-On Sat, May 09, 2026 at 08:34:11AM -0400, Sasha Levin wrote:
-> On Sat, May 09, 2026 at 02:02:24PM +0200, Florian Weimer wrote:
-> > * Sasha Levin:
-> > 
-> > > When a kernel (security) issue goes public, fleets stay exposed until a patched
-> > > kernel is built, distributed, and rebooted into.
-> > > 
-> > > For many such issues the simplest mitigation is to stop calling the buggy
-> > > function. Killswitch provides that. An admin writes:
-> > > 
-> > >     echo "engage af_alg_sendmsg -1" \
-> > >         > /sys/kernel/security/killswitch/control
-> > > 
-> > > After this, af_alg_sendmsg() returns -EPERM on every call without
-> > > running its body. The mitigation takes effect immediately, and is dropped on
-> > > the next reboot -- by which point a patched kernel is hopefully in place.
-> > 
-> > Do you expect this to be safe to enable in kernel lockdown mode (i.e.,
-> > with typical Secure Boot configurations in distributions)?
+On Sat, May 09, 2026 at 09:43:11AM +0900, Mark Brown wrote:
+> On Fri, May 08, 2026 at 06:12:01PM +0100, Mark Rutland wrote:
+> > On Fri, Mar 06, 2026 at 05:00:53PM +0000, Mark Brown wrote:
 > 
-> Yes: under lockdown, killswitch has to be configured on the cmdline. Runtime
-> engage is gated on the new LOCKDOWN_KILLSWITCH reason.
+> > > Update the definition of SMIDR_EL1 in the sysreg definition to reflect the
+> > > information in DD0601 2025-06. This includes somewhat more generic ways of
+> > > describing the sharing of SMCUs, more information on supported priorities
+> > > and provides additional resolution for describing affinity groups.
+> 
+> > FWIW, these are all in ARM DDI 0487 M.b:
+> 
+> >   https://developer.arm.com/documentation/ddi0487/mb/
+> 
+> > Is anything later in the series going to depend on these fields, or
+> > would everything behave correctly with the existing RES0 field
+> > definitions?
+> 
+> We're exposing the affinity fields so there's a build time issue.
 
-Basically this proposal allows for any function to be overridden on a
-production kernel as long as no lockdown level is enabled, which is quite
-dangerous.
+What I'm asking is what is the rationale for updating these definitions?
+e.g.
 
-Assuming this is acceptable (which I am not sure it should be), then this
-is equivalent to the existing error injection code that we already have in
-the kernel (CONFIG_FAIL_FUNCTION) minus the explicit whitelisting on a per
-function basis required to permit injection.
+* Are we planning to use any of the fields in a specific way in the
+  *host*?
 
-Given that this achieves the exact same result, then why don't we consider
-simply removing the whitelisting restriction from fail_function altogether
-and use that instead? The only thing missing then would be the boot param
-parsing and setup.
+* Are we planning to use any of the fields in a specific way in the
+  *guest*?
 
-This way we'll be removing a few hundred lines of code instead of adding
-more duplication, while enabling the same functionality.
+* Is this updated just out of habit?
 
-[As a bonus, this would also make the existing framework more practical to
- use for testing arbitrary function failures. I have been carrying a debug
- only patch to that effect for a while, which basically just shorts the
- whitelisting check when CONFIG_FUNCTION_ERROR_INJECTION_ALLOW_ALL=y.]
+Knowing the rationale would help with review, even if that rationale is
+just "it seemed nice to use the latest".
 
-Regards,
-Anthony
+> > > +Field	55:52	HIP
+> 
+> > Reading the ARM ARM, HIP is arguably a backwards-incompatible change.
+> 
+> Yes, I belive people are aware.
+
+Ok. Is that considered a problem, or accepted?
+
+Which people are aware?
+
+> > Do we expect to expose that to VMs, or just hide priorities entirely? I
+> > suspect we probably want to require that the guest sees
+> > SMIDR_EL1.SMPS==0, and not care about any of that.
+> 
+> Currently we're not exposing priority support to guests so we don't need
+> to worry about it yet.
+
+Do we plan to in future?
+
+Mark.
