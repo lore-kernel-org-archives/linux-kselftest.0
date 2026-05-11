@@ -1,208 +1,127 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CEA63242B8
-	for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 12:27:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3AD83EF66D;
+	Mon, 11 May 2026 12:31:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778502452; cv=none; b=R50zvhDSBdKESAkn1+fnOEatUYudE9BLmxLwEWOl11i+/QDpdv5tyGXwBg1vdPQRtiMTK8VKNp4tMh2C/AiwzHtRIDJvTqMcbijvhdvdbq+clmhW88H3Qnj/i3jgMvVlQm7n0gL1EIeus5WsZHB0bo5S8dq9eIGr+/UW+fEzf+k=
+	t=1778502669; cv=none; b=j0xJqcL9EhOVs1Nt0J6vFFil77+k8LRE1ZiJo0ycv+L2R1KKbYvX+pJzunsmjIntWQq3YsjO6Mrg4equr++QZGFy03cVeAAtEhLOEG9KGvVXRjbtcC+7DICXSSYUrnvI9ieUSTfk6f2AOeC2Rwl0qo+zjsoEgpDqBJ3Zd6f8U9A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778502452; c=relaxed/simple;
-	bh=4Ou/XNRtk4tgOOCk2D/f+N5Hguh5Go/3XYIUSgk99OU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=AhF+J5viq27JeJV0L2yFzWcBJr6I7ClU7BvxjWvPofcBx+W/BtGIjL7aj0/E1VekuKuOVSOzxtbBlYr5w36BdmiueMYIIa4/uhvBSVTMxJ8fE45sU9G3zM3L/xDNVcUhg2lVA2YP37+3SaXvvUdXv3PhyNGO+M9LQmyId5xptNU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=vyyqbfFz; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Qx68NNtp; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=Lo28DNyZ; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=n5G/ykAc; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	s=arc-20240116; t=1778502669; c=relaxed/simple;
+	bh=4cj4AFpxR7VfRzsb4XVcpSOKHntygkHpeH2TRzpG76A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BaP9h9acv2ENAUrKbX9Xh0wBkp//vd3tlosqBR7fhM4tKxVVDZRcnlNjAKlePWsS6Mudzeuo7W0HWhPVU28W0flfJnDJdOg6qIcxiffMfFmQ0JqglyXg/lhZ7LMWQKuUM4+MTPFr1mvXa6WeKRDUxW8EjTVbehNm24rLQ1u2/IY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ik+Jsoeg; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="vyyqbfFz";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Qx68NNtp";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="Lo28DNyZ";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="n5G/ykAc"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 0A21B6B830;
-	Mon, 11 May 2026 12:27:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1778502444; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=qU6l/+ER9t/PsjZjUYr1aPdEhYaTfE6GNZ3x1LGiPTw=;
-	b=vyyqbfFz8jEd1vz0ItuOti5Tln+6gCW3bt5ux4QuPdxg+Glv+xCW0iLQ98mugU1xuVdx3u
-	r/ysxmUforF8iTrzLTNLeVe1G4UUFmrcs2NgM/9S42N+aB+6TRMtczApTSFD3bU7cV1M6/
-	Vh8sYgewqzVtUjx1cpWUI7npcBdLC80=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1778502444;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=qU6l/+ER9t/PsjZjUYr1aPdEhYaTfE6GNZ3x1LGiPTw=;
-	b=Qx68NNtpxrMuPOidtBeRIRjw8zMhhSzbnyie21hPWZUJ6lvae08gohg+EgUdIXkA26ltxX
-	6R8EojxbLeEHTWDQ==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=Lo28DNyZ;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b="n5G/ykAc"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1778502440; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=qU6l/+ER9t/PsjZjUYr1aPdEhYaTfE6GNZ3x1LGiPTw=;
-	b=Lo28DNyZUQJAOk6SuKOFJCmm6zaQQZfK7PodQPCKYG3kKJJbWLFLz4k0LrbGXcQMkMXthi
-	BbLHLMxu6tRDcmGqR5F2olqZ8Ca6J+6SmtaF+Zvu+rD03GFSFJcg+crD/mc6qvKq7VGXJP
-	DnmXrXAww5COAhCoj8DUloOGlsoqiy0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1778502440;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=qU6l/+ER9t/PsjZjUYr1aPdEhYaTfE6GNZ3x1LGiPTw=;
-	b=n5G/ykAcUxh6vBopD9gtHBI4kaHSdWnIKze5dg9lW+fL7F/psrRhvyYZTWc/y/wfgr7JjX
-	ax0InhEyEgaxxPAA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 60A36593A3;
-	Mon, 11 May 2026 12:27:19 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id BBe5FCfLAWosZgAAD6G6ig
-	(envelope-from <fmancera@suse.de>); Mon, 11 May 2026 12:27:19 +0000
-From: Fernando Fernandez Mancera <fmancera@suse.de>
-To: netdev@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org,
-	horms@kernel.org,
-	pabeni@redhat.com,
-	kuba@kernel.org,
-	edumazet@google.com,
-	dsahern@kernel.org,
-	davem@davemloft.net,
-	Fernando Fernandez Mancera <fmancera@suse.de>,
-	=?UTF-8?q?=C5=81ukasz=20Stelmach?= <steelman@post.pl>,
-	Ido Schimmel <idosch@nvidia.com>
-Subject: [PATCH 1/2 net v4] ipv6: addrconf: fix temp address generation after prefix deprecation
-Date: Mon, 11 May 2026 14:26:45 +0200
-Message-ID: <20260511122645.6233-2-fmancera@suse.de>
-X-Mailer: git-send-email 2.51.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ik+Jsoeg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37C90C2BCB0;
+	Mon, 11 May 2026 12:31:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778502669;
+	bh=4cj4AFpxR7VfRzsb4XVcpSOKHntygkHpeH2TRzpG76A=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Ik+Jsoeg6Q3DJuanPHz1lpNamzmd17Yr5QPCV8lyzZTR8FB/LKe+SXBQRARyF3Q6E
+	 ugGWVkLSx7xQOY2BOpClEh36pzqyfKnvC/6lBvcZNDtCRocKIM4VnXlk2Jk4QSDHY6
+	 fIhnWYrcmxdyarFsFke6+3jj7kE38dPsZIsTKtGv43mZcGCF0tH37wnju55G8vayL1
+	 l5Uj4B7pK9w4MJR2hHx6sIJg37t4GoDh7lquM0WSg6eHo3uGZWmY2DNGWjuA1YB3Pl
+	 5batzUW6ViddTwtV6B7gw53TbJHoAuZBsxoahpSezLjrNCGGgBz6IMl7VUfifq6jz+
+	 o/fVhTzgqoYeA==
+Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
+	id 1B24E1AC58A9; Mon, 11 May 2026 13:31:07 +0100 (BST)
+Date: Mon, 11 May 2026 21:31:07 +0900
+From: Mark Brown <broonie@kernel.org>
+To: Mark Rutland <mark.rutland@arm.com>
+Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	Oliver Upton <oupton@kernel.org>, Dave Martin <Dave.Martin@arm.com>,
+	Fuad Tabba <tabba@google.com>, Ben Horgan <ben.horgan@arm.com>,
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Peter Maydell <peter.maydell@linaro.org>,
+	Eric Auger <eric.auger@redhat.com>
+Subject: Re: [PATCH v10 01/30] arm64/sysreg: Update SMIDR_EL1 to DDI0601
+ 2025-06
+Message-ID: <agHMCyu12-q9qSyI@sirena.co.uk>
+References: <20260306-kvm-arm64-sme-v10-0-43f7683a0fb7@kernel.org>
+ <20260306-kvm-arm64-sme-v10-1-43f7683a0fb7@kernel.org>
+ <af4ZYVFsbYlEfdOu@J2N7QTR9R3>
+ <af6DH_j7pyEm4HyI@sirena.co.uk>
+ <agGyAvutI1GOCQkI@J2N7QTR9R3.cambridge.arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Flag: NO
-X-Spam-Score: -3.51
-X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-3.51 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	TO_DN_SOME(0.00)[];
-	ARC_NA(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	FROM_HAS_DN(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	FROM_EQ_ENVFROM(0.00)[];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	DNSWL_BLOCKED(0.00)[2a07:de40:b281:104:10:150:64:97:from,2a07:de40:b281:106:10:150:64:167:received];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	DKIM_TRACE(0.00)[suse.de:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,post.pl:email,suse.de:email,suse.de:dkim,suse.de:mid,nvidia.com:email]
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Rspamd-Queue-Id: 0A21B6B830
-X-Spam-Level: 
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="pfCVkcJhE9mTQmhr"
+Content-Disposition: inline
+In-Reply-To: <agGyAvutI1GOCQkI@J2N7QTR9R3.cambridge.arm.com>
+X-Cookie: Truckers welcome.
 
-When a router temporarily deprecates an IPv6 prefix (either by sending a
-Router Advertisement with Preferred Lifetime = 0 or by letting the
-lifetime expire) and later restores it, the kernel permanently loses its
-ability to generate temporary privacy addresses (RFC 8981) for that
-prefix.
 
-This happens because the address worker attempts to generate a
-replacement temporary address when the current one nears expiration. As
-the base prefix is deprecated already, the generation fails after
-marking the temporary address as already having spawned a replacement
-(ifp->regen_count++).
+--pfCVkcJhE9mTQmhr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-When the router eventually restores the prefix, the temporary address
-becomes active again. However, once it naturally expires, the address
-worker sees this temporary address already tried to generate one and
-skips the regeneration.
+On Mon, May 11, 2026 at 11:40:02AM +0100, Mark Rutland wrote:
+> On Sat, May 09, 2026 at 09:43:11AM +0900, Mark Brown wrote:
 
-Fix this by checking if all temporary addresses for a given prefix have
-already tried to spawn a replacement when processing a new RA. If so,
-spawn a new temporary address.
+> > We're exposing the affinity fields so there's a build time issue.
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Reported-by: Łukasz Stelmach <steelman@post.pl>
-Closes: https://lore.kernel.org/netdev/87340td30q.fsf%25steelman@post.pl/
-Suggested-by: Ido Schimmel <idosch@nvidia.com>
-Signed-off-by: Fernando Fernandez Mancera <fmancera@suse.de>
----
-v2: adjusted commit message, adjusted the implementation to cover all
-race conditions
-v3: regen now if ipv6_create_tempaddr failed due to timer to avoid an
-infinite loop as we restart the loop and we need to check now against
-prefered_lft again.
-v4: change the proposed fix completely, now we address the problem when
-doing manage_tempaddrs().
----
- net/ipv6/addrconf.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+> What I'm asking is what is the rationale for updating these definitions?
+> e.g.
 
-diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
-index 5476b6536eb7..18a6f2de30ce 100644
---- a/net/ipv6/addrconf.c
-+++ b/net/ipv6/addrconf.c
-@@ -2595,8 +2595,9 @@ static void manage_tempaddrs(struct inet6_dev *idev,
- 			     __u32 valid_lft, __u32 prefered_lft,
- 			     bool create, unsigned long now)
- {
--	u32 flags;
- 	struct inet6_ifaddr *ift;
-+	bool all_regen = true;
-+	u32 flags;
- 
- 	read_lock_bh(&idev->lock);
- 	/* update all temporary addresses in the list */
-@@ -2637,6 +2638,8 @@ static void manage_tempaddrs(struct inet6_dev *idev,
- 		ift->tstamp = now;
- 		if (prefered_lft > 0)
- 			ift->flags &= ~IFA_F_DEPRECATED;
-+		if (!ift->regen_count)
-+			all_regen = false;
- 
- 		spin_unlock(&ift->lock);
- 		if (!(flags&IFA_F_TENTATIVE))
-@@ -2644,12 +2647,14 @@ static void manage_tempaddrs(struct inet6_dev *idev,
- 	}
- 
- 	/* Also create a temporary address if it's enabled but no temporary
--	 * address currently exists.
-+	 * address currently exists or if all temporary addresses already
-+	 * generated an address.
- 	 * However, we get called with valid_lft == 0, prefered_lft == 0, create == false
- 	 * as part of cleanup (ie. deleting the mngtmpaddr).
- 	 * We don't want that to result in creating a new temporary ip address.
- 	 */
--	if (list_empty(&idev->tempaddr_list) && (valid_lft || prefered_lft))
-+	if ((list_empty(&idev->tempaddr_list) || all_regen) &&
-+	    (valid_lft || prefered_lft))
- 		create = true;
- 
- 	if (create && READ_ONCE(idev->cnf.use_tempaddr) > 0) {
--- 
-2.53.0
+> * Are we planning to use any of the fields in a specific way in the
+>   *host*?
 
+> * Are we planning to use any of the fields in a specific way in the
+>   *guest*?
+
+> * Is this updated just out of habit?
+
+> Knowing the rationale would help with review, even if that rationale is
+> just "it seemed nice to use the latest".
+
+The immediate motivation for including this in the current series is the
+above.
+
+> Which people are aware?
+
+Probably a conversation best taken off list.
+
+> > > Do we expect to expose that to VMs, or just hide priorities entirely? I
+> > > suspect we probably want to require that the guest sees
+> > > SMIDR_EL1.SMPS==0, and not care about any of that.
+
+> > Currently we're not exposing priority support to guests so we don't need
+> > to worry about it yet.
+
+> Do we plan to in future?
+
+The plan to evaluate the priority support that hardware implements in
+the context of practical systems and consider if and how to expose it
+for either hosts or guests, we need to ensure we've got a good
+understanding of the system impacts and user needs.  Architecturally the
+priority support is all very implementation defined.
+
+--pfCVkcJhE9mTQmhr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmoBzAoACgkQJNaLcl1U
+h9DPQAf/SInPpjUAtj1bRvp1YePRMRh2qdaVto7ygoI98Dhsvq+5UWD7dCYSDKJt
+2aAm55eLL3hSs4fkLK4HPUnXDsBez6ZxoGQPvFtcuM74FRKPBHuKQ9GvWB6ueO08
+owAzkEPBUqaDWkHup7eQwXwlXtksLw2WaTniQaAaKLprrLIDAr97U30kaLowRMbm
+/1HPUx42NG+yEZs7O0KfEPKzl6WdApz2zxBxRgLYzgs3QHKJDiQZ9g9z1NryLgSK
++QHdfRFhN/iRUaHqgHY50zCrysR8LUXjYSjS/VbSk3c4O1m2AF0GV84j3uwAunYy
+4Y6zZmylTgiqhjTcKPAYWPsp8DKdiQ==
+=Gq3j
+-----END PGP SIGNATURE-----
+
+--pfCVkcJhE9mTQmhr--
