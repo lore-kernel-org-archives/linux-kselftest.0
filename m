@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0320342DFF1;
-	Mon, 11 May 2026 16:32:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89FA73CFF5E;
+	Mon, 11 May 2026 16:32:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778517146; cv=none; b=o+ySPfRucGXKAaqZJLSh/nWf/mNCHiM226GgtaH2/NK8SQHmGhe3Ish6ul5mrdVf6FrL8OsqodzUi9fBgaCKHY5L/6wrj++pwQyDrl0SWlJnntRqia2B/UoCKR1GY03Gh2MieSpSuzeo984GgsneKWYjyvSbRMQLe9od09mw0zc=
+	t=1778517152; cv=none; b=RSVxPndTKhXVfhP5BqBOs/uVQxHYWxLyRTLbP1paYdoOEhFG0zOyRaSGB9hIRqDyWXg2/qrVditECzHwGV+agn4J/HKQRMpCyZEuVNQ3gPz0N7KmxcaBHIBNU/oJeR3nW1DPZ5UA7DmloZE/oiEWYSl8dV3iGDLHykkANbhHs8s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778517146; c=relaxed/simple;
-	bh=lA3bDepyp/KwvwswSh+ZEnsgnt+UniCEkPXwbD7q5uk=;
+	s=arc-20240116; t=1778517152; c=relaxed/simple;
+	bh=55gDmnO5T45LMvku84PvaaMpLqFoz2ktrJOVSg+/AyE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Cb66Z/2R0yQpcYXxF8eMNbt0b7S1SoOfhFJsgwhBOhKzU4HAxRrspobY5zXcxofqJjDbzptPjt8pyAyC0JUN0jnhgQnc6HoGhFThlcI/3SszBUd+LXmQc8oLYZFNLCFFvtTJMw3H+EndoVQCIdLyR2QLtE1Cm8U30o2T40JaSqY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e9kUymH/; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=MlFCuUdAMEU2LZhLEiEpCaC5YeqiBqyrkB9o92g3K0W6Y+lSL1obU4E0JErCrb1Xt8pKiTguyAw3sLc4VcKbSfN1sYAlW/Wsub/0yBYSvp5/bfpcCyDiIY3GubvlRbXuWkNZC3AkCvjatM0z+NbpBc1aw5elMwmec9YrJooVDm0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S1SkCvWj; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e9kUymH/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B2ECC2BCB0;
-	Mon, 11 May 2026 16:32:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S1SkCvWj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22D0CC2BCC9;
+	Mon, 11 May 2026 16:32:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778517145;
-	bh=lA3bDepyp/KwvwswSh+ZEnsgnt+UniCEkPXwbD7q5uk=;
+	s=k20201202; t=1778517152;
+	bh=55gDmnO5T45LMvku84PvaaMpLqFoz2ktrJOVSg+/AyE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=e9kUymH/p70j9GGaBVXch80X7FOdrlg68SCppYlJo3m3mXNbvnCArzXhbuOo7t2h2
-	 EKsMQiD8F+uwMFZWpfs4Djtuklt790IpQsjhkb90AXp4k8pFDjJRVI4cf5b+3x+sl5
-	 w+zahcfQYi5CKy0BD8nS2fkYCYQ0HwN7WpjMCr2rgO92oLsDDQdB9mSgzX90BsX2BV
-	 2RSOARreDsvUTgWiHaDoaYLCm/HOSI9+5lXFvhzi+Nu2saajYli2wuVgPMFgwgxGYS
-	 YSiU+TKOYvLIGDnwISBdSeRPbrFnWqxo45ZR0nuAVuVEeYKaorLRZTggepWhhHAi7X
-	 xAAIdtXkZ2jzQ==
+	b=S1SkCvWj7mrUnRTm3Zy84Z4OanDq535aEWgVexeaslU5b5MOaLWX/CaC7xGaftSKq
+	 ZAgheTl9QnLISNZoF+o2nGJGyi7bkDvepDRVRXEKzoYrVld+WHFbRRe3mCnmFV/c61
+	 GEuT+3bVH50GoXwfzWPQSdaSi9Tnsx5GqH6zFZqnCUcsOO/SEj8t6n/AeJjre4L/vd
+	 /bnxd1jFTL/Fdnogkia1HA6GyUJqnSYLv9H8yPHScAzDZEK4E1qczsPxHVU3F7RE5R
+	 S882e87MGZa5iybUMTtvzICPmbj0xxbSVA4WXk7VzFdDfDtShHuoziPmaLxBe6Wy1I
+	 WXjxjqc4FmTeA==
 From: Mike Rapoport <rppt@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	David Hildenbrand <david@kernel.org>
@@ -55,9 +55,9 @@ Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-mm@kvack.org
-Subject: [PATCH v4 33/55] selftests/mm: gup_longterm: add setup of HugeTLB pages
-Date: Mon, 11 May 2026 19:28:17 +0300
-Message-ID: <20260511162840.375890-34-rppt@kernel.org>
+Subject: [PATCH v4 34/55] selftests/mm: gup_test: add setup of HugeTLB pages
+Date: Mon, 11 May 2026 19:28:18 +0300
+Message-ID: <20260511162840.375890-35-rppt@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260511162840.375890-1-rppt@kernel.org>
 References: <20260511162840.375890-1-rppt@kernel.org>
@@ -71,32 +71,66 @@ Content-Transfer-Encoding: 8bit
 
 From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-gup_longterm tests skips HugeTLB tests if there are no free huge pages
+gup_test fails to run HugeTLB tests if there are no free huge pages
 prepared by a wrapper script.
 
-Add setup of HugeTLB pages to the test and make sure that the original
-settings are restored on the test exit.
+Add setup of HugeTLB pages to the test and make sure that the
+original settings are restored on the test exit.
 
 Tested-by: Luiz Capitulino <luizcap@redhat.com>
 Tested-by: Sarthak Sharma <sarthak.sharma@arm.com>
 Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 ---
- tools/testing/selftests/mm/gup_longterm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/mm/gup_test.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/tools/testing/selftests/mm/gup_longterm.c b/tools/testing/selftests/mm/gup_longterm.c
-index 96dae0acd11a..eb8963e9d98f 100644
---- a/tools/testing/selftests/mm/gup_longterm.c
-+++ b/tools/testing/selftests/mm/gup_longterm.c
-@@ -510,7 +510,7 @@ int main(int argc, char **argv)
- 	int i;
+diff --git a/tools/testing/selftests/mm/gup_test.c b/tools/testing/selftests/mm/gup_test.c
+index fb8f9ae49efa..3f841a96f870 100644
+--- a/tools/testing/selftests/mm/gup_test.c
++++ b/tools/testing/selftests/mm/gup_test.c
+@@ -14,6 +14,7 @@
+ #include <mm/gup_test.h>
+ #include "kselftest.h"
+ #include "vm_util.h"
++#include "hugepage_settings.h"
  
- 	pagesize = getpagesize();
--	nr_hugetlbsizes = detect_hugetlb_page_sizes(hugetlbsizes,
-+	nr_hugetlbsizes = hugetlb_setup(2, hugetlbsizes,
- 						    ARRAY_SIZE(hugetlbsizes));
+ #define MB (1UL << 20)
+ 
+@@ -94,6 +95,7 @@ int main(int argc, char **argv)
+ 	int filed, i, opt, nr_pages = 1, thp = -1, write = 1, nthreads = 1, ret;
+ 	int flags = MAP_PRIVATE;
+ 	char *file = "/dev/zero";
++	bool hugetlb = false;
+ 	pthread_t *tid;
+ 	char *p;
+ 
+@@ -168,6 +170,7 @@ int main(int argc, char **argv)
+ 			break;
+ 		case 'H':
+ 			flags |= (MAP_HUGETLB | MAP_ANONYMOUS);
++			hugetlb = true;
+ 			break;
+ 		default:
+ 			ksft_exit_fail_msg("Wrong argument\n");
+@@ -199,6 +202,18 @@ int main(int argc, char **argv)
+ 	}
  
  	ksft_print_header();
++
++	if (hugetlb) {
++		unsigned long hp_size = default_huge_page_size();
++
++		if (!hp_size)
++			ksft_exit_skip("HugeTLB is unavailable\n");
++
++		size = (size + hp_size - 1) & ~(hp_size - 1);
++		if (!hugetlb_setup_default(size / hp_size))
++			ksft_exit_skip("Not enough huge pages\n");
++	}
++
+ 	ksft_set_plan(nthreads);
+ 
+ 	filed = open(file, O_RDWR|O_CREAT, 0664);
 -- 
 2.53.0
 
