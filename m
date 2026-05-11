@@ -1,155 +1,241 @@
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A909D2F7AC1
-	for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 15:20:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.172
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778512837; cv=pass; b=KccsBqWwIGOpDUXV699ymfF1PlFm93EyXRf/YWXtnbKtTCpPYOgrjv3JCQGZr7zczvlaT8uv1PStO17PmwnH8BhjgEbEEVHwHu7ARXrBqk3osJDis1LS6R+niNgdNqMzRNzoeLmw3mgyvrwYXoa89dyq9dPHkJTetVsC2eqEO1k=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778512837; c=relaxed/simple;
-	bh=Xz4fYGbS7i/Q6Qi38Fw9U1gRgtcym24JZtgZTH7Ivpg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=InaJKWyBOENAz3iDzObWz1HKAuckCq+RKs8yd8wXSLUn4hkYiTCL043yS04PLUa5+XelyaLj2l56QS9bn5ZwCvGdxIW6m6RdxMfohkrtbL1BMXYXUZKIcl2c/2H6Y5KcwOa+9ChqG+4RP7RwAIL1xWLCSOjKWe7/2il6T6z6gzs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=oIYYIH/0; arc=pass smtp.client-ip=209.85.160.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C08FD6FC5;
+	Mon, 11 May 2026 15:28:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778513340; cv=none; b=LiT1cSDdb5w2SpX7YhVthdAtyQcp9i7jSs+21k9z38/g6v32bMwitNfwT66fp7E46oW5kdY6exolPWlvoPQW/o2/6O4q0odqWtFqKW5r4VAKXUTwKaiDryz8jyev2siK+TuMUf7iVB46kVREa56vCwu6JtHzGK0MOtHjdCn7uPw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778513340; c=relaxed/simple;
+	bh=ilVtCMETArty0tgVLr/76tppfvSBhti029SN+Q65P8Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=d7Bk5JdA6vxoDygA8jV5cSCkHQzpuvX00tH8/s3wM2uY72xxLXpEN1LFE+i9Ps1rRlEmp4n53gAwcubm2NTEQfRQ9OLGwYsERvqVTBRnSNHtxbi/f4Ian7y8iHppmay3/u6xov3VJCS+lGHo2XYxI2Bni7HpUEdGQH5NFnYuAzE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=OoryCbj+; arc=none smtp.client-ip=91.218.175.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="oIYYIH/0"
-Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-50e61648f10so8031cf.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 08:20:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778512834; cv=none;
-        d=google.com; s=arc-20240605;
-        b=CsoiKlASCU62f/Ly2RKACvpG7+EbENGXmuKluD1InEFMyylWeeAB0CLfhj4PkNq6G/
-         F3RTUm5e0qZBUVz0btOdqgn0x0hVoO2wpIXA0oVTnfbj016G1bppJi8MeZqglWkYrDiT
-         qUlvNQ4WlXN/aAs5zlMB7dYc449QTyt9aM7kqEfWqVpRfCaYgaOMDrytJYepBgDl3lOM
-         EjA7r/yE/crbTcSCUbb4xzGZdDqnaOs2LxP9CVezATJzWeQ426gxMqTLtqLWbrD1+ac8
-         BYW9vbYifjxtFTexfR6GlOsKWKPqV/EH3HpNirc8NZ/xF0amVNu3wV0ok5N0+GbE+DYs
-         UOtw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=y5WEI3bc+jKa5pFUDTyUeMXlg9f3nphKAR2eDCdRxOs=;
-        fh=CflVhOHcmFw7guUFuEl0Vn9r941i49N8TV7cRLnnFyw=;
-        b=Ij3dILTKx0+mpa/Pjeko9KjK32DIKYjX07wAqlwBl+vdom78zV3LIa79wmh0GuAMJ2
-         ji3k1wA9znjoh9nKJUKo/bSVPTfrsXgtY+9QnJFe5vGTKz2yxF1zrupdxFk6BeXnt5HS
-         Vz0g3Wf4oy0lV0nnAYWC3QQ45x2xB0Qlhy0D00oaMVyY0dJ16rmxHdQUuH2H25lbkBCA
-         0dPL9zjFyfnjnYb1eNoXuPs2Nzvyt7tFmT5ER2MyrnL1TuE8vKREBuKFEOrEQO5IGWTr
-         mbwwy8jbSdfkhRaTv1k51RxcM7TIFozGf3zRR/3g7itkCu/LHcnuDlVoJsmK8UNCPly9
-         T5GQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1778512834; x=1779117634; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=y5WEI3bc+jKa5pFUDTyUeMXlg9f3nphKAR2eDCdRxOs=;
-        b=oIYYIH/0AlhWSmOV/8humSiDKOr8H3eHmdiCR7ChUQzr4Iz5n9vPUjeK+im49G9Ya3
-         /ZuS5nPJgLMd4dH+OPN0YoAY8+gvgN++3NbJPW/Qsr7pOfSbNzCRNzU0shuwc/44KIHq
-         Kt12VmdJ/3gB4qQKAfU29sbAUgVvE+N9l5EE5/ffKICMrxzsfAwCjkSRT5F4qaX0vYnh
-         2Us8kfCXC7/vT/W5My4j3VoQqhB3Bp673t6mA0pkpblkjAuzwzIq2ZSn9pB79SnJNo3t
-         9PhDvsIGVe26arsIaumzFFNea5SSWm71zb54yMr5Mn9Ik5SvQelHq7YZNx0dN2qo9wDH
-         lBqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778512834; x=1779117634;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=y5WEI3bc+jKa5pFUDTyUeMXlg9f3nphKAR2eDCdRxOs=;
-        b=AI6jyMrrE2dJ9QmUdjukUEmHJT5fAn9k/l/ooMa5W1T9ltwGtROI0e66Qw2X+Zw+XM
-         5oy88xlvjol9PiOy2LBk27OIgPjQKO7IDwt2BNa81EBNYvVwU03W/ARROedr2YmSyuH2
-         aIHxv10uFtUC1oDVzwpdwfa3NHhJxwfbysYvdyFAyKupJarkNFMWvH0fmSKXRhZE5Ky9
-         WshMMxj3qARz1jbzoI3IlruhpLGqP1LHP5XnGm4q86r43z3598rBI3GBfoFk8UfeRO2q
-         xN4aZ55aK4wjjARBWj2SFRjG9ekXtrstjwdsRcT4tqYtWMrBHj0czhigzadoverL4uF0
-         KOEg==
-X-Forwarded-Encrypted: i=1; AFNElJ9sFfMrwd6OclJ3RDfPwBcK9/0Xj3cSJUEUUOZUGp4cZbIyq+MNh4OMcvaIXvwZZ0AnPP/RGSgMzXG3l25UT/8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwKXS0rRfhya9W57YhGQlrkMev9FyLtde8YgqKbYrp9KYtVvNuC
-	I8S2SAzdiFJYEoO5iRP40aKl4vHsVQAmYxn79d/BOTnwG1ww2kRWTkDF+TgshwnEsEUxKVctrNs
-	yMuNBG0stdaQ7SnUM3xlnAPO4r4sWQMySU6og3Oah
-X-Gm-Gg: Acq92OEcXCzlBVjlpwK0mhWbtqAEZ3YyMB1121jXXPvyCORVE1pdc86pfhOkYVz3C7Q
-	Bkfvx82jtsEpNG3ycjC3bfiDrJzUXjOZvPI0PQER5fvk72K6eOELjmcLrOl9GrRzBM8QUE4zhZA
-	E2hDGOBXsmN0GN7kSgRN55obkbLFr8DL+um6eOOtq1EyacAHpkv6lcoZuYG6LrbdL75GpLuw4cz
-	UM89nDMV/0c+PPfXNTHF98TvUmr1FCcTpEqeMG/6Eye/r7Ex2w1B4++/A+axerneG0433K1Zdxe
-	PPE4sUZ9L59jY1whK8k=
-X-Received: by 2002:a05:622a:152:b0:50d:edb1:6bd1 with SMTP id
- d75a77b69052e-514a04b4d5emr2366971cf.13.1778512832483; Mon, 11 May 2026
- 08:20:32 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="OoryCbj+"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1778513334;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Uw/TqA3cSIuxEgZed4XabPauoYN3AsaYdt82a8SrDck=;
+	b=OoryCbj+EmiU6m67ZZiyiTncfp0ekA9je+6s9HKp/EtutAez0/Vba4luu/kC0V1UIghM0e
+	q9XGLUzVPD7sbZcoHDpEYI/tYIi03GpvFj4RLgcbTlr3Vw9BOx7HACA2Q6r+r2X3bauipT
+	sQK+8OhRcIba5WV/wog6YHJ1/PCKGHU=
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Christian Brauner <brauner@kernel.org>,
+	Seth Forshee <sforshee@kernel.org>,
+	Yuichiro Tsuji <yuichtsu@amazon.com>,
+	Andrey Albershteyn <aalbersh@redhat.com>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	Willem de Bruijn <willemb@google.com>,
+	Jason Xing <kerneljasonxing@gmail.com>,
+	Tao Chen <chen.dylane@linux.dev>,
+	Mykyta Yatsenko <yatsenko@meta.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Anton Protopopov <a.s.protopopov@gmail.com>,
+	Amery Hung <ameryhung@gmail.com>,
+	Rong Tao <rongtao@cestc.cn>,
+	linux-kernel@vger.kernel.org,
+	linux-api@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	kernel-patches-bot@fb.com
+Subject: [PATCH bpf-next v13 0/8] bpf: Extend BPF syscall with common attributes support
+Date: Mon, 11 May 2026 23:28:09 +0800
+Message-ID: <20260511152817.89191-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260511113759.610924-1-tabba@google.com> <20260511113759.610924-3-tabba@google.com>
- <agHugdIrptaXZW-2@google.com>
-In-Reply-To: <agHugdIrptaXZW-2@google.com>
-From: Fuad Tabba <tabba@google.com>
-Date: Mon, 11 May 2026 16:19:55 +0100
-X-Gm-Features: AVHnY4K0xwc8Hb8-5C7f-YejfzbLAhjXF8he_JFEhS_49b6vZjQIeDztW1ArGj4
-Message-ID: <CA+EHjTw1z7ROF7u0fKqxDGao7S1kELxNWtyWhLoPQx5uwVfuWQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] KVM: selftests: Fix FD double-close in kvm_vm_release()
-To: Sean Christopherson <seanjc@google.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, Marc Zyngier <maz@kernel.org>, 
-	Oliver Upton <oupton@kernel.org>, Will Deacon <will@kernel.org>, 
-	Ackerley Tng <ackerleytng@google.com>, David Matlack <dmatlack@google.com>, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Mon, 11 May 2026 at 15:58, Sean Christopherson <seanjc@google.com> wrote:
->
-> On Mon, May 11, 2026, Fuad Tabba wrote:
-> > kvm_vm_release() closes vmp->fd and vmp->kvm_fd unconditionally, and
-> > kvm_vm_free() calls kvm_vm_release() at teardown.  A test that calls
-> > kvm_vm_release() and then kvm_vm_free() without a
-> > vm_recreate_with_one_vcpu() in between double-closes both FDs.
->
-> That's a test bug, no?
+This patch series builds upon the discussion in
+"[PATCH bpf-next v4 0/4] bpf: Improve error reporting for freplace attachment failure" [1].
 
-Fair point.  Let me describe the actual use case and then I'd like
-your guidance on which way to fix it.
+This patch series introduces support for *common attributes* in the BPF
+syscall, providing a unified mechanism for passing shared metadata across
+all BPF commands, initially used by BPF_PROG_LOAD, BPF_BTF_LOAD, and
+BPF_MAP_CREATE.
 
-The pKVM selftests I'm preparing need to verify that protected guest
-memory is zeroed when the VM is destroyed before the host regains
-visibility of those pages.  The test pattern is:
+The initial set of common attributes includes:
 
-  vm_userspace_mem_region_add(vm, ..., GPA_BASE, 1, GPA_PAGES, 0);
-  /* run protected guest, which writes/shares/unshares its memory */
-  ...
-  TEST_ASSERT(get_proc_locked_vm_size() > GPA_SIZE);   /* still pinned */
+1. 'log_buf': User-provided buffer for storing log output.
+2. 'log_size': Size of the provided log buffer.
+3. 'log_level': Verbosity level for logging.
+4. 'log_true_size': Actual log size reported by kernel.
 
-  kvm_vm_release(vm);                                  /* trigger destroy */
+With this extension, the BPF syscall will be able to return meaningful
+error messages (e.g., map creation failures), improving debuggability
+and user experience.
 
-  /* host_mem is still mmap'd in the test process; pKVM should have
-   * zeroed it before unpinning */
-  TEST_ASSERT(is_zero(region->host_mem, GPA_PAGES * PAGE_SIZE));
+Links:
+[1] https://lore.kernel.org/bpf/20250224153352.64689-1-leon.hwang@linux.dev/
 
-  kvm_vm_free(vm);                                     /* tidy up */
-  TEST_ASSERT(get_proc_locked_vm_size() == 0);
+Changes:
+v12 -> v13:
+* Rebase on bpf-next tree to resolve code conflict.
+* Report log_true_size on success path in patch #6.
+* Check size instead of common->log_buf in patch #6 (per bot+bpf-ci).
+* v12: https://lore.kernel.org/bpf/20260420141804.27179-1-leon.hwang@linux.dev/
 
-I used kvm_vm_release() because it's the only public API that closes
-vm->fd to trigger kernel-side destruction.  But the existing callers
-follow it with vm_recreate_with_one_vcpu(), so the "release + later
-kvm_vm_free()" path isn't exercised today.
+v11 -> v12:
+* Drop "log_" prefix in struct bpf_log_attr in patch #3.
+* Drop "log_" prefix in struct bpf_log_opts in patch #7.
+* Copy log_true_size using copy_to_bpfptr_offset() in patch #3 (per Alexei).
+* v11: https://lore.kernel.org/bpf/20260216150445.68278-1-leon.hwang@linux.dev/
 
-I see three ways to make this clean:
-  a) This patch: kvm_vm_release() becomes idempotent for its three
-     FDs, matching the kvm_stats_release() idiom it already invokes.
-  b) Leave kvm_vm_release() as-is and add a dedicated helper, e.g.
-     kvm_vm_destroy_kernel(), that closes vm->fd to trigger kernel
-     destruction while leaving the kvm_vm struct intact for
-     post-destruction inspection.  kvm_vm_free() learns to handle the
-     half-released state.
-  c) Something else entirely, e.g., the test should manage vm->fd
-     directly and not rely on library helpers for this pattern.
+v10 -> v11:
+* Collect Acked-by from Andrii, thanks.
+* Validate whether log_buf, log_size, and log_level are valid by reusing
+  bpf_verifier_log_attr_valid() in patch #4 (per Andrii).
+* v10: https://lore.kernel.org/bpf/20260211151115.78013-1-leon.hwang@linux.dev/
 
-I lean (a). (b) doesn't really avoid the change, as kvm_vm_free()
-still calls kvm_vm_release() internally, so either kvm_vm_release()
-gains these guards, or kvm_vm_free() grows new "already half-released"
-state, or kvm_vm_destroy_kernel() open-codes the same guarded closes
-on every FD it touches.  (a) is the minimal form, and it lines up
-vmp->fd / vmp->kvm_fd with vmp->stats.fd, which kvm_vm_release()
-already handles this way via kvm_stats_release().  But happy to take
-(b) or (c) if you'd rather not broaden kvm_vm_release()'s contract.
+v9 -> v10:
+* Collect Acked-by from Andrii, thanks.
+* Address comments from Andrii:
+  * Drop log NULL check in bpf_log_attr_finalize().
+  * Return -EFAULT early in bpf_log_attr_finalize().
+  * Validate whether log_buf, log_size, and log_level are set.
+  * Keep log_buf, log_size, log_level, and user-pointer log_true_size in struct
+    bpf_log_attr.
+  * Make prog_load and btf_load work with the new struct bpf_log_attr.
+  * Add comment to log_true_size of struct bpf_log_opts in libbpf.
+* Address comment from Alexei:
+  * Avoid using BPF_LOG_FIXED as log_level in tests.
+* v9: https://lore.kernel.org/bpf/20260202144046.30651-1-leon.hwang@linux.dev/
 
-Cheers,
-/fuad
+v8 -> v9:
+* Rework reporting 'log_true_size' for prog_load, btf_load, and map_create to
+  simplify struct bpf_log_attr (per Alexei).
+* v8: https://lore.kernel.org/bpf/20260126151409.52072-1-leon.hwang@linux.dev/
+
+v7 -> v8:
+* Return 0 when fd < 0 and errno != EFAULT in probe_sys_bpf_ext(), then simplify
+  probe_bpf_syscall_common_attrs() (per Alexei and Andrii).
+* v7: https://lore.kernel.org/bpf/20260123032445.125259-1-leon.hwang@linux.dev/
+
+v6 -> v7:
+* Return -errno when fd < 0 and errno != EFAULT in probe_sys_bpf_ext().
+* Convert return value of probe_sys_bpf_ext() to bool in
+  probe_bpf_syscall_common_attrs().
+* Address comments from Andrii:
+  * Drop the comment, and handle fd >= 0 case explicitly in
+    probe_sys_bpf_ext().
+  * Return an error when fd >= 0 in probe_sys_bpf_ext().
+* v6: https://lore.kernel.org/bpf/20260120152424.40766-1-leon.hwang@linux.dev/
+
+v5 -> v6:
+* Address comments from Andrii:
+  * Update some variables' name.
+  * Drop unnecessary 'close(fd)' in libbpf.
+  * Rename FEAT_EXTENDED_SYSCALL to FEAT_BPF_SYSCALL_COMMON_ATTRS with
+    updated description in libbpf.
+  * Use EINVAL instead of EUSERS, as EUSERS is not used in bpf yet.
+  * Rename struct bpf_syscall_common_attr_opts to bpf_log_opts in libbpf.
+  * Add 'OPTS_SET(log_opts, log_true_size, 0);' in libbpf's 'bpf_map_create()'.
+* v5: https://lore.kernel.org/bpf/20260112145616.44195-1-leon.hwang@linux.dev/
+
+v4 -> v5:
+* Rework reporting 'log_true_size' for prog_load, btf_load, and map_create
+  (per Alexei).
+* v4: https://lore.kernel.org/bpf/20260106172018.57757-1-leon.hwang@linux.dev/
+
+RFC v3 -> v4:
+* Drop RFC.
+* Address comments from Andrii:
+  * Add parentheses in 'sys_bpf_ext()'.
+  * Avoid creating new fd in 'probe_sys_bpf_ext()'.
+  * Add a new struct to wrap log fields in libbpf.
+* Address comments from Alexei:
+  * Do not skip writing to user space when log_true_size is zero.
+  * Do not use 'bool' arguments.
+  * Drop the adding WARN_ON_ONCE()'s.
+* v3: https://lore.kernel.org/bpf/20251002154841.99348-1-leon.hwang@linux.dev/
+
+RFC v2 -> RFC v3:
+* Rename probe_sys_bpf_extended to probe_sys_bpf_ext.
+* Refactor reporting 'log_true_size' for prog_load.
+* Refactor reporting 'btf_log_true_size' for btf_load.
+* Add warnings for internal bugs in map_create.
+* Check log_true_size in test cases.
+* Address comment from Alexei:
+  * Change kvzalloc/kvfree to kzalloc/kfree.
+* Address comments from Andrii:
+  * Move BPF_COMMON_ATTRS to 'enum bpf_cmd' alongside brief comment.
+  * Add bpf_check_uarg_tail_zero() for extra checks.
+  * Rename sys_bpf_extended to sys_bpf_ext.
+  * Rename sys_bpf_fd_extended to sys_bpf_ext_fd.
+  * Probe the new feature using NULL and -EFAULT.
+  * Move probe_sys_bpf_ext to libbpf_internal.h and drop LIBBPF_API.
+  * Return -EUSERS when log attrs are conflict between bpf_attr and
+    bpf_common_attr.
+  * Avoid touching bpf_vlog_init().
+  * Update the reason messages in map_create.
+  * Finalize the log using __cleanup().
+  * Report log size to users.
+  * Change type of log_buf from '__u64' to 'const char *' and cast type
+    using ptr_to_u64() in bpf_map_create().
+  * Do not return -EOPNOTSUPP when kernel doesn't support this feature
+    in bpf_map_create().
+  * Add log_level support for map creation for consistency.
+* Address comment from Eduard:
+  * Use common_attrs->log_level instead of BPF_LOG_FIXED.
+* v2: https://lore.kernel.org/bpf/20250911163328.93490-1-leon.hwang@linux.dev/
+
+RFC v1 -> RFC v2:
+* Fix build error reported by test bot.
+* Address comments from Alexei:
+  * Drop new uapi for freplace.
+  * Add common attributes support for prog_load and btf_load.
+  * Add common attributes support for map_create.
+* v1: https://lore.kernel.org/bpf/20250728142346.95681-1-leon.hwang@linux.dev/
+
+Leon Hwang (8):
+  bpf: Extend BPF syscall with common attributes support
+  libbpf: Add support for extended BPF syscall
+  bpf: Refactor reporting log_true_size for prog_load
+  bpf: Add syscall common attributes support for prog_load
+  bpf: Add syscall common attributes support for btf_load
+  bpf: Add syscall common attributes support for map_create
+  libbpf: Add syscall common attributes support for map_create
+  selftests/bpf: Add tests to verify map create failure log
+
+ include/linux/bpf.h                           |   4 +-
+ include/linux/bpf_verifier.h                  |  16 ++
+ include/linux/btf.h                           |   3 +-
+ include/linux/syscalls.h                      |   3 +-
+ include/uapi/linux/bpf.h                      |   8 +
+ kernel/bpf/btf.c                              |  30 +---
+ kernel/bpf/log.c                              |  90 +++++++++-
+ kernel/bpf/syscall.c                          | 115 +++++++++---
+ kernel/bpf/verifier.c                         |  17 +-
+ tools/include/uapi/linux/bpf.h                |   8 +
+ tools/lib/bpf/bpf.c                           |  52 +++++-
+ tools/lib/bpf/bpf.h                           |  17 +-
+ tools/lib/bpf/features.c                      |   8 +
+ tools/lib/bpf/libbpf_internal.h               |   3 +
+ .../selftests/bpf/prog_tests/map_init.c       | 166 ++++++++++++++++++
+ 15 files changed, 473 insertions(+), 67 deletions(-)
+
+--
+2.54.0
