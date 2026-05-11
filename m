@@ -1,42 +1,47 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22FD82F0C45;
-	Mon, 11 May 2026 13:39:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDCB83DD522;
+	Mon, 11 May 2026 13:40:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778506775; cv=none; b=QDtMeCjxALdqa47cnuU9draF+fieRPNF7iIUuDvqDsez8XOzj9rrWMQ+OGH4/3xjliU55xPtIVDVTnb6nF2lBwmVK+Gpl/hlvYO/f20Cn4xOd3PO1TLueveHoHOzOdU4FcInp02jdgV3viLpzRF6X2C6gpeUFFBZOQduRdHaI00=
+	t=1778506830; cv=none; b=QCHkBdPYvscEicj4nBZU3r6rGXHe3hhWSWFeOEddWL3vHLe3tpk505jM5xlPjJI/vNHBLEfcQcn8KN6SV+mK36wLoqXcr/9F3SPDe05yOhWXmMYwTP0vt1NfztVMEcKgZj/2AaVADKHIbIVMaHRngCuQSnnXfvPKyX2i2PCZX6o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778506775; c=relaxed/simple;
-	bh=0YDoda5xBJ99O7ber1zwH7VzziHTUhV7z6JtjcjZ4ZY=;
+	s=arc-20240116; t=1778506830; c=relaxed/simple;
+	bh=HetL7fwL88YbNiLLCNv2HBHdNqdmtHPgs5HbLx9YVCo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=irvDgV5qT807VKG2Y7cXZSmXEJoFTtoA5YMYBNrQY62Nn3NWQxtnbdLTrBJSxVyy0Wde52Nh0BbYTLhWdSqt5qQ/zCXiK6rroT9BdCa849ntRFn7/w1KqFCmj3jwZo/KsuP5QbouZ1TW1Mtr8dIfTuKzbCqOEh9faOkE29XaMvE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LOR2xEr4; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=gP0uHHXhfiVhWEKhDPsHIHyNhuKiw0dQ/tmEG636lkFBy5dTHrVHhBN2xb6xbh4ioGzaXbesz/+6HlfRvLgAHL5WEX8kpOqMDlHYgXKBR3ETN8/nBI6Y63+Qs+AG0pfJoiG1ktvwaugVMN025AVPkBZLqlCNm4bIfo5TzfxTUUI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=meJvWriC; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LOR2xEr4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 805CFC2BCB0;
-	Mon, 11 May 2026 13:39:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778506774;
-	bh=0YDoda5xBJ99O7ber1zwH7VzziHTUhV7z6JtjcjZ4ZY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LOR2xEr4xLIIIdBMqP0Nm7ImHunIMTowtUqxVkgZYReNzNXns70gavsHE/jG9MkO+
-	 2TZJKd1N7Sd9GEBXrhyXcWbpq4dMNaKfx+6Nqr+yq6vZt2sVMXYnl4NB4NzHvf4mS+
-	 l3QSMzQ5GikjSLTAOT4hSixS+yWuVfyBSYk7JTQlRQ/RArS/lgKpBe7Tv8nJa9/NIR
-	 Rvndg7tPx8USRc+8QBI6hNIYm3ozMvcfHL6zWcs0+9cj0hT4Bh2ttp4nYrQJRQ0R4h
-	 t6rWZ+JrCBtHmk1dwK9P0kB/J0ZaXUL9AtjXz1WbBZjAqUWDmrgj+NzBaMb09LfJuo
-	 oOCdnvuUZsO/g==
-Date: Mon, 11 May 2026 09:39:32 -0400
-From: Sasha Levin <sashal@kernel.org>
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="meJvWriC"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+	Reply-To:Content-ID:Content-Description;
+	bh=KA30ajxPuAZxlVx+oW1ephR/e4yqdZ0I6hebdfKsqw4=; b=meJvWriC8hyPN2Nz+wZVWxIyUa
+	a/TAVOI0lzz9pFZtUiPpqsP/ogn6fHDMKF4oX3yy38uLhp+XxKSusjILf/E4p6zYJHxPoj46TwmHs
+	UdgOOX8jOQRcfAKmsicpsL/vioeuKPYM0eml2tBXqOpSzEgBvtL17k9qbjTpaOvYCO8GFSwE3eSuZ
+	6S5nzfhZ/k6zP7AkEF0AuwVFL7rsvxvnr8mlD+unWemVwoxGVIi8vrs7k8ylaYehb9JYEqEbyWfdB
+	QgBYgMSCHk8kbha3Ro2pSfwQWQWTqohdgywapGLhYvFxAtGtfoOcqOManMtRd0AIa6U+41b0mtXAe
+	tgBBcaGQ==;
+Received: from authenticated user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1wMQrt-001dfv-32;
+	Mon, 11 May 2026 13:40:22 +0000
+Date: Mon, 11 May 2026 06:40:16 -0700
+From: Breno Leitao <leitao@debian.org>
 To: Michal Hocko <mhocko@suse.com>
-Cc: Breno Leitao <leitao@debian.org>,
-	Andrew Morton <akpm@linux-foundation.org>, corbet@lwn.net,
-	skhan@linuxfoundation.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	gregkh@linuxfoundation.org
+Cc: Sasha Levin <sashal@kernel.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, corbet@lwn.net, skhan@linuxfoundation.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	gregkh@linuxfoundation.org, ivaz@meta.com
 Subject: Re: [PATCH] killswitch: add per-function short-circuit mitigation
  primitive
-Message-ID: <agHcFCRVSn5ra5Kc@laps>
+Message-ID: <agHW-lYKoWmuBLDQ@gmail.com>
 References: <20260507070547.2268452-1-sashal@kernel.org>
  <20260508135630.a380e3c187b59e4c04e6f358@linux-foundation.org>
  <af5Z2IvtS5pVorSl@laps>
@@ -48,80 +53,77 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 In-Reply-To: <agHUp8ulaWJ75WU5@tiehlicka>
+X-Debian-User: leitao
+
+Hello Michal,
 
 On Mon, May 11, 2026 at 03:07:51PM +0200, Michal Hocko wrote:
->On Mon 11-05-26 04:41:38, Breno Leitao wrote:
->> On Fri, May 08, 2026 at 05:47:04PM -0400, Sasha Levin wrote:
->> > On Fri, May 08, 2026 at 01:56:30PM -0700, Andrew Morton wrote:
->> > > On Thu,  7 May 2026 03:05:45 -0400 Sasha Levin <sashal@kernel.org> wrote:
->> > >
->> > > > When a (security) issue goes public, fleets stay exposed until a patched kernel
->> > > > is built, distributed, and rebooted into.
->> > > >
->> > > > For many such issues the simplest mitigation is to stop calling the buggy
->> > > > function. Killswitch provides that. An admin writes:
->> > > >
->> > > >     echo "engage af_alg_sendmsg -1" \
->> > > >         > /sys/kernel/security/killswitch/control
->> > >
->> > > It certainly sounds useful, but what would I know.  How do we hunt down
->> > > suitable operations people (aka "target audience") to find out how
->> > > useful this is to them?
->> >
->> > I'm not entierly sure here... If folks have suggestions on folks to loop in,
->> > that'll be great!
->>
->> I work with these issues at Meta, and this approach would address a real
->> need we have.
-
-Thanks for the feedback!
-
->> While livepatch could theoretically solve this problem, it's less suited
->> for rapid mitigation for a couple of reasons:
->>
->> 1) Livepatch rollout is inherently slower due to the blast radius if a
->>    bug exists in the livepatch mechanism itself.
->>
->> 2) It's common to run hundreds of different kernel versions across a
->>    fleet. Since livepatch is kernel-specific, a single CVE suddenly
->>    requires building and deploying hundreds of individual livepatches—
->>    far less practical than a simple sysfs write.
+> > I work with these issues at Meta, and this approach would address a real
+> > need we have.
+> >
+> > While livepatch could theoretically solve this problem, it's less suited
+> > for rapid mitigation for a couple of reasons:
+> >
+> > 1) Livepatch rollout is inherently slower due to the blast radius if a
+> >    bug exists in the livepatch mechanism itself.
+> >
+> > 2) It's common to run hundreds of different kernel versions across a
+> >    fleet. Since livepatch is kernel-specific, a single CVE suddenly
+> >    requires building and deploying hundreds of individual livepatches—
+> >    far less practical than a simple sysfs write.
 >
->LP is certainly a more laborous solution. I guess this is quite clear.
->It is also much safer option as it deals with all implementation details
->like consistency. All that is not done for fun. I am really wondering
->how admins are expected to a) know which kernel functions are ok/safe to
->disable and b) when it is safe to do so without introducing unsafe
->kernel state or introduce an outright bug that way.
+> LP is certainly a more laborous solution. I guess this is quite clear.
+>
+> It is also much safer option as it deals with all implementation details
+> like consistency. All that is not done for fun. I am really wondering
+> how admins are expected to a) know which kernel functions are ok/safe to
+> disable and b) when it is safe to do so without introducing unsafe
+> kernel state or introduce an outright bug that way.
 
-In a similar way to how they would know if a given livepatch is safe to apply -
-ideally it would be communicated by the vendor/distro/kernel team.
+You raise a valid concern. There's no simple answer. Making these decisions
+requires deep understanding of both the code and the potential consequences.
 
-"On Debian XX.YY, use the following command to mitigate CVE-AAAA-BBBB:
+The value proposition here (IMO) is the ability to completely disable a
+code path by returning an error code (such as -EINVAL or -EBUSY) at key
+entry points, rather than attempting surgical modifications.
 
-  echo "engage woops -1" > /sys/kernel/security/killswitch/control"
+While this approach is far from perfect, it can serve as an effective
+stopgap measure until a proper fix is deployed or a livepatch becomes
+available.
 
->Thiking about this I can see how waiting for an official LP can be time
->consuming and sometimes creating those is far from trivial. But would it
->make sense to have automated LP creation tooling available that would
->allow to return early from a function and relly on the existing
->infrastructure to do the right thing?
+> Thiking about this I can see how waiting for an official LP can be time
+> consuming and sometimes creating those is far from trivial. But would it
+> make sense to have automated LP creation tooling available that would
+> allow to return early from a function and relly on the existing
+> infrastructure to do the right thing?
 
-This would definitely help (and in light of how the last couple of weeks played
-out, the case for livepatches definitely increased), but not all
-vendors/distros provide livepatches.
+Absolutely. I view this as a progression of mitigation strategies, where
+the ultimate goal is deploying a properly fixed kernel, but reaching that
+endpoint may require intermediate steps.
 
-My personal usecase is simple: I use debian, with their kernel. I'm not going
-to get livepatches from debian, and it would take a few days/weeks for a kernel
-update to land. I want a simple solution that'll let me disable functionality I
-don't care about.
+1) Fix and deploy a new kernel:
+   * Pros: Lowest risk, permanent solution
+   * Cons:
+   	- Requires reboot and extended downtime
 
-So I can't use livepatching/fault injection/etc easily.
+2) Livepatch:
+   * Pros: Complete mitigation, clean approach, zero downtime
+   * Cons:
+	- Time-intensive rollout (requires bake time and health checks)
+	- Demands manual patch creation and review for each kernel version
+	  (i.e., kernel developer involvement is essential)
 
--- 
-Thanks,
-Sasha
+3) This approach (killswitch):
+   * Pros: Immediate deployment capability
+   	- Security engineers familiar with kernel code can act independently
+   * Cons:
+	- Risk of instability if the operator misjudges the impact
+
+In short, I see killswitch as a complementary tool in the security
+toolbox, not a universal solution.
+
+--breno
