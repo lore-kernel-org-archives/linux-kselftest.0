@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F04D642EEB1;
-	Mon, 11 May 2026 16:30:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8A3E2749D6;
+	Mon, 11 May 2026 16:30:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778517035; cv=none; b=McVnNeq/yBPHP32nH538dNgZvUv1Qku/W7P6S36svxF8/CMe4EQMNXcOsYLzZUc0lUgGBFjFIjMMV7dh3ad7eUigdAkeUoe5suGqX49bvt6UUbybMAE0EXrpHjLuDzpsWjg3h5IL7dTpqh1wf+oZe6JAkAqs1BsCI5bSdSJ8+Uw=
+	t=1778517041; cv=none; b=OXx68cpEWtiEUDfCqJFSOQeS2A78A9DGurjANi6gBnAB9kA6XSLmLQkMUiyL/S5tcPb/Ky5MVEmwN2k8LIpV4LzLM//FaowTSN+zUZsGj19l0/nuv97YSQqqeWcIiT9e8ELcdHj0V2nY6/Gub4bkMjO59ns6SOxfYLzvitQY3Wc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778517035; c=relaxed/simple;
-	bh=IxGwkiVerzk+69w9oGEPtrHGTr9T+VJ5NDxFldF5Syg=;
+	s=arc-20240116; t=1778517041; c=relaxed/simple;
+	bh=eC4vwpU9vFNcN2z6oLk75iFVUlZ87Tp/bOty1j6wGoU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LR4A4USbHU9aLl3Zr/O41xgIf5wAIcUQNACrgyaOdnuXy+hjYzNoWUgH2YellgoP/Eox1KXt/JBhUPKcfYHj57S5yfGarTaNglAu6EvzdXNjrMxmkOmeBH2iQTUxk4Uld7mF5GSNHU4TUs+vcNpjgQLGx6vbfgS9p5kEjscHXqs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hJpo5zmf; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=Nei+n0zVcWLX/2cK4BQH/kKwbUJin1enj9TeyRbYYRbX5p3vNuohiZLI08JehK6GI9tp+e67Brx2WWtcGG6bUxGkBo7YUlZkWfT7vXCp2IZm37fxsLe0cMlLTxCXEnLb4wm1MGrjhut01ZpVafksVWLvWF4WZCKdSJhB256JJaA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rkoB6HJX; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hJpo5zmf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0ACAC2BCB0;
-	Mon, 11 May 2026 16:30:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rkoB6HJX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59FA0C2BCB0;
+	Mon, 11 May 2026 16:30:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778517034;
-	bh=IxGwkiVerzk+69w9oGEPtrHGTr9T+VJ5NDxFldF5Syg=;
+	s=k20201202; t=1778517041;
+	bh=eC4vwpU9vFNcN2z6oLk75iFVUlZ87Tp/bOty1j6wGoU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=hJpo5zmfzh6pp8OuMPfLAAjaggVXaG8vzD+Xidfd59DUseSeUHJjOYt2zomf7tKTl
-	 sY2IBZSMYpGKslbLY0h6UErtvh8k09VMyPfHZaezNnRDhunpjTCnOLjhOvvmlIZ4NK
-	 mxk4oMISsYVsA4lbttgzSMWvWq9JH4k77rqrXw0vSOb7w+u6TfwyjqjhQSLGj+J5JG
-	 A1C/6I8bxPGxlZMOD0QerED9hh0pmCgC++pMkVf8ElC1ltEYdQURzvCpDmjTwgPCXW
-	 P/mK9pxmH3pajpGcj3/KoFBF6ggCtfI/+nxfuZaRy3AjcMpG9ablMr6YXPFBUhglsP
-	 pQ/qV7xrCvcwA==
+	b=rkoB6HJXCHYtyEG2AUimuPNPvidE3aB0Akv6ICmiAVPx/xDs9UCCMtaHsztLUfCGH
+	 OJ6eEg9qw/JhiyxAq2dmEUpeH8eDFKD8gjfJWQe1UxWHABs8OjdphW7RRLCfXZhxOX
+	 le01II0hyWlKD76K2BfHYsq8z1fPNitGYxEX8UX1LyMJdMk0F97AnffUD+0b8u4t0H
+	 bXaqVOdJdOHN+OFf1KXBWdtaG9Xiy4xk2Oo5fJl6G/9uMXFEkq/HdPFka81Bw1QIVQ
+	 AYdjnxzYcW2LFhg7VQw14JBMAu/Xm7nlYidxLgqY1rCxszT/8Mpp4M3PwmAJM9qUcd
+	 kHgBV96GkDMNA==
 From: Mike Rapoport <rppt@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	David Hildenbrand <david@kernel.org>
@@ -55,9 +55,9 @@ Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-mm@kvack.org
-Subject: [PATCH v4 16/55] selftests/mm: protection_keys: use descriptive test names in the output
-Date: Mon, 11 May 2026 19:28:00 +0300
-Message-ID: <20260511162840.375890-17-rppt@kernel.org>
+Subject: [PATCH v4 17/55] selftests/mm: protection_keys: use kselftest framework
+Date: Mon, 11 May 2026 19:28:01 +0300
+Message-ID: <20260511162840.375890-18-rppt@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260511162840.375890-1-rppt@kernel.org>
 References: <20260511162840.375890-1-rppt@kernel.org>
@@ -71,102 +71,133 @@ Content-Transfer-Encoding: 8bit
 
 From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-Replace the numeric test index in TAP output with the actual test
-function name.
+Convert protection_keys test to use kselftest framework for reporting
+and tracking successful and failing runs.
 
-Use a structure containing function pointer and its name rather than
-only the function pointer in the pkey_tests array.
+Adjust dprintf0() printouts to use "#" in the beginning of the line for
+TAP compatibility.
 
-Reviewed-by: Donet Tom <donettom@linux.ibm.com>
-
-Reviewed-by: Mark Brown <broonie@kernel.org>
 Tested-by: Luiz Capitulino <luizcap@redhat.com>
+Tested-by: Sarthak Sharma <sarthak.sharma@arm.com>
 Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 ---
- tools/testing/selftests/mm/protection_keys.c | 55 +++++++++++---------
- 1 file changed, 31 insertions(+), 24 deletions(-)
+ tools/testing/selftests/mm/pkey-helpers.h    | 15 +++++------
+ tools/testing/selftests/mm/protection_keys.c | 26 +++++++++++---------
+ 2 files changed, 23 insertions(+), 18 deletions(-)
 
+diff --git a/tools/testing/selftests/mm/pkey-helpers.h b/tools/testing/selftests/mm/pkey-helpers.h
+index 7c29f075e40b..2c377f4e9df1 100644
+--- a/tools/testing/selftests/mm/pkey-helpers.h
++++ b/tools/testing/selftests/mm/pkey-helpers.h
+@@ -71,13 +71,14 @@ static inline void sigsafe_printf(const char *format, ...)
+ extern void abort_hooks(void);
+ #define pkey_assert(condition) do {		\
+ 	if (!(condition)) {			\
+-		dprintf0("assert() at %s::%d test_nr: %d iteration: %d\n", \
+-				__FILE__, __LINE__,	\
+-				test_nr, iteration_nr);	\
+-		dprintf0("errno at assert: %d", errno);	\
+-		abort_hooks();			\
+-		exit(__LINE__);			\
+-	}					\
++		dprintf0("# assert() at %s::%d test_nr: %d iteration: %d\n", \
++			 __FILE__, __LINE__,				\
++			 test_nr, iteration_nr);			\
++		dprintf0("# errno at assert: %d\n", errno);		\
++		abort_hooks();						\
++		ksft_exit_fail_msg("test %d (iteration %d)\n",		\
++				   test_nr, iteration_nr);		\
++	}								\
+ } while (0)
+ 
+ #define barrier() __asm__ __volatile__("": : :"memory")
 diff --git a/tools/testing/selftests/mm/protection_keys.c b/tools/testing/selftests/mm/protection_keys.c
-index 2085982dba69..80c6124e8378 100644
+index 80c6124e8378..d617b41dda6b 100644
 --- a/tools/testing/selftests/mm/protection_keys.c
 +++ b/tools/testing/selftests/mm/protection_keys.c
-@@ -1692,29 +1692,36 @@ static void test_mprotect_pkey_on_unsupported_cpu(int *ptr, u16 pkey)
- 	pkey_assert(sret < 0);
- }
+@@ -136,6 +136,7 @@ static void tracing_off(void)
  
--static void (*pkey_tests[])(int *ptr, u16 pkey) = {
--	test_read_of_write_disabled_region,
--	test_read_of_access_disabled_region,
--	test_read_of_access_disabled_region_with_page_already_mapped,
--	test_write_of_write_disabled_region,
--	test_write_of_write_disabled_region_with_page_already_mapped,
--	test_write_of_access_disabled_region,
--	test_write_of_access_disabled_region_with_page_already_mapped,
--	test_kernel_write_of_access_disabled_region,
--	test_kernel_write_of_write_disabled_region,
--	test_kernel_gup_of_access_disabled_region,
--	test_kernel_gup_write_to_write_disabled_region,
--	test_executing_on_unreadable_memory,
--	test_implicit_mprotect_exec_only_memory,
--	test_mprotect_with_pkey_0,
--	test_ptrace_of_child,
--	test_pkey_init_state,
--	test_pkey_syscalls_on_non_allocated_pkey,
--	test_pkey_syscalls_bad_args,
--	test_pkey_alloc_exhaust,
--	test_pkey_alloc_free_attach_pkey0,
-+struct pkey_test {
-+	void (*func)(int *ptr, u16 pkey);
-+	const char *name;
-+};
-+
-+#define PKEY_TEST(fn) { fn, #fn }
-+
-+static struct pkey_test pkey_tests[] = {
-+	PKEY_TEST(test_read_of_write_disabled_region),
-+	PKEY_TEST(test_read_of_access_disabled_region),
-+	PKEY_TEST(test_read_of_access_disabled_region_with_page_already_mapped),
-+	PKEY_TEST(test_write_of_write_disabled_region),
-+	PKEY_TEST(test_write_of_write_disabled_region_with_page_already_mapped),
-+	PKEY_TEST(test_write_of_access_disabled_region),
-+	PKEY_TEST(test_write_of_access_disabled_region_with_page_already_mapped),
-+	PKEY_TEST(test_kernel_write_of_access_disabled_region),
-+	PKEY_TEST(test_kernel_write_of_write_disabled_region),
-+	PKEY_TEST(test_kernel_gup_of_access_disabled_region),
-+	PKEY_TEST(test_kernel_gup_write_to_write_disabled_region),
-+	PKEY_TEST(test_executing_on_unreadable_memory),
-+	PKEY_TEST(test_implicit_mprotect_exec_only_memory),
-+	PKEY_TEST(test_mprotect_with_pkey_0),
-+	PKEY_TEST(test_ptrace_of_child),
-+	PKEY_TEST(test_pkey_init_state),
-+	PKEY_TEST(test_pkey_syscalls_on_non_allocated_pkey),
-+	PKEY_TEST(test_pkey_syscalls_bad_args),
-+	PKEY_TEST(test_pkey_alloc_exhaust),
-+	PKEY_TEST(test_pkey_alloc_free_attach_pkey0),
- #if defined(__i386__) || defined(__x86_64__) || defined(__aarch64__)
--	test_ptrace_modifies_pkru,
-+	PKEY_TEST(test_ptrace_modifies_pkru),
- #endif
- };
+ void abort_hooks(void)
+ {
++	fflush(stdout);
+ 	fprintf(stderr, "running %s()...\n", __func__);
+ 	tracing_off();
+ #ifdef SLEEP_ON_ABORT
+@@ -370,8 +371,8 @@ static void signal_handler(int signum, siginfo_t *si, void *vucontext)
+ 	if ((si->si_code == SEGV_MAPERR) ||
+ 	    (si->si_code == SEGV_ACCERR) ||
+ 	    (si->si_code == SEGV_BNDERR)) {
+-		printf("non-PK si_code, exiting...\n");
+-		exit(4);
++		dprintf0("# non-PK si_code: %d, exiting...\n", si->si_code);
++		exit(1);
+ 	}
  
-@@ -1735,7 +1742,7 @@ static void run_tests_once(void)
- 		dprintf1("test %d starting with pkey: %d\n", test_nr, pkey);
- 		ptr = malloc_pkey(PAGE_SIZE, prot, pkey);
- 		dprintf1("test %d starting...\n", test_nr);
--		pkey_tests[test_nr](ptr, pkey);
-+		pkey_tests[test_nr].func(ptr, pkey);
- 		dprintf1("freeing test memory: %p\n", ptr);
- 		free_pkey_malloc(ptr);
- 		sys_pkey_free(pkey);
-@@ -1746,7 +1753,7 @@ static void run_tests_once(void)
+ 	si_pkey_ptr = siginfo_get_pkey_ptr(si);
+@@ -719,7 +720,7 @@ static void setup_hugetlbfs(void)
+ 	long hpagesz_mb;
+ 
+ 	if (geteuid() != 0) {
+-		fprintf(stderr, "WARNING: not run as root, can not do hugetlb test\n");
++		ksft_print_msg("WARNING: not run as root, can not do hugetlb test\n");
+ 		return;
+ 	}
+ 
+@@ -855,7 +856,7 @@ void expected_pkey_fault(int pkey)
+ 
+ #define do_not_expect_pkey_fault(msg)	do {			\
+ 	if (last_pkey_faults != pkey_faults)			\
+-		dprintf0("unexpected PKey fault: %s\n", msg);	\
++		dprintf0("# unexpected PKey fault: %s\n", msg);	\
+ 	pkey_assert(last_pkey_faults == pkey_faults);		\
+ } while (0)
+ 
+@@ -1753,7 +1754,7 @@ static void run_tests_once(void)
  		tracing_off();
  		close_test_fds();
  
--		printf("test %2d PASSED (iteration %d)\n", test_nr, iteration_nr);
-+		printf("test %s PASSED (iteration %d)\n", pkey_tests[test_nr].name, iteration_nr);
+-		printf("test %s PASSED (iteration %d)\n", pkey_tests[test_nr].name, iteration_nr);
++		ksft_test_result_pass("test %s (iteration %d)\n", pkey_tests[test_nr].name, iteration_nr);
  		dprintf1("======================\n\n");
  	}
  	iteration_nr++;
+@@ -1773,27 +1774,30 @@ int main(void)
+ 
+ 	setup_handlers();
+ 
+-	printf("has pkeys: %d\n", pkeys_supported);
++	ksft_print_header();
+ 
+ 	if (!pkeys_supported) {
+ 		int size = PAGE_SIZE;
+ 		int *ptr;
+ 
+-		printf("running PKEY tests for unsupported CPU/OS\n");
++		ksft_set_plan(1);
++		ksft_print_msg("running PKEY tests for unsupported CPU/OS\n");
+ 
+ 		ptr  = mmap(NULL, size, PROT_NONE, MAP_ANONYMOUS|MAP_PRIVATE, -1, 0);
+ 		assert(ptr != (void *)-1);
+ 		test_mprotect_pkey_on_unsupported_cpu(ptr, 1);
+-		exit(0);
++		ksft_test_result_pass("pkey on unsupported CPU/OS\n");
++		ksft_finished();
+ 	}
+ 
++	ksft_set_plan(ARRAY_SIZE(pkey_tests) * nr_iterations);
++
+ 	pkey_setup_shadow();
+-	printf("startup pkey_reg: %016llx\n", read_pkey_reg());
++	ksft_print_msg("startup pkey_reg: %016llx\n", read_pkey_reg());
+ 	setup_hugetlbfs();
+ 
+ 	while (nr_iterations-- > 0)
+ 		run_tests_once();
+ 
+-	printf("done (all tests OK)\n");
+-	return 0;
++	ksft_finished();
+ }
 -- 
 2.53.0
 
