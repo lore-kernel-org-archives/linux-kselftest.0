@@ -1,50 +1,53 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C1DF1E5207;
-	Tue, 12 May 2026 00:27:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8AE91367;
+	Tue, 12 May 2026 01:01:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778545645; cv=none; b=czdQY/bmIp5RVAGs3h1IpHZByDIfnEotY/0ZOp83Bv5bXC5yBEWJFHm+7tre4cDm9uxw4PDUvbmVeBbCvd6Y3YpxHgb0zBTHkEAj0Q3Pa+wJeClFc5hhM97B2tottWMaRsdhwgkVRX4uU7DTw88G4bUEBRtJ14hDVx2wF3Fy5Ts=
+	t=1778547711; cv=none; b=Zy77DRK3OneGR1R1QQYk6UQhDLapy+CeDJ3ZpN2ViG4coOROTNvkEU9oNcV1b8UfcipFL66gS/X5jjiKfzPsIPa/apANUFy5p+4MgQAbjvglOScn0CxL1u3XX0zr4jPf+MeVpcLHqV3626ZyEm+hKVElRSQAfSzLNtrFoUlmANY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778545645; c=relaxed/simple;
-	bh=7B6mqILzOafZ5FNuX6Q8RkR6+qHrviQS9ErqUJNiffw=;
+	s=arc-20240116; t=1778547711; c=relaxed/simple;
+	bh=uOigxamA7HqnQC0MEIlrE3L2zzSIAwK5E7bXe17pjuk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=g4nlzZjVPe8iUpRQm4+SQcgd8nzC/0fJeM0n0ESJPY1FVPton4ewwNUjsOb+K2tqiCYGyAKscnQFgFkk/RH24Ysr8M3u3+594WgihA9SAEClYL/SXzF9yJdH2gXwblbLVnhT1xdH0NTh5lCbZve6fPfB/fOjymB1ZYhaQJ54Dwg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sH7Hh4nl; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=s1pZufmSofqcIDRVWsOoia0VdVRvGjo+aICQcz/x2rjiNjSo5BDDTU7pNeqeTWgTLiXM9Z+i0DG7TftnjWSip9DexYztyVOrceBiYsrNnkaXa10F94XBUugRY6MqeaC9BNb9lo0jvi4gWh4uHz2amZvWy4ZLMyICNZ26M2vOp8Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZZ8mRPl6; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sH7Hh4nl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9886C2BCB0;
-	Tue, 12 May 2026 00:27:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZZ8mRPl6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBCABC2BCB0;
+	Tue, 12 May 2026 01:01:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778545645;
-	bh=7B6mqILzOafZ5FNuX6Q8RkR6+qHrviQS9ErqUJNiffw=;
+	s=k20201202; t=1778547711;
+	bh=uOigxamA7HqnQC0MEIlrE3L2zzSIAwK5E7bXe17pjuk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=sH7Hh4nlNQNcBDF2/Lr0GjS9v7+FlgRXHLAUZpe5wuVQXX4yb3WZHTjyZ8qelohsx
-	 Plh9lfTKygJbhwTRUFEviUP3chHDprPafvcb9YrjxaNOhLLtYcwyzDoWDznDgdVJYa
-	 mkYp04RZ6u1hpGkzgLeO87UETX+f8hWG5kqQ5DbvikOWZ+1z0YIU9Dur/3xg07w2nW
-	 NxzPlO9Q11WDUwMkbVuuYR2b6BZ9XcuVI0vlUjs1WqHTYdnpkkyKPZdXps206DoZDz
-	 wwmtd+8MxQoSyJnliUj1O7OYkuPeeeGodeeBO0023p5grTkytk32sCOhadWakVeQ+1
-	 Rfq09IyR5YZzA==
-From: Jakub Kicinski <kuba@kernel.org>
-To: ntspring@meta.com
-Cc: Jakub Kicinski <kuba@kernel.org>,
-	netdev@vger.kernel.org,
-	edumazet@google.com,
-	ncardwell@google.com,
-	kuniyu@google.com,
-	davem@davemloft.net,
-	dsahern@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
+	b=ZZ8mRPl6jaBrMYPbTjpx1/PdPe8at4EqJQbmNDOM4fuHw5h2XQ3/Wyj2ZXzik0rfe
+	 P9+urSYhg+zHJShmVBgBboyIzzFoI5XiIKOYgZh2I1enr2K7IV7iXgHBJ7RPmd3Gwr
+	 PMtzi1HL7QeUc7NHL8GsELE4o3h6S801Z2vsTNiEQh7TPZNNHasqqjjouLfjmPuKhC
+	 wgiA8wDWK+IbrwwfGvLONOJm26+5mE96shBOi/ZQjoDQiGGVSEC/uCs6q8sQ2La9ns
+	 G6zFvENQD/hgPVXTgGTOhEVTiupaI8KGkT1S6ROg1gl2xtZ3jysBg3XyPQL8/Kju4o
+	 NyD+BFrTE6s6A==
+From: SeongJae Park <sj@kernel.org>
+To: pratmal@google.com
+Cc: SeongJae Park <sj@kernel.org>,
+	akpm@linux-foundation.org,
 	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v4 1/2] tcp: rehash onto different local ECMP path on retransmit timeout
-Date: Mon, 11 May 2026 17:27:19 -0700
-Message-ID: <20260512002719.739807-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260507171319.1259115-2-ntspring@meta.com>
-References: <20260507171319.1259115-2-ntspring@meta.com>
+	yosry@kernel.org,
+	david@kernel.org,
+	ljs@kernel.org,
+	Liam.Howlett@oracle.com,
+	vbabka@kernel.org,
+	rppt@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/2] selftests/mm: use pattern matching in .gitignore
+Date: Mon, 11 May 2026 18:01:48 -0700
+Message-ID: <20260512010148.1175-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260511173411.267628-1-pratmal@google.com>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,55 +56,46 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This is an AI-generated review of your patch. The human sending this
-email has considered the AI review valid, or at least plausible.
----
-tcp: rehash onto different local ECMP path on retransmit timeout
+On Mon, 11 May 2026 17:34:09 +0000 pratmal@google.com wrote:
 
-This commit updates ECMP path selection logic to use the socket's txhash
-on RTO, PLB, and spurious retransmissions by invalidating the cached dst
-and setting fl6->mp_hash for IPv6. It also moves txhash initialization
-earlier in tcp_conn_request().
+> From: Pratyush Mallick <pratmal@google.com>
+> 
+> The current selftests/mm/.gitignore hardcodes each generated test binary
+> by name, which requires manual updates every time a new test is added.
+> 
+> This series switches to a pattern-matching approach (similar to KVM
+> selftests), ignoring everything by default and allowing specific source
+> extensions. To accommodate this without tracking generated headers,
+> local_config.h is renamed to local_config.h_gen.
+> 
+> Changelog since v2:
+> - Split the changes into two separate patches (header rename and
+>   .gitignore update)
+> - Added Suggested-by for David Hildenbrand for the header rename approach.
+> - Dropped David's and Yosry's Reviewed-by tags.
+> - Kept Lorenzo Stoakes's Reviewed-by and added Mike Rapoport's Acked-by.
+> 
+> Changelog since v1 (RFC):
+> - Renamed local_config.h to local_config.h_gen to avoid conflict with !*.h.
+> - Updated Makefile, check_config.sh, and affected .c files for the rename.
+> - Removed *.mod.c as it was unnecessary.
 
-> diff --git a/net/ipv6/inet6_connection_sock.c b/net/ipv6/inet6_connection_sock.c
-> index 37534e1168992..fc4b75de6af8e 100644
-> --- a/net/ipv6/inet6_connection_sock.c
-> +++ b/net/ipv6/inet6_connection_sock.c
+Adding previous revision links together [1] would be helpful for people who
+willing to see details of previous discussions.
 
-[ ... ]
+> 
+> Pratyush Mallick (2):
+>   selftests/mm: use pattern matching in .gitignore
+>   selftests/mm: rename local_config.h to local_config.h_gen
 
-> @@ -70,6 +73,9 @@ struct dst_entry *inet6_csk_route_socket(struct sock *sk,
->  	fl6->saddr = np->saddr;
->  	fl6->flowlabel = np->flow_label;
->  	IP6_ECN_flow_xmit(sk, fl6->flowlabel);
-> +
-> +	/* >> 1 for 31-bit mp_hash range matching nhc_upper_bound. */
-> +	fl6->mp_hash = sk->sk_txhash >> 1;
->  	fl6->flowi6_oif = sk->sk_bound_dev_if;
->  	fl6->flowi6_mark = sk->sk_mark;
->  	fl6->fl6_sport = inet->inet_sport;
+So, after applying the first patch, we may show local_config.h unexpectedly
+shown on 'git status' output?  Maybe too trivial thing, but I'm wondering if we
+already considered doing the renaming first.
 
-Does this leave active IPv6 connections and syncookie-created sockets vulnerable
-to spontaneous ECMP path flapping upon natural route invalidation?
+[1] https://docs.kernel.org/process/submitting-patches.html#commentary
 
-The patch updates inet6_sk_rebuild_header() and inet6_csk_route_socket() to
-use sk_txhash for ECMP path selection, but it appears to miss two critical
-paths:
 
-1. tcp_v6_connect() (active open): fl6.mp_hash is 0 during
-   ip6_dst_lookup_flow(). sk_set_txhash(sk) is called only after the route
-   is cached.
+Thanks,
+SJ
 
-2. cookie_v6_check() (IPv6 syncookies): fl6.mp_hash is 0 during
-   ip6_dst_lookup_flow(), despite treq->txhash having been generated in
-   cookie_tcp_reqsk_alloc().
-
-In both cases, the initial dst is selected via the standard 5-tuple hash,
-but the socket is assigned a random txhash. If the route is later naturally
-invalidated (e.g., via PMTU discovery), the rebuild functions will apply
-sk_txhash >> 1. Because this new hash is uncorrelated with the 5-tuple, the
-connection could unpredictably flap to a different ECMP path, potentially
-breaking connections passing through stateful firewalls/NATs and causing
-severe packet reordering.
--- 
-pw-bot: cr
+[...]
