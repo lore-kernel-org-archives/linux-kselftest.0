@@ -1,112 +1,122 @@
-Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
+Received: from mail-vk1-f178.google.com (mail-vk1-f178.google.com [209.85.221.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E9483C2797
-	for <linux-kselftest@vger.kernel.org>; Tue, 12 May 2026 20:24:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778617473; cv=none; b=JQry0cIYZkAuVBCpjQzhc8/6JL3HkzduLQMBTfquaMPqKh2o7R9lhEXc4g/4/iJbUbJ4tU3ZxkRA7G35t/pfUF81djemgG8tg8sLOpcia6fg+58X6S7fo2N0bXw6+4QT6XhUjID1rKiict6VnOVvj5mHlW30Z/DRBfLOejp7Ylk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778617473; c=relaxed/simple;
-	bh=ZuC4aqvAth3//T6/XaDMKe8783spN0RRKAEAwn3cyi8=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Rh9i8BHfX/FCOwBCQwLCf254OdSGyxU4nG7MBoDpxpOloItKB8iQ9rAQIjgxDM1cffA8yqRPpor7Jizzl0NK3oubDCyg+5DVWSKwV4yTtxc6Z7p3kOaPEcgbnH5qfb12pAiUTcp8yPdYm7f9OR/Mxd/tsy0sKPK4H+9bn6AI810=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gwxvmmEW; arc=none smtp.client-ip=209.85.210.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A903A3AF646
+	for <linux-kselftest@vger.kernel.org>; Tue, 12 May 2026 20:24:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.178
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778617501; cv=pass; b=c+gMpGeNxAod/Ccz0WWS0OdjHBSFB0cfUGsQQ/N1qQPlmzTzqjXqGwdT2SFOBFJabdw/8n78pXP33WYURDZ6nxdLvm2i5xQa5jqf83qrArtYlrr2DYAvlmQkRWAflB6BwyAzP2zLV3SP2t7NGVtBgsrB/GUt0PmyjTR1lv7Q1Ms=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778617501; c=relaxed/simple;
+	bh=p1Dt2Pau45+gr9BBZWBbRM+0pqU8mWL0SwtrndPS4cI=;
+	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qBzkY/+YylNEFdWlHxyMT55jiqubOQRxqH9dzcUO/seFCe8+CChgNN1hip827zIH2Xl+iUjcZLY8qBfQoDAzZ9V7JmtH4J9Rzom9sbW4HxY3ndd3urBMEnQ1151vV0Fff3DZzxppj71C/5q0segqtpWZO5ZEEXnl90LDCqOL2Ak=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Ke+HVRC5; arc=pass smtp.client-ip=209.85.221.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gwxvmmEW"
-Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-8386367b23cso4627443b3a.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 12 May 2026 13:24:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Ke+HVRC5"
+Received: by mail-vk1-f178.google.com with SMTP id 71dfb90a1353d-5751136c561so4748850e0c.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 12 May 2026 13:24:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778617499; cv=none;
+        d=google.com; s=arc-20240605;
+        b=fwmdxP3m1TsPuZ4DgWlxo44P3hxrOrFGzzKXjs5hVoJVM7Q2Vkod0Q3A7OnXou3Wqu
+         J4EeO9m5GNuSrHHmJIGFNvDyRwVl9iRzi0uZ/g6zv9Q0JVEd/BH5YYkUiaH7ioBXZqn7
+         8gBqlf+kHl61h0QLz4zoA/OQ9HFdE3QeZpNLf6N5hdD4ygOU0Lp1UHGoEZjiBt/tAtpT
+         VcI8MASTJcX6oM4iTZSDAmJGDQNzV8a9P5Z3bkRyOt4F6r5RKn3DyMiUNtnlBc/Hpy2W
+         Zo6VxpBJq57iE+2pBVnKPsn9EpxN24ZY8N2U0KQPJ34sCyr9eNj5+M0ANH+5bQg3KTZZ
+         WOIw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:dkim-signature;
+        bh=6A32fFSH9OPwjkkpWNRgZBSlRVvMKc+ege6TQRAjjbc=;
+        fh=0TBJDd6EseShvftf+E1Z/8rIn7KmBqDjWTmNfMTVhoE=;
+        b=Rp7bXMoBWqtvGan8ioTC4Smr8odCpIRbaVju9zpIRQPXrAxiqel4bFgQ/RHydToJv1
+         yoQjL2SOFDOsn1m0/Re+GW05A0GwC8TiE4MhyMnCT3/Mlkr2U+aGfAYklza9sjqEDMRE
+         iyc7IAr2cFNEP71eYR76htBNOwonS8yMYqcEzwv8dqFSWBFhiCpQyvR5c/CeUKADQGn6
+         F6Fdp3jHUPCva6DP8hqb4W5NETQDN36hk68O8dxBAxsJdNCIYvDVdJ7u31xgfL2yTv85
+         Y3vU4o/H4KLJKo9Q5QcjFQKTR+eVvJgngMsutklCm59Uu29uidGxR3WPPkXrZfqsqiRx
+         7AFg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1778617471; x=1779222271; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rokOSit4LNm5cJdb1Y3jNPDKg842KRY3HU1fgqtDryg=;
-        b=gwxvmmEWkpugyAXCAmQfUPBKOmn+VlAfqC18V9PyxMc5SHCWn438VP+Iv9uOAKgaTw
-         l2ri6zLHH1uFtqAB//p222/mGQonCFZSr8iIncKz+xO6UjWsRt4VOBjsizAT4TEDq28j
-         7bydaWzJ/yaXGmtZiQlPWktMLaydXwaPeWqOSYEcWaBGe32tcEFlXElM5R2hswbdiZZd
-         0Y/9ae/39n6adsG+YGmXKV8ODiwARS7X6rcObcUjgNfrrSdVzofuK/+jx+OP/g3Ojiok
-         oXKDVp6dnHySwLYJdVkJuxYi1GB9aYdkaJpnDyTTYWtcXntX2rb2xD/wAJwtPXQPo6ij
-         b6lw==
+        d=google.com; s=20251104; t=1778617499; x=1779222299; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6A32fFSH9OPwjkkpWNRgZBSlRVvMKc+ege6TQRAjjbc=;
+        b=Ke+HVRC5Axson/fPx69NHKv1kMSMzrBpU0e/d8rzsJbl7KnfxHHJQ9SlxHQyvDViHR
+         +11AAD7I1vH2/gOvjo/2wd4kAb58+JYxrHOm+9uFEufz3M5YjiyoEoH9lwE9yuGfPCC6
+         HJ9jgzjz9SMi39dtgoO2zO4CPHYf3arg6EgHlLPeR3MbXRx9wQ73Q1u/jO310MRQMap6
+         L+jcJ392bfxrlA5Vka1/+YRACksqbijC/+jnvxncFnlO+Z4i9Bqr06KBXUACrdUBvSJ0
+         ja6+F3xGmkRERBsdjYrhqUM8K6aqJAyAhD5uojYQ02o4mmST2HrIKBz5F7HSp4rBaTgc
+         RNhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778617471; x=1779222271;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rokOSit4LNm5cJdb1Y3jNPDKg842KRY3HU1fgqtDryg=;
-        b=sa9bxhqcDexdo8AmYVLZ+e+h6aJfLCg1vZqQIpGyyRJkFDR3QgiwtI3lSQYvJZnofA
-         KU3xC/mek13i8U4zma6by7ylarYKOMEI4fmVtxd5UMjd5H5psVqogA6dqwhOTH5VfMc+
-         SZUZfcArLv6K9td6NO94Osn/n8+q0Bq8nMz2YHA0ncAzIWCTxk7RtthTuzhTLPgbmEap
-         f3kCL73MOWmGRkrQVfAoNTfFlmimpn+hoqo1Bx1HawQCOn2ihWrCwB/Fd8H3asCKSlrO
-         VXu8J0LAbJpzzakDbikC2+SugdGe0tIcsl9k9Zj9VNtZNWrb+rVufatVkc+f/vFJq/Hr
-         FOIw==
-X-Forwarded-Encrypted: i=1; AFNElJ8K95wOcj7hY5PdZCuW652Pgd3Ig+yZtK8Zp+qzfQscGzdfHOELBUhxs8hrRobcKd9bvKdbGcMSz7nnO9b8q2c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyLqs91n6s6rxIRSn44LPAWppg+5pYb+xOM/Nk8trUfPWkzXtUI
-	JtZAyMBx+CPTcdfX5UTOeQxpcRKspt5exQXsQWHeMeM4i5O9P9GnfWKfmOIy/MJHu2y/Ugvuf0R
-	4IY7mVQ==
-X-Received: from pfdc18.prod.google.com ([2002:aa7:8c12:0:b0:834:df9e:8e02])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:e1a:b0:82a:7893:e14b
- with SMTP id d2e1a72fcca58-83f042bf9c8mr170703b3a.38.1778617471299; Tue, 12
- May 2026 13:24:31 -0700 (PDT)
-Date: Tue, 12 May 2026 13:24:30 -0700
-In-Reply-To: <20260414-selftest-global-metadata-v1-0-fd223922bc57@google.com>
+        d=1e100.net; s=20251104; t=1778617499; x=1779222299;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6A32fFSH9OPwjkkpWNRgZBSlRVvMKc+ege6TQRAjjbc=;
+        b=GLLPwc9tJrdw5Dxcsj8uXwZ6sz0klyqJ0ixx5iKbP2YPDWGFRfYNOdgNMhCth9r5mK
+         jFdwwNb0QtH1Q07SMSkP7tx3kteBgxa4iYLNwEOTD8yNFiSY5GaIoNLlk4hOJTBC+O9O
+         VUpDyWSmGv1sXDi5ANlenU/4Gp8+jsbsK4hUw/hIWRM9GLKst4v3keKflT/tnosIAupw
+         z1lSVqzRV43oemUWEnhmKbCff4vgag9E0iKZgSnXEKwwDlCkPoR05yoYeJKZkTRu6mAM
+         LS759rCxPx1LkYrRIla2tCujOzxMHHIPxEkYNk8V5nU6lXajDs6sdk3ywGeQ3cgkbFmM
+         K2rw==
+X-Forwarded-Encrypted: i=1; AFNElJ9clL9hef+C4iAA3jNBZkjDbUD+QBgr0OcVYvjLbJQxakBXNJ0idbncukdrRZeSRE2/drKdpFuxtTG+0Znih2Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwPJNv2glZyOa/jj4dinR/e5084MKbd45nXg3EEJgLkTRscPe91
+	QRVfcF/LR2n8iYunrNf7VJgIw92dHXYfX4hn5OMCIGcjdwh6U14LMEyjpu6PoQSRp9kbIb4CTyC
+	vv6Dpxi7F/R6cKk9PcLXVBVpKrSVJQIu8oYzf9YLh
+X-Gm-Gg: Acq92OH2GSUlFLHD6i27HXX9Y/hQ7V8p4NFWVyd5cBTK3fSAayYNHScbLAWEqQZdm4b
+	F4A0eVCwY9gxCebXbWw+1KwIUJcqVVQzlMKzYROORZOr05kWiIkctgQmEVZIdetJabm8otiSyZj
+	wD/F0Rks9ct/RKFe6YSv3nTa13h4ykaz/kWw0PtFv0GCj1/wC24BZe0NfgaG05crsjBPoKnm/Ri
+	oz5n4Yj4uED1L9TAkbP+GIvZUCtSFVAQfbZjsnkuA2+rmhd9buKAxtZQC4fisRtDmWEFpvrm9qg
+	+refFEdaU/e/yHUA6wAi4J8gCzZRZHAR0K0QUCWXZwAVIF80bJJoyg408rEl4DCqXkU6KVgYni/
+	Qqr2Q
+X-Received: by 2002:a05:6122:814:b0:575:9cb5:a87d with SMTP id
+ 71dfb90a1353d-575cfc6f98bmr1737434e0c.2.1778617498178; Tue, 12 May 2026
+ 13:24:58 -0700 (PDT)
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 12 May 2026 13:24:57 -0700
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 12 May 2026 13:24:57 -0700
+From: Ackerley Tng <ackerleytng@google.com>
+In-Reply-To: <20260511113759.610924-3-tabba@google.com>
+References: <20260511113759.610924-1-tabba@google.com> <20260511113759.610924-3-tabba@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260414-selftest-global-metadata-v1-0-fd223922bc57@google.com>
-Message-ID: <agOMfpW2Xxpzk-D5@google.com>
-Subject: Re: [PATCH RFC 0/4] selftests: harness: Provide global metadata
- pointer to allow clean teardown from selftest libraries
-From: Sean Christopherson <seanjc@google.com>
-To: Ackerley Tng <ackerleytng@google.com>
-Cc: Kees Cook <kees@kernel.org>, Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>, 
-	Shuah Khan <shuah@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, thomas.weissschuh@linutronix.de, 
-	linux@weissschuh.net, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kvm@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Date: Tue, 12 May 2026 13:24:57 -0700
+X-Gm-Features: AVHnY4JAG5WXg_aVbHSnEQMcpSlet0iZdAsV7gUZdzLesUHy1Hns5TF1STKi8r4
+Message-ID: <CAEvNRgHfBqqC1K7enCPX3jqWE0smJ3E0NE=kUPSX7N7g5KQrvg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] KVM: selftests: Fix FD double-close in kvm_vm_release()
+To: Fuad Tabba <tabba@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Sean Christopherson <seanjc@google.com>, Shuah Khan <shuah@kernel.org>
+Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, Will Deacon <will@kernel.org>, 
+	David Matlack <dmatlack@google.com>, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Apr 14, 2026, Ackerley Tng wrote:
-> Sean suggested using setjmp and longjmp [1] to back to the top level
-> TEST_F(). I looked at [1] and found myself wishing to use TEST_F() the from
-> kselftest harness directly.
+Fuad Tabba <tabba@google.com> writes:
 
-Can you elaborate?  If you have a need for direct TEST_F() in KVM selftests, odds
-are good someone/something else will have a similar need, sooner or later.
+I agree that perhaps in this case manually setting up the memslot after
+mmap()-ing anonymous memory is better since it's more explicit about
+what is being tested.
 
-> Also, setjmp/longjmp felt like it was introducing state that could be messed
-> up easily.
-
-Meh, same goes for the kselftests_harness.h.  I can point you at a half dozen
-bugs where enhancements to the core framework wreaked havoc for unsuspecting
-subsystems.  I'm not trying to throw shade at the harness; there's a _lot_ of
-goodness in there.  My point is that doing complex things that impact a huge
-variety of downstream users is going to have many sharp edges, regardless of
-where the complexity resides.
-
-I'm not wedded to setjmp/longjmp by any means, but for me this isn't a compelling
-argument against the approach. 
-
-> I also found recent work that removed setjmp/longjmp from kselftest harness
-> [2].
-
-KVM selftests don't support building with nolibc.
-
-> The kselftests harness is running tests sequentially anyway, and the
-> function pointers in _metadata wouldn't be changing all that often in most
-> selftests.
-> 
-> Would maintainers be open to having the kselftest harness expose a pointer
-> to the metadata globally?
+> kvm_vm_release() closes vmp->fd and vmp->kvm_fd unconditionally, and
+> kvm_vm_free() calls kvm_vm_release() at teardown.  A test that calls
+> kvm_vm_release() and then kvm_vm_free() without a
+> vm_recreate_with_one_vcpu() in between double-closes both FDs.  Since
+> kvm_close() asserts on close() failure, the second close trips
+> TEST_ASSERT and aborts the test, or, if the FD was recycled, silently
+> closes an unrelated file.
 >
-> Another option would be to expose the current teardown function pointer
-> globally instead of the pointer to the entire metadata struct.
 
-I'm strongly opposed to any idea effectively requires special casing KVM selftests
-in the common harness.  In my experience, the common harness is already quite
-brittle, in large part because there is no singular maintainer(s) that is responsible
-for ensuring changes work for all downstream users.  Adding odd bits of code that
-is only ever used by a handful of KVM selftests is only going to increase the
-probability that that code is broken.
+Never thought about this fd-recycling case, I think this change still
+has value in avoiding the silent closing of some other file.
+
+>
+> [...snip...]
+>
