@@ -1,94 +1,102 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA52432143D;
-	Tue, 12 May 2026 14:41:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11C68396B8C;
+	Tue, 12 May 2026 15:00:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778596872; cv=none; b=NZwpMmPKnFGFbeGmptZMHtqxPf+kYUeBgozUIM6Ec2emXpCwrFP+sWJRdS/tRdo3zRcV77oZU9ZOCbaoKrXIEpWeGb2XniMsobjEFulZyIQ2V7NjElh7agIRC89eDDy0GD0KRC3iSmCp2iv9tZzPGRb8u7j9HOS2h4Bi8vccJZ8=
+	t=1778598004; cv=none; b=cn7tYFEopnHMIKciRyLmV09K9Z7+/3uKNxn+r5RJW0//n6g4kgd+hRtRMYzAO36lbErwECTe7JqPzpE9ItbGHhtu0mmWat6Z8/HS8GKx+9rqUfyyDEKKVd2NyQJIUDHAa6MBc6VE3QafMOC8JroNJp9fEnlSlXSu0eTfLLu0BQg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778596872; c=relaxed/simple;
-	bh=BXG5s7Yd2g7rT7VjpjIRc3pzygNpmdAU8FwMqxST/ys=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=fRlyjT9oWzMYOSjmHFzOUXrIFuadQg6LR9ILpkpS+IzY9GTa/QSPksqukUwcmwx/qedgA4LNC9ak452zQHq/wcPrpJ9vPurl0cRUOHdmCsY6jl3PxqJ0bxxa7Jh/T6sGbVxB7QiZs5u7VHdqdRjWg007mFIJ9/9C3rSEeGBg6h4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h2dNJszl; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778598004; c=relaxed/simple;
+	bh=NWjULvnU8a6sPqFhYgaMooTgTXZAkxXdJyvFa0WZLl8=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=kaMmLB5pxsvs/tMUqUTGzDH2kmoX3pWpeGjsEyd8Nz2V6Ikyz/aluLmRf0wzrXCDiX3xp4ZIlVol1IBQNrtwXGoZbpT/47jIXevOcqhHTdbf3faLrVE4mDovmxA3b8B5gmb/BhzPn4xkI8j5wGyNuLE2o/r5JSKmliEBcygC/Xk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=HOomwG/b; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h2dNJszl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60867C2BCB0;
-	Tue, 12 May 2026 14:41:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778596872;
-	bh=BXG5s7Yd2g7rT7VjpjIRc3pzygNpmdAU8FwMqxST/ys=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=h2dNJszlCMJgG6P1X7XIT8yBEL9DAJI4hexe90uTyt0/VUSL2144/LWiUCLccLjVp
-	 T6qDq32wLBzLN+rF2lRL3Ls560tn1edEehT5BwLzrDoQ4CHMb8+sdeOkx56QQ4MbCq
-	 upaPmfTQe67Wy7N8OVYo3NRIpk4GfNu/gqwpepQqI2utDHSVgV/ccagtfOR8E0GIME
-	 YNqkiZ3rbHMEgQQ82uYVlQPNNmCe4hD76f8k78/H9bBpZPH5Jcc8OOwHWqRp/trBzv
-	 3VlT24j59ju0Mt4GDiVy9e/pxdppkCs7vq5t82eifioxg3jHOmq1FU9AIwi0yI09lD
-	 sne05Jsj+oUng==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B9EE13811A5D;
-	Tue, 12 May 2026 14:40:19 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="HOomwG/b"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B4DAC1691;
+	Tue, 12 May 2026 07:59:56 -0700 (PDT)
+Received: from e132581.arm.com (e132581.arm.com [10.1.196.87])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 912C53F836;
+	Tue, 12 May 2026 07:59:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1778598001; bh=NWjULvnU8a6sPqFhYgaMooTgTXZAkxXdJyvFa0WZLl8=;
+	h=From:Subject:Date:To:Cc:From;
+	b=HOomwG/bUKAYpgTw78IfkCu7zBjWwEAbV9Bcvp/HZugnd4vNfHZ5jmA/3WB/SzqYO
+	 BEFVbVOtvyqfhclkSij8jzCqoqxlegqIBTZRIM1zSQnIcxPLA7nrt5ed+Qbr988c5L
+	 HMH+LW7cU21EcZ5PoMsZf0YJYzqGVBe6b28UVs9I=
+From: Leo Yan <leo.yan@arm.com>
+Subject: [PATCH 0/2] perf: Revert direct PMU stop for refresh limit
+Date: Tue, 12 May 2026 15:59:51 +0100
+Message-Id: <20260512-arm_cs_clean_perf_handle-v1-0-75ff373ecd22@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v2 00/10] net: shaper: fix various minor bugs
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177859681855.2901456.10504449767222718446.git-patchwork-notify@kernel.org>
-Date: Tue, 12 May 2026 14:40:18 +0000
-References: <20260510192904.3987113-1-kuba@kernel.org>
-In-Reply-To: <20260510192904.3987113-1-kuba@kernel.org>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
- pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org, shuah@kernel.org,
- linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAGdAA2oC/42NXQqDMBCEryL73BST+FN96j2KhLiudUETSYq0i
+ Hdv6gn6+A0z3+wQKTBFaLMdAm0c2bsE8pIBTtY9SfCQGFSuqrxQjbBhMRgNzmSdWSmMJtWGmUR
+ daUStG5RjCWm+Bhr5faofXeKJ48uHz/m0yV/6h3STQgrda9vURd7fSnVP1Sv6BbrjOL6Iw7nzv
+ gAAAA==
+X-Change-ID: 20260429-arm_cs_clean_perf_handle-763cc339c1f5
+To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+ Shuah Khan <shuah@kernel.org>, Arnaldo Carvalho de Melo <acme@kernel.org>, 
+ Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, 
+ Adrian Hunter <adrian.hunter@intel.com>, 
+ James Clark <james.clark@linaro.org>, 
+ Sumanth Korikkar <sumanthk@linux.ibm.com>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-perf-users@vger.kernel.org, Leo Yan <leo.yan@arm.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1778597999; l=1638;
+ i=leo.yan@arm.com; s=20250604; h=from:subject:message-id;
+ bh=NWjULvnU8a6sPqFhYgaMooTgTXZAkxXdJyvFa0WZLl8=;
+ b=UYUkogu4jL1N1ROTPW+iYNkV3eI+mCN0hp5ZiSITmtzAqPghr3sEKw1Tyv/5+yx1ruri6kr2C
+ JrA7oXHjKOgDPDLXnwsYfhfOisSaVqoUsY0W9vYHPjtC6rUEPZU8i8B
+X-Developer-Key: i=leo.yan@arm.com; a=ed25519;
+ pk=k4BaDbvkCXzBFA7Nw184KHGP5thju8lKqJYIrOWxDhI=
 
-Hello:
+Commit 18dbcbfabfff ("perf: Fix the POLL_HUP delivery breakage") added a
+direct pmu->stop() call when the refresh limit reaches zero. The change
+was based on a test program [1] that reported missing POLL_HUP
+notifications.
 
-This series was applied to netdev/net.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
+However, the test program used SIGIO, which is a standard signal and can
+be coalesced. As a result, userspace may miss signal delivery even
+though the signal was generated by the kernel. This is expected
+behaviour for standard signals.
 
-On Sun, 10 May 2026 12:28:54 -0700 you wrote:
-> Fix various minor bugs in the net shaper API.
-> 
-> First 2 patches deal with ordering issues around inserting
-> and publishing new shapers. Shapers are inserted "tentatively"
-> and marked valid only after HW op succeeded, this used to
-> be slightly racy.
-> 
-> [...]
+This series adds a selftest for the PERF_EVENT_IOC_REFRESH limit using a
+real-time signal, which guarantees queued signal delivery and confirms
+that POLL_HUP notifications are delivered reliably on arm64.
 
-Here is the summary with links:
-  - [net,v2,01/10] net: shaper: flip the polarity of the valid flag
-    https://git.kernel.org/netdev/net/c/7cee43fcb0c3
-  - [net,v2,02/10] net: shaper: fix trivial ordering issue in net_shaper_commit()
-    https://git.kernel.org/netdev/net/c/235fb5376139
-  - [net,v2,03/10] net: shaper: reject duplicate leaves in GROUP request
-    https://git.kernel.org/netdev/net/c/a9a2fa1da619
-  - [net,v2,04/10] selftests: drv-net: add shaper test for duplicate leaves
-    https://git.kernel.org/netdev/net/c/6e8ae9d805d4
-  - [net,v2,05/10] net: shaper: set ret to -ENOMEM when genlmsg_new() fails in group_doit
-    https://git.kernel.org/netdev/net/c/8054f85b83f4
-  - [net,v2,06/10] net: shaper: fix undersized reply skb allocation in GROUP command
-    https://git.kernel.org/netdev/net/c/0f9a857e34d0
-  - [net,v2,07/10] tools: ynl: add scope qualifier for definitions
-    https://git.kernel.org/netdev/net/c/fbf5df34a4db
-  - [net,v2,08/10] net: shaper: reject handle IDs exceeding internal bit-width
-    https://git.kernel.org/netdev/net/c/8d5806c600fd
-  - [net,v2,09/10] net: shaper: enforce singleton NETDEV scope with id 0
-    https://git.kernel.org/netdev/net/c/b62b29e6de67
-  - [net,v2,10/10] net: shaper: reject QUEUE scope handle with missing id
-    https://git.kernel.org/netdev/net/c/ce372e869f9f
+With that verified, the direct pmu->stop() call introduced by commit
+18dbcbfabfff can be reverted, since event disabling is already handled
+through perf_event_disable_inatomic().
 
-You are awesome, thank you!
+[1] https://lore.kernel.org/lkml/aICYAqM5EQUlTqtX@li-2b55cdcc-350b-11b2-a85c-a78bff51fc11.ibm.com/
+
+Signed-off-by: Leo Yan <leo.yan@arm.com>
+---
+Leo Yan (2):
+      selftests/perf_events: Add test for refresh limit signals
+      Revert "perf: Fix the POLL_HUP delivery breakage"
+
+ kernel/events/core.c                               |   1 -
+ tools/testing/selftests/perf_events/.gitignore     |   1 +
+ tools/testing/selftests/perf_events/Makefile       |   3 +-
+ .../testing/selftests/perf_events/refresh_signal.c | 120 +++++++++++++++++++++
+ 4 files changed, 123 insertions(+), 2 deletions(-)
+---
+base-commit: 50897c955902c93ae71c38698abb910525ebdc89
+change-id: 20260429-arm_cs_clean_perf_handle-763cc339c1f5
+
+Best regards,
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Leo Yan <leo.yan@arm.com>
 
