@@ -1,60 +1,84 @@
-Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0C8F406296;
-	Tue, 12 May 2026 06:00:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAFAA32E696
+	for <linux-kselftest@vger.kernel.org>; Tue, 12 May 2026 06:39:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778565629; cv=none; b=Z5ReX/87j9JbdZMTEPqyYOwqK0+vdYLo26ERSVjOYZtFEUYt9cNtulnElZ6KoG8//1q7tjG6a/m3+Bp/43PmaB2esTnDxymnAXeKi202w1IZJVxSTuUTIY4M4tTOvy0j+zXSIoeLkmkMJ5S8iJB1wbK07yxzc9h+rmtIg1/7BxY=
+	t=1778567955; cv=none; b=LphfaIW+pAr3kS3FYsrughzYckx8meU+x9/fMqJaNJ8DB6779OtgXhCmgkPdfJCHpbbhpIrJBE4TlMdFz71E9POXCqYa2Jps2nk7e1tkPvNlCjeGnOpzW2v6gVmL4V5P9dzKPdot1gaQHbEnFopMCScxue8u76hMxmd+JITva9U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778565629; c=relaxed/simple;
-	bh=3/dhJ8s/gTLp5FfI4tzFmnbnLZHdbFW3dNsyriiTHY4=;
+	s=arc-20240116; t=1778567955; c=relaxed/simple;
+	bh=ReCO6+bh7wS8iJhfio0QbKq7IFDuLtB2Nf5u/s3X6+w=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZXk1/dIu5KWGqKp0OaX3m8z5NJfwZAwqsSRgM1CMxNxHRjMNykRiZQJSHQosudo+Ulc7QvsWXUYZP4XBHS2Eyd4jNDj1oETUNP6tvVu9qsn5Hgf5jkLckhiVGmVBuyuJ8ChOaZDgt0GUibRGt+uWfKhNjdaAgxZfQ6wIKQD9ETs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xhllyi74; arc=none smtp.client-ip=91.218.175.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 MIME-Version; b=dyjQhKiCnWG7kt9JRFfc7KaodQM14zPNjFpEuf9gXmVubThSyyMoKrQZQ1RiRugwfLW1spEZOabeyPRm5YmWRvjpIZylZ7ERT9AeKTrtGm4pTzN6K51ydlLKqtTosNN6HLX7NBu/6lMg0/LmdJ2q1cUjXqxp7hrFAjv0eXRng1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N0zT/NuK; arc=none smtp.client-ip=209.85.210.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xhllyi74"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1778565610;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=l40L11oPsTEKSxgVhQkbOKoDGaw16jzWQ7998spksOs=;
-	b=xhllyi74T2L3GxX3zb0Asw/m4N6jRSCbiR4nNypiwBz77STD8cLfd35WcMrD2PCj2DPoN7
-	f/QsTizLBZyliO+JDFTLyLFi40gx3AK1QplYrBWYR3i+UCn0wISrJzwvBpf9FWn5rC8dbz
-	gOQ3PawcnxeKgU+aNLn1nJrMP2/YI8s=
-From: Kaitao cheng <kaitao.cheng@linux.dev>
-To: ast@kernel.org,
-	corbet@lwn.net,
-	martin.lau@linux.dev,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	shuah@kernel.org,
-	chengkaitao@kylinos.cn,
-	skhan@linuxfoundation.org,
-	memxor@gmail.com
-Cc: bpf@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N0zT/NuK"
+Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-7dcd689829eso4668376a34.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 23:39:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778567945; x=1779172745; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sZihSXzk3m4ncPT8T2SwT5MxO7o0tjFPGrpvOfDpq78=;
+        b=N0zT/NuK1wSWw7Q97hs7GhIGkxoDTzWq/eiD93nF3tLcRR7SwCtYtZILXSQgC0lUw6
+         QYOJfOkCPQpVZwj0/rZY6bvXQeJ0e7oBxaJdODplI5z9bkRxo6MLuE2LjV3QzTrkCUIQ
+         j4zPPaqdzh4gVBKRK8Vg3bJ1eCp+tZsqpqCNUWGDhGieyqDtmcDMbGlUQ9SuCjApJZz/
+         BbkyErpeSlVL/ku1QHf9E7oqNdYtN4Kwq21oxqiJyY7L+Q7hnK+N9g0BXsDvam+6FppY
+         Vz2zM7/MHi0BNZBXIOKGoI+zoBvofzJUV+SoOQKhEWsAUv62h+/pNLSmzNTsVQ9xHc/9
+         hS2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778567945; x=1779172745;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=sZihSXzk3m4ncPT8T2SwT5MxO7o0tjFPGrpvOfDpq78=;
+        b=E6W+AoTaOT4nI3C4vSvlWj0QVk+jB/mBI+9AMhi/P6fFuki9lJbrYiEN/FwCuqI+Ka
+         LBYmgZAWfLhGaGM3EagQLQoP1Vb2XkcbMD878dmYH6PjQy/byyiKN7vjmaP1TJ4BVZQ/
+         /HVXxo2psvCUKioMKKDfz9VBxIEv6bLLD7gDmssmXVkgxSfbaFhBsg1gihzl4Hy1k1iP
+         5k4pt6flpcawnphekdDQds947Uz/XEUaLMXwnQAUmmb4Vwu9THZZTAjvXCLBQidPiGeI
+         7znCeJwrcW49naIcrecpC20UAQXrFtkdkl9AkIggSiOrfURBu4moAMv90OnY+EL7afel
+         moGQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+M1Nt2z+j3XuHuqP5y/8IDD0tNKdTzwwRqatz7kddHnUvJjVt5VlNpbmhHQxm0bmwDWZzL7qv/coH+JNL07wQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwE4FJWlJy7pSSLA8IRcjWs7p3X44hpZVlT+AlJtjmID3qEmvDj
+	/nnu8JqBdO9cUS8LDoFUNqNVc7D5KSkvPvMHO72CvHjOwPZLMFkQqcBt
+X-Gm-Gg: Acq92OHdqewtFVmN+J9LwCRxu+bdmt6qshQZ6gugDI0wvoVZQuGkLpzlngs9liwYQrV
+	93EzO5UOmRJrq6ArfB8Lb79FP5b5eH/WitXrGEQhX9EtESIbb10mW2Fb8KbAft53vFQXtSADwTD
+	Av7B2V3Gys0lTU8HQ+L1BkRe4ZlRCNbjdnjnMikV8+aVtZGa21rj9wX8hzSDjR03UCRP1Klvmw8
+	CfC7sy8XyV2exWKjBJgyZiHTi0onhOHA3t5B6UicKnUtsqGphznpIRllQpEOm8AWIpD7BKpq1mp
+	9jXhTdTQT9T4CWebnU0RigbOljv9ZwN77bDEGxKrSaQRjI0B6r3OZ4DWzHcYD3OdZddTsfbooT/
+	ZndDZ0nUyWqUINC9+EG6a89AL/DQCbQFaUsWxe6JPCwPTscQ/ro7MsmentW6w1FW5T+qUNqUB3z
+	RSjskWQ/cZp8TAh8Q=
+X-Received: by 2002:a05:6830:6281:b0:7d7:d504:cc6d with SMTP id 46e09a7af769-7e366839eafmr12638704a34.21.1778567945479;
+        Mon, 11 May 2026 23:39:05 -0700 (PDT)
+Received: from houminxi ([72.244.37.221])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7e367d9d788sm8183783a34.24.2026.05.11.23.38.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 May 2026 23:39:03 -0700 (PDT)
+From: Minxi Hou <houminxi@gmail.com>
+To: netdev@vger.kernel.org
+Cc: dev@openvswitch.org,
+	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	vmalik@redhat.com,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH RESEND bpf-next v10 7/8] bpf: allow non-owning list-node args via __nonown_allowed
-Date: Tue, 12 May 2026 13:59:18 +0800
-Message-ID: <20260512055919.95716-8-kaitao.cheng@linux.dev>
-In-Reply-To: <20260512055919.95716-1-kaitao.cheng@linux.dev>
-References: <20260512055919.95716-1-kaitao.cheng@linux.dev>
+	aconole@redhat.com,
+	echaudro@redhat.com,
+	i.maximets@ovn.org,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	shuah@kernel.org,
+	Minxi Hou <houminxi@gmail.com>
+Subject: [PATCH net-next v10 0/2] selftests: openvswitch: add pop_vlan test
+Date: Tue, 12 May 2026 14:38:48 +0800
+Message-ID: <20260512063850.1133046-1-houminxi@gmail.com>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260509135423.3433910-1-houminxi@gmail.com>
+References: <20260509135423.3433910-1-houminxi@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -62,161 +86,80 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
-From: Kaitao Cheng <chengkaitao@kylinos.cn>
+Add test_pop_vlan() to verify OVS kernel datapath pop_vlan action
+correctly strips 802.1Q VLAN tags from frames.
 
-KF_ARG_PTR_TO_LIST_NODE normally requires an owning reference
-(PTR_TO_BTF_ID | MEM_ALLOC with ref_obj_id). Introduce and use
-the __nonown_allowed annotation on selected list-node arguments
-so non-owning references with ref_obj_id==0 are accepted as well.
+Patch 1 extends ovs-dpctl.py with vlan(vid=X,pcp=Y,cfi=Z) formatting
+and parsing, plus an encap_ovskey subclass for safe ENCAP NLA decoding.
+It changes OVS_KEY_ATTR_VLAN type from uint16 to be16 to match
+the kernel __be16 wire format.
+It also adds push_vlan action support (parse/format with range
+validation).
+Patch 2 adds the selftest using purely ping-based verification with
+a push_vlan return flow for symmetric bidirectional testing.
 
-This enables passing bpf_list_front() / bpf_list_back() results to:
+Tested with vng on x86_64, all OVS selftests pass (including new
+test_pop_vlan).
 
-bpf_list_add() as insertion point (prev)
-bpf_list_del() as deletion target (node)
-bpf_list_is_first/last() as query target (node)
+v10:
+  - fix masked VLAN dpstr round-trip: use tci=0xNNNN/0xMMMM format
+    for masked vlan() output instead of vid=X,pcp=Y,cfi=Z/vid=...
+    which the parser cannot re-consume
+  - fix int() base handling in _parse_vlan_from_flowstr: use
+    int(val, 0) for auto base detection instead of manual
+    0x prefix check
+  - fix commit message: remove reference to nonexistent
+    MAX_ENCAP_DEPTH constant, clarify "encap parse()" scope
+v9: https://lore.kernel.org/netdev/20260509135423.3433910-1-houminxi@gmail.com/
+  - rebase on net-next (resolve conflict with 05416ada37aa4
+    "selftests: openvswitch: add tests for tunnel vport
+    refcounting")
+v8: https://lore.kernel.org/netdev/20260508134308.2857449-1-houminxi@gmail.com/
+  - consistent error message prefix: push_vlan() instead of
+    push_vlan (matches vlan() and encap() style)
+  - unify encap() error messages for clarity
+  - add empty-string guards for MAC address variables
+  - remove slot number comments from encap_ovskey nla_map
+  - remove explicit modprobe 8021q pre-flight check
+v7: https://lore.kernel.org/netdev/20260507131541.2331771-1-houminxi@gmail.com/
+  - remove slot number comments from encap_ovskey nla_map, keep
+    only comments explaining differences from base ovskey class
+  - remove explicit modprobe 8021q pre-flight check (ip link add
+    type vlan auto-loads the module)
+v6: https://lore.kernel.org/netdev/20260506131218.1880852-1-houminxi@gmail.com/
+  - fix non-ASCII characters (em dashes) in comments and commit
+    messages
+v5: https://lore.kernel.org/netdev/20260505124957.1239812-1-houminxi@gmail.com/
+  - add push_vlan action class, dpstr format and parse with range
+    validation (vid 0-4095, pcp 0-7, tpid 0-0xFFFF, CFI forced to 1)
+  - remove MAX_ENCAP_DEPTH constant and depth tracking (bracket-depth
+    counter in encap parser already handles nesting)
+  - remove start_capture/stop_capture helpers and tcpdump/pcap
+    verification -- use ping success/failure instead
+  - remove modprobe/netns pre-flight checks (other tests don't do this)
+  - remove ethtool VLAN offload disable (unnecessary for veth)
+  - add push_vlan return flow for symmetric bidirectional ping
+  - use ovs_sbx wrapper for ping commands (consistent with siblings)
+v4: https://lore.kernel.org/netdev/20260504123713.555461-1-houminxi@gmail.com/
+  - fix all checkpatch line-length warnings in new code
+  - fix pylint W0707: use explicit exception chaining (from exc)
+v3: https://lore.kernel.org/netdev/20260503120946.51869-1-houminxi@gmail.com/
+  - encap_ovskey: MPLS type "ovs_key_mpls" -> "array(ovs_key_mpls)"
+  - encap_ovskey: PRIORITY/IN_PORT set to "none" (metadata, not in ENCAP)
+  - _vlan_dpstr: cfi=0 falls back to tci=0x%04x for round-trip safety
+  - encap parse(): check return value for unrecognized trailing content
+  - vlan parser: boundary check + raise-from for exception chaining
+v2: https://lore.kernel.org/netdev/20260501133924.3100680-1-houminxi@gmail.com/
 
-Verifier keeps existing owning-ref checks by default; only arguments
-annotated with __nonown_allowed bypass MEM_ALLOC/ref_obj_id checks
-and then follow the same list-node validation path.
+Minxi Hou (2):
+  selftests: openvswitch: add vlan() and encap() flow string parsing
+  selftests: openvswitch: add pop_vlan test
 
-Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
----
- Documentation/bpf/kfuncs.rst | 22 ++++++++++++++++++++--
- kernel/bpf/helpers.c         | 20 +++++++++++---------
- kernel/bpf/verifier.c        | 13 +++++++++++++
- 3 files changed, 44 insertions(+), 11 deletions(-)
+ .../selftests/net/openvswitch/openvswitch.sh  |  78 +++++
+ .../selftests/net/openvswitch/ovs-dpctl.py    | 324 +++++++++++++++++-
+ 2 files changed, 392 insertions(+), 10 deletions(-)
 
-diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
-index 75e6c078e0e7..3a9db1108b95 100644
---- a/Documentation/bpf/kfuncs.rst
-+++ b/Documentation/bpf/kfuncs.rst
-@@ -207,8 +207,26 @@ Here, the buffer may be NULL. If the buffer is not NULL, it must be at least
- buffer__szk bytes in size. The kfunc is responsible for checking if the buffer
- is NULL before using it.
- 
--2.3.5 __str Annotation
------------------------------
-+2.3.5 __nonown_allowed Annotation
-+---------------------------------
-+
-+This annotation is used to indicate that the parameter may be a non-owning reference.
-+
-+An example is given below::
-+
-+        __bpf_kfunc int bpf_list_add(..., struct bpf_list_node
-+                                     *prev__nonown_allowed, ...)
-+        {
-+                ...
-+        }
-+
-+For the ``prev__nonown_allowed`` parameter (resolved as ``KF_ARG_PTR_TO_LIST_NODE``),
-+suffix ``__nonown_allowed`` retains the usual owning-pointer rules and also
-+permits a non-owning reference with no ref_obj_id (e.g. the return value of
-+bpf_list_front() / bpf_list_back()).
-+
-+2.3.6 __str Annotation
-+----------------------
- This annotation is used to indicate that the argument is a constant string.
- 
- An example is given below::
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index dfd465badd9d..f2f8705f0e9a 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -2571,10 +2571,10 @@ __bpf_kfunc int bpf_list_push_back_impl(struct bpf_list_head *head,
- }
- 
- __bpf_kfunc int bpf_list_add(struct bpf_list_head *head, struct bpf_list_node *new,
--			     struct bpf_list_node *prev, struct btf_struct_meta *meta,
--			     u64 off)
-+			     struct bpf_list_node *prev__nonown_allowed,
-+			     struct btf_struct_meta *meta, u64 off)
- {
--	struct bpf_list_node_kern *n = (void *)new, *p = (void *)prev;
-+	struct bpf_list_node_kern *n = (void *)new, *p = (void *)prev__nonown_allowed;
- 	struct list_head *prev_ptr = &p->list_head;
- 
- 	return __bpf_list_add(n, head, &prev_ptr, meta ? meta->record : NULL, off);
-@@ -2620,9 +2620,9 @@ __bpf_kfunc struct bpf_list_node *bpf_list_pop_back(struct bpf_list_head *head)
- }
- 
- __bpf_kfunc struct bpf_list_node *bpf_list_del(struct bpf_list_head *head,
--					       struct bpf_list_node *node)
-+				struct bpf_list_node *node__nonown_allowed)
- {
--	struct bpf_list_node_kern *kn = (void *)node;
-+	struct bpf_list_node_kern *kn = (void *)node__nonown_allowed;
- 
- 	/* verifier guarantees node is a list node rather than list head */
- 	return __bpf_list_del(head, &kn->list_head);
-@@ -2648,10 +2648,11 @@ __bpf_kfunc struct bpf_list_node *bpf_list_back(struct bpf_list_head *head)
- 	return (struct bpf_list_node *)h->prev;
- }
- 
--__bpf_kfunc bool bpf_list_is_first(struct bpf_list_head *head, struct bpf_list_node *node)
-+__bpf_kfunc bool bpf_list_is_first(struct bpf_list_head *head,
-+				   struct bpf_list_node *node__nonown_allowed)
- {
- 	struct list_head *h = (struct list_head *)head;
--	struct bpf_list_node_kern *kn = (struct bpf_list_node_kern *)node;
-+	struct bpf_list_node_kern *kn = (struct bpf_list_node_kern *)node__nonown_allowed;
- 
- 	if (READ_ONCE(kn->owner) != head)
- 		return false;
-@@ -2659,10 +2660,11 @@ __bpf_kfunc bool bpf_list_is_first(struct bpf_list_head *head, struct bpf_list_n
- 	return list_is_first(&kn->list_head, h);
- }
- 
--__bpf_kfunc bool bpf_list_is_last(struct bpf_list_head *head, struct bpf_list_node *node)
-+__bpf_kfunc bool bpf_list_is_last(struct bpf_list_head *head,
-+				  struct bpf_list_node *node__nonown_allowed)
- {
- 	struct list_head *h = (struct list_head *)head;
--	struct bpf_list_node_kern *kn = (struct bpf_list_node_kern *)node;
-+	struct bpf_list_node_kern *kn = (struct bpf_list_node_kern *)node__nonown_allowed;
- 
- 	if (READ_ONCE(kn->owner) != head)
- 		return false;
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index ca33f35bc3eb..08ab337866bf 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -10502,6 +10502,11 @@ static bool is_kfunc_arg_nullable(const struct btf *btf, const struct btf_param
- 	return btf_param_match_suffix(btf, arg, "__nullable");
- }
- 
-+static bool is_kfunc_arg_nonown_allowed(const struct btf *btf, const struct btf_param *arg)
-+{
-+	return btf_param_match_suffix(btf, arg, "__nonown_allowed");
-+}
-+
- static bool is_kfunc_arg_const_str(const struct btf *btf, const struct btf_param *arg)
- {
- 	return btf_param_match_suffix(btf, arg, "__str");
-@@ -12017,6 +12022,13 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
- 				return ret;
- 			break;
- 		case KF_ARG_PTR_TO_LIST_NODE:
-+			if (is_kfunc_arg_nonown_allowed(btf, &args[i]) &&
-+			    type_is_non_owning_ref(reg->type) && !reg->ref_obj_id) {
-+				/* Allow bpf_list_front/back return value for
-+				 * __nonown_allowed list-node arguments.
-+				 */
-+				goto check_ok;
-+			}
- 			if (reg->type != (PTR_TO_BTF_ID | MEM_ALLOC)) {
- 				verbose(env, "%s expected pointer to allocated object\n",
- 					reg_arg_name(env, argno));
-@@ -12026,6 +12038,7 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
- 				verbose(env, "allocated object must be referenced\n");
- 				return -EINVAL;
- 			}
-+check_ok:
- 			ret = process_kf_arg_ptr_to_list_node(env, reg, argno, meta);
- 			if (ret < 0)
- 				return ret;
--- 
-2.50.1 (Apple Git-155)
+--
+2.53.0
 
