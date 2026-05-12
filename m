@@ -1,111 +1,167 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE19E39936B;
-	Tue, 12 May 2026 09:28:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5790A379C52
+	for <linux-kselftest@vger.kernel.org>; Tue, 12 May 2026 09:37:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778578105; cv=none; b=qReU7QDvchescwZMowU+dx++/ylTfkDeC/Q57mu418L4kSFbk78jl4yE9W/GEKPIhjPTpsjEhnA8wuStkHSj/gyczxurm0M9ILZVXTRgYqH8MVnDz72FdvqCnJyUT/XP+KmMpLaxBoxEKPEAPaIsswdFnMnahkOTho1vDLbHLyc=
+	t=1778578626; cv=none; b=tM8MIcSqgDUQL2RGFEByZ7M2aOaNduExxmYZCjQWyQroicuq0wYdKEwNeLWCbpBdh0NLqM99bfpfVRDHHNywqULzaqxeYlMwlNfevZRvhPw4l6LmWxWP6OLZtMlO78T0tZG6eDsZEPUo+B30DkpW5Trmlrjv1gZkfLg4iNxPJQ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778578105; c=relaxed/simple;
-	bh=0E5IxBKbz4u4hg2v2fd+BVV/esRQq2aK57wXBGGDo7g=;
+	s=arc-20240116; t=1778578626; c=relaxed/simple;
+	bh=h1c7WlF0eO4XFsRi+bXuKWCQloLuvGFJm5M3Yr7QuFQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gxlPL28PaBxhVZaj0x8emMafn+T4L4GM2p2WBC0xkWJ1JEl6quDm3xVOIVNiGkXcrMTr1AW0Lay9puiWpVTO/SmbK8vlTpzuX7epJ3E3IpXh3dwcBKS3/n8co5F5x52TUbPRugU1X/IwChfwfyjuAVDUBPq+B2IPbXgnTRQGRok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Qpi4KKNX; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=u9bdjridolTkV15zbJhFp30dtXH/sfp7u0WpBg3YrhbLjcAbhLLe/QKvhNiQhhy+CK+hIcqRXwk3ooKOrcxqHQlSttpScCM0eJ6NOO0Sne9FsQWD4zHtm0hfNOb4AiGo6REvoZla6zxNo3EU2PaEoMjGr0clZQWRkjOXXTrQMus=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=avQvWjHi; arc=none smtp.client-ip=91.218.175.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Qpi4KKNX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28E7CC2BCB0;
-	Tue, 12 May 2026 09:28:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778578105;
-	bh=0E5IxBKbz4u4hg2v2fd+BVV/esRQq2aK57wXBGGDo7g=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Qpi4KKNXGcN58BJXlD58i5Xlxu6vbfqPhXibd9sFp/0BeN1+aY+vOK/C7xbEORQaN
-	 FnguCTSycv3dR2Edh4bCbAsdRtGNZfITNUQbrjSg+xBlrbyRwP4HxtX7kMqFG7hnk2
-	 ZCGA8oeP6h4wsfNS7+r/sueekLbwjyiaUMw1Ku6Ko258CF0sH8Hcc54/lMdR41A6e/
-	 qNhiRD0kinDKblm8pQ50/n6nDC+G/dQ7Zd6oK7PEnyWgADOBXlcnV+oI8R7WumXMrY
-	 tAcsQI9wexgSOWBDj+Xqo2q7xtfRNEkLmUke5JHFhIdB38YFbGUv5S2axnYAlcXoLV
-	 oI5JXgBRH2brg==
-Message-ID: <a27344e1-6f0c-4686-99ac-fc2cfcc5bb06@kernel.org>
-Date: Tue, 12 May 2026 11:28:20 +0200
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="avQvWjHi"
+Message-ID: <6cf003cb-f39c-4362-9b24-e479b988ecd3@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1778578610;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=T20NslB0IYADqB7NaB6OdKMLIjFa/Li1Y4ec0dAtHc4=;
+	b=avQvWjHigzU7HCJ8Pa09LGj+MI4xauLUbWi8dFaZc97TpLhA1cXTC2VwTRjLyqkvI1/6wV
+	ZMUkhZ/oKcP9HMcHl8naUkL2gD4JGSPnUbmBFgAoZ7eN+a1njaZ+l1m3Ijs/NIODAP4U36
+	Z6VOJraCL731kL6vV+Htq1duzAWoYYg=
+Date: Tue, 12 May 2026 17:36:07 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/3] use vma locks for proc/pid/{smaps|numa_maps} reads
-To: Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
-Cc: liam@infradead.org, ljs@kernel.org, vbabka@kernel.org,
- willy@infradead.org, jannh@google.com, paulmck@kernel.org, pfalcato@suse.de,
- shuah@kernel.org, hsukrut3@gmail.com, richard.weiyang@gmail.com,
- reddybalavignesh9979@gmail.com, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260426062718.1238437-1-surenb@google.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <20260426062718.1238437-1-surenb@google.com>
+Subject: Re: [PATCH RESEND bpf-next v10 3/8] bpf: Introduce the bpf_list_del
+ kfunc.
+To: bot+bpf-ci@kernel.org
+Cc: bpf@vger.kernel.org, ast@kernel.org, corbet@lwn.net,
+ martin.lau@linux.dev, daniel@iogearbox.net, andrii@kernel.org,
+ eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
+ john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
+ haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
+ chengkaitao@kylinos.cn, skhan@linuxfoundation.org, memxor@gmail.com,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, vmalik@redhat.com,
+ linux-kselftest@vger.kernel.org, martin.lau@kernel.org, clm@meta.com,
+ ihor.solodrai@linux.dev
+References: <20260512055919.95716-4-kaitao.cheng@linux.dev>
+ <297a19ac8fb5fc8ab279a932137bf39604f2f3637521ff6d7d4b39c364a52e07@mail.kernel.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Kaitao Cheng <kaitao.cheng@linux.dev>
+In-Reply-To: <297a19ac8fb5fc8ab279a932137bf39604f2f3637521ff6d7d4b39c364a52e07@mail.kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On 4/26/26 08:27, Suren Baghdasaryan wrote:
-> Use per-vma locks when reading /proc/pid/smaps and /proc/pid/numa_maps
-> similar to /proc/pid/maps to reduce contention on central mmap_lock. One
-> major difference between maps and smaps/numa_maps reading is that the
-> latter executes page table walk which can't be done under RCU due to a
-> possibility of sleeping. Therefore we drop RCU read lock before this walk
-> while keeping the VMA locked. After the walk we retake RCU read lock,
-> reset VMA iterator and proceed with the next VMA.
+I have clarified this issue in the [PATCH bpf-next v10 3/8] patch,
+with the link provided below:
 
-With many small VMAs, is that overhead noticable?
+https://lore.kernel.org/bpf/0637c1ce-0e73-4505-8a0c-e77339f4aefb@linux.dev/
+
+在 2026/5/12 14:41, bot+bpf-ci@kernel.org 写道:
+>> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+>> index 1e8754877dd1..51b6ea4bb8cb 100644
+>> --- a/kernel/bpf/helpers.c
+>> +++ b/kernel/bpf/helpers.c
+>> @@ -2593,6 +2593,15 @@ __bpf_kfunc struct bpf_list_node *bpf_list_pop_back(struct bpf_list_head *head)
+>>  	return __bpf_list_del(head, h->prev);
+>>  }
+>>
+>> +__bpf_kfunc struct bpf_list_node *bpf_list_del(struct bpf_list_head *head,
+>> +					       struct bpf_list_node *node)
+>> +{
+>> +	struct bpf_list_node_kern *kn = (void *)node;
+>> +
+>> +	/* verifier guarantees node is a list node rather than list head */
+>> +	return __bpf_list_del(head, &kn->list_head);
+>> +}
+>> +
+> 
+> Looking at bpf_list_pop_front() and bpf_list_pop_back() in the same
+> file, both functions read from the list_head (h->next or h->prev)
+> before passing it to __bpf_list_del(). If the list is uninitialized,
+> they end up passing potentially invalid pointer values to __bpf_list_del(),
+> which then has to handle this by initializing the list and returning NULL.
+> 
+> While __bpf_list_del() handles this correctly, would it be clearer to
+> move the initialization check into the top-level kfuncs (like
+> bpf_list_pop_front/back) so that __bpf_list_del() always receives a
+> valid list_head pointer rather than potentially garbage values that
+> get ignored later?
+> 
+> Reference: https://lore.kernel.org/bpf/af50d188f6bc2de81fe3c321b26a645a9425ba9f2644cb6f8525d5bb637385f9@mail.kernel.org/
+> 
+>> @@ -4725,6 +4734,7 @@ BTF_ID_FLAGS(func, bpf_list_push_back, KF_IMPLICIT_ARGS)
+>>  BTF_ID_FLAGS(func, bpf_list_push_back_impl)
+>>  BTF_ID_FLAGS(func, bpf_list_pop_front, KF_ACQUIRE | KF_RET_NULL)
+>>  BTF_ID_FLAGS(func, bpf_list_pop_back, KF_ACQUIRE | KF_RET_NULL)
+>> +BTF_ID_FLAGS(func, bpf_list_del, KF_ACQUIRE | KF_RET_NULL)
+>>  BTF_ID_FLAGS(func, bpf_list_front, KF_RET_NULL)
+>>  BTF_ID_FLAGS(func, bpf_list_back, KF_RET_NULL)
+>>  BTF_ID_FLAGS(func, bpf_task_acquire, KF_ACQUIRE | KF_RCU | KF_RET_NULL)
+> 
+> [ ... ]
+> 
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index 11054ad89c14..a6bcbe68cd72 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>> @@ -10744,6 +10744,7 @@ enum special_kfunc_type {
+>>  	KF_bpf_list_push_back,
+>>  	KF_bpf_list_pop_front,
+>>  	KF_bpf_list_pop_back,
+>> +	KF_bpf_list_del,
+>>  	KF_bpf_list_front,
+>>  	KF_bpf_list_back,
+>>  	KF_bpf_cast_to_kern_ctx,
+> 
+> [ ... ]
+> 
+>> @@ -11456,7 +11459,8 @@ static bool check_kfunc_is_graph_node_api(struct bpf_verifier_env *env,
+>>
+>>  	switch (node_field_type) {
+>>  	case BPF_LIST_NODE:
+>> -		ret = is_bpf_list_push_kfunc(kfunc_btf_id);
+>> +		ret = is_bpf_list_push_kfunc(kfunc_btf_id) ||
+>> +		      kfunc_btf_id == special_kfunc_list[KF_bpf_list_del];
+>>  		break;
+>>  	case BPF_RB_NODE:
+>>  		ret = (is_bpf_rbtree_add_kfunc(kfunc_btf_id) ||
+> 
+> Can bpf_list_del actually be called from BPF programs? Looking at the
+> verifier's handling of KF_ARG_PTR_TO_LIST_NODE arguments in
+> check_kfunc_args():
+> 
+> 	case KF_ARG_PTR_TO_LIST_NODE:
+> 		...
+> 		if (!reg->ref_obj_id) {
+> 			verbose(env, "allocated object must be referenced\n");
+> 			return -EINVAL;
+> 		}
+> 
+> This code path unconditionally requires an owning reference (ref_obj_id
+> must be non-zero). However, once a node is added to the list via
+> bpf_list_push_front/back, the owning reference is converted to a
+> non-owning reference (ref_obj_id becomes 0). This means bpf_list_del
+> cannot be called on nodes that are actually in the list.
+> 
+> The sister kfunc bpf_rbtree_remove handles this by having a special
+> branch in check_kfunc_args() that accepts non-owning references for
+> that specific kfunc. Does bpf_list_del need similar handling to allow
+> removing nodes that are actually in the list?
+> 
+> Reference: https://lore.kernel.org/bpf/294242698d576e4fedf243ab055c6f9a984e55033933a9bd09808f62a7018e9d@mail.kernel.org/
+> 
+> 
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> 
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25716874656
 
 -- 
-Cheers,
+Thanks
+Kaitao Cheng
 
-David
