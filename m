@@ -1,264 +1,221 @@
-Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
+Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com [209.85.222.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 658BC38228C
-	for <linux-kselftest@vger.kernel.org>; Tue, 12 May 2026 21:33:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778621639; cv=none; b=F+Ps3S0aYXtKTWhVMINmnx6NSfQKVd1naopAwVs0W2HNuPhICu2uyqoa7GjK1MUyCiAmiG69cbeidSxfA90FzF9v0zjCxLnvo5BuiIcuSZMsI2XLb+WeaWX45gSGwAjJhzXAtxf4+enstEFFwKW8L5Aq0xvWR1++09XohnaSq+0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778621639; c=relaxed/simple;
-	bh=nf5LaBv/q1yBV2WRernYjv6lnDcXTDPc+W5b1NXMv3E=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Z53bPeELES5b7a9PZ/KmlHIlcQRpF/y0eSwolXYD/jgFiymb6EUKbbrl7VfP4tijYDj9CdsqmSJ0Q1aNcMUO7sMA+VVgdAgmuENAE+BU8+r8VlEqDfBAOyeElS6YwLfa8wWzN1RjxgYdJdpdKEhzJZovxI/PxJJhGBLqLaCtJWo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=p5ldaXJs; arc=none smtp.client-ip=209.85.215.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E6E13A3E65
+	for <linux-kselftest@vger.kernel.org>; Tue, 12 May 2026 22:30:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.222.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778625029; cv=pass; b=TPInE6V/jgFZhbkA95qa2Zmf1/aCvAjjpW2TOzBcyasGldRZsGu22Hs6EXK+NFjQ3y5XKgzPYpPVAAd+NdEeVUkxFrrNP+8nVAIKOhdI7osrL9Bf6u70hwMOndASFvHeVBTD3n+pl9Lnk2lSBOCiQOV2/hHgmFZxMR7p5XPx6b4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778625029; c=relaxed/simple;
+	bh=ctAmtD5i9O0zXAJdPtZK0rAgm3gUJsIsE1gDEZWd5XA=;
+	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hBwS2Q3LMGW3hZuFWt+K4X2ms5b+3Wx52oXWc6Oi8bNnsfUf8FGXSu2v5tjfsQRkB/dY7B2JVRwB4vqQxgQHwRO2lng3A/tyoIXln8EhjLpbJWnCIsk6ehCRmzy8E5cYQJhE8VDz9ePrG7rAr3/gnci+WMw5D1uRZS5LSS7zHpk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Z3P+1mkz; arc=pass smtp.client-ip=209.85.222.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="p5ldaXJs"
-Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-c828acf7c1dso3765297a12.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 12 May 2026 14:33:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Z3P+1mkz"
+Received: by mail-ua1-f41.google.com with SMTP id a1e0cc1a2514c-95f2b0bd920so2434995241.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 12 May 2026 15:30:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778625026; cv=none;
+        d=google.com; s=arc-20240605;
+        b=WwT7KLXuONK4ra4IgtyMmZkDVvQ4FA8Vw8FYDQnxaSRDzkqO6ss26djtur6glxU3Z6
+         1IcUIKP7Hb6bf+S+Z+6+Elj92Dx5y9ZU0YhCcyVm3PcP90flD+zgdwnyaHSUlODqOgV4
+         4n4+t2HJksQCOAWCmsGQEUAnQK1/P1Ful+36ZQ3YHRaX/seLHZgkiSKtmp3yBKaivsGW
+         D4gn+o0ZcMLRdPplsCWS3ukXd/UMDWfyq7VCORs/PszeuUEq1wBaMKN+pWeD6L6NFL7J
+         kzRGCCS7J8BEL+8jFAjmHCoQWYAMBdLOp5h9xCL+xhVRewVncojOQPJVKAO3Io3Mk2bS
+         CfyA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date
+         :mime-version:references:in-reply-to:from:dkim-signature;
+        bh=7TPT8725vjJaWzYD56fEvXZ06oMkvP85Hz1/t121+lc=;
+        fh=thx7HmnRSQl2xydeSGDm7r/eQBj9+84HfR4tnIWAkhE=;
+        b=g9nsie97nLUuSRfVqihERFkIB7VcELYGATxpALjtZhStyb0UrBAgvJhA/s7jjuBs2F
+         PhUoG7ExPEK5F/OlpmI6NMq6JhyBPSRk2gkcEu7wKZ942TVE2P5tbwh8MVXk1Gzj5mkM
+         LPaUwrbuOyXUHuolI3l9mrABsXCeNlWkFya/yXj2StXm74H3FZCkssiAlI0KIj2eMLrN
+         Vedj/9AH4Lz3hvafL1a1akFu29hg3ZwcWYfx5Ukzl6BwmxVqzQZKQ82pEygKXeDLJKtB
+         BMDYs47E11RaKc3il1JfTeaz9pVGgrB0D5nD6Gyo2HoJ0gh5xvdafEIktwOTiR3k74fC
+         kvGA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1778621636; x=1779226436; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wUyDM/wX4+q24OYtylEh1N7LuXBizzR7BVDWaiwz87k=;
-        b=p5ldaXJs4vL3fyNZrTY2GJF/mE4FtZRREghulMCnkFExaBvp6WOoeaafi3Ay4jWDpJ
-         z3nY/ZAd9uFcbjiCcvsxOMSyD/Hk2G9Ac/5J9KWl2O0wvxdT38Bt7MSnDJmkCEmTsvdE
-         Ijsy1q9GcTksyC1ByZf1f0hFuytBwEUN6Mst/vlFTwZOmdnS2F50Z9wv0ycuhUqa24ig
-         EpG7ToEyXt2C7lwEdI9gCTfPta4GARRWfv+3CE3ID6X0iB+mMKRCi2iL/VpvOKcVnAiW
-         NJwLEsLRkG+hCDqh5FO1Lv7XHToeicSh5we3rLTQ7dZ0Oqv2wcj/hzqbrqougnEoXBgV
-         3t3g==
+        d=google.com; s=20251104; t=1778625026; x=1779229826; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date
+         :mime-version:references:in-reply-to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7TPT8725vjJaWzYD56fEvXZ06oMkvP85Hz1/t121+lc=;
+        b=Z3P+1mkzpj8h4Ny2fRAwAu8+rBE8RmY/hqTESjapBAiEuZat4VHSRDf/jOos2uaYkS
+         VieRx0q/g0gGq2sQW4x4U/jX3graJAZbntlqD1wSsROXwdHc70mRKKtYEOrOfGw4zssZ
+         zfatOl88ZcEA+Bw+ZJR1JaW4a3CQR8E1uCy1Gv5nd+MD4fJLj54BN9xxXLD67vhRIOlV
+         r7T+Lf0eC/M3qQrsBJQsJR1KeTBc5TsP5AzTGh/QLkC+KIo4rn8BYvrUlGprsuaf+54N
+         +5rdI9/+eSyZCXoP7wCwcOvjjjR8b+C6rbemjMgDYsFjoTrTStrU0XaTwOv63HW47jJc
+         pSpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778621636; x=1779226436;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wUyDM/wX4+q24OYtylEh1N7LuXBizzR7BVDWaiwz87k=;
-        b=qCtRJgbkAkWrFgzYnGa3R2UyU5v5dKHfY9RuqN9sZLmgHuHlaPF4XTfZBwBaRGUcRm
-         /T38aXjtD7+g5+IAWEaXZ04H1O2/fg0ayMHJRtsk9ry9mRumCND4BvEwINjt5h8gFRcp
-         NLiKHcsH1DXshZPTnHA7F26atZKiYah5sM0xs+FIOlNzk0zc3IV/xXX6mzicuk+rNCeQ
-         +GyCeuSUU3KpGKOn2ocz8NCGcwR4Nchp4NLWH7r2nhDojyoUpNsN1sFhdT34S624vTzU
-         VGSVCbHQupBcEpI0tkPWgmBbnQsDE5S3zpjAa88vHjXlILCR7QFj1OblHA3gFgz0UEFo
-         bz0g==
-X-Forwarded-Encrypted: i=1; AFNElJ/7Z6as8w87DtiJghycbikHS4WhPTTrN7+3Q2Bdc3PHAuqvWSnnbOho2TBFbfau2r5T8ELdkBCEmRMj66OzlOM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YywFfF2eR/9vfQAHGjW+f+D6Lw+zAiVHG66EsMDCKjveEKxiFnu
-	+sG3Eeoj3o9/NhbX6o3Sc18au8BaQ8XxHFgDy2itwJdjO48OubxQOWj8GPbskp1U/4TTE2WBEF4
-	5iEvAFQ==
-X-Received: from pfbem37.prod.google.com ([2002:a05:6a00:3765:b0:82f:b53f:40d7])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:3286:b0:3a2:c685:f9b0
- with SMTP id adf61e73a8af0-3af83e43fa0mr313442637.49.1778621636348; Tue, 12
- May 2026 14:33:56 -0700 (PDT)
-Date: Tue, 12 May 2026 14:33:55 -0700
-In-Reply-To: <20260508170714.489136-3-jmattson@google.com>
+        d=1e100.net; s=20251104; t=1778625026; x=1779229826;
+        h=content-transfer-encoding:cc:to:subject:message-id:date
+         :mime-version:references:in-reply-to:from:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7TPT8725vjJaWzYD56fEvXZ06oMkvP85Hz1/t121+lc=;
+        b=G+KUYRaKQlkRBtFyIXeZ/H13Y1sroSJtDD7KFNYWzDOaLpFix0la8mdSVGpvrhrOkf
+         FZZgT6OYw7VQgpri10lgnH09wdqdrTjDsResxRk005CiSpvZlHJ1InCZNYqwHv/kcx29
+         XeMdu/QwJjqp+SsLp9ocON7EZqd8sC4nuOhNKSpIQerMMFxoCtgnl5mLUUgWtIy86BtJ
+         I/tIGEUVzV5MCXH8AlP2RkANFtMoL4C0uGV7cfm1w/trz6W2IoE2qrf4e6+B1NhdQMCd
+         njqf4k1HvHoQ8c6sgHk295DFd32L5qYVAduaj45e/5RD/Od8JjcTa72ascQHCf4qwEsH
+         vI7A==
+X-Forwarded-Encrypted: i=1; AFNElJ8ai9q3LNFCorY5qC8Q7+6f6H2sPVY+qPoGliyEn7cNOjK6DJq5BASbwqjX0zEf95M9pM1Mpr1j+pGHVlyXmTs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzqlkhdwKo53g5sZpfXDyebcbAJq384j/AI0BmJCzoWQjgy+Ax+
+	GTxgWzPY7PQsurJ/GdOgIw4Uywzomwes66TSM5XMKCx2KaybeZyvhJPfBbNcJdXfl+OvnNIGtF7
+	8BZRzHzM4kRydjS5PSmRN9doYjfTmGJlLFuM1Qs2p
+X-Gm-Gg: Acq92OEtbvcLzt+iMu1kfHI4gfBvsCtRaKnWyku8Wr0Iqim5UQK/sGgibXfgYViBtFk
+	geWYH91aXUvS2MOttL2xAPCAHk82EC524cAC1k6/HV1DA9MM4h9JVCdJtmev5BHaCtFTYdaIWnA
+	gY9IN41gsOof36oUPosoFfV7uc3H7hVi85uyPnucbeY0rgSe1B6gVGSPXw14slS6dBiQiMRo9eu
+	K65rAXDUwaIxKlto5bcIZTB5AOmMssKmmSEejZnCth3O2ixrKsH4I14LO8LsMk5cEfqrjK1wbIc
+	vXAcYYnbsxoU/JJaWeLDunKwdYug/tkQaNMka1V7elZxYDaSNYfRecmx8Ne68QXkSsfi4dnlaBW
+	tGu0U
+X-Received: by 2002:a05:6102:442a:b0:632:3bd5:d57c with SMTP id
+ ada2fe7eead31-635ced54981mr2555380137.3.1778625025472; Tue, 12 May 2026
+ 15:30:25 -0700 (PDT)
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 12 May 2026 15:30:24 -0700
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 12 May 2026 15:30:24 -0700
+From: Ackerley Tng <ackerleytng@google.com>
+In-Reply-To: <1DAB05E2-7F30-45D7-B155-B66C59D31AFF@infradead.org>
+References: <20260428-gmem-inplace-conversion-v5-0-d8608ccfca22@google.com>
+ <20260428-gmem-inplace-conversion-v5-10-d8608ccfca22@google.com>
+ <n5ce32wumzeiqqyqutom4apy2kqfetbvusc6j4k2xarsska5mw@klp5bmy7qhfm>
+ <CAEvNRgF9+Gr7UVEq-E2SQEb_XOQQMOXy9F_A2tA=DbNV_fJ0EQ@mail.gmail.com> <1DAB05E2-7F30-45D7-B155-B66C59D31AFF@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260508170714.489136-1-jmattson@google.com> <20260508170714.489136-3-jmattson@google.com>
-Message-ID: <agOcw9ZIXALKrs_a@google.com>
-Subject: Re: [PATCH v2 2/3] KVM: x86: Virtualize AMD CPUID faulting
-From: Sean Christopherson <seanjc@google.com>
-To: Jim Mattson <jmattson@google.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Clayton Pence <ctpence@google.com>
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Date: Tue, 12 May 2026 15:30:24 -0700
+X-Gm-Features: AVHnY4Lh8UobS4TfgaX3AzC6MvTUmkcUL18qAWSQRch3a7T6C4hmHCpmi3zo20A
+Message-ID: <CAEvNRgGgggCPKRzd0=r5jV7stxFJVGzj3as_awGytonx9qdfLw@mail.gmail.com>
+Subject: Re: [PATCH RFC v5 10/53] KVM: guest_memfd: Add basic support for KVM_SET_MEMORY_ATTRIBUTES2
+To: "Liam R. Howlett" <liam@infradead.org>
+Cc: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com, 
+	brauner@kernel.org, chao.p.peng@linux.intel.com, david@kernel.org, 
+	ira.weiny@intel.com, jmattson@google.com, jthoughton@google.com, 
+	michael.roth@amd.com, oupton@kernel.org, pankaj.gupta@amd.com, 
+	qperret@google.com, rick.p.edgecombe@intel.com, rientjes@google.com, 
+	shivankg@amd.com, steven.price@arm.com, tabba@google.com, willy@infradead.org, 
+	wyihan@google.com, yan.y.zhao@intel.com, forkloop@google.com, 
+	pratyush@kernel.org, suzuki.poulose@arm.com, aneesh.kumar@kernel.org, 
+	Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson <seanjc@google.com>, 
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
+	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+	Nhat Pham <nphamcs@gmail.com>, Baoquan He <bhe@redhat.com>, Barry Song <baohua@kernel.org>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
+	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
+	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Kiryl Shutsemau <kas@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>, Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-mm@kvack.org, linux-coco@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 08, 2026, Jim Mattson wrote:
->  static __always_inline void kvm_cpu_cap_clear(unsigned int x86_feature)
-> diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
-> index c8c6cc0406d6..127d031d3310 100644
-> --- a/arch/x86/kvm/emulate.c
-> +++ b/arch/x86/kvm/emulate.c
-> @@ -3593,13 +3593,15 @@ static int em_sti(struct x86_emulate_ctxt *ctxt)
->  static int em_cpuid(struct x86_emulate_ctxt *ctxt)
->  {
->  	u32 eax, ebx, ecx, edx;
-> -	u64 msr = 0;
-> +	u64 msr[2] = {};
->  
-> -	ctxt->ops->get_msr(ctxt, MSR_MISC_FEATURES_ENABLES, &msr);
-> -	if (!ctxt->ops->is_smm(ctxt) &&
-> -	    (msr & MSR_MISC_FEATURES_ENABLES_CPUID_FAULT) &&
-> -	    ctxt->ops->cpl(ctxt))
-> -		return emulate_gp(ctxt, 0);
-> +	if (!ctxt->ops->is_smm(ctxt) && ctxt->ops->cpl(ctxt)) {
-> +		ctxt->ops->get_msr(ctxt, MSR_MISC_FEATURES_ENABLES, &msr[0]);
-> +		ctxt->ops->get_msr(ctxt, MSR_K7_HWCR, &msr[1]);
-> +		if ((msr[0] & MSR_MISC_FEATURES_ENABLES_CPUID_FAULT) ||
-> +		    (msr[1] & BIT_ULL(MSR_K7_HWCR_CPUID_USER_DIS_BIT)))
+"Liam R. Howlett" <liam@infradead.org> writes:
 
-Hrm, this is all rather ugly (definitely not your fault).  What do you think about
-adding x86_emulate_ops.cpuid_fault_enabled() to at least get deduplicate the MSR
-lookups?
+>
+> [...snip...]
+>
+>>
+>>The invariant in this maple tree is that contiguous ranges with the same
+>>attribute are stored as a single range.
+>>
+>>The goal of this first part is to get the entry at the index just after
+>>the requested range, and see what the attribute there is. If that
+>>attribute is what we're about to set, extend the requested range for
+>>storing to the end of that range.
+>>
+>>If there is another range higher than end + 1, with the invariant
+>>maintained, that attribute has to be different than the attribute stored
+>>at end. Hence, we only want to extend this requested range up till end.
+>>
+>
+> mas_find() will look for an entry at the given address for the first sear=
+ch, and if it is not found it will continue to search upwards.  Since you l=
+imit the search to end, it will work as you want and there isn't a bug as I=
+ was thinking in my sleep deprived state.
+>
+> Since you are searching for exactly one address (end), it might serve you=
+ better to walk there.  Maybe walking is a better API for what you are doin=
+g here?
+>
 
-Gah, we should do more than that.  I was going to say, "If it weren't for
-kvm_emulate_cpuid() using kvm_require_cpl(), we could roll *all* of the checks
-into cpuid_fault_enabled()".  But that's a rather stupid reason to duplicate the
-code, because kvm_emulate_cpuid() is literally the only user of kvm_require_cpl().
+Thanks again for this tip! I'll try the walk API in the next revision
+after v6 [1]
 
-Pulling smm.h into cpuid.h isn't great, but the code is much nicer, especially
-the next patch to add AMD CPUID faulting.
+[1] https://lore.kernel.org/all/20260507-gmem-inplace-conversion-v6-0-91ab5=
+a8b19a4@google.com/T/
 
-Compile tested only...
+>
+>>> Do you have testing of these functions somewhere?
+>>>
+>>
+>>GMEM_CONVERSION_MULTIPAGE_TEST_INIT_SHARED(indexing, 4) tests setting
+>>attributes in ranges. If test_page is 2,
+>>
+>>1. [0, 4) starts off shared (4 is the number of pages in the guest_memfd)
+>>2. [2, 3) is converted to private
+>>    =3D> so the ranges should now be [0, 2), [2, 3), [3, 4)
+>>3. [2, 3) is converted back to shared
+>>    =3D> so the ranges should now be [0, 4)
+>>
+>>I verified this by inserting some trace_printk()s and inspecting manually=
+.
+>>
+>
+> Thanks.  I find the exclusive ranges a bit odd to think about in the mapl=
+e tree context, but this test case makes sense.  This is especially odd to =
+look at a single index entry, at least for me.
+>
+> I generally have a set of test cases and append any bug reproduces to tha=
+t list so they are unlikely to reoccur.  My testing is certainly different =
+from what you'll be doing, but this method has done well with the quality o=
+f code improving over time, and limited (if any) regressions.
+>
 
----
-From: Sean Christopherson <seanjc@google.com>
-Date: Tue, 12 May 2026 14:20:47 -0700
-Subject: [PATCH 1/3] KVM: x86: Consolidate CPUID fault handling for emulator
- and interception logic
+I've not worked directly with the maple tree tests but the xarray tests
+(similarly set up, I believe) are a joy to work with.
 
-Extract the logic for emulating CPUID faulting (where CPUID #GPs at CPL>0
-outside of SMM) into a dedicated helper and use the helper for both the
-full emulator and the intercepted-CPUID paths.
+> I actually insist that any fix has a test before I accept them.  There ar=
+e two reasons for this: 1. Avoiding the regression. 2. People really unders=
+tand the bug if they can create a reproducer.
+>
+> I hope this helps.
+>
+>
 
-Opportunistically drop kvm_require_cpl(), as kvm_require_cpl() was the one
-and only user.
+The maple tree tests are set up to directly test maple tree code, but
+KVM selftests test from the userspace interface, and it's hard to test
+this invariant from userspace.
 
-No functional change intended.
-
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/include/asm/kvm_host.h |  1 -
- arch/x86/kvm/cpuid.c            |  5 +++--
- arch/x86/kvm/cpuid.h            |  8 ++++++++
- arch/x86/kvm/emulate.c          |  6 +-----
- arch/x86/kvm/kvm_emulate.h      |  1 +
- arch/x86/kvm/x86.c              | 18 ++++++------------
- 6 files changed, 19 insertions(+), 20 deletions(-)
-
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index c470e40a00aa..a9005c61619b 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -2285,7 +2285,6 @@ void kvm_requeue_exception(struct kvm_vcpu *vcpu, unsigned int nr,
- void kvm_inject_page_fault(struct kvm_vcpu *vcpu, struct x86_exception *fault);
- void kvm_inject_emulated_page_fault(struct kvm_vcpu *vcpu,
- 				    struct x86_exception *fault);
--bool kvm_require_cpl(struct kvm_vcpu *vcpu, int required_cpl);
- bool kvm_require_dr(struct kvm_vcpu *vcpu, int dr);
- 
- static inline int __kvm_irq_line_state(unsigned long *irq_state,
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index e69156b54cff..1c95d1fa3ead 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -2161,9 +2161,10 @@ int kvm_emulate_cpuid(struct kvm_vcpu *vcpu)
- {
- 	u32 eax, ebx, ecx, edx;
- 
--	if (!is_smm(vcpu) && cpuid_fault_enabled(vcpu) &&
--	    !kvm_require_cpl(vcpu, 0))
-+	if (!kvm_is_cpuid_allowed(vcpu)) {
-+		kvm_queue_exception_e(vcpu, GP_VECTOR, 0);
- 		return 1;
-+	}
- 
- 	eax = kvm_rax_read(vcpu);
- 	ecx = kvm_rcx_read(vcpu);
-diff --git a/arch/x86/kvm/cpuid.h b/arch/x86/kvm/cpuid.h
-index 8b64d863e19c..95d09ccbf951 100644
---- a/arch/x86/kvm/cpuid.h
-+++ b/arch/x86/kvm/cpuid.h
-@@ -7,6 +7,8 @@
- #include <asm/processor.h>
- #include <uapi/asm/kvm_para.h>
- 
-+#include "smm.h"
-+
- extern u32 kvm_cpu_caps[NR_KVM_CPU_CAPS] __read_mostly;
- extern bool kvm_is_configuring_cpu_caps __read_mostly;
- 
-@@ -187,6 +189,12 @@ static inline bool cpuid_fault_enabled(struct kvm_vcpu *vcpu)
- 		  MSR_MISC_FEATURES_ENABLES_CPUID_FAULT;
- }
- 
-+static inline bool kvm_is_cpuid_allowed(struct kvm_vcpu *vcpu)
-+{
-+	return !cpuid_fault_enabled(vcpu) || is_smm(vcpu) ||
-+	       !kvm_x86_call(get_cpl)(vcpu);
-+}
-+
- static __always_inline void kvm_cpu_cap_clear(unsigned int x86_feature)
- {
- 	unsigned int x86_leaf = __feature_leaf(x86_feature);
-diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
-index c8c6cc0406d6..3ba09093b5ab 100644
---- a/arch/x86/kvm/emulate.c
-+++ b/arch/x86/kvm/emulate.c
-@@ -3593,12 +3593,8 @@ static int em_sti(struct x86_emulate_ctxt *ctxt)
- static int em_cpuid(struct x86_emulate_ctxt *ctxt)
- {
- 	u32 eax, ebx, ecx, edx;
--	u64 msr = 0;
- 
--	ctxt->ops->get_msr(ctxt, MSR_MISC_FEATURES_ENABLES, &msr);
--	if (!ctxt->ops->is_smm(ctxt) &&
--	    (msr & MSR_MISC_FEATURES_ENABLES_CPUID_FAULT) &&
--	    ctxt->ops->cpl(ctxt))
-+	if (!ctxt->ops->is_cpuid_allowed(ctxt))
- 		return emulate_gp(ctxt, 0);
- 
- 	eax = reg_read(ctxt, VCPU_REGS_RAX);
-diff --git a/arch/x86/kvm/kvm_emulate.h b/arch/x86/kvm/kvm_emulate.h
-index 0abff36d0994..45d4a03b202e 100644
---- a/arch/x86/kvm/kvm_emulate.h
-+++ b/arch/x86/kvm/kvm_emulate.h
-@@ -225,6 +225,7 @@ struct x86_emulate_ops {
- 			 struct x86_instruction_info *info,
- 			 enum x86_intercept_stage stage);
- 
-+	bool (*is_cpuid_allowed)(struct x86_emulate_ctxt *ctxt);
- 	bool (*get_cpuid)(struct x86_emulate_ctxt *ctxt, u32 *eax, u32 *ebx,
- 			  u32 *ecx, u32 *edx, bool exact_only);
- 	bool (*guest_has_movbe)(struct x86_emulate_ctxt *ctxt);
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 7d5b66287593..c60773349f35 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -1021,18 +1021,6 @@ void kvm_queue_exception_e(struct kvm_vcpu *vcpu, unsigned nr, u32 error_code)
- }
- EXPORT_SYMBOL_FOR_KVM_INTERNAL(kvm_queue_exception_e);
- 
--/*
-- * Checks if cpl <= required_cpl; if true, return true.  Otherwise queue
-- * a #GP and return false.
-- */
--bool kvm_require_cpl(struct kvm_vcpu *vcpu, int required_cpl)
--{
--	if (kvm_x86_call(get_cpl)(vcpu) <= required_cpl)
--		return true;
--	kvm_queue_exception_e(vcpu, GP_VECTOR, 0);
--	return false;
--}
--
- bool kvm_require_dr(struct kvm_vcpu *vcpu, int dr)
- {
- 	if ((dr != 4 && dr != 5) || !kvm_is_cr4_bit_set(vcpu, X86_CR4_DE))
-@@ -8819,6 +8807,11 @@ static int emulator_intercept(struct x86_emulate_ctxt *ctxt,
- 					     &ctxt->exception);
- }
- 
-+static bool emulator_is_cpuid_allowed(struct x86_emulate_ctxt *ctxt)
-+{
-+	return kvm_is_cpuid_allowed(emul_to_vcpu(ctxt));
-+}
-+
- static bool emulator_get_cpuid(struct x86_emulate_ctxt *ctxt,
- 			      u32 *eax, u32 *ebx, u32 *ecx, u32 *edx,
- 			      bool exact_only)
-@@ -8955,6 +8948,7 @@ static const struct x86_emulate_ops emulate_ops = {
- 	.wbinvd              = emulator_wbinvd,
- 	.fix_hypercall       = emulator_fix_hypercall,
- 	.intercept           = emulator_intercept,
-+	.is_cpuid_allowed    = emulator_is_cpuid_allowed,
- 	.get_cpuid           = emulator_get_cpuid,
- 	.guest_has_movbe     = emulator_guest_has_movbe,
- 	.guest_has_fxsr      = emulator_guest_has_fxsr,
-
-base-commit: 41a2602f2947b91e237cd1ce85afcd162274470a
---
+>>>> +	if (entry && xa_to_value(entry) =3D=3D attributes)
+>>>> +		last =3D mas->last;
+>>>> +
+>>>> +	if (start > 0) {
+>>>> +		mas_set_range(mas, start - 1, start - 1);
+>>>> +		entry =3D mas_find(mas, start - 1);
+>>>> +		if (entry && xa_to_value(entry) =3D=3D attributes)
+>>>> +			start =3D mas->index;
+>>>> +	}
+>>>> +
+>>>> +	mas_set_range(mas, start, last);
+>>>> +	return mas_preallocate(mas, xa_mk_value(attributes), GFP_KERNEL);
+>>>> +}
+>>>> +
+>>>>
+>>>> [...snip...]
+>>>>
