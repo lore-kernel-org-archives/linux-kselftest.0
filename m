@@ -1,30 +1,32 @@
-Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
+Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF26840B6EF
-	for <linux-kselftest@vger.kernel.org>; Tue, 12 May 2026 05:59:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F5AF413258;
+	Tue, 12 May 2026 05:59:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778565608; cv=none; b=JA9x3awOSQD6yGhD8aoUAe0fOGrzvOffm+nwHc2kLtIxuGopCY7LKFwOaYAe/odUXF21T6U4CyJvTxpZEtwZdAHHXTFO3VnmLVIX89twZfzJC1eQov2Ox3uN/KV9a+jEA0NmNO3UDFlbe0KZCTkfx39HaznCcnmwPWqaPE17nlk=
+	t=1778565609; cv=none; b=C4D6nDVC2UpcFWFBnOnVCcXlILqwF7pHMWTPRdxOeJ0+Hf1PWreYFdj2AbOypvQlx9Y+S8XZIN4VrnYURTS4N/FPzvrBl5T4Vz06cxx7PdcwLcChHOuWpklqCCsIXjHnoLbdfR21eh6ZGGC2qVtQeSVxiyEe6cNSUm32Emi59ks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778565608; c=relaxed/simple;
-	bh=Eh74TSifcGeEOIzcpSzOVIR1X9KHsOJLEHChXgvhSDE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZWPlHwm6daLZsHjB0O+9/jpk8/n2x83bxCLUm3QZukARA+Peh0M8aTPBlZJscRRGo4AEeJsOO49UkI2QZ3ThdjmD/c8QN/YkAdfEDNGlskUEjIi8Dg+GeLNd9GX30WdiRP3mJ4rJlsxfqmRzTlDJRFF1JwokMe8OGgjVBWJrX0s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=aDd1M+rT; arc=none smtp.client-ip=91.218.175.170
+	s=arc-20240116; t=1778565609; c=relaxed/simple;
+	bh=anDkAin6bRlzRMPVlynK7/7TJNEy5a/mdefQRK4EtCw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=QQ71tBTz6jpvyzo1S3+Sr0gV/FdWNYs46MFNk0o9o1MM5mKtOzQw1m9u2E80+gS3BLv+TTbG76JaWSKfkVOXBbOh9LCzeSLYWnfXSWg69urDTagNZl6eALj9o6R5NJbmitmj9Wwt2SE4KNJX5jzwhj0BlVVPbj+MevxafOKZqcQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=GRhKJxcS; arc=none smtp.client-ip=91.218.175.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="aDd1M+rT"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="GRhKJxcS"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1778565577;
+	t=1778565591;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=KuQ4lB0Yb/eJHtuSptfULFcyza6MPAInuIUye+FUgmc=;
-	b=aDd1M+rT2eItYA2edQXKAiv4fLqerDRsR8BckM5SAWOwYDGHHyqUbNBM2uN3+/JegPeabS
-	lsSbPaoavvAet3+iLcX3wBrHtYPRdNMR5srjRWDqg0+lynqJB68BjwJ5Q4pIloGNl812fn
-	Ya9ILuWu7cL6LNl0hQl/Cn2sLY6AcM8=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=sfDNacsy6+YXnBjKQmcVLo7bpaOxccX77oa8AMBMhws=;
+	b=GRhKJxcS3aasgcPPHieC5HYrXEwKibazUkvRis69r0CyB3Nukz3rV+e4/MynwP6HUkrk6Z
+	QkAKa8guBmgZpV/Bd0+EppDA+gPWArofTJ+Rpj1akCAubb+sBakHNP+rk8456TxNC58Dnz
+	4OcfaBYvI2Pn4JmSSMP4hasYEBpHOgI=
 From: Kaitao cheng <kaitao.cheng@linux.dev>
 To: ast@kernel.org,
 	corbet@lwn.net,
@@ -47,11 +49,12 @@ Cc: bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-doc@vger.kernel.org,
 	vmalik@redhat.com,
-	linux-kselftest@vger.kernel.org,
-	Kaitao cheng <kaitao.cheng@linux.dev>
-Subject: [PATCH RESEND bpf-next v10 0/8] bpf: Extend the bpf_list family of APIs
-Date: Tue, 12 May 2026 13:59:11 +0800
-Message-ID: <20260512055919.95716-1-kaitao.cheng@linux.dev>
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH RESEND bpf-next v10 3/8] bpf: Introduce the bpf_list_del kfunc.
+Date: Tue, 12 May 2026 13:59:14 +0800
+Message-ID: <20260512055919.95716-4-kaitao.cheng@linux.dev>
+In-Reply-To: <20260512055919.95716-1-kaitao.cheng@linux.dev>
+References: <20260512055919.95716-1-kaitao.cheng@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -61,111 +64,86 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-In BPF, a list can only be used to implement a stack structure.
-Due to an incomplete API set, only FIFO or LIFO operations are
-supported. The patches enhance the BPF list API, making it more
-list-like.
+From: Kaitao Cheng <chengkaitao@kylinos.cn>
 
-Five new kfuncs have been added:
-bpf_list_del: remove a node from the list
-bpf_list_add_impl: insert a node after a given list node
-bpf_list_is_first: check if a node is the first in the list
-bpf_list_is_last: check if a node is the last in the list
-bpf_list_empty: check if the list is empty
+Allow users to remove any node from a linked list.
 
-And add test cases for the aforementioned kfuncs.
+We have added an additional parameter bpf_list_head *head to
+bpf_list_del, as the verifier requires the head parameter to
+check whether the lock is being held.
 
-Changes in v10:
-- Remove the table-driven approach (Ihor Solodrai)
-- Use the __nonown_allowed suffix for bpf_list_del/front/back
-- Add test cases for __nonown_allowed
+Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
+---
+ kernel/bpf/helpers.c  | 10 ++++++++++
+ kernel/bpf/verifier.c |  6 +++++-
+ 2 files changed, 15 insertions(+), 1 deletion(-)
 
-Changes in v9:
-- Expand table-driven approach coverage (Emil Tsalapatis)
-- Clear list node owner and unlink before drop (Emil Tsalapatis)
-- Remove warnings caused by WARN_ON_ONCE() (Emil Tsalapatis)
-- Introduce the __nonown_allowed suffix (Alexei Starovoitov)
-
-Changes in v8:
-- Use [patch v7 5/5] as the start of the patch series (Leon Hwang)
-- Introduce double pointer prev_ptr in __bpf_list_del
-  (Kumar Kartikeya Dwivedi)
-- Extract refactored __bpf_list_del/add into separate patches (Leon Hwang)
-- Allow bpf_list_front/back result as the prev argument of bpf_list_add
-- Split test cases (Leon Hwang)
-
-Changes in v7:
-- Replace bpf_list_node_is_edge with bpf_list_is_first/is_last
-- Reimplement __bpf_list_del and __bpf_list_add (Kumar Kartikeya Dwivedi)
-- Simplify test cases (Mykyta Yatsenko)
-
-Changes in v6:
-- Merge [patch v5 (2,4,6)/6] into [patch v6 4/5] (Leon Hwang)
-- If list_head was 0-initialized, init it
-- refactor kfunc checks to table-driven approach (Leon Hwang)
-
-Changes in v5:
-- Fix bpf_obj leak on bpf_list_add_impl error
-
-Changes in v4:
-- [patch v3 1/6] Revert to version v1 (Alexei Starovoitov)
-- Change the parameters of bpf_list_add_impl to (head, new, prev, ...)
-
-Changes in v3:
-- Add a new lock_rec member to struct bpf_reference_state for lock
-  holding detection.
-- Add test cases to verify that the verifier correctly restricts calls
-  to bpf_list_del when the spin_lock is not held.
-
-Changes in v2:
-- Remove the head parameter from bpf_list_del (Alexei Starovoitov)
-- Add bpf_list_add/is_first/is_last/empty to API and test cases
-  (Alexei Starovoitov)
-
-Link to v9:
-https://lore.kernel.org/all/20260329140506.9595-1-pilgrimtao@gmail.com/
-
-Link to v8:
-https://lore.kernel.org/all/20260316112843.78657-1-pilgrimtao@gmail.com/
-
-Link to v7:
-https://lore.kernel.org/all/20260308134614.29711-1-pilgrimtao@gmail.com/
-
-Link to v6:
-https://lore.kernel.org/all/20260304143459.78059-1-pilgrimtao@gmail.com/
-
-Link to v5:
-https://lore.kernel.org/all/20260304031606.43884-1-pilgrimtao@gmail.com/
-
-Link to v4:
-https://lore.kernel.org/all/20260303135219.33726-1-pilgrimtao@gmail.com/
-
-Link to v3:
-https://lore.kernel.org/all/20260302124028.82420-1-pilgrimtao@gmail.com/
-
-Link to v2:
-https://lore.kernel.org/all/20260225092651.94689-1-pilgrimtao@gmail.com/
-
-Link to v1:
-https://lore.kernel.org/all/20260209025250.55750-1-pilgrimtao@gmail.com/
-
-Kaitao Cheng (8):
-  bpf: refactor __bpf_list_del to take list node pointer
-  bpf: clear list node owner and unlink before drop
-  bpf: Introduce the bpf_list_del kfunc.
-  bpf: refactor __bpf_list_add to take insertion point via **prev_ptr
-  bpf: Add bpf_list_add to insert node after a given list node
-  bpf: add bpf_list_is_first/last/empty kfuncs
-  bpf: allow non-owning list-node args via __nonown_allowed
-  selftests/bpf: Add test cases for
-    bpf_list_del/add/is_first/is_last/empty
-
- Documentation/bpf/kfuncs.rst                  |  22 +-
- kernel/bpf/helpers.c                          | 139 ++++--
- kernel/bpf/verifier.c                         |  44 +-
- .../selftests/bpf/progs/refcounted_kptr.c     | 421 ++++++++++++++++++
- 4 files changed, 593 insertions(+), 33 deletions(-)
-
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 1e8754877dd1..51b6ea4bb8cb 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -2593,6 +2593,15 @@ __bpf_kfunc struct bpf_list_node *bpf_list_pop_back(struct bpf_list_head *head)
+ 	return __bpf_list_del(head, h->prev);
+ }
+ 
++__bpf_kfunc struct bpf_list_node *bpf_list_del(struct bpf_list_head *head,
++					       struct bpf_list_node *node)
++{
++	struct bpf_list_node_kern *kn = (void *)node;
++
++	/* verifier guarantees node is a list node rather than list head */
++	return __bpf_list_del(head, &kn->list_head);
++}
++
+ __bpf_kfunc struct bpf_list_node *bpf_list_front(struct bpf_list_head *head)
+ {
+ 	struct list_head *h = (struct list_head *)head;
+@@ -4725,6 +4734,7 @@ BTF_ID_FLAGS(func, bpf_list_push_back, KF_IMPLICIT_ARGS)
+ BTF_ID_FLAGS(func, bpf_list_push_back_impl)
+ BTF_ID_FLAGS(func, bpf_list_pop_front, KF_ACQUIRE | KF_RET_NULL)
+ BTF_ID_FLAGS(func, bpf_list_pop_back, KF_ACQUIRE | KF_RET_NULL)
++BTF_ID_FLAGS(func, bpf_list_del, KF_ACQUIRE | KF_RET_NULL)
+ BTF_ID_FLAGS(func, bpf_list_front, KF_RET_NULL)
+ BTF_ID_FLAGS(func, bpf_list_back, KF_RET_NULL)
+ BTF_ID_FLAGS(func, bpf_task_acquire, KF_ACQUIRE | KF_RCU | KF_RET_NULL)
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 03f9e16c2abe..3c0e0076bd69 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -10744,6 +10744,7 @@ enum special_kfunc_type {
+ 	KF_bpf_list_push_back,
+ 	KF_bpf_list_pop_front,
+ 	KF_bpf_list_pop_back,
++	KF_bpf_list_del,
+ 	KF_bpf_list_front,
+ 	KF_bpf_list_back,
+ 	KF_bpf_cast_to_kern_ctx,
+@@ -10812,6 +10813,7 @@ BTF_ID(func, bpf_list_push_back_impl)
+ BTF_ID(func, bpf_list_push_back)
+ BTF_ID(func, bpf_list_pop_front)
+ BTF_ID(func, bpf_list_pop_back)
++BTF_ID(func, bpf_list_del)
+ BTF_ID(func, bpf_list_front)
+ BTF_ID(func, bpf_list_back)
+ BTF_ID(func, bpf_cast_to_kern_ctx)
+@@ -11334,6 +11336,7 @@ static bool is_bpf_list_api_kfunc(u32 btf_id)
+ 	return is_bpf_list_push_kfunc(btf_id) ||
+ 	       btf_id == special_kfunc_list[KF_bpf_list_pop_front] ||
+ 	       btf_id == special_kfunc_list[KF_bpf_list_pop_back] ||
++	       btf_id == special_kfunc_list[KF_bpf_list_del] ||
+ 	       btf_id == special_kfunc_list[KF_bpf_list_front] ||
+ 	       btf_id == special_kfunc_list[KF_bpf_list_back];
+ }
+@@ -11456,7 +11459,8 @@ static bool check_kfunc_is_graph_node_api(struct bpf_verifier_env *env,
+ 
+ 	switch (node_field_type) {
+ 	case BPF_LIST_NODE:
+-		ret = is_bpf_list_push_kfunc(kfunc_btf_id);
++		ret = is_bpf_list_push_kfunc(kfunc_btf_id) ||
++		      kfunc_btf_id == special_kfunc_list[KF_bpf_list_del];
+ 		break;
+ 	case BPF_RB_NODE:
+ 		ret = (is_bpf_rbtree_add_kfunc(kfunc_btf_id) ||
 -- 
 2.50.1 (Apple Git-155)
 
