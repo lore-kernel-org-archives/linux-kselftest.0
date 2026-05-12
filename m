@@ -1,85 +1,192 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 391E33A05FC;
-	Tue, 12 May 2026 13:59:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57C8A3A71A1;
+	Tue, 12 May 2026 14:04:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778594394; cv=none; b=IeYCh1cush4Yx9HK/haunDtxD4lehepKkGXGghcrEcy1ufU3QCTjy20yUFg/GoqE6y4cqa3NbACLgg2REpcIP7nGxBdyo3uNfF5jNWlnIdBjVnroLJzukYrT7LyOCdDrMIq0ZFTGkX2c0Vd0KNffAHdigEuCEIC2H+Jgr6k5ZcM=
+	t=1778594659; cv=none; b=RaqQ97WbLHbm379Dzxg/MXhXFf2u8ZE2yq/FnvrvV9poWjDVfADklsCB2oi3hpjKbXESg5SuCmCyHrnCkgOtDYwo4OfpCR50ceViFIAuLLV4eb+FPIXjDefTzVATf8/epXjZVCehlEe3mIMTUaxiv32n8929el7IOeYFhJzdP7k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778594394; c=relaxed/simple;
-	bh=Jvc6GOYinJ6BRNhNH7dRq2Uwx7+Ab05BLqjYU9Eq4Mo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Gn+hCS4ZSZuzQf3OoAwYq/ArbP2m0daHbK860de+kS3tGd6DTIuRTLRlvgF//cTQNLBsDd3+ndpYztQFJpEJvQhLQcR6YNi6hsdHy52xJiD78Y/c6sKqFe1lukO+erU7OEZIE/Y+615m6gSwr53w96DaIPp6VkgGcAdkAd/cwx4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jm06ZhB+; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778594659; c=relaxed/simple;
+	bh=Q8yAjyxfHY28L//mLfMimLlu3G9TMaVuo/gBH1FBvpA=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=eHGxtu7cPiY4JRI1j5QTMWPWzWjISM9ftBBxhFERw3AmdhFyV6ZMTuaxT3+LJTAJCu1JjW3NvwRNBrX1MiABFy9Zh9Xz6mP8RsegyOLE8YnmlyTsuhDOXg61SPVdDB0TQHBEu30KV9c7ouMdWHUICt2maMw0srfaVtNO4VlC1SU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cq2MuUjx; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jm06ZhB+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBF96C2BCF5;
-	Tue, 12 May 2026 13:59:51 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cq2MuUjx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AE51C2BCB0;
+	Tue, 12 May 2026 14:04:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778594393;
-	bh=Jvc6GOYinJ6BRNhNH7dRq2Uwx7+Ab05BLqjYU9Eq4Mo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jm06ZhB+kVXPOpssK05SbhVCcr/bHIQasVtzKXdp4tJmVXJFgluXT3k0rQPKeu0lK
-	 V6LnW74Mb0hVE1hw59XXNTw9F8Ki3JKhmT5jKsLcEh5cMhLsKuOVcS3/auEjTbbtNC
-	 iEoWLvGZ5mo9Vfst3394Crz/rC/nTGS82QnQq7xKb8v2Q8sOg6CVIyVLgsYEWDiMi2
-	 tFsyWbgfuoLvYyicnCpoRHD/67AMj3BvBwGQj08j/cNQ25rPrKggvAp4vKsgIy8MKV
-	 abLqxEq9kFT9KplEXsIpLILm2BVJIADNk1v1zk2NP/suW9hBTU3D379wIs0kHjhaNR
-	 Yi5pQt9jN38Kg==
-Date: Tue, 12 May 2026 14:59:49 +0100
-From: Lorenzo Stoakes <ljs@kernel.org>
-To: Fujunjie <fujunjie1@qq.com>
-Cc: Jann Horn <jannh@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
-	Vlastimil Babka <vbabka@kernel.org>, Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] mm/mremap: unmap full fixed target for multi-VMA moves
-Message-ID: <agMyDHx5MxR0igFY@lucifer>
-References: <tencent_863C8A01F3C81EBA238F375B16065CBACF08@qq.com>
- <agHmO4i4YUhs3cSG@lucifer>
- <CAG48ez1sLtSKVQLHbLO5usBgMgjyOGhbX29pKEfku4Ht05HffA@mail.gmail.com>
- <agH1ZSdX_7QF8P_I@lucifer>
- <CAG48ez17evhhcoDKF6AoPqzYZwGuFCkVAsc-0bBzevf0LHYNxA@mail.gmail.com>
- <agH7ONBSX7XLzS6q@lucifer>
- <CAG48ez0y3N9uEOzvr4N85Js4XN1fh4JiUFjW=PQB2UZ_5t1R4A@mail.gmail.com>
- <agICeiIEshWf-1xa@lucifer>
- <tencent_B49EC91555E7B93CE646566E0A2DBEB9BE09@qq.com>
+	s=k20201202; t=1778594659;
+	bh=Q8yAjyxfHY28L//mLfMimLlu3G9TMaVuo/gBH1FBvpA=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=cq2MuUjxZaaz+oJSEXJdEeDtgTFAJIvx2jPoPT4P6i2bH/XG9P0Onm/6MTLHNcxKw
+	 qoLuRi9AHWEatgSAaWFT5oiZwoPK1T5hcGQLdHc+Lg72YDYnVs3g2tzz1MTl1RiiR3
+	 C4v1FuubXlphP8LVjCu4oVy53Rjqb12zvaF1rA7/dZ036+hm6IWAne2C34nnB7tcTp
+	 auxKGuYUl/ylMxcMga0/vMAqhTqfNHr1cbjup6I/LfIcwOeI2Ylh14yHINQabwAWJN
+	 y+kSgpKNsEWxbyTw/oGT1Obf5TzYUoR0dyqv4Xq6fVs201SJt7/HF3JZhvpg4n/SPH
+	 nMxBaKQbDnbVw==
+From: Pratyush Yadav <pratyush@kernel.org>
+To: Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc: linux-kselftest@vger.kernel.org,  rppt@kernel.org,  shuah@kernel.org,
+  akpm@linux-foundation.org,  linux-mm@kvack.org,
+  linux-kernel@vger.kernel.org,  dmatlack@google.com,
+  kexec@lists.infradead.org,  pratyush@kernel.org,  skhawaja@google.com,
+  graf@amazon.com
+Subject: Re: [PATCH 3/5] selftests/liveupdate: Test session and file limit
+ removal
+In-Reply-To: <20260414200237.444170-4-pasha.tatashin@soleen.com> (Pasha
+	Tatashin's message of "Tue, 14 Apr 2026 20:02:35 +0000")
+References: <20260414200237.444170-1-pasha.tatashin@soleen.com>
+	<20260414200237.444170-4-pasha.tatashin@soleen.com>
+Date: Tue, 12 May 2026 16:04:15 +0200
+Message-ID: <2vxzse7wafmo.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <tencent_B49EC91555E7B93CE646566E0A2DBEB9BE09@qq.com>
+Content-Type: text/plain
 
-On Tue, May 12, 2026 at 03:24:24PM +0800, Fujunjie wrote:
->
->
-> On 5/12/2026 12:30 AM, Lorenzo Stoakes wrote:
-> > Yeah let's go with that then I think :)
->
->
-> Thanks Lorenzo and Jann.
->
-> I agree that the patch as posted goes in the wrong direction by treating
-> source gaps as ranges that should be propagated to the destination.  Please
-> drop this patch.
->
-> If disallowing source gaps in this multi-VMA move path still sounds right,
-> I can look into a v2/new patch that rejects sparse source ranges up front
-> instead.
+On Tue, Apr 14 2026, Pasha Tatashin wrote:
 
-Sorry I really want to think about this a little more + make sure the
-semantics are sane, so I'd rather take a look at this myself.
-
-I do really hate to take something away from newer contributors but in this
-case things are quite fiddly so I want to make sure everything's correct :)
-
+> With the removal of static limits on the number of sessions and files per
+> session, the orchestrator now uses dynamic allocation.
 >
-> Thanks,
-> fujunjie
+> Add new test cases to verify that the system can handle a large number of
+> sessions and files. These tests ensure that the dynamic block allocation
+> and reuse logic for session metadata and outgoing files work correctly
+> beyond the previous static limits.
 >
+> Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+> ---
+>  .../testing/selftests/liveupdate/liveupdate.c | 99 +++++++++++++++++++
+>  1 file changed, 99 insertions(+)
+>
+> diff --git a/tools/testing/selftests/liveupdate/liveupdate.c b/tools/testing/selftests/liveupdate/liveupdate.c
+> index 37c808fbe1e9..0eaf97b19267 100644
+> --- a/tools/testing/selftests/liveupdate/liveupdate.c
+> +++ b/tools/testing/selftests/liveupdate/liveupdate.c
+> @@ -22,6 +22,7 @@
+>  #include <fcntl.h>
+>  #include <string.h>
+>  #include <sys/ioctl.h>
+> +#include <sys/resource.h>
+>  #include <unistd.h>
+>  
+>  #include <linux/liveupdate.h>
+> @@ -386,4 +387,102 @@ TEST_F(liveupdate_device, prevent_double_preservation)
+>  	ASSERT_EQ(close(session_fd2), 0);
+>  }
+>  
+> +static void ensure_nofile_limit(struct __test_metadata *_metadata,
+> +				long min_limit)
+> +{
+> +	struct rlimit hl;
+> +
+> +	if (getrlimit(RLIMIT_NOFILE, &hl) < 0)
+> +		ksft_exit_fail_msg("getrlimit failed: %s\n", strerror(errno));
+> +
+> +	if (hl.rlim_cur >= min_limit)
+> +		return;
+> +
+> +	hl.rlim_cur = min_limit;
+> +	if (hl.rlim_cur > hl.rlim_max)
+> +		hl.rlim_max = hl.rlim_cur;
+> +
+> +	if (setrlimit(RLIMIT_NOFILE, &hl) < 0) {
+> +		if (errno == EPERM) {
+> +			SKIP(return, "Insufficient privileges to set RLIMIT_NOFILE to %ld",
+> +			     hl.rlim_cur);
+> +		}
+> +		ksft_exit_fail_msg("setrlimit to %ld failed: %s\n",
+> +				   hl.rlim_cur, strerror(errno));
+> +	}
+> +}
+> +
+> +/*
+> + * Test Case: Manage Many Sessions
+> + *
+> + * Verifies that a large number of sessions can be created and then
+> + * destroyed during normal system operation. This specifically tests the
+> + * dynamic block allocation and reuse logic for session metadata management
+> + * without preserving any files.
+> + */
+> +TEST_F(liveupdate_device, preserve_many_sessions)
+> +{
+> +#define MANY_SESSIONS 2000
+> +	int session_fds[MANY_SESSIONS];
+> +	int i;
+> +
+> +	self->fd1 = open(LIVEUPDATE_DEV, O_RDWR);
+> +	if (self->fd1 < 0 && errno == ENOENT)
+> +		SKIP(return, "%s does not exist", LIVEUPDATE_DEV);
+> +	ASSERT_GE(self->fd1, 0);
+> +
+> +	ensure_nofile_limit(_metadata, MANY_SESSIONS + 10);
+> +	if (_metadata->exit_code == KSFT_SKIP)
+> +		return;
 
-Thanks, Lorenzo
+Nit: This is strange. Why not just return errno in ensure_nofile_limit()
+and handle the skipping here? Same below.
+
+LGTM otherwise.
+
+> +
+> +	for (i = 0; i < MANY_SESSIONS; i++) {
+> +		char name[64];
+> +
+> +		snprintf(name, sizeof(name), "many-session-%d", i);
+> +		session_fds[i] = create_session(self->fd1, name);
+> +		ASSERT_GE(session_fds[i], 0);
+> +	}
+> +
+> +	for (i = 0; i < MANY_SESSIONS; i++)
+> +		ASSERT_EQ(close(session_fds[i]), 0);
+> +}
+> +
+> +/*
+> + * Test Case: Preserve Many Files
+> + *
+> + * Verifies that a large number of files can be preserved in a single session
+> + * and then destroyed during normal system operation. This tests the dynamic
+> + * block allocation and management for outgoing files.
+> + */
+> +TEST_F(liveupdate_device, preserve_many_files)
+> +{
+> +#define MANY_FILES 500
+> +	int mem_fds[MANY_FILES];
+> +	int session_fd;
+> +	int i;
+> +
+> +	self->fd1 = open(LIVEUPDATE_DEV, O_RDWR);
+> +	if (self->fd1 < 0 && errno == ENOENT)
+> +		SKIP(return, "%s does not exist", LIVEUPDATE_DEV);
+> +	ASSERT_GE(self->fd1, 0);
+> +
+> +	session_fd = create_session(self->fd1, "many-files-test");
+> +	ASSERT_GE(session_fd, 0);
+> +
+> +	ensure_nofile_limit(_metadata, MANY_FILES + 10);
+> +	if (_metadata->exit_code == KSFT_SKIP)
+> +		return;
+> +
+> +	for (i = 0; i < MANY_FILES; i++) {
+> +		mem_fds[i] = memfd_create("test-memfd", 0);
+> +		ASSERT_GE(mem_fds[i], 0);
+> +		ASSERT_EQ(preserve_fd(session_fd, mem_fds[i], i), 0);
+> +	}
+> +
+> +	for (i = 0; i < MANY_FILES; i++)
+> +		ASSERT_EQ(close(mem_fds[i]), 0);
+> +
+> +	ASSERT_EQ(close(session_fd), 0);
+> +}
+> +
+>  TEST_HARNESS_MAIN
+
+-- 
+Regards,
+Pratyush Yadav
