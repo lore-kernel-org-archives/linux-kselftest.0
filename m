@@ -1,460 +1,237 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F83B33F5AE
-	for <linux-kselftest@vger.kernel.org>; Tue, 12 May 2026 18:53:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.45
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778612009; cv=pass; b=q9mXkwPw5JpIY1QAa2N63Np4/nLFXixq+iC8361jeVWi2cROXmYLefFKyGDlVEf3abTREompoBfcpvYEnkZ1miE69s6r/YJ2NMtjuRlRLWHCSOD2sV+7lgfAf8nTuqKAWSoFQjQuk5HtyDsdbPhEeFxWEsZyAg3fzT5TpqOrebs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778612009; c=relaxed/simple;
-	bh=i0w04GxLO4WKxw/OOYd2vO6zt2k0z7rVo2A187IebDQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=I9OsE74ZQTrmu+dnIptHnSGRJfTj2anQBIGPJ3AVMrvlG+IlKb1bYQX0ABF7cyDjh/7dhjnUU+Cwvgx639765MBqgDJnRDTldGpMXnjmi/b0FT5wDNN4Bf8YNPMm/EO4ZiNgGjTpACclnBvlGM87wEXOkS9knvi5/f9ZtdfGghQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Vq0Z5Y9I; arc=pass smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3514025B0BC;
+	Tue, 12 May 2026 19:18:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778613502; cv=none; b=WPfhiBDv9ByDrrTPCmO0CG+3CavVybqkH1zSYgsG3yxQ8OQ4Z+bt2UCk5e74LZmp2I/At6e7K5D2AuFmcoFWqM/NvsUHShkaBHemLfEI19m4cPVWYnUzSqw4b7VznfnkS34Jc+A+uk7IZsHuOMaKzyF5Z9ZmcoWmsJb1OgX+nWU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778613502; c=relaxed/simple;
+	bh=n9ZB7A2gEdvqANZ8FsDaEPZkfoEgyD4mck1ueTnSuwE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=V6mYzKAW8cunm2glw3J73aVZVeFN8RGimKzlU6P4URC5ZrehDcYQawV8I++ula1H+BFmyg1b/KVmLPIKzXX+HH8sosKiYErwRyuu39GKr9LGf/OR5W5zGJutc6V5D+rfQHzTv4aQwwbBQWy2OucM5lhfNULeHFTWTHpK/+3E44k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H1w5otV1; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Vq0Z5Y9I"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-48d1c670255so1615e9.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 12 May 2026 11:53:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778612005; cv=none;
-        d=google.com; s=arc-20240605;
-        b=j9EEJ2UoDuLjyJDZO22IPQzIQOYlSFt6BKV46G6ORj1/UWIKdq2munxXa0z1KtufYA
-         R37cXpXelI2uZ5A3c+mnuker+IUMMWCFKqeSXbBdPv08JDDuRei+j6dXro/VeQCUS0h6
-         S/iv4zM6AYJ6NHkjWzVKZSSDOxR4+x6kpI15VdgdfNYgwGsqilxRXnxREwBYUcssuy31
-         7M+IatHGljiZRon+HE/0zzl+hp6fSNuYsLZFdtf+Eo6/V0Na7+HynjtdizkxFW3LvPH3
-         Erkth5CZJAcaaMsaDmxs0cfc5UClmhLUCk6AZGvgypFd6HjMjKasWOhw4ezobvxvUcz0
-         YgPw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=TrEiWuJQdbxBBI+NqMaHT087xAKAEKai4Pv5jifgOpI=;
-        fh=kZe4M/GtATe+lpNLgsmnf6XRlq5tWjZndszNXoQIuso=;
-        b=iJztAdcfjHKKZTtfgFG0Gt/7arEEjoHVjIeF8k5taHzDBRMXfDRgzFb1IpRQbC0xQU
-         hcuWuGAlMESEU4keiXOcIWNKfxsQLHdrVK5j4TLIttReGU4+Z6oxJFDZyWwyN/teb0M4
-         x4xj7gmR3c8BoXqeDIzaz7vcHA1bHfiJx5cM8vcCn/ZUM8wcSM4z7hA+ChUr/jT1aLeY
-         BTrZNpBrRhuyaJRCHldzjGQGQ8xlQNt/P6lTdU2LKnYaKp9AL2u2M/B+iVMrnUqKtP6O
-         cFVDDbK/ZTfQ3oiqxrHfogWjpjFtSjPH4YSZRU/WWfwu/+jGZfd0JXB/tQjTid5Nkt0X
-         A33g==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1778612005; x=1779216805; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TrEiWuJQdbxBBI+NqMaHT087xAKAEKai4Pv5jifgOpI=;
-        b=Vq0Z5Y9I9Ll0yKQ3yi1f35hzP3Q3ZAG1v1VzWEsN/S/cn7df7gZHSmnaPknJZ970ko
-         LbpGxZ8b1n+WVxV2I3JBW4eWnYbLmnMvIc1iSEk1nDsb14yojuO7q2pduAvSpmMl/2gP
-         1sB/0IRYzpfn+ckeizX0h3P+ag6w4yxu3MJlkSUZ9mFnfzho8uMH2R6w+lb+7aChawN+
-         4zYEbPC+wBd6sWtlcyd/ToHJwEcA3d1qn2aIcmA4stpqR2zJCNXWgx7wqg++Xti5kjgK
-         QjFl6TmJTkpX4SguIZq/Gm+60ZUsuoBKGBkw7gHdbwQsYemxO5/o9xRWPP+Lkkm4+55T
-         k/ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778612005; x=1779216805;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=TrEiWuJQdbxBBI+NqMaHT087xAKAEKai4Pv5jifgOpI=;
-        b=RTxPHTYT9UJBTmo1zmSgvECKvAXgUKWylAxsoeo8e3uSmBwR7R7nMZA78wCmsoXHFy
-         KlpSveQbvpgij+2HJgbeiaL9orZAFAYr2d8vQu9POHm+LO4cdxk61S16fMDa7hglYors
-         SjAn1TQ2uxi9Bh8kaXNuqOpuFkhD9NEfJklFC48DvQidQsUJI0/xM+UvFGkNmOF8ra5i
-         1cQgVlUuj8jlz1rbH2dPBs4Ym15/OUi+bNc/FXiNHOShxdjUEyCzaUpliDgelzTz7uel
-         7JN8uxrm9zobC2knttc5NxYmGL8NLUvvThYP7a1RBT5nWOiMlyfRWFpkHWAXNbcTV6cp
-         z06A==
-X-Forwarded-Encrypted: i=1; AFNElJ8QpvANSEXHQaIEq06EtS48eA2Q47FPS1Tm0XVneRzs7CH7zrfbkmTznuG2muM23gNKUHx8ftdjmt95Q9SoQTk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy+CvMf0kJRAFu4JiG47DzWYXBn5gkFgst2aW3EJoMVSQtQF7VC
-	D5Tm9BGZFOfur6LAwzjTNw+wQMeze6Nr5RJHoN5NQKFYUOiiECJsrzzNziywyXrLjCabRSOJEsg
-	y1b3otIsKNt82e+Nys+iWdfnzC4/qAaxQBROy1sd6
-X-Gm-Gg: Acq92OEH/XlG7h24UHzoFDE0SlbnpbcTSuVMhV+ViprhMw7DGMXQzlllus3drvnyc6l
-	GdBPIwbHeskNaCzmgmqfFOaZbgClHgQO7ws+jDnYxcjViliaoGEzTVrqm1iP5jPZ2BdUrB0tkmO
-	RxwQ0we0ry5TINkSOLsphKbUGeFkUfozMICLqy56t+K0KONY9/kz8tQ6uAZudOzvQWoeREFW5cY
-	GOTNePfaYkyZTsmy4kaOp3NMNdZ/Cxe4Ej/KwIYrAmO783x7E9TqulMRfWkQE2am/SWZfNPk3pj
-	SRd0ZcIBWJLolWhcLAzwoZo2CU1S7MKPIrKW1bb37UsTyJlwzZ6fkSVYLe8U2aVJsS0Jdt5ULA1
-	467U8
-X-Received: by 2002:a05:600c:37ce:b0:45f:2940:d194 with SMTP id
- 5b1f17b1804b1-48fc912731amr162315e9.2.1778612004394; Tue, 12 May 2026
- 11:53:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H1w5otV1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B672C2BCC7;
+	Tue, 12 May 2026 19:18:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778613501;
+	bh=n9ZB7A2gEdvqANZ8FsDaEPZkfoEgyD4mck1ueTnSuwE=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=H1w5otV1M3DsFdgOglqXsLKFi+B0mybGzQnjOAOajRKElgWSaUOGslfaEWlPfEgpq
+	 ZDAWvQmaw87Mp75chPRwYcLw950rhB6j2Xw5yF0U0wxwR3PeixxnNA2cCNQQaotGpw
+	 MNk8lFWsg0xuJNECXAxoD+zkqUGzD7Iv6QEOXEEwFoUe4UJTQKy8vbngMcXS/09UYC
+	 nEdoofgxND8MTjeEFA81eYUoPotRoKpRqAu4LlcIi/l0DszSE5WCDEMPKdsECDECUT
+	 AluWRgSDSCM3sc5ct0JFtPSNn0mfgrgu5JOyvrBLezEfIhOh8a8asMZTiWz3gv23eT
+	 qjJn9H6vETxFQ==
+Message-ID: <f073a8d7-5761-4f7b-a5e5-c6aeae5fdc72@kernel.org>
+Date: Tue, 12 May 2026 21:18:11 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260512-v2_20230123_tjmercier_google_com-v1-0-6326701c3691@redhat.com>
- <20260512-v2_20230123_tjmercier_google_com-v1-2-6326701c3691@redhat.com> <8ef38815-6ae9-4359-86d4-042554357639@amd.com>
-In-Reply-To: <8ef38815-6ae9-4359-86d4-042554357639@amd.com>
-From: "T.J. Mercier" <tjmercier@google.com>
-Date: Tue, 12 May 2026 11:53:12 -0700
-X-Gm-Features: AVHnY4JXtRqPsXET8uL03o5gs-ClmvUux85Yh-qyEMDfOBbZC2p2MhMEibIFp7A
-Message-ID: <CABdmKX2uwZ12kYJYPJGfWxuMBOJS=64b1GRj72tfB5D=NKM22w@mail.gmail.com>
-Subject: Re: [PATCH RFC 2/5] dma-heap: charge dma-buf memory via explicit memcg
-To: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc: Albert Esteve <aesteve@redhat.com>, Tejun Heo <tj@kernel.org>, 
-	Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, Michal Hocko <mhocko@kernel.org>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Muchun Song <muchun.song@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, 
-	Benjamin Gaignard <benjamin.gaignard@collabora.com>, Brian Starkey <Brian.Starkey@arm.com>, 
-	John Stultz <jstultz@google.com>, Christian Brauner <brauner@kernel.org>, 
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
-	"Serge E. Hallyn" <serge@hallyn.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
-	Ondrej Mosnacek <omosnace@redhat.com>, Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	linaro-mm-sig@lists.linaro.org, linux-mm@kvack.org, 
-	linux-security-module@vger.kernel.org, selinux@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, mripard@kernel.org, echanude@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/3] mm/hmm: Add hmm_range_fault_unlockable() for mmap
+ lock-drop support
+To: Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
+Cc: kys@microsoft.com, Liam.Howlett@oracle.com, akpm@linux-foundation.org,
+ decui@microsoft.com, haiyangz@microsoft.com, jgg@ziepe.ca, corbet@lwn.net,
+ leon@kernel.org, longli@microsoft.com, ljs@kernel.org, mhocko@suse.com,
+ rppt@kernel.org, shuah@kernel.org, skhan@linuxfoundation.org,
+ surenb@google.com, vbabka@kernel.org, wei.liu@kernel.org,
+ linux-doc@vger.kernel.org, linux-hyperv@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-mm@kvack.org
+References: <177759835313.221039.2807391868456411507.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
+ <177759840859.221039.13065406062747296947.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
+ <563bb216-c270-4711-adda-b91484af40dc@kernel.org>
+ <agNS4llNtAHBkMA2@skinsburskii.localdomain>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <agNS4llNtAHBkMA2@skinsburskii.localdomain>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, May 12, 2026 at 3:14=E2=80=AFAM Christian K=C3=B6nig
-<christian.koenig@amd.com> wrote:
->
-> On 5/12/26 11:10, Albert Esteve wrote:
-> > On embedded platforms a central process often allocates dma-buf
-> > memory on behalf of client applications. Without a way to
-> > attribute the charge to the requesting client's cgroup, the
-> > cost lands on the allocator, making per-cgroup memory limits
-> > ineffective for the actual consumers.
-> >
-> > Add charge_pid_fd to struct dma_heap_allocation_data. When set to
-> > a valid pidfd, DMA_HEAP_IOCTL_ALLOC resolves the target task's
-> > memcg and charges the buffer there via mem_cgroup_charge_dmabuf()
-> > inside dma_heap_buffer_alloc(). Without charge_pid_fd, and with
-> > the mem_accounting module parameter enabled, the buffer is charged
-> > to the allocator's own cgroup.
-> >
-> > Additionally, commit 3c227be90659 ("dma-buf: system_heap: account for
-> > system heap allocation in memcg") adds __GFP_ACCOUNT to system-heap
-> > page allocations. Keeping __GFP_ACCOUNT would charge the same pages
-> > twice (once to kmem, once to MEMCG_DMABUF), thus remove it and route
-> > all accounting through a single MEMCG_DMABUF path.
-> >
-> > Usage examples:
-> >
-> >   1. Central allocator charging to a client at allocation time.
-> >      The allocator knows the client's PID (e.g., from binder's
-> >      sender_pid) and uses pidfd to attribute the charge:
-> >
-> >        pid_t client_pid =3D txn->sender_pid;
-> >        int pidfd =3D pidfd_open(client_pid, 0);
-> >
-> >        struct dma_heap_allocation_data alloc =3D {
-> >            .len             =3D buffer_size,
-> >            .fd_flags        =3D O_RDWR | O_CLOEXEC,
-> >            .charge_pid_fd   =3D pidfd,
-> >        };
-> >        ioctl(heap_fd, DMA_HEAP_IOCTL_ALLOC, &alloc);
-> >        close(pidfd);
-> >        /* alloc.fd is now charged to client's cgroup */
-> >
-> >   2. Default allocation (no pidfd, mem_accounting=3D1).
-> >      When charge_pid_fd is not set and the mem_accounting module
-> >      parameter is enabled, the buffer is charged to the allocator's
-> >      own cgroup:
-> >
-> >        struct dma_heap_allocation_data alloc =3D {
-> >            .len      =3D buffer_size,
-> >            .fd_flags =3D O_RDWR | O_CLOEXEC,
-> >        };
-> >        ioctl(heap_fd, DMA_HEAP_IOCTL_ALLOC, &alloc);
-> >        /* charged to current process's cgroup */
-> >
-> > Current limitations:
-> >
-> >  - Single-owner model: a dma-buf carries one memcg charge regardless of
-> >    how many processes share it. Means only the first owner (and exporte=
-r)
-> >    of the shared buffer bears the charge.
-> >  - Only memcg accounting supported. While this makes sense for system
-> >    heap buffers, other heaps (e.g., CMA heaps) will require selectively
-> >    charging also for the dmem controller.
->
-> Well that doesn't looks soo bad, it at least seems to tackle the problem =
-at hand for Android and some of other embedded use cases.
+On 5/12/26 18:18, Stanislav Kinsburskii wrote:
+> On Tue, May 12, 2026 at 10:42:14AM +0200, David Hildenbrand (Arm) wrote:
+>>
+>>> +	for (; addr < end; addr += PAGE_SIZE) {
+>>> +		vm_fault_t ret;
+>>> +
+>>> +		ret = handle_mm_fault(vma, addr, fault_flags, NULL);
+>>> +
+>>> +		if (ret & (VM_FAULT_RETRY | VM_FAULT_COMPLETED)) {
+>>> +			/*
+>>> +			 * The mmap lock has been dropped by the fault handler.
+>>> +			 * Record the failing address and signal lock-drop to
+>>> +			 * the caller.
+>>> +			 */
+>>> +			*hmm_vma_walk->locked = 0;
+>>> +			hmm_vma_walk->last = addr;
+>>> +			return -EAGAIN;
+>>
+>>
+>> Okay, so we'll return straight from hmm_vma_fault() to
+>> hmm_vma_handle_pte()/hmm_vma_walk_pmd() -> walk_page_range() machinery.
+>>
+>> Hopefully we don't refer to the MM/VMA on any path there? It would be nicer if
+>> the hmm_vma_fault() could be called by the caller of walk_page_range(), but
+>> that's tricky I guess, as hmm_vma_fault() consumes the walk structure and
+>> requires the vma in there.
+>>
+> 
+> It looks like a caller can provide a post_vma callback in mm_walk_ops. I
+> missed that case here. This callback cannot be supported by this change.
+> I will update the patch.
+> 
+>>
+>> Note: am I wrong, or is hmm_vma_fault() really always called with
+>> required_fault=true?
+>>
+> 
+> No, hmm_pte_need_fault can return false.
 
-Yeah I think this might work. I know of 3 cases, and it trivially
-solves the first two. The third requires some work on our end to
-extend our userspace interfaces to include the pidfd but it seems
-doable. I'm checking with our graphics folks.
+That's not what I mean. Looks like all paths leading to hmm_vma_fault() have
+required_fault = true;
 
-1) Direct allocation from user (e.g. app -> allocation ioctl on
-/dev/dma_heap/foo)
-No changes required to userspace. mem_accounting=3D1 charges the app.
+IOW, there is always a "if (required_fault)" before it one way or the other.
 
-2) Single hop remote allocation (e.g. app -> AHardwareBuffer_allocate
--> gralloc)
-gralloc has the caller's pid as described in the commit message. Open
-a pidfd and pass it in the dma_heap_allocation_data.
+Ah, and there even is a "WARN_ON_ONCE(!required_fault)" in the function. What an
+odd thing to do :)
 
-3) Double hop remote allocation (e.g. app -> dequeueBuffer ->
-SurfaceFlinger -> gralloc)
-In this case gralloc knows SurfaceFlinger's pid, but not the app's. So
-we need to add the app's pidfd to the SurfaceFlinger -> gralloc
-interface, or transfer the memcg charge from SurfaceFlinger to the app
-after the allocation.
-It'd be nice to avoid the charge transfer option entirely, but if we
-need it that doesn't seem so bad in this case because it's a bulk
-charge for the entire dmabuf rather than per-page. So the exporter
-doesn't need to get involved (we wouldn't need a new dma_buf_op) and
-we wouldn't have to worry about looping and locking for each page.
+> 
+>>> +		}
+>>> +
+>>> +		if (ret & VM_FAULT_ERROR)
+>>>  			return -EFAULT;
+>>> +	}
+>>>  	return -EBUSY;
+>>>  }
+>>>  
+>>> @@ -566,6 +585,17 @@ static int hmm_vma_walk_hugetlb_entry(pte_t *pte, unsigned long hmask,
+>>>  	if (required_fault) {
+>>>  		int ret;
+>>>  
+>>> +		/*
+>>> +		 * Faulting hugetlb pages on the unlockable path is not
+>>> +		 * supported. The walk framework holds hugetlb_vma_lock_read
+>>> +		 * which must be dropped before handle_mm_fault, but if the
+>>> +		 * mmap lock is also dropped (VM_FAULT_RETRY), the vma may
+>>> +		 * be freed and the walk framework's unconditional unlock
+>>> +		 * becomes a use-after-free.
+>>> +		 */
+>>> +		if (hmm_vma_walk->locked)
+>>> +			return -EFAULT;
+>>
+>> Just because it's unlockable doesn't mean that you must unlock. Can't this be
+>> kept working as is, just simulating here as if it would not be unlockable?
+>>
+> 
+> I’m not sure how to implement this. The walk_page_range code expects the
+> hugetlb VMA to still be read-locked when we return from
+> hmm_vma_walk_hugetlb_entry. How can we guarantee that if the VMA might
+> be gone?
+> 
+> I added a note in the docs. Whoever tackles this will likely need to
+> either rework `walk_page_range` to handle the case where the VMA is
+> gone, or use a different approach.
+> 
+> Do you have any other suggestions on how to implement it?
 
-> I'm just not sure if this is future prove and will work for all use cases=
-, e.g. cloud gaming, native context for automotive etc...
->
-> Essentially the problem boils down to two limitations:
-> 1) a piece of memory can only be charged to one cgroup, the framework doe=
-sn't has a concept of charging shared memory to multiple groups
+You just want hmm_vma_fault() to not set
+"FAULT_FLAG_ALLOW_RETRY·|·FAULT_FLAG_KILLABLE".
 
-Yup, memcg already has this problem with pagecache and shmem.
+The hacky way could be:
 
-> 2) when memory references in the form of file descriptors are passed betw=
-een applications we have no way of changing the accounting to a different c=
-group
->
-> The passing of the memory reference already has a well defined uAPI and i=
-f we could solve those two limitations we not only solve the problem withou=
-t introducing new uAPI (with potential new security risks) but also solve i=
-t for all other use cases which uses file descriptors as well as. E.g. memf=
-d, accel and GPU drivers etc...
->
-> On the other hand it is really nice to finally see this tackled for at le=
-ast DMA-buf heaps.
+diff --git a/mm/hmm.c b/mm/hmm.c
+index 5955f2f0c83d..83dba990e10a 100644
+--- a/mm/hmm.c
++++ b/mm/hmm.c
+@@ -564,6 +564,7 @@ static int hmm_vma_walk_hugetlb_entry(pte_t *pte, unsigned
+long hmask,
+        required_fault =
+                hmm_pte_need_fault(hmm_vma_walk, pfn_req_flags, cpu_flags);
+        if (required_fault) {
++               int *saved_locked = hmm_vma_walk->locked;
+                int ret;
 
-I have a question about this part. Albert I guess you are interested
-only in accounting dmabuf-heap allocations, or do you expect to add
-__GFP_ACCOUNT or mem_cgroup_charge_dmabuf calls to other
-non-dmabuf-heap exporters?
+                spin_unlock(ptl);
+@@ -576,7 +577,9 @@ static int hmm_vma_walk_hugetlb_entry(pte_t *pte, unsigned
+long hmask,
+                 * use here of either pte or ptl after dropping the vma
+                 * lock.
+                 */
++               hmm_vma_walk->locked = NULL;
+                ret = hmm_vma_fault(addr, end, required_fault, walk);
++               hmm_vma_walk->locked = saved_locked;
+                hugetlb_vma_lock_read(vma);
+                return ret;
+        }
 
-> On the GPU side I have seen just another try of a driver doing some kind =
-of special driver specific accounting to solve this just a few weeks ago. A=
-nd to be honest such single driver island approach have the tendency to bre=
-ak more often that they are working correctly.
->
-> Regards,
-> Christian.
->
-> >
-> > Signed-off-by: Albert Esteve <aesteve@redhat.com>
-> > ---
-> >  Documentation/admin-guide/cgroup-v2.rst |  5 ++--
-> >  drivers/dma-buf/dma-buf.c               | 16 ++++---------
-> >  drivers/dma-buf/dma-heap.c              | 42 +++++++++++++++++++++++++=
-+++++---
-> >  drivers/dma-buf/heaps/system_heap.c     |  2 --
-> >  include/uapi/linux/dma-heap.h           |  6 +++++
-> >  5 files changed, 53 insertions(+), 18 deletions(-)
-> >
-> > diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/ad=
-min-guide/cgroup-v2.rst
-> > index 8bdbc2e866430..824d269531eb1 100644
-> > --- a/Documentation/admin-guide/cgroup-v2.rst
-> > +++ b/Documentation/admin-guide/cgroup-v2.rst
-> > @@ -1636,8 +1636,9 @@ The following nested keys are defined.
-> >               structures.
-> >
-> >         dmabuf (npn)
-> > -             Amount of memory used for exported DMA buffers allocated =
-by the cgroup.
-> > -             Stays with the allocating cgroup regardless of how the bu=
-ffer is shared.
-> > +             Amount of memory used for exported DMA buffers allocated =
-by or on
-> > +             behalf of the cgroup. Stays with the allocating cgroup re=
-gardless
-> > +             of how the buffer is shared.
-> >
-> >         workingset_refault_anon
-> >               Number of refaults of previously evicted anonymous pages.
-> > diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-> > index ce02377f48908..23fb758b78297 100644
-> > --- a/drivers/dma-buf/dma-buf.c
-> > +++ b/drivers/dma-buf/dma-buf.c
-> > @@ -181,8 +181,11 @@ static void dma_buf_release(struct dentry *dentry)
-> >        */
-> >       BUG_ON(dmabuf->cb_in.active || dmabuf->cb_out.active);
-> >
-> > -     mem_cgroup_uncharge_dmabuf(dmabuf->memcg, PAGE_ALIGN(dmabuf->size=
-) / PAGE_SIZE);
-> > -     mem_cgroup_put(dmabuf->memcg);
-> > +     if (dmabuf->memcg) {
-> > +             mem_cgroup_uncharge_dmabuf(dmabuf->memcg,
-> > +                                       PAGE_ALIGN(dmabuf->size) / PAGE=
-_SIZE);
-> > +             mem_cgroup_put(dmabuf->memcg);
-> > +     }
-> >
-> >       dmabuf->ops->release(dmabuf);
-> >
-> > @@ -764,13 +767,6 @@ struct dma_buf *dma_buf_export(const struct dma_bu=
-f_export_info *exp_info)
-> >               dmabuf->resv =3D resv;
-> >       }
-> >
-> > -     dmabuf->memcg =3D get_mem_cgroup_from_mm(current->mm);
-> > -     if (!mem_cgroup_charge_dmabuf(dmabuf->memcg, PAGE_ALIGN(dmabuf->s=
-ize) / PAGE_SIZE,
-> > -                                   GFP_KERNEL)) {
-> > -             ret =3D -ENOMEM;
-> > -             goto err_memcg;
-> > -     }
-> > -
-> >       file->private_data =3D dmabuf;
-> >       file->f_path.dentry->d_fsdata =3D dmabuf;
-> >       dmabuf->file =3D file;
-> > @@ -781,8 +777,6 @@ struct dma_buf *dma_buf_export(const struct dma_buf=
-_export_info *exp_info)
-> >
-> >       return dmabuf;
-> >
-> > -err_memcg:
-> > -     mem_cgroup_put(dmabuf->memcg);
-> >  err_file:
-> >       fput(file);
-> >  err_module:
-> > diff --git a/drivers/dma-buf/dma-heap.c b/drivers/dma-buf/dma-heap.c
-> > index ac5f8685a6494..ff6e259afcdc0 100644
-> > --- a/drivers/dma-buf/dma-heap.c
-> > +++ b/drivers/dma-buf/dma-heap.c
-> > @@ -7,13 +7,17 @@
-> >   */
-> >
-> >  #include <linux/cdev.h>
-> > +#include <linux/cgroup.h>
-> >  #include <linux/device.h>
-> >  #include <linux/dma-buf.h>
-> >  #include <linux/dma-heap.h>
-> > +#include <linux/memcontrol.h>
-> > +#include <linux/sched/mm.h>
-> >  #include <linux/err.h>
-> >  #include <linux/export.h>
-> >  #include <linux/list.h>
-> >  #include <linux/nospec.h>
-> > +#include <linux/pidfd.h>
-> >  #include <linux/syscalls.h>
-> >  #include <linux/uaccess.h>
-> >  #include <linux/xarray.h>
-> > @@ -55,10 +59,12 @@ MODULE_PARM_DESC(mem_accounting,
-> >                "Enable cgroup-based memory accounting for dma-buf heap =
-allocations (default=3Dfalse).");
-> >
-> >  static int dma_heap_buffer_alloc(struct dma_heap *heap, size_t len,
-> > -                              u32 fd_flags,
-> > -                              u64 heap_flags)
-> > +                              u32 fd_flags, u64 heap_flags,
-> > +                              struct mem_cgroup *charge_to)
-> >  {
-> >       struct dma_buf *dmabuf;
-> > +     unsigned int nr_pages;
-> > +     struct mem_cgroup *memcg =3D charge_to;
-> >       int fd;
-> >
-> >       /*
-> > @@ -73,6 +79,22 @@ static int dma_heap_buffer_alloc(struct dma_heap *he=
-ap, size_t len,
-> >       if (IS_ERR(dmabuf))
-> >               return PTR_ERR(dmabuf);
-> >
-> > +     nr_pages =3D len / PAGE_SIZE;
-> > +
-> > +     if (memcg)
-> > +             css_get(&memcg->css);
-> > +     else if (mem_accounting)
-> > +             memcg =3D get_mem_cgroup_from_mm(current->mm);
-> > +
-> > +     if (memcg) {
-> > +             if (!mem_cgroup_charge_dmabuf(memcg, nr_pages, GFP_KERNEL=
-)) {
-> > +                     mem_cgroup_put(memcg);
-> > +                     dma_buf_put(dmabuf);
-> > +                     return -ENOMEM;
-> > +             }
-> > +             dmabuf->memcg =3D memcg;
-> > +     }
-> > +
-> >       fd =3D dma_buf_fd(dmabuf, fd_flags);
-> >       if (fd < 0) {
-> >               dma_buf_put(dmabuf);
-> > @@ -102,6 +124,9 @@ static long dma_heap_ioctl_allocate(struct file *fi=
-le, void *data)
-> >  {
-> >       struct dma_heap_allocation_data *heap_allocation =3D data;
-> >       struct dma_heap *heap =3D file->private_data;
-> > +     struct mem_cgroup *memcg =3D NULL;
-> > +     struct task_struct *task;
-> > +     unsigned int pidfd_flags;
-> >       int fd;
-> >
-> >       if (heap_allocation->fd)
-> > @@ -113,9 +138,20 @@ static long dma_heap_ioctl_allocate(struct file *f=
-ile, void *data)
-> >       if (heap_allocation->heap_flags & ~DMA_HEAP_VALID_HEAP_FLAGS)
-> >               return -EINVAL;
-> >
-> > +     if (heap_allocation->charge_pid_fd) {
-> > +             task =3D pidfd_get_task(heap_allocation->charge_pid_fd, &=
-pidfd_flags);
-> > +             if (IS_ERR(task))
-> > +                     return PTR_ERR(task);
-> > +
-> > +             memcg =3D get_mem_cgroup_from_mm(task->mm);
-> > +             put_task_struct(task);
-> > +     }
-> > +
-> >       fd =3D dma_heap_buffer_alloc(heap, heap_allocation->len,
-> >                                  heap_allocation->fd_flags,
-> > -                                heap_allocation->heap_flags);
-> > +                                heap_allocation->heap_flags,
-> > +                                memcg);
-> > +     mem_cgroup_put(memcg);
-> >       if (fd < 0)
-> >               return fd;
-> >
-> > diff --git a/drivers/dma-buf/heaps/system_heap.c b/drivers/dma-buf/heap=
-s/system_heap.c
-> > index 03c2b87cb1112..95d7688167b93 100644
-> > --- a/drivers/dma-buf/heaps/system_heap.c
-> > +++ b/drivers/dma-buf/heaps/system_heap.c
-> > @@ -385,8 +385,6 @@ static struct page *alloc_largest_available(unsigne=
-d long size,
-> >               if (max_order < orders[i])
-> >                       continue;
-> >               flags =3D order_flags[i];
-> > -             if (mem_accounting)
-> > -                     flags |=3D __GFP_ACCOUNT;
-> >               page =3D alloc_pages(flags, orders[i]);
-> >               if (!page)
-> >                       continue;
-> > diff --git a/include/uapi/linux/dma-heap.h b/include/uapi/linux/dma-hea=
-p.h
-> > index a4cf716a49fa6..e02b0f8cbc6a1 100644
-> > --- a/include/uapi/linux/dma-heap.h
-> > +++ b/include/uapi/linux/dma-heap.h
-> > @@ -29,6 +29,10 @@
-> >   *                   handle to the allocated dma-buf
-> >   * @fd_flags:                file descriptor flags used when allocatin=
-g
-> >   * @heap_flags:              flags passed to heap
-> > + * @charge_pid_fd:   optional pidfd of the process whose cgroup should=
- be
-> > + *                   charged for this allocation; 0 means charge the c=
-alling
-> > + *                   process's cgroup
-> > + * @__padding:               reserved, must be zero
-> >   *
-> >   * Provided by userspace as an argument to the ioctl
-> >   */
-> > @@ -37,6 +41,8 @@ struct dma_heap_allocation_data {
-> >       __u32 fd;
-> >       __u32 fd_flags;
-> >       __u64 heap_flags;
-> > +     __u32 charge_pid_fd;
-> > +     __u32 __padding;
-> >  };
-> >
-> >  #define DMA_HEAP_IOC_MAGIC           'H'
-> >
->
+But really, I think we should just try to get uffd support working properly, not
+excluding hugetlb.
+
+GUP achieves it properly by performing the fault handling outside of page table
+walking context ... essentially what I described in my first comment above:
+return the information to the caller and let it just trigger the fault.
+
+The issue here is that we trigger a fault out of walk_hugetlb_range() where we
+still hold locks, resulting in this questionable hugetlb_vma_unlock_read +
+hugetlb_vma_lock_read pattern.
+
+The fault should just be triggered from a place where we don't have to play with
+hugetlb vma locks or be afraid that dropping the mmap lock causes other problems.
+
+
+-- 
+Cheers,
+
+David
