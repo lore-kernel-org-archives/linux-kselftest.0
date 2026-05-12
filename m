@@ -1,90 +1,190 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 280A348C8B0;
-	Tue, 12 May 2026 08:08:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E778F2D73BC;
+	Tue, 12 May 2026 08:17:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778573306; cv=none; b=aXVjWygZsUoExdAHGdwBJ4IapA6Z95IDIMBk70ro1XjtqVdMp1ci8mjyjWSYpbDJya+2lZMXS8T9lentsPbNPSVHQ0eqS45+m2+kdsTgVEp7TFaV+/weAJZvzv9GTSualBXLzv4u9usXy1IyT/wiytUqkDEIqgNO2TylwIxaSKs=
+	t=1778573826; cv=none; b=LEYDuKOOHZGa/HlJ8gLnnnfxdUfQbvyo/lEiSMwvcgdKO2KYVDz1XVo91o1cAgSD8SCePygjaw/LJfAZYrRMcPe/VMNgPO+wOthRPZdcL091VoGx/jP4rEea/q9XLHVu7Pjsgw9qN4ouOdnG03/tpr6NQq4T8OFX6coRpWbTQRg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778573306; c=relaxed/simple;
-	bh=9iv8M8NMqcO1i4WisbiYd6QCESQN6Xr8lqgWxUscNIA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RObMcTDuicaDaaJhJcQe588xsJploAeL9K950m/qT8D+XJsLQlpdcLmF5J6yEkXfvvQNcr3S5FTleR89vHjvbwiTqOqR21/YienubHb7d2OsiyR5l7AWveNdIJt2Lva4JIkvNFpwkVyfmDg/x48EIgaB8ZmIPRkYt3fx4CMbw4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=CTivWa84; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	s=arc-20240116; t=1778573826; c=relaxed/simple;
+	bh=tLCdh/n3r829zo7nnZ+f729oceajn5PFZJ92fEGwgYg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=eI8tPa5hCfdifpRWaXnPnShEwdPPfl/5QMKYGYKUBjRas8riTpn9pNWlEiLz5L4/1Uz4V6AlMHMkpojtwUt/+x51GpO6uDYM75Kpm/7DN5OpGvRqVplI2SgwliFKmuyAvjqwPk9MbQwuuCodh360XeAPPdC+FIuDiMIuaG73RCQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s96bi0US; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="CTivWa84"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=o2HR+k0aK2TG6oa5kngAI2VUFrIVp9uFjKEf9DAE8Nc=; b=CTivWa84th+mlSCvSghq+l5pwk
-	1UhmAWUTQo5jNToYKriuqSv3aszIdASgdtXj6y2Ns1uV3I8F+CPTNeP09SA/5boLIrUVSFxZ47Upu
-	Y017JvQcIWpDls8VlGlQw72C8k/ALa5fRMA4O3r/I5/Xy2LxZPs20KVogm1YE7N/MhcS2oAqngOic
-	icJ/Z+L0NxAphEAXxBTXpFJxu9IU6Op6UJBcDwo3rxCSChExqJvlQibqQp9D7JcVfvviPY0sCcw8P
-	OBBk/2VyflnMC/OqzGxez5bVf2KkoUDgbtJ2tTzKn9QCmq/0A1WoOc3HTUquPPzBYOyESv3mreLtq
-	MdPyOw3w==;
-Received: from authenticated user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wMiA8-002Ef4-1r;
-	Tue, 12 May 2026 08:08:20 +0000
-Date: Tue, 12 May 2026 01:08:15 -0700
-From: Breno Leitao <leitao@debian.org>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Fernando Fernandez Mancera <fmancera@suse.de>, netdev@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, horms@kernel.org, pabeni@redhat.com, edumazet@google.com, 
-	dsahern@kernel.org, davem@davemloft.net
-Subject: Re: [PATCH 2/2 net v4] selftests: fib_tests: add temporary IPv6
- address renewal test
-Message-ID: <agLenteVpazkwn0j@gmail.com>
-References: <20260511122645.6233-2-fmancera@suse.de>
- <20260511122645.6233-3-fmancera@suse.de>
- <agIKdx3q9ewyhq7r@gmail.com>
- <20260511170848.756e9347@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s96bi0US"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78B3FC2BCB0;
+	Tue, 12 May 2026 08:17:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778573825;
+	bh=tLCdh/n3r829zo7nnZ+f729oceajn5PFZJ92fEGwgYg=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=s96bi0USUPujrkqhfCW0mIF3GtkQT8zV//g9jBbpXw0g1s7ZbvpTI4vdqJ9EDKwLx
+	 h1s0vweRTLdVDZiNA24tDeB0THJxbOti0u6c8bf77fONzt/qJKcYFbXaX5FArU423K
+	 9AnbfFL384pg317tkfvrKVfEvFUzfQkmXRcyHBvtXdRzG2TkzFFyn0s8w/ir4A75Hm
+	 pYjauvJpL/KWlqQLVDVoZ9dgT0iuqyEtvZx9XjOpvmxS+1bBoDzhTscxhFx360z7Za
+	 pJbK1NuXGFTEymLyjgMExHjMFiAElrS3ZBcCvVk6YoRwVRduUzgJjYEGl8Bvlu2OWO
+	 RSoZHgVvNg9/A==
+Message-ID: <9504c193-8c01-4d03-8f62-c50fd7fbdbc0@kernel.org>
+Date: Tue, 12 May 2026 10:17:00 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260511170848.756e9347@kernel.org>
-X-Debian-User: leitao
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 1/4] mm/memory-failure: report MF_MSG_KERNEL for
+ reserved pages
+To: Breno Leitao <leitao@debian.org>, Miaohe Lin <linmiaohe@huawei.com>,
+ Naoya Horiguchi <nao.horiguchi@gmail.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Shuah Khan <shuah@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ "Liam R. Howlett" <liam@infradead.org>
+Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, kernel-team@meta.com,
+ Lance Yang <lance.yang@linux.dev>
+References: <20260511-ecc_panic-v6-0-183012ba7d4b@debian.org>
+ <20260511-ecc_panic-v6-1-183012ba7d4b@debian.org>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <20260511-ecc_panic-v6-1-183012ba7d4b@debian.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, May 11, 2026 at 05:08:48PM -0700, Jakub Kicinski wrote:
-> On Mon, 11 May 2026 10:01:00 -0700 Breno Leitao wrote:
-> > Should you check for ra6 before the "setup" above?
->
-> Not really. AI bots love to complain about this. But "ra6 command
-> not found" is as good of a message as the explicit skip, honestly.
+On 5/11/26 17:38, Breno Leitao wrote:
+> When get_hwpoison_page() returns a negative value, distinguish
+> reserved pages from other failure cases by reporting MF_MSG_KERNEL
+> instead of MF_MSG_GET_HWPOISON. Reserved pages belong to the kernel
+> and should be classified accordingly for proper handling.
+> 
+> Sample PG_reserved before the get_hwpoison_page() call. In the
+> MF_COUNT_INCREASED path get_any_page() can drop the caller's
+> reference before returning -EIO, after which the underlying page may
+> have been freed and reallocated with page->flags reset; reading
+> PageReserved(p) at that point would observe stale or unrelated state.
+> The pre-call snapshot reflects what the page actually was at the
+> time of the failure event.
+> 
+> Acked-by: Miaohe Lin <linmiaohe@huawei.com>
+> Reviewed-by: Lance Yang <lance.yang@linux.dev>
+> Signed-off-by: Breno Leitao <leitao@debian.org>
+> ---
+>  mm/memory-failure.c | 19 ++++++++++++++++++-
+>  1 file changed, 18 insertions(+), 1 deletion(-)
+> 
+> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+> index 866c4428ac7ef..f112fb27a8ff6 100644
+> --- a/mm/memory-failure.c
+> +++ b/mm/memory-failure.c
+> @@ -2348,6 +2348,7 @@ int memory_failure(unsigned long pfn, int flags)
+>  	unsigned long page_flags;
+>  	bool retry = true;
+>  	int hugetlb = 0;
+> +	bool is_reserved;
+>  
+>  	if (!sysctl_memory_failure_recovery)
+>  		panic("Memory failure on page %lx", pfn);
+> @@ -2411,6 +2412,18 @@ int memory_failure(unsigned long pfn, int flags)
+>  	 * In fact it's dangerous to directly bump up page count from 0,
+>  	 * that may make page_ref_freeze()/page_ref_unfreeze() mismatch.
+>  	 */
+> +	/*
+> +	 * Pages with PG_reserved set are not currently managed by the
+> +	 * page allocator (memblock-reserved memory, driver reservations,
+> +	 * etc.), so classify them as kernel-owned for reporting.
+> +	 *
+> +	 * Sample the flag before get_hwpoison_page(): in the
+> +	 * MF_COUNT_INCREASED path, get_any_page() can drop the caller's
+> +	 * reference before returning -EIO, after which page->flags may
+> +	 * have been reset by the allocator.
+> +	 */
+> +	is_reserved = PageReserved(p);
+> +
+>  	res = get_hwpoison_page(p, flags);
+>  	if (!res) {
+>  		if (is_free_buddy_page(p)) {
+> @@ -2432,7 +2445,11 @@ int memory_failure(unsigned long pfn, int flags)
+>  		}
+>  		goto unlock_mutex;
+>  	} else if (res < 0) {
+> -		res = action_result(pfn, MF_MSG_GET_HWPOISON, MF_IGNORED);
+> +		if (is_reserved)
+> +			res = action_result(pfn, MF_MSG_KERNEL, MF_IGNORED);
+> +		else
+> +			res = action_result(pfn, MF_MSG_GET_HWPOISON,
+> +					    MF_IGNORED);
+>  		goto unlock_mutex;
+>  	}
+>  
+> 
 
-Right, but why call setup() before checking if ra6 is available?
+It's a bit odd that we need this handling when we already have handling for
+reserved pages in error_states[].
 
-Running setup() performs unnecessary work if the test will be skipped anyway.
-It would be cleaner to:
+HWPoisonHandlable() would always essentially reject PG_reserved pages. So
+__get_hwpoison_page() ... would always fail? Making
+get_hwpoison_page()->get_any_page() always fail?
 
-1) Check for required tools (ra6) and skip early if missing
-2) Run setup() to create namespace and configure the environment
-3) Proceed with the test
+But then, we never call identify_page_state()? And never call me_kernel()?
 
-Rather than:
+This all looks very odd.
 
-1) Run setup() to configure namespace and network interfaces
-2) Check for tool availability
-3) Clean up when tools are missing
+Why would you even want to call get_hwpoison_page() in the first place if you
+find PageReserved?
 
-If you look at netcons_basic.sh for instance, it has the following
-lines, which seems saner:
+-- 
+Cheers,
 
-	# Check for basic system dependency and exit if not found
-	check_for_dependencies
-
-	# Remove the namespace, interfaces and netconsole target on exit
-	trap cleanup EXIT
-
-	<Do the test>
+David
