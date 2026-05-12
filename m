@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C23F4949F9;
-	Tue, 12 May 2026 08:22:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 238F74A3408;
+	Tue, 12 May 2026 08:42:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778574164; cv=none; b=qJcxzZHBiYXViHleMxgBLxHYb61Mpp+EZCknO3CJz38oQYwSUr3Wx+ZKPHOib/8K40T7kS2TJT8cC57p68KOOhbX9Dce6KxSYvPDBYgroyti2+piLSkGe+/QkLwZ/ov4Ectl+5lnonxoheDhF6LVl0pl4LouJlEycP2MRGUrC2E=
+	t=1778575341; cv=none; b=Q+qJv9VOkKyb+yrwel0GTptbd4b2K4HtiSaO9U5zA+swF2O18C+qlGOKPTmaLLRCD08JTc1JHzpqdD3P1JQ5ek8BA4lCCcfLTXkgJxJpEZEmqpp6ASXIQQwAbysC1cuDMyJqEesbnt87cyWFSpW9neXRXjXOsNvKDHs/FMfNc2Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778574164; c=relaxed/simple;
-	bh=ni0UxaK6U6J7nDb32Vm336GAcjOxiGHM4mmYEl06cwk=;
+	s=arc-20240116; t=1778575341; c=relaxed/simple;
+	bh=ljMVN0mSJd0KTMjrcegOkqI698VOfIwxmfgsHJ7qRXc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=J7m3CMMj9OmvuAzUn6EIEB8Xc/UWtzX0ZUw0SgabOC0EKh6gKLEIjrUJ5Eacy2o6ylNLT7MoF8XDkUNd2QNoqKUUj6rN2b7d+Bi8ACW4j64PnLJjR94FwtnfWlwbq9HicCuqWQ8o0P6Fyos5TaddYdF/n1G5T3O+SsAco4Sa0rE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a8Fr8KxJ; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=MnrTzu8tNxezML67KSJsFbaqlITBdjHXwO6S6IBK5oUcKtvRlQ2SuQWA2CLU40ssKmMAVxP/W/oAvVUHMFms5ft26Poau8P1mH2DqSvZQDsfxmx72kN2m0QNJ+PNHNJxpii80I0wS73Se3b/6J6bcByUBXnCjxdFeUftROVgsgc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aXarLmuQ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a8Fr8KxJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9E8EC2BCB0;
-	Tue, 12 May 2026 08:22:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aXarLmuQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0AD5C2BCB0;
+	Tue, 12 May 2026 08:42:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778574163;
-	bh=ni0UxaK6U6J7nDb32Vm336GAcjOxiGHM4mmYEl06cwk=;
+	s=k20201202; t=1778575340;
+	bh=ljMVN0mSJd0KTMjrcegOkqI698VOfIwxmfgsHJ7qRXc=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=a8Fr8KxJOOCGoI0HMLCHdruOThN3aUAAXoiQ0FX7e8xaSxBlda2QfjkE4vUYRFgeE
-	 VIkg5CWLYbbTzAtIxVcT67HMj4s0/mNv7A66FF7fhUtRKCy1pSe7y4nbD4Xl4C7q2b
-	 3hIk/sEB2KBVVrnoYx16qaMP+Ke+LjRaYyJV5N6T+4jz8o40lPloH1JMyVTk5IvVgU
-	 ferDYsrDODOhojxaF9xK5A/WrZTHmYmXTFi2sHBohOWlIgHhXNokikQc2N+p6awpId
-	 1hIK5d5HW6U3z+X/siVn8UpTVYHuxfpGSUchEa72TcyFt0JhZ1eZbxxBuPMocHQMDQ
-	 4lYjaHwDekm2A==
-Message-ID: <8d4940bc-d8c4-4e7f-a35d-979e6a781966@kernel.org>
-Date: Tue, 12 May 2026 10:22:38 +0200
+	b=aXarLmuQ5ZFeOPSU6FhyRT4yq+oRCm5H7/kGva7h7c7LxWbIU9kmR6BUDWhapDUzH
+	 FDOPx1WtzILPuT68FbOg95T+Le8esLE8B4CuCGLvXh7IUSCWolvsrnNIdEVCNUA3GS
+	 HmGFWvPQw4rtOPuWuuvejg41lAKu/JAP65G+JcK9ufm6scgCxP+KCoTAwOIMgtiEx4
+	 E7ijKwL9qJTTVpAnq7cTeyd4VqVa2xoJPEZuclth0mKK/EViKcX7Ek9Ds5LzGKisO7
+	 JqO3VwtI/KRB75BnyN1Lrure/YkgfeeHIeAC75tZP64qgkpEivZLjyA7WNLweI4LmH
+	 9aX3zDFYIbKeQ==
+Message-ID: <563bb216-c270-4711-adda-b91484af40dc@kernel.org>
+Date: Tue, 12 May 2026 10:42:14 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,23 +35,19 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 3/4] mm/memory-failure: add panic option for
- unrecoverable pages
-To: Breno Leitao <leitao@debian.org>, Miaohe Lin <linmiaohe@huawei.com>,
- Naoya Horiguchi <nao.horiguchi@gmail.com>,
- Andrew Morton <akpm@linux-foundation.org>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, Lorenzo Stoakes <ljs@kernel.org>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Shuah Khan <shuah@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- "Liam R. Howlett" <liam@infradead.org>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, kernel-team@meta.com
-References: <20260511-ecc_panic-v6-0-183012ba7d4b@debian.org>
- <20260511-ecc_panic-v6-3-183012ba7d4b@debian.org>
+Subject: Re: [PATCH 1/3] mm/hmm: Add hmm_range_fault_unlockable() for mmap
+ lock-drop support
+To: Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>,
+ kys@microsoft.com, Liam.Howlett@oracle.com, akpm@linux-foundation.org,
+ decui@microsoft.com, haiyangz@microsoft.com, jgg@ziepe.ca, corbet@lwn.net,
+ leon@kernel.org, longli@microsoft.com, ljs@kernel.org, mhocko@suse.com,
+ rppt@kernel.org, shuah@kernel.org, skhan@linuxfoundation.org,
+ surenb@google.com, vbabka@kernel.org, wei.liu@kernel.org
+Cc: linux-doc@vger.kernel.org, linux-hyperv@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-mm@kvack.org
+References: <177759835313.221039.2807391868456411507.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
+ <177759840859.221039.13065406062747296947.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -98,29 +94,65 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20260511-ecc_panic-v6-3-183012ba7d4b@debian.org>
+In-Reply-To: <177759840859.221039.13065406062747296947.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 
-> @@ -1281,6 +1292,18 @@ static void update_per_node_mf_stats(unsigned long pfn,
->  	++mf_stats->total;
+> +	for (; addr < end; addr += PAGE_SIZE) {
+> +		vm_fault_t ret;
+> +
+> +		ret = handle_mm_fault(vma, addr, fault_flags, NULL);
+> +
+> +		if (ret & (VM_FAULT_RETRY | VM_FAULT_COMPLETED)) {
+> +			/*
+> +			 * The mmap lock has been dropped by the fault handler.
+> +			 * Record the failing address and signal lock-drop to
+> +			 * the caller.
+> +			 */
+> +			*hmm_vma_walk->locked = 0;
+> +			hmm_vma_walk->last = addr;
+> +			return -EAGAIN;
+
+
+Okay, so we'll return straight from hmm_vma_fault() to
+hmm_vma_handle_pte()/hmm_vma_walk_pmd() -> walk_page_range() machinery.
+
+Hopefully we don't refer to the MM/VMA on any path there? It would be nicer if
+the hmm_vma_fault() could be called by the caller of walk_page_range(), but
+that's tricky I guess, as hmm_vma_fault() consumes the walk structure and
+requires the vma in there.
+
+
+Note: am I wrong, or is hmm_vma_fault() really always called with
+required_fault=true?
+
+> +		}
+> +
+> +		if (ret & VM_FAULT_ERROR)
+>  			return -EFAULT;
+> +	}
+>  	return -EBUSY;
 >  }
 >  
-> +static bool panic_on_unrecoverable_mf(enum mf_action_page_type type,
-> +				      enum mf_result result)
-> +{
-> +	if (!sysctl_panic_on_unrecoverable_mf || result != MF_IGNORED)
-> +		return false;
-> +
-> +	if (type == MF_MSG_KERNEL)
-> +		return true;
-> +
-> +	return false;
+> @@ -566,6 +585,17 @@ static int hmm_vma_walk_hugetlb_entry(pte_t *pte, unsigned long hmask,
+>  	if (required_fault) {
+>  		int ret;
+>  
+> +		/*
+> +		 * Faulting hugetlb pages on the unlockable path is not
+> +		 * supported. The walk framework holds hugetlb_vma_lock_read
+> +		 * which must be dropped before handle_mm_fault, but if the
+> +		 * mmap lock is also dropped (VM_FAULT_RETRY), the vma may
+> +		 * be freed and the walk framework's unconditional unlock
+> +		 * becomes a use-after-free.
+> +		 */
+> +		if (hmm_vma_walk->locked)
+> +			return -EFAULT;
 
-return type == MF_MSG_KERNEL;
+Just because it's unlockable doesn't mean that you must unlock. Can't this be
+kept working as is, just simulating here as if it would not be unlockable?
 
-might be simpler.
 
 -- 
 Cheers,
