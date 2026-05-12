@@ -1,50 +1,51 @@
-Received: from out203-205-221-236.mail.qq.com (out203-205-221-236.mail.qq.com [203.205.221.236])
+Received: from out203-205-221-235.mail.qq.com (out203-205-221-235.mail.qq.com [203.205.221.235])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5B1A47CC80
-	for <linux-kselftest@vger.kernel.org>; Tue, 12 May 2026 07:13:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.236
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E32A0477E58
+	for <linux-kselftest@vger.kernel.org>; Tue, 12 May 2026 07:13:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.235
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778570013; cv=none; b=VDhuk9XkU84C5coYqGjUiZV1shdLjbNXPMwstV8g3hiFDbdlLfb2Aiob2US/Xyojc+m394Y3EYgWgVc2Ocb+PxHJDy1FtgECZ9YFMMSe08yyUVxhiCf3v9kLkO2r+2QfsJohVcLnBXwgFpZm717vzgb/QLkCbpZC0uwUcgz598Q=
+	t=1778570029; cv=none; b=BrRVqU4zTWAiaFl5Ii2T5gIdHKJ9X9uTm3uCW4oQCv3ecLsINPrZ/ayXbhCDe5FmBcZg816WFRap5r7VW5qVhGqqNuh+QLfY1grM68zmQbXtw+xKaytwIy5DJmAa8R7syXGdUS6pJX+M6lh/B8NvEEWLgh97MLPp3TyOSSGM0jw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778570013; c=relaxed/simple;
-	bh=HFD9M5t1P4aIhMmAv30q0/GRAkcUUMoFUh+ZZ5DqTwY=;
+	s=arc-20240116; t=1778570029; c=relaxed/simple;
+	bh=yG/evL3KBASYyxGp0i0hfqBAGi35HSoPB+hrGAJ0s70=;
 	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=JO4/lMzpc2fNt37cPhNORuYI5ald5/K8Uoy43IiQqJ1f0uWb7GNQ3VftYIA68xT7ap63MXvupsB73O3nL81ofLyGllkni76JoBV6o5AfdpRTjsJSthwTcWC+AqHRAK9eElmsuZSS8Ewqn+T+0gVaHNvlebWqdCQ6GzLbqU16JRo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=Mh2Qnky+; arc=none smtp.client-ip=203.205.221.236
+	 MIME-Version; b=mf5BfJAFQ3nDr8x9BpTgO0zPc196gY31E5B1cKU0WpsykXrOcGQJHuVPYvU84BUTU40J86jv/zCs14/p2Z8fPigCoFYnvGJvcmBlZDWI7DWXaXXateVbcVbJCrRF4eD9/+yawyMXWWCAnC9gWfxAaopfbA3Vi/R/kfaS4qH13ng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=v6MXIQp3; arc=none smtp.client-ip=203.205.221.235
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="Mh2Qnky+"
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="v6MXIQp3"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1778570000;
-	bh=Lkc4p2kMOO2gidUulgWb5kkE5ShGQu/O14IAX3jTqVg=;
+	s=s201512; t=1778570016;
+	bh=RkxmsoOndnS552AiB2EhazGuZqNKHe7IJF8baLR4uzo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=Mh2Qnky+vQozPss8JgO+rLTArPKAd8eS05a3svBzoIMcHh3QOSfY44K1+340ivkZi
-	 FpdTOg5aPhu9Dmi96YQB4DKmWfhw4H7nyOfd9Cr2GY9i7mXZTcQgwbZ8614HnjIhg8
-	 BNVrhSHZETVgqDVcqMm02eJMBuMvcjhlYE+tkwl0=
+	b=v6MXIQp3/z5mQ2g3PlRlFlgnXckU1Z2BsBa+1nsmAtElIJOfKuWwKf57A679lWbg6
+	 huUQ6ShvGxSgSITxFxn6py+hVKQJ/WspPCHIDUGYCBL4nyEdtyUdh7XuDgRTNaSUlc
+	 x9KOsfnzO7BPXOHJYhXug7jO8btjFvJ4mTgM4RvI=
 Received: from meizu-Precision-3660.meizu.com ([112.91.84.73])
-	by newxmesmtplogicsvrszb51-1.qq.com (NewEsmtp) with SMTP
-	id 350AB046; Tue, 12 May 2026 15:13:16 +0800
-X-QQ-mid: xmsmtpt1778569996tblhq1jbl
-Message-ID: <tencent_F5BEABD979711ECA5778D74CD11337E1B806@qq.com>
-X-QQ-XMAILINFO: N7IHLsEATiKziGWcPfl1eNrOtr1OIwpeID8ic6dnPy6XT7jYTa4tbiMcFgzD40
-	 87xmKwuazzVgKlPAVlEwEiwbakn4jarfUF9ZPwmrD9rt1f0Tv+dIj38Vk7DvggNB9VvnO8/uXIpU
-	 xqTxn6/qPto0yhS0j+vrDHduhjnyVsW6TSxCcmTXV6Ry5EssCpwH9cfwjZg59i3FrKvEjQdV18Im
-	 q0hZDulzb6V+pTlyTNL+QyKe4On8g1S/jKuBUTosCpYWvZRk07F545SR/YLiTEM0YtepGhGPoxd7
-	 P0uvGN82QRozLabQb3drJ2a/UWDqpVdNKajQLuovOtKMNTuw7akeTLcEwXS7QFYOKCxrRvBSBnZD
-	 wmMkqr7f/QF7bdrmP6I156OI87ycPJO5gTvKqbPCK/llX0c8MzQ3uxSdE8XL3b3WIZj4WBfJ4Vm3
-	 goTnO4QdMf381eVusCcFlDZgZayvfmt0n7iODAH/UAs40sbqSDiATNwl7om1EAaoaTessBNIFGUL
-	 xET1IYJqTh7Y6Zk0x453oIIuYaCT/R2njI95Rc7pXiv2/7n4OaOoMfZhRBsn6QzLnL6/waa+PQyP
-	 ABB5+NkQnpDf1H8+wMzCtSFU9gcMv6sv7D+5MTab5vWpU/yFtH1uhyCWKSh+k8LCu4T/6AUMx1eG
-	 BZnsZuRF4eX1Uh6RIgMp8h3molUi4YG6gyqfar2zTYv+iGqIE2s34t+UfFsbZQwM2rtZEEmin6em
-	 9Ufj9oCabYLkSJ1sJpsZ+hnLU04nGjXNApTPg+u6kgSx9VV6M/kKbGlEiaEBO/h4EMnAFtY/a5ue
-	 VIWdfr7FNAF4y4nmYf5F/35iSZXAK51+Ee1XhSi0w4lqh8O6+DClN8Ho+FJU57t6Scsz/sDwZGul
-	 ps75PdVfHfve3EoR6OCD2usZmB03bz1yvlqTytNta+7HqJCjiZcorzP+dlhdAd1TOSTAFlH2cfWA
-	 MBVrfHrXwSyJGjh7Z7NbJmjlbEe5pANJPiqUKpu3blD+qi7eHpDGAHf0kaQxKgzZpUf10bKlqQSw
-	 blBy/F4iqU8nt5vmt/1YlNh3R08++K/5PfVwFaUWQvBLvPXaq+sQ/jTondsW33plj7B7ZJUhj5oH
-	 OfmHaLVwMgET/6neMGPvJIbnsWNym2BJNGqRHn90qHcSYPnHM9KUrfI9FpDg==
-X-QQ-XMRINFO: MSVp+SPm3vtSI1QTLgDHQqIV1w2oNKDqfg==
+	by newxmesmtplogicsvrsza53-0.qq.com (NewEsmtp) with SMTP
+	id 360A6464; Tue, 12 May 2026 15:13:32 +0800
+X-QQ-mid: xmsmtpt1778570012tcbxgdpn1
+Message-ID: <tencent_95DCB5ECFC2D2FF34BA52BA9688ABB645C05@qq.com>
+X-QQ-XMAILINFO: OHRxy+6QobHQHDTMR6y4sCsl8CO6APMk5qlwBdTtmmRu52MUoUZ7MNcuMmt0Lp
+	 jyL7Qxs+r2DIIRR7TowFOy3lDfZ6iosehMGvvotY+2L8GgrTrL2tLgl0SYP+4XFqPKy6MaJGpYBr
+	 Pm2eJMXHERpiepbrO13RZTERmYkKxTOUGeGG9PMc+opt7oduP/eDAiVAP3PQsEsn6PNj6ak4lRzT
+	 DG315OGAQriCFaXdGCEntvyJ2qzz9818dy5C41G5Bn1+nqHbiTWT+BPGGpwNUf6s0RZol84U/XJO
+	 KECLEYhKurJNGMSZ2yfeN0IiCMx2R9fjU5uYBqtjTRVnBPtcW6S5lUJzyQoROEts6i/Xp7exrqzy
+	 KBgzGonj1Yv96vFbjCSFxIAx+/g2wN04A6Hp7wA0nT2RNbTiLCUQ+RjNj140G2WOeb7Dy7vhSDTD
+	 543gsHE2KnOFv2ODfgWvDUAfWKuYJUBTSrKiCVOY2GkswMbVNIK9Snk/Z/8jNtN56TgSBVcOKz4y
+	 z431AQX8IjXSvPoFZWmlQ4NjdFfsLspVKFKMNUXWWqCgPkh1kqQLHBe4aglAkVSVmpNr5/wkbBIk
+	 +Apaw6kr7waBhDmFDKQf2UjRj1g6E/aUrlYim96wYtopRQdi49XfetM1pdeGX2tRTaBnjFgA5uqo
+	 oq0NAyAezIEh1wt43uR7ZOUElH8szQZimlJY3YsGE5ZeC6VDN+UvQwf21PvqWivGDBQL6LEyX+oq
+	 UteiLwgyRTF7A5KvKwnmU53yjMQNA3taogRLRQxZr0FjD/cCQY4MSJPsoz5oK8bBpWGl+RRL5Gan
+	 l6n74h7jP7T7XRl+BBrJvxLM6e4ardNXery747St6s0kQXyiaGxH+ixkAEMA1Nt+J6uwk1+9SaFz
+	 gzmIR9dsguloXsYbXiGg78RJUuIkdXxANf1MaELNynPVyLR5FHXPSq3DUWriwCD2r+3/oqdHMI9L
+	 u1um5XEY2/wjEy7YHKrAic1S9IRF1R+Agx1PADKj//n5bIrVZodGGH26h/zI5Kekgi8ellfwIA+z
+	 TMJYN25L6QHSsTyTPGb+4OdT3itdfUpxW76xqwX2wmH2Zx1nFvZ9GWyCAGwBKNgxqXZFyHoUgKmm
+	 ccegI0AG8bUJiG4u/QK0Z7oRNEElM3WfG1xf0lSxkl/T44VzALDvTmrUauNK+74yHEPhcpS+BHCw
+	 aIi+oYQZQ3rpK5qs+fGlLaAu75qQ9URASfIfU=
+X-QQ-XMRINFO: NS+P29fieYNwqS3WCnRCOn9D1NpZuCnCRA==
 From: Yuwen Chen <ywen.chen@foxmail.com>
 To: ywen.chen@foxmail.com
 Cc: akpm@linux-foundation.org,
@@ -69,9 +70,9 @@ Cc: akpm@linux-foundation.org,
 	tglx@kernel.org,
 	usama.anjum@collabora.com,
 	wakel@google.com
-Subject: [PATCH v7 1/2] selftests/futex: implement the interfaces related to threads
-Date: Tue, 12 May 2026 15:13:14 +0800
-X-OQ-MSGID: <20260512071314.3105991-1-ywen.chen@foxmail.com>
+Subject: [PATCH v7 2/2] selftests/futex: fix the failed futex_requeue test issue
+Date: Tue, 12 May 2026 15:13:31 +0800
+X-OQ-MSGID: <20260512071331.3106030-1-ywen.chen@foxmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <tencent_0C775F885D7D4560DC59E359AE7DE74C7908@qq.com>
 References: <tencent_0C775F885D7D4560DC59E359AE7DE74C7908@qq.com>
@@ -83,164 +84,139 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-There are timing issues in the use of threads in some unit test cases
-for futex. A potentially good solution is to check whether the thread
-is in the sleep state after creating it.
+This test item has extremely high requirements for timing and can only
+pass the test under specific conditions. The following situations will
+lead to test failure:
 
-A file named futex_thread.h is added, in which several thread-related
-functions are implemented to facilitate the solution of this problem.
+    MainThread                  Thread1
+        |
+  pthread_create--------------------
+        |                          |
+ futex_cmp_requeue                 |
+        |                     futex_wait
+        |                          |
 
+If the child thread is not waiting in the futex_wait function when the
+main thread reaches the futex_cmp_requeue function, the test will fail.
+
+An attempt is made to avoid this problem by checking whether the child
+thread is in a sleeping state in the main thread.
+
+Fixes: 7cb5dd8e2c8c ("selftests: futex: Add futex compare requeue test")
 Signed-off-by: Yuwen Chen <ywen.chen@foxmail.com>
+Co-developed-by: Edward Liaw <edliaw@google.com>
+Signed-off-by: Edward Liaw <edliaw@google.com>
 ---
 v6->v7:
-    1. Changed `static` to `static inline` for all functions to prevent
-       compiler warnings about unused functions.
-    2. Added `sleep_time_us` variable with zero-guard in __wait_for_thread()
-       to prevent tight loop when timeout_us < WAIT_THREAD_RETRIES.
-    3. Removed fallback usleep(100ms) from futex_wait_for_thread(); the
-       caller is now responsible for handling errors.
-    4. Added return value check for pthread_barrier_init().
-    5. Added pthread_barrier_destroy() cleanup on pthread_create() failure.
+    1. Unified error checking to `if (ret < 0)` in both requeue_single
+       and requeue_multiple test cases.
+    2. Added comment explaining the break logic in requeue_multiple when
+       /proc is not available.
 
- .../selftests/futex/functional/Makefile       |   3 +-
- .../selftests/futex/include/futex_thread.h    | 114 ++++++++++++++++++
- 2 files changed, 116 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/futex/include/futex_thread.h
+ .../futex/functional/futex_requeue.c          | 46 +++++++++++++------
+ 1 file changed, 32 insertions(+), 14 deletions(-)
 
-diff --git a/tools/testing/selftests/futex/functional/Makefile b/tools/testing/selftests/futex/functional/Makefile
-index 5c1c824f97400..724e8216e41b1 100644
---- a/tools/testing/selftests/futex/functional/Makefile
-+++ b/tools/testing/selftests/futex/functional/Makefile
-@@ -11,7 +11,8 @@ endif
+diff --git a/tools/testing/selftests/futex/functional/futex_requeue.c b/tools/testing/selftests/futex/functional/futex_requeue.c
+index dcf0d5f2f3122..5c849ccf16e26 100644
+--- a/tools/testing/selftests/futex/functional/futex_requeue.c
++++ b/tools/testing/selftests/futex/functional/futex_requeue.c
+@@ -9,51 +9,59 @@
+ #include <limits.h>
  
- LOCAL_HDRS := \
- 	../include/futextest.h \
--	../include/atomic.h
-+	../include/atomic.h \
-+	../include/futex_thread.h
- TEST_GEN_PROGS := \
- 	futex_wait_timeout \
- 	futex_wait_wouldblock \
-diff --git a/tools/testing/selftests/futex/include/futex_thread.h b/tools/testing/selftests/futex/include/futex_thread.h
-new file mode 100644
-index 0000000000000..49ae687012fe5
---- /dev/null
-+++ b/tools/testing/selftests/futex/include/futex_thread.h
-@@ -0,0 +1,114 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-+
-+#ifndef _FUTEX_THREAD_H
-+#define _FUTEX_THREAD_H
-+#include <stdio.h>
-+#include <string.h>
-+#include <errno.h>
-+#include <pthread.h>
-+#include <unistd.h>
-+
-+#define USEC_PER_SEC 1000000L
-+#define WAIT_THREAD_RETRIES 100
-+
-+struct futex_thread {
-+	pthread_t		thread;
-+	pthread_barrier_t	barrier;
-+	pid_t			tid;
-+	int			(*threadfn)(void *arg);
-+	void			*arg;
-+	int			retval;
-+};
-+
-+static inline int __wait_for_thread(FILE *fp, int timeout_us)
-+{
-+	char buf[80] = "";
-+	int i;
-+	int sleep_time_us = timeout_us / WAIT_THREAD_RETRIES;
-+
-+	if (sleep_time_us <= 0)
-+		sleep_time_us = 1;
-+
-+	for (i = 0; i < WAIT_THREAD_RETRIES; i++) {
-+		if (!fgets(buf, sizeof(buf), fp))
-+			return -EIO;
-+		if (!strncmp(buf, "futex", 5))
-+			return 0;
-+		usleep(sleep_time_us);
-+		rewind(fp);
+ #include "futextest.h"
++#include "futex_thread.h"
+ #include "kselftest_harness.h"
+ 
+-#define timeout_ns  30000000
+-#define WAKE_WAIT_US 10000
++#define FUTEX_WAIT_TIMEOUT_SECS 1
++#define WAIT_THREAD_CREATE_TIMEOUT_USECS (USEC_PER_SEC / 2) /* 500ms */
+ 
+ volatile futex_t *f1;
+ 
+-void *waiterfn(void *arg)
++static int waiterfn(void *arg)
+ {
+ 	struct timespec to;
+ 
+-	to.tv_sec = 0;
+-	to.tv_nsec = timeout_ns;
++	to.tv_sec = FUTEX_WAIT_TIMEOUT_SECS;
++	to.tv_nsec = 0;
+ 
+-	if (futex_wait(f1, *f1, &to, 0))
++	if (futex_wait(f1, *f1, &to, 0)) {
+ 		printf("waiter failed errno %d\n", errno);
++		return -errno;
 +	}
-+	return -ETIMEDOUT;
-+}
-+
-+static void *__futex_thread_fn(void *arg)
-+{
-+	struct futex_thread *t = arg;
-+
-+	t->tid = gettid();
-+	pthread_barrier_wait(&t->barrier);
-+	t->retval = t->threadfn(t->arg);
-+	return NULL;
-+}
-+
-+/**
-+ * futex_wait_for_thread - Wait for the child thread to sleep in the futex context
-+ * @t:          Thread handle.
-+ * @timeout_us: The timeout for waiting for the thread to enter the sleep state.
-+ */
-+static inline int futex_wait_for_thread(struct futex_thread *t, int timeout_us)
-+{
-+	char fname[80];
-+	FILE *fp;
-+	int res;
-+
-+	snprintf(fname, sizeof(fname), "/proc/%d/wchan", t->tid);
-+	fp = fopen(fname, "r");
-+	if (!fp) {
-+		return -EIO;
-+	}
-+
-+	res = __wait_for_thread(fp, timeout_us);
-+	fclose(fp);
-+	return res;
-+}
-+
-+/**
-+ * futex_thread_create - Create a new thread for testing.
-+ * @t:        The handle of the newly created thread.
-+ * @threadfn: The new thread starts execution by invoking threadfn
-+ * @arg:      The parameters passed to threadfn.
-+ */
-+static inline int futex_thread_create(struct futex_thread *t, int (*threadfn)(void *), void *arg)
-+{
-+	int ret;
-+
-+	ret = pthread_barrier_init(&t->barrier, NULL, 2);
-+	if (ret)
-+		return ret;
-+
-+	t->tid = 0;
-+	t->threadfn = threadfn;
-+	t->arg = arg;
-+
-+	ret = pthread_create(&t->thread, NULL, __futex_thread_fn, t);
-+	if (ret) {
-+		pthread_barrier_destroy(&t->barrier);
-+		return ret;
-+	}
-+
-+	pthread_barrier_wait(&t->barrier);
+ 
+-	return NULL;
 +	return 0;
-+}
+ }
+ 
+ TEST(requeue_single)
+ {
++	struct futex_thread waiter;
+ 	volatile futex_t _f1 = 0;
+ 	volatile futex_t f2 = 0;
+-	pthread_t waiter[10];
++	int ret;
+ 
+ 	f1 = &_f1;
+ 
+ 	/*
+ 	 * Requeue a waiter from f1 to f2, and wake f2.
+ 	 */
+-	ASSERT_EQ(0, pthread_create(&waiter[0], NULL, waiterfn, NULL));
++	ASSERT_EQ(0, futex_thread_create(&waiter, waiterfn, NULL));
+ 
+-	usleep(WAKE_WAIT_US);
++	ret = futex_wait_for_thread(&waiter, WAIT_THREAD_CREATE_TIMEOUT_USECS);
++	if (ret < 0)
++		usleep(WAIT_THREAD_CREATE_TIMEOUT_USECS);
+ 
+ 	EXPECT_EQ(1, futex_cmp_requeue(f1, 0, &f2, 0, 1, 0));
+ 	EXPECT_EQ(1, futex_wake(&f2, 1, 0));
 +
-+/**
-+ * futex_thread_destroy - Wait for and reclaim the resources of the thread.
-+ * @t:      Thread handle.
-+ */
-+static inline int futex_thread_destroy(struct futex_thread *t)
-+{
-+	pthread_join(t->thread, NULL);
-+	pthread_barrier_destroy(&t->barrier);
-+	return t->retval;
-+}
++	EXPECT_EQ(0, futex_thread_destroy(&waiter));
+ }
+ 
+ TEST(requeue_multiple)
+ {
++	struct futex_thread waiter[10];
+ 	volatile futex_t _f1 = 0;
+ 	volatile futex_t f2 = 0;
+-	pthread_t waiter[10];
+-	int i;
++	int i, ret;
+ 
+ 	f1 = &_f1;
+ 
+@@ -62,12 +70,22 @@ TEST(requeue_multiple)
+ 	 * At futex_wake, wake INT_MAX (should be exactly 7).
+ 	 */
+ 	for (i = 0; i < 10; i++)
+-		ASSERT_EQ(0, pthread_create(&waiter[i], NULL, waiterfn, NULL));
++		ASSERT_EQ(0, futex_thread_create(&waiter[i], waiterfn, NULL));
+ 
+-	usleep(WAKE_WAIT_US);
++	for (i = 0; i < 10; i++) {
++		ret = futex_wait_for_thread(&waiter[i], WAIT_THREAD_CREATE_TIMEOUT_USECS / 10);
++		if (ret < 0) {
++			/* /proc not available, give all threads time to enter futex wait */
++			usleep(WAIT_THREAD_CREATE_TIMEOUT_USECS);
++			break;
++		}
++	}
+ 
+ 	EXPECT_EQ(10, futex_cmp_requeue(f1, 0, &f2, 3, 7, 0));
+ 	EXPECT_EQ(7, futex_wake(&f2, INT_MAX, 0));
 +
-+#endif
++	for (i = 0; i < 10; i++)
++		EXPECT_EQ(0, futex_thread_destroy(&waiter[i]));
+ }
+ 
+ TEST_HARNESS_MAIN
 -- 
 2.34.1
 
