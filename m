@@ -1,147 +1,145 @@
-Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
+Received: from mail-dl1-f54.google.com (mail-dl1-f54.google.com [74.125.82.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAD273B7B76
-	for <linux-kselftest@vger.kernel.org>; Tue, 12 May 2026 20:41:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.173
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778618486; cv=none; b=UPgbMHZVuSvXI2sEK6bekQX0Gs2ztb6paGeot8MVFALyzpNRFMVN16yHgs6SsH0i+oXKHxqKXv19Wdk39beAcYin5vXFKRvBBo5qvBGS0hmViywvwISwrXgb8gTa0DG2I5CRcdolSyX6QPxQhCvQhSEW+Yks/D7sy1bnQg1zsEc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778618486; c=relaxed/simple;
-	bh=i2FMVqoCYm6FiVcFiqxhtfNbdlephUNWQBXqZIy8Ti0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lfAJSwVrOPnsG+Va5d8fhDyBMf5zQ9qt7Bu3DUqqzcn2mIITgtIJio9IQB21afzVAyXXcsjHw1o9iNrZvFi6DXoCLqH32rrjUDVFa54a8qTV3YuqN0ja/IBXSxBiT7Rcd8T3+pnIc8LSZ1pmT3Lzu+WclOJWZF6yKUnIwG6k6ws=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=i+AO2G1D; arc=none smtp.client-ip=209.85.222.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28E853C5552
+	for <linux-kselftest@vger.kernel.org>; Tue, 12 May 2026 21:00:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.54
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778619623; cv=pass; b=bERIxKIZZZpNZe/garIUlDZhxzQsO3aPMYDsQBiRfWqnql8JzGS6mH+cR8Y8U38vd4sg5Qt7ddUG5BalTjNRmV5frV9SyaoEFAKs3qYkO1WyEMufVkRAKXyKCovi5ApnFJfNNL+ZPRqsnByOFNPAh/LBnCA74lddikSeVBZ5CxI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778619623; c=relaxed/simple;
+	bh=yjcYpwM0bNWA8F+oMBSlbnJX7nZ+1khq657ozFenk1Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=lMlQy0KvvbWnVDDoccJgN1EzFQ+dBsO1F8WA0TbSNLQAD8PN7bJZAMd0+qV9RlIi9ccQ5kf91zRQNM+Ob0FQLn6b+gCgnU3fcj4Xv+kb91OHV5psxSbgjS2w+MeYjF6wb9+eEaOm3aLL1Xymp1hTdSJXY5WC5OLTySleiCz/5Ik=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=KYU5vNgn; arc=pass smtp.client-ip=74.125.82.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="i+AO2G1D"
-Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-8ec37d52c0dso839509385a.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 12 May 2026 13:41:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KYU5vNgn"
+Received: by mail-dl1-f54.google.com with SMTP id a92af1059eb24-130c9dcbd25so5675095c88.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 12 May 2026 14:00:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778619619; cv=none;
+        d=google.com; s=arc-20240605;
+        b=aSFWGV/+HPFp3q6RmXh1Fga9+THMOiLNOXkEvA+tn06mw2rtrcM2wsOnXErTHAx20I
+         FBTjhLhm1x/g/1v2vVxlIU66l9fg8tNzRJFodvh12yB92FrD6aT/QI7wNHlPTnZsyTJh
+         YuQQz63NEWPpMPiBXAXgj2iLpg7ws7V7ZJMz7tqKxU+sk/zRfTw9YobRaNC59/7CcUKP
+         Pn/p/bB9T3A1ckX02fFFatH8FbsSXjNL0vwtYvP5UvTHcmg/VDLDZmOjM39oXalZnDTp
+         uTLZza7IvF7lxlHwJ6hMs9jdJjTpaC5JWhwDoQuK5a0Qvy8TcNePo4WB+CcpVrd6xy7L
+         OUSQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=9t69VAH4Nc1O0MVDyKt+JQMOR1DA7dJ94HBiu06W+HM=;
+        fh=j+Y0xEogloijQBp/N4rSgy5lb4L/i5VcS9hdAn3vqgE=;
+        b=dLSzqGW4r+Sjxi+ZlAQlrMPBVvxgKcReunydYQc3HjWVspSYZJKtTDWofvv4sm+9Ai
+         mZiioMNPilOCbRdxgG24XoOk8srfyfxvmfWERbAos5WrkokZZOAOnUBI5RXwlBQqrvmM
+         cD9TwDmMbz8r9s1qnyT4riHtPMtmaVCSqIsM8cAyg2eNtI3x9VoffXjIcwai+XMedCOu
+         wjHPYY9aiKaPH1GGk3AGpvKnLvPr9E6w9vOyE6vKf/424WwoWxghzr4QjlGyoROaQFg5
+         9aBwlqsmVooUFfRvpTpQ/HhnXO52JIrggRqeanDlm+BTy4EsgRSYE5wFQRe62DqyzqZA
+         MsTw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1778618483; x=1779223283; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Sq67mJ1Mle/Wjax+ZhdINyyVrcamDgHQ2bN9yr1Zbf8=;
-        b=i+AO2G1DurT9T8SdPgRWjfiuEHxC8BINqSX13HrZAM9omqGM/c0ALZd0JXFYyBF9vJ
-         OopR44JWA5+nhaPutZSFON5+OjqS81LX+IDNEK8aaoy+LYYEKrrUaQi98Z4o8FCRiwov
-         OSggGR7D7+gmXWVwksSxTHwYSki9oymSwxWztax76ejWgw4yftwxRZK5+0wM3sSD9JuT
-         /w4JctQO97I7Y6NwtRgWyfoMCZ7GR8bXV1438CHL7WYmcTBbfBhNjSVLVYKX02xH0ajY
-         zZFfsEOfotGJzEA0Ip/PcohoLILbF459vkIWyTCwDgLu6DvRGSwNFvDBF43zJE0b8eNS
-         n8jA==
+        d=google.com; s=20251104; t=1778619619; x=1779224419; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9t69VAH4Nc1O0MVDyKt+JQMOR1DA7dJ94HBiu06W+HM=;
+        b=KYU5vNgnDBBJPuWlxf7lFR91IHbrV8OkzR3trOdGVz4KIMAWskUuH1oyFcJQNd0DRu
+         w9wrP8xMj0EL1TuFo8QxPIdL2PJ17f1TJ6tlpbG9ibsue1EWsKm6FER6163MD3rEZQ6S
+         iJAACQAzV1vdNBgf3Jy/7BRVoaRtfrELpuEeQpbRdfEAi6Bf8w0RhPg4jSA+Nna7c7Ap
+         ighJ8xRz8+xXr1/s0ERILzp1adkUgDz/0kgugFZc1kLMlPBW9FYVRTeGm3CoBPJDynEV
+         3orwTuARevjTMKC6XyOm4eEemo8WIm4W6GukN+crwCdqN3ZWdkD9/9216JtUvUvbSv2f
+         oZXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778618483; x=1779223283;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Sq67mJ1Mle/Wjax+ZhdINyyVrcamDgHQ2bN9yr1Zbf8=;
-        b=IvM+5EbHPeCPHV7lxhRuCDoQjazsLkuqNwZPYJ2QLmaSAgkwXp7wSrW2tAb+V7KspI
-         gESzJIxMZAdNTItH4ZhGBCmzDzG44Ev7+pYrH+GdwLdtogEaHmxapzzENlM+72xKVDMY
-         hG21Mkh6tJyfDZfuTN7PutK3vmEGXKJbw9uK7toos5aYcCau2ZfttTm6f8c6Wq10HXUm
-         wmkb6Lz5EtXFdE8PkxJ/9aFIHOK/lIHfshw414jm71epc35vSESK8GBUNndSEtHrEh1y
-         bNgZ5U2Ur2pRawkj6Rbloo5Iqq8jqDWDMjCMsLRBLNv04t1XdZ5cFK2KefyDyUdA/TD1
-         DnsA==
-X-Forwarded-Encrypted: i=1; AFNElJ8BD8tL658/CpTL0E9TT7djnJyFGRBRiCyRJYJoXUvdAQv7dqvI7ucl6qBVWvwlTtcP/9TGianbCUDI+og6owk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw40dsHBaTXoRzYB4GdQZT7OaLGUUmGLp3pPUPckl5W1HWy/5Pw
-	bH9XLrzJ7M34/Fnv1DuOtHDax5guku5YKMPijHnlEULFJvxLGiN+iT3A9Dq+p5KqI0A=
-X-Gm-Gg: Acq92OGLzpf0TH/4WQbfShS1PFjdrlA65AlFzSzXYmBOdH/r5GPJjMRwPYCw72o/CV5
-	i8rSQRK7efPP86w5cPXQniCvFYgbUPWPwa5Yg7d4ih6mT50pGaAvTHODYf7wWhcBsoi+pGYT0eY
-	acUTcel9S7/yH7oHDOdV5lud85EC46Lx5vCnXn/EbpTnJ88nS3ONEN7Bmcf2nC1lB8yhNh6Fx9a
-	mJJKhvb5+bkBdcIeu1QS5pVHNY69Hf22g/TZzxxcDMRicNSsHIPlao/YmQyeq9xnW7CbcNBA7kQ
-	1WdkGJRQNlqgtz7hBiNdLHxCyUisvvXn8urGcIkLDT/X0E5OLdffUXeBSqd5J5QiqBhISCrIC8/
-	oseZAsI8ch9gEock4ZOnkgU3HEGqKevM5InlBvksZ5fjwqag5p2kXiJdfUdQywwZWCo8N69KfoH
-	TCWnu6oY5ks1RPfDd4VzOZLh2RnrSitN6fMOLet6lqGrfkjEHcTk4=
-X-Received: by 2002:a05:620a:4593:b0:8da:d152:b7e2 with SMTP id af79cd13be357-90f88f92e19mr94041885a.25.1778618483528;
-        Tue, 12 May 2026 13:41:23 -0700 (PDT)
-Received: from plex ([71.181.43.54])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-90cd7a6c35csm354234285a.42.2026.05.12.13.41.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 May 2026 13:41:23 -0700 (PDT)
-Date: Tue, 12 May 2026 20:41:21 +0000
-From: Pasha Tatashin <pasha.tatashin@soleen.com>
-To: Pratyush Yadav <pratyush@kernel.org>
-Cc: Pasha Tatashin <pasha.tatashin@soleen.com>, 
-	linux-kselftest@vger.kernel.org, rppt@kernel.org, shuah@kernel.org, akpm@linux-foundation.org, 
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org, dmatlack@google.com, 
-	kexec@lists.infradead.org, skhawaja@google.com, graf@amazon.com
-Subject: Re: [PATCH 4/5] selftests/liveupdate: Add stress-sessions kexec test
-Message-ID: <agOQa0aGZMVRlCu2@plex>
-References: <20260414200237.444170-1-pasha.tatashin@soleen.com>
- <20260414200237.444170-5-pasha.tatashin@soleen.com>
- <2vxzlddoafel.fsf@kernel.org>
+        d=1e100.net; s=20251104; t=1778619619; x=1779224419;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=9t69VAH4Nc1O0MVDyKt+JQMOR1DA7dJ94HBiu06W+HM=;
+        b=hd539vM02QqP65dK/raJE4zqZzqX4AhCRFncXJ3DSa45CLM9O2NNm1uNzjSw8UDYRo
+         7BTOmloC3vmTYtTzRJjkb7ChyYVFwbv6o3SZ3nkH1AuvHyutdvcG6YZ+uPMfKK6A5oMY
+         95mPaXXy5lEQ/MsQFnob1gP8HRCMDYiVyO9nJo8h/Iy3/kiIZpA5hi1s8DDHuRSyYQK1
+         blgssKEz75WTFE0S+cmN+ryyOc6nigkW6kzsnfaFL702wYloohP3KHSYgeComY/fdrAs
+         G+pIW3nJ80rbhDCaFas9z0qB5/vNZ7UTGcbkOQu5damH1W+Oa7bQoUasiOTzI7vrMbZn
+         QD2g==
+X-Forwarded-Encrypted: i=1; AFNElJ/BN1GF38nA5roJ1sJTnXWQIZ6nuAx4Pb0gBuxOHPyGNY3QTWo4P+9cYs7Ey5UnpDodohmfMb5Obtz9rate6ik=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywq8zfjCmcGzEq4HNtizccK4lZXfljKyZPrIHS+WN8HoD9x8l/D
+	l02bKclbnqz5GRk0k9cz+fcYPI6rDWMaIHPK8Akr0MPpJeXYHuxz7PD+Ojlxy2Xnvat4oqnxgP1
+	GyIuLYoCWzf5cw6hhO7sr2uaiTK4PHmIZ6xESR5jr
+X-Gm-Gg: Acq92OEA89zZynWe7a4JzdvjwIl1lHtKSfaIdBN9Z4CvdAiR7cOogOfF3EpqCOyhQGv
+	7pk9oZfJZngzbEIfc5lfbR7t1DlgMniaDwQxeMnq6NvuoM2CpAVTffZWmQ2ygJQwIgJL/1mj7B4
+	rZfTxKEwye6bk3mGwGPzeVAcOcN0ljrcbXU5ah/4AWrpkkkOqJyYudcq6+LfPxCj5bSEV2Lz27k
+	KgyGtpJWmVTksLFkaFHTBPg5/K+hB7ZCvbx5ejKUpU9Mxyrqh6bW3TmztCtu2OAXklD7kXbSVdq
+	IV2oMANhvGVV1k6uUmk=
+X-Received: by 2002:a05:7022:2394:b0:11a:fb0a:ceca with SMTP id
+ a92af1059eb24-1333b2d9c6bmr3134966c88.16.1778619618598; Tue, 12 May 2026
+ 14:00:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2vxzlddoafel.fsf@kernel.org>
+References: <20260511234802.2280368-1-vipinsh@google.com> <20260511234802.2280368-3-vipinsh@google.com>
+In-Reply-To: <20260511234802.2280368-3-vipinsh@google.com>
+From: David Matlack <dmatlack@google.com>
+Date: Tue, 12 May 2026 13:59:51 -0700
+X-Gm-Features: AVHnY4KwNtssIpJT8BgW9ND1vjmOC-DKwSQu-Dn5zwJb7fp396v17OflLbojuVc
+Message-ID: <CALzav=fR8c2tYj9jeOc_K=xoupxAfWMHmk0ipDniSXg6uGiFYA@mail.gmail.com>
+Subject: Re: [PATCH v4 02/16] vfio/pci: Preserve vfio-pci device files across
+ Live Update
+To: Vipin Sharma <vipinsh@google.com>
+Cc: kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-pci@vger.kernel.org, ajayachandra@nvidia.com, alex@shazbot.org, 
+	amastro@fb.com, ankita@nvidia.com, apopple@nvidia.com, chrisl@kernel.org, 
+	corbet@lwn.net, graf@amazon.com, jacob.pan@linux.microsoft.com, 
+	jgg@nvidia.com, jgg@ziepe.ca, jrhilke@google.com, julianr@linux.ibm.com, 
+	kevin.tian@intel.com, leon@kernel.org, leonro@nvidia.com, lukas@wunner.de, 
+	michal.winiarski@intel.com, parav@nvidia.com, pasha.tatashin@soleen.com, 
+	praan@google.com, pratyush@kernel.org, rananta@google.com, 
+	rientjes@google.com, rodrigo.vivi@intel.com, rppt@kernel.org, 
+	saeedm@nvidia.com, skhan@linuxfoundation.org, skhawaja@google.com, 
+	vivek.kasireddy@intel.com, witu@nvidia.com, yanjun.zhu@linux.dev, 
+	yi.l.liu@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 05-12 16:09, Pratyush Yadav wrote:
-> On Tue, Apr 14 2026, Pasha Tatashin wrote:
-> 
-> > Add a new test that creates 2000 LUO sessions before a kexec
-> > reboot and verifies their presence after the reboot. This ensures
-> > that the linked-block serialization mechanism works correctly for
-> > a large number of sessions.
-> >
-> > Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
-> > ---
-> > diff --git a/tools/testing/selftests/liveupdate/luo_test_utils.c b/tools/testing/selftests/liveupdate/luo_test_utils.c
-> > index 3c8721c505df..37c330b9bb36 100644
-> > --- a/tools/testing/selftests/liveupdate/luo_test_utils.c
-> > +++ b/tools/testing/selftests/liveupdate/luo_test_utils.c
-> > @@ -20,6 +20,7 @@
-> >  #include <sys/stat.h>
-> >  #include <errno.h>
-> >  #include <stdarg.h>
-> > +#include <sys/resource.h>
-> >  
-> >  #include "luo_test_utils.h"
-> >  
-> > @@ -28,6 +29,30 @@ int luo_open_device(void)
-> >  	return open(LUO_DEVICE, O_RDWR);
-> >  }
-> >  
-> > +void luo_ensure_nofile_limit(long min_limit)
-> 
-> Since you are adding this to luo_test_utils anyway, I think you should
-> do it in patch 3 and use it there too.
+On Mon, May 11, 2026 at 4:48=E2=80=AFPM Vipin Sharma <vipinsh@google.com> w=
+rote:
 
-Done
+> diff --git a/drivers/vfio/pci/Kconfig b/drivers/vfio/pci/Kconfig
+> index c12d614fc6c4..019de053f116 100644
+> --- a/drivers/vfio/pci/Kconfig
+> +++ b/drivers/vfio/pci/Kconfig
+> @@ -45,13 +45,15 @@ config VFIO_PCI_IGD
+>
+>  config VFIO_PCI_LIVEUPDATE
+>         bool "VFIO PCI support for Live Update (EXPERIMENTAL)"
+> -       depends on PCI_LIVEUPDATE
+> +       depends on PCI_LIVEUPDATE && VFIO_DEVICE_CDEV
+>         help
+>           Support for preserving devices bound to vfio-pci across a Live
+>           Update. This option should only be enabled by developers workin=
+g on
+>           implementing this support. Once enough support has landed in th=
+e
+>           kernel, this option will no longer be marked EXPERIMENTAL.
+>
+> +         Enabling this will disable support for VFIO PCI DMA buffer.
+> +
+>           If you don't know what to do here, say N.
+>
+>  endif
+> @@ -68,7 +70,7 @@ config VFIO_PCI_ZDEV_KVM
+>           To enable s390x KVM vfio-pci extensions, say Y.
+>
+>  config VFIO_PCI_DMABUF
+> -       def_bool y if VFIO_PCI_CORE && PCI_P2PDMA && DMA_SHARED_BUFFER
+> +       def_bool y if VFIO_PCI_CORE && PCI_P2PDMA && DMA_SHARED_BUFFER &&=
+ !VFIO_PCI_LIVEUPDATE
 
-> 
-> LGTM otherwise.
-> 
-> > +{
-> > +	struct rlimit hl;
-> > +
-> > +	if (getrlimit(RLIMIT_NOFILE, &hl) < 0)
-> > +		ksft_exit_fail_msg("getrlimit failed: %s\n", strerror(errno));
-> > +
-> > +	if (hl.rlim_cur >= min_limit)
-> > +		return;
-> > +
-> > +	hl.rlim_cur = min_limit;
-> > +	if (hl.rlim_cur > hl.rlim_max)
-> > +		hl.rlim_max = hl.rlim_cur;
-> > +
-> > +	if (setrlimit(RLIMIT_NOFILE, &hl) < 0) {
-> > +		if (errno == EPERM) {
-> > +			ksft_exit_skip("Insufficient privileges to set RLIMIT_NOFILE to %ld\n",
-> > +				       hl.rlim_cur);
-> > +		}
-> > +		ksft_exit_fail_msg("setrlimit to %ld failed: %s\n",
-> > +				   hl.rlim_cur, strerror(errno));
-> > +	}
-> > +}
-> > +
-> >  int luo_create_session(int luo_fd, const char *name)
-> >  {
-> >  	struct liveupdate_ioctl_create_session arg = { .size = sizeof(arg) };
-> 
-> -- 
-> Regards,
-> Pratyush Yadav
+Why does enabling VFIO_PCI_LIVEUPDATE require disabling
+VFIO_PCI_DMABUF? I saw the cover letter says "to keep things simple",
+but what specific problem does this solve or simplify?
