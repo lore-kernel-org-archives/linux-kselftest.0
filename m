@@ -1,86 +1,122 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 438553E170C;
-	Tue, 12 May 2026 13:05:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93C023812EA
+	for <linux-kselftest@vger.kernel.org>; Tue, 12 May 2026 13:30:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778591148; cv=none; b=tDWObDKQHWY8C5ei6MXCquZr9EM6enGsLJEz998ylvjCpy9upZdRECLo2YoTjjsBuRk+AHjXeYpoK0Gwk9pw1GSpbGar7DRnqUSvHpwtk7sKEU8ruN/f1FMJYuDkXf0wgWn3dZ4Htp2tn4h3/I6zeZAU7iACc2fh31o+TRryKV8=
+	t=1778592604; cv=none; b=Sp9tomiCfbeZ3hAEsrzsRYQO7ajo3zTxoFeTvTdmKUEswixYtSl0t28YTwezAf4HkN3tbi4gohpWwGJjRblKhJWLn4r79Cdbq8VoFGXWrRvjf1Ayc+YrpS1Zdr8iGlPQByxGVYlvq/yD7tM0u+fUZwnXi0h/J4RQ9TOvnWoz07E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778591148; c=relaxed/simple;
-	bh=n8gaZFTUvxz2GlSH8if4QoMEk3XrJLJ4wMVxRfHKC3k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AXlfBf7LAydGXhxJ6Wrx8oqFwryWydjD6dWFJLuf58L2xi0iRWjhEWlUeo0HQVB9x3x9M8AF7uTauBKcw902DFzMpU6sK/FGtSMhB1LtgVwAyQO/3CjtUfmMyrQ4f85TREgbOMnDLiqGz3ZslfsF6yrPGtATKrCh2tzyatLkUCE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=TbbFtDMD; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	s=arc-20240116; t=1778592604; c=relaxed/simple;
+	bh=pDiZshBpS/wxU9Uro1koolEi4k/3XegrJ3uZ3HA4A2w=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=XMxmpTYkRvV2ujq8tn2BZPHwKqUFTWsn3PXjgMXbroChvogIK4yY7tGIPmLuaPJjAdyo2Ao5wapVtGxNbnR9JYdeJVacjagXysmEkjaNu6J9hUtaCwg8LUX90U3tU3gQZaqd62Qz6oOYXsvBtU2LWRF5rHWPNwWHdb3gQlPGKpA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=G3HGiAhR; arc=none smtp.client-ip=209.85.210.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="TbbFtDMD"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=kX9NKZc878QSw9T/nFa6vS4SRnKB4jXUSRuipp9+zYg=; b=TbbFtDMDVxiioURi9D9kuOtmSW
-	cETUFLucu9DUzw9+DFDImtEfVW+HvJknB/Dq48RIfpjP4PQlqAg9JFBMhrVoToz8+GTLWlAASsAXn
-	ECD4xyOtJEmCmJUBNAgqD3vjN7uWz0KWGF0kz1WFu8d/z7UnCdqN6TBK1JVMjREfUBDl9GG/CHRca
-	2rkx13nLibDxOjebq7bdpGIKLvXmYE5AFJuia/D3KYSUaC4bCBYFYytHaUM9AVGOo2AkGGGrsngHC
-	3nKTh5Rz9hHXUsdXjzh35vu3bmCu4vZ4jl4+z378xsCu174PkJk5KB95Jb+zJBe/eweGM5wskKdCM
-	PxVEDF6Q==;
-Received: from authenticated user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wMmnj-002ObZ-1U;
-	Tue, 12 May 2026 13:05:31 +0000
-Date: Tue, 12 May 2026 06:05:25 -0700
-From: Breno Leitao <leitao@debian.org>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: Miaohe Lin <linmiaohe@huawei.com>, 
-	Naoya Horiguchi <nao.horiguchi@gmail.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Lorenzo Stoakes <ljs@kernel.org>, Vlastimil Babka <vbabka@kernel.org>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
-	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
-	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, "Liam R. Howlett" <liam@infradead.org>, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH v6 3/4] mm/memory-failure: add panic option for
- unrecoverable pages
-Message-ID: <agMlebHmui2quDBr@gmail.com>
-References: <20260511-ecc_panic-v6-0-183012ba7d4b@debian.org>
- <20260511-ecc_panic-v6-3-183012ba7d4b@debian.org>
- <8d4940bc-d8c4-4e7f-a35d-979e6a781966@kernel.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="G3HGiAhR"
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-83536dc3be5so5873674b3a.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 12 May 2026 06:30:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1778592602; x=1779197402; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=FwvmZbvQ55BiKQJH5ec2dbqWlhZ4p91dqEFuyoRuLTw=;
+        b=G3HGiAhRZP/ux+tkdfyoXCj5LPp7oLHXTO8kHhKdwr56rSEUrMLTI6xQvGIYWcPzsv
+         yqkBhpYQl4v5kRw+5VattIl7omv5e05anGG3ocu7GZFyLoPmPnisI14gove3IKt/mvsH
+         r5p/4GXKJC9dWWsJX9+LzZmpvBhdQyfWRHvhIyBaziQ84ACLr4DeDzLbrGGUZUa/qo9u
+         0o1cjyscmO4OqUfd77UtObHgOG/otJRCelrRMFQR/9/ILUduvYoEHC8HpEhwjMTp67M+
+         LzEpK80jIwbmNd1sLZdu4RlvBcB1s9WuW7zKDixtCWvTO0gzI/WShy29/DPF1H/bORmI
+         0OXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778592602; x=1779197402;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FwvmZbvQ55BiKQJH5ec2dbqWlhZ4p91dqEFuyoRuLTw=;
+        b=k69eUq3fe8ETagikshiWWjbUQ32TGMrAGERc1YuiQp9UyMZufDA1LBePM5zT+tyeti
+         9ey/ZXZAdJAWNUSctmAFFreFS9JIXoWBAjyP1B+IXGL9elnYUZhzraVZHtkEimqAaJH9
+         fdf/zOhswjVQRUZ7Ast9JMYz/XCWwGAm74+GrEjd+hMUuiKduEj5XYtGjQet6OFx51Fa
+         mTKV+GSJSFYqL0GP2KPZaMt9eAsgC99XKuJKpdBpePk7JN/ydZA9kACuZPfaoMZFwx0k
+         xp/SCDPeaca+uWTp1E1xQN1i+AjIUHKPUAUgcqdlcxfZwUB0Q47IPC+4HTqMPhW3sdXh
+         iDoQ==
+X-Forwarded-Encrypted: i=1; AFNElJ97Z9Oa4QfLe4YMbMXVYHcxRWFyHQ52dYhh1KppAPgmdOKNCEXo4IKjsokFnvEQXHTjt8QzwNolWguu0CVwxwc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YySQ0MTnpnW+gC1pCcNrmWxift/leqM/ekgze+n4b+CUCnFNuDp
+	rYnK2zxMsYUkMRhbgpK04546iGUgPYdqqC/C0KwqUxSfqRHqB4IA9ZKhHBkHhp1eRbPI+aj58fJ
+	e0iWV4Q==
+X-Received: from pfbcg6.prod.google.com ([2002:a05:6a00:2906:b0:836:ed4a:203f])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:80ed:b0:83d:b11f:796c
+ with SMTP id d2e1a72fcca58-83db11f7bc9mr12471248b3a.49.1778592601686; Tue, 12
+ May 2026 06:30:01 -0700 (PDT)
+Date: Tue, 12 May 2026 06:30:00 -0700
+In-Reply-To: <CA+EHjTxDvkDGyd-uyAqW7ErVxcKnUBpCYAgmnYfCdh+CCSq=3g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8d4940bc-d8c4-4e7f-a35d-979e6a781966@kernel.org>
-X-Debian-User: leitao
+Mime-Version: 1.0
+References: <20260511113759.610924-1-tabba@google.com> <20260511113759.610924-3-tabba@google.com>
+ <agHugdIrptaXZW-2@google.com> <CA+EHjTw1z7ROF7u0fKqxDGao7S1kELxNWtyWhLoPQx5uwVfuWQ@mail.gmail.com>
+ <agI7M7rZ_NZJyjhj@google.com> <CA+EHjTxDvkDGyd-uyAqW7ErVxcKnUBpCYAgmnYfCdh+CCSq=3g@mail.gmail.com>
+Message-ID: <agMqc7Zub3fqToxp@google.com>
+Subject: Re: [PATCH 2/2] KVM: selftests: Fix FD double-close in kvm_vm_release()
+From: Sean Christopherson <seanjc@google.com>
+To: Fuad Tabba <tabba@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, Marc Zyngier <maz@kernel.org>, 
+	Oliver Upton <oupton@kernel.org>, Will Deacon <will@kernel.org>, 
+	Ackerley Tng <ackerleytng@google.com>, David Matlack <dmatlack@google.com>, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-On Tue, May 12, 2026 at 10:22:38AM +0200, David Hildenbrand (Arm) wrote:
+On Tue, May 12, 2026, Fuad Tabba wrote:
+> On Mon, 11 May 2026 at 21:25, Sean Christopherson <seanjc@google.com> wrote:
+> > > I used kvm_vm_release() because it's the only public API that closes
+> > > vm->fd to trigger kernel-side destruction.  But the existing callers
+> > > follow it with vm_recreate_with_one_vcpu(), so the "release + later
+> > > kvm_vm_free()" path isn't exercised today.
+> > >
+> > > I see three ways to make this clean:
+> > >   a) This patch: kvm_vm_release() becomes idempotent for its three
+> > >      FDs, matching the kvm_stats_release() idiom it already invokes.
+> > >   b) Leave kvm_vm_release() as-is and add a dedicated helper, e.g.
+> > >      kvm_vm_destroy_kernel(), that closes vm->fd to trigger kernel
+> > >      destruction while leaving the kvm_vm struct intact for
+> > >      post-destruction inspection.  kvm_vm_free() learns to handle the
+> > >      half-released state.
+> > >   c) Something else entirely, e.g., the test should manage vm->fd
+> > >      directly and not rely on library helpers for this pattern.
+> >
+> >     d) Fully kill the VM; validate the semantics with an explict mmap().
+> >
+> > The entire point of the test you are writing is to verfiy that a guest_memfd VMA
+> > doesn't somehow cause KVM to leak state.  So, make that obvious instead of abusing
+> > APIs that kinda sorta do what you want, but not really.
+> >
+> >         mem = kvm_mmap(region->mmap_size, PROT_READ | PROT_WRITE, MAP_SHARED,
+> >                        region->guest_memfd);
+> >
+> >         ...
+> >
+> >         kvm_vm_free(vm);
+> >
+> >         TEST_ASSERT(is_zero(mem, ...));
 > 
-> > @@ -1281,6 +1292,18 @@ static void update_per_node_mf_stats(unsigned long pfn,
-> >  	++mf_stats->total;
-> >  }
-> >  
-> > +static bool panic_on_unrecoverable_mf(enum mf_action_page_type type,
-> > +				      enum mf_result result)
-> > +{
-> > +	if (!sysctl_panic_on_unrecoverable_mf || result != MF_IGNORED)
-> > +		return false;
-> > +
-> > +	if (type == MF_MSG_KERNEL)
-> > +		return true;
-> > +
-> > +	return false;
-> 
-> return type == MF_MSG_KERNEL;
-> 
-> might be simpler.
+> The test isn't about guest_memfd.  The pKVM support that just landed
+> via Will's series [1] 
 
-Ack, I will update once we decide about the other pendencies.
+Landed where?  Is pKVM actually going upstream with anonymous memory?  I thought
+the inability to protect against page faults in the untrusted kernel was a
+non-starter?
+
+> kvm_mmap() + kvm_vm_free() + is_zero() doesn't translate here.  The only
+> host view of the donated pages is the memslot mmap, and kvm_vm_free()
+> munmaps it on the way out, so inspection has to happen between
+> kernel-side destruction and userspace free.  kvm_vm_release() is the
+> only library primitive that does that today.
+> 
+> What do you suggest?
+
+Manually allocate the memory and expose it to the guest via
+vm_set_user_memory_region2() vm_set_user_memory_region().
+
