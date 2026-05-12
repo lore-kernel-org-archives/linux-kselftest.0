@@ -1,136 +1,160 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B49A36A371;
-	Tue, 12 May 2026 15:04:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778598254; cv=none; b=u8+a3g68MOytutm2Ky6Z6xbsSebsO0JsivT0lqtPKzjziSrQSG/E7qfJhBkvR8bJXBKMO/xng9e0WKXBfdpMrm19GL2euEuz1ELhIGinmLWiJRkpNBbKlnEH/gszBDeE7T+nyjTVhGJ63UZgCQFx99ZPbV8EURnjUqlKEHlbPQ4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778598254; c=relaxed/simple;
-	bh=9e4agnsk3Epm26Tyl0betzKQu1e9CrI0C+7TCaDt8nw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gtnnOZTyNALosFtGzdX4Uo/H9hPcLCUXeVmUI0wpF8kYe/8artSmvOd7qLtC11ZEhp55SsF5zOphHS9+mZXLNh404Ic9Ly2JDh2rfU1f7TF0KsPdJoLd4iSeLvcxposn/E+vW2nS8t/hCl3vQVTFUgdCPXUlWJfUouRuEtSHXjA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iqU6CxSs; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07B4338D3FD
+	for <linux-kselftest@vger.kernel.org>; Tue, 12 May 2026 15:05:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=170.10.133.124
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778598336; cv=pass; b=ilfi1PSbVvg2K01R/IP4hAb5Pum4ZjcQ+KplEvkGH7FNbpfX5oRfTdQGOIsHDNHn5eq4319jV/uMIh1A4k/A7CmblRYWvyut6dnPX9qnaFLyiaG8RqfdPVD1gtNkT4x2gR9owSxb4YMYONLF9v+mZXHXMvGhLA7wJWL0pw9IGG0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778598336; c=relaxed/simple;
+	bh=Yc9da0wDU/GeX1+XjMTk9av+bBmiHdfCu0Hae/L1BKk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AzTPBLcDBsS51h3MhoIlvYOatl5Ps6G/WVcLm18a/YOAuQv9imrBqxRzs0tzz97kI5qDMp3E9MHsWpaO+U0OkUPVTEettd4k8vnCTbBn0GEq/w+CfjDx2i4aPoCFKWawGzjRQPLlQybbVb8zqwM8Z0vUNhQbXidY+U+DAlbI/mk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bNcXOg7d; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=ewWkVXwP; arc=pass smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iqU6CxSs"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1589C2BCB0;
-	Tue, 12 May 2026 15:04:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778598253;
-	bh=9e4agnsk3Epm26Tyl0betzKQu1e9CrI0C+7TCaDt8nw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=iqU6CxSsBmKcbXgDGiaK/i2wZz6tXgeYklO0e5H3cPPPN1jJQFVXpVERGPbC0KKey
-	 EUI5PARUfPIxJA/wbgDFclAdkEeD3sexJAMiDs+Lw3XbYnp5x7VCRe6nnT44nxcACw
-	 Co4h9VRQ1KoRWfQ1gUnMhpK2e21n7V2tLeAqjpBhq1V++OxhORlFDSP/ewIkIO8ZL9
-	 cT0MCK1Gvh8N9erTdbik71h4wjCuoCZxRZkU42lP0PvyhTd0S16TtdVbmfEDeT7LEQ
-	 JjQIcr13AJ75RBJr6YaVggmP8XAdJNMeUWhpDOcEfq+6h75AuZJXako6ySeEhbrK7y
-	 KwVIlzGo/s20g==
-Date: Tue, 12 May 2026 16:04:07 +0100
-From: Will Deacon <will@kernel.org>
-To: Sean Christopherson <seanjc@google.com>
-Cc: Fuad Tabba <tabba@google.com>, Paolo Bonzini <pbonzini@redhat.com>,
-	Shuah Khan <shuah@kernel.org>, Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oupton@kernel.org>,
-	Ackerley Tng <ackerleytng@google.com>,
-	David Matlack <dmatlack@google.com>, kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] KVM: selftests: Fix FD double-close in
- kvm_vm_release()
-Message-ID: <agNBZ94I5SMCOzmi@willie-the-truck>
-References: <20260511113759.610924-1-tabba@google.com>
- <20260511113759.610924-3-tabba@google.com>
- <agHugdIrptaXZW-2@google.com>
- <CA+EHjTw1z7ROF7u0fKqxDGao7S1kELxNWtyWhLoPQx5uwVfuWQ@mail.gmail.com>
- <agI7M7rZ_NZJyjhj@google.com>
- <CA+EHjTxDvkDGyd-uyAqW7ErVxcKnUBpCYAgmnYfCdh+CCSq=3g@mail.gmail.com>
- <agMqc7Zub3fqToxp@google.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bNcXOg7d";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="ewWkVXwP"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1778598334;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=W2eX0USmLShQsb/8DMQ63vXaSE/VT5r1TpahlVnwh5Y=;
+	b=bNcXOg7dgBlMSJaL1cbnPz2pmfiDmi0Ux/Rbpm1Ylaa/7uRcKDQmcv77cEY6nrAobEcAzP
+	gH0eJlywHWPdSeNyCojL2r63E2JekoTd2rTRiRXZ72CfdfbTI8wdkA3Vc7vS6JFDq28BjG
+	Ik0JuirZJnfQ/TwIhnV6J14RwnRzbHw=
+Received: from mail-yw1-f198.google.com (mail-yw1-f198.google.com
+ [209.85.128.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-146-DiqvVk-yPZC4elOCZguXbg-1; Tue, 12 May 2026 11:05:33 -0400
+X-MC-Unique: DiqvVk-yPZC4elOCZguXbg-1
+X-Mimecast-MFC-AGG-ID: DiqvVk-yPZC4elOCZguXbg_1778598331
+Received: by mail-yw1-f198.google.com with SMTP id 00721157ae682-7bd5c42192aso150080207b3.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 12 May 2026 08:05:31 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778598331; cv=none;
+        d=google.com; s=arc-20240605;
+        b=M5sju16ZJg9WgqGY+b6yXeLo8YVgUDnNPyxtLGaOwhCwOp08f1i4c/36h/hm/sbJRw
+         ajtz5SM8r8fYvQ9hmuLyd++LGUbCjhmqsWUGWqFSzzvAHEj9i8XD+M0RN6Q9Z/uc56Df
+         W+IawvFpwlUWxp9dV0/vL4rngjmEpR0BOUNPJEwH485OG/Q+dBLAomjbo5lXGOht5g9K
+         No8fQe3an70bbLPF66cbm3OYN1t+aRQNkKf5LkUUOSJzaRX5PK4GNE4QqZMZ7Tt7gS8I
+         4/XssleE4bAsXBaMAxtGfbbRT5h4tnZRpz7Og4hlleWW/fdtsaZxO6uv0OUbO60JVvvq
+         Mxiw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=W2eX0USmLShQsb/8DMQ63vXaSE/VT5r1TpahlVnwh5Y=;
+        fh=U+Mn3L03WO3CQ3p4ZHje7qDOmImfimV0Mz/50XJXMZc=;
+        b=QGJjk6EgiZoz5qNOy3gkUhRRwf0B2oekUidGrdTU+nLLaphli3CjUwEW+ccU7k6XX4
+         ncYvFGhmPSbjGH/io2frBfmArh2duI7SELq4CcR+0EtzfKuiaBeV/0u4jsCeTKcsYxWl
+         5kmbBpS4Jp+pCOjlqCnBrx7wKXRMFxxQJ6PHY1qXQIg4puLwrCxY8VpcFNDdbLotakfq
+         JvAzvafmGZYTZchw7PyBaYmj5P0bJKX5rKV8Y3DvuUdVmFUTXfxBJTXiX2yYB1m7NBfF
+         ngZdLjgbGtUf2dKNj/RHkoytLJEDJ52KNfnHHpJnxamzjD53z1XsOdglvbuEiQGImLuz
+         loLw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1778598331; x=1779203131; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=W2eX0USmLShQsb/8DMQ63vXaSE/VT5r1TpahlVnwh5Y=;
+        b=ewWkVXwPkmCZ4XFrslMbpJ7dm1h7H9AlNeXjD4q9j5CcOAw5wxZyAyQiiUl/6HUkyb
+         5CAx7JBrlIfZf/BGNlQfXZ+al6czoIK0sCFwoDp1QosILvQ4UsGQ5jk9kRs7n2U6b2a2
+         H7DcviGDXUwq1RZS7elQU8cY6hiQkzUEmTOVHHDZUoUrAOPh9cKZnq5QHYOxbVLHmlOy
+         V8J/jTHds/l5BMAcgyySDS2G6RBmE26ROVALfA155CQw9Dg4q2cbBvWvpVI3mTVW5v3a
+         IyOJjoTjj9dtYQirRqZdbSICf5wc+NphKTtAOxyB3O1OUi33HaBsdZuMQpj/dV3DobBG
+         CQxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778598331; x=1779203131;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=W2eX0USmLShQsb/8DMQ63vXaSE/VT5r1TpahlVnwh5Y=;
+        b=T/Z+nZbXWWiR2P13Lh20ngbTGsTfS/Vl61MWDIkSgayuZc9lXuIM4joS7ZDlKWu3sD
+         ZBHFtmJnr0qG60jvNjCb6Mgqg/wgNzlD4EJwLd0UDUkHSQ1u7tZoWd1I6u0NYYBfd1qy
+         4igS6ZqE/H4vMy9+bdYCgj0sG130OgdNj1rEouVMHp8zBSSh/VfdgvzkcNT3o0/Mf8kS
+         7dxZ2fXrOHzn6T5zWsSQ6w2LFnH4x26jrQryvxkPQHHbvbMM9PNboDyF7r0XtbrfXFa+
+         uoSGzZAx+aFR+7ahlzrM5i6b7Fu7a+6nQCklABGCGV11W5mCJY6ZMEL5u40OVQMqgyOs
+         UXdw==
+X-Forwarded-Encrypted: i=1; AFNElJ/ZD6+B0rxpmbsOlRHS6QTBSJqJM8H1I6iJECb4f48zcPOYstW18hjvHJFQsph/w3zbmacUbNr4p3LnaK80SwY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzLLqE2p4jgNFQnzKP/YPrBgGX/vGTupDoiA3+OcBBfcrW7DOZp
+	HhDrQDzkd1VzL6yo61Tjm9lglnKbhj21CUNXi2jGHb9KlJWs5SdYR3xv39L2o9YVfmijbLc1s/T
+	MXOorfXurLVWcIlGskAKSqn5xmxMfEhaE1aqLSoNnxQni4w/fDNh+MWSqaBF5k0WfHsSrZSHs+X
+	4SQh473Rnxvlv8CuGS8dAyrVOOrg5ojH18NPmMIzvUa+1o
+X-Gm-Gg: Acq92OH0AOyWAsQpa2qjRvF1XS83FPixAhYX0bepmGLew8a3quJ5xzoViixtgR5DOaF
+	V14aREtGBzvRVekJOwZqNBCF8m7wLEiN2pSsvI3JLxj0p3IU7ZiVAJes/0Y1hojjOWuY20GKWkj
+	IYzzau6/ohgr7IhyiNg7X6dy+4F3MLbrECJAwQ5uRJhZHXnM0VXOuuD/Dsv4rSXCsW5PJ7p1aBP
+	28Z1w==
+X-Received: by 2002:a05:690c:34c9:b0:7bd:6a98:58d3 with SMTP id 00721157ae682-7c50f7cdf32mr36554527b3.18.1778598330991;
+        Tue, 12 May 2026 08:05:30 -0700 (PDT)
+X-Received: by 2002:a05:690c:34c9:b0:7bd:6a98:58d3 with SMTP id
+ 00721157ae682-7c50f7cdf32mr36553547b3.18.1778598330230; Tue, 12 May 2026
+ 08:05:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <agMqc7Zub3fqToxp@google.com>
+References: <20260508-kunit_add_support-v9-0-99df7aa880f6@redhat.com> <20260508165203.1cd1b27e664754d18dbea899@linux-foundation.org>
+In-Reply-To: <20260508165203.1cd1b27e664754d18dbea899@linux-foundation.org>
+From: Albert Esteve <aesteve@redhat.com>
+Date: Tue, 12 May 2026 17:05:18 +0200
+X-Gm-Features: AVHnY4IjDWzPTwv7Lf1EJ-4smElfrpc1pe5LEGC8untQsvEPzH-woMO9H8PAPck
+Message-ID: <CADSE00LNoc8KgVWR=7Va-Phb2U9sDzS9wntWckDFm66Uz89bnQ@mail.gmail.com>
+Subject: Re: [PATCH v9 0/4] kunit: Add support for suppressing warning backtraces
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Brendan Higgins <brendan.higgins@linux.dev>, 
+	David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Alexandre Ghiti <alex@ghiti.fr>, linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	dri-devel@lists.freedesktop.org, workflows@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, linux-doc@vger.kernel.org, 
+	peterz@infradead.org, Alessandro Carminati <acarmina@redhat.com>, 
+	Guenter Roeck <linux@roeck-us.net>, Kees Cook <kees@kernel.org>, 
+	Linux Kernel Functional Testing <lkft@linaro.org>, =?UTF-8?B?TWHDrXJhIENhbmFs?= <mcanal@igalia.com>, 
+	Dan Carpenter <error27@gmail.com>, Simona Vetter <simona.vetter@ffwll.ch>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 12, 2026 at 06:30:00AM -0700, Sean Christopherson wrote:
-> On Tue, May 12, 2026, Fuad Tabba wrote:
-> > On Mon, 11 May 2026 at 21:25, Sean Christopherson <seanjc@google.com> wrote:
-> > > > I used kvm_vm_release() because it's the only public API that closes
-> > > > vm->fd to trigger kernel-side destruction.  But the existing callers
-> > > > follow it with vm_recreate_with_one_vcpu(), so the "release + later
-> > > > kvm_vm_free()" path isn't exercised today.
-> > > >
-> > > > I see three ways to make this clean:
-> > > >   a) This patch: kvm_vm_release() becomes idempotent for its three
-> > > >      FDs, matching the kvm_stats_release() idiom it already invokes.
-> > > >   b) Leave kvm_vm_release() as-is and add a dedicated helper, e.g.
-> > > >      kvm_vm_destroy_kernel(), that closes vm->fd to trigger kernel
-> > > >      destruction while leaving the kvm_vm struct intact for
-> > > >      post-destruction inspection.  kvm_vm_free() learns to handle the
-> > > >      half-released state.
-> > > >   c) Something else entirely, e.g., the test should manage vm->fd
-> > > >      directly and not rely on library helpers for this pattern.
-> > >
-> > >     d) Fully kill the VM; validate the semantics with an explict mmap().
-> > >
-> > > The entire point of the test you are writing is to verfiy that a guest_memfd VMA
-> > > doesn't somehow cause KVM to leak state.  So, make that obvious instead of abusing
-> > > APIs that kinda sorta do what you want, but not really.
-> > >
-> > >         mem = kvm_mmap(region->mmap_size, PROT_READ | PROT_WRITE, MAP_SHARED,
-> > >                        region->guest_memfd);
-> > >
-> > >         ...
-> > >
-> > >         kvm_vm_free(vm);
-> > >
-> > >         TEST_ASSERT(is_zero(mem, ...));
-> > 
-> > The test isn't about guest_memfd.  The pKVM support that just landed
-> > via Will's series [1] 
-> 
-> Landed where?  Is pKVM actually going upstream with anonymous memory?
+On Sat, May 9, 2026 at 1:52=E2=80=AFAM Andrew Morton <akpm@linux-foundation=
+.org> wrote:
+>
+> On Fri, 08 May 2026 17:02:44 +0200 Albert Esteve <aesteve@redhat.com> wro=
+te:
+>
+> > Some unit tests intentionally trigger warning backtraces by passing bad
+> > parameters to kernel API functions. Such unit tests typically check the
+> > return value from such calls, not the existence of the warning backtrac=
+e.
+> >
+> > ...
+> >
+> > Solve the problem by providing a means to suppress warning backtraces
+> > originating from the current kthread while executing test code.
+> > Since each KUnit test runs in its own kthread, this effectively scopes
+> > suppression to the test that enabled it, without requiring any
+> > architecture-specific code.
+>
+> Thanks.  AI review has a bunch of questions:
+>         https://sashiko.dev/#/patchset/20260508-kunit_add_support-v9-0-99=
+df7aa880f6@redhat.com
+>
 
-The basic memory protection code for pKVM using anonymous memory is now
-upstream but we still have a tonne to do for CPU state, DMA, firmware
-loading etc. It obviously doesn't preclude support for guest_memfd in
-future and, as you know, Fuad has been actively involved in that
-discussion over the years. It does, however, mean that we'd be offering
-guest_memfd alongside anonymous memory, which matches what we'd have to
-do in Android at this point anyway (given the millions of devices using
-anonymous memory in the field). Of course, if that means we should have
-an additional set of tests, then that's fine.
+Hi! Most look like valid concerns/issues. I will send a new version
+addressing them then, and monitor sashiko to ensure I clear
+everything.
 
-> I thought the inability to protect against page faults in the untrusted
-> kernel was a non-starter?
+Thanks for the link.
 
-We ended up solving that by forcefully reclaiming the target page from
-the guest. So the flow looks something like:
+BR,
+Albert.
 
-1. The host kernel accesses a private (faulting) page via a kernel mapping
-2. An exception is taken to the hypervisor
-3. The hypervisor injects an exception back into the kernel, with
-   sufficient syndrome information to triage it as an access to a private
-   page.
-4. The kernel searches its usual exception handlers (for things like
-   load_unaligned_zeropad())
-5. If no handlers are found, the kernel translates the faulting virtual
-   address into a physical address using the 'AT' instruction and issues
-   a hypercall to forcefully reclaim the page.
-6. The hypervisor unmaps the page from the guest and replaces the guest
-   pte with an immutable "poison" (faulting) entry. If a vCPU later
-   faults on this entry, it returns to userspace with -EFAULT.
-7. The hypervisor clears the unmapped page, maps it back into the host
-   and returns from the hypercall.
-8. The kernel treats the fault as "spurious" and retries the faulting
-   instruction.
-
-If the faulting access in (1) instead came from userspace, the kernel
-injects a SEGV at (4). If the faulting access came from a uaccess
-routine (e.g. copy_from_user()), then the fixup handler would run like
-normal in (4).
-
-Will
