@@ -1,139 +1,107 @@
-Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0435175A66
-	for <linux-kselftest@vger.kernel.org>; Tue, 12 May 2026 00:13:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C1DF1E5207;
+	Tue, 12 May 2026 00:27:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778544799; cv=none; b=L3Hcxt33xzaLrJyqwhY0odckb8xuqIHeMyjx3fX8oG2EkrAceMcaT8z6mHFNxwXbuqkKFIRAktSnR8SBFk0qfUUBVLYmAO6kC4a7N2K3i0h+pfUgFgFL3qdF/o22eIAkLskChoW0Kn/SxWylykZj6NqseqKnhx7wj0dVrSrq8Yc=
+	t=1778545645; cv=none; b=czdQY/bmIp5RVAGs3h1IpHZByDIfnEotY/0ZOp83Bv5bXC5yBEWJFHm+7tre4cDm9uxw4PDUvbmVeBbCvd6Y3YpxHgb0zBTHkEAj0Q3Pa+wJeClFc5hhM97B2tottWMaRsdhwgkVRX4uU7DTw88G4bUEBRtJ14hDVx2wF3Fy5Ts=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778544799; c=relaxed/simple;
-	bh=HSBgfbObOgGU8ldj/hIKoGQPFZw89/D/MCoMiB8hSrM=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=XFGrfB7dgzxDZZkmBGr0HEEfFdZ5qRQlG0jpljiX6hnyA4Y8djJx9rCKKle9KaAERaE1QJ9kvESh7EEMmx3meAT7b13vQl76ieXmjhSCMrKmZEThSMLN4TudcyKsUyD34VVFu5MTmggkP9KKHuSIsjyvgMrpSnhK7iOLvymsU80=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Ozf5Okxa; arc=none smtp.client-ip=209.85.210.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1778545645; c=relaxed/simple;
+	bh=7B6mqILzOafZ5FNuX6Q8RkR6+qHrviQS9ErqUJNiffw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=g4nlzZjVPe8iUpRQm4+SQcgd8nzC/0fJeM0n0ESJPY1FVPton4ewwNUjsOb+K2tqiCYGyAKscnQFgFkk/RH24Ysr8M3u3+594WgihA9SAEClYL/SXzF9yJdH2gXwblbLVnhT1xdH0NTh5lCbZve6fPfB/fOjymB1ZYhaQJ54Dwg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sH7Hh4nl; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Ozf5Okxa"
-Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-8353df9bc7eso4663676b3a.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 17:13:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1778544796; x=1779149596; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=v4JYEVaDRVs+or3txsBOsP9kx9Y7GV2JqrS69eG16uc=;
-        b=Ozf5OkxaZnK3qbCCRRpx1mntF+0CrROwnsD5ZW26cc9z4VA0DEQ/nUtRt0n+z92x1S
-         2GEic0CeQyDkfk+tp8ENN4AUS37jId372A/p2u27Dm2AzICO8JfcWGxzV9Ui2ccKIkJQ
-         XJcSSDJzwnfZC91EC1y0ySuuhpRCvr3agPYiM/uKWb8NVsW2wh7yib7qStIq0BCL3T+1
-         6ngDImOf9OHOwHWeHACCnl67hvkqfMNr5/blHPrGc3Lj+jtfKUxmdnIyz0JbNnNDTJJ2
-         9Hd9GCX1bp9lYRtN19oikgZGKXQ86QfJ8IzC5Q6uGB0bv4xPsKD2+tQ8Y2NJDhw0zeoY
-         7tBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778544796; x=1779149596;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=v4JYEVaDRVs+or3txsBOsP9kx9Y7GV2JqrS69eG16uc=;
-        b=Jj9wYgnro/bst16+aQy2wX0Xo2847g3hmmuw9n4R0deHNckAGDW+nCCZxFWgt2tWVu
-         vPK/cgkK1qlMmJzh6++4Gw337KW/YrhzrEH+PlCgr/qichdmVgKJtyN3RHlAmERVv4Ro
-         N2ITfvEZQBjqenQJoIahrbhKE5rFe/D4ASHAf4koBrnu9LExec3JFxW/QvB9GVZyIZrE
-         hyCBwWHpHQlVbrfbloe0IIW2fLSvB04k1w/vo1e+laJkcmMH3Crz+NBjbqZe22brFwIC
-         K74jvsqXIk3Wq/XehhCD9fb1xxxC5x8tguVWyhL5f5/aOuLuqQGMI2riY9P8eA453uKU
-         ZIFg==
-X-Forwarded-Encrypted: i=1; AFNElJ8PTLz1w2PxctGpvNROuasLplgeKZENplJdOtYHO/qSBZ/I4Qw7Hor4rONTuDW1qtKXtO6D/yKVLzSyXQkukaI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzj7wKD+ivvn5WCFy1HqEuWyp0OPPByhCIGgnG2LzrhVu0GfpUA
-	gDLxawr+SV5hPyG0nPRSUVApSSkUh2zeVXCybyfivmZdflShBxYJhxA3wmL/pa642Qu/dQqDKoy
-	ZJYo/1w==
-X-Received: from pfgu4.prod.google.com ([2002:a05:6a00:984:b0:83b:b70d:c021])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:4c0a:b0:835:3949:3c25
- with SMTP id d2e1a72fcca58-83a5d873e79mr27493326b3a.24.1778544795770; Mon, 11
- May 2026 17:13:15 -0700 (PDT)
-Date: Mon, 11 May 2026 17:13:15 -0700
-In-Reply-To: <20260102142429.896101-9-griffoul@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sH7Hh4nl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9886C2BCB0;
+	Tue, 12 May 2026 00:27:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778545645;
+	bh=7B6mqILzOafZ5FNuX6Q8RkR6+qHrviQS9ErqUJNiffw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=sH7Hh4nlNQNcBDF2/Lr0GjS9v7+FlgRXHLAUZpe5wuVQXX4yb3WZHTjyZ8qelohsx
+	 Plh9lfTKygJbhwTRUFEviUP3chHDprPafvcb9YrjxaNOhLLtYcwyzDoWDznDgdVJYa
+	 mkYp04RZ6u1hpGkzgLeO87UETX+f8hWG5kqQ5DbvikOWZ+1z0YIU9Dur/3xg07w2nW
+	 NxzPlO9Q11WDUwMkbVuuYR2b6BZ9XcuVI0vlUjs1WqHTYdnpkkyKPZdXps206DoZDz
+	 wwmtd+8MxQoSyJnliUj1O7OYkuPeeeGodeeBO0023p5grTkytk32sCOhadWakVeQ+1
+	 Rfq09IyR5YZzA==
+From: Jakub Kicinski <kuba@kernel.org>
+To: ntspring@meta.com
+Cc: Jakub Kicinski <kuba@kernel.org>,
+	netdev@vger.kernel.org,
+	edumazet@google.com,
+	ncardwell@google.com,
+	kuniyu@google.com,
+	davem@davemloft.net,
+	dsahern@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	shuah@kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v4 1/2] tcp: rehash onto different local ECMP path on retransmit timeout
+Date: Mon, 11 May 2026 17:27:19 -0700
+Message-ID: <20260512002719.739807-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260507171319.1259115-2-ntspring@meta.com>
+References: <20260507171319.1259115-2-ntspring@meta.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260102142429.896101-1-griffoul@gmail.com> <20260102142429.896101-9-griffoul@gmail.com>
-Message-ID: <agJwm8Vog6cSkNna@google.com>
-Subject: Re: [PATCH v4 08/10] KVM: x86: Add nested context management
-From: Sean Christopherson <seanjc@google.com>
-To: Fred Griffoul <griffoul@gmail.com>
-Cc: kvm@vger.kernel.org, pbonzini@redhat.com, vkuznets@redhat.com, 
-	shuah@kernel.org, dwmw@amazon.co.uk, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Fred Griffoul <fgriffo@amazon.co.uk>
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Fri, Jan 02, 2026, Fred Griffoul wrote:
-> From: Fred Griffoul <fgriffo@amazon.co.uk>
-> 
-> Add infrastructure to persist nested virtualization state when L2 vCPUs
+This is an AI-generated review of your patch. The human sending this
+email has considered the AI review valid, or at least plausible.
+---
+tcp: rehash onto different local ECMP path on retransmit timeout
 
-Please be more transparent with what exactly is being persisted.
+This commit updates ECMP path selection logic to use the socket's txhash
+on RTO, PLB, and spurious retransmissions by invalidating the cached dst
+and setting fl6->mp_hash for IPv6. It also moves txhash initialization
+earlier in tcp_conn_request().
 
-> are switched on an L1 vCPU or migrated between L1 vCPUs.
-> 
-> The nested context table uses a hash table for fast lookup by nested
-> control block GPA (VMPTR for VMX, VMCB for SVM) and maintains a free
-> list for context management.
->
-> The kvm_nested_context_load() function searches for a context indexed by
-> the target GPA; if not found, it allocates a new context up to the
-> configured maximum. If at capacity, it recycles the oldest context from
-> the free list.
-> 
-> The oversubscription is hardcoded to support up to 8 L2 vCPUs per L1
-> vCPU.
-> 
-> The kvm_nested_context_clear() function moves the context to the free
-> list while keeping it in the hash table for potential reuse.
-> 
-> This allows nested hypervisors to multiplex multiple L2 vCPUs on L1
-> vCPUs without losing cached nested state, significantly improving
-> performance for workloads with frequent L2 context switches.
-> 
-> This patch adds the basic infrastructure. Subsequent patches will add
-> the nested VMX and SVM specific support to populate and utilize the
-> cached nested state.
-> 
-> Signed-off-by: Fred Griffoul <fgriffo@amazon.co.uk>
-> ---
->  arch/x86/include/asm/kvm_host.h |  31 +++++
->  arch/x86/include/uapi/asm/kvm.h |   2 +
->  arch/x86/kvm/Makefile           |   2 +-
->  arch/x86/kvm/nested.c           | 199 ++++++++++++++++++++++++++++++++
->  arch/x86/kvm/x86.c              |   5 +-
->  5 files changed, 237 insertions(+), 2 deletions(-)
+> diff --git a/net/ipv6/inet6_connection_sock.c b/net/ipv6/inet6_connection_sock.c
+> index 37534e1168992..fc4b75de6af8e 100644
+> --- a/net/ipv6/inet6_connection_sock.c
+> +++ b/net/ipv6/inet6_connection_sock.c
 
-Please provide concrete performance numbers.  They need to be isolated from the
-switch to gpcs, and need to show how much benefit is provided for a per-VM hash
-table vs. (much) simpler approaches, e.g. versus a stupid simple per-vCPU LRU
-cache, a la KVM's pgd caching.
+[ ... ]
 
-There also needs to be an analysis of the downsides of the performance gains.
-If I'm putting the pieces together correctly, quoting a snippet from the cover
-letter, the performance benefits come from:
+> @@ -70,6 +73,9 @@ struct dst_entry *inet6_csk_route_socket(struct sock *sk,
+>  	fl6->saddr = np->saddr;
+>  	fl6->flowlabel = np->flow_label;
+>  	IP6_ECN_flow_xmit(sk, fl6->flowlabel);
+> +
+> +	/* >> 1 for 31-bit mp_hash range matching nhc_upper_bound. */
+> +	fl6->mp_hash = sk->sk_txhash >> 1;
+>  	fl6->flowi6_oif = sk->sk_bound_dev_if;
+>  	fl6->flowi6_mark = sk->sk_mark;
+>  	fl6->fl6_sport = inet->inet_sport;
 
-  The pfncache infrastructure maintains persistent mappings as long as the
-  page GPA does not change, eliminating the memremap/memunmap overhead on
-  every VM entry/exit cycle. 
+Does this leave active IPv6 connections and syncookie-created sockets vulnerable
+to spontaneous ECMP path flapping upon natural route invalidation?
 
-Which means that this caching effectively eliminates the security value added by
-removing memory from the kernel's direct map.  If, in the long term, we're
-collectively moving towards guest_memfd (for setups that don't want all of the
-overcommit goodness provided by mm/), then the performance provided by this approach
-is directly at odds with the efforts to remove guest_memfd memory from the direct
-map for added security.
+The patch updates inet6_sk_rebuild_header() and inet6_csk_route_socket() to
+use sk_txhash for ECMP path selection, but it appears to miss two critical
+paths:
 
-E.g. if the ratio of L2:L1 contexts is pushed high enough, it would be possible
-to have the majority of guest memory mapped into the host kernel.
+1. tcp_v6_connect() (active open): fl6.mp_hash is 0 during
+   ip6_dst_lookup_flow(). sk_set_txhash(sk) is called only after the route
+   is cached.
 
-That then raises the question of whether or not we are optimizing the right thing.
-E.g. if we can somehow make map+unmap blazing fast for "all" real world usage that
-matters, then maybe we don't need this type of caching.
+2. cookie_v6_check() (IPv6 syncookies): fl6.mp_hash is 0 during
+   ip6_dst_lookup_flow(), despite treq->txhash having been generated in
+   cookie_tcp_reqsk_alloc().
 
-In general, this needs a _lot_ more justification on the design decisions.  A lot,
-a lot, a _lot_ more.  This is too much code and complexity for me to even start
-reviewing without hard data.
+In both cases, the initial dst is selected via the standard 5-tuple hash,
+but the socket is assigned a random txhash. If the route is later naturally
+invalidated (e.g., via PMTU discovery), the rebuild functions will apply
+sk_txhash >> 1. Because this new hash is uncorrelated with the 5-tuple, the
+connection could unpredictably flap to a different ECMP path, potentially
+breaking connections passing through stateful firewalls/NATs and causing
+severe packet reordering.
+-- 
+pw-bot: cr
