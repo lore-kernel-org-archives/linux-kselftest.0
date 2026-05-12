@@ -1,58 +1,59 @@
 Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86A8B3A960E;
-	Tue, 12 May 2026 05:34:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A34E3D75B0;
+	Tue, 12 May 2026 05:46:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778564053; cv=none; b=WhiOvileTiDFCG52cU4c9pACeAnOyiJ1AGTJ3kENDM6frRVYCiT+4nOsniqmRVlfQxqIEj7c1WAgICZcQWhFQAkiDcvfUVThvJSXqOvFmrdaLv+aqecaTZE0JhR1lpYSjwxqTd4EN3pgnH/Dskpni6g44PoB3Ngis4Rk5O751fs=
+	t=1778564817; cv=none; b=tCluKsops/4j7FtJdCbko/prgsKwkYaQ9xATKFayudMh2hZByHbgj8nPaa07piSBcaVAiV2xvgP63w782hgu6PHqUOAWvhnMdVvxBaHDpQAxt5QxqTwx0Sgkz/zMpaHdp4f+H4ocY70cNZcbErgTLkxWpfN2TEMDM4A0inRcMDg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778564053; c=relaxed/simple;
-	bh=+sxpyDDGu9nFu2c/2FBN4Xccd3UmmwGCXZDmNwI0VQM=;
+	s=arc-20240116; t=1778564817; c=relaxed/simple;
+	bh=6AnKAGe4OHByvTGBgfSnEfgHSd2KvCeI6zo8fGuDK8w=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=oWevByaw3qDLpbJwPuohIYRS6HmGlYUokdRZiDamFkKw8mNIEExXDbGXKhAsv7K4XkVptgt8J6EUwBYxufgWT4pcxtVMYqvjEK+BM6tnLLvIwZfLkqCFbGT4SV4uxp27xJrg34P3bcd//2f9n2/ywMgu9FCMVYdgNhnN1VJ1O2o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=pafqB07e; arc=none smtp.client-ip=90.155.50.34
+	 Content-Type:MIME-Version; b=B2XhooPnwJqbKwGaHudfPqgcFxbo9Mg7jPx92g06vnBbiJyZePLoMEFUkLLzwCavyQY1Fy9VL7QKl49L+Wg6NwUY92JuoD8XmGuPLofnVq/IXRNHGV2kSnEpQRUmj6sKxYzClNkYTJFlF/KbD0AFBTjrORu0sUvhikZ7S+/M0g0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=LXweTyMZ; arc=none smtp.client-ip=90.155.50.34
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="pafqB07e"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="LXweTyMZ"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
 	In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
 	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=0iKo2m2y7ve2NzkGYtq6pN/SCzH79aFLcgWyahFlDP0=; b=pafqB07eAbVvbt/aKBcxrhQGBk
-	hQoAUMJ3cG8a0/ybaRky5nO8RUDObvW0N6FAygtHCWo3WeT/1wG8H8rZXtr7thSBU/h7W2Gwa2XBb
-	OgovU2uxrRpZdr3q1RyZ4AiHZMo+iynPmxyMsGVmj+PyNoo3SDereEwP92lxZyux9beomaZCcrxQx
-	oUJkujOQeTyOy35liWd505tcIHcCLivyLffBUVoA2n7W05ETsgRCDeF4CVmP41JhJj7Bm4DlFt9x/
-	DO5RZTcLohN+rfaGwJ5l9HvaQ5tjJb1U9LW4y1jPMDtaQ8x13TfkHDuWfNF6PVHevb1EbFLXwM/FP
-	glGgWyPQ==;
+	bh=6AnKAGe4OHByvTGBgfSnEfgHSd2KvCeI6zo8fGuDK8w=; b=LXweTyMZ954YRZxZ31WIHDTGZg
+	MppJgNUmQGiCwipQcw5mdsiazPWdROr7Yx2K8DFJW79XEdZY4Uv7hTcOLJ6zGswcSpoTVg9nI8pQG
+	YkDf3Gu0Adp1y0tnrICL8zFmXHb2x6bmuZtPN3NkEE32hlRTTs9lVOUEJjG5P/fceZBwRA8mVQ+n8
+	BmWDQwJs6SSLgHSXVaBzNH4sRu3BjIoliNw1p8PD5DFT0deYBVgqUtQfehv2LlCWtGCnfi6ef6cbx
+	nlERMACHoNyvOyFtnXHC2+sg8b9tGMY0Mi7ZApCnqMyTw64T9Mx3fP4TsQVK9X4WU4wjYFv/fiuyO
+	jS+D4B9Q==;
 Received: from 54-240-197-236.amazon.com ([54.240.197.236] helo=u09cd745991455d.ant.amazon.com)
 	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1wMfkq-00000009DqD-3oKw;
-	Tue, 12 May 2026 05:34:05 +0000
-Message-ID: <82bd3ade27e251ce6bebc03a2c8d12144523cd35.camel@infradead.org>
-Subject: Re: [PATCH 3/5] KVM: x86: account KVM_SET_CLOCK downtime in steal
- time
+	id 1wMfx0-00000009FL5-2mla;
+	Tue, 12 May 2026 05:46:38 +0000
+Message-ID: <4e23483e646d8581416158268cef74f9bfd6eb54.camel@infradead.org>
+Subject: Re: [PATCH 2/5] KVM: x86: Reset vcpu->arch.st.last_steal when
+ enabling steal time
 From: David Woodhouse <dwmw2@infradead.org>
-To: Dongli Zhang <dongli.zhang@oracle.com>, kvm@vger.kernel.org,
- x86@kernel.org,  linux-kselftest@vger.kernel.org
-Cc: seanjc@google.com, pbonzini@redhat.com, vkuznets@redhat.com,
- tglx@kernel.org,  mingo@redhat.com, bp@alien8.de,
- dave.hansen@linux.intel.com, shuah@kernel.org,  peterz@infradead.org,
+To: Dongli Zhang <dongli.zhang@oracle.com>, Sean Christopherson
+	 <seanjc@google.com>
+Cc: kvm@vger.kernel.org, x86@kernel.org, linux-kselftest@vger.kernel.org, 
+ pbonzini@redhat.com, vkuznets@redhat.com, tglx@kernel.org,
+ mingo@redhat.com,  bp@alien8.de, dave.hansen@linux.intel.com,
+ shuah@kernel.org, hpa@zytor.com,  peterz@infradead.org,
  juri.lelli@redhat.com, vincent.guittot@linaro.org, 
  dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
  mgorman@suse.de,  vschneid@redhat.com, kprateek.nayak@amd.com,
- jgross@suse.com, joe.jin@oracle.com,  "H. Peter Anvin" <hpa@zytor.com>
-Date: Tue, 12 May 2026 06:34:03 +0100
-In-Reply-To: <87ac4d82-a121-4666-bfa1-8a279133c683@oracle.com>
+ jgross@suse.com, joe.jin@oracle.com
+Date: Tue, 12 May 2026 06:46:37 +0100
+In-Reply-To: <53a294f2-1812-4ccf-9bc8-c61a93588564@oracle.com>
 References: <20260505003044.78693-1-dongli.zhang@oracle.com>
-	 <20260505003044.78693-4-dongli.zhang@oracle.com>
-	 <09b261dafa3b50d358debe1fb13163703bc6e0a1.camel@infradead.org>
-	 <2C6E66BA-B225-41E7-A1F9-E6B2DAE0B392@zytor.com>
-	 <87691b4969fa963b332b0be209361d6f206f493f.camel@infradead.org>
-	 <87ac4d82-a121-4666-bfa1-8a279133c683@oracle.com>
+	 <20260505003044.78693-3-dongli.zhang@oracle.com>
+	 <af5mbWXpG5ofRdJ2@google.com>
+	 <c5c38b0f7b6ca0da69152698913b0c68e185e5c8.camel@infradead.org>
+	 <2b409be867cbd9b83087203302a86594553050e1.camel@infradead.org>
+	 <53a294f2-1812-4ccf-9bc8-c61a93588564@oracle.com>
 Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-	boundary="=-V++HKpUttkxkxzSpbamd"
+	boundary="=-mgUknryebdIdEqitKJ4J"
 User-Agent: Evolution 3.52.3-0ubuntu1.1 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -63,56 +64,43 @@ MIME-Version: 1.0
 X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 
 
---=-V++HKpUttkxkxzSpbamd
+--=-mgUknryebdIdEqitKJ4J
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, 2026-05-11 at 14:46 -0700, Dongli Zhang wrote:
+On Mon, 2026-05-11 at 14:27 -0700, Dongli Zhang wrote:
 >=20
-> Thank you very much!
+> Thank you very much for reminder! Base on my understanding of source code=
+, the
+> delta between vcpu->arch.st.last_steal and current->sched_info.run_delay =
+(new
+> thread) won't account downtime if we handle it properly in
+> kvm_arch_vcpu_run_pid_change(). I may also add that validation to the sel=
+ftest.
 >=20
-> Based on my understanding, you have two main points:
->=20
-> 1. KVM_CLOCK_REALTIME is not preferred for live migration or live update.
-> Essentially, the only acceptable use of KVM_CLOCK_REALTIME is to adjust
-> guest_TSC. After that, everything should rely on kvm-clock (especially af=
-ter
-> KVM_SET_CLOCK_GUEST).
->=20
-> 2. Regardless of whether TAI or KVM_CLOCK_REALTIME is used to adjust gues=
-t_TSC,
-> the calculation of the steal-time delta should always and exclusively be =
-based
-> on kvm-clock values before and after the adjustment.
->=20
-> Would you mind confirming whether my understanding of your points is corr=
-ect?
 
-Yeah, I think so. Let me rephrase it as:
+Do we ever *initialize* vcpu->arch.st.last_steal to
+current->sched_info.run_delay when a vCPU is created? It looks like if
+we create a vCPU in a long-running thread, it might immediately be
+attributed a bunch of steal time due to run_delay from before it was
+even started?
 
-1. Any comparison with "real time" should be used *only* for migrating
-   the guest TSC to another physical host on live migration. And not on
-   live update (where the offset from the host TSC remains constant).
-   The time nerds will go on about UTC/TAI and leap seconds, but you
-   can mostly ignore them.
+Xen keeps track almost identically, in vcpu->arch.xen.last_steal
+(because it's delta-based, and we can't just share arch.st.last_steal).
+The Xen does *does* initialise its last_steal... but not on vCPU
+creation, only when the runstate is restored :)
 
-2. The KVM clock should be set in terms of the guest TSC, using the
-   KVM_[GS]ET_CLOCK_GUEST ioctl. (Guests without ->use_master_clock
-   will sadly have to use real time for restoring the KVM clock too.)
+On kvm_arch_vcpu_run_pid_change() you probably want to account the
+run_delay on the outgoing pid and *then* set last_steal to the
+run_delay of the new pid, yes?
 
-3. Absolutely everything else should be set in terms of the KVM clock
-   (nanoseconds) or guest TSC (cycles), never with any relation to
-   'real time'.
+Would you mind harmonising this for native and Xen steal time
+processing as you change it, please? They should be (and should remain)
+fairly much identical.
 
-Take a look at the selftest I added for Xen steal time, prompted by
-this. I posted it as [PATCH 33/30] and it's in my kvmclock5 branch,
-collected with a couple of 32-bit build fixes I'll roll into the next
-series along with any other review feedback.
+Thanks.
 
-https://git.infradead.org/?p=3Dusers/dwmw2/linux.git;a=3Dshortlog;h=3Drefs/=
-heads/kvmclock5
-
---=-V++HKpUttkxkxzSpbamd
+--=-mgUknryebdIdEqitKJ4J
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Disposition: attachment; filename="smime.p7s"
 Content-Transfer-Encoding: base64
@@ -191,21 +179,21 @@ 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
-ggE3MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI2MDUxMjA1MzQw
-M1owLwYJKoZIhvcNAQkEMSIEIN+NAeCn9NrX/a4iUQXLRsmlbAbVsiGEFs3d/0BmLe9pMGQGCSsG
+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
-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
+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
 
 
---=-V++HKpUttkxkxzSpbamd--
+--=-mgUknryebdIdEqitKJ4J--
