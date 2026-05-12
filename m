@@ -1,65 +1,66 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 454C43ED132
-	for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 13:36:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 965173ECBF3
+	for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 13:36:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778506586; cv=none; b=NzGVp/gH/zqYZG2CLlUy6E2xuOVlN8cIEb0PljOoRbLqwSTz2F2e4CoEMlKXY/TpV/4UJwQ2ER554859KpSsgNTQ4zFmbAVpC9cPO+ldIvZhyI3e6eNvlwLvxcndDEv32eJ8ZK1IZNgIKOi7ShNrfSk4EVF8z36K01Pso1dooW0=
+	t=1778506594; cv=none; b=P4YWxxprBi+2DOQQJBJ7hoVrk3+rQRv/u5g206eEfuym9eSTeSpJedcGXfu0XtP9zevkuAIKSOQaU8iFjuhWSc+/vMAJYbtJjae1BSYC/UMoY/ATtHSI/Oi4gD00gK0IwZ1tMJ4fP7KjD0tdKO+KE+zc484OqFdFqMztyjCOP9Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778506586; c=relaxed/simple;
-	bh=AI7+PC+wO6PLDRtpdw2bXlws667UYCRwcBeEHIMSovA=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=h3X85HIfzKRCmz5smlh+C7sp9c25qVJUrDL7kpzjqoebygriPMpJC5n8asYNg5LQ5BfIFF9RrzAJVb1AcgwHjOdGUTDLUiVMg1U2Q/uEJ0HoHOPMcs/+RkOpSZROZQ683mvwDasfFfBTa0mHqDUFzYqzAavZSHxz6q8GW3f7RfU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b=HrC2uyz6; arc=none smtp.client-ip=209.85.216.43
+	s=arc-20240116; t=1778506594; c=relaxed/simple;
+	bh=SZNfq+U9n3x985DbHaankrwq6lQqgPLZMKPvxc9aSu0=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=MquJbRUiGmUl2qeEvT/rGniEi+UthlvhRnZEplQdDqalVPMXyPYViRtCKJ3lJh0G2VXNIJdwNf46fQ+Mm8rp0oFKdysdZBzKzku375ohZiWxUjCEbI0VttwTXORrL+uBzf3+O8N72cVEYHnu/Rg0TNv0JoWGYpVENADk5KKUZZg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b=YW7uJepC; arc=none smtp.client-ip=209.85.216.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b="HrC2uyz6"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-3664df32e91so2821798a91.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 06:36:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b="YW7uJepC"
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-3665b67ed66so1772781a91.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 06:36:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=riscstar-com.20251104.gappssmtp.com; s=20251104; t=1778506583; x=1779111383; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+Z29fhkBQbknShosTsnNNQxT5IXOqOhrJTIx7eoQ358=;
-        b=HrC2uyz6M4ftAjkf3RaKqtm7xosMoYcaRoNSA2Ho/WQidy9vLT3CPQw2it2gjR2uc2
-         LqLrJvSkFR9CsDOGytE0aufchCTsU84CnR/jC7xJhDyfMD1i0JIdxpnvhNWm+B6TjzD/
-         39do8w+h6ovm6IbH9noFsTZeW2da6+T6xFZETmcFioOV7TYb0PtkBIv8KBD0T7uTuKgA
-         SVJ/eFWbDUB/q3lLS/FbafH2yU+b0F+bhRCJao8aMaLmPT3sniMYVD/SLDso/dRh39rR
-         IZndLAbNyysk9zecUv+PQg1XDld21I5ebLhXyDQJ0V+UimRdnLTxna/i0OCQVxTSU6cY
-         T2BA==
+        d=riscstar-com.20251104.gappssmtp.com; s=20251104; t=1778506590; x=1779111390; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EOFE3ehNiNk6algJYrLucEv0fxL7pkMWqS8jdXvY7Mk=;
+        b=YW7uJepC/6HjTt+PnLp5QuhbbRgG2pceJi8Hk9FQksPBk8x6kg4+zs4YZt62yhIyWo
+         tJBlOGjY9hin7DEkM5lbwrYMw1uUcIE8Mdw3+T+IpXSDdvUfTjULXatPaUbTx+T4Q6R5
+         5UwxCl83uSXipnZVNoddc+Nt8WuMUBqcwhZW6QCUlKYI1H+AhpuGrvd0T3x8Dc1nGa34
+         ZMP7aNYkL57URmclP+cpkr/7SKgJPwmbSEYvLGHw66O+hKFzPcWoUxfTMm6hwpHbSd9j
+         fW+obcGaaq32x1oQskwKKq0JSAchxiSjN5r090oG1gS/9/KVhhPRqKDioURGlIV16pF9
+         I3aw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778506583; x=1779111383;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+Z29fhkBQbknShosTsnNNQxT5IXOqOhrJTIx7eoQ358=;
-        b=Y5cXoj4LnPB2HOuwDVswliDq0R4KPS36SmbmMORuPL0+pzCnmW5iy5w6A1GU6VX65o
-         hGiFU4D8fHKbFx3NtiEaDE5TNv28LeJYhSOV7HQE+tmuB9qMHCLahGLf5FMvXesKIDV0
-         9p/l6p7k86vDUrjeLDA5e9hVh0S5DgIn4V2PDdISuoxDsr6/6CBX+Ep5dk82CQ53iQWz
-         77LASXtKZ6Krh33ZLsvp/4KBdKvBc0vbrZJpGuj93Rx+2gFPSKNrvQlNOKfPLlSDo3PB
-         8e0vN0+DMmwsiAm777SI3gl8pmrQPQYiThqFTLnHemKwOTEnATV3kvsS8wYg8h6ckxpm
-         DxMg==
-X-Forwarded-Encrypted: i=1; AFNElJ+3+IMBhSy8J/65FWWpASB9Z4lv2L5pEIMPXERrSUqXak3I8ExEIsvR8sVMbftT9qg4qb2kuGOTF+bkIJeOFck=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwfiYbg+7Mgm+G0Oyott9bX2nw2jl5lsvS8tZ1PdgnTdjXfJG4T
-	LN329CNtCI3Ct/M/brbUy3I/fIcBNZO/BIGv+izi5wIF1ujetQTUq9RUUni+MLeOOGs=
-X-Gm-Gg: Acq92OG2C9Q7M+U/rykfg+HVcJzwrEI+Nzzo1A0nDuUjG8P6aBOvFGq9s5gCXQzWZFI
-	xaCOvnHYFIKWLrO3Z5a+MKiDNG2NXywfP2G8N8c00XZ7Xwnx/hQD2VQKTwgL+OAIoEuJ34PSL0o
-	iP8kSwY+Tb47VBK4NMrcRYPigz3v/xyvGEMI4g2qvIDAtMYLKKHYNSW4rZQpgOKJj7cSb1IAnjQ
-	B7POEC4l00AzkpWbojsZPBGpr1sUGfmwS032Zs1HwaV73EPWQ0qcboESnEJr2ijs36K/fq2W9PJ
-	t9flryZdDI9X9iUDhmWskdNyHUnFtk0qx6XX0ReTNLkDoF9moDxD3wpvKWwol9tFBiFqoFrOUK0
-	auZS4iMa+mn9IYtichEePl3d7/Yh+Z6sGiwPNGOWKx61KcgsR0rU3u9qNxNyl1kK3s7gwW5ufOU
-	eX1iM+5v9Z1W+LKePy9i2NSuqhUKRoH+bDy4Ovk2NyGuA=
-X-Received: by 2002:a17:90b:2648:b0:366:479c:59e8 with SMTP id 98e67ed59e1d1-367d46b8be5mr9758495a91.8.1778506583435;
-        Mon, 11 May 2026 06:36:23 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1778506590; x=1779111390;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=EOFE3ehNiNk6algJYrLucEv0fxL7pkMWqS8jdXvY7Mk=;
+        b=h6Br+i67zv0c4zvwKIoeQDowPM/7tH6qBh1NzwE04PvCAiZaH2EXd0DPRERqnRcXvL
+         smkSn0VQ0ePYvjzbxiDMRUZWrKy1HTkvN6kICLJT7qzZ5um2CGeFKbQ1w4SQ25Kk79jF
+         Q84q52i5fLYgvWnt5E5/8gls9OQ6jLQhGZTzOo1vVEyPXd7B/ECtjV6PFHra2vkys7nn
+         PztvpGwCJ915nD7kF0XA91/OeQh3s1n1sERC4qbXxdPtFKHJR5YcwgrRGsHzsCCS+qYl
+         rLR9Ihcy0H1PLd6wqRnhVz9Ju0A4X6zW1e8kIXi9Fhm+VV65ZjABU6LiwiK2ad5Mrxr8
+         s/Vw==
+X-Forwarded-Encrypted: i=1; AFNElJ8jy4ad2N4SRTuRYbI2Mx28OxqM3dX34WwaDUHdQ9wkcnvf1kxFkcYyU0fWI5jO+liA1ThnvuyQB1Gb0xV0O9U=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwsBt0rBy5uTGxVlK9pDvSKZR2awBcjXxWVCeDtkr8VfKcNwka9
+	d7EluWwDxQSWZ21Z/mkC9ElAAHLRO/BU5X3e+u4dLPAAJk+Du5WGFxXBmoaZpIil01c=
+X-Gm-Gg: Acq92OGtYZZVhle1BgXtUi3JJanS+pe068SqCbhoRQXiNIRFiJvbkVLySM2I4JibZLr
+	qvS5Gh/pFWrb75mYW3znCQATQfPl/KTvyMMK7HcNb1nI6LvY9Uzxx5VI6dyOoH+7yqe7bfgcFBA
+	4bES3JZCEIIURnwYhgigASelTFeJXNJfvzo0qUCT5u0FN8juiHAYg3othfXFAFjd1OWikRcTo/r
+	iNBIYvOdviDVBj1GzfR0N+4BWyZjn9pO1UNnue9WSOMk5Zp9opZqcmVus+llJO9Ql6FxkbIZ1Vy
+	Ynd/lJT25TTjR/q2f2s3CcLHUVCcGO0gM4Zaxrb2/iMOdqYNgsiAJDN8CXLHeeaFmoGTlTNWbLJ
+	Gdpkv45und2Gdn8lJrZOzK4Q5th7kUefZK+hYrM3SEwwXA4oTHtcu6j/XzW99zmbIjm33vIuqZv
+	/PPYauQClyNWcLtIEa/k+pPRawCQcRGeo/DF6znuTM7kg=
+X-Received: by 2002:a17:90b:38c2:b0:362:e7e5:a20a with SMTP id 98e67ed59e1d1-367d46c6798mr10065289a91.4.1778506590008;
+        Mon, 11 May 2026 06:36:30 -0700 (PDT)
 Received: from [127.0.1.1] ([2a12:a305:4::30f3])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-367be3daafesm3034326a91.8.2026.05.11.06.36.15
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-367be3daafesm3034326a91.8.2026.05.11.06.36.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 May 2026 06:36:23 -0700 (PDT)
+        Mon, 11 May 2026 06:36:29 -0700 (PDT)
 From: Guodong Xu <guodong@riscstar.com>
-Subject: [PATCH v2 00/10] riscv: hwprobe: Expose RVA23U64 base behavior
-Date: Mon, 11 May 2026 21:34:45 -0400
-Message-Id: <20260511-rva23u64-hwprobe-v2-v2-0-21c5a544f1dc@riscstar.com>
+Date: Mon, 11 May 2026 21:34:46 -0400
+Subject: [PATCH v2 01/10] riscv: hwprobe.rst: Document EXT_ZICFISS
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -68,10 +69,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIALaDAmoC/yXMPQ6DMAxA4asgz1hKzW+5StWBBAPuAMiBtBLi7
- qQwfsN7O3hWYQ9NsoNyEC/zFEFpAm5sp4FRumggQ6UpTI0aWsq2Msfxu+hsGQPhoyNTZU9nbc0
- Qy0W5l991fb1v+81+2K3/FRzHCXxjjPl3AAAA
-X-Change-ID: 20260508-rva23u64-hwprobe-v2-1d20739cbb8e
+Message-Id: <20260511-rva23u64-hwprobe-v2-v2-1-21c5a544f1dc@riscstar.com>
+References: <20260511-rva23u64-hwprobe-v2-v2-0-21c5a544f1dc@riscstar.com>
+In-Reply-To: <20260511-rva23u64-hwprobe-v2-v2-0-21c5a544f1dc@riscstar.com>
 To: Jonathan Corbet <corbet@lwn.net>, Paul Walmsley <pjw@kernel.org>, 
  Palmer Dabbelt <palmer@dabbelt.com>, 
  Conor Dooley <conor.dooley@microchip.com>, 
@@ -85,108 +85,35 @@ Cc: Andrew Jones <andrew.jones@oss.qualcomm.com>,
  Samuel Holland <samuel.holland@sifive.com>, linux-doc@vger.kernel.org, 
  linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, kvm@vger.kernel.org, 
- kvm-riscv@lists.infradead.org, Guodong Xu <guodong@riscstar.com>, 
- Charlie Jenkins <thecharlesjenkins@gmail.com>, 
- Jesse Taube <jesse@rivosinc.com>, Andy Chiu <andybnac@gmail.com>
+ kvm-riscv@lists.infradead.org, Guodong Xu <guodong@riscstar.com>
 X-Mailer: b4 0.15.1
 
-This series builds on Andrew Jones's earlier RFC [1]. It lets
-userspace check for RVA23U64 conformance in one call, instead of
-walking hwprobe + prctl across every mandatory extension.
+Commit 30c3099036a9 ("riscv/hwprobe: add zicfilp / zicfiss
+enumeration in hwprobe") added RISCV_HWPROBE_EXT_ZICFISS as bit 0 of
+RISCV_HWPROBE_KEY_IMA_EXT_1 but did not add a matching entry to
+Documentation/arch/riscv/hwprobe.rst.  Add it now.
 
-The series adds a small framework that resolves profile-class
-bases (IMA and RVA23U64) from the kernel's ISA extension bitmap at
-init time, and surfaces the result through both /proc/cpuinfo and
-hwprobe. Later patches can add RVA23S64, and backward RVA22 / RVA20
-detection, to riscv_set_isa_bases() without changes to the
-surrounding code.
-
-To detect RVA23U64 the kernel first has to recognise every extension
-it mandates, so patches 4-6 bring Zicclsm; Ziccamoa, Ziccif,
-Ziccrse, Za64rs; and B into the cpufeature parser. The framework
-then reads the resulting bitmap, and the final patch exposes the
-RVA23U64 bit through RISCV_HWPROBE_BASE_BEHAVIOR_RVA23U64.
-
-Series outline:
-
-  1-3. hwprobe.rst clean-ups: document EXT_ZICFISS, normalize
-       indentation, and standardize extension capitalization.
-
-   4.  Zicclsm: cpufeature parsing + hwprobe export.
-   5.  Ziccamoa, Ziccif, Ziccrse, Za64rs: cpufeature parsing + hwprobe
-       export, with cpufeature dependency validation for
-       Ziccamoa->Zaamo and Za64rs->Zalrsc.
-   6.  B (hwcap + hwprobe), as the Zba/Zbb/Zbs set.
-
-   7.  riscv_have_user_pmlen(): arch-level accessor for user
-       pointer-masking PMLEN support, used by RVA23U64 detection.
-
-   8.  cpufeature: per-hart and host-wide isa_bases bitmaps,
-       populated at init time. IMA and RVA23U64 detection lives
-       here; /proc/cpuinfo and hwprobe both read from these bitmaps.
-
-   9.  /proc/cpuinfo: print "isa bases" / "hart isa bases" lines
-       sourced from the cached bitmaps.
-
-  10.  hwprobe: expose RVA23U64 via
-       RISCV_HWPROBE_BASE_BEHAVIOR_RVA23U64.
-
-Tested on qemu booted with -cpu rva23s64,sv39=on,pmp=on:
-  - /proc/cpuinfo reports "isa bases : rv64ima rva23u64" on both the
-    aggregated and per-hart lines.
-  - hwprobe RISCV_HWPROBE_KEY_BASE_BEHAVIOR returns
-    BASE_BEHAVIOR_IMA | BASE_BEHAVIOR_RVA23U64.
-
-Based on v7.2-rc2; happy to rebase onto another tree if needed.
-
-Link: https://lore.kernel.org/linux-riscv/20260206002349.96740-1-andrew.jones@oss.qualcomm.com/ [1]
-
-BR,
-Guodong Xu
-
+Fixes: 30c3099036a9 ("riscv/hwprobe: add zicfilp / zicfiss enumeration in hwprobe")
 Signed-off-by: Guodong Xu <guodong@riscstar.com>
 ---
-Andrew Jones (4):
-      riscv: hwprobe.rst: Replace tabs with spaces
-      riscv: Add Ziccamoa, Ziccif, Ziccrse, and Za64rs to cpufeature and hwprobe
-      riscv: Add B to hwcap and hwprobe
-      riscv: Add a getter for user PMLEN support
-
-Charlie Jenkins (1):
-      riscv: Standardize extension capitalization
-
-Guodong Xu (4):
-      riscv: hwprobe.rst: Document EXT_ZICFISS
-      riscv: cpufeature: Introduce ISA bases bitmap and rva23u64 detection
-      riscv: cpu: Output isa bases lines in cpuinfo
-      riscv: hwprobe: Introduce rva23u64 base behavior
-
-Jesse Taube (1):
-      riscv: Add Zicclsm to cpufeature and hwprobe
-
- Documentation/arch/riscv/hwprobe.rst               |  46 +++++-
- arch/riscv/include/asm/cpufeature.h                |  14 ++
- arch/riscv/include/asm/hwcap.h                     |  23 +--
- arch/riscv/include/asm/processor.h                 |   4 +
- arch/riscv/include/asm/switch_to.h                 |   4 +-
- arch/riscv/include/uapi/asm/hwcap.h                |   1 +
- arch/riscv/include/uapi/asm/hwprobe.h              |   9 +-
- arch/riscv/kernel/cpu.c                            |  26 ++++
- arch/riscv/kernel/cpufeature.c                     | 154 ++++++++++++++++++---
- arch/riscv/kernel/process.c                        |  12 ++
- arch/riscv/kernel/sys_hwprobe.c                    |  33 +++--
- arch/riscv/kvm/isa.c                               |  16 +--
- arch/riscv/kvm/main.c                              |   2 +-
- arch/riscv/kvm/vcpu_fp.c                           |  20 +--
- arch/riscv/kvm/vcpu_onereg.c                       |   6 +-
- arch/riscv/kvm/vcpu_vector.c                       |  10 +-
- tools/testing/selftests/riscv/hwprobe/which-cpus.c |   2 +-
- 17 files changed, 312 insertions(+), 70 deletions(-)
+v2: New patch.
 ---
-base-commit: 7fd2df204f342fc17d1a0bfcd474b24232fb0f32
-change-id: 20260508-rva23u64-hwprobe-v2-1d20739cbb8e
+ Documentation/arch/riscv/hwprobe.rst | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Best regards,
---  
-Guodong Xu <guodong@riscstar.com>
+diff --git a/Documentation/arch/riscv/hwprobe.rst b/Documentation/arch/riscv/hwprobe.rst
+index c420a8349bc68..b1a84ac06da75 100644
+--- a/Documentation/arch/riscv/hwprobe.rst
++++ b/Documentation/arch/riscv/hwprobe.rst
+@@ -391,3 +391,7 @@ The following keys are defined:
+ * :c:macro:`RISCV_HWPROBE_KEY_IMA_EXT_1`: A bitmask containing additional
+   extensions that are compatible with the
+   :c:macro:`RISCV_HWPROBE_BASE_BEHAVIOR_IMA`: base system behavior.
++
++  * :c:macro:`RISCV_HWPROBE_EXT_ZICFISS`: The Zicfiss extension is supported,
++       as defined in version 1.0 of the RISC-V Control-flow Integrity (CFI)
++       extensions specification, ratified 2024-07.
+
+-- 
+2.43.0
 
