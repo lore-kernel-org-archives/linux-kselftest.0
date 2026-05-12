@@ -1,122 +1,147 @@
-Received: from mail-vk1-f178.google.com (mail-vk1-f178.google.com [209.85.221.178])
+Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A903A3AF646
-	for <linux-kselftest@vger.kernel.org>; Tue, 12 May 2026 20:24:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.178
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778617501; cv=pass; b=c+gMpGeNxAod/Ccz0WWS0OdjHBSFB0cfUGsQQ/N1qQPlmzTzqjXqGwdT2SFOBFJabdw/8n78pXP33WYURDZ6nxdLvm2i5xQa5jqf83qrArtYlrr2DYAvlmQkRWAflB6BwyAzP2zLV3SP2t7NGVtBgsrB/GUt0PmyjTR1lv7Q1Ms=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778617501; c=relaxed/simple;
-	bh=p1Dt2Pau45+gr9BBZWBbRM+0pqU8mWL0SwtrndPS4cI=;
-	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qBzkY/+YylNEFdWlHxyMT55jiqubOQRxqH9dzcUO/seFCe8+CChgNN1hip827zIH2Xl+iUjcZLY8qBfQoDAzZ9V7JmtH4J9Rzom9sbW4HxY3ndd3urBMEnQ1151vV0Fff3DZzxppj71C/5q0segqtpWZO5ZEEXnl90LDCqOL2Ak=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Ke+HVRC5; arc=pass smtp.client-ip=209.85.221.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAD273B7B76
+	for <linux-kselftest@vger.kernel.org>; Tue, 12 May 2026 20:41:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.173
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778618486; cv=none; b=UPgbMHZVuSvXI2sEK6bekQX0Gs2ztb6paGeot8MVFALyzpNRFMVN16yHgs6SsH0i+oXKHxqKXv19Wdk39beAcYin5vXFKRvBBo5qvBGS0hmViywvwISwrXgb8gTa0DG2I5CRcdolSyX6QPxQhCvQhSEW+Yks/D7sy1bnQg1zsEc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778618486; c=relaxed/simple;
+	bh=i2FMVqoCYm6FiVcFiqxhtfNbdlephUNWQBXqZIy8Ti0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lfAJSwVrOPnsG+Va5d8fhDyBMf5zQ9qt7Bu3DUqqzcn2mIITgtIJio9IQB21afzVAyXXcsjHw1o9iNrZvFi6DXoCLqH32rrjUDVFa54a8qTV3YuqN0ja/IBXSxBiT7Rcd8T3+pnIc8LSZ1pmT3Lzu+WclOJWZF6yKUnIwG6k6ws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=i+AO2G1D; arc=none smtp.client-ip=209.85.222.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Ke+HVRC5"
-Received: by mail-vk1-f178.google.com with SMTP id 71dfb90a1353d-5751136c561so4748850e0c.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 12 May 2026 13:24:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778617499; cv=none;
-        d=google.com; s=arc-20240605;
-        b=fwmdxP3m1TsPuZ4DgWlxo44P3hxrOrFGzzKXjs5hVoJVM7Q2Vkod0Q3A7OnXou3Wqu
-         J4EeO9m5GNuSrHHmJIGFNvDyRwVl9iRzi0uZ/g6zv9Q0JVEd/BH5YYkUiaH7ioBXZqn7
-         8gBqlf+kHl61h0QLz4zoA/OQ9HFdE3QeZpNLf6N5hdD4ygOU0Lp1UHGoEZjiBt/tAtpT
-         VcI8MASTJcX6oM4iTZSDAmJGDQNzV8a9P5Z3bkRyOt4F6r5RKn3DyMiUNtnlBc/Hpy2W
-         Zo6VxpBJq57iE+2pBVnKPsn9EpxN24ZY8N2U0KQPJ34sCyr9eNj5+M0ANH+5bQg3KTZZ
-         WOIw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:dkim-signature;
-        bh=6A32fFSH9OPwjkkpWNRgZBSlRVvMKc+ege6TQRAjjbc=;
-        fh=0TBJDd6EseShvftf+E1Z/8rIn7KmBqDjWTmNfMTVhoE=;
-        b=Rp7bXMoBWqtvGan8ioTC4Smr8odCpIRbaVju9zpIRQPXrAxiqel4bFgQ/RHydToJv1
-         yoQjL2SOFDOsn1m0/Re+GW05A0GwC8TiE4MhyMnCT3/Mlkr2U+aGfAYklza9sjqEDMRE
-         iyc7IAr2cFNEP71eYR76htBNOwonS8yMYqcEzwv8dqFSWBFhiCpQyvR5c/CeUKADQGn6
-         F6Fdp3jHUPCva6DP8hqb4W5NETQDN36hk68O8dxBAxsJdNCIYvDVdJ7u31xgfL2yTv85
-         Y3vU4o/H4KLJKo9Q5QcjFQKTR+eVvJgngMsutklCm59Uu29uidGxR3WPPkXrZfqsqiRx
-         7AFg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="i+AO2G1D"
+Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-8ec37d52c0dso839509385a.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 12 May 2026 13:41:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1778617499; x=1779222299; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=6A32fFSH9OPwjkkpWNRgZBSlRVvMKc+ege6TQRAjjbc=;
-        b=Ke+HVRC5Axson/fPx69NHKv1kMSMzrBpU0e/d8rzsJbl7KnfxHHJQ9SlxHQyvDViHR
-         +11AAD7I1vH2/gOvjo/2wd4kAb58+JYxrHOm+9uFEufz3M5YjiyoEoH9lwE9yuGfPCC6
-         HJ9jgzjz9SMi39dtgoO2zO4CPHYf3arg6EgHlLPeR3MbXRx9wQ73Q1u/jO310MRQMap6
-         L+jcJ392bfxrlA5Vka1/+YRACksqbijC/+jnvxncFnlO+Z4i9Bqr06KBXUACrdUBvSJ0
-         ja6+F3xGmkRERBsdjYrhqUM8K6aqJAyAhD5uojYQ02o4mmST2HrIKBz5F7HSp4rBaTgc
-         RNhA==
+        d=soleen.com; s=google; t=1778618483; x=1779223283; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Sq67mJ1Mle/Wjax+ZhdINyyVrcamDgHQ2bN9yr1Zbf8=;
+        b=i+AO2G1DurT9T8SdPgRWjfiuEHxC8BINqSX13HrZAM9omqGM/c0ALZd0JXFYyBF9vJ
+         OopR44JWA5+nhaPutZSFON5+OjqS81LX+IDNEK8aaoy+LYYEKrrUaQi98Z4o8FCRiwov
+         OSggGR7D7+gmXWVwksSxTHwYSki9oymSwxWztax76ejWgw4yftwxRZK5+0wM3sSD9JuT
+         /w4JctQO97I7Y6NwtRgWyfoMCZ7GR8bXV1438CHL7WYmcTBbfBhNjSVLVYKX02xH0ajY
+         zZFfsEOfotGJzEA0Ip/PcohoLILbF459vkIWyTCwDgLu6DvRGSwNFvDBF43zJE0b8eNS
+         n8jA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778617499; x=1779222299;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6A32fFSH9OPwjkkpWNRgZBSlRVvMKc+ege6TQRAjjbc=;
-        b=GLLPwc9tJrdw5Dxcsj8uXwZ6sz0klyqJ0ixx5iKbP2YPDWGFRfYNOdgNMhCth9r5mK
-         jFdwwNb0QtH1Q07SMSkP7tx3kteBgxa4iYLNwEOTD8yNFiSY5GaIoNLlk4hOJTBC+O9O
-         VUpDyWSmGv1sXDi5ANlenU/4Gp8+jsbsK4hUw/hIWRM9GLKst4v3keKflT/tnosIAupw
-         z1lSVqzRV43oemUWEnhmKbCff4vgag9E0iKZgSnXEKwwDlCkPoR05yoYeJKZkTRu6mAM
-         LS759rCxPx1LkYrRIla2tCujOzxMHHIPxEkYNk8V5nU6lXajDs6sdk3ywGeQ3cgkbFmM
-         K2rw==
-X-Forwarded-Encrypted: i=1; AFNElJ9clL9hef+C4iAA3jNBZkjDbUD+QBgr0OcVYvjLbJQxakBXNJ0idbncukdrRZeSRE2/drKdpFuxtTG+0Znih2Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwPJNv2glZyOa/jj4dinR/e5084MKbd45nXg3EEJgLkTRscPe91
-	QRVfcF/LR2n8iYunrNf7VJgIw92dHXYfX4hn5OMCIGcjdwh6U14LMEyjpu6PoQSRp9kbIb4CTyC
-	vv6Dpxi7F/R6cKk9PcLXVBVpKrSVJQIu8oYzf9YLh
-X-Gm-Gg: Acq92OH2GSUlFLHD6i27HXX9Y/hQ7V8p4NFWVyd5cBTK3fSAayYNHScbLAWEqQZdm4b
-	F4A0eVCwY9gxCebXbWw+1KwIUJcqVVQzlMKzYROORZOr05kWiIkctgQmEVZIdetJabm8otiSyZj
-	wD/F0Rks9ct/RKFe6YSv3nTa13h4ykaz/kWw0PtFv0GCj1/wC24BZe0NfgaG05crsjBPoKnm/Ri
-	oz5n4Yj4uED1L9TAkbP+GIvZUCtSFVAQfbZjsnkuA2+rmhd9buKAxtZQC4fisRtDmWEFpvrm9qg
-	+refFEdaU/e/yHUA6wAi4J8gCzZRZHAR0K0QUCWXZwAVIF80bJJoyg408rEl4DCqXkU6KVgYni/
-	Qqr2Q
-X-Received: by 2002:a05:6122:814:b0:575:9cb5:a87d with SMTP id
- 71dfb90a1353d-575cfc6f98bmr1737434e0c.2.1778617498178; Tue, 12 May 2026
- 13:24:58 -0700 (PDT)
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 12 May 2026 13:24:57 -0700
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 12 May 2026 13:24:57 -0700
-From: Ackerley Tng <ackerleytng@google.com>
-In-Reply-To: <20260511113759.610924-3-tabba@google.com>
-References: <20260511113759.610924-1-tabba@google.com> <20260511113759.610924-3-tabba@google.com>
+        d=1e100.net; s=20251104; t=1778618483; x=1779223283;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Sq67mJ1Mle/Wjax+ZhdINyyVrcamDgHQ2bN9yr1Zbf8=;
+        b=IvM+5EbHPeCPHV7lxhRuCDoQjazsLkuqNwZPYJ2QLmaSAgkwXp7wSrW2tAb+V7KspI
+         gESzJIxMZAdNTItH4ZhGBCmzDzG44Ev7+pYrH+GdwLdtogEaHmxapzzENlM+72xKVDMY
+         hG21Mkh6tJyfDZfuTN7PutK3vmEGXKJbw9uK7toos5aYcCau2ZfttTm6f8c6Wq10HXUm
+         wmkb6Lz5EtXFdE8PkxJ/9aFIHOK/lIHfshw414jm71epc35vSESK8GBUNndSEtHrEh1y
+         bNgZ5U2Ur2pRawkj6Rbloo5Iqq8jqDWDMjCMsLRBLNv04t1XdZ5cFK2KefyDyUdA/TD1
+         DnsA==
+X-Forwarded-Encrypted: i=1; AFNElJ8BD8tL658/CpTL0E9TT7djnJyFGRBRiCyRJYJoXUvdAQv7dqvI7ucl6qBVWvwlTtcP/9TGianbCUDI+og6owk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw40dsHBaTXoRzYB4GdQZT7OaLGUUmGLp3pPUPckl5W1HWy/5Pw
+	bH9XLrzJ7M34/Fnv1DuOtHDax5guku5YKMPijHnlEULFJvxLGiN+iT3A9Dq+p5KqI0A=
+X-Gm-Gg: Acq92OGLzpf0TH/4WQbfShS1PFjdrlA65AlFzSzXYmBOdH/r5GPJjMRwPYCw72o/CV5
+	i8rSQRK7efPP86w5cPXQniCvFYgbUPWPwa5Yg7d4ih6mT50pGaAvTHODYf7wWhcBsoi+pGYT0eY
+	acUTcel9S7/yH7oHDOdV5lud85EC46Lx5vCnXn/EbpTnJ88nS3ONEN7Bmcf2nC1lB8yhNh6Fx9a
+	mJJKhvb5+bkBdcIeu1QS5pVHNY69Hf22g/TZzxxcDMRicNSsHIPlao/YmQyeq9xnW7CbcNBA7kQ
+	1WdkGJRQNlqgtz7hBiNdLHxCyUisvvXn8urGcIkLDT/X0E5OLdffUXeBSqd5J5QiqBhISCrIC8/
+	oseZAsI8ch9gEock4ZOnkgU3HEGqKevM5InlBvksZ5fjwqag5p2kXiJdfUdQywwZWCo8N69KfoH
+	TCWnu6oY5ks1RPfDd4VzOZLh2RnrSitN6fMOLet6lqGrfkjEHcTk4=
+X-Received: by 2002:a05:620a:4593:b0:8da:d152:b7e2 with SMTP id af79cd13be357-90f88f92e19mr94041885a.25.1778618483528;
+        Tue, 12 May 2026 13:41:23 -0700 (PDT)
+Received: from plex ([71.181.43.54])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-90cd7a6c35csm354234285a.42.2026.05.12.13.41.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 May 2026 13:41:23 -0700 (PDT)
+Date: Tue, 12 May 2026 20:41:21 +0000
+From: Pasha Tatashin <pasha.tatashin@soleen.com>
+To: Pratyush Yadav <pratyush@kernel.org>
+Cc: Pasha Tatashin <pasha.tatashin@soleen.com>, 
+	linux-kselftest@vger.kernel.org, rppt@kernel.org, shuah@kernel.org, akpm@linux-foundation.org, 
+	linux-mm@kvack.org, linux-kernel@vger.kernel.org, dmatlack@google.com, 
+	kexec@lists.infradead.org, skhawaja@google.com, graf@amazon.com
+Subject: Re: [PATCH 4/5] selftests/liveupdate: Add stress-sessions kexec test
+Message-ID: <agOQa0aGZMVRlCu2@plex>
+References: <20260414200237.444170-1-pasha.tatashin@soleen.com>
+ <20260414200237.444170-5-pasha.tatashin@soleen.com>
+ <2vxzlddoafel.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Tue, 12 May 2026 13:24:57 -0700
-X-Gm-Features: AVHnY4JAG5WXg_aVbHSnEQMcpSlet0iZdAsV7gUZdzLesUHy1Hns5TF1STKi8r4
-Message-ID: <CAEvNRgHfBqqC1K7enCPX3jqWE0smJ3E0NE=kUPSX7N7g5KQrvg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] KVM: selftests: Fix FD double-close in kvm_vm_release()
-To: Fuad Tabba <tabba@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Sean Christopherson <seanjc@google.com>, Shuah Khan <shuah@kernel.org>
-Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, Will Deacon <will@kernel.org>, 
-	David Matlack <dmatlack@google.com>, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2vxzlddoafel.fsf@kernel.org>
 
-Fuad Tabba <tabba@google.com> writes:
+On 05-12 16:09, Pratyush Yadav wrote:
+> On Tue, Apr 14 2026, Pasha Tatashin wrote:
+> 
+> > Add a new test that creates 2000 LUO sessions before a kexec
+> > reboot and verifies their presence after the reboot. This ensures
+> > that the linked-block serialization mechanism works correctly for
+> > a large number of sessions.
+> >
+> > Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+> > ---
+> > diff --git a/tools/testing/selftests/liveupdate/luo_test_utils.c b/tools/testing/selftests/liveupdate/luo_test_utils.c
+> > index 3c8721c505df..37c330b9bb36 100644
+> > --- a/tools/testing/selftests/liveupdate/luo_test_utils.c
+> > +++ b/tools/testing/selftests/liveupdate/luo_test_utils.c
+> > @@ -20,6 +20,7 @@
+> >  #include <sys/stat.h>
+> >  #include <errno.h>
+> >  #include <stdarg.h>
+> > +#include <sys/resource.h>
+> >  
+> >  #include "luo_test_utils.h"
+> >  
+> > @@ -28,6 +29,30 @@ int luo_open_device(void)
+> >  	return open(LUO_DEVICE, O_RDWR);
+> >  }
+> >  
+> > +void luo_ensure_nofile_limit(long min_limit)
+> 
+> Since you are adding this to luo_test_utils anyway, I think you should
+> do it in patch 3 and use it there too.
 
-I agree that perhaps in this case manually setting up the memslot after
-mmap()-ing anonymous memory is better since it's more explicit about
-what is being tested.
+Done
 
-> kvm_vm_release() closes vmp->fd and vmp->kvm_fd unconditionally, and
-> kvm_vm_free() calls kvm_vm_release() at teardown.  A test that calls
-> kvm_vm_release() and then kvm_vm_free() without a
-> vm_recreate_with_one_vcpu() in between double-closes both FDs.  Since
-> kvm_close() asserts on close() failure, the second close trips
-> TEST_ASSERT and aborts the test, or, if the FD was recycled, silently
-> closes an unrelated file.
->
-
-Never thought about this fd-recycling case, I think this change still
-has value in avoiding the silent closing of some other file.
-
->
-> [...snip...]
->
+> 
+> LGTM otherwise.
+> 
+> > +{
+> > +	struct rlimit hl;
+> > +
+> > +	if (getrlimit(RLIMIT_NOFILE, &hl) < 0)
+> > +		ksft_exit_fail_msg("getrlimit failed: %s\n", strerror(errno));
+> > +
+> > +	if (hl.rlim_cur >= min_limit)
+> > +		return;
+> > +
+> > +	hl.rlim_cur = min_limit;
+> > +	if (hl.rlim_cur > hl.rlim_max)
+> > +		hl.rlim_max = hl.rlim_cur;
+> > +
+> > +	if (setrlimit(RLIMIT_NOFILE, &hl) < 0) {
+> > +		if (errno == EPERM) {
+> > +			ksft_exit_skip("Insufficient privileges to set RLIMIT_NOFILE to %ld\n",
+> > +				       hl.rlim_cur);
+> > +		}
+> > +		ksft_exit_fail_msg("setrlimit to %ld failed: %s\n",
+> > +				   hl.rlim_cur, strerror(errno));
+> > +	}
+> > +}
+> > +
+> >  int luo_create_session(int luo_fd, const char *name)
+> >  {
+> >  	struct liveupdate_ioctl_create_session arg = { .size = sizeof(arg) };
+> 
+> -- 
+> Regards,
+> Pratyush Yadav
