@@ -1,82 +1,56 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0FDA3612ED;
-	Mon, 11 May 2026 23:59:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0919F1FC8;
+	Tue, 12 May 2026 00:08:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778543971; cv=none; b=eD9uZ8VxhWWf8k3svko35IBD8CP7dcQulMQ2DscK4JfdBvnd86gTXyxyyVPvNtxOImY61l5RVb+cQCgb9FV5Z7ZmPZ36Sgzgj1a28Cnl0AlA7+tDDkoWMnvIeuWtGyMoYhP4YNn9CY5jZgEQ2hx0Zdzd+AQEHk+O7lcE/4aiLHI=
+	t=1778544530; cv=none; b=eVFHnh9hm+KKdSh64t4f2xieivhHGxjIbJ54Ib48J9phvbMDKuqmvLEOAw75cRYdGpWXmeNSqUIsGWluyJ2KIow1vIH33cOr73YpHUgTowHj5IMu3rVUNuUEewW637+QsDWFY49960LV4do1Mph67+e+qekzqqQhSt/YYDaM+88=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778543971; c=relaxed/simple;
-	bh=OOezJdOY2CaICsn492imL9pnwELutNX20BeZitAgQiI=;
+	s=arc-20240116; t=1778544530; c=relaxed/simple;
+	bh=X/J3i/4zSRYs2FzjQn82U1t9+W0iDHKOMA9TgEygxro=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Jx1dcypiqcymiHD/nX7vz6//eioi29uDdtFc/AqEvFp0xAs51T8oTgfOYcWmX8c3feywVwNrS/gsUuRa81UM3I7HadhBWbx2oOgTJi6TJo4oNwTG+NRQlrY22Oofjsv3ONZehc1FMeLkGW+KwZ2ryrAsw8r/IcYiEMHrouFs6SI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EQHND40Z; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=lfZ++IZon7SVAsnUqpTD5PmhUacoguxKHJmwOyBdVWE/jj966UKGmpn1HpUFr16I0oml0yYlyfpZ4NmBhqpwz8rIR0veNspRH/OM7arHNNiO4MTjYEROsRhzWm8M6qNfbBoQG9FR5jA7NhWhFrFQrfkLxm6/TfJ1Avz5KvhPOgU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OIjQYCIz; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EQHND40Z"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09714C2BCB0;
-	Mon, 11 May 2026 23:59:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OIjQYCIz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BE2DC2BCB0;
+	Tue, 12 May 2026 00:08:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778543971;
-	bh=OOezJdOY2CaICsn492imL9pnwELutNX20BeZitAgQiI=;
+	s=k20201202; t=1778544529;
+	bh=X/J3i/4zSRYs2FzjQn82U1t9+W0iDHKOMA9TgEygxro=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=EQHND40ZiFWaqBVBpzKZg8hhRxoeA8e7pv9gtIVHIamMk8JoJLZGfPMNFfCXRRhgn
-	 WE0BbYOyLUcAYpKzKoyruoVyHx64HJO+z0d0WVvq5u+qm1cQ0krL3K8+dEwyp8LF3d
-	 t8UjF3HbllDqLDBPGpUc8AOG2KaqcNFWOqXqrapfnLHda/6jRGR7mezS1F9e6C8TS5
-	 ezJswPsl3sGWzU2xcQzE6rfOvuDTlFqMmltTHZh7yoiPMLLOPQhZWVAoZSkg2GvQNe
-	 Tg7AdD/UPlwHUpdOwYW3ZqyepX232dfEAOvFnTN6b1B9c4tlFJqmYSuvxveDqGMgfr
-	 M6MVmdQr/Vqcg==
-Date: Mon, 11 May 2026 16:59:30 -0700
+	b=OIjQYCIzLZ4+2iist5eYnUix5mb+g5c8lFkOiPin8ahoucIg7TP3l5s7oq2xL5h8x
+	 BsME/s170IvEkAcN+Vn0BrNgyE/M2v583cJz2BpwzKht+IdlUSbENtbQOlwHkp6MpG
+	 p9uCZh2C7iGRttjoyagr0XYnBMaBIhc5nF0KOP1WoKa7J1A4pnWv5Nas8cYUZSNlfF
+	 Pumim9o5J8CzTD1PjApjuCXw4qh+R5raYsfC5pZdEzNDbNKIaEGz+YZQYP71mcmUul
+	 J5ibxo8UtRdN0KsCkFItSip7vLlq5+uBiO/KDufi61pMsPx3YO9eDAs1VOCQ4XdOrd
+	 V9o+RO+vs/cVg==
+Date: Mon, 11 May 2026 17:08:48 -0700
 From: Jakub Kicinski <kuba@kernel.org>
-To: =?UTF-8?B?w43DsWlnbw==?= Huguet <ihuguet@redhat.com>
-Cc: =?UTF-8?B?w43DsWlnbw==?= Huguet <ihuguet@riseup.net>, Andrew Lunn
- <andrew+netdev@lunn.ch>, "David S . Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan
- <shuah@kernel.org>, Sabrina Dubroca <sd@queasysnail.net>, Filip Pokryvka
- <fpokryvk@redhat.com>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next 0/5] netdevsim: get link via ethtool, set via
- sysfs
-Message-ID: <20260511165930.14c7b6b9@kernel.org>
-In-Reply-To: <CACT4oucitAa05V11KD0d2mQYc7h1L36zDGumnRYXn6+6XUa=QA@mail.gmail.com>
-References: <20260510164337.7611-1-ihuguet@riseup.net>
-	<20260510095246.5c8f6d0b@kernel.org>
-	<CACT4oucitAa05V11KD0d2mQYc7h1L36zDGumnRYXn6+6XUa=QA@mail.gmail.com>
+To: Breno Leitao <leitao@debian.org>
+Cc: Fernando Fernandez Mancera <fmancera@suse.de>, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, horms@kernel.org, pabeni@redhat.com,
+ edumazet@google.com, dsahern@kernel.org, davem@davemloft.net
+Subject: Re: [PATCH 2/2 net v4] selftests: fib_tests: add temporary IPv6
+ address renewal test
+Message-ID: <20260511170848.756e9347@kernel.org>
+In-Reply-To: <agIKdx3q9ewyhq7r@gmail.com>
+References: <20260511122645.6233-2-fmancera@suse.de>
+	<20260511122645.6233-3-fmancera@suse.de>
+	<agIKdx3q9ewyhq7r@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Mon, 11 May 2026 11:50:32 +0200 =C3=8D=C3=B1igo Huguet wrote:
-> On Sun, May 10, 2026 at 6:52=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> =
-wrote:
-> > Could you please explain your motivation? Feels quite trivial,
-> > so it's not immediately obvious why we need tests.
-> > =20
->=20
-> We use netdevsim for some userspace CI testing here at Red Hat. Specifica=
-lly,
-> There are some tests that require reacting to carrier changes on a device
-> matched by permanent MAC address from userspace. As veths don't have a
-> permanent MAC address, we need netdevsim for this test case.
->=20
-> As you say, it's pretty trivial, but IMHO there's nothing against it, as =
-it
-> will help to resemble better a typical Ethernet device.
->=20
-> Note: we know that there's no guarantee regarding netdevsim's uAPI and we=
-'re
-> ready to adapt for any change, but the truth is that there's no reasonable
-> replacement of netdevsim for these kinds of cases where veth is not enoug=
-h.
+On Mon, 11 May 2026 10:01:00 -0700 Breno Leitao wrote:
+> Should you check for ra6 before the "setup" above?
 
-All code require maintenance. I'm trying to push back on netdevsim use
-across the board. It was essentially a workaround for us not having any
-real HW CI upstream. But that's no longer the case. Well, we still don't
-have any crypto-capable HW :/ I think you'd be better off implementing
-whatever you need in a small OOT module instead adding fake tests
-upstream.
+Not really. AI bots love to complain about this. But "ra6 command
+not found" is as good of a message as the explicit skip, honestly.
+And we don't want writing tests to be too burdensome.
