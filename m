@@ -1,169 +1,112 @@
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
+Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D33B53AB29B
-	for <linux-kselftest@vger.kernel.org>; Tue, 12 May 2026 20:13:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E9483C2797
+	for <linux-kselftest@vger.kernel.org>; Tue, 12 May 2026 20:24:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778616786; cv=none; b=LzPqPfVgT5GiysBGiuDnE6BQdv7y83puMjZrm+iapBlR7hFjh1Z2ip50RujT2xIJmXvTJT9i0EebEyk6vCP9NmJnJjo452x0AXNhhG7cXrAQ9VpMiBvdjc8tygI3hWTBYIJvJL5yrNseLBIlLI9kN4JpAjVpTk3FHIC8Ttkagjo=
+	t=1778617473; cv=none; b=JQry0cIYZkAuVBCpjQzhc8/6JL3HkzduLQMBTfquaMPqKh2o7R9lhEXc4g/4/iJbUbJ4tU3ZxkRA7G35t/pfUF81djemgG8tg8sLOpcia6fg+58X6S7fo2N0bXw6+4QT6XhUjID1rKiict6VnOVvj5mHlW30Z/DRBfLOejp7Ylk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778616786; c=relaxed/simple;
-	bh=VbuSSS++NYVPZ+f4EE021rODkOHPnmVtE4jyTtZ4G6E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZXk7cVv7pURstEtf3rLjBjaq7Ed9O38UozzSd1lVmpxsMaA6WPCqIeg49gb4VmbS068zRokRCJKUdbqPE6dvMkGpTkugIo160G9Y3YOaI1vWbUSKkLh1vuFGCf5pHFpLZFeqlYdyzYzZ/aqQkS7fPjyQ6IiotOSvd2QZHoSf73A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=UwH3NpjQ; arc=none smtp.client-ip=209.85.222.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
+	s=arc-20240116; t=1778617473; c=relaxed/simple;
+	bh=ZuC4aqvAth3//T6/XaDMKe8783spN0RRKAEAwn3cyi8=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=Rh9i8BHfX/FCOwBCQwLCf254OdSGyxU4nG7MBoDpxpOloItKB8iQ9rAQIjgxDM1cffA8yqRPpor7Jizzl0NK3oubDCyg+5DVWSKwV4yTtxc6Z7p3kOaPEcgbnH5qfb12pAiUTcp8yPdYm7f9OR/Mxd/tsy0sKPK4H+9bn6AI810=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gwxvmmEW; arc=none smtp.client-ip=209.85.210.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="UwH3NpjQ"
-Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-8d65f4073bfso816719185a.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 12 May 2026 13:13:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gwxvmmEW"
+Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-8386367b23cso4627443b3a.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 12 May 2026 13:24:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1778616784; x=1779221584; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=DIIRS0CpXrVK8EEE9qFLP9/pCIOhI1EfpJW18IQe0rY=;
-        b=UwH3NpjQVY1Z4wgFbw+hbv/nlKseNSvKIRcvChDMzJMIB/M63tMoAeXUSA6bldrsLu
-         u++b8NyElc1GLwKpew/c594ZEc+MVzHCPLW8nkTjJyTgoiTuZLaw5uRH9Utr0jEtEhSO
-         EHOdeHChT/ZlDBtsEqgBb7uMghrMbwzycxVRgN6HzuqQOJGu2zyUBWym86UXD+2cT79S
-         sWz/W9ZvpcvKt/tqpCrpqRtYK1CB8tvdEVqW0dtZqRJhHR3A8+RrR8AtbaNuiK6VTDP0
-         Kzm2Zhb3/nxinz6jyrqSwmgGmeNhRhRJ0/chHzeFZn3NNAnN5hwvTS7pIx2P9py4NtS9
-         LEqA==
+        d=google.com; s=20251104; t=1778617471; x=1779222271; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=rokOSit4LNm5cJdb1Y3jNPDKg842KRY3HU1fgqtDryg=;
+        b=gwxvmmEWkpugyAXCAmQfUPBKOmn+VlAfqC18V9PyxMc5SHCWn438VP+Iv9uOAKgaTw
+         l2ri6zLHH1uFtqAB//p222/mGQonCFZSr8iIncKz+xO6UjWsRt4VOBjsizAT4TEDq28j
+         7bydaWzJ/yaXGmtZiQlPWktMLaydXwaPeWqOSYEcWaBGe32tcEFlXElM5R2hswbdiZZd
+         0Y/9ae/39n6adsG+YGmXKV8ODiwARS7X6rcObcUjgNfrrSdVzofuK/+jx+OP/g3Ojiok
+         oXKDVp6dnHySwLYJdVkJuxYi1GB9aYdkaJpnDyTTYWtcXntX2rb2xD/wAJwtPXQPo6ij
+         b6lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778616784; x=1779221584;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DIIRS0CpXrVK8EEE9qFLP9/pCIOhI1EfpJW18IQe0rY=;
-        b=Vrx424Y+/CeEDRMu4WTy6qRLZPv0C40qFkqG7Xkky3NKF2Is8IXDfYYN+/DcimTcXs
-         gnrgybGjPJ7jOMU4znJuQ8nGs0Igo5UKwewamxqY3cVGatC01o4Ed0bgI7KKFMgmECuH
-         KuAYSfo8RL2ozVUYLpjZe/FOkb0QRsDvzX5sfMvMaaT2tQ+o/CR2wPFMAqg8tSKVlb9M
-         OXdS7vrn1VSuaiecHUGKbuHIv21JYZZNppXNmdtBybaKCQX0DKUAjzBuodI+/iz9KmWy
-         u/PR5TWjMei4F0vtXTD6Vw/SL3uDHsjWrAkNs7AM0ZBNQxdaTvH6xWgYMGMVFWyYwqhs
-         pCvw==
-X-Forwarded-Encrypted: i=1; AFNElJ+pBFOEcHcAJ/e9MmpxdzwHzOsdKFYYUNAtCIkdayMa5pACHKzsiJoefOSEZ7utHuFuoaqtUH9yFNyxATIlo4M=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzz51SEW/FdNjqLKaCkCJ+lREAxltYpXXfxyiweypbzemiHj8AM
-	X2USRp8VUp0Ij66TBwuIQMSZJiszUBiNUYyDrTlpGN6nQr5SL+XSaPXhk/OYmXa+oew=
-X-Gm-Gg: Acq92OHE48/FfQvnZjxvPWU8xyx4v8xs1K29GZefhm5CrJM3t2cTHbA9Mihe8dyzLtK
-	3aVc7ndDJzq8xwHd6u+ujmxOQAmtxiNy4A9ID9nCXkpoPWzO2X46DUjMiZ4MaAL9wRhP3Y4mt1O
-	AleHHI2EVUwLZVIxgOfx7ETPdSQSUBlvly8rrxQ1l80GkBn+JdGHW8jQJy1OHf9SftyMOenGQnm
-	zT4ioocT1Tki7pQlk2Vcz4ost4QTBYblIAuzq7HjWo7G1Ws/qtF57XJWHNG96AGz31WKgwFtZUw
-	TyibcjTeCrBPYFkIoqV1TYDrBQ1jxVVQRjKwVab4FCiiM+UqHUD7mDjologP882k66clhTuRzZG
-	9J35km4i3U2L8Fxb1TCbPgARnxOEnlagcXVDP8nEzUj5WjoUe0Kpr8THxQdkoE6szdHar/ul+T6
-	sYAesHoxZjGYW9YIio8xH+OIhvKMtaQ1GqZLjJ6C+FKboiyeSuWJc=
-X-Received: by 2002:a05:622a:92:b0:514:9ece:a15a with SMTP id d75a77b69052e-5162f5fedb6mr2218391cf.45.1778616783708;
-        Tue, 12 May 2026 13:13:03 -0700 (PDT)
-Received: from plex ([71.181.43.54])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-5148e675b9csm125582881cf.11.2026.05.12.13.13.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 May 2026 13:13:03 -0700 (PDT)
-Date: Tue, 12 May 2026 20:13:02 +0000
-From: Pasha Tatashin <pasha.tatashin@soleen.com>
-To: Pratyush Yadav <pratyush@kernel.org>
-Cc: Pasha Tatashin <pasha.tatashin@soleen.com>, 
-	linux-kselftest@vger.kernel.org, rppt@kernel.org, shuah@kernel.org, akpm@linux-foundation.org, 
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org, dmatlack@google.com, 
-	kexec@lists.infradead.org, skhawaja@google.com, graf@amazon.com
-Subject: Re: [PATCH 3/5] selftests/liveupdate: Test session and file limit
- removal
-Message-ID: <agOJui6EOiJR3cgn@plex>
-References: <20260414200237.444170-1-pasha.tatashin@soleen.com>
- <20260414200237.444170-4-pasha.tatashin@soleen.com>
- <2vxzse7wafmo.fsf@kernel.org>
+        d=1e100.net; s=20251104; t=1778617471; x=1779222271;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rokOSit4LNm5cJdb1Y3jNPDKg842KRY3HU1fgqtDryg=;
+        b=sa9bxhqcDexdo8AmYVLZ+e+h6aJfLCg1vZqQIpGyyRJkFDR3QgiwtI3lSQYvJZnofA
+         KU3xC/mek13i8U4zma6by7ylarYKOMEI4fmVtxd5UMjd5H5psVqogA6dqwhOTH5VfMc+
+         SZUZfcArLv6K9td6NO94Osn/n8+q0Bq8nMz2YHA0ncAzIWCTxk7RtthTuzhTLPgbmEap
+         f3kCL73MOWmGRkrQVfAoNTfFlmimpn+hoqo1Bx1HawQCOn2ihWrCwB/Fd8H3asCKSlrO
+         VXu8J0LAbJpzzakDbikC2+SugdGe0tIcsl9k9Zj9VNtZNWrb+rVufatVkc+f/vFJq/Hr
+         FOIw==
+X-Forwarded-Encrypted: i=1; AFNElJ8K95wOcj7hY5PdZCuW652Pgd3Ig+yZtK8Zp+qzfQscGzdfHOELBUhxs8hrRobcKd9bvKdbGcMSz7nnO9b8q2c=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyLqs91n6s6rxIRSn44LPAWppg+5pYb+xOM/Nk8trUfPWkzXtUI
+	JtZAyMBx+CPTcdfX5UTOeQxpcRKspt5exQXsQWHeMeM4i5O9P9GnfWKfmOIy/MJHu2y/Ugvuf0R
+	4IY7mVQ==
+X-Received: from pfdc18.prod.google.com ([2002:aa7:8c12:0:b0:834:df9e:8e02])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:e1a:b0:82a:7893:e14b
+ with SMTP id d2e1a72fcca58-83f042bf9c8mr170703b3a.38.1778617471299; Tue, 12
+ May 2026 13:24:31 -0700 (PDT)
+Date: Tue, 12 May 2026 13:24:30 -0700
+In-Reply-To: <20260414-selftest-global-metadata-v1-0-fd223922bc57@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2vxzse7wafmo.fsf@kernel.org>
+Mime-Version: 1.0
+References: <20260414-selftest-global-metadata-v1-0-fd223922bc57@google.com>
+Message-ID: <agOMfpW2Xxpzk-D5@google.com>
+Subject: Re: [PATCH RFC 0/4] selftests: harness: Provide global metadata
+ pointer to allow clean teardown from selftest libraries
+From: Sean Christopherson <seanjc@google.com>
+To: Ackerley Tng <ackerleytng@google.com>
+Cc: Kees Cook <kees@kernel.org>, Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>, 
+	Shuah Khan <shuah@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, thomas.weissschuh@linutronix.de, 
+	linux@weissschuh.net, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, kvm@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-On 05-12 16:04, Pratyush Yadav wrote:
-> On Tue, Apr 14 2026, Pasha Tatashin wrote:
-> 
-> > With the removal of static limits on the number of sessions and files per
-> > session, the orchestrator now uses dynamic allocation.
-> >
-> > Add new test cases to verify that the system can handle a large number of
-> > sessions and files. These tests ensure that the dynamic block allocation
-> > and reuse logic for session metadata and outgoing files work correctly
-> > beyond the previous static limits.
-> >
-> > Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
-> > ---
-> >  .../testing/selftests/liveupdate/liveupdate.c | 99 +++++++++++++++++++
-> >  1 file changed, 99 insertions(+)
-> >
-> > diff --git a/tools/testing/selftests/liveupdate/liveupdate.c b/tools/testing/selftests/liveupdate/liveupdate.c
-> > index 37c808fbe1e9..0eaf97b19267 100644
-> > --- a/tools/testing/selftests/liveupdate/liveupdate.c
-> > +++ b/tools/testing/selftests/liveupdate/liveupdate.c
-> > @@ -22,6 +22,7 @@
-> >  #include <fcntl.h>
-> >  #include <string.h>
-> >  #include <sys/ioctl.h>
-> > +#include <sys/resource.h>
-> >  #include <unistd.h>
-> >  
-> >  #include <linux/liveupdate.h>
-> > @@ -386,4 +387,102 @@ TEST_F(liveupdate_device, prevent_double_preservation)
-> >  	ASSERT_EQ(close(session_fd2), 0);
-> >  }
-> >  
-> > +static void ensure_nofile_limit(struct __test_metadata *_metadata,
-> > +				long min_limit)
-> > +{
-> > +	struct rlimit hl;
-> > +
-> > +	if (getrlimit(RLIMIT_NOFILE, &hl) < 0)
-> > +		ksft_exit_fail_msg("getrlimit failed: %s\n", strerror(errno));
-> > +
-> > +	if (hl.rlim_cur >= min_limit)
-> > +		return;
-> > +
-> > +	hl.rlim_cur = min_limit;
-> > +	if (hl.rlim_cur > hl.rlim_max)
-> > +		hl.rlim_max = hl.rlim_cur;
-> > +
-> > +	if (setrlimit(RLIMIT_NOFILE, &hl) < 0) {
-> > +		if (errno == EPERM) {
-> > +			SKIP(return, "Insufficient privileges to set RLIMIT_NOFILE to %ld",
-> > +			     hl.rlim_cur);
-> > +		}
-> > +		ksft_exit_fail_msg("setrlimit to %ld failed: %s\n",
-> > +				   hl.rlim_cur, strerror(errno));
-> > +	}
-> > +}
-> > +
-> > +/*
-> > + * Test Case: Manage Many Sessions
-> > + *
-> > + * Verifies that a large number of sessions can be created and then
-> > + * destroyed during normal system operation. This specifically tests the
-> > + * dynamic block allocation and reuse logic for session metadata management
-> > + * without preserving any files.
-> > + */
-> > +TEST_F(liveupdate_device, preserve_many_sessions)
-> > +{
-> > +#define MANY_SESSIONS 2000
-> > +	int session_fds[MANY_SESSIONS];
-> > +	int i;
-> > +
-> > +	self->fd1 = open(LIVEUPDATE_DEV, O_RDWR);
-> > +	if (self->fd1 < 0 && errno == ENOENT)
-> > +		SKIP(return, "%s does not exist", LIVEUPDATE_DEV);
-> > +	ASSERT_GE(self->fd1, 0);
-> > +
-> > +	ensure_nofile_limit(_metadata, MANY_SESSIONS + 10);
-> > +	if (_metadata->exit_code == KSFT_SKIP)
-> > +		return;
-> 
-> Nit: This is strange. Why not just return errno in ensure_nofile_limit()
-> and handle the skipping here? Same below.
-> 
-> LGTM otherwise.
+On Tue, Apr 14, 2026, Ackerley Tng wrote:
+> Sean suggested using setjmp and longjmp [1] to back to the top level
+> TEST_F(). I looked at [1] and found myself wishing to use TEST_F() the from
+> kselftest harness directly.
 
-Good suggestion. Done.
+Can you elaborate?  If you have a need for direct TEST_F() in KVM selftests, odds
+are good someone/something else will have a similar need, sooner or later.
 
+> Also, setjmp/longjmp felt like it was introducing state that could be messed
+> up easily.
+
+Meh, same goes for the kselftests_harness.h.  I can point you at a half dozen
+bugs where enhancements to the core framework wreaked havoc for unsuspecting
+subsystems.  I'm not trying to throw shade at the harness; there's a _lot_ of
+goodness in there.  My point is that doing complex things that impact a huge
+variety of downstream users is going to have many sharp edges, regardless of
+where the complexity resides.
+
+I'm not wedded to setjmp/longjmp by any means, but for me this isn't a compelling
+argument against the approach. 
+
+> I also found recent work that removed setjmp/longjmp from kselftest harness
+> [2].
+
+KVM selftests don't support building with nolibc.
+
+> The kselftests harness is running tests sequentially anyway, and the
+> function pointers in _metadata wouldn't be changing all that often in most
+> selftests.
+> 
+> Would maintainers be open to having the kselftest harness expose a pointer
+> to the metadata globally?
+>
+> Another option would be to expose the current teardown function pointer
+> globally instead of the pointer to the entire metadata struct.
+
+I'm strongly opposed to any idea effectively requires special casing KVM selftests
+in the common harness.  In my experience, the common harness is already quite
+brittle, in large part because there is no singular maintainer(s) that is responsible
+for ensuring changes work for all downstream users.  Adding odd bits of code that
+is only ever used by a handful of KVM selftests is only going to increase the
+probability that that code is broken.
