@@ -1,108 +1,143 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54961392829;
-	Tue, 12 May 2026 08:51:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 422C638A702
+	for <linux-kselftest@vger.kernel.org>; Tue, 12 May 2026 08:57:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778575885; cv=none; b=AfEthh0db28xeLBHK1oYREWvwB66jBjyakufVFh8GtXR0+Mi8cjgEwkd2vzwtfOvMtbGfOG6U3Nw7cH6VQokxEiraOii900lSV72kAmdshQ9jh1zhQrWYTLhZ4/NUMeC+poF0YNXlglq4IdukrDPB+PKxMqjmn0Zgl7WELeBeoA=
+	t=1778576231; cv=none; b=d2KyodoYjuGu8g6nanmfApIns6dtKjwqxIVHU6oUjrmx7b61zClrRRnRdgBa/i5rapLH5TeIDT7TkDeQNVmGzddFwoWmncRoo0Pz9b1KJ0JeGuqS6p5/VkLRpCvizEiVM0FPJmcjGqiaZLQFLrB0tlSGiznzoMJJ1iCt0Fl2ARw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778575885; c=relaxed/simple;
-	bh=Wt32r9HqTnmChyHNUvyBHP0cnR5+BSMvmBHSczvrJoc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=StqXp7FxXpFY0/LnprFnqSDphyOiPAOkuXqY6GnoZQ86Ct5xu1VmqM93r4FqM2VdT1CK86WzpNEzv6HJ7PX9wDQZB1hHHJe2Qq2u4SHZJp60WRyOq/x1dQ2xiaOQLSuckz+WGQUFx4sIeWy/I/BJ0dgSqfsdO9sjWeiVS33TEPo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gpVwbLMw; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778576231; c=relaxed/simple;
+	bh=Rlk7APYLUhRDFXVDwVWk3a09kszEYGfYDGOrXzHLDbI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TG55DfedWH5eMkQAAuui2UumN9+sSzT0bS8mL4OnggGQBROf4F80hFEelRwPcTQcVmzJrFY9v20fbrFlkt1ddHFPpKYzUCvJVTShyDc2nMYu5WiBuClZNOyFlG0cHajm30ykGFEvQxCSgo5ZdoLnXxBUvDDbBdKvNr0vjox+hSs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=jzUXdEt6; arc=none smtp.client-ip=95.215.58.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gpVwbLMw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7B5CC2BCB0;
-	Tue, 12 May 2026 08:51:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778575884;
-	bh=Wt32r9HqTnmChyHNUvyBHP0cnR5+BSMvmBHSczvrJoc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gpVwbLMwNfdLpdSY7fNpWhpdW/X5XTGl0Oeb8wUNbwBSpkUthjBoWYQeNh48cWMZ5
-	 goDoE0i3QnfiRzR+2MJq6c0MQIWWK3xM7ROSMekRm12lBmvaXyE43pZih47ptZ9R+S
-	 PDdULsdVV7kwx9lNWNz5zMgwdTBQHdY/5cmqr1BjPvxXIiMDyqNd/Mq1PXlbAx0MfV
-	 Mk6uHGyhGluXCTdftSM1NPR5c7VN+aW/QekePdpHiEHsmHReAbVmshmE/Jj5WmkffZ
-	 rxnDddH520MD51johZ9H444ms3wVVgMAIy039yiMXyqYoznak8DKUlwQJieJM4ablg
-	 tUzJyKrgr7+5w==
-Date: Tue, 12 May 2026 11:51:18 +0300
-From: Leon Romanovsky <leon@kernel.org>
-To: Paul Moore <paul@paul-moore.com>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>,
-	Roberto Sassu <roberto.sassu@huaweicloud.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Matt Bobrowski <mattbobrowski@google.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Saeed Mahameed <saeedm@nvidia.com>,
-	Itay Avraham <itayavr@nvidia.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-rdma@vger.kernel.org, Chiara Meiohas <cmeiohas@nvidia.com>,
-	Maher Sanalla <msanalla@nvidia.com>,
-	linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v2 0/4] Firmware LSM hook
-Message-ID: <20260512085118.GP15586@unreal>
-References: <20260413231920.GS3694781@ziepe.ca>
- <CAHC9VhTLamfe4C81ZNRVT=H32x+KLxSqH3o0eBfrHsWAgAqxCA@mail.gmail.com>
- <20260415134705.GG2577880@ziepe.ca>
- <CAHC9VhSECYihup=tURo_Qk__xUdYYPkHgnz5CWA0BrRAkvwbog@mail.gmail.com>
- <20260417191749.GK2577880@ziepe.ca>
- <CAHC9VhQbpS9XpO6dWu7gOiX=ppjtAxnNBOFe6s5wjEZNpMRjgw@mail.gmail.com>
- <20260424143603.GB3611611@ziepe.ca>
- <CAHC9VhR++21SD+v4Bb16SQmYHgJYZ0ytQ+BecGPNK+fEOe4G7g@mail.gmail.com>
- <20260424221310.GA804026@ziepe.ca>
- <CAHC9VhTsx6cpKMP8nVgK4F=drXTFJtK3_D9k9pmKr56+ZFUu9w@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="jzUXdEt6"
+Message-ID: <4e1d29b5-38d5-4419-9f2b-1b421486ab46@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1778576218;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5i+1kkpA2Ee08JGHavIhKppUEEy/+Cg51zFy81CfIe4=;
+	b=jzUXdEt6zqwwYcBlI0smv5otUDttm+oRSftGru12EDpf9GHYcMnaCjaWY7NoJvJFVaCbQR
+	8JciHSfsAVzhs7nt7D0uKPRmYLJlMPaM5q/JJi7zyXuSdxLqrn44JwkgroMSjrTN39S40P
+	Lw0RKjANJxPjuWB8OBXjP/YbBoN97UI=
+Date: Tue, 12 May 2026 16:55:59 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Subject: Re: [PATCH RESEND bpf-next v10 1/8] bpf: refactor __bpf_list_del to
+ take list node pointer
+To: bot+bpf-ci@kernel.org
+Cc: bpf@vger.kernel.org, ast@kernel.org, corbet@lwn.net,
+ martin.lau@linux.dev, daniel@iogearbox.net, andrii@kernel.org,
+ eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
+ john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
+ haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
+ chengkaitao@kylinos.cn, skhan@linuxfoundation.org, memxor@gmail.com,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, vmalik@redhat.com,
+ linux-kselftest@vger.kernel.org, martin.lau@kernel.org, clm@meta.com,
+ ihor.solodrai@linux.dev
+References: <20260512055919.95716-2-kaitao.cheng@linux.dev>
+ <6eb07d559a41965a3a9b186b4c28c0942cf1bfb982d539b92c76c27b08db0b04@mail.kernel.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Kaitao Cheng <kaitao.cheng@linux.dev>
+In-Reply-To: <6eb07d559a41965a3a9b186b4c28c0942cf1bfb982d539b92c76c27b08db0b04@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHC9VhTsx6cpKMP8nVgK4F=drXTFJtK3_D9k9pmKr56+ZFUu9w@mail.gmail.com>
+X-Migadu-Flow: FLOW_OUT
 
-On Mon, May 04, 2026 at 06:33:45PM -0400, Paul Moore wrote:
-> On Fri, Apr 24, 2026 at 6:13 PM Jason Gunthorpe <jgg@ziepe.ca> wrote:
-> >
-> > ... I wonder if we are even speaking the same language.
+I have clarified this issue in the [PATCH bpf-next v10 1/8] patch,
+with the link provided below:
+
+https://lore.kernel.org/bpf/e908cd1a-a0ee-49b1-8528-c455bbd4c432@linux.dev/
+
+在 2026/5/12 14:41, bot+bpf-ci@kernel.org 写道:
+>> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+>> index baa12b24bb64..9cd7b028592c 100644
+>> --- a/kernel/bpf/helpers.c
+>> +++ b/kernel/bpf/helpers.c
+>> @@ -2550,22 +2550,24 @@ __bpf_kfunc int bpf_list_push_back_impl(struct bpf_list_head *head,
+>>  	return bpf_list_push_back(head, node, meta__ign, off);
+>>  }
+>>
+>> -static struct bpf_list_node *__bpf_list_del(struct bpf_list_head *head, bool tail)
+>> +static struct bpf_list_node *__bpf_list_del(struct bpf_list_head *head,
+>> +					    struct list_head *n)
+>>  {
+>> -	struct list_head *n, *h = (void *)head;
+>> +	struct list_head *h = (void *)head;
+>>  	struct bpf_list_node_kern *node;
+>>
+>>  	/* If list_head was 0-initialized by map, bpf_obj_init_field wasn't
+>>  	 * called on its fields, so init here
+>>  	 */
+>> -	if (unlikely(!h->next))
+>> +	if (unlikely(!h->next)) {
+>>  		INIT_LIST_HEAD(h);
+>> +		return NULL;
+>> +	}
+>>  	if (list_empty(h))
+>>  		return NULL;
+>>
+>> -	n = tail ? h->prev : h->next;
+>>  	node = container_of(n, struct bpf_list_node_kern, list_head);
+>> -	if (WARN_ON_ONCE(READ_ONCE(node->owner) != head))
+>> +	if (unlikely(READ_ONCE(node->owner) != head))
+>>  		return NULL;
+>>
+>>  	list_del_init(n);
+>> @@ -2575,12 +2577,16 @@ static struct bpf_list_node *__bpf_list_del(struct bpf_list_head *head, bool tai
+>>
+>>  __bpf_kfunc struct bpf_list_node *bpf_list_pop_front(struct bpf_list_head *head)
+>>  {
+>> -	return __bpf_list_del(head, false);
+>> +	struct list_head *h = (void *)head;
+>> +
+>> +	return __bpf_list_del(head, h->next);
+>>  }
 > 
-> Let's reset the conversation.
+> The new code reads h->next before __bpf_list_del checks if the list is
+> initialized. If the list is uninitialized (h->next is NULL), a NULL pointer
+> is passed to __bpf_list_del.
 > 
-> As I understand it, based on our discussion in this thread and Leon's
-> previous patchsets, the basic idea is to enable LSMs to enforce access
-> control over fwctl requests/commands sent from userspace.  I'm going
-> to start with that as a basis.
-
-Yes, we proposed two users: FWCTL and RDMA DevX. Both are relevant, but
-FWCTL is the higher priority.
-
+> While __bpf_list_del eventually initializes the list and returns NULL without
+> dereferencing the NULL pointer, this is counterintuitive - passing a
+> potentially garbage value that is later ignored.
 > 
-> Using the kernel's docs on fwctl, the userspace API appears to consist
-> mostly of ioctls with some basic sysfs interfaces.  It looks like we
-> can mostly ignore the sysfs interface and focus on the ioctl side of
-> the API, do you agree?
-
-Yes, all FW commands are routed through ioctls.
-
+> Can you move the initialization check into the top-level kfuncs
+> (bpf_list_pop_front and bpf_list_pop_back) to ensure the list_head passed to
+> __bpf_list_del is always valid? You could initialize the list and return NULL
+> in that case - we know it's empty.
 > 
-> https://docs.kernel.org/userspace-api/fwctl/fwctl.html
+> This concern was raised by Emil Tsalapatis in v8:
+> https://lore.kernel.org/bpf/DH6W7K2SLPYB.PCO7FQ6CR1YZ@etsalapatis.com/
 > 
-> While normally I would suggest simply using the existing
-> security_file_ioctl() hook, Leon previously mentioned that the hook is
-> too early for fwctl as the userspace copy happens much later.
+>>
+>>  __bpf_kfunc struct bpf_list_node *bpf_list_pop_back(struct bpf_list_head *head)
+>>  {
+>> -	return __bpf_list_del(head, true);
+>> +	struct list_head *h = (void *)head;
+>> +
+>> +	return __bpf_list_del(head, h->prev);
+>>  }
+> 
+> 
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> 
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25716874656
 
-I talked about general verbs interface in RDMA.
-
+-- 
 Thanks
+Kaitao Cheng
+
