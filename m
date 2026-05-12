@@ -1,117 +1,107 @@
-Received: from canpmsgout07.his.huawei.com (canpmsgout07.his.huawei.com [113.46.200.222])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B7F1374E60;
-	Tue, 12 May 2026 02:49:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.222
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA9021FC8;
+	Tue, 12 May 2026 03:05:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778554171; cv=none; b=CwrfCM+G5kiXhvqFA1aH+ATsKucBxju+b8Gt3w7sW6XQQJia0pOv6zutAcIJP1rZ1qJ2jcmz4roN1RBI2GaF7qPZmkuAv4SxAzyTRSTmvBlptoF6iBmmAQJrfU5PAzfjQUzO3HpRxnoTZipPdxV8xaHX5hw+TOy1TjQ7s+Uo850=
+	t=1778555160; cv=none; b=gTVxKJU06sgrWd+fUtaNHIU+VGSUvliWkQvVaLINu8jSZ08WmYYmU491Uk+nJe4fSb0QtC+wblY9wg+Qhj3brLlPXg8dvIWB0b+QyuKpGhJybTR8fXX23IWwLcrOWDZBD/OjnwZUNhGVVJKsTV2HWVwL9xVXZDpPFehzZt6jj5I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778554171; c=relaxed/simple;
-	bh=4gjtDJdA4sG345Fy+X9zoD4KCWxH3m8P70O52eAN5hM=;
-	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=qrr8WiW5qUMTWiYtr9pUNnqQvFBukEyRw9k68pl1yJVbVYmy0fUqEsimwvZBUoai7GDS54/PIXfTVz1r7hK7aetUOi7lyP78SoySiCvFvbM+ugCWzJULYfEiPVAEpjUjdu5RUppW+QJFpUdBuCX2iZyvzSwJlPt7MymlToFtQ0c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=SVv0YpU1; arc=none smtp.client-ip=113.46.200.222
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="SVv0YpU1"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=Xme2/5b6VlXBlC6AhlZIW7AoCuhJqHRlKXDBQI9tCDs=;
-	b=SVv0YpU1mMlIj9xDev6lT+4U3unfM+VhRMdSD7QlkA/CW7DvlkE/2kllq4BdBsbuy21pZz9Wx
-	thLKKLSSRL9OZ0PlK7DeyB9/mOCXbO4dsAzzbbTq+pjCEf7SUW0gUFHeOPEkEMx5BBRx8MoQs0E
-	8F1DbwYaNohofOyeqjU7c1s=
-Received: from mail.maildlp.com (unknown [172.19.163.200])
-	by canpmsgout07.his.huawei.com (SkyGuard) with ESMTPS id 4gF17x0Y2GzM42v;
-	Tue, 12 May 2026 10:41:49 +0800 (CST)
-Received: from kwepemk200017.china.huawei.com (unknown [7.202.194.83])
-	by mail.maildlp.com (Postfix) with ESMTPS id E62864055B;
-	Tue, 12 May 2026 10:49:24 +0800 (CST)
-Received: from [10.174.178.219] (10.174.178.219) by
- kwepemk200017.china.huawei.com (7.202.194.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Tue, 12 May 2026 10:49:23 +0800
-Subject: Re: [PATCH] KVM: arm64: Add memslot for ST_GPA_BASE in
- check_steal_time_uapi()
-To: Mark Brown <broonie@kernel.org>
-CC: Paolo Bonzini <pbonzini@redhat.com>, Anup Patel <anup@brainfault.org>,
-	Atish Patra <atish.patra@linux.dev>, Marc Zyngier <maz@kernel.org>, Oliver
- Upton <oupton@kernel.org>, Jiakai Xu <xujiakai2025@iscas.ac.cn>,
-	<kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, Andrew Jones
-	<andrew.jones@oss.qualcomm.com>, Shuah Khan <shuah@kernel.org>, Jiakai Xu
-	<jiakaiPeanut@gmail.com>, <kvm-riscv@lists.infradead.org>, Linus Torvalds
-	<torvalds@linux-foundation.org>
-References: <20260501021639.2563219-1-xujiakai2025@iscas.ac.cn>
- <agKJnKOcvbPZ5cgA@sirena.co.uk>
-From: Zenghui Yu <yuzenghui@huawei.com>
-Message-ID: <fb12c011-27d5-09e2-14fb-ec1728bb6c81@huawei.com>
-Date: Tue, 12 May 2026 10:49:23 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+	s=arc-20240116; t=1778555160; c=relaxed/simple;
+	bh=aPFi2WgApGsqhMDAR6VCAxZmMEWbKO4oOpSg8XCVytw=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=gUzb5G2ClsY4rLaKCHmb6DJIdcH2jMrIuFhS0Uvmn8rFfdRiAfoqEAQVN2nan7AOFPn1KD0Sv4yYEXnzdTQQ9JqJm+ShcwoFiOXuBlUIvNUb4YrseN7g3HanU1koBOY8V4r94WltfZ72h2XXOInR9TBqKOhl65LM0EWo+XYiryI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 77da728c4daf11f1aa26b74ffac11d73-20260512
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B, HR_CTT_MISS
+	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME, HR_SJ_LANG
+	HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE, HR_SJ_PHRASE_LEN
+	HR_SJ_PRE_RE, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME
+	IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_TRUSTED, SA_EXISTED
+	SN_TRUSTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS
+	CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO, GTI_C_BU
+	AMN_GOOD, ABX_MISS_RDNS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.12,REQID:36e1e69e-1b14-460a-9a29-b149158999a8,IP:10,
+	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+	N:release,TS:5
+X-CID-INFO: VERSION:1.3.12,REQID:36e1e69e-1b14-460a-9a29-b149158999a8,IP:10,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:5
+X-CID-META: VersionHash:e7bac3a,CLOUDID:9664b41425725c4b0711df2f1f0134f6,BulkI
+	D:260511104727UACKCMR1,BulkQuantity:4,Recheck:0,SF:17|19|64|66|78|80|81|82
+	|83|102|127|841|850|898,TC:nil,Content:-10|0|15|50,EDM:-3,IP:-2,URL:0,File
+	:nil,RT:nil,Bulk:40,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR
+	:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_FSD,TF_CID_SPAM_SNR,TF_CID_SPAM_FAS
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 77da728c4daf11f1aa26b74ffac11d73-20260512
+X-User: lihongfu@kylinos.cn
+Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
+	(envelope-from <lihongfu@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 1377102052; Tue, 12 May 2026 11:05:45 +0800
+From: Hongfu Li <lihongfu@kylinos.cn>
+To: vishal.moola@gmail.com
+Cc: cgroups@vger.kernel.org,
+	hannes@cmpxchg.org,
+	lihongfu@kylinos.cn,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org,
+	mhocko@kernel.org,
+	mkoutny@suse.com,
+	muchun.song@linux.dev,
+	roman.gushchin@linux.dev,
+	shakeel.butt@linux.dev,
+	shuah@kernel.org,
+	tj@kernel.org
+Subject: Re: [PATCH] selftests/cgroup: check malloc return value in alloc_anon functions
+Date: Tue, 12 May 2026 11:06:04 +0800
+Message-Id: <20260512030604.2392932-1-lihongfu@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <agHEjG7_fHMAnQrw@fedora>
+References: <agHEjG7_fHMAnQrw@fedora>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <agKJnKOcvbPZ5cgA@sirena.co.uk>
-Content-Type: text/plain; charset="windows-1252"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
- kwepemk200017.china.huawei.com (7.202.194.83)
+Content-Transfer-Encoding: 8bit
 
-On 2026/5/12 9:59, Mark Brown wrote:
-> On Fri, May 01, 2026 at 02:16:39AM +0000, Jiakai Xu wrote:
-> > The refactored check_steal_time_uapi() creates a temporary VM via
-> > vm_create_with_one_vcpu(), whose default memslot0 only covers GPA
-> > 0..~2MB.  Setting st_ipa to ST_GPA_BASE (1 << 30) causes
-> > kvm_arm_pvtime_set_attr() to fail with EINVAL because gfn_to_hva()
-> > cannot find a valid memslot at the target GFN.
-> >
-> > Add a memslot at ST_GPA_BASE in the temporary VM, mirroring what
-> > the main test already does.
-> 
-> The regression in Linus' tree that is fixed by this patch is still
-> present today.  Adding Marc and Oliver since this bug manifests on
-> arm64, adding Anup and Atish since the patch introducing the regression
-> was merged via RISC-V.
+Hi Vishal,
 
-Does fc240715fc50 [1] fix the selftest regression? It has been included
-in the latest KVM/arm64 pull request [2].
-
-[1]
-https://git.kernel.org/pub/scm/linux/kernel/git/kvmarm/kvmarm.git/commit/?h=fixes&id=fc240715fc5003538ff530e3cfb985e7769b7171
-[2] https://lore.kernel.org/kvmarm/20260507154221.2905554-1-maz@kernel.org
-
-> 
-> > Reported-by: Mark Brown <broonie@kernel.org>
-> > Closes: https://lore.kernel.org/lkml/afM8WEe4gG5tL4fH@sirena.co.uk
-> > Signed-off-by: Jiakai Xu <xujiakai2025@iscas.ac.cn>
-> > Signed-off-by: Jiakai Xu <jiakaiPeanut@gmail.com>
-> > Fixes: 40351ed924dd30 ("KVM: selftests: Refactor UAPI tests into dedicated function")
-> > ---
-> >  tools/testing/selftests/kvm/steal_time.c | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> >
-> > diff --git a/tools/testing/selftests/kvm/steal_time.c b/tools/testing/selftests/kvm/steal_time.c
-> > index 7df2bc8eec02..2b01b466ddc1 100644
-> > --- a/tools/testing/selftests/kvm/steal_time.c
-> > +++ b/tools/testing/selftests/kvm/steal_time.c
-> > @@ -213,6 +213,10 @@ static void check_steal_time_uapi(void)
+> > diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
+> > index b43da9bc20c4..8ef9c99a82eb 100644
+> > --- a/tools/testing/selftests/cgroup/test_memcontrol.c
+> > +++ b/tools/testing/selftests/cgroup/test_memcontrol.c
+> > @@ -61,6 +61,11 @@ int alloc_anon(const char *cgroup, void *arg)
+> >  	char *buf, *ptr;
 > >  
-> >  	vm = vm_create_with_one_vcpu(&vcpu, NULL);
-> >  
-> > +	/* ST_GPA_BASE needs a valid memslot for gfn_to_hva() to succeed */
-> > +	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS, ST_GPA_BASE,
-> > +				    1, 1, 0);
+> >  	buf = malloc(size);
+> > +	if (buf == NULL) {
+> > +		fprintf(stderr, "malloc() failed\n");
+> > +		return -1;
+> > +	}
 > > +
-> >  	struct kvm_device_attr dev = {
-> >  		.group = KVM_ARM_VCPU_PVTIME_CTRL,
-> >  		.attr = KVM_ARM_VCPU_PVTIME_IPA,
-> > -- 
-> > 2.34.1
-> >
+> >  	for (ptr = buf; ptr < buf + size; ptr += PAGE_SIZE)
+> >  		*ptr = 0;
+> 
+> Every malloc() call in this file has this same pattern. Maybe we'd be
+> better off making it a helper function?
+> 
+> Either way:
+> Reviewed-by: Vishal Moola <vishal.moola@gmail.com>
+
+Thanks for your review and valuable suggestion.
+I agree with you, will refactor all malloc() checks into a common helper
+function, and send out a v2 patch soon.
+
+Best regards,
+Hongfu Li
