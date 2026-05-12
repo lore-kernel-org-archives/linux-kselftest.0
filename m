@@ -1,152 +1,83 @@
-Received: from out-186.mta1.migadu.com (out-186.mta1.migadu.com [95.215.58.186])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C15A360EFD
-	for <linux-kselftest@vger.kernel.org>; Tue, 12 May 2026 12:06:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.186
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD5A136C59E;
+	Tue, 12 May 2026 12:21:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778587582; cv=none; b=Ak5U9AcVwGNRAUKbvzt9as3Pwh9IN9IqHja7CE7sXOriYjgnzaCVu7Knod8KphxjoSf/+Jo3szkaWIcbP6n6eRzR4nsNAa85KP8n8OwO5SskiQWkBx7Pl/D4qc6ioUijQplmTo+WCay4dDOEiY33suK40oFjXFwbuOZNfHLsl4M=
+	t=1778588496; cv=none; b=aG6VEU3YxoUVKBF67bC/QsdSprGGPKxjNfCx7mOKaEdf3Mt0pi5dgXiSWSPOE8ROxlbjiAmjWS9dnl/8xKeMRFI5rQo7//5RbeWwNtK0eY2L4F0f13cNrpWcfetQbS3qwgSzX+YfnWq5wUXDn2FPbnjbKSac8n4e1JzDxK6BWh4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778587582; c=relaxed/simple;
-	bh=p/tHk3Ki7ukILe77/bmVvcIMX8dUCZhWCuNG0mGDJjY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LHBF4nilHj2isa/v2TrTYodPXkbmffxVihMx+wMmV+//0LP//E1dIVnJq6pHriLhsmuaJu1RRTdw06chbmKk9vSA4+Mzd65IfDHX7pUF5+aFUUGqyjcaCGpJtPivD8pazAkviCV3x9X7Nv+ff5KVHErjJDkbHJgpySh9dCQbAgA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=I+M8YmPX; arc=none smtp.client-ip=95.215.58.186
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1778588496; c=relaxed/simple;
+	bh=wqAIUXGNRFLlciEzYLfd74vbbJTuTmippmPLs7dX3ss=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Bb65gB3EWgb62Hw9WaLTyDvgbI6t2zQneZtM7MUH2KfZgbnPq+yk494QQnaROszq93qDX4XMn4zqqDyjDk08BGZbk8pew80v+I2F+0I6CL1YPBiY4S0VMx/x8d2zq4eVK0D1qBy74if0b1dQwfa3O8lLMSSkJLOIZjiRQihzzGk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j83PBPm9; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="I+M8YmPX"
-Message-ID: <1e3e5461-76cb-4e69-81f8-fb2220bf797c@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1778587577;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Ap2nfY1WZm6T5NE1j7FvcA+Rbuv0o1NHLF2th8iyNUI=;
-	b=I+M8YmPXQjQDW/l4DymajI9lHONPQvH/p43t4tlzHtFeU9DBE5bi0PJBgeo3tVXpo2Xvwz
-	3PvQKsUX01TNh9+d6MawmNdT2f+P83j3QgbFOsKIOYLE3UH3kJ3SmlKEc6ZLXeWhtIK7rv
-	2F6A2S2YBrcbnM8zP8J+n8o0Nlm0z58=
-Date: Tue, 12 May 2026 20:05:15 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j83PBPm9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65147C2BCB0;
+	Tue, 12 May 2026 12:21:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778588496;
+	bh=wqAIUXGNRFLlciEzYLfd74vbbJTuTmippmPLs7dX3ss=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=j83PBPm90V70Z5DzvXF/3ALqo6TXArDPPwEh49VBE2prM9PIC8+QiZm8wPP1vX0ES
+	 fEqsbz26nHNAhiXOyR/MEJHOLhUDrAYgycH4Ep0mcOx3E9YfLFeMqUYxC2FNw7ed7T
+	 /TLDLKuSf9FZPO7ncyuDSSmzbXMdJlN3DtvRM7ZbFxkvWOkMS4NEiczktj0VWg9WZf
+	 LG+kjWyYJhnmfZ2EXeJ8ynXUMi+f/tPRQ3poYQ0ez2jSAZj24dxEtXnGE5yP6ChUZd
+	 yUxcB/Z91qGqxb3a46U6SDuzlEU5e7yTVJmX5lozqtxmRqXmpvtTx3ERcZH5Ap4a6d
+	 HfZkFvN4Hg3EQ==
+Date: Tue, 12 May 2026 15:21:28 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Hongfu Li <lihongfu@kylinos.cn>
+Cc: jgg@ziepe.ca, leon@kernel.org, akpm@linux-foundation.org,
+	david@kernel.org, ljs@kernel.org, vbabka@kernel.org,
+	surenb@google.com, mhocko@suse.com, shuah@kernel.org,
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/mm: Fix mmap() return value check in
+ run_migration_benchmark
+Message-ID: <agMbSBgaBRoh2-xn@kernel.org>
+References: <20260512101305.139509-1-lihongfu@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH RESEND bpf-next v10 5/8] bpf: Add bpf_list_add to insert
- node after a given list node
-To: bot+bpf-ci@kernel.org
-Cc: bpf@vger.kernel.org, ast@kernel.org, corbet@lwn.net,
- martin.lau@linux.dev, daniel@iogearbox.net, andrii@kernel.org,
- eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
- john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
- chengkaitao@kylinos.cn, skhan@linuxfoundation.org, memxor@gmail.com,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, vmalik@redhat.com,
- linux-kselftest@vger.kernel.org, martin.lau@kernel.org, clm@meta.com,
- ihor.solodrai@linux.dev
-References: <20260512055919.95716-6-kaitao.cheng@linux.dev>
- <f573f7e0a5140fe6254d2ddfd3f69add455fa25c67c020c0312e2c2ceeca7c69@mail.kernel.org>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Kaitao Cheng <kaitao.cheng@linux.dev>
-In-Reply-To: <f573f7e0a5140fe6254d2ddfd3f69add455fa25c67c020c0312e2c2ceeca7c69@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260512101305.139509-1-lihongfu@kylinos.cn>
 
+On Tue, May 12, 2026 at 06:13:05PM +0800, Hongfu Li wrote:
+> mmap() returns MAP_FAILED on error, not NULL.  The current check uses
+> !buffer->ptr, which evaluates to false when mmap() fails (since
+> MAP_FAILED is (void *)-1, not 0), so the error path is never taken.
+> 
+> Signed-off-by: Hongfu Li <lihongfu@kylinos.cn>
 
+Acked-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 
-在 2026/5/12 14:41, bot+bpf-ci@kernel.org 写道:
->> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
->> --- a/kernel/bpf/helpers.c
->> +++ b/kernel/bpf/helpers.c
->> @@ -2570,6 +2570,16 @@ __bpf_kfunc int bpf_list_push_back_impl(struct bpf_list_head *head,
->>  	return bpf_list_push_back(head, node, meta__ign, off);
->>  }
->>
->> +__bpf_kfunc int bpf_list_add(struct bpf_list_head *head, struct bpf_list_node *new,
->> +			     struct bpf_list_node *prev, struct btf_struct_meta *meta,
->> +			     u64 off)
-> 
-> The commit message states that 'prev' must already be in the list. How can a
-> BPF program obtain such a reference and pass it to this kfunc?
-> 
-> A node already in the list is tracked by the verifier as a non-owning
-> reference (PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF with ref_obj_id == 0).
-> The typical way to obtain this is via bpf_list_front() or bpf_list_back(),
-> which return non-owning references.
-> 
-> However, check_kfunc_args() in kernel/bpf/verifier.c handles
-> KF_ARG_PTR_TO_LIST_NODE by requiring owning references and rejects non-owning
-> references.
-> 
-> Without a similar distinction for KF_ARG_PTR_TO_LIST_NODE (as exists for
-> KF_ARG_PTR_TO_RB_NODE), is there any valid BPF register state that satisfies
-> both the verifier check and the runtime semantics stated in the commit
-> message?
-> 
-> The BPF CI bot reported this issue in v10. The author responded that this was
-> fixed in [PATCH bpf-next v10 7/8], which introduces the __nonown_allowed
-> annotation and corresponding verifier logic. However, patch 7/8 is not
-> present in this commit (feed006fb969), so the parameter lacks the
-> __nonown_allowed suffix and the verifier lacks the is_kfunc_arg_nonown_allowed()
-> check.
-
-If this is an issue that must be fixed, I will move [PATCH bpf-next v10 7/8]
-earlier in the next version.
-
-> Reference: https://lore.kernel.org/bpf/cb7368c6062232b6ad5f9ab1c6a97bc8530566a8b3db5c4deefdd5ea63d31538@mail.kernel.org/
-> 
->> +{
->> +	struct bpf_list_node_kern *n = (void *)new, *p = (void *)prev;
->> +	struct list_head *prev_ptr = &p->list_head;
->> +
->> +	return __bpf_list_add(n, head, &prev_ptr, meta ? meta->record : NULL, off);
->> +}
->> +
-> 
-> [ ... ]
-> 
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
-> 
-> [ ... ]
-> 
->> @@ -19235,8 +19238,11 @@ struct bpf_insn addr[2] = { BPF_LD_IMM64(BPF_REG_2, (long)kptr_struct_meta) };
->>  		int struct_meta_reg = BPF_REG_3;
->>  		int node_offset_reg = BPF_REG_4;
->>
->> -		/* rbtree_add has extra 'less' arg, so args-to-fixup are in diff regs */
->> -		if (is_bpf_rbtree_add_kfunc(desc->func_id)) {
->> +		/* list_add/rbtree_add have an extra arg (prev/less),
->> +		 * so args-to-fixup are in diff regs.
->> +		 */
-> 
-> This isn't a bug, but the multi-line comment format doesn't follow the BPF
-> subsystem style. The preferred form in kernel/bpf/ has the opening /* on its
-> own line:
-> 
->     /*
->      * list_add/rbtree_add have an extra arg (prev/less),
->      * so args-to-fixup are in diff regs.
->      */
-> 
->> +		if (desc->func_id == special_kfunc_list[KF_bpf_list_add] ||
->> +		    is_bpf_rbtree_add_kfunc(desc->func_id)) {
->>  			struct_meta_reg = BPF_REG_4;
->>  			node_offset_reg = BPF_REG_5;
->>  		}
-> 
-> 
 > ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>  tools/testing/selftests/mm/hmm-tests.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25716874656
+> diff --git a/tools/testing/selftests/mm/hmm-tests.c b/tools/testing/selftests/mm/hmm-tests.c
+> index 788689497e92..d72adba5c74e 100644
+> --- a/tools/testing/selftests/mm/hmm-tests.c
+> +++ b/tools/testing/selftests/mm/hmm-tests.c
+> @@ -2688,7 +2688,7 @@ static inline int run_migration_benchmark(int fd, int use_thp, size_t buffer_siz
+>  	buffer->ptr = mmap(NULL, buffer_size, PROT_READ | PROT_WRITE,
+>  			  MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+>  
+> -	if (!buffer->ptr)
+> +	if (buffer->ptr == MAP_FAILED)
+>  		return -1;
+>  
+>  	/* Apply THP hint if requested */
+> -- 
+> 2.25.1
+> 
 
 -- 
-Thanks
-Kaitao Cheng
-
+Sincerely yours,
+Mike.
