@@ -1,66 +1,66 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 965173ECBF3
-	for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 13:36:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B0043EDAA3
+	for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 13:36:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778506594; cv=none; b=P4YWxxprBi+2DOQQJBJ7hoVrk3+rQRv/u5g206eEfuym9eSTeSpJedcGXfu0XtP9zevkuAIKSOQaU8iFjuhWSc+/vMAJYbtJjae1BSYC/UMoY/ATtHSI/Oi4gD00gK0IwZ1tMJ4fP7KjD0tdKO+KE+zc484OqFdFqMztyjCOP9Q=
+	t=1778506601; cv=none; b=SGdl0S+N2qU6wmbOOVgaPuJjxj0mvJzqyWJB3KDhI9O6hcbfx6zI4PS0XAcCUeZhkQ9+TbpplRgWmcUlI+dDXyErtZss62SEIATPM8w8W72MCWnBWrltV2Qt8JGenj1Onh937WtnuOFF22d4lStsHEIbEx7gh38XU/jykiTFxOY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778506594; c=relaxed/simple;
-	bh=SZNfq+U9n3x985DbHaankrwq6lQqgPLZMKPvxc9aSu0=;
+	s=arc-20240116; t=1778506601; c=relaxed/simple;
+	bh=0RoxEeTW+dkRhWnBSljqlypTBfGWhhyYzVBMtv6J90k=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=MquJbRUiGmUl2qeEvT/rGniEi+UthlvhRnZEplQdDqalVPMXyPYViRtCKJ3lJh0G2VXNIJdwNf46fQ+Mm8rp0oFKdysdZBzKzku375ohZiWxUjCEbI0VttwTXORrL+uBzf3+O8N72cVEYHnu/Rg0TNv0JoWGYpVENADk5KKUZZg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b=YW7uJepC; arc=none smtp.client-ip=209.85.216.53
+	 In-Reply-To:To:Cc; b=gFSunFhG5LnJ98dhO6RWH3tMMykjAdn6vXPxnqsu2zqRJOEcuhwnvX90AYPsqD0er3u6Zr1JCZEP9aYUihP9SaGYEvcBlkdyyQ/VUqMOJWVEP6eJLKAJIN+I0rQMp/Jd06G2tMkkuAek3pAt1DXK2my2nanJzdPKtja5WLXezmI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b=wGRPGnYq; arc=none smtp.client-ip=209.85.216.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b="YW7uJepC"
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-3665b67ed66so1772781a91.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 06:36:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=riscstar-com.20251104.gappssmtp.com header.i=@riscstar-com.20251104.gappssmtp.com header.b="wGRPGnYq"
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-365eecc5885so4206090a91.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 11 May 2026 06:36:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=riscstar-com.20251104.gappssmtp.com; s=20251104; t=1778506590; x=1779111390; darn=vger.kernel.org;
+        d=riscstar-com.20251104.gappssmtp.com; s=20251104; t=1778506597; x=1779111397; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=EOFE3ehNiNk6algJYrLucEv0fxL7pkMWqS8jdXvY7Mk=;
-        b=YW7uJepC/6HjTt+PnLp5QuhbbRgG2pceJi8Hk9FQksPBk8x6kg4+zs4YZt62yhIyWo
-         tJBlOGjY9hin7DEkM5lbwrYMw1uUcIE8Mdw3+T+IpXSDdvUfTjULXatPaUbTx+T4Q6R5
-         5UwxCl83uSXipnZVNoddc+Nt8WuMUBqcwhZW6QCUlKYI1H+AhpuGrvd0T3x8Dc1nGa34
-         ZMP7aNYkL57URmclP+cpkr/7SKgJPwmbSEYvLGHw66O+hKFzPcWoUxfTMm6hwpHbSd9j
-         fW+obcGaaq32x1oQskwKKq0JSAchxiSjN5r090oG1gS/9/KVhhPRqKDioURGlIV16pF9
-         I3aw==
+        bh=zkBT5A6/LBnTeUPklgGzPFjB6isZzD11PPCRi8U3YM0=;
+        b=wGRPGnYqM2xP6Xl5zyTyn17PSjpSTCxY0jsype3eiNLMmfsj0JXvxduOc98m6/NOfV
+         M5+dVGRJ56lULvnvl0jVfm4RJOdr7bnhOwQsvzO0IokTGYPTRNP4m+8PXcYQxKMZ9pp3
+         liGNt4gZKRnDn6ihVkQyhSmerZG37trM5U63Rb9SIcwAhw8fW9s3cy/PBZo6rjUdX2ZP
+         neJrrjVgq4JmMSV9/lMtXd2lx8obwM2Q2+I+64uG64CqiZRFhBe2Y5tz7aNaK4bPC/9K
+         DoBY0wdX1RgBgdmF9WHco5FBnXroUlR5cC/kEKbPP2cwnGqYFZ4jgbdIutcbg5+uHH6x
+         BjNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778506590; x=1779111390;
+        d=1e100.net; s=20251104; t=1778506597; x=1779111397;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=EOFE3ehNiNk6algJYrLucEv0fxL7pkMWqS8jdXvY7Mk=;
-        b=h6Br+i67zv0c4zvwKIoeQDowPM/7tH6qBh1NzwE04PvCAiZaH2EXd0DPRERqnRcXvL
-         smkSn0VQ0ePYvjzbxiDMRUZWrKy1HTkvN6kICLJT7qzZ5um2CGeFKbQ1w4SQ25Kk79jF
-         Q84q52i5fLYgvWnt5E5/8gls9OQ6jLQhGZTzOo1vVEyPXd7B/ECtjV6PFHra2vkys7nn
-         PztvpGwCJ915nD7kF0XA91/OeQh3s1n1sERC4qbXxdPtFKHJR5YcwgrRGsHzsCCS+qYl
-         rLR9Ihcy0H1PLd6wqRnhVz9Ju0A4X6zW1e8kIXi9Fhm+VV65ZjABU6LiwiK2ad5Mrxr8
-         s/Vw==
-X-Forwarded-Encrypted: i=1; AFNElJ8jy4ad2N4SRTuRYbI2Mx28OxqM3dX34WwaDUHdQ9wkcnvf1kxFkcYyU0fWI5jO+liA1ThnvuyQB1Gb0xV0O9U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwsBt0rBy5uTGxVlK9pDvSKZR2awBcjXxWVCeDtkr8VfKcNwka9
-	d7EluWwDxQSWZ21Z/mkC9ElAAHLRO/BU5X3e+u4dLPAAJk+Du5WGFxXBmoaZpIil01c=
-X-Gm-Gg: Acq92OGtYZZVhle1BgXtUi3JJanS+pe068SqCbhoRQXiNIRFiJvbkVLySM2I4JibZLr
-	qvS5Gh/pFWrb75mYW3znCQATQfPl/KTvyMMK7HcNb1nI6LvY9Uzxx5VI6dyOoH+7yqe7bfgcFBA
-	4bES3JZCEIIURnwYhgigASelTFeJXNJfvzo0qUCT5u0FN8juiHAYg3othfXFAFjd1OWikRcTo/r
-	iNBIYvOdviDVBj1GzfR0N+4BWyZjn9pO1UNnue9WSOMk5Zp9opZqcmVus+llJO9Ql6FxkbIZ1Vy
-	Ynd/lJT25TTjR/q2f2s3CcLHUVCcGO0gM4Zaxrb2/iMOdqYNgsiAJDN8CXLHeeaFmoGTlTNWbLJ
-	Gdpkv45und2Gdn8lJrZOzK4Q5th7kUefZK+hYrM3SEwwXA4oTHtcu6j/XzW99zmbIjm33vIuqZv
-	/PPYauQClyNWcLtIEa/k+pPRawCQcRGeo/DF6znuTM7kg=
-X-Received: by 2002:a17:90b:38c2:b0:362:e7e5:a20a with SMTP id 98e67ed59e1d1-367d46c6798mr10065289a91.4.1778506590008;
-        Mon, 11 May 2026 06:36:30 -0700 (PDT)
+        bh=zkBT5A6/LBnTeUPklgGzPFjB6isZzD11PPCRi8U3YM0=;
+        b=WQ5L/BdpS++ntlHwnN2H6ZHdEZ1L40gSEVhrq7wWoIHv/xeCO4LHKHr2WkT3a1ygzn
+         uPOtK9PJWyZ3RUcwng5OQi+A8sq8yQ0dyIKHjYWy+3cHV2Dpw3JCmFKH9nV0rXOtreir
+         NPRFyKRbhqx5Op39Q5qp0+oTbbX39n8XRPwDgoQGJvt08jW2IYyo0z0oXvxxRbHzdeuO
+         4oS6XdWvlHf6LqavCJzlA9627uuZGqXzZYqjMEsrvBBJw9jVn+MKyopTNa/htgOjjf63
+         aqXW/Z/w1NedSuV0lGV8jWN69rATB5bWLt68IZMpWx+VPP34mDXItBp/9q/0K2QopOfx
+         wRLQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9cIK0+qSigBCSIfleUJmoNBJ1PpDZryohEHJQxC7mewib+Yrk2HHNZefvVmGJfPhtjNtPHth5QJEHvQ+lH9ro=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxxJy0zEQqMo3Hu0Y02EegZhndixDgQm8+ApxY1S09tPH/qDway
+	dFDEcAWxfZLkYxD2YdplmjmBtWs+xQ3nZasELj6l3XoHSFD2dVs+QXNuClvv02fIjpU=
+X-Gm-Gg: Acq92OFdh9TTR+WfYkVTBeqc0+5IfaRPQDeLrYxkmDd3wqqxZjLBj1iIHffi4EKhq+T
+	m7upm8cuEctF3rocM/DdhpNWv6JvaYP2u91rzYoknb1ahpjzhLKRDB2cvPe9NfC13Kr3Tl69kr9
+	DjNfcV+OJOmJEHOmHlvvRYdXvzZPDCy5RcvwcYPvPAEB48gduNTLquFAGAtIkHJmrjGklc04rbq
+	FHMp6synErke1yz3X0Tlkz/HBKlSzqsURm2uhDmUNae13vwggBSKxESEbcEhIUHtT7nmpkGiwYs
+	Egqq4OkJ3bWrOCZCnIPysQu9qDbe0b4sr+JeoAo+a4V5d8w0BcrvWCvRmQPCjhkZVB4nO3mKT8w
+	KzZqvdpnKE5YsoaNPp6T5IsoLLU/iNerCkwszukq0V4s7OluLFfh+2sgiHU/ZuxNBAdckjQbLvT
+	5SF9QvjqORc077wFvw8VsNhXRLGW0sCZFGMQcKAcO3cc4=
+X-Received: by 2002:a17:90a:d883:b0:359:8de8:1229 with SMTP id 98e67ed59e1d1-367d487d1cbmr11028452a91.21.1778506596853;
+        Mon, 11 May 2026 06:36:36 -0700 (PDT)
 Received: from [127.0.1.1] ([2a12:a305:4::30f3])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-367be3daafesm3034326a91.8.2026.05.11.06.36.23
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-367be3daafesm3034326a91.8.2026.05.11.06.36.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 May 2026 06:36:29 -0700 (PDT)
+        Mon, 11 May 2026 06:36:36 -0700 (PDT)
 From: Guodong Xu <guodong@riscstar.com>
-Date: Mon, 11 May 2026 21:34:46 -0400
-Subject: [PATCH v2 01/10] riscv: hwprobe.rst: Document EXT_ZICFISS
+Date: Mon, 11 May 2026 21:34:47 -0400
+Subject: [PATCH v2 02/10] riscv: hwprobe.rst: Replace tabs with spaces
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -69,7 +69,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260511-rva23u64-hwprobe-v2-v2-1-21c5a544f1dc@riscstar.com>
+Message-Id: <20260511-rva23u64-hwprobe-v2-v2-2-21c5a544f1dc@riscstar.com>
 References: <20260511-rva23u64-hwprobe-v2-v2-0-21c5a544f1dc@riscstar.com>
 In-Reply-To: <20260511-rva23u64-hwprobe-v2-v2-0-21c5a544f1dc@riscstar.com>
 To: Jonathan Corbet <corbet@lwn.net>, Paul Walmsley <pjw@kernel.org>, 
@@ -88,31 +88,59 @@ Cc: Andrew Jones <andrew.jones@oss.qualcomm.com>,
  kvm-riscv@lists.infradead.org, Guodong Xu <guodong@riscstar.com>
 X-Mailer: b4 0.15.1
 
-Commit 30c3099036a9 ("riscv/hwprobe: add zicfilp / zicfiss
-enumeration in hwprobe") added RISCV_HWPROBE_EXT_ZICFISS as bit 0 of
-RISCV_HWPROBE_KEY_IMA_EXT_1 but did not add a matching entry to
-Documentation/arch/riscv/hwprobe.rst.  Add it now.
+From: Andrew Jones <andrew.jones@oss.qualcomm.com>
 
-Fixes: 30c3099036a9 ("riscv/hwprobe: add zicfilp / zicfiss enumeration in hwprobe")
+A handful of vendor-extension entries indent continuation lines with a
+tab character, while the rest of hwprobe.rst uses spaces. Replace
+those tabs with spaces so the file is consistently space-indented.
+
+Cosmetic update, no functional change.
+
+Signed-off-by: Andrew Jones <andrew.jones@oss.qualcomm.com>
 Signed-off-by: Guodong Xu <guodong@riscstar.com>
 ---
-v2: New patch.
+v2: No change.
 ---
- Documentation/arch/riscv/hwprobe.rst | 4 ++++
- 1 file changed, 4 insertions(+)
+ Documentation/arch/riscv/hwprobe.rst | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/Documentation/arch/riscv/hwprobe.rst b/Documentation/arch/riscv/hwprobe.rst
-index c420a8349bc68..b1a84ac06da75 100644
+index b1a84ac06da75..c3bb26d70c748 100644
 --- a/Documentation/arch/riscv/hwprobe.rst
 +++ b/Documentation/arch/riscv/hwprobe.rst
-@@ -391,3 +391,7 @@ The following keys are defined:
- * :c:macro:`RISCV_HWPROBE_KEY_IMA_EXT_1`: A bitmask containing additional
-   extensions that are compatible with the
-   :c:macro:`RISCV_HWPROBE_BASE_BEHAVIOR_IMA`: base system behavior.
-+
-+  * :c:macro:`RISCV_HWPROBE_EXT_ZICFISS`: The Zicfiss extension is supported,
-+       as defined in version 1.0 of the RISC-V Control-flow Integrity (CFI)
-+       extensions specification, ratified 2024-07.
+@@ -358,7 +358,7 @@ The following keys are defined:
+ 
+     * :c:macro:`RISCV_HWPROBE_VENDOR_EXT_XTHEADVECTOR`: The xtheadvector vendor
+         extension is supported in the T-Head ISA extensions spec starting from
+-	commit a18c801634 ("Add T-Head VECTOR vendor extension. ").
++        commit a18c801634 ("Add T-Head VECTOR vendor extension. ").
+ 
+ * :c:macro:`RISCV_HWPROBE_KEY_ZICBOM_BLOCK_SIZE`: An unsigned int which
+   represents the size of the Zicbom block in bytes.
+@@ -371,19 +371,19 @@ The following keys are defined:
+ 
+     * :c:macro:`RISCV_HWPROBE_VENDOR_EXT_XSFVQMACCDOD`: The Xsfqmaccdod vendor
+         extension is supported in version 1.1 of SiFive Int8 Matrix Multiplication
+-	Extensions Specification.
++        Extensions Specification.
+ 
+     * :c:macro:`RISCV_HWPROBE_VENDOR_EXT_XSFVQMACCQOQ`: The Xsfqmaccqoq vendor
+         extension is supported in version 1.1 of SiFive Int8 Matrix Multiplication
+-	Instruction Extensions Specification.
++        Instruction Extensions Specification.
+ 
+     * :c:macro:`RISCV_HWPROBE_VENDOR_EXT_XSFVFNRCLIPXFQF`: The Xsfvfnrclipxfqf
+         vendor extension is supported in version 1.0 of SiFive FP32-to-int8 Ranged
+-	Clip Instructions Extensions Specification.
++        Clip Instructions Extensions Specification.
+ 
+     * :c:macro:`RISCV_HWPROBE_VENDOR_EXT_XSFVFWMACCQQQ`: The Xsfvfwmaccqqq
+         vendor extension is supported in version 1.0 of Matrix Multiply Accumulate
+-	Instruction Extensions Specification.
++        Instruction Extensions Specification.
+ 
+ * :c:macro:`RISCV_HWPROBE_KEY_ZICBOP_BLOCK_SIZE`: An unsigned int which
+   represents the size of the Zicbop block in bytes.
 
 -- 
 2.43.0
