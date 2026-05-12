@@ -1,139 +1,103 @@
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FDDA39E9DE;
-	Tue, 12 May 2026 16:18:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B6223B1022;
+	Tue, 12 May 2026 16:23:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778602732; cv=none; b=F+do2Bkeac801SDznu8+zKRjzPhLRgfPZYBhSJhBHfFyu/t+5DlkMSSWG4uDvlUa3DQectQ0uSNcgUYkfcEuVL6lw1xsxm03jIe5s2l6RGlZc7CUvx1EwLIGFNE25nujytkKmatdcu6lJboT/BZaNivKdoyqdAjQ+BdjQRHRKVE=
+	t=1778602996; cv=none; b=k957SbPd/qDw+8nfNuJeu5u6F1ec+y1XN7PlnxG6OmASQp7k1ppMuE8iAupwECk6Etm6l/WnofAxuEMNXPRe66lm4FBROGNvTolelYMRRjNBRqseo78lNWzoUUZg5/eVMtO0El7hwwKgw+cfa2qWOREu48XU4E6BoWxt8b2Uoq4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778602732; c=relaxed/simple;
-	bh=8XFd6GbcBLGGHzmX2zLvpVShwAmL65/U/v73rY5+HBM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ptc1pEDFGxC72C+Afi6PjuDG0rl8AwkaIi6E2NHFbGQqkkEwenA07xh4QcVx82n+zXO314EGAQ77OTC2mrNJefj4ecx8O4p1TDum6Do9LgOynKCoeKWfJKU+HfS9Rc4Z+ORnHpDvrbakF3OxIll7yBaZvS42Up98FTCt/O4DwPA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=KWQck597; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+	s=arc-20240116; t=1778602996; c=relaxed/simple;
+	bh=vYDNHoFu5KGezYeSr31ivJsn2rFbeSkn+mNV5uEwneM=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=GJ6dI5MgJDjPJJs+ZPaXcaHU0U5QZOr9GBWekTdY2w7r29xhOjTSeu9GRwyRybhLRZNgrE1GAoNBRK/uxqWzq2sGKApcDlaXiXxZH0EMN6s7rV+8QsxUQQCQsKHJdoABoOpuyrRHg8zbLnZfp2wBbibhwR4dpJGuNH9pbxyc10w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g/jLp9ep; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="KWQck597"
-Received: from skinsburskii.localdomain (c-98-225-44-182.hsd1.wa.comcast.net [98.225.44.182])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 5B64120B7166;
-	Tue, 12 May 2026 09:18:42 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5B64120B7166
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1778602722;
-	bh=Uf3CnoeoD1JaJ9/DXoxz1jb7GBmNLqY9irHzO+pPh0g=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KWQck597/eyja/NgCMAmkLC3+bWL5hWVU+Y66nu66N5UekfOjtVOB6GjKYNXVyVjD
-	 ufyi56nCuI23ffrZ1mDNNNacGzY8zvU7I+bAkw7ZuMQgMgaNmaUNxKHaeWaIr2+dyr
-	 J4TNJtiDGtT4mGb4Wzvblbe2M6QKyghCab8lT9Fk=
-Date: Tue, 12 May 2026 09:18:42 -0700
-From: Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: kys@microsoft.com, Liam.Howlett@oracle.com, akpm@linux-foundation.org,
-	decui@microsoft.com, haiyangz@microsoft.com, jgg@ziepe.ca,
-	corbet@lwn.net, leon@kernel.org, longli@microsoft.com,
-	ljs@kernel.org, mhocko@suse.com, rppt@kernel.org, shuah@kernel.org,
-	skhan@linuxfoundation.org, surenb@google.com, vbabka@kernel.org,
-	wei.liu@kernel.org, linux-doc@vger.kernel.org,
-	linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH 1/3] mm/hmm: Add hmm_range_fault_unlockable() for mmap
- lock-drop support
-Message-ID: <agNS4llNtAHBkMA2@skinsburskii.localdomain>
-References: <177759835313.221039.2807391868456411507.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
- <177759840859.221039.13065406062747296947.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
- <563bb216-c270-4711-adda-b91484af40dc@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g/jLp9ep"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A43E1C2BCB0;
+	Tue, 12 May 2026 16:23:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778602996;
+	bh=vYDNHoFu5KGezYeSr31ivJsn2rFbeSkn+mNV5uEwneM=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=g/jLp9eplTyhbaoHBeRl7S+zwt3ZPUlKoEAL5lZOzrck8PGPQNtOaMZ+5q0R7VzK9
+	 1pVOob1Pfh83TUo9mo0B7nfcFDwvBuMgNaPA+UIqYioE0uxPplso+ou3p9NDh5QKUH
+	 OW2P/zy+/ZMNGY0qTu3eVBRQfME1N4C2OFUyzEADhVrURvUYsGFyYX+8bEjqDvhdEk
+	 ON7ZSgS7SnBoRqYljSyJ2IwoP32Zk4kp7sJzAlImLrW2Af4IJwIHP64sihN8tzlR/K
+	 IHvaG+W3Ip5dlGsz4ft+46/PAWd7CRYqlwLg+k+IL/3SnGrIGn/BFB3ysICGxGLLs4
+	 pnTfGLqKA07Ug==
+Content-Type: multipart/mixed; boundary="===============6389190805276887042=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <563bb216-c270-4711-adda-b91484af40dc@kernel.org>
+Message-Id: <44819125e8a416353eb3e314e7804d2c762ea87331f98f1396eaa8b86421d950@mail.kernel.org>
+In-Reply-To: <20260512153157.28382-3-leon.hwang@linux.dev>
+References: <20260512153157.28382-3-leon.hwang@linux.dev>
+Subject: Re: [PATCH bpf-next v14 2/8] libbpf: Add support for extended BPF syscall
+From: bot+bpf-ci@kernel.org
+To: leon.hwang@linux.dev,bpf@vger.kernel.org
+Cc: ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,brauner@kernel.org,sforshee@kernel.org,yuichtsu@amazon.com,aalbersh@redhat.com,leon.hwang@linux.dev,willemb@google.com,kerneljasonxing@gmail.com,chen.dylane@linux.dev,yatsenko@meta.com,memxor@gmail.com,a.s.protopopov@gmail.com,ameryhung@gmail.com,rongtao@cestc.cn,linux-kernel@vger.kernel.org,linux-api@vger.kernel.org,linux-kselftest@vger.kernel.org,kernel-patches-bot@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue, 12 May 2026 16:23:15 +0000 (UTC)
 
-On Tue, May 12, 2026 at 10:42:14AM +0200, David Hildenbrand (Arm) wrote:
-> 
-> > +	for (; addr < end; addr += PAGE_SIZE) {
-> > +		vm_fault_t ret;
-> > +
-> > +		ret = handle_mm_fault(vma, addr, fault_flags, NULL);
-> > +
-> > +		if (ret & (VM_FAULT_RETRY | VM_FAULT_COMPLETED)) {
-> > +			/*
-> > +			 * The mmap lock has been dropped by the fault handler.
-> > +			 * Record the failing address and signal lock-drop to
-> > +			 * the caller.
-> > +			 */
-> > +			*hmm_vma_walk->locked = 0;
-> > +			hmm_vma_walk->last = addr;
-> > +			return -EAGAIN;
-> 
-> 
-> Okay, so we'll return straight from hmm_vma_fault() to
-> hmm_vma_handle_pte()/hmm_vma_walk_pmd() -> walk_page_range() machinery.
-> 
-> Hopefully we don't refer to the MM/VMA on any path there? It would be nicer if
-> the hmm_vma_fault() could be called by the caller of walk_page_range(), but
-> that's tricky I guess, as hmm_vma_fault() consumes the walk structure and
-> requires the vma in there.
-> 
+--===============6389190805276887042==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-It looks like a caller can provide a post_vma callback in mm_walk_ops. I
-missed that case here. This callback cannot be supported by this change.
-I will update the patch.
+> diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+> index 5846de364209..9d8740761b7a 100644
+> --- a/tools/lib/bpf/bpf.c
+> +++ b/tools/lib/bpf/bpf.c
 
-> 
-> Note: am I wrong, or is hmm_vma_fault() really always called with
-> required_fault=true?
-> 
+[ ... ]
 
-No, hmm_pte_need_fault can return false.
+> +int probe_sys_bpf_ext(void)
+> +{
+> +	const size_t attr_sz = offsetofend(union bpf_attr, prog_token_fd);
+> +	union bpf_attr attr;
+> +	int fd;
+> +
+> +	memset(&attr, 0, attr_sz);
+> +	fd = syscall(__NR_bpf, BPF_PROG_LOAD | BPF_COMMON_ATTRS, &attr, attr_sz, NULL,
+> +		     sizeof(struct bpf_common_attr));
+> +	if (fd >= 0) {
+> +		close(fd);
+> +		return -EINVAL;
+                        ^^^^^^
 
-> > +		}
-> > +
-> > +		if (ret & VM_FAULT_ERROR)
-> >  			return -EFAULT;
-> > +	}
-> >  	return -EBUSY;
-> >  }
-> >  
-> > @@ -566,6 +585,17 @@ static int hmm_vma_walk_hugetlb_entry(pte_t *pte, unsigned long hmask,
-> >  	if (required_fault) {
-> >  		int ret;
-> >  
-> > +		/*
-> > +		 * Faulting hugetlb pages on the unlockable path is not
-> > +		 * supported. The walk framework holds hugetlb_vma_lock_read
-> > +		 * which must be dropped before handle_mm_fault, but if the
-> > +		 * mmap lock is also dropped (VM_FAULT_RETRY), the vma may
-> > +		 * be freed and the walk framework's unconditional unlock
-> > +		 * becomes a use-after-free.
-> > +		 */
-> > +		if (hmm_vma_walk->locked)
-> > +			return -EFAULT;
-> 
-> Just because it's unlockable doesn't mean that you must unlock. Can't this be
-> kept working as is, just simulating here as if it would not be unlockable?
-> 
+Should probe_sys_bpf_ext() return 1 instead of -EINVAL when fd >= 0?
 
-I’m not sure how to implement this. The walk_page_range code expects the
-hugetlb VMA to still be read-locked when we return from
-hmm_vma_walk_hugetlb_entry. How can we guarantee that if the VMA might
-be gone?
+The probe function detects kernel support for extended BPF syscall
+attributes by calling the BPF syscall with the BPF_COMMON_ATTRS flag
+and a NULL pointer for common attributes.
 
-I added a note in the docs. Whoever tackles this will likely need to
-either rework `walk_page_range` to handle the case where the VMA is
-gone, or use a different approach.
+The expected outcomes are:
+- New kernel with support: errno=EFAULT (can't copy from NULL) -> return 1
+- Old kernel without support: errno!=EFAULT (invalid command) -> return 0
 
-Do you have any other suggestions on how to implement it?
+If the syscall succeeds (fd >= 0), that definitively proves the kernel
+accepts the extended syscall format and supports BPF_COMMON_ATTRS. The
+function should return 1 (supported) rather than -EINVAL (error).
 
-Thanks,
-Stanislav
+Returning -EINVAL causes feat_supported() in features.c to print a
+warning "Detection of kernel BPF syscall common attributes support
+support failed: Invalid argument" and mark the feature as MISSING,
+incorrectly reporting that the kernel doesn't support the feature when
+the successful syscall proves it does.
 
-> 
-> -- 
-> Cheers,
-> 
-> David
+> +	}
+> +	return errno == EFAULT ? 1 : 0;
+> +}
+
+[ ... ]
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25745661172
+--===============6389190805276887042==--
