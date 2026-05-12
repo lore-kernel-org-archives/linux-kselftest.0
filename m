@@ -1,201 +1,93 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from xmbghk7.mail.qq.com (xmbghk7.mail.qq.com [43.163.128.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E2BA368D5C;
-	Tue, 12 May 2026 07:15:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2219747DD5C;
+	Tue, 12 May 2026 07:24:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=43.163.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778570122; cv=none; b=jtLlXIPqMrGBvYbAfX0kq+ooYG7mM/sdgcAyORETACuhpgci8imjphfMi6af3pwHYqrmFJ+ftaIXxp33CErzJLIsCNy8RhVxvGEILH/LmqNu5cAQ5eSHvjp8Q4SW1wiTMWWNIygfWPxVeIAXHf2tmluVeS8UhXtWZzEg07GiRwA=
+	t=1778570689; cv=none; b=DWNYyGhtuv3IKgPPnSlhnOl6ocNaSoZGTtm33hOQeOSTltA0A3cLx8kXLKIwslsykEm/1Y6qTwatQ4Il7A6RnKW5Ec+2azub0wNUTyfoEP7o7KJjuPhLDsBm9k8ALk6rC8lebu27pmZnLQaatbhnCWrFrLP86K3pKkv2FDdmaOI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778570122; c=relaxed/simple;
-	bh=iLFLRbsK6t46Y6F4N+Yd13Of2BLo4wGHx/Lb2GGHcQQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=rMult4q4T83UnjZkW83Z4k3gkbjyoF8FWbKSWDiwYlrNCWRm3KFWN0TY+TjlhxxdTpUex20Ntz2NQaq/HNz3zbfJ9VHypX69E2aQ0RqX+qrOn8mPiXFv0REtDGERqi8r8THOYuHU6uuIAeECR/16L+RXHQVFrPh1CV26aC2ctM8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 4eef91f44dd211f1aa26b74ffac11d73-20260512
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
-	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
-	HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
-	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
-	HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_TRUSTED
-	SA_EXISTED, SN_TRUSTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS
-	DMARC_NOPASS, CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO
-	GTI_C_BU, AMN_GOOD, ABX_MISS_RDNS
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:f9674a71-c2c8-4f0f-879b-b5182cad1869,IP:10,
-	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-	N:release,TS:5
-X-CID-INFO: VERSION:1.3.12,REQID:f9674a71-c2c8-4f0f-879b-b5182cad1869,IP:10,UR
-	L:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:5
-X-CID-META: VersionHash:e7bac3a,CLOUDID:a4fa77afa57655aead32552bc0befba1,BulkI
-	D:260512151511UXZ7AZTA,BulkQuantity:0,Recheck:0,SF:17|19|38|66|78|102|127|
-	850|898,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk:nil
-	,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:
-	0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 4eef91f44dd211f1aa26b74ffac11d73-20260512
-X-User: lihongfu@kylinos.cn
-Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
-	(envelope-from <lihongfu@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 588572323; Tue, 12 May 2026 15:15:08 +0800
-From: Hongfu Li <lihongfu@kylinos.cn>
-To: hannes@cmpxchg.org,
-	mhocko@kernel.org,
-	roman.gushchin@linux.dev,
-	shakeel.butt@linux.dev,
-	muchun.song@linux.dev,
-	tj@kernel.org,
-	mkoutny@suse.com,
-	shuah@kernel.org,
-	vishal.moola@gmail.com
-Cc: cgroups@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Hongfu Li <lihongfu@kylinos.cn>
-Subject: [PATCH v2] selftests/cgroup: check malloc return value in alloc_anon functions
-Date: Tue, 12 May 2026 15:14:24 +0800
-Message-Id: <20260512071424.59449-1-lihongfu@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1778570689; c=relaxed/simple;
+	bh=wEyDr/bRW18sk+Eh6qeSY0G5GBCNnNAFInLo/yOFKUc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=sJoclmXpT/AU5P6QIzj4xmL2HaF2aQrUcDqYoX7DJlOg/eGbB9E3lzhdHUUsK/Facp/6q9VtunVQjdxr4GP6pz6nuka8Tv4WkRe3MohVQw9AAxEJ+YES4GY8POEOJSf++bLOEazQWIBkGlE4/LugjUjdSZF9FZDPFAcGQcARe1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=KTE+l0RE; arc=none smtp.client-ip=43.163.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="KTE+l0RE"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1778570667; bh=vLBmIVgGqAm1WgQmG2CCAsu20EJzohul4rqXqPsB24w=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=KTE+l0RELO6nyyJN3zhI4UCsnTlSEqyQ8hXGxJIrpyI+ENz8HKuR/mhvJC0UPCYfE
+	 pm+gP6+kfBVf+dnCYyrVKUy8GyubzOMLtkVrlLY2QvhDy5dI2IPp2RyP2PfKZWSn12
+	 amyCS77BMDy9P7RMEMON0xmW5RdKojy1GNpm/1MA=
+Received: from [10.46.141.45] ([36.112.3.68])
+	by newxmesmtplogicsvrsza73-0.qq.com (NewEsmtp) with SMTP
+	id 618BE4F8; Tue, 12 May 2026 15:24:24 +0800
+X-QQ-mid: xmsmtpt1778570664tqfecap3n
+Message-ID: <tencent_B49EC91555E7B93CE646566E0A2DBEB9BE09@qq.com>
+X-QQ-XMAILINFO: NGZp1yYNf7Y+Zap4hDs08HaF9zaVs0jQUNat9/uAQOz37raUQURZq4YA3VcyqL
+	 jp7SC867tbUdYkbU2Iyvagw4v/z9+peY6LYMDvbsHEUABQSLIBCSR/8adNZL2DuA9Vy4+K5hDe3l
+	 Hj1UO7T93RrfIkothez9lPMDm6r7QGhjUaVDlqomBgw8t04Wic8H3sDUhleBKMubQeXr5VeMZTsH
+	 4hlbZm1H4L3Iy0t0T1tNu7ErtKCTvoTOo2dSHaGq1Y3GI3EFaS+jwHXyDWRlaKSgdlpu8hgmb4KV
+	 FiDv7I5G6JeooJsOG+wXcTv9TA5o/WUZSHKhQqieUZuZDDUZmAaGy7TklbTNGLOOg39gTGPD07tS
+	 QLfBOaVqU31xFiOQhBxHFNVpDLYrmrQ8tZZ2oEP0OLTW3jcteg4CemI+U2kpc/y9mr3YAFmij8y3
+	 QS/rKos6zcEk+ffoSFRgDeYkDQ9e7goL6IWDdPTbkkCZUL7IpIEv2TfOCaff9qcoRB55r2ifGo5d
+	 XccaXYDTD4KrcWNukBZWdOcTC/QB6R0hHq76anGBsOVVAb0hbg1AYC/Ddw8PWyZK6MCx5Tf2tGBD
+	 7cS1+t6ogkYPWpgMh2cU+Wr0auE+RVsDe3Yog0XHdwcPjO1mQbDwJq6RgwKYIZzEwe7RiTnG+7hd
+	 B8ZWq9Puaz/PqDPu6SUwas82INSo5sK+mOgHpq1zYoF5bMqSpTtaOa5eEfof8cU35uEEsZgbG+CU
+	 c3XJ5RHSCYcbEWnTR3rTPwc4GhoEcm+gfDNq63C8reFUNOOcV596oXLeGDBitE0ZGTAx1FOpib6F
+	 j6irYa468LB3Uf1GxSHrG5+KovLQWbGP55HyVutTJDs42KmSccvq/Sz59vQ2//FlRgUQ4FvH2EnJ
+	 aRhQWOb4TrG9GSu4JI0PZ+mqFvP7TiZT4lZ4nZ7tomtI1AI/w0W5uatsgQjSwi5aNyvDJ4iO2Xia
+	 ZnUFpzGEqVuZxMVibvgoKm+TwZdAnvOgwpofh5OD9EOUATBhBfzPTNch+4OvveCF7RBEMd930JAw
+	 9VbHj5Aa20yo8/LwoT
+X-QQ-XMRINFO: NyFYKkN4Ny6FuXrnB5Ye7Aabb3ujjtK+gg==
+X-OQ-MSGID: <49f042ac-7bb8-45d3-9e43-97ab00dd0a96@qq.com>
+Date: Tue, 12 May 2026 15:24:24 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] mm/mremap: unmap full fixed target for multi-VMA moves
+To: Lorenzo Stoakes <ljs@kernel.org>, Jann Horn <jannh@google.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Vlastimil Babka <vbabka@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <tencent_863C8A01F3C81EBA238F375B16065CBACF08@qq.com>
+ <agHmO4i4YUhs3cSG@lucifer>
+ <CAG48ez1sLtSKVQLHbLO5usBgMgjyOGhbX29pKEfku4Ht05HffA@mail.gmail.com>
+ <agH1ZSdX_7QF8P_I@lucifer>
+ <CAG48ez17evhhcoDKF6AoPqzYZwGuFCkVAsc-0bBzevf0LHYNxA@mail.gmail.com>
+ <agH7ONBSX7XLzS6q@lucifer>
+ <CAG48ez0y3N9uEOzvr4N85Js4XN1fh4JiUFjW=PQB2UZ_5t1R4A@mail.gmail.com>
+ <agICeiIEshWf-1xa@lucifer>
+From: Fujunjie <fujunjie1@qq.com>
+In-Reply-To: <agICeiIEshWf-1xa@lucifer>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-The alloc_anon() function calls malloc() without checking for a NULL
-return. If memory allocation fails, a NULL pointer dereference will
-occur when accessing the buffer.
 
-Add proper error handling to return -1 when malloc() fails in all
-four alloc_anon variants:
-- alloc_anon()
-- alloc_anon_50M_check()
-- alloc_anon_noexit()
-- alloc_anon_50M_check_swap()
 
-Signed-off-by: Hongfu Li <lihongfu@kylinos.cn>
-Reviewed-by: Vishal Moola <vishal.moola@gmail.com>
-Reviewed-by: Muchun Song <muchun.song@linux.dev>
----
-v2:
-- Refactored repeated malloc() patterns in alloc_anon_* into a helper
-  function.
----
- .../selftests/cgroup/test_memcontrol.c        | 53 ++++++++++---------
- 1 file changed, 27 insertions(+), 26 deletions(-)
+On 5/12/2026 12:30 AM, Lorenzo Stoakes wrote:
+> Yeah let's go with that then I think :)
 
-diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
-index b43da9bc20c4..21aedb35cc12 100644
---- a/tools/testing/selftests/cgroup/test_memcontrol.c
-+++ b/tools/testing/selftests/cgroup/test_memcontrol.c
-@@ -55,15 +55,31 @@ int alloc_pagecache(int fd, size_t size)
- 	return -1;
- }
- 
--int alloc_anon(const char *cgroup, void *arg)
-+static char *alloc_and_populate_anon(size_t size)
- {
--	size_t size = (unsigned long)arg;
- 	char *buf, *ptr;
- 
- 	buf = malloc(size);
-+	if (buf == NULL) {
-+		fprintf(stderr, "malloc() failed\n");
-+		return NULL;
-+	}
-+
- 	for (ptr = buf; ptr < buf + size; ptr += PAGE_SIZE)
- 		*ptr = 0;
- 
-+	return buf;
-+}
-+
-+int alloc_anon(const char *cgroup, void *arg)
-+{
-+	size_t size = (unsigned long)arg;
-+	char *buf;
-+
-+	buf = alloc_and_populate_anon(size);
-+	if (!buf)
-+		return -1;
-+
- 	free(buf);
- 	return 0;
- }
-@@ -174,18 +190,13 @@ static int test_memcg_subtree_control(const char *root)
- static int alloc_anon_50M_check(const char *cgroup, void *arg)
- {
- 	size_t size = MB(50);
--	char *buf, *ptr;
-+	char *buf;
- 	long anon, current;
- 	int ret = -1;
- 
--	buf = malloc(size);
--	if (buf == NULL) {
--		fprintf(stderr, "malloc() failed\n");
-+	buf = alloc_and_populate_anon(size);
-+	if (!buf)
- 		return -1;
--	}
--
--	for (ptr = buf; ptr < buf + size; ptr += PAGE_SIZE)
--		*ptr = 0;
- 
- 	current = cg_read_long(cgroup, "memory.current");
- 	if (current < size)
-@@ -406,16 +417,11 @@ static int alloc_anon_noexit(const char *cgroup, void *arg)
- {
- 	int ppid = getppid();
- 	size_t size = (unsigned long)arg;
--	char *buf, *ptr;
-+	char *buf;
- 
--	buf = malloc(size);
--	if (buf == NULL) {
--		fprintf(stderr, "malloc() failed\n");
-+	buf = alloc_and_populate_anon(size);
-+	if (!buf)
- 		return -1;
--	}
--
--	for (ptr = buf; ptr < buf + size; ptr += PAGE_SIZE)
--		*ptr = 0;
- 
- 	while (getppid() == ppid)
- 		sleep(1);
-@@ -990,18 +996,13 @@ static int alloc_anon_50M_check_swap(const char *cgroup, void *arg)
- {
- 	long mem_max = (long)arg;
- 	size_t size = MB(50);
--	char *buf, *ptr;
-+	char *buf;
- 	long mem_current, swap_current;
- 	int ret = -1;
- 
--	buf = malloc(size);
--	if (buf == NULL) {
--		fprintf(stderr, "malloc() failed\n");
-+	buf = alloc_and_populate_anon(size);
-+	if (!buf)
- 		return -1;
--	}
--
--	for (ptr = buf; ptr < buf + size; ptr += PAGE_SIZE)
--		*ptr = 0;
- 
- 	mem_current = cg_read_long(cgroup, "memory.current");
- 	if (!mem_current || !values_close(mem_current, mem_max, 3))
--- 
-2.25.1
+
+Thanks Lorenzo and Jann.
+
+I agree that the patch as posted goes in the wrong direction by treating
+source gaps as ranges that should be propagated to the destination.  Please
+drop this patch.
+
+If disallowing source gaps in this multi-VMA move path still sounds right,
+I can look into a v2/new patch that rejects sparse source ranges up front
+instead.
+
+Thanks,
+fujunjie
 
