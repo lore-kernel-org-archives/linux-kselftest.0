@@ -1,260 +1,524 @@
-Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CF7E3B841B
-	for <linux-kselftest@vger.kernel.org>; Tue, 12 May 2026 15:35:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D492A3B1ED1
+	for <linux-kselftest@vger.kernel.org>; Tue, 12 May 2026 15:55:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778600145; cv=none; b=rbGAPBMCNKEEYY29fq7UY96bfSJu5UQMuxBhqXygpoZMFAmwDJTHaJtCJA8S3EMc8nYC2ixraRlY9AM3Hk6mCeG2VggRygw/15XfGwvr2o9L5B0sqTU7l4KrcSL2/kD/ystH0H0btGJ5PddMazHkn0pY1vTGa8KvVwzyf6iwNl8=
+	t=1778601323; cv=none; b=cfdxaP/8HqWT7sKHYJC4nKx+xKqxmTA0QpeFujxCFt9REUrMQbN/sTT1LfLFY2fErdIkRflL72XAOyWs/E0igU5U9sZOFgJGF4rMjf//fcNE8BrCd9zJ2VGWwaA+hlFDBTE5Tvmz9VyyV0eidyovsUi66S/9e5H/2r1zPLtkBpg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778600145; c=relaxed/simple;
-	bh=sfKJZJ8ctcHAZCmfJQeymzJppmwIwJF9EO7P/NWJ/hQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Q9U+PLyvipFwvIQvo4uGbYQbE9b5tTMzof/OSyooSuEjXHCAYAlMHWjSHAi1C+A31QXolFAggVYqY7djbwTotwO9xt59zd4VQS+5rL4OtuUcpdjLwIavADDXxfjRvr6KER8QMny4LJSYABGGFiExSft1zgeWGlI578PFlgpFIrQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=BYTVz4cP; arc=none smtp.client-ip=91.218.175.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1778601323; c=relaxed/simple;
+	bh=GHT3IjxKzX+EV5s5n0k+0FBg4DGijOzzq8F37mChSq0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=q3iX0rU1/osENA8tdmUivcfoxWf0sQivoRmpIicxEMIlqHI6sfdH/JBra5WcjejXgp2wB7DV0yqlgJuvEZdA1pr+wh1Gc0NOWa0AmAigFgjQd6SeEjPkdaHd1nWRBIsGBsJa/RmmZNGUEtDGiNHTsXgXxBjxEJ7XenYRZmVWVoM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=JVkqBKSJ; arc=none smtp.client-ip=209.85.222.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="BYTVz4cP"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1778600141;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=UBCKOVce/S8UBOdaCxeu/letmftudNtjxh9CrdzjR3Q=;
-	b=BYTVz4cPGcS6uiTu9C01WMSOS974p3UXQSRUMp09PpEczxCZHg1Qnu6EF85z0M0pDnaftR
-	u36M32U8r9YomhO5JzaEQe4WPbIJLuH+HaF9dd3Bci9qyX82WYfK86whJTfldhg64wWqUz
-	Jr+3rRm5ZvS9m18myqAX9SWeajvPU44=
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Christian Brauner <brauner@kernel.org>,
-	Seth Forshee <sforshee@kernel.org>,
-	Yuichiro Tsuji <yuichtsu@amazon.com>,
-	Andrey Albershteyn <aalbersh@redhat.com>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	Willem de Bruijn <willemb@google.com>,
-	Jason Xing <kerneljasonxing@gmail.com>,
-	Tao Chen <chen.dylane@linux.dev>,
-	Mykyta Yatsenko <yatsenko@meta.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Anton Protopopov <a.s.protopopov@gmail.com>,
-	Amery Hung <ameryhung@gmail.com>,
-	Rong Tao <rongtao@cestc.cn>,
-	linux-kernel@vger.kernel.org,
-	linux-api@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next v14 8/8] selftests/bpf: Add tests to verify map create failure log
-Date: Tue, 12 May 2026 23:31:57 +0800
-Message-ID: <20260512153157.28382-9-leon.hwang@linux.dev>
-In-Reply-To: <20260512153157.28382-1-leon.hwang@linux.dev>
-References: <20260512153157.28382-1-leon.hwang@linux.dev>
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="JVkqBKSJ"
+Received: by mail-qk1-f179.google.com with SMTP id af79cd13be357-8eea23d01f7so775692085a.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 12 May 2026 08:55:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=soleen.com; s=google; t=1778601321; x=1779206121; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=AjqoH2MST/ARSrDQXxT/BJrG9vMB0FapDofsPh6TaDo=;
+        b=JVkqBKSJSRyAJ+wVbiC8gHxsGcc0geoBAomZwgSbTwygRXV/ttrkYgDH+eLBcYhqf+
+         J0Vh3xMDBEencH3fwzfyFAKFZyiAuIzPBJRf//eA1kd1DX33/ceGg0t9h7vv49Pj7nEm
+         GqMPsUB/N8GoXj7vRzBB35DUz01pjI8OCFkzMZHRGb8PqGJQadatN+EZLTcznT6o4ncS
+         fyYUoU9JOpHXWLnsdo39Mkoy39k6q9hRt20dg8WCFPbppWPOC9MeSwfzN1rHV1uCbeqS
+         Livg+J8A4yxWvts/fB6pj+aC5Ra/JvZRcIhd5S4VZpMaI4XLqHYbEAi1+ab6/KgL/fXJ
+         YkdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778601321; x=1779206121;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AjqoH2MST/ARSrDQXxT/BJrG9vMB0FapDofsPh6TaDo=;
+        b=kDdRq156NmcNy8TD7TE2Ag7FDRnVWaSbmrRWybl9GGd6bT51Big/wDwm5fC8j4oqHG
+         YiUkiGWA3Se1HPRHw9kn+OQM6+Om/+D8av6l2MR2oHiqj4FtTKRyr2WQ6y1vkfrtB/KL
+         W//d8+dS/cI0HhVj5bJXlC9qb/kreSvSObWwP0jmiFX6byw/N0+dgiobavHRzokwEdpa
+         2lodK+eTtWDiBZNzxMoBfd2ZE8facF88zZtynhBCBvybBN9MekrgLueF58m4wTD0qzKf
+         XNMALrGwlZLM6nKj4uTW2tfiXounnHAFFopAjouHJyf/nBPlkyVJ18z2UK2W+pvSIiE2
+         LIcg==
+X-Forwarded-Encrypted: i=1; AFNElJ9ra7m+qH7GzUsR0GN3aFTtmzhVHdzzUMZqPssys1Isbz04WqIiDBX12bHqrh2N1thOp+OWQt80EcVhXjzt+54=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx7qmOOeoSw1YlO7PR1xjVEayhmQq5qUsGKPWj3dttugByXaliY
+	RahTE0XQWDQx5Ug051oSOBaDmv01J4XgRcVE0EMrm5CU4D+zJUZu214KdgMW5ZgL4JA=
+X-Gm-Gg: Acq92OEWocGy0cHjUHF3JPYPiTJq4zMoju4GHRQJvAlvrb4JT+UGR9DgqHEnKPFAGrL
+	aDW8IYIrDOUYTegpXqf9PhsvR9O2xodG0mLeD9EWnSL+3Mtbz1aEZAuGXuIB8u7XLaw/NBcXDAv
+	8ox6GLiiLOi0r5CBJZepoOZFfRVeLUEqdLGbje+cw9Pwp2jRo+EX3NGCBmYlNC2PHRrJnZa8Qaf
+	XszEH2EjZGm+AJYVAvrxuMiYMuiEHrhPTGTAiYOuOf0b1o/GTBfccpwbXjTJAmxc+EMM9CUK4j6
+	dzhXwJ4f8D8W1wCC5Ios01chJ3dNSWXn5AC0IkJv9n2RQcsnrBtxUZ/6FITQ9BpE0G7d51J8aFd
+	03UmGJ7BN8U5MzSUvvvn0RrVkjUk/Pu3loVJ7VlrE9I8IrtpT7Uu8W1IW91guidYNZcXUT8grV6
+	HwLvwRqmJSu9OyJ2WWR/Yy1ojgX70DjQLBAIw6SHhvTPSQ8TVrZsM=
+X-Received: by 2002:a05:620a:4506:b0:909:b1d5:7f63 with SMTP id af79cd13be357-90cfafbe0c8mr498728885a.3.1778601320648;
+        Tue, 12 May 2026 08:55:20 -0700 (PDT)
+Received: from plex ([71.181.43.54])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8fc2cd057acsm3752666485a.47.2026.05.12.08.55.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 May 2026 08:55:20 -0700 (PDT)
+Date: Tue, 12 May 2026 15:55:18 +0000
+From: Pasha Tatashin <pasha.tatashin@soleen.com>
+To: Pratyush Yadav <pratyush@kernel.org>
+Cc: Pasha Tatashin <pasha.tatashin@soleen.com>, 
+	linux-kselftest@vger.kernel.org, rppt@kernel.org, shuah@kernel.org, akpm@linux-foundation.org, 
+	linux-mm@kvack.org, linux-kernel@vger.kernel.org, dmatlack@google.com, 
+	kexec@lists.infradead.org, skhawaja@google.com, graf@amazon.com
+Subject: Re: [PATCH 1/5] liveupdate: Remove limit on the number of sessions
+Message-ID: <agMtfe19n4OlxXmS@plex>
+References: <20260414200237.444170-1-pasha.tatashin@soleen.com>
+ <20260414200237.444170-2-pasha.tatashin@soleen.com>
+ <2vxz1pfgbvic.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2vxz1pfgbvic.fsf@kernel.org>
 
-Add tests to verify that the kernel reports the expected error messages
-and correct log_true_size when map creation fails.
+On 05-12 15:35, Pratyush Yadav wrote:
+> On Tue, Apr 14 2026, Pasha Tatashin wrote:
+> 
+> > Currently, the number of LUO sessions is limited by a fixed number of
+> > pre-allocated pages for serialization (16 pages, allowing for ~819
+> > sessions).
+> >
+> > This limitation is problematic if LUO is used to support things such as
+> > systemd file descriptor store, and would be used not just as VM memory
+> > but to save other states on the machine.
+> >
+> > Remove this limit by transitioning to a linked-block approach for
+> > session metadata serialization. Instead of a single contiguous block,
+> > session metadata is now stored in a chain of 16-page blocks. Each block
+> > starts with a header containing the physical address of the next block
+> > and the number of session entries in the current block.
+> 
+> We now have 3 variants of this linked block data structure: LUO
+> sessions, LUO files, and KHO vmalloc. Is it time now to unify them into
+> a reusable data structure? I proposed "KHO Array" some time ago. That
+> was a collection of pointers, but perhaps we can generalize that to a
+> collection of elements of arbitrary size?
 
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
----
- .../selftests/bpf/prog_tests/map_init.c       | 166 ++++++++++++++++++
- 1 file changed, 166 insertions(+)
+I agree, especially since there are a couple more users incoming. I know 
+Sami is proposing this for IOMMU as well. He and I have talked about 
+creating a library that others could use. My suggestion is to get this 
+in now and unify it later into something that works for all use cases, 
+rather than changing it for every new one. The KHO ABI is not stable, so 
+we can change it at any time, but I would still like to minimize the 
+number of times we do so.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/map_init.c b/tools/testing/selftests/bpf/prog_tests/map_init.c
-index 14a31109dd0e..5c61c8e37306 100644
---- a/tools/testing/selftests/bpf/prog_tests/map_init.c
-+++ b/tools/testing/selftests/bpf/prog_tests/map_init.c
-@@ -212,3 +212,169 @@ void test_map_init(void)
- 	if (test__start_subtest("pcpu_lru_map_init"))
- 		test_pcpu_lru_map_init();
- }
-+
-+static void test_map_create(enum bpf_map_type map_type, const char *map_name,
-+			    struct bpf_map_create_opts *opts, const char *exp_msg)
-+{
-+	const int key_size = 4, value_size = 4, max_entries = 1;
-+	char log_buf[128];
-+	int fd;
-+	LIBBPF_OPTS(bpf_log_opts, log_opts);
-+
-+	log_buf[0] = '\0';
-+	log_opts.buf = log_buf;
-+	log_opts.size = sizeof(log_buf);
-+	log_opts.level = 1;
-+	opts->log_opts = &log_opts;
-+	fd = bpf_map_create(map_type, map_name, key_size, value_size, max_entries, opts);
-+	if (!ASSERT_LT(fd, 0, "bpf_map_create")) {
-+		close(fd);
-+		return;
-+	}
-+
-+	ASSERT_STREQ(log_buf, exp_msg, "log_buf");
-+	ASSERT_EQ(log_opts.true_size, strlen(exp_msg) + 1, "true_size");
-+}
-+
-+static void test_map_create_array(struct bpf_map_create_opts *opts, const char *exp_msg)
-+{
-+	test_map_create(BPF_MAP_TYPE_ARRAY, "test_map_create", opts, exp_msg);
-+}
-+
-+static void test_invalid_vmlinux_value_type_id_struct_ops(void)
-+{
-+	const char *msg = "btf_vmlinux_value_type_id can only be used with struct_ops maps.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts,
-+		    .btf_vmlinux_value_type_id = 1,
-+	);
-+
-+	test_map_create_array(&opts, msg);
-+}
-+
-+static void test_invalid_vmlinux_value_type_id_kv_type_id(void)
-+{
-+	const char *msg = "btf_vmlinux_value_type_id is mutually exclusive with btf_key_type_id and btf_value_type_id.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts,
-+		    .btf_vmlinux_value_type_id = 1,
-+		    .btf_key_type_id = 1,
-+	);
-+
-+	test_map_create(BPF_MAP_TYPE_STRUCT_OPS, "test_map_create", &opts, msg);
-+}
-+
-+static void test_invalid_value_type_id(void)
-+{
-+	const char *msg = "Invalid btf_value_type_id.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts,
-+		    .btf_key_type_id = 1,
-+	);
-+
-+	test_map_create_array(&opts, msg);
-+}
-+
-+static void test_invalid_map_extra(void)
-+{
-+	const char *msg = "Invalid map_extra.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts,
-+		    .map_extra = 1,
-+	);
-+
-+	test_map_create_array(&opts, msg);
-+}
-+
-+static void test_invalid_numa_node(void)
-+{
-+	const char *msg = "Invalid numa_node.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts,
-+		    .map_flags = BPF_F_NUMA_NODE,
-+		    .numa_node = 0xFF,
-+	);
-+
-+	test_map_create_array(&opts, msg);
-+}
-+
-+static void test_invalid_map_type(void)
-+{
-+	const char *msg = "Invalid map_type.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts);
-+
-+	test_map_create(__MAX_BPF_MAP_TYPE, "test_map_create", &opts, msg);
-+}
-+
-+static void test_invalid_token_fd(void)
-+{
-+	const char *msg = "Invalid map_token_fd.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts,
-+		    .map_flags = BPF_F_TOKEN_FD,
-+		    .token_fd = 0xFF,
-+	);
-+
-+	test_map_create_array(&opts, msg);
-+}
-+
-+static void test_invalid_map_name(void)
-+{
-+	const char *msg = "Invalid map_name.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts);
-+
-+	test_map_create(BPF_MAP_TYPE_ARRAY, "test-!@#", &opts, msg);
-+}
-+
-+static void test_invalid_btf_fd(void)
-+{
-+	const char *msg = "Invalid btf_fd.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts,
-+		    .btf_fd = -1,
-+		    .btf_key_type_id = 1,
-+		    .btf_value_type_id = 1,
-+	);
-+
-+	test_map_create_array(&opts, msg);
-+}
-+
-+static void test_excl_prog_hash_size_1(void)
-+{
-+	const char *msg = "Invalid excl_prog_hash_size.\n";
-+	const char *hash = "DEADCODE";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts,
-+		    .excl_prog_hash = hash,
-+	);
-+
-+	test_map_create_array(&opts, msg);
-+}
-+
-+static void test_excl_prog_hash_size_2(void)
-+{
-+	const char *msg = "Invalid excl_prog_hash_size.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts,
-+		    .excl_prog_hash_size = 1,
-+	);
-+
-+	test_map_create_array(&opts, msg);
-+}
-+
-+void test_map_create_failure(void)
-+{
-+	if (test__start_subtest("invalid_vmlinux_value_type_id_struct_ops"))
-+		test_invalid_vmlinux_value_type_id_struct_ops();
-+	if (test__start_subtest("invalid_vmlinux_value_type_id_kv_type_id"))
-+		test_invalid_vmlinux_value_type_id_kv_type_id();
-+	if (test__start_subtest("invalid_value_type_id"))
-+		test_invalid_value_type_id();
-+	if (test__start_subtest("invalid_map_extra"))
-+		test_invalid_map_extra();
-+	if (test__start_subtest("invalid_numa_node"))
-+		test_invalid_numa_node();
-+	if (test__start_subtest("invalid_map_type"))
-+		test_invalid_map_type();
-+	if (test__start_subtest("invalid_token_fd"))
-+		test_invalid_token_fd();
-+	if (test__start_subtest("invalid_map_name"))
-+		test_invalid_map_name();
-+	if (test__start_subtest("invalid_btf_fd"))
-+		test_invalid_btf_fd();
-+	if (test__start_subtest("invalid_excl_prog_hash_size_1"))
-+		test_excl_prog_hash_size_1();
-+	if (test__start_subtest("invalid_excl_prog_hash_size_2"))
-+		test_excl_prog_hash_size_2();
-+}
--- 
-2.54.0
+> [0] https://lore.kernel.org/linux-mm/20250909144426.33274-1-pratyush@kernel.org/T/#u
+> 
+> >
+> > - Bump session ABI version to v3.
+> > - Update struct luo_session_header_ser to include a 'next' pointer.
+> > - Implement dynamic block allocation in luo_session_insert().
+> > - Update setup, serialization, and deserialization logic to traverse
+> >   the block chain.
+> > - Remove LUO_SESSION_MAX limit.
+> >
+> > Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+> > ---
+> >  include/linux/kho/abi/luo.h      |  19 +--
+> >  kernel/liveupdate/luo_internal.h |  12 +-
+> >  kernel/liveupdate/luo_session.c  | 237 +++++++++++++++++++++++--------
+> >  3 files changed, 197 insertions(+), 71 deletions(-)
+> >
+> > diff --git a/include/linux/kho/abi/luo.h b/include/linux/kho/abi/luo.h
+> > index 46750a0ddf88..f5732958545e 100644
+> > --- a/include/linux/kho/abi/luo.h
+> > +++ b/include/linux/kho/abi/luo.h
+> > @@ -57,9 +57,10 @@
+> >   *   - compatible: "luo-session-v1"
+> >   *     Identifies the session ABI version.
+> >   *   - luo-session-header: u64
+> > - *     The physical address of a `struct luo_session_header_ser`. This structure
+> > - *     is the header for a contiguous block of memory containing an array of
+> > - *     `struct luo_session_ser`, one for each preserved session.
+> > + *     The physical address of the first `struct luo_session_header_ser`.
+> > + *     This structure is the header for a block of memory containing an array
+> > + *     of `struct luo_session_ser` entries. Multiple blocks are linked via
+> > + *     the `next` field in the header.
+> >   *
+> >   * File-Lifecycle-Bound Node (luo-flb):
+> >   *   This node describes all preserved global objects whose lifecycle is bound
+> > @@ -77,9 +78,9 @@
+> >   *   `__packed` structures. These structures contain the actual preserved state.
+> >   *
+> >   *   - struct luo_session_header_ser:
+> > - *     Header for the session array. Contains the total page count of the
+> > - *     preserved memory block and the number of `struct luo_session_ser`
+> > - *     entries that follow.
+> > + *     Header for the session data block. Contains the physical address of the
+> > + *     next session data block and the number of `struct luo_session_ser`
+> > + *     entries that follow this header in the current block.
+> >   *
+> >   *   - struct luo_session_ser:
+> >   *     Metadata for a single session, including its name and a physical pointer
+> > @@ -153,21 +154,23 @@ struct luo_file_set_ser {
+> >   *                          luo_session_header_ser
+> >   */
+> >  #define LUO_FDT_SESSION_NODE_NAME	"luo-session"
+> > -#define LUO_FDT_SESSION_COMPATIBLE	"luo-session-v2"
+> > +#define LUO_FDT_SESSION_COMPATIBLE	"luo-session-v3"
+> >  #define LUO_FDT_SESSION_HEADER		"luo-session-header"
+> >  
+> >  /**
+> >   * struct luo_session_header_ser - Header for the serialized session data block.
+> > + * @next:  Physical address of the next struct luo_session_header_ser.
+> >   * @count: The number of `struct luo_session_ser` entries that immediately
+> >   *         follow this header in the memory block.
+> >   *
+> > - * This structure is located at the beginning of a contiguous block of
+> > + * This structure is located at the beginning of a block of
+> >   * physical memory preserved across the kexec. It provides the necessary
+> >   * metadata to interpret the array of session entries that follow.
+> >   *
+> >   * If this structure is modified, `LUO_FDT_SESSION_COMPATIBLE` must be updated.
+> >   */
+> >  struct luo_session_header_ser {
+> > +	u64 next;
+> >  	u64 count;
+> >  } __packed;
+> >  
+> > diff --git a/kernel/liveupdate/luo_internal.h b/kernel/liveupdate/luo_internal.h
+> > index 875844d7a41d..a73f42069301 100644
+> > --- a/kernel/liveupdate/luo_internal.h
+> > +++ b/kernel/liveupdate/luo_internal.h
+> > @@ -11,6 +11,16 @@
+> >  #include <linux/liveupdate.h>
+> >  #include <linux/uaccess.h>
+> >  
+> > +/*
+> > + * Safeguard limit for the number of serialization blocks. This is used to
+> > + * prevent infinite loops and excessive memory allocation in case of memory
+> > + * corruption in the preserved state.
+> > + *
+> > + * This limit allows for ~8.1 million sessions and ~1.2 million files per
+> > + * session, which is more than enough for all realistic use cases.
+> > + */
+> > +#define LUO_MAX_BLOCKS 10000
+> > +
+> >  struct luo_ucmd {
+> >  	void __user *ubuffer;
+> >  	u32 user_size;
+> > @@ -59,7 +69,6 @@ struct luo_file_set {
+> >   * struct luo_session - Represents an active or incoming Live Update session.
+> >   * @name:       A unique name for this session, used for identification and
+> >   *              retrieval.
+> > - * @ser:        Pointer to the serialized data for this session.
+> >   * @list:       A list_head member used to link this session into a global list
+> >   *              of either outgoing (to be preserved) or incoming (restored from
+> >   *              previous kernel) sessions.
+> > @@ -70,7 +79,6 @@ struct luo_file_set {
+> >   */
+> >  struct luo_session {
+> >  	char name[LIVEUPDATE_SESSION_NAME_LENGTH];
+> > -	struct luo_session_ser *ser;
+> 
+> I was confused by this removal. Seeing this makes one think this got
+> moved to some other place. But it seems like this was never used. I
+> think it would be good to mention that in the commit message.
 
+Let me move this to a separate commit, may be together with the comment 
+fix below.
+
+> 
+> >  	struct list_head list;
+> >  	bool retrieved;
+> >  	struct luo_file_set file_set;
+> > diff --git a/kernel/liveupdate/luo_session.c b/kernel/liveupdate/luo_session.c
+> > index 92b1af791889..007ca34eba79 100644
+> > --- a/kernel/liveupdate/luo_session.c
+> > +++ b/kernel/liveupdate/luo_session.c
+> > @@ -69,30 +69,39 @@
+> >  #include <uapi/linux/liveupdate.h>
+> >  #include "luo_internal.h"
+> >  
+> > -/* 16 4K pages, give space for 744 sessions */
+> > +/* 16 4K pages, give space for 819 sessions per block */
+> 
+> It seems odd to read that we added 8 bytes to the header and the number
+> of sessions per block grew. But then I did the math and I think the
+> number was always 819 sessions per block and adding the extra 8 bytes
+> didn't make a difference.
+
+Yeah, I updated the comment while at it, 744 was true in some earlier 
+LUO versions, but was never updated.
+
+> 
+> >  #define LUO_SESSION_PGCNT	16ul
+> > -#define LUO_SESSION_MAX		(((LUO_SESSION_PGCNT << PAGE_SHIFT) -	\
+> > +#define LUO_SESSION_BLOCK_MAX		(((LUO_SESSION_PGCNT << PAGE_SHIFT) -	\
+> >  		sizeof(struct luo_session_header_ser)) /		\
+> >  		sizeof(struct luo_session_ser))
+> >  
+> > +/**
+> > + * struct luo_session_block - Internal representation of a session serialization block.
+> > + * @list: List head for linking blocks in memory.
+> > + * @ser:  Pointer to the serialized header in preserved memory.
+> > + */
+> > +struct luo_session_block {
+> > +	struct list_head list;
+> > +	struct luo_session_header_ser *ser;
+> 
+> Nit: luo_session_header_ser reads like it is the header for the entire
+> list not for each block. Perhaps rename it to luo_block_header_ser?
+
+Sounds good I will rename this to:
+luo_session_block_header_ser and, in the next patch 
+luo_file_block_header_ser accordingly.
+
+> 
+> > +};
+> > +
+> >  /**
+> >   * struct luo_session_header - Header struct for managing LUO sessions.
+> >   * @count:      The number of sessions currently tracked in the @list.
+> > + * @nblocks:    The number of allocated serialization blocks.
+> >   * @list:       The head of the linked list of `struct luo_session` instances.
+> >   * @rwsem:      A read-write semaphore providing synchronized access to the
+> >   *              session list and other fields in this structure.
+> > - * @header_ser: The header data of serialization array.
+> > - * @ser:        The serialized session data (an array of
+> > - *              `struct luo_session_ser`).
+> > + * @blocks:     The list of serialization blocks (struct luo_session_block).
+> >   * @active:     Set to true when first initialized. If previous kernel did not
+> >   *              send session data, active stays false for incoming.
+> >   */
+> >  struct luo_session_header {
+> >  	long count;
+> > +	long nblocks;
+> >  	struct list_head list;
+> >  	struct rw_semaphore rwsem;
+> > -	struct luo_session_header_ser *header_ser;
+> > -	struct luo_session_ser *ser;
+> > +	struct list_head blocks;
+> >  	bool active;
+> >  };
+> >  
+> > @@ -110,10 +119,12 @@ static struct luo_session_global luo_session_global = {
+> >  	.incoming = {
+> >  		.list = LIST_HEAD_INIT(luo_session_global.incoming.list),
+> >  		.rwsem = __RWSEM_INITIALIZER(luo_session_global.incoming.rwsem),
+> > +		.blocks = LIST_HEAD_INIT(luo_session_global.incoming.blocks),
+> >  	},
+> >  	.outgoing = {
+> >  		.list = LIST_HEAD_INIT(luo_session_global.outgoing.list),
+> >  		.rwsem = __RWSEM_INITIALIZER(luo_session_global.outgoing.rwsem),
+> > +		.blocks = LIST_HEAD_INIT(luo_session_global.outgoing.blocks),
+> >  	},
+> >  };
+> >  
+> > @@ -140,6 +151,70 @@ static void luo_session_free(struct luo_session *session)
+> >  	kfree(session);
+> >  }
+> >  
+> > +static int luo_session_add_block(struct luo_session_header *sh,
+> > +				 struct luo_session_header_ser *ser)
+> > +{
+> > +	struct luo_session_block *block;
+> > +
+> > +	if (sh->nblocks >= LUO_MAX_BLOCKS)
+> > +		return -ENOSPC;
+> > +
+> > +	block = kzalloc_obj(*block);
+> > +	if (!block)
+> > +		return -ENOMEM;
+> > +
+> > +	block->ser = ser;
+> > +	list_add_tail(&block->list, &sh->blocks);
+> > +	sh->nblocks++;
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static int luo_session_create_ser_block(struct luo_session_header *sh)
+> > +{
+> > +	struct luo_session_block *last = NULL;
+> > +	struct luo_session_header_ser *ser;
+> > +	int err;
+> > +
+> > +	ser = kho_alloc_preserve(LUO_SESSION_PGCNT << PAGE_SHIFT);
+> > +	if (IS_ERR(ser))
+> > +		return PTR_ERR(ser);
+> > +
+> > +	if (!list_empty(&sh->blocks))
+> > +		last = list_last_entry(&sh->blocks, struct luo_session_block, list);
+> 
+> Nit: using list_last_entry_or_null() is a tiny bit cleaner.
+
+Done.
+
+> 
+> > +
+> > +	err = luo_session_add_block(sh, ser);
+> > +	if (err)
+> > +		goto err_unpreserve;
+> > +
+> > +	if (last)
+> > +		last->ser->next = virt_to_phys(ser);
+> 
+> Nit: can you please move this to luo_session_add_block(). Logically this
+> operation is a part of adding a block. You add a block to the list and
+> then update the serialized state. So would be nice to have it done in
+> one place.
+
+Done.
+
+> 
+> > +
+> > +	return 0;
+> > +
+> > +err_unpreserve:
+> > +	kho_unpreserve_free(ser);
+> > +	return err;
+> > +}
+> > +
+> > +static void luo_session_destroy_ser_blocks(struct luo_session_header *sh,
+> > +					   bool unpreserve)
+> > +{
+> > +	struct luo_session_block *block, *tmp;
+> > +
+> > +	list_for_each_entry_safe(block, tmp, &sh->blocks, list) {
+> > +		if (block->ser) {
+> 
+> Block always has ser. Why this check?
+
+Removed, thanks!
+
+> 
+> > +			if (unpreserve)
+> > +				kho_unpreserve_free(block->ser);
+> > +			else
+> > +				kho_restore_free(block->ser);
+> 
+> Ugh, this is ugly. But I don't see anything obviously better. Perhaps we
+> can check for sh == luo_session_global.outgoing but that is probably
+> worse.
+> 
+> > +		}
+> > +		list_del(&block->list);
+> > +		kfree(block);
+> > +		sh->nblocks--;
+> > +	}
+> > +}
+> > +
+> >  static int luo_session_insert(struct luo_session_header *sh,
+> >  			      struct luo_session *session)
+> >  {
+> > @@ -147,15 +222,6 @@ static int luo_session_insert(struct luo_session_header *sh,
+> >  
+> >  	guard(rwsem_write)(&sh->rwsem);
+> >  
+> > -	/*
+> > -	 * For outgoing we should make sure there is room in serialization array
+> > -	 * for new session.
+> > -	 */
+> > -	if (sh == &luo_session_global.outgoing) {
+> > -		if (sh->count == LUO_SESSION_MAX)
+> > -			return -ENOMEM;
+> > -	}
+> > -
+> >  	/*
+> >  	 * For small number of sessions this loop won't hurt performance
+> >  	 * but if we ever start using a lot of sessions, this might
+> > @@ -166,6 +232,20 @@ static int luo_session_insert(struct luo_session_header *sh,
+> >  		if (!strncmp(it->name, session->name, sizeof(it->name)))
+> >  			return -EEXIST;
+> >  	}
+> > +
+> > +	/*
+> > +	 * For outgoing we should make sure there is room in serialization array
+> > +	 * for new session. If not, allocate a new block.
+> > +	 */
+> > +	if (sh == &luo_session_global.outgoing) {
+> > +		if (sh->count == sh->nblocks * LUO_SESSION_BLOCK_MAX) {
+> > +			int err = luo_session_create_ser_block(sh);
+> > +
+> > +			if (err)
+> > +				return err;
+> > +		}
+> > +	}
+> > +
+> 
+> Since we just allocate space here and not actually fill it yet, I think
+> we can do the same check in luo_session_remove() to free blocks once
+> session count falls below (sh->nblocks - 1) * LUO_SESSION_BLOCK_MAX.
+> This prevents memory leak if the number of sessions goes too high at
+> some point and then falls back down.
+> 
+> Not that I think it is something likely to happen, but I don't see why
+> not.
+
+Done. I did not want to add this functionality just to keep the patch 
+simpler, but since you brought it up, I am adding it here.
+
+> 
+> Perhaps also abstract this out to a helper function for readability?
+
+Done
+
+> 
+> >  	list_add_tail(&session->list, &sh->list);
+> >  	sh->count++;
+> >  
+> > @@ -444,9 +524,12 @@ int __init luo_session_setup_outgoing(void *fdt_out)
+> >  	u64 header_ser_pa;
+> >  	int err;
+> >  
+> > -	header_ser = kho_alloc_preserve(LUO_SESSION_PGCNT << PAGE_SHIFT);
+> > -	if (IS_ERR(header_ser))
+> > -		return PTR_ERR(header_ser);
+> > +	err = luo_session_create_ser_block(&luo_session_global.outgoing);
+> > +	if (err)
+> > +		return err;
+> > +
+> > +	header_ser = list_first_entry(&luo_session_global.outgoing.blocks,
+> > +				      struct luo_session_block, list)->ser;
+> 
+> I suppose it would be a tiny bit better to create a placeholder entry
+> here and then fill it up later in luo_session_serialize(). This would
+> result in the first block not being a special case and it can be
+> allocated and freed on demand list the rest of the blocks.
+> 
+> I won't insist on it but would be nice to have IMO if you're willing to
+> do the refactor.
+
+Let's keep it as is for now. Perhaps, we can return to this once we have 
+a unifying library for KHO arrays.
+
+> 
+> >  	header_ser_pa = virt_to_phys(header_ser);
+> >  
+> >  	err = fdt_begin_node(fdt_out, LUO_FDT_SESSION_NODE_NAME);
+> > @@ -459,19 +542,18 @@ int __init luo_session_setup_outgoing(void *fdt_out)
+> >  	if (err)
+> >  		goto err_unpreserve;
+> >  
+> > -	luo_session_global.outgoing.header_ser = header_ser;
+> > -	luo_session_global.outgoing.ser = (void *)(header_ser + 1);
+> >  	luo_session_global.outgoing.active = true;
+> >  
+> >  	return 0;
+> >  
+> >  err_unpreserve:
+> > -	kho_unpreserve_free(header_ser);
+> > +	luo_session_destroy_ser_blocks(&luo_session_global.outgoing, true);
+> >  	return err;
+> >  }
+> >  
+> >  int __init luo_session_setup_incoming(void *fdt_in)
+> >  {
+> > +	struct luo_session_header *sh = &luo_session_global.incoming;
+> >  	struct luo_session_header_ser *header_ser;
+> >  	int err, header_size, offset;
+> >  	u64 header_ser_pa;
+> [...]
+> 
+> -- 
+> Regards,
+> Pratyush Yadav
