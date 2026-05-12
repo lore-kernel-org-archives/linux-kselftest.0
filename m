@@ -1,167 +1,99 @@
-Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5790A379C52
-	for <linux-kselftest@vger.kernel.org>; Tue, 12 May 2026 09:37:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB9B63A7F55;
+	Tue, 12 May 2026 10:12:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778578626; cv=none; b=tM8MIcSqgDUQL2RGFEByZ7M2aOaNduExxmYZCjQWyQroicuq0wYdKEwNeLWCbpBdh0NLqM99bfpfVRDHHNywqULzaqxeYlMwlNfevZRvhPw4l6LmWxWP6OLZtMlO78T0tZG6eDsZEPUo+B30DkpW5Trmlrjv1gZkfLg4iNxPJQ0=
+	t=1778580774; cv=none; b=l+22LTXyhWhc7l++DrzHKOwyT0Qo+FNPMM3pZ2XrhDJTyiiVr1Z31XX5XCsXdXb2RSgey3Yz1tRtmFJHRnRpWa3XA56+U/1Ln7gr9Oq90sceHGRif2vAN4V36CxJuPzzbgUC7/e3RdF91LkSIsIxHOMMm9LZO+KeXqFxq2fjmXQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778578626; c=relaxed/simple;
-	bh=h1c7WlF0eO4XFsRi+bXuKWCQloLuvGFJm5M3Yr7QuFQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=u9bdjridolTkV15zbJhFp30dtXH/sfp7u0WpBg3YrhbLjcAbhLLe/QKvhNiQhhy+CK+hIcqRXwk3ooKOrcxqHQlSttpScCM0eJ6NOO0Sne9FsQWD4zHtm0hfNOb4AiGo6REvoZla6zxNo3EU2PaEoMjGr0clZQWRkjOXXTrQMus=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=avQvWjHi; arc=none smtp.client-ip=91.218.175.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="avQvWjHi"
-Message-ID: <6cf003cb-f39c-4362-9b24-e479b988ecd3@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1778578610;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=T20NslB0IYADqB7NaB6OdKMLIjFa/Li1Y4ec0dAtHc4=;
-	b=avQvWjHigzU7HCJ8Pa09LGj+MI4xauLUbWi8dFaZc97TpLhA1cXTC2VwTRjLyqkvI1/6wV
-	ZMUkhZ/oKcP9HMcHl8naUkL2gD4JGSPnUbmBFgAoZ7eN+a1njaZ+l1m3Ijs/NIODAP4U36
-	Z6VOJraCL731kL6vV+Htq1duzAWoYYg=
-Date: Tue, 12 May 2026 17:36:07 +0800
+	s=arc-20240116; t=1778580774; c=relaxed/simple;
+	bh=TFeoX1n+4ZiXp9AQyl9+Y+CMXZNLVqyyMR3mdN07dQM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=KABfSmzLOlLSn5Z+aBTd28fauXfJfYF/H7PGLxGyEXJKXPnM2OMhFP2ifEvkKD3gGQ9/fQX89iN9vdiTY0i0QQKh0VRFGYD5+VSZtM2SCa2soWtqAAUR9cMcUPkLfDSuDwE+kgOEMOw9RpnFUu7yceEUFHSIaGvrwCrXy/Zxdks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 1c7cb5ee4deb11f1aa26b74ffac11d73-20260512
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
+	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
+	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
+	HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME
+	IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_TRUSTED, SA_EXISTED
+	SN_TRUSTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS
+	CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO, GTI_C_BU
+	AMN_GOOD, ABX_MISS_RDNS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.12,REQID:e511f9d0-06d7-4983-a25e-d0086108c149,IP:10,
+	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+	N:release,TS:5
+X-CID-INFO: VERSION:1.3.12,REQID:e511f9d0-06d7-4983-a25e-d0086108c149,IP:10,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:5
+X-CID-META: VersionHash:e7bac3a,CLOUDID:59f88e905d8dfcaf5c0b5915116a76db,BulkI
+	D:260512181244RW6IEBAK,BulkQuantity:0,Recheck:0,SF:17|19|38|66|78|102|127|
+	850|898,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk:nil
+	,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:
+	0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 1c7cb5ee4deb11f1aa26b74ffac11d73-20260512
+X-User: lihongfu@kylinos.cn
+Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
+	(envelope-from <lihongfu@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 1415767180; Tue, 12 May 2026 18:12:41 +0800
+From: Hongfu Li <lihongfu@kylinos.cn>
+To: jgg@ziepe.ca,
+	leon@kernel.org,
+	akpm@linux-foundation.org,
+	david@kernel.org,
+	ljs@kernel.org,
+	vbabka@kernel.org,
+	rppt@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	shuah@kernel.org
+Cc: linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Hongfu Li <lihongfu@kylinos.cn>
+Subject: [PATCH] selftests/mm: Fix mmap() return value check in run_migration_benchmark
+Date: Tue, 12 May 2026 18:13:05 +0800
+Message-Id: <20260512101305.139509-1-lihongfu@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH RESEND bpf-next v10 3/8] bpf: Introduce the bpf_list_del
- kfunc.
-To: bot+bpf-ci@kernel.org
-Cc: bpf@vger.kernel.org, ast@kernel.org, corbet@lwn.net,
- martin.lau@linux.dev, daniel@iogearbox.net, andrii@kernel.org,
- eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
- john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
- chengkaitao@kylinos.cn, skhan@linuxfoundation.org, memxor@gmail.com,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, vmalik@redhat.com,
- linux-kselftest@vger.kernel.org, martin.lau@kernel.org, clm@meta.com,
- ihor.solodrai@linux.dev
-References: <20260512055919.95716-4-kaitao.cheng@linux.dev>
- <297a19ac8fb5fc8ab279a932137bf39604f2f3637521ff6d7d4b39c364a52e07@mail.kernel.org>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Kaitao Cheng <kaitao.cheng@linux.dev>
-In-Reply-To: <297a19ac8fb5fc8ab279a932137bf39604f2f3637521ff6d7d4b39c364a52e07@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
-I have clarified this issue in the [PATCH bpf-next v10 3/8] patch,
-with the link provided below:
+mmap() returns MAP_FAILED on error, not NULL.  The current check uses
+!buffer->ptr, which evaluates to false when mmap() fails (since
+MAP_FAILED is (void *)-1, not 0), so the error path is never taken.
 
-https://lore.kernel.org/bpf/0637c1ce-0e73-4505-8a0c-e77339f4aefb@linux.dev/
+Signed-off-by: Hongfu Li <lihongfu@kylinos.cn>
+---
+ tools/testing/selftests/mm/hmm-tests.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-在 2026/5/12 14:41, bot+bpf-ci@kernel.org 写道:
->> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
->> index 1e8754877dd1..51b6ea4bb8cb 100644
->> --- a/kernel/bpf/helpers.c
->> +++ b/kernel/bpf/helpers.c
->> @@ -2593,6 +2593,15 @@ __bpf_kfunc struct bpf_list_node *bpf_list_pop_back(struct bpf_list_head *head)
->>  	return __bpf_list_del(head, h->prev);
->>  }
->>
->> +__bpf_kfunc struct bpf_list_node *bpf_list_del(struct bpf_list_head *head,
->> +					       struct bpf_list_node *node)
->> +{
->> +	struct bpf_list_node_kern *kn = (void *)node;
->> +
->> +	/* verifier guarantees node is a list node rather than list head */
->> +	return __bpf_list_del(head, &kn->list_head);
->> +}
->> +
-> 
-> Looking at bpf_list_pop_front() and bpf_list_pop_back() in the same
-> file, both functions read from the list_head (h->next or h->prev)
-> before passing it to __bpf_list_del(). If the list is uninitialized,
-> they end up passing potentially invalid pointer values to __bpf_list_del(),
-> which then has to handle this by initializing the list and returning NULL.
-> 
-> While __bpf_list_del() handles this correctly, would it be clearer to
-> move the initialization check into the top-level kfuncs (like
-> bpf_list_pop_front/back) so that __bpf_list_del() always receives a
-> valid list_head pointer rather than potentially garbage values that
-> get ignored later?
-> 
-> Reference: https://lore.kernel.org/bpf/af50d188f6bc2de81fe3c321b26a645a9425ba9f2644cb6f8525d5bb637385f9@mail.kernel.org/
-> 
->> @@ -4725,6 +4734,7 @@ BTF_ID_FLAGS(func, bpf_list_push_back, KF_IMPLICIT_ARGS)
->>  BTF_ID_FLAGS(func, bpf_list_push_back_impl)
->>  BTF_ID_FLAGS(func, bpf_list_pop_front, KF_ACQUIRE | KF_RET_NULL)
->>  BTF_ID_FLAGS(func, bpf_list_pop_back, KF_ACQUIRE | KF_RET_NULL)
->> +BTF_ID_FLAGS(func, bpf_list_del, KF_ACQUIRE | KF_RET_NULL)
->>  BTF_ID_FLAGS(func, bpf_list_front, KF_RET_NULL)
->>  BTF_ID_FLAGS(func, bpf_list_back, KF_RET_NULL)
->>  BTF_ID_FLAGS(func, bpf_task_acquire, KF_ACQUIRE | KF_RCU | KF_RET_NULL)
-> 
-> [ ... ]
-> 
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index 11054ad89c14..a6bcbe68cd72 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->> @@ -10744,6 +10744,7 @@ enum special_kfunc_type {
->>  	KF_bpf_list_push_back,
->>  	KF_bpf_list_pop_front,
->>  	KF_bpf_list_pop_back,
->> +	KF_bpf_list_del,
->>  	KF_bpf_list_front,
->>  	KF_bpf_list_back,
->>  	KF_bpf_cast_to_kern_ctx,
-> 
-> [ ... ]
-> 
->> @@ -11456,7 +11459,8 @@ static bool check_kfunc_is_graph_node_api(struct bpf_verifier_env *env,
->>
->>  	switch (node_field_type) {
->>  	case BPF_LIST_NODE:
->> -		ret = is_bpf_list_push_kfunc(kfunc_btf_id);
->> +		ret = is_bpf_list_push_kfunc(kfunc_btf_id) ||
->> +		      kfunc_btf_id == special_kfunc_list[KF_bpf_list_del];
->>  		break;
->>  	case BPF_RB_NODE:
->>  		ret = (is_bpf_rbtree_add_kfunc(kfunc_btf_id) ||
-> 
-> Can bpf_list_del actually be called from BPF programs? Looking at the
-> verifier's handling of KF_ARG_PTR_TO_LIST_NODE arguments in
-> check_kfunc_args():
-> 
-> 	case KF_ARG_PTR_TO_LIST_NODE:
-> 		...
-> 		if (!reg->ref_obj_id) {
-> 			verbose(env, "allocated object must be referenced\n");
-> 			return -EINVAL;
-> 		}
-> 
-> This code path unconditionally requires an owning reference (ref_obj_id
-> must be non-zero). However, once a node is added to the list via
-> bpf_list_push_front/back, the owning reference is converted to a
-> non-owning reference (ref_obj_id becomes 0). This means bpf_list_del
-> cannot be called on nodes that are actually in the list.
-> 
-> The sister kfunc bpf_rbtree_remove handles this by having a special
-> branch in check_kfunc_args() that accepts non-owning references for
-> that specific kfunc. Does bpf_list_del need similar handling to allow
-> removing nodes that are actually in the list?
-> 
-> Reference: https://lore.kernel.org/bpf/294242698d576e4fedf243ab055c6f9a984e55033933a9bd09808f62a7018e9d@mail.kernel.org/
-> 
-> 
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25716874656
-
+diff --git a/tools/testing/selftests/mm/hmm-tests.c b/tools/testing/selftests/mm/hmm-tests.c
+index 788689497e92..d72adba5c74e 100644
+--- a/tools/testing/selftests/mm/hmm-tests.c
++++ b/tools/testing/selftests/mm/hmm-tests.c
+@@ -2688,7 +2688,7 @@ static inline int run_migration_benchmark(int fd, int use_thp, size_t buffer_siz
+ 	buffer->ptr = mmap(NULL, buffer_size, PROT_READ | PROT_WRITE,
+ 			  MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+ 
+-	if (!buffer->ptr)
++	if (buffer->ptr == MAP_FAILED)
+ 		return -1;
+ 
+ 	/* Apply THP hint if requested */
 -- 
-Thanks
-Kaitao Cheng
+2.25.1
 
