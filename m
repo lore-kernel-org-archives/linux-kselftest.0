@@ -1,96 +1,125 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 361E141754;
-	Tue, 12 May 2026 01:20:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8B5728F948;
+	Tue, 12 May 2026 01:59:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778548846; cv=none; b=ij2SxlvGTJUJx2dRUcBLDd1XrSTMWLPVNvkrGRf16SQLDbceq7God/vdZTxi8hj3KOeQ2qrQxkvlC03bodWJdAa+3iEyduLOozvwUmlPq54DpjvwEnxRsI8LibSigkbbPJuRiuU/dF+SYTijPtERhmfyPCgtK7T4VrLNiQHDv0U=
+	t=1778551199; cv=none; b=jCmNRybeY+p7KKPk6kl8UGlmXfBZbdctU1sn1j16tZcneqqMfZKwLAZXanDjbkiLRmUO9EWGPaiz5mCzdH4XLrIIr+zjP1q6m/PpVRb24QyuYKK5LkFZU70LzFsSVT+OaPM+eDXq6MZyYP9IkDFdT/MMXTtOLPAJtHo0ibw+Ojk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778548846; c=relaxed/simple;
-	bh=rmhmgjf9pNbch508V7x5oA7WF+QOIlAxgYvbMVZNPDQ=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=Wx2k0fLuD8nNv2QRQWY8e8DPBW2KjRs5owfa7cQrZB0exlXHOEaEytjXDcPajhKWeps5XhZ480aSHxbcOgII0IGxBaGaDJBroG8a2Ll3Yp9b4+7x3/jHWBDle1Ng05F3ZJt0XtkemnAkolacLdYj/g2pqxvfHRoMf/p2FImRWVU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lZ1uxS59; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778551199; c=relaxed/simple;
+	bh=JqUKm1zabpCzOKVv8zteO3eSNVnNbK68AaZt1Yo4LwM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=i6bF5NJyWf1hTuKT1toPfiCkpknNdHvLAvyc7P/bzla+kZrIYCNm9yqBXNq7ljivILm971DJjK31Ygakn95yNw6hGRDMFS4xynOegB7nqG7ALPozRm0tLlEUGP1gxN1UrZLX20fY87CHeKuQDHbojqb7Uq7egAfJ2GaAVqDYH/w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=amiXDQpl; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lZ1uxS59"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3429C2BCB0;
-	Tue, 12 May 2026 01:20:45 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="amiXDQpl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E25CC2BCB0;
+	Tue, 12 May 2026 01:59:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778548845;
-	bh=rmhmgjf9pNbch508V7x5oA7WF+QOIlAxgYvbMVZNPDQ=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=lZ1uxS59S2WcIzQvvsc+Zao5NxRjWGQV8LatMZ7CYTnf7vIGiKcV3pYkh01xATBgj
-	 ixfxDLJzj7L/22CIgp21SVqd+qmXZu/AJF3ySI2F5Fy+8o/2Hy7evsgSSuPWKXNON8
-	 tKVXufDSle97m+x0pIdL6C8y2JRgFoK5kPm4iRcYaF0ApJFyoPBaxsVAVcTV9Pnxa6
-	 lh0hVqwKKpBsHHjuN13KOeCUIEZMqdhNNpSzdK05ZML7RSS875KrecA/p0kw0IlRst
-	 TZwZRn/dXCAOG/zOv3FCeXIfqCnfbqU1O/zWLBuWRBCg6RRwjPg4SlmBf356sJe8cG
-	 XGB5Hb9CvHWTQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7CF1339308E4;
-	Tue, 12 May 2026 01:19:53 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1778551199;
+	bh=JqUKm1zabpCzOKVv8zteO3eSNVnNbK68AaZt1Yo4LwM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=amiXDQplOjPOrSnNOBF7LEJ+/6eh4XlQI5wNiRtAo0rNSJnfQpzdCEiNMqMkyEfNV
+	 sS2bW8JA4ZmxPBy2K3vglpLXfjButk5eoxbQBK7hz64jRaxN14hoDlaNthKBAdDcgI
+	 08YexPxrpbj6dHvIC2fVi9oETcXGuLc1vWV0sZGIaI93m97o/XVgCaapDU0NrA40aP
+	 kKgMwmdV9yRret4upPWBVeK5B1NA+U7xGJHGNl7BXz/f2PhixazkJPHWBff5LgC70P
+	 prKwEC0Car3L0JhQZXIe3WFY1AiU4fRi0m4KkPozM3/7MrJFYTGdRV6fy6vjsPSAA5
+	 5LUvHHJk4ykgQ==
+Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
+	id B02A11AC5843; Tue, 12 May 2026 02:59:56 +0100 (BST)
+Date: Tue, 12 May 2026 10:59:56 +0900
+From: Mark Brown <broonie@kernel.org>
+To: Paolo Bonzini <pbonzini@redhat.com>, Anup Patel <anup@brainfault.org>,
+	Atish Patra <atish.patra@linux.dev>, Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oupton@kernel.org>
+Cc: Jiakai Xu <xujiakai2025@iscas.ac.cn>, kvm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Andrew Jones <andrew.jones@oss.qualcomm.com>,
+	Anup Patel <anup@brainfault.org>,
+	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+	Jiakai Xu <jiakaiPeanut@gmail.com>, kvm-riscv@lists.infradead.org,
+	Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH] KVM: arm64: Add memslot for ST_GPA_BASE in
+ check_steal_time_uapi()
+Message-ID: <agKJnKOcvbPZ5cgA@sirena.co.uk>
+References: <20260501021639.2563219-1-xujiakai2025@iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 0/8] mptcp: pm: in-kernel: increase limits
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177854879234.2528168.4119644465151651447.git-patchwork-notify@kernel.org>
-Date: Tue, 12 May 2026 01:19:52 +0000
-References: 
- <20260508-net-next-mptcp-pm-inc-limits-v1-0-c84e3fdf9b6a@kernel.org>
-In-Reply-To: 
- <20260508-net-next-mptcp-pm-inc-limits-v1-0-c84e3fdf9b6a@kernel.org>
-To: Matthieu Baerts (NGI0) <matttbe@kernel.org>
-Cc: martineau@kernel.org, geliang@kernel.org, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- netdev@vger.kernel.org, mptcp@lists.linux.dev, linux-kernel@vger.kernel.org,
- shuah@kernel.org, linux-kselftest@vger.kernel.org
-
-Hello:
-
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Fri, 08 May 2026 17:40:45 +0200 you wrote:
-> Allow switching from 8 to 64 for the maximum number of subflows and
-> accepted ADD_ADDR, and from 8 to 255 for the number of MPTCP endpoints.
-> 
-> The previous limit of 8 subflows makes sense in most cases. Using more
-> subflows will very likely *not* improve the situation, and could even
-> decrease the performances. But there are no technical limitations nor
-> performance impact to raise this limit, so let's do it: this will allow
-> people with very specific use-cases, and researchers to easily create
-> more subflows, and measure the performance impact by themselves.
-> 
-> [...]
-
-Here is the summary with links:
-  - [net-next,1/8] mptcp: pm: in-kernel: explicitly limit batches to array size
-    https://git.kernel.org/netdev/net-next/c/9031e5e31d5d
-  - [net-next,2/8] mptcp: pm: in-kernel: increase all limits to 64
-    https://git.kernel.org/netdev/net-next/c/c8646664fbf1
-  - [net-next,3/8] mptcp: pm: kernel: allow flushing more than 8 endpoints
-    https://git.kernel.org/netdev/net-next/c/607f16ab462b
-  - [net-next,4/8] mptcp: pm: in-kernel: increase endpoints limit
-    https://git.kernel.org/netdev/net-next/c/e845e6397d78
-  - [net-next,5/8] selftests: mptcp: join: allow changing ifaces nr per test
-    https://git.kernel.org/netdev/net-next/c/e1515a1a494b
-  - [net-next,6/8] selftests: mptcp: join: validate 8x8 subflows
-    https://git.kernel.org/netdev/net-next/c/1697837a67fa
-  - [net-next,7/8] selftests: mptcp: pm: validate new limits
-    https://git.kernel.org/netdev/net-next/c/c9b581e619d2
-  - [net-next,8/8] selftests: mptcp: pm: use simpler send/recv forms
-    https://git.kernel.org/netdev/net-next/c/ed5372634c5b
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="uWRoW7NMniSf8PmN"
+Content-Disposition: inline
+In-Reply-To: <20260501021639.2563219-1-xujiakai2025@iscas.ac.cn>
+X-Cookie: Truckers welcome.
 
 
+--uWRoW7NMniSf8PmN
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, May 01, 2026 at 02:16:39AM +0000, Jiakai Xu wrote:
+> The refactored check_steal_time_uapi() creates a temporary VM via
+> vm_create_with_one_vcpu(), whose default memslot0 only covers GPA
+> 0..~2MB.  Setting st_ipa to ST_GPA_BASE (1 << 30) causes
+> kvm_arm_pvtime_set_attr() to fail with EINVAL because gfn_to_hva()
+> cannot find a valid memslot at the target GFN.
+>=20
+> Add a memslot at ST_GPA_BASE in the temporary VM, mirroring what
+> the main test already does.
+
+The regression in Linus' tree that is fixed by this patch is still
+present today.  Adding Marc and Oliver since this bug manifests on
+arm64, adding Anup and Atish since the patch introducing the regression
+was merged via RISC-V.
+
+> Reported-by: Mark Brown <broonie@kernel.org>
+> Closes: https://lore.kernel.org/lkml/afM8WEe4gG5tL4fH@sirena.co.uk
+> Signed-off-by: Jiakai Xu <xujiakai2025@iscas.ac.cn>
+> Signed-off-by: Jiakai Xu <jiakaiPeanut@gmail.com>
+> Fixes: 40351ed924dd30 ("KVM: selftests: Refactor UAPI tests into dedicate=
+d function")
+> ---
+>  tools/testing/selftests/kvm/steal_time.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+>=20
+> diff --git a/tools/testing/selftests/kvm/steal_time.c b/tools/testing/sel=
+ftests/kvm/steal_time.c
+> index 7df2bc8eec02..2b01b466ddc1 100644
+> --- a/tools/testing/selftests/kvm/steal_time.c
+> +++ b/tools/testing/selftests/kvm/steal_time.c
+> @@ -213,6 +213,10 @@ static void check_steal_time_uapi(void)
+> =20
+>  	vm =3D vm_create_with_one_vcpu(&vcpu, NULL);
+> =20
+> +	/* ST_GPA_BASE needs a valid memslot for gfn_to_hva() to succeed */
+> +	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS, ST_GPA_BASE,
+> +				    1, 1, 0);
+> +
+>  	struct kvm_device_attr dev =3D {
+>  		.group =3D KVM_ARM_VCPU_PVTIME_CTRL,
+>  		.attr =3D KVM_ARM_VCPU_PVTIME_IPA,
+> --=20
+> 2.34.1
+>=20
+
+--uWRoW7NMniSf8PmN
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmoCiZsACgkQJNaLcl1U
+h9Aztwf/TJOL07dodf+kbqHGMGanbVGP2UgWLGXE9K1upoIUu6EOLDb52Qn10qVt
+Uiq0EHGtwmhChGZqkdaP7GRRUuP2/3UbVC2O7Ts/m4RWs9AtBdmr3pn0pxwUNtg6
+w4wYmTNV1Czs782mzaa+ad0VcEXjdY3uirSYPMbDgwTEL+IHbrVs2SS20fTH8i/V
+BAi4DqyDVCRnu49QmGRqa0HvwrmNzP+5fBnJXauS5bbQqxBb18ePzLNKQ9fypFP5
+NEZvRAiRn/hwhWa/zh3YCqYrm3lFaR3uh0y+ndMHoD2BiPNPZzkVqF0/rzEZ//V2
+T5msZhZHP8j1DVjINnNAFjQ8p07K/w==
+=toXn
+-----END PGP SIGNATURE-----
+
+--uWRoW7NMniSf8PmN--
