@@ -1,138 +1,122 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E55A838E12D;
-	Wed, 13 May 2026 10:58:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B59093A6B8B;
+	Wed, 13 May 2026 11:16:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778669915; cv=none; b=Nw2KIGvIr0UE7VsRHxTvzMWnc7pw22j8J16UTrtAG45htoXM3cfENGUyS+UV71csO/J+YAQWaV+GwuD8M/BFxEzse1VKvJE2nY7SUddGg+GJiE3snO3Ksr0u05DUhMy7/7koF5AO58KikwQPT0Tb1pm3oZrn/WgvVf7kJuYKd+U=
+	t=1778670976; cv=none; b=hCY9oCLLafHWw0TF/f0vCvtsx6EfX207u+j5LkIs1ABcI5bFXRzYOzbNG3X/F7UZiJpPvYalYltcNxDYIUptn3YU18g2fu5buMeLOHdQyYt1pVESNo8Q1WN9aIYH6ajD4B1EKlzWpVTYmoxHG2b1BzRKxpnGPCB0984mZzlda+4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778669915; c=relaxed/simple;
-	bh=QIA/aaUl+Tf7JJyWRrgCs8eHCQk13Eufaox2+xCY8+8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=mIg8gKOftNgl2Gs33U8kc4E7zFe8rc9gL6M4OtZI+Jlc/3jnqB9wCepKYSkNk2sUIaG4qelc6GSL5RXayOoDbGdMdy2jt1sJehwsZlV3Jzx9/BLfcLNSR79nxk/alwfmRCPWlZtvsZNEqMYdpmae+AYC6M/ZwHB18b9iqjITRkQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=r/JD0yV0; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="r/JD0yV0"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:Message-Id:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From:
-	Reply-To:Content-ID:Content-Description:In-Reply-To:References;
-	bh=b2vQAn4oTfcls0aM2yCHBuL5+9umU8OJL3yCGEj5204=; b=r/JD0yV07yKn/rGJzW6sVNAKbN
-	huAov3LYBDl2q5atVn5g94IkPk4SDZKg9fPdqFaslx3PUAuV/ZCRvndG4380AVJIR+Puq9Sem9E2c
-	DAZdWLsaFboqsWxDXGDVwHQosWydSb0Y/hPfYUoliIiesZA6TAf3kqMpY08Y++C7VmIXVWaGXKvtJ
-	rdyR/Aibg2JYdDDpN1QtW7CJZvKosopdDy8Dtt3lp4BT5QUPzOLsVoSUs1LAFk0WeDbuOfBGH2/Qv
-	zOPPaJyt3JpqbHHmR4B2tc6PfALmzuXtF63L3qkB6ZC1s8v4MYJmcuT7MfLlorzAO3ji4r7TJkxnI
-	49n/lFqA==;
-Received: from authenticated user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wN7I2-00371Y-0r;
-	Wed, 13 May 2026 10:58:10 +0000
-From: Breno Leitao <leitao@debian.org>
-Date: Wed, 13 May 2026 03:57:54 -0700
-Subject: [PATCH net] nfc: llcp: avoid userspace overflow on invalid optlen
+	s=arc-20240116; t=1778670976; c=relaxed/simple;
+	bh=y8rQbMndo2srFaXh3NkszFiqDDFXnUz6OZVCV/sTT6o=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=OGfAUs7/JYq7rz0yXCLNhs8NJjB3MfZOlukjfAg/JQpydUFUXuwfM6TcyXivzpkARk5zA0E0s5z3EVH/TI3ENVU1z2l/hmGteMIQWi62+InmR9CSMp7paZ+Cxq0LVuo7cL7OiiIbw5wBc4J4Myy4mjewdgWpQcrFDiDb0WOwFzw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 21e5a3104ebd11f1aa26b74ffac11d73-20260513
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B, HR_CTT_MISS
+	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME, HR_SJ_DIGIT_LEN
+	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
+	HR_SJ_PHRASE_LEN, HR_SJ_PRE_RE, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
+	HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_TRUSTED
+	SA_EXISTED, SN_TRUSTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS
+	DMARC_NOPASS, CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO
+	GTI_C_BU, AMN_GOOD, ABX_MISS_RDNS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.12,REQID:77ded235-1e1c-407b-a79e-b5cc4d0b8cd5,IP:10,
+	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+	N:release,TS:5
+X-CID-INFO: VERSION:1.3.12,REQID:77ded235-1e1c-407b-a79e-b5cc4d0b8cd5,IP:10,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:5
+X-CID-META: VersionHash:e7bac3a,CLOUDID:8fbb76106d7c896d451a9b9b4f497a04,BulkI
+	D:260513180600PLGD15QJ,BulkQuantity:4,Recheck:0,SF:17|19|64|66|78|80|81|82
+	|83|102|127|841|850|898,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:0,File:nil
+	,RT:nil,Bulk:40,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,D
+	KP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 21e5a3104ebd11f1aa26b74ffac11d73-20260513
+X-User: lihongfu@kylinos.cn
+Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
+	(envelope-from <lihongfu@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 194317941; Wed, 13 May 2026 19:16:04 +0800
+From: Hongfu Li <lihongfu@kylinos.cn>
+To: david@kernel.org
+Cc: akpm@linux-foundation.org,
+	dev.jain@arm.com,
+	liam@infradead.org,
+	lihongfu@kylinos.cn,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org,
+	ljs@kernel.org,
+	mhocko@suse.com,
+	rppt@kernel.org,
+	shuah@kernel.org,
+	surenb@google.com,
+	vbabka@kernel.org
+Subject: Re: [PATCH v2] selftests/mm: Fix incorrect mmap() error handling with NULL instead of MAP_FAILED
+Date: Wed, 13 May 2026 19:15:22 +0800
+Message-Id: <20260513111522.824074-1-lihongfu@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <9e302879-d218-4257-9e2b-e468564b89ea@kernel.org>
+References: <9e302879-d218-4257-9e2b-e468564b89ea@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260513-fix_llc-v1-1-33c76f931ff6@debian.org>
-X-B4-Tracking: v=1; b=H4sIADFZBGoC/yXMQQqDMBAF0KsMf23AJI2VXKWI2Dhpp0haEhVBv
- Htp3b7F21E4Cxd42pF5lSLvBE+6IoTnkB6sZIQnmNo0tdNWRdn6aQrKXOOlta5ptXWoCJ/MUbb
- /dEPiGd2JZbm/OMy/A8fxBVwhGBJwAAAA
-X-Change-ID: 20260513-fix_llc-27f483568135
-To: "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, David Heidelberg <david+nfc@ixit.cz>, 
- Samuel Ortiz <sameo@linux.intel.com>
-Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, oe-linux-nfc@lists.linux.dev, 
- kernel-team@meta.com, Breno Leitao <leitao@debian.org>
-X-Mailer: b4 0.16-dev-d5d98
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2108; i=leitao@debian.org;
- h=from:subject:message-id; bh=QIA/aaUl+Tf7JJyWRrgCs8eHCQk13Eufaox2+xCY8+8=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqBFk+AoW4oPCP5GFeTXU6bONFB9NA6e78wUQak
- f0UWuFGWvKJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCagRZPgAKCRA1o5Of/Hh3
- baIuD/9WV2i+Km1+S+9RNoOXRoOcjrz64ezSvMmj2PgL0WQuf6waZw4SN45WRtGigcorcNp7H+i
- HB2nakWATkqD2AS5WOMLLzTZzZFA3Lh1VIx0iuAiEssLRLRStUW9YNbrKIkAwbTYb3Fs8zT++pW
- adx+kddYkyH+m2kFXzIGVz6lfloNE8gqKfZ5JeqtdCFSNNKFs4BV7ho7XlBurPQ9SU/LYRu1mGS
- MpgBc5c1l45gyVXToVfpKyAR+zasYeombAWk1rLDgppNJq0pkOJ28Z8tceMPv8Au5mFox3pcSSi
- oeq+zBUaraEpZYIUU6ksy2CWFAnSI1LCKMwQ0RFc5vadtHKUzjOAnz0CNWTcgfo78O8stjtR9LY
- saL5gVcEO8zpqpTephhAoZdvLnVwsAjuz7imUvZUTl+V9sREx0NJ2YvGEe6ZHViI04Q6HQnhF6h
- +AMPqQGOuPCPIFOkdTLIflLqjzRn5xGgAtBKcqwJ6o06LevBh9QDcYHnFsoPPyDQygaf5xxb1CH
- QC29DpPKp8mTy4cpAWaIxFMC3tgn0SCVNOxBneqZ0ApyG0zG86LxKbNOlT1kO7ZeYpnVeaxXViP
- 9rEJWb76EhgjpWmq85KkTcM0JGftSqzrL2KQn+D3snErdOtxpcSsWyVEsqPww+FJFSfoOScrroC
- EyUEuel0yP+FE2Q==
-X-Developer-Key: i=leitao@debian.org; a=openpgp;
- fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
-X-Debian-User: leitao
+Content-Transfer-Encoding: 8bit
 
-nfc_llcp_getsockopt() returns each of its option values via:
+Hi David,
+Thanks for your review.
 
-	put_user(value, (u32 __user *) optval);
+> > mmap() returns MAP_FAILED, which is defined as (void *)-1, on error,
+> > not NULL.  Several selftests incorrectly check the return value of
+> > mmap() using !ptr or ptr == NULL, which would erroneously treat
+> > MAP_FAILED as a valid pointer since MAP_FAILED is non-zero and
+> > non-NULL.  This can lead to segfaults when mmap() actually fails
+> > under memory pressure.
+> 
+> Well, your patch also adds more checks where we previously didn't have any checks?
 
-The (u32 __user *) cast tells put_user() to store sizeof(u32) = 4
-bytes, regardless of what optlen the caller supplied. The earlier
-clamp
+Yes, I added a few checks for the mmap return value, as they were not
+handled previously. Perhaps I should also adjust the commit message to
+match this change.
 
-	len = min_t(u32, len, sizeof(u32));
+> > 
+> > Signed-off-by: Hongfu Li <lihongfu@kylinos.cn>
+> > Reviewed-by: Dev Jain <dev.jain@arm.com>
+> > ---
+> > v2:
+> > - Add missing mmap() return value checks in pkey_sighandler_tests.c
+> >   and protection_keys.c
+> > ---
+> 
+> [...]
+> 
+> > diff --git a/tools/testing/selftests/mm/protection_keys.c b/tools/testing/selftests/mm/protection_keys.c
+> > index 2085982dba69..580bf1668c71 100644
+> > --- a/tools/testing/selftests/mm/protection_keys.c
+> > +++ b/tools/testing/selftests/mm/protection_keys.c
+> > @@ -1217,6 +1217,7 @@ static void arch_force_pkey_reg_init(void)
+> >  	 * doing the XSAVE size enumeration dance.
+> >  	 */
+> >  	buf = mmap(NULL, 1*MB, PROT_READ|PROT_WRITE, MAP_ANONYMOUS|MAP_PRIVATE, -1, 0);
+> > +	pkey_assert(buf != (void *)-1);
+> 
+> What's the reason for not using MAP_FAILED?
 
-only affects the optlen value that is later reported back to user
-space; it does not constrain the put_user() store itself.
-
-If a caller invokes getsockopt(NFC_LLCP_RW/MIUX/REMOTE_*) with
-optlen < 4 (for example optlen = 1 against a single-byte buffer),
-the kernel still writes 4 bytes into optval, scribbling up to 3
-bytes of the caller's adjacent memory.
-
-That violates the getsockopt(2) contract that the kernel must not write
-more than *optlen bytes into the user buffer.
-
-All five supported optnames (NFC_LLCP_RW, NFC_LLCP_MIUX,
-NFC_LLCP_REMOTE_MIU, NFC_LLCP_REMOTE_LTO, NFC_LLCP_REMOTE_RW)
-are affected because they share the same put_user() pattern.
-
-Reject any call with optlen < sizeof(u32) up front so the
-put_user() stores always have enough room. This formalises the
-implicit u32 ABI these options have always returned.o
-
-Maybe it is possible to change nfc_llcp_getsockopt() to accept optlen
-< 4, but this might be a riskier operation than just keep the current
-approach and guarantee that users are doing the right thing.
-
-Fixes: 26fd76cab2e6 ("NFC: llcp: Implement socket options")
-Signed-off-by: Breno Leitao <leitao@debian.org>
----
- net/nfc/llcp_sock.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/net/nfc/llcp_sock.c b/net/nfc/llcp_sock.c
-index f1be1e84f6653..dc74e725ddd05 100644
---- a/net/nfc/llcp_sock.c
-+++ b/net/nfc/llcp_sock.c
-@@ -319,6 +319,9 @@ static int nfc_llcp_getsockopt(struct socket *sock, int level, int optname,
- 	if (get_user(len, optlen))
- 		return -EFAULT;
- 
-+	if (len < sizeof(u32))
-+		return -EINVAL;
-+
- 	local = llcp_sock->local;
- 	if (!local)
- 		return -ENODEV;
-
----
-base-commit: 1d5dcaa3bd65f2e8c9baa14a393d3a2dc5db7524
-change-id: 20260513-fix_llc-27f483568135
+I tried to keep consistency with the existing mmap handling pattern in protection_keys.c.
+That said, using MAP_FAILED would indeed be more appropriate.
+I'll adjust this and send out a v3 shortly.
 
 Best regards,
---  
-Breno Leitao <leitao@debian.org>
-
+Hongfu
