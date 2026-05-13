@@ -1,49 +1,49 @@
-Received: from mail-wr1-f66.google.com (mail-wr1-f66.google.com [209.85.221.66])
+Received: from mail-wm1-f66.google.com (mail-wm1-f66.google.com [209.85.128.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B20C3B2FF3
-	for <linux-kselftest@vger.kernel.org>; Wed, 13 May 2026 18:36:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 606953B3BE3
+	for <linux-kselftest@vger.kernel.org>; Wed, 13 May 2026 18:36:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778697386; cv=none; b=u6diK3zMIQVduxLABjxZgzYL8kWf7BbA7qRtB14pZcbrg7PSJuN5Gs+TSlivCEgGLbP1QQ+d9DFJO3gB+HcaendVoulqdyhOE5QMKzS3w5rDLyM9gdpk3OaXTHzvtM4AiDGygjnsWMb5+BqSEcNoKoSzW5O2a3NEFmJXfSiCi28=
+	t=1778697388; cv=none; b=KzuXpPvgGvQGN2zEdUrQGb8gNpsCIelzfgd0ikUjKoxunlk3cEf4guDrBcxvtoyRcCUuOBLLfGHxQKH1PUw2/0+/OBJrifKeagdNaMijkkziIFyusaITRPvW/OBt6EGan7szqkSmLDfweUUj6i5mdV0A+R71GMvOan9EVZrrXQ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778697386; c=relaxed/simple;
-	bh=o0pCRzhxwmfMV3TcD5VlPb9JbEKxbxvZW3AI+AvXYbM=;
+	s=arc-20240116; t=1778697388; c=relaxed/simple;
+	bh=+5u5jJ60v1xjveGW2ChiPGnJYtxZ0kG5T3OCYSA6QtY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dH1H90yMiOVE++6pmk3LPxkJD7fMENVqUsZcr7i5MC0dh/bhM8U43gauT27Rm0VQKMRikUENzcs6cmCMCnrBQjmSyOkNwMaY/lymeNio5SX8XHVm5cFMB6ZTKW32XdfnUZyY91GoZ3+pk8bqS3BkK2xN5ZNv3APFrNr7h3TdeuA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.66
+	 MIME-Version; b=cB7YLwNUptZ5O9yCGG0/bcHVCno9O3mz7bh338c6tvBMAuanw/Ky7r9LfWNGt7NnyGz03Zj+msD20SLURA/pZQRnERMejf8FIHS/tK6FouiBXAp/AAINVJMxvjU+SF5VmRcieuZZCgoZIAktjACxH0YqCtKm+gGdbmZqCS/iCpw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.66
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f66.google.com with SMTP id ffacd0b85a97d-44ccbd3290aso5768428f8f.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 13 May 2026 11:36:23 -0700 (PDT)
+Received: by mail-wm1-f66.google.com with SMTP id 5b1f17b1804b1-488ff90d6c7so63610295e9.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 13 May 2026 11:36:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778697382; x=1779302182;
+        d=1e100.net; s=20251104; t=1778697385; x=1779302185;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=aDjn5A6QB434U5615WGA/fHygBkP687Auiym2D0+n2I=;
-        b=TtLvxVIFM+aCfHHPrKrumowNupOBCvLgwydLWzBs5RcIP/jtY/U3bZ7ucj4/lNeAKZ
-         9Xow/SOFVDuqtAYsO/OpdE6HBxG0KBZ41NCOC/wwJJvYSRZoik4rX6RqOlmOPiZEnKrd
-         0XvJVjWm1NHwEkRbgHlHWm/7/o/CRRagBNd93ndWiSpuBaC1Uaudr8ftc3AwHh2/JK9q
-         nQbkrfAOiMG7DqG9VBHkj5DzXkfBkw7UkfI5tVoHla/9RHTmSWZXBqQNMgM4zHCo9OtV
-         Y3Ru9VsmUobm/BgYXbIqhZGOtUzGGZM+eo0bdfYi95+O+402s4kVjhYc5GhurmUfF9rt
-         Ztzg==
-X-Forwarded-Encrypted: i=1; AFNElJ9GPeHFBiaX51egYxR0V3P14JXbfcmUPIPYxQxjQu5W39rV99k3ehJUW+IR+EbUJZ/7exp7j0RLko4vXGQwNe4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz7CbHsRlqqfDCcpVi+4erpAvHz8JDr9V0MetQv0m1cvdX7HttY
-	5RogKIAwz2IXmCIJl6GZE205WD1EDt7EyhMxc/ssAvXs5J4ofJ4W7h46
-X-Gm-Gg: Acq92OFf6GIxJGWWsyc/D8GeEWuXw7x83ASQcgSr72WfV5WrGOAu6kv6d3Ns9oeChPw
-	VNFElJmdeZzGW37O3oDbt7g4rawn/wi6NsOECAPuB3qmG9B7fyhAjDiU10TfYHKduxY03QIbL/T
-	wFmwb6i6irMAK9Zrl1pvWGsZ4DOR45mplYkC6XMBIBRhE/uKcwJNpaEKYL18QT6GJZ9yOG0ld/T
-	AFAalRWMZnpQAySvLaeUIXXkevMgwfWwVKT7MBAatKD9HGNbiiEpDS8//V1oUF9NTsBEC/hEQj/
-	TJ1obM+b+IWVCl9P1H4e1fAdPyKdmm9sSinVNSmiA9+mfoSYdqul913RCPxrVrD0gZ7MEa+h1tb
-	bhr7R6rcqE12BZpORkPuXunh4fdYi4FKP76+o2ny47HuGMEp4hcQxyKLmQtsxIse2FKgTFwmR9+
-	/ewA1B6h7zhgqGfEeG60LCl4sdopOAw5z61SpWnyPt5TksWDvjY4PVqdxuwPM=
-X-Received: by 2002:a05:6000:2386:b0:43c:f1a5:56f6 with SMTP id ffacd0b85a97d-45c5b2184f5mr7318960f8f.43.1778697381945;
-        Wed, 13 May 2026 11:36:21 -0700 (PDT)
+        bh=lFrGXmGkGqSJhTRhqyzlGScwr6w06YpxqqRUHTQ9L1A=;
+        b=IY+G4WeMPK/gSEMYEJXVVtajx7qNb1BYPF0vBnO43rZs+uX1E5XdRxok+Ghlh3wo1b
+         JwNB6cvst0kWVhdRE4S7B4Wrlzfv9v2q8Ft02Pg0onJh4JRPkN9ZNFFQSbX9iPsQnAkp
+         hnOrLen0HQWs4tJ4bZWM4RLSrPIJ+UQEWWelkeM/xdPqszNaY6ybf8d5Dwjs+i4HGxsl
+         s9k+h3qVAN/OGya08OHYcKdzGDD+DEx5xLQNLm0JrIFHm158phXh7rwI39cikSw6P3Ya
+         ewAvChw0jGyQ53BOf6YJiPPR1qU7uAmfubWhjlrg8r0i6DNnAVO09OxMJ8AGQ4mMu3V+
+         MnTw==
+X-Forwarded-Encrypted: i=1; AFNElJ8uFGBq9pSN42heU683bbdlpbG0OmbGx+hhw37WbegnGK++vclDydaUoR86z0bUSCDUsk01TUXAz9tkna2G8TA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzhyCw7H3/pD9PUHki3KEDlx3napNwJPHNrZrCJ003is1N3wtmM
+	SZ6FgbhsN5JEpEmRLtbn1MnvpPXmUATEknso5h7RQ+5N40gaOvlt1fT5
+X-Gm-Gg: Acq92OFMB5aNOGKQI0VCHwLI9Wj4wPdM61wvh/hWhd0n+2DZcXC8kEW99tCwmj2O9+x
+	sufJbZhr5ZtKH6O55+51cd4dFj1kIRLSJ819yutPbcyVSRtr8AlyDTx0X484ddMuzE6F5E69VPQ
+	oE8/DBOMggE54VQ1gTWNaS+cVWZzbqtIiyhbTW2mQmmhU/+DuDThmBuqMxtPS6eAY2W8kWML6mq
+	VZwuGEXM2S5AKFL4ciEIS9necy7wpRebBrIQuYGyqK1/LInk4Ih98/acp6ZPhbfYdLDDkklvEYe
+	lg/pHdkMr39eT3c9baEFO8RnLSlQfyL4UeTicRhdOYVLnjEEa1XKZP+Q+NxJ53gdpck145y9/gS
+	qPT8wVQUk2j1SpO23aPgHN4EJjtB9wy2PUlGjuUHasOa/jiV0YTO1fHQ8mvymIeF3x/gdVPYFU8
+	XI0KeWWJdTabgqLKPOOabMK+FeRSI6RRwYpwC+ilmoo5sr3YynUW3P6iZYCXY=
+X-Received: by 2002:a05:600d:18:b0:48a:5574:3a5d with SMTP id 5b1f17b1804b1-48fce9bd5d1mr49631725e9.7.1778697384382;
+        Wed, 13 May 2026 11:36:24 -0700 (PDT)
 Received: from im-t490s.redhat.com (37-48-40-237.nat.epc.tmcz.cz. [37.48.40.237])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45da15a6454sm720609f8f.34.2026.05.13.11.36.20
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45da15a6454sm720609f8f.34.2026.05.13.11.36.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 May 2026 11:36:21 -0700 (PDT)
+        Wed, 13 May 2026 11:36:24 -0700 (PDT)
 From: Ilya Maximets <i.maximets@ovn.org>
 To: netdev@vger.kernel.org
 Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
@@ -67,9 +67,9 @@ Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
 	dev@openvswitch.org,
 	linux-kselftest@vger.kernel.org,
 	Ilya Maximets <i.maximets@ovn.org>
-Subject: [RFC net-next 2/6] openvswitch: vport: remove infrastructure for vport options
-Date: Wed, 13 May 2026 20:35:22 +0200
-Message-ID: <20260513183559.2141010-3-i.maximets@ovn.org>
+Subject: [RFC net-next 3/6] openvswitch: vport: remove infrastructure for separate modules
+Date: Wed, 13 May 2026 20:35:23 +0200
+Message-ID: <20260513183559.2141010-4-i.maximets@ovn.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260513183559.2141010-1-i.maximets@ovn.org>
 References: <20260513183559.2141010-1-i.maximets@ovn.org>
@@ -81,233 +81,131 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Since removal of tunnel vport types, there aren't any vports that
-support options.  Let's remove the options-related infrastructure.
+Since removal of legacy tunnel vport types only the built-in ones
+remain.  So, there is no need for the extra infrastructure for dynamic
+module loading.  Can be reinstated in the future if we need a new
+vport type.
 
-Can be reinstated if we ever need a new vport type or if we need extra
-options for the existing ones.  The uAPI attribute remains.
-
-Clarification comment is added to highlight that none of the supported
-vports support options at the moment.
-
-Note: It is technically possible that someone has an out-of-tree module
-named vport-type-N that implements a different vport type and they have
-options for this vport type.  However, our message size calculations do
-not account for whatever options such a port would have and so it is
-dangerous to load such a module without modifying the code in the main
-datapath.c, unless the options are smaller than the ones we had for
-vxlan.  A more robust solution would be to have a different version of
-the entire openvswitch module instead, so the use case of a separate
-vport-type-N loaded with the upstream openvswitch module is unlikely.
-At this time we're not aware of anyone doing that.  Alternative to
-immediate removal would be printing out a deprecation warning whenever
-the options setting is attempted.
+Note: It is technically possible that someone has an out-of-tree
+module named vport-type-N that implements a different vport type.
+At this time we're not aware of anyone doing that.  People running
+out-of-tree modules normally just have an out-of-tree openvswitch
+module as a whole.  And there are actually no supported out-of-tree
+implementations of the openvswitch module known to the community.
+Alternative to immediate removal would be printing out a deprecation
+warning whenever a vport module is loaded, but I'm not sure if we
+need it at this time.
 
 Signed-off-by: Ilya Maximets <i.maximets@ovn.org>
 ---
- net/openvswitch/datapath.c | 20 +-------------
- net/openvswitch/vport.c    | 54 --------------------------------------
- net/openvswitch/vport.h    | 14 ----------
- 3 files changed, 1 insertion(+), 87 deletions(-)
+ net/openvswitch/vport.c | 22 ++--------------------
+ net/openvswitch/vport.h |  9 +--------
+ 2 files changed, 3 insertions(+), 28 deletions(-)
 
-diff --git a/net/openvswitch/datapath.c b/net/openvswitch/datapath.c
-index d86c53fedc1e1..a9c0cc2c702a4 100644
---- a/net/openvswitch/datapath.c
-+++ b/net/openvswitch/datapath.c
-@@ -1852,7 +1852,6 @@ static int ovs_dp_cmd_new(struct sk_buff *skb, struct genl_info *info)
- 	/* Set up our datapath device. */
- 	parms.name = nla_data(a[OVS_DP_ATTR_NAME]);
- 	parms.type = OVS_VPORT_TYPE_INTERNAL;
--	parms.options = NULL;
- 	parms.dp = dp;
- 	parms.port_no = OVSP_LOCAL;
- 	parms.upcall_portids = a[OVS_DP_ATTR_UPCALL_PID];
-@@ -2168,10 +2167,6 @@ static int ovs_vport_cmd_fill_info(struct vport *vport, struct sk_buff *skb,
- 	if (ovs_vport_get_upcall_portids(vport, skb))
- 		goto nla_put_failure;
- 
--	err = ovs_vport_get_options(vport, skb);
--	if (err == -EMSGSIZE)
--		goto error;
--
- 	genlmsg_end(skb, ovs_header);
- 	return 0;
- 
-@@ -2179,7 +2174,6 @@ static int ovs_vport_cmd_fill_info(struct vport *vport, struct sk_buff *skb,
- 	rcu_read_unlock();
- nla_put_failure:
- 	err = -EMSGSIZE;
--error:
- 	genlmsg_cancel(skb, ovs_header);
- 	return err;
- }
-@@ -2206,10 +2200,6 @@ static size_t ovs_vport_cmd_msg_size(void)
- 	/* OVS_VPORT_ATTR_UPCALL_PID */
- 	msgsize += nla_total_size(nr_cpu_ids * sizeof(u32));
- 
--	/* There are no vports supporting OVS_VPORT_ATTR_OPTIONS, so it is
--	 * not included in the message size calculation.
--	 */
--
- 	return msgsize;
- }
- 
-@@ -2361,7 +2351,6 @@ static int ovs_vport_cmd_new(struct sk_buff *skb, struct genl_info *info)
- 	}
- 
- 	parms.name = nla_data(a[OVS_VPORT_ATTR_NAME]);
--	parms.options = a[OVS_VPORT_ATTR_OPTIONS];
- 	parms.dp = dp;
- 	parms.port_no = port_no;
- 	parms.upcall_portids = a[OVS_VPORT_ATTR_UPCALL_PID];
-@@ -2422,13 +2411,6 @@ static int ovs_vport_cmd_set(struct sk_buff *skb, struct genl_info *info)
- 		goto exit_unlock_free;
- 	}
- 
--	if (a[OVS_VPORT_ATTR_OPTIONS]) {
--		err = ovs_vport_set_options(vport, a[OVS_VPORT_ATTR_OPTIONS]);
--		if (err)
--			goto exit_unlock_free;
--	}
--
--
- 	if (a[OVS_VPORT_ATTR_UPCALL_PID]) {
- 		struct nlattr *ids = a[OVS_VPORT_ATTR_UPCALL_PID];
- 
-@@ -2602,7 +2584,7 @@ static const struct nla_policy vport_policy[OVS_VPORT_ATTR_MAX + 1] = {
- 	[OVS_VPORT_ATTR_PORT_NO] = { .type = NLA_U32 },
- 	[OVS_VPORT_ATTR_TYPE] = { .type = NLA_U32 },
- 	[OVS_VPORT_ATTR_UPCALL_PID] = { .type = NLA_UNSPEC },
--	[OVS_VPORT_ATTR_OPTIONS] = { .type = NLA_NESTED },
-+	[OVS_VPORT_ATTR_OPTIONS] = { .type = NLA_NESTED }, /* Unused. */
- 	[OVS_VPORT_ATTR_IFINDEX] = NLA_POLICY_MIN(NLA_S32, 0),
- 	[OVS_VPORT_ATTR_NETNSID] = { .type = NLA_S32 },
- 	[OVS_VPORT_ATTR_UPCALL_STATS] = { .type = NLA_NESTED },
 diff --git a/net/openvswitch/vport.c b/net/openvswitch/vport.c
-index 56b2e2d1a749f..7a9caacfd6ac2 100644
+index 7a9caacfd6ac2..ef2fff4353c0a 100644
 --- a/net/openvswitch/vport.c
 +++ b/net/openvswitch/vport.c
-@@ -239,22 +239,6 @@ struct vport *ovs_vport_add(const struct vport_parms *parms)
- 		return ERR_PTR(-EAGAIN);
+@@ -57,7 +57,7 @@ static struct hlist_head *hash_bucket(const struct net *net, const char *name)
+ 	return &dev_table[hash & (VPORT_HASH_BUCKETS - 1)];
  }
  
--/**
-- *	ovs_vport_set_options - modify existing vport device (for kernel callers)
-- *
-- * @vport: vport to modify.
-- * @options: New configuration.
-- *
-- * Modifies an existing device with the specified configuration (which is
-- * dependent on device type).  ovs_mutex must be held.
-- */
--int ovs_vport_set_options(struct vport *vport, struct nlattr *options)
--{
--	if (!vport->ops->set_options)
--		return -EOPNOTSUPP;
--	return vport->ops->set_options(vport, options);
--}
--
+-int __ovs_vport_ops_register(struct vport_ops *ops)
++int ovs_vport_ops_register(struct vport_ops *ops)
+ {
+ 	int err = -EEXIST;
+ 	struct vport_ops *o;
+@@ -73,7 +73,6 @@ int __ovs_vport_ops_register(struct vport_ops *ops)
+ 	ovs_unlock();
+ 	return err;
+ }
+-EXPORT_SYMBOL_GPL(__ovs_vport_ops_register);
+ 
+ void ovs_vport_ops_unregister(struct vport_ops *ops)
+ {
+@@ -81,7 +80,6 @@ void ovs_vport_ops_unregister(struct vport_ops *ops)
+ 	list_del(&ops->list);
+ 	ovs_unlock();
+ }
+-EXPORT_SYMBOL_GPL(ovs_vport_ops_unregister);
+ 
  /**
-  *	ovs_vport_del - delete existing vport device
-  *
-@@ -348,44 +332,6 @@ int ovs_vport_get_upcall_stats(struct vport *vport, struct sk_buff *skb)
- 	return 0;
+  *	ovs_vport_locate - find a port that has already been created
+@@ -210,12 +208,8 @@ struct vport *ovs_vport_add(const struct vport_parms *parms)
+ 	if (ops) {
+ 		struct hlist_head *bucket;
+ 
+-		if (!try_module_get(ops->owner))
+-			return ERR_PTR(-EAFNOSUPPORT);
+-
+ 		vport = ops->create(parms);
+ 		if (IS_ERR(vport)) {
+-			module_put(ops->owner);
+ 			return vport;
+ 		}
+ 
+@@ -225,18 +219,7 @@ struct vport *ovs_vport_add(const struct vport_parms *parms)
+ 		return vport;
+ 	}
+ 
+-	/* Unlock to attempt module load and return -EAGAIN if load
+-	 * was successful as we need to restart the port addition
+-	 * workflow.
+-	 */
+-	ovs_unlock();
+-	request_module("vport-type-%d", parms->type);
+-	ovs_lock();
+-
+-	if (!ovs_vport_lookup(parms))
+-		return ERR_PTR(-EAFNOSUPPORT);
+-	else
+-		return ERR_PTR(-EAGAIN);
++	return ERR_PTR(-EAFNOSUPPORT);
  }
  
--/**
-- *	ovs_vport_get_options - retrieve device options
-- *
-- * @vport: vport from which to retrieve the options.
-- * @skb: sk_buff where options should be appended.
-- *
-- * Retrieves the configuration of the given device, appending an
-- * %OVS_VPORT_ATTR_OPTIONS attribute that in turn contains nested
-- * vport-specific attributes to @skb.
-- *
-- * Returns 0 if successful, -EMSGSIZE if @skb has insufficient room, or another
-- * negative error code if a real error occurred.  If an error occurs, @skb is
-- * left unmodified.
-- *
-- * Must be called with ovs_mutex or rcu_read_lock.
-- */
--int ovs_vport_get_options(const struct vport *vport, struct sk_buff *skb)
--{
--	struct nlattr *nla;
--	int err;
--
--	if (!vport->ops->get_options)
--		return 0;
--
--	nla = nla_nest_start_noflag(skb, OVS_VPORT_ATTR_OPTIONS);
--	if (!nla)
--		return -EMSGSIZE;
--
--	err = vport->ops->get_options(vport, skb);
--	if (err) {
--		nla_nest_cancel(skb, nla);
--		return err;
--	}
--
--	nla_nest_end(skb, nla);
--	return 0;
--}
--
  /**
-  *	ovs_vport_set_upcall_portids - set upcall portids of @vport.
-  *
+@@ -250,7 +233,6 @@ struct vport *ovs_vport_add(const struct vport_parms *parms)
+ void ovs_vport_del(struct vport *vport)
+ {
+ 	hlist_del_rcu(&vport->hash_node);
+-	module_put(vport->ops->owner);
+ 	vport->ops->destroy(vport);
+ }
+ 
 diff --git a/net/openvswitch/vport.h b/net/openvswitch/vport.h
-index 9f67b9dd49f98..636788b59907c 100644
+index 636788b59907c..930f1ccc85581 100644
 --- a/net/openvswitch/vport.h
 +++ b/net/openvswitch/vport.h
-@@ -34,9 +34,6 @@ void ovs_vport_get_stats(struct vport *, struct ovs_vport_stats *);
- 
- int ovs_vport_get_upcall_stats(struct vport *vport, struct sk_buff *skb);
- 
--int ovs_vport_set_options(struct vport *, struct nlattr *options);
--int ovs_vport_get_options(const struct vport *, struct sk_buff *);
--
- int ovs_vport_set_upcall_portids(struct vport *, const struct nlattr *pids);
- int ovs_vport_get_upcall_portids(const struct vport *, struct sk_buff *);
- u32 ovs_vport_find_upcall_portid(const struct vport *, struct sk_buff *);
-@@ -92,8 +89,6 @@ struct vport {
-  *
-  * @name: New vport's name.
-  * @type: New vport's type.
-- * @options: %OVS_VPORT_ATTR_OPTIONS attribute from Netlink message, %NULL if
-- * none was supplied.
-  * @desired_ifindex: New vport's ifindex.
-  * @dp: New vport's datapath.
-  * @port_no: New vport's port number.
-@@ -104,7 +99,6 @@ struct vport_parms {
- 	const char *name;
- 	enum ovs_vport_type type;
- 	int desired_ifindex;
--	struct nlattr *options;
- 
- 	/* For ovs_vport_alloc(). */
- 	struct datapath *dp;
-@@ -120,11 +114,6 @@ struct vport_parms {
-  * a new vport allocated with ovs_vport_alloc(), otherwise an ERR_PTR() value.
-  * @destroy: Destroys a vport.  Must call vport_free() on the vport but not
+@@ -116,7 +116,6 @@ struct vport_parms {
   * before an RCU grace period has elapsed.
-- * @set_options: Modify the configuration of an existing vport.  May be %NULL
-- * if modification is not supported.
-- * @get_options: Appends vport-specific attributes for the configuration of an
-- * existing vport to a &struct sk_buff.  May be %NULL for a vport that does not
-- * have any configuration.
   * @send: Send a packet on the device.
   * zero for dropped packets or negative for error.
-  * @owner: Module that implements this vport type.
-@@ -137,9 +126,6 @@ struct vport_ops {
- 	struct vport *(*create)(const struct vport_parms *);
+- * @owner: Module that implements this vport type.
+  * @list: List entry in the global list of vport types.
+  */
+ struct vport_ops {
+@@ -127,7 +126,6 @@ struct vport_ops {
  	void (*destroy)(struct vport *);
  
--	int (*set_options)(struct vport *, struct nlattr *);
--	int (*get_options)(const struct vport *, struct sk_buff *);
--
  	int (*send)(struct sk_buff *skb);
- 	struct module *owner;
+-	struct module *owner;
  	struct list_head list;
+ };
+ 
+@@ -191,12 +189,7 @@ static inline const char *ovs_vport_name(struct vport *vport)
+ 	return vport->dev->name;
+ }
+ 
+-int __ovs_vport_ops_register(struct vport_ops *ops);
+-#define ovs_vport_ops_register(ops)		\
+-	({					\
+-		(ops)->owner = THIS_MODULE;	\
+-		__ovs_vport_ops_register(ops);	\
+-	})
++int ovs_vport_ops_register(struct vport_ops *ops);
+ 
+ void ovs_vport_ops_unregister(struct vport_ops *ops);
+ void ovs_vport_send(struct vport *vport, struct sk_buff *skb, u8 mac_proto);
 -- 
 2.53.0
 
