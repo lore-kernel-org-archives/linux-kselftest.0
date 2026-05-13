@@ -1,49 +1,49 @@
-Received: from mail-wm1-f66.google.com (mail-wm1-f66.google.com [209.85.128.66])
+Received: from mail-wr1-f68.google.com (mail-wr1-f68.google.com [209.85.221.68])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 606953B3BE3
-	for <linux-kselftest@vger.kernel.org>; Wed, 13 May 2026 18:36:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC61C3B6362
+	for <linux-kselftest@vger.kernel.org>; Wed, 13 May 2026 18:36:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.68
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778697388; cv=none; b=KzuXpPvgGvQGN2zEdUrQGb8gNpsCIelzfgd0ikUjKoxunlk3cEf4guDrBcxvtoyRcCUuOBLLfGHxQKH1PUw2/0+/OBJrifKeagdNaMijkkziIFyusaITRPvW/OBt6EGan7szqkSmLDfweUUj6i5mdV0A+R71GMvOan9EVZrrXQ4=
+	t=1778697391; cv=none; b=LYQlh7gukGrGVZyUtf55UteCTzY5pxXhvcARaE2ItUJljC5kLcwuvJyEqNaBEf7BkwqoF1RtFIdipMlGlD7QkVMY1KQYkgRpgcIVEQV8evvqxJajUZ1PttDCJKcK0LDYHMJzhYeoBNu6PgXiKf+yaTeIy2BNKHUWNPNdt+K9gbw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778697388; c=relaxed/simple;
-	bh=+5u5jJ60v1xjveGW2ChiPGnJYtxZ0kG5T3OCYSA6QtY=;
+	s=arc-20240116; t=1778697391; c=relaxed/simple;
+	bh=kkNx7pBIe4lTrSygNXIC+r7fP19o5wlqxg31cX6buFg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cB7YLwNUptZ5O9yCGG0/bcHVCno9O3mz7bh338c6tvBMAuanw/Ky7r9LfWNGt7NnyGz03Zj+msD20SLURA/pZQRnERMejf8FIHS/tK6FouiBXAp/AAINVJMxvjU+SF5VmRcieuZZCgoZIAktjACxH0YqCtKm+gGdbmZqCS/iCpw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.66
+	 MIME-Version; b=WFekEZzEkiBrJh5/pQIaz21HcAILJK8AzpGAfCHxxviAOJ7esCUb35MaqhaCJNhC4kWFJOqyW0oc3M5ykW2MT+xA+8Sz1wg/TNDFsk1vtXNrX+/xjgDnkCXI++jvYpcyxUkaaTofJJyi35Gq+ZOVwHC8amVoHze2XXSqIzOgH5c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.68
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f66.google.com with SMTP id 5b1f17b1804b1-488ff90d6c7so63610295e9.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 13 May 2026 11:36:26 -0700 (PDT)
+Received: by mail-wr1-f68.google.com with SMTP id ffacd0b85a97d-449de065cb3so6533441f8f.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 13 May 2026 11:36:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778697385; x=1779302185;
+        d=1e100.net; s=20251104; t=1778697387; x=1779302187;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=lFrGXmGkGqSJhTRhqyzlGScwr6w06YpxqqRUHTQ9L1A=;
-        b=IY+G4WeMPK/gSEMYEJXVVtajx7qNb1BYPF0vBnO43rZs+uX1E5XdRxok+Ghlh3wo1b
-         JwNB6cvst0kWVhdRE4S7B4Wrlzfv9v2q8Ft02Pg0onJh4JRPkN9ZNFFQSbX9iPsQnAkp
-         hnOrLen0HQWs4tJ4bZWM4RLSrPIJ+UQEWWelkeM/xdPqszNaY6ybf8d5Dwjs+i4HGxsl
-         s9k+h3qVAN/OGya08OHYcKdzGDD+DEx5xLQNLm0JrIFHm158phXh7rwI39cikSw6P3Ya
-         ewAvChw0jGyQ53BOf6YJiPPR1qU7uAmfubWhjlrg8r0i6DNnAVO09OxMJ8AGQ4mMu3V+
-         MnTw==
-X-Forwarded-Encrypted: i=1; AFNElJ8uFGBq9pSN42heU683bbdlpbG0OmbGx+hhw37WbegnGK++vclDydaUoR86z0bUSCDUsk01TUXAz9tkna2G8TA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzhyCw7H3/pD9PUHki3KEDlx3napNwJPHNrZrCJ003is1N3wtmM
-	SZ6FgbhsN5JEpEmRLtbn1MnvpPXmUATEknso5h7RQ+5N40gaOvlt1fT5
-X-Gm-Gg: Acq92OFMB5aNOGKQI0VCHwLI9Wj4wPdM61wvh/hWhd0n+2DZcXC8kEW99tCwmj2O9+x
-	sufJbZhr5ZtKH6O55+51cd4dFj1kIRLSJ819yutPbcyVSRtr8AlyDTx0X484ddMuzE6F5E69VPQ
-	oE8/DBOMggE54VQ1gTWNaS+cVWZzbqtIiyhbTW2mQmmhU/+DuDThmBuqMxtPS6eAY2W8kWML6mq
-	VZwuGEXM2S5AKFL4ciEIS9necy7wpRebBrIQuYGyqK1/LInk4Ih98/acp6ZPhbfYdLDDkklvEYe
-	lg/pHdkMr39eT3c9baEFO8RnLSlQfyL4UeTicRhdOYVLnjEEa1XKZP+Q+NxJ53gdpck145y9/gS
-	qPT8wVQUk2j1SpO23aPgHN4EJjtB9wy2PUlGjuUHasOa/jiV0YTO1fHQ8mvymIeF3x/gdVPYFU8
-	XI0KeWWJdTabgqLKPOOabMK+FeRSI6RRwYpwC+ilmoo5sr3YynUW3P6iZYCXY=
-X-Received: by 2002:a05:600d:18:b0:48a:5574:3a5d with SMTP id 5b1f17b1804b1-48fce9bd5d1mr49631725e9.7.1778697384382;
-        Wed, 13 May 2026 11:36:24 -0700 (PDT)
+        bh=j17dyAXjVQ5kVJZNPUptY+dBBjRJ1RjAOk+0kE7NMQ4=;
+        b=c1cZavbBP1U4m/Q8QNFM2fzKhgy1aZ1au44AvM1A9jA4LXGuSExGdCwTC3kKXXQwmO
+         Tgn3CLOS3ieGvwOtdKORcI8kG/hVX6n54oIOwZBgEbYqXad83PKsdmdng+dUq4hRoBua
+         Z20H1qhwVdJ9nTUE57F6hs43hbsiVbARu4LzdAX5yVCr1j2pRLlfzMwUs3dOb7ElerpR
+         m2QYpK/RdPeuMuoNZICPx6W0bSW7J9Sl8JJ6/0sbSSn/1bL/HTd8LSORXjNBKGcd7G/I
+         i0TQ5678fgq4kmtJ+zGbpEKuyL3/oAxwmOOPYOhdKnHubY5j6SUkQcQx3PX10j6FAPcB
+         AO/w==
+X-Forwarded-Encrypted: i=1; AFNElJ/lppHtVgGN4KOwmQ7FgqksfmoufMyYBhh7Dv4GUHFv08DBSnCji74z9HqyZb6s9R4W8N+AiU1SGRx0a9J/gwA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzjJ9QRyTjwAH7PGRwJZjxN3HLFe6v2taYkPu88TcG0BRUCG6lU
+	VcHk7wArM43mUHYkZSEVJn1f8QmmIxteUeEFQEF2GDJ1a4xFRDdkt8e7
+X-Gm-Gg: Acq92OFc2LHVyktMWRoSQvQ9EM/Thnzhy5FrMKqlyOc1ErvEQ28FLW3V6mYUZ4aEwwy
+	yHIK1xZH5BQvEsKH/3OWocLx+0JsBXmGk5I1lvGEHSIwoY5R9dDJLxWsw4sqSq2VdiCDdwjMV8A
+	FDZiNOJDPd8ouH2A35xuW1NF7hvHoUB0VSBOITiJ21Ahmrcvc94QmSBeDvLKbJd0P/tdPf4hup0
+	dUdKC2khv5RuXojF2TxcWHExyDTv6kZTCDMi+H0awsP2SNfo71zvFm/0fIHpiocd2jGAnjjeQ8r
+	lGoCP8NEeFI+05GKA2PzIre8aXa2fENuj7cyzr3cWWBnCscHoUmOz6ye5hPmEzjUOyzdU2z1l9B
+	osaRQbCd5hhppUB/NQ5YxxzAgMy6Xc67ypFDqHrdhOdeCHRbi/eJlt2Dtto451hont0GjL0NEVk
+	JuLql86vo2piaokaj1AN2GoZv9qZ10MGQy82U6leWlyM660hGaMKZtTl6m/yC5/OjGOgRsWw==
+X-Received: by 2002:a05:6000:1787:b0:452:d03a:7aad with SMTP id ffacd0b85a97d-45c7b7630famr6803975f8f.36.1778697387064;
+        Wed, 13 May 2026 11:36:27 -0700 (PDT)
 Received: from im-t490s.redhat.com (37-48-40-237.nat.epc.tmcz.cz. [37.48.40.237])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45da15a6454sm720609f8f.34.2026.05.13.11.36.23
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45da15a6454sm720609f8f.34.2026.05.13.11.36.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 May 2026 11:36:24 -0700 (PDT)
+        Wed, 13 May 2026 11:36:26 -0700 (PDT)
 From: Ilya Maximets <i.maximets@ovn.org>
 To: netdev@vger.kernel.org
 Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
@@ -67,9 +67,9 @@ Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
 	dev@openvswitch.org,
 	linux-kselftest@vger.kernel.org,
 	Ilya Maximets <i.maximets@ovn.org>
-Subject: [RFC net-next 3/6] openvswitch: vport: remove infrastructure for separate modules
-Date: Wed, 13 May 2026 20:35:23 +0200
-Message-ID: <20260513183559.2141010-4-i.maximets@ovn.org>
+Subject: [RFC net-next 4/6] net: geneve: remove unused geneve_dev_create_fb
+Date: Wed, 13 May 2026 20:35:24 +0200
+Message-ID: <20260513183559.2141010-5-i.maximets@ovn.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260513183559.2141010-1-i.maximets@ovn.org>
 References: <20260513183559.2141010-1-i.maximets@ovn.org>
@@ -81,131 +81,91 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Since removal of legacy tunnel vport types only the built-in ones
-remain.  So, there is no need for the extra infrastructure for dynamic
-module loading.  Can be reinstated in the future if we need a new
-vport type.
+The only user was vport-geneve in openvswitch and now it is gone.
 
-Note: It is technically possible that someone has an out-of-tree
-module named vport-type-N that implements a different vport type.
-At this time we're not aware of anyone doing that.  People running
-out-of-tree modules normally just have an out-of-tree openvswitch
-module as a whole.  And there are actually no supported out-of-tree
-implementations of the openvswitch module known to the community.
-Alternative to immediate removal would be printing out a deprecation
-warning whenever a vport module is loaded, but I'm not sure if we
-need it at this time.
+Note: since it's an exported symbol, there is a possibility that some
+out-of-tree module is using it.  So, alternative is to deprecate it
+instead by adding a warning if it is ever called.
 
 Signed-off-by: Ilya Maximets <i.maximets@ovn.org>
 ---
- net/openvswitch/vport.c | 22 ++--------------------
- net/openvswitch/vport.h |  9 +--------
- 2 files changed, 3 insertions(+), 28 deletions(-)
+ drivers/net/geneve.c | 48 --------------------------------------------
+ include/net/geneve.h |  5 -----
+ 2 files changed, 53 deletions(-)
 
-diff --git a/net/openvswitch/vport.c b/net/openvswitch/vport.c
-index 7a9caacfd6ac2..ef2fff4353c0a 100644
---- a/net/openvswitch/vport.c
-+++ b/net/openvswitch/vport.c
-@@ -57,7 +57,7 @@ static struct hlist_head *hash_bucket(const struct net *net, const char *name)
- 	return &dev_table[hash & (VPORT_HASH_BUCKETS - 1)];
- }
- 
--int __ovs_vport_ops_register(struct vport_ops *ops)
-+int ovs_vport_ops_register(struct vport_ops *ops)
- {
- 	int err = -EEXIST;
- 	struct vport_ops *o;
-@@ -73,7 +73,6 @@ int __ovs_vport_ops_register(struct vport_ops *ops)
- 	ovs_unlock();
- 	return err;
- }
--EXPORT_SYMBOL_GPL(__ovs_vport_ops_register);
- 
- void ovs_vport_ops_unregister(struct vport_ops *ops)
- {
-@@ -81,7 +80,6 @@ void ovs_vport_ops_unregister(struct vport_ops *ops)
- 	list_del(&ops->list);
- 	ovs_unlock();
- }
--EXPORT_SYMBOL_GPL(ovs_vport_ops_unregister);
- 
- /**
-  *	ovs_vport_locate - find a port that has already been created
-@@ -210,12 +208,8 @@ struct vport *ovs_vport_add(const struct vport_parms *parms)
- 	if (ops) {
- 		struct hlist_head *bucket;
- 
--		if (!try_module_get(ops->owner))
--			return ERR_PTR(-EAFNOSUPPORT);
--
- 		vport = ops->create(parms);
- 		if (IS_ERR(vport)) {
--			module_put(ops->owner);
- 			return vport;
- 		}
- 
-@@ -225,18 +219,7 @@ struct vport *ovs_vport_add(const struct vport_parms *parms)
- 		return vport;
- 	}
- 
--	/* Unlock to attempt module load and return -EAGAIN if load
--	 * was successful as we need to restart the port addition
--	 * workflow.
--	 */
--	ovs_unlock();
--	request_module("vport-type-%d", parms->type);
--	ovs_lock();
--
--	if (!ovs_vport_lookup(parms))
--		return ERR_PTR(-EAFNOSUPPORT);
--	else
--		return ERR_PTR(-EAGAIN);
-+	return ERR_PTR(-EAFNOSUPPORT);
- }
- 
- /**
-@@ -250,7 +233,6 @@ struct vport *ovs_vport_add(const struct vport_parms *parms)
- void ovs_vport_del(struct vport *vport)
- {
- 	hlist_del_rcu(&vport->hash_node);
--	module_put(vport->ops->owner);
- 	vport->ops->destroy(vport);
- }
- 
-diff --git a/net/openvswitch/vport.h b/net/openvswitch/vport.h
-index 636788b59907c..930f1ccc85581 100644
---- a/net/openvswitch/vport.h
-+++ b/net/openvswitch/vport.h
-@@ -116,7 +116,6 @@ struct vport_parms {
-  * before an RCU grace period has elapsed.
-  * @send: Send a packet on the device.
-  * zero for dropped packets or negative for error.
-- * @owner: Module that implements this vport type.
-  * @list: List entry in the global list of vport types.
-  */
- struct vport_ops {
-@@ -127,7 +126,6 @@ struct vport_ops {
- 	void (*destroy)(struct vport *);
- 
- 	int (*send)(struct sk_buff *skb);
--	struct module *owner;
- 	struct list_head list;
+diff --git a/drivers/net/geneve.c b/drivers/net/geneve.c
+index b36fad8337245..153b15e4ef569 100644
+--- a/drivers/net/geneve.c
++++ b/drivers/net/geneve.c
+@@ -2364,54 +2364,6 @@ static struct rtnl_link_ops geneve_link_ops __read_mostly = {
+ 	.fill_info	= geneve_fill_info,
  };
  
-@@ -191,12 +189,7 @@ static inline const char *ovs_vport_name(struct vport *vport)
- 	return vport->dev->name;
+-struct net_device *geneve_dev_create_fb(struct net *net, const char *name,
+-					u8 name_assign_type, u16 dst_port)
+-{
+-	struct nlattr *tb[IFLA_MAX + 1];
+-	struct net_device *dev;
+-	LIST_HEAD(list_kill);
+-	int err;
+-	struct geneve_config cfg = {
+-		.df = GENEVE_DF_UNSET,
+-		.use_udp6_rx_checksums = true,
+-		.ttl_inherit = false,
+-		.collect_md = true,
+-		.port_min = 1,
+-		.port_max = USHRT_MAX,
+-	};
+-
+-	memset(tb, 0, sizeof(tb));
+-	dev = rtnl_create_link(net, name, name_assign_type,
+-			       &geneve_link_ops, tb, NULL);
+-	if (IS_ERR(dev))
+-		return dev;
+-
+-	init_tnl_info(&cfg.info, dst_port);
+-	err = geneve_configure(net, dev, NULL, &cfg);
+-	if (err) {
+-		free_netdev(dev);
+-		return ERR_PTR(err);
+-	}
+-
+-	/* openvswitch users expect packet sizes to be unrestricted,
+-	 * so set the largest MTU we can.
+-	 */
+-	err = geneve_change_mtu(dev, IP_MAX_MTU);
+-	if (err)
+-		goto err;
+-
+-	err = rtnl_configure_link(dev, NULL, 0, NULL);
+-	if (err < 0)
+-		goto err;
+-
+-	return dev;
+-err:
+-	geneve_dellink(dev, &list_kill);
+-	unregister_netdevice_many(&list_kill);
+-	return ERR_PTR(err);
+-}
+-EXPORT_SYMBOL_GPL(geneve_dev_create_fb);
+-
+ static int geneve_netdevice_event(struct notifier_block *unused,
+ 				  unsigned long event, void *ptr)
+ {
+diff --git a/include/net/geneve.h b/include/net/geneve.h
+index 5c96827a487e7..ba2c14d61e904 100644
+--- a/include/net/geneve.h
++++ b/include/net/geneve.h
+@@ -68,9 +68,4 @@ static inline bool netif_is_geneve(const struct net_device *dev)
+ 	       !strcmp(dev->rtnl_link_ops->kind, "geneve");
  }
  
--int __ovs_vport_ops_register(struct vport_ops *ops);
--#define ovs_vport_ops_register(ops)		\
--	({					\
--		(ops)->owner = THIS_MODULE;	\
--		__ovs_vport_ops_register(ops);	\
--	})
-+int ovs_vport_ops_register(struct vport_ops *ops);
- 
- void ovs_vport_ops_unregister(struct vport_ops *ops);
- void ovs_vport_send(struct vport *vport, struct sk_buff *skb, u8 mac_proto);
+-#ifdef CONFIG_INET
+-struct net_device *geneve_dev_create_fb(struct net *net, const char *name,
+-					u8 name_assign_type, u16 dst_port);
+-#endif /*ifdef CONFIG_INET */
+-
+ #endif /*ifdef__NET_GENEVE_H */
 -- 
 2.53.0
 
