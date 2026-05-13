@@ -1,225 +1,213 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from SA9PR02CU001.outbound.protection.outlook.com (mail-southcentralusazon11013015.outbound.protection.outlook.com [40.93.196.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D886402BA0
-	for <linux-kselftest@vger.kernel.org>; Wed, 13 May 2026 14:18:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778681932; cv=none; b=WPq3LeRb95BJdWc106ig8zhFbyr6BB010WDlLEi6YT7O/zF+77aJxh9jNdW4B2zOCgjyr2Tgkh4nshuoj4Rlk9Oy/kHGS5YL4JcJMEMf+uWJVyH/mE/6NVDFIIUiRVDT9dhdry90xY9Uu4yaTyeQjhL8HWo4CHFelItCm96Zn5Q=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778681932; c=relaxed/simple;
-	bh=zcY7FUBNhO74nxP+DA38C8U6lBo8ZKlML3Nf1QLj804=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=G24ccr46ZGzAN4hqunTR79WDKf/lNCpjgS4GYFRtMm5W8DlBrM3wT+QPBl0JVXYNxkPiuyR5+MHATqpHwvZlVb6Zie1YDQYg+aqeuVWD9JNgd+vkYoCNIenVXjIGF/llb+u4ZUzZB4rQia6cZMMWqF2JcX2M68Z1PSD5fgAz+yk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MGXuaUfy; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B52640DFA0;
+	Wed, 13 May 2026 14:35:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.196.15
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778682955; cv=fail; b=jXP2w/aZb7Jm4KAWFl+4anIawwZNPyhid4gB9HMFzrQ+q9BomAp7xoihcqHwlVUs9O+nIjVSu+LFz8BJC3x5B4jm9k8XSynSh0AYEEjiQPTjuTfnpnaNtzIltzSAoxwi+ZA4hOvTyx8JlDZm8B1uGmdd3M/TSgF2SNNCFzrmkWs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778682955; c=relaxed/simple;
+	bh=ztEbsduVqZEEGr6zH4YwLq/vjVJ8+O6oE/2wPdT2XBU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=IjhtNdrVS/AdvK5H5yBYB6BqB450D35IMvIyHTt/eBJX1l/yvoXtRmEvNzZoPzkVeqHMAyJEqURQL2LyE7ZATqJFCS9Tp1S4CdcMpT3QaH75gg+VSyFbu29KDEoPOC1w9fyTlRrPKfO6wYNYdwhjjIXZghncIkUrscfPLbAMcPk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=jIzUvjJP; arc=fail smtp.client-ip=40.93.196.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MGXuaUfy"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1778681926;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xYlye75OCf2YtQTajLfzvkg89uVXgpLkqgB1sCbwhbY=;
-	b=MGXuaUfyiBZOawY1aO9SOj1dv4WkJ03W4f1y/y3w+WolCgxlKxpxwR5UWHspVUsm+02Wo0
-	p+ZaF5s8+rxIao7emQzb1Fw3U87lACYeoxp09QAEiSICo6IzRyVPrT+CaA2r9Tsst9gQdF
-	ZWMWdUywYfzzYAO63U/84SoQTZKKCQg=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-193-2XC5kgG9MqiOZhAXaBJ7Wg-1; Wed, 13 May 2026 10:18:44 -0400
-X-MC-Unique: 2XC5kgG9MqiOZhAXaBJ7Wg-1
-X-Mimecast-MFC-AGG-ID: 2XC5kgG9MqiOZhAXaBJ7Wg_1778681924
-Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-8baa173eacbso55717686d6.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 13 May 2026 07:18:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778681924; x=1779286724;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xYlye75OCf2YtQTajLfzvkg89uVXgpLkqgB1sCbwhbY=;
-        b=dUSFQflx0MxaOn2M2ZWzk2pEDu8neXTrDGO6YesVVIkLUDHi4Gu2tU7HotBr/3MQVY
-         ogRGiPdz3IEzv8T24wMnwaRqzai779bWHS+JuASaNTE80arvXZVAHHrkL1qVeWfz4mMa
-         K+q6pS4qSauCloNi2/ZdKqxHzIvaDaWUg1sIaM32LnewoXxUcI5R7EZyZn13jYHuOVh5
-         wYbtpL9rmwvW0p6Gq/q1zZt5gcaIkPyfd4oVzgPZmC/p+Jq6lFeK12faqvtjQhqAu6HF
-         M5UnGrsHNfmJsVFWMnXg2adE2j9n2IzQW0T5eyaQLpTtF3C5QG1OMRaKvtT5N1e/xwt3
-         RYEw==
-X-Forwarded-Encrypted: i=1; AFNElJ+43idIKjwZkyuRbAxxlUo/axn7YvO4bfIx7g+Vt4ShYpwn/KRTZDZNFNBgvYVp4Jbh1FoLBoXlDwKMSr5ASv0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyAlrE67A2GGeyg2uLf4mqKEDhVmBPPpFMSr9Nd+no3fCeBec1q
-	v/dFbnrcynzFhQ4b8cC36JIleHI8ECukHV5iMAuzYWLrpxgRTtKJVqEwmLz8nsQXzbOoUwcedvg
-	zTpPPVAfMreoMpzN/qXfI53eGtryuWxTdqg8XO9KxXTf3OM2HA2zsJ31naqmIOhiL4e1cNg==
-X-Gm-Gg: Acq92OGEcQEjg/sVSTbyUYmb4uJfFtq+4Fc0+ymKPU3z5A8KOCHfwiVRPX7Gn8+Z559
-	YtapMWCgn3AW133PoPkCUvVXlmEUT6Lq87+Fxh2KhBZrim3bW/MB3QJQl72P9GrPU9urSiYz7yO
-	ep4gDnhWsczT9eUrHczBQ/HsfsHE7jZAqJC7kOCpniYFKpnyhESHtjtWRtMeEV3rTJsonr1dulk
-	afaIUoC3zxFqtrWDkfE4kdt47YC574hci4pt/1g9qCaSrTCpZsEscM4TCdaO/U8qH5G6n7G3N6h
-	l2iSiYOaI7IjYM8uXuCSN+HDIU35PTxyNHnt2GVPsX/pNtaTgTJiL/xzCjUzDULQ8Kd+5SuRjnX
-	qpo8AG0rW+WjhsamUqHPDAMEL
-X-Received: by 2002:a05:622a:5c85:b0:50b:3788:ab59 with SMTP id d75a77b69052e-5162f4b00dfmr48896591cf.22.1778681924088;
-        Wed, 13 May 2026 07:18:44 -0700 (PDT)
-X-Received: by 2002:a05:622a:5c85:b0:50b:3788:ab59 with SMTP id d75a77b69052e-5162f4b00dfmr48895661cf.22.1778681923428;
-        Wed, 13 May 2026 07:18:43 -0700 (PDT)
-Received: from [192.168.2.110] ([70.53.202.134])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-5148e6336c0sm160633171cf.2.2026.05.13.07.18.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 May 2026 07:18:43 -0700 (PDT)
-Message-ID: <e3ae249d-812c-42ed-aa9b-cfc8cde27b77@redhat.com>
-Date: Wed, 13 May 2026 10:18:31 -0400
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="jIzUvjJP"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=K02Capw3yXiolIHvhE+bfZxFVrgNvhKA1lSuobPPZooHcy++NY/KFG4LUAoBsVGEFbd+NX8Q4WTCyYFFP3R5IEWcLovDwVETvrnh1/nKGClbyzYn9iwQnGaE7nK4MCVRLBoNqqSUfbR2acEJAXAVElDFUU5UHGdM98MYFR+4vwC7JEz3EnaTNywtan5CN3Aza9/CamcIX5QhO9KyyPWkTQNsZOc49cPtwVHrrCZRnaRea3tXq4EqFibhYM4YqXHxAwkIXxs6Mg/JXjR1sjGvitlKBgWxSv3XKG8gxWorZLpkaiDEXFnuuqIhgAKOGINDE2ZsgkGvVF1QOvQ+0M+j2A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DHI3ANWP2a9dmnTsued5rYwfLrSFSwZmKTpmoCK64XM=;
+ b=oWLCOHPRNW2CZsPBL7pxqTyqqscGbFzHNMehHg0UKqCEoLzRTH3W5q6af4kulULuzTe29m3MXTMz+oRu6RqkW/1Mg3Rh4AX3xRIO0Mp651ViMiGUXGFnfipFZdhGosIp9QE4Prn8anPv6aWKdNGCORPSt34VPH8u1BRSEMJ+venYHF5Pl0EI2a9OF9WDoSOc3VtFiaZMb51OipNcwam/tXnxVCcYYnTThLqafiD/04QEPBbOdye2u788bOpFlatqfxoVHrij7jBqGg0S0gMEKHOfPS4XfyTHH54Y2f7ixKuuFGyING87TXICMZ+3y8pFFK3ytas4ewjHbcWqQeHcIg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DHI3ANWP2a9dmnTsued5rYwfLrSFSwZmKTpmoCK64XM=;
+ b=jIzUvjJPtV1t9zoEglGA9WPzoP+u+WjPpoORvYccTIXo7tnOazcer2KeiKozlTZ5jrIzwu/RL/2/wTSXGsFcc61t6+khbGjI2IGJd6jUZXqLU2PoLUjnsW+0zpQK//7i7ljqYVdeqBAFvjS99/kYdyiTSZwDjrUotcNynOWYrh0eWGGD0GeDudnQInR5WJNZlWX7ZlyKQtw1GtTw8ApjRne1rpR2SSNRQptuBRkTHOxxD53v0s6vFyVv0uQnMaEDOkWqij/q0DqyTz5rDz6fzisi7fXMhpLHY8ma9sKw8vA11wyY1SoPtwiplSo21sHPrYGs9JQ32FrUd9+Vi6CiJw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from SA3PR12MB7901.namprd12.prod.outlook.com (2603:10b6:806:306::12)
+ by DS0PR12MB8480.namprd12.prod.outlook.com (2603:10b6:8:159::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9913.12; Wed, 13 May
+ 2026 14:35:43 +0000
+Received: from SA3PR12MB7901.namprd12.prod.outlook.com
+ ([fe80::6f7f:5844:f0f7:acc2]) by SA3PR12MB7901.namprd12.prod.outlook.com
+ ([fe80::6f7f:5844:f0f7:acc2%6]) with mapi id 15.20.9913.009; Wed, 13 May 2026
+ 14:35:43 +0000
+Date: Wed, 13 May 2026 17:35:33 +0300
+From: Ido Schimmel <idosch@nvidia.com>
+To: Fernando Fernandez Mancera <fmancera@suse.de>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	horms@kernel.org, pabeni@redhat.com, kuba@kernel.org,
+	edumazet@google.com, dsahern@kernel.org, davem@davemloft.net,
+	=?utf-8?Q?=C5=81ukasz?= Stelmach <steelman@post.pl>
+Subject: Re: [PATCH 1/2 net v4] ipv6: addrconf: fix temp address generation
+ after prefix deprecation
+Message-ID: <20260513143533.GA415119@shredder>
+References: <20260511122645.6233-2-fmancera@suse.de>
+ <3f371efe-1b1b-464c-af21-ccd66b6c5df6@suse.de>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3f371efe-1b1b-464c-af21-ccd66b6c5df6@suse.de>
+X-ClientProxiedBy: FR4P281CA0183.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:ca::6) To SA3PR12MB7901.namprd12.prod.outlook.com
+ (2603:10b6:806:306::12)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 04/55] selftests/mm: migration: properly cleanup
- fork()ed processes
-To: Mike Rapoport <rppt@kernel.org>, Andrew Morton
- <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>
-Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
- Barry Song <baohua@kernel.org>, Dev Jain <dev.jain@arm.com>,
- Donet Tom <donettom@linux.ibm.com>, Jason Gunthorpe <jgg@ziepe.ca>,
- John Hubbard <jhubbard@nvidia.com>, "Liam R. Howlett"
- <Liam.Howlett@oracle.com>, Lance Yang <lance.yang@linux.dev>,
- Li Wang <li.wang@linux.dev>, Leon Romanovsky <leon@kernel.org>,
- Lorenzo Stoakes <ljs@kernel.org>, Mark Brown <broonie@kernel.org>,
- Michal Hocko <mhocko@suse.com>, Nico Pache <npache@redhat.com>,
- Peter Xu <peterx@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
- Sarthak Sharma <sarthak.sharma@arm.com>, Shuah Khan <shuah@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Vlastimil Babka <vbabka@kernel.org>,
- Zi Yan <ziy@nvidia.com>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org
-References: <20260511162840.375890-1-rppt@kernel.org>
- <20260511162840.375890-5-rppt@kernel.org>
-Content-Language: en-US, en-CA
-From: Luiz Capitulino <luizcap@redhat.com>
-In-Reply-To: <20260511162840.375890-5-rppt@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA3PR12MB7901:EE_|DS0PR12MB8480:EE_
+X-MS-Office365-Filtering-Correlation-Id: 27a548e3-700a-4e33-2786-08deb0fce9a4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|376014|366016|7416014|56012099003|22082099003|18002099003|11063799003;
+X-Microsoft-Antispam-Message-Info:
+	qw82pIBRedPj2vLADKlpoBSLJji8ElJfG+tPgjCIU4HWscz4Fxxfv6nbHvLKDZauMnrLg994LkaiMN0vpwWTyWLTfkzVmYBv+a/OGX9TXU+jx+6uspNkIdRr7phKwBYXqiIR9H2iMdZGjnCjH4QRLeAVp0bpa5ElOKXo6o5r/JmX+9zSbCNsNkCcTymp1fJxsOdRya6OPbBHtSV74wH/vCVM2Waef9/krt1IAdopbBPiQ/1d7kL9FVREtbADgbOh2Ic25Fue3YvX6jdKcr4h81f2XBbZB5qmPGGb+fjovp7j/1rwaMPI9LEnBtSDf0qV7sIBcH0ocXcmOafG7m7gK0IExKT6erdoQ3JgtHHkqR6sQSOGuK0N3c/f3nl1UKdWVqKEW0qDiM1rIns3Ip5QVNTc+Jt7GoOuOqfsGf2B2PmJXfbvSz9ueOnrn//9pZGikSykP6RhtvniOGCMs79yDFXC7cP6ONTo3qXor+ZH/QARmuvkG8a5CUp0LMVM40d/HREtz7OHwf6Phwf2q9G8QDpnPCuSnUyNPY9qc+eG+NkdkyaUWxQcyDMZ7mra98faqp3virWMj6PaaLfkL3NWEFQWwSMxY6Azzlig2V2hC+/uZxA5G7F6BQxWW7Qa6wEzC9sYln0L/61BmDfJ+0q7w9V4mU99GVnzJ/VT7A9IChhlfrD8bhbGvj1c1lLkNYzm
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA3PR12MB7901.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(7416014)(56012099003)(22082099003)(18002099003)(11063799003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?dWvvf/1df3q4Jn0CtYDj7f33ZpN9MYPbMWPErDhPdoxeIVURgvl84ggouYT8?=
+ =?us-ascii?Q?PUApicE48/xOBIs6+BhZ5pwwxlPN14CSR4b4bM2+UMhEISN22fNanQKcGFx3?=
+ =?us-ascii?Q?PbBOGQGZ+iUt1WaoPpJyoKr/GKwV7Ja8IrAqOS94rtn6seIovthTCik9IPzG?=
+ =?us-ascii?Q?FJgbVhYFQLEsDWtTZ+CpGx9eRHzfHX+IWjUnpQJxwPcA1LNkl3hz8OJqEmR2?=
+ =?us-ascii?Q?16BjOYvsjr3X6yZxAWlPmovJTHdp9lbVn3outDIzFvPNfj8KPYeotMpaNhKd?=
+ =?us-ascii?Q?4qshg2DYCsOPU/iKbnf877aYrWYPSGjW+RFaCY4Vg4D5T8xFhvAFX++QE2iw?=
+ =?us-ascii?Q?S9DkXW2qhX1gHNgSaq1GqRgbA51286uO8bzgiIoNZNdbx3gClyze2YswOJLT?=
+ =?us-ascii?Q?G7Vq62wHGGVkHvn5adhJYFwl1U6FFy7NWxXv2uBtxK390IDvNnBlYGjtp52a?=
+ =?us-ascii?Q?j7J/9iMtxEZNpVTCzQ0N2AsgNKLgPFF+vtBQSgRFtSs30DxytkGC94opRenS?=
+ =?us-ascii?Q?v7tQ8pi0jnZ//Upuu8Mw9FJIvEVV3AGevVf0D5p68Tu91mzOLFfh5JCgc9fS?=
+ =?us-ascii?Q?UiTkKXhUjKoGPeG79NWTlbS22c3bIY5ybN2oUc/9o3R+b0K4Jbvbsf8iXL7c?=
+ =?us-ascii?Q?nvOwEy6N80Mq0Ra7hT11SKttwkqkOCDj42iHAms7HxTWysWhzTUDjbFN/idc?=
+ =?us-ascii?Q?Vk0zMBlxNTxygSAq00O77RXZJrbA1VE7HyVdIfB/Tj56hbzVyzqfGyMUhyAV?=
+ =?us-ascii?Q?SWlS9Mm6mpjDrHqrY8d5igQ6fRkSdq1A84l1sa+NDyX2Qg0izIiMQ3PRp5Uz?=
+ =?us-ascii?Q?sTxT9v3HEawsPaHetGLb5q6+IjqHJ1CHcO+pEJBeKNwlG9haabY2XLyVtWur?=
+ =?us-ascii?Q?cGOYpJfV8jiggxvRiu7vXtt/avikimMc19RegiIVCbevaZs8j6HiSzli/qtI?=
+ =?us-ascii?Q?f9uMEdQZh6jtGf0AA9Y0HEqfGdQ7r0HX0n9XhMxaPmpjhWjHbKbZsMn1oXB4?=
+ =?us-ascii?Q?UB8zXwC2INfmso2CNE1vhmfkqrYOPxwJKmMAD99VICMpDeOWtR5VJtck6sMB?=
+ =?us-ascii?Q?sKu4vv2XHwLWxEAzkvXhfEEnQUG7NxA2LT5n0I3H8Rn/JO385NTe7yklcQ7+?=
+ =?us-ascii?Q?g2LP/8dwYF/w+eAgyAf5uVHrJpgX48TXCJQxcU+K86q9VSdh3SnqtDECCLdG?=
+ =?us-ascii?Q?p8fiE0J5VoXMygjj+mZnc7bXQ01dAnG6rOk65GHQdge3rqMAHPc1ke4+O0Y5?=
+ =?us-ascii?Q?h7KCK3F2j21llQRO4txq0ChQFwcx6lUr+G4uLxcutKFx1sFE4kucNh9IiGP3?=
+ =?us-ascii?Q?HaxCY2mH5Qe5nYHfUu+46QfcFX1UDFowk8ReOfnlNkxfJ/zpYYh9Bqn43Z1v?=
+ =?us-ascii?Q?6dQC7XidAR6idkrSlK3YaQ6LYNubOY0LNpPX5TLRPuWZ+L4JSNE+YLllsz2/?=
+ =?us-ascii?Q?pHTslqLDo7tSF+/ka0sxJ3eOaPfXnWVzZJyH87tlrJdVKJOokjB8WsVmiBup?=
+ =?us-ascii?Q?hYaooruqYWGbjTw7HXimpeeUnzHuY1ohgzT7oaSDXULLfcjIbi68Q8uqhaWD?=
+ =?us-ascii?Q?u0xDvbmMfKBa7rYhlPY++tccmolTAWcMKRNtnQQDkPsW+QQZGKa7qfacivFL?=
+ =?us-ascii?Q?QeBHs//MTDmdVbpRXLHEZYty7lxhWnQFuZkAv+mgz1SDhRl2tja2RMScGGjZ?=
+ =?us-ascii?Q?R3u31AFEr/1QRXuYzVTfGZ+5VhtlnTbauNG2SXoa7QtoWPtT?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 27a548e3-700a-4e33-2786-08deb0fce9a4
+X-MS-Exchange-CrossTenant-AuthSource: SA3PR12MB7901.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 May 2026 14:35:43.4307
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: euSV5+pFRXOZEJJkBLWssdVYvvzOGDn+GLdog4U/ahmBuj35m0Rh/zZFzDosofQeMY8HO5s+BKy0emAehXwAVg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8480
 
-On 2026-05-11 12:27, Mike Rapoport wrote:
-> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+On Tue, May 12, 2026 at 08:24:27PM +0200, Fernando Fernandez Mancera wrote:
+> Sashiko feedback [1] is right about the DoS, that is a router that sends
+> multiple 0-lft RA until it exhausts all spawn attempts, leaving temporary
+> addresses disabled on the system.
 > 
-> Several migration test use fork() to create worker processes. These
-> processes are later killed, but nothing collects their exit status and they
-> remain as zombies in the system.
+> About the leaked address, I do not think the feedback is right. If an ifp
+> does not have any ift, it means something went wrong most likely. Either
+> this address was removed manually (any RA would restore it, even with
+> previous implementation) or for some reason that prefix didn't get an RA but
+> we didn't try to generate one and we MUST do it.
 > 
-> Add a helper function that kills the worker processes, waitpid()s for
-> them and verifies the exit status.
+> I think we can cover it by avoiding to attempt create a new temporary
+> address for a 0-lft RA, it makes sense to me. Something like this:
 > 
-> Replace the loops that call kill() for each process with a call to that
-> helper.
+> diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
+> index 18a6f2de30ce..6c511e9c1bf5 100644
+> --- a/net/ipv6/addrconf.c
+> +++ b/net/ipv6/addrconf.c
+> @@ -2654,7 +2654,7 @@ static void manage_tempaddrs(struct inet6_dev *idev,
+>  	 * We don't want that to result in creating a new temporary ip address.
+>  	 */
+>  	if ((list_empty(&idev->tempaddr_list) || all_regen) &&
+> -	    (valid_lft || prefered_lft))
+> +	    (valid_lft && prefered_lft))
+>  		create = true;
 > 
-> Reported-by: Luiz Capitulino <luizcap@redhat.com>
-> Tested-by: Luiz Capitulino <luizcap@redhat.com>
-> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+>  	if (create && READ_ONCE(idev->cnf.use_tempaddr) > 0) {
+> 
+> Any thoughts?
 
-Reviewed-by: Luiz Capitulino <luizcap@redhat.com>
+This still leaves the case of RAs that alternate between prefered_lft >
+0 and prefered_lft == 0. It will cause the kernel to create an unbounded
+amount of temporary addresses.
 
-> ---
->   tools/testing/selftests/mm/migration.c | 47 +++++++++++++++++++-------
->   1 file changed, 35 insertions(+), 12 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/mm/migration.c b/tools/testing/selftests/mm/migration.c
-> index 16ffd3c55ee0..e504829df6b6 100644
-> --- a/tools/testing/selftests/mm/migration.c
-> +++ b/tools/testing/selftests/mm/migration.c
-> @@ -67,6 +67,29 @@ FIXTURE_TEARDOWN(migration)
->   	free(self->pids);
->   }
->   
-> +static bool kill_children(FIXTURE_DATA(migration) * self)
-> +{
-> +	bool err = false;
-> +	pid_t pid;
-> +	int i;
-> +
-> +	for (i = 0; i < self->nthreads; i++) {
-> +		int status = 0;
-> +
-> +		pid = self->pids[i];
-> +		if (pid < 0)
-> +			continue;
-> +		if (kill(pid, SIGTERM))
-> +			err = true;
-> +		if (pid != waitpid(pid, &status, 0))
-> +			err = true;
-> +		if (!WIFSIGNALED(status) || WTERMSIG(status) != SIGTERM)
-> +			err = true;
-> +	}
-> +
-> +	return !err;
-> +}
-> +
->   int migrate(uint64_t *ptr, int n1, int n2)
->   {
->   	int ret, tmp;
-> @@ -151,7 +174,7 @@ TEST_F_TIMEOUT(migration, shared_anon, 2*RUNTIME)
->   {
->   	pid_t pid;
->   	uint64_t *ptr;
-> -	int i;
-> +	int i, err;
->   
->   	ptr = mmap(NULL, TWOMEG, PROT_READ | PROT_WRITE,
->   		MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-> @@ -171,9 +194,9 @@ TEST_F_TIMEOUT(migration, shared_anon, 2*RUNTIME)
->   		}
->   	}
->   
-> -	ASSERT_EQ(migrate(ptr, self->n1, self->n2), 0);
-> -	for (i = 0; i < self->nthreads; i++)
-> -		ASSERT_EQ(kill(self->pids[i], SIGTERM), 0);
-> +	err = migrate(ptr, self->n1, self->n2);
-> +	ASSERT_EQ(kill_children(self), true);
-> +	ASSERT_EQ(err, 0);
->   }
->   
->   /*
-> @@ -217,7 +240,7 @@ TEST_F_TIMEOUT(migration, shared_anon_thp, 2*RUNTIME)
->   	uint64_t pmdsize;
->   	pid_t pid;
->   	uint64_t *ptr;
-> -	int i;
-> +	int i, err;
->   
->   	if (!thp_is_enabled())
->   		SKIP(return, "Transparent Hugepages not available");
-> @@ -247,9 +270,9 @@ TEST_F_TIMEOUT(migration, shared_anon_thp, 2*RUNTIME)
->   		}
->   	}
->   
-> -	ASSERT_EQ(migrate(ptr, self->n1, self->n2), 0);
-> -	for (i = 0; i < self->nthreads; i++)
-> -		ASSERT_EQ(kill(self->pids[i], SIGTERM), 0);
-> +	err = migrate(ptr, self->n1, self->n2);
-> +	ASSERT_EQ(kill_children(self), true);
-> +	ASSERT_EQ(err, 0);
->   }
->   
->   /*
-> @@ -287,7 +310,7 @@ TEST_F_TIMEOUT(migration, shared_anon_htlb, 2*RUNTIME)
->   	unsigned long hugepage_size;
->   	pid_t pid;
->   	uint64_t *ptr;
-> -	int i;
-> +	int i, err;
->   
->   	hugepage_size = default_huge_page_size();
->   	if (!hugepage_size)
-> @@ -311,9 +334,9 @@ TEST_F_TIMEOUT(migration, shared_anon_htlb, 2*RUNTIME)
->   		}
->   	}
->   
-> -	ASSERT_EQ(migrate(ptr, self->n1, self->n2), 0);
-> -	for (i = 0; i < self->nthreads; i++)
-> -		ASSERT_EQ(kill(self->pids[i], SIGTERM), 0);
-> +	err = migrate(ptr, self->n1, self->n2);
-> +	ASSERT_EQ(kill_children(self), true);
-> +	ASSERT_EQ(err, 0);
->   }
->   
->   TEST_HARNESS_MAIN
+I think that a better fix would be to reset the regeneration counter of
+the newest temporary address whenever the associated public address
+becomes preferred. Something like [1].
 
+If the newest temporary address has yet to spawn a new address, then its
+regeneration counter is 0 and nothing changes. However, if it was
+incremented and no new address was created, then this patch will reset
+its regeneration counter to reflect that. Before expiring,
+addrconf_verify_rtnl() will notice that this address has yet to spawn a
+new address and call ipv6_create_tempaddr().
+
+The case of constant RAs with prefered_lft == 0 is not an issue because
+we only reset the regeneration counter when prefered_lft > 0.
+
+Alternating RAs are also not an issue because we don't call
+ipv6_create_tempaddr() immediately and instead let
+addrconf_verify_rtnl() handle it when the address is about to expire.
+
+[1]
+diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
+index 5476b6536eb7..d550524f4266 100644
+--- a/net/ipv6/addrconf.c
++++ b/net/ipv6/addrconf.c
+@@ -2595,8 +2595,9 @@ static void manage_tempaddrs(struct inet6_dev *idev,
+                             __u32 valid_lft, __u32 prefered_lft,
+                             bool create, unsigned long now)
+ {
++       struct inet6_ifaddr *ift, *newest_ift = NULL;
++       u32 orig_prefered_lft = prefered_lft;
+        u32 flags;
+-       struct inet6_ifaddr *ift;
+ 
+        read_lock_bh(&idev->lock);
+        /* update all temporary addresses in the list */
+@@ -2606,6 +2607,9 @@ static void manage_tempaddrs(struct inet6_dev *idev,
+                if (ifp != ift->ifpub)
+                        continue;
+ 
++               if (!newest_ift || time_after(ift->cstamp, newest_ift->cstamp))
++                       newest_ift = ift;
++
+                /* RFC 4941 section 3.3:
+                 * If a received option will extend the lifetime of a public
+                 * address, the lifetimes of temporary addresses should
+@@ -2643,6 +2647,12 @@ static void manage_tempaddrs(struct inet6_dev *idev,
+                        ipv6_ifa_notify(0, ift);
+        }
+ 
++       if (newest_ift && orig_prefered_lft > 0) {
++               spin_lock(&newest_ift->lock);
++               newest_ift->regen_count = 0;
++               spin_unlock(&newest_ift->lock);
++       }
++
+        /* Also create a temporary address if it's enabled but no temporary
+         * address currently exists.
+         * However, we get called with valid_lft == 0, prefered_lft == 0, create == false
