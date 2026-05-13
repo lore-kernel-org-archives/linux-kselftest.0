@@ -1,111 +1,91 @@
-Received: from xmbghk7.mail.qq.com (xmbghk7.mail.qq.com [43.163.128.54])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E93A537DE80;
-	Wed, 13 May 2026 11:49:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=43.163.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA7763806A7
+	for <linux-kselftest@vger.kernel.org>; Wed, 13 May 2026 11:55:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778672965; cv=none; b=B+x7E/m2KB9LgBU4kCeLP9TRZD+SiN5tKu8tH3W/PPA47m/IT07FrAGTBzrVbbYsqt0k+c8x770NYdRrmdeYPaDwpvQaNwVlgUNdeD2jooOSD59i1Zs3wiFMot7cPA+2M6mXDor89Rklg2vfPVqqu5Pt9vjSVDAvpadKRlXBpE0=
+	t=1778673326; cv=none; b=lmC13MmQ0iDaAR7/7XOKxp8yTPYweiDTebWqUy4fG4vY59v/Tnk2n9WfaALdAdiGnEwiZR8JRWh6FkAYvKoKN5B5RFWUNycvjVKPJc3pUe4kzTfIg+Ff4jkzJ5ncO0Rqc5mhXa7+IXUiTS3N9p2Fmqz+7Lm0QJohSoyvQRAZl2w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778672965; c=relaxed/simple;
-	bh=CpBtpD26hJi5W/nbKNLKTl4TLBMQhgSwkAP0JzD4xOA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ybnkf6Gb1WQLc5Cr12zhN/hiOGWvtwiNGVMBJlmHCWvGB1UWzZgBFpdvlC/rinwnyz5ueLR19JZwFeJUTlCk3BnO3n0ub16GT2pkx6dZ4kcV4d6gKoLxdpo3iUCbBuUOH97pwJcrFiVQniBF9U0XT1ph86+pHhg66fZY9XD9iO4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=zVUopWNw; arc=none smtp.client-ip=43.163.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+	s=arc-20240116; t=1778673326; c=relaxed/simple;
+	bh=C3ROoSAwEcHmpVj4q2nXE9Zx2ZOZUZAfV3pe+l9yKtQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AgFPNz3/TyoKfqznw+7xpDGhPTgqivx25j3//84zaPl+7L0AhOlCjM5R3l45IXeFAe2YZuwqiQ5CIiouJodur09O1hPwfecY6tnadDbsxoGoDLj71YUdxRszOhL/k/muUapMLFQwJoT17u4VHsST7YmV9EkGE0nOuUkdAmhfRIs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bh0TgWy+; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="zVUopWNw"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1778672952; bh=uIHzgVbli95YXrDt4r2xvjhCuHt4WOuS+wHLnD1yRAk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=zVUopWNw9aNcwtzywGGC5TZY7DuATPUgX4dfwLibSvuRYOeNYMFdFqFkFqYs+BoVs
-	 kwNDvg0dH87LkDvePMdiFS4LxwyPeq+LTt/GVuSpUbJbQnD8Rw2al70hayEX+5C8g3
-	 ukIvPJ60btTWN9G2lqx8bn6AXg4nCWyqqkl13KIg=
-Received: from [10.46.141.45] ([36.112.3.68])
-	by newxmesmtplogicsvrsza73-0.qq.com (NewEsmtp) with SMTP
-	id C4A0F68C; Wed, 13 May 2026 19:49:10 +0800
-X-QQ-mid: xmsmtpt1778672950tq981p33l
-Message-ID: <tencent_802CA0B9BE9F8F159FE6913C7047906E1E09@qq.com>
-X-QQ-XMAILINFO: MRMtjO3A6C9XRE5vbLvVJpWGcifG9l5x0ln1XGQ5ij8pr4bXVPr1TdcKBYayMX
-	 eUQTsFddOJYgx8GeiaYnvVX5tkQPII68Ti9BxdcnVctSLx8ufX5SAGBUtguBoe4VTKwlN9GqEOfM
-	 FFCorW6oTpL5Z8Sgi8TVNTtnrNhGTtfADcbYmmqpvI07QSe8qB8TgQjRIN+PtbRlEC2I7hehN1s+
-	 Jho2YNdsh+Iv2uN3X6XPYfbHoRIc4KmOJ7/dlasRgIniTrG5+Icocybb3KH48TOsLPUwFDK2n16A
-	 +I1qTvzzMrePlrd4jSf7N6Kz29hM5slotiKC9snrQLNgDx+8eTI+b7+hfh4D8ZWyCNwVcsdt77fP
-	 S+5pr4pJvMIs5JpmfiyKUVDArvlLQuSe0XP3QrMDcsZzF1LpoVaIOtmVJwTZXx5r9BLoR8Dp5qdP
-	 roRHqmznXP7cU5BGE0nF2Zd5WtzvaEAhA7zjotWe2qNq4uC5SNbH5/qDQ6L74tzMF4BVd9o5p2Kf
-	 teG+3HJ6T3tUEGHTdxE6Ms7W3ZlrPF48otKboWcdGa+nv6QhBqyHW457A7wCgiy1t8uHf3NOJMhK
-	 xsRv+ivkVoN6QhwYd9zvOj/0BYtJBdft4hLsaqq/bjlfdAkpv5eMKZ+ASFjER7s1sQ0DSWtjfhlz
-	 hbDB9eBDSNxpbb1REchXH4Yz/YYs5obINmiQt0FExJtL4BCNuh5sdZrt3SpKwDOOKNsy2tzTCSdV
-	 otuMLbkq70coFnBtlQlUXV4oo3GJYIs/280E8yc4/6HStfQTUO8GCMk+XH0cpalFyGhIV03tqpMq
-	 dJR+Wae7Iw6trUR9NPPG7bXcjM0jtSaHR+w5mkDS0lEBeyUXCXRX1rufclHoocQnkXUwA3sA3fJW
-	 Q5iJV1eHq9I16oE39eqbszEbbjCPK5jWUCk9oWdz+UsY5O0c7e6g1ap+LxjGgmM6SCktO9sdQaX+
-	 WNJHiNsmmMLFRblk0E5r6noeRXyoOwBkUeNidzBRsvBg7XLGofVBdcyELtFGrZYgqsDaIC5FErxh
-	 rycUkzxkrY6P64q99S1/51hMPz4Vk=
-X-QQ-XMRINFO: OWPUhxQsoeAVwkVaQIEGSKwwgKCxK/fD5g==
-X-OQ-MSGID: <3fe8e232-66c0-4b41-83ee-b5b27c9c175c@qq.com>
-Date: Wed, 13 May 2026 19:49:10 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bh0TgWy+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8121EC2BCFD
+	for <linux-kselftest@vger.kernel.org>; Wed, 13 May 2026 11:55:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778673326;
+	bh=C3ROoSAwEcHmpVj4q2nXE9Zx2ZOZUZAfV3pe+l9yKtQ=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=bh0TgWy+eepwj2qnbn9Rc3qYpCqJLPwMWlEQbiwSrKH5tnYeUUxAyM+acmatna/d0
+	 bT+bKrITNGzPCW7k/nmRZFlOqsOwK8hE73H/w62ib0yp1843+uP6BxNttJwaMKvExP
+	 N1yvsRysJsvMOJvCF07i4kCwa8710Bf7vSOmvABfpxMurufWzXS1Wow/dqJJ5ybMdP
+	 dT7G/QMOcYEGUGyCcrrP5C9TGD/MGKFrOnoXNydAdFCCYKgsH5hiBcU7p48blC/lpy
+	 pVHuh+PGbdSN0o3cwqyC82SUJY/j0Bqp61k8JN/YjLFwO298TbChViZHTjcsEbVrGD
+	 Rc4Y5M8iAMRmA==
+Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-38e800deae4so55112071fa.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 13 May 2026 04:55:26 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AFNElJ+LTQ3x3lFn5B+Y3k/bp8i8ZWXZgqjAZZa+ncducVn7LDToS09KwiWC8metNRGl80skkcvWd+zv162XqGvTxLk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxmrJRekG4AcJX8vs98H91mMu8bX+pGyjG8yaCmMk0oiqRXA9KY
+	ftiqGiUwNDt9ufSu7fJAed5IjtSCj/WNXgYpVvhjwgEMsjdcnjGEgcFhVEFa7PUUKtAglsZEsjn
+	twkT69an6QZFfIg9QC2pek8ATgWYzHSwuC14Esrr6Dw==
+X-Received: by 2002:a05:6512:68a:b0:5a8:9b6a:5749 with SMTP id
+ 2adb3069b0e04-5a8ef9af8a5mr1068752e87.28.1778673324966; Wed, 13 May 2026
+ 04:55:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] mm/mremap: unmap full fixed target for multi-VMA moves
-To: Lorenzo Stoakes <ljs@kernel.org>
-Cc: Jann Horn <jannh@google.com>, Andrew Morton <akpm@linux-foundation.org>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Vlastimil Babka <vbabka@kernel.org>, Shuah Khan <shuah@kernel.org>,
- linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <tencent_863C8A01F3C81EBA238F375B16065CBACF08@qq.com>
- <agHmO4i4YUhs3cSG@lucifer>
- <CAG48ez1sLtSKVQLHbLO5usBgMgjyOGhbX29pKEfku4Ht05HffA@mail.gmail.com>
- <agH1ZSdX_7QF8P_I@lucifer>
- <CAG48ez17evhhcoDKF6AoPqzYZwGuFCkVAsc-0bBzevf0LHYNxA@mail.gmail.com>
- <agH7ONBSX7XLzS6q@lucifer>
- <CAG48ez0y3N9uEOzvr4N85Js4XN1fh4JiUFjW=PQB2UZ_5t1R4A@mail.gmail.com>
- <agICeiIEshWf-1xa@lucifer>
- <tencent_B49EC91555E7B93CE646566E0A2DBEB9BE09@qq.com>
- <agMyDHx5MxR0igFY@lucifer>
-From: Fujunjie <fujunjie1@qq.com>
-In-Reply-To: <agMyDHx5MxR0igFY@lucifer>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20260512-swnode-remove-on-dev-unreg-v5-0-0035eff63812@oss.qualcomm.com>
+ <20260512-swnode-remove-on-dev-unreg-v5-3-0035eff63812@oss.qualcomm.com> <DIGUBLZXZXPJ.8CX0K5EL6255@kernel.org>
+In-Reply-To: <DIGUBLZXZXPJ.8CX0K5EL6255@kernel.org>
+From: Bartosz Golaszewski <brgl@kernel.org>
+Date: Wed, 13 May 2026 13:55:11 +0200
+X-Gmail-Original-Message-ID: <CAMRc=MdnKgkxsiw7UtpXaSYf+5WHMWZidy4YukPhndZY2Uft9w@mail.gmail.com>
+X-Gm-Features: AVHnY4IuEQ8uACIYu2CQFY2xUnaqBV75CJzYWeWWso-yewElWdvH5VZ2Hb43cmI
+Message-ID: <CAMRc=MdnKgkxsiw7UtpXaSYf+5WHMWZidy4YukPhndZY2Uft9w@mail.gmail.com>
+Subject: Re: [PATCH v5 3/7] driver core: platform: provide platform_device_add_software_node()
+To: Danilo Krummrich <dakr@kernel.org>
+Cc: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Brendan Higgins <brendan.higgins@linux.dev>, 
+	David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>, 
+	Andy Shevchenko <andy@kernel.org>, Maximilian Luz <luzmaximilian@gmail.com>, 
+	Hans de Goede <hansg@kernel.org>, =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+	Matthew Brost <matthew.brost@intel.com>, 
+	=?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
+	Rodrigo Vivi <rodrigo.vivi@intel.com>, David Airlie <airlied@gmail.com>, 
+	Simona Vetter <simona@ffwll.ch>, driver-core@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	platform-driver-x86@vger.kernel.org, intel-xe@lists.freedesktop.org, 
+	dri-devel@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Tue, May 12, 2026 at 6:31=E2=80=AFPM Danilo Krummrich <dakr@kernel.org> =
+wrote:
+>
+> On Tue May 12, 2026 at 1:59 PM CEST, Bartosz Golaszewski wrote:
+> > +int platform_device_add_software_node(struct platform_device *pdev,
+> > +                                   const struct software_node *swnode)
+> > +{
+> > +     return device_add_software_node(&pdev->dev, swnode);
+>
+> I think this should be device_create_managed_software_node(), see also [1=
+].
+>
+> That said, now that I see the resulting code and the corresponding sublet=
+ies, I
+> think we should reconsider your (well predicted) "temporary
+> platform_device_release_full()" idea for -fixes, while iterating this for=
+ -next.
+>
 
+Agreed, I think it's much safer this way.
 
-On 5/12/2026 9:59 PM, Lorenzo Stoakes wrote:
-> On Tue, May 12, 2026 at 03:24:24PM +0800, Fujunjie wrote:
->>
->>
->> On 5/12/2026 12:30 AM, Lorenzo Stoakes wrote:
->>> Yeah let's go with that then I think :)
->>
->>
->> Thanks Lorenzo and Jann.
->>
->> I agree that the patch as posted goes in the wrong direction by treating
->> source gaps as ranges that should be propagated to the destination.  Please
->> drop this patch.
->>
->> If disallowing source gaps in this multi-VMA move path still sounds right,
->> I can look into a v2/new patch that rejects sparse source ranges up front
->> instead.
-> 
-> Sorry I really want to think about this a little more + make sure the
-> semantics are sane, so I'd rather take a look at this myself.
-> 
-> I do really hate to take something away from newer contributors but in this
-> case things are quite fiddly so I want to make sure everything's correct :)
-> 
->>
->> Thanks,
->> fujunjie
->>
-> 
-> Thanks, Lorenzo
-
-No problem at all, that makes sense :)
-
+Bart
