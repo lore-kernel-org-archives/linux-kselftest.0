@@ -1,115 +1,110 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B4E435DA55;
-	Wed, 13 May 2026 02:38:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E81361E834B;
+	Wed, 13 May 2026 02:40:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778639890; cv=none; b=TKi64dflumOV/kI2MIjrE6pUYxc/kXqXMvTaZZIZ0+EnHHBrPkHoVSqoCgXhNkb2knZnw1rt7skfC69bjLRnIa2xCsZwbhBL+9S8Mt104e4y7BLYx6iaBSfAhS/LxrPV0WdDm1HSJCDu1A2PIQiJiNVmOamUsz15kO3361+mCtU=
+	t=1778640013; cv=none; b=tynTMe68+zItAd2eLAOVylkESzVs9+rTDf2HlnhSxag+NV7M65R3yK2p/JqZtEyGiZ/GJyhXrv92//biSoBkNCcMx8MI4+MnTXfx4lMV+wCdXUkLyH+TAzuk1xT0isXZ2vrg5RKOkyULT3EAN6b5ubxX+Q1FgAES8n6iA4SfmyI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778639890; c=relaxed/simple;
-	bh=/EZnHq9nNnsuQQUSQoHEF72Pas3GFWEFAmrx2JPyXlk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=K7ImFFa1jN+L6EC39DY7jlTCaTzw8VZqFRA0aJEs2Mn+nZ2L9SUHBEFQOSPETofgG2QXR9SCJ/ZFkSAc7SMayobupKDfah2z+aUoOgD/Jr4ogQ5Ym+4gpBdWt1ALu1t9w/V83IrhyinFOg4fduuhrfjziFvYTN1J+ILCP7VQv/I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: c3fbfcb04e7411f1aa26b74ffac11d73-20260513
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CHARSET
-	HR_CHARSET_NUM, HR_CTE_8B, HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD
-	HR_DATE_ZONE, HR_FROM_NAME, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER
-	HR_SJ_NOR_SYM, HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_CHARSET
-	HR_TO_CHARSET_NUM, HR_TO_COUNT, HR_TO_DOMAIN_COUNT, HR_TO_NAME, IP_TRUSTED
-	SRC_TRUSTED, DN_TRUSTED, SA_UNTRUSTED, SA_UNFAMILIAR, SN_UNTRUSTED
-	SN_UNFAMILIAR, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS, CIE_GOOD
-	CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO, GTI_C_BU, AMN_GOOD
-	ABX_MISS_RDNS
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:ecefcfc9-f295-4318-b6ea-fe6d35d9bf7c,IP:10,
-	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:5,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:15
-X-CID-INFO: VERSION:1.3.12,REQID:ecefcfc9-f295-4318-b6ea-fe6d35d9bf7c,IP:10,UR
-	L:0,TC:0,Content:0,EDM:0,RT:0,SF:5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-	elease,TS:15
-X-CID-META: VersionHash:e7bac3a,CLOUDID:e91c13234778766932006b445e033996,BulkI
-	D:260513095221EOQFH20K,BulkQuantity:2,Recheck:0,SF:19|38|66|72|78|102|127|
-	898,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk:40,QS:n
-	il,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC
-	:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_FSD,TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: c3fbfcb04e7411f1aa26b74ffac11d73-20260513
-X-User: yumiao@kylinos.cn
-Received: from kylinos.cn [(223.70.159.239)] by mailgw.kylinos.cn
-	(envelope-from <yumiao@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 1475918497; Wed, 13 May 2026 10:38:03 +0800
-From: Yu Miao <yumiao@kylinos.cn>
-To: Johannes Weiner <hannes@cmpxchg.org>,
-	Michal Hocko <mhocko@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Tejun Heo <tj@kernel.org>,
-	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Muchun Song <muchun.song@linux.dev>,
-	cgroups@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Yu Miao <yumiao@kylinos.cn>
-Subject: [PATCH] selftests/cgroup: Fix error path leaks in test_percpu_basic
-Date: Wed, 13 May 2026 10:39:07 +0800
-Message-ID: <20260513023907.179097-1-yumiao@kylinos.cn>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1778640013; c=relaxed/simple;
+	bh=g0/9nv44wwrVpiDbCqISoiJS8wkrPIEMBJHkvC7uCd8=;
+	h=Subject:From:To:Cc:Date:Message-ID:MIME-Version:Content-Type; b=kLv72mABjfo+X7M4Z436gekLDopr2WvHtQwLo0cyIE90q6ZAnLrjW8R3sBfXz0CTKWXSppXHqiIFT9P73MHeWctP2jfzrOwstcIk/HippvJLZcMMLr2uv2UZWPrj1OAdkU2A2UhDeCeA5jEHdsFJ309cgXSP0oAVapJ4T9aU3j8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=EQGDynGa; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="EQGDynGa"
+Received: from skinsburskii-cloud-desktop.internal.cloudapp.net (unknown [4.155.116.186])
+	by linux.microsoft.com (Postfix) with ESMTPSA id B45C720B7166;
+	Tue, 12 May 2026 19:40:08 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B45C720B7166
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1778640008;
+	bh=N1s5sw3nWN7BWqRr46+3WhMMbM99l09M/gxgDWbQgaw=;
+	h=Subject:From:To:Cc:Date:From;
+	b=EQGDynGa+VbsBVPnZCkybUUon+onLL7yFtkroe2aWMi37uFiayo/oC1P254OTPr/D
+	 cXKYMtYpyTmpafkmEG9S/5EIonuCx61Wbgp/R3OJSdVE6oWVKV7nCWSlHtnzrKRVYp
+	 9Is5oC58U1I8KL+l7nE9qIkm6z5MpTBsgT9Sc3Do=
+Subject: [PATCH v2 0/3] mm/hmm: Add mmap lock-drop support for
+ userfaultfd-backed mappings
+From: Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
+To: kys@microsoft.com, Liam.Howlett@oracle.com, akpm@linux-foundation.org,
+ akpm@linux-foundation.org, david@kernel.org, jgg@ziepe.ca, corbet@lwn.net,
+ leon@kernel.org, ljs@kernel.org, mhocko@suse.com, rppt@kernel.org,
+ shuah@kernel.org, skhan@linuxfoundation.org, surenb@google.com,
+ vbabka@kernel.org, skinsburskii@gmail.com
+Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-mm@kvack.org
+Date: Wed, 13 May 2026 02:40:11 +0000
+Message-ID: 
+ <177863991557.82528.15288076059759579141.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
+User-Agent: StGit/0.19
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-When cg_name_indexed() returns NULL partway through the child creation
-loop, the code returned -1 without running cleanup_children and cleanup.
-That left the `parent` pathname allocation unreleased and did not remove
-child cgroup directories already created under the parent. Fix by jumping
-to cleanup_children instead of returning.
+This series extends the HMM framework to support userfaultfd-backed memory
+by allowing the mmap read lock to be dropped during hmm_range_fault().
 
-When cg_create() fails, `child` (the pathname from cg_name_indexed())
-was not freed before cleanup_children. Fix by freeing `child` before
-branching to cleanup_children.
+Some page fault handlers — most notably userfaultfd — require the mmap lock
+to be released so that userspace can resolve the fault. The current HMM
+interface never sets FAULT_FLAG_ALLOW_RETRY, making it impossible to fault
+in pages from userfaultfd-registered regions.
 
-Signed-off-by: Yu Miao <yumiao@kylinos.cn>
+This series follows the established int *locked pattern from
+get_user_pages_remote() in mm/gup.c. A new entry point,
+hmm_range_fault_unlockable(), accepts an int *locked parameter. When the
+mmap lock is dropped during fault resolution (VM_FAULT_RETRY or
+VM_FAULT_COMPLETED), the function returns 0 with *locked = 0, signalling
+the caller to restart its walk. The existing hmm_range_fault() is
+refactored into a thin wrapper that passes NULL, preserving current
+behavior for all existing callers.
+
+Faulting hugetlb pages on the unlockable path is not supported because
+walk_hugetlb_range() unconditionally holds and releases
+hugetlb_vma_lock_read across the callback; if the mmap lock is dropped
+inside the callback, the VMA may be freed before the walk framework's
+unlock. Hugetlb pages already present in page tables are handled normally.
+Possible approaches to lift this limitation are documented in
+Documentation/mm/hmm.rst.
+
+Changes in v2:
+
+ - Split into a preparatory refactor (new patch 1) that moves
+   handle_mm_fault() out of the walk callbacks, plus a smaller feature
+   patch on top.  Suggested by David Hildenbrand.
+ - Hugetlb regions are now supported on the unlockable path; the v1
+   -EFAULT short-circuit and the hugetlb_vma_lock_read drop/retake
+   dance are gone.
+ - Distinct internal sentinels for "needs fault" (HMM_FAULT_PENDING)
+   and "lock dropped" (HMM_FAULT_UNLOCKED).
+ - Outer loop now re-walks after a successful internal fault so the
+   faulted pfns end up in range->hmm_pfns.
+ - Kernel-doc on hmm_range_fault_unlockable() and the
+   Documentation/mm/hmm.rst example match the implementation.
+ - Dropped the mshv driver conversion (v1 patch 2); will post
+   separately.
+ - Selftest converted to drive the path through test_hmm with a
+   userfaultfd handler (new HMM_DMIRROR_READ_UNLOCKABLE ioctl).
+
 ---
- tools/testing/selftests/cgroup/test_kmem.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/cgroup/test_kmem.c b/tools/testing/selftests/cgroup/test_kmem.c
-index eeabd34bf083..12f59925500b 100644
---- a/tools/testing/selftests/cgroup/test_kmem.c
-+++ b/tools/testing/selftests/cgroup/test_kmem.c
-@@ -368,11 +368,15 @@ static int test_percpu_basic(const char *root)
- 
- 	for (i = 0; i < 1000; i++) {
- 		child = cg_name_indexed(parent, "child", i);
--		if (!child)
--			return -1;
-+		if (!child) {
-+			ret = -1;
-+			goto cleanup_children;
-+		}
- 
--		if (cg_create(child))
-+		if (cg_create(child)) {
-+			free(child);
- 			goto cleanup_children;
-+		}
- 
- 		free(child);
- 	}
--- 
-2.43.0
+Stanislav Kinsburskii (3):
+      mm/hmm: move page fault handling out of walk callbacks
+      mm/hmm: add hmm_range_fault_unlockable() for mmap lock-drop support
+      selftests/mm: add userfaultfd test for HMM unlockable path
+
+
+ Documentation/mm/hmm.rst               |   62 +++++++++++
+ include/linux/hmm.h                    |    1 
+ lib/test_hmm.c                         |  122 +++++++++++++++++++++
+ lib/test_hmm_uapi.h                    |    1 
+ mm/hmm.c                               |  187 ++++++++++++++++++++++++--------
+ tools/testing/selftests/mm/hmm-tests.c |  132 +++++++++++++++++++++++
+ 6 files changed, 461 insertions(+), 44 deletions(-)
 
