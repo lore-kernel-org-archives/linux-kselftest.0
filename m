@@ -1,52 +1,75 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 708423988FA;
-	Wed, 13 May 2026 08:43:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1330A3EBF24
+	for <linux-kselftest@vger.kernel.org>; Wed, 13 May 2026 08:55:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778661796; cv=none; b=N7hZoHgbNC/r2ZCi6lOUhgbUKngj04k09GWXa5RXebVHzt8330to37800wiEKHt8ccBw4svHEGuqvvAB4hvWk6jyAthHv2j2SOVmzryh+rnX5WcV9ifUI/xeIaHiUquchUMJT1mjAvy3ZUc+3VeEgxNIeqhTNwLXBvWn3Q7Y72I=
+	t=1778662511; cv=none; b=Jlk668bsWVztgCsSeS0NKJkateBJyF6B1C8+aFC/yiVMfNrqxzpKlidHHGpT8AfxkV+avBQlxR32oTE+OILPIhWUF25JVu24HxgrdGHo1D4uQ2G0MJyW3BMUSHXBGe5ZbUwDBRbytsxSCtElE7js14lkPtw5kALUES2IgGjM9ZI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778661796; c=relaxed/simple;
-	bh=0VkMMnq26s4mP6QQ4+plN3jXE2zXn6QWaCLFVrVSjxw=;
+	s=arc-20240116; t=1778662511; c=relaxed/simple;
+	bh=kJbZ5JOXagVppsXc4ZdddJ+mu91Aj2bq7j6nNsU0ZhY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WYT5pok4YxgKV3prkUmujIoGRzNYAppb91XkILlY5FQTmzlgCD/sb3b8mykN6ZTE52Fk5BfYsUIDg9T/zs0BLffXBS0e4wASuPFH+XDS7HwRfj0Rg0HsS84SePMlG+d/d4SxBPm23O+qI2gA1FeqgFqkl2sRTvFM0g2CXI6HrKA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=CXHbpdYk; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=rCBkFI2JHOGht5lBYCTYk9hDyER6bpqAiupepjUgBOMzE+J2a4aAg0SS4n4rgGCstlBaKxGXKisj+LR9tguAZ0eCAso7+BPDBfHKX0MSfH8uMPsEmtMC5feWUsP701w/76wchU0+PcDugm/dDR0VEVH6Pa1V9a5So7grDp9xjmk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bfIQbId7; arc=none smtp.client-ip=209.85.208.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="CXHbpdYk"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=XTbl9imM9XXLaa+LSCrBqsB33iPfAB7LRFDJ8WSXePA=; b=CXHbpdYkn48wMEHsQ+dnHNTS3O
-	J3JyoBpE//PLD8BSwWfUiw+qAqH0wNKbyXmPdgnr6lmqHZF+MLkxcqMpWx1oMoFXYh3MrZTGnX9nr
-	Uvz2hbBY3BGuieTk41dYzX9VjfOZpCocDfUKZoV4NG4+jWoUUWoe03LczFRq/lE5zMsjsfsTguLOB
-	yGChw9m0BxScvHXkcqyczcHYwFHQbdCsDPxpHsvh5CS5Xnc8oDSrri0Sgdsm8nPgkoW/uGQ8hS/LL
-	Tykw71Ez8BKGhhP5LxVO0SVMRd5I9vGA7M1vDuR6Zgmz38PQwI4uoDT5olxdG2tGkBmIT7zgFWP8W
-	WVIiRECw==;
-Received: from authenticated user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wN5BH-0032Rj-1A;
-	Wed, 13 May 2026 08:43:03 +0000
-Date: Wed, 13 May 2026 01:42:53 -0700
-From: Breno Leitao <leitao@debian.org>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Fernando Fernandez Mancera <fmancera@suse.de>, netdev@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, horms@kernel.org, pabeni@redhat.com, edumazet@google.com, 
-	dsahern@kernel.org, davem@davemloft.net
-Subject: Re: [PATCH 2/2 net v4] selftests: fib_tests: add temporary IPv6
- address renewal test
-Message-ID: <agQ5e5sSzKTU_L4h@gmail.com>
-References: <20260511122645.6233-2-fmancera@suse.de>
- <20260511122645.6233-3-fmancera@suse.de>
- <agIKdx3q9ewyhq7r@gmail.com>
- <20260511170848.756e9347@kernel.org>
- <agLenteVpazkwn0j@gmail.com>
- <20260512165641.1f557ba8@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bfIQbId7"
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-6746d0b2b4aso9945084a12.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 13 May 2026 01:55:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778662503; x=1779267303; darn=vger.kernel.org;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jOzITOOB7eZcMbWT9yiOWFw0EJuWlsY59IFvhncuQ1E=;
+        b=bfIQbId7m2H2G5AoK2z1C5MfxcT9+TgRZVpGmBLAVgxCebdcQVwhyH7Vl85XFr7B4L
+         U1eoWEoRN9x6zqXnSQuFPanCWKFGW/i3mXtHwI+VZe5QBDm8Y4kAe8TgteNpiNqFvpGt
+         p99qVRXpkDOI2imUWEU5azv1eralGqslmzttyQp0Z6mQgMRefywZBDBJHYhh13+0pSHo
+         R4ejZVfo54rrVvARGSJoRiCMpVHDFTrPNuu2sAPjX+oBEs8IW9q6r6JxKkPk2455r+zq
+         vZ34eiDR3pvU9dnTO7QO/fkYvGVbSQ0WevUQMePaeetJnhbcdM3ederc0XsbGIvfFRlc
+         /zow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778662503; x=1779267303;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :reply-to:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jOzITOOB7eZcMbWT9yiOWFw0EJuWlsY59IFvhncuQ1E=;
+        b=aFwBWrPg68a+oNaOaNoB6Z+xEk1bxeb3nTmEShWwYC9oWNCtuFK8oAkR1pFzMmhFLL
+         fXdG0CNNZN/knwUmCS3q0M6klM+5MkosgBwIOrCO1+Y2ieP9SIwhlonm4A35NVAd8Etj
+         FxWLQqld9HA07u30KYI/4hY4HdNJGSssC6zfLrSL8vSlL06Io3U9KUQnZPiPuY5YU2mr
+         5nHicZzh7sB5zEKlq+6ks7EPTvSFlx7c+UvnjYw+mnhHjS3BdF5U7sCedfVk7Rp8e5ZC
+         ETOSDLt9KORUVBPIgLFJOrYyR4aCwYfUuXx/uaAMBWVhImJZuVks6a+l8SJIzIEmiZxE
+         JByQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9BUkrhieVQFrKp2Op4ETaQJb6JoxW/GI4cwuWBrhSQe2gV6g3OG0w/nETQEihSDDRF3kIYDu/J+hTGAZUgg8M=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwPiPHfdVAmfAf8gZVhHiCkVG4bxxMHLhNHk7vQ5f5UgbifjhXM
+	py9e1F2GfsuNmCwOat8Xmdcs5N2vSUSakFNDR2XkL9O2fxZrqTY+vle4
+X-Gm-Gg: Acq92OGxI+kdAp7UuArQ51iQbvbFCi6arFPWg2aOc4rC+Bi9272SzFETCKLfLh8QYDs
+	YDSZuBJtQQu6BDF1L96JFZgpJhYYtcPcOjfpbgfPlMJuPUDaPM5n3TY3rKiJPaQUVy6/7uU1bZ3
+	v0aaT4KQzsqNBoBOya2HzGHdhJ7FcaqcWoGKpbS9Aws50y+S1MwQu1vU5axOO0sj5VLFkbVxDxg
+	xKP+T7OO8FrIiZda2X1ZFUC88O7NcVG3G5gjR1F94nS7E7npu1Ft1BUUHiMVTfAxtC1fnkYDG6y
+	D7V65vIQk+tbD0T3ILCsNWihNSVmItzD/bjKNPA5EU8SdxxsY/1n66OhaONbmWLOUPTiFek8630
+	N2Jt9dP9CKHrsgruhCAjJ43kTgCL2gqINHZsGECvoaivRW08MkJ0JnasNw4BUUL/UTR2+3QXuy1
+	PxpqwYEHFGABYugb5zG8o9hA==
+X-Received: by 2002:a05:6402:a0d6:b0:67b:7d11:7589 with SMTP id 4fb4d7f45d1cf-682a700ac71mr782684a12.7.1778662502578;
+        Wed, 13 May 2026 01:55:02 -0700 (PDT)
+Received: from localhost ([185.92.221.13])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-67ef0dfd35csm6047568a12.15.2026.05.13.01.55.01
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 13 May 2026 01:55:02 -0700 (PDT)
+Date: Wed, 13 May 2026 08:55:01 +0000
+From: Wei Yang <richard.weiyang@gmail.com>
+To: Hongfu Li <lihongfu@kylinos.cn>
+Cc: shuah@kernel.org, akpm@linux-foundation.org,
+	reddybalavignesh9979@gmail.com, richard.weiyang@gmail.com,
+	mic@digikod.net, sj@kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/perf_events: Fix mmap() error check in
+ sigtrap_threads
+Message-ID: <20260513085501.lzljqdgzwanbqtr4@master>
+Reply-To: Wei Yang <richard.weiyang@gmail.com>
+References: <20260513025838.594945-1-lihongfu@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -55,23 +78,43 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260512165641.1f557ba8@kernel.org>
-X-Debian-User: leitao
+In-Reply-To: <20260513025838.594945-1-lihongfu@kylinos.cn>
+User-Agent: NeoMutt/20170113 (1.7.2)
 
-On Tue, May 12, 2026 at 04:56:41PM -0700, Jakub Kicinski wrote:
-> On Tue, 12 May 2026 01:08:15 -0700 Breno Leitao wrote:
-> > On Mon, May 11, 2026 at 05:08:48PM -0700, Jakub Kicinski wrote:
-> > > On Mon, 11 May 2026 10:01:00 -0700 Breno Leitao wrote:  
-> > > > Should you check for ra6 before the "setup" above?  
-> > >
-> > > Not really. AI bots love to complain about this. But "ra6 command
-> > > not found" is as good of a message as the explicit skip, honestly.  
-> > 
-> > Right, but why call setup() before checking if ra6 is available?
-> 
-> You cut off the sentence from my response which told you why.
-> 
-> Checking dependencies is not a priority for our tests.
+On Wed, May 13, 2026 at 10:58:38AM +0800, Hongfu Li wrote:
+>In sigtrap_threads(), the return value of mmap() is checked against
+>NULL.  mmap() returns MAP_FAILED, which is (void *)-1, not NULL, when
+>it fails.  Since MAP_FAILED is non-zero and non-NULL, the condition
+>"p == NULL" will never be true on failure, causing the program to
+>proceed with an invalid pointer and segfault if mmap() actually fails
+>under memory pressure.
+>
+>Signed-off-by: Hongfu Li <lihongfu@kylinos.cn>
 
-Ack. Notes taken, sorry for the noise,
---breno
+Ah, looks you are right.
+
+Reviewed-by: Wei Yang <richard.weiyang@gmail.com>
+
+>---
+> tools/testing/selftests/perf_events/watermark_signal.c | 2 +-
+> 1 file changed, 1 insertion(+), 1 deletion(-)
+>
+>diff --git a/tools/testing/selftests/perf_events/watermark_signal.c b/tools/testing/selftests/perf_events/watermark_signal.c
+>index 0f64b9b17081..a84709cabd8b 100644
+>--- a/tools/testing/selftests/perf_events/watermark_signal.c
+>+++ b/tools/testing/selftests/perf_events/watermark_signal.c
+>@@ -102,7 +102,7 @@ TEST(watermark_signal)
+> 	}
+> 
+> 	p = mmap(NULL, 2 * page_size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+>-	if (p == NULL) {
+>+	if (p == MAP_FAILED) {
+> 		perror("mmap");
+> 		goto cleanup;
+> 	}
+>-- 
+>2.25.1
+
+-- 
+Wei Yang
+Help you, Help me
