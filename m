@@ -1,133 +1,206 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7669925B094;
-	Wed, 13 May 2026 13:04:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAF2C27FB3C
+	for <linux-kselftest@vger.kernel.org>; Wed, 13 May 2026 13:52:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778677478; cv=none; b=ZnXhbKtPenqi8aJSpt0GetKmMoN+Jqu0CWMvOqEMj9CLei5MavoceTI/2WRizZWt7O48gUQ4UTDqP8+FUv0t6WjcxdNJr4StTxnGSC/ltgUJ+WgqBBulbRxoFEpxM35AlwfmNq5ZpJMBIRgCpx/rBMyiZAoe3BzjFTDI3euisjE=
+	t=1778680337; cv=none; b=LnNxuAD7g1WvcBZ8gebe8/KepVqJQzAkRJfPiUuxSYgAqZw6zMELkGzeqZc10Mra+Tt7yfXXshqYbQS+op8VdH6stiR1tNhxbjw8gbwBwhIl6njb5OCwUFR7r/0Z1Xk4JMjjPHvLvQ7wWGzSpOMN9qOxkUeBk064Cv1toLyPy4U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778677478; c=relaxed/simple;
-	bh=6LEu9DtzugsPgS9zY7ikDk3PNAySaXFJrErwGthAkfU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cDgAuUuuooH4DASttJopd8bADXLyLqxvHBVPZyLYTq2nrja9qkfhzuwy6fXnN6ps821Z+IAaER5vOCYTGmRy7SkIEdT1DlD/Qs5Fe7oetWSG9oD39/CE1OBDK3eTCKMmIigojT7zwfKeX0nb9oFBIGpgkiib9AfabTHsMdix9OA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lGsDWVW2; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778680337; c=relaxed/simple;
+	bh=X+zQTAkwFG4eQIJ2OFu3Tfmpd6S4Es/WmHvgusJTuik=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=GSoVlMpCOirjb8KoBBSFey0jg+rA874a6tAdxFG9ql6DYqr6oRQufrrN5aI+6m+noECgTaUWLOPVdoLbrHceDKYarZGH+MJZe0KASv7uChIPFUIIY7ajBrNDyJOUYjVtX3FdlEryHXE/WYoISvgh7lq3Unp5LjTyIz8yOiO9C/8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=DJmDRP3q; arc=none smtp.client-ip=209.85.210.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lGsDWVW2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F9F9C2BCC7;
-	Wed, 13 May 2026 13:04:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778677478;
-	bh=6LEu9DtzugsPgS9zY7ikDk3PNAySaXFJrErwGthAkfU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lGsDWVW2oR08PACx9KcRC8YMpUuN6oYYOvoOWllZtScTRbHp7+islHrOswbDz0e1U
-	 Rd/2lD7xK6tofxdt3rjsHrXixgEE2cEIam/CmgAPO+rVJ0EqqFFymekAQgAVcROykG
-	 /N7UobOXD+QLpx6gmP6NTOmHQYOBi0pny/Bp5nb7yAfX2fzkn+nP5WBB8+35vCpLep
-	 jh4Y8TgC1kC/ozfdDPxCBHLqgSPMWYg5w/mYxRbWDqfzsPeOwoBvd1TnZH2MG/F2uI
-	 pbR8JRRzktjhwXI6yger0M0d/hUI8h3I7h6ajlUBWmNi8Qu54RVQUXSLuoGBn6Z7hf
-	 kXJB84AOZ4pfg==
-Date: Wed, 13 May 2026 15:04:35 +0200
-From: Frederic Weisbecker <frederic@kernel.org>
-To: Thomas Gleixner <tglx@kernel.org>
-Cc: Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	"K. Y. Srinivasan" <kys@microsoft.com>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
-	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-	Long Li <longli@microsoft.com>, Guenter Roeck <linux@roeck-us.net>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Boqun Feng <boqun@kernel.org>, Uladzislau Rezki <urezki@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang@linux.dev>,
-	Anna-Maria Behnsen <anna-maria@linutronix.de>,
-	Ingo Molnar <mingo@kernel.org>,
-	Chen Ridong <chenridong@huaweicloud.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, cgroups@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-hyperv@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, rcu@vger.kernel.org,
-	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Costa Shulyupin <cshulyup@redhat.com>,
-	Qiliang Yuan <realwujing@gmail.com>
-Subject: Re: [PATCH 04/23] tick/nohz: Allow runtime changes in full dynticks
- CPUs
-Message-ID: <agR241twxk9UdRrg@localhost.localdomain>
-References: <20260421030351.281436-1-longman@redhat.com>
- <20260421030351.281436-5-longman@redhat.com>
- <87340od7ev.ffs@tglx>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DJmDRP3q"
+Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-82fa860e71eso3824816b3a.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 13 May 2026 06:52:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1778680335; x=1779285135; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fZ26r4X5jfVq6A2+/ceMGSKMXoCrvOMhrTX7zo3uG2I=;
+        b=DJmDRP3qAD2ILfYO1Oe8/nhiuz4Ktfc2zFNt/ARVMzHA5Wm1yv06gGo+3QUZmjIooC
+         6p1dG+DolG4/7XKVkyDZ1kpPHHOmOwbJG/8NmS4LlZ6n5XoMyeP++J8rQBpSj+ZBpFlg
+         TEupzbkgF7HM6LLfk9E7K4W43zlXi0NiSjSerzetNSq7RTWw86NHUmuro71Ud4t/cB8y
+         ipH/acIYwJam2W0lSrEMVBu37nese8cJVOnkQ6w+yZwRmB0WsTtVHT8TPMFRsdQswDc6
+         FBYd4vgUM2B88lvDaGVELETfLnOdfz4BC3GSELDd49+c1lap6u571rmUKnSZfCuP+wW4
+         6mJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778680335; x=1779285135;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=fZ26r4X5jfVq6A2+/ceMGSKMXoCrvOMhrTX7zo3uG2I=;
+        b=fI5l/JH2hDwhJKuDmRSRGlz924rphtmwW33MUmRdYivrJ8jT+ElxzONDd8JhP6Bz1c
+         VZS4kywCA34porOMO3/8N6hEqd5c3LDH0cZbQG0SaMMgh23T0+4OrhBttUBeWkTgB3Wu
+         GLH5wWbocHZ6Brkn32CX4fGGwHBI6mRGXwX9zJKvufEPy6U2vJycr5GKXcWHBRsq+8gu
+         f6DCGt8sWcay14owlR8gX8xroh1jkLiyQfi8k2NYxmMOYcC15vx5b3NML0x7IBGqYFBL
+         0d0eF71E8BQBNfbiAEognjVCponYwiUPsd+11kwzpWLKTqVgNgKGKh7ijcye0nsHhHq2
+         P5bg==
+X-Forwarded-Encrypted: i=1; AFNElJ/eoTgpzC3xtsE7G14XGa1mSv69JvjC30FAmYaEXp2IjSBH9dymsNeAYElXixesdMR9pdobCDLwF40Wuf93vaw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxLDy7wrb/1Cf+50p44cv7T9J8TfzaKsgongRQ+YAZp1p1nWVp/
+	KTrVbKOniWMxsHWFHh8cQTJDQuuHvB3roiVuRHN8YgllYt2IrXkxdCD1EL0tySQWfQlevTzQ64P
+	TOIy8IA==
+X-Received: from pfbly26.prod.google.com ([2002:a05:6a00:759a:b0:82f:a4cc:2fb3])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:2e90:b0:835:5557:31fa
+ with SMTP id d2e1a72fcca58-83f042ff9afmr3568898b3a.46.1778680334716; Wed, 13
+ May 2026 06:52:14 -0700 (PDT)
+Date: Wed, 13 May 2026 06:52:14 -0700
+In-Reply-To: <1a5a115e-3bf3-e2bf-475a-b49f5b6e308f@loongson.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87340od7ev.ffs@tglx>
+Mime-Version: 1.0
+References: <20260508015013.4108345-1-maobibo@loongson.cn> <agO6oLqQYQG14x6D@google.com>
+ <1a5a115e-3bf3-e2bf-475a-b49f5b6e308f@loongson.cn>
+Message-ID: <agSCDrazxEvStSuI@google.com>
+Subject: Re: [PATCH] KVM: selftests: Check guest memfd validity with flags
+From: Sean Christopherson <seanjc@google.com>
+To: Bibo Mao <maobibo@loongson.cn>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Oliver Upton <oupton@kernel.org>, 
+	Marc Zyngier <maz@kernel.org>, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Fuad Tabba <tabba@google.com>, 
+	Ackerley Tng <ackerleytng@google.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Le Tue, Apr 21, 2026 at 10:50:00AM +0200, Thomas Gleixner a écrit :
-> On Mon, Apr 20 2026 at 23:03, Waiman Long wrote:
-> > +	/*
-> > +	 * To properly enable/disable nohz_full dynticks for the affected CPUs,
-> > +	 * the new nohz_full CPUs have to be copied to tick_nohz_full_mask and
-> > +	 * ct_cpu_track_user/ct_cpu_untrack_user() will have to be called
-> > +	 * for those CPUs that have their states changed. Those CPUs should be
-> > +	 * in an offline state.
-> > +	 */
-> > +	for_each_cpu_andnot(cpu, cpumask, tick_nohz_full_mask) {
-> > +		WARN_ON_ONCE(cpu_online(cpu));
-> > +		ct_cpu_track_user(cpu);
-> > +		cpumask_set_cpu(cpu, tick_nohz_full_mask);
-> > +	}
-> > +
-> > +	for_each_cpu_andnot(cpu, tick_nohz_full_mask, cpumask) {
-> > +		WARN_ON_ONCE(cpu_online(cpu));
-> > +		ct_cpu_untrack_user(cpu);
-> > +		cpumask_clear_cpu(cpu, tick_nohz_full_mask);
-> > +	}
-> > +}
-> 
-> So this writes to tick_nohz_full_mask while other CPUs can access
-> it. That's just wrong and I'm not at all interested in the resulting
-> KCSAN warnings.
-> 
-> tick_nohz_full_mask needs to become a RCU protected pointer, which is
-> updated once the new mask is established in a separately allocated one.
++Ackerley and Fuad
 
-How about just dropping tick_nohz_full_mask that is just
- ~housekeeping_cpumask(HK_TYPE_KERNEL_NOISE) which itself is becoming RCU
-protected in this patchset?
+On Wed, May 13, 2026, Bibo Mao wrote:
+> On 2026/5/13 =E4=B8=8A=E5=8D=887:41, Sean Christopherson wrote:
+> > On Fri, May 08, 2026, Bibo Mao wrote:
+> > > The type of guest_memfd in structure kvm_userspace_memory_region2
+> > > is __u32, it is not correct to assign it with -1 and check whether
+> > > it is smaller than 0. Here check flags with KVM_MEM_GUEST_MEMFD
+> > > set.
+> > >=20
+> > > Signed-off-by: Bibo Mao <maobibo@loongson.cn>
+> > > ---
+> > >   tools/testing/selftests/kvm/lib/kvm_util.c | 4 +---
+> > >   1 file changed, 1 insertion(+), 3 deletions(-)
+> > >=20
+> > > diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testi=
+ng/selftests/kvm/lib/kvm_util.c
+> > > index 2a76eca7029d..9d3553f7e6a5 100644
+> > > --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> > > +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> > > @@ -817,7 +817,7 @@ static void __vm_mem_region_delete(struct kvm_vm =
+*vm,
+> > >   		kvm_munmap(region->mmap_alias, region->mmap_size);
+> > >   		close(region->fd);
+> > >   	}
+> > > -	if (region->region.guest_memfd >=3D 0)
+> > > +	if (region->region.flags & KVM_MEM_GUEST_MEMFD)
+> >=20
+> > Hmm, it's a bit gross, but this is probably more robust?
+> >=20
+> > 	if ((int)region->region.guest_memfd < 0)
+> yes, this is more direct, only that some guys in the community do not lik=
+e
+> type conversion. Both are ok for me.
+>=20
+> >=20
+> > E.g. if we somehow end up in a state where KVM_MEM_GUEST_MEMFD is eithe=
+r stale
+> > or the guest_memfd file was already closed.  I highly doubt either of t=
+hose things
+> > will happen, but logically it's the correct fix (the only reason guest_=
+memfd is
+> > a u32 is being it's part of the kernel's uAPI).
+> Actually it probably will happen, how about something like this:
+> -       if (region->region.guest_memfd >=3D 0)
+> +       if ((int)region->region.guest_memfd >=3D 0) {
 
-Thanks.
+LOL, doh.  Yeah, that's what I meant.
 
-> 
-> Thanks,
-> 
->         tglx
-> 
-> 
+>                 close(region->region.guest_memfd);
+> +               region->region.guest_memfd =3D -1;
 
--- 
-Frederic Weisbecker
-SUSE Labs
+It's funny how these sorts of things seem to come in bunches.  Can you hold=
+ off
+on this specific change, and just send a v2 for the fix?  Invalidating gues=
+t_memfd
+isn't at all necessary here, because region itself is freed shortly thereaf=
+ter.
+
+But, Ackerley and Fuad want give kvm_vm_release() the same treatment[*], at=
+ which
+point there's no good reason not to be paranoid.  I want to do that in a de=
+dicated
+patch though, and harden "everything" in one shot.  I'll send something lik=
+e the
+below.
+
+[*] https://lore.kernel.org/all/20260511113759.610924-3-tabba@google.com
+
+diff --git tools/testing/selftests/kvm/lib/kvm_util.c tools/testing/selftes=
+ts/kvm/lib/kvm_util.c
+index 2a76eca7029d..2476167252a1 100644
+--- tools/testing/selftests/kvm/lib/kvm_util.c
++++ tools/testing/selftests/kvm/lib/kvm_util.c
+@@ -737,6 +737,12 @@ userspace_mem_region_find(struct kvm_vm *vm, u64 start=
+, u64 end)
+        return NULL;
+ }
+=20
++static void kvm_free_fd(int *fd)
++{
++       kvm_close(*fd);
++       *fd =3D -1;
++}
++
+ static void kvm_stats_release(struct kvm_binary_stats *stats)
+ {
+        if (stats->fd < 0)
+@@ -747,8 +753,7 @@ static void kvm_stats_release(struct kvm_binary_stats *=
+stats)
+                stats->desc =3D NULL;
+        }
+=20
+-       kvm_close(stats->fd);
+-       stats->fd =3D -1;
++       kvm_free_fd(&stats->fd);
+ }
+=20
+ __weak void vcpu_arch_free(struct kvm_vcpu *vcpu)
+@@ -777,7 +782,7 @@ static void vm_vcpu_rm(struct kvm_vm *vm, struct kvm_vc=
+pu *vcpu)
+=20
+        kvm_munmap(vcpu->run, vcpu_mmap_sz());
+=20
+-       kvm_close(vcpu->fd);
++       kvm_free_fd(&vcpu->fd);
+        kvm_stats_release(&vcpu->stats);
+=20
+        list_del(&vcpu->list);
+@@ -793,8 +798,8 @@ void kvm_vm_release(struct kvm_vm *vmp)
+        list_for_each_entry_safe(vcpu, tmp, &vmp->vcpus, list)
+                vm_vcpu_rm(vmp, vcpu);
+=20
+-       kvm_close(vmp->fd);
+-       kvm_close(vmp->kvm_fd);
++       kvm_free_fd(&vmp->fd);
++       kvm_free_fd(&vmp->kvm_fd);
+=20
+        /* Free cached stats metadata and close FD */
+        kvm_stats_release(&vmp->stats);
+@@ -815,10 +820,10 @@ static void __vm_mem_region_delete(struct kvm_vm *vm,
+        if (region->fd >=3D 0) {
+                /* There's an extra map when using shared memory. */
+                kvm_munmap(region->mmap_alias, region->mmap_size);
+-               close(region->fd);
++               kvm_free_fd(&region->fd);
+        }
+        if (region->region.guest_memfd >=3D 0)
+-               close(region->region.guest_memfd);
++               kvm_free_fd((int *)&region->region.guest_memfd);
+=20
+        free(region);
+ }
