@@ -1,66 +1,79 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4500385D76;
-	Wed, 13 May 2026 03:24:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF9A73563E8;
+	Wed, 13 May 2026 03:46:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778642680; cv=none; b=B7P4GnAVaSxDeWbhw5CuJ1l6OFDRj08fiEL3jIStsPYXkpMAX9vRkw1Kkpxkc3URn6C7eIdZUv6UkPZ/LeGSa5AO3BQ96PEUPTOPN/RPthIVnUd3QwbC5lT+akQ6QDjsdWtNABD1P3VPPfu6ir/NFycFacbuJjHO/Fzz4MJYb+4=
+	t=1778643992; cv=none; b=d5Ykd607jIfT2y3RBzgrT5Ubij6nhuJd2zYG8H0Oazo9TZXpEoNNmeyMcb0SD/H1YpgYlLbZLx62McGaRgk+fsmQHkAcvHTUIMRiaUvzziisTcQtBoG3q7pdeTfFi44OMVW6MaSMoxKAhNd4fp0HaQlHCiOmfIJSHXgPi27v25U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778642680; c=relaxed/simple;
-	bh=WeTxWCELMc05TsXWrycjVf+KrYRziDCqbR7joXkp6tw=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=E2rrjmOJvFbI4qYX864PCv3PqH8IJrswe16BmCxgjUFyRoF1kKDgoCB6qjuA4nZDmg/VqDa6eg772pAGsyOSLhxo7lRiuxPLaMlH9a7l+SzmWN3F3Vqhre+2aNe47TVYjxCTrw3an50DtKxVlIlxHn7TRg/RxLAwr5GjCcAw7Mg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=xd0V97Ck; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778643992; c=relaxed/simple;
+	bh=I958cKXMRUeIholFCKrb8igOnxRirt/wAdJwV+6Rps8=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=hDS8LI1DoyAjHnXo/Mx50sj+qshpiRjKyjeUS/b2BgSwCpwAm7WkEvBt72fj78j9VAij0qbPeSA05OP3CXOva1IzPqEnufGnaD2DDdHUSjZtYx6cqYSmI2q0rVkbhlLfAKEnIplN+SVASvdIHEkxvZp/tFnKJxs2Qbh4AtRKRJo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XwQTOjUe; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="xd0V97Ck"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED6B5C2BCB0;
-	Wed, 13 May 2026 03:24:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1778642680;
-	bh=WeTxWCELMc05TsXWrycjVf+KrYRziDCqbR7joXkp6tw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=xd0V97CkQEyg8x1FCAD5O8fl3kaLAs6QTAlIzAN8i7h9BDqugDelSjLtLWiLpt82w
-	 /lo32+w1a5m/ikHJozf7RS3jC3KMNyJPQRApM3skBLRvETu1vUSWOhogkx1RkNfRkY
-	 WVNe7LEJIPK3i85YpX/8OCD2wwknb8wg1/pXfZt0=
-Date: Tue, 12 May 2026 20:24:39 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Sayali Patil <sayalip@linux.ibm.com>
-Cc: Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, Ritesh
- Harjani <ritesh.list@gmail.com>, David Hildenbrand <david@kernel.org>, Zi
- Yan <ziy@nvidia.com>, Michal Hocko <mhocko@kernel.org>, Oscar Salvador
- <osalvador@suse.de>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Dev Jain
- <dev.jain@arm.com>, Liam.Howlett@oracle.com, linuxppc-dev@lists.ozlabs.org,
- Miaohe Lin <linmiaohe@huawei.com>, Venkat Rao Bagalkote
- <venkat88@linux.ibm.com>
-Subject: Re: [PATCH v6 00/14] selftests/mm: fix failures and robustness
- improvements
-Message-Id: <20260512202439.e71f233281428ff596dab0b6@linux-foundation.org>
-In-Reply-To: <cover.1777877814.git.sayalip@linux.ibm.com>
-References: <cover.1777877814.git.sayalip@linux.ibm.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XwQTOjUe"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8014CC2BCC7;
+	Wed, 13 May 2026 03:46:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778643992;
+	bh=I958cKXMRUeIholFCKrb8igOnxRirt/wAdJwV+6Rps8=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=XwQTOjUeuQxOB4aaKyj/8fLf3MhQR4/yQ7T6ZvJn3isxy22ETi4xKeAlDZwRZJJji
+	 tgsNP7uIiNNWnDG/sz2bXyd4/waffrVr+Hu/PaHZSzGwXpVwkAb0OTypQntGaaU59v
+	 eXHfppZH64VZiKVgkpYcfOmf4fFIJeiNjDF6+SYd7T77nox0D6gjib1H/goZH9k/bQ
+	 zj/xCDTNRSHV131dfVUhIe4WKwnzUqKtf7QmVmkLN4ZaJrctI+gL1SfKGH1Z3p0fAM
+	 Rer8gfrstLakAoqvUcc8tPsfVlp8DydSZ8bTUmh3kzCkRwrk2Ajo37hlwhGoktgUNp
+	 12JD5fSWMs8AA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7CE593822D60;
+	Wed, 13 May 2026 03:45:39 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next] selftests: drv-net: cope with slow env in
+ so_txtime.py test
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177864393804.3173643.10761886760431638344.git-patchwork-notify@kernel.org>
+Date: Wed, 13 May 2026 03:45:38 +0000
+References: <20260511222138.2045551-1-willemdebruijn.kernel@gmail.com>
+In-Reply-To: <20260511222138.2045551-1-willemdebruijn.kernel@gmail.com>
+To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+ edumazet@google.com, pabeni@redhat.com, horms@kernel.org,
+ linux-kselftest@vger.kernel.org, shuah@kernel.org, willemb@google.com
 
-On Mon,  4 May 2026 13:54:37 +0530 Sayali Patil <sayalip@linux.ibm.com> wrote:
+Hello:
 
-> Powerpc systems with a 64K base page size exposed several issues while
-> running mm selftests. Some tests assume specific hugetlb configurations,
-> use incorrect interfaces, or fail instead of skipping when the required
-> kernel features are not available.
+This patch was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Mon, 11 May 2026 18:19:20 -0400 you wrote:
+> From: Willem de Bruijn <willemb@google.com>
 > 
-> This series fixes these issues and improves test robustness.
+> This test was converted from shell script to drv-net test.
+> 
+> The new version is flaky in dbg builds on the netdev.bots dashboard.
+> The previous shell script had more protections to avoid these. Added
+> in commit a7ee79b9c455 ("selftests: net: cope with slow env in
+> so_txtime.sh test").
+> 
+> [...]
 
-Sorry, bitrot.  Mike's monster series "make MM selftests more CI
-friendly" has moved a lot of this code around then altered it.  Can you
-please redo against mm.git's mm-new branch?
+Here is the summary with links:
+  - [net-next] selftests: drv-net: cope with slow env in so_txtime.py test
+    https://git.kernel.org/netdev/net-next/c/543bdc1578cd
 
-Thanks.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
