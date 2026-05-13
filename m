@@ -1,69 +1,105 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AAFA3F411D;
-	Wed, 13 May 2026 23:01:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6A513CB8F4
+	for <linux-kselftest@vger.kernel.org>; Wed, 13 May 2026 23:14:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778713286; cv=none; b=sl5ZCBxJ9NUBNW0sijduO+m0ApSMi3GZkK1t/VcV3UfXCF0EbX1PjHmJQnrrWqgTKquYLCLTfPAqfQE6nd88Evbw3HWaS47Hb8Neif6KhfHQOe/8de9sk7+IcoyrEpLj/mlqB1/CMwMZZJxvf8egOsIzplZp8e+0NYiTREEqvXc=
+	t=1778714057; cv=none; b=WoR4sa1rt8C45blchpEZRmyB3ns3XGXOf4huJDIMthIgYS//nL6ScLuFDd3Bhu3ZON3cjSM4SQEG0gvnYZJLQap9VmFI/pEEEvG3nzfrrW5Wv0LCeht/M+7ph9a285onyFb3cRudNvkdwrf/jJs2FC9qourTpuofIBit+WVEEcY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778713286; c=relaxed/simple;
-	bh=11u+GMiB7NpvoAsHw52zWd5zJPglYXFSlspfoZSudaw=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=hY3JErwKGyr4ygQaynheqFN202a2WGQMVvdkrnx7LDm6KbND0gazQ3QMN9oy0bjTyVb3tTsuF0kfDIING4uSbrlgXuuuaQwmCUDHrcVaOm1VhUAurYp62wJ+2YDO3hVaFU9a+O/ze8ghjfCLTu4qO21TLB7whYCGGjHZgxdtw/w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ggtWO78v; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778714057; c=relaxed/simple;
+	bh=sa3MU5hP47nUdEGWyqAw1QOWRSRun/RHMRIVSWeqHIo=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=I35VTMJ8E2GVlT8x8NCfVAB9jAvqsOMKdV3CNczAqzRkNn8w+FMM39UBcXRBL6jwakBNkV6+ZM1XFzjGM7JNnhtJWs/t93reQ58VrSt3u1sZ0z9JPU4/KTqJXX2pMUCHkIIP0kyOD6PbfirYkZqTL3uq70J4drZtSlfSIPTvQbI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=EyY0YC7v; arc=none smtp.client-ip=209.85.216.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ggtWO78v"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B0A1C19425;
-	Wed, 13 May 2026 23:01:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778713286;
-	bh=11u+GMiB7NpvoAsHw52zWd5zJPglYXFSlspfoZSudaw=;
-	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-	b=ggtWO78vIy56LeccuBY8CQq7FHGfJ7Y+WiajO04PG9tx633Uv9kQU11uWr4sDzmlb
-	 oTaSzWviE6eUc0I+qv5PQENZhPmNo4TwW5djUvkK4eW7PiL2HuhTfLMWBQ/fDgNcsf
-	 gqI1jd7qrSRrhv50JLGBFkw7v8BSt1Dr18drsBwrEKlqfgxzhLi0LWy+UZhYqo2ETn
-	 875pIYfjIUpYmMGFHV9+3525oL0t+iE+vmSx0pHHuBEaViPzV8H22JPLhgTS2qbxOO
-	 Xhgrnx/VcNSM7yyMzmmI2eTaA+s47cW3wV3Fr1GeL00Yml3FOzvL2rGJUnu5D9c5iA
-	 EoTEGw48URKeA==
-Date: Wed, 13 May 2026 17:01:24 -0600 (MDT)
-From: Paul Walmsley <pjw@kernel.org>
-To: Zong Li <zong.li@sifive.com>
-cc: pjw@kernel.org, palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr, 
-    shuah@kernel.org, linux-kselftest@vger.kernel.org, 
-    linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/riscv: fix compiler output flag spacing in
- all Makefiles
-In-Reply-To: <20260511032917.3542802-1-zong.li@sifive.com>
-Message-ID: <a407bc11-efcc-2254-01ca-607c3c62feed@kernel.org>
-References: <20260511032917.3542802-1-zong.li@sifive.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EyY0YC7v"
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-3692f395339so191614a91.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 13 May 2026 16:14:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1778714055; x=1779318855; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YZROrOwy5J7pzI1auvv9ygqqn1CxMDUVxMMwN7QUYwo=;
+        b=EyY0YC7vSNmq8ALtwiwezfZ9xFheIpTvLlOk08vGUxMDTTAUP2OiroHad2jDaTKOTs
+         20XNCCjQYXq4aVSAvq0SlQdb7DazS5SFBMwtXoI/qrdxoP/ed1ET4Qrh+cW1G6SszvQ0
+         QA6uJgo9NJztNrnPpcPZBExV2qLmV/+XAGERG1a1MAKlvf2x9jRWEBF/fVkLDGGHRbN1
+         v/LjVMAc02KcS/wIkQGKfKSXVNk94IKsY3uMBbrpdWjcCrA/2Lm9y6tX9SjLvyMvnkk8
+         OxM39W9Ub6NT7HfwJaELfZAoYwq7OrCCL9Desq8u2zos4ByP5GCdyiMxE396QJfsibEy
+         0GCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778714055; x=1779318855;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YZROrOwy5J7pzI1auvv9ygqqn1CxMDUVxMMwN7QUYwo=;
+        b=HMzOnjDeIfhgQ6z5IphgnXckpBaSdTdIbAkVkfCi4/GgnLsmkNgX1t4tu7Sx7nUV1D
+         fIXfuELJpA+L+48D1JdMdD79CoGb/5he613GyX8eX0l6oz7XlXSHd7XfTmmqeGMkVVZ1
+         skXKVv6k9bCmHLVngPkESvdZS1+WCj5hXcYEY3RXX6pROCAG9yaJPSrYbJ+DizVXB4m4
+         RvyuwwirhJqO57zpcjePWltdsK0ZRw6jBjt4ORf7h9YKKLcvUJgjfqSD0rwZdikEjDsx
+         BCOiOKx56KCik2y2Gadf9M7+sqqvWGjPq0I/dlZjniZLRUDLYo3VCG5JDuOQ1Itv4s5x
+         z2Ig==
+X-Forwarded-Encrypted: i=1; AFNElJ/78kyV+TfFKT8etHrBD9Hlh5VWC+FMjo36Rxzg2Y7T6HzWLE8VwgDJz8PDM/WZvlh4AWeXXaeBLwkLLUE4qIM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxeppY/Rr0+x0sASCQfnV5OA3QQ/U0cNy/8d1o26q8lo9PASOcA
+	OIOPyBuvDcvfMdw8ECmIQSf+fGURX/4Tfd1a0lBjaLIuC7yjyVM/A8AYwh0HKxDwN4rKCW7P8lf
+	D+iuTag==
+X-Received: from pfbfa8.prod.google.com ([2002:a05:6a00:2d08:b0:839:9ad:ee32])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:5493:b0:3aa:c93b:6266
+ with SMTP id adf61e73a8af0-3afaf61979amr5920299637.19.1778714054962; Wed, 13
+ May 2026 16:14:14 -0700 (PDT)
+Date: Wed, 13 May 2026 16:14:14 -0700
+In-Reply-To: <e0df5d6812da0f508cdf697ac7627693199c8293.1766066076.git.houwenlong.hwl@antgroup.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Mime-Version: 1.0
+References: <cover.1766066076.git.houwenlong.hwl@antgroup.com> <e0df5d6812da0f508cdf697ac7627693199c8293.1766066076.git.houwenlong.hwl@antgroup.com>
+Message-ID: <agUFxrpUhBRv54ZV@google.com>
+Subject: Re: [PATCH v2 9/9] KVM: selftests: Verify 'BS' bit checking in
+ pending debug exception state during VM-Entry
+From: Sean Christopherson <seanjc@google.com>
+To: Hou Wenlong <houwenlong.hwl@antgroup.com>
+Cc: kvm@vger.kernel.org, Lai Jiangshan <jiangshan.ljs@antgroup.com>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-On Sun, 10 May 2026, Zong Li wrote:
+On Thu, Dec 18, 2025, Hou Wenlong wrote:
+> In the x86's debug_regs test, add a test case to cover the scenario
+> where single-step with STI in VMX sets the 'BS' bit in pending debug
+> exceptions state for #DB interception and instruction emulation in both
+> cases.
 
-> Standardize the compiler output flag format across all RISC-V
-> selftests by adding a space between '-o' and '$@'.
-> 
-> Although '-o$@' is perfectly valid for GCC/Clang to parse, But
-> changing it to '-o $@' with a space could align with the GNU
-> official documentation conventions, improves readability by
-> visually separating the flag from the target variable, and
-> ensures consistency with other architectures
-> 
-> Currently, RISC-V selftests use '-o$@' (without space) in 13
-> instances across 6 Makefiles, while all other architectures
-> consistently use '-o $@' (with space). This inconsistency makes
-> RISC-V an outlier in the kernel's selftest infrastructure.
-> 
-> Signed-off-by: Zong Li <zong.li@sifive.com>
+...
 
-Thanks, queued for v7.2.
+> +static void guest_db_handler(struct ex_regs *regs)
+> +{
+> +	static int count;
+> +	unsigned long target_rips[2] = {
+> +		CAST_TO_RIP(fep_sti_start),
+> +		CAST_TO_RIP(fep_sti_end),
+> +	};
+> +
+> +	__GUEST_ASSERT(regs->rip == target_rips[count], "STI: unexpected rip 0x%lx (should be 0x%lx)",
+> +		       regs->rip, target_rips[count]);
+> +	regs->rflags &= ~X86_EFLAGS_TF;
+> +	count++;
+> +}
+> +
+> +static void guest_irq_handler(struct ex_regs *regs)
+> +{
+> +	unsigned long target_rip = CAST_TO_RIP(fep_bd_start);
+> +
+> +	__GUEST_ASSERT(regs->rip == target_rip, "IRQ: unexpected rip 0x%lx (should be 0x%lx)",
+> +		       regs->rip, target_rip);
 
-
-- Paul
+This is wrong, and the test fails with your series applied verbatim.  The IRQ
+will arrive at fep_sti_start, because RFLAGS.IF=0 from the CLI at the end of the
+ss_start block, and remains that way across fep_bd_start.   And to make things
+even more confusing, the IRQ arrives on the CLI even though it's in an STI shadow
+due to #DBs not being subjected to _STI_ shadows on Intel, only to MOV-SS/POP-SS
+shadows.  I.e. the #DB lands on CLI, pushes RFLAGS.IF=1 on the stack, and then
+the subsequent IRET from guest_db_handler() fully unmasks IRQs, and voila.
