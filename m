@@ -1,38 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D5E338E8CB;
-	Wed, 13 May 2026 03:06:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98D551D63F3;
+	Wed, 13 May 2026 03:10:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778641593; cv=none; b=ug4sOskDkhsH48QBXpKnsFN/wRa290LHMFrs/l41cz08Sk4HWyZYjomyZAUeDAvP3NiqTfcyTx0zg+QRf4WocmFDHa8DBrApK6XGZ2PPoTmbVzrZmlzfb9hurRL02dgLoWJGL0ThRluJFCPxLbTX/vA4qKK8ZmqIRV7vDVJ/oog=
+	t=1778641841; cv=none; b=YUfMbmlA6Jdc40pq5ILa/knGcs1iHlz+KQbktdtsYaHBW2Bka8YMtpvn57LtN1mMqbPRra6ELHjn2m6y4j3MOExGC12PzOOS2lxEkdDAEBv2/pKxh7HUvOe962nzRJP6GzFpCkJjX09PXYHk4BH2l6LWl/P9AlVHX9cp4QYMET8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778641593; c=relaxed/simple;
-	bh=v42Q3fJGlh3sKqS7/VSV1G4hfJ35NzHyYQOEaT5rKHU=;
+	s=arc-20240116; t=1778641841; c=relaxed/simple;
+	bh=vu0gwBDBN0+TJsY5BEup/tyag+dQOp0HKz2GTXrJUmY=;
 	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=iK1aiEXZzW0MjxfE2sf0gUDi1rYyCJocvFVym7xeZrx8y2WMKYmDaKZzTTO8Frc2U8JmE8TM+PIjdTOPUxuuolIT7qNW/qfLdXi20VVH3rMzcy8RO2d8FMlAKVy+NchqKyw8hGwW2U0RtFXX0+OmfTdh6qTNYWgAxmPBgB3ZG0M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=Ej+cBwUb; arc=none smtp.client-ip=10.30.226.201
+	 Mime-Version:Content-Type; b=L6HYlSVOYhyXNXD8SxYf1RvFwlM+soXoJxcLH6vRMVO9FnKmJBA1zdGCfY2eZLrhzslDcT1i68cVImCQPrWhXdvFfqAJvOzzxf677l38UtjB1En+9AWTM7AQuEdKwoNSATZqDm4Cy4mbrM3GO4BuxeoNhqqfTdXItSPZxxsxLLA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=s5pS0SgF; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="Ej+cBwUb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E4EAC2BCB0;
-	Wed, 13 May 2026 03:06:32 +0000 (UTC)
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="s5pS0SgF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5F97C2BCB0;
+	Wed, 13 May 2026 03:10:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1778641592;
-	bh=v42Q3fJGlh3sKqS7/VSV1G4hfJ35NzHyYQOEaT5rKHU=;
+	s=korg; t=1778641841;
+	bh=vu0gwBDBN0+TJsY5BEup/tyag+dQOp0HKz2GTXrJUmY=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Ej+cBwUbAXVsbiOMGcLXz75uvDj/ANS2LRzDcuaO/LFvYW66d/JVS3beplyN3fnaZ
-	 JiLERm38ema69N8JJZrBLIYsrCopjXeEVlQYukw8NwxM879A7g7jEaxYIs9y4bLlkg
-	 cs6wZqmBCrhOEqghLr5iGE1G1WmvGyaGMYby0zpg=
-Date: Tue, 12 May 2026 20:06:31 -0700
+	b=s5pS0SgFgTsKMvZSlWIJVsVVNwwQLETV3CkqJebs25P0NP6SKTAlrMLogWJ+5F5Ie
+	 9bK7BSPaefeZ5fYVVhK4hmY8J3zk+FkHacbQeWQOl4NGtBQ/EMKPKFu6W6h6ZfNAAM
+	 BwToAu8ocE3Dp5rVkVmy/sB0rxwHnSDeO1MGgKsc=
+Date: Tue, 12 May 2026 20:10:40 -0700
 From: Andrew Morton <akpm@linux-foundation.org>
-To: Aboorva Devarajan <aboorvad@linux.ibm.com>
+To: Sayali Patil <sayalip@linux.ibm.com>
 Cc: Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, Sayali Patil <sayalip@linux.ibm.com>,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] selftests/mm: assorted fixes for hmm-tests
-Message-Id: <20260512200631.b52b15dd47cdbfb887ab3e3b@linux-foundation.org>
-In-Reply-To: <cover.1777870179.git.aboorvad@linux.ibm.com>
-References: <cover.1777870179.git.aboorvad@linux.ibm.com>
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, Ritesh
+ Harjani <ritesh.list@gmail.com>, David Hildenbrand <david@kernel.org>, Zi
+ Yan <ziy@nvidia.com>, Michal Hocko <mhocko@kernel.org>, Oscar Salvador
+ <osalvador@suse.de>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Dev Jain
+ <dev.jain@arm.com>, Liam.Howlett@oracle.com, linuxppc-dev@lists.ozlabs.org,
+ Miaohe Lin <linmiaohe@huawei.com>, Venkat Rao Bagalkote
+ <venkat88@linux.ibm.com>
+Subject: Re: [PATCH v6 00/14] selftests/mm: fix failures and robustness
+ improvements
+Message-Id: <20260512201040.5783a643a3ba23f42777debd@linux-foundation.org>
+In-Reply-To: <cover.1777877814.git.sayalip@linux.ibm.com>
+References: <cover.1777877814.git.sayalip@linux.ibm.com>
 X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -43,16 +49,18 @@ Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Mon,  4 May 2026 14:41:05 +0530 Aboorva Devarajan <aboorvad@linux.ibm.com> wrote:
+On Mon,  4 May 2026 13:54:37 +0530 Sayali Patil <sayalip@linux.ibm.com> wrote:
 
-> This series fixes a few issues in hmm-tests that show up when
-> page-size and huge-page configuration differ from the hardcoded
-> assumptions the tests were written for (PMD/THP sizing, default
-> hugepage size, and related cases).
+> Powerpc systems with a 64K base page size exposed several issues while
+> running mm selftests. Some tests assume specific hugetlb configurations,
+> use incorrect interfaces, or fail instead of skipping when the required
+> kernel features are not available.
 > 
-> It also includes a minor fix to exclusive_cow: the test ignored the
-> return value of fork(), so both parent and child ran the same teardown
-> path.
+> This series fixes these issues and improves test robustness.
 
-Thanks.  AI review asked a few reasonable-sounding questions:
-	https://sashiko.dev/#/patchset/cover.1777870179.git.aboorvad@linux.ibm.com
+Thanks, I'll add this to mm.git for testing exposure.
+
+Did you see the Sashiko results?  It all looks fairly nitpicky to me
+but perhaps there's something you'd prefer to change?
+
+	https://sashiko.dev/#/patchset/cover.1777877814.git.sayalip@linux.ibm.com
