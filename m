@@ -1,196 +1,94 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC2474963C8;
-	Wed, 13 May 2026 15:40:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CADBB1EB5FD
+	for <linux-kselftest@vger.kernel.org>; Wed, 13 May 2026 15:56:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778686823; cv=none; b=o75z0J1EaK/PPPL8J3U+keDfgpa48CMgHB1OIVelDGOac+XdBsfK/tl1q2KCGlS3PstcEg4ZNVVkOp6ncCzP5Pt2r4V3xIcsOZT9rKV6a5qxoWy8GZvi8q0JYWGByqeeXnLdfWBPO+pVADh1QxTm3iRQ6zH7L/tDp6VdC9y4pD4=
+	t=1778687764; cv=none; b=RLpD4oJukkQmrZ3aggR54jmg9u6UCWe+AZ0MoLACqabMn6U0TjGWRoBi6oBP1Wqn3BkAbGrMCCWDG1pZA2GU7KQOrt4J1Q7R9yd8g3bBnajEBUJh6NL0FhuhwJCSviWC0HKX83c40ixesRz5q/+SKx0rmVveFMpgLmYkXiqEuqM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778686823; c=relaxed/simple;
-	bh=ncCft6wLVNRyu8CqP+C5ij+1shPAevwH/Ny4XjCyHOI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=j477I3dV+OYZutQK6tCIZcSUygNNRMO+lqQm1xNf9p0SqWMVffn5tIfBe0sEypTYh1rPoyTjn6GYUrsUVbgLbmPiVGpn/s24k5iQ3AloHLqPprGW7//S4O/2xKPDbuLZIpU46q55vMWz07bYsPcs6+881sdXzs5HVn2PYD2uPzg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=MUz/a7yD; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	s=arc-20240116; t=1778687764; c=relaxed/simple;
+	bh=n7Ws94gxeaCRFtf3TF8uVIiRZHvc/e1UvuieOeTg8/g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZeZVRBJ5T0Y5J7WnkIxLTxsnN2KSi2O+v4gf2jJYyAw+MPZgIWXqDOpn1I8zbDTe7VFw+gXnMQ27/q4J0Ejz4m0o6Dbc+DFMMpNvuFVrWWPB+65xe5gYB4fwWmPEo/UhSUMvbQUfv2d/2TNLVyn5UcS0y5ez2ed+AJMv1vEw/xs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Y878hePz; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="MUz/a7yD"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:In-Reply-To:References:
-	Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:
-	From:Reply-To:Content-ID:Content-Description;
-	bh=ps5zJ4kvCPWwzd5UeBW/t615zOIlJIp4XGX6hA3qpRU=; b=MUz/a7yDPF3GUlgcn3qxI3gfXO
-	vu0GqHwaV/Mb1bW82IvzWEIXuz1AjC5Kf2hZQhhXHM7cK/WFxIui/Cd+LceT7+B4TWxlF/y5O2o5V
-	Ynyr/q5CC229E0JpqG/ofuV5CPL8tKnbhLV2UojmrnwyGZx02U7HgRK0SZ/4U98R3CXLsTObxtF4Q
-	8gPvehCcyeFI3RKI/DNCXG0nWLf2F803eE4PF4ug8dR562+Lae3fObfrgDoKgeS865C3f7su0x3tF
-	DcDiLzTDw+HtJoxbAfkmpsusVnu8fI4Q/dYZoRN+va/uuESIhOwGl2i00Uv6IslMYqXmaHSgP6ynC
-	jDONS5zA==;
-Received: from authenticated user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wNBh5-003GVI-14;
-	Wed, 13 May 2026 15:40:19 +0000
-From: Breno Leitao <leitao@debian.org>
-Date: Wed, 13 May 2026 08:39:37 -0700
-Subject: [PATCH v7 6/6] Documentation: document
- panic_on_unrecoverable_memory_failure sysctl
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Y878hePz"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1778687761;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=DfaTsBVptCeA0QuBzTDUKxyGUiuTsN+d73fyP8TMEMg=;
+	b=Y878hePzfJ/rjbt2Nx7JNDmJ7c561mK92u7Td8pbgj0YV9S0airKdVNZC2eyk4oj1/3cPA
+	QEKNgzu7R88O7h6vwToPyLzYIHkM3+eqBd6mfHN2hUuCsklBdDB+nPM9MfxF/glq2vMJY1
+	VuLPRxhM9OknyloXWzo8qizwiZ0j/P0=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-546-VDKQFgU_MDuDVSxLGFMDEw-1; Wed,
+ 13 May 2026 11:55:58 -0400
+X-MC-Unique: VDKQFgU_MDuDVSxLGFMDEw-1
+X-Mimecast-MFC-AGG-ID: VDKQFgU_MDuDVSxLGFMDEw_1778687756
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4A549195605F;
+	Wed, 13 May 2026 15:55:56 +0000 (UTC)
+Received: from thinkpad (headnet01.pony-001.prod.iad2.dc.redhat.com [10.2.32.101])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D1A831953947;
+	Wed, 13 May 2026 15:55:52 +0000 (UTC)
+Date: Wed, 13 May 2026 17:55:49 +0200
+From: Felix Maurer <fmaurer@redhat.com>
+To: Qingfang Deng <qingfang.deng@linux.dev>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Petr Machata <petrm@nvidia.com>, linux-kernel@vger.kernel.org,
+	linux-ppp@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next] selftests: net: add tests for PPPoL2TP
+Message-ID: <agSfBWQorPHodayz@thinkpad>
+References: <20260508032158.67887-1-qingfang.deng@linux.dev>
+ <af4czAjnz--nOUYf@thinkpad>
+ <a8036fda-3509-437e-b787-4376992a0359@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260513-ecc_panic-v7-6-be2e578e61da@debian.org>
-References: <20260513-ecc_panic-v7-0-be2e578e61da@debian.org>
-In-Reply-To: <20260513-ecc_panic-v7-0-be2e578e61da@debian.org>
-To: Miaohe Lin <linmiaohe@huawei.com>, 
- Andrew Morton <akpm@linux-foundation.org>, 
- David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
- Shuah Khan <shuah@kernel.org>, Naoya Horiguchi <nao.horiguchi@gmail.com>, 
- Steven Rostedt <rostedt@goodmis.org>, 
- Masami Hiramatsu <mhiramat@kernel.org>, 
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
- "Liam R. Howlett" <liam@infradead.org>, 
- "Liam R. Howlett" <liam@infradead.org>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Breno Leitao <leitao@debian.org>, linux-trace-kernel@vger.kernel.org, 
- kernel-team@meta.com
-X-Mailer: b4 0.16-dev-d5d98
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4856; i=leitao@debian.org;
- h=from:subject:message-id; bh=ncCft6wLVNRyu8CqP+C5ij+1shPAevwH/Ny4XjCyHOI=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqBJs7zoPgDDOGBYZIRWE5RwFBx84GbKDJ1RbfP
- mV5jtA91a2JAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCagSbOwAKCRA1o5Of/Hh3
- bZu2D/4gM6SMB3HsM1fzjJLPFg/Qj+o9TLUGhGX0U4PAr4DLJAFnRYhnbWfSnD6iqxo/aGpRGyp
- A4uC+3akefYTn2jttKvwNwQTz3K/dMC2u/ygdomRYAEJCzqah7oozi71XW7BJxV7GEzGuyggiDR
- nY1mzqHCNUC1/iWJB9Ptq5b+6tbCikpyCb5F9wQbk3B4tN9/g47cKcav0BJDax+dn15Pujh4laM
- y98k0W0fSNwDrJQySnNMOYZy0vraHPxo/gUc2EPLzOSEI8+RWGd3yuAmG4eK8PZrVG3Le/4e6to
- LzEAxARG4wZz1tvDYTNJegKeLJa8JYZPpHOgRE3WfYEreS76cQ2/4yujfr28kHniGRtDp+dU5O0
- NHSJZTDB8MdO9wLjHpCmaanq0Sv+PCdxDX9llfKF57/gWSRPnRtJ/gmJaXNxdjjJjr77McAlIeI
- kW24yoCcw5pm7OTWQzM/Lh8UiJxWB8vI3ypt3TauIsmdojyATYMo7aUVL/GRSCQRFKxDZ2zy6Dz
- kRBbVBUj2QzfbkRmglwtI5hM4fxGA5JFyw+1+NGNI5e0MUJ+KIncw+XWiSiqMq1M2hNO+Vtxa2d
- l/gZCO7rSf4VOlydR7YnJkksXXBbj5lgIH68gjUg2h9McfRt8NUgNEHJT/Yn6cW4ncP+pC6u5DW
- pRlZ6VXaiL1vUrA==
-X-Developer-Key: i=leitao@debian.org; a=openpgp;
- fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
-X-Debian-User: leitao
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a8036fda-3509-437e-b787-4376992a0359@linux.dev>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-Add documentation for the new vm.panic_on_unrecoverable_memory_failure
-sysctl, describing which failures trigger a panic (kernel-owned pages
-the handler cannot recover) and which are intentionally left out
-(transient allocator races and unclassified pages).
+On Sat, May 09, 2026 at 09:13:58AM +0800, Qingfang Deng wrote:
+> On 2026/5/9 1:26, Felix Maurer wrote:
+> > Is there a particular reason to create the test setup with a netkit pair
+> > instead of the more standard veth pairs?
+>
+> L2TP does not need an outer ethernet header so I choose netkit instead of
+> veth.
 
-Signed-off-by: Breno Leitao <leitao@debian.org>
----
- Documentation/admin-guide/sysctl/vm.rst | 80 +++++++++++++++++++++++++++++++++
- 1 file changed, 80 insertions(+)
+I see, thanks. In my opinion, sticking to the same environment setup for
+as many selftests as possible, i.e., using veth pairs everywhere, has
+more benefits in terms of maintenance of the test than leaving out the
+ethernet header has. Also, while I understand that selftests are only
+supported on systems that run with the respective selftest kernel
+config, I still think it's good to stick to veth as it is probably
+available in more kernel builds (think resource constrained
+envrionments, older kernel versions, etc.).
 
-diff --git a/Documentation/admin-guide/sysctl/vm.rst b/Documentation/admin-guide/sysctl/vm.rst
-index 97e12359775c9..452c2ab25b35e 100644
---- a/Documentation/admin-guide/sysctl/vm.rst
-+++ b/Documentation/admin-guide/sysctl/vm.rst
-@@ -67,6 +67,7 @@ Currently, these files are in /proc/sys/vm:
- - page-cluster
- - page_lock_unfairness
- - panic_on_oom
-+- panic_on_unrecoverable_memory_failure
- - percpu_pagelist_high_fraction
- - stat_interval
- - stat_refresh
-@@ -925,6 +926,85 @@ panic_on_oom=2+kdump gives you very strong tool to investigate
- why oom happens. You can get snapshot.
- 
- 
-+panic_on_unrecoverable_memory_failure
-+======================================
-+
-+When a hardware memory error (e.g. multi-bit ECC) hits a kernel page
-+that cannot be recovered by the memory failure handler, the default
-+behaviour is to ignore the error and continue operation.  This is
-+dangerous because the corrupted data remains accessible to the kernel,
-+risking silent data corruption or a delayed crash when the poisoned
-+memory is next accessed.
-+
-+When enabled, this sysctl triggers a panic on memory failure events
-+hitting reserved (``PageReserved``) memory: firmware reservations,
-+the kernel image, vDSO, the zero page, and similar memblock-reserved
-+regions.  These are owned by the kernel, are not managed by the page
-+allocator, and cannot be recovered by the memory failure handler.
-+
-+Other unrecoverable kernel-owned populations (slab, vmalloc, page
-+tables, kernel stacks, ...) are not currently covered by this
-+sysctl.  The handler cannot reliably distinguish them from a
-+userspace folio temporarily off the LRU during migration or
-+compaction, and the cost of a false-positive panic on a recoverable
-+userspace page is too high.  Such pages still go through the
-+standard MF_MSG_GET_HWPOISON path: ``PG_hwpoison`` is set on them
-+and a delayed crash on the next access remains possible.  Coverage
-+may grow in the future as the handler gains stronger
-+kernel-ownership signals.
-+
-+Recoverable failure paths are also intentionally left out: in-flight
-+buddy allocations and other transient races with the page allocator
-+can reach the same diagnostic, and panicking on them would risk
-+killing the box for a page destined for userspace where the standard
-+SIGBUS recovery path applies.  Pages whose state could not be
-+classified at all are not covered either, since an unknown state is
-+not a sound basis for a panic decision.
-+
-+For many environments it is preferable to panic immediately with a clean
-+crash dump that captures the original error context, rather than to
-+continue and face a random crash later whose cause is difficult to
-+diagnose.
-+
-+Use cases
-+---------
-+
-+This option is most useful in environments where unattributed crashes
-+are expensive to debug or where data integrity must take precedence
-+over availability:
-+
-+* Large fleets, where multi-bit ECC errors on kernel pages are observed
-+  regularly and post-mortem analysis of an unrelated downstream crash
-+  (often seconds to minutes after the original error) consumes
-+  significant engineering effort.
-+
-+* Systems configured with kdump, where panicking at the moment of the
-+  hardware error produces a vmcore that still contains the faulting
-+  address, the affected page state, and the originating MCE/GHES
-+  record — context that is typically lost by the time a delayed crash
-+  occurs.
-+
-+* High-availability clusters that rely on fast, deterministic node
-+  failure for failover, and prefer an immediate panic over silent data
-+  corruption propagating to replicas or persistent storage.
-+
-+* Kernel and platform developers reproducing hwpoison issues with
-+  tools such as ``mce-inject`` or error-injection debugfs interfaces,
-+  where panicking on the unrecoverable path makes regressions
-+  immediately visible instead of surfacing as later, unrelated
-+  failures.
-+
-+= =====================================================================
-+0 Try to continue operation (default).
-+1 Panic immediately.  If the ``panic`` sysctl is also non-zero then the
-+  machine will be rebooted.
-+= =====================================================================
-+
-+Example::
-+
-+     echo 1 > /proc/sys/vm/panic_on_unrecoverable_memory_failure
-+
-+
- percpu_pagelist_high_fraction
- =============================
- 
+But in the end, it's up to you and the maintainers. However, if you
+stick with netkit, please name the interfaces explicitly and don't rely
+on the current auto-assigned name of the peer interface.
 
--- 
-2.53.0-Meta
+Thanks,
+   Felix
 
