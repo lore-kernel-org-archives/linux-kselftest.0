@@ -1,67 +1,67 @@
-Received: from mail-dy1-f181.google.com (mail-dy1-f181.google.com [74.125.82.181])
+Received: from mail-dl1-f48.google.com (mail-dl1-f48.google.com [74.125.82.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B07739D6F8
-	for <linux-kselftest@vger.kernel.org>; Wed, 13 May 2026 22:33:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 401433955EB
+	for <linux-kselftest@vger.kernel.org>; Wed, 13 May 2026 22:35:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778711630; cv=none; b=SbUdErYJyAmviyou24GajVZnZcQ2yON9bZDUtTGZOJ7s7mEcfrAr+1GeVpZSLhQLDlU/KILRi7Z9WLBCWW9x7ETeQeFcVOSPq9NSA+hexgUAWGppisnv7xSMi1HexXh/uS5GaXjaNgVnR4svQYD/2cFwjMXbj1DY7RhhMty0zWA=
+	t=1778711712; cv=none; b=ZXghf9PQ5Wabs4Z/m1Pd4PKuOpm1l78rMOJ0LNOe6eASvlF5bdxTXwF0tyyZDnGVllkfTnS31NLaRpDwO4g+D7Y/8bRUNttZjTxxKEe87irebISljaIxHqAlnC5eYDej0Ww7or8t23pcdmZySZXTssmtxc8ncxb0UqRNkrrFMCE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778711630; c=relaxed/simple;
-	bh=kgA0KAea695MAc8LHoG5EseKaGFUKSpbXPmYExsdEug=;
+	s=arc-20240116; t=1778711712; c=relaxed/simple;
+	bh=c6hY0TLeDSV5AMDSqRm8hCkvr7s1rq6x1vYyUALqD6Y=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=auDLabtiX0PcGUq15kf1GpZjQvdylOz12MmCkrcb28IQ3btnyiJJYmdWaD6tGTdkiCbylPjeGPzEYIgLq8WIXsFx5CDqQK2kAr7kErRdgVblrP+w99SSjgotyNbX/gKtYokyXTMnOsKutvKQAMq2csHvDVKs3KLJX5exMcSFtOw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VnHmWezM; arc=none smtp.client-ip=74.125.82.181
+	 Content-Type:MIME-Version; b=Jk1X3/QdxiQvzkSZVvmAChKgRAogn1tc3pwY9npugnoP8P2oJkx3f7weY2jiXsy5U5s7G/wVTK7Ai3ViqDfy3+AfPprSUyUZVDXz7Br7ucgGNtfj1dy+TTiwzZSJxEa/VZBbsCYyO/MlawQip3R4d9O9VLSfkqGXjTUeLmAYEDs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CFRRrTIY; arc=none smtp.client-ip=74.125.82.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VnHmWezM"
-Received: by mail-dy1-f181.google.com with SMTP id 5a478bee46e88-2f7020a928eso10296777eec.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 13 May 2026 15:33:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CFRRrTIY"
+Received: by mail-dl1-f48.google.com with SMTP id a92af1059eb24-134ac81c445so1307265c88.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 13 May 2026 15:35:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778711628; x=1779316428; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1778711709; x=1779316509; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=kgA0KAea695MAc8LHoG5EseKaGFUKSpbXPmYExsdEug=;
-        b=VnHmWezMo0YlbCNcA++RfdlNu1SAfug0zNNW+AX2t6EAp7QeMQCIqBLPh9tYDkgJn/
-         Ukjlom+POn5HpSnk683AJE96NFrKsWoEOtWmHsQzraB917NphnoaZ4WfEa1S6pQ/jCJY
-         Xu7TMuRJ79epD8mXu+HYjS7UN97TZmYuJYHvbjxNeniFR3pf6GuSDGcuvgfqBypKmW3L
-         EZlQWBd8gtqqFqvbjtD6dd8xsGCG2rMAgqmJAqxfNvdt3Z0ZRHupXQwRdBgQkVX81l0e
-         Cw4KrJS3DEIv7lawH2dowOP0mBVBTS8xR+eRmiHNMMTmUWyY0cGm0t6hUwjm6iI6ur44
-         LvCQ==
+        bh=SXNCqoVNxl+yA9TLHYQ9aS809nax/c51C0zyfUUYCFA=;
+        b=CFRRrTIYd/wxZyFo3cxCmBgcTByKJb95583nIJXn28UWPRqG2woSo/oZmKZ2ubenZP
+         Xidv4EW3ENNnesRSJz8CoNOUkMaO7vMM/GvbGiSqhtRo0zNVRKVlSGBPWgQQS+s/4XfV
+         n9Xnir72wEAV2rcVvF5XBQ5j0eWZKdpO6lQ9pVtyf74iz2ZAmlZH30wUf3uvBZcCX2og
+         Cj+bBoJS9vSeVaSqXWO8I2g9KaDAy4Q6Sr7zcO7Hqau0r+JUyXJCcOtPlrNEitZlLEAk
+         khEWmN3Axu0GXTDoY6AY3/mdyLww10xiGWBIyVj6cMDM7Fc5jUZxHjdDmHi1T7jqblbl
+         VUpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778711628; x=1779316428;
+        d=1e100.net; s=20251104; t=1778711709; x=1779316509;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kgA0KAea695MAc8LHoG5EseKaGFUKSpbXPmYExsdEug=;
-        b=BBbk8ip8H58XN9/NC+WgpMhi/lk//VAMYQkNV2ryIJSmRyb3LWuyWlzvmUnNq8xtPR
-         GvInD2X9A3Rics8nDoNCMFOcLgZrcuSpy341i5Ad+UIv3KYwpAnxqYd31+k5XyFrbr4x
-         fyGCjN41NhPMDgiSKg561XDfk+eY6HcUKsnSLty5w00Iy7Turxvn5O095PvFih3f0EcA
-         bTYq/hPihmRzfW0bFeugJqL9q/ia5a8Ze2bfhoEnf8r7Ohoj51WSsvqEiMY2Wvqp9gwH
-         yk8aMg8FHAfWmklBUi/H6FKcdo98SHQjkBNcxSIGPZMjD81E3UCGDyR+UJMwnVmmTKzz
-         gxQQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/v4POuli6SpUx1MTOsetvi+R9ciUZx5GqIrbGc3HPTMCx7JvTj0k3VXxtqyMj/aQqgzMVG0UU+WgBCzE5WPM0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxw407CmGGhiAkeFXJLElGy+wOnZCPUWbNGdHt8iBonsUwodjSu
-	UspyzrF+3H5x8RwowMCqRNjKmBalTOiGLBaioNGPXXftAfGwZ+NJ20YR
-X-Gm-Gg: Acq92OFbKQ66ECEtZOJMRn2KLtpG9xVvEboOrjv5prxCEMk+6gnoUqkYe3qzL38C9Vp
-	LmH9v13DaFXez09W6MyG1ekowojfGlI06mz6NuNNN31dyZeI7BBKX5gOOZkZUVTtpTzdQ4RGJEr
-	hHw0Oz1CBEEP6CA+jQJsD/iV8NkNB7Gbag2+PvUORp/S88fwutPLBLNzq8Wlmm7y0a4562H5Hts
-	fDNpbgnvTghgPHsLI7a/DCBjD3fWrjGDUQ+KvgGU2CLN1bx5cofcAY/P2Wy1kg2S+9sQn4UyvW4
-	eAyTIp+wgw3ZRNfbxejIC1IRqWbWHZsgm6H7wZuhWjMWWecdmsoA+4QC/Qxbx7Wa+64XDfIlipk
-	A2qE/oZjRLaG3pqMnCt76qjlYXn1B5m6luMGKj2o14XFsb7l8VYGW4cnuSFYTP43ja2vM4HudDN
-	Q9NtCx2uAV83cGo+Hl4RSQBKO635CLDT4+M0r4mMYfi8LBuN0JzZDMKJic2zhgCa6G9cWstm8Nh
-	w4VJo8=
-X-Received: by 2002:a05:7300:c87:b0:2d9:6f2f:9f6f with SMTP id 5a478bee46e88-30119f5955dmr2880656eec.24.1778711627516;
-        Wed, 13 May 2026 15:33:47 -0700 (PDT)
+        bh=SXNCqoVNxl+yA9TLHYQ9aS809nax/c51C0zyfUUYCFA=;
+        b=derhZGNmdIImLwQ2FEJTsTZdUM6zPOsXZs+1Sb5/ZDpGf6zJGCFrNorjLbUwakLkMJ
+         Z484/XqDd/JdWnvzOywATZZaGHs1QeX93qB5Ho/wcIsxi+POLihpp/s17/q8skUo/Wv5
+         AWtDscs6i/FzZNX2ssp+d3cKwSnYKOSUNSwYTAPtbEeoMHpn2iHaQmwocaEk/r5q0P12
+         HYw7IJE+LMeVUQv2EpCg9JERIGbit/C/iHK+lS4EAh3H41bYE1r2WWOi0DHXBp9LMG1i
+         3zaJaLwQVTwGbNvlbWkhOH2he4sY/DPXHvJP0MLO1j7zUBA9eRicJN78VFeWUkyKVXoR
+         feNg==
+X-Forwarded-Encrypted: i=1; AFNElJ/iVv94OMuaeYamt3UMY4pBNn2DwW/Z7Jrfqp+U7VSWKbn8k3Cf663z940xTikp8sTZj3Flf0XmnZO0JZQy1j8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxQwPCVkI8QXbKktulDSerlWFxVJwWFcWZ5czaJBqHabpllDWf8
+	R7Ed6VTTbVjB9bszFW1FA1vvp0Eag7AufZBsX5e0FgqfKIA1sBSCxwF4
+X-Gm-Gg: Acq92OHWm69DHGsgPBv2GZjBJliGLy+1DTKgWlvB3nzaTNWY/xCZtCrRQdw8t4yYNlZ
+	kuak3qPdQI9woV5R3iBF4nQuCljuwe7RQuc9yacE7mRBmeI0+OpaMG9N35zYGsWDYhj3pyPYrKB
+	ammUgPmX+k/1Fjz63nLv+HTkAmGMbnBe23YvmTMBz0UNbGnFHbvvXDVywez1KDxcWQpS5WZyx1w
+	ThSx5CE3wj7bbLU6bQwxcyz2iuensHQ8Amj2Jo7BpqoG/li0hFWTD3tBoBgvhUoYcnmp5B5wCaV
+	uFhfh8a1RAOa8kEaUeNWwdPtsAHw61L3SyDyJnXErpRvj5n4vj1KESWqkMsVV6O6x7qwaN95e6j
+	lKzawzhzYlrzECkrfc3HgvJ3VNYkkdQzBtNhhLdORbOFnxCg6rBQyYsMfaCUSeWdBkQMN/7dvVS
+	FRcyhLys85z8r6j4e71NbTsGCT70BCs46YVQuMNiG7Jj5scxyQcN+Xus6mxVL7tFfNsrCaiHkfF
+	TFToXQ=
+X-Received: by 2002:a05:7022:f8d:b0:128:bae0:e03c with SMTP id a92af1059eb24-13436a9e59bmr3032396c88.30.1778711709309;
+        Wed, 13 May 2026 15:35:09 -0700 (PDT)
 Received: from ?IPv6:2a03:83e0:115c:1:5152:641f:f5ef:6c7b? ([2620:10d:c090:500::2:8a9])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30297bbc9a3sm718642eec.31.2026.05.13.15.33.45
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30294adddaasm768297eec.13.2026.05.13.15.35.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 May 2026 15:33:47 -0700 (PDT)
-Message-ID: <2ec40641b6d0313674557a682984d7ea9cdf24a4.camel@gmail.com>
-Subject: Re: [PATCH RESEND bpf-next v10 4/8] bpf: refactor __bpf_list_add to
- take insertion point via **prev_ptr
+        Wed, 13 May 2026 15:35:08 -0700 (PDT)
+Message-ID: <237f26933259d2a9114b4abd9cd7773b788c2038.camel@gmail.com>
+Subject: Re: [PATCH RESEND bpf-next v10 5/8] bpf: Add bpf_list_add to insert
+ node after a given list node
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: Kaitao cheng <kaitao.cheng@linux.dev>, ast@kernel.org, corbet@lwn.net, 
 	martin.lau@linux.dev, daniel@iogearbox.net, andrii@kernel.org,
@@ -72,10 +72,10 @@ To: Kaitao cheng <kaitao.cheng@linux.dev>, ast@kernel.org, corbet@lwn.net,
 Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	linux-doc@vger.kernel.org, vmalik@redhat.com,
  linux-kselftest@vger.kernel.org
-Date: Wed, 13 May 2026 15:33:44 -0700
-In-Reply-To: <20260512055919.95716-5-kaitao.cheng@linux.dev>
+Date: Wed, 13 May 2026 15:35:06 -0700
+In-Reply-To: <20260512055919.95716-6-kaitao.cheng@linux.dev>
 References: <20260512055919.95716-1-kaitao.cheng@linux.dev>
-	 <20260512055919.95716-5-kaitao.cheng@linux.dev>
+	 <20260512055919.95716-6-kaitao.cheng@linux.dev>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
@@ -89,18 +89,19 @@ MIME-Version: 1.0
 On Tue, 2026-05-12 at 13:59 +0800, Kaitao cheng wrote:
 > From: Kaitao Cheng <chengkaitao@kylinos.cn>
 >=20
-> Refactor __bpf_list_add to accept (node, head, struct list_head **prev_pt=
-r,
-> ..) instead of (node, head, bool tail, ..). Load prev from *prev_ptr afte=
-r
-> INIT_LIST_HEAD(h), so we never dereference an uninitialized h->prev when
-> head was 0-initialized (e.g. push_back passes &h->prev).
+> Add a new kfunc bpf_list_add(head, new, prev, meta, off) that
+> inserts 'new' after 'prev' in the BPF linked list. Both must be in
+> the same list; 'prev' must already be in the list. The new node must
+> be an owning reference (e.g. from bpf_obj_new); the kfunc consumes
+> that reference and the node becomes non-owning once inserted.
 >=20
-> When prev is not the list head, validate that prev is in the list via
-> its owner.
+> We have added an additional parameter bpf_list_head *head to
+> bpf_list_add, as the verifier requires the head parameter to
+> check whether the lock is being held.
 >=20
-> Prepares for bpf_list_add(head, new, prev, ..) to insert after a given
-> list node.
+> Returns 0 on success, -EINVAL if 'prev' is not in a list or 'new'
+> is already in a list (or duplicate insertion). On failure, the
+> kernel drops the passed-in node.
 >=20
 > Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
 > ---
@@ -108,3 +109,23 @@ r
 Reviewed-by: Eduard Zingerman <eddyz87@gmail.com>
 
 [...]
+
+> @@ -19228,8 +19231,11 @@ int bpf_fixup_kfunc_call(struct bpf_verifier_env=
+ *env, struct bpf_insn *insn,
+>  		int struct_meta_reg =3D BPF_REG_3;
+>  		int node_offset_reg =3D BPF_REG_4;
+> =20
+> -		/* rbtree_add has extra 'less' arg, so args-to-fixup are in diff regs =
+*/
+> -		if (is_bpf_rbtree_add_kfunc(desc->func_id)) {
+> +		/* list_add/rbtree_add have an extra arg (prev/less),
+> +		 * so args-to-fixup are in diff regs.
+> +		 */
+> +		if (desc->func_id =3D=3D special_kfunc_list[KF_bpf_list_add] ||
+
+Nit: same nit here, maybe add is_bpf_list_add_kfunc().
+
+> +		    is_bpf_rbtree_add_kfunc(desc->func_id)) {
+>  			struct_meta_reg =3D BPF_REG_4;
+>  			node_offset_reg =3D BPF_REG_5;
+>  		}
