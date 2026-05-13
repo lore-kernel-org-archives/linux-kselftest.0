@@ -1,339 +1,225 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 320DA2D876B;
-	Wed, 13 May 2026 13:57:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D886402BA0
+	for <linux-kselftest@vger.kernel.org>; Wed, 13 May 2026 14:18:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778680662; cv=none; b=SqUq+VBLLglCjD8FlJV5jMcsqU/5HnXYv+ye+bWths9g1L244PC8bGFuz0LGP1dXMwi9t3X2v0vsYQ+N3hfWRIaKS2AazkXSaU2cytXp6E1qRRJOXwVE73aZ9xeMU6CMkzeQmeB0pvQlQ4eQggmRFB9yQ6zpnB/gr2kZb0C1irc=
+	t=1778681932; cv=none; b=WPq3LeRb95BJdWc106ig8zhFbyr6BB010WDlLEi6YT7O/zF+77aJxh9jNdW4B2zOCgjyr2Tgkh4nshuoj4Rlk9Oy/kHGS5YL4JcJMEMf+uWJVyH/mE/6NVDFIIUiRVDT9dhdry90xY9Uu4yaTyeQjhL8HWo4CHFelItCm96Zn5Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778680662; c=relaxed/simple;
-	bh=WrrzkkXmW9/JJRydVb+33JBT+lGsMTBln8KmVYL1kl4=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=rJ4u7QYn2JsikhEHUVsjEmXC1S7pM5JF6vJiKt6dxlr3tYz+lpKGkXZtNg4l6iwfDtmHwZZDoxT8bhd83kCUI+HAtvMiJz03xLTyN7gGc6bVh92mrLUEgTwM+Tl72YINlCn7X5s56JSrh43UKC49oUdDbQY8/vfqpEgM62c0yjk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=HzrzncgN; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
+	s=arc-20240116; t=1778681932; c=relaxed/simple;
+	bh=zcY7FUBNhO74nxP+DA38C8U6lBo8ZKlML3Nf1QLj804=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=G24ccr46ZGzAN4hqunTR79WDKf/lNCpjgS4GYFRtMm5W8DlBrM3wT+QPBl0JVXYNxkPiuyR5+MHATqpHwvZlVb6Zie1YDQYg+aqeuVWD9JNgd+vkYoCNIenVXjIGF/llb+u4ZUzZB4rQia6cZMMWqF2JcX2M68Z1PSD5fgAz+yk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MGXuaUfy; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="HzrzncgN"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
-	In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=WrrzkkXmW9/JJRydVb+33JBT+lGsMTBln8KmVYL1kl4=; b=HzrzncgNHHm/ieuIGK+wbTgPUM
-	yh0DSk+0Y4PZxYzyiHOOY9gsKY7yso/+anRmqKPXHyQMLFsQuXCZ26wJsuTD6b6Set6H3K3onLH6P
-	uLldoeE2awVpEgl6uZLoyQ9upWoTlmoG9osnARTCgLik95swdPMpp13RCLUB/4KaxXG6aOGlCUlu7
-	hZbHyKLLM8wpZif6WVTz9sma2xuFbKVGsSUFm+5O4dbdZAdN/PbDuwGZE99a2wWNaTTHSvo/mofvz
-	JzhEopOE0uJo00/dGNbguGYsuiGu6r0N8vgLXHMLbydDbK3kmzm0Vv2HGq2fZ8V0BX4ZJlatdMNgG
-	A0sl1lAQ==;
-Received: from 54-240-197-236.amazon.com ([54.240.197.236] helo=u09cd745991455d.ant.amazon.com)
-	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1wNA5Y-0000000BhcF-2lZN;
-	Wed, 13 May 2026 13:57:28 +0000
-Message-ID: <d9d4471a7f5ec1e297b3ca07f42a59090aa91e15.camel@infradead.org>
-Subject: Re: [PATCH] Documentation: KVM: Document guest-visible
- compatibility expectations
-From: David Woodhouse <dwmw2@infradead.org>
-To: Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>
-Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan
- <skhan@linuxfoundation.org>,  kvm@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,  Sean
- Christopherson <seanjc@google.com>, Jim Mattson <jmattson@google.com>,
- Oliver Upton <oupton@kernel.org>, Joey Gouly <joey.gouly@arm.com>, Suzuki K
- Poulose <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Raghavendra Rao Ananta <rananta@google.com>, Eric Auger
- <eric.auger@redhat.com>, Kees Cook <kees@kernel.org>,  Arnd Bergmann
- <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
- linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
- linux-kselftest@vger.kernel.org
-Date: Wed, 13 May 2026 14:57:27 +0100
-In-Reply-To: <ba08dfe9-932b-40c3-9fdf-fc891d52e1d8@redhat.com>
-References: <6856b269d2af706eae397e0cf9c1231f89d9a932.camel@infradead.org>
-	 <6afc4b95-3c15-4d71-877d-19b84e91ce05@redhat.com>
-	 <57bc082f4824d6114d3156744c25986effc29aca.camel@infradead.org>
-	 <baff82ca-6321-4b16-aa61-b2d6d60b6535@redhat.com>
-	 <86h5obya2r.wl-maz@kernel.org>
-	 <48b06e5655d56ff6eda30e563b34894fa0eb2f07.camel@infradead.org>
-	 <ba08dfe9-932b-40c3-9fdf-fc891d52e1d8@redhat.com>
-Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-	boundary="=-e5BhHGK/BH1nijaPhsdl"
-User-Agent: Evolution 3.52.3-0ubuntu1.1 
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MGXuaUfy"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1778681926;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=xYlye75OCf2YtQTajLfzvkg89uVXgpLkqgB1sCbwhbY=;
+	b=MGXuaUfyiBZOawY1aO9SOj1dv4WkJ03W4f1y/y3w+WolCgxlKxpxwR5UWHspVUsm+02Wo0
+	p+ZaF5s8+rxIao7emQzb1Fw3U87lACYeoxp09QAEiSICo6IzRyVPrT+CaA2r9Tsst9gQdF
+	ZWMWdUywYfzzYAO63U/84SoQTZKKCQg=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-193-2XC5kgG9MqiOZhAXaBJ7Wg-1; Wed, 13 May 2026 10:18:44 -0400
+X-MC-Unique: 2XC5kgG9MqiOZhAXaBJ7Wg-1
+X-Mimecast-MFC-AGG-ID: 2XC5kgG9MqiOZhAXaBJ7Wg_1778681924
+Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-8baa173eacbso55717686d6.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 13 May 2026 07:18:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778681924; x=1779286724;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xYlye75OCf2YtQTajLfzvkg89uVXgpLkqgB1sCbwhbY=;
+        b=dUSFQflx0MxaOn2M2ZWzk2pEDu8neXTrDGO6YesVVIkLUDHi4Gu2tU7HotBr/3MQVY
+         ogRGiPdz3IEzv8T24wMnwaRqzai779bWHS+JuASaNTE80arvXZVAHHrkL1qVeWfz4mMa
+         K+q6pS4qSauCloNi2/ZdKqxHzIvaDaWUg1sIaM32LnewoXxUcI5R7EZyZn13jYHuOVh5
+         wYbtpL9rmwvW0p6Gq/q1zZt5gcaIkPyfd4oVzgPZmC/p+Jq6lFeK12faqvtjQhqAu6HF
+         M5UnGrsHNfmJsVFWMnXg2adE2j9n2IzQW0T5eyaQLpTtF3C5QG1OMRaKvtT5N1e/xwt3
+         RYEw==
+X-Forwarded-Encrypted: i=1; AFNElJ+43idIKjwZkyuRbAxxlUo/axn7YvO4bfIx7g+Vt4ShYpwn/KRTZDZNFNBgvYVp4Jbh1FoLBoXlDwKMSr5ASv0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyAlrE67A2GGeyg2uLf4mqKEDhVmBPPpFMSr9Nd+no3fCeBec1q
+	v/dFbnrcynzFhQ4b8cC36JIleHI8ECukHV5iMAuzYWLrpxgRTtKJVqEwmLz8nsQXzbOoUwcedvg
+	zTpPPVAfMreoMpzN/qXfI53eGtryuWxTdqg8XO9KxXTf3OM2HA2zsJ31naqmIOhiL4e1cNg==
+X-Gm-Gg: Acq92OGEcQEjg/sVSTbyUYmb4uJfFtq+4Fc0+ymKPU3z5A8KOCHfwiVRPX7Gn8+Z559
+	YtapMWCgn3AW133PoPkCUvVXlmEUT6Lq87+Fxh2KhBZrim3bW/MB3QJQl72P9GrPU9urSiYz7yO
+	ep4gDnhWsczT9eUrHczBQ/HsfsHE7jZAqJC7kOCpniYFKpnyhESHtjtWRtMeEV3rTJsonr1dulk
+	afaIUoC3zxFqtrWDkfE4kdt47YC574hci4pt/1g9qCaSrTCpZsEscM4TCdaO/U8qH5G6n7G3N6h
+	l2iSiYOaI7IjYM8uXuCSN+HDIU35PTxyNHnt2GVPsX/pNtaTgTJiL/xzCjUzDULQ8Kd+5SuRjnX
+	qpo8AG0rW+WjhsamUqHPDAMEL
+X-Received: by 2002:a05:622a:5c85:b0:50b:3788:ab59 with SMTP id d75a77b69052e-5162f4b00dfmr48896591cf.22.1778681924088;
+        Wed, 13 May 2026 07:18:44 -0700 (PDT)
+X-Received: by 2002:a05:622a:5c85:b0:50b:3788:ab59 with SMTP id d75a77b69052e-5162f4b00dfmr48895661cf.22.1778681923428;
+        Wed, 13 May 2026 07:18:43 -0700 (PDT)
+Received: from [192.168.2.110] ([70.53.202.134])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-5148e6336c0sm160633171cf.2.2026.05.13.07.18.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 May 2026 07:18:43 -0700 (PDT)
+Message-ID: <e3ae249d-812c-42ed-aa9b-cfc8cde27b77@redhat.com>
+Date: Wed, 13 May 2026 10:18:31 -0400
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 04/55] selftests/mm: migration: properly cleanup
+ fork()ed processes
+To: Mike Rapoport <rppt@kernel.org>, Andrew Morton
+ <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>
+Cc: Baolin Wang <baolin.wang@linux.alibaba.com>,
+ Barry Song <baohua@kernel.org>, Dev Jain <dev.jain@arm.com>,
+ Donet Tom <donettom@linux.ibm.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+ John Hubbard <jhubbard@nvidia.com>, "Liam R. Howlett"
+ <Liam.Howlett@oracle.com>, Lance Yang <lance.yang@linux.dev>,
+ Li Wang <li.wang@linux.dev>, Leon Romanovsky <leon@kernel.org>,
+ Lorenzo Stoakes <ljs@kernel.org>, Mark Brown <broonie@kernel.org>,
+ Michal Hocko <mhocko@suse.com>, Nico Pache <npache@redhat.com>,
+ Peter Xu <peterx@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
+ Sarthak Sharma <sarthak.sharma@arm.com>, Shuah Khan <shuah@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Vlastimil Babka <vbabka@kernel.org>,
+ Zi Yan <ziy@nvidia.com>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org
+References: <20260511162840.375890-1-rppt@kernel.org>
+ <20260511162840.375890-5-rppt@kernel.org>
+Content-Language: en-US, en-CA
+From: Luiz Capitulino <luizcap@redhat.com>
+In-Reply-To: <20260511162840.375890-5-rppt@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
+On 2026-05-11 12:27, Mike Rapoport wrote:
+> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+> 
+> Several migration test use fork() to create worker processes. These
+> processes are later killed, but nothing collects their exit status and they
+> remain as zombies in the system.
+> 
+> Add a helper function that kills the worker processes, waitpid()s for
+> them and verifies the exit status.
+> 
+> Replace the loops that call kill() for each process with a call to that
+> helper.
+> 
+> Reported-by: Luiz Capitulino <luizcap@redhat.com>
+> Tested-by: Luiz Capitulino <luizcap@redhat.com>
+> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 
---=-e5BhHGK/BH1nijaPhsdl
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: Luiz Capitulino <luizcap@redhat.com>
 
-On Wed, 2026-05-13 at 14:43 +0200, Paolo Bonzini wrote:
-> On 5/13/26 11:24, David Woodhouse wrote:
-> > On Wed, 2026-05-13 at 09:42 +0100, Marc Zyngier wrote:
-> > > If userspace is not a total joke, it will read all the ID registers,
-> > > and configure what it wants to see, assuming it is a feature that can
-> > > be configured (not everything can, because the architecture itself is
-> > > not fully backward compatible).
-> > >=20
-> > > Yes, this is buggy at times, because the combinatorial explosion of
-> > > CPU capabilities and supported features makes it pretty hard to test
-> > > (and really nobody actually does). But overall, it works, and QEMU is
-> > > growing an infrastructure to manage it in a "user friendly" way.
-> >=20
-> > Yes, that is precisely what I'm asking for. I'm prepared to deal with
-> > the fact that KVM/Arm64 is not a stable and mature platform like x86
-> > is, and that userspace has to find all the random changes from one
-> > version to the next, and explicitly pin things down to be compatible.
-> >=20
-> > All I'm asking for is that KVM makes it *possible* to pin things down
-> > to the behaviour of previously released Linux/KVM kernels.
-> >=20
-> > > But really, this isn't what David is asking. He's demanding "bug for
-> > > bug" compatibility. For that, we have two possible cases:
-> >=20
-> > No, I am not asking you to meet that bar. I merely observed that x86
-> > does and that it would be nice. But we are a *long* way from that.
->=20
-> x86 doesn't do bug-for-bug compatibility, thankfully - we have quirks
-> but only 11 of them, or about one per year since we started adding them.=
-=20
-> =C2=A0 We only add quirks, generally speaking, when 1) we change the way =
-file=20
-> descriptors are initialized, 2) guests in the wild were relying on it,=
-=20
-> or 3) it prevends restoring state saved from an old kernel.=C2=A0 Is ther=
-e
-> anything else?
->=20
-> So you're asking something not really far from this:
->=20
-> > > - this is a behaviour that is not allowed by the architecture: we fix
-> > > =C2=A0=C2=A0 it for good. We do that on every release. Some minor, so=
-me much more
-> > > =C2=A0=C2=A0 visible. And there is no way we will add this sort of "b=
-ring the
-> > > =C2=A0=C2=A0 bugs back" type of behaviours. Specially when it is real=
-ly obvious
-> > > =C2=A0=C2=A0 that no SW can make any reasonable use of the defect. We=
- allow
-> > > =C2=A0=C2=A0 userspace to keep behaving as before, but the guest will=
- not see a
-> > > =C2=A0=C2=A0 non-compliant behaviour.
->=20
-> ... where for example=20
-> https://lore.kernel.org/kvm/e03f092dfbb7d391a6bf2797ba01e122ba080bcd.came=
-l@infradead.org/=C2=A0
-> is an example of a bug that "no SW can make any reasonable use of".
+> ---
+>   tools/testing/selftests/mm/migration.c | 47 +++++++++++++++++++-------
+>   1 file changed, 35 insertions(+), 12 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/mm/migration.c b/tools/testing/selftests/mm/migration.c
+> index 16ffd3c55ee0..e504829df6b6 100644
+> --- a/tools/testing/selftests/mm/migration.c
+> +++ b/tools/testing/selftests/mm/migration.c
+> @@ -67,6 +67,29 @@ FIXTURE_TEARDOWN(migration)
+>   	free(self->pids);
+>   }
+>   
+> +static bool kill_children(FIXTURE_DATA(migration) * self)
+> +{
+> +	bool err = false;
+> +	pid_t pid;
+> +	int i;
+> +
+> +	for (i = 0; i < self->nthreads; i++) {
+> +		int status = 0;
+> +
+> +		pid = self->pids[i];
+> +		if (pid < 0)
+> +			continue;
+> +		if (kill(pid, SIGTERM))
+> +			err = true;
+> +		if (pid != waitpid(pid, &status, 0))
+> +			err = true;
+> +		if (!WIFSIGNALED(status) || WTERMSIG(status) != SIGTERM)
+> +			err = true;
+> +	}
+> +
+> +	return !err;
+> +}
+> +
+>   int migrate(uint64_t *ptr, int n1, int n2)
+>   {
+>   	int ret, tmp;
+> @@ -151,7 +174,7 @@ TEST_F_TIMEOUT(migration, shared_anon, 2*RUNTIME)
+>   {
+>   	pid_t pid;
+>   	uint64_t *ptr;
+> -	int i;
+> +	int i, err;
+>   
+>   	ptr = mmap(NULL, TWOMEG, PROT_READ | PROT_WRITE,
+>   		MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+> @@ -171,9 +194,9 @@ TEST_F_TIMEOUT(migration, shared_anon, 2*RUNTIME)
+>   		}
+>   	}
+>   
+> -	ASSERT_EQ(migrate(ptr, self->n1, self->n2), 0);
+> -	for (i = 0; i < self->nthreads; i++)
+> -		ASSERT_EQ(kill(self->pids[i], SIGTERM), 0);
+> +	err = migrate(ptr, self->n1, self->n2);
+> +	ASSERT_EQ(kill_children(self), true);
+> +	ASSERT_EQ(err, 0);
+>   }
+>   
+>   /*
+> @@ -217,7 +240,7 @@ TEST_F_TIMEOUT(migration, shared_anon_thp, 2*RUNTIME)
+>   	uint64_t pmdsize;
+>   	pid_t pid;
+>   	uint64_t *ptr;
+> -	int i;
+> +	int i, err;
+>   
+>   	if (!thp_is_enabled())
+>   		SKIP(return, "Transparent Hugepages not available");
+> @@ -247,9 +270,9 @@ TEST_F_TIMEOUT(migration, shared_anon_thp, 2*RUNTIME)
+>   		}
+>   	}
+>   
+> -	ASSERT_EQ(migrate(ptr, self->n1, self->n2), 0);
+> -	for (i = 0; i < self->nthreads; i++)
+> -		ASSERT_EQ(kill(self->pids[i], SIGTERM), 0);
+> +	err = migrate(ptr, self->n1, self->n2);
+> +	ASSERT_EQ(kill_children(self), true);
+> +	ASSERT_EQ(err, 0);
+>   }
+>   
+>   /*
+> @@ -287,7 +310,7 @@ TEST_F_TIMEOUT(migration, shared_anon_htlb, 2*RUNTIME)
+>   	unsigned long hugepage_size;
+>   	pid_t pid;
+>   	uint64_t *ptr;
+> -	int i;
+> +	int i, err;
+>   
+>   	hugepage_size = default_huge_page_size();
+>   	if (!hugepage_size)
+> @@ -311,9 +334,9 @@ TEST_F_TIMEOUT(migration, shared_anon_htlb, 2*RUNTIME)
+>   		}
+>   	}
+>   
+> -	ASSERT_EQ(migrate(ptr, self->n1, self->n2), 0);
+> -	for (i = 0; i < self->nthreads; i++)
+> -		ASSERT_EQ(kill(self->pids[i], SIGTERM), 0);
+> +	err = migrate(ptr, self->n1, self->n2);
+> +	ASSERT_EQ(kill_children(self), true);
+> +	ASSERT_EQ(err, 0);
+>   }
+>   
+>   TEST_HARNESS_MAIN
 
-I actually believe that the focus on ICEBP was triggered by some weird
-gaming software's anti-DRM mechanism, and that it *did* affect actual
-guests in the wild?
-
-But yeah, *fixing* it should not have any adverse effects. That's the
-key.
-
-> > Marc, this is complete nonsense and you should know better.
-> > Once a behaviour is present in a released version of Linux/KVM, we
-> > can't just declare it "wrong" and unilaterally impose a change in
-> > guest-visible behaviour on *running* guests as a side-effect of a
-> > kernel upgrade.
-> >=20
-> > The criterion for *KVM* to remain compatible is "once it has been in a
-> > released version of the kernel". Not "once it is in the architecture".
->=20
-> That is *also* obviously nonsense though, isn't it (see example above)?=
-=20
-> The truth is in the middle, "once it is in the architecture" is likely=
-=20
-> too narrow but "once it is in a Linux release" is way too broad.
-
-How about "once it is in a Linux release and guest visible, and unless
-we *know* that changing it in either direction underneath running
-guests cannot cause problems".
-
-> And besides, both miss the point of *configurability* which is the basis =
-of=20
-> it all.
-
-Hm, configurability *is* the point, I thought. I'm not asking for the
-*default* to remain compatible. I only ask that a VMM *can* ask KVM for
-guest-visible things to remain the same as before.
-
-> The main difference between x86 and Arm is the default state at=20
-> creation; x86 defaults to a blank slate, mostly; and when we didn't do=
-=20
-> that, we regretted it later (cue the STUFF_FEATURE_MSRS quirk).=C2=A0 It'=
-s
-> too late to change the behavior for Arm, but I think we can agree that=
-=20
-> patches such as=20
-> https://lore.kernel.org/kvm/20260511113558.3325004-2-dwmw2@infradead.org/=
-=C2=A0
-> ("KVM: arm64: vgic: Allow userspace to set IIDR revision 1") are what
-> the letter and spirit of this proposal is about.
-
-Yes. That *exact* patch.
-
-> Marc did not mention having to deal with guests in the wild.=C2=A0 Let's=
-=20
-> ignore it for now because even defining "guests in the wild" is hard;
-> and anyway it's not related to the patch that triggered the discussion.
->
-> So we have the third case, "restoring state saved from an old kernel".=
-=20
-> If this case arises, I do believe that Arm will have to deal with it and=
-=20
-> introduce quirks or KVM_GET/SET_REG hacks.=C2=A0 Maybe it hasn't happened=
-=20
-> yet, lucky you.
-
-We literally have those mechanisms already. That's exactly what the
-revision field in the IIDR is used for:=20
-https://developer.arm.com/documentation/111107/2026-03/External-Registers/G=
-ICD-IIDR--Distributor-Implementer-Identification-Register
-
-See commit https://git.kernel.org/torvalds/c/49a1a2c70a7f which adds a
-new guest-visible feature in revision 3, but allowed userspace to
-restore the old behaviour by setting it to revision 2. (Or at least
-intended to; there was a separate bug which stopped it working, which I
-already fixed last week.)
-
-All my patch above does, is make it possible to set it to revision 1 as
-well. Because https://git.kernel.org/torvalds/c/d53c2c29ae0d previously
-changed the behaviour and bumped the default to 2 *without* allowing
-userspace to restore the prior behaviour, and we've been carrying a
-*revert* of that patch.
-
-So the patch we're arguing about is just making that earlier guest-
-visible change optional in precisely the way that is already designed
-into KVM, and has been used for the subsequent change.
-
-Why would we *not* accept such a patch?=20
-
-It's not like I'm trying to upstream something like
-https://david.woodhou.se/0001-Allow-writes-via-newly-readonly-PTE-for-buggy=
--Ubuntu.patch
-... but yes, those *are* the lengths we have to go to sometimes to
-ensure that when we upgrade the hosting environment, guests which have
-worked for years don't suddenly break =E2=80=94 however much they DESERVE t=
-o :)
-
-> Overall, even if we may disagree about the details, are we really on=20
-> terribly distant grounds, or are we not?
-
-I genuinely have no idea.
-
-On one hand, no we are not terribly distant. All the mechanisms to do
-this properly already *exist*, and the fix I'm asking for is not much
-more than a one-liner to fix up the previous oversight.
-
-But on the other hand, Marc seems terribly insistent that we SHOULD NOT
-restore the behaviour that older KVM offered to guests, and we MUST
-change it unconditionally underneath running guests, making these
-registers writable on upgrade... and reverting them to read-only for
-running guests on a rollback.
-
-And there we do have a very different viewpoint.
-
---=-e5BhHGK/BH1nijaPhsdl
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Transfer-Encoding: base64
-
-MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCD9Aw
-ggSOMIIDdqADAgECAhAOmiw0ECVD4cWj5DqVrT9PMA0GCSqGSIb3DQEBCwUAMGUxCzAJBgNVBAYT
-AlVTMRUwEwYDVQQKEwxEaWdpQ2VydCBJbmMxGTAXBgNVBAsTEHd3dy5kaWdpY2VydC5jb20xJDAi
-BgNVBAMTG0RpZ2lDZXJ0IEFzc3VyZWQgSUQgUm9vdCBDQTAeFw0yNDAxMzAwMDAwMDBaFw0zMTEx
-MDkyMzU5NTlaMEExCzAJBgNVBAYTAkFVMRAwDgYDVQQKEwdWZXJva2V5MSAwHgYDVQQDExdWZXJv
-a2V5IFNlY3VyZSBFbWFpbCBHMjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMjvgLKj
-jfhCFqxYyRiW8g3cNFAvltDbK5AzcOaR7yVzVGadr4YcCVxjKrEJOgi7WEOH8rUgCNB5cTD8N/Et
-GfZI+LGqSv0YtNa54T9D1AWJy08ZKkWvfGGIXN9UFAPMJ6OLLH/UUEgFa+7KlrEvMUupDFGnnR06
-aDJAwtycb8yXtILj+TvfhLFhafxroXrflspavejQkEiHjNjtHnwbZ+o43g0/yxjwnarGI3kgcak7
-nnI9/8Lqpq79tLHYwLajotwLiGTB71AGN5xK+tzB+D4eN9lXayrjcszgbOv2ZCgzExQUAIt98mre
-8EggKs9mwtEuKAhYBIP/0K6WsoMnQCcCAwEAAaOCAVwwggFYMBIGA1UdEwEB/wQIMAYBAf8CAQAw
-HQYDVR0OBBYEFIlICOogTndrhuWByNfhjWSEf/xwMB8GA1UdIwQYMBaAFEXroq/0ksuCMS1Ri6en
-IZ3zbcgPMA4GA1UdDwEB/wQEAwIBhjAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIweQYI
-KwYBBQUHAQEEbTBrMCQGCCsGAQUFBzABhhhodHRwOi8vb2NzcC5kaWdpY2VydC5jb20wQwYIKwYB
-BQUHMAKGN2h0dHA6Ly9jYWNlcnRzLmRpZ2ljZXJ0LmNvbS9EaWdpQ2VydEFzc3VyZWRJRFJvb3RD
-QS5jcnQwRQYDVR0fBD4wPDA6oDigNoY0aHR0cDovL2NybDMuZGlnaWNlcnQuY29tL0RpZ2lDZXJ0
-QXNzdXJlZElEUm9vdENBLmNybDARBgNVHSAECjAIMAYGBFUdIAAwDQYJKoZIhvcNAQELBQADggEB
-ACiagCqvNVxOfSd0uYfJMiZsOEBXAKIR/kpqRp2YCfrP4Tz7fJogYN4fxNAw7iy/bPZcvpVCfe/H
-/CCcp3alXL0I8M/rnEnRlv8ItY4MEF+2T/MkdXI3u1vHy3ua8SxBM8eT9LBQokHZxGUX51cE0kwa
-uEOZ+PonVIOnMjuLp29kcNOVnzf8DGKiek+cT51FvGRjV6LbaxXOm2P47/aiaXrDD5O0RF5SiPo6
-xD1/ClkCETyyEAE5LRJlXtx288R598koyFcwCSXijeVcRvBB1cNOLEbg7RMSw1AGq14fNe2cH1HG
-W7xyduY/ydQt6gv5r21mDOQ5SaZSWC/ZRfLDuEYwggWbMIIEg6ADAgECAhAH5JEPagNRXYDiRPdl
-c1vgMA0GCSqGSIb3DQEBCwUAMEExCzAJBgNVBAYTAkFVMRAwDgYDVQQKEwdWZXJva2V5MSAwHgYD
-VQQDExdWZXJva2V5IFNlY3VyZSBFbWFpbCBHMjAeFw0yNDEyMzAwMDAwMDBaFw0yODAxMDQyMzU5
-NTlaMB4xHDAaBgNVBAMME2R3bXcyQGluZnJhZGVhZC5vcmcwggIiMA0GCSqGSIb3DQEBAQUAA4IC
-DwAwggIKAoICAQDali7HveR1thexYXx/W7oMk/3Wpyppl62zJ8+RmTQH4yZeYAS/SRV6zmfXlXaZ
-sNOE6emg8WXLRS6BA70liot+u0O0oPnIvnx+CsMH0PD4tCKSCsdp+XphIJ2zkC9S7/yHDYnqegqt
-w4smkqUqf0WX/ggH1Dckh0vHlpoS1OoxqUg+ocU6WCsnuz5q5rzFsHxhD1qGpgFdZEk2/c//ZvUN
-i12vPWipk8TcJwHw9zoZ/ZrVNybpMCC0THsJ/UEVyuyszPtNYeYZAhOJ41vav1RhZJzYan4a1gU0
-kKBPQklcpQEhq48woEu15isvwWh9/+5jjh0L+YNaN0I//nHSp6U9COUG9Z0cvnO8FM6PTqsnSbcc
-0j+GchwOHRC7aP2t5v2stVx3KbptaYEzi4MQHxm/0+HQpMEVLLUiizJqS4PWPU6zfQTOMZ9uLQRR
-ci+c5xhtMEBszlQDOvEQcyEG+hc++fH47K+MmZz21bFNfoBxLP6bjR6xtPXtREF5lLXxp+CJ6KKS
-blPKeVRg/UtyJHeFKAZXO8Zeco7TZUMVHmK0ZZ1EpnZbnAhKE19Z+FJrQPQrlR0gO3lBzuyPPArV
-hvWxjlO7S4DmaEhLzarWi/ze7EGwWSuI2eEa/8zU0INUsGI4ywe7vepQz7IqaAovAX0d+f1YjbmC
-VsAwjhLmveFjNwIDAQABo4IBsDCCAawwHwYDVR0jBBgwFoAUiUgI6iBOd2uG5YHI1+GNZIR//HAw
-HQYDVR0OBBYEFFxiGptwbOfWOtMk5loHw7uqWUOnMDAGA1UdEQQpMCeBE2R3bXcyQGluZnJhZGVh
-ZC5vcmeBEGRhdmlkQHdvb2Rob3Uuc2UwFAYDVR0gBA0wCzAJBgdngQwBBQEBMA4GA1UdDwEB/wQE
-AwIF4DAdBgNVHSUEFjAUBggrBgEFBQcDAgYIKwYBBQUHAwQwewYDVR0fBHQwcjA3oDWgM4YxaHR0
-cDovL2NybDMuZGlnaWNlcnQuY29tL1Zlcm9rZXlTZWN1cmVFbWFpbEcyLmNybDA3oDWgM4YxaHR0
-cDovL2NybDQuZGlnaWNlcnQuY29tL1Zlcm9rZXlTZWN1cmVFbWFpbEcyLmNybDB2BggrBgEFBQcB
-AQRqMGgwJAYIKwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmRpZ2ljZXJ0LmNvbTBABggrBgEFBQcwAoY0
-aHR0cDovL2NhY2VydHMuZGlnaWNlcnQuY29tL1Zlcm9rZXlTZWN1cmVFbWFpbEcyLmNydDANBgkq
-hkiG9w0BAQsFAAOCAQEAQXc4FPiPLRnTDvmOABEzkIumojfZAe5SlnuQoeFUfi+LsWCKiB8Uextv
-iBAvboKhLuN6eG/NC6WOzOCppn4mkQxRkOdLNThwMHW0d19jrZFEKtEG/epZ/hw/DdScTuZ2m7im
-8ppItAT6GXD3aPhXkXnJpC/zTs85uNSQR64cEcBFjjoQDuSsTeJ5DAWf8EMyhMuD8pcbqx5kRvyt
-JPsWBQzv1Dsdv2LDPLNd/JUKhHSgr7nbUr4+aAP2PHTXGcEBh8lTeYea9p4d5k969pe0OHYMV5aL
-xERqTagmSetuIwolkAuBCzA9vulg8Y49Nz2zrpUGfKGOD0FMqenYxdJHgDCCBZswggSDoAMCAQIC
-EAfkkQ9qA1FdgOJE92VzW+AwDQYJKoZIhvcNAQELBQAwQTELMAkGA1UEBhMCQVUxEDAOBgNVBAoT
-B1Zlcm9rZXkxIDAeBgNVBAMTF1Zlcm9rZXkgU2VjdXJlIEVtYWlsIEcyMB4XDTI0MTIzMDAwMDAw
-MFoXDTI4MDEwNDIzNTk1OVowHjEcMBoGA1UEAwwTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJ
-KoZIhvcNAQEBBQADggIPADCCAgoCggIBANqWLse95HW2F7FhfH9bugyT/danKmmXrbMnz5GZNAfj
-Jl5gBL9JFXrOZ9eVdpmw04Tp6aDxZctFLoEDvSWKi367Q7Sg+ci+fH4KwwfQ8Pi0IpIKx2n5emEg
-nbOQL1Lv/IcNiep6Cq3DiyaSpSp/RZf+CAfUNySHS8eWmhLU6jGpSD6hxTpYKye7PmrmvMWwfGEP
-WoamAV1kSTb9z/9m9Q2LXa89aKmTxNwnAfD3Ohn9mtU3JukwILRMewn9QRXK7KzM+01h5hkCE4nj
-W9q/VGFknNhqfhrWBTSQoE9CSVylASGrjzCgS7XmKy/BaH3/7mOOHQv5g1o3Qj/+cdKnpT0I5Qb1
-nRy+c7wUzo9OqydJtxzSP4ZyHA4dELto/a3m/ay1XHcpum1pgTOLgxAfGb/T4dCkwRUstSKLMmpL
-g9Y9TrN9BM4xn24tBFFyL5znGG0wQGzOVAM68RBzIQb6Fz758fjsr4yZnPbVsU1+gHEs/puNHrG0
-9e1EQXmUtfGn4InoopJuU8p5VGD9S3Ikd4UoBlc7xl5yjtNlQxUeYrRlnUSmdlucCEoTX1n4UmtA
-9CuVHSA7eUHO7I88CtWG9bGOU7tLgOZoSEvNqtaL/N7sQbBZK4jZ4Rr/zNTQg1SwYjjLB7u96lDP
-sipoCi8BfR35/ViNuYJWwDCOEua94WM3AgMBAAGjggGwMIIBrDAfBgNVHSMEGDAWgBSJSAjqIE53
-a4blgcjX4Y1khH/8cDAdBgNVHQ4EFgQUXGIam3Bs59Y60yTmWgfDu6pZQ6cwMAYDVR0RBCkwJ4ET
-ZHdtdzJAaW5mcmFkZWFkLm9yZ4EQZGF2aWRAd29vZGhvdS5zZTAUBgNVHSAEDTALMAkGB2eBDAEF
-AQEwDgYDVR0PAQH/BAQDAgXgMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEFBQcDBDB7BgNVHR8E
-dDByMDegNaAzhjFodHRwOi8vY3JsMy5kaWdpY2VydC5jb20vVmVyb2tleVNlY3VyZUVtYWlsRzIu
-Y3JsMDegNaAzhjFodHRwOi8vY3JsNC5kaWdpY2VydC5jb20vVmVyb2tleVNlY3VyZUVtYWlsRzIu
-Y3JsMHYGCCsGAQUFBwEBBGowaDAkBggrBgEFBQcwAYYYaHR0cDovL29jc3AuZGlnaWNlcnQuY29t
-MEAGCCsGAQUFBzAChjRodHRwOi8vY2FjZXJ0cy5kaWdpY2VydC5jb20vVmVyb2tleVNlY3VyZUVt
-YWlsRzIuY3J0MA0GCSqGSIb3DQEBCwUAA4IBAQBBdzgU+I8tGdMO+Y4AETOQi6aiN9kB7lKWe5Ch
-4VR+L4uxYIqIHxR7G2+IEC9ugqEu43p4b80LpY7M4KmmfiaRDFGQ50s1OHAwdbR3X2OtkUQq0Qb9
-6ln+HD8N1JxO5nabuKbymki0BPoZcPdo+FeRecmkL/NOzzm41JBHrhwRwEWOOhAO5KxN4nkMBZ/w
-QzKEy4PylxurHmRG/K0k+xYFDO/UOx2/YsM8s138lQqEdKCvudtSvj5oA/Y8dNcZwQGHyVN5h5r2
-nh3mT3r2l7Q4dgxXlovERGpNqCZJ624jCiWQC4ELMD2+6WDxjj03PbOulQZ8oY4PQUyp6djF0keA
-MYIDuzCCA7cCAQEwVTBBMQswCQYDVQQGEwJBVTEQMA4GA1UEChMHVmVyb2tleTEgMB4GA1UEAxMX
-VmVyb2tleSBTZWN1cmUgRW1haWwgRzICEAfkkQ9qA1FdgOJE92VzW+AwDQYJYIZIAWUDBAIBBQCg
-ggE3MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI2MDUxMzEzNTcy
-N1owLwYJKoZIhvcNAQkEMSIEIBBzsSkwkcPImtD9zV5nHr4vO8a7uWMde8glwTgdTTzjMGQGCSsG
-AQQBgjcQBDFXMFUwQTELMAkGA1UEBhMCQVUxEDAOBgNVBAoTB1Zlcm9rZXkxIDAeBgNVBAMTF1Zl
-cm9rZXkgU2VjdXJlIEVtYWlsIEcyAhAH5JEPagNRXYDiRPdlc1vgMGYGCyqGSIb3DQEJEAILMVeg
-VTBBMQswCQYDVQQGEwJBVTEQMA4GA1UEChMHVmVyb2tleTEgMB4GA1UEAxMXVmVyb2tleSBTZWN1
-cmUgRW1haWwgRzICEAfkkQ9qA1FdgOJE92VzW+AwDQYJKoZIhvcNAQEBBQAEggIABzA9vzghovLM
-BqMCQY/loB5c3q4o1wAMAnac7vbeEjyW3hpZeVnDoH6hpRXk2KmelIsI7Be5uxT7g2pziIyraxNM
-uIpXZwZo/LhuA2eXKnTxVVIKe1e1hNAW1r684m9PlnN9ipZqnadh7TBTRREvAkl82Q4VspyZQnob
-KStPjQdagp6nXr3RyRWW5C24l2oA2dTWRVCqToJAWpajwtRILPD+wZcHcN/CqTKnq946mnNApoDa
-Kc7e0rRoBc2j3AShToHBOsStH4g0fwFVSPJs+BQPb6jeNFXBcJSOpfUYJewUb1ILu2bQXqe+frZ/
-KqCJ6IwBQJkJR5GWBm9DRllefk9PP+Ax35vC5VYVxp9cXB93V6NdXyz+b4ifiMVaDlt02c0Vfvl7
-c0O6s04lARgu38Ukub0HxH0o9ZXMUKD18TjTv8hoZx2w6WxsYmtKAYg2lC6Y2FFzB2C5DFNSb4gS
-Y7n4DkxTJAchM9/1NJCvtNpQanSc7SJ3o5m7tcjCsYzZbm+nI02hghlcDW8uku5grZ8N64+oYX12
-S0+7yhQxDRgwXmV+jlvZjyGtWEYwZPwTvP3kLkop9zdJgrieHXG8bVfT6UJ0mIJq2/SnTnBUKeMQ
-KgFAMEokJDgTRpjfbyl5MMOPr0yE1ODWin5s+RAU99r1TE9wzwgwSKAV/8ysfYAAAAAAAAA=
-
-
---=-e5BhHGK/BH1nijaPhsdl--
