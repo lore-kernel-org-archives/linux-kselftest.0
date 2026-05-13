@@ -1,136 +1,182 @@
-Received: from smtp-bc0c.mail.infomaniak.ch (smtp-bc0c.mail.infomaniak.ch [45.157.188.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D11CE37701B
-	for <linux-kselftest@vger.kernel.org>; Wed, 13 May 2026 10:52:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5EB63AEB40;
+	Wed, 13 May 2026 10:58:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778669561; cv=none; b=FKVwqCZrxjD+wIKhAJ8VzVelheCaBV+egAQnM5OSNfv5zMBwrywgg3ZScM1SP/xeRnqWX4IGQ5cfFg4pTlHlf0m42zbRAYVXk2/aXv8rmbZMGfSYdokXqwrB9zLHC4UI0TySjVAnFgyQJCYAgF2e9KRwlacNnm/915Y0H9t1PQo=
+	t=1778669885; cv=none; b=p2JG8M8k0eD99AwWGn8+o4gDFsC72DnipFSSI5GtEgQAJQutPRTuwpF75S39DmJLsoIG+3qFJNY2/RRxtE465JNWb1u08taztDHRUBOwqC0vGL5gPXvndhMu1OTCeYjNrzZdEaLmOi+gPQKODtaPxgg2JZKJPjQ1EMl3tGbAoOc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778669561; c=relaxed/simple;
-	bh=0MYAnE8ltPGjcQoQ6tYxrN2xPXGdXnSbRlYHQJYnz6o=;
+	s=arc-20240116; t=1778669885; c=relaxed/simple;
+	bh=8dhOi+LcaAZswGzRl4JIrjmJt8FqOC6s0xrrgcCEoI4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UvAbIGFlxwKf4QZu5zOXyBUP5dSfK/wW6hIpef5MUvi+PYNDItfViDcWWvyjmXFmyK5kurCR/USa3o6clcroDnUz+zXHoBlGIJzTPLD3BZZ04sI/L4HGntXcqx48g+NLgFW7SQjtbZ6yGLgBeXeKn8C6A2pk7HCIDJ9MvioNw2k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=z4gq/Bri; arc=none smtp.client-ip=45.157.188.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+	 Content-Type:Content-Disposition:In-Reply-To; b=osDR4NapTCqzrTxyLG3JLXaoFcdW2WzBp8cNF9L6VD8PTA0ywx3QqUfmrA5vEfxk0wcfWUvpdlpU40vLNqa+GpirvQhd4QfXsZktBgMXIVMorHI3fBtnLE9qNrdpamFei35Ruyp+bypmvLdxYg/snwCO6a7IJAboGZplrFcKrzo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QIschZxi; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="z4gq/Bri"
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [IPv6:2001:1600:4:17::246c])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4gFqzn70zrzd69;
-	Wed, 13 May 2026 12:52:37 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1778669557;
-	bh=hT3FL8hNRoTv2wd/TyaHSDPl2qpHaafarg8T+VkCxCY=;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QIschZxi"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 783EEC2BCC7;
+	Wed, 13 May 2026 10:58:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778669885;
+	bh=8dhOi+LcaAZswGzRl4JIrjmJt8FqOC6s0xrrgcCEoI4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=z4gq/Bri5PY20oWAl5CPpmsrY0g7ZAicr9kWtoFC5zjwqxwVNIwKwFKPI/nre43PR
-	 1W64XVWc/SFkdB6dqGu+5y8DJpkCj7Yr4gN6HairAVmBmwQiVaAV3zeOZiG0f8bl5i
-	 OGGmFky8I9y1NuyuyCrecWCFjb+qSgmElV5MPKg0=
-Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4gFqzn0x4pzjY2;
-	Wed, 13 May 2026 12:52:37 +0200 (CEST)
-Date: Wed, 13 May 2026 12:52:35 +0200
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-Cc: =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, 
-	kernel test robot <oliver.sang@intel.com>, linux-security-module@vger.kernel.org, oe-lkp@lists.linux.dev, 
-	lkp@intel.com, linux-kernel@vger.kernel.org, 
-	Shuah Khan <skhan@linuxfoundation.org>, Kees Cook <kees@kernel.org>, linux-kselftest@vger.kernel.org
-Subject: Re: [linus:master] [selftests]  465b05bae5:
- kernel-selftests.landlock.audit_test.audit.tsync_override_log_subdomains_off.fail
-Message-ID: <20260513.eeboh9zooQuu@digikod.net>
-References: <202605111649.a8b30a62-lkp@intel.com>
- <20260512112054-0a5c7cad-c8c6-4745-a765-0780a3bd2dab@linutronix.de>
+	b=QIschZxiNsmY8s0D03sHvQp9kqpVbF1FRYyVa/C7nS2E0/uCwWfbBDvO+sCnilM5k
+	 /K3wBIuosK1gk9aviKsftT+26UqXjZyf3voiAAR4Ld1606I2fwyoVZyNZBU4nO+gmx
+	 qNRFhh5qkmteIhtO0lMdR9Ts2GktfnxDWtWZHM6n6LaRmg5oXlS0EvFZKEPSFbQXCU
+	 fDItq2cZJjr7vabuQcAEVpjxb8CsWipZLPlu1913MCiaG6Uj31rNpHtaUFw2AuN7P8
+	 3KtEOtnV0Ih/0abPYHTW+Jq5gUwg1kDD1IbYJ9NhSSzVLo7hMyzkkZohvT8thj6evq
+	 sO8kPAISOzhHQ==
+Date: Wed, 13 May 2026 11:57:59 +0100
+From: Lorenzo Stoakes <ljs@kernel.org>
+To: Hongfu Li <lihongfu@kylinos.cn>
+Cc: akpm@linux-foundation.org, david@kernel.org, liam@infradead.org, 
+	vbabka@kernel.org, rppt@kernel.org, surenb@google.com, mhocko@suse.com, 
+	shuah@kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Dev Jain <dev.jain@arm.com>
+Subject: Re: [PATCH v2] selftests/mm: Fix incorrect mmap() error handling
+ with NULL instead of MAP_FAILED
+Message-ID: <agRX7BXxuv-VWqN4@lucifer>
+References: <20260513095609.789935-1-lihongfu@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260512112054-0a5c7cad-c8c6-4745-a765-0780a3bd2dab@linutronix.de>
-X-Infomaniak-Routing: alpha
+In-Reply-To: <20260513095609.789935-1-lihongfu@kylinos.cn>
 
-Hi Thomas,
+On Wed, May 13, 2026 at 05:56:09PM +0800, Hongfu Li wrote:
+> mmap() returns MAP_FAILED, which is defined as (void *)-1, on error,
+> not NULL.  Several selftests incorrectly check the return value of
+> mmap() using !ptr or ptr == NULL, which would erroneously treat
+> MAP_FAILED as a valid pointer since MAP_FAILED is non-zero and
+> non-NULL.  This can lead to segfaults when mmap() actually fails
+> under memory pressure.
+>
+> Signed-off-by: Hongfu Li <lihongfu@kylinos.cn>
+> Reviewed-by: Dev Jain <dev.jain@arm.com>
 
-Thanks for the report.
+You forgot my tag :)
 
-On Tue, May 12, 2026 at 11:27:42AM +0200, Thomas Weißschuh wrote:
-> Hi Mickaël and Günther,
-> 
-> I received the following report about a failing landlock selftest from
-> the 0day bot.
-> 
-> On Mon, May 11, 2026 at 10:15:00PM +0800, kernel test robot wrote:
-> > kernel test robot noticed "kernel-selftests.landlock.audit_test.audit.tsync_override_log_subdomains_off.fail" on:
-> > 
-> > commit: 465b05bae5ac553c13315681c1490dc565337771 ("selftests: harness: Restore order of test functions")
-> > https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
-> > 
-> > 
-> > in testcase: kernel-selftests
-> > version: kernel-selftests-x86_64-9f2693489ef8-1_20260201
-> > with following parameters:
-> > 
-> > 	group: landlock
+Also, please do not send a respin right away if you can, multiple revisions in
+one day can be tricky to deal with.
 
-This group is correct but I'm wondering why the maintainer (me) and the
-reviewer (Günther) weren't in Cc.
+As per David's points - please update the commit message to reflect the fact
+you've added a missing assert too and replace the (void *)-1 with MAP_FAILED.
 
-What do we need to do to subscribe to such report?  Why isn't
-automatically inferred from the MAINTAINER file?
+Cheers, Lorenzo
 
-> > 
-> > config: x86_64-rhel-9.4-kselftests
-> > compiler: gcc-14
-> > test machine: 16 threads Intel(R) Core(TM) i7-13620H (Raptor Lake) with 32G memory
-> > 
-> > (please refer to attached dmesg/kmsg for entire log/backtrace)
-> > 
-> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <oliver.sang@intel.com>
-> > | Closes: https://lore.kernel.org/oe-lkp/202605111649.a8b30a62-lkp@intel.com
-> 
-> I was unable to run the landlock selftests myself, on my machines they are
-> failing at runtime with all kinds of colorful errors. Are the requirements
-> explained somewhere?
+> ---
+> v2:
+> - Add missing mmap() return value checks in pkey_sighandler_tests.c
+>   and protection_keys.c
+> ---
+>  tools/testing/selftests/mm/ksm_tests.c             | 2 +-
+>  tools/testing/selftests/mm/madv_populate.c         | 2 +-
+>  tools/testing/selftests/mm/pkey_sighandler_tests.c | 2 ++
+>  tools/testing/selftests/mm/protection_keys.c       | 1 +
+>  tools/testing/selftests/mm/soft-dirty.c            | 4 ++--
+>  tools/testing/selftests/mm/vm_util.c               | 2 +-
+>  6 files changed, 8 insertions(+), 5 deletions(-)
+>
+> diff --git a/tools/testing/selftests/mm/ksm_tests.c b/tools/testing/selftests/mm/ksm_tests.c
+> index a0b48b839d54..ed481f817282 100644
+> --- a/tools/testing/selftests/mm/ksm_tests.c
+> +++ b/tools/testing/selftests/mm/ksm_tests.c
+> @@ -174,7 +174,7 @@ static void  *allocate_memory(void *ptr, int prot, int mapping, char data, size_
+>  {
+>  	void *map_ptr = mmap(ptr, map_size, PROT_WRITE, mapping, -1, 0);
+>
+> -	if (!map_ptr) {
+> +	if (map_ptr == MAP_FAILED) {
+>  		perror("mmap");
+>  		return NULL;
+>  	}
+> diff --git a/tools/testing/selftests/mm/madv_populate.c b/tools/testing/selftests/mm/madv_populate.c
+> index 88050e0f829a..7fce5d0b622b 100644
+> --- a/tools/testing/selftests/mm/madv_populate.c
+> +++ b/tools/testing/selftests/mm/madv_populate.c
+> @@ -34,7 +34,7 @@ static void sense_support(void)
+>
+>  	addr = mmap(0, pagesize, PROT_READ | PROT_WRITE,
+>  		    MAP_ANONYMOUS | MAP_PRIVATE, 0, 0);
+> -	if (!addr)
+> +	if (addr == MAP_FAILED)
+>  		ksft_exit_fail_msg("mmap failed\n");
+>
+>  	ret = madvise(addr, pagesize, MADV_POPULATE_READ);
+> diff --git a/tools/testing/selftests/mm/pkey_sighandler_tests.c b/tools/testing/selftests/mm/pkey_sighandler_tests.c
+> index 302fef54049c..4637809192f9 100644
+> --- a/tools/testing/selftests/mm/pkey_sighandler_tests.c
+> +++ b/tools/testing/selftests/mm/pkey_sighandler_tests.c
+> @@ -317,6 +317,7 @@ static void test_sigsegv_handler_with_different_pkey_for_stack(void)
+>  	/* Set up alternate signal stack that will use the default MPK */
+>  	sigstack.ss_sp = mmap(0, STACK_SIZE, PROT_READ | PROT_WRITE,
+>  			      MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+> +	assert(sigstack.ss_sp != MAP_FAILED);
+>  	sigstack.ss_flags = 0;
+>  	sigstack.ss_size = STACK_SIZE;
+>
+> @@ -490,6 +491,7 @@ static void test_pkru_sigreturn(void)
+>  	/* Set up alternate signal stack that will use the default MPK */
+>  	sigstack.ss_sp = mmap(0, STACK_SIZE, PROT_READ | PROT_WRITE,
+>  			      MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+> +	assert(sigstack.ss_sp != MAP_FAILED);
+>  	sigstack.ss_flags = 0;
+>  	sigstack.ss_size = STACK_SIZE;
+>
+> diff --git a/tools/testing/selftests/mm/protection_keys.c b/tools/testing/selftests/mm/protection_keys.c
+> index 2085982dba69..580bf1668c71 100644
+> --- a/tools/testing/selftests/mm/protection_keys.c
+> +++ b/tools/testing/selftests/mm/protection_keys.c
+> @@ -1217,6 +1217,7 @@ static void arch_force_pkey_reg_init(void)
+>  	 * doing the XSAVE size enumeration dance.
+>  	 */
+>  	buf = mmap(NULL, 1*MB, PROT_READ|PROT_WRITE, MAP_ANONYMOUS|MAP_PRIVATE, -1, 0);
+> +	pkey_assert(buf != (void *)-1);
 
-I'm curious about the errors you get.  They are standard kselftests that
-should work following this workflow:
+Should use MAP_FAILED here as David pointed out.
 
-  make TARGETS=landlock O=build kselftest-gen_tar
-
-and then running ./build/kselftests/kselftest_install/run_kselftest.sh
-as root in a VM.  The required kernel configuration is listed in
-tools/testing/selftests/landlock/config
-
-To make it easier, we wrote a wrapper to test everything with UML:
-https://github.com/landlock-lsm/landlock-test-tools (see check-linux.sh)
-
-> 
-> > # #  RUN           audit.tsync_override_log_subdomains_off ...
-> > # # audit_test.c:591:tsync_override_log_subdomains_off:Expected 0 (0) == matches_log_signal(_metadata, self->audit_fd, child_data.parent_pid, NULL) (-11)
-> 
-> This error number means "EAGAIN 11 Resource temporarily unavailable",
-> so it could be a temporary error.
-
-Yes, the test is flaky under pressure.
-
-> 
-> Can you reproduce this issue? Is it really dependent on my patch as
-> blamed above? If so, does the selftest rely on the previous, incorrect order?
-
-I don't think it directly depends on your patch but it might be a side
-effect.  Anyway, I've been working on fixing this kind of issue and just
-sent a fix:
-https://lore.kernel.org/r/20260513105112.140137-2-mic@digikod.net
-
-> 
-> > # # tsync_override_log_subdomains_off: Test failed
-> > # #          FAIL  audit.tsync_override_log_subdomains_off
-> > # not ok 5 audit.tsync_override_log_subdomains_off
-> 
-> 
-> Thomas
+>
+>  	/* These __builtins require compiling with -mxsave */
+>
+> diff --git a/tools/testing/selftests/mm/soft-dirty.c b/tools/testing/selftests/mm/soft-dirty.c
+> index bcfcac99b436..67c26c265880 100644
+> --- a/tools/testing/selftests/mm/soft-dirty.c
+> +++ b/tools/testing/selftests/mm/soft-dirty.c
+> @@ -143,7 +143,7 @@ static void test_mprotect(int pagemap_fd, int pagesize, bool anon)
+>  	if (anon) {
+>  		map = mmap(NULL, pagesize, PROT_READ|PROT_WRITE,
+>  			   MAP_ANONYMOUS|MAP_PRIVATE, -1, 0);
+> -		if (!map)
+> +		if (map == MAP_FAILED)
+>  			ksft_exit_fail_msg("anon mmap failed\n");
+>  	} else {
+>  		test_fd = open(fname, O_RDWR | O_CREAT, 0664);
+> @@ -155,7 +155,7 @@ static void test_mprotect(int pagemap_fd, int pagesize, bool anon)
+>  		ftruncate(test_fd, pagesize);
+>  		map = mmap(NULL, pagesize, PROT_READ|PROT_WRITE,
+>  			   MAP_SHARED, test_fd, 0);
+> -		if (!map)
+> +		if (map == MAP_FAILED)
+>  			ksft_exit_fail_msg("file mmap failed\n");
+>  	}
+>
+> diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
+> index db94564f4431..63aaa2d9ec0b 100644
+> --- a/tools/testing/selftests/mm/vm_util.c
+> +++ b/tools/testing/selftests/mm/vm_util.c
+> @@ -463,7 +463,7 @@ bool softdirty_supported(void)
+>  	/* New mappings are expected to be marked with VM_SOFTDIRTY (sd). */
+>  	addr = mmap(0, pagesize, PROT_READ | PROT_WRITE,
+>  		    MAP_ANONYMOUS | MAP_PRIVATE, 0, 0);
+> -	if (!addr)
+> +	if (addr == MAP_FAILED)
+>  		ksft_exit_fail_msg("mmap failed\n");
+>
+>  	supported = check_vmflag(addr, "sd");
+> --
+> 2.25.1
+>
