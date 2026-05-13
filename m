@@ -1,201 +1,86 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B011641C30A
-	for <linux-kselftest@vger.kernel.org>; Wed, 13 May 2026 12:44:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A54B1421EFF
+	for <linux-kselftest@vger.kernel.org>; Wed, 13 May 2026 12:48:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778676247; cv=none; b=taU3vVzDQI1DBbqsFpm4/aOycvwlM0nAxjFlmv//9M6JMwT6HshaNg4Ep+mOfAN4pmg66Mkotiu57zThaRCWUITE7ZIXwhDwFsaMy36ycS9vK64UpnUW/Q78wGt4/X/6OtRasXBVyHZNvnO05Bto6+p3xzox7k5GEWZi2HYENcU=
+	t=1778676523; cv=none; b=EyoOrY2MSsmmuECq6c9nel0Xr1MKqtvG4ejYtqE0xJtfNVM9XSrRoiQSTyrhPqLS6N9x2OlZDNlPeBRNBpojOQk5Onl5CMS6ybU9W+GnJ4oLJTd8KXDbs1j3W2/FF3S73DGPaxqwNOq9QaqBE7Dhv5EAkOALxi6FUX5UP+5vPNU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778676247; c=relaxed/simple;
-	bh=U1yovwocJyt4iBBN2hMuvWGhooDrsAQSGxPcJ2jhBZU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=o95aCG0jm32sUeK3FXvKnjuF4rxwLEwxeUMdJlKG/rDewoxmw2U4ZCilG65nt+otMge8k/HiCqLN+aQWxJ5ZsnNRh2H3xG05PyXbZOoqeBV8qsyyGhik0IexueQdLCOf6yhUCSdYjQGb7/WMMKo+oRxQ6Hp7xY5Omapz5Yvd2ZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=GGKGlb/+; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1778676523; c=relaxed/simple;
+	bh=mmyRi+Zx/6q2gDvD/t17nESFmxjkc5pSHHo05OFL0dA=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=N0qf4CqBXhyC5zV+aeBrq108JwsHfcSLH9jJhJxu5kJD9/SgbyGTROWmorwWWLLc0hakLghtSP1XERDNQToHDjyHfyssoXR+IByP8w7TG/zHU3psTNpzN+937nM/1S3gaFTsZFDuJl8M+Wy1wEekE1EP93LfJ+5Nfm/4HP4rI+Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=S2yL7q9J; arc=none smtp.client-ip=209.85.215.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GGKGlb/+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1778676244;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=qCqqmvyfBRoByfly7X2wP/YX/5z+CJ5QvZWJz06fuzM=;
-	b=GGKGlb/+fr4D40gbjy1keYdKifaPMm5frdAqUpUcZ4WCWjlygRZ+QV59zNp2oxZJcONJKp
-	RrUgF6f9cLf4mePw7szCC1A6Km9Hn2NjQbhbIObOk/ELzll9e0F2gKiYmeAHbqBXZJVMZi
-	bnjTf8JBvMW3eZ5iu+jrLyJ1TOclsII=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-223-V10L4c38NFm5JVp7kK65ow-1; Wed,
- 13 May 2026 08:43:58 -0400
-X-MC-Unique: V10L4c38NFm5JVp7kK65ow-1
-X-Mimecast-MFC-AGG-ID: V10L4c38NFm5JVp7kK65ow_1778676234
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 66C65180034E;
-	Wed, 13 May 2026 12:43:53 +0000 (UTC)
-Received: from [10.44.50.86] (unknown [10.44.50.86])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 070DE180034E;
-	Wed, 13 May 2026 12:43:44 +0000 (UTC)
-Message-ID: <ba08dfe9-932b-40c3-9fdf-fc891d52e1d8@redhat.com>
-Date: Wed, 13 May 2026 14:43:42 +0200
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="S2yL7q9J"
+Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-c827c880e39so2288480a12.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 13 May 2026 05:48:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1778676522; x=1779281322; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=MK1gTGxtPYOlCCins8M0QHXqM2NhJUagixEFgmK4yWM=;
+        b=S2yL7q9Jkl5OGMjP6y3HQBI7BiJmFeZgbnHXuw76QgyYzfgc6cllHznt5Nw7W7pS2C
+         +q39Iskjzi5yKrGRSQzBXrjV1xGW+xhVI6SyHpFYMIf+ir+jqcS/S/lgM+0/LDSkAaRc
+         mkCHISXHbkidKDSPZXHeMyr0mpacjJVId/xnSMGEK3HpU7MSwcwtlA4gAsTET/qiNEQv
+         TyhhqroCKKhMJOdhPiJj83lOXo2QYQaHSUMyRtRIYiCl/Jhf7FLiHINwnsTBFntFRoNZ
+         BW1ShZXwEe61Yb75w37imODFhoebYE7dSQsLCcAQM+sJ75AdDW0b9cpFdvNadKdcThb8
+         13NQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778676522; x=1779281322;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MK1gTGxtPYOlCCins8M0QHXqM2NhJUagixEFgmK4yWM=;
+        b=rSB9VM1EIwWUynU4wreHwl6Ju4erzg8CrYX0jrD6/UYpCR7JSLpVchJ5cpcpByppsj
+         96EueHv6RB58y99fyw/AnscGUPV9Gkqx02YjJgFd+hUZEoXsWGIVWTVWbDcky0CtProz
+         lO79Nh62/ty0W/8yGVpLJSJZ7+S9m6Z/89wT6HoRXwJrf04WIbjGY9yCbj3C9MCZT/ug
+         TCHP1U4hH4apEbePHeU+wpe3I67Nr8jYhtimT49AOtrQaHJ+hW8w2gumix/d9pugC7NC
+         K//1f9TcLMpt+HDVgp9HYguN3TL5rMTPOXEiNmJIC026LPKufgPWsADN1I55mZHEa8q+
+         aH1w==
+X-Forwarded-Encrypted: i=1; AFNElJ+LfxLqBAclLl8iygFU+ueUR28NRmGkBRnWqTu/zz4wPqQUrXQg9j6pX35sdbapLH7/zkWwcv6k27G+vm3HDqY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyR+pSGrj/v2gRK2Ud27y9l91CzL3HambbdWcwM9ZGUF8cF0j2P
+	iZrRhw1JySP7VSuMQE1aupmwCIlcbmsGpP4E/+HtHgWPhYg0TwJ6wmZXdBpaH3agWssydoPtpkz
+	VbwFhSw==
+X-Received: from pgch29.prod.google.com ([2002:a05:6a02:509d:b0:c74:664d:4080])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:a107:b0:3a2:d0ed:f1f8
+ with SMTP id adf61e73a8af0-3af81372d5fmr3545884637.30.1778676521573; Wed, 13
+ May 2026 05:48:41 -0700 (PDT)
+Date: Wed, 13 May 2026 05:48:41 -0700
+In-Reply-To: <CAEvNRgHfBqqC1K7enCPX3jqWE0smJ3E0NE=kUPSX7N7g5KQrvg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Documentation: KVM: Document guest-visible compatibility
- expectations
-To: David Woodhouse <dwmw2@infradead.org>, Marc Zyngier <maz@kernel.org>
-Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- kvm@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
- Jim Mattson <jmattson@google.com>, Oliver Upton <oupton@kernel.org>,
- Joey Gouly <joey.gouly@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>,
- Zenghui Yu <yuzenghui@huawei.com>, Catalin Marinas
- <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Raghavendra Rao Ananta <rananta@google.com>,
- Eric Auger <eric.auger@redhat.com>, Kees Cook <kees@kernel.org>,
- Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>,
- linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
- linux-kselftest@vger.kernel.org
-References: <6856b269d2af706eae397e0cf9c1231f89d9a932.camel@infradead.org>
- <6afc4b95-3c15-4d71-877d-19b84e91ce05@redhat.com>
- <57bc082f4824d6114d3156744c25986effc29aca.camel@infradead.org>
- <baff82ca-6321-4b16-aa61-b2d6d60b6535@redhat.com>
- <86h5obya2r.wl-maz@kernel.org>
- <48b06e5655d56ff6eda30e563b34894fa0eb2f07.camel@infradead.org>
-Content-Language: en-US
-From: Paolo Bonzini <pbonzini@redhat.com>
-Autocrypt: addr=pbonzini@redhat.com; keydata=
- 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
-In-Reply-To: <48b06e5655d56ff6eda30e563b34894fa0eb2f07.camel@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Mime-Version: 1.0
+References: <20260511113759.610924-1-tabba@google.com> <20260511113759.610924-3-tabba@google.com>
+ <CAEvNRgHfBqqC1K7enCPX3jqWE0smJ3E0NE=kUPSX7N7g5KQrvg@mail.gmail.com>
+Message-ID: <agRzKWDH4lpN1rJv@google.com>
+Subject: Re: [PATCH 2/2] KVM: selftests: Fix FD double-close in kvm_vm_release()
+From: Sean Christopherson <seanjc@google.com>
+To: Ackerley Tng <ackerleytng@google.com>
+Cc: Fuad Tabba <tabba@google.com>, Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, Will Deacon <will@kernel.org>, 
+	David Matlack <dmatlack@google.com>, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-On 5/13/26 11:24, David Woodhouse wrote:
-> On Wed, 2026-05-13 at 09:42 +0100, Marc Zyngier wrote:
->> If userspace is not a total joke, it will read all the ID registers,
->> and configure what it wants to see, assuming it is a feature that can
->> be configured (not everything can, because the architecture itself is
->> not fully backward compatible).
->>
->> Yes, this is buggy at times, because the combinatorial explosion of
->> CPU capabilities and supported features makes it pretty hard to test
->> (and really nobody actually does). But overall, it works, and QEMU is
->> growing an infrastructure to manage it in a "user friendly" way.
+On Tue, May 12, 2026, Ackerley Tng wrote:
+> Fuad Tabba <tabba@google.com> writes:
+> > kvm_vm_release() closes vmp->fd and vmp->kvm_fd unconditionally, and
+> > kvm_vm_free() calls kvm_vm_release() at teardown.  A test that calls
+> > kvm_vm_release() and then kvm_vm_free() without a
+> > vm_recreate_with_one_vcpu() in between double-closes both FDs.  Since
+> > kvm_close() asserts on close() failure, the second close trips
+> > TEST_ASSERT and aborts the test, or, if the FD was recycled, silently
+> > closes an unrelated file.
+> >
 > 
-> Yes, that is precisely what I'm asking for. I'm prepared to deal with
-> the fact that KVM/Arm64 is not a stable and mature platform like x86
-> is, and that userspace has to find all the random changes from one
-> version to the next, and explicitly pin things down to be compatible.
-> 
-> All I'm asking for is that KVM makes it *possible* to pin things down
-> to the behaviour of previously released Linux/KVM kernels.
-> 
->> But really, this isn't what David is asking. He's demanding "bug for
->> bug" compatibility. For that, we have two possible cases:
-> 
-> No, I am not asking you to meet that bar. I merely observed that x86
-> does and that it would be nice. But we are a *long* way from that.
+> Never thought about this fd-recycling case, I think this change still
+> has value in avoiding the silent closing of some other file.
 
-x86 doesn't do bug-for-bug compatibility, thankfully - we have quirks 
-but only 11 of them, or about one per year since we started adding them. 
-  We only add quirks, generally speaking, when 1) we change the way file 
-descriptors are initialized, 2) guests in the wild were relying on it, 
-or 3) it prevends restoring state saved from an old kernel.  Is there 
-anything else?
-
-So you're asking something not really far from this:
-
->> - this is a behaviour that is not allowed by the architecture: we fix
->>    it for good. We do that on every release. Some minor, some much more
->>    visible. And there is no way we will add this sort of "bring the
->>    bugs back" type of behaviours. Specially when it is really obvious
->>    that no SW can make any reasonable use of the defect. We allow
->>    userspace to keep behaving as before, but the guest will not see a
->>    non-compliant behaviour.
-
-... where for example 
-https://lore.kernel.org/kvm/e03f092dfbb7d391a6bf2797ba01e122ba080bcd.camel@infradead.org/ 
-is an example of a bug that "no SW can make any reasonable use of".
-
-> Marc, this is complete nonsense and you should know better.
-> Once a behaviour is present in a released version of Linux/KVM, we
-> can't just declare it "wrong" and unilaterally impose a change in
-> guest-visible behaviour on *running* guests as a side-effect of a
-> kernel upgrade.
-> 
-> The criterion for *KVM* to remain compatible is "once it has been in a
-> released version of the kernel". Not "once it is in the architecture".
-
-That is *also* obviously nonsense though, isn't it (see example above)? 
-The truth is in the middle, "once it is in the architecture" is likely 
-too narrow but "once it is in a Linux release" is way too broad.  And 
-besides, both miss the point of *configurability* which is the basis of 
-it all.
-
-The main difference between x86 and Arm is the default state at 
-creation; x86 defaults to a blank slate, mostly; and when we didn't do 
-that, we regretted it later (cue the STUFF_FEATURE_MSRS quirk).  It's 
-too late to change the behavior for Arm, but I think we can agree that 
-patches such as 
-https://lore.kernel.org/kvm/20260511113558.3325004-2-dwmw2@infradead.org/ 
-("KVM: arm64: vgic: Allow userspace to set IIDR revision 1") are what 
-the letter and spirit of this proposal is about.
-
-Marc did not mention having to deal with guests in the wild.  Let's 
-ignore it for now because even defining "guests in the wild" is hard; 
-and anyway it's not related to the patch that triggered the discussion.
-
-So we have the third case, "restoring state saved from an old kernel". 
-If this case arises, I do believe that Arm will have to deal with it and 
-introduce quirks or KVM_GET/SET_REG hacks.  Maybe it hasn't happened 
-yet, lucky you.
-
-Overall, even if we may disagree about the details, are we really on 
-terribly distant grounds, or are we not?
-
-Paolo
-
+I have no objection to invalidating the fds, I just don't want to make
+kvm_vm_release() and kvm_vm_free() idempotent.  The caller needs to not mess up.
