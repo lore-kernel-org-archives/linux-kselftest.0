@@ -1,94 +1,227 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f74.google.com (mail-oo1-f74.google.com [209.85.161.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CADBB1EB5FD
-	for <linux-kselftest@vger.kernel.org>; Wed, 13 May 2026 15:56:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A616D3905E3
+	for <linux-kselftest@vger.kernel.org>; Wed, 13 May 2026 16:10:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778687764; cv=none; b=RLpD4oJukkQmrZ3aggR54jmg9u6UCWe+AZ0MoLACqabMn6U0TjGWRoBi6oBP1Wqn3BkAbGrMCCWDG1pZA2GU7KQOrt4J1Q7R9yd8g3bBnajEBUJh6NL0FhuhwJCSviWC0HKX83c40ixesRz5q/+SKx0rmVveFMpgLmYkXiqEuqM=
+	t=1778688638; cv=none; b=BohBNs2DlFOT39pyUoUPhTMUcvbFr/USrW4wuDaqPfPnXFyNdcPOw66FyGoi7RVVrO8k8+dNOgKjBN4sKw9r7ZLbSZuhCeqJY85LtkaERNCWWGqXlx1f2m+wXnKnfUduDYFysbFcNfMLJXo5Ro4AVWrTzrKhvkNy98d5eImjcIY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778687764; c=relaxed/simple;
-	bh=n7Ws94gxeaCRFtf3TF8uVIiRZHvc/e1UvuieOeTg8/g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZeZVRBJ5T0Y5J7WnkIxLTxsnN2KSi2O+v4gf2jJYyAw+MPZgIWXqDOpn1I8zbDTe7VFw+gXnMQ27/q4J0Ejz4m0o6Dbc+DFMMpNvuFVrWWPB+65xe5gYB4fwWmPEo/UhSUMvbQUfv2d/2TNLVyn5UcS0y5ez2ed+AJMv1vEw/xs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Y878hePz; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1778688638; c=relaxed/simple;
+	bh=xUFNckisZTKglNhJBqKKNuO742ekTOASKm0SwN4Guw0=;
+	h=Date:In-Reply-To:Mime-Version:Message-ID:Subject:From:To:Cc:
+	 Content-Type; b=SjozJHJfnH2immV48MlEZghS4dpO8S60qApXGcWbH5UwxBrgSKevlUNSkwB65DFG/Cg0bcU5WEvhEr+GuIrHSKxc97pZZ+ojFA9ET/5Lr4o2rIsjwS4nbinM24SDL58YW5/DTaMOTy6XES6uoDfgpouPXdHj28PWhf295TlOiE8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fZw+uyc6; arc=none smtp.client-ip=209.85.161.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Y878hePz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1778687761;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=DfaTsBVptCeA0QuBzTDUKxyGUiuTsN+d73fyP8TMEMg=;
-	b=Y878hePzfJ/rjbt2Nx7JNDmJ7c561mK92u7Td8pbgj0YV9S0airKdVNZC2eyk4oj1/3cPA
-	QEKNgzu7R88O7h6vwToPyLzYIHkM3+eqBd6mfHN2hUuCsklBdDB+nPM9MfxF/glq2vMJY1
-	VuLPRxhM9OknyloXWzo8qizwiZ0j/P0=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-546-VDKQFgU_MDuDVSxLGFMDEw-1; Wed,
- 13 May 2026 11:55:58 -0400
-X-MC-Unique: VDKQFgU_MDuDVSxLGFMDEw-1
-X-Mimecast-MFC-AGG-ID: VDKQFgU_MDuDVSxLGFMDEw_1778687756
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4A549195605F;
-	Wed, 13 May 2026 15:55:56 +0000 (UTC)
-Received: from thinkpad (headnet01.pony-001.prod.iad2.dc.redhat.com [10.2.32.101])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D1A831953947;
-	Wed, 13 May 2026 15:55:52 +0000 (UTC)
-Date: Wed, 13 May 2026 17:55:49 +0200
-From: Felix Maurer <fmaurer@redhat.com>
-To: Qingfang Deng <qingfang.deng@linux.dev>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Petr Machata <petrm@nvidia.com>, linux-kernel@vger.kernel.org,
-	linux-ppp@vger.kernel.org, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next] selftests: net: add tests for PPPoL2TP
-Message-ID: <agSfBWQorPHodayz@thinkpad>
-References: <20260508032158.67887-1-qingfang.deng@linux.dev>
- <af4czAjnz--nOUYf@thinkpad>
- <a8036fda-3509-437e-b787-4376992a0359@linux.dev>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fZw+uyc6"
+Received: by mail-oo1-f74.google.com with SMTP id 006d021491bc7-6961e8fa90bso13223606eaf.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 13 May 2026 09:10:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1778688635; x=1779293435; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=syDSn8FwCn4myKFJCIXbZFQJnGch0dw2zPcy4g4QTeo=;
+        b=fZw+uyc6vGidUaj0Oo5dc1K5M0uQNg+lc67/27dUNQ8vw0jIqYzv8xvucWpZ9VJ7N0
+         JehGHhV7/KC7To5TrTJFzd+wm5qZVgOtkdj09T0MSODSXW/8alonPv/ytv1uqQV5velb
+         KCqV40HFDJ5qtju754LD+sqdmjkQYMghb+7aEzKRBMLJ4D81EkgFVq82401SffLlKMhy
+         BmpMYf+cqJA8Y5OlnFu3wywib+Mb2G655LHoNc7uM/kV0Cd+FCqP5rNU7t9vTFZWquPB
+         BntF0wt04ZTMNYJdBxt9aH3nx0kxHRL+FOfAgijPzv8QCyTZ7zY8C75DM0ZZkaFAAYkL
+         IEJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778688635; x=1779293435;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=syDSn8FwCn4myKFJCIXbZFQJnGch0dw2zPcy4g4QTeo=;
+        b=pnJ0H9iXFfIo8FcifR5xiy6rJnOrZgkUdzpoLNWJjJto5cn5fmDVn72tklEEq1Wo7I
+         c+zUSOkLyYOYnyoW13wJeiYCUtnDTWWcNHI1tgTlglxLh7qsva7m+mecsfWglx/1fOj5
+         AWSLvcQIgxKxWZh9bLvAsWEgBccBLOew92P34Pwn3IXU/P0Vukos0J9D2a+WAN5RH6RL
+         ajTxrbpAhA4J0fswB+IJre8nFzKvqEbzpBrhZB9aBRBmugL76YaFUKZf9IEG4Tn1oksb
+         7POWJ0xrDFVw9IPs4Cthe9ktcovwIIa0XSW/dwMV5ye1ku0lXMw4JaCreadUaQ9aSC9i
+         O+0w==
+X-Forwarded-Encrypted: i=1; AFNElJ9aNzvc3EMFMNnMs33aQvJCEKzbtv1N8dC9fEpzK4D1b5i6ah3qPN3El2mbon1YNzSJxrU3EqIZx30VaMJxq7Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzkqFaOya+j9u1GYITfXeT90o9KgefBLsF6xKepSTHQJNfIoJWU
+	eb6hjEViD1RrfjBYgerEfu6Q3xysCFLKBbh9gh+CiXqq07dPyB8r2SiFFf0UBLWFFx/PIdIzh8z
+	eKl/XnRvHiJi4zWe3Pl6Z9sa+6Q==
+X-Received: from iovs8.prod.google.com ([2002:a05:6602:2bc8:b0:96e:18c2:898c])
+ (user=coltonlewis job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6820:1a0c:b0:696:64ab:cd9d with SMTP id 006d021491bc7-69b7a9d330cmr1858550eaf.12.1778688634368;
+ Wed, 13 May 2026 09:10:34 -0700 (PDT)
+Date: Wed, 13 May 2026 16:10:33 +0000
+In-Reply-To: <18d747ea-660a-4ae6-b8b8-365d745352ce@linaro.org> (message from
+ James Clark on Mon, 11 May 2026 15:57:13 +0100)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a8036fda-3509-437e-b787-4376992a0359@linux.dev>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Mime-Version: 1.0
+Message-ID: <gsnt8q9ncmti.fsf@coltonlewis-kvm.c.googlers.com>
+Subject: Re: [PATCH v7 00/20] ARM64 PMU Partitioning
+From: Colton Lewis <coltonlewis@google.com>
+To: James Clark <james.clark@linaro.org>
+Cc: alexandru.elisei@arm.com, pbonzini@redhat.com, corbet@lwn.net, 
+	linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org, 
+	maz@kernel.org, oliver.upton@linux.dev, mizhang@google.com, 
+	joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, 
+	mark.rutland@arm.com, shuah@kernel.org, gankulkarni@os.amperecomputing.com, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
+	linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 
-On Sat, May 09, 2026 at 09:13:58AM +0800, Qingfang Deng wrote:
-> On 2026/5/9 1:26, Felix Maurer wrote:
-> > Is there a particular reason to create the test setup with a netkit pair
-> > instead of the more standard veth pairs?
->
-> L2TP does not need an outer ethernet header so I choose netkit instead of
-> veth.
 
-I see, thanks. In my opinion, sticking to the same environment setup for
-as many selftests as possible, i.e., using veth pairs everywhere, has
-more benefits in terms of maintenance of the test than leaving out the
-ethernet header has. Also, while I understand that selftests are only
-supported on systems that run with the respective selftest kernel
-config, I still think it's good to stick to veth as it is probably
-available in more kernel builds (think resource constrained
-envrionments, older kernel versions, etc.).
+Hi James. Thanks for reviewing.
 
-But in the end, it's up to you and the maintainers. However, if you
-stick with netkit, please name the interfaces explicitly and don't rely
-on the current auto-assigned name of the peer interface.
+James Clark <james.clark@linaro.org> writes:
 
-Thanks,
-   Felix
+> On 04/05/2026 10:17 pm, Colton Lewis wrote:
+>> This series creates a new PMU scheme on ARM, a partitioned PMU that
+>> allows reserving a subset of counters for more direct guest access,
+>> significantly reducing overhead. More details, including performance
+>> benchmarks, can be read in the v1 cover letter linked below.
 
+>> An overview of what this series accomplishes was presented at KVM
+>> Forum 2025. Slides [1] and video [2] are linked below.
+
+>> After a few false starts, meeting with Will Deacon and Mark Rutland to
+>> discuss implementation ideas, and a few more false starts, I finally
+>> have an implementation of dynamic counter reservation that works
+>> without disrupting host perf too much. Now the host only loses access
+>> to the guest counters when a vCPU resides on the CPU.
+
+>> The key was creating perf_pmu_resched_update, which behaves exactly
+>> like perf_pmu_resched except it takes a callback to call in between
+>> when the perf events are scheduled out and when they are scheduled
+>> back in. That allows us to update the PMU's available counters when we
+>> know they are not currently in use without needing to expose private
+>> perf core functions and triple check they are not being called in a
+>> way that violates existing assumptions.
+
+>> Because this introduces a possibility of perf reschedule during vCPU
+>> load, I've optimized to only do that operation if there are host
+>> events occupying the intended guest counters at the time of the load.
+
+>> The kernel command line parameter for the driver still exists, but now
+>> only defines an upper limit of counters the guest might use rather
+>> than taking those counters from the host permanently.
+
+>> v7:
+
+>> * Implement dynamic counter reservation as described above. One side
+>>     effect is the PMUv3 driver now needs much fewer changes to enforce
+>>     the boundary.
+
+>> * Move register accesses out of fast path for non-FGT hardware. The
+>>     performance impact was negligible and this moves bloat out of the
+>>     fast path and allows a more reliable design with more code sharing.
+
+>> * Make PMCCNTR a special case in the context swap again because trying
+>>     to access it with PMXEVCNTR is undefined.
+
+>> * Fix a bug where kvm_pmu_guest_counter_mask was using & instead of |.
+
+>> * Re-expose the dedicated instruction counter to the host since it was
+>>     decided the guest will not own it.
+
+>> * Change the global armv8pmu_reserved_host_counters to
+>>     armv8pmu_is_partitoned because it was only used in boolean checks.
+
+>> * Fix typo in vcpu attribute commit so the spelling of the flag in the
+>>     commit message matches the code.
+
+>> * Rebase to v7.0-rc7
+
+>> v6:
+>> https://lore.kernel.org/kvmarm/20260209221414.2169465-1-coltonlewis@google.com/
+
+>> v5:
+>> https://lore.kernel.org/kvmarm/20251209205121.1871534-1-coltonlewis@google.com/
+
+>> v4:
+>> https://lore.kernel.org/kvmarm/20250714225917.1396543-1-coltonlewis@google.com/
+
+>> v3:
+>> https://lore.kernel.org/kvm/20250626200459.1153955-1-coltonlewis@google.com/
+
+>> v2:
+>> https://lore.kernel.org/kvm/20250620221326.1261128-1-coltonlewis@google.com/
+
+>> v1:
+>> https://lore.kernel.org/kvm/20250602192702.2125115-1-coltonlewis@google.com/
+
+>> [1]  
+>> https://gitlab.com/qemu-project/kvm-forum/-/raw/main/_attachments/2025/Optimizing__itvHkhc.pdf
+>> [2]  
+>> https://www.youtube.com/watch?v=YRzZ8jMIA6M&list=PLW3ep1uCIRfxwmllXTOA2txfDWN6vUOHp&index=9
+
+>> Colton Lewis (19):
+>>     arm64: cpufeature: Add cpucap for HPMN0
+>>     KVM: arm64: Reorganize PMU functions
+>>     perf: arm_pmuv3: Generalize counter bitmasks
+>>     perf: arm_pmuv3: Check cntr_mask before using pmccntr
+>>     perf: arm_pmuv3: Add method to partition the PMU
+>>     KVM: arm64: Set up FGT for Partitioned PMU
+>>     KVM: arm64: Add Partitioned PMU register trap handlers
+>>     KVM: arm64: Set up MDCR_EL2 to handle a Partitioned PMU
+>>     KVM: arm64: Context swap Partitioned PMU guest registers
+>>     KVM: arm64: Enforce PMU event filter at vcpu_load()
+>>     perf: Add perf_pmu_resched_update()
+>>     KVM: arm64: Apply dynamic guest counter reservations
+>>     KVM: arm64: Implement lazy PMU context swaps
+>>     perf: arm_pmuv3: Handle IRQs for Partitioned PMU guest counters
+>>     KVM: arm64: Detect overflows for the Partitioned PMU
+>>     KVM: arm64: Add vCPU device attr to partition the PMU
+>>     KVM: selftests: Add find_bit to KVM library
+>>     KVM: arm64: selftests: Add test case for Partitioned PMU
+>>     KVM: arm64: selftests: Relax testing for exceptions when partitioned
+
+>> Marc Zyngier (1):
+>>     KVM: arm64: Reorganize PMU includes
+
+>>    arch/arm/include/asm/arm_pmuv3.h              |  18 +
+>>    arch/arm64/include/asm/arm_pmuv3.h            |  12 +-
+>>    arch/arm64/include/asm/kvm_host.h             |  17 +-
+>>    arch/arm64/include/asm/kvm_types.h            |   6 +-
+>>    arch/arm64/include/uapi/asm/kvm.h             |   2 +
+>>    arch/arm64/kernel/cpufeature.c                |   8 +
+>>    arch/arm64/kvm/Makefile                       |   2 +-
+>>    arch/arm64/kvm/arm.c                          |   2 +
+>>    arch/arm64/kvm/config.c                       |  41 +-
+>>    arch/arm64/kvm/debug.c                        |  31 +-
+>>    arch/arm64/kvm/pmu-direct.c                   | 494 ++++++++++++
+>>    arch/arm64/kvm/pmu-emul.c                     | 674 +----------------
+>>    arch/arm64/kvm/pmu.c                          | 701 ++++++++++++++++++
+>>    arch/arm64/kvm/sys_regs.c                     | 250 ++++++-
+>>    arch/arm64/tools/cpucaps                      |   1 +
+>>    arch/arm64/tools/sysreg                       |   6 +-
+>>    drivers/perf/arm_pmuv3.c                      | 111 ++-
+>>    include/kvm/arm_pmu.h                         | 110 +++
+>>    include/linux/perf/arm_pmu.h                  |   3 +
+>>    include/linux/perf/arm_pmuv3.h                |  14 +-
+>>    include/linux/perf_event.h                    |   3 +
+>>    kernel/events/core.c                          |  28 +-
+>>    tools/testing/selftests/kvm/Makefile.kvm      |   1 +
+>>    .../selftests/kvm/arm64/vpmu_counter_access.c | 112 ++-
+>>    tools/testing/selftests/kvm/lib/find_bit.c    |   1 +
+>>    25 files changed, 1861 insertions(+), 787 deletions(-)
+>>    create mode 100644 arch/arm64/kvm/pmu-direct.c
+>>    create mode 100644 tools/testing/selftests/kvm/lib/find_bit.c
+
+
+>> base-commit: 591cd656a1bf5ea94a222af5ef2ee76df029c1d2
+>> --
+>> 2.54.0.545.g6539524ca2-goog
+
+> I tested it a bit and ran the kselftests and it all seems to be working
+
+Great to hear you didn't find any obvious problems with your testing!
+
+> ok. Some of the critical sashiko comments look like they are worth
+> looking into though:
+> https://sashiko.dev/#/patchset/20260504211813.1804997-1-coltonlewis%40google.com
+> For example writing to PMCR_EL0.P from EL2 resets the host's counters,
+> even if it's KVM doing it after trapping a write from the guest.
+
+I will comb through this and the other sashiko comments and fix.
