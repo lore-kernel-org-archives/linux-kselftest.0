@@ -1,263 +1,310 @@
-Received: from CH4PR04CU002.outbound.protection.outlook.com (mail-northcentralusazon11013008.outbound.protection.outlook.com [40.107.201.8])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5012F39A063;
-	Wed, 13 May 2026 07:24:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.201.8
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778657051; cv=fail; b=tSLhUhIJebbMgYbOIMbUCUzRzkBDAxnoR5xr+rGkCfz+SWZCfgwNbr5QBi+MnAP1RndUXADW/gYRe3HSpOU3uJi8wrF93BMiTWPXANmh/Grb9Bw6+BI+QYZA8C8BasHyOKKsEu5+SQTOackahDstarMzqrTgSm5qwXMVQOqXJNU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778657051; c=relaxed/simple;
-	bh=Bpa0qyMi0x+wGb9sUV+c89i0DVx5Cx9P2OoAXbwc6j8=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=SY0Av4pVDlOYGWKonoyGJqKPpQgVpEJSKhkF2osNR+pkMdUPOIPqagwLif4jBwUcMjQz8H2499p01k9ac+DOS5cbxbSMs1CIpmBudF9Eiy3Gd1a4ROWkiLS39TGTrxbz+XHh+rAdks4IFtNgP1UeZMIYszL+D3TX3ULXWrgqyhw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=W+qEYULj; arc=fail smtp.client-ip=40.107.201.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AE63356A0A
+	for <linux-kselftest@vger.kernel.org>; Wed, 13 May 2026 07:31:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778657483; cv=none; b=cJpkrVZHVim99P2bT1clRWxt+jvO92ubc+SinnceYAOL0JQhRNOdqhpEeefPzdumOsTU9hgQGEgrAkJPuDRDxA/XOrUqr5L3oTRdsywa8StGTW5PBVNR+mJv+5v87G5Ou1k+a7eFJ5Z5t3lzz1SXBlGP5I9uC+hzwnNbN1yS9T8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778657483; c=relaxed/simple;
+	bh=L5Yg5uVqrkobj7bmXCB6WQm8iYeZIrVy6jTHOY+8NLc=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=u7jPvBstvvqCGLIG/QAsS4JqpQXxnwOSPB/1g0Lmo6cafFTTgmyg1evv98mUqTCXDMtfEfW1z2LwTG+occSjEUHZXTBXuNKcDTlSYYLzgOgwZEOo5SOaNacfmSKahxfhDSgNjf1wKCyAWPyTs15ae/We8nurP1/1OseUOzRJkqc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=GRzK3ieB; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="W+qEYULj"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=UIc5hxYnHV20oPCNxGXfSF9d98RaBWP2GTf/Q3Huq9jBZtxZxBgLvgjwyBQtsP+qpLUBAfEvWUm4TJGWB+wJQiRaMWLHrc9Pp7i8kQ0B1K+1CnDzeJgUejUxspMWA/8+yDlrvqI4pcy7W7sALjwwU234YKsf+6BjrF/bb9k1CQGIyHXI+6fmH2Oq8MPX33Olq7Oa0G1hhP3glhjAzCt8ziI/LzCx1FuL7a3mhbgx+vB+elKFizvxKGTV7qlV+A8+HcYxkl5/YEVw65v/zG7yopCofWcHSv6HeToAYm+yx78S/ojL8fj47c7bG9hPAgv3aolmeYe9VxBkPR/RrazjQA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HKqbeFM/fxn82sZeoKMSZKrjEBvo+DbAc7+95doLiQw=;
- b=Lj/2R0o+/JgHJ6lHB/vemYkbA3/Vl7dYxuu+cbsYsrhIwWY/6JksDWfAjCZ1/ENGA2xEXRnwezF2CnG+E6Wknh/wNmMnDM9WggQrZomzII2vPRQaQnQzHGykIBustGb7TNWKozPaznL+JswOYOwt0QrLAn0mAB82ja8ROqniUHnRkB/EER7aDnyt63GSKk61M1ez3N1kW3gdB1dsNtywcd/32+hp65Ca5BCHxeY8m6kd/TfdspDzi/WqszsKUsFBxv9VTYW2a5s8e+5ffMdjT6XeFJb34bgVw+Qmtc1vxvVIgQFRU0rdUqRFitQgH02U277QLzP93xtI/xk+rwtGSw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HKqbeFM/fxn82sZeoKMSZKrjEBvo+DbAc7+95doLiQw=;
- b=W+qEYULjBZepKaQxEzVjqtElyZd+TZC7C0tZyx9XIX7GWLwdFC5fELSWW00i0FI7EdBJw7412FO1rPd7NjNzR94V9G+H7elPC9OJ3e2sZRrUuAxDJA63cxcERO0XO7UBsE7d1OzG1inE8b7omSvOL2JgISj7yk7NrsogZUlWN2j1SE1CpqonchFei34fyPyVdjqNLUL2+nORrAv5ctilExpLiRdAUorYdHjTGGxN0gUus86eZ3DyltiypMAkT7KNcV1kEeV9jaseNTxtbA9Lt0jvumvlp2U/XqPiY4BPGqLubo2QHqGp/y0U52tSO6DUiay4LdUBTMw7mGw+aAdpAA==
-Received: from BY3PR03CA0030.namprd03.prod.outlook.com (2603:10b6:a03:39a::35)
- by CY8PR12MB8243.namprd12.prod.outlook.com (2603:10b6:930:78::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9913.11; Wed, 13 May
- 2026 07:24:05 +0000
-Received: from SJ1PEPF000023CC.namprd02.prod.outlook.com
- (2603:10b6:a03:39a:cafe::c3) by BY3PR03CA0030.outlook.office365.com
- (2603:10b6:a03:39a::35) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9913.12 via Frontend Transport; Wed,
- 13 May 2026 07:24:05 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- SJ1PEPF000023CC.mail.protection.outlook.com (10.167.244.6) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.25.13 via Frontend Transport; Wed, 13 May 2026 07:24:04 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 13 May
- 2026 00:23:45 -0700
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 13 May
- 2026 00:23:45 -0700
-Received: from vdi.nvidia.com (10.127.8.14) by mail.nvidia.com (10.129.68.7)
- with Microsoft SMTP Server id 15.2.2562.20 via Frontend Transport; Wed, 13
- May 2026 00:23:39 -0700
-From: Nimrod Oren <noren@nvidia.com>
-To: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
-	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Shuah Khan
-	<shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
-	<daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, "John
- Fastabend" <john.fastabend@gmail.com>
-CC: Stanislav Fomichev <sdf@fomichev.me>, Mohsin Bashir
-	<mohsin.bashr@gmail.com>, Amery Hung <ameryhung@gmail.com>, Martin KaFai Lau
-	<martin.lau@kernel.org>, Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>,
-	Nimrod Oren <noren@nvidia.com>, <netdev@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<bpf@vger.kernel.org>, Carolina Jubran <cjubran@nvidia.com>, Dragos Tatulea
-	<dtatulea@nvidia.com>
-Subject: [PATCH net] selftests: net: Fix checksums in xdp_native
-Date: Wed, 13 May 2026 10:23:55 +0300
-Message-ID: <20260513072355.1083381-1-noren@nvidia.com>
-X-Mailer: git-send-email 2.45.0
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GRzK3ieB"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1778657480;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=jKqEdpwEL44n322oM5dzYdh/fnpCSr+Dp2MnzVEGH7E=;
+	b=GRzK3ieBD6PwIQHOwOntCyTdhYq3MxROgfHa9k9MhmtfxxakzLN+/S5PGZBc/sqUktMkXE
+	p+3iD9VFnLBFuIoo4UL8rrBqS7wrCNZJOJ+67S2Xhs3HjYkNHyhEjbQ2s5kRqYqroXRpiT
+	2zsaIR79PdEybJkK2hCwPZi//1TwXJs=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-31-DPwmEbudOqCZ0DsZ6xBCTQ-1; Wed,
+ 13 May 2026 03:31:16 -0400
+X-MC-Unique: DPwmEbudOqCZ0DsZ6xBCTQ-1
+X-Mimecast-MFC-AGG-ID: DPwmEbudOqCZ0DsZ6xBCTQ_1778657471
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6B01B1956089;
+	Wed, 13 May 2026 07:31:09 +0000 (UTC)
+Received: from [192.168.1.153] (headnet01.pony-001.prod.iad2.dc.redhat.com [10.2.32.101])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7C8B618004A3;
+	Wed, 13 May 2026 07:30:59 +0000 (UTC)
+From: Albert Esteve <aesteve@redhat.com>
+Subject: [PATCH v10 0/4] kunit: Add support for suppressing warning
+ backtraces
+Date: Wed, 13 May 2026 09:30:50 +0200
+Message-Id: <20260513-kunit_add_support-v10-0-e379d206c8cd@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ1PEPF000023CC:EE_|CY8PR12MB8243:EE_
-X-MS-Office365-Filtering-Correlation-Id: 743389ea-446e-43c0-677e-08deb0c09cb1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|36860700016|376014|82310400026|1800799024|56012099003|18002099003|921020|11063799003;
-X-Microsoft-Antispam-Message-Info:
-	50MjZ8BoJsIa4wTDfKYkTr8i6SUGq/IIaYEDnjZHzqFFha3RwRA6tTTZixxcXV++gUhiE0irZZnUeonFK9KtCkJo0TBo/yaFd7QMIYpBhFHBcoYIyt7v9xyt1OgzTwW2BMDC0lmHIOPivA2dKZyE0+/ohXLQw5h99ooP/0xosDFdlPv6o2Z5am0r4FKByyZuaEb/+aOPWBEnmHSSikYiqxKoaeBZGcqRhr5/9R9ThFsS2UbRWOXq5deup1pD1zzRJYkCmJ1eqRTMjbX/ucJSLQtVKPEQ+wFwSAdZR1tgPoFVqkV+LTHrDU1zrnXx3mzNeD3vCwILFZdRrSTyp1T0qdAx/a23Uc36ZoyRFElHtsQ/GjnSzhMRZJ+k0KuQlB0XfUJ9lUU2VjvL9CcKx1kQAvPEwK0ki3YruY/NZos6RYI4MyD+nC4iP9VYT6MtRdF3Lwqg/g8zyogUGuQtG24A5PGtPKNCcjgpW85Z1+DCQPtQ36FQ2c4gY9gf1FofA/PFrW/Hr9EbCR/PwCXsPbeTaHuk82uKGpK93IpH0Enm8jc/l9VOEqrYnDdL8LKYV4Rci4PITUIpf52sUeTDRbXjNRRta61tonLz6ULnU99QHsXvzSQNYJevBOlxblbsXfShLWfg3nKEqSRsn+DeRfQHSXAe705IU0o1zHfksmfQkWBqhTfqZFroR+42g3VMV663O+BrnrLcxCn7d8TGkQyHoFNaiPxrW516umBeTUKXGCQlfqOMZLaTiCvCgnVrgGUMAak384HUAnNkNQ5HiULxKA==
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(7416014)(36860700016)(376014)(82310400026)(1800799024)(56012099003)(18002099003)(921020)(11063799003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	xHhvUJ9fq6gdFJtFDjsemsHf43E52Y8u1WQKJU5eVy35RBH1aRpk13DuKCQWJFUiy7rUtwcnzFdDpKfBqNSmMxr4soXvgCojgjjicsrP5zG4HFCqhDvpWdhW2UoTxosgLTNbhpaPZzTEBxla4hkp5bMnNTr3kSd49o34YLUVpuFk8agtKqMrE/gDoG7C00ifHpd9URFwPyjMici+IdzKCtsD9MqCQnWp4RSyH8bK1HLQlCPIxRQWOuVbEJe99bxA19Kz6jUgtejulcxyPRhnK0S1u8lXzcwiF+RJx37cXuQm2FwxdEGeqtI81aNxLHCS5gDSv1kFCB2nxuCnsdl80naCRMw/iUSXpHuhCzrSBtRAm0bKoy6tUOgQlO0udKUXvuKk0yfYc8TqWa5UXW65xAW/duJP2Go5jnSkkJtN6tYodr5xJmlZa4OjSKrka1IN
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 May 2026 07:24:04.1916
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 743389ea-446e-43c0-677e-08deb0c09cb1
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SJ1PEPF000023CC.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB8243
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/23Oy2rDMBCF4VcJWldhJEW3rPoeJQTZM6pF8QXZM
+ SnB7145EJISL8/AfPw3NlJONLLj7sYyzWlMfVeGgI8dq5vQfRNPWA5MgjSghOQ/ly5N54B4Hi/
+ D0OeJy6i0A1MJj8jK35Appusd/TqVHXPf8qnJFB6SBi2NUNJqvRfGCA1c8FCH3KYufGbCJkz7u
+ m9XrUnj1Offe+FsVvPRYjdaZsOBI0oZqFKRNL5qa8xsn8RBwhZhC0Guqg1BtID0RrgnoeGwRbh
+ CKNJe27rEKP1G+FfCbRG+EN5jtCE4B9H8I5Zl+QOenrtpuwEAAA==
+X-Change-ID: 20260312-kunit_add_support-2f35806b19dd
+To: Arnd Bergmann <arnd@arndb.de>, 
+ Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, 
+ Rae Moar <raemoar63@gmail.com>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+ Andrew Morton <akpm@linux-foundation.org>, Paul Walmsley <pjw@kernel.org>, 
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+ Alexandre Ghiti <alex@ghiti.fr>
+Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+ dri-devel@lists.freedesktop.org, workflows@vger.kernel.org, 
+ linux-riscv@lists.infradead.org, linux-doc@vger.kernel.org, 
+ peterz@infradead.org, Alessandro Carminati <acarmina@redhat.com>, 
+ Guenter Roeck <linux@roeck-us.net>, Kees Cook <kees@kernel.org>, 
+ Albert Esteve <aesteve@redhat.com>, 
+ Linux Kernel Functional Testing <lkft@linaro.org>, 
+ =?utf-8?q?Ma=C3=ADra_Canal?= <mcanal@igalia.com>, 
+ Dan Carpenter <error27@gmail.com>, Kees Cook <kees@kernel.org>, 
+ Simona Vetter <simona.vetter@ffwll.ch>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1778657458; l=9933;
+ i=aesteve@redhat.com; s=20260303; h=from:subject:message-id;
+ bh=L5Yg5uVqrkobj7bmXCB6WQm8iYeZIrVy6jTHOY+8NLc=;
+ b=o5eNnkqZLZkFTzUigTvAZt6LJyE7V61s14nT3qQcdkFHBwZW4RelppieMjiHpLDlrmV3syVSN
+ obfW5Fc9iGnA38sJNEdMiOTdrD+2vCbEufQuVH1qDVDuc0wGaeHeCqb
+X-Developer-Key: i=aesteve@redhat.com; a=ed25519;
+ pk=YSFz6sOHd2L45+Fr8DIvHTi6lSIjhLZ5T+rkxspJt1s=
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-Data adjustment cases failed with "Data exchange failed" when using IPv4
-because the program did not update the IP and UDP checksums in the IPv4
-branch. The issue was masked when both IPv4 and IPv6 were configured,
-since the test harness prefers IPv6.
+Some unit tests intentionally trigger warning backtraces by passing bad
+parameters to kernel API functions. Such unit tests typically check the
+return value from such calls, not the existence of the warning backtrace.
 
-Fixes: 0b65cfcef9c5 ("selftests: drv-net: Test tail-adjustment support")
-Reviewed-by: Carolina Jubran <cjubran@nvidia.com>
-Reviewed-by: Dragos Tatulea <dtatulea@nvidia.com>
-Signed-off-by: Nimrod Oren <noren@nvidia.com>
+Such intentionally generated warning backtraces are neither desirable
+nor useful for a number of reasons:
+- They can result in overlooked real problems.
+- A warning that suddenly starts to show up in unit tests needs to be
+  investigated and has to be marked to be ignored, for example by
+  adjusting filter scripts. Such filters are ad hoc because there is
+  no real standard format for warnings. On top of that, such filter
+  scripts would require constant maintenance.
+
+One option to address the problem would be to add messages such as
+"expected warning backtraces start/end here" to the kernel log.
+However, that would again require filter scripts, might result in
+missing real problematic warning backtraces triggered while the test
+is running, and the irrelevant backtrace(s) would still clog the
+kernel log.
+
+Solve the problem by providing a means to suppress warning backtraces
+originating from the current kthread while executing test code.
+Since each KUnit test runs in its own kthread, this effectively scopes
+suppression to the test that enabled it, without requiring any
+architecture-specific code.
+
+Overview:
+Patch#1 Introduces the suppression infrastructure integrated into
+        KUnit's hook mechanism.
+Patch#2 Adds selftests to validate the functionality.
+Patch#3 Demonstrates real-world usage in the DRM subsystem.
+Patch#4 Documents the new API and usage guidelines.
+
+Design Notes:
+Suppression is integrated into the existing KUnit hooks infrastructure,
+reusing the kunit_running static branch for zero overhead
+when no tests are running. The implementation lives entirely in the
+kunit module; only a static-inline wrapper and a function pointer
+slot are added to built-in code.
+
+Suppression is checked at three points in the warning path:
+- In `warn_slowpath_fmt()` (kernel/panic.c), for architectures without
+  __WARN_FLAGS. The check runs before any output, fully suppressing
+  both message and backtrace.
+- In `__warn_printk()` (kernel/panic.c), for architectures that define
+  __WARN_FLAGS but not their own __WARN_printf (arm64, loongarch,
+  parisc, powerpc, riscv, sh). The check suppresses the warning message
+  text that is printed before the trap enters __report_bug().
+- In `__report_bug()` (lib/bug.c), for architectures that define
+  __WARN_FLAGS. The check runs before `__warn()` is called, suppressing
+  the backtrace and stack dump. 
+
+To avoid double-counting on architectures where both `__warn_printk()`
+and `__report_bug()` run for the same warning, the hook takes a bool
+parameter: true to increment the suppression counter, false to suppress
+without counting.
+
+The suppression state is dynamically allocated via kunit_kzalloc() and
+tied to the KUnit test lifecycle via `kunit_add_action()`, ensuring
+automatic cleanup at test exit. Writer-side access to the global
+suppression list is serialized with a spinlock; readers use RCU.
+
+Two API forms are provided:
+- kunit_warning_suppress(test) { ... }: scoped blocks with automatic
+  cleanup. The suppression handle is not accessible outside the block,
+  so warning counts (if needed) must be checked inside. Multiple
+  suppression blocks are allowed.
+- kunit_start/end_suppress_warning(test): direct functions that return
+  an explicit handle. Use when the handle needs to be retained, or passed
+  across helpers. Multiple suppression blocks are allowed.
+
+This series is based on the RFC patch and subsequent discussion at
+https://patchwork.kernel.org/project/linux-kselftest/patch/02546e59-1afe-4b08-ba81-d94f3b691c9a@moroto.mountain/
+and offers a more comprehensive solution of the problem discussed there.
+
+Changes since RFC:
+- Introduced CONFIG_KUNIT_SUPPRESS_BACKTRACE
+- Minor cleanups and bug fixes
+- Added support for all affected architectures
+- Added support for counting suppressed warnings
+- Added unit tests using those counters
+- Added patch to suppress warning backtraces in dev_addr_lists tests
+
+Changes since v1:
+- Rebased to v6.9-rc1
+- Added Tested-by:, Acked-by:, and Reviewed-by: tags
+  [I retained those tags since there have been no functional changes]
+- Introduced KUNIT_SUPPRESS_BACKTRACE configuration option, enabled by
+  default.
+
+Changes since v2:
+- Rebased to v6.9-rc2
+- Added comments to drm warning suppression explaining why it is needed.
+- Added patch to move conditional code in arch/sh/include/asm/bug.h
+  to avoid kerneldoc warning
+- Added architecture maintainers to Cc: for architecture specific patches
+- No functional changes
+
+Changes since v3:
+- Rebased to v6.14-rc6
+- Dropped net: "kunit: Suppress lock warning noise at end of dev_addr_lists tests"
+  since 3db3b62955cd6d73afde05a17d7e8e106695c3b9
+- Added __kunit_ and KUNIT_ prefixes.
+- Tested on interessed architectures.
+
+Changes since v4:
+- Rebased to v6.15-rc7
+- Dropped all code in __report_bug()
+- Moved all checks in WARN*() macros.
+- Dropped all architecture specific code.
+- Made __kunit_is_suppressed_warning nice to noinstr functions.
+
+Changes since v5:
+- Rebased to v7.0-rc3
+- Added RCU protection for the suppressed warnings list.
+- Added static key and branching optimization.
+- Removed custom `strcmp` implementation and reworked
+  __kunit_is_suppressed_warning() entrypoint function.
+
+Changes since v6:
+- Moved suppression checks from WARN*() macros to warn_slowpath_fmt()
+  and __report_bug().
+- Replaced stack-allocated suppression struct with kunit_kzalloc() heap
+  allocation tied to the KUnit test lifecycle.
+- Changed suppression strategy from function-name matching to task-scoped:
+  all warnings on the current task are suppressed between START and END,
+  rather than only warnings originating from a specific named function.
+- Simplified macro API: removed KUNIT_DECLARE_SUPPRESSED_WARNING(),
+  the START macro now takes (test) and handles allocation internally.
+- Removed static key and branching optiomization, as by the time it
+  was executed, callers are already in warn slowpaths.
+- Link to v6: https://lore.kernel.org/r/20260317-kunit_add_support-v6-0-dd22aeb3fe5d@redhat.com
+
+Changes since v7:
+- Integrated suppression into existing KUnit hooks infrastructure
+- Removed CONFIG_KUNIT_SUPPRESS_BACKTRACE
+- Added suppression check in __warn_printk()
+- Added spinlock for writer-side RCU protection
+- Replaced explicit rcu_read_lock/unlock with guard(rcu)()
+- Added scoped API (kunit_warning_suppress) using __cleanup attribute
+- Updated DRM patch to use scoped API
+- Expanded self-tests: incremental counting, cross-kthread isolation
+- Rewrote documentation covering all three API forms with examples
+- Link to v7: https://lore.kernel.org/r/20260420-kunit_add_support-v7-0-e8bc6e0f70de@redhat.com
+
+Changes since v8:
+- Rebased to v7.1-rc2
+- Remove KUNIT_START/END_SUPPRESSED_WARNING() macros
+- Add KUNIT_EXPECT_SUPPRESSED_WARNING_COUNT checks to drm tests
+- Link to v8: https://lore.kernel.org/r/20260504-kunit_add_support-v8-0-3e5957cdd235@redhat.com
+
+Changes since v9:
+- Fix silent false-pass when kunit_start_suppress_warning() returns NULL
+- Fix RCU lockdep splat for kunit_is_suppressed_warning() calls
+- Move disable_trace_on_warning() in __report_bug()
+- Make suppress counter atomic
+- Mark helper warn functions in selftest as noinline
+- Add kunit_skip() for CONFIG_BUG=n in selftests
+- Fix potentially uninitialized data.was_active in kthread seltest
+- Add kthread_stop() in kthread selftest early exit
+- Initialize scaling_factor to INT_MIN in DRM scaling tests
+- Add include for bool in test-bug.h to fix CONFIG_KUNIT=n case
+- Link to v9: https://lore.kernel.org/r/20260508-kunit_add_support-v9-0-99df7aa880f6@redhat.com
+
+--
+2.34.1
+
 ---
- .../selftests/net/lib/xdp_native.bpf.c        | 54 ++++++++++---------
- 1 file changed, 29 insertions(+), 25 deletions(-)
+To: Brendan Higgins <brendan.higgins@linux.dev>
+To: David Gow <david@davidgow.net>
+To: Rae Moar <raemoar63@gmail.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+To: Paul Walmsley <pjw@kernel.org>
+To: Palmer Dabbelt <palmer@dabbelt.com>
+To: Albert Ou <aou@eecs.berkeley.edu>
+To: Alexandre Ghiti <alex@ghiti.fr>
+To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+To: Maxime Ripard <mripard@kernel.org>
+To: Thomas Zimmermann <tzimmermann@suse.de>
+To: David Airlie <airlied@gmail.com>
+To: Simona Vetter <simona@ffwll.ch>
+To: Jonathan Corbet <corbet@lwn.net>
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Cc: kunit-dev@googlegroups.com
+Cc: linux-riscv@lists.infradead.org
+Cc: dri-devel@lists.freedesktop.org
+Cc: workflows@vger.kernel.org
+Cc: linux-doc@vger.kernel.org
 
-diff --git a/tools/testing/selftests/net/lib/xdp_native.bpf.c b/tools/testing/selftests/net/lib/xdp_native.bpf.c
-index 64f05229ab24..eaecfa58b967 100644
---- a/tools/testing/selftests/net/lib/xdp_native.bpf.c
-+++ b/tools/testing/selftests/net/lib/xdp_native.bpf.c
-@@ -268,6 +268,16 @@ static int xdp_mode_tx_handler(struct xdp_md *ctx, __u16 port)
- 	return XDP_PASS;
- }
- 
-+static __always_inline __u16 csum_fold_helper(__u32 csum)
-+{
-+	return ~((csum & 0xffff) + (csum >> 16));
-+}
-+
-+static __always_inline __u16 csum_fold_udp_helper(__u32 csum)
-+{
-+	return csum_fold_helper(csum) ? : 0xffff;
-+}
-+
- static void *update_pkt(struct xdp_md *ctx, __s16 offset, __u32 *udp_csum)
- {
- 	void *data_end = (void *)(long)ctx->data_end;
-@@ -281,21 +291,22 @@ static void *update_pkt(struct xdp_md *ctx, __s16 offset, __u32 *udp_csum)
- 
- 	if (eth->h_proto == bpf_htons(ETH_P_IP)) {
- 		struct iphdr *iph = data + sizeof(*eth);
--		__u16 total_len;
- 
- 		if (iph + 1 > (struct iphdr *)data_end)
- 			return NULL;
- 
--		iph->tot_len = bpf_htons(bpf_ntohs(iph->tot_len) + offset);
--
- 		udph = (void *)eth + sizeof(*iph) + sizeof(*eth);
- 		if (!udph || udph + 1 > (struct udphdr *)data_end)
- 			return NULL;
- 
--		len_new = bpf_htons(bpf_ntohs(udph->len) + offset);
-+		len = iph->tot_len;
-+		len_new = bpf_htons(bpf_ntohs(len) + offset);
-+		iph->tot_len = len_new;
-+		iph->check = csum_fold_helper(
-+			bpf_csum_diff(&len, sizeof(len), &len_new,
-+				      sizeof(len_new), ~((__u32)iph->check)));
- 	} else if (eth->h_proto  == bpf_htons(ETH_P_IPV6)) {
- 		struct ipv6hdr *ipv6h = data + sizeof(*eth);
--		__u16 payload_len;
- 
- 		if (ipv6h + 1 > (struct ipv6hdr *)data_end)
- 			return NULL;
-@@ -304,33 +315,27 @@ static void *update_pkt(struct xdp_md *ctx, __s16 offset, __u32 *udp_csum)
- 		if (!udph || udph + 1 > (struct udphdr *)data_end)
- 			return NULL;
- 
--		*udp_csum = ~((__u32)udph->check);
--
- 		len = ipv6h->payload_len;
- 		len_new = bpf_htons(bpf_ntohs(len) + offset);
- 		ipv6h->payload_len = len_new;
--
--		*udp_csum = bpf_csum_diff(&len, sizeof(len), &len_new,
--					  sizeof(len_new), *udp_csum);
--
--		len = udph->len;
--		len_new = bpf_htons(bpf_ntohs(udph->len) + offset);
--		*udp_csum = bpf_csum_diff(&len, sizeof(len), &len_new,
--					  sizeof(len_new), *udp_csum);
- 	} else {
- 		return NULL;
- 	}
- 
-+	len = udph->len;
-+	len_new = bpf_htons(bpf_ntohs(len) + offset);
-+
-+	*udp_csum = ~((__u32)udph->check);
-+	*udp_csum = bpf_csum_diff(&len, sizeof(len), &len_new,
-+				  sizeof(len_new), *udp_csum);
-+	*udp_csum = bpf_csum_diff(&len, sizeof(len), &len_new,
-+				  sizeof(len_new), *udp_csum);
-+
- 	udph->len = len_new;
- 
- 	return udph;
- }
- 
--static __u16 csum_fold_helper(__u32 csum)
--{
--	return ~((csum & 0xffff) + (csum >> 16)) ? : 0xffff;
--}
--
- static int xdp_adjst_tail_shrnk_data(struct xdp_md *ctx, __u16 offset,
- 				     unsigned long hdr_len)
- {
-@@ -359,7 +364,7 @@ static int xdp_adjst_tail_shrnk_data(struct xdp_md *ctx, __u16 offset,
- 		return -1;
- 
- 	udp_csum = bpf_csum_diff((__be32 *)tmp_buff, offset, 0, 0, udp_csum);
--	udph->check = (__u16)csum_fold_helper(udp_csum);
-+	udph->check = (__u16)csum_fold_udp_helper(udp_csum);
- 
- 	if (bpf_xdp_adjust_tail(ctx, 0 - offset) < 0)
- 		return -1;
-@@ -403,7 +408,7 @@ static int xdp_adjst_tail_grow_data(struct xdp_md *ctx, __u16 offset)
- 		return -1;
- 
- 	udp_csum = bpf_csum_diff(0, 0, (__be32 *)tmp_buff, offset, udp_csum);
--	udph->check = (__u16)csum_fold_helper(udp_csum);
-+	udph->check = (__u16)csum_fold_udp_helper(udp_csum);
- 
- 	buff_len = bpf_xdp_get_buff_len(ctx);
- 
-@@ -484,8 +489,7 @@ static int xdp_adjst_head_shrnk_data(struct xdp_md *ctx, __u64 hdr_len,
- 		return -1;
- 
- 	udp_csum = bpf_csum_diff((__be32 *)tmp_buff, offset, 0, 0, udp_csum);
--
--	udph->check = (__u16)csum_fold_helper(udp_csum);
-+	udph->check = (__u16)csum_fold_udp_helper(udp_csum);
- 
- 	if (bpf_xdp_load_bytes(ctx, 0, tmp_buff, MAX_ADJST_OFFSET) < 0)
- 		return -1;
-@@ -542,7 +546,7 @@ static int xdp_adjst_head_grow_data(struct xdp_md *ctx, __u64 hdr_len,
- 		return -1;
- 
- 	udp_csum = bpf_csum_diff(0, 0, (__be32 *)data_buff, offset, udp_csum);
--	udph->check = (__u16)csum_fold_helper(udp_csum);
-+	udph->check = (__u16)csum_fold_udp_helper(udp_csum);
- 
- 	if (hdr_len > MAX_ADJST_OFFSET || hdr_len == 0)
- 		return -1;
+---
+Alessandro Carminati (1):
+      bug/kunit: Core support for suppressing warning backtraces
+
+Guenter Roeck (3):
+      kunit: Add backtrace suppression self-tests
+      drm: Suppress intentional warning backtraces in scaling unit tests
+      kunit: Add documentation for warning backtrace suppression API
+
+ Documentation/dev-tools/kunit/usage.rst |  46 +++++++-
+ drivers/gpu/drm/tests/drm_rect_test.c   |  32 +++++-
+ include/kunit/test-bug.h                |  26 +++++
+ include/kunit/test.h                    |  98 ++++++++++++++++
+ kernel/panic.c                          |  11 ++
+ lib/bug.c                               |  14 ++-
+ lib/kunit/Makefile                      |   4 +-
+ lib/kunit/backtrace-suppression-test.c  | 196 ++++++++++++++++++++++++++++++++
+ lib/kunit/bug.c                         | 119 +++++++++++++++++++
+ lib/kunit/hooks-impl.h                  |   2 +
+ 10 files changed, 538 insertions(+), 10 deletions(-)
+---
+base-commit: 74fe02ce122a6103f207d29fafc8b3a53de6abaf
+change-id: 20260312-kunit_add_support-2f35806b19dd
+
+Best regards,
 -- 
-2.45.0
+Albert Esteve <aesteve@redhat.com>
 
