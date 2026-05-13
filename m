@@ -1,77 +1,129 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F9031DF261;
-	Wed, 13 May 2026 01:54:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D40F137DE8C
+	for <linux-kselftest@vger.kernel.org>; Wed, 13 May 2026 02:11:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778637262; cv=none; b=NuFzq223R+uVqV7vBizVAKzaDBdzpYx7YJalkHo24HcYwUlEJE+J8gAMOaL2xGqI5bAoUWkVuStbC3IWI3hfwCVFD4EcLmU95T6/GYVXzG5OREarqEIRa4Gtxr/kgv1lLYRZ9qpg70SDJCS7WUSfyfPJUIsQEsZIURgqBIhKDiQ=
+	t=1778638271; cv=none; b=FQ/R+8CDG0jSDWu8kno7aiH9nJLE7lv76saRj4lUOIZIdiUBhQSKoGxUp0uVsiaotpxe13UaDjEpLSkraP1FpTHXpA5T7k0+ufStf0DWUnM1lWFSBhuYCs3u/aQCKTNyU49AqHJW48QstHhVpYERujb2e6NgB0XfcFdd5vNWVr4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778637262; c=relaxed/simple;
-	bh=nvkKlP+muh+e39AxYKH9NZ8enYjEU29a+h+cLGdElwQ=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=SyjikUpwzEqvtx+m4idQm3UGHCHRwqm4MYEGKrkXSl1DJqFi1X3d65Kw22wTQe+mKRVreWA7Jht8/paxZ5u0W07OEpY8OAHfZ2RszHAI89nMD+NWbR3++pkmuPXpcABfxgQIN841JTAUlXWawg05DxPnPO5BiX5EKBE46BX6+zU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fi0ObpWe; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778638271; c=relaxed/simple;
+	bh=aKdC+ll5LUjELuwn0biEITF+mfUo1RIVcG962JSBIRE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JWWDfaHsmEDKswF0xeMB6BRKUh7yhgBRM4+6R5b7iGTDSmep2Z3fq1Z1LY0M+JqINmIfyZHNSK2NjaqNUMBYR2q4qB8S6jwZ5MsQw175HjUJaGNWyfQjtsNbOYt/0LcpGt3cJ57l5ji6KJ91j8+JnH9E/UJEaFbmG1DqxTWBnwQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=qITTtdRC; arc=none smtp.client-ip=91.218.175.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fi0ObpWe"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 703B1C2BCB0;
-	Wed, 13 May 2026 01:54:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778637261;
-	bh=nvkKlP+muh+e39AxYKH9NZ8enYjEU29a+h+cLGdElwQ=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=Fi0ObpWePc/vTI/DoHV7qqDJ3dCfZwYGjWe/iamzdU+zmyLtetiCWsUVzVXe2Z0pE
-	 m8CIa4H/RuDFRVm011MWTTTuo+ua+nztjD9Juj6myZYMdtfOU7rSClP2rC6fL1/dKQ
-	 TSojoNBv/JZ+grbAD4ygFVkbNfURvO54DXSpSdwHH0GfaScpOi81/LZ+fEhAIGkjKH
-	 Hp9pxjtaLKi65clFZUa7eqizxf3CHfl1maiugSEdgX/FATVDhV2L8fHBScXWYpmO8f
-	 8sJKbExoArbHjI0VZh0H1wRi2zcCoExRS03gK2oU3D2oP/pCVpp9jXkKvWZ7/y8EDT
-	 cVUFHA6NbCwkA==
-Message-ID: <38c21a1067fbdf2f2780b6dfd06d839001943d59.camel@kernel.org>
-Subject: Re: [PATCH net-next v1 0/9] selftests: rds: Add ROCE support to rds
- selftests
-From: Allison Henderson <achender@kernel.org>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: netdev@vger.kernel.org, pabeni@redhat.com, edumazet@google.com, 
- horms@kernel.org, linux-rdma@vger.kernel.org,
- linux-kselftest@vger.kernel.org,  shuah@kernel.org
-Date: Tue, 12 May 2026 18:54:20 -0700
-In-Reply-To: <20260512184209.0956bcf1@kernel.org>
-References: <20260511072316.1174045-1-achender@kernel.org>
-	 <20260512184209.0956bcf1@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.3-0ubuntu1.1 
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="qITTtdRC"
+Message-ID: <ce0ad562-2da9-452d-bd54-bf98ea858eda@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1778638256;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=VwYvBJrozbXYTsAqhyFYjrLi+BBFGmN36kt8esNvc24=;
+	b=qITTtdRCN1UzrIKnUpaKyEYOKJX9tFb8+1X0lqJ9AwLaI6uY9Q8P8H3lNzkTY25wpuEYCv
+	9oZQ9OZ/HAh5ZFKIJJ9NcFC8wFet/FXPzffTEL5g1w7yhjMDjCoZ0To1wYn5E7SmLm4UyR
+	om6ctVIa5cWtVUcLiQihznVfKz3YPyg=
+Date: Wed, 13 May 2026 10:10:06 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next v14 2/8] libbpf: Add support for extended BPF
+ syscall
+Content-Language: en-US
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me,
+ haoluo@google.com, jolsa@kernel.org, shuah@kernel.org, brauner@kernel.org,
+ sforshee@kernel.org, yuichtsu@amazon.com, aalbersh@redhat.com,
+ willemb@google.com, kerneljasonxing@gmail.com, chen.dylane@linux.dev,
+ yatsenko@meta.com, memxor@gmail.com, a.s.protopopov@gmail.com,
+ ameryhung@gmail.com, rongtao@cestc.cn, linux-kernel@vger.kernel.org,
+ linux-api@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kernel-patches-bot@fb.com, martin.lau@kernel.org, clm@meta.com,
+ ihor.solodrai@linux.dev
+References: <20260512153157.28382-3-leon.hwang@linux.dev>
+ <44819125e8a416353eb3e314e7804d2c762ea87331f98f1396eaa8b86421d950@mail.kernel.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <44819125e8a416353eb3e314e7804d2c762ea87331f98f1396eaa8b86421d950@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Tue, 2026-05-12 at 18:42 -0700, Jakub Kicinski wrote:
-> On Mon, 11 May 2026 00:23:07 -0700 Allison Henderson wrote:
-> > Currently the rds selftests only tests the tcp transport.  This means
-> > most of rds_rdma.ko has no testing coverage.  This series refactors the
-> > rds self tests to add an rdma option when running tests.  When used,
-> > the test creates a pair of ROCE interfaces to run the payloads through.
-> >=20
-> > Most of this set is refactoring the existing test.py module.  Since mos=
-t
-> > of this code is one long procedure, it is difficult to modularize it
-> > without creating a lot of pylint complaints about lengthy functions
-> > with too many variables or branches.  The first seven patches address
-> > this by breaking down test.py into helper functions.  After we have
-> > modularized the send/recv packet logic, we introduce the new ROCE
-> > equivalent network configurations, add the new command line flags to
-> > build and run the test with rdma support. =20
->=20
-> Looks like there's a handful of ruff and pylint warnings flagged here.
+On 13/5/26 00:23, bot+bpf-ci@kernel.org wrote:
+>> diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+>> index 5846de364209..9d8740761b7a 100644
+>> --- a/tools/lib/bpf/bpf.c
+>> +++ b/tools/lib/bpf/bpf.c
+> 
+> [ ... ]
+> 
+>> +int probe_sys_bpf_ext(void)
+>> +{
+>> +	const size_t attr_sz = offsetofend(union bpf_attr, prog_token_fd);
+>> +	union bpf_attr attr;
+>> +	int fd;
+>> +
+>> +	memset(&attr, 0, attr_sz);
+>> +	fd = syscall(__NR_bpf, BPF_PROG_LOAD | BPF_COMMON_ATTRS, &attr, attr_sz, NULL,
+>> +		     sizeof(struct bpf_common_attr));
+>> +	if (fd >= 0) {
+>> +		close(fd);
+>> +		return -EINVAL;
+>                         ^^^^^^
+> 
+> Should probe_sys_bpf_ext() return 1 instead of -EINVAL when fd >= 0?
+> 
+> The probe function detects kernel support for extended BPF syscall
+> attributes by calling the BPF syscall with the BPF_COMMON_ATTRS flag
+> and a NULL pointer for common attributes.
+> 
+> The expected outcomes are:
+> - New kernel with support: errno=EFAULT (can't copy from NULL) -> return 1
+> - Old kernel without support: errno!=EFAULT (invalid command) -> return 0
+> 
+> If the syscall succeeds (fd >= 0), that definitively proves the kernel
+> accepts the extended syscall format and supports BPF_COMMON_ATTRS. The
+> function should return 1 (supported) rather than -EINVAL (error).
+> 
+> Returning -EINVAL causes feat_supported() in features.c to print a
+> warning "Detection of kernel BPF syscall common attributes support
+> support failed: Invalid argument" and mark the feature as MISSING,
+> incorrectly reporting that the kernel doesn't support the feature when
+> the successful syscall proves it does.
+> 
 
-Yes, I noticed those. I will send a v2 with some more pylint/ruff cleanups,=
- and anything else that comes up in the
-sashiko reports.
+Should not return 1.
 
+This return was discussed in v5 and v6.
 
-Thanks!
-Allison
+Cite Andrii's review in v5:
+
+But fd should really not be >= 0, and if it is -- it's some problem,
+so I'd return an error in that case to keep us aware, which is why I'm
+saying I'd just return inside if (fd >= 0) { }
+
+Thanks,
+Leon
+
+>> +	}
+>> +	return errno == EFAULT ? 1 : 0;
+>> +}
+> 
+> [ ... ]
+> 
+> 
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> 
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25745661172
 
