@@ -1,155 +1,176 @@
-Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D3173C140E
-	for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 20:44:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.53
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778791453; cv=none; b=lc/Rjo0shsGOrZsYpRYqK3Wqyul+g2ZUsHSg++dkfrpRA6JpLetT2Hp98Kljc29skEP2eSGqFrAtKVlYVv4F5PZUf559SrjaS5d4/YLt3M2ewXKd/5mzqFKySqkYy02ONn6enLjsh6TKKYgsDs/N92fMNlkqCQkad7NaIaPdkSI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778791453; c=relaxed/simple;
-	bh=bhsOuUIaNixFGUNouO+flDtH1Ol7OJbIIYt+9nRn+ow=;
-	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Cc:Subject:
-	 References:In-Reply-To; b=f62nP7qGWrYMn9Nh+kNGTalopTmnA1btAtPFcTd2xYYzkC6TOKD60rli4mcHO2BhvMiHz967xcSVVx33KUGmaJaAiceqK2uMyc2/BqQZ0ADFWUpaybIF9h9WSfArH9kdXoNwDnhhs9/HK60PMmhEJAOp6ugLYPrNSpWax3uKFos=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=OSc1CYb0; arc=none smtp.client-ip=209.85.219.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DECE538F939
+	for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 21:49:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.171
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778795382; cv=pass; b=rO3xB3S/ELNMFkThFf722yd3J/9qdK9D/d33ty2lw1TvYz2bgVdtHJPXIRextpBzdErl09MnIb7fqNbgSdgEIAlbHQ0CrX3pXJUXbxYJex2s9sJxbPo0aroOzNIekQ9SI9LfwtlQAUuUK7MeGk1f3nesaB5HIVLqeVSpptDuoNU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778795382; c=relaxed/simple;
+	bh=qPw6hhkh44Kw11vhKm0GuTYfqgO/FQ1TU7OYkZdj4hc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BtM37gMx+CUXjh0cT34miu3YJ5OiD/Lt6S2EQXpvhfGzlXdm6U+c2xkA0rJsuP2cPFmuLAUvzR35z/S1HXDKWjhlEfd58JnHf7jjjTi5cFvADSNawusNB7W4CyKDFz3PjOJa3oaxp7kYFh0TVDNKZL/fo6H/TnkB24yJXfAudSw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=SQSZPKA+; arc=pass smtp.client-ip=209.85.160.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="OSc1CYb0"
-Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-8b5de17382cso61437326d6.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 13:44:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SQSZPKA+"
+Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-50d6b393d60so2811cf.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 14:49:40 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778795380; cv=none;
+        d=google.com; s=arc-20240605;
+        b=ZQH8Mlvk74/enLYcbu1Yf542Ugs7ZwaVWKxXX2Ds6Hd7KoVgxEEoE8eJYF8RsWriRD
+         xl4ADOkas7AyMVRSqA7k4LK7RCC6vK3I3XiBiGfR+l0Q2xXr6lyYPZJd/5SwSbdnBBSV
+         s2ra0klbMbDjC7jengXmg3fg+j4QLxE3ieAcmTKMtMwtC0hoXhRNymZ2DRDuZj18CQ1N
+         V3yL8D5ft2ShpR5voQEwZySER5Gz5r4fJmOY8UZWUWZ/Vo8ghJxG7nmQDonO6/8ThUrc
+         Nw98mgCquzCy0kE1PwgLah3GJDhGqPFB7rDDNkj4pHoqlcKx+6bejxUZNLyiNtyZjPC6
+         Exvg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=x3ZJ3XkKOqKtr76p8ODDEk6AtSE3Rf05AzjjlPfemzQ=;
+        fh=Fp45zJv6aVw9c6+JLccYB4plD1fIVHmli3n3Ty43RK4=;
+        b=G104MJ2quVNwnWAQ6pyxL3YMMsa9yzrB6V5JWM7+ErlGf60f/0zXhchAKdOSyPGPR3
+         ROMhgrgHpqFUQ2KJ9xDElwfzZfGcXkeVtm7Gmgk9S5qcbm+4NoL+sCA5WGStfR/j0HzT
+         +X3U5ZV0MBKx5UrHvNuA8rk2tSr0nw4xc9c7tDsjUDtudgjC3UeN2M6qT4AYzxZ1O46r
+         Jz4Kf2KcSo3OMKPNsKWqt+LEaVH89D2tpil7W+oD69mS5GkgNc3f/1m7jJ3M4NV5dDSn
+         XjoSjJ+UrAMIx8kOQnySGuWlFNgKk/1b8ATYLxLqQKHPYw0hwLWaXBusetyLVSV0xeXd
+         F/Gw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1778791451; x=1779396251; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
-         :mime-version:message-id:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iIn517qMFa/72Ee/XGTDeeK9Cq6VJiGDpV2GCDJOS7E=;
-        b=OSc1CYb0LA2hDiDhS0KeITKEVBykeYFWm5mB0F2ke+6PQDCnTZXwjSXfPcFZ2NjxZh
-         Ud8DZ2Pn80kJgStc5aPzDIhYLMhcN1gBuV634XDMewUMWFm1C4TCCf85M8NSRiX1eLv7
-         zr2glp2nDXnD4JkJPtYxTMuKBslrojKLiTEHAcm3EH6FwxYhOdc0MwS1z8EnASGXUNdh
-         qhqkOHGuzzpUceCeCbvLtRLmYW42xUzlK1M6PLl6EmmgsVevWHKple3NmFdra+FfED0d
-         w7cz8MNWx7gA9pA1tPMPQc/OFjkj/Fy1Lz2cu5g15GIezPqAP5ftUK5m0p3AWAzVxQZa
-         4dLQ==
+        d=google.com; s=20251104; t=1778795380; x=1779400180; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=x3ZJ3XkKOqKtr76p8ODDEk6AtSE3Rf05AzjjlPfemzQ=;
+        b=SQSZPKA+qiwSY6Dsy38XXCGDls6zV8kjZ/QpuMNJ/bmJ3o0z82AhEZvR8PFN8DGnsM
+         reRmRxlZTki/hZznhjljRljGXIqsPOeJ0pIborIdqYqecRIkncr3qAWwfgA5ywq5YjE7
+         diwFCdaa9nNn1AlI+6OMvx/4M6zGmPL9y7oxbOauBJ5UY5wvTisskws0v62lRB5WFckx
+         z6UYbt4ymjW1k8DEEsyu0nkHYpEwmQy7NOlCdv7Dew5xlJ0P3V2p3zAXFJ5U2cflpjMn
+         gHcI928XPrP/vP1SxRL6pSSQDU6Ap+Ll5HXAb2nRvJFDsW3HPgvM/P8GLHyMn4T5JJyr
+         Brqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778791451; x=1779396251;
-        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
-         :mime-version:message-id:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iIn517qMFa/72Ee/XGTDeeK9Cq6VJiGDpV2GCDJOS7E=;
-        b=fmLf0ElyiWkY+gzQGPTMvGV0JLFRQQqQIg8Us6H5lFQhorfnqqLeioJ9vhVydpWuTu
-         n2AGN7DGNW4Bzw+jnJEOFVwBvlGJlyy8IoXUPl3eHS6MxZvascLpX1KIo4jhKwwZC//+
-         LeyUZ2pI8YW76LMy6PUhZAN4ccmYOqnuXfxmMfAw1fAx1mGovp4At9VK35M6Chhx5Wer
-         3bmpgSedDtGUUeaarfd/Hc+kfXojGpL+1tnfFgYN+inGIO1JlFGTeQFDG8RL9kk3d2B7
-         Y2iOQLuefFFu9phQxU1CAuZT6O5v8Jmn13STLkwQ9+4pUk7hxSc2Tt8nypAA33FJgvKp
-         jRsg==
-X-Forwarded-Encrypted: i=1; AFNElJ9RUfmz0Xxn2g4KySSlxSedBDsluRThFTwX3HFXSVNQcdShsbodkOOJtydEUrMHlrcnJlXqtnoUsVQacIQKzWA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw+XZNw9L9H+EDLX9/M9aoh0NpWAeenMUqhh91T6aZddIHXaK5n
-	nE2/kBP/o67oHAez51fc2bWFG8o1489xq2fXFkxVliabFR9CbCSv22u7SyIQdW9PQQ==
-X-Gm-Gg: Acq92OGO8BpfO927LF8BNMdB+AcBCp1MXV19BLwNvYnwgyzKKD/GjA03C/kLfyH2EPE
-	GVlYODz5qJwoYrjMiV+ziPhc18O2LeD0Ylk5HPesrUk+Fay2CJEiI/Tmhe2wNRyO1hZz2h6mHif
-	QUlLfAo+zlPB5G9KZFnFd/gqcQMEMdHJMpuzyd1x6CW1kM8oKcv/YbBipH72UNZio6H20D3vsJQ
-	++/SqPOkoBkUjarA2wxfBsCCMw5G/iWu0ZfSDt+RIj/qWKVOzQHSQE8TOfLJDQiaeaq1j580Ct/
-	a0ItKlDnW+tC4ljocV168zcZTNA5jPqxUhI8w0oDxxgQLdDWq4LCMkUyxc8dnMJ3RPIBcdoPY+o
-	IirlxNpwwEzwDFigOUvu1lxwO2fuhEtCrIP90wn2kP3jadtlMV6pe7jg42Q7WyH8RRJQm+zEjqS
-	bhXWcfC2ypN1+FbXvo4v1YChd6TCVzrjYPFjOJw9qs8MRdvaMLqRxOLzYJ3XOhpQCGFO3MDUSpv
-	bUauIc=
-X-Received: by 2002:ad4:5e88:0:b0:8ac:b70c:8a9b with SMTP id 6a1803df08f44-8ca0f70f697mr20146116d6.44.1778791451056;
-        Thu, 14 May 2026 13:44:11 -0700 (PDT)
-Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8c90c358539sm32474826d6.41.2026.05.14.13.44.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 May 2026 13:44:10 -0700 (PDT)
-Date: Thu, 14 May 2026 16:44:09 -0400
-Message-ID: <16093a0278a6d7d1a0a8bc055c228bed@paul-moore.com>
+        d=1e100.net; s=20251104; t=1778795380; x=1779400180;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=x3ZJ3XkKOqKtr76p8ODDEk6AtSE3Rf05AzjjlPfemzQ=;
+        b=aJyLX7t3b1c7a4YjDsasTFnQf1qspaBYKAkX0ehI5JSmxNy0/m4T9HRKK3hdhk1q6g
+         AODMmxbmnS8PhWqEx7W/7jTfPs1S6IHXBb4Z+zefJahx4dN3nEimrHbPcdunjebvL4ZQ
+         RqEBGqLa1L1nKhpQYd5u8M+7jFxBX8uC7TlWgnEH2K93xbzc8iwuyUt4CmgyPXmR33Gw
+         oqdZ5/lvuQI5q6FRxUzuyTmp1qLsj4Syrm4O7K71uy/5WlvqZDL1iG6tsDjnxjfBwuk8
+         VgUZzlKultEN/Co/Wuh0JiGhiqubRrM8NU1cC13wVVCN4fJjemqW/8UlQgVZtjh6krGT
+         CTzw==
+X-Forwarded-Encrypted: i=1; AFNElJ+NVdPnyCG02dyl+H5HLd4HkV4Vc1XCZpNF1ZbN5GticDAvGmY/2ZJHgPRB35NENMPh25zpS2E/hRMnaEuX1hQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzpUg/gojSfAhY89ekIIDa1zM1aM6YpbR8ouhBeFLy5Q0zWr3/7
+	wKBLL2nDZrilsJMGBdLvQ5GStaXYs3saLc4SupDHBVa0y6rKxEKzf8qFV+3NxRAMFuqE1Si4ukB
+	dT0KYv3zhLBOLwUUE+AUZHU0BkD/6Uj+LG7C8nQ4=
+X-Gm-Gg: Acq92OFr8qxcBkWaJNWS5j3UaAsN514vbI6cDWVH0kBTOa3vKoq4AnokibvgFMqPBSH
+	+46I0oO5bT/JBflJVe3tCtJU7qDhJrwrIQXIX5p6kCLujKbtW2GwqTVI872mtj6VAp+Gmg4FA2W
+	Cn7Md/9gXds1D93siR/1iT1FlURZoLGX+9K4KAWyhKSIsueLjsTTsxVSPZ77MkCqYEMNHuqjCmB
+	fpaHURxmMIIiflplu16AIPIUgH39dNZiD1eIdyFFnF+DoWaM6GHgUR8LY0QmEKJjkRPFdEZt/16
+	HKqyrJN1TsP9H1U=
+X-Received: by 2002:a05:622a:aa07:20b0:516:4f62:85ea with SMTP id
+ d75a77b69052e-5165d410daamr1400691cf.21.1778795379422; Thu, 14 May 2026
+ 14:49:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 
-Content-Type: text/plain; charset=UTF-8 
-Content-Transfer-Encoding: 8bit 
-X-Mailer: pstg-pwork:20260514_1634/pstg-lib:20260514_1359/pstg-pwork:20260514_1634
-From: Paul Moore <paul@paul-moore.com>
-To: Albert Esteve <aesteve@redhat.com>, Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, =?utf-8?q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Sumit Semwal <sumit.semwal@linaro.org>, =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, Benjamin Gaignard <benjamin.gaignard@collabora.com>, Brian Starkey <Brian.Starkey@arm.com>, John Stultz <jstultz@google.com>, "T.J. Mercier" <tjmercier@google.com>, Christian Brauner <brauner@kernel.org>, James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, Shuah Khan <shuah@kernel.org>
-Cc: cgroups@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org, linux-mm@kvack.org, linux-security-module@vger.kernel.org, selinux@vger.kernel.org, linux-kselftest@vger.kernel.org, Albert Esteve <aesteve@redhat.com>, mripard@kernel.org, echanude@redhat.com
-Subject: Re: [PATCH RFC 4/5] selinux: Restrict cross-cgroup dma-heap charging
-References: <20260512-v2_20230123_tjmercier_google_com-v1-4-6326701c3691@redhat.com>
-In-Reply-To: <20260512-v2_20230123_tjmercier_google_com-v1-4-6326701c3691@redhat.com>
+MIME-Version: 1.0
+References: <20260511211839.2781731-1-jrhilke@google.com> <agJqAO-RRdjMrUZJ@google.com>
+ <CAAdrzjtiiOtw7-YL2COgZC-QSFp6LLwq+jP9V3jPKLUe0w7Y0g@mail.gmail.com>
+ <CAAdrzjuf3z-CyWeBRPKmMQxmQZ9U=2Tc0cDAFqdRFRDHKw_K-Q@mail.gmail.com>
+ <agUKLmKLoV71Hq6S@google.com> <20260514102824.6be38bf6@shazbot.org>
+In-Reply-To: <20260514102824.6be38bf6@shazbot.org>
+From: Josh Hilke <jrhilke@google.com>
+Date: Thu, 14 May 2026 14:49:28 -0700
+X-Gm-Features: AVHnY4IqMgAIGejttTEeDl7uihihNsvJd81hWKmH0vaDHAXOrt_U83zoEkbkvMQ
+Message-ID: <CAAdrzjv7FiYWhXHDJQvK-c71UpKo+uwOu-dnbtka=6p2qj86zQ@mail.gmail.com>
+Subject: Re: [PATCH] vfio: selftests: Add driver for IGB QEMU device
+To: Alex Williamson <alex@shazbot.org>
+Cc: David Matlack <dmatlack@google.com>, Vipin Sharma <vipinsh@google.com>, 
+	Jason Gunthorpe <jgg@nvidia.com>, Shuah Khan <shuah@kernel.org>, 
+	Tony Nguyen <anthony.l.nguyen@intel.com>, kvm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On May 12, 2026 Albert Esteve <aesteve@redhat.com> wrote:
-> 
-> The security_dma_heap_alloc() hook allows security modules
-> to control which processes may charge dma-buf allocations
-> to another process's cgroup via the charge_pid_fd field of
-> DMA_HEAP_IOCTL_ALLOC. Without a policy implementation, the
-> hook is a no-op and the restriction is not enforced.
-> 
-> On SELinux-managed systems any domain with access to a
-> dma-heap device node can therefore exhaust another cgroup's
-> memory budget without restriction.
-> 
-> Implement selinux_dma_heap_alloc() using avc_has_perm() with
-> a new dma_heap object class and a charge_to permission. Policy
-> authors can then grant cross-cgroup charging selectively,
-> for example:
-> 
->   allow allocator_app_t client_app_t:dma_heap charge_to;
-> 
-> Signed-off-by: Albert Esteve <aesteve@redhat.com>
-> ---
->  security/selinux/hooks.c            | 7 +++++++
->  security/selinux/include/classmap.h | 1 +
->  2 files changed, 8 insertions(+)
-> 
-> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-> index 0f704380a8c81..ea1f410b9f619 100644
-> --- a/security/selinux/hooks.c
-> +++ b/security/selinux/hooks.c
-> @@ -2189,6 +2189,12 @@ static int selinux_capable(const struct cred *cred, struct user_namespace *ns,
->  	return cred_has_capability(cred, cap, opts, ns == &init_user_ns);
->  }
->  
-> +static int selinux_dma_heap_alloc(const struct cred *from, const struct cred *to)
-> +{
-> +	return avc_has_perm(cred_sid(from), cred_sid(to),
-> +			    SECCLASS_DMA_HEAP, DMA_HEAP__CHARGE_TO, NULL);
-> +}
-> +
->  static int selinux_quotactl(int cmds, int type, int id, const struct super_block *sb)
->  {
->  	const struct cred *cred = current_cred();
-> @@ -7541,6 +7547,7 @@ static struct security_hook_list selinux_hooks[] __ro_after_init = {
->  	LSM_HOOK_INIT(capget, selinux_capget),
->  	LSM_HOOK_INIT(capset, selinux_capset),
->  	LSM_HOOK_INIT(capable, selinux_capable),
-> +	LSM_HOOK_INIT(dma_heap_alloc, selinux_dma_heap_alloc),
->  	LSM_HOOK_INIT(quotactl, selinux_quotactl),
->  	LSM_HOOK_INIT(quota_on, selinux_quota_on),
->  	LSM_HOOK_INIT(syslog, selinux_syslog),
-> diff --git a/security/selinux/include/classmap.h b/security/selinux/include/classmap.h
-> index 90cb61b164256..d232f7808f6b8 100644
-> --- a/security/selinux/include/classmap.h
-> +++ b/security/selinux/include/classmap.h
-> @@ -181,6 +181,7 @@ const struct security_class_mapping secclass_map[] = {
->  	{ "user_namespace", { "create", NULL } },
->  	{ "memfd_file",
->  	  { COMMON_FILE_PERMS, "execute_no_trans", "entrypoint", NULL } },
-> +	{ "dma_heap", { "charge_to", NULL } },
->  	/* last one */ { NULL, {} }
->  };
+On Thu, May 14, 2026 at 9:28=E2=80=AFAM Alex Williamson <alex@shazbot.org> =
+wrote:
+>
+> On Wed, 13 May 2026 23:33:02 +0000
+> David Matlack <dmatlack@google.com> wrote:
+>
+> > On 2026-05-13 11:49 AM, Josh Hilke wrote:
+> > > On Tue, May 12, 2026 at 7:12=E2=80=AFPM Josh Hilke <jrhilke@google.co=
+m> wrote:
+> > > > On Mon, May 11, 2026 at 4:45=E2=80=AFPM David Matlack <dmatlack@goo=
+gle.com> wrote:
+> > > > > On 2026-05-11 09:18 PM, Josh Hilke wrote:
+> >
+> > > > > > +     retries =3D 100;
+> > > > > > +     while (retries-- > 0) {
+> > > > > > +             if (rx->wb.status_error & 1)
+> > > > > > +                     break;
+> > > > > > +             usleep(10);
+> > > > > > +     }
+> > > > >
+> > > > > Why bail after a certain timeout? The test may have kicked off a =
+large
+> > > > > count of memcpys. Is this for error detection?
+> > > >
+> > > > The bailout was intended to detect errors during development.
+> > > > Shouldn't need it anymore. I'll remove it in v2.
+> > >
+> > > Sorry, I forgot: we need the timeout  to detect DMA errors for the
+> > > memcpy_from_unmapped_iova test in vfio_pci_driver_test. The test
+> > > triggers an IOMMU fault because the IOVA is unmapped, and the IOMMU
+> > > aborts the DMA operation. However, the QEMU IGB implementation does
+> > > not set an error bit, so timing out is our only method for error
+> > > detection.
+> >
+> > Hm... that's going to be tricky then. This means we would have to set
+> > the timeout to longer than the longest possible memcpy duration to avoi=
+d
+> > false negatives? That means we'll have to set the timeout to quite long=
+.
+>
+> FWIW, I had AI churn on trying to make this work on a physical 82576 as
+> I have several of these in my local machines as sort of the defacto,
+> readily available SR-IOV NIC.  The AI got up to 30/35 tests passing but
+> is currently stuck that the queues stall in the mix-and-match test when
+> it's trying to DMA from an unmapped IOVA.  So far none of the in-band
+> methods to kick the queues seem to work, I'm not sure if we'll need to
+> resort to an FLR.
+>
+> I'd be happy to send the changes it's made so far if you want to
+> validate and incorporate, or have any thoughts to kicking it after the
+> IOMMU fault.  Some of the changes are related to timeouts, where QEMU
+> loopback is actually faster than bare metal since the physical  queues
+> run at 1Gbps even in loopback mode.
+>
+> I'll also plant the seed that if we do have outstanding issues for a
+> driver that binds to a real world device, but only works on the
+> emulated version of that device... how do we handle that?  In part, I
+> think it's emulated in QEMU because it is so ubiquitous.  I'm also
+> hoping to use the same device for the new SR-IOV selftests.  Thanks,
+>
+> Alex
 
-While we have seen some one-off patches to add specific resource/cgroups
-controls in the past, much like this one, we've yet to see a patchset
-that provides a more comprehensive set of resource/cgroup access controls
-for SELinux.
+I'm glad you're interested in this as well!
 
-I'm not opposed to a patch like this, but I would like to see it as part
-of a larger effort to introduce access controls across all of the
-existing cgroup control points where it makes sense.  In other words,
-let's see a design for cgroup access controls so that we can ensure we
-have something that is meaningful and makes sense from a policy
-developer's perspective.
+Unfortunately (and ironically) I don't have access to a physical device.
 
---
-paul-moore.com
+Regarding driver support for the real vs. emulated device, I think we
+should prioritize supporting the emulated version. This approach
+unlocks the ability for anyone to run VFIO/Live Update tests without
+needing specific hardware. Once that's done, other folks can add
+patches to update the driver if they want to use the physical device.
+What do you think?
+
+I plan to add SR-IOV support to this driver in a separate series after
+the driver merges.
