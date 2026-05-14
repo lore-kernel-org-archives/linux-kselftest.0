@@ -1,130 +1,265 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43F423E1CE6;
-	Thu, 14 May 2026 15:24:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4110131E822
+	for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 16:00:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778772294; cv=none; b=IVNAcWNuHuAAX/sPZnw6/OxJxDy/ODGxa7p6O6BqNCFkzAlpmEHv5uY/lBMLBi/NFKEOIWo7J002wS1swh5LsTOnSoYulq8HKelBm+/DkHfuO8WNFZTcxntAxAEOfCci/CEBf8pdvlQlS5afHwV5H91MyfIzU8/rwWWHS2D+VN4=
+	t=1778774428; cv=none; b=OAZJw22E/aLMzBv+7gwTC+LI/65xYZIxlzNzclLWqiAy7m/EekYqFpCNoOeH3LQvvUOlN+6Gz+v4vxxMZ0BN8kj5SsUgWjNo623/KLCb2lsEhCUiTq0rC+cxyyKq+HXyHdYsgYJWF5CRSPF9OmMJIFR3TwVMHAHNtumWIJh3I3U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778772294; c=relaxed/simple;
-	bh=pp56e/DCHOxZ+Eut9lk+188HvenrbqBoOLsSg2cmQrA=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=Ie48xO3Sj9ThQNnW2lXqflut6yPWZ2Ld28F4zn7ZNjsZ6XKp6YEdJuxETfbXg4IxLTfS1tJxCYmtW/UaGmzuLonQSt6Yzwk4CVFKfmSocTX2LQ9YC0vp9vbxqqiaTmDAg5rkUMjGRu4kGt00SwoE0DUVy040KoLAHvXCsHNMW8U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I7CpSyu+; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778774428; c=relaxed/simple;
+	bh=9bz7ArJby5v7jeQA8ymGKl9RNGJQiBSe3pmorWJoSPE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gxkMQ8aSltXtemfoMsnNc/qcCW10MjW7XcVoQpWAmvvdw/VNa3NeJjp9bXBSvHMVHlmgTPjvrJywlFnktoZ9qGpHB6dQJTdXL9YVP+tTwc2GE3hWryZJnzXOPj/kxyMsMXFqrwFoE/51fuPCK2sZqmPCGuqrDJopF8zajRlgr6o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=XAisUViV; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=hqjT0A6w; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=XAisUViV; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=hqjT0A6w; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I7CpSyu+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A92DC2BCB3;
-	Thu, 14 May 2026 15:24:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778772294;
-	bh=pp56e/DCHOxZ+Eut9lk+188HvenrbqBoOLsSg2cmQrA=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=I7CpSyu+P0Xv1f+CwVAtXHqRkk2+3kFBG1SJBrfAI4kfjGfXc0ZsrbSOdmQaoRfIf
-	 8XA+X02uEBJTAtt85EtEM1LP7exZNpI46fEhlfsFlbhxKP57S5AO+yHTHn6EM9XTTF
-	 xeffW52S7EUxnBn2bLlQvLYkCSalCLmKdOOgVI6nVJ0Ft8H7xq0eq0fotAQbr3r2l2
-	 QyTkHkLoqw/l2Sly+MXmK1JxNcCtWWhMrX15qzkPJ022tHz5pC2n8DJ+Aq9aZ8CDmh
-	 QK/1gbinOmpMPrPyaHwXyyfaQm9G9/sqjtmARkjbuFTXpefsA3ctOPOY406Vdx5L0Z
-	 S3+DSW+jrw8ZA==
-From: Pratyush Yadav <pratyush@kernel.org>
-To: Samiullah Khawaja <skhawaja@google.com>
-Cc: Vipin Sharma <vipinsh@google.com>,  David Matlack <dmatlack@google.com>,
-  kvm@vger.kernel.org,  linux-doc@vger.kernel.org,
-  linux-kernel@vger.kernel.org,  linux-kselftest@vger.kernel.org,
-  linux-pci@vger.kernel.org,  ajayachandra@nvidia.com,  alex@shazbot.org,
-  amastro@fb.com,  ankita@nvidia.com,  apopple@nvidia.com,
-  chrisl@kernel.org,  corbet@lwn.net,  graf@amazon.com,
-  jacob.pan@linux.microsoft.com,  jgg@nvidia.com,  jgg@ziepe.ca,
-  jrhilke@google.com,  julianr@linux.ibm.com,  kevin.tian@intel.com,
-  leon@kernel.org,  leonro@nvidia.com,  lukas@wunner.de,
-  michal.winiarski@intel.com,  parav@nvidia.com,
-  pasha.tatashin@soleen.com,  praan@google.com,  pratyush@kernel.org,
-  rananta@google.com,  rientjes@google.com,  rodrigo.vivi@intel.com,
-  rppt@kernel.org,  saeedm@nvidia.com,  skhan@linuxfoundation.org,
-  vivek.kasireddy@intel.com,  witu@nvidia.com,  yanjun.zhu@linux.dev,
-  yi.l.liu@intel.com
-Subject: Re: [PATCH v4 02/16] vfio/pci: Preserve vfio-pci device files
- across Live Update
-In-Reply-To: <agT9bYpXskVwW0E_@google.com> (Samiullah Khawaja's message of
-	"Wed, 13 May 2026 22:42:56 +0000")
-References: <20260511234802.2280368-1-vipinsh@google.com>
-	<20260511234802.2280368-3-vipinsh@google.com>
-	<CALzav=fR8c2tYj9jeOc_K=xoupxAfWMHmk0ipDniSXg6uGiFYA@mail.gmail.com>
-	<20260512211412.GA2819150.vipinsh@google.com>
-	<agT9bYpXskVwW0E_@google.com>
-Date: Thu, 14 May 2026 17:24:46 +0200
-Message-ID: <2vxzcxyy9fpd.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="XAisUViV";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="hqjT0A6w";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="XAisUViV";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="hqjT0A6w"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 7485A67CE3;
+	Thu, 14 May 2026 16:00:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1778774424; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=i4EMS4p/wehXnBfvVDcG/5oQUtGRphLSbPMyRiQ5TBM=;
+	b=XAisUViVDjXvFFo43tlEnUaOeUu39L4yqTve7eH4kUoLeAhAcuWoxuymdWGEfxTXFh0Q1i
+	tfxBWzfV8CE/SD8XKNI7rKxwQ0Y7u3b2PZQLGcNYKvHdAHM8QBHwEUpl+6XFEFNzKnveVz
+	/yPhU2g5IfReHsNf3Gcz5PYwfU6hJlc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1778774424;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=i4EMS4p/wehXnBfvVDcG/5oQUtGRphLSbPMyRiQ5TBM=;
+	b=hqjT0A6wHji0DF/4gW54QQh1Qnl9b11XGe5FHcg4/IYnLbsPsROH1hS6q9R1eGEX9bP8OU
+	MI/C/evGOKJ9j8AA==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1778774424; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=i4EMS4p/wehXnBfvVDcG/5oQUtGRphLSbPMyRiQ5TBM=;
+	b=XAisUViVDjXvFFo43tlEnUaOeUu39L4yqTve7eH4kUoLeAhAcuWoxuymdWGEfxTXFh0Q1i
+	tfxBWzfV8CE/SD8XKNI7rKxwQ0Y7u3b2PZQLGcNYKvHdAHM8QBHwEUpl+6XFEFNzKnveVz
+	/yPhU2g5IfReHsNf3Gcz5PYwfU6hJlc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1778774424;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=i4EMS4p/wehXnBfvVDcG/5oQUtGRphLSbPMyRiQ5TBM=;
+	b=hqjT0A6wHji0DF/4gW54QQh1Qnl9b11XGe5FHcg4/IYnLbsPsROH1hS6q9R1eGEX9bP8OU
+	MI/C/evGOKJ9j8AA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id D2468593A9;
+	Thu, 14 May 2026 16:00:23 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id wJfuL5fxBWplBQAAD6G6ig
+	(envelope-from <fmancera@suse.de>); Thu, 14 May 2026 16:00:23 +0000
+Message-ID: <2e046948-aa98-4159-b1c1-46368f034027@suse.de>
+Date: Thu, 14 May 2026 18:00:13 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2 net v4] ipv6: addrconf: fix temp address generation
+ after prefix deprecation
+To: Ido Schimmel <idosch@nvidia.com>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ horms@kernel.org, pabeni@redhat.com, kuba@kernel.org, edumazet@google.com,
+ dsahern@kernel.org, davem@davemloft.net, =?UTF-8?Q?=C5=81ukasz_Stelmach?=
+ <steelman@post.pl>
+References: <20260511122645.6233-2-fmancera@suse.de>
+ <3f371efe-1b1b-464c-af21-ccd66b6c5df6@suse.de>
+ <20260513143533.GA415119@shredder>
+Content-Language: en-US
+From: Fernando Fernandez Mancera <fmancera@suse.de>
+In-Reply-To: <20260513143533.GA415119@shredder>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Level: 
+X-Spamd-Result: default: False [-4.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid]
+X-Spam-Flag: NO
+X-Spam-Score: -4.30
 
-On Wed, May 13 2026, Samiullah Khawaja wrote:
-
-> On Tue, May 12, 2026 at 02:29:19PM -0700, Vipin Sharma wrote:
->>On Tue, May 12, 2026 at 01:59:51PM -0700, David Matlack wrote:
->>> On Mon, May 11, 2026 at 4:48=E2=80=AFPM Vipin Sharma <vipinsh@google.co=
-m> wrote:
->>>
->>> > diff --git a/drivers/vfio/pci/Kconfig b/drivers/vfio/pci/Kconfig
->>> > index c12d614fc6c4..019de053f116 100644
->>> > --- a/drivers/vfio/pci/Kconfig
->>> > +++ b/drivers/vfio/pci/Kconfig
->>> > @@ -45,13 +45,15 @@ config VFIO_PCI_IGD
->>> >
->>> >  config VFIO_PCI_LIVEUPDATE
->>> >         bool "VFIO PCI support for Live Update (EXPERIMENTAL)"
->>> > -       depends on PCI_LIVEUPDATE
->>> > +       depends on PCI_LIVEUPDATE && VFIO_DEVICE_CDEV
->>> >         help
->>> >           Support for preserving devices bound to vfio-pci across a L=
-ive
->>> >           Update. This option should only be enabled by developers wo=
-rking on
->>> >           implementing this support. Once enough support has landed i=
-n the
->>> >           kernel, this option will no longer be marked EXPERIMENTAL.
->>> >
->>> > +         Enabling this will disable support for VFIO PCI DMA buffer.
->>> > +
->>> >           If you don't know what to do here, say N.
->>> >
->>> >  endif
->>> > @@ -68,7 +70,7 @@ config VFIO_PCI_ZDEV_KVM
->>> >           To enable s390x KVM vfio-pci extensions, say Y.
->>> >
->>> >  config VFIO_PCI_DMABUF
->>> > -       def_bool y if VFIO_PCI_CORE && PCI_P2PDMA && DMA_SHARED_BUFFER
->>> > +       def_bool y if VFIO_PCI_CORE && PCI_P2PDMA && DMA_SHARED_BUFFE=
-R && !VFIO_PCI_LIVEUPDATE
->>>
->>> Why does enabling VFIO_PCI_LIVEUPDATE require disabling
->>> VFIO_PCI_DMABUF? I saw the cover letter says "to keep things simple",
->>> but what specific problem does this solve or simplify?
+On 5/13/26 4:35 PM, Ido Schimmel wrote:
+> On Tue, May 12, 2026 at 08:24:27PM +0200, Fernando Fernandez Mancera wrote:
+>> Sashiko feedback [1] is right about the DoS, that is a router that sends
+>> multiple 0-lft RA until it exhausts all spawn attempts, leaving temporary
+>> addresses disabled on the system.
 >>
->>I should have provided more details there.
+>> About the leaked address, I do not think the feedback is right. If an ifp
+>> does not have any ift, it means something went wrong most likely. Either
+>> this address was removed manually (any RA would restore it, even with
+>> previous implementation) or for some reason that prefix didn't get an RA but
+>> we didn't try to generate one and we MUST do it.
 >>
->>When device is getting reset in vfio_pci_liveupdate_freeze(), we are
->>zapping userspace mapped bars, we also need to use
->>vfio_pci_dma_buf_move() to revoke dma buffer access or
->>vfio_pci_dma_buf_cleanup() combination. Cleanup takes the memory lock
->>which freeze already takes, and there are some refcounts which are
->>managed in both of these APIs. This was causing complexities with code
->>flow based on result of pci_load_saved_state(). All this was adding more
->>refactoring than I wanted in the series.
->
-> Maybe we can return -EOPNOTSUPP if any dmabufs for this vfio cdev are
-> exported during preserve?
+>> I think we can cover it by avoiding to attempt create a new temporary
+>> address for a 0-lft RA, it makes sense to me. Something like this:
+>>
+>> diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
+>> index 18a6f2de30ce..6c511e9c1bf5 100644
+>> --- a/net/ipv6/addrconf.c
+>> +++ b/net/ipv6/addrconf.c
+>> @@ -2654,7 +2654,7 @@ static void manage_tempaddrs(struct inet6_dev *idev,
+>>   	 * We don't want that to result in creating a new temporary ip address.
+>>   	 */
+>>   	if ((list_empty(&idev->tempaddr_list) || all_regen) &&
+>> -	    (valid_lft || prefered_lft))
+>> +	    (valid_lft && prefered_lft))
+>>   		create = true;
+>>
+>>   	if (create && READ_ONCE(idev->cnf.use_tempaddr) > 0) {
+>>
+>> Any thoughts?
+> 
+> This still leaves the case of RAs that alternate between prefered_lft >
+> 0 and prefered_lft == 0. It will cause the kernel to create an unbounded
+> amount of temporary addresses.
+> 
+> I think that a better fix would be to reset the regeneration counter of
+> the newest temporary address whenever the associated public address
+> becomes preferred. Something like [1].
+> 
+> If the newest temporary address has yet to spawn a new address, then its
+> regeneration counter is 0 and nothing changes. However, if it was
+> incremented and no new address was created, then this patch will reset
+> its regeneration counter to reflect that. Before expiring,
+> addrconf_verify_rtnl() will notice that this address has yet to spawn a
+> new address and call ipv6_create_tempaddr().
+> 
+> The case of constant RAs with prefered_lft == 0 is not an issue because
+> we only reset the regeneration counter when prefered_lft > 0.
+> 
+> Alternating RAs are also not an issue because we don't call
+> ipv6_create_tempaddr() immediately and instead let
+> addrconf_verify_rtnl() handle it when the address is about to expire.
+> 
 
-Whichever way you go with, a TODO/comment would be nice to have so
-someone (including future you) looking at this code knows why this
-restriction exists.
+Hi Ido, yes this looks good but I am afraid of using time_after(). Sure, 
+a temporary address should never be older than 2 ~ 7 days. Yet, we allow 
+configuring it up to 2147483647 (68~ years). And that might cause 
+problems in 32-bit systems.
 
---=20
-Regards,
-Pratyush Yadav
+I think we either limit this configuration on sysctl directly or we need 
+to support this nonsense.. another option would be to move inet6_ifaddr 
+out of jiffies which is something that I recently added to my TODO list. 
+But that is a bigger change I do not want to bundle with this one.
+
+I noticed that ipv6_add_addr() do:
+
+list_add(&ifa->tmp_list, &idev->tempaddr_list);
+
+Doesn't it mean the first address that matches the base prefix is indeed 
+the most recent one? I tried a bit and it seems we can use just the 
+first match :)
+
+In addition, I didn't check with Sashiko but it is likely going to 
+complain about a race condition for a RA arriving right after we have 
+spawned an address but it has not been added to the tempaddr list. 
+Therefore we would have two addresses.. anyway, that race is quite 
+unlikely. I also have planned work on that are to reduce the multiple 
+race windows, currently there are plenty. I suggest to acknowledge such 
+race condition for now and improve the code base for the reported scenario.
+
+I propose this small change to your proposed diff, I acknowledge that it 
+is a bit fragile tho (maybe a comment at ipv6_add_addr() is worth to 
+avoid breaking this accidentally):
+
+diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
+index d550524f4266..af0d3fcbef98 100644
+--- a/net/ipv6/addrconf.c
++++ b/net/ipv6/addrconf.c
+@@ -2607,7 +2607,7 @@ static void manage_tempaddrs(struct inet6_dev *idev,
+  		if (ifp != ift->ifpub)
+  			continue;
+
+-		if (!newest_ift || time_after(ift->cstamp, newest_ift->cstamp))
++		if (!newest_ift)
+  			newest_ift = ift;
+
+  		/* RFC 4941 section 3.3:
+
+
+Thanks!
+Fernando.
+
+
+> [1]
+> diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
+> index 5476b6536eb7..d550524f4266 100644
+> --- a/net/ipv6/addrconf.c
+> +++ b/net/ipv6/addrconf.c
+> @@ -2595,8 +2595,9 @@ static void manage_tempaddrs(struct inet6_dev *idev,
+>                               __u32 valid_lft, __u32 prefered_lft,
+>                               bool create, unsigned long now)
+>   {
+> +       struct inet6_ifaddr *ift, *newest_ift = NULL;
+> +       u32 orig_prefered_lft = prefered_lft;
+>          u32 flags;
+> -       struct inet6_ifaddr *ift;
+>   
+>          read_lock_bh(&idev->lock);
+>          /* update all temporary addresses in the list */
+> @@ -2606,6 +2607,9 @@ static void manage_tempaddrs(struct inet6_dev *idev,
+>                  if (ifp != ift->ifpub)
+>                          continue;
+>   
+> +               if (!newest_ift || time_after(ift->cstamp, newest_ift->cstamp))
+> +                       newest_ift = ift;
+> +
+>                  /* RFC 4941 section 3.3:
+>                   * If a received option will extend the lifetime of a public
+>                   * address, the lifetimes of temporary addresses should
+> @@ -2643,6 +2647,12 @@ static void manage_tempaddrs(struct inet6_dev *idev,
+>                          ipv6_ifa_notify(0, ift);
+>          }
+>   
+> +       if (newest_ift && orig_prefered_lft > 0) {
+> +               spin_lock(&newest_ift->lock);
+> +               newest_ift->regen_count = 0;
+> +               spin_unlock(&newest_ift->lock);
+> +       }
+> +
+>          /* Also create a temporary address if it's enabled but no temporary
+>           * address currently exists.
+>           * However, we get called with valid_lft == 0, prefered_lft == 0, create == false
+
