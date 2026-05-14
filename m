@@ -1,92 +1,93 @@
-Received: from mail-dl1-f45.google.com (mail-dl1-f45.google.com [74.125.82.45])
+Received: from mail-dl1-f52.google.com (mail-dl1-f52.google.com [74.125.82.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFDDB3A9851
-	for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 07:55:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22471395AFD
+	for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 08:01:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.52
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778745312; cv=pass; b=DUZrMiT8ZnEnvJ4HgaqqS36NkTWs6LDNSO1F0zhPfw4pa3E5N3K9X+7R4JW1gdWBaRUdzQQYngAusonbNQlQ2+j3vb2Qxk0aHYDS5iN99tx6dZ0EvVRuMui20sAt9A2qQcbxqJShGlaldBFz6xirMCnJ9+5Jr2YCc5e0DaIArhY=
+	t=1778745719; cv=pass; b=IybIQlOjnv7XRKLmfngDKtNTl7o5WUdJswkOSpNSmXmMlf1eUJRzu/qfUjcQBpfKiPKi4QIzjMCrvg+O6EuQuCkZKAfT//kkh+DjHGsNYDZZ1PFK5BtjAaAXQzFaIWYgZiYMVJSpqbR4E0AzWp3coe1hlcLhOiOycXYsBobrxKs=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778745312; c=relaxed/simple;
-	bh=vAKHwi/+46La1lVZj6I0OUdfUfqhDDBZXGHemI1QJAU=;
+	s=arc-20240116; t=1778745719; c=relaxed/simple;
+	bh=81kN/c0whuLRH0kfnXp/GgeU5xeC5H9AC8PyLrKwRWI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gqye4vUXPeNqBGODEYdfCW70HB5LBZCL8cXndJ33qMaH6MCPj9pj0I+2qH4e6Hl0kugI0Bemz+BazUfvsoTuQUB1TGRlzZ47T++eRK1pYjrKn9THZ/nU0JFZbQQ/CkKeqsNarjxkYY1bTYB94ZS+3NzTJinu1XiT21XpWidymrU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=uytzo477; arc=pass smtp.client-ip=74.125.82.45
+	 To:Cc:Content-Type; b=kXy6qg/qcrqdnnXkQxhxofLPJO2uLz9aWwGXpYEsv57dn0mbF9K8vB/R1JEBYtLkJ60wC3Idsztd2PMlyd+5LXtfs0eTzvwtXj5SfQpwVs20Lwn7sq4URIGkdL6jMfY+qvOrzTDehL9fR9+lOUW3683TMbYwYWqAr4CkgpTtbLo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fKFUEsSe; arc=pass smtp.client-ip=74.125.82.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uytzo477"
-Received: by mail-dl1-f45.google.com with SMTP id a92af1059eb24-12ddbe104ccso7062576c88.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 00:55:10 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778745310; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fKFUEsSe"
+Received: by mail-dl1-f52.google.com with SMTP id a92af1059eb24-134ac81c445so2387873c88.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 01:01:57 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778745717; cv=none;
         d=google.com; s=arc-20240605;
-        b=H5d2G4oqWkGZRh76t/JhOP5fI2muSIuNdzHaUJhIBsBQzec35KNtesVLyzHHNoEGBq
-         emwrCHMELwwccjkRC4m+4nMZahN2MFm+lLlTS1RrRNHwv2apXenZ4/M/ypjs5AexDFvH
-         FmH0tlmy98GPz1F7ynLDb50CQWB143jnXQVtpk66JLnOVFXFwHQdVO9g4AqM7Fc/GnIr
-         IC6QYANCZN5/cwdr3YOZi9Ygy9Zn58uI4Oq4WVnKWK+BlwVED794OvYnPmpStMHqWWmw
-         JpbK+pgwLz+9bYwBcxWVnAAtK69AR3NGko47BA3v6zX8MriGwkcoheqorcUKv2e1YYMt
-         URZA==
+        b=gjdWqN7xhP/Hn7NE7nIJenUAudSlkXWJdxcPZ0LA/i7u44WnpJvGMnJh4BnFVnDadV
+         zJKBkB1X0O9gl+qd2QjEwGlvUXz04sYnkG9FewGt4XL2qhMnAFOkdyrlLbvxpSUdPBwN
+         l7TFgh3Z6gFXsPR3jyy8FZFGyJtFMh9ngmcV9MeN0vCsXAiBU0KZIY+76h5is7s50om1
+         tijDu9TJFJHkdibAjjtE6Rxwyyup5AiH2XwBVprwy2Sw6nCQ3l+DDbUFQpUW3ksMHixU
+         BgFvUqY9cq5+4QmJrod8suaFzhRe8pwEdcoOrTk4OcxcwtkSlsJYRIJiiOFPHNkfjVBK
+         009w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:dkim-signature;
-        bh=ILxCmYkL50pA0BzEcihF0YhatRIafK5z4/k4jZSf+Gs=;
-        fh=HmtGtcZNZQcE7lyvy2/91DHWeEeJdCNAtSHFvQ9d4fM=;
-        b=XSRqdki+gZ2hZzZEhw3RF0O0s+kT4C+85NnTVhzjq9g4xBRKrql8Ky0PrzsVEbnfEJ
-         pt/23nCq0s/dUY2cI77drD0SfOalg8DJOx6foDviRfj2zCSxt9QbwDUu4Di4GkFO68vJ
-         Z2DgLlkADTkOnzJ9CmwCMIhS/DQKKBsnDW+DgcdO2PegbNR3vAdu66mz7vMcD+ZbEECB
-         MOjfndKxRSO7FM/UWEtATVvVotmtMyxJfAYYESFni3kM9lGbNKOpR6+GAPDw4z8KUNWe
-         qJmHwY/XkBOpjWyL60Oc6hKwFyP4EhpJ2BGRM7fKy4sVxmaVGKBdt8bxI4sHwJPzS+Ji
-         QGNA==;
+        bh=R3rMcHi+SRGerVbM0q8doN39gwMZLkcDzykkfyfOtI8=;
+        fh=K6+UHG0xBRwO5Q8DM3O8eIDvKqGBeANyscoEEYjwPGU=;
+        b=SXhe0F2V5q7LjswA6AEWOaAsnc8CELlyDlCk6qYGGoYgT7Rpogo0BIlIx3PI06iPoG
+         mbTfId4TX82NgdS30w/LrZmfZwAkYGt07fQ0cGGRv/NhHA3miO1cZVz8srG1hL9iuIBE
+         95+LbnrE/NbM16TxTTDhrbCIjHJTkl+svKwcTDOmJf9g5jDVg5+N9ugJU3VoUK2vNAfP
+         3ahoak9c8tZqBj4bMEFTCz+N1FC2QQN4zRpnaNXoxPF8OWLW2OKAvDW2TZZgjm4x3uGr
+         njmWRvPhaH5TEFUYHze4vVEYlgsZfY6HmIyvyJwPaV0G2x81/NUCx82W5bu4EnIPRsJB
+         gLiw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1778745310; x=1779350110; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1778745717; x=1779350517; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ILxCmYkL50pA0BzEcihF0YhatRIafK5z4/k4jZSf+Gs=;
-        b=uytzo477x08SpHQC9uceQjFEqoO0aXi9qfuPLn4aD/W/M0iv368kUEzt7YXGiWt7V2
-         4V0WeaDYcZlRJsOnYsQ+Qi3QKeE6/FAo4FdRoFexR/oo+RwdwRNOD/IswYmeBaZ4ttHC
-         s7x4x9lieiBVGJHHEehr6E+nCb3cMr9t1qUD7d46IVMgV8dv5xIv5SZXGl3YaasHLN6y
-         zSxeIJjKHXuW9xo05fCN5nTYAf1TZ2vdme8hOsG9/IuG3xNaRnbUyVNLZj0/fGLkOEfh
-         HZQNl+zB+iluTq2MS+Tzc3nLgB7QsfLdNLvWRDZBprAAYtVydThJguTv7+j0HllEh949
-         bn/A==
+        bh=R3rMcHi+SRGerVbM0q8doN39gwMZLkcDzykkfyfOtI8=;
+        b=fKFUEsSeSYMSDVkCMtt5pEXXkHrte4cGizJMM1N82Q2Vegxnc3Syj9YvD0XPKZKtjt
+         EpbOMOEwV3HZ/2myULhHtcOLZoC2z1TF4x+LE1zOwyDOmA2vFfwzyRlSQgplymgW8eXR
+         Y5CaM/nja9ImztJ4unodiGVZGogD1hTm+1Cd6lQ0s8OfYNQX0CjHbyEDcpQqtOtylZaQ
+         PFEeOBl8GeCRWBPJ9wAE9e7q5y5l8o48ND8z48mFSZVJbxLn6vnBllt2U0lOVoFPg2On
+         5mr+8buy/0TJ/HsnwKCdCBJMR0f4eGOTitUN4bF4YD6EesQBQwI93YZVdLARw/6O2ula
+         bhTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778745310; x=1779350110;
+        d=1e100.net; s=20251104; t=1778745717; x=1779350517;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ILxCmYkL50pA0BzEcihF0YhatRIafK5z4/k4jZSf+Gs=;
-        b=lEx3cxlKHCz7197M5Cvh99cyvXyySBAPnEyUSDBGiiPGpDDUX80Sqewp+XCeYPdsxo
-         3wZb6H2S9Zco6C/7mkN3nFM0FwIjAICRjEwMO/0i7HqwJ0Y8oakeW3UJrfuKjRdFCsR9
-         oaXb4isbXTGq93sUUYju0B38Qx70W0WOxgC9P80x1FYO8L22CFcn14qwkKHLqloZTM2n
-         oVg7+053LjvyUDhvOD7uXeaXkAs3XeLtG/5oDLdIuPNxYlJA1tm0GyZWP7MmcBgzfVdA
-         lGGcW3Qc59gG93UVIdL1dlfVWymOsBoR0eseXly/VaVZDrYPjblL55o9rBSRJ0Bks2Hv
-         RejA==
-X-Forwarded-Encrypted: i=1; AFNElJ+wia/6vRfIHTffSm7fy69OAroq6EOXGZtMP8XIPXJJM4TUdX407SKtP4DTG58ZHDhe+PN/OzSWlimIkPeuGBQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwAf5+D7vRvYpmMcVwaRol1n2pNk7Ze4ip4BTsag+AK9zEqWq7W
-	rsvNp/m0uBjnxkxzvbJzoN3DSF68xkdd/Og5/MG4YGWXqroWuxM6de2GzAIb2jgWFPGFn/N2GIU
-	k9/ta07sbGINVQqp0+DtQABksdQ5fZkQ56+Y5d8cR
-X-Gm-Gg: Acq92OHcsrsdDzVahVBDb7QTNQQgShVK4NYXhJu7Hlt8tjwUb/nO2R7a0kRg7X84yO0
-	spJZlnulzYS4YfRhrUp1sEygieiuCsXS8zmWp26k3cCVflcwVLjrgnA5cs1Wm8HxRXKjT/8nsZR
-	aQHxNyNYlVhrrPdHLCQ832oQ00bEp5S9aaud2x3V8627fQYAi056ZliOs/8T2H5KcwEcoFySM1G
-	HpM2jewDMl+QtQWuOozeOpSOm7rCX/J9velSY5ptIhrNOKZS/wanw/2RKE0d53WSNE8KYj+0jdd
-	tSSf5hoIZ2qt9mX19cVnWHaeuWe9ngMRqiWzh160ewT0IdFitQ==
-X-Received: by 2002:a05:7022:f9a:b0:132:2486:b47 with SMTP id
- a92af1059eb24-1342ef3d502mr4606238c88.3.1778745309159; Thu, 14 May 2026
- 00:55:09 -0700 (PDT)
+        bh=R3rMcHi+SRGerVbM0q8doN39gwMZLkcDzykkfyfOtI8=;
+        b=Ykp4pUMSRRN5JWZ4+TtpcumcE6dbNPwKzHxIByyrq+/WCAIAZf/4xtjM9b1CviaalK
+         O868DN3X58LZMZPNQ/JzhPNkx8o/0WfFKlPQjIOjMPUHXBfBfAfWCibkl3mbFyAUkD1P
+         EidDrLm5mQt3nFbYPnjMJLquAYirm76B0xdq41BW+OGcK6+KnbAgKcywPC9ehACKkV4j
+         MBAFpzS3X9r1GGIqF6S5RBNwk/ASOMDBmkXi9B+Jd7jnet/qSyLA9zZSw1XXQefw3ihV
+         nd4fMOnjsoDeHFC0SoLfHe/S+nkCAsryVw/5k11bjEKbYSGGbcjEyInMC+4sRCVSGYcS
+         8KVQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+11Mm+nf6PoFCN6aDA5uWu85lCiuCyU3tH0igsyQM2EXiZx3hKOEg2EycZIuUhQbw3l4X6Wn/ivaLtPIFRuzQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YypF3IBrDTYmC1zbXN6DfKUbiDs9MbtsF0kvM48F3ZsPhlG8cG6
+	RdE1xFLyo2Mu+MdkWzQ6itFXwTP0F/ZbdZ55Bh4JDqmXVOIbzSGQg7f6NKsyIkpT3ieD4ayymrA
+	sKS1IbwukBYyHYU0jNbjv5kNyiyOulQLP4H2r2aw/
+X-Gm-Gg: Acq92OFXVYyiW1qzywYO2EJ8q2E3LoyBMM5K0oSoijHtOfH2lvWDD8C+pf3+PYNITaK
+	IXAYC+p94EgM7eD9mV1pFujzyS54Pcw14TtXkBDJ9YgFnw+56gAm5g++rAnZKr/FP+9rBo77e11
+	iAjQCame6DcfuyX18412/YCcVH4ZGHd9CtO98PWKadYY0hZ4GkTk5C/xHszWw23gxJ1pVp9dY9t
+	KSQ8iMlbu90g9EfHgXiukwvNvKvp2OxGBorfqvWDlHlFkJC6sOyNM205ipGl2+XmMnOA+t6Gxlx
+	+XOxhVcXJdpNr87fLRs6eb7c+pAQqrFzzkdp6mt36auOw6IYqA==
+X-Received: by 2002:a05:7022:b89:b0:12c:5e48:4c01 with SMTP id
+ a92af1059eb24-1342ee3e06cmr4229857c88.1.1778745716497; Thu, 14 May 2026
+ 01:01:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260514050455.2954509-1-justin.he@arm.com> <20260514050455.2954509-3-justin.he@arm.com>
-In-Reply-To: <20260514050455.2954509-3-justin.he@arm.com>
+References: <20260514050455.2954509-1-justin.he@arm.com> <20260514050455.2954509-7-justin.he@arm.com>
+In-Reply-To: <20260514050455.2954509-7-justin.he@arm.com>
 From: Marco Elver <elver@google.com>
-Date: Thu, 14 May 2026 09:54:32 +0200
-X-Gm-Features: AVHnY4JSKKs4-AOrzjQCzwh9kSmbyo54JL-yInX3IhQgKt6h5_imJyB2qQ8DYtg
-Message-ID: <CANpmjNMLa39q=Ss7TVzSi=TTef60AX4_C67XUifanio9YeHB9Q@mail.gmail.com>
-Subject: Re: [PATCH 2/7] kfence: kunit: skip when no pool is available
+Date: Thu, 14 May 2026 10:01:19 +0200
+X-Gm-Features: AVHnY4LXtb13xHae_HjNLF3uu8TPNuAYGsyBqY2dhhK2QMuCmkBsOtE8ngXwGcI
+Message-ID: <CANpmjNNAb0apuxu4+tdihHr6PDmdYK5L7Fhg_3SxrVG3UV3_3A@mail.gmail.com>
+Subject: Re: [PATCH 6/7] hw_breakpoint_test: fix test_many_cpus failure on
+ large systems
 To: Jia He <justin.he@arm.com>
 Cc: linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
 	linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org, 
@@ -105,51 +106,51 @@ Cc: linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
 	Petr Mladek <pmladek@suse.com>, Kees Cook <kees@kernel.org>, David Disseldorp <ddiss@suse.de>
 Content-Type: text/plain; charset="UTF-8"
 
-On Thu, 14 May 2026 at 07:07, Jia He <justin.he@arm.com> wrote:
+On Thu, 14 May 2026 at 07:08, Jia He <justin.he@arm.com> wrote:
 >
-> When KFENCE is compiled in but disabled at boot (KFENCE_SAMPLE_INTERVAL=0)
-> or __kfence_pool is not allocated, every kfence kunit case fails with
-> -EINVAL.
+> On systems with many CPUs (e.g. 128 cores x 4 HW breakpoint slots =
+> 512 = MAX_TEST_BREAKPOINTS), test_many_cpus() advances idx to
+> MAX_TEST_BREAKPOINTS after the last fill_bp_slots(). The subsequent
+> register_test_bp() call hits WARN_ON(idx >= MAX_TEST_BREAKPOINTS),
+> returns NULL, and the -ENOSPC expectation fails.
 >
-> Use kunit_skip() so they are reported as skipped instead.
+> Bail out of the loop when idx reaches the limit. Earlier iterations
+> already validate the NOSPC path on other CPUs.
 >
-> To: Alexander Potapenko <glider@google.com>
-> To: Marco Elver <elver@google.com>
-> To: Dmitry Vyukov <dvyukov@google.com>
-> To: Andrew Morton <akpm@linux-foundation.org>
-> Cc: kasan-dev@googlegroups.com
-> Cc: linux-mm@kvack.org
+> To: Peter Zijlstra <peterz@infradead.org>
+> To: Ingo Molnar <mingo@redhat.com>
+> To: Arnaldo Carvalho de Melo <acme@kernel.org>
+> To: Namhyung Kim <namhyung@kernel.org>
+> To: Mark Rutland <mark.rutland@arm.com>
+> To: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+> To: Jiri Olsa <jolsa@kernel.org>
+> To: Ian Rogers <irogers@google.com>
+> To: Adrian Hunter <adrian.hunter@intel.com>
+> To: James Clark <james.clark@linaro.org>
+> Cc: linux-perf-users@vger.kernel.org
 >
 > Signed-off-by: Jia He <justin.he@arm.com>
 
-Acked-by: Marco Elver <elver@google.com>
-
-Fair enough - typically this failure was a way to know something went
-wrong in the test setup. But I also understand that it's not always
-possible to just not load this test if kfence is not enabled, say with
-some compliance test suites or such.
+Reviewed-by: Marco Elver <elver@google.com>
 
 > ---
->  mm/kfence/kfence_test.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+>  kernel/events/hw_breakpoint_test.c | 3 +++
+>  1 file changed, 3 insertions(+)
 >
-> diff --git a/mm/kfence/kfence_test.c b/mm/kfence/kfence_test.c
-> index 5725a367246d..e376329dd621 100644
-> --- a/mm/kfence/kfence_test.c
-> +++ b/mm/kfence/kfence_test.c
-> @@ -822,8 +822,10 @@ static int test_init(struct kunit *test)
->         unsigned long flags;
->         int i;
+> diff --git a/kernel/events/hw_breakpoint_test.c b/kernel/events/hw_breakpoint_test.c
+> index 2cfeeecf8de9..943d040d2224 100644
+> --- a/kernel/events/hw_breakpoint_test.c
+> +++ b/kernel/events/hw_breakpoint_test.c
+> @@ -137,6 +137,9 @@ static void test_many_cpus(struct kunit *test)
+>         for_each_online_cpu(cpu) {
+>                 bool do_continue = fill_bp_slots(test, &idx, cpu, NULL, 0);
 >
-> -       if (!__kfence_pool)
-> -               return -EINVAL;
-> +       if (!__kfence_pool) {
-> +               kunit_skip(test, "kfence pool not allocated or kfence not enabled");
-> +               return 0;
-> +       }
->
->         spin_lock_irqsave(&observed.lock, flags);
->         for (i = 0; i < ARRAY_SIZE(observed.lines); i++)
+> +               if (idx >= MAX_TEST_BREAKPOINTS)
+> +                       break;
+> +
+>                 TEST_EXPECT_NOSPC(register_test_bp(cpu, NULL, idx));
+>                 if (!do_continue)
+>                         break;
 > --
 > 2.34.1
 >
