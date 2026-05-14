@@ -1,261 +1,137 @@
-Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A56739A7F2
-	for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 09:28:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EE6C399372
+	for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 09:32:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778750888; cv=none; b=aiblDDnraxQfPwexdC8SMOkHVecf6gliRyJa+7eyXF2IWEiqELTr6MDXmYe3btCEcx086+XTN9b2AHgHS/NUAGuR3UEIjMs8RpA9VuOsxAQughpmi92qcZ26C3SRB9tnpgmDc1XKupdxmp5k7rIal94B4m0QArunUSTqF6KXGYE=
+	t=1778751153; cv=none; b=tW2HBsBfunNZzG4IzGtUb8FPj1iKym6Wh4Vp2uG6w8K8PL05ngk4DUYXTfpx0cO68mac2tqp1Ql52r7Coh6MR5pcLbHAS0lilJqs1OHUER7QqFWYdKtacbUSCSRLG7hnE/Z6jQswMkgyaTjRqKwtDyShpmJPWHawZoWXIfcqajI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778750888; c=relaxed/simple;
-	bh=vJo8Et4Ka70jEcKej5D2UJ2IvboGkJfqC0GtAqic2aw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jWzXiyuon8vRyfCasV7OyTwE+Gg0Ef3ckJux7HCjzpllZNuemsM0wtwReOnpMnKEu0NFniS1JXaXj05kyLR3lzJ6T4KBv4QXrN2iGUFvCnVNuPPpFVtLrpFBa1rjBmgjbTTlvcSPbYvKZU/xeaSPSQv+Nll9nhZRTLI/FMmqOJI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Qnsm68sa; arc=none smtp.client-ip=209.85.161.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1778751153; c=relaxed/simple;
+	bh=g4qN1qiOL6eoyFGTvuGJsgsnQ0jH3lElMo1cnFmnA00=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Bs18LKxQ5SIqvrfNagxSJE/YCWSdtKo46oku2niXToGMkGiuH8ovycT9ysErdOZjMm+V4XJczEWrDsy5Rj1erTKxe5SRVpCe7XV77AlRrT5rzD7/PO8dbLybQQTMAHPnnEIlaX1Z26zWN8zAlyvB5LPwfcWzLLy7UBykxmy7liA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=kyeKNy93; arc=none smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qnsm68sa"
-Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-69b905c10ddso136652eaf.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 02:28:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="kyeKNy93"
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-44b330c5cc6so5671384f8f.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 02:32:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778750886; x=1779355686; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=80AXNXJ5hpSRtR/OIpPH7OUMQU6bBhqaMTgSESMPNUo=;
-        b=Qnsm68sams7CFubm0Y1UwEBYNsi5zodm2fuVHjnWn3FGRxpbsgVUty0dRgGi733+zv
-         oVnYbme1csi96Afabiv3V0N1Q90sYYQrPVyxxER5CqEnA+DHx1NALnzu5wuSDGOoVXRX
-         p2Wc6TUY2T9QvVAali+7l3exvRMYlJ6Kus8v1gwXoEzcNYcBNJz1ve5EyTG6FIM8lPZf
-         W8d0gOumGO713Olt9EyfeOf0QBc49lYozpbXxeAXhTsejC0/b4wVT1OJiHH5jbThduyh
-         XBqSpB5RJiGs9QkYXyjaX1WSRECxN/hIvBZJ2kk59dJPHy6umCc/t3ki1O+CYEr7asDZ
-         JicA==
+        d=linaro.org; s=google; t=1778751150; x=1779355950; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jIhsStlSAZdSG6VxaddFdlwdDOVd+4VLWmlrEpic5HY=;
+        b=kyeKNy93HloOQAPUGi9QaNC2baV/8JPS/4t4SDA+KiqJq22SN9hkNsMn7iD82X4bju
+         tRyWrySNJja+xn1gSHqp9d6h1qjzUWX4SoPlieA3NUK0nWrWz+7OjOliJYD6QPLb4hP2
+         wAful7H5dmDbH0Vo5ZZOirp5CmTrTpg8CNh7PGPaBwhpUQKNLn6t9VQE4571Hgv2yXo0
+         WAD8RRy/qeDn2WtyaVrOmi73UKCkiA6EEore2iX/3j553e7b9ByT8Yq3SLDAoYc5b16N
+         +nD8PEPaxN8cwoEXU/ZRLk3QF2aBenGIBst04QBZrxItlno6nT6IU3Z3xtir93EtjnJU
+         f7qA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778750886; x=1779355686;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20251104; t=1778751150; x=1779355950;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=80AXNXJ5hpSRtR/OIpPH7OUMQU6bBhqaMTgSESMPNUo=;
-        b=CqYgIAz+WF/nPLFx2bxaFVLOC65eUnuKRP1SkkOuuw6d4Xeu4f9KcQL8oo7xJw47Qk
-         rpnAYBJGBP/T1gQwirLlfcs3JXauvXv8PUU66ZwnXFK8DTW5s88rI4SIMkQ3koHhVcCG
-         Z/XwMyjGal5WNyVBUcWK7JK78l6ohj0v6N+r81Jo1hKG59BSB5PSDRQGVU/iJus+Gam+
-         wK9i0oPZkSFotWkFZ3vBBcdc2BRahM2w4sUhZ6vB5mgGvnBRm4wTTKT5tu+cRnwDhyFB
-         iuZKf61Dy266AXGQvQpJ/+jnxP7To1qmHi5tejM0tjdyAEz/T8myJ0H2M7MPpaRxKfW2
-         NLHQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/PxGgaBql4xdcYj6ittkHAXdeN5tuLFRsJ7bG6ch2NH+G66cHMFEES9/mppRgjbiN9E6JIKam5gvxgyAUBDJ0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxljN4gmm4pQbckXRHNwH4qTyy2dBVkPnh9fQR+MSzilN9OPS36
-	xOQ5LBt7ZJm2WJttX04N6honC2GABBddkzBAaerBczPr46jQh3c1LfCd
-X-Gm-Gg: Acq92OEYQiIvr0FAjxhrPO3MVlXOJczteSIYooMOcjulV50IBMGnlRI2yTdvxLWuAlj
-	nZiJpmj1qT8AZCZmfNdjBcwavCDHeuyxgsdqkt3eMie/N/g8h3Yc1Uh1XwJekZTQRuWtOGpuCzA
-	sUF4s+GM0WtYd+Tb0gL91RQfxO4XyIYJ7dTf7VzYGIpmCqas7fAP1D4kA3hUlNTvYShE4ValM20
-	Oyo9ULU7CqIBexQYf5CURm0KhpZwpnFMdQp+Q2bgqPJiBQ/rM/fWvpQDI1FdZ5ew5/yxfOr4Vcb
-	QNwLqKZvaeOX7AdyyjL+cVXDW7g6VwgwBTMgfw8fGTuRhNCccaofSDz1su+pVWIt3dvWt2C4Sfw
-	CLUI47Qj6WQ64EgopxCSk+1gGoNpY9bJAzhF7GwxVs/AH/F41pcgTG/w8I+8A8fLyMG2ddNPrHv
-	RjOQIh7u6ruZIjxecUzFng4JivXg==
-X-Received: by 2002:a05:6820:c8c:b0:696:7b19:9cf3 with SMTP id 006d021491bc7-69b7a9d7b8cmr3538431eaf.8.1778750885870;
-        Thu, 14 May 2026 02:28:05 -0700 (PDT)
-Received: from houminxi ([72.244.37.221])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-69b8ccdc7fdsm863512eaf.14.2026.05.14.02.27.59
+        bh=jIhsStlSAZdSG6VxaddFdlwdDOVd+4VLWmlrEpic5HY=;
+        b=FISWq1jAxXEGKYf806LMqfMeZs+Yx/seUQXXJ/AlJVW4T7tZriQ/sllY37M6K1KrrD
+         kogzhVtCXjyD6idUERY9MW1k4cbnjnh51LIM62flR+u6E6byG2HiLefx7M7JELFN+2Fc
+         YilDC38+FYLM/jL4jR+FwQCuoP1HFdDf2+uck4as4dY76UMTRevkPfKrmZ5IYRxaCn/G
+         0wFI32s7q27S+XpgfRR+CJWiXwa2jBl+FV2JHGZtJ0Jy8WSoXQOVXBWK3u3zGc4K+VZt
+         bKfFzSzdB+d0hAPq8AgOuLT5gWivt10HU7DHN/ny7TMSvLifQ67GiFdZnZVsGhGoH98V
+         aQog==
+X-Forwarded-Encrypted: i=1; AFNElJ9HukQRrmgxtdsuP9el4Nn8LR36SZy/ynaYpMv9C2kxu/X8vBzMOTyNNXTJJC71kIMbxaqS3JJsVz51X/NiO04=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxp5OtuUz8st1qJpI34iHQ4kd3x39ODi359N5p081KdcUcQ6O0r
+	L6Nd4JM9ZWT73WpjQ1rBDqL04tvoFTAChFo4sJAVKLIvvDKo1rBDZf6ACFsh7shnmKsQxc3FXYN
+	oc8xjbYY=
+X-Gm-Gg: Acq92OGkArZCQA64WgczOfjBazQ8rAhjAoKdA3HrxjD9VIYykxw/l6546JTu+sGhCF5
+	qD89NMs8LYdhgPSMVK88oWx37p7DmL8bkrQl4vAkG+HKSxGHATB0KaXN/oN/h1Bo9Ws6p3rPHAr
+	exsBqd7iyrACyZgA4XtKblQ+GBjTv3rSLBPAEhfn9ptMXhsW1+2JrCk3cOYEqaHD5+3JNwLQ54x
+	dXS7HpwW8m1Mjj39JKflENycuUwe+RLXKswWB5c4L5ZhGLv8BbF0bDNbMjgIZi7ZBfOZ+gDcikL
+	YkI9cxw8iHGAAGGBCz2khW6M/JWN5BV09JNB6WxDi5T6PCBMvlhg+sifSVof2CA3zIGYwMDgH9z
+	2QbASQyEa6A9gLXxxwYsndYZNE23I+9MRwWgPkfinr+V56vHV1EOBIlaXgJIG0hBdx/fr7R8Sbk
+	fHpo0WF3KQqvUFIivueREl/c9qY30HDLo6
+X-Received: by 2002:a05:6000:2401:b0:43f:e721:76b8 with SMTP id ffacd0b85a97d-45c7a7dc644mr10324893f8f.37.1778751150103;
+        Thu, 14 May 2026 02:32:30 -0700 (PDT)
+Received: from ho-tower-lan.lan ([185.48.77.170])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45da0fe0fecsm5097164f8f.26.2026.05.14.02.32.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 May 2026 02:28:05 -0700 (PDT)
-From: Minxi Hou <houminxi@gmail.com>
-To: netdev@vger.kernel.org
-Cc: aconole@redhat.com,
-	davem@davemloft.net,
-	echaudro@redhat.com,
-	edumazet@google.com,
-	horms@kernel.org,
-	i.maximets@ovn.org,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	shuah@kernel.org,
-	dev@openvswitch.org,
-	i.maximets@redhat.com,
-	linux-kselftest@vger.kernel.org,
-	Minxi Hou <houminxi@gmail.com>
-Subject: [PATCH net-next] selftests: openvswitch: add dec_ttl action support and test
-Date: Thu, 14 May 2026 17:27:47 +0800
-Message-ID: <20260514092747.3653656-1-houminxi@gmail.com>
-X-Mailer: git-send-email 2.53.0
+        Thu, 14 May 2026 02:32:29 -0700 (PDT)
+From: James Clark <james.clark@linaro.org>
+Subject: [PATCH 0/6] tools/build: Allow versioning of all LLVM tools
+Date: Thu, 14 May 2026 10:32:07 +0100
+Message-Id: <20260514-james-perf-llvm-version-v1-0-6cac1a9a4c8d@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJeWBWoC/x3MSwqAMAwA0atI1gasWgWvIi7ammrEHykUQby71
+ eUs3twQSJgCdNkNQpEDH3sKlWfgZrNPhDymhrIom0IrhYvZKOBJ4nFd44aR5DNYV8YqZ7V17Qh
+ Jn0Ker//cD8/zAm21c3VpAAAA
+To: Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+ Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, 
+ Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, 
+ Adrian Hunter <adrian.hunter@intel.com>, 
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>
+Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+ linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ bpf@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+ James Clark <james.clark@linaro.org>, leo.yan@arm.com
+X-Mailer: b4 0.14.0
 
-Add dec_ttl action support to the OVS kernel datapath selftest
-framework:
+I ran into the build issue mentioned in the first commit, because using
+an option like LLVM=-15 is a documented way to build [1], but only
+some of the LLVM tools defined in tools/ support this.
 
-  - Add DecTtl nested NLA class to ovs-dpctl.py with proper
-    OVS_DEC_TTL_ATTR_ACTION sub-attribute handling
-  - Add parse support for dec_ttl(<inner_actions>) action string
-    following the same pattern as clone()
-  - Add dpstr output formatting for dec_ttl actions
-  - Add test_dec_ttl() to openvswitch.sh that verifies:
-    * Normal TTL packets are forwarded after decrement
-    * TTL=1 packets are dropped (TTL expiry)
-    * Graceful skip via ksft_skip if kernel lacks dec_ttl support
+After fixing that, a lot of other tidyups fell out. I didn't go too far,
+for example some selftests include tools/testing/selftests/lib.mk which
+reimplements some of the LLVM_SUFFIX stuff, but other selftests include
+tools/scripts/Makefile.include and I stopped before touching the former.
+Some other non build scripts hard code toolchains and I didn't touch
+those either, this change is only focused on things that already
+include Makefile.include.
 
-The DecTtl class uses late-binding type resolution to reference
-ovsactions for its inner action list, avoiding circular references
-at class definition time.
+[1]: Documentation/kbuild/llvm.rst
 
-Tested with vng on x86_64, all OVS selftests pass.
-
-Signed-off-by: Minxi Hou <houminxi@gmail.com>
+Signed-off-by: James Clark <james.clark@linaro.org>
 ---
- .../selftests/net/openvswitch/openvswitch.sh  | 55 +++++++++++++++++++
- .../selftests/net/openvswitch/ovs-dpctl.py    | 39 ++++++++++++-
- 2 files changed, 92 insertions(+), 2 deletions(-)
+James Clark (6):
+      tools/build: Allow versioning of all LLVM tools defined in Makefile.include
+      tools/build: Indent if else blocks
+      selftests: Remove unused LLD variable
+      tools/build: Allow versioning LLVM readelf
+      tools/build: selftests: Allow versioning LLVM lld
+      tools/build: selftests: Remove some duplicate toolchain definitions
 
-diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-index 3cdd953f6813..200c36c4d7bf 100755
---- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
-+++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-@@ -28,6 +28,7 @@ tests="
- 	tunnel_metadata				ovs: test extraction of tunnel metadata
- 	tunnel_refcount				ovs: test tunnel vport reference cleanup
- 	drop_reason				drop: test drop reasons are emitted
-+	dec_ttl					ttl: dec_ttl action decrements IP TTL
- 	psample					psample: Sampling packets with psample"
- 
- info() {
-@@ -244,6 +245,60 @@ usage() {
- }
- 
- 
-+test_dec_ttl() {
-+	sbx_add "test_dec_ttl" || return $?
-+	ovs_add_dp "test_dec_ttl" decttl || return 1
-+
-+	info "create namespaces"
-+	for ns in client server; do
-+		ovs_add_netns_and_veths "test_dec_ttl" "decttl" "$ns" \
-+			"${ns:0:1}0" "${ns:0:1}1" || return 1
-+	done
-+
-+	ip netns exec client ip addr add 10.0.0.1/24 dev c1
-+	ip netns exec client ip link set c1 up
-+	ip netns exec server ip addr add 10.0.0.2/24 dev s1
-+	ip netns exec server ip link set s1 up
-+
-+	# Probe: check if kernel supports dec_ttl action.
-+	ovs_add_flow "test_dec_ttl" decttl \
-+		'in_port(1),eth(),eth_type(0x0800),ipv4()' \
-+		'dec_ttl()' &>/dev/null
-+	if [ $? == 1 ]; then
-+		info "no support for dec_ttl - skipping"
-+		ovs_exit_sig
-+		return $ksft_skip
-+	fi
-+
-+	ovs_del_flows "test_dec_ttl" decttl
-+
-+	# ARP flows (bidirectional)
-+	ovs_add_flow "test_dec_ttl" decttl \
-+		'in_port(1),eth(),eth_type(0x0806),arp()' '2' || return 1
-+	ovs_add_flow "test_dec_ttl" decttl \
-+		'in_port(2),eth(),eth_type(0x0806),arp()' '1' || return 1
-+
-+	# IP flows with dec_ttl action
-+	ovs_add_flow "test_dec_ttl" decttl \
-+		'in_port(1),eth(),eth_type(0x0800),ipv4()' \
-+		'dec_ttl(),2' || return 1
-+	ovs_add_flow "test_dec_ttl" decttl \
-+		'in_port(2),eth(),eth_type(0x0800),ipv4()' \
-+		'dec_ttl(),1' || return 1
-+
-+	info "verify connectivity with dec_ttl"
-+	ovs_sbx "test_dec_ttl" ip netns exec client ping -c 1 -W 2 \
-+		10.0.0.2 || return 1
-+
-+	info "verify TTL=1 is dropped by dec_ttl"
-+	ovs_sbx "test_dec_ttl" ip netns exec client ping -c 1 -W 2 \
-+		-t 1 10.0.0.2 >/dev/null 2>&1 \
-+		&& { info "FAIL: ping should fail with TTL=1 and dec_ttl"
-+		     return 1; }
-+
-+	return 0
-+}
-+
- # psample test
- # - use psample to observe packets
- test_psample() {
-diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-index bbe35e2718d2..a73ca98d7aef 100644
---- a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-+++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-@@ -388,11 +388,19 @@ class ovsactions(nla):
-         ("OVS_ACTION_ATTR_CLONE", "recursive"),
-         ("OVS_ACTION_ATTR_CHECK_PKT_LEN", "none"),
-         ("OVS_ACTION_ATTR_ADD_MPLS", "none"),
--        ("OVS_ACTION_ATTR_DEC_TTL", "none"),
-+        ("OVS_ACTION_ATTR_DEC_TTL", "DecTtl"),
-         ("OVS_ACTION_ATTR_DROP", "uint32"),
-         ("OVS_ACTION_ATTR_PSAMPLE", "psample"),
-     )
- 
-+    class DecTtl(nla):
-+        nla_flags = NLA_F_NESTED
-+
-+        nla_map = (
-+            ("OVS_DEC_TTL_ATTR_UNSPEC", "none"),
-+            ("OVS_DEC_TTL_ATTR_ACTION", "actions"),
-+        )
-+
-     class psample(nla):
-         nla_flags = NLA_F_NESTED
- 
-@@ -632,6 +640,13 @@ class ovsactions(nla):
-                 print_str += "ct_clear"
-             elif field[0] == "OVS_ACTION_ATTR_POP_VLAN":
-                 print_str += "pop_vlan"
-+            elif field[0] == "OVS_ACTION_ATTR_DEC_TTL":
-+                datum = self.get_attr(field[0])
-+                print_str += "dec_ttl("
-+                subacts = datum.get_attr("OVS_DEC_TTL_ATTR_ACTION")
-+                if subacts and subacts.get("attrs"):
-+                    print_str += subacts.dpstr(more)
-+                print_str += ")"
-             elif field[0] == "OVS_ACTION_ATTR_POP_ETH":
-                 print_str += "pop_eth"
-             elif field[0] == "OVS_ACTION_ATTR_POP_NSH":
-@@ -725,7 +740,21 @@ class ovsactions(nla):
-                     actstr = actstr[strspn(actstr, ", ") :]
-                     parsed = True
- 
--            if parse_starts_block(actstr, "clone(", False):
-+            if parse_starts_block(actstr, "dec_ttl(", False):
-+                parencount += 1
-+                subacts = ovsactions()
-+                actstr = actstr[len("dec_ttl("):]
-+                parsedLen = subacts.parse(actstr)
-+                decttl = ovsactions.DecTtl()
-+                decttl["attrs"].append(
-+                    ("OVS_DEC_TTL_ATTR_ACTION", subacts)
-+                )
-+                self["attrs"].append(
-+                    ("OVS_ACTION_ATTR_DEC_TTL", decttl)
-+                )
-+                actstr = actstr[parsedLen:]
-+                parsed = True
-+            elif parse_starts_block(actstr, "clone(", False):
-                 parencount += 1
-                 subacts = ovsactions()
-                 actstr = actstr[len("clone("):]
-@@ -896,6 +925,12 @@ class ovsactions(nla):
-         return (totallen - len(actstr))
- 
- 
-+# pyroute2 resolves nla_map types via getattr(self, name).
-+# DecTtl needs "actions" to resolve to ovsactions, but
-+# ovsactions is not defined when DecTtl class body runs.
-+ovsactions.DecTtl.actions = ovsactions
-+
-+
- class ovskey(nla):
-     nla_flags = NLA_F_NESTED
-     nla_map = (
+ tools/bpf/resolve_btfids/Makefile    |  3 --
+ tools/lib/api/Makefile               |  4 --
+ tools/lib/bpf/Makefile               |  8 ++--
+ tools/lib/subcmd/Makefile            |  4 --
+ tools/lib/symbol/Makefile            |  4 --
+ tools/perf/Makefile.perf             |  7 ----
+ tools/scripts/Makefile.include       | 77 ++++++++++++++++++++----------------
+ tools/testing/selftests/bpf/Makefile |  9 ++---
+ tools/testing/selftests/hid/Makefile |  7 ----
+ 9 files changed, 50 insertions(+), 73 deletions(-)
+---
+base-commit: 09d355618f7ccc27ffc7fc668b2e232872962079
+change-id: 20260511-james-perf-llvm-version-43ab1cb5bc7d
+
+Best regards,
 -- 
-2.53.0
+James Clark <james.clark@linaro.org>
 
