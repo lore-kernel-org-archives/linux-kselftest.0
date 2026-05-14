@@ -1,106 +1,337 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E7A13909B5;
-	Thu, 14 May 2026 11:07:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 486FE3AEF44
+	for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 11:07:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778756852; cv=none; b=GO3Olek3xGdFMPDXSEzP/LI16Xynf39JFo9IfXzFzw4WZW2MuvfdS8CXH8v/qq0ge0c+pmYixGwGCFYBa00QSggXNLY2Etd//6yyeJq/tVuyFotrs3TisEJKBPBAfOq15Wip4SmA9j4Ps67HMkkp7jttm6RHuuxRnx+wmROcV1I=
+	t=1778756862; cv=none; b=LhSOuZKrZTXyws8vFRFD90sJH15p3qDTKDxU5KXGojhmfSNEwsls9Xomx90ZD438JXtIvQCFh57UDi/6U0mfX7cslczkXlpAJ5hgK6M8SoShvdyp3ABeNpImwWg9kOLHW5rNMql0mN6vIREP9ESOm44BHPdWvjn8NpUXIETS7hI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778756852; c=relaxed/simple;
-	bh=64h78kYhiuhfHSxMUMUDpTwZLBrLQDm2GThKRcUhPbA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=a43M4BWuqCPPxza+r4DPDTLC3W0IeEceTIN4FOb6j+YVDwKAISkpWVlc4I36NFgEEKV2abgheu/sOaQuiY6KpfIUCCYks51lvXJ7WlB/uXeQxJKfzdRPrroDucuU/h2bXaczqDD197iTTY+UV37X2l2cwlPaLNckjKLaKB8Sdeg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=FSkv2BFN; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	s=arc-20240116; t=1778756862; c=relaxed/simple;
+	bh=oC0UzBP3ghZItozYv+DgZ3ZQwAh1ydbxesK2C9w8/A4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=QUepZ3moP/uSGGRZM3aUQfxDxVnnmJzrsBoXI0DQ2tj0If0UrMV+B15FLvecUmGdOnOBwFp0YooIQk6m9BZEA9/srufiKjsXswWkLEh3RS6SDnOr+GOECXH3W0UmBTG5bM7kYbTzGjCxopSdCPVxRijSSBBXErhTkA0DgiZpE88=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gtyEPgFi; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="FSkv2BFN"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=8ajRUalzhgnnfvlPn0WFR2fLEgViH6plKkchspfix3c=; b=FSkv2BFN8Uucm7POm/m+FRQU/f
-	OKnEJNeRs5TovgCDj71pFKXBJ1ywjwTYpsPkhqP9CZJSYJ2pJwTrRoWL15Kaz7/MMYxMntaic2dBR
-	YWzDWy8dFIHIw5lFZC/dpG4I+/ayRH3T7wofabgAeBm2v8IZqoGuF3ep2U5WdJxuGiIevSKY5ovUV
-	PD3MK0HHzJHnjLAcT2nyMQDmdsvV/0brczMU5K6/j0LxqEhDkA6JWF034qbFbC82lluwRPT0hgXgz
-	QVNwSPf7c6MuOxJy4ycOlhxtvmO22G61aJu46aH+Dhl//jaXkvhovISFZBaHZaZKCfruOsjKVAYPn
-	+t0uCj8A==;
-Received: from authenticated user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wNTu6-003tUh-22;
-	Thu, 14 May 2026 11:06:59 +0000
-Date: Thu, 14 May 2026 04:06:51 -0700
-From: Breno Leitao <leitao@debian.org>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: Miaohe Lin <linmiaohe@huawei.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>, 
-	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
-	Naoya Horiguchi <nao.horiguchi@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	"Liam R. Howlett" <liam@infradead.org>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, kernel-team@meta.com, Lance Yang <lance.yang@linux.dev>
-Subject: Re: [PATCH v7 4/6] mm/memory-failure: short-circuit PG_reserved
- before get_hwpoison_page()
-Message-ID: <agWrHSXGQzZPEg0L@gmail.com>
-References: <20260513-ecc_panic-v7-0-be2e578e61da@debian.org>
- <20260513-ecc_panic-v7-4-be2e578e61da@debian.org>
- <511dc52e-f2af-43c8-a9cf-19321b091dbe@kernel.org>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gtyEPgFi"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1778756857;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=B/yPHeYC2fgqBsF3pbfRiH1JNjMfGHMBqeiHiH39eH8=;
+	b=gtyEPgFiDpziO2IXoTM9yShsTSm3fjPziXrwW6MGHvUcMYL6nQ/dUm4oU8lgSUMTRbMyKG
+	XLtmHNU3AUpASazhIMVpESn+lUs4HNA1YA4RDUluilNtuaY42nL6NoR8QxJoAYhTyPZzkf
+	QaClprpB0/zq5prYQq4w2PISDvxwHcI=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-259-lOuwrRuFPeaWarCVxurkgQ-1; Thu,
+ 14 May 2026 07:07:30 -0400
+X-MC-Unique: lOuwrRuFPeaWarCVxurkgQ-1
+X-Mimecast-MFC-AGG-ID: lOuwrRuFPeaWarCVxurkgQ_1778756847
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 262971800343;
+	Thu, 14 May 2026 11:07:26 +0000 (UTC)
+Received: from [192.168.1.153] (headnet01.pony-001.prod.iad2.dc.redhat.com [10.2.32.101])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8CB8A19560A2;
+	Thu, 14 May 2026 11:07:18 +0000 (UTC)
+From: Albert Esteve <aesteve@redhat.com>
+Date: Thu, 14 May 2026 13:06:38 +0200
+Subject: [PATCH v11 2/4] kunit: Add backtrace suppression self-tests
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <511dc52e-f2af-43c8-a9cf-19321b091dbe@kernel.org>
-X-Debian-User: leitao
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260514-kunit_add_support-v11-2-b36a530a6d8f@redhat.com>
+References: <20260514-kunit_add_support-v11-0-b36a530a6d8f@redhat.com>
+In-Reply-To: <20260514-kunit_add_support-v11-0-b36a530a6d8f@redhat.com>
+To: Arnd Bergmann <arnd@arndb.de>, 
+ Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, 
+ Rae Moar <raemoar63@gmail.com>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+ Andrew Morton <akpm@linux-foundation.org>, Paul Walmsley <pjw@kernel.org>, 
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+ Alexandre Ghiti <alex@ghiti.fr>
+Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+ dri-devel@lists.freedesktop.org, workflows@vger.kernel.org, 
+ linux-riscv@lists.infradead.org, linux-doc@vger.kernel.org, 
+ peterz@infradead.org, Guenter Roeck <linux@roeck-us.net>, 
+ Linux Kernel Functional Testing <lkft@linaro.org>, 
+ Alessandro Carminati <acarmina@redhat.com>, 
+ Albert Esteve <aesteve@redhat.com>, Dan Carpenter <error27@gmail.com>, 
+ Kees Cook <kees@kernel.org>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1778756819; l=7797;
+ i=aesteve@redhat.com; s=20260303; h=from:subject:message-id;
+ bh=/37HgWGzcoYykJdidB3fwcaQ4TOWQzBWk65C8FwtPuo=;
+ b=1xNtxi/tOUSoHj87hiAjsHado0B7Q0HA2Vw0jezN3yULzaQa9GK1MuWsFIRfam3wYxfP5AY3A
+ mdqaVcQfyhXCPMpa4Lcna7Knu7ekw5cPQXSuf46Et2k0rH4Hg6rVOIU
+X-Developer-Key: i=aesteve@redhat.com; a=ed25519;
+ pk=YSFz6sOHd2L45+Fr8DIvHTi6lSIjhLZ5T+rkxspJt1s=
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-On Wed, May 13, 2026 at 09:49:28PM +0200, David Hildenbrand (Arm) wrote:
-> On 5/13/26 17:39, Breno Leitao wrote:
-> > The previous patch already classifies PG_reserved pages as
-> > MF_MSG_KERNEL through the long path: get_hwpoison_page() calls
-> > __get_hwpoison_page() which fails HWPoisonHandlable(), get_any_page()
-> > exhausts its shake_page() retry budget, and the resulting
-> > -ENOTRECOVERABLE is mapped to MF_MSG_KERNEL by the switch.  The
-> > outcome is correct but the work in between is wasted: shake_page()
-> > cannot turn a reserved page into a handlable one.
-> 
-> If really required, can we just move the check right there, into get_any_page() etc?
+From: Guenter Roeck <linux@roeck-us.net>
 
-Sure, we might move it to get_any_page(). I took this current approach
-based on the following facts:
+Add unit tests to verify that warning backtrace suppression works.
 
-1) Lance suggested it, and it sounded a good idea.
-	https://lore.kernel.org/all/20260512124837.38883-1-lance.yang@linux.dev/
+Tests cover both API forms:
+- Scoped: kunit_warning_suppress() with in-block count verification
+  and post-block inactivity check.
+- Direct functions: kunit_start/end_suppress_warning() with
+  sequential independent suppression blocks and per-block counts.
 
-2) There is a _similar_ check close to this one in memory_failure(),
-   just before this one:
+Furthermore, tests verify incremental warning counting, that
+kunit_has_active_suppress_warning() transitions correctly around
+suppression boundaries, and that suppression active in the test
+kthread does not leak to a separate kthread.
 
-  if (TestSetPageHWPoison(p)) {
-  	....
-	action_result()
-	goto unlock_mutex;
-  }
+If backtrace suppression does _not_ work, the unit tests will likely
+trigger unsuppressed backtraces, which should actually help to get
+the affected architectures / platforms fixed.
 
-  and now
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Acked-by: Dan Carpenter <dan.carpenter@linaro.org>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Alessandro Carminati <acarmina@redhat.com>
+Reviewed-by: David Gow <david@davidgow.net>
+Signed-off-by: Albert Esteve <aesteve@redhat.com>
+---
+ lib/kunit/Makefile                     |   1 +
+ lib/kunit/backtrace-suppression-test.c | 198 +++++++++++++++++++++++++++++++++
+ 2 files changed, 199 insertions(+)
 
-  if (PageReserved(p)) {
-	...
-  	action_result()
-	goto unlock_mutes;
-  }
+diff --git a/lib/kunit/Makefile b/lib/kunit/Makefile
+index 4592f9d0aa8dd..2e8a6b71a2ab0 100644
+--- a/lib/kunit/Makefile
++++ b/lib/kunit/Makefile
+@@ -22,6 +22,7 @@ obj-$(if $(CONFIG_KUNIT),y) +=		hooks.o
+ 
+ obj-$(CONFIG_KUNIT_TEST) +=		kunit-test.o
+ obj-$(CONFIG_KUNIT_TEST) +=		platform-test.o
++obj-$(CONFIG_KUNIT_TEST) +=		backtrace-suppression-test.o
+ 
+ # string-stream-test compiles built-in only.
+ ifeq ($(CONFIG_KUNIT_TEST),y)
+diff --git a/lib/kunit/backtrace-suppression-test.c b/lib/kunit/backtrace-suppression-test.c
+new file mode 100644
+index 0000000000000..7a2a59c6a780d
+--- /dev/null
++++ b/lib/kunit/backtrace-suppression-test.c
+@@ -0,0 +1,198 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * KUnit test for suppressing warning tracebacks.
++ *
++ * Copyright (C) 2024, Guenter Roeck
++ * Author: Guenter Roeck <linux@roeck-us.net>
++ */
++
++#include <kunit/test.h>
++#include <linux/bug.h>
++#include <linux/completion.h>
++#include <linux/kthread.h>
++
++static void backtrace_suppression_test_warn_direct(struct kunit *test)
++{
++	if (!IS_ENABLED(CONFIG_BUG))
++		kunit_skip(test, "requires CONFIG_BUG");
++
++	kunit_warning_suppress(test) {
++		WARN(1, "This backtrace should be suppressed");
++		/*
++		 * Count must be checked inside the scope; the handle
++		 * is not accessible after the block exits.
++		 */
++		KUNIT_EXPECT_SUPPRESSED_WARNING_COUNT(test, 1);
++	}
++	KUNIT_EXPECT_FALSE(test, kunit_has_active_suppress_warning());
++}
++
++static noinline void trigger_backtrace_warn(void)
++{
++	WARN(1, "This backtrace should be suppressed");
++}
++
++static void backtrace_suppression_test_warn_indirect(struct kunit *test)
++{
++	if (!IS_ENABLED(CONFIG_BUG))
++		kunit_skip(test, "requires CONFIG_BUG");
++
++	kunit_warning_suppress(test) {
++		trigger_backtrace_warn();
++		KUNIT_EXPECT_SUPPRESSED_WARNING_COUNT(test, 1);
++	}
++}
++
++static void backtrace_suppression_test_warn_multi(struct kunit *test)
++{
++	if (!IS_ENABLED(CONFIG_BUG))
++		kunit_skip(test, "requires CONFIG_BUG");
++
++	kunit_warning_suppress(test) {
++		WARN(1, "This backtrace should be suppressed");
++		trigger_backtrace_warn();
++		KUNIT_EXPECT_SUPPRESSED_WARNING_COUNT(test, 2);
++	}
++}
++
++static void backtrace_suppression_test_warn_on_direct(struct kunit *test)
++{
++	if (!IS_ENABLED(CONFIG_BUG))
++		kunit_skip(test, "requires CONFIG_BUG");
++	if (!IS_ENABLED(CONFIG_DEBUG_BUGVERBOSE) && !IS_ENABLED(CONFIG_KALLSYMS))
++		kunit_skip(test, "requires CONFIG_DEBUG_BUGVERBOSE or CONFIG_KALLSYMS");
++
++	kunit_warning_suppress(test) {
++		WARN_ON(1);
++		KUNIT_EXPECT_SUPPRESSED_WARNING_COUNT(test, 1);
++	}
++}
++
++static noinline void trigger_backtrace_warn_on(void)
++{
++	WARN_ON(1);
++}
++
++static void backtrace_suppression_test_warn_on_indirect(struct kunit *test)
++{
++	if (!IS_ENABLED(CONFIG_BUG))
++		kunit_skip(test, "requires CONFIG_BUG");
++	if (!IS_ENABLED(CONFIG_DEBUG_BUGVERBOSE))
++		kunit_skip(test, "requires CONFIG_DEBUG_BUGVERBOSE");
++
++	kunit_warning_suppress(test) {
++		trigger_backtrace_warn_on();
++		KUNIT_EXPECT_SUPPRESSED_WARNING_COUNT(test, 1);
++	}
++}
++
++static void backtrace_suppression_test_count(struct kunit *test)
++{
++	if (!IS_ENABLED(CONFIG_BUG))
++		kunit_skip(test, "requires CONFIG_BUG");
++
++	kunit_warning_suppress(test) {
++		KUNIT_EXPECT_SUPPRESSED_WARNING_COUNT(test, 0);
++
++		WARN(1, "suppressed");
++		KUNIT_EXPECT_SUPPRESSED_WARNING_COUNT(test, 1);
++
++		WARN(1, "suppressed again");
++		KUNIT_EXPECT_SUPPRESSED_WARNING_COUNT(test, 2);
++	}
++}
++
++static void backtrace_suppression_test_active_state(struct kunit *test)
++{
++	KUNIT_EXPECT_FALSE(test, kunit_has_active_suppress_warning());
++
++	kunit_warning_suppress(test) {
++		KUNIT_EXPECT_TRUE(test, kunit_has_active_suppress_warning());
++	}
++
++	KUNIT_EXPECT_FALSE(test, kunit_has_active_suppress_warning());
++
++	kunit_warning_suppress(test) {
++		KUNIT_EXPECT_TRUE(test, kunit_has_active_suppress_warning());
++	}
++
++	KUNIT_EXPECT_FALSE(test, kunit_has_active_suppress_warning());
++}
++
++static void backtrace_suppression_test_multi_scope(struct kunit *test)
++{
++	struct kunit_suppressed_warning *sw1, *sw2;
++
++	if (!IS_ENABLED(CONFIG_BUG))
++		kunit_skip(test, "requires CONFIG_BUG");
++	if (!IS_ENABLED(CONFIG_DEBUG_BUGVERBOSE))
++		kunit_skip(test, "requires CONFIG_DEBUG_BUGVERBOSE");
++
++	sw1 = kunit_start_suppress_warning(test);
++	trigger_backtrace_warn_on();
++	WARN(1, "suppressed by sw1");
++	kunit_end_suppress_warning(test, sw1);
++
++	sw2 = kunit_start_suppress_warning(test);
++	WARN(1, "suppressed by sw2");
++	kunit_end_suppress_warning(test, sw2);
++
++	KUNIT_EXPECT_EQ(test, kunit_suppressed_warning_count(sw1), 2);
++	KUNIT_EXPECT_EQ(test, kunit_suppressed_warning_count(sw2), 1);
++}
++
++struct cross_kthread_data {
++	bool was_active;
++	struct completion done;
++};
++
++static int cross_kthread_fn(void *data)
++{
++	struct cross_kthread_data *d = data;
++
++	d->was_active = kunit_has_active_suppress_warning();
++	complete(&d->done);
++	while (!kthread_should_stop())
++		schedule();
++	return 0;
++}
++
++static void backtrace_suppression_test_cross_kthread(struct kunit *test)
++{
++	struct cross_kthread_data data;
++	struct task_struct *task;
++
++	data.was_active = false;
++	init_completion(&data.done);
++
++	kunit_warning_suppress(test) {
++		task = kthread_run(cross_kthread_fn, &data, "kunit-cross-test");
++		KUNIT_ASSERT_FALSE(test, IS_ERR(task));
++		wait_for_completion(&data.done);
++		kthread_stop(task);
++	}
++
++	KUNIT_EXPECT_FALSE(test, data.was_active);
++}
++
++static struct kunit_case backtrace_suppression_test_cases[] = {
++	KUNIT_CASE(backtrace_suppression_test_warn_direct),
++	KUNIT_CASE(backtrace_suppression_test_warn_indirect),
++	KUNIT_CASE(backtrace_suppression_test_warn_multi),
++	KUNIT_CASE(backtrace_suppression_test_warn_on_direct),
++	KUNIT_CASE(backtrace_suppression_test_warn_on_indirect),
++	KUNIT_CASE(backtrace_suppression_test_count),
++	KUNIT_CASE(backtrace_suppression_test_active_state),
++	KUNIT_CASE(backtrace_suppression_test_multi_scope),
++	KUNIT_CASE(backtrace_suppression_test_cross_kthread),
++	{}
++};
++
++static struct kunit_suite backtrace_suppression_test_suite = {
++	.name = "backtrace-suppression-test",
++	.test_cases = backtrace_suppression_test_cases,
++};
++kunit_test_suites(&backtrace_suppression_test_suite);
++
++MODULE_LICENSE("GPL");
++MODULE_DESCRIPTION("KUnit test to verify warning backtrace suppression");
 
-3) I wanted to give get it as  real layering point, not handwaving.
+-- 
+2.53.0
 
-That said, I will short-circuit reserved pages inside get_any_page(), in
-an updated version.
-
-Again, thanks for the review and direction!
---breno
