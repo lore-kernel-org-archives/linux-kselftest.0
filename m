@@ -1,79 +1,107 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91DA4224AF7;
-	Thu, 14 May 2026 02:38:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C5811A6808;
+	Thu, 14 May 2026 04:33:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778726283; cv=none; b=OKPYmq5b/JC6gu5+IvOIgAqda8ajq/pxukrLPshj6j1tY63v+R/M99NQUcvXiJ16a4uOXlEDaHmI7fEo30lYSgIUQcUB1RXW4sIRDa9Pb11DElPtQG2t7czogUD5bpP2bE/sQl5df90Jr3zYp9mxgG0ZelOjZqxTH9wo6ppnPHM=
+	t=1778733212; cv=none; b=fLDgYCTpTpYp1CT4Cz86qmZSBi6X/lB1Lz483dkO7rzfWoySHlzWcqHsk4Vf8LrkBnmeWdXbAfkNqfBgIcFvsVR+pt39M72QYRiDhiX02PgXY/5bHh/aQTMzTcxhhuXv8gRtOKjYAiZDHvFMNJHhJ7zjEg8oqhFU3y7JpF845S4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778726283; c=relaxed/simple;
-	bh=OkqJKLPa5/XWhe7b5tvMy99sdc3gDBLM7Mk7A4X0AS8=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Z1/zQN48WMZB8L3R61/5auJTikmZW13T8YGIJMPjhnTo/19BJPIbXBm/pCI1NNyieSBB+BNDguOvxdXvZRMUTwDFNFKQfpZmzztnNFlMk6vyjA38JFEeLsjbOVJVVlLvM4kE/gqpEoz1+fF1fbOOKDaaZ04hTR8taTIIV1LwQjw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gj1fBhJX; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778733212; c=relaxed/simple;
+	bh=INDRk09ThMXJo9yURkK/JvJY8tS7dKZZsWIbfE5GOJY=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version; b=RvPEpsucTgIMo+A464MWUczfKATmaOSgUILT6ZH4iT7omK8KSdo2klNw/S0kskuAU8eSPMCvCDI6JXK+e/zvpRVQciv2lCYzx/vDIp8Xb01wKvVtVRJlxeR4xJr30k8NWe7UosOa355klrX8HRFCFjZ4er29FOW1O9PtpIB5N+A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cgU9Pk1P; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gj1fBhJX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C98BC19425;
-	Thu, 14 May 2026 02:38:01 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cgU9Pk1P"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90F4AC2BCB7;
+	Thu, 14 May 2026 04:33:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778726283;
-	bh=OkqJKLPa5/XWhe7b5tvMy99sdc3gDBLM7Mk7A4X0AS8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Gj1fBhJXmKTXqg9VRUh/5vLialAkSg2jjNpJUH3da3w0xw23gLNPS5uaYgB9qM7rx
-	 qMARyNg6VJtIFp8BD3vzCz7TZjdV0dMXHym77KLE/dsjWzj0mGoXJnqZJTgpiWJSRk
-	 /QnLZ93qVuMu+oYu+RKmDULObMd+PFoa94PYitPfUw8XL5RC+xTklUrKVNOtk5liMM
-	 XHkIMUC+QlTSEqq/Qm16pMqfBrdzhEVprpK9Znq/PEH7V6xsu3o++2N2lOPyDIeVhB
-	 k32Oj1Na6qgYOpa9o77AJE56aLFhYj6cCkvf3qTy4OpLTCka5H5mCW7WGuftaKha/V
-	 Q8lDzWBF+0LCw==
-Date: Wed, 13 May 2026 19:38:00 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Bobby Eshleman <bobbyeshleman@gmail.com>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
- <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Jonathan Corbet
- <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Alex Shi
- <alexs@kernel.org>, Yanteng Si <si.yanteng@linux.dev>, Dongliang Mu
- <dzm91@hust.edu.cn>, Michael Chan <michael.chan@broadcom.com>, Pavan Chebbi
- <pavan.chebbi@broadcom.com>, Joshua Washington <joshwash@google.com>,
- Harshitha Ramamurthy <hramamurthy@google.com>, Saeed Mahameed
- <saeedm@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>, Mark Bloch
- <mbloch@nvidia.com>, Leon Romanovsky <leon@kernel.org>, Alexander Duyck
- <alexanderduyck@fb.com>, kernel-team@meta.com, Daniel Borkmann
- <daniel@iogearbox.net>, Nikolay Aleksandrov <razor@blackwall.org>, Shuah
- Khan <shuah@kernel.org>, dw@davidwei.uk, sdf.kernel@gmail.com,
- mohsin.bashr@gmail.com, willemb@google.com, jiang.kun2@zte.com.cn,
- xu.xin16@zte.com.cn, wang.yaxin@zte.com.cn, netdev@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-rdma@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Stanislav Fomichev <sdf@fomichev.me>, Mina
- Almasry <almasrymina@google.com>, Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v4 6/8] selftests: drv-net: refactor devmem
- command builders into lib module
-Message-ID: <20260513193800.680a3375@kernel.org>
-In-Reply-To: <agUzR3O35Rx4RHnu@devvm29614.prn0.facebook.com>
-References: <20260511-tcp-dm-netkit-v4-0-841b78b99d74@meta.com>
-	<20260511-tcp-dm-netkit-v4-6-841b78b99d74@meta.com>
-	<20260513192133.60a82598@kernel.org>
-	<agUzR3O35Rx4RHnu@devvm29614.prn0.facebook.com>
+	s=k20201202; t=1778733212;
+	bh=INDRk09ThMXJo9yURkK/JvJY8tS7dKZZsWIbfE5GOJY=;
+	h=From:To:Subject:Date:From;
+	b=cgU9Pk1PwuAwZf52CtCd8RtsWY+XTozPQDs6XnXBwnGafCIfV/Y9AXkoCDTFmtQm7
+	 H5z7iO0+nOdTag/MmlaHqFGqtxbOaWRXXMfSD+ZWLMKWMtzZB1QkV2YqhAznb4lFAg
+	 8oZGbk6k9tMrdvd9adrsQVoPTUeE9m4tD7iaOaFNxQ2+lIZd4W4BuJ8cDXQjUwAnPE
+	 RhyR7QMhOZipk+tqUs94y5bCGVI2OAlBdjHmyCE2dVov0jMW3QWx5lDCUEXxOPZ6Cl
+	 DcgidxIU6wXmmWZjiSUzpLuuw1Cs6ueY49PCj9VCVVtZvgjHpS+VGSoe9lj30A5WxG
+	 4qWB5HnKzHCdQ==
+From: Allison Henderson <achender@kernel.org>
+To: netdev@vger.kernel.org,
+	pabeni@redhat.com,
+	edumazet@google.com,
+	kuba@kernel.org,
+	horms@kernel.org,
+	linux-rdma@vger.kernel.org,
+	achender@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	shuah@kernel.org
+Subject: [PATCH net-next v2 0/9] selftests: rds: Add ROCE support to rds selftests
+Date: Wed, 13 May 2026 21:33:21 -0700
+Message-Id: <20260514043330.1718969-1-achender@kernel.org>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Wed, 13 May 2026 19:28:23 -0700 Bobby Eshleman wrote:
-> > Also I think you missed adding the new file to Makefiles ?
-> > It needs to be under TEST_FILES for building tarballs  
-> 
-> Ah okay, I wasn't sure if the already existing `TEST_INCLUDES :=
-> $(wildcard lib/py/*.py ../lib/py/*.py)` was sufficient or not. Will use
-> TEST_FILES with the devmem_lib approach above next rev.
+Currently the rds selftests only tests the tcp transport.  This means
+most of rds_rdma.ko has no testing coverage.  This series refactors the
+rds self tests to add an rdma option when running tests.  When used,
+the test creates a pair of ROCE interfaces to run the payloads through.
 
-Ah, you're right! Forgot we have the wildcard there.
+Most of this set is refactoring the existing test.py module.  Since most
+of this code is one long procedure, it is difficult to modularize it
+without creating a lot of pylint complaints about lengthy functions
+with too many variables or branches.  The first seven patches address
+this by breaking down test.py into helper functions.  After we have
+modularized the send/recv packet logic, we introduce the new ROCE
+equivalent network configurations, add the new command line flags to
+build and run the test with rdma support.  
 
-We should probably update
-https://github.com/linux-netdev/nipa/blob/main/tests/patch/check_selftest/test.py
+Questions, comments and feedback appreciated!
+
+Thanks everyone!
+Allison
+
+Change Log
+v2:
+   [PATCH net-next v1 1/9] selftests: rds: Capitalize ret global in test.py
+      Dropped
+
+   [PATCH net-next v2 4/9] selftests: rds: Add helper function recv_burst() in test.py 
+      Pylint nits
+
+   [PATCH net-next v2 6/9] selftests: rds: Add helper function snd_rcv_packets() in test.py
+      Pylint nits
+
+   [PATCH net-next v2 7/9] selftests: rds: Register network teardown via atexi 
+      NEW
+      Registers network config cleanup function teardown_tcp() with atexi
+
+   [PATCH net-next v2 8/9] selftests: rds: Add ROCE support to test.py
+      Pylint nits
+      Added rdma network teardown cleanup on atexit
+      Fixed test result reporting with dynamic per-transport reporting
+
+Allison Henderson (9):
+  selftests: rds: Add helper function setup_tcp() in test.py
+  selftests: rds: Add helper function check_info() in test.py
+  selftests: rds: Add helper function send_burst() in test.py
+  selftests: rds: Add helper function recv_burst() in test.py
+  selftests: rds: Add helper function verify_hashes() in test.py
+  selftests: rds: Add helper function snd_rcv_packets() in test.py
+  selftests: rds: Register network teardown via atexit
+  selftests: rds: Add ROCE support to test.py
+  selftests: rds: Add ROCE support to run.sh
+
+ tools/testing/selftests/net/rds/config.sh |  15 +-
+ tools/testing/selftests/net/rds/run.sh    |  53 +-
+ tools/testing/selftests/net/rds/test.py   | 591 +++++++++++++++-------
+ 3 files changed, 465 insertions(+), 194 deletions(-)
+
+-- 
+2.25.1
+
