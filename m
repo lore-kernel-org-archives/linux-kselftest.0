@@ -1,206 +1,187 @@
-Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
+Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6D3F3793BF
-	for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 13:29:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AB593E1204;
+	Thu, 14 May 2026 13:30:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.242.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778765349; cv=none; b=Bijq8YdepNxmAcG9w8No4Hbg7jQ8DVMCazBwMqQKMSavNbZIO4nGF10mfd3EIu4duOoTleD8fHMfSUGsCPgmhbq0UwWoWWtvUHeFgorLcgDSPe38r+iqx7TcR7g8r/bJFWuFzCVGaV2psNN5ZymoNBITVzSfWkeyhPnavSKVgik=
+	t=1778765404; cv=none; b=G64Gr3u5RL6jMC8QSc9yFJu+1ZagAEbqS7YSM0//A/yvTacMpeEAHmLyQT2DYL7eWBtB/iWaCCDyREF3zpXzre/4pj8R2w4/fA5pPpzmqcXSktFV+8c6b9dtI6mDffZwMbDKy2h0PD2qOR0+pM0vu000r5VHLiOfiRtQkRGy5A8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778765349; c=relaxed/simple;
-	bh=/htvruVWym1bQsi8fQdburgDbXqcQpRYNNGCNxuN6Vs=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=feHzGHgvkmrB2MYlZq30vsMjZ5Iwvy+FwU7Op7FpUD408aCCWCARBLofhnkdRorr0X6Rnohuje5XtIEYa8uoswPCtZErAMUnpuYSZB1xHzRte6HyF2SE8Nm0fLiFMLjuruU8v3ubY0WSCD4aYniCIaVb8VeF6nSYDGBuDhX6kZs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Gy4rLQF3; arc=none smtp.client-ip=95.215.58.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1778765404; c=relaxed/simple;
+	bh=vxbfjng0B9uFu3i4cyWFlIzzXmNnzPEgPX/PRp4v+CM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=js0VqznKicbMbs7aVdjIao2Lbt/Q7IulV70jr4LhchehGUuvP+gnbga9JE4flS76xEG52BQNzuoUe+rOOn2hizOrO7UZmbOX3499FAe8sBUzZZDwBkVMmvWG9JzdrvSOF9cxMMmENpczeUjrWUVH6zdcqmI2xDyXB5AxkCNAib0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net; spf=pass smtp.mailfrom=davidgow.net; dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b=acQesxzF; dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b=XE3hTE2g; arc=none smtp.client-ip=203.29.242.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Gy4rLQF3"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1778765333;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=CHsQvgnGni5VzgHRfyddSYqk4CVVONQEgEqMCt8cdnY=;
-	b=Gy4rLQF3LbRi2vNN5nxzWcmxA0rj1izyKV4hVle7D6TZWBOFHaO+fDNE1T6lfPxCtV+ZWm
-	C6dXs4GRA6SUMk/uccaOIKQE0nAtepkm5OPEDqz31U98o9qMsRRc0r5+v4EDmY4BHXN5K9
-	jXcavJKzAVTla4wEJjC++MsqneecnGs=
-From: Lance Yang <lance.yang@linux.dev>
-To: leitao@debian.org
-Cc: linmiaohe@huawei.com,
-	akpm@linux-foundation.org,
-	david@kernel.org,
-	ljs@kernel.org,
-	vbabka@kernel.org,
-	rppt@kernel.org,
-	surenb@google.com,
-	mhocko@suse.com,
-	shuah@kernel.org,
-	nao.horiguchi@gmail.com,
-	rostedt@goodmis.org,
-	mhiramat@kernel.org,
-	mathieu.desnoyers@efficios.com,
-	corbet@lwn.net,
-	skhan@linuxfoundation.org,
-	liam@infradead.org,
-	linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	kernel-team@meta.com,
-	Lance Yang <lance.yang@linux.dev>
-Subject: Re: [PATCH v7 2/6] mm/memory-failure: surface unhandlable kernel pages as -ENOTRECOVERABLE
-Date: Thu, 14 May 2026 21:28:30 +0800
-Message-Id: <20260514132830.25622-1-lance.yang@linux.dev>
-In-Reply-To: <20260513-ecc_panic-v7-2-be2e578e61da@debian.org>
-References: <20260513-ecc_panic-v7-2-be2e578e61da@debian.org>
+	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b="acQesxzF";
+	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b="XE3hTE2g"
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
+	s=201606; t=1778765391;
+	bh=vxbfjng0B9uFu3i4cyWFlIzzXmNnzPEgPX/PRp4v+CM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=acQesxzF7A7T9F+A+7bYxuQVSsmI/3VdYu2Lt+EvNCs4yPj3KsQYjBZUESXxqlm31
+	 PzcNndL7dEGK+k3LKyHVrhR99Hn54130P/82/Hgop9yqqw41Z25mEaoQu2/kbAN5KZ
+	 6FMh3aLQTZtQLUoI2P5Oe6BLgkTs/w8fovTxgMaX3Bn52e5nz1qXvkx4SvAz8hHKuK
+	 rg1Yjgi0ODWYb8f6Iby8rZuKB3m6wUb68mDA5up/so0LSTATTDVJoIEzTTvzoW9kCn
+	 1QJTxBWkr6iZP1rTPQg+grlmgjTOrLGYuLWK16W1v8jgpA3r7yEkQ4CZote2EAKDUi
+	 F+nEXpY65tBKtOjiOhVi7ua5/0emivXTUZtaXT2Pg+YHRQ27XJU/Y4CdA/zuJVL492
+	 sYThvqxyJbcWd7xMcoQNb7HKTZRsTJUjZddB9ap7cxRK6tnzZGhzDVVdqGL9u7s4I3
+	 JdmQcuGvQiZi5KmeL1b6Wimk0UGAtGM2j+0c+LfOkG7AETA5alwqgM8LBCET5I1dy7
+	 EoEbMHIcrXwV6COkpWLZ6ymZS39Yy1I0QUqave8mK8G57qFhhFnwRGooIDu6P9H+jh
+	 2st+F4eQJctKzA17ySa1gmD+iGoa6aGprGYZ0OibR60EhRZNnuoFzONXbjWNbk1L8q
+	 NKkYucWSKOO9YlxMh9RjDt6c=
+Received: by sphereful.davidgow.net (Postfix, from userid 119)
+	id D32BD1E96CB; Thu, 14 May 2026 21:29:51 +0800 (AWST)
+X-Spam-Level: 
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
+	s=201606; t=1778765389;
+	bh=vxbfjng0B9uFu3i4cyWFlIzzXmNnzPEgPX/PRp4v+CM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=XE3hTE2goqoZYwH4TFBAMLkaami0TNvqQC2EB9Yle6CxjGboRMuxVJJ6pSHaydA8m
+	 Bu/X0dgrow+gEaHfuMU68gc1L8qCfbZGc6lRhUl3AeR3ENi5EliIYNNngjXOiFGJhV
+	 pzvgsatJqSGF1G+ALpluO1NDNOYR2vkEMOaIFIjU2LJU36ec2vHPn8JH2CT+39/No1
+	 Z4KBX5DP1lPvLZQtX7btz6Dr3mNGYPb3W4tZTI6AMPXFyAdGyTd9wV5XSeVTNWwNqg
+	 3vHFhhtfE80BmORFq7Vy72wX/3/xSMu9UfVFFTBIGLNqniao6hEpJQXxTP+GEmbnMD
+	 WWeG14rAKXE7nCjbLribyPQmjW9Y4lLYWCSEHlnJ9yteWc8olstu6Xn1MpHK3ibN06
+	 NELYTQN8tGWSoCIZGzB7R7HOSWAJ9YLF2s3gMDR7kdK3r5sq9wmT0E8rTvLtoZcqty
+	 0QsANpO8hAvEBogwDFz1cAHLkJwxLOY5KO6yk550F07Qm/owy5FlK5/oHjJX4S9BhR
+	 fnQODupDMF4p3tAGviQmWcwyNw9zX8KnRWeSq1LAl57Vr/Jm58bKRIUeEM8xNFmTYr
+	 MY9wfHNu0U9j6eGSSDOMSm9YYq9HJ1SRoDxgqUIVgVZea+F4xs4/5z51VjzZw+RA7i
+	 lwYO/ev0jhEAS7KZJd+arQEA=
+Received: from [IPV6:2001:8003:8810:ea00:ed87:ca88:5326:e11d] (unknown [IPv6:2001:8003:8810:ea00:ed87:ca88:5326:e11d])
+	by sphereful.davidgow.net (Postfix) with ESMTPSA id A7B8D1E96C4;
+	Thu, 14 May 2026 21:29:49 +0800 (AWST)
+Message-ID: <7f673258-e608-4d67-b092-c9dbb533d2f4@davidgow.net>
+Date: Thu, 14 May 2026 21:29:47 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] kunit: fix use-after-free in debugfs when using
+ kunit.filter
+To: Florian Schmaus <florian.schmaus@codasip.com>,
+ Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <raemoar63@gmail.com>
+Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+ linux-kernel@vger.kernel.org
+References: <20260507084854.233984-1-florian.schmaus@codasip.com>
+From: David Gow <david@davidgow.net>
+Content-Language: fr
+In-Reply-To: <20260507084854.233984-1-florian.schmaus@codasip.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
-
-On Wed, May 13, 2026 at 08:39:33AM -0700, Breno Leitao wrote:
->get_any_page() collapses three different failure modes into a single
->-EIO return:
->
->  * the put_page race in the !count_increased path;
->  * the HWPoisonHandlable() rejection that bounces out of
->    __get_hwpoison_page() with -EBUSY and exhausts shake_page() retries;
->  * the HWPoisonHandlable() rejection that goes through the
->    count_increased / put_page / shake_page retry loop.
->
->The first is transient (the page is racing with the allocator).  The
->second can be either transient (a userspace folio briefly off LRU
->during migration/compaction) or stable (slab/vmalloc/page-table/
->kernel-stack pages).  The third describes a stable kernel-owned page
->that the count_increased=true caller already held a reference on.
->
->Distinguish them on the return path: keep -EIO for both the put_page
->race and the -EBUSY-after-retries branch (shake_page() cannot drag a
->folio back from active migration, so we cannot prove the page is
->permanently kernel-owned from there), keep -EBUSY for the allocation
->race (unchanged), and return -ENOTRECOVERABLE only from the
->count_increased-true HWPoisonHandlable() rejection that exhausts its
->retries -- the caller's reference is structural evidence that the
->page is owned by the kernel.
->
->Extend the unhandlable-page pr_err() to fire for either errno and
->update the get_hwpoison_page() kerneldoc.
->
->memory_failure() still folds every negative return into
->MF_MSG_GET_HWPOISON via its existing "else if (res < 0)" branch, so
->this patch is a no-op for users of memory_failure() and only changes
->the errno that soft_offline_page() can propagate to its callers.  A
->follow-up wires the new return code through memory_failure() and
->reports MF_MSG_KERNEL for the unrecoverable cases.
->
->Suggested-by: David Hildenbrand <david@kernel.org>
->Signed-off-by: Breno Leitao <leitao@debian.org>
->---
-> mm/memory-failure.c | 18 +++++++++++++++---
-> 1 file changed, 15 insertions(+), 3 deletions(-)
->
->diff --git a/mm/memory-failure.c b/mm/memory-failure.c
->index 49bcfbd04d213..bae883df3ccb2 100644
->--- a/mm/memory-failure.c
->+++ b/mm/memory-failure.c
->@@ -1408,6 +1408,15 @@ static int get_any_page(struct page *p, unsigned long flags)
-> 				shake_page(p);
-> 				goto try_again;
-> 			}
->+			/*
->+			 * Return -EIO rather than -ENOTRECOVERABLE: this
->+			 * branch is also reached for pages that are merely
->+			 * off-LRU transiently (e.g. a folio in the middle
->+			 * of migration or compaction), which shake_page()
->+			 * cannot drag back.  The caller cannot prove the
->+			 * page is permanently kernel-owned from here, so
->+			 * keep it on the recoverable errno.
->+			 */
-> 			ret = -EIO;
-> 			goto out;
-> 		}
->@@ -1427,10 +1436,10 @@ static int get_any_page(struct page *p, unsigned long flags)
-> 			goto try_again;
-> 		}
-> 		put_page(p);
->-		ret = -EIO;
->+		ret = -ENOTRECOVERABLE;
-> 	}
-> out:
->-	if (ret == -EIO)
->+	if (ret == -EIO || ret == -ENOTRECOVERABLE)
-> 		pr_err("%#lx: unhandlable page.\n", page_to_pfn(p));
+Le 07/05/2026 à 4:48 PM, 'Florian Schmaus' via KUnit Development a écrit :
+> When the kernel is booted with a kunit filter (e.g.,
+> kunit.filter="speed!=slow"), the kunit executor dynamically allocates
+> copies of the filtered test suites using kmalloc/kmemdup.
 > 
-> 	return ret;
->@@ -1487,7 +1496,10 @@ static int __get_unpoison_page(struct page *page)
->  *         -EIO for pages on which we can not handle memory errors,
->  *         -EBUSY when get_hwpoison_page() has raced with page lifecycle
->  *         operations like allocation and free,
->- *         -EHWPOISON when the page is hwpoisoned and taken off from buddy.
->+ *         -EHWPOISON when the page is hwpoisoned and taken off from buddy,
->+ *         -ENOTRECOVERABLE for stable kernel-owned pages the handler
->+ *         cannot recover (PG_reserved, slab, vmalloc, page tables,
->+ *         kernel stacks, and similar non-LRU/non-buddy pages).
+> During the initial boot execution, kunit_debugfs_create_suite() creates
+> debugfs files (such as /sys/kernel/debug/kunit/<suite>/run) and
+> permanently stores a pointer to the dynamically allocated suite in the
+> inode's i_private field.
+> 
+> Previously, the executor freed this dynamically allocated suite_set
+> immediately after executing the boot-time tests. Because the debugfs
+> nodes were not destroyed, any subsequent interaction with the debugfs
+> `run` file from userspace triggered a use-after-free (UAF). On systems
+> with architectural capabilities, like CHERI RISC-V, this resulted in
+> an immediate fatal hardware exception due to the invalidation of the
+> capability tags on the reclaimed memory. On other architectures, it
+> resulted in silent memory corruption.
+> 
+> Fix this UAF by properly coupling the lifetime of the filtered suite
+> memory allocation to the lifetime of the kunit subsystem and its
+> associated VFS nodes. Ownership of the boot-time suite_set is now
+> transferred to a global tracker ('kunit_boot_suites'), and the memory
+> is cleanly released in kunit_exit() during module teardown.
+> 
+> Signed-off-by: Florian Schmaus <florian.schmaus@codasip.com>
+> ---
 
-Did you test this patch series? I don't see how we ever get to
--ENOTRECOVERABLE there ...
+Nice catch. Alas, I don't have any CHERI-style setups at the moment to
+actually test it out, but it looks right to me, and doesn't break
+anything.
 
-Even with MF_COUNT_INCREASED, the first pass does:
+It might be useful to add a Fixes tag to this if you do a future
+version: I think that the culprit commit is probably the original
+debugfs one:
+Fixes: e2219db280e3 ("kunit: add debugfs /sys/kernel/debug/kunit/<suite>/results display")
 
-	if (flags & MF_COUNT_INCREASED)
-		count_increased = true;
+Reviewed-by: David Gow <david@davidgow.net>
 
-	[...]
 
-	if (PageHuge(p) || HWPoisonHandlable(p, flags)) {
-		ret = 1;
-	} else {
-		if (pass++ < GET_PAGE_MAX_RETRY_NUM) { <-
-			put_page(p);
-			shake_page(p);
-			count_increased = false;
-			goto try_again; <-
-		}
-		put_page(p);
-		ret = -ENOTRECOVERABLE;
-	}
+Cheers,
+-- David
 
-Then we come back with count_increased=false:
+>  include/kunit/test.h |  1 +
+>  lib/kunit/executor.c | 19 ++++++++++++++++---
+>  lib/kunit/test.c     |  1 +
+>  3 files changed, 18 insertions(+), 3 deletions(-)
+> 
+> diff --git a/include/kunit/test.h b/include/kunit/test.h
+> index 9cd1594ab697..ce0573e196ce 100644
+> --- a/include/kunit/test.h
+> +++ b/include/kunit/test.h
+> @@ -613,6 +613,7 @@ unsigned long kunit_vm_mmap(struct kunit *test, struct file *file,
+>  			    unsigned long offset);
+>  
+>  void kunit_cleanup(struct kunit *test);
+> +void kunit_free_boot_suites(void);
+>  
+>  void __printf(2, 3) kunit_log_append(struct string_stream *log, const char *fmt, ...);
+>  
+> diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
+> index 1fef217de11d..b0f8a41d61d3 100644
+> --- a/lib/kunit/executor.c
+> +++ b/lib/kunit/executor.c
+> @@ -15,6 +15,16 @@ extern struct kunit_suite * const __kunit_suites_end[];
+>  extern struct kunit_suite * const __kunit_init_suites_start[];
+>  extern struct kunit_suite * const __kunit_init_suites_end[];
+>  
+> +static struct kunit_suite_set kunit_boot_suites;
+> +
+> +void kunit_free_boot_suites(void)
+> +{
+> +	if (kunit_boot_suites.start) {
+> +		kunit_free_suite_set(kunit_boot_suites);
+> +		kunit_boot_suites = (struct kunit_suite_set){ NULL, NULL };
+> +	}
+> +}
+> +
+>  static char *action_param;
+>  
+>  module_param_named(action, action_param, charp, 0400);
+> @@ -411,9 +421,12 @@ int kunit_run_all_tests(void)
+>  		pr_err("kunit executor: unknown action '%s'\n", action_param);
+>  
+>  free_out:
+> -	if (filter_glob_param || filter_param)
+> -		kunit_free_suite_set(suite_set);
+> -	else if (init_num_suites > 0)
+> +	if (filter_glob_param || filter_param) {
+> +		if (err)
+> +			kunit_free_suite_set(suite_set);
+> +		else
+> +			kunit_boot_suites = suite_set;
+> +	} else if (init_num_suites > 0)
+>  		/* Don't use kunit_free_suite_set because suites aren't individually allocated */
+>  		kfree(suite_set.start);
+>  
+> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> index 41e1c89799b6..99773e000e1b 100644
+> --- a/lib/kunit/test.c
+> +++ b/lib/kunit/test.c
+> @@ -1075,6 +1075,7 @@ static void __exit kunit_exit(void)
+>  	kunit_bus_shutdown();
+>  
+>  	kunit_debugfs_cleanup();
+> +	kunit_free_boot_suites();
+>  }
+>  module_exit(kunit_exit);
+>  
 
-try_again:
-	if (!count_increased) {
-		ret = __get_hwpoison_page(p, flags); <-
-		if (!ret) {
-		[...]
-		} else if (ret == -EBUSY) { <-
-		[...]
-			ret = -EIO;
-			goto out; <-
-		}
-	}
-
-For slab/vmalloc/page-table pages, __get_hwpoison_page() returns -EBUSY:
-
-	if (!HWPoisonHandlable(&folio->page, flags))
-		return -EBUSY;
-
-so they still seem to end up as -EIO ... Am I missing something?
-
->  */
-> static int get_hwpoison_page(struct page *p, unsigned long flags)
-> {
->
->-- 
->2.53.0-Meta
->
->
