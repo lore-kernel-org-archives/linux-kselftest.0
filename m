@@ -1,117 +1,157 @@
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout-a4-smtp.messagingengine.com (fout-a4-smtp.messagingengine.com [103.168.172.147])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C57031E835
-	for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 16:23:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778775793; cv=pass; b=LUcehF2ezQTfyAaNgIqGegrVpIjOeKdRa2+O7GHqsXYqsjkHtvwbF/riYzLQI/gS8QnSMq2u3iEXNqmKl2mDAdF6/0putg5hPsD8z8Kki2QvWuDN/TBK9wJl00trUL7265SEMCM52VZP8YslqLtXkbjI4M5dtWpdQA+YyjpDse4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778775793; c=relaxed/simple;
-	bh=Q0ib4SDX/P+VFF7eKBzjA1FdrcNeZGq2xss6Iv0jB3A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rvrqs8a+9ug676aNpYDzGRxXrtadoLnKkn+ka5uMn0Vigw6D9iETf6NLhUmV5ULVjH0aRJSHbwuRwwFJmBPftBzKQcIIrs0ds3JmpsCjZ32uN2NZe2p26fSi8fSBmq3lTZTq2SlV0yDdJzWgtqG5ztMVFAMdKaV4gLi36FSqCOo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qG/rwtGA; arc=pass smtp.client-ip=209.85.208.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77AED30E0EC;
+	Thu, 14 May 2026 16:28:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.147
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778776110; cv=none; b=oEcjstfV8O3T3brkyh2oMWvOFFSMtJDBodsha/zDYvU6+MrjU9ULhE4efXvs58o5/HOebmzKbxb8Z+N8Y8Vuw0qrFarM9LHRU917btINezEG2H4HIGlqHGNIGaBAGctOH1HOdJ0bp42aJMJsnL6+r1/OvpfEgSf8M8nCQOj5Oko=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778776110; c=relaxed/simple;
+	bh=OxcSotoXAgAwPL5og6RYJGOkP0ybODZJGRrCIqcvjvs=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=oY3XlnR4XJpTJyLTV0rhHe0WsAZ/OqqrgZIitkeH954s+xJfUmHWnkH0+6QUTSKe/puJWSOrDsv7oXfLjJlrZTPIXLgIEsi3BUzm32zb8O8wsT9BWb4/9JqMj9Tu+f5WW+k4L3szTcOu6P10yk3HaQrvABsCJU/tbYRsTWEMVoY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org; spf=pass smtp.mailfrom=shazbot.org; dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b=Htqtc9zr; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=v1f3Rz2L; arc=none smtp.client-ip=103.168.172.147
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shazbot.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qG/rwtGA"
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-67bf769704eso11039a12.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 09:23:12 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778775791; cv=none;
-        d=google.com; s=arc-20240605;
-        b=OUhcqF8daerK+uQ9OZKnu0fZRpj8LV8LUCaCSPaKgMriFYiJlG7ljr3PPcWdjCrIZG
-         4Ka4mMAXFCry491746j0N/VR+NMaN3N/RItJYrMdwq1vZj/sUwpCT1hz81W3CSO2cwnv
-         c+DTkuWtMHwofG6bp/pCPHLibGV6Ka2arsYHC3HGMHMgPl6TVtDlo+vhyD0N5Qbxn2Ne
-         +NLKeSAHKSX2PEGdWMJQ8silUku0zoxxmMUt5xLXdEVkSU9NzG/9YfN84MZwLZ9BKcDO
-         k5F62BhGKayVrFxOmyUwkea6dEq77CrFjaPvGlcmTkDvfpYVJfYpwzhq8wurwVZG6p6x
-         voxg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=eBe4adX/bnjRGKzW5ohsf4TCpEbTJmEdSDad4e+lcVc=;
-        fh=eANtK27scmrATJROsxHBOKiL2F1JiXaMYjBChAQavWE=;
-        b=O7e46xyMe6HXGcZ6M8wfVMB98UAwmQQg1EKGvpB1C2oC4f2sQ/d6KxClmLVTYakqw2
-         +vuIuXWnPpVUuD+RQS87Tlw4eX1l0HeYkhOPtYdR7ge6TnOIdAs0xzhl90OmnhibWgz/
-         TDxJqjG9p/rAfkkf+lhOoTolZfWna53LE+jJddMIbIGaOQYnOTWsiv1Pvq8RVcYECTUD
-         QupyCil9RnNzIwd63Gg8BLcsk4VO0jcnNaVMbcMbtmY8PuEpUN/nu6rqH8JEHdCd3w9S
-         yvUzsT5iJ6wvKKsG/p1/w7YdtYgoMganq+sXYKjUVfso/HdPeSaCk8m/G2So7d+Wc2l+
-         UhoQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1778775791; x=1779380591; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eBe4adX/bnjRGKzW5ohsf4TCpEbTJmEdSDad4e+lcVc=;
-        b=qG/rwtGAqKhn34ASB85AlOnVO+EbKJgG5JBDFa24VWPFjqpOHwbvPXYHo8UXhpJYYk
-         7py9jdjUj0HG6N/uYxR5nKVyS01JJxRQ4OLegjQmwr7u7dZ1zXdbZ5c3E92KYQuI1ia1
-         HFKzuRrFagbioZ5doli6J8A5yJ7fyQC9LEZ6CD0mhNTx4oBAhHYuck01dRwgmHmNxB/s
-         Fhi1G8ZsyiQRe809Iz9/P/WBWHRJ23ICcqSmPzjeq9dzafSTxgZ3Bq7raNcE6x0uCqyi
-         QEWmnZ8U1j1eyzQtEvi9mOoWMEiT4V6+civTHH2giGccDFe2xxqI414KkpY8qVXz5VRO
-         C5tA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778775791; x=1779380591;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=eBe4adX/bnjRGKzW5ohsf4TCpEbTJmEdSDad4e+lcVc=;
-        b=b3lNwcAjV4IUPBTAvHDM20BACPs22MuL55KRC4fu7AQmmXBmXXSSO+k4eMwvVtkLX5
-         ihqQBC0zKqBJ2nK7p3NanofDqb3ICireYZnjV4kAv08ccU0B/GI+izyqs8uXdD/Vi6m+
-         U949h/BH+pIJ8QQ9/mkVNJUv1msDivOwOfmktInbhYM137oXZD5bIW++cRzsd4zqXje/
-         BLbWXQVCM5gUc6DQieo+5j7sIPQf0NJZcQjX+srHyfvzz/rgNC6RzTcOXH4WMumxbzN/
-         cSjbhRt5oibeDVFSTlUsClrVC6uIUficStwSnKAEY2l7P/0hGLEzFmTc4vUR9kwFqL+6
-         XMlA==
-X-Forwarded-Encrypted: i=1; AFNElJ9+uE+pO9jzOeyXkaSlG/fSSCMUK3ynE5rF+r4VAabZJvjWWA5HnIn40Ql/9sRWQ4wm/CdSMoxNSM1HNxPGD9I=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxHeYj//UsLkDSWfLJO4F9o/6Cp9UERra9PUakt8GhOX67gd2eO
-	gJ+MloL957HXqzuDZADCo6xog0IA++nW6qan66cNBjYgtUKYA8n7pkIUcWTXIk4i7KT2AfLGh0z
-	Oul/FDXjkEJDqbW+jNcBpjaCR29kN+wiPv8vjp5OY
-X-Gm-Gg: Acq92OHek0H+Rs8TbMRGuHVKtTCxk4MsJPAPJtmfoZvAo14upPy327z/9hnX510IHrc
-	iu2O2k17wj3YUQ/GPDmdoGCtRzhtVysg6Fao0f69WU23adAhb7B2+HnN1EoMr+gCfE1lm1GiydD
-	EV2uhGwUIlIn+uUA9S5DohnJuWcQNt9OR13M6gIVUYbSbWybQBfE0Yv546y2btxS5l4DrxfHUH7
-	zo+aLWUPlQTK/erdRw0ZTvAz4N7d6PR3w5gcoi2P3utg3fr89F54QjWFVTU3JpffARfiTWCt6S8
-	d1W6FGvyC33k3yCyBg==
-X-Received: by 2002:a05:6402:a547:10b0:668:c2b6:9fa2 with SMTP id
- 4fb4d7f45d1cf-68326bd4ba1mr41151a12.7.1778775790450; Thu, 14 May 2026
- 09:23:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b="Htqtc9zr";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="v1f3Rz2L"
+Received: from phl-compute-11.internal (phl-compute-11.internal [10.202.2.51])
+	by mailfout.phl.internal (Postfix) with ESMTP id 7E19BEC00A2;
+	Thu, 14 May 2026 12:28:26 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-11.internal (MEProxy); Thu, 14 May 2026 12:28:26 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shazbot.org; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1778776106;
+	 x=1778862506; bh=SjwBOXM5FIDVm9YpfwN9HdBzg59yznbfkQeW+INIUWk=; b=
+	Htqtc9zrcIXJRi4Zbu3GvviqV1zRBA1xKjQx1gSVuk6lAaTOvxqWWuE/cZ0Cm8Y7
+	F0abf2p/TXlcwO1UtD+HZ8wPgo/PVgsH4aysMe/pvB7A+lpuu8H4W2ivfNcJSnnf
+	C1C7UvCUHijucStaq9Z3NgfOVYK/tb1Ya7sekn4Aquj5pkOVk7+LZqcC1qaT8UZT
+	N0/UDo0NvxHMQdHwIqFRqG7CLm7UQ3DLDuNDiaaTPi+RCWGlbD5YIYePVq2LBOVu
+	R4R0vNj2/SUNllhEa1cOxBzR8kP3zn5VTjTUhI4W35u38W2HU5tXFj9LpP6DXHZh
+	9ReVI/+eXbwqanPKKFaKdA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1778776106; x=
+	1778862506; bh=SjwBOXM5FIDVm9YpfwN9HdBzg59yznbfkQeW+INIUWk=; b=v
+	1f3Rz2L3xJgviejRgtHFNSEQoXb4VUJQqQKlouYOPHkjJiCE74/uvOw1RRc99NSz
+	0xlkVLxPx4MsK1yyykhTRieOoNpOnJBXWo67+6hlMOsRnfk/mGday62mx/3mSQXr
+	yiDMF/ynzKFewNpkXppMMzJGoRwzPDhBgTkPE2dHG8KWuWHpf+Kmpxm+ttgBra9+
+	sWG0s/fy8XQneOP9lFfpihwNYXU1GDDx0V9FufcREvb43jvcycxtykB+JmxD+0pL
+	kJp1rdLlpN90G2D/C7gEoinOT0Vbjpa1nGXY0/ZeefSy5y8OdjjTTWengTeE+dre
+	Yz3MmtGUp4+1tzcM+db0g==
+X-ME-Sender: <xms:KvgFano6AcdPjEiL8vQzwGMg1Ct7w6GUQ3x4PEHA5sFN5t7UXXbfwQ>
+    <xme:KvgFanr5iWMomHr-X6zqpTfegqxzSOeBdkrDeeXXPvmRQc49Y7aZI1Ta2UKDkl7Rc
+    Ec6Q73wcNGSh3fzxvxG-1Moeky4xZtNgF-4YiIfiUQTgAlOycdJFA>
+X-ME-Received: <xmr:KvgFavA9G7RTx4yMH9UQw3NWE-BfuIb324_dQp0frGrTMlc9qu8pmfFLkLk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgdduvdektddtucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepfffhvfevuffkjghfofggtgfgsehtqhertdertdejnecuhfhrohhmpeetlhgvgicu
+    hghilhhlihgrmhhsohhnuceorghlvgigsehshhgriigsohhtrdhorhhgqeenucggtffrrg
+    htthgvrhhnpeegudevhfejueefveduieeuueeifeettdekveekhffgvdetfeelueehgfdt
+    heffhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grlhgvgiesshhhrgiisghothdrohhrghdpnhgspghrtghpthhtohepuddtpdhmohguvgep
+    shhmthhpohhuthdprhgtphhtthhopegumhgrthhlrggtkhesghhoohhglhgvrdgtohhmpd
+    hrtghpthhtohepjhhrhhhilhhkvgesghhoohhglhgvrdgtohhmpdhrtghpthhtohepvhhi
+    phhinhhshhesghhoohhglhgvrdgtohhmpdhrtghpthhtohepjhhgghesnhhvihguihgrrd
+    gtohhmpdhrtghpthhtohepshhhuhgrhheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohep
+    rghnthhhohhnhidrlhdrnhhguhihvghnsehinhhtvghlrdgtohhmpdhrtghpthhtohepkh
+    hvmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghr
+    nhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhksh
+    gvlhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:KvgFatsP8ST4CVvUBMSjLB8R0bnpDFr_bTpUrOSeJhjPMaRLvSL4hw>
+    <xmx:KvgFamJEQWDuWUURqmIVV5lzNZtzXxmLQg9bHkTEgifFna8HE81Vhw>
+    <xmx:KvgFasavCghzIYzAtA3sLfT2LaBVOSlsUX_aqM1J5-khccTxWELxiw>
+    <xmx:KvgFagD_Try891aJFIZqhF7y6ba7XB8cF9U4A6wTQWijYedecRAnIg>
+    <xmx:KvgFaoGEJrAyVY3yY1io-9iQyGLo7lqrafNuMWehKjwA8NVUNd3uJOOT>
+Feedback-ID: i03f14258:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 14 May 2026 12:28:25 -0400 (EDT)
+Date: Thu, 14 May 2026 10:28:24 -0600
+From: Alex Williamson <alex@shazbot.org>
+To: David Matlack <dmatlack@google.com>, Josh Hilke <jrhilke@google.com>
+Cc: Vipin Sharma <vipinsh@google.com>, Jason Gunthorpe <jgg@nvidia.com>,
+ Shuah Khan <shuah@kernel.org>, Tony Nguyen <anthony.l.nguyen@intel.com>,
+ kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, alex@shazbot.org
+Subject: Re: [PATCH] vfio: selftests: Add driver for IGB QEMU device
+Message-ID: <20260514102824.6be38bf6@shazbot.org>
+In-Reply-To: <agUKLmKLoV71Hq6S@google.com>
+References: <20260511211839.2781731-1-jrhilke@google.com>
+	<agJqAO-RRdjMrUZJ@google.com>
+	<CAAdrzjtiiOtw7-YL2COgZC-QSFp6LLwq+jP9V3jPKLUe0w7Y0g@mail.gmail.com>
+	<CAAdrzjuf3z-CyWeBRPKmMQxmQZ9U=2Tc0cDAFqdRFRDHKw_K-Q@mail.gmail.com>
+	<agUKLmKLoV71Hq6S@google.com>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260513224608.1859737-1-jmattson@google.com> <20260513224608.1859737-4-jmattson@google.com>
- <CALMp9eS4s9tsOmvDUDeqS7oph0mSHyhxBiULQdwHVaG+7gXLSQ@mail.gmail.com>
- <agXcKDjnJc9DPcyr@google.com> <CALMp9eS831M153QmAgjzJcR2dFY_wCCCzDisd7_T6GyS3-gAFw@mail.gmail.com>
- <agX2SJF3rJSkIqDe@google.com>
-In-Reply-To: <agX2SJF3rJSkIqDe@google.com>
-From: Jim Mattson <jmattson@google.com>
-Date: Thu, 14 May 2026 09:22:57 -0700
-X-Gm-Features: AVHnY4Lsmqlfaqp7hEXV3B-RlTugrnhObbgCElgWlD60p-logKCtI0xa4Zqrmow
-Message-ID: <CALMp9eQTSxFkVf4vV83yNYvv2AjseHYiD3M68mcc951L4U1Jxw@mail.gmail.com>
-Subject: Re: [PATCH v3 3/4] KVM: x86: Virtualize AMD CPUID faulting
-To: Sean Christopherson <seanjc@google.com>
-Cc: pbonzini@redhat.com, tglx@kernel.org, mingo@redhat.com, bp@alien8.de, 
-	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, shuah@kernel.org, 
-	kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, ctpence@google.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 14, 2026 at 9:20=E2=80=AFAM Sean Christopherson <seanjc@google.=
-com> wrote:
-> Oooh, this is based on the generic CPL rules.  I didn't think about it fr=
-om that
-> perspective.  So yeah, addressing that does make sense.  What a pain.
+On Wed, 13 May 2026 23:33:02 +0000
+David Matlack <dmatlack@google.com> wrote:
 
-When I fix this in version 4, what's the correct footer for Sashiko attribu=
-tion:
+> On 2026-05-13 11:49 AM, Josh Hilke wrote:
+> > On Tue, May 12, 2026 at 7:12=E2=80=AFPM Josh Hilke <jrhilke@google.com>=
+ wrote: =20
+> > > On Mon, May 11, 2026 at 4:45=E2=80=AFPM David Matlack <dmatlack@googl=
+e.com> wrote: =20
+> > > > On 2026-05-11 09:18 PM, Josh Hilke wrote: =20
+>=20
+> > > > > +     retries =3D 100;
+> > > > > +     while (retries-- > 0) {
+> > > > > +             if (rx->wb.status_error & 1)
+> > > > > +                     break;
+> > > > > +             usleep(10);
+> > > > > +     } =20
+> > > >
+> > > > Why bail after a certain timeout? The test may have kicked off a la=
+rge
+> > > > count of memcpys. Is this for error detection? =20
+> > >
+> > > The bailout was intended to detect errors during development.
+> > > Shouldn't need it anymore. I'll remove it in v2. =20
+> >=20
+> > Sorry, I forgot: we need the timeout  to detect DMA errors for the
+> > memcpy_from_unmapped_iova test in vfio_pci_driver_test. The test
+> > triggers an IOMMU fault because the IOVA is unmapped, and the IOMMU
+> > aborts the DMA operation. However, the QEMU IGB implementation does
+> > not set an error bit, so timing out is our only method for error
+> > detection. =20
+>=20
+> Hm... that's going to be tricky then. This means we would have to set
+> the timeout to longer than the longest possible memcpy duration to avoid
+> false negatives? That means we'll have to set the timeout to quite long.
 
-Assisted-by: Sashiko:gemini/gemini-3.1-pro-preview
+FWIW, I had AI churn on trying to make this work on a physical 82576 as
+I have several of these in my local machines as sort of the defacto,
+readily available SR-IOV NIC.  The AI got up to 30/35 tests passing but
+is currently stuck that the queues stall in the mix-and-match test when
+it's trying to DMA from an unmapped IOVA.  So far none of the in-band
+methods to kick the queues seem to work, I'm not sure if we'll need to
+resort to an FLR.
 
-or
+I'd be happy to send the changes it's made so far if you want to
+validate and incorporate, or have any thoughts to kicking it after the
+IOMMU fault.  Some of the changes are related to timeouts, where QEMU
+loopback is actually faster than bare metal since the physical  queues
+run at 1Gbps even in loopback mode.
 
-Reported-by: Sashiko:gemini/gemini-3.1-pro-preview
+I'll also plant the seed that if we do have outstanding issues for a
+driver that binds to a real world device, but only works on the
+emulated version of that device... how do we handle that?  In part, I
+think it's emulated in QEMU because it is so ubiquitous.  I'm also
+hoping to use the same device for the new SR-IOV selftests.  Thanks,
 
-or something else?
+Alex
