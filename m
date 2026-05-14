@@ -1,44 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C46623F410E;
-	Thu, 14 May 2026 02:30:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C57461459FA;
+	Thu, 14 May 2026 02:35:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778725840; cv=none; b=MjhmI32Gt8YuEnDbVp9Xr1eKiumiv2uCbZlOEYta3ME8NBQPtCjwrH0oKI1NffqkNoY0qNeJcf94bnnLZYB0BqeQDVqK89Y1ZMxmW/vbGmONvJ3iZvmDEtZ8LxUlyMQEjxjd64OP+bFab4ccKiHcJhMtZxVGoToDjkJs1Bf5PzY=
+	t=1778726146; cv=none; b=lbDy1uTyocoXqDgWa6cI2jFbZ9kCvcw6/J+1mOwpp36znmQVCet4A6sf+/irSsH4otfJlviyCotuLMvthYerIAxwknUcn+a0833dHqnC0jMc7wxg4PqRPsnAnYvEgbzZQcsRyNCPKcKbRcR6l+0++LWJp+JXcanXsPt4aD0Pd5I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778725840; c=relaxed/simple;
-	bh=anymWKMJinrIHSnimXr7FGoJQlWff6vTzzrQCu4N+nA=;
+	s=arc-20240116; t=1778726146; c=relaxed/simple;
+	bh=FAxIPJuCdBfxFLr7b5SZBZadKglB80+7msXC94z0AZk=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=cLyNchYXi7a0SYli2qGY8/erYbncl17nat0+DxiscbpBI5x1juqHoPq5QKEPdGgP5h9QwZrg5NDeWAQAr53JVTEsqDYO1u/yEg8WODn3nrSwGc04aS48qxZ84lawKcGZcamA0x3W8gPACUw/hTq47h+p0GVL7OXUr+k6SFqpPUs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JBRRaJeA; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=ZrBJbJ0oyYOuVH8W36oU6KDDvxphebSDmoAg6czMpY1ljrdCj3IgV+YusUqMJrSnFZczUVnZ7goCWHkwJw2SbCpTkbwMx0gVlemRgyn4Ag1BBulNDEgE1jJY/TwFQU/WGY5PPxxBYkuUU07kr4Xdk71Fc8YAoquBbkggPHAxNQM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h1+kWQdg; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JBRRaJeA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA958C19425;
-	Thu, 14 May 2026 02:30:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h1+kWQdg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCED5C19425;
+	Thu, 14 May 2026 02:35:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778725840;
-	bh=anymWKMJinrIHSnimXr7FGoJQlWff6vTzzrQCu4N+nA=;
+	s=k20201202; t=1778726146;
+	bh=FAxIPJuCdBfxFLr7b5SZBZadKglB80+7msXC94z0AZk=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=JBRRaJeA8URSNwVV3xOUiqP11p63HixRu8h8+WBou235CWpJFNDTJewpQZz5KcM52
-	 SM8QyM1AOENFf8wLyBI1Y6sEJ1iHdi6KbYppFMOPNlJKz/0NpOtZrT2tiIyPQPcYNX
-	 C497nLfIAdX8PZ2s9jFIDeX4+sGr1UFHFi+mIgAbtPlv2iCnL0OugoFpm322WK9nyo
-	 9XnpOWwW9S/7oFhllZzkFi3WkJCvaslRjNe8XDPPjSo5oeNamMUDxmkPA1rn4DXSXc
-	 EwYOCJfZ3wZDbwUJN5q5fjEAsNyqrYPefdFdSpswvE9SaQn1OsERT15vyCS+eDiqS2
-	 KkinYQiENEuvA==
-Date: Wed, 13 May 2026 19:30:39 -0700
+	b=h1+kWQdgmHwUxvSaWxu6ZIzdcu4n9pbUvRW8UR37uj9WjzwqsgtXmjkAIAkdQ+1LI
+	 A4z3ba7QfllMdu4idZJlVKWiaDhU5iq5rfkqf2xL6VMmQBcJDyHhDuO4B1Y+WFoz6K
+	 l3ent/5w/bqWXlu67zKrRdX2h9mCcYgjQxQ0oMyJnerGO9SN+i/CrfyHxLXdAOUx9m
+	 A7ksmaEIV7+Q2rQBh6hCBEpu/7wKG4p7q5RvkoMZXnFoYqaN+EEaBcSa3SQttLwLNx
+	 qeVgMo+VD5SIjgjhTjxBMcl+WP/WQniNSNPRYsgsr36TXG0ttkFvgpNZtGmk6DClYw
+	 gdczdOoMx6nyA==
+Date: Wed, 13 May 2026 19:35:44 -0700
 From: Jakub Kicinski <kuba@kernel.org>
 To: Fernando Fernandez Mancera <fmancera@suse.de>
 Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
  horms@kernel.org, pabeni@redhat.com, edumazet@google.com,
- dsahern@kernel.org, davem@davemloft.net, Nicolas Dichtel
- <nicolas.dichtel@6wind.com>
-Subject: Re: [PATCH 2/3 net-next v4] ipv4: handle devconf post-set actions
- on netlink updates
-Message-ID: <20260513193039.7dd435df@kernel.org>
-In-Reply-To: <20260510081528.5257-2-fmancera@suse.de>
+ dsahern@kernel.org, davem@davemloft.net
+Subject: Re: [PATCH 3/3 net-next v4] selftests: net: add test for IPv4
+ devconf netlink notifications
+Message-ID: <20260513193544.47970cb8@kernel.org>
+In-Reply-To: <20260510081528.5257-3-fmancera@suse.de>
 References: <20260510081528.5257-1-fmancera@suse.de>
-	<20260510081528.5257-2-fmancera@suse.de>
+	<20260510081528.5257-3-fmancera@suse.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -48,11 +47,19 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Sun, 10 May 2026 10:15:27 +0200 Fernando Fernandez Mancera wrote:
-> -		nla_for_each_nested(a, tb[IFLA_INET_CONF], rem)
-> -			ipv4_devconf_set(in_dev, nla_type(a), nla_get_u32(a));
-> +		nla_for_each_nested(a, tb[IFLA_INET_CONF], rem) {
-> +			int old_value = ipv4_devconf_get(in_dev, nla_type(a));
-> +			int new_value = nla_get_u32(a);
+On Sun, 10 May 2026 10:15:28 +0200 Fernando Fernandez Mancera wrote:
+> Introduce a new test, `ipv4_devconf_notify`, to verify that the kernel
+> sends the appropriate netlink notifications when IPv4 devconf parameters
+> are modified.
+> 
+> Since YNL currently has a bug where it declares an array of u32 values
+> instead of the nested attributes expected by the kernel for devconf set
+> operations, a temporary hack (`patched_add_attr`) is included to
+> pack the netlink attributes correctly.
 
-Hm, what checks if nla_type(a) is in range?
+Right, YNL doesn't really support the level or weirdness that netconf
+requires. Why use YNL? Can't we test this with iproute2?
+
+nit: sashiko found a typo in "notificiation"
+-- 
+pw-bot: cr
