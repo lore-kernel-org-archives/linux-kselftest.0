@@ -1,135 +1,108 @@
-Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 175612D0C9A
-	for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 16:20:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78A2531A56C;
+	Thu, 14 May 2026 16:21:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778775627; cv=none; b=o2/FToCJVY3PcC4rjIJT3Q4+2pqkyU8L5c8Btn37VQOke4S3wx0h8CVnbE+2atWVxdSapu3a5rTGq+dIXLRr4JedMwWqEfhp7L9i3gg3pBLwDPYkVZMIig2ksplE+sz0F+7CtRs/mbJTectAHce1O960jUiF1jUgllDHJOFJzUo=
+	t=1778775700; cv=none; b=PgPpXXyPV1UlDRyyID3ppSYm9IrGjJ6UQWlDTjU8GPK5oZ4YkmlU9vOIGKEf2w1RBPzN0o0n+d/q2WuWyKFLlF2FlY9I4IaWFI4zQp5Sbc4JvOZsAe0ix5dQOvJjZUbOW4p8Cz4bIDWwXsYJOJj0iHd+onqXCYKRtHVop6nFAiA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778775627; c=relaxed/simple;
-	bh=bRPXR+XoAWGyM027fV86uSKqBM6jbUbGdYB+tgBt/1Q=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=NtJWDbNE0goMwgbqA5KcuqUa7XOvKczmqRteR0ykGhbGGumMC2YWcV3rQ/LEjWl7EP33mXr6HCsN+KeB0s9IQtD2h80S2kBcNr8rj9Gm/Bpfp6ckth07VxdMAY+8QD0WmeQlRNr0Gnp88Dhh34pzlkOotKpCYX1YmdunK2MU8hk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=vKFEPJvF; arc=none smtp.client-ip=209.85.215.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1778775700; c=relaxed/simple;
+	bh=LsQsJ/EIJPt7FY3mXN8jMzUaXSyiTsmkWcJOpGnE2jE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=GkbTOxqwXXlXPHvYb5xTfPVLyL3zMiMNnDGVKlsFNaXYgV29zdt2yO9dY7k7VkqFXSYGSFDfJGWs+WWVxUgzL9DTqXB1ob19BS586Kp3L4sG2g5NSRQktVurQdYqL4UzXsT/w4gliTGFUE1jrtnC1bEt3o6z7GLBbCOpzjY4UVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=Nj42+w90; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vKFEPJvF"
-Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-c82c477290bso443816a12.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 09:20:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1778775625; x=1779380425; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fZMTbfY/E3jzMdSXTa2jqc1Caj39SJ60tMJ4eJGTiXI=;
-        b=vKFEPJvFPOo2E74KeqG8JLqhp9xHiqOnZ3+geHv/T4A2Fc2wz6552roU8SRdLDHavV
-         JjUlEp3e8Tf6SONq/uJijrl2fPpf85nhYLg6HqCGTu5Dz4P4jmdSSEylhhUgv7GZHhj9
-         /58aiHZzwY8yxP+wPYSH3cyohi7BxprY76dZXwwrUEYQbGShCrx63er+MoISzxvO8EWp
-         amNk11UJQev6/KQSzabP7miRKGf+/+s2a5YJYgkWcZhBxzomgGhqMLv879+vjiefDGL7
-         FjB6LKmnIbQ9HHd6gkd1Tsn8hmbew5FQgE3b5DHGLFSfXQk8XKRUoyarJA+76XCqGyz7
-         6Drw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778775625; x=1779380425;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=fZMTbfY/E3jzMdSXTa2jqc1Caj39SJ60tMJ4eJGTiXI=;
-        b=dq+V0xWCSJ3CV2EqUdINkF9fW1HoHfFKSxia2BzVIDJomkWQInJZON1DbE1ZYg21JU
-         IfwCl/354cQ96zaPsUADJC/llNtE2t+zEkYPd+vdib2vhA8/cB5HwJKcAkPX7F6tax3h
-         hwhiCYOfbEFIFpM2PW9pFI4dBMZmor52jbl24pfjay7ZhMbyCXMNXJS+fyzd1i2rZka4
-         O6wZU6kQBDcKNGSgWXyxoZkdOspQzcgFCqRwsZHUVBAHSYMdHCJ7XaBQDfLTCK4H50VU
-         ssSaF2dQeH6W2FCHqsfJCH5GswQoZ2sdC73Qp+025pHafLUWpJO6COA7xgUawD/dmGaP
-         7oaA==
-X-Forwarded-Encrypted: i=1; AFNElJ9AClfqfnyMxBYklRxwO6OObo/JosdbQy/HKDJuCm11nk/fek9Fc9pI6CPMDzaZiVJAA9xXsEky+0R+Tk/G7EY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwKOaaqIzUC2YqhiCIcql63KpCbAf0OCFE4zGDwdWZe2engJB6j
-	qfeFDWAy5CZMtFPNn8hDXSHJpj1bNFKC99peVynIJxwM+VioKHFCaP/zQULb/ouV774OxCAsYdD
-	Mzm2cLg==
-X-Received: from pfblu4.prod.google.com ([2002:a05:6a00:7484:b0:83a:58c1:f5e2])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:6a27:b0:398:9ae9:7110
- with SMTP id adf61e73a8af0-3aface18cb0mr9516909637.11.1778775625044; Thu, 14
- May 2026 09:20:25 -0700 (PDT)
-Date: Thu, 14 May 2026 09:20:24 -0700
-In-Reply-To: <CALMp9eS831M153QmAgjzJcR2dFY_wCCCzDisd7_T6GyS3-gAFw@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="Nj42+w90"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 072061C00;
+	Thu, 14 May 2026 09:21:27 -0700 (PDT)
+Received: from e132581.arm.com (e132581.arm.com [10.1.196.87])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C14D23F7B4;
+	Thu, 14 May 2026 09:21:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1778775692; bh=LsQsJ/EIJPt7FY3mXN8jMzUaXSyiTsmkWcJOpGnE2jE=;
+	h=From:Subject:Date:To:Cc:From;
+	b=Nj42+w90Gv/mZ2EZW7D4BGV2plN+C43bkbm2vdIARnboyv/tRIs2MgWRvWt1aGomX
+	 q0bhS91sXh4sC0fXDt4opqe+zRr6envXlM9FUhY7fRLeV3+Q7iE9/c/KRffEFT1bLZ
+	 kCbGzK7xs8wDrdQoMWAkFhNUm4vJFx2lpjl8sYqg=
+From: Leo Yan <leo.yan@arm.com>
+Subject: [PATCH v2 0/2] perf: Improve refresh limit in overflow handler
+Date: Thu, 14 May 2026 17:21:18 +0100
+Message-Id: <20260514-arm_cs_clean_perf_handle-v2-0-cbb29c3b3661@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260513224608.1859737-1-jmattson@google.com> <20260513224608.1859737-4-jmattson@google.com>
- <CALMp9eS4s9tsOmvDUDeqS7oph0mSHyhxBiULQdwHVaG+7gXLSQ@mail.gmail.com>
- <agXcKDjnJc9DPcyr@google.com> <CALMp9eS831M153QmAgjzJcR2dFY_wCCCzDisd7_T6GyS3-gAFw@mail.gmail.com>
-Message-ID: <agX2SJF3rJSkIqDe@google.com>
-Subject: Re: [PATCH v3 3/4] KVM: x86: Virtualize AMD CPUID faulting
-From: Sean Christopherson <seanjc@google.com>
-To: Jim Mattson <jmattson@google.com>
-Cc: pbonzini@redhat.com, tglx@kernel.org, mingo@redhat.com, bp@alien8.de, 
-	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, shuah@kernel.org, 
-	kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, ctpence@google.com
+MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAH72BWoC/42Nyw6CMBREf4V0bU0flIor/8OQplxupQkU0hqiI
+ fy7hY074/JM5sysJGH0mMi1WEnExSc/hQziVBDobXgg9V1mIpioWClqauNoIBkY0AYzY3Qm17o
+ Bqa4kgJQ1cKdI1ueIzr+O6XuTuffpOcX38bTwPf1jdOGUU9lKW+uStRclbrl6hmncHw5dcfFTZ
+ 1Qr56SWCJ346s22bR8ts3Qn/QAAAA==
+X-Change-ID: 20260429-arm_cs_clean_perf_handle-763cc339c1f5
+To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+ Shuah Khan <shuah@kernel.org>, Arnaldo Carvalho de Melo <acme@kernel.org>, 
+ Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, 
+ Adrian Hunter <adrian.hunter@intel.com>, 
+ James Clark <james.clark@linaro.org>, 
+ Sumanth Korikkar <sumanthk@linux.ibm.com>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-perf-users@vger.kernel.org, Leo Yan <leo.yan@arm.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1778775688; l=1909;
+ i=leo.yan@arm.com; s=20250604; h=from:subject:message-id;
+ bh=LsQsJ/EIJPt7FY3mXN8jMzUaXSyiTsmkWcJOpGnE2jE=;
+ b=B45+evgH66eG83X0urrgbmODxywo+FX5TCK1EFKKWilLExQc+ai184j+gXen28WZ7DYAuLn4Z
+ PpytBsAHvxkBbjxFOfqI/OHO9YTWptXs1gdYg111sZu5GMJZf3NC7Kc
+X-Developer-Key: i=leo.yan@arm.com; a=ed25519;
+ pk=k4BaDbvkCXzBFA7Nw184KHGP5thju8lKqJYIrOWxDhI=
 
-On Thu, May 14, 2026, Jim Mattson wrote:
-> On Thu, May 14, 2026 at 7:28=E2=80=AFAM Sean Christopherson <seanjc@googl=
-e.com> wrote:
-> >
-> > On Thu, May 14, 2026, Jim Mattson wrote:
-> > > > diff --git a/arch/x86/kvm/cpuid.h b/arch/x86/kvm/cpuid.h
-> > > > index 95d09ccbf951..fc96ba86c644 100644
-> > > > --- a/arch/x86/kvm/cpuid.h
-> > > > +++ b/arch/x86/kvm/cpuid.h
-> > > > @@ -185,8 +185,9 @@ static inline int guest_cpuid_stepping(struct k=
-vm_vcpu *vcpu)
-> > > >
-> > > >  static inline bool cpuid_fault_enabled(struct kvm_vcpu *vcpu)
-> > > >  {
-> > > > -       return vcpu->arch.msr_misc_features_enables &
-> > > > -                 MSR_MISC_FEATURES_ENABLES_CPUID_FAULT;
-> > > > +       return (vcpu->arch.msr_misc_features_enables &
-> > > > +               MSR_MISC_FEATURES_ENABLES_CPUID_FAULT) ||
-> > > > +               (vcpu->arch.msr_hwcr & MSR_K7_HWCR_CPUID_USER_DIS);
-> > > >  }
-> > >
-> > > Sashiko raises a good point here about a pre-existing issue that
-> >
-> > Calling this pre-existing is a bit of a stretch.  I'm guessing VMX does=
-n't check
-> > the #GP before the VM-Exit (checking #GP before a VM-Exit is so stupid)=
-.
->=20
-> Per the SDM, volume 3, section 27.1.1: Relative Priority of Faults and VM=
- Exits
->=20
-> Certain exceptions have priority over VM exits. These include invalid-opc=
-ode
-> exceptions, faults based on privilege level,1 and general-protection
-> exceptions that are based on checking I/O permission bits in the task- st=
-ate
-> segment (TSS). For example, execution of RDMSR with CPL =3D 3 generates a
-> general-protection exception and not a VM exit.2
+Commit 18dbcbfabfff ("perf: Fix the POLL_HUP delivery breakage") added a
+direct pmu->stop() call when the refresh limit reaches zero. The change
+was based on a test program [1] that reported missing POLL_HUP
+notifications.
 
-...
+However, the test program used SIGIO, which is a standard signal and can
+be coalesced. As a result, userspace may miss signal delivery even
+though the signal was generated by the kernel. This is expected
+behaviour for standard signals.
 
-> > Where in the APM?  I can't find anything in the description of CPUID or=
- CpuidUserDis
-> > that specifies the priority, and "Table 15-7. Instruction Intercepts" i=
-s flat out
-> > wrong because it just says:
-> >
-> >    CPUID  CPUID  No exceptions to check.
->=20
-> APM volume 2, section 15.7: Intercept Operation
->=20
-> > Generally, instruction intercepts are checked after simple exceptions
-> (such as #GP=E2=80=94when CPL is incorrect=E2=80=94or #UD) have been chec=
-ked, but
-> before exceptions related to
-> memory accesses (such as page faults) and exceptions based on specific
-> operand values.
+This series adds a selftest for the PERF_EVENT_IOC_REFRESH limit using a
+real-time signal, which guarantees queued signal delivery and confirms
+that POLL_HUP notifications are delivered reliably on arm64.
 
-Oooh, this is based on the generic CPL rules.  I didn't think about it from=
- that
-perspective.  So yeah, addressing that does make sense.  What a pain.
+The second patch replaces the direct PMU stop with an explicit
+pending-disable guard, this can avoid redundant stop for most cases and
+logic is easier to understand.
+
+[1] https://lore.kernel.org/lkml/aICYAqM5EQUlTqtX@li-2b55cdcc-350b-11b2-a85c-a78bff51fc11.ibm.com/
+
+Signed-off-by: Leo Yan <leo.yan@arm.com>
+---
+Changes in v2:
+- Replaced ASSERT_EQ() with EXPECT_EQ() in test tear down (Sashiko).
+- Handled a race case for high frequency overflow before disable irq_work (Sashiko).
+- Link to v1: https://lore.kernel.org/r/20260512-arm_cs_clean_perf_handle-v1-0-75ff373ecd22@arm.com
+
+---
+Leo Yan (2):
+      selftests/perf_events: Add test for refresh limit signals
+      perf/core: Ignore overflows while disable is pending
+
+ kernel/events/core.c                               |   8 +-
+ tools/testing/selftests/perf_events/.gitignore     |   1 +
+ tools/testing/selftests/perf_events/Makefile       |   3 +-
+ .../testing/selftests/perf_events/refresh_signal.c | 120 +++++++++++++++++++++
+ 4 files changed, 130 insertions(+), 2 deletions(-)
+---
+base-commit: e1914add2799225a87502051415fc5c32aeb02ae
+change-id: 20260429-arm_cs_clean_perf_handle-763cc339c1f5
+
+Best regards,
+-- 
+Leo Yan <leo.yan@arm.com>
+
