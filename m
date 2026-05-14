@@ -1,196 +1,155 @@
-Received: from mail-oa1-f74.google.com (mail-oa1-f74.google.com [209.85.160.74])
+Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A7B13932DB
-	for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 19:05:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D3173C140E
+	for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 20:44:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778785551; cv=none; b=VMyWuAoaBVGP+0hf9jC7+mGOsuyR5s9HRa2gMMAbFtosEgz7qb83iUlPHuFWAoXsGRWPva5uHIt1Yhae8dKSEmcIaiglqm0Pt1z2fZ5Ainr+ZiwjKv/phuVEh/GSPoNy1ZEca/jQi3B/UxJXgagw7oHlOSJLCu3rz9R90BdnJkY=
+	t=1778791453; cv=none; b=lc/Rjo0shsGOrZsYpRYqK3Wqyul+g2ZUsHSg++dkfrpRA6JpLetT2Hp98Kljc29skEP2eSGqFrAtKVlYVv4F5PZUf559SrjaS5d4/YLt3M2ewXKd/5mzqFKySqkYy02ONn6enLjsh6TKKYgsDs/N92fMNlkqCQkad7NaIaPdkSI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778785551; c=relaxed/simple;
-	bh=sQcHMqWClhWoLs/AGdSMEcZmnhEkmnp9dBbRrLle6qk=;
-	h=Date:In-Reply-To:Mime-Version:Message-ID:Subject:From:To:Cc:
-	 Content-Type; b=pwzPmRTmCYRktm+5pcKtUbHPEPfQsOkstqnynxvzG6IuECfJ1M+BEnUvvW7tolqARGOCnjQexCxZShr1FooYw25v7TTz29a12CF9Mp2VlQ7GDCxrOC9Xhv1AMj587hPc8SFpuEEK89LOynvy+TKvRWM0h26mREMfebbXQ5W6DPo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=dbWKkL7X; arc=none smtp.client-ip=209.85.160.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com
+	s=arc-20240116; t=1778791453; c=relaxed/simple;
+	bh=bhsOuUIaNixFGUNouO+flDtH1Ol7OJbIIYt+9nRn+ow=;
+	h=Date:Message-ID:MIME-Version:Content-Type:From:To:Cc:Subject:
+	 References:In-Reply-To; b=f62nP7qGWrYMn9Nh+kNGTalopTmnA1btAtPFcTd2xYYzkC6TOKD60rli4mcHO2BhvMiHz967xcSVVx33KUGmaJaAiceqK2uMyc2/BqQZ0ADFWUpaybIF9h9WSfArH9kdXoNwDnhhs9/HK60PMmhEJAOp6ugLYPrNSpWax3uKFos=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=OSc1CYb0; arc=none smtp.client-ip=209.85.219.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dbWKkL7X"
-Received: by mail-oa1-f74.google.com with SMTP id 586e51a60fabf-4398773e510so5244211fac.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 12:05:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="OSc1CYb0"
+Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-8b5de17382cso61437326d6.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 13:44:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1778785548; x=1779390348; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+        d=paul-moore.com; s=google; t=1778791451; x=1779396251; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :mime-version:message-id:date:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=sQcHMqWClhWoLs/AGdSMEcZmnhEkmnp9dBbRrLle6qk=;
-        b=dbWKkL7XSFJId5WJR9FQIW964W3jMi7frwBrtMepuaRE7xZuVOzdGXs8F0vBgbAW7F
-         yrhfcazon8YbL+xt1q1DdVgqZH9v9irdebmYByhx0AcHn91wHjzPylSGCOw3Pvu+o6aM
-         /PrNAtzMiNays3Hhqfy6KM7CRRnK7l1/o+J5yECw/Ij1Oig+mXZyW4yxLpxihkAR+fVV
-         45P0yGdmZUS+7PjNjq2Gf5MzPhDlPSPA34FQ0wC6XIpBKN9cHLHd31LvaFotMzztePcl
-         WXF865XEy8isskThsOxs/vQEEkRTH9+A+W3/NbOG5zYXwW8cMzRFP/obxt9qKmuOmyIS
-         bUsQ==
+        bh=iIn517qMFa/72Ee/XGTDeeK9Cq6VJiGDpV2GCDJOS7E=;
+        b=OSc1CYb0LA2hDiDhS0KeITKEVBykeYFWm5mB0F2ke+6PQDCnTZXwjSXfPcFZ2NjxZh
+         Ud8DZ2Pn80kJgStc5aPzDIhYLMhcN1gBuV634XDMewUMWFm1C4TCCf85M8NSRiX1eLv7
+         zr2glp2nDXnD4JkJPtYxTMuKBslrojKLiTEHAcm3EH6FwxYhOdc0MwS1z8EnASGXUNdh
+         qhqkOHGuzzpUceCeCbvLtRLmYW42xUzlK1M6PLl6EmmgsVevWHKple3NmFdra+FfED0d
+         w7cz8MNWx7gA9pA1tPMPQc/OFjkj/Fy1Lz2cu5g15GIezPqAP5ftUK5m0p3AWAzVxQZa
+         4dLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778785548; x=1779390348;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=sQcHMqWClhWoLs/AGdSMEcZmnhEkmnp9dBbRrLle6qk=;
-        b=hcC9MsFEjpHZqydrK61Ku0ysDIQXokf2m13lhPwwpCJtdgekhLqTIguqeZnxiVdd6H
-         Z0m4uQGCTZeVZUf7JTL0nDKgv4HEX4OSjr3nb3TtrRwn76UBKKv0B0ucMNhgExfqKO7c
-         hDygNgDxYkUVrgzEFl/ENuwlBWngp7KQBsp1hMWB2vMe0YGV3+Qoob8ccKk2Uyw01Fzi
-         fc+GfqUv5HY5V/F8EMtUx4Cwacp+ZhuA5BEn/qzDtSqnLM6AN3pRENtwDf+0wM0Bufq6
-         WCLr4T/knnwy3ZStuP6fy5nOlprFaBZe9+m19QMdeGZw6UTygxCDe80NMBgTmlPwB4JC
-         ykiw==
-X-Forwarded-Encrypted: i=1; AFNElJ/qxzWzgXdFXM6zNN33CTRbJBLavPtiydXKeF5Lcjk5REnSMOoJxfOYbjcv5P669Mbk8MKJjWkDuKTIfbejyfE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw38zNRGY6Ua0qSsWYA6s363HMtZQ+ZA3Qb29PjR6eV8WM/EfAH
-	SwTEkq0Z7efuDWLJ2lZRwPZ+hXjQYiWQBiPyDquRLo1Oqizntn+JsMmynK8mHihAd7/RS95zq1D
-	Lq1ZvRzbxYmyJ0JZ1lGbraesTag==
-X-Received: from iohl17.prod.google.com ([2002:a6b:7511:0:b0:96b:8e45:e183])
- (user=coltonlewis job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6820:f023:b0:696:77e2:a78 with SMTP id 006d021491bc7-69c94301c1emr515355eaf.23.1778785547975;
- Thu, 14 May 2026 12:05:47 -0700 (PDT)
-Date: Thu, 14 May 2026 19:05:47 +0000
-In-Reply-To: <66797cb2-18f7-4782-9370-68d0c10c35f4@linaro.org> (message from
- James Clark on Thu, 14 May 2026 10:10:02 +0100)
+        d=1e100.net; s=20251104; t=1778791451; x=1779396251;
+        h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
+         :mime-version:message-id:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iIn517qMFa/72Ee/XGTDeeK9Cq6VJiGDpV2GCDJOS7E=;
+        b=fmLf0ElyiWkY+gzQGPTMvGV0JLFRQQqQIg8Us6H5lFQhorfnqqLeioJ9vhVydpWuTu
+         n2AGN7DGNW4Bzw+jnJEOFVwBvlGJlyy8IoXUPl3eHS6MxZvascLpX1KIo4jhKwwZC//+
+         LeyUZ2pI8YW76LMy6PUhZAN4ccmYOqnuXfxmMfAw1fAx1mGovp4At9VK35M6Chhx5Wer
+         3bmpgSedDtGUUeaarfd/Hc+kfXojGpL+1tnfFgYN+inGIO1JlFGTeQFDG8RL9kk3d2B7
+         Y2iOQLuefFFu9phQxU1CAuZT6O5v8Jmn13STLkwQ9+4pUk7hxSc2Tt8nypAA33FJgvKp
+         jRsg==
+X-Forwarded-Encrypted: i=1; AFNElJ9RUfmz0Xxn2g4KySSlxSedBDsluRThFTwX3HFXSVNQcdShsbodkOOJtydEUrMHlrcnJlXqtnoUsVQacIQKzWA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw+XZNw9L9H+EDLX9/M9aoh0NpWAeenMUqhh91T6aZddIHXaK5n
+	nE2/kBP/o67oHAez51fc2bWFG8o1489xq2fXFkxVliabFR9CbCSv22u7SyIQdW9PQQ==
+X-Gm-Gg: Acq92OGO8BpfO927LF8BNMdB+AcBCp1MXV19BLwNvYnwgyzKKD/GjA03C/kLfyH2EPE
+	GVlYODz5qJwoYrjMiV+ziPhc18O2LeD0Ylk5HPesrUk+Fay2CJEiI/Tmhe2wNRyO1hZz2h6mHif
+	QUlLfAo+zlPB5G9KZFnFd/gqcQMEMdHJMpuzyd1x6CW1kM8oKcv/YbBipH72UNZio6H20D3vsJQ
+	++/SqPOkoBkUjarA2wxfBsCCMw5G/iWu0ZfSDt+RIj/qWKVOzQHSQE8TOfLJDQiaeaq1j580Ct/
+	a0ItKlDnW+tC4ljocV168zcZTNA5jPqxUhI8w0oDxxgQLdDWq4LCMkUyxc8dnMJ3RPIBcdoPY+o
+	IirlxNpwwEzwDFigOUvu1lxwO2fuhEtCrIP90wn2kP3jadtlMV6pe7jg42Q7WyH8RRJQm+zEjqS
+	bhXWcfC2ypN1+FbXvo4v1YChd6TCVzrjYPFjOJw9qs8MRdvaMLqRxOLzYJ3XOhpQCGFO3MDUSpv
+	bUauIc=
+X-Received: by 2002:ad4:5e88:0:b0:8ac:b70c:8a9b with SMTP id 6a1803df08f44-8ca0f70f697mr20146116d6.44.1778791451056;
+        Thu, 14 May 2026 13:44:11 -0700 (PDT)
+Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8c90c358539sm32474826d6.41.2026.05.14.13.44.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 May 2026 13:44:10 -0700 (PDT)
+Date: Thu, 14 May 2026 16:44:09 -0400
+Message-ID: <16093a0278a6d7d1a0a8bc055c228bed@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Message-ID: <gsntlddlbylw.fsf@coltonlewis-kvm.c.googlers.com>
-Subject: Re: [PATCH v7 13/20] KVM: arm64: Apply dynamic guest counter reservations
-From: Colton Lewis <coltonlewis@google.com>
-To: James Clark <james.clark@linaro.org>
-Cc: alexandru.elisei@arm.com, pbonzini@redhat.com, corbet@lwn.net, 
-	linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org, 
-	maz@kernel.org, oliver.upton@linux.dev, mizhang@google.com, 
-	joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, 
-	mark.rutland@arm.com, shuah@kernel.org, gankulkarni@os.amperecomputing.com, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
-	linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0 
+Content-Type: text/plain; charset=UTF-8 
+Content-Transfer-Encoding: 8bit 
+X-Mailer: pstg-pwork:20260514_1634/pstg-lib:20260514_1359/pstg-pwork:20260514_1634
+From: Paul Moore <paul@paul-moore.com>
+To: Albert Esteve <aesteve@redhat.com>, Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, =?utf-8?q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Sumit Semwal <sumit.semwal@linaro.org>, =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, Benjamin Gaignard <benjamin.gaignard@collabora.com>, Brian Starkey <Brian.Starkey@arm.com>, John Stultz <jstultz@google.com>, "T.J. Mercier" <tjmercier@google.com>, Christian Brauner <brauner@kernel.org>, James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org, linux-mm@kvack.org, linux-security-module@vger.kernel.org, selinux@vger.kernel.org, linux-kselftest@vger.kernel.org, Albert Esteve <aesteve@redhat.com>, mripard@kernel.org, echanude@redhat.com
+Subject: Re: [PATCH RFC 4/5] selinux: Restrict cross-cgroup dma-heap charging
+References: <20260512-v2_20230123_tjmercier_google_com-v1-4-6326701c3691@redhat.com>
+In-Reply-To: <20260512-v2_20230123_tjmercier_google_com-v1-4-6326701c3691@redhat.com>
 
-SmFtZXMgQ2xhcmsgPGphbWVzLmNsYXJrQGxpbmFyby5vcmc+IHdyaXRlczoNCg0KPiBPbiAxMy8w
-NS8yMDI2IDU6NDUgcG0sIENvbHRvbiBMZXdpcyB3cm90ZToNCj4+IEphbWVzIENsYXJrIDxqYW1l
-cy5jbGFya0BsaW5hcm8ub3JnPiB3cml0ZXM6DQoNCj4+PiBPbiAwNC8wNS8yMDI2IDEwOjE4IHBt
-LCBDb2x0b24gTGV3aXMgd3JvdGU6DQo+Pj4+IEFwcGx5IGR5bmFtaWMgZ3Vlc3QgY291bnRlciBy
-ZXNlcnZhdGlvbnMgYnkgY2hlY2tpbmcgaWYgdGhlIHJlcXVlc3RlZA0KPj4+PiBndWVzdCBtYXNr
-IGNvbGxpZGVzIHdpdGggYW55IGV2ZW50cyB0aGUgaG9zdCBoYXMgc2NoZWR1bGVkIGFuZCBjYWxs
-aW5nDQo+Pj4+IHBtdV9wZXJmX3Jlc2NoZWRfdXBkYXRlKCkgd2l0aCBhIGhvb2sgdGhhdCB1cGRh
-dGVzIHRoZSBtYXNrIG9mDQo+Pj4+IGF2YWlsYWJsZSBjb3VudGVycyBpbiBiZXR3ZWVuIHNjaGVk
-dWxlIG91dCBhbmQgc2NoZWR1bGUgaW4uDQoNCj4+Pj4gU2lnbmVkLW9mZi1ieTogQ29sdG9uIExl
-d2lzIDxjb2x0b25sZXdpc0Bnb29nbGUuY29tPg0KPj4+PiAtLS0NCj4+Pj4gwqDCoCBhcmNoL2Fy
-bTY0L2t2bS9wbXUtZGlyZWN0LmPCoCB8IDY5ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysr
-KysrDQo+Pj4+ICsrKysNCj4+Pj4gwqDCoCBpbmNsdWRlL2xpbnV4L3BlcmYvYXJtX3BtdS5oIHzC
-oCAxICsNCj4+Pj4gwqDCoCAyIGZpbGVzIGNoYW5nZWQsIDcwIGluc2VydGlvbnMoKykNCg0KPj4+
-PiBkaWZmIC0tZ2l0IGEvYXJjaC9hcm02NC9rdm0vcG11LWRpcmVjdC5jIGIvYXJjaC9hcm02NC9r
-dm0vcG11LWRpcmVjdC5jDQo+Pj4+IGluZGV4IDIyNTJkM2I5MDVkYjkuLjE0Y2M0MTlkYmFmYWQg
-MTAwNjQ0DQo+Pj4+IC0tLSBhL2FyY2gvYXJtNjQva3ZtL3BtdS1kaXJlY3QuYw0KPj4+PiArKysg
-Yi9hcmNoL2FybTY0L2t2bS9wbXUtZGlyZWN0LmMNCj4+Pj4gQEAgLTEwMCw2ICsxMDAsNzMgQEAg
-dTgga3ZtX3BtdV9ocG1uKHN0cnVjdCBrdm1fdmNwdSAqdmNwdSkNCj4+Pj4gwqDCoMKgwqDCoMKg
-IHJldHVybiAqaG9zdF9kYXRhX3B0cihucl9ldmVudF9jb3VudGVycyk7DQo+Pj4+IMKgwqAgfQ0K
-DQo+Pj4+ICsvKiBDYWxsYmFjayB0byB1cGRhdGUgY291bnRlciBtYXNrIGJldHdlZW4gcGVyZiBz
-Y2hlZHVsaW5nICovDQo+Pj4+ICtzdGF0aWMgdm9pZCBrdm1fcG11X3VwZGF0ZV9tYXNrKHN0cnVj
-dCBwbXUgKnBtdSwgdm9pZCAqZGF0YSkNCj4+Pj4gK3sNCj4+Pj4gK8KgwqDCoCBzdHJ1Y3QgYXJt
-X3BtdSAqYXJtX3BtdSA9IHRvX2FybV9wbXUocG11KTsNCj4+Pj4gK8KgwqDCoCB1bnNpZ25lZCBs
-b25nICpuZXdfbWFzayA9IGRhdGE7DQo+Pj4+ICsNCj4+Pj4gK8KgwqDCoCBiaXRtYXBfY29weShh
-cm1fcG11LT5jbnRyX21hc2ssIG5ld19tYXNrLCBBUk1QTVVfTUFYX0hXRVZFTlRTKTsNCj4+Pj4g
-K30NCj4+Pj4gKw0KPj4+PiArLyoqDQo+Pj4+ICsgKiBrdm1fcG11X3NldF9ndWVzdF9jb3VudGVy
-cygpIC0gSGFuZGxlIGR5bmFtaWMgY291bnRlciByZXNlcnZhdGlvbnMNCj4+Pj4gKyAqIEBjcHVf
-cG11OiBzdHJ1Y3QgYXJtX3BtdSB0byBwb3RlbnRpYWxseSBtb2RpZnkNCj4+Pj4gKyAqIEBndWVz
-dF9tYXNrOiBuZXcgZ3Vlc3QgbWFzayBmb3IgdGhlIHBtdQ0KPj4+PiArICoNCj4+Pj4gKyAqIENo
-ZWNrIGlmIGd1ZXN0IGNvdW50ZXJzIHdpbGwgaW50ZXJmZXJlIHdpdGggY3VycmVudCBob3N0IGV2
-ZW50cyBhbmQNCj4+Pj4gKyAqIGNhbGwgaW50byBwZXJmX3BtdV9yZXNjaGVkX3VwZGF0ZSBpZiBh
-IHJlc2NoZWR1bGUgaXMgcmVxdWlyZWQuDQo+Pj4+ICsgKi8NCj4+Pj4gK3N0YXRpYyB2b2lkIGt2
-bV9wbXVfc2V0X2d1ZXN0X2NvdW50ZXJzKHN0cnVjdCBhcm1fcG11ICpjcHVfcG11LCB1NjQNCj4+
-Pj4gZ3Vlc3RfbWFzaykNCj4+Pj4gK3sNCj4+Pj4gK8KgwqDCoCBzdHJ1Y3QgcG11X2h3X2V2ZW50
-cyAqY3B1YyA9IHRoaXNfY3B1X3B0cihjcHVfcG11LT5od19ldmVudHMpOw0KPj4+PiArwqDCoMKg
-IERFQ0xBUkVfQklUTUFQKGd1ZXN0X2JpdG1hcCwgQVJNUE1VX01BWF9IV0VWRU5UUyk7DQo+Pj4+
-ICvCoMKgwqAgREVDTEFSRV9CSVRNQVAobmV3X21hc2ssIEFSTVBNVV9NQVhfSFdFVkVOVFMpOw0K
-Pj4+PiArwqDCoMKgIGJvb2wgbmVlZF9yZXNjaGVkID0gZmFsc2U7DQo+Pj4+ICsNCj4+Pj4gK8Kg
-wqDCoCBiaXRtYXBfZnJvbV9hcnI2NChndWVzdF9iaXRtYXAsICZndWVzdF9tYXNrLCBBUk1QTVVf
-TUFYX0hXRVZFTlRTKTsNCj4+Pj4gK8KgwqDCoCBiaXRtYXBfY29weShuZXdfbWFzaywgY3B1X3Bt
-dS0+aHdfY250cl9tYXNrLCBBUk1QTVVfTUFYX0hXRVZFTlRTKTsNCj4+Pj4gKw0KPj4+PiArwqDC
-oMKgIGlmIChndWVzdF9tYXNrKSB7DQo+Pj4+ICvCoMKgwqDCoMKgwqDCoCAvKiBTdWJ0cmFjdCBn
-dWVzdCBjb3VudGVycyBmcm9tIGF2YWlsYWJsZSBob3N0IG1hc2sgKi8NCj4+Pj4gK8KgwqDCoMKg
-wqDCoMKgIGJpdG1hcF9hbmRub3QobmV3X21hc2ssIG5ld19tYXNrLCBndWVzdF9iaXRtYXAsDQo+
-Pj4+IEFSTVBNVV9NQVhfSFdFVkVOVFMpOw0KPj4+PiArDQo+Pj4+ICvCoMKgwqDCoMKgwqDCoCAv
-KiBEaWQgd2UgY29sbGlkZSB3aXRoIGFuIGFjdGl2ZSBob3N0IGV2ZW50PyAqLw0KPj4+PiArwqDC
-oMKgwqDCoMKgwqAgaWYgKGJpdG1hcF9pbnRlcnNlY3RzKGNwdWMtPnVzZWRfbWFzaywgZ3Vlc3Rf
-Yml0bWFwLA0KPj4+PiBBUk1QTVVfTUFYX0hXRVZFTlRTKSkgew0KPj4+PiArwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoCBpbnQgaWR4Ow0KPj4+PiArDQo+Pj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-IG5lZWRfcmVzY2hlZCA9IHRydWU7DQo+Pj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGNwdWMt
-Pmhvc3Rfc3F1ZWV6ZWQgPSB0cnVlOw0KPj4+PiArDQo+Pj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgIC8qIExvb2sgZm9yIHBpbm5lZCBldmVudHMgdGhhdCBhcmUgYWJvdXQgdG8gYmUgcHJlZW1w
-dGVkICANCj4+Pj4gKi8NCj4+Pj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqAgZm9yX2VhY2hfc2V0
-X2JpdChpZHgsIGd1ZXN0X2JpdG1hcCwgQVJNUE1VX01BWF9IV0VWRU5UUykgew0KPj4+PiArwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGlmICh0ZXN0X2JpdChpZHgsIGNwdWMtPnVzZWRf
-bWFzaykgJiYgY3B1Yy0NCj4+Pj4gPmV2ZW50c1tpZHhdICYmDQo+Pj4+ICvCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBjcHVjLT5ldmVudHNbaWR4XS0+YXR0ci5waW5uZWQp
-IHsNCj4+Pj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHByX3dhcm5f
-cmF0ZWxpbWl0ZWQoInBlcmY6IFBpbm5lZCBob3N0IGV2ZW50DQo+Pj4+IHNxdWVlemVkIG91dCBi
-eSBLVk0gZ3Vlc3QgUE1VIHBhcnRpdGlvblxuIik7DQoNCj4+PiBIaSBDb2x0b24sDQoNCj4+PiBJ
-IGdldCAicGVyZjogUGlubmVkIGhvc3QgZXZlbnQgc3F1ZWV6ZWQgb3V0IGJ5IEtWTSBndWVzdCBQ
-TVUgcGFydGl0aW9uIg0KPj4+IGV2ZW4gd2l0aCBhcm1fcG11djMucmVzZXJ2ZWRfaG9zdF9jb3Vu
-dGVycz0zIGZvciBleGFtcGxlLiBJIHdvdWxkIGhhdmUNCj4+PiBleHBlY3RlZCBhbnkgbm9uIHpl
-cm8gdmFsdWUgdG8gc3RvcCB0aGUgd2FybmluZy4NCg0KPj4+IEkgdGhpbmsgYXJtdjhwbXVfZ2V0
-X3NpbmdsZV9pZHgoKSBuZWVkcyB0byBiZSBjaGFuZ2VkIHRvIGFsbG9jYXRlIGZyb20NCj4+PiB0
-aGUgaGlnaCBlbmQgaG9zdCBjb3VudGVycyBmaXJzdC4gQSBtb3JlIGNvbXBsaWNhdGVkIG9wdGlv
-biB3b3VsZCBiZQ0KPj4+IGNoZWNraW5nIHRvIHNlZSBpZiB0aGVyZSBhcmUgYW55IG5vbi1waW5u
-ZWQgY291bnRlcnMgaW4gdGhlIGhvc3QNCj4+PiByZXNlcnZlZCBoYWxmIHdoZW4gYSBuZXcgcGlu
-bmVkIGNvdW50ZXIgaXMgb3BlbmVkLCB0aGVuIHN3YXBwaW5nIHRoZQ0KPj4+IHBsYWNlcyBvZiB0
-aGUgbmV3IHBpbm5lZCBhbmQgZXhpc3Rpbmcgbm9uLXBpbm5lZCBjb3VudGVycyBzbyBwaW5uZWQN
-Cj4+PiBhbHdheXMgcHJlZmVyIGJlaW5nIHB1dCBpbnRvIHRoZSBob3N0IGhhbGYuIEJ1dCBpdCdz
-IHByb2JhYmx5IG5vdCB3b3J0aA0KPj4+IGRvaW5nIHRoYXQuDQoNCj4+PiBKYW1lcw0KDQoNCj4+
-IEkgYWdyZWUgaXQgbWFrZXMgdGhlIG1vc3Qgc2Vuc2UgdG8gYWxsb2NhdGUgZnJvbSB0aGUgdG9w
-LCBidXQgSSdtIGhhcHB5DQo+PiB0aGUgYmFzaWMgaWRlYSB3b3Jrcy4NCg0KDQo+IEFub3RoZXIg
-dGhpbmcgSSBmb3Jnb3QgdG8gbWVudGlvbiBpcyB0aGF0IGV2ZW4gd2l0aCB0aGUgcmF0ZWxpbWl0
-ZWQNCj4gd2FybmluZywgdGhpcyBzcGFtcyB0aGUgbG9ncyBhbnkgdGltZSB0aGUgaG9zdCBhbmQg
-Z3Vlc3QgYXJlIGJvdGggdXNpbmcNCj4gdGhlIFBNVSBhbmQgSSdtIG5vdCBzdXJlIGhvdyB1c2Vm
-dWwgdGhhdCBpcy4NCg0KSSdtIHN1cmUgaXQgZG9lcy4gSSdsbCBkZWxldGUgaXQuDQoNCj4+Pj4g
-K8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGJyZWFrOw0KPj4+PiArwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIH0NCj4+Pj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKg
-wqAgfQ0KPj4+PiArwqDCoMKgwqDCoMKgwqAgfQ0KPj4+PiArwqDCoMKgIH0gZWxzZSB7DQo+Pj4+
-ICvCoMKgwqDCoMKgwqDCoCAvKg0KPj4+PiArwqDCoMKgwqDCoMKgwqDCoCAqIFJlc3RvcmluZyB0
-byBod19jbnRyX21hc2suDQo+Pj4+ICvCoMKgwqDCoMKgwqDCoMKgICogT25seSByZXNjaGVkIGlm
-IHdlIHByZXZpb3VzbHkgc3F1ZWV6ZWQgYW4gZXZlbnQuDQo+Pj4+ICvCoMKgwqDCoMKgwqDCoMKg
-ICovDQo+Pj4+ICvCoMKgwqDCoMKgwqDCoCBpZiAoY3B1Yy0+aG9zdF9zcXVlZXplZCkgew0KPj4+
-PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBuZWVkX3Jlc2NoZWQgPSB0cnVlOw0KPj4+PiArwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoCBjcHVjLT5ob3N0X3NxdWVlemVkID0gZmFsc2U7DQo+Pj4+ICvC
-oMKgwqDCoMKgwqDCoCB9DQo+Pj4+ICvCoMKgwqAgfQ0KPj4+PiArDQo+Pj4+ICvCoMKgwqAgaWYg
-KG5lZWRfcmVzY2hlZCkgew0KPj4+PiArwqDCoMKgwqDCoMKgwqAgLyogQ29sbGlzaW9uOiBydW4g
-ZnVsbCBwZXJmIHJlc2NoZWR1bGUgKi8NCj4+Pj4gK8KgwqDCoMKgwqDCoMKgIHBlcmZfcG11X3Jl
-c2NoZWRfdXBkYXRlKCZjcHVfcG11LT5wbXUsIGt2bV9wbXVfdXBkYXRlX21hc2ssDQo+Pj4+IG5l
-d19tYXNrKTsNCj4+Pj4gK8KgwqDCoCB9IGVsc2Ugew0KPj4+PiArwqDCoMKgwqDCoMKgwqAgLyog
-SG9zdCB3YXMgbmV2ZXIgdXNpbmcgZ3Vlc3QgY291bnRlcnMgYW55d2F5ICovDQo+Pj4+ICvCoMKg
-wqDCoMKgwqDCoCBiaXRtYXBfY29weShjcHVfcG11LT5jbnRyX21hc2ssIG5ld19tYXNrLCAgDQo+
-Pj4+IEFSTVBNVV9NQVhfSFdFVkVOVFMpOw0KPj4+PiArwqDCoMKgIH0NCj4+Pj4gK30NCj4+Pj4g
-Kw0KPj4+PiDCoMKgIC8qKg0KPj4+PiDCoMKgwqAgKiBrdm1fcG11X2hvc3RfY291bnRlcl9tYXNr
-KCkgLSBDb21wdXRlIGJpdG1hc2sgb2YgaG9zdC1yZXNlcnZlZA0KPj4+PiBjb3VudGVycw0KPj4+
-PiDCoMKgwqAgKiBAcG11OiBQb2ludGVyIHRvIGFybV9wbXUgc3RydWN0DQo+Pj4+IEBAIC0yMTgs
-NiArMjg1LDcgQEAgdm9pZCBrdm1fcG11X2xvYWQoc3RydWN0IGt2bV92Y3B1ICp2Y3B1KQ0KDQo+
-Pj4+IMKgwqDCoMKgwqDCoCBwbXUgPSB2Y3B1LT5rdm0tPmFyY2guYXJtX3BtdTsNCj4+Pj4gwqDC
-oMKgwqDCoMKgIGd1ZXN0X2NvdW50ZXJzID0ga3ZtX3BtdV9ndWVzdF9jb3VudGVyX21hc2socG11
-KTsNCj4+Pj4gK8KgwqDCoCBrdm1fcG11X3NldF9ndWVzdF9jb3VudGVycyhwbXUsIGd1ZXN0X2Nv
-dW50ZXJzKTsNCj4+Pj4gwqDCoMKgwqDCoMKgIGt2bV9wbXVfYXBwbHlfZXZlbnRfZmlsdGVyKHZj
-cHUpOw0KDQo+Pj4+IMKgwqDCoMKgwqDCoCBmb3JfZWFjaF9zZXRfYml0KGksICZndWVzdF9jb3Vu
-dGVycywgQVJNUE1VX01BWF9IV0VWRU5UUykgew0KPj4+PiBAQCAtMzE5LDUgKzM4Nyw2IEBAIHZv
-aWQga3ZtX3BtdV9wdXQoc3RydWN0IGt2bV92Y3B1ICp2Y3B1KQ0KPj4+PiDCoMKgwqDCoMKgwqAg
-dmFsID0gcmVhZF9zeXNyZWcocG1pbnRlbnNldF9lbDEpOw0KPj4+PiDCoMKgwqDCoMKgwqAgX192
-Y3B1X2Fzc2lnbl9zeXNfcmVnKHZjcHUsIFBNSU5URU5TRVRfRUwxLCB2YWwgJiBtYXNrKTsNCg0K
-Pj4+PiArwqDCoMKgIGt2bV9wbXVfc2V0X2d1ZXN0X2NvdW50ZXJzKHBtdSwgMCk7DQo+Pj4+IMKg
-wqDCoMKgwqDCoCBwcmVlbXB0X2VuYWJsZSgpOw0KPj4+PiDCoMKgIH0NCj4+Pj4gZGlmZiAtLWdp
-dCBhL2luY2x1ZGUvbGludXgvcGVyZi9hcm1fcG11LmggIA0KPj4+PiBiL2luY2x1ZGUvbGludXgv
-cGVyZi9hcm1fcG11LmgNCj4+Pj4gaW5kZXggZjdiMDAwYmIzZWNhOC4uNjNmODhmZWM1ZTgwZiAx
-MDA2NDQNCj4+Pj4gLS0tIGEvaW5jbHVkZS9saW51eC9wZXJmL2FybV9wbXUuaA0KPj4+PiArKysg
-Yi9pbmNsdWRlL2xpbnV4L3BlcmYvYXJtX3BtdS5oDQo+Pj4+IEBAIC03NSw2ICs3NSw3IEBAIHN0
-cnVjdCBwbXVfaHdfZXZlbnRzIHsNCg0KPj4+PiDCoMKgwqDCoMKgwqAgLyogQWN0aXZlIGV2ZW50
-cyByZXF1ZXN0aW5nIGJyYW5jaCByZWNvcmRzICovDQo+Pj4+IMKgwqDCoMKgwqDCoCB1bnNpZ25l
-ZCBpbnTCoMKgwqDCoMKgwqDCoCBicmFuY2hfdXNlcnM7DQo+Pj4+ICvCoMKgwqAgYm9vbCBob3N0
-X3NxdWVlemVkOw0KPj4+PiDCoMKgIH07DQoNCj4+Pj4gwqDCoCBlbnVtIGFybXBtdV9hdHRyX2dy
-b3VwcyB7DQo=
+On May 12, 2026 Albert Esteve <aesteve@redhat.com> wrote:
+> 
+> The security_dma_heap_alloc() hook allows security modules
+> to control which processes may charge dma-buf allocations
+> to another process's cgroup via the charge_pid_fd field of
+> DMA_HEAP_IOCTL_ALLOC. Without a policy implementation, the
+> hook is a no-op and the restriction is not enforced.
+> 
+> On SELinux-managed systems any domain with access to a
+> dma-heap device node can therefore exhaust another cgroup's
+> memory budget without restriction.
+> 
+> Implement selinux_dma_heap_alloc() using avc_has_perm() with
+> a new dma_heap object class and a charge_to permission. Policy
+> authors can then grant cross-cgroup charging selectively,
+> for example:
+> 
+>   allow allocator_app_t client_app_t:dma_heap charge_to;
+> 
+> Signed-off-by: Albert Esteve <aesteve@redhat.com>
+> ---
+>  security/selinux/hooks.c            | 7 +++++++
+>  security/selinux/include/classmap.h | 1 +
+>  2 files changed, 8 insertions(+)
+> 
+> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+> index 0f704380a8c81..ea1f410b9f619 100644
+> --- a/security/selinux/hooks.c
+> +++ b/security/selinux/hooks.c
+> @@ -2189,6 +2189,12 @@ static int selinux_capable(const struct cred *cred, struct user_namespace *ns,
+>  	return cred_has_capability(cred, cap, opts, ns == &init_user_ns);
+>  }
+>  
+> +static int selinux_dma_heap_alloc(const struct cred *from, const struct cred *to)
+> +{
+> +	return avc_has_perm(cred_sid(from), cred_sid(to),
+> +			    SECCLASS_DMA_HEAP, DMA_HEAP__CHARGE_TO, NULL);
+> +}
+> +
+>  static int selinux_quotactl(int cmds, int type, int id, const struct super_block *sb)
+>  {
+>  	const struct cred *cred = current_cred();
+> @@ -7541,6 +7547,7 @@ static struct security_hook_list selinux_hooks[] __ro_after_init = {
+>  	LSM_HOOK_INIT(capget, selinux_capget),
+>  	LSM_HOOK_INIT(capset, selinux_capset),
+>  	LSM_HOOK_INIT(capable, selinux_capable),
+> +	LSM_HOOK_INIT(dma_heap_alloc, selinux_dma_heap_alloc),
+>  	LSM_HOOK_INIT(quotactl, selinux_quotactl),
+>  	LSM_HOOK_INIT(quota_on, selinux_quota_on),
+>  	LSM_HOOK_INIT(syslog, selinux_syslog),
+> diff --git a/security/selinux/include/classmap.h b/security/selinux/include/classmap.h
+> index 90cb61b164256..d232f7808f6b8 100644
+> --- a/security/selinux/include/classmap.h
+> +++ b/security/selinux/include/classmap.h
+> @@ -181,6 +181,7 @@ const struct security_class_mapping secclass_map[] = {
+>  	{ "user_namespace", { "create", NULL } },
+>  	{ "memfd_file",
+>  	  { COMMON_FILE_PERMS, "execute_no_trans", "entrypoint", NULL } },
+> +	{ "dma_heap", { "charge_to", NULL } },
+>  	/* last one */ { NULL, {} }
+>  };
+
+While we have seen some one-off patches to add specific resource/cgroups
+controls in the past, much like this one, we've yet to see a patchset
+that provides a more comprehensive set of resource/cgroup access controls
+for SELinux.
+
+I'm not opposed to a patch like this, but I would like to see it as part
+of a larger effort to introduce access controls across all of the
+existing cgroup control points where it makes sense.  In other words,
+let's see a design for cgroup access controls so that we can ensure we
+have something that is meaningful and makes sense from a policy
+developer's perspective.
+
+--
+paul-moore.com
