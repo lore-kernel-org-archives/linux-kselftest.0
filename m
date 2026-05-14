@@ -1,123 +1,96 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 154EC40DFB8;
-	Thu, 14 May 2026 14:09:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21D193C4165
+	for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 14:13:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778767766; cv=none; b=FW3FXc99lCu0cZi2gpBGANhBKlLfPxY5Nloz8hlmEpq3iPG0JDtqERgNAWVZ1GxTGcib6iXMtkDJURkekIoWBn5pdSaa1PI39YtuZyZlemIwVMTbRFCxSnb5+NRuii7ODQTszl5XISs/nJUN1N9EqbVYow6ttyFDC3488uIiY0I=
+	t=1778767999; cv=none; b=cW/8T7JHMVx2habyjEHSyqIiW15dEYvyBVKPWfBXC7sndTpuGxgIPxagqef+1kKcKHWVqWZaCmwtuXkNrAHuCPZ7SdQHAfN4BOZp/0W74+0Auulx+Oy/oWHT7HxUNI2myTKnjNZxO2aKCrqPxt+en78zQ6X8+A0bxtUp9PZuXjo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778767766; c=relaxed/simple;
-	bh=EauBIBzKjl6rFCRlEGSo/s6NrgLL9HoVh8TIqUsq9vs=;
+	s=arc-20240116; t=1778767999; c=relaxed/simple;
+	bh=6+Vy77mlexUq69K/GifNbxsYh1MJdCUIjNEhN5F1vsY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YEAbBP2wwosLO3eVToIjtHho/2a6d3bGHY1zY8lm90gAyY3dyHmfSUhNSReUoO9vvgQcxIV8spQJJGQqx8FOOVrs1Nxd6E0o6owbXSFqiHj9ATgVFBM1bmDsB5r0MYP69livYEwW6LpxYANxwtK+HQ4Ksi/OfzU1Sbvr3uA8oq8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k/Q18Z/2; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=aJDHZlyJ26AgaWboSR7y/I7miv/cBNa6ZfDi+0ySeq7yUle4u+m2BhFxo6AK96STb2SCyYOJ/M4oLBgQUIpCFNBoTeVtumuHk/c5Z35l6lHK8JW94zf5TBXgT19LpmSXdLQH31qQUG1cEZf5VpTDRuDpS2RIMnrG6P+16MEmC5w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pUZwLJas; arc=none smtp.client-ip=209.85.160.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k/Q18Z/2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BBADC2BCFA;
-	Thu, 14 May 2026 14:09:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778767764;
-	bh=EauBIBzKjl6rFCRlEGSo/s6NrgLL9HoVh8TIqUsq9vs=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=k/Q18Z/2gp4e1C41DVo5DjiFVe/i3Y7T2vD9AOkCxNKGjNv2X3Qr1isGZxHuM1C8U
-	 RDqzNyHcwVmHJXk1XdVE2RaJbqcco/yvBFrXCNL18tP2hwZZ03JKKecKDG5Rf7p7Z2
-	 YTTct4tLB4Srl9oV+ovlapU0VhWx2Wy7+J+k0jWYUG9bSQfszNG/zQ+sgqQT6txga8
-	 uBAVIYuw1CqpvjB4XojTQIql5evO2wPl/bt4AITeIWfFK3XYtwGWW6ynt8Xzd/hKJc
-	 ocK8m6usBtKaYy2yfnQE5j4Kacrryj4r/50orkJuzVeQmGZeAEpykPASD8kL3oqBOO
-	 JU2V/rPwVTg2Q==
-From: SeongJae Park <sj@kernel.org>
-To: 
-Cc: SeongJae Park <sj@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	damon@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pUZwLJas"
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-40ef10ec84cso6323030fac.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 07:13:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778767997; x=1779372797; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6+Vy77mlexUq69K/GifNbxsYh1MJdCUIjNEhN5F1vsY=;
+        b=pUZwLJasNTJ1Tkg/kdJU4j57rcOJHBX4sZkY/MUdYttTZzy+8kaHashhWEnW0eYTHv
+         j6RKrxTp2L1SgutrUke2Z+PDn9KmFmNLBBk83SwYbunnjOfvMWEV6Hn5GLYSib6EXEHX
+         dTQ5uifKqHxzvKCtyjSt6Qj588UXeyNFJH/rSruoUTlhILFadLnIpGgXX3v4eiMlEAAb
+         Gup2+0BeY0GkqNNHh5bzKoDechD7GPQk5Fh6I4FABchwPx1ewOEBQH/WEYuob6eZSfh4
+         TjpZiGENiePqs5s/oT92KlLpMPhSG7eyLxpiKCMaD/tGhV6vNDGoVT0xzANk3CiWB/F4
+         QD6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778767997; x=1779372797;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=6+Vy77mlexUq69K/GifNbxsYh1MJdCUIjNEhN5F1vsY=;
+        b=p964dG2KFaTqTxm3/q53gmUEFSJeVpVCRLm1pccf/LkYh7KnmeXPsrwRYm7WzCkeZ3
+         VjUH/1KLCMSs7nLSfCYQPRL45yhlgfN/YIi8dNXWzwfgRqUlhb35Rfw4giJhNSZe2fQH
+         Y6IgW9jM3UO0JrpOvLP3tnZqfOyT0O0I4Ooh9Oz7A3xDjgVoq9rCehNC8PyLt0pzF0ni
+         V/6UHa0ZfTbnIBVqJ+KUG6s37b6UMUtbDFBNZDbYssD/gUjWSXNudNQX4r7ZVZMlfb9+
+         G1w4Rgk/ZI8omZrPUlSfmO8RI+Pg5OG0V4Hx92ir32w9CBVIs2djK8YJYdBZOIYC29Ks
+         hwHw==
+X-Forwarded-Encrypted: i=1; AFNElJ98WmtUHQg8xGGgUUK/2+RKIYDnpu619WrjpngzpXNMptVUcjKiFfHP1d9+RVQGpYVf2miEfKV3t+KdnW3nKig=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzrMJMynsFFfJjbqk4vhOTnxBeZzG0gzva643tlLuxxlUtbyGnT
+	EOeIgeURWylHikRKotzp0NSmAy6l/gWM+z4H/QwjlaAA0VCmkGzblzej
+X-Gm-Gg: Acq92OH542JAJS+Nry/yq1vQgS7o05PnJ1Pixn6k5P7IlSKLSRtHkXhz7oQT5xJ16ud
+	32zNOVz3R0u5yfSQDLZmAOZeisaE9b0695V9P4AR+2WVjuqJhxeqIhDtQWz4PNbhZPobzgjssWa
+	BXiaOwb3MbGHQtr/Cmhracg7ZSUj4a0XkP+BbJF6sUK8nc/efmxu0rXSdvtAZnAW6HRVnPLAQV9
+	VQpn1/ZiSiLGWMabtNF9a2zPwMG7a2BzjzaNDDFglDY7Zv7nGaes0Ds7I1GGhPPhAexPgTC1bOJ
+	whyp4By2CZawEQHVtlVA12uVaZ+V48KIMVPAGd6rq0kTL0H2QI+fRkNV9jsDCWybC06v0aWO7nD
+	gdDFUvMLk+LynyJ4hvxaF49szW5IyUtWQDXJnMMewgZA/tWX7Yj3ccU/pimKICS/25cYIgWxJGk
+	+XI14LlCYDVGjgBJ8=
+X-Received: by 2002:a05:6871:54d:b0:42f:7bbc:ce82 with SMTP id 586e51a60fabf-439d2ffc601mr4141250fac.26.1778767997001;
+        Thu, 14 May 2026 07:13:17 -0700 (PDT)
+Received: from houminxi ([72.244.37.221])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-439fc4dcb89sm2018191fac.12.2026.05.14.07.13.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 May 2026 07:13:16 -0700 (PDT)
+From: Minxi Hou <houminxi@gmail.com>
+To: Aaron Conole <aconole@redhat.com>
+Cc: Minxi Hou <houminxi@gmail.com>,
+	netdev@vger.kernel.org,
+	davem@davemloft.net,
+	echaudro@redhat.com,
+	edumazet@google.com,
+	horms@kernel.org,
+	i.maximets@ovn.org,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	shuah@kernel.org,
+	dev@openvswitch.org,
+	i.maximets@redhat.com,
 	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: [RFC PATCH v2.1 19/28] selftests/damon/sysfs.sh: test probes dir
-Date: Thu, 14 May 2026 07:08:52 -0700
-Message-ID: <20260514140904.119781-20-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260514140904.119781-1-sj@kernel.org>
-References: <20260514140904.119781-1-sj@kernel.org>
+	Eric Garver <eric@garver.life>
+Subject: Re: [PATCH net-next] selftests: openvswitch: add dec_ttl action support and test
+Date: Thu, 14 May 2026 22:12:59 +0800
+Message-ID: <20260514141259.4042848-1-houminxi@gmail.com>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <f7tecjeqezk.fsf@redhat.com>
+References: <20260514092747.3653656-1-houminxi@gmail.com> <f7tecjeqezk.fsf@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Add simple existence tests for data probes sysfs directories and files.
+Thanks Aaron. I missed the le_1() wrapper in odp-util.c. I was only
+looking at the kernel netlink attributes and derived the format from
+there, which doesn't have that layer.
 
-Signed-off-by: SeongJae Park <sj@kernel.org>
----
- tools/testing/selftests/damon/sysfs.sh | 48 ++++++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
-
-diff --git a/tools/testing/selftests/damon/sysfs.sh b/tools/testing/selftests/damon/sysfs.sh
-index 83e3b7f63d81c..1ac3e2ce8e448 100755
---- a/tools/testing/selftests/damon/sysfs.sh
-+++ b/tools/testing/selftests/damon/sysfs.sh
-@@ -291,11 +291,59 @@ test_intervals()
- 	ensure_file "$intervals_dir/update_us" "exist" "600"
- }
- 
-+test_damon_filter()
-+{
-+	damon_filter_dir=$1
-+	ensure_file "$damon_filter_dir/type" "exist" "600"
-+	ensure_write_succ "$damon_filter_dir/type" "anon" "valid input"
-+	ensure_write_fail "$damon_filter_dir/type" "foo" "invalid input"
-+	ensure_file "$damon_filter_dir/matching" "exist" "600"
-+	ensure_file "$damon_filter_dir/allow" "exist" "600"
-+}
-+
-+test_damon_filters()
-+{
-+	filters_dir=$1
-+	ensure_dir "$filters_dir" "exist"
-+	ensure_file "$filters_dir/nr_filters" "exist" "600"
-+	ensure_write_succ  "$filters_dir/nr_filters" "1" "valid input"
-+	test_damon_filter "$filters_dir/0"
-+
-+	ensure_write_succ  "$filters_dir/nr_filters" "2" "valid input"
-+	test_damon_filter "$filters_dir/0"
-+	test_damon_filter "$filters_dir/1"
-+
-+	ensure_write_succ "$filters_dir/nr_filters" "0" "valid input"
-+	ensure_dir "$filters_dir/0" "not_exist"
-+	ensure_dir "$filters_dir/1" "not_exist"
-+}
-+
-+test_probe()
-+{
-+	probe_dir=$1
-+	ensure_dir "$probe_dir" "exist"
-+	test_damon_filters "$probe_dir/filters"
-+}
-+
-+test_probes()
-+{
-+	probes_dir=$1
-+	ensure_dir "$probes_dir" "exist"
-+	ensure_file "$probes_dir/nr_probes" "exist" "600"
-+
-+	ensure_write_succ "$probes_dir/nr_probes" "1" "valid input"
-+	test_probe "$probes_dir/0"
-+
-+	ensure_write_succ "$probes_dir/nr_probes" "0" "valid input"
-+	ensure_dir "$probes_dir/0" "not_exist"
-+}
-+
- test_monitoring_attrs()
- {
- 	monitoring_attrs_dir=$1
- 	ensure_dir "$monitoring_attrs_dir" "exist"
- 	test_intervals "$monitoring_attrs_dir/intervals"
-+	test_probes "$monitoring_attrs_dir/probes"
- 	test_range "$monitoring_attrs_dir/nr_regions"
- }
- 
--- 
-2.47.3
+Will update the selftest to use dec_ttl(le_1(...)) in v2.
