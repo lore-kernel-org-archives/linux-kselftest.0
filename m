@@ -1,265 +1,170 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from CH1PR05CU001.outbound.protection.outlook.com (mail-northcentralusazon11010060.outbound.protection.outlook.com [52.101.193.60])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4110131E822
-	for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 16:00:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778774428; cv=none; b=OAZJw22E/aLMzBv+7gwTC+LI/65xYZIxlzNzclLWqiAy7m/EekYqFpCNoOeH3LQvvUOlN+6Gz+v4vxxMZ0BN8kj5SsUgWjNo623/KLCb2lsEhCUiTq0rC+cxyyKq+HXyHdYsgYJWF5CRSPF9OmMJIFR3TwVMHAHNtumWIJh3I3U=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778774428; c=relaxed/simple;
-	bh=9bz7ArJby5v7jeQA8ymGKl9RNGJQiBSe3pmorWJoSPE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gxkMQ8aSltXtemfoMsnNc/qcCW10MjW7XcVoQpWAmvvdw/VNa3NeJjp9bXBSvHMVHlmgTPjvrJywlFnktoZ9qGpHB6dQJTdXL9YVP+tTwc2GE3hWryZJnzXOPj/kxyMsMXFqrwFoE/51fuPCK2sZqmPCGuqrDJopF8zajRlgr6o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=XAisUViV; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=hqjT0A6w; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=XAisUViV; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=hqjT0A6w; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 984EB330B10;
+	Thu, 14 May 2026 16:04:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.193.60
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778774692; cv=fail; b=NJwqxoHP8CTHN96UYOa16gRpruB3KY8CIqmHnG9KhBPO7Y3EpqmTFi7dk0mRS3qLsTCjDGvEm8935zr4azhV8EcnVKKwiGNjz8f2yeJS7B8CrmBCTNbMaAjpo3Dm7b6TgweBH2rCa/5z5/4EEJAVirZO6Ad3udnOwL8kuaVbZCk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778774692; c=relaxed/simple;
+	bh=iJS8pnveStfj4QwO7CvE/cZnFZOfuTVx3W7S7DxFsyo=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=R32b1N39K7BE7GLHhh/zrus1tB+JQvHEemaASHUfiZ+xfm/Ihm3KfqoKdok/9RNZJqGbdY94eiR/uARERpMNuwfiWz8gtmp6RvnesCLPQs/fryucpAWxJXKpPF/D31XmqGv48QJa2o/ILHGb2HosYmc2XjrUrIbUFx4jMNh4lW8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=cD1/EeJb; arc=fail smtp.client-ip=52.101.193.60
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="XAisUViV";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="hqjT0A6w";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="XAisUViV";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="hqjT0A6w"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 7485A67CE3;
-	Thu, 14 May 2026 16:00:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1778774424; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=i4EMS4p/wehXnBfvVDcG/5oQUtGRphLSbPMyRiQ5TBM=;
-	b=XAisUViVDjXvFFo43tlEnUaOeUu39L4yqTve7eH4kUoLeAhAcuWoxuymdWGEfxTXFh0Q1i
-	tfxBWzfV8CE/SD8XKNI7rKxwQ0Y7u3b2PZQLGcNYKvHdAHM8QBHwEUpl+6XFEFNzKnveVz
-	/yPhU2g5IfReHsNf3Gcz5PYwfU6hJlc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1778774424;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=i4EMS4p/wehXnBfvVDcG/5oQUtGRphLSbPMyRiQ5TBM=;
-	b=hqjT0A6wHji0DF/4gW54QQh1Qnl9b11XGe5FHcg4/IYnLbsPsROH1hS6q9R1eGEX9bP8OU
-	MI/C/evGOKJ9j8AA==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1778774424; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=i4EMS4p/wehXnBfvVDcG/5oQUtGRphLSbPMyRiQ5TBM=;
-	b=XAisUViVDjXvFFo43tlEnUaOeUu39L4yqTve7eH4kUoLeAhAcuWoxuymdWGEfxTXFh0Q1i
-	tfxBWzfV8CE/SD8XKNI7rKxwQ0Y7u3b2PZQLGcNYKvHdAHM8QBHwEUpl+6XFEFNzKnveVz
-	/yPhU2g5IfReHsNf3Gcz5PYwfU6hJlc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1778774424;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=i4EMS4p/wehXnBfvVDcG/5oQUtGRphLSbPMyRiQ5TBM=;
-	b=hqjT0A6wHji0DF/4gW54QQh1Qnl9b11XGe5FHcg4/IYnLbsPsROH1hS6q9R1eGEX9bP8OU
-	MI/C/evGOKJ9j8AA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id D2468593A9;
-	Thu, 14 May 2026 16:00:23 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id wJfuL5fxBWplBQAAD6G6ig
-	(envelope-from <fmancera@suse.de>); Thu, 14 May 2026 16:00:23 +0000
-Message-ID: <2e046948-aa98-4159-b1c1-46368f034027@suse.de>
-Date: Thu, 14 May 2026 18:00:13 +0200
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="cD1/EeJb"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=zG3C+oDM1J+OdMuVjuz4WFuQZw8BczARSPy1aThbLkVYGtCTqziWS2qcElFKrrFR8VwpBgvfymAMQnVRuZGN3g5JEDYSEgApCIz0jdu+NRSY9jid8v2dh/Aj8d08eWE5YObvkCzNPNWcrKCek7DZLYyumSM+mkqj8eg+Oiar0pdJxs7VRaP3qd9V+/v8nHFXHZvbj18iyBfMw45NcIkiKrSOkxUNrCZMWDsE2TgUM28HmtIhWzrwDzIh4BwhZTmljrYOrahWQ5gqSdXdJvU0r69zEP75rfRslWu//7h+fPd/x0P3KEmbegxxVfEIx64xwL3oDCLS53sJA4Yhl+ZjHQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7rBKi2K5AlTB4xfkGUhNurBgjtOdTzg8LETWI6PDwug=;
+ b=mwthFm8ICLtav7ul83Dwsux5ymEe8Zk2aTSUtJVRBRmVNfOHP1gS7ER2AGqw9C1BUPjI+++Keed6CCaOBCf+RQvFHFoF+Q5LQguXe01Mnu9RHEAlaUHV3eRiGDDUALFxVcXWaliqiTfpIpD3D1+PIdsySMIzM4eAAQQDE7eMd6zPTGbXc2sCvWhjzFinhDv0alkJ4A4IvM8B/UGCawRVDkZa4nNxxchpqNHayHerz3QlhZu6Kg8Acu6mYLUM02aOdPmOXYigMxoszKT51PqvL1z9X3uLz8gcWIZvfmDvKGqJvAmvmsPUq1+SBnbw7nkVvzTxSx20rHaAPpVhFc0Ovg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7rBKi2K5AlTB4xfkGUhNurBgjtOdTzg8LETWI6PDwug=;
+ b=cD1/EeJbTPWnEtv9GbOWWaQGS77s/JOSiNsJwFzlU11cmP4F5/0H5XrxqAciE/F3als592QHToL5tcnKl9BzKdknZlGoqhwhjK/rL9q2NReQQejhymXxqdCeXvSZK967ntbdUk4o54QYOhTj1RN91ypTpOK7ycByOlDAbBSWR+EY5jf249uHPT1hB+bZf5IXTLwwi9bfL/l/HDngAkgZLi3DKqWnzllnl+5RjejotctEqNbK/2iVCUXVzuGXzC8G4VD+KmSGtmX8zCbbTP9TsPG2/L0UZeKNJonLDBUeaUZaKzF6AQ0XBbCm2SoVUlGNJWRMCwRFL2Arrpu+Sn8unw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV8PR12MB9620.namprd12.prod.outlook.com (2603:10b6:408:2a1::19)
+ by DS0PR12MB8200.namprd12.prod.outlook.com (2603:10b6:8:f5::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9913.11; Thu, 14 May
+ 2026 16:04:45 +0000
+Received: from LV8PR12MB9620.namprd12.prod.outlook.com
+ ([fe80::299d:f5e0:3550:1528]) by LV8PR12MB9620.namprd12.prod.outlook.com
+ ([fe80::299d:f5e0:3550:1528%5]) with mapi id 15.21.0025.012; Thu, 14 May 2026
+ 16:04:45 +0000
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Alex Williamson <alex@shazbot.org>,
+	kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Shuah Khan <shuah@kernel.org>
+Cc: Alex Williamson <alex.williamson@redhat.com>,
+	David Matlack <dmatlack@google.com>,
+	patches@lists.linux.dev,
+	Shuah Khan <skhan@linuxfoundation.org>
+Subject: [PATCH v2] vfio: selftests: Fix out-of-tree build with make O=
+Date: Thu, 14 May 2026 13:04:44 -0300
+Message-ID: <0-v2-4ccc247e6aff+1d93-vfio_st_make_o_jgg@nvidia.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: MN2PR15CA0051.namprd15.prod.outlook.com
+ (2603:10b6:208:237::20) To LV8PR12MB9620.namprd12.prod.outlook.com
+ (2603:10b6:408:2a1::19)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2 net v4] ipv6: addrconf: fix temp address generation
- after prefix deprecation
-To: Ido Schimmel <idosch@nvidia.com>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- horms@kernel.org, pabeni@redhat.com, kuba@kernel.org, edumazet@google.com,
- dsahern@kernel.org, davem@davemloft.net, =?UTF-8?Q?=C5=81ukasz_Stelmach?=
- <steelman@post.pl>
-References: <20260511122645.6233-2-fmancera@suse.de>
- <3f371efe-1b1b-464c-af21-ccd66b6c5df6@suse.de>
- <20260513143533.GA415119@shredder>
-Content-Language: en-US
-From: Fernando Fernandez Mancera <fmancera@suse.de>
-In-Reply-To: <20260513143533.GA415119@shredder>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Level: 
-X-Spamd-Result: default: False [-4.30 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid]
-X-Spam-Flag: NO
-X-Spam-Score: -4.30
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV8PR12MB9620:EE_|DS0PR12MB8200:EE_
+X-MS-Office365-Filtering-Correlation-Id: ae784180-fc1e-48a7-67c3-08deb1d28442
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|376014|366016|3023799003|18002099003|56012099003|11063799003;
+X-Microsoft-Antispam-Message-Info:
+	97sOADTGxQxrdHnwDbjlyYv8geCj3DegKHsM/JlGi3y0Vd34Wf7yfVtPt5eChR2Qe2pUH2xQXjFSOCBtN/o/b8AcAp54eaz6WuBj7h/TbJ0w0JG2Jh+OQLb0iiGIL035QmnEcTm9rb0Liar02MF3rD1EAXiulElM50960WiqClfXK/aHjwkA6CykNhLOq6g4cK31odnhDaYyiFSgw+SFXq+FjAggNmCi67giUu2pHxtgGBMgBmtkTT+9sM5XJkdB5lQKcB5oxyc0+oM0dbVJoOcEoUEEUt8h+T2Y3qqmExDae9IdaWA946qc5GUTrTPUeqmdw8a9JL00/4OOkRGQyHqsTSkooqd92fGUKgvPFsN+tesQq7Zq1ZWB+9mpVHx3nq2XfLGCDigE3fCx+apqNIWao0z4h+kNQFFwRnSP89Yb0qhphdyctsAMF34v/JzEsaD7Pr/OkGTVvyNpeypa14VqXxjYJzJvsQQTWBr6ym2RQVT/xsNtfP2L8yWZs2lPlB/cRDxx9aENa/pTIPK3NE0viKp+0EIi7fNrpD29/fG2+mDqENROJX4DWdoumV/3VtCHIYyfkIDxrg2TksdgusA4VRbbSGMl88fxIRww2JXX+Zqy6EiMq9e0fts5WhVcpTmAr37WhNkwg3PpSXOKTTz9E75JHkbTfU9nHY8u0iEoC+WtFNcs0ndjpGOFhw0O
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9620.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(3023799003)(18002099003)(56012099003)(11063799003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?jDq+d8xobI35iu0ktfZrcVUjje77TSYIN33mhf6K1SWuu/UJ5sOgnq42L2qC?=
+ =?us-ascii?Q?9jHquACCNQRF6ZnJ5XzbzCYi4ZQ4PB1mBKz7X1/v2Tn00E4vlIp8am3rU2XI?=
+ =?us-ascii?Q?OWQsEyAK1BgcN9FpB7Inrm8utJxWybyWxT+jIBoXF6BmumlWD8B1sI+SuGLW?=
+ =?us-ascii?Q?OsUZY+O18OI5iYgq47fl/sN3dCzeJ0qzA2aP0/ol4wzhU18ymd2gqB9m+8nH?=
+ =?us-ascii?Q?KlW3M+r41RQyoPFGdHAcSijMYeZVdtWGfU+2ICzRULCyKKt+cxlE/fRa8Ece?=
+ =?us-ascii?Q?0SybF+l+CgAGqSgHnPBgEkcSNqBGK8fjZ7thlq9I5Q6VETOaq1QQpeml6jm+?=
+ =?us-ascii?Q?U9tRG3b4/6vfPIEPWHr0n4MLa/tBbr+hAgexLIrhqniqjTvWXnzawE7968QI?=
+ =?us-ascii?Q?kYyfY0Ztige5HaF+P1GqvZJd8zieYdOi5txfFilicKb+4D5LUFq2wOGmT5X6?=
+ =?us-ascii?Q?ovNT3anZsDaP4gKhiRCRcSi8Ry53DcsRxng/U+B96a4kldoyn4RlAjmJN1W9?=
+ =?us-ascii?Q?n+JBPHGmsaf4wa1dw4TqtT7HGx4AqUbtNcSdOoaeJTg6ZAoU9k7RnMl41Jge?=
+ =?us-ascii?Q?Yuk/BU08Z6c4RpA5QAxCP+WLv+JDypWmlL+9egjEuPTV32DMbOZKUyVOE/yF?=
+ =?us-ascii?Q?Qqfa5Y7IYLf1zC+7fwOxw15ZoZIcqvgnK/uKo+JATwU1ZtYtcqK+axNcQZsR?=
+ =?us-ascii?Q?cL7/ExjcJ+Xbw6+bAwUtLC8QSuGk+ZIBlI1AlETQGVvBM5Xrhp9aq7ftzkkQ?=
+ =?us-ascii?Q?MK+4yY+OcbWZQewYRqeja2hSq9SPDZK2J1leNAi2frgROuIVaBMnllSD8EBf?=
+ =?us-ascii?Q?axZxQEGDKeC2/Qt8rhKrfc6h658T+8DxiImdz9DBzcQgOcojsFGj/TWFKgYQ?=
+ =?us-ascii?Q?0S0wRaHCLjrXJdLrwf6a7zUwRN7mes04vMRlg/JsiAMRhWr49OvOqGKCh150?=
+ =?us-ascii?Q?xU5eHI/Bx2WXEbb7zYGlSWJ/UWAP/N9n5TgSoDXIRd2ltVilSGcn6K0qZe14?=
+ =?us-ascii?Q?Xs8/oJufipljq2GTlHDSeq7P1Tt8Ym6lW1gbrOi/eC+T4kSBfbe+IR36gegv?=
+ =?us-ascii?Q?WaCYnjckv/H4rt4GEiumy93qO4aHwTA0edcxL0w+iAvYhXfIWQky0IdikKGV?=
+ =?us-ascii?Q?jpjtx7XhJwibQhJIQILvFzaA1kvfHhMkwGpNCrXOyr25OJxpCG+jcsDXvilZ?=
+ =?us-ascii?Q?RmFaKjqGRwFODCoHglm+JaaUOnlumzzkadPMtZtChLY+JXAJjR5q8elKPaGF?=
+ =?us-ascii?Q?3WEBpB7apLI9VLgKNOkz74FSF+Nv8HnKDuw2lpBrEnmgn35XLndfanXRSDET?=
+ =?us-ascii?Q?999VN886uGXEFtWbV9z/SJ8io4/DuhzU11ekyPayFPV2tC5LoN9djkIuITpp?=
+ =?us-ascii?Q?4dhjUgmI/FdQ5wEmeg/eJaYDFjY4HWKqXu0qvNlbNY2PrZrrePsW8GsAfVXC?=
+ =?us-ascii?Q?aDcFPdZ70UDtFnguJ8Hs4wq6nH2ktKOaDmSGEvlyyEVAPpQh+/1aAhTpEJ6K?=
+ =?us-ascii?Q?/Ifkfmym1qK34Wv/o7CXLyuIszdxIlYP+qadfFfvkjJFY6mL62KrvGy1Myea?=
+ =?us-ascii?Q?l7KAY5nTHKzUDRSXv0/hDtC/msP7U9tCPZtIyjZyvdG80MkwD97lIV02FYx+?=
+ =?us-ascii?Q?1k+GEMSjSEBJtjGOMU/PkQdGYw67/4DVDxwyHMX9DhFP21tcN0f6NLB/G7Wa?=
+ =?us-ascii?Q?/toCS2XvgQ0usuo/KO0Xsv2UFkrWxVeLBF2SFp0buBK2b2kY?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ae784180-fc1e-48a7-67c3-08deb1d28442
+X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9620.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 May 2026 16:04:45.5286
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: HLobFi29XdXRy9NXwKOXo7aS6R+tuSL4isxXs1a4/xJOkV3mxo3BK9QsH6fLKrfL
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8200
 
-On 5/13/26 4:35 PM, Ido Schimmel wrote:
-> On Tue, May 12, 2026 at 08:24:27PM +0200, Fernando Fernandez Mancera wrote:
->> Sashiko feedback [1] is right about the DoS, that is a router that sends
->> multiple 0-lft RA until it exhausts all spawn attempts, leaving temporary
->> addresses disabled on the system.
->>
->> About the leaked address, I do not think the feedback is right. If an ifp
->> does not have any ift, it means something went wrong most likely. Either
->> this address was removed manually (any RA would restore it, even with
->> previous implementation) or for some reason that prefix didn't get an RA but
->> we didn't try to generate one and we MUST do it.
->>
->> I think we can cover it by avoiding to attempt create a new temporary
->> address for a 0-lft RA, it makes sense to me. Something like this:
->>
->> diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
->> index 18a6f2de30ce..6c511e9c1bf5 100644
->> --- a/net/ipv6/addrconf.c
->> +++ b/net/ipv6/addrconf.c
->> @@ -2654,7 +2654,7 @@ static void manage_tempaddrs(struct inet6_dev *idev,
->>   	 * We don't want that to result in creating a new temporary ip address.
->>   	 */
->>   	if ((list_empty(&idev->tempaddr_list) || all_regen) &&
->> -	    (valid_lft || prefered_lft))
->> +	    (valid_lft && prefered_lft))
->>   		create = true;
->>
->>   	if (create && READ_ONCE(idev->cnf.use_tempaddr) > 0) {
->>
->> Any thoughts?
-> 
-> This still leaves the case of RAs that alternate between prefered_lft >
-> 0 and prefered_lft == 0. It will cause the kernel to create an unbounded
-> amount of temporary addresses.
-> 
-> I think that a better fix would be to reset the regeneration counter of
-> the newest temporary address whenever the associated public address
-> becomes preferred. Something like [1].
-> 
-> If the newest temporary address has yet to spawn a new address, then its
-> regeneration counter is 0 and nothing changes. However, if it was
-> incremented and no new address was created, then this patch will reset
-> its regeneration counter to reflect that. Before expiring,
-> addrconf_verify_rtnl() will notice that this address has yet to spawn a
-> new address and call ipv6_create_tempaddr().
-> 
-> The case of constant RAs with prefered_lft == 0 is not an issue because
-> we only reset the regeneration counter when prefered_lft > 0.
-> 
-> Alternating RAs are also not an issue because we don't call
-> ipv6_create_tempaddr() immediately and instead let
-> addrconf_verify_rtnl() handle it when the address is about to expire.
-> 
+The test programs are compiled via a static pattern rule that requires
+intermediate .o files:
 
-Hi Ido, yes this looks good but I am afraid of using time_after(). Sure, 
-a temporary address should never be older than 2 ~ 7 days. Yet, we allow 
-configuring it up to 2147483647 (68~ years). And that might cause 
-problems in 32-bit systems.
+  $(TEST_GEN_PROGS): %: %.o $(LIBVFIO_O)
 
-I think we either limit this configuration on sysctl directly or we need 
-to support this nonsense.. another option would be to move inet6_ifaddr 
-out of jiffies which is something that I recently added to my TODO list. 
-But that is a bigger change I do not want to bundle with this one.
+After lib.mk prefixes TEST_GEN_PROGS with $(OUTPUT), this creates
+dependencies on .o files in the output directory (e.g.
+$(OUTPUT)/vfio_dma_mapping_test.o). However, there is no rule to compile
+these .o files from the source directory .c files when OUTPUT differs
+from the source directory.
 
-I noticed that ipv6_add_addr() do:
+Add an explicit chain of pattern rules:
+  $(OUTPUT)/% -> $(OUTPUT)/%.o -> %.c
 
-list_add(&ifa->tmp_list, &idev->tempaddr_list);
+Following the same pattern already used in libvfio.mk for the library
+objects.
 
-Doesn't it mean the first address that matches the base prefix is indeed 
-the most recent one? I tried a bit and it seems we can use just the 
-first match :)
+Fixes: 19faf6fd969c ("vfio: selftests: Add a helper library for VFIO selftests")
+Reviewed-by: David Matlack <dmatlack@google.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+---
+ tools/testing/selftests/vfio/Makefile | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-In addition, I didn't check with Sashiko but it is likely going to 
-complain about a race condition for a RA arriving right after we have 
-spawned an address but it has not been added to the tempaddr list. 
-Therefore we would have two addresses.. anyway, that race is quite 
-unlikely. I also have planned work on that are to reduce the multiple 
-race windows, currently there are plenty. I suggest to acknowledge such 
-race condition for now and improve the code base for the reported scenario.
+v2: Fix the typo
 
-I propose this small change to your proposed diff, I acknowledge that it 
-is a bit fragile tho (maybe a comment at ipv6_add_addr() is worth to 
-avoid breaking this accidentally):
+diff --git a/tools/testing/selftests/vfio/Makefile b/tools/testing/selftests/vfio/Makefile
+index 40165d087a0bc4..0a4cfd1a6c7ed6 100644
+--- a/tools/testing/selftests/vfio/Makefile
++++ b/tools/testing/selftests/vfio/Makefile
+@@ -27,10 +27,13 @@ CFLAGS += $(EXTRA_CFLAGS)
+ 
+ LDFLAGS += -pthread
+ 
+-$(TEST_GEN_PROGS): %: %.o $(LIBVFIO_O)
++$(TEST_GEN_PROGS): $(OUTPUT)/%: $(OUTPUT)/%.o $(LIBVFIO_O)
+ 	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $< $(LIBVFIO_O) $(LDLIBS) -o $@
+ 
+ TEST_GEN_PROGS_O = $(patsubst %, %.o, $(TEST_GEN_PROGS))
++$(TEST_GEN_PROGS_O): $(OUTPUT)/%.o: %.c
++	$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
++
+ TEST_DEP_FILES = $(patsubst %.o, %.d, $(TEST_GEN_PROGS_O) $(LIBVFIO_O))
+ -include $(TEST_DEP_FILES)
+ 
 
-diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
-index d550524f4266..af0d3fcbef98 100644
---- a/net/ipv6/addrconf.c
-+++ b/net/ipv6/addrconf.c
-@@ -2607,7 +2607,7 @@ static void manage_tempaddrs(struct inet6_dev *idev,
-  		if (ifp != ift->ifpub)
-  			continue;
-
--		if (!newest_ift || time_after(ift->cstamp, newest_ift->cstamp))
-+		if (!newest_ift)
-  			newest_ift = ift;
-
-  		/* RFC 4941 section 3.3:
-
-
-Thanks!
-Fernando.
-
-
-> [1]
-> diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
-> index 5476b6536eb7..d550524f4266 100644
-> --- a/net/ipv6/addrconf.c
-> +++ b/net/ipv6/addrconf.c
-> @@ -2595,8 +2595,9 @@ static void manage_tempaddrs(struct inet6_dev *idev,
->                               __u32 valid_lft, __u32 prefered_lft,
->                               bool create, unsigned long now)
->   {
-> +       struct inet6_ifaddr *ift, *newest_ift = NULL;
-> +       u32 orig_prefered_lft = prefered_lft;
->          u32 flags;
-> -       struct inet6_ifaddr *ift;
->   
->          read_lock_bh(&idev->lock);
->          /* update all temporary addresses in the list */
-> @@ -2606,6 +2607,9 @@ static void manage_tempaddrs(struct inet6_dev *idev,
->                  if (ifp != ift->ifpub)
->                          continue;
->   
-> +               if (!newest_ift || time_after(ift->cstamp, newest_ift->cstamp))
-> +                       newest_ift = ift;
-> +
->                  /* RFC 4941 section 3.3:
->                   * If a received option will extend the lifetime of a public
->                   * address, the lifetimes of temporary addresses should
-> @@ -2643,6 +2647,12 @@ static void manage_tempaddrs(struct inet6_dev *idev,
->                          ipv6_ifa_notify(0, ift);
->          }
->   
-> +       if (newest_ift && orig_prefered_lft > 0) {
-> +               spin_lock(&newest_ift->lock);
-> +               newest_ift->regen_count = 0;
-> +               spin_unlock(&newest_ift->lock);
-> +       }
-> +
->          /* Also create a temporary address if it's enabled but no temporary
->           * address currently exists.
->           * However, we get called with valid_lft == 0, prefered_lft == 0, create == false
+base-commit: b5953f774781f0b489ae1f34d49eb08fefe176a6
+-- 
+2.43.0
 
