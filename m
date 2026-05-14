@@ -1,202 +1,83 @@
-Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86A4A31D72E
-	for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 01:58:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7DA81E8826;
+	Thu, 14 May 2026 02:21:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778723884; cv=none; b=fCfU6hoSjrZD89I+Otd+aIT4yGV30nV/Jsj43F8+wpg1bDV7eXRGO3J9THgagDgPKoJYfQhFNP6IssR0zGwv5pjTaIEPa5Nbps1JdEDH1ZhjU8DCHruu8FTM/KXAGPOgm49Ee2NvjjNS+jvtfnkadEZPuv6mCbkbpRlbMBszWvo=
+	t=1778725296; cv=none; b=pTg4fCuRM4RtCq/U6ug3+g1JP7mDszvu7P0dvY0wggf4uqFxonm79Ph80dhxP/dV0uXbzKZerM/Q2+cUibGOWAPLodLdHe35osQxNYccxrym7WUzuFgRYS978jFTp4E9dbPAWc1SiwTl7w9NI4JgHH0Nue6Sf9+uJtdNKiW63xY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778723884; c=relaxed/simple;
-	bh=QSENlRK6PdQcsKY4C3zA8cBazFvH+owMvKs28lxS/eo=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=n+mECSCmpxCgwo8KMq2fEX+qspBmSHo+8a2iOa6FQciL5sf+whjjQ/ipIXHzYAIriJbvTLxTXPDMdcJWr+9T49P1VJgf7NtGD/z4KproeDI1gufRVmRnhzn8xDiFqabc5MfCRVg32qJyp3jeUp3zVOZaq/FZ3mLIkxXRNAqi5cM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=p6dgzZ/7; arc=none smtp.client-ip=91.218.175.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1778725296; c=relaxed/simple;
+	bh=hx+tymloAIZP4K3mSk6uylZJeFOgFon7qjf1v0Tiguk=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=j9xJ+cpT6lNE6qg2cQ95vSQ/Kn97zAwlyu0IYzhnW18WXGgGRI59VYzdyuu8wkDjPEgNibc5LkiJMQOTUTKR81CS7saYMCm3S7FuktL8AH5JuQT8ZzV6O58XNjS3VcDKlARoXUuqTEnHbNuA89fCJibeWqIAr57d0GKiWkwcz7U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LpdT/4sY; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="p6dgzZ/7"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1778723870;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=AToiLp5s9PtrKKoXGsWO6tlmsClmnuo3iSqdPilSAGk=;
-	b=p6dgzZ/7Yacdx0s+aWXec47EyIriW1zz34Onqj9sr6CuAAnZRu4MoJ2EtjU3BTP2kIWbh7
-	6WBMoNX3yl7+AcG6r33gP7883NE1GJ57Ssk9ZtZEpBXuRlgSQjY7/W4bnnMC15Cn8KPv7N
-	ajjiPdB3+dfCiUtekxjft09YYSaBkDc=
-From: Qingfang Deng <qingfang.deng@linux.dev>
-To: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Felix Maurer <fmaurer@redhat.com>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Qingfang Deng <qingfang.deng@linux.dev>,
-	Petr Machata <petrm@nvidia.com>,
-	linux-kernel@vger.kernel.org,
-	linux-ppp@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next v2] selftests: net: add tests for PPPoL2TP
-Date: Thu, 14 May 2026 09:57:32 +0800
-Message-ID: <20260514015743.37869-1-qingfang.deng@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LpdT/4sY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2099EC19425;
+	Thu, 14 May 2026 02:21:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778725296;
+	bh=hx+tymloAIZP4K3mSk6uylZJeFOgFon7qjf1v0Tiguk=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=LpdT/4sYf4W5sJwtPHPsmS1gYgte/QoafDoR9rthPNQ0qfGDxUaqDC7gqbDYlTsSs
+	 HLDVybZtXf4HM59aE5+pAed+O4XjPavi/2XremwM/XukiFH1AiO2qNrWkcsrbfxpkq
+	 aYkuo+JXRhS7seBZQBaMSlQc5U1Aghl2zhIlA4oOUCDwH/xryfZQbHi87d9KN6scLO
+	 pYhtGYoeGqVKk45s9coTfeBIU4b5ptBjqAbUNniEiqmsZPPRolVNoYg25jrATRjvfE
+	 ZxixagliJqw1Jvoaag2tqHPQzrQhq8A32g68Ws/Q0rm8QCyDtvnmsfutt8uJa7WVD1
+	 66+88xEsUI/GA==
+Date: Wed, 13 May 2026 19:21:33 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Bobby Eshleman <bobbyeshleman@gmail.com>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
+ <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Jonathan Corbet
+ <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Alex Shi
+ <alexs@kernel.org>, Yanteng Si <si.yanteng@linux.dev>, Dongliang Mu
+ <dzm91@hust.edu.cn>, Michael Chan <michael.chan@broadcom.com>, Pavan Chebbi
+ <pavan.chebbi@broadcom.com>, Joshua Washington <joshwash@google.com>,
+ Harshitha Ramamurthy <hramamurthy@google.com>, Saeed Mahameed
+ <saeedm@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>, Mark Bloch
+ <mbloch@nvidia.com>, Leon Romanovsky <leon@kernel.org>, Alexander Duyck
+ <alexanderduyck@fb.com>, kernel-team@meta.com, Daniel Borkmann
+ <daniel@iogearbox.net>, Nikolay Aleksandrov <razor@blackwall.org>, Shuah
+ Khan <shuah@kernel.org>, dw@davidwei.uk, sdf.kernel@gmail.com,
+ mohsin.bashr@gmail.com, willemb@google.com, jiang.kun2@zte.com.cn,
+ xu.xin16@zte.com.cn, wang.yaxin@zte.com.cn, netdev@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-rdma@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Stanislav Fomichev <sdf@fomichev.me>, Mina
+ Almasry <almasrymina@google.com>, Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next v4 6/8] selftests: drv-net: refactor devmem
+ command builders into lib module
+Message-ID: <20260513192133.60a82598@kernel.org>
+In-Reply-To: <20260511-tcp-dm-netkit-v4-6-841b78b99d74@meta.com>
+References: <20260511-tcp-dm-netkit-v4-0-841b78b99d74@meta.com>
+	<20260511-tcp-dm-netkit-v4-6-841b78b99d74@meta.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Add ping, iperf3, and recursion tests for PPPoL2TP.
+On Mon, 11 May 2026 18:18:00 -0700 Bobby Eshleman wrote:
+>  tools/testing/selftests/drivers/net/hw/devmem.py   |  77 ++------
+>  .../selftests/drivers/net/hw/lib/py/devmem.py      | 218 +++++++++++++++++++++
 
-Assisted-by: Gemini:gemini-3-flash
-Signed-off-by: Qingfang Deng <qingfang.deng@linux.dev>
----
-v2:
- - use named veth pair instead of netkit
- - reset RET prior to the recursion test
-v1: https://lore.kernel.org/netdev/20260508032158.67887-1-qingfang.deng@linux.dev
+If the reuse is in the same dir I think you can create
 
- tools/testing/selftests/net/ppp/Makefile    |  1 +
- tools/testing/selftests/net/ppp/config      |  2 +
- tools/testing/selftests/net/ppp/pppol2tp.sh | 95 +++++++++++++++++++++
- 3 files changed, 98 insertions(+)
- create mode 100755 tools/testing/selftests/net/ppp/pppol2tp.sh
+tools/testing/selftests/drivers/net/hw/devmem_lib.py
 
-diff --git a/tools/testing/selftests/net/ppp/Makefile b/tools/testing/selftests/net/ppp/Makefile
-index b39b0abadde6..6036fa134351 100644
---- a/tools/testing/selftests/net/ppp/Makefile
-+++ b/tools/testing/selftests/net/ppp/Makefile
-@@ -5,6 +5,7 @@ top_srcdir = ../../../../..
- TEST_PROGS := \
- 	ppp_async.sh \
- 	pppoe.sh \
-+	pppol2tp.sh \
- # end of TEST_PROGS
- 
- TEST_FILES := \
-diff --git a/tools/testing/selftests/net/ppp/config b/tools/testing/selftests/net/ppp/config
-index b45d25c5b970..843545df8f03 100644
---- a/tools/testing/selftests/net/ppp/config
-+++ b/tools/testing/selftests/net/ppp/config
-@@ -1,4 +1,5 @@
- CONFIG_IPV6=y
-+CONFIG_L2TP=m
- CONFIG_PACKET=y
- CONFIG_PPP=m
- CONFIG_PPP_ASYNC=m
-@@ -6,4 +7,5 @@ CONFIG_PPP_BSDCOMP=m
- CONFIG_PPP_DEFLATE=m
- CONFIG_PPPOE=m
- CONFIG_PPPOE_HASH_BITS_4=y
-+CONFIG_PPPOL2TP=m
- CONFIG_VETH=y
-diff --git a/tools/testing/selftests/net/ppp/pppol2tp.sh b/tools/testing/selftests/net/ppp/pppol2tp.sh
-new file mode 100755
-index 000000000000..5b592785f1f9
---- /dev/null
-+++ b/tools/testing/selftests/net/ppp/pppol2tp.sh
-@@ -0,0 +1,95 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+source ppp_common.sh
-+
-+VETH_SERVER="veth-server"
-+VETH_CLIENT="veth-client"
-+OUTER_IP_SERVER="172.16.1.1"
-+OUTER_IP_CLIENT="172.16.1.2"
-+
-+PPPOL2TP_DIR=$(mktemp -d /tmp/pppol2tp.XXXXXX)
-+
-+# shellcheck disable=SC2329
-+cleanup() {
-+	cleanup_all_ns
-+	rm -rf "$PPPOL2TP_DIR"
-+}
-+
-+trap cleanup EXIT
-+
-+require_command xl2tpd
-+ppp_common_init
-+modprobe -q l2tp_ppp
-+
-+# Create the veth pair
-+ip link add "$VETH_SERVER" type veth peer name "$VETH_CLIENT"
-+ip link set "$VETH_SERVER" netns "$NS_SERVER"
-+ip link set "$VETH_CLIENT" netns "$NS_CLIENT"
-+ip -netns "$NS_SERVER" link set "$VETH_SERVER" up
-+ip -netns "$NS_CLIENT" link set "$VETH_CLIENT" up
-+ip -netns "$NS_SERVER" address add dev "$VETH_SERVER" "$OUTER_IP_SERVER" peer "$OUTER_IP_CLIENT"
-+ip -netns "$NS_CLIENT" address add dev "$VETH_CLIENT" "$OUTER_IP_CLIENT" peer "$OUTER_IP_SERVER"
-+
-+# Generate configuration files
-+cat > "$PPPOL2TP_DIR/l2tp-server.conf" <<EOF
-+[global]
-+listen-addr = $OUTER_IP_SERVER
-+access control = no
-+
-+[lns default]
-+ip range = $IP_CLIENT
-+local ip = $IP_SERVER
-+require authentication = no
-+require chap = no
-+require pap = no
-+ppp debug = yes
-+pppoptfile = $(pwd)/pppoe-server-options
-+EOF
-+
-+cat > "$PPPOL2TP_DIR/l2tp-client.conf" <<EOF
-+[global]
-+listen-addr = $OUTER_IP_CLIENT
-+access control = no
-+
-+[lac server]
-+lns = $OUTER_IP_SERVER
-+require authentication = no
-+require chap = no
-+require pap = no
-+ppp debug = yes
-+pppoptfile = $(pwd)/pppoe-server-options
-+EOF
-+
-+# Start the L2TP Server
-+ip netns exec "$NS_SERVER" xl2tpd -D -c "$PPPOL2TP_DIR/l2tp-server.conf" \
-+	-p "$PPPOL2TP_DIR/l2tp-server.pid" -C "$PPPOL2TP_DIR/l2tp-server.control" &
-+
-+# Start the L2TP Client
-+ip netns exec "$NS_CLIENT" xl2tpd -D -c "$PPPOL2TP_DIR/l2tp-client.conf" \
-+	-p "$PPPOL2TP_DIR/l2tp-client.pid" -C "$PPPOL2TP_DIR/l2tp-client.control" &
-+
-+# Wait for xl2tpd to start and open their control pipes
-+slowwait 2 [ -p "$PPPOL2TP_DIR/l2tp-server.control" ]
-+slowwait 2 [ -p "$PPPOL2TP_DIR/l2tp-client.control" ]
-+
-+# Connect LAC to LNS
-+echo "c server" > "$PPPOL2TP_DIR/l2tp-client.control"
-+
-+ppp_test_connectivity
-+
-+log_test "PPPoL2TP"
-+
-+# Recursion test
-+RET=0
-+# Delete route to LNS IP
-+ip -netns "$NS_CLIENT" route del "$OUTER_IP_SERVER"
-+# Add default route through ppp0
-+ip -netns "$NS_CLIENT" route add default dev ppp0
-+# ping (we expect the ping to fail but not deadlock the system)
-+ip netns exec "$NS_CLIENT" ping -c 1 "$IP_SERVER" -w 1
-+check_fail $?
-+
-+log_test "PPPoL2TP Recursion"
-+
-+exit "$EXIT_STATUS"
--- 
-2.43.0
+and import:
 
+from devmem_lib import bla
+
+I _think_ that should "just work" ?
+
+The lib/ is meant for things shared between targets.
+
+Also I think you missed adding the new file to Makefiles ?
+It needs to be under TEST_FILES for building tarballs
