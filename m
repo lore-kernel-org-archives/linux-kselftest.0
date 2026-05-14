@@ -1,251 +1,317 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D817223707
-	for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 13:48:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EFAD3E5ED6;
+	Thu, 14 May 2026 14:09:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778766518; cv=none; b=CY8BtHINcRl5emDiPxGRfHnY/Dun/kH0bl67+TPuzjqMs5KPzIQIUjy0lVC2Qm4qOQJV2Q1fBDYTrZCHJbuSzyvyFl62DlglxIBx97PWGST/ChBeMxag6y3om5UrMcCNnUYxeA2NDWEkegUsoY8udiaSe1Bnqjykr7SQFqGUvJ0=
+	t=1778767759; cv=none; b=sF1ZoD7pS0vyNJojBAwsEk7pjsNZdjxyq/EZuwQ37mvgBmRi73cXG//2h9xEJbKgQK3xmUvKPDlm9Z0xM3s59wwPjwczlarxZW9eXKR5hPlSOlrWIIyHRg3vmrxof4lny5Qty1PN9gPey+N3RmvwnMRYqpKyuYhoiX1+ibeTHOc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778766518; c=relaxed/simple;
-	bh=/Jwmlr4yNkQzDVzsjm77kRSpBCNy/sGPCwGbJXpn7pc=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=JnH3sWulUJ5FPfuMsUMlv56mcUmCeiLB5V8eCdcwtYuzoD6wOK8veF3cuLmlQWsaVm83jlDYZb8/xvwQ3A1aEcVgRbMWo7hA4UGB21DZicjfIySfZm2krHUESvpmvut9dXFoykhIhJzBtmbh9JRYKRH1DUh9WZHTzfqnTJhjNHs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=f//gqK8A; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1778767759; c=relaxed/simple;
+	bh=crS/vJ0l9jNtTLZIgHpYMSSvA7GQ12UlRLojwsyXt1c=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Z13h4GVtxkCZkZ9fSiMUXJrsTWfFVDJ5gwY6voroywukDmmHZYgyTXLdqMqsBYR+umDfWB/ZnCqOgUwrwcr7DAsdY9Inj5/ypN2uJ1hi0ODfr2fbhY1MmExbnZ+AKDW3gvKN+JicsYWFsW7jnPDACmLMKZ6ImtMCjEhr3bgpQkM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uwxnnCwK; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="f//gqK8A"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1778766515;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Py2NBwAszrXeeyrlxYBxDuq+1AsGYDGoJTLIquOAmDw=;
-	b=f//gqK8AtDr2WIdPl2RoqD2Vvo44vQIQ7+giEdliGYWkYKmKvjCjfmCvxcTUSfRNAjCT/8
-	tcvvizkwzGkF9tvMjeL4i2GUDY3V7CJVdqbBgXoPniCH+BWuy6j44jP48CQpsZyl64p/zr
-	liLfz3nroF+FCa1+CcLTeVWYHN/DTMQ=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-647-iaQh7iIVPQS4nnorD1EDzw-1; Thu,
- 14 May 2026 09:48:32 -0400
-X-MC-Unique: iaQh7iIVPQS4nnorD1EDzw-1
-X-Mimecast-MFC-AGG-ID: iaQh7iIVPQS4nnorD1EDzw_1778766509
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id EC0E5197752D;
-	Thu, 14 May 2026 13:48:22 +0000 (UTC)
-Received: from RHTRH0061144 (unknown [10.22.81.221])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5128B1956053;
-	Thu, 14 May 2026 13:48:18 +0000 (UTC)
-From: Aaron Conole <aconole@redhat.com>
-To: Minxi Hou <houminxi@gmail.com>
-Cc: netdev@vger.kernel.org,  davem@davemloft.net,  echaudro@redhat.com,
-  edumazet@google.com,  horms@kernel.org,  i.maximets@ovn.org,
-  kuba@kernel.org,  pabeni@redhat.com,  shuah@kernel.org,
-  dev@openvswitch.org,  i.maximets@redhat.com,
-  linux-kselftest@vger.kernel.org, Eric Garver <eric@garver.life>
-Subject: Re: [PATCH net-next] selftests: openvswitch: add dec_ttl action
- support and test
-In-Reply-To: <20260514092747.3653656-1-houminxi@gmail.com> (Minxi Hou's
-	message of "Thu, 14 May 2026 17:27:47 +0800")
-References: <20260514092747.3653656-1-houminxi@gmail.com>
-Date: Thu, 14 May 2026 09:48:15 -0400
-Message-ID: <f7tecjeqezk.fsf@redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uwxnnCwK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93A7BC2BCB3;
+	Thu, 14 May 2026 14:09:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778767758;
+	bh=crS/vJ0l9jNtTLZIgHpYMSSvA7GQ12UlRLojwsyXt1c=;
+	h=From:To:Cc:Subject:Date:From;
+	b=uwxnnCwKtnnkKSHPkK/qVx5GWZzQjfDEc54rcYlcpQplJE7Xn/GVYWgFlHRH/4ZVG
+	 mQ4CNyY7RPd615tbEbCfceeFsvFYyZyl5qCh8RhY43qHplhXaiocJyt+BFzKncO8hw
+	 nmX1Ctqp6fZM7Q18umcdZ+f3cVUtU0vrV/u1pYJD7H/1mXyWIwyAzFMsKOvuMs4q06
+	 f1n/bljpxJb4cnTtVYAP2ujZjoAnnpoLUbmPLPEZSUYC8X0z/kIZBgzITeWIGMk39W
+	 yuQz24c3mxmGGMBQRY38NNw+gFiQVo04Wg2h0dOX961yyRqK5PWYvXad08Rwa5IWSj
+	 AlVGjsImb186g==
+From: SeongJae Park <sj@kernel.org>
+To: 
+Cc: SeongJae Park <sj@kernel.org>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	damon@lists.linux.dev,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-trace-kernel@vger.kernel.org
+Subject: [RFC PATCH v2.1 00/28] mm/damon: introduce data attributes monitoring
+Date: Thu, 14 May 2026 07:08:33 -0700
+Message-ID: <20260514140904.119781-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Content-Transfer-Encoding: 8bit
 
-Minxi Hou <houminxi@gmail.com> writes:
+TL; DR
+======
 
-> Add dec_ttl action support to the OVS kernel datapath selftest
-> framework:
->
->   - Add DecTtl nested NLA class to ovs-dpctl.py with proper
->     OVS_DEC_TTL_ATTR_ACTION sub-attribute handling
->   - Add parse support for dec_ttl(<inner_actions>) action string
->     following the same pattern as clone()
->   - Add dpstr output formatting for dec_ttl actions
->   - Add test_dec_ttl() to openvswitch.sh that verifies:
->     * Normal TTL packets are forwarded after decrement
->     * TTL=1 packets are dropped (TTL expiry)
->     * Graceful skip via ksft_skip if kernel lacks dec_ttl support
->
-> The DecTtl class uses late-binding type resolution to reference
-> ovsactions for its inner action list, avoiding circular references
-> at class definition time.
->
-> Tested with vng on x86_64, all OVS selftests pass.
->
-> Signed-off-by: Minxi Hou <houminxi@gmail.com>
-> ---
->  .../selftests/net/openvswitch/openvswitch.sh  | 55 +++++++++++++++++++
->  .../selftests/net/openvswitch/ovs-dpctl.py    | 39 ++++++++++++-
->  2 files changed, 92 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-> index 3cdd953f6813..200c36c4d7bf 100755
-> --- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
-> +++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-> @@ -28,6 +28,7 @@ tests="
->  	tunnel_metadata				ovs: test extraction of tunnel metadata
->  	tunnel_refcount				ovs: test tunnel vport reference cleanup
->  	drop_reason				drop: test drop reasons are emitted
-> +	dec_ttl					ttl: dec_ttl action decrements IP TTL
->  	psample					psample: Sampling packets with psample"
->  
->  info() {
-> @@ -244,6 +245,60 @@ usage() {
->  }
->  
->  
-> +test_dec_ttl() {
-> +	sbx_add "test_dec_ttl" || return $?
-> +	ovs_add_dp "test_dec_ttl" decttl || return 1
-> +
-> +	info "create namespaces"
-> +	for ns in client server; do
-> +		ovs_add_netns_and_veths "test_dec_ttl" "decttl" "$ns" \
-> +			"${ns:0:1}0" "${ns:0:1}1" || return 1
-> +	done
-> +
-> +	ip netns exec client ip addr add 10.0.0.1/24 dev c1
-> +	ip netns exec client ip link set c1 up
-> +	ip netns exec server ip addr add 10.0.0.2/24 dev s1
-> +	ip netns exec server ip link set s1 up
-> +
-> +	# Probe: check if kernel supports dec_ttl action.
-> +	ovs_add_flow "test_dec_ttl" decttl \
-> +		'in_port(1),eth(),eth_type(0x0800),ipv4()' \
-> +		'dec_ttl()' &>/dev/null
-> +	if [ $? == 1 ]; then
-> +		info "no support for dec_ttl - skipping"
-> +		ovs_exit_sig
-> +		return $ksft_skip
-> +	fi
-> +
-> +	ovs_del_flows "test_dec_ttl" decttl
-> +
-> +	# ARP flows (bidirectional)
-> +	ovs_add_flow "test_dec_ttl" decttl \
-> +		'in_port(1),eth(),eth_type(0x0806),arp()' '2' || return 1
-> +	ovs_add_flow "test_dec_ttl" decttl \
-> +		'in_port(2),eth(),eth_type(0x0806),arp()' '1' || return 1
-> +
-> +	# IP flows with dec_ttl action
-> +	ovs_add_flow "test_dec_ttl" decttl \
-> +		'in_port(1),eth(),eth_type(0x0800),ipv4()' \
-> +		'dec_ttl(),2' || return 1
-> +	ovs_add_flow "test_dec_ttl" decttl \
-> +		'in_port(2),eth(),eth_type(0x0800),ipv4()' \
-> +		'dec_ttl(),1' || return 1
-> +
-> +	info "verify connectivity with dec_ttl"
-> +	ovs_sbx "test_dec_ttl" ip netns exec client ping -c 1 -W 2 \
-> +		10.0.0.2 || return 1
-> +
-> +	info "verify TTL=1 is dropped by dec_ttl"
-> +	ovs_sbx "test_dec_ttl" ip netns exec client ping -c 1 -W 2 \
-> +		-t 1 10.0.0.2 >/dev/null 2>&1 \
-> +		&& { info "FAIL: ping should fail with TTL=1 and dec_ttl"
-> +		     return 1; }
-> +
-> +	return 0
-> +}
-> +
->  # psample test
->  # - use psample to observe packets
->  test_psample() {
-> diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-> index bbe35e2718d2..a73ca98d7aef 100644
-> --- a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-> +++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-> @@ -388,11 +388,19 @@ class ovsactions(nla):
->          ("OVS_ACTION_ATTR_CLONE", "recursive"),
->          ("OVS_ACTION_ATTR_CHECK_PKT_LEN", "none"),
->          ("OVS_ACTION_ATTR_ADD_MPLS", "none"),
-> -        ("OVS_ACTION_ATTR_DEC_TTL", "none"),
-> +        ("OVS_ACTION_ATTR_DEC_TTL", "DecTtl"),
->          ("OVS_ACTION_ATTR_DROP", "uint32"),
->          ("OVS_ACTION_ATTR_PSAMPLE", "psample"),
->      )
->  
-> +    class DecTtl(nla):
-> +        nla_flags = NLA_F_NESTED
-> +
-> +        nla_map = (
-> +            ("OVS_DEC_TTL_ATTR_UNSPEC", "none"),
-> +            ("OVS_DEC_TTL_ATTR_ACTION", "actions"),
-> +        )
-> +
->      class psample(nla):
->          nla_flags = NLA_F_NESTED
->  
-> @@ -632,6 +640,13 @@ class ovsactions(nla):
->                  print_str += "ct_clear"
->              elif field[0] == "OVS_ACTION_ATTR_POP_VLAN":
->                  print_str += "pop_vlan"
-> +            elif field[0] == "OVS_ACTION_ATTR_DEC_TTL":
-> +                datum = self.get_attr(field[0])
-> +                print_str += "dec_ttl("
-> +                subacts = datum.get_attr("OVS_DEC_TTL_ATTR_ACTION")
-> +                if subacts and subacts.get("attrs"):
-> +                    print_str += subacts.dpstr(more)
-> +                print_str += ")"
->              elif field[0] == "OVS_ACTION_ATTR_POP_ETH":
->                  print_str += "pop_eth"
->              elif field[0] == "OVS_ACTION_ATTR_POP_NSH":
-> @@ -725,7 +740,21 @@ class ovsactions(nla):
->                      actstr = actstr[strspn(actstr, ", ") :]
->                      parsed = True
->  
-> -            if parse_starts_block(actstr, "clone(", False):
-> +            if parse_starts_block(actstr, "dec_ttl(", False):
-> +                parencount += 1
-> +                subacts = ovsactions()
-> +                actstr = actstr[len("dec_ttl("):]
+Extend DAMON for monitoring general data attributes other than accesses.
+The short term motivation is lightweight page type (e.g., belonging
+cgroup) aware monitoring.  In long term, this will help extending DAMON
+for multiple access events capture primitives (e.g., page faults and
+PMU) and eventually pivotting DAMON to a "Data Attributes Monitoring and
+Operations eNgine" in long term.
 
-It looks like in odp-util.c the dec_ttl block has a defined le_1(...)
-format for the TTL value being less-than-or-equal-to-1.  I've CC'd Eric
-since he added that parsing block.
+Background: High Cost of Page Level Properties Monitoring
+=========================================================
 
-I think it makes sense to keep that consistent with the existing ODP
-utils.
+DAMON is initially introduced as a Data Access MONitor.  It has been
+extended for not only access monitoring but also data access-aware
+system operations (DAMOS).  But still the monitoring part is only for
+data accesses.
 
-> +                parsedLen = subacts.parse(actstr)
-> +                decttl = ovsactions.DecTtl()
-> +                decttl["attrs"].append(
-> +                    ("OVS_DEC_TTL_ATTR_ACTION", subacts)
-> +                )
-> +                self["attrs"].append(
-> +                    ("OVS_ACTION_ATTR_DEC_TTL", decttl)
-> +                )
-> +                actstr = actstr[parsedLen:]
-> +                parsed = True
-> +            elif parse_starts_block(actstr, "clone(", False):
->                  parencount += 1
->                  subacts = ovsactions()
->                  actstr = actstr[len("clone("):]
-> @@ -896,6 +925,12 @@ class ovsactions(nla):
->          return (totallen - len(actstr))
->  
->  
-> +# pyroute2 resolves nla_map types via getattr(self, name).
-> +# DecTtl needs "actions" to resolve to ovsactions, but
-> +# ovsactions is not defined when DecTtl class body runs.
-> +ovsactions.DecTtl.actions = ovsactions
-> +
-> +
->  class ovskey(nla):
->      nla_flags = NLA_F_NESTED
->      nla_map = (
+Data access patterns is good information, but some users need more
+holistic views.  Particularly, users want to show the access pattern
+information together with the types of the memory.  For example, users
+who work for making huge pages efficiently want to know how much of
+DAMON-found hot/cold regions are backed by huge pages.  Users who run
+multiple workloads with different cgroups want to know how much of
+DAMON-found hot/cold regions belong to specific cgroups.
 
+For the user demand, we developed a DAMOS extension for page level
+properties based monitoring [1], which has landed on 6.14.  Using the
+feature, users can inform the page level data properties that they are
+interested in, in a flexible format that uses DAMOS filters.  Then,
+DAMON applies the filters to each folio of the entire DAMON region and
+lets users know how many bytes of memory in each DAMON region passed the
+given filters.
+
+This gives page level detailed and deterministic information to users.
+But, because the operation is done at page level, the overhead is
+proportional to the memory size.  It was useful for test or debugging
+purposes on a small number of machines.  But it was obviously too heavy
+to be enabled always on all machines running the real user workloads.
+For real world workloads, it was recommended to use the feature with
+user-space controlled sampling approaches.  For example, users could do
+the page level monitoring only once per hour, on randomly selected one
+percent of machines of their fleet.  If the runtime and the  size of the
+fleet is long and big enough, it should provide statistically meaningful
+data.
+
+But users are too busy to implement such controls on their own.
+
+Data Attributes Monitoring
+==========================
+
+Extend DAMON to monitor not only data accesses, but also general data
+attributes.  Do the extension while keeping the main promise of DAMON,
+the bounded and best-effort minimum overhead.
+
+Allow users to specify what data attributes in addition to the data
+access they want to monitor.  Users can install one 'data probe' per
+data attribute of their interest for this purpose.  The 'data probe'
+should be able to be applied to any memory, and determine if the given
+memory has the appropriate data attribute.  E.g., if memory of physical
+address 42 belongs to cgroup A.  Each 'data probe' is configured with
+filters that are very similar to the DAMOS filters.
+
+When DAMON checks if each sampling address memory of each region is
+accessed since the last check, it applies data probes if registered.
+Same to the number of access check-positive samples accounting
+(nr_accesses), it accounts the number of each data probe-positive
+samples in another per-region counters array, namely 'probe_hits'. When
+DAMON resets nr_accesses every aggregation interval, it resets
+'probe_hits' together.
+
+Users can read 'probe_hits' just before the values are reset.  In this
+way, users can know how many hot/cold memory regions have data
+attributes of their interest.  E.g., 30 percent of this system's hot
+memory is belonging to cgroup A, and 80 percent of the cgroup
+A-belonging hot memory is backed by huge pages.
+
+Patches Sequence
+================
+
+First eight patches implement the core feature, interface and the
+working support.  Patch 1 introduces data probe data structure, namely
+damon_probe.  Patch 2 extends damon_ctx for installing data probes.
+Patch 3 introduces another data structure for filters of each data
+probe, namely damon_filter.  Patch 4 updates damon_ctx commit function
+to handle the probes.  Patch 5 extends damon_region for the per-region
+per-probe positive samples counter, namely probe_hits.  Patch 6 extends
+damon_operations for applying probes on the underlying DAMON operations
+implementation.  Patch 7 updates kdamond_fn() to invoke the probes
+applying callback.  Patch 8 finally implements the probes support on
+paddr ops.
+
+Ten changes for user interface (patches 9-18) come next.  Patches 9-13
+implements sysfs directories and files for setting data probes, namely
+probes directory, probe directory, filters directory, filter directory
+and filter directory internal files, respectively.  Patch 14 connects
+the user inputs that are made via the sysfs files to DAMON core.
+Following three patches (patches 15-17) implement sysfs directories and
+files for showing the probe_hits to users, namely probes directory,
+probe directory and hits files, respectively.  Patch 18 introduces a new
+tracepoint for showing the probe_hits via tracefs.
+
+Patch 19 adds a selftest for the sysfs files.
+
+Patches 20 and 21 documents the design and usage of the new feature,
+respectively.
+
+Seven additional patches (patches 22-28) for monitoring belonging memory
+cgroup follow.  Depending on the feedback, this part might be separated
+to another series in future.  Patch 22 defines the DAMON filter type for
+the new attribute, namely DAMON_FILTER_TYPE_MEMCG.  Patch 23 add the
+support on paddr ops.  Patch 24 updates the sysfs interface for setup of
+the target memcg.  Patch 25 move code for easy reuse of the filter
+target memcg setup.  Patch 26 connects the user input to the core layer.
+Finally, patches 27 and 28 update the design and usage documents for the
+memcg attribute monitoring support.
+
+Discussions
+===========
+
+This allows the page properties monitoring with overhead that is low
+enough to be enabled always on real world workloads.  Because the
+sampling time for access check is reused for data attributes check,  the
+upper-bounded and best-effort minimum overhead of DAMON is kept.
+Because the sampling memory for access check is reused for data
+attributes check, additional overhead is minimum.
+
+Still DAMOS-based page level properties monitoring should be useful,
+because it provides a deterministic page level information.  When in
+doubt of the sampling based information, running DAMOS-based one
+together and comparing the results would be useful, for debugging and
+tuning.
+
+Plan for Dropping RFC tag
+=========================
+
+I'm considering renaming the tracepoint for exposing probe_hits
+(damon_aggregated_v2).
+
+Making changes for feedback from myself, humans and Sashiko should be
+the major remaining work.
+
+I'm currently hoping to drop the RFC tag by 7.2-rc1.
+
+Future Works: Mid Term
+========================
+
+This version of implementation is limiting the maximum number of data
+probes to four.  I will try to find a way to remove the limit in future.
+I personally think it should be enough for common use cases, though, and
+therefore not giving high priority at the moment.
+
+Future Works: Long Term
+=======================
+
+There are user requests for extending DAMON with detailed access
+information, for example, per-CPUs/threads/read/writes monitoring.  For
+that, I was working [2] on extending DAMON to use page fault events as
+another access check primitives, and making the infrastructure flexible
+for future use of yet another access check primitive.  Actually there is
+another ongoing work [3] for extending DAMON with PMU events.  The
+motivation of the work is reducing the overhead, though.
+
+In my work [2], I was introducing a new interface for access sampling
+primitives control.  Now I think this data probe interface can be used
+for that, too.  That is, data access becomes just one type of data
+attribute.  Also, pg_idle-confirmed access, page fault-confirmed access,
+and PMU event-confirmed access will be different types of data
+attributes.
+
+The regions adjustment mechanism is currently working based on the
+access information.  That's because DAMON is designed for data access
+monitoring.  That is, data access information is the primary interest,
+and therefore DAMON adjusts regions in a way that can best-present the
+information.
+
+Once data access becomes just one of data attributes, there is no reason
+to think data access that special.  There might be some users not
+interested in access at all but want to know the location of memory of
+specific type.  Data probes interface will allow doing that.  Further,
+we could extend the interface to let users set any data attribute as the
+'primary' attribute.  Then, DAMON will split and merge regions in a way
+that can best-present the 'primary' attributes.
+
+DAMOS will also be extended, to specify targets based on not only the
+data access pattern, but all user-registered data attributes.  From this
+stage, we may be able to call DAMON as a "Data Attributes Monitoring and
+Operations eNgine".
+
+[1] https://lore.kernel.org/20250106193401.109161-1-sj@kernel.org
+[2] https://lore.kernel.org/20251208062943.68824-1-sj@kernel.org/
+[3] https://lore.kernel.org/20260423004211.7037-1-akinobu.mita@gmail.com
+
+Changes from RFC v2
+- rfc v2: https://lore.kernel.org/20260512143645.113201-1-sj@kernel.org
+- Optimize nr_probes calculation for probe_hits tracepoint.
+- Use TRACE_EVENT_CONDITION() for probe_hits tracepoint.
+- Rebase to latest mm-new.
+Changes from RFC
+- rfc: https://lore.kernel.org/all/20260426205222.93895-1-sj@kernel.org/
+- Support memcg DAMON filter.
+- Use per-probe probe_hits sysfs file.
+- Use dynamic_array for probe_hits tracing.
+- Fix filter matching field.
+- Fix folio leaking in damon_pa_filter_pass().
+- Move nr_regions of damon_aggregated_v2 tracepoint after end.
+- Rename DAMON_TEST_TYPE_ANON to DAMON_FILTER_TYPE_ANON.
+
+SeongJae Park (28):
+  mm/damon/core: introduce struct damon_probe
+  mm/damon/core: embed damon_probe objects in damon_ctx
+  mm/damon/core: introduce damon_filter
+  mm/damon/core: commit probes
+  mm/damon/core: introduce damon_region->probe_hits
+  mm/damon/core: introduce damon_ops->apply_probes
+  mm/damon/core: do data attributes monitoring
+  mm/damon/paddr: support data attributes monitoring
+  mm/damon/sysfs: implement probes dir
+  mm/damon/sysfs: implement probe dir
+  mm/damon/sysfs: implement filters directory
+  mm/damon/sysfs: implement filter dir
+  mm/damon/sysfs: implement filter dir files
+  mm/damon/sysfs: setup probes on DAMON core API parameters
+  mm/damon/sysfs-schemes: implement tried_regions/<r>/probes/
+  mm/damon/sysfs-schemes: implement probe dir
+  mm/damon/sysfs-schemes: implement probe/hits file
+  mm/damon: trace probe_hits
+  selftests/damon/sysfs.sh: test probes dir
+  Docs/mm/damon/design: document data attributes monitoring
+  Docs/admin-guide/mm/damon/usage: document data attributes monitoring
+  mm/damon/core: introduce DAMON_FILTER_TYPE_MEMCG
+  mm/damon/paddr: support DAMON_FILTER_TYPE_MEMCG
+  mm/damon/sysfs: add filters/<F>/path file
+  mm/damon/sysfs-schemes: move memcg_path_to_id() to sysfs-common
+  mm/damon/sysfs: setup damon_filter->memcg_id from path
+  Docs/mm/damon/design: update for memcg damon filter
+  Docs/admin-guide/mm/damon/usage: update for memcg damon filter
+
+ Documentation/admin-guide/mm/damon/usage.rst |  48 +-
+ Documentation/mm/damon/design.rst            |  39 ++
+ include/linux/damon.h                        |  67 +++
+ include/trace/events/damon.h                 |  38 ++
+ mm/damon/core.c                              | 197 +++++++
+ mm/damon/paddr.c                             |  76 +++
+ mm/damon/sysfs-common.c                      |  41 ++
+ mm/damon/sysfs-common.h                      |   2 +
+ mm/damon/sysfs-schemes.c                     | 222 ++++++--
+ mm/damon/sysfs.c                             | 557 +++++++++++++++++++
+ tools/testing/selftests/damon/sysfs.sh       |  48 ++
+ 11 files changed, 1284 insertions(+), 51 deletions(-)
+
+
+base-commit: 678b6bc7ce120b8c51d4e05fcb8eb0a92f9be3f6
+-- 
+2.47.3
