@@ -1,169 +1,130 @@
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE6323DFC78
-	for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 14:45:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.48
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778769945; cv=pass; b=l4Lqw2f17YSU618mUpWjUMSDeiGhOepzyOESoMaGmIt3kIJYEDtQIp6CBvUyfR6GgYy4IlsYSNtMFtuY+xXadAFeTqoQBRgaqwr9k14R7Bi+TpDi4Ky/64UzfWXHfBj9qofITk6IATAEO/s37K82frZo/vcEuppuCyL/LXIMRD8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778769945; c=relaxed/simple;
-	bh=AOuL4P8rcB/w4m3MQYbAMxJmPtiyHVkS+oqVWDnYxGg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MTG9+Y0vuPdp73aSmHIqKr5mQe+/MmbBZa23bpl1XYWTb8t1Irjn8xqGTLKrLSjN8oea2Tt7q6M6ACuKeuud18FnhEFZfX+z3XIsVph9yCpvxFqmCBqSzoTJLyZ+NRp6dydXmrBy6c3drMlQUHaiD06p7sEaIZUjxBraZ/QAhUs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lSvGb2l7; arc=pass smtp.client-ip=209.85.208.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43F423E1CE6;
+	Thu, 14 May 2026 15:24:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778772294; cv=none; b=IVNAcWNuHuAAX/sPZnw6/OxJxDy/ODGxa7p6O6BqNCFkzAlpmEHv5uY/lBMLBi/NFKEOIWo7J002wS1swh5LsTOnSoYulq8HKelBm+/DkHfuO8WNFZTcxntAxAEOfCci/CEBf8pdvlQlS5afHwV5H91MyfIzU8/rwWWHS2D+VN4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778772294; c=relaxed/simple;
+	bh=pp56e/DCHOxZ+Eut9lk+188HvenrbqBoOLsSg2cmQrA=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=Ie48xO3Sj9ThQNnW2lXqflut6yPWZ2Ld28F4zn7ZNjsZ6XKp6YEdJuxETfbXg4IxLTfS1tJxCYmtW/UaGmzuLonQSt6Yzwk4CVFKfmSocTX2LQ9YC0vp9vbxqqiaTmDAg5rkUMjGRu4kGt00SwoE0DUVy040KoLAHvXCsHNMW8U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I7CpSyu+; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lSvGb2l7"
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-671f1a0d0c5so9273a12.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 07:45:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778769942; cv=none;
-        d=google.com; s=arc-20240605;
-        b=FIyEulo/cksWGf8U/PmL+gzjp4VAr4vqdf8TH28dXI6EgYI5mX5bljoWw1SEffhbPc
-         k581BOO4RrEdr0qTKdjkouqzZdgoaqnjBaTa9TbT1BbSF0Fe8cgSLLYeBVvrbLlNEU30
-         KMqDm/Bj/utLtQZEP4HXCJ1OupoUNnHGI+s6bs+wek5IzpDZwnbwTSaOrMbv7xLGUfu7
-         nJmg9UtCxS4f/hrpsRvyGoqW1AKxMViuXRCKE+zdw+7RDmOGZb//gIw1oE9/+w1Jeu4E
-         BSqdemqt1G15Oo1MH+robJ9y18Oq/TtghgANt2wKiD94po4vhrtT3Cj7YKOAXH1Y+IzW
-         nd4g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=mHlWFCWo35g49/Oc5J271s5rFVq6NRF9U1sIaUKt4Qo=;
-        fh=b1Ppbg9pAd4BH0EiCHm6r0nQu8UN06xP0VI2fqvHTaQ=;
-        b=RKThJ5ulAW7dH8vn2eCiepxewWuOBgNyn/98BBqXbP/tlwJsDRmb6JlSiZszNS0YCd
-         wZZZW6mmFrhSWJ6EU8Zzv/WVujWk+ChH/UlU+IdKDBsAvj52edfDXvZTjv5VGmeH7jwo
-         NzqdQ0TW2a0iTV/i8t1T9YcDJtf71SOaPuwCnu4u3c+Vs2H6Vx7NfTsZv3olMHu4vxQy
-         +VZfc98bQSrS9BX/vfH+ne2R0lA9vUqq1G130UBQieTAmom4rBRyH1e3JjuLKU3xC92z
-         3myMNacRvpG6uH03QBvisXowcvk2igfM7Pxy89vILI34KsgATNUBvvkhc5z1TtnNDLSg
-         R0Ng==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1778769942; x=1779374742; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mHlWFCWo35g49/Oc5J271s5rFVq6NRF9U1sIaUKt4Qo=;
-        b=lSvGb2l7TF43sTuMVzAqrV4mup+TcU+k7NEykRZPR3mJ0Dr9KNoGTMbHrYNvZJ9a+S
-         hyiD+m+dxpgD/5Hnh/Nucwd7qdstiGt1bkKCSDi4xTdpAHvXSFdiTKR/1oD6ADTWvPJ7
-         CpymscLz3eIwJSxp2AX+AitLyK5hZn/+0u72ow4Ze4r31Uq2RDoSdzI8p6aY76QWNxuC
-         Fb3/QyCuHiO0xCOfTZD/FAAP5kUNfhkcwMA289MlK88gifV7AhO+hjKZKqqMxhK7gNuF
-         SutjaEQMMX+UBPwee29+GogPVlKSTl0sJv9f4K8SNovn9208Sx+/7wAzzt/5pIz5F/wg
-         bh6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778769942; x=1779374742;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=mHlWFCWo35g49/Oc5J271s5rFVq6NRF9U1sIaUKt4Qo=;
-        b=HiyTdM0FHwrBYMpHQkiegbFFsiNmc5CAO3R8to4Cs7I5TBYKTviYhy0H029Uh8Rf/y
-         IKr7+ce2dApMEywY2M6X6Me9YDmgFljhI99MNpEjdkLLS5YJwcyKQojFdhFVwshcSvJt
-         ZuTMEFhcXtfYsQ5iARfmTjFz+AK129j1omLVxYG+L/+FKUKzxnWVWnLcudywxkoet9js
-         GokXB/b1fK28qPw+tcV0qD9kwSov0N8Sdnxvx/tHXp+9ieXQMC4+YKbbzWayNv+lRdGe
-         Pm7yNR17ZtjTSrVWmuwKuhn7sIL5EQ5Wgl99sKSmcGSalOAWO7oW9IFB7e485WO7SgIL
-         +xuQ==
-X-Forwarded-Encrypted: i=1; AFNElJ8Iwhehk1D5teUPQa3Pbw6P6ryufi2U80Sy5wMygLs6WbXKdRA7pyZodvfnoWHih7JieIFmz4dzC/Pt9OiOHww=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwnEaaBJvhtfvkk17phmf8CbYz3DYHODODIaodyMOCPYp6DSgaw
-	RbsxhblWY3TYY9mYYfdzpgqy/EVqq3m8pC/RgJvAgsZDn+uS/bO2BzztJHY3bW2JlFs5fkge/Bl
-	uKQQU9MpMTzsTfEHxu2TxcPzCnv/4SNryBBC3MlU5
-X-Gm-Gg: Acq92OHGUjh5x/HwcpcdL0p8fWaS71H5xfgkmB2+iibks7qMyKJarriof8C5dNYc7Jx
-	TWE9ful/EqkkiYSklnbP4Wz8Na2+xuY//TLEH6/NRELURNC6g8sQW3temQ+zJH4NHV5BoaEQ7Zl
-	xJXodYfEKjdoUgnzUyJTE7d08BuY1Wrzmtd1PHRFyctveJTdyjhVb9noQD14QG0SczPqIi4f37i
-	2m8f895nn/wttzES3o8lJCtYhNRc8BsbA4Mc+fb2XRcFgtWDhg/LPWO7cfxeoezuov7I4S0DX0k
-	Yxp15Ohs/ZxeGZLlRw==
-X-Received: by 2002:a05:6402:10cf:b0:682:a2f:a15c with SMTP id
- 4fb4d7f45d1cf-683271a79d3mr59165a12.11.1778769941669; Thu, 14 May 2026
- 07:45:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I7CpSyu+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A92DC2BCB3;
+	Thu, 14 May 2026 15:24:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778772294;
+	bh=pp56e/DCHOxZ+Eut9lk+188HvenrbqBoOLsSg2cmQrA=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=I7CpSyu+P0Xv1f+CwVAtXHqRkk2+3kFBG1SJBrfAI4kfjGfXc0ZsrbSOdmQaoRfIf
+	 8XA+X02uEBJTAtt85EtEM1LP7exZNpI46fEhlfsFlbhxKP57S5AO+yHTHn6EM9XTTF
+	 xeffW52S7EUxnBn2bLlQvLYkCSalCLmKdOOgVI6nVJ0Ft8H7xq0eq0fotAQbr3r2l2
+	 QyTkHkLoqw/l2Sly+MXmK1JxNcCtWWhMrX15qzkPJ022tHz5pC2n8DJ+Aq9aZ8CDmh
+	 QK/1gbinOmpMPrPyaHwXyyfaQm9G9/sqjtmARkjbuFTXpefsA3ctOPOY406Vdx5L0Z
+	 S3+DSW+jrw8ZA==
+From: Pratyush Yadav <pratyush@kernel.org>
+To: Samiullah Khawaja <skhawaja@google.com>
+Cc: Vipin Sharma <vipinsh@google.com>,  David Matlack <dmatlack@google.com>,
+  kvm@vger.kernel.org,  linux-doc@vger.kernel.org,
+  linux-kernel@vger.kernel.org,  linux-kselftest@vger.kernel.org,
+  linux-pci@vger.kernel.org,  ajayachandra@nvidia.com,  alex@shazbot.org,
+  amastro@fb.com,  ankita@nvidia.com,  apopple@nvidia.com,
+  chrisl@kernel.org,  corbet@lwn.net,  graf@amazon.com,
+  jacob.pan@linux.microsoft.com,  jgg@nvidia.com,  jgg@ziepe.ca,
+  jrhilke@google.com,  julianr@linux.ibm.com,  kevin.tian@intel.com,
+  leon@kernel.org,  leonro@nvidia.com,  lukas@wunner.de,
+  michal.winiarski@intel.com,  parav@nvidia.com,
+  pasha.tatashin@soleen.com,  praan@google.com,  pratyush@kernel.org,
+  rananta@google.com,  rientjes@google.com,  rodrigo.vivi@intel.com,
+  rppt@kernel.org,  saeedm@nvidia.com,  skhan@linuxfoundation.org,
+  vivek.kasireddy@intel.com,  witu@nvidia.com,  yanjun.zhu@linux.dev,
+  yi.l.liu@intel.com
+Subject: Re: [PATCH v4 02/16] vfio/pci: Preserve vfio-pci device files
+ across Live Update
+In-Reply-To: <agT9bYpXskVwW0E_@google.com> (Samiullah Khawaja's message of
+	"Wed, 13 May 2026 22:42:56 +0000")
+References: <20260511234802.2280368-1-vipinsh@google.com>
+	<20260511234802.2280368-3-vipinsh@google.com>
+	<CALzav=fR8c2tYj9jeOc_K=xoupxAfWMHmk0ipDniSXg6uGiFYA@mail.gmail.com>
+	<20260512211412.GA2819150.vipinsh@google.com>
+	<agT9bYpXskVwW0E_@google.com>
+Date: Thu, 14 May 2026 17:24:46 +0200
+Message-ID: <2vxzcxyy9fpd.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260513224608.1859737-1-jmattson@google.com> <20260513224608.1859737-4-jmattson@google.com>
- <CALMp9eS4s9tsOmvDUDeqS7oph0mSHyhxBiULQdwHVaG+7gXLSQ@mail.gmail.com> <agXcKDjnJc9DPcyr@google.com>
-In-Reply-To: <agXcKDjnJc9DPcyr@google.com>
-From: Jim Mattson <jmattson@google.com>
-Date: Thu, 14 May 2026 07:45:29 -0700
-X-Gm-Features: AVHnY4JYNiOdZV1RRg0bwZU9VVOOCRJGJfNWSac97RU4N7K2DxmR7r5ouTnF8Qk
-Message-ID: <CALMp9eS831M153QmAgjzJcR2dFY_wCCCzDisd7_T6GyS3-gAFw@mail.gmail.com>
-Subject: Re: [PATCH v3 3/4] KVM: x86: Virtualize AMD CPUID faulting
-To: Sean Christopherson <seanjc@google.com>
-Cc: pbonzini@redhat.com, tglx@kernel.org, mingo@redhat.com, bp@alien8.de, 
-	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, shuah@kernel.org, 
-	kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, ctpence@google.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 14, 2026 at 7:28=E2=80=AFAM Sean Christopherson <seanjc@google.=
-com> wrote:
+On Wed, May 13 2026, Samiullah Khawaja wrote:
+
+> On Tue, May 12, 2026 at 02:29:19PM -0700, Vipin Sharma wrote:
+>>On Tue, May 12, 2026 at 01:59:51PM -0700, David Matlack wrote:
+>>> On Mon, May 11, 2026 at 4:48=E2=80=AFPM Vipin Sharma <vipinsh@google.co=
+m> wrote:
+>>>
+>>> > diff --git a/drivers/vfio/pci/Kconfig b/drivers/vfio/pci/Kconfig
+>>> > index c12d614fc6c4..019de053f116 100644
+>>> > --- a/drivers/vfio/pci/Kconfig
+>>> > +++ b/drivers/vfio/pci/Kconfig
+>>> > @@ -45,13 +45,15 @@ config VFIO_PCI_IGD
+>>> >
+>>> >  config VFIO_PCI_LIVEUPDATE
+>>> >         bool "VFIO PCI support for Live Update (EXPERIMENTAL)"
+>>> > -       depends on PCI_LIVEUPDATE
+>>> > +       depends on PCI_LIVEUPDATE && VFIO_DEVICE_CDEV
+>>> >         help
+>>> >           Support for preserving devices bound to vfio-pci across a L=
+ive
+>>> >           Update. This option should only be enabled by developers wo=
+rking on
+>>> >           implementing this support. Once enough support has landed i=
+n the
+>>> >           kernel, this option will no longer be marked EXPERIMENTAL.
+>>> >
+>>> > +         Enabling this will disable support for VFIO PCI DMA buffer.
+>>> > +
+>>> >           If you don't know what to do here, say N.
+>>> >
+>>> >  endif
+>>> > @@ -68,7 +70,7 @@ config VFIO_PCI_ZDEV_KVM
+>>> >           To enable s390x KVM vfio-pci extensions, say Y.
+>>> >
+>>> >  config VFIO_PCI_DMABUF
+>>> > -       def_bool y if VFIO_PCI_CORE && PCI_P2PDMA && DMA_SHARED_BUFFER
+>>> > +       def_bool y if VFIO_PCI_CORE && PCI_P2PDMA && DMA_SHARED_BUFFE=
+R && !VFIO_PCI_LIVEUPDATE
+>>>
+>>> Why does enabling VFIO_PCI_LIVEUPDATE require disabling
+>>> VFIO_PCI_DMABUF? I saw the cover letter says "to keep things simple",
+>>> but what specific problem does this solve or simplify?
+>>
+>>I should have provided more details there.
+>>
+>>When device is getting reset in vfio_pci_liveupdate_freeze(), we are
+>>zapping userspace mapped bars, we also need to use
+>>vfio_pci_dma_buf_move() to revoke dma buffer access or
+>>vfio_pci_dma_buf_cleanup() combination. Cleanup takes the memory lock
+>>which freeze already takes, and there are some refcounts which are
+>>managed in both of these APIs. This was causing complexities with code
+>>flow based on result of pci_load_saved_state(). All this was adding more
+>>refactoring than I wanted in the series.
 >
-> On Thu, May 14, 2026, Jim Mattson wrote:
-> > > diff --git a/arch/x86/kvm/cpuid.h b/arch/x86/kvm/cpuid.h
-> > > index 95d09ccbf951..fc96ba86c644 100644
-> > > --- a/arch/x86/kvm/cpuid.h
-> > > +++ b/arch/x86/kvm/cpuid.h
-> > > @@ -185,8 +185,9 @@ static inline int guest_cpuid_stepping(struct kvm=
-_vcpu *vcpu)
-> > >
-> > >  static inline bool cpuid_fault_enabled(struct kvm_vcpu *vcpu)
-> > >  {
-> > > -       return vcpu->arch.msr_misc_features_enables &
-> > > -                 MSR_MISC_FEATURES_ENABLES_CPUID_FAULT;
-> > > +       return (vcpu->arch.msr_misc_features_enables &
-> > > +               MSR_MISC_FEATURES_ENABLES_CPUID_FAULT) ||
-> > > +               (vcpu->arch.msr_hwcr & MSR_K7_HWCR_CPUID_USER_DIS);
-> > >  }
-> >
-> > Sashiko raises a good point here about a pre-existing issue that
->
-> Calling this pre-existing is a bit of a stretch.  I'm guessing VMX doesn'=
-t check
-> the #GP before the VM-Exit (checking #GP before a VM-Exit is so stupid).
+> Maybe we can return -EOPNOTSUPP if any dmabufs for this vfio cdev are
+> exported during preserve?
 
-Per the SDM, volume 3, section 27.1.1: Relative Priority of Faults and VM E=
-xits
+Whichever way you go with, a TODO/comment would be nice to have so
+someone (including future you) looking at this code knows why this
+restriction exists.
 
-> Certain exceptions have priority over VM exits. These include invalid-opc=
-ode exceptions, faults based on
-privilege level,1 and general-protection exceptions that are based on
-checking I/O permission bits in the task-
-state segment (TSS). For example, execution of RDMSR with CPL =3D 3
-generates a general-protection exception
-and not a VM exit.2
-
-> Yes, KVM technically emulates MSR_MISC_FEATURES_ENABLES_CPUID_FAULT for A=
-MD, but
-> we're firmly in "making shit up" territory when reasoning about the inter=
-actions
-> between SVM and a feature that doesn't exist on real AMD CPUs.
-
-True.
-
-> > probably warrants a fix before propagating it further:
-> >
-> > > Does this emulation of CPUID faulting respect architectural fault
-> > > priorities in a nested virtualization scenario?
-> > >
-> > > According to the AMD APM, if CPUID faulting is enabled, a #GP fault t=
-akes
-> > > precedence over a CPUID VM-exit intercept.
->
-> Where in the APM?  I can't find anything in the description of CPUID or C=
-puidUserDis
-> that specifies the priority, and "Table 15-7. Instruction Intercepts" is =
-flat out
-> wrong because it just says:
->
->    CPUID  CPUID  No exceptions to check.
-
-APM volume 2, section 15.7: Intercept Operation
-
-> Generally, instruction intercepts are checked after simple exceptions
-(such as #GP=E2=80=94when CPL is incorrect=E2=80=94or #UD) have been checke=
-d, but
-before exceptions related to
-memory accesses (such as page faults) and exceptions based on specific
-operand values.
+--=20
+Regards,
+Pratyush Yadav
