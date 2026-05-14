@@ -1,229 +1,169 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C8CE3A961B;
-	Thu, 14 May 2026 14:38:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778769486; cv=none; b=dc8nseX3Wboa91jhiDBh+sKcxqFJ3ilhg0FcgPwg+O9Y38Co/ZQ8r/KDOo8tzihk+WBr0JHC1gtKm7Y+u/PKUj3PKh+z0fIpU2zeb7uj/oibRVai9bcGJUZKl8cnOnUItlnllWpEpdVkDOB7oROGc3VzM7DcXhiP19+glCOnboc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778769486; c=relaxed/simple;
-	bh=mXwHDIqGXSheuVmXkz3Nu+rxuQ4jB4Ts4ly5uFc02Ts=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=u2JcyqQX7YPKTI64ZqOka/h2dWy+fVT5LUII+v8hFX9xRarFc18V54D5iW4bZalMn4RbYIxRCLq/rZ9RHevvIuZQUKejisxCXEEoapu38x/8xO6b9dTiqrJUFb9ngJekpZaGvmjdISfF3IYRkyeJtwit2MZ85bwUPfiQK8NEl0U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=eWNCk7mE; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE6323DFC78
+	for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 14:45:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.48
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778769945; cv=pass; b=l4Lqw2f17YSU618mUpWjUMSDeiGhOepzyOESoMaGmIt3kIJYEDtQIp6CBvUyfR6GgYy4IlsYSNtMFtuY+xXadAFeTqoQBRgaqwr9k14R7Bi+TpDi4Ky/64UzfWXHfBj9qofITk6IATAEO/s37K82frZo/vcEuppuCyL/LXIMRD8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778769945; c=relaxed/simple;
+	bh=AOuL4P8rcB/w4m3MQYbAMxJmPtiyHVkS+oqVWDnYxGg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MTG9+Y0vuPdp73aSmHIqKr5mQe+/MmbBZa23bpl1XYWTb8t1Irjn8xqGTLKrLSjN8oea2Tt7q6M6ACuKeuud18FnhEFZfX+z3XIsVph9yCpvxFqmCBqSzoTJLyZ+NRp6dydXmrBy6c3drMlQUHaiD06p7sEaIZUjxBraZ/QAhUs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lSvGb2l7; arc=pass smtp.client-ip=209.85.208.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="eWNCk7mE"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-	Reply-To:Content-ID:Content-Description;
-	bh=ooEeB1JEjvZHDYLPx2r/tMVM+A1Ro3YEzIkX/3MTpcI=; b=eWNCk7mEeueoc/qlWYm2CtsNSp
-	e9ixqbIP3UGcVD8XXg+KLsajvk3gwBxUAw0WRae/WqTeh1R7HwofikWBRsMF9ibNKTE43oDhMkK2n
-	W93XSKq2J0EyCRaFjdrWi5Aaao3bqV7zpHAo4YNe7sTZSd2YBdbUqWf39Z57l8uJYqR6nCTQ8U7EP
-	+AQLwVtjplJ0IzeZWmc7q7DxMG7HqR5Z5UYd5hgCVSBe6DB+kLhS2ppGBOP5HKMogGn4CCO66NMAZ
-	PL2z7dOlWxBX373QY4FckVVBzcW6KqZOmUXEpOf1S05p5etYrDKUfcfiCR6AwqYxagXX0vnBc7EgL
-	ERp0APyw==;
-Received: from authenticated user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wNXBi-0040e9-2w;
-	Thu, 14 May 2026 14:37:23 +0000
-Date: Thu, 14 May 2026 07:37:14 -0700
-From: Breno Leitao <leitao@debian.org>
-To: Lance Yang <lance.yang@linux.dev>
-Cc: linmiaohe@huawei.com, akpm@linux-foundation.org, david@kernel.org, 
-	ljs@kernel.org, vbabka@kernel.org, rppt@kernel.org, surenb@google.com, 
-	mhocko@suse.com, shuah@kernel.org, nao.horiguchi@gmail.com, rostedt@goodmis.org, 
-	mhiramat@kernel.org, mathieu.desnoyers@efficios.com, corbet@lwn.net, 
-	skhan@linuxfoundation.org, liam@infradead.org, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH v7 2/6] mm/memory-failure: surface unhandlable kernel
- pages as -ENOTRECOVERABLE
-Message-ID: <agXcPleVC9LGVCmj@gmail.com>
-References: <20260513-ecc_panic-v7-2-be2e578e61da@debian.org>
- <20260514132830.25622-1-lance.yang@linux.dev>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lSvGb2l7"
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-671f1a0d0c5so9273a12.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 07:45:43 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778769942; cv=none;
+        d=google.com; s=arc-20240605;
+        b=FIyEulo/cksWGf8U/PmL+gzjp4VAr4vqdf8TH28dXI6EgYI5mX5bljoWw1SEffhbPc
+         k581BOO4RrEdr0qTKdjkouqzZdgoaqnjBaTa9TbT1BbSF0Fe8cgSLLYeBVvrbLlNEU30
+         KMqDm/Bj/utLtQZEP4HXCJ1OupoUNnHGI+s6bs+wek5IzpDZwnbwTSaOrMbv7xLGUfu7
+         nJmg9UtCxS4f/hrpsRvyGoqW1AKxMViuXRCKE+zdw+7RDmOGZb//gIw1oE9/+w1Jeu4E
+         BSqdemqt1G15Oo1MH+robJ9y18Oq/TtghgANt2wKiD94po4vhrtT3Cj7YKOAXH1Y+IzW
+         nd4g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=mHlWFCWo35g49/Oc5J271s5rFVq6NRF9U1sIaUKt4Qo=;
+        fh=b1Ppbg9pAd4BH0EiCHm6r0nQu8UN06xP0VI2fqvHTaQ=;
+        b=RKThJ5ulAW7dH8vn2eCiepxewWuOBgNyn/98BBqXbP/tlwJsDRmb6JlSiZszNS0YCd
+         wZZZW6mmFrhSWJ6EU8Zzv/WVujWk+ChH/UlU+IdKDBsAvj52edfDXvZTjv5VGmeH7jwo
+         NzqdQ0TW2a0iTV/i8t1T9YcDJtf71SOaPuwCnu4u3c+Vs2H6Vx7NfTsZv3olMHu4vxQy
+         +VZfc98bQSrS9BX/vfH+ne2R0lA9vUqq1G130UBQieTAmom4rBRyH1e3JjuLKU3xC92z
+         3myMNacRvpG6uH03QBvisXowcvk2igfM7Pxy89vILI34KsgATNUBvvkhc5z1TtnNDLSg
+         R0Ng==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1778769942; x=1779374742; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mHlWFCWo35g49/Oc5J271s5rFVq6NRF9U1sIaUKt4Qo=;
+        b=lSvGb2l7TF43sTuMVzAqrV4mup+TcU+k7NEykRZPR3mJ0Dr9KNoGTMbHrYNvZJ9a+S
+         hyiD+m+dxpgD/5Hnh/Nucwd7qdstiGt1bkKCSDi4xTdpAHvXSFdiTKR/1oD6ADTWvPJ7
+         CpymscLz3eIwJSxp2AX+AitLyK5hZn/+0u72ow4Ze4r31Uq2RDoSdzI8p6aY76QWNxuC
+         Fb3/QyCuHiO0xCOfTZD/FAAP5kUNfhkcwMA289MlK88gifV7AhO+hjKZKqqMxhK7gNuF
+         SutjaEQMMX+UBPwee29+GogPVlKSTl0sJv9f4K8SNovn9208Sx+/7wAzzt/5pIz5F/wg
+         bh6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778769942; x=1779374742;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=mHlWFCWo35g49/Oc5J271s5rFVq6NRF9U1sIaUKt4Qo=;
+        b=HiyTdM0FHwrBYMpHQkiegbFFsiNmc5CAO3R8to4Cs7I5TBYKTviYhy0H029Uh8Rf/y
+         IKr7+ce2dApMEywY2M6X6Me9YDmgFljhI99MNpEjdkLLS5YJwcyKQojFdhFVwshcSvJt
+         ZuTMEFhcXtfYsQ5iARfmTjFz+AK129j1omLVxYG+L/+FKUKzxnWVWnLcudywxkoet9js
+         GokXB/b1fK28qPw+tcV0qD9kwSov0N8Sdnxvx/tHXp+9ieXQMC4+YKbbzWayNv+lRdGe
+         Pm7yNR17ZtjTSrVWmuwKuhn7sIL5EQ5Wgl99sKSmcGSalOAWO7oW9IFB7e485WO7SgIL
+         +xuQ==
+X-Forwarded-Encrypted: i=1; AFNElJ8Iwhehk1D5teUPQa3Pbw6P6ryufi2U80Sy5wMygLs6WbXKdRA7pyZodvfnoWHih7JieIFmz4dzC/Pt9OiOHww=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwnEaaBJvhtfvkk17phmf8CbYz3DYHODODIaodyMOCPYp6DSgaw
+	RbsxhblWY3TYY9mYYfdzpgqy/EVqq3m8pC/RgJvAgsZDn+uS/bO2BzztJHY3bW2JlFs5fkge/Bl
+	uKQQU9MpMTzsTfEHxu2TxcPzCnv/4SNryBBC3MlU5
+X-Gm-Gg: Acq92OHGUjh5x/HwcpcdL0p8fWaS71H5xfgkmB2+iibks7qMyKJarriof8C5dNYc7Jx
+	TWE9ful/EqkkiYSklnbP4Wz8Na2+xuY//TLEH6/NRELURNC6g8sQW3temQ+zJH4NHV5BoaEQ7Zl
+	xJXodYfEKjdoUgnzUyJTE7d08BuY1Wrzmtd1PHRFyctveJTdyjhVb9noQD14QG0SczPqIi4f37i
+	2m8f895nn/wttzES3o8lJCtYhNRc8BsbA4Mc+fb2XRcFgtWDhg/LPWO7cfxeoezuov7I4S0DX0k
+	Yxp15Ohs/ZxeGZLlRw==
+X-Received: by 2002:a05:6402:10cf:b0:682:a2f:a15c with SMTP id
+ 4fb4d7f45d1cf-683271a79d3mr59165a12.11.1778769941669; Thu, 14 May 2026
+ 07:45:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260514132830.25622-1-lance.yang@linux.dev>
-X-Debian-User: leitao
+References: <20260513224608.1859737-1-jmattson@google.com> <20260513224608.1859737-4-jmattson@google.com>
+ <CALMp9eS4s9tsOmvDUDeqS7oph0mSHyhxBiULQdwHVaG+7gXLSQ@mail.gmail.com> <agXcKDjnJc9DPcyr@google.com>
+In-Reply-To: <agXcKDjnJc9DPcyr@google.com>
+From: Jim Mattson <jmattson@google.com>
+Date: Thu, 14 May 2026 07:45:29 -0700
+X-Gm-Features: AVHnY4JYNiOdZV1RRg0bwZU9VVOOCRJGJfNWSac97RU4N7K2DxmR7r5ouTnF8Qk
+Message-ID: <CALMp9eS831M153QmAgjzJcR2dFY_wCCCzDisd7_T6GyS3-gAFw@mail.gmail.com>
+Subject: Re: [PATCH v3 3/4] KVM: x86: Virtualize AMD CPUID faulting
+To: Sean Christopherson <seanjc@google.com>
+Cc: pbonzini@redhat.com, tglx@kernel.org, mingo@redhat.com, bp@alien8.de, 
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, shuah@kernel.org, 
+	kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, ctpence@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 14, 2026 at 09:28:30PM +0800, Lance Yang wrote:
-> 
-> On Wed, May 13, 2026 at 08:39:33AM -0700, Breno Leitao wrote:
-> >get_any_page() collapses three different failure modes into a single
-> >-EIO return:
+On Thu, May 14, 2026 at 7:28=E2=80=AFAM Sean Christopherson <seanjc@google.=
+com> wrote:
+>
+> On Thu, May 14, 2026, Jim Mattson wrote:
+> > > diff --git a/arch/x86/kvm/cpuid.h b/arch/x86/kvm/cpuid.h
+> > > index 95d09ccbf951..fc96ba86c644 100644
+> > > --- a/arch/x86/kvm/cpuid.h
+> > > +++ b/arch/x86/kvm/cpuid.h
+> > > @@ -185,8 +185,9 @@ static inline int guest_cpuid_stepping(struct kvm=
+_vcpu *vcpu)
+> > >
+> > >  static inline bool cpuid_fault_enabled(struct kvm_vcpu *vcpu)
+> > >  {
+> > > -       return vcpu->arch.msr_misc_features_enables &
+> > > -                 MSR_MISC_FEATURES_ENABLES_CPUID_FAULT;
+> > > +       return (vcpu->arch.msr_misc_features_enables &
+> > > +               MSR_MISC_FEATURES_ENABLES_CPUID_FAULT) ||
+> > > +               (vcpu->arch.msr_hwcr & MSR_K7_HWCR_CPUID_USER_DIS);
+> > >  }
 > >
-> >  * the put_page race in the !count_increased path;
-> >  * the HWPoisonHandlable() rejection that bounces out of
-> >    __get_hwpoison_page() with -EBUSY and exhausts shake_page() retries;
-> >  * the HWPoisonHandlable() rejection that goes through the
-> >    count_increased / put_page / shake_page retry loop.
+> > Sashiko raises a good point here about a pre-existing issue that
+>
+> Calling this pre-existing is a bit of a stretch.  I'm guessing VMX doesn'=
+t check
+> the #GP before the VM-Exit (checking #GP before a VM-Exit is so stupid).
+
+Per the SDM, volume 3, section 27.1.1: Relative Priority of Faults and VM E=
+xits
+
+> Certain exceptions have priority over VM exits. These include invalid-opc=
+ode exceptions, faults based on
+privilege level,1 and general-protection exceptions that are based on
+checking I/O permission bits in the task-
+state segment (TSS). For example, execution of RDMSR with CPL =3D 3
+generates a general-protection exception
+and not a VM exit.2
+
+> Yes, KVM technically emulates MSR_MISC_FEATURES_ENABLES_CPUID_FAULT for A=
+MD, but
+> we're firmly in "making shit up" territory when reasoning about the inter=
+actions
+> between SVM and a feature that doesn't exist on real AMD CPUs.
+
+True.
+
+> > probably warrants a fix before propagating it further:
 > >
-> >The first is transient (the page is racing with the allocator).  The
-> >second can be either transient (a userspace folio briefly off LRU
-> >during migration/compaction) or stable (slab/vmalloc/page-table/
-> >kernel-stack pages).  The third describes a stable kernel-owned page
-> >that the count_increased=true caller already held a reference on.
-> >
-> >Distinguish them on the return path: keep -EIO for both the put_page
-> >race and the -EBUSY-after-retries branch (shake_page() cannot drag a
-> >folio back from active migration, so we cannot prove the page is
-> >permanently kernel-owned from there), keep -EBUSY for the allocation
-> >race (unchanged), and return -ENOTRECOVERABLE only from the
-> >count_increased-true HWPoisonHandlable() rejection that exhausts its
-> >retries -- the caller's reference is structural evidence that the
-> >page is owned by the kernel.
-> >
-> >Extend the unhandlable-page pr_err() to fire for either errno and
-> >update the get_hwpoison_page() kerneldoc.
-> >
-> >memory_failure() still folds every negative return into
-> >MF_MSG_GET_HWPOISON via its existing "else if (res < 0)" branch, so
-> >this patch is a no-op for users of memory_failure() and only changes
-> >the errno that soft_offline_page() can propagate to its callers.  A
-> >follow-up wires the new return code through memory_failure() and
-> >reports MF_MSG_KERNEL for the unrecoverable cases.
-> >
-> >Suggested-by: David Hildenbrand <david@kernel.org>
-> >Signed-off-by: Breno Leitao <leitao@debian.org>
-> >---
-> > mm/memory-failure.c | 18 +++++++++++++++---
-> > 1 file changed, 15 insertions(+), 3 deletions(-)
-> >
-> >diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-> >index 49bcfbd04d213..bae883df3ccb2 100644
-> >--- a/mm/memory-failure.c
-> >+++ b/mm/memory-failure.c
-> >@@ -1408,6 +1408,15 @@ static int get_any_page(struct page *p, unsigned long flags)
-> > 				shake_page(p);
-> > 				goto try_again;
-> > 			}
-> >+			/*
-> >+			 * Return -EIO rather than -ENOTRECOVERABLE: this
-> >+			 * branch is also reached for pages that are merely
-> >+			 * off-LRU transiently (e.g. a folio in the middle
-> >+			 * of migration or compaction), which shake_page()
-> >+			 * cannot drag back.  The caller cannot prove the
-> >+			 * page is permanently kernel-owned from here, so
-> >+			 * keep it on the recoverable errno.
-> >+			 */
-> > 			ret = -EIO;
-> > 			goto out;
-> > 		}
-> >@@ -1427,10 +1436,10 @@ static int get_any_page(struct page *p, unsigned long flags)
-> > 			goto try_again;
-> > 		}
-> > 		put_page(p);
-> >-		ret = -EIO;
-> >+		ret = -ENOTRECOVERABLE;
-> > 	}
-> > out:
-> >-	if (ret == -EIO)
-> >+	if (ret == -EIO || ret == -ENOTRECOVERABLE)
-> > 		pr_err("%#lx: unhandlable page.\n", page_to_pfn(p));
-> > 
-> > 	return ret;
-> >@@ -1487,7 +1496,10 @@ static int __get_unpoison_page(struct page *page)
-> >  *         -EIO for pages on which we can not handle memory errors,
-> >  *         -EBUSY when get_hwpoison_page() has raced with page lifecycle
-> >  *         operations like allocation and free,
-> >- *         -EHWPOISON when the page is hwpoisoned and taken off from buddy.
-> >+ *         -EHWPOISON when the page is hwpoisoned and taken off from buddy,
-> >+ *         -ENOTRECOVERABLE for stable kernel-owned pages the handler
-> >+ *         cannot recover (PG_reserved, slab, vmalloc, page tables,
-> >+ *         kernel stacks, and similar non-LRU/non-buddy pages).
-> 
-> Did you test this patch series? I don't see how we ever get to
-> -ENOTRECOVERABLE there ...
+> > > Does this emulation of CPUID faulting respect architectural fault
+> > > priorities in a nested virtualization scenario?
+> > >
+> > > According to the AMD APM, if CPUID faulting is enabled, a #GP fault t=
+akes
+> > > precedence over a CPUID VM-exit intercept.
+>
+> Where in the APM?  I can't find anything in the description of CPUID or C=
+puidUserDis
+> that specifies the priority, and "Table 15-7. Instruction Intercepts" is =
+flat out
+> wrong because it just says:
+>
+>    CPUID  CPUID  No exceptions to check.
 
-Yes, I did. I am using the following test case:
+APM volume 2, section 15.7: Intercept Operation
 
-https://github.com/leitao/linux/commit/cfebe84ddeab5ac34ed456331db980d57e7025dc
-
-	# RUN_DESTRUCTIVE=1 tools/testing/selftests/mm/hwpoison-panic.sh
-	# enabling /proc/sys/vm/panic_on_unrecoverable_memory_failure
-	# injecting hwpoison at phys 0x2a00000 (Kernel rodata)
-	# expecting kernel panic: 'Memory failure: <pfn>: unrecoverable page'
-	[  501.113256] Memory failure: 0x2a00: recovery action for reserved kernel page: Ignored
-	[  501.113956] Kernel panic - not syncing: Memory failure: 0x2a00: unrecoverable page
-
-
-> Even with MF_COUNT_INCREASED, the first pass does:
-> 
-> 	if (flags & MF_COUNT_INCREASED)
-> 		count_increased = true;
-> 
-> 	[...]
-> 
-> 	if (PageHuge(p) || HWPoisonHandlable(p, flags)) {
-> 		ret = 1;
-> 	} else {
-> 		if (pass++ < GET_PAGE_MAX_RETRY_NUM) { <-
-> 			put_page(p);
-> 			shake_page(p);
-> 			count_increased = false;
-> 			goto try_again; <-
-> 		}
-> 		put_page(p);
-> 		ret = -ENOTRECOVERABLE;
-> 	}
-> 
-> Then we come back with count_increased=false:
-> 
-> try_again:
-> 	if (!count_increased) {
-> 		ret = __get_hwpoison_page(p, flags); <-
-> 		if (!ret) {
-> 		[...]
-> 		} else if (ret == -EBUSY) { <-
-> 		[...]
-> 			ret = -EIO;
-> 			goto out; <-
-> 		}
-> 	}
-> 
-> For slab/vmalloc/page-table pages, __get_hwpoison_page() returns -EBUSY:
-> 
-> 	if (!HWPoisonHandlable(&folio->page, flags))
-> 		return -EBUSY;
-> 
-> so they still seem to end up as -EIO ... Am I missing something?
-
-You are not, and thanks for catching this. I traced it again and the
--ENOTRECOVERABLE branch is unreachable for slab/vmalloc/page-table pages
-exactly as you described. The __get_hwpoison_page() → -EBUSY → shake → retry
-loop catches them first and they exit as -EIO.
-
-The selftest I am using (link above) only validated the PageReserved
-short-circuit added in patch 3, which lives in memory_failure() and never
-reaches get_any_page().
-
-I even thought about this code path, and I was not convinced we should return
--ENOTRECOVERABLE, thus I documented the following (as in this current patch)
-
-	@@ -1408,6 +1408,15 @@ static int get_any_page(struct page *p, unsigned long flags)
-			shake_page(p);
-			goto try_again;
-		}
-	+            /*
-	+             * Return -EIO rather than -ENOTRECOVERABLE: this
-	+             * branch is also reached for pages that are merely
-	+             * off-LRU transiently (e.g. a folio in the middle
-	+             * of migration or compaction), which shake_page()
-	+             * cannot drag back.  The caller cannot prove the
-	+             * page is permanently kernel-owned from here, so
-	+             * keep it on the recoverable errno.
-	+             */
-		ret = -EIO;
+> Generally, instruction intercepts are checked after simple exceptions
+(such as #GP=E2=80=94when CPL is incorrect=E2=80=94or #UD) have been checke=
+d, but
+before exceptions related to
+memory accesses (such as page faults) and exceptions based on specific
+operand values.
