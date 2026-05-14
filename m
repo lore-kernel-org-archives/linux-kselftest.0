@@ -1,186 +1,172 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-oa1-f73.google.com (mail-oa1-f73.google.com [209.85.160.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40F913A5420
-	for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 17:23:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7DD2388E6E
+	for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 17:49:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778779384; cv=none; b=reDpiZ81TPu3+dgzWK79e3102cwBloMAeD4XZsLsYL04MGE4mF+i1KgdMEPa5SRtxHNQja2bk9CsNNdNNuLxxzmowCLytUbFPr0Ye+3CnFL0BkB5rvQG6HCqZF61tVbXxPEWhpQjL4a5vfNFPfCGLHuCbYPP4b4R9qQYUu+PU6E=
+	t=1778780946; cv=none; b=TZyoJDA3V5hpLmQ15UI4F3fwi3R689WNKTN8p7sdpD45Yi2Fs3sycz/PEV3/VLANeAhEs4FCmobf8xzDGZlDk239PRX3nyPuuW/zJa9IPEXBNH9IkBTup08FRxQ6KEXbTNpADfu63sdl4DbECD2qBoUmJsbHNnbliPbRsPR63MU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778779384; c=relaxed/simple;
-	bh=MVNfRK0cS8Dt06z8NeESFxJysl04Isvyco3jwpSwjh8=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=fyKFVUPQSqJx/fH9ASR/r/WVZ2ranc2cVqkrl6o9KaIx4VJkXH/ptMXQBDMHjCzy+WdMwYghF+1SBvYNmnS0OkUL8B0w7/fmloSd60KFVnHs2FgiHe3G4lVJNAnau8UsDPTDUzcP2Tp8Vo/dzTDePjakylzlLoBYspcO1lqZy3s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pLjgY4MT; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1778780946; c=relaxed/simple;
+	bh=GoRDUmjwts98H2GxjEyrtGopYG2FlUX43PGMqIqINsM=;
+	h=Date:In-Reply-To:Mime-Version:Message-ID:Subject:From:To:Cc:
+	 Content-Type; b=F/R5XcEPjfij4Wz38tOCHkdlZ6pTsx/oYZfQV361ImjPHnSYPZqZptwC1dek08aA0My/u8C2jKg6q0nsJr4XWQvc2ERyaHJ7buUqEguS0LfeF0viOq+vrp8zpzurFem7Sw+n9ZT3zQLe8At+EkvhxRyaWT7iG241sURLtvVCceg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fyhzYkEA; arc=none smtp.client-ip=209.85.160.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pLjgY4MT"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4891c569cb1so7232925e9.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 10:23:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fyhzYkEA"
+Received: by mail-oa1-f73.google.com with SMTP id 586e51a60fabf-439d6202259so3470786fac.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 10:49:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778779379; x=1779384179; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=AMaxR+q/wtm3s4msj3w1sOUTMessNfD3kYpKQBJanDw=;
-        b=pLjgY4MTLJ//Cft02z8ASl+D/34IQfhhF3d0fC8zsq42DQ2ZsaJU1E6DyRIiqhxPEs
-         qdGLKFDP3IHrnz9Jm/9ZwgB1oPxorg87zcC540lKwO6V7lM0/OVOjhquZSdSpOf6rFlA
-         7mB6WddKr6D5anR8wiXBaUVcS9lC0qfHFXt2sH3rvDm0gyp9wna18OIHqXk3ZqknqDWK
-         405F/JDX/SuxWg5RDSiDaf43cOXJgaUORawJ9/QQX2o1i5RN9p+75wZGhdVJj7qHv24Q
-         UDM8vL2wPf8rD6TrBcywzNQLTMp3IR3OhMf+7ZoNUFPC7gn0UAgA/Emaoajqo00QWxJh
-         TCFg==
+        d=google.com; s=20251104; t=1778780944; x=1779385744; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=lvf58REysbafuiio+PHgzYPPOXJAU2S7yZkdP1X1Ak4=;
+        b=fyhzYkEAbiuipPqf7gx5+RdaCXwMfqmpjczIhbMY7cBnUFd+IALqIrwDlL+CkfOy8R
+         POeCtYJ2bwwX21dIaWHEIoGEC7/PqWd/riNRFOHYVtq6YMSjTzRC3Tk2Fn765Y945gVa
+         rvuJ+BzJH9Zml+P0kNSQYCFbq5ELx6g/fPtmJOd6y1MpZxuoA+oSsdBKBv7jOT7weB5K
+         wUzPs2RbvNHqK8/Ip8vQY1twzb1P7xV8fVyqGMC3pZRMqYQ3e9YxWW5XxlHL0aZhcq6B
+         88+ZKGsu1+ejYtPjxrj6uLGDISrx4Bvy4E6ZAc5I44MpgeuTxoFepMV8Fn1DofCbarXq
+         nqvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778779379; x=1779384179;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AMaxR+q/wtm3s4msj3w1sOUTMessNfD3kYpKQBJanDw=;
-        b=NSnugziFQSSNGvlIavAOJbGYcczuBRyLEJue14BbnD7r6MFMO2VIYGoGebWl2s9e7h
-         gEGM7YLvuFfOa1cRj4paOLnWbekDzabZdIwnO9Oc7BpATSUBeqS/sqBTvCzBH50YT8OX
-         7mFGqbkMnPTStPkKGqmcyMbtEY9M+cyQRwIIhG9i45i55F978syh8JyvA3H0Ml45wN4X
-         QdAIZ1JmnbRt8lf7wBE604k8bmYjo6/W+SJWZcxJ/8QCdH1OREr4cSjsHwDexP91EBFq
-         lLg6uDvun7zOiAixKtk676RJUfmtpv9Mpf642imiR77wceWpYSw1hi1vWOzHprbJQbdu
-         3RAQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+uEy+k6JjJWqDFwT0A550z7F6iSDeFBR//MDL9xMmS10cPyrNzN3kJ3qzSlD4ya345JVLtLcXWxifNmuR7Amk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxBYSv8aNyzlvWqxrqqsbPP0lABpTBAi6OnEsjNX1QPK7TpnKHu
-	MR7t9WPZzFtCxlMnTHdfIXfbKNba9gCb5w1z315PJiGpwgziJoU06IX8
-X-Gm-Gg: Acq92OF/6gUvhYnl8qLvo9kTMvpNZcX2Vmfeo00XRfN4RCCc4cmFJ5fz9hvLOGcpoiZ
-	qlhUxXnNyDpIjJvoDYlzgLXC85cOvpJXwykULZONHmMCxSHoHxLUvZAkKjpPigr3IhsLYbIk/zG
-	+Zfvxxt6GPwsIb6SXF9l52jD/+N3NOADAlSw6OsbcA7B/ne11deQsga+/l9oq9sCeI2yawpKO9r
-	aETXrdM31BDzjLIRJN5dgYncukhZtDkFFIsgMra/F8lgPRjHGn2hJTLlfc+kbNFJBeQbQ4xxMgs
-	U3orzRTs5OAeWUQ+egyjlEt+/lkdvHq8xDQ3JdT91HeG2ZD8nEBvys6ff/5Kg9kCtyxUOb4jZhC
-	7k660+M6OYDijdDLKyQEYIDnB11aONu+qLAtdb6371zcuXjazL+I9AXt6ZhHTM4+aY07OTHmAeU
-	9jwzuBfLBVSIT6ZQke3fu9qEB/hQlNp6pal5zyaUuUrFgZ
-X-Received: by 2002:a05:600c:310f:b0:48e:7a10:1f5e with SMTP id 5b1f17b1804b1-48fe5fd5b3amr2237065e9.2.1778779379407;
-        Thu, 14 May 2026 10:22:59 -0700 (PDT)
-Received: from localhost.localdomain ([82.215.118.79])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45da15a6454sm7853932f8f.34.2026.05.14.10.22.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 May 2026 10:22:58 -0700 (PDT)
-From: Stepan Ionichev <sozdayvek@gmail.com>
-To: andriy.shevchenko@linux.intel.com
-Cc: akpm@linux-foundation.org,
-	gregkh@linuxfoundation.org,
-	brendan.higgins@linux.dev,
-	david@davidgow.net,
-	raemoar63@gmail.com,
-	linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com,
-	linux-kernel@vger.kernel.org,
-	sozdayvek@gmail.com
-Subject: [PATCH] lib/uuid_kunit: add tests for the four random UUID/GUID generators
-Date: Thu, 14 May 2026 22:22:41 +0500
-Message-Id: <20260514172241.28006-1-sozdayvek@gmail.com>
-X-Mailer: git-send-email 2.33.0.windows.2
+        d=1e100.net; s=20251104; t=1778780944; x=1779385744;
+        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lvf58REysbafuiio+PHgzYPPOXJAU2S7yZkdP1X1Ak4=;
+        b=TM2GJR+1sKwCSkB56VlwlQJadjrflXgIapyVbih3a2qJxijKA1A5xmcBkT48qK1UhO
+         yfvOni3rAhuDYSpnwEAc3z1MNA+quP7Sb6adzA6yfiz7EsXLUFH5iC+0X1SwB66kKQN+
+         ioJySIn9H/DxuE+d1639RBLDu0gU7uxjYcEW1VKHNKdfmUPf5rtvvNSx6Otbzcc67M38
+         MjsGQvwhiSJ3kTwnJs2HFnZvng2JbyOtZMaRoHimHYHVzISkq/ISPnfEZCYLfcSLwwAY
+         xvuZPP80apARbO9U436fsO6TZks8WK5PitwLJghwDkSEonH0fUFCIPC3fwRX3VJKYH7x
+         Tu7A==
+X-Forwarded-Encrypted: i=1; AFNElJ+HukWN5/fASIpLI3eP0hjx0xex5/J+0QCZ4E+JTssr1/9Wtxf6tp0pkPbAwtYjZkdjZL2O/iGOan+0hCGZYJU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxS1RCsi4miT+yukzB0rnoW9qb3ngBP0tHq+8Qn3ZoTJf7Yu0rq
+	SSQ2wlU6zxIeUQht8sTWcoAh6Ol+1vhJtgTIVzx+nvZymRoeJ0q2ipJtrxWIN5IrAfYQo8sFpmJ
+	JRx3yAxkW8Nm9yi5QX8y6lfN+ug==
+X-Received: from oaao19.prod.google.com ([2002:a05:6870:f013:b0:43a:1a0e:c45b])
+ (user=coltonlewis job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6870:a793:b0:434:efa3:9bd5 with SMTP id 586e51a60fabf-43a2ddcfbbamr377060fac.27.1778780943565;
+ Thu, 14 May 2026 10:49:03 -0700 (PDT)
+Date: Thu, 14 May 2026 17:49:02 +0000
+In-Reply-To: <agQpbiD8Fi6fzomf@kernel.org> (message from Oliver Upton on Wed,
+ 13 May 2026 00:34:06 -0700)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Message-ID: <gsntwlx5c25t.fsf@coltonlewis-kvm.c.googlers.com>
+Subject: Re: [PATCH v7 07/20] KVM: arm64: Set up FGT for Partitioned PMU
+From: Colton Lewis <coltonlewis@google.com>
+To: Oliver Upton <oupton@kernel.org>
+Cc: kvm@vger.kernel.org, alexandru.elisei@arm.com, pbonzini@redhat.com, 
+	corbet@lwn.net, linux@armlinux.org.uk, catalin.marinas@arm.com, 
+	will@kernel.org, maz@kernel.org, oliver.upton@linux.dev, mizhang@google.com, 
+	joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, 
+	mark.rutland@arm.com, shuah@kernel.org, gankulkarni@os.amperecomputing.com, 
+	james.clark@linaro.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	kvmarm@lists.linux.dev, linux-perf-users@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 
-uuid_kunit currently exercises only guid_parse() and uuid_parse() (plus
-their invalid-input paths). The four random generators exported from
-lib/uuid.c -- generate_random_uuid(), generate_random_guid(),
-uuid_gen() and guid_gen() -- have no direct kunit coverage.
+Hi Oliver. Thanks for the review.
 
-Random output cannot be compared against a fixed expected value, but
-RFC 4122 section 4.4 specifies two invariants that any version-4
-random UUID/GUID must satisfy:
+Oliver Upton <oupton@kernel.org> writes:
 
-  - version 4 in the high nibble of the version byte
-    (byte 6 in the wire uuid_t layout, byte 7 in the byte-swapped
-    guid_t layout);
-  - variant DCE 1.1 (binary 10x) in the high bits of byte 8.
+> On Mon, May 04, 2026 at 09:18:00PM +0000, Colton Lewis wrote:
+>> +static void __compute_hdfgrtr(struct kvm_vcpu *vcpu)
+>> +{
+>> +	__compute_fgt(vcpu, HDFGRTR_EL2);
+>> +
+>> +	*vcpu_fgt(vcpu, HDFGRTR_EL2) |=
+>> +		HDFGRTR_EL2_PMOVS
+>> +		| HDFGRTR_EL2_PMCCFILTR_EL0
+>> +		| HDFGRTR_EL2_PMEVTYPERn_EL0
+>> +		| HDFGRTR_EL2_PMCEIDn_EL0
+>> +		| HDFGRTR_EL2_PMMIR_EL1;
+>> +}
+>> +
 
-Add four test cases that invoke each generator several times and
-verify these bit patterns hold. The same checks catch a regression
-in either the mask/OR sequence in the generators or the layout
-constants. Run the loop a handful of times to cover the small but
-non-zero chance that an unmasked random byte happens to satisfy
-the version/variant pattern by accident on a single call.
+> I've given this feedback at least twice already...
 
-Signed-off-by: Stepan Ionichev <sozdayvek@gmail.com>
----
- lib/tests/uuid_kunit.c | 60 ++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 60 insertions(+)
+> Operators go on the preceding line in the case of line continuations.
 
-diff --git a/lib/tests/uuid_kunit.c b/lib/tests/uuid_kunit.c
-index de71b2649..a800a80e6 100644
---- a/lib/tests/uuid_kunit.c
-+++ b/lib/tests/uuid_kunit.c
-@@ -86,11 +86,71 @@ static void uuid_test_uuid_invalid(struct kunit *test)
- 	}
- }
- 
-+/*
-+ * RFC 4122 section 4.4 says random UUIDs/GUIDs (version 4) must have:
-+ *   - version 4 in the high nibble of the version byte,
-+ *   - variant DCE 1.1 (binary 10x) in the high bits of byte 8.
-+ *
-+ * The version byte is byte 6 in the "wire" uuid_t layout and byte 7 in
-+ * the byte-swapped guid_t layout.
-+ */
-+static void uuid_test_uuid_gen(struct kunit *test)
-+{
-+	unsigned int i;
-+	uuid_t u;
-+
-+	for (i = 0; i < 8; i++) {
-+		uuid_gen(&u);
-+		KUNIT_EXPECT_EQ(test, u.b[6] & 0xf0, 0x40);
-+		KUNIT_EXPECT_EQ(test, u.b[8] & 0xc0, 0x80);
-+	}
-+}
-+
-+static void uuid_test_guid_gen(struct kunit *test)
-+{
-+	unsigned int i;
-+	guid_t g;
-+
-+	for (i = 0; i < 8; i++) {
-+		guid_gen(&g);
-+		KUNIT_EXPECT_EQ(test, g.b[7] & 0xf0, 0x40);
-+		KUNIT_EXPECT_EQ(test, g.b[8] & 0xc0, 0x80);
-+	}
-+}
-+
-+static void uuid_test_generate_random_uuid(struct kunit *test)
-+{
-+	unsigned char buf[16];
-+	unsigned int i;
-+
-+	for (i = 0; i < 8; i++) {
-+		generate_random_uuid(buf);
-+		KUNIT_EXPECT_EQ(test, buf[6] & 0xf0, 0x40);
-+		KUNIT_EXPECT_EQ(test, buf[8] & 0xc0, 0x80);
-+	}
-+}
-+
-+static void uuid_test_generate_random_guid(struct kunit *test)
-+{
-+	unsigned char buf[16];
-+	unsigned int i;
-+
-+	for (i = 0; i < 8; i++) {
-+		generate_random_guid(buf);
-+		KUNIT_EXPECT_EQ(test, buf[7] & 0xf0, 0x40);
-+		KUNIT_EXPECT_EQ(test, buf[8] & 0xc0, 0x80);
-+	}
-+}
-+
- static struct kunit_case uuid_test_cases[] = {
- 	KUNIT_CASE(uuid_test_guid_valid),
- 	KUNIT_CASE(uuid_test_uuid_valid),
- 	KUNIT_CASE(uuid_test_guid_invalid),
- 	KUNIT_CASE(uuid_test_uuid_invalid),
-+	KUNIT_CASE(uuid_test_uuid_gen),
-+	KUNIT_CASE(uuid_test_guid_gen),
-+	KUNIT_CASE(uuid_test_generate_random_uuid),
-+	KUNIT_CASE(uuid_test_generate_random_guid),
- 	{},
- };
- 
--- 
-2.43.0
+I apologize for letting that slip through again.
 
+>> +
+>> +/**
+>> + * kvm_pmu_is_partitioned() - Determine if given PMU is partitioned
+>> + * @pmu: Pointer to arm_pmu struct
+>> + *
+>> + * Determine if given PMU is partitioned by looking at hpmn field. The
+>> + * PMU is partitioned if this field is less than the number of
+>> + * counters in the system.
+>> + *
+>> + * Return: True if the PMU is partitioned, false otherwise
+>> + */
+>> +bool kvm_pmu_is_partitioned(struct arm_pmu *pmu)
+>> +{
+>> +	if (!pmu)
+>> +		return false;
+>> +
+>> +	return pmu->max_guest_counters >= 0 &&
+>> +		pmu->max_guest_counters <= *host_data_ptr(nr_event_counters);
+>> +}
+>> +
+>> +/**
+>> + * kvm_vcpu_pmu_is_partitioned() - Determine if given VCPU has a  
+>> partitioned PMU
+>> + * @vcpu: Pointer to kvm_vcpu struct
+>> + *
+>> + * Determine if given VCPU has a partitioned PMU by extracting that
+>> + * field and passing it to :c:func:`kvm_pmu_is_partitioned`
+>> + *
+>> + * Return: True if the VCPU PMU is partitioned, false otherwise
+>> + */
+>> +bool kvm_vcpu_pmu_is_partitioned(struct kvm_vcpu *vcpu)
+>> +{
+>> +	return kvm_pmu_is_partitioned(vcpu->kvm->arch.arm_pmu) &&
+>> +		false;
+>> +}
+
+> Ok, I'm thoroughly confused about these predicates.
+
+> Whether or not a vCPU is using a partitioned PMU is a per-VM property.
+> This is separate from whether or not the backing arm_pmu has a range of
+> available counters for the guest to use.
+
+> It is entirely possible that a VM *isn't* using the partitioned PMU
+> feature (i.e. backed with perf events) yet the supporting arm_pmu has a
+> guest counter range.
+
+Yes and I add that to this predicate in a later patch when I introduce
+the flag. I can always reorder to introduce the flag before (or along
+with) this predicate.
+
+>> +#if !defined(__KVM_NVHE_HYPERVISOR__)
+>> +bool kvm_vcpu_pmu_is_partitioned(struct kvm_vcpu *vcpu);
+>> +bool kvm_vcpu_pmu_use_fgt(struct kvm_vcpu *vcpu);
+>> +#else
+>> +static inline bool kvm_vcpu_pmu_is_partitioned(struct kvm_vcpu *vcpu)
+>> +{
+>> +	return false;
+>> +}
+>> +
+>> +static inline bool kvm_vcpu_pmu_use_fgt(struct kvm_vcpu *vcpu)
+>> +{
+>> +	return false;
+>> +}
+>> +#endif
+>> +
+
+> Don't use ifdeffery for this. Aim to have a single definition and rely
+> on has_vhe() to do the rest of the work.
+
+Will do.
+
+
+> Thanks,
+> Oliver
