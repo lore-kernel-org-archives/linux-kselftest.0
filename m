@@ -1,96 +1,118 @@
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21D193C4165
-	for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 14:13:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A49453FE34A
+	for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 14:28:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778767999; cv=none; b=cW/8T7JHMVx2habyjEHSyqIiW15dEYvyBVKPWfBXC7sndTpuGxgIPxagqef+1kKcKHWVqWZaCmwtuXkNrAHuCPZ7SdQHAfN4BOZp/0W74+0Auulx+Oy/oWHT7HxUNI2myTKnjNZxO2aKCrqPxt+en78zQ6X8+A0bxtUp9PZuXjo=
+	t=1778768940; cv=none; b=F4WEEGBkBOgS+C4FQvXvazBA0xpqXZY/93mPKaPcGU7i3wexQ/RE5H3MvxR0O9I0zU9XQ4VmwvJvDf6M2XaduK9YQYCBXFAVIOwS/QylCnD2TGcs8xyTg0g2xBl0PYkrTv1c1l56kwDvWfrqTMDSqM/YN+RSkHmMk/S5Gx9KGI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778767999; c=relaxed/simple;
-	bh=6+Vy77mlexUq69K/GifNbxsYh1MJdCUIjNEhN5F1vsY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=aJDHZlyJ26AgaWboSR7y/I7miv/cBNa6ZfDi+0ySeq7yUle4u+m2BhFxo6AK96STb2SCyYOJ/M4oLBgQUIpCFNBoTeVtumuHk/c5Z35l6lHK8JW94zf5TBXgT19LpmSXdLQH31qQUG1cEZf5VpTDRuDpS2RIMnrG6P+16MEmC5w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pUZwLJas; arc=none smtp.client-ip=209.85.160.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1778768940; c=relaxed/simple;
+	bh=cE2lkLmKq0IcZdV/Mrh7n/fH686ncFoZwuoKXAn37F0=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=mZjFA64CiSD/iTm8WuI2BK0EGtp+UNXFbUXdOD0qYQ/6P/tH9JBGlCblHJifnH0MEN63Rwbym/lkUoTLAebp/R/DghFQ25jY9qVr+oDoRWWyInvw4rPIS+3D98qRnrEc127v9laRQTNB0ehGMSIWzJk723KXzwrmLBYPExVxdBc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IPURNUCu; arc=none smtp.client-ip=209.85.215.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pUZwLJas"
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-40ef10ec84cso6323030fac.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 07:13:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IPURNUCu"
+Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-c8276c91addso3301405a12.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 07:28:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778767997; x=1779372797; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6+Vy77mlexUq69K/GifNbxsYh1MJdCUIjNEhN5F1vsY=;
-        b=pUZwLJasNTJ1Tkg/kdJU4j57rcOJHBX4sZkY/MUdYttTZzy+8kaHashhWEnW0eYTHv
-         j6RKrxTp2L1SgutrUke2Z+PDn9KmFmNLBBk83SwYbunnjOfvMWEV6Hn5GLYSib6EXEHX
-         dTQ5uifKqHxzvKCtyjSt6Qj588UXeyNFJH/rSruoUTlhILFadLnIpGgXX3v4eiMlEAAb
-         Gup2+0BeY0GkqNNHh5bzKoDechD7GPQk5Fh6I4FABchwPx1ewOEBQH/WEYuob6eZSfh4
-         TjpZiGENiePqs5s/oT92KlLpMPhSG7eyLxpiKCMaD/tGhV6vNDGoVT0xzANk3CiWB/F4
-         QD6w==
+        d=google.com; s=20251104; t=1778768937; x=1779373737; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=7LCeT1NsI569FTnrt0qFrtZYhyjYrpE+ZVg188rcut0=;
+        b=IPURNUCua3A3uJ1fpwifjzs9ly9D0GCgd5TAPMU69Il4r56cRDMF9WhsAa39yqnxLH
+         nH00yYo74tHC5mpyBWKbgQcjCP5RHbN3rJ5uW7mgq2K6jnHMdwKPV+8FXnBa06K/utnG
+         qIuKb6AZi56YLZQ0ACxgGQspfUCQonUmYJJdHBhRwbZ2RgLRgxi8dDxGO1qGJ+yij+VK
+         Q1PS5YxCYyzVQH3iz4Mot1AlubmAddEwkLgDqPsKd8dynRRHDbd9ePlj+YdA7iE383DE
+         XgQXRCXYJotrl1k5Dmc7Y6Wfjmvz6OtXbso/zgHTnUCE5EN3qxl7OFJHcRaCwjgXVbJM
+         zEjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778767997; x=1779372797;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=6+Vy77mlexUq69K/GifNbxsYh1MJdCUIjNEhN5F1vsY=;
-        b=p964dG2KFaTqTxm3/q53gmUEFSJeVpVCRLm1pccf/LkYh7KnmeXPsrwRYm7WzCkeZ3
-         VjUH/1KLCMSs7nLSfCYQPRL45yhlgfN/YIi8dNXWzwfgRqUlhb35Rfw4giJhNSZe2fQH
-         Y6IgW9jM3UO0JrpOvLP3tnZqfOyT0O0I4Ooh9Oz7A3xDjgVoq9rCehNC8PyLt0pzF0ni
-         V/6UHa0ZfTbnIBVqJ+KUG6s37b6UMUtbDFBNZDbYssD/gUjWSXNudNQX4r7ZVZMlfb9+
-         G1w4Rgk/ZI8omZrPUlSfmO8RI+Pg5OG0V4Hx92ir32w9CBVIs2djK8YJYdBZOIYC29Ks
-         hwHw==
-X-Forwarded-Encrypted: i=1; AFNElJ98WmtUHQg8xGGgUUK/2+RKIYDnpu619WrjpngzpXNMptVUcjKiFfHP1d9+RVQGpYVf2miEfKV3t+KdnW3nKig=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzrMJMynsFFfJjbqk4vhOTnxBeZzG0gzva643tlLuxxlUtbyGnT
-	EOeIgeURWylHikRKotzp0NSmAy6l/gWM+z4H/QwjlaAA0VCmkGzblzej
-X-Gm-Gg: Acq92OH542JAJS+Nry/yq1vQgS7o05PnJ1Pixn6k5P7IlSKLSRtHkXhz7oQT5xJ16ud
-	32zNOVz3R0u5yfSQDLZmAOZeisaE9b0695V9P4AR+2WVjuqJhxeqIhDtQWz4PNbhZPobzgjssWa
-	BXiaOwb3MbGHQtr/Cmhracg7ZSUj4a0XkP+BbJF6sUK8nc/efmxu0rXSdvtAZnAW6HRVnPLAQV9
-	VQpn1/ZiSiLGWMabtNF9a2zPwMG7a2BzjzaNDDFglDY7Zv7nGaes0Ds7I1GGhPPhAexPgTC1bOJ
-	whyp4By2CZawEQHVtlVA12uVaZ+V48KIMVPAGd6rq0kTL0H2QI+fRkNV9jsDCWybC06v0aWO7nD
-	gdDFUvMLk+LynyJ4hvxaF49szW5IyUtWQDXJnMMewgZA/tWX7Yj3ccU/pimKICS/25cYIgWxJGk
-	+XI14LlCYDVGjgBJ8=
-X-Received: by 2002:a05:6871:54d:b0:42f:7bbc:ce82 with SMTP id 586e51a60fabf-439d2ffc601mr4141250fac.26.1778767997001;
-        Thu, 14 May 2026 07:13:17 -0700 (PDT)
-Received: from houminxi ([72.244.37.221])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-439fc4dcb89sm2018191fac.12.2026.05.14.07.13.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 May 2026 07:13:16 -0700 (PDT)
-From: Minxi Hou <houminxi@gmail.com>
-To: Aaron Conole <aconole@redhat.com>
-Cc: Minxi Hou <houminxi@gmail.com>,
-	netdev@vger.kernel.org,
-	davem@davemloft.net,
-	echaudro@redhat.com,
-	edumazet@google.com,
-	horms@kernel.org,
-	i.maximets@ovn.org,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	shuah@kernel.org,
-	dev@openvswitch.org,
-	i.maximets@redhat.com,
-	linux-kselftest@vger.kernel.org,
-	Eric Garver <eric@garver.life>
-Subject: Re: [PATCH net-next] selftests: openvswitch: add dec_ttl action support and test
-Date: Thu, 14 May 2026 22:12:59 +0800
-Message-ID: <20260514141259.4042848-1-houminxi@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <f7tecjeqezk.fsf@redhat.com>
-References: <20260514092747.3653656-1-houminxi@gmail.com> <f7tecjeqezk.fsf@redhat.com>
+        d=1e100.net; s=20251104; t=1778768937; x=1779373737;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7LCeT1NsI569FTnrt0qFrtZYhyjYrpE+ZVg188rcut0=;
+        b=FVTiEv8UCQKKLjPlXwVayOOdKlpraD7u6l04z2yA0VBH2JmJhuJi17WoQ0u3sHWDpD
+         wu5a2khV0M12prq35uKdvQJvnCai3TExFWkOf4OrEI0HWHLlolmT2AU1QV51yF7AFcle
+         Li/cmiJZA/bpRXnHEjURoW4Ut2ctm0JFsdQDqJbUAU2skH76drR8GH5+C/RlEiHC6NUH
+         2Aa7VNPSDzcIRAbcefG+87qjlqJlUA2VResivQrtJyxN2p/zAZy4rYUv/Z66S7Mj8V42
+         9xR3aqID94biN7xXYW8beDGVDKe2mryN66RPjKhjldhb+6X1vdF1nnUUB1dX4SW2dD9F
+         w6Dg==
+X-Forwarded-Encrypted: i=1; AFNElJ+FHha+ljtqCX0p7UTpyKaQSZxEslO0//frGXWMVwGihQY78+FSzFZH02bVYqhSeQXYWToYxmvxg5EWsWsigvc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw+FxWTw1RgaOZypRxqynEUSugfedmRmfQjDrhNvgwHrp64yDEo
+	L4lUMbpy7UAPrWm3PMS3pUTzoeSbA2UPf20dlg3Vx3HVU+GmFxxXQXK72urwZ6oDNjuGDBDP95L
+	QorZ9WA==
+X-Received: from pfbmd16.prod.google.com ([2002:a05:6a00:7710:b0:82f:c134:e67c])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:ad8f:b0:839:dd77:34fb
+ with SMTP id d2e1a72fcca58-83f041eff94mr10426507b3a.22.1778768936700; Thu, 14
+ May 2026 07:28:56 -0700 (PDT)
+Date: Thu, 14 May 2026 07:28:56 -0700
+In-Reply-To: <CALMp9eS4s9tsOmvDUDeqS7oph0mSHyhxBiULQdwHVaG+7gXLSQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+References: <20260513224608.1859737-1-jmattson@google.com> <20260513224608.1859737-4-jmattson@google.com>
+ <CALMp9eS4s9tsOmvDUDeqS7oph0mSHyhxBiULQdwHVaG+7gXLSQ@mail.gmail.com>
+Message-ID: <agXcKDjnJc9DPcyr@google.com>
+Subject: Re: [PATCH v3 3/4] KVM: x86: Virtualize AMD CPUID faulting
+From: Sean Christopherson <seanjc@google.com>
+To: Jim Mattson <jmattson@google.com>
+Cc: pbonzini@redhat.com, tglx@kernel.org, mingo@redhat.com, bp@alien8.de, 
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, shuah@kernel.org, 
+	kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, ctpence@google.com
+Content-Type: text/plain; charset="us-ascii"
 
-Thanks Aaron. I missed the le_1() wrapper in odp-util.c. I was only
-looking at the kernel netlink attributes and derived the format from
-there, which doesn't have that layer.
+On Thu, May 14, 2026, Jim Mattson wrote:
+> > diff --git a/arch/x86/kvm/cpuid.h b/arch/x86/kvm/cpuid.h
+> > index 95d09ccbf951..fc96ba86c644 100644
+> > --- a/arch/x86/kvm/cpuid.h
+> > +++ b/arch/x86/kvm/cpuid.h
+> > @@ -185,8 +185,9 @@ static inline int guest_cpuid_stepping(struct kvm_vcpu *vcpu)
+> >
+> >  static inline bool cpuid_fault_enabled(struct kvm_vcpu *vcpu)
+> >  {
+> > -       return vcpu->arch.msr_misc_features_enables &
+> > -                 MSR_MISC_FEATURES_ENABLES_CPUID_FAULT;
+> > +       return (vcpu->arch.msr_misc_features_enables &
+> > +               MSR_MISC_FEATURES_ENABLES_CPUID_FAULT) ||
+> > +               (vcpu->arch.msr_hwcr & MSR_K7_HWCR_CPUID_USER_DIS);
+> >  }
+> 
+> Sashiko raises a good point here about a pre-existing issue that
 
-Will update the selftest to use dec_ttl(le_1(...)) in v2.
+Calling this pre-existing is a bit of a stretch.  I'm guessing VMX doesn't check
+the #GP before the VM-Exit (checking #GP before a VM-Exit is so stupid).
+
+Yes, KVM technically emulates MSR_MISC_FEATURES_ENABLES_CPUID_FAULT for AMD, but
+we're firmly in "making shit up" territory when reasoning about the interactions
+between SVM and a feature that doesn't exist on real AMD CPUs.
+
+> probably warrants a fix before propagating it further:
+> 
+> > Does this emulation of CPUID faulting respect architectural fault
+> > priorities in a nested virtualization scenario?
+> >
+> > According to the AMD APM, if CPUID faulting is enabled, a #GP fault takes
+> > precedence over a CPUID VM-exit intercept.
+
+Where in the APM?  I can't find anything in the description of CPUID or CpuidUserDis
+that specifies the priority, and "Table 15-7. Instruction Intercepts" is flat out
+wrong because it just says:
+
+   CPUID  CPUID  No exceptions to check.
+
+> > Because KVM emulates CPUID faulting in kvm_emulate_cpuid(), the fault check
+> > happens after nested VM-exit intercept checks. If an L1 hypervisor enables
+> > both CPUID faulting and a CPUID VM-exit intercept, L0's nested exit
+> > handlers will observe L1's intercept request and immediately reflect the
+> > VM-exit to L1.
+> >
+> > Since this reflection happens before evaluating kvm_emulate_cpuid(), does
+> > this allow L2 guests to completely bypass the CPUID faulting restrictions
+> > imposed by L1?
