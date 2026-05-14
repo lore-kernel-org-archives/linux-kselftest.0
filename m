@@ -1,85 +1,82 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4258D319847;
-	Thu, 14 May 2026 23:21:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77F531624C0;
+	Thu, 14 May 2026 23:24:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778800864; cv=none; b=jUDA/lhuCaoEds0uDRuKVXo/9aSGWN347UTETyKBbWu+60V6VXzFIUI5RYmCnFBkd5wPdvd0oQ6DYAs5nT2V6JtPhKFQ8yr5hzFKVB+s7brfr1jDJyypPp01Hf1UwWliqvmrTtTHwMUdwClCapBdXpYLut+RePs0MNCvEhHoWfg=
+	t=1778801070; cv=none; b=cpRr6SxIdDhgHeJf9bpXP1HP4ijifvdLO/8EPfYrRho6nDYsEIkJ4vP4dDguT2OPc9mGzdnx3n/EMBmm0VO0Hi/PikcpZL8Jm+YamNu7wH+PemaJl1Meewm3wxnzW9j3qGHG2mXFDNfui9HQEueASSaSHRF5L8nb21CNObt2lUw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778800864; c=relaxed/simple;
-	bh=woR3eW2vN+nrbzCT/rg9ask53K0weHezP8BYoeNyT2M=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=aYjXRCNymSL10gNNbPw7gUnY7Tvg/49p7J0TngXy1sG+vpx7BfPsPgTSINF0PccEZola5ZOPbPPvoQmToKZflVwKuczUnjEvARpd+0drr3wFExvO68aZPFNla7NTMAG0KqsWcpxh/5Uzy3wpJ9JFz8V/9JGMLU0yNVAGyAATgBU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nbwhgxpG; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778801070; c=relaxed/simple;
+	bh=abcUdZkExVsC3g0gsn6E8bZW1UNFsj1zLdTe3Vx+fWQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=A+3xnEBPNrG19IdV+C62Ob08shD86Axc4U57qZZI6XhFbWXplqEBZJUgVFXXhg9tWkTdRJ5L2FQxareKFLFwteltV1av8DSIcXkNiyaImruq0sWAcGsl2Z2vMdA6Fvk9rT0+cMfVuet47N/Kgb/G+aMxq069J8T4Hkcdk+GOQac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mfTQnb53; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nbwhgxpG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B63B6C2BCB3;
-	Thu, 14 May 2026 23:21:03 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mfTQnb53"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBC2BC2BCB3;
+	Thu, 14 May 2026 23:24:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778800863;
-	bh=woR3eW2vN+nrbzCT/rg9ask53K0weHezP8BYoeNyT2M=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=nbwhgxpGApskI74n3kYSrYrG4UapXenJ8Ooo2EiQkFQcJBsnMSkRZ9So1PTGiX3W5
-	 W1AkRWj2RozGO41ZpgsOoSoea3QXSQzV9iRs/38wuG8UOD3pJr0etlPqp3Xpk06C6y
-	 oWCGf6LZBIZosKcfLytux6o7mm6GE8onYd5/GTyw1Ei7bwqEjETTXYLBaRVdiY3O2H
-	 MUJVj9AEWEgHxkgFnpXFfyYCSHF41RwSoYN7X9KdgOAIlR/S/T0T6EqANxtqaRzIyp
-	 NuDnHKyH6fc9fBdFSREn7Lo5j2HM5FCkXGP56KSAXh1CoRqUmFLuN4zXZZlKvazh3s
-	 UZ2Q/Vls6kRlg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7CD5639E4DB3;
-	Thu, 14 May 2026 23:20:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1778801070;
+	bh=abcUdZkExVsC3g0gsn6E8bZW1UNFsj1zLdTe3Vx+fWQ=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=mfTQnb53M/gyo+fqzJfJZzTPxPGmKkT3RJ4+AAzP+QvQ2ie+CIukFB7Fq7i7WZTvZ
+	 WVPgFSWJzDnRN7dEhuTu1aui7NZnx+ffCTrHYIlBx24UEoNvJxcfYgFWEPPij69/fC
+	 Ha19o3Cpd2GAbRN483e+tDZZzK/qKWd6xHLupty+MF45q5u4NoRHCZLx4DgFTOhHTO
+	 P/5ykig/fy3JB2/H/lnQUD9+F7PjRwDwyCreZ6nMdgwRNE2/mL3HqDFqOdz5Ir3Fgm
+	 7XCYcWiSI5TZUMFI/OffqPM4jq/kRK2c/IiI5xiiqKv6qypIVgTFgwVw11pYe3YcKa
+	 OeDqr0uZm7Anw==
+Date: Thu, 14 May 2026 16:24:29 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Fernando Fernandez Mancera <fmancera@suse.de>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ horms@kernel.org, pabeni@redhat.com, edumazet@google.com,
+ dsahern@kernel.org, davem@davemloft.net
+Subject: Re: [PATCH 3/3 net-next v4] selftests: net: add test for IPv4
+ devconf netlink notifications
+Message-ID: <20260514162429.366b94c9@kernel.org>
+In-Reply-To: <bd560c89-c71f-4ef5-a0fd-5ea096a0f767@suse.de>
+References: <20260510081528.5257-1-fmancera@suse.de>
+	<20260510081528.5257-3-fmancera@suse.de>
+	<20260513193544.47970cb8@kernel.org>
+	<bd560c89-c71f-4ef5-a0fd-5ea096a0f767@suse.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v4 0/2] Support BPF traversal of wakeup sources
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177880080805.121176.5183470343054925054.git-patchwork-notify@kernel.org>
-Date: Thu, 14 May 2026 23:20:08 +0000
-References: <20260511174559.659782-1-wusamuel@google.com>
-In-Reply-To: <20260511174559.659782-1-wusamuel@google.com>
-To: Samuel Wu <wusamuel@google.com>
-Cc: rafael@kernel.org, lenb@kernel.org, pavel@kernel.org,
- gregkh@linuxfoundation.org, dakr@kernel.org, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
- eddyz87@gmail.com, memxor@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, shuah@kernel.org,
- kernel-team@android.com, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, driver-core@lists.linux.dev, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hello:
-
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
-
-On Mon, 11 May 2026 10:45:55 -0700 you wrote:
-> This patchset adds requisite kfuncs for BPF programs to safely traverse
-> wakeup_sources, and puts a config flag around the sysfs interface.
+On Thu, 14 May 2026 11:42:16 +0200 Fernando Fernandez Mancera wrote:
+> On 5/14/26 4:35 AM, Jakub Kicinski wrote:
+> > On Sun, 10 May 2026 10:15:28 +0200 Fernando Fernandez Mancera wrote:  
+> >> Introduce a new test, `ipv4_devconf_notify`, to verify that the kernel
+> >> sends the appropriate netlink notifications when IPv4 devconf parameters
+> >> are modified.
+> >>
+> >> Since YNL currently has a bug where it declares an array of u32 values
+> >> instead of the nested attributes expected by the kernel for devconf set
+> >> operations, a temporary hack (`patched_add_attr`) is included to
+> >> pack the netlink attributes correctly.  
+> > 
+> > Right, YNL doesn't really support the level or weirdness that netconf
+> > requires. Why use YNL? Can't we test this with iproute2?
 > 
-> Currently, a traversal of wakeup sources require going through
-> /sys/class/wakeup/* or /d/wakeup_sources/*. The repeated syscalls to query
-> sysfs is inefficient, as there can be hundreds of wakeup_sources, with each
-> wakeup source also having multiple attributes. debugfs is unstable and
-> insecure.
-> 
-> [...]
+> No, AFAIU, iproute2 does not expose devconf settings. The main user of 
+> IFLA_INET_CONF are netlink libraries and other userspace tools that 
+> heavily rely on netlink operations like NetworkManager, nmstate, nispor, 
+> rust-netlink..
 
-Here is the summary with links:
-  - [v4,1/2] PM: wakeup: Add kfuncs to traverse over wakeup_sources
-    https://git.kernel.org/bpf/bpf-next/c/5ff44955447e
-  - [v4,2/2] selftests/bpf: Add tests for wakeup_sources kfuncs
-    https://git.kernel.org/bpf/bpf-next/c/9ef647114201
+Isn't this ip netconf ?
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> FWIW, I plan to fix the YNL side of things so we have this fixed 
+> properly.
 
+If it adds any hacks or new concepts to YNL it's unlikely to 
+be accepted :(
 
+> But I would prefer if this isn't blocked. Another patchset 
+> introducing IFLA_INET6_CONF support is also coming.. being able to avoid 
+> sysctl usage is quite useful for these userspace tools.
