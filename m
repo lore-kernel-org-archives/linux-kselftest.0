@@ -1,168 +1,176 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC8D93C0A1D
-	for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 11:07:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778756873; cv=none; b=P0HD7BSQzOlOaXya/IVqPVGLzn2ve5rqC0Ox7USdTwd9YqGzmN10a9dICaoUh8tes7/Cx8N+o9VTX9jqWi1v973j2T9jjwx4DZYwHQNtNyNUs6LHlz7QwLcL1/In4fk7we1kpt+9ixifYcxv8HQrLkbk2qH6s//CYYG7rC88tKA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778756873; c=relaxed/simple;
-	bh=95rnVbuPoEqYoOgOEmXgRRLmt/DgdbJJ5HiCjeQHGDU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=raWt2G0sihvB4lXkPr9WNtv1isngpS0e8bfVyxFMI9gdx+WVuWGlYbboxtzp2D+uEvtF+Tquc9tCi0mJx5p2aduv9YlDkb4LKEIHZPOpjHiC1yTSdy+/lNEeFr6tNDq3MNZtT7lnzERFHhC3CpfVevV7OvJZEgFXgHn2QM3kowY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=f95p6boN; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06DCA2DF13B
+	for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 13:19:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.50
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778764767; cv=pass; b=QFabiwxYO5Pd+lOF7OyTzZhVSyCoPL3XNY2uiwB59bM4/sleSBbtRtTrU2eOkJA8rQRySsOXvdZVkCfJ9hKDmzDjTNtSMd3benYRV3hTF4i9zCoMlaWfqy3iMDB4Pbr+EiVD8wMAz1SCjm7xwTQUuRVKjTeQqkEYJXK0MoevZeE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778764767; c=relaxed/simple;
+	bh=9ICCk+OyIj4L7gOwVp8C185KAvEAgb6yccg57WP1JdQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Content-Type; b=fwnJ88I4VWb421RTr7gw9YZ0gwiqBFkTETtwRLrL+49d7KJDJ/LpwKK3xZ/8CcmKRQViaX+E6Td+dS/j9qftxJjsZlRisq8bAYY9RMz0WWvbPtJPyXIFVglwDval7h0yt/yahXx9lBKpDMbWCF3ubOZ3Ex8ACgbpqOIuWjYr8Kw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pXZNxTfb; arc=pass smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="f95p6boN"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1778756866;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=mmxOVGUrnxS/H09zubyapT22aA5Jy+w6JF95xU/Ftgg=;
-	b=f95p6boNQvMtjkUE2lnEr/IiOHV27/IsYTFJo6UlJikUHmiM/OFy4BgiQMKGX/TeJaKMYI
-	HwiL/N9YHnzLcBLm87W0R1p3EBOQ/2HbNGZOHm77ZOlfO9nZ86OsEfxWl3g7NU4YQXj4lE
-	3Pj3/F+r9/l7jlehsJHkshLMhiLv+Cg=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-240-vZArWm47OuSkAV24NUg0SA-1; Thu,
- 14 May 2026 07:07:45 -0400
-X-MC-Unique: vZArWm47OuSkAV24NUg0SA-1
-X-Mimecast-MFC-AGG-ID: vZArWm47OuSkAV24NUg0SA_1778756861
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 588591800611;
-	Thu, 14 May 2026 11:07:41 +0000 (UTC)
-Received: from [192.168.1.153] (headnet01.pony-001.prod.iad2.dc.redhat.com [10.2.32.101])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 41EBE19560A2;
-	Thu, 14 May 2026 11:07:34 +0000 (UTC)
-From: Albert Esteve <aesteve@redhat.com>
-Date: Thu, 14 May 2026 13:06:40 +0200
-Subject: [PATCH v11 4/4] kunit: Add documentation for warning backtrace
- suppression API
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pXZNxTfb"
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-671f1a0d0c5so7918a12.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 06:19:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778764764; cv=none;
+        d=google.com; s=arc-20240605;
+        b=C5lQxZ/kZGT3QLKP5omPKafT+NWXcsSl2B36wes/+GqBxCwJGnOI5jDlEtKmjUiMyo
+         t41DdHWLLBYxmvVOZeGPF0EIMaOwjzLErKVxkCy9sSxT44gb7sNCzF6Ct6V2V6FZURiq
+         8/bVgZf0HuiQuV0XuOErEe1QawhmqksCxiQ4nPeGf+3AxAoD2QLHIoigScfpox56RWQq
+         G8OlXVaf3BSiYQS4jNDmsGH62uPi/B13pk/Blflj78nt8X8MF1bL/bEOiFv/MIOs4rer
+         V8Ze5xdqLoF6hMEtWRlWI9RdzQPyRDGQmt63OVfWIsX2Tn0BKU06fJ6G/Q6PYc4A/5O2
+         1TWw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=y25x6EGUZpuJV22gmOWO4iW0decpRTYPeoGdvBoHF4Q=;
+        fh=oqU9t7hJ/sa3+F3Ua6Jt0byGBDGO+QpTH+ag3c1/Evw=;
+        b=ITna2Y4NJqKZvSAVvqeoCKuQ+IAEmffqXzadjjm0pk1vM6oUPbqEJFrhfx18Kgwrw4
+         JGNmLBvUuDvwqaf7c4XDM8oODSf3O0UdGJE7/by5MAPUVdEmGY1u5EMNOzL487ytYvG7
+         TG2aFmS7TruC6o9O90QMSHQbIan1u8K37Kb8qkh/yL/35YND8RnhKR+8smRiO50QpvaO
+         P+phLrNNgHkf5xadssiSZeuBeqSGrniuEbyAPLCTWhWBJpSH0gAoIRFkUBbFw/MmX8ue
+         yQ/l4Ry3PnU2cgVr2RDI89Gvfxhx7x+o+2YPWqkwR4UEqbeaoLgN5B6cSvcMsT4oRSMJ
+         pC2g==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1778764764; x=1779369564; darn=vger.kernel.org;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=y25x6EGUZpuJV22gmOWO4iW0decpRTYPeoGdvBoHF4Q=;
+        b=pXZNxTfbZCpaIuLlsxLdzI9HtwQPuoYWNY7ATKkxYVhb3JgQ1foNjBMztkaUN3dr2x
+         OcHRT3+hu+n4XyuoU7HIQh5ZYscUFDJAQgaCJJHHqtF1nwsW8R9rInewkjUuFBi8lCII
+         pA31gJGhQ+XG6h3iEN9jrWg1j4bw+QtT6sBHeMbbJ72RE7LwQiXwHOosejMUwYxeIipd
+         clfiobpfLtuYaS9t8I4/+sQg4E2ujkDnH09pr6ERb+kIMs7wgdubv9POlEIxHR0cRHkD
+         3z85ZIGFKu4eteXYc+CsWs3QqinimvG7aGpNje+n73fKZcjjMQUgvyzGhkHQiMxh/dGQ
+         S9Qw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778764764; x=1779369564;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=y25x6EGUZpuJV22gmOWO4iW0decpRTYPeoGdvBoHF4Q=;
+        b=QtLqUS1aARqxfTpU0ItubDrabRF1+w+E1jvEJJt2taesN93JcreVJoyBFAqFoP/XFb
+         ygSi5alI4sVVefUP+atuC9i0pRbyqhDicA0KrMXLfwq6ZHRR7Po8Ej3OQqf1uyqrNvXv
+         vB0Fb2E56olcH8YPcRPcDOMPLXa24ckO9KUpVrgBQk0ePzMDXt661qb3fvy1NABibmTp
+         aH5eApFRvmwX0dEJwzjdClklCKkza3Cs80w6Dx+Mqy44sYEqatR8JBlFo5SPGMRMboHJ
+         AUKh5Kc+1IjFt/zOHbfjEueXLe1HHm6xN843GcS4Dmt6G9dRBqrO1EClx67ZEIoZ7Gm9
+         +JAg==
+X-Forwarded-Encrypted: i=1; AFNElJ+w1N0EQl2dO5DI7l52q5cFPnIgH7v9/YPnr7CifUWsC2YgZE3M3vBKTyjL5eYw4tcfcYiit+601X8+LSsc814=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzAMiOynPbNLj5PhWdxaW+FZpNX+wz0gkoXc3T1SgHDLgLXltvq
+	J4rULrBrvNF5ZY9Vm4mRCbbm3KjWZWMFLOz02bw5TWe+ngLq25hBra+1KYLACIVFCFKEVwRUuZP
+	923eJ4rDRh4M0Z5i8HeG/pxqbIOeBKrW5zLMLuflo
+X-Gm-Gg: Acq92OFtNIfDxOr4K+4ivEKyYBeqb4ZewR8U2AiwUiHgM5G3rkAfLtBXUqPAj0UjWby
+	ZbFEpU2bfnt3UdVCyb5GJDmoIMYH+Z4LomtcOr5FkzeJfAAjb2HblSpLbH3Zy7eEHtxx3Zl8Wfx
+	AlQ0BtAt+37aNE8QuN6XL13a4QskOa27LzXvZd3oI0ejec71uj6xRt2UlO842gRSlolcRQM3Ptj
+	D0Cuirhy5ktfxVvzXQSjUXkaY6yAu6i21EKoCkXVMUe8fLOv/hJYp2ZvZkp9ccfvbDZpI1ua5LV
+	JWS6MI5lPzq3F90xGw==
+X-Received: by 2002:a05:6402:2238:b0:670:9e9f:1a5e with SMTP id
+ 4fb4d7f45d1cf-6830f43b08emr39904a12.2.1778764763802; Thu, 14 May 2026
+ 06:19:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260514-kunit_add_support-v11-4-b36a530a6d8f@redhat.com>
-References: <20260514-kunit_add_support-v11-0-b36a530a6d8f@redhat.com>
-In-Reply-To: <20260514-kunit_add_support-v11-0-b36a530a6d8f@redhat.com>
-To: Arnd Bergmann <arnd@arndb.de>, 
- Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, 
- Rae Moar <raemoar63@gmail.com>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
- Andrew Morton <akpm@linux-foundation.org>, Paul Walmsley <pjw@kernel.org>, 
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
- Alexandre Ghiti <alex@ghiti.fr>
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
- dri-devel@lists.freedesktop.org, workflows@vger.kernel.org, 
- linux-riscv@lists.infradead.org, linux-doc@vger.kernel.org, 
- peterz@infradead.org, Guenter Roeck <linux@roeck-us.net>, 
- Linux Kernel Functional Testing <lkft@linaro.org>, 
- Alessandro Carminati <acarmina@redhat.com>, 
- Albert Esteve <aesteve@redhat.com>, Dan Carpenter <error27@gmail.com>, 
- Kees Cook <kees@kernel.org>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1778756819; l=2728;
- i=aesteve@redhat.com; s=20260303; h=from:subject:message-id;
- bh=YX7AMC4Z3qCvd9o2GGoQ6LMsoUJS/dulVvDsXv5Qzg4=;
- b=UCVRctm1Cbo6eZtFp+7OFgg3RKq19as80DJZzBTZLnrct+Fr9AO008Ob+YqtH/4TgueyVolOH
- JxVmzFZHMagDclzSc852PEcOuL7d5KEuMDrtZY+XHoufMeROYCCbMYv
-X-Developer-Key: i=aesteve@redhat.com; a=ed25519;
- pk=YSFz6sOHd2L45+Fr8DIvHTi6lSIjhLZ5T+rkxspJt1s=
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+References: <20260513224608.1859737-1-jmattson@google.com> <20260513224608.1859737-4-jmattson@google.com>
+In-Reply-To: <20260513224608.1859737-4-jmattson@google.com>
+From: Jim Mattson <jmattson@google.com>
+Date: Thu, 14 May 2026 06:19:11 -0700
+X-Gm-Features: AVHnY4LivttTNL3HjqWlJlQ4S9FC-nQBWB86x_2g_vxGuW5W--oiKXnJqk7-Eb0
+Message-ID: <CALMp9eS4s9tsOmvDUDeqS7oph0mSHyhxBiULQdwHVaG+7gXLSQ@mail.gmail.com>
+Subject: Re: [PATCH v3 3/4] KVM: x86: Virtualize AMD CPUID faulting
+To: seanjc@google.com, pbonzini@redhat.com, tglx@kernel.org, mingo@redhat.com, 
+	bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, 
+	shuah@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, ctpence@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Guenter Roeck <linux@roeck-us.net>
+On Wed, May 13, 2026 at 3:46=E2=80=AFPM Jim Mattson <jmattson@google.com> w=
+rote:
+>
+> On AMD CPUs, CPUID faulting support is advertised via
+> CPUID.80000021H:EAX.CpuidUserDis[bit 17] and enabled by setting
+> HWCR.CpuidUserDis[bit 35].
+>
+> Advertise the feature to userspace regardless of host CPU support. Allow
+> writes to HWCR to set bit 35 when the guest CPUID advertises
+> CpuidUserDis. Update cpuid_fault_enabled() to check HWCR.CpuidUserDis
+> as well as MSR_FEATURE_ENABLES.CPUID_GP_ON_CPL_GT_0.
+>
+> Signed-off-by: Jim Mattson <jmattson@google.com>
+> ---
+>  arch/x86/include/asm/msr-index.h |  1 +
+>  arch/x86/kvm/cpuid.c             |  2 +-
+>  arch/x86/kvm/cpuid.h             |  5 +++--
+>  arch/x86/kvm/x86.c               | 18 ++++++++++++------
+>  4 files changed, 17 insertions(+), 9 deletions(-)
+>
+> diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-=
+index.h
+> index 6673601246b3..0eeae121b0a6 100644
+> --- a/arch/x86/include/asm/msr-index.h
+> +++ b/arch/x86/include/asm/msr-index.h
+> @@ -888,6 +888,7 @@
+>  #define MSR_K7_HWCR_IRPERF_EN_BIT      30
+>  #define MSR_K7_HWCR_IRPERF_EN          BIT_ULL(MSR_K7_HWCR_IRPERF_EN_BIT=
+)
+>  #define MSR_K7_HWCR_CPUID_USER_DIS_BIT 35
+> +#define MSR_K7_HWCR_CPUID_USER_DIS     BIT_ULL(MSR_K7_HWCR_CPUID_USER_DI=
+S_BIT)
+>  #define MSR_K7_FID_VID_CTL             0xc0010041
+>  #define MSR_K7_FID_VID_STATUS          0xc0010042
+>  #define MSR_K7_HWCR_CPB_DIS_BIT                25
+> diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
+> index 1c95d1fa3ead..8e5340dd2621 100644
+> --- a/arch/x86/kvm/cpuid.c
+> +++ b/arch/x86/kvm/cpuid.c
+> @@ -1248,7 +1248,7 @@ void kvm_initialize_cpu_caps(void)
+>                 F(AUTOIBRS),
+>                 EMULATED_F(NO_SMM_CTL_MSR),
+>                 /* PrefetchCtlMsr */
+> -               /* GpOnUserCpuid */
+> +               EMULATED_F(GP_ON_USER_CPUID),
+>                 /* EPSF */
+>                 F(PREFETCHI),
+>                 F(AVX512_BMM),
+> diff --git a/arch/x86/kvm/cpuid.h b/arch/x86/kvm/cpuid.h
+> index 95d09ccbf951..fc96ba86c644 100644
+> --- a/arch/x86/kvm/cpuid.h
+> +++ b/arch/x86/kvm/cpuid.h
+> @@ -185,8 +185,9 @@ static inline int guest_cpuid_stepping(struct kvm_vcp=
+u *vcpu)
+>
+>  static inline bool cpuid_fault_enabled(struct kvm_vcpu *vcpu)
+>  {
+> -       return vcpu->arch.msr_misc_features_enables &
+> -                 MSR_MISC_FEATURES_ENABLES_CPUID_FAULT;
+> +       return (vcpu->arch.msr_misc_features_enables &
+> +               MSR_MISC_FEATURES_ENABLES_CPUID_FAULT) ||
+> +               (vcpu->arch.msr_hwcr & MSR_K7_HWCR_CPUID_USER_DIS);
+>  }
 
-Document API functions for suppressing warning backtraces.
+Sashiko raises a good point here about a pre-existing issue that
+probably warrants a fix before propagating it further:
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-Acked-by: Dan Carpenter <dan.carpenter@linaro.org>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Alessandro Carminati <acarmina@redhat.com>
-Reviewed-by: David Gow <david@davidgow.net>
-Signed-off-by: Albert Esteve <aesteve@redhat.com>
----
- Documentation/dev-tools/kunit/usage.rst | 46 ++++++++++++++++++++++++++++++++-
- 1 file changed, 45 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
-index ebd06f5ea4550..1c78dfff94e8a 100644
---- a/Documentation/dev-tools/kunit/usage.rst
-+++ b/Documentation/dev-tools/kunit/usage.rst
-@@ -157,6 +157,50 @@ Alternatively, one can take full control over the error message by using
- 	if (some_setup_function())
- 		KUNIT_FAIL(test, "Failed to setup thing for testing");
- 
-+Suppressing warning backtraces
-+------------------------------
-+
-+Some unit tests trigger warning backtraces either intentionally or as a side
-+effect. Such backtraces are normally undesirable since they distract from
-+the actual test and may result in the impression that there is a problem.
-+
-+Backtraces can be suppressed with **task-scoped suppression**: while
-+suppression is active on the current task, the backtrace and stack dump from
-+``WARN*()``, ``WARN_ON*()``, and related macros on that task are suppressed.
-+Two API forms are available.
-+
-+- Scoped suppression is the simplest form. Wrap the code that triggers
-+  warnings in a ``kunit_warning_suppress()`` block:
-+
-+.. code-block:: c
-+
-+	static void some_test(struct kunit *test)
-+	{
-+		kunit_warning_suppress(test) {
-+			trigger_backtrace();
-+			KUNIT_EXPECT_SUPPRESSED_WARNING_COUNT(test, 1);
-+		}
-+	}
-+
-+.. note::
-+   The warning count must be checked inside the block; the suppression handle
-+   is not accessible after the block exits.
-+
-+- Direct functions return an explicit handle pointer. Use them when the handle
-+  needs to be retained or passed across helper functions:
-+
-+.. code-block:: c
-+
-+	static void some_test(struct kunit *test)
-+	{
-+		struct kunit_suppressed_warning *w;
-+
-+		w = kunit_start_suppress_warning(test);
-+		trigger_backtrace();
-+		kunit_end_suppress_warning(test, w);
-+
-+		KUNIT_EXPECT_EQ(test, kunit_suppressed_warning_count(w), 1);
-+	}
- 
- Test Suites
- ~~~~~~~~~~~
-@@ -1211,4 +1255,4 @@ For example:
- 		dev_managed_string = devm_kstrdup(fake_device, "Hello, World!");
- 
- 		// Everything is cleaned up automatically when the test ends.
--	}
-\ No newline at end of file
-+	}
-
--- 
-2.53.0
-
+> Does this emulation of CPUID faulting respect architectural fault priorit=
+ies in a nested virtualization scenario?
+> According to the AMD APM, if CPUID faulting is enabled, a #GP fault takes=
+ precedence over a CPUID VM-exit intercept.
+> Because KVM emulates CPUID faulting in kvm_emulate_cpuid(), the fault che=
+ck happens after nested VM-exit intercept checks. If an L1 hypervisor enabl=
+es both CPUID faulting and a CPUID VM-exit intercept, L0's nested exit hand=
+lers will observe L1's intercept request and immediately reflect the VM-exi=
+t to L1.
+> Since this reflection happens before evaluating kvm_emulate_cpuid(), does=
+ this allow L2 guests to completely bypass the CPUID faulting restrictions =
+imposed by L1?
