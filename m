@@ -1,173 +1,147 @@
-Received: from mail-yx1-f53.google.com (mail-yx1-f53.google.com [74.125.224.53])
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8CEE38F623
-	for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 17:51:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6364726FA7A
+	for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 18:01:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.42
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778781090; cv=pass; b=SssPOOw763BmQKmxXjoLHsuNggzzukKFyqqX7XTK/iOFAZP93AuAiFx8xymWdqDr7loH4DAFMOQVqMFLeAvpfPloC+HobIUG9S9UnucLN+/neIAF1m472naXUk0RUrSnGbeVhMkhyItw0XdHLeeW4Z6RhabVUUCLWoopDG7y30g=
+	t=1778781710; cv=pass; b=ILCRqKlO0JTjjZEMehrN+j2d6fpFoiCEBWanIRRNIRmSAro1RlkV8jCcrRNaa52ZAXvvJEujPqFkRfYg5ClYJBnY2DYKHTNEVZaJVxbqvgHNVyABiAqTJMaWVE7uChRp6uclML9EiONADwg/Ai0uEL+nF9PIe9Pt66ABT2ftiuA=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778781090; c=relaxed/simple;
-	bh=oEZTFGT/zsbjhwuKvWnfYPy3McEOR01XWhw4l9V3p8s=;
+	s=arc-20240116; t=1778781710; c=relaxed/simple;
+	bh=bz7VCAlC3pS/IeMmBV0BkER+XEA2HS4Ltbcv/N+3xv8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oFYTY+8reKmPXdOda720LVliyNxx8sIDS3RfHE3jL8tb19C85j29c7jRn5isL08+t20Z8NkA7mCR7gdNC9bj3hvW8zGNd7B08UOaWxa2Rj2/UAdwEk1yc640LVEOs3mtWVcvRM4OBasp7S9+jaHpxdNMPfflpMp2t/6N9i6UebM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WYOv8U9k; arc=pass smtp.client-ip=74.125.224.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=Qh/wKBU6pVWpuR7e9tGNK1RIxHPBmU1Hny4vjjNmcaxKy6If4xkdVYsldphcJjJKmFUUj+U07o0X0TWSel1Wu9i+h3EH+KjSBTm4ARheGzUUvEMe987u287bn0sokjx34k5mWWcmoiPMMAvh3kVXX391ja310EKfwwSFaTOtJa8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fYWdx6Fu; arc=pass smtp.client-ip=209.85.208.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WYOv8U9k"
-Received: by mail-yx1-f53.google.com with SMTP id 956f58d0204a3-65c24be9e4bso10586055d50.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 10:51:28 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778781088; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fYWdx6Fu"
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-671588ab0cfso233a12.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 11:01:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778781708; cv=none;
         d=google.com; s=arc-20240605;
-        b=fTWm+JKEFMbfqxYlMK+CCorIMMAExsvcg6TmrABmu3KQxuqC3t4eAtkaxZPOEnwoYQ
-         hrRLl/XRUuEUbnbOW4E8ZkP5xZtsbWvbBlLl5MLtXPTQ1917hW073kBEaRlg6ET2TXBp
-         naLzbLO/C85ixzcpMAWPuoWlE/U06c3N1u+Mn0PqXt6rz+ns9kSIWFcNOtGg8PIXAOG1
-         +GooHtB3lsFWIV4lWVwURdaATmrJ1tqW13+e1vFKBEsKXHY7PqvlTTrcIJpFyBacxzjE
-         nQ+fXspFMSzEiclbFRWwww0t86rKi6W9bVe8IQIkQg1BfOOgky5IHxcX70DIR1UjcU35
-         eycg==
+        b=EHvYpsKko9zNkty+tyrdsDrjxVxySXHVlTN0cD9u3Rcw2S3FZiLvsRfQ8XC/VXg7iu
+         zUwvySBDpjSBNlSzat633PcDe7X7LdAQS5heD92ad8jsYIBMoiR7LUb9inOW/ZFgcV1Z
+         2GvNKqoJCi8BzmbrfAE2DkU2jlEk5kxypEnBwZIn2d426VMDjRG4z4EFQXbPCQekSGxA
+         YjyACk1q3nn4lLIt+amOt5Vvy9M1GEfcL3em3CNZ5UL3luzDYFeHf+zYd9wmweHZThkj
+         gMwSbRIWYgal/DWXRZs8DKdL6hbpbMPdJWF0C1t+3VDSmN8JXYu4UJg8XpdIT8PwgghP
+         Ihlw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=6wDiBZDMexEMEADEYdo6MQjjkOCysVPN+9Ft5KwrZRw=;
-        fh=3wC3erM940HAMGkO5UNSUoKWZ0WvMQzlPKEP1S8fxPE=;
-        b=erJU0tfsCYlpqsBvml2LVx3MuC+xz9aAdDXyZn0btpIS9gWvzCe/s/xaBxv1q25e43
-         3NSA8vqab+UdHysGLao8He8Qv95it73gZ5wm/fzTtEFFUs0ttHujYF5OAUkZK2SZCD6H
-         HE+CRZ4op2E2ZmJci+5cQxPdx/P8p4rJJ+lKMob2Q//i+2Wk/NvogTY5Qg28tLOLcEbr
-         Xe+yNRr3SRd10VkSjGxS3zvdPbUIb6C9t7P2+I6iIspTerTUSih1ufEsEoTzXvT3lfUq
-         e8LchksYBJ2xqso4G7WLxlHk2Hm0oqJj6WDNgDQJ+sBZ0TZTFfE65jQAnQDNjXID+PJH
-         Kh2Q==;
+        bh=EuQv+2Xkz0PPaxnC48IjSJx36n2gfqEKQS5cw1hUKio=;
+        fh=wudiYYz83dQqtduLjPuPU064sLXIGUdCUizx2h2/RDs=;
+        b=gB/vRJa9zxUVyUZJZdxv9UfxmF7+e4T3a2nJaFsdh318rK+2sWN5NZl6FTazsfYZQ/
+         XNT3J1pSpPbcOqez0xwZcgdBbJL4y1DR05hfJu9onM4nMlBVdCY2MMkvsa3JQeiHkHvL
+         0T4k5qo10NiU9GlLpcLtxP522uSjMgkJSqfGQ4rIg62srqPM1zusnN8aX4luoZUPprQH
+         cZo7G+JyjDbBJ4W32RQVmKwJYyppubP2DMi7Gq1SSMAkYucvB6awY+S8O5AkkB33b3AZ
+         klpAioeAAhqWh4+nfbeKMco1SIFXogZZiPzWbbUdAnvqLuIBInTL2ComYY57j/92sOxj
+         pBzQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778781088; x=1779385888; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1778781708; x=1779386508; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6wDiBZDMexEMEADEYdo6MQjjkOCysVPN+9Ft5KwrZRw=;
-        b=WYOv8U9kRDVZWcHQGhZunhQgkMDOaeuANoqDV6EQmSWDBtReTLpolS3t154WTR3lb2
-         8NHD5SZKRdBYk3aFv2Qzejs54BC99AnBhyuZeD6Yeq+MU/icS/UV5gOx7Tyhq8vt8AXk
-         qkmmT5IUG6o1/2peFbqHZ2H6SvC1BAqQgodC9Bd0OPUPMB7peIvD9/51aUCwAGGa1Lnu
-         lQB188mz52MAGzutTME0f9eJWFkWGZ5QFTKJp9bM0vvnHLNxa9H2lDODY+IX/Y/Bge/k
-         fN8PZ9DTmWmWQeZvrpqDKjtzOxnYou5pMYmESdR1k3p9HBA7B+rnsRTvPiQvxOWdvKVd
-         5cQw==
+        bh=EuQv+2Xkz0PPaxnC48IjSJx36n2gfqEKQS5cw1hUKio=;
+        b=fYWdx6FuylmeL6AEPs1v1BZCWiwwYRGNMJU298q5jhhvA8uXhRsfXdKi1i2wubCysF
+         iGPfzgB72+ms/uYUjkUiYdJ1ZSWCv4yGhvnCHwrVcTviS22DtMwIPCTA0a8l4MYk/03/
+         EGvi744rELnAciy7Ribin1jZifIHnapJqmFNEI7teKXjV/pYgFSh1t8R5F4A3Zp9HOCo
+         jEyIFEewpolulBuL747Uo03+Yb0gP7YMDDM6lNmEpKSYpiea+w4KI2ZtyqTH2wvcveK1
+         bKMOur80bD6BhMdpA0/Myc3wKcWuzb7NS90Vj+ornrcEgMg5/l4l0Iie5c0SA22g5rnP
+         1aQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778781088; x=1779385888;
+        d=1e100.net; s=20251104; t=1778781708; x=1779386508;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=6wDiBZDMexEMEADEYdo6MQjjkOCysVPN+9Ft5KwrZRw=;
-        b=agG1manc/DSN+aQVHcvL8yGi3lgas6CCWOUBZ6HItYpSPmZi60CVosSnR6GjxgFv5c
-         q1W9QuOc++ioqgEuXw2wsMhCwi6TiKijKpCjwLZ6ukMDzKFXBBgF9+H2XUDLok8PP/3Q
-         9kVR8F83UPXtJ1bmDWC9AfDrxuOm7v8IFnflhCSCWgLiCwksKHRZjA/4gxfmaR/0CShm
-         rN6UdhojyVOoM7I3HNWJQzsX5S8m08417i/ikgufTOFAlL3+iDH4jLL0Ksk37f80Ijdk
-         v8WlxqgpWAvVTquso5xk9VwyKPBago5N+B00lyM8owCypm4iNMiptPIHu7cDsGD24/rf
-         zRBQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+ss4HGf7hsQ5SxX6Dl1OVSc+rCJSDz6B8G52KP4qsb/HM4O+Ennz2rMfAElXjmy7x+U1QHvNoixM69YM58wLM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzKiAGp2vORHefpHdnY+aLWPcVxWRKSgFd78kZDhP5IMQ9KHgYE
-	dOXp7ICNgldon1FBx0XC46g8X9R+cMLMOJmTXT1mjn0/6W81BhWr2yihImu4WZYt3du7UNPLOtV
-	eC51vupnXwIMzk/jzjI/2xRCwv1+VcI4=
-X-Gm-Gg: Acq92OHT0e44g6ZmtYbK98HrVEgEAU9JiMA0QKmxho3kpYHAoHBEuJGEG/JCAHUHbEh
-	YrZf3HD0ROyAI7o6nhXfLdjA0JMmHIe7rv7CJeC+KKDw0WVrmx5bmTmvU0e0EpXoOyiUgElkV5b
-	VoAkYyfegdwz25DSDjB+kubKit7wtbmO+7/FFr2oOlUo7tqVmatpK9r/S+BsicA1A/Fiz9/5vzM
-	7QuoaM/LQErv1uxKl41jbOvA06V/Hqc6nm64irbw8A4wnu8SGvzwHjPuKMj/B5611znSehrdIMD
-	C9a1Q6AC5bjL/qPTqZ4jUXq2KWRDWBYLufjzPgwgb50XdtBba6LbYKRPfOKNXSZHrxphY7NRfpK
-	Jxxrn
-X-Received: by 2002:a53:c049:0:10b0:651:c047:f09c with SMTP id
- 956f58d0204a3-65e227d52f7mr245379d50.39.1778781087600; Thu, 14 May 2026
- 10:51:27 -0700 (PDT)
+        bh=EuQv+2Xkz0PPaxnC48IjSJx36n2gfqEKQS5cw1hUKio=;
+        b=liQYktFJ56teCwooObJ+k05CCwaoYXhENvFitF4WDJZyll0BX/EPnbAHruTKuZNcW0
+         5YFvD25NeI/K8Nstv8Cbwn+5RKwPvCflCmDmJn1np0Sqe4WTiunqENBvqu5ZCw7L6T0o
+         xeIMdrLGtWoadCy7UtDf7PofmSxjW4Lk911ahZz9UmHqQQYFlALoEjNJnBSsZ3Tafkq3
+         ENZtGUBVlgHPvd3NxcqIGJRswO/hwgPMNX6/ZsV/6xNN6h8pT7E1I/sAA0NrqRyhXVaS
+         kFyYFIga5CM9E8CrPeUWGy8Jkim6LzM9ur2kQGx1LeAlma1HcxPmxz6lXQv/TLGY+Ylr
+         E9dA==
+X-Forwarded-Encrypted: i=1; AFNElJ8XWC+Up9WiQYAegu+JLVNEi/ZD7TpXOcby3d6Vo9TLTROnkY50YX0wJAVNBTN9usRKLJCGmsFTNotQbiAisEM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YytLUEly2Xh+MgxoR7N6RMi/Re7fCD87AfA28vUtR/lDm2OBG8g
+	TURVydSSZYC6o1L8HU6kQM0A947f3wWRA6hDN+X7i6vfLNShZz1ycX/vT5VrHTBbqFp2udGdrLu
+	tCXTvR5fTruYdPLRMzLJyOpyEkc3C0aUB6xStO/U4
+X-Gm-Gg: Acq92OHE3h+ndt7EpX+U4MjUQXGuPV5hE2VZAI/QZYThJju5XphsYadSgYpF+62s/Pj
+	kVymmeWA7cHaeafnUeDeR/ZJX2hlQtXDTKhBbUOc7NOrJQehQ0sjNmiwydAedh1De7bWjAKku9K
+	OGXETY1tOdyenFWWA3OF7Thq+bzLMa7WvnoApg/vERqkmsF4XUM//c8uQDcZ3qG/ju+o+zEFlj6
+	UtvEjTNdcUOIQ6t5ICzWHxFtviKXrBDJgc2OyMrTmHeXOg8/YR5Q2ZNnvi4CG0Oh/rNJE8Iq+GB
+	rDBL2cYLaoQObxFKQO9ltzxT7Uag
+X-Received: by 2002:a05:6402:46c9:b0:67b:6d1c:9585 with SMTP id
+ 4fb4d7f45d1cf-683c02f0f2amr4920a12.8.1778781707399; Thu, 14 May 2026 11:01:47
+ -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260512-getsock_three-v2-0-30b7b22ef14c@debian.org>
-In-Reply-To: <20260512-getsock_three-v2-0-30b7b22ef14c@debian.org>
-From: Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Date: Thu, 14 May 2026 13:51:16 -0400
-X-Gm-Features: AVHnY4LxOXAY7x1GGPoD-ZrWMAi2sQqAU3A0fF7icss2dq6JW-g14LN3XOF-d6E
-Message-ID: <CABBYNZ+nvtMHcU9but5VEG891vyO=K0MF3OAGofANxzdLVmw-g@mail.gmail.com>
-Subject: Re: [PATCH net-next v2 0/6] Bluetooth: convert remaining bluetooth
- socket families to getsockopt_iter
-To: Breno Leitao <leitao@debian.org>
-Cc: Marcel Holtmann <marcel@holtmann.org>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, linux-bluetooth@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
+References: <20260513224608.1859737-1-jmattson@google.com> <20260513224608.1859737-4-jmattson@google.com>
+ <CALMp9eS4s9tsOmvDUDeqS7oph0mSHyhxBiULQdwHVaG+7gXLSQ@mail.gmail.com>
+ <agXcKDjnJc9DPcyr@google.com> <CALMp9eS831M153QmAgjzJcR2dFY_wCCCzDisd7_T6GyS3-gAFw@mail.gmail.com>
+ <agX2SJF3rJSkIqDe@google.com> <CALMp9eQTSxFkVf4vV83yNYvv2AjseHYiD3M68mcc951L4U1Jxw@mail.gmail.com>
+ <agX5v1utAfyMadPm@google.com>
+In-Reply-To: <agX5v1utAfyMadPm@google.com>
+From: Jim Mattson <jmattson@google.com>
+Date: Thu, 14 May 2026 11:01:33 -0700
+X-Gm-Features: AVHnY4LLIpTGXClPtZ3NIuJ5IjxRpd6GGNfBMTLD-JMB8crD1vsnQ7OTTrR2bno
+Message-ID: <CALMp9eQqbHrcV1_WM+5xUR16OpGk+unxoZGi+=t55cqVhFgAfQ@mail.gmail.com>
+Subject: Re: [PATCH v3 3/4] KVM: x86: Virtualize AMD CPUID faulting
+To: Sean Christopherson <seanjc@google.com>, "Kaplan, David" <David.Kaplan@amd.com>
+Cc: pbonzini@redhat.com, tglx@kernel.org, mingo@redhat.com, bp@alien8.de, 
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, shuah@kernel.org, 
+	kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, ctpence@google.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Breno,
+On Thu, May 14, 2026 at 9:35=E2=80=AFAM Sean Christopherson <seanjc@google.=
+com> wrote:
+>
+> On Thu, May 14, 2026, Jim Mattson wrote:
+> > On Thu, May 14, 2026 at 9:20=E2=80=AFAM Sean Christopherson <seanjc@goo=
+gle.com> wrote:
+> > > Oooh, this is based on the generic CPL rules.  I didn't think about i=
+t from that
+> > > perspective.  So yeah, addressing that does make sense.  What a pain.
+> >
+> > When I fix this in version 4, what's the correct footer for Sashiko att=
+ribution:
+> >
+> > Assisted-by: Sashiko:gemini/gemini-3.1-pro-preview
+> >
+> > or
+> >
+> > Reported-by: Sashiko:gemini/gemini-3.1-pro-preview
+>
+> This, or even just:
+>
+>   Reported-by: Sashiko
+>
+> is good enough for me.  I don't expect random developers to know or care =
+what
+> model was used, at least not when it comes to reporting bugs.  If you use=
+ AI to
+> help write the code, then maybe I'd care?
 
-On Tue, May 12, 2026 at 7:12=E2=80=AFAM Breno Leitao <leitao@debian.org> wr=
-ote:
->
-> Continue the conversion to .getsockopt_iter for the Bluetooth socket
-> families: hci_sock, ISO, RFCOMM, SCO and L2CAP. The first patch is a
-> small precursor that fixes a long-standing 1-byte put_user write in
-> hci_sock_getsockopt_old() so the subsequent conversion stays mechanical.
->
-> The riskiest change in this series is the SCO BT_CODEC conversion: it
-> is the only one that drops an open-coded ptr cursor in favour of
-> relying on iter_out advancing naturally on every copy_to_iter() call.
-> Every other socket option is a near-mechanical s/copy_to_user/
-> copy_to_iter/ rewrite, but BT_CODEC walks a variable-length list of
-> codecs + capabilities and previously tracked its own write offset by
-> hand. Getting the cursor semantics wrong here would silently truncate
-> or misalign user-visible codec data.
->
-> For more context about the motivation for this change, please check
-> commit 67fab22a7ad ("net: add getsockopt_iter callback to proto_ops")
->
-> Signed-off-by: Breno Leitao <leitao@debian.org>
-> ---
-> Changes in v2:
-> - rebase the tree on top of bluetooth-next.
-> - Remove the selftest, which was mixing network and bluetooth together.
-> - Link to v1: https://patch.msgid.link/20260511-getsock_three-v1-0-1461fa=
-8786ab@debian.org
->
-> To: Marcel Holtmann <marcel@holtmann.org>
-> To: Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-> Cc: linux-bluetooth@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
->
-> ---
-> Breno Leitao (6):
->       Bluetooth: hci_sock: write the full optval for getsockopt
->       Bluetooth: hci_sock: convert to getsockopt_iter
->       Bluetooth: ISO: convert to getsockopt_iter
->       Bluetooth: RFCOMM: convert to getsockopt_iter
->       Bluetooth: L2CAP: convert to getsockopt_iter
->       Bluetooth: SCO: convert to getsockopt_iter
->
->  net/bluetooth/hci_sock.c    | 26 +++++++++++--------
->  net/bluetooth/iso.c         | 27 ++++++++++----------
->  net/bluetooth/l2cap_sock.c  | 61 +++++++++++++++++++++++++++------------=
-------
->  net/bluetooth/rfcomm/sock.c | 30 ++++++++++++----------
->  net/bluetooth/sco.c         | 59 ++++++++++++++++++++++-----------------=
-----
->  5 files changed, 114 insertions(+), 89 deletions(-)
-> ---
-> base-commit: c2f0079e8c42fd6814c8d6b1491e3ce0a0e3b3fa
-> change-id: 20260511-getsock_three-d0d7f1b2629e
->
-> Best regards,
-> --
-> Breno Leitao <leitao@debian.org>
+I had Jetski write an empirical test to see how the hardware behaves.
+On the first userspace CPUID VM-exit, temporarily set #GP on userspace
+CPUID per the appropriate vendor's mechanism, make sure that we
+intercept #GP, and re-enter the guest without advancing RIP. Then, see
+what the next VM-exit is.
 
-There are some comments from sashiko on this:
+Surprise!
 
-https://sashiko.dev/#/patchset/20260512-getsock_three-v2-0-30b7b22ef14c%40d=
-ebian.org
+kvm_intel: KVM: EMPIRICAL TEST RESULT: #GP took precedence over CPUID VM-ex=
+it
+kvm_amd: KVM: EMPIRICAL TEST RESULT (SVM): CPUID VM-exit took
+precedence over #GP!
 
-Now Im not sure the truncating is actually used by our tools, but that
-sounds like it could break userspace if we don't check properly, or
-have you already done this for other socket families and it was
-considered to be ok?
+LOL!
 
---=20
-Luiz Augusto von Dentz
+David: Is this intentional or a bug?
