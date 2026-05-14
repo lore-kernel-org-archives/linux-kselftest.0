@@ -1,173 +1,202 @@
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F106E2253FC
-	for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 01:50:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86A4A31D72E
+	for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 01:58:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778723423; cv=none; b=EJ31/8WKFmLQ0iqdIZ9iojeM1rYFodkT/Q8ZWUaxdjOSBpdrMkKrSGv0Ufe55UmUEg7VmXtfuey5o5SsCiXK6rxm1vHZN3wC22wNpb9ZUK0huC71v37t8j76pWhRe53ScyfsaVkAOf6iOfre5PLJBKMVClIe7YEzdj2P/Lvfi3c=
+	t=1778723884; cv=none; b=fCfU6hoSjrZD89I+Otd+aIT4yGV30nV/Jsj43F8+wpg1bDV7eXRGO3J9THgagDgPKoJYfQhFNP6IssR0zGwv5pjTaIEPa5Nbps1JdEDH1ZhjU8DCHruu8FTM/KXAGPOgm49Ee2NvjjNS+jvtfnkadEZPuv6mCbkbpRlbMBszWvo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778723423; c=relaxed/simple;
-	bh=b1SJCsRjN4qVXBbXXcSZ8S481JDIBqIMGFIaGROaXd4=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=FhLLLQAsnaulluIneeUcQnizRTCWbnA01Rg+dJTIyROAPOO0M85H9bVT4Ed6854PJhAILFv/R7Xetpy0R3j/oOGHMFxfiZVtQrmOOzuZuoaDNjdRYxwARYQ5JHM67Bp3GCTLXG+/bQKqRRw/0V/XIGHU7cy/lAlubchMeOqbnT8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gD2c1quL; arc=none smtp.client-ip=209.85.167.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1778723884; c=relaxed/simple;
+	bh=QSENlRK6PdQcsKY4C3zA8cBazFvH+owMvKs28lxS/eo=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=n+mECSCmpxCgwo8KMq2fEX+qspBmSHo+8a2iOa6FQciL5sf+whjjQ/ipIXHzYAIriJbvTLxTXPDMdcJWr+9T49P1VJgf7NtGD/z4KproeDI1gufRVmRnhzn8xDiFqabc5MfCRVg32qJyp3jeUp3zVOZaq/FZ3mLIkxXRNAqi5cM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=p6dgzZ/7; arc=none smtp.client-ip=91.218.175.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gD2c1quL"
-Received: by mail-oi1-f175.google.com with SMTP id 5614622812f47-479d9b155deso2684064b6e.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 13 May 2026 18:50:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778723421; x=1779328221; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bWw4PA4xea3qoVC7BJte8Yrd814HYwd8HlKIssZKr8U=;
-        b=gD2c1quL+OKgxFsk3OYaUEMd1mTk8yg1ysxnNKRPFfdW1V1jrvzU+flM4h77jxKeVT
-         NdRqSkn1GeCavfk963iW1For5nkAcciNpSzQw0EySLG5vFypDxGIBK8bMcPan3YXo7fw
-         dHL9LlsV/wR6VbisjpBdkudjl1GmxdXoIJBBQmL+KWUcRV1dBhq7lOTdDS0dE0DC9cyo
-         iKxhyLgmwCAP9rUE4DkMveRgqMTn7qd6RLLHpKJAbnoen2c4I80qcDaQfncp2NqMcYj+
-         F6ZrUyvTMoNtchgYVyr6fuynfnXDs+KeqYGYbun1DSsFVCZx2PSNCSOLPAg/Ubr2IjPd
-         uERw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778723421; x=1779328221;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bWw4PA4xea3qoVC7BJte8Yrd814HYwd8HlKIssZKr8U=;
-        b=sUZnIoPkul1OSNYVAHG/meiMl5PYSZx5VMfvMMlmzwrlnDfyIynBI2CWhZJMLoJMsG
-         mqSz2Zqx3ccLsqK511B7hzGKHbggUOIcYcTEtAnOmnhJwKbDcnvbgu/2gIYalybWj3rS
-         LubdtpoaxJJyj90wfRLWtwax4XkfY1M8/+CmqA/FVh0uWgNrHCf5YhAfvGHyMRwfWzoU
-         jeOz+kVOL2OdzWemUdawgdvsGve9KUneXBUVF+zKAWx6HcBJPvKeXObl/gjTfJosQpLU
-         NqRZulYzGueZ5KE1mCG86pwDqoWEbGmQ7RvoIJE7hB6iPz1mg9QTrzqkARS5IQVuEREe
-         qVnA==
-X-Forwarded-Encrypted: i=1; AFNElJ/0Tt4fFmDMhx1SZzYd4rm7uqIymo+EM1GNtTFux3A2p3vsABgYxvHw2bGcsIMWfHdGyjBZLmUPYkLtA/8Y1JQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw38z16onEZMwLJ8VFVycT2Te2Ghc2pzKaTxul+7FA4Sd19r/qD
-	UBgeA+WmmZjz6Dbo/DucDbG5LmEBOXsTJhmDofuqXhMRufi8ZUv1K5mQ
-X-Gm-Gg: Acq92OE8SKC6r2ikyRl17Bmt/zWQsb+HmL6qdq7tQkh/xp9kUU+tR4XQ09bmBjVWhz/
-	pj3OtChTEtK+l2KKG5NQzvpbKjvf9pKmOa68TzWr11/x7Hthd2prbg6+dsutI69myea8gYM1qUy
-	2ep97SNphjEfeioHCoLAE9e/5Fos7cC4KpUrXlGMt/jLm/SbT4ngGQmwwrq84cRi19r6IonsMyp
-	SdD8D8P7YRgvkz5kjEl3wE44Cbt/FB/lrJDCsct8GO1tsTHVDk0aDiVS4HZRqC/WFcORHHMj2LN
-	kt+9mG5If48+evHyctXMczKOpa0CUtsSoeflPKSWKl0FQYieVyoNBaz+fVgXr8pkh1UNk3SD7Tm
-	tAIlDTnKLMHNk768O3N04WeSmiYS3HmiOEUIAg3hDo+hA0LA2V/HexSEwnGStD536+42mkZk8t/
-	K68UClqZGRiW7qjGCAYO28VdyZD65zD89Xtc/gQMYjNPQHvWvO21cjKLNlMUQZO8KaJe5wUzNFg
-	aWH4trXh9DpcBBPog==
-X-Received: by 2002:a05:6808:1492:b0:46c:cdf4:1be4 with SMTP id 5614622812f47-482b2a5c978mr3483177b6e.10.1778723420780;
-        Wed, 13 May 2026 18:50:20 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:50::])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-482d3d4a8d1sm417604b6e.15.2026.05.13.18.50.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 May 2026 18:50:19 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="p6dgzZ/7"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1778723870;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=AToiLp5s9PtrKKoXGsWO6tlmsClmnuo3iSqdPilSAGk=;
+	b=p6dgzZ/7Yacdx0s+aWXec47EyIriW1zz34Onqj9sr6CuAAnZRu4MoJ2EtjU3BTP2kIWbh7
+	6WBMoNX3yl7+AcG6r33gP7883NE1GJ57Ssk9ZtZEpBXuRlgSQjY7/W4bnnMC15Cn8KPv7N
+	ajjiPdB3+dfCiUtekxjft09YYSaBkDc=
+From: Qingfang Deng <qingfang.deng@linux.dev>
+To: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Felix Maurer <fmaurer@redhat.com>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Qingfang Deng <qingfang.deng@linux.dev>,
+	Petr Machata <petrm@nvidia.com>,
+	linux-kernel@vger.kernel.org,
+	linux-ppp@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next v2] selftests: net: add tests for PPPoL2TP
+Date: Thu, 14 May 2026 09:57:32 +0800
+Message-ID: <20260514015743.37869-1-qingfang.deng@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 13 May 2026 18:50:17 -0700
-Message-Id: <DII0TT9LXYCX.2GMM6QA4Q9BPZ@gmail.com>
-Cc: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-doc@vger.kernel.org>, <vmalik@redhat.com>,
- <linux-kselftest@vger.kernel.org>, <martin.lau@kernel.org>, <clm@meta.com>,
- <ihor.solodrai@linux.dev>
-Subject: Re: [PATCH RESEND bpf-next v10 2/8] bpf: clear list node owner and
- unlink before drop
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Eduard Zingerman" <eddyz87@gmail.com>, <bot+bpf-ci@kernel.org>,
- <kaitao.cheng@linux.dev>, <ast@kernel.org>, <corbet@lwn.net>,
- <martin.lau@linux.dev>, <daniel@iogearbox.net>, <andrii@kernel.org>,
- <song@kernel.org>, <yonghong.song@linux.dev>, <john.fastabend@gmail.com>,
- <kpsingh@kernel.org>, <sdf@fomichev.me>, <haoluo@google.com>,
- <jolsa@kernel.org>, <shuah@kernel.org>, <chengkaitao@kylinos.cn>,
- <skhan@linuxfoundation.org>, <memxor@gmail.com>
-X-Mailer: aerc
-References: <20260512055919.95716-3-kaitao.cheng@linux.dev>
- <da95f45b43d94d17796b19abc4c555e35daafab7d5e1cdca3714fe0f54ab8cce@mail.kernel.org> <e141699dab70282d811ec30bbf2aa8279706817b.camel@gmail.com>
-In-Reply-To: <e141699dab70282d811ec30bbf2aa8279706817b.camel@gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Wed May 13, 2026 at 3:53 PM PDT, Eduard Zingerman wrote:
-> On Tue, 2026-05-12 at 06:41 +0000, bot+bpf-ci@kernel.org wrote:
->
-> [...]
->
->> When a BPF program holds an owning or refcount-acquired reference to
->> one of these nodes (node X), which is structurally supported because
->> __bpf_obj_drop_impl() uses refcount_dec_and_test() and only frees at
->> refcount 0, a concurrent push to a DIFFERENT bpf_list_head becomes a
->> corruption:
->>=20
->> CPU 0 (bpf_list_head_free, lock released)  CPU 1 (BPF prog, refcount X)
->> -----------------------------------------   ----------------------------
->> (owner of X =3D=3D NULL, X linked in drain)
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0bpf_list_push_back(other, X)
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0__bpf_list_add: spin_=
-lock()
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0cmpxchg(X->owner, NUL=
-L,
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0POISON) -> OK
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0list_add_tail(&X->lis=
-t_head,
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0other_head)
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0-> overwr=
-ites X->next,
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0X->prev, corrupts
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0other_head's chain
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0because X is still
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0stitched into drain
->> pos =3D drain.next;      (may be X or neighbor using X's stale next)
->> list_del_init(pos);    reads X->next/prev now pointing into other_head,
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0corrupts =
-other_head's list and/or drain
->
->
-> Kaitao, this scenario seem plausible, could you please comment on it?
+Add ping, iperf3, and recursion tests for PPPoL2TP.
 
-I think bot is correct.
-This patch looks buggy.
-It seems to me an optimization that breaks the concurrent logic.
-May be just drop this patch and reorder the other one, so that bot
-sees nonown suffix logic first.
+Assisted-by: Gemini:gemini-3-flash
+Signed-off-by: Qingfang Deng <qingfang.deng@linux.dev>
+---
+v2:
+ - use named veth pair instead of netkit
+ - reset RET prior to the recursion test
+v1: https://lore.kernel.org/netdev/20260508032158.67887-1-qingfang.deng@linux.dev
+
+ tools/testing/selftests/net/ppp/Makefile    |  1 +
+ tools/testing/selftests/net/ppp/config      |  2 +
+ tools/testing/selftests/net/ppp/pppol2tp.sh | 95 +++++++++++++++++++++
+ 3 files changed, 98 insertions(+)
+ create mode 100755 tools/testing/selftests/net/ppp/pppol2tp.sh
+
+diff --git a/tools/testing/selftests/net/ppp/Makefile b/tools/testing/selftests/net/ppp/Makefile
+index b39b0abadde6..6036fa134351 100644
+--- a/tools/testing/selftests/net/ppp/Makefile
++++ b/tools/testing/selftests/net/ppp/Makefile
+@@ -5,6 +5,7 @@ top_srcdir = ../../../../..
+ TEST_PROGS := \
+ 	ppp_async.sh \
+ 	pppoe.sh \
++	pppol2tp.sh \
+ # end of TEST_PROGS
+ 
+ TEST_FILES := \
+diff --git a/tools/testing/selftests/net/ppp/config b/tools/testing/selftests/net/ppp/config
+index b45d25c5b970..843545df8f03 100644
+--- a/tools/testing/selftests/net/ppp/config
++++ b/tools/testing/selftests/net/ppp/config
+@@ -1,4 +1,5 @@
+ CONFIG_IPV6=y
++CONFIG_L2TP=m
+ CONFIG_PACKET=y
+ CONFIG_PPP=m
+ CONFIG_PPP_ASYNC=m
+@@ -6,4 +7,5 @@ CONFIG_PPP_BSDCOMP=m
+ CONFIG_PPP_DEFLATE=m
+ CONFIG_PPPOE=m
+ CONFIG_PPPOE_HASH_BITS_4=y
++CONFIG_PPPOL2TP=m
+ CONFIG_VETH=y
+diff --git a/tools/testing/selftests/net/ppp/pppol2tp.sh b/tools/testing/selftests/net/ppp/pppol2tp.sh
+new file mode 100755
+index 000000000000..5b592785f1f9
+--- /dev/null
++++ b/tools/testing/selftests/net/ppp/pppol2tp.sh
+@@ -0,0 +1,95 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++
++source ppp_common.sh
++
++VETH_SERVER="veth-server"
++VETH_CLIENT="veth-client"
++OUTER_IP_SERVER="172.16.1.1"
++OUTER_IP_CLIENT="172.16.1.2"
++
++PPPOL2TP_DIR=$(mktemp -d /tmp/pppol2tp.XXXXXX)
++
++# shellcheck disable=SC2329
++cleanup() {
++	cleanup_all_ns
++	rm -rf "$PPPOL2TP_DIR"
++}
++
++trap cleanup EXIT
++
++require_command xl2tpd
++ppp_common_init
++modprobe -q l2tp_ppp
++
++# Create the veth pair
++ip link add "$VETH_SERVER" type veth peer name "$VETH_CLIENT"
++ip link set "$VETH_SERVER" netns "$NS_SERVER"
++ip link set "$VETH_CLIENT" netns "$NS_CLIENT"
++ip -netns "$NS_SERVER" link set "$VETH_SERVER" up
++ip -netns "$NS_CLIENT" link set "$VETH_CLIENT" up
++ip -netns "$NS_SERVER" address add dev "$VETH_SERVER" "$OUTER_IP_SERVER" peer "$OUTER_IP_CLIENT"
++ip -netns "$NS_CLIENT" address add dev "$VETH_CLIENT" "$OUTER_IP_CLIENT" peer "$OUTER_IP_SERVER"
++
++# Generate configuration files
++cat > "$PPPOL2TP_DIR/l2tp-server.conf" <<EOF
++[global]
++listen-addr = $OUTER_IP_SERVER
++access control = no
++
++[lns default]
++ip range = $IP_CLIENT
++local ip = $IP_SERVER
++require authentication = no
++require chap = no
++require pap = no
++ppp debug = yes
++pppoptfile = $(pwd)/pppoe-server-options
++EOF
++
++cat > "$PPPOL2TP_DIR/l2tp-client.conf" <<EOF
++[global]
++listen-addr = $OUTER_IP_CLIENT
++access control = no
++
++[lac server]
++lns = $OUTER_IP_SERVER
++require authentication = no
++require chap = no
++require pap = no
++ppp debug = yes
++pppoptfile = $(pwd)/pppoe-server-options
++EOF
++
++# Start the L2TP Server
++ip netns exec "$NS_SERVER" xl2tpd -D -c "$PPPOL2TP_DIR/l2tp-server.conf" \
++	-p "$PPPOL2TP_DIR/l2tp-server.pid" -C "$PPPOL2TP_DIR/l2tp-server.control" &
++
++# Start the L2TP Client
++ip netns exec "$NS_CLIENT" xl2tpd -D -c "$PPPOL2TP_DIR/l2tp-client.conf" \
++	-p "$PPPOL2TP_DIR/l2tp-client.pid" -C "$PPPOL2TP_DIR/l2tp-client.control" &
++
++# Wait for xl2tpd to start and open their control pipes
++slowwait 2 [ -p "$PPPOL2TP_DIR/l2tp-server.control" ]
++slowwait 2 [ -p "$PPPOL2TP_DIR/l2tp-client.control" ]
++
++# Connect LAC to LNS
++echo "c server" > "$PPPOL2TP_DIR/l2tp-client.control"
++
++ppp_test_connectivity
++
++log_test "PPPoL2TP"
++
++# Recursion test
++RET=0
++# Delete route to LNS IP
++ip -netns "$NS_CLIENT" route del "$OUTER_IP_SERVER"
++# Add default route through ppp0
++ip -netns "$NS_CLIENT" route add default dev ppp0
++# ping (we expect the ping to fail but not deadlock the system)
++ip netns exec "$NS_CLIENT" ping -c 1 "$IP_SERVER" -w 1
++check_fail $?
++
++log_test "PPPoL2TP Recursion"
++
++exit "$EXIT_STATUS"
+-- 
+2.43.0
 
