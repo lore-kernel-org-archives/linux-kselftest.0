@@ -1,200 +1,175 @@
-Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55D913D410E
-	for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 22:58:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C41028F5
+	for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 23:15:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778799530; cv=none; b=s9v3mjjmv4ugdoWhW6MW8qdiNKpU02a++kByZC+uyk+gfqv/sob8GRfovIRBL2Pceu2Dn6zh6xA8FJW8pUiUDe8PbVPBJVu+/PG+/589RbK/9oL2cBFe7Y84DiPgz/yseDPumaY4WFxp1m3Alb6vpgPeDq9bb7HluJWyNhpb/ZY=
+	t=1778800551; cv=none; b=MGTWdQBJLa+wmPdCTz6APMMC/7lv25hW2c5npW2FcKKgF0LSYSEXYRsjnAtwjCi2jx1MOgvpc3JI9myxC33L4POTpKLl7JIGAtej/vw/n03C7voJFxarhbc+Lkevm9cgtr3v/DQNeXPljn/MlDEUofCUSJ9WpJtUiLLd6X9B/14=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778799530; c=relaxed/simple;
-	bh=i8w7VpQr+6X4a4/yPJf10QNnECBtGebsq7fakngaHoc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KNxpmrU5Vy+dzhklGVLP8NdKCPmw9couPPbZYscvUIkIH9CthtYTfmso0A4cjR+z0wX/5MHLTd+sReM7RQHnLf6bbwp2UO8GapNsvuin3rIZFfk/3fJ13bsZo2rVBcR9qLL8mOF95GynbwO1wuz3WiMsSyYA9IVnhlzzEy/b+uI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=P27eIE26; arc=none smtp.client-ip=74.125.82.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1778800551; c=relaxed/simple;
+	bh=MtJHNlbiZerjdPEzOlj263GMPVJy10WoBSXyLLQ4UyU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Cc36oTHdz310ip7hqIzswD+u37M9olbGfnSonFmH+NMm4X41Zk43nPeIJvdIL5A+wComDwuqfYywwCPGvPMASbZtEP7ik8a4JtSsU61BkQKvRSWeMwMj5cU0cJmk6wXynSqN29Xky4wJn77qH1DTfY24HTrQNFFagpCm+OH20O4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=gbeNdo8Q; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="P27eIE26"
-Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-2ff5472f263so4925853eec.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 15:58:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="gbeNdo8Q"
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-48374014a77so73859665e9.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 16:15:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1778799528; x=1779404328; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=NDdeoDPqkkjirbrQZdWdWsogLJA5TPCEhQZ/zT+bmaQ=;
-        b=P27eIE26Pv5O1uJl4GQsNyAlMANY+J5yNtaKctEriMhzPF6YIgKa0RrLEUfr6uFQ8Z
-         7W7WsgcjJEiUMEzEB1NEESaz9wWoFHa8BVY6wnPoNF5rJe1YJQDitlW7enHCbL+LyVgl
-         pbpYnug3+IFDuz8Sqgn0+FJcGiqZiTIeew3N6Y/a08MRw6wzQ5i//dqGNbpgZlfLixGT
-         3+yA4ZA6xvqSu55tEiifpw7iYgOb0gseTiniibabTMWn6VgdnlRiux+QrFD1sX12yzM2
-         /0DmKWLYzAq040Q9OZYxsMI9k34YLTpcyTQcFs6uLiJuXaF9R+DR/skW5R+Y2yVo2zqw
-         78dA==
+        d=openvpn.net; s=google; t=1778800549; x=1779405349; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OqoRDlzgxB40s7RWtbhlam/wZ2ILK++oCwT7V3WKKyA=;
+        b=gbeNdo8QG1aCXE7m8O44UomH2iz4583WE2KQB6K61nttTm0LW8fhMfwtl+u8MoTwvm
+         f5VXpf0BNn5R5JeU4YvZ3+/RM2zpDiwXqCj4o6YyljD1iAmeeniOdUFWpv1CUPDjv/Fj
+         u7ua3CJESJamqZN/sSjIUHr7Dysx9xstHz+zZxIHut2jpJwhBOeoMcmoIWPGPpsVez68
+         oLNrk93ICLK2Gwd26LKwRMxkJ55RwSyHMdxp6QgTViz+6hNKVi4e+BpPsV2gXNfApJNN
+         YSU9FkJpoh/9SzoOaahSRrGS8Me0YjYo9zzRrlOMl2es0NrLnuDY4CuiuxuXHph2e9xM
+         nwNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778799528; x=1779404328;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NDdeoDPqkkjirbrQZdWdWsogLJA5TPCEhQZ/zT+bmaQ=;
-        b=DyTtP37dRKOpKesnqJtkC+SeW3VHksg2ZmZJavtHz27zX3xoI5Ihrpm4/jLkWVFvBn
-         98uKTG2hAMDQrg4CXct4K3Q/bu230Vc/sadgWYQAz4fHWlebSDGHtII9w/kp5auEZYT6
-         0+ysVjtGj4nBhSMDMw+yM0VYSRnlbseWQQ7JGxCTxRVtlLFrF5oHQHhSHH5c74AdVCqm
-         zmSImhvTQJ72wauKQ+ui/LO9EeWZVA/RreAAZx07TuM40Jt02yIiWVy2ImzBclxDqXvp
-         6pUNpwmnYCcZoZQHBy7HN9eyUjcQXNQIWhGmyvLKmfSeR19TS7Brj6G6/yxkEAweNwyn
-         9o9g==
-X-Forwarded-Encrypted: i=1; AFNElJ8JJsnk+6pDJwkbzDDF8O70FsWSv5jY3TzgG0Wh2FeEgNOZc5rh1xWFVCFitFtimfxGoMW3aOhBVxutv9QKIuY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxjioGN3iqdwpSCuS5ZmZGGDwYryvnDrPutaiGwyQ2ZJn+LJHN3
-	4HdwfzZBDDZHXKEdLWQSPt5CFYtaHYbwdPCFDs2KqLOH4FcvWCFOwUuTMDW95Oz+Xw==
-X-Gm-Gg: Acq92OHwL7sXXCqvi+RCH/dU5kXVrxtR1sB+UWrZn9HBHcEhZqNrpmCXQDO0sXBxSlN
-	YD+eHUMNIC+uTfselKVfjGOMMx7gIuGp7uyxAcNlb5L3iPPfwuDcTGbjPALd3kHoEM2fUyqJOfi
-	Hga6T08vdjBoU3+44B3Fs83tKsqaqoPU5SKgN2kfCSlDukHK4kgN5/cZkpgSHRLDveyJk/ylqzU
-	mTal5rX72LVCaD74xxpaLF0sHVxe3JVgHcTWJUZYpmAaMSL97dzhyK1eSX+YjNr86cllnGJl8/o
-	WBkfZjWhGSEVEJCR/vMgz80Cy6GdfE9tiVaKnd93dg1PeGNv1bPfDm04mDDvjGG+lq7KO65Yzya
-	zMMvS/gjZQDCIVsxv0tmBluSuwW0lXbrJXCQSwRg4KA5UHRzHMDEtKal9uZWrSiGsU8ZYazLg5D
-	AxQ9E8DCTyfGh8spxVrkUrY4SnSHuDfzvUaKUAvPyA08a0I5hgVn2vWAV5H4y3ic5cejW/O4RJ
-X-Received: by 2002:a05:7301:6448:b0:2da:a813:a5fd with SMTP id 5a478bee46e88-3039867fa16mr894249eec.22.1778799527786;
-        Thu, 14 May 2026 15:58:47 -0700 (PDT)
-Received: from google.com (56.149.168.34.bc.googleusercontent.com. [34.168.149.56])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-302978b1a79sm4765745eec.28.2026.05.14.15.58.47
+        d=1e100.net; s=20251104; t=1778800549; x=1779405349;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=OqoRDlzgxB40s7RWtbhlam/wZ2ILK++oCwT7V3WKKyA=;
+        b=iTCKDQWnGRtEu1lW4shdJpWLOJyBaw3n7lOX5vNNoVF5enTYLEOFPo+HC55HnvCZbp
+         leXZwSgRmGvzXlLrD2gPeJaJQ4+uPed/VAz4DSQr28gIzKy4KvbLYfuBEynYyJ+glA4q
+         C9O3CeQ5KOvyp0yYle1fv48XdEqZydxQGfV03kXSchZzirW4f60TzlgbXh27AOE8RIJT
+         lqttgchJaMDm7cdXpNcgxJam9NTWN5aa1nvuGrpSVAFmRTi7smzkBFFqRsp2R9xbQRix
+         2vKo02miUOfVdlZvMy1xIukL62YXtY5aZ3kjE3QyiWHX+tf2wiiGjaIzHOQZpOgv8tDa
+         ISXA==
+X-Forwarded-Encrypted: i=1; AFNElJ/6dJ3r4OnRsZK4mMU04KnA3Ks0i0ZWxpRgW5uUBg0ri7sGTY7xpjGKhUicHcJqEGPvFPRU68PdnAhgZOZx6TA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyOOvdi2uUpUpxf93V77hsFKx0gpIdoecXeTciieQK/eGZ8wObm
+	/nH5zUjoQSX+TdozxLDedvvfdV6XFz5njWsHgAKtwktHWAz8OKzueIPk0O5pSHJD7YA4bebOpQ0
+	F4Wr9xL0yDvwNEx7Jeh3LrcbIFlajkmcM8yZVw6ZAfk/fMi0D47TL3csoqw6boEs=
+X-Gm-Gg: Acq92OGnx5KAk3BD5bKBoIO85FYHVSQNoiRtZk/R7aLWp+VkAJ/5dXJ6NTSi1Nf//Ut
+	UtrxECPDun8cNO7tXJhX4lTGpMlVt8/LHKECKuEOjCZuazaAHaXFo/KvRs+VoMtB5YK0fgZM0Gf
+	I6mSsfKQHoCw+nvcSbDP2bq7GpoLF4gsk9+MzTBbjc/36J5ZeUnb4A5fwXaY/QBa11RlJP6Sadn
+	wGBpTw8UsKvHu8jZgKakdZPEHdz26ti66Xr/L0wPr4eDXgV2yb2HaonoUYVyEd1tH2CKD2cd1Ed
+	MN4OPPOgc8CjP0+GLmgFj/8E1SXUOMZqLbGs915Wr3Czjd47rDq00Jza98bApQdRSxQ1Z5eHuAl
+	kSrm9u0L21UtP1I+hi81nGXKU+dVSvUmpGuqYLkT5m/DDneW4jR3iWgOgx3tyL7CHuSJ9KJL+qq
+	hsd3t+McbgyHPNji8cKX3/7GakXANVrfo5rvQ1ffc306U95Q==
+X-Received: by 2002:a05:600c:8b75:b0:488:7ff6:1f75 with SMTP id 5b1f17b1804b1-48fe6321cdamr17622285e9.21.1778800548808;
+        Thu, 14 May 2026 16:15:48 -0700 (PDT)
+Received: from inifinity.mandelbit.com ([2001:67c:2fbc:1:a628:d33e:601:ebb9])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48fe4c8344asm39155855e9.1.2026.05.14.16.15.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 May 2026 15:58:47 -0700 (PDT)
-Date: Thu, 14 May 2026 22:58:43 +0000
-From: David Matlack <dmatlack@google.com>
-To: Alex Williamson <alex@shazbot.org>
-Cc: Josh Hilke <jrhilke@google.com>, Vipin Sharma <vipinsh@google.com>,
-	Jason Gunthorpe <jgg@nvidia.com>, Shuah Khan <shuah@kernel.org>,
-	Tony Nguyen <anthony.l.nguyen@intel.com>, kvm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] vfio: selftests: Add driver for IGB QEMU device
-Message-ID: <agZTo-OzlSbD9G5n@google.com>
-References: <20260511211839.2781731-1-jrhilke@google.com>
- <agJqAO-RRdjMrUZJ@google.com>
- <CAAdrzjtiiOtw7-YL2COgZC-QSFp6LLwq+jP9V3jPKLUe0w7Y0g@mail.gmail.com>
- <CAAdrzjuf3z-CyWeBRPKmMQxmQZ9U=2Tc0cDAFqdRFRDHKw_K-Q@mail.gmail.com>
- <agUKLmKLoV71Hq6S@google.com>
- <20260514102824.6be38bf6@shazbot.org>
- <CAAdrzjv7FiYWhXHDJQvK-c71UpKo+uwOu-dnbtka=6p2qj86zQ@mail.gmail.com>
- <20260514164844.2698802c@shazbot.org>
+        Thu, 14 May 2026 16:15:48 -0700 (PDT)
+From: Antonio Quartulli <antonio@openvpn.net>
+To: netdev@vger.kernel.org
+Cc: Sabrina Dubroca <sd@queasysnail.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Ralf Lici <ralf@mandelbit.com>,
+	linux-kselftest@vger.kernel.org,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Antonio Quartulli <antonio@openvpn.net>
+Subject: [PATCH net 1/5] selftests: ovpn: reduce remaining ping flood counts
+Date: Fri, 15 May 2026 01:15:40 +0200
+Message-ID: <20260514231544.795993-2-antonio@openvpn.net>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260514231544.795993-1-antonio@openvpn.net>
+References: <20260514231544.795993-1-antonio@openvpn.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260514164844.2698802c@shazbot.org>
 
-On 2026-05-14 04:48 PM, Alex Williamson wrote:
-> On Thu, 14 May 2026 14:49:28 -0700
-> Josh Hilke <jrhilke@google.com> wrote:
-> 
-> > On Thu, May 14, 2026 at 9:28 AM Alex Williamson <alex@shazbot.org> wrote:
-> > >
-> > > On Wed, 13 May 2026 23:33:02 +0000
-> > > David Matlack <dmatlack@google.com> wrote:
-> > >  
-> > > > On 2026-05-13 11:49 AM, Josh Hilke wrote:  
-> > > > > On Tue, May 12, 2026 at 7:12 PM Josh Hilke <jrhilke@google.com> wrote:  
-> > > > > > On Mon, May 11, 2026 at 4:45 PM David Matlack <dmatlack@google.com> wrote:  
-> > > > > > > On 2026-05-11 09:18 PM, Josh Hilke wrote:  
-> > > >  
-> > > > > > > > +     retries = 100;
-> > > > > > > > +     while (retries-- > 0) {
-> > > > > > > > +             if (rx->wb.status_error & 1)
-> > > > > > > > +                     break;
-> > > > > > > > +             usleep(10);
-> > > > > > > > +     }  
-> > > > > > >
-> > > > > > > Why bail after a certain timeout? The test may have kicked off a large
-> > > > > > > count of memcpys. Is this for error detection?  
-> > > > > >
-> > > > > > The bailout was intended to detect errors during development.
-> > > > > > Shouldn't need it anymore. I'll remove it in v2.  
-> > > > >
-> > > > > Sorry, I forgot: we need the timeout  to detect DMA errors for the
-> > > > > memcpy_from_unmapped_iova test in vfio_pci_driver_test. The test
-> > > > > triggers an IOMMU fault because the IOVA is unmapped, and the IOMMU
-> > > > > aborts the DMA operation. However, the QEMU IGB implementation does
-> > > > > not set an error bit, so timing out is our only method for error
-> > > > > detection.  
-> > > >
-> > > > Hm... that's going to be tricky then. This means we would have to set
-> > > > the timeout to longer than the longest possible memcpy duration to avoid
-> > > > false negatives? That means we'll have to set the timeout to quite long.  
-> > >
-> > > FWIW, I had AI churn on trying to make this work on a physical 82576 as
-> > > I have several of these in my local machines as sort of the defacto,
-> > > readily available SR-IOV NIC.  The AI got up to 30/35 tests passing but
-> > > is currently stuck that the queues stall in the mix-and-match test when
-> > > it's trying to DMA from an unmapped IOVA.  So far none of the in-band
-> > > methods to kick the queues seem to work, I'm not sure if we'll need to
-> > > resort to an FLR.
-> > >
-> > > I'd be happy to send the changes it's made so far if you want to
-> > > validate and incorporate, or have any thoughts to kicking it after the
-> > > IOMMU fault.  Some of the changes are related to timeouts, where QEMU
-> > > loopback is actually faster than bare metal since the physical  queues
-> > > run at 1Gbps even in loopback mode.
-> > >
-> > > I'll also plant the seed that if we do have outstanding issues for a
-> > > driver that binds to a real world device, but only works on the
-> > > emulated version of that device... how do we handle that?  In part, I
-> > > think it's emulated in QEMU because it is so ubiquitous.  I'm also
-> > > hoping to use the same device for the new SR-IOV selftests.  Thanks,
-> > >
-> > > Alex  
-> > 
-> > I'm glad you're interested in this as well!
-> > 
-> > Unfortunately (and ironically) I don't have access to a physical device.
-> > 
-> > Regarding driver support for the real vs. emulated device, I think we
-> > should prioritize supporting the emulated version. This approach
-> > unlocks the ability for anyone to run VFIO/Live Update tests without
-> > needing specific hardware. Once that's done, other folks can add
-> > patches to update the driver if they want to use the physical device.
-> > What do you think?
-> > 
-> > I plan to add SR-IOV support to this driver in a separate series after
-> > the driver merges.
-> 
-> I've got it working now, I'll need to do some cleanup and verification,
-> but it's not too bad (imo), several places where QEMU emulation only
-> supports one mode and we don't fully configure the device or don't
-> account for physical hardware limitations or timing.  The most
-> significant change is in resolving the issue above, that once the queue
-> gets wedged from DMA errors, VFIO_DEVICE_RESET unfortunately seems to
-> be the most straightforward mechanism to get it unstuck.  That may
-> result in some initialization refactoring and plumbing to restore the
-> interrupt state. Thanks,
+From: Ralf Lici <ralf@mandelbit.com>
 
-FWIW I had to do similar for the ioat driver, except it used a
-device-specific reset mechanism instead of VFIO_DEVICE_RESET, so I think
-this approach should be ok.
+Commit 201ba706318d ("selftests: ovpn: reduce ping count in test.sh")
+lowered the baseline traffic flood ping count to avoid flakes on slower
+CI instances, however some instances were left out.
 
-static void ioat_handle_error(struct vfio_pci_device *device)
-{
-	...
-	ioat_reset(device);
-}
+Apply the same limit to the remaining ovpn selftest flood pings that
+still request 500 packets.
 
-static int ioat_memcpy_wait(struct vfio_pci_device *device)
-{
-	void *registers = ioat_channel_registers(device);
-	u64 status;
-	int r = 0;
+Fixes: 201ba706318d ("selftests: ovpn: reduce ping count in test.sh")
+Signed-off-by: Ralf Lici <ralf@mandelbit.com>
+Signed-off-by: Antonio Quartulli <antonio@openvpn.net>
+---
+ tools/testing/selftests/net/ovpn/test-close-socket.sh | 2 +-
+ tools/testing/selftests/net/ovpn/test-mark.sh         | 6 +++---
+ tools/testing/selftests/net/ovpn/test.sh              | 4 ++--
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-	/* Wait until all operations complete. */
-	for (;;) {
-		status = ioat_channel_status(registers);
-		...
-		if (status == IOAT_CHANSTS_HALTED) {
-			ioat_handle_error(device);
-			return -1;
-		}
-	}
+diff --git a/tools/testing/selftests/net/ovpn/test-close-socket.sh b/tools/testing/selftests/net/ovpn/test-close-socket.sh
+index af1532b4d2da..ec9a51bbf3c9 100755
+--- a/tools/testing/selftests/net/ovpn/test-close-socket.sh
++++ b/tools/testing/selftests/net/ovpn/test-close-socket.sh
+@@ -53,7 +53,7 @@ ovpn_run_ping_traffic() {
+ 
+ 	for p in $(seq 1 ${OVPN_NUM_PEERS}); do
+ 		ovpn_cmd_ok "send ping traffic to peer ${p}" \
+-			ip netns exec ovpn_peer0 ping -qfc 500 -w 3 \
++			ip netns exec ovpn_peer0 ping -qfc 100 -w 3 \
+ 				5.5.5.$((p + 1))
+ 	done
+ }
+diff --git a/tools/testing/selftests/net/ovpn/test-mark.sh b/tools/testing/selftests/net/ovpn/test-mark.sh
+index 5a8f47554286..7c1d56e9c525 100755
+--- a/tools/testing/selftests/net/ovpn/test-mark.sh
++++ b/tools/testing/selftests/net/ovpn/test-mark.sh
+@@ -66,7 +66,7 @@ ovpn_mark_run_baseline_traffic() {
+ 
+ 	for p in $(seq 1 3); do
+ 		ovpn_cmd_ok "send baseline traffic to peer ${p}" \
+-			ip netns exec ovpn_peer0 ping -qfc 500 -w 3 \
++			ip netns exec ovpn_peer0 ping -qfc 100 -w 3 \
+ 				5.5.5.$((p + 1))
+ 	done
+ }
+@@ -101,7 +101,7 @@ ovpn_mark_verify_drop_traffic() {
+ 	local total_count
+ 
+ 	for p in $(seq 1 3); do
+-		if ping_output=$(ip netns exec ovpn_peer0 ping -qfc 500 -w 1 \
++		if ping_output=$(ip netns exec ovpn_peer0 ping -qfc 100 -w 1 \
+ 			5.5.5.$((p + 1)) 2>&1); then
+ 			printf '%s\n' "expected ping to peer ${p} to fail \
+ 				after nft drop rule"
+@@ -144,7 +144,7 @@ ovpn_mark_verify_traffic_recovery() {
+ 	sleep 1
+ 	for p in $(seq 1 3); do
+ 		ovpn_cmd_ok "send recovery traffic to peer ${p}" \
+-			ip netns exec ovpn_peer0 ping -qfc 500 -w 3 \
++			ip netns exec ovpn_peer0 ping -qfc 100 -w 3 \
+ 				5.5.5.$((p + 1))
+ 	done
+ }
+diff --git a/tools/testing/selftests/net/ovpn/test.sh b/tools/testing/selftests/net/ovpn/test.sh
+index c06e3135fbef..9b5610837032 100755
+--- a/tools/testing/selftests/net/ovpn/test.sh
++++ b/tools/testing/selftests/net/ovpn/test.sh
+@@ -110,7 +110,7 @@ ovpn_run_basic_traffic() {
+ 
+ ovpn_run_lan_traffic() {
+ 	ovpn_cmd_ok "ping LAN behind peer1" \
+-		ip netns exec ovpn_peer0 ping -qfc 500 -w 3 "${OVPN_LAN_IP}"
++		ip netns exec ovpn_peer0 ping -qfc 100 -w 3 "${OVPN_LAN_IP}"
+ }
+ 
+ ovpn_run_float_mode() {
+@@ -127,7 +127,7 @@ ovpn_run_float_mode() {
+ 	for p in $(seq 1 ${OVPN_NUM_PEERS}); do
+ 		peer_ns="ovpn_peer${p}"
+ 		ovpn_cmd_ok "ping tunnel after float peer ${p}" \
+-			ip netns exec "${peer_ns}" ping -qfc 500 -w 3 5.5.5.1
++			ip netns exec "${peer_ns}" ping -qfc 100 -w 3 5.5.5.1
+ 	done
+ }
+ 
+-- 
+2.53.0
 
-	...
-}
