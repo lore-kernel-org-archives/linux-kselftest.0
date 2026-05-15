@@ -1,168 +1,169 @@
-Received: from canpmsgout12.his.huawei.com (canpmsgout12.his.huawei.com [113.46.200.227])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDFA93C4563;
-	Fri, 15 May 2026 03:04:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.227
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778814249; cv=none; b=ShIYN8VBH2Wnsl2sgQBj0mAzrIs4vd5WXb23AwL/+boEfdApvQ49gTOZHBx34cs053+/F6XEVscRPJw/F62MH0JPIoIc4KNTISMrhkMvLn7kraKObLVZj7TPWrF613fBZhg4HEBuvw4I/w0yl7G879wK6Wz9/dvhgFdIngXWelM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778814249; c=relaxed/simple;
-	bh=XhcnxjnUYRKbBkL4zobZN3AAxaA0Z1eO6uo2G/8yYC0=;
-	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=jV/xRowhQd+96vFcNM4a2JF/65Ywp90Kx2Zx9JhxyhUith3Fz+aw7zp2qCrzUMo9fTuvIyaFZ5u+Fs3qknWSTEnJVoMpT7sVlYj6I3XSug2J6vRDPk8+PCXRb6/MPuAtIHNL3GR8EvEnMfKu8pqIMNBygj4JqPFn+Tbj8O8q2Nw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=zrNDrXNs; arc=none smtp.client-ip=113.46.200.227
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6D713CF66A
+	for <linux-kselftest@vger.kernel.org>; Fri, 15 May 2026 03:48:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.172
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778816928; cv=pass; b=A4xiGpe3KNiaQaT8/Ncpf6mZdQJNqMZbZcIkhttw5CPb40tTn4ib/1nMCbrvaa9GCzkpd79NXRa+1wcRysiiafraDHto0xTNfzvS8XWfFBpDCAZy/NpOJG9w2zPQUY5O4FsnqmYzIeTAtiUl215u6q/cCLSKsNmiwH+G5Jxi0xQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778816928; c=relaxed/simple;
+	bh=axJimQpTH54Vk+wcEK9CMzTx0gjIcv6uLIP6tuXgnsw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=jdM920WTVlfJtlplPqvnqlV7a43ZAvOXku2NUQ7d+S3kkxHIEdo6Dob0OHRQTPeZ2RpebCBZLQbYhC1j6gnmtv8O2YpuGXdw71UmQODVYKmpKd1dvvZc1Vfd7DwB1pk7Xzxcl+zJ/Dkzvo+vwxPbcTjDVBmcbLiME/QWVGKtChI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=eCuJcjog; arc=pass smtp.client-ip=209.85.215.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="zrNDrXNs"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=c1kImyxqEbaAy8kSJvIICJ2cSXsdXwlWP4COYny/KSg=;
-	b=zrNDrXNsSOpvDcQyNoICT4sJcco3E5Wsi/O9iHpDKfEX9XEWUf/G4XkITj7GNXEmCI/idJPfP
-	P4UGl/4Oun+rHqHdIN28evtQ5auEfY+bkcrQEAnCVTqBcNINbAhTUGsW0k0T2fek/MYR3cF4Ai1
-	3WMtGlCqyQAslPSg+eDFPV4=
-Received: from mail.maildlp.com (unknown [172.19.163.15])
-	by canpmsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4gGsL46BLFznTZY;
-	Fri, 15 May 2026 10:57:00 +0800 (CST)
-Received: from dggemv706-chm.china.huawei.com (unknown [10.3.19.33])
-	by mail.maildlp.com (Postfix) with ESMTPS id A0C4240539;
-	Fri, 15 May 2026 11:04:02 +0800 (CST)
-Received: from kwepemq500010.china.huawei.com (7.202.194.235) by
- dggemv706-chm.china.huawei.com (10.3.19.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Fri, 15 May 2026 11:04:02 +0800
-Received: from [10.173.124.160] (10.173.124.160) by
- kwepemq500010.china.huawei.com (7.202.194.235) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Fri, 15 May 2026 11:04:01 +0800
-Subject: Re: [PATCH v7 2/6] mm/memory-failure: surface unhandlable kernel
- pages as -ENOTRECOVERABLE
-To: Breno Leitao <leitao@debian.org>
-CC: <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-trace-kernel@vger.kernel.org>, <kernel-team@meta.com>, Andrew Morton
-	<akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>, "Lorenzo
- Stoakes" <ljs@kernel.org>, Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport
-	<rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko
-	<mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, Naoya Horiguchi
-	<nao.horiguchi@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, "Masami
- Hiramatsu" <mhiramat@kernel.org>, Mathieu Desnoyers
-	<mathieu.desnoyers@efficios.com>, Jonathan Corbet <corbet@lwn.net>, "Shuah
- Khan" <skhan@linuxfoundation.org>, "Liam R. Howlett" <liam@infradead.org>
-References: <20260513-ecc_panic-v7-0-be2e578e61da@debian.org>
- <20260513-ecc_panic-v7-2-be2e578e61da@debian.org>
-From: Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <5cbb6038-72e3-9eda-7d1a-464f879fabb9@huawei.com>
-Date: Fri, 15 May 2026 11:04:00 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="eCuJcjog"
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-c7980c060cfso4120707a12.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 20:48:45 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778816924; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Qfct1RLhB6doQG7ck+26wiLQvRCuWVurjwL43novddQKoZXaLklJ2dUPCfleA6TaIk
+         qd67ZH8LfimnEupocCMyE/4vky7jUqgTnzLL198Jtz2om68IrkhMom9Vlm5UBiRggKWX
+         UBsCgEg1NSk3UDJyshqrDXk4uLLdKqzgumgQY+UMkA717uO3DUFA+j8qcRXKj+VNO3Jx
+         MDYSAmlLp5JA+cNPOzWhRehrsprQfqN/sL2oaoSEe92N2Hxv+LLSZ6WYa8HswLOODZgd
+         ZEWfhi7T1fjpN0Ya099B/NCWaDDXhsNz2zjLO8XAfLSs4c4GtOY79e72varwfytE0ww7
+         qfyg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=kbAj3QkbSA9sXO8i6EDoM3LNbpdhiqhg3HK+8g7Mcbs=;
+        fh=nWGPXrk5zKP31geu0gieLOyHG2MJZRpVctU70jsgheY=;
+        b=cyNXUNLNTnnr88z9NW/trW8PMhlnB1bsft2IsFMBv1Zo/h01mFwsoOUCUs4NGt9lOO
+         yoC+Txqxh/23S9VSJp2JlJRfZe0+PimovzxhMRX5yF/5g1U/FbQWn0RebpwzeE1LTzM/
+         nCUiW7kpoomeoOJzo0j8czn+e/xnDbwA145h9/IcwjpSZFD9EYL0s9Q7QIgmdRGxqVxo
+         LQ/L6nNqupIwRm049zzODiRSbTM5LTnTyqIBXyFA9KgOeI0VrbKAAjnhsZP15rX1z1DS
+         uqoYkatPWLmPNzEyr02J+SnZ6kzfIxzNLlxI7DXogGU9/0bscizmLGnZkbqua+1qGPC9
+         971A==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1778816924; x=1779421724; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kbAj3QkbSA9sXO8i6EDoM3LNbpdhiqhg3HK+8g7Mcbs=;
+        b=eCuJcjogazgHx1HmwNxl9a51S3GLjs5pS4nDxe37/8LXdA5Fu20goCgJtAKS42+Cor
+         mHvNYms0FnDGEwfsiM7okmTbroOVgHRULZWDAUGjSqqm2uW6r4QYOeNXDTf+xkXkOAiq
+         65BxlH+Eo/WolkI1yV/IpGAP6AWP52cMtBLNwXtI5vfDmltmGae2mNMOLAlQvtbXUeLC
+         j9kZnmJfUEN+Q481D79Rsui32+CMPNJhP+4XqD9nBglVufmX1xONPMSyZVa7oS0mviop
+         Ic83TUblVdcReOEiWKWyt0tqysvXvQ4IJfXhQmN++N89i0is1gU0xe9EJNz/lSyzdYEK
+         e1yQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778816924; x=1779421724;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=kbAj3QkbSA9sXO8i6EDoM3LNbpdhiqhg3HK+8g7Mcbs=;
+        b=Otq/h4crTu5C3ogGIdRNMazxOzIbWwLcyb1Z5CgppfLyTS6+0XYzE9a0kPumfXdj8x
+         YmUPUjjufEPkqs4Vct+6teJyTTO1G3ujYMR6/TCusH5vTz7AJch4t3aq+D8N+aILRXer
+         kY7A8j5KRacfu3gLFk5U25GLgrFTK/FGQZ6/zJl87OOxYydABDbyXcYE9Wgn0/qSHIGP
+         S0ceyooAfPE7Tg5ChUKqnpmZxUR+FpVLQDKB10Iy9dMg71u8yaI+i/LJCILpUWMA8SAJ
+         pD2LZ536eBAT9bbvONlpE01+7bPlv+9dtRjrTda+kr8K+I4LPCpnjvc+48oNdUDq6sfK
+         ZJGg==
+X-Forwarded-Encrypted: i=1; AFNElJ8zP2KDzVd50SqlyeBnmK/0A+0ovcaAgwDATmUMoS774V45MEyWK4m600zPjaYaJczmeC5oJ2B6iwpF7+kKtAE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxY4ozsw00ZRMCoqlc/kLfvd8dT4cJqJ4zH/9dn3bJLepKpkNvB
+	KakLB7mL2zmb0IZVfCk/ORVWFBpBYpEkpeRWb5gfBqkSxxWzt/lw8spa7mIoAgXI1qJNvxSDri1
+	+Qhj7zWaPNMybA3ZyqnStUBefy6s1xyy4HqxLH8W6
+X-Gm-Gg: Acq92OF/Ag1iHo7h+UK7n8p+WsJKSCtLj8gImWPPbhrEZVc4OXb1ECxMPK25Kvwk3al
+	I5YNq24aDY/tUxTPf+OoW4irAtv2HMmlr4eVOQsCVE+C0uSvVPGwUXUG0dJSgvuHZIQdwQu6VLm
+	rTVh1B4H/w9p/zgsCWTb/O0lRhqpQP1WD4jrCoxsV8uvCZe97LRicq3GUwqSQi12Sbacf+DJFU6
+	J879vT5hOiBxJGthUKBxpXonVxRcXX3eO6+1xQHpRRSEh2XmNyqJ5ynnWqkHmnztY7Aq0BCiccY
+	jpl/CYM=
+X-Received: by 2002:a17:903:1b4c:b0:2ba:7610:3f21 with SMTP id
+ d9443c01a7336-2bd7e802964mr23892325ad.5.1778816924539; Thu, 14 May 2026
+ 20:48:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20260513-ecc_panic-v7-2-be2e578e61da@debian.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
- kwepemq500010.china.huawei.com (7.202.194.235)
+References: <20260507070547.2268452-1-sashal@kernel.org>
+In-Reply-To: <20260507070547.2268452-1-sashal@kernel.org>
+From: Paul Moore <paul@paul-moore.com>
+Date: Thu, 14 May 2026 23:48:32 -0400
+X-Gm-Features: AVHnY4IFjeygqhvOWHf7nnff2hcSoElhRffZjECjs-fQ1g-cwaO4KY2xNXWLrHM
+Message-ID: <CAHC9VhTwDt2Bx8n0io9Qge_fUEnrHsxrFAQY+KaemKWqJqBQxw@mail.gmail.com>
+Subject: Re: [PATCH] killswitch: add per-function short-circuit mitigation primitive
+To: Sasha Levin <sashal@kernel.org>
+Cc: corbet@lwn.net, akpm@linux-foundation.org, skhan@linuxfoundation.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, gregkh@linuxfoundation.org, 
+	linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2026/5/13 23:39, Breno Leitao wrote:
-> get_any_page() collapses three different failure modes into a single
-> -EIO return:
-> 
->   * the put_page race in the !count_increased path;
->   * the HWPoisonHandlable() rejection that bounces out of
->     __get_hwpoison_page() with -EBUSY and exhausts shake_page() retries;
->   * the HWPoisonHandlable() rejection that goes through the
->     count_increased / put_page / shake_page retry loop.
-> 
-> The first is transient (the page is racing with the allocator).  The
-> second can be either transient (a userspace folio briefly off LRU
-> during migration/compaction) or stable (slab/vmalloc/page-table/
-> kernel-stack pages).  The third describes a stable kernel-owned page
-> that the count_increased=true caller already held a reference on.
-> 
-> Distinguish them on the return path: keep -EIO for both the put_page
-> race and the -EBUSY-after-retries branch (shake_page() cannot drag a
-> folio back from active migration, so we cannot prove the page is
-> permanently kernel-owned from there), keep -EBUSY for the allocation
-> race (unchanged), and return -ENOTRECOVERABLE only from the
-> count_increased-true HWPoisonHandlable() rejection that exhausts its
-> retries -- the caller's reference is structural evidence that the
-> page is owned by the kernel.
-> 
-> Extend the unhandlable-page pr_err() to fire for either errno and
-> update the get_hwpoison_page() kerneldoc.
-> 
-> memory_failure() still folds every negative return into
-> MF_MSG_GET_HWPOISON via its existing "else if (res < 0)" branch, so
-> this patch is a no-op for users of memory_failure() and only changes
-> the errno that soft_offline_page() can propagate to its callers.  A
-> follow-up wires the new return code through memory_failure() and
-> reports MF_MSG_KERNEL for the unrecoverable cases.
-> 
-> Suggested-by: David Hildenbrand <david@kernel.org>
-> Signed-off-by: Breno Leitao <leitao@debian.org>
+On Thu, May 7, 2026 at 3:05=E2=80=AFAM Sasha Levin <sashal@kernel.org> wrot=
+e:
+>
+> When a (security) issue goes public, fleets stay exposed until a patched =
+kernel
+> is built, distributed, and rebooted into.
+>
+> For many such issues the simplest mitigation is to stop calling the buggy
+> function. Killswitch provides that. An admin writes:
+>
+>     echo "engage af_alg_sendmsg -1" \
+>         > /sys/kernel/security/killswitch/control
+>
+> After this, af_alg_sendmsg() returns -EPERM on every call without
+> running its body. The mitigation takes effect immediately, and is dropped=
+ on
+> the next reboot.
+>
+> A lot of recent kernel issues sit in code paths most installs only have e=
+nabled
+> to support a relative minority of users: AF_ALG, ksmbd, nf_tables, vsock,=
+ ax25,
+> and friends.
+>
+> For most users, the cost of "this socket family stops working for the day=
+" is
+> much smaller than the cost of running a known vulnerable kernel until the=
+ fix
+> land.
+>
+> Assisted-by: Claude:claude-opus-4-7
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
 > ---
->  mm/memory-failure.c | 18 +++++++++++++++---
->  1 file changed, 15 insertions(+), 3 deletions(-)
-> 
-> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-> index 49bcfbd04d213..bae883df3ccb2 100644
-> --- a/mm/memory-failure.c
-> +++ b/mm/memory-failure.c
-> @@ -1408,6 +1408,15 @@ static int get_any_page(struct page *p, unsigned long flags)
->  				shake_page(p);
->  				goto try_again;
->  			}
-> +			/*
-> +			 * Return -EIO rather than -ENOTRECOVERABLE: this
-> +			 * branch is also reached for pages that are merely
-> +			 * off-LRU transiently (e.g. a folio in the middle
-> +			 * of migration or compaction), which shake_page()
-> +			 * cannot drag back.  The caller cannot prove the
-> +			 * page is permanently kernel-owned from here, so
-> +			 * keep it on the recoverable errno.
-> +			 */
->  			ret = -EIO;
->  			goto out;
->  		}
-> @@ -1427,10 +1436,10 @@ static int get_any_page(struct page *p, unsigned long flags)
->  			goto try_again;
->  		}
->  		put_page(p);
-> -		ret = -EIO;
-> +		ret = -ENOTRECOVERABLE;
+>  Documentation/admin-guide/index.rst           |   1 +
+>  Documentation/admin-guide/killswitch.rst      | 159 ++++
+>  Documentation/admin-guide/tainted-kernels.rst |   8 +
+>  MAINTAINERS                                   |  11 +
+>  include/linux/killswitch.h                    |  19 +
+>  include/linux/panic.h                         |   3 +-
+>  init/Kconfig                                  |   2 +
+>  kernel/Kconfig.killswitch                     |  31 +
+>  kernel/Makefile                               |   1 +
+>  kernel/killswitch.c                           | 798 ++++++++++++++++++
+>  kernel/panic.c                                |   1 +
+>  lib/Kconfig.debug                             |  13 +
+>  lib/Makefile                                  |   1 +
+>  lib/test_killswitch.c                         |  85 ++
+>  tools/testing/selftests/Makefile              |   1 +
+>  tools/testing/selftests/killswitch/.gitignore |   1 +
+>  tools/testing/selftests/killswitch/Makefile   |   8 +
+>  .../selftests/killswitch/cve_31431_test.c     | 162 ++++
+>  .../selftests/killswitch/killswitch_test.sh   | 147 ++++
+>  19 files changed, 1451 insertions(+), 1 deletion(-)
+>  create mode 100644 Documentation/admin-guide/killswitch.rst
+>  create mode 100644 include/linux/killswitch.h
+>  create mode 100644 kernel/Kconfig.killswitch
+>  create mode 100644 kernel/killswitch.c
+>  create mode 100644 lib/test_killswitch.c
+>  create mode 100644 tools/testing/selftests/killswitch/.gitignore
+>  create mode 100644 tools/testing/selftests/killswitch/Makefile
+>  create mode 100644 tools/testing/selftests/killswitch/cve_31431_test.c
+>  create mode 100755 tools/testing/selftests/killswitch/killswitch_test.sh
 
-Theoretically, pages that are merely off-LRU transiently as you commented above could
-reach here too? Or am I miss something?
+If we made Lockdown an LSM, we should probably also make killswitch an LSM.
 
-Thanks.
-.
+For the LSM crowd who might be seeing this for the first time, the
+original thread can be found on lore via the link below:
+https://lore.kernel.org/all/20260507070547.2268452-1-sashal@kernel.org
 
->  	}
->  out:
-> -	if (ret == -EIO)
-> +	if (ret == -EIO || ret == -ENOTRECOVERABLE)
->  		pr_err("%#lx: unhandlable page.\n", page_to_pfn(p));
->  
->  	return ret;
-> @@ -1487,7 +1496,10 @@ static int __get_unpoison_page(struct page *page)
->   *         -EIO for pages on which we can not handle memory errors,
->   *         -EBUSY when get_hwpoison_page() has raced with page lifecycle
->   *         operations like allocation and free,
-> - *         -EHWPOISON when the page is hwpoisoned and taken off from buddy.
-> + *         -EHWPOISON when the page is hwpoisoned and taken off from buddy,
-> + *         -ENOTRECOVERABLE for stable kernel-owned pages the handler
-> + *         cannot recover (PG_reserved, slab, vmalloc, page tables,
-> + *         kernel stacks, and similar non-LRU/non-buddy pages).
->   */
->  static int get_hwpoison_page(struct page *p, unsigned long flags)
->  {
-> 
-
+--=20
+paul-moore.com
