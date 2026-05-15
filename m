@@ -1,266 +1,101 @@
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+Received: from mail-wm1-f67.google.com (mail-wm1-f67.google.com [209.85.128.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ECC43469EE
-	for <linux-kselftest@vger.kernel.org>; Fri, 15 May 2026 20:18:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBB09487BE
+	for <linux-kselftest@vger.kernel.org>; Fri, 15 May 2026 20:19:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.67
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778876309; cv=none; b=e1I8FaYylSx7PDuEPrRiJ1bQzxGaiHBXfeJf5L28H82cOVeu0M+K2JeWvsyxrkqE4ACcbU6AOzpRRwIeIRcCASFspI3wqPzjZ8Y1MpbBSZIvqBP+79AzFK1EFncA4otjoLA1RWXHx5u6QgKZSVEnjyKYeTXG/8Qba+atSrW6oUM=
+	t=1778876384; cv=none; b=eVmQ+RJW5zWEHBKXxGl3o6v4ByZwX7iMHqpjzSw/vG/fZOlPC+rjsTx8hWvFC+XfGg1f0+E/Y371Y8Hp2H44WAmJJXct0DTbvDsV5roG3sqirlxuwzEO6xLLRRBl9Ev2wFDWK7fg3nQTLcecvkNlIljBVXRsWiepKa0eXQdgQdQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778876309; c=relaxed/simple;
-	bh=1hhJhGRBnE39H1ExGWWobqPWwKhQ+nPBRdzHBrMnTcU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=U5NN+6QQoGT2Vt3KuNhkiNHjtXI+vR8npdeX1+QadRHc8HsUqW3zMVb8rpTll9K6gjcOPi0FaX1nq8qrBAtPwDAfZCHihOqzxoMtDd33Z6xBqeyoNII51K2LS+DMijbctYXyVAORutEbnJMwuoThKTlWEWBUC8u3C4ld41B8UkY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oIovqBLR; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1778876384; c=relaxed/simple;
+	bh=IVAG7AjADp9pbIkirnW2LF7lyZL0hDgmHLHln1JCBGk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Bpf+Yb9lfz8ED0Wul61a9GGq3VSUHCBSQM1HeomRNEaX++bJ6b7nnbpCNyPkogKj8TK0fCmojpy18wg71MD5/dD4sTUtS5eahQ3krRYop/PClvcR3YuxJVNMMlHJ6PRqznBGKqyUZs4oC6PYmRmcI+WKQ+oyCwlx5+aDQh3m4r8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.67
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oIovqBLR"
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-43fe608cb92so88863f8f.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 15 May 2026 13:18:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778876306; x=1779481106; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gFUMjA3Q99bNtqVvjxkvJVf5DLmJ4s9XgY1QXegt+iY=;
-        b=oIovqBLR0CtMBAyoaCqKzxXaDNJN5d76PLDqiDCIXHgoAnyMY7jQS038UCH4nrskgh
-         sahfXbgL3fpJ9GVHqGl64t5jiepC3kTOkaF35ndqhchM2Z6aGuQSDVLfsgi57CE2eBeL
-         iNJ5TVnRZs6FFdlbLtiUZydx4TbPobkBrlASKADzNE8DBGyhJKW/Uh2gS2syoFTHQmZD
-         7GlnJjgjyLQm6BYs7fZ0/DylTTpA+K3S/Prv32A9EPKLroVCz3o9cRmw1oDhV8zLgObw
-         Tfah0AwIJMZLFx5jFBFux7eyZr8Syu3N7wwH4xPBhJt734OzKp+FtDu5E+10nn5ge56L
-         XCNw==
+Received: by mail-wm1-f67.google.com with SMTP id 5b1f17b1804b1-48d146705b4so2165095e9.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 15 May 2026 13:19:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778876306; x=1779481106;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gFUMjA3Q99bNtqVvjxkvJVf5DLmJ4s9XgY1QXegt+iY=;
-        b=jz2PXeg7d4gNw2uF1VSiSEuVmz93qkmHnnv+VEza0MjEBYjBVNGAkOOkwnvnka+76Q
-         WgyhqyVbo/zGwBtAxpqsacu9KN+FS079VatgNyhPHjsBbpep2/m+ZBEP0t4o6jQAs76c
-         vvl5GLBPMJkd36AisY60yZdReD1F7AgN9ar7ucSQw9RuISOQJvotOQ1aKrXBQZ/vSc11
-         wnouogPjkLNZ5fFtcHUmaXoel/NXnp5Vkx8xyRelG/IZVtlyHc0u/W9SFEMPBbmKvYEo
-         DpDIPPiKyWWuTdOgAFMqtfDDmcp1POgRPljOjIeNruEqfUxS39Xlg6BYC4DBHOiEC6+U
-         BKIQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+0xVMLDi+iATtMYk/T7QOMKPCWzIJ5NjYTHz45l4yKKa6yxnptz4Tea32SBHNVaUacvIxbunacEQZHQi3CPnc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzm5RoqF/DVczDCC3JorGaQ2+M5eBP+tiR+Z4ysr6LMc16axrEB
-	oDudtk6WspDHRI4FW25OeGDt7vMykONhI0TGrWFbJmBTUnzBPUGWzdqq
-X-Gm-Gg: Acq92OH0NFMTo1uVpEgU3/F64Dtq/UgcMZOwQEjra1BZqpSQ5jFrpz4B4UUu43rDCZ5
-	WnDPq2KOJVNoLgR8ewPReK8UJZcY4TJ074I1UE6ACzl1oP/1mC7EkFAtYyYKEtg2qL53ft5V8Gw
-	eg9xY9a35vkQnWtCpopM8GMVwAsLyv5XfrdS1S/lGVcCMjICeFZ/fAitUF4fub77bYwdlEyMfrI
-	T31eC5XSiJt62mYDkzCW1WPkkPqn+cjAVra82sapV00o+htXOuJriG9FQeap5W9Fl1gVqn4V5xf
-	0mEKL3jZNrWZu6k+TchUXMII5AFB76V5iTQShne9B042Etun4B/yQrF6K5aLYxRoqV1MbKBmLUp
-	huqfIJjalSvD0joFugec0p6mbl8hBJQ91bMCifmjg47lUFv8sRzgdcU9XyDdt50nrEOSfNf//pg
-	xU5e08Dveh3RiFDAZAMqQfpZMbxk8x9eGa6ss9z6A8h96qbaiwnrVlad2reZu5vGK/4OGBd7L4o
-	ev69dHwoQ==
-X-Received: by 2002:a05:6000:1ace:b0:43d:775b:c9bd with SMTP id ffacd0b85a97d-45e5c58906amr7599545f8f.10.1778876306213;
-        Fri, 15 May 2026 13:18:26 -0700 (PDT)
-Received: from f (cst-prg-92-135.cust.vodafone.cz. [46.135.92.135])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45da0fe248dsm16413483f8f.30.2026.05.15.13.18.22
+        d=1e100.net; s=20251104; t=1778876381; x=1779481181;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9wKWO2Yi4eHfQwzUIECRCEbVVtbU/J0JhEXvTgyUNag=;
+        b=HnqWd1qxfE6RrgxwCTqyZmwzI8WrOLxI8CFCNgqMka/m8Ea7NsAex0opxCx++yudHt
+         kRCAva9Maq199c6tlygwwEVxjG6IXRzlpgCVu6+8hhKRiHucpn1rZGHncgFc3IFthc/u
+         PB6RXxlGNkp4uzwObvN8zQUfEhA+IXYQHyOTgLWNIQrreDAATj9HIEv8YFUTbkJWevbi
+         mcJhuziy0D1NNNEOFEUnSeEUfoBfAHboqtsGMHFBKBeyqoFFdHVtUoyhHHANvYTZJInL
+         FyyT5kv2mvqFbTDey+8A7KvdpUIFmvwfXbfthgWlaPyz49CLHz1haMcVrQRkeTPcLywf
+         J7+w==
+X-Forwarded-Encrypted: i=1; AFNElJ+D9rAy8eJ085RI2+7cqCXXMnDVad2Csa5NhkUc2OY9uSfrdLlNxgBDaOAC/2shFW+vwzifzgwr2njItGy01WM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxqfkm6lCNr1fAGsWc/mmdxkOKVzZV83tbFub1WnARWp6Qzsh2Z
+	IUEvHDyiLt1d+P7tEsvTYNJi2+dCguXBxwD62ok9thyDVBK/XWT6xvVY
+X-Gm-Gg: Acq92OGuyJALQgrqhISKbZtxeAavC4sekeyLQeh6Xp4oDiBjI89HItnsYTv0rKm5KhB
+	3PUWVQNeJivJOtmT/37j63Z1YBQV34PnYfL5GgGE//WohDUlugNas8pllrF0jviQ08kvzM9rDMD
+	rnaAi7DJVawMSYB0+pZEkgDp8nyAV9GQQe1BFlNJD/9T4He0neDrACIIyUSN3dY0vu7IZioPAkM
+	NTUcR3SiUaVsq5fr1lz2lD7g2TFNOWVqGMADpPpYd9ha33ddzCVpMzJ4XgBmyAJr7vQ9X2jgXdA
+	NpCeF4mX8dCbAXr9MXgxer6gOOcTTlu8zRvW5BLDWaarhaLeVosMCkDPpDsFZFv3HRQQHRU6Vea
+	1PuuueHZRTN26pLYkEEE9gDGFq04RWusqY7I4BLk66vaFXyG5jokZYTRVqFcMGdsXHIHITaBQ3y
+	ZS7U1QqTYk7N3ljazDmr4Pwk5vtOn4FabZnFtoVr8+UnWCCkR7RsqB7nD4SE4=
+X-Received: by 2002:a05:600c:a11c:b0:488:9bf8:7f17 with SMTP id 5b1f17b1804b1-48fe61f27famr55369845e9.14.1778876381107;
+        Fri, 15 May 2026 13:19:41 -0700 (PDT)
+Received: from im-t490s.redhat.com (89-24-32-159.nat.epc.tmcz.cz. [89.24.32.159])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48feab2896bsm22924605e9.4.2026.05.15.13.19.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 May 2026 13:18:25 -0700 (PDT)
-Date: Fri, 15 May 2026 22:18:19 +0200
-From: Mateusz Guzik <mjguzik@gmail.com>
-To: Breno Leitao <leitao@debian.org>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Shuah Khan <shuah@kernel.org>, 
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	usama.arif@linux.dev, kernel-team@meta.com
-Subject: Re: [PATCH 1/2] fs/pipe: bulk pre-allocate pages outside pipe->mutex
- in anon_pipe_write
-Message-ID: <q37bmptbjr2gysl2g67bqo5axxqor4lsrrnf7ajixxjdrumbup@tgu3kz6kien5>
-References: <20260515-fix_pipe-v1-0-b14c840c7555@debian.org>
- <20260515-fix_pipe-v1-1-b14c840c7555@debian.org>
+        Fri, 15 May 2026 13:19:40 -0700 (PDT)
+From: Ilya Maximets <i.maximets@ovn.org>
+To: netdev@vger.kernel.org
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Adrian Moreno <amorenoz@redhat.com>,
+	Jiri Benc <jbenc@redhat.com>,
+	Nicolas Dichtel <nicolas.dichtel@6wind.com>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Matteo Perin <matteo.perin@canonical.com>,
+	Ilya Maximets <i.maximets@ovn.org>
+Subject: [PATCH net 0/5] netlink: fixes for cross-namespace nsid reporting
+Date: Fri, 15 May 2026 22:19:19 +0200
+Message-ID: <20260515201937.2813983-1-i.maximets@ovn.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260515-fix_pipe-v1-1-b14c840c7555@debian.org>
+Content-Transfer-Encoding: 8bit
 
-On Fri, May 15, 2026 at 03:28:44AM -0700, Breno Leitao wrote:
-> anon_pipe_write() takes pipe->mutex and then, from the per-iteration
-> anon_pipe_get_page() helper, used to call alloc_page(GFP_HIGHUSER |
-> __GFP_ACCOUNT) once per page while still holding it. That allocation
-> can sleep doing direct reclaim and/or runs memcg charging, which extends
-> the critical section and stalls a concurrent reader on the very same
-> mutex.
-> 
-> Bulk pre-allocate DIV_ROUND_UP(total_len, PAGE_SIZE) pages (up to
-> PIPE_PREALLOC_MAX (8)) pages outside the mutex when total_len >=
-> PAGE_SIZE, using alloc_pages_bulk().  (Under memcg, alloc_pages_bulk()
-> with __GFP_ACCOUNT might return less pages than requested, but, this is
-> still a win, given some pages allocation is moved outside of the
-> lock).
-> 
-> Pass the array into anon_pipe_get_page(), which now consumes from
-> tmp_page[] first, then from the prealloc array, and only as a last
-> resort falls back to alloc_page() under the mutex (reached only for
-> writes larger than 8 pages, where the prealloc cap is exhausted).
-> 
-> Doing this in one bulk call before the lock keeps the fast path's
-> mutex held for a single, write-bounded critical section -- no extra
-> mutex_unlock/_lock cycles -- so it avoids the per-page lock-handoff
-> overhead that a per-page drop-and-retake design would introduce, while
-> still moving the typical multi-page allocation off the critical
-> section. Unused prealloc pages are pushed to the pipe's tmp_page[]
-> cache (or freed) before unlock, so a subsequent write to the same
-> pipe gets a hot cached page rather than paying for an alloc again.
-> 
-> Sub-PAGE_SIZE writes are unchanged: the merge path handles them
-> without ever needing a fresh page, so it is not worth speculatively
-> allocating for them.
-> 
-> This can improve the pipe throughput up to 48% and reduce the latency in
-> 33%.
+While working on some new features for OVS and OVN we discovered that
+self-referential NSIDs get unintentionally allocated in the system as
+well as unexpectedly reported for local events on all-nsid listeners.
 
+More details in the patches.  They change user-visible behavior, but
+the current behavior is arguably a bug, as it makes it hard to use
+all-nsid sockets without a decent amount of extra unrelated work of
+tracking when new NSIDs are allocated for your local namespace.
 
-This change is quite a hammer.
+Tests are added to check the expected behavior and YNL is extended to
+support all-nsid sockets in the tests.
 
-Do you have a real workload where there are multiple processes issuing
-large ops to the same pipe on both reader and writer side?
+Ilya Maximets (5):
+  net: rtnetlink: fix link nsid reported when the link is local
+  selftests: net: add a test case for cross-namespace peer netns
+  net: netlink: don't set nsid on local notifications
+  tools: ynl: support listening on all nsids
+  selftests: net: add a test case for nsid in all nsid notifications
 
-The only workload I'm aware of sharing the pipe between more than just
-one reader and one writer is anything with make, but that is mostly
-operating on 1-byte ops.
+ net/core/rtnetlink.c                      |   2 +-
+ net/netlink/af_netlink.c                  |   8 +-
+ tools/net/ynl/pyynl/lib/ynl.py            |  32 +++++--
+ tools/testing/selftests/net/link_netns.py | 101 +++++++++++++++++++++-
+ 4 files changed, 132 insertions(+), 11 deletions(-)
 
-I'm asking because this would be better implemented taking into account
-how many pages are hanging out in the tmp_page array. With only one
-writer and one reader there is no concern someone will steal the pages.
+-- 
+2.53.0
 
-Preferably the tmp_page array would grow to accomodate more memory, but
-admittedly this runs into a problem where a pipe can linger unused
-indefinitely while hoarding several pages. As in, some shrinking
-mechanism would be needed so that's probably a no-go and preallocation
-is the way to go for now.
-
-Even then, this can definitely be integrated much better instead of
-being open-coded.
-
-> 
-> Signed-off-by: Breno Leitao <leitao@debian.org>
-> ---
->  fs/pipe.c | 40 ++++++++++++++++++++++++++++++++++++++--
->  1 file changed, 38 insertions(+), 2 deletions(-)
-> 
-> diff --git a/fs/pipe.c b/fs/pipe.c
-> index 9841648c9cf3e..7a1517d15107a 100644
-> --- a/fs/pipe.c
-> +++ b/fs/pipe.c
-> @@ -111,7 +111,11 @@ void pipe_double_lock(struct pipe_inode_info *pipe1,
->  	pipe_lock(pipe2);
->  }
->  
-> -static struct page *anon_pipe_get_page(struct pipe_inode_info *pipe)
-> +#define PIPE_PREALLOC_MAX 8
-> +
-> +static struct page *anon_pipe_get_page(struct pipe_inode_info *pipe,
-> +				       struct page **prealloc,
-> +				       unsigned int *prealloc_n)
->  {
->  	for (int i = 0; i < ARRAY_SIZE(pipe->tmp_page); i++) {
->  		if (pipe->tmp_page[i]) {
-> @@ -121,6 +125,14 @@ static struct page *anon_pipe_get_page(struct pipe_inode_info *pipe)
->  		}
->  	}
->  
-> +	if (*prealloc_n) {
-> +		unsigned int idx = --(*prealloc_n);
-
-This is some nasty golfing.
-
-Instead, you could have something like:
-struct tmp_page_prealloc {
-	struct page *pages;
-	unsigned int count;
-};
-
-
-then...
-
-> +		struct page *page = prealloc[idx];
-> +
-> +		prealloc[idx] = NULL;
-> +		return page;
-> +	}
-> +
->  	return alloc_page(GFP_HIGHUSER | __GFP_ACCOUNT);
->  }
->  
-> @@ -438,6 +450,8 @@ anon_pipe_write(struct kiocb *iocb, struct iov_iter *from)
->  	ssize_t chars;
->  	bool was_empty = false;
->  	bool wake_next_writer = false;
-> +	struct page *prealloc[PIPE_PREALLOC_MAX] = { NULL };
-> +	unsigned int prealloc_n = 0;
->  
-
-	struct tmp_page_prealloc tpp = {};
-
->  	/*
->  	 * Reject writing to watch queue pipes before the point where we lock
-> @@ -455,6 +469,26 @@ anon_pipe_write(struct kiocb *iocb, struct iov_iter *from)
->  	if (unlikely(total_len == 0))
->  		return 0;
->  
-> +	/*
-> +	 * Bulk pre-allocate up to PIPE_PREALLOC_MAX pages outside pipe->mutex
-> +	 * for writes that span at least one full page. alloc_page() with
-> +	 * GFP_HIGHUSER may sleep doing reclaim and runs memcg charging, so
-> +	 * doing it under the mutex extends the critical section and stalls
-> +	 * the reader. The merge path handles sub-PAGE_SIZE writes without
-> +	 * needing a fresh page; for writes larger than PIPE_PREALLOC_MAX
-> +	 * pages, anon_pipe_get_page() falls back to a single alloc_page()
-> +	 * under the mutex for the remainder. Unused prealloc pages are
-> +	 * returned to the pipe's tmp_page[] cache (or freed) before unlock.
-> +	 */
-> +	if (total_len >= PAGE_SIZE) {
-> +		unsigned int want = min_t(unsigned int,
-> +					  DIV_ROUND_UP(total_len, PAGE_SIZE),
-> +					  PIPE_PREALLOC_MAX);
-> +
-> +		prealloc_n = alloc_pages_bulk(GFP_HIGHUSER | __GFP_ACCOUNT,
-> +					      want, prealloc);
-> +	}
-> +
-
-This should move to a dedicated routine, perhaps:
-	anon_get_page_prealloc(pipe, &tmp_page_prealloc);
-
-then it can also easily decide how much to prealloc based on existing
-state
-
->  	mutex_lock(&pipe->mutex);
->  
->  	if (!pipe->readers) {
-> @@ -512,7 +546,7 @@ anon_pipe_write(struct kiocb *iocb, struct iov_iter *from)
->  			struct page *page;
->  			int copied;
->  
-> -			page = anon_pipe_get_page(pipe);
-> +			page = anon_pipe_get_page(pipe, prealloc, &prealloc_n);
->  			if (unlikely(!page)) {
->  				if (!ret)
->  					ret = -ENOMEM;
-> @@ -576,6 +610,8 @@ anon_pipe_write(struct kiocb *iocb, struct iov_iter *from)
->  		wake_next_writer = true;
->  	}
->  out:
-> +	while (prealloc_n)
-> +		anon_pipe_put_page(pipe, prealloc[--prealloc_n]);
-
-this results in put_page() calls under the mutex, still extending the hold time
-
-you could split this into 2 ops, for example:
-+	anon_pipe_cache_pages(pipe, &tmp_page_prealloc);
-  	if (pipe_is_full(pipe))
-  		wake_next_writer = false;
-  	mutex_unlock(&pipe->mutex);
-+	anon_pipe_free_pages(pipe, &tmp_page_prealloc);
-
-All that aside, I have no idea about performance impact on arm64, but
-there is *definitely* some throughput lost based on the fact that memory
-copy is restarted per page. I presume arm64 has an equivalent of amd64's
-SMAP which again will not be free and is paid for every time as well.
