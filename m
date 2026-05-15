@@ -1,172 +1,266 @@
-Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com [209.85.222.47])
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 183B23F8888
-	for <linux-kselftest@vger.kernel.org>; Fri, 15 May 2026 18:34:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.222.47
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778870080; cv=pass; b=rCM1zdm4M1qgmJMsbM4ggzjleIM4X+nzvuHvMWx/hT7Mm15abNexvlL4cZY7Z5Xoqo0cfPbrrC7ByskpCJ494liR3LDPIKjUcOsbJrkrL3/d+Hmlm0OrtTDEMzl3qWldSJs6ByPT+Xax9vlVLANTCFGUDRh57wmUyEHDag03oUk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778870080; c=relaxed/simple;
-	bh=DA2Wy9smkUrOgGLD5EcQ7iMKHSUE3cp9ttCFreanAWA=;
-	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rBiech2b0YGCjTfpE3h+jDqkXTQ2ikF/sxV/Vk2Ai/b5/lMShtJ4mAR9A7T3YOFJVYIPaDh1U1VJhEye6xdpciLkruQ0H0MIYSpw5D3IXWBfo9NYmMsg698lAs8yPbAsgYFsyKfFuHGN2lu13sGUWdoqHcZWTRYS4UWPP96Np0w=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YYS73nz/; arc=pass smtp.client-ip=209.85.222.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ECC43469EE
+	for <linux-kselftest@vger.kernel.org>; Fri, 15 May 2026 20:18:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778876309; cv=none; b=e1I8FaYylSx7PDuEPrRiJ1bQzxGaiHBXfeJf5L28H82cOVeu0M+K2JeWvsyxrkqE4ACcbU6AOzpRRwIeIRcCASFspI3wqPzjZ8Y1MpbBSZIvqBP+79AzFK1EFncA4otjoLA1RWXHx5u6QgKZSVEnjyKYeTXG/8Qba+atSrW6oUM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778876309; c=relaxed/simple;
+	bh=1hhJhGRBnE39H1ExGWWobqPWwKhQ+nPBRdzHBrMnTcU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=U5NN+6QQoGT2Vt3KuNhkiNHjtXI+vR8npdeX1+QadRHc8HsUqW3zMVb8rpTll9K6gjcOPi0FaX1nq8qrBAtPwDAfZCHihOqzxoMtDd33Z6xBqeyoNII51K2LS+DMijbctYXyVAORutEbnJMwuoThKTlWEWBUC8u3C4ld41B8UkY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oIovqBLR; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YYS73nz/"
-Received: by mail-ua1-f47.google.com with SMTP id a1e0cc1a2514c-94ac8cbf3feso34746241.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 15 May 2026 11:34:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778870075; cv=none;
-        d=google.com; s=arc-20240605;
-        b=HvFvWObfN41NX8140ysGNNmrqt3PhKBe8q4SBbKkmeP0lC9GXhrfixemqLIoN9G+0K
-         6mhXzoDKSDOgkvNDOFkDZTeNp8i6Tto6S0PBlLFNv/2sQiuCsFXph4kvhT9di/bJg1Dg
-         wl1YYejdwU8zQAhIZXXP+OHFO1KERZLilgp5yNDhCT0LaDC+ox0zOYvedKou58Efmqy8
-         V/4NocQ0HsKLNTjptpYbU/JrLiXiJfR95tb1LxncB2fRxyQoRCYX2SLMPRzYdECvMbEc
-         bLpoMdzO3aHxGi9xdFspkqp+doB/hAI3Cp3VEoaYB8IbZFc/WkgHam5vvWWN+ADoXvpT
-         Le9g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:dkim-signature;
-        bh=hXzcL4Si7AoDz7U9pqlgIyMQAxFIyNef25XFajpPNe4=;
-        fh=RhK++GzdlG/W/V9Chh1qihAdVsNw6vReFROBzS91Cbg=;
-        b=JLVTOpqSrQC0Arna5PS+YQL7kXd9qwJDEREWdWARSpWKZx3RiSEuTPj7jMYI0wZp9a
-         OorDEWfIEJKfSFFAMsRduJpEZVt6Ix1vPAASsK/U19At5VO5NqlBmg3LITLP8WCY0ufs
-         4NyOgV5TfFg4/JM9bUNmf53KnqSMSaOP8fmRqJ48dZXT6yzL4QDj/zP01tzA/ZfIUvSG
-         d6k5vC3GCqtlxn3izatRrPjxHcAJsdxkllyEd0/5/+s5/YY10YMg9odpvAKNbyktZ3ui
-         fW4EkpoPEu2J1wj5oecPVHveXlCGd8P3NIwZF0z+0iJGJxE5liD4FfxJKOKClQM4m0pe
-         GCiA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oIovqBLR"
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-43fe608cb92so88863f8f.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 15 May 2026 13:18:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1778870075; x=1779474875; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=hXzcL4Si7AoDz7U9pqlgIyMQAxFIyNef25XFajpPNe4=;
-        b=YYS73nz/xIcDnIoNXHbg5GJ4s1o3X29GnkFEut9rfuxgQk3TQRUsu6RVLw+uqTtc/v
-         d2z1AxB2eSs4RV3oGINb/D2mPrEtUN+TCkSDpWobhMFO0HR0hbo5L8yeD9O8iU/IcRJH
-         sa7VwaOXROWEEexJ+1HCXnKsA1naMryFUYh/MiAvcrarKYPHzupdMRSlAWyR8eOetR3b
-         Sxe8w+/PVbeVsIw96r/jOUejGQ71sBO0mVt543KBlOXhuQ8VzTtMl4oO9u8I8KxBxyia
-         EK+Q8RFlfe1ZHyYZaqOa1j0zPOMaJsKMfLjG/nF5Rn7Z23Kd8k2b0hBAblYntqprLt5m
-         Klbw==
+        d=gmail.com; s=20251104; t=1778876306; x=1779481106; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=gFUMjA3Q99bNtqVvjxkvJVf5DLmJ4s9XgY1QXegt+iY=;
+        b=oIovqBLR0CtMBAyoaCqKzxXaDNJN5d76PLDqiDCIXHgoAnyMY7jQS038UCH4nrskgh
+         sahfXbgL3fpJ9GVHqGl64t5jiepC3kTOkaF35ndqhchM2Z6aGuQSDVLfsgi57CE2eBeL
+         iNJ5TVnRZs6FFdlbLtiUZydx4TbPobkBrlASKADzNE8DBGyhJKW/Uh2gS2syoFTHQmZD
+         7GlnJjgjyLQm6BYs7fZ0/DylTTpA+K3S/Prv32A9EPKLroVCz3o9cRmw1oDhV8zLgObw
+         Tfah0AwIJMZLFx5jFBFux7eyZr8Syu3N7wwH4xPBhJt734OzKp+FtDu5E+10nn5ge56L
+         XCNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778870075; x=1779474875;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hXzcL4Si7AoDz7U9pqlgIyMQAxFIyNef25XFajpPNe4=;
-        b=P5qVFfjP5EmdxlGQSlXUSaRDSb3MnQ/SMyxzWAI4sYzgqOgEBJXlwCmClfHsjrXS+2
-         /+xAaKEAfS6aHkBF2KbfdQvrWIsUiM/bjuPFPLdxi9bCvbyowUC4eN7W3TimbjQXC0+U
-         lzh8YNQf/FE1t475L27ocCJYzCigpy/aHPOjp6f/NisQtMZb9J7lvP4fdoqS2V2YYt1d
-         oLj50XcL6wogQsLsu6FOL8Uw3g3nMDWWpFq6SxtU8VI61/GrvvkSKowJ6AydjAAoKgmf
-         ElBHn/ZjVZT6d0p1JO8kGvK0aM5xf70ctrrerdWNHF3RNNQ/fsnjqNMgNOgA0XasEa9d
-         FdRw==
-X-Forwarded-Encrypted: i=1; AFNElJ/NcXJwRKuqUKVRgufbXE2cA4fPV6tLb+K5f46Ajc+oGJDM4DKc9Is+A5Jx+2/Bd0VmPqtKLnmiCIbYY22A840=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwJmDMA0LnjKfPRDUS+37ECssc0zSAJb/wCeDP3qQAyhGb+RtFd
-	TdK4a2lWz3+MgHvqtHbP40julMrXvgtwkrf/e9PCWzRc2uCU1euIvdt0H+nikWjEbscp4DN0810
-	Q4/Q5rb/KRLIVPl3xquqCH0ReLwbnyV6mRfjgGTTe
-X-Gm-Gg: Acq92OEYg3+Nes4N3/thFKA8+MEeZpOWhIIvFNdDREf5wYo6nTmK0m3sTQy3ZjsxGKv
-	qtId5gStqiTGhmwmkLi04Y+q18Eh7Nyi+VvxS/VEwCbKeWFpf1XoHR+XSSO4rALRhuFVPkKZlqn
-	2bFyoS7xFsuhmhkL/BcvNghfUej8m96wBKeXSL8m7aZLtBLm2UWpLD7iHnKVX/ASVQETsMbzcTi
-	hjQZAHWyxzWMo0vKsRUa2/LBeHgFgbtoyxFcc9z5El3dLcA0r5XYqL+A0O6WoI4AubnKHAPNQbD
-	0ENzGbcRiDCUg3VTGBKWTKCQLd85YkOE+YLFt+eInsNv1P0DtdficQA4792Oy38Srd9elS9chTY
-	NEgsj3QpMl1Y1PQ==
-X-Received: by 2002:a05:6102:f13:b0:5ff:f4ae:a154 with SMTP id
- ada2fe7eead31-63a3ca1ab64mr3398396137.1.1778870074886; Fri, 15 May 2026
- 11:34:34 -0700 (PDT)
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 15 May 2026 11:34:34 -0700
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 15 May 2026 11:34:33 -0700
-From: Ackerley Tng <ackerleytng@google.com>
-In-Reply-To: <ac7oE_1j6gxf8OKT@google.com>
-References: <20260402041156.1377214-1-rppt@kernel.org> <20260402041156.1377214-14-rppt@kernel.org>
- <ac7oE_1j6gxf8OKT@google.com>
+        d=1e100.net; s=20251104; t=1778876306; x=1779481106;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gFUMjA3Q99bNtqVvjxkvJVf5DLmJ4s9XgY1QXegt+iY=;
+        b=jz2PXeg7d4gNw2uF1VSiSEuVmz93qkmHnnv+VEza0MjEBYjBVNGAkOOkwnvnka+76Q
+         WgyhqyVbo/zGwBtAxpqsacu9KN+FS079VatgNyhPHjsBbpep2/m+ZBEP0t4o6jQAs76c
+         vvl5GLBPMJkd36AisY60yZdReD1F7AgN9ar7ucSQw9RuISOQJvotOQ1aKrXBQZ/vSc11
+         wnouogPjkLNZ5fFtcHUmaXoel/NXnp5Vkx8xyRelG/IZVtlyHc0u/W9SFEMPBbmKvYEo
+         DpDIPPiKyWWuTdOgAFMqtfDDmcp1POgRPljOjIeNruEqfUxS39Xlg6BYC4DBHOiEC6+U
+         BKIQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+0xVMLDi+iATtMYk/T7QOMKPCWzIJ5NjYTHz45l4yKKa6yxnptz4Tea32SBHNVaUacvIxbunacEQZHQi3CPnc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzm5RoqF/DVczDCC3JorGaQ2+M5eBP+tiR+Z4ysr6LMc16axrEB
+	oDudtk6WspDHRI4FW25OeGDt7vMykONhI0TGrWFbJmBTUnzBPUGWzdqq
+X-Gm-Gg: Acq92OH0NFMTo1uVpEgU3/F64Dtq/UgcMZOwQEjra1BZqpSQ5jFrpz4B4UUu43rDCZ5
+	WnDPq2KOJVNoLgR8ewPReK8UJZcY4TJ074I1UE6ACzl1oP/1mC7EkFAtYyYKEtg2qL53ft5V8Gw
+	eg9xY9a35vkQnWtCpopM8GMVwAsLyv5XfrdS1S/lGVcCMjICeFZ/fAitUF4fub77bYwdlEyMfrI
+	T31eC5XSiJt62mYDkzCW1WPkkPqn+cjAVra82sapV00o+htXOuJriG9FQeap5W9Fl1gVqn4V5xf
+	0mEKL3jZNrWZu6k+TchUXMII5AFB76V5iTQShne9B042Etun4B/yQrF6K5aLYxRoqV1MbKBmLUp
+	huqfIJjalSvD0joFugec0p6mbl8hBJQ91bMCifmjg47lUFv8sRzgdcU9XyDdt50nrEOSfNf//pg
+	xU5e08Dveh3RiFDAZAMqQfpZMbxk8x9eGa6ss9z6A8h96qbaiwnrVlad2reZu5vGK/4OGBd7L4o
+	ev69dHwoQ==
+X-Received: by 2002:a05:6000:1ace:b0:43d:775b:c9bd with SMTP id ffacd0b85a97d-45e5c58906amr7599545f8f.10.1778876306213;
+        Fri, 15 May 2026 13:18:26 -0700 (PDT)
+Received: from f (cst-prg-92-135.cust.vodafone.cz. [46.135.92.135])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45da0fe248dsm16413483f8f.30.2026.05.15.13.18.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 May 2026 13:18:25 -0700 (PDT)
+Date: Fri, 15 May 2026 22:18:19 +0200
+From: Mateusz Guzik <mjguzik@gmail.com>
+To: Breno Leitao <leitao@debian.org>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Shuah Khan <shuah@kernel.org>, 
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	usama.arif@linux.dev, kernel-team@meta.com
+Subject: Re: [PATCH 1/2] fs/pipe: bulk pre-allocate pages outside pipe->mutex
+ in anon_pipe_write
+Message-ID: <q37bmptbjr2gysl2g67bqo5axxqor4lsrrnf7ajixxjdrumbup@tgu3kz6kien5>
+References: <20260515-fix_pipe-v1-0-b14c840c7555@debian.org>
+ <20260515-fix_pipe-v1-1-b14c840c7555@debian.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Fri, 15 May 2026 11:34:33 -0700
-X-Gm-Features: AVHnY4IEbHvurLDEpAdcz2fUdNtakQtGECOPGI7q3-EkzXTSsmoe5CSHOnLeDQk
-Message-ID: <CAEvNRgHd4azPaMddvqnSG+Z5fmg+LWd+pz=LSB3PrJTW618dww@mail.gmail.com>
-Subject: Re: [PATCH v4 13/15] KVM: guest_memfd: implement userfaultfd operations
-To: Sean Christopherson <seanjc@google.com>, Mike Rapoport <rppt@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Andrea Arcangeli <aarcange@redhat.com>, 
-	Andrei Vagin <avagin@google.com>, Axel Rasmussen <axelrasmussen@google.com>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, David Hildenbrand <david@kernel.org>, 
-	Harry Yoo <harry.yoo@oracle.com>, Hugh Dickins <hughd@google.com>, 
-	James Houghton <jthoughton@google.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
-	"Lorenzo Stoakes (Oracle)" <ljs@kernel.org>, "Matthew Wilcox (Oracle)" <willy@infradead.org>, Michal Hocko <mhocko@suse.com>, 
-	Muchun Song <muchun.song@linux.dev>, Nikita Kalyazin <kalyazin@amazon.com>, 
-	Oscar Salvador <osalvador@suse.de>, Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>, 
-	Shuah Khan <shuah@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Vlastimil Babka <vbabka@suse.cz>, 
-	kvm@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-mm@kvack.org, tarunsahu@google.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260515-fix_pipe-v1-1-b14c840c7555@debian.org>
 
-Sean Christopherson <seanjc@google.com> writes:
+On Fri, May 15, 2026 at 03:28:44AM -0700, Breno Leitao wrote:
+> anon_pipe_write() takes pipe->mutex and then, from the per-iteration
+> anon_pipe_get_page() helper, used to call alloc_page(GFP_HIGHUSER |
+> __GFP_ACCOUNT) once per page while still holding it. That allocation
+> can sleep doing direct reclaim and/or runs memcg charging, which extends
+> the critical section and stalls a concurrent reader on the very same
+> mutex.
+> 
+> Bulk pre-allocate DIV_ROUND_UP(total_len, PAGE_SIZE) pages (up to
+> PIPE_PREALLOC_MAX (8)) pages outside the mutex when total_len >=
+> PAGE_SIZE, using alloc_pages_bulk().  (Under memcg, alloc_pages_bulk()
+> with __GFP_ACCOUNT might return less pages than requested, but, this is
+> still a win, given some pages allocation is moved outside of the
+> lock).
+> 
+> Pass the array into anon_pipe_get_page(), which now consumes from
+> tmp_page[] first, then from the prealloc array, and only as a last
+> resort falls back to alloc_page() under the mutex (reached only for
+> writes larger than 8 pages, where the prealloc cap is exhausted).
+> 
+> Doing this in one bulk call before the lock keeps the fast path's
+> mutex held for a single, write-bounded critical section -- no extra
+> mutex_unlock/_lock cycles -- so it avoids the per-page lock-handoff
+> overhead that a per-page drop-and-retake design would introduce, while
+> still moving the typical multi-page allocation off the critical
+> section. Unused prealloc pages are pushed to the pipe's tmp_page[]
+> cache (or freed) before unlock, so a subsequent write to the same
+> pipe gets a hot cached page rather than paying for an alloc again.
+> 
+> Sub-PAGE_SIZE writes are unchanged: the merge path handles them
+> without ever needing a fresh page, so it is not worth speculatively
+> allocating for them.
+> 
+> This can improve the pipe throughput up to 48% and reduce the latency in
+> 33%.
 
->
-> [...snip...]
->
->> +#ifdef CONFIG_USERFAULTFD
->> +static bool kvm_gmem_can_userfault(struct vm_area_struct *vma, vm_flags_t vm_flags)
->> +{
->> +	struct inode *inode = file_inode(vma->vm_file);
->> +
->> +	/*
->> +	 * Only support userfaultfd for guest_memfd with INIT_SHARED flag.
->> +	 * This ensures the memory can be mapped to userspace.
->> +	 */
 
-Is the principle here that any memory that is allowed to be mapped to
-userspace can be userfault-ed?
+This change is quite a hammer.
 
->> +	if (!(GMEM_I(inode)->flags & GUEST_MEMFD_FLAG_INIT_SHARED))
->> +		return false;
->
-> I'm not comfortable with this change.  It works for now, but it's going to be
-> wildly wrong when in-place conversion comes along.  While I agree with the "Let's
-> solve each problem in it's time :)"[*], the time for in-place conversion is now.
-> In-place conversion isn't landing this cycle or next, but it's been in development
-> for longer than UFFD support, and I'm not willing to punt solvable problems to
-> that series, because it's plenty fat as is.
->
+Do you have a real workload where there are multiple processes issuing
+large ops to the same pipe on both reader and writer side?
 
-Thanks :)
+The only workload I'm aware of sharing the pipe between more than just
+one reader and one writer is anything with make, but that is mostly
+operating on 1-byte ops.
 
-> Happily, IIUC, this is an easy problem to solve, and will have a nice side effect
-> for the common UFFD code.
->
-> My objection to an early, global "can_userfault()" check is that it's guaranteed
-> to cause TOCTOU issues.  E.g. for VM_UFFD_MISSING and VM_UFFD_MINOR, the check on
-> whether or not a given address can be faulted in needs to happen in __do_userfault(),
-> not broadly when VM_UFFD_MINOR is added to a VMA.  Conceptually, that also better
-> aligns the code with the "normal" user fault path in kvm_gmem_fault_user_mapping().
->
-> I'm definitely not asking to fully prep for in-place conversion, I just want to
-> set us up for success and also to not have to churn a pile of code.  Concretely,
-> again IIUC, I think we just need to move the INIT_SHARED check to ->alloc_folio()
-> and ->get_folio_noalloc().  And if we extract kvm_gmem_is_shared_mem() now instead
-> of waiting for in-place conversion, then we'll avoid a small amount of churn when
-> in-place conversion comes along.
->
+I'm asking because this would be better implemented taking into account
+how many pages are hanging out in the tmp_page array. With only one
+writer and one reader there is no concern someone will steal the pages.
 
-I think it would help if we do some refactoring of existing allocation
-functions to provide guest_memfd's uffd ->alloc_folio and
-->get_folio_noalloc callbacks instead of having new functions.
+Preferably the tmp_page array would grow to accomodate more memory, but
+admittedly this runs into a problem where a pipe can linger unused
+indefinitely while hoarding several pages. As in, some shrinking
+mechanism would be needed so that's probably a no-go and preallocation
+is the way to go for now.
 
-Perhaps uffd ->alloc_folio and ->get_folio_noalloc can call an alloc
-function refactored out of kvm_gmem_get_folio(), and also do the
-kvm_gmem_is_shared_mem() check.
+Even then, this can definitely be integrated much better instead of
+being open-coded.
 
-+tarunsahu@google.com, who is starting work on guest_memfd preservation
-(as in LUO/KHO).
+> 
+> Signed-off-by: Breno Leitao <leitao@debian.org>
+> ---
+>  fs/pipe.c | 40 ++++++++++++++++++++++++++++++++++++++--
+>  1 file changed, 38 insertions(+), 2 deletions(-)
+> 
+> diff --git a/fs/pipe.c b/fs/pipe.c
+> index 9841648c9cf3e..7a1517d15107a 100644
+> --- a/fs/pipe.c
+> +++ b/fs/pipe.c
+> @@ -111,7 +111,11 @@ void pipe_double_lock(struct pipe_inode_info *pipe1,
+>  	pipe_lock(pipe2);
+>  }
+>  
+> -static struct page *anon_pipe_get_page(struct pipe_inode_info *pipe)
+> +#define PIPE_PREALLOC_MAX 8
+> +
+> +static struct page *anon_pipe_get_page(struct pipe_inode_info *pipe,
+> +				       struct page **prealloc,
+> +				       unsigned int *prealloc_n)
+>  {
+>  	for (int i = 0; i < ARRAY_SIZE(pipe->tmp_page); i++) {
+>  		if (pipe->tmp_page[i]) {
+> @@ -121,6 +125,14 @@ static struct page *anon_pipe_get_page(struct pipe_inode_info *pipe)
+>  		}
+>  	}
+>  
+> +	if (*prealloc_n) {
+> +		unsigned int idx = --(*prealloc_n);
 
->
-> [...snip...]
->
+This is some nasty golfing.
+
+Instead, you could have something like:
+struct tmp_page_prealloc {
+	struct page *pages;
+	unsigned int count;
+};
+
+
+then...
+
+> +		struct page *page = prealloc[idx];
+> +
+> +		prealloc[idx] = NULL;
+> +		return page;
+> +	}
+> +
+>  	return alloc_page(GFP_HIGHUSER | __GFP_ACCOUNT);
+>  }
+>  
+> @@ -438,6 +450,8 @@ anon_pipe_write(struct kiocb *iocb, struct iov_iter *from)
+>  	ssize_t chars;
+>  	bool was_empty = false;
+>  	bool wake_next_writer = false;
+> +	struct page *prealloc[PIPE_PREALLOC_MAX] = { NULL };
+> +	unsigned int prealloc_n = 0;
+>  
+
+	struct tmp_page_prealloc tpp = {};
+
+>  	/*
+>  	 * Reject writing to watch queue pipes before the point where we lock
+> @@ -455,6 +469,26 @@ anon_pipe_write(struct kiocb *iocb, struct iov_iter *from)
+>  	if (unlikely(total_len == 0))
+>  		return 0;
+>  
+> +	/*
+> +	 * Bulk pre-allocate up to PIPE_PREALLOC_MAX pages outside pipe->mutex
+> +	 * for writes that span at least one full page. alloc_page() with
+> +	 * GFP_HIGHUSER may sleep doing reclaim and runs memcg charging, so
+> +	 * doing it under the mutex extends the critical section and stalls
+> +	 * the reader. The merge path handles sub-PAGE_SIZE writes without
+> +	 * needing a fresh page; for writes larger than PIPE_PREALLOC_MAX
+> +	 * pages, anon_pipe_get_page() falls back to a single alloc_page()
+> +	 * under the mutex for the remainder. Unused prealloc pages are
+> +	 * returned to the pipe's tmp_page[] cache (or freed) before unlock.
+> +	 */
+> +	if (total_len >= PAGE_SIZE) {
+> +		unsigned int want = min_t(unsigned int,
+> +					  DIV_ROUND_UP(total_len, PAGE_SIZE),
+> +					  PIPE_PREALLOC_MAX);
+> +
+> +		prealloc_n = alloc_pages_bulk(GFP_HIGHUSER | __GFP_ACCOUNT,
+> +					      want, prealloc);
+> +	}
+> +
+
+This should move to a dedicated routine, perhaps:
+	anon_get_page_prealloc(pipe, &tmp_page_prealloc);
+
+then it can also easily decide how much to prealloc based on existing
+state
+
+>  	mutex_lock(&pipe->mutex);
+>  
+>  	if (!pipe->readers) {
+> @@ -512,7 +546,7 @@ anon_pipe_write(struct kiocb *iocb, struct iov_iter *from)
+>  			struct page *page;
+>  			int copied;
+>  
+> -			page = anon_pipe_get_page(pipe);
+> +			page = anon_pipe_get_page(pipe, prealloc, &prealloc_n);
+>  			if (unlikely(!page)) {
+>  				if (!ret)
+>  					ret = -ENOMEM;
+> @@ -576,6 +610,8 @@ anon_pipe_write(struct kiocb *iocb, struct iov_iter *from)
+>  		wake_next_writer = true;
+>  	}
+>  out:
+> +	while (prealloc_n)
+> +		anon_pipe_put_page(pipe, prealloc[--prealloc_n]);
+
+this results in put_page() calls under the mutex, still extending the hold time
+
+you could split this into 2 ops, for example:
++	anon_pipe_cache_pages(pipe, &tmp_page_prealloc);
+  	if (pipe_is_full(pipe))
+  		wake_next_writer = false;
+  	mutex_unlock(&pipe->mutex);
++	anon_pipe_free_pages(pipe, &tmp_page_prealloc);
+
+All that aside, I have no idea about performance impact on arm64, but
+there is *definitely* some throughput lost based on the fact that memory
+copy is restarted per page. I presume arm64 has an equivalent of amd64's
+SMAP which again will not be free and is paid for every time as well.
