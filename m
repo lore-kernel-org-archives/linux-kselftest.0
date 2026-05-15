@@ -1,416 +1,216 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from CY3PR05CU001.outbound.protection.outlook.com (mail-westcentralusazon11013048.outbound.protection.outlook.com [40.93.201.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ECA74DB564
-	for <linux-kselftest@vger.kernel.org>; Fri, 15 May 2026 17:07:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89A2B3DE436;
+	Fri, 15 May 2026 17:30:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.201.48
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778864827; cv=pass; b=s41q0xJDkgjbXp7WsJWZXxdjF1DaP5HQ4uz5JPgSk6EaK6Y682D20mybISoH4wPLLwnrZefMYrCQYCGW4hhjOLekGP55wwG5bt1zjaJIn0e+weBAUfyO4YBAmySiEBlADXnSiVy3hS+tQczZ8kmaYAODCxtDdsYq+ga6LsXVt/s=
+	t=1778866216; cv=fail; b=seZwinPncLzHlEho3wVzVy82GZiheIusYfyEgp+wAHBe5ioCh6X0gHOSDsc4NZ2eZ8fgJ+92enh8LLDP2rnH1pCIzTOuT5rFtrBCeYWz+6xQBCu7Vw3/jiOWjGJIGvHyJBDE5ks0D+j4DpfMhcqCx1ZPBSsL16Vkg+vL+m7G1j0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778864827; c=relaxed/simple;
-	bh=nfVVCWXzvqa1LUWfzx7loZHs3RrGdLWJRj9wkdFaNyg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YO2jWgK6d7h5klHu6FPaUh72GHzascy1B+VElUMHXrnt9cQ0coabPk38NGPWFAJQjKPTP2FKsOk8O56S0NHXje2KPYnF1jZ4L/Cker4KtZW8d1KkEL6+7LugpSG0Gag5ggMRUxjOqP/dKLTiWWyr3MdhSuSlHNSaEmFyscqwgos=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=E0srMPLx; arc=pass smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1778866216; c=relaxed/simple;
+	bh=lggE1rtPfHtoUGHC9J94m+26DqukC/fBcuL/Chf0dTY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=pS9FP99QeFB5mexhcm2ktOVAwbYzYF5IAk5Z3pSmSWMbFEiTLHRAdL7/ll/QWLbVoOpjlX+MYmceXgQb4EsDsVE/Js0stlKbwk9VdlCO7hivW9fAD7flF5n5dRupXYFlhHoBMCXEXtXhLZ/yYEpH0EKknBZ9pmU0od4+RxDPad8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=pyHtBBXG; arc=fail smtp.client-ip=40.93.201.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="E0srMPLx"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4891ca4ce02so2815e9.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 15 May 2026 10:07:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778864824; cv=none;
-        d=google.com; s=arc-20240605;
-        b=hPtIkkV6JGU9zUDvbD5zY3QJoSOm90AP6YP/M8WHWbJpK2vQk08RiddXeoiJUnt/IN
-         AfGgu3dKSW84j+BjEtQRHsYvBlPUdJCJFRIxTozCzLHJ+MS+gJ5p2/Onz6yUcJ8I8bEx
-         t6lvEoH0F6hhb8YGBT20BxHydDEseH09+c/TftDFxgLekYzQ03Oa3riq32BktvwonNQv
-         fVVqvEvSOGyCAdZ1wCk5s3VNiDKmC7WJoeGTNeY7MWFWqTvoa1IUz8UXGUaUKmMAqPWN
-         hjWfx88wllI07Z8KASn/S5Rlfz2O6M7dZuXV2v1sjW7uYtIMugVLtbGUrBmfLYTBlT3g
-         GWzw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=LQnzcBlc7+y3xboPXu3CAuDhwWayfDkxWRZzNgig+eE=;
-        fh=yGpOagPuqNz10b7Ot1mrbsmqpAfXilfzXgi4O5qutBI=;
-        b=e0JR9Y17HfA1QihIflOPwk7vfnTf4sHCqkR28Jzcs/hLZvSkSDVgU4ov3jZU6mTwdV
-         iPwv3ca2mVSDIqdFgDw1RyssE6zZdM+G6N4KnLz+JWwnhPBMwRkQto+pI2HOXbN4j4Xt
-         3sR4S25CZDF6ukVgEh6WDn9iCu9p625NiI+k4mdaFzsU5C8YDttra7KVoK4xY7yYUg0f
-         aCsuSpL+UDESf7eOboV8GZezxmDKZPECtoXogwxYB2khXO5RGSgyksV4uz6LW7aVsJuV
-         WkYSUKs13Owi4rYK+RSy6YjkKluxxcmdt6ECIrXKDSiyFc3F7JYGfApK/6AiCoCoQNcN
-         zZaQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1778864824; x=1779469624; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LQnzcBlc7+y3xboPXu3CAuDhwWayfDkxWRZzNgig+eE=;
-        b=E0srMPLxCnbv4KB+EQPF5rUjYvkR9PlBB7xN/JKyrfvX9MCkwGvTj5Wp6yUh6ELTX1
-         wLUDZbjN1jpwGP1SqsN3atkssUt11imLO3YwSPXCp6sHkOCVReBTSTDKcB5dJkOraJf0
-         kl7AbBgrxmSkdjNyF7qgTvydVY+uTkTaTpgUObzjQjZG0VVfHit2RPvQIOegafOIsU0R
-         vZn4OGzAGJlOnQtyG7YhI7QoDrpo6hGMsht4DjUGiCqgpgQRGrL44LZ53ijorf+4/zSa
-         bAdyZqGCp3GnpUfkC0io5hgmqbD1sbUrBEJM9TdQHeBKHiI7pxL7RycGbjfk3h5EtPdM
-         mLUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778864824; x=1779469624;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=LQnzcBlc7+y3xboPXu3CAuDhwWayfDkxWRZzNgig+eE=;
-        b=Bx1JFuQCAXlaZlwWaGQ1qGQqJzmOglPgtcrVN3BxMCuCp1GgTSQAHiOrWNAsZ2X4xQ
-         THFtsdx/WixkYVeLoWuRDtcoVBxUJvoUluSjZXcUZhtFpA3a1ZRTSOdmqGkt2cWbd346
-         ZMLOO0FCuVrdpATCYW7rl5k6Kd/Roo7Fjyg3Pj+umtdZIDfIiDvHaonPGX7j8+qo79VU
-         2/wkQO1+0VsdvNq7FDI2bXNuAyzf+a52J0dLGJdJdCACa1q2p5K0+xGIySLipM2SBcKm
-         L9iJh3wfgy4L62stK0exGb0cSfz9Mb71g5s8aMLsyBpjjooSMM9VZyAZ4U1See28lHKn
-         KQvQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/Qx5P9lbB45aXsHQWoJkdldePZTCEGA0lWjWrXpqzJN/hsC7CsVVf1e+uet4gDc1zWmbT4axY8ji6uJWIN+K0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxZD9l3cYJ6iOP2eBFhvaHa5s7AIJSyXRnkZc9tNhEu1UOHtAs9
-	w9V84uG7N8267FDFEdzQtfzEROKVAq+qlGEl6hR+aAUpRzGAQV8S19vIDErQ75G6kWsjXESO2GL
-	hSDNlI2VG1I62wwdb/DfTKp07JyCJnWvbpKOZ2KOn
-X-Gm-Gg: Acq92OHr6F1wOHtZUhwfkvHkLOyqqGv7RR60mQZgcbLDURZnq6oZ0Q4lePdvOlythiR
-	PjbJSgWISNNTLRvTSsnKfR0soiorYy1FKuzNTrSuD440AqjxrQPEYBeqm+jSm6ImL6OP7fuD1gf
-	vewm+tz8orZeAiUBRPDRR/ykiJ7+6T4h2pQkbmjqjV2CybLI9O7t2t2SXCzZe8fzDM22SPCMUc9
-	DCoqS51ogPOpcnW9/cwY2sPFglNE3WxXgxrdH8AiItpsLOkcRmU6Q5XT2x4ZV6lEn6TqwZwrl/J
-	B6h79Q8EXQQszLHQ0moOQ+DDM9M9BiU/rbUE9IgL+5m5N5sF
-X-Received: by 2002:a05:600c:4999:b0:489:1adc:f017 with SMTP id
- 5b1f17b1804b1-48fe881e582mr645715e9.5.1778864823481; Fri, 15 May 2026
- 10:07:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="pyHtBBXG"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=ZOkuRnbSDdHzmhFpfL545ZpvhSbaiLKZWR5FoolBrChJG7SU7aFO5Y/XWKWYTHWxDWHuNoYtU2qJBRpHabEAJNsGlc89J412HtSeZclg7YU8HAPwXKUSi336y/YuLrZlMcd4OJCfKLuhu6N5lMTPVqqw+x1Qy6ZIjJpr9JQazfpFm9Q+Vm0CrOe7oNELyn/eVoZlgt05LK22bqren9UIrZsHstSrqbiufWg/FkHp+LwCZrEQ+wGPc7RcVhHphWvl9EQrbkTELon4FSLwLjppXUU2uBEaKoUIHymjnRn0ykbVQvxhw6vOxGLkSjYqOmu3gyCN733bMF3MK3FRsXG9LA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WH8QTgzVEvwVn1J023aYxR41RTUe2ha67t2tbOgrUHk=;
+ b=fv6DXOSMDTgHo5/xpl3sHlCmZxu+lJI8mPo2pgrIgzFM627fB7Lr3N+Bs4l3WtSVphj7i0B5YS9npmKhGweqBdK3HgfJBt28rv5RBjrPJfo2D8SLw4KuLIlGMuhLLOn7JYix03AVDFNBh9oqjbAhZn3T/+SGc9lMYKblPHitOfDl6sLQdfijAgqXA/9vL0Y005xWtVGZjP5ZTcT6uv1KuHltiKyjj/trsIJT30OixOTkZ3c6E+CQctjnIG2h/mejBv34gzBNet2Pzx9WC6h7yC/4MgYpkRmuH8UM3l8BiOcDRrmUkHePnGGf8aVyphea/IU4UX/e2Awn3ucyNNfixQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WH8QTgzVEvwVn1J023aYxR41RTUe2ha67t2tbOgrUHk=;
+ b=pyHtBBXGTh2P8dRhPVz6p5VY0TRg1q07yGX1WuU0xAA6Va/4uJzrJpJUmBRWJ+019skVKyE7fS0n30nJpuGqG+TdR4Rw5wFw5Ah8mU8kDNKNmBZTB5v45mZkdp03MekmTj7VS9xylxVSRARUbEl8D7Wnm2pzixRBSEJqR+H5F9cdHFknVxta2WZxjaossCkiVrupsrY/2eISbe9NZyNFhj3P3y61WF4XkoBLN/GtbbFLXBicVRwVJWallUSvWvgRGYTt9DahDDOa+X7LWOVz/amK59gS3Qf8enOpStMTx08khf+9w2iUMTb1cPJbEdKTXka4vvqM5pTKzbXPBgXB4w==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV8PR12MB9620.namprd12.prod.outlook.com (2603:10b6:408:2a1::19)
+ by PH7PR12MB7283.namprd12.prod.outlook.com (2603:10b6:510:20a::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.25.19; Fri, 15 May
+ 2026 17:30:10 +0000
+Received: from LV8PR12MB9620.namprd12.prod.outlook.com
+ ([fe80::299d:f5e0:3550:1528]) by LV8PR12MB9620.namprd12.prod.outlook.com
+ ([fe80::299d:f5e0:3550:1528%5]) with mapi id 15.21.0025.012; Fri, 15 May 2026
+ 17:30:10 +0000
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Alex Williamson <alex@shazbot.org>,
+	David Matlack <dmatlack@google.com>,
+	kvm@vger.kernel.org,
+	Leon Romanovsky <leon@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	linux-rdma@vger.kernel.org,
+	Mark Bloch <mbloch@nvidia.com>,
+	netdev@vger.kernel.org,
+	Saeed Mahameed <saeedm@nvidia.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Tariq Toukan <tariqt@nvidia.com>
+Cc: patches@lists.linux.dev
+Subject: [PATCH v2 04/11] net/mlx5: Add ONCE and MMIO accessor variants to mlx5_ifc_macros.h
+Date: Fri, 15 May 2026 14:30:01 -0300
+Message-ID: <4-v2-72e9640932fd+2c64-mlx5st_jgg@nvidia.com>
+In-Reply-To: <0-v2-72e9640932fd+2c64-mlx5st_jgg@nvidia.com>
+References:
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BL1P223CA0007.NAMP223.PROD.OUTLOOK.COM
+ (2603:10b6:208:2c4::12) To LV8PR12MB9620.namprd12.prod.outlook.com
+ (2603:10b6:408:2a1::19)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260512-v2_20230123_tjmercier_google_com-v1-0-6326701c3691@redhat.com>
- <20260512-v2_20230123_tjmercier_google_com-v1-2-6326701c3691@redhat.com> <20260515-hinschauen-effizient-9e3a05a94f2e@brauner>
-In-Reply-To: <20260515-hinschauen-effizient-9e3a05a94f2e@brauner>
-From: "T.J. Mercier" <tjmercier@google.com>
-Date: Fri, 15 May 2026 10:06:50 -0700
-X-Gm-Features: AVHnY4LllvNrEvKpMMJyjJvPlkuCoR7DSmB99jM3FHC68bpYwfg1MyASdUtT0JM
-Message-ID: <CABdmKX0d6Zsg+_TxXjB80UZR23ZvXzxYoWzORgwmx=ZiuE+Nzw@mail.gmail.com>
-Subject: Re: [PATCH RFC 2/5] dma-heap: charge dma-buf memory via explicit memcg
-To: Christian Brauner <brauner@kernel.org>
-Cc: Albert Esteve <aesteve@redhat.com>, Tejun Heo <tj@kernel.org>, 
-	Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>, 
-	Andrew Morton <akpm@linux-foundation.org>, 
-	Benjamin Gaignard <benjamin.gaignard@collabora.com>, Brian Starkey <Brian.Starkey@arm.com>, 
-	John Stultz <jstultz@google.com>, Paul Moore <paul@paul-moore.com>, 
-	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
-	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
-	Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org, 
-	linux-mm@kvack.org, linux-security-module@vger.kernel.org, 
-	selinux@vger.kernel.org, linux-kselftest@vger.kernel.org, mripard@kernel.org, 
-	echanude@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV8PR12MB9620:EE_|PH7PR12MB7283:EE_
+X-MS-Office365-Filtering-Correlation-Id: 72251ac3-0ca0-4b48-f8b5-08deb2a79ca4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|1800799024|366016|921020|18002099003|56012099003|22082099003|11063799003;
+X-Microsoft-Antispam-Message-Info:
+	tzx6XkrIR4ch8NYgczy/63strp4xE3hh5EXyaydJIHAH/opC9eGSkl9YpsQ9aWS8EzrodUzXODW00EpaL6oX5TZhoaCjp8wXLRBH89PZgXbdgGVb6yzNcrqwlMERWJ+FjIXjhUEgArSAeJ9pl80oCYr1B4YTm607JIzOsV361pWSVzVx6q22jGrK6sgVcCANbYPJAykJGSeWhgehy7pEtvZwVjA92xUnihHhAECJZC4/QuZpSMIR5pdtBzFnd4KS3rshf+76oR5LwDUfehr658CC3vGdNbk3jCKR7iihUHkBU3fBZMXSQUlPMliltlf45dQguDATl6zLgF4JUke/pYK79KtyhZ3Qz20c2lKyEkagyETHb2xgOpdiuepodlP/I2sET0OjhJTY9FsY0p1XKeycRZBg6cLEiItBAqrNwpSZpLrTpEhBKbctqUNqfK6wBbJMSTWnZO9ToeQpPUapXl+WK1UaBPodu1Ux0HAaNsbEN6Rp1qtGfjf/jF9tCmEsYIBIxm3GHuVyk3qACAfpD7AQl6+EwxVCJ6J8KARWmkzU4SEnai7/ZeOiX4TmWWhjzIwp+iQcEA+4uW5bnFLuOuzE2QgWoiSyjxASldvGkY1cJbVokICcFZlhKS8Db+QsBZkvkONg/4Qk0cLJlrle5lIN8A843+FACK3tP9mgUqpjWmTYsW1G4Amo2XK94yFyv7OpAEFt+arQrFfrwtiQof2Vbe2JmSFc9S5/3/U0eYU=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9620.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016)(921020)(18002099003)(56012099003)(22082099003)(11063799003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?fsZ9gocu8v6NIkenTKYHrDWGDAh9hH2N7Mv+FQ6eQew8nvu6p02ffj2QZw4X?=
+ =?us-ascii?Q?CDZLTgyv/X5JGyQGTstD7RCdFSUWXEVi+SZ4zQxTCD/O4dOo7Oa/mSJdXDu7?=
+ =?us-ascii?Q?sDmtJzu8wxoRxLXxOd2GiliPHCUIAWVvAKxaOgwiasWsHqwub5YC4DRL4SPB?=
+ =?us-ascii?Q?QHTzYgc9dG6HNn9tgrqfIwiS7sW9Qs1dv8dxx+It/giH7PyUUw6ovWYj9wvX?=
+ =?us-ascii?Q?e+kWUPpH/rs4kd5b7x7t4PRpe34ArS80t9Rfk4I821xZXHeHUEM6jWxlbfQQ?=
+ =?us-ascii?Q?Yq9VF0D5I55UCNXvzzSPoJd1s6pE3i7T4et67n7o4gHE8jy3Zgz+uAC/2BZR?=
+ =?us-ascii?Q?kG9yfb7pt+ENzg4JkbkXHFhOPZS3JUtxSrnIHrkVlKUcDaGsJgod/R4VzYI8?=
+ =?us-ascii?Q?csHV7dmENh+PPASR2XXCcOcQOiqlEv3+7jSm23ytOKTzfmdbp0RixC+rVWtr?=
+ =?us-ascii?Q?j5F2EYNSXIExA4eJn/K5jN8JKgw+72AP6IpTeZsQU78HV+I+UWumh5n/G7Bx?=
+ =?us-ascii?Q?yCZKZlv4DXHKqB9qiH2l1ztu+BFFxtfoMVbWNcymE7I9BLTtJKqmPauPSKZs?=
+ =?us-ascii?Q?CS+xGF0jm+Hnb3Cdyo7/F29njIiZuYxvHJuRp68ZWL6Xa38M+zqsSZ8E1CXS?=
+ =?us-ascii?Q?QAk6tHogs4cygvuucAUTpj3E7TArX3MPcf623U40JSgqN1WRV+gTt+Uu7XEs?=
+ =?us-ascii?Q?Cbqpxl61dcahW1dbLzUxHN7v5ApNG1FiZIBlTUuk8KUHkkjRDY+NAlvoJ+us?=
+ =?us-ascii?Q?czrn1jJnidzxqc/bs/avXX012FWJWPKze9jfXCukassMTFlehd076JEsxSNo?=
+ =?us-ascii?Q?e9qIv+yVbwAE4zYTFtTZD3wedJOMhtpnSx7uMewuuMK/K7Xup77i5uPDlwFk?=
+ =?us-ascii?Q?5ItFj6d+j8K57woMXF1TjNwwKLN4ghOU28KFZmLoFVzCPzTOzQu6mcpY82sv?=
+ =?us-ascii?Q?t0kwWw8BrmpgyglnVQcfNsxCfWZKOByYklcKv98gJ6JBivjQ1Y6v0fCRrDkQ?=
+ =?us-ascii?Q?D4QORbz0+sK0Lq2huZLZxjIOHFolLdzvWwDl+FUu00o6w586wrTO8arigFQE?=
+ =?us-ascii?Q?tsEtUbC0ac6SG4ECyLBECiJJLLT56W0GKcN5h1vfCykfbwJ05VlOx3IlhWUx?=
+ =?us-ascii?Q?Nl0UyWXyIRM0Vl0zjTvS3dDbV89eGuHpOdHXr23EY84p7x710JkenaF0fsTi?=
+ =?us-ascii?Q?c8poEibS9wsTUfryev0pcKD/zM63s/eE2+NjpmCFVJxjWNTJFw/VjtTNvWbL?=
+ =?us-ascii?Q?lzvnwaabeZXT4ucYCXXshpiVhOYOnsImL5+STGWuWoFGQG0DaVTdOfXWitKm?=
+ =?us-ascii?Q?5albFxkyoOSADj+mefNC0xjiemkN5jMPQ7+s7GcG1yP1okNNf0Okql3svsNB?=
+ =?us-ascii?Q?73VwFopFw+N0OijYUnqsJZT5MhZv8IPw/t6p/TR3OIYicvdbMSNcHV+Pbobg?=
+ =?us-ascii?Q?pIol1b5GW9z4KI1pvFmX+dIjS7gWxD3wlDVv5dC51gadZjZpXaqnswG5inRY?=
+ =?us-ascii?Q?1pON6Ozng09984dz+gFxffA7KY1+bwliutfM3YMy2gJFvdx2ZyfV8Y2csl7W?=
+ =?us-ascii?Q?dHQfNW31n3QqkEy8/Q4tSEooideY1mg5fZO/EaLjDrp2P5MFtQWg90M881bQ?=
+ =?us-ascii?Q?mzIwtG5kzffii/aVr3hgvNwyTsqa/1v0dKNhN7eojoHWBE9K1qMvxbuDKnnJ?=
+ =?us-ascii?Q?LAbtPcf+BeK0vsldql5bR8US2Rbf5DAOGmlnrcKvzTFbtH8K?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 72251ac3-0ca0-4b48-f8b5-08deb2a79ca4
+X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9620.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 May 2026 17:30:09.3440
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: v7Oa5O0bLr3QglnuNjljY+r6H9xWbP5uY7xpmTsMWfb9VRNjKnGMwPYaJAppXmBF
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7283
 
-On Fri, May 15, 2026 at 6:53=E2=80=AFAM Christian Brauner <brauner@kernel.o=
-rg> wrote:
->
-> On Tue, May 12, 2026 at 11:10:44AM +0200, Albert Esteve wrote:
-> > On embedded platforms a central process often allocates dma-buf
-> > memory on behalf of client applications. Without a way to
-> > attribute the charge to the requesting client's cgroup, the
-> > cost lands on the allocator, making per-cgroup memory limits
-> > ineffective for the actual consumers.
-> >
-> > Add charge_pid_fd to struct dma_heap_allocation_data. When set to
->
-> Please be aware that pidfds come in two flavors:
->
-> thread-group pidfds and thread-specific pidfds. Make sure that your API
-> doesn't implicitly depend on this distinction not existing.
+Add MLX5_GET_ONCE / MLX5_SET_ONCE which include READ_ONCE/WRITE_ONCE
+semantics for touching ownership bits that hardware may read or write
+at any time. The kernel driver doesn't use the IFC struct for these
+ownership bits, but the VFIO driver will and needs these helpers.
 
-Hi Christian,
+Add MLX5_GET_MMIO / MLX5_SET_MMIO for accessing the init seg using
+the IFC offsets. They embed a readl/writel using the IFC struct to
+generate the addressing.
 
-Memcg is not a controller that supports "thread mode" so all threads
-in a group should belong to the same memcg.
+Add MLX5_ARRAY_GET64(), the missing counterpart to
+MLX5_ARRAY_SET64().
 
-Checking the flags from pidfd_get_pid would be the best way for an
-explicit check of the pidfd type?
+Assisted-by: Claude:claude-opus-4.6
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+---
+ include/linux/mlx5/mlx5_ifc_macros.h | 52 ++++++++++++++++++++++++++++
+ 1 file changed, 52 insertions(+)
 
-> > a valid pidfd, DMA_HEAP_IOCTL_ALLOC resolves the target task's
-> > memcg and charges the buffer there via mem_cgroup_charge_dmabuf()
-> > inside dma_heap_buffer_alloc(). Without charge_pid_fd, and with
-> > the mem_accounting module parameter enabled, the buffer is charged
-> > to the allocator's own cgroup.
-> >
-> > Additionally, commit 3c227be90659 ("dma-buf: system_heap: account for
-> > system heap allocation in memcg") adds __GFP_ACCOUNT to system-heap
-> > page allocations. Keeping __GFP_ACCOUNT would charge the same pages
-> > twice (once to kmem, once to MEMCG_DMABUF), thus remove it and route
-> > all accounting through a single MEMCG_DMABUF path.
-> >
-> > Usage examples:
-> >
-> >   1. Central allocator charging to a client at allocation time.
-> >      The allocator knows the client's PID (e.g., from binder's
-> >      sender_pid) and uses pidfd to attribute the charge:
-> >
-> >        pid_t client_pid =3D txn->sender_pid;
-> >        int pidfd =3D pidfd_open(client_pid, 0);
-> >
-> >        struct dma_heap_allocation_data alloc =3D {
-> >            .len             =3D buffer_size,
-> >            .fd_flags        =3D O_RDWR | O_CLOEXEC,
-> >            .charge_pid_fd   =3D pidfd,
-> >        };
-> >        ioctl(heap_fd, DMA_HEAP_IOCTL_ALLOC, &alloc);
-> >        close(pidfd);
-> >        /* alloc.fd is now charged to client's cgroup */
-> >
-> >   2. Default allocation (no pidfd, mem_accounting=3D1).
-> >      When charge_pid_fd is not set and the mem_accounting module
-> >      parameter is enabled, the buffer is charged to the allocator's
-> >      own cgroup:
-> >
-> >        struct dma_heap_allocation_data alloc =3D {
-> >            .len      =3D buffer_size,
-> >            .fd_flags =3D O_RDWR | O_CLOEXEC,
-> >        };
-> >        ioctl(heap_fd, DMA_HEAP_IOCTL_ALLOC, &alloc);
-> >        /* charged to current process's cgroup */
-> >
-> > Current limitations:
-> >
-> >  - Single-owner model: a dma-buf carries one memcg charge regardless of
-> >    how many processes share it. Means only the first owner (and exporte=
-r)
-> >    of the shared buffer bears the charge.
-> >  - Only memcg accounting supported. While this makes sense for system
-> >    heap buffers, other heaps (e.g., CMA heaps) will require selectively
-> >    charging also for the dmem controller.
-> >
-> > Signed-off-by: Albert Esteve <aesteve@redhat.com>
-> > ---
-> >  Documentation/admin-guide/cgroup-v2.rst |  5 ++--
-> >  drivers/dma-buf/dma-buf.c               | 16 ++++---------
-> >  drivers/dma-buf/dma-heap.c              | 42 +++++++++++++++++++++++++=
-+++++---
-> >  drivers/dma-buf/heaps/system_heap.c     |  2 --
-> >  include/uapi/linux/dma-heap.h           |  6 +++++
-> >  5 files changed, 53 insertions(+), 18 deletions(-)
-> >
-> > diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/ad=
-min-guide/cgroup-v2.rst
-> > index 8bdbc2e866430..824d269531eb1 100644
-> > --- a/Documentation/admin-guide/cgroup-v2.rst
-> > +++ b/Documentation/admin-guide/cgroup-v2.rst
-> > @@ -1636,8 +1636,9 @@ The following nested keys are defined.
-> >               structures.
-> >
-> >         dmabuf (npn)
-> > -             Amount of memory used for exported DMA buffers allocated =
-by the cgroup.
-> > -             Stays with the allocating cgroup regardless of how the bu=
-ffer is shared.
-> > +             Amount of memory used for exported DMA buffers allocated =
-by or on
-> > +             behalf of the cgroup. Stays with the allocating cgroup re=
-gardless
-> > +             of how the buffer is shared.
-> >
-> >         workingset_refault_anon
-> >               Number of refaults of previously evicted anonymous pages.
-> > diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-> > index ce02377f48908..23fb758b78297 100644
-> > --- a/drivers/dma-buf/dma-buf.c
-> > +++ b/drivers/dma-buf/dma-buf.c
-> > @@ -181,8 +181,11 @@ static void dma_buf_release(struct dentry *dentry)
-> >        */
-> >       BUG_ON(dmabuf->cb_in.active || dmabuf->cb_out.active);
-> >
-> > -     mem_cgroup_uncharge_dmabuf(dmabuf->memcg, PAGE_ALIGN(dmabuf->size=
-) / PAGE_SIZE);
-> > -     mem_cgroup_put(dmabuf->memcg);
-> > +     if (dmabuf->memcg) {
-> > +             mem_cgroup_uncharge_dmabuf(dmabuf->memcg,
-> > +                                       PAGE_ALIGN(dmabuf->size) / PAGE=
-_SIZE);
-> > +             mem_cgroup_put(dmabuf->memcg);
-> > +     }
-> >
-> >       dmabuf->ops->release(dmabuf);
-> >
-> > @@ -764,13 +767,6 @@ struct dma_buf *dma_buf_export(const struct dma_bu=
-f_export_info *exp_info)
-> >               dmabuf->resv =3D resv;
-> >       }
-> >
-> > -     dmabuf->memcg =3D get_mem_cgroup_from_mm(current->mm);
-> > -     if (!mem_cgroup_charge_dmabuf(dmabuf->memcg, PAGE_ALIGN(dmabuf->s=
-ize) / PAGE_SIZE,
-> > -                                   GFP_KERNEL)) {
-> > -             ret =3D -ENOMEM;
-> > -             goto err_memcg;
-> > -     }
-> > -
-> >       file->private_data =3D dmabuf;
-> >       file->f_path.dentry->d_fsdata =3D dmabuf;
-> >       dmabuf->file =3D file;
-> > @@ -781,8 +777,6 @@ struct dma_buf *dma_buf_export(const struct dma_buf=
-_export_info *exp_info)
-> >
-> >       return dmabuf;
-> >
-> > -err_memcg:
-> > -     mem_cgroup_put(dmabuf->memcg);
-> >  err_file:
-> >       fput(file);
-> >  err_module:
-> > diff --git a/drivers/dma-buf/dma-heap.c b/drivers/dma-buf/dma-heap.c
-> > index ac5f8685a6494..ff6e259afcdc0 100644
-> > --- a/drivers/dma-buf/dma-heap.c
-> > +++ b/drivers/dma-buf/dma-heap.c
-> > @@ -7,13 +7,17 @@
-> >   */
-> >
-> >  #include <linux/cdev.h>
-> > +#include <linux/cgroup.h>
-> >  #include <linux/device.h>
-> >  #include <linux/dma-buf.h>
-> >  #include <linux/dma-heap.h>
-> > +#include <linux/memcontrol.h>
-> > +#include <linux/sched/mm.h>
-> >  #include <linux/err.h>
-> >  #include <linux/export.h>
-> >  #include <linux/list.h>
-> >  #include <linux/nospec.h>
-> > +#include <linux/pidfd.h>
-> >  #include <linux/syscalls.h>
-> >  #include <linux/uaccess.h>
-> >  #include <linux/xarray.h>
-> > @@ -55,10 +59,12 @@ MODULE_PARM_DESC(mem_accounting,
-> >                "Enable cgroup-based memory accounting for dma-buf heap =
-allocations (default=3Dfalse).");
-> >
-> >  static int dma_heap_buffer_alloc(struct dma_heap *heap, size_t len,
-> > -                              u32 fd_flags,
-> > -                              u64 heap_flags)
-> > +                              u32 fd_flags, u64 heap_flags,
-> > +                              struct mem_cgroup *charge_to)
-> >  {
-> >       struct dma_buf *dmabuf;
-> > +     unsigned int nr_pages;
-> > +     struct mem_cgroup *memcg =3D charge_to;
-> >       int fd;
-> >
-> >       /*
-> > @@ -73,6 +79,22 @@ static int dma_heap_buffer_alloc(struct dma_heap *he=
-ap, size_t len,
-> >       if (IS_ERR(dmabuf))
-> >               return PTR_ERR(dmabuf);
-> >
-> > +     nr_pages =3D len / PAGE_SIZE;
-> > +
-> > +     if (memcg)
-> > +             css_get(&memcg->css);
-> > +     else if (mem_accounting)
-> > +             memcg =3D get_mem_cgroup_from_mm(current->mm);
-> > +
-> > +     if (memcg) {
-> > +             if (!mem_cgroup_charge_dmabuf(memcg, nr_pages, GFP_KERNEL=
-)) {
-> > +                     mem_cgroup_put(memcg);
-> > +                     dma_buf_put(dmabuf);
-> > +                     return -ENOMEM;
-> > +             }
-> > +             dmabuf->memcg =3D memcg;
-> > +     }
-> > +
-> >       fd =3D dma_buf_fd(dmabuf, fd_flags);
-> >       if (fd < 0) {
-> >               dma_buf_put(dmabuf);
-> > @@ -102,6 +124,9 @@ static long dma_heap_ioctl_allocate(struct file *fi=
-le, void *data)
-> >  {
-> >       struct dma_heap_allocation_data *heap_allocation =3D data;
-> >       struct dma_heap *heap =3D file->private_data;
-> > +     struct mem_cgroup *memcg =3D NULL;
-> > +     struct task_struct *task;
-> > +     unsigned int pidfd_flags;
-> >       int fd;
-> >
-> >       if (heap_allocation->fd)
-> > @@ -113,9 +138,20 @@ static long dma_heap_ioctl_allocate(struct file *f=
-ile, void *data)
-> >       if (heap_allocation->heap_flags & ~DMA_HEAP_VALID_HEAP_FLAGS)
-> >               return -EINVAL;
-> >
-> > +     if (heap_allocation->charge_pid_fd) {
-> > +             task =3D pidfd_get_task(heap_allocation->charge_pid_fd, &=
-pidfd_flags);
->
-> Will always get a thread-group leader pidfd and will fail if this is a
-> thread-specific pidfd. pidfd_open(1234, PIDFD_THREAD) can be used to
-> open a thread-specific pidfd.
->
-> > +             if (IS_ERR(task))
-> > +                     return PTR_ERR(task);
-> > +
-> > +             memcg =3D get_mem_cgroup_from_mm(task->mm);
-> > +             put_task_struct(task);
-> > +     }
-> > +
-> >       fd =3D dma_heap_buffer_alloc(heap, heap_allocation->len,
-> >                                  heap_allocation->fd_flags,
-> > -                                heap_allocation->heap_flags);
-> > +                                heap_allocation->heap_flags,
-> > +                                memcg);
-> > +     mem_cgroup_put(memcg);
-> >       if (fd < 0)
-> >               return fd;
-> >
-> > diff --git a/drivers/dma-buf/heaps/system_heap.c b/drivers/dma-buf/heap=
-s/system_heap.c
-> > index 03c2b87cb1112..95d7688167b93 100644
-> > --- a/drivers/dma-buf/heaps/system_heap.c
-> > +++ b/drivers/dma-buf/heaps/system_heap.c
-> > @@ -385,8 +385,6 @@ static struct page *alloc_largest_available(unsigne=
-d long size,
-> >               if (max_order < orders[i])
-> >                       continue;
-> >               flags =3D order_flags[i];
-> > -             if (mem_accounting)
-> > -                     flags |=3D __GFP_ACCOUNT;
-> >               page =3D alloc_pages(flags, orders[i]);
-> >               if (!page)
-> >                       continue;
-> > diff --git a/include/uapi/linux/dma-heap.h b/include/uapi/linux/dma-hea=
-p.h
-> > index a4cf716a49fa6..e02b0f8cbc6a1 100644
-> > --- a/include/uapi/linux/dma-heap.h
-> > +++ b/include/uapi/linux/dma-heap.h
-> > @@ -29,6 +29,10 @@
-> >   *                   handle to the allocated dma-buf
-> >   * @fd_flags:                file descriptor flags used when allocatin=
-g
-> >   * @heap_flags:              flags passed to heap
-> > + * @charge_pid_fd:   optional pidfd of the process whose cgroup should=
- be
-> > + *                   charged for this allocation; 0 means charge the c=
-alling
-> > + *                   process's cgroup
-> > + * @__padding:               reserved, must be zero
-> >   *
-> >   * Provided by userspace as an argument to the ioctl
-> >   */
-> > @@ -37,6 +41,8 @@ struct dma_heap_allocation_data {
-> >       __u32 fd;
-> >       __u32 fd_flags;
-> >       __u64 heap_flags;
-> > +     __u32 charge_pid_fd;
-> > +     __u32 __padding;
-> >  };
-> >
-> >  #define DMA_HEAP_IOC_MAGIC           'H'
-> >
-> > --
-> > 2.53.0
-> >
+diff --git a/include/linux/mlx5/mlx5_ifc_macros.h b/include/linux/mlx5/mlx5_ifc_macros.h
+index d357acfd351de2..be963b9ad5b295 100644
+--- a/include/linux/mlx5/mlx5_ifc_macros.h
++++ b/include/linux/mlx5/mlx5_ifc_macros.h
+@@ -85,6 +85,13 @@ __mlx5_mask(typ, fld))
+ 	__MLX5_SET64(typ, p, fld[idx], v); \
+ } while (0)
+ 
++#define MLX5_ARRAY_GET64(typ, p, fld, idx)                                   \
++	({                                                                   \
++		BUILD_BUG_ON(__mlx5_bit_sz(typ, fld) % 64);                  \
++		be64_to_cpu(                                                 \
++			*((__be64 *)(p) + __mlx5_64_off(typ, fld) + (idx))); \
++	})
++
+ #define MLX5_GET64(typ, p, fld) be64_to_cpu(*((__be64 *)(p) + __mlx5_64_off(typ, fld)))
+ 
+ #define MLX5_GET64_PR(typ, p, fld) ({ \
+@@ -130,4 +137,49 @@ __mlx5_mask16(typ, fld))
+ 		tmp;							  \
+ 		})
+ 
++/*
++ * Use READ_ONCE/WRITE_ONCE for a single field that hardware may read/write
++ * unpredictably, mostly owner bits. All other bits in the DW must be stable.
++ * Usually a dma_wmb() will be required before a write and a dma_rmb() after a
++ * read.
++ */
++#define MLX5_GET_ONCE(typ, p, fld)                                              \
++	((be32_to_cpu(READ_ONCE(*((__be32 *)(p) + __mlx5_dw_off(typ, fld)))) >> \
++	  __mlx5_dw_bit_off(typ, fld)) &                                        \
++	 __mlx5_mask(typ, fld))
++
++#define MLX5_SET_ONCE(typ, p, fld, v)                                      \
++	do {                                                               \
++		u32 _v = v;                                                \
++		__be32 *_dw = (__be32 *)(p) + __mlx5_dw_off(typ, fld);     \
++		BUILD_BUG_ON(__mlx5_st_sz_bits(typ) % 32);                 \
++		WRITE_ONCE(*_dw,                                           \
++			   cpu_to_be32((be32_to_cpu(READ_ONCE(*_dw)) &     \
++					(~__mlx5_dw_mask(typ, fld))) |     \
++				       (((_v) & __mlx5_mask(typ, fld))     \
++					<< __mlx5_dw_bit_off(typ, fld)))); \
++	} while (0)
++
++/* Access MMIO registers, usually the init segment, using IFC structs. */
++#define MLX5_GET_MMIO(typ, p, fld)                                         \
++	((ioread32be(((__be32 __iomem *)(p) + __mlx5_dw_off(typ, fld))) >> \
++	  __mlx5_dw_bit_off(typ, fld)) &                                   \
++	 __mlx5_mask(typ, fld))
++
++/* The set is not relaxed so there is an integrated dma_wmb(). */
++#define MLX5_SET_MMIO(typ, p, fld, v)                                         \
++	do {                                                                  \
++		u32 _v = v;                                                   \
++		void __iomem *_dw =                                           \
++			((__be32 __iomem *)(p) + __mlx5_dw_off(typ, fld));    \
++		if (__mlx5_bit_sz(typ, fld) == 32)                            \
++			iowrite32be(_v, _dw);                                 \
++		else                                                          \
++			iowrite32be((ioread32be(_dw) &                        \
++				     (~__mlx5_dw_mask(typ, fld))) |           \
++					    ((_v & __mlx5_mask(typ, fld))     \
++					     << __mlx5_dw_bit_off(typ, fld)), \
++				    _dw);                                     \
++	} while (0)
++
+ #endif /* MLX5_IFC_MACROS_H */
+-- 
+2.43.0
+
