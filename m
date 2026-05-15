@@ -1,82 +1,94 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77F531624C0;
-	Thu, 14 May 2026 23:24:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50E5921771B;
+	Fri, 15 May 2026 00:21:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778801070; cv=none; b=cpRr6SxIdDhgHeJf9bpXP1HP4ijifvdLO/8EPfYrRho6nDYsEIkJ4vP4dDguT2OPc9mGzdnx3n/EMBmm0VO0Hi/PikcpZL8Jm+YamNu7wH+PemaJl1Meewm3wxnzW9j3qGHG2mXFDNfui9HQEueASSaSHRF5L8nb21CNObt2lUw=
+	t=1778804479; cv=none; b=Gw8kSbWGiA24zpGDYA2yFnPAs0ibdHAp7IWd0vTx0yiG6JdTF66JM6A7wTNLHssKT9wqrWPv7t4Nr4ulvp1gZ0jEKUN+YUKFmHMxa90EEvKuDV1EFyyXSF1Njs8GgGFWa3sqQxOKzfrmjDiopzxl8OHTmpvJtx5c6u1wmcHwfjE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778801070; c=relaxed/simple;
-	bh=abcUdZkExVsC3g0gsn6E8bZW1UNFsj1zLdTe3Vx+fWQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=A+3xnEBPNrG19IdV+C62Ob08shD86Axc4U57qZZI6XhFbWXplqEBZJUgVFXXhg9tWkTdRJ5L2FQxareKFLFwteltV1av8DSIcXkNiyaImruq0sWAcGsl2Z2vMdA6Fvk9rT0+cMfVuet47N/Kgb/G+aMxq069J8T4Hkcdk+GOQac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mfTQnb53; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778804479; c=relaxed/simple;
+	bh=ZTvOd0uB1Ju0Md2Nb3++sx3rRD8bpVqiedLSDvIKz8w=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=j2yoLUpWsu5xaiHNO76maU2Gyt5Gbsz+w1gyxZ4f7mlihT+hsQptzApMQhS/kZxhYeIAjF5egmoSaGQRh3qo1mNtUQTjcgBAYpkxEsPKGJh4NkSbf5Ru3kUP79opoq+MZjKvDAHoQeohpXh6yBUvxJFrohecRxEHLypfK33/Ow4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XM3KpllV; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mfTQnb53"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBC2BC2BCB3;
-	Thu, 14 May 2026 23:24:29 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XM3KpllV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F5B0C2BCB3;
+	Fri, 15 May 2026 00:21:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778801070;
-	bh=abcUdZkExVsC3g0gsn6E8bZW1UNFsj1zLdTe3Vx+fWQ=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=mfTQnb53M/gyo+fqzJfJZzTPxPGmKkT3RJ4+AAzP+QvQ2ie+CIukFB7Fq7i7WZTvZ
-	 WVPgFSWJzDnRN7dEhuTu1aui7NZnx+ffCTrHYIlBx24UEoNvJxcfYgFWEPPij69/fC
-	 Ha19o3Cpd2GAbRN483e+tDZZzK/qKWd6xHLupty+MF45q5u4NoRHCZLx4DgFTOhHTO
-	 P/5ykig/fy3JB2/H/lnQUD9+F7PjRwDwyCreZ6nMdgwRNE2/mL3HqDFqOdz5Ir3Fgm
-	 7XCYcWiSI5TZUMFI/OffqPM4jq/kRK2c/IiI5xiiqKv6qypIVgTFgwVw11pYe3YcKa
-	 OeDqr0uZm7Anw==
-Date: Thu, 14 May 2026 16:24:29 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Fernando Fernandez Mancera <fmancera@suse.de>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- horms@kernel.org, pabeni@redhat.com, edumazet@google.com,
- dsahern@kernel.org, davem@davemloft.net
-Subject: Re: [PATCH 3/3 net-next v4] selftests: net: add test for IPv4
- devconf netlink notifications
-Message-ID: <20260514162429.366b94c9@kernel.org>
-In-Reply-To: <bd560c89-c71f-4ef5-a0fd-5ea096a0f767@suse.de>
-References: <20260510081528.5257-1-fmancera@suse.de>
-	<20260510081528.5257-3-fmancera@suse.de>
-	<20260513193544.47970cb8@kernel.org>
-	<bd560c89-c71f-4ef5-a0fd-5ea096a0f767@suse.de>
+	s=k20201202; t=1778804479;
+	bh=ZTvOd0uB1Ju0Md2Nb3++sx3rRD8bpVqiedLSDvIKz8w=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=XM3KpllV60Mgh6wILoy66Uv2izQg8jgiip/bC0OUOBRKLH/oylBzlpskXis03NTd5
+	 YVQUyv/pQznbY5+B+OZ4VjPS7Y0Kq0bosVpenAZd2muX1p3WAZBnPSL3EMLmN+Z7kq
+	 AD5sVEwcew0tzXDjNwHeC6h3xLPE4z1k7k5dY+McBQPjMVA5CMVsgY5uCSbAtRM2n4
+	 iHGhlC+g2vxmfWRsN8jl7Q66JEdFqRyTDsM+/iNEdOCaMAZdJZu+wW9tzGyRAOGj1S
+	 5Zq9rdZ3ri2IcI7e1BUYMZoXj2wqkCO/qaXVuJmjsDRNFHdAMAxkOZOZG76mgBCXaD
+	 N0Ct7sxMPhPdg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 058F839E4DB3;
+	Fri, 15 May 2026 00:20:25 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v10 1/2] selftests: openvswitch: add vlan() and
+ encap() flow string parsing
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177880442379.134878.9953459778629075808.git-patchwork-notify@kernel.org>
+Date: Fri, 15 May 2026 00:20:23 +0000
+References: <20260512070841.1183581-2-houminxi@gmail.com>
+In-Reply-To: <20260512070841.1183581-2-houminxi@gmail.com>
+To: Minxi Hou <houminxi@gmail.com>
+Cc: netdev@vger.kernel.org, dev@openvswitch.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ aconole@redhat.com, echaudro@redhat.com, i.maximets@ovn.org,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+ horms@kernel.org, shuah@kernel.org
 
-On Thu, 14 May 2026 11:42:16 +0200 Fernando Fernandez Mancera wrote:
-> On 5/14/26 4:35 AM, Jakub Kicinski wrote:
-> > On Sun, 10 May 2026 10:15:28 +0200 Fernando Fernandez Mancera wrote:  
-> >> Introduce a new test, `ipv4_devconf_notify`, to verify that the kernel
-> >> sends the appropriate netlink notifications when IPv4 devconf parameters
-> >> are modified.
-> >>
-> >> Since YNL currently has a bug where it declares an array of u32 values
-> >> instead of the nested attributes expected by the kernel for devconf set
-> >> operations, a temporary hack (`patched_add_attr`) is included to
-> >> pack the netlink attributes correctly.  
-> > 
-> > Right, YNL doesn't really support the level or weirdness that netconf
-> > requires. Why use YNL? Can't we test this with iproute2?
+Hello:
+
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Tue, 12 May 2026 15:08:40 +0800 you wrote:
+> Add VLAN TCI formatting and parsing support to ovs-dpctl.py:
 > 
-> No, AFAIU, iproute2 does not expose devconf settings. The main user of 
-> IFLA_INET_CONF are netlink libraries and other userspace tools that 
-> heavily rely on netlink operations like NetworkManager, nmstate, nispor, 
-> rust-netlink..
+> - Add _vlan_dpstr() to decompose TCI into vid/pcp/cfi fields,
+>   with raw tci=0x%04x fallback when cfi=0 for round-trip safety.
+> - Add _parse_vlan_from_flowstr() boundary check for missing ')'.
+> - Add encap_ovskey subclass restricting nla_map to L2-L4 attributes
+>   (slots 0-21) that appear inside 802.1Q ENCAP, with metadata
+>   attributes set to "none".
+> - Check encap parse() return value for unrecognized trailing content.
+> - Support callable format functions in dpstr() output.
+> - Change OVS_KEY_ATTR_VLAN type from uint16 to be16 to match the
+>   kernel __be16 wire format; uint16 decodes in host byte order,
+>   which gives wrong values on little-endian architectures.
+> - Change OVS_KEY_ATTR_ENCAP type from none to encap_ovskey to
+>   enable recursive parsing of 802.1Q encapsulated flow keys.
+> - Add push_vlan action class with fields matching kernel struct
+>   ovs_action_push_vlan (vlan_tpid, vlan_tci as network-order u16).
+> - Add push_vlan dpstr format and parse with range validation
+>   (vid 0-4095, pcp 0-7, tpid 0-0xFFFF) and CFI forced to 1.
+> 
+> [...]
 
-Isn't this ip netconf ?
+Here is the summary with links:
+  - [net-next,v10,1/2] selftests: openvswitch: add vlan() and encap() flow string parsing
+    https://git.kernel.org/netdev/net-next/c/db30e412b7f5
+  - [net-next,v10,2/2] selftests: openvswitch: add pop_vlan test
+    https://git.kernel.org/netdev/net-next/c/2476e005b13a
 
-> FWIW, I plan to fix the YNL side of things so we have this fixed 
-> properly.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-If it adds any hacks or new concepts to YNL it's unlikely to 
-be accepted :(
 
-> But I would prefer if this isn't blocked. Another patchset 
-> introducing IFLA_INET6_CONF support is also coming.. being able to avoid 
-> sysctl usage is quite useful for these userspace tools.
