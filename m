@@ -1,168 +1,139 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0691C421A1B
-	for <linux-kselftest@vger.kernel.org>; Fri, 15 May 2026 08:53:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 484F1428857
+	for <linux-kselftest@vger.kernel.org>; Fri, 15 May 2026 09:22:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778835228; cv=none; b=fOMLePCBErxYleZQkHoWyJDCLU6VuMsX7juHVBgjQF+ulL6w4uGeh/PTkSu+L6rismjWxVNB4vyzkoYaJT/m20MiS6UrSq7wMX+ChUS+9P4AuYJ2sT5PYqwODDtpyqyQce5CCZyK0qcis8AzTCD6VeJxuc6TJmW7Zw8Is6YggTE=
+	t=1778836937; cv=none; b=tHgRf9eLMYxwPaBjB9z0zytq8XpU/CjoUtSgbR7iGkOUxco0pyRsiQ1TI/1MMscH4wz74AmP8zL5eHcTvCrqRAG1+hOnrdALvS/uFbCzDqJI3Q2kcNJr7rW6tSvnHT/XoQeKihAwbHhgVSdiCq5+NRa7C9vWkFDOHCA6/CmvWfI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778835228; c=relaxed/simple;
-	bh=95rnVbuPoEqYoOgOEmXgRRLmt/DgdbJJ5HiCjeQHGDU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=nYecTGLBbVru3s/OIDM1EFafkaKm6/y7ocmjObKX7XVvVao+1eJEyTkpsS5SKmt5MxPDflyHALsCOTW7yCCUUMIbKCiSUYYwkeo5PSFyY+GK7fcXt36fAm5HSNgsfSptABCVSe1w8E6+VAliIAsgOwgNkfTt4FI/IIFJ6YvUJWk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=N/fBBTKp; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1778836937; c=relaxed/simple;
+	bh=LHuH38OYYSxE9/VQcwZgKysoFQxWuBx4gzsB5o3h7aM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NrKTk05uenn/z6duA09pAipLUPso/ebEyYAEUSmlE6ri6LeceKN0zGyMcpvuDADjENHvLkrYeUS7wRSxvA6/6hY2GP8UPcVzBCd6uy4u4D8LvcXsResnnu58UTWcY1NwTn2LaNbfhXja7Kps9Cl1IrWW0kfTyOtVEUvXUblCA+0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IaVdkOZj; arc=none smtp.client-ip=209.85.208.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="N/fBBTKp"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1778835226;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=mmxOVGUrnxS/H09zubyapT22aA5Jy+w6JF95xU/Ftgg=;
-	b=N/fBBTKpCCcvyiEDEdEyXOWPY/eCNbw5kIYwSTFSbusrtswPyX3m6+CVVYsc0J5eT1ZBCq
-	A3t/jeC/O7y87Gt/NARoaiywQVAfGflYMUgwh9EuFzHuwaf8VK3FwPwoGaOp00NkCeBuX2
-	6W2ELQytCo36fDgcaYJpbn0SSIkiwJ0=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-484-XDqT1YrxOLCP5ZZge2o2rA-1; Fri,
- 15 May 2026 04:53:42 -0400
-X-MC-Unique: XDqT1YrxOLCP5ZZge2o2rA-1
-X-Mimecast-MFC-AGG-ID: XDqT1YrxOLCP5ZZge2o2rA_1778835219
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4B1411956054;
-	Fri, 15 May 2026 08:53:38 +0000 (UTC)
-Received: from [192.168.1.153] (headnet01.pony-001.prod.iad2.dc.redhat.com [10.2.32.101])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id DBD4D1955D85;
-	Fri, 15 May 2026 08:53:31 +0000 (UTC)
-From: Albert Esteve <aesteve@redhat.com>
-Date: Fri, 15 May 2026 10:52:53 +0200
-Subject: [PATCH v12 4/4] kunit: Add documentation for warning backtrace
- suppression API
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IaVdkOZj"
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-6763cc8775cso1387099a12.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 15 May 2026 02:22:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1778836935; x=1779441735; darn=vger.kernel.org;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SZB7dXJdMz2m27jS4oJrp4Xa0e7eQPlOm8RhL6/Zm48=;
+        b=IaVdkOZjgLn4No7s1OX0TJNqO41vIVcTL04nzT5nuCyHAUYKsq84JQNTaBbQxQ02Bv
+         2LF+C5jR70PUiwO3f1Ps0gAUXxUcQAFGtH2j8BkaRkMecLU/KGvah4UqeFQnlOOrTNiY
+         a5NlZDHURt/+dOX/miGuol+aURPwdZt5JxWkiSsDmibLVpL+cPTU0X5caYz9VC6ciWzM
+         27aObvicx3QOmX9PvjksUTMDhg5j9UZP7mxEUA/MAjOfN1xiBlFAIkPtRG50XF5jrnDJ
+         bhYwfepYLOntKdLBFhLUTZED+MolA6iEy+Mh83cQ9qeNAvd4gty62WpQsEKc0Tsue86r
+         +/Mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778836935; x=1779441735;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :reply-to:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SZB7dXJdMz2m27jS4oJrp4Xa0e7eQPlOm8RhL6/Zm48=;
+        b=KiVUCr/7uLueP++VHHyVYGHbaLMZ99jp8lOyPr5ekNwcEI1ExAlNv6Tl2KdmxN1dDm
+         QJiU92qflQdn30WgOV3Odgrso0IRMSMteQrUXMXVyrHuXuef1ny6T9xbzg3dSWektYZ9
+         NLH7ChgFPdjfNnr7si7aO47jmyX/hIZQCmVVMNixQ01pTaHXwpK44h4evZEhu8LuD2Tz
+         cIyKYOAcAZiTc+Ukc4HNBV6Jzp2vCHhA2rud7lbx5SGFuKmfCV0bSdv7o8R7on4H+3DS
+         cJk0sqn4O4FmqAo1xsxBTnzEpcOXnLuuW6dp1QILb6WhwqNfbHDz7K9wWBqNwNmmRdZX
+         1Img==
+X-Forwarded-Encrypted: i=1; AFNElJ+LS614adftS+KZEIhCBWqtW3d7M/+4e1th0chI5e1yFFmckcV6oeD1VdvkucCBR6Emg45pa4HoZFagcbQnBSo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxKbjzidMe5iSXZaPtUXYZ7njwCgnf5f6dQjMB6hdgTpHIFdypq
+	PY7Of6HE5Htggdji5OkuXm0ET5P1T2RbDFTWUneNLR9jZ/5TwCIRIckP
+X-Gm-Gg: Acq92OEHdwh19XudskOuZDoxHaKJ7EHC551kdWoALxpRUjFdaIhSGBFIJUOJ4MdawD3
+	1JWB02JRD6V5fu/25j3zdwy5O2oialc8NpFyU7OtZQgL4Ch2ze/33QaL86//ErCga6tpl8Q0NSg
+	+afwJxXcGH7EACaeSr4bpU43s4AGfhPdFJN/HT0guenxCft2Wwe52OepAIjtYVVsrpMbOeHOf3F
+	wYbS7MVl+vRKBrjfkfYv0bsGsiML9e6nUvtAGZFuoT2HHs3I04JhVrHMdxDf/a5GQf6jm3RDzhe
+	XeETeHgZNCenmLklG6M+47IwTqso1ncSLwxmpa9TMg3CPOuzMbHKg1d3Usn9ofNqbu4Jhe1eEKn
+	PmUEZM0EavRhh0Q7aBi/ctkFUijNUGxNeDt1hQbulnwjZfRTqz30U4pvuyYMNYFZwinn6ZfUf54
+	9+KLbvvrOiMFxpiDWmlUqCug==
+X-Received: by 2002:a17:907:9614:b0:bd3:99fc:5610 with SMTP id a640c23a62f3a-bd4f3503c54mr412050166b.30.1778836934495;
+        Fri, 15 May 2026 02:22:14 -0700 (PDT)
+Received: from localhost ([185.92.221.13])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-68311769040sm1743357a12.24.2026.05.15.02.22.13
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 15 May 2026 02:22:13 -0700 (PDT)
+Date: Fri, 15 May 2026 09:22:11 +0000
+From: Wei Yang <richard.weiyang@gmail.com>
+To: Vineet Agarwal <agarwal.vineet2006@gmail.com>
+Cc: akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org,
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/mm: check file initialization writes in
+ split_huge_page_test
+Message-ID: <20260515092211.qkmaxcofxwfdexld@master>
+Reply-To: Wei Yang <richard.weiyang@gmail.com>
+References: <20260512074924.27721-1-agarwal.vineet2006@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260515-kunit_add_support-v12-4-a216dc228be8@redhat.com>
-References: <20260515-kunit_add_support-v12-0-a216dc228be8@redhat.com>
-In-Reply-To: <20260515-kunit_add_support-v12-0-a216dc228be8@redhat.com>
-To: Arnd Bergmann <arnd@arndb.de>, 
- Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, 
- Rae Moar <raemoar63@gmail.com>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
- Andrew Morton <akpm@linux-foundation.org>, Paul Walmsley <pjw@kernel.org>, 
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
- Alexandre Ghiti <alex@ghiti.fr>
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
- dri-devel@lists.freedesktop.org, workflows@vger.kernel.org, 
- linux-riscv@lists.infradead.org, linux-doc@vger.kernel.org, 
- peterz@infradead.org, Guenter Roeck <linux@roeck-us.net>, 
- Linux Kernel Functional Testing <lkft@linaro.org>, 
- Alessandro Carminati <acarmina@redhat.com>, 
- Albert Esteve <aesteve@redhat.com>, Dan Carpenter <error27@gmail.com>, 
- Kees Cook <kees@kernel.org>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1778835177; l=2728;
- i=aesteve@redhat.com; s=20260303; h=from:subject:message-id;
- bh=YX7AMC4Z3qCvd9o2GGoQ6LMsoUJS/dulVvDsXv5Qzg4=;
- b=uU8iZP3aKTG6p9f6uzLQ+7585Tt2YEgz1OTvweQ4CuLQ3H8MMENyxt9ulFNJQ1k4vJADogKw5
- Vq1oW3OIyVmDghCtrvC2+FcWQVlJ23+UX8uxtuiWX2rKMKaZvQTxK9J
-X-Developer-Key: i=aesteve@redhat.com; a=ed25519;
- pk=YSFz6sOHd2L45+Fr8DIvHTi6lSIjhLZ5T+rkxspJt1s=
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260512074924.27721-1-agarwal.vineet2006@gmail.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
 
-From: Guenter Roeck <linux@roeck-us.net>
+On Tue, May 12, 2026 at 01:19:24PM +0530, Vineet Agarwal wrote:
+>create_pagecache_thp_and_fd() fills the backing file for the
+>pagecache THP tests using repeated write() calls, but the return
+>value is never checked.
+>
+>If a write fails or completes only partially, the test may continue
+>with an incompletely initialized file and produce misleading results.
+>
+>Check the result of write() and fail the test if the expected number
+>of bytes was not written.
+>
+>Signed-off-by: Vineet Agarwal <agarwal.vineet2006@gmail.com>
+>---
+> tools/testing/selftests/mm/split_huge_page_test.c | 13 ++++++++++---
+> 1 file changed, 10 insertions(+), 3 deletions(-)
+>
+>diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
+>index 500d07c4938b..eab69b0f59a0 100644
+>--- a/tools/testing/selftests/mm/split_huge_page_test.c
+>+++ b/tools/testing/selftests/mm/split_huge_page_test.c
+>@@ -609,9 +609,16 @@ static int create_pagecache_thp_and_fd(const char *testfile, size_t fd_size,
+> 	assert(fd_size % sizeof(buf) == 0);
+> 	for (i = 0; i < sizeof(buf); i++)
+> 		buf[i] = (unsigned char)i;
+>-	for (i = 0; i < fd_size; i += sizeof(buf))
+>-		write(*fd, buf, sizeof(buf));
+>-
+>+	for (i = 0; i < fd_size; i += sizeof(buf)) {
+>+		ssize_t written;
+>+
+>+		written = write(*fd, buf, sizeof(buf));
+>+		if (written != sizeof(buf)) {
+>+			ksft_perror("write testfile");
+>+			close(*fd);
+>+			goto err_out_unlink;
 
-Document API functions for suppressing warning backtraces.
+Maybe we can "goto err_out_close" and remove the close() here?
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-Acked-by: Dan Carpenter <dan.carpenter@linaro.org>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Alessandro Carminati <acarmina@redhat.com>
-Reviewed-by: David Gow <david@davidgow.net>
-Signed-off-by: Albert Esteve <aesteve@redhat.com>
----
- Documentation/dev-tools/kunit/usage.rst | 46 ++++++++++++++++++++++++++++++++-
- 1 file changed, 45 insertions(+), 1 deletion(-)
+Apart from this, I found on error writing to /proc/sys/vm/drop_caches in below,
+it just goto err_out_unlink, which left fd open.
 
-diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
-index ebd06f5ea4550..1c78dfff94e8a 100644
---- a/Documentation/dev-tools/kunit/usage.rst
-+++ b/Documentation/dev-tools/kunit/usage.rst
-@@ -157,6 +157,50 @@ Alternatively, one can take full control over the error message by using
- 	if (some_setup_function())
- 		KUNIT_FAIL(test, "Failed to setup thing for testing");
- 
-+Suppressing warning backtraces
-+------------------------------
-+
-+Some unit tests trigger warning backtraces either intentionally or as a side
-+effect. Such backtraces are normally undesirable since they distract from
-+the actual test and may result in the impression that there is a problem.
-+
-+Backtraces can be suppressed with **task-scoped suppression**: while
-+suppression is active on the current task, the backtrace and stack dump from
-+``WARN*()``, ``WARN_ON*()``, and related macros on that task are suppressed.
-+Two API forms are available.
-+
-+- Scoped suppression is the simplest form. Wrap the code that triggers
-+  warnings in a ``kunit_warning_suppress()`` block:
-+
-+.. code-block:: c
-+
-+	static void some_test(struct kunit *test)
-+	{
-+		kunit_warning_suppress(test) {
-+			trigger_backtrace();
-+			KUNIT_EXPECT_SUPPRESSED_WARNING_COUNT(test, 1);
-+		}
-+	}
-+
-+.. note::
-+   The warning count must be checked inside the block; the suppression handle
-+   is not accessible after the block exits.
-+
-+- Direct functions return an explicit handle pointer. Use them when the handle
-+  needs to be retained or passed across helper functions:
-+
-+.. code-block:: c
-+
-+	static void some_test(struct kunit *test)
-+	{
-+		struct kunit_suppressed_warning *w;
-+
-+		w = kunit_start_suppress_warning(test);
-+		trigger_backtrace();
-+		kunit_end_suppress_warning(test, w);
-+
-+		KUNIT_EXPECT_EQ(test, kunit_suppressed_warning_count(w), 1);
-+	}
- 
- Test Suites
- ~~~~~~~~~~~
-@@ -1211,4 +1255,4 @@ For example:
- 		dev_managed_string = devm_kstrdup(fake_device, "Hello, World!");
- 
- 		// Everything is cleaned up automatically when the test ends.
--	}
-\ No newline at end of file
-+	}
+How about fix that at the same time.
+
+Generally, the change look good.
+
+>+		}
+>+	}
+> 	close(*fd);
+> 	sync();
+> 	*fd = open("/proc/sys/vm/drop_caches", O_WRONLY);
+>-- 
+>2.54.0
+>
 
 -- 
-2.53.0
-
+Wei Yang
+Help you, Help me
