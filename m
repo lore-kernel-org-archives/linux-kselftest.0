@@ -1,262 +1,408 @@
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D66113FF88C
-	for <linux-kselftest@vger.kernel.org>; Fri, 15 May 2026 08:28:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778833725; cv=none; b=QC2ed8RovD3ss6E9MvaSNVKH3nOaNVzcVYd+AKJnmbfrYsrRRbg98BrBHVdfPs54A0/+2sLfoNLrEcukD2zd6LqUn/qOVxTgHDD4TS/3jceJ6gIe4vMpgEyCBImJYAMMKpbh6E6wpuAIChoq3RJvl9i2EgqRgoeceCPNWpHSyic=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778833725; c=relaxed/simple;
-	bh=VjM1sDIwoUP6qi68BiA3PqSUNQtFlaJkLbn2w6NF95w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AVM+iA8ypSOS8+wmwGZfQleOAWBNqEVrdCogG1dB4JlSp4/VqBECMEEBNQjooACuYlQNxX2iCKpjJubM2i4e42JdTkQJMABVBXT/Ul6q5mYZJPw0vIt4Ro7aC+aq4UXb3dhYwEnkb0EbIEhSGSuh5C+7cX6m0grNYHlLGhJ8f5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=BatIa1gc; arc=none smtp.client-ip=209.85.221.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7371A401A23
+	for <linux-kselftest@vger.kernel.org>; Fri, 15 May 2026 08:30:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=170.10.133.124
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778833825; cv=pass; b=DDVoSqvKDvU42FK8vGLiuvKfRB2+YcSrq6DLeaiiSf1skoeNPm7FIneMl8CNAlfAYJC0Q42WNk3mLlwIVCT2GibXhVrTqB9IEiDGe46bHluUo+/tGJFZRChgF/ZZpeZuokwEPQ0mL+uolqobphUDUnhJISA4jA964HYjTb2dXJo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778833825; c=relaxed/simple;
+	bh=wZoWkMX+eskXzZoY5GSBYclpj+6G3yHCYIb+U539EoQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SCcesf+0MFfr7LDACpkV1P1mK5FJFu9bqfpq8Z29+DQGHmsm66vJHj/HuI7kF5Bh/6wE5rxCYnZKkYC3bRQaN18Gw5b7JSeXbmYGANVcP90yOQkO9beCY3tvAgB9b+Mhv8E/LbuT+DfywkO8VQdfIGFibmOrVzTg+7xVZZLtwZw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=N5Z2s3wb; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=kAbEuEGl; arc=pass smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="BatIa1gc"
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-44509921fbcso4554475f8f.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 15 May 2026 01:28:43 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="N5Z2s3wb";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="kAbEuEGl"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1778833822;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bl97SG38DqEYm+qLShyfMzefRk/OXd7eX3bX+dxr3ds=;
+	b=N5Z2s3wbGD5T2Ur87tk2PSZ7jF5uYSYh5vcEP7+xZ1Y2XhEVw2CrSDg6rxPDb5XxpAOsSk
+	hEWj6JV3TPDX1Fr/vrUBvLbNlyFgExNlz5pIXHYjubNnLT7PmGl0N0rHrduz0lhP0Lj+UU
+	PvwG9DT8ljWWWqdXTpiP9FSTYHDKmO0=
+Received: from mail-yx1-f69.google.com (mail-yx1-f69.google.com
+ [74.125.224.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-194-7CwCYwWBNhe7-rieYG_CIA-1; Fri, 15 May 2026 04:30:21 -0400
+X-MC-Unique: 7CwCYwWBNhe7-rieYG_CIA-1
+X-Mimecast-MFC-AGG-ID: 7CwCYwWBNhe7-rieYG_CIA_1778833821
+Received: by mail-yx1-f69.google.com with SMTP id 956f58d0204a3-651c15e69d7so19812998d50.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 15 May 2026 01:30:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1778833821; cv=none;
+        d=google.com; s=arc-20240605;
+        b=U8ad71U4i7kw8H8aaAgI8H04FSz3lxqHNWqrFYblKMyw0iOuLqMLUpJrgqi79EdUeU
+         Tac3B/2rAqYpW95wkcvAcEsAv/x8aq3Oqxy3XZdvs7y4AuY3C9IJbCVDlP5ZCxUiYrfI
+         yGdjL5ufFeBo5MlK6abzx9Dhp2zh5GV52GpLC7TzP2lF0my1+TUXnF9BfYuQSL/0OhdU
+         jiD/XwBOCZUGm3nsZq1K+ChXhkYdU18AhXQbY2jPlrHVTIfEk1/rlNbCoH0WSrMTtBwm
+         Np5HqRyLoS+FO6OxYAdKJ+v8bD8JOsBqtChVtM/z+wnfXXq7P4dUdOmMKZGOS/wuOaT5
+         CM2Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=bl97SG38DqEYm+qLShyfMzefRk/OXd7eX3bX+dxr3ds=;
+        fh=BlH4MuAJJg+ReE+1z+88ucp/oW21qgkOJKTgQfhxIgU=;
+        b=DLBukyZE+Y0+Qoo0fNdDOzthjD7FfD4CknSnhj1H+PmgcEiySRz0NB9rd9MCkdFYiy
+         fhf4j4P1ntXr2Nj+NeLlsA8K6RvfgrOLJVoYZzDvg9zY3JEurk8qOTv4jh+BnQpxpS0L
+         t3GA12QxaQiqlv018wod9uKc2LejiuNnY6nrGknVdtVSEqbTkm3QbhiaOxv2SSw8I6Qu
+         ehkLwxwEtwzJNRjsl5Wq2KnUo6gVb5LF1fCtupMOChbXPS4gnJ5S4Z3gjMH0bcqvyVHy
+         N8mRldujdQGof7j6amd+6Lr7fgsP5X0OfdM9IhNYzIRuh7Zo92MWNkEeYtr0jMNsYHS2
+         P2ig==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1778833722; x=1779438522; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=x9sH8Q4QjX83trp+YQQ6QbWlIhiR2CnSj4K2FVOvEtA=;
-        b=BatIa1gcYN/3Pq5VcVtdUgifJqGYkH8EXs7wEMcfSL5IljTl4Cq1uQ2lk5wehbA5wQ
-         fOyx3eOCodmJtBRnZUZXu8b+pGptsXS773Mpx7zjWj0pEUpMeppRDVqGRff3f6YetNs9
-         kVzjkgM/aEupCWlq/JPLJ3/ywwVhAz4rsqdW0X5STQaZn2LxO/ZMR/1fQn4rFL77YYyS
-         Rfi/+H4+GfeI28z9Sx7yqZdKnuQN9+DC/9tk6ZotXzT7aQiJPla3Yj6He/gufKrYl+6Y
-         NvpY+Cmwi5jaYfiVPnDRM/pNSeyzQm32GRCLxRRLEVIJcaFtIK/XBOlhooiKqCgWJP6D
-         S0SQ==
+        d=redhat.com; s=google; t=1778833821; x=1779438621; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bl97SG38DqEYm+qLShyfMzefRk/OXd7eX3bX+dxr3ds=;
+        b=kAbEuEGlsQ2HH37n6hwUfilPN+5fmKWuBJQ0PDRIij0rCmsLhvBjLY3LOEE1D53M/k
+         6wLco4dBOlxGCGHcJGtPkKwZVApyg5LIYX/iqT88/zX4YqNvUCKA7b2CktNqUfhPcdeq
+         jEztmn7IwsWKl5gG/wLnle7Hd1zu2ZyN2FyR+StIouBugdpxErZThHw4M9RyHWXQmauq
+         +FKMUyHnASRHhsm3dnVtbDL8jDXqRRgddQkOpgTglzwVzdLI3lNTKF4dxkpbvCZX6pnh
+         jyQ2RIiTitWXIFsXiVMpfYvXDKUEfN9DQT+mASqcUDAfqJB4Ss5qMkmEHZTqlpv5ksvT
+         /lNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778833722; x=1779438522;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=x9sH8Q4QjX83trp+YQQ6QbWlIhiR2CnSj4K2FVOvEtA=;
-        b=Ap6+HGBECkvDjyNWWjFjFi9qmMhdU90Dt1ljb2oxRKL894OgyM860f8pEaFHjSbygF
-         cDaP9MUZ30oSnCLiVIBvYN5ZYBQwo0nVjFRUm852eD8MuOYDdD1ZfBleEu1ikhePyHXc
-         XsCaUcfJZzM3OXZWbr4hi9sjx0KjgXBiqhDjGXbqdyW7dTOpawD0JJMWeaNyIv370QxG
-         uTZOg7ftHjVyLeq23YKVoNBdZPZzbX2DFy7Sz7uQB7at1OyCQZR9mod6seCCaVkHNCnP
-         u45cxrPbRm/KuDGB6Em3QuBmT8gX8LmvQ8As57O6M6282Mx34/wl5OwNsAW6vAalsq+i
-         GLRA==
-X-Forwarded-Encrypted: i=1; AFNElJ/lixPELY14xt2k4kBKQ8WtpJF6VthEDdu9hb/eHqDBuBdGd0X8f/Etr20sv6WIUTYOpT1UdmwcLtYuiaLZgBw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwOZLyRvA2Qea0RkzOjSlyXf2Lf6C8AiEzjTJfdgXEPJa0H90O1
-	g+VeIOelj3P5AKjIEBoQ8e1sSWrL1YbpJiSBzvRdaFkmTKBAdrPeOCnIBLEjacODufc=
-X-Gm-Gg: Acq92OHAyj3FahjKNVXMA4C3fDEfSH1a74GxqtNOUHsfjqyRqORF86RrlJpzoMyLTJY
-	YCPZrIGqwH489f0e2nskM/WaIC+tvVxRWVDqCTyOw3fv74BbA1uGB95/ZLytRc0bpJQdd2aOAo0
-	xbEmWOqXx2gLBmZnXH3JOkEc31H1FNnBkJBc1l9tdrUQGHM5217kYaz4V1ZJPuaOaRhZNa5zO0U
-	fPWgHlEQUexcZqYIpVQHVW34ibCFJnYLL7QXXeo/crdZg4/Wx2/JxSC/1gZ9E7OtU+4hzw0iVab
-	aYMHA5/Aw6X28Tew/ayuz+ht51oSqlrOJymLTY0xZxyZYsOhTkAsP0oV5n8ulURX8E7EVAMeq0P
-	3G9zq8PjlufafeI7WQdzw+ok505v2eJaAbDPqQyFN47OQLWEynKCIk7uq+fU3bkX/78nJqW+hou
-	uXOWtptZEDcGS2zVy9Rm+iRXedMaMU
-X-Received: by 2002:a05:6000:1787:b0:455:fbb:28bb with SMTP id ffacd0b85a97d-45e5c5dd6famr3551750f8f.35.1778833722379;
-        Fri, 15 May 2026 01:28:42 -0700 (PDT)
-Received: from [192.168.1.3] ([185.48.77.170])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45da0a19c2dsm12770884f8f.21.2026.05.15.01.28.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 May 2026 01:28:41 -0700 (PDT)
-Message-ID: <c7a68965-88e5-4808-9a75-d58c4986a3b6@linaro.org>
-Date: Fri, 15 May 2026 09:28:40 +0100
+        d=1e100.net; s=20251104; t=1778833821; x=1779438621;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=bl97SG38DqEYm+qLShyfMzefRk/OXd7eX3bX+dxr3ds=;
+        b=nUi3Cb1VE0BHxY+vrRWKwUfwNt9ZkTsZ3PU/R3Prs3kldnAAa9GEV0nq5YbqDPxfru
+         bkpao8r1qHGWC2vnyhZ8vCiFurFt2j5kDb+KUFZNj3UxsP/pxyTKmEuMd5VEbEfsmG5L
+         6thvzkvP4xLC1n2s1bc1zkDJ+efZJlz/8ZEW2q4vLmVW2bj/jD+4ibZX6Qp//kREE6WP
+         wsB2YEvqz3ta9/NR75EayZQp7BcY7qfiMPK90HJAdTcwgBcBbp8Ldqk8wTi7ipvTc27J
+         Q9HVJ8sM/NcsPyP/EQEY0HhvT4ZN4BqUFqMg9daWTEvt5oX5AqZjB7Q2x+/s+JQF/+Ra
+         0bhg==
+X-Forwarded-Encrypted: i=1; AFNElJ85uFdEo5r8Bq6F+L2B5dYL3mKhhj52BqagPHNHicMfz8RmRVQrM014iRhobMMw/DiU963I4dmTqtNmjYkU1nE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxq4SLJN2Tc5TfHcQR+HoHereHHBc9s/gcIPcRPVPtIvq3PtvgW
+	X5xlRRsc+fq7D8cntbtT2iBmQG0djXJ6Kb6s2eh/uk7Otv6V1xwQ4pR9jTcruy41DfgdUygONb3
+	L856rBq9Q/96+PmsY0QVhbdWABho9R0XQ+pYUmmlYymMXbFMjvhzO+ivfC0tgJQ5MqRtyemDwjb
+	ZpEb+6BNpx8pY3UcUNsdmhxmIRaan3sgctfwD8FK4e8n+v
+X-Gm-Gg: Acq92OGP3WsHcMprm+Hwm8HQXA9Yss0tVeEFUjr1ApQPR9bOQlXOg/HWgZm8m/n1ouS
+	CttEuso08ed0GdRIzejrPWCskmHwgjZm4YcPyDpZyGESxx7UVPIffMvTBR9Vq8z/MNDNyvCw/Wf
+	SgON2/y9o5RtdTOf42lddd/Ozo0ooAr6w3WUtHq3hiYfSyWcXfpwEuOIdx9Zve9vf/O/In11ldk
+	EmViw==
+X-Received: by 2002:a05:690c:d91:b0:7a4:8718:8c73 with SMTP id 00721157ae682-7c959f7eae9mr29527897b3.9.1778833820548;
+        Fri, 15 May 2026 01:30:20 -0700 (PDT)
+X-Received: by 2002:a05:690c:d91:b0:7a4:8718:8c73 with SMTP id
+ 00721157ae682-7c959f7eae9mr29527457b3.9.1778833820057; Fri, 15 May 2026
+ 01:30:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 13/20] KVM: arm64: Apply dynamic guest counter
- reservations
-To: Colton Lewis <coltonlewis@google.com>
-Cc: alexandru.elisei@arm.com, pbonzini@redhat.com, corbet@lwn.net,
- linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
- maz@kernel.org, oliver.upton@linux.dev, mizhang@google.com,
- joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com,
- mark.rutland@arm.com, shuah@kernel.org, gankulkarni@os.amperecomputing.com,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
- linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kvm@vger.kernel.org
-References: <gsntlddlbylw.fsf@coltonlewis-kvm.c.googlers.com>
-Content-Language: en-US
-From: James Clark <james.clark@linaro.org>
-In-Reply-To: <gsntlddlbylw.fsf@coltonlewis-kvm.c.googlers.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20260514-kunit_add_support-v11-0-b36a530a6d8f@redhat.com> <20260514-kunit_add_support-v11-2-b36a530a6d8f@redhat.com>
+In-Reply-To: <20260514-kunit_add_support-v11-2-b36a530a6d8f@redhat.com>
+From: Albert Esteve <aesteve@redhat.com>
+Date: Fri, 15 May 2026 10:30:07 +0200
+X-Gm-Features: AVHnY4IpbN1L0iL3JJ5V1KLP5rKC5fDaPhQjSTbBKstC7eTK3NlVXbuxOJbgBlw
+Message-ID: <CADSE00KxDcyvw5MzRzrY0haZze8=9Npb8W8SwsxR+wjcS0R9pw@mail.gmail.com>
+Subject: Re: [PATCH v11 2/4] kunit: Add backtrace suppression self-tests
+To: Arnd Bergmann <arnd@arndb.de>, Brendan Higgins <brendan.higgins@linux.dev>, 
+	David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, Paul Walmsley <pjw@kernel.org>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Alexandre Ghiti <alex@ghiti.fr>
+Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	dri-devel@lists.freedesktop.org, workflows@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, linux-doc@vger.kernel.org, 
+	peterz@infradead.org, Guenter Roeck <linux@roeck-us.net>, 
+	Linux Kernel Functional Testing <lkft@linaro.org>, Alessandro Carminati <acarmina@redhat.com>, Dan Carpenter <error27@gmail.com>, 
+	Kees Cook <kees@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Thu, May 14, 2026 at 1:07=E2=80=AFPM Albert Esteve <aesteve@redhat.com> =
+wrote:
+>
+> From: Guenter Roeck <linux@roeck-us.net>
+>
+> Add unit tests to verify that warning backtrace suppression works.
+>
+> Tests cover both API forms:
+> - Scoped: kunit_warning_suppress() with in-block count verification
+>   and post-block inactivity check.
+> - Direct functions: kunit_start/end_suppress_warning() with
+>   sequential independent suppression blocks and per-block counts.
+>
+> Furthermore, tests verify incremental warning counting, that
+> kunit_has_active_suppress_warning() transitions correctly around
+> suppression boundaries, and that suppression active in the test
+> kthread does not leak to a separate kthread.
+>
+> If backtrace suppression does _not_ work, the unit tests will likely
+> trigger unsuppressed backtraces, which should actually help to get
+> the affected architectures / platforms fixed.
+>
+> Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> Acked-by: Dan Carpenter <dan.carpenter@linaro.org>
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Alessandro Carminati <acarmina@redhat.com>
+> Reviewed-by: David Gow <david@davidgow.net>
+> Signed-off-by: Albert Esteve <aesteve@redhat.com>
+> ---
+>  lib/kunit/Makefile                     |   1 +
+>  lib/kunit/backtrace-suppression-test.c | 198 +++++++++++++++++++++++++++=
+++++++
+>  2 files changed, 199 insertions(+)
+>
+> diff --git a/lib/kunit/Makefile b/lib/kunit/Makefile
+> index 4592f9d0aa8dd..2e8a6b71a2ab0 100644
+> --- a/lib/kunit/Makefile
+> +++ b/lib/kunit/Makefile
+> @@ -22,6 +22,7 @@ obj-$(if $(CONFIG_KUNIT),y) +=3D                hooks.o
+>
+>  obj-$(CONFIG_KUNIT_TEST) +=3D            kunit-test.o
+>  obj-$(CONFIG_KUNIT_TEST) +=3D            platform-test.o
+> +obj-$(CONFIG_KUNIT_TEST) +=3D            backtrace-suppression-test.o
+>
+>  # string-stream-test compiles built-in only.
+>  ifeq ($(CONFIG_KUNIT_TEST),y)
+> diff --git a/lib/kunit/backtrace-suppression-test.c b/lib/kunit/backtrace=
+-suppression-test.c
+> new file mode 100644
+> index 0000000000000..7a2a59c6a780d
+> --- /dev/null
+> +++ b/lib/kunit/backtrace-suppression-test.c
+> @@ -0,0 +1,198 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * KUnit test for suppressing warning tracebacks.
+> + *
+> + * Copyright (C) 2024, Guenter Roeck
+> + * Author: Guenter Roeck <linux@roeck-us.net>
+> + */
+> +
+> +#include <kunit/test.h>
+> +#include <linux/bug.h>
+> +#include <linux/completion.h>
+> +#include <linux/kthread.h>
+> +
+> +static void backtrace_suppression_test_warn_direct(struct kunit *test)
+> +{
+> +       if (!IS_ENABLED(CONFIG_BUG))
+> +               kunit_skip(test, "requires CONFIG_BUG");
+> +
+> +       kunit_warning_suppress(test) {
+> +               WARN(1, "This backtrace should be suppressed");
+> +               /*
+> +                * Count must be checked inside the scope; the handle
+> +                * is not accessible after the block exits.
+> +                */
+> +               KUNIT_EXPECT_SUPPRESSED_WARNING_COUNT(test, 1);
+> +       }
+> +       KUNIT_EXPECT_FALSE(test, kunit_has_active_suppress_warning());
+> +}
+> +
+> +static noinline void trigger_backtrace_warn(void)
+> +{
+> +       WARN(1, "This backtrace should be suppressed");
+> +}
+> +
+> +static void backtrace_suppression_test_warn_indirect(struct kunit *test)
+> +{
+> +       if (!IS_ENABLED(CONFIG_BUG))
+> +               kunit_skip(test, "requires CONFIG_BUG");
+> +
+> +       kunit_warning_suppress(test) {
+> +               trigger_backtrace_warn();
+> +               KUNIT_EXPECT_SUPPRESSED_WARNING_COUNT(test, 1);
+> +       }
+> +}
+> +
+> +static void backtrace_suppression_test_warn_multi(struct kunit *test)
+> +{
+> +       if (!IS_ENABLED(CONFIG_BUG))
+> +               kunit_skip(test, "requires CONFIG_BUG");
+> +
+> +       kunit_warning_suppress(test) {
+> +               WARN(1, "This backtrace should be suppressed");
+> +               trigger_backtrace_warn();
+> +               KUNIT_EXPECT_SUPPRESSED_WARNING_COUNT(test, 2);
+> +       }
+> +}
+> +
+> +static void backtrace_suppression_test_warn_on_direct(struct kunit *test=
+)
+> +{
+> +       if (!IS_ENABLED(CONFIG_BUG))
+> +               kunit_skip(test, "requires CONFIG_BUG");
+> +       if (!IS_ENABLED(CONFIG_DEBUG_BUGVERBOSE) && !IS_ENABLED(CONFIG_KA=
+LLSYMS))
+> +               kunit_skip(test, "requires CONFIG_DEBUG_BUGVERBOSE or CON=
+FIG_KALLSYMS");
+> +
+> +       kunit_warning_suppress(test) {
+> +               WARN_ON(1);
+> +               KUNIT_EXPECT_SUPPRESSED_WARNING_COUNT(test, 1);
+> +       }
+> +}
+> +
+> +static noinline void trigger_backtrace_warn_on(void)
+> +{
+> +       WARN_ON(1);
+> +}
+> +
+> +static void backtrace_suppression_test_warn_on_indirect(struct kunit *te=
+st)
+> +{
+> +       if (!IS_ENABLED(CONFIG_BUG))
+> +               kunit_skip(test, "requires CONFIG_BUG");
+> +       if (!IS_ENABLED(CONFIG_DEBUG_BUGVERBOSE))
+> +               kunit_skip(test, "requires CONFIG_DEBUG_BUGVERBOSE");
+Sashiko says:
+"""
+Is there a reason why backtrace_suppression_test_warn_on_direct() falls bac=
+k
+to checking CONFIG_KALLSYMS while
+backtrace_suppression_test_warn_on_indirect() does not?
+The core warning suppression logic matches on the task, so it seems like
+CONFIG_KALLSYMS should be sufficient for both.
+Could this cause tests to be unnecessarily skipped on systems with
+CONFIG_KALLSYMS enabled but CONFIG_DEBUG_BUGVERBOSE disabled?
+"""
+This is interesting. I am not sure why they were different; it was
+probably an oversight. But after looking at it, this is probably a
+leftover from when suppression occurred at the macros. They do not
+seem necessary anymore. So I will remove them.
 
-
-On 14/05/2026 8:05 pm, Colton Lewis wrote:
-> James Clark <james.clark@linaro.org> writes:
-> 
->> On 13/05/2026 5:45 pm, Colton Lewis wrote:
->>> James Clark <james.clark@linaro.org> writes:
-> 
->>>> On 04/05/2026 10:18 pm, Colton Lewis wrote:
->>>>> Apply dynamic guest counter reservations by checking if the requested
->>>>> guest mask collides with any events the host has scheduled and calling
->>>>> pmu_perf_resched_update() with a hook that updates the mask of
->>>>> available counters in between schedule out and schedule in.
-> 
->>>>> Signed-off-by: Colton Lewis <coltonlewis@google.com>
->>>>> ---
->>>>>    arch/arm64/kvm/pmu-direct.c  | 69 ++++++++++++++++++++++++++++++++
->>>>> ++++
->>>>>    include/linux/perf/arm_pmu.h |  1 +
->>>>>    2 files changed, 70 insertions(+)
-> 
->>>>> diff --git a/arch/arm64/kvm/pmu-direct.c b/arch/arm64/kvm/pmu-direct.c
->>>>> index 2252d3b905db9..14cc419dbafad 100644
->>>>> --- a/arch/arm64/kvm/pmu-direct.c
->>>>> +++ b/arch/arm64/kvm/pmu-direct.c
->>>>> @@ -100,6 +100,73 @@ u8 kvm_pmu_hpmn(struct kvm_vcpu *vcpu)
->>>>>        return *host_data_ptr(nr_event_counters);
->>>>>    }
-> 
->>>>> +/* Callback to update counter mask between perf scheduling */
->>>>> +static void kvm_pmu_update_mask(struct pmu *pmu, void *data)
->>>>> +{
->>>>> +    struct arm_pmu *arm_pmu = to_arm_pmu(pmu);
->>>>> +    unsigned long *new_mask = data;
->>>>> +
->>>>> +    bitmap_copy(arm_pmu->cntr_mask, new_mask, ARMPMU_MAX_HWEVENTS);
->>>>> +}
->>>>> +
->>>>> +/**
->>>>> + * kvm_pmu_set_guest_counters() - Handle dynamic counter reservations
->>>>> + * @cpu_pmu: struct arm_pmu to potentially modify
->>>>> + * @guest_mask: new guest mask for the pmu
->>>>> + *
->>>>> + * Check if guest counters will interfere with current host events 
->>>>> and
->>>>> + * call into perf_pmu_resched_update if a reschedule is required.
->>>>> + */
->>>>> +static void kvm_pmu_set_guest_counters(struct arm_pmu *cpu_pmu, u64
->>>>> guest_mask)
->>>>> +{
->>>>> +    struct pmu_hw_events *cpuc = this_cpu_ptr(cpu_pmu->hw_events);
->>>>> +    DECLARE_BITMAP(guest_bitmap, ARMPMU_MAX_HWEVENTS);
->>>>> +    DECLARE_BITMAP(new_mask, ARMPMU_MAX_HWEVENTS);
->>>>> +    bool need_resched = false;
->>>>> +
->>>>> +    bitmap_from_arr64(guest_bitmap, &guest_mask, 
->>>>> ARMPMU_MAX_HWEVENTS);
->>>>> +    bitmap_copy(new_mask, cpu_pmu->hw_cntr_mask, 
->>>>> ARMPMU_MAX_HWEVENTS);
->>>>> +
->>>>> +    if (guest_mask) {
->>>>> +        /* Subtract guest counters from available host mask */
->>>>> +        bitmap_andnot(new_mask, new_mask, guest_bitmap,
->>>>> ARMPMU_MAX_HWEVENTS);
->>>>> +
->>>>> +        /* Did we collide with an active host event? */
->>>>> +        if (bitmap_intersects(cpuc->used_mask, guest_bitmap,
->>>>> ARMPMU_MAX_HWEVENTS)) {
->>>>> +            int idx;
->>>>> +
->>>>> +            need_resched = true;
->>>>> +            cpuc->host_squeezed = true;
->>>>> +
->>>>> +            /* Look for pinned events that are about to be 
->>>>> preempted */
->>>>> +            for_each_set_bit(idx, guest_bitmap, 
->>>>> ARMPMU_MAX_HWEVENTS) {
->>>>> +                if (test_bit(idx, cpuc->used_mask) && cpuc-
->>>>> >events[idx] &&
->>>>> +                    cpuc->events[idx]->attr.pinned) {
->>>>> +                    pr_warn_ratelimited("perf: Pinned host event
->>>>> squeezed out by KVM guest PMU partition\n");
-> 
->>>> Hi Colton,
-> 
->>>> I get "perf: Pinned host event squeezed out by KVM guest PMU partition"
->>>> even with arm_pmuv3.reserved_host_counters=3 for example. I would have
->>>> expected any non zero value to stop the warning.
-> 
->>>> I think armv8pmu_get_single_idx() needs to be changed to allocate from
->>>> the high end host counters first. A more complicated option would be
->>>> checking to see if there are any non-pinned counters in the host
->>>> reserved half when a new pinned counter is opened, then swapping the
->>>> places of the new pinned and existing non-pinned counters so pinned
->>>> always prefer being put into the host half. But it's probably not worth
->>>> doing that.
-> 
->>>> James
-> 
-> 
->>> I agree it makes the most sense to allocate from the top, but I'm happy
->>> the basic idea works.
-> 
-> 
->> Another thing I forgot to mention is that even with the ratelimited
->> warning, this spams the logs any time the host and guest are both using
->> the PMU and I'm not sure how useful that is.
-> 
-> I'm sure it does. I'll delete it.
-> 
-
-A warn_once might save someone a few hours of debugging, but we probably 
-don't need more than that.
-
->>>>> +                    break;
->>>>> +                }
->>>>> +            }
->>>>> +        }
->>>>> +    } else {
->>>>> +        /*
->>>>> +         * Restoring to hw_cntr_mask.
->>>>> +         * Only resched if we previously squeezed an event.
->>>>> +         */
->>>>> +        if (cpuc->host_squeezed) {
->>>>> +            need_resched = true;
->>>>> +            cpuc->host_squeezed = false;
->>>>> +        }
->>>>> +    }
->>>>> +
->>>>> +    if (need_resched) {
->>>>> +        /* Collision: run full perf reschedule */
->>>>> +        perf_pmu_resched_update(&cpu_pmu->pmu, kvm_pmu_update_mask,
->>>>> new_mask);
->>>>> +    } else {
->>>>> +        /* Host was never using guest counters anyway */
->>>>> +        bitmap_copy(cpu_pmu->cntr_mask, new_mask, 
->>>>> ARMPMU_MAX_HWEVENTS);
->>>>> +    }
->>>>> +}
->>>>> +
->>>>>    /**
->>>>>     * kvm_pmu_host_counter_mask() - Compute bitmask of host-reserved
->>>>> counters
->>>>>     * @pmu: Pointer to arm_pmu struct
->>>>> @@ -218,6 +285,7 @@ void kvm_pmu_load(struct kvm_vcpu *vcpu)
-> 
->>>>>        pmu = vcpu->kvm->arch.arm_pmu;
->>>>>        guest_counters = kvm_pmu_guest_counter_mask(pmu);
->>>>> +    kvm_pmu_set_guest_counters(pmu, guest_counters);
->>>>>        kvm_pmu_apply_event_filter(vcpu);
-> 
->>>>>        for_each_set_bit(i, &guest_counters, ARMPMU_MAX_HWEVENTS) {
->>>>> @@ -319,5 +387,6 @@ void kvm_pmu_put(struct kvm_vcpu *vcpu)
->>>>>        val = read_sysreg(pmintenset_el1);
->>>>>        __vcpu_assign_sys_reg(vcpu, PMINTENSET_EL1, val & mask);
-> 
->>>>> +    kvm_pmu_set_guest_counters(pmu, 0);
->>>>>        preempt_enable();
->>>>>    }
->>>>> diff --git a/include/linux/perf/arm_pmu.h b/include/linux/perf/ 
->>>>> arm_pmu.h
->>>>> index f7b000bb3eca8..63f88fec5e80f 100644
->>>>> --- a/include/linux/perf/arm_pmu.h
->>>>> +++ b/include/linux/perf/arm_pmu.h
->>>>> @@ -75,6 +75,7 @@ struct pmu_hw_events {
-> 
->>>>>        /* Active events requesting branch records */
->>>>>        unsigned int        branch_users;
->>>>> +    bool host_squeezed;
->>>>>    };
-> 
->>>>>    enum armpmu_attr_groups {
+> +
+> +       kunit_warning_suppress(test) {
+> +               trigger_backtrace_warn_on();
+> +               KUNIT_EXPECT_SUPPRESSED_WARNING_COUNT(test, 1);
+> +       }
+> +}
+> +
+> +static void backtrace_suppression_test_count(struct kunit *test)
+> +{
+> +       if (!IS_ENABLED(CONFIG_BUG))
+> +               kunit_skip(test, "requires CONFIG_BUG");
+> +
+> +       kunit_warning_suppress(test) {
+> +               KUNIT_EXPECT_SUPPRESSED_WARNING_COUNT(test, 0);
+> +
+> +               WARN(1, "suppressed");
+> +               KUNIT_EXPECT_SUPPRESSED_WARNING_COUNT(test, 1);
+> +
+> +               WARN(1, "suppressed again");
+> +               KUNIT_EXPECT_SUPPRESSED_WARNING_COUNT(test, 2);
+> +       }
+> +}
+> +
+> +static void backtrace_suppression_test_active_state(struct kunit *test)
+> +{
+> +       KUNIT_EXPECT_FALSE(test, kunit_has_active_suppress_warning());
+> +
+> +       kunit_warning_suppress(test) {
+> +               KUNIT_EXPECT_TRUE(test, kunit_has_active_suppress_warning=
+());
+> +       }
+> +
+> +       KUNIT_EXPECT_FALSE(test, kunit_has_active_suppress_warning());
+> +
+> +       kunit_warning_suppress(test) {
+> +               KUNIT_EXPECT_TRUE(test, kunit_has_active_suppress_warning=
+());
+> +       }
+> +
+> +       KUNIT_EXPECT_FALSE(test, kunit_has_active_suppress_warning());
+> +}
+> +
+> +static void backtrace_suppression_test_multi_scope(struct kunit *test)
+> +{
+> +       struct kunit_suppressed_warning *sw1, *sw2;
+> +
+> +       if (!IS_ENABLED(CONFIG_BUG))
+> +               kunit_skip(test, "requires CONFIG_BUG");
+> +       if (!IS_ENABLED(CONFIG_DEBUG_BUGVERBOSE))
+> +               kunit_skip(test, "requires CONFIG_DEBUG_BUGVERBOSE");
+> +
+> +       sw1 =3D kunit_start_suppress_warning(test);
+> +       trigger_backtrace_warn_on();
+> +       WARN(1, "suppressed by sw1");
+> +       kunit_end_suppress_warning(test, sw1);
+> +
+> +       sw2 =3D kunit_start_suppress_warning(test);
+> +       WARN(1, "suppressed by sw2");
+> +       kunit_end_suppress_warning(test, sw2);
+> +
+> +       KUNIT_EXPECT_EQ(test, kunit_suppressed_warning_count(sw1), 2);
+> +       KUNIT_EXPECT_EQ(test, kunit_suppressed_warning_count(sw2), 1);
+> +}
+> +
+> +struct cross_kthread_data {
+> +       bool was_active;
+> +       struct completion done;
+> +};
+> +
+> +static int cross_kthread_fn(void *data)
+> +{
+> +       struct cross_kthread_data *d =3D data;
+> +
+> +       d->was_active =3D kunit_has_active_suppress_warning();
+> +       complete(&d->done);
+> +       while (!kthread_should_stop())
+> +               schedule();
+> +       return 0;
+> +}
+> +
+> +static void backtrace_suppression_test_cross_kthread(struct kunit *test)
+> +{
+> +       struct cross_kthread_data data;
+> +       struct task_struct *task;
+> +
+> +       data.was_active =3D false;
+> +       init_completion(&data.done);
+> +
+> +       kunit_warning_suppress(test) {
+> +               task =3D kthread_run(cross_kthread_fn, &data, "kunit-cros=
+s-test");
+> +               KUNIT_ASSERT_FALSE(test, IS_ERR(task));
+> +               wait_for_completion(&data.done);
+> +               kthread_stop(task);
+> +       }
+> +
+> +       KUNIT_EXPECT_FALSE(test, data.was_active);
+> +}
+> +
+> +static struct kunit_case backtrace_suppression_test_cases[] =3D {
+> +       KUNIT_CASE(backtrace_suppression_test_warn_direct),
+> +       KUNIT_CASE(backtrace_suppression_test_warn_indirect),
+> +       KUNIT_CASE(backtrace_suppression_test_warn_multi),
+> +       KUNIT_CASE(backtrace_suppression_test_warn_on_direct),
+> +       KUNIT_CASE(backtrace_suppression_test_warn_on_indirect),
+> +       KUNIT_CASE(backtrace_suppression_test_count),
+> +       KUNIT_CASE(backtrace_suppression_test_active_state),
+> +       KUNIT_CASE(backtrace_suppression_test_multi_scope),
+> +       KUNIT_CASE(backtrace_suppression_test_cross_kthread),
+> +       {}
+> +};
+> +
+> +static struct kunit_suite backtrace_suppression_test_suite =3D {
+> +       .name =3D "backtrace-suppression-test",
+> +       .test_cases =3D backtrace_suppression_test_cases,
+> +};
+> +kunit_test_suites(&backtrace_suppression_test_suite);
+> +
+> +MODULE_LICENSE("GPL");
+> +MODULE_DESCRIPTION("KUnit test to verify warning backtrace suppression")=
+;
+>
+> --
+> 2.53.0
+>
 
