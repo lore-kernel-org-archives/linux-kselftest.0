@@ -1,110 +1,284 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABAE13D6466
-	for <linux-kselftest@vger.kernel.org>; Fri, 15 May 2026 06:53:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0921939934C
+	for <linux-kselftest@vger.kernel.org>; Fri, 15 May 2026 07:04:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778828033; cv=none; b=h31yHq6wDEInQYaQdG56V3rk7Ej0JmU98vS0PJcNhjr5G4JrxJ/CMlqe/5tT83XjJK3E+rp3KbNRGmw6007zfQA7zXIT/hR0QLsaWbsLR5Wbdxq0p9omAhV+tUg4jaES3/Ldhcp7ffdLt6wOxTmaUiN3x+Ctc2r8w5iDiQvsi/s=
+	t=1778828662; cv=none; b=pHg5E+GPPm7i3pfHhMHrjFT6if8lGtNRWHTXltc5HbiEFOMyL3fs04g40f0vFeW+Du3qdUEnWqKnVLgyzBEAWXadFQyAfOr/ObCk7iQJtY7NlkkWJUcTIA2Iu8qheTFAVZ7qNm4ZOTVaFxMjqagzh3yDHfsb9RLA8+o7LiDSv34=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778828033; c=relaxed/simple;
-	bh=Sv4xPSqe/Lw3o9sgsUySZxvwXDH5uG9frkm2sFB3IiQ=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=HYPgywoqf9YHDdUb9YDB7B+O9RTeZ9jSgHosS5PL8c+khaH7Fxmzn+TB4ksLk2IdRWgtcn5qCijglibJH4MPkUFpzQPB+hSUNI2znXpJEdUTzWUN2bSeEtkRpK/BeOw04fVxrC3tht9hWA0+dpazMRo1JJD6nQL7TpdLMZmsnZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=AL8bI0jd; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1778828662; c=relaxed/simple;
+	bh=zW3iEZrpcY1FhOd+Yu7EtlqzmETsoXAYMX6eJwdYdJg=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=OkIcChLuFj+21glo+hhgrrl19hnrJmgoxwYQ+5qoC5vtb4uXIk0YDjo/izLBABOe2Dy/9kVdlBmLH5QiRyjy6W30W+epQb4LJFUdOtaL+g8znPLg0dD+Onby6Mm7eFyRrqBlWGVax9DeINb/CT1MvXycKjn98f6SeIieXtjdeCM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ioF9Qd6I; arc=none smtp.client-ip=91.218.175.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AL8bI0jd"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1778828030;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ioF9Qd6I"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1778828649;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=0ZAeat6OEtCU2HoUDGx/9XhjLgZNjEvUYNHT3F6GC4k=;
-	b=AL8bI0jdYsRQq8Pmpu3RxZ0PBnvHM4huDcsYBwFDZVDOUoCig7nlpP2kPS2P93M4xqb1h5
-	+qUTINOXAb7KHmhPwo55tb7FnRusXiIadp+seCtZSppC8NySdt5sKuhlxmLJcui7ysuvb6
-	EkqyVAq0k6lvQdu93ADiTtHeHkTTzmo=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-546-QnA3Wtb7P5ucKcz0EIOB7A-1; Fri,
- 15 May 2026 02:53:45 -0400
-X-MC-Unique: QnA3Wtb7P5ucKcz0EIOB7A-1
-X-Mimecast-MFC-AGG-ID: QnA3Wtb7P5ucKcz0EIOB7A_1778828023
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1D8F31956054;
-	Fri, 15 May 2026 06:53:43 +0000 (UTC)
-Received: from RHTRH0061144 (unknown [10.22.81.221])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 46C6F19560A2;
-	Fri, 15 May 2026 06:53:38 +0000 (UTC)
-From: Aaron Conole <aconole@redhat.com>
-To: Minxi Hou <houminxi@gmail.com>
-Cc: netdev@vger.kernel.org,  dev@openvswitch.org,
-  linux-kselftest@vger.kernel.org,  linux-kernel@vger.kernel.org,
-  echaudro@redhat.com,  i.maximets@ovn.org,  i.maximets@redhat.com,
-  davem@davemloft.net,  edumazet@google.com,  kuba@kernel.org,
-  pabeni@redhat.com,  horms@kernel.org,  shuah@kernel.org
-Subject: Re: [PATCH net-next 0/5] selftests: openvswitch: pylint cleanup for
- ovs-dpctl.py
-In-Reply-To: <20260513121240.2590767-1-houminxi@gmail.com> (Minxi Hou's
-	message of "Wed, 13 May 2026 20:12:35 +0800")
-References: <20260513121240.2590767-1-houminxi@gmail.com>
-Date: Fri, 15 May 2026 02:53:35 -0400
-Message-ID: <f7tzf21noy8.fsf@redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	bh=OvZa42yjJAYAdcdRRX0/uxArNhxHjuKTcYRUXMctwJM=;
+	b=ioF9Qd6IHOrgMIoGJt1DwvNsewHp6MSqTGxmO9Nd4Q6NWnPTFdjyAH0z5NlsvStc4kUSeX
+	sP0BHQqkDrhDp7A/NL6DNwtTu9myS+O0A6Inj6T6z4K3mLQJ6RDJrkdKSLv3aFd0XXPkDM
+	zSv8H6XKpLPykJ2+18Q58jAI3S1eANA=
+From: Lance Yang <lance.yang@linux.dev>
+To: leitao@debian.org
+Cc: linmiaohe@huawei.com,
+	akpm@linux-foundation.org,
+	david@kernel.org,
+	ljs@kernel.org,
+	vbabka@kernel.org,
+	rppt@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	shuah@kernel.org,
+	nao.horiguchi@gmail.com,
+	rostedt@goodmis.org,
+	mhiramat@kernel.org,
+	mathieu.desnoyers@efficios.com,
+	corbet@lwn.net,
+	skhan@linuxfoundation.org,
+	liam@infradead.org,
+	linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	kernel-team@meta.com,
+	Lance Yang <lance.yang@linux.dev>
+Subject: Re: [PATCH v7 2/6] mm/memory-failure: surface unhandlable kernel pages as -ENOTRECOVERABLE
+Date: Fri, 15 May 2026 15:03:53 +0800
+Message-Id: <20260515070353.87244-1-lance.yang@linux.dev>
+In-Reply-To: <agXcPleVC9LGVCmj@gmail.com>
+References: <agXcPleVC9LGVCmj@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Minxi Hou <houminxi@gmail.com> writes:
 
-> This series cleans up all pylint warnings in ovs-dpctl.py,
-> bringing the score from 7.62/10 to 10.00/10.
+On Thu, May 14, 2026 at 07:37:14AM -0700, Breno Leitao wrote:
+>On Thu, May 14, 2026 at 09:28:30PM +0800, Lance Yang wrote:
+>> 
+>> On Wed, May 13, 2026 at 08:39:33AM -0700, Breno Leitao wrote:
+>> >get_any_page() collapses three different failure modes into a single
+>> >-EIO return:
+>> >
+>> >  * the put_page race in the !count_increased path;
+>> >  * the HWPoisonHandlable() rejection that bounces out of
+>> >    __get_hwpoison_page() with -EBUSY and exhausts shake_page() retries;
+>> >  * the HWPoisonHandlable() rejection that goes through the
+>> >    count_increased / put_page / shake_page retry loop.
+>> >
+>> >The first is transient (the page is racing with the allocator).  The
+>> >second can be either transient (a userspace folio briefly off LRU
+>> >during migration/compaction) or stable (slab/vmalloc/page-table/
+>> >kernel-stack pages).  The third describes a stable kernel-owned page
+>> >that the count_increased=true caller already held a reference on.
+>> >
+>> >Distinguish them on the return path: keep -EIO for both the put_page
+>> >race and the -EBUSY-after-retries branch (shake_page() cannot drag a
+>> >folio back from active migration, so we cannot prove the page is
+>> >permanently kernel-owned from there), keep -EBUSY for the allocation
+>> >race (unchanged), and return -ENOTRECOVERABLE only from the
+>> >count_increased-true HWPoisonHandlable() rejection that exhausts its
+>> >retries -- the caller's reference is structural evidence that the
+>> >page is owned by the kernel.
+>> >
+>> >Extend the unhandlable-page pr_err() to fire for either errno and
+>> >update the get_hwpoison_page() kerneldoc.
+>> >
+>> >memory_failure() still folds every negative return into
+>> >MF_MSG_GET_HWPOISON via its existing "else if (res < 0)" branch, so
+>> >this patch is a no-op for users of memory_failure() and only changes
+>> >the errno that soft_offline_page() can propagate to its callers.  A
+>> >follow-up wires the new return code through memory_failure() and
+>> >reports MF_MSG_KERNEL for the unrecoverable cases.
+>> >
+>> >Suggested-by: David Hildenbrand <david@kernel.org>
+>> >Signed-off-by: Breno Leitao <leitao@debian.org>
+>> >---
+>> > mm/memory-failure.c | 18 +++++++++++++++---
+>> > 1 file changed, 15 insertions(+), 3 deletions(-)
+>> >
+>> >diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+>> >index 49bcfbd04d213..bae883df3ccb2 100644
+>> >--- a/mm/memory-failure.c
+>> >+++ b/mm/memory-failure.c
+>> >@@ -1408,6 +1408,15 @@ static int get_any_page(struct page *p, unsigned long flags)
+>> > 				shake_page(p);
+>> > 				goto try_again;
+>> > 			}
+>> >+			/*
+>> >+			 * Return -EIO rather than -ENOTRECOVERABLE: this
+>> >+			 * branch is also reached for pages that are merely
+>> >+			 * off-LRU transiently (e.g. a folio in the middle
+>> >+			 * of migration or compaction), which shake_page()
+>> >+			 * cannot drag back.  The caller cannot prove the
+>> >+			 * page is permanently kernel-owned from here, so
+>> >+			 * keep it on the recoverable errno.
+>> >+			 */
+>> > 			ret = -EIO;
+>> > 			goto out;
+>> > 		}
+>> >@@ -1427,10 +1436,10 @@ static int get_any_page(struct page *p, unsigned long flags)
+>> > 			goto try_again;
+>> > 		}
+>> > 		put_page(p);
+>> >-		ret = -EIO;
+>> >+		ret = -ENOTRECOVERABLE;
+>> > 	}
+>> > out:
+>> >-	if (ret == -EIO)
+>> >+	if (ret == -EIO || ret == -ENOTRECOVERABLE)
+>> > 		pr_err("%#lx: unhandlable page.\n", page_to_pfn(p));
+>> > 
+>> > 	return ret;
+>> >@@ -1487,7 +1496,10 @@ static int __get_unpoison_page(struct page *page)
+>> >  *         -EIO for pages on which we can not handle memory errors,
+>> >  *         -EBUSY when get_hwpoison_page() has raced with page lifecycle
+>> >  *         operations like allocation and free,
+>> >- *         -EHWPOISON when the page is hwpoisoned and taken off from buddy.
+>> >+ *         -EHWPOISON when the page is hwpoisoned and taken off from buddy,
+>> >+ *         -ENOTRECOVERABLE for stable kernel-owned pages the handler
+>> >+ *         cannot recover (PG_reserved, slab, vmalloc, page tables,
+>> >+ *         kernel stacks, and similar non-LRU/non-buddy pages).
+>> 
+>> Did you test this patch series? I don't see how we ever get to
+>> -ENOTRECOVERABLE there ...
 >
-> This series applies on top of:
->   [PATCH net-next v10 1/2] selftests: openvswitch: add vlan() and
->   encap() flow string parsing
->   https://lore.kernel.org/netdev/20260512070841.1183581-2-houminxi@gmail.com/
->
-> Patch 1 converts 86 %-format strings to f-strings.
-> Patch 2 fixes misc warnings (unused import, bare except, unused
-> variables, redundant expressions).
-> Patch 3 renames classes to PascalCase and variables to snake_case.
-> Patch 4 adds one-line docstrings to all definitions.
-> Patch 5 suppresses complexity warnings from pyroute2 constraints.
->
-> Tested with vng on x86_64, all OVS selftests pass.
->
-> Minxi Hou (5):
->   selftests: openvswitch: convert %-formatting to f-strings
->   selftests: openvswitch: fix misc pylint warnings in ovs-dpctl.py
->   selftests: openvswitch: rename classes and variables in ovs-dpctl.py
->   selftests: openvswitch: add missing docstrings in ovs-dpctl.py
->   selftests: openvswitch: suppress pylint complexity warnings
->
->  .../selftests/net/openvswitch/ovs-dpctl.py    | 794 ++++++++++--------
->  1 file changed, 428 insertions(+), 366 deletions(-)
+>Yes, I did. I am using the following test case:
 
-Thinking about this series, it might be better to go a bit further and
-just drop the pyroute2 in favor of using ynl to generate the netlink
-encode/decode.  The value that ovs-dpctl.py brings is the ability to
-interoperate with the ovs-vswitchd odp encoding.  That we are using
-pyroute2 to do the actual 'wire' format of netlink is incidental.
+Okay.
 
-Some of the work would still be needed (I think some of the f-string
-adjustments) but that would allow trimming a good chunk of the code and
-let us just rely on the in-tree ynl rather than pyroute2 dependency.
+>https://github.com/leitao/linux/commit/cfebe84ddeab5ac34ed456331db980d57e7025dc
+>
+>	# RUN_DESTRUCTIVE=1 tools/testing/selftests/mm/hwpoison-panic.sh
+>	# enabling /proc/sys/vm/panic_on_unrecoverable_memory_failure
+>	# injecting hwpoison at phys 0x2a00000 (Kernel rodata)
+>	# expecting kernel panic: 'Memory failure: <pfn>: unrecoverable page'
+>	[  501.113256] Memory failure: 0x2a00: recovery action for reserved kernel page: Ignored
+>	[  501.113956] Kernel panic - not syncing: Memory failure: 0x2a00: unrecoverable page
+>
+>
+>> Even with MF_COUNT_INCREASED, the first pass does:
+>> 
+>> 	if (flags & MF_COUNT_INCREASED)
+>> 		count_increased = true;
+>> 
+>> 	[...]
+>> 
+>> 	if (PageHuge(p) || HWPoisonHandlable(p, flags)) {
+>> 		ret = 1;
+>> 	} else {
+>> 		if (pass++ < GET_PAGE_MAX_RETRY_NUM) { <-
+>> 			put_page(p);
+>> 			shake_page(p);
+>> 			count_increased = false;
+>> 			goto try_again; <-
+>> 		}
+>> 		put_page(p);
+>> 		ret = -ENOTRECOVERABLE;
+>> 	}
+>> 
+>> Then we come back with count_increased=false:
+>> 
+>> try_again:
+>> 	if (!count_increased) {
+>> 		ret = __get_hwpoison_page(p, flags); <-
+>> 		if (!ret) {
+>> 		[...]
+>> 		} else if (ret == -EBUSY) { <-
+>> 		[...]
+>> 			ret = -EIO;
+>> 			goto out; <-
+>> 		}
+>> 	}
+>> 
+>> For slab/vmalloc/page-table pages, __get_hwpoison_page() returns -EBUSY:
+>> 
+>> 	if (!HWPoisonHandlable(&folio->page, flags))
+>> 		return -EBUSY;
+>> 
+>> so they still seem to end up as -EIO ... Am I missing something?
+>
+>You are not, and thanks for catching this. I traced it again and the
+>-ENOTRECOVERABLE branch is unreachable for slab/vmalloc/page-table pages
+>exactly as you described. The __get_hwpoison_page() → -EBUSY → shake → retry
+>loop catches them first and they exit as -EIO.
 
-WDYT?  Ilya and I can work with you offline if you are interested in
-pursuing this approach.  I think it should make the overall code much
-better to work with, too.
+Wonder if it would be simpler to just do a positive check near the top
+of get_any_page() instead. Something like:
 
+static bool hwpoison_unrecoverable_kernel_page(struct page *page,
+						unsigned long flags)
+{
+	if ((flags & MF_SOFT_OFFLINE) && page_has_movable_ops(page))
+		return false;
+
+	return PageReserved(page) || PageSlab(page) || 
+		PageTable(page) || PageLargeKmalloc(page);
+}
+
+static int get_any_page(struct page *p, unsigned long flags)
+{
+	int ret = 0, pass = 0;
+	bool count_increased = false;
+
+	if (flags & MF_COUNT_INCREASED)
+		count_increased = true;
+
+	if (hwpoison_unrecoverable_kernel_page(p, flags)) {
+		if (count_increased)
+			put_page(p);
+		ret = -ENOTRECOVERABLE;
+		goto out;
+	}
+[...]
+}
+
+Then get_any_page() could return -ENOTRECOVERABLE only for page types we
+can positively identify as kernel-owned.
+
+These types always fail HWPoisonHandlable(), so retrying does not really
+buy us anything for them.
+
+Won't cover everything (vmalloc, kernel stacks, etc. have no page_type
+to key off), but that's fine - best effort, right?
+
+Cheers, Lance
+
+>
+>The selftest I am using (link above) only validated the PageReserved
+>short-circuit added in patch 3, which lives in memory_failure() and never
+>reaches get_any_page().
+>
+>I even thought about this code path, and I was not convinced we should return
+>-ENOTRECOVERABLE, thus I documented the following (as in this current patch)
+>
+>	@@ -1408,6 +1408,15 @@ static int get_any_page(struct page *p, unsigned long flags)
+>			shake_page(p);
+>			goto try_again;
+>		}
+>	+            /*
+>	+             * Return -EIO rather than -ENOTRECOVERABLE: this
+>	+             * branch is also reached for pages that are merely
+>	+             * off-LRU transiently (e.g. a folio in the middle
+>	+             * of migration or compaction), which shake_page()
+>	+             * cannot drag back.  The caller cannot prove the
+>	+             * page is permanently kernel-owned from here, so
+>	+             * keep it on the recoverable errno.
+>	+             */
+>		ret = -EIO;
+>
