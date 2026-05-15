@@ -1,61 +1,58 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FF7F146A66;
-	Fri, 15 May 2026 00:29:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A5832D780E;
+	Fri, 15 May 2026 00:41:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778804986; cv=none; b=iG6a92+0caHoV4Rq/C9OZ1NIjAGJP0A1LGMhEGdoT4d16uxOCJwOjv9j5OLlAv1m+WLzBDlrBqF3ak0yu4T023JQybBej03YSqKUwJnh5gBM/BdmhSYJK+1Dh3rutW2A4cNgw/DoSaqmIsvLFG2QiWJpEJ/FbRSaDh+nIl3rws8=
+	t=1778805703; cv=none; b=A+ZxsdBCNkr2rrw4xhjkZhaSuouQOBL4TRmgu+DER8YjAsN00DxbXxpYu9yKCiB4eCc/+v3sgxW/huGTEN7izleeZcFbn33RZFfiyKEQL5d1dkw8BjrKE5zoXWF8MZ+W/WDet2mLy8C2HDIqnX6TSUJS/3RgdICySInv+Fku0wI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778804986; c=relaxed/simple;
-	bh=WbNqRyYAf+hkaZF5dLnG9kBdPrq6Jxs4l7qPgnpKjmg=;
+	s=arc-20240116; t=1778805703; c=relaxed/simple;
+	bh=bJO/kE6QL8D7YE9Smgjkz8t6WHx6lrXs3dUs2I0Uj4s=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IzF9RQ1LdgMR8xKidvIkCNpTzxJe4LhPzky15PASbxTmCjDuKGsrL2PpP0fjC6x8LQf/qNG0x7HVgpLjxn6B1jcijwdyYAJ8JFEx51gPiVxe4MO1O/ejv6PHRFx3UuGXwnmILqTkXA9pRPbOV4RgglfLDx7v/x4DL1HpyV+m0JQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MVYp41fA; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=PvRN0ubZqxQOZMMnW31U6iJy++0Ucwek+bXhE+mTm4NmkYchdm2wJ7z0fQVJaMVwtJ0txkYScOXgsNpJpkTkE+Ea5Bal5ADM0yMbGoRUIolHvFaIWmOsY2sUKHiVUymTL7zTI28jcsYd+k5psauh/SIKor8DZL3BT3E/lLADrJY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HuT4r9ID; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MVYp41fA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 824BCC2BCB3;
-	Fri, 15 May 2026 00:29:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HuT4r9ID"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C266CC2BCB3;
+	Fri, 15 May 2026 00:41:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778804985;
-	bh=WbNqRyYAf+hkaZF5dLnG9kBdPrq6Jxs4l7qPgnpKjmg=;
+	s=k20201202; t=1778805701;
+	bh=bJO/kE6QL8D7YE9Smgjkz8t6WHx6lrXs3dUs2I0Uj4s=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=MVYp41fAvhbcH6lzP0iL6HNSyElsHkR/Q+lCcK30GKR9H+vj/MFLMhVAd1v3csNBH
-	 kCRRLysqV5YMJFMOV6lswhv3RvvBpMfR2bkseMs7x1fgO80AOzV7wFLKTSA3jxdTG7
-	 4zuPMR9SAUtFtCXPf5J6eezX1IAiSYrGOKubXJhq23H6MzYOcCZNlpFyZEyFR9HoKP
-	 SAFAOfpvqHOAVV5BcpOkfaMeaiZGEvbuoDtViEk8oIkwPs+H3BHTg7rUVyKBjchDro
-	 vUntATzUUqvhc7aImuP5dFv32fo4BeHGidQoMpsgDOJmfeL1HQEENTFp7xigaOgRd5
-	 16CGzJTwhE2yg==
+	b=HuT4r9IDxhWGJMY8i0Orgn14YjsiKpbutBYqr8dGd1vTCRBcCuUCOpewlaakfONzp
+	 QsxEHIe9sDc85rA5RZcp8xojiuICNxgnTmNAHKaFbSqh4/ZzO9uvueP3i/hdhp81YG
+	 jYiyZrgCfo8Qy2QtsNB8v3ogmc1aTR4A1K09bYtQm9Z2Ikz7l14XkOsJXtojO1qcRh
+	 kLFrsPZLLMPp9TVihzV7qtthA/ALQQxy9k8u97Mk8qyfT25CgGPep+biWvpjLHeCzJ
+	 JfkfUlUnrLK5+NWtxyZhavCQcKPmj9hL5Zig4+XRMQB0uhDBDOxozoYvru2IMCNlId
+	 BV4SEzx1hK0jg==
 From: SeongJae Park <sj@kernel.org>
-To: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
-Cc: SeongJae Park <sj@kernel.org>,
-	akpm@linux-foundation.org,
-	rppt@kernel.org,
-	peterx@redhat.com,
-	david@kernel.org,
-	ljs@kernel.org,
-	surenb@google.com,
-	vbabka@kernel.org,
-	Liam.Howlett@oracle.com,
-	ziy@nvidia.com,
-	corbet@lwn.net,
-	skhan@linuxfoundation.org,
-	seanjc@google.com,
-	pbonzini@redhat.com,
-	jthoughton@google.com,
-	aarcange@redhat.com,
-	usama.arif@linux.dev,
-	linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org,
+To: SeongJae Park <sj@kernel.org>
+Cc: "Liam R. Howlett" <liam@infradead.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	damon@lists.linux.dev,
 	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	kvm@vger.kernel.org,
-	kernel-team@meta.com
-Subject: Re: [PATCH v2 04/14] mm: add VM_UFFD_RWP VMA flag
-Date: Thu, 14 May 2026 17:29:31 -0700
-Message-ID: <20260515002932.124892-1-sj@kernel.org>
+	linux-mm@kvack.org,
+	linux-trace-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v2.1 00/28] mm/damon: introduce data attributes monitoring
+Date: Thu, 14 May 2026 17:41:19 -0700
+Message-ID: <20260515004120.128430-1-sj@kernel.org>
 X-Mailer: git-send-email 2.47.3
-In-Reply-To: <b47d8d5681fd8730f6090ebfdb72f219a8edef1e.1778254670.git.kas@kernel.org>
+In-Reply-To: <20260514140904.119781-1-sj@kernel.org>
 References: 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -65,87 +62,26 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On Fri,  8 May 2026 16:55:16 +0100 "Kiryl Shutsemau (Meta)" <kas@kernel.org> wrote:
+On Thu, 14 May 2026 07:08:33 -0700 SeongJae Park <sj@kernel.org> wrote:
 
-> Preparatory patch for userfaultfd read-write protection (RWP). RWP
-> extends userfaultfd protection from plain write-protection (WP) to
-> full read-write protection: accesses to an RWP-protected range --
-> reads as well as writes -- trap through userfaultfd.
+> TL; DR
+> ======
 > 
-> RWP marks ranges by combining PAGE_NONE with the uffd PTE bit, so
-> the flag is only meaningful when both primitives exist. A new
-> CONFIG_USERFAULTFD_RWP Kconfig symbol auto-selects when CONFIG_64BIT,
-> CONFIG_ARCH_HAS_PTE_PROTNONE, and CONFIG_HAVE_ARCH_USERFAULTFD_WP
-> are all set; call sites that gate on the flag depend on the symbol.
-> Elsewhere VM_UFFD_RWP aliases VM_NONE and every downstream check
-> folds to dead code.
-> 
-> Nothing sets the flag yet.
-> 
-> Signed-off-by: Kiryl Shutsemau <kas@kernel.org>
-> Assisted-by: Claude:claude-opus-4-6
+> Extend DAMON for monitoring general data attributes other than accesses.
+> The short term motivation is lightweight page type (e.g., belonging
+> cgroup) aware monitoring.  In long term, this will help extending DAMON
+> for multiple access events capture primitives (e.g., page faults and
+> PMU) and eventually pivotting DAMON to a "Data Attributes Monitoring and
+> Operations eNgine" in long term.
 
-A silly but loud thought.  Would it make more sense to put Signed-off-by: after
-Assisted-by: ?
+Sashiko failed [1] reviewing this due to a problem at finding a fresh baseline
+commit.  I will shortly post the next version (RFC v2.2) after rebasing to
+mm-stable (7.1-rc3) for avoiding the issue.
 
-> ---
->  Documentation/filesystems/proc.rst |  1 +
->  fs/proc/task_mmu.c                 |  3 +++
->  include/linux/mm.h                 | 28 +++++++++++++++++----------
->  include/linux/userfaultfd_k.h      | 31 +++++++++++++++++++++++++-----
->  include/trace/events/mmflags.h     |  7 +++++++
->  mm/Kconfig                         |  9 +++++++++
->  6 files changed, 64 insertions(+), 15 deletions(-)
-> 
-> diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
-> index db6167befb7b..db28207c5290 100644
-> --- a/Documentation/filesystems/proc.rst
-> +++ b/Documentation/filesystems/proc.rst
-> @@ -607,6 +607,7 @@ encoded manner. The codes are the following:
->      um    userfaultfd missing tracking
->      uw    userfaultfd wr-protect tracking
->      ui    userfaultfd minor fault
-> +    ur    userfaultfd read-write-protect tracking
-
-Yet another silly but loud thought.  My first feeling on this was that this
-reads like 'u'serfaultfd 'r'ead-protect.  And was further thinking 'uf' for
-just 'u'seffaultfd 'f'ault or 'up' for 'u'serfault-'p'rotect might make sense.
-But ended up thinking this is too trivial and ain't really matter.
-
-[...]
-> diff --git a/mm/Kconfig b/mm/Kconfig
-> index e8bf1e9e6ad9..ccf534a8cbc9 100644
-> --- a/mm/Kconfig
-> +++ b/mm/Kconfig
-> @@ -1347,6 +1347,15 @@ config HAVE_ARCH_USERFAULTFD_MINOR
->  	help
->  	  Arch has userfaultfd minor fault support
->  
-> +config USERFAULTFD_RWP
-> +	def_bool y
-> +	depends on 64BIT && ARCH_HAS_PTE_PROTNONE && HAVE_ARCH_USERFAULTFD_WP
-> +	help
-> +	  Userfaultfd read-write protection (UFFDIO_RWPROTECT) delivers a
-
-Seems UFFDIO_RWPROTECT will be introduced later.  Would it make more sense to
-add this config together with the patch?
-
-> +	  userfaultfd notification on every access -- read or write -- to a
-> +	  protected range, letting userspace observe the working set of a
-> +	  process.
-> +
->  menuconfig USERFAULTFD
->  	bool "Enable userfaultfd() system call"
->  	depends on MMU
-> -- 
-> 2.51.2
-> 
-> 
-
-None of my comments is a blocker.
-
-Reviewed-by: SeongJae Park <sj@kernel.org>
+[1] https://lore.kernel.org/20260514205555.51653-1-sj@kernel.org
 
 
 Thanks,
 SJ
+
+[...]
