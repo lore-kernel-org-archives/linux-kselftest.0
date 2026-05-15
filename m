@@ -1,169 +1,146 @@
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6D713CF66A
-	for <linux-kselftest@vger.kernel.org>; Fri, 15 May 2026 03:48:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.172
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778816928; cv=pass; b=A4xiGpe3KNiaQaT8/Ncpf6mZdQJNqMZbZcIkhttw5CPb40tTn4ib/1nMCbrvaa9GCzkpd79NXRa+1wcRysiiafraDHto0xTNfzvS8XWfFBpDCAZy/NpOJG9w2zPQUY5O4FsnqmYzIeTAtiUl215u6q/cCLSKsNmiwH+G5Jxi0xQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778816928; c=relaxed/simple;
-	bh=axJimQpTH54Vk+wcEK9CMzTx0gjIcv6uLIP6tuXgnsw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jdM920WTVlfJtlplPqvnqlV7a43ZAvOXku2NUQ7d+S3kkxHIEdo6Dob0OHRQTPeZ2RpebCBZLQbYhC1j6gnmtv8O2YpuGXdw71UmQODVYKmpKd1dvvZc1Vfd7DwB1pk7Xzxcl+zJ/Dkzvo+vwxPbcTjDVBmcbLiME/QWVGKtChI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=eCuJcjog; arc=pass smtp.client-ip=209.85.215.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E525C3D0BE5;
+	Fri, 15 May 2026 04:28:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778819285; cv=none; b=PC/Gwo1es+Xf/u5/aVEQqf7P5HPBtpElLSrNYcx0TIfu/rXUS17TjaqugNQkjHNnoY83n0ZXHYjx/NnGvaTG4eRPZu4rlMUvj7H9xh0Ej6td3+ZMQ97K7kEeg9GfgKHs4f4dUFT2kU1IzZZDnSvBGSJSpg0OgbjAEymHr97NVS4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778819285; c=relaxed/simple;
+	bh=eaholhXH0T0ZCPDy0hweKNhPYJD49AxYHdU2Laz8nkc=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=qBt6A2MIvJRFcqb361gdk4toOSR7iNbQcm1E3fyz7saocmX1O7OZyTamZNDRw9GXZMdYcmUBGAd/FcCs6VRYMMG8HXt3/3aJK0AbIvHL8nTodul74GLXISdD+ThVHZg9FChWAhEbQ5ItVNhBzG8S0D7mNL4KF19FX7LXKeIuMgI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BOqOnXq5; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="eCuJcjog"
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-c7980c060cfso4120707a12.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 May 2026 20:48:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778816924; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Qfct1RLhB6doQG7ck+26wiLQvRCuWVurjwL43novddQKoZXaLklJ2dUPCfleA6TaIk
-         qd67ZH8LfimnEupocCMyE/4vky7jUqgTnzLL198Jtz2om68IrkhMom9Vlm5UBiRggKWX
-         UBsCgEg1NSk3UDJyshqrDXk4uLLdKqzgumgQY+UMkA717uO3DUFA+j8qcRXKj+VNO3Jx
-         MDYSAmlLp5JA+cNPOzWhRehrsprQfqN/sL2oaoSEe92N2Hxv+LLSZ6WYa8HswLOODZgd
-         ZEWfhi7T1fjpN0Ya099B/NCWaDDXhsNz2zjLO8XAfLSs4c4GtOY79e72varwfytE0ww7
-         qfyg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=kbAj3QkbSA9sXO8i6EDoM3LNbpdhiqhg3HK+8g7Mcbs=;
-        fh=nWGPXrk5zKP31geu0gieLOyHG2MJZRpVctU70jsgheY=;
-        b=cyNXUNLNTnnr88z9NW/trW8PMhlnB1bsft2IsFMBv1Zo/h01mFwsoOUCUs4NGt9lOO
-         yoC+Txqxh/23S9VSJp2JlJRfZe0+PimovzxhMRX5yF/5g1U/FbQWn0RebpwzeE1LTzM/
-         nCUiW7kpoomeoOJzo0j8czn+e/xnDbwA145h9/IcwjpSZFD9EYL0s9Q7QIgmdRGxqVxo
-         LQ/L6nNqupIwRm049zzODiRSbTM5LTnTyqIBXyFA9KgOeI0VrbKAAjnhsZP15rX1z1DS
-         uqoYkatPWLmPNzEyr02J+SnZ6kzfIxzNLlxI7DXogGU9/0bscizmLGnZkbqua+1qGPC9
-         971A==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1778816924; x=1779421724; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kbAj3QkbSA9sXO8i6EDoM3LNbpdhiqhg3HK+8g7Mcbs=;
-        b=eCuJcjogazgHx1HmwNxl9a51S3GLjs5pS4nDxe37/8LXdA5Fu20goCgJtAKS42+Cor
-         mHvNYms0FnDGEwfsiM7okmTbroOVgHRULZWDAUGjSqqm2uW6r4QYOeNXDTf+xkXkOAiq
-         65BxlH+Eo/WolkI1yV/IpGAP6AWP52cMtBLNwXtI5vfDmltmGae2mNMOLAlQvtbXUeLC
-         j9kZnmJfUEN+Q481D79Rsui32+CMPNJhP+4XqD9nBglVufmX1xONPMSyZVa7oS0mviop
-         Ic83TUblVdcReOEiWKWyt0tqysvXvQ4IJfXhQmN++N89i0is1gU0xe9EJNz/lSyzdYEK
-         e1yQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778816924; x=1779421724;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=kbAj3QkbSA9sXO8i6EDoM3LNbpdhiqhg3HK+8g7Mcbs=;
-        b=Otq/h4crTu5C3ogGIdRNMazxOzIbWwLcyb1Z5CgppfLyTS6+0XYzE9a0kPumfXdj8x
-         YmUPUjjufEPkqs4Vct+6teJyTTO1G3ujYMR6/TCusH5vTz7AJch4t3aq+D8N+aILRXer
-         kY7A8j5KRacfu3gLFk5U25GLgrFTK/FGQZ6/zJl87OOxYydABDbyXcYE9Wgn0/qSHIGP
-         S0ceyooAfPE7Tg5ChUKqnpmZxUR+FpVLQDKB10Iy9dMg71u8yaI+i/LJCILpUWMA8SAJ
-         pD2LZ536eBAT9bbvONlpE01+7bPlv+9dtRjrTda+kr8K+I4LPCpnjvc+48oNdUDq6sfK
-         ZJGg==
-X-Forwarded-Encrypted: i=1; AFNElJ8zP2KDzVd50SqlyeBnmK/0A+0ovcaAgwDATmUMoS774V45MEyWK4m600zPjaYaJczmeC5oJ2B6iwpF7+kKtAE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxY4ozsw00ZRMCoqlc/kLfvd8dT4cJqJ4zH/9dn3bJLepKpkNvB
-	KakLB7mL2zmb0IZVfCk/ORVWFBpBYpEkpeRWb5gfBqkSxxWzt/lw8spa7mIoAgXI1qJNvxSDri1
-	+Qhj7zWaPNMybA3ZyqnStUBefy6s1xyy4HqxLH8W6
-X-Gm-Gg: Acq92OF/Ag1iHo7h+UK7n8p+WsJKSCtLj8gImWPPbhrEZVc4OXb1ECxMPK25Kvwk3al
-	I5YNq24aDY/tUxTPf+OoW4irAtv2HMmlr4eVOQsCVE+C0uSvVPGwUXUG0dJSgvuHZIQdwQu6VLm
-	rTVh1B4H/w9p/zgsCWTb/O0lRhqpQP1WD4jrCoxsV8uvCZe97LRicq3GUwqSQi12Sbacf+DJFU6
-	J879vT5hOiBxJGthUKBxpXonVxRcXX3eO6+1xQHpRRSEh2XmNyqJ5ynnWqkHmnztY7Aq0BCiccY
-	jpl/CYM=
-X-Received: by 2002:a17:903:1b4c:b0:2ba:7610:3f21 with SMTP id
- d9443c01a7336-2bd7e802964mr23892325ad.5.1778816924539; Thu, 14 May 2026
- 20:48:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BOqOnXq5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C69BBC2BCB0;
+	Fri, 15 May 2026 04:27:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778819284;
+	bh=eaholhXH0T0ZCPDy0hweKNhPYJD49AxYHdU2Laz8nkc=;
+	h=From:Subject:Date:To:Cc:From;
+	b=BOqOnXq5Txa8KVIj/z/bHSP47kS3TWb/b8ssziqfPDsCZ8maiBD61HfLUGJhbSGKX
+	 DDitz6gt66Fg6ooGTNIU0D4V8he+Iib96KzJ0r3aIJ0i/2atdFDm4sAFKLVxbmJu1B
+	 O/V05O7eKI7dfadaLk10h6z1bttl1I8pBdccMUEGMH1SHdJq7dcGDik2c8aN+6DlHE
+	 qMIMh6BRzt90ABXX1KSxuRXnPvP0ea8+veI+flJ6kmq8EIKDTrI7hW1G9+s94sR+Hk
+	 yBkpsIoslhKetw1FbLyR61kgOiPW6Sjt4WpTwpmHd4q45c8T1aKLDw1CbB6AdN+quz
+	 mXp1WrOWsvWVw==
+From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+Subject: [PATCH net v2 0/6] mptcp: misc fixes for v7.1-rc4
+Date: Fri, 15 May 2026 06:27:31 +0200
+Message-Id: <20260515-net-mptcp-misc-fixes-7-1-rc4-v2-0-701e96419f2f@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260507070547.2268452-1-sashal@kernel.org>
-In-Reply-To: <20260507070547.2268452-1-sashal@kernel.org>
-From: Paul Moore <paul@paul-moore.com>
-Date: Thu, 14 May 2026 23:48:32 -0400
-X-Gm-Features: AVHnY4IFjeygqhvOWHf7nnff2hcSoElhRffZjECjs-fQ1g-cwaO4KY2xNXWLrHM
-Message-ID: <CAHC9VhTwDt2Bx8n0io9Qge_fUEnrHsxrFAQY+KaemKWqJqBQxw@mail.gmail.com>
-Subject: Re: [PATCH] killswitch: add per-function short-circuit mitigation primitive
-To: Sasha Levin <sashal@kernel.org>
-Cc: corbet@lwn.net, akpm@linux-foundation.org, skhan@linuxfoundation.org, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, gregkh@linuxfoundation.org, 
-	linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/42OTQ6CMBCFr0Jm7Zi24Sdx5T0MC1oeUJVC2ko0h
+ Ltb8AIu3+Sb772VArxFoEu2ksdig51cCuqUkRka14NtmzIpoUpRSMkOkcc5mplHGwx39o3AFUv
+ 2JmeoMhddm6NThpJi9jiAZLhR+qT6dwwvfYeJu3jHBhvi5D/HiEUe8H99i2TBBVBURitdQV8f8
+ A7P8+R7qrdt+wIp4SrR4AAAAA==
+X-Change-ID: 20260511-net-mptcp-misc-fixes-7-1-rc4-e2640fd4ef2c
+To: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev, 
+ linux-kernel@vger.kernel.org, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
+ linux-kselftest@vger.kernel.org, Eric Dumazet <edumaze@google.com>, 
+ Shardul Bankar <shardul.b@mpiricsoftware.com>, stable@vger.kernel.org, 
+ Li Xiasong <lixiasong1@huawei.com>, Gang Yan <yangang@kylinos.cn>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2824; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=eaholhXH0T0ZCPDy0hweKNhPYJD49AxYHdU2Laz8nkc=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBqBqDK2ccR0WHe8pCzPWkNS2G3tWtzMFqi13UcF
+ rKTja/mZzaJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCagagygAKCRD2t4JPQmmg
+ c/BLEACxsyXw+ngszNAvWlGIs0SmvxMWFvGKvUo2AClf0UkJ4gHuHoJxux/UiW5ircEpN89XPs8
+ UYE8gvcBPR7t+tKK4ETe9yXBBzhGm7q8maJasFK1SpSAfHWBF55qVD12XgF/ru/JagZBCh+NW8L
+ DE7ZxwbKb09nMAfir30HoxSnW/IGgQbJ5VkD1V28n1jYLg49mohUC00WBBXa7ESxZpGJWJ6t9MF
+ e4Fu9MTum5k3Rjlh7guPQNiGO1bJc9e7rpvVBzWGklL7JQ+N1VXCgZKlSPnPA7VzJzMUJcpKdkt
+ TK5rH9ArAk5cavMjjd205Hs1lqVn22lN8eo/dJpHpS4gLYIaHF2n8KgtCtCe36P/zuHB2TByh60
+ oFVrqR7uzq7ffH9ve1AzCdKJbYRYo3Rkk6+I03VsmyUy4HYr5VQPf+glKFxv2qTykk5zPwd5MjT
+ LM+d5ljwnukn9HsdEVYsOKW12wYX5gvCIqTDt0LIXkepnMP3HYe/pu+5/8fqmQCvE/w3Qfh0D9N
+ S5uwq4pkBBriJu/rxaQ9+JoRVUbtdR0b1M4mWKof3mK0t76yvpmE0wE31WotMfPoHxAJ1unssZD
+ te0IOuCitqkGn8iOumFBjhQMZlU4vRveYj1YvcRGm/oOdq07VCZZExO9J5iLmaF9oA6I4rQpmVd
+ KiwSLH+qoFeVOFg==
+X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-On Thu, May 7, 2026 at 3:05=E2=80=AFAM Sasha Levin <sashal@kernel.org> wrot=
-e:
->
-> When a (security) issue goes public, fleets stay exposed until a patched =
-kernel
-> is built, distributed, and rebooted into.
->
-> For many such issues the simplest mitigation is to stop calling the buggy
-> function. Killswitch provides that. An admin writes:
->
->     echo "engage af_alg_sendmsg -1" \
->         > /sys/kernel/security/killswitch/control
->
-> After this, af_alg_sendmsg() returns -EPERM on every call without
-> running its body. The mitigation takes effect immediately, and is dropped=
- on
-> the next reboot.
->
-> A lot of recent kernel issues sit in code paths most installs only have e=
-nabled
-> to support a relative minority of users: AF_ALG, ksmbd, nf_tables, vsock,=
- ax25,
-> and friends.
->
-> For most users, the cost of "this socket family stops working for the day=
-" is
-> much smaller than the cost of running a known vulnerable kernel until the=
- fix
-> land.
->
-> Assisted-by: Claude:claude-opus-4-7
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
->  Documentation/admin-guide/index.rst           |   1 +
->  Documentation/admin-guide/killswitch.rst      | 159 ++++
->  Documentation/admin-guide/tainted-kernels.rst |   8 +
->  MAINTAINERS                                   |  11 +
->  include/linux/killswitch.h                    |  19 +
->  include/linux/panic.h                         |   3 +-
->  init/Kconfig                                  |   2 +
->  kernel/Kconfig.killswitch                     |  31 +
->  kernel/Makefile                               |   1 +
->  kernel/killswitch.c                           | 798 ++++++++++++++++++
->  kernel/panic.c                                |   1 +
->  lib/Kconfig.debug                             |  13 +
->  lib/Makefile                                  |   1 +
->  lib/test_killswitch.c                         |  85 ++
->  tools/testing/selftests/Makefile              |   1 +
->  tools/testing/selftests/killswitch/.gitignore |   1 +
->  tools/testing/selftests/killswitch/Makefile   |   8 +
->  .../selftests/killswitch/cve_31431_test.c     | 162 ++++
->  .../selftests/killswitch/killswitch_test.sh   | 147 ++++
->  19 files changed, 1451 insertions(+), 1 deletion(-)
->  create mode 100644 Documentation/admin-guide/killswitch.rst
->  create mode 100644 include/linux/killswitch.h
->  create mode 100644 kernel/Kconfig.killswitch
->  create mode 100644 kernel/killswitch.c
->  create mode 100644 lib/test_killswitch.c
->  create mode 100644 tools/testing/selftests/killswitch/.gitignore
->  create mode 100644 tools/testing/selftests/killswitch/Makefile
->  create mode 100644 tools/testing/selftests/killswitch/cve_31431_test.c
->  create mode 100755 tools/testing/selftests/killswitch/killswitch_test.sh
+Here are various unrelated fixes:
 
-If we made Lockdown an LSM, we should probably also make killswitch an LSM.
+- Patch 1: avoid dropping partial packets. A previous version has been
+  sent a few week ago. A fix for 5.10.
 
-For the LSM crowd who might be seeing this for the first time, the
-original thread can be found on lore via the link below:
-https://lore.kernel.org/all/20260507070547.2268452-1-sashal@kernel.org
+- Patches 2-3: stop ADD_ADDR timer when an ADD_ADDR can never been sent
+  due to insufficient option space. A fix for v5.10.
 
---=20
-paul-moore.com
+- Patch 4: reset rcv_wnd_sent on disconnect, just in case the next
+  connection falls back to TCP. A fix for 5.17.
+
+- Patch 5: update window_clamp when SO_RCVBUF is set during the
+  connection. A fix similar to a recent one on TCP side, for v6.6.
+
+- Patch 6: avoid wrong time being displayed in the selftests when using
+  uutils 0.8.0 which contains a regression with 'date +%3N'. It doesn't
+  fix an issue in the kernel selftests, but having the fix is helpful
+  for those using uutils 0.8.0.
+
+Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+---
+Changes in v2:
+- Patch 2: note for sashiko-nipa
+- Patch 5: remove 'inline' keyword (NIPA) + update Fixes tag (Jakub)
+- Patch 6: new
+- Remove Eric's duplicated address with a typo (not sure how I did that)
+- Link to v1: https://patch.msgid.link/20260511-net-mptcp-misc-fixes-7-1-rc4-v1-0-5ee57cb2b7eb@kernel.org
+
+To: Matthieu Baerts <matttbe@kernel.org>
+To: Mat Martineau <martineau@kernel.org>
+To: Geliang Tang <geliang@kernel.org>
+To: "David S. Miller" <davem@davemloft.net>
+To: Eric Dumazet <edumazet@google.com>
+To: Jakub Kicinski <kuba@kernel.org>
+To: Paolo Abeni <pabeni@redhat.com>
+To: Simon Horman <horms@kernel.org>
+To: Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org
+Cc: mptcp@lists.linux.dev
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Cc: Eric Dumazet <edumaze@google.com>
+
+---
+Gang Yan (1):
+      mptcp: update window_clamp on subflows when SO_RCVBUF is set
+
+Li Xiasong (2):
+      mptcp: pm: fix ADD_ADDR timer infinite retry on option space insufficient
+      selftests: mptcp: join: cover ADD_ADDR tx drop and list progress
+
+Matthieu Baerts (NGI0) (1):
+      selftests: mptcp: drop nanoseconds width specifier
+
+Paolo Abeni (1):
+      mptcp: reset rcv wnd on disconnect
+
+Shardul Bankar (1):
+      mptcp: do not drop partial packets
+
+ net/mptcp/pm.c                                     | 56 ++++++++++++++++++----
+ net/mptcp/protocol.c                               | 25 ++++++++--
+ net/mptcp/sockopt.c                                | 10 +++-
+ tools/testing/selftests/net/mptcp/mptcp_connect.sh |  6 +--
+ tools/testing/selftests/net/mptcp/mptcp_join.sh    | 31 ++++++++++++
+ tools/testing/selftests/net/mptcp/mptcp_lib.sh     | 10 ++--
+ 6 files changed, 113 insertions(+), 25 deletions(-)
+---
+base-commit: 5db89c99566fc4728cc92e941d8e1975711e24b5
+change-id: 20260511-net-mptcp-misc-fixes-7-1-rc4-e2640fd4ef2c
+
+Best regards,
+--  
+Matthieu Baerts (NGI0) <matttbe@kernel.org>
+
