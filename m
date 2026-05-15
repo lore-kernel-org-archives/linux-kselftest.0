@@ -1,127 +1,172 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from pdx-out-011.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-011.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.35.192.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85C4230568A;
-	Fri, 15 May 2026 16:02:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4A6432ABC0;
+	Fri, 15 May 2026 16:40:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.35.192.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778860920; cv=none; b=ergXxe+7AHhtLkrZ2mt55kweusFh+0VmhmeMWafR0CjB9bB0nXVc2Rq0fc5/xHZafOLvG6uWWYi0TgFjeGDOMX0kvrY+99fJ/Et1gnLXOsqs7tQXB0Dp+KSGjcFQaLa426tNcd4bDQvzlsGAFxUopzcDay+oiaGKqePXsnJUzf0=
+	t=1778863259; cv=none; b=N2oIPIo/a4ieGmdnklSFUFChY2zIn2AxbWkYniWKTUFNgyS6M+y512ov2fmG3ZxmkTSRmItA2/wcuE+A2qwJ/eTR1EuO5VG1LtAUjc12+FNvjTefEHcgoq+kPSeE9GkVKJffN3JvCb3FJ5yg8v9zQuAl8NQv/Zzu4Nko31g842g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778860920; c=relaxed/simple;
-	bh=Xt1Dal9QBZdl4hYiEVqvJ+og0H7MInhWhEjKEAiXxp0=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=WCBABGHAT/93IiEVK8ePIbxmrl1rpYZsBcU/9bBkZiHmy6QUGNlzlwLxKYKKzQi31hPJXroHuJYCo4kuXTyW0s8CV4acz+q/cMRcklQy3oSi7psL4j1DIBqCl2DWAVoWi9a06Rn6RXkWpeuf4H67ow1Fvz/pYoNbfmoMogLCTLw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FRTjZEni; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778863259; c=relaxed/simple;
+	bh=XWBFSg8szzCHX65W+LYQnfSnkWMu48jKtZ5yOZzh0cU=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=CvESPKU0XKR4hdfChh+wKzMbSWL4643XU3zUr4mRyxyVR7Jf54t7TeqmQeC7bzS9ACstszo4NQJdjQwlB5Zq3aC0nlgnLyVeFkcFmo8XeAERDzixNuaXJh+wSTx9eOotkKhNHQHdDP7yhjs2PPd7w/nMcJVsU6v8/7caYm57bw8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=aeeVo2ba; arc=none smtp.client-ip=52.35.192.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FRTjZEni"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D222DC2BCB0;
-	Fri, 15 May 2026 16:01:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778860920;
-	bh=Xt1Dal9QBZdl4hYiEVqvJ+og0H7MInhWhEjKEAiXxp0=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=FRTjZEniQkgJRPmE7Njd1hCN69NxFjtK31RAyok3RoHqvbdA8SIwxmc78RZfkUUMa
-	 MTJTcUjJwNEgTJsDdRpYhAvzsvoRTuUr0PR+mkQkjk9F8VubH0bmh2oPsOHftRP3nI
-	 A+0DZgJ6F9Jqj+r/Bzjb5IlRAHZZvSdquqv1SnwH8fqIBJwmS2xcij6Fkc/kLu9NuB
-	 UdEiHXUOhd/8x8poN6MbGsW3hlkUE/753q6QTx2xN8FcQJQH8igsAmjgCw4B9rowEI
-	 wq04p7OHJINKT7ntVIdCKkSiSGjukYk20bbal9osgZm5LqK5sx3zVLih+CENeGNAwq
-	 +Dh8bGZ5/b9ow==
-Content-Type: multipart/mixed; boundary="===============5271935997963645921=="
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="aeeVo2ba"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1778863257; x=1810399257;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=UlJWLuxmHT8SCx8qRHdUgoi0qgBbNM8ZIVyE0ArpedI=;
+  b=aeeVo2baZn2DzTKeWkhInOn+91yNyKVgv3oS42wFn7O+pRFHY6kNaMlC
+   jBMxLejs5xPmmOjA729AGTcdGAd8HOpKsDnt4GKgOLurjSVqM/Uudz4QX
+   h0TQyg4XvHsDrFJ67MkMCeIz+rc+No8YRMtgobO6jwKU7S8B9OZewtkwa
+   NYZTlrCKHbUA4Pr4Yu/PjCgLWuoPmDHty6bhISlZdQsSNWe1WIF0x5VaQ
+   3K837YCkBi4MwGxMQESaZG2GegwyQsDnrHUiTsWqCirxs527/t4YEKKkw
+   UqYGiNat4IJ7spp16thZPKtkBkgtbPcHzyrUPovUID9NJpSedPLXlc1kO
+   Q==;
+X-CSE-ConnectionGUID: BCUwzNNiSlGSpTmlVVao0w==
+X-CSE-MsgGUID: Rrxq5KTkRc2wiKl2qJtcDw==
+X-IronPort-AV: E=Sophos;i="6.23,236,1770595200"; 
+   d="scan'208";a="19524399"
+Received: from ip-10-5-9-48.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.9.48])
+  by internal-pdx-out-011.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2026 16:40:54 +0000
+Received: from EX19MTAUWA001.ant.amazon.com [205.251.233.182:28511]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.56.132:2525] with esmtp (Farcaster)
+ id 424bb4e9-4620-477f-afcd-4a4e409a5240; Fri, 15 May 2026 16:40:53 +0000 (UTC)
+X-Farcaster-Flow-ID: 424bb4e9-4620-477f-afcd-4a4e409a5240
+Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
+ EX19MTAUWA001.ant.amazon.com (10.250.64.217) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37;
+ Fri, 15 May 2026 16:40:53 +0000
+Received: from dev-dsk-akiyano-1c-2138b29d.eu-west-1.amazon.com (172.19.83.6)
+ by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37;
+ Fri, 15 May 2026 16:40:48 +0000
+From: Arthur Kiyanovski <akiyano@amazon.com>
+To: David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+	<netdev@vger.kernel.org>
+CC: Arthur Kiyanovski <akiyano@amazon.com>, Richard Cochran
+	<richardcochran@gmail.com>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
+	<pabeni@redhat.com>, David Woodhouse <dwmw2@infradead.org>, Thomas Gleixner
+	<tglx@linutronix.de>, Miroslav Lichvar <mlichvar@redhat.com>, Andrew Lunn
+	<andrew+netdev@lunn.ch>, Wen Gu <guwen@linux.alibaba.com>, Xuan Zhuo
+	<xuanzhuo@linux.alibaba.com>, David Woodhouse <dwmw@amazon.com>, "Yonatan
+ Sarna" <ysarna@amazon.com>, Zorik Machulsky <zorik@amazon.com>, "Alexander
+ Matushevsky" <matua@amazon.com>, Saeed Bshara <saeedb@amazon.com>, Matt
+ Wilson <msw@amazon.com>, Anthony Liguori <aliguori@amazon.com>, Nafea Bshara
+	<nafea@amazon.com>, Evgeny Schmeilin <evgenys@amazon.com>, Netanel Belgazal
+	<netanel@amazon.com>, Ali Saidi <alisaidi@amazon.com>, Benjamin Herrenschmidt
+	<benh@amazon.com>, Noam Dagan <ndagan@amazon.com>, David Arinzon
+	<darinzon@amazon.com>, Evgeny Ostrovsky <evostrov@amazon.com>, Ofir Tabachnik
+	<ofirt@amazon.com>, Amit Bernstein <amitbern@amazon.com>,
+	<linux-kselftest@vger.kernel.org>, <shuah@kernel.org>,
+	<vadim.fedorenko@linux.dev>
+Subject: [PATCH v3 net-next 0/7] ptp: Add PHC timestamp quality attributes
+Date: Fri, 15 May 2026 16:40:20 +0000
+Message-ID: <20260515164033.6403-1-akiyano@amazon.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <fcc86800bb58349e766263afc346616b862fa7b660facba32abecb8e8e7083c6@mail.kernel.org>
-In-Reply-To: <20260515151830.711129-1-faisalbukhari523@gmail.com>
-References: <20260515151830.711129-1-faisalbukhari523@gmail.com>
-Subject: Re: [PATCH] selftests/bpf: fix tunnel option size in ip6geneve_set_tunnel()
-From: bot+bpf-ci@kernel.org
-To: faisalbukhari523@gmail.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,shuah@kernel.org
-Cc: bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri, 15 May 2026 16:01:59 +0000 (UTC)
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: EX19D038UWB003.ant.amazon.com (10.13.139.157) To
+ EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
---===============5271935997963645921==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+This series adds quality attributes to PTP Hardware Clock (PHC)
+timestamps, allowing userspace to obtain error bound, clock status,
+timescale, and raw counter values alongside timestamps in a single
+call.
 
-> commit 5f750f9a85fff89d7c4960e06d838efe58b8a805
-> Author: Faisal Bukhari <faisalbukhari523@gmail.com>
->
->     selftests/bpf: fix tunnel option size in ip6geneve_set_tunnel()
->
->     Pass the correct size to bpf_skb_set_tunnel_opt() in
->     ip6geneve_set_tunnel().
->
->     sizeof(gopt) returns the size of the pointer instead of the
->     actual Geneve option structure, resulting in an incorrect
->     option length being passed to the helper. Use
->     sizeof(local_gopt) to provide the proper structure size.
->
->     Signed-off-by: Faisal Bukhari <faisalbukhari523@gmail.com>
+Motivation
+----------
+The existing PTP APIs return timestamps without any indication of
+their quality. Applications that need clock accuracy and
+synchronization status commonly rely on external tools such as
+ptp4l, which implement synchronization logic and can export their
+measurement of clock accuracy. For managed PHC devices — such as
+the ENA network adapter, whose clock is synchronized by the device
+without userspace involvement — these tools are not available, and
+the existing APIs lack a way to report quality metrics to consumers
+of time.
 
-This isn't a bug, but does this actually change the size passed to the
-helper? On the 64-bit eBPF architecture, pointers are exactly 8 bytes.
-struct local_geneve_opt consists of a 4-byte struct geneve_opt and a 4-byte
-int, totaling exactly 8 bytes.
+This was previously proposed as an RFC [1] with a single ioctl.
+Based on community feedback, the design was reworked to cover both
+the extended (multi-sample) and precise (cross-timestamp) paths,
+with a shared attributes structure.
 
-Thus, the exact same length (8) is passed to the helper before and after the
-patch. The patch improves semantics but does not appear to fix an incorrect
-length.
+Design
+------
+This series introduces two new ioctls that extend the existing
+extended and precise timestamp paths with per-timestamp quality
+attributes: error bound (nanoseconds), clock synchronization
+status, timescale, and raw hardware counter values.
 
-This looks like a bug fix. Should this include:
+A capability flag is added to ptp_clock_caps so userspace can
+discover attributes support.
 
-  Fixes: 5ddafcc377f9 ("selftests/bpf: Fix a few tests for GCC related warnings.")
+Patches 2-3 add testptp support for the new ioctls.
 
-> diff --git a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-> index 30f1de458669..ca04d1d1ade4 100644
-> --- a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-> +++ b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-> @@ -674,7 +674,7 @@ int ip6geneve_set_tunnel(struct __sk_buff *skb)
->  	gopt->length = 2; /* 4-byte multiple */
->  	*(int *) &gopt->opt_data = bpf_htonl(0xfeedbeef);
->
-> -	ret = bpf_skb_set_tunnel_opt(skb, gopt, sizeof(gopt));
-> +	ret = bpf_skb_set_tunnel_opt(skb, gopt, sizeof(local_gopt));
->  	if (ret < 0) {
->  		log_err(ret);
->  		return TC_ACT_SHOT;
+Patch 4 implements the attributes for ptp_vmclock, reporting
+error bound, clock status, timescale, and raw counter values.
 
-Does this construct a malformed Geneve packet? According to RFC 8926, the
-length field defines the option data length in 4-byte multiples, excluding
-the 4-byte header.
+Patches 5-7 implement the attributes for the ENA driver,
+reporting error bound from the device's PHC layer.
 
-Thus, length = 2 indicates 8 bytes of data (12 bytes total option length).
-However, only 8 bytes total are passed to bpf_skb_set_tunnel_opt() via
-sizeof(local_gopt).
+v3:
+- Remove patch 5/8 from v2 (return-code bugfix) — sent separately
+  as [PATCH net] to the net tree.
+- Zero-initialize struct ptp_clock_attributes in PTP core ioctl
+  handlers to prevent stack leak of unset fields. (Simon Horman,
+  sashiko)
+- ptp_vmclock: validate counter_period_shift < 128 to prevent
+  undefined behavior on untrusted hypervisor input. (sashiko)
+- ptp_vmclock: add overflow check on err_hi * NSEC_PER_SEC to
+  prevent silent wraparound producing erroneously small error
+  bound. (sashiko)
+- ptp_vmclock: report PTP_TIMESCALE_TAI after tai_adjust() to
+  avoid timescale mismatch. (sashiko)
+- ENA: set counter_id = 0, counter_value = 0 in gettimexattrs64
+  for defense-in-depth. (sashiko)
 
-This results in an option that claims a length exceeding the available option
-space. Should the length field be set to 1 instead?
+v2:
+- Fix build bisectability: move ena_com.c consumer updates into
+  patch 6/8 and ena_phc.c caller update into patch 7/8 so each
+  patch compiles independently.
+- Add missing Cc for Amit Bernstein (co-author of ENA patches).
 
-Looking at ip6geneve_get_tunnel(), does the receiver test silently fail to
-read the Geneve options?
+[1] https://lore.kernel.org/netdev/20250724115657.150-1-darinzon@amazon.com/
 
-The kernel helper enforces that the buffer size must be at least the size of
-the options present on the packet. Since the sender set 8 bytes of options,
-bpf_skb_get_tunnel_opt() with a 4-byte buffer will fail with -ENOMEM:
+Arthur Kiyanovski (7):
+  ptp: Add ioctls for PHC timestamps with quality attributes
+  selftests/ptp: Extract print_system_timestamp helper in testptp
+  selftests/ptp: Add testptp support for attributes ioctls
+  ptp: ptp_vmclock: Implement attributes ioctls
+  net: ena: Update PHC admin interface for error bound support
+  net: ena: Add error bound to PHC communication layer
+  net: ena: Implement gettimexattrs64 callback for PTP attributes
 
-ip6geneve_get_tunnel() {
-    struct geneve_opt gopt;
+ .../device_drivers/ethernet/amazon/ena.rst    |   2 +
+ .../net/ethernet/amazon/ena/ena_admin_defs.h  |  17 +-
+ drivers/net/ethernet/amazon/ena/ena_com.c     |  47 ++--
+ drivers/net/ethernet/amazon/ena/ena_com.h     |   5 +-
+ drivers/net/ethernet/amazon/ena/ena_debugfs.c |   3 +
+ drivers/net/ethernet/amazon/ena/ena_phc.c     |  64 ++++-
+ drivers/ptp/ptp_chardev.c                     | 130 +++++++++-
+ drivers/ptp/ptp_clock.c                       |   4 +-
+ drivers/ptp/ptp_vmclock.c                     | 209 ++++++++++++++--
+ include/linux/ptp_clock_kernel.h              |  30 +++
+ include/uapi/linux/ptp_clock.h                | 225 +++++++++++++++++-
+ tools/testing/selftests/ptp/testptp.c         | 175 ++++++++++----
+ 12 files changed, 804 insertions(+), 107 deletions(-)
 
-    ret = bpf_skb_get_tunnel_opt(skb, &gopt, sizeof(gopt));
-    if (ret < 0)
-        gopt.opt_class = 0;
-}
+-- 
+2.47.3
 
-It seems the test might be ignoring this error and bypassing the verification
-of the Geneve options entirely.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25926759989
---===============5271935997963645921==--
