@@ -1,149 +1,112 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 255D830C17E
-	for <linux-kselftest@vger.kernel.org>; Sat, 16 May 2026 07:02:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55ABF1C3F31
+	for <linux-kselftest@vger.kernel.org>; Sat, 16 May 2026 07:37:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778914961; cv=none; b=lbPozncSLstQm9qY8if3DxzB1HUz/k21uIfnmP5k3rSE2q88uFrNFvKWKF8pbhnVLx78MnV7aIbY82NkOEgPQrECA6UYlZ917SaLJplSOiQ+BR0Sv340YTW+nYYgpws3rlsrYzWkFbBSEpeZLzq+C3C5/eiHBktvqT4t52RyZDw=
+	t=1778917028; cv=none; b=kKQ+W5zV/6fUK4UnB1Je9VjkILhRhgLMs44ndW+qOah8dhNX1eA8nvK27+VLUoilaq+FoYL4CsDOWmEaeq1U22wLEhuacOZ3HTkMTC2w7TD7xM3sDuij4WgEfs+pKtsK54yLvtEgpm2k21ux4Kby2dbZVDWGNVxYRNBkh/zaZ74=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778914961; c=relaxed/simple;
-	bh=tMMZNlzAyJhWGPORawbViec/lbgCUwgopIP8U5sACYE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZqqX0TUu0DwHragZk3KuaECw21I0eRTY8x6ZE7rH0ek5pBqpEOh5xPckQTtAcBvrjvF72cXpsn5NCwIYQj/BYq3h1BaMM+pI1vuwvZ+vocuXNdBowm2HSdN+4Un32lt90fgbAnMmPID8cQ8g95tVpwwDWiyq3FDmDmnM86sDnFs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=GkCWD3sm; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=DPIqoM9N; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=GkCWD3sm; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=DPIqoM9N; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	s=arc-20240116; t=1778917028; c=relaxed/simple;
+	bh=P3vqgwHwD6iLuiEKYHBc9rKUdaJI1VWv+dxZinDZG8M=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=f7s8yj97p0DECCbosMDEoA7SxlBwZd/W/QV2UHVkohlad3SMMi27EyXXYYHaW513XPp5swXv22R+X4y+UFBlHReiRAaUaFjIj+XWzdE0mT3DD2MJ22mR9ez7sV1SN8d+TCqbAiq6B+NDRLvqtLwfrXfZUn20d9cvzH3dh3El2fs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nNpNtXRG; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="GkCWD3sm";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="DPIqoM9N";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="GkCWD3sm";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="DPIqoM9N"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id B1B25618B2;
-	Sat, 16 May 2026 07:02:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1778914956; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=fx1HImtpNbf9r3+ZuscqsV8lfMcF7aUDitALcVW1KCU=;
-	b=GkCWD3smq2JUjVeH4m9BungaGkxVsmfqMzqxrlXizkYIFIMbiChlvVDgAjZ6oHxSzDnI2J
-	o2xwrL1acR7zMg/0ky2YPZWNk9xYox3plDxOZBXNK0YcsmS+UOBqTVp4DSKO8A5jM6m8Lp
-	Iz9p47s37NvxwdWrR5jo5BGSFnGPb9c=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1778914956;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=fx1HImtpNbf9r3+ZuscqsV8lfMcF7aUDitALcVW1KCU=;
-	b=DPIqoM9NAv/DHCfeAvUQ0fLyVMsRc1ylU97Fbh2HJFC0S9x8iSRAeysSpMyf6fhKSpNr7A
-	Gl7+aN4LT6NrVoDg==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1778914956; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=fx1HImtpNbf9r3+ZuscqsV8lfMcF7aUDitALcVW1KCU=;
-	b=GkCWD3smq2JUjVeH4m9BungaGkxVsmfqMzqxrlXizkYIFIMbiChlvVDgAjZ6oHxSzDnI2J
-	o2xwrL1acR7zMg/0ky2YPZWNk9xYox3plDxOZBXNK0YcsmS+UOBqTVp4DSKO8A5jM6m8Lp
-	Iz9p47s37NvxwdWrR5jo5BGSFnGPb9c=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1778914956;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=fx1HImtpNbf9r3+ZuscqsV8lfMcF7aUDitALcVW1KCU=;
-	b=DPIqoM9NAv/DHCfeAvUQ0fLyVMsRc1ylU97Fbh2HJFC0S9x8iSRAeysSpMyf6fhKSpNr7A
-	Gl7+aN4LT6NrVoDg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id CA076593A8;
-	Sat, 16 May 2026 07:02:35 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id v4gCKosWCGotawAAD6G6ig
-	(envelope-from <fmancera@suse.de>); Sat, 16 May 2026 07:02:35 +0000
-Message-ID: <f5cae72f-93c7-41d7-b7db-2b60281afb72@suse.de>
-Date: Sat, 16 May 2026 09:02:27 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nNpNtXRG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F6B0C2BCB7
+	for <linux-kselftest@vger.kernel.org>; Sat, 16 May 2026 07:37:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778917028;
+	bh=P3vqgwHwD6iLuiEKYHBc9rKUdaJI1VWv+dxZinDZG8M=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=nNpNtXRGUw0mf4NnH+yNpsGfoHEeYyd5NHflVOhmZkdo7mVPuYo0Sn7ejcQkpbAdL
+	 Xq4AnHBYR4AGZl8TBwgKc4eBK1jQKV2THXCREwHOk3eNmL2yNugi07+KM4ItzVAMO6
+	 lSPY0Q0dGzv7nMdKXX7wA4HJVc7hGOOjnXN54jcMnyKjaImX35rvGB1CMn7FnXzrEH
+	 ttD1bT9CLBvfDdqqOFFKIZxJh2yhLap9F2AzPm/qZYxfkQWJm8kzSDn2H87s6wQ+fJ
+	 uJXowVoELz8Hq3RAcg3eCdTqAUK/EgUtAJVUnrzr3fZqJNnt9hF+hAPgi/sObhd4Kf
+	 /5dvJQcCOdrpg==
+Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-8b1f2b7f1bcso10984816d6.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 16 May 2026 00:37:08 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AFNElJ+VJRqycJbm5n+nB2Quxdfm3/IOWEYP9DvfsY5c0lgCXJGzN070easO1gvuEMekxvHZElixiSgsqhxIMsYwnFM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx1aHfQTauS24KglEt5CPcC2qHiNSrk+D7HvrhHQA791Y4ZCj9y
+	wH0yGSIeJjd1fHJCTiPThbpkVkP+sr2o5VDSq5p1FQDxnlbxpddFR4EM/NdSE/CMGqa//hHVpv1
+	Wc/2cSVCbYheAY1lBIlwsCQpOL3ssipA=
+X-Received: by 2002:a05:6214:29ce:b0:8b3:ff3f:5d61 with SMTP id
+ 6a1803df08f44-8c8fda1ccbbmr178745586d6.22.1778917027156; Sat, 16 May 2026
+ 00:37:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3 net-next v4] selftests: net: add test for IPv4 devconf
- netlink notifications
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- horms@kernel.org, pabeni@redhat.com, edumazet@google.com,
- dsahern@kernel.org, davem@davemloft.net
-References: <20260510081528.5257-1-fmancera@suse.de>
- <20260510081528.5257-3-fmancera@suse.de> <20260513193544.47970cb8@kernel.org>
- <bd560c89-c71f-4ef5-a0fd-5ea096a0f767@suse.de>
- <20260514162429.366b94c9@kernel.org>
- <f528360c-18b3-46e5-8ba8-88f921203716@suse.de>
- <20260515181623.5a44140e@kernel.org>
-Content-Language: en-US
-From: Fernando Fernandez Mancera <fmancera@suse.de>
-In-Reply-To: <20260515181623.5a44140e@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Flag: NO
-X-Spam-Score: -4.30
-X-Spamd-Result: default: False [-4.30 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid]
-X-Spam-Level: 
+References: <20260512-v2_20230123_tjmercier_google_com-v1-0-6326701c3691@redhat.com>
+ <20260512-v2_20230123_tjmercier_google_com-v1-2-6326701c3691@redhat.com>
+In-Reply-To: <20260512-v2_20230123_tjmercier_google_com-v1-2-6326701c3691@redhat.com>
+From: Barry Song <baohua@kernel.org>
+Date: Sat, 16 May 2026 15:36:56 +0800
+X-Gmail-Original-Message-ID: <CAGsJ_4xfznffbjOaNKwnN6oZk_H6pqOzYqd1zx4Q9XrocdzV8A@mail.gmail.com>
+X-Gm-Features: AVHnY4L9M-s1Neba6WebvB2EkXnslTMMIykTYPVPE3skCvVx5rzQK6ntLSW6W0w
+Message-ID: <CAGsJ_4xfznffbjOaNKwnN6oZk_H6pqOzYqd1zx4Q9XrocdzV8A@mail.gmail.com>
+Subject: Re: [PATCH RFC 2/5] dma-heap: charge dma-buf memory via explicit memcg
+To: Albert Esteve <aesteve@redhat.com>
+Cc: Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
+	=?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>, 
+	Andrew Morton <akpm@linux-foundation.org>, 
+	Benjamin Gaignard <benjamin.gaignard@collabora.com>, Brian Starkey <Brian.Starkey@arm.com>, 
+	John Stultz <jstultz@google.com>, "T.J. Mercier" <tjmercier@google.com>, 
+	Christian Brauner <brauner@kernel.org>, Paul Moore <paul@paul-moore.com>, 
+	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
+	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
+	Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org, 
+	linux-mm@kvack.org, linux-security-module@vger.kernel.org, 
+	selinux@vger.kernel.org, linux-kselftest@vger.kernel.org, mripard@kernel.org, 
+	echanude@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 5/16/26 3:16 AM, Jakub Kicinski wrote:
-> On Fri, 15 May 2026 10:02:50 +0200 Fernando Fernandez Mancera wrote:
->>>> No, AFAIU, iproute2 does not expose devconf settings. The main user of
->>>> IFLA_INET_CONF are netlink libraries and other userspace tools that
->>>> heavily rely on netlink operations like NetworkManager, nmstate, nispor,
->>>> rust-netlink..
->>>
->>> Isn't this ip netconf ?
->>>    
->>
->> Oh sorry, I should have clarified it. ip netconf only shows/query them
->> but it cannot set them AFAICS.
->>
->> Usage: ip netconf show [ dev STRING ]
-> 
-> Oh, fun. anyway, you gotta find a better way. Or just give up on the
-> selftest, the YNL hack is too ugly to live
-> 
+On Tue, May 12, 2026 at 5:18=E2=80=AFPM Albert Esteve <aesteve@redhat.com> =
+wrote:
+>
+> On embedded platforms a central process often allocates dma-buf
+> memory on behalf of client applications. Without a way to
+> attribute the charge to the requesting client's cgroup, the
+> cost lands on the allocator, making per-cgroup memory limits
+> ineffective for the actual consumers.
+>
+> Add charge_pid_fd to struct dma_heap_allocation_data. When set to
+> a valid pidfd, DMA_HEAP_IOCTL_ALLOC resolves the target task's
+> memcg and charges the buffer there via mem_cgroup_charge_dmabuf()
+> inside dma_heap_buffer_alloc(). Without charge_pid_fd, and with
+> the mem_accounting module parameter enabled, the buffer is charged
+> to the allocator's own cgroup.
+>
+> Additionally, commit 3c227be90659 ("dma-buf: system_heap: account for
+> system heap allocation in memcg") adds __GFP_ACCOUNT to system-heap
+> page allocations. Keeping __GFP_ACCOUNT would charge the same pages
+> twice (once to kmem, once to MEMCG_DMABUF), thus remove it and route
+> all accounting through a single MEMCG_DMABUF path.
+>
+[...]
 
-Fair, let me see what I can do. Otherwise, Paolo as you requested the 
-selftest, would it be acceptable for you to drop it given the situation? 
-I looking for alternatives anyway :-)
+> -               if (mem_accounting)
+> -                       flags |=3D __GFP_ACCOUNT;
 
-Thanks!
-Fernando.
+Hi Albert,
+
+would it be better to move this and its description to patch 1? It
+looks like patch 1 already introduces the double accounting changes,
+and patch 2 is mainly just supporting remote charging.
+
+Also, mem_accounting is only used by system_heap.c; has this patchset
+also eliminated its need?
+
+Thanks
+Barry
