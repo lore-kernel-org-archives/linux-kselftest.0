@@ -1,69 +1,81 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17F1C171AF;
-	Sat, 16 May 2026 01:16:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 598B424676D
+	for <linux-kselftest@vger.kernel.org>; Sat, 16 May 2026 04:06:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778894185; cv=none; b=UP3xDDgBGELxWR83xDK2cECUbzC9oiw8TxQoEX5CdEQcd+V429Tfk2pB7fUkYSURwa6Ff9hJdY/kGA8Q8U1ew90OQbkVtR1BDHrIf4+ds4AvWpB6y3Zb9r2264MYGF5gZerAZPlqz4IiJCzWmOw8VMVAnRE9vNszjtPQIR0kgS0=
+	t=1778904402; cv=none; b=WjjFBRHqDryICgUEgJswv8OGwEO1DP0yk7iu3P+4uNKXUUrXinM6JGa0gT1ZR7jbrITm2rG3YYVORL/2Of6WQnSxe1iUOBvNO9I4XzxCoVYVNTA+5M9+GCO5WdY6Ur4hVrR57ogzU/wCqkVTYz4u/u4a89EO0SvrXvufmeGFa3U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778894185; c=relaxed/simple;
-	bh=LjtG0cq3tc+oYX8UP5INN6Ba1JgDmi3hokOGghsAnfs=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=TaThFYn+e4HvWG6+aRZGDQ9NwSLw1x+CKlvEEnceArfqzg6mjO+3z/zxsmj3ZHBvItHVFV8+4PM8bQMYGSdbIE97Pim7Eju0kl7JE4omEDeRfZjAh7IMfvy3cQkHk8JZN10DFHXdFtuiwe7WMUp9MM4lpwiy2FPNNsBlLd5b+hs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eWVzftvi; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778904402; c=relaxed/simple;
+	bh=GBwaUEyCsHc0bhV3MvwOkn2yoHIHILajZ2KK2Sj624E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gLe4DamHcaTq84236QgB/jcD3G4cIJi1y5JnhiyPVKpHQMboONSbjMKjZYpXZWJJBcPR2Xr3z2mhBx8ifaBrG3Cp6jm00RUjoDI4tgx/U+hghxDliN7nSpPefe6nLpiPblgaTp+Ho5qgAZKj9toeLY5RJTEWhxLJb71JiuQVlXw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=m/T4jWUy; arc=none smtp.client-ip=95.215.58.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eWVzftvi"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E5D0C2BCB0;
-	Sat, 16 May 2026 01:16:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778894184;
-	bh=LjtG0cq3tc+oYX8UP5INN6Ba1JgDmi3hokOGghsAnfs=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=eWVzftvi5gV+xlN5Qfe3OmsQ0BSOeiqvLcrql2hEb0tdsceOo6tBUHjLcBW4SPcC3
-	 tueo4DgaKRloKUXBPcd6aZyrThT0GtAT54Z7a8v2j14cPl17xv1JSwfFDSyGnbWvIf
-	 7mx8DLqhjG5j/Be6a7QDLxNFRhWoRvmyxs700DIHIBVM21DG75sp6O2yM9onAgpVve
-	 FnypbyxVRgmU2KUB+NOwNDuwg253WUgzrpHDOVoyA4iB+7+NUkNTA/2eTL0eh6r708
-	 6V0+825v5n8UpqSg+qAJBXG5ZyUuG659TC4ConmXh+VW1ZiuXoOkNvhv/u4NLtDZkd
-	 c8O6+wXQo5prg==
-Date: Fri, 15 May 2026 18:16:23 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Fernando Fernandez Mancera <fmancera@suse.de>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- horms@kernel.org, pabeni@redhat.com, edumazet@google.com,
- dsahern@kernel.org, davem@davemloft.net
-Subject: Re: [PATCH 3/3 net-next v4] selftests: net: add test for IPv4
- devconf netlink notifications
-Message-ID: <20260515181623.5a44140e@kernel.org>
-In-Reply-To: <f528360c-18b3-46e5-8ba8-88f921203716@suse.de>
-References: <20260510081528.5257-1-fmancera@suse.de>
-	<20260510081528.5257-3-fmancera@suse.de>
-	<20260513193544.47970cb8@kernel.org>
-	<bd560c89-c71f-4ef5-a0fd-5ea096a0f767@suse.de>
-	<20260514162429.366b94c9@kernel.org>
-	<f528360c-18b3-46e5-8ba8-88f921203716@suse.de>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="m/T4jWUy"
+Message-ID: <f76b79d3-080a-4931-873e-99d4b3e1020f@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1778904398;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=csEBmhV4pBMWZ2fB04greY5anYTJC5J151pnKD1dZ50=;
+	b=m/T4jWUyKVPBrEtgI+LssBYE8Jr1JtMKr0LC+7/kLTiQQ5hs1U9JvcXG/ff5kGZB9kDH8j
+	yfg3OKQY/qc5xL9N70vxIHxOISGzjIXPdS29DbHnveiqosMrQEKPuglL6ufFzM10cY/+yN
+	CEhCLgcRYDzRn7tVG2TNL9cq+EyTS8I=
+Date: Sat, 16 May 2026 12:06:14 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Subject: Re: [PATCH v7 2/6] mm/memory-failure: surface unhandlable kernel
+ pages as -ENOTRECOVERABLE
+Content-Language: en-US
+To: Breno Leitao <leitao@debian.org>
+Cc: linmiaohe@huawei.com, akpm@linux-foundation.org, david@kernel.org,
+ ljs@kernel.org, vbabka@kernel.org, rppt@kernel.org, surenb@google.com,
+ mhocko@suse.com, shuah@kernel.org, nao.horiguchi@gmail.com,
+ rostedt@goodmis.org, mhiramat@kernel.org, mathieu.desnoyers@efficios.com,
+ corbet@lwn.net, skhan@linuxfoundation.org, liam@infradead.org,
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ kernel-team@meta.com
+References: <agXcPleVC9LGVCmj@gmail.com>
+ <20260515070353.87244-1-lance.yang@linux.dev> <agcbfLHT5ZWnNeN0@gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Lance Yang <lance.yang@linux.dev>
+In-Reply-To: <agcbfLHT5ZWnNeN0@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, 15 May 2026 10:02:50 +0200 Fernando Fernandez Mancera wrote:
-> >> No, AFAIU, iproute2 does not expose devconf settings. The main user of
-> >> IFLA_INET_CONF are netlink libraries and other userspace tools that
-> >> heavily rely on netlink operations like NetworkManager, nmstate, nispor,
-> >> rust-netlink..  
-> > 
-> > Isn't this ip netconf ?
-> >   
-> 
-> Oh sorry, I should have clarified it. ip netconf only shows/query them 
-> but it cannot set them AFAICS.
-> 
-> Usage: ip netconf show [ dev STRING ]
 
-Oh, fun. anyway, you gotta find a better way. Or just give up on the
-selftest, the YNL hack is too ugly to live
+
+On 2026/5/15 21:13, Breno Leitao wrote:
+[...]
+>>
+>> Wonder if it would be simpler to just do a positive check near the top
+>> of get_any_page() instead. Something like:
+>>
+>> static bool hwpoison_unrecoverable_kernel_page(struct page *page,
+>> 						unsigned long flags)
+> 
+> Ack. We probably want to call it something like HWPoisonKernelOwned() to
+> follow the same naming sematics of these helpers, such as HWPoisonHandlable()
+> 
+> By the way, I will re-include the self test back to this patch series,
+> In case they are not useful, we do not merge it.
+> 
+
+Sounds good :)
+
+Can you also test the relevant page types if possible, especially
+the ones the new helper is supposed to classify?
+
+Cheers, Lance
