@@ -1,175 +1,256 @@
-Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
+Received: from smtp.uniroma2.it (smtp.uniroma2.it [160.80.4.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 384581643B
-	for <linux-kselftest@vger.kernel.org>; Sat, 16 May 2026 16:18:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6474F405C4D;
+	Sat, 16 May 2026 16:32:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=160.80.4.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778948310; cv=none; b=Ewc8UL0ysoqcK9GYdTP65B7rHvvoehBblx0gorgVT/x0PBUd6dMiYCyh4HIdfkRQJaNNHX2J2aB8YiOsTBWpD0oOXmvBvHcJacmF5qovTUxJaTd6+QpypcdJOZqOJBHrE5ZpgCho2TIbBx00B696VgBEScalc/jiYXw5FKoJLcc=
+	t=1778949167; cv=none; b=RYdaf6Kgfv6d7jTfE8t34j2RRDLNPb1L7/H5TQiX9kC6nTWUVINEQfup4l2zvO6IcZi8uor/YUWwHy9bkM5s4o66mMZ88iTmjHFDiLrHhHshqHQnrGaW6dJSsTM0D7yzLuA3Oq95OvEzSI21kPHh1tQUrjHZ4H6MD8HIvCv1dMk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778948310; c=relaxed/simple;
-	bh=FM7gTZ1mmAAgFi4vaJTykZhCfX+sgQguDzAIZMiy5x4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oc7rzpxlS5ttKX0q53uBjpLVcdswBtLCCASE4wWC1WO4EKpn3gBPaGuzuSeLvPoIZpmUbG8TspG3/Wj7/ja+wmo4Y5bc5xFTpL9QjfCczDjpjGuQVH9IR7rbb109ISkkGAcXy5X7fL4UVqjKMU169u759cqfW4/8T02Ic8mU/xA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=r4UtEKN8; arc=none smtp.client-ip=95.215.58.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1778949167; c=relaxed/simple;
+	bh=PWRlz0bAYGNEss5NAODwa78EZdoYB4GvTMaDda35irc=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=D4+j2XOkfbGEbo5LalsbH7QWlqUy3VdrA8svKshZ0kY5HZk2ovwHC9lBlGREq8/kcKVjxejHyqdY5rmkmObV5+TcDzgpQoHtWBevQ5W/B8/JkGcVPK/zUuIF3LzNnu3VBBp4DFHHN1QW9WOXtTA4kFWduxUbHEaJa2N3FRiKH/Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniroma2.it; spf=pass smtp.mailfrom=uniroma2.it; dkim=permerror (0-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b=o7bu4ttN; dkim=pass (2048-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b=Ryku/9CD; arc=none smtp.client-ip=160.80.4.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniroma2.it
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniroma2.it
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="r4UtEKN8"
-Message-ID: <0171629c-bdd3-4661-a4e6-2698dd623c3a@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1778948306;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	dkim=permerror (0-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b="o7bu4ttN";
+	dkim=pass (2048-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b="Ryku/9CD"
+Received: from smtpauth-2019-1.uniroma2.it (smtpauth-2019-1.uniroma2.it [160.80.5.46])
+	by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 64GGQ0f7022595;
+	Sat, 16 May 2026 18:26:06 +0200
+Received: from lubuntu-18.04 (host-95-246-236-184.retail.telecomitalia.it [95.246.236.184])
+	by smtpauth-2019-1.uniroma2.it (Postfix) with ESMTPSA id DBF44122901;
+	Sat, 16 May 2026 18:25:56 +0200 (CEST)
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=uniroma2.it;
+	s=ed201904; t=1778948757; h=from:from:sender:reply-to:subject:subject:date:date:
+	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+	 content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=vR+lCQ0+V0Cdos5Ij8lDKUWYnxsl8sJZdNMOw6mrUN4=;
-	b=r4UtEKN8a1UsCGh7yOfFegUVpsKLPA7q0L22MVLySoDpU72FG41c8Sk94hzx7+op1L62Oz
-	NaCH7lToB2Na5CMycO9mwvJGHJ713s+iLAHLlfLJz9LDQQyL/4fsf4ntfucLEX4VYbYYuz
-	BvPZAYWr9/U61fKJ1pRdQpQJBOlkbSs=
-Date: Sun, 17 May 2026 00:18:04 +0800
+	bh=RTO1RAu7euvHtj4HzoctoToKt9Ch9IUKUgMEEx4QzpQ=;
+	b=o7bu4ttNt52bH3A6pny5FyhRyrFs+Yn4MFCg9/fTZe27XN9jDx6O3FxJhA41tQo+R2DyA8
+	dM+TGYj7SRzLH2BA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniroma2.it; s=rsa201904;
+	t=1778948757; h=from:from:sender:reply-to:subject:subject:date:date:
+	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+	 content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=RTO1RAu7euvHtj4HzoctoToKt9Ch9IUKUgMEEx4QzpQ=;
+	b=Ryku/9CDDmWB/aFrWWfQ0ClbLjlvV00F9zcAwNDPa1czzXWpj3zwoMx3F1aDO8Xenp/dSx
+	XUsOri3sl7ZMaX+CBY5BBPIlYxp0dSUZ1UIpXy8UUDGD1jpCE1+nVuI0OULcAOtQ2tOGAm
+	KZp7ERlmvcMGi6CP9UexUuOguskVP2274Y9d135F7XZ6YIAUClGgyzS5JYGsn/LrTd8Yh7
+	EMMPE3MhF4VbQKSK2SYn42ZIVDDs7gw5FhXEVNu63znQLgAS4Sotnn1hQX9E9KzmMhJ41V
+	xTaU65EK+l+ZKGk3gbqtRzEl3FMR9Q8KyXPUmcoyOZvvJY1kBu2zvnGuN/ykIQ==
+Date: Sat, 16 May 2026 18:25:56 +0200
+From: Andrea Mayer <andrea.mayer@uniroma2.it>
+To: Yuya Kusakabe <yuya.kusakabe@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet
+ <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni
+ <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+        Justin Iurman
+ <justin.iurman@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, Jonathan Corbet
+ <corbet@lwn.net>,
+        Shuah Khan <skhan@linuxfoundation.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, stefano.salsano@uniroma2.it,
+        ahabdels@cisco.com, Andrea Mayer
+ <andrea.mayer@uniroma2.it>
+Subject: Re: [PATCH v2 0/7] seg6: add SRv6 Mobile User Plane (RFC 9433)
+ behaviors
+Message-Id: <20260516182556.66af27a9c63208435911990b@uniroma2.it>
+In-Reply-To: <20260505-seg6-mobile-v2-0-9e8022bdfdb6@gmail.com>
+References: <20260505-seg6-mobile-v2-0-9e8022bdfdb6@gmail.com>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Subject: Re: [PATCH RESEND bpf-next v10 2/8] bpf: clear list node owner and
- unlink before drop
-To: Eduard Zingerman <eddyz87@gmail.com>,
- Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, ast@kernel.org, memxor@gmail.com, corbet@lwn.net,
- martin.lau@linux.dev, daniel@iogearbox.net, andrii@kernel.org,
- song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
- kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
- shuah@kernel.org, chengkaitao@kylinos.cn, skhan@linuxfoundation.org,
- vmalik@redhat.com, linux-kselftest@vger.kernel.org, martin.lau@kernel.org,
- clm@meta.com, ihor.solodrai@linux.dev, bot+bpf-ci@kernel.org
-References: <20260512055919.95716-3-kaitao.cheng@linux.dev>
- <da95f45b43d94d17796b19abc4c555e35daafab7d5e1cdca3714fe0f54ab8cce@mail.kernel.org>
- <e141699dab70282d811ec30bbf2aa8279706817b.camel@gmail.com>
- <DII0TT9LXYCX.2GMM6QA4Q9BPZ@gmail.com>
- <0fb2d99b-b122-44fa-a8bc-9befe6e350bc@linux.dev>
- <7fa6794161a8bd4fdbc21dad68e86e9770c873cc.camel@gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Kaitao Cheng <kaitao.cheng@linux.dev>
-In-Reply-To: <7fa6794161a8bd4fdbc21dad68e86e9770c873cc.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
+X-Virus-Status: Clean
 
+On Tue, 05 May 2026 01:30:10 +0900
+Yuya Kusakabe <yuya.kusakabe@gmail.com> wrote:
 
+Hi Yuya,
 
-在 2026/5/16 02:24, Eduard Zingerman 写道:
-> On Fri, 2026-05-15 at 12:34 +0800, Kaitao Cheng wrote:
->>
->> 在 2026/5/14 09:50, Alexei Starovoitov 写道:
->>> On Wed May 13, 2026 at 3:53 PM PDT, Eduard Zingerman wrote:
->>>> On Tue, 2026-05-12 at 06:41 +0000, bot+bpf-ci@kernel.org wrote:
->>>>
->>>> [...]
->>>>
->>>>> When a BPF program holds an owning or refcount-acquired reference to
->>>>> one of these nodes (node X), which is structurally supported because
->>>>> __bpf_obj_drop_impl() uses refcount_dec_and_test() and only frees at
->>>>> refcount 0, a concurrent push to a DIFFERENT bpf_list_head becomes a
->>>>> corruption:
->>>>>
->>>>> CPU 0 (bpf_list_head_free, lock released)  CPU 1 (BPF prog, refcount X)
->>>>> -----------------------------------------   ----------------------------
->>>>> (owner of X == NULL, X linked in drain)
->>>>>                                             bpf_list_push_back(other, X)
->>>>>                                               __bpf_list_add: spin_lock()
->>>>>                                               cmpxchg(X->owner, NULL,
->>>>>                                                       POISON) -> OK
->>>>>                                               list_add_tail(&X->list_head,
->>>>>                                                             other_head)
->>>>>                                                 -> overwrites X->next,
->>>>>                                                    X->prev, corrupts
->>>>>                                                    other_head's chain
->>>>>                                                    because X is still
->>>>>                                                    stitched into drain
->>>>> pos = drain.next;      (may be X or neighbor using X's stale next)
->>>>> list_del_init(pos);    reads X->next/prev now pointing into other_head,
->>>>>                        corrupts other_head's list and/or drain
->>>>
->>>>
->>>> Kaitao, this scenario seem plausible, could you please comment on it?
->>>
->>> I think bot is correct.
->>> This patch looks buggy.
->>> It seems to me an optimization that breaks the concurrent logic.
->>> May be just drop this patch and reorder the other one, so that bot
->>> sees nonown suffix logic first.
->>
->> This patch is still necessary because it addresses the problem discussed
->> in this thread:
->> https://lore.kernel.org/all/DH846C0P88QU.16YT12I1LXBZM@etsalapatis.com/
->>
->> The patch does have a bug, however. To fix the issues we are seeing now,
->> I propose the additional changes below and would appreciate feedback.
->>
->> --- a/kernel/bpf/helpers.c
->> +++ b/kernel/bpf/helpers.c
->> @@ -2263,8 +2263,10 @@ void bpf_list_head_free(const struct btf_field *field, void *list_head,
->>         if (!head->next || list_empty(head))
->>                 goto unlock;
->>         list_for_each_safe(pos, n, head) {
->> -               WRITE_ONCE(container_of(pos,
->> -                       struct bpf_list_node_kern, list_head)->owner, NULL);
->> +               struct bpf_list_node_kern *node;
->> +
->> +               node = container_of(pos, struct bpf_list_node_kern, list_head);
->> +               WRITE_ONCE(node->owner, BPF_PTR_POISON);
->>                 list_move_tail(pos, &drain);
->>         }
->>  unlock:
->> @@ -2272,8 +2274,12 @@ void bpf_list_head_free(const struct btf_field *field, void *list_head,
->>         __bpf_spin_unlock_irqrestore(spin_lock);
->>
->>         while (!list_empty(&drain)) {
->> +               struct bpf_list_node_kern *node;
->> +
->>                 pos = drain.next;
->> +               node = container_of(pos, struct bpf_list_node_kern, list_head);
->>                 list_del_init(pos);
->> +               WRITE_ONCE(node->owner, NULL);
-> 
-> I think this still leaves a short race window open.
-> Why does the .owner has field to be NULL?
-> Can the logic that implies for it to be NULL be extended to accept
-> POISON as well?
+Thanks for the work. Some comments on the overall design below. I will
+reply on the individual patches separately.
 
-Here, before setting owner to NULL, list_del_init() has already been
-executed, which means the node no longer belongs to any list. This
-should match the semantic meaning of owner == NULL.
+> This series adds the in-kernel data path for the SRv6 Mobile User
+> Plane (MUP) architecture defined in RFC 9433.  SRv6 MUP integrates
+> GTP-U mobile traffic into an SRv6 transport domain by mapping the
+> 5-tuple (TEID, QFI, R, U, PDU Session ID) into a single SID, allowing
+> operators to replace the GTP-U overlay between the gNB and the
+> upstream UPF with native SRv6 forwarding while keeping the radio side
+> unchanged.
+>
+> The series implements the six MUP behaviors that an SRv6 MUP gateway
+> typically needs:
+>
+>   End.MAP         (RFC 9433 Section 6.2) -- swap DA with the next SID
+>                                             without consuming the SRH
+>   End.M.GTP6.D    (Section 6.3) -- IPv6/GTP-U to SRv6 headend encap
+>   End.M.GTP6.D.Di (Section 6.4) -- drop-in mode variant of the above
+>                                    (preserves the original outer DA at
+>                                    SRH[0] and discards TEID/QFI)
+>   End.M.GTP6.E    (Section 6.5) -- SRv6 to IPv6/GTP-U egress encap
+>   End.M.GTP4.E    (Section 6.6) -- SRv6 to IPv4/GTP-U egress encap
+>   H.M.GTP4.D      (Section 6.7) -- IPv4/GTP-U to SRv6 headend encap
 
-Do you mean deleting WRITE_ONCE(node->owner, NULL) and preventing
-all subsequent __bpf_list_add() operations on this node?
+RFC 9433 Section 6 is titled "SRv6 Segment Endpoint Mobility Behaviors",
+but Section 6.7 defines H.M.GTP4.D as "SR Policy Headend with tunnel
+decapsulation and map to an SRv6 policy". This behavior receives IPv4
+packets and is not bound to any SID, so it does not fit the endpoint
+model that seg6_local implements. Placing it there required relaxing the
+ETH_P_IPV6 guard to accept ETH_P_IP and adding input_family to
+seg6_action_desc, for a single behavior that does not share the endpoint
+model.
 
-> 
->>                 /* The contained type can also have resources, including a
->>                  * bpf_list_head which needs to be freed.
->>                  */
+seg6_local is not the natural place for this behavior. The UAPI cannot
+be undone once merged, so where it should live needs discussion on the
+list before we proceed.
 
+>
+> End.Limit (RFC 9433 Section 6.8) is intentionally out of scope.
 
->> @@ -2481,6 +2487,14 @@ static int __bpf_list_add(struct bpf_list_node_kern *node,
->>         if (unlikely(!h->next))
->>                 INIT_LIST_HEAD(h);
->> 
->> +       /* bpf_list_head_free() marks nodes being detached with BPF_PTR_POISON
->> +        * before list_del_init().  cmpxchg(NULL, POISON) below would fail with
->> +        * that old value and fall into the generic error path, which wrongly
->> +        * calls __bpf_obj_drop_impl().  Reject POISON up front instead.
->> +        */
->> +       if (READ_ONCE(node->owner) == BPF_PTR_POISON)
->> +               return -EINVAL;
->> +
+>
+> All behaviors plug into the existing seg6_local lwtunnel framework, so
+> they are configurable through the standard "ip route ... encap
+> seg6local action ..." interface.
 
-This code block is not needed; I will remove it.
+This adds ~2.2k lines to seg6_local.c, bringing it from ~2.7k to ~5k
+lines. The behaviors reuse the existing seg6_local infrastructure (SRH
+validation, seg6_do_srh_encap, seg6_lookup_nexthop), while the GTP-U
+parsing, encapsulation, and PDU Session handling, for example, is new
+and self-contained. Given the volume, moving the MUP code into a
+separate seg6_mobile.c (say CONFIG_IPV6_SEG6_MUP) would keep seg6_local
+focused on the RFC 8986 endpoint framework. There are trade-offs
+either way and I think this deserves discussion on the list.
 
--- 
-Thanks
-Kaitao Cheng
+There is significant duplication across the introduced behaviors: for
+example the GTP-U parsing, inner protocol dispatch, and NF_HOOK plumbing
+are nearly identical each time, and the small differences are already
+hiding issues (HMAC validation missing in some, malformed SRH silently
+accepted in others, wrong drop reasons). Some of the individual
+functions are also well over 100 lines. Splitting them with helpers
+would help.
+The new code also has some style drift from seg6_local.c (variable
+declaration ordering, scope blocks, blank lines) that should be fixed.
 
+I think this patchset should be broken into smaller patchsets, one per
+behavior, each with the behavior, its selftest, and any needed helpers as
+separate patches. The same approach was used for End.DT4/End.DT6 and
+End.DT46. End.M.GTP4.E alone is ~1.2k lines in a single diff.
+
+> No new netlink families are
+> introduced -- the new SEG6_LOCAL_MOBILE_* attributes extend
+> SEG6_LOCAL_MAX in an add-only way, and the new SEG6_LOCAL_ACTION_*
+> values are appended.
+
+The attribute layout and semantics are probably the most sensitive part
+of the series and need to be settled before it can go in, since the UAPI
+cannot be changed once merged.
+
+The series reuses SEG6_LOCAL_NH6, SEG6_LOCAL_SRH and SEG6_LOCAL_OIF with
+semantics that differ from the existing behaviors. NH6 today means
+next-hop in End.X/DX6. This series reuses it as DA replacement in
+End.MAP and as prefix template in H.M.GTP4.D.
+SRH is inserted verbatim in End.B6/B6.Encaps but augmented per-packet in
+the mobile behaviors. These attributes have established UAPI semantics
+from their existing behaviors. Giving them a different meaning in new
+behaviors is a UAPI semantic divergence.
+
+The selftests use OIF on all five GTP behaviors to select a VRF for the
+lookup, but that is what TABLE and VRFTABLE are for (End.DT4, End.DT6).
+OIF in the existing behaviors means output interface (End.X) or L2
+egress device (End.DX2). VRF support is a nice-to-have that can be added
+later as a separate optional attribute.
+
+>
+> The egress behaviors (End.M.GTP4.E and End.M.GTP6.E) accept an
+> optional per-route pdu_type attribute that is the sole control
+> for inserting the GTP-U PDU Session Container (3GPP TS 38.415 Section
+> 5.5.2).  When pdu_type is set (dl/ul/0..15), every emitted GTP-U
+> packet carries the container with that PDU Type and the QFI extracted
+> from Args.Mob.Session.  When pdu_type is unset, the egress emits
+> a short GTPv1-U header with no container.  pdu_type must be
+> configured on egress routes serving 5G N3 traffic; omitting it is
+> intended only for LTE-only / S1-U-style deployments where no PDU
+> Session Container is exchanged.
+>
+> The matching iproute2 patch series has been posted to iproute2-next:
+> https://lore.kernel.org/netdev/20260505-seg6-mobile-v2-0-93291b7b0134@gmail.com/
+
+The user-facing parameter names and their semantics are defined in the
+iproute2 series (where the man page lives), so that is probably the
+better place to discuss keyword choices and attribute naming.
+
+> [snip]
+>  include/net/dropreason-core.h                      |   40 +
+
+The series introduces six mobile-specific drop reasons. Drop reasons are
+visible to userspace via the kfree_skb tracepoint (perf, bpftrace,
+dropwatch), so they look like a kind of interface and their names should
+match the actual failure.
+
+BAD_SID and BAD_GTPU make sense as mobile-specific reasons. The other
+four have issues: NOMEM and MTU_EXCEEDED duplicate existing generic
+reasons (NOMEM and PKT_TOO_BIG). INVALID_SRH_SL is used for multiple SRH
+validation failures, not just Segments Left (HMAC failure is also
+reported as INVALID_SRH_SL). BAD_INNER is used as a catch-all for outer
+header pull failures and encapsulation errors, neither of which involves
+the inner payload.
+
+We could think about a prep patch introducing SRv6-level drop reasons
+(SEG6_INVALID_SRH, SEG6_HMAC, etc.) that both the existing behaviors and
+the MUP ones can share.
+
+> [snip]
+>  .../selftests/net/srv6_end_m_gtp4_e_test.sh        |  486 ++++
+>  .../selftests/net/srv6_end_m_gtp6_d_di_test.sh     |  427 ++++
+>  .../selftests/net/srv6_end_m_gtp6_d_test.sh        |  497 ++++
+>  .../selftests/net/srv6_end_m_gtp6_e_test.sh        |  402 +++
+>  tools/testing/selftests/net/srv6_end_map_test.sh   |  103 +
+>  .../testing/selftests/net/srv6_h_m_gtp4_d_test.sh  |  487 ++++
+
+Selftests for the five GTP behaviors heavily depend on python3 and scapy
+heredocs embedded in the shell scripts for packet construction and
+validation, which adds an external runtime dependency. A statically
+compiled C helper would remove it and avoid embedding python heredocs
+in shell scripts.
+A few cases worth covering: SRH and no-SRH input paths where the
+behavior accepts both, missing SRH where the behavior requires
+it, malformed SRH, and invalid attribute values.
+
+The five GTP behaviors pass per-packet context to a finish callback through
+skb->cb, and recover the lwtstate via skb_dst(skb)->lwtstate.
+When nf_hooks_lwtunnel is enabled, an NF_HOOK sits between the input
+handler and the finish callback. Netfilter processing at this hook can then
+corrupt the cb (IPCB/IP6CB aliases skb->cb) or drop/replace the skb dst, so
+the finish callback dereferences a NULL or unrelated dst.
+Even if the dst is preserved, the cb may have been modified.
+
+The dst problem is pre-existing from 7a3f5b0de364 ("netfilter: add
+netfilter hooks to SRv6 data plane") and affects seg6_iptunnel too. Both
+issues need a robust fix before this series can go in. I want to look at
+this myself and will Cc you when I do, as the five new behaviors may need
+to be adjusted on top.
+
+> [snip]
+
+> Best regards,
+> --
+> Yuya Kusakabe <yuya.kusakabe@gmail.com>
+
+Ciao,
+Andrea
