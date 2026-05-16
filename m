@@ -1,81 +1,149 @@
-Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 598B424676D
-	for <linux-kselftest@vger.kernel.org>; Sat, 16 May 2026 04:06:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 255D830C17E
+	for <linux-kselftest@vger.kernel.org>; Sat, 16 May 2026 07:02:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778904402; cv=none; b=WjjFBRHqDryICgUEgJswv8OGwEO1DP0yk7iu3P+4uNKXUUrXinM6JGa0gT1ZR7jbrITm2rG3YYVORL/2Of6WQnSxe1iUOBvNO9I4XzxCoVYVNTA+5M9+GCO5WdY6Ur4hVrR57ogzU/wCqkVTYz4u/u4a89EO0SvrXvufmeGFa3U=
+	t=1778914961; cv=none; b=lbPozncSLstQm9qY8if3DxzB1HUz/k21uIfnmP5k3rSE2q88uFrNFvKWKF8pbhnVLx78MnV7aIbY82NkOEgPQrECA6UYlZ917SaLJplSOiQ+BR0Sv340YTW+nYYgpws3rlsrYzWkFbBSEpeZLzq+C3C5/eiHBktvqT4t52RyZDw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778904402; c=relaxed/simple;
-	bh=GBwaUEyCsHc0bhV3MvwOkn2yoHIHILajZ2KK2Sj624E=;
+	s=arc-20240116; t=1778914961; c=relaxed/simple;
+	bh=tMMZNlzAyJhWGPORawbViec/lbgCUwgopIP8U5sACYE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gLe4DamHcaTq84236QgB/jcD3G4cIJi1y5JnhiyPVKpHQMboONSbjMKjZYpXZWJJBcPR2Xr3z2mhBx8ifaBrG3Cp6jm00RUjoDI4tgx/U+hghxDliN7nSpPefe6nLpiPblgaTp+Ho5qgAZKj9toeLY5RJTEWhxLJb71JiuQVlXw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=m/T4jWUy; arc=none smtp.client-ip=95.215.58.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 In-Reply-To:Content-Type; b=ZqqX0TUu0DwHragZk3KuaECw21I0eRTY8x6ZE7rH0ek5pBqpEOh5xPckQTtAcBvrjvF72cXpsn5NCwIYQj/BYq3h1BaMM+pI1vuwvZ+vocuXNdBowm2HSdN+4Un32lt90fgbAnMmPID8cQ8g95tVpwwDWiyq3FDmDmnM86sDnFs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=GkCWD3sm; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=DPIqoM9N; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=GkCWD3sm; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=DPIqoM9N; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="m/T4jWUy"
-Message-ID: <f76b79d3-080a-4931-873e-99d4b3e1020f@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1778904398;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="GkCWD3sm";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="DPIqoM9N";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="GkCWD3sm";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="DPIqoM9N"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id B1B25618B2;
+	Sat, 16 May 2026 07:02:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1778914956; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=csEBmhV4pBMWZ2fB04greY5anYTJC5J151pnKD1dZ50=;
-	b=m/T4jWUyKVPBrEtgI+LssBYE8Jr1JtMKr0LC+7/kLTiQQ5hs1U9JvcXG/ff5kGZB9kDH8j
-	yfg3OKQY/qc5xL9N70vxIHxOISGzjIXPdS29DbHnveiqosMrQEKPuglL6ufFzM10cY/+yN
-	CEhCLgcRYDzRn7tVG2TNL9cq+EyTS8I=
-Date: Sat, 16 May 2026 12:06:14 +0800
+	bh=fx1HImtpNbf9r3+ZuscqsV8lfMcF7aUDitALcVW1KCU=;
+	b=GkCWD3smq2JUjVeH4m9BungaGkxVsmfqMzqxrlXizkYIFIMbiChlvVDgAjZ6oHxSzDnI2J
+	o2xwrL1acR7zMg/0ky2YPZWNk9xYox3plDxOZBXNK0YcsmS+UOBqTVp4DSKO8A5jM6m8Lp
+	Iz9p47s37NvxwdWrR5jo5BGSFnGPb9c=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1778914956;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=fx1HImtpNbf9r3+ZuscqsV8lfMcF7aUDitALcVW1KCU=;
+	b=DPIqoM9NAv/DHCfeAvUQ0fLyVMsRc1ylU97Fbh2HJFC0S9x8iSRAeysSpMyf6fhKSpNr7A
+	Gl7+aN4LT6NrVoDg==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1778914956; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=fx1HImtpNbf9r3+ZuscqsV8lfMcF7aUDitALcVW1KCU=;
+	b=GkCWD3smq2JUjVeH4m9BungaGkxVsmfqMzqxrlXizkYIFIMbiChlvVDgAjZ6oHxSzDnI2J
+	o2xwrL1acR7zMg/0ky2YPZWNk9xYox3plDxOZBXNK0YcsmS+UOBqTVp4DSKO8A5jM6m8Lp
+	Iz9p47s37NvxwdWrR5jo5BGSFnGPb9c=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1778914956;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=fx1HImtpNbf9r3+ZuscqsV8lfMcF7aUDitALcVW1KCU=;
+	b=DPIqoM9NAv/DHCfeAvUQ0fLyVMsRc1ylU97Fbh2HJFC0S9x8iSRAeysSpMyf6fhKSpNr7A
+	Gl7+aN4LT6NrVoDg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id CA076593A8;
+	Sat, 16 May 2026 07:02:35 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id v4gCKosWCGotawAAD6G6ig
+	(envelope-from <fmancera@suse.de>); Sat, 16 May 2026 07:02:35 +0000
+Message-ID: <f5cae72f-93c7-41d7-b7db-2b60281afb72@suse.de>
+Date: Sat, 16 May 2026 09:02:27 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v7 2/6] mm/memory-failure: surface unhandlable kernel
- pages as -ENOTRECOVERABLE
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/3 net-next v4] selftests: net: add test for IPv4 devconf
+ netlink notifications
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ horms@kernel.org, pabeni@redhat.com, edumazet@google.com,
+ dsahern@kernel.org, davem@davemloft.net
+References: <20260510081528.5257-1-fmancera@suse.de>
+ <20260510081528.5257-3-fmancera@suse.de> <20260513193544.47970cb8@kernel.org>
+ <bd560c89-c71f-4ef5-a0fd-5ea096a0f767@suse.de>
+ <20260514162429.366b94c9@kernel.org>
+ <f528360c-18b3-46e5-8ba8-88f921203716@suse.de>
+ <20260515181623.5a44140e@kernel.org>
 Content-Language: en-US
-To: Breno Leitao <leitao@debian.org>
-Cc: linmiaohe@huawei.com, akpm@linux-foundation.org, david@kernel.org,
- ljs@kernel.org, vbabka@kernel.org, rppt@kernel.org, surenb@google.com,
- mhocko@suse.com, shuah@kernel.org, nao.horiguchi@gmail.com,
- rostedt@goodmis.org, mhiramat@kernel.org, mathieu.desnoyers@efficios.com,
- corbet@lwn.net, skhan@linuxfoundation.org, liam@infradead.org,
- linux-mm@kvack.org, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- kernel-team@meta.com
-References: <agXcPleVC9LGVCmj@gmail.com>
- <20260515070353.87244-1-lance.yang@linux.dev> <agcbfLHT5ZWnNeN0@gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Lance Yang <lance.yang@linux.dev>
-In-Reply-To: <agcbfLHT5ZWnNeN0@gmail.com>
+From: Fernando Fernandez Mancera <fmancera@suse.de>
+In-Reply-To: <20260515181623.5a44140e@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+X-Spam-Flag: NO
+X-Spam-Score: -4.30
+X-Spamd-Result: default: False [-4.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid]
+X-Spam-Level: 
 
-
-
-On 2026/5/15 21:13, Breno Leitao wrote:
-[...]
+On 5/16/26 3:16 AM, Jakub Kicinski wrote:
+> On Fri, 15 May 2026 10:02:50 +0200 Fernando Fernandez Mancera wrote:
+>>>> No, AFAIU, iproute2 does not expose devconf settings. The main user of
+>>>> IFLA_INET_CONF are netlink libraries and other userspace tools that
+>>>> heavily rely on netlink operations like NetworkManager, nmstate, nispor,
+>>>> rust-netlink..
+>>>
+>>> Isn't this ip netconf ?
+>>>    
 >>
->> Wonder if it would be simpler to just do a positive check near the top
->> of get_any_page() instead. Something like:
+>> Oh sorry, I should have clarified it. ip netconf only shows/query them
+>> but it cannot set them AFAICS.
 >>
->> static bool hwpoison_unrecoverable_kernel_page(struct page *page,
->> 						unsigned long flags)
+>> Usage: ip netconf show [ dev STRING ]
 > 
-> Ack. We probably want to call it something like HWPoisonKernelOwned() to
-> follow the same naming sematics of these helpers, such as HWPoisonHandlable()
-> 
-> By the way, I will re-include the self test back to this patch series,
-> In case they are not useful, we do not merge it.
+> Oh, fun. anyway, you gotta find a better way. Or just give up on the
+> selftest, the YNL hack is too ugly to live
 > 
 
-Sounds good :)
+Fair, let me see what I can do. Otherwise, Paolo as you requested the 
+selftest, would it be acceptable for you to drop it given the situation? 
+I looking for alternatives anyway :-)
 
-Can you also test the relevant page types if possible, especially
-the ones the new helper is supposed to classify?
-
-Cheers, Lance
+Thanks!
+Fernando.
