@@ -1,185 +1,69 @@
-Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 709F13E92AB;
-	Fri, 15 May 2026 22:58:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17F1C171AF;
+	Sat, 16 May 2026 01:16:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778885916; cv=none; b=DqpNaE3syLVkNrTE1Jizh8q/LzJy7rVFDDibqmNTlUF4HQ4G4s+ebyf6VY/iK9CP563dO/V5gRhDpfshuvuYDsyRQ2cjtJmNpahntbiOOuVPga7PQhr+Bm93eldPcMBPQzyaoqKIxJcU3KV7rRR2q0ntDsmnOsoJStO+LwoO07Y=
+	t=1778894185; cv=none; b=UP3xDDgBGELxWR83xDK2cECUbzC9oiw8TxQoEX5CdEQcd+V429Tfk2pB7fUkYSURwa6Ff9hJdY/kGA8Q8U1ew90OQbkVtR1BDHrIf4+ds4AvWpB6y3Zb9r2264MYGF5gZerAZPlqz4IiJCzWmOw8VMVAnRE9vNszjtPQIR0kgS0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778885916; c=relaxed/simple;
-	bh=YCcPJH/vYgPQzSl/jsRGZR7a3T07mS4IJqsbO6CFGbA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UDI9fA4+ytBh86QNjsc59l5iF2cm8DCoJeBZVu2zPrQN1fKsEl9CFmeWxHf2PTgF92Z1Q1jSv7NS263UpE+Lms4WvueuCEwuF7SC2tg7s0lW9gNGnRvrtrKb2Zw9p6QmYBN2iiDVPkpBWbtRXs1pi4sTyKocxBVaJfHz7NsYVQg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FN46Z9kg; arc=none smtp.client-ip=91.218.175.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1778894185; c=relaxed/simple;
+	bh=LjtG0cq3tc+oYX8UP5INN6Ba1JgDmi3hokOGghsAnfs=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=TaThFYn+e4HvWG6+aRZGDQ9NwSLw1x+CKlvEEnceArfqzg6mjO+3z/zxsmj3ZHBvItHVFV8+4PM8bQMYGSdbIE97Pim7Eju0kl7JE4omEDeRfZjAh7IMfvy3cQkHk8JZN10DFHXdFtuiwe7WMUp9MM4lpwiy2FPNNsBlLd5b+hs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eWVzftvi; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FN46Z9kg"
-Message-ID: <bda702a1-18f5-47ed-8a4e-a01b94829e07@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1778885911;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ycnjTqUOfjzmeEfBwBIsxrCHrlibJg0T0GtKO5eKf28=;
-	b=FN46Z9kgrU4Kbrry6rzC1hKw5c/BjJWT9JzboldGA6XMR/SAGsv528OaUcjWjUgSQeYBmd
-	5K+exPVhr0rkGPOt/yb/c/n4qF/6CBQfTOFh6/xG+dXkoSNGmmEZt0uvPz9elT4wnWFAFD
-	bzNYWItnaGOho3LJep+0i0TX7jE83Ck=
-Date: Fri, 15 May 2026 15:58:14 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eWVzftvi"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E5D0C2BCB0;
+	Sat, 16 May 2026 01:16:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778894184;
+	bh=LjtG0cq3tc+oYX8UP5INN6Ba1JgDmi3hokOGghsAnfs=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=eWVzftvi5gV+xlN5Qfe3OmsQ0BSOeiqvLcrql2hEb0tdsceOo6tBUHjLcBW4SPcC3
+	 tueo4DgaKRloKUXBPcd6aZyrThT0GtAT54Z7a8v2j14cPl17xv1JSwfFDSyGnbWvIf
+	 7mx8DLqhjG5j/Be6a7QDLxNFRhWoRvmyxs700DIHIBVM21DG75sp6O2yM9onAgpVve
+	 FnypbyxVRgmU2KUB+NOwNDuwg253WUgzrpHDOVoyA4iB+7+NUkNTA/2eTL0eh6r708
+	 6V0+825v5n8UpqSg+qAJBXG5ZyUuG659TC4ConmXh+VW1ZiuXoOkNvhv/u4NLtDZkd
+	 c8O6+wXQo5prg==
+Date: Fri, 15 May 2026 18:16:23 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Fernando Fernandez Mancera <fmancera@suse.de>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ horms@kernel.org, pabeni@redhat.com, edumazet@google.com,
+ dsahern@kernel.org, davem@davemloft.net
+Subject: Re: [PATCH 3/3 net-next v4] selftests: net: add test for IPv4
+ devconf netlink notifications
+Message-ID: <20260515181623.5a44140e@kernel.org>
+In-Reply-To: <f528360c-18b3-46e5-8ba8-88f921203716@suse.de>
+References: <20260510081528.5257-1-fmancera@suse.de>
+	<20260510081528.5257-3-fmancera@suse.de>
+	<20260513193544.47970cb8@kernel.org>
+	<bd560c89-c71f-4ef5-a0fd-5ea096a0f767@suse.de>
+	<20260514162429.366b94c9@kernel.org>
+	<f528360c-18b3-46e5-8ba8-88f921203716@suse.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH 5/6] tools/build: selftests: Allow versioning LLVM lld
-To: James Clark <james.clark@linaro.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
- Adrian Hunter <adrian.hunter@intel.com>, Andrii Nakryiko
- <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>
-Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org,
- bpf@vger.kernel.org, linux-perf-users@vger.kernel.org, leo.yan@arm.com
-References: <20260514-james-perf-llvm-version-v1-0-6cac1a9a4c8d@linaro.org>
- <20260514-james-perf-llvm-version-v1-5-6cac1a9a4c8d@linaro.org>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20260514-james-perf-llvm-version-v1-5-6cac1a9a4c8d@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 
-On 5/14/26 2:32 AM, James Clark wrote:
-> Building with LLVM=... could result in a different version of lld being
-> used than the main toolchain for liburandom_read.so because it's
-> hardcoded to "lld" in this makefile.
+On Fri, 15 May 2026 10:02:50 +0200 Fernando Fernandez Mancera wrote:
+> >> No, AFAIU, iproute2 does not expose devconf settings. The main user of
+> >> IFLA_INET_CONF are netlink libraries and other userspace tools that
+> >> heavily rely on netlink operations like NetworkManager, nmstate, nispor,
+> >> rust-netlink..  
+> > 
+> > Isn't this ip netconf ?
+> >   
 > 
-> Make it consistent with the rest of the LLVM toolchain by adding an LLD
-> variable to Makefile.include. Keep the fallback for other architectures
-> in tools/testing/selftests/bpf/Makefile as it seems like it's something
-> specific to this make rule and shouldn't be global.
+> Oh sorry, I should have clarified it. ip netconf only shows/query them 
+> but it cannot set them AFAICS.
 > 
-> Clang accepts either a full path or "ld.lld-15" style inputs to
-> -fuse-ld= so this will work with LLD defined the same way as the other
-> LLVM tools. However, for full paths, we need to use ".../ld.lld" instead
-> of the generic driver "lld", but I don't think the original use of "lld"
-> was significant as this is always a linux build.
-> 
-> Signed-off-by: James Clark <james.clark@linaro.org>
-> ---
->  tools/scripts/Makefile.include       | 2 ++
->  tools/testing/selftests/bpf/Makefile | 8 ++++----
->  2 files changed, 6 insertions(+), 4 deletions(-)
-> 
-> diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.include
-> index 380ad84ac51e..5c2d505cba62 100644
-> --- a/tools/scripts/Makefile.include
-> +++ b/tools/scripts/Makefile.include
-> @@ -67,6 +67,7 @@ ifneq ($(LLVM),)
->    $(call allow-override,HOSTAR,$(LLVM_PREFIX)llvm-ar$(LLVM_SUFFIX))
->    $(call allow-override,LD,$(LLVM_PREFIX)ld.lld$(LLVM_SUFFIX))
->    $(call allow-override,HOSTLD,$(LLVM_PREFIX)ld.lld$(LLVM_SUFFIX))
-> +  $(call allow-override,LLD,$(LLVM_PREFIX)ld.lld$(LLVM_SUFFIX))
->    $(call allow-override,CXX,$(LLVM_PREFIX)clang++$(LLVM_SUFFIX))
->    $(call allow-override,STRIP,$(LLVM_PREFIX)llvm-strip$(LLVM_SUFFIX))
->    $(call allow-override,LLVM_STRIP,$(LLVM_PREFIX)llvm-strip$(LLVM_SUFFIX))
-> @@ -91,6 +92,7 @@ else
->    # Some tools still require Clang, LLC and/or LLVM utils
->    $(call allow-override,CLANG,clang)
->    $(call allow-override,LLC,llc)
-> +  $(call allow-override,LLD,ld.lld)
->    $(call allow-override,LLVM_CONFIG,llvm-config)
->    $(call allow-override,LLVM_OBJCOPY,llvm-objcopy)
->    $(call allow-override,LLVM_STRIP,llvm-strip)
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index 6ef6872adbc3..44ba829e5d4d 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -245,9 +245,9 @@ $(OUTPUT)/%:%.c
->  
->  # LLVM's ld.lld doesn't support all the architectures, so use it only on x86
->  ifeq ($(SRCARCH),$(filter $(SRCARCH),x86 riscv))
-> -LLD := lld
-> +USE_LD := $(LLD)
->  else
-> -LLD := $(shell command -v $(LD))
-> +USE_LD := $(shell command -v $(LD))
->  endif
->  
->  # Filter out -static for liburandom_read.so and its dependent targets so that static builds
-> @@ -258,7 +258,7 @@ $(OUTPUT)/liburandom_read.so: urandom_read_lib1.c urandom_read_lib2.c liburandom
->  		     $(filter-out -static,$(CFLAGS) $(LDFLAGS)) \
->  		     $(filter %.c,$^) $(filter-out -static,$(LDLIBS)) \
->  		     -Wno-unused-command-line-argument \
-> -		     -fuse-ld=$(LLD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
-> +		     -fuse-ld=$(USE_LD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
+> Usage: ip netconf show [ dev STRING ]
 
-Hi James,
-
-This patch breaks the selftests/bpf build:
-
-$ clang --version
-clang version 22.1.3 (CentOS 22.1.3-1.el9)
-Target: x86_64-redhat-linux-gnu
-Thread model: posix
-InstalledDir: /usr/bin
-Configuration file: /etc/clang/x86_64-redhat-linux-gnu-clang.cfg
-
-$ make LLVM=1 -j$(nproc)
-  [...] # ok
-
-$ make LLVM=1 -C tools/testing/selftests/bpf -j$(nproc)
-
-[...] # somewhere in the middle
-
-  LIB      liburandom_read.so
-clang: error: invalid linker name in argument '-fuse-ld=ld.lld'
-make: *** [Makefile:256: /home/isolodrai/workspace/review/linux/tools/testing/selftests/bpf/liburandom_read.so] Error 1
-make: Leaving directory '/home/isolodrai/workspace/review/linux/tools/testing/selftests/bpf'
-
-[...]
-
-Or a simpler reproducer:
-
-$ make LLVM=1 OUTPUT=/tmp/out /tmp/out/liburandom_read.so
-  LIB      liburandom_read.so
-clang: error: invalid linker name in argument '-fuse-ld=ld.lld'
-make: *** [Makefile:256: /tmp/out/liburandom_read.so] Error 1
-
-$ make LLVM=-22 OUTPUT=/tmp/out /tmp/out/liburandom_read.so
-  LIB      liburandom_read.so
-clang-22: error: invalid linker name in argument '-fuse-ld=ld.lld-22'
-make: *** [Makefile:256: /tmp/out/liburandom_read.so] Error 1
-
-I tried your patches, and only then noticed BPF CI caught this too:
-https://github.com/kernel-patches/bpf/actions/runs/25943477658/job/76267174885?pr=12082
-
->  		     -Wl,--version-script=liburandom_read.map \
->  		     -fPIC -shared -o $@
->  
-> @@ -268,7 +268,7 @@ $(OUTPUT)/urandom_read: urandom_read.c urandom_read_aux.c $(OUTPUT)/liburandom_r
->  		     $(filter-out -static,$(CFLAGS) $(LDFLAGS)) $(filter %.c,$^) \
->  		     -Wno-unused-command-line-argument \
->  		     -lurandom_read $(filter-out -static,$(LDLIBS)) -L$(OUTPUT) \
-> -		     -fuse-ld=$(LLD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
-> +		     -fuse-ld=$(USE_LD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
->  		     -Wl,-rpath=. -o $@
->  
->  $(OUTPUT)/sign-file: ../../../../scripts/sign-file.c
-> 
-
+Oh, fun. anyway, you gotta find a better way. Or just give up on the
+selftest, the YNL hack is too ugly to live
