@@ -1,291 +1,87 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0A07363C40
-	for <linux-kselftest@vger.kernel.org>; Sat, 16 May 2026 19:21:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87CC7405C48;
+	Sat, 16 May 2026 22:04:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778959306; cv=none; b=kCy5OsuvJUXhrHLtIIBuD2keyCatHuqsSiXZtjxh1g0gr86rQPM5I1msSg37t2kMvUe11H0ZlByXnIMRLFtVZdr27K2rTvrXZYhyTCSjRRG0aSjGQkWuqJh8b4ngNIcAqjwWXYKohBmipYQoGAkgVkfrg1k10KRW0qb/9BnOns8=
+	t=1778969054; cv=none; b=KRmGNmdufCRY4Vr6GzfFtItyaiW/ldYdCQNBMV6vlFV5fQjDwaTITwfXUCb5iey174K2M1XFvhMgO5KY3hED9BiTSV7MEYDIf+nv2Ncp+i7nx6MrH/pG6vI/SlRXiyXEHi7OCLL+bH+tzwo8Lo7W90g6sZFD2Rn0hEiT2lFWaQQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778959306; c=relaxed/simple;
-	bh=AwpLiTFnf/aZLz14+tNGOQUNxXaUEnHIez4a1jGAFKU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=P7kSqKJThGrnVsveUOeVQO405iLSr+gpJ/VTQp75r0soIaSIqp7yySTvcVqFpfaVpQBv28XAnqaB66cSBhWvoN4DGswWC4igagUSAwrex/8/INjdGS5/6G92oIOX/NisosKFo5zMRHBZjbn8Yx+eZazur5K3GOgDai7ukzCx20c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jKFP8Ush; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1778969054; c=relaxed/simple;
+	bh=jqUJDOVFPnUp4elyBS4bsFweoUttqEpYWejG0EQ9Hc4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=aBvVwmFe77HS8Ep2/ajjwPQ9lbmCznu/UbbGyC3uoiFrPCO4KlNuq1J4NEu8dxPwEbnYRDA1OLS8jhUqMCZW/5cUVXAWGQwiU7gvqJlZ3SLuH5kqAJmWrBS2UNuomFq+hVWtVkllJRSTSZ6mw/VaV+Ufk2TpaXXDMZPK6DbUcZU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aXDo6/EH; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jKFP8Ush"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4891b0786beso6572085e9.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 16 May 2026 12:21:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778959303; x=1779564103; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=mXUlf0Sm1ANstRJLmc2W7TgH4cPtLhK8378wQUDoPY4=;
-        b=jKFP8UshgOsJ5byCjTzLqOLgwVtlFwzm81K1JgORwZnFjm2YTzzDhe8P/PjKyUTLvU
-         gKrCzzonCBmM/lEmeQiSV+I+GftEqIPQJLOYLbV+LYxyBMstz4vGCST4q+eTzt+WT5QT
-         /fPk1u1B20Z3d/zyKEgARuFmuKH/Hmzv+gblnKe2Bv4CIkMe2PHFBXtW4bjaKS4B7N+8
-         Io0zPiFpRjJ6Abq+vwqKmwIdqUj/BvyMZy+nFMbOhMzyy3nsSUwSLfJEQq8lxP+FUeV1
-         SdsQftAJ00LoNWLoQwCrOq6oocUEr9erI15zEbOEIrlaVpASlEyOpOrJSVixLzX87g6G
-         a8fg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778959303; x=1779564103;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mXUlf0Sm1ANstRJLmc2W7TgH4cPtLhK8378wQUDoPY4=;
-        b=Gdbh+b+J1c6ppRXmi+FfCX+TQ6HKqzifcgeLAdsjptoD46Gvjv3vNMs+NNlPdP0BtX
-         oyp0s6cw3PfG2zaM2XfMadH5E1VlPD4B1FzysNurvIEapcX5fI9QJ1Xxrk2ofES6IMcH
-         xkdPrHUDNOLycw3Zj35tCozG9FWETmmEZBeu3SexHXFwEAAZoR60QsV3Wi/e4mmUmirP
-         vpbjRkD6L69K2Y0fr+9Vj2Z7XBuI2xKH5riVJB3CPdDbDDMQyqVJE5Py07VQweU4ynms
-         SY1p8Ikzq5Big3f8KuRSkW2keO8mw7CIZDyUR3rbrPzQElkUK3bV3l+dLw9YVxYQVXuY
-         GNuw==
-X-Forwarded-Encrypted: i=1; AFNElJ8aJ6IuRcPpuOvXpyOcyLn2xthQdiE66GhqyODIMNKKWH7u1NmyL/doyyQb1wVPBYBtxgWSjtI31C6kEdzh4Sc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwvzYzWSOY+bY7m1s7/K2AxqgHQPGInHd70+qoPmp8ohGhorTSC
-	3PY82lAldfb1QghLuovCp/0pix/nYroS/io8Qn5yr46uiW3lncY437aJ
-X-Gm-Gg: Acq92OGFxkIxxPDGZC4SnJC4xtSlWVXamd9Y2CMC1vuwW4v35RiVeEs62rNzIAugewm
-	7QKZrDBCW3yoQMrTHiTSki/6uDKfAYewdYzNMq3JX7ovDTFCy0TgGc9g96A4xCHTJcIXFnM7xcl
-	qCIEi/S5JZU2xs+Ld8PZPX9x3Op51tTmESvwuZhLbaZ1wnSe+U3aqGmarNLfqMbWJIIBtXvzXHw
-	0ndQ/416l2DDmaL69kFjrEZIumdUkYUWFNKeQ6bZPoNsvCLMr3c7HRYVBa4UMuVQfaM4Dt+k8r4
-	ZMdVImY9XGIc15icJLBLkJZw1rii/5Je7+kFTJS+INuktJt+m0hNC5KX/UWiT7wIDCuPVnsw2bi
-	WepWI90xAj4Tx9siiiJ26r6TcqexVqR5evf4l9QkKViMg0Ael1wzBqCnA4765g/UzecFjtz+m2S
-	aKfeCv0of7s4Dwyv9gFSH5eMC3XBx3QPSN30Em8OXbZAcznGRd
-X-Received: by 2002:a05:600c:c10e:b0:48a:65a5:750f with SMTP id 5b1f17b1804b1-48fe63265ddmr98795675e9.21.1778959302907;
-        Sat, 16 May 2026 12:21:42 -0700 (PDT)
-Received: from localhost (ip87-106-108-193.pbiaas.com. [87.106.108.193])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48febf8305dsm58490605e9.9.2026.05.16.12.21.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 16 May 2026 12:21:42 -0700 (PDT)
-Date: Sat, 16 May 2026 21:21:40 +0200
-From: =?iso-8859-1?Q?G=FCnther?= Noack <gnoack3000@gmail.com>
-To: =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>
-Cc: =?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
-	Kees Cook <kees@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>,
-	kernel test robot <oliver.sang@intel.com>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-security-module@vger.kernel.org, lkp@intel.com,
-	oe-lkp@lists.linux.dev, stable@vger.kernel.org
-Subject: Re: [PATCH v1 2/2] selftests/landlock: Increase default audit socket
- timeout
-Message-ID: <20260516.5fdd905d48d8@gnoack.org>
-References: <20260513105112.140137-1-mic@digikod.net>
- <20260513105112.140137-2-mic@digikod.net>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aXDo6/EH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5B7FC19425;
+	Sat, 16 May 2026 22:04:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778969054;
+	bh=jqUJDOVFPnUp4elyBS4bsFweoUttqEpYWejG0EQ9Hc4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=aXDo6/EHMP7g5zKEG7iKB4Qxz3Lrf3sdPP5zBHOr7Y3UUAL8c43gxrU6tilYE41jC
+	 PGIS05HaNt1c1lq39JLyLx7tr1fsaS4GxvX28m0svfsyH9NkRtxbHqZnAN8y5Ve3t1
+	 HlD0mwOVEvoKTnYOYUqnHiTCC+xpylEd3rKQU7sdj576eo3TbikY88DaTTWQBv5MdH
+	 oO6dwlxNN9jdO0fV8UGwzCWG9H++dAOoL5njpZ+OE6h0xY4GsC2lsx+bEuFrG4EGnu
+	 TbM/kd4xFvBR4mbObgv9kexhyiyLNK9QLPvIdM+TO/4qNFO+ScKXoKfXEPvyKzpDpH
+	 o7jpPzwCY6BKA==
+From: SeongJae Park <sj@kernel.org>
+To: SeongJae Park <sj@kernel.org>
+Cc: "Liam R. Howlett" <liam@infradead.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	damon@lists.linux.dev,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-trace-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v3 00/28] mm/damon: introduce data attributes monitoring
+Date: Sat, 16 May 2026 15:03:16 -0700
+Message-ID: <20260516220317.4300-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260516183712.81393-1-sj@kernel.org>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260513105112.140137-2-mic@digikod.net>
 
-On Wed, May 13, 2026 at 12:51:09PM +0200, Mickaël Salaün wrote:
-> matches_log_fs() and other audit_match_record() callers intermittently
-> return -EAGAIN under heavy debug configs (KASAN, lockdep).  The audit
-> record delivery pipeline is asynchronous: landlock_log_denial() queues
-> the record to audit_queue, and kauditd_thread dequeues and delivers via
-> netlink.  Under debug configs, kauditd scheduling between
-> audit_log_end() and netlink_unicast() can exceed a syscall round trip
-> (more than 1 usec), which was the value of the socket timeout used for
-> the recvfrom() calls.
-> 
-> The observed failure [1] is an EAGAIN error code (-11) which means that
-> the access record had not arrived within the 1 usec timeout of
-> recvfrom().  The expected record does arrive, but only after
-> matches_log_fs() has already returned.  It is then consumed by a later
-> audit_count_records() call, making records.access == 1 instead of 0.
-> 
-> Switch the default socket timeout to the slow value (1 second) so all
-> audit_match_record() callers wait long enough for kauditd delivery, and
-> lower it to the fast value (1 usec) only on the two paths that expect no
-> record: audit_count_records() and the expected_domain_id == 0 probe in
-> matches_log_domain_deallocated().  audit_init() drains stale records
-> with the fast timeout (terminating on -EAGAIN once the backlog is empty)
-> and switches to the patient default before returning.  1 second gives
-> ~10x margin over the observed maximum (~100 ms, while the happy path is
-> ~23 us).
-> 
-> Rename the timeval constants to reflect their new roles:
-> - audit_tv_dom_drop (1 second) -> audit_tv_default: default socket
->   timeout, patient enough for asynchronous kauditd delivery.
-> - audit_tv_default (1 usec) -> audit_tv_fast: fast timeout for paths
->   that expect no record (drain, audit_count_records(), probes).
-> 
-> Invert the conditional in matches_log_domain_deallocated().  Check
-> setsockopt returns on both the lower and restore paths; preserve the
-> first error via !err when the restore fails after a prior error so the
-> actionable return code is not masked by a bookkeeping failure.
-> 
-> Cc: Günther Noack <gnoack@google.com>
-> Cc: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
-> Cc: stable@vger.kernel.org
-> Depends-on: 07c2572a8757 ("selftests/landlock: Skip stale records in audit_match_record()")
-> Fixes: 6a500b22971c ("selftests/landlock: Add tests for audit flags and domain IDs")
-> Reported-by: Günther Noack <gnoack3000@gmail.com>
-> Closes: https://lore.kernel.org/r/20260402.eb5c4e85f472@gnoack.org [1]
-> Reported-by: kernel test robot <oliver.sang@intel.com>
-> Closes: https://lore.kernel.org/oe-lkp/202605111649.a8b30a62-lkp@intel.com
-> Signed-off-by: Mickaël Salaün <mic@digikod.net>
-> ---
->  tools/testing/selftests/landlock/audit.h | 80 +++++++++++++++++++-----
->  1 file changed, 63 insertions(+), 17 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/landlock/audit.h b/tools/testing/selftests/landlock/audit.h
-> index 699aed5ffab4..936fe20f020e 100644
-> --- a/tools/testing/selftests/landlock/audit.h
-> +++ b/tools/testing/selftests/landlock/audit.h
-> @@ -45,17 +45,25 @@ struct audit_message {
->  	};
->  };
->  
-> -static const struct timeval audit_tv_dom_drop = {
-> +static const struct timeval audit_tv_default = {
->  	/*
-> -	 * Because domain deallocation is tied to asynchronous credential
-> -	 * freeing, receiving such event may take some time.  In practice,
-> -	 * on a small VM, it should not exceed 100k usec, but let's wait up
-> -	 * to 1 second to be safe.
-> +	 * Default socket timeout for audit_match_record() callers that expect a
-> +	 * record to arrive.  Asynchronous kauditd delivery can exceed 1 usec
-> +	 * under heavy debug configs (KASAN, lockdep), where kauditd_thread
-> +	 * scheduling between audit_log_end() and netlink_unicast() takes longer
-> +	 * than the previous 1 usec timeout. 1 second is a generous ceiling: on
-> +	 * the happy path, kauditd delivers within dozens of usec.
->  	 */
->  	.tv_sec = 1,
->  };
->  
-> -static const struct timeval audit_tv_default = {
-> +static const struct timeval audit_tv_fast = {
-> +	/*
-> +	 * Fast timeout for paths that expect no record (audit_init() drain,
-> +	 * audit_count_records(), probes).  Causes audit_recv() to return
-> +	 * -EAGAIN once the socket buffer is empty, naturally terminating the
-> +	 * read loop.
-> +	 */
->  	.tv_usec = 1,
->  };
->  
-> @@ -334,8 +342,13 @@ static int __maybe_unused matches_log_domain_allocated(int audit_fd, pid_t pid,
->   * Matches a domain deallocation record.  When expected_domain_id is non-zero,
->   * the pattern includes the specific domain ID so that stale deallocation
->   * records from a previous test (with a different domain ID) are skipped by
-> - * audit_match_record(), and the socket timeout is temporarily increased to
-> - * audit_tv_dom_drop to wait for the asynchronous kworker deallocation.
-> + * audit_match_record(), waiting for the asynchronous kworker deallocation with
-> + * the default patient timeout.
-> + *
-> + * When expected_domain_id is zero, the caller is probing for any dealloc record
-> + * that may or may not arrive.  Temporarily lowers the socket timeout to
-> + * audit_tv_fast for this probe so it returns promptly when no record is
-> + * pending; restores audit_tv_default after.
->   */
->  static int __maybe_unused
->  matches_log_domain_deallocated(int audit_fd, unsigned int num_denials,
-> @@ -361,16 +374,21 @@ matches_log_domain_deallocated(int audit_fd, unsigned int num_denials,
->  	if (log_match_len >= sizeof(log_match))
->  		return -E2BIG;
->  
-> -	if (expected_domain_id)
-> -		setsockopt(audit_fd, SOL_SOCKET, SO_RCVTIMEO,
-> -			   &audit_tv_dom_drop, sizeof(audit_tv_dom_drop));
-> +	if (!expected_domain_id) {
-> +		if (setsockopt(audit_fd, SOL_SOCKET, SO_RCVTIMEO,
-> +			       &audit_tv_fast, sizeof(audit_tv_fast)))
-> +			return -errno;
-> +	}
->  
->  	err = audit_match_record(audit_fd, AUDIT_LANDLOCK_DOMAIN, log_match,
->  				 domain_id);
->  
-> -	if (expected_domain_id)
-> -		setsockopt(audit_fd, SOL_SOCKET, SO_RCVTIMEO, &audit_tv_default,
-> -			   sizeof(audit_tv_default));
-> +	if (!expected_domain_id) {
-> +		if (setsockopt(audit_fd, SOL_SOCKET, SO_RCVTIMEO,
-> +			       &audit_tv_default, sizeof(audit_tv_default)) &&
-> +		    !err)
-> +			err = -errno;
-> +	}
->  
->  	return err;
->  }
-> @@ -387,6 +405,11 @@ struct audit_records {
->   * audit_init() and after the preceding audit_match_record() call.  Allocation
->   * records are emitted synchronously during landlock_log_denial() in the current
->   * test's syscall context, so only those are counted in records->domain.
-> + *
-> + * Temporarily lowers SO_RCVTIMEO to audit_tv_fast for the read loop: this is a
-> + * "no record expected" path that should terminate on the first -EAGAIN.  The
-> + * default patient timeout is restored on exit for subsequent
-> + * audit_match_record() callers.
->   */
->  static int audit_count_records(int audit_fd, struct audit_records *records)
->  {
-> @@ -403,6 +426,12 @@ static int audit_count_records(int audit_fd, struct audit_records *records)
->  	records->access = 0;
->  	records->domain = 0;
->  
-> +	if (setsockopt(audit_fd, SOL_SOCKET, SO_RCVTIMEO, &audit_tv_fast,
-> +		       sizeof(audit_tv_fast))) {
-> +		err = -errno;
-> +		goto out;
-> +	}
-> +
->  	do {
->  		memset(&msg, 0, sizeof(msg));
->  		err = audit_recv(audit_fd, &msg);
-> @@ -429,6 +458,10 @@ static int audit_count_records(int audit_fd, struct audit_records *records)
->  	} while (true);
->  
->  out:
-> +	if (setsockopt(audit_fd, SOL_SOCKET, SO_RCVTIMEO, &audit_tv_default,
-> +		       sizeof(audit_tv_default)) &&
-> +	    !err)
-> +		err = -errno;
->  	regfree(&dealloc_re);
->  	return err;
->  }
-> @@ -449,9 +482,9 @@ static int audit_init(void)
->  	if (err)
->  		goto err_close;
->  
-> -	/* Sets a timeout for negative tests. */
-> -	err = setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, &audit_tv_default,
-> -			 sizeof(audit_tv_default));
-> +	/* Uses the fast timeout to drain stale records below. */
-> +	err = setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, &audit_tv_fast,
-> +			 sizeof(audit_tv_fast));
->  	if (err) {
->  		err = -errno;
->  		goto err_close;
-> @@ -467,6 +500,19 @@ static int audit_init(void)
->  	while (audit_recv(fd, NULL) == 0)
->  		;
->  
-> +	/*
-> +	 * Restores the default timeout for audit_match_record() callers that
-> +	 * expect a record to arrive.  Paths that expect no record restore the
-> +	 * fast timeout locally (audit_count_records(), the expected_domain_id
-> +	 * == 0 probe in matches_log_domain_deallocated()).
-> +	 */
-> +	err = setsockopt(fd, SOL_SOCKET, SO_RCVTIMEO, &audit_tv_default,
-> +			 sizeof(audit_tv_default));
-> +	if (err) {
-> +		err = -errno;
-> +		goto err_close;
-> +	}
-> +
->  	return fd;
->  
->  err_close:
-> -- 
-> 2.54.0
-> 
+On Sat, 16 May 2026 11:36:41 -0700 SeongJae Park <sj@kernel.org> wrote:
 
-Tested-by: Günther Noack <gnoack3000@gmail.com>
+> TL; DR
+> ======
+> 
+> Extend DAMON for monitoring general data attributes other than accesses.
+> The short term motivation is lightweight page type (e.g., belonging
+> cgroup) aware monitoring.  In long term, this will help extending DAMON
+> for multiple access events capture primitives (e.g., page faults and
+> PMU) and eventually pivotting DAMON to a "Data Attributes Monitoring and
+> Operations eNgine" in long term.
+
+Sashiko found [1] no blocker for this version but a nice document wordsmithing
+idea.  Unless I get other opinions, I will drop RFC tag from the next version
+of this series.
+
+[1] https://lore.kernel.org/damon/20260516185032.82261-1-sj@kernel.org/
+
+
+Thanks,
+SJ
+
+[...]
