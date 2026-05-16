@@ -1,109 +1,98 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from outbound.mr.icloud.com (mr-2002b-snip4-6.eps.apple.com [57.103.68.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CAFC3812EF
-	for <linux-kselftest@vger.kernel.org>; Sat, 16 May 2026 09:19:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F61913E02A
+	for <linux-kselftest@vger.kernel.org>; Sat, 16 May 2026 12:06:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.68.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778923194; cv=none; b=RoKu8LmudgnMzQWC+1Ko4NMx4a2d6Pz+k0uu/oIT8YkfAIavw5w9SEI50oYy/VyamUcZcWuZVELGCbyMihlvFEoF5xp9KrvpKEkErPSCZ9D171htlrgyxIGynLqjIULQZX/GYMEuJYDE8Mfp9+w97zK9b61oTo8MlsGfpRvOIBY=
+	t=1778933211; cv=none; b=F1GQzmtYPn27asU7WC1oSh7DcAxHLOnQCzg99mXoGDxTesWB8NChfXEcBsBXlf3G9Rz8B98zy1vJKOMHUkxBKVqQBX5tFiFgCLkPG3QXowbChMn/ttNGzW/R2eMp+h6iWdB+NyZrHJUwi5rOUlXYQOtJTBfl+C7lM/PjkLLTakU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778923194; c=relaxed/simple;
-	bh=G1PUbCxyJOX//Tw7UPj9+qUEfRYerN3gCn9IPzsOw7c=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RgkvPxW/Xz9/EEoP7Jj/E9V6EjERTf/dXR7m+J8TRD3j94AQdKaWvNA+HgstF3XKuQHat9q2m/mBRHLBkkQzJwYDo0PZBmgNM11V1J7O5ibIewhHRgyzYWnIFVSjmVsB3b8sr4pe0P3WT7BWWkqZFWPPDvR621kHuzwf6+7kt+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M1z72bao; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1778933211; c=relaxed/simple;
+	bh=bkitfgbATV7muE7dLlUcvmr9xMuCmbEgqgAiY22qe8c=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=R7xOGg8j5ASGYQ8Tt3J58abMDaYvyHJx7B2fi7PDGN5PPM4zwwBs0JBlmQI8R98gIzzifRyIClK6HJjUICYhNMCAtFaW52L0i1DS5zVNMLnP9vk5Zad/dP03JRXGCmSSw0LovjFVPLwbzEKPXkMkFTr4yl1sO5XJBooa+ftOzG4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kvasnytskyi.net; spf=pass smtp.mailfrom=kvasnytskyi.net; dkim=pass (2048-bit key) header.d=kvasnytskyi.net header.i=@kvasnytskyi.net header.b=sTwzVRL0; arc=none smtp.client-ip=57.103.68.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=kvasnytskyi.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kvasnytskyi.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M1z72bao"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30AADC2BCC7
-	for <linux-kselftest@vger.kernel.org>; Sat, 16 May 2026 09:19:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778923194;
-	bh=G1PUbCxyJOX//Tw7UPj9+qUEfRYerN3gCn9IPzsOw7c=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=M1z72baoLmGJAEKOKqQZ86umfRZIzE/a/XGjsuyC2B4C2wlE1QHhtr/w78SZurUcj
-	 weHzRq8Qt//48z9bq7n7N7fFaDfSiTsphqENDn1/PUflv232kYu2CRgg8j9ClFq93b
-	 msqTPrTtdkX8k+U6G4aTsX4cXywWFSetkX0oSxWR+RmO+NSY4LOAAUtxDeFPzGxF6E
-	 fcRtbK64rUgnF5X+E0teg3M33P+tvkBXmpgqd1T8S9R00XEJPVgzMzrLnyWYyKZ/Q1
-	 8R7raGUJN6mb6Qa4oFUGszn5/fGQs04AsGgPMZgDV6zlzRsdAdzTjr89YwHXmbRvH5
-	 RoJtjjey6r67A==
-Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-90d042fa745so163395485a.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 16 May 2026 02:19:54 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AFNElJ/qQMTTjxUAbDCmSfQSmKsOCQgz0C8qNHm65Eq13tTK7XTNMSilUW9yX9Cqvv7UVX2MiYRZeOfDUHyMr5lt7bE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxqYE0abM9YKiX+RoWz7iYysmqruFNZJSQTLedsNgCHj5WImeot
-	8BSD025640SC80/R824eUNShj6spbjFSFiwVfysB/1L8cMx/KJ6OedNhM8Da6q6UgU3sVfurAnr
-	Sut9MrZ8Xjs1ADA2sZZ0hLJML+Mkjs4M=
-X-Received: by 2002:a05:620a:4487:b0:912:c631:d797 with SMTP id
- af79cd13be357-912c631d977mr618156185a.60.1778923192922; Sat, 16 May 2026
- 02:19:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kvasnytskyi.net header.i=@kvasnytskyi.net header.b="sTwzVRL0"
+Received: from outbound.mr.icloud.com (unknown [127.0.0.2])
+	by p00-icloudmta-asmtp-us-west-2a-60-percent-6 (Postfix) with ESMTPS id 7B02F180017B;
+	Sat, 16 May 2026 12:06:45 +0000 (UTC)
+X-ICL-Out-Info: HUtFAUMHWwJACUgBTUQeDx5WFlZNRAJCTQFBHVsPRQBDAFYCXQZLVxQEClwAVgVyG08ZQANOH0EbQBEdA1IfEhZdRUECWgpcMFIOUh5ZEkYDUgFaQ1kORlBLGw5cAktaFVUXDgJCH1AfTBZXQ1oZHBlaFFwYU0VRH1RYQxlFVmlBC08dXRlbHEJkWFcJCgBEEUoWShlEAEsZFxZWGRcGWxQERAFdBV0CRQhOAl8HXQBFF0ADVQRSH0EUClwAVgVyG08ZQANOH0EbQBEdA1IfDFBNAUMICghHA00XXjJTBF8RUBY=
+Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kvasnytskyi.net; s=sig1; t=1778933208; x=1781525208; bh=QNuhYDnlYFZZgAg9TfiK4gX6cXQQKz0Ik93tJj+M/aA=; h=From:To:Subject:Date:Message-ID:MIME-Version:x-icloud-hme; b=sTwzVRL0/De253VX7g+vSjdeojP0LYkM5Uhe7R+fVWSy5fd4/JdOb+yvTf0/x2xqCeAbz/KmCac0SbfETg/RT1VYXGcqFW4p2kLCkzqc/Jk/Jq4TirG0C0exVEx3Kxoiymn9ph/g5hPrGXIw30B/mnHVMH+gqplRep9VU9eXjdlDe4X4uTL/qkrmUjwU7bkfkACcOI0nAjHaJarbDWVpvB34EfJzOJAdzlnvZBFndrnNWPiNs7H751byQf7hJ/uuHLcKTgyaSMcpYasNA0jqrhm01vbCYJb8gMvkUyb6JEDCl6oerD84pY1km/XkF/AlwB4hPHpAs8QZabd4XrqfUQ==
+mail-alias-created-date: 1743450725635
+Received: from periecle (unknown [17.57.152.38])
+	by p00-icloudmta-asmtp-us-west-2a-60-percent-6 (Postfix) with ESMTPSA id BC93C1800106;
+	Sat, 16 May 2026 12:06:41 +0000 (UTC)
+From: Roman Kvasnytskyi <roman@kvasnytskyi.net>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	KP Singh <kpsingh@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Roman Kvasnytskyi <roman@kvasnytskyi.net>
+Subject: [PATCH bpf] selftests/bpf: Reject unsupported -k option in vmtest.sh
+Date: Sat, 16 May 2026 14:06:25 +0200
+Message-ID: <20260516120625.80839-1-roman@kvasnytskyi.net>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260512-v2_20230123_tjmercier_google_com-v1-0-6326701c3691@redhat.com>
- <20260512-v2_20230123_tjmercier_google_com-v1-2-6326701c3691@redhat.com>
- <8ef38815-6ae9-4359-86d4-042554357639@amd.com> <CABdmKX2uwZ12kYJYPJGfWxuMBOJS=64b1GRj72tfB5D=NKM22w@mail.gmail.com>
- <CADSE00Jq_uvNgvxgPze0mEdUd+hF4-DPZkHy0KroWHZzygf4WA@mail.gmail.com> <CABdmKX3DhejYBis9htLDnzPrG7vuF3R3URLVNEbnyd61SSsx=g@mail.gmail.com>
-In-Reply-To: <CABdmKX3DhejYBis9htLDnzPrG7vuF3R3URLVNEbnyd61SSsx=g@mail.gmail.com>
-From: Barry Song <baohua@kernel.org>
-Date: Sat, 16 May 2026 17:19:41 +0800
-X-Gmail-Original-Message-ID: <CAGsJ_4zyecY6E-=Tm4_couT7uoM9LMcFdTMUPkZAjj4zUKE-dQ@mail.gmail.com>
-X-Gm-Features: AVHnY4Lfp6d8-xrGLNMN2A36VEAHbeTkf6FHYhVfd3tCidoD4YpDVmS9DpWsPFQ
-Message-ID: <CAGsJ_4zyecY6E-=Tm4_couT7uoM9LMcFdTMUPkZAjj4zUKE-dQ@mail.gmail.com>
-Subject: Re: [Linaro-mm-sig] Re: [PATCH RFC 2/5] dma-heap: charge dma-buf
- memory via explicit memcg
-To: "T.J. Mercier" <tjmercier@google.com>
-Cc: Albert Esteve <aesteve@redhat.com>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, Michal Hocko <mhocko@kernel.org>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Muchun Song <muchun.song@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, 
-	Benjamin Gaignard <benjamin.gaignard@collabora.com>, Brian Starkey <Brian.Starkey@arm.com>, 
-	John Stultz <jstultz@google.com>, Christian Brauner <brauner@kernel.org>, 
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
-	"Serge E. Hallyn" <serge@hallyn.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
-	Ondrej Mosnacek <omosnace@redhat.com>, Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-media@vger.kernel.org, dri- <devel@lists.freedesktop.org>, 
-	linaro-mm-sig@lists.linaro.org, linux-mm@kvack.org, 
-	linux-security-module@vger.kernel.org, selinux@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, mripard@kernel.org, echanude@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: nH-lzb8WrWMz4XOfNm1oqSXTv0Mgol4_
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTE2MDExOSBTYWx0ZWRfX3pDR6/+SI2Zy
+ sXu9KJMta2THkrjo3Vys1QUSvA5pGt/NPMy89Q4bG0s1z5nzPoyNvAClXNB4RU4CvwoXhJgohmi
+ eglyIj8fJvFrOIniylg536uNzVSsiAijAYc9usf5c1OV6nnS2K+eqbk9HxHRdkQe3pkSBWpPXzK
+ isCtrk0ojMaHknHjFvOD0ZbOsnFXSvQRYG8MFYeAw1MND8fj0s5ejhOyNIZK5i7FFcAJtJUq9Za
+ rrZ2yPgoua8UpLUWhdCjV/eUaRyoY/Hp3O3+xVxvh3s+uT8CGX+NJ+1j+Dw+7TC62fK3prjhJp1
+ O+2RLjupuPcFeOtA44DZy/2fzoZ1XL6EQn3HPHFE1O8jdpVVFYuEpijm3rUgi0=
+X-Authority-Info-Out: v=2.4 cv=IfyKmGqa c=1 sm=1 tr=0 ts=6a085dd7
+ cx=c_apl:c_pps:t_out a=9OgfyREA4BUYbbCgc0Y0oA==:117
+ a=9OgfyREA4BUYbbCgc0Y0oA==:17 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=NLb4dWRdAAAA:8 a=UdcUEC0rSNdnLTSpIWMA:9 a=A-tYh6_xkEhJBr09wb0_:22
+X-Proofpoint-GUID: nH-lzb8WrWMz4XOfNm1oqSXTv0Mgol4_
 
-On Thu, May 14, 2026 at 12:35=E2=80=AFAM T.J. Mercier <tjmercier@google.com=
-> wrote:
-[...]
-> > > I have a question about this part. Albert I guess you are interested
-> > > only in accounting dmabuf-heap allocations, or do you expect to add
-> > > __GFP_ACCOUNT or mem_cgroup_charge_dmabuf calls to other
-> > > non-dmabuf-heap exporters?
-> >
-> > We're scoping this to dma-buf heaps for now. CMA heaps and the dmem
-> > controller are on the radar for follow-up/parallel work (there will be
-> > dragons and will surely need discussion). For DRM and V4L2 the
-> > long-term intent is migration to heaps, which would make direct
-> > accounting on those paths unnecessary.
->
-> Ah I see. GEM buffers exported to dmabufs are what I had in mind. I
-> guess this would only leave the odd non-DRM driver with the need to
-> add their own accounting calls, which I don't expect would be a big
-> problem.
->
+vmtest.sh does not document a -k option and does not handle it in the
+getopts case statement. However, the getopts optstring includes k, which
+causes the script to accept -k silently instead of reporting it as an
+invalid option.
 
-sounds like we still have a long way to go to correctly account for
-various v4l2, drm, GEM, CMA, etc. In patch 1, the charging is done in
-dma_buf_export(), so I guess it covers all dma-buf types except
-dma_heap, but the problem is that it has no remote charging support at
-all?
+Remove k from the optstring so unsupported options are rejected through
+the existing invalid-option path.
 
-> > udmabufs are already
-> > memcg-charged, so adding a separate MEMCG_DMABUF would double count.
-> > Are there any other exporters you had in mind that would benefit from
-> > this approach?
-> >
+Fixes: c9709f52386d ("bpf: Helper script for running BPF presubmit tests")
+Signed-off-by: Roman Kvasnytskyi <roman@kvasnytskyi.net>
+---
+ tools/testing/selftests/bpf/vmtest.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks
-Barry
+diff --git a/tools/testing/selftests/bpf/vmtest.sh b/tools/testing/selftests/bpf/vmtest.sh
+index 2f869daf8a06..9ca802285393 100755
+--- a/tools/testing/selftests/bpf/vmtest.sh
++++ b/tools/testing/selftests/bpf/vmtest.sh
+@@ -382,7 +382,7 @@ main()
+ 	local exit_command="poweroff -f"
+ 	local debug_shell="no"
+ 
+-	while getopts ':hskl:id:j:' opt; do
++	while getopts ':hsl:id:j:' opt; do
+ 		case ${opt} in
+ 		l)
+ 			LOCAL_ROOTFS_IMAGE="$OPTARG"
+
+base-commit: a828abbb897657451d96ad7bf20f1893ac983bb9
+-- 
+2.54.0
+
