@@ -1,54 +1,57 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 489CE33CEA9;
-	Sat, 16 May 2026 18:31:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A53DB1A3154;
+	Sat, 16 May 2026 18:37:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778956283; cv=none; b=gaU0vVbDBaQt4Spr3E1uQIOLwd8WbBVRj50C6mRWVQ61JwJUntX8VKEsKhmypWIhocZJ6EJKtI+h6Pc2n1zlBBsl2R+BU/j1krDZsd0E9wZNrEQdKkkL+KeT3MNa9qQvf17SuYfcMdOrc/VgfkDv+lnDumEy9TPcbxWAUQcTSZ8=
+	t=1778956644; cv=none; b=EwtRQAtByAyLq5RWbhnPuA1Y7GJrfX1TdcYI7HNKpNen1b7J3ArWGNTbohArKRpYICl0V5vZ508Gr1WfHBRI9we6+pRvfeP1tNcFl1+Ov0FkafUniPrwztzSsPl245g1qIq9zQYYssY1sA7noIBylJa3idFSQvSDZ6LmKEWFcCc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778956283; c=relaxed/simple;
-	bh=/1t/CERV4WJKmLTkfx/AdC8xUY2k0LviAytjvvkIoEI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MK1aDujPbaOTvm0rsu/pn2uoLFRzTDmA/9nyS3YfznXcbZHLJKmZUx3Nv7FoWoSGJqCtTcS37BUyka+jl2nA1DjqBUrv7/6EPXfPtVlm6HPkIVHDj7epAPXNxBNtl8hc8+O1GGxgTFDdP7go/pvy8Bnh5YOUxnRYAJbGkD3fmoA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=qpRjr816; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1778956644; c=relaxed/simple;
+	bh=iNE/SB8H53Nzextg8blBzeBIvjL6Bieyu8nHGY4bfl4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mQUlT8s0LDT4CSgdgxlczFzwMQ5YWhETN7bsKmnkxJpLvBAxcQnnCLrGT0cwqU+LG4rlMuR3QUIRRKCoIgXrOmmLd/KHWRJyPDNu23Vtr9Qd3s5AfRPW2cRsskdw1p7Mu+KdjQNqfnbWnVnhrTbjkkHAoDb6yEF/lX2Wzxxyojo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fk8U0nia; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="qpRjr816"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 951041BF3;
-	Sat, 16 May 2026 11:31:10 -0700 (PDT)
-Received: from workstation-e142269.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 24C233F85F;
-	Sat, 16 May 2026 11:31:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1778956275; bh=/1t/CERV4WJKmLTkfx/AdC8xUY2k0LviAytjvvkIoEI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=qpRjr816bPDh6feC6wJMq4ZIT5RzIoLJmWRlzCn5rCnXmoTiF3bHGGE1C5XSnJc7Q
-	 VjYxy9b7Uts/utZxVgpD6SKJNwAU6vibvirdlm9ieO0R71PaivSFzOxTjBQeAyOv0i
-	 RLlH90CDHQA/7p5jNQ6H7s9GkpJ+9Z12pLK0DLbo=
-From: Wei-Lin Chang <weilin.chang@arm.com>
-To: linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev
-Cc: Paolo Bonzini <pbonzini@redhat.com>,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fk8U0nia"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB461C19425;
+	Sat, 16 May 2026 18:37:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778956644;
+	bh=iNE/SB8H53Nzextg8blBzeBIvjL6Bieyu8nHGY4bfl4=;
+	h=From:To:Cc:Subject:Date:From;
+	b=fk8U0niaHwU8+O663bnFtGKSIAspTm435SwxEs0Xdbsh5kW3OyPFSaOtw1ZlsVTBI
+	 rarbyKZ8EEZ23lWyi5EXJVDchP5jcPV4h+cpCNrQNdpmzCxhJ37zh/e8QeHMOb9GUK
+	 IAq/ZGRLHpecpiVl7kxQgDmXejLor/mjCTFhTreHJxak6SgqbBtGNwrHqelVZQrG+i
+	 ObBEuLJjmycc8n6vbdor4ZV9Ue/Cm+dNLTriRFTv9n3HQq4T4DfcGiVvE05cRpRRpv
+	 z4a7ZnkS9lwPmCdUCJzMG6hz38mt8JK4YrAlxzXPppHAN9DwMI6pF1/IDMVaA4h6qM
+	 mJtXOlL6vgepg==
+From: SeongJae Park <sj@kernel.org>
+To: 
+Cc: SeongJae Park <sj@kernel.org>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Mike Rapoport <rppt@kernel.org>,
 	Shuah Khan <shuah@kernel.org>,
-	Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oupton@kernel.org>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Itaru Kitayama <itaru.kitayama@fujitsu.com>,
-	Wei-Lin Chang <weilin.chang@arm.com>
-Subject: [PATCH v3 9/9] KVM: arm64: selftests: shadow_stage2: Turn on stage-2 translation for the nested guest
-Date: Sat, 16 May 2026 19:30:03 +0100
-Message-ID: <20260516183003.799058-10-weilin.chang@arm.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260516183003.799058-1-weilin.chang@arm.com>
-References: <20260516183003.799058-1-weilin.chang@arm.com>
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	damon@lists.linux.dev,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-trace-kernel@vger.kernel.org
+Subject: [RFC PATCH v3 00/28] mm/damon: introduce data attributes monitoring
+Date: Sat, 16 May 2026 11:36:41 -0700
+Message-ID: <20260516183712.81393-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -57,68 +60,271 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Utilize the stage-2 library functions to initialize a s2_mmu, build a
-stage-2 page table, and turn on stage-2 translation for the nested
-guest. This better tests out the shadow page table code in KVM.
+TL; DR
+======
 
-Signed-off-by: Wei-Lin Chang <weilin.chang@arm.com>
----
- .../selftests/kvm/arm64/shadow_stage2.c       | 23 ++++++++++++++++---
- 1 file changed, 20 insertions(+), 3 deletions(-)
+Extend DAMON for monitoring general data attributes other than accesses.
+The short term motivation is lightweight page type (e.g., belonging
+cgroup) aware monitoring.  In long term, this will help extending DAMON
+for multiple access events capture primitives (e.g., page faults and
+PMU) and eventually pivotting DAMON to a "Data Attributes Monitoring and
+Operations eNgine" in long term.
 
-diff --git a/tools/testing/selftests/kvm/arm64/shadow_stage2.c b/tools/testing/selftests/kvm/arm64/shadow_stage2.c
-index 2b274b810dcf..5bce55abdea7 100644
---- a/tools/testing/selftests/kvm/arm64/shadow_stage2.c
-+++ b/tools/testing/selftests/kvm/arm64/shadow_stage2.c
-@@ -51,9 +51,11 @@ static void l2_guest_code(void)
- static void guest_code(void)
- {
- 	struct vcpu vcpu;
-+	struct s2_mmu mmu;
- 	struct hyp_data hyp_data;
- 	int ret, i = 0;
--	gpa_t l2_pc, l2_stack_top;
-+	gpa_t l2_pc, l2_stack_start, l2_stack_top, s2_pgd;
-+	gpa_t do_hvc_gpa;
- 	struct page_pool pp;
- 	u64 mmfr0 = read_sysreg(id_aa64mmfr0_el1);
- 
-@@ -68,11 +70,20 @@ static void guest_code(void)
- 	if (!has_tgran_2(mmfr0, pp.page_size))
- 		GUEST_SYNC1(TGRAN2NOSUP);
- 
--	l2_stack_top = alloc_page(&pp) + pp.page_size;
-+	l2_stack_start = alloc_page(&pp);
-+	l2_stack_top = l2_stack_start + pp.page_size;
- 	l2_pc = ucall_translate_to_gpa(l2_guest_code);
-+	do_hvc_gpa = ucall_translate_to_gpa(do_hvc);
-+
-+	s2_pgd = alloc_page(&pp);
- 
- 	init_vcpu(&vcpu, l2_pc, l2_stack_top);
--	prepare_hyp_no_s2();
-+	init_s2_mmu(&mmu, 0, s2_pgd, pp.page_size, 40);
-+	create_s2_mapping(&mmu, l2_pc, l2_pc, pp.page_size * 2, &pp);
-+	create_s2_mapping(&mmu, do_hvc_gpa, do_hvc_gpa, pp.page_size, &pp);
-+	create_s2_mapping(&mmu, l2_stack_start, l2_stack_start, pp.page_size, &pp);
-+
-+	prepare_hyp(&mmu);
- 
- 	while (true) {
- 		GUEST_PRINTF("L2 enter\n");
-@@ -113,6 +124,12 @@ int main(void)
- 	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS,
- 				    L2_PAGE_POOL_ADDR, L2_PAGE_POOL_MEMSLOT,
- 				    L2_PAGE_POOL_NPAGES, 0);
-+	/*
-+	 * This idmap allows L1 to traverse and build its guest stage-2, where
-+	 * it must do a PA to VA conversion in order to descend to the next
-+	 * level.
-+	 */
-+	virt_map(vm, L2_PAGE_POOL_ADDR, L2_PAGE_POOL_ADDR, L2_PAGE_POOL_NPAGES);
- 
- 	while (true) {
- 		vcpu_run(vcpu);
+Background: High Cost of Page Level Properties Monitoring
+=========================================================
+
+DAMON is initially introduced as a Data Access MONitor.  It has been
+extended for not only access monitoring but also data access-aware
+system operations (DAMOS).  But still the monitoring part is only for
+data accesses.
+
+Data access patterns is good information, but some users need more
+holistic views.  Particularly, users want to show the access pattern
+information together with the types of the memory.  For example, users
+who work for making huge pages efficiently want to know how much of
+DAMON-found hot/cold regions are backed by huge pages.  Users who run
+multiple workloads with different cgroups want to know how much of
+DAMON-found hot/cold regions belong to specific cgroups.
+
+For the user demand, we developed a DAMOS extension for page level
+properties based monitoring [1], which has landed on 6.14.  Using the
+feature, users can inform the page level data properties that they are
+interested in, in a flexible format that uses DAMOS filters.  Then,
+DAMON applies the filters to each folio of the entire DAMON region and
+lets users know how many bytes of memory in each DAMON region passed the
+given filters.
+
+This gives page level detailed and deterministic information to users.
+But, because the operation is done at page level, the overhead is
+proportional to the memory size.  It was useful for test or debugging
+purposes on a small number of machines.  But it was obviously too heavy
+to be enabled always on all machines running the real user workloads.
+For real world workloads, it was recommended to use the feature with
+user-space controlled sampling approaches.  For example, users could do
+the page level monitoring only once per hour, on randomly selected one
+percent of machines of their fleet.  If the runtime and the  size of the
+fleet is long and big enough, it should provide statistically meaningful
+data.
+
+But users are too busy to implement such controls on their own.
+
+Data Attributes Monitoring
+==========================
+
+Extend DAMON to monitor not only data accesses, but also general data
+attributes.  Do the extension while keeping the main promise of DAMON,
+the bounded and best-effort minimum overhead.
+
+Allow users to specify what data attributes in addition to the data
+access they want to monitor.  Users can install one 'data probe' per
+data attribute of their interest for this purpose.  The 'data probe'
+should be able to be applied to any memory, and determine if the given
+memory has the appropriate data attribute.  E.g., if memory of physical
+address 42 belongs to cgroup A.  Each 'data probe' is configured with
+filters that are very similar to the DAMOS filters.
+
+When DAMON checks if each sampling address memory of each region is
+accessed since the last check, it applies data probes if registered.
+Same to the number of access check-positive samples accounting
+(nr_accesses), it accounts the number of each data probe-positive
+samples in another per-region counters array, namely 'probe_hits'. When
+DAMON resets nr_accesses every aggregation interval, it resets
+'probe_hits' together.
+
+Users can read 'probe_hits' just before the values are reset.  In this
+way, users can know how many hot/cold memory regions have data
+attributes of their interest.  E.g., 30 percent of this system's hot
+memory is belonging to cgroup A, and 80 percent of the cgroup
+A-belonging hot memory is backed by huge pages.
+
+Patches Sequence
+================
+
+First eight patches implement the core feature, interface and the
+working support.  Patch 1 introduces data probe data structure, namely
+damon_probe.  Patch 2 extends damon_ctx for installing data probes.
+Patch 3 introduces another data structure for filters of each data
+probe, namely damon_filter.  Patch 4 updates damon_ctx commit function
+to handle the probes.  Patch 5 extends damon_region for the per-region
+per-probe positive samples counter, namely probe_hits.  Patch 6 extends
+damon_operations for applying probes on the underlying DAMON operations
+implementation.  Patch 7 updates kdamond_fn() to invoke the probes
+applying callback.  Patch 8 finally implements the probes support on
+paddr ops.
+
+Ten changes for user interface (patches 9-18) come next.  Patches 9-13
+implements sysfs directories and files for setting data probes, namely
+probes directory, probe directory, filters directory, filter directory
+and filter directory internal files, respectively.  Patch 14 connects
+the user inputs that are made via the sysfs files to DAMON core.
+Following three patches (patches 15-17) implement sysfs directories and
+files for showing the probe_hits to users, namely probes directory,
+probe directory and hits files, respectively.  Patch 18 introduces a new
+tracepoint for showing the probe_hits via tracefs.
+
+Patch 19 adds a selftest for the sysfs files.
+
+Patches 20 and 21 documents the design and usage of the new feature,
+respectively.
+
+Seven additional patches (patches 22-28) for monitoring belonging memory
+cgroup follow.  Depending on the feedback, this part might be separated
+to another series in future.  Patch 22 defines the DAMON filter type for
+the new attribute, namely DAMON_FILTER_TYPE_MEMCG.  Patch 23 add the
+support on paddr ops.  Patch 24 updates the sysfs interface for setup of
+the target memcg.  Patch 25 move code for easy reuse of the filter
+target memcg setup.  Patch 26 connects the user input to the core layer.
+Finally, patches 27 and 28 update the design and usage documents for the
+memcg attribute monitoring support.
+
+Discussions
+===========
+
+This allows the page properties monitoring with overhead that is low
+enough to be enabled always on real world workloads.  Because the
+sampling time for access check is reused for data attributes check,  the
+upper-bounded and best-effort minimum overhead of DAMON is kept.
+Because the sampling memory for access check is reused for data
+attributes check, additional overhead is minimum.
+
+Still DAMOS-based page level properties monitoring should be useful,
+because it provides a deterministic page level information.  When in
+doubt of the sampling based information, running DAMOS-based one
+together and comparing the results would be useful, for debugging and
+tuning.
+
+Plan for Dropping RFC tag
+=========================
+
+Making changes for feedback from myself, humans and Sashiko should be
+the major remaining work.
+
+I'm currently hoping to drop the RFC tag by 7.2-rc1.
+
+Future Works: Mid Term
+========================
+
+This version of implementation is limiting the maximum number of data
+probes to four.  I will try to find a way to remove the limit in future.
+I personally think it should be enough for common use cases, though, and
+therefore not giving high priority at the moment.
+
+Future Works: Long Term
+=======================
+
+There are user requests for extending DAMON with detailed access
+information, for example, per-CPUs/threads/read/writes monitoring.  For
+that, I was working [2] on extending DAMON to use page fault events as
+another access check primitives, and making the infrastructure flexible
+for future use of yet another access check primitive.  Actually there is
+another ongoing work [3] for extending DAMON with PMU events.  The
+motivation of the work is reducing the overhead, though.
+
+In my work [2], I was introducing a new interface for access sampling
+primitives control.  Now I think this data probe interface can be used
+for that, too.  That is, data access becomes just one type of data
+attribute.  Also, pg_idle-confirmed access, page fault-confirmed access,
+and PMU event-confirmed access will be different types of data
+attributes.
+
+The regions adjustment mechanism is currently working based on the
+access information.  That's because DAMON is designed for data access
+monitoring.  That is, data access information is the primary interest,
+and therefore DAMON adjusts regions in a way that can best-present the
+information.
+
+Once data access becomes just one of data attributes, there is no reason
+to think data access that special.  There might be some users not
+interested in access at all but want to know the location of memory of
+specific type.  Data probes interface will allow doing that.  Further,
+we could extend the interface to let users set any data attribute as the
+'primary' attribute.  Then, DAMON will split and merge regions in a way
+that can best-present the 'primary' attributes.
+
+DAMOS will also be extended, to specify targets based on not only the
+data access pattern, but all user-registered data attributes.  From this
+stage, we may be able to call DAMON as a "Data Attributes Monitoring and
+Operations eNgine".
+
+[1] https://lore.kernel.org/20250106193401.109161-1-sj@kernel.org
+[2] https://lore.kernel.org/20251208062943.68824-1-sj@kernel.org/
+[3] https://lore.kernel.org/20260423004211.7037-1-akinobu.mita@gmail.com
+
+Changes from RFC v2.2
+- rfc v2.2: https://lore.kernel.org/20260515004433.128933-1-sj@kernel.org
+- Rename damon_aggregated_v2 trace event to damon_region_aggregated.
+- Address Sashiko issues.
+  - Enclose arguments on damon_for_each_{probe,filter}[_safe]() macros.
+  - Fix typos in comments and documents.
+  - Update probe_hits for region split and merge.
+  - Add more documentation for damon_operation->apply_probes() callback.
+  - Reduce unnecessary folio_{get,put}() in damon_pa_apply_probes().
+  - Define damon_sysfs_probe_attrs as static.
+  - Link scheme tried region sysfs dir and increase the count only after
+    all internal dir population success.
+  - Commit damon_filter->memcg_id for newly added filters.
+Changes from RFC v2.1
+- rfc v2.1: https://lore.kernel.org/20260514140904.119781-1-sj@kernel.org
+- Rebase to mm-stable (7.1-rc3) to avoid Sashiko patch apply failure.
+Changes from RFC v2
+- rfc v2: https://lore.kernel.org/20260512143645.113201-1-sj@kernel.org
+- Optimize nr_probes calculation for probe_hits tracepoint.
+- Use TRACE_EVENT_CONDITION() for probe_hits tracepoint.
+- Rebase to latest mm-new.
+Changes from RFC
+- rfc: https://lore.kernel.org/all/20260426205222.93895-1-sj@kernel.org/
+- Support memcg DAMON filter.
+- Use per-probe probe_hits sysfs file.
+- Use dynamic_array for probe_hits tracing.
+- Fix filter matching field.
+- Fix folio leaking in damon_pa_filter_pass().
+- Move nr_regions of damon_aggregated_v2 tracepoint after end.
+- Rename DAMON_TEST_TYPE_ANON to DAMON_FILTER_TYPE_ANON.
+
+SeongJae Park (28):
+  mm/damon/core: introduce struct damon_probe
+  mm/damon/core: embed damon_probe objects in damon_ctx
+  mm/damon/core: introduce damon_filter
+  mm/damon/core: commit probes
+  mm/damon/core: introduce damon_region->probe_hits
+  mm/damon/core: introduce damon_ops->apply_probes
+  mm/damon/core: do data attributes monitoring
+  mm/damon/paddr: support data attributes monitoring
+  mm/damon/sysfs: implement probes dir
+  mm/damon/sysfs: implement probe dir
+  mm/damon/sysfs: implement filters directory
+  mm/damon/sysfs: implement filter dir
+  mm/damon/sysfs: implement filter dir files
+  mm/damon/sysfs: setup probes on DAMON core API parameters
+  mm/damon/sysfs-schemes: implement tried_regions/<r>/probes/
+  mm/damon/sysfs-schemes: implement probe dir
+  mm/damon/sysfs-schemes: implement probe/hits file
+  mm/damon: trace probe_hits
+  selftests/damon/sysfs.sh: test probes dir
+  Docs/mm/damon/design: document data attributes monitoring
+  Docs/admin-guide/mm/damon/usage: document data attributes monitoring
+  mm/damon/core: introduce DAMON_FILTER_TYPE_MEMCG
+  mm/damon/paddr: support DAMON_FILTER_TYPE_MEMCG
+  mm/damon/sysfs: add filters/<F>/path file
+  mm/damon/sysfs-schemes: move memcg_path_to_id() to sysfs-common
+  mm/damon/sysfs: setup damon_filter->memcg_id from path
+  Docs/mm/damon/design: update for memcg damon filter
+  Docs/admin-guide/mm/damon/usage: update for memcg damon filter
+
+ Documentation/admin-guide/mm/damon/usage.rst |  46 +-
+ Documentation/mm/damon/design.rst            |  39 ++
+ include/linux/damon.h                        |  69 +++
+ include/trace/events/damon.h                 |  38 ++
+ mm/damon/core.c                              | 211 +++++++
+ mm/damon/paddr.c                             |  76 +++
+ mm/damon/sysfs-common.c                      |  41 ++
+ mm/damon/sysfs-common.h                      |   2 +
+ mm/damon/sysfs-schemes.c                     | 226 ++++++--
+ mm/damon/sysfs.c                             | 557 +++++++++++++++++++
+ tools/testing/selftests/damon/sysfs.sh       |  48 ++
+ 11 files changed, 1305 insertions(+), 48 deletions(-)
+
+
+base-commit: 5d6919055dec134de3c40167a490f33c74c12581
 -- 
-2.43.0
-
+2.47.3
