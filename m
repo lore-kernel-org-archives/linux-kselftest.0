@@ -1,77 +1,77 @@
-Received: from CH5PR02CU005.outbound.protection.outlook.com (mail-northcentralusazon11012020.outbound.protection.outlook.com [40.107.200.20])
+Received: from BN8PR05CU002.outbound.protection.outlook.com (mail-eastus2azon11011005.outbound.protection.outlook.com [52.101.57.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16B01405C57;
-	Sun, 17 May 2026 07:29:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.200.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A17C361667;
+	Sun, 17 May 2026 11:27:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.57.5
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779002972; cv=fail; b=dMrSLzRtJnbJcYVRWwy7JEtiXsYMXD7usdSf5c0OJoAUwWY7+KblsGbSYq74AWavof46d9AxLESMWw1ZXe6d6dOkroqGrqk7zi2xXOLqYawMWXhOg5dPsmTvRwLtyXt1PqfskkW5z1rLLkQ/KlNutGlnM9NOFGWcu5654e3Qlco=
+	t=1779017250; cv=fail; b=FI6tAw87hg2o9s5KNXRoUIlyyx+GRoxuS43dkHax4tMRR0mebSDg25VIDu4LjIwV2NCKCjWxL5EwsPPTTW/9EKTpDICDZlyWmty2VLuc5G3ww1h9XrDEh8MVwcebKtTl5Ngs5ObdFcHjEvVPcw522mPuBJDKoDZ/AVdwwyViIMA=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779002972; c=relaxed/simple;
-	bh=nR/BkSXxfUNeKKTb5nO8p2XrK/UkXuEK0/8JJBzCqaE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=lPBq2Onh6GhCZW3jvI2AXiRDoG1b9zQj5e45OwHHPnJJqwzHtchfS5cO/4s7Dm53m7keelQCxWJEaoa6foInSXWM617SPnhYkNKC/E2HJ7+IblHbfj1jDWCkjm3wX4iCtWIRXyYGAjkJ1FEVGePUiap6fPQjQZRu9NorqTVcuaA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=F6eddAlA; arc=fail smtp.client-ip=40.107.200.20
+	s=arc-20240116; t=1779017250; c=relaxed/simple;
+	bh=AcpU6J2kjZv44DTXiXJPvEfXm/yIkt7/9SgC6b18Qwo=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=E7inAV2uT6vqAxp7xrpvTocFettizVdmcsXXPtw9C5lCcxM/aZGjQ1mHAVyGxq0A9gvlDSA2GFe3P+gLO9eNJ+utm1OAdh+HfMvZww56MwHIdgxdWrxO9SLXQg8QX+sMZse125H9U5Gt+x1Y88lkAy8wUbvRymV+KChnUFlFJz4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=qyuaUO66; arc=fail smtp.client-ip=52.101.57.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="F6eddAlA"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="qyuaUO66"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=HftbYr8JNZcJe8qZB2bSCD4P54E4TQuHfjlBsCL0fNtJRPptgZ8KTETCBSpHGvfIZj3G7I0sL+c2mo2coN/ctGJHpEeQ2FcZ13tag+E0FnycfN/FzzleIL0H2DneVkNaKKVExnvxEumFNEEySwk1iuSa9d6AVQp39Bk0j8i556p+TSp1gV7J5EVFw1kDGaGwvLF2dpfvB6eo+p3xuv3ylie7TBtTeBjltOgQiNvGnSd9L6iLL0OtwXQ171YwGQxy5orzkP+tmcAiWJVENrvnJT7A7Ygi5a2c6/XnkD6dXNCDE8PV6KiZJPkWPPy9ZwamRfQpff7NPFEGpDt71GP0Ow==
+ b=iYKdyXaIXVGNqSOo9ByvMgq30ha6oHd2NV+RnIFvsbfLC+Rk8Y6gM7asCWyPSsovQKOslnVEKHD04dn4A/jLBNqZpeXplcd49NMpf6bWsSVBkBDhzgeh5JTbApf+rnBiOLz3h4LYH3/8xYhp9MgxNbFZ0UH9JcEnFDV1j2m8iTVHTGJtFoddoxN+LACD30ovm+AOi6Xov8oGC3pCY/6BmdmzPOv8IbauMNdsEVQ8AQF6qjq28nxIfvfDC9sQwj/gy8BHPbKoWmGZXbZCbOiReHKG8LeORdfAWpSAqeKSB9wdLtkAlOXAHlq4/bQ7j+fzh8VCyWGLQPyTXHm0oV+tAQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uoYgfXYD4ddiFseOqj78hJ26jNv40lh2DfNw03bugjg=;
- b=eM+3wxILNLo7rUohrRxZhHnSAQ58oop80qXMaLsn/nuYSnHFGwRC97W4O+RuK8CbfN5nKfSLyjWJIyAUn7HPE5ei9XGkbCwaoVdqcinI8+YnmTbbUW3lyAp2vXYnAq+gK0DaX+Mh+70x99rM/9Sp7msfG7uY9Ub5KA+2/WE/1KQNGj5hoIpAM0r7lrieuIeCnTzHzXjukRRtygPFIOKCDbwkYyVecGwmyhQfIyOMPY4u9u+9IiE7tpTL0Ed7FnPPLpQNm7Jo7W29WKm3Czk7uYuS4od2TEFnx3NTzxYuO70uSbAHDuyMSls/fQNaxLqCjuUp9G3D8guIfMRA84AWMg==
+ bh=d8MXiYSjsezHTTnoKMIxBQH5qg+qHU0Qv+sXpilipno=;
+ b=cjX54pDcu6Kycc0S4lrzDtyso9jw9qbn7BskyvZBl2fwimDnDJedhkmOZMhCQ03jh/PRSdBpQaNII2lrVGtyqG81NzlV/M7xgQKo91DEYm2MA82Y6C6K37w9Cz/zykS+kJcBM7ghZvPVpCJgM+wx/jnb8Xn6ywaelmSb3NWaQeO6DB5w3/Ts7Y0AVvmVqCpL/1ri7H21ADZs5dUIWnUGQx3nxFPGT/9n5M9DeL2pbgdmQ5ooN2Asr6CasT9YaUXZ2r0eLW5EsbBBa3or4Js0/Oi0Kzi5BnknvW2t8EpyBkFPCRTTtcpsaerSYP3lYDdn6l9ZZY+Mwy/ygO8shi9bRA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uoYgfXYD4ddiFseOqj78hJ26jNv40lh2DfNw03bugjg=;
- b=F6eddAlAcSRXHTzfGmHFdd/SFQrxygb9nCHNQHQ7pGAYlgqjFjVdC4JRUxCCZHZCfsw11sERITbc/6JjE/Tim745KB/bu578L/s6Q56FekB34RvexUy1s7aUn6dLUgGWXW7YhTrehWZJzYo3fagvQM+aq5AuDDoOHiIAuDpeOT+nKxe+kyNPiFOmBZDp7Y6zOWch0Oke1yRVqnbOJOU6el8nQaSSSNO829/X59TzCgBNbI23ms2jo9aG5dlKjOwaszysGjWJ6XbYcAQQA/CDZbkiXpF3t53ugYVXdZdtjEH7wFZXQ3cTyd6ihXX66SNk8TMIIAsUGmPMh6CBkZZN8A==
+ bh=d8MXiYSjsezHTTnoKMIxBQH5qg+qHU0Qv+sXpilipno=;
+ b=qyuaUO66/urdnzo5RXsJLVmHb9g+YcR/jo0d9TP1WGHVabkmuj38uxA6jKNVjYrtWysF/H0mqVCRD7vTL0bOBvztas9aqb5snjfgvHSEwHYjHG3heTNd77V/FiAx5LS0Ps+DA5ixbRkZZolyAs0hKXlOOZM/9z7dz19gBuCtKmktp7Cq+9PQ2gKxGVQkDtR4xYR2Qt/MkGY4iV9SbXpqqeLZ1I6OHWgnuBPr94+E8nJOMvurOkIqyByzZ4kjdbF6OMWHnaNuKmKjIwLP8ETsESpv/5mTbxY7aJrh2deGk1IOs2xTdmeFfmIlOB1sf33D6U9rQDkuzw8cGd0Dkrrykg==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DS7PR12MB9473.namprd12.prod.outlook.com (2603:10b6:8:252::5) by
- CY1PR12MB9674.namprd12.prod.outlook.com (2603:10b6:930:106::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.25.18; Sun, 17 May 2026 07:29:26 +0000
-Received: from DS7PR12MB9473.namprd12.prod.outlook.com
- ([fe80::f01d:73d2:2dda:c7b2]) by DS7PR12MB9473.namprd12.prod.outlook.com
- ([fe80::f01d:73d2:2dda:c7b2%5]) with mapi id 15.21.0025.016; Sun, 17 May 2026
- 07:29:26 +0000
-From: Zi Yan <ziy@nvidia.com>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- "Matthew Wilcox (Oracle)" <willy@infradead.org>,
- Song Liu <songliubraving@fb.com>, Chris Mason <clm@fb.com>,
- David Sterba <dsterba@suse.com>, Alexander Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
- Lorenzo Stoakes <ljs@kernel.org>,
- Baolin Wang <baolin.wang@linux.alibaba.com>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, Nico Pache <npache@redhat.com>,
- Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
- Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Shuah Khan <shuah@kernel.org>, linux-btrfs@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 13/14] mm/khugepaged: enable clean pagecache folio
- collapse for writable files
-Date: Sun, 17 May 2026 15:29:10 +0800
-X-Mailer: MailMate (2.0r6292)
-Message-ID: <FA92C9E5-1339-4EAE-B2CA-5D533CF6DC2E@nvidia.com>
-In-Reply-To: <b8a3c3eb-f241-40fe-9121-4ae5a1097807@kernel.org>
-References: <20260429152924.727124-1-ziy@nvidia.com>
- <20260429153538.727855-9-ziy@nvidia.com>
- <b8a3c3eb-f241-40fe-9121-4ae5a1097807@kernel.org>
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: MN2PR05CA0054.namprd05.prod.outlook.com
- (2603:10b6:208:236::23) To DS7PR12MB9473.namprd12.prod.outlook.com
- (2603:10b6:8:252::5)
+Received: from MW4PR12MB6802.namprd12.prod.outlook.com (2603:10b6:303:20f::19)
+ by DS2PR12MB9821.namprd12.prod.outlook.com (2603:10b6:8:270::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.25.22; Sun, 17 May
+ 2026 11:27:24 +0000
+Received: from MW4PR12MB6802.namprd12.prod.outlook.com
+ ([fe80::51f4:a3d9:b44e:9587]) by MW4PR12MB6802.namprd12.prod.outlook.com
+ ([fe80::51f4:a3d9:b44e:9587%5]) with mapi id 15.21.0025.020; Sun, 17 May 2026
+ 11:27:24 +0000
+Message-ID: <aa818076-6e5a-4b61-bc7f-0bfe3907fe2f@nvidia.com>
+Date: Sun, 17 May 2026 14:27:15 +0300
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net] selftests: net: Fix checksums in xdp_native
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, Mohsin Bashir
+ <mohsin.bashr@gmail.com>, Amery Hung <ameryhung@gmail.com>,
+ Martin KaFai Lau <martin.lau@kernel.org>,
+ Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>,
+ "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+ "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+ Carolina Jubran <cjubran@nvidia.com>, Dragos Tatulea <dtatulea@nvidia.com>
+References: <20260513072355.1083381-1-noren@nvidia.com>
+ <20260514183832.5ef205c1@kernel.org>
+Content-Language: en-US
+From: Nimrod Oren <noren@nvidia.com>
+In-Reply-To: <20260514183832.5ef205c1@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR0P281CA0086.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:1e::22) To MW4PR12MB6802.namprd12.prod.outlook.com
+ (2603:10b6:303:20f::19)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -79,142 +79,81 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB9473:EE_|CY1PR12MB9674:EE_
-X-MS-Office365-Filtering-Correlation-Id: ed0301fe-10d2-4479-4c9a-08deb3e6065b
+X-MS-TrafficTypeDiagnostic: MW4PR12MB6802:EE_|DS2PR12MB9821:EE_
+X-MS-Office365-Filtering-Correlation-Id: 229ecbd3-5f30-4603-95f3-08deb4074475
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|10070799003|376014|7416014|1800799024|18002099003|22082099003|56012099003|4143699003|11063799003;
+	BCL:0;ARA:13230040|376014|1800799024|366016|7416014|11063799003|4143699003|56012099003|18002099003|22082099003;
 X-Microsoft-Antispam-Message-Info:
-	tvtjL/Vszk5aQoQx83NoKKq+cJdqfOm3axYI4LGpHNdZPZPBv7ZImTz1JBgGGio9kNUtqzIZGHz7u0SYytoVNWjSCSJulpE1uX11hBKH8f0RvRv1wJayiv7w8QgsLOFmAyB0lT2YwKNwf/sx/cTVJsQ8ziBjR8aUblxbh3uPs5wlmOPBOZLFhaZy+qqu0UQGlYOQDq66AVS1JBgDIuqgtgzVzZRQWsXjzPpFJIxFcjGMo+RlBTs5474C4tPbr0VA2snaceyiR6+CVP0/kko8aK+RUN4cJChxnUNgI+/vENoHIuFBehVPmX+c9Way9eYh7HV/VJt/ypNOM0V2UG9CFYzNA+MnrmAYpzGrX/mluJxo9cofs3g8gAcGktRSJrQh9k6zuSbhdVjkUt/rd7MUBTqCTAYB9J0lXShQL0cf3jBALEgFPrHWpzCjroOrhORhtM6IpaqKCZ47mWhAYGqiLMjqv7ZvCGpy3FZykhE8UAU/2xnzcWb/hfHY9cN1QGpsZKZN81C1aNLzYQNllUUOpZ/a2nxwyKe5QLmN02VoPsp97phSVYIW5vG8KY+EgncEH+iF63nbS9rF6ZfziSNre2Ms7JRuBBPHDsRPyLVcAwa04p+Reu2H5SDlZBP4chIMd2BDgnpv/1BeJDvCv6uwja/75MM5KqugJLM9DMf9zC8EI/VWvHlvayhhk3P8hPjk
+	JTVlxqZJaQSQroOvNmyvagqVFK75d84ftyMJbJs4SacQxnBo8EZpRtOvnw9P2NeRhgos/6mFp8ZhDl2oJCiuTtcNsY/z4X8yJ2yeYQfLL3kyiP3olhU5f1+Fj+2aG85wXehScX0dj4TLC2s5BBRyT/K/A3XRZqF0qOqOyz/WYonw2ym0odYJuaSuDeiXWfgjaTZY8/WetAZZ71CUkkN2JvqgBf4i7ow7/sqtJwbLtrpziW4UypiAySZ1TbYtPJz5Wi9B3JcGZewyarPJkctl2yMB4GGurleh/a+KJcn982KKS2IZe8U+6h4Lbbjx7VTGvOCGijii/2DemaZs1xSl6oDIf8BiXwGFIKSOpl1W/Fc40xTeFd7WKt85zsJB0euK6kx+z64vtbyrAzkG/5I4SnsYFK97EKlaXPK27Y85gxE/g7Y8OCfIfJS4vd4k26Ev+v0+gpoPEY+W2cCDxXgwPFSTX3BbFeEUTZ+51TIF53AKYEcz3yQYesznlvFhkLeN15YoTrhc1Y0mqF4GOuWxAq+OaVrcLbM11ekajDJmK9XCDfyEbEHTSWjBip+UyhQPP6x89n1TkpH95g/Ct7YcjljY+C+OQBCGFwsx2vuwJLEhMVgfQVzPFr5ruewlyWr9yENezPf9CQk3/PpYMmYT/P+NVJvbD//1uCZf1Styc/csot+PtDDc+lmsEBJBxpBP
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB9473.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(10070799003)(376014)(7416014)(1800799024)(18002099003)(22082099003)(56012099003)(4143699003)(11063799003);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR12MB6802.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016)(7416014)(11063799003)(4143699003)(56012099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?mtjCje+XkxaDSVCxDVD+nSYln3cZJci5ICqZZ23dUjpxZPhAB3257qXaXDsW?=
- =?us-ascii?Q?JbedZbd3yjkzxuN0AE94erJ/2iMaO4WrMphkjtIhA+J4lW00AO0qbv0rxwny?=
- =?us-ascii?Q?606cvgshcmVL+cjDQ+PIK2jt05+HhPYrWWytPhiWrq7FGbhWtYSGr8WRTjVb?=
- =?us-ascii?Q?kB51eDcHyHOvqpYMDWJ88ORdP7y8UNeEmIW+Ox+T+6cdOg0Kvpaf0WjZX1HJ?=
- =?us-ascii?Q?uq1EEbXxPl8pqUW6eqVsKRtzVZejNCabf0a6xRhZtf86D5+FsA/aJq5W0f9w?=
- =?us-ascii?Q?Wlo0/d10KlXIwLrKiSfjrRMLJctxVRWqW6qxJj+XAYPdRl52z1/LUg+RwaUv?=
- =?us-ascii?Q?upQrfigqWS8v1GVwrn1/iyWLPW47Rxdym17sNCN2EXviA6c04dU9OIdsRfYp?=
- =?us-ascii?Q?xEbjkNDgB7PS8upr8B7iK5EUX4/7BB66QIDYvB4bBWrduPJIU3pqdBYOS5vx?=
- =?us-ascii?Q?C3opSQL1mnbKawMPV77fvpPlU13r4qbP4wcJHKSlZN8DMZbVmyE1eQEH8ySw?=
- =?us-ascii?Q?RfvGCdt3jm0YfHhLwMOfpsMULhLPq3VowfwNXhgJYN1rrtnU4nOhOl2KPjCb?=
- =?us-ascii?Q?XQtF/r38qbIRhPLz0qBgfdXNUzhdUYhdf2ozVoVJ4zV/coO1J+mFO7t50lFU?=
- =?us-ascii?Q?MXJHlwjhHTl8RdVk2RZvgytnXVcc9Q/+nOrbTme8SIgGMvO9WQVn9Ty0UwsU?=
- =?us-ascii?Q?n9DSrXh699RpnRIjav7fUv1HiuFT01/voOT0kPa4WFDlZp4B2AeswDkhBV3j?=
- =?us-ascii?Q?Uw1KqSLB7X2SbC+6NM1/t6gPPshwS51hRITggIrRfWsYaxXmft44HpS4DrJO?=
- =?us-ascii?Q?6q+jO0zFWVM5inFkS/cDzYM1KY4E6mSnewXwaWy81DEO2hOCxTetyep5Cw+L?=
- =?us-ascii?Q?hg9dCEjPh5t3SEjBAhJl4OujXaT5NCZ9En7Kvu/YQ7XxqRRSKiuKkjmOlI9r?=
- =?us-ascii?Q?C9BrpVoEDNMs5m+8BsfJCmZhZPCQ/gMVcfI7Z8jxAr+9pNfh+02bylL6nOHn?=
- =?us-ascii?Q?nLUleBSyaDTgZLcJcfA3UlrV6mHC373hEZjT4dJ3bSEbJ2qdJrWyPRTRGZMF?=
- =?us-ascii?Q?MXSWrmLCNm+nkdCxVb3yJTnO0+pw0x1QGJFsBKhNqDPDleyAxJh06P7pCLEt?=
- =?us-ascii?Q?CrPOSqjd51woSF4FTqvMz1eseKajR1QaGF2lvrJg1jK8NiJMrLalj+H4bTBg?=
- =?us-ascii?Q?WZ6e6+L3j8sa4FuuGOABvVoUAIUd/D92rGLuec2e/+L8c8WetpKyr+CmuOwo?=
- =?us-ascii?Q?1SxZ/G1F0tbOrtRycdRox3ame/rfFqFmRpSt+jLa8lSWrKPEQ3C4CcAqpXo5?=
- =?us-ascii?Q?SGrFOuJPCypUHAgu0KMpIzEszqgL/BIbItYWwbQ+vaPAfP3LTRF0af9mMYiv?=
- =?us-ascii?Q?zhUKVFxLq7aoutuIhWwTZRVcUw3S4Ij0kMMj6l/HmapptWHIEzDoSJQXum7j?=
- =?us-ascii?Q?xwFnJ6qgJwuShG5nMmi/hm48KycTKXVzYNeVTVRa0ukVzqRodfoqKcNJYTnW?=
- =?us-ascii?Q?VwP6gtWCPLXBDZSaJjrvSxpGNiaqbZsBhVoAmnYdU3WkrhXnMsBFgOOCUI8A?=
- =?us-ascii?Q?vWCQbHjb43op09qhdLladl1OfvsVGC05d8YKnFOjNGijdmzXF61La0Zn27H6?=
- =?us-ascii?Q?UydKbu+s2/2CSs3fkP1U7KFF43wy/Brliz/jCCQXKs5kw+7pzUBGwlMssmpF?=
- =?us-ascii?Q?b8PAERsrEVnnAdStGQ0PYP8xrMpPi8uJWDmwXiHNMpQ5z6Au4EkEyjBllEo0?=
- =?us-ascii?Q?FAAos+Y6HUHbwN/k0TodiEHmvOMORiwv7oDtspht5WRhtuFGLnfI?=
+	=?utf-8?B?TTJUVkE2Mlo4VkhCcXlUNUJIbmtoVFp4SUlrQms1Mm8rWStJN1BHNjF5UFNB?=
+ =?utf-8?B?bG1nWlBnR01KWXpEZlJhQWNvdERRdTdlRmdGNWZITjhPZ0g4RnNKREcyR1lX?=
+ =?utf-8?B?UUtQcVB2VjBzamxCTVZncFZudG1VamFUY3FhbFIvSFNOdHFJbml4d21lNFRX?=
+ =?utf-8?B?Z2hwcEVkaHNzeHc2OFI0dVphQ1RYSzYxTGdSM3hYWnZvNU5vZnZOSHNQa0RM?=
+ =?utf-8?B?Nk5lbDNQRFVQMHFtL3JNWW5xRU1aSFJETlZpMEE4dllEdnhmUll4N3RLclNh?=
+ =?utf-8?B?ZVE4ckJnUFZjL3ZWbm9jVzBuWC9zOTFxVS81Skw5Uzlwb1B4Mktqa3gwTTNo?=
+ =?utf-8?B?Z1NWdnB0SnJxVyttNEJ5WjBHaXgrVmtGTHZ2MWF5TURSZWkwR2ZjM0pSc1JF?=
+ =?utf-8?B?MUNRaGtPZGNyT01XVTRRQjNYZ0JXYWJ5SkJnMGxsZm01THdOdUpQUnB5YVFN?=
+ =?utf-8?B?MllHb2xHajFNY0FwS3JFbzFMVDBueGJuS2N5QXBNNFJwelkwSElZUm83MFVl?=
+ =?utf-8?B?WGFMMzBmOFBWZDJkdjVPaEljc3ZYRGpwaHlRNW8vVy9MOGtNR255bTlIVkF4?=
+ =?utf-8?B?bDZWMllqNEJGdGY5WDlqWW9sdUZ2TVhiV1FiRXhZZElIQjMyM08xb0h5NDFi?=
+ =?utf-8?B?azNtYUVFeGlzODVQWXBvN2M2TFpBa2lkRis1SXI5SFNIdjRpQkc1NDBEV2NM?=
+ =?utf-8?B?TkVHbE4yZ0tOMkJTWDlxZUFhbTBNencvYVQ0Zmw2cjFmOFJ1VmpuWEZ6REJ3?=
+ =?utf-8?B?cnloN2I4Ujdzb2dvemxETW1KZ2xuQjgxSmVHWG42UXJ2RlBsUnYyaHJ4aEF6?=
+ =?utf-8?B?UnNHZlYrdzUzZ2FsaGhwbEF5Z0V1RFBDZ3ZXZ3BqM0dMQk4xNWpWNTNZS01n?=
+ =?utf-8?B?M1JocTVyVlMzbzBuL3o5dmNtZ2JUMFJsUnBRVzVYaTNOZVV4Tm9kRHhHQUJB?=
+ =?utf-8?B?bi8xVmEvL1c4V1dnOXlra2ZpNEk3K1VNMm4vd2ZDdzYveGh0ZjMwaTR5NnB0?=
+ =?utf-8?B?cFFXSFV6Q0drSzl2VXJ5djcraVo5SWVPUHZ3SmVOYkNZdjNvQVdjUk1HcG40?=
+ =?utf-8?B?cmM2ZVducTF5NnlhamUwSjQ5SllGN25kUDA2YXZaZnhKT1IyU3dJWDl2RzVV?=
+ =?utf-8?B?SzBuUHJ5Nkx3Q2RoaDVLRU5idmE4UlV0SVc2aGsvWjlLSEs2S1dHUFFpbVFZ?=
+ =?utf-8?B?Z3VDRjN4cWhBMnY4UVU5ZUFueTZqL0pGTU16R0UwMVYwYUJObittZlMzTWIz?=
+ =?utf-8?B?c0czWnB5Q3FrczRnNFcxVUZkcGtwbDRrcm15amIyUlpLS1MvM0FIZXEyRUdo?=
+ =?utf-8?B?UVJab2lqZEVYV3pmcDhkeHNiUnVDWFQwU0VJNjh5eGtmWXV4dzJBV0NqWFVy?=
+ =?utf-8?B?M0ZUQnFjMExYMURDS3JSU3NTQXQ1d05YQlVNMVYzVjMyQVorbzQ2Y3cyRFFy?=
+ =?utf-8?B?QlFVYWRxSHNKZmk2YytESFd3cVZuSEJyTThEdGhMWDIzWmFKMTAyVURtREFS?=
+ =?utf-8?B?VTNMYmhZZkdoekFXL3RZUmRjakQwaG9ZQzk3eFdYeWJNRENPZHBtaEptWkJW?=
+ =?utf-8?B?ekxMbGpDVG5UbTJDUFQ4SGNvcmh3THRHZ3hOWVAvM29oOXFNWkcxQk1LNTdQ?=
+ =?utf-8?B?MEExN3FSU3hRakp5VFViZnZwRGFxUjM4Y2lOZThoN1JEQkdkUzBMUFRqdW9Q?=
+ =?utf-8?B?cTkwWlZOcndDdVdqbytDcllLNmhTcXhJSjhGVGVXZkdFMmdERDRvaDhNd1pD?=
+ =?utf-8?B?Znd3QUlzSmlNaE9oSEFJV044NXVITm5Rc3RXTGVRUkd1a2NtWU9jU3NmWXpO?=
+ =?utf-8?B?STEyTFV6RjRSdjYxT1VkTnhaSk9YTXVaeHQxY1hlTjduMDdRL25uaFdNbW5U?=
+ =?utf-8?B?WGFtWllxSk5YNmJIUUV4N1NKZjR1UzBNNzc1NEtaaHFhSUE2SWJlOS9HTUh4?=
+ =?utf-8?B?d1BCMVAwQUVwelhjV0ZlNDZPelpXUjc0V1hPOEE5SmJESjBmOTZGZlN6Wlp2?=
+ =?utf-8?B?aGVPVU5BVVFqeEQ0eVE4OUR6aVAxc2ZyU1R2VWQ2a1J0SG5OQ25iUmNkU09x?=
+ =?utf-8?B?SnRuM2REN0ZONmFvTlgxamE5RnRkMytYSFNrcjJFV3Q4MnBSREE5T0V3alBm?=
+ =?utf-8?B?dDhWOGVNVnUrVGFHREdXaENDVUZuSzVGTG5vb0FJM1ZmdzN2MzNVcFFndFBx?=
+ =?utf-8?B?QWpPNmIyTVovOS9GZkEwUW9kdjlNQVAzVURnLzRmaERLSlJpYk0yVkFHWHNT?=
+ =?utf-8?B?ME1pZ1ZldmZ2ZDNiV1o0c1NWNmI2RUxjV3NneWF2ZXdBYWpHSlkrNnB3U2dT?=
+ =?utf-8?Q?WRLTg9VAgfX/yYVXHa?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ed0301fe-10d2-4479-4c9a-08deb3e6065b
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB9473.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 229ecbd3-5f30-4603-95f3-08deb4074475
+X-MS-Exchange-CrossTenant-AuthSource: MW4PR12MB6802.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2026 07:29:26.4702
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2026 11:27:24.5388
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4Y/G1a14VCOgHRxtb38CqVi745uJki4CWA+Z7+5g27OtI+X2RKNuz1Xdg1y6T8D9
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY1PR12MB9674
+X-MS-Exchange-CrossTenant-UserPrincipalName: iO3Tx6WA5LZen9RANFJXuGV+oikswN8APc2ix/3WIzDHy1TdUcvjz19AZIVCHEjiHuAxIi85V7lozZkFvLNS8Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS2PR12MB9821
 
-On 9 May 2026, at 4:13, David Hildenbrand (Arm) wrote:
 
-> On 4/29/26 17:35, Zi Yan wrote:
->> collapse_file() is capable of collapsing pagecache folios from writabl=
-e
->> files to PMD folios. Now enable clean pagecache folio collapse in addi=
-tion
->> to read-only pagecache folio collapse by removing the
->> inode_is_open_for_write() from file_thp_enabled() and only performing
->> filemap_flush() if the file is read-only.
->>
->> This means userspace needs to explicitly flush the content of pagecach=
-e
->> folios before khugepaged can collapse the folios, or use
->> madvise(MADV_COLLAPSE), which does the flush in the retry. The reason =
-is
->> that blindly enabling dirty pagecache folio from writable files collap=
-se
->> makes khugepaged flush these folios all the time. It is undesirable to=
 
->> cause system level pagecache flushes.
->>
->> To properly support dirty pagecache folio collapse, filemap_flush() ne=
-eds
->> to be avoided. Potentially, merging associated buffer instead of dropp=
-ing
->> it with filemap_release_folio() might be needed.
->>
->> NOTE: this breaks khugepaged selftests for writable file pagecache
->> collapse, which is set to fail all the time. The next commit fix it.
->>
->> Signed-off-by: Zi Yan <ziy@nvidia.com>
->> ---
->>  mm/huge_memory.c | 2 +-
->>  mm/khugepaged.c  | 9 ++++++++-
->>  2 files changed, 9 insertions(+), 2 deletions(-)
->>
->> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
->> index 9b3abb98a7e51..e1e9d59db6e70 100644
->> --- a/mm/huge_memory.c
->> +++ b/mm/huge_memory.c
->> @@ -97,7 +97,7 @@ static inline bool file_thp_enabled(struct vm_area_s=
-truct *vma)
->>  	if (!mapping_pmd_folio_support(vma->vm_file->f_mapping))
->>  		return false;
->>
->> -	return !inode_is_open_for_write(inode) && S_ISREG(inode->i_mode);
->> +	return S_ISREG(inode->i_mode);
->>  }
->>
->>  /* If returns true, we are unable to access the VMA's folios. */
->> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
->> index 1ee15b48962a3..fb7ff643973cc 100644
->> --- a/mm/khugepaged.c
->> +++ b/mm/khugepaged.c
->> @@ -2345,7 +2345,14 @@ static enum scan_result collapse_file(struct mm=
-_struct *mm, unsigned long addr,
->>  				 * forcing writeback in loop.
->>  				 */
->>  				xas_unlock_irq(&xas);
->> -				filemap_flush(mapping);
->> +				/*
->> +				 * Only flush for read-only files. Writable
->> +				 * files can have their folios dirty at any
->> +				 * time; blindly flushing them would cause
->> +				 * undesirable system-wide writeback.
->> +				 */
->
-> That comment should really be merged in the comment above.
->
-> Also, there we say "khugepaged only works on read-only fd" ... which is=
- now just
-> wrong?
->
-> Please revise that whole comment as you incorporate your comment.
-Sure.
+On 15/05/2026 4:38, Jakub Kicinski wrote:
+> On Wed, 13 May 2026 10:23:55 +0300 Nimrod Oren wrote:
+>> Data adjustment cases failed with "Data exchange failed" when using IPv4
+>> because the program did not update the IP and UDP checksums in the IPv4
+>> branch. The issue was masked when both IPv4 and IPv6 were configured,
+>> since the test harness prefers IPv6.
+> 
+> Oops, maybe we should run against both IP version after all?
 
->
-> Apart from that I guess this is fine ... or we'll learn rather quickly,=
- haha.
+I can send a follow-up to run all xdp.py cases against both IP versions
+when both are configured. Or are you suggesting this as a broader change
+for all drivers/net/*.py selftests?
 
-:)
-
-Best Regards,
-Yan, Zi
