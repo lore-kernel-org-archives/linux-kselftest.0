@@ -1,189 +1,171 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A623A2459E5;
-	Sun, 17 May 2026 17:46:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21BD333987
+	for <linux-kselftest@vger.kernel.org>; Sun, 17 May 2026 18:13:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779039976; cv=none; b=uTeofYoSn/46NB3pcv1iIvlG88I1srktbW5QvrSQSDR02OKdFebtaiTk8R1xN7rx/iou3yIu1eN3g1nvpE2I2/yJkIj423mvEmkLSoYiKNLcMF63V5V2hnvm8ZeTWpyh4+KbyeJowyAtarSgc+Y6LtbkEnLngce0ySnMRAuEzj0=
+	t=1779041624; cv=none; b=TekL68L+CtUKrP6Gw07lrelauFo4KaUtmeclOOBhA887yFPGYEQLnWwTQw55qZwd33L2Z/CU2n0+UHiJr4d1LdQCtrTaaFfUdvc84aRMeuCYGZho6KDbqPUk3ebH/VXC2r32IpvoECrTLyax8JDOXzAoXHck3PFp3yY7Xj5DDx0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779039976; c=relaxed/simple;
-	bh=LSrZIjSMC9bdEkQlWcQGlIFkZF2tAKMPlGMluXJUtU8=;
-	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Message-ID:Content-Type; b=J3sl8TuAAhcojJ2bNOvaDmyAH8oAvVtaF3UpqGVxuMdg7ake/YgmVB0HBSJ8McKb/foIO56wZ4CWQkOq/bK+qJSnSpSKMMtTBj3QuaM6DdkFtFp/WQzpja0OclwDopgI1Qs9dO1eLeLja++tG2kIR6rcqbb2r5Ga8d44iydwiDw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=QkuFGwr1; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1779041624; c=relaxed/simple;
+	bh=8eVmxtcYmSeoUBzl3bHvfv6EisD5Oywosw3966cGgXQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=H8nZm4ToT7xP+45GhfDY8RT1ENHWqi0+u4r3fjGZsF5ZYGCkluV8UrgmbFfhGz1JXFnnQYo23M6tIoYlVaBsrjieNAkJs0V8UZl65EV/ocOoXKEdmzt27bS1uXe8hM5QSYr9+XKPBFCWO7I17aXoKN8zvpAWnT0lI5JNedS1IwM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=T/luTTRS; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=eoGtqcNK; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="QkuFGwr1"
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64HCfTjM4141466;
-	Sun, 17 May 2026 17:45:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=sSwTRB
-	GQO/SP4XfT8sDGOUbmXuHvETtJn9laC+LQKyk=; b=QkuFGwr1kHXctGbVdGKk4k
-	XAdicNRjrvyeb1b8lzU+XPLEJbGmTpxoUfRV0l9w6uCpr1um5XKUYAb8zH8da+Ef
-	aMUM3sqcfMqjujUKJXRyx/OtH0bQ0PMjt5dg5nJyaeoiQxUd+4eQj8scY8o1Yeox
-	BtScFK25WipK4cgu8nilEbLWBlL2swkId4c/oaMTdlZmoNSI+p9k0h2/8cTLNR2W
-	aGi7TLVCxKJkQPTlLE0camLuvTgmrscLD/LDAdOuhs0u7sU7nRU92UAcHOrLn8Jh
-	hFq5OTWCjYDZuPHLnbwKp3JoEj9znMM3X40GthYT/tT5r8D5X/TAo+G7FCIVFwsw
-	==
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4e6havvbny-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 17 May 2026 17:45:52 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64HHd77X002229;
-	Sun, 17 May 2026 17:45:52 GMT
-Received: from smtprelay07.wdc07v.mail.ibm.com ([172.16.1.74])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4e754g28p4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 17 May 2026 17:45:51 +0000 (GMT)
-Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
-	by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 64HHjoKm30605984
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sun, 17 May 2026 17:45:50 GMT
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 523CD5804E;
-	Sun, 17 May 2026 17:45:50 +0000 (GMT)
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 7C5975803F;
-	Sun, 17 May 2026 17:45:49 +0000 (GMT)
-Received: from ltc.linux.ibm.com (unknown [9.5.196.140])
-	by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Sun, 17 May 2026 17:45:49 +0000 (GMT)
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="T/luTTRS";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="eoGtqcNK"
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64H9L3oC1762415
+	for <linux-kselftest@vger.kernel.org>; Sun, 17 May 2026 18:13:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=1Qv0uuV8Ex5OvKUJ759UY79R
+	1wNp48m7rDkw4nsWu9A=; b=T/luTTRSCy6ThZnqIMq4Yv9t7QpQoo3sMj3NuAPs
+	RfWctSvaJ1iz8NPlEmCJxGfPfEaLbU/o6srfIXsRyDzyj/WfigponPfPIqjUJdia
+	8QF0U4Go3zbojf6o5Jn1DgtCS33XiUZYfw/BqPIRxGRH+AJBdh2XCYluPWmsk86F
+	TVpSGq/sBx2kRcUdD6r9jk9uKsC7k6Hw+ut6Xjbde5VS2NNbrETq38gtMpq1koWI
+	IJZ0S+Wu0kgDCe7OcjRlAgv3vBu+PQX0eX/XPqvcPEVXo1zb7mzXhejUj4cJickR
+	5vyVHRuVAmCRA5/v9kM9GTEQ+Fxd2iP2J8gOkhMVD/npaA==
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com [209.85.219.70])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4e6gwmbc09-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-kselftest@vger.kernel.org>; Sun, 17 May 2026 18:13:42 +0000 (GMT)
+Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-8acb26fbbb2so18138356d6.2
+        for <linux-kselftest@vger.kernel.org>; Sun, 17 May 2026 11:13:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1779041621; x=1779646421; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=1Qv0uuV8Ex5OvKUJ759UY79R1wNp48m7rDkw4nsWu9A=;
+        b=eoGtqcNKKy2dptGtrTNgKWXbnNe1bwR+OVEyw+1BQj7m8nB1hrjm9d+ZfKAw4uH/HS
+         1KyClEIoQEqFfcIXiAEMhl6UEpaeWF0UK52xZ0OOcNdqqgfR98VUwriRfS2628ovBsat
+         wjTiJr6715TgPwDMjzexAZB8f8NWHUNp0tN0zqtIRC3PqmVue7iVHnZtdCBfcf+oNrKU
+         Ei5mphVgHmW7FOC0fqk0e/3D8Tz4uvFso+ILSZOtTRIkJoiMUzVLmhN4kQ3y5hsY79gz
+         0MuGo8cZ7/eLQxqbWxEQ7+bb86zzhLQuKcX/pHTLl1GCnsXuLF1spkMTOFRqyurd4US3
+         T+6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779041621; x=1779646421;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1Qv0uuV8Ex5OvKUJ759UY79R1wNp48m7rDkw4nsWu9A=;
+        b=IYTuhjpW9zrs+pXit+YR/32ozbnWA4diCcROc/md/uWqVR3stE7wA79iDeiW+f9IB5
+         U4Vnr1hu61ewnB8uzAA1wQFvQNZn85nWNJVQib8ZbbvrTwy9MoMjPrIgE2c/QvZ4jHmE
+         OtwnR9609vdBUioLmWBBm2oXhDPd84ERZxMj7+t0l1Ipwf+wu/mQWfO1vdVEVMQQnfsY
+         Nvu/y90Ed624ysolG7ejW0lW007nP67MhYgLxdSzyDrpr8uWLRInQ9mCxfE+A8MtbrSm
+         o+612tUNdDkqONgHAWCiYgSW5Wr05CWA3AM3h/eWEobE2PWivJpYp03ME79J3WI+OKOJ
+         Mp4A==
+X-Forwarded-Encrypted: i=1; AFNElJ9+3caOmPCLqPpRwV3+6FKBGfjEE8KE/6QKfe53gXYN5YtxVSTgx+sgPFyBgP8vOyUYAQ086rqizH93mDKMU9U=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw/HKjUkhTp3PcAZR2oy7U0sGzhkQhNph7g8D7kyVsIueT1lmqV
+	GhlX+o81jKi3bc5hgBBBhHMMJFnQCdgwoZp+WDp3eVWFrf1t040mg1yEU48+8B018H94o+CXZkk
+	0s7A+WEkRm53f/ddXeAl8UGpVheGFnfbGk+sldH1YzIKDu8Z7pO+a9XBwp7GLtP77s8TJ3dI=
+X-Gm-Gg: Acq92OE04KX5XGbW9IxbElokDL+CVqQTOikxootSBiJw7iVSGWeeUZ33CMBojd8dw9U
+	Dg/AA7sBQr3RD7X1B4PA0hpggGIbCZ6in7EbP1IDyrYJTDkMPzKzxZRScw3UN+eURnACfZ6QTmw
+	XfA31mqzgoZbCMpKhwAjzTwEFG7/ihwgch7aCXw1n6wcSOxxAGP/ehn86zN+Hye+Z17MJawlHPy
+	F0Ta+7prltAvP7I9lEHnBJGM+Y0h7m8G3frbG3IgB3vMepqRbo/iESnHX+arPm8UqNb4cuEmeSs
+	FF+G5oFY5uqDstl5bzHskC5aCQfp2yrHff6bHyx0poIPFjgb2Zxg1H9MXuAJAB2PDlqN2B48nc1
+	g5Ul+251KYUGrFuup4Gtnk7T5R0oPuzlrgOagKMWuuu/nKXDD42jT+LAAgnWUmOcEpd5EbqUwx2
+	3c2SZVgLNxGGd1AsSwIer/4XJKPtQm4LQSbYk=
+X-Received: by 2002:ac8:5cc5:0:b0:50e:62ba:3ff7 with SMTP id d75a77b69052e-5165a075923mr178267141cf.26.1779041621542;
+        Sun, 17 May 2026 11:13:41 -0700 (PDT)
+X-Received: by 2002:ac8:5cc5:0:b0:50e:62ba:3ff7 with SMTP id d75a77b69052e-5165a075923mr178266581cf.26.1779041621074;
+        Sun, 17 May 2026 11:13:41 -0700 (PDT)
+Received: from umbar.lan (2001-14ba-a073-af00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a073:af00:264b:feff:fe8b:be8a])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-395882c41c1sm6557951fa.12.2026.05.17.11.13.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 17 May 2026 11:13:39 -0700 (PDT)
+Date: Sun, 17 May 2026 21:13:36 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+To: Oli R <sigmatwojastara@gmail.com>
+Cc: Rob Clark <robin.clark@oss.qualcomm.com>,
+        Dmitry Baryshkov <lumag@kernel.org>,
+        Abhinav Kumar <abhinav.kumar@linux.dev>,
+        Jessica Zhang <jesszhan0024@gmail.com>, Sean Paul <sean@poorly.run>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        James Clark <james.clark@linaro.org>, Shuah Khan <shuah@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>, Boqun Feng <boqun@kernel.org>,
+        "open list:DRM DRIVER for Qualcomm display hardware" <linux-arm-msm@vger.kernel.org>,
+        "open list:DRM DRIVER for Qualcomm display hardware" <dri-devel@lists.freedesktop.org>,
+        "open list:DRM DRIVER for Qualcomm display hardware" <freedreno@lists.freedesktop.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:AMD CRYPTOGRAPHIC COPROCESSOR (CCP) DRIVER - DB..." <linux-crypto@vger.kernel.org>,
+        "open list:PERFORMANCE EVENTS SUBSYSTEM" <linux-perf-users@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH] treewide: replace /usr/bin/python3 shebangs with env
+ python3
+Message-ID: <u7c5s7dtvzmqteqvrhr5p2a6wc7sdtmhfksw5344grs2gzgot5@n2ybljjcrju6>
+References: <20260515180806.246914-1-sigmatwojastara@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Sun, 17 May 2026 23:15:49 +0530
-From: adubey <adubey@linux.ibm.com>
-To: Hari Bathini <hbathini@linux.ibm.com>
-Cc: bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, maddy@linux.ibm.com,
-        ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
-        shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v3 1/5] powerpc/bpf: fix alignment of long branch
- trampoline address
-In-Reply-To: <7d3bbb94-575f-4119-9ef0-62cff98795ce@linux.ibm.com>
-References: <20260411221413.44304-1-adubey@linux.ibm.com>
- <20260411221413.44304-2-adubey@linux.ibm.com>
- <7d3bbb94-575f-4119-9ef0-62cff98795ce@linux.ibm.com>
-Message-ID: <273c38d74bafbdf8ad4e22d0df94e6ac@linux.ibm.com>
-X-Sender: adubey@linux.ibm.com
-Organization: IBM
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTE3MDE5MCBTYWx0ZWRfX/D/17EsNSKnN
- Vj9JkarDQ8JEjSVaBTL1xcfCmFbd+hZhYoj7l2ldCZlQMeCY55bsGxPVQLH2w3+Wa8/KR8i7hNz
- hyWhk/D+6bhsJW23wuuMVzjmlcU8HVd/vJeilGOb9IiNGG0ihNFBvjapNpu7nn0wKju+tfWTjsz
- +23fjwF5FYStcOSRqu+QxRtSnTcsnQqNpYny3vt+93YaL07TKFqHmbClEbhGLl0n1ht/F0ejUcF
- U4Cb8lls1XAGhxnHBD7BG56uDSkCBDmxbXbi3F71LX6oiW8ScX7KBywW0ctEPlmHm7h6zDlznCp
- lbkaDSJKfus4TFm5BSJ/vc4UR8GqxyYJAFBSdlgtHVL++azD1Jfg5h4G+Lg4gqmx6L7GKMXHzto
- MxGEMsSkYTTrgU3Q4BLaQ7KnUyDLoVOcF1OWvJPp+9GpvFQLsldgUwfz4goqxU1ZnkKaJJgUIzc
- 5R/HOTDiRBVmQ8fdSUQ==
-X-Authority-Analysis: v=2.4 cv=Np/htcdJ c=1 sm=1 tr=0 ts=6a09fed0 cx=c_pps
- a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
- a=kj9zAlcOel0A:10 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=RzCfie-kr_QcCd8fBx8p:22 a=VwQbUJbxAAAA:8
- a=VnNF1IyMAAAA:8 a=I4iyMijFOUpp9DcVwYYA:9 a=CjuIK1q_8ugA:10
-X-Proofpoint-ORIG-GUID: FPkm5COqXv7hbfoCe4W3pq1iNDUPrnqq
-X-Proofpoint-GUID: FPkm5COqXv7hbfoCe4W3pq1iNDUPrnqq
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260515180806.246914-1-sigmatwojastara@gmail.com>
+X-Proofpoint-ORIG-GUID: VZyoRBc8V35k6DAo23yuEdg6x9aTI6NC
+X-Proofpoint-GUID: VZyoRBc8V35k6DAo23yuEdg6x9aTI6NC
+X-Authority-Analysis: v=2.4 cv=W/AIkxWk c=1 sm=1 tr=0 ts=6a0a0556 cx=c_pps
+ a=oc9J++0uMp73DTRD5QyR2A==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
+ a=NGcC8JguVDcA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=u7WPNUs3qKkmUXheDGA7:22 a=_glEPmIy2e8OvE2BGh3C:22 a=pGLkceISAAAA:8
+ a=EUspDBNiAAAA:8 a=Vby_bzTUFChIRH6wvO4A:9 a=CjuIK1q_8ugA:10
+ a=iYH6xdkBrDN1Jqds4HTS:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTE3MDE5NyBTYWx0ZWRfX0tWaU9GG8f18
+ RQKg7G+DQPls5K2XuQI9Rc7DBKjLJtsdoDduQgA2Jku5WhIdKwNZlQXEXLqeRuegfjKBCscIoT5
+ d2hrzOCofW3Clz4DQA6HLjptBuTOfTy0GHtfHBCkkM7KHnmqc5bKNWFJRhcHbhCpZPKedbqzrhu
+ 7KhS4hK6nqLb+ZHTJwhQ7imNZv7VGeL5uny0z0yqiK3Y7z/jZP/JvSmvwjh4/KP82Imi0+3H40u
+ 2JyCVttOlXVgPNvC4CtnG1gHe4xcXSsmRRR7zkCta5V+F14t61hvsHDD5FHePcb4tKKeWoG5XzC
+ 4HqeCRpR25Azpfv+QHWhuZRQQtOykRWcBsjGtAyBL1qAVi+6UWLLyDM5k9o0AK8pCY0Lt4VKkwW
+ vJEur6g7RCLgnGrdNX9hdQz1c4xqP5E8odFexpiQMpZndc+igIwrHImrU0q/c+Ze+XGob63JYwi
+ UNAQ8ba9u7PO110rgoA==
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-05-17_04,2026-05-15_01,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- bulkscore=0 spamscore=0 clxscore=1015 priorityscore=1501 impostorscore=0
- lowpriorityscore=0 suspectscore=0 adultscore=0 phishscore=0 malwarescore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2605130000 definitions=main-2605170190
+ spamscore=0 malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0
+ impostorscore=0 priorityscore=1501 adultscore=0 clxscore=1011
+ lowpriorityscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2605130000
+ definitions=main-2605170197
 
-On 2026-04-28 20:59, Hari Bathini wrote:
-> On 12/04/26 3:44 am, adubey@linux.ibm.com wrote:
->> From: Abhishek Dubey <adubey@linux.ibm.com>
->> 
->> Ensure the dummy trampoline address field present between the OOL stub
->> and the long branch stub is 8-byte aligned, for memory compatibility
->> when content loaded to a register.
->> 
->> Reported-by: Hari Bathini <hbathini@linux.ibm.com>
->> Fixes: d243b62b7bd3 ("powerpc64/bpf: Add support for bpf trampolines")
->> Cc: stable@vger.kernel.org
->> Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
->> ---
->>   arch/powerpc/net/bpf_jit.h        |  4 ++--
->>   arch/powerpc/net/bpf_jit_comp.c   | 34 
->> ++++++++++++++++++++++++++-----
->>   arch/powerpc/net/bpf_jit_comp64.c |  4 ++--
->>   3 files changed, 33 insertions(+), 9 deletions(-)
->> 
->> diff --git a/arch/powerpc/net/bpf_jit.h b/arch/powerpc/net/bpf_jit.h
->> index 7354e1d72f79..1184ad15d5a4 100644
->> --- a/arch/powerpc/net/bpf_jit.h
->> +++ b/arch/powerpc/net/bpf_jit.h
->> @@ -208,8 +208,8 @@ int bpf_jit_emit_func_call_rel(u32 *image, u32 
->> *fimage, struct codegen_context *
->>   int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, u32 *fimage, 
->> struct codegen_context *ctx,
->>   		       u32 *addrs, int pass, bool extra_pass);
->>   void bpf_jit_build_prologue(u32 *image, struct codegen_context 
->> *ctx);
->> -void bpf_jit_build_epilogue(u32 *image, struct codegen_context *ctx);
->> -void bpf_jit_build_fentry_stubs(u32 *image, struct codegen_context 
->> *ctx);
->> +void bpf_jit_build_epilogue(u32 *image, u32 *fimage, struct 
->> codegen_context *ctx);
->> +void bpf_jit_build_fentry_stubs(u32 *image, u32 *fimage, struct 
->> codegen_context *ctx);
->>   void bpf_jit_realloc_regs(struct codegen_context *ctx);
->>   int bpf_jit_emit_exit_insn(u32 *image, struct codegen_context *ctx, 
->> int tmp_reg, long exit_addr);
->>   diff --git a/arch/powerpc/net/bpf_jit_comp.c 
->> b/arch/powerpc/net/bpf_jit_comp.c
->> index a62a9a92b7b5..c255b30a37b0 100644
->> --- a/arch/powerpc/net/bpf_jit_comp.c
->> +++ b/arch/powerpc/net/bpf_jit_comp.c
->> @@ -49,11 +49,34 @@ asm (
->>   "	.popsection				;"
->>   );
->>   -void bpf_jit_build_fentry_stubs(u32 *image, struct codegen_context 
->> *ctx)
->> +void bpf_jit_build_fentry_stubs(u32 *image, u32 *fimage, struct 
->> codegen_context *ctx)
->>   {
->>   	int ool_stub_idx, long_branch_stub_idx;
->>     	/*
->> +	 * In the final pass, align the mis-aligned dummy_tramp_addr field
->> +	 * in the fimage. The alignment NOP must appear before OOL stub,
->> +	 * to make ool_stub_idx & long_branch_stub_idx constant from end.
->> +	 *
->> +	 * Need alignment NOP in following conditions:
->> +	 *
+On Fri, May 15, 2026 at 08:07:59PM +0200, Oli R wrote:
+> Use /usr/bin/env python3 instead of hardcoded interpreter paths
+> to improve portability across environments where python3 is not
+> installed in /usr/bin.
 > 
-> I don't think I follow this table..
-I have omitted this table. The new logic emits alignment NOP wrt 
-misalignment detected
-for dummy_tramp_addr field.
-Please follow the changes at 
-https://lore.kernel.org/bpf/20260517214043.12975-2-adubey@linux.ibm.com
+> No functional changes intended.
 > 
->> +	 * OOL stub aligned	CONFIG_PPC_FTRACE_OUT_OF_LINE	Alignment NOP
->> +	 *      Y                               Y                     N
-> 
->> +	 *      Y                               N                     Y
-> 
-> Please help me understand why a NOP is needed here
-> 
->> +	 *      N                               Y                     Y
-> 
->> +	 *      N                               N                     N
-> 
-> and also, why a NOP isn't needed here..
-> 
-> - Hari
--Abhishek
+> Signed-off-by: Oli R <sigmatwojastara@gmail.com>
+> ---
+>  drivers/gpu/drm/msm/registers/gen_header.py                     | 2 +-
+
+Acked-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com> # drm/msm
+
+
+>  scripts/macro_checker.py                                        | 2 +-
+>  tools/crypto/ccp/dbc.py                                         | 2 +-
+>  tools/crypto/ccp/dbc_cli.py                                     | 2 +-
+>  tools/crypto/ccp/test_dbc.py                                    | 2 +-
+>  tools/perf/tests/shell/lib/perf_json_output_lint.py             | 2 +-
+>  .../selftests/devices/probe/test_discoverable_devices.py        | 2 +-
+>  tools/testing/selftests/rseq/rseq-slice-hist.py                 | 2 +-
+>  8 files changed, 8 insertions(+), 8 deletions(-)
+
+-- 
+With best wishes
+Dmitry
