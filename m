@@ -1,40 +1,40 @@
-Received: from mail-108-mta45.mxroute.com (mail-108-mta45.mxroute.com [136.175.108.45])
+Received: from mail-108-mta140.mxroute.com (mail-108-mta140.mxroute.com [136.175.108.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A25D03C76A0
-	for <linux-kselftest@vger.kernel.org>; Sun, 17 May 2026 18:35:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=136.175.108.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86B093CEBA6
+	for <linux-kselftest@vger.kernel.org>; Sun, 17 May 2026 18:36:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=136.175.108.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779042960; cv=none; b=pama8kq87cB/W6JQJAONHqd8J3ofnb3twRzUBw6BYjcA2GWBSj2WpQTwpARDKaEFOpXgSC3dBqAamNioOifigVpBosMcM5J5Qmy5vPu5EnMnNEhiTc6zKLNKp0LSC3yyoUT+iXGUWiSNY+PQHeyMkBhoBZRPHogJP6NxrKB9a7k=
+	t=1779042963; cv=none; b=rzVHTZLKjr9izFe+fO11CjIs4e+Dmpd+KBPdGH5gmkbD9JU/2P9JapEUqzLPCKcxsvIg6/2j7M7EREqcZKtRzy4PBsGs430qSL47Jgnuby05UCO5hmimLupCXjJqBwDquBidAg0oDBCORzjgux7qg1O0QSuSkanXVPZBQsG9Rb4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779042960; c=relaxed/simple;
-	bh=nzkSeffIK+gjPwyOs7CPx0rKZ0wFtGra/6Hr/w1xvVQ=;
+	s=arc-20240116; t=1779042963; c=relaxed/simple;
+	bh=qe8/roO65A2VoZ78Z1QRgHVD8L+p2JrGkAE7QP5GbbQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=q6FXVwUwsjAX+iBx9+aFbWVUTKLvyOPeVacjASrTAA9JKd+osU1sOuOJAW5oQfbecT1zmzV47w8UNlOSkRaiJeu6YX75Ppo+jhsdN+JroW0a0J9aoR4rX1BaVqWG7mHRwm1rsQvuI82m2U9p5wOe1DWpEJYz06We7RPOsphWFxk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wii.dev; spf=pass smtp.mailfrom=wii.dev; dkim=fail (0-bit key) header.d=wii.dev header.i=@wii.dev header.b=Id64VS9Q reason="key not found in DNS"; arc=none smtp.client-ip=136.175.108.45
+	 MIME-Version; b=lFN/XALAYcK/MTznOG/DM33J0YH+vklVqm6FQb+86X71PS/fnRG6bsqIccc1A8QQLXGi+6jSnd4hBIxPGujTf0VCTjXkoZXmEjvYKgyblWcLwBMNJ8bmgxthAmgH+Gh7c/Dj83Xmp2M4Je8P9859B8/Yt2zUS3Pna5EaVPLd7oM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wii.dev; spf=pass smtp.mailfrom=wii.dev; dkim=fail (0-bit key) header.d=wii.dev header.i=@wii.dev header.b=deq7JJoH reason="key not found in DNS"; arc=none smtp.client-ip=136.175.108.140
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wii.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wii.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=wii.dev header.i=@wii.dev header.b="Id64VS9Q"
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=wii.dev header.i=@wii.dev header.b="deq7JJoH"
 Received: from filter006.mxroute.com ([136.175.111.3] filter006.mxroute.com)
  (Authenticated sender: mN4UYu2MZsgR)
- by mail-108-mta45.mxroute.com (ZoneMTA) with ESMTPSA id 19e37347b6100067f7.00d
+ by mail-108-mta140.mxroute.com (ZoneMTA) with ESMTPSA id 19e3734892800067f7.00d
  for <linux-kselftest@vger.kernel.org>
  (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Sun, 17 May 2026 18:30:46 +0000
-X-Zone-Loop: 98577e034c635ef4f0b8e04d158594c172c850e0fc61
+ Sun, 17 May 2026 18:30:50 +0000
+X-Zone-Loop: 497ce8a15b7d4d944d87d9393e1cf4e1f29946bf2161
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=wii.dev;
 	s=x; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
 	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
 	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
 	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
 	List-Post:List-Owner:List-Archive;
-	bh=rOYOSG9vWxa4zChVZ2uDWaCD4UCDHihRbzaFMlB+lKE=; b=Id64VS9Qd8ejJVKC/9/9mJrMnT
-	ZCcDNhRLr7ch74kS4/j8ebw398JWGxET0ZdK/WTB7g1nrEVIMiCJ6CtqwugdxWsvdPXIz3QvfIFqR
-	fyzkLA0KRgxRE1fAW8Z48jDScivfWCVkWyeor+VWUAwUIrdIuuIwLSwKqRhJWHTXnN+Ma9bTOMLhv
-	E64CWMN8Y5/4SE+FHmfVDogeljuaQVhZv9KZ74vFbc/UwwottmB9GWfhlU11JRoIlL7E9T7xwS+to
-	bNYANXnf9rJTaLnOj1bOHrTNmaWeU4K351QQT7TRjkMGFuh5/o2B6mC5fqiBKC6uWOpDclFtM+LcJ
-	j6sVuXSg==;
+	bh=O3MajR2UHTB7tELzpgwInX/+mjytSwXsndvBgFS7uhw=; b=deq7JJoHk5ZITIV0eUqmpRtNFO
+	UhvqKUzSPnyAmhskyyLPSMndgQZIwuBWs1NGXQIC+XYL8LFBQszNh8Mt8DVRDX6XNGXJ9IOsaZrdy
+	OefiRgVXmYyyL4K4FVbkz/TlMqVjm6vnFV6oc6//ZG48k1O7/Acbu9fFHpC8Xg93wWVhbGvsG6icn
+	sstg99O/jTO2COyqe9RY/lODgrsE/68Y1vgwVSskNX/I12pJk8bXoZ5J5zv4tpjDl+QWSziGV0t2U
+	oMxXwfpivipCygX/SlB91uT0p8GNoMvAvfQYL/nCK9pBJ60JTsf3LuVpAlDsHuiNbCzNYuTXHJAce
+	dZ78ZS9A==;
 From: Richard Patel <ripatel@wii.dev>
 To: x86@kernel.org
 Cc: Rick Edgecombe <rick.p.edgecombe@intel.com>,
@@ -50,9 +50,9 @@ Cc: Rick Edgecombe <rick.p.edgecombe@intel.com>,
 	Shuah Khan <shuah@kernel.org>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 5/7] x86: expose user IBT via PR_CFI_BRANCH_LANDING_PADS
-Date: Sun, 17 May 2026 13:30:22 -0500
-Message-ID: <20260517183024.16292-6-ripatel@wii.dev>
+Subject: [PATCH 7/7] selftests/x86: test usermode IBT
+Date: Sun, 17 May 2026 13:30:24 -0500
+Message-ID: <20260517183024.16292-8-ripatel@wii.dev>
 In-Reply-To: <20260517183024.16292-1-ripatel@wii.dev>
 References: <20260517183024.16292-1-ripatel@wii.dev>
 Precedence: bulk
@@ -64,171 +64,198 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Authenticated-Id: ripatel@wii.dev
 
-Allows userspace applications to enable IBT (forward-edge control
-flow integrity protection) using the portable PR_CFI prctl API.
-
-The name 'branch landing pads' is RISC-V specific, but the mechanism
-is nearly identical in x86.
-
-This setting enables the following MSR_IA32_U_CET bits:
-- CET_ENDBR_EN (enforce endbr as indirect branch target)
-- CET_NOTRACK_EN (jump modifier to opt-out of IBT checking)
-
-Kernel-mode IBT (as part of CFI) bans notrack. A future prctl flag
-could be introduced to ban notrack in usermode too.
+Adds a basic selftest exercising a usermode IBT violation.
 
 Signed-off-by: Richard Patel <ripatel@wii.dev>
 ---
- arch/x86/include/asm/ibt.h   |  2 +
- arch/x86/kernel/ibt.c        | 87 ++++++++++++++++++++++++++++++++++++
- arch/x86/kernel/process_64.c |  2 +
- 3 files changed, 91 insertions(+)
+ tools/testing/selftests/x86/Makefile   |   5 +-
+ tools/testing/selftests/x86/user_ibt.c | 157 +++++++++++++++++++++++++
+ 2 files changed, 161 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/x86/user_ibt.c
 
-diff --git a/arch/x86/include/asm/ibt.h b/arch/x86/include/asm/ibt.h
-index 3fe464bf83e7..a67c9ceaaf9e 100644
---- a/arch/x86/include/asm/ibt.h
-+++ b/arch/x86/include/asm/ibt.h
-@@ -121,9 +121,11 @@ struct pt_regs;
- #ifdef CONFIG_X86_USER_IBT
- bool user_ibt_pop_wait_endbr(struct pt_regs *regs);
- void user_ibt_restore_wait_endbr(struct pt_regs *regs, bool wait_endbr);
-+void reset_thread_ibt(void);
- #else
- static inline bool user_ibt_pop_wait_endbr(struct pt_regs *regs) { return false; }
- static inline void user_ibt_restore_wait_endbr(struct pt_regs *regs, bool wait_endbr) {}
-+static inline void reset_thread_ibt(void) {}
- #endif /* CONFIG_X86_USER_IBT */
+diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
+index 434065215d12..203c3d9073f2 100644
+--- a/tools/testing/selftests/x86/Makefile
++++ b/tools/testing/selftests/x86/Makefile
+@@ -19,7 +19,8 @@ TARGETS_C_32BIT_ONLY := entry_from_vm86 test_syscall_vdso unwind_vdso \
+ 			test_FCMOV test_FCOMI test_FISTTP \
+ 			vdso_restorer
+ TARGETS_C_64BIT_ONLY := fsgsbase sysret_rip syscall_numbering \
+-			corrupt_xstate_header amx lam test_shadow_stack avx apx
++			corrupt_xstate_header amx lam test_shadow_stack avx apx \
++			user_ibt
+ # Some selftests require 32bit support enabled also on 64bit systems
+ TARGETS_C_32BIT_NEEDED := ldt_gdt ptrace_syscall
  
- #endif /* __ASSEMBLER__ */
-diff --git a/arch/x86/kernel/ibt.c b/arch/x86/kernel/ibt.c
-index 596b0629106d..343e6fd5dab0 100644
---- a/arch/x86/kernel/ibt.c
-+++ b/arch/x86/kernel/ibt.c
-@@ -1,6 +1,8 @@
- // SPDX-License-Identifier: GPL-2.0
- 
- #include <linux/types.h>
-+#include <linux/cpu.h>
+@@ -138,3 +139,5 @@ $(OUTPUT)/avx_64: CFLAGS += -mno-avx -mno-avx512f
+ $(OUTPUT)/amx_64: EXTRA_FILES += xstate.c
+ $(OUTPUT)/avx_64: EXTRA_FILES += xstate.c
+ $(OUTPUT)/apx_64: EXTRA_FILES += xstate.c
++
++$(OUTPUT)/user_ibt_64: CFLAGS += -fcf-protection=branch
+diff --git a/tools/testing/selftests/x86/user_ibt.c b/tools/testing/selftests/x86/user_ibt.c
+new file mode 100644
+index 000000000000..795011503335
+--- /dev/null
++++ b/tools/testing/selftests/x86/user_ibt.c
+@@ -0,0 +1,157 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Test kernel support for userspace Indirect Branch Tracking (IBT).
++ * Enables IBT manually via prctl(). Must be compiled with
++ * -fcf-protection=branch to enable ENDBR64 instrumentation.
++ */
++
++#define _GNU_SOURCE
++
++#include <errno.h>
++#include <setjmp.h>
++#include <signal.h>
++#include <sys/signal.h>
++#include <sys/syscall.h>
++#include <linux/const.h>
 +#include <linux/prctl.h>
- #include <asm/msr.h>
- #include <asm/fpu/xstate.h>
- 
-@@ -9,6 +11,85 @@ static bool user_ibt_enabled(struct task_struct *task)
- 	return task->thread.ibt;
- }
- 
-+static bool user_ibt_locked(struct task_struct *task)
++#include <unistd.h>
++#include "../kselftest.h"
++
++/*
++ * Allow building this test with old kernel headers.
++ */
++#ifndef PR_SET_CFI
++#define PR_GET_CFI			80
++#define PR_SET_CFI			81
++#endif
++#ifndef PR_CFI_ENABLE
++#define PR_CFI_ENABLE			(1UL << 0)
++#define PR_CFI_DISABLE			(1UL << 1)
++#endif
++#ifndef PR_CFI_BRANCH_LANDING_PADS
++#define PR_CFI_BRANCH_LANDING_PADS	0
++#endif
++#ifndef SEGV_CPERR
++#define SEGV_CPERR			10
++#endif
++
++#if !defined(__CET__) || (__CET__ & 1) != 1
++int main(int argc, char *argv[])
 +{
-+	return task->thread.ibt_locked;
++	ksft_print_header();
++	ksft_exit_skip("Compiler does not support CET.\n");
++	return 0;
++}
++#else
++void __attribute__((naked)) valid_target(void)
++{
++	asm volatile (
++		"endbr64\n"
++		"ret\n"
++	);
 +}
 +
-+static void user_ibt_set_lock(struct task_struct *task, bool lock)
++void __attribute__((nocf_check, naked)) invalid_target(void)
 +{
-+	task->thread.ibt_locked = lock;
++	asm volatile ("ret\n");
 +}
 +
-+static void user_ibt_set_enable(bool enable)
++void __attribute__((naked)) user_ibt_basic_test(void)
 +{
-+	u64 msrval;
-+
-+	/* Already enabled */
-+	if (user_ibt_enabled(current) == enable)
-+		return;
-+
-+	current->thread.ibt = !!enable;
-+
-+	fpregs_lock_and_load();
-+	rdmsrq(MSR_IA32_U_CET, msrval);
-+	if (enable)
-+		msrval |= CET_ENDBR_EN | CET_NO_TRACK_EN;
-+	else
-+		msrval &= ~(CET_ENDBR_EN | CET_NO_TRACK_EN);
-+	msrval &= ~CET_WAIT_ENDBR;
-+	wrmsrq(MSR_IA32_U_CET, msrval);
-+	fpregs_unlock();
++	asm volatile (
++		"leaq valid_target(%rip), %rax\n"
++		"call *%rax\n"
++		"ret\n"
++	);
 +}
 +
-+int arch_prctl_get_branch_landing_pad_state(struct task_struct *t,
-+					    unsigned long __user *state)
++void __attribute__((naked)) user_ibt_notrack_test(void)
 +{
-+	unsigned long status = 0;
-+
-+	if (!cpu_feature_enabled(X86_FEATURE_USER_IBT) || in_ia32_syscall())
-+		return -EINVAL;
-+
-+	status = (user_ibt_enabled(t) ? PR_CFI_ENABLE : PR_CFI_DISABLE);
-+	status |= (user_ibt_locked(t) ? PR_CFI_LOCK : 0);
-+
-+	return copy_to_user(state, &status, sizeof(status)) ? -EFAULT : 0;
++	asm volatile (
++		"leaq invalid_target(%rip), %rax\n"
++		"notrack call *%rax\n"
++		"ret\n"
++	);
 +}
 +
-+int arch_prctl_set_branch_landing_pad_state(struct task_struct *t, unsigned long state)
++static sigjmp_buf jmpbuf;
++static sig_atomic_t got_signal;
++static sig_atomic_t got_cperr;
++
++static void segv_handler(int signum, siginfo_t *si, void *uc)
 +{
-+	if (!cpu_feature_enabled(X86_FEATURE_USER_IBT) || in_ia32_syscall())
-+		return -EINVAL;
++	got_signal = true;
++	got_cperr = si->si_code == SEGV_CPERR;
++	siglongjmp(jmpbuf, 1);
++}
 +
-+	if (t != current)
-+		return -EINVAL;
++int user_ibt_violation_test(void)
++{
++	struct sigaction sa = {};
++	struct sigaction oldsa;
++	size_t volatile ptr;
 +
-+	if (user_ibt_locked(t))
-+		return -EINVAL;
++	got_signal = false;
++	got_cperr = false;
 +
-+	if (!(state & (PR_CFI_ENABLE | PR_CFI_DISABLE)))
-+		return -EINVAL;
++	sa.sa_sigaction = segv_handler;
++	sa.sa_flags = SA_SIGINFO;
++	if (sigaction(SIGSEGV, &sa, &oldsa)) {
++		ksft_perror("SIGSEGV handler setup failed");
++		return 1;
++	}
 +
-+	if (state & PR_CFI_ENABLE && state & PR_CFI_DISABLE)
-+		return -EINVAL;
++	if (!sigsetjmp(jmpbuf, 1)) {
++		/*
++		 * Force an indirect call and drop 'nocf_check' attribute.
++		 * Obfuscate cast through a temp local to suppress
++		 * -Wincompatible-pointer-types (which correctly detects
++		 * the nocf_check attribute mismatch)
++		 */
++		ptr = (size_t)invalid_target;
++		((void (* volatile)(void))ptr)();
++		/* Fall through in case this didn't SIGSEGV */
++	}
 +
-+	user_ibt_set_enable(!!(state & PR_CFI_ENABLE));
++	if (sigaction(SIGSEGV, &oldsa, NULL)) {
++		ksft_perror("SIGSEGV handler restore failed");
++		return 1;
++	}
++
++	if (!got_signal) {
++		ksft_print_msg("IBT violation did not generate SIGSEGV\n");
++		return 1;
++	}
++	if (!got_cperr) {
++		ksft_print_msg("IBT violation generated unknown segfault\n");
++		return 1;
++	}
 +
 +	return 0;
 +}
 +
-+int arch_prctl_lock_branch_landing_pad_state(struct task_struct *task)
++int main(int argc, char *argv[])
 +{
-+	if (!cpu_feature_enabled(X86_FEATURE_USER_IBT) ||
-+	    !user_ibt_enabled(task) ||
-+	    in_ia32_syscall())
-+		return -EINVAL;
++	unsigned long lpad_status = PR_CFI_ENABLE;
 +
-+	user_ibt_set_lock(task, true);
++	ksft_print_header();
++	ksft_set_plan(3);
 +
-+	return 0;
++	if (syscall(__NR_prctl, PR_SET_CFI, PR_CFI_BRANCH_LANDING_PADS, lpad_status, 0, 0)) {
++		if (errno == EINVAL || errno == EOPNOTSUPP)
++			ksft_exit_skip("User IBT is not supported.\n");
++		ksft_exit_fail_perror("Failed to enable user IBT");
++	}
++
++	user_ibt_basic_test();
++	ksft_test_result_pass("valid indirect call with endbr64\n");
++
++	user_ibt_notrack_test();
++	ksft_test_result_pass("notrack indirect call to non-endbr target\n");
++
++	ksft_test_result(!user_ibt_violation_test(),
++			 "indirect call to non-endbr target raises SIGSEGV\n");
++
++	ksft_finished();
 +}
-+
- bool user_ibt_pop_wait_endbr(struct pt_regs *regs)
- {
- 	struct fpu *fpu = x86_task_fpu(current);
-@@ -86,3 +167,9 @@ user_ibt_restore_wait_endbr(struct pt_regs *regs, bool wait_endbr)
- 
- 	fpregs_unlock();
- }
-+
-+void reset_thread_ibt(void)
-+{
-+	current->thread.ibt = false;
-+	current->thread.ibt_locked = false;
-+}
-diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
-index b85e715ebb30..4b727cc7bccb 100644
---- a/arch/x86/kernel/process_64.c
-+++ b/arch/x86/kernel/process_64.c
-@@ -59,6 +59,7 @@
- #include <asm/fsgsbase.h>
- #include <asm/fred.h>
- #include <asm/msr.h>
-+#include <asm/ibt.h>
- #ifdef CONFIG_IA32_EMULATION
- /* Not included via unistd.h */
- #include <asm/unistd_32_ia32.h>
-@@ -540,6 +541,7 @@ start_thread_common(struct pt_regs *regs, unsigned long new_ip,
- 	}
- 
- 	reset_thread_features();
-+	reset_thread_ibt();
- 
- 	loadsegment(fs, 0);
- 	loadsegment(es, _ds);
++#endif
 -- 
 2.47.3
 
