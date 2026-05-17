@@ -1,69 +1,79 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6990A3C9888;
-	Sun, 17 May 2026 17:41:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E9553C4548
+	for <linux-kselftest@vger.kernel.org>; Sun, 17 May 2026 17:45:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779039673; cv=none; b=WUNFbFfQzfLJwWu75mjWGWYBmWPByvbGds3CK38wJdr+aIg0KHXOpL6D35qusgP41uO2njy7Xl3lC0SE0/kM9mKCp0HxuK3MoMm/NYIuFW1Oax7NMD16ifG4zGagz4NEEBj6Ye5Jv6zgsa2t6D94KLFWsSEsPwOuOeFnzMtflOs=
+	t=1779039930; cv=none; b=eZX1WS6iGdfxSITDj6qlf574SaMLjspu9z6LAlNbYcNsFbnCa9A20VDinQ3LWCg8VF2uURuMpTea/V3SSWFl52qkOwTDcDJjPpxoPPx7/ukkpOQ2O23vLPg99ylTRWiKV3+Aa+vuxj3cLZ4OsqmDjLBW6oW+p4CU85oskyf7to8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779039673; c=relaxed/simple;
-	bh=wqCefgXIPO4pgVK/aaRpKoDkLWVRccGpsdwKVlL9gME=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fUkxFJjpa4fx4NTFy8MfjsN9FTCI0tMIJOaUgv3oPfphjCJodBqoi3Uwu+J5/SYw5lgD2Ue7XoEf1MqC+yQvocEUMazM9TgwJaMAlfUPYrf13f91cGKBeUiwPgtM2Wv3L/qgHi8kEbJyyRhuM7zkBJTNal6WEtT6qTIWPPJmAHE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=tp+6VdF7; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1779039930; c=relaxed/simple;
+	bh=kNkNI/8XynKLjIPo6Gtw2lmZjrLtzPz1LeOBAz58KHM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gIvuErmTLEheu5scc1ZXQbrm3VpPD1h0Knfew+uIaIiPIbxQszI2qEagZt9kGuzcxkS3UnC0fZq53PDoIfvNaM4VqeMxDZIxBh5Q2InP43dYn9JS1DtcufY+zGh0PU1Z6tDJf0Z3tqeXV2CXrqxJjDXjkn7xHiOSbanZsuk3lIg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=VQxBmEDw; arc=none smtp.client-ip=67.231.153.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="tp+6VdF7"
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64H5sfUV4011095;
-	Sun, 17 May 2026 17:40:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=7UzgUOcOLrOw8m6H+
-	qH2Iej3AcpM2LCHHy+6zVvTD8I=; b=tp+6VdF7HgUo/unkK5ODauInjVCvf/iId
-	bA5JXbBpK9L3Ff9Q3vTWHnIAIxRsXgvahd34B92bvtUuz56xXRsvG7bfEjQo2IUz
-	PcxGz0tjAA9tLiWFD242PjNoJcQX5vxu68OBGhj7oxRzPb4XMZCYWJfT49Der5N4
-	sPsx2B8bkyuw9f+WMDcBlfBWvYkoTriWwYMlsnbAP3gY8Jtf9fpRlPAeDEtqE9Qt
-	2VF6q9+aKjnAgwNUIlAi8lclNBGeft0K4ZnS8owA3CiCDDHDpRsR3QpgLdanc+bz
-	7WbtF6+S4SPMnHjwjKKekmB73PMSQpUKxLMY194xxgnMXd2Zp3abw==
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4e6hb84bdt-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 17 May 2026 17:40:56 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64HHdELk005608;
-	Sun, 17 May 2026 17:40:55 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4e73wjtf68-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 17 May 2026 17:40:55 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 64HHepl713304196
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sun, 17 May 2026 17:40:51 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 0724420043;
-	Sun, 17 May 2026 17:40:51 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id F2D6D20040;
-	Sun, 17 May 2026 17:40:48 +0000 (GMT)
-Received: from ltcrain4-lp15.ltc.tadn.ibm.com (unknown [9.5.7.39])
-	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Sun, 17 May 2026 17:40:48 +0000 (GMT)
-From: adubey@linux.ibm.com
-To: bpf@vger.kernel.org
-Cc: hbathini@linux.ibm.com, linuxppc-dev@lists.ozlabs.org, maddy@linux.ibm.com,
-        ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
-        shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        stable@vger.kernel.org, Abhishek Dubey <adubey@linux.ibm.com>
-Subject: [PATCH v4 5/5] selftest/bpf: Add tailcall verifier selftest for powerpc64
-Date: Sun, 17 May 2026 17:40:43 -0400
-Message-ID: <20260517214043.12975-6-adubey@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="VQxBmEDw"
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64HHObpQ461963
+	for <linux-kselftest@vger.kernel.org>; Sun, 17 May 2026 10:45:27 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=s2048-2025-q2; bh=XpCR9Cc4JL6ZGc1pX8ozjC9q6S7skyL
+	22FrSAjt8B7M=; b=VQxBmEDweGj3zqz+XiN7Ew0W+qm7GrQ4OBvWlx9dDHm4hgN
+	BrG6A/NFAe6z0wbvEWhHlLZMxsCN6JGktAGfGwiSzCvZjIBaxtsQdTspcTWTNEfl
+	91fWokH1iNBQdIzeNJ2Use3PEaQxHyr5wOO1v7t6CS+D+B0LuIIjm75AhTJwSKJ3
+	CqKtskIZ1TT/E0palpb8f9Bl+QfG9+qlqyzqkozuwNZpje6E3p8NuMJVxfNckHs8
+	BNOwoUQYRgAtC4hURgy9MFhmAXwxfTVa8ipQ0eUsqC1wrVuFnBS54Y+nFNSqK2XE
+	gXxaDkhL5npla9FryIYsHa3+K/wiXrFsvqgZHVg==
+Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com [209.85.167.198])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4e6pd6mt5e-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-kselftest@vger.kernel.org>; Sun, 17 May 2026 10:45:27 -0700 (PDT)
+Received: by mail-oi1-f198.google.com with SMTP id 5614622812f47-482abfeea78so2885478b6e.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 17 May 2026 10:45:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779039926; x=1779644726;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XpCR9Cc4JL6ZGc1pX8ozjC9q6S7skyL22FrSAjt8B7M=;
+        b=f4Ysagw4eJp9GONZPU179fZ1/55OyKr+I111hGrXehe36CE2wBBSdXoAVR+Fj/bb8z
+         G8gnuNMLe7qUKdzpdiqL1Wpu/KcKJSlSs1ST9KaAnvPxYZ9GbLLjy90VCDbqD2npUch9
+         PMWUPV0QCLUxbmA6Gyc+/EcEc69/cI6soZrLvajx7ANLe+BiqR68qO0jt4BVAtZS40i/
+         ied3NC87AEhdfJ22WTBfOPtkj5cLb81kioXUpjFBzv/lnEut7lsVoY9yQl3NWs3CARSs
+         xU8U/NYHUZiXoZbo0UmQDuIQUWegygR0Gb+8neVVRIpqPfI4PEkbIlCE6wcRihb/bg0a
+         X/wA==
+X-Forwarded-Encrypted: i=1; AFNElJ+6pdYVK9FY3ZKRvbBvmn904Dn9KpzIkQVaczoVLzFaw0ijCbTaPdIC9g4kcQg8QtjUmt/jXBE2cNtwTiwz++I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YySGvuwJ9r0o91ff3KxlMkdh4+ubNmOuyo2SQfkNPnCalS1Uz08
+	OyZLuHr0T1ILG3KVjDKiQHSaNW3SAHXWNRd42S+weEJc3LdrrUMrSBlmJM+ECDwnwDy+FtRgP6o
+	km1cfmjSI5wuCU43lWM5PIECEhac9OSlklfuejGUj9nxrWTTNSWf8BJSN1waxsz9VjEcfOIhrq/
+	Y=
+X-Gm-Gg: Acq92OEmB9xT5zn4e+uEHUYqy4s6MhCTpN2TR5ZkB9tyMJ2iFiYjp7B1BHh6GLEhHJ0
+	ocVBGsbHZWWpR8lUSEYcwxjG29y8K9rCgZrEL1YC0AYkE1dtYG2a6iRLTZLvol13UUwbVKIm/XV
+	5ToO4wiyRochA4/hifMJXv41D9kH8Yz2eE7ZCkYTvdFHcyx9gcxF/zOLgmMRjjDAjiejbEFRw/H
+	ePaL79A6O7V0sBMa8A6VXLUwKMrtKwa6AguuXv88A7HzQ+i7gXt1kTzprlfsgoOHxX6xat9zjQD
+	nHMaXJFbGvMDTzKjcXsDs204Nbp8Ji2CWpVsT14yxp6elQeksu1YJICELUZ1Yoh3H8IV+QLMGIC
+	/mjTQQF6naw==
+X-Received: by 2002:a05:6808:1a07:b0:482:5bd1:d8e5 with SMTP id 5614622812f47-482e55afc67mr7658641b6e.9.1779039925958;
+        Sun, 17 May 2026 10:45:25 -0700 (PDT)
+X-Received: by 2002:a05:6808:1a07:b0:482:5bd1:d8e5 with SMTP id 5614622812f47-482e55afc67mr7658617b6e.9.1779039925448;
+        Sun, 17 May 2026 10:45:25 -0700 (PDT)
+Received: from localhost ([2a03:2880:12ff:5::])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-43a94fd54desm2136691fac.8.2026.05.17.10.45.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 17 May 2026 10:45:24 -0700 (PDT)
+From: Neil Spring <ntspring@meta.com>
+To: netdev@vger.kernel.org
+Cc: edumazet@google.com, ncardwell@google.com, kuniyu@google.com,
+        davem@davemloft.net, kuba@kernel.org, dsahern@kernel.org,
+        pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org, ntspring@meta.com
+Subject: [PATCH net-next v6 0/2] tcp: rehash onto different local ECMP path on retransmit timeout
+Date: Sun, 17 May 2026 10:45:20 -0700
+Message-ID: <20260517174522.2232057-1-ntspring@meta.com>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260517214043.12975-1-adubey@linux.ibm.com>
-References: <20260517214043.12975-1-adubey@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -71,127 +81,131 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTE3MDE5MCBTYWx0ZWRfX15KEYz6aohzl
- R4foSbJRN5+f1fPDiEVmcRi7rPDY+v2jNGFI5BnfDvrmDcdR14qTXvBS/YZJ4YVxu/2wVEPWFDL
- lNvm5CEVUFpOKaBgbAzC4X/lnTtVPmYlKmzc2ICM7tee6W1kb2QktNHtcr8lwixt/TRvyMXTusu
- wj1ME8+KuroZqlRxKjjLBz5HqNyOcBE/ojftPyWIyivU0+7qLeqcWycUU6ESQ8FBxrFw32RyRBs
- 94UHjuSrVBMoTAawJFifNlmZ9e4ruYbe5nvC0uotIQtc1dbt8bnQ3FUVeFFHHFkqXKr9S0mnw/d
- 7h4nz92LNsMjaTOe5nlmBR3xhJiguLDHW8wAYdI7nG12ZqBZldeYmVpHJ/hQc/T4jyZPGdHoGVf
- 41rqvK+RiBnzn+kNVDMIk5Htbb/D8rcjZ6oNrQWH+PNjLaw8CyHGd4s5cjiouTUa+YpgAuL/Fgc
- 1vgiHx0HNiA5vg5IeDA==
-X-Proofpoint-GUID: uxTt4YNKyKlegNc3MmsfG18vbR_IbT1b
-X-Proofpoint-ORIG-GUID: uxTt4YNKyKlegNc3MmsfG18vbR_IbT1b
-X-Authority-Analysis: v=2.4 cv=aYBRWxot c=1 sm=1 tr=0 ts=6a09fda8 cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
- a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=Y2IxJ9c9Rs8Kov3niI8_:22 a=VnNF1IyMAAAA:8 a=FPGcE6EkJ86GxW4wuzUA:9
+X-Proofpoint-ORIG-GUID: j9N92SgObei8S0z3xOc-9OEQWRMDx13B
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTE3MDE5MSBTYWx0ZWRfXy5y0ZKB7i61x
+ hgCQKpfKwQnQlzneR0IncMbIqAsaglYdaLwRCzy7PptjpuZVFO1MrhlzzXaITIJUjEDPKFW4FOV
+ u5sfbfOkJfcJ1U21NR3lTnXXTODPS8MTY0e6R9VRCJZowzTKfh9CSiOFHa+59zxCT/c1pQrSbQv
+ 9n77Lwtg/qACLMrVNFHjC68NbiWr8Cmxxo+C2Stb8OlE040+xrqcjqbhysFHEI7WJ0eHKg1wsEu
+ hYSyVgR6AujahBLeJ2eFF6KE75zrjVxNZm/230vaJfF7/KUFCHNWo2piY/9gtzkZDRKwDx5lwAc
+ PHfkb0/4ov1Vsmx5f25zd6dJGC4qJNcwXQYxVvO8QesASDX6JtIffqbPxh7oEKQSlXGBag889L3
+ XEAVnTVUAYutn9suQ8kBDNryOhbXu96Qy1LLgHcjMGZo7+iXPqzSgADP/wxFwIzPR+A8rqkRaIa
+ 7d0Wcz3serc7mt3D6PQ==
+X-Proofpoint-GUID: j9N92SgObei8S0z3xOc-9OEQWRMDx13B
+X-Authority-Analysis: v=2.4 cv=PfLPQChd c=1 sm=1 tr=0 ts=6a09feb7 cx=c_pps
+ a=4ztaESFFfuz8Af0l9swBwA==:117 a=xqWC_Br6kY4A:10 a=NGcC8JguVDcA:10
+ a=f7IdgyKtn90A:10 a=VkNPw1HP01LnGYTKEx00:22 a=7x6HtfJdh03M6CCDgxCd:22
+ a=wpfVPzegXHpEFt3DAXn9:22 a=VwQbUJbxAAAA:8 a=VabnemYjAAAA:8
+ a=IdTnusCh2XOMSKVXdlMA:9 a=TPnrazJqx2CeVZ-ItzZ-:22 a=gKebqoRLp9LExxC7YDUY:22
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-05-17_04,2026-05-15_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 adultscore=0 bulkscore=0 suspectscore=0 lowpriorityscore=0
- clxscore=1015 spamscore=0 phishscore=0 priorityscore=1501 malwarescore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2605130000 definitions=main-2605170190
 
-From: Abhishek Dubey <adubey@linux.ibm.com>
+Currently sk_rethink_txhash() re-rolls the socket's txhash on RTO,
+PLB, and spurious-retransmission events, but the new hash is not
+propagated into the IPv6 ECMP path selection logic.  The cached
+route is reused and fib6_select_path() is never re-invoked, so
+the connection stays on the same ECMP path.
 
-Verifier testcase result for tailcalls:
+This series adds the two missing pieces:
 
-# ./test_progs -t verifier_tailcall
-#618/1   verifier_tailcall/invalid map type for tail call:OK
-#618/2   verifier_tailcall/invalid map type for tail call @unpriv:OK
-#618     verifier_tailcall:OK
-#619/1   verifier_tailcall_jit/main:OK
-#619     verifier_tailcall_jit:OK
-Summary: 2/3 PASSED, 0 SKIPPED, 0 FAILED
+1. __sk_dst_reset() alongside sk_rethink_txhash() so the cached dst
+   is invalidated and the next transmit triggers a fresh route lookup.
 
-Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
----
- .../bpf/progs/verifier_tailcall_jit.c         | 69 +++++++++++++++++++
- 1 file changed, 69 insertions(+)
+2. fl6->mp_hash set from sk_txhash before each route lookup so
+   fib6_select_path() picks a path based on the (potentially re-rolled)
+   hash.  This is conditioned on fib_multipath_hash_policy == 0 (L3)
+   because policies 1-3 compute a deterministic hash from the flow
+   keys which must not be overridden.
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_tailcall_jit.c b/tools/testing/selftests/bpf/progs/verifier_tailcall_jit.c
-index 8d60c634a114..17475ecb3207 100644
---- a/tools/testing/selftests/bpf/progs/verifier_tailcall_jit.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_tailcall_jit.c
-@@ -90,6 +90,75 @@ __jited("	popq	%rax")
- __jited("	jmp	{{.*}}")		/* jump to tail call tgt   */
- __jited("L0:	leave")
- __jited("	{{(retq|jmp	0x)}}")		/* return or jump to rethunk */
-+__arch_powerpc64
-+/* program entry for main(), regular function prologue */
-+__jited("	nop")
-+__jited("	ld 2, 16(13)")
-+__jited("	li 9, 0")
-+__jited("	std 9, -8(1)")
-+__jited("	mflr 0")
-+__jited("	std 0, 16(1)")
-+__jited("	stdu 1, {{.*}}(1)")
-+/* load address and call sub() via count register */
-+__jited("	lis 12, {{.*}}")
-+__jited("	sldi 12, 12, 32")
-+__jited("	oris 12, 12, {{.*}}")
-+__jited("	ori 12, 12, {{.*}}")
-+__jited("	mtctr 12")
-+__jited("	bctrl")
-+__jited("	mr	8, 3")
-+__jited("	li 8, 0")
-+__jited("	addi 1, 1, {{.*}}")
-+__jited("	ld 0, 16(1)")
-+__jited("	mtlr 0")
-+__jited("	mr	3, 8")
-+__jited("	blr")
-+__jited("...")
-+__jited("func #1")
-+/* subprogram entry for sub() */
-+__jited("	nop")
-+__jited("	ld 2, 16(13)")
-+/* tail call prologue for subprogram */
-+__jited("	ld 10, 0(1)")
-+__jited("	ld 9, -8(10)")
-+__jited("	cmplwi	9, 33")
-+__jited("	bt	{{.*}}, {{.*}}")
-+__jited("	addi 9, 10, -8")
-+__jited("	std 9, -8(1)")
-+__jited("	lis {{.*}}, {{.*}}")
-+__jited("	sldi {{.*}}, {{.*}}, 32")
-+__jited("	oris {{.*}}, {{.*}}, {{.*}}")
-+__jited("	ori {{.*}}, {{.*}}, {{.*}}")
-+__jited("	li {{.*}}, 0")
-+__jited("	lwz 9, {{.*}}({{.*}})")
-+__jited("	slwi {{.*}}, {{.*}}, 0")
-+__jited("	cmplw	{{.*}}, 9")
-+__jited("	bf	0, {{.*}}")
-+/* bpf_tail_call implementation */
-+__jited("	ld 9, -8(1)")
-+__jited("	cmplwi	9, 33")
-+__jited("	bf	{{.*}}, {{.*}}")
-+__jited("	ld 9, 0(9)")
-+__jited("	cmplwi	9, 33")
-+__jited("	bt	{{.*}}, {{.*}}")
-+__jited("	addi 9, 9, 1")
-+__jited("	mulli 10, {{.*}}, 8")
-+__jited("	add 10, 10, {{.*}}")
-+__jited("	ld 10, {{.*}}(10)")
-+__jited("	cmpldi	10, 0")
-+__jited("	bt	{{.*}}, {{.*}}")
-+__jited("	ld 10, {{.*}}(10)")
-+__jited("	addi 10, 10, 16")
-+__jited("	mtctr 10")
-+__jited("	ld 10, -8(1)")
-+__jited("	cmplwi	10, 33")
-+__jited("	bt	{{.*}}, {{.*}}")
-+__jited("	addi 10, 1, -8")
-+__jited("	std 9, 0(10)")
-+__jited("	bctr")
-+__jited("	mr	3, 8")
-+__jited("	blr")
-+
- SEC("tc")
- __naked int main(void)
- {
--- 
-2.52.0
+Patch 1 is the kernel change; patch 2 adds selftests covering SYN
+rehash, SYN/ACK rehash, midstream RTO rehash, midstream ACK rehash
+(spurious retransmission), PLB rehash, a policy 1 negative test,
+a flowlabel leak regression test, and two dst rebuild consistency
+tests (normal and syncookie) verifying that natural route
+invalidation does not cause unintended path changes.
+
+Changes since v5: https://lore.kernel.org/netdev/20260513204048.2721843-1-ntspring@meta.com/
+- Improve selftest reliability: suppress __dst_negative_advice() via
+  tcp_retries1=255 in dst rebuild tests so a real RTO cannot trigger
+  an unintended rehash; add internal retry to midstream and ACK
+  rehash tests to tolerate probabilistic ECMP path selection; fix
+  midstream baseline capture to account for packets that bypass tc
+  filters during the prio qdisc's TCQ_F_CAN_BYPASS window
+- Increase ECMP_REBUILD_ROUNDS default to 10 for reliable regression
+  detection with 2-way ECMP; replace sleep with busywait
+- Use tcp_allowed_congestion_control instead of changing the host's
+  default congestion control for PLB test
+- Use (txhash >> 1) ?: 1 to guarantee non-zero mp_hash, since zero
+  falls back to rt6_multipath_hash()
+
+Changes since v4: https://lore.kernel.org/netdev/20260507171319.1259115-1-ntspring@meta.com/
+- Condition fl6->mp_hash on fib_multipath_hash_policy == 0 to preserve
+  deterministic hash policies 1-3 (e.g., symmetric 5-tuple for policy 1)
+- Set fl6->mp_hash in tcp_v6_connect() and cookie_v6_check() for
+  initial route lookup consistency; move sk_set_txhash() earlier
+  (Jakub Kicinski)
+- Add policy 1 negative test; improve sysctl save/restore
+- Add flowlabel leak test confirming mp_hash does not alter the
+  on-wire IPv6 flow label
+- Add dst rebuild consistency tests (normal and syncookie) verifying
+  that route table changes do not cause unintended ECMP path changes
+
+Changes since v3: https://lore.kernel.org/netdev/20260505193824.2791642-1-ntspring@meta.com/
+- Use __sk_dst_reset() instead of sk_dst_reset() since the socket lock
+  is held in all three call sites (Eric Dumazet)
+- Guard __sk_dst_reset() with sk->sk_family == AF_INET6 since IPv4 ECMP
+  does not use sk_txhash for path selection
+- Guard __sk_dst_reset() in tcp_plb_check_rehash() with the return value
+  of sk_rethink_txhash()
+- Move tcp_rsk(req)->txhash initialization before route_req() in
+  tcp_conn_request() to avoid reading uninitialized memory
+- Add CONFIG_TCP_CONG_DCTCP=m to selftests/net/config for PLB test
+- Skip PLB test gracefully if DCTCP is not available
+- Save and restore original congestion control algorithm in PLB test
+- Default get_netstat_counter() to 0 when counter is not found
+- Skip all tests if tcp_syn_linear_timeouts is not available
+- Replace bash/pipe data sources with socat OPEN:/dev/zero for
+  cleaner process cleanup
+- Fix shellcheck warnings
+
+Changes since v2: https://lore.kernel.org/netdev/20260408070514.1840227-1-ntspring@meta.com/
+- Retitle "ECMP" to "local ECMP" to distinguish from remote ECMP
+  (Neal Cardwell)
+- Add fl6->mp_hash propagation in inet6_sk_rebuild_header() (af_inet6.c),
+  covering the dst rebuild path used on established sockets
+- Remove incorrect ir_iif update from tcp_check_req() in tcp_minisocks.c;
+  the SYN/ACK rehash is already handled by tcp_rtx_synack() re-rolling
+  txhash which feeds into inet6_csk_route_req()'s mp_hash
+  (Eric Dumazet)
+- Add ACK rehash and PLB rehash selftests
+- Improve selftest reliability
+
+Changes since v1: https://lore.kernel.org/netdev/20260408002802.2448424-1-ntspring@meta.com/
+- Use tcp_rsk(req)->txhash instead of jhash_1word(req->num_retrans, ...)
+  for ECMP path selection in inet6_csk_route_req(), making the request
+  socket path consistent with the established socket path (Eric Dumazet)
+- Add comments explaining the >> 1 shift for 31-bit mp_hash range
+- Use socat -u (unidirectional) in selftest to avoid SIGPIPE race
+- Increase tcp_syn_retries and tcp_syn_linear_timeouts to 25 for
+  better rehash coverage
+
+Neil Spring (2):
+  tcp: rehash onto different local ECMP path on retransmit timeout
+  selftests: net: add local ECMP rehash test
+
+ net/ipv4/tcp_input.c                       |   6 +-
+ net/ipv4/tcp_plb.c                         |   7 +-
+ net/ipv4/tcp_timer.c                       |   4 +
+ net/ipv6/af_inet6.c                        |   3 +
+ net/ipv6/inet6_connection_sock.c           |   6 +
+ net/ipv6/syncookies.c                      |   3 +
+ net/ipv6/tcp_ipv6.c                        |  13 +-
+ tools/testing/selftests/net/Makefile       |   1 +
+ tools/testing/selftests/net/config         |   1 +
+ tools/testing/selftests/net/ecmp_rehash.sh | 923 +++++++++++++++++++++
+ 10 files changed, 962 insertions(+), 5 deletions(-)
+ create mode 100755 tools/testing/selftests/net/ecmp_rehash.sh
+
+--
+2.53.0-Meta
 
