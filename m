@@ -1,79 +1,82 @@
 Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E9553C4548
-	for <linux-kselftest@vger.kernel.org>; Sun, 17 May 2026 17:45:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3665B3CAE7F
+	for <linux-kselftest@vger.kernel.org>; Sun, 17 May 2026 17:45:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779039930; cv=none; b=eZX1WS6iGdfxSITDj6qlf574SaMLjspu9z6LAlNbYcNsFbnCa9A20VDinQ3LWCg8VF2uURuMpTea/V3SSWFl52qkOwTDcDJjPpxoPPx7/ukkpOQ2O23vLPg99ylTRWiKV3+Aa+vuxj3cLZ4OsqmDjLBW6oW+p4CU85oskyf7to8=
+	t=1779039932; cv=none; b=E+vlcqdA8+hpo7SPcsqJF+1htYySSx40hHTongpSzJHpzPCCUFM26aoMoRLArayo8KUrzCD/6DVQLsxz9FbnqMZhT/LAI30Gr1in4VssHpA8gbAjcld7Dck2twj7JyKktL61nu6LBDVA85OJW2zPrQ1tlvHZ27rYvroMoyGrzQY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779039930; c=relaxed/simple;
-	bh=kNkNI/8XynKLjIPo6Gtw2lmZjrLtzPz1LeOBAz58KHM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gIvuErmTLEheu5scc1ZXQbrm3VpPD1h0Knfew+uIaIiPIbxQszI2qEagZt9kGuzcxkS3UnC0fZq53PDoIfvNaM4VqeMxDZIxBh5Q2InP43dYn9JS1DtcufY+zGh0PU1Z6tDJf0Z3tqeXV2CXrqxJjDXjkn7xHiOSbanZsuk3lIg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=VQxBmEDw; arc=none smtp.client-ip=67.231.153.30
+	s=arc-20240116; t=1779039932; c=relaxed/simple;
+	bh=fXxy1Sy/5F41T5Sx3jo+gB/W5t3QoT6r6jP8/14BiI0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Cr+uhJ8rkg+y2Dzkyl5uL1DLG6OGqnva0w0iTtC8A1nyDTRSVcTpW7POpcgS97cjm+SIbYD3rqAUek2/x3ALzs+kwLzpfCsiByFSx8T5Do7yKe313nZsuHDmIXUAcNzfLnuAxm0RnApS+OXKOBXk7EegQxYiXsWE3I8+7nVUWds=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=ZfwBO75C; arc=none smtp.client-ip=67.231.153.30
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="VQxBmEDw"
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="ZfwBO75C"
 Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64HHObpQ461963
-	for <linux-kselftest@vger.kernel.org>; Sun, 17 May 2026 10:45:27 -0700
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64HHisEI500390
+	for <linux-kselftest@vger.kernel.org>; Sun, 17 May 2026 10:45:29 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
-	:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=s2048-2025-q2; bh=XpCR9Cc4JL6ZGc1pX8ozjC9q6S7skyL
-	22FrSAjt8B7M=; b=VQxBmEDweGj3zqz+XiN7Ew0W+qm7GrQ4OBvWlx9dDHm4hgN
-	BrG6A/NFAe6z0wbvEWhHlLZMxsCN6JGktAGfGwiSzCvZjIBaxtsQdTspcTWTNEfl
-	91fWokH1iNBQdIzeNJ2Use3PEaQxHyr5wOO1v7t6CS+D+B0LuIIjm75AhTJwSKJ3
-	CqKtskIZ1TT/E0palpb8f9Bl+QfG9+qlqyzqkozuwNZpje6E3p8NuMJVxfNckHs8
-	BNOwoUQYRgAtC4hURgy9MFhmAXwxfTVa8ipQ0eUsqC1wrVuFnBS54Y+nFNSqK2XE
-	gXxaDkhL5npla9FryIYsHa3+K/wiXrFsvqgZHVg==
-Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com [209.85.167.198])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4e6pd6mt5e-1
+	:content-transfer-encoding:date:from:in-reply-to:message-id
+	:mime-version:references:subject:to; s=s2048-2025-q2; bh=hHwjqC/
+	gnuHNLCaMsw451iPYwce4YfSboUtjcc/Yjko=; b=ZfwBO75C+zhqzFAG9OswnxD
+	32UoSz4Of6l8bsdDorJBmXPaTQRvJDcpbNrx7LTCbgnIxlPJtaysBElUz/r8pdWc
+	2DCLNMTp2OGC1lVDk1CEMq6NjcdikeULNW2OFzgoUzq6OEl1bP6H9lg3tdWkyIme
+	CmP+gDLRbr79DqzrAKBwE6CSg/6ILo9qKm6L2HgbDsMl39WznsPAfNKupAECYQ+j
+	K3nVSJ7CCuJT4nYf7zDV2V9SJR4CCjpjOB6l+qq6+7RxRaRFf54MfCn6sndBTLEu
+	fefm29ofxxZfs/QWC9F1hwI5niqUcOdcHevIt2O6MLlhBmkQfeMBo+3eUHrJwgg=
+	=
+Received: from mail-oa1-f70.google.com (mail-oa1-f70.google.com [209.85.160.70])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4e6pd6mt5p-1
 	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-kselftest@vger.kernel.org>; Sun, 17 May 2026 10:45:27 -0700 (PDT)
-Received: by mail-oi1-f198.google.com with SMTP id 5614622812f47-482abfeea78so2885478b6e.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 17 May 2026 10:45:26 -0700 (PDT)
+	for <linux-kselftest@vger.kernel.org>; Sun, 17 May 2026 10:45:29 -0700 (PDT)
+Received: by mail-oa1-f70.google.com with SMTP id 586e51a60fabf-43a55fd90faso945003fac.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 17 May 2026 10:45:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779039926; x=1779644726;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XpCR9Cc4JL6ZGc1pX8ozjC9q6S7skyL22FrSAjt8B7M=;
-        b=f4Ysagw4eJp9GONZPU179fZ1/55OyKr+I111hGrXehe36CE2wBBSdXoAVR+Fj/bb8z
-         G8gnuNMLe7qUKdzpdiqL1Wpu/KcKJSlSs1ST9KaAnvPxYZ9GbLLjy90VCDbqD2npUch9
-         PMWUPV0QCLUxbmA6Gyc+/EcEc69/cI6soZrLvajx7ANLe+BiqR68qO0jt4BVAtZS40i/
-         ied3NC87AEhdfJ22WTBfOPtkj5cLb81kioXUpjFBzv/lnEut7lsVoY9yQl3NWs3CARSs
-         xU8U/NYHUZiXoZbo0UmQDuIQUWegygR0Gb+8neVVRIpqPfI4PEkbIlCE6wcRihb/bg0a
-         X/wA==
-X-Forwarded-Encrypted: i=1; AFNElJ+6pdYVK9FY3ZKRvbBvmn904Dn9KpzIkQVaczoVLzFaw0ijCbTaPdIC9g4kcQg8QtjUmt/jXBE2cNtwTiwz++I=@vger.kernel.org
-X-Gm-Message-State: AOJu0YySGvuwJ9r0o91ff3KxlMkdh4+ubNmOuyo2SQfkNPnCalS1Uz08
-	OyZLuHr0T1ILG3KVjDKiQHSaNW3SAHXWNRd42S+weEJc3LdrrUMrSBlmJM+ECDwnwDy+FtRgP6o
-	km1cfmjSI5wuCU43lWM5PIECEhac9OSlklfuejGUj9nxrWTTNSWf8BJSN1waxsz9VjEcfOIhrq/
-	Y=
-X-Gm-Gg: Acq92OEmB9xT5zn4e+uEHUYqy4s6MhCTpN2TR5ZkB9tyMJ2iFiYjp7B1BHh6GLEhHJ0
-	ocVBGsbHZWWpR8lUSEYcwxjG29y8K9rCgZrEL1YC0AYkE1dtYG2a6iRLTZLvol13UUwbVKIm/XV
-	5ToO4wiyRochA4/hifMJXv41D9kH8Yz2eE7ZCkYTvdFHcyx9gcxF/zOLgmMRjjDAjiejbEFRw/H
-	ePaL79A6O7V0sBMa8A6VXLUwKMrtKwa6AguuXv88A7HzQ+i7gXt1kTzprlfsgoOHxX6xat9zjQD
-	nHMaXJFbGvMDTzKjcXsDs204Nbp8Ji2CWpVsT14yxp6elQeksu1YJICELUZ1Yoh3H8IV+QLMGIC
-	/mjTQQF6naw==
-X-Received: by 2002:a05:6808:1a07:b0:482:5bd1:d8e5 with SMTP id 5614622812f47-482e55afc67mr7658641b6e.9.1779039925958;
-        Sun, 17 May 2026 10:45:25 -0700 (PDT)
-X-Received: by 2002:a05:6808:1a07:b0:482:5bd1:d8e5 with SMTP id 5614622812f47-482e55afc67mr7658617b6e.9.1779039925448;
-        Sun, 17 May 2026 10:45:25 -0700 (PDT)
-Received: from localhost ([2a03:2880:12ff:5::])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-43a94fd54desm2136691fac.8.2026.05.17.10.45.23
+        d=1e100.net; s=20251104; t=1779039928; x=1779644728;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=hHwjqC/gnuHNLCaMsw451iPYwce4YfSboUtjcc/Yjko=;
+        b=mv11Rvp145XnMfSl9gXZxIOuup3DOVfrWiRruwIRgf5mQ7ovMs5Q3zKh3p8paJjakE
+         9/TqC5hHv00wbJ6xxXaR6GO9CbSnlnvf/z6NF8W5GuDoDAYtRLNRYsbGXtEytMVe+g1Q
+         Gsah6KI4G/T0ekzRjmiUtDcCt2Cyx7vsCQ0Fy8iv7iKaA0gkrfG37qHUcfOT1HNYBt0p
+         LVjE/LpYO8P5FdIfEfRIdnFpNTc6nZWCV8wqLaceSo7DuH82uJKPTgzqx4zultY5IHxU
+         NtueFvGT++9ZI40AlxNUx8mTPI7OFRWvfi9DmYBt09TR/eL/1/7IYRjZqUZXKoCOtRZx
+         ESrQ==
+X-Forwarded-Encrypted: i=1; AFNElJ98FgjBPL+sQTBc7dnjt8ILH+DMAKp8qXhfaJ7CyXzXP6ZSgeyXF4dhRY/aZfkBNZLAHUiuWKfwk9UzoCgvLmM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwSLmQ9re4nVk2XWJFTwFBWkveu7gPHnq4UHhO6fyhzrxKkcRpR
+	agkoI5yzZQd0GMYA9Sv11t+LeKtO0h1nNTiowrt05ERO3hXVxKvoRCS0Pj2WPHf36hemowfweLJ
+	CcGpYBo/j6mIX4jf4IpXYb+ezufuLcxmFgvySwO1zz67Xp5QcjgGeRupE51+SUAkckFE=
+X-Gm-Gg: Acq92OEK+RI6a8TTZokLqhZifOUO+2PfTZk88ySP3beiPwUSAsuuAUBOKHdvKp6I9PU
+	xS4729tF4i/QTqU9z3Nh/7vIAVdAwai7/y7n0yAnaFxdx35DbruKyD0BJggWyfvkz5JcrolntSt
+	6e9J/EGRf0JFlhO+xa/p24G6x7dI54g8tjcE8+aDgTyui8/YI9qhaYND3Rg+CVn9U9YT//p/0l8
+	5RP1o9TQMkzTCnd7BvAPb5b/jPJNKM3ZI7ukYwLjvYVDAd7w5OMi/J8ZjvWXE524krzS9cHJtzg
+	JyjrshWHFblGRHVHw3ObxEWCZdJOrzM6mdILOr8l0QtwsVt8wslbCWsZHyM4qhfe5nG+d9qeeIV
+	yNDyro2adX1ci3LJSovAp
+X-Received: by 2002:a05:6820:3103:b0:69b:5486:e85 with SMTP id 006d021491bc7-69c9bfd479emr7536374eaf.36.1779039928350;
+        Sun, 17 May 2026 10:45:28 -0700 (PDT)
+X-Received: by 2002:a05:6820:3103:b0:69b:5486:e85 with SMTP id 006d021491bc7-69c9bfd479emr7536354eaf.36.1779039927852;
+        Sun, 17 May 2026 10:45:27 -0700 (PDT)
+Received: from localhost ([2a03:2880:12ff:9::])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-69d045e6646sm4436558eaf.1.2026.05.17.10.45.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 May 2026 10:45:24 -0700 (PDT)
+        Sun, 17 May 2026 10:45:27 -0700 (PDT)
 From: Neil Spring <ntspring@meta.com>
 To: netdev@vger.kernel.org
 Cc: edumazet@google.com, ncardwell@google.com, kuniyu@google.com,
         davem@davemloft.net, kuba@kernel.org, dsahern@kernel.org,
         pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
         linux-kselftest@vger.kernel.org, ntspring@meta.com
-Subject: [PATCH net-next v6 0/2] tcp: rehash onto different local ECMP path on retransmit timeout
-Date: Sun, 17 May 2026 10:45:20 -0700
-Message-ID: <20260517174522.2232057-1-ntspring@meta.com>
+Subject: [PATCH net-next v6 1/2] tcp: rehash onto different local ECMP path on retransmit timeout
+Date: Sun, 17 May 2026 10:45:21 -0700
+Message-ID: <20260517174522.2232057-2-ntspring@meta.com>
 X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260517174522.2232057-1-ntspring@meta.com>
+References: <20260517174522.2232057-1-ntspring@meta.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -81,131 +84,238 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: j9N92SgObei8S0z3xOc-9OEQWRMDx13B
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTE3MDE5MSBTYWx0ZWRfXy5y0ZKB7i61x
- hgCQKpfKwQnQlzneR0IncMbIqAsaglYdaLwRCzy7PptjpuZVFO1MrhlzzXaITIJUjEDPKFW4FOV
- u5sfbfOkJfcJ1U21NR3lTnXXTODPS8MTY0e6R9VRCJZowzTKfh9CSiOFHa+59zxCT/c1pQrSbQv
- 9n77Lwtg/qACLMrVNFHjC68NbiWr8Cmxxo+C2Stb8OlE040+xrqcjqbhysFHEI7WJ0eHKg1wsEu
- hYSyVgR6AujahBLeJ2eFF6KE75zrjVxNZm/230vaJfF7/KUFCHNWo2piY/9gtzkZDRKwDx5lwAc
- PHfkb0/4ov1Vsmx5f25zd6dJGC4qJNcwXQYxVvO8QesASDX6JtIffqbPxh7oEKQSlXGBag889L3
- XEAVnTVUAYutn9suQ8kBDNryOhbXu96Qy1LLgHcjMGZo7+iXPqzSgADP/wxFwIzPR+A8rqkRaIa
- 7d0Wcz3serc7mt3D6PQ==
-X-Proofpoint-GUID: j9N92SgObei8S0z3xOc-9OEQWRMDx13B
-X-Authority-Analysis: v=2.4 cv=PfLPQChd c=1 sm=1 tr=0 ts=6a09feb7 cx=c_pps
- a=4ztaESFFfuz8Af0l9swBwA==:117 a=xqWC_Br6kY4A:10 a=NGcC8JguVDcA:10
+X-Proofpoint-ORIG-GUID: UrC9PX3URsP_DY-fLZ_HTHKdFJ3-4el-
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTE3MDE5MSBTYWx0ZWRfX7g5u3J2jY/GR
+ NfCl674LVeWQGBfIwP3fLtkUUQQLedqA8aH9bbVgRoTfeacQNXfej1oIcIMHBc80iUhkDVXYy26
+ JhHl+zCisOaKQ9wkxMQ2fE93qvtWv6v4Os8/ixL0IgZVskQzlqAEEqjl9AVC7SVhd75oltOk5EI
+ UuEMb9uwiTkaltsrUMOd9pKEpB6O05DrczLQ4r/AMionLi/uNJMbC9wvZSM4j4DAvv7tiPjQ/Np
+ gZkI4xOyxeyOIQaI7PqCY17jfjrU9liAnQALdV/6tEk5S3WHLd1P9Z9BDq9wnE3096qvvXIM6wE
+ HxyF32Ibg6UECCHm8AirQBhDJdBHK/vFmcqaTKHuRiN2W6GaWc1HSo/Eh/nCptlHr3rQZibONpb
+ kMVKt8n3e96jY2CRl2Hnc164q9FViABpUsAQODk0gfpNKFbc8HsvBb6YWDn6ND5keRROe2kDZ5Q
+ zDq/UPGKBC7yrLHCTkA==
+X-Proofpoint-GUID: UrC9PX3URsP_DY-fLZ_HTHKdFJ3-4el-
+X-Authority-Analysis: v=2.4 cv=PfLPQChd c=1 sm=1 tr=0 ts=6a09feb9 cx=c_pps
+ a=nSjmGuzVYOmhOUYzIAhsAg==:117 a=xqWC_Br6kY4A:10 a=NGcC8JguVDcA:10
  a=f7IdgyKtn90A:10 a=VkNPw1HP01LnGYTKEx00:22 a=7x6HtfJdh03M6CCDgxCd:22
- a=wpfVPzegXHpEFt3DAXn9:22 a=VwQbUJbxAAAA:8 a=VabnemYjAAAA:8
- a=IdTnusCh2XOMSKVXdlMA:9 a=TPnrazJqx2CeVZ-ItzZ-:22 a=gKebqoRLp9LExxC7YDUY:22
+ a=wpfVPzegXHpEFt3DAXn9:22 a=VabnemYjAAAA:8 a=LSjaGeFOPYFcjronpEcA:9
+ a=1zu1i0D7hVQfj8NKfPKu:22 a=gKebqoRLp9LExxC7YDUY:22
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-05-17_04,2026-05-15_01,2025-10-01_01
 
-Currently sk_rethink_txhash() re-rolls the socket's txhash on RTO,
-PLB, and spurious-retransmission events, but the new hash is not
-propagated into the IPv6 ECMP path selection logic.  The cached
-route is reused and fib6_select_path() is never re-invoked, so
-the connection stays on the same ECMP path.
+Currently sk_rethink_txhash() re-rolls the socket's txhash on RTO, PLB,
+and spurious-retransmission events, but the cached route is reused and
+the new hash is not propagated into the ECMP path selection logic.  Two
+changes are needed to make rehash select a different local ECMP path:
 
-This series adds the two missing pieces:
+1. Add __sk_dst_reset() alongside sk_rethink_txhash() in
+   tcp_write_timeout(), tcp_rcv_spurious_retrans(), and
+   tcp_plb_check_rehash() so the cached dst is invalidated and the
+   next transmit triggers a fresh route lookup.
 
-1. __sk_dst_reset() alongside sk_rethink_txhash() so the cached dst
-   is invalidated and the next transmit triggers a fresh route lookup.
+2. Set fl6->mp_hash from sk_txhash (or tcp_rsk(req)->txhash for
+   SYN/ACK retransmits and syncookies) in tcp_v6_connect(),
+   inet6_sk_rebuild_header(), inet6_csk_route_req(),
+   inet6_csk_route_socket(), and cookie_v6_check() so
+   fib6_select_path() picks a path based on the new hash.
 
-2. fl6->mp_hash set from sk_txhash before each route lookup so
-   fib6_select_path() picks a path based on the (potentially re-rolled)
-   hash.  This is conditioned on fib_multipath_hash_policy == 0 (L3)
-   because policies 1-3 compute a deterministic hash from the flow
-   keys which must not be overridden.
+   The expression uses (txhash >> 1) ?: 1 to guarantee a non-zero
+   mp_hash, since fib6_select_path() treats zero as unset and
+   falls back to rt6_multipath_hash().
 
-Patch 1 is the kernel change; patch 2 adds selftests covering SYN
-rehash, SYN/ACK rehash, midstream RTO rehash, midstream ACK rehash
-(spurious retransmission), PLB rehash, a policy 1 negative test,
-a flowlabel leak regression test, and two dst rebuild consistency
-tests (normal and syncookie) verifying that natural route
-invalidation does not cause unintended path changes.
+   This is conditioned on fib_multipath_hash_policy == 0 (L3)
+   because policies 1-3 compute a deterministic hash from the
+   flow keys (e.g., symmetric 5-tuple for policy 1) which must
+   not be overridden by a random txhash.
 
-Changes since v5: https://lore.kernel.org/netdev/20260513204048.2721843-1-ntspring@meta.com/
-- Improve selftest reliability: suppress __dst_negative_advice() via
-  tcp_retries1=255 in dst rebuild tests so a real RTO cannot trigger
-  an unintended rehash; add internal retry to midstream and ACK
-  rehash tests to tolerate probabilistic ECMP path selection; fix
-  midstream baseline capture to account for packets that bypass tc
-  filters during the prio qdisc's TCQ_F_CAN_BYPASS window
-- Increase ECMP_REBUILD_ROUNDS default to 10 for reliable regression
-  detection with 2-way ECMP; replace sleep with busywait
-- Use tcp_allowed_congestion_control instead of changing the host's
-  default congestion control for PLB test
-- Use (txhash >> 1) ?: 1 to guarantee non-zero mp_hash, since zero
-  falls back to rt6_multipath_hash()
+   It is necessary to update mp_hash explicitly because the
+   default ECMP hash derives from fl6->flowlabel via
+   np->flow_label, which is not updated from sk_txhash
+   (REPFLOW is off by default).  ip6_make_flowlabel() cannot
+   help either, as it runs after the route lookup.
 
-Changes since v4: https://lore.kernel.org/netdev/20260507171319.1259115-1-ntspring@meta.com/
-- Condition fl6->mp_hash on fib_multipath_hash_policy == 0 to preserve
-  deterministic hash policies 1-3 (e.g., symmetric 5-tuple for policy 1)
-- Set fl6->mp_hash in tcp_v6_connect() and cookie_v6_check() for
-  initial route lookup consistency; move sk_set_txhash() earlier
-  (Jakub Kicinski)
-- Add policy 1 negative test; improve sysctl save/restore
-- Add flowlabel leak test confirming mp_hash does not alter the
-  on-wire IPv6 flow label
-- Add dst rebuild consistency tests (normal and syncookie) verifying
-  that route table changes do not cause unintended ECMP path changes
+sk_set_txhash() is moved before ip6_dst_lookup_flow() in
+tcp_v6_connect() so the initial ECMP path is selected by the same
+txhash that subsequent route rebuilds will use.  This avoids
+unintended path changes when the cached dst is naturally
+invalidated (e.g., by PMTU discovery or route changes).
 
-Changes since v3: https://lore.kernel.org/netdev/20260505193824.2791642-1-ntspring@meta.com/
-- Use __sk_dst_reset() instead of sk_dst_reset() since the socket lock
-  is held in all three call sites (Eric Dumazet)
-- Guard __sk_dst_reset() with sk->sk_family == AF_INET6 since IPv4 ECMP
-  does not use sk_txhash for path selection
-- Guard __sk_dst_reset() in tcp_plb_check_rehash() with the return value
-  of sk_rethink_txhash()
-- Move tcp_rsk(req)->txhash initialization before route_req() in
-  tcp_conn_request() to avoid reading uninitialized memory
-- Add CONFIG_TCP_CONG_DCTCP=m to selftests/net/config for PLB test
-- Skip PLB test gracefully if DCTCP is not available
-- Save and restore original congestion control algorithm in PLB test
-- Default get_netstat_counter() to 0 when counter is not found
-- Skip all tests if tcp_syn_linear_timeouts is not available
-- Replace bash/pipe data sources with socat OPEN:/dev/zero for
-  cleaner process cleanup
-- Fix shellcheck warnings
+The dst reset is guarded by sk->sk_family == AF_INET6 since IPv4
+ECMP does not currently use sk_txhash for path selection.  For
+IPv4-mapped IPv6 sockets this produces a redundant dst reset on a
+cold path (RTO/PLB); the subsequent IPv4 route lookup returns the
+same result.
 
-Changes since v2: https://lore.kernel.org/netdev/20260408070514.1840227-1-ntspring@meta.com/
-- Retitle "ECMP" to "local ECMP" to distinguish from remote ECMP
-  (Neal Cardwell)
-- Add fl6->mp_hash propagation in inet6_sk_rebuild_header() (af_inet6.c),
-  covering the dst rebuild path used on established sockets
-- Remove incorrect ir_iif update from tcp_check_req() in tcp_minisocks.c;
-  the SYN/ACK rehash is already handled by tcp_rtx_synack() re-rolling
-  txhash which feeds into inet6_csk_route_req()'s mp_hash
-  (Eric Dumazet)
-- Add ACK rehash and PLB rehash selftests
-- Improve selftest reliability
+tcp_rsk(req)->txhash initialization is moved before route_req() in
+tcp_conn_request() so that inet6_csk_route_req() reads a valid hash
+on the initial SYN/ACK.
 
-Changes since v1: https://lore.kernel.org/netdev/20260408002802.2448424-1-ntspring@meta.com/
-- Use tcp_rsk(req)->txhash instead of jhash_1word(req->num_retrans, ...)
-  for ECMP path selection in inet6_csk_route_req(), making the request
-  socket path consistent with the established socket path (Eric Dumazet)
-- Add comments explaining the >> 1 shift for 31-bit mp_hash range
-- Use socat -u (unidirectional) in selftest to avoid SIGPIPE race
-- Increase tcp_syn_retries and tcp_syn_linear_timeouts to 25 for
-  better rehash coverage
+Signed-off-by: Neil Spring <ntspring@meta.com>
+---
+ net/ipv4/tcp_input.c             |  6 ++++--
+ net/ipv4/tcp_plb.c               |  7 ++++++-
+ net/ipv4/tcp_timer.c             |  4 ++++
+ net/ipv6/af_inet6.c              |  3 +++
+ net/ipv6/inet6_connection_sock.c |  6 ++++++
+ net/ipv6/syncookies.c            |  3 +++
+ net/ipv6/tcp_ipv6.c              | 13 +++++++++++--
+ 7 files changed, 37 insertions(+), 5 deletions(-)
 
-Neil Spring (2):
-  tcp: rehash onto different local ECMP path on retransmit timeout
-  selftests: net: add local ECMP rehash test
-
- net/ipv4/tcp_input.c                       |   6 +-
- net/ipv4/tcp_plb.c                         |   7 +-
- net/ipv4/tcp_timer.c                       |   4 +
- net/ipv6/af_inet6.c                        |   3 +
- net/ipv6/inet6_connection_sock.c           |   6 +
- net/ipv6/syncookies.c                      |   3 +
- net/ipv6/tcp_ipv6.c                        |  13 +-
- tools/testing/selftests/net/Makefile       |   1 +
- tools/testing/selftests/net/config         |   1 +
- tools/testing/selftests/net/ecmp_rehash.sh | 923 +++++++++++++++++++++
- 10 files changed, 962 insertions(+), 5 deletions(-)
- create mode 100755 tools/testing/selftests/net/ecmp_rehash.sh
-
---
+diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
+index 7995a89bafc9..8f602a665b71 100644
+--- a/net/ipv4/tcp_input.c
++++ b/net/ipv4/tcp_input.c
+@@ -5020,8 +5020,10 @@ static void tcp_rcv_spurious_retrans(struct sock *sk,
+ 	    skb->protocol == htons(ETH_P_IPV6) &&
+ 	    (tcp_sk(sk)->inet_conn.icsk_ack.lrcv_flowlabel !=
+ 	     ntohl(ip6_flowlabel(ipv6_hdr(skb)))) &&
+-	    sk_rethink_txhash(sk))
++	    sk_rethink_txhash(sk)) {
+ 		NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPDUPLICATEDATAREHASH);
++		__sk_dst_reset(sk);
++	}
+ 
+ 	/* Save last flowlabel after a spurious retrans. */
+ 	tcp_save_lrcv_flowlabel(sk, skb);
+@@ -7636,6 +7638,7 @@ int tcp_conn_request(struct request_sock_ops *rsk_ops,
+ 	tcp_rsk(req)->af_specific = af_ops;
+ 	tcp_rsk(req)->ts_off = 0;
+ 	tcp_rsk(req)->req_usec_ts = false;
++	tcp_rsk(req)->txhash = net_tx_rndhash();
+ #if IS_ENABLED(CONFIG_MPTCP)
+ 	tcp_rsk(req)->is_mptcp = 0;
+ #endif
+@@ -7717,7 +7720,6 @@ int tcp_conn_request(struct request_sock_ops *rsk_ops,
+ 	}
+ #endif
+ 	tcp_rsk(req)->snt_isn = isn;
+-	tcp_rsk(req)->txhash = net_tx_rndhash();
+ 	tcp_rsk(req)->syn_tos = TCP_SKB_CB(skb)->ip_dsfield;
+ 	tcp_openreq_init_rwin(req, sk, dst);
+ 	sk_rx_queue_set(req_to_sk(req), skb);
+diff --git a/net/ipv4/tcp_plb.c b/net/ipv4/tcp_plb.c
+index c11a0cd3f8fe..accdd83dfc3d 100644
+--- a/net/ipv4/tcp_plb.c
++++ b/net/ipv4/tcp_plb.c
+@@ -78,7 +78,12 @@ void tcp_plb_check_rehash(struct sock *sk, struct tcp_plb_state *plb)
+ 	if (plb->pause_until)
+ 		return;
+ 
+-	sk_rethink_txhash(sk);
++	if (sk_rethink_txhash(sk)) {
++#if IS_ENABLED(CONFIG_IPV6)
++		if (sk->sk_family == AF_INET6)
++			__sk_dst_reset(sk);
++#endif
++	}
+ 	plb->consec_cong_rounds = 0;
+ 	WRITE_ONCE(tcp_sk(sk)->plb_rehash, tcp_sk(sk)->plb_rehash + 1);
+ 	NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPPLBREHASH);
+diff --git a/net/ipv4/tcp_timer.c b/net/ipv4/tcp_timer.c
+index 322db13333c7..24c1c19eda6e 100644
+--- a/net/ipv4/tcp_timer.c
++++ b/net/ipv4/tcp_timer.c
+@@ -300,6 +300,10 @@ static int tcp_write_timeout(struct sock *sk)
+ 	if (sk_rethink_txhash(sk)) {
+ 		WRITE_ONCE(tp->timeout_rehash, tp->timeout_rehash + 1);
+ 		__NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPTIMEOUTREHASH);
++#if IS_ENABLED(CONFIG_IPV6)
++		if (sk->sk_family == AF_INET6)
++			__sk_dst_reset(sk);
++#endif
+ 	}
+ 
+ 	return 0;
+diff --git a/net/ipv6/af_inet6.c b/net/ipv6/af_inet6.c
+index 0a88b376141d..8e8f94b1f2a4 100644
+--- a/net/ipv6/af_inet6.c
++++ b/net/ipv6/af_inet6.c
+@@ -823,6 +823,9 @@ int inet6_sk_rebuild_header(struct sock *sk)
+ 	fl6->flowi6_uid = sk_uid(sk);
+ 	security_sk_classify_flow(sk, flowi6_to_flowi_common(fl6));
+ 
++	if (ip6_multipath_hash_policy(sock_net(sk)) == 0)
++		fl6->mp_hash = (sk->sk_txhash >> 1) ?: 1;
++
+ 	rcu_read_lock();
+ 	final_p = fl6_update_dst(fl6, rcu_dereference(np->opt), &np->final);
+ 	rcu_read_unlock();
+diff --git a/net/ipv6/inet6_connection_sock.c b/net/ipv6/inet6_connection_sock.c
+index 37534e116899..4e10299ba0bd 100644
+--- a/net/ipv6/inet6_connection_sock.c
++++ b/net/ipv6/inet6_connection_sock.c
+@@ -48,6 +48,9 @@ struct dst_entry *inet6_csk_route_req(const struct sock *sk,
+ 	fl6->flowi6_uid = sk_uid(sk);
+ 	security_req_classify_flow(req, flowi6_to_flowi_common(fl6));
+ 
++	if (ip6_multipath_hash_policy(sock_net(sk)) == 0)
++		fl6->mp_hash = (tcp_rsk(req)->txhash >> 1) ?: 1;
++
+ 	if (!dst) {
+ 		dst = ip6_dst_lookup_flow(sock_net(sk), sk, fl6, final_p);
+ 		if (IS_ERR(dst))
+@@ -70,6 +73,9 @@ struct dst_entry *inet6_csk_route_socket(struct sock *sk,
+ 	fl6->saddr = np->saddr;
+ 	fl6->flowlabel = np->flow_label;
+ 	IP6_ECN_flow_xmit(sk, fl6->flowlabel);
++
++	if (ip6_multipath_hash_policy(sock_net(sk)) == 0)
++		fl6->mp_hash = (sk->sk_txhash >> 1) ?: 1;
+ 	fl6->flowi6_oif = sk->sk_bound_dev_if;
+ 	fl6->flowi6_mark = sk->sk_mark;
+ 	fl6->fl6_sport = inet->inet_sport;
+diff --git a/net/ipv6/syncookies.c b/net/ipv6/syncookies.c
+index 4f6f0d751d6c..f43f10bd2822 100644
+--- a/net/ipv6/syncookies.c
++++ b/net/ipv6/syncookies.c
+@@ -245,6 +245,9 @@ struct sock *cookie_v6_check(struct sock *sk, struct sk_buff *skb)
+ 		fl6.flowi6_uid = sk_uid(sk);
+ 		security_req_classify_flow(req, flowi6_to_flowi_common(&fl6));
+ 
++		if (ip6_multipath_hash_policy(net) == 0)
++			fl6.mp_hash = (tcp_rsk(req)->txhash >> 1) ?: 1;
++
+ 		dst = ip6_dst_lookup_flow(net, sk, &fl6, final_p);
+ 		if (IS_ERR(dst)) {
+ 			SKB_DR_SET(reason, IP_OUTNOROUTES);
+diff --git a/net/ipv6/tcp_ipv6.c b/net/ipv6/tcp_ipv6.c
+index 2c3f7a739709..231eed3d4f7b 100644
+--- a/net/ipv6/tcp_ipv6.c
++++ b/net/ipv6/tcp_ipv6.c
+@@ -258,6 +258,8 @@ static int tcp_v6_connect(struct sock *sk, struct sockaddr_unsized *uaddr,
+ 	if (!ipv6_addr_any(&sk->sk_v6_rcv_saddr))
+ 		saddr = &sk->sk_v6_rcv_saddr;
+ 
++	sk_set_txhash(sk);
++
+ 	fl6->flowi6_proto = IPPROTO_TCP;
+ 	fl6->daddr = sk->sk_v6_daddr;
+ 	fl6->saddr = saddr ? *saddr : np->saddr;
+@@ -275,6 +277,15 @@ static int tcp_v6_connect(struct sock *sk, struct sockaddr_unsized *uaddr,
+ 
+ 	security_sk_classify_flow(sk, flowi6_to_flowi_common(fl6));
+ 
++	/* Non-zero mp_hash bypasses rt6_multipath_hash() in
++	 * fib6_select_path(), letting txhash control ECMP path
++	 * selection so that sk_rethink_txhash() rehashes onto a
++	 * different path.  Policies 1-3 derive a deterministic
++	 * hash from the flow keys and must not be overridden.
++	 */
++	if (ip6_multipath_hash_policy(net) == 0)
++		fl6->mp_hash = (sk->sk_txhash >> 1) ?: 1;
++
+ 	dst = ip6_dst_lookup_flow(net, sk, fl6, final_p);
+ 	if (IS_ERR(dst)) {
+ 		err = PTR_ERR(dst);
+@@ -313,8 +324,6 @@ static int tcp_v6_connect(struct sock *sk, struct sockaddr_unsized *uaddr,
+ 	if (err)
+ 		goto late_failure;
+ 
+-	sk_set_txhash(sk);
+-
+ 	if (likely(!tp->repair)) {
+ 		union tcp_seq_and_ts_off st;
+ 
+-- 
 2.53.0-Meta
 
