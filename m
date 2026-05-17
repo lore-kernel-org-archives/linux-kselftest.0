@@ -1,63 +1,63 @@
-Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
+Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDCC93CF03E
-	for <linux-kselftest@vger.kernel.org>; Sun, 17 May 2026 18:37:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A2713CC9F3
+	for <linux-kselftest@vger.kernel.org>; Sun, 17 May 2026 18:40:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779043044; cv=none; b=kQepHR/Z6WKRLS+X0NK0smEcxXCPCi4AyAtUCZa1KbF92qWo5r1PpAilSqlgr3O2gSJFCAG+cCUa4W54m12sYmqWxcq0r9ru7sabZRm/sD/9Rdn2/9rrbG9qhpf+Neh0qgOnrDLOWV3tkVJ1m9YiFDBmrAjKAKpMXmw4ny3pybM=
+	t=1779043255; cv=none; b=QgcCTc6ZNqYV55oHo4EICyUHMQdKWCSpGpu02pstidt1zH9J3rqBWRxO4W+KQQz36Koq5K3hUXmwOITL8njmjoM5JpQSns7JwmAD9W0idZUVwvJa8il4jsEoSeZObx1H4IeUPwkUhUk9u06KW7Mpj8OdWIoobACUz67CV22cYgA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779043044; c=relaxed/simple;
-	bh=ODINtDFFV5g4mSz8cJVlLxEbZA37tQMcdVPH8vgGrAI=;
+	s=arc-20240116; t=1779043255; c=relaxed/simple;
+	bh=0kpVpDj+XWlJIzQDiyFGQk8iMRHNhireUEHGx1sDQkc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=grrxQSGAj2nGe5m8MwLM2v896LtQ2PS822g47yanZI2TO/TrfBAP+sOtWbeiBB13AUDV48nQl3JSYGAXI/Ym5GT4GkjrYGy5clQ0cwgQbrdSnJJ1l7sAJw4lF0eZaK/tp/Q6nY8WF6IJvrkoEZnIkvokQfwUez97S2AD3gCjplw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=ea0x6hxA; arc=none smtp.client-ip=209.85.222.182
+	 Content-Type:Content-Disposition:In-Reply-To; b=WicvOck3Epg7svZ3tqqFl60z9t0Ei6Vz2YSz++YyM3uV7fQcua07GIa55BDltU3jjQ6nShY2ZtR7wnkQB8wH/17dZ3ZPJ+49bilcZ0kx3Qs7M6X6Mz4ChFWGaUVEDujqoQYVHv3G8lMfEFJZPefJU7oQ8Nme92lpJGT8gLBr9xg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=TfTiem+5; arc=none smtp.client-ip=209.85.219.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="ea0x6hxA"
-Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-90d042fa745so321312385a.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 17 May 2026 11:37:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="TfTiem+5"
+Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-8bb4e8a5240so24538046d6.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 17 May 2026 11:40:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1779043039; x=1779647839; darn=vger.kernel.org;
+        d=soleen.com; s=google; t=1779043253; x=1779648053; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=qSvR3pUa7/2OkCu/xeQoYakjb0Jx3U+q13XWt8GPix0=;
-        b=ea0x6hxAjQoGtU2KeJgS0o4Lgf2ssyGAeoMpbLf72HISJVxxWFNRNVbJzh0KrJwgwd
-         6mP5e4l3NNqGin3xB2bKzKpKHhKGlZ6KOQHKxnTV5Ye2kI0mqMvmRNIEsPR64sEKLMfI
-         4bZz+vM+dSXYaQro9O2g92IZVRVnALgJm7Gx8xrJhl7HAWHuJICVygKuVTQBDs1Ci5d4
-         HqCMg+C8WXW9oWudSEcH1FkTts2JPH8eCTKOXOlqRu5Cx3OtgmC99ieraJrVbIGMtucm
-         maTO2HwO7k72O1duqD0KDZwOTwTxiV/hDnV/F6dffSgyFHpLAR6BMKZXFsfNV1V0Nmot
-         ja2A==
+        bh=yO9O8pu4RjDyHVPuvzyCd3iEZISD+KMOY00JM/YV72g=;
+        b=TfTiem+5WDnnCIzlAqfMtLzTa59DMOdCCycU2k0GQcqEQNHNAk81xwA01H6rbyG38n
+         vtf6+ev6ZUvyRR9izAD5DqnpGcLGWCaUj4g1GYWB1bsykUJdiZNdmmKmaofNLc1uKWat
+         0ucsJ03P5dIIk+KzOf0xIRNKp01QNteDQKw5TOjTIlfw5/nZPV60Zr79UALvN8wc4Z8f
+         LixlbH+BNInlIZmVch/S4Cic68+dHfMlC1kepOcytrw9pwobJM1hV3gTqxSvjaLh0qdD
+         i0M8scCn0cQyyP5hGmj8w+iYZfwXAqYrDpWtOBBRPC+8lZFv9bbTc5LHN0Efc1viLLj6
+         Ombg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779043039; x=1779647839;
+        d=1e100.net; s=20251104; t=1779043253; x=1779648053;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=qSvR3pUa7/2OkCu/xeQoYakjb0Jx3U+q13XWt8GPix0=;
-        b=J0Cn87leueT7wMgxuKf67lBDfyng4kLgYnzWUboHldhmzX4gV51KnD2pVydVifUkRK
-         A7kEBvg8asZJoU5ql58GqGjpZfD7EdYR2OGf6tMasewiBxrwnnH+ee6x8Kcpn0+SYC4A
-         QI3WneSnik7rV1GFFU5marEhCq6tQ2Oj0SvN24oS0artuGVhggdkx2ZjVFh4DEkVa6SM
-         Nl7pFEvZxGyGGXNQZOOUFnBpqImz1QqR/3Z20dqr6E9FR/QdxXnnLdAf63f3wFOV5T43
-         Fixd1ddAN7HMP6eCBOJfEua214Ad9EbNvFgbORH0VRkKELNR+TR7hQ++oDyHT4T40ggL
-         ue+g==
-X-Forwarded-Encrypted: i=1; AFNElJ9jkwwLWp/ryziumakfsBsXdpoPPSoG1z7wxVfNDtKD+ingVPPRzbVMEtVxKU3X93FARk5PboNZfgP4r0hQFTA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzfUk70B9/Ne/yo6sWpDi437vgFIJR5MrER3BGze377+3pi60yX
-	ct3UyQFpnf3k5pE8pD/I7JaKOHb3xQTso9VVPR9cqqRvJSEXt8OwHwyrPjaso1ARNCc=
-X-Gm-Gg: Acq92OFK0hqauf06W43lPu1do7L0sEOCUx+/w9OGN7d9zJqE0l+cv4QkO0QRlTzVNBw
-	eRB0cnY/9FvHcKIhJfQzrtBvdiFntLN6EEeOGg/YA1UMGx8VJGqEuB7Xt/Lnw4GFBkx6TNuKOYP
-	EDYU1d53lrkd5tnddexONYIYT2aI0GaYZH+wkNA9+bfYI+WJ7b1aoHnrD5V5+BXpu1Q5cgNNSTG
-	JFraCF3AV9rCLFhrExqAZqnrhBq/fyDMpg6qGgTrI7ZwCpiK32luIz8iubIRWMq1AcM+taS90+c
-	jxGCFKWtOMIN/qWNTpLGbmDd9ZATh8EppJEXHfJ7A6Pvoilrk6EiHkDzmTJYk4Qb4rPXK4WfLnY
-	+98JEtVT1+TycxE//poG83ih4mPnxnCmXM6kKQJCeW6F3NrM3mCaQkqBqxavlWnVHdAvWXtvkeY
-	nan4NYFL5KGF3WT3XFKA6I3nH7jnITdi56OtdvOcDI02WUiV3xDJA=
-X-Received: by 2002:a05:620a:258d:b0:8cf:c513:349c with SMTP id af79cd13be357-911cdd431f7mr1842710185a.9.1779043039579;
-        Sun, 17 May 2026 11:37:19 -0700 (PDT)
+        bh=yO9O8pu4RjDyHVPuvzyCd3iEZISD+KMOY00JM/YV72g=;
+        b=OkOOjyJIZ3iIZTKkygzkvUSiZq7mvmU4uttG/t6a2LbkmrjDSIe4EiJ2yuqvsLwKru
+         U08UhSHj12x3qCpRWl+jL/rC2KujcnkVOyo4n50TAXjGf8nKR/bV9HTHYjau9egHnBTt
+         mfCyA051Ynp6bixn04JPIo6JrCoF+IhjzhSs8TvTgSl1Llm8cd1VlmL0Ytler4dVKcDS
+         Q0EoMnnPoMkSX4c8pKmXvh/+VwmvBXmdQSvkN+57bLnpcnipgL5gZ2us3eqc46HGUyfe
+         HX+VKgiAGdsSLXE/goT+Azn6iaGh45MXutu+4b55ed8+qhhfJ3ggAXZVCVAT/HBT8dJL
+         7sRA==
+X-Forwarded-Encrypted: i=1; AFNElJ/3aai36TIZLKl8dfSmni2yV21o45f9jnNYnpt5YxHfeXBB+qr3P9Qz620M2ckptUN0RJx+hdeDn+BsQlGCNUU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzcuOVwwWsrw4UynCdIIqyCIKoSRaUjiFCHWwCR0Ab7JFfLbqKP
+	XhKfD2MwiVCJw7U991Z47kBw6wuzUFeSBErcqCMRVwuNVhjwsm2I4FptoUzvk7rk+n4=
+X-Gm-Gg: Acq92OF0Ex02PZNhx9E9j270/JyaRxAB2X4eu0fvoSrHL869yEeLq2jGl4zXR1g0eug
+	KN6KHxM78t5RN24eNsZ4fE3vNK7VIrPNClhqJumJscmvOkordUdLvxkN+W9QIh1N/tUC9rc2pe1
+	cdXrHs4V8RATaf3E/TGcEYdUGonk6MkIx1gIPn8v4OcXHgEtHqVJem+ukwZV8aL6XE8P6WhHEQm
+	dWfLr+ZIMTMLDGugOoRJGE9Ul+mdTDsrIlPs+J0BolPti5wxqW3V02AABKUrcXFpD+DzWBzkD+W
+	O38lN4Gdp/Nx4xQFdZDkzJ1VCrE1kDu4fOhNjiXbmgpjIUUMd9H6+bcAXbQ1kCxflJILBc6Odep
+	AYr6CLrVHG71zqPmNzSO557PkLTWZb1MvvH5/FX1j8I+tyZIv1oFrz1y98wOUc2zuw+QrfB8JtZ
+	6BQ1uqFdBoAqb8HqsVTZouCga07nGVpDT4k9UZmTaVaJGZu5Njhs0=
+X-Received: by 2002:a05:6214:23cc:b0:89a:f0b:60e9 with SMTP id 6a1803df08f44-8ca1ecce8bbmr127423436d6.13.1779043253347;
+        Sun, 17 May 2026 11:40:53 -0700 (PDT)
 Received: from plex ([71.181.43.54])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-910ba36e1acsm1238613585a.3.2026.05.17.11.37.18
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8ca3619c7d9sm29192256d6.36.2026.05.17.11.40.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 May 2026 11:37:19 -0700 (PDT)
-Date: Sun, 17 May 2026 18:37:18 +0000
+        Sun, 17 May 2026 11:40:52 -0700 (PDT)
+Date: Sun, 17 May 2026 18:40:50 +0000
 From: Pasha Tatashin <pasha.tatashin@soleen.com>
 To: Mike Rapoport <rppt@kernel.org>
 Cc: Pasha Tatashin <pasha.tatashin@soleen.com>, 
@@ -65,12 +65,12 @@ Cc: Pasha Tatashin <pasha.tatashin@soleen.com>,
 	skhan@linuxfoundation.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	corbet@lwn.net, dmatlack@google.com, kexec@lists.infradead.org, 
 	pratyush@kernel.org, skhawaja@google.com, graf@amazon.com
-Subject: Re: [PATCH v2 02/10] liveupdate: Extract luo_file_deserialize_one
- helper
-Message-ID: <agoKzw8mR21K7cCJ@plex>
+Subject: Re: [PATCH v2 04/10] liveupdate: add support for linked-block
+ serialization
+Message-ID: <agoK7TRpT1LErW8H@plex>
 References: <20260514222628.931312-1-pasha.tatashin@soleen.com>
- <20260514222628.931312-3-pasha.tatashin@soleen.com>
- <agn50TRvhDpGm_9v@kernel.org>
+ <20260514222628.931312-5-pasha.tatashin@soleen.com>
+ <agn6QeIamoeMkesv@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -79,26 +79,38 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <agn50TRvhDpGm_9v@kernel.org>
+In-Reply-To: <agn6QeIamoeMkesv@kernel.org>
 
-On 05-17 20:24, Mike Rapoport wrote:
-> On Thu, May 14, 2026 at 10:26:20PM +0000, Pasha Tatashin wrote:
-> > Extract the logic for deserializing single entries for files into
-> > separate helper functions. In preparation to a linked-block
-> > serialization for files.
+On 05-17 20:26, Mike Rapoport wrote:
+> On Thu, May 14, 2026 at 10:26:22PM +0000, Pasha Tatashin wrote:
+> > Introduce a linked-block serialization mechanism for LUO state.
+> > 
+> > Previously, LUO used contiguous memory blocks for serializing sessions
+> > and files, which imposed limits on the total number of items that could
+> > be preserved across a live update.
+> > 
+> > This commit adds the infrastructure for a more flexible, block-based
+> > approach where serialized data is stored in a chain of linked blocks.
+> > This is a preparatory step to allow an unlimited number of
+> > luo_sessions and luo_files to be preserved.
 > 
-> It would be nice to mention that this is a pure code movement without
-> indented changes.
+> Shouldn't it be a part of KHO?
 
-OK, will do that if there is another spin.
+It can be. However, at the moment, it is only used by LUO, so I kept it 
+there. Sami is also planning to use it for IOMMU; if so, he will adopt 
+the interface for his usage as well, and move it to a separate KHO 
+library.
 
 >  
 > > Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
 > > ---
-> >  kernel/liveupdate/luo_file.c | 77 ++++++++++++++++++++----------------
-> >  1 file changed, 44 insertions(+), 33 deletions(-)
-> 
-> Acked-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> >  Documentation/core-api/liveupdate.rst |   8 +
+> >  include/linux/kho/abi/luo.h           |  22 ++
+> >  kernel/liveupdate/Makefile            |   1 +
+> >  kernel/liveupdate/luo_block.c         | 388 ++++++++++++++++++++++++++
+> >  kernel/liveupdate/luo_internal.h      |  57 ++++
+> >  5 files changed, 476 insertions(+)
+> >  create mode 100644 kernel/liveupdate/luo_block.c
 > 
 > -- 
 > Sincerely yours,
