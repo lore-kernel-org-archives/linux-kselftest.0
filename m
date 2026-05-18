@@ -1,38 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E741D3815FD;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7510381AEB;
 	Mon, 18 May 2026 18:17:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779128266; cv=none; b=fFaE4Ibf9w0u26tKr1rkMnGQiNKbNso2am4nxCe7W4hIj16Ua9TzUmoJxnXx78s1Tx19UBenoA50xVicdJgR9LXrKc3GT68K/RS8MWjZWPMdu5xQ329/jbI3d2pGlJZfSkbhoSbB8DOoMhjZXs28orV/ogTHAZ+FRe8v+suveE8=
+	t=1779128266; cv=none; b=LmSrykoEvQekHspo6WdN+7MjiZkEch+N7dAkBhG+whv+ZdURQSDJC1QNjgnXwXdEFB2u4abZTRzChE5sxMtCoSN6u2LUa7nS0kwXL7tZxrJnH9OcKuRMQxbD6zx+j5C4eJWMxeA4SAqWO6NoNpogpQEhtokmEETDVgM7nawih9M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1779128266; c=relaxed/simple;
-	bh=uPaUXRhcKqK9gTwZzqyg3dsJT+ESOmLgskDTFq08dN4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=IXTHle8GKfPAX/ODXeETLoPzlr4lYJNESidrSUiUMx1/jTrKN3PgsvyRKsg5+L1M86BJi+AvbQ9yOkqJG7u4WsQsgxt0b12y8D+F23Onme1wMudT0o3O8cvL074srmh5GnXbbD/qBpGHZ8COjSdlSvAJnSsanbRRdm7b+jYkmzg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iqCNxRdq; arc=none smtp.client-ip=10.30.226.201
+	bh=aVAYRCF7fpcH4fE/r8x3fxMBl+z01QeRVwKC6iFuOtI=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=o0eT4+eGz/jZrXejuff6gqS6XMmLzt/zp4lNOoxyC+ZDt2HH2Dy0dwWM/tvifgoLFlG6umsE6l29qG9dWF/wAgyUT3t0ii7e07iG7Wf2ZS51ELUonPqWETALLePr6YJOfg2kiJB5ZysBNOhwFEOLB63E5X8TkGACSbunbe+AEsk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bRAtmhXH; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iqCNxRdq"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 968D9C2BCC6;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bRAtmhXH"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 85BFBC2BCC9;
 	Mon, 18 May 2026 18:17:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1779128265;
-	bh=uPaUXRhcKqK9gTwZzqyg3dsJT+ESOmLgskDTFq08dN4=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=iqCNxRdqLxB4wvgj9cMjt8jNzLW7SuPq6eCfmjflUK1BOhqh2ryUyskaTt7nXGE5z
-	 qkhBIAxHYOp00DQQ0Iu8eScWkeEMgUgYLjbFaBIGVCrBOOuwEMMGS2vh5Pko7Z7BRa
-	 F7Ytfby7tDmjA3g3Ibq9tiQ3yvIGBH14hN85AR8kgTT/i4rrlXchzBnJU6p+iAHc2y
-	 fkV19X+sYc3Hh4564uiTJ/CVCx2LL5WAVW4lCpMdOZF7nq+cbRZZzEOMS07dV23ny8
-	 lGbgKMuvy9GIc9yNQFSOsrBmDWRy8lT0nPUP765Ac12Zg39eJk1Wl0f6aaMdi6C14p
-	 SSMH2vwK0qclQ==
+	bh=aVAYRCF7fpcH4fE/r8x3fxMBl+z01QeRVwKC6iFuOtI=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=bRAtmhXHDokhqvFEewWkVhT2zPlHSo5s7VDSykNtcQvIR+B4OlkOwwzCAWA/nbvVN
+	 Sl3A9950ps0TWTwqezCrVvoFq3z03vGqcN9CcPFW08i5qUz/X/ZWhSlerJk5qVl4vN
+	 LO8lyxetnZYbm6kHqHALvxFUmAhMRke3x/WZRBqKgKKHrdFOM/kkp+wr+CRxw00quK
+	 CzJjrhP3RLAPn94NfA08+377ggJ+Zmg0wFddimnWqSChP8PrG0Xlh8o4OcKddQ9OU6
+	 zitvp2om944rTTLotZCUS6ku8xHxkj2TPopprWEATu4ksSFdu43fjO4SRbEKnE6TrE
+	 LRtn+t+BfwtWQ==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 87296CD4F4A;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7335ECD4F52;
 	Mon, 18 May 2026 18:17:45 +0000 (UTC)
 From: Ackerley Tng via B4 Relay <devnull+ackerleytng.google.com@kernel.org>
-Date: Mon, 18 May 2026 11:17:33 -0700
-Subject: [PATCH RFC 1/5] mm: selftests: Inline check_bytes() function into
- caller
+Subject: [PATCH RFC 0/5] Test readback from fd on hugetlbfs mount
+Date: Mon, 18 May 2026 11:17:32 -0700
+Message-Id: <20260518-port-hugetlb-selftests-v1-0-d64ba3a785fe@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -41,9 +40,10 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260518-port-hugetlb-selftests-v1-1-d64ba3a785fe@google.com>
-References: <20260518-port-hugetlb-selftests-v1-0-d64ba3a785fe@google.com>
-In-Reply-To: <20260518-port-hugetlb-selftests-v1-0-d64ba3a785fe@google.com>
+X-B4-Tracking: v=1; b=H4sIALxXC2oC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIzMDUwNj3YL8ohLdjNL01JKcJN3i1Jy0ktTikmJdy6RkM+OklFRTQ0MzJaD
+ mgqLUtMwKsMHRSkFuzkqxtbUAtv9QKW0AAAA=
+X-Change-ID: 20260503-port-hugetlb-selftests-9bc63bde5116
 To: Andrew Morton <akpm@linux-foundation.org>, 
  David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
  "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
@@ -53,11 +53,11 @@ To: Andrew Morton <akpm@linux-foundation.org>,
 Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
  linux-kernel@vger.kernel.org, Ackerley Tng <ackerleytng@google.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1779128265; l=1508;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1779128265; l=1923;
  i=ackerleytng@google.com; s=20260225; h=from:subject:message-id;
- bh=ojhFIsSt5J/Ln9Qe8lS4lDGB7t2xMx2nI91/0IgGnFg=;
- b=aCFGbDzyqxAT6wHgkBwWRA+y1A982R53xn0sOG+7hlA8GCoWXFQxD8QyELbiTEhSynpWciYyf
- 8NJ5sYUzWfbAuyRupSfrHOzNUScKBzd0pxj9IFOKrSOl1MraP43NkT/
+ bh=aVAYRCF7fpcH4fE/r8x3fxMBl+z01QeRVwKC6iFuOtI=;
+ b=+r7KYrdkoJP5CPg+cUFpdVi0hERhxpSIqRqAicUAgbGChju5O7GgStBPIRKVnYedFhDyJSaQf
+ OobXVllVPbZBKb9C324yvDI5HnNpIK9pzvr/lVbJilPV18vGKGdgtlI
 X-Developer-Key: i=ackerleytng@google.com; a=ed25519;
  pk=sAZDYXdm6Iz8FHitpHeFlCMXwabodTm7p8/3/8xUxuU=
 X-Endpoint-Received: by B4 Relay for ackerleytng@google.com/20260225 with
@@ -65,56 +65,61 @@ X-Endpoint-Received: by B4 Relay for ackerleytng@google.com/20260225 with
 X-Original-From: Ackerley Tng <ackerleytng@google.com>
 Reply-To: ackerleytng@google.com
 
-From: Ackerley Tng <ackerleytng@google.com>
+Hi,
 
-Inline the check_bytes() function to prepare for using the kselftest
-harness, where TH_LOG() relies on the variable _metadata being present in
-the caller.
+I'm thinking of consolidating the tests for libhugetlbfs as kernel
+selftests, and to start that off, I picked the simplest test:
+tests/readback.c
 
-Instead of passing _metadata to a helper function like check_bytes(), call
-TH_LOG() directly.
+I refactored hugepage-mmap.c to use the kselftest harness, and then used
+FIXTURE_VARIANT from the harness to port in testing readback from an fd on
+a hugetlbfs mount.
+
+This output shows that the original test behavior was retained for the
+memfd part:
+
+  # ./hugepage-mmap
+  TAP version 13
+  1..1
+  # Returned address is 0x7f312f200000
+  # First hex is 0
+  # First hex is 3020100
+  ok 1 Read same data
+  # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
+
+  # ./hugepage-mmap
+  TAP version 13
+  1..1
+  # Starting 1 tests from 1 test cases.
+  #  RUN           hugepage_mmap.read_write ...
+  # hugepage-mmap.c:41:read_write:Returned address is 0x7f19f3a00000
+  # hugepage-mmap.c:54:read_write:First hex is 0
+  # hugepage-mmap.c:59:read_write:First hex is 3020100
+  #            OK  hugepage_mmap.read_write
+  ok 1 hugepage_mmap.read_write
+  # PASSED: 1 / 1 tests passed.
+  # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
+
+Let me know what you think before I genericize the 2M hugepage size to
+other sizes!
 
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 ---
- tools/testing/selftests/mm/hugepage-mmap.c | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+Ackerley Tng (5):
+      mm: selftests: Inline check_bytes() function into caller
+      mm: selftests: Inline {read,write}_bytes functions
+      mm: selftests: Refactor hugepage-mmap to use kselftest harness
+      mm: selftests: Update hugepage-mmap to support hugetlbfs mount
+      mm: selftests: Port readback test logic from libhugetlbfs
 
-diff --git a/tools/testing/selftests/mm/hugepage-mmap.c b/tools/testing/selftests/mm/hugepage-mmap.c
-index d543419de0407..8c246070572f9 100644
---- a/tools/testing/selftests/mm/hugepage-mmap.c
-+++ b/tools/testing/selftests/mm/hugepage-mmap.c
-@@ -20,11 +20,6 @@
- #define LENGTH (256UL*1024*1024)
- #define PROTECTION (PROT_READ | PROT_WRITE)
- 
--static void check_bytes(char *addr)
--{
--	ksft_print_msg("First hex is %x\n", *((unsigned int *)addr));
--}
--
- static void write_bytes(char *addr)
- {
- 	unsigned long i;
-@@ -37,7 +32,7 @@ static int read_bytes(char *addr)
- {
- 	unsigned long i;
- 
--	check_bytes(addr);
-+	ksft_print_msg("First hex is %x\n", *((unsigned int *)addr));
- 	for (i = 0; i < LENGTH; i++)
- 		if (*(addr + i) != (char)i) {
- 			ksft_print_msg("Error: Mismatch at %lu\n", i);
-@@ -65,7 +60,7 @@ int main(void)
- 	}
- 
- 	ksft_print_msg("Returned address is %p\n", addr);
--	check_bytes(addr);
-+	ksft_print_msg("First hex is %x\n", *((unsigned int *)addr));
- 	write_bytes(addr);
- 	ret = read_bytes(addr);
- 
+ tools/testing/selftests/mm/hugepage-mmap.c | 143 +++++++++++++++++++++--------
+ 1 file changed, 105 insertions(+), 38 deletions(-)
+---
+base-commit: 66edb901bf874d9e0787326ba12d3548b2da8700
+change-id: 20260503-port-hugetlb-selftests-9bc63bde5116
 
--- 
-2.54.0.563.g4f69b47b94-goog
+Best regards,
+--
+Ackerley Tng <ackerleytng@google.com>
 
 
