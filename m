@@ -1,37 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7510381AEB;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED1BA381AFA;
 	Mon, 18 May 2026 18:17:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779128266; cv=none; b=LmSrykoEvQekHspo6WdN+7MjiZkEch+N7dAkBhG+whv+ZdURQSDJC1QNjgnXwXdEFB2u4abZTRzChE5sxMtCoSN6u2LUa7nS0kwXL7tZxrJnH9OcKuRMQxbD6zx+j5C4eJWMxeA4SAqWO6NoNpogpQEhtokmEETDVgM7nawih9M=
+	t=1779128266; cv=none; b=nsNqgJqVnqGLiEwUOqVgUeGwlW+hIneorg+gO5BneQIWFtS4JhQvIQOj3Mba1m4v2jK3ogVTZBOIyAYPE+R7u/xl5hDTwFkdXneB4riKVNrswr5ccoUY58lNpYnyxBItI/STW9ItHuS7Cbh3HLTyUmg9NVMTelwL40fMm3yH/cA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1779128266; c=relaxed/simple;
-	bh=aVAYRCF7fpcH4fE/r8x3fxMBl+z01QeRVwKC6iFuOtI=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=o0eT4+eGz/jZrXejuff6gqS6XMmLzt/zp4lNOoxyC+ZDt2HH2Dy0dwWM/tvifgoLFlG6umsE6l29qG9dWF/wAgyUT3t0ii7e07iG7Wf2ZS51ELUonPqWETALLePr6YJOfg2kiJB5ZysBNOhwFEOLB63E5X8TkGACSbunbe+AEsk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bRAtmhXH; arc=none smtp.client-ip=10.30.226.201
+	bh=JHk3R6g816OuqB1Hgt1l1LwWqhgjH6v3Sfs+FGIL2jU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=bOcfy1mHr5j2iFH3KFwCvGlfqhZ8Uo/s3GCt5iu4G/G0UTjPfGEPT7D3H7M07fP0fHtXx5BXgLCOQrKNxVtioTBwVNuIoMsRPd2Ex80LQUmu3ccAge1tJKlkrGKHcyy3D/7uxeXmA2EpZeq1ILYB1GMkPKvcDD8WbU+STj9kbkM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f1CzrJ4Y; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bRAtmhXH"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 85BFBC2BCC9;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f1CzrJ4Y"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C42C9C4AF13;
 	Mon, 18 May 2026 18:17:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1779128265;
-	bh=aVAYRCF7fpcH4fE/r8x3fxMBl+z01QeRVwKC6iFuOtI=;
-	h=From:Subject:Date:To:Cc:Reply-To:From;
-	b=bRAtmhXHDokhqvFEewWkVhT2zPlHSo5s7VDSykNtcQvIR+B4OlkOwwzCAWA/nbvVN
-	 Sl3A9950ps0TWTwqezCrVvoFq3z03vGqcN9CcPFW08i5qUz/X/ZWhSlerJk5qVl4vN
-	 LO8lyxetnZYbm6kHqHALvxFUmAhMRke3x/WZRBqKgKKHrdFOM/kkp+wr+CRxw00quK
-	 CzJjrhP3RLAPn94NfA08+377ggJ+Zmg0wFddimnWqSChP8PrG0Xlh8o4OcKddQ9OU6
-	 zitvp2om944rTTLotZCUS6ku8xHxkj2TPopprWEATu4ksSFdu43fjO4SRbEKnE6TrE
-	 LRtn+t+BfwtWQ==
+	bh=JHk3R6g816OuqB1Hgt1l1LwWqhgjH6v3Sfs+FGIL2jU=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=f1CzrJ4Yqo95t6yHU0KmyGCBnjXUxXIbLF0XKmEgnPj3QDd8hfz31iQj29DUC66yG
+	 LdF9lVGvLdHoF/sUkrp8RZt5iD1L1l61bY+3TxtOuwXSU0FvdR4Cq/gYsXDvqLepmq
+	 XsvrnkmqZ59yXphWF/RX/Vdem0JYu/U6cZo1frf6iVwu1wyX/qTFBoV4cr/LZmG2/D
+	 sf4B1gL3QCWDW8rrSzd+8UDmUVesy/lDXVtpYMX9XjOMGyybi7pe/cKb9Qj5qVwmik
+	 rOkP4uEc+5+QQD20ApwmBkbyE3bX+Yqtg9KEeGLScDfvUnOXNmi9oMmEezi/SOGy7d
+	 APim1AMvT0muw==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7335ECD4F52;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BB958CD4F57;
 	Mon, 18 May 2026 18:17:45 +0000 (UTC)
 From: Ackerley Tng via B4 Relay <devnull+ackerleytng.google.com@kernel.org>
-Subject: [PATCH RFC 0/5] Test readback from fd on hugetlbfs mount
-Date: Mon, 18 May 2026 11:17:32 -0700
-Message-Id: <20260518-port-hugetlb-selftests-v1-0-d64ba3a785fe@google.com>
+Date: Mon, 18 May 2026 11:17:36 -0700
+Subject: [PATCH RFC 4/5] mm: selftests: Update hugepage-mmap to support
+ hugetlbfs mount
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -40,10 +41,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIALxXC2oC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIzMDUwNj3YL8ohLdjNL01JKcJN3i1Jy0ktTikmJdy6RkM+OklFRTQ0MzJaD
- mgqLUtMwKsMHRSkFuzkqxtbUAtv9QKW0AAAA=
-X-Change-ID: 20260503-port-hugetlb-selftests-9bc63bde5116
+Message-Id: <20260518-port-hugetlb-selftests-v1-4-d64ba3a785fe@google.com>
+References: <20260518-port-hugetlb-selftests-v1-0-d64ba3a785fe@google.com>
+In-Reply-To: <20260518-port-hugetlb-selftests-v1-0-d64ba3a785fe@google.com>
 To: Andrew Morton <akpm@linux-foundation.org>, 
  David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
  "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
@@ -53,11 +53,11 @@ To: Andrew Morton <akpm@linux-foundation.org>,
 Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
  linux-kernel@vger.kernel.org, Ackerley Tng <ackerleytng@google.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1779128265; l=1923;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1779128265; l=3375;
  i=ackerleytng@google.com; s=20260225; h=from:subject:message-id;
- bh=aVAYRCF7fpcH4fE/r8x3fxMBl+z01QeRVwKC6iFuOtI=;
- b=+r7KYrdkoJP5CPg+cUFpdVi0hERhxpSIqRqAicUAgbGChju5O7GgStBPIRKVnYedFhDyJSaQf
- OobXVllVPbZBKb9C324yvDI5HnNpIK9pzvr/lVbJilPV18vGKGdgtlI
+ bh=UohDzF0IDPJpVfS8tMj24WgpCofY5vpUdRHF24vk2iU=;
+ b=5uxe5mBqfzQ1SIKIcquQms4vhqqdYB3BUyQSZlrS81kmhC9iHur6Z1P4KUT/FsGZeEPqSznpj
+ duVeqsyGbkjAeZx/X2wU4RhXQfpUX9wLvfFv9lFXFBOjzJc+o3dh6gl
 X-Developer-Key: i=ackerleytng@google.com; a=ed25519;
  pk=sAZDYXdm6Iz8FHitpHeFlCMXwabodTm7p8/3/8xUxuU=
 X-Endpoint-Received: by B4 Relay for ackerleytng@google.com/20260225 with
@@ -65,61 +65,142 @@ X-Endpoint-Received: by B4 Relay for ackerleytng@google.com/20260225 with
 X-Original-From: Ackerley Tng <ackerleytng@google.com>
 Reply-To: ackerleytng@google.com
 
-Hi,
+From: Ackerley Tng <ackerleytng@google.com>
 
-I'm thinking of consolidating the tests for libhugetlbfs as kernel
-selftests, and to start that off, I picked the simplest test:
-tests/readback.c
+Run the same write/read test for a file on a hugetlbfs mount, in addition
+to a memfd.
 
-I refactored hugepage-mmap.c to use the kselftest harness, and then used
-FIXTURE_VARIANT from the harness to port in testing readback from an fd on
-a hugetlbfs mount.
-
-This output shows that the original test behavior was retained for the
-memfd part:
-
-  # ./hugepage-mmap
-  TAP version 13
-  1..1
-  # Returned address is 0x7f312f200000
-  # First hex is 0
-  # First hex is 3020100
-  ok 1 Read same data
-  # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
-
-  # ./hugepage-mmap
-  TAP version 13
-  1..1
-  # Starting 1 tests from 1 test cases.
-  #  RUN           hugepage_mmap.read_write ...
-  # hugepage-mmap.c:41:read_write:Returned address is 0x7f19f3a00000
-  # hugepage-mmap.c:54:read_write:First hex is 0
-  # hugepage-mmap.c:59:read_write:First hex is 3020100
-  #            OK  hugepage_mmap.read_write
-  ok 1 hugepage_mmap.read_write
-  # PASSED: 1 / 1 tests passed.
-  # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
-
-Let me know what you think before I genericize the 2M hugepage size to
-other sizes!
+Use FIXTURE_VARIANT for parametrized testing. Use an unlinked fd to make
+save cleanup steps later.
 
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 ---
-Ackerley Tng (5):
-      mm: selftests: Inline check_bytes() function into caller
-      mm: selftests: Inline {read,write}_bytes functions
-      mm: selftests: Refactor hugepage-mmap to use kselftest harness
-      mm: selftests: Update hugepage-mmap to support hugetlbfs mount
-      mm: selftests: Port readback test logic from libhugetlbfs
+ tools/testing/selftests/mm/hugepage-mmap.c | 85 ++++++++++++++++++++++++++++--
+ 1 file changed, 80 insertions(+), 5 deletions(-)
 
- tools/testing/selftests/mm/hugepage-mmap.c | 143 +++++++++++++++++++++--------
- 1 file changed, 105 insertions(+), 38 deletions(-)
----
-base-commit: 66edb901bf874d9e0787326ba12d3548b2da8700
-change-id: 20260503-port-hugetlb-selftests-9bc63bde5116
+diff --git a/tools/testing/selftests/mm/hugepage-mmap.c b/tools/testing/selftests/mm/hugepage-mmap.c
+index 9c8a0638d04b8..dd9fccb209b10 100644
+--- a/tools/testing/selftests/mm/hugepage-mmap.c
++++ b/tools/testing/selftests/mm/hugepage-mmap.c
+@@ -15,36 +15,111 @@
+ #include <unistd.h>
+ #include <sys/mman.h>
+ #include <fcntl.h>
++#include <sys/mount.h>
++#include <sys/stat.h>
++#include <limits.h>
+ #include "kselftest_harness.h"
+ 
++static int hugetlbfs_unlinked_fd(const char *mount)
++{
++	char path[PATH_MAX];
++	int fd;
++
++	snprintf(path, sizeof(path), "%s/hugepage-mmap-XXXXXX", mount);
++	fd = mkstemp(path);
++	if (fd < 0)
++		return fd;
++
++	unlink(path);
++	return fd;
++}
++
+ #define LENGTH (256UL*1024*1024)
+ #define PROTECTION (PROT_READ | PROT_WRITE)
+ 
++enum fd_kind {
++	MEMFD,
++	HUGETLBFS_FD,
++};
++
+ FIXTURE(hugepage_mmap)
+ {
+ 	int fd;
+ 	char *addr;
++	char mount_dir[PATH_MAX];
++};
++
++static int fd_create(struct __test_metadata *_metadata,
++		FIXTURE_DATA(hugepage_mmap) *self, enum fd_kind fd_kind)
++{
++	switch (fd_kind) {
++	case MEMFD:
++		return memfd_create("hugepage-mmap", MFD_HUGETLB);
++	case HUGETLBFS_FD: {
++		snprintf(self->mount_dir, sizeof(self->mount_dir),
++			 "/tmp/hugepage-mmap-XXXXXX");
++		ASSERT_NE(NULL, mkdtemp(self->mount_dir))
++		{
++			TH_LOG("mkdtemp() failed: %s", strerror(errno));
++		}
++		ASSERT_EQ(0, mount("none", self->mount_dir, "hugetlbfs", 0,
++				   "pagesize=2M"))
++		{
++			TH_LOG("mount() failed: %s", strerror(errno));
++		}
++		return hugetlbfs_unlinked_fd(self->mount_dir);
++	}
++	default:
++		return -1;
++	};
++}
++
++FIXTURE_VARIANT(hugepage_mmap)
++{
++	enum fd_kind fd_kind;
++};
++
++FIXTURE_VARIANT_ADD(hugepage_mmap, memfd)
++{
++	.fd_kind = MEMFD,
++};
++
++FIXTURE_VARIANT_ADD(hugepage_mmap, hugetlbfs_fd)
++{
++	.fd_kind = HUGETLBFS_FD,
+ };
+ 
+ FIXTURE_SETUP(hugepage_mmap)
+ {
+-	self->fd = memfd_create("hugepage-mmap", MFD_HUGETLB);
++	self->fd = -1;
++	self->addr = MAP_FAILED;
++	self->mount_dir[0] = '\0';
++	/* Enable teardown to cleanup on any assertions in FIXTURE_SETUP(). */
++	*_metadata->no_teardown = false;
++
++	self->fd = fd_create(_metadata, self, variant->fd_kind);
+ 	ASSERT_GE(self->fd, 0) {
+-		TH_LOG("memfd_create() failed: %s", strerror(errno));
++		TH_LOG("fd creation failed: %s", strerror(errno));
+ 	}
+ 
+ 	self->addr = mmap(NULL, LENGTH, PROTECTION, MAP_SHARED, self->fd, 0);
+ 	ASSERT_NE(MAP_FAILED, self->addr) {
+ 		TH_LOG("mmap(): %s", strerror(errno));
+-		close(self->fd);
+ 	}
+ 	TH_LOG("Returned address is %p", self->addr);
+ }
+ 
+ FIXTURE_TEARDOWN(hugepage_mmap)
+ {
+-	munmap(self->addr, LENGTH);
+-	close(self->fd);
++	if (self->addr != MAP_FAILED)
++		munmap(self->addr, LENGTH);
++	if (self->fd >= 0)
++		close(self->fd);
++
++	if (variant->fd_kind == HUGETLBFS_FD && self->mount_dir[0]) {
++		umount(self->mount_dir);
++		rmdir(self->mount_dir);
++	}
+ }
+ 
+ TEST_F(hugepage_mmap, read_write)
 
-Best regards,
---
-Ackerley Tng <ackerleytng@google.com>
+-- 
+2.54.0.563.g4f69b47b94-goog
 
 
