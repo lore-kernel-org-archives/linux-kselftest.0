@@ -1,106 +1,106 @@
-Received: from mail-ua1-f46.google.com (mail-ua1-f46.google.com [209.85.222.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 333D736DA14
-	for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 20:11:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.222.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779135103; cv=pass; b=I4iclYSEcQ+ZBDiT0P0WlJc9GVtd9/tqJMM9Aj4KTaw2UHWLQZLPn9iaJiMUNI4LI6UXPo9wvYtsq4JDuIN28DhW9kjKwGRyVG/6uBtBLNHaJ3kOfU9sm7NfTwdHdV/OA+JTUA78c3YZ0YhjInOmSyevrAvOEAMbnd9IQKx2oJk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779135103; c=relaxed/simple;
-	bh=9IEqR/JAOjfFIJhebyvyH/SI7u/QxKnr1MWrLw5MrgA=;
-	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mEgEG2f0q6AOSkmwCHDadN1aEkgETJR6cpxClmldjPihkFp94h7xL2tiaJ78btqQ+nCal6uE1vD13sOxdqKsiAO2Lc0gc8Q1EqPMXHYh4TM45jFZrP+KmOlDvG8005TzIOeHf4WaNKID8enRncfvCXDXaGhwtemhce+lBL2Bfx0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=c52N6cjE; arc=pass smtp.client-ip=209.85.222.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F55A36F413;
+	Mon, 18 May 2026 20:39:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779136754; cv=none; b=SEsC+Q1KECUs83iaslxakEvGW+jA+MZKp7nJrVLgUv83K/CwES/vs0ePSceU1eCN8/TYH8GrzvZx+zU3/ZgSBoOeh6ovEOuh5IZHPjxYME/a7IzqgZmAcThJP6ngONHWXga20+3QmTlWBIZY63zV7U6H2vzTxNauT21h98mhCtc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779136754; c=relaxed/simple;
+	bh=j8l70kevZbw9WJ/nAYucOtDN4WHanokXjvs8vr9D5+4=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=VEU8WkQ5M2S9iZ+ZicUoF7XzvWxkY78qvCy5CoBikFeLsnjCqfjqaXlWdz7kL+g6a8UlIYgNcPdZqM1WI7Qt34IeQepWpVcu/mZfkYGO1V5LMSnmQkg+4AhDv6HL7HdRGxEYJWG+8/7KurMLsmpU5/bFOQfrsAAtonrLPXdwZ4U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=N5a7j9vh; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="c52N6cjE"
-Received: by mail-ua1-f46.google.com with SMTP id a1e0cc1a2514c-95d0476492bso1822471241.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 13:11:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779135101; cv=none;
-        d=google.com; s=arc-20240605;
-        b=GvINZsg92Um3Q32DJsBCJRVvBwV2YZbaYEMtpVttUNcvbjn3oCf3G0NhwZwrxWZLdg
-         vxlIpVBRyxJMerkIWoCESJcDs+VNRQNXmBoylQiDGdkapD8NqRoP6OkBXlO4b3Sq49Br
-         aN7nEG2P6XxGYhapHMmATQw0GCkij6i3LadYZ54t87ehfqXkxu98pyk5RWY43bPClpDW
-         KfVf3hOjJneTkalvnz7CVwlYqix5F2GxEWoWhsG88Td2ZuLlwFhQzYngIBSO48M0DHH0
-         CmljP1I25YQ0YcEHsn6sa9hOIXmCAV7zpLC7kiIqtDWh4ozCeKGVHLiBI2vArlwUjgLB
-         Cwcg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:dkim-signature;
-        bh=9IEqR/JAOjfFIJhebyvyH/SI7u/QxKnr1MWrLw5MrgA=;
-        fh=5uU4mA+cP40VbT/KBWVegYYTdKKhX/SdDVl5CCV9qI4=;
-        b=e2rYBv4B9eDjGofkhRYAxsaHYA1vbPoaJ6FOKg9BN0VNoF3gGouLWG0T95qBlUDtaF
-         nq3B/cy8sQ4XvH5hqnMNpleSmrL+4MXpp2v/seO+atpE4ygtZp85Osnkuj8mWjhbyofr
-         cpPUChFNtZE1E64d8WsOeI7uycSJg6GBx8gUjs4PbBJisdy4VkTLqvTY1r71HAqnj4Wb
-         BjXYhEIq26gLcpixTxSmjBUExBYeukJ+SyJ4L3mPqhw55kAnjbiPjaPUiNzoqifntu5I
-         hVgxN4Yc03JUq9nDkz08aRTtnG2iQkgJBZzoq+L7sLnudmW/wefRCppQLdhmm944aoJm
-         dxmg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1779135101; x=1779739901; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9IEqR/JAOjfFIJhebyvyH/SI7u/QxKnr1MWrLw5MrgA=;
-        b=c52N6cjEaqEYeVIKFaWdAtF1aoscZkAHsH7UTL1abmzqtAI5aSjYbquA6Wj2wy5jEX
-         VkWE2LH6tf1nycM393ndpIQ1gjPb6cr2pCmkmhPQXyVngRAbpUx4kys30VJcctcbFmqB
-         9H9xw2h+zGsmIrYX4qfobr+4iE3S4epXjj6IrzL8uk5q6Cjadr03ZXtocNRurR30gOPf
-         oGZN5J/mXd0N3AquoegKHQvfw503ciDn6h5RiqDLi2fVYz3B9S9Qsa9iKA4n41kRa5nQ
-         VgIvyAiPkzggIDbe6UadcvGEh1JM7tUmqCUve+oF21wgHjmnpX2Pq/hHs69J+xRfhFss
-         LDKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779135101; x=1779739901;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9IEqR/JAOjfFIJhebyvyH/SI7u/QxKnr1MWrLw5MrgA=;
-        b=iS+3LMZlWKJf1U6sMzZoD1pwd0Ih27veU3ndnz6JzFOmJpm6Vq8PpNiH9il/FX47cV
-         zsH2//Uv9m9zceVgsYXRaPwRmz5BH93OVk1FZB2xnW1qhHP+uh3TbvMGwdqzkqvv6KKT
-         RD1S5fyXZV8W+HvG415VGOXDrPHPFb080LFow8iwwmpjEpFZZlNPJFTUf67LQeJNzk1H
-         xVVw8jbIfmMJAY+q9bTuoa2r7gI5RyalDXVpsFy2Yj6mKOxFAPiHRRKDbPbYZvh6/NJ6
-         Y9XBlhihuhL9Sa8wEv8z2i+8TG+WtiIKbSzwnGVeeIHRmUldAlE0gQaNpbAGkV/9XTtX
-         kicg==
-X-Forwarded-Encrypted: i=1; AFNElJ8o+c8o8XFs6o1B/XvVtbAn73NJGbqdjty61dCRFdiOYGSYcefkTKXm5ncyRcEBEeRANkAU9mvyjWcZki/Yids=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzDJL29ftJRjVeJnuBE94gEWLEeUTf/BUCmvjzpG4YUzaDMRLch
-	dpcJBzSHKFtnE0LsZuPc4xEW2PwY+knO/tFlbDPZjtZzF4z1Cre1/FTqeDNJTsMg8TMhZFwWQR6
-	0WbL0l8yuRAMSdycsQWZr+IVdAcTo0HAs5pdkQLpv
-X-Gm-Gg: Acq92OHqY8Bxc25LA4wnFIHlxj0LKsDh1pdO/5h0e2vt7Dk+Y145TrLKeB1Gacz/lbL
-	Z97c9HUv4gbKbnlUVqz5vul2T+RCncxTLPfEDtdV5aogWA1/3NhAv2u5MQao+bGL9TVRaAELMLK
-	YwD89BPm9RhgC/wUUe/H5aQEJN6nfiWPOO50hepSfwry3I/cTrUayMoXEVRNk3JPYfcAI2JC8aM
-	D3dQFE611eNjGRq+ik5BWmNJGupl5JYke3G59TAVl2l8N/IaJ6lGWyfrnsoArb7zuDjDqVuKY00
-	uvCwCyycjML6i52Ian/b/EPzGvepWv83K5J4gfDw1R585LxF38yt5P68N+sCusea9ASadCwcOvt
-	NISn+
-X-Received: by 2002:a05:6102:942:b0:631:ec2d:12bd with SMTP id
- ada2fe7eead31-63a3cd10ed4mr8833063137.5.1779135100510; Mon, 18 May 2026
- 13:11:40 -0700 (PDT)
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 18 May 2026 13:11:39 -0700
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 18 May 2026 13:11:39 -0700
-From: Ackerley Tng <ackerleytng@google.com>
-In-Reply-To: <20260518070943.2091287-2-ZongYao.Chen@linux.alibaba.com>
-References: <20260518070943.2091287-1-ZongYao.Chen@linux.alibaba.com> <20260518070943.2091287-2-ZongYao.Chen@linux.alibaba.com>
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="N5a7j9vh"
+Received: from ehlo.thunderbird.net (c-76-133-66-138.hsd1.ca.comcast.net [76.133.66.138])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 64IKMQvw2327773
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Mon, 18 May 2026 13:22:26 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 64IKMQvw2327773
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2026042601; t=1779135747;
+	bh=d22rrup/77nnsw9mcNXM+lLrmw1694c4z1kAYgwrbwU=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+	b=N5a7j9vhpwP3zBAMjj780rZyFdsYLrghzt0q61nkXpQarhJfyXzki/qhiaNRjYuOU
+	 efCju9M4rGLsL/06E3cblwwv38ouxoketIgId5TUQArEBb1kXCEqAN03ca4joAQBnF
+	 cW1EKuTTEnTdghJUidDVjHVaEgQHFx5K/7Ax0jPdtBO5l43yOQKz+x7+CjZkCB190Z
+	 HwUNoSTKTyE537VQFJpAsZqfXASTsoXV/4+nUSr4syD3KfdD044Kd/K5q0I4G9Wr29
+	 M3Zv2PDn2aOkD6LVj0WmDC714Nht4FAjKPXrqEwg0UfHFQavwNjiV1ifdk6ezriKdU
+	 mr4VheuP26BRg==
+Date: Mon, 18 May 2026 13:22:19 -0700
+From: "H. Peter Anvin" <hpa@zytor.com>
+To: Richard Patel <ripatel@wii.dev>, x86@kernel.org
+CC: Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
+        Kees Cook <kees@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/7] x86: ban 32-bit sigreturn when user IBT enabled
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20260517183024.16292-5-ripatel@wii.dev>
+References: <20260517183024.16292-1-ripatel@wii.dev> <20260517183024.16292-5-ripatel@wii.dev>
+Message-ID: <F10D66BF-C851-4B14-81D7-E5F1E15A325B@zytor.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Mon, 18 May 2026 13:11:39 -0700
-X-Gm-Features: AVHnY4LMAx_y1X0yC87kI7cNrem7WpKVKfwQkhpaYZq-kTqwoEkCuoNA5KTDNNw
-Message-ID: <CAEvNRgF3ow+k74tnQQ0rZQM9jfUMObap36G=HuxG9Yt2E+z0Zg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] KVM: guest_memfd: Return -EEXIST for overlapping bindings
-To: ZongYao.Chen@linux.alibaba.com, Paolo Bonzini <pbonzini@redhat.com>, 
-	kvm@vger.kernel.org
-Cc: Shuah Khan <shuah@kernel.org>, Sean Christopherson <seanjc@google.com>, 
-	"Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>, Chao Peng <chao.p.peng@linux.intel.com>, 
-	Xiaoyao Li <xiaoyao.li@intel.com>, Tianjia Zhang <tianjia.zhang@linux.alibaba.com>, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-ZongYao.Chen@linux.alibaba.com writes:
+On May 17, 2026 11:30:21 AM PDT, Richard Patel <ripatel@wii=2Edev> wrote:
+>IBT enforces that indirect branch targets land on an endbr
+>instruction=2E The CPU enforces this by setting the 'WAIT_FOR_ENDBR'
+>bit after executing an indirect branch/jump=2E
+>
+>The only relevant edge case with user IBT is signal handling:
+>When entering/leaving a signal handler, the WAIT_FOR_ENDBR bit must
+>be backed up/restored=2E
+>
+>IBT is not implemented for 32-bit and cannot be enabled using a
+>32-bit syscall=2E However, a 64-bit thread could far jump into 32-bit=2E
+>Therefore, 32-bit sigreturn must be banned until IBT supports that
+>environment=2E
+>
+>Signed-off-by: Richard Patel <ripatel@wii=2Edev>
+>Based-on-patch-by: Yu-cheng Yu <yu-cheng=2Eyu@intel=2Ecom>
+>Link: https://lwn=2Enet/ml/linux-kernel/20210830182221=2E3535-5-yu-cheng=
+=2Eyu@intel=2Ecom/
+>---
+> arch/x86/kernel/signal_32=2Ec | 5 +++++
+> 1 file changed, 5 insertions(+)
+>
+>diff --git a/arch/x86/kernel/signal_32=2Ec b/arch/x86/kernel/signal_32=2E=
+c
+>index e55cf19e68fe=2E=2E7cb76d794366 100644
+>--- a/arch/x86/kernel/signal_32=2Ec
+>+++ b/arch/x86/kernel/signal_32=2Ec
+>@@ -143,6 +143,11 @@ static bool ia32_restore_sigcontext(struct pt_regs *=
+regs,
+> 	regs->ds =3D fixup_rpl(sc=2Eds);
+> #endif
+>=20
+>+#ifdef CONFIG_X86_USER_IBT
+>+	if (current->thread=2Eibt)
+>+		return false;
+>+#endif
+>+
+> 	return fpu__restore_sig(compat_ptr(sc=2Efpstate), 1);
+> }
+>=20
 
-Reviewed-by: Ackerley Tng <ackerleytng@google.com>
-Tested-by: Ackerley Tng <ackerleytng@google.com>
+Dumb question: is there any reason not to just enable it for 32 bits? It d=
+oesn't seem that it would be that big of a delta to Just Do It=2E=E2=84=A2
+
+That being said, I suspect the number of users will be very small if any=
+=2E 
