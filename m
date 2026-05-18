@@ -1,277 +1,145 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24A8E370D5A;
-	Mon, 18 May 2026 15:08:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F03F43F9267;
+	Mon, 18 May 2026 15:36:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.145.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779116933; cv=none; b=UVJ1UuOXxeKr6VrDjqj6c4GzyZwq8Ho2yaGntCgAXtfiqspblcTYM8fLRlNdiJP1NJUC6Y9qVb/ftE+5k7xUk7GrZKD13/qFz0pSGGkbjJpOMp/o1uObfp1qJPT5OgL+ipKEhs8jD8lg2LsxTLl/XwJpI09/DbaY2v2d+cvBq7k=
+	t=1779118583; cv=none; b=Ftrl5Uds1ijzJORY5bXMAaIiMN7eqFBhcB1E78lKu7fYob69k+m3GNvsNlN8Q6/TxohLSoUOMZ6mdqZ/HBXDn7NuCh97PZ95F3+SB+jDmNe0lBzchlkNSzY6RTxoljHdFfk/lbmzWAbF8POyZwPJrjyvnOJDzA+PHmtC1B6fbyc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779116933; c=relaxed/simple;
-	bh=cfA4Ibdui6nnrdEV54tiYvssRE6gcGfQ0ARyvZ4bAAY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=impu/hR/wIuamWgrg6yVmFfv3zUK68O8Agtdxk3yKMdrrgXEcZ7zsbWKI867t4ROvvXAkw9C3mRmQYe1ycniQ8u+1OEcuVnylUR0q3CzLuQQwrIafs3ROy3RKnXcDJT7baEmEvGqRR3yUGElVZ2H7GaKZitSzKFqdv9sa2ix7NA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=INRh4+GG; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1779118583; c=relaxed/simple;
+	bh=ugsWDGGPZC8bQpr9CLD1la9fbD4agwDvtWnhrmBS3DM=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=WJTpj902hYw1GlJdQePL1BW8gMhnopSxiDqfqo23L2IiWLXjFtj5GJx2UVD08KPmUGvLkcVTEHEbvu7gORO3XntmdUp5Wrb12j74NTvMBshWO/YIVOZ19INB3t95OsS7fPuYB75akFth8BoQta0pIgzmBMLFU4lu0rvhPdH5pWA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=rksVrHvw; arc=none smtp.client-ip=67.231.145.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="INRh4+GG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32CC4C2BCB7;
-	Mon, 18 May 2026 15:08:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779116932;
-	bh=cfA4Ibdui6nnrdEV54tiYvssRE6gcGfQ0ARyvZ4bAAY=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=INRh4+GGjQHX0qwXeslpFza20QCQAPfFM2xhozYOYD7gaJr7QaL2TJ/irYFmSIr92
-	 uquHagjrFwfeUDCrEe464adINNgOLXT8mVErM6N8uJer819Bgw8e/urhwDSqkrXtjq
-	 /XEby8wgpoEuR1WOef8Ln8SlayFxQwcKNt0P9BAq6Ao6CoZdljnSOngCLbx50Fius1
-	 XUUrN1eMxqko8lBF7qeDmS/i3x7MAvrqVMeX2LlBRtBrWiFKrtfxSMhzvU0Co0XIiD
-	 9CQ2kwLJYXQx5cMjdAe5kIdMfMNRCxH1NiA80mN5v/6iSDTgIEEyiaaa3iV5yoijs2
-	 cAfKLq77/FxBA==
-From: Mark Brown <broonie@kernel.org>
-Date: Mon, 18 May 2026 16:07:30 +0100
-Subject: [PATCH v2 2/2] kselftest/arm64: Add 2025 dpISA coverage to hwcaps
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="rksVrHvw"
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64IAKp6r2173324;
+	Mon, 18 May 2026 08:36:11 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=s2048-2025-q2; bh=jKJonzgQAZbOdQ53pS
+	rOTQNV7/Pfkb+kPgaujQEE2VY=; b=rksVrHvwptoxgDXoqXCvEAtdB3eQOLqDmR
+	0xaG0j3jd4D5z7wR/Hhz4GUHzT8TDyQU2nIx2xquI9p91drmpXsfvS8SkB9X3WFd
+	pYNFaM0v9EPUuKmCPBcRS3YfLMjvOOzlhXHiRKndjx/Bs/lo9nksdw0T8wYLyUtx
+	Mn4+7lbB4uwzp5AxcOT+reW+6Yf/0GZ3E3W6n84heSPWqGui6oTo4NAY2rSF1/Tk
+	huq+9NMSk4n0QKptnVnFTbn0/dNS1conCe8p9WwF70XesgxkCbucxqwE/x06oRl/
+	rLhV8k9tGy82luRXD2TI0l5YLpHCd1+VAskPB7EH5ArzT0P3fmnA==
+Received: from mail.thefacebook.com ([163.114.134.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4e6np69rad-2
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+	Mon, 18 May 2026 08:36:10 -0700 (PDT)
+Received: from localhost (2620:10d:c085:208::f) by mail.thefacebook.com
+ (2620:10d:c08b:78::2ac9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.37; Mon, 18 May
+ 2026 15:36:09 +0000
+From: =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@meta.com>
+To: <io-uring@vger.kernel.org>, Pavel Begunkov <asml.silence@gmail.com>,
+        "Jens
+ Axboe" <axboe@kernel.dk>
+CC: =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@meta.com>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <netdev@vger.kernel.org>,
+        "David S.
+ Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        "Jakub
+ Kicinski" <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+        Simon Horman
+	<horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan
+	<skhan@linuxfoundation.org>,
+        Vishwanath Seshagiri <vishs@fb.com>
+Subject: [PATCH v2 0/6] io_uring/zcrx: add CQE based notifications and stats reporting
+Date: Mon, 18 May 2026 08:35:23 -0700
+Message-ID: <20260518153532.2835502-1-cleger@meta.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260518-arm64-dpisa-2025-v2-2-b3367b73bd00@kernel.org>
-References: <20260518-arm64-dpisa-2025-v2-0-b3367b73bd00@kernel.org>
-In-Reply-To: <20260518-arm64-dpisa-2025-v2-0-b3367b73bd00@kernel.org>
-To: Catalin Marinas <catalin.marinas@arm.com>, 
- Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <shuah@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.16-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5117; i=broonie@kernel.org;
- h=from:subject:message-id; bh=cfA4Ibdui6nnrdEV54tiYvssRE6gcGfQ0ARyvZ4bAAY=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBqCyt+tC6HEN5KhtRFuBmb2AlnCPLhZuPZqHHIf
- J3ZKvpsAieJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCagsrfgAKCRAk1otyXVSH
- 0DEmB/4pD0mSaCB2En9wA75gJzPKr/6DL0dNbf3NlSPnWX9R6sibPUUhLsgyTgOyPs/6EXiJW/x
- kUcjXeOgbTcvB0vQYZAJWtZFfdFzMKyVE8zhoRtGzykfeM51bys+ZReEvh7aGjwcuuylg48vSlU
- Dvi1Ybu3cUc4ZPzm2ITogr87TdaWicIWxXjDw7ynug9QQM4txBueZbNwaP6KyagCTSFKFLAP6Zb
- Sp5eEy+lPM+Pw3PPZI8B8agWVvQvHbUWCdbIZJRJalAndccU4u186aLafGjryYpeXN8ty7gxZkA
- 3TAsxFBKDnH1pm9zj6SsKq/fSTVHGJzvC4wmRHsrybenLdn6
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTE4MDE1MyBTYWx0ZWRfXxHUamKYPukSG
+ 5GeRXtxgHrlrU2kT8s2PBZ68lR6vP2y/cjjt0k5n7RXU0xViM16hU/lDFriNavixU/Murt0u7QT
+ jGQhAW4VgBAVAH3UiUk7HAl+b6eZgK39BvN8uEJMfsKacB0lzHPBaBsafcUaADBqLSvKdib+KVw
+ 0WjqENOQ9UdGArTcBrmWeP2FVkT4lkah3Uw53N7uuD/R61c4+7A0TqEZPXqKyr/yEstRw5xDWLf
+ tEzU4kPRzORVxvIiGmanNx9IzKuLcSj1qkuWnvKSe7TTfqFdOu9TX+rWa3WbSjIgX1lPQmExcd9
+ 3ws4FJGlkx4oefb4t46zprlkRH//MvcMw8daINw/vTi7YfSM0UFzKTt5JjpTfQaGQeaTvkE4koO
+ Sujpzr084RxKKpBT5QJwmG2kTg5dNH0DjP1IiMJOZZFV7VPszVI8LOogPyJ1mNQv1MvsuZkQ9pR
+ jkyvQ2Yyhy8xWKg0qgQ==
+X-Authority-Analysis: v=2.4 cv=Pr2jqQM3 c=1 sm=1 tr=0 ts=6a0b31ea cx=c_pps
+ a=CB4LiSf2rd0gKozIdrpkBw==:117 a=CB4LiSf2rd0gKozIdrpkBw==:17
+ a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=M51BFTxLslgA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=7x6HtfJdh03M6CCDgxCd:22 a=03ozwUkBphtHgyqjj1sw:22
+ a=NhOMyWKnmVta6MYugR0A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: nlxn9_SD6l87l-KKaAz2kiYhGc7hOp7g
+X-Proofpoint-ORIG-GUID: nlxn9_SD6l87l-KKaAz2kiYhGc7hOp7g
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-05-18_03,2026-05-18_01,2025-10-01_01
 
-Add coverage of the new hwcaps to the test program, encodings cross checked
-against LLVM 22.
+The zcrx path can encounter various conditions that lead to internal
+fallbacks or errors. These errors can have a large impact on performance
+and functionality but are not yet not being reported to the user which
+is then unable to take action.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
+This series addresses this problem by adding a new notification system
+paired with a statistics structure. The notification system currently
+report out of buffer and packets that fallback to copy. The statistics
+structure report the number and total size of packets that were copied
+rather than received via the zero-copy path.
+
+The out of buffer notification allows the user to actually adjust the
+buffer sizing when registering zcrx support for the ifq. Some future
+work could allow the user to add more memory on the fly to the pool so
+the page allocator doesn't run out of memory.
+
+This series can be tested using the include kselftest modification and
+using the liburing series that updates headers and tests/examples so
+that it uses notifications and statistics.
+
+Changes in v2:
+- Rebase on top of Pavel's branch that now uses a single CQE per notif
+- Change notification mask to type (ie one CQE per event)
+- Use a type rather than a mask for rearm as well
+- Update tests to use single typei
+- Update documentatiopn to state that notif CQEs are sent for a single
+  event
+- Fix zero init of zcrx_query_notif __resv field
+- Rename resv1 to __resv1
+- Reduce __resv2 size to match io_uring_query_opcode size
+- Verifies that stats_offset is 0 if FLAG_STATS is zero
+- Added zcrx notif query sequence to documentation
+- Add _copy_fallback to test name
+
 ---
- tools/testing/selftests/arm64/abi/hwcap.c | 116 ++++++++++++++++++++++++++++++
- 1 file changed, 116 insertions(+)
 
-diff --git a/tools/testing/selftests/arm64/abi/hwcap.c b/tools/testing/selftests/arm64/abi/hwcap.c
-index e22703d6b97c..19fca95f7c22 100644
---- a/tools/testing/selftests/arm64/abi/hwcap.c
-+++ b/tools/testing/selftests/arm64/abi/hwcap.c
-@@ -108,6 +108,24 @@ static void f8mm8_sigill(void)
- 	asm volatile(".inst 0x6e80ec00");
- }
- 
-+static void f16f32dot_sigill(void)
-+{
-+	/* FDOT V0.2S, V0.4H, V0.2H[0] */
-+	asm volatile(".inst 0xf409000");
-+}
-+
-+static void f16f32mm_sigill(void)
-+{
-+	/* FMMLA V0.4S, V0.8H, V0.8H */
-+	asm volatile(".inst 0x4e40ec00");
-+}
-+
-+static void f16mm_sigill(void)
-+{
-+	/* FMMLA V0.8H, V0.8H, V0.8H */
-+	asm volatile(".inst 0x4ec0ec00");
-+}
-+
- static void faminmax_sigill(void)
- {
- 	/* FAMIN V0.4H, V0.4H, V0.4H */
-@@ -191,6 +209,12 @@ static void lut_sigill(void)
- 	asm volatile(".inst 0x4e801000");
- }
- 
-+static void sve_lut6_sigill(void)
-+{
-+	/* LUTI6 Z0.H, { Z0.H, Z1.H }, Z0[0] */
-+	asm volatile(".inst 0x4560ac00");
-+}
-+
- static void mops_sigill(void)
- {
- 	char dst[1], src[1];
-@@ -282,6 +306,18 @@ static void sme2p2_sigill(void)
- 	asm volatile("msr S0_3_C4_C6_3, xzr" : : : );
- }
- 
-+static void sme2p3_sigill(void)
-+{
-+	/* SMSTART SM */
-+	asm volatile("msr S0_3_C4_C3_3, xzr" : : : );
-+
-+	/* ADDQP Z0.B, Z0.B, Z0.B */
-+	asm volatile(".inst 0x4207800" : : : "z0");
-+
-+	/* SMSTOP */
-+	asm volatile("msr S0_3_C4_C6_3, xzr" : : : );
-+}
-+
- static void sme_aes_sigill(void)
- {
- 	/* SMSTART SM */
-@@ -378,6 +414,18 @@ static void smef8f32_sigill(void)
- 	asm volatile("msr S0_3_C4_C6_3, xzr" : : : );
- }
- 
-+static void smelut6_sigill(void)
-+{
-+	/* SMSTART */
-+	asm volatile("msr S0_3_C4_C7_3, xzr" : : : );
-+
-+	/* LUTI6 { Z0.B-Z3.B }, ZT0, { Z0-Z2 } */
-+	asm volatile(".inst 0xc08a0000" : : : );
-+
-+	/* SMSTOP */
-+	asm volatile("msr S0_3_C4_C6_3, xzr" : : : );
-+}
-+
- static void smelutv2_sigill(void)
- {
- 	/* SMSTART */
-@@ -486,6 +534,12 @@ static void sve2p2_sigill(void)
- 	asm volatile(".inst 0x4cea000" : : : "z0");
- }
- 
-+static void sve2p3_sigill(void)
-+{
-+	/* ADDQP Z0.B, Z0.B, Z0.B */
-+	asm volatile(".inst 0x4207800" : : : "z0");
-+}
-+
- static void sveaes_sigill(void)
- {
- 	/* AESD z0.b, z0.b, z0.b */
-@@ -504,6 +558,12 @@ static void sveb16b16_sigill(void)
- 	asm volatile(".inst 0x65000000" : : : );
- }
- 
-+static void sveb16mm_sigill(void)
-+{
-+	/* BFMMLA Z0.H, Z0.H, Z0.H */
-+	asm volatile(".inst 0x64e0e000" : : : );
-+}
-+
- static void svebfscale_sigill(void)
- {
- 	/* BFSCALE Z0.H, P0/M, Z0.H, Z0.H */
-@@ -729,6 +789,27 @@ static const struct hwcap_data {
- 		.cpuinfo = "f8mm4",
- 		.sigill_fn = f8mm4_sigill,
- 	},
-+	{
-+		.name = "F16MM",
-+		.at_hwcap = AT_HWCAP3,
-+		.hwcap_bit = HWCAP3_F16MM,
-+		.cpuinfo = "f16mm",
-+		.sigill_fn = f16mm_sigill,
-+	},
-+	{
-+		.name = "F16F32DOT",
-+		.at_hwcap = AT_HWCAP3,
-+		.hwcap_bit = HWCAP3_F16F32DOT,
-+		.cpuinfo = "f16f32dot",
-+		.sigill_fn = f16f32dot_sigill,
-+	},
-+	{
-+		.name = "F16F32MM",
-+		.at_hwcap = AT_HWCAP3,
-+		.hwcap_bit = HWCAP3_F16F32MM,
-+		.cpuinfo = "f16f32mm",
-+		.sigill_fn = f16f32mm_sigill,
-+	},
- 	{
- 		.name = "FAMINMAX",
- 		.at_hwcap = AT_HWCAP2,
-@@ -918,6 +999,13 @@ static const struct hwcap_data {
- 		.cpuinfo = "sme2p2",
- 		.sigill_fn = sme2p2_sigill,
- 	},
-+	{
-+		.name = "SME 2.3",
-+		.at_hwcap = AT_HWCAP3,
-+		.hwcap_bit = HWCAP3_SME2P3,
-+		.cpuinfo = "sme2p3",
-+		.sigill_fn = sme2p3_sigill,
-+	},
- 	{
- 		.name = "SME AES",
- 		.at_hwcap = AT_HWCAP,
-@@ -967,6 +1055,13 @@ static const struct hwcap_data {
- 		.cpuinfo = "smef8f32",
- 		.sigill_fn = smef8f32_sigill,
- 	},
-+	{
-+		.name = "SME LUT6",
-+		.at_hwcap = AT_HWCAP3,
-+		.hwcap_bit = HWCAP3_SME_LUT6,
-+		.cpuinfo = "smelut6",
-+		.sigill_fn = smelut6_sigill,
-+	},
- 	{
- 		.name = "SME LUTV2",
- 		.at_hwcap = AT_HWCAP2,
-@@ -1052,6 +1147,13 @@ static const struct hwcap_data {
- 		.cpuinfo = "sve2p2",
- 		.sigill_fn = sve2p2_sigill,
- 	},
-+	{
-+		.name = "SVE 2.3",
-+		.at_hwcap = AT_HWCAP3,
-+		.hwcap_bit = HWCAP3_SVE2P3,
-+		.cpuinfo = "sve2p3",
-+		.sigill_fn = sve2p3_sigill,
-+	},
- 	{
- 		.name = "SVE AES",
- 		.at_hwcap = AT_HWCAP2,
-@@ -1066,6 +1168,13 @@ static const struct hwcap_data {
- 		.cpuinfo = "sveaes2",
- 		.sigill_fn = sveaes2_sigill,
- 	},
-+	{
-+		.name = "SVE B16MM",
-+		.at_hwcap = AT_HWCAP3,
-+		.hwcap_bit = HWCAP3_SVE_B16MM,
-+		.cpuinfo = "sveb16mm",
-+		.sigill_fn = sveb16mm_sigill,
-+	},
- 	{
- 		.name = "SVE BFSCALE",
- 		.at_hwcap = AT_HWCAP,
-@@ -1087,6 +1196,13 @@ static const struct hwcap_data {
- 		.cpuinfo = "svef16mm",
- 		.sigill_fn = svef16mm_sigill,
- 	},
-+	{
-+		.name = "SVE_LUT6",
-+		.at_hwcap = AT_HWCAP3,
-+		.hwcap_bit = HWCAP3_SVE_LUT6,
-+		.cpuinfo = "svelut6",
-+		.sigill_fn = sve_lut6_sigill,
-+	},
- 	{
- 		.name = "SVE2 B16B16",
- 		.at_hwcap = AT_HWCAP2,
+Clément Léger (4):
+  io_uring/zcrx: notify user on frag copy fallback
+  io_uring/zcrx: add shared-memory notification statistics
+  Documentation: networking: document zcrx notifications and statistics
+  selftests: iou-zcrx: add notification and stats test for zcrx
+
+Pavel Begunkov (2):
+  io_uring/zcrx: add ctx pointer to zcrx
+  io_uring/zcrx: notify user when out of buffers
+
+ Documentation/networking/iou-zcrx.rst         | 121 ++++++++++++
+ include/uapi/linux/io_uring/query.h           |  12 ++
+ include/uapi/linux/io_uring/zcrx.h            |  36 +++-
+ io_uring/io_uring.c                           |   2 +-
+ io_uring/io_uring.h                           |   1 +
+ io_uring/query.c                              |  16 ++
+ io_uring/zcrx.c                               | 180 +++++++++++++++++-
+ io_uring/zcrx.h                               |  11 +-
+ .../selftests/drivers/net/hw/iou-zcrx.c       | 114 ++++++++++-
+ .../selftests/drivers/net/hw/iou-zcrx.py      |  49 ++++-
+ 10 files changed, 517 insertions(+), 25 deletions(-)
 
 -- 
-2.47.3
-
+Clément Léger
