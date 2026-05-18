@@ -1,234 +1,133 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E730B3E9286
-	for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 16:06:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.176
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779120392; cv=pass; b=WrhjoCB9GknZJX2r787fz57+4xBzWNmKhsmUZQK383qqdbw0UozMlbpc5cIP75qGYzHKfZWJMrnzAfj5poDZ6hD3u847ySc9WpK6bMwtBQVzuRN7i24b/8coUBF44b279hJMH+iqLVM2NRwlKPeAJDVRgj5E8XLvSVdd8o5liq8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779120392; c=relaxed/simple;
-	bh=0JN4eWAeyH1DFvPDOFr1bp0SNGRTw2jc5rqIj+ZsVUM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=j/qiFDh3DNTBuTAkLFTaLLzeNmSQ4Jmo7BMWCUeYPk8a0RcqMA8iTkgzTm6lJtaUZZCeHFSh7pfVZOzXvJH9n+sx4uT6/vGQUF2KeAFYdG6RlZQtCvMyHu72AO2DhtcaTQWtSK+lSe2praUG8bX3pDx15LyYLCCBrx2IHF2vM1A=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jGueLnnv; arc=pass smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4822040C5A0
+	for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 16:14:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779120874; cv=none; b=um0VmoziN6Emzp/c/r28WADewyJbRgtp/8pff+t1Ql9/uA76oYbeDD5x+yUtmDQM3+3MZwdGsd6xri+WL8Frxsj+15uTFGAUY64vXpkJF2miclcdb3C8MNQEtzBQf5XuIbz8HWtDW33Vz/NDHWTSjk3VM/g9yQZqGRJitvf0iF8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779120874; c=relaxed/simple;
+	bh=KBmaIFHON2EYfGmxVZYjIH/WtRx0RWqToQinmPzD7i4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HcldkkH4bEpiPZVN5C/g7S3+n9N4cspersQUPZAQOjvJ3Uv4TTzoFrIfceIdcCFUOgOY2DFgYbzWIj7HefBlNbbq0pyLVZibQpGUnapOFq/XvHdUUaEfSu8WboLrug4fcagF/ahxwLC1xndlWLpLamhbIj0t6i48xjPq+indBXI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pf4q7KQD; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jGueLnnv"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2b2e8b95bdbso175ad.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 09:06:10 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779120368; cv=none;
-        d=google.com; s=arc-20240605;
-        b=jvNsxLRxoRPEp8CGx+X4illutYzuIABbiENR+q38M0d951ZEnjFib7XOjoQJCg8hh3
-         xYQLw2hyJaP7pwXNDQlHttjxWroSu0Oq24hirjr6ircnuQkJ+Yczh1N0pVvBoNDbDJ1y
-         jFvEn1l9pBkXRG1xFDwsFd3G+8EBTcMeqUelI3tZtU8uruJ5HJHDs+dBpL2nOLdzkgbi
-         9Xb5aqS2rflibBMJIfuEHl5ha7Dw2j1agpHZnB4AbJNE7NDp9PR5KxZ5mb2bYT+nldJn
-         KDFljblCuyTpjPcEc7x30FSKgtXC7FaO7S3CPkq/xwQF2HvckQVz30jCXN2OEqYHZS7g
-         Td5g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=/yL2S/NNFD9uZOxHwjkGhATRbJfyjLUg+vdf0l7wFBI=;
-        fh=eYtPox5Xri+HHx1tCAiPBJL7L6BaQLcXs3CcmL9hzM4=;
-        b=PqfdYcvEVtCxtvr3an5JxfQ/pWyNIoabuKPrdy1ZWKtWYPlryrKrX5Cy741hD5nBgp
-         0Mu3279ox9hNutIaiColZ1uUVfpK6F+ju/x5YDQ2Xt6eHpISFjjVaj59f+hegspzdr9S
-         3qwDMSjAuWOEo3h1m4o5216BKH7mF86o3b//t1c6qWavdUL7a/nv+RaMSxezdwO+2hd4
-         ujtb9Uuf6ZvMEU+lGsSteOJI4uDegxCuYSytLCcug5/ejxeIlWVjPIUU1kP8GNTB+0pq
-         FY9Pp8C83iVFw0OcnnFOsYjxSekZ91xhQ8LTwWgvebnjvhDT9s+NOZamfrh47vzeZKQz
-         Z/ow==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pf4q7KQD"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-48e82c23840so19326715e9.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 09:14:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1779120368; x=1779725168; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/yL2S/NNFD9uZOxHwjkGhATRbJfyjLUg+vdf0l7wFBI=;
-        b=jGueLnnvGXPf0SEVFUOojzRtxCqeaOSe0Yzj+zD3sHWcSHCOPwqjC9HnKvg5/v8vvO
-         re1A4G8Fh9asuAzg6hSNQholYgZA16S5Ssrud0W/kdtLOERIt95MnH1l3ORcirQBC9Yu
-         oZ+mlJ1qvOaTU9/Ipx+JI4HCPUFBcbUzE4yU8akOhcl53ykTaj2qY/XzdzJX6F615JKL
-         GuRfH+f1mYy1yL3L6lnz78pE6TCzJNFOAJS++nSyeSoB8m0C/l+f4Pdwnvfb6DP7qrY2
-         N30usLFBRg+HJBllLX+Yxk/3tXlQZy5YufVqvEqHSjKTMhp0jh9zG95dxHQtX0yfIbHs
-         O//A==
+        d=gmail.com; s=20251104; t=1779120859; x=1779725659; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SDQc/Hmcg4wkxrkpnM69XNZHAqGS6wrj96XS3N9o/CM=;
+        b=pf4q7KQDIX4aYUNO5qTK8noUwHH4b4C7thwJpFBsfYrHz8JTcLB1azrAubTvOYJ42y
+         xblz69Rxvq1D2fs4AXfoxpo06u3Yq9kNyDXL37GBREMWim8ZSmZEH0EulOQbfPk4LwQw
+         o4LNbK/XFb6wbJPShfpG4oVTVog7ETwHP8YB2H92v8kbpWifzEQ6E23H7atM8629+WRp
+         8rccpBjzg5x6LLaONtL0W3hRhrSASlhWvn3pwMAbCtiyRbXzPuqVj/hgI+2PkrhTtjL7
+         c4tkZ9QWz4a6TwkJLhvEUL3nLoUgttWrhof1RVX9+tndGVC+SF507D2Ojde4fy4oGWH/
+         UsSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779120368; x=1779725168;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=/yL2S/NNFD9uZOxHwjkGhATRbJfyjLUg+vdf0l7wFBI=;
-        b=KQaB4UtZoQEEzp+n01LS0i4s7JrzXp82p748jjKe2djaa5iTO8JrUU+sUxBWAFPuLu
-         fHaHkm5b+HGHj9SVpIv7Kn7YFndVeED6KU4tYEku8GXcmxpKVtmE4p1wgAR+XsLGSSRz
-         B4OEqnHQm2KAy4F50yq5D6AstvmpDX1ob2Iu4FceprjNS4gAonD9eYf0oMUF5oIRGxkU
-         K5gCGTvTlBduzOHAxx35+41tzcKA9uxSScs24+jCl1idWbGMnneZOPKREe0LJf3GJaUu
-         bNr8iLY+B/AzYJ0Z6x0RU1usvn030glDZhgzrKDek9ESFDGvFW6BDAZQB6v3VjJDTJxK
-         euGQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+HHtUwdQVVHBtrHfpmYhzvRMyORsRKpUvOTQdTozvm+c8j9MzO/nfbnlvOYkU4XacERa2oBq+4cL+ggXjH15k=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxeGin63gq6SO9aadsB6QmUsCY8e96S3luRr/HW0BMRnhepPPf8
-	vVJhSHs7N7gNnL4oi+Ii9s1Cq2zpKR/dnnzHqagtyj2Tr/C4T+mM5kTZtW4mFy1r059RalYgTsz
-	MWn2mgkoVIRctaGTMblZIQLVy8MI0o3f7ANXvF+O/
-X-Gm-Gg: Acq92OFgzPGEuPrvMbu4+hqpgLjtiUB1JdguxTkSGwRREaUSPrn/qgWV3B4sa2keVVd
-	dfIEV8tgAvqf5zH+aaSJW9qdLe1Wsf3YmWCdkVGg7woKFd9MisT703ZluCZGl5NT8BcCRLLaZPn
-	q4DtRQPRmG2gSmc8tEYBhFhK8BGXgulaZFM2KPtvttl1pYFlce16woEc0ZES4b1WcBggsjmILNR
-	lE2NAuH3tkRSjL6FaZsId2jLYYDmqbEFFB0KIhXlyNCEF1RQEvrN9Ksx0h/N/cTFAwvaTvTxE/d
-	W8RHoofcMIT+mOU0Z4jfKEELi5pWZadlj9/E2cTLfuNxlSVQ
-X-Received: by 2002:a17:902:d2cf:b0:2bd:3c1b:3073 with SMTP id
- d9443c01a7336-2bdb041654emr3259205ad.16.1779120367385; Mon, 18 May 2026
- 09:06:07 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1779120859; x=1779725659;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SDQc/Hmcg4wkxrkpnM69XNZHAqGS6wrj96XS3N9o/CM=;
+        b=otMG8q/s08HtebelTajtqfSxnOoBtRLNV80HpDvjjhmX7IzTqCOqmgYtpasTCmsGYT
+         NIZ1IkCe8XwN1ZjUA9S2C1D6blndy7wYhUPTt6WQtEGTp781ZpYx1u+mBgsayF4Fx5jF
+         cZHXv+u7/XiZAll99cT4EIQrjAJUtQc5nH4NxuYbpqnfCF9mSRklx5pPItu6RmTAXbxK
+         tiYIzFdj6qybHrpN4blqBTPPACdIM9Bfk+OutoctCFcYFSE+VgSMv5bpf0zf5B9Vqg0O
+         a7/Pq1vxBw8ObYM8rY4iWrmxC2ZLRUpl8Jmc8F3QKp79rZ+muZ8m5dCdUYkG0CRGmXvd
+         bO+A==
+X-Forwarded-Encrypted: i=1; AFNElJ+fDlxyV6f7VpKrAHVzG4J5Hab/8cdajgVjP5GDFLsj1MR4Go0noVfK1bCoaRJp2acCYml4GKFNDtyiSjFVbWc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxJgaw8SMPXrLNNZCw07lsxpSHBdB9Fld/LQrz1Tw25cL7NSGEW
+	mzZFEUXg2IxEsQ4S1yOkfYob6rFh41+IGjZeMgPQWMB7nsgCywMnnRmO
+X-Gm-Gg: Acq92OG4Euz8zNcI/qa7bFgkRrVTqOOvlsVqj6pbe2am3OsUufGRjxuqOxOKKySFKp7
+	ZZz+rKlKngn1Hv/QCWBwkRpYACDVrXNPx2v9SbGLhk5cq4vSVQsBEScXxZiU96Yu/jzZkECPl6x
+	ITJ9WL92jTYtCXABss2Y1+6Y8kke0H761hMmj3fKIada8G+et+e3rCqzJZokuyUxPFLySPAdZ+M
+	sGSmSM+zAzaN0Sa3elBn6bzcWY2qKQ5BUu+ka6iXtaw8DUENvpLFGF+RGLZCmk59wjuO1CGct3Z
+	JLk3m75zcBa7+tuTd0Y61P3wREuuvaBe317OrOlyDqvRaOOnJmDgb1Z30zNOCphkjYTrPte+3M2
+	FOvUbmlf8KVCNroLdpkUmPUUM46JC0Ms3kY+tpxIo/pKnHg2SdDU4bUoISXp4agwG4U2LZOfmAh
+	rkIu1KUpNS79q0vZAPCpXVxU0VIvq5NND+rTEmDnGY/t9QlAYEGxjviWAuZIubGgCUEJCdfDo=
+X-Received: by 2002:a05:600c:1d0d:b0:48f:da34:ec4e with SMTP id 5b1f17b1804b1-48fe632343dmr227408525e9.19.1779120858659;
+        Mon, 18 May 2026 09:14:18 -0700 (PDT)
+Received: from ?IPV6:2a03:83e0:1126:4:1178:9251:cb12:6150? ([2620:10d:c092:500::5:5e25])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4900c16c62dsm72201115e9.11.2026.05.18.09.14.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 May 2026 09:14:17 -0700 (PDT)
+Message-ID: <e86e1075-f62c-4167-86df-158841952940@gmail.com>
+Date: Mon, 18 May 2026 17:14:16 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260518-james-perf-llvm-version-v2-0-f12cc4f031d8@linaro.org> <20260518-james-perf-llvm-version-v2-4-f12cc4f031d8@linaro.org>
-In-Reply-To: <20260518-james-perf-llvm-version-v2-4-f12cc4f031d8@linaro.org>
-From: Ian Rogers <irogers@google.com>
-Date: Mon, 18 May 2026 09:05:55 -0700
-X-Gm-Features: AVHnY4J8ZynnI8bourXp6ojaD0bCqutv1EZpQT8aGfrcInLJ1HrazyPhkbTF28U
-Message-ID: <CAP-5=fWmXQEbLg=xGJwQ4s5q5xUZUTdxx2N1K71N0gztZunQrQ@mail.gmail.com>
-Subject: Re: [PATCH v2 4/6] tools/build: Allow versioning LLVM readelf
-To: James Clark <james.clark@linaro.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, ihor.solodrai@linux.dev, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 1/5] bpf: Check tail zero of bpf_common_attr
+ using offsetofend
+To: Leon Hwang <leon.hwang@linux.dev>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kernel-patches-bot@fb.com
+References: <20260518145446.6794-1-leon.hwang@linux.dev>
+ <20260518145446.6794-2-leon.hwang@linux.dev>
+Content-Language: en-US
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+In-Reply-To: <20260518145446.6794-2-leon.hwang@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, May 18, 2026 at 2:04=E2=80=AFAM James Clark <james.clark@linaro.org=
-> wrote:
->
-> Documentation/kbuild/llvm.rst mentions that readelf is included in the
-> LLVM toolchain, but it's not currently included in this block.
->
-> Add it so that LLVM=3D... options also apply to readelf. Users in tools/
-> were Perf which was hardcoding it, and another was the BPF makefile.
-> Both already include Makefile.include so convert them to use the new
-> variable.
->
-> It also didn't have the cross compile prefix, so either readelf didn't
-> mind opening cross binaries, or it wasn't working for cross builds.
->
-> Signed-off-by: James Clark <james.clark@linaro.org>
 
-For the tools/perf/Makefile.perf part of this change.
 
-Reviewed-by: Ian Rogers <irogers@google.com>
-
-Thanks for the cleanup!
-Ian
-
+On 5/18/26 3:54 PM, Leon Hwang wrote:
+> Because of the 8-byte alignment, the compiler will pad struct
+> bpf_common_attr to 24 bytes. That said, sizeof(attr_common) is 24 instead
+> of 20.
+> 
+> When check tail zero using sizeof(attr_common) in
+> bpf_check_uarg_tail_zero(), there will be 4 bytes that won't be checked.
+> 
+> To also check the padding 4 bytes, replace sizeof(attr_common) with
+> offsetofend(struct bpf_common_attr, log_true_size).
+> 
+> Fixes: f28771c0691b ("bpf: Extend BPF syscall with common attributes support")
+> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 > ---
->  tools/lib/bpf/Makefile         | 8 ++++----
->  tools/perf/Makefile.perf       | 1 -
->  tools/scripts/Makefile.include | 2 ++
->  3 files changed, 6 insertions(+), 5 deletions(-)
->
-> diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
-> index 168140f8e646..180dca9c57c8 100644
-> --- a/tools/lib/bpf/Makefile
-> +++ b/tools/lib/bpf/Makefile
-> @@ -114,12 +114,12 @@ PC_FILE           :=3D $(addprefix $(OUTPUT),$(PC_F=
-ILE))
->
->  TAGS_PROG :=3D $(if $(shell which etags 2>/dev/null),etags,ctags)
->
-> -GLOBAL_SYM_COUNT =3D $(shell readelf -s --wide $(BPF_IN_SHARED) | \
-> +GLOBAL_SYM_COUNT =3D $(shell $(READELF) -s --wide $(BPF_IN_SHARED) | \
->                            cut -d "@" -f1 | sed 's/_v[0-9]_[0-9]_[0-9].*/=
-/' | \
->                            sed 's/\[.*\]//' | \
->                            awk '/GLOBAL/ && /DEFAULT/ && !/UND|ABS/ {prin=
-t $$NF}' | \
->                            sort -u | wc -l)
-> -VERSIONED_SYM_COUNT =3D $(shell readelf --dyn-syms --wide $(OUTPUT)libbp=
-f.so | \
-> +VERSIONED_SYM_COUNT =3D $(shell $(READELF) --dyn-syms --wide $(OUTPUT)li=
-bbpf.so | \
->                               sed 's/\[.*\]//' | \
->                               awk '/GLOBAL/ && /DEFAULT/ && !/UND|ABS/ {p=
-rint $$NF}' | \
->                               grep -Eo '[^ ]+@LIBBPF_' | cut -d@ -f1 | so=
-rt -u | wc -l)
-> @@ -182,12 +182,12 @@ check_abi: $(OUTPUT)libbpf.so $(VERSION_SCRIPT)
->                      "versioned symbols in $^ ($(VERSIONED_SYM_COUNT))." =
-\
->                      "Please make sure all LIBBPF_API symbols are"       =
-\
->                      "versioned in $(VERSION_SCRIPT)." >&2;              =
-\
-> -               readelf -s --wide $(BPF_IN_SHARED) |                     =
-\
-> +               $(READELF) -s --wide $(BPF_IN_SHARED) |                  =
-\
->                     cut -d "@" -f1 | sed 's/_v[0-9]_[0-9]_[0-9].*//' |   =
-\
->                     sed 's/\[.*\]//' |                                   =
-\
->                     awk '/GLOBAL/ && /DEFAULT/ && !/UND/ {print $$NF}'|  =
-\
->                     sort -u > $(OUTPUT)libbpf_global_syms.tmp;           =
-\
-> -               readelf --dyn-syms --wide $(OUTPUT)libbpf.so |           =
-\
-> +               $(READELF) --dyn-syms --wide $(OUTPUT)libbpf.so |        =
-        \
->                     sed 's/\[.*\]//' |                                   =
-\
->                     awk '/GLOBAL/ && /DEFAULT/ && !/UND|ABS/ {print $$NF}=
-'|  \
->                     grep -Eo '[^ ]+@LIBBPF_' | cut -d@ -f1 |             =
-\
-> diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-> index 0aba14f22a06..63276bf55856 100644
-> --- a/tools/perf/Makefile.perf
-> +++ b/tools/perf/Makefile.perf
-> @@ -215,7 +215,6 @@ FLEX    ?=3D flex
->  BISON   ?=3D bison
->  STRIP   =3D strip
->  AWK     =3D awk
-> -READELF ?=3D readelf
->
->  # include Makefile.config by default and rule out
->  # non-config cases
-> diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.incl=
-ude
-> index e81e5b479c56..380ad84ac51e 100644
-> --- a/tools/scripts/Makefile.include
-> +++ b/tools/scripts/Makefile.include
-> @@ -73,6 +73,7 @@ ifneq ($(LLVM),)
->    $(call allow-override,LLC,$(LLVM_PREFIX)llc$(LLVM_SUFFIX))
->    $(call allow-override,LLVM_CONFIG,$(LLVM_PREFIX)llvm-config$(LLVM_SUFF=
-IX))
->    $(call allow-override,LLVM_OBJCOPY,$(LLVM_PREFIX)llvm-objcopy$(LLVM_SU=
-FFIX))
-> +  $(call allow-override,READELF,$(LLVM_PREFIX)llvm-readelf$(LLVM_SUFFIX)=
-)
->  else
->    # Allow setting various cross-compile vars or setting CROSS_COMPILE as=
- a prefix.
->    $(call allow-override,CC,$(CROSS_COMPILE)gcc)
-> @@ -80,6 +81,7 @@ else
->    $(call allow-override,LD,$(CROSS_COMPILE)ld)
->    $(call allow-override,CXX,$(CROSS_COMPILE)g++)
->    $(call allow-override,STRIP,$(CROSS_COMPILE)strip)
-> +  $(call allow-override,READELF,$(CROSS_COMPILE)readelf)
->
->    # Host versions aren't prefixed
->    $(call allow-override,HOSTAR,ar)
->
-> --
-> 2.34.1
->
+>  kernel/bpf/syscall.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index 6600e126fbfb..83de8fb9b9aa 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -6278,7 +6278,9 @@ static int __sys_bpf(enum bpf_cmd cmd, bpfptr_t uattr, unsigned int size,
+>  
+>  	memset(&attr_common, 0, sizeof(attr_common));
+>  	if (cmd & BPF_COMMON_ATTRS) {
+> -		err = bpf_check_uarg_tail_zero(uattr_common, sizeof(attr_common), size_common);
+> +		err = bpf_check_uarg_tail_zero(uattr_common,
+> +					       offsetofend(struct bpf_common_attr, log_true_size),
+> +					       size_common);
+
+The change looks correct.
+
+It looks like similar behavior exists in 2 other places of this file:
+bpf_map_get_info_by_fd()
+bpf_prog_get_info_by_fd()
+
+Does it make sense to fix those too, just to make sure agents follow the
+pattern correctly next time?
+
+>  		if (err)
+>  			return err;
+>  
+
+
