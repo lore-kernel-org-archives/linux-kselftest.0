@@ -1,54 +1,54 @@
-Received: from mail-ed1-f74.google.com (mail-ed1-f74.google.com [209.85.208.74])
+Received: from mail-ej1-f73.google.com (mail-ej1-f73.google.com [209.85.218.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2025B3E8338
-	for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 09:36:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D80873E833D
+	for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 09:36:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779097008; cv=none; b=lvWssDHX5I3sY7HoOl3dugCsr3sAI4zWqBh/W9m2YMpsAmqGsGNHyuDLHLW6nDqX7ugcg+D1JL03xWflNllFjycKaOvHXEgbxUTFqYtylCrlmMHGUQg1xetEX7Acn8baOn4KXerEU/EeHJRMKUD6vgO1ghj0hFazulw9Yu3/CUQ=
+	t=1779097009; cv=none; b=RevLuu5yOcLZrkPH6yTf3kr3UD8ntPORQXv5ps1/UwhU6NuXmSeb+Hg/OtLIwuuA9ZYswkx0At3JynpQPg7UHmF+XVBgdCBa+ob7WR4eQfM1p3QoISuo2KlhP2C0zzNprwuh2182y8Rws/aV5b5YDnQSnHtidSCZ5LSI0eDVH+U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779097008; c=relaxed/simple;
-	bh=L4H1uHql/HJPpc27eILZG0D33tmdJ49HmIaLmZtdcjk=;
+	s=arc-20240116; t=1779097009; c=relaxed/simple;
+	bh=V8f3kDEJqJZh7MK3ij24Zg4qD5ZSK/hWmoGv8D34y/E=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=urhe3ag5+s37AurkqP5CSUegEpiAUpB4phyWE/FvqbudrNH72I3qlOb+kqgT2vuRRYjsdMe1Fd+vcp/8wFPqqRdqx27F8JOrP+QdieY3WmvF3tYQ0fIkHzhtLZU07qh639XY7PQUs8kN5xSji6tO0p1uB69ykbyFZEyl8dH82Zg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tarunsahu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=EVilUGXy; arc=none smtp.client-ip=209.85.208.74
+	 To:Cc:Content-Type; b=aY/jrL1/Dpr8wi23wyKbTETOC4bz9WEWOBtBupB27oafapBAsqc/ea1y760U5gXzoYswYXTE6eGXz/Sc8dm9pHFeQUg564p7I55SLB1fzupbiJRy7I9ZQRzUxdn/xaSopLt5ao9cCBtPVriI5ZGJ+DzFNwt73ijZodLGEgbthNc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tarunsahu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=n5ZjyEsQ; arc=none smtp.client-ip=209.85.218.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tarunsahu.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EVilUGXy"
-Received: by mail-ed1-f74.google.com with SMTP id 4fb4d7f45d1cf-67ff00a6997so1916488a12.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 02:36:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="n5ZjyEsQ"
+Received: by mail-ej1-f73.google.com with SMTP id a640c23a62f3a-bd548eb1008so187757166b.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 02:36:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1779097004; x=1779701804; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1779097005; x=1779701805; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=as26CSLWhv9riXhwc0+6uzjiz4k1n6M2f5huVsJsy4s=;
-        b=EVilUGXyZO/YdxBQG2cE+FeFkN9JXIKep99a6NIvgspYja0UUmChIRjvaAbB2oYJpi
-         iQ0y3XPfQWx5XbVMjRBZ4V5dO+bsqCudb1GQ9hFGYaI4ve3khCptOmLqi4ZKAauOLcYX
-         OAjCqic5xfeIYGtu4XtHIHsRwfmhvqDWZHwzg0Qdvec9Nrt4ySawaBlKHNxsZRBR8CNT
-         nmxtRq7jqO600gqi6cu80t7dNeVrUqSXWfeT+EDIT9hMUzswcuKbohto88uq/SEWBD84
-         POh+5m3Y/f6Q6eCsbqzn68SHsBUv8u2KJjdaWXZ5bPVmQ4+Gpn87Qsq588XvhiS/cVT4
-         51Hw==
+        bh=Gu2thktJGs003PTp9eiJKgCeu3f066a/QrblnMWAnz8=;
+        b=n5ZjyEsQRRnUm8aBaTesVGsuzMtGQKFzf5msV3pCOkL4QaYZJ4qZpQFQa/tB0r+yZr
+         IMJkjxvmy2r5n7SQ9U6qtVahUKHjzkL2mE8RGW0cy5GTVUpGlhb4NMwhkqQEzb1P4axq
+         o8alTK1hJwdQ0wF5mDa60D3kRP6Icpf8kN1gGHvAz7aK+q7NCcSuqTgLpvjt0cuOK47H
+         zykUih7BYSd4cGyghJ/SApMW5+sgb825m+4MGAb6O6eB+yP9DT/yF0icFasAPlYwF3MH
+         58/TQtTuk5O/RoT8gvqvfP5WycTXBu4DmuB5Skjn1KyqLlHBLAk3rkxU54TbPTcl9oVr
+         OsrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779097004; x=1779701804;
+        d=1e100.net; s=20251104; t=1779097005; x=1779701805;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=as26CSLWhv9riXhwc0+6uzjiz4k1n6M2f5huVsJsy4s=;
-        b=CDXuo5EpsveUyNNnXU8q0q4bnazyE4Nqdf2igiSIaYmHjS8J608oGRHX9rlZ/jXqGF
-         GMaRQI6OHN4Dso5PnlKstkGiM8DbBOBFv9wECcR/c6xGO80WunoxNjd7bZ+OqPcyH0yC
-         5eUMLT6+Qh1st0p4X1BwbR+eiDkk/Uc1aXBJLPI0+fdBv9gwCGjDMzikBpsFj8CnxLut
-         x6cX0s6UBMj3Im0OfBbPaydAHBG8u8ZroIblgJBnqonOlfvct4dvu71MQQDK0sw8qnL4
-         BuaNHdcwTRBWBA57uuW827YyJ64zu8GjPc5U5QG+2LhkPMJwipiivxboaOS9F+s0mSa3
-         sqyg==
-X-Forwarded-Encrypted: i=1; AFNElJ//0a5pgBlKjlWeX5tY10HrA76je35De1ZiA3M6tCPTWT9JBMXp0GW5NmQijz4wgVAimSBitkpT77pbiSdpzjo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw02GHv1jE22pQ0ClHmOQ03hcQ6Xiv7THLmlbqCHzTDCbxwXo0X
-	bASBLDaWQJP34OXQmToIg3cZOo3nGvqkB3/Dpr5ORZaTWxwUf0yyeMyCHDrE+uq+pYqohhtURjX
-	CVtOWNRY+sWtB6oJUIQ==
-X-Received: from edxa5.prod.google.com ([2002:a05:6402:13c5:b0:683:d667:6d6c])
+        bh=Gu2thktJGs003PTp9eiJKgCeu3f066a/QrblnMWAnz8=;
+        b=UOoSR8i0/fhl7UoJzhcCI/neGKsVVJydnym/GrHF9mtbmkAbUmO1X6aFoXzs9/9a0T
+         KUlWEHgul57Oh6QQpfTOC2/oICX249kxlyVhvABADQ0OegEkiH5fVQ9H5GqxUtfljdbF
+         wVfYJnosejeLk6StEi2kV2NtLooA3p2hneTuebFEHnArNSoEcE5g6nMphhuu4P3MmSnr
+         FSsjHY2dKUTruoemTdmxlnCPENXyZdc3YMpzT1Oufx3kxxRpzN9o7y9zfkY/B3BedJP0
+         8E96k47Q2IUAv8/DOFXYMw0PRrCEOuscm7Q16x8g6rJWGSo1d0s/sAoeXtsj/CyAlkdS
+         5stw==
+X-Forwarded-Encrypted: i=1; AFNElJ9wMewImMmAmC6vNKCGmyC4kcfEFWoV6QH8IdoK7+CLXfGY5UFeHNxE8gzRX+zu/SykaZDhP+boVQejYnr4na4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwcV2E3VuOLiw2827+XH2Z04xKVaiTIS8bLx21rbcAep05g+s64
+	zjcr0F0sRZ1WbonGlH6NWYiTl113jwYWvGsiIB91ISljZKIeBVaGM6G3JsHuAIOhGcAhl3dAGdT
+	OsPHpxUXfIrxE6W600A==
+X-Received: from edbck27.prod.google.com ([2002:a05:6402:1c1b:b0:672:bd1d:a465])
  (user=tarunsahu job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6402:24ce:b0:683:5306:d41b with SMTP id 4fb4d7f45d1cf-683bc5ba630mr6644571a12.7.1779097003267;
- Mon, 18 May 2026 02:36:43 -0700 (PDT)
-Date: Mon, 18 May 2026 09:36:31 +0000
+ 2002:a17:906:8e0e:b0:bae:d29c:4e28 with SMTP id a640c23a62f3a-bd51785f36amr758368766b.12.1779097005099;
+ Mon, 18 May 2026 02:36:45 -0700 (PDT)
+Date: Mon, 18 May 2026 09:36:33 +0000
 In-Reply-To: <cover.1779080766.git.tarunsahu@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -58,8 +58,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <cover.1779080766.git.tarunsahu@google.com>
 X-Mailer: git-send-email 2.54.0.563.g4f69b47b94-goog
-Message-ID: <9ff4237649ace8b7eb78f3c3ec9ffaf5ae49ae6a.1779080766.git.tarunsahu@google.com>
-Subject: [RFC PATCH v1 1/9] liveupdate: luo_file: Add internal APIs for file preservation
+Message-ID: <24e13c0679157302f0d8385c341169b0ddd4ea40.1779080766.git.tarunsahu@google.com>
+Subject: [RFC PATCH v1 3/9] kvm: Prepare core VM structs and helpers for LUO support
 From: Tarun Sahu <tarunsahu@google.com>
 To: axelrasmussen@google.com, mark.rutland@arm.com, skhawaja@google.com, 
 	Mike Rapoport <rppt@kernel.org>, sagis@google.com, Jason Gunthorpe <jgg@ziepe.ca>, 
@@ -74,228 +74,201 @@ Cc: linux-kernel@vger.kernel.org, linux-mm@kvack.org,
 	kvm@vger.kernel.org, Tarun Sahu <tarunsahu@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-From: Pasha Tatashin <pasha.tatashin@soleen.com>
+Introduce core infrastructure to support VM preservation with LUO.
 
-The core liveupdate mechanism allows userspace to preserve file
-descriptors. However, kernel subsystems often manage struct file
-objects directly and need to participate in the preservation process
-programmatically without relying solely on userspace interaction.
+First two changes are just refactoring, no functional change, third
+change introduces a new member in struct kvm.
+- Move ITOA_MAX_LEN to kvm_mm.h for reuse by upcoming kvm_luo code.
+- Add a public kvm_create_vm_file() helper wrapping kvm_create_vm()
+  and anon_inode_getfile() to provide a unified VM file creation API.
+- Track a weak reference to the backing file in struct kvm under
+  CONFIG_LIVEUPDATE_GUEST_MEMFD to enable reverse file resolution
+  without circular lifetime dependencies.
 
-Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
-Signed-off-by: Samiullah Khawaja <skhawaja@google.com>
 Signed-off-by: Tarun Sahu <tarunsahu@google.com>
 ---
- include/linux/liveupdate.h       | 21 ++++++++++
- kernel/liveupdate/luo_file.c     | 69 ++++++++++++++++++++++++++++++++
- kernel/liveupdate/luo_internal.h | 17 ++++++++
- 3 files changed, 107 insertions(+)
+ include/linux/kvm_host.h | 14 +++++++
+ virt/kvm/kvm_main.c      | 79 +++++++++++++++++++++++++++++-----------
+ virt/kvm/kvm_mm.h        |  3 ++
+ 3 files changed, 75 insertions(+), 21 deletions(-)
 
-diff --git a/include/linux/liveupdate.h b/include/linux/liveupdate.h
-index 30c5a39ff9e9..de052438eaac 100644
---- a/include/linux/liveupdate.h
-+++ b/include/linux/liveupdate.h
-@@ -24,6 +24,7 @@ struct file;
- /**
-  * struct liveupdate_file_op_args - Arguments for file operation callbacks.
-  * @handler:          The file handler being called.
-+ * @session:          The session this file belongs to.
-  * @retrieve_status:  The retrieve status for the 'can_finish / finish'
-  *                    operation. A value of 0 means the retrieve has not been
-  *                    attempted, a positive value means the retrieve was
-@@ -44,6 +45,7 @@ struct file;
-  */
- struct liveupdate_file_op_args {
- 	struct liveupdate_file_handler *handler;
-+	struct liveupdate_session *session;
- 	int retrieve_status;
- 	struct file *file;
- 	u64 serialized_data;
-@@ -240,6 +242,13 @@ void liveupdate_unregister_flb(struct liveupdate_file_handler *fh,
+diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+index 4c14aee1fb06..9111a28637af 100644
+--- a/include/linux/kvm_host.h
++++ b/include/linux/kvm_host.h
+@@ -874,6 +874,18 @@ struct kvm {
+ #ifdef CONFIG_KVM_GENERIC_MEMORY_ATTRIBUTES
+ 	/* Protected by slots_lock (for writes) and RCU (for reads) */
+ 	struct xarray mem_attr_array;
++#endif
++#ifdef CONFIG_LIVEUPDATE_GUEST_MEMFD
++	/*
++	 * Weak reference to the VFS file backing this KVM instance. Stored
++	 * without incrementing the file refcount to prevent a circular lifetime
++	 * dependency (since file->private_data already pins this struct kvm).
++	 * Used exclusively to resolve the file pointer back from struct kvm.
++	 *
++	 * Written/cleared via rcu_assign_pointer() and read locklessly under
++	 * RCU (e.g. via get_file_active() to prevent ABA races).
++	 */
++	struct file *vm_file;
+ #endif
+ 	char stats_id[KVM_STATS_NAME_SIZE];
+ };
+@@ -1074,7 +1086,9 @@ void kvm_get_kvm(struct kvm *kvm);
+ bool kvm_get_kvm_safe(struct kvm *kvm);
+ void kvm_put_kvm(struct kvm *kvm);
+ bool file_is_kvm(struct file *file);
++struct file *kvm_create_vm_file(unsigned long type, const char *fdname);
+ void kvm_put_kvm_no_destroy(struct kvm *kvm);
++void kvm_uevent_notify_vm_create(struct kvm *kvm);
  
- int liveupdate_flb_get_incoming(struct liveupdate_flb *flb, void **objp);
- int liveupdate_flb_get_outgoing(struct liveupdate_flb *flb, void **objp);
-+/* kernel can internally retrieve files */
-+int liveupdate_get_file_incoming(struct liveupdate_session *s, u64 token,
-+				 struct file **filep);
+ static inline struct kvm_memslots *__kvm_memslots(struct kvm *kvm, int as_id)
+ {
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index 89489996fbc1..65f0c5fb353e 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -67,9 +67,6 @@
+ #include <linux/kvm_dirty_ring.h>
+ 
+ 
+-/* Worst case buffer size needed for holding an integer. */
+-#define ITOA_MAX_LEN 12
+-
+ MODULE_AUTHOR("Qumranet");
+ MODULE_DESCRIPTION("Kernel-based Virtual Machine (KVM) Hypervisor");
+ MODULE_LICENSE("GPL");
+@@ -1349,6 +1346,19 @@ static int kvm_vm_release(struct inode *inode, struct file *filp)
+ {
+ 	struct kvm *kvm = filp->private_data;
+ 
++#ifdef CONFIG_LIVEUPDATE_GUEST_MEMFD
++	/*
++	 * Clear the weak reference of the vm file.
++	 * In case vm file is closed by userspace, but kvm still has
++	 * other users like vCPUs, clearing this pointer ensures
++	 * that we don't have a dangling pointer to a closed file.
++	 *
++	 * Cleared via rcu_assign_pointer() to ensure proper memory visibility
++	 * for concurrent lockless readers under RCU.
++	 */
++	rcu_assign_pointer(kvm->vm_file, NULL);
++#endif
 +
-+/* Get a token for an outgoing file, or -ENOENT if file is not preserved */
-+int liveupdate_get_token_outgoing(struct liveupdate_session *s,
-+				  struct file *file, u64 *tokenp);
+ 	kvm_irqfd_release(kvm);
  
- #else /* CONFIG_LIVEUPDATE */
- 
-@@ -285,5 +294,17 @@ static inline int liveupdate_flb_get_outgoing(struct liveupdate_flb *flb,
- 	return -EOPNOTSUPP;
+ 	kvm_put_kvm(kvm);
+@@ -5476,11 +5486,47 @@ bool file_is_kvm(struct file *file)
  }
+ EXPORT_SYMBOL_FOR_KVM_INTERNAL(file_is_kvm);
  
-+static inline int liveupdate_get_file_incoming(struct liveupdate_session *s,
-+					       u64 token, struct file **filep)
++struct file *kvm_create_vm_file(unsigned long type, const char *fdname)
 +{
-+	return -EOPNOTSUPP;
-+}
++	struct kvm *kvm = kvm_create_vm(type, fdname);
++	struct file *file;
 +
-+static inline int liveupdate_get_token_outgoing(struct liveupdate_session *s,
-+						struct file *file, u64 *tokenp)
-+{
-+	return -EOPNOTSUPP;
-+}
++	if (IS_ERR(kvm))
++		return ERR_CAST(kvm);
 +
- #endif /* CONFIG_LIVEUPDATE */
- #endif /* _LINUX_LIVEUPDATE_H */
-diff --git a/kernel/liveupdate/luo_file.c b/kernel/liveupdate/luo_file.c
-index a0a419085e28..0aa0b4e5339f 100644
---- a/kernel/liveupdate/luo_file.c
-+++ b/kernel/liveupdate/luo_file.c
-@@ -323,6 +323,7 @@ int luo_preserve_file(struct luo_file_set *file_set, u64 token, int fd)
- 	mutex_init(&luo_file->mutex);
- 
- 	args.handler = fh;
-+	args.session = luo_session_from_file_set(file_set);
- 	args.file = file;
- 	err = fh->ops->preserve(&args);
- 	if (err)
-@@ -380,6 +381,7 @@ void luo_file_unpreserve_files(struct luo_file_set *file_set)
- 					   struct luo_file, list);
- 
- 		args.handler = luo_file->fh;
-+		args.session = luo_session_from_file_set(file_set);
- 		args.file = luo_file->file;
- 		args.serialized_data = luo_file->serialized_data;
- 		args.private_data = luo_file->private_data;
-@@ -411,6 +413,7 @@ static int luo_file_freeze_one(struct luo_file_set *file_set,
- 		struct liveupdate_file_op_args args = {0};
- 
- 		args.handler = luo_file->fh;
-+		args.session = luo_session_from_file_set(file_set);
- 		args.file = luo_file->file;
- 		args.serialized_data = luo_file->serialized_data;
- 		args.private_data = luo_file->private_data;
-@@ -432,6 +435,7 @@ static void luo_file_unfreeze_one(struct luo_file_set *file_set,
- 		struct liveupdate_file_op_args args = {0};
- 
- 		args.handler = luo_file->fh;
-+		args.session = luo_session_from_file_set(file_set);
- 		args.file = luo_file->file;
- 		args.serialized_data = luo_file->serialized_data;
- 		args.private_data = luo_file->private_data;
-@@ -621,6 +625,7 @@ int luo_retrieve_file(struct luo_file_set *file_set, u64 token,
- 	}
- 
- 	args.handler = luo_file->fh;
-+	args.session = luo_session_from_file_set(file_set);
- 	args.serialized_data = luo_file->serialized_data;
- 	err = luo_file->fh->ops->retrieve(&args);
- 	if (err) {
-@@ -654,6 +659,7 @@ static int luo_file_can_finish_one(struct luo_file_set *file_set,
- 		struct liveupdate_file_op_args args = {0};
- 
- 		args.handler = luo_file->fh;
-+		args.session = luo_session_from_file_set(file_set);
- 		args.file = luo_file->file;
- 		args.serialized_data = luo_file->serialized_data;
- 		args.retrieve_status = luo_file->retrieve_status;
-@@ -671,6 +677,7 @@ static void luo_file_finish_one(struct luo_file_set *file_set,
- 	guard(mutex)(&luo_file->mutex);
- 
- 	args.handler = luo_file->fh;
-+	args.session = luo_session_from_file_set(file_set);
- 	args.file = luo_file->file;
- 	args.serialized_data = luo_file->serialized_data;
- 	args.retrieve_status = luo_file->retrieve_status;
-@@ -924,3 +931,65 @@ void liveupdate_unregister_file_handler(struct liveupdate_file_handler *fh)
- 	luo_flb_unregister_all(fh);
- 	list_del(&ACCESS_PRIVATE(fh, list));
- }
-+EXPORT_SYMBOL_GPL(liveupdate_unregister_file_handler);
-+
-+/**
-+ * liveupdate_get_token_outgoing - Get the token for a preserved file.
-+ * @s:      The outgoing liveupdate session.
-+ * @file:   The file object to search for.
-+ * @tokenp: Output parameter for the found token.
-+ *
-+ * Searches the list of preserved files in an outgoing session for a matching
-+ * file object. If found, the corresponding user-provided token is returned.
-+ *
-+ * This function is intended for in-kernel callers that need to correlate a
-+ * file with its liveupdate token.
-+ *
-+ * Context: It must be called with session mutex acquired.
-+ * Return: 0 on success, -ENOENT if the file is not preserved in this session.
-+ */
-+int liveupdate_get_token_outgoing(struct liveupdate_session *s,
-+				  struct file *file, u64 *tokenp)
-+{
-+	struct luo_file_set *file_set = luo_file_set_from_session_locked(s);
-+	struct luo_file *luo_file;
-+	int err = -ENOENT;
-+
-+	list_for_each_entry(luo_file, &file_set->files_list, list) {
-+		if (luo_file->file == file) {
-+			if (tokenp)
-+				*tokenp = luo_file->token;
-+			err = 0;
-+			break;
-+		}
++	file = anon_inode_getfile("kvm-vm", &kvm_vm_fops, kvm, O_RDWR);
++	if (IS_ERR(file)) {
++		kvm_put_kvm(kvm);
++		return file;
 +	}
 +
-+	return err;
++#ifdef CONFIG_LIVEUPDATE_GUEST_MEMFD
++	/*
++	 * Weak reference to the file (without get_file()) to prevent a circular
++	 * dependency. Safe because the file's release path clears this pointer
++	 * and drops its reference to the VM.
++	 *
++	 * Written via rcu_assign_pointer() because the pointer can be read
++	 * locklessly under RCU (e.g., in kvm_gmem_luo_preserve() via
++	 * get_file_active() to prevent lockless ABA races).
++	 */
++	rcu_assign_pointer(kvm->vm_file, file);
++#endif
++
++	/*
++	 * Don't call kvm_put_kvm anymore at this point; file->f_op is
++	 * already set, with ->release() being kvm_vm_release().  In error
++	 * cases it will be called by the final fput(file) and will take
++	 * care of doing kvm_put_kvm(kvm).
++	 */
++
++	return file;
 +}
 +
-+/**
-+ * liveupdate_get_file_incoming - Retrieves a preserved file for in-kernel use.
-+ * @s:      The incoming liveupdate session (restored from the previous kernel).
-+ * @token:  The unique token identifying the file to retrieve.
-+ * @filep:  On success, this will be populated with a pointer to the retrieved
-+ *          'struct file'.
-+ *
-+ * Provides a kernel-internal API for other subsystems to retrieve their
-+ * preserved files after a live update. This function is a simple wrapper
-+ * around luo_retrieve_file(), allowing callers to find a file by its token.
-+ *
-+ * The caller receives a new reference to the file and must call fput() when it
-+ * is no longer needed. The file's lifetime is managed by LUO and any userspace
-+ * file descriptors. If the caller needs to hold a reference to the file beyond
-+ * the immediate scope, it must call get_file() itself.
-+ *
-+ * Context: It must be called with session mutex acquired of a restored session.
-+ * Return: 0 on success. Returns -ENOENT if no file with the matching token is
-+ *         found, or any other negative errno on failure.
-+ */
-+int liveupdate_get_file_incoming(struct liveupdate_session *s, u64 token,
-+				 struct file **filep)
-+{
-+	return luo_retrieve_file(luo_file_set_from_session_locked(s),
-+				 token, filep);
-+}
-diff --git a/kernel/liveupdate/luo_internal.h b/kernel/liveupdate/luo_internal.h
-index 875844d7a41d..08b198802e7f 100644
---- a/kernel/liveupdate/luo_internal.h
-+++ b/kernel/liveupdate/luo_internal.h
-@@ -79,6 +79,23 @@ struct luo_session {
+ static int kvm_dev_ioctl_create_vm(unsigned long type)
+ {
+ 	char fdname[ITOA_MAX_LEN + 1];
+ 	int r, fd;
+-	struct kvm *kvm;
+ 	struct file *file;
  
- extern struct rw_semaphore luo_register_rwlock;
+ 	fd = get_unused_fd_flags(O_CLOEXEC);
+@@ -5489,31 +5535,17 @@ static int kvm_dev_ioctl_create_vm(unsigned long type)
  
-+static inline struct liveupdate_session *luo_session_from_file_set(struct luo_file_set *file_set)
+ 	snprintf(fdname, sizeof(fdname), "%d", fd);
+ 
+-	kvm = kvm_create_vm(type, fdname);
+-	if (IS_ERR(kvm)) {
+-		r = PTR_ERR(kvm);
+-		goto put_fd;
+-	}
+-
+-	file = anon_inode_getfile("kvm-vm", &kvm_vm_fops, kvm, O_RDWR);
++	file = kvm_create_vm_file(type, fdname);
+ 	if (IS_ERR(file)) {
+ 		r = PTR_ERR(file);
+-		goto put_kvm;
++		goto put_fd;
+ 	}
+ 
+-	/*
+-	 * Don't call kvm_put_kvm anymore at this point; file->f_op is
+-	 * already set, with ->release() being kvm_vm_release().  In error
+-	 * cases it will be called by the final fput(file) and will take
+-	 * care of doing kvm_put_kvm(kvm).
+-	 */
+-	kvm_uevent_notify_change(KVM_EVENT_CREATE_VM, kvm);
++	kvm_uevent_notify_change(KVM_EVENT_CREATE_VM, file->private_data);
+ 
+ 	fd_install(fd, file);
+ 	return fd;
+ 
+-put_kvm:
+-	kvm_put_kvm(kvm);
+ put_fd:
+ 	put_unused_fd(fd);
+ 	return r;
+@@ -6341,6 +6373,11 @@ static void kvm_uevent_notify_change(unsigned int type, struct kvm *kvm)
+ 	kfree(env);
+ }
+ 
++void kvm_uevent_notify_vm_create(struct kvm *kvm)
 +{
-+	struct luo_session *session;
-+
-+	session = container_of(file_set, struct luo_session, file_set);
-+
-+	return (struct liveupdate_session *)session;
++	kvm_uevent_notify_change(KVM_EVENT_CREATE_VM, kvm);
 +}
 +
-+static inline struct luo_file_set *luo_file_set_from_session_locked(struct liveupdate_session *s)
-+{
-+	struct luo_session *session = (struct luo_session *)s;
+ static void kvm_init_debug(void)
+ {
+ 	const struct file_operations *fops;
+diff --git a/virt/kvm/kvm_mm.h b/virt/kvm/kvm_mm.h
+index 9fcc5d5b7f8d..7aa1d65c3d46 100644
+--- a/virt/kvm/kvm_mm.h
++++ b/virt/kvm/kvm_mm.h
+@@ -3,6 +3,9 @@
+ #ifndef __KVM_MM_H__
+ #define __KVM_MM_H__ 1
+ 
++/* Worst case buffer size needed for holding an integer as a string. */
++#define ITOA_MAX_LEN 12
 +
-+	lockdep_assert_held(&session->mutex);
-+	return &session->file_set;
-+}
-+
- int luo_session_create(const char *name, struct file **filep);
- int luo_session_retrieve(const char *name, struct file **filep);
- int __init luo_session_setup_outgoing(void *fdt);
+ /*
+  * Architectures can choose whether to use an rwlock or spinlock
+  * for the mmu_lock.  These macros, for use in common code
 -- 
 2.54.0.563.g4f69b47b94-goog
 
