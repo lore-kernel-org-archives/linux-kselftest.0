@@ -1,38 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED1BA381AFA;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E73943806D6;
 	Mon, 18 May 2026 18:17:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779128266; cv=none; b=nsNqgJqVnqGLiEwUOqVgUeGwlW+hIneorg+gO5BneQIWFtS4JhQvIQOj3Mba1m4v2jK3ogVTZBOIyAYPE+R7u/xl5hDTwFkdXneB4riKVNrswr5ccoUY58lNpYnyxBItI/STW9ItHuS7Cbh3HLTyUmg9NVMTelwL40fMm3yH/cA=
+	t=1779128266; cv=none; b=pWoEw3ATN3UN5fY0UrvWExC36tEvatu8CujQxrBUY8ZCxvVmR1BNT+VVd4TdMs1c/xyhXyCpSufXfRFyho+pasKqv1W7yUm4w/6zgSbYLpwaoaUIGy9Ot15V35/CjYYOux1ZlZGSNqoy8env3/j8W4fJIkTVyHVPpmmEhXzZmM4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1779128266; c=relaxed/simple;
-	bh=JHk3R6g816OuqB1Hgt1l1LwWqhgjH6v3Sfs+FGIL2jU=;
+	bh=BUdOCaQuOCSBBDHR2jUyq+U+9zPMuOuv59bLWu+eXK8=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=bOcfy1mHr5j2iFH3KFwCvGlfqhZ8Uo/s3GCt5iu4G/G0UTjPfGEPT7D3H7M07fP0fHtXx5BXgLCOQrKNxVtioTBwVNuIoMsRPd2Ex80LQUmu3ccAge1tJKlkrGKHcyy3D/7uxeXmA2EpZeq1ILYB1GMkPKvcDD8WbU+STj9kbkM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f1CzrJ4Y; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=tYV8yhOQyGTgU31jfQ+L/9yrLXIRx3whvrrFgSGkY7MhMV5r7rtiHzpWGUZiBZFD8lOD855a4kXCYIJzii5i/UhSTKCAYJ0aQf9K0fhkNexZWhvk6SPn3tZEQ9jTyehNdsjEPTeB439rNlHEJOC/HjzuysdTiGoI0PRIl18WlmQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M58eeV4u; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f1CzrJ4Y"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C42C9C4AF13;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M58eeV4u"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A373EC2BCF5;
 	Mon, 18 May 2026 18:17:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1779128265;
-	bh=JHk3R6g816OuqB1Hgt1l1LwWqhgjH6v3Sfs+FGIL2jU=;
+	bh=BUdOCaQuOCSBBDHR2jUyq+U+9zPMuOuv59bLWu+eXK8=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=f1CzrJ4Yqo95t6yHU0KmyGCBnjXUxXIbLF0XKmEgnPj3QDd8hfz31iQj29DUC66yG
-	 LdF9lVGvLdHoF/sUkrp8RZt5iD1L1l61bY+3TxtOuwXSU0FvdR4Cq/gYsXDvqLepmq
-	 XsvrnkmqZ59yXphWF/RX/Vdem0JYu/U6cZo1frf6iVwu1wyX/qTFBoV4cr/LZmG2/D
-	 sf4B1gL3QCWDW8rrSzd+8UDmUVesy/lDXVtpYMX9XjOMGyybi7pe/cKb9Qj5qVwmik
-	 rOkP4uEc+5+QQD20ApwmBkbyE3bX+Yqtg9KEeGLScDfvUnOXNmi9oMmEezi/SOGy7d
-	 APim1AMvT0muw==
+	b=M58eeV4uIMxcWwQE2urHUh/QNnc1jCQBqSjK9PPpmrrgybimA9xYcjou1TUZCjuvI
+	 AvcAUrVa6eGU5NMe5rREDkifS95Rlxmdkt1niQq2t+QLUY6VQQ+8cJMIAF5FXxDt74
+	 eINX0SB8yeSkm5KrzwlirNCZ6TAa4HV+Y2Ph+rU6HTr1P5ZdFR5fnhgAcRBzNHY/dx
+	 boDlFqxn1DBobvQFL6JfB83LimuOi3PZyAwKCBc/S+FgtiQ1Bk9ed6l4UlqTTTfEHR
+	 ChVB3Qk+S2zHVfZos0SXxXl3cQEzroxHU7LEXqU4eFfVM1Wtg3kmcyEuhimu9ialjT
+	 G4KPykVIF8sSA==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB958CD4F57;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95DE4CD4F50;
 	Mon, 18 May 2026 18:17:45 +0000 (UTC)
 From: Ackerley Tng via B4 Relay <devnull+ackerleytng.google.com@kernel.org>
-Date: Mon, 18 May 2026 11:17:36 -0700
-Subject: [PATCH RFC 4/5] mm: selftests: Update hugepage-mmap to support
- hugetlbfs mount
+Date: Mon, 18 May 2026 11:17:34 -0700
+Subject: [PATCH RFC 2/5] mm: selftests: Inline {read,write}_bytes functions
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -41,7 +40,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260518-port-hugetlb-selftests-v1-4-d64ba3a785fe@google.com>
+Message-Id: <20260518-port-hugetlb-selftests-v1-2-d64ba3a785fe@google.com>
 References: <20260518-port-hugetlb-selftests-v1-0-d64ba3a785fe@google.com>
 In-Reply-To: <20260518-port-hugetlb-selftests-v1-0-d64ba3a785fe@google.com>
 To: Andrew Morton <akpm@linux-foundation.org>, 
@@ -53,11 +52,11 @@ To: Andrew Morton <akpm@linux-foundation.org>,
 Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
  linux-kernel@vger.kernel.org, Ackerley Tng <ackerleytng@google.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1779128265; l=3375;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1779128265; l=1888;
  i=ackerleytng@google.com; s=20260225; h=from:subject:message-id;
- bh=UohDzF0IDPJpVfS8tMj24WgpCofY5vpUdRHF24vk2iU=;
- b=5uxe5mBqfzQ1SIKIcquQms4vhqqdYB3BUyQSZlrS81kmhC9iHur6Z1P4KUT/FsGZeEPqSznpj
- duVeqsyGbkjAeZx/X2wU4RhXQfpUX9wLvfFv9lFXFBOjzJc+o3dh6gl
+ bh=3vqV15tnc/KP7l17CqT82I3LVdfcrBoQAIsUGRd62xc=;
+ b=8wRWXv6/rOnk4l6CutfsJgow0n6eIr/AsAi5gOQiNeOSPDM5g7SuG9MmaRX7tv6dn3aqhQhb+
+ PQUacAigGvODbw69xP477YxGOx0ttnT+euh7SJS2UaNIeMbKaErkZ1g
 X-Developer-Key: i=ackerleytng@google.com; a=ed25519;
  pk=sAZDYXdm6Iz8FHitpHeFlCMXwabodTm7p8/3/8xUxuU=
 X-Endpoint-Received: by B4 Relay for ackerleytng@google.com/20260225 with
@@ -67,138 +66,74 @@ Reply-To: ackerleytng@google.com
 
 From: Ackerley Tng <ackerleytng@google.com>
 
-Run the same write/read test for a file on a hugetlbfs mount, in addition
-to a memfd.
-
-Use FIXTURE_VARIANT for parametrized testing. Use an unlinked fd to make
-save cleanup steps later.
+When the kselftest_harness is used in a later patch, making assertions like
+ASSERT_EQ() relies on _metadata's existence at the macro site, hence using
+helper functions makes it more complicated.
 
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 ---
- tools/testing/selftests/mm/hugepage-mmap.c | 85 ++++++++++++++++++++++++++++--
- 1 file changed, 80 insertions(+), 5 deletions(-)
+ tools/testing/selftests/mm/hugepage-mmap.c | 38 +++++++++++-------------------
+ 1 file changed, 14 insertions(+), 24 deletions(-)
 
 diff --git a/tools/testing/selftests/mm/hugepage-mmap.c b/tools/testing/selftests/mm/hugepage-mmap.c
-index 9c8a0638d04b8..dd9fccb209b10 100644
+index 8c246070572f9..64f7d28a97fdf 100644
 --- a/tools/testing/selftests/mm/hugepage-mmap.c
 +++ b/tools/testing/selftests/mm/hugepage-mmap.c
-@@ -15,36 +15,111 @@
- #include <unistd.h>
- #include <sys/mman.h>
- #include <fcntl.h>
-+#include <sys/mount.h>
-+#include <sys/stat.h>
-+#include <limits.h>
- #include "kselftest_harness.h"
- 
-+static int hugetlbfs_unlinked_fd(const char *mount)
-+{
-+	char path[PATH_MAX];
-+	int fd;
-+
-+	snprintf(path, sizeof(path), "%s/hugepage-mmap-XXXXXX", mount);
-+	fd = mkstemp(path);
-+	if (fd < 0)
-+		return fd;
-+
-+	unlink(path);
-+	return fd;
-+}
-+
+@@ -20,31 +20,11 @@
  #define LENGTH (256UL*1024*1024)
  #define PROTECTION (PROT_READ | PROT_WRITE)
  
-+enum fd_kind {
-+	MEMFD,
-+	HUGETLBFS_FD,
-+};
-+
- FIXTURE(hugepage_mmap)
+-static void write_bytes(char *addr)
+-{
+-	unsigned long i;
+-
+-	for (i = 0; i < LENGTH; i++)
+-		*(addr + i) = (char)i;
+-}
+-
+-static int read_bytes(char *addr)
+-{
+-	unsigned long i;
+-
+-	ksft_print_msg("First hex is %x\n", *((unsigned int *)addr));
+-	for (i = 0; i < LENGTH; i++)
+-		if (*(addr + i) != (char)i) {
+-			ksft_print_msg("Error: Mismatch at %lu\n", i);
+-			return 1;
+-		}
+-	return 0;
+-}
+-
+ int main(void)
  {
- 	int fd;
- 	char *addr;
-+	char mount_dir[PATH_MAX];
-+};
+ 	void *addr;
+-	int fd, ret;
++	int fd, ret = 0;
++	unsigned long i;
+ 
+ 	ksft_print_header();
+ 	ksft_set_plan(1);
+@@ -61,8 +41,18 @@ int main(void)
+ 
+ 	ksft_print_msg("Returned address is %p\n", addr);
+ 	ksft_print_msg("First hex is %x\n", *((unsigned int *)addr));
+-	write_bytes(addr);
+-	ret = read_bytes(addr);
 +
-+static int fd_create(struct __test_metadata *_metadata,
-+		FIXTURE_DATA(hugepage_mmap) *self, enum fd_kind fd_kind)
-+{
-+	switch (fd_kind) {
-+	case MEMFD:
-+		return memfd_create("hugepage-mmap", MFD_HUGETLB);
-+	case HUGETLBFS_FD: {
-+		snprintf(self->mount_dir, sizeof(self->mount_dir),
-+			 "/tmp/hugepage-mmap-XXXXXX");
-+		ASSERT_NE(NULL, mkdtemp(self->mount_dir))
-+		{
-+			TH_LOG("mkdtemp() failed: %s", strerror(errno));
++	for (i = 0; i < LENGTH; i++)
++		*(char *)(addr + i) = (char)i;
++
++	ksft_print_msg("First hex is %x\n", *((unsigned int *)addr));
++	for (i = 0; i < LENGTH; i++) {
++		if (*(char *)(addr + i) != (char)i) {
++			ksft_print_msg("Error: Mismatch at %lu\n", i);
++			ret = 1;
++			break;
 +		}
-+		ASSERT_EQ(0, mount("none", self->mount_dir, "hugetlbfs", 0,
-+				   "pagesize=2M"))
-+		{
-+			TH_LOG("mount() failed: %s", strerror(errno));
-+		}
-+		return hugetlbfs_unlinked_fd(self->mount_dir);
 +	}
-+	default:
-+		return -1;
-+	};
-+}
-+
-+FIXTURE_VARIANT(hugepage_mmap)
-+{
-+	enum fd_kind fd_kind;
-+};
-+
-+FIXTURE_VARIANT_ADD(hugepage_mmap, memfd)
-+{
-+	.fd_kind = MEMFD,
-+};
-+
-+FIXTURE_VARIANT_ADD(hugepage_mmap, hugetlbfs_fd)
-+{
-+	.fd_kind = HUGETLBFS_FD,
- };
  
- FIXTURE_SETUP(hugepage_mmap)
- {
--	self->fd = memfd_create("hugepage-mmap", MFD_HUGETLB);
-+	self->fd = -1;
-+	self->addr = MAP_FAILED;
-+	self->mount_dir[0] = '\0';
-+	/* Enable teardown to cleanup on any assertions in FIXTURE_SETUP(). */
-+	*_metadata->no_teardown = false;
-+
-+	self->fd = fd_create(_metadata, self, variant->fd_kind);
- 	ASSERT_GE(self->fd, 0) {
--		TH_LOG("memfd_create() failed: %s", strerror(errno));
-+		TH_LOG("fd creation failed: %s", strerror(errno));
- 	}
- 
- 	self->addr = mmap(NULL, LENGTH, PROTECTION, MAP_SHARED, self->fd, 0);
- 	ASSERT_NE(MAP_FAILED, self->addr) {
- 		TH_LOG("mmap(): %s", strerror(errno));
--		close(self->fd);
- 	}
- 	TH_LOG("Returned address is %p", self->addr);
- }
- 
- FIXTURE_TEARDOWN(hugepage_mmap)
- {
--	munmap(self->addr, LENGTH);
--	close(self->fd);
-+	if (self->addr != MAP_FAILED)
-+		munmap(self->addr, LENGTH);
-+	if (self->fd >= 0)
-+		close(self->fd);
-+
-+	if (variant->fd_kind == HUGETLBFS_FD && self->mount_dir[0]) {
-+		umount(self->mount_dir);
-+		rmdir(self->mount_dir);
-+	}
- }
- 
- TEST_F(hugepage_mmap, read_write)
+ 	munmap(addr, LENGTH);
+ 	close(fd);
 
 -- 
 2.54.0.563.g4f69b47b94-goog
