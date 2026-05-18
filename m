@@ -1,206 +1,102 @@
 Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D16EC3939A4
-	for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 20:39:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEA34382F25
+	for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 20:42:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779136775; cv=none; b=bmvQ2V+0DJ1RqmitUlSz8NRxcrbBUbG55R+nlUBWx2+mLJN/YjFTpwtpY+zhlCGSvY+UXXia72evbdbp0zS/vfBnfxp2azs4MjX/Yg5frqMno+yqQ30AvaAhWPOeVpxnGwZIr01MlA29opPbaSHROBAQzP4XXn1rQG54iYnBeSA=
+	t=1779136964; cv=none; b=fe5xcLtkR8dH3j4+Gs0z3awiscGMmWsKF4/OzWwvWoz0D3youGKJMSbTpKkhfZqYK2G08UjTzRqw7m5Tg01tCAijDudta+h74XX+2YiNZ09Yh7cnEYhMNxvUdFlv8qsAGSVib4TUp1+95dx756/4Z6Z7z4OcP1EvgUNK1x9qNUs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779136775; c=relaxed/simple;
-	bh=1DQgFAuOo/ufJExWgbAin5UszAM9EvUvWON9Wa22hNk=;
+	s=arc-20240116; t=1779136964; c=relaxed/simple;
+	bh=nQVouHXOMCqKouN03zntvmRFb98UZvsXHIXc5Lhetxo=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=JOd95ZYa9WO9OTRX6Gv588Zc7XMb8qlp+E69Ol54ZZEiaWO2aqrB7Rv/5bF5H8KkQev9XmoBWt8rYQ0CnY+t93B6CnjyQj9T26+7Z3FeHZY4Oio9pk/aIs0fjuau/6WcW+4xxe+01EmG2/PV16NT3xkvizCitThbiCBiCxLqgLk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rvaCfsmP; arc=none smtp.client-ip=209.85.214.202
+	 To:Cc:Content-Type; b=Yad3QLDMHTGQLdGyiTrnZQU7mnOM1EzYN86ZvOMXbGmTyISiCHfC/O1HO2r0lw5oZfu84AhwMjJRZMPRhCdJBndcizu9vfrWHPNw1a9oyfetRUGO/2dL+JIodz4nNAV9FkYBmOdNIj/Mw0x5NIQZfURiEsXHgutGrc8XjyXPg1I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=LaUF8OXi; arc=none smtp.client-ip=209.85.214.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rvaCfsmP"
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2b2e8bba2e6so42110925ad.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 13:39:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="LaUF8OXi"
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2bd5b20aaa6so30919105ad.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 13:42:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1779136772; x=1779741572; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1779136962; x=1779741762; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cGd6BbSJy5OvNTaNiXv/yILYTZDNFNlp8vbkFDJsHGY=;
-        b=rvaCfsmPyRHOCOqn7UErpvCXq4cbJbTI7vdDUu5cMfoce4rwkN0w3+oTUM/NbF8YY1
-         ZClhKoXmLgHXv2z2MBZLwC1Q7BOgMz995p6xoXiH1cyAFcfX6V329Qo2tShQ1z3aKb8q
-         ALKJgy8R9Yrjp2NhcmEiZMc4E0WGLbGRTYlLHWdZX0y3NHAH0rKuDWzKgcBs1tNfTatv
-         VfXdbVSJ4yPxPhzhdD6U/XeGby2imNWbz6MZDpI8PmfMNPYs+h+j0CW24QzNsiNOrEvZ
-         G6lPVsj7cIGWblKI4gcuIUt/DcX6jlv4kSYztAD6EveohgVKAw+nRTnRNhs+3EbZlMB7
-         mnFw==
+        bh=vEZiI2mCaxhF27MBx5FxJQ+kMagKDbcRpCU+GTF0M5o=;
+        b=LaUF8OXiun00q6G5gyzFgzqxAR8yDko5H7DIT0sHGhmHtIc43DXdUyzOheAeN5ZdKp
+         QGlspkvwP0DFmgMNoDYdeYt0yMsuM08OHkhOzQD5WDC2efW4zSPiFG/gnD71CL+N3IJr
+         8096AAP/VAcySjXMFl09Ea8sPOwNbiCVEL9au8CJ41ah0BXjXmUDBKSF9vfhsfK65dq0
+         H7JCGOMDhL0Ad6yftSQM5Lt/6G76ihixSNmyxF6B9wzFRgXHfc41Mzi9KLl7XL/aeeoF
+         prJZbNBU4czyFvBcBesF1PWCcqJ7QNoLCHHP44uoYTEJUwHu1aAUDL5QgmO8NE0Th3JB
+         r4cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779136772; x=1779741572;
+        d=1e100.net; s=20251104; t=1779136962; x=1779741762;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cGd6BbSJy5OvNTaNiXv/yILYTZDNFNlp8vbkFDJsHGY=;
-        b=PpraIF0v2Q78p3uq2ZBfiXA8QkZwgwKUCxFz1O5RdCFGqXFb+5I2VAUHZKRuNtCihg
-         DiXsl2C0DtPEuAcwKXfDLoZiXxhhNNolqzHEhOnKW9EdLaeopi1dnasBuDYgoGOJid4u
-         nYPCRNbb8TghOjde3GQOs1xC0ycNtZmdsB7HBILBIde72ItLmYO7EQ9qaKmbbF99bzmQ
-         BN7eja0KgtdEOrQVfSdrodAuaq72F54GnDMXy+1padS5A+80ShXCrOJFeYJAgjYQECAA
-         2fSBE+BBTel4sOb0aolSW2RpK3VTQgk9KMDhjCLGR8VR55FYX1SrFswBkvnv/DQZyRrG
-         jiJw==
-X-Forwarded-Encrypted: i=1; AFNElJ/lRZAIkFmkoh9cWXGYND2TeEsEzq2j97zXmZSgLndPqdEXNdigrG8nl2/uRBiZwwfOr0RJd26o5cfk4RNr5xk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwFJMX7/e896QnIuaIqGMcp3qCKcBAFiaYkjJ+TSVI87zqJ9DN+
-	88C75od3J4kxz8DgQvHFzVurl3ou4Lrlxf8KEv7cRJmOqIu8X/I0daboMRU2DRul4Lie7JTcAdO
-	IFpg/Mg==
-X-Received: from plhi13.prod.google.com ([2002:a17:903:2ecd:b0:2b2:4f3d:3df4])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:cec7:b0:2b4:5d51:ce96
- with SMTP id d9443c01a7336-2bd7e87ed84mr179781255ad.24.1779136771910; Mon, 18
- May 2026 13:39:31 -0700 (PDT)
-Date: Mon, 18 May 2026 13:39:31 -0700
-In-Reply-To: <CAEvNRgFgobnW+O=t32gu-0YDy0n7ZqvmdCtg+DzLT3uf0+BDeg@mail.gmail.com>
+        bh=vEZiI2mCaxhF27MBx5FxJQ+kMagKDbcRpCU+GTF0M5o=;
+        b=koGfY2wOti6cVgf9W3JVwyKq5Ec29YBIg0MFmmHhZQriOSKT8aF1rtv6uu0KyXHoz/
+         pK5bTgYw3/1G2+pkrbnhCRptuFMjUqeDuaUYI7lhD26Es5ha3SW0Yarvdg5e8lYLKGSC
+         MzGx+gmT/MBhomcT4QRM+CFsVmBiBH43pLszHicq6jJ8Q9tDM7j9fQPQXh+44xNitUU4
+         r2eFCUn7s2ZCWEC79/jN1IMh478i60HWa34BuaqVx55bVJX44VmDNwk1aRO8+O/HTUlK
+         aC/s8SVhilrwwcq4rC5oEKBCv9ATCK5YPIAjl5U3bQLiRlBcYaNXIa2nIPlVhjtCxtON
+         dJIg==
+X-Forwarded-Encrypted: i=1; AFNElJ9wgIRzAp1uc20SRyO4cN765dGZIGjg6f8CRRbGwkv5sh8NWDQrUe+TM57ntJHZZagwZuk4Xpk5ASdGVeC8V2k=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw90MoGuXhXPuH2VGx/p0YHWE7SHz/UACJofOR0YLKnOwLeI/x3
+	xK5wPDVgXnKhiELpDlA4OXX3ywEJkeUy2fgcVFgjEx53JEqQD68J3ceVkt6Kx0v02gUe4FoJV0F
+	xp6psKw==
+X-Received: from plsr2.prod.google.com ([2002:a17:902:be02:b0:2b2:48d8:c695])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:3c43:b0:2bd:c310:f7c9
+ with SMTP id d9443c01a7336-2bdc310fd7fmr94710675ad.2.1779136962102; Mon, 18
+ May 2026 13:42:42 -0700 (PDT)
+Date: Mon, 18 May 2026 13:42:41 -0700
+In-Reply-To: <CAEvNRgHd4azPaMddvqnSG+Z5fmg+LWd+pz=LSB3PrJTW618dww@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20260518070943.2091287-1-ZongYao.Chen@linux.alibaba.com>
- <20260518070943.2091287-3-ZongYao.Chen@linux.alibaba.com> <CAEvNRgFgobnW+O=t32gu-0YDy0n7ZqvmdCtg+DzLT3uf0+BDeg@mail.gmail.com>
-Message-ID: <agt5A90k9lS9JPWp@google.com>
-Subject: Re: [PATCH 2/2] KVM: selftests: Test guest_memfd binding overlap
- without GPA overlap
+References: <20260402041156.1377214-1-rppt@kernel.org> <20260402041156.1377214-14-rppt@kernel.org>
+ <ac7oE_1j6gxf8OKT@google.com> <CAEvNRgHd4azPaMddvqnSG+Z5fmg+LWd+pz=LSB3PrJTW618dww@mail.gmail.com>
+Message-ID: <agt5wTK5I-FvlB57@google.com>
+Subject: Re: [PATCH v4 13/15] KVM: guest_memfd: implement userfaultfd operations
 From: Sean Christopherson <seanjc@google.com>
 To: Ackerley Tng <ackerleytng@google.com>
-Cc: ZongYao.Chen@linux.alibaba.com, Paolo Bonzini <pbonzini@redhat.com>, 
-	kvm@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
-	"Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>, Chao Peng <chao.p.peng@linux.intel.com>, 
-	Xiaoyao Li <xiaoyao.li@intel.com>, Tianjia Zhang <tianjia.zhang@linux.alibaba.com>, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: Mike Rapoport <rppt@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Andrea Arcangeli <aarcange@redhat.com>, Andrei Vagin <avagin@google.com>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
+	David Hildenbrand <david@kernel.org>, Harry Yoo <harry.yoo@oracle.com>, Hugh Dickins <hughd@google.com>, 
+	James Houghton <jthoughton@google.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+	"Lorenzo Stoakes (Oracle)" <ljs@kernel.org>, "Matthew Wilcox (Oracle)" <willy@infradead.org>, Michal Hocko <mhocko@suse.com>, 
+	Muchun Song <muchun.song@linux.dev>, Nikita Kalyazin <kalyazin@amazon.com>, 
+	Oscar Salvador <osalvador@suse.de>, Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>, 
+	Shuah Khan <shuah@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Vlastimil Babka <vbabka@suse.cz>, 
+	kvm@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-mm@kvack.org, tarunsahu@google.com
 Content-Type: text/plain; charset="us-ascii"
 
-On Mon, May 18, 2026, Ackerley Tng wrote:
-> ZongYao.Chen@linux.alibaba.com writes:
+On Fri, May 15, 2026, Ackerley Tng wrote:
+> Sean Christopherson <seanjc@google.com> writes:
 > 
-> > From: Zongyao Chen <ZongYao.Chen@linux.alibaba.com>
 > >
-> > The guest_memfd binding overlap test recreates the deleted slot with GPA
-> > ranges that overlap the still-live slot.  KVM rejects those attempts from
-> > the generic memslot overlap check before reaching kvm_gmem_bind(), so the
-> > test can pass even if guest_memfd binding overlap detection is broken.
+> > [...snip...]
 > >
-> > Recreate the slot at its original, non-overlapping GPA and use guest_memfd
-> > offsets that overlap the front and back halves of the other slot's binding.
-> > Expand the guest_memfd so the back-half case remains within the file size.
-> >
-> > Fixes: 2feabb855df8 ("KVM: selftests: Expand set_memory_region_test to validate guest_memfd()")
+> >> +#ifdef CONFIG_USERFAULTFD
+> >> +static bool kvm_gmem_can_userfault(struct vm_area_struct *vma, vm_flags_t vm_flags)
+> >> +{
+> >> +	struct inode *inode = file_inode(vma->vm_file);
+> >> +
+> >> +	/*
+> >> +	 * Only support userfaultfd for guest_memfd with INIT_SHARED flag.
+> >> +	 * This ensures the memory can be mapped to userspace.
+> >> +	 */
 > 
-> Thanks for fixing this!
-> 
-> > Signed-off-by: Zongyao Chen <ZongYao.Chen@linux.alibaba.com>
-> > ---
-> >  .../testing/selftests/kvm/set_memory_region_test.c | 14 +++++++-------
-> >  1 file changed, 7 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/kvm/set_memory_region_test.c b/tools/testing/selftests/kvm/set_memory_region_test.c
-> > index 9b919a231c93..15607e0bec90 100644
-> > --- a/tools/testing/selftests/kvm/set_memory_region_test.c
-> > +++ b/tools/testing/selftests/kvm/set_memory_region_test.c
-> > @@ -510,7 +510,7 @@ static void test_add_overlapping_private_memory_regions(void)
-> 
-> Shall we rename this to test_bind_overlapping_guest_memfd_offsets to
-> make it clearer?
+> Is the principle here that any memory that is allowed to be mapped to
+> userspace can be userfault-ed?
 
-Hmm, not if we make the change additive (see blelow).
- 
-> Perhaps also update the pr_info() to "Testing binding to overlapping
-> guest_memfd offsets\n".
-> 
-> >
-> >  	vm = vm_create_barebones_type(KVM_X86_SW_PROTECTED_VM);
-> >
-> > -	memfd = vm_create_guest_memfd(vm, MEM_REGION_SIZE * 4, 0);
-> > +	memfd = vm_create_guest_memfd(vm, MEM_REGION_SIZE * 6, 0);
-> 
-> I think this technically only needs to be MEM_REGION_SIZE * 5 for this
-> test to work.
-> 
-> >
-> >  	vm_set_user_memory_region2(vm, MEM_REGION_SLOT, KVM_MEM_GUEST_MEMFD,
-> >  				   MEM_REGION_GPA, MEM_REGION_SIZE * 2, 0, memfd, 0);
-> > @@ -526,19 +526,19 @@ static void test_add_overlapping_private_memory_regions(void)
-> >  	vm_set_user_memory_region2(vm, MEM_REGION_SLOT, KVM_MEM_GUEST_MEMFD,
-> >  				   MEM_REGION_GPA, 0, NULL, -1, 0);
-> 
-> When I re-read this I was wondering why we created and removed the first
-> memslot. Was it meant as a confidence check that set_memory_region works
-> with the given MEM_REGION_GPA? Perhaps we could add a comment/pr_info()
-> to check that.
-
-Rather than "fix" the check, why not have both?
-
-> > -	/* Overlap the front half of the other slot. */
-> > +	/* Overlap the front half of the other slot's guest_memfd binding. */
-> >  	r = __vm_set_user_memory_region2(vm, MEM_REGION_SLOT, KVM_MEM_GUEST_MEMFD,
-> > -					 MEM_REGION_GPA * 2 - MEM_REGION_SIZE,
-> > +					 MEM_REGION_GPA,
-> >  					 MEM_REGION_SIZE * 2,
-> > -					 0, memfd, 0);
-> > +					 0, memfd, MEM_REGION_SIZE);
-> >  	TEST_ASSERT(r == -1 && errno == EEXIST, "%s",
-> >  		    "Overlapping guest_memfd() bindings should fail with EEXIST");
-> >
-> > -	/* And now the back half of the other slot. */
-> > +	/* And now the back half of the other slot's guest_memfd binding. */
-> >  	r = __vm_set_user_memory_region2(vm, MEM_REGION_SLOT, KVM_MEM_GUEST_MEMFD,
-> > -					 MEM_REGION_GPA * 2 + MEM_REGION_SIZE,
-> > +					 MEM_REGION_GPA,
-> >  					 MEM_REGION_SIZE * 2,
-> > -					 0, memfd, 0);
-> > +					 0, memfd, MEM_REGION_SIZE * 3);
-> >  	TEST_ASSERT(r == -1 && errno == EEXIST, "%s",
-> >  		    "Overlapping guest_memfd() bindings should fail with EEXIST");
-> >
-> 
-> Since this test program is meant to test set_memory_region, should we be
-> retaining the original test? The original test is wrong in that it
-> doesn't test guest_memfd's binding, but it does test that
-> set_memory_region returns -EEXIST on overlapping GPAs.
-> 
-> Perhaps to just test overlapping GPAs we can use anonymous memory
-> instead of guest_memfd.
-
-Eh, I see no harm in having both.  E.g. if we do this, then we don't have to
-explain why we're not testing the other case :-)
-
-diff --git a/tools/testing/selftests/kvm/set_memory_region_test.c b/tools/testing/selftests/kvm/set_memory_region_test.c
-index 9b919a231c93..283392bcc3a0 100644
---- a/tools/testing/selftests/kvm/set_memory_region_test.c
-+++ b/tools/testing/selftests/kvm/set_memory_region_test.c
-@@ -510,7 +510,7 @@ static void test_add_overlapping_private_memory_regions(void)
- 
-        vm = vm_create_barebones_type(KVM_X86_SW_PROTECTED_VM);
- 
--       memfd = vm_create_guest_memfd(vm, MEM_REGION_SIZE * 4, 0);
-+       memfd = vm_create_guest_memfd(vm, MEM_REGION_SIZE * 5, 0);
- 
-        vm_set_user_memory_region2(vm, MEM_REGION_SLOT, KVM_MEM_GUEST_MEMFD,
-                                   MEM_REGION_GPA, MEM_REGION_SIZE * 2, 0, memfd, 0);
-@@ -542,6 +542,26 @@ static void test_add_overlapping_private_memory_regions(void)
-        TEST_ASSERT(r == -1 && errno == EEXIST, "%s",
-                    "Overlapping guest_memfd() bindings should fail with EEXIST");
- 
-+       /*
-+        * Repeat the overlap tests, but so that there is overlap in the
-+        * guest_memfd bindings (i.e. in guest_memfd file offsets), but _not_
-+        * in the GPA space.  Regardless of where there's overlap, KVM should
-+        * return -EEXIST.
-+        */
-+       r = __vm_set_user_memory_region2(vm, MEM_REGION_SLOT, KVM_MEM_GUEST_MEMFD,
-+                                        MEM_REGION_GPA,
-+                                        MEM_REGION_SIZE * 2,
-+                                        0, memfd, MEM_REGION_SIZE);
-+       TEST_ASSERT(r == -1 && errno == EEXIST, "%s",
-+                   "Overlapping guest_memfd() bindings should fail with EEXIST");
-+
-+       /* And now the back half of the other slot's guest_memfd binding. */
-+       r = __vm_set_user_memory_region2(vm, MEM_REGION_SLOT, KVM_MEM_GUEST_MEMFD,
-+                                        MEM_REGION_GPA,
-+                                        MEM_REGION_SIZE * 2,
-+                                        0, memfd, MEM_REGION_SIZE * 3);
-+       TEST_ASSERT(r == -1 && errno == EEXIST, "%s",
-+                   "Overlapping guest_memfd() bindings should fail with EEXIST");
-        close(memfd);
-        kvm_vm_free(vm);
- }
+Yes?  It's more the opposite though: memory that can't be SHARED and thus can't
+be mapped into userspace can't possibly support userfaultfd.  Six of one, half
+dozen of the other, but I think it's important to highlight that there's no
+judgment call being made, i.e. we aren't deciding to support only SHARED just
+because we're lazy, it's a hard requirement.
