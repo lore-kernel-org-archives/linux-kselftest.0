@@ -1,195 +1,81 @@
-Received: from mail-vs1-f51.google.com (mail-vs1-f51.google.com [209.85.217.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B46FC338595
-	for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 20:05:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.217.51
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779134709; cv=pass; b=shQfTBzG2nFWBEVyYllEU5+54k+PXYYxqw6/RC0LGY9CCXs7n9NXaf4bXaH0BSD1stwpFi9rDi2qhVzLnOgZf4q1WUtEdMkJ/s88hiAzqT/jt/SXT1gsSNF+uVcbI5K+2CoQLnzvLGG36S8SvSSGO+BS4pPhJ9DUiEZ2PX1NA8Q=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779134709; c=relaxed/simple;
-	bh=fGDWFtOBKfjZJNEB/V2j3tDwuKJfxKGoa79UynO/y6s=;
-	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TmbzkqXvDdjnHLhr1RNhYndSscmrEE+sVFpLXo9wzhxVgpHPRN+I2Dme8lHjoW+8LAlmu/clm59BDtssUrkQ0O9smbpfPztAwQBFmJiJ5Eup7r4phCRAE8JTyUNn9/CADTZkVP3UfDP7qLQa+Zr76MfEwNQgStwLsxkE2z0jwz8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Pbk7VrKL; arc=pass smtp.client-ip=209.85.217.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6862405C4B;
+	Mon, 18 May 2026 20:08:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779134905; cv=none; b=WWLJ9yAOdhzyH7gqLSlO+yhJYNtj3+Gecu33MjbzcQFmuJeVjBfNYyO6L5oxUpZk282m6iu5Gjocb1Km5VFBSJdRBxDY6B3q8/ULdCzMWGGV6yd9w2lfr4RWk2Grk8CWKrovx7aUDeKCKu8Xdrv8PeAkA2SqX6oklcK3WyTyvbw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779134905; c=relaxed/simple;
+	bh=LBjgJsXIGbZM5w2GUzxKJldAI723FEpT19Mr+HRKvuo=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=rdoGrBmJE5kz9kOkgmvx9Vw5ICsoDlP0+HJxoL1rzCzm/X7BRH+MwNbMB4bu2Qzj8rlMsXH4uHc37Y7IEaie5oEsRyJEjEIvPkiQZMuJvshMDHar1SL4tM3KOPMqX2IoXICU0SO1Knx11wvAsFN2Lj5BimcSihqeTHIJ2ESYlGs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FlMoAUxs; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Pbk7VrKL"
-Received: by mail-vs1-f51.google.com with SMTP id ada2fe7eead31-63a3977145fso742927137.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 13:05:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779134707; cv=none;
-        d=google.com; s=arc-20240605;
-        b=fNpBGiLfnPNQfesJbc53u9bI1jLzohd26hxhrLOm8Vv8R5My4CYTygXbO8xelCUUKv
-         cuJwbvJE/7RXjzh+52N2dRVVo9SdJXYLHzfBZhk92uCpT0dvKHR7ttwLow8iLEsDOE1L
-         +xcPiHw4BNGJcR2Y1/VqvrXiLwXyU6WcHg4KfnNL+OzBwe2mkPFOGAYAt5tmPiCUAE73
-         7j4EhtqELKtSX3q7gGpKu1w5Zad6N5U6qWQjTFQEmwtMESWP1R+C/bxf8dTzYnc98XgK
-         vjJCiaJXjxFl32WUCGeVuknA0aWrKHKiRU8y54rvIFikJTP+vbQj22TfQ3oaL8oHEuDg
-         FduA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:dkim-signature;
-        bh=glQxNdgLK/pIJ2vL4my5atUrPxfPqi+r7bSAfMQrWYw=;
-        fh=ozAqE86P57LNFGjjHT6rWgX6YS1NaYHiJDGdo5vOOhw=;
-        b=WDNPXGRzEr/ODscYZUeNMBGSD/QtBG0KA2MSoQ+gNivJ39wPUA+E3PxwFPbhBvWPf7
-         ZtEvD0YbZEtsznSySsNSiVlE0AnSHfta6m8zs5pSa5cpFCvjxw5UTvfinfe2GFmHBurb
-         uHra9B2lrSejUzQtE/IGZByxoATj5lfZZedR2UhueISGxxaOInVn7/TwLHvyM6MWJWoh
-         hWTTsrhEyHiMmQ93TiKODge6Q4tJb7MZZXkH+GP3hDFxy4S/cjFuYnI//6uv8SAB31wu
-         AWNPKKXUOMmK22qptvApHeDub1oj9cdSUnn/9OQtyHGDq9yOml09rC7GV0ARjHPoriJh
-         uzwA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1779134707; x=1779739507; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=glQxNdgLK/pIJ2vL4my5atUrPxfPqi+r7bSAfMQrWYw=;
-        b=Pbk7VrKL9bMcuXxS7XixuRfLBiFjhqvrER+YKwx3OIiqXlHokWfZoE2kztiEIuqK3G
-         LPyPZm56Al5cWpQ1yRrLFWMaq0q0mklpBcJUjOArfLM6/oTs4p2eGoDtIjIPDM2MF4aZ
-         1/TtCrBPqI7fvyk3OeJLukHWJUopMB2+w7D8hJfK9Vp1aCZxtLia28m8N2JAqD75vpoY
-         CYPxfUuYUNq/FLIjD7xOGfKleVLWYBUI8s8LWriF7th6Aqejj4zj5rGXxXoKUt6pHq83
-         W+uHU1u81HkK7YT6cXnYGovxB2Xk8W1EHwxKhoPtgoN2LU5F/ZRosdMwZJUfu3BPqpGU
-         z1jA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779134707; x=1779739507;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=glQxNdgLK/pIJ2vL4my5atUrPxfPqi+r7bSAfMQrWYw=;
-        b=NL4AcBCH76kBmnyBJNkU1DMrstHBGyi3zfbKPYSZ9qnmD5Rzpxo4es/vwfngpUQ2jC
-         lAJPXTW9toYTihkLTO/YxqnkRdaYUFxQiL4P3hasyyZD0FFmY4pGvFwYBlARlYhDT5Ya
-         AH1yCnqhU8vrfeq5dFwtILm1aDPBKKEpfveyNl1M+HAUyUdWQfJUVSoV7bxcGJnEUl02
-         sZOsBm4sriDfyr2LKabqwNqRyMXnPNgt1FCDaswwQTgoY6B159shgkbX7cXriY0vVLxk
-         xCOQvHILQj7fCFXy7dbpYSvKs7A+X1Pv3Fgl/KtKiautvjxhuKLzeyvf8WLhrqQYVUDA
-         X3Zg==
-X-Forwarded-Encrypted: i=1; AFNElJ9/JBjmIXf+U5Le5n21qo4ZvQMpOgi6hBtAGfPqJbjLpqqb5acPRXPtQLHu9qmrvIGGnCRGD1EmvLqjD/Qrbg0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwwZhSAK27tYrWPxSVxW0v3ychHZWjpcWMXThV0uGdHXomclIhW
-	vnCLr+M8nG8FiPG7E0Pk8ZF8hz340aDpLfyB0q+cNqgRDhq2lFAxB6rw/e7p3v5f/5yfhtSF+4d
-	UuIH6XKkq5H7NP/uqrOh7x60E2WnuA57ui6mPVDdO
-X-Gm-Gg: Acq92OHeq0Yb7wASgukzr+fFilOhHdkJ0+KsIguW7WDbMGgAc/K7kFiWlgxjw4cBR68
-	hi+M2w6aWamGYwyF12GurzPTzvclBy7um4WfWd5No58xCwT1ghr4vAGoToQUuJrcdJIhAY70dNc
-	vy9XCIeITbhG/8MAOqp3TfeesNvcPD+7wvKgAuuiog/OWKTOS34Gz+cRMeHU4vf+ZEdAG37R57q
-	KdcpKsLHPIqUwM+p+VjZfm6fWfG7423Z3OvQB6jL9NcbwyfkkJpcij1TtPeLcGKXx2Gd2A6cMXo
-	f3L5MGHtQhL9xfaW6D7LC+OEdRxEsS7o1RXJFW5zQSLOU3e06bz4x0byPH/XZAcHaYyIVoQhOCy
-	Cmpls
-X-Received: by 2002:a05:6102:10d2:b0:65a:fcea:5a8 with SMTP id
- ada2fe7eead31-65afcea103emr1750266137.3.1779134706025; Mon, 18 May 2026
- 13:05:06 -0700 (PDT)
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 18 May 2026 13:05:04 -0700
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 18 May 2026 13:05:04 -0700
-From: Ackerley Tng <ackerleytng@google.com>
-In-Reply-To: <20260518070943.2091287-3-ZongYao.Chen@linux.alibaba.com>
-References: <20260518070943.2091287-1-ZongYao.Chen@linux.alibaba.com> <20260518070943.2091287-3-ZongYao.Chen@linux.alibaba.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FlMoAUxs"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0320CC2BCB7;
+	Mon, 18 May 2026 20:08:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1779134905;
+	bh=LBjgJsXIGbZM5w2GUzxKJldAI723FEpT19Mr+HRKvuo=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=FlMoAUxsm9astcIK0DyduY0a9NwBtvAIJe4VYHzcEhD59YJ30o1NUk/rzUgNBLKo0
+	 APCRD4Fp7PSFol58ZHnBNqe4RAWdzxBmA0qzWgXWqYZGF5JIKwVvcYFM9SVuJVWQNO
+	 afmm1BczCj8jcjOFQF6beYANagEg5vfjydDG3DHXsAYgvjwavglJ0flP4dOR8FvQmU
+	 z/XRpvW8PoocZYqx5jpBaTEJg21tyQGRbQREM7Q0GszY4OjjFREBSf3xePoA25pGdw
+	 0BTkqRUkfQMZKx1DODC9cnoWih9NACDkG1cBioAq430nSECAU19zH5C+MITULoURc8
+	 k2hePFzGmfxUQ==
+Date: Mon, 18 May 2026 13:08:24 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Neil Spring <ntspring@meta.com>
+Cc: netdev@vger.kernel.org, edumazet@google.com, ncardwell@google.com,
+ kuniyu@google.com, davem@davemloft.net, dsahern@kernel.org,
+ pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v6 0/2] tcp: rehash onto different local ECMP
+ path on retransmit timeout
+Message-ID: <20260518130824.2fe952ea@kernel.org>
+In-Reply-To: <20260517174522.2232057-1-ntspring@meta.com>
+References: <20260517174522.2232057-1-ntspring@meta.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Mon, 18 May 2026 13:05:04 -0700
-X-Gm-Features: AVHnY4J_F_OblcICyWTeoEnuPCNoexxjBKD7qo6aV_V4XEGTmZ1hiCbzwRoXxrk
-Message-ID: <CAEvNRgFgobnW+O=t32gu-0YDy0n7ZqvmdCtg+DzLT3uf0+BDeg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] KVM: selftests: Test guest_memfd binding overlap
- without GPA overlap
-To: ZongYao.Chen@linux.alibaba.com, Paolo Bonzini <pbonzini@redhat.com>, 
-	kvm@vger.kernel.org
-Cc: Shuah Khan <shuah@kernel.org>, Sean Christopherson <seanjc@google.com>, 
-	"Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>, Chao Peng <chao.p.peng@linux.intel.com>, 
-	Xiaoyao Li <xiaoyao.li@intel.com>, Tianjia Zhang <tianjia.zhang@linux.alibaba.com>, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-ZongYao.Chen@linux.alibaba.com writes:
+On Sun, 17 May 2026 10:45:20 -0700 Neil Spring wrote:
+> Currently sk_rethink_txhash() re-rolls the socket's txhash on RTO,
+> PLB, and spurious-retransmission events, but the new hash is not
+> propagated into the IPv6 ECMP path selection logic.  The cached
+> route is reused and fib6_select_path() is never re-invoked, so
+> the connection stays on the same ECMP path.
+> 
+> This series adds the two missing pieces:
+> 
+> 1. __sk_dst_reset() alongside sk_rethink_txhash() so the cached dst
+>    is invalidated and the next transmit triggers a fresh route lookup.
+> 
+> 2. fl6->mp_hash set from sk_txhash before each route lookup so
+>    fib6_select_path() picks a path based on the (potentially re-rolled)
+>    hash.  This is conditioned on fib_multipath_hash_policy == 0 (L3)
+>    because policies 1-3 compute a deterministic hash from the flow
+>    keys which must not be overridden.
+> 
+> Patch 1 is the kernel change; patch 2 adds selftests covering SYN
+> rehash, SYN/ACK rehash, midstream RTO rehash, midstream ACK rehash
+> (spurious retransmission), PLB rehash, a policy 1 negative test,
+> a flowlabel leak regression test, and two dst rebuild consistency
+> tests (normal and syncookie) verifying that natural route
+> invalidation does not cause unintended path changes.
 
-> From: Zongyao Chen <ZongYao.Chen@linux.alibaba.com>
->
-> The guest_memfd binding overlap test recreates the deleted slot with GPA
-> ranges that overlap the still-live slot.  KVM rejects those attempts from
-> the generic memslot overlap check before reaching kvm_gmem_bind(), so the
-> test can pass even if guest_memfd binding overlap detection is broken.
->
-> Recreate the slot at its original, non-overlapping GPA and use guest_memfd
-> offsets that overlap the front and back halves of the other slot's binding.
-> Expand the guest_memfd so the back-half case remains within the file size.
->
-> Fixes: 2feabb855df8 ("KVM: selftests: Expand set_memory_region_test to validate guest_memfd()")
+Still flakes:
 
-Thanks for fixing this!
+https://netdev-ctrl.bots.linux.dev/logs/vmksft/net/results/652122/44-ecmp-rehash-sh/stdout
 
-> Signed-off-by: Zongyao Chen <ZongYao.Chen@linux.alibaba.com>
-> ---
->  .../testing/selftests/kvm/set_memory_region_test.c | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
->
-> diff --git a/tools/testing/selftests/kvm/set_memory_region_test.c b/tools/testing/selftests/kvm/set_memory_region_test.c
-> index 9b919a231c93..15607e0bec90 100644
-> --- a/tools/testing/selftests/kvm/set_memory_region_test.c
-> +++ b/tools/testing/selftests/kvm/set_memory_region_test.c
-> @@ -510,7 +510,7 @@ static void test_add_overlapping_private_memory_regions(void)
-
-Shall we rename this to test_bind_overlapping_guest_memfd_offsets to
-make it clearer?
-
-Perhaps also update the pr_info() to "Testing binding to overlapping
-guest_memfd offsets\n".
-
->
->  	vm = vm_create_barebones_type(KVM_X86_SW_PROTECTED_VM);
->
-> -	memfd = vm_create_guest_memfd(vm, MEM_REGION_SIZE * 4, 0);
-> +	memfd = vm_create_guest_memfd(vm, MEM_REGION_SIZE * 6, 0);
-
-I think this technically only needs to be MEM_REGION_SIZE * 5 for this
-test to work.
-
->
->  	vm_set_user_memory_region2(vm, MEM_REGION_SLOT, KVM_MEM_GUEST_MEMFD,
->  				   MEM_REGION_GPA, MEM_REGION_SIZE * 2, 0, memfd, 0);
-> @@ -526,19 +526,19 @@ static void test_add_overlapping_private_memory_regions(void)
->  	vm_set_user_memory_region2(vm, MEM_REGION_SLOT, KVM_MEM_GUEST_MEMFD,
->  				   MEM_REGION_GPA, 0, NULL, -1, 0);
-
-When I re-read this I was wondering why we created and removed the first
-memslot. Was it meant as a confidence check that set_memory_region works
-with the given MEM_REGION_GPA? Perhaps we could add a comment/pr_info()
-to check that.
-
->
-> -	/* Overlap the front half of the other slot. */
-> +	/* Overlap the front half of the other slot's guest_memfd binding. */
->  	r = __vm_set_user_memory_region2(vm, MEM_REGION_SLOT, KVM_MEM_GUEST_MEMFD,
-> -					 MEM_REGION_GPA * 2 - MEM_REGION_SIZE,
-> +					 MEM_REGION_GPA,
->  					 MEM_REGION_SIZE * 2,
-> -					 0, memfd, 0);
-> +					 0, memfd, MEM_REGION_SIZE);
->  	TEST_ASSERT(r == -1 && errno == EEXIST, "%s",
->  		    "Overlapping guest_memfd() bindings should fail with EEXIST");
->
-> -	/* And now the back half of the other slot. */
-> +	/* And now the back half of the other slot's guest_memfd binding. */
->  	r = __vm_set_user_memory_region2(vm, MEM_REGION_SLOT, KVM_MEM_GUEST_MEMFD,
-> -					 MEM_REGION_GPA * 2 + MEM_REGION_SIZE,
-> +					 MEM_REGION_GPA,
->  					 MEM_REGION_SIZE * 2,
-> -					 0, memfd, 0);
-> +					 0, memfd, MEM_REGION_SIZE * 3);
->  	TEST_ASSERT(r == -1 && errno == EEXIST, "%s",
->  		    "Overlapping guest_memfd() bindings should fail with EEXIST");
->
-
-Since this test program is meant to test set_memory_region, should we be
-retaining the original test? The original test is wrong in that it
-doesn't test guest_memfd's binding, but it does test that
-set_memory_region returns -EEXIST on overlapping GPAs.
-
-Perhaps to just test overlapping GPAs we can use anonymous memory
-instead of guest_memfd.
-
-Reviewed-by: Ackerley Tng <ackerleytng@google.com>
-Tested-by: Ackerley Tng <ackerleytng@google.com>
-
-> --
-> 2.47.3
+https://netdev-ctrl.bots.linux.dev/logs/vmksft/net-dbg/results/652122/34-ecmp-rehash-sh/stdout
+-- 
+pw-bot: cr
