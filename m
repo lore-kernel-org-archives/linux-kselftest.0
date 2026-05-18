@@ -1,63 +1,63 @@
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31C0738F623
-	for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 19:12:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34F56390222
+	for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 19:12:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779131550; cv=none; b=PUEfoO0lzNRclDxBWwbKjfqYIv36KaFm8BtNz/b+5B9VQfhYjI2COQuo5c6d2Ba5boKncns7ZP/9UFVUPBmSdP9sgBDtnZxNvALyyWALAOZdrfI8LQGDkI4GYuq9vY9UTHUg0oybjiv2UIDtgda8kCFoddpLF9B8LoULXKWQeoc=
+	t=1779131556; cv=none; b=DvW+Z/mBSq4qlTz82ESVlSUDDT9hVB2g38uaYP87lYflPEFC4jRztl2xfeoKoYgZPmFqHyjSE/1wBtXejfu5qunva34l42zxORpI/UxqiMEBZGGkgJ92HPASNiBWbjSFuK1WcfZBPIq820v7NJsYGm7JQdnKYOCevdWoipy11wI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779131550; c=relaxed/simple;
-	bh=rrpVVM/TXd2iBehI82iGkh/E/IqrUjKfYzsy7IZjmKk=;
+	s=arc-20240116; t=1779131556; c=relaxed/simple;
+	bh=RljyayX1PyhhLkcz/gwwb9ZSAUXbtpbGzWUaxpfKHrw=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=iMd9F3qCGzFfYnmJkuzhrg6/l5nQy1bNS8pJYxCLHE5ok5lZK7vE21egMmzQXNFNq07hkOQI6bnf2xMCcW7mV2PfgSZhJZeB1aUziD10Tc/JuD4kcktuJwM42r+s9c4S3tMvX4pF0ZBa5vma2t0/oTYaQh3lTW9DVKFj95/jlJA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PfH2OEOv; arc=none smtp.client-ip=209.85.221.49
+	 MIME-Version; b=n3khvWe/5xHMYWCiN9VA8TgrWp5q0N+XouUjwaE559VV+eyjTqfFSOFJNhMeFYlW51wNGIflEELgjM2p8Bpn8w4yGH/C0UbZ2C00T/y6GqrE03WNdYBTbhk626fWGHZsPUBaZ34kgBCRkOyKwicxXCZh+C3mWxLjmjhRjWXphnI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LdpCApab; arc=none smtp.client-ip=209.85.221.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PfH2OEOv"
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-45e6a4d0be0so1047681f8f.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 12:12:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LdpCApab"
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-43d7645adbdso1751992f8f.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 12:12:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779131547; x=1779736347; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1779131550; x=1779736350; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yBC6NBfwX3+M9N5z8/EgZVcnEG4Grml2tle9vPR+gqU=;
-        b=PfH2OEOvzDx5nGgrmRx9lVOttYsEwUscougv4FJzo213WBqMC08hhop1Oa3k2GIbJg
-         xJll2aMkGIA5MV/L5JVEptnUQgnUPEbdBYPSvwW1hsOTUwl/ML6xwf18yQXBPqHrlJP6
-         QOhug6emN1hN7mHl/HAVOoLA8frV/G5d4V+1V0CNdcV/D6/n/Ui+V/hBHv+86DyEAk58
-         nij2DyvtIFcunPmjAh0wZuCOMYdHrH2Y4/4Tas7gMGH9HOqwkPBZoSCMgiefNcC6i6Xy
-         b2VdUWSwiFl/kzmt00RU7AyDVVtDvSTGI6WujgYE0VJnHT6wGRuKyPmXgkcdF/qVoulO
-         8+Ig==
+        bh=G8rvqbbv4pCegDpTmp8AOnsZ/Yo8hHTCvqhnXp9eK9A=;
+        b=LdpCApabLeLn3LB2LR54zKUbb1X5xcpMSnDjlbR6jc5nJjTN+km+N9OQq8Ox6aE08Y
+         9FG9BeNHOU6ujGKYH2los/54NUTum6rVhtOTK9Yo0A96xfZYUorAeOA6UJo9iVtGPPGp
+         MFQbK6vxqpsBKL3Nscui25Cxi34KBfmMvhDHJ7K9WgjZmp/5SYwsKowobEBG6/amxHYR
+         qNw1Awn4/XYYiILB0Efe29W/QEsOmt7zAQVF5ZnhlObIBKkhi3cibjuAbsJm8n4HWH4s
+         e2eWw2xkfGxGXTjhTDCfpaivE1w3bH9OGDvRFKlfoOXlQUg2h+k2VR1UZEirWl+E23T4
+         q1yQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779131547; x=1779736347;
+        d=1e100.net; s=20251104; t=1779131550; x=1779736350;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=yBC6NBfwX3+M9N5z8/EgZVcnEG4Grml2tle9vPR+gqU=;
-        b=pFWvAa7aiMzVp1MEv+kaFZRx8ZC9P4CSzr2TPFxZaGklOCYNpB4NFt2JvXhy2MMOFr
-         nUYVr/pPPccmorkFQuymH5A338LPqlWwiJABfxneZBZZt8FZ1kl7zc6bGCKxY2WUsI4a
-         WjuMWSihMhC4bKB8Fn3ThRmNNESG7ouPInki+UkrDicfUOdurJSp5xDuRg0RbNG9HabO
-         zpUnfJU+0BHS3UoEVTF30ZcndJxCymZwp/Q4clFtPOgm5CEIMvdrvAqyaGcdZldnlwZh
-         BvXbnUe40ObRajaLAZKmX45uLPgcg9iSOt+/Co4iJKKCzcl4o/T4SY1HXWgpcDJV411U
-         NSVQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+mN1YrWn5sJK3r35bxHykEkelNIs9hUlFmRZrYx3PhOLTuPG0GGML+tzT4ZWtNNJVqBf+cJaE1GEO2XgwMVY0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywj7h0h0iq3oCSluVad02d1t4SXGkPYArc9rkngaLMNMmRn3wLd
-	6LgTQtvKrz6UZTQOITNUXsCYVs1YAQy3Od65UtaqolsLlAs4nIL82yf1
-X-Gm-Gg: Acq92OH3zeVrkZgcAI6AgZO4JcHrP+JIzxR2B+vY1LyUL+9y3ZjRbful8BnGJFvFDon
-	GsivyRfSv9FLS+/d3w0doImtS7qfpYrvlEEce1gyqJu0cdoVzPlCpMcJ3mmJPuL8Db5QSfcX6ha
-	bXkdHAv1/5EqP5Gl937T0kkk7IEKenOQDbsj3lH1o1mVLoNP3owELWa/HcM7rB3rG3if5FmXUOF
-	Gr4mA12CXqLqqQ9TsopMbQniMFYpQGUajburmpmIZ+nukiv1M+DfODjOjgzfBSKbhS98+G4hOPW
-	VhCAD6a0NyISMTyVEXA3kz04aVxp1m27CzYciS/9VXYQ8Xxp4+svGmGv09EYa3ltkXVXIRmwB2J
-	g4C4L5q4XIFCNWjLYrTJc767H84m36eM+af/vJ9xtIi75Eub2b1DOC/qQx4ZJTEgWBmlHI0q3t5
-	yftrFhBJG8/LOIle/fubwHD+HnLbArTlrTepL5zTNUMP2lZEOiBZQ=
-X-Received: by 2002:a5d:5885:0:b0:43c:f7e5:817b with SMTP id ffacd0b85a97d-45e5c5cc2b5mr26469781f8f.19.1779131546344;
-        Mon, 18 May 2026 12:12:26 -0700 (PDT)
+        bh=G8rvqbbv4pCegDpTmp8AOnsZ/Yo8hHTCvqhnXp9eK9A=;
+        b=ekNg47OMqRgNWswDTaGJDvAnB1VDAqmU4oibpzrnllDJoJujn+dd2RRPKN4AHBdQaG
+         WdWfPtd4o/mcr5rT2X4ObulcvSfEchyKWdGtnKFwwGVOECUdmeMfP/C2S3lLmjSh3Wgw
+         uuP2zhfALFcTmTUiVuEisZdFOz3txOEMLbfsxVcxDwiG2cQxUDh6dYv5IxrE2DEEVHgL
+         7feXW+aDe05sv6rC+sdZ8YKzRHz55wCYWqnd41wNlr/FR2HMsDZh1UoZ0HkQgdYVyknn
+         f9i65aKagjsbehZ76ToLWMphsrpWncJG84TzAeogX6/aEloqpXrepvkR+FUQgvEfOoaz
+         RC6Q==
+X-Forwarded-Encrypted: i=1; AFNElJ/kDgNe+h2oUTS3KsRACE5c4c8fZU5Wtf2QIwZxETMzdwX2GyrqmODZldz1AqXBCTeoTpD2R6vaMm8DuK2dnhY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yybv+bq5qC1A3hI4UGYC7uWVCXIO/lAH4dIEmwkbqGZXY8+9pEQ
+	dBztrPGK/0JVPeQDHogWwQeBMVS+PIyZtSrmVJod3jVS5cG6oUbSd0ZY
+X-Gm-Gg: Acq92OG43Ho+bkvzHDbZQwhDfI32LOtO7l814YqLLSr5TKGUC3BXDJ3lPRtXogtVdJl
+	7wMinlpub68z/eYfb35TOahx584HwMTcaVeNf0QH7WWD/WbaTFskWNPlp1TUdL+ZhygBJGBPE06
+	LmSd+Xw7/9JOCqK501uKJE0BK9+w+dC6jLjDn4Drc4NRkmVlcJJLFqeFwi3Z/dZWYUbQWcXBYNj
+	poD5C+eDpuaZdB1+udd+gDAtpJ5VEqd2WSbUbLPfwlQYzPNtkXnsfAK/oWKNfAN7GYEiMQBIolp
+	3xy0YsmS7wPszm2GheWb8n8a4JMMO32vSlegqXVlEPIimO8q+NVfTUGsXLZMj2MIrpzRZvUisYD
+	VuRtJ9m9Qgktxm4Q4p+FczyQil3lKiGkgPOPmSsbuA7y5aCfs8hUgwzibShAt+8HRRFUGUvnY6U
+	AmGXs00ki3YyxMmPqilKIWA/U5/ZgNb/aZhL4DTsswwcd4Ua9+YAqHqfqjBr9glw==
+X-Received: by 2002:a05:6000:1247:b0:45e:6518:3299 with SMTP id ffacd0b85a97d-45e651832f5mr15730841f8f.5.1779131549508;
+        Mon, 18 May 2026 12:12:29 -0700 (PDT)
 Received: from mshcherba-RedmiBook-16.. ([188.163.115.207])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45da15a6454sm40043167f8f.34.2026.05.18.12.12.25
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45da15a6454sm40043167f8f.34.2026.05.18.12.12.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 May 2026 12:12:26 -0700 (PDT)
+        Mon, 18 May 2026 12:12:29 -0700 (PDT)
 From: Maksym Shcherba <mshcherba2000@gmail.com>
 X-Google-Original-From: Maksym Shcherba <maksym.shcherba@lnu.edu.ua>
 To: sj@kernel.org,
@@ -77,9 +77,9 @@ Cc: david@kernel.org,
 	linux-doc@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Maksym Shcherba <maksym.shcherba@lnu.edu.ua>
-Subject: [PATCH 5/6] selftests/damon/_damon_sysfs: support update_schemes_quota_goals
-Date: Mon, 18 May 2026 22:09:31 +0300
-Message-Id: <20260518190932.42270-5-maksym.shcherba@lnu.edu.ua>
+Subject: [PATCH 6/6] selftests/damon: add a test for update_schemes_quota_goals
+Date: Mon, 18 May 2026 22:09:32 +0300
+Message-Id: <20260518190932.42270-6-maksym.shcherba@lnu.edu.ua>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260518190932.42270-1-maksym.shcherba@lnu.edu.ua>
 References: <20260518190932.42270-1-maksym.shcherba@lnu.edu.ua>
@@ -91,42 +91,125 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add update_schemes_quota_goals() method to the Kdamond class in
-_damon_sysfs.py, which writes 'update_schemes_quota_goals' to the state
-file and reads back the current_value of each quota goal.
+The new update_schemes_quota_goals sysfs command allows users to manually
+update the current_value of quota goals.
+
+Add a selftest for the command. The test writes a dummy value to
+current_value, executes the update command, and verifies that the dummy
+value is successfully overwritten by the kernel.
 
 Assisted-by: Antigravity:Gemini-3.1-Pro
 Signed-off-by: Maksym Shcherba <maksym.shcherba@lnu.edu.ua>
 ---
- tools/testing/selftests/damon/_damon_sysfs.py | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ tools/testing/selftests/damon/Makefile        |  1 +
+ .../damon/sysfs_update_schemes_quota_goals.py | 86 +++++++++++++++++++
+ 2 files changed, 87 insertions(+)
+ create mode 100755 tools/testing/selftests/damon/sysfs_update_schemes_quota_goals.py
 
-diff --git a/tools/testing/selftests/damon/_damon_sysfs.py b/tools/testing/selftests/damon/_damon_sysfs.py
-index 8b12cc048440..27cd94683f6d 100644
---- a/tools/testing/selftests/damon/_damon_sysfs.py
-+++ b/tools/testing/selftests/damon/_damon_sysfs.py
-@@ -806,6 +806,21 @@ class Kdamond:
-                     goal.effective_bytes = int(content)
-         return None
+diff --git a/tools/testing/selftests/damon/Makefile b/tools/testing/selftests/damon/Makefile
+index 2180c328a825..a692ebaa6c8a 100644
+--- a/tools/testing/selftests/damon/Makefile
++++ b/tools/testing/selftests/damon/Makefile
+@@ -13,6 +13,7 @@ TEST_PROGS += sysfs.py
+ TEST_PROGS += sysfs_update_schemes_tried_regions_wss_estimation.py
+ TEST_PROGS += damos_quota.py damos_quota_goal.py damos_apply_interval.py
+ TEST_PROGS += damos_tried_regions.py damon_nr_regions.py
++TEST_PROGS += sysfs_update_schemes_quota_goals.py
+ TEST_PROGS += reclaim.sh lru_sort.sh
  
-+    def update_schemes_quota_goals(self):
-+        err = write_file(os.path.join(self.sysfs_dir(), 'state'),
-+                         'update_schemes_quota_goals')
-+        if err is not None:
-+            return err
-+        for context in self.contexts:
-+            for scheme in context.schemes:
-+                for goal in scheme.quota.goals:
-+                    content, err = read_file(
-+                            os.path.join(goal.sysfs_dir(), 'current_value'))
-+                    if err is not None:
-+                        return err
-+                    goal.current_value = int(content)
-+        return None
+ # regression tests (reproducers of previously found bugs)
+diff --git a/tools/testing/selftests/damon/sysfs_update_schemes_quota_goals.py b/tools/testing/selftests/damon/sysfs_update_schemes_quota_goals.py
+new file mode 100755
+index 000000000000..745b97f75bc2
+--- /dev/null
++++ b/tools/testing/selftests/damon/sysfs_update_schemes_quota_goals.py
+@@ -0,0 +1,86 @@
++#!/usr/bin/env python3
++# SPDX-License-Identifier: GPL-2.0
 +
-     def commit(self):
-         nr_contexts_file = os.path.join(self.sysfs_dir(),
-                 'contexts', 'nr_contexts')
++"""
++Test the update_schemes_quota_goals sysfs command.
++
++Start DAMON with a scheme that has a some_mem_psi_us quota goal.  Write a
++physically impossible dummy value to the goal's current_value sysfs file.
++Wait for a while, ensure the dummy value is not overwritten asynchronously,
++then write 'update_schemes_quota_goals' to the state file and verify that
++the dummy value is overwritten by the kernel.
++"""
++
++import os
++import time
++
++import _damon_sysfs
++
++
++def main():
++    goal = _damon_sysfs.DamosQuotaGoal(
++            metric=_damon_sysfs.qgoal_metric_some_mem_psi_us,
++            target_value=1000)
++    kdamonds = _damon_sysfs.Kdamonds([_damon_sysfs.Kdamond(
++            contexts=[_damon_sysfs.DamonCtx(
++                ops='paddr',
++                schemes=[_damon_sysfs.Damos(
++                    action='stat',
++                    quota=_damon_sysfs.DamosQuota(
++                        goals=[goal], reset_interval_ms=100),
++                    )]  # schemes
++                )]  # contexts
++            )])  # kdamonds
++
++    err = kdamonds.start()
++    if err is not None:
++        print('kdamond start failed: %s' % err)
++        exit(1)
++
++    # Write a dummy value to current_value to ensure the command actually
++    # overwrites it. We use 2x the quota reset interval in microseconds,
++    # which is a physically impossible value for the kernel to measure.
++    impossible_value = goal.quota.reset_interval_ms * 2000
++    err = _damon_sysfs.write_file(
++            os.path.join(goal.sysfs_dir(), 'current_value'),
++            '%d' % impossible_value)
++    if err is not None:
++        kdamonds.stop()
++        print('Writing dummy current_value failed: %s' % err)
++        exit(1)
++
++    # wait a couple of aggregation intervals so that the kernel has a chance
++    # to compute the first current_value measurement
++    time.sleep(0.5)
++
++    content, err = _damon_sysfs.read_file(
++            os.path.join(goal.sysfs_dir(), 'current_value'))
++    if err is not None:
++        kdamonds.stop()
++        print('Reading current_value before update failed: %s' % err)
++        exit(1)
++    if int(content) != impossible_value:
++        kdamonds.stop()
++        print('current_value changed before update (%s)' % content)
++        exit(1)
++
++    err = kdamonds.kdamonds[0].update_schemes_quota_goals()
++    if err is not None:
++        kdamonds.stop()
++        print('update_schemes_quota_goals failed: %s' % err)
++        exit(1)
++
++    # current_value must be updated and different from our dummy value
++    if goal.current_value is None or goal.current_value == impossible_value:
++        kdamonds.stop()
++        print('update_schemes_quota_goals failed to update current_value')
++        exit(1)
++
++    print('current_value after update_schemes_quota_goals: %d' %
++          goal.current_value)
++
++    kdamonds.stop()
++
++
++if __name__ == '__main__':
++    main()
 -- 
 2.43.0
 
