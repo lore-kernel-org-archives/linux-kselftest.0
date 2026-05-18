@@ -1,154 +1,131 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67BA537D104;
-	Mon, 18 May 2026 08:21:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D318426B973;
+	Mon, 18 May 2026 08:48:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779092475; cv=none; b=Mssut57Pe0pr4bixwm/xkJkTdAHgtZFJ6mf9PnAWVkjGRNnKD2xV5wipLAn2GDivs1zRihvmKBPLi0hWNVOkcrs/POg266uocq+siMZ5rMlJzsPhGHhM6NwDq8CwCR3FFOROwlOvJzqI5mk03/lWG1NUZ9KTWqo+P5lEz01ijkk=
+	t=1779094117; cv=none; b=hSkL7Jd0BPzJB+PEn5Ty/cNUJqADHmJady9JIzOTSJbUcj+1i3RgkIxmOd4zupmHHAht9JbxF0CN4wAeuLLbNIY67DFqqwdeqzVD/adZKzgqX237RnbVO7pn42lhs3zH7MbUJK1FGkr+f0xrACPk2+B1lP2tg6twdpzTyGDBPzs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779092475; c=relaxed/simple;
-	bh=fa1niQ8KA4AEe+k5cwpjO5vJ7osWOjSGGExyw7jfec8=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=dGqiS7oB/Msdxk+/u+ALTmHFxR8na/mCZVI7bBoJimYSD/w2MWdFc04bw0SC7TVmpxCDyJ2OVdMBlTYkRGWpMKNiwhW6ae1tvm9XAJ+veVwulK0vu1H5dH11XtXvFB1m8hsi844Ir8HwlNVoG8I5T8XI5CSACgakMgLQbzoEra4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 84798ff4529211f1aa26b74ffac11d73-20260518
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
-	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
-	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
-	HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME
-	IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_TRUSTED, SA_EXISTED
-	SN_TRUSTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS
-	CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO, GTI_C_BU
-	AMN_GOOD, ABX_MISS_RDNS
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:c43c0ae4-c94b-46a4-88a5-2b37133bb355,IP:10,
-	URL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTI
-	ON:release,TS:-15
-X-CID-INFO: VERSION:1.3.12,REQID:c43c0ae4-c94b-46a4-88a5-2b37133bb355,IP:10,UR
-	L:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:-15
-X-CID-META: VersionHash:e7bac3a,CLOUDID:4e25d0cca9c87494f8cb9aa16d37c8e7,BulkI
-	D:2605181621085YHCR8YL,BulkQuantity:0,Recheck:0,SF:17|19|38|66|78|102|127|
-	850|865|898,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk
-	:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,
-	BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 84798ff4529211f1aa26b74ffac11d73-20260518
-X-User: lihongfu@kylinos.cn
-Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
-	(envelope-from <lihongfu@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 1102519821; Mon, 18 May 2026 16:21:06 +0800
-From: Hongfu Li <lihongfu@kylinos.cn>
-To: akpm@linux-foundation.org,
-	david@kernel.org,
-	ljs@kernel.org,
-	liam@infradead.org,
-	vbabka@kernel.org,
-	rppt@kernel.org,
-	surenb@google.com,
-	mhocko@suse.com,
-	shuah@kernel.org
-Cc: linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Hongfu Li <lihongfu@kylinos.cn>
-Subject: [PATCH] selftests/mm: add missing mmap() return checks in pkey tests
-Date: Mon, 18 May 2026 16:21:20 +0800
-Message-Id: <20260518082120.3890552-1-lihongfu@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1779094117; c=relaxed/simple;
+	bh=9t5KxgZSvMy4+PrO7AcN8zNi278O5hkk/AIOuTQgGLc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LJgFRxZDAkevPoPLKBRFgohT3VXWAOswBA60Mit0ebSOe/gajVtEoE7nIwaWUMUjBaS5AUihi+EKHJMHV+XRCvcoBzn0nlew31st3kHJ1B/yFjoARbgpfQVSjhy/gd8Xx+PPMH7dtqPBXo11XQNKrHtpbZ9yn5pwl7ghWzs/91I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=QixhRBsf; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=rCb8Hd6j; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="QixhRBsf";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="rCb8Hd6j"
+Date: Mon, 18 May 2026 10:48:27 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1779094113;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8NmoyZjWMcQlJ+wu8nb9k9PXQ/vBAKzFMTW/kF6RHyw=;
+	b=QixhRBsfT4Zq9oBQC1PdPmHgj5oPrfyE0MAuOUnGr5C7Q/D/a4WLXRuZGfVo7yRPxZbu5P
+	Lt0X2/x52cBqxISi6FmcGAe4FwIcImR7vjhdiIApPYOItJYfZ3l35llnJoxFJhENpBAte6
+	Xz/GhEyfUZkex/WfpQJCGg3B4PsQ0BTiOXfCye2/ojX5mZo4nYUevJIw+VoTaLN2B0/gaG
+	MBTbIGimRsFOJDLBst9n3zGH1aIdl8+SfS7gqd7yN9zEfxILPDPTFPWw5oetTEqqPgL1mL
+	713K9cGfkycxklwrKpPwhHFsd+KdmNEyT1tdmWZfaMWq/ZUdTU4EWL+A/sOKig==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1779094113;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8NmoyZjWMcQlJ+wu8nb9k9PXQ/vBAKzFMTW/kF6RHyw=;
+	b=rCb8Hd6jfN5h+IrZLnNTt6Q80Vty9DBmxOpBnIG+y15r3587Y2WVmdFD4r/9BZPhAdDA5z
+	kmUvLUuASGkzLZCg==
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+To: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+Cc: =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, 
+	kernel test robot <oliver.sang@intel.com>, linux-security-module@vger.kernel.org, oe-lkp@lists.linux.dev, 
+	lkp@intel.com, linux-kernel@vger.kernel.org, 
+	Shuah Khan <skhan@linuxfoundation.org>, Kees Cook <kees@kernel.org>, linux-kselftest@vger.kernel.org
+Subject: Re: [linus:master] [selftests]  465b05bae5:
+ kernel-selftests.landlock.audit_test.audit.tsync_override_log_subdomains_off.fail
+Message-ID: <20260518100602-5b161e99-83fa-4170-bb7b-1642df6b5a3d@linutronix.de>
+References: <202605111649.a8b30a62-lkp@intel.com>
+ <20260512112054-0a5c7cad-c8c6-4745-a765-0780a3bd2dab@linutronix.de>
+ <20260513.eeboh9zooQuu@digikod.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260513.eeboh9zooQuu@digikod.net>
 
-Several mmap() calls lack error checks and would crash on failure.
-Add the missing checks. Also replace bare (void *)-1 with the
-standard MAP_FAILED macro in protection_keys.c for consistency.
+On Wed, May 13, 2026 at 12:52:35PM +0200, Mickaël Salaün wrote:
+(...)
 
-Signed-off-by: Hongfu Li <lihongfu@kylinos.cn>
----
- tools/testing/selftests/mm/pkey_sighandler_tests.c | 2 ++
- tools/testing/selftests/mm/protection_keys.c       | 9 +++++----
- 2 files changed, 7 insertions(+), 4 deletions(-)
+> > > config: x86_64-rhel-9.4-kselftests
+> > > compiler: gcc-14
+> > > test machine: 16 threads Intel(R) Core(TM) i7-13620H (Raptor Lake) with 32G memory
+> > > 
+> > > (please refer to attached dmesg/kmsg for entire log/backtrace)
+> > > 
+> > > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> > > the same patch/commit), kindly add following tags
+> > > | Reported-by: kernel test robot <oliver.sang@intel.com>
+> > > | Closes: https://lore.kernel.org/oe-lkp/202605111649.a8b30a62-lkp@intel.com
+> > 
+> > I was unable to run the landlock selftests myself, on my machines they are
+> > failing at runtime with all kinds of colorful errors. Are the requirements
+> > explained somewhere?
+> 
+> I'm curious about the errors you get.  They are standard kselftests that
+> should work following this workflow:
+> 
+>   make TARGETS=landlock O=build kselftest-gen_tar
+> 
+> and then running ./build/kselftests/kselftest_install/run_kselftest.sh
+> as root in a VM.  The required kernel configuration is listed in
+> tools/testing/selftests/landlock/config
 
-diff --git a/tools/testing/selftests/mm/pkey_sighandler_tests.c b/tools/testing/selftests/mm/pkey_sighandler_tests.c
-index 302fef54049c..4637809192f9 100644
---- a/tools/testing/selftests/mm/pkey_sighandler_tests.c
-+++ b/tools/testing/selftests/mm/pkey_sighandler_tests.c
-@@ -317,6 +317,7 @@ static void test_sigsegv_handler_with_different_pkey_for_stack(void)
- 	/* Set up alternate signal stack that will use the default MPK */
- 	sigstack.ss_sp = mmap(0, STACK_SIZE, PROT_READ | PROT_WRITE,
- 			      MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+	assert(sigstack.ss_sp != MAP_FAILED);
- 	sigstack.ss_flags = 0;
- 	sigstack.ss_size = STACK_SIZE;
- 
-@@ -490,6 +491,7 @@ static void test_pkru_sigreturn(void)
- 	/* Set up alternate signal stack that will use the default MPK */
- 	sigstack.ss_sp = mmap(0, STACK_SIZE, PROT_READ | PROT_WRITE,
- 			      MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+	assert(sigstack.ss_sp != MAP_FAILED);
- 	sigstack.ss_flags = 0;
- 	sigstack.ss_size = STACK_SIZE;
- 
-diff --git a/tools/testing/selftests/mm/protection_keys.c b/tools/testing/selftests/mm/protection_keys.c
-index 2085982dba69..d53bdc540a74 100644
---- a/tools/testing/selftests/mm/protection_keys.c
-+++ b/tools/testing/selftests/mm/protection_keys.c
-@@ -667,7 +667,7 @@ static void *malloc_pkey_with_mprotect(long size, int prot, u16 pkey)
- 			size, prot, pkey);
- 	pkey_assert(pkey < NR_PKEYS);
- 	ptr = mmap(NULL, size, prot, MAP_ANONYMOUS|MAP_PRIVATE, -1, 0);
--	pkey_assert(ptr != (void *)-1);
-+	pkey_assert(ptr != MAP_FAILED);
- 	ret = mprotect_pkey((void *)ptr, PAGE_SIZE, prot, pkey);
- 	pkey_assert(!ret);
- 	record_pkey_malloc(ptr, size, prot);
-@@ -690,7 +690,7 @@ static void *malloc_pkey_anon_huge(long size, int prot, u16 pkey)
- 	 */
- 	size = ALIGN_UP(size, HPAGE_SIZE * 2);
- 	ptr = mmap(NULL, size, PROT_NONE, MAP_ANONYMOUS|MAP_PRIVATE, -1, 0);
--	pkey_assert(ptr != (void *)-1);
-+	pkey_assert(ptr != MAP_FAILED);
- 	record_pkey_malloc(ptr, size, prot);
- 	mprotect_pkey(ptr, size, prot, pkey);
- 
-@@ -770,7 +770,7 @@ static void *malloc_pkey_hugetlb(long size, int prot, u16 pkey)
- 	size = ALIGN_UP(size, HPAGE_SIZE * 2);
- 	pkey_assert(pkey < NR_PKEYS);
- 	ptr = mmap(NULL, size, PROT_NONE, flags, -1, 0);
--	pkey_assert(ptr != (void *)-1);
-+	pkey_assert(ptr != MAP_FAILED);
- 	mprotect_pkey(ptr, size, prot, pkey);
- 
- 	record_pkey_malloc(ptr, size, prot);
-@@ -1217,6 +1217,7 @@ static void arch_force_pkey_reg_init(void)
- 	 * doing the XSAVE size enumeration dance.
- 	 */
- 	buf = mmap(NULL, 1*MB, PROT_READ|PROT_WRITE, MAP_ANONYMOUS|MAP_PRIVATE, -1, 0);
-+	pkey_assert(buf != MAP_FAILED);
- 
- 	/* These __builtins require compiling with -mxsave */
- 
-@@ -1775,7 +1776,7 @@ int main(void)
- 		printf("running PKEY tests for unsupported CPU/OS\n");
- 
- 		ptr  = mmap(NULL, size, PROT_NONE, MAP_ANONYMOUS|MAP_PRIVATE, -1, 0);
--		assert(ptr != (void *)-1);
-+		assert(ptr != MAP_FAILED);
- 		test_mprotect_pkey_on_unsupported_cpu(ptr, 1);
- 		exit(0);
- 	}
--- 
-2.25.1
+So there are two root issues I ran into:
 
+1) The tests can not be executed from virtiofs (as set up by virtme-ng):
+
+ #  RUN           audit.layers ...
+# audit_test.c:52:layers:Expected 0 (0) <= self->audit_fd (-13)
+# audit_test.c:61:layers:Failed to initialize audit: Permission denied
+# layers: Test failed
+#          FAIL  audit.layers
+not ok 1 audit.layers
+
+(The same for all other testcases)
+
+2) $PWD needs to be the test binary directory for "./wait-pipe-sandbox" to work.
+
+> To make it easier, we wrote a wrapper to test everything with UML:
+> https://github.com/landlock-lsm/landlock-test-tools (see check-linux.sh)
+> 
+> > 
+> > > # #  RUN           audit.tsync_override_log_subdomains_off ...
+> > > # # audit_test.c:591:tsync_override_log_subdomains_off:Expected 0 (0) == matches_log_signal(_metadata, self->audit_fd, child_data.parent_pid, NULL) (-11)
+> > 
+> > This error number means "EAGAIN 11 Resource temporarily unavailable",
+> > so it could be a temporary error.
+> 
+> Yes, the test is flaky under pressure.
+> 
+> > 
+> > Can you reproduce this issue? Is it really dependent on my patch as
+> > blamed above? If so, does the selftest rely on the previous, incorrect order?
+> 
+> I don't think it directly depends on your patch but it might be a side
+> effect.  Anyway, I've been working on fixing this kind of issue and just
+> sent a fix:
+> https://lore.kernel.org/r/20260513105112.140137-2-mic@digikod.net
+
+Thanks, unfortunately I can't validate that it will fix the issue at hand.
+
+
+Thomas
