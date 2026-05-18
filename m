@@ -1,147 +1,115 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from canpmsgout04.his.huawei.com (canpmsgout04.his.huawei.com [113.46.200.219])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17E1F3C1F37
-	for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 06:31:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D18A3B9DBC;
+	Mon, 18 May 2026 06:34:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.219
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779085919; cv=none; b=aVnh56M0seuDx69Za3SM6Ik/VMyPOSZ6NM7muhvOkjuKyzYHisW8E9m0Yf5pyNg5dzD3F9qQBtBvkAZs9bAjgLZlhND0NuXilwEXlnFfReKjWZw7bF4s5E9mFQKp4SBirGtXJPuQDAorCSEYRDvHQGXufUt7OhvlCnF5owekyaU=
+	t=1779086100; cv=none; b=dawziUonkyquqhgfLJp2OIJLQLJ7EwBjL6CiE1JDVDN1QHC7f4iYYmBs7Gw/zEzgIzNS4fj3XzPaSb9FuziIT54Mt15vAP0+IXLUsRXZcxHAeQHmhCiaOjGSn2A0k2wO45x6kKrKCdaIP6WwrPQ6Jg/0sq7kaTB0YhFILgVyeXk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779085919; c=relaxed/simple;
-	bh=MlEkCgLfLAET7HePrdJoisimifxqtQFmEEEd1oJx1CU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Fv4SHBs8wxOAmGanwV4yPDr61VfRzJx+LX/G3q5A6y81bWPYzu4koUqToU9Aw4tckMsNU0a4Uif2mI73ZbBICKaaD+IKXCd7n/Iz28eiOPj1+r2hpfDvNV9L6k2FgzsA5ZAhQNVv06ffCfxXQKVx+g0xR3R5sFJw4DzWKOBQoH4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cuAGr4Dn; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1779086100; c=relaxed/simple;
+	bh=sibF+s6I00NkiIexv5eillM53CQ4gPHCtUOHSkRX6/w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=HcOfdJlIupTmOTx3H5ermlSmnzrwFaMgB21o9mgo1w+lKWwZVqqdb63B5Q+HKPffr2GzRIBjnWOuOOkI5lc4nVBBbpJJjAS2bZ7qUWxWe6RLddUQmxF862ZX+Tb2XUxtQPnEKmx27l+XY6w/d0H5XIE+KSnF+FcDqJPvnc/gs30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=ZZekhNhU; arc=none smtp.client-ip=113.46.200.219
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cuAGr4Dn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94F20C2BCB7
-	for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 06:31:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779085918;
-	bh=MlEkCgLfLAET7HePrdJoisimifxqtQFmEEEd1oJx1CU=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=cuAGr4DnkaFWPiMnoO48Yvv80BrIorHG/0iLTHalhudgVSdwvPoapErFdIN+NFMz2
-	 phLGmFTNoU5bC3WLQ6i8P7+rbKg89ysZTCsBcgzIz6Vz4bIjOgfYeqfplU+dVj8yLh
-	 W6Rj4kkSmJN3NlQR97SIRGnYtluBo0phXonMWeZsAmo7QkpAt2gj9kboK68pC4kAI7
-	 JlR1I8OQHsDoQysR1HWWgP4pQlJy4VQMQiI6kRLU+7N/KPp53TTWyfRZiLQIHMP1et
-	 +5icBoIoHPPt+nOhGNZ5UsVbyVzaGJz0bEjBOoCWDncGwWIW+tknxhYVmJpb+Lh8Gm
-	 2kXg3SVX2YAig==
-Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-90cbb2b50ccso154783385a.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 17 May 2026 23:31:58 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AFNElJ/Jxn9HNOdBpNFSzds3MimqD54nOULqVRW9O/DHStmPP8ttqmzu7IjFnL6Wxk7nGrq29K21GXfaQy2z48JooiM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy88/an1TcFsu86bzfJ44IJ1HzjLQQrn/O9zvZfOy43Y77tk7nb
-	fPVS+B7VMULUvQKNUB4mnkmD71rnwDdI+IB9iCjfXEnmR2/VX1FH+EFZX5Puj+yB1rB/iX2qGG8
-	ubDxBpOy7fnmDVNSLuUjpeKrWXxTYOCA=
-X-Received: by 2002:a05:620a:ac0a:b0:912:61f8:cab1 with SMTP id
- af79cd13be357-91261f8d5b2mr1253868385a.25.1779085917789; Sun, 17 May 2026
- 23:31:57 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="ZZekhNhU"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=RiBiEJoGO8e+ET2Ji/6JNkgdquRadWqYFE6AePCfdvc=;
+	b=ZZekhNhUzccfldwRZ1g4HTnF4cTQ7Sdid/wIe36HPbSYlfrs44ibdiY5rDzW6bW+iHuz7lt/f
+	kZcNRLZAKuQrPhnP7G5Y9AuSD28hTKVvUqlrEvcCqj36tNmIKuOjhIS/zyOlRG/NhMbLF/E9yEY
+	orqev7hPaTM0e6/izgAYgfU=
+Received: from mail.maildlp.com (unknown [172.19.162.223])
+	by canpmsgout04.his.huawei.com (SkyGuard) with ESMTPS id 4gJns26ppzz1prKB;
+	Mon, 18 May 2026 14:27:02 +0800 (CST)
+Received: from kwepemj500018.china.huawei.com (unknown [7.202.194.48])
+	by mail.maildlp.com (Postfix) with ESMTPS id 8603440571;
+	Mon, 18 May 2026 14:34:45 +0800 (CST)
+Received: from [10.174.178.79] (10.174.178.79) by
+ kwepemj500018.china.huawei.com (7.202.194.48) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Mon, 18 May 2026 14:34:44 +0800
+Message-ID: <a462e95c-6aad-4d70-8499-3aa5f090f0a2@huawei.com>
+Date: Mon, 18 May 2026 14:34:43 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260507070547.2268452-1-sashal@kernel.org> <CAHC9VhTwDt2Bx8n0io9Qge_fUEnrHsxrFAQY+KaemKWqJqBQxw@mail.gmail.com>
-In-Reply-To: <CAHC9VhTwDt2Bx8n0io9Qge_fUEnrHsxrFAQY+KaemKWqJqBQxw@mail.gmail.com>
-From: Song Liu <song@kernel.org>
-Date: Sun, 17 May 2026 23:31:45 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW4TJRqQKXgcBYog8YgFLU2h2Zq9ReahxTYp_zpDyvO8AA@mail.gmail.com>
-X-Gm-Features: AVHnY4LE6Uz9P1F7Ei7__uZGPqS4LrmpPDUToLlmTi9orUT0m2IrTepJoYB0Usc
-Message-ID: <CAPhsuW4TJRqQKXgcBYog8YgFLU2h2Zq9ReahxTYp_zpDyvO8AA@mail.gmail.com>
-Subject: Re: [PATCH] killswitch: add per-function short-circuit mitigation primitive
-To: Paul Moore <paul@paul-moore.com>
-Cc: Sasha Levin <sashal@kernel.org>, corbet@lwn.net, akpm@linux-foundation.org, 
-	skhan@linuxfoundation.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	gregkh@linuxfoundation.org, linux-security-module@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net v2 2/6] mptcp: pm: fix ADD_ADDR timer infinite retry
+ on option space insufficient
+To: Matthieu Baerts <matttbe@kernel.org>
+CC: "netdev@vger.kernel.org" <netdev@vger.kernel.org>, "mptcp@lists.linux.dev"
+	<mptcp@lists.linux.dev>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "linux-kselftest@vger.kernel.org"
+	<linux-kselftest@vger.kernel.org>, Eric Dumazet <edumaze@google.com>,
+	"stable@vger.kernel.org" <stable@vger.kernel.org>, Mat Martineau
+	<martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, "David S. Miller"
+	<davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Simon Horman
+	<horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Jakub Kicinski
+	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, "weiyongjun (A)"
+	<weiyongjun1@huawei.com>, yuehaibing <yuehaibing@huawei.com>, zhangchangzhong
+	<zhangchangzhong@huawei.com>
+References: <20260515-net-mptcp-misc-fixes-7-1-rc4-v2-0-701e96419f2f@kernel.org>
+ <20260515-net-mptcp-misc-fixes-7-1-rc4-v2-2-701e96419f2f@kernel.org>
+ <85b89125-57f2-43ab-a834-4dca56881e26@kernel.org>
+From: Li Xiasong <lixiasong1@huawei.com>
+In-Reply-To: <85b89125-57f2-43ab-a834-4dca56881e26@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
+ kwepemj500018.china.huawei.com (7.202.194.48)
 
-On Thu, May 14, 2026 at 8:48=E2=80=AFPM Paul Moore <paul@paul-moore.com> wr=
-ote:
->
-> On Thu, May 7, 2026 at 3:05=E2=80=AFAM Sasha Levin <sashal@kernel.org> wr=
-ote:
-> >
-> > When a (security) issue goes public, fleets stay exposed until a patche=
-d kernel
-> > is built, distributed, and rebooted into.
-> >
-> > For many such issues the simplest mitigation is to stop calling the bug=
-gy
-> > function. Killswitch provides that. An admin writes:
-> >
-> >     echo "engage af_alg_sendmsg -1" \
-> >         > /sys/kernel/security/killswitch/control
-> >
-> > After this, af_alg_sendmsg() returns -EPERM on every call without
-> > running its body. The mitigation takes effect immediately, and is dropp=
-ed on
-> > the next reboot.
-> >
-> > A lot of recent kernel issues sit in code paths most installs only have=
- enabled
-> > to support a relative minority of users: AF_ALG, ksmbd, nf_tables, vsoc=
-k, ax25,
-> > and friends.
-> >
-> > For most users, the cost of "this socket family stops working for the d=
-ay" is
-> > much smaller than the cost of running a known vulnerable kernel until t=
-he fix
-> > land.
-> >
-> > Assisted-by: Claude:claude-opus-4-7
-> > Signed-off-by: Sasha Levin <sashal@kernel.org>
-> > ---
-> >  Documentation/admin-guide/index.rst           |   1 +
-> >  Documentation/admin-guide/killswitch.rst      | 159 ++++
-> >  Documentation/admin-guide/tainted-kernels.rst |   8 +
-> >  MAINTAINERS                                   |  11 +
-> >  include/linux/killswitch.h                    |  19 +
-> >  include/linux/panic.h                         |   3 +-
-> >  init/Kconfig                                  |   2 +
-> >  kernel/Kconfig.killswitch                     |  31 +
-> >  kernel/Makefile                               |   1 +
-> >  kernel/killswitch.c                           | 798 ++++++++++++++++++
-> >  kernel/panic.c                                |   1 +
-> >  lib/Kconfig.debug                             |  13 +
-> >  lib/Makefile                                  |   1 +
-> >  lib/test_killswitch.c                         |  85 ++
-> >  tools/testing/selftests/Makefile              |   1 +
-> >  tools/testing/selftests/killswitch/.gitignore |   1 +
-> >  tools/testing/selftests/killswitch/Makefile   |   8 +
-> >  .../selftests/killswitch/cve_31431_test.c     | 162 ++++
-> >  .../selftests/killswitch/killswitch_test.sh   | 147 ++++
-> >  19 files changed, 1451 insertions(+), 1 deletion(-)
-> >  create mode 100644 Documentation/admin-guide/killswitch.rst
-> >  create mode 100644 include/linux/killswitch.h
-> >  create mode 100644 kernel/Kconfig.killswitch
-> >  create mode 100644 kernel/killswitch.c
-> >  create mode 100644 lib/test_killswitch.c
-> >  create mode 100644 tools/testing/selftests/killswitch/.gitignore
-> >  create mode 100644 tools/testing/selftests/killswitch/Makefile
-> >  create mode 100644 tools/testing/selftests/killswitch/cve_31431_test.c
-> >  create mode 100755 tools/testing/selftests/killswitch/killswitch_test.=
-sh
->
-> If we made Lockdown an LSM, we should probably also make killswitch an LS=
-M.
+Hi, Matt
 
-I don't think killswitch can stack with other LSMs. In fact, killswitch
-can be used to bypass other LSMs, for example:
+On 5/17/2026 1:50 PM, Matthieu Baerts wrote:
+> Hello,
+> 
+> On 15/05/2026 06:27, Matthieu Baerts (NGI0) wrote:
+>> From: Li Xiasong <lixiasong1@huawei.com>
+>>
+>> When TCP option space is insufficient (e.g., when sending ADD_ADDR with an
+>> IPv6 address and port while tcp_timestamps is enabled), the original code
+>> jumped to out_unlock without clearing the addr_signal flag. This caused
+>> mptcp_pm_add_timer to keep rescheduling indefinitely, not sending ADD_ADDR,
+>> preventing subsequent addresses in the endpoint list from being announced.
+> 
+> (...)
+> 
+>> diff --git a/net/mptcp/pm.c b/net/mptcp/pm.c
+>> index 3c152bf66cd5..3e770c7407e1 100644
+>> --- a/net/mptcp/pm.c
+>> +++ b/net/mptcp/pm.c
+> 
+> (...)
+> 
+>> @@ -414,8 +420,12 @@ mptcp_pm_del_add_timer(struct mptcp_sock *msk,
+>>  	/* Note: entry might have been removed by another thread.
+>>  	 * We hold rcu_read_lock() to ensure it is not freed under us.
+>>  	 */
+>> -	if (stop_timer)
+>> -		sk_stop_timer_sync(sk, &entry->add_timer);
+> FYI, sashiko found a pre-existing issue here, but I guess that's not
+> blocking this series.
+> 
+> https://sashiko.dev/#/patchset/20260515-net-mptcp-misc-fixes-7-1-rc4-v2-0-701e96419f2f%40kernel.org
+> 
+> @Li: just to know what I do with this pre-existing issue, do you plan to
+> look at it?
+> 
+> Just in case, I just opened:
+> 
+>   https://github.com/multipath-tcp/mptcp_net-next/issues/623
+> 
 
-echo engage security_file_open 0 > /sys/kernel/security/killswitch/control
+Thanks for the heads-up. I’ll take a look at #623 separately and follow up
+there.
 
-will bypass all hooks on security_file_open.
-
-Thanks,
-Song
-
-> For the LSM crowd who might be seeing this for the first time, the
-> original thread can be found on lore via the link below:
-> https://lore.kernel.org/all/20260507070547.2268452-1-sashal@kernel.org
->
-> --
-> paul-moore.com
->
+Best regards,
+Li Xiasong
