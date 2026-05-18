@@ -1,118 +1,105 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-108-mta136.mxroute.com (mail-108-mta136.mxroute.com [136.175.108.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7CC53CBE77
-	for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 06:37:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F85A3C5DDC
+	for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 06:52:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=136.175.108.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779086269; cv=none; b=DVuoI/3YQAWs0/nkx1mFwgZ5CbPlb6Ny+sVorH/xv9rKb1GcadjLw0JW3coubvpIw+1VGYMdP5W3NzVskM1oIoN97oBv85EJSePX/THTJTnecACq0Qod3VJpZHzxctf92H3XcrAqKLy05UOmHne6DvGWLEv5Tm0h585nbt62OD0=
+	t=1779087143; cv=none; b=U/06ZbTxY15Z/VPP1Hv//awFK12yj+nxS0X29ydArVXt+/wdclsbtChZC6ZQVIXSWX0LmDTnx+CJUupLnxPBZU//5Y+p9EIBDRQie5vUB7ZMqK8e0q9kyCYjXxHlpKqt/rpeYdhmKqC3jQD/rGJq9VuAfmJI7fO0NNdA7TFKMIw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779086269; c=relaxed/simple;
-	bh=PrT96Y/vLV0Zld5NPvnbzDiOZRpJnR9HPYAVqBrX/a4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Tx4iBNNAGop/KJRquILbndXI6zUKQ890XWZhKgDHWRbfB0/Gxj9llEr2Qa2yUJ8Ay4r/epYBZHGzCCrHBHy4FH6eJLJj4npWOOdP39p+Zox3vykeVpnvKTLJfkf5auCmJEJO0rpaCFvm5QCrKO9LUHqxGscGCw7y40ENgXvI30c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tpomMW39; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1779087143; c=relaxed/simple;
+	bh=9Ul8tDS8RWFcTTIB7woEmHR85Y17odDIHxPntVubcGA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gSGGxSkvnD4Z1UkC1g7aaH5SUbGzDbyOLxo+OH6gHYPcRDnhVjXYBUjun1RS0HCgrkNVAEaBLm6zqKL8/95XTgGAQswfR+YGi5IAMmyL1ZHTIEjPiuFkYunLa00ethmebyVW+swm0KDVkrMSSGU+b+oVQ2pNwLhe4xsGQIdsHpc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wii.dev; spf=pass smtp.mailfrom=wii.dev; dkim=pass (2048-bit key) header.d=wii.dev header.i=@wii.dev header.b=YI4PRc4v; arc=none smtp.client-ip=136.175.108.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wii.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wii.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tpomMW39"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68250C2BCC6
-	for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 06:37:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779086268;
-	bh=PrT96Y/vLV0Zld5NPvnbzDiOZRpJnR9HPYAVqBrX/a4=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=tpomMW39Z+QDBMxf/W2OlOg6wDPsPG25eOFCJTVwmHzccb84gLd4cO9h/QGw+/gZD
-	 GAsyRzMtDEKon2j700Sa96994l4RBypdbX+Z/ROuYRHDIRkNIs7PVMgpO2psMCgcwS
-	 2t/OpakfWgVJNjObHzxYCPZeUX1OMgBcyZAmFBeqZJI8ZQPbs9TA7w75y153t7kFIY
-	 U4Nz8gtYhQA87sytwD1i4vdRJs+8httO/jezAxwxirFI7fVHXjf8PslP3/4Ha1H/rD
-	 0ww/W+yedO4WQcrdCNfDtEKxT4hiBLWOWmBOjlqa1yZYDkX0cDbHrrybjue+LRS2o7
-	 z2/3a+RWPiTBw==
-Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-8acb3daf2aaso39317696d6.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 17 May 2026 23:37:48 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AFNElJ/kisn5ASwGqIcRgqTkM/oQGZs06sCYdkGNAZyPTTxpe5c5fM4QuGfMIsHm69efoT/nZm6/YVHpvYtuQ1b0CFA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxtTNmi3V6oz9AhXsNDwJ6pz20uA2kIIGSoGBcZQ1zVvhbYGjGl
-	19DRmG8C6H/yAlpGFtFIxs5QKsg/dpcXkqJtpSPuu6o+PoA5L0c/8s+ikOEh9gyGIieDSNmcrJf
-	BIB2Aih0qtnnWHj8TN/q5tHqty9+cOO4=
-X-Received: by 2002:a05:6214:3c98:b0:8ca:2410:4b05 with SMTP id
- 6a1803df08f44-8ca2410535fmr151166296d6.40.1779086267702; Sun, 17 May 2026
- 23:37:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=wii.dev header.i=@wii.dev header.b="YI4PRc4v"
+Received: from filter006.mxroute.com ([136.175.111.3] filter006.mxroute.com)
+ (Authenticated sender: mN4UYu2MZsgR)
+ by mail-108-mta136.mxroute.com (ZoneMTA) with ESMTPSA id 19e39d69e2400067f7.00d
+ for <linux-kselftest@vger.kernel.org>
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Mon, 18 May 2026 06:47:07 +0000
+X-Zone-Loop: 89725232838cf32224530d351f533aade434724958fd
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=wii.dev;
+	s=x; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:Cc
+	:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=w0UMA+XCQeCnqyZuB8gmN29dfFtWO2qyTm3HmkBTUuU=; b=YI4PRc4vDwNj+zXZNo9U/emECj
+	YKzWO813etclhr4C/YNrEh47L/JglHJOilKiKHsbVy8AgDYzzXfcq3BJpWGDF1EAYMvhn20KDeaOh
+	4UqL3gRmEPrvHv9vK7yPvroLm0pBgOVJxahE0AlgNaMv+16Mk4OxW4pJPzhj+z/EpMYTrwc47jJLo
+	ujsRsSW/TgnzMwrYEeaPqQiHe95nUdpMUOakxKQXh6CBXCHDI240Okr0vqfTG3+IQ4JqS2aWSB3PE
+	MCjXvvvHpfNVvS6B8c71ppn2Ym6jWch1M/yyjixNuBuroX1/uMSExPYC1YOWtjImsJI3ialQ/NyiO
+	J4MLY5/Q==;
+Date: Mon, 18 May 2026 06:46:56 +0000
+From: Richard Patel <ripatel@wii.dev>
+To: x86@kernel.org
+Cc: Rick Edgecombe <rick.p.edgecombe@intel.com>,
+	Yu-cheng Yu <yu-cheng.yu@intel.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>, "H. Peter Anvin" <hpa@zytor.com>,
+	Andy Lutomirski <luto@kernel.org>, Kees Cook <kees@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/7] x86: expose user IBT via PR_CFI_BRANCH_LANDING_PADS
+Message-ID: <agq14AaohMEb8mDt@gusc1c-ossdev-firedancer66.jumpisolated.com>
+References: <20260517183024.16292-1-ripatel@wii.dev>
+ <20260517183024.16292-6-ripatel@wii.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260508195749.1885522-1-sashal@kernel.org> <20260517134858.146569-1-sashal@kernel.org>
-In-Reply-To: <20260517134858.146569-1-sashal@kernel.org>
-From: Song Liu <song@kernel.org>
-Date: Sun, 17 May 2026 23:37:36 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW4x8shWon8Moi5VgCq2n4E2EzaaauZ2HHpy42Rp1Y-J-g@mail.gmail.com>
-X-Gm-Features: AVHnY4J4mKBEhL8yoe8m_C50zE8fB-yoG9ZDQzbqPScq3MxagdnowtQVIUF5N1M
-Message-ID: <CAPhsuW4x8shWon8Moi5VgCq2n4E2EzaaauZ2HHpy42Rp1Y-J-g@mail.gmail.com>
-Subject: Re: [PATCH v3] killswitch: add per-function short-circuit mitigation primitive
-To: Sasha Levin <sashal@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, bpf@vger.kernel.org, 
-	live-patching@vger.kernel.org, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Joshua Peisach <jpeisach@ubuntu.com>, Florian Weimer <fw@deneb.enyo.de>, Breno Leitao <leitao@debian.org>, 
-	Anthony Iliopoulos <ailiop@suse.com>, Michal Hocko <mhocko@suse.com>, Jiri Olsa <jolsa@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260517183024.16292-6-ripatel@wii.dev>
+X-Authenticated-Id: ripatel@wii.dev
 
-On Sun, May 17, 2026 at 6:49=E2=80=AFAM Sasha Levin <sashal@kernel.org> wro=
-te:
->
-> When a kernel (security) issue goes public, fleets stay exposed until a p=
-atched
-> kernel is built, distributed, and rebooted into.
->
-> For many such issues the simplest mitigation is to stop calling the buggy
-> function. Killswitch provides that. An admin writes:
->
->     echo "engage af_alg_sendmsg -1" \
->         > /sys/kernel/security/killswitch/control
->
-> After this, af_alg_sendmsg() returns -EPERM on every call without
-> running its body. The mitigation takes effect immediately, and is dropped=
- on
-> the next reboot -- by which point a patched kernel is hopefully in place.
->
-> A lot of recent kernel issues sit in code paths most installs only have e=
-nabled
-> to support a relative minority of users: AF_ALG, ksmbd, nf_tables, vsock,=
- ax25,
-> and friends.
->
-> For most users, the cost of "this socket family stops working for the day=
-" is
-> much smaller than the cost of running a known vulnerable kernel until the=
- fix
-> lands.
->
-> Why not an existing facility:
->
-> * livepatch needs a built, signed, per-kernel-version module per CVE.
->   Under Secure Boot the operator can't sign their own, so they wait
->   for the vendor, and only a minority of vendors actually ship
->   livepatches. Killswitch covers the days before that module shows
->   up.
->
-> * fail_function (CONFIG_FUNCTION_ERROR_INJECTION) is disabled in
->   most production kernels. Even where enabled, it only works on
->   functions pre-annotated with ALLOW_ERROR_INJECTION() in source -
->   no help for a freshly-disclosed CVE. The debugfs UI is blocked by
->   lockdown=3Dintegrity and the override is probabilistic.
->
-> * BPF override (bpf_override_return) honors the same
->   ALLOW_ERROR_INJECTION() whitelist, and BPF itself is off in many
->   production kernels. Even where on, the operator interface is
->   "load a verified BPF program," not a one-line write.
+Thinking out loud ... sorry for the noise
 
-If it is OK for killswitch to attach to any kernel functions, do we still
-need ALLOW_ERROR_INJECTION() for fail_function and BPF
-override? Shall we instead also allow fail_function and BPF override
-to attach to any kernel functions?
+On Sun, May 17, 2026 at 01:30:22PM -0500, Richard Patel wrote:
+> +int arch_prctl_set_branch_landing_pad_state(struct task_struct *t, unsigned long state)
+> +{
+> +	if (!cpu_feature_enabled(X86_FEATURE_USER_IBT) || in_ia32_syscall())
+> +		return -EINVAL;
+> +
+> +	if (t != current)
+> +		return -EINVAL;
+> +
+> +	if (user_ibt_locked(t))
+> +		return -EINVAL;
+> +
+> +	if (!(state & (PR_CFI_ENABLE | PR_CFI_DISABLE)))
+> +		return -EINVAL;
+> +
+> +	if (state & PR_CFI_ENABLE && state & PR_CFI_DISABLE)
+> +		return -EINVAL;
 
-Thanks,
-Song
+I noticed the caller doesn't filter input arguments, so uapi could pass
+garbage flags, and we need to filter here. Will fix and add a selftest
+for this in v2.
+
+I think the RISC-V code from which I ported this has the same problem.
+
+> +void reset_thread_ibt(void)
+> +{
+> +	current->thread.ibt = false;
+> +	current->thread.ibt_locked = false;
+> +}
+
+Should I add a comment here explaining why setting U_CET MSR is not
+necessary here?
+
+>  	reset_thread_features();
+> +	reset_thread_ibt();
+
+There is quite obvious overlap with ARCH_SHSTK here. The problem is that
+'features' is gated by USER_SHADOW_STACK, and I didn't want to cause a
+mess there before asking. x86 maintainers, what is your preference?
