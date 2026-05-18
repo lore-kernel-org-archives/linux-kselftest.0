@@ -1,106 +1,206 @@
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F55A36F413;
-	Mon, 18 May 2026 20:39:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D16EC3939A4
+	for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 20:39:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779136754; cv=none; b=SEsC+Q1KECUs83iaslxakEvGW+jA+MZKp7nJrVLgUv83K/CwES/vs0ePSceU1eCN8/TYH8GrzvZx+zU3/ZgSBoOeh6ovEOuh5IZHPjxYME/a7IzqgZmAcThJP6ngONHWXga20+3QmTlWBIZY63zV7U6H2vzTxNauT21h98mhCtc=
+	t=1779136775; cv=none; b=bmvQ2V+0DJ1RqmitUlSz8NRxcrbBUbG55R+nlUBWx2+mLJN/YjFTpwtpY+zhlCGSvY+UXXia72evbdbp0zS/vfBnfxp2azs4MjX/Yg5frqMno+yqQ30AvaAhWPOeVpxnGwZIr01MlA29opPbaSHROBAQzP4XXn1rQG54iYnBeSA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779136754; c=relaxed/simple;
-	bh=j8l70kevZbw9WJ/nAYucOtDN4WHanokXjvs8vr9D5+4=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=VEU8WkQ5M2S9iZ+ZicUoF7XzvWxkY78qvCy5CoBikFeLsnjCqfjqaXlWdz7kL+g6a8UlIYgNcPdZqM1WI7Qt34IeQepWpVcu/mZfkYGO1V5LMSnmQkg+4AhDv6HL7HdRGxEYJWG+8/7KurMLsmpU5/bFOQfrsAAtonrLPXdwZ4U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=N5a7j9vh; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+	s=arc-20240116; t=1779136775; c=relaxed/simple;
+	bh=1DQgFAuOo/ufJExWgbAin5UszAM9EvUvWON9Wa22hNk=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=JOd95ZYa9WO9OTRX6Gv588Zc7XMb8qlp+E69Ol54ZZEiaWO2aqrB7Rv/5bF5H8KkQev9XmoBWt8rYQ0CnY+t93B6CnjyQj9T26+7Z3FeHZY4Oio9pk/aIs0fjuau/6WcW+4xxe+01EmG2/PV16NT3xkvizCitThbiCBiCxLqgLk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rvaCfsmP; arc=none smtp.client-ip=209.85.214.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="N5a7j9vh"
-Received: from ehlo.thunderbird.net (c-76-133-66-138.hsd1.ca.comcast.net [76.133.66.138])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 64IKMQvw2327773
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Mon, 18 May 2026 13:22:26 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 64IKMQvw2327773
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2026042601; t=1779135747;
-	bh=d22rrup/77nnsw9mcNXM+lLrmw1694c4z1kAYgwrbwU=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=N5a7j9vhpwP3zBAMjj780rZyFdsYLrghzt0q61nkXpQarhJfyXzki/qhiaNRjYuOU
-	 efCju9M4rGLsL/06E3cblwwv38ouxoketIgId5TUQArEBb1kXCEqAN03ca4joAQBnF
-	 cW1EKuTTEnTdghJUidDVjHVaEgQHFx5K/7Ax0jPdtBO5l43yOQKz+x7+CjZkCB190Z
-	 HwUNoSTKTyE537VQFJpAsZqfXASTsoXV/4+nUSr4syD3KfdD044Kd/K5q0I4G9Wr29
-	 M3Zv2PDn2aOkD6LVj0WmDC714Nht4FAjKPXrqEwg0UfHFQavwNjiV1ifdk6ezriKdU
-	 mr4VheuP26BRg==
-Date: Mon, 18 May 2026 13:22:19 -0700
-From: "H. Peter Anvin" <hpa@zytor.com>
-To: Richard Patel <ripatel@wii.dev>, x86@kernel.org
-CC: Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
-        Kees Cook <kees@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/7] x86: ban 32-bit sigreturn when user IBT enabled
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20260517183024.16292-5-ripatel@wii.dev>
-References: <20260517183024.16292-1-ripatel@wii.dev> <20260517183024.16292-5-ripatel@wii.dev>
-Message-ID: <F10D66BF-C851-4B14-81D7-E5F1E15A325B@zytor.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rvaCfsmP"
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2b2e8bba2e6so42110925ad.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 13:39:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1779136772; x=1779741572; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=cGd6BbSJy5OvNTaNiXv/yILYTZDNFNlp8vbkFDJsHGY=;
+        b=rvaCfsmPyRHOCOqn7UErpvCXq4cbJbTI7vdDUu5cMfoce4rwkN0w3+oTUM/NbF8YY1
+         ZClhKoXmLgHXv2z2MBZLwC1Q7BOgMz995p6xoXiH1cyAFcfX6V329Qo2tShQ1z3aKb8q
+         ALKJgy8R9Yrjp2NhcmEiZMc4E0WGLbGRTYlLHWdZX0y3NHAH0rKuDWzKgcBs1tNfTatv
+         VfXdbVSJ4yPxPhzhdD6U/XeGby2imNWbz6MZDpI8PmfMNPYs+h+j0CW24QzNsiNOrEvZ
+         G6lPVsj7cIGWblKI4gcuIUt/DcX6jlv4kSYztAD6EveohgVKAw+nRTnRNhs+3EbZlMB7
+         mnFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779136772; x=1779741572;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cGd6BbSJy5OvNTaNiXv/yILYTZDNFNlp8vbkFDJsHGY=;
+        b=PpraIF0v2Q78p3uq2ZBfiXA8QkZwgwKUCxFz1O5RdCFGqXFb+5I2VAUHZKRuNtCihg
+         DiXsl2C0DtPEuAcwKXfDLoZiXxhhNNolqzHEhOnKW9EdLaeopi1dnasBuDYgoGOJid4u
+         nYPCRNbb8TghOjde3GQOs1xC0ycNtZmdsB7HBILBIde72ItLmYO7EQ9qaKmbbF99bzmQ
+         BN7eja0KgtdEOrQVfSdrodAuaq72F54GnDMXy+1padS5A+80ShXCrOJFeYJAgjYQECAA
+         2fSBE+BBTel4sOb0aolSW2RpK3VTQgk9KMDhjCLGR8VR55FYX1SrFswBkvnv/DQZyRrG
+         jiJw==
+X-Forwarded-Encrypted: i=1; AFNElJ/lRZAIkFmkoh9cWXGYND2TeEsEzq2j97zXmZSgLndPqdEXNdigrG8nl2/uRBiZwwfOr0RJd26o5cfk4RNr5xk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwFJMX7/e896QnIuaIqGMcp3qCKcBAFiaYkjJ+TSVI87zqJ9DN+
+	88C75od3J4kxz8DgQvHFzVurl3ou4Lrlxf8KEv7cRJmOqIu8X/I0daboMRU2DRul4Lie7JTcAdO
+	IFpg/Mg==
+X-Received: from plhi13.prod.google.com ([2002:a17:903:2ecd:b0:2b2:4f3d:3df4])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:cec7:b0:2b4:5d51:ce96
+ with SMTP id d9443c01a7336-2bd7e87ed84mr179781255ad.24.1779136771910; Mon, 18
+ May 2026 13:39:31 -0700 (PDT)
+Date: Mon, 18 May 2026 13:39:31 -0700
+In-Reply-To: <CAEvNRgFgobnW+O=t32gu-0YDy0n7ZqvmdCtg+DzLT3uf0+BDeg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+References: <20260518070943.2091287-1-ZongYao.Chen@linux.alibaba.com>
+ <20260518070943.2091287-3-ZongYao.Chen@linux.alibaba.com> <CAEvNRgFgobnW+O=t32gu-0YDy0n7ZqvmdCtg+DzLT3uf0+BDeg@mail.gmail.com>
+Message-ID: <agt5A90k9lS9JPWp@google.com>
+Subject: Re: [PATCH 2/2] KVM: selftests: Test guest_memfd binding overlap
+ without GPA overlap
+From: Sean Christopherson <seanjc@google.com>
+To: Ackerley Tng <ackerleytng@google.com>
+Cc: ZongYao.Chen@linux.alibaba.com, Paolo Bonzini <pbonzini@redhat.com>, 
+	kvm@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
+	"Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>, Chao Peng <chao.p.peng@linux.intel.com>, 
+	Xiaoyao Li <xiaoyao.li@intel.com>, Tianjia Zhang <tianjia.zhang@linux.alibaba.com>, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-On May 17, 2026 11:30:21 AM PDT, Richard Patel <ripatel@wii=2Edev> wrote:
->IBT enforces that indirect branch targets land on an endbr
->instruction=2E The CPU enforces this by setting the 'WAIT_FOR_ENDBR'
->bit after executing an indirect branch/jump=2E
->
->The only relevant edge case with user IBT is signal handling:
->When entering/leaving a signal handler, the WAIT_FOR_ENDBR bit must
->be backed up/restored=2E
->
->IBT is not implemented for 32-bit and cannot be enabled using a
->32-bit syscall=2E However, a 64-bit thread could far jump into 32-bit=2E
->Therefore, 32-bit sigreturn must be banned until IBT supports that
->environment=2E
->
->Signed-off-by: Richard Patel <ripatel@wii=2Edev>
->Based-on-patch-by: Yu-cheng Yu <yu-cheng=2Eyu@intel=2Ecom>
->Link: https://lwn=2Enet/ml/linux-kernel/20210830182221=2E3535-5-yu-cheng=
-=2Eyu@intel=2Ecom/
->---
-> arch/x86/kernel/signal_32=2Ec | 5 +++++
-> 1 file changed, 5 insertions(+)
->
->diff --git a/arch/x86/kernel/signal_32=2Ec b/arch/x86/kernel/signal_32=2E=
-c
->index e55cf19e68fe=2E=2E7cb76d794366 100644
->--- a/arch/x86/kernel/signal_32=2Ec
->+++ b/arch/x86/kernel/signal_32=2Ec
->@@ -143,6 +143,11 @@ static bool ia32_restore_sigcontext(struct pt_regs *=
-regs,
-> 	regs->ds =3D fixup_rpl(sc=2Eds);
-> #endif
->=20
->+#ifdef CONFIG_X86_USER_IBT
->+	if (current->thread=2Eibt)
->+		return false;
->+#endif
->+
-> 	return fpu__restore_sig(compat_ptr(sc=2Efpstate), 1);
-> }
->=20
+On Mon, May 18, 2026, Ackerley Tng wrote:
+> ZongYao.Chen@linux.alibaba.com writes:
+> 
+> > From: Zongyao Chen <ZongYao.Chen@linux.alibaba.com>
+> >
+> > The guest_memfd binding overlap test recreates the deleted slot with GPA
+> > ranges that overlap the still-live slot.  KVM rejects those attempts from
+> > the generic memslot overlap check before reaching kvm_gmem_bind(), so the
+> > test can pass even if guest_memfd binding overlap detection is broken.
+> >
+> > Recreate the slot at its original, non-overlapping GPA and use guest_memfd
+> > offsets that overlap the front and back halves of the other slot's binding.
+> > Expand the guest_memfd so the back-half case remains within the file size.
+> >
+> > Fixes: 2feabb855df8 ("KVM: selftests: Expand set_memory_region_test to validate guest_memfd()")
+> 
+> Thanks for fixing this!
+> 
+> > Signed-off-by: Zongyao Chen <ZongYao.Chen@linux.alibaba.com>
+> > ---
+> >  .../testing/selftests/kvm/set_memory_region_test.c | 14 +++++++-------
+> >  1 file changed, 7 insertions(+), 7 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/kvm/set_memory_region_test.c b/tools/testing/selftests/kvm/set_memory_region_test.c
+> > index 9b919a231c93..15607e0bec90 100644
+> > --- a/tools/testing/selftests/kvm/set_memory_region_test.c
+> > +++ b/tools/testing/selftests/kvm/set_memory_region_test.c
+> > @@ -510,7 +510,7 @@ static void test_add_overlapping_private_memory_regions(void)
+> 
+> Shall we rename this to test_bind_overlapping_guest_memfd_offsets to
+> make it clearer?
 
-Dumb question: is there any reason not to just enable it for 32 bits? It d=
-oesn't seem that it would be that big of a delta to Just Do It=2E=E2=84=A2
+Hmm, not if we make the change additive (see blelow).
+ 
+> Perhaps also update the pr_info() to "Testing binding to overlapping
+> guest_memfd offsets\n".
+> 
+> >
+> >  	vm = vm_create_barebones_type(KVM_X86_SW_PROTECTED_VM);
+> >
+> > -	memfd = vm_create_guest_memfd(vm, MEM_REGION_SIZE * 4, 0);
+> > +	memfd = vm_create_guest_memfd(vm, MEM_REGION_SIZE * 6, 0);
+> 
+> I think this technically only needs to be MEM_REGION_SIZE * 5 for this
+> test to work.
+> 
+> >
+> >  	vm_set_user_memory_region2(vm, MEM_REGION_SLOT, KVM_MEM_GUEST_MEMFD,
+> >  				   MEM_REGION_GPA, MEM_REGION_SIZE * 2, 0, memfd, 0);
+> > @@ -526,19 +526,19 @@ static void test_add_overlapping_private_memory_regions(void)
+> >  	vm_set_user_memory_region2(vm, MEM_REGION_SLOT, KVM_MEM_GUEST_MEMFD,
+> >  				   MEM_REGION_GPA, 0, NULL, -1, 0);
+> 
+> When I re-read this I was wondering why we created and removed the first
+> memslot. Was it meant as a confidence check that set_memory_region works
+> with the given MEM_REGION_GPA? Perhaps we could add a comment/pr_info()
+> to check that.
 
-That being said, I suspect the number of users will be very small if any=
-=2E 
+Rather than "fix" the check, why not have both?
+
+> > -	/* Overlap the front half of the other slot. */
+> > +	/* Overlap the front half of the other slot's guest_memfd binding. */
+> >  	r = __vm_set_user_memory_region2(vm, MEM_REGION_SLOT, KVM_MEM_GUEST_MEMFD,
+> > -					 MEM_REGION_GPA * 2 - MEM_REGION_SIZE,
+> > +					 MEM_REGION_GPA,
+> >  					 MEM_REGION_SIZE * 2,
+> > -					 0, memfd, 0);
+> > +					 0, memfd, MEM_REGION_SIZE);
+> >  	TEST_ASSERT(r == -1 && errno == EEXIST, "%s",
+> >  		    "Overlapping guest_memfd() bindings should fail with EEXIST");
+> >
+> > -	/* And now the back half of the other slot. */
+> > +	/* And now the back half of the other slot's guest_memfd binding. */
+> >  	r = __vm_set_user_memory_region2(vm, MEM_REGION_SLOT, KVM_MEM_GUEST_MEMFD,
+> > -					 MEM_REGION_GPA * 2 + MEM_REGION_SIZE,
+> > +					 MEM_REGION_GPA,
+> >  					 MEM_REGION_SIZE * 2,
+> > -					 0, memfd, 0);
+> > +					 0, memfd, MEM_REGION_SIZE * 3);
+> >  	TEST_ASSERT(r == -1 && errno == EEXIST, "%s",
+> >  		    "Overlapping guest_memfd() bindings should fail with EEXIST");
+> >
+> 
+> Since this test program is meant to test set_memory_region, should we be
+> retaining the original test? The original test is wrong in that it
+> doesn't test guest_memfd's binding, but it does test that
+> set_memory_region returns -EEXIST on overlapping GPAs.
+> 
+> Perhaps to just test overlapping GPAs we can use anonymous memory
+> instead of guest_memfd.
+
+Eh, I see no harm in having both.  E.g. if we do this, then we don't have to
+explain why we're not testing the other case :-)
+
+diff --git a/tools/testing/selftests/kvm/set_memory_region_test.c b/tools/testing/selftests/kvm/set_memory_region_test.c
+index 9b919a231c93..283392bcc3a0 100644
+--- a/tools/testing/selftests/kvm/set_memory_region_test.c
++++ b/tools/testing/selftests/kvm/set_memory_region_test.c
+@@ -510,7 +510,7 @@ static void test_add_overlapping_private_memory_regions(void)
+ 
+        vm = vm_create_barebones_type(KVM_X86_SW_PROTECTED_VM);
+ 
+-       memfd = vm_create_guest_memfd(vm, MEM_REGION_SIZE * 4, 0);
++       memfd = vm_create_guest_memfd(vm, MEM_REGION_SIZE * 5, 0);
+ 
+        vm_set_user_memory_region2(vm, MEM_REGION_SLOT, KVM_MEM_GUEST_MEMFD,
+                                   MEM_REGION_GPA, MEM_REGION_SIZE * 2, 0, memfd, 0);
+@@ -542,6 +542,26 @@ static void test_add_overlapping_private_memory_regions(void)
+        TEST_ASSERT(r == -1 && errno == EEXIST, "%s",
+                    "Overlapping guest_memfd() bindings should fail with EEXIST");
+ 
++       /*
++        * Repeat the overlap tests, but so that there is overlap in the
++        * guest_memfd bindings (i.e. in guest_memfd file offsets), but _not_
++        * in the GPA space.  Regardless of where there's overlap, KVM should
++        * return -EEXIST.
++        */
++       r = __vm_set_user_memory_region2(vm, MEM_REGION_SLOT, KVM_MEM_GUEST_MEMFD,
++                                        MEM_REGION_GPA,
++                                        MEM_REGION_SIZE * 2,
++                                        0, memfd, MEM_REGION_SIZE);
++       TEST_ASSERT(r == -1 && errno == EEXIST, "%s",
++                   "Overlapping guest_memfd() bindings should fail with EEXIST");
++
++       /* And now the back half of the other slot's guest_memfd binding. */
++       r = __vm_set_user_memory_region2(vm, MEM_REGION_SLOT, KVM_MEM_GUEST_MEMFD,
++                                        MEM_REGION_GPA,
++                                        MEM_REGION_SIZE * 2,
++                                        0, memfd, MEM_REGION_SIZE * 3);
++       TEST_ASSERT(r == -1 && errno == EEXIST, "%s",
++                   "Overlapping guest_memfd() bindings should fail with EEXIST");
+        close(memfd);
+        kvm_vm_free(vm);
+ }
