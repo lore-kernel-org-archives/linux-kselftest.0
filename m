@@ -1,259 +1,159 @@
-Received: from CH4PR04CU002.outbound.protection.outlook.com (mail-northcentralusazon11013035.outbound.protection.outlook.com [40.107.201.35])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 920753E8C54;
-	Mon, 18 May 2026 09:37:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.201.35
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779097079; cv=fail; b=CV9kjLAj/ofMd6pdgBF+LctoQ1cs0lfVKML5i8umURWjQM/S7IwgpWlZD3sZ/3O59x6GlQvLF8SpZI94kf+fCUiy1aaqM8SBhdQ4qM/xN/9ewZXmKvAL8I8/MXKOnIdhOAgCzegJqastnTfbslLKwacve2BElyzW0zTJuKQ2VCs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779097079; c=relaxed/simple;
-	bh=pXrVy3lifmvLABC3n7Hql42Hx5fCGyrQjmGfvh2KaS4=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=n1hrjHWAPlVOmReZFU9FSP3tOnUxxNrdKwgKU1xuSrUGGV5smiyGXFC9JsSVjpQuzKpmMYnKs9hlQShomCYHuB5hN7X93DAS447jKL+BruxHYIvOoE3bCXlbk/yhPk+muJLE0zBF9BPwmlL+aT6sK+uLwlsNehGM2Q2oxDWirtk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=HpG6fvst; arc=fail smtp.client-ip=40.107.201.35
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9373E326923;
+	Mon, 18 May 2026 10:01:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779098516; cv=none; b=s37XI5cvIlCr7BeCBy5toNBs7dQ1FjQUfU0r/4A0jGoCijUX0J0N5RcCLIkq0anrBcONNYYk7m0ZYL1Tu8SAQAczqH44qFErNUIKNYY4Uh1p/i91/4/dkPRPqlBbPpnK7OSP0F83QjX8csHZHaTKEWl1g2ia+PgVos3/wQz6FKE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779098516; c=relaxed/simple;
+	bh=L3f1Vp/n/cdeEMDV5sI+sXWwZyj64HpcGqTJbxUOe/c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WIj66h3xkxXanHOAg+kyTy3ZVbYSiXbE9M7L3fHWZtdKlEpDnXGXoJaXTthA/3bwSGUqzJk0kCH0RC7LnpyRrTlyI6PSAa6ZJ5ewtpYbvTe6GEMAwSN5lyU3A425/DNCvO9EyWsS8fIZ599TVwB9bHwlbpzgu3I+59BSjEDTF/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ONuaZYUV; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=TtYKiEHJ; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="HpG6fvst"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Iy7JLAOjABncF+2FneOBhCRCpP1r7kCGvQ16f7/8Fd+t34lGRE6wDHwJV5GylHJxOCvDby+vHS01nG03Ehxi6shNegfNc6G/yaxV5bjdOa236gqZkOycp1UqkKwE5L0dzVm5dm6IeA6w2TN5spT1eDi9k9p1tlZeDe5W15AcKcdmgPlGADk7vXFxhYux6yHozXIfhHX0kDK5y7WD9+hOYE6gP+U/Ne3UnBR92Qhj2qctthLYZt53KQUuwgHIqUaAjHjKb4eyKgaACRlJ3YRhNyvquHsf4c2ICxW68a+ZSEynpLZlfHJXg900YRIdNBuZh7j3JDtgiTd0DnEmNYrHVw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=I/zJGE1yQCMPgZ/gA7dGYbmiyu2dejnd+tpbS9hxb38=;
- b=YsHTfKSsqupqaEsOWVZz21YhYhrpbP/rKBDRTaNZsJ9klu0yZikrXsX7TpRIRRZ/c872j5QrR3TqFnd+imVNsHiznSpjAStOUks0GMYhmOQx0JWLx1xNdhB7RKFE4KACtIWSo96CN4sC3ZvAsWt2xBZs1TlUOK/hNcjYT4iuGuxJkd5UU7i5lcc4rGY63gKOOcFpveeUoGMY+9YoSZaQPqXbWIjOLjbaO9BL1Wh9eDaxT5H56MMDFvzTIKAJgygDESrM6q6DVLUAbbU6bSwYhF1rZwUSY4791aENaA3WIR03tb+dh/nLDsWs45gPVqXyxmwTzNSKomDbapwELuwjEg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=I/zJGE1yQCMPgZ/gA7dGYbmiyu2dejnd+tpbS9hxb38=;
- b=HpG6fvstA49m3j1TPkC8unsuLgYX3jeOydUmZz7sFgmFVE7IHxHQxirqD2h+TU0brm4N1Wez4Gqh+ZogjvLqi7ZDnTj8tr38sbVBBu06FWCeOYOWCxWCijY8tjRb5493ya4+8UFpz/18FbuVKkDoL6OvbjHBlVmxfsIUof6WjjzlEi5flYDRXpv6rSRSHlwIKx7Fo2B5Fzdjzs72cCmlR/304QjAGwfZ3FoHA7g9tCFvmaXOMPVVNg+ekluMwdHeFJX4zdSNlRquNF1eX2ga/pqkRIwDhsYc5H1dxMLMJozr1U2derZqTfFqzX18BsXXl0b2YYQITsr7eFt19SbEkQ==
-Received: from CY5PR15CA0127.namprd15.prod.outlook.com (2603:10b6:930:68::10)
- by BY5PR12MB4307.namprd12.prod.outlook.com (2603:10b6:a03:20c::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.25.24; Mon, 18 May
- 2026 09:37:52 +0000
-Received: from CY4PEPF0000E9D7.namprd05.prod.outlook.com
- (2603:10b6:930:68:cafe::c6) by CY5PR15CA0127.outlook.office365.com
- (2603:10b6:930:68::10) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.25.24 via Frontend Transport; Mon, 18
- May 2026 09:37:52 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- CY4PEPF0000E9D7.mail.protection.outlook.com (10.167.241.70) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.48.11 via Frontend Transport; Mon, 18 May 2026 09:37:52 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 18 May
- 2026 02:37:35 -0700
-Received: from c-237-113-240-247.mtl.labs.mlnx (10.126.231.37) by
- rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.20; Mon, 18 May 2026 02:37:30 -0700
-From: Cosmin Ratiu <cratiu@nvidia.com>
-To: <netdev@vger.kernel.org>
-CC: Andrew Lunn <andrew+netdev@lunn.ch>, "David S . Miller"
-	<davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
-	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan
-	<shuah@kernel.org>, Simon Horman <horms@kernel.org>, Cosmin Ratiu
-	<cratiu@nvidia.com>, Petr Machata <petrm@nvidia.com>, Breno Leitao
-	<leitao@debian.org>, Nimrod Oren <noren@nvidia.com>, Gal Pressman
-	<gal@nvidia.com>, Willem de Bruijn <willemb@google.com>, Dimitri Daskalakis
-	<dimitri.daskalakis1@gmail.com>, <linux-kselftest@vger.kernel.org>
-Subject: [PATCH net-next 3/3] selftests: Use a master ssh connection for remote commands
-Date: Mon, 18 May 2026 12:36:53 +0300
-Message-ID: <20260518093653.551166-4-cratiu@nvidia.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260518093653.551166-1-cratiu@nvidia.com>
-References: <20260518093653.551166-1-cratiu@nvidia.com>
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ONuaZYUV";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="TtYKiEHJ"
+Date: Mon, 18 May 2026 12:01:52 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1779098512;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9R7iXz/vKaTcboM4y0DO/8RfZsBrVr/cAx9OLOYE8Gc=;
+	b=ONuaZYUVIkb276hiZPlFFmhvaLFa/bK+n7SlrA5ctGJPIA5YkCVGuYwzhz2ZW/SyAyv5oo
+	aaUJqL12sz8f5Nwa91tIg2eX/9BhWYN3X0ksKJnyXz76C4pIHu1KM45RsMDgE5lMNhAiP8
+	yz5PLSjdOOIbWnbRLxY7FNjpdYhyVmDwNgW/dTlmV0HjH4HL7QZ417qq2sXRKJ6pr0qdjR
+	pHnUolSLoBGcRYo9b3mbBW4/8dAVL7ZqBdV9njAa/McuvhkKFDhTFZ4MzT1Mw/wjig4bzC
+	aZXvYcaZBZc1xoYB2XES6X5L0nVL/vHsLAiPmXD5JMCdX5adCLodYpmBoNKJJA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1779098512;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9R7iXz/vKaTcboM4y0DO/8RfZsBrVr/cAx9OLOYE8Gc=;
+	b=TtYKiEHJSRwK6P/AZOSUveWrHARGDTNzttlc+E8rKl+7jbMwXJb/u8f73ElG68742EWq4e
+	pJnWpBb7w23P94Aw==
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+To: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+Cc: =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, 
+	kernel test robot <oliver.sang@intel.com>, linux-security-module@vger.kernel.org, oe-lkp@lists.linux.dev, 
+	lkp@intel.com, linux-kernel@vger.kernel.org, 
+	Shuah Khan <skhan@linuxfoundation.org>, Kees Cook <kees@kernel.org>, linux-kselftest@vger.kernel.org
+Subject: Re: [linus:master] [selftests]  465b05bae5:
+ kernel-selftests.landlock.audit_test.audit.tsync_override_log_subdomains_off.fail
+Message-ID: <20260518115330-2156280f-0a6e-4d82-bbf5-13ad7052bafc@linutronix.de>
+References: <202605111649.a8b30a62-lkp@intel.com>
+ <20260512112054-0a5c7cad-c8c6-4745-a765-0780a3bd2dab@linutronix.de>
+ <20260513.eeboh9zooQuu@digikod.net>
+ <20260518100602-5b161e99-83fa-4170-bb7b-1642df6b5a3d@linutronix.de>
+ <20260518.ohn9DahGhui6@digikod.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000E9D7:EE_|BY5PR12MB4307:EE_
-X-MS-Office365-Filtering-Correlation-Id: e7585d42-e95c-41c6-e283-08deb4c121fe
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|36860700016|376014|7416014|82310400026|56012099003|22082099003|18002099003|3023799003|11063799003;
-X-Microsoft-Antispam-Message-Info:
-	FAt+Bj+fR87Qk8mKjHuHDnmoLIEBc9c75DNrSRdAXwHfu7dTDKy0dmW0m3A2dfVceP3lRh9Wjp454+F/1oRT6ntU1HzN6LFoAlyAmVi5bJaxLTfqiPGtysa5mdz7iWeAKWsUFUDqj5UGMG7zawoKYaQCUwsAyxQ8tXWBOeeDJ9zp6K2MU+9WYqEcJBjJnP2mt8xBuRCUyyI+dXPKY5BzCKorEP5JVih6PbgS7FyxYxe12+c2NX5HlZsYttEnfbjNGd5TdPCZHJkNOuAyxYXAwyyKjLc+91Hv9lAFCpqQR1GJaO6RnTKA5JFjs/nSXCU3mTduk7FjdP+TomZXIMYPE3kdWsYFpxW7adt2tgixqqamg9zNbOTfXpIiyi6a/gZ2gMNzyQ5QrclVgRXDPVFbRcTLJ65rUsxchxLcGHcQacV+ScKdwOpZZuBLxvH/lLzLqOuKLAVFQnJVbOgTGV+Juj8zTd69VyKs7So9gmXB/h/KHfaTxFUyoGkmANFChic/vRvtOm4NF+OxC3JFdMxj8x5Vluxf36Sp6WJcedpG3CMUsQYHus3xJIreK+/BuZ9ky+TLhvxWd0GvACQe5Dtu5M9uArCa0AHjWygQIFrK7/aHTa9yLDWm7SdY/EA6GhtJKsji7s+kkvy+wzjIi+25jNVshM6evbHzKLtiKN/87cmNRU3DUCbHfzs9iFZpsOK5usDBpI3TkdL6g8Hh/dc2ju0mG2YEtwAOBtBBNL9Lt34=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(36860700016)(376014)(7416014)(82310400026)(56012099003)(22082099003)(18002099003)(3023799003)(11063799003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	BSLkvfCxq+AN7R7qCf9eN8J8OGRnkSMZVe+VNp11A1GGgB/ApsyF3RPG1Tar0Kmh4UkYyTiYrwZgmHOsO69dgF3xCtqL1Wv0zdzM9b+YQ0UvGL6JSozPPCMDs0G9GT7/33YdVfoomOneBDGjCsIR5IWzBnV9f5J2jsz+75/5lybeksNhFMs1Dic971RzY/Z7TVc83yhNRuOu5jHhHVIEOijW+s8+xQ98DeOr9yOsOHfj7lNrMlc9nTvldaQ0xgjxhIeFsWavVazT2q57mZ4DXk1fBs4aDgSecdb1uPaMTYJfxTX8XjOUL0GFc2G6cQPjyBFb7FPjt4YIurRfNjukZ+y1GUkDSL1DU47INPg/iYb/BT5pJSgEs3oLpUlhR2/j1dPZzyfxiVV4e1GAw10UpjU9uHCcW9ZeKu+FMFFDdQEUtbf0Vhx5Pw0YdvsskBL4
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 May 2026 09:37:52.3802
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e7585d42-e95c-41c6-e283-08deb4c121fe
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CY4PEPF0000E9D7.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4307
+In-Reply-To: <20260518.ohn9DahGhui6@digikod.net>
 
-Every remote test command done via remote_ssh has to exchange ssh keys
-and authenticate, paying a (sometimes significant) setup cost. This cost
-is compounded when several remote commands are run in sequence, and made
-even worse when the remote configuration is usually restored on defer().
+On Mon, May 18, 2026 at 11:30:42AM +0200, Mickaël Salaün wrote:
+> On Mon, May 18, 2026 at 10:48:27AM +0200, Thomas Weißschuh wrote:
+> > On Wed, May 13, 2026 at 12:52:35PM +0200, Mickaël Salaün wrote:
+> > (...)
+> > 
+> > > > > config: x86_64-rhel-9.4-kselftests
+> > > > > compiler: gcc-14
+> > > > > test machine: 16 threads Intel(R) Core(TM) i7-13620H (Raptor Lake) with 32G memory
+> > > > > 
+> > > > > (please refer to attached dmesg/kmsg for entire log/backtrace)
+> > > > > 
+> > > > > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> > > > > the same patch/commit), kindly add following tags
+> > > > > | Reported-by: kernel test robot <oliver.sang@intel.com>
+> > > > > | Closes: https://lore.kernel.org/oe-lkp/202605111649.a8b30a62-lkp@intel.com
+> > > > 
+> > > > I was unable to run the landlock selftests myself, on my machines they are
+> > > > failing at runtime with all kinds of colorful errors. Are the requirements
+> > > > explained somewhere?
+> > > 
+> > > I'm curious about the errors you get.  They are standard kselftests that
+> > > should work following this workflow:
+> > > 
+> > >   make TARGETS=landlock O=build kselftest-gen_tar
+> > > 
+> > > and then running ./build/kselftests/kselftest_install/run_kselftest.sh
+> > > as root in a VM.  The required kernel configuration is listed in
+> > > tools/testing/selftests/landlock/config
+> > 
+> > So there are two root issues I ran into:
+> > 
+> > 1) The tests can not be executed from virtiofs (as set up by virtme-ng):
+> 
+> Most filesystem tests initially set up tmpfs and then use it.
+> 
+> I'm using virtme-ng too, see the
+> https://github.com/landlock-lsm/landlock-test-tools
+> 
+>  ARCH=x86_64 .../check-linux.sh build_light kselftest
+> 
+> > 
+> >  #  RUN           audit.layers ...
+> > # audit_test.c:52:layers:Expected 0 (0) <= self->audit_fd (-13)
+> > # audit_test.c:61:layers:Failed to initialize audit: Permission denied
+> > # layers: Test failed
+> > #          FAIL  audit.layers
+> > not ok 1 audit.layers
+> > 
+> > (The same for all other testcases)
+> 
+> It looks like the tests are not run with enough privileges.  Do you run
+> them as root?  Does the kernel has the required config set?
 
-Fix that by using a master ssh connection per remote host, allowing
-subsequent connections to skip these steps and be almost as fast as
-running those commands locally. This will reduce infrastructure usage by
-these tests because they will finish much faster.
+Yes. The exact same setup works when executed from a tmpfs.
 
-This finally implements this part of
-tools/testing/selftests/drivers/net/README.rst:
-"Using persistent SSH connections is strongly encouraged to avoid
-the latency of SSH connection setup on every command."
+> > 2) $PWD needs to be the test binary directory for "./wait-pipe-sandbox" to work.
+> 
+> Yes.  run_kselftest.sh should handle that.
 
-Significant improvements are seen in a b2b setup involving NIS, here's
-an example with the ping.py test, with remote cmd execution instrumented
-with timing info:
+Fair enough. The selftests I used so far worked just fine when executed directly.
+Maybe only I am using them this way. Some better diagnostics would have saved
+me some time. Consider it a suggestion.
 
-Before (one ssh connection per remote command):
-  # ./tools/testing/selftests/drivers/net/ping.py
-  [...]
-  remote: 0.769s  ping -c 1 -W0.5 1.0.0.1
-  remote: 0.790s  ping -s 65000 -c 1 -W0.5 1.0.0.1
-  remote: 0.775s  command -v -- socat
-  remote: 0.784s  echo dwlelyrvaimmzirvhlfrgxtjxpxjdwcxmzj...
-  remote: 1.238s  cat /proc/net/tcp*
-  remote: 0.761s  ping -c 1 -W0.5 1.0.0.1
-  remote: 0.753s  ping -s 65000 -c 1 -W0.5 1.0.0.1
-  remote: 0.787s  echo zmhdqnnwidygdmoylhpdimcfmtgubbvygkc...
-  remote: 1.034s  cat /proc/net/tcp*
-  ok 1 ping.test_default_v4
-  [...]
-  # Totals: pass:5 fail:0 xfail:0 xpass:0 skip:2 error:0
-  # Total remote cmd time: 55.416s
+> > > To make it easier, we wrote a wrapper to test everything with UML:
+> > > https://github.com/landlock-lsm/landlock-test-tools (see check-linux.sh)
+> > > 
+> > > > 
+> > > > > # #  RUN           audit.tsync_override_log_subdomains_off ...
+> > > > > # # audit_test.c:591:tsync_override_log_subdomains_off:Expected 0 (0) == matches_log_signal(_metadata, self->audit_fd, child_data.parent_pid, NULL) (-11)
+> > > > 
+> > > > This error number means "EAGAIN 11 Resource temporarily unavailable",
+> > > > so it could be a temporary error.
+> > > 
+> > > Yes, the test is flaky under pressure.
+> > > 
+> > > > 
+> > > > Can you reproduce this issue? Is it really dependent on my patch as
+> > > > blamed above? If so, does the selftest rely on the previous, incorrect order?
+> > > 
+> > > I don't think it directly depends on your patch but it might be a side
+> > > effect.  Anyway, I've been working on fixing this kind of issue and just
+> > > sent a fix:
+> > > https://lore.kernel.org/r/20260513105112.140137-2-mic@digikod.net
+> > 
+> > Thanks, unfortunately I can't validate that it will fix the issue at hand.
+> 
+> I pushed it to -next, we'll see but I'm pretty sure this is the issue.
 
-After (a single master ssh connection):
-  # ./tools/testing/selftests/drivers/net/ping.py
-  [...]
-  remote: 0.017s  ping -c 1 -W0.5 1.0.0.1
-  remote: 0.017s  ping -s 65000 -c 1 -W0.5 1.0.0.1
-  remote: 0.016s  command -v -- socat
-  remote: 0.020s  echo njbgxukbquvxqxynzyelisajhilshglkqmv...
-  remote: 0.022s  cat /proc/net/tcp*
-  remote: 0.017s  ping -c 1 -W0.5 1.0.0.1
-  remote: 0.017s  ping -s 65000 -c 1 -W0.5 1.0.0.1
-  remote: 0.020s  echo rmjpqfbfwfdtzesiqpmeljpdipiopvcfrhs...
-  remote: 0.022s  cat /proc/net/tcp*
-  ok 1 ping.test_default_v4
-  [...]
-  # Totals: pass:5 fail:0 xfail:0 xpass:0 skip:2 error:0
-  # Total remote cmd time: 2.563s
+Nice. I justed wanted to make clear that I won't be able to provide a Tested-by.
 
-So a reduction in total time spent executing remote commands from 55s to
-2.5s. Similar speedups should apply across all tests using remote_ssh.
 
-Signed-off-by: Cosmin Ratiu <cratiu@nvidia.com>
----
- .../drivers/net/lib/py/remote_ssh.py          | 48 ++++++++++++++++---
- 1 file changed, 42 insertions(+), 6 deletions(-)
-
-diff --git a/tools/testing/selftests/drivers/net/lib/py/remote_ssh.py b/tools/testing/selftests/drivers/net/lib/py/remote_ssh.py
-index 427082561d00..8f2e57ccbe2f 100644
---- a/tools/testing/selftests/drivers/net/lib/py/remote_ssh.py
-+++ b/tools/testing/selftests/drivers/net/lib/py/remote_ssh.py
-@@ -1,9 +1,11 @@
- # SPDX-License-Identifier: GPL-2.0
- 
- import os
-+import shutil
- import string
- import subprocess
- import random
-+import tempfile
- 
- from lib.py import cmd
- 
-@@ -13,17 +15,50 @@ class Remote:
-         self.name = name
-         self.dir_path = dir_path
-         self._tmpdir = None
-+        self._ctl_dir = tempfile.mkdtemp(prefix="ssh-ksft-")
-+        self._ctl = os.path.join(self._ctl_dir, "ctl")
-+        self._ssh_opts = ["-o", "BatchMode=yes",
-+                          "-o", "ConnectTimeout=20",
-+                          "-o", "ControlMaster=auto",
-+                          "-o", f"ControlPath={self._ctl}",
-+                          "-o", "ControlPersist=30"]
-+        self._ssh_base = ["ssh", "-q"] + self._ssh_opts
-+        # Open the persistent connection
-+        self._master_started = False
-+        try:
-+            r = subprocess.run(self._ssh_base + ["-fNM", self.name],
-+                               stdin=subprocess.DEVNULL,
-+                               stdout=subprocess.DEVNULL,
-+                               stderr=subprocess.PIPE, timeout=30)
-+            if r.returncode:
-+                raise OSError(f"SSH master to {name} failed: {r.stderr.decode().strip()}")
-+            self._master_started = True
-+        finally:
-+            if not self._master_started:
-+                shutil.rmtree(self._ctl_dir, ignore_errors=True)
- 
-     def __del__(self):
--        if self._tmpdir:
--            cmd("rm -rf " + self._tmpdir, host=self)
--            self._tmpdir = None
-+        try:
-+            if self._tmpdir:
-+                cmd("rm -rf " + self._tmpdir, host=self)
-+                self._tmpdir = None
-+        except Exception:
-+            pass
-+        try:
-+            if self._master_started:
-+                self._master_started = False
-+                subprocess.run(self._ssh_base + ["-O", "exit", self.name],
-+                               stdout=subprocess.DEVNULL,
-+                               stderr=subprocess.DEVNULL, timeout=10)
-+        except Exception:
-+            pass
-+        shutil.rmtree(self._ctl_dir, ignore_errors=True)
- 
-     def cmd(self, comm, pty=False):
--        args = ["ssh", "-q"]
-+        args = []
-         if pty:
-             args += ["-tt"]
--        return subprocess.Popen(args + [self.name, comm],
-+        return subprocess.Popen(self._ssh_base + args + [self.name, comm],
-                                 stdin=subprocess.DEVNULL,
-                                 stdout=subprocess.PIPE, stderr=subprocess.PIPE)
- 
-@@ -39,5 +74,6 @@ class Remote:
-         if not os.path.isabs(what):
-             what = os.path.abspath(self.dir_path + "/" + what)
- 
--        cmd(f"scp {what} {self.name}:{file_name}")
-+        cmd(["scp", "-q"] + self._ssh_opts +
-+             [what, f"{self.name}:{file_name}"])
-         return file_name
--- 
-2.53.0
-
+Thanks again,
+Thomas
