@@ -1,273 +1,154 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11E7A318EF0;
-	Mon, 18 May 2026 22:21:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 626B93AE1BD
+	for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 22:43:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779142878; cv=none; b=Z3I64lcv72c7Oq5uBpeHHIM2TmIVSdRzDyVQ9cDT9RQSj/QpDDQy50iuPLMX3mjDAjD4gcm5jHf0128lHGP+HV8inOSGrPHFZUcwggpEzSRPMDREC2goTX3TRVzRz14RBS13hPJl8Sr9J77rzOtiFqzCCJoxKPCRXGgHPeXWwzY=
+	t=1779144219; cv=none; b=aZ8z742QCAt2Vh/OAZUlxW2nQrdAJSXwSLT5N/JJJhLxfaJDnB5Qg+S1vk4qdSvgn/JJO6fpmeAmOzHPRyyUxdX8kJvK/EZrKMMhoOHRn/L3RkKiNZQB2DK6sctjWcG6ztUssGglRQPBIo3sim99fXJlDX6qnqY8L51W0mJs0WY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779142878; c=relaxed/simple;
-	bh=CvHCd07/S3yhsVmuLEx0Das9gEcbosbXvIlvUM5YHeY=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=fvwLtXN/xXHyOmhBF9XHD8TpYXndLfICzyVHhDhoB9C3bUrssjMs4/7PDWhaIJ8GA5Cc11tT3jDDyZKX94am2dwwH1JtDT8RLE1RLDIGGcTVp39YNhzpUg4g3BiVljVHVBYvAPStfLakvg/eC7KrVqHq9a+BjRIQMiYQTXfS6t0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=LPOBTh+X; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1779144219; c=relaxed/simple;
+	bh=ZqxlUv6AphBiZDSxvrCBSCRC+/VdjzoWlIzND7rNfMs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Q3mcpdYvzb5rgvf4WSj5VRkFuwOvq6q77OcTA5NIGQLOOeC6cg2d67CFpi/5Wdwf7h+rVav8U2T8jdj8TzF9XKxDQ4/eVEeiqqb6Qr0EPjFuynmgKjFbnOv8yAuK2ORBDSnEXoYSw4qPoZgJn14hcpV3VHXGD1Ium+37ybOzlIw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jnLwwkQM; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="LPOBTh+X"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E2C8C2BCB7;
-	Mon, 18 May 2026 22:21:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1779142877;
-	bh=CvHCd07/S3yhsVmuLEx0Das9gEcbosbXvIlvUM5YHeY=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=LPOBTh+XmQ0iQXW5b+ZMakHisn/tcxyMDY7KiUbYiwAFMdlR/PUwsr15dJ+bjHqia
-	 57tyfnpBGHCBy5CSE5qlDVzOJkNzoMfcA20++p3PbNNSUGnbwnxBCYexjmFErmideA
-	 JuzfRDIdKVZr3V0U8yQms5Bo0BH4hzvIu2QEZNCc=
-Date: Mon, 18 May 2026 15:21:16 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Zi Yan <ziy@nvidia.com>
-Cc: David Hildenbrand <david@kernel.org>, "Matthew Wilcox (Oracle)"
- <willy@infradead.org>, Song Liu <songliubraving@fb.com>, Chris Mason
- <clm@fb.com>, David Sterba <dsterba@suse.com>, Alexander Viro
- <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara
- <jack@suse.cz>, Lorenzo Stoakes <ljs@kernel.org>, Baolin Wang
- <baolin.wang@linux.alibaba.com>, "Liam R. Howlett"
- <Liam.Howlett@oracle.com>, Nico Pache <npache@redhat.com>, Ryan Roberts
- <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song
- <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>, Vlastimil Babka
- <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan
- <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Shuah Khan
- <shuah@kernel.org>, linux-btrfs@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org, Luiz Capitulino
- <luizcap@redhat.com>, Donet Tom <donettom@linux.ibm.com>, Jason Gunthorpe
- <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>, Leon Romanovsky
- <leon@kernel.org>, Liam Howlett <liam@infradead.org>, Mark Brown
- <broonie@kernel.org>, Peter Xu <peterx@redhat.com>, Li Wang
- <li.wang@linux.dev>, Sarthak Sharma <sarthak.sharma@arm.com>
-Subject: Re: [PATCH v6 00/14] Remove CONFIG_READ_ONLY_THP_FOR_FS and enable
- file THP for writable files
-Message-Id: <20260518152116.840e926e9992d47c9b3e33c3@linux-foundation.org>
-In-Reply-To: <20260517135416.1434539-1-ziy@nvidia.com>
-References: <20260517135416.1434539-1-ziy@nvidia.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jnLwwkQM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 314C0C2BCB7
+	for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 22:43:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1779144219;
+	bh=ZqxlUv6AphBiZDSxvrCBSCRC+/VdjzoWlIzND7rNfMs=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=jnLwwkQMSrXKmuTYoC8kFb+1DJ/go3KnenQZXQbnnWDMKKe8Jj3Fzm3HyLrQ0zheV
+	 fWwkQt3ckMrypK82sqP40r4dWhy/Sug1Az8mk5wtdqdi3B8OH285juzi22vXh0j4B4
+	 DUVPFgA0b1KVuKWxy8+/+DaAhru/iD/G3ca5MZBV4Onpr+/jbrySCFfaO++5TDEQvu
+	 3ogI98oJYBqD1C8zrDhoJ1leceekpoRlJDlxh07BKnKkng2BxQy7E7S80tlFJqWAgt
+	 IM9QYwIjrjB+uI75Gi/whUG4uhXcOaQc7yM0/nstduFPa55V4lKsPsP3u1KqoxhIWm
+	 csQ6T9UwG2PSg==
+Received: by mail-ua1-f50.google.com with SMTP id a1e0cc1a2514c-95d3492fb1eso1830606241.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 15:43:39 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AFNElJ+CVk97Uef0GJIb2Q+GOZwM1K4TKJ38eVw9pNVfEB0IX7fRosVY9WZVOG1zsXBmcfHf28ivTis/8kU7hiEhjI0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyHAiOYkwAkS3X5NeBlwv4EiQMSB/vWsQ1++RLUD2F1KxKQ1EN9
+	GeszNd2froR1YZdOnuoziHpakJFwKHiVYzn6ZMXR2zq7JGMp0riq5wwPxBOm2KI1/5++KjLSHmO
+	kvqH6u6Sm6EGsfH76Uhdxxsmt0Pfg84M=
+X-Received: by 2002:a05:6102:1497:b0:632:eef7:4b7f with SMTP id
+ ada2fe7eead31-63a3f38ed3dmr9090434137.22.1779144217888; Mon, 18 May 2026
+ 15:43:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+References: <20260512-v2_20230123_tjmercier_google_com-v1-0-6326701c3691@redhat.com>
+ <20260512-v2_20230123_tjmercier_google_com-v1-2-6326701c3691@redhat.com>
+ <CAGsJ_4xfznffbjOaNKwnN6oZk_H6pqOzYqd1zx4Q9XrocdzV8A@mail.gmail.com> <CADSE00LjJcL8P5M-UPEpzZijU70uEmUirnin29N8YR5W5D-oFg@mail.gmail.com>
+In-Reply-To: <CADSE00LjJcL8P5M-UPEpzZijU70uEmUirnin29N8YR5W5D-oFg@mail.gmail.com>
+From: Barry Song <baohua@kernel.org>
+Date: Tue, 19 May 2026 06:43:26 +0800
+X-Gmail-Original-Message-ID: <CAGsJ_4xwJ7SAhKPJyRtMTw6psTO7H1EcFFpDw0po1W8PX4FE8g@mail.gmail.com>
+X-Gm-Features: AVHnY4KEVuNU5LGUxbEGufPnQvVfof22PSDgrj8C9uNhmMZb-wsisqSstH9JT8s
+Message-ID: <CAGsJ_4xwJ7SAhKPJyRtMTw6psTO7H1EcFFpDw0po1W8PX4FE8g@mail.gmail.com>
+Subject: Re: [PATCH RFC 2/5] dma-heap: charge dma-buf memory via explicit memcg
+To: Albert Esteve <aesteve@redhat.com>
+Cc: Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
+	=?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>, 
+	Andrew Morton <akpm@linux-foundation.org>, 
+	Benjamin Gaignard <benjamin.gaignard@collabora.com>, Brian Starkey <Brian.Starkey@arm.com>, 
+	John Stultz <jstultz@google.com>, "T.J. Mercier" <tjmercier@google.com>, 
+	Christian Brauner <brauner@kernel.org>, Paul Moore <paul@paul-moore.com>, 
+	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
+	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
+	Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org, 
+	linux-mm@kvack.org, linux-security-module@vger.kernel.org, 
+	selinux@vger.kernel.org, linux-kselftest@vger.kernel.org, mripard@kernel.org, 
+	echanude@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, 17 May 2026 09:54:02 -0400 Zi Yan <ziy@nvidia.com> wrote:
+On Mon, May 18, 2026 at 8:16=E2=80=AFPM Albert Esteve <aesteve@redhat.com> =
+wrote:
+>
+> On Sat, May 16, 2026 at 9:37=E2=80=AFAM Barry Song <baohua@kernel.org> wr=
+ote:
+> >
+> > On Tue, May 12, 2026 at 5:18=E2=80=AFPM Albert Esteve <aesteve@redhat.c=
+om> wrote:
+> > >
+> > > On embedded platforms a central process often allocates dma-buf
+> > > memory on behalf of client applications. Without a way to
+> > > attribute the charge to the requesting client's cgroup, the
+> > > cost lands on the allocator, making per-cgroup memory limits
+> > > ineffective for the actual consumers.
+> > >
+> > > Add charge_pid_fd to struct dma_heap_allocation_data. When set to
+> > > a valid pidfd, DMA_HEAP_IOCTL_ALLOC resolves the target task's
+> > > memcg and charges the buffer there via mem_cgroup_charge_dmabuf()
+> > > inside dma_heap_buffer_alloc(). Without charge_pid_fd, and with
+> > > the mem_accounting module parameter enabled, the buffer is charged
+> > > to the allocator's own cgroup.
+> > >
+> > > Additionally, commit 3c227be90659 ("dma-buf: system_heap: account for
+> > > system heap allocation in memcg") adds __GFP_ACCOUNT to system-heap
+> > > page allocations. Keeping __GFP_ACCOUNT would charge the same pages
+> > > twice (once to kmem, once to MEMCG_DMABUF), thus remove it and route
+> > > all accounting through a single MEMCG_DMABUF path.
+> > >
+> > [...]
+> >
+> > > -               if (mem_accounting)
+> > > -                       flags |=3D __GFP_ACCOUNT;
+> >
+> > Hi Albert,
+> >
+> > would it be better to move this and its description to patch 1? It
+> > looks like patch 1 already introduces the double accounting changes,
+> > and patch 2 is mainly just supporting remote charging.
+>
+> Hi Barry,
+>
+> Thanks for looking into this series! Yes, in my head I was trying to
+> keep patch 1, which was taken from a previous, different series, and
+> then diverge from it starting with patch 2. This would clarify the
+> difference between the two. But I can see it just added some confusion
+> (for example, patch 1 charges on dma_buf_export() and then it is moved
+> to dma_heap_buffer_alloc() in patch 2). I will reorganize it better
+> for the next version, including your suggestion.
 
-> Hi all,
-> 
-> This patchset removes READ_ONLY_THP_FOR_FS Kconfig and enables creating
-> file-backed THPs for FSes with large folio support (the supported orders
-> need to include PMD_ORDER) by default, including for writable files.
+Yep, I understand the situation now. I also understand
+that you were referring to T.J.'s patch, which caused
+some back-and-forth confusion for readers when reading
+patches 1 and 2.
 
-Cool.  Sashiko wasn't able to apply this (presumably because of Mike's
-CI-friendly series).  I take it that the AI review from v5
-(https://sashiko.dev/#/patchset/20260429152924.727124-1-ziy@nvidia.com)
-was considered?
+>
+> >
+> > Also, mem_accounting is only used by system_heap.c; has this patchset
+> > also eliminated its need?
+>
+> No, mem_accounting is still handled in this patch for the general case
+> where no `charge_pid_fd` is used. See dma_heap_buffer_alloc() code:
+>
+> +       if (memcg)
+> +               css_get(&memcg->css);
+> +       else if (mem_accounting)
+> +               memcg =3D get_mem_cgroup_from_mm(current->mm);
 
-Also, please check that the below were considered:
+I see. What feels a bit odd to me is that mem_accounting
+could either be dropped (with unconditional charging), or
+it should cover both remote and local charge cases.
 
-https://lore.kernel.org/e9e61132-902a-445f-9c4c-4d405d164e70@kernel.org
-https://lore.kernel.org/22831162-abe7-4498-9e81-7f5aa3526d00@kernel.org
-https://lore.kernel.org/959238dd-2493-4d9c-ac35-6d04460a8239@kernel.org
-https://lore.kernel.org/1895A67C-BB1F-49EA-ADC3-AA4F51A6ED57@nvidia.com
+I don=E2=80=99t have a strong opinion here=E2=80=94it just feels a bit
+strange, since its description is quite generic for memcg:
 
-https://lore.kernel.org/20260508074643.55548-1-lance.yang@linux.dev
-https://lore.kernel.org/b8a3c3eb-f241-40fe-9121-4ae5a1097807@kernel.org
+"Enable cgroup-based memory accounting for dma-buf heap
+allocations (default=3Dfalse)."
 
-
-> is an in-place replacement of V5 in mm-new. It affects Mike Rapoport's
-> "make MM selftests more CI friendly", since "selftests/mm: khugepaged:
-> use kselftest framework" needs to be updated. I updated it and put it at
-> the end of this cover letter.
-
-Helpful, thanks.  It was a little complicated because your email client
-messes with whitespace (it always has!), but I figured it out.
-
-> Changelog
-> ===
-> >From V5[6]:
-> 1. added mapping_min_folio_order(mapping) <= PMD_ORDER check to
->    mapping_pmd_folio_support() in Patch 1 to correctly handle
->    filesystems whose minimum folio order exceeds PMD_ORDER. Also
->    improved the kernel-doc comment per David's suggestions.
-> 
-> 2. cleaned up Patch 11 per David's review: use const for open_opt and
->    mmap_prot, remove mmap_opt (use MAP_SHARED for both read-only and
->    read-write mappings), inline file_fault_common() into separate
->    file_fault_read() and file_fault_write() functions, fix "read only"
->    typo to "read-only", update usage message to "with PMD-sized large
->    folio support". Also fixed run_vmtests.sh to use elif test_selected
->    thp for the SKIP case to avoid spurious [SKIP] output per Nico's
->    report.
-> 
-> 3. revised stale comment in Patch 13: removed "There won't be new dirty
->    pages" and updated "khugepaged only works on read-only fd" to reflect
->    that writable files are now supported; merged the comment blocks per
->    David's suggestion.
-> 
-
-Here's how v6 altered mm.git:
-
-
- include/linux/pagemap.h                 |   12 +++----
- mm/khugepaged.c                         |   18 ++++-------
- tools/testing/selftests/mm/khugepaged.c |   35 ++++++++--------------
- 3 files changed, 26 insertions(+), 39 deletions(-)
-
---- a/include/linux/pagemap.h~b
-+++ a/include/linux/pagemap.h
-@@ -514,15 +514,15 @@ static inline bool mapping_large_folio_s
- }
- 
- /**
-- * mapping_pmd_folio_support() - Check if a mapping support PMD-sized folio
-+ * mapping_pmd_folio_support() - Check if a mapping supports PMD-sized folio
-  * @mapping: The address_space
-  *
-- * Some file supports large folio but does not support as large as PMD order.
-- * If a PMD-sized pagecache folio is attempted to be created on a filesystem,
-- * this check needs to be performed first.
-+ * While some mappings support large folios, they might not support PMD-sized
-+ * folios. This function checks whether a mapping supports PMD-sized folios.
-+ * For example, khugepaged needs this information before attempting to
-+ * collapsing THPs.
-  *
-- * Return: true - PMD-sized folio is supported, false - PMD-sized folio is not
-- * supported.
-+ * Return: True if PMD-sized folios are supported, otherwise false.
-  */
- #ifdef CONFIG_TRANSPARENT_HUGEPAGE
- static inline bool mapping_pmd_folio_support(const struct address_space *mapping)
---- a/mm/khugepaged.c~b
-+++ a/mm/khugepaged.c
-@@ -2342,23 +2342,19 @@ static enum scan_result collapse_file(st
- 			} else if (folio_test_dirty(folio)) {
- 				/*
- 				 * This page is dirty because it hasn't
--				 * been flushed since first write. There
--				 * won't be new dirty pages.
-+				 * been flushed since first write.
- 				 *
--				 * Trigger async flush here and hope the
--				 * writeback is done when khugepaged
--				 * revisits this page.
-+				 * Trigger async flush for read-only files and
-+				 * hope the writeback is done when khugepaged
-+				 * revisits this page. Writable files can have
-+				 * their folios dirty at any time; blindly
-+				 * flushing them would cause undesirable
-+				 * system-wide writeback.
- 				 *
- 				 * This is a one-off situation. We are not
- 				 * forcing writeback in loop.
- 				 */
- 				xas_unlock_irq(&xas);
--				/*
--				 * Only flush for read-only files. Writable
--				 * files can have their folios dirty at any
--				 * time; blindly flushing them would cause
--				 * undesirable system-wide writeback.
--				 */
- 				if (!inode_is_open_for_write(mapping->host))
- 					filemap_flush(mapping);
- 				result = SCAN_PAGE_DIRTY_OR_WRITEBACK;
---- a/tools/testing/selftests/mm/khugepaged.c~b
-+++ a/tools/testing/selftests/mm/khugepaged.c
-@@ -376,12 +376,11 @@ static bool anon_check_huge(void *addr,
- 
- static void *file_setup_area_common(int nr_hpages, enum file_setup_ops setup)
- {
-+	const int open_opt = setup == FILE_SETUP_READ_ONLY_FS ? O_RDONLY : O_RDWR;
-+	const int mmap_prot = setup == FILE_SETUP_READ_ONLY_FS ? PROT_READ : (PROT_READ | PROT_WRITE);
- 	int fd;
- 	void *p;
- 	unsigned long size;
--	int open_opt = setup == FILE_SETUP_READ_ONLY_FS ? O_RDONLY : O_RDWR;
--	int mmap_prot = setup == FILE_SETUP_READ_ONLY_FS ? PROT_READ : (PROT_READ | PROT_WRITE);
--	int mmap_opt = setup == FILE_SETUP_READ_ONLY_FS ? MAP_PRIVATE : MAP_SHARED;
- 
- 	unlink(finfo.path);  /* Cleanup from previous failed tests */
- 	printf("Creating %s for collapse%s...", finfo.path,
-@@ -414,7 +413,7 @@ static void *file_setup_area_common(int
- 	success("OK");
- 
- 	printf("Opening %s %s for collapse...", finfo.path,
--	       setup == FILE_SETUP_READ_ONLY_FS ? "read only" :
-+	       setup == FILE_SETUP_READ_ONLY_FS ? "read-only" :
- 	       setup == FILE_SETUP_READ_WRITE_FS_READ_DATA ?
- 						  "read-write (read)" :
- 						  "read-write (write)");
-@@ -423,8 +422,7 @@ static void *file_setup_area_common(int
- 		perror("open()");
- 		exit(EXIT_FAILURE);
- 	}
--	p = mmap(BASE_ADDR, size, mmap_prot,
--		 mmap_opt, finfo.fd, 0);
-+	p = mmap(BASE_ADDR, size, mmap_prot, MAP_SHARED, finfo.fd, 0);
- 	if (p == MAP_FAILED || p != BASE_ADDR) {
- 		perror("mmap()");
- 		exit(EXIT_FAILURE);
-@@ -458,27 +456,17 @@ static void file_cleanup_area(void *p, u
- 	unlink(finfo.path);
- }
- 
--static void file_fault_common(void *p, unsigned long start, unsigned long end,
--		int madv_ops)
-+static void file_fault_read(void *p, unsigned long start, unsigned long end)
- {
--	if (madvise(((char *)p) + start, end - start, madv_ops)) {
--		if (madv_ops == MADV_POPULATE_READ)
--			perror("madvise(MADV_POPULATE_READ");
--		else if (madv_ops == MADV_POPULATE_WRITE)
--			perror("madvise(MADV_POPULATE_WRITE");
-+	if (madvise(((char *)p) + start, end - start, MADV_POPULATE_READ)) {
-+		perror("madvise(MADV_POPULATE_READ)");
- 		exit(EXIT_FAILURE);
- 	}
- }
- 
--static void file_fault_read(void *p, unsigned long start, unsigned long end)
--{
--	file_fault_common(p, start, end, MADV_POPULATE_READ);
--}
--
- static void file_fault_read_and_flush(void *p, unsigned long start, unsigned long end)
- {
--	file_fault_common(p, start, end, MADV_POPULATE_READ);
--
-+	file_fault_read(p, start, end);
- 	/*
- 	 * make folio clean, since dirty folios from read&write file are
- 	 * rejected and not flushed
-@@ -488,7 +476,10 @@ static void file_fault_read_and_flush(vo
- 
- static void file_fault_write(void *p, unsigned long start, unsigned long end)
- {
--	file_fault_common(p, start, end, MADV_POPULATE_WRITE);
-+	if (madvise(((char *)p) + start, end - start, MADV_POPULATE_WRITE)) {
-+		perror("madvise(MADV_POPULATE_WRITE)");
-+		exit(EXIT_FAILURE);
-+	}
- }
- 
- static bool file_check_huge(void *addr, int nr_hpages)
-@@ -1191,7 +1182,7 @@ static void usage(void)
- 	fprintf(stderr, "\t<mem_type>\t: [all|anon|file|shmem]\n");
- 	fprintf(stderr, "\n\t\"file,all\" mem_type requires [dir] argument\n");
- 	fprintf(stderr, "\n\t\"file,all\" mem_type requires a file system\n");
--	fprintf(stderr,	"\twith large folio support (order >= PMD order)\n");
-+	fprintf(stderr,	"\twith PMD-sized large folio support\n");
- 	fprintf(stderr, "\n\tif [dir] is a (sub)directory of a tmpfs mount, tmpfs must be\n");
- 	fprintf(stderr,	"\tmounted with huge=advise option for khugepaged tests to work\n");
- 	fprintf(stderr,	"\n\tSupported Options:\n");
-_
-
+Best Regards
+Barry
