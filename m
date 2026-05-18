@@ -1,228 +1,118 @@
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65CC32FE56E
-	for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 09:05:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AB233E1CFF;
+	Mon, 18 May 2026 09:14:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779095122; cv=none; b=cg8Lyx8vw/uOZIR3gP56sL2zmM53FpOX6PaHUa67w/KmV6HcOTI+UK0Chkc2wH6trUF/J2wJJvvqUCbcNTPDwpYbXGA6ptsx7bQTN0/HXJJL//7YPKxFug//wyU33REGO6hyT7buLPit1+EUPOSsn3oM1dokMAfuAfveseR+0g4=
+	t=1779095664; cv=none; b=V/kkfJZTeA9LYv1Wg0CnPzEXPYbsW4Ry2pzD/DXHujI2K1jFpNP6fRxoYNDJHroYNelk4EHB9pwtfCnWTQ/olH41+zvXzSkK9GUeJP7y3YzfI5PSQhJu9mMTYlZv9gAfIKKr+OapPhQOy1QvNQmau6jgotJlGmQ7Kdhs3ILZ41s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779095122; c=relaxed/simple;
-	bh=N+mBa9Qop2DRXCEJaXykcTUTNPqJPKjVhuTJzDs3+Ds=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nBNP1Oy76NAxuL1JwoSdz+ohcoAm8f3Ce/eSSIaNabNWPz8UYJ0CjVuwLyMA8mZHZBSXttO9D2eFOD5lHzWaBX3P1FqU68WlgGcMmM6yeKLiu9rCY8mO5zOBisCWUGW6h5ide4iwcE02M0HLWU/Fe74MSQsp3uJTGU/lKY9nbQk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=vtiNbayr; arc=none smtp.client-ip=209.85.221.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1779095664; c=relaxed/simple;
+	bh=dhY3CKr2XCza+nlc8BVgspVXkSxeR632VvA4y6UIJqI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=cmo0s4uacmf1B4SZxIYCwsxJGEEAFfN8ZtiACZS8pZy0n+c/yUagQMPSxo+iIZ6rXTCXJmqY3DNZhtt3FQ6qb9OBOCBR2d0E73QUpoI+mfhZd/oPaDuh4nnfYEdRhPzDKk5yCK093jziP//5XYbYM/gtkmUYLNIKpzY+Jw2kiVs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VYMbqMjU; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="vtiNbayr"
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-449d6c68ed8so1865752f8f.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 02:05:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1779095119; x=1779699919; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=b5p4hero2Con2BmKZIS8vOF61ZHN0e7aAbx1KJsO8hg=;
-        b=vtiNbayrVhfvPUlg45HCUIOWCBpzFDwIkRu/o37TrMurtMPtutoJzBZHyRqaHQJDvD
-         t6G4JkhrVrq0ijH+q8RG875GTJFF+TXc4Zi4CEQEvK0YSrp71FOlVmkDIveOEG5iiZa/
-         s0b1eKzsP7+XduTsuzvEPu2I5XPlRz0S0IhtZ3L2quQlGRQ7kmFQL+14GTPZmswJOAdd
-         O2YRM85mlcKjMZJHEuPRLJGCmzprVPGyG6gzdPgkjmoIWDZGm2jY/462fL96EDhJWGFQ
-         Rpku9+hNTOo1DoE7shodoL2tXiVbwSf6gyChnh76jq/sYaxRXACvvkj3h8ruYjw3rApu
-         Vd7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779095119; x=1779699919;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=b5p4hero2Con2BmKZIS8vOF61ZHN0e7aAbx1KJsO8hg=;
-        b=JqBzmE3MrehHGaWsfFp7Fobrg7JyfN2emG4uFIyMf/lfGy+z7+arywp+8hjInzsq6U
-         WnQDSorxXKbzRebdhnPWrU/0F4CU9ISKr+cMz8UVuHeG8E7692Xg6B95Rv+w22YvwfI7
-         HLXYiy66z57eC2FxWKZCIfnq23sKARLluwhwFxH4+M3AN2cS+zj9qfa1tLUSZK9MLPUW
-         J7NkhUPzceXvxB61zp31RWvhISipvKpj0PEfVT5GkzAhzyiHZems0AiMUscaBqoZMoQs
-         X33uW3/7wftx7fr+nCkzEldCDMl5yCLTBBththOqWceb3K0Iqpp5xG7dhelEn9xT3YoZ
-         be5Q==
-X-Forwarded-Encrypted: i=1; AFNElJ+cpSLWP3TvboLlyHzfv9FPnhmYIZmf77tOWUFu6I5u+plxCa0uYViHMsuS6TW5CGUu6lLLcfwAV6W6lrBQpsI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyxpdy2oh3exwRp5Hb8kUq8ZEvM30gLFPw7Pjz7aRrmg/rz4iPL
-	JQX1euSG2j/qcitWLwNP/GZZgJflUk81/NAOoVx2+jecuoT7oRe4LjSV7cVN82E0Y1k=
-X-Gm-Gg: Acq92OG2Zslk7Zb9wmvIYDHcAgxU+qu7scXDWWzwWDzc5g0NPG5RNJHj8whir9jxDgJ
-	uCY/XCIRu/OyX+6K+0cZJkxffb0q8Y8PS+PrTzA258VuI+Rjo/QeUbwUXxIjPOdqSZ+9NJ4WglI
-	4ZMnsOjmsk1rzcMZ03UBIDeV/PjdbkuCYTZ+3RJy8Jv/Xo9msZtUkNjkSytg30ROa1tPOVpm6fD
-	WNkMY6+5Zv+2u+l2XrW9BOdl+SepqI7/AGGH/bdOHpzBORxb0pv3R0zs1UO2emcvleDhPpSGqbM
-	VkoB+TL+dBW3oUWxyK88UxZtxCRntKZMfdiLWMq4iFwv78mijgmL3TebSnY/tayC25PzY+r5KyV
-	hBykLsVEmJO7+7vW4nR+p+y8M4Mbg+wOEqkgaIwRc+jYw9To+HMfJ5FlsCYF+Vjmp4Fp6tkWEiS
-	7Flcra4rjzZ9b2KyF/ITQZAK5JRPam
-X-Received: by 2002:a5d:44d2:0:b0:45e:739b:3e3c with SMTP id ffacd0b85a97d-45e739b3f89mr5942873f8f.0.1779095118902;
-        Mon, 18 May 2026 02:05:18 -0700 (PDT)
-Received: from [192.168.1.3] ([185.48.77.170])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45da0fe0f72sm38419068f8f.25.2026.05.18.02.05.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 May 2026 02:05:18 -0700 (PDT)
-Message-ID: <b8108271-9e89-46bf-8cd3-3376cbdea6a3@linaro.org>
-Date: Mon, 18 May 2026 10:05:16 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VYMbqMjU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBB37C2BCB7;
+	Mon, 18 May 2026 09:14:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1779095663;
+	bh=dhY3CKr2XCza+nlc8BVgspVXkSxeR632VvA4y6UIJqI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=VYMbqMjUp19nUJcz6fP9igsmEaUvSTuW+yi9MVpeCxp4Ll8x+phM13j8d3TVDIqpQ
+	 C3NrUjwcXvuzATxTIiDVIdD9ipuJErP/pn9jH5Z2VwFf2pGf6ABci2qRyrRRsznma0
+	 DXNRXhKx2aUT/Ldv401PAa4g9ksOLD4jbwI0Hux9oqtmDAx+waUZn+KwCw+o3jCSlp
+	 8+1ZB9I4i4wt7OtnN0vk5Jpc6WCxpFWYpYRCi2nNmI/UGbchaVcIJDQUQ2DoNhz3TT
+	 Dte/0iRX4bv9M3hfVEWc1p7D0fxKCRkPgXD9x0GXcdYSZ7HE8cyoj34jdOmVAYqSF3
+	 I7YmoFAdoO6VA==
+From: Simon Horman <horms@kernel.org>
+To: leitao@debian.org
+Cc: 'Simon Horman' <horms@kernel.org>,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	shuah@kernel.org,
+	david+nfc@ixit.cz,
+	sameo@linux.intel.com,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	oe-linux-nfc@lists.linux.dev,
+	kernel-team@meta.com
+Subject: Re: [PATCH net] nfc: llcp: avoid userspace overflow on invalid optlen
+Date: Mon, 18 May 2026 10:11:04 +0100
+Message-ID: <20260518091103.427351-2-horms@kernel.org>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260513-fix_llc-v1-1-33c76f931ff6@debian.org>
+References: <20260513-fix_llc-v1-1-33c76f931ff6@debian.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 5/6] tools/build: selftests: Allow versioning LLVM lld
-To: Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org,
- bpf@vger.kernel.org, linux-perf-users@vger.kernel.org, leo.yan@arm.com,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
- Adrian Hunter <adrian.hunter@intel.com>, Andrii Nakryiko
- <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>
-References: <20260514-james-perf-llvm-version-v1-0-6cac1a9a4c8d@linaro.org>
- <20260514-james-perf-llvm-version-v1-5-6cac1a9a4c8d@linaro.org>
- <bda702a1-18f5-47ed-8a4e-a01b94829e07@linux.dev>
-Content-Language: en-US
-From: James Clark <james.clark@linaro.org>
-In-Reply-To: <bda702a1-18f5-47ed-8a4e-a01b94829e07@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+From: 'Simon Horman' <horms@kernel.org>
 
+This is an AI-generated review of your patch. The human sending this
+email has considered the AI review valid, or at least plausible.
+Full review at: https://sashiko.dev
+---
+nfc: llcp: avoid userspace overflow on invalid optlen
 
-On 15/05/2026 11:58 pm, Ihor Solodrai wrote:
-> On 5/14/26 2:32 AM, James Clark wrote:
->> Building with LLVM=... could result in a different version of lld being
->> used than the main toolchain for liburandom_read.so because it's
->> hardcoded to "lld" in this makefile.
->>
->> Make it consistent with the rest of the LLVM toolchain by adding an LLD
->> variable to Makefile.include. Keep the fallback for other architectures
->> in tools/testing/selftests/bpf/Makefile as it seems like it's something
->> specific to this make rule and shouldn't be global.
->>
->> Clang accepts either a full path or "ld.lld-15" style inputs to
->> -fuse-ld= so this will work with LLD defined the same way as the other
->> LLVM tools. However, for full paths, we need to use ".../ld.lld" instead
->> of the generic driver "lld", but I don't think the original use of "lld"
->> was significant as this is always a linux build.
->>
->> Signed-off-by: James Clark <james.clark@linaro.org>
->> ---
->>   tools/scripts/Makefile.include       | 2 ++
->>   tools/testing/selftests/bpf/Makefile | 8 ++++----
->>   2 files changed, 6 insertions(+), 4 deletions(-)
->>
->> diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.include
->> index 380ad84ac51e..5c2d505cba62 100644
->> --- a/tools/scripts/Makefile.include
->> +++ b/tools/scripts/Makefile.include
->> @@ -67,6 +67,7 @@ ifneq ($(LLVM),)
->>     $(call allow-override,HOSTAR,$(LLVM_PREFIX)llvm-ar$(LLVM_SUFFIX))
->>     $(call allow-override,LD,$(LLVM_PREFIX)ld.lld$(LLVM_SUFFIX))
->>     $(call allow-override,HOSTLD,$(LLVM_PREFIX)ld.lld$(LLVM_SUFFIX))
->> +  $(call allow-override,LLD,$(LLVM_PREFIX)ld.lld$(LLVM_SUFFIX))
->>     $(call allow-override,CXX,$(LLVM_PREFIX)clang++$(LLVM_SUFFIX))
->>     $(call allow-override,STRIP,$(LLVM_PREFIX)llvm-strip$(LLVM_SUFFIX))
->>     $(call allow-override,LLVM_STRIP,$(LLVM_PREFIX)llvm-strip$(LLVM_SUFFIX))
->> @@ -91,6 +92,7 @@ else
->>     # Some tools still require Clang, LLC and/or LLVM utils
->>     $(call allow-override,CLANG,clang)
->>     $(call allow-override,LLC,llc)
->> +  $(call allow-override,LLD,ld.lld)
->>     $(call allow-override,LLVM_CONFIG,llvm-config)
->>     $(call allow-override,LLVM_OBJCOPY,llvm-objcopy)
->>     $(call allow-override,LLVM_STRIP,llvm-strip)
->> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
->> index 6ef6872adbc3..44ba829e5d4d 100644
->> --- a/tools/testing/selftests/bpf/Makefile
->> +++ b/tools/testing/selftests/bpf/Makefile
->> @@ -245,9 +245,9 @@ $(OUTPUT)/%:%.c
->>   
->>   # LLVM's ld.lld doesn't support all the architectures, so use it only on x86
->>   ifeq ($(SRCARCH),$(filter $(SRCARCH),x86 riscv))
->> -LLD := lld
->> +USE_LD := $(LLD)
->>   else
->> -LLD := $(shell command -v $(LD))
->> +USE_LD := $(shell command -v $(LD))
->>   endif
->>   
->>   # Filter out -static for liburandom_read.so and its dependent targets so that static builds
->> @@ -258,7 +258,7 @@ $(OUTPUT)/liburandom_read.so: urandom_read_lib1.c urandom_read_lib2.c liburandom
->>   		     $(filter-out -static,$(CFLAGS) $(LDFLAGS)) \
->>   		     $(filter %.c,$^) $(filter-out -static,$(LDLIBS)) \
->>   		     -Wno-unused-command-line-argument \
->> -		     -fuse-ld=$(LLD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
->> +		     -fuse-ld=$(USE_LD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
-> 
-> Hi James,
-> 
-> This patch breaks the selftests/bpf build:
-> 
-> $ clang --version
-> clang version 22.1.3 (CentOS 22.1.3-1.el9)
-> Target: x86_64-redhat-linux-gnu
-> Thread model: posix
-> InstalledDir: /usr/bin
-> Configuration file: /etc/clang/x86_64-redhat-linux-gnu-clang.cfg
-> 
-> $ make LLVM=1 -j$(nproc)
->    [...] # ok
-> 
-> $ make LLVM=1 -C tools/testing/selftests/bpf -j$(nproc)
-> 
-> [...] # somewhere in the middle
-> 
->    LIB      liburandom_read.so
-> clang: error: invalid linker name in argument '-fuse-ld=ld.lld'
-> make: *** [Makefile:256: /home/isolodrai/workspace/review/linux/tools/testing/selftests/bpf/liburandom_read.so] Error 1
-> make: Leaving directory '/home/isolodrai/workspace/review/linux/tools/testing/selftests/bpf'
-> 
-> [...]
-> 
-> Or a simpler reproducer:
-> 
-> $ make LLVM=1 OUTPUT=/tmp/out /tmp/out/liburandom_read.so
->    LIB      liburandom_read.so
-> clang: error: invalid linker name in argument '-fuse-ld=ld.lld'
-> make: *** [Makefile:256: /tmp/out/liburandom_read.so] Error 1
-> 
-> $ make LLVM=-22 OUTPUT=/tmp/out /tmp/out/liburandom_read.so
->    LIB      liburandom_read.so
-> clang-22: error: invalid linker name in argument '-fuse-ld=ld.lld-22'
-> make: *** [Makefile:256: /tmp/out/liburandom_read.so] Error 1
-> 
-> I tried your patches, and only then noticed BPF CI caught this too:
-> https://github.com/kernel-patches/bpf/actions/runs/25943477658/job/76267174885?pr=12082
-> 
+This commit attempts to fix a userspace buffer overflow in
+nfc_llcp_getsockopt() by rejecting calls where the provided optlen is less
+than the size of a u32.
 
-Thanks for testing. Yeah looks like I made a mistake here testing the 
-various different formats of LLD. Converting it to a full path works 
-with both prefixed and postfixed versions, and that's what's already 
-done for non x86/riscv so I'll do that.
+> diff --git a/net/nfc/llcp_sock.c b/net/nfc/llcp_sock.c
+> index f1be1e84f6653..dc74e725ddd05 100644
+> --- a/net/nfc/llcp_sock.c
+> +++ b/net/nfc/llcp_sock.c
+> @@ -319,6 +319,9 @@ static int nfc_llcp_getsockopt(struct socket *sock, int level, int optname,
+>  	if (get_user(len, optlen))
+>  		return -EFAULT;
+>  
+> +	if (len < sizeof(u32))
+> +		return -EINVAL;
 
->>   		     -Wl,--version-script=liburandom_read.map \
->>   		     -fPIC -shared -o $@
->>   
->> @@ -268,7 +268,7 @@ $(OUTPUT)/urandom_read: urandom_read.c urandom_read_aux.c $(OUTPUT)/liburandom_r
->>   		     $(filter-out -static,$(CFLAGS) $(LDFLAGS)) $(filter %.c,$^) \
->>   		     -Wno-unused-command-line-argument \
->>   		     -lurandom_read $(filter-out -static,$(LDLIBS)) -L$(OUTPUT) \
->> -		     -fuse-ld=$(LLD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
->> +		     -fuse-ld=$(USE_LD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
->>   		     -Wl,-rpath=. -o $@
->>   
->>   $(OUTPUT)/sign-file: ../../../../scripts/sign-file.c
->>
-> 
+Since len is a signed int and sizeof(u32) is an unsigned size_t, does C
+integer promotion cause negative lengths to bypass this check?
 
+If a user provides an optlen of -1, it appears it would be promoted to a
+large positive number, making this condition false.
+
+It would then be explicitly cast to u32 in the min_t() call below, allowing
+the code to continue and overflow the userspace buffer exactly as this
+patch was attempting to prevent.
+
+> +
+>  	local = llcp_sock->local;
+>  	if (!local)
+>  		return -ENODEV;
+
+While looking at this, is there a potential use-after-free regression here
+if llcp_sock->local is read outside of the socket lock?
+
+If another thread calls llcp_sock_bind() on the same socket, it might
+successfully set llcp_sock->local, but then hit an error path. In that
+error path, bind() would drop the reference and set llcp_sock->local
+to NULL.
+
+If the getsockopt() thread reads local here, gets the valid pointer, and
+then blocks waiting for lock_sock(sk):
+
+getsockopt() thread:
+local = llcp_sock->local;
+// blocks on lock_sock(sk)
+
+bind() thread:
+// hits error path
+nfc_llcp_local_put(llcp_sock->local);
+llcp_sock->local = NULL;
+release_sock(sk);
+
+Will the getsockopt() thread wake up, acquire the lock, and then
+dereference the now-freed local pointer in the switch statement below?
