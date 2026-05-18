@@ -1,101 +1,158 @@
-Received: from mail-108-mta202.mxroute.com (mail-108-mta202.mxroute.com [136.175.108.202])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82E193FDBE7
-	for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 16:25:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=136.175.108.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C0B245BD6F
+	for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 16:37:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779121560; cv=none; b=Lz4bSlhMttXe6ZpniI3LagdmyKiXMzkhBODFBDOmfUtBVW+NL7PG5dUVjYKyOHEJHp0mOwdM6juioQHCAcJoYLkEdPLu5XHpC9l0eJYgd1jsjtSNcGqUNjgGXqQjIqCOjRr5MqbkveSsAU+5BPnFs0aZo0EGKNdABJiIB0WclnA=
+	t=1779122255; cv=none; b=DvK5sne+x95fUEv4YsvrV5y9WeTMY3uzbn4aG/2akS7cHxQK9HpRln/pqym0NmXJg4042kjMvgkLYCJmcfQvw4aSJ6fCu2/JGq7AdKKtfAKmbkiSZdonNCqtMR04Gte50mICmptXpEyzFsTj2uOmOOlpnix+b7bUKmqcBuyhwbQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779121560; c=relaxed/simple;
-	bh=0BPmgMtJS+bcF+/mesQQXQyUq8KaoDpdOp1lJOPwks8=;
+	s=arc-20240116; t=1779122255; c=relaxed/simple;
+	bh=opLnOv8rcGGpMzk9NYT62osXVn/LxJ7Ob8lhc0zDKrA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ioKjNrf/JoEcGPX3KbmG0NcZWEL8rLi3dxPXBW7Av5v0mHwMZIDUWdJXkE8YxYt3VJ9CGB7cqm9nO8CAJN5TwEnB3IWKWODY8Nt1qlbIWsXUTRKS7YW0ffP2srBmiyzvMe9sZdziH1MBRz9drjTKT/bCT0o69bNvvNazmikLHB0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wii.dev; spf=pass smtp.mailfrom=wii.dev; dkim=pass (2048-bit key) header.d=wii.dev header.i=@wii.dev header.b=D9KhCic8; arc=none smtp.client-ip=136.175.108.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wii.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wii.dev
+	 Content-Type:Content-Disposition:In-Reply-To; b=PH3xfA/L9ZKqLFmYG22u97PnmCrLh/c9V0LFg7A/5GZBAf0KV2X4QPi9CHQogrj70WqcvBbKq7Ukp7QnbGvQmH7CmRM6fVLiYODBiZC1h9VIXohE2aRYsDt1buBfO7XJfkF9QUN900Q4bR3zZvrwbf0uLG1Lc7gwoQ2O9s5Lov0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=P2Q8oU6l; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wii.dev header.i=@wii.dev header.b="D9KhCic8"
-Received: from filter006.mxroute.com ([136.175.111.3] filter006.mxroute.com)
- (Authenticated sender: mN4UYu2MZsgR)
- by mail-108-mta202.mxroute.com (ZoneMTA) with ESMTPSA id 19e3be884fb00067f7.00d
- for <linux-kselftest@vger.kernel.org>
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Mon, 18 May 2026 16:25:54 +0000
-X-Zone-Loop: 867fff870f6be7140c1c29175d53b0deb5e9d3c88f28
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=wii.dev;
-	s=x; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:Cc
-	:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=qnSxJKEl0qRPArxjJpQ7k4Ogs6rey6KiQ78uKuOSg9s=; b=D9KhCic8jBwhkAzRIy/FQuz/SU
-	3Tzo1JQahaiLepIv9gotvicNZu08ujluNWhyek4IEKCdfZmeqsJoGzz0FGz/raqa2yONt1EZXeoW7
-	7IELTE2mj5YW0Gu2dOKPp8zoXeqxi/9X9AEGvv0itCWCD7wClKSgnBI85/QFEmIzRBqUsaZhDqiUk
-	qzaVk2hXGI0Iyl48pp5npGTpJWtRzbufEXaekZ8nrhPjfSeBnzCAnjxRe4nu2qphAI7cCe+sXtHfY
-	Lz5zdh5Lck0L8G9i1ZchtEMan7kE+Tbqnvmyhq0/rbft2r2qauorHiElTuSjjHW9CjgBlViIde0TN
-	anmx9hUQ==;
-Date: Mon, 18 May 2026 16:25:40 +0000
-From: Richard Patel <ripatel@wii.dev>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: x86@kernel.org, Rick Edgecombe <rick.p.edgecombe@intel.com>,
-	Yu-cheng Yu <yu-cheng.yu@intel.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>, "H. Peter Anvin" <hpa@zytor.com>,
-	Andy Lutomirski <luto@kernel.org>, Kees Cook <kees@kernel.org>,
-	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/7] Usermode Indirect Branch Tracking
-Message-ID: <ags9hFcExPnQlu8V@wii.dev>
-References: <20260517183024.16292-1-ripatel@wii.dev>
- <20260518073616.GQ3102624@noisy.programming.kicks-ass.net>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="P2Q8oU6l"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2b46da8c48eso4945ad.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 09:37:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1779122254; x=1779727054; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=+pfGbgcaleoCc2Ifk0qdh18kJSuW5oqOcEuMwE4BYsU=;
+        b=P2Q8oU6lQk05pqegx9wz2Ckm4pDXPQZea1FepjyKI/zkJrjl11E+xDSNSU3l6Hqtdc
+         D1b9XotvaV/jHWJ40QukJxeJjr0ABXujWSFUNWcdOzVYen/UIIHT3n+YnpGy1FzvRfVe
+         oDtCSXbsE7guueyK9OwwVN0vod9he4MfeDgN+YdZjXoxKj/EcGl1UcRQSBR+b9KKKeJG
+         XoaUBpcyP2yaGieaQ3WX+yXa5Ucjh54IlLTwgQaphG4uQaZMq/QtSwKgnC4AtUcWt2WC
+         Iky9yA+EOh7/FVX/JNOxUxkl545i55IxKnv2pG7wYCoEpuuhy68cNUnSHi6021Aqa1nm
+         y6Yw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779122254; x=1779727054;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+pfGbgcaleoCc2Ifk0qdh18kJSuW5oqOcEuMwE4BYsU=;
+        b=ZSxWylPsf8QkmzXiBAE9CrU31boDTw3snudIinOwepnMIdTql4Nk7WGCGsn0RKRzGd
+         iDrWJQhjm4ztHPd6O40UbtDOCukuOP96ofe9GrEN/yUqcm6MDrgx4zmHfGnvoKIswC7R
+         2S4J2hdzXQK5UvAZjzTtJi3lVbGkqFu3gBUuJ91OpZBU6GkRYg2IqIog6TL0dtoaNdpI
+         h62fLESTRIW25WN7humFYoqqeYw34msK69xiufQr5ABfUPx7YR7foAfRM5bcczAJJmz/
+         0M+f1pkYRACYUudyRhXLoeRbiieC3qKPMRDYat2rZQk/PzkdJQ9gHKk9h+rtuXBSmaUg
+         nQ8A==
+X-Forwarded-Encrypted: i=1; AFNElJ83SUSXalaqEbSiDOBsjzSBZb+yawGcOfIAv/l5DjYIDKalk3beBFSZggRtrf9r46O7x+TgYGeJGko+sp2HY1I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwdUrOgFN/w8v9R4Z+Jt10uE5wUQPX2JH3pKsgWuHp/XxHysyrI
+	EnSPeVfHdSa83vHCnZlmE8BiBkyoSHanUEncGxp/Ns0R3O+rsLICzEs1htW1Nf9sdQ==
+X-Gm-Gg: Acq92OHd9XZ4pQaUiMlQR2LXbhgxSJiGP168+9zXHbPFC7k+PsTETLEGBuHIwuBa5o2
+	uDJxOToiWsceMfSoYg2Vur8mT/ik6Qq8O9+mpLDpWoc4bsjTVE4/9ATtsiUSGh3ULAig8UGuGVf
+	GIR0XwvUfGIpZLFzgIXmzWRK2OCgNF3R7YlIy+n1SSrIs6bOYEyqk++al8B//xyEjpecrmpOF4V
+	ByZyLBgAOE/xuJZg6HIbo3aFvsJ1ARtzR7czaDP3YzzdvQAuZK+Q1Vb72arDvNBM8eIxPmtoJ/7
+	YlqOE9/RiQ+y5Lom2M1dyheGDob70eJIPezVoPVEHpbTRJ2bHadB4BXVwJv7qGqGNxYZWdG8hKm
+	O0F0Uvp2h9cNRBm+6rZphP37hlPUTGF+rJ4PUKTUl5LM/T12uCv9ObkeJkaT/EKSn/1H8tiae5Z
+	K73S2migpCDtu4H/oBKZsc60lGKBhKImoGR71ZDY7iRTz9F2Guy18UbAHUxW+Jk4GV4A203Ag=
+X-Received: by 2002:a17:902:d512:b0:2bc:dc0b:ab29 with SMTP id d9443c01a7336-2bdb0109472mr2960365ad.0.1779122253168;
+        Mon, 18 May 2026 09:37:33 -0700 (PDT)
+Received: from google.com (176.13.105.34.bc.googleusercontent.com. [34.105.13.176])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c82bb121cd6sm14018626a12.30.2026.05.18.09.37.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 May 2026 09:37:32 -0700 (PDT)
+Date: Mon, 18 May 2026 09:37:28 -0700
+From: Vipin Sharma <vipinsh@google.com>
+To: Pratyush Yadav <pratyush@kernel.org>
+Cc: Samiullah Khawaja <skhawaja@google.com>, 
+	David Matlack <dmatlack@google.com>, kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-pci@vger.kernel.org, 
+	ajayachandra@nvidia.com, alex@shazbot.org, amastro@fb.com, ankita@nvidia.com, 
+	apopple@nvidia.com, chrisl@kernel.org, corbet@lwn.net, graf@amazon.com, 
+	jacob.pan@linux.microsoft.com, jgg@nvidia.com, jgg@ziepe.ca, jrhilke@google.com, 
+	julianr@linux.ibm.com, kevin.tian@intel.com, leon@kernel.org, leonro@nvidia.com, 
+	lukas@wunner.de, michal.winiarski@intel.com, parav@nvidia.com, 
+	pasha.tatashin@soleen.com, praan@google.com, rananta@google.com, rientjes@google.com, 
+	rodrigo.vivi@intel.com, rppt@kernel.org, saeedm@nvidia.com, skhan@linuxfoundation.org, 
+	vivek.kasireddy@intel.com, witu@nvidia.com, yanjun.zhu@linux.dev, yi.l.liu@intel.com
+Subject: Re: [PATCH v4 02/16] vfio/pci: Preserve vfio-pci device files across
+ Live Update
+Message-ID: <20260518152420.GA3281683.vipinsh@google.com>
+References: <20260511234802.2280368-1-vipinsh@google.com>
+ <20260511234802.2280368-3-vipinsh@google.com>
+ <CALzav=fR8c2tYj9jeOc_K=xoupxAfWMHmk0ipDniSXg6uGiFYA@mail.gmail.com>
+ <20260512211412.GA2819150.vipinsh@google.com>
+ <agT9bYpXskVwW0E_@google.com>
+ <2vxzcxyy9fpd.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260518073616.GQ3102624@noisy.programming.kicks-ass.net>
-X-Authenticated-Id: ripatel@wii.dev
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2vxzcxyy9fpd.fsf@kernel.org>
 
-On Mon, May 18, 2026 at 09:36:16AM +0200, Peter Zijlstra wrote:
-> Anyway, the most contentious part was the whole backwards compat bitmap
-> crap. When the dynamic linker composes a process of parts that support
-> IBT and parts that do not, you get to deal with fallout.
-
-Is it acceptable to do all-or-nothing IBT first? And then do a second
-round of patches with legacy support?
-
-Until then, ld.so could:
-- start with IBT, disable it upon loading incompatible DSO
-- allow users to manually lock IBT
-
-I thought this weak form of IBT is better than nothing at all, if
-there's a risk that legacy support derails things.
-
-Btw, apparently OpenBSD enforces kernel+user IBT. I think the end goal
-is a user_ibt=force command-line param that locks IBT for all processes
-on startup.
-
-> The IBT spec has this horrid bitmap thing to try and deal with this, and
-> those early patches exposed that piece of shit to userspace. Then later
-> patches (suggested by me) used the ARM64/BTI approach of using PROT_BTI.
-> We'd use a (software) page-table bit, and upon #CP consult that to see
-> if we should eat the trap or produce a warn/signal whatever.
-
-Nice, I'm happy to revive/rebase/test any of this if there's interest.
-
-> I think we were near something workable there when Rick got pulled from
-> this and put onto something more 'important' and things just haven't
-> moved ever since.
+On Thu, May 14, 2026 at 05:24:46PM +0200, Pratyush Yadav wrote:
+> On Wed, May 13 2026, Samiullah Khawaja wrote:
 > 
-> Anyway, glad to see someone has time to poke at this.
+> > On Tue, May 12, 2026 at 02:29:19PM -0700, Vipin Sharma wrote:
+> >>On Tue, May 12, 2026 at 01:59:51PM -0700, David Matlack wrote:
+> >>> On Mon, May 11, 2026 at 4:48 PM Vipin Sharma <vipinsh@google.com> wrote:
+> >>>
+> >>> > diff --git a/drivers/vfio/pci/Kconfig b/drivers/vfio/pci/Kconfig
+> >>> > index c12d614fc6c4..019de053f116 100644
+> >>> > --- a/drivers/vfio/pci/Kconfig
+> >>> > +++ b/drivers/vfio/pci/Kconfig
+> >>> > @@ -45,13 +45,15 @@ config VFIO_PCI_IGD
+> >>> >
+> >>> >  config VFIO_PCI_LIVEUPDATE
+> >>> >         bool "VFIO PCI support for Live Update (EXPERIMENTAL)"
+> >>> > -       depends on PCI_LIVEUPDATE
+> >>> > +       depends on PCI_LIVEUPDATE && VFIO_DEVICE_CDEV
+> >>> >         help
+> >>> >           Support for preserving devices bound to vfio-pci across a Live
+> >>> >           Update. This option should only be enabled by developers working on
+> >>> >           implementing this support. Once enough support has landed in the
+> >>> >           kernel, this option will no longer be marked EXPERIMENTAL.
+> >>> >
+> >>> > +         Enabling this will disable support for VFIO PCI DMA buffer.
+> >>> > +
+> >>> >           If you don't know what to do here, say N.
+> >>> >
+> >>> >  endif
+> >>> > @@ -68,7 +70,7 @@ config VFIO_PCI_ZDEV_KVM
+> >>> >           To enable s390x KVM vfio-pci extensions, say Y.
+> >>> >
+> >>> >  config VFIO_PCI_DMABUF
+> >>> > -       def_bool y if VFIO_PCI_CORE && PCI_P2PDMA && DMA_SHARED_BUFFER
+> >>> > +       def_bool y if VFIO_PCI_CORE && PCI_P2PDMA && DMA_SHARED_BUFFER && !VFIO_PCI_LIVEUPDATE
+> >>>
+> >>> Why does enabling VFIO_PCI_LIVEUPDATE require disabling
+> >>> VFIO_PCI_DMABUF? I saw the cover letter says "to keep things simple",
+> >>> but what specific problem does this solve or simplify?
+> >>
+> >>I should have provided more details there.
+> >>
+> >>When device is getting reset in vfio_pci_liveupdate_freeze(), we are
+> >>zapping userspace mapped bars, we also need to use
+> >>vfio_pci_dma_buf_move() to revoke dma buffer access or
+> >>vfio_pci_dma_buf_cleanup() combination. Cleanup takes the memory lock
+> >>which freeze already takes, and there are some refcounts which are
+> >>managed in both of these APIs. This was causing complexities with code
+> >>flow based on result of pci_load_saved_state(). All this was adding more
+> >>refactoring than I wanted in the series.
+> >
+> > Maybe we can return -EOPNOTSUPP if any dmabufs for this vfio cdev are
+> > exported during preserve?
 
-Happy to spend whatever time is needed to land IBT. I'm very glad the
-first reaction wasn't "absolutely no way" :-)
+Currently, no APIs are present to fetch if dmabufs are exported or not.
+I will add one patch to this series to return EOPNOTSUPP and remove
+condition from the config.
 
-Thank you,
--Richard
+> 
+> Whichever way you go with, a TODO/comment would be nice to have so
+> someone (including future you) looking at this code knows why this
+> restriction exists.
+> 
+
+I will add comment in the next version.
