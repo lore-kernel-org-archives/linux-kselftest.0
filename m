@@ -1,195 +1,160 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 870DB401499
-	for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 12:16:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=170.10.133.124
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779106619; cv=pass; b=sPjhb+6R3QZKR8+oUSCmBjgnttiU/0pFPzHNXRgwIh18eYiKjTCvOeUw76voBl1a+t7fpLZMCekv1P+ncc95krSkIxQhe1CsnC1l55n7WnI56KoKKNna+IcK2hv6LDDeeZrEbl05qacDgCI9aNdFQRzTe5nov7KeB9SimJkDdWk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779106619; c=relaxed/simple;
-	bh=GxTu0NfteCWY6YUdX16wT/N4BvT3hXjpZN7hbF/PIrM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZV66G6kJF2aFdrXl5icpwu1wB588XCrZbDEUIXhMLxjyypTlHGUrVNgE+p/UIc1/mDNUFE9ctJT+9xfSy4qqFB+HEIp4tYKygiyQOJpFemIe3eKAClcBGG//eYfvOAe7/LdR8VrKlIf+Yne6GirKEoWwGK6zLFCSMW8Ocqf90bc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=EaU0h4jl; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=pJBVJPui; arc=pass smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03488409E1B
+	for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 12:26:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779107214; cv=none; b=pWM5MI5gd9E4QcbcsqLGqhBcD5EDhWm1SL5m1aANcF2bC/7I0DdR8193SoUZun9xHCXyHPlpON27qt1imbB/KSMOT4vGwnovbZSkqJqieH1aQp3cP5CPblIg1UXCKs1vZIeHmU7+TBAEOHH3RifJIA5rIWpYOgb7099sTigM4N4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779107214; c=relaxed/simple;
+	bh=aSTIccs+v3BOXNzJps3pGcZ+OSMa6U+1upRu9QgbhdM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GVXXSb03rqwq/MZzxPkk4cgWoKZ5G+ilXEdy1JiYQOSyJs7QK+l46Y3lQ1dBXilww8uiSKNv1e+Dkyu6nf+JCJQ5EPfG6hC8YXT6Xy0rwmp5hQpG3gV7hGpyPVmBB+Ey789kMRD4vEKLBT6EOhTPjpY6Ox1ti3QQaBp8OqVJReo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=6wind.com; spf=pass smtp.mailfrom=6wind.com; dkim=pass (2048-bit key) header.d=6wind.com header.i=@6wind.com header.b=ATutRfXn; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=6wind.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=6wind.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="EaU0h4jl";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="pJBVJPui"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1779106616;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=nTNxjctaqLUFv9CjPVEgJLujFyB864ku/zdpEqnLvsc=;
-	b=EaU0h4jldrYE8HGaDK8xbT7CoTIiQEJ15dVJu8cZRDWbcZXXZ8fVY/1HdXUjP/uYtNdffV
-	3Bo7FsjGFIAYuashqlckZcXsOeysMy//WXm93ZOSu9qV2//Cjp/InR1T90CqFLho14Bfw9
-	jXAemOqa5HZn4cWuIkTE3jBvkibMM7I=
-Received: from mail-yw1-f199.google.com (mail-yw1-f199.google.com
- [209.85.128.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-102-tKyHdkcLNiGsK4ytW20U4A-1; Mon, 18 May 2026 08:16:53 -0400
-X-MC-Unique: tKyHdkcLNiGsK4ytW20U4A-1
-X-Mimecast-MFC-AGG-ID: tKyHdkcLNiGsK4ytW20U4A_1779106612
-Received: by mail-yw1-f199.google.com with SMTP id 00721157ae682-7bd795b6288so25758697b3.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 05:16:52 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779106612; cv=none;
-        d=google.com; s=arc-20240605;
-        b=VdfEfD5CfjP9w2Strs1+lcb9qj4ntBkbRrOqzHKdI9gmfAy7T9nyV6bK7Ze1ZReAxb
-         LI2HaXwdFhFRGkWzLHDnk0yJdMc5p2oxureVweBmM+4IRS5GF5W+lnudqQ6JRnzazY0q
-         MY9UgdVzeDXu4iK6Q727G81yhmtGRI490qQc6M4ft5D7h5ydiB5+n0KTD4fhLGL4hBow
-         7uiN44RQSqYntzgKaGaPRejYZedYwcW3788rexumxZJoAHEJQ18r2mGh8q1JFQJ3n9hk
-         DlvjBqrp4lUot90BR2w/3mNL3nyqKPFzDxdKuc01SxexBgB+cyP7XZPbRbQiPgboStWp
-         eGvA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=nTNxjctaqLUFv9CjPVEgJLujFyB864ku/zdpEqnLvsc=;
-        fh=/PxEb5wDSAbZLJsFS7SOMZtQBaH/6dpRTYXC/MLLMXw=;
-        b=RHQx+E2IYDXRXCtzIeNGu6AjJkLRpbR4HHRY20wLIQDfe+fqMLcM5dfwcFi+ZyHAMN
-         On3nJIGULfo/M3zQlALxmc+P85Jimh2a0yO9KlH7tvJVbQekJQT+it/1/NJV32XrS5f6
-         Mg/dZbyiTWPNyLHJ+d5MPW4YdWS9GhNmVPUr3XNMzABije0TODQvVli7Zkun0FlCZ4ui
-         MAnJKPKWzUcNnXH5rEfgPzxF8eC3D5Ot35I0tAfaEEKjTd+EVFhnlpe7YjWWmevdWh6F
-         C8LpNP3aggaCrOIQYEeFc1cafH/OmvGxtIUtUlX+fIb0nSVfMq9UXrRywjqa4E8BubGG
-         w8Yg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=6wind.com header.i=@6wind.com header.b="ATutRfXn"
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-488ac04e13dso2578815e9.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 05:26:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1779106612; x=1779711412; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nTNxjctaqLUFv9CjPVEgJLujFyB864ku/zdpEqnLvsc=;
-        b=pJBVJPuiJ9TppGffJ7/vAPnD/Z2mIYqgiML0AkBYA1lmD/96RwCBB8DnmO7WT60GyV
-         jW3ZI87unkDZDW1xghetk6urrRbI8jcT3MHbs4F036uHvin3DbJvk0wV4UVYhrjx+7OO
-         hJpJgv6Kpa+Voxr33d9/uf64uTHm3+FVc7FyztyY/lG1ypsZBNQLT4nlkOXQDotGpVvw
-         /O6OQltvdVdc9xB5Yh0uKHN4cq1059lXmi/dghfpxCuqIbhEgXnMAVhwkqPbZCvdhj/0
-         K25FscMl+T1/3s0pDQ1A8+NmNuixSyESlMeW/b/5L46HmwbaMFwq3CKrmfq/VEc/wZp2
-         D7aw==
+        d=6wind.com; s=google; t=1779107211; x=1779712011; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:content-language
+         :from:references:cc:to:subject:reply-to:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=K7f4p9DDizh5dEM+ARpNcE58XjtZwhJ/w+0XvXwelXk=;
+        b=ATutRfXnY+gIvP820ugX6IERpTKx8wkYMtdmDpqClNp1jpIz9cazMnQ/0394O45yV7
+         5UHgs0yl6y6DAIW2zlEMFhCJX6r/wpI9Ju16EmFYmZnKuDg5OiM2an9iN+66Wp62whKV
+         WL3H1fp6jAAlVk56ZAEyOoYHdjcsRTo9ApEGofBYGN9zY08/203ZDnvfGV9zDhv4ODGC
+         kee1dUSUzG7tdtlaX4pqYgZkzBoCx9P/9h8mV9R/MK49EkBMd6c+DMrkUKn5G3wCeqc3
+         7XUzH3EFmjeK+9VqzsvplyjUIFthwRGctUbORHBHTcxFN7J8Qmsp4yMaBqRo+xrSk2Jb
+         no+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779106612; x=1779711412;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=nTNxjctaqLUFv9CjPVEgJLujFyB864ku/zdpEqnLvsc=;
-        b=QrtMePiniX/cSGNSSeaXrvfAPqNW4fsoYypJJ8EQx/wTAU7wwgdsotoN2qlpLTwisc
-         OQA+iRJLFwYUvCxSqWT620idIYQtsk5R5WppiQXOxsPRhmclXn/6Zh7U6ytHhOVfa3ka
-         0RE+OzRO4rpQ09lOVSAn+8oz5oE3w3NYuLwuEVsmhpNe29m83CX9EXvPh9yxWM3n0ITx
-         4o608BxwRHi0IpUcFQgOEkVAqvuuHwe6eRLs6N52QY6dweZC3nphV1EaavPeGMyeha/N
-         hil/y6mswuCtDJQfrtvYlbKheu1xHkEKPzZKemvnxn4pqO77C071pk6n3ImwyNj0vugZ
-         hAuA==
-X-Forwarded-Encrypted: i=1; AFNElJ91qdz6oIdCVUZCNtIjHI+Gb8AON8oUP8h9dSfPQ/3+E7ajWQEYAIACMNkMNhquM+PrcFzfjAk2ArtBPMdbLCI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzScyWuU6MPbjYIY+FliioRnD1pPIbKcY/iBx3o73NphLYOeJib
-	67BNvWo1dUDc/1YyOIZ1IjosFyw97/fLb/ltRqiEVPrRlV50QzY8ZvkADH6bjndxGnPjKxC3QoR
-	np/GbwHF41Pw/NAUVQLBCcw2tqk3JluqwPMY/+v5znV2VMpv1q2zD5iomfvgv9DaBIj9vEzhUoP
-	t22OLz/JMI6ZBy3hGAKfhohFjaRGW1Vs9sR8jgtay6WAyU
-X-Gm-Gg: Acq92OEZL3u8twRmQM2VK8YTPL78zHLZWRAuVPWft/Z7qOBj4Zqm2CPT7+uSx43gA3b
-	05itg6/z6y0MQ5Okq9pS3YYxMaOSEG2jnO1unpNERyiL3kiPrJPB0s0bFUQAOqicuHwaDwo0jLX
-	+r8+2Tf5IUmj4uvVDYaFP8WLVdhGENCNWP0eEPwvdlKL+B4c+QMIlleX5qw3oK5BY+Wmumo/FwR
-	lEyFg==
-X-Received: by 2002:a05:690c:18:b0:79a:b440:5c8d with SMTP id 00721157ae682-7c94765b6ecmr126201117b3.11.1779106612329;
-        Mon, 18 May 2026 05:16:52 -0700 (PDT)
-X-Received: by 2002:a05:690c:18:b0:79a:b440:5c8d with SMTP id
- 00721157ae682-7c94765b6ecmr126200267b3.11.1779106611396; Mon, 18 May 2026
- 05:16:51 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1779107211; x=1779712011;
+        h=content-transfer-encoding:in-reply-to:organization:content-language
+         :from:references:cc:to:subject:reply-to:user-agent:mime-version:date
+         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=K7f4p9DDizh5dEM+ARpNcE58XjtZwhJ/w+0XvXwelXk=;
+        b=gWBaio2eL0rrGTMy8qW2POOPp/vQyv35XavGHGbXm0FXVSQDHgcvJiivWGlyNcJUR8
+         j+sl/IV0ZW1WEpe7kgE6qxPxK3s2ClMxX8S2eAU588dyPu7Mw9V9W3HUp9L7wEwJz9Qk
+         lKitgLp050hTVW+bmn4xz8y99tUyN68QDIySQ26dJPbjURoxxjvghVeV+sPuGPLhqEGb
+         EWZ6rWeOsBsLwzsdGcvXM+ft5+MDZY91hq1RuNK+PAeqovz0/td5H8jPg4yFDO7666+r
+         btkrBolk84aQPQXwbsgkrnefvk3uie77bbffcbxinGWpPuoclG+dhO8M2tFUL0hVCPI4
+         +avw==
+X-Forwarded-Encrypted: i=1; AFNElJ9F+8FThLQnxD9L7iFjaMQKp0WGl9spt6/0qYBX5DYZVK9uAmFMAzoQ3aVjeZPjlJZIBSfljmuSdZfWvcvVDhE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwNXkMxUGBIakqERIRqs4CeArbzD7Sz7uG0nFBXGucp9WT58LJg
+	mTM8mI045eR1+vSNKCI5lYgNYz0AvGDXeKodCI67TgQO1Jbfj6kTKts65zcgpgh0bhQ=
+X-Gm-Gg: Acq92OFyPBGOE6AjbzUiIDEXBIMirHY0Sfea4uR3FO3Sx7wYiKVa9e4v2eDEZtF7e7I
+	cYN1+HZnf9UESZNSMrMe8/I8Y9VgZoYfwEZ/XkrnmwR5of03o2d47sMrosmUixDCyjelM1p0on0
+	thKTyLXmFujCHCUNQ+SYBTuCse3MPpV9g6BQG+c/NozHfxesHzVkqkf+oYOa9PkxuOVHj9Vy7MU
+	n1vJLOzD+UMf4vuCAZsOonqamqWdfm7PWBabgKU+V1APYQiXgPhsXsEQQwC8x0d24wKyBs5gHPl
+	dqYIHcxEoYb/yW2RYevFF41/pH0pdwlJDJQENbBbfI84rRiJb9U4pisD9yATiJqw1VZJ21Nzw/o
+	zzR/DDjgt3PUFqJI+Pmy7AxOmOxpA/3kFc152gOWtMM8mEfZCT0jgrJ9kPn5JA8SdJ6u1sOwkZl
+	iQDmhtSGtTtupjJg20eB9btYQgaPJUoN5xm7C5yhrhOUE1jIFcIwWq4emxMNffebS6+o6j0jyJ6
+	wzv
+X-Received: by 2002:a05:600c:3b07:b0:48e:6db5:76e6 with SMTP id 5b1f17b1804b1-48fe63099c6mr122267235e9.2.1779107211132;
+        Mon, 18 May 2026 05:26:51 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:b41:c160:6a1d:efff:fe52:1959? ([2a01:e0a:b41:c160:6a1d:efff:fe52:1959])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48fe5cab818sm261195405e9.14.2026.05.18.05.26.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 May 2026 05:26:50 -0700 (PDT)
+Message-ID: <596094fa-4e41-4ffe-9261-47089ff92f74@6wind.com>
+Date: Mon, 18 May 2026 14:26:50 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260512-v2_20230123_tjmercier_google_com-v1-0-6326701c3691@redhat.com>
- <20260512-v2_20230123_tjmercier_google_com-v1-2-6326701c3691@redhat.com> <CAGsJ_4xfznffbjOaNKwnN6oZk_H6pqOzYqd1zx4Q9XrocdzV8A@mail.gmail.com>
-In-Reply-To: <CAGsJ_4xfznffbjOaNKwnN6oZk_H6pqOzYqd1zx4Q9XrocdzV8A@mail.gmail.com>
-From: Albert Esteve <aesteve@redhat.com>
-Date: Mon, 18 May 2026 14:16:37 +0200
-X-Gm-Features: AVHnY4KtxiMU87dVIS1J63myR0LimTeIXsyDKnE3-mVGrbnQ2cunkdBN5oMYBbg
-Message-ID: <CADSE00LjJcL8P5M-UPEpzZijU70uEmUirnin29N8YR5W5D-oFg@mail.gmail.com>
-Subject: Re: [PATCH RFC 2/5] dma-heap: charge dma-buf memory via explicit memcg
-To: Barry Song <baohua@kernel.org>
-Cc: Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
-	=?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>, 
-	Andrew Morton <akpm@linux-foundation.org>, 
-	Benjamin Gaignard <benjamin.gaignard@collabora.com>, Brian Starkey <Brian.Starkey@arm.com>, 
-	John Stultz <jstultz@google.com>, "T.J. Mercier" <tjmercier@google.com>, 
-	Christian Brauner <brauner@kernel.org>, Paul Moore <paul@paul-moore.com>, 
-	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
-	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
-	Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org, 
-	linux-mm@kvack.org, linux-security-module@vger.kernel.org, 
-	selinux@vger.kernel.org, linux-kselftest@vger.kernel.org, mripard@kernel.org, 
-	echanude@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Reply-To: nicolas.dichtel@6wind.com
+Subject: Re: [PATCH net 1/5] net: rtnetlink: fix link nsid reported when the
+ link is local
+To: Jiri Benc <jbenc@redhat.com>, Ilya Maximets <i.maximets@ovn.org>
+Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Donald Hunter <donald.hunter@gmail.com>, Shuah Khan <shuah@kernel.org>,
+ Adrian Moreno <amorenoz@redhat.com>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Matteo Perin <matteo.perin@canonical.com>
+References: <20260515201937.2813983-1-i.maximets@ovn.org>
+ <20260515201937.2813983-2-i.maximets@ovn.org>
+ <20260518082138.37522db0@griffin>
+From: Nicolas Dichtel <nicolas.dichtel@6wind.com>
+Content-Language: en-US
+Organization: 6WIND
+In-Reply-To: <20260518082138.37522db0@griffin>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Sat, May 16, 2026 at 9:37=E2=80=AFAM Barry Song <baohua@kernel.org> wrot=
-e:
->
-> On Tue, May 12, 2026 at 5:18=E2=80=AFPM Albert Esteve <aesteve@redhat.com=
-> wrote:
-> >
-> > On embedded platforms a central process often allocates dma-buf
-> > memory on behalf of client applications. Without a way to
-> > attribute the charge to the requesting client's cgroup, the
-> > cost lands on the allocator, making per-cgroup memory limits
-> > ineffective for the actual consumers.
-> >
-> > Add charge_pid_fd to struct dma_heap_allocation_data. When set to
-> > a valid pidfd, DMA_HEAP_IOCTL_ALLOC resolves the target task's
-> > memcg and charges the buffer there via mem_cgroup_charge_dmabuf()
-> > inside dma_heap_buffer_alloc(). Without charge_pid_fd, and with
-> > the mem_accounting module parameter enabled, the buffer is charged
-> > to the allocator's own cgroup.
-> >
-> > Additionally, commit 3c227be90659 ("dma-buf: system_heap: account for
-> > system heap allocation in memcg") adds __GFP_ACCOUNT to system-heap
-> > page allocations. Keeping __GFP_ACCOUNT would charge the same pages
-> > twice (once to kmem, once to MEMCG_DMABUF), thus remove it and route
-> > all accounting through a single MEMCG_DMABUF path.
-> >
-> [...]
->
-> > -               if (mem_accounting)
-> > -                       flags |=3D __GFP_ACCOUNT;
->
-> Hi Albert,
->
-> would it be better to move this and its description to patch 1? It
-> looks like patch 1 already introduces the double accounting changes,
-> and patch 2 is mainly just supporting remote charging.
+Le 18/05/2026 à 08:21, Jiri Benc a écrit :
+> Hi Ilya,
+> 
+> IIRC this was added because Open vSwitch needed it. I'd expect most
+> users that need to deal with cross-namespace detection to just switch
+> to the given netns prior to issuing RTM_GETLINK; at least, that's what
+> I'm doing in the tools I wrote.
+> 
+> On Fri, 15 May 2026 22:19:20 +0200, Ilya Maximets wrote:
+>> But this doesn't work for link nsid in cross-namespace RTM_GETLINK
+>> requests.  For some reason the code checks if the original device
+>> and the link are in the same namespace and not if the querier's
+>> namespace is the same as the link's.  So the logic becomes:
+>>
+>> - if NSID is not reported, then the link is in the same namespace
+>>   as the queried device.
+>> - if NSID is reported, then the link is not in the same namespace
+>>   with the queried device.
 
-Hi Barry,
+I don't agree. The expected behavior is to have a IFLA_LINK_NETNSID if the link
+part is not in the same netns as the netdev, see d37512a277df ("rtnl: add link
+netns id to interface messages")
 
-Thanks for looking into this series! Yes, in my head I was trying to
-keep patch 1, which was taken from a previous, different series, and
-then diverge from it starting with patch 2. This would clarify the
-difference between the two. But I can see it just added some confusion
-(for example, patch 1 charges on dma_buf_export() and then it is moved
-to dma_heap_buffer_alloc() in patch 2). I will reorganize it better
-for the next version, including your suggestion.
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d37512a277df
 
->
-> Also, mem_accounting is only used by system_heap.c; has this patchset
-> also eliminated its need?
+> 
+> I'm not sure I would call this a bug; the original idea was to use
+> IFLA_IF_NETNSID to switch to the point of view of that netns but
+> without actually switching to that netns. Hence, the netnsid is
+> relative to the caller's netns but otherwise, you get the same reply as
+> you would if you switched to that netns. If you think about it that
+> way, the current reply is consistent.
++1
 
-No, mem_accounting is still handled in this patch for the general case
-where no `charge_pid_fd` is used. See dma_heap_buffer_alloc() code:
+> 
+> I agree the side effects of the self-referential netnsid are
+> unfortunate. But that's an orthogonal problem merely uncovered by
+> IFLA_IF_NETNSID, since, as you correctly note, such netnsid can be
+> created also by other means. This is (AFAICS correctly) fixed by patch
+> 3/5.
+As said in my other reply, getting the self-nsid of a netns isn't complex. An
+application should be prepared to handle this.
 
-+       if (memcg)
-+               css_get(&memcg->css);
-+       else if (mem_accounting)
-+               memcg =3D get_mem_cgroup_from_mm(current->mm);
+> 
+> So, I would argue both the old and the proposed behavior are valid.
+> I agree that from the point of view you're presenting the proposed
+> behavior is easier to use. Double so since you're arguing from the Open
+> vSwitch POV.
+> 
+>> 4. A seemingly read-only RTM_GETLINK request for a different namespace
+>>    allocates a self-referential nsid for the current namespace, which
+>>    is a little unexpected.
+> 
+> I, however, don't agree with this argument. RTM_GETLINK has always
+> allocated netnsids, even long before the patch adding IFLA_IF_NETNSID.
+> There's nothing special here. You might call the netnsid allocation
+> unexpected but it's been part of this since the very beginning.
++1
 
->
-> Thanks
-> Barry
->
+> 
+>> A research across open-source projects doesn't show any projects that
+>> rely on the things that are being changed.  I couldn't find any
+>> project that uses the reported LINK_NSID with cross-namespace requests.
+>> And no projects that use cross-namespace requests seem to even parse
+>> the reported LINK_NSID.
+We (6WIND) are using this behavior. It's part of the netlink API.
 
+Regards,
+Nicolas
