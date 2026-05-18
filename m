@@ -1,143 +1,147 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6DC23E0239
-	for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 06:21:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17E1F3C1F37
+	for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 06:31:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779085328; cv=none; b=PxnzhY1A7RIUmAOL/LMLF1gMrhyV+dXgwwqFL0f05KoLu3JmVY8ESgVrLvuI8exdl5zNoiQvsY2sx6JAtDim/7HHk5JW7zxPKRLxXeG5X9kiOYOSbbaTq9YpfiVks/a3raunrx31ChMm++waEIKkq7wieMKA1jYzpNnQnhVK1N4=
+	t=1779085919; cv=none; b=aVnh56M0seuDx69Za3SM6Ik/VMyPOSZ6NM7muhvOkjuKyzYHisW8E9m0Yf5pyNg5dzD3F9qQBtBvkAZs9bAjgLZlhND0NuXilwEXlnFfReKjWZw7bF4s5E9mFQKp4SBirGtXJPuQDAorCSEYRDvHQGXufUt7OhvlCnF5owekyaU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779085328; c=relaxed/simple;
-	bh=GAxmCVfEfuTYdYwUoDV98+wVYrNUCo+F+B14gf3GO9Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mYcFGBndsRT//XNcut6qWWfFkkRfpToa96V4VOYeCrBBqEACtLN8VBoZb+t/bz8lPC69V2wMG6bQRkEsj+IMXweKBV/61gibxXAa/6OtXSJdQa9BOaytfAzohua8pamH16ZvQFb0zxEqTZmr+ndwY2FWWvpP1Lz57gU2iyIn/Lo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RMa1y+6l; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1779085919; c=relaxed/simple;
+	bh=MlEkCgLfLAET7HePrdJoisimifxqtQFmEEEd1oJx1CU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Fv4SHBs8wxOAmGanwV4yPDr61VfRzJx+LX/G3q5A6y81bWPYzu4koUqToU9Aw4tckMsNU0a4Uif2mI73ZbBICKaaD+IKXCd7n/Iz28eiOPj1+r2hpfDvNV9L6k2FgzsA5ZAhQNVv06ffCfxXQKVx+g0xR3R5sFJw4DzWKOBQoH4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cuAGr4Dn; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RMa1y+6l"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1779085310;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5dg7sEKaYbYXo9PZMr6ZpjguChM6yU45YbBjm7jsgrk=;
-	b=RMa1y+6lqtkoG6A62MEw1iEPmSwb6n0PiHcZ7ypM4a3E8avGrupbYpRSqNzPXhDLzLo1UP
-	JRNImV+UsAvCtppxu8wP/ZDO9op04CyiYiaYxYwDUZ1zmREG8TcvdVhbQUML7CSEGFsZ0m
-	L1poBobMwqhOkw5ONM51hjrNEkcrw8c=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-650-3cKWxSV_Ny6n3wpZqxTRmw-1; Mon,
- 18 May 2026 02:21:47 -0400
-X-MC-Unique: 3cKWxSV_Ny6n3wpZqxTRmw-1
-X-Mimecast-MFC-AGG-ID: 3cKWxSV_Ny6n3wpZqxTRmw_1779085305
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0C33418002C8;
-	Mon, 18 May 2026 06:21:45 +0000 (UTC)
-Received: from griffin (unknown [10.44.32.106])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 14E8D18004A3;
-	Mon, 18 May 2026 06:21:40 +0000 (UTC)
-Date: Mon, 18 May 2026 08:21:38 +0200
-From: Jiri Benc <jbenc@redhat.com>
-To: Ilya Maximets <i.maximets@ovn.org>
-Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
- Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Donald Hunter
- <donald.hunter@gmail.com>, Shuah Khan <shuah@kernel.org>, Adrian Moreno
- <amorenoz@redhat.com>, Nicolas Dichtel <nicolas.dichtel@6wind.com>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, Matteo Perin
- <matteo.perin@canonical.com>
-Subject: Re: [PATCH net 1/5] net: rtnetlink: fix link nsid reported when the
- link is local
-Message-ID: <20260518082138.37522db0@griffin>
-In-Reply-To: <20260515201937.2813983-2-i.maximets@ovn.org>
-References: <20260515201937.2813983-1-i.maximets@ovn.org>
-	<20260515201937.2813983-2-i.maximets@ovn.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cuAGr4Dn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94F20C2BCB7
+	for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 06:31:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1779085918;
+	bh=MlEkCgLfLAET7HePrdJoisimifxqtQFmEEEd1oJx1CU=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=cuAGr4DnkaFWPiMnoO48Yvv80BrIorHG/0iLTHalhudgVSdwvPoapErFdIN+NFMz2
+	 phLGmFTNoU5bC3WLQ6i8P7+rbKg89ysZTCsBcgzIz6Vz4bIjOgfYeqfplU+dVj8yLh
+	 W6Rj4kkSmJN3NlQR97SIRGnYtluBo0phXonMWeZsAmo7QkpAt2gj9kboK68pC4kAI7
+	 JlR1I8OQHsDoQysR1HWWgP4pQlJy4VQMQiI6kRLU+7N/KPp53TTWyfRZiLQIHMP1et
+	 +5icBoIoHPPt+nOhGNZ5UsVbyVzaGJz0bEjBOoCWDncGwWIW+tknxhYVmJpb+Lh8Gm
+	 2kXg3SVX2YAig==
+Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-90cbb2b50ccso154783385a.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 17 May 2026 23:31:58 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AFNElJ/Jxn9HNOdBpNFSzds3MimqD54nOULqVRW9O/DHStmPP8ttqmzu7IjFnL6Wxk7nGrq29K21GXfaQy2z48JooiM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy88/an1TcFsu86bzfJ44IJ1HzjLQQrn/O9zvZfOy43Y77tk7nb
+	fPVS+B7VMULUvQKNUB4mnkmD71rnwDdI+IB9iCjfXEnmR2/VX1FH+EFZX5Puj+yB1rB/iX2qGG8
+	ubDxBpOy7fnmDVNSLuUjpeKrWXxTYOCA=
+X-Received: by 2002:a05:620a:ac0a:b0:912:61f8:cab1 with SMTP id
+ af79cd13be357-91261f8d5b2mr1253868385a.25.1779085917789; Sun, 17 May 2026
+ 23:31:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+References: <20260507070547.2268452-1-sashal@kernel.org> <CAHC9VhTwDt2Bx8n0io9Qge_fUEnrHsxrFAQY+KaemKWqJqBQxw@mail.gmail.com>
+In-Reply-To: <CAHC9VhTwDt2Bx8n0io9Qge_fUEnrHsxrFAQY+KaemKWqJqBQxw@mail.gmail.com>
+From: Song Liu <song@kernel.org>
+Date: Sun, 17 May 2026 23:31:45 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW4TJRqQKXgcBYog8YgFLU2h2Zq9ReahxTYp_zpDyvO8AA@mail.gmail.com>
+X-Gm-Features: AVHnY4LE6Uz9P1F7Ei7__uZGPqS4LrmpPDUToLlmTi9orUT0m2IrTepJoYB0Usc
+Message-ID: <CAPhsuW4TJRqQKXgcBYog8YgFLU2h2Zq9ReahxTYp_zpDyvO8AA@mail.gmail.com>
+Subject: Re: [PATCH] killswitch: add per-function short-circuit mitigation primitive
+To: Paul Moore <paul@paul-moore.com>
+Cc: Sasha Levin <sashal@kernel.org>, corbet@lwn.net, akpm@linux-foundation.org, 
+	skhan@linuxfoundation.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	gregkh@linuxfoundation.org, linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Ilya,
+On Thu, May 14, 2026 at 8:48=E2=80=AFPM Paul Moore <paul@paul-moore.com> wr=
+ote:
+>
+> On Thu, May 7, 2026 at 3:05=E2=80=AFAM Sasha Levin <sashal@kernel.org> wr=
+ote:
+> >
+> > When a (security) issue goes public, fleets stay exposed until a patche=
+d kernel
+> > is built, distributed, and rebooted into.
+> >
+> > For many such issues the simplest mitigation is to stop calling the bug=
+gy
+> > function. Killswitch provides that. An admin writes:
+> >
+> >     echo "engage af_alg_sendmsg -1" \
+> >         > /sys/kernel/security/killswitch/control
+> >
+> > After this, af_alg_sendmsg() returns -EPERM on every call without
+> > running its body. The mitigation takes effect immediately, and is dropp=
+ed on
+> > the next reboot.
+> >
+> > A lot of recent kernel issues sit in code paths most installs only have=
+ enabled
+> > to support a relative minority of users: AF_ALG, ksmbd, nf_tables, vsoc=
+k, ax25,
+> > and friends.
+> >
+> > For most users, the cost of "this socket family stops working for the d=
+ay" is
+> > much smaller than the cost of running a known vulnerable kernel until t=
+he fix
+> > land.
+> >
+> > Assisted-by: Claude:claude-opus-4-7
+> > Signed-off-by: Sasha Levin <sashal@kernel.org>
+> > ---
+> >  Documentation/admin-guide/index.rst           |   1 +
+> >  Documentation/admin-guide/killswitch.rst      | 159 ++++
+> >  Documentation/admin-guide/tainted-kernels.rst |   8 +
+> >  MAINTAINERS                                   |  11 +
+> >  include/linux/killswitch.h                    |  19 +
+> >  include/linux/panic.h                         |   3 +-
+> >  init/Kconfig                                  |   2 +
+> >  kernel/Kconfig.killswitch                     |  31 +
+> >  kernel/Makefile                               |   1 +
+> >  kernel/killswitch.c                           | 798 ++++++++++++++++++
+> >  kernel/panic.c                                |   1 +
+> >  lib/Kconfig.debug                             |  13 +
+> >  lib/Makefile                                  |   1 +
+> >  lib/test_killswitch.c                         |  85 ++
+> >  tools/testing/selftests/Makefile              |   1 +
+> >  tools/testing/selftests/killswitch/.gitignore |   1 +
+> >  tools/testing/selftests/killswitch/Makefile   |   8 +
+> >  .../selftests/killswitch/cve_31431_test.c     | 162 ++++
+> >  .../selftests/killswitch/killswitch_test.sh   | 147 ++++
+> >  19 files changed, 1451 insertions(+), 1 deletion(-)
+> >  create mode 100644 Documentation/admin-guide/killswitch.rst
+> >  create mode 100644 include/linux/killswitch.h
+> >  create mode 100644 kernel/Kconfig.killswitch
+> >  create mode 100644 kernel/killswitch.c
+> >  create mode 100644 lib/test_killswitch.c
+> >  create mode 100644 tools/testing/selftests/killswitch/.gitignore
+> >  create mode 100644 tools/testing/selftests/killswitch/Makefile
+> >  create mode 100644 tools/testing/selftests/killswitch/cve_31431_test.c
+> >  create mode 100755 tools/testing/selftests/killswitch/killswitch_test.=
+sh
+>
+> If we made Lockdown an LSM, we should probably also make killswitch an LS=
+M.
 
-IIRC this was added because Open vSwitch needed it. I'd expect most
-users that need to deal with cross-namespace detection to just switch
-to the given netns prior to issuing RTM_GETLINK; at least, that's what
-I'm doing in the tools I wrote.
+I don't think killswitch can stack with other LSMs. In fact, killswitch
+can be used to bypass other LSMs, for example:
 
-On Fri, 15 May 2026 22:19:20 +0200, Ilya Maximets wrote:
-> But this doesn't work for link nsid in cross-namespace RTM_GETLINK
-> requests.  For some reason the code checks if the original device
-> and the link are in the same namespace and not if the querier's
-> namespace is the same as the link's.  So the logic becomes:
-> 
-> - if NSID is not reported, then the link is in the same namespace
->   as the queried device.
-> - if NSID is reported, then the link is not in the same namespace
->   with the queried device.
+echo engage security_file_open 0 > /sys/kernel/security/killswitch/control
 
-I'm not sure I would call this a bug; the original idea was to use
-IFLA_IF_NETNSID to switch to the point of view of that netns but
-without actually switching to that netns. Hence, the netnsid is
-relative to the caller's netns but otherwise, you get the same reply as
-you would if you switched to that netns. If you think about it that
-way, the current reply is consistent.
+will bypass all hooks on security_file_open.
 
-I agree the side effects of the self-referential netnsid are
-unfortunate. But that's an orthogonal problem merely uncovered by
-IFLA_IF_NETNSID, since, as you correctly note, such netnsid can be
-created also by other means. This is (AFAICS correctly) fixed by patch
-3/5.
+Thanks,
+Song
 
-So, I would argue both the old and the proposed behavior are valid.
-I agree that from the point of view you're presenting the proposed
-behavior is easier to use. Double so since you're arguing from the Open
-vSwitch POV.
-
-> 4. A seemingly read-only RTM_GETLINK request for a different namespace
->    allocates a self-referential nsid for the current namespace, which
->    is a little unexpected.
-
-I, however, don't agree with this argument. RTM_GETLINK has always
-allocated netnsids, even long before the patch adding IFLA_IF_NETNSID.
-There's nothing special here. You might call the netnsid allocation
-unexpected but it's been part of this since the very beginning.
-
-> A research across open-source projects doesn't show any projects that
-> rely on the things that are being changed.  I couldn't find any
-> project that uses the reported LINK_NSID with cross-namespace requests.
-> And no projects that use cross-namespace requests seem to even parse
-> the reported LINK_NSID.
-
-I trust your research. My main concern would be Open vSwitch breaking
-with the change; I haven't checked but obviously I trust you there even
-more.
-
-> Of course, that doesn't mean there are no such applications, but the
-> current behavior feels like a logical bug that IMO should be fixed,
-> otherwise it's hard to use all-nsid sockets properly.
-
-I don't think it's a bug. It's just a different way to look at the
-interface. I don't have a problem with saying it's more ergonomic and
-better. I don't have a problem with changing the behavior given your
-research. But please resend this patch without calling this a bug and
-without the Fixes: header. Otherwise, it gets a CVE and I don't think
-that's appropriate here. This is not a stable material, this is a
-feature adding a behavior change. You'll get my Acked-by then.
-
-The real fix for the all-nsid problem is patch 3/5.
-
-Thanks!
-
- Jiri
-
+> For the LSM crowd who might be seeing this for the first time, the
+> original thread can be found on lore via the link below:
+> https://lore.kernel.org/all/20260507070547.2268452-1-sashal@kernel.org
+>
+> --
+> paul-moore.com
+>
