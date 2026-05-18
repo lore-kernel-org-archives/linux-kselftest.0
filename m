@@ -1,125 +1,108 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A304387598;
-	Mon, 18 May 2026 18:17:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1F3033F5A3
+	for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 18:32:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779128266; cv=none; b=tk0jjTFLBJtIMu0nLlMj/krhJILmx50EcBl+/wkwTZJWD4Ka6ifF6ra428oALwv3omUsE5yF+o/VmaSJhyHScXoANSHTv/8uDB2PnP679QIwgmFctXMa91zRAj3jwBOBByKyBN/9rwo4QCoxuVQHONSNq9CUOyCZRfpmOJ586Aw=
+	t=1779129144; cv=none; b=q9kaaHBSqpsfuNpYjNssa22u4N6fF8goWSMzAZLkDZ7KDpz8PtaJ+MlrrKAv1jNYNifYiKv0JOqe5X6nexsACYmaLQLsywu59DmRYl9HMRjHqAWJpQ06JpglZ9VtsPhwdZVOC/WoB4rBrB+aU+ZLzT+iVsJC3iTozABRSyZvggE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779128266; c=relaxed/simple;
-	bh=4CO55womEnBoPWCctzW+OpQftEjr2hhkfmJD62dJN44=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=PW35IYboOmtHBigPAvwGqmTDpl2XjmLXSk+5Uj0bsocel9AHtO0ScdS2sO4GJrCw0iOQ6n+io8PQrTlE8ob1QVR/2bo3NI5ia6EJ0Oi6psG2AcWPtcZnTEyylXbmSOBOBTvUTwmpEYFM2VMQ6waF8pRXMHysOWbF5MCHIq/hRcE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CaSA7KfQ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1779129144; c=relaxed/simple;
+	bh=16bEYXGZGd2YyQebL5pOyWJvKC3gIBGcSWo7OTItR0g=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=bxJrm8Ce8baHVs66wFEChsRSQPGP1WJ5f1fNkOI8ongysMykrpvzr6mJva0Gt+5xcpl/MjfjjYtre4ahAZgCpihe0twHgbOKyJnkLN30AtPgji2MprcoEYNLRJAxImVPzi2OBVjIf4tL+8WBUfHTXxhz/C2zbppHk6J7EC7nipI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YRRmJYhI; arc=none smtp.client-ip=209.85.210.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CaSA7KfQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D6913C2BCFF;
-	Mon, 18 May 2026 18:17:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779128265;
-	bh=4CO55womEnBoPWCctzW+OpQftEjr2hhkfmJD62dJN44=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=CaSA7KfQVyQtRv+yyn5br6OHX/yPIzATzUCHi1Eb/EZspFaXkpKymTJOMyR8d9M3b
-	 jR+P8fhRKGpBlxdTRzAdg+IHe0u6ScPeT1mj2WJU8i29ZZTnbHeJJGAdF1mktLD9V5
-	 Xy1fM0l2ZxnhJ3zkJZBdeMOSXTScHIuWNo7zZlDQTjwfS00oIxOlu+QoItCMmYUK4o
-	 kBzoL18v7OEwvqn9n8gUma7GhpA9cYchtQQZfeH1wlAvA2aPq818oZvFlK7HGEwJZ5
-	 xyya+ZVcgYi2qH8i0YUH0i1mEBpe1jbyV0Ce0d9FJXB+E7l3iHdK9Bin2/Kn75I2c2
-	 93SbdK1aEZ1HA==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CBE3DCD4F4A;
-	Mon, 18 May 2026 18:17:45 +0000 (UTC)
-From: Ackerley Tng via B4 Relay <devnull+ackerleytng.google.com@kernel.org>
-Date: Mon, 18 May 2026 11:17:37 -0700
-Subject: [PATCH RFC 5/5] mm: selftests: Port readback test logic from
- libhugetlbfs
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YRRmJYhI"
+Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-8353df9bc7eso3606081b3a.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 11:32:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1779129142; x=1779733942; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=uMfPrbhoLjga1AdJLxMvGsU3iqNPJdA/CeWmsArIr+g=;
+        b=YRRmJYhIB4+xHrTzclJKFEDVXRKDBnV0PL+TcjJ1q823qHuS87zvB7iRI4pfOIwVSt
+         /Vcg+k5s1pdTPvf9NmYfD5TzKXRdu3hGY2+63S9VOI0/uJ4yN0yZStUJDi9UJsAdvq8P
+         h+Bkv7Uh6hJDA1X9GqZ49mcgPObXqgWxP+4w8R7dpvrOVipkNw59msdU7vR8o7Fmr6Lh
+         BXU/RRMj+X6GUb82f1O5dtn4+H0kMxN/tZllXE9TfgwHDGYPKBuXqg5UiPMeW9ABU19a
+         2Bar/a81dFIsVZHicquxAwry8vbApv6vr2UJLo0aT39CteFe21zgkeZcIfCV11hNlrNT
+         mlqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779129142; x=1779733942;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uMfPrbhoLjga1AdJLxMvGsU3iqNPJdA/CeWmsArIr+g=;
+        b=BKX/G8mMN54hirs06k8tf1XTlC7VYWYXBTEyZlENHQwJw/suOgKMPyXU+aRc+Wn944
+         6LmC0OXMAU625p2pk3RCxXXOSBIjBwpoQHFLRP6tmw3uIl4/KYwG/KYvBFKZdKu6rasJ
+         VhD0HQTcGJp8J5gvZASSdXgki3LH98AqOcl9Ggr7KMmqgQC6oWXi6AQW4Gmp06R87rw0
+         LkqE5hv9vnqkhxo9uZAheUENLscfKGMJkIB+utNs8EdK3S4m5txvH/KOT5lKiDvPlJOq
+         dDXOtLe9SHIXeEwNperAeAgi/EUvHN1BI3kksxHL1T3IJm6aQ5GQ/AT4hpjsLtBDpAou
+         2F3g==
+X-Forwarded-Encrypted: i=1; AFNElJ+AnK02xyRAypO1zi77RjN0ZVtyjiIQU73CtZ0tkNrA4EgLaMoWSWocBCFBNYBm9vjj6GTWyud69lrHnDz89WY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy1kwI5VN6Ef3FAfq9/SFgNXUl5Dw2pxg+S/NydanGKhYDcFTVT
+	xKCao13aU7aIPsrJgM/+u3Ei51QrUUHKn/tV1X+0XwzMrtm4kaW1X4QzOYYPxE0Xfklhqo+k8Ot
+	s6hg3FA==
+X-Received: from pfbff26.prod.google.com ([2002:a05:6a00:2f5a:b0:83e:dfc6:971])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:a221:b0:82f:7b98:e499
+ with SMTP id d2e1a72fcca58-83f33d9dcb4mr16612559b3a.31.1779129141944; Mon, 18
+ May 2026 11:32:21 -0700 (PDT)
+Date: Mon, 18 May 2026 11:32:21 -0700
+In-Reply-To: <20260518070943.2091287-2-ZongYao.Chen@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260518-port-hugetlb-selftests-v1-5-d64ba3a785fe@google.com>
-References: <20260518-port-hugetlb-selftests-v1-0-d64ba3a785fe@google.com>
-In-Reply-To: <20260518-port-hugetlb-selftests-v1-0-d64ba3a785fe@google.com>
-To: Andrew Morton <akpm@linux-foundation.org>, 
- David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
- "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
- Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
- muchun.song@linux.dev, osalvador@suse.de
-Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Ackerley Tng <ackerleytng@google.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1779128265; l=1602;
- i=ackerleytng@google.com; s=20260225; h=from:subject:message-id;
- bh=89off7URPXKpNOqQZuCiXrCqLPNnXfaicuty8kmghyM=;
- b=2EmdrC/gCQ3MioA72AfovP0JnhYZTfmTmBwAMfNu2EP7oCwZxCKgxIPZaCXufUhQE+ZEiaPpM
- EdlNF/U6uRBBLfpGgRNE33I/AxPAC835iYY/3i4b0CTZgeAgV36UEn3
-X-Developer-Key: i=ackerleytng@google.com; a=ed25519;
- pk=sAZDYXdm6Iz8FHitpHeFlCMXwabodTm7p8/3/8xUxuU=
-X-Endpoint-Received: by B4 Relay for ackerleytng@google.com/20260225 with
- auth_id=649
-X-Original-From: Ackerley Tng <ackerleytng@google.com>
-Reply-To: ackerleytng@google.com
+Mime-Version: 1.0
+References: <20260518070943.2091287-1-ZongYao.Chen@linux.alibaba.com> <20260518070943.2091287-2-ZongYao.Chen@linux.alibaba.com>
+Message-ID: <agtbNc2uPA7esShy@google.com>
+Subject: Re: [PATCH 1/2] KVM: guest_memfd: Return -EEXIST for overlapping bindings
+From: Sean Christopherson <seanjc@google.com>
+To: ZongYao.Chen@linux.alibaba.com
+Cc: Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
+	"Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>, Chao Peng <chao.p.peng@linux.intel.com>, 
+	Xiaoyao Li <xiaoyao.li@intel.com>, Ackerley Tng <ackerleytng@google.com>, 
+	Tianjia Zhang <tianjia.zhang@linux.alibaba.com>, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-From: Ackerley Tng <ackerleytng@google.com>
+On Mon, May 18, 2026, ZongYao.Chen@linux.alibaba.com wrote:
+> From: Zongyao Chen <ZongYao.Chen@linux.alibaba.com>
+> 
+> KVM_SET_USER_MEMORY_REGION2 rejects guest_memfd ranges that overlap an
+> existing binding, but kvm_gmem_bind() currently reports the failure through
+> its generic -EINVAL path.  That makes binding conflicts indistinguishable
+> from malformed guest_memfd parameters.
+> 
+> Return -EEXIST when the target guest_memfd range is already bound, matching
+> the errno used for overlapping GPA memslots and making the two types of
+> range conflicts report the same class of error to userspace.
 
-Port verification logic from libhugetlbfs' tests/readback.c.
+The other key piece of information is that we quite clearly intended to return
+-EEXIST in this case, given the testcase, but simply failed on multiple fronts.
 
-Iterate using an unsigned int pointer instead of a char pointer, which
-enables testing against a greater range of stored values beyond [0, 255].
+No need for a v2, I'll add a blurb when applying.
 
-Signed-off-by: Ackerley Tng <ackerleytng@google.com>
----
- tools/testing/selftests/mm/hugepage-mmap.c | 16 +++++++++-------
- 1 file changed, 9 insertions(+), 7 deletions(-)
-
-diff --git a/tools/testing/selftests/mm/hugepage-mmap.c b/tools/testing/selftests/mm/hugepage-mmap.c
-index dd9fccb209b10..a7d4a3eba3dd7 100644
---- a/tools/testing/selftests/mm/hugepage-mmap.c
-+++ b/tools/testing/selftests/mm/hugepage-mmap.c
-@@ -45,7 +45,7 @@ enum fd_kind {
- FIXTURE(hugepage_mmap)
- {
- 	int fd;
--	char *addr;
-+	unsigned int *addr;
- 	char mount_dir[PATH_MAX];
- };
- 
-@@ -122,19 +122,21 @@ FIXTURE_TEARDOWN(hugepage_mmap)
- 	}
- }
- 
-+#define RANDOM_CONSTANT 0x1234ABCD
-+
- TEST_F(hugepage_mmap, read_write)
- {
- 	unsigned long i;
- 
--	TH_LOG("First hex is %x", *((unsigned int *)self->addr));
-+	TH_LOG("First hex is %x", *self->addr);
- 
--	for (i = 0; i < LENGTH; i++)
--		self->addr[i] = (char)i;
-+	for (i = 0; i < LENGTH / sizeof(*self->addr); i++)
-+		self->addr[i] = RANDOM_CONSTANT ^ i;
- 
--	TH_LOG("First hex is %x", *((unsigned int *)self->addr));
-+	TH_LOG("First hex is %x", *self->addr);
- 
--	for (i = 0; i < LENGTH; i++) {
--		ASSERT_EQ(self->addr[i], (char)i) {
-+	for (i = 0; i < LENGTH / sizeof(*self->addr); i++) {
-+		ASSERT_EQ(self->addr[i], RANDOM_CONSTANT ^ i) {
- 			TH_LOG("Error: Mismatch at %lu\n", i);
- 		};
- 	}
-
--- 
-2.54.0.563.g4f69b47b94-goog
-
-
+> Fixes: a7800aa80ea4 ("KVM: Add KVM_CREATE_GUEST_MEMFD ioctl() for guest-specific backing memory")
+> Signed-off-by: Zongyao Chen <ZongYao.Chen@linux.alibaba.com>
+> ---
+>  virt/kvm/guest_memfd.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
+> index 69c9d6d546b2..46727539d08a 100644
+> --- a/virt/kvm/guest_memfd.c
+> +++ b/virt/kvm/guest_memfd.c
+> @@ -675,6 +675,7 @@ int kvm_gmem_bind(struct kvm *kvm, struct kvm_memory_slot *slot,
+>  
+>  	if (!xa_empty(&f->bindings) &&
+>  	    xa_find(&f->bindings, &start, end - 1, XA_PRESENT)) {
+> +		r = -EEXIST;
+>  		filemap_invalidate_unlock(inode->i_mapping);
+>  		goto err;
+>  	}
+> -- 
+> 2.47.3
+> 
