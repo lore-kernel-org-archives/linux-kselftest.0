@@ -1,115 +1,118 @@
-Received: from canpmsgout04.his.huawei.com (canpmsgout04.his.huawei.com [113.46.200.219])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D18A3B9DBC;
-	Mon, 18 May 2026 06:34:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.219
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7CC53CBE77
+	for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 06:37:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779086100; cv=none; b=dawziUonkyquqhgfLJp2OIJLQLJ7EwBjL6CiE1JDVDN1QHC7f4iYYmBs7Gw/zEzgIzNS4fj3XzPaSb9FuziIT54Mt15vAP0+IXLUsRXZcxHAeQHmhCiaOjGSn2A0k2wO45x6kKrKCdaIP6WwrPQ6Jg/0sq7kaTB0YhFILgVyeXk=
+	t=1779086269; cv=none; b=DVuoI/3YQAWs0/nkx1mFwgZ5CbPlb6Ny+sVorH/xv9rKb1GcadjLw0JW3coubvpIw+1VGYMdP5W3NzVskM1oIoN97oBv85EJSePX/THTJTnecACq0Qod3VJpZHzxctf92H3XcrAqKLy05UOmHne6DvGWLEv5Tm0h585nbt62OD0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779086100; c=relaxed/simple;
-	bh=sibF+s6I00NkiIexv5eillM53CQ4gPHCtUOHSkRX6/w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=HcOfdJlIupTmOTx3H5ermlSmnzrwFaMgB21o9mgo1w+lKWwZVqqdb63B5Q+HKPffr2GzRIBjnWOuOOkI5lc4nVBBbpJJjAS2bZ7qUWxWe6RLddUQmxF862ZX+Tb2XUxtQPnEKmx27l+XY6w/d0H5XIE+KSnF+FcDqJPvnc/gs30=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=ZZekhNhU; arc=none smtp.client-ip=113.46.200.219
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1779086269; c=relaxed/simple;
+	bh=PrT96Y/vLV0Zld5NPvnbzDiOZRpJnR9HPYAVqBrX/a4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Tx4iBNNAGop/KJRquILbndXI6zUKQ890XWZhKgDHWRbfB0/Gxj9llEr2Qa2yUJ8Ay4r/epYBZHGzCCrHBHy4FH6eJLJj4npWOOdP39p+Zox3vykeVpnvKTLJfkf5auCmJEJO0rpaCFvm5QCrKO9LUHqxGscGCw7y40ENgXvI30c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tpomMW39; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="ZZekhNhU"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=RiBiEJoGO8e+ET2Ji/6JNkgdquRadWqYFE6AePCfdvc=;
-	b=ZZekhNhUzccfldwRZ1g4HTnF4cTQ7Sdid/wIe36HPbSYlfrs44ibdiY5rDzW6bW+iHuz7lt/f
-	kZcNRLZAKuQrPhnP7G5Y9AuSD28hTKVvUqlrEvcCqj36tNmIKuOjhIS/zyOlRG/NhMbLF/E9yEY
-	orqev7hPaTM0e6/izgAYgfU=
-Received: from mail.maildlp.com (unknown [172.19.162.223])
-	by canpmsgout04.his.huawei.com (SkyGuard) with ESMTPS id 4gJns26ppzz1prKB;
-	Mon, 18 May 2026 14:27:02 +0800 (CST)
-Received: from kwepemj500018.china.huawei.com (unknown [7.202.194.48])
-	by mail.maildlp.com (Postfix) with ESMTPS id 8603440571;
-	Mon, 18 May 2026 14:34:45 +0800 (CST)
-Received: from [10.174.178.79] (10.174.178.79) by
- kwepemj500018.china.huawei.com (7.202.194.48) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Mon, 18 May 2026 14:34:44 +0800
-Message-ID: <a462e95c-6aad-4d70-8499-3aa5f090f0a2@huawei.com>
-Date: Mon, 18 May 2026 14:34:43 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tpomMW39"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68250C2BCC6
+	for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 06:37:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1779086268;
+	bh=PrT96Y/vLV0Zld5NPvnbzDiOZRpJnR9HPYAVqBrX/a4=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=tpomMW39Z+QDBMxf/W2OlOg6wDPsPG25eOFCJTVwmHzccb84gLd4cO9h/QGw+/gZD
+	 GAsyRzMtDEKon2j700Sa96994l4RBypdbX+Z/ROuYRHDIRkNIs7PVMgpO2psMCgcwS
+	 2t/OpakfWgVJNjObHzxYCPZeUX1OMgBcyZAmFBeqZJI8ZQPbs9TA7w75y153t7kFIY
+	 U4Nz8gtYhQA87sytwD1i4vdRJs+8httO/jezAxwxirFI7fVHXjf8PslP3/4Ha1H/rD
+	 0ww/W+yedO4WQcrdCNfDtEKxT4hiBLWOWmBOjlqa1yZYDkX0cDbHrrybjue+LRS2o7
+	 z2/3a+RWPiTBw==
+Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-8acb3daf2aaso39317696d6.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 17 May 2026 23:37:48 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AFNElJ/kisn5ASwGqIcRgqTkM/oQGZs06sCYdkGNAZyPTTxpe5c5fM4QuGfMIsHm69efoT/nZm6/YVHpvYtuQ1b0CFA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxtTNmi3V6oz9AhXsNDwJ6pz20uA2kIIGSoGBcZQ1zVvhbYGjGl
+	19DRmG8C6H/yAlpGFtFIxs5QKsg/dpcXkqJtpSPuu6o+PoA5L0c/8s+ikOEh9gyGIieDSNmcrJf
+	BIB2Aih0qtnnWHj8TN/q5tHqty9+cOO4=
+X-Received: by 2002:a05:6214:3c98:b0:8ca:2410:4b05 with SMTP id
+ 6a1803df08f44-8ca2410535fmr151166296d6.40.1779086267702; Sun, 17 May 2026
+ 23:37:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net v2 2/6] mptcp: pm: fix ADD_ADDR timer infinite retry
- on option space insufficient
-To: Matthieu Baerts <matttbe@kernel.org>
-CC: "netdev@vger.kernel.org" <netdev@vger.kernel.org>, "mptcp@lists.linux.dev"
-	<mptcp@lists.linux.dev>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-kselftest@vger.kernel.org"
-	<linux-kselftest@vger.kernel.org>, Eric Dumazet <edumaze@google.com>,
-	"stable@vger.kernel.org" <stable@vger.kernel.org>, Mat Martineau
-	<martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, "David S. Miller"
-	<davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Simon Horman
-	<horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Jakub Kicinski
-	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, "weiyongjun (A)"
-	<weiyongjun1@huawei.com>, yuehaibing <yuehaibing@huawei.com>, zhangchangzhong
-	<zhangchangzhong@huawei.com>
-References: <20260515-net-mptcp-misc-fixes-7-1-rc4-v2-0-701e96419f2f@kernel.org>
- <20260515-net-mptcp-misc-fixes-7-1-rc4-v2-2-701e96419f2f@kernel.org>
- <85b89125-57f2-43ab-a834-4dca56881e26@kernel.org>
-From: Li Xiasong <lixiasong1@huawei.com>
-In-Reply-To: <85b89125-57f2-43ab-a834-4dca56881e26@kernel.org>
+References: <20260508195749.1885522-1-sashal@kernel.org> <20260517134858.146569-1-sashal@kernel.org>
+In-Reply-To: <20260517134858.146569-1-sashal@kernel.org>
+From: Song Liu <song@kernel.org>
+Date: Sun, 17 May 2026 23:37:36 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW4x8shWon8Moi5VgCq2n4E2EzaaauZ2HHpy42Rp1Y-J-g@mail.gmail.com>
+X-Gm-Features: AVHnY4J4mKBEhL8yoe8m_C50zE8fB-yoG9ZDQzbqPScq3MxagdnowtQVIUF5N1M
+Message-ID: <CAPhsuW4x8shWon8Moi5VgCq2n4E2EzaaauZ2HHpy42Rp1Y-J-g@mail.gmail.com>
+Subject: Re: [PATCH v3] killswitch: add per-function short-circuit mitigation primitive
+To: Sasha Levin <sashal@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, bpf@vger.kernel.org, 
+	live-patching@vger.kernel.org, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Joshua Peisach <jpeisach@ubuntu.com>, Florian Weimer <fw@deneb.enyo.de>, Breno Leitao <leitao@debian.org>, 
+	Anthony Iliopoulos <ailiop@suse.com>, Michal Hocko <mhocko@suse.com>, Jiri Olsa <jolsa@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
- kwepemj500018.china.huawei.com (7.202.194.48)
+Content-Transfer-Encoding: quoted-printable
 
-Hi, Matt
+On Sun, May 17, 2026 at 6:49=E2=80=AFAM Sasha Levin <sashal@kernel.org> wro=
+te:
+>
+> When a kernel (security) issue goes public, fleets stay exposed until a p=
+atched
+> kernel is built, distributed, and rebooted into.
+>
+> For many such issues the simplest mitigation is to stop calling the buggy
+> function. Killswitch provides that. An admin writes:
+>
+>     echo "engage af_alg_sendmsg -1" \
+>         > /sys/kernel/security/killswitch/control
+>
+> After this, af_alg_sendmsg() returns -EPERM on every call without
+> running its body. The mitigation takes effect immediately, and is dropped=
+ on
+> the next reboot -- by which point a patched kernel is hopefully in place.
+>
+> A lot of recent kernel issues sit in code paths most installs only have e=
+nabled
+> to support a relative minority of users: AF_ALG, ksmbd, nf_tables, vsock,=
+ ax25,
+> and friends.
+>
+> For most users, the cost of "this socket family stops working for the day=
+" is
+> much smaller than the cost of running a known vulnerable kernel until the=
+ fix
+> lands.
+>
+> Why not an existing facility:
+>
+> * livepatch needs a built, signed, per-kernel-version module per CVE.
+>   Under Secure Boot the operator can't sign their own, so they wait
+>   for the vendor, and only a minority of vendors actually ship
+>   livepatches. Killswitch covers the days before that module shows
+>   up.
+>
+> * fail_function (CONFIG_FUNCTION_ERROR_INJECTION) is disabled in
+>   most production kernels. Even where enabled, it only works on
+>   functions pre-annotated with ALLOW_ERROR_INJECTION() in source -
+>   no help for a freshly-disclosed CVE. The debugfs UI is blocked by
+>   lockdown=3Dintegrity and the override is probabilistic.
+>
+> * BPF override (bpf_override_return) honors the same
+>   ALLOW_ERROR_INJECTION() whitelist, and BPF itself is off in many
+>   production kernels. Even where on, the operator interface is
+>   "load a verified BPF program," not a one-line write.
 
-On 5/17/2026 1:50 PM, Matthieu Baerts wrote:
-> Hello,
-> 
-> On 15/05/2026 06:27, Matthieu Baerts (NGI0) wrote:
->> From: Li Xiasong <lixiasong1@huawei.com>
->>
->> When TCP option space is insufficient (e.g., when sending ADD_ADDR with an
->> IPv6 address and port while tcp_timestamps is enabled), the original code
->> jumped to out_unlock without clearing the addr_signal flag. This caused
->> mptcp_pm_add_timer to keep rescheduling indefinitely, not sending ADD_ADDR,
->> preventing subsequent addresses in the endpoint list from being announced.
-> 
-> (...)
-> 
->> diff --git a/net/mptcp/pm.c b/net/mptcp/pm.c
->> index 3c152bf66cd5..3e770c7407e1 100644
->> --- a/net/mptcp/pm.c
->> +++ b/net/mptcp/pm.c
-> 
-> (...)
-> 
->> @@ -414,8 +420,12 @@ mptcp_pm_del_add_timer(struct mptcp_sock *msk,
->>  	/* Note: entry might have been removed by another thread.
->>  	 * We hold rcu_read_lock() to ensure it is not freed under us.
->>  	 */
->> -	if (stop_timer)
->> -		sk_stop_timer_sync(sk, &entry->add_timer);
-> FYI, sashiko found a pre-existing issue here, but I guess that's not
-> blocking this series.
-> 
-> https://sashiko.dev/#/patchset/20260515-net-mptcp-misc-fixes-7-1-rc4-v2-0-701e96419f2f%40kernel.org
-> 
-> @Li: just to know what I do with this pre-existing issue, do you plan to
-> look at it?
-> 
-> Just in case, I just opened:
-> 
->   https://github.com/multipath-tcp/mptcp_net-next/issues/623
-> 
+If it is OK for killswitch to attach to any kernel functions, do we still
+need ALLOW_ERROR_INJECTION() for fail_function and BPF
+override? Shall we instead also allow fail_function and BPF override
+to attach to any kernel functions?
 
-Thanks for the heads-up. I’ll take a look at #623 separately and follow up
-there.
-
-Best regards,
-Li Xiasong
+Thanks,
+Song
