@@ -1,205 +1,111 @@
-Received: from DM1PR04CU001.outbound.protection.outlook.com (mail-centralusazon11010044.outbound.protection.outlook.com [52.101.61.44])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1C0C38BF63;
-	Mon, 18 May 2026 07:34:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.61.44
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779089663; cv=fail; b=ZFTWUCAZvpndbvwxUbvL1WGThb1YW12XdR11vTVQJlcBMjmpT/W31yvIfvizWKY7r/riz91cHDHdPZ5VwTgIuZC9RQA4u8kAie88oxeQfuvvw1hfTfl08LHbzz67Jp30LmenfwI5ikEb1lGnqxuioqZXmXLzIpzXs7YhIFGPldM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779089663; c=relaxed/simple;
-	bh=I+T57Ilzv2uUwgXRJxE/kfQTKDjtTaleYykfycqGrYo=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=eh9SmXUlcSHg33p2WZwX999Hq5xygNNeqsus6b37ibGSgWlrCuFyKFLelZo3LyGGTQpJILhLPgQ7qntqwJDhd6HRYbUSJ6kDmk6CP/VeSx1RswbeZnbHKcEYLZ/0yrLwSoTdw8QLUw4iBpNOcm96t57/N7FmXdTXDzTbEqhkPOQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=uBIVhf/f; arc=fail smtp.client-ip=52.101.61.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4902130567A;
+	Mon, 18 May 2026 07:36:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779089786; cv=none; b=sutfxu0osz8cJjF1rV4mC6gDL4vEUmwHJ2GA62F1NKejD6Kng6nrTRyUpuOfSrFRJEkbrFcD97bhaQteCs2HLVqWTYxEzW9gbrehFSC/eh4zdldxzmRB0MYtvgoypVPPRzM2vwsaCr6UC3M5iJZ8kCULvIkNXj7sZzHoDDXfeXA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779089786; c=relaxed/simple;
+	bh=0RmsoeoqEBdCwscuQohJgSW+yc5VGaU8VIYM5D4T7s0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=t8LOYF4DqOuL4ssV8/m8JASDw3t8ObMQVafh+wjZriZRrD3AdTDEOgZtkIlPjcTNUd/uH+pLKFiPsONH6BfHAzIOVxZiHOpla9Gbl+3LFdTFHIngYzuGhu6s0g+SCfjVxtCe7UgEQcZv6sDyvoUpId1ccXn0nyrtrrH/9T2Y0FI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=rv/UrFjA; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="uBIVhf/f"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=k6jShW/h+ZKD6v5odz7fpHB2bXt0+WrwsafEIyoBSkElbEst7rkFi+PafGPFFJ5UeMwGJoaK0l4ZXWBwprmnMEUAbCXlnN+yyGWxLQH4zBBx/th1wElc7PABELauC7Fm8Y/73VfmzD9TztzheE62TicN/4dIFZTa1fwrHdXAiPWWpHh6hBFU+T5hxQw1PH1mBYRR7JCTJgcbO4PXwq7KSdWjdjVmlZiyx4mhSOY60deVXGRDjgQ/1G8pUdLcH+w31EgYDsnGVN6tdN8LzXoAsRUK8fl/dbv6x5GgnsqyS7ATucfOssrLN9h2gg11VLfYTrnGueqjVysVnHZQk5/Wpg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oGK1Fc3IZVi27vk7jBfZylC+6MP/Pejak+VnOxftD/s=;
- b=KnCNPPqGk77rPsFRDt7FgF8XbnK+php/4O/Fs7ToF3fpS150qzmUQvxqqbzmHPtAXwqKXK6QpLh188F1CR7TvqTBnN9b71Bmq4rq6zDIiRq+NiudP0U1/HIQsYTC0yDpQoR02m4YdMBTg35BJA2xyCVQ7JoLNg6x5bykxswTwBQ2YyQG3j/g2llbG4wPTevI9g+tFDSrrtozrT8PGJc5944oIQ9qiPmnDuFTwUE1hzbaCSZfQXy/z1CDx4lZhUZCbVzaeCa+FYoAoydubEllEb4E3njoznDZhIElmWSwKTw8xMYI2gQjOp8JBQOmGqyLzLAHOy5JkPwZ8NVZYpmGLA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oGK1Fc3IZVi27vk7jBfZylC+6MP/Pejak+VnOxftD/s=;
- b=uBIVhf/fvieTFEFZs2OVD6895O1RoTHheTs8tsTxulsReZ1Dh/LZOclWzSOV/hWZrKqflLyD0hCqcWGIdZ6DEd3v1b12uJvIEQRCgqKKQItgTu0lK0lwKCwJujnPnrP7IUDVbydFqZWWzLzjs7wUeXKtIx8FVZZa9zFMuluncMk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from PH7PR12MB5685.namprd12.prod.outlook.com (2603:10b6:510:13c::22)
- by DM4PR12MB6327.namprd12.prod.outlook.com (2603:10b6:8:a2::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.25.23; Mon, 18 May 2026 07:34:17 +0000
-Received: from PH7PR12MB5685.namprd12.prod.outlook.com
- ([fe80::ce69:cfae:774d:a65c]) by PH7PR12MB5685.namprd12.prod.outlook.com
- ([fe80::ce69:cfae:774d:a65c%5]) with mapi id 15.21.0025.022; Mon, 18 May 2026
- 07:34:17 +0000
-Message-ID: <cb84c2ee-9de1-4565-b2e0-60984721228f@amd.com>
-Date: Mon, 18 May 2026 09:34:08 +0200
-User-Agent: Mozilla Thunderbird
-Subject: Re: [Linaro-mm-sig] Re: [PATCH RFC 2/5] dma-heap: charge dma-buf
- memory via explicit memcg
-To: Barry Song <baohua@kernel.org>, "T.J. Mercier" <tjmercier@google.com>
-Cc: Albert Esteve <aesteve@redhat.com>, Tejun Heo <tj@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>,
- Sumit Semwal <sumit.semwal@linaro.org>, Michal Hocko <mhocko@kernel.org>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>,
- Andrew Morton <akpm@linux-foundation.org>,
- Benjamin Gaignard <benjamin.gaignard@collabora.com>,
- Brian Starkey <Brian.Starkey@arm.com>, John Stultz <jstultz@google.com>,
- Christian Brauner <brauner@kernel.org>, Paul Moore <paul@paul-moore.com>,
- James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>,
- Stephen Smalley <stephen.smalley.work@gmail.com>,
- Ondrej Mosnacek <omosnace@redhat.com>, Shuah Khan <shuah@kernel.org>,
- cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
- dri- <devel@lists.freedesktop.org>, linaro-mm-sig@lists.linaro.org,
- linux-mm@kvack.org, linux-security-module@vger.kernel.org,
- selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
- mripard@kernel.org, echanude@redhat.com
-References: <20260512-v2_20230123_tjmercier_google_com-v1-0-6326701c3691@redhat.com>
- <20260512-v2_20230123_tjmercier_google_com-v1-2-6326701c3691@redhat.com>
- <8ef38815-6ae9-4359-86d4-042554357639@amd.com>
- <CABdmKX2uwZ12kYJYPJGfWxuMBOJS=64b1GRj72tfB5D=NKM22w@mail.gmail.com>
- <CADSE00Jq_uvNgvxgPze0mEdUd+hF4-DPZkHy0KroWHZzygf4WA@mail.gmail.com>
- <CABdmKX3DhejYBis9htLDnzPrG7vuF3R3URLVNEbnyd61SSsx=g@mail.gmail.com>
- <CAGsJ_4zyecY6E-=Tm4_couT7uoM9LMcFdTMUPkZAjj4zUKE-dQ@mail.gmail.com>
-Content-Language: en-US
-From: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-In-Reply-To: <CAGsJ_4zyecY6E-=Tm4_couT7uoM9LMcFdTMUPkZAjj4zUKE-dQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR4P281CA0375.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:f8::10) To PH7PR12MB5685.namprd12.prod.outlook.com
- (2603:10b6:510:13c::22)
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="rv/UrFjA"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=XLXOvIKJsur9URmqw+rYawOKy5SFXzC1LIy9xw9RSJ8=; b=rv/UrFjASlo2Ou4mbIOw0dKtGq
+	sgbxvv07/Wp46GDC38oDGsATqXgxtGi0GRUNce934DEbXTfGGpuLE6Bw3FrzmoVixTPd3igrT7OGO
+	tdsfWSeltEDZRyRSH3wfupsNopwVgQZ64VBrNikA5yhqDfQnnRuO+SnBUd5HrUYTMxXAsFxWS6vHq
+	5r/PpxUbgmm4DT3h+oDnOodx7T+CWTODPA3xnI4NTUeDXqQJ5lziKo1QjAurPj4DnQpKs2dc/mtkK
+	9Meog1AyCewokhwOTX8CoB/9EnhQD1nlEbTb9LwJ8+T/T9Lrl+IDuFSDwLF/TCjYhchdoS7nfdyl3
+	Na/izfLw==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
+	id 1wOsWQ-00000004Tx8-29RL;
+	Mon, 18 May 2026 07:36:18 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id F324B3007A4; Mon, 18 May 2026 09:36:16 +0200 (CEST)
+Date: Mon, 18 May 2026 09:36:16 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Richard Patel <ripatel@wii.dev>
+Cc: x86@kernel.org, Rick Edgecombe <rick.p.edgecombe@intel.com>,
+	Yu-cheng Yu <yu-cheng.yu@intel.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>, "H. Peter Anvin" <hpa@zytor.com>,
+	Andy Lutomirski <luto@kernel.org>, Kees Cook <kees@kernel.org>,
+	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/7] Usermode Indirect Branch Tracking
+Message-ID: <20260518073616.GQ3102624@noisy.programming.kicks-ass.net>
+References: <20260517183024.16292-1-ripatel@wii.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH7PR12MB5685:EE_|DM4PR12MB6327:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6ba71726-fef0-487e-f64e-08deb4afde19
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|366016|7416014|376014|22082099003|18002099003|56012099003|4143699003|11063799003;
-X-Microsoft-Antispam-Message-Info:
-	Rz36V3JIkquESeE/DPFbosgntqxhqt/jDujZFBZDb1Ogtbj4OQgLJtz7mdlR0MxOIWkOqmgfPsgIdYqDlbubBariIyQ8R2hiHPfnEWeiA1D27vD/p53H5MorgRfXzx7U8tq/9gSQ7kW+xlOjOqV3lWeX7HPOEsPQSAW4ikR/bxFa4iBrqT++LedFyj2moTbKttnCN5ZB3gXLgWMqTgZqcBGy8GaU8rVpwxF8ZzP07gE33ZwcO9VWm9eYrPQ8LCYACE0gWNCwxZZA9XeNpz2Fmt+WTDB7/53UJAJDk+NPYMfd2LSlkB8vE4dCLQRmMNJxh5sZjbugmsqMK6NMsJw+CbD6mD2K7sRdsrkRRkrCL+Bc2GyN21ZJVuh4xIptIWlIGA5SD2iXVBJ9iDp12SttiupFOecfp5gmYwvdW/HWedT0GUdhLI6Cp2H5XZUt/js1WvDMUi04ZK41VPGHxS4X+Yx1daPSVec1+0rngORI+lzQo75PnL0vHvxwoMAZybtnrt5VmpvtSjEsB8nrhGC0iZ0l3br7WrpWDoc5xHX86LUtonTGY6u3+GdnADPQ/B2M5tixXduShHOpJu+zzgYT+lxRNuDwW2NmRZ2czjcgh1KA2X5DejpxRFZz57VF1oqMjLaMO7MxAhpcTdQwd4bvCKn5MS6rXJwIGYBktHP0GdzLmX6NKcjB2HVS4PeRqAu9
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5685.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014)(22082099003)(18002099003)(56012099003)(4143699003)(11063799003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?YjN2QVN5WW4vRzViUFZ0dVhsT0Q3RnRvU3pVU1h5NWV2bnJST2pBbkxyNWo0?=
- =?utf-8?B?b05KZ0JjVnAwUzhXWnEva0hSVk1Db29JVmtqZlJhbDd3T2twd0FrYk1TZVQ0?=
- =?utf-8?B?NWxxbU1kci9qN1pnV0JEVjlKSzRuZWRpUHRLRDgzSjVoTENPVkp3YmhMNDBi?=
- =?utf-8?B?bWZJb3pMN2hsemE4TG9RRkZQMXVkWDE1OG9HRlBBS1lrZmthczhHa1dzWEVJ?=
- =?utf-8?B?NVZrdkhtYThVd0Z4Tkd3SXNPL3lwTEdwbkM2TSs1V3gvYS83N3U1eXF2NHh3?=
- =?utf-8?B?QTdHUFhaQnMwU0xmd2kyWnhxQlhsOWd5bkF5dXRqREVXMWdrdXY0Q2ViUlZu?=
- =?utf-8?B?QlRDdWtLUm1UQkdaL2RFV1kyNGQrUlRzS21RVS9XWUxzdy9vNlNMcTY1UnRq?=
- =?utf-8?B?b1RwcGFKQ1pmS0EzMkhVUUw0TWg5ZG84dllYczc5UmVvSHJUeExJTzFKaWxM?=
- =?utf-8?B?anViZDZUaldVNEIrYXhtUEdzUDRXK05LL1pncUdBVHFDWTNIUFlDaC9BNW8x?=
- =?utf-8?B?WU5ESTRRQVpQdkhNVzBQcVAyNUMrL3oyakNHT3dyV0YzQXI5Q0hzWWVzUjAy?=
- =?utf-8?B?NjFyQ1kybk1WNE9GY3Q5WGQ1VlJtejVINGUxaUxOeThkRlIwZk9ZWUwvVVky?=
- =?utf-8?B?bElhS2NqWHRYNkR3MzBYQzYvQnZZQldKTnJtR21OOUhHMlRDM1BPdHVSSXQx?=
- =?utf-8?B?NlNObERhTE1DckRmZkRJalFldm9GZk9NVFd0dXBhdnBvMUNxeWlNVS90d1gr?=
- =?utf-8?B?dFRYNmtxdlVXSkN1cnBHT1J1UDc3dXNnNkIrV01sazZFeVo3VVcvS2FlM1Jr?=
- =?utf-8?B?L2hWbCtHRU5WZy82aGx6OVVxTThLR1hRaURSNlo5MTNnOTdYVk5NUVI2WHR1?=
- =?utf-8?B?K0U1WE5xdGtMR0wzRTJ2STBQcXk4YkpqemJHU1J1M091Q3JlVk9yMVp0dDAv?=
- =?utf-8?B?S2FPcDVMd0lDYmhLU2RXVUM5ekZxWE9QWTFmeURaciszdllyUGpWVVl0Y3dl?=
- =?utf-8?B?aElnQlNJaTNwZmhnTlpDRXd3Q3QrVW9nQVFzKzhjYTZtc1NoSUFXeGxrd2pJ?=
- =?utf-8?B?cG9WQjUyencxSGRyclVhUHllYjFLc0kyd0UxTlRTZDlldnlyU1hkVkFCRjZJ?=
- =?utf-8?B?RC82VDlDaUY3VFVMb1JWS3h3eVBpcHpWQlZEcXBBcjQ0TmtzeGZJZnU4bHhH?=
- =?utf-8?B?UVBBa2ErWFh1R0xEaEpBZ0lxeTU2T2p0ZythenlPQXMvVlZkZm5rc3FUNXpB?=
- =?utf-8?B?VmRaazdTY2JoZ1NvL253eEdXVHR1K3RtQXZaUlcvZDlhaTdVbmI4WlJYVG1E?=
- =?utf-8?B?dDZ2d28zSStsYWpFVklOZVZmR2NnUDgzWVRTZHgxOUNoM2FlMzAxQjFJL293?=
- =?utf-8?B?SUtEZTRzcjhnd3MyZ1ErekpONWZZZ01aMXg5TThURWhiWmNXM3l5dHdvTzMx?=
- =?utf-8?B?OEJwd2xYaVJoWmdhTFYvVzEvV0YwNUdpUmdUVTVYZ28xaHgwZ1V2TzkvVlNX?=
- =?utf-8?B?TURZZXZjTURRa2dJKzdyeHRQejdzdktaM1dVZ3I0VnVvOXFBSHpNRWZGMURL?=
- =?utf-8?B?d0ZFYUpkOTJhQVhCMllwdEdYZ1NOc3NYOTh5RDRJUTJrMS9lNHN1VFZrb0hL?=
- =?utf-8?B?SXljSlFVL0d2ZGhJaDJxNVBYbVdRRzdaY1hhSTZ6ZGpzbGJjSC9VMldPUUpZ?=
- =?utf-8?B?UThJTnd4Tm02UE5lbVpkK0kyVWVPM2Nma2dTVk1kVmFDMWU5R1ZJem15bXNL?=
- =?utf-8?B?eWsrY2RyL2wxWUpiOVRoQ0RwdHZFYXRqMmFycHlhdjBvRlFtN0JJWDVsdTlV?=
- =?utf-8?B?aXY5em5GVnJuWHdDM0FJVE5lQkRTV0xuNXVkV1ZNczZTTk1QZ2ZCWmw2NFpz?=
- =?utf-8?B?SVJrTXlxYTNhMm9vSWR0bUdUeGwxa2x2NldLVEhBNDBFY0JmY3ZIeWZaM3dS?=
- =?utf-8?B?SkZHYW1RMXlzekVBU2diSE5CT1RKVzdzT0NGcUNkSm1tREVNVlJJNHdHckoz?=
- =?utf-8?B?NWhITFlLN01JQTBBdGpFM2lzUCt2bDRlUFltTzVMMnFqSjJFNEhuRllRRzBS?=
- =?utf-8?B?ejZDZ0pTZjZTUG9qdFRlcThGSUhFVU16NlFyRjRxeFY4NUovcDExSWxLQ1V2?=
- =?utf-8?B?ZGZtN3lTT3BtTnY4OHI0U3A3NEtUUDIxN1J2WmZSSTl0eFd1ZWdlZXpObE82?=
- =?utf-8?B?TjRoRUhpK3VXL0pHNDkrd3hrNlJrUW02MmxQRGlNYTRQK0dyL2l0QmlHekNJ?=
- =?utf-8?B?M2xEclNLNjNTVzNISXAzanZReHpEMGxxd2d6Q2dIOCtacWI4WWlacWFuR3l6?=
- =?utf-8?Q?izuDB4c3QEpID/cTUJ?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6ba71726-fef0-487e-f64e-08deb4afde19
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5685.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 May 2026 07:34:17.3042
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: dTYc+kXojVBuwAvXkRpJsgRPNSmUM5Y0Q5JghRCK9k9Y4iDqIe+OiSYcXx9z1Gqk
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6327
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260517183024.16292-1-ripatel@wii.dev>
 
-On 5/16/26 11:19, Barry Song wrote:
-> On Thu, May 14, 2026 at 12:35 AM T.J. Mercier <tjmercier@google.com> wrote:
-> [...]
->>>> I have a question about this part. Albert I guess you are interested
->>>> only in accounting dmabuf-heap allocations, or do you expect to add
->>>> __GFP_ACCOUNT or mem_cgroup_charge_dmabuf calls to other
->>>> non-dmabuf-heap exporters?
->>>
->>> We're scoping this to dma-buf heaps for now. CMA heaps and the dmem
->>> controller are on the radar for follow-up/parallel work (there will be
->>> dragons and will surely need discussion). For DRM and V4L2 the
->>> long-term intent is migration to heaps, which would make direct
->>> accounting on those paths unnecessary.
->>
->> Ah I see. GEM buffers exported to dmabufs are what I had in mind. I
->> guess this would only leave the odd non-DRM driver with the need to
->> add their own accounting calls, which I don't expect would be a big
->> problem.
->>
+On Sun, May 17, 2026 at 01:30:17PM -0500, Richard Patel wrote:
+> I was quite surprised that the Linux kernel still does not allow
+> userspace to enable x86 IBT (indirect jmp/call integrity).
 > 
-> sounds like we still have a long way to go to correctly account for
-> various v4l2, drm, GEM, CMA, etc. In patch 1, the charging is done in
-> dma_buf_export(), so I guess it covers all dma-buf types except
-> dma_heap, but the problem is that it has no remote charging support at
-> all?
-
-No, just the other way around
-
-DMA-buf heaps can be handled here because we know that it is pure system memory and nothing special so memcg always applies.
-
-dma_buf_export() on the other hand handles tons of different use cases, ranging from buffer accounted to dmem, over special resources which aren't even memory all the way to buffers which can migrate from dmem to memcg and back during their lifetime.
-
->>> udmabufs are already
->>> memcg-charged, so adding a separate MEMCG_DMABUF would double count.
->>> Are there any other exporters you had in mind that would benefit from
->>> this approach?
-
-Well apart from DMA-buf memfd_create() is one of the things which as broken our neck in the past a couple of times.
-
-But thinking more about it what if instead of making this DMA-buf heaps specific what if we have a general cgroups function which allows to change accounting of a buffer referenced by a file descriptor to a different process?
-
-That would cover not only the DMA-buf heaps use case, but also all other DMA-buf with dmem and whatever we come up in the future as well.
-
-The only drawback I can see is that DMA-buf heap allocations would be temporarily accounted to the memory allocation daemon, but I don't think that this would be a problem.
-
-Regards,
-Christian.
-
+> Compilers and linkers have been emitting 'endbr64' IBT markers and ELF
+> support notes for a while now.
 > 
-> Thanks
-> Barry
+> The hard work was done years ago by Intel:
+> https://lore.kernel.org/all/20210830182221.3535-1-yu-cheng.yu@intel.com/
+> 
+> In summary, usermode IBT requires 3 things:
+> 1. Set the CET_ENDBR_EN bit in MSR_IA32_U_CET for each IBT-enabled thread
+>    (PATCH 2,5)
+> 2. Back up the WAIT_FOR_ENDBR bit across signal handling (PATCH 3,4)
+> 3. Provide a way for usermode to enable it (PATCH 5)
+> 
+> This builds on top of Yu Cheng's work, with some adaptations:
+> - FRED support
+> - Implemented the existing prctl(PR_CFI_*) API
+> - Removed ELF parsing (can be added later)
+> 
+> Unresolved questions:
+> - Is there a cleaner way to do the WAIT_FOR_ENDBR XSAVE fallback?
+> - What to do about 'notrack jmp *rax'?
+>   I leave CET_NO_TRACK_EN enabled, which weakens IBT, by enabling a jump
+>   prefix that skips the ENDBR check. GCC emits it for jump tables
+>   (-mcet-switch). We could introduce a PR_CFI_IBT_STRICT bit.
+> - There's some obvious overlap with arch_prctl(ARCH_SHSTK_*).
+>   Happy to use that API instead.
 
+Right, I think the problem was mostly one of ABI. Various distributions
+shipped with 'early' patches using an ABI that hadn't seen upstream
+review much, and when it hit we went uhhh, no!
+
+And then glibc and distros were like, but uhmm, it has to be.
+
+So here we are :-(
+
+Anyway, the most contentious part was the whole backwards compat bitmap
+crap. When the dynamic linker composes a process of parts that support
+IBT and parts that do not, you get to deal with fallout.
+
+The IBT spec has this horrid bitmap thing to try and deal with this, and
+those early patches exposed that piece of shit to userspace. Then later
+patches (suggested by me) used the ARM64/BTI approach of using PROT_BTI.
+We'd use a (software) page-table bit, and upon #CP consult that to see
+if we should eat the trap or produce a warn/signal whatever.
+
+I think we were near something workable there when Rick got pulled from
+this and put onto something more 'important' and things just haven't
+moved ever since.
+
+Anyway, glad to see someone has time to poke at this.
