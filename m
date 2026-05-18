@@ -1,191 +1,187 @@
-Received: from mail-wm1-f68.google.com (mail-wm1-f68.google.com [209.85.128.68])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A500E1FBEA8
-	for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 13:55:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDBC348A2C5;
+	Mon, 18 May 2026 13:56:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779112527; cv=none; b=fp5PxwN9dpZ4DC0RjLqARpXd2KFqsjNAwsx+XJTzcQ6mLnlr1Gums37VckIFapIoBlPgf8i5gu6E6Q5taWaiOkkC6eTuwtASsyjgVoJXdhci8WavdaxU61PuZhWlQW88zJnyFnvyY7AmlptjZZyViKIv4u3WxZTNAD0zQoRUKzo=
+	t=1779112592; cv=none; b=tGVP19iSywH2O1whK8YuSHeIWsUA21kK4BYr8MjZjo5ksxPh2iL2F1t06cnX4nBuVmonWvOvNBTLjLVs+nqiLIQWxjK/EzdNp40guxkvx3AqlmPjZjoGzcTqtJwYfiq8wCDAI/EWW8C+XkVIvC3oSabX+94D6Q9JHqtx5pUsGjI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779112527; c=relaxed/simple;
-	bh=VMOptizGQ70e+J7xxlCbq9mgAizi8a4WRjYduTd5ZK4=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=vDG7Iznj4Ru4BrGyF02ZFUHJhm1IEzn54PXow3STo4RAG6rFlBGluFyKrjUHYDHeiobzErcq+WZzwWYUdXnAhsqRzl43405goWUCgxKLqdWpi9VF+N7ssys4NB34IG0WFTtmItKaRtKueR/j9J8FZ2mAlvGlNxvFaUwA58LYOs8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.68
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f68.google.com with SMTP id 5b1f17b1804b1-488a9033b2cso17667515e9.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 06:55:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779112524; x=1779717324;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:cc:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Tizt3kVJ9HgwVYO0PwgdSdfIFIk0uWpRihhV5cyqjVQ=;
-        b=sFXGPfpfp7nDif4eyCaYHw/SYP9ymuiDxlo2s0MhUpUwP86Cp/+g47Ffa4m06lpxHp
-         L4i+S4XywsblzwL4O9GaKNC2OELF5Cposfx93WD5f8WRktwor4UMMgUWJDx5P/cH1uuF
-         jVVb7JEbRxBc10o8yEWup0T+11gxzsb7WsF1WSKl+QhC+XLK1eMasqP1SCiJYuZYodNA
-         oeNvcAdrPd4o+4Y3LxwlSdTpjGPTCE14/0ijcVZTbafeUeNIOAB894QvZQVtTBX8NzYc
-         t0bFYDVAhNSCnV/JwqNluWUSag9HltKCgcEp0eg6AJxUFWg6BmNN8f666vTQC1zEwyCa
-         besA==
-X-Forwarded-Encrypted: i=1; AFNElJ9ivtoRU3LZL2JyQ2iGUOOB6j+gH1LqywtzbRf6cgYviuG7cgOhRDoJWsLLkzvBkHVvk7Lo87oL+d20uf/Ubnw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwnymzKxV6LXHKQe7WAbsDKXyn9qScaVzhNEbJvSy6x3sEyhZLi
-	vZtL73BMhPvIGeQ0mpwKi2LC6lqTtAOwhtMKYAik+4UsTIG5ryD6taI8
-X-Gm-Gg: Acq92OHEr6E9noxoM3FDanCFI/EbfWMpW2oCAmK6RfGgytMqpIippSdweqcU1ZK1D77
-	f9HhKQqlY0Hsjj/Rj9A4whJBZXgB/RZkl9J3DYQR9U1VGoVIP1RGxdrStFh0UscIRzG1XB40JqP
-	xXeFJru8vM1ZfdErkYMGIcLnDjYvujlvFTk7FDNCgNutePgvD9EqL9E0VoEPbMvGAhk9dL0IZua
-	KD3WdG/MTzMSvzhWjp+rXqzDMvEWoCAvbFsMNRd4/G1jOAJ9e8mHYe06U1Uuz9hwD1jtGwsTzCd
-	wUde3i1kxt5AE2ZlfPPD8TdHVm4cZT/ZdY6sqbxuMwpa5tONYpceWSca5XX2VTpDYmmSgTrzImc
-	IoKsvHJfinTR+845CaZlj1S8jdrUpglN+g7t/WJB3yINVSti0wJ+siytO1KdKVRH6pl8vdbUwAi
-	Jp2nGiBKgFdf7jc40wFGVSWW9rzgO8ei3W3C7qlM3kkqEzXjGBTS1bOn4=
-X-Received: by 2002:a05:600c:3b12:b0:488:a824:fdff with SMTP id 5b1f17b1804b1-48fe61ed2cfmr223048385e9.22.1779112523670;
-        Mon, 18 May 2026 06:55:23 -0700 (PDT)
-Received: from [192.168.88.241] (89-24-32-159.nat.epc.tmcz.cz. [89.24.32.159])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48febe79ce3sm85711065e9.31.2026.05.18.06.55.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 May 2026 06:55:23 -0700 (PDT)
-Message-ID: <30599c3d-66b5-4787-9ead-53ab716ba338@ovn.org>
-Date: Mon, 18 May 2026 15:55:18 +0200
+	s=arc-20240116; t=1779112592; c=relaxed/simple;
+	bh=M1hJb0hoxcKkSmY+3IhEMGFrd0EBvNP2uyHwSKG6WPk=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ukBlEq63HCKfY0PaABaBwjOTq10YMMxsI9oI8NP+rp86VOvRBaNgvmr0ddfepJW5XNpHjyOo5YlF+W4MboWqupocN/HmhVwbnHMWWzFcMPfgHqLuDkgSwOohrwEV+i3jyEzSqhsYqgGnq8XELe3Du5fsk+RbFKu8PY1pv4kmgiA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=ILPUfjCQ; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ILPUfjCQ"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
+	In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=M1hJb0hoxcKkSmY+3IhEMGFrd0EBvNP2uyHwSKG6WPk=; b=ILPUfjCQYenNwqo9nmnty8T+JP
+	XFB7C9Z5Coj5DPZYvFaC+rllHVtl3AuXYRXqyFZQ+I729tIs90HEIOsjikVAFwvYpInrbCge/7hNl
+	1zqL/+TJf/x76qZa9Uy7BoU7UDnC2/XvSM4NXMlYt99WuREVcWuLpvqE7dH+OLybrplAqVo/YD0We
+	J/RWNAMzuy0zf+s4ravtJ8WR2G9y75DNhF/4flqSFZyHsd/fKXl0dPj3acJ5cHjagKoEY8v1JhjPL
+	8W5ImBd2mTNyvAfxrbok5D9kX5u8AI1XXrPT4wLn08Pqg4Ookg7BDMOWoft10Aj3vUOVdOR0bNjo8
+	V1FtNFoQ==;
+Received: from 54-240-197-225.amazon.com ([54.240.197.225] helo=u09cd745991455d.ant.amazon.com)
+	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
+	id 1wOyS7-00000004pP2-1g7Z;
+	Mon, 18 May 2026 13:56:15 +0000
+Message-ID: <7be2151d420954e02577312f6985018fc848ee4c.camel@infradead.org>
+Subject: Re: [PATCH v3 0/4] KVM: arm64: vgic: Fix IGROUPR writability and
+ IIDR revision control
+From: David Woodhouse <dwmw2@infradead.org>
+To: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan
+ <skhan@linuxfoundation.org>,  Marc Zyngier <maz@kernel.org>, Oliver Upton
+ <oupton@kernel.org>, Joey Gouly <joey.gouly@arm.com>, Suzuki K Poulose
+ <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>, Catalin
+ Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Jonathan
+ Cameron <jic23@kernel.org>, Sascha Bischoff <Sascha.Bischoff@arm.com>, Eric
+ Auger <eric.auger@redhat.com>, Raghavendra Rao Ananta <rananta@google.com>,
+ Maxim Levitsky <mlevitsk@redhat.com>, Kees Cook <kees@kernel.org>, Timothy
+ Hayes <timothy.hayes@arm.com>,  Arnd Bergmann <arnd@arndb.de>,
+ kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org, Peter Maydell
+ <peter.maydell@linaro.org>, qemu-arm@nongnu.org, qemu-devel@nongnu.org
+Date: Mon, 18 May 2026 14:56:13 +0100
+In-Reply-To: <20260511113558.3325004-1-dwmw2@infradead.org>
+References: <20260511113558.3325004-1-dwmw2@infradead.org>
+Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
+	boundary="=-Hkc7djUBzr1SPdOeRBFL"
+User-Agent: Evolution 3.52.3-0ubuntu1.1 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: i.maximets@ovn.org, netdev@vger.kernel.org,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Donald Hunter <donald.hunter@gmail.com>,
- Shuah Khan <shuah@kernel.org>, Adrian Moreno <amorenoz@redhat.com>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Matteo Perin <matteo.perin@canonical.com>
-Subject: Re: [PATCH net 1/5] net: rtnetlink: fix link nsid reported when the
- link is local
-To: nicolas.dichtel@6wind.com, Jiri Benc <jbenc@redhat.com>
-References: <20260515201937.2813983-1-i.maximets@ovn.org>
- <20260515201937.2813983-2-i.maximets@ovn.org>
- <20260518082138.37522db0@griffin>
- <8aa4e92d-0498-4335-b3b1-dabd7e507ed7@ovn.org>
- <5d4467d5-f081-4f7e-ac3c-9134ee8ddc6e@6wind.com>
-Content-Language: en-US
-From: Ilya Maximets <i.maximets@ovn.org>
-Autocrypt: addr=i.maximets@ovn.org; keydata=
- xsFNBF77bOMBEADVZQ4iajIECGfH3hpQMQjhIQlyKX4hIB3OccKl5XvB/JqVPJWuZQRuqNQG
- /B70MP6km95KnWLZ4H1/5YOJK2l7VN7nO+tyF+I+srcKq8Ai6S3vyiP9zPCrZkYvhqChNOCF
- pNqdWBEmTvLZeVPmfdrjmzCLXVLi5De9HpIZQFg/Ztgj1AZENNQjYjtDdObMHuJQNJ6ubPIW
- cvOOn4WBr8NsP4a2OuHSTdVyAJwcDhu+WrS/Bj3KlQXIdPv3Zm5x9u/56NmCn1tSkLrEgi0i
- /nJNeH5QhPdYGtNzPixKgPmCKz54/LDxU61AmBvyRve+U80ukS+5vWk8zvnCGvL0ms7kx5sA
- tETpbKEV3d7CB3sQEym8B8gl0Ux9KzGp5lbhxxO995KWzZWWokVUcevGBKsAx4a/C0wTVOpP
- FbQsq6xEpTKBZwlCpxyJi3/PbZQJ95T8Uw6tlJkPmNx8CasiqNy2872gD1nN/WOP8m+cIQNu
- o6NOiz6VzNcowhEihE8Nkw9V+zfCxC8SzSBuYCiVX6FpgKzY/Tx+v2uO4f/8FoZj2trzXdLk
- BaIiyqnE0mtmTQE8jRa29qdh+s5DNArYAchJdeKuLQYnxy+9U1SMMzJoNUX5uRy6/3KrMoC/
- 7zhn44x77gSoe7XVM6mr/mK+ViVB7v9JfqlZuiHDkJnS3yxKPwARAQABzSJJbHlhIE1heGlt
- ZXRzIDxpLm1heGltZXRzQG92bi5vcmc+wsGUBBMBCAA+AhsDBQsJCAcCBhUKCQgLAgQWAgMB
- Ah4BAheAFiEEh+ma1RKWrHCY821auffsd8gpv5YFAmfB9JAFCQyI7q0ACgkQuffsd8gpv5YQ
- og/8DXt1UOznvjdXRHVydbU6Ws+1iUrxlwnFH4WckoFgH4jAabt25yTa1Z4YX8Vz0mbRhTPX
- M/j1uORyObLem3of4YCd4ymh7nSu++KdKnNsZVHxMcoiic9ILPIaWYa8kTvyIDT2AEVfn9M+
- vskM0yDbKa6TAHgr/0jCxbS+mvN0ZzDuR/LHTgy3e58097SWJohj0h3Dpu+XfuNiZCLCZ1/G
- AbBCPMw+r7baH/0evkX33RCBZwvh6tKu+rCatVGk72qRYNLCwF0YcGuNBsJiN9Aa/7ipkrA7
- Xp7YvY3Y1OrKnQfdjp3mSXmknqPtwqnWzXvdfkWkZKShu0xSk+AjdFWCV3NOzQaH3CJ67NXm
- aPjJCIykoTOoQ7eEP6+m3WcgpRVkn9bGK9ng03MLSymTPmdINhC5pjOqBP7hLqYi89GN0MIT
- Ly2zD4m/8T8wPV9yo7GRk4kkwD0yN05PV2IzJECdOXSSStsf5JWObTwzhKyXJxQE+Kb67Wwa
- LYJgltFjpByF5GEO4Xe7iYTjwEoSSOfaR0kokUVM9pxIkZlzG1mwiytPadBt+VcmPQWcO5pi
- WxUI7biRYt4aLriuKeRpk94ai9+52KAk7Lz3KUWoyRwdZINqkI/aDZL6meWmcrOJWCUMW73e
- 4cMqK5XFnGqolhK4RQu+8IHkSXtmWui7LUeEvO/OwU0EXvts4wEQANCXyDOic0j2QKeyj/ga
- OD1oKl44JQfOgcyLVDZGYyEnyl6b/tV1mNb57y/YQYr33fwMS1hMj9eqY6tlMTNz+ciGZZWV
- YkPNHA+aFuPTzCLrapLiz829M5LctB2448bsgxFq0TPrr5KYx6AkuWzOVq/X5wYEM6djbWLc
- VWgJ3o0QBOI4/uB89xTf7mgcIcbwEf6yb/86Cs+jaHcUtJcLsVuzW5RVMVf9F+Sf/b98Lzrr
- 2/mIB7clOXZJSgtV79Alxym4H0cEZabwiXnigjjsLsp4ojhGgakgCwftLkhAnQT3oBLH/6ix
- 87ahawG3qlyIB8ZZKHsvTxbWte6c6xE5dmmLIDN44SajAdmjt1i7SbAwFIFjuFJGpsnfdQv1
- OiIVzJ44kdRJG8kQWPPua/k+AtwJt/gjCxv5p8sKVXTNtIP/sd3EMs2xwbF8McebLE9JCDQ1
- RXVHceAmPWVCq3WrFuX9dSlgf3RWTqNiWZC0a8Hn6fNDp26TzLbdo9mnxbU4I/3BbcAJZI9p
- 9ELaE9rw3LU8esKqRIfaZqPtrdm1C+e5gZa2gkmEzG+WEsS0MKtJyOFnuglGl1ZBxR1uFvbU
- VXhewCNoviXxkkPk/DanIgYB1nUtkPC+BHkJJYCyf9Kfl33s/bai34aaxkGXqpKv+CInARg3
- fCikcHzYYWKaXS6HABEBAAHCwXwEGAEIACYCGwwWIQSH6ZrVEpascJjzbVq59+x3yCm/lgUC
- Z8H0qQUJDIjuxgAKCRC59+x3yCm/loAdD/wJCOhPp9711J18B9c4f+eNAk5vrC9Cj3RyOusH
- Hebb9HtSFm155Zz3xiizw70MSyOVikjbTocFAJo5VhkyuN0QJIP678SWzriwym+EG0B5P97h
- FSLBlRsTi4KD8f1Ll3OT03lD3o/5Qt37zFgD4mCD6OxAShPxhI3gkVHBuA0GxF01MadJEjMu
- jWgZoj75rCLG9sC6L4r28GEGqUFlTKjseYehLw0s3iR53LxS7HfJVHcFBX3rUcKFJBhuO6Ha
- /GggRvTbn3PXxR5UIgiBMjUlqxzYH4fe7pYR7z1m4nQcaFWW+JhY/BYHJyMGLfnqTn1FsIwP
- dbhEjYbFnJE9Vzvf+RJcRQVyLDn/TfWbETf0bLGHeF2GUPvNXYEu7oKddvnUvJK5U/BuwQXy
- TRFbae4Ie96QMcPBL9ZLX8M2K4XUydZBeHw+9lP1J6NJrQiX7MzexpkKNy4ukDzPrRE/ruui
- yWOKeCw9bCZX4a/uFw77TZMEq3upjeq21oi6NMTwvvWWMYuEKNi0340yZRrBdcDhbXkl9x/o
- skB2IbnvSB8iikbPng1ihCTXpA2yxioUQ96Akb+WEGopPWzlxTTK+T03G2ljOtspjZXKuywV
- Wu/eHyqHMyTu8UVcMRR44ki8wam0LMs+fH4dRxw5ck69AkV+JsYQVfI7tdOu7+r465LUfg==
-In-Reply-To: <5d4467d5-f081-4f7e-ac3c-9134ee8ddc6e@6wind.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 
-On 5/18/26 2:46 PM, Nicolas Dichtel wrote:
-> Le 18/05/2026 à 14:11, Ilya Maximets a écrit :
->> On 5/18/26 8:21 AM, Jiri Benc wrote:
->>> Hi Ilya,
->>
->> Hi, Jiri.  Thanks for your thoughts on the matter!
->>
->>>
->>> IIRC this was added because Open vSwitch needed it. I'd expect most
->>> users that need to deal with cross-namespace detection to just switch
->>> to the given netns prior to issuing RTM_GETLINK; at least, that's what
->>> I'm doing in the tools I wrote.
->>
->> Yeah, that's also what other projects like FRR are doing.  It's a bit
->> of a hustle for multi-threaded applications, as AFAIK, there is no way
->> to just move one thread into a different namespace, so if many threads
->> are doing something with the network and you suddenly need to check
->> something in a different namespace, you can't really do that without
->> pausing all other threads first.  But that's a separate thing, unrelated
->> to the series.  I'm just ranting. :) 
-> Hmm, not sure to understand. setns() is per thread (see man setns()).
 
-Hmm, I got my wires crossed here with something else, I suppose.
-Though CAP_SYS_ADMIN requirement may be an even higher barrier.
+--=-Hkc7djUBzr1SPdOeRBFL
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> 
->>
->>>
->>> On Fri, 15 May 2026 22:19:20 +0200, Ilya Maximets wrote:
->>>> But this doesn't work for link nsid in cross-namespace RTM_GETLINK
->>>> requests.  For some reason the code checks if the original device
->>>> and the link are in the same namespace and not if the querier's
->>>> namespace is the same as the link's.  So the logic becomes:
->>>>
->>>> - if NSID is not reported, then the link is in the same namespace
->>>>   as the queried device.
->>>> - if NSID is reported, then the link is not in the same namespace
->>>>   with the queried device.
->>>
->>> I'm not sure I would call this a bug; the original idea was to use
->>> IFLA_IF_NETNSID to switch to the point of view of that netns but
->>> without actually switching to that netns. Hence, the netnsid is
->>> relative to the caller's netns but otherwise, you get the same reply as
->>> you would if you switched to that netns. If you think about it that
->>> way, the current reply is consistent.
->>
->> It makes some sense, but the fact that all-nsid notification and the
->> cross-namespace RTM_GETLINK provide different IDs makes it inconsistent
->> in my brain.  We have:
->>
->> 1. nsenter(target) + getlink(local) = target-to-link nsid.
->> 2. getlink(target) = caller-to-target nsid  + caller-to-link nsid.
->> 3. all-nsid-notiication = cmsg(caller-to-target nsid) + target-to-link nsid.
-> 
-> all-nsid-notification appears before cross-getlink.
-> The goal, for all-nsid-notification, was to be able to receive netlink messages
-> of a subset of netns in one socket. So these messages are provided as-is, ie
-> like if they were sent on a netlink socket opened in the corresponding netns.
-> It's generic, there is no need to patch every subsystem.
-> 
-> cross-get*() have been added later. The chosen behavior is friendlier at the
-> cost of patching every subsystem that is supported.
+On Mon, 2026-05-11 at 12:30 +0100, David Woodhouse wrote:
+> Maintaining precise guest compatibility across host kernel upgrades =E2=
+=80=94
+> and even downgrades, since rollback is sometimes necessary =E2=80=94 is n=
+ot=20
+> optional. That *shouldn't* need saying, but maybe it does:
+> https://lore.kernel.org/all/6856b269d2af706eae397e0cf9c1231f89d9a932.came=
+l@infradead.org/
+>=20
+> This series fixes the GICv2/v3 IGROUPR writability model to be
+> consistently controlled by the GICD_IIDR implementation revision,
+> replacing the ad-hoc v2_groups_user_writable flag.
 
-That's exactly my point.  If we're creating a special patch for a subsystem, we
-don't need to adhere to the exact structure of the original message, since the
-data reported changes anyway.
+The more generic question of whether KVM should actually maintain guest
+compatibility from one version of the host kernel to another is being
+discussed in that other thread.
 
-IMO, not reporting nsid that is the same as the caller's nsid is more friendlier.
-But that's, again, just a difference in opinion at this point, I'll not insist.
+Setting that aside, is there any *technical* feedback on this series? I
+believe I've dealt with all of Marc's feedback on v1 (thanks).
 
-Best regards, Ilya Maximets.
+
+--=-Hkc7djUBzr1SPdOeRBFL
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
+
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCD9Aw
+ggSOMIIDdqADAgECAhAOmiw0ECVD4cWj5DqVrT9PMA0GCSqGSIb3DQEBCwUAMGUxCzAJBgNVBAYT
+AlVTMRUwEwYDVQQKEwxEaWdpQ2VydCBJbmMxGTAXBgNVBAsTEHd3dy5kaWdpY2VydC5jb20xJDAi
+BgNVBAMTG0RpZ2lDZXJ0IEFzc3VyZWQgSUQgUm9vdCBDQTAeFw0yNDAxMzAwMDAwMDBaFw0zMTEx
+MDkyMzU5NTlaMEExCzAJBgNVBAYTAkFVMRAwDgYDVQQKEwdWZXJva2V5MSAwHgYDVQQDExdWZXJv
+a2V5IFNlY3VyZSBFbWFpbCBHMjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMjvgLKj
+jfhCFqxYyRiW8g3cNFAvltDbK5AzcOaR7yVzVGadr4YcCVxjKrEJOgi7WEOH8rUgCNB5cTD8N/Et
+GfZI+LGqSv0YtNa54T9D1AWJy08ZKkWvfGGIXN9UFAPMJ6OLLH/UUEgFa+7KlrEvMUupDFGnnR06
+aDJAwtycb8yXtILj+TvfhLFhafxroXrflspavejQkEiHjNjtHnwbZ+o43g0/yxjwnarGI3kgcak7
+nnI9/8Lqpq79tLHYwLajotwLiGTB71AGN5xK+tzB+D4eN9lXayrjcszgbOv2ZCgzExQUAIt98mre
+8EggKs9mwtEuKAhYBIP/0K6WsoMnQCcCAwEAAaOCAVwwggFYMBIGA1UdEwEB/wQIMAYBAf8CAQAw
+HQYDVR0OBBYEFIlICOogTndrhuWByNfhjWSEf/xwMB8GA1UdIwQYMBaAFEXroq/0ksuCMS1Ri6en
+IZ3zbcgPMA4GA1UdDwEB/wQEAwIBhjAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIweQYI
+KwYBBQUHAQEEbTBrMCQGCCsGAQUFBzABhhhodHRwOi8vb2NzcC5kaWdpY2VydC5jb20wQwYIKwYB
+BQUHMAKGN2h0dHA6Ly9jYWNlcnRzLmRpZ2ljZXJ0LmNvbS9EaWdpQ2VydEFzc3VyZWRJRFJvb3RD
+QS5jcnQwRQYDVR0fBD4wPDA6oDigNoY0aHR0cDovL2NybDMuZGlnaWNlcnQuY29tL0RpZ2lDZXJ0
+QXNzdXJlZElEUm9vdENBLmNybDARBgNVHSAECjAIMAYGBFUdIAAwDQYJKoZIhvcNAQELBQADggEB
+ACiagCqvNVxOfSd0uYfJMiZsOEBXAKIR/kpqRp2YCfrP4Tz7fJogYN4fxNAw7iy/bPZcvpVCfe/H
+/CCcp3alXL0I8M/rnEnRlv8ItY4MEF+2T/MkdXI3u1vHy3ua8SxBM8eT9LBQokHZxGUX51cE0kwa
+uEOZ+PonVIOnMjuLp29kcNOVnzf8DGKiek+cT51FvGRjV6LbaxXOm2P47/aiaXrDD5O0RF5SiPo6
+xD1/ClkCETyyEAE5LRJlXtx288R598koyFcwCSXijeVcRvBB1cNOLEbg7RMSw1AGq14fNe2cH1HG
+W7xyduY/ydQt6gv5r21mDOQ5SaZSWC/ZRfLDuEYwggWbMIIEg6ADAgECAhAH5JEPagNRXYDiRPdl
+c1vgMA0GCSqGSIb3DQEBCwUAMEExCzAJBgNVBAYTAkFVMRAwDgYDVQQKEwdWZXJva2V5MSAwHgYD
+VQQDExdWZXJva2V5IFNlY3VyZSBFbWFpbCBHMjAeFw0yNDEyMzAwMDAwMDBaFw0yODAxMDQyMzU5
+NTlaMB4xHDAaBgNVBAMME2R3bXcyQGluZnJhZGVhZC5vcmcwggIiMA0GCSqGSIb3DQEBAQUAA4IC
+DwAwggIKAoICAQDali7HveR1thexYXx/W7oMk/3Wpyppl62zJ8+RmTQH4yZeYAS/SRV6zmfXlXaZ
+sNOE6emg8WXLRS6BA70liot+u0O0oPnIvnx+CsMH0PD4tCKSCsdp+XphIJ2zkC9S7/yHDYnqegqt
+w4smkqUqf0WX/ggH1Dckh0vHlpoS1OoxqUg+ocU6WCsnuz5q5rzFsHxhD1qGpgFdZEk2/c//ZvUN
+i12vPWipk8TcJwHw9zoZ/ZrVNybpMCC0THsJ/UEVyuyszPtNYeYZAhOJ41vav1RhZJzYan4a1gU0
+kKBPQklcpQEhq48woEu15isvwWh9/+5jjh0L+YNaN0I//nHSp6U9COUG9Z0cvnO8FM6PTqsnSbcc
+0j+GchwOHRC7aP2t5v2stVx3KbptaYEzi4MQHxm/0+HQpMEVLLUiizJqS4PWPU6zfQTOMZ9uLQRR
+ci+c5xhtMEBszlQDOvEQcyEG+hc++fH47K+MmZz21bFNfoBxLP6bjR6xtPXtREF5lLXxp+CJ6KKS
+blPKeVRg/UtyJHeFKAZXO8Zeco7TZUMVHmK0ZZ1EpnZbnAhKE19Z+FJrQPQrlR0gO3lBzuyPPArV
+hvWxjlO7S4DmaEhLzarWi/ze7EGwWSuI2eEa/8zU0INUsGI4ywe7vepQz7IqaAovAX0d+f1YjbmC
+VsAwjhLmveFjNwIDAQABo4IBsDCCAawwHwYDVR0jBBgwFoAUiUgI6iBOd2uG5YHI1+GNZIR//HAw
+HQYDVR0OBBYEFFxiGptwbOfWOtMk5loHw7uqWUOnMDAGA1UdEQQpMCeBE2R3bXcyQGluZnJhZGVh
+ZC5vcmeBEGRhdmlkQHdvb2Rob3Uuc2UwFAYDVR0gBA0wCzAJBgdngQwBBQEBMA4GA1UdDwEB/wQE
+AwIF4DAdBgNVHSUEFjAUBggrBgEFBQcDAgYIKwYBBQUHAwQwewYDVR0fBHQwcjA3oDWgM4YxaHR0
+cDovL2NybDMuZGlnaWNlcnQuY29tL1Zlcm9rZXlTZWN1cmVFbWFpbEcyLmNybDA3oDWgM4YxaHR0
+cDovL2NybDQuZGlnaWNlcnQuY29tL1Zlcm9rZXlTZWN1cmVFbWFpbEcyLmNybDB2BggrBgEFBQcB
+AQRqMGgwJAYIKwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmRpZ2ljZXJ0LmNvbTBABggrBgEFBQcwAoY0
+aHR0cDovL2NhY2VydHMuZGlnaWNlcnQuY29tL1Zlcm9rZXlTZWN1cmVFbWFpbEcyLmNydDANBgkq
+hkiG9w0BAQsFAAOCAQEAQXc4FPiPLRnTDvmOABEzkIumojfZAe5SlnuQoeFUfi+LsWCKiB8Uextv
+iBAvboKhLuN6eG/NC6WOzOCppn4mkQxRkOdLNThwMHW0d19jrZFEKtEG/epZ/hw/DdScTuZ2m7im
+8ppItAT6GXD3aPhXkXnJpC/zTs85uNSQR64cEcBFjjoQDuSsTeJ5DAWf8EMyhMuD8pcbqx5kRvyt
+JPsWBQzv1Dsdv2LDPLNd/JUKhHSgr7nbUr4+aAP2PHTXGcEBh8lTeYea9p4d5k969pe0OHYMV5aL
+xERqTagmSetuIwolkAuBCzA9vulg8Y49Nz2zrpUGfKGOD0FMqenYxdJHgDCCBZswggSDoAMCAQIC
+EAfkkQ9qA1FdgOJE92VzW+AwDQYJKoZIhvcNAQELBQAwQTELMAkGA1UEBhMCQVUxEDAOBgNVBAoT
+B1Zlcm9rZXkxIDAeBgNVBAMTF1Zlcm9rZXkgU2VjdXJlIEVtYWlsIEcyMB4XDTI0MTIzMDAwMDAw
+MFoXDTI4MDEwNDIzNTk1OVowHjEcMBoGA1UEAwwTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJ
+KoZIhvcNAQEBBQADggIPADCCAgoCggIBANqWLse95HW2F7FhfH9bugyT/danKmmXrbMnz5GZNAfj
+Jl5gBL9JFXrOZ9eVdpmw04Tp6aDxZctFLoEDvSWKi367Q7Sg+ci+fH4KwwfQ8Pi0IpIKx2n5emEg
+nbOQL1Lv/IcNiep6Cq3DiyaSpSp/RZf+CAfUNySHS8eWmhLU6jGpSD6hxTpYKye7PmrmvMWwfGEP
+WoamAV1kSTb9z/9m9Q2LXa89aKmTxNwnAfD3Ohn9mtU3JukwILRMewn9QRXK7KzM+01h5hkCE4nj
+W9q/VGFknNhqfhrWBTSQoE9CSVylASGrjzCgS7XmKy/BaH3/7mOOHQv5g1o3Qj/+cdKnpT0I5Qb1
+nRy+c7wUzo9OqydJtxzSP4ZyHA4dELto/a3m/ay1XHcpum1pgTOLgxAfGb/T4dCkwRUstSKLMmpL
+g9Y9TrN9BM4xn24tBFFyL5znGG0wQGzOVAM68RBzIQb6Fz758fjsr4yZnPbVsU1+gHEs/puNHrG0
+9e1EQXmUtfGn4InoopJuU8p5VGD9S3Ikd4UoBlc7xl5yjtNlQxUeYrRlnUSmdlucCEoTX1n4UmtA
+9CuVHSA7eUHO7I88CtWG9bGOU7tLgOZoSEvNqtaL/N7sQbBZK4jZ4Rr/zNTQg1SwYjjLB7u96lDP
+sipoCi8BfR35/ViNuYJWwDCOEua94WM3AgMBAAGjggGwMIIBrDAfBgNVHSMEGDAWgBSJSAjqIE53
+a4blgcjX4Y1khH/8cDAdBgNVHQ4EFgQUXGIam3Bs59Y60yTmWgfDu6pZQ6cwMAYDVR0RBCkwJ4ET
+ZHdtdzJAaW5mcmFkZWFkLm9yZ4EQZGF2aWRAd29vZGhvdS5zZTAUBgNVHSAEDTALMAkGB2eBDAEF
+AQEwDgYDVR0PAQH/BAQDAgXgMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEFBQcDBDB7BgNVHR8E
+dDByMDegNaAzhjFodHRwOi8vY3JsMy5kaWdpY2VydC5jb20vVmVyb2tleVNlY3VyZUVtYWlsRzIu
+Y3JsMDegNaAzhjFodHRwOi8vY3JsNC5kaWdpY2VydC5jb20vVmVyb2tleVNlY3VyZUVtYWlsRzIu
+Y3JsMHYGCCsGAQUFBwEBBGowaDAkBggrBgEFBQcwAYYYaHR0cDovL29jc3AuZGlnaWNlcnQuY29t
+MEAGCCsGAQUFBzAChjRodHRwOi8vY2FjZXJ0cy5kaWdpY2VydC5jb20vVmVyb2tleVNlY3VyZUVt
+YWlsRzIuY3J0MA0GCSqGSIb3DQEBCwUAA4IBAQBBdzgU+I8tGdMO+Y4AETOQi6aiN9kB7lKWe5Ch
+4VR+L4uxYIqIHxR7G2+IEC9ugqEu43p4b80LpY7M4KmmfiaRDFGQ50s1OHAwdbR3X2OtkUQq0Qb9
+6ln+HD8N1JxO5nabuKbymki0BPoZcPdo+FeRecmkL/NOzzm41JBHrhwRwEWOOhAO5KxN4nkMBZ/w
+QzKEy4PylxurHmRG/K0k+xYFDO/UOx2/YsM8s138lQqEdKCvudtSvj5oA/Y8dNcZwQGHyVN5h5r2
+nh3mT3r2l7Q4dgxXlovERGpNqCZJ624jCiWQC4ELMD2+6WDxjj03PbOulQZ8oY4PQUyp6djF0keA
+MYIDuzCCA7cCAQEwVTBBMQswCQYDVQQGEwJBVTEQMA4GA1UEChMHVmVyb2tleTEgMB4GA1UEAxMX
+VmVyb2tleSBTZWN1cmUgRW1haWwgRzICEAfkkQ9qA1FdgOJE92VzW+AwDQYJYIZIAWUDBAIBBQCg
+ggE3MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI2MDUxODEzNTYx
+M1owLwYJKoZIhvcNAQkEMSIEICqt//RAX/pWu9cXB++MsOe2WMY0oz8fhUmPi6jxt8lSMGQGCSsG
+AQQBgjcQBDFXMFUwQTELMAkGA1UEBhMCQVUxEDAOBgNVBAoTB1Zlcm9rZXkxIDAeBgNVBAMTF1Zl
+cm9rZXkgU2VjdXJlIEVtYWlsIEcyAhAH5JEPagNRXYDiRPdlc1vgMGYGCyqGSIb3DQEJEAILMVeg
+VTBBMQswCQYDVQQGEwJBVTEQMA4GA1UEChMHVmVyb2tleTEgMB4GA1UEAxMXVmVyb2tleSBTZWN1
+cmUgRW1haWwgRzICEAfkkQ9qA1FdgOJE92VzW+AwDQYJKoZIhvcNAQEBBQAEggIAJdF11gRQu5b0
+WHvhiZWx/Uhmg3FKvzegxqEDSGe3fRVfyKIbNr5nYVSTqp8iRbyR3GK+lD2pE9mUhJmxvl2mwf6I
+09XZCAQL75U6KoyeND4KtQfLHuyRA5JUTLDR/ZtGXqdIBMGSsuVHKjtEjEW0Ko2wytJFwHpDSUF5
+kAbY9ZeLcCkb5xpGm9GAEOhKWpKqYjcIP4hXtvQeUxa92yXdwWjaQyLaWztqDc645+ggkNEMQO+K
+ozdUDKBV0okeI+CBrySgMZRbr7DuqTxxgzB3jVosOCyla8ke4LAwkBBjjrm+uH3VHDz6n25SXsrq
+JFc6zCnHyNqN0AWL/ocbJZvL9PpHuEslDvQOj6u9AvAcsNd/5MzPD5k7XxWj0PZgiA9+O94ZM2Fe
+n15VBs1ZD3K2Bs92l8/s0fjjZo31m3jqHkTcQCURcfTWWOffCKmq15f7j3J7719dqkdLqM9MuFxd
+hfBg9XxHs4WVwg7714ACs/4CPNZnzfxtI4s7B43fPhj1tbUb30ZQDNCTzwXeJoTmlXt3/q3HfKKG
+olegD9kqVgQa9H4L43BsRK+3UqCfRr6oK42wgMAB/7yRwsllAxBSgkFiZ8NWb2WUYPf3KqAe+d2Q
+E4IuZ49d7l0190FczUqMzxjnk+E4gOlt3vVS/Ql2b1Y+Pic5GrMDu0OxcVHHQzMAAAAAAAA=
+
+
+--=-Hkc7djUBzr1SPdOeRBFL--
