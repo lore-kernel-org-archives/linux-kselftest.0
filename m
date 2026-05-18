@@ -1,158 +1,142 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C0B245BD6F
-	for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 16:37:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ABAD48BD2F
+	for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 16:43:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779122255; cv=none; b=DvK5sne+x95fUEv4YsvrV5y9WeTMY3uzbn4aG/2akS7cHxQK9HpRln/pqym0NmXJg4042kjMvgkLYCJmcfQvw4aSJ6fCu2/JGq7AdKKtfAKmbkiSZdonNCqtMR04Gte50mICmptXpEyzFsTj2uOmOOlpnix+b7bUKmqcBuyhwbQ=
+	t=1779122634; cv=none; b=VS/wRtYnwRZlu/lchfgjWhkw9feCGIj/1+c5yIjwSnDOPqnDFGingg+HzdWmedhA0ixxoI+w6y7sfLYmzp7doGWU9cbaWHoYl8ChjfTBGP3HbkJe4AfRwkH9DxC8Gw3VkEuAVHsx4yb2THYXRqeNXgpQ3fyfyBt5jQsbKCyuThg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779122255; c=relaxed/simple;
-	bh=opLnOv8rcGGpMzk9NYT62osXVn/LxJ7Ob8lhc0zDKrA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PH3xfA/L9ZKqLFmYG22u97PnmCrLh/c9V0LFg7A/5GZBAf0KV2X4QPi9CHQogrj70WqcvBbKq7Ukp7QnbGvQmH7CmRM6fVLiYODBiZC1h9VIXohE2aRYsDt1buBfO7XJfkF9QUN900Q4bR3zZvrwbf0uLG1Lc7gwoQ2O9s5Lov0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=P2Q8oU6l; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1779122634; c=relaxed/simple;
+	bh=BpUI463qOnTFoISKFwnX5ZskGYYCjuOqBstCVOJYwzo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BlS+7WEYSq7VB/Pz7Do7RWFW017ijxSXnG8fzetgDSgwalL1HzN9SeBPyMNv5/zht0ij6Xf3U5Em4pxDN2G5ArQepQh7KVsQuX+WRCodr6is65ybYS8TrlAbhCA0aL1giYyuDZjsjVuKdWjo5Q7Pw3iIbke1YzJOh6XpvuxGvAk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=tL8Qus3F; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="P2Q8oU6l"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2b46da8c48eso4945ad.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 09:37:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tL8Qus3F"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-48984d29fe3so27842365e9.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 09:43:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1779122254; x=1779727054; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=+pfGbgcaleoCc2Ifk0qdh18kJSuW5oqOcEuMwE4BYsU=;
-        b=P2Q8oU6lQk05pqegx9wz2Ckm4pDXPQZea1FepjyKI/zkJrjl11E+xDSNSU3l6Hqtdc
-         D1b9XotvaV/jHWJ40QukJxeJjr0ABXujWSFUNWcdOzVYen/UIIHT3n+YnpGy1FzvRfVe
-         oDtCSXbsE7guueyK9OwwVN0vod9he4MfeDgN+YdZjXoxKj/EcGl1UcRQSBR+b9KKKeJG
-         XoaUBpcyP2yaGieaQ3WX+yXa5Ucjh54IlLTwgQaphG4uQaZMq/QtSwKgnC4AtUcWt2WC
-         Iky9yA+EOh7/FVX/JNOxUxkl545i55IxKnv2pG7wYCoEpuuhy68cNUnSHi6021Aqa1nm
-         y6Yw==
+        d=gmail.com; s=20251104; t=1779122631; x=1779727431; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nSt4x+poU4p8LXWInMRteFG4LHeESzIi5up8Mh8FuBw=;
+        b=tL8Qus3F4zRUUEGV3qGi6geTpbWwiLc8IvlQAXmMSYPz2bJo67wbRasQux7hs12qIq
+         ABmyKdA65WCX5fnURIFo2bBmWdmKcnH4m/o1DqnStNEh/kU6bNdLHuFJR/pOrFvABqwS
+         i/2v1zd/Y0xEtRuFdjILbJmQ+Zc7n/TRjwhUKm1m2O+y3fu+WkOuUcnsVXci8LUUu0jM
+         StcAG8kOznCaV3BS9GTEr27aCZMkfIppstjtBdEXyMHzMZFtSIDiQHKaF8oyWdTeVWrG
+         t/M4uTSVTrlWA2D4CVy3s8t5lXat2kx1Dm+ddWDNcpHWRTC+gswyTYsYuQIOXKfzcARD
+         boUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779122254; x=1779727054;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+pfGbgcaleoCc2Ifk0qdh18kJSuW5oqOcEuMwE4BYsU=;
-        b=ZSxWylPsf8QkmzXiBAE9CrU31boDTw3snudIinOwepnMIdTql4Nk7WGCGsn0RKRzGd
-         iDrWJQhjm4ztHPd6O40UbtDOCukuOP96ofe9GrEN/yUqcm6MDrgx4zmHfGnvoKIswC7R
-         2S4J2hdzXQK5UvAZjzTtJi3lVbGkqFu3gBUuJ91OpZBU6GkRYg2IqIog6TL0dtoaNdpI
-         h62fLESTRIW25WN7humFYoqqeYw34msK69xiufQr5ABfUPx7YR7foAfRM5bcczAJJmz/
-         0M+f1pkYRACYUudyRhXLoeRbiieC3qKPMRDYat2rZQk/PzkdJQ9gHKk9h+rtuXBSmaUg
-         nQ8A==
-X-Forwarded-Encrypted: i=1; AFNElJ83SUSXalaqEbSiDOBsjzSBZb+yawGcOfIAv/l5DjYIDKalk3beBFSZggRtrf9r46O7x+TgYGeJGko+sp2HY1I=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwdUrOgFN/w8v9R4Z+Jt10uE5wUQPX2JH3pKsgWuHp/XxHysyrI
-	EnSPeVfHdSa83vHCnZlmE8BiBkyoSHanUEncGxp/Ns0R3O+rsLICzEs1htW1Nf9sdQ==
-X-Gm-Gg: Acq92OHd9XZ4pQaUiMlQR2LXbhgxSJiGP168+9zXHbPFC7k+PsTETLEGBuHIwuBa5o2
-	uDJxOToiWsceMfSoYg2Vur8mT/ik6Qq8O9+mpLDpWoc4bsjTVE4/9ATtsiUSGh3ULAig8UGuGVf
-	GIR0XwvUfGIpZLFzgIXmzWRK2OCgNF3R7YlIy+n1SSrIs6bOYEyqk++al8B//xyEjpecrmpOF4V
-	ByZyLBgAOE/xuJZg6HIbo3aFvsJ1ARtzR7czaDP3YzzdvQAuZK+Q1Vb72arDvNBM8eIxPmtoJ/7
-	YlqOE9/RiQ+y5Lom2M1dyheGDob70eJIPezVoPVEHpbTRJ2bHadB4BXVwJv7qGqGNxYZWdG8hKm
-	O0F0Uvp2h9cNRBm+6rZphP37hlPUTGF+rJ4PUKTUl5LM/T12uCv9ObkeJkaT/EKSn/1H8tiae5Z
-	K73S2migpCDtu4H/oBKZsc60lGKBhKImoGR71ZDY7iRTz9F2Guy18UbAHUxW+Jk4GV4A203Ag=
-X-Received: by 2002:a17:902:d512:b0:2bc:dc0b:ab29 with SMTP id d9443c01a7336-2bdb0109472mr2960365ad.0.1779122253168;
-        Mon, 18 May 2026 09:37:33 -0700 (PDT)
-Received: from google.com (176.13.105.34.bc.googleusercontent.com. [34.105.13.176])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c82bb121cd6sm14018626a12.30.2026.05.18.09.37.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 May 2026 09:37:32 -0700 (PDT)
-Date: Mon, 18 May 2026 09:37:28 -0700
-From: Vipin Sharma <vipinsh@google.com>
-To: Pratyush Yadav <pratyush@kernel.org>
-Cc: Samiullah Khawaja <skhawaja@google.com>, 
-	David Matlack <dmatlack@google.com>, kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-pci@vger.kernel.org, 
-	ajayachandra@nvidia.com, alex@shazbot.org, amastro@fb.com, ankita@nvidia.com, 
-	apopple@nvidia.com, chrisl@kernel.org, corbet@lwn.net, graf@amazon.com, 
-	jacob.pan@linux.microsoft.com, jgg@nvidia.com, jgg@ziepe.ca, jrhilke@google.com, 
-	julianr@linux.ibm.com, kevin.tian@intel.com, leon@kernel.org, leonro@nvidia.com, 
-	lukas@wunner.de, michal.winiarski@intel.com, parav@nvidia.com, 
-	pasha.tatashin@soleen.com, praan@google.com, rananta@google.com, rientjes@google.com, 
-	rodrigo.vivi@intel.com, rppt@kernel.org, saeedm@nvidia.com, skhan@linuxfoundation.org, 
-	vivek.kasireddy@intel.com, witu@nvidia.com, yanjun.zhu@linux.dev, yi.l.liu@intel.com
-Subject: Re: [PATCH v4 02/16] vfio/pci: Preserve vfio-pci device files across
- Live Update
-Message-ID: <20260518152420.GA3281683.vipinsh@google.com>
-References: <20260511234802.2280368-1-vipinsh@google.com>
- <20260511234802.2280368-3-vipinsh@google.com>
- <CALzav=fR8c2tYj9jeOc_K=xoupxAfWMHmk0ipDniSXg6uGiFYA@mail.gmail.com>
- <20260512211412.GA2819150.vipinsh@google.com>
- <agT9bYpXskVwW0E_@google.com>
- <2vxzcxyy9fpd.fsf@kernel.org>
+        d=1e100.net; s=20251104; t=1779122631; x=1779727431;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nSt4x+poU4p8LXWInMRteFG4LHeESzIi5up8Mh8FuBw=;
+        b=IVaZmUFDC6t1Q4WolyUD86ElYCboVs2w6+kgC612G4Cl2OKmOZpygTGAIKlQ7D+x/6
+         +P1M6Aq2cg5WjDFt6V70ubKmQdoC1ZfawxyXkbXqA6ghyxBQOps9vJJcGf4NpOhs6zmX
+         n0rHaizrwOPvDrDXaxkcLxY1kwGQioptIVwsNNkV5EaTVFmGssqpawRDE0svNnSIFcCp
+         j2lyHuT8+j62ONu9KAbP05P9Al/U3ih4aBrbk9+LknEK7/zW01xcA+weOjY3bdteTgNf
+         prKsDGmDvN27Y3pa3vLYXN7It9yz11wyXF3zBBYDt06bLiDjJgPA34PXHJgMrBAv0WyG
+         /OEA==
+X-Forwarded-Encrypted: i=1; AFNElJ/tsFTO0qSpd2dpEDarbpG2RRGfBlkVo9uOMHyt1phw8etBwGg5Oig0OZx15gN+JRxpqUiLdHshL7cYrR+0YC8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyVT5kD7HvZAMSJOs9FFk542jnjc77PH3zz6/VodVXlAimMdKXA
+	Vnj8CoUaSNEBk+axyvAenx+LRkOMvs8K/OcA1QaI7WOegYXU2ZzZQ/ZG
+X-Gm-Gg: Acq92OFpBceXik98qeVBGcDMxYcMsaFexf6uHkqbS1F8z5p8/jbBxo2jQFLa+Li/p9G
+	J9ofy92VTsEmmSz5x9n03hhhJPoQt6hfXrGLckPY9GhQ+2LZb7f2H5gxne2YLLrz8ia3BwgGA+b
+	dK6BKYjY5t4imSvDDQ3pfALuKEa/5s8+wq6JqcxPJMIlhHWCtEsLfJNhhhRTFIaUZXaHh6Bx/8L
+	1sXFVxH35h9eyAmhDYRlajEeWGiVevQcdtzDXdQkFauaoRMs1vYMTm3IFYVJrK97jUbO76nnfuP
+	1RliBayYISQKBf0IBYX4Xl1Ug2R2tj4xdbdV8qKPBZOo/tgKNOGIDpQRO/U6rRTmrOwLP8/vRIX
+	YLxg3xmC0b7DVbw24w/vx+MrFY7sb3PJIKwFIJ8uJlm8YN+jxncEqIrrdvKLAOgxTiEVb1HymxH
+	UHuXq0AkDdQ65a4wL906B72xmGa81gXUK4eYtB5WDKApfcAoXzgTryh9G1D/gOaSFqBkF8Sk0=
+X-Received: by 2002:a05:600c:8b0d:b0:48f:e230:2a26 with SMTP id 5b1f17b1804b1-48fe6631679mr255364615e9.33.1779122631321;
+        Mon, 18 May 2026 09:43:51 -0700 (PDT)
+Received: from ?IPV6:2a03:83e0:1126:4:1178:9251:cb12:6150? ([2620:10d:c092:500::5:5e25])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48fe4dac000sm272950585e9.0.2026.05.18.09.43.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 May 2026 09:43:50 -0700 (PDT)
+Message-ID: <261a47f4-a92b-4a61-86ca-c1de362be105@gmail.com>
+Date: Mon, 18 May 2026 17:43:50 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2vxzcxyy9fpd.fsf@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 2/5] bpf: Fix concurrent regression in
+ map_create()
+To: Leon Hwang <leon.hwang@linux.dev>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kernel-patches-bot@fb.com
+References: <20260518145446.6794-1-leon.hwang@linux.dev>
+ <20260518145446.6794-3-leon.hwang@linux.dev>
+Content-Language: en-US
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+In-Reply-To: <20260518145446.6794-3-leon.hwang@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, May 14, 2026 at 05:24:46PM +0200, Pratyush Yadav wrote:
-> On Wed, May 13 2026, Samiullah Khawaja wrote:
+
+
+On 5/18/26 3:54 PM, Leon Hwang wrote:
+> Because there is time gap between bpf_map_new_fd() and close_fd(), a
+> concurrent thread is able to close the new fd and opens a new, unrelated
+> file with the exact same fd number. Thereafter, this close_fd() might
+> inadvertently close the unrelated file.
 > 
-> > On Tue, May 12, 2026 at 02:29:19PM -0700, Vipin Sharma wrote:
-> >>On Tue, May 12, 2026 at 01:59:51PM -0700, David Matlack wrote:
-> >>> On Mon, May 11, 2026 at 4:48 PM Vipin Sharma <vipinsh@google.com> wrote:
-> >>>
-> >>> > diff --git a/drivers/vfio/pci/Kconfig b/drivers/vfio/pci/Kconfig
-> >>> > index c12d614fc6c4..019de053f116 100644
-> >>> > --- a/drivers/vfio/pci/Kconfig
-> >>> > +++ b/drivers/vfio/pci/Kconfig
-> >>> > @@ -45,13 +45,15 @@ config VFIO_PCI_IGD
-> >>> >
-> >>> >  config VFIO_PCI_LIVEUPDATE
-> >>> >         bool "VFIO PCI support for Live Update (EXPERIMENTAL)"
-> >>> > -       depends on PCI_LIVEUPDATE
-> >>> > +       depends on PCI_LIVEUPDATE && VFIO_DEVICE_CDEV
-> >>> >         help
-> >>> >           Support for preserving devices bound to vfio-pci across a Live
-> >>> >           Update. This option should only be enabled by developers working on
-> >>> >           implementing this support. Once enough support has landed in the
-> >>> >           kernel, this option will no longer be marked EXPERIMENTAL.
-> >>> >
-> >>> > +         Enabling this will disable support for VFIO PCI DMA buffer.
-> >>> > +
-> >>> >           If you don't know what to do here, say N.
-> >>> >
-> >>> >  endif
-> >>> > @@ -68,7 +70,7 @@ config VFIO_PCI_ZDEV_KVM
-> >>> >           To enable s390x KVM vfio-pci extensions, say Y.
-> >>> >
-> >>> >  config VFIO_PCI_DMABUF
-> >>> > -       def_bool y if VFIO_PCI_CORE && PCI_P2PDMA && DMA_SHARED_BUFFER
-> >>> > +       def_bool y if VFIO_PCI_CORE && PCI_P2PDMA && DMA_SHARED_BUFFER && !VFIO_PCI_LIVEUPDATE
-> >>>
-> >>> Why does enabling VFIO_PCI_LIVEUPDATE require disabling
-> >>> VFIO_PCI_DMABUF? I saw the cover letter says "to keep things simple",
-> >>> but what specific problem does this solve or simplify?
-> >>
-> >>I should have provided more details there.
-> >>
-> >>When device is getting reset in vfio_pci_liveupdate_freeze(), we are
-> >>zapping userspace mapped bars, we also need to use
-> >>vfio_pci_dma_buf_move() to revoke dma buffer access or
-> >>vfio_pci_dma_buf_cleanup() combination. Cleanup takes the memory lock
-> >>which freeze already takes, and there are some refcounts which are
-> >>managed in both of these APIs. This was causing complexities with code
-> >>flow based on result of pci_load_saved_state(). All this was adding more
-> >>refactoring than I wanted in the series.
-> >
-> > Maybe we can return -EOPNOTSUPP if any dmabufs for this vfio cdev are
-> > exported during preserve?
-
-Currently, no APIs are present to fetch if dmabufs are exported or not.
-I will add one patch to this series to return EOPNOTSUPP and remove
-condition from the config.
-
+> To avoid such regression, drop close_fd() and override err when failed to
+> create map and failed to finalize the log.
 > 
-> Whichever way you go with, a TODO/comment would be nice to have so
-> someone (including future you) looking at this code knows why this
-> restriction exists.
+> In other word, when succeed in creating map but fail to finalize log,
+> users will get the map fd instead of the finalization error.
 > 
+> Fixes: 49f9b2b2a18c ("bpf: Add syscall common attributes support for map_create")
+> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+> ---
+>  kernel/bpf/syscall.c | 15 +++++++++++----
+>  1 file changed, 11 insertions(+), 4 deletions(-)
+> 
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index 83de8fb9b9aa..322865a88b3a 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -1647,11 +1647,18 @@ static int map_create(union bpf_attr *attr, bpfptr_t uattr, struct bpf_common_at
+>  
+>  	/* preserve original error even if log finalization is successful */
+>  	ret = bpf_log_attr_finalize(&attr_log, log);
+> -	if (ret) {
+> -		if (err >= 0)
+> -			close_fd(err);
+> +	if (ret && err < 0)
+> +		/*
+> +		 * Failed to finalize the log.
+> +		 * Should not close_fd(err) here. Since the bpf_map_new_fd()
 
-I will add comment in the next version.
+nit: you can't close_fd(err) here, because err < 0? The comment overall appears to
+explain why we are making this change right now, rather than why this works this way.
+
+If map_crate() failed with error code and then log finalization failed, do we really
+want to override error code? It sounds like map_create error is more important.
+
+> +		 * has published the map fd, if a concurrent thread closes the
+> +		 * fd, then opens new, unrelated file that receives the exact
+> +		 * same fd number, close_fd(err) might inadvertently close the
+> +		 * unrelated file.
+> +		 * As a trade-off, override the err only when failed to finalize
+> +		 * the log and failed to create map.
+> +		 */
+>  		err = ret;
+> -	}
+>  
+>  	kfree(log);
+>  	return err;
+
