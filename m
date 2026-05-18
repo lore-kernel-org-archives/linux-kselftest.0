@@ -1,52 +1,52 @@
-Received: from mail-wm1-f66.google.com (mail-wm1-f66.google.com [209.85.128.66])
+Received: from mail-wm1-f68.google.com (mail-wm1-f68.google.com [209.85.128.68])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05644436365
-	for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 13:45:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A500E1FBEA8
+	for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 13:55:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.68
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779111914; cv=none; b=doT8/DjDZW+C8DFdh6RFgH+5lB9Q/jZ54u4uAJ3bXiP3uNdM1R5B5qDOA+kDLHAmnEM2QuA5LZbiV/QzJOK4mBO86JaHafBGq5MrCYy0Lu4NkR89PCBEg+IlxMsxzzTKcd2awbAUH+/szZzBt1kxMUeVax0N27eWVdfVDcnu9PQ=
+	t=1779112527; cv=none; b=fp5PxwN9dpZ4DC0RjLqARpXd2KFqsjNAwsx+XJTzcQ6mLnlr1Gums37VckIFapIoBlPgf8i5gu6E6Q5taWaiOkkC6eTuwtASsyjgVoJXdhci8WavdaxU61PuZhWlQW88zJnyFnvyY7AmlptjZZyViKIv4u3WxZTNAD0zQoRUKzo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779111914; c=relaxed/simple;
-	bh=kCwLOhF+YTC+tTRQkORlL4SJtUPM4oJsy0ZyzyF2QOE=;
+	s=arc-20240116; t=1779112527; c=relaxed/simple;
+	bh=VMOptizGQ70e+J7xxlCbq9mgAizi8a4WRjYduTd5ZK4=;
 	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=VgYF851PvNEYeeJy+0lDEYDUqpxLA6AS91kP9uzH+mECQYUvnxDI1R2uuQrQlgJQx+CVNmFO9Y/oBA2nWOPqI8ifWz2nNWMDkG0GRH6C/Os04HFVIw9ASGrpxBIvrXBNVcSdAx3T8rRGxvkdzekBhOgBFT8YE5r8Aup4NymzgVo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.66
+	 In-Reply-To:Content-Type; b=vDG7Iznj4Ru4BrGyF02ZFUHJhm1IEzn54PXow3STo4RAG6rFlBGluFyKrjUHYDHeiobzErcq+WZzwWYUdXnAhsqRzl43405goWUCgxKLqdWpi9VF+N7ssys4NB34IG0WFTtmItKaRtKueR/j9J8FZ2mAlvGlNxvFaUwA58LYOs8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.68
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f66.google.com with SMTP id 5b1f17b1804b1-488b3f8fa2bso26014155e9.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 06:45:12 -0700 (PDT)
+Received: by mail-wm1-f68.google.com with SMTP id 5b1f17b1804b1-488a9033b2cso17667515e9.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 06:55:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779111911; x=1779716711;
+        d=1e100.net; s=20251104; t=1779112524; x=1779717324;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:to:subject:cc:user-agent:mime-version
          :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FmdAw2WRzVLabqXPx3TFlY1NHUTLm/6QXgxYmBIrZBU=;
-        b=nH9AeYQlKuBHUr6S0LqnTaYaU2qflwfW0dpANT4QsSjk8qe+5CWT80ptUcQ7dQerpu
-         WrDk9D5N1xKOA65CshWdf18VVJ8kOtDdvBNePYa88qy3lWO8k5sdA1fxCdh/wn0QQUSo
-         VBmhYEZGkWBQFeI09h4LpUXG2tbbEj0CfVLAI9jObkCI4kU4ThdUxLbmkZ5I8deoFuhi
-         PQsS223kiGde3shLHIT/l3kBCEhNrH6e7kugyF4HzKrLu4b21GHyr+5PO47lM6Z4s8gj
-         GQhBq/XtJbdlrV2SLEAyGFWZYixZTcPOAgPpzpgGhOJr3cn1ai8dz8PfS0nbieJlyhNe
-         Wqwg==
-X-Forwarded-Encrypted: i=1; AFNElJ9IRPbU5mnMPOKY5MN8MjkkTz4HQE95LZKuGNcksvgQTd6nvl40yjH+bmXHagbIKJqshZL2agFFG8A2Dbm3m+w=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyAfvq0SfSChVU5at4BSGNhQkvNTonX4KZkEzVSLbDYAn6zcNuh
-	WeJzvrELkcvC1FTHPm1CfydeeG1+3bCD4TqbAwtYsinoSAYrf2s6vSzv
-X-Gm-Gg: Acq92OFXUqNUl9KcUwEVlzjge2+KhxGAOv7reR0OhDC7MXXgC3VFZ6oQRtqo6Kf28rp
-	1xMLWimQJvlGpzg6HEp41BrxqPavt0VH37C6E3qwKPM6WYQQ4PufT9BUyDz9XnIKqAaKBNRA9FS
-	wzOxoHQoIhTjFldIdVk5Io+PE9GktneqSH94BrDaMJ4li8Nt6R0zqGYC6SQl2uL9QvZPydKdfMe
-	gLIentXt7ZFUt4zOZAO5CUP6RRa7UMgHiqOh5uhqSB/kN3X2PkAZsCwK9Z2qkpcM2korcigd8C7
-	TZliFmz6fxAnx9PPJ42xQqA+cm9m7Pp7SFB4CDq/g8HF7f2Afp+/GjqTxjnx/qCgHsLTw7Utu26
-	+hPMEoCSKL33F0HtJzijI/9fgTjGzDIfgJRuWdkA9i4G46bZGaZ6XBohKgaWpvp1I6wb1JRG5OK
-	WNsUEaxazsCvg19vJ7Ro1kmMm37wNd2M5WpeBkfxFL
-X-Received: by 2002:a05:600c:c0d0:b0:48a:761:5816 with SMTP id 5b1f17b1804b1-48fe53774b4mr175297185e9.8.1779111911342;
-        Mon, 18 May 2026 06:45:11 -0700 (PDT)
+        bh=Tizt3kVJ9HgwVYO0PwgdSdfIFIk0uWpRihhV5cyqjVQ=;
+        b=sFXGPfpfp7nDif4eyCaYHw/SYP9ymuiDxlo2s0MhUpUwP86Cp/+g47Ffa4m06lpxHp
+         L4i+S4XywsblzwL4O9GaKNC2OELF5Cposfx93WD5f8WRktwor4UMMgUWJDx5P/cH1uuF
+         jVVb7JEbRxBc10o8yEWup0T+11gxzsb7WsF1WSKl+QhC+XLK1eMasqP1SCiJYuZYodNA
+         oeNvcAdrPd4o+4Y3LxwlSdTpjGPTCE14/0ijcVZTbafeUeNIOAB894QvZQVtTBX8NzYc
+         t0bFYDVAhNSCnV/JwqNluWUSag9HltKCgcEp0eg6AJxUFWg6BmNN8f666vTQC1zEwyCa
+         besA==
+X-Forwarded-Encrypted: i=1; AFNElJ9ivtoRU3LZL2JyQ2iGUOOB6j+gH1LqywtzbRf6cgYviuG7cgOhRDoJWsLLkzvBkHVvk7Lo87oL+d20uf/Ubnw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwnymzKxV6LXHKQe7WAbsDKXyn9qScaVzhNEbJvSy6x3sEyhZLi
+	vZtL73BMhPvIGeQ0mpwKi2LC6lqTtAOwhtMKYAik+4UsTIG5ryD6taI8
+X-Gm-Gg: Acq92OHEr6E9noxoM3FDanCFI/EbfWMpW2oCAmK6RfGgytMqpIippSdweqcU1ZK1D77
+	f9HhKQqlY0Hsjj/Rj9A4whJBZXgB/RZkl9J3DYQR9U1VGoVIP1RGxdrStFh0UscIRzG1XB40JqP
+	xXeFJru8vM1ZfdErkYMGIcLnDjYvujlvFTk7FDNCgNutePgvD9EqL9E0VoEPbMvGAhk9dL0IZua
+	KD3WdG/MTzMSvzhWjp+rXqzDMvEWoCAvbFsMNRd4/G1jOAJ9e8mHYe06U1Uuz9hwD1jtGwsTzCd
+	wUde3i1kxt5AE2ZlfPPD8TdHVm4cZT/ZdY6sqbxuMwpa5tONYpceWSca5XX2VTpDYmmSgTrzImc
+	IoKsvHJfinTR+845CaZlj1S8jdrUpglN+g7t/WJB3yINVSti0wJ+siytO1KdKVRH6pl8vdbUwAi
+	Jp2nGiBKgFdf7jc40wFGVSWW9rzgO8ei3W3C7qlM3kkqEzXjGBTS1bOn4=
+X-Received: by 2002:a05:600c:3b12:b0:488:a824:fdff with SMTP id 5b1f17b1804b1-48fe61ed2cfmr223048385e9.22.1779112523670;
+        Mon, 18 May 2026 06:55:23 -0700 (PDT)
 Received: from [192.168.88.241] (89-24-32-159.nat.epc.tmcz.cz. [89.24.32.159])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48fe5694fbfsm447019315e9.6.2026.05.18.06.45.10
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48febe79ce3sm85711065e9.31.2026.05.18.06.55.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 May 2026 06:45:10 -0700 (PDT)
-Message-ID: <25337119-17d3-456b-b5e7-a60565737b27@ovn.org>
-Date: Mon, 18 May 2026 15:45:09 +0200
+        Mon, 18 May 2026 06:55:23 -0700 (PDT)
+Message-ID: <30599c3d-66b5-4787-9ead-53ab716ba338@ovn.org>
+Date: Mon, 18 May 2026 15:55:18 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -67,7 +67,8 @@ To: nicolas.dichtel@6wind.com, Jiri Benc <jbenc@redhat.com>
 References: <20260515201937.2813983-1-i.maximets@ovn.org>
  <20260515201937.2813983-2-i.maximets@ovn.org>
  <20260518082138.37522db0@griffin>
- <596094fa-4e41-4ffe-9261-47089ff92f74@6wind.com>
+ <8aa4e92d-0498-4335-b3b1-dabd7e507ed7@ovn.org>
+ <5d4467d5-f081-4f7e-ac3c-9134ee8ddc6e@6wind.com>
 Content-Language: en-US
 From: Ilya Maximets <i.maximets@ovn.org>
 Autocrypt: addr=i.maximets@ovn.org; keydata=
@@ -113,60 +114,78 @@ Autocrypt: addr=i.maximets@ovn.org; keydata=
  yWOKeCw9bCZX4a/uFw77TZMEq3upjeq21oi6NMTwvvWWMYuEKNi0340yZRrBdcDhbXkl9x/o
  skB2IbnvSB8iikbPng1ihCTXpA2yxioUQ96Akb+WEGopPWzlxTTK+T03G2ljOtspjZXKuywV
  Wu/eHyqHMyTu8UVcMRR44ki8wam0LMs+fH4dRxw5ck69AkV+JsYQVfI7tdOu7+r465LUfg==
-In-Reply-To: <596094fa-4e41-4ffe-9261-47089ff92f74@6wind.com>
+In-Reply-To: <5d4467d5-f081-4f7e-ac3c-9134ee8ddc6e@6wind.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 5/18/26 2:26 PM, Nicolas Dichtel wrote:
-> Le 18/05/2026 à 08:21, Jiri Benc a écrit :
->> Hi Ilya,
+On 5/18/26 2:46 PM, Nicolas Dichtel wrote:
+> Le 18/05/2026 à 14:11, Ilya Maximets a écrit :
+>> On 5/18/26 8:21 AM, Jiri Benc wrote:
+>>> Hi Ilya,
 >>
->> IIRC this was added because Open vSwitch needed it. I'd expect most
->> users that need to deal with cross-namespace detection to just switch
->> to the given netns prior to issuing RTM_GETLINK; at least, that's what
->> I'm doing in the tools I wrote.
+>> Hi, Jiri.  Thanks for your thoughts on the matter!
 >>
->> On Fri, 15 May 2026 22:19:20 +0200, Ilya Maximets wrote:
->>> But this doesn't work for link nsid in cross-namespace RTM_GETLINK
->>> requests.  For some reason the code checks if the original device
->>> and the link are in the same namespace and not if the querier's
->>> namespace is the same as the link's.  So the logic becomes:
 >>>
->>> - if NSID is not reported, then the link is in the same namespace
->>>   as the queried device.
->>> - if NSID is reported, then the link is not in the same namespace
->>>   with the queried device.
+>>> IIRC this was added because Open vSwitch needed it. I'd expect most
+>>> users that need to deal with cross-namespace detection to just switch
+>>> to the given netns prior to issuing RTM_GETLINK; at least, that's what
+>>> I'm doing in the tools I wrote.
+>>
+>> Yeah, that's also what other projects like FRR are doing.  It's a bit
+>> of a hustle for multi-threaded applications, as AFAIK, there is no way
+>> to just move one thread into a different namespace, so if many threads
+>> are doing something with the network and you suddenly need to check
+>> something in a different namespace, you can't really do that without
+>> pausing all other threads first.  But that's a separate thing, unrelated
+>> to the series.  I'm just ranting. :) 
+> Hmm, not sure to understand. setns() is per thread (see man setns()).
+
+Hmm, I got my wires crossed here with something else, I suppose.
+Though CAP_SYS_ADMIN requirement may be an even higher barrier.
+
 > 
-> I don't agree. The expected behavior is to have a IFLA_LINK_NETNSID if the link
-> part is not in the same netns as the netdev, see d37512a277df ("rtnl: add link
-> netns id to interface messages")
+>>
+>>>
+>>> On Fri, 15 May 2026 22:19:20 +0200, Ilya Maximets wrote:
+>>>> But this doesn't work for link nsid in cross-namespace RTM_GETLINK
+>>>> requests.  For some reason the code checks if the original device
+>>>> and the link are in the same namespace and not if the querier's
+>>>> namespace is the same as the link's.  So the logic becomes:
+>>>>
+>>>> - if NSID is not reported, then the link is in the same namespace
+>>>>   as the queried device.
+>>>> - if NSID is reported, then the link is not in the same namespace
+>>>>   with the queried device.
+>>>
+>>> I'm not sure I would call this a bug; the original idea was to use
+>>> IFLA_IF_NETNSID to switch to the point of view of that netns but
+>>> without actually switching to that netns. Hence, the netnsid is
+>>> relative to the caller's netns but otherwise, you get the same reply as
+>>> you would if you switched to that netns. If you think about it that
+>>> way, the current reply is consistent.
+>>
+>> It makes some sense, but the fact that all-nsid notification and the
+>> cross-namespace RTM_GETLINK provide different IDs makes it inconsistent
+>> in my brain.  We have:
+>>
+>> 1. nsenter(target) + getlink(local) = target-to-link nsid.
+>> 2. getlink(target) = caller-to-target nsid  + caller-to-link nsid.
+>> 3. all-nsid-notiication = cmsg(caller-to-target nsid) + target-to-link nsid.
 > 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d37512a277df
+> all-nsid-notification appears before cross-getlink.
+> The goal, for all-nsid-notification, was to be able to receive netlink messages
+> of a subset of netns in one socket. So these messages are provided as-is, ie
+> like if they were sent on a netlink socket opened in the corresponding netns.
+> It's generic, there is no need to patch every subsystem.
+> 
+> cross-get*() have been added later. The chosen behavior is friendlier at the
+> cost of patching every subsystem that is supported.
 
-This patch predates the cross-namespace requests by quite some time,
-so I'm not sure it can be used as a source of truth, since the netdev
-namespace and the caller's namespace can be interchangeable in the
-description.  It's hard to argue about what was the intended behavior
-for the scenario that didn't exist at a time.  The semantics decision
-had to be made along with the introduction of the cross-namespace
-request support.
+That's exactly my point.  If we're creating a special patch for a subsystem, we
+don't need to adhere to the exact structure of the original message, since the
+data reported changes anyway.
 
->>> A research across open-source projects doesn't show any projects that
->>> rely on the things that are being changed.  I couldn't find any
->>> project that uses the reported LINK_NSID with cross-namespace requests.
->>> And no projects that use cross-namespace requests seem to even parse
->>> the reported LINK_NSID.
-> We (6WIND) are using this behavior. It's part of the netlink API.
-
-OK.  Thanks for the info.
-
-The man page for rtnetlink doesn't mention IFLA_LINK_NETNSID at all, so
-we don't really have a documented behavior for it.  Which practically
-means that the code is the source of truth here, and so be it.  Though
-it would be nice to have the man pages updated.
-
-As I said in the other thread, I'll be dropping this one patch for now,
-the way forward if necessary would be yet another flag, but it's not
-needed at the moment, so no need to further complicate the API.
+IMO, not reporting nsid that is the same as the caller's nsid is more friendlier.
+But that's, again, just a difference in opinion at this point, I'll not insist.
 
 Best regards, Ilya Maximets.
