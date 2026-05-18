@@ -1,118 +1,138 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp-42a9.mail.infomaniak.ch (smtp-42a9.mail.infomaniak.ch [84.16.66.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AB233E1CFF;
-	Mon, 18 May 2026 09:14:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19A6D3E558C
+	for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 09:31:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779095664; cv=none; b=V/kkfJZTeA9LYv1Wg0CnPzEXPYbsW4Ry2pzD/DXHujI2K1jFpNP6fRxoYNDJHroYNelk4EHB9pwtfCnWTQ/olH41+zvXzSkK9GUeJP7y3YzfI5PSQhJu9mMTYlZv9gAfIKKr+OapPhQOy1QvNQmau6jgotJlGmQ7Kdhs3ILZ41s=
+	t=1779096666; cv=none; b=Qw1AVOySntNSVtJ9zc2Bl8CpxxYmMh8tG/GVGvOhW+0nLSV5yzHZarCEjK21gmVbov4OPm7gad0D4v7sWguKR6PBvgEkE366KZvukK5+zUH4UKhxmb7qLD/NAB78Gc5gBrkGV4CZakaUUfOpHZ+5+EEWafdu1b5zH0nO0IIJ7c0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779095664; c=relaxed/simple;
-	bh=dhY3CKr2XCza+nlc8BVgspVXkSxeR632VvA4y6UIJqI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cmo0s4uacmf1B4SZxIYCwsxJGEEAFfN8ZtiACZS8pZy0n+c/yUagQMPSxo+iIZ6rXTCXJmqY3DNZhtt3FQ6qb9OBOCBR2d0E73QUpoI+mfhZd/oPaDuh4nnfYEdRhPzDKk5yCK093jziP//5XYbYM/gtkmUYLNIKpzY+Jw2kiVs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VYMbqMjU; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1779096666; c=relaxed/simple;
+	bh=/dYR/di/P91MBWleOcQbzeLk9BRn7Di7RPmN3cGMuGg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kKsMa/xHFL937EvxhrSN5PEREdiw0ljFXnOuN7atgYQjcsZvfn0zOrHMDKtmfLWu6v9B+KS4xYF6EcTgQoeqkZgCXi4kKYK+FwuaL+B4E9wdCFX1RvSpu/7BbI4A3UbI8hoYoqCGX5AgDo7mFSbIbiU8l2HE9SZ0GMzkMNFl+mI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=SZn0qOoP; arc=none smtp.client-ip=84.16.66.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VYMbqMjU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBB37C2BCB7;
-	Mon, 18 May 2026 09:14:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779095663;
-	bh=dhY3CKr2XCza+nlc8BVgspVXkSxeR632VvA4y6UIJqI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=VYMbqMjUp19nUJcz6fP9igsmEaUvSTuW+yi9MVpeCxp4Ll8x+phM13j8d3TVDIqpQ
-	 C3NrUjwcXvuzATxTIiDVIdD9ipuJErP/pn9jH5Z2VwFf2pGf6ABci2qRyrRRsznma0
-	 DXNRXhKx2aUT/Ldv401PAa4g9ksOLD4jbwI0Hux9oqtmDAx+waUZn+KwCw+o3jCSlp
-	 8+1ZB9I4i4wt7OtnN0vk5Jpc6WCxpFWYpYRCi2nNmI/UGbchaVcIJDQUQ2DoNhz3TT
-	 Dte/0iRX4bv9M3hfVEWc1p7D0fxKCRkPgXD9x0GXcdYSZ7HE8cyoj34jdOmVAYqSF3
-	 I7YmoFAdoO6VA==
-From: Simon Horman <horms@kernel.org>
-To: leitao@debian.org
-Cc: 'Simon Horman' <horms@kernel.org>,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	shuah@kernel.org,
-	david+nfc@ixit.cz,
-	sameo@linux.intel.com,
-	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	oe-linux-nfc@lists.linux.dev,
-	kernel-team@meta.com
-Subject: Re: [PATCH net] nfc: llcp: avoid userspace overflow on invalid optlen
-Date: Mon, 18 May 2026 10:11:04 +0100
-Message-ID: <20260518091103.427351-2-horms@kernel.org>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260513-fix_llc-v1-1-33c76f931ff6@debian.org>
-References: <20260513-fix_llc-v1-1-33c76f931ff6@debian.org>
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="SZn0qOoP"
+Received: from smtp-4-0001.mail.infomaniak.ch (unknown [IPv6:2001:1600:7:10::a6c])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4gJsxB6fq5zbDF;
+	Mon, 18 May 2026 11:30:54 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1779096654;
+	bh=Tq4nWFRD2pesMJMgNQoyW5cYEITckzriAVmKWJfRgHA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=SZn0qOoPOdzYJ22SGoQKd/pL9xU1E4r9IW/x4D1naLrEOL5cxHEjiBSNtC33yggMv
+	 NusN9MhvK8JM24DpmVA/Q4OeQo3L+wLSuzCsh3LTCtG2ICBdwteRR3ZIaP3NceziI9
+	 jSG8eHz7JxhlRG6L7D5eEoPz0ELMMcHIOEg9OfIk=
+Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4gJsx95w9KzLNw;
+	Mon, 18 May 2026 11:30:53 +0200 (CEST)
+Date: Mon, 18 May 2026 11:30:42 +0200
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+Cc: =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, 
+	kernel test robot <oliver.sang@intel.com>, linux-security-module@vger.kernel.org, oe-lkp@lists.linux.dev, 
+	lkp@intel.com, linux-kernel@vger.kernel.org, 
+	Shuah Khan <skhan@linuxfoundation.org>, Kees Cook <kees@kernel.org>, linux-kselftest@vger.kernel.org
+Subject: Re: [linus:master] [selftests]  465b05bae5:
+ kernel-selftests.landlock.audit_test.audit.tsync_override_log_subdomains_off.fail
+Message-ID: <20260518.ohn9DahGhui6@digikod.net>
+References: <202605111649.a8b30a62-lkp@intel.com>
+ <20260512112054-0a5c7cad-c8c6-4745-a765-0780a3bd2dab@linutronix.de>
+ <20260513.eeboh9zooQuu@digikod.net>
+ <20260518100602-5b161e99-83fa-4170-bb7b-1642df6b5a3d@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260518100602-5b161e99-83fa-4170-bb7b-1642df6b5a3d@linutronix.de>
+X-Infomaniak-Routing: alpha
 
-From: 'Simon Horman' <horms@kernel.org>
+On Mon, May 18, 2026 at 10:48:27AM +0200, Thomas Weißschuh wrote:
+> On Wed, May 13, 2026 at 12:52:35PM +0200, Mickaël Salaün wrote:
+> (...)
+> 
+> > > > config: x86_64-rhel-9.4-kselftests
+> > > > compiler: gcc-14
+> > > > test machine: 16 threads Intel(R) Core(TM) i7-13620H (Raptor Lake) with 32G memory
+> > > > 
+> > > > (please refer to attached dmesg/kmsg for entire log/backtrace)
+> > > > 
+> > > > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> > > > the same patch/commit), kindly add following tags
+> > > > | Reported-by: kernel test robot <oliver.sang@intel.com>
+> > > > | Closes: https://lore.kernel.org/oe-lkp/202605111649.a8b30a62-lkp@intel.com
+> > > 
+> > > I was unable to run the landlock selftests myself, on my machines they are
+> > > failing at runtime with all kinds of colorful errors. Are the requirements
+> > > explained somewhere?
+> > 
+> > I'm curious about the errors you get.  They are standard kselftests that
+> > should work following this workflow:
+> > 
+> >   make TARGETS=landlock O=build kselftest-gen_tar
+> > 
+> > and then running ./build/kselftests/kselftest_install/run_kselftest.sh
+> > as root in a VM.  The required kernel configuration is listed in
+> > tools/testing/selftests/landlock/config
+> 
+> So there are two root issues I ran into:
+> 
+> 1) The tests can not be executed from virtiofs (as set up by virtme-ng):
 
-This is an AI-generated review of your patch. The human sending this
-email has considered the AI review valid, or at least plausible.
-Full review at: https://sashiko.dev
----
-nfc: llcp: avoid userspace overflow on invalid optlen
+Most filesystem tests initially set up tmpfs and then use it.
 
-This commit attempts to fix a userspace buffer overflow in
-nfc_llcp_getsockopt() by rejecting calls where the provided optlen is less
-than the size of a u32.
+I'm using virtme-ng too, see the
+https://github.com/landlock-lsm/landlock-test-tools
 
-> diff --git a/net/nfc/llcp_sock.c b/net/nfc/llcp_sock.c
-> index f1be1e84f6653..dc74e725ddd05 100644
-> --- a/net/nfc/llcp_sock.c
-> +++ b/net/nfc/llcp_sock.c
-> @@ -319,6 +319,9 @@ static int nfc_llcp_getsockopt(struct socket *sock, int level, int optname,
->  	if (get_user(len, optlen))
->  		return -EFAULT;
->  
-> +	if (len < sizeof(u32))
-> +		return -EINVAL;
+ ARCH=x86_64 .../check-linux.sh build_light kselftest
 
-Since len is a signed int and sizeof(u32) is an unsigned size_t, does C
-integer promotion cause negative lengths to bypass this check?
+> 
+>  #  RUN           audit.layers ...
+> # audit_test.c:52:layers:Expected 0 (0) <= self->audit_fd (-13)
+> # audit_test.c:61:layers:Failed to initialize audit: Permission denied
+> # layers: Test failed
+> #          FAIL  audit.layers
+> not ok 1 audit.layers
+> 
+> (The same for all other testcases)
 
-If a user provides an optlen of -1, it appears it would be promoted to a
-large positive number, making this condition false.
+It looks like the tests are not run with enough privileges.  Do you run
+them as root?  Does the kernel has the required config set?
 
-It would then be explicitly cast to u32 in the min_t() call below, allowing
-the code to continue and overflow the userspace buffer exactly as this
-patch was attempting to prevent.
+> 
+> 2) $PWD needs to be the test binary directory for "./wait-pipe-sandbox" to work.
 
-> +
->  	local = llcp_sock->local;
->  	if (!local)
->  		return -ENODEV;
+Yes.  run_kselftest.sh should handle that.
 
-While looking at this, is there a potential use-after-free regression here
-if llcp_sock->local is read outside of the socket lock?
+> 
+> > To make it easier, we wrote a wrapper to test everything with UML:
+> > https://github.com/landlock-lsm/landlock-test-tools (see check-linux.sh)
+> > 
+> > > 
+> > > > # #  RUN           audit.tsync_override_log_subdomains_off ...
+> > > > # # audit_test.c:591:tsync_override_log_subdomains_off:Expected 0 (0) == matches_log_signal(_metadata, self->audit_fd, child_data.parent_pid, NULL) (-11)
+> > > 
+> > > This error number means "EAGAIN 11 Resource temporarily unavailable",
+> > > so it could be a temporary error.
+> > 
+> > Yes, the test is flaky under pressure.
+> > 
+> > > 
+> > > Can you reproduce this issue? Is it really dependent on my patch as
+> > > blamed above? If so, does the selftest rely on the previous, incorrect order?
+> > 
+> > I don't think it directly depends on your patch but it might be a side
+> > effect.  Anyway, I've been working on fixing this kind of issue and just
+> > sent a fix:
+> > https://lore.kernel.org/r/20260513105112.140137-2-mic@digikod.net
+> 
+> Thanks, unfortunately I can't validate that it will fix the issue at hand.
 
-If another thread calls llcp_sock_bind() on the same socket, it might
-successfully set llcp_sock->local, but then hit an error path. In that
-error path, bind() would drop the reference and set llcp_sock->local
-to NULL.
-
-If the getsockopt() thread reads local here, gets the valid pointer, and
-then blocks waiting for lock_sock(sk):
-
-getsockopt() thread:
-local = llcp_sock->local;
-// blocks on lock_sock(sk)
-
-bind() thread:
-// hits error path
-nfc_llcp_local_put(llcp_sock->local);
-llcp_sock->local = NULL;
-release_sock(sk);
-
-Will the getsockopt() thread wake up, acquire the lock, and then
-dereference the now-freed local pointer in the switch statement below?
+I pushed it to -next, we'll see but I'm pretty sure this is the issue.
