@@ -1,35 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2924E36CE1E;
-	Mon, 18 May 2026 15:08:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24A8E370D5A;
+	Mon, 18 May 2026 15:08:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779116931; cv=none; b=Y+hUl60LOoo5cXiO5BmHhQoq0Jl0v+Mt4rN0FPqAlaugrB3uM2fiWGi5VnfyJWAFXJ/D7zOHyP47MRWlb0Nh8o3MR5B9YGA1+fcB0M//Xm86KM+G4pEImF9oUstFo1ciB8rgM4QHe/z1V+Wd9oKlWtDrpNCboBkiAlZthGVHIZg=
+	t=1779116933; cv=none; b=UVJ1UuOXxeKr6VrDjqj6c4GzyZwq8Ho2yaGntCgAXtfiqspblcTYM8fLRlNdiJP1NJUC6Y9qVb/ftE+5k7xUk7GrZKD13/qFz0pSGGkbjJpOMp/o1uObfp1qJPT5OgL+ipKEhs8jD8lg2LsxTLl/XwJpI09/DbaY2v2d+cvBq7k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779116931; c=relaxed/simple;
-	bh=tAFkrfa2Y/nfuLCUXO0TqhAEz2ryyE7xUymG4Ewvevc=;
+	s=arc-20240116; t=1779116933; c=relaxed/simple;
+	bh=cfA4Ibdui6nnrdEV54tiYvssRE6gcGfQ0ARyvZ4bAAY=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=GHD1lvVPdEKzip0BjrVIPEOSpit6dxXjXiqk6WgcCrOXa1x8h66CAplj1JsO9iiYDU7OpegavR0EIKG0AmfL28Yd2eUv1NSo4PcADUOnVwJypWJeiUCGHR6RTAALP4/EMKtHTeTvf4WOv0nQM8GDHJO7pJlO21QYlWDmB1h0Y0M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HHseVqbm; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=impu/hR/wIuamWgrg6yVmFfv3zUK68O8Agtdxk3yKMdrrgXEcZ7zsbWKI867t4ROvvXAkw9C3mRmQYe1ycniQ8u+1OEcuVnylUR0q3CzLuQQwrIafs3ROy3RKnXcDJT7baEmEvGqRR3yUGElVZ2H7GaKZitSzKFqdv9sa2ix7NA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=INRh4+GG; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HHseVqbm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 321FCC2BCFA;
-	Mon, 18 May 2026 15:08:49 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="INRh4+GG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32CC4C2BCB7;
+	Mon, 18 May 2026 15:08:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779116930;
-	bh=tAFkrfa2Y/nfuLCUXO0TqhAEz2ryyE7xUymG4Ewvevc=;
+	s=k20201202; t=1779116932;
+	bh=cfA4Ibdui6nnrdEV54tiYvssRE6gcGfQ0ARyvZ4bAAY=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=HHseVqbmaVaBmurCVCWaI+yeTOgTzOahUiKpEO/ldtMJX9jQoyfdHzIkpxXJdbEqA
-	 fZZAOdlCf30BdHEvW99/hMVN+78Z22UnBLsilytx6vZEfvgHAQyBy/sBZ/6HMfB/df
-	 C2TkDsoFmKUt4TWolgrPUZo6xkE1XDy4Xkrr+qv3WLAO1WtX3yJ0lH9GirnXQDavRD
-	 gHdQ5kBh1Jhto5JgdHtV0UbdQ0mkxLo4PNHxruAN5aTYs4UP/ZkRPljb7Gb0+Z35QF
-	 yQowgWTAK29LG2lfMAZ4itJgD4x77F87kfpw0C3lEVYiHhjFmdhzxEj5SIsoDnQ3vJ
-	 mzCe4K/EGNfNQ==
+	b=INRh4+GGjQHX0qwXeslpFza20QCQAPfFM2xhozYOYD7gaJr7QaL2TJ/irYFmSIr92
+	 uquHagjrFwfeUDCrEe464adINNgOLXT8mVErM6N8uJer819Bgw8e/urhwDSqkrXtjq
+	 /XEby8wgpoEuR1WOef8Ln8SlayFxQwcKNt0P9BAq6Ao6CoZdljnSOngCLbx50Fius1
+	 XUUrN1eMxqko8lBF7qeDmS/i3x7MAvrqVMeX2LlBRtBrWiFKrtfxSMhzvU0Co0XIiD
+	 9CQ2kwLJYXQx5cMjdAe5kIdMfMNRCxH1NiA80mN5v/6iSDTgIEEyiaaa3iV5yoijs2
+	 cAfKLq77/FxBA==
 From: Mark Brown <broonie@kernel.org>
-Date: Mon, 18 May 2026 16:07:29 +0100
-Subject: [PATCH v2 1/2] arm64/cpufeature: Define hwcaps for 2025 dpISA
- features
+Date: Mon, 18 May 2026 16:07:30 +0100
+Subject: [PATCH v2 2/2] kselftest/arm64: Add 2025 dpISA coverage to hwcaps
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -38,7 +37,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260518-arm64-dpisa-2025-v2-1-b3367b73bd00@kernel.org>
+Message-Id: <20260518-arm64-dpisa-2025-v2-2-b3367b73bd00@kernel.org>
 References: <20260518-arm64-dpisa-2025-v2-0-b3367b73bd00@kernel.org>
 In-Reply-To: <20260518-arm64-dpisa-2025-v2-0-b3367b73bd00@kernel.org>
 To: Catalin Marinas <catalin.marinas@arm.com>, 
@@ -48,171 +47,230 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
  linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.16-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=8561; i=broonie@kernel.org;
- h=from:subject:message-id; bh=tAFkrfa2Y/nfuLCUXO0TqhAEz2ryyE7xUymG4Ewvevc=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBqCyt9E07pPLSQFlandI9mTLhfGfi3nsteJcdHt
- FBM84QG96OJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCagsrfQAKCRAk1otyXVSH
- 0EwSB/wPAGsdozFb4/qegeLzFBpvKcVXU7zdfZBHMXClx4wrvqVV1NCsgRc4o0ooNy4DxmUwFmm
- leXCmX0bgD6XIK0z83zCbqJfuEC6clIkAZqAochD+OZZ59AhtCWLDPjOYqGYPSmlJz25xJxYQnt
- BOFquHcGVNHYQJojvRwi1YAFvQNdtGWVlg9wHOEukVWVbHP2Bs49j8hZ2mWXynnrvVkC6nio3uP
- /3npm25DZQ1+2y80+JQkhBoesBrUWKaNS/SYIDo6pLqKgOv38CDu0JyVZmIR9sZplSCoqSJ/5r+
- GsZe3l3yK3xTu4iMTEdBrd3+DfHqJ5xEXUCZItfldPXnnM9F
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5117; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=cfA4Ibdui6nnrdEV54tiYvssRE6gcGfQ0ARyvZ4bAAY=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBqCyt+tC6HEN5KhtRFuBmb2AlnCPLhZuPZqHHIf
+ J3ZKvpsAieJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCagsrfgAKCRAk1otyXVSH
+ 0DEmB/4pD0mSaCB2En9wA75gJzPKr/6DL0dNbf3NlSPnWX9R6sibPUUhLsgyTgOyPs/6EXiJW/x
+ kUcjXeOgbTcvB0vQYZAJWtZFfdFzMKyVE8zhoRtGzykfeM51bys+ZReEvh7aGjwcuuylg48vSlU
+ Dvi1Ybu3cUc4ZPzm2ITogr87TdaWicIWxXjDw7ynug9QQM4txBueZbNwaP6KyagCTSFKFLAP6Zb
+ Sp5eEy+lPM+Pw3PPZI8B8agWVvQvHbUWCdbIZJRJalAndccU4u186aLafGjryYpeXN8ty7gxZkA
+ 3TAsxFBKDnH1pm9zj6SsKq/fSTVHGJzvC4wmRHsrybenLdn6
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-The features added by the 2025 dpISA are all straightforward instruction
-only features so there is no state to manage, we can just expose hwcaps to
-let userspace know they are available.
-
-F16MM is slightly odd in that the feature is FEAT_F16MM but it is discovered
-via ID_AA64FPFR0_EL1.F16MM2. We follow the feature name.
+Add coverage of the new hwcaps to the test program, encodings cross checked
+against LLVM 22.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- Documentation/arch/arm64/elf_hwcaps.rst | 24 ++++++++++++++++++++++++
- arch/arm64/include/uapi/asm/hwcap.h     |  8 ++++++++
- arch/arm64/kernel/cpufeature.c          | 11 +++++++++++
- arch/arm64/kernel/cpuinfo.c             |  8 ++++++++
- 4 files changed, 51 insertions(+)
+ tools/testing/selftests/arm64/abi/hwcap.c | 116 ++++++++++++++++++++++++++++++
+ 1 file changed, 116 insertions(+)
 
-diff --git a/Documentation/arch/arm64/elf_hwcaps.rst b/Documentation/arch/arm64/elf_hwcaps.rst
-index 97315ae6c0da..07ff9ea1d605 100644
---- a/Documentation/arch/arm64/elf_hwcaps.rst
-+++ b/Documentation/arch/arm64/elf_hwcaps.rst
-@@ -451,6 +451,30 @@ HWCAP3_LS64
-     of CPU. User should only use ld64b/st64b on supported target (device)
-     memory location, otherwise fallback to the non-atomic alternatives.
+diff --git a/tools/testing/selftests/arm64/abi/hwcap.c b/tools/testing/selftests/arm64/abi/hwcap.c
+index e22703d6b97c..19fca95f7c22 100644
+--- a/tools/testing/selftests/arm64/abi/hwcap.c
++++ b/tools/testing/selftests/arm64/abi/hwcap.c
+@@ -108,6 +108,24 @@ static void f8mm8_sigill(void)
+ 	asm volatile(".inst 0x6e80ec00");
+ }
  
-+HWCAP3_SVE_B16MM
-+    Functionality implied by ID_AA64ZFR0_EL1.B16B16 == 0b0011
++static void f16f32dot_sigill(void)
++{
++	/* FDOT V0.2S, V0.4H, V0.2H[0] */
++	asm volatile(".inst 0xf409000");
++}
 +
-+HWCAP3_SVE2P3
-+    Functionality implied by ID_AA64ZFR0_EL1.SVEver == 0b0100
++static void f16f32mm_sigill(void)
++{
++	/* FMMLA V0.4S, V0.8H, V0.8H */
++	asm volatile(".inst 0x4e40ec00");
++}
 +
-+HWCAP3_SME_LUT6
-+    Functionality implied by ID_AA64SMFR0_EL1.LUT6 == 0b1
++static void f16mm_sigill(void)
++{
++	/* FMMLA V0.8H, V0.8H, V0.8H */
++	asm volatile(".inst 0x4ec0ec00");
++}
 +
-+HWCAP3_SME2P3
-+    Functionality implied by ID_AA64SMFR0_EL1.SMEver == 0b0100
-+
-+HWCAP3_F16MM
-+    Functionality implied by ID_AA64FPFR0_EL1.F16MM2 == 0b1
-+
-+HWCAP3_F16F32DOT
-+    Functionality implied by ID_AA64ISAR0_EL1.FHM == 0b0010
-+
-+HWCAP3_F16F32MM
-+    Functionality implied by ID_AA64ISAR0_EL1.FHM == 0b0011
-+
-+HWCAP3_SVE_LUT6
-+    Functionality implied by ID_AA64ISAR2_EL1.LUT == 0b0010 and
-+    ID_AA64PFR0_EL1.SVE == 0b0001.
+ static void faminmax_sigill(void)
+ {
+ 	/* FAMIN V0.4H, V0.4H, V0.4H */
+@@ -191,6 +209,12 @@ static void lut_sigill(void)
+ 	asm volatile(".inst 0x4e801000");
+ }
  
- 4. Unused AT_HWCAP bits
- -----------------------
-diff --git a/arch/arm64/include/uapi/asm/hwcap.h b/arch/arm64/include/uapi/asm/hwcap.h
-index 06f83ca8de56..10272ddb4d6f 100644
---- a/arch/arm64/include/uapi/asm/hwcap.h
-+++ b/arch/arm64/include/uapi/asm/hwcap.h
-@@ -147,5 +147,13 @@
- #define HWCAP3_MTE_STORE_ONLY		(1UL << 1)
- #define HWCAP3_LSFE		(1UL << 2)
- #define HWCAP3_LS64		(1UL << 3)
-+#define HWCAP3_SVE_B16MM	(1UL << 4)
-+#define HWCAP3_SVE2P3		(1UL << 5)
-+#define HWCAP3_SME_LUT6		(1UL << 6)
-+#define HWCAP3_SME2P3		(1UL << 7)
-+#define HWCAP3_F16MM		(1UL << 8)
-+#define HWCAP3_F16F32DOT	(1UL << 9)
-+#define HWCAP3_F16F32MM		(1UL << 10)
-+#define HWCAP3_SVE_LUT6		(1UL << 11)
++static void sve_lut6_sigill(void)
++{
++	/* LUTI6 Z0.H, { Z0.H, Z1.H }, Z0[0] */
++	asm volatile(".inst 0x4560ac00");
++}
++
+ static void mops_sigill(void)
+ {
+ 	char dst[1], src[1];
+@@ -282,6 +306,18 @@ static void sme2p2_sigill(void)
+ 	asm volatile("msr S0_3_C4_C6_3, xzr" : : : );
+ }
  
- #endif /* _UAPI__ASM_HWCAP_H */
-diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
-index 6d53bb15cf7b..96de16582fca 100644
---- a/arch/arm64/kernel/cpufeature.c
-+++ b/arch/arm64/kernel/cpufeature.c
-@@ -365,6 +365,8 @@ static const struct arm64_ftr_bits ftr_id_aa64zfr0[] = {
- static const struct arm64_ftr_bits ftr_id_aa64smfr0[] = {
- 	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_SME),
- 		       FTR_STRICT, FTR_EXACT, ID_AA64SMFR0_EL1_FA64_SHIFT, 1, 0),
-+	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_SME),
-+		       FTR_STRICT, FTR_EXACT, ID_AA64SMFR0_EL1_LUT6_SHIFT, 1, 0),
- 	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_SME),
- 		       FTR_STRICT, FTR_EXACT, ID_AA64SMFR0_EL1_LUTv2_SHIFT, 1, 0),
- 	ARM64_FTR_BITS(FTR_VISIBLE_IF_IS_ENABLED(CONFIG_ARM64_SME),
-@@ -419,6 +421,7 @@ static const struct arm64_ftr_bits ftr_id_aa64fpfr0[] = {
- 	ARM64_FTR_BITS(FTR_VISIBLE, FTR_STRICT, FTR_EXACT, ID_AA64FPFR0_EL1_F8DP2_SHIFT, 1, 0),
- 	ARM64_FTR_BITS(FTR_VISIBLE, FTR_STRICT, FTR_EXACT, ID_AA64FPFR0_EL1_F8MM8_SHIFT, 1, 0),
- 	ARM64_FTR_BITS(FTR_VISIBLE, FTR_STRICT, FTR_EXACT, ID_AA64FPFR0_EL1_F8MM4_SHIFT, 1, 0),
-+	ARM64_FTR_BITS(FTR_VISIBLE, FTR_STRICT, FTR_EXACT, ID_AA64FPFR0_EL1_F16MM2_SHIFT, 1, 0),
- 	ARM64_FTR_BITS(FTR_VISIBLE, FTR_STRICT, FTR_EXACT, ID_AA64FPFR0_EL1_F8E4M3_SHIFT, 1, 0),
- 	ARM64_FTR_BITS(FTR_VISIBLE, FTR_STRICT, FTR_EXACT, ID_AA64FPFR0_EL1_F8E5M2_SHIFT, 1, 0),
- 	ARM64_FTR_END,
-@@ -3284,6 +3287,8 @@ static const struct arm64_cpu_capabilities arm64_elf_hwcaps[] = {
- 	HWCAP_CAP(ID_AA64ISAR0_EL1, SM4, IMP, CAP_HWCAP, KERNEL_HWCAP_SM4),
- 	HWCAP_CAP(ID_AA64ISAR0_EL1, DP, IMP, CAP_HWCAP, KERNEL_HWCAP_ASIMDDP),
- 	HWCAP_CAP(ID_AA64ISAR0_EL1, FHM, IMP, CAP_HWCAP, KERNEL_HWCAP_ASIMDFHM),
-+	HWCAP_CAP(ID_AA64ISAR0_EL1, FHM, F16F32DOT, CAP_HWCAP, KERNEL_HWCAP_F16F32DOT),
-+	HWCAP_CAP(ID_AA64ISAR0_EL1, FHM, F16F32MM, CAP_HWCAP, KERNEL_HWCAP_F16F32MM),
- 	HWCAP_CAP(ID_AA64ISAR0_EL1, TS, FLAGM, CAP_HWCAP, KERNEL_HWCAP_FLAGM),
- 	HWCAP_CAP(ID_AA64ISAR0_EL1, TS, FLAGM2, CAP_HWCAP, KERNEL_HWCAP_FLAGM2),
- 	HWCAP_CAP(ID_AA64ISAR0_EL1, RNDR, IMP, CAP_HWCAP, KERNEL_HWCAP_RNG),
-@@ -3313,7 +3318,9 @@ static const struct arm64_cpu_capabilities arm64_elf_hwcaps[] = {
- 	HWCAP_CAP(ID_AA64ISAR3_EL1, LSFE, IMP, CAP_HWCAP, KERNEL_HWCAP_LSFE),
- 	HWCAP_CAP(ID_AA64MMFR2_EL1, AT, IMP, CAP_HWCAP, KERNEL_HWCAP_USCAT),
- #ifdef CONFIG_ARM64_SVE
-+	HWCAP_CAP_MATCH_ID(has_sve_feature, ID_AA64ISAR2_EL1, LUT, LUT6, CAP_HWCAP, KERNEL_HWCAP_SVE_LUT6),
- 	HWCAP_CAP(ID_AA64PFR0_EL1, SVE, IMP, CAP_HWCAP, KERNEL_HWCAP_SVE),
-+	HWCAP_CAP_MATCH_ID(has_sve_feature, ID_AA64ZFR0_EL1, SVEver, SVE2p3, CAP_HWCAP, KERNEL_HWCAP_SVE2P3),
- 	HWCAP_CAP_MATCH_ID(has_sve_feature, ID_AA64ZFR0_EL1, SVEver, SVE2p2, CAP_HWCAP, KERNEL_HWCAP_SVE2P2),
- 	HWCAP_CAP_MATCH_ID(has_sve_feature, ID_AA64ZFR0_EL1, SVEver, SVE2p1, CAP_HWCAP, KERNEL_HWCAP_SVE2P1),
- 	HWCAP_CAP_MATCH_ID(has_sve_feature, ID_AA64ZFR0_EL1, SVEver, SVE2, CAP_HWCAP, KERNEL_HWCAP_SVE2),
-@@ -3323,6 +3330,7 @@ static const struct arm64_cpu_capabilities arm64_elf_hwcaps[] = {
- 	HWCAP_CAP_MATCH_ID(has_sve_feature, ID_AA64ZFR0_EL1, BitPerm, IMP, CAP_HWCAP, KERNEL_HWCAP_SVEBITPERM),
- 	HWCAP_CAP_MATCH_ID(has_sve_feature, ID_AA64ZFR0_EL1, B16B16, IMP, CAP_HWCAP, KERNEL_HWCAP_SVE_B16B16),
- 	HWCAP_CAP_MATCH_ID(has_sve_feature, ID_AA64ZFR0_EL1, B16B16, BFSCALE, CAP_HWCAP, KERNEL_HWCAP_SVE_BFSCALE),
-+	HWCAP_CAP_MATCH_ID(has_sve_feature, ID_AA64ZFR0_EL1, B16B16, B16MM, CAP_HWCAP, KERNEL_HWCAP_SVE_B16MM),
- 	HWCAP_CAP_MATCH_ID(has_sve_feature, ID_AA64ZFR0_EL1, BF16, IMP, CAP_HWCAP, KERNEL_HWCAP_SVEBF16),
- 	HWCAP_CAP_MATCH_ID(has_sve_feature, ID_AA64ZFR0_EL1, BF16, EBF16, CAP_HWCAP, KERNEL_HWCAP_SVE_EBF16),
- 	HWCAP_CAP_MATCH_ID(has_sve_feature, ID_AA64ZFR0_EL1, SHA3, IMP, CAP_HWCAP, KERNEL_HWCAP_SVESHA3),
-@@ -3362,7 +3370,9 @@ static const struct arm64_cpu_capabilities arm64_elf_hwcaps[] = {
- #ifdef CONFIG_ARM64_SME
- 	HWCAP_CAP(ID_AA64PFR1_EL1, SME, IMP, CAP_HWCAP, KERNEL_HWCAP_SME),
- 	HWCAP_CAP_MATCH_ID(has_sme_feature, ID_AA64SMFR0_EL1, FA64, IMP, CAP_HWCAP, KERNEL_HWCAP_SME_FA64),
-+	HWCAP_CAP_MATCH_ID(has_sme_feature, ID_AA64SMFR0_EL1, LUT6, IMP, CAP_HWCAP, KERNEL_HWCAP_SME_LUT6),
- 	HWCAP_CAP_MATCH_ID(has_sme_feature, ID_AA64SMFR0_EL1, LUTv2, IMP, CAP_HWCAP, KERNEL_HWCAP_SME_LUTV2),
-+	HWCAP_CAP_MATCH_ID(has_sme_feature, ID_AA64SMFR0_EL1, SMEver, SME2p3, CAP_HWCAP, KERNEL_HWCAP_SME2P3),
- 	HWCAP_CAP_MATCH_ID(has_sme_feature, ID_AA64SMFR0_EL1, SMEver, SME2p2, CAP_HWCAP, KERNEL_HWCAP_SME2P2),
- 	HWCAP_CAP_MATCH_ID(has_sme_feature, ID_AA64SMFR0_EL1, SMEver, SME2p1, CAP_HWCAP, KERNEL_HWCAP_SME2P1),
- 	HWCAP_CAP_MATCH_ID(has_sme_feature, ID_AA64SMFR0_EL1, SMEver, SME2, CAP_HWCAP, KERNEL_HWCAP_SME2),
-@@ -3393,6 +3403,7 @@ static const struct arm64_cpu_capabilities arm64_elf_hwcaps[] = {
- 	HWCAP_CAP(ID_AA64FPFR0_EL1, F8DP2, IMP, CAP_HWCAP, KERNEL_HWCAP_F8DP2),
- 	HWCAP_CAP(ID_AA64FPFR0_EL1, F8MM8, IMP, CAP_HWCAP, KERNEL_HWCAP_F8MM8),
- 	HWCAP_CAP(ID_AA64FPFR0_EL1, F8MM4, IMP, CAP_HWCAP, KERNEL_HWCAP_F8MM4),
-+	HWCAP_CAP(ID_AA64FPFR0_EL1, F16MM2, IMP, CAP_HWCAP, KERNEL_HWCAP_F16MM),
- 	HWCAP_CAP(ID_AA64FPFR0_EL1, F8E4M3, IMP, CAP_HWCAP, KERNEL_HWCAP_F8E4M3),
- 	HWCAP_CAP(ID_AA64FPFR0_EL1, F8E5M2, IMP, CAP_HWCAP, KERNEL_HWCAP_F8E5M2),
- #ifdef CONFIG_ARM64_POE
-diff --git a/arch/arm64/kernel/cpuinfo.c b/arch/arm64/kernel/cpuinfo.c
-index 6149bc91251d..d50e2a9b066b 100644
---- a/arch/arm64/kernel/cpuinfo.c
-+++ b/arch/arm64/kernel/cpuinfo.c
-@@ -164,6 +164,14 @@ static const char *const hwcap_str[] = {
- 	[KERNEL_HWCAP_MTE_FAR]		= "mtefar",
- 	[KERNEL_HWCAP_MTE_STORE_ONLY]	= "mtestoreonly",
- 	[KERNEL_HWCAP_LSFE]		= "lsfe",
-+	[KERNEL_HWCAP_SVE_B16MM]	= "sveb16mm",
-+	[KERNEL_HWCAP_SVE2P3]		= "sve2p3",
-+	[KERNEL_HWCAP_SME_LUT6]		= "smelut6",
-+	[KERNEL_HWCAP_SME2P3]		= "sme2p3",
-+	[KERNEL_HWCAP_F16MM]		= "f16mm",
-+	[KERNEL_HWCAP_F16F32DOT]	= "f16f32dot",
-+	[KERNEL_HWCAP_F16F32MM]		= "f16f32mm",
-+	[KERNEL_HWCAP_SVE_LUT6]		= "svelut6",
- };
++static void sme2p3_sigill(void)
++{
++	/* SMSTART SM */
++	asm volatile("msr S0_3_C4_C3_3, xzr" : : : );
++
++	/* ADDQP Z0.B, Z0.B, Z0.B */
++	asm volatile(".inst 0x4207800" : : : "z0");
++
++	/* SMSTOP */
++	asm volatile("msr S0_3_C4_C6_3, xzr" : : : );
++}
++
+ static void sme_aes_sigill(void)
+ {
+ 	/* SMSTART SM */
+@@ -378,6 +414,18 @@ static void smef8f32_sigill(void)
+ 	asm volatile("msr S0_3_C4_C6_3, xzr" : : : );
+ }
  
- #ifdef CONFIG_COMPAT
++static void smelut6_sigill(void)
++{
++	/* SMSTART */
++	asm volatile("msr S0_3_C4_C7_3, xzr" : : : );
++
++	/* LUTI6 { Z0.B-Z3.B }, ZT0, { Z0-Z2 } */
++	asm volatile(".inst 0xc08a0000" : : : );
++
++	/* SMSTOP */
++	asm volatile("msr S0_3_C4_C6_3, xzr" : : : );
++}
++
+ static void smelutv2_sigill(void)
+ {
+ 	/* SMSTART */
+@@ -486,6 +534,12 @@ static void sve2p2_sigill(void)
+ 	asm volatile(".inst 0x4cea000" : : : "z0");
+ }
+ 
++static void sve2p3_sigill(void)
++{
++	/* ADDQP Z0.B, Z0.B, Z0.B */
++	asm volatile(".inst 0x4207800" : : : "z0");
++}
++
+ static void sveaes_sigill(void)
+ {
+ 	/* AESD z0.b, z0.b, z0.b */
+@@ -504,6 +558,12 @@ static void sveb16b16_sigill(void)
+ 	asm volatile(".inst 0x65000000" : : : );
+ }
+ 
++static void sveb16mm_sigill(void)
++{
++	/* BFMMLA Z0.H, Z0.H, Z0.H */
++	asm volatile(".inst 0x64e0e000" : : : );
++}
++
+ static void svebfscale_sigill(void)
+ {
+ 	/* BFSCALE Z0.H, P0/M, Z0.H, Z0.H */
+@@ -729,6 +789,27 @@ static const struct hwcap_data {
+ 		.cpuinfo = "f8mm4",
+ 		.sigill_fn = f8mm4_sigill,
+ 	},
++	{
++		.name = "F16MM",
++		.at_hwcap = AT_HWCAP3,
++		.hwcap_bit = HWCAP3_F16MM,
++		.cpuinfo = "f16mm",
++		.sigill_fn = f16mm_sigill,
++	},
++	{
++		.name = "F16F32DOT",
++		.at_hwcap = AT_HWCAP3,
++		.hwcap_bit = HWCAP3_F16F32DOT,
++		.cpuinfo = "f16f32dot",
++		.sigill_fn = f16f32dot_sigill,
++	},
++	{
++		.name = "F16F32MM",
++		.at_hwcap = AT_HWCAP3,
++		.hwcap_bit = HWCAP3_F16F32MM,
++		.cpuinfo = "f16f32mm",
++		.sigill_fn = f16f32mm_sigill,
++	},
+ 	{
+ 		.name = "FAMINMAX",
+ 		.at_hwcap = AT_HWCAP2,
+@@ -918,6 +999,13 @@ static const struct hwcap_data {
+ 		.cpuinfo = "sme2p2",
+ 		.sigill_fn = sme2p2_sigill,
+ 	},
++	{
++		.name = "SME 2.3",
++		.at_hwcap = AT_HWCAP3,
++		.hwcap_bit = HWCAP3_SME2P3,
++		.cpuinfo = "sme2p3",
++		.sigill_fn = sme2p3_sigill,
++	},
+ 	{
+ 		.name = "SME AES",
+ 		.at_hwcap = AT_HWCAP,
+@@ -967,6 +1055,13 @@ static const struct hwcap_data {
+ 		.cpuinfo = "smef8f32",
+ 		.sigill_fn = smef8f32_sigill,
+ 	},
++	{
++		.name = "SME LUT6",
++		.at_hwcap = AT_HWCAP3,
++		.hwcap_bit = HWCAP3_SME_LUT6,
++		.cpuinfo = "smelut6",
++		.sigill_fn = smelut6_sigill,
++	},
+ 	{
+ 		.name = "SME LUTV2",
+ 		.at_hwcap = AT_HWCAP2,
+@@ -1052,6 +1147,13 @@ static const struct hwcap_data {
+ 		.cpuinfo = "sve2p2",
+ 		.sigill_fn = sve2p2_sigill,
+ 	},
++	{
++		.name = "SVE 2.3",
++		.at_hwcap = AT_HWCAP3,
++		.hwcap_bit = HWCAP3_SVE2P3,
++		.cpuinfo = "sve2p3",
++		.sigill_fn = sve2p3_sigill,
++	},
+ 	{
+ 		.name = "SVE AES",
+ 		.at_hwcap = AT_HWCAP2,
+@@ -1066,6 +1168,13 @@ static const struct hwcap_data {
+ 		.cpuinfo = "sveaes2",
+ 		.sigill_fn = sveaes2_sigill,
+ 	},
++	{
++		.name = "SVE B16MM",
++		.at_hwcap = AT_HWCAP3,
++		.hwcap_bit = HWCAP3_SVE_B16MM,
++		.cpuinfo = "sveb16mm",
++		.sigill_fn = sveb16mm_sigill,
++	},
+ 	{
+ 		.name = "SVE BFSCALE",
+ 		.at_hwcap = AT_HWCAP,
+@@ -1087,6 +1196,13 @@ static const struct hwcap_data {
+ 		.cpuinfo = "svef16mm",
+ 		.sigill_fn = svef16mm_sigill,
+ 	},
++	{
++		.name = "SVE_LUT6",
++		.at_hwcap = AT_HWCAP3,
++		.hwcap_bit = HWCAP3_SVE_LUT6,
++		.cpuinfo = "svelut6",
++		.sigill_fn = sve_lut6_sigill,
++	},
+ 	{
+ 		.name = "SVE2 B16B16",
+ 		.at_hwcap = AT_HWCAP2,
 
 -- 
 2.47.3
