@@ -1,80 +1,159 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 041192989BC;
-	Mon, 18 May 2026 21:31:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FDC13AB283
+	for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 22:19:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779139901; cv=none; b=imRVHUcqosgL1TVEAMrrLLCD0wLyjYzJvCNeb9HBV6qjWhu6x258kNRF4mmjKr0AKsUYmG8wtF9QmcmkI2wTybbf23TJBgrnrvejmRhV7it+sKeAsQMQFl/Xqa+mfq8nO/DX5YgxWFMNr6XYT/zT+9XBXwjbarG6DYHRVUAXFAo=
+	t=1779142756; cv=none; b=Svys5JdLR9+hSHW9JnzkZnt+mX++cmR9ppettzMu+qxSZkht/go0i0VpfIjkQwWdCmJd3iD+9koWNfQzhGlno5MCfganlNN/jJOl/KNaindoGkxVuIyPCJaRRHyUevnadFKEj7IPYlDGnO8lUxS2OFxbt+Puz6yFZnZ7r9KJ1qs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779139901; c=relaxed/simple;
-	bh=Al+xAkc3zJx2hYJ8EWq9TnfFPavpYY51lLG8aXdvAsc=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=SaUpt/+i7vhfxf9e8ed4+hGLr0+Rn0+7O7MsJjCcPHcrLYP7QrHU6v0RADBL8tYaR8DnLTBq2w6GnX5QBzAgxHI5CYoUuabROFH5wh/YaIWdwTOd5pzKWWDzsQkhfb4YS69weMWHAMD8GxWHlpJRrjUykrgtvO1+cwONN5dTGns=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dz3YH+9W; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1779142756; c=relaxed/simple;
+	bh=QwPwsIbtmpQIwK98XGhoY5fkgFLxHo2PkgkWS665XEM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hHuB9XUMVOajVDRsNf6kW6KaXLVXW83zg0naroR1SEFgS1+DJHXefy9d+R6NFsuDfIvFv2PumcSBRK/Z3CNrwNIkDvQqaiqOufLruuMbsEgILNwA9sv+U6b0IIqGTc6eWTbqT/zdH4zPsP3hndGkxgfDnPSgrnieXgsaQvfZHzM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I2DT7leN; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dz3YH+9W"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 269F4C2BCF5;
-	Mon, 18 May 2026 21:31:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I2DT7leN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5376AC2BCF6
+	for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 22:19:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779139900;
-	bh=Al+xAkc3zJx2hYJ8EWq9TnfFPavpYY51lLG8aXdvAsc=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=dz3YH+9WBld+b0pVXSiIrWxyZg4xFys8KdMEhpsPJAxuMb4LEMcl7ndNYNqbbiWOr
-	 gYTWp5axql1oBIMdjvnyGbZw0N3XTHK8nTl5XqR5VzFa7UT7y0tG0UL9SdtQDp6AHQ
-	 hBlnGFH/J7KcvekfRLMKmV+P0giRbbHAMIAqp+lac5UbfyEruJVTID6LNhfJgZuVpy
-	 5CVEJ3RAONCPsvQ3O8C9LSUJyIynw7vbpy2rwo+z2c7miVhNfz8Of9EZXGUqXKu/A3
-	 LTgcjoR83AU0ghQy49Uak5PPlAekJhZ1xHXm8BKhVvAaSUy8f5q94FF13ZUT776jz8
-	 1Ly2LbVzqOdYw==
-Date: Mon, 18 May 2026 14:31:38 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Nimrod Oren <noren@nvidia.com>
-Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
- <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard
- Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Mohsin Bashir
- <mohsin.bashr@gmail.com>, Amery Hung <ameryhung@gmail.com>, Martin KaFai
- Lau <martin.lau@kernel.org>, Dimitri Daskalakis
- <dimitri.daskalakis1@gmail.com>, "netdev@vger.kernel.org"
- <netdev@vger.kernel.org>, "linux-kselftest@vger.kernel.org"
- <linux-kselftest@vger.kernel.org>, "linux-kernel@vger.kernel.org"
- <linux-kernel@vger.kernel.org>, "bpf@vger.kernel.org"
- <bpf@vger.kernel.org>, Carolina Jubran <cjubran@nvidia.com>, Dragos Tatulea
- <dtatulea@nvidia.com>
-Subject: Re: [PATCH net] selftests: net: Fix checksums in xdp_native
-Message-ID: <20260518143138.74839bf9@kernel.org>
-In-Reply-To: <aa818076-6e5a-4b61-bc7f-0bfe3907fe2f@nvidia.com>
-References: <20260513072355.1083381-1-noren@nvidia.com>
-	<20260514183832.5ef205c1@kernel.org>
-	<aa818076-6e5a-4b61-bc7f-0bfe3907fe2f@nvidia.com>
+	s=k20201202; t=1779142756;
+	bh=QwPwsIbtmpQIwK98XGhoY5fkgFLxHo2PkgkWS665XEM=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=I2DT7leNuntNS4Fb0mktVNPyw8Rbhs+gVWTrg1CstO4ifg9+fbn19Tgwwb5RQu6SJ
+	 oVl76IdmVMFtIEEqI2x/Xk3A/Wht7NKh8NtrVe0yXfXVmjnNq8YVf80fCSmSQB/9Sl
+	 z6dIrXGO3QMeh0NMXNp52X2Z9+LN7pXlOPxNah+bZ6rTc1cHUpk0as9s2igql3GoOc
+	 Nn3oJzn+lUOR2SS9p5bZeS83tU/OhQ+WnZftbPwcS04E1pQZCCdT8Su+w/1iajXGdX
+	 Bukvz/pnRIlUSoqf23mMiKaFEZErMrH8ypf7E0ZiSE4XanK5S8CzjuMpKgvtHduVrO
+	 pN/VlZ1JtpNSg==
+Received: by mail-vs1-f54.google.com with SMTP id ada2fe7eead31-636970cf66cso2135834137.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 15:19:16 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AFNElJ9PVVl992Xl+5Qfo6zGefuvCjORDswJfQcCxqn+UHVh5kVV0IJ84GbAOzwIQcKG2s/2ZBuUDCSyWb3bB+Fo71E=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwwaA8zul4WlLY499c6kkGA3Ne61JOPPXjNPiYazJDmZWneFiJe
+	RCrump4nqvow7mSbQrWb2xDKlAPBQp5T/n6G/NbVT9CCZSmXSE0OkzJljHbgpEFTFB2xU4ztECn
+	AZRwoLv9ZHaokcAtXXKXx/Ffftanvw+I=
+X-Received: by 2002:a05:6102:6:b0:65a:fec7:137b with SMTP id
+ ada2fe7eead31-65afec72d9emr1102084137.0.1779142755093; Mon, 18 May 2026
+ 15:19:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20260512-v2_20230123_tjmercier_google_com-v1-0-6326701c3691@redhat.com>
+ <20260512-v2_20230123_tjmercier_google_com-v1-2-6326701c3691@redhat.com>
+ <8ef38815-6ae9-4359-86d4-042554357639@amd.com> <CABdmKX2uwZ12kYJYPJGfWxuMBOJS=64b1GRj72tfB5D=NKM22w@mail.gmail.com>
+ <CAGsJ_4zjrFJYQQsLThTGXR6g+2PXzeAhjyDpLHfDFqVViWvyBQ@mail.gmail.com>
+ <CABdmKX0gqg309hcXcOHSj_yTg0h1zwDL34GDk8mX3wp4YoyfDg@mail.gmail.com> <CABdmKX3wwgovwS-V8rVC3=+EZcTvPs_cttpQb1w6WemwLAVhsw@mail.gmail.com>
+In-Reply-To: <CABdmKX3wwgovwS-V8rVC3=+EZcTvPs_cttpQb1w6WemwLAVhsw@mail.gmail.com>
+From: Barry Song <baohua@kernel.org>
+Date: Tue, 19 May 2026 06:19:03 +0800
+X-Gmail-Original-Message-ID: <CAGsJ_4y=Gsv=FSUjJ5+99Gg6ULUnv0LRexCGOGetzChR3YA44Q@mail.gmail.com>
+X-Gm-Features: AVHnY4I1qEOEZQdYFnOfKNfIzm2SBPuZfZoateaLto4Ne3PZjITQyUeamdYuj98
+Message-ID: <CAGsJ_4y=Gsv=FSUjJ5+99Gg6ULUnv0LRexCGOGetzChR3YA44Q@mail.gmail.com>
+Subject: Re: [PATCH RFC 2/5] dma-heap: charge dma-buf memory via explicit memcg
+To: "T.J. Mercier" <tjmercier@google.com>
+Cc: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Albert Esteve <aesteve@redhat.com>, Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
+	=?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, Michal Hocko <mhocko@kernel.org>, 
+	Roman Gushchin <roman.gushchin@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Muchun Song <muchun.song@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, 
+	Benjamin Gaignard <benjamin.gaignard@collabora.com>, Brian Starkey <Brian.Starkey@arm.com>, 
+	John Stultz <jstultz@google.com>, Christian Brauner <brauner@kernel.org>, 
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
+	Ondrej Mosnacek <omosnace@redhat.com>, Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	linaro-mm-sig@lists.linaro.org, linux-mm@kvack.org, 
+	linux-security-module@vger.kernel.org, selinux@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, mripard@kernel.org, echanude@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, 17 May 2026 14:27:15 +0300 Nimrod Oren wrote:
-> On 15/05/2026 4:38, Jakub Kicinski wrote:
-> > On Wed, 13 May 2026 10:23:55 +0300 Nimrod Oren wrote:  
-> >> Data adjustment cases failed with "Data exchange failed" when using IPv4
-> >> because the program did not update the IP and UDP checksums in the IPv4
-> >> branch. The issue was masked when both IPv4 and IPv6 were configured,
-> >> since the test harness prefers IPv6.  
-> > 
-> > Oops, maybe we should run against both IP version after all?  
-> 
-> I can send a follow-up to run all xdp.py cases against both IP versions
-> when both are configured.
+On Tue, May 19, 2026 at 5:17=E2=80=AFAM T.J. Mercier <tjmercier@google.com>=
+ wrote:
+[...]
+> > > > Yeah I think this might work. I know of 3 cases, and it trivially
+> > > > solves the first two. The third requires some work on our end to
+> > > > extend our userspace interfaces to include the pidfd but it seems
+> > > > doable. I'm checking with our graphics folks.
+> > > >
+> > > > 1) Direct allocation from user (e.g. app -> allocation ioctl on
+> > > > /dev/dma_heap/foo)
+> > > > No changes required to userspace. mem_accounting=3D1 charges the ap=
+p.
+> > > >
+> > > > 2) Single hop remote allocation (e.g. app -> AHardwareBuffer_alloca=
+te
+> > > > -> gralloc)
+> > > > gralloc has the caller's pid as described in the commit message. Op=
+en
+> > > > a pidfd and pass it in the dma_heap_allocation_data.
+> > > >
+> > > > 3) Double hop remote allocation (e.g. app -> dequeueBuffer ->
+> > > > SurfaceFlinger -> gralloc)
+> > > > In this case gralloc knows SurfaceFlinger's pid, but not the app's.=
+ So
+> > > > we need to add the app's pidfd to the SurfaceFlinger -> gralloc
+> > > > interface, or transfer the memcg charge from SurfaceFlinger to the =
+app
+> > > > after the allocation.
+> > > > It'd be nice to avoid the charge transfer option entirely, but if w=
+e
+> > > > need it that doesn't seem so bad in this case because it's a bulk
+> > > > charge for the entire dmabuf rather than per-page. So the exporter
+> > > > doesn't need to get involved (we wouldn't need a new dma_buf_op) an=
+d
+> > > > we wouldn't have to worry about looping and locking for each page.
+> > > >
+> > >
+> > > Hi T.J.,
+> > >
+> > > Your description of the three different cases sounds very interesting=
+.
+> > > It helps me understand how difficult it can be to correctly charge
+> > > dma-buf in the current user scenarios.
+> > >
+> > > I=E2=80=99m wondering where I can find Android userspace code that tr=
+ansfers
+> > > the PID of RPC callers. Do we have any existing sample code in Androi=
+d
+> > > for this?
+> >
+> > Hi Barry,
+> >
+> > In Java android.os.Binder.getCallingPid() will provide it. Here
+>
+> ... let me try again
+>
+> Here are some examples from the framework code:
+>
+> https://cs.android.com/search?q=3DgetCallingPid%20f:ActivityManager&sq=3D=
+&ss=3Dandroid%2Fplatform%2Fsuperproject
+>
+> In native code we have AIBinder_getCallingPid and
+> android::IPCThreadState::self()->getCallingPid() (or
+> android::hardware::IPCThreadState::self()->getCallingPid() for HIDL)
+>
+> https://cs.android.com/search?q=3DgetCallingPid%20l:cpp%20-f:prebuilt&ss=
+=3Dandroid%2Fplatform%2Fsuperproject
 
-Follow up sounds good. This patch needs a respin for the issues
-Sashiko pointed out, to be clear.
+Thanks very much, T.J. That is very helpful. I guess
+that would require user space to understand the RPC
+procedure, including single-hop and two-hop cases, and
+make the corresponding changes.
 
-> Or are you suggesting this as a broader change for all
-> drivers/net/*.py selftests?
+You pointed out the SurfaceFlinger cases, which are
+two hops. It seems that AI models are also using
+dma_heap, at least from what I have observed on MTK
+and Qualcomm phones. Likely, we need to understand
+those RPC relationships in userspace and make the
+corresponding changes.
+I assume AI models are a single-hop case?
 
-Just XDP
+Best Regards
+Barry
