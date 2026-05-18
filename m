@@ -1,174 +1,131 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F9A226738C;
-	Mon, 18 May 2026 23:55:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779148512; cv=none; b=MQVbrDzB5sYcI/wDCwbOzk2+CmHSnbqNbbhNw0X1hunjU40DZGqAFCjNgvppz5Rq+5cz4IzKiRgIfC3BwmSSUFgkgSvinDFI2BQW6ji3g7pVJuvPiNslyclSqQAy/TijJrYQJEsAo/UHNBG7I+5YqtMvyw7cM5l3AdHfRDn2Jv0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779148512; c=relaxed/simple;
-	bh=Oq+gnuMQRWjKoACeXqW8Y4zLGstl6ODlk5GgQd7tCZ8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=dQoyK2eeDoUkaAQ8iWAzQrtNIe88OGhXX9594AwnWIhkYxZIwEeuFv3VpGpe8j6NzFW8l1E8Sk3R/3MiZbI3W6AOvwSXcbj/b+OrQMutzJ6pXcmqsc0Xsp2YDaNAPI2VJX/N2gzRbail5UMwLTmefCCOt39pTxUqEvIwB6Zd7gk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SR7d5+u1; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C53CA318BB8
+	for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 23:57:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.53
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779148672; cv=pass; b=mV/yeFmuEGzq8NteH3j+lzd2a0yeWxGrci6N5IAQ11azlCdnfr9dpXpLuTKaAESA3xy1y2gCv5ZJnzM7rpEc9qZE/3+cBTBDKrefpKQJ5DgHCGoS4hLalUBUiQvnPojqS9wBszL2ROIriH26HlmXeXOWHGDy9uc9RfbndpMSbYE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779148672; c=relaxed/simple;
+	bh=unqEGZFYSyCBmS401bO5UPSCWFKfUOAKb+T3Y4jxQe0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=OYjowG9lh5YVDLUyzjmkgf3Up6jpSSJmu782cv1N0MjzyPc7wVGPxWztphvAnkfLMNOSRffGCCO39cSfpUFIHlfA29KXCDkCH7pGlkWMeyark6lK2U9LB77ZXyei/HoButRgtbNKafWRmN+HqIuU1W0+UC6yr76q8joYmq73NxU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=YW1xiazA; arc=pass smtp.client-ip=209.85.216.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SR7d5+u1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E81D7C2BCB7;
-	Mon, 18 May 2026 23:55:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779148512;
-	bh=Oq+gnuMQRWjKoACeXqW8Y4zLGstl6ODlk5GgQd7tCZ8=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=SR7d5+u17pNQYr8ELcR1xR6JkyTOzTM7GiEFnfi8yqYX6yxpe+CXZdjyY770E8O5q
-	 3h1r06qdamKnBL5bVPZYGdpEbdDkH47F+T88CHYxX3Y+iNTmdg7jZdBPVebyI6RkZk
-	 gNR5jWYEmalMXgdnSOEXSwBKOoyHVUUwPculI94XbhrvNK3/AUMNKGVP3vlfwpFZhr
-	 Wg8YsIC0Qa6lB+Uy4DD84inuaBjXqED4JVElgKDBkc4MMd7TSpyCzUwBgZnF9cDb4k
-	 SRCQaJmL4M1LiMW5hsE55y5GtoZgnVIs5133RoHmzam32zoMsljjxPSWRY3BHwB3/g
-	 TUvzofbsc8PrA==
-Message-ID: <097fe9ea-bd19-4aec-a854-f00b050603a6@kernel.org>
-Date: Mon, 18 May 2026 18:55:08 -0500
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="YW1xiazA"
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-36643b96b99so2720408a91.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 16:57:50 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779148670; cv=none;
+        d=google.com; s=arc-20240605;
+        b=GCX8cml0v+SrbYrzz2VmBhT3hwVj0PPisiFd59QfnPH/C2AR8wiKQxhHJ2HEL+qRu+
+         TtsQIKUeoqFHoBodi27f3wpWJsCbHJhtXBUpFfuVyxYO5QWPt6715k3pe9Mmhg7fiBGQ
+         zcJP3oeJa/99lyNUh7enzFh6KnnMkD3HQxshFIKRu8fpf6q+JyeeExtKgJAXh9P+rdoR
+         p8HN9al7WvwEeKBgzyibgfBMjDwF70ak90bIgs0hjTOS2HmX9V20gDh618+kDWvik1rb
+         So+L84CJg7ClbEXZeyoDSzAEVgU/m55bpdde3/MMTCSEkZRioL2fB46CkbQ9j4jLV45p
+         sYeQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=yQIzRVdOE5dF5raU9qEOWy4pjYF2amwoUhs+1RS7QM4=;
+        fh=3rQdpQcsiGlJ1LsxvzGprerysRS4Ru5XUIItARxqG6I=;
+        b=hYiHVAdD+FcMcqOt+BuJ0GXVG8QBibSVgK8e36FhoVg9TT8x1D2imNoxi6FcJXjve6
+         gZXN51lB0tDEgKCBH2lOD+SZnLYJY4gV3Mf/D9olCBrHWDYIiqs6bX/JMVgfgOWfp/ID
+         +XvWOAufl0pZuvCn+x9hWoFdB+oog2S/l/0X4sDslZciZeBd3wxaQiDVaaawglcBN/vF
+         H2WGo53pPOutMukgOt3QoJnXeKRx2AN7j7jRSxa0HQWTUAYpKF+++WSP32FmUf+qhipo
+         wI+deK0r3rGx3M8xj38kv72MAiBYUIoU02lN2oLVd3VHEYBxuZqCnxKDLwg2bf2d0zVC
+         BQ+w==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1779148670; x=1779753470; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yQIzRVdOE5dF5raU9qEOWy4pjYF2amwoUhs+1RS7QM4=;
+        b=YW1xiazAIuoO9uzWuY8PqoK6SOdp7+AQBjShSj8YTFGoQR3wR6bW5nFHEGj7Lav0df
+         371Iaezpn7zqcLSmiRbT/LfnDxDSWJIP1r9ISLxB/GdZAN8zjmyHF1MYQKW6A/gBrv9I
+         4L8gjS8H+H40H8waQIhbxIsIllLqY/uEqsrvQGIsAD3FV3EbMMkON2FFZr+X1MIAuope
+         +XppFw06GE7AMWQJaiF/SC66WOVHKImIN0C37Bk+9rjk70Wb1VjogJNnTSVIS2TCJA86
+         HdqITE68CdCVz2ZfHjuYhUvr8NTvbUxNtJgRhUacgXWXp/QAkMNxVBuxXNvmZPP0B5v6
+         lNKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779148670; x=1779753470;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=yQIzRVdOE5dF5raU9qEOWy4pjYF2amwoUhs+1RS7QM4=;
+        b=WdFrAN2Vs2u6mhJdKLLlaXi4W/0stypjzOUmRxSHB08zWaPpIRhneu6l6bNr8jaBzz
+         LtdLYuHMvtk2yEHeSxbiunhfy2B0e/OIW4azL9piNuTltL0VtfAeBWs/GBb3+hdJIrt9
+         J61UcwZ7xkxWWYAMSTG2LT66KCfAw619VGW9gN/p4fAbF8D3JxBnfULZJHi50VJZC87Y
+         dEDiHUhN9wq0W3hW+uPRhT2nw8IYRoZ4Gu4NRF4If1VEVartYNZtFCFEhywJ1p6gWlMQ
+         ifQAovRVUgJOpRoQs4qee86T96vsGXD2dEC5wEeFdIw2cdmkH41OpEUmxhG7uI/pEFe7
+         kuWA==
+X-Forwarded-Encrypted: i=1; AFNElJ9+HHu+i1/Tt79t5R8zwKiYmyel3oIVvTp9p1Bvcoqw6a7wKLYmoLTSV9YSw3dP2blzLxyY0QZloRuvF0MHu1A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzGMJOYSTqI0TlbZZc1Q9S7Q8agzbD8LGYTHbm+Cs97Kenpbawj
+	CjEZggBoC2Sgp28S4sPogOKLGtRgQtwASWJtE7iztHPr7elv6ABtVILadfmrr7P/nbcggJT6y94
+	VcXCeohoij5+lfYaqCSaQKzvq/SyOm6WlmiDxxCo/Bj5zER/Za83CvQ==
+X-Gm-Gg: Acq92OE0VhfIm0UrG4QZoQsQtyQVOiaUxgyRJgNOS9yBMvUROJskewakezO82OyNRIL
+	Lwh51oI5HoKni9YpUf4NDV7wlz6DmH/Bu5moVZ/p+yRNvFTHtpk7rVE3U0uMWi0+b8tf7EQk11+
+	19HFJ9cMGQopXbk83RoIkAIJFmrqhy1o0kom74Jx5aonw8Nu7DBHvAbLg+vY43iZdQKKoYtf8bQ
+	dAbtoXClh890mjDy7SQo7+4OV86KkcXV9WdPyHu83S01fhaGqwzba5gEUZWSKuH8zbYmSEGYvBe
+	Seznq6k=
+X-Received: by 2002:a17:90b:5486:b0:35f:c729:de9b with SMTP id
+ 98e67ed59e1d1-36951cabdd1mr17237144a91.20.1779148670183; Mon, 18 May 2026
+ 16:57:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] treewide: replace /usr/bin/python3 shebangs with env
- python3
-Content-Language: en-US
-To: Oli R <sigmatwojastara@gmail.com>,
- Rob Clark <robin.clark@oss.qualcomm.com>, Dmitry Baryshkov
- <lumag@kernel.org>, Abhinav Kumar <abhinav.kumar@linux.dev>,
- Jessica Zhang <jesszhan0024@gmail.com>, Sean Paul <sean@poorly.run>,
- Marijn Suijten <marijn.suijten@somainline.org>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
- Adrian Hunter <adrian.hunter@intel.com>, James Clark
- <james.clark@linaro.org>, Shuah Khan <shuah@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- "Paul E. McKenney" <paulmck@kernel.org>, Boqun Feng <boqun@kernel.org>,
- "open list:DRM DRIVER for Qualcomm display hardware"
- <linux-arm-msm@vger.kernel.org>,
- "open list:DRM DRIVER for Qualcomm display hardware"
- <dri-devel@lists.freedesktop.org>,
- "open list:DRM DRIVER for Qualcomm display hardware"
- <freedreno@lists.freedesktop.org>, open list <linux-kernel@vger.kernel.org>,
- "open list:AMD CRYPTOGRAPHIC COPROCESSOR (CCP) DRIVER - DB..."
- <linux-crypto@vger.kernel.org>,
- "open list:PERFORMANCE EVENTS SUBSYSTEM" <linux-perf-users@vger.kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-References: <20260515180806.246914-1-sigmatwojastara@gmail.com>
-From: Mario Limonciello <superm1@kernel.org>
-In-Reply-To: <20260515180806.246914-1-sigmatwojastara@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20260507070547.2268452-1-sashal@kernel.org> <CAHC9VhTwDt2Bx8n0io9Qge_fUEnrHsxrFAQY+KaemKWqJqBQxw@mail.gmail.com>
+ <CAPhsuW4TJRqQKXgcBYog8YgFLU2h2Zq9ReahxTYp_zpDyvO8AA@mail.gmail.com>
+ <CAHC9VhS1DJNs9gDB6gD9WKhL08giSVajBskZ+=mY0AWRCAsw7Q@mail.gmail.com> <CAPhsuW5jQOzRTi1ea+=UPhx5W9bkBdivPagRE=O=nx0zf_vb8w@mail.gmail.com>
+In-Reply-To: <CAPhsuW5jQOzRTi1ea+=UPhx5W9bkBdivPagRE=O=nx0zf_vb8w@mail.gmail.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Mon, 18 May 2026 19:57:37 -0400
+X-Gm-Features: AVHnY4Ju9QhtCnU9X4q0Y1FoqKmXLcQYabAg7vghJP1SBxCLhKOLIiAM2oGfePM
+Message-ID: <CAHC9VhTGDOJZDzEA31qc0S6FJpYNC4oD__HQ-65wqqwhng=V9Q@mail.gmail.com>
+Subject: Re: [PATCH] killswitch: add per-function short-circuit mitigation primitive
+To: Song Liu <song@kernel.org>
+Cc: Sasha Levin <sashal@kernel.org>, corbet@lwn.net, akpm@linux-foundation.org, 
+	skhan@linuxfoundation.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	gregkh@linuxfoundation.org, linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Mon, May 18, 2026 at 7:23=E2=80=AFPM Song Liu <song@kernel.org> wrote:
+> On Mon, May 18, 2026 at 2:29=E2=80=AFPM Paul Moore <paul@paul-moore.com> =
+wrote:
+> [...]
+> > In my opinion, making killswitch an LSM is more of a procedural item
+> > that deals with how we view a capability like killswitch.  I
+> > personally view killswitch as somewhat similar to Lockdown, which is
+> > why I made the suggestion.
+> >
+> > The use of kprobes, while an interesting idea, presents problems as
+> > allowing any kernel symbol to be killed introduces the potential for
+> > security regressions.  As a reminder, some LSMs, as well as other
+> > kernel subsystems, have mechanisms in place to restrict root and/or
+> > enforce one-way configuration locks; while many people equate "root"
+> > with full control, in many cases today that is not strictly correct.
+> >
+> > Yes, kprobes have been around for some time, this is not a new
+> > problem, but killswitch makes it far more convenient and accessible to
+> > do dangerous things with kprobes.  If killswitch makes it past the RFC
+> > stage without any significant changes to its kill mechanism, we may
+> > need to start considering more liberal usage of NOKPROBE_SYMBOL()
+> > which I think would be an unfortunate casualty.
+>
+> I don't think we can use NOKPROBE_SYMBOL(). There are functions
+> that we don't want to killswitch, but still want to trace.
 
+That was exactly my point, but we need to figure something out so
+killswitch doesn't make it easier to cause a regression.
 
-On 5/15/26 13:07, Oli R wrote:
-> Use /usr/bin/env python3 instead of hardcoded interpreter paths
-> to improve portability across environments where python3 is not
-> installed in /usr/bin.
-> 
-> No functional changes intended.
-> 
-> Signed-off-by: Oli R <sigmatwojastara@gmail.com>
-Reviewed-by: Mario Limonciello (AMD) <superm1@kernel.org) (tools/crypto/ccp)
-> ---
->   drivers/gpu/drm/msm/registers/gen_header.py                     | 2 +-
->   scripts/macro_checker.py                                        | 2 +-
->   tools/crypto/ccp/dbc.py                                         | 2 +-
->   tools/crypto/ccp/dbc_cli.py                                     | 2 +-
->   tools/crypto/ccp/test_dbc.py                                    | 2 +-
->   tools/perf/tests/shell/lib/perf_json_output_lint.py             | 2 +-
->   .../selftests/devices/probe/test_discoverable_devices.py        | 2 +-
->   tools/testing/selftests/rseq/rseq-slice-hist.py                 | 2 +-
->   8 files changed, 8 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/registers/gen_header.py b/drivers/gpu/drm/msm/registers/gen_header.py
-> index 2acad951f1e2..10316f517a7d 100644
-> --- a/drivers/gpu/drm/msm/registers/gen_header.py
-> +++ b/drivers/gpu/drm/msm/registers/gen_header.py
-> @@ -1,4 +1,4 @@
-> -#!/usr/bin/python3
-> +#!/usr/bin/env python3
->   #
->   # Copyright © 2019-2024 Google, Inc.
->   #
-> diff --git a/scripts/macro_checker.py b/scripts/macro_checker.py
-> index ba550982e98f..7dbb114a57d5 100755
-> --- a/scripts/macro_checker.py
-> +++ b/scripts/macro_checker.py
-> @@ -1,4 +1,4 @@
-> -#!/usr/bin/python3
-> +#!/usr/bin/env python3
->   # SPDX-License-Identifier: GPL-2.0
->   # Author: Julian Sun <sunjunchao2870@gmail.com>
->   
-> diff --git a/tools/crypto/ccp/dbc.py b/tools/crypto/ccp/dbc.py
-> index 2b91415b1940..cd56a63aa8ce 100644
-> --- a/tools/crypto/ccp/dbc.py
-> +++ b/tools/crypto/ccp/dbc.py
-> @@ -1,4 +1,4 @@
-> -#!/usr/bin/python3
-> +#!/usr/bin/env python3
->   # SPDX-License-Identifier: GPL-2.0
->   
->   import ctypes
-> diff --git a/tools/crypto/ccp/dbc_cli.py b/tools/crypto/ccp/dbc_cli.py
-> index bf52233fd038..bfe34f01e619 100755
-> --- a/tools/crypto/ccp/dbc_cli.py
-> +++ b/tools/crypto/ccp/dbc_cli.py
-> @@ -1,4 +1,4 @@
-> -#!/usr/bin/python3
-> +#!/usr/bin/env python3
->   # SPDX-License-Identifier: GPL-2.0
->   import argparse
->   import binascii
-> diff --git a/tools/crypto/ccp/test_dbc.py b/tools/crypto/ccp/test_dbc.py
-> index bb0e671be96d..0ee3da6c6be7 100755
-> --- a/tools/crypto/ccp/test_dbc.py
-> +++ b/tools/crypto/ccp/test_dbc.py
-> @@ -1,4 +1,4 @@
-> -#!/usr/bin/python3
-> +#!/usr/bin/env python3
->   # SPDX-License-Identifier: GPL-2.0
->   import unittest
->   import os
-> diff --git a/tools/perf/tests/shell/lib/perf_json_output_lint.py b/tools/perf/tests/shell/lib/perf_json_output_lint.py
-> index dafbde56cc76..dccafd507bb7 100644
-> --- a/tools/perf/tests/shell/lib/perf_json_output_lint.py
-> +++ b/tools/perf/tests/shell/lib/perf_json_output_lint.py
-> @@ -1,4 +1,4 @@
-> -#!/usr/bin/python
-> +#!/usr/bin/env python3
->   # SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
->   # Basic sanity check of perf JSON output as specified in the man page.
->   
-> diff --git a/tools/testing/selftests/devices/probe/test_discoverable_devices.py b/tools/testing/selftests/devices/probe/test_discoverable_devices.py
-> index d7a2bb91c807..72a94bbfbc7b 100755
-> --- a/tools/testing/selftests/devices/probe/test_discoverable_devices.py
-> +++ b/tools/testing/selftests/devices/probe/test_discoverable_devices.py
-> @@ -1,4 +1,4 @@
-> -#!/usr/bin/python3
-> +#!/usr/bin/env python3
->   # SPDX-License-Identifier: GPL-2.0
->   #
->   # Copyright (c) 2023 Collabora Ltd
-> diff --git a/tools/testing/selftests/rseq/rseq-slice-hist.py b/tools/testing/selftests/rseq/rseq-slice-hist.py
-> index b7933eeaefb9..2c43b2e2bf0d 100644
-> --- a/tools/testing/selftests/rseq/rseq-slice-hist.py
-> +++ b/tools/testing/selftests/rseq/rseq-slice-hist.py
-> @@ -1,4 +1,4 @@
-> -#!/usr/bin/python3
-> +#!/usr/bin/env python3
->   
->   #
->   # trace-cmd record -e hrtimer_start -e hrtimer_cancel -e hrtimer_expire_entry -- $cmd
-
+--=20
+paul-moore.com
