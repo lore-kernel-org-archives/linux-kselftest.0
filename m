@@ -1,424 +1,134 @@
-Received: from mail-ed1-f74.google.com (mail-ed1-f74.google.com [209.85.208.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from BL0PR03CU003.outbound.protection.outlook.com (mail-eastusazon11012060.outbound.protection.outlook.com [52.101.53.60])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC9C93EAC86
-	for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 09:36:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.74
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779097018; cv=none; b=VS8pVEdHZ5w7KpsdcucVX1CE7gViH4IRQbnRPI0HfFwUYvsHts5SpYlsngWkRdAQ3uvfz1uV6qQnVFyrumSlVw0GRc5oE1g4yvXjS/pfDzDRh7oYSUt+iLCjCcnEC9oJcvapXEY5h9G6cr/uJGsnLVLvsrdB/SIk1+nQPOWWndI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779097018; c=relaxed/simple;
-	bh=xF0FkPdLJIQGHoVCk1kA8/18zDIww4vBJZuumvGQiUw=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=spIJxVD+6fbY3NhldoDzaIjbHsxy1GwXLaOHpYesZ9j2jjux8XD2K+rtj8FSGsecxXp+r6OkWPk9jiLV/xa/cMkCF1Be+wB2IGvW1bdajy08tdXIpw+gUhQHZZ6W6yivEFGDlY1M6t2CbFTQuG3ygKeFFVSb05LH/1BUqz9FU+A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tarunsahu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=UOoJI29a; arc=none smtp.client-ip=209.85.208.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tarunsahu.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A56C53E6DFF;
+	Mon, 18 May 2026 09:37:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.53.60
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779097065; cv=fail; b=hXYR87LRdchERo5waFSOLZSLrAss2iTV6kA076wPhf7vUzOqlqj4AYgr0VIb3BOaWev1Dt8eDDLSyz4wDEHdKh1EZ5Deaep6Y0t2j35CpesHAKVzSrqB9P7THChNEAncMAdP/SziXxV9z4PUmEgzJpUH/qkmCp7G3MDdr1/o+oA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779097065; c=relaxed/simple;
+	bh=j3L3PAMpDwcWUKzWN9FESX9YmU0QEn1rVt+iFA+9IZA=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=BLCYtsBxl2ZCTLK4O771YxFUbiTEuhM7o7FWeggIgG34HuSQZSMEiahWvALrKkFMxyGXWGbp02/2rIaSpCUHAKP7cvOoDWW4XwwbJA27EyanUGbg4miR+BXd6Ty/NfySilvU08caRlvX4fUM48UHf8S2UkPRSEWXAsJqNpSVJfA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=mhA8NNt4; arc=fail smtp.client-ip=52.101.53.60
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UOoJI29a"
-Received: by mail-ed1-f74.google.com with SMTP id 4fb4d7f45d1cf-67b6c936989so3288610a12.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 02:36:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1779097012; x=1779701812; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=O7OlXwmA5HFHQvyK/b9w4xYG/XKhpdapsDQN7y6zQXo=;
-        b=UOoJI29aOTztVxE7XuTwDbRd6LrgNyT9BVd20n46pMWGWh+2E7MAiMxjl7K+op1fhW
-         MT1U3XpTF42Imdivr10JZu1VC/YO3ilCLyYwVAvCOozjOTDI3d8tTKgtSGU+Ew8PNlI1
-         01xO/iQG+Sce+YsFsm8TJdNkvW53EI4iEyTnHWeIChxpPJzWDuenm95wARQ6dZ/r7EeE
-         hCUSjil8tcBmHoLfPp7UT0rF3eIdbOA8xVfWgjlRQOJKtDQaMWFqBu84YiSfZ8VZYktV
-         5Pk1i0favkXtfsBKJdV9Np30NvM0ARltD95E7ZBmLyiGIO5lyXgHuUrKeztQ0lSfHe4r
-         +MgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779097012; x=1779701812;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=O7OlXwmA5HFHQvyK/b9w4xYG/XKhpdapsDQN7y6zQXo=;
-        b=a7tM4Ggf/QctVlCZ53gVfaTeHKZt/8vqMpRfGya1IaDC+gDWOl/YfAPLKhTpUxqKZl
-         cn/GOp8nzH3kG5G1lKnBIqiM44xFpuHuxuH2fKcJyDqnjFmizQfcbgZTKDPytzOtiiZe
-         DiR0tRapqoYBmW4OiJlSLeUelc7J4M3wH+czEbxboBZvJRjKVbqacnNpnVjfOVKzVL6p
-         D75ScAcTwDsBd0RMSwAePrrqvJfodPGkE38mbG7l0b/3QNL/VOpc55GrqaehFIDW0DcU
-         /70OEuT3hTf0RM+0NriaQHA8/NncqAY5jW5y+GaK60ZJvmQN8VUgiF0VxEgf5zAjlqNr
-         p7Xw==
-X-Forwarded-Encrypted: i=1; AFNElJ9L/KR5bfsUF59sSx4uxnvtlqm9cavS9vgBOy6NH19IzBW+GAW93HCT/3zpTi1G7ZujJSxBEpWdejxXSJMpE34=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwY8+QdR3/XKkRkShDKz7zVvU8qANfqEm21K4V0Pep+LjwiHi3X
-	1y6Wp4MImclAQmudS4j2yNE30uMJ30tz/d1KX32WEoV0zznEOBWuBtl/FGz9Z5UjwiTUwMW6Ggs
-	kHp7agWLf+4ksRq6V8Q==
-X-Received: from edgg22.prod.google.com ([2002:a05:6402:1ed6:b0:67e:2459:8ce9])
- (user=tarunsahu job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6402:13c2:b0:67c:7ffc:c4b with SMTP id 4fb4d7f45d1cf-683bd384cdbmr7475294a12.19.1779097011469;
- Mon, 18 May 2026 02:36:51 -0700 (PDT)
-Date: Mon, 18 May 2026 09:36:39 +0000
-In-Reply-To: <cover.1779080766.git.tarunsahu@google.com>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="mhA8NNt4"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=AVKsxiWxQl75GOHzmz4URIIKVgAlJ7J7FruvF7Sz1OEOWFhd38cH0ZxIwHPeIhvDyd1nFpolNJZ1RpLWsPjt6xulbHb1ttO/+1qhf/t3T/LlcGKjGml7d5E0sSiQR3jhtygXukztNNZcCY6nKA4y+DZgG+raWLSYvwFK/CKiSgHy4nXOTCeRO8MIs2wwXPjVAkPpYiRp+VDhaElwBj/s3GZTeIupb1sKkaSMOs3zUkz6ZE/G3n11pRkXbF8ElWvQD+szgBexzOecO8a+qUGuMoDjU+yjG0EsGLdBRoIyQ/gMMZrVlKYfHHv2ztOiyNubhu+2RzC30tIcAm9otR1KkQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bjg+ORjjHEhY4sxyQ7vMWaBvicT+IclMAv9a3iasPVQ=;
+ b=FNxpBSPfoJyL3Vrb3ilKRpC0aTNXyaRJKvGZi16MDoa0g7ehOQ7nXCULk56xyum4Sh9lxSL2C9mExq7j2814nlxYH7H0HoARJN31Z1PHXEWVAP3E71Nztuun+zek009wsSNAiyU9Q72MH6xWr/SL/jg0HI16NviF+A9ct098hJlLaAz/NcaCJ2MqifROiucH5iNv0V75DeKVGmu33rimALOM326b3/dPjppSTZspq/4FAuHAtVrs7UUCYSU+A5CnPhkwA5ajrDz1tULirPYB/CxWFy8nnP/14HU5WsuE/tafaKacoVHnGVrlc1516gtyCcG9oQFW3YEofpT25+Lzgw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bjg+ORjjHEhY4sxyQ7vMWaBvicT+IclMAv9a3iasPVQ=;
+ b=mhA8NNt4/kL7cdLkTIKopGPsoVV6CjY9++WDPTcN7fUK+KxNkI+aTsThmhFXx+3Nquv8la01bjNoB/rM4TJPxr+AEpA4ReCiF3y3I3eCBv6oajF5BR4N3a8Ql8VwfMPUeknnYn8X7WLVlSqNWm5I7i1Au7b8MzMSfDohCfxt4xzMyNx/GRrWMBinJKk85E+kIUXtVZW6/0a2PFWyl/+MSn5SMP6XPCgl+x3cWPHK8prd8tQBKkP7nXUWq6WgxIwTpanNBonIlf0XorY/spKolDwErKHMeoeXG6MWk+IvinMoKuPV86hqsWY0THzPNatdJYcCcPocgK1XR5PTjMlBlA==
+Received: from BL1P223CA0014.NAMP223.PROD.OUTLOOK.COM (2603:10b6:208:2c4::19)
+ by LV8PR12MB9270.namprd12.prod.outlook.com (2603:10b6:408:205::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.25.23; Mon, 18 May
+ 2026 09:37:37 +0000
+Received: from MN1PEPF0000F0E2.namprd04.prod.outlook.com
+ (2603:10b6:208:2c4:cafe::3) by BL1P223CA0014.outlook.office365.com
+ (2603:10b6:208:2c4::19) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.25.23 via Frontend Transport; Mon, 18
+ May 2026 09:37:36 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ MN1PEPF0000F0E2.mail.protection.outlook.com (10.167.242.40) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.48.11 via Frontend Transport; Mon, 18 May 2026 09:37:36 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 18 May
+ 2026 02:37:21 -0700
+Received: from c-237-113-240-247.mtl.labs.mlnx (10.126.231.37) by
+ rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.20; Mon, 18 May 2026 02:37:16 -0700
+From: Cosmin Ratiu <cratiu@nvidia.com>
+To: <netdev@vger.kernel.org>
+CC: Andrew Lunn <andrew+netdev@lunn.ch>, "David S . Miller"
+	<davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
+	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan
+	<shuah@kernel.org>, Simon Horman <horms@kernel.org>, Cosmin Ratiu
+	<cratiu@nvidia.com>, Petr Machata <petrm@nvidia.com>, Breno Leitao
+	<leitao@debian.org>, Nimrod Oren <noren@nvidia.com>, Gal Pressman
+	<gal@nvidia.com>, Willem de Bruijn <willemb@google.com>, Dimitri Daskalakis
+	<dimitri.daskalakis1@gmail.com>, <linux-kselftest@vger.kernel.org>
+Subject: [PATCH net-next 0/3] selftests: Use a master ssh connection for remote commands
+Date: Mon, 18 May 2026 12:36:50 +0300
+Message-ID: <20260518093653.551166-1-cratiu@nvidia.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <cover.1779080766.git.tarunsahu@google.com>
-X-Mailer: git-send-email 2.54.0.563.g4f69b47b94-goog
-Message-ID: <a1bc78e4f43b5b6b079012954af9af1cf864b3f8.1779080766.git.tarunsahu@google.com>
-Subject: [RFC PATCH v1 9/9] selftests: kvm: Add guest_memfd_preservation_test
-From: Tarun Sahu <tarunsahu@google.com>
-To: axelrasmussen@google.com, mark.rutland@arm.com, skhawaja@google.com, 
-	Mike Rapoport <rppt@kernel.org>, sagis@google.com, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Shuah Khan <shuah@kernel.org>, ackerleytng@google.com, corbet@lwn.net, 
-	dmatlack@google.com, Paolo Bonzini <pbonzini@redhat.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, vannapurve@google.com, 
-	Pratyush Yadav <pratyush@kernel.org>, david@redhat.com, aneesh.kumar@kernel.org, 
-	vipinsh@google.com, Alexander Graf <graf@amazon.com>, David Hildenbrand <david@kernel.org>, 
-	Pasha Tatashin <pasha.tatashin@soleen.com>
-Cc: linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
-	kexec@lists.infradead.org, linux-kselftest@vger.kernel.org, 
-	kvm@vger.kernel.org, Tarun Sahu <tarunsahu@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN1PEPF0000F0E2:EE_|LV8PR12MB9270:EE_
+X-MS-Office365-Filtering-Correlation-Id: c19b8403-7df5-48e6-6662-08deb4c118ba
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|36860700016|376014|7416014|82310400026|56012099003|18002099003|3023799003|11063799003;
+X-Microsoft-Antispam-Message-Info:
+	FW9fyCGZVkbmnlLIDuxcKnOVFjzZIDuZudePrVVfhUUKRRvxu/0cLKWQHUFw8tkdMXyELhDAXzhCUoSZuWF7yfZWPWMuI48wUFlfWEdT+5X4zQG0WorbqWGpswrfGU3VBiKR+vT2Wez4LqYSasTqkEh8u5J/ep01YwYj2y9fk5J1ZEAIk5/OwQw1VynH+Hfgs6Ip2rjqbyk5n2TMsFTPULi94HbCXYaPHe0RqaYl+XZuS3CjBXupdiZX8Lv13KdVBmxFN5MV5LvMyjYezKPbp/qm2UnbheL64fVKVwkgIkPGTn8ueNRXy9KQ8A00l70Iaz/RPXkeHzeY6aOjo+dZwYWYPGvwWjHMHolu1ObI6JHTJPCKFsqhIz4E4iNWKgpmYR3r3AdbEjUrTi4INKDybTD3lzo24hHsIQq1rrDrt5B+LqrHmBoHGeFgXyCy09CF0fWY99I0WNZNFoK28rI9c8dDFANw5Xzv/vKfV9+vHJMagFdZGYe7839ES9UhvVG3H95q5YH2Uugq+JwEi1DxC4Xj3Dnq0TEEclGQ6heSWDR10z85IeUXQUlxkHGjAiPoZ58OzCk2+hQEDRY4qLRelJPn+FgQRmTd41qXIdST72+vryT/B92PAOpMQ2L/RI8/NBdSD3+WpqAy7keMmJK/VHe0Cy9osfXZ1uw33KPorzPYSRA1ybnHSTrTidfFvWOF6Rq3eWFT0rDCGoSx9A+McoG5US9xB95xnM+1t/7U4Ns=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(36860700016)(376014)(7416014)(82310400026)(56012099003)(18002099003)(3023799003)(11063799003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	Hx3GFmzqBmDTZd9zXJ5w1GXKJzsQd6jY7YDS/rJVAPGtN3/Q7y+wDcHEfRHJY+o1epPyBFOd+P4b9Tf+RJKDEqZ0isuo71QJ7esv5C/l36bMTZNS1SH9NG5D2FWWvpCMfOCQJlSA3nn2gKLKsYm/VX4EYDntei5VT8m+op3v4Ful3T4rx1IIdjvCwGeHA8ibeDQouPYWPVh6dz4SeUswqZpNG75XuFq3qRSoImIo6IcvoQSGjBFzad99jc2+0r5vT3UlY6FXpJhihb2WO39ywPZgy15ngpNFNuU2eERAoU3n5BYfYrM8BQAOIVyyEy3w6avBrP9fNNmXjpytZhaXCMqTyJ+T5GPEx32wZSb6gc6sUS8pyYFnm2p0pDuuM6m08g7miAY7exCk0RJuhUJytUQJXgvp/CABNyZR8ZiB0oOJ10TgcIb7kX7DNyji4L+k
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 May 2026 09:37:36.7895
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c19b8403-7df5-48e6-6662-08deb4c118ba
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	MN1PEPF0000F0E2.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR12MB9270
 
-Add a new KVM selftest `guest_memfd_preservation_test` to verify that
-guest memory backed by guest_memfd is preserved properly.
+This series switches selftests to run remote ssh commands over an ssh
+master connection, significantly speeding up test execution in most
+environments by avoiding the need to repeatedly authenticate.
 
-The test leverages the Live Update Orchestrator (LUO) infrastructure
-to validate that memory folios and configuration layouts are
-successfully saved and then restored during kernel live updates,
-preventing any memory loss for the guest.
+The first patch fixes an issue with stdin inheritance, the 2nd patch
+wraps some remote command executions in PTYs to avoid a termination
+issue and the 3rd patch finally converts remote command execution to use
+an ssh master connection. For details, please see individual patches.
 
-Here, I have used the kvm selftests framework by creating a new
-vm and mapping two memory slots to it. One is the code that is executed
-inside the vm and other is the guest_memfd whose memory is being
-written by the guest code.
+Cosmin Ratiu (3):
+  selftests: Disable stdin for remote commands over ssh
+  selftests: Wrap remote command executions in PTYs
+  selftests: Use a master ssh connection for remote commands
 
-In Phase 1: Once data is written the vm exits and wait for the user
-to trigger the kexec.
+ .../drivers/net/lib/py/remote_netns.py        |  2 +-
+ .../drivers/net/lib/py/remote_ssh.py          | 52 ++++++++++++++++---
+ tools/testing/selftests/net/lib/py/utils.py   |  4 +-
+ 3 files changed, 50 insertions(+), 8 deletions(-)
 
-In Phase 2: A new vm is created with retrieved kvm and again two
-memory slots are assigned. Once for guest code, and another is for
-retrieved guest_memfd where guest_memfd memory is verified by the
-executed guest code. If verification succeeds, The test passes.
-
-Signed-off-by: Tarun Sahu <tarunsahu@google.com>
----
- MAINTAINERS                                   |   1 +
- tools/testing/selftests/kvm/Makefile.kvm      |   2 +
- .../kvm/guest_memfd_preservation_test.c       | 285 ++++++++++++++++++
- 3 files changed, 288 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/guest_memfd_preservation_test.c
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index e5402a56ab98..647d60f6a1e2 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -14413,6 +14413,7 @@ L:	kexec@lists.infradead.org
- L:	kvm@vger.kernel.org
- S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/liveupdate/linux.git
-+F:	tools/testing/selftests/kvm/guest_memfd_preservation_test.c
- F:	virt/kvm/guest_memfd_luo.c
- F:	virt/kvm/kvm_luo.c
- 
-diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
-index 9118a5a51b89..4ea6cb7bf001 100644
---- a/tools/testing/selftests/kvm/Makefile.kvm
-+++ b/tools/testing/selftests/kvm/Makefile.kvm
-@@ -161,6 +161,8 @@ TEST_GEN_PROGS_x86 += pre_fault_memory_test
- 
- # Compiled outputs used by test targets
- TEST_GEN_PROGS_EXTENDED_x86 += x86/nx_huge_pages_test
-+# Manual test that forks a persistent background daemon; skip auto CI run
-+TEST_GEN_PROGS_EXTENDED_x86 += guest_memfd_preservation_test
- 
- TEST_GEN_PROGS_arm64 = $(TEST_GEN_PROGS_COMMON)
- TEST_GEN_PROGS_arm64 += arm64/aarch32_id_regs
-diff --git a/tools/testing/selftests/kvm/guest_memfd_preservation_test.c b/tools/testing/selftests/kvm/guest_memfd_preservation_test.c
-new file mode 100644
-index 000000000000..ad7b305b48c3
---- /dev/null
-+++ b/tools/testing/selftests/kvm/guest_memfd_preservation_test.c
-@@ -0,0 +1,285 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2026, Google LLC.
-+ *
-+ * Author: Tarun Sahu <tarunsahu@google.com>
-+ *
-+ * Test for VM and guest_memfd preservation across kexec (Live Update) via LUO.
-+ *
-+ * NOTE: This is a MANUAL test and is excluded from automated CI/testing
-+ * frameworks because Phase 1 daemonizes into the background to pin resources
-+ * and requires a human operator to manually trigger kexec before Phase 2
-+ * is executed. Running Phase 1 automatically would leak the background daemon
-+ * and cause CI runners to falsely interpret it as a passed test.
-+ *
-+ * Usage:
-+ * Phase 1: ./guest_memfd_preservation_test
-+ * Phase 2: ./guest_memfd_preservation_test --phase2
-+ */
-+#include <stdlib.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <errno.h>
-+#include <stdio.h>
-+#include <fcntl.h>
-+#include <sys/mman.h>
-+#include <sys/types.h>
-+#include <sys/stat.h>
-+#include <sys/ioctl.h>
-+#include <linux/sizes.h>
-+#include <linux/falloc.h>
-+
-+#include "kvm_util.h"
-+#include "processor.h"
-+#include "test_util.h"
-+#include "ucall_common.h"
-+#include "../kselftest.h"
-+#include "../kselftest_harness.h"
-+
-+#include "../../../../include/uapi/linux/liveupdate.h"
-+
-+#define SESSION_NAME "gmem_vm_preservation_session"
-+#define VM_TOKEN 0x1001
-+#define GMEM_TOKEN 0x1002
-+
-+#define GMEM_SIZE (16ULL * 1024 * 1024)
-+#define DATA_SIZE (5ULL * 1024 * 1024)
-+
-+static size_t page_size;
-+
-+/* Deterministic byte pattern generation based on offset */
-+static inline uint8_t get_pattern_byte(size_t offset)
-+{
-+	return (uint8_t)(offset ^ 0x5A);
-+}
-+
-+static void guest_code_phase1(uint64_t gpa, uint64_t size, uint64_t data_size)
-+{
-+	uint8_t *mem = (uint8_t *)gpa;
-+	size_t i;
-+
-+	for (i = 0; i < data_size; i++)
-+		mem[i] = get_pattern_byte(i);
-+
-+	GUEST_DONE();
-+}
-+
-+static void guest_code_phase2(uint64_t gpa, uint64_t size, uint64_t data_size)
-+{
-+	uint8_t *mem = (uint8_t *)gpa;
-+	size_t i;
-+
-+	for (i = 0; i < data_size; i++) {
-+		uint8_t val = get_pattern_byte(i);
-+
-+		__GUEST_ASSERT(mem[i] == val,
-+			       "Data mismatch at offset %lu! Expected 0x%x, got 0x%x",
-+			       i, val, mem[i]);
-+	}
-+
-+	GUEST_DONE();
-+}
-+
-+static void do_phase1(void)
-+{
-+	uint64_t flags = GUEST_MEMFD_FLAG_MMAP | GUEST_MEMFD_FLAG_INIT_SHARED;
-+	int gmem_fd, dev_luo_fd, ret;
-+	const uint64_t gpa = SZ_4G;
-+	struct kvm_vcpu *vcpu;
-+	const int slot = 1;
-+	struct kvm_vm *vm;
-+	struct liveupdate_ioctl_create_session create_sess = {
-+		.size = sizeof(create_sess),
-+		.name = SESSION_NAME,
-+	};
-+	struct liveupdate_session_preserve_fd preserve_vm = {
-+		.size = sizeof(preserve_vm),
-+		.token = VM_TOKEN,
-+	};
-+	struct liveupdate_session_preserve_fd preserve_gmem = {
-+		.size = sizeof(preserve_gmem),
-+		.token = GMEM_TOKEN,
-+	};
-+
-+	vm = __vm_create_shape_with_one_vcpu(VM_SHAPE_DEFAULT, &vcpu, 1,
-+					guest_code_phase1);
-+	gmem_fd = vm_create_guest_memfd(vm, GMEM_SIZE, flags);
-+	vm_set_user_memory_region2(vm, slot, KVM_MEM_GUEST_MEMFD, gpa, GMEM_SIZE, NULL,
-+				 gmem_fd, 0);
-+	ret = fallocate(gmem_fd, FALLOC_FL_KEEP_SIZE, 0, GMEM_SIZE);
-+	TEST_ASSERT(!ret, "fallocate failed, errno = %d (%s)", errno, strerror(errno));
-+
-+	for (size_t i = 0; i < GMEM_SIZE; i += page_size)
-+		virt_pg_map(vm, gpa + i, gpa + i);
-+
-+	vcpu_args_set(vcpu, 3, gpa, GMEM_SIZE, DATA_SIZE);
-+
-+	vcpu_run(vcpu);
-+	TEST_ASSERT_EQ(get_ucall(vcpu, NULL), UCALL_DONE);
-+
-+	dev_luo_fd = open("/dev/liveupdate", O_RDWR);
-+	TEST_ASSERT(dev_luo_fd >= 0, "Failed to open /dev/liveupdate");
-+
-+	TEST_ASSERT(ioctl(dev_luo_fd, LIVEUPDATE_IOCTL_CREATE_SESSION,
-+			  &create_sess) == 0,
-+			  "Failed to create LUO session");
-+	TEST_ASSERT(create_sess.fd >= 0, "Invalid session fd");
-+
-+	preserve_vm.fd = vm->fd;
-+	TEST_ASSERT(ioctl(create_sess.fd, LIVEUPDATE_SESSION_PRESERVE_FD,
-+			  &preserve_vm) == 0,
-+			  "Failed to preserve VM file descriptor");
-+
-+	preserve_gmem.fd = gmem_fd;
-+	TEST_ASSERT(ioctl(create_sess.fd, LIVEUPDATE_SESSION_PRESERVE_FD,
-+		    &preserve_gmem) == 0,
-+		    "Failed to preserve guest_memfd file descriptor");
-+
-+	printf("\n============================================================\n");
-+	printf("Phase 1 Complete Successfully!\n");
-+	printf("VM file and guest_memfd file have been preserved via LUO.\n");
-+	printf("Tokens: VM_TOKEN=0x%x, GMEM_TOKEN=0x%x\n", VM_TOKEN, GMEM_TOKEN);
-+	printf("Machine Size: %llu MB, Data Size: %llu MB\n", GMEM_SIZE / SZ_1M,
-+				 DATA_SIZE / SZ_1M);
-+	printf("------------------------------------------------------------\n");
-+
-+	pid_t pid;
-+
-+	printf("Forking background process to hold sessions open...\n");
-+	pid = fork();
-+	TEST_ASSERT(pid >= 0, "fork failed");
-+
-+	if (pid > 0) {
-+		printf("Background child process PID: %d. Resources are pinned.\n", pid);
-+		printf("ACTION REQUIRED: Trigger kexec now to boot into Phase 2 kernel.\n");
-+		exit(EXIT_SUCCESS);
-+	}
-+
-+	/* Child process: detach from terminal and hold resources */
-+	if (setsid() < 0)
-+		exit(EXIT_FAILURE);
-+
-+	close(STDIN_FILENO);
-+	close(STDOUT_FILENO);
-+	close(STDERR_FILENO);
-+
-+	while (1)
-+		sleep(60);
-+}
-+
-+static struct kvm_vm *vm_create_from_fd(int resurrected_vm_fd,
-+					struct vm_shape shape)
-+{
-+	struct kvm_vm *vm;
-+
-+	vm = calloc(1, sizeof(*vm));
-+	TEST_ASSERT(vm != NULL, "Insufficient Memory");
-+
-+	vm_init_fields(vm, shape);
-+
-+	vm->kvm_fd = open_path_or_exit(KVM_DEV_PATH, O_RDWR);
-+	vm->fd = resurrected_vm_fd;
-+
-+	if (kvm_has_cap(KVM_CAP_BINARY_STATS_FD))
-+		vm->stats.fd = vm_get_stats_fd(vm);
-+	else
-+		vm->stats.fd = -1;
-+
-+	vm_init_memory_properties(vm);
-+
-+	return vm;
-+}
-+
-+static void do_phase2(void)
-+{
-+	int retrieved_vm_fd, retrieved_gmem_fd, dev_luo_fd;
-+	struct vm_shape shape = VM_SHAPE_DEFAULT;
-+	const uint64_t gpa = SZ_4G;
-+	struct kvm_vcpu *vcpu;
-+	const int slot = 1;
-+	struct kvm_vm *vm;
-+	struct liveupdate_ioctl_retrieve_session retrieve_sess = {
-+		.size = sizeof(retrieve_sess),
-+		.name = SESSION_NAME,
-+	};
-+	struct liveupdate_session_retrieve_fd retrieve_vm = {
-+		.size = sizeof(retrieve_vm),
-+		.token = VM_TOKEN,
-+	};
-+	struct liveupdate_session_retrieve_fd retrieve_gmem = {
-+		.size = sizeof(retrieve_gmem),
-+		.token = GMEM_TOKEN,
-+	};
-+
-+	dev_luo_fd = open("/dev/liveupdate", O_RDWR);
-+	TEST_ASSERT(dev_luo_fd >= 0, "Failed to open /dev/liveupdate");
-+
-+	TEST_ASSERT(ioctl(dev_luo_fd, LIVEUPDATE_IOCTL_RETRIEVE_SESSION, &retrieve_sess) == 0,
-+		    "Failed to retrieve LUO session");
-+	TEST_ASSERT(retrieve_sess.fd >= 0, "Invalid retrieved session fd");
-+
-+	TEST_ASSERT(ioctl(retrieve_sess.fd, LIVEUPDATE_SESSION_RETRIEVE_FD, &retrieve_vm) == 0,
-+		    "Failed to retrieve VM file descriptor");
-+	retrieved_vm_fd = retrieve_vm.fd;
-+
-+	TEST_ASSERT(ioctl(retrieve_sess.fd, LIVEUPDATE_SESSION_RETRIEVE_FD, &retrieve_gmem) == 0,
-+		    "Failed to retrieve guest_memfd file descriptor");
-+	retrieved_gmem_fd = retrieve_gmem.fd;
-+
-+	vm = vm_create_from_fd(retrieved_vm_fd, shape);
-+
-+	u64 nr_pages = 2048; /* 8MB is plenty for slot0 pages */
-+
-+	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS, 0, 0, nr_pages, 0);
-+	kvm_vm_elf_load(vm, program_invocation_name);
-+
-+	for (int i = 0; i < NR_MEM_REGIONS; i++)
-+		vm->memslots[i] = 0;
-+
-+	struct userspace_mem_region *slot0 = memslot2region(vm, 0);
-+
-+	ucall_init(vm, slot0->region.guest_phys_addr + slot0->region.memory_size);
-+
-+	vm_set_user_memory_region2(vm, slot, KVM_MEM_GUEST_MEMFD, gpa, GMEM_SIZE, NULL,
-+				   retrieved_gmem_fd, 0);
-+
-+	for (size_t i = 0; i < GMEM_SIZE; i += page_size)
-+		virt_pg_map(vm, gpa + i, gpa + i);
-+
-+	vcpu = vm_vcpu_add(vm, 0, guest_code_phase2);
-+	kvm_arch_vm_finalize_vcpus(vm);
-+
-+	vcpu_args_set(vcpu, 3, gpa, GMEM_SIZE, DATA_SIZE);
-+
-+	printf("Resuming / Running VM in Phase 2...\n");
-+	vcpu_run(vcpu);
-+	TEST_ASSERT_EQ(get_ucall(vcpu, NULL), UCALL_DONE);
-+
-+	printf("\nSUCCESS: Phase 2 Complete! All 5MB complex data verified intact!\n");
-+
-+	close(retrieve_sess.fd);
-+	close(dev_luo_fd);
-+	/* This will also close the vm_fd */
-+	kvm_vm_free(vm);
-+	close(retrieved_gmem_fd);
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	bool phase2 = false;
-+
-+	TEST_REQUIRE(kvm_has_cap(KVM_CAP_GUEST_MEMFD));
-+	page_size = getpagesize();
-+
-+	for (int i = 1; i < argc; i++) {
-+		if (strcmp(argv[i], "--phase2") == 0)
-+			phase2 = true;
-+	}
-+
-+	if (phase2)
-+		do_phase2();
-+	else
-+		do_phase1();
-+
-+	return 0;
-+}
 -- 
-2.54.0.563.g4f69b47b94-goog
+2.53.0
 
