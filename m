@@ -1,473 +1,186 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 242E844A713
-	for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 12:50:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=170.10.129.124
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779108647; cv=pass; b=MMS4cEQ68ODQX71uZLfw9JfmovGGLwArJMmD4UwlIzI32FG55s+tOjHOfV2pMZUPF7GsryPMSWhtDLnZw0c5JKYY/b65BF7S/3lRrb9QzLJ/+SeR1LbGFlaTBrVO2bMiRS9qt4NHuCNEE2dhEP8oUiVlRzFS6yKOoexhd+DaOeQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779108647; c=relaxed/simple;
-	bh=2SxzrS0DGp89vUJWVtqZoEzOzAxn7JVMcHC7WjqbRbY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Omo8h42PdijJgY8ixjvPEZwtgouEHyDMAQC3pN32jy+U8zaIaqrwnxC+43if8ZTpgDJmx5s21GYnRMPxRyTk++efbDuQESPf7ebSAkhtLsutQl4tdzBuqCVxRk1b4szDA6Lp83IRHMDaEBsF9o9NhZwRGTSV7L8V+YHdQLF/ViQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=A+iE65dw; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=lq0PJ5IT; arc=pass smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 605CE4508E0;
+	Mon, 18 May 2026 12:55:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779108927; cv=none; b=guV/aiXCuVh6ElqPqreRtQ9DI+Xk92yoD96kvEp380yjzDHjpmEpuPHKmQQf1MgP+4YMtPIGgCNPaHK1pG1zMp/799TYQFZ8l9sXRiW8ZZYXz32VJwz5qLBc7l5+XR2PMHNDdRapnivHH2lNzEEvqweQIk8ZhwDV+MlBOKC7r2I=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779108927; c=relaxed/simple;
+	bh=TsnwzaRYKCZk9fAfCvB6ylKKPgnmH6O40n1/23cglBk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=R1nGeppu+T4kLKR337lOX15aBJZz4Ybht1R2QtlS24YmdecCVCeKwJZ3lUpkbAnwbSocr3A8Psl7j6jg0GpqMeVTwQAZkBhZ6nM3VjxArtWEKL+4uS6mwrSch/k2AMAYHgifw6LjzymWSLs0ZkyW239LRByPutQ7++V5anqqeQ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=lC427nXP; arc=none smtp.client-ip=117.135.210.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="A+iE65dw";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="lq0PJ5IT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1779108644;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=eRhhMtWag6dFHgJ+9KXfvh39yjXyi0gyNukph7J5ngs=;
-	b=A+iE65dwepd/3+vSRtmUf/iqrI1tMTKPLQkOHG6tYXmDxvkUlafCeCC/KLrSGhAf3vG2rz
-	Fo3zoZcMDMFXCmHBXlS8F1azQjjDOQJQYc4YVFYCtu9a+2RAtAi0xJvN9rdrqiLNz4IRkn
-	t8YGkqbc1bh31TZmT/BVq2u71N38ZvY=
-Received: from mail-yw1-f200.google.com (mail-yw1-f200.google.com
- [209.85.128.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-177-jQqdEqsrMFac34T470sYMA-1; Mon, 18 May 2026 08:50:42 -0400
-X-MC-Unique: jQqdEqsrMFac34T470sYMA-1
-X-Mimecast-MFC-AGG-ID: jQqdEqsrMFac34T470sYMA_1779108642
-Received: by mail-yw1-f200.google.com with SMTP id 00721157ae682-7bd726a9569so28146397b3.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 05:50:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779108642; cv=none;
-        d=google.com; s=arc-20240605;
-        b=WbRRJ/tDUsD4eM3XUhH+PPWO6P0wkVogmyJVLBzu4r0QWGhbuyuugofl3upSXPZZuv
-         R4ce62x5qDZYUWCsJRCustVAb6B9kaNNcp0hMX+pCGPNQoY1etwZR57p5bclZqLm/Snc
-         yGXra3TUwErcYyezLV3wzQugbRdVi01gdipQV3dUp/6413NWgz5oH1oaXy8Ics9hxCaC
-         W36kXH91RAjAK1OjLkaQY7/z2Q/Aha5zeBWP/25Xw+Z4QS5vUD+xntXUi8kpglaG7/Y5
-         bgmZ2j4E7ou+/BU4ETZ1mXTLrMW6xTrpkJKCiCnlqyp/L4JURPuesjDnziA4QK2ab4ts
-         QwfA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=eRhhMtWag6dFHgJ+9KXfvh39yjXyi0gyNukph7J5ngs=;
-        fh=3i6MWL1QNUfQNgjsKp2d6wRMmUji2iD/O0IIDTnIVCU=;
-        b=MOa8rDxm7xVw4hYzCTAGDRuAb3HEKMvwGCiCZJv+D1+kYIUn9hgsiBXYN0dFNjD4Q6
-         0Qn/VwqPC7QffzbgY8D4buWlZ7Cc8Syd6f/8KlFPmkTCciQDL6cOmDk2HCfKxZbg2OLA
-         8Njm8g971m2Lhzh6QIYl/ht0SSTqrLV4eDs6rWv+BpuMPQnQtaKCfAlfo+gYiKB4Oehm
-         PRYgoV/cH5vYjn2I1hTrOH66dxmHVQSa1pyzFFy+k88NDEQMxuauRUbzASTjJCOHM1YY
-         HyCFis6G7Bh1f0XMJZ8WvsT8wvCecvSQRALqUVVtqjWe3pan2EPOm5owE2MgqnIM+S2X
-         W1CA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1779108642; x=1779713442; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eRhhMtWag6dFHgJ+9KXfvh39yjXyi0gyNukph7J5ngs=;
-        b=lq0PJ5ITc/jbS0p2vTR4r+xln4hrYydzzjXl8vHR807q61LMtMN1KeD2tiLFB3zkPd
-         YNKUDQtTr0hkUcEJqGM1VjpLlyGt5T4RWiI2ipyDpzxkQ9YSv2kdQVBE+zygr8wdOVas
-         twvUYTDNudGAOIdSGLaZPy/R61JZAVVEBIqwiRwhuhTeIjXv8LHmtN3RUgebpggKPpZq
-         sgmaMuLp1dxdwLHf0J89AfMTz6IKIXL7IfhuIigDKuVpbqnascNrjSWx3Yi8dUfmqwvN
-         ScnySXTSVIaE1sFR4Gq5/Cmw85VBQnLWpFLggqV7wHRZ1jWQV8z9FNlfwMKy8r+EPOhb
-         Y+Mg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779108642; x=1779713442;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=eRhhMtWag6dFHgJ+9KXfvh39yjXyi0gyNukph7J5ngs=;
-        b=IDgDj2sGGoykGytGzYiBJrOnUUzKy1fMFeCuMh2druxJ/Hjb1cZ4E//gQ8i79VppTB
-         L4DBt02Q80fqQVBxe0cVskNV/qG8HBd0R5zeFJxiuwt+TA/YsBkZZq6nWi/02gw/tgJE
-         zqPHw8JiIEm9DBNMc1t3YZT9tlpSUuqfOhMPMabJ5d/e06sd2EpTqd/GwpIq675snHTK
-         X07W1H7XD+GhxfWPRZed+pI5pQkAGiz5HvKgha6N8jLWGyHJd67KxN+AwkIBPM56QQKQ
-         qMUJ3L7aIStqte+EM8G7PRvaN23+R38JgFrXoboS4LEpdhOFeyFyzd0hru+8sZNghWhF
-         R0+Q==
-X-Forwarded-Encrypted: i=1; AFNElJ9fo3JMpUDcTFFBg9fbYerGooX6bnV6HFxwa5Hz4KfLALvGhlNIcw1In3W9UsLZV3/O4A0fFcqgeX3q8tpw3To=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwSEqM7wGdpvoNkEGp9dXxkG68y6u3bTNkiNmfa5cqZ103ZAgCY
-	ZFzbcBq7pHc+S0N0ilRJ+eI5dFIO45uoP2gdDHgqSwWiKJbYXcbW7syPRk92yFcEoZNc6rqVI85
-	v5G6jorem0dtbV8PQcE7Ez4eisGO/SU/7HCJp6OYvRiscZ7UQtWXC+OiUqoQtOZeBKzI6AP2mDw
-	r52VrCHBIM6UfdrGOo7W3gMpcIBj77B4VUKX7/w+0TvwEo
-X-Gm-Gg: Acq92OG2Nd3CdiJr1yWXcVRNaAR86u9GgutPDjqT3fgWx4eMvXSLvTETt+g9qictFhc
-	U9Ac1dDpgnssdq9UJKZPOFtdcazJKQ1OysGmhspMsdLz9PqEQIUxRAFOWkc161GC1PBPYKpSmwR
-	DYeySSvZkoeC+KYgrMOraCLaCoFY7Mdt7BgUPnLMRvTegDZTivc9Q88+fNi9ksMReV9UyYf4InU
-	ikMiQ==
-X-Received: by 2002:a05:690c:c504:b0:7ba:f0ed:c5ea with SMTP id 00721157ae682-7c95c202cb8mr151839527b3.39.1779108642048;
-        Mon, 18 May 2026 05:50:42 -0700 (PDT)
-X-Received: by 2002:a05:690c:c504:b0:7ba:f0ed:c5ea with SMTP id
- 00721157ae682-7c95c202cb8mr151838957b3.39.1779108641320; Mon, 18 May 2026
- 05:50:41 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="lC427nXP"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=Message-ID:Date:MIME-Version:Subject:To:From:
+	Content-Type; bh=CrDEAo7psewF/Zo6NTuk77pv1DJdNaLBNAD0ghaWzHc=;
+	b=lC427nXPvIjwiNmYFg/EZ/bY2f01kkqizgwT6ZxEcbkcVrzaAjXF5M7SV+IYPV
+	sXbPF76d/xj+TKNqP2aVu90z3McknrtM8SAd+IYUYWZY0ea6E6q1c6IlTl63PiPj
+	r+E/5byfzxXrboWTXGYok4Hd1XL2GITtdX1Je6vcqI/Mc=
+Received: from [IPV6:240e:38c:8516:b200:791b:8dc7:75fb:a430] (unknown [])
+	by gzsmtp3 (Coremail) with SMTP id PigvCgDnp4GVCwtqUaZZDw--.170S2;
+	Mon, 18 May 2026 20:52:40 +0800 (CST)
+Message-ID: <22e32ff9-3d79-4130-a3cb-3a4ec2efd498@163.com>
+Date: Mon, 18 May 2026 20:52:37 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260512-v2_20230123_tjmercier_google_com-v1-0-6326701c3691@redhat.com>
- <20260512-v2_20230123_tjmercier_google_com-v1-2-6326701c3691@redhat.com>
- <20260515-hinschauen-effizient-9e3a05a94f2e@brauner> <CABdmKX0d6Zsg+_TxXjB80UZR23ZvXzxYoWzORgwmx=ZiuE+Nzw@mail.gmail.com>
- <208fb820-d8eb-4832-a343-ef8b360e8120@amd.com>
-In-Reply-To: <208fb820-d8eb-4832-a343-ef8b360e8120@amd.com>
-From: Albert Esteve <aesteve@redhat.com>
-Date: Mon, 18 May 2026 14:50:30 +0200
-X-Gm-Features: AVHnY4JVeUZbQl3fJZojeCwshobXzZdw1dcYItf6HM2iKIo4t723byYD2xZMKVg
-Message-ID: <CADSE00Lh95ygoXGKJGsYvQGEsFV8sVmwEC3uvh8M6r3ERzaJwg@mail.gmail.com>
-Subject: Re: [PATCH RFC 2/5] dma-heap: charge dma-buf memory via explicit memcg
-To: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc: "T.J. Mercier" <tjmercier@google.com>, Christian Brauner <brauner@kernel.org>, Tejun Heo <tj@kernel.org>, 
-	Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, Michal Hocko <mhocko@kernel.org>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Muchun Song <muchun.song@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, 
-	Benjamin Gaignard <benjamin.gaignard@collabora.com>, Brian Starkey <Brian.Starkey@arm.com>, 
-	John Stultz <jstultz@google.com>, Paul Moore <paul@paul-moore.com>, 
-	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
-	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
-	Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org, 
-	linux-mm@kvack.org, linux-security-module@vger.kernel.org, 
-	selinux@vger.kernel.org, linux-kselftest@vger.kernel.org, mripard@kernel.org, 
-	echanude@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/3] KVM: selftests: Add unit to dirty_log_test
+To: Sean Christopherson <seanjc@google.com>
+Cc: wu.fei9@sanechips.com.cn, linux-riscv@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, anup@brainfault.org,
+ atish.patra@linux.dev, pjw@kernel.org, palmer@dabbelt.com,
+ aou@eecs.berkeley.edu, alex@ghiti.fr, pbonzini@redhat.com, shuah@kernel.org
+References: <202605111849442561v1a0B_7W1L2Z-ENusLaP@zte.com.cn>
+ <202605111130.64BBUXDN013040@mse-fl2.zte.com.cn>
+ <agO_0ejKd0x38_-E@google.com> <f64029bf-1f4c-40a7-860a-eb04fbe5317b@163.com>
+ <agck1WqW-TyEqkqd@google.com>
+Content-Language: en-US
+From: Wu Fei <atwufei@163.com>
+In-Reply-To: <agck1WqW-TyEqkqd@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:PigvCgDnp4GVCwtqUaZZDw--.170S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW3Jr4kKFyrCrWfWw18Cw4rZrb_yoW7AFWDpF
+	WSga47KFs7A345Cwn2yayDXryFkr43JFWDA34rt3s0k3s0gF1fXr1xKFy09F95Cr1rZr1S
+	vrZ0q347Zr1DuaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UYD7-UUUUU=
+X-CM-SenderInfo: pdwz3wlhl6il2tof0z/xtbCzRlG52oLC5nAxgAA3A
 
-On Mon, May 18, 2026 at 9:20=E2=80=AFAM Christian K=C3=B6nig
-<christian.koenig@amd.com> wrote:
->
-> On 5/15/26 19:06, T.J. Mercier wrote:
-> > On Fri, May 15, 2026 at 6:53=E2=80=AFAM Christian Brauner <brauner@kern=
-el.org> wrote:
-> >>
-> >> On Tue, May 12, 2026 at 11:10:44AM +0200, Albert Esteve wrote:
-> >>> On embedded platforms a central process often allocates dma-buf
-> >>> memory on behalf of client applications. Without a way to
-> >>> attribute the charge to the requesting client's cgroup, the
-> >>> cost lands on the allocator, making per-cgroup memory limits
-> >>> ineffective for the actual consumers.
-> >>>
-> >>> Add charge_pid_fd to struct dma_heap_allocation_data. When set to
-> >>
-> >> Please be aware that pidfds come in two flavors:
-> >>
-> >> thread-group pidfds and thread-specific pidfds. Make sure that your AP=
-I
-> >> doesn't implicitly depend on this distinction not existing.
-> >
-> > Hi Christian,
-> >
-> > Memcg is not a controller that supports "thread mode" so all threads
-> > in a group should belong to the same memcg.
->
-> BTW: Exactly that is the requirement automotive has with their native con=
-text use case.
->
-> The use case is that you have a deamon which has multiple threads were ea=
-ch one is acting on behalve of some other process.
->
-> At the moment we basically say they are simply not using cgroups for that=
- use case, but it would be really nice if we could handle that as well.
->
-> Summarizing the requirement of that use case: You need a different cgroup=
- for each thread of a process.
+On 5/15/26 21:51, Sean Christopherson wrote:
+> On Wed, May 13, 2026, Wu Fei wrote:
+>> On 5/13/26 08:03, Sean Christopherson wrote:
+>>> On Mon, May 11, 2026, wu.fei9@sanechips.com.cn wrote:
+>>>> Currently dirty_log_test hardcodes usleep 1ms in each interval, which
+>>>> could be too short for guest to write and fault in enough pages, then
+>>>> there is less chance to test the write protection mechanism, especially
+>>>> in the case of (log_mode != LOG_MODE_DIRTY_RING).
+>>>
+>>> But when log_mode != LOG_MODE_DIRTY_RING, the individual sleep time is largely
+>>> meaningless, because the test won't reap the bitmaps for iterations > 0.
+>>>
+>>> 			if (i && host_log_mode != LOG_MODE_DIRTY_RING)
+>>> 				continue;
+>>>
+>> The first usleep  matters in the case of KVM_DIRTY_LOG_INITIALLY_SET. The
+>> dirty bitmap is not precise in the first get_dirty_log, all pages are marked
+>> as dirty but most of them are not populated in page table, this creates the
+>> situation I mentioned in the cover letter.
+> 
+> I suspect something is messed up in your workflow, because the actual patches
+> aren't properly threaded with respect to the cover letter.  E.g. patch 1 has
+> 
+>    In-Reply-To: <202605111849442561v1a0B_7W1L2Z-ENusLaP@zte.com.cn>
+> 
+> but the cover letter has:
+> 
+>    Message-Id: <202605111108.64BB8RFR010522@mse-db.zte.com.cn>
+> 
+> Copy+pasting the entirety of the cover letter for reference:
+> 
+>   : The current gstage range walker unconditionally advances by 'page_size'
+>   : when a leaf PTE is not found, e.g. when the range to wp is
+>   : [0xfffff01fc000, 0xfffff023c000) , if found_leaf of 0xfffff01fc000
+>   : returns false and page_size is 2MB, it skips the whole range, but it's
+>   : possible to have valid entries in [0xfffff0200000, 0xfffff023c000), so
+>   : only [0xfffff01fc000, 0xfffff0200000) can be skipped safely. Both
+>   : wp/unamp have the same pattern.
+>   :
+>   : dirty_log_test intentionally sets up the unaligned guest physical
+>   : address, after riscv kvm enabling KVM_DIRTY_LOG_INITIALLY_SET, it's easy
+>   : to trigger this bug if there is a larger window for guest to write more
+>   : pages before first collect_dirty_pages.
+> 
+>> "when the range to wp is
+>> [0xfffff01fc000, 0xfffff023c000) , if found_leaf of 0xfffff01fc000
+>> returns false and page_size is 2MB, it skips the whole range, but it's
+>> possible to have valid entries in [0xfffff0200000, 0xfffff023c000), so
+>> only [0xfffff01fc000, 0xfffff0200000) can be skipped safely."
+>>
+>>>>
+>>>> Unit is introduced to replace the default 1ms if specified in command
+>>>> line. The following test can't trigger failure on my riscv vm:
+>>>
+>>> Failure of what?  And does the failure really not reproduce with a higher interval?
+>>
+>> On riscv, it fails to write protect some pages with valid page table entry
+>> then loses track of dirty pages. Higher interval doesn't help because only
+>> the first usleep matters, after the first collect_dirty_pages, all dirty
+>> pages are tracked precisely then there is no such problem.
+> 
+> Ah, gotcha.  Rather than let (and force) the user to provide a larger sleep time,
+> what if we instead randomize the delay before the initial reaping of the dirty
+> bitmap/ring?  That should provide a good balance between coverage, complexity and
+> user-friendliness.
 
-Hi Christian,
+I'm fine with your solution, I applied it and it did trigger the same issue.
 
-Thanks for sharing this atuomotive usecase. If I understand correctly,
-the actual requirement is attributing dma-buf charges to the right
-client, not putting each daemon thread in a different cgroup? If so,
-the `charge_pid_fd` approach achieves this directly by passing the
-client's `pid_fd`, without needing to add per-thread cgroup
-infrastructure.
+Thanks,
+Fei.
 
->
-> Regards,
-> Christian.
->
-> >
-> > Checking the flags from pidfd_get_pid would be the best way for an
-> > explicit check of the pidfd type?
-> >
-> >>> a valid pidfd, DMA_HEAP_IOCTL_ALLOC resolves the target task's
-> >>> memcg and charges the buffer there via mem_cgroup_charge_dmabuf()
-> >>> inside dma_heap_buffer_alloc(). Without charge_pid_fd, and with
-> >>> the mem_accounting module parameter enabled, the buffer is charged
-> >>> to the allocator's own cgroup.
-> >>>
-> >>> Additionally, commit 3c227be90659 ("dma-buf: system_heap: account for
-> >>> system heap allocation in memcg") adds __GFP_ACCOUNT to system-heap
-> >>> page allocations. Keeping __GFP_ACCOUNT would charge the same pages
-> >>> twice (once to kmem, once to MEMCG_DMABUF), thus remove it and route
-> >>> all accounting through a single MEMCG_DMABUF path.
-> >>>
-> >>> Usage examples:
-> >>>
-> >>>   1. Central allocator charging to a client at allocation time.
-> >>>      The allocator knows the client's PID (e.g., from binder's
-> >>>      sender_pid) and uses pidfd to attribute the charge:
-> >>>
-> >>>        pid_t client_pid =3D txn->sender_pid;
-> >>>        int pidfd =3D pidfd_open(client_pid, 0);
-> >>>
-> >>>        struct dma_heap_allocation_data alloc =3D {
-> >>>            .len             =3D buffer_size,
-> >>>            .fd_flags        =3D O_RDWR | O_CLOEXEC,
-> >>>            .charge_pid_fd   =3D pidfd,
-> >>>        };
-> >>>        ioctl(heap_fd, DMA_HEAP_IOCTL_ALLOC, &alloc);
-> >>>        close(pidfd);
-> >>>        /* alloc.fd is now charged to client's cgroup */
-> >>>
-> >>>   2. Default allocation (no pidfd, mem_accounting=3D1).
-> >>>      When charge_pid_fd is not set and the mem_accounting module
-> >>>      parameter is enabled, the buffer is charged to the allocator's
-> >>>      own cgroup:
-> >>>
-> >>>        struct dma_heap_allocation_data alloc =3D {
-> >>>            .len      =3D buffer_size,
-> >>>            .fd_flags =3D O_RDWR | O_CLOEXEC,
-> >>>        };
-> >>>        ioctl(heap_fd, DMA_HEAP_IOCTL_ALLOC, &alloc);
-> >>>        /* charged to current process's cgroup */
-> >>>
-> >>> Current limitations:
-> >>>
-> >>>  - Single-owner model: a dma-buf carries one memcg charge regardless =
-of
-> >>>    how many processes share it. Means only the first owner (and expor=
-ter)
-> >>>    of the shared buffer bears the charge.
-> >>>  - Only memcg accounting supported. While this makes sense for system
-> >>>    heap buffers, other heaps (e.g., CMA heaps) will require selective=
-ly
-> >>>    charging also for the dmem controller.
-> >>>
-> >>> Signed-off-by: Albert Esteve <aesteve@redhat.com>
-> >>> ---
-> >>>  Documentation/admin-guide/cgroup-v2.rst |  5 ++--
-> >>>  drivers/dma-buf/dma-buf.c               | 16 ++++---------
-> >>>  drivers/dma-buf/dma-heap.c              | 42 +++++++++++++++++++++++=
-+++++++---
-> >>>  drivers/dma-buf/heaps/system_heap.c     |  2 --
-> >>>  include/uapi/linux/dma-heap.h           |  6 +++++
-> >>>  5 files changed, 53 insertions(+), 18 deletions(-)
-> >>>
-> >>> diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/=
-admin-guide/cgroup-v2.rst
-> >>> index 8bdbc2e866430..824d269531eb1 100644
-> >>> --- a/Documentation/admin-guide/cgroup-v2.rst
-> >>> +++ b/Documentation/admin-guide/cgroup-v2.rst
-> >>> @@ -1636,8 +1636,9 @@ The following nested keys are defined.
-> >>>               structures.
-> >>>
-> >>>         dmabuf (npn)
-> >>> -             Amount of memory used for exported DMA buffers allocate=
-d by the cgroup.
-> >>> -             Stays with the allocating cgroup regardless of how the =
-buffer is shared.
-> >>> +             Amount of memory used for exported DMA buffers allocate=
-d by or on
-> >>> +             behalf of the cgroup. Stays with the allocating cgroup =
-regardless
-> >>> +             of how the buffer is shared.
-> >>>
-> >>>         workingset_refault_anon
-> >>>               Number of refaults of previously evicted anonymous page=
-s.
-> >>> diff --git a/drivers/dma-buf/dma-buf.c b/drivers/dma-buf/dma-buf.c
-> >>> index ce02377f48908..23fb758b78297 100644
-> >>> --- a/drivers/dma-buf/dma-buf.c
-> >>> +++ b/drivers/dma-buf/dma-buf.c
-> >>> @@ -181,8 +181,11 @@ static void dma_buf_release(struct dentry *dentr=
-y)
-> >>>        */
-> >>>       BUG_ON(dmabuf->cb_in.active || dmabuf->cb_out.active);
-> >>>
-> >>> -     mem_cgroup_uncharge_dmabuf(dmabuf->memcg, PAGE_ALIGN(dmabuf->si=
-ze) / PAGE_SIZE);
-> >>> -     mem_cgroup_put(dmabuf->memcg);
-> >>> +     if (dmabuf->memcg) {
-> >>> +             mem_cgroup_uncharge_dmabuf(dmabuf->memcg,
-> >>> +                                       PAGE_ALIGN(dmabuf->size) / PA=
-GE_SIZE);
-> >>> +             mem_cgroup_put(dmabuf->memcg);
-> >>> +     }
-> >>>
-> >>>       dmabuf->ops->release(dmabuf);
-> >>>
-> >>> @@ -764,13 +767,6 @@ struct dma_buf *dma_buf_export(const struct dma_=
-buf_export_info *exp_info)
-> >>>               dmabuf->resv =3D resv;
-> >>>       }
-> >>>
-> >>> -     dmabuf->memcg =3D get_mem_cgroup_from_mm(current->mm);
-> >>> -     if (!mem_cgroup_charge_dmabuf(dmabuf->memcg, PAGE_ALIGN(dmabuf-=
->size) / PAGE_SIZE,
-> >>> -                                   GFP_KERNEL)) {
-> >>> -             ret =3D -ENOMEM;
-> >>> -             goto err_memcg;
-> >>> -     }
-> >>> -
-> >>>       file->private_data =3D dmabuf;
-> >>>       file->f_path.dentry->d_fsdata =3D dmabuf;
-> >>>       dmabuf->file =3D file;
-> >>> @@ -781,8 +777,6 @@ struct dma_buf *dma_buf_export(const struct dma_b=
-uf_export_info *exp_info)
-> >>>
-> >>>       return dmabuf;
-> >>>
-> >>> -err_memcg:
-> >>> -     mem_cgroup_put(dmabuf->memcg);
-> >>>  err_file:
-> >>>       fput(file);
-> >>>  err_module:
-> >>> diff --git a/drivers/dma-buf/dma-heap.c b/drivers/dma-buf/dma-heap.c
-> >>> index ac5f8685a6494..ff6e259afcdc0 100644
-> >>> --- a/drivers/dma-buf/dma-heap.c
-> >>> +++ b/drivers/dma-buf/dma-heap.c
-> >>> @@ -7,13 +7,17 @@
-> >>>   */
-> >>>
-> >>>  #include <linux/cdev.h>
-> >>> +#include <linux/cgroup.h>
-> >>>  #include <linux/device.h>
-> >>>  #include <linux/dma-buf.h>
-> >>>  #include <linux/dma-heap.h>
-> >>> +#include <linux/memcontrol.h>
-> >>> +#include <linux/sched/mm.h>
-> >>>  #include <linux/err.h>
-> >>>  #include <linux/export.h>
-> >>>  #include <linux/list.h>
-> >>>  #include <linux/nospec.h>
-> >>> +#include <linux/pidfd.h>
-> >>>  #include <linux/syscalls.h>
-> >>>  #include <linux/uaccess.h>
-> >>>  #include <linux/xarray.h>
-> >>> @@ -55,10 +59,12 @@ MODULE_PARM_DESC(mem_accounting,
-> >>>                "Enable cgroup-based memory accounting for dma-buf hea=
-p allocations (default=3Dfalse).");
-> >>>
-> >>>  static int dma_heap_buffer_alloc(struct dma_heap *heap, size_t len,
-> >>> -                              u32 fd_flags,
-> >>> -                              u64 heap_flags)
-> >>> +                              u32 fd_flags, u64 heap_flags,
-> >>> +                              struct mem_cgroup *charge_to)
-> >>>  {
-> >>>       struct dma_buf *dmabuf;
-> >>> +     unsigned int nr_pages;
-> >>> +     struct mem_cgroup *memcg =3D charge_to;
-> >>>       int fd;
-> >>>
-> >>>       /*
-> >>> @@ -73,6 +79,22 @@ static int dma_heap_buffer_alloc(struct dma_heap *=
-heap, size_t len,
-> >>>       if (IS_ERR(dmabuf))
-> >>>               return PTR_ERR(dmabuf);
-> >>>
-> >>> +     nr_pages =3D len / PAGE_SIZE;
-> >>> +
-> >>> +     if (memcg)
-> >>> +             css_get(&memcg->css);
-> >>> +     else if (mem_accounting)
-> >>> +             memcg =3D get_mem_cgroup_from_mm(current->mm);
-> >>> +
-> >>> +     if (memcg) {
-> >>> +             if (!mem_cgroup_charge_dmabuf(memcg, nr_pages, GFP_KERN=
-EL)) {
-> >>> +                     mem_cgroup_put(memcg);
-> >>> +                     dma_buf_put(dmabuf);
-> >>> +                     return -ENOMEM;
-> >>> +             }
-> >>> +             dmabuf->memcg =3D memcg;
-> >>> +     }
-> >>> +
-> >>>       fd =3D dma_buf_fd(dmabuf, fd_flags);
-> >>>       if (fd < 0) {
-> >>>               dma_buf_put(dmabuf);
-> >>> @@ -102,6 +124,9 @@ static long dma_heap_ioctl_allocate(struct file *=
-file, void *data)
-> >>>  {
-> >>>       struct dma_heap_allocation_data *heap_allocation =3D data;
-> >>>       struct dma_heap *heap =3D file->private_data;
-> >>> +     struct mem_cgroup *memcg =3D NULL;
-> >>> +     struct task_struct *task;
-> >>> +     unsigned int pidfd_flags;
-> >>>       int fd;
-> >>>
-> >>>       if (heap_allocation->fd)
-> >>> @@ -113,9 +138,20 @@ static long dma_heap_ioctl_allocate(struct file =
-*file, void *data)
-> >>>       if (heap_allocation->heap_flags & ~DMA_HEAP_VALID_HEAP_FLAGS)
-> >>>               return -EINVAL;
-> >>>
-> >>> +     if (heap_allocation->charge_pid_fd) {
-> >>> +             task =3D pidfd_get_task(heap_allocation->charge_pid_fd,=
- &pidfd_flags);
-> >>
-> >> Will always get a thread-group leader pidfd and will fail if this is a
-> >> thread-specific pidfd. pidfd_open(1234, PIDFD_THREAD) can be used to
-> >> open a thread-specific pidfd.
-> >>
-> >>> +             if (IS_ERR(task))
-> >>> +                     return PTR_ERR(task);
-> >>> +
-> >>> +             memcg =3D get_mem_cgroup_from_mm(task->mm);
-> >>> +             put_task_struct(task);
-> >>> +     }
-> >>> +
-> >>>       fd =3D dma_heap_buffer_alloc(heap, heap_allocation->len,
-> >>>                                  heap_allocation->fd_flags,
-> >>> -                                heap_allocation->heap_flags);
-> >>> +                                heap_allocation->heap_flags,
-> >>> +                                memcg);
-> >>> +     mem_cgroup_put(memcg);
-> >>>       if (fd < 0)
-> >>>               return fd;
-> >>>
-> >>> diff --git a/drivers/dma-buf/heaps/system_heap.c b/drivers/dma-buf/he=
-aps/system_heap.c
-> >>> index 03c2b87cb1112..95d7688167b93 100644
-> >>> --- a/drivers/dma-buf/heaps/system_heap.c
-> >>> +++ b/drivers/dma-buf/heaps/system_heap.c
-> >>> @@ -385,8 +385,6 @@ static struct page *alloc_largest_available(unsig=
-ned long size,
-> >>>               if (max_order < orders[i])
-> >>>                       continue;
-> >>>               flags =3D order_flags[i];
-> >>> -             if (mem_accounting)
-> >>> -                     flags |=3D __GFP_ACCOUNT;
-> >>>               page =3D alloc_pages(flags, orders[i]);
-> >>>               if (!page)
-> >>>                       continue;
-> >>> diff --git a/include/uapi/linux/dma-heap.h b/include/uapi/linux/dma-h=
-eap.h
-> >>> index a4cf716a49fa6..e02b0f8cbc6a1 100644
-> >>> --- a/include/uapi/linux/dma-heap.h
-> >>> +++ b/include/uapi/linux/dma-heap.h
-> >>> @@ -29,6 +29,10 @@
-> >>>   *                   handle to the allocated dma-buf
-> >>>   * @fd_flags:                file descriptor flags used when allocat=
-ing
-> >>>   * @heap_flags:              flags passed to heap
-> >>> + * @charge_pid_fd:   optional pidfd of the process whose cgroup shou=
-ld be
-> >>> + *                   charged for this allocation; 0 means charge the=
- calling
-> >>> + *                   process's cgroup
-> >>> + * @__padding:               reserved, must be zero
-> >>>   *
-> >>>   * Provided by userspace as an argument to the ioctl
-> >>>   */
-> >>> @@ -37,6 +41,8 @@ struct dma_heap_allocation_data {
-> >>>       __u32 fd;
-> >>>       __u32 fd_flags;
-> >>>       __u64 heap_flags;
-> >>> +     __u32 charge_pid_fd;
-> >>> +     __u32 __padding;
-> >>>  };
-> >>>
-> >>>  #define DMA_HEAP_IOC_MAGIC           'H'
-> >>>
-> >>> --
-> >>> 2.53.0
-> >>>
->
+> 
+> diff --git a/tools/testing/selftests/kvm/dirty_log_test.c b/tools/testing/selftests/kvm/dirty_log_test.c
+> index 12446a4b6e8d..74ca096bf976 100644
+> --- a/tools/testing/selftests/kvm/dirty_log_test.c
+> +++ b/tools/testing/selftests/kvm/dirty_log_test.c
+> @@ -694,7 +694,17 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+>          pthread_create(&vcpu_thread, NULL, vcpu_worker, vcpu);
+>   
+>          for (iteration = 1; iteration <= p->iterations; iteration++) {
+> -               unsigned long i;
+> +               unsigned long i, reap_i;
+> +
+> +               /*
+> +                * Select a random point in the time interval to reap the dirty
+> +                * bitmap/ring while the guest is running, i.e. randomize how
+> +                * long the guest gets to initially run and thus how many pages
+> +                * it can dirty, before collecting the dirty bitmap/ring.  See
+> +                * the loop below for details.
+> +                */
+> +               reap_i = random() % p->interval;
+> +               printf("Reaping after a %lu ms delay\n", reap_i);
+>   
+>                  sync_global_to_guest(vm, iteration);
+>   
+> @@ -729,13 +739,17 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+>                           * that's effectively blocked.  Collecting while the
+>                           * guest is running also verifies KVM doesn't lose any
+>                           * state.
+> -                        *
+> +                        */
+> +                       if (i < reap_i)
+> +                               continue;
+> +
+> +                       /*
+>                           * For bitmap modes, KVM overwrites the entire bitmap,
+>                           * i.e. collecting the bitmaps is destructive.  Collect
+> -                        * the bitmap only on the first pass, otherwise this
+> -                        * test would lose track of dirty pages.
+> +                        * the bitmap while the guest is running only once,
+> +                        * otherwise this test would lose track of dirty pages.
+>                           */
+> -                       if (i && host_log_mode != LOG_MODE_DIRTY_RING)
+> +                       if (i > reap_i && host_log_mode != LOG_MODE_DIRTY_RING)
+>                                  continue;
+>   
+>                          /*
+> @@ -745,7 +759,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+>                           * the ring on every pass would make it unlikely the
+>                           * vCPU would ever fill the fing).
+>                           */
+> -                       if (i && !READ_ONCE(dirty_ring_vcpu_ring_full))
+> +                       if (i > reap_i && !READ_ONCE(dirty_ring_vcpu_ring_full))
+>                                  continue;
+>   
+>                          log_mode_collect_dirty_pages(vcpu, TEST_MEM_SLOT_INDEX,
 
