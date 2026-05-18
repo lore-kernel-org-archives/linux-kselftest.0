@@ -1,151 +1,234 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D6743FCB10
-	for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 15:41:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779118883; cv=none; b=KP9b4ylbb97sffmY+tuHxfNhSEj5w0arGrT7d7dpgNdoTzVM4Fs8Wsu+ZTq+gcoFOD3fSbuSjSlHcteI54QNtEwOT5X08krpAI72CR+G9W4Df5hH0A2zTZVKauHsm2LeT7xcXEoEgJ5Uy91qrMPijx0mBjfXcxGMu7SDnz4HcCM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779118883; c=relaxed/simple;
-	bh=tk5GTPAK/nlnsOY7+TwdKEKLbFUPr/NxBIWdKs81b/o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tKc8xdOLImVqKtvVlZiCufKKZ+uv7LSMMDfET+9r5T47vg5SmCqtkrXIgwHtgV+LpHDmTo/tbupmORnFY/fbalMv0PduMs1TTLHKSoQrM9TWTx/32r2O9VCuYY+SdCo1/M+7yEVrnazOlkZBBnzKdvUCny7ogdjj9sJ8eD1E580=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=6wind.com; spf=pass smtp.mailfrom=6wind.com; dkim=pass (2048-bit key) header.d=6wind.com header.i=@6wind.com header.b=XIWxQNX7; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=6wind.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=6wind.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E730B3E9286
+	for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 16:06:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.176
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779120392; cv=pass; b=WrhjoCB9GknZJX2r787fz57+4xBzWNmKhsmUZQK383qqdbw0UozMlbpc5cIP75qGYzHKfZWJMrnzAfj5poDZ6hD3u847ySc9WpK6bMwtBQVzuRN7i24b/8coUBF44b279hJMH+iqLVM2NRwlKPeAJDVRgj5E8XLvSVdd8o5liq8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779120392; c=relaxed/simple;
+	bh=0JN4eWAeyH1DFvPDOFr1bp0SNGRTw2jc5rqIj+ZsVUM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=j/qiFDh3DNTBuTAkLFTaLLzeNmSQ4Jmo7BMWCUeYPk8a0RcqMA8iTkgzTm6lJtaUZZCeHFSh7pfVZOzXvJH9n+sx4uT6/vGQUF2KeAFYdG6RlZQtCvMyHu72AO2DhtcaTQWtSK+lSe2praUG8bX3pDx15LyYLCCBrx2IHF2vM1A=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jGueLnnv; arc=pass smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=6wind.com header.i=@6wind.com header.b="XIWxQNX7"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-488ac04e13dso2763285e9.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 08:41:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jGueLnnv"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2b2e8b95bdbso175ad.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 09:06:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779120368; cv=none;
+        d=google.com; s=arc-20240605;
+        b=jvNsxLRxoRPEp8CGx+X4illutYzuIABbiENR+q38M0d951ZEnjFib7XOjoQJCg8hh3
+         xYQLw2hyJaP7pwXNDQlHttjxWroSu0Oq24hirjr6ircnuQkJ+Yczh1N0pVvBoNDbDJ1y
+         jFvEn1l9pBkXRG1xFDwsFd3G+8EBTcMeqUelI3tZtU8uruJ5HJHDs+dBpL2nOLdzkgbi
+         9Xb5aqS2rflibBMJIfuEHl5ha7Dw2j1agpHZnB4AbJNE7NDp9PR5KxZ5mb2bYT+nldJn
+         KDFljblCuyTpjPcEc7x30FSKgtXC7FaO7S3CPkq/xwQF2HvckQVz30jCXN2OEqYHZS7g
+         Td5g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=/yL2S/NNFD9uZOxHwjkGhATRbJfyjLUg+vdf0l7wFBI=;
+        fh=eYtPox5Xri+HHx1tCAiPBJL7L6BaQLcXs3CcmL9hzM4=;
+        b=PqfdYcvEVtCxtvr3an5JxfQ/pWyNIoabuKPrdy1ZWKtWYPlryrKrX5Cy741hD5nBgp
+         0Mu3279ox9hNutIaiColZ1uUVfpK6F+ju/x5YDQ2Xt6eHpISFjjVaj59f+hegspzdr9S
+         3qwDMSjAuWOEo3h1m4o5216BKH7mF86o3b//t1c6qWavdUL7a/nv+RaMSxezdwO+2hd4
+         ujtb9Uuf6ZvMEU+lGsSteOJI4uDegxCuYSytLCcug5/ejxeIlWVjPIUU1kP8GNTB+0pq
+         FY9Pp8C83iVFw0OcnnFOsYjxSekZ91xhQ8LTwWgvebnjvhDT9s+NOZamfrh47vzeZKQz
+         Z/ow==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=6wind.com; s=google; t=1779118880; x=1779723680; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:content-language
-         :from:references:cc:to:subject:reply-to:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=94Zjn9XQ3WDyXLdVoVZUdv+2NPn/y4aj79+Tl33qL2Y=;
-        b=XIWxQNX7m8TQdntyMGgQxBLS1mv3Q6HmKWuxc1yDJmr66Utt283l/LZHrDrTkcGjHX
-         +WaRfN/iivzLR/5GjTWkSKsehnGxQwRybuzaqWwG0ZprvVx2IEiZP1bwY2cOzcf927Nz
-         YyEm8ntvVba7ATjnEzgw6yWHhAtgbyofN1KJNtvBfzfNJ8wXPN5eLuNl/gkrBShHXVvg
-         elEHntUwzeIHS1eKPS2svpqTfzN/Z1QW6vREXZGM2KWFbXOmN26D5j1zK4HgSwy93yT3
-         AMXcyr1hvlnrf+K5E8B2O1uWwTDapAES05+zz6ECQI7q8eefHPgO4pV1CKck2m9PEx05
-         Va9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779118880; x=1779723680;
-        h=content-transfer-encoding:in-reply-to:organization:content-language
-         :from:references:cc:to:subject:reply-to:user-agent:mime-version:date
-         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20251104; t=1779120368; x=1779725168; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=94Zjn9XQ3WDyXLdVoVZUdv+2NPn/y4aj79+Tl33qL2Y=;
-        b=UZsXXU7nwDxKT32c+jz0MFM4thN2XG02Q2gOopLAwUklYs7UhNzFTgjOYbts5q8YV3
-         PI/5jYdbbdfpvxUzI9cFEmW034e9ZwDCmWBnA5PqN+SqpzRNvaQh9ivy+lpAoF7jm4dm
-         Lihvbkphi5LOOWgNhAzcd1G1v9DFXVSX89NzYzt5jlOcOJE/pReNxzooZH6cwbtvMhGA
-         t/UjLmSCr7QQBCdhRpHBBLzq5XqsHoFWfgzbRPoROO3XgCfraHBs2g/LZYDg4sX08++V
-         X72/m0gVJSaRHuGkLWaEBsiAyjEzl3JSNx4m6Qpbyi4SDiIdc2i5raDRnClKwtcBo8dY
-         VHrw==
-X-Forwarded-Encrypted: i=1; AFNElJ/Wk6fSHSWjOsgHfJzgWE+H6MQq6b2ziJUlBZ94xxZ8WI1/Yyr351iSh4/lMCxwYkyYOKIQo/Pbfu8gJA0+Dcc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxnYlhAF2I3IQa0EyUeiID4SjdrxjkiQFObikOr0V6RwdNGV/3L
-	6ayWuPszfZ8f9ICara6Xn9dorCh/wN91Y8fYk6JeC1PQ5u151wAVHQ9XOXiWYjlw/Xg=
-X-Gm-Gg: Acq92OEBv+T4EEjE8f9TDbN1urwxLNjiMnszUNGySRdjH5XNUvYQdqJPBpwYo8y0JQf
-	aNdIil7V6jZKOMLviZpjAWodCZrJ/F027iIdEWB0yTk8b+otqnTlFgslQ9Fj4NqmEPl9Zs3HsPm
-	lL4sdMLw8Tris+l8uIfqiMDCckMlRNesMwNAvMUhsx/Wg9zgmmuYFvdKA8qXUYm0pCddthsDGi1
-	c5jUoOuxQaxyvgOdFkJeBDWl+JOL6zPHMMfAVsHo2iSV95dpN4SXBzv5k31B6HRWp3RdTkSSpSE
-	/G77VsFCALt2wFGctW3lzpJ3QIY195SDfVa7wnK7oO46j6DgVkNuyUmPf18J9/yhOdxRj5D1HIH
-	7GaBX9+i+a5qWBcZEzWmQBI2RZTfp0Kc07wYuefdvzZoHRk0NxuN/2yl9nsBIH4V1+8OHglu9WO
-	fWZVzr/lvZkDJj8mh2EASDhE5xJlzruNp2YhnXsaEDp/nZOltHL/GlLYYqsbTPjSJdMjIJ/pOuf
-	kf7+zlViOUpRvYuxhCjTVgszg==
-X-Received: by 2002:a05:600c:1d02:b0:48a:5302:8ed9 with SMTP id 5b1f17b1804b1-48fe5ea0842mr143830215e9.0.1779118880533;
-        Mon, 18 May 2026 08:41:20 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:b41:c160:6a1d:efff:fe52:1959? ([2a01:e0a:b41:c160:6a1d:efff:fe52:1959])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45da15a6449sm38102785f8f.37.2026.05.18.08.41.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 May 2026 08:41:20 -0700 (PDT)
-Message-ID: <ef3b3583-253e-4e83-8bab-31672effb9ab@6wind.com>
-Date: Mon, 18 May 2026 17:41:19 +0200
+        bh=/yL2S/NNFD9uZOxHwjkGhATRbJfyjLUg+vdf0l7wFBI=;
+        b=jGueLnnvGXPf0SEVFUOojzRtxCqeaOSe0Yzj+zD3sHWcSHCOPwqjC9HnKvg5/v8vvO
+         re1A4G8Fh9asuAzg6hSNQholYgZA16S5Ssrud0W/kdtLOERIt95MnH1l3ORcirQBC9Yu
+         oZ+mlJ1qvOaTU9/Ipx+JI4HCPUFBcbUzE4yU8akOhcl53ykTaj2qY/XzdzJX6F615JKL
+         GuRfH+f1mYy1yL3L6lnz78pE6TCzJNFOAJS++nSyeSoB8m0C/l+f4Pdwnvfb6DP7qrY2
+         N30usLFBRg+HJBllLX+Yxk/3tXlQZy5YufVqvEqHSjKTMhp0jh9zG95dxHQtX0yfIbHs
+         O//A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779120368; x=1779725168;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=/yL2S/NNFD9uZOxHwjkGhATRbJfyjLUg+vdf0l7wFBI=;
+        b=KQaB4UtZoQEEzp+n01LS0i4s7JrzXp82p748jjKe2djaa5iTO8JrUU+sUxBWAFPuLu
+         fHaHkm5b+HGHj9SVpIv7Kn7YFndVeED6KU4tYEku8GXcmxpKVtmE4p1wgAR+XsLGSSRz
+         B4OEqnHQm2KAy4F50yq5D6AstvmpDX1ob2Iu4FceprjNS4gAonD9eYf0oMUF5oIRGxkU
+         K5gCGTvTlBduzOHAxx35+41tzcKA9uxSScs24+jCl1idWbGMnneZOPKREe0LJf3GJaUu
+         bNr8iLY+B/AzYJ0Z6x0RU1usvn030glDZhgzrKDek9ESFDGvFW6BDAZQB6v3VjJDTJxK
+         euGQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+HHtUwdQVVHBtrHfpmYhzvRMyORsRKpUvOTQdTozvm+c8j9MzO/nfbnlvOYkU4XacERa2oBq+4cL+ggXjH15k=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxeGin63gq6SO9aadsB6QmUsCY8e96S3luRr/HW0BMRnhepPPf8
+	vVJhSHs7N7gNnL4oi+Ii9s1Cq2zpKR/dnnzHqagtyj2Tr/C4T+mM5kTZtW4mFy1r059RalYgTsz
+	MWn2mgkoVIRctaGTMblZIQLVy8MI0o3f7ANXvF+O/
+X-Gm-Gg: Acq92OFgzPGEuPrvMbu4+hqpgLjtiUB1JdguxTkSGwRREaUSPrn/qgWV3B4sa2keVVd
+	dfIEV8tgAvqf5zH+aaSJW9qdLe1Wsf3YmWCdkVGg7woKFd9MisT703ZluCZGl5NT8BcCRLLaZPn
+	q4DtRQPRmG2gSmc8tEYBhFhK8BGXgulaZFM2KPtvttl1pYFlce16woEc0ZES4b1WcBggsjmILNR
+	lE2NAuH3tkRSjL6FaZsId2jLYYDmqbEFFB0KIhXlyNCEF1RQEvrN9Ksx0h/N/cTFAwvaTvTxE/d
+	W8RHoofcMIT+mOU0Z4jfKEELi5pWZadlj9/E2cTLfuNxlSVQ
+X-Received: by 2002:a17:902:d2cf:b0:2bd:3c1b:3073 with SMTP id
+ d9443c01a7336-2bdb041654emr3259205ad.16.1779120367385; Mon, 18 May 2026
+ 09:06:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Reply-To: nicolas.dichtel@6wind.com
-Subject: Re: [PATCH net 3/5] net: netlink: don't set nsid on local
- notifications
-To: Ilya Maximets <i.maximets@ovn.org>, netdev@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Donald Hunter <donald.hunter@gmail.com>, Shuah Khan <shuah@kernel.org>,
- Adrian Moreno <amorenoz@redhat.com>, Jiri Benc <jbenc@redhat.com>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Matteo Perin <matteo.perin@canonical.com>
-References: <20260515201937.2813983-1-i.maximets@ovn.org>
- <20260515201937.2813983-4-i.maximets@ovn.org>
- <40603dce-f801-42ad-96ec-c8c0a57e5aae@6wind.com>
- <5344852f-e920-4232-9b54-5b22f6c8a1d3@ovn.org>
- <5d19e543-ac3b-4d32-a464-377d03cde500@6wind.com>
- <f695ac3a-aec9-41fd-a3d3-9537ea4c50f1@ovn.org>
-From: Nicolas Dichtel <nicolas.dichtel@6wind.com>
-Content-Language: en-US
-Organization: 6WIND
-In-Reply-To: <f695ac3a-aec9-41fd-a3d3-9537ea4c50f1@ovn.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20260518-james-perf-llvm-version-v2-0-f12cc4f031d8@linaro.org> <20260518-james-perf-llvm-version-v2-4-f12cc4f031d8@linaro.org>
+In-Reply-To: <20260518-james-perf-llvm-version-v2-4-f12cc4f031d8@linaro.org>
+From: Ian Rogers <irogers@google.com>
+Date: Mon, 18 May 2026 09:05:55 -0700
+X-Gm-Features: AVHnY4J8ZynnI8bourXp6ojaD0bCqutv1EZpQT8aGfrcInLJ1HrazyPhkbTF28U
+Message-ID: <CAP-5=fWmXQEbLg=xGJwQ4s5q5xUZUTdxx2N1K71N0gztZunQrQ@mail.gmail.com>
+Subject: Re: [PATCH v2 4/6] tools/build: Allow versioning LLVM readelf
+To: James Clark <james.clark@linaro.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, ihor.solodrai@linux.dev, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Le 18/05/2026 à 16:06, Ilya Maximets a écrit :
-> On 5/18/26 2:56 PM, Nicolas Dichtel wrote:
->> Le 18/05/2026 à 14:46, Ilya Maximets a écrit :
->>
->> [snip]
->>
->>> True and also not really.  The main problem is that ID can be allocated
->>> at any point in time, so the application needs to listen for NEW messages
->>> on the same socket that it is listening for the events that are interesting
->>> to it (to avoid races), if it doesn't want to make a separate GET request
->>> per notification or track all the IDs that were previously checked.  It's a
->>> non-trivial amount of code depending on the application structure.
->> iproute2 handles it ;-)
-> 
-> I don't think it does.  If I run this in one terminal:
-> 
-> ip netns add test-ns
-> ip netns exec test-ns ip monitor link all-nsid
-> 
-> And then in the other terminal:
-> 
-> ip -n test-ns link add dummy1 type dummy
-> ip netns exec test-ns ip netns set test-ns 100
-> ip -n test-ns link add dummy2 type dummy
-> ip netns del test-ns
-> 
-> I see the following events:
-> 
-> [nsid current]2: dummy1: <BROADCAST,NOARP> ...
-> [nsid 100]3: dummy2: <BROADCAST,NOARP> ...
-> 
-> Which is confusing to the user (myself) and shows that iproute2 doesn't
-> know or doesn't care (which may be fine for this particular command) that
-> 100 is the ID of the current namespace.
-Right, it doesn't update its cache. I thought I fixed this :D
+On Mon, May 18, 2026 at 2:04=E2=80=AFAM James Clark <james.clark@linaro.org=
+> wrote:
+>
+> Documentation/kbuild/llvm.rst mentions that readelf is included in the
+> LLVM toolchain, but it's not currently included in this block.
+>
+> Add it so that LLVM=3D... options also apply to readelf. Users in tools/
+> were Perf which was hardcoding it, and another was the BPF makefile.
+> Both already include Makefile.include so convert them to use the new
+> variable.
+>
+> It also didn't have the cross compile prefix, so either readelf didn't
+> mind opening cross binaries, or it wasn't working for cross builds.
+>
+> Signed-off-by: James Clark <james.clark@linaro.org>
 
-[snip]
+For the tools/perf/Makefile.perf part of this change.
 
->> I need to make some tests with your series.
-> 
-> Note: sashiko points out that it may be possible to have stale values reported, so
-> re-setting the nsid_is_set flag unconditionally before the check may be required,
-> e.g.:
-> 
-> +  NETLINK_CB(p->skb2).nsid_is_set = false;
->    if (!net_eq(sock_net(sk), p->net)) {
->        NETLINK_CB(p->skb2).nsid = peernet2id(sock_net(sk), p->net);
->        if (NETLINK_CB(p->skb2).nsid != NETNSA_NSID_NOT_ASSIGNED)
->            NETLINK_CB(p->skb2).nsid_is_set = true;
->    }
-> 
-> I'll include that in v2.
-I will wait for the v2 to test the series.
+Reviewed-by: Ian Rogers <irogers@google.com>
 
-Regards,
-Nicolas
+Thanks for the cleanup!
+Ian
+
+> ---
+>  tools/lib/bpf/Makefile         | 8 ++++----
+>  tools/perf/Makefile.perf       | 1 -
+>  tools/scripts/Makefile.include | 2 ++
+>  3 files changed, 6 insertions(+), 5 deletions(-)
+>
+> diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
+> index 168140f8e646..180dca9c57c8 100644
+> --- a/tools/lib/bpf/Makefile
+> +++ b/tools/lib/bpf/Makefile
+> @@ -114,12 +114,12 @@ PC_FILE           :=3D $(addprefix $(OUTPUT),$(PC_F=
+ILE))
+>
+>  TAGS_PROG :=3D $(if $(shell which etags 2>/dev/null),etags,ctags)
+>
+> -GLOBAL_SYM_COUNT =3D $(shell readelf -s --wide $(BPF_IN_SHARED) | \
+> +GLOBAL_SYM_COUNT =3D $(shell $(READELF) -s --wide $(BPF_IN_SHARED) | \
+>                            cut -d "@" -f1 | sed 's/_v[0-9]_[0-9]_[0-9].*/=
+/' | \
+>                            sed 's/\[.*\]//' | \
+>                            awk '/GLOBAL/ && /DEFAULT/ && !/UND|ABS/ {prin=
+t $$NF}' | \
+>                            sort -u | wc -l)
+> -VERSIONED_SYM_COUNT =3D $(shell readelf --dyn-syms --wide $(OUTPUT)libbp=
+f.so | \
+> +VERSIONED_SYM_COUNT =3D $(shell $(READELF) --dyn-syms --wide $(OUTPUT)li=
+bbpf.so | \
+>                               sed 's/\[.*\]//' | \
+>                               awk '/GLOBAL/ && /DEFAULT/ && !/UND|ABS/ {p=
+rint $$NF}' | \
+>                               grep -Eo '[^ ]+@LIBBPF_' | cut -d@ -f1 | so=
+rt -u | wc -l)
+> @@ -182,12 +182,12 @@ check_abi: $(OUTPUT)libbpf.so $(VERSION_SCRIPT)
+>                      "versioned symbols in $^ ($(VERSIONED_SYM_COUNT))." =
+\
+>                      "Please make sure all LIBBPF_API symbols are"       =
+\
+>                      "versioned in $(VERSION_SCRIPT)." >&2;              =
+\
+> -               readelf -s --wide $(BPF_IN_SHARED) |                     =
+\
+> +               $(READELF) -s --wide $(BPF_IN_SHARED) |                  =
+\
+>                     cut -d "@" -f1 | sed 's/_v[0-9]_[0-9]_[0-9].*//' |   =
+\
+>                     sed 's/\[.*\]//' |                                   =
+\
+>                     awk '/GLOBAL/ && /DEFAULT/ && !/UND/ {print $$NF}'|  =
+\
+>                     sort -u > $(OUTPUT)libbpf_global_syms.tmp;           =
+\
+> -               readelf --dyn-syms --wide $(OUTPUT)libbpf.so |           =
+\
+> +               $(READELF) --dyn-syms --wide $(OUTPUT)libbpf.so |        =
+        \
+>                     sed 's/\[.*\]//' |                                   =
+\
+>                     awk '/GLOBAL/ && /DEFAULT/ && !/UND|ABS/ {print $$NF}=
+'|  \
+>                     grep -Eo '[^ ]+@LIBBPF_' | cut -d@ -f1 |             =
+\
+> diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
+> index 0aba14f22a06..63276bf55856 100644
+> --- a/tools/perf/Makefile.perf
+> +++ b/tools/perf/Makefile.perf
+> @@ -215,7 +215,6 @@ FLEX    ?=3D flex
+>  BISON   ?=3D bison
+>  STRIP   =3D strip
+>  AWK     =3D awk
+> -READELF ?=3D readelf
+>
+>  # include Makefile.config by default and rule out
+>  # non-config cases
+> diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.incl=
+ude
+> index e81e5b479c56..380ad84ac51e 100644
+> --- a/tools/scripts/Makefile.include
+> +++ b/tools/scripts/Makefile.include
+> @@ -73,6 +73,7 @@ ifneq ($(LLVM),)
+>    $(call allow-override,LLC,$(LLVM_PREFIX)llc$(LLVM_SUFFIX))
+>    $(call allow-override,LLVM_CONFIG,$(LLVM_PREFIX)llvm-config$(LLVM_SUFF=
+IX))
+>    $(call allow-override,LLVM_OBJCOPY,$(LLVM_PREFIX)llvm-objcopy$(LLVM_SU=
+FFIX))
+> +  $(call allow-override,READELF,$(LLVM_PREFIX)llvm-readelf$(LLVM_SUFFIX)=
+)
+>  else
+>    # Allow setting various cross-compile vars or setting CROSS_COMPILE as=
+ a prefix.
+>    $(call allow-override,CC,$(CROSS_COMPILE)gcc)
+> @@ -80,6 +81,7 @@ else
+>    $(call allow-override,LD,$(CROSS_COMPILE)ld)
+>    $(call allow-override,CXX,$(CROSS_COMPILE)g++)
+>    $(call allow-override,STRIP,$(CROSS_COMPILE)strip)
+> +  $(call allow-override,READELF,$(CROSS_COMPILE)readelf)
+>
+>    # Host versions aren't prefixed
+>    $(call allow-override,HOSTAR,ar)
+>
+> --
+> 2.34.1
+>
