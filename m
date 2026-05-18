@@ -1,97 +1,174 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B1F341C62;
-	Mon, 18 May 2026 23:53:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F9A226738C;
+	Mon, 18 May 2026 23:55:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779148424; cv=none; b=BBgeYhruv98KjE5x8ha1eVHGT0McdIR6bdYSq0au02zm7o0RC7g49k0t9Df1fmMxmCYJWbpGvly8tjZI38bAwdoGDvdXU+PPbczRy9U4d8OIiyMCYFpJhXvM3kCTwgbVhVJmOUahdG/+2CRqexHYxIN6S7ASntmJ+ZmycIvljpU=
+	t=1779148512; cv=none; b=MQVbrDzB5sYcI/wDCwbOzk2+CmHSnbqNbbhNw0X1hunjU40DZGqAFCjNgvppz5Rq+5cz4IzKiRgIfC3BwmSSUFgkgSvinDFI2BQW6ji3g7pVJuvPiNslyclSqQAy/TijJrYQJEsAo/UHNBG7I+5YqtMvyw7cM5l3AdHfRDn2Jv0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779148424; c=relaxed/simple;
-	bh=CCybTItl2l5Gf43MmCAPz8mcPgmYEVNMNLsLUpJUbN8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RfeWDL0eBZ422ymJveS+Z34gAEw6zEZgWxwOs3/750GyTQoDYb3IErTK0QJifBX0OXK8bgKeUAN6v2lPtQo43AUpSmGn3cw6JuIX8Zsbe3+rmCFGKISF8wa9hOQjH+XJXC0VnJzklY7VS16zrv9kPl/4SZe09RuNG8xTzZiSYDM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BtC4UE8f; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1779148512; c=relaxed/simple;
+	bh=Oq+gnuMQRWjKoACeXqW8Y4zLGstl6ODlk5GgQd7tCZ8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=dQoyK2eeDoUkaAQ8iWAzQrtNIe88OGhXX9594AwnWIhkYxZIwEeuFv3VpGpe8j6NzFW8l1E8Sk3R/3MiZbI3W6AOvwSXcbj/b+OrQMutzJ6pXcmqsc0Xsp2YDaNAPI2VJX/N2gzRbail5UMwLTmefCCOt39pTxUqEvIwB6Zd7gk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SR7d5+u1; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BtC4UE8f"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69000C2BCB7;
-	Mon, 18 May 2026 23:53:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SR7d5+u1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E81D7C2BCB7;
+	Mon, 18 May 2026 23:55:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779148424;
-	bh=CCybTItl2l5Gf43MmCAPz8mcPgmYEVNMNLsLUpJUbN8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=BtC4UE8f9YImDELdTsR30s9qV7Sfy4huKZAEnlT6YqC/XF3AEhhTAyUsPwtmB1gEp
-	 5V3/u/FryBPMIgLDc3+KiBYI//28T90ZNylyhhL+dCm967kY+L9Lt4sVVXjtlfT/H6
-	 OGa8/dTsHX2DOOGqd9VYAe78UBi/gNm5TcWKDpwA2F3ey8PE8IHmt6OM7ULx93g/tP
-	 icavgCFw35jPGHgsURhE8Eytx0+35+qAEZhJReQLirfR9U5dqKSjYHgcE5abXh4T5R
-	 DSagiQST1o/j8A7b2V6Mr8HQy4WSBtSlWhqKKpc5NvRwuJxCOik7bZiny3OMranSvz
-	 wEgoRBGgIw/9g==
-From: SeongJae Park <sj@kernel.org>
-To: SeongJae Park <sj@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	David Hildenbrand <david@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Mike Rapoport <rppt@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	damon@lists.linux.dev,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/28] mm/damon: introduce data attributes monitoring
-Date: Mon, 18 May 2026 16:53:34 -0700
-Message-ID: <20260518235335.98776-1-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260518234119.97569-1-sj@kernel.org>
-References: 
+	s=k20201202; t=1779148512;
+	bh=Oq+gnuMQRWjKoACeXqW8Y4zLGstl6ODlk5GgQd7tCZ8=;
+	h=Date:Subject:To:References:From:In-Reply-To:From;
+	b=SR7d5+u17pNQYr8ELcR1xR6JkyTOzTM7GiEFnfi8yqYX6yxpe+CXZdjyY770E8O5q
+	 3h1r06qdamKnBL5bVPZYGdpEbdDkH47F+T88CHYxX3Y+iNTmdg7jZdBPVebyI6RkZk
+	 gNR5jWYEmalMXgdnSOEXSwBKOoyHVUUwPculI94XbhrvNK3/AUMNKGVP3vlfwpFZhr
+	 Wg8YsIC0Qa6lB+Uy4DD84inuaBjXqED4JVElgKDBkc4MMd7TSpyCzUwBgZnF9cDb4k
+	 SRCQaJmL4M1LiMW5hsE55y5GtoZgnVIs5133RoHmzam32zoMsljjxPSWRY3BHwB3/g
+	 TUvzofbsc8PrA==
+Message-ID: <097fe9ea-bd19-4aec-a854-f00b050603a6@kernel.org>
+Date: Mon, 18 May 2026 18:55:08 -0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] treewide: replace /usr/bin/python3 shebangs with env
+ python3
+Content-Language: en-US
+To: Oli R <sigmatwojastara@gmail.com>,
+ Rob Clark <robin.clark@oss.qualcomm.com>, Dmitry Baryshkov
+ <lumag@kernel.org>, Abhinav Kumar <abhinav.kumar@linux.dev>,
+ Jessica Zhang <jesszhan0024@gmail.com>, Sean Paul <sean@poorly.run>,
+ Marijn Suijten <marijn.suijten@somainline.org>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+ Adrian Hunter <adrian.hunter@intel.com>, James Clark
+ <james.clark@linaro.org>, Shuah Khan <shuah@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ "Paul E. McKenney" <paulmck@kernel.org>, Boqun Feng <boqun@kernel.org>,
+ "open list:DRM DRIVER for Qualcomm display hardware"
+ <linux-arm-msm@vger.kernel.org>,
+ "open list:DRM DRIVER for Qualcomm display hardware"
+ <dri-devel@lists.freedesktop.org>,
+ "open list:DRM DRIVER for Qualcomm display hardware"
+ <freedreno@lists.freedesktop.org>, open list <linux-kernel@vger.kernel.org>,
+ "open list:AMD CRYPTOGRAPHIC COPROCESSOR (CCP) DRIVER - DB..."
+ <linux-crypto@vger.kernel.org>,
+ "open list:PERFORMANCE EVENTS SUBSYSTEM" <linux-perf-users@vger.kernel.org>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+References: <20260515180806.246914-1-sigmatwojastara@gmail.com>
+From: Mario Limonciello <superm1@kernel.org>
+In-Reply-To: <20260515180806.246914-1-sigmatwojastara@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On Mon, 18 May 2026 16:40:48 -0700 SeongJae Park <sj@kernel.org> wrote:
 
-> TL; DR
-> ======
+
+On 5/15/26 13:07, Oli R wrote:
+> Use /usr/bin/env python3 instead of hardcoded interpreter paths
+> to improve portability across environments where python3 is not
+> installed in /usr/bin.
 > 
-> Extend DAMON for monitoring general data attributes other than accesses.
-> The short term motivation is lightweight page type (e.g., belonging
-> cgroup) aware monitoring.  In long term, this will help extending DAMON
-> for multiple access events capture primitives (e.g., page faults and
-> PMU) and eventually pivotting DAMON to a "Data Attributes Monitoring and
-> Operations eNgine" in long term.
-[...]
-> Changes from RFC v3
-> - rfc v3: https://lore.kernel.org/20260516183712.81393-1-sj@kernel.org
-> - Wordsmithing documentation.
-> - Drop RFC tag.
-> - Rebase to mm-new.
+> No functional changes intended.
+> 
+> Signed-off-by: Oli R <sigmatwojastara@gmail.com>
+Reviewed-by: Mario Limonciello (AMD) <superm1@kernel.org) (tools/crypto/ccp)
+> ---
+>   drivers/gpu/drm/msm/registers/gen_header.py                     | 2 +-
+>   scripts/macro_checker.py                                        | 2 +-
+>   tools/crypto/ccp/dbc.py                                         | 2 +-
+>   tools/crypto/ccp/dbc_cli.py                                     | 2 +-
+>   tools/crypto/ccp/test_dbc.py                                    | 2 +-
+>   tools/perf/tests/shell/lib/perf_json_output_lint.py             | 2 +-
+>   .../selftests/devices/probe/test_discoverable_devices.py        | 2 +-
+>   tools/testing/selftests/rseq/rseq-slice-hist.py                 | 2 +-
+>   8 files changed, 8 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/registers/gen_header.py b/drivers/gpu/drm/msm/registers/gen_header.py
+> index 2acad951f1e2..10316f517a7d 100644
+> --- a/drivers/gpu/drm/msm/registers/gen_header.py
+> +++ b/drivers/gpu/drm/msm/registers/gen_header.py
+> @@ -1,4 +1,4 @@
+> -#!/usr/bin/python3
+> +#!/usr/bin/env python3
+>   #
+>   # Copyright © 2019-2024 Google, Inc.
+>   #
+> diff --git a/scripts/macro_checker.py b/scripts/macro_checker.py
+> index ba550982e98f..7dbb114a57d5 100755
+> --- a/scripts/macro_checker.py
+> +++ b/scripts/macro_checker.py
+> @@ -1,4 +1,4 @@
+> -#!/usr/bin/python3
+> +#!/usr/bin/env python3
+>   # SPDX-License-Identifier: GPL-2.0
+>   # Author: Julian Sun <sunjunchao2870@gmail.com>
+>   
+> diff --git a/tools/crypto/ccp/dbc.py b/tools/crypto/ccp/dbc.py
+> index 2b91415b1940..cd56a63aa8ce 100644
+> --- a/tools/crypto/ccp/dbc.py
+> +++ b/tools/crypto/ccp/dbc.py
+> @@ -1,4 +1,4 @@
+> -#!/usr/bin/python3
+> +#!/usr/bin/env python3
+>   # SPDX-License-Identifier: GPL-2.0
+>   
+>   import ctypes
+> diff --git a/tools/crypto/ccp/dbc_cli.py b/tools/crypto/ccp/dbc_cli.py
+> index bf52233fd038..bfe34f01e619 100755
+> --- a/tools/crypto/ccp/dbc_cli.py
+> +++ b/tools/crypto/ccp/dbc_cli.py
+> @@ -1,4 +1,4 @@
+> -#!/usr/bin/python3
+> +#!/usr/bin/env python3
+>   # SPDX-License-Identifier: GPL-2.0
+>   import argparse
+>   import binascii
+> diff --git a/tools/crypto/ccp/test_dbc.py b/tools/crypto/ccp/test_dbc.py
+> index bb0e671be96d..0ee3da6c6be7 100755
+> --- a/tools/crypto/ccp/test_dbc.py
+> +++ b/tools/crypto/ccp/test_dbc.py
+> @@ -1,4 +1,4 @@
+> -#!/usr/bin/python3
+> +#!/usr/bin/env python3
+>   # SPDX-License-Identifier: GPL-2.0
+>   import unittest
+>   import os
+> diff --git a/tools/perf/tests/shell/lib/perf_json_output_lint.py b/tools/perf/tests/shell/lib/perf_json_output_lint.py
+> index dafbde56cc76..dccafd507bb7 100644
+> --- a/tools/perf/tests/shell/lib/perf_json_output_lint.py
+> +++ b/tools/perf/tests/shell/lib/perf_json_output_lint.py
+> @@ -1,4 +1,4 @@
+> -#!/usr/bin/python
+> +#!/usr/bin/env python3
+>   # SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
+>   # Basic sanity check of perf JSON output as specified in the man page.
+>   
+> diff --git a/tools/testing/selftests/devices/probe/test_discoverable_devices.py b/tools/testing/selftests/devices/probe/test_discoverable_devices.py
+> index d7a2bb91c807..72a94bbfbc7b 100755
+> --- a/tools/testing/selftests/devices/probe/test_discoverable_devices.py
+> +++ b/tools/testing/selftests/devices/probe/test_discoverable_devices.py
+> @@ -1,4 +1,4 @@
+> -#!/usr/bin/python3
+> +#!/usr/bin/env python3
+>   # SPDX-License-Identifier: GPL-2.0
+>   #
+>   # Copyright (c) 2023 Collabora Ltd
+> diff --git a/tools/testing/selftests/rseq/rseq-slice-hist.py b/tools/testing/selftests/rseq/rseq-slice-hist.py
+> index b7933eeaefb9..2c43b2e2bf0d 100644
+> --- a/tools/testing/selftests/rseq/rseq-slice-hist.py
+> +++ b/tools/testing/selftests/rseq/rseq-slice-hist.py
+> @@ -1,4 +1,4 @@
+> -#!/usr/bin/python3
+> +#!/usr/bin/env python3
+>   
+>   #
+>   # trace-cmd record -e hrtimer_start -e hrtimer_cancel -e hrtimer_expire_entry -- $cmd
 
-Sashiko failed [1] to reivew this series because it is still having an old
-version of mm-new, while this series is based on mm-new.  Same issues were
-found in RFC versions, so I was making those to based on mm-stable, and got
-Sashiko reviews.  On the last version (RFC v3), I confirmed [2] Sashiko find no
-more blocker.  So I believe this is good to go for more testing in mm-new.  I
-will of course happy to get different inputs.
-
-[1] https://sashiko.dev/#/patchset/20260518234119.97569-1-sj%40kernel.org
-[2] https://lore.kernel.org/20260516220317.4300-1-sj@kernel.org
-
-
-Thanks,
-SJ
-
-[...]
