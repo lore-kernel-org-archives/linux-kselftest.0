@@ -1,264 +1,156 @@
-Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B016832B139
-	for <linux-kselftest@vger.kernel.org>; Tue, 19 May 2026 10:49:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5353C32B130
+	for <linux-kselftest@vger.kernel.org>; Tue, 19 May 2026 11:03:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779187776; cv=none; b=GvFndi9uokkN80xGo2VaYksd2360VMc4vPBpK6JR3QEXf6ssdEusU85QW4GVhSnx9ktLVIefjpEy8kgd77xnotRhVYF1lO9vZOyInP4kL5rW6NgHwYKXx3AgtvSjPfLQuMos4JNZWJAOScnx5jLNdcrMZfgqhegMjQSZg8FwrY0=
+	t=1779188624; cv=none; b=r68LyGhxhli5eHZU4ZV75q0WvYz+NRIPNmVLik1igMaZlbZgRVnIQtKhpkrbBr863H+1zNNuY6BmIEwthiFBFGZ4CpCpVjHChLQIBTJGZuMvNxtprXRxLoTtDcM1A0zBSzP/7z0p0yBYE9HUW9Bk51/97ZOjEtxeLFwwc6+hOdc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779187776; c=relaxed/simple;
-	bh=LNT6YcyLbXAG1yWhR2ERK8jl/auyMXLmzVwA/qk2LR4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=m1YCyrzQpNZ6PZ5L8WIFHQQa8qIYF1iEn3RNk/MSpE9Ni/oqVmlRFodcvZ/6rmKDX2whQLcJZBzn3O4FFY+Qpg9xVVt8FZDfyC336i5UDo21vRDzgrX9+I60rA2SE53sHA9AJTvJWbP7QvT400y7V3wIjtRgrfPIV0PdWvV1Wos=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=CTBYDS3h; arc=none smtp.client-ip=91.218.175.186
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1779188624; c=relaxed/simple;
+	bh=n6BBrq+FrC4yrmdE/lDjXJKloZJFhROP8N/VMk0IHcc=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=vA3g7i7mCDblfk5e3rG/pLY0FVCUOq373/dkhgMJNUD7/7l9hIQO+pjFhLZqb88cOnyP63D6Ed0fuee/tNhf+DG+0JkztWpZ1rj5Kj9wBNBZrkqEfM4gROv3AucHd1PaAqybs1R8L9nHXVgfrNZh8dp8L6J/ZOHSNSv/PRwwrrM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=f/Yycqxr; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="CTBYDS3h"
-Message-ID: <feda101c-6514-4ea0-b02f-a04b369a612d@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1779187761;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="f/Yycqxr"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1779188622;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=GLXJs8LycZcvKaJYylyDE7SjYym6xbt1uCA8DeNxrkE=;
-	b=CTBYDS3hE3uo4Bnr/myYqTB9Z8/hvx8N3KDBzOzN7TbYxfvsvQvBuhbJLVMMP+QMH3QyKg
-	Q9C+UuXVrKRgYOIgfGy9fzv38GRzApIKQBa9r1JsQ+dt6mdHN3mfCO+u7mO+4t0ljeRthB
-	ZLtXVoEEarjFdv4bkIyOr2gDx67UIOI=
-Date: Tue, 19 May 2026 18:48:56 +0800
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=RXb08deqJbmS1OubRYA6i/YgljNJA7lkuSyxZCr/zzU=;
+	b=f/Yycqxre7Hk43IMAM4beaye7rmLIhWWeVDZxMDRwH5J/jAxLng+tr8LL5ojUmPXQnsUfJ
+	u3MPav2cB2DjKOHLBoMHx/OonXynPOlWDLW3s0ZcY9TLbCS7lC7Nv64qeva5N6N3eBRVlT
+	5O2oFhDbhlg5G4yfOZm9AxE5EvibxDk=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-621-EtFNG__2O06Nnvmf6QJHjg-1; Tue,
+ 19 May 2026 07:03:36 -0400
+X-MC-Unique: EtFNG__2O06Nnvmf6QJHjg-1
+X-Mimecast-MFC-AGG-ID: EtFNG__2O06Nnvmf6QJHjg_1779188614
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 60E7119560B4;
+	Tue, 19 May 2026 11:03:34 +0000 (UTC)
+Received: from [192.168.1.153] (headnet01.pony-001.prod.iad2.dc.redhat.com [10.2.32.101])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id AA6A130002DF;
+	Tue, 19 May 2026 11:03:31 +0000 (UTC)
+From: Albert Esteve <aesteve@redhat.com>
+Subject: [PATCH v4 0/4] cgroup: dmem: add selftest helper, coverage, and VM
+ runner
+Date: Tue, 19 May 2026 13:03:10 +0200
+Message-Id: <20260519-kunit_cgroups-v4-0-f6c2f498fae4@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next 2/5] bpf: Fix concurrent regression in
- map_create()
-Content-Language: en-US
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bot+bpf-ci@kernel.org, bpf <bpf@vger.kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Shuah Khan <shuah@kernel.org>,
- LKML <linux-kernel@vger.kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- kernel-patches-bot@fb.com, Martin KaFai Lau <martin.lau@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Chris Mason <clm@meta.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>
-References: <20260518145446.6794-3-leon.hwang@linux.dev>
- <18095298384649847dcbe0293f6b710a1382f9ee3eb9aa2bf8f6d02e56a1f0c4@mail.kernel.org>
- <6d869149-49b2-4a7a-8ed1-7db9b6af8542@linux.dev>
- <CAADnVQ+rBXAWojPPd40XSkqCM_4XWEqu+_GqCWNkDbi13makcw@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <CAADnVQ+rBXAWojPPd40XSkqCM_4XWEqu+_GqCWNkDbi13makcw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/2XM3wqCMByG4VuJHbf47Y+b66j7iAg3p47IyaZSi
+ PfelECyw++D551QtMHZiM6HCQU7uuh8mwY/HpBpira22JVpIwpUACM5fgyt6++mDn7oIpaVBq2
+ s4EAkSqYLtnKvtXe9pd242PvwXvMjWd5vicpdaSQYsJJEMyOZKgAuwZZN0Z+Mf6IlNdKNc0r2n
+ CautRAyK3PKlfnjbOMZ8D1niXNbGAVaikqRHz7P8wcCW5p7KQEAAA==
+X-Change-ID: 20260318-kunit_cgroups-7fb0b9e64017
+To: Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
+ =?utf-8?q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Albert Esteve <aesteve@redhat.com>, 
+ mripard@kernel.org, echanude@redhat.com
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1779188611; l=3416;
+ i=aesteve@redhat.com; s=20260303; h=from:subject:message-id;
+ bh=n6BBrq+FrC4yrmdE/lDjXJKloZJFhROP8N/VMk0IHcc=;
+ b=GBIB4rmj06pcr586fL9pr7XWioZVP5M/IHaf0TH4UuHDab6a3ZSsrc6twrB+WjXE1++DTou+G
+ 9qQoO1yPbElDlBIWTqp7BhrCp3380NnLwtyHfTd6n/3KEhslguH5L95
+X-Developer-Key: i=aesteve@redhat.com; a=ed25519;
+ pk=YSFz6sOHd2L45+Fr8DIvHTi6lSIjhLZ5T+rkxspJt1s=
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-On 19/5/26 11:05, Alexei Starovoitov wrote:
-> On Mon, May 18, 2026 at 7:48 PM Leon Hwang <leon.hwang@linux.dev> wrote:
->>
->> On 18/5/26 23:40, bot+bpf-ci@kernel.org wrote:
-[...]
->> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
->> index 20c421b43849..a10ef58bb6ea 100644
->> --- a/include/linux/bpf_verifier.h
->> +++ b/include/linux/bpf_verifier.h
->> @@ -788,6 +788,7 @@ struct bpf_log_attr {
->>         u32 level;
->>         u32 offsetof_true_size;
->>         bpfptr_t uattr;
->> +       bool finalized;
->>  };
-> 
-> No. That looks worse.
-> The suggestion was to do the finalize log _once_ before
-> allocating FD.
+Hi all,
 
-Understand the suggestion.
+This small series adds practical test coverage for the dmem
+cgroup controller.
 
-When tried to finalize log once without "finalized" guard, it seemed
-complicated to modify __map_create() to make sure finalize log once on
-all code logic paths.
+The motivation came from following the recent dmem API discussion in
+thread [1]. That discussion considered changing the dmem API and
+adding a new knob. Currently there are no dedicated tests covering
+dmem behaviour, which makes such changes riskier.
 
-> Why are you doing it twice?
+Adding selftests has an additional challenge: dmem charging paths
+are driver-driven today, so regression testing is harder unless a
+suitable driver is present in the test environment.
 
-So, to simplify the change, finalize log the second time with the
-"finalized" guard to cover all the check-failure paths.
+This series addresses that by adding:
+- a kernel-side selftest helper module to trigger charge/uncharge
+  from userspace in a controlled way,
+- cgroup selftests covering dmem accounting and protection semantics
+  (including dmem.max enforcement and byte-granularity checks),
+- a virtme-based VM runner for repeatable execution of the dmem tests.
 
-After thinking hardly, the below patch is the way to make sure finalize
-log once before security_bpf_map_create().
+The goal is to make dmem behavior easier to validate when evolving the API
+and implementation, while keeping tests deterministic and driver-independent.
 
-It works, but it is not good enough.
+Thanks.
 
-Thanks,
-Leon
+[1] - https://lore.kernel.org/all/aZoHfloupKvF2oSu@fedora/
+
+Signed-off-by: Albert Esteve <aesteve@redhat.com>
+---
+Changes in v4:
+- Fix charged_pool leak in dmem_selftest_init()
+- Replace ssh-based VM approach in vmtest-dmem.sh with vng --exec
+- Add main() wrapper to vmtest-dmem.sh
+- Other small fixes suggested by Sashiko
+- Link to v3: https://lore.kernel.org/r/20260504-kunit_cgroups-v3-0-4eac90b76f91@redhat.com
+
+Changes in v3:
+- Set charged flag on unexpected over-limit charge success.
+- Add CONFIG_DMEM_SELFTEST=m to selftest config.
+- Simplify -v to a boolean; single -v was a no-op.
+- Unquote kernel_opt to avoid empty-string arg to vng.
+- Document -b in usage() output.
+- Link to v2: https://lore.kernel.org/r/20260421-kunit_cgroups-v2-0-bb6675d8249c@redhat.com
+
+Changes in v2:
+- Fix debugfs_create_dir() error check
+- Fix module teardown race: call dmem_selftest_remove() before
+  uncharging so debugfs files are torn down
+- Use IS_ERR_OR_NULL() in selftest() sanity check
+- Add CONFIG_CGROUP_DMEM=y to the cgroup selftest config
+- Replace config-file parsing in check_guest_requirements() with
+  a direct check of /sys/fs/cgroup/cgroup.controllers
+- Add new patch 4 (from Eric Chanudet): vmtest-dmem.sh -b flag
+  to configure and build a local kernel tree
+- Link to v1: https://lore.kernel.org/r/20260327-kunit_cgroups-v1-0-971b3c739a00@redhat.com
 
 ---
+Albert Esteve (4):
+      cgroup: Add dmem_selftest module
+      selftests: cgroup: Add dmem selftest coverage
+      selftests: cgroup: Add vmtest-dmem runner script
+      selftests: cgroup: handle vmtest-dmem -b to test locally built kernel
 
-From 80f697c30e830786a57787f370299d4e3335fbbc Mon Sep 17 00:00:00 2001
-From: Leon Hwang <leon.hwang@linux.dev>
-Date: Tue, 19 May 2026 15:32:45 +0800
-Subject: [PATCH bpf-next v2] bpf: Fix concurrent regression in map_create()
-
-Because there is time gap between bpf_map_new_fd() and close_fd(), a
-concurrent thread is able to close the new fd and opens a new, unrelated
-file with the exact same fd number. Thereafter, this close_fd() might
-inadvertently close the unrelated file.
-
-To avoid such regression, do finalize log before security_bpf_map_create().
-
-However, to achieve it, move bpf_get_file_flag(),
-security_bpf_map_create(), bpf_map_alloc_id(), and bpf_map_new_fd() from
-__map_create() to map_create(). And, rename __map_create() to
-map_create_alloc() meanwhile.
-
-Fixes: 49f9b2b2a18c ("bpf: Add syscall common attributes support for
-map_create")
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+ init/Kconfig                                  |  12 +
+ kernel/cgroup/Makefile                        |   1 +
+ kernel/cgroup/dmem_selftest.c                 | 198 +++++++++++
+ tools/testing/selftests/cgroup/.gitignore     |   1 +
+ tools/testing/selftests/cgroup/Makefile       |   4 +-
+ tools/testing/selftests/cgroup/config         |   2 +
+ tools/testing/selftests/cgroup/test_dmem.c    | 492 ++++++++++++++++++++++++++
+ tools/testing/selftests/cgroup/vmtest-dmem.sh | 177 +++++++++
+ 8 files changed, 886 insertions(+), 1 deletion(-)
 ---
- kernel/bpf/syscall.c | 79 ++++++++++++++++++++++++++------------------
- 1 file changed, 46 insertions(+), 33 deletions(-)
+base-commit: 70eda68668d1476b459b64e69b8f36659fa9dfa8
+change-id: 20260318-kunit_cgroups-7fb0b9e64017
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 83de8fb9b9aa..e815457f5b24 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -1359,7 +1359,8 @@ static int map_check_btf(struct bpf_map *map,
-struct bpf_token *token,
-
- #define BPF_MAP_CREATE_LAST_FIELD excl_prog_hash_size
- /* called via syscall */
--static int __map_create(union bpf_attr *attr, bpfptr_t uattr, struct
-bpf_verifier_log *log)
-+static int map_create_alloc(union bpf_attr *attr, bpfptr_t uattr,
-struct bpf_verifier_log *log,
-+			    struct bpf_map **mapp, struct bpf_token **tokenp)
- {
- 	const struct bpf_map_ops *ops;
- 	struct bpf_token *token = NULL;
-@@ -1367,7 +1368,6 @@ static int __map_create(union bpf_attr *attr,
-bpfptr_t uattr, struct bpf_verifie
- 	u32 map_type = attr->map_type;
- 	struct bpf_map *map;
- 	bool token_flag;
--	int f_flags;
- 	int err;
-
- 	err = CHECK_ATTR(BPF_MAP_CREATE);
-@@ -1403,10 +1403,6 @@ static int __map_create(union bpf_attr *attr,
-bpfptr_t uattr, struct bpf_verifie
- 		return -EINVAL;
- 	}
-
--	f_flags = bpf_get_file_flag(attr->map_flags);
--	if (f_flags < 0)
--		return f_flags;
--
- 	if (numa_node != NUMA_NO_NODE &&
- 	    ((unsigned int)numa_node >= nr_node_ids ||
- 	     !node_online(numa_node))) {
-@@ -1598,6 +1594,48 @@ static int __map_create(union bpf_attr *attr,
-bpfptr_t uattr, struct bpf_verifie
- 		goto free_map;
- 	}
-
-+	*mapp = map;
-+	*tokenp = token;
-+	return 0;
-+
-+free_map:
-+	bpf_map_free(map);
-+put_token:
-+	bpf_token_put(token);
-+	return err;
-+}
-+
-+static int map_create(union bpf_attr *attr, bpfptr_t uattr, struct
-bpf_common_attr *attr_common,
-+		      bpfptr_t uattr_common, u32 size_common)
-+{
-+	struct bpf_token *token = NULL;
-+	struct bpf_verifier_log *log;
-+	struct bpf_log_attr attr_log;
-+	struct bpf_map *map = NULL;
-+	int err, ret;
-+	int f_flags;
-+
-+	log = bpf_log_attr_create_vlog(&attr_log, attr_common, uattr_common,
-size_common);
-+	if (IS_ERR(log))
-+		return PTR_ERR(log);
-+
-+	err = map_create_alloc(attr, uattr, log, &map, &token);
-+
-+	/* preserve original error even if log finalization is successful */
-+	ret = bpf_log_attr_finalize(&attr_log, log);
-+	if (ret)
-+		err = ret;
-+	kfree(log);
-+
-+	if (err)
-+		goto free_map;
-+
-+	f_flags = bpf_get_file_flag(attr->map_flags);
-+	if (f_flags < 0) {
-+		err = f_flags;
-+		goto free_map;
-+	}
-+
- 	err = security_bpf_map_create(map, attr, token, uattr.is_kernel);
- 	if (err)
- 		goto free_map_sec;
-@@ -1626,37 +1664,12 @@ static int __map_create(union bpf_attr *attr,
-bpfptr_t uattr, struct bpf_verifie
- free_map_sec:
- 	security_bpf_map_free(map);
- free_map:
--	bpf_map_free(map);
--put_token:
-+	if (map)
-+		bpf_map_free(map);
- 	bpf_token_put(token);
- 	return err;
- }
-
--static int map_create(union bpf_attr *attr, bpfptr_t uattr, struct
-bpf_common_attr *attr_common,
--		      bpfptr_t uattr_common, u32 size_common)
--{
--	struct bpf_verifier_log *log;
--	struct bpf_log_attr attr_log;
--	int err, ret;
--
--	log = bpf_log_attr_create_vlog(&attr_log, attr_common, uattr_common,
-size_common);
--	if (IS_ERR(log))
--		return PTR_ERR(log);
--
--	err = __map_create(attr, uattr, log);
--
--	/* preserve original error even if log finalization is successful */
--	ret = bpf_log_attr_finalize(&attr_log, log);
--	if (ret) {
--		if (err >= 0)
--			close_fd(err);
--		err = ret;
--	}
--
--	kfree(log);
--	return err;
--}
--
- void bpf_map_inc(struct bpf_map *map)
- {
- 	atomic64_inc(&map->refcnt);
+Best regards,
 -- 
-2.54.0
-
-
+Albert Esteve <aesteve@redhat.com>
 
