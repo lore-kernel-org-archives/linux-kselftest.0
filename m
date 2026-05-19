@@ -1,169 +1,212 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CAED327C0D
-	for <linux-kselftest@vger.kernel.org>; Tue, 19 May 2026 02:55:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C218033A9C4
+	for <linux-kselftest@vger.kernel.org>; Tue, 19 May 2026 03:05:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.43
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779159324; cv=pass; b=u8srqn5aof9V5MtDJMJeCHDEWQSjvv1IXCM7AGWf3AK4AMgFAT1Y9B7QkP6zPFxVG445kHV4wk++8EAfW4QIzIWBJXINr0bCR9WKZ/ZNLxo6Z8hWlYhzYd9e5KRZGj/pGr4mVIvvbj1gegy8uoxHtzBV4IyFpsBslJJWzPX9mYY=
+	t=1779159923; cv=pass; b=Wx6/kHtJsTEap8ZuJOV6kMUFd6bwGosDf26TCq5vbVX56sGOWdWE1WjuWtKe4D9/Gtk+r1rxOUsPyxdKTvN+u3wklkn6cf+PVW0CPj60GHAGhwpsO/QykVI9bUpW4aDsUZ2+Fl+ogbsv4JoyTFHzt+r599jLFHJQulgYBHYPyQs=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779159324; c=relaxed/simple;
-	bh=7UyJCqBRdDQbRUMfdCvNywEZmQykXXP5gBZZWpmEPYI=;
+	s=arc-20240116; t=1779159923; c=relaxed/simple;
+	bh=Q9+bQYcgqcKG4E7oWlBQwRgnuDVbY8gf2xhQ0zFIZWs=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QX2il3HHfz/M1Esjuuecb3mkUXrOfrMwRP8GiIGTyPlvrLeq9v8UZlVNcuK5hb7Pdf7nokk8WwFDC8/kAFEl5RLPo/I6pVeSGIcdjT+ehUWvGP4xbDfN3r00yybsPyPAVze4N3cYGReLwJsAXj85ml0vNxV9ZRYloQlAv8Ph2DE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=LHig9NhB; arc=pass smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	 To:Cc:Content-Type; b=oKwoRqiTvVGjiUftB7dNmtE2XpXiTzN/jw5ANssIDteQAWXLx8orA9u/+32B5aix+tGwb2GVufKWE3JbNpNQgK86V9uYxEFjO+eXFfaR84UjJrNYcj8FEUEXgec77SG+nC6kUQJf4CX+qC533X3NB6k7RpGI6EtMI3+wOQL7hxY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K0J72eUi; arc=pass smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="LHig9NhB"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2bd266f6fc0so14268505ad.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 19:55:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779159323; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K0J72eUi"
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4891e86fabeso40234225e9.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 20:05:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779159920; cv=none;
         d=google.com; s=arc-20240605;
-        b=DBc8oRE7nPFtSMbmQDfTzppTqDcAT4PJgBndcelND+PyZZonitzKgo06XMr/GfGj7H
-         vdzygJ8L/JPbB0el+r8lPJR1caWd73/EC/ZsMmWGoiYZzncXYToENnl/4SLQP+2PqpMb
-         s8LnEah9sUqKJa5YUm+5NS/8ImvuBZ/YppCH5zaBkBdGmfUFX1F2MLtIn/S4C1BN/HyQ
-         dvlaNEafoINgge6A10CKR5Njgi7vOeRkAWw5G054XSNcq6o5ZBPv1/+6x0HIbXS8tRfD
-         ndMtIuCJDt/gmde+eGwPHPv4FmpzyZPNiizzw7/Vt0sV3qxLVxQe2yPqnfoxy/tdkw6k
-         F05w==
+        b=EWqwKF5+OGAueC6DYdoNQPVDYxPsL9b09kmRZXKEbxplYRTRi8lq3n2CcmeQkvR6mC
+         ooGPe2G/ST+BSywIiUC0FsQmioNTrtmzE4WgQDoiMGmfaT0vHkN77jab95eOr0ayBbQ7
+         R6KZnC3L1jXZx641Jzi4qeSGy8ouG/ytiobtodT+s/KcW1efAp2qqkp9GqiB7MJpi/QT
+         +kK/4WZ+nOX3dWebp6juR/B19d4kXotFXLUI27Hf2AoPCs5hZZRgIWh5TShllRFJ+8jN
+         2MchKIqBn9a0Vw4nLW2OFiVughkWujXCIOJNyzNt+9jWIQ2bSyIiCZyu62zVRCfQvBEU
+         ivCA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=48t5Wp7GpUaD4JVHMYGaZTa+PdE+2hwEulXY2P1l2dE=;
-        fh=E7NiPvydiXEt8oZyun2lSzAGbSSVUl3SS6Apiqetpmk=;
-        b=agBX0j7qJLEfBSPPCGB53pf2TCHm2i8xCkzE0vSRd2UTbN7jbqBMTAkZYgjblVjQOF
-         pybvMiQsBiM/2i2tPvqW/5S/XLeZ1pPvvhi/DejGgV+WMvKYwuQZWtBiQuAdC/jih5aa
-         Hx2wD9BFeXPBYSg7EwHP42/bKsB87wqW/4uFhMAgJVDbGDNgNA0mP92OlP4hbbce2MyY
-         z/oCRe06kqJIT8pEqtbLQ8D2mzuNvzGi7LzxLmVpCDOjLpp+kf1OxeNaMSp42hQqTj5o
-         TiuwKFE3+Y1rkCtwz5iLvac200VtXpCXov1hVcWwb67iMO6+dkx3CLqTCKw37ga8RAN0
-         820g==;
+        bh=5fn5lXdhzUmR8WoBmOTDZiMW6X9iVCgyfgQJdzyZoiE=;
+        fh=kwNTKtp68ihLGtp1j8n/eXmC86Hb1it9SjplsZeQPrU=;
+        b=JuMdqa29djyjLAsM/zVPVvGdSiPMszHc/L5fgPSoDHG5UQYXb9A6TOnORheASKWZz6
+         sh/HgSyA26yrEbHcOmE7gJT7pXyMS747kl9BGTZqOo5kCSU1sWArJkGAm1+1sNjIUMC3
+         wB2QSyDBQay9YF9nZKRZbo78Nq4klTx/grsIUnbCurL5p2lueuJ5D9SDMBjZVWpK5n3H
+         iYfHVSp4sxcBiOH1cLymUiDd9bwOXQs5sUhR/nd1xZ/Efl9cTV1/vxbmlaUrLJFkRsgH
+         a8037V+3A2MQVj9jZfHlaEveLKzFPsGEMVJNCM2UP+w7TjhkHSyra24mnM0r5gWFUX24
+         iMuA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1779159323; x=1779764123; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1779159920; x=1779764720; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=48t5Wp7GpUaD4JVHMYGaZTa+PdE+2hwEulXY2P1l2dE=;
-        b=LHig9NhBYcp4lvu9FsDgRb8HDOdpTciWKsFU0bX2LCajRvpkNxObfIMDmhbSB8zXoM
-         y7KuHzobb9crsODCEHkINJ38esHDaFhWFxEsNa/7rSvANhMEbWEOjH7/CUoPeU01RGz2
-         orqC8Np5R/PrR6zsxIfNkWHQc2puRSbAmXmob1Jvx2P0JMBZj16WkbRJobH2GXBGpbUq
-         AaJuMKdEsWXtAV2E7Uq3T/B9Y1otAYfrPiruwuhkQXXK3IOAY5heSjjvxAkbq2biXcQo
-         CHbyGUzBuM8FEuHef0eEWxXyqV0D7IG3N4PKmgkIiEtcb8LPpw9+5aB0+qaDFmanYJVr
-         0ZIQ==
+        bh=5fn5lXdhzUmR8WoBmOTDZiMW6X9iVCgyfgQJdzyZoiE=;
+        b=K0J72eUivS4nsp+kMiAcnWfSv3ffaIg+2HZ03qEJ57F4F0bL7DdJLk083LWVVEyNne
+         aEGMQgNYDz+02gSHwfkuWReFfUnZlIboGv9lWneAQ7RMV1+2/dD76+JzsQzVkgvI3CDg
+         /3HmKk0S2YQkQayZHdgJWuUVgPTu/2oDuX3eGoLfv/KpK829Ed0RN3HaGyNBjboNXPsU
+         f4AX+Vy3TCL/jBNB+zM/C2c/PWn2LvGnbnFDU2USKzw/BlAkWam//XRqvWxwSSBUmfYA
+         hWqZiao5fUm+5l/NWkYSv8E4MgXB3JA0jPTZxuFtmWll/gIA3248wkUWeuv61Zsro7Oq
+         XnEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779159323; x=1779764123;
+        d=1e100.net; s=20251104; t=1779159920; x=1779764720;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=48t5Wp7GpUaD4JVHMYGaZTa+PdE+2hwEulXY2P1l2dE=;
-        b=cYJcqfzJxhzO4JeANc5Mq2irQRK9pAHgiTOFonEL1/Iu/d4Yg+/oDlMEd3sCPoLUbQ
-         ljuqv551mxtkglszs/VCjrrthAfwDoPHW8HEO9GidTJ5kFGysPDHjJ14mszCY5efniUX
-         BgxMeIU9xpLIWZwYf7x2koWr1mr/neeeTwJMY93ikZJHCjuoG0pHL0t1SlpiLwduMjkc
-         rpiTVXYFRkv0DMcXjzGQviGZD9Bvlidt21M98UR1dCWq8+ezl5bMz3aTFz9Ed5UYjusL
-         NrXRLxg3ymWFdHF8YIZA1dlwN2lFZXYZoXTvawwAtZDNzxO0sKvDLXfhVGoPxz4dZ5dE
-         cGdg==
-X-Forwarded-Encrypted: i=1; AFNElJ8btKYv0VuwGNZGtKHwfHgY6DCLbV3SzpejHEkE4EA/Y90JAczRc9OxxJDksopHr9a6Wryum2BqAOZIyk239rY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwTKt7morV54o46bQJ96G8USqX1Kpv2a30JrHKQaQfkonTyawmr
-	5v5q47BlhYmY1zZFgU6UyI2EyLhBlhbOZsDjXzeyoDk6xpxAYioK2iaD7qu3x0m6YuaB6Gws1E2
-	1tXxAuppaH1Xh/jyh6yeMWz2GXLvR64KP/9Z6srQn
-X-Gm-Gg: Acq92OGb+8/YnhNTa2lI+v4kVsedr0nFdxSa6rd5M6ImtVr1ThUjBJpr7tFQn4bZYlJ
-	P2qhxXOFpOYHhRJ2nEDhAPLdf7LYvaH4IwOAeLey8eHdyz33N3NV13HUpNj6mljhjNZpJ8aDFd2
-	g3Rc2MjMZflg8LJsuRSc30uArPFtp0XxMnmUIB3bZJn33adwCWEPgFiTAD2AK+OPCx+muoU0P58
-	wTSJBbbETXo3IZyoN52pNeEU38uHjWQz63/9X+r/rIbmJiI4XR/GzkTIS7/frnojF7lSr/q9VSO
-	7xnaeQc=
-X-Received: by 2002:a17:903:17cd:b0:2bd:8938:b811 with SMTP id
- d9443c01a7336-2bd8938b845mr174842955ad.34.1779159322627; Mon, 18 May 2026
- 19:55:22 -0700 (PDT)
+        bh=5fn5lXdhzUmR8WoBmOTDZiMW6X9iVCgyfgQJdzyZoiE=;
+        b=XCbudSuLV81s8oHNEPqAwgvGgSK7cGsCzAl8kOc81HmrFvjbDTxMDkGOkbqM53h1Ip
+         s+7s0CmJ8bghDVvr1R127ElwbS86cz5S/7Z9jqvsC7O9bZsJ/HdSGSqr7VkY03GBfzGM
+         ow5UVJVb0rKZq+4UGl1RFWbNce6GX6M7rIvpKz8GzRTMN0VnsEf0Nulq3/JYn2QItOoC
+         Fe8G444EgRy1jKSWhuai/gIXno408GbucvBQoIZnlWDm4OBFK94MT4lseiniFqUiYo2i
+         SviIDX+2zzVQIo7WVj11SN5fjFU43oogQS6i63DHAl+ZjWMsfrfyD+QDk4LYHfMMy63a
+         eLLA==
+X-Forwarded-Encrypted: i=1; AFNElJ+zKkvsyuQlet1lUy12ub3XjIBZSNzVjDvNFc9VN2XI3tOhml9NE/QNMMQIbrgk8cLUZYkhgZXBDE9jb9m6Sqk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzLKow/oe2BjKBExUocqv5D1u9Wyj6XPFQ2UKCanBimlmCztkIz
+	ZDzZSc4rgEe0kxW5HJRvt0lUP59hHuYb8zJ5BzXC1rgWHYA8ojS8zWQ/D2VjLXpx40k9ekWzhex
+	ib5lckL16uWeIwF38bgeOUb5uUTGB61E=
+X-Gm-Gg: Acq92OGhB+2IcmnNmzx5xsLTqmZM+NjK9gHCcZokHpVN0oozWxcENvNR+U/FI6bFNKI
+	DOWVeiQFnDw2GpFT+OuvwvMv06dwuH3gwslSWqM5zUQhYGIkhqmA6vvRCVxGs0ybgDxRElHSvax
+	t/51Ikl970HqkJKmT4hOv+3eBdhRvCPnNEkWJu3v9Nc0Rys/IsWlSop3T+umZYT8Zac50rYM2we
+	p5wCiiLHOokqC7QkLfZHPPlUMkK0fLFyGl5N3qKsEtfPjHybfX/YD7n2YN7/d31RP7fQ9rvzVXS
+	xm2CLUgUOLqRJqUwV60W8ySpCuXYJCwRSeJp+5SonpNblW5okDnRKE9an2/N9KN684aFVLMJA2Q
+	UQqdpYEoTL9fKrfh6u87DKzij5XkNvzE2VKuG
+X-Received: by 2002:a05:600c:3b21:b0:488:78f2:6b0 with SMTP id
+ 5b1f17b1804b1-48fe651b39dmr256690525e9.29.1779159919917; Mon, 18 May 2026
+ 20:05:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260507070547.2268452-1-sashal@kernel.org> <CAHC9VhTwDt2Bx8n0io9Qge_fUEnrHsxrFAQY+KaemKWqJqBQxw@mail.gmail.com>
- <CAPhsuW4TJRqQKXgcBYog8YgFLU2h2Zq9ReahxTYp_zpDyvO8AA@mail.gmail.com>
- <CAHC9VhS1DJNs9gDB6gD9WKhL08giSVajBskZ+=mY0AWRCAsw7Q@mail.gmail.com>
- <CAPhsuW5jQOzRTi1ea+=UPhx5W9bkBdivPagRE=O=nx0zf_vb8w@mail.gmail.com>
- <CAHC9VhTGDOJZDzEA31qc0S6FJpYNC4oD__HQ-65wqqwhng=V9Q@mail.gmail.com> <CAPhsuW7Js0Z6tU30RphbUjWsJXETkxaGOArfGZpDjNPmZFUpuQ@mail.gmail.com>
-In-Reply-To: <CAPhsuW7Js0Z6tU30RphbUjWsJXETkxaGOArfGZpDjNPmZFUpuQ@mail.gmail.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Mon, 18 May 2026 22:55:10 -0400
-X-Gm-Features: AVHnY4IvhqH391i3RQ33XvQXVamFfTLljbGCppZ7t8Skv2w-HCikKnYPe2_pXNI
-Message-ID: <CAHC9VhRiDyGT6R+yqxS_oMBSiD6x01HNTb9jWq6B55sfdDkqbw@mail.gmail.com>
-Subject: Re: [PATCH] killswitch: add per-function short-circuit mitigation primitive
-To: Song Liu <song@kernel.org>
-Cc: Sasha Levin <sashal@kernel.org>, corbet@lwn.net, akpm@linux-foundation.org, 
-	skhan@linuxfoundation.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	gregkh@linuxfoundation.org, linux-security-module@vger.kernel.org
+References: <20260518145446.6794-3-leon.hwang@linux.dev> <18095298384649847dcbe0293f6b710a1382f9ee3eb9aa2bf8f6d02e56a1f0c4@mail.kernel.org>
+ <6d869149-49b2-4a7a-8ed1-7db9b6af8542@linux.dev>
+In-Reply-To: <6d869149-49b2-4a7a-8ed1-7db9b6af8542@linux.dev>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Mon, 18 May 2026 20:05:07 -0700
+X-Gm-Features: AVHnY4IMZVY1Ka0Gc2HwMu-nrf1fg0lbl7TQ0eZnTcIDBs7xynIM4zFCGhpFuxQ
+Message-ID: <CAADnVQ+rBXAWojPPd40XSkqCM_4XWEqu+_GqCWNkDbi13makcw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 2/5] bpf: Fix concurrent regression in map_create()
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: bot+bpf-ci@kernel.org, bpf <bpf@vger.kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Shuah Khan <shuah@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, kernel-patches-bot@fb.com, 
+	Martin KaFai Lau <martin.lau@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
+	Chris Mason <clm@meta.com>, Ihor Solodrai <ihor.solodrai@linux.dev>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, May 18, 2026 at 8:01=E2=80=AFPM Song Liu <song@kernel.org> wrote:
-> On Mon, May 18, 2026 at 4:57=E2=80=AFPM Paul Moore <paul@paul-moore.com> =
-wrote:
-> > On Mon, May 18, 2026 at 7:23=E2=80=AFPM Song Liu <song@kernel.org> wrot=
-e:
-> > > On Mon, May 18, 2026 at 2:29=E2=80=AFPM Paul Moore <paul@paul-moore.c=
-om> wrote:
-> > > [...]
-> > > > In my opinion, making killswitch an LSM is more of a procedural ite=
-m
-> > > > that deals with how we view a capability like killswitch.  I
-> > > > personally view killswitch as somewhat similar to Lockdown, which i=
-s
-> > > > why I made the suggestion.
-> > > >
-> > > > The use of kprobes, while an interesting idea, presents problems as
-> > > > allowing any kernel symbol to be killed introduces the potential fo=
-r
-> > > > security regressions.  As a reminder, some LSMs, as well as other
-> > > > kernel subsystems, have mechanisms in place to restrict root and/or
-> > > > enforce one-way configuration locks; while many people equate "root=
-"
-> > > > with full control, in many cases today that is not strictly correct=
-.
-> > > >
-> > > > Yes, kprobes have been around for some time, this is not a new
-> > > > problem, but killswitch makes it far more convenient and accessible=
- to
-> > > > do dangerous things with kprobes.  If killswitch makes it past the =
-RFC
-> > > > stage without any significant changes to its kill mechanism, we may
-> > > > need to start considering more liberal usage of NOKPROBE_SYMBOL()
-> > > > which I think would be an unfortunate casualty.
-> > >
-> > > I don't think we can use NOKPROBE_SYMBOL(). There are functions
-> > > that we don't want to killswitch, but still want to trace.
-> >
-> > That was exactly my point, but we need to figure something out so
-> > killswitch doesn't make it easier to cause a regression.
+On Mon, May 18, 2026 at 7:48=E2=80=AFPM Leon Hwang <leon.hwang@linux.dev> w=
+rote:
 >
-> killswitch is making it easier to fix a CVE. It can surely make it easier
-> to cause a regression. AFAICT, the only protection here is "it is only
-> for root".
+> On 18/5/26 23:40, bot+bpf-ci@kernel.org wrote:
+> >> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> >> index 83de8fb9b9aa..322865a88b3a 100644
+> >> --- a/kernel/bpf/syscall.c
+> >> +++ b/kernel/bpf/syscall.c
+> >> @@ -1647,11 +1647,18 @@ static int map_create(union bpf_attr *attr, bp=
+fptr_t uattr, struct bpf_common_at
+> >>
+> >>      /* preserve original error even if log finalization is successful=
+ */
+> >>      ret =3D bpf_log_attr_finalize(&attr_log, log);
+> >> -    if (ret) {
+> >> -            if (err >=3D 0)
+> >> -                    close_fd(err);
+> >> +    if (ret && err < 0)
+> >> +            /*
+> >> +             * Failed to finalize the log.
+> >> +             * Should not close_fd(err) here. Since the bpf_map_new_f=
+d()
+> >> +             * has published the map fd, if a concurrent thread close=
+s the
+> >> +             * fd, then opens new, unrelated file that receives the e=
+xact
+> >> +             * same fd number, close_fd(err) might inadvertently clos=
+e the
+> >> +             * unrelated file.
+> >> +             * As a trade-off, override the err only when failed to f=
+inalize
+> >> +             * the log and failed to create map.
+> >> +             */
+> >>              err =3D ret;
+> >
+> > In the v13 review thread, Alexei Starovoitov suggested moving
+> > bpf_log_attr_finalize() earlier in the flow to eliminate the race
+> > window entirely:
+> >
+> >   "bot is correct. Let's avoid these races. Pls move
+> >    bpf_log_attr_finalize() into map_create and do it before
+> >    security_bpf_map_create."
+> >
+> >   https://lore.kernel.org/bpf/CAADnVQ+XR3kyqizGgGhtG5xiBu3oK3O+COUMfPDQ=
+DBSJbm=3D56A@mail.gmail.com/
+> >
+> > Does the current approach fully address the race concern? While removin=
+g
+> > close_fd() prevents the specific file descriptor hijacking issue, the
+> > suggestion was to finalize the log before security_bpf_map_create(),
+> > which would avoid creating the race window in the first place.
+> >
+> > Is there a reason why the log finalization cannot be moved earlier as
+> > Alexei suggested?
+> >
+> I've tried his suggestion, attached below.
+>
+> However, I think there should be a simpler approach to fix it.
+>
+> I preferred this simple one, so I posted it.
+>
+> Should I follow the suggestion instead of this trade-off approach?
+>
+> Thanks,
+> Leon
+>
+> ---
+>
+> From 7ea7ab53d24b7cf34bd2775ef5c871aa312d07c6 Mon Sep 17 00:00:00 2001
+> From: Leon Hwang <leon.hwang@linux.dev>
+> Date: Tue, 19 May 2026 10:32:01 +0800
+> Subject: [PATCH bpf-next 2/5] bpf: Fix concurrent regression in map_creat=
+e()
+>
+> Because there is time gap between bpf_map_new_fd() and close_fd(), a
+> concurrent thread is able to close the new fd and opens a new, unrelated
+> file with the exact same fd number. Thereafter, this close_fd() might
+> inadvertently close the unrelated file.
+>
+> To avoid such regression, add bpf_log_attr_finalize() before
+> security_bpf_map_create() to report log_true_size on check-success path.
+>
+> While keep the original bpf_log_attr_finalize() and avoid finalizing
+> bpf_log_attr twice, guard the finalization using attr_log->finalized.
+>
+> Fixes: 49f9b2b2a18c ("bpf: Add syscall common attributes support for
+> map_create")
+> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+> ---
+>  include/linux/bpf_verifier.h |  1 +
+>  kernel/bpf/log.c             |  4 ++++
+>  kernel/bpf/syscall.c         | 21 ++++++++++++++-------
+>  3 files changed, 19 insertions(+), 7 deletions(-)
+>
+> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+> index 20c421b43849..a10ef58bb6ea 100644
+> --- a/include/linux/bpf_verifier.h
+> +++ b/include/linux/bpf_verifier.h
+> @@ -788,6 +788,7 @@ struct bpf_log_attr {
+>         u32 level;
+>         u32 offsetof_true_size;
+>         bpfptr_t uattr;
+> +       bool finalized;
+>  };
 
-As I mentioned earlier, several LSMs have the ability to restrict root
-beyond what is possible with traditional Linux accesscontrols.  For
-example, with SELinux one could deny root a specific privilege while
-also blocking changes to the SELinux policy; the root user would not
-be able to restore that privilege without rebooting the system.
-
-On a killswitch enabled system the ability to restrict root is lost as
-root would be able to kill the enforcement of those access controls.
-Presumably one could have the LSM block access to killswitch in this
-particular case, but that defeats the purpose doesn't it?
-
-The audit subsystem also has a somewhat similar one-way configuration
-lock, which when set does not allow even root to unlock it, a reboot
-is required.  By a bit of luck with regards to how the code is
-written*, it may not be vulnerable to a killswitch regression but I do
-wonder if there are other similar things in the kernel which would
-have the same type of problem.
-
-* This is probably the first time I think I've ever considered myself
-lucky with respect to the audit code implementation.
-
---=20
-paul-moore.com
+No. That looks worse.
+The suggestion was to do the finalize log _once_ before
+allocating FD.
+Why are you doing it twice?
