@@ -1,270 +1,204 @@
-Received: from MW6PR02CU001.outbound.protection.outlook.com (mail-westus2azon11012000.outbound.protection.outlook.com [52.101.48.0])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5AF62459C5;
-	Tue, 19 May 2026 07:53:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.48.0
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779177219; cv=fail; b=ON9qpGaZl84+sx6QiLmFlNUnw7mjdVkCVMPd4zyZN5Rg+Mz7hFVQzUrNgxFHmtsKxMZ1wy4wAQec6Qdql+iv58vZQVIItj4lE2T6jGUNU5ytnTOFBoEBdJevBe7X6B0h4RgX+A2Y41qUq8t6PCDOqPO5SAxy8xMK7sefTKWhkVQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779177219; c=relaxed/simple;
-	bh=P1y9SX2S4lDsS0/lWb9jBKd2pcf7L9gBUmcHZvl2YnQ=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=q15KD9QD8RbwbhtsecbLXS93Kp2l2Mft1DmNikqhBDKDpIEWPbexXDn/PHrbdXIdK0KVhrU1BSVLfnGFcfMJZpsnDMDrew/4sgIy5adwWiQh7VNOqP1eE2JMNapDbblSSvkdI8BruZ3ITXU0aR5KEa2cINNt411tJMnk66/YM9U=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=aXBYR2TS; arc=fail smtp.client-ip=52.101.48.0
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 485FC19644B;
+	Tue, 19 May 2026 07:54:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779177301; cv=none; b=psZaRxEsV7KGjgxyLj9aiF3Tn+ucFD0Q25wVz1QjyQbebg6faEN+61YZ5ZIwFj2cSeDNSmn/T9iRH6WsZ6MnlJyvUVYaDNoo7alNloPnIXxG7Ukt069c4Ef1xc7FkCakJ9WOBX8pZiZ1bDDp6eiQMJLH7Drz9UiyCtvTwLCwRhk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779177301; c=relaxed/simple;
+	bh=kxDnhCMFukfGQTD0OCV8H6wDlq4JqmueGtLA8tc8FP8=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=l+z04g/M5AVbsknLGZeOv7ccqqhicfZKpoRhoppHAzilgD0ziqQ17jFtodREagCB0b3o13eTVyNGmoXXplE/6UuzNLws9kIhIJFOsB5okN4q1X04xaMmSLOX7zii/o0EJ36klAwa8rUWJqz19cWH8UpYvbw7453V0JhQyqZr968=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=mjb4kKbr; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="aXBYR2TS"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=C47NOUgzALBfz0G8PfzauSOb/yWfHD4bI+kRvS4ogba7hwJF2nibpnz/PRctzgr4ZyoXdeHsPS9Yg4q2K9CQlP6tXyziWcxQOoxcUP4Q1n9GUESoiXHUSyxy+hPVgRS8yGe3oYWpxiWD3s8b3F8xLzkz5pqxuTLGSYveIBDZ/LONtlt0MvU/JjBM7rPmy3XGExY+W2jteKch//adhrwhGa0KS2ufiQycm70lWnIujBMlrHDijYStO5P1dHgg1GHR9tDuYwfSVcCMZvu9ptvrkosVxCl2np7DfIYGmhnuDiTH+dFqTH+OOq/dXmvu89MmJXRyTtHHLOB1d5HHsx9reg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QcTGYPJyddA/87hdIBe9DbOLClP63BESwxE1z6U6qqM=;
- b=NFAVMv826SgnPgqwrkZqcIvU9fcSqYXwvzGfm4GkfdiDFUbxNWbTYvNRahfUluh4MfdTe2nC/Et5ECAUZBQeYbfE0/ZRXwTgp+t5/bdFPi7oH0aOXwHUgIDb7hQ9sJ6YqHdbw1/VIqG0+ZAtr8+F7b9cooTmpELjR4Ld/OZuaIYu+5jvkvaq6DmhEqpI7PNAaWPKNq56+IghnWo9c+jOHxc14BxxzeGMFXbH88UkqcuYevRNOxUip1VH4uZZWM8PDFG7W97Vyz0ww+MjZCM/fo6MN2VDGFajql6ZWnSYlQ4VhP/cdVanEb1RW6vU5ukPolPGZQQycucl9m+dDQvKhA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QcTGYPJyddA/87hdIBe9DbOLClP63BESwxE1z6U6qqM=;
- b=aXBYR2TS1RROtj2D0au1VJy5cKdeYY7yPq6ta49MvxDFoW2isVh7OPtvZKALEonjsit7IWW4jxToy5DeUwb/lqwwo2+fGTRe8zxqa33eje/356qXv+1EibXyWJAk1x7mzvKCmK2849V/zDvqa7ebl+DvHWvzQRcdEQndVuk6yEc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from PH7PR12MB5685.namprd12.prod.outlook.com (2603:10b6:510:13c::22)
- by SJ0PR12MB7067.namprd12.prod.outlook.com (2603:10b6:a03:4ae::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.48.14; Tue, 19 May
- 2026 07:53:29 +0000
-Received: from PH7PR12MB5685.namprd12.prod.outlook.com
- ([fe80::ce69:cfae:774d:a65c]) by PH7PR12MB5685.namprd12.prod.outlook.com
- ([fe80::ce69:cfae:774d:a65c%5]) with mapi id 15.21.0025.022; Tue, 19 May 2026
- 07:53:29 +0000
-Message-ID: <9cc79977-9a42-40eb-bfa7-460881c1e10f@amd.com>
-Date: Tue, 19 May 2026 09:53:19 +0200
-User-Agent: Mozilla Thunderbird
-Subject: Re: [Linaro-mm-sig] Re: [PATCH RFC 2/5] dma-heap: charge dma-buf
- memory via explicit memcg
-To: Albert Esteve <aesteve@redhat.com>
-Cc: Barry Song <baohua@kernel.org>, "T.J. Mercier" <tjmercier@google.com>,
- Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
- =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Sumit Semwal <sumit.semwal@linaro.org>, Michal Hocko <mhocko@kernel.org>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>,
- Andrew Morton <akpm@linux-foundation.org>,
- Benjamin Gaignard <benjamin.gaignard@collabora.com>,
- Brian Starkey <Brian.Starkey@arm.com>, John Stultz <jstultz@google.com>,
- Christian Brauner <brauner@kernel.org>, Paul Moore <paul@paul-moore.com>,
- James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>,
- Stephen Smalley <stephen.smalley.work@gmail.com>,
- Ondrej Mosnacek <omosnace@redhat.com>, Shuah Khan <shuah@kernel.org>,
- cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
- dri- <devel@lists.freedesktop.org>, linaro-mm-sig@lists.linaro.org,
- linux-mm@kvack.org, linux-security-module@vger.kernel.org,
- selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
- mripard@kernel.org, echanude@redhat.com
-References: <20260512-v2_20230123_tjmercier_google_com-v1-0-6326701c3691@redhat.com>
- <20260512-v2_20230123_tjmercier_google_com-v1-2-6326701c3691@redhat.com>
- <8ef38815-6ae9-4359-86d4-042554357639@amd.com>
- <CABdmKX2uwZ12kYJYPJGfWxuMBOJS=64b1GRj72tfB5D=NKM22w@mail.gmail.com>
- <CADSE00Jq_uvNgvxgPze0mEdUd+hF4-DPZkHy0KroWHZzygf4WA@mail.gmail.com>
- <CABdmKX3DhejYBis9htLDnzPrG7vuF3R3URLVNEbnyd61SSsx=g@mail.gmail.com>
- <CAGsJ_4zyecY6E-=Tm4_couT7uoM9LMcFdTMUPkZAjj4zUKE-dQ@mail.gmail.com>
- <cb84c2ee-9de1-4565-b2e0-60984721228f@amd.com>
- <CADSE00Lc42s2bzXzV5D7t1Enf56u4BVj-yXLp3Yxhm0=qMPvuw@mail.gmail.com>
-Content-Language: en-US
-From: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-In-Reply-To: <CADSE00Lc42s2bzXzV5D7t1Enf56u4BVj-yXLp3Yxhm0=qMPvuw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR4P281CA0309.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:f6::6) To PH7PR12MB5685.namprd12.prod.outlook.com
- (2603:10b6:510:13c::22)
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="mjb4kKbr"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
+	In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=kxDnhCMFukfGQTD0OCV8H6wDlq4JqmueGtLA8tc8FP8=; b=mjb4kKbrJ/Q2zXDIIGOJ32SVgA
+	DHLYAdYPhjAoxXZy7N0ZI8Edf1UZAuPPXAUb9agUSue0Duv0Gt4PgYUDfQCgc+W6hV9tFdBKlM2WQ
+	b9aNQqdrK5IR8mOFWDK7V/QimpZKdP3wlIViNxfg4i+BplaqX+RTukA+OnED0AK0xwupT6Ng+h0GU
+	egUFRMVtVbC7k82tm6K4hWla+J+GsF2YVLZxf/19Gf5e+vouR3euCUlxO5Hc4AO7BxTWzyKJ0pKpe
+	O6VlubjrBvUuklOMdEi+gcj7mMvGlZHEU/JpGTvMX59tTi5W2wQnd7gm+DScuDx1fj9ZnD2Zh7lZh
+	vsET8LIg==;
+Received: from 54-240-197-233.amazon.com ([54.240.197.233] helo=u09cd745991455d.ant.amazon.com)
+	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
+	id 1wPFHz-00000005dTa-0xkJ;
+	Tue, 19 May 2026 07:54:55 +0000
+Message-ID: <dda019489e11cd6069c831f270cfbd814ebea9a7.camel@infradead.org>
+Subject: Re: [PATCH v4 16/30] KVM: x86: Restructure kvm_guest_time_update()
+ for TSC upscaling
+From: David Woodhouse <dwmw2@infradead.org>
+To: Dongli Zhang <dongli.zhang@oracle.com>, kvm@vger.kernel.org
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
+ Shuah Khan <skhan@linuxfoundation.org>, Sean Christopherson
+ <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar
+ <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,  Dave Hansen
+ <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin"
+ <hpa@zytor.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, Juergen Gross
+ <jgross@suse.com>, Boris Ostrovsky <boris.ostrovsky@oracle.com>, Paul
+ Durrant <paul@xen.org>, Jonathan Cameron <jic23@kernel.org>, Sascha
+ Bischoff <Sascha.Bischoff@arm.com>, Marc Zyngier <maz@kernel.org>, Joey
+ Gouly <joey.gouly@arm.com>, Jack Allister <jalliste@amazon.com>,
+ joe.jin@oracle.com, linux-doc@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org, 
+ linux-kselftest@vger.kernel.org
+Date: Tue, 19 May 2026 08:54:53 +0100
+In-Reply-To: <b5a8262d-4128-4fd4-b3db-fa718002c4cc@oracle.com>
+References: <20260509224824.3264567-1-dwmw2@infradead.org>
+	 <20260509224824.3264567-17-dwmw2@infradead.org>
+	 <b5a8262d-4128-4fd4-b3db-fa718002c4cc@oracle.com>
+Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
+	boundary="=-fhzFy9YA8yde6QYEuqnv"
+User-Agent: Evolution 3.52.3-0ubuntu1.1 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH7PR12MB5685:EE_|SJ0PR12MB7067:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2afa463c-406f-4c66-c463-08deb57bb6d1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|7416014|366016|3023799003|56012099003|22082099003|18002099003|4143699003|11063799003;
-X-Microsoft-Antispam-Message-Info:
-	IOe1jomYCeJ1l4P9ZTKYM8vM7bZTWJKmIBdDvTmJLW+TGJjEjFIa40HVPgcohH8GT9HsxsAZcBBJaThIElUM8C4nkRnhUtwOLmicloq55YiUWm6sQ73ro94k/3I5YnzW/MN53WRjp9pX87aJHqgZqfZ84mKHJmgMAhg7Swoo7OXq0Wud/leHc7ROMaUKt5VkH5+QwPmBVvXAWG9BC+ldN0MwHooR9yeQ8K/gIXZnZc/q9xK7BPWTUrMjuRbbwNcTQeKaTx/UgOP7cNNoWXD5+l6skntTbDUajGVfAjLPIFSw3GMp9F2K6MkgVbvv7FrQWbUZ0cUznVmRqEUwLI1PlDbHRFMfbOUX0avg/h2x9U2pWdZlMVTmjnxnSzMeySdXe0g+XvyZccNfccZ70zIAgj10jvZy9eVJFefw+hhcBzBrZBgN67oZ1bP15x0mzubl1tWAz0u/BDDp9c1r0bJgD33Cz0/E33eDmf7l/BLLJubHphtWo8SExM5Mk1nQAfpT3kl4YpczlY/Ri3pdjVFx0dz/sxecehDAZwk2bXMJEqJhZccGbRpJaKwU47xJtwiaMHTaxG/yiDBtL4DMCgVO8+gGRQKBgMeeyRIbXKhKdlBK90cBZPyRJfgyxjnSzL9osDXUg7qfwMBF7DLdy0cZGElalh7TQO9qcO0sKgyPRIx21EQhGd0sZd8yY3gvx8rn+4HjhuA2M2Pc84iiArDTgg==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5685.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016)(3023799003)(56012099003)(22082099003)(18002099003)(4143699003)(11063799003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?N0ZoaHhlbjhCYWF4RUxJWDV6dGY3VVRXSStXc1NzY1ZXdVI2L2NBSlIwZVRJ?=
- =?utf-8?B?NlJ1bVRoNWlzVkxiUkJVZ0xxa3BXa1ZvS1hTTUM1WEtobmhSa04vQ1F5VzM5?=
- =?utf-8?B?VU02MzRCc21BSGkyY3dWc1dBUjRqdjlNZGUrRFJQMEZwV211Y2ltN0RsL3Yy?=
- =?utf-8?B?U2tQa21JQ1BWbjNxejdRKzEySm84dDk0N0h4TXk1ZHR6Y3pkK3JVcjN6RHhE?=
- =?utf-8?B?MFFaVkJUVmgxWDQvV2F0emFHTGVRVmp2VmlmY2ZtNDRaclpoV3VnTkVzRFBr?=
- =?utf-8?B?REhBRkZZK1Rrc2FsSDc0VkJhS3JGWjdqS1lRYlBtdEVKR0RtV3ZJNUU4b1dX?=
- =?utf-8?B?bWQyRVgzcGJlR0lEMHl1b05IUzZ4bTNCVmxBQWFlVzlwYTZKRTdVS1ZzZEJo?=
- =?utf-8?B?eWxvaWs1dEtwKytIRmRISFR4SnhhbGdQSVRwNHRBUmlWbmFhVnhkbmdaN0RH?=
- =?utf-8?B?NklUNjlRMnFRM0xTb0ptcU9IY01iSWltVHVLMEduMmdubkd0aUMvN2NkeUtE?=
- =?utf-8?B?ZFZzSCtqRDlmdVFxTk00ZnAvR2xBYlBxM21hUUN6UDlUT2E3UkUzamtFTkEr?=
- =?utf-8?B?enZoeEg0UlJHdU5MR050cm9odTlNQkNwdGtzNnZDU3RISmsyZ0pITWpWa2V4?=
- =?utf-8?B?d1N5R2NoTXhvb25uemRCRkNwWCs5M0plUkhhdVU0aEhxQy9YU1JYc1ZPYjJh?=
- =?utf-8?B?Rk41Y0JLN2ZSTU93RFFrOGhQb3d0R2dVKy9PZko3enk5aU1wTFVaN0QrVkJ3?=
- =?utf-8?B?TnRuNWdSejU4V0JSWjBnbGpBZGkrUTk4WWFWak5sTnpMbmdzTTlOWWRjZnpO?=
- =?utf-8?B?TzhIdTcwSUpOL1gyMFFlTGpIV3FGdndGTTZJTHJzd2trcHhneWRZbFBLaHpp?=
- =?utf-8?B?ZlU1dkpmSFc4VGZiMHg4OUtNemtTbzgyWHZ6RzdjRG9MTHJiRlZMWFRGbDhi?=
- =?utf-8?B?VUdpODc1MDRUbFhUMHBob2Q2QWRDTytRTEE5bHVEeENpVkQrTFFrK282SGhX?=
- =?utf-8?B?R0VQTHl0S2J4YVYrdjUzSnd5MFNKOWxsa1FucUl4aDhxY1ZmMFJWVFZQeVdz?=
- =?utf-8?B?ZzloVkFBZWtIY29NYWxJM21ZVnlSMG9vM0hOcFlKeFJrZk1uSnE1elkzYm1O?=
- =?utf-8?B?Y2I4VWtFeTFEeWFxMitrY3FZRnFMbGJlMTdmWnB6SzRrMHFPY3hqUHFsSkhj?=
- =?utf-8?B?aUltYzZSUFgzdUNzcVJIa1NvUFlJSldHM3RYUUpZU2FYNGtHK2RGcWRmeGF4?=
- =?utf-8?B?RUsvdE9jQ2JzdHBnWUpvb3gwTVlJakNKSDhkSldVek1GSGUvYnVaaTROOHov?=
- =?utf-8?B?UElOSGpHYWRyaUxkN0NBYWNaM09FZGhvQVVBR2N5L0RBU3crUHh3bDFxN1M5?=
- =?utf-8?B?NDdqU2hBT3JYNkpvMEVDRzVQVmlZNC8rMC9RNlcrQzd0cWNBOXhKMnZBMDVj?=
- =?utf-8?B?NkFwaEl3SEhMNTlPQUJCVXF0NkJKODZ1UnNtWG1sYys0UWhwR1VlSVlsQ2dH?=
- =?utf-8?B?b1NsdGtIS2czR1NHTmowRGI4MjdldHIzb0R6RThtVmhXRU9CSXlMSlRWdVhu?=
- =?utf-8?B?eW5UZVF3RXY4V0lzNU5xM29yenIxYXpoUG9PWjgySU5XeHh1bGYyZy9HNzVh?=
- =?utf-8?B?WW1zSng3cEgyL2ljMzI1SDJuc3dXNU1zWlU4Tm1RdEY2RlVaaEMzc0tsSHZN?=
- =?utf-8?B?dlA1VE9qbG1hSzNFeTNxV3NmS01neTJyY3FzbWpNelpTak9QVzZ5VEp1VEp1?=
- =?utf-8?B?eVpDSWNoYXlFcUJHclA0V0tSVmtnR1BuMHZyUXBkVzgwSFBRT0IwY1RZNXMw?=
- =?utf-8?B?Mm5Ka0FVSEV1cHVhZU5hbzNYQUYzaU9heHFaejNaVTFwd2M2cnhjdDg2b0xo?=
- =?utf-8?B?dysrZHZtbXljSmVPQ2FGWTFNSEtJcUx3L3g3Rlp4Vm9nazRtR0puVFRWVFRy?=
- =?utf-8?B?LzBsVVhBcUd1OU1pNGg5Yk5RbmtJZ2NjSkJyVVg0bTBpRTQ5SXpiaEdzT2RE?=
- =?utf-8?B?dXNwWUtGRndiMThmVlR3bzc4RGJEb2gvV1hBK05xQ3RLNkpSenNad1MwZDBx?=
- =?utf-8?B?c25haU9hK0lqcGVOU3cvaHdkeXRMYzhwajJWTzhtZnRLMWxTSW80YWhacDFm?=
- =?utf-8?B?d09LZEw0a00vM2Nyak9rSUVoc2tvN0sxRzk3MkVSYVpkNTE0UVhOMmtDUllS?=
- =?utf-8?B?RTN3RlN4dmNIcFN3eHFyUnFPbVNUZ0h5SUV0M2twMmFvQ2d3TkFjazJKUzdP?=
- =?utf-8?B?MzZhdnppQnE5KzJ1U3d2TnRmdFBXWWJOZzRmSE1zOVh1bUQ3RWp5Mkp4dFNh?=
- =?utf-8?Q?GEFllYyeNyi5uR292C?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2afa463c-406f-4c66-c463-08deb57bb6d1
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5685.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2026 07:53:28.9599
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: lHKflGocT50PZGGGXfuV9j2328lwMnecTmWPNTA9XZje1JVfcupepggejSGFNoqF
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB7067
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 
-On 5/18/26 14:06, Albert Esteve wrote:
->>>>> udmabufs are already
->>>>> memcg-charged, so adding a separate MEMCG_DMABUF would double count.
->>>>> Are there any other exporters you had in mind that would benefit from
->>>>> this approach?
->>
->> Well apart from DMA-buf memfd_create() is one of the things which as broken our neck in the past a couple of times.
->>
->> But thinking more about it what if instead of making this DMA-buf heaps specific what if we have a general cgroups function which allows to change accounting of a buffer referenced by a file descriptor to a different process?
->>
->> That would cover not only the DMA-buf heaps use case, but also all other DMA-buf with dmem and whatever we come up in the future as well.
-> 
-> I removed a draft adding an ioctl for charge transfer from the series
-> before sending because I wanted to focus on the charge_pid_fd approach
-> and keep things simple, deferring the recharge path to a follow-up
-> depending on feedback.
-> 
-> The main difference between my removed draft and what you're
-> describing, iiuc, is scope and layer: my draft was an explicit ioctl
-> on the dma-buf fd that the consumer calls to claim the charge (see
-> below), while you seem to be suggesting a more general kernel-internal
-> function that could work across buffer types and cgroup controllers,
-> so not necessarily userspace-initiated? A kernel-internal function
-> will need a way to identify the target process, which sounds similar
-> to the binder-backed approach from TJ [1]. For everything else, the
-> receiver still needs to declare itself, which the ioctl accomplishes.
-> 
-> ```
-> # When an app imports a daemon-allocated buffer, it can transfer the
-> charge to itself:
-> int buf_fd = receive_dmabuf_from_daemon();
-> ioctl(buf_fd, DMA_BUF_IOCTL_XFER_CHARGE); /* charge now attributed to
-> apps's cgroup */
 
-Well that thinking goes into the right direction, but the requirements are still not completely covered as far as I can see.
+--=-fhzFy9YA8yde6QYEuqnv
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Let me explain below a bit more.
+On Tue, 2026-05-19 at 00:38 -0700, Dongli Zhang wrote:
+> I have encountered this build error with this patch.
+>=20
+> Perhaps it is because all usage of "flags" are removed.
+>=20
+> $ make -j32 > /dev/null
+> arch/x86/kvm/x86.c: In function =E2=80=98kvm_guest_time_update=E2=80=99:
+> arch/x86/kvm/x86.c:3359:23: error: unused variable =E2=80=98flags=E2=80=
+=99 [-Werror=3Dunused-variable]
+> =C2=A03359 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 unsigned lon=
+g flags;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 ^~~~~
+> cc1: all warnings being treated as errors
+> make[4]: *** [scripts/Makefile.build:289: arch/x86/kvm/x86.o] Error 1
+> make[3]: *** [scripts/Makefile.build:548: arch/x86/kvm] Error 2
+> make[2]: *** [scripts/Makefile.build:548: arch/x86] Error 2
+> make[1]: *** [/home/opc/ext4/mainline-linux/Makefile:2143: .] Error 2
+> make: *** [Makefile:248: __sub-make] Error 2
+>=20
+> Thank you very much!
+>=20
+> Dongli Zhang
 
-> 
-> [1] https://lore.kernel.org/cgroups/20230109213809.418135-1-tjmercier@google.com/
-> 
->>
->> The only drawback I can see is that DMA-buf heap allocations would be temporarily accounted to the memory allocation daemon, but I don't think that this would be a problem.
-> 
-> The main reasons we moved away from TJ's transfer-based approach
-> toward `charge_pid_fd` are: avoid the transient charge window on the
-> daemon's cgroup; and to decouple from Binder, allowing any allocator
-> to use it.
+Yes, in all the refactoring/rebasing, somehow the line which should
+have removed 'flags' there ended up in
+https://lore.kernel.org/all/20260509224824.3264567-31-dwmw2@infradead.org/
+along with another one-liner that should have been in a different
+previous commit and breaks bisectability of that too. Sorry about that.
 
-Yeah those concerns are completely correct.
+Should all be fixed in
+https://git.infradead.org/?p=3Dusers/dwmw2/linux.git;a=3Dshortlog;h=3Drefs/=
+heads/kvmclock5
+where I'm accumulating various fixes in preparation to post a v5.
 
-The application should not volunteering says 'Charge that buffer to me.', but rather that the daemon says force charge that buffer to this application and tell me when the application is over its limit.
+--=-fhzFy9YA8yde6QYEuqnv
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
 
-> 
-> Technically, both approaches could coexist, though. Of the three
-> scenarios TJ described:
-> - Scenario 2 is directly addressed by charge_pid_fd approach without
-> any transient charge on the daemon at the cost of one extra field in
-> the heap ioctl uAPI struct.
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCD9Aw
+ggSOMIIDdqADAgECAhAOmiw0ECVD4cWj5DqVrT9PMA0GCSqGSIb3DQEBCwUAMGUxCzAJBgNVBAYT
+AlVTMRUwEwYDVQQKEwxEaWdpQ2VydCBJbmMxGTAXBgNVBAsTEHd3dy5kaWdpY2VydC5jb20xJDAi
+BgNVBAMTG0RpZ2lDZXJ0IEFzc3VyZWQgSUQgUm9vdCBDQTAeFw0yNDAxMzAwMDAwMDBaFw0zMTEx
+MDkyMzU5NTlaMEExCzAJBgNVBAYTAkFVMRAwDgYDVQQKEwdWZXJva2V5MSAwHgYDVQQDExdWZXJv
+a2V5IFNlY3VyZSBFbWFpbCBHMjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMjvgLKj
+jfhCFqxYyRiW8g3cNFAvltDbK5AzcOaR7yVzVGadr4YcCVxjKrEJOgi7WEOH8rUgCNB5cTD8N/Et
+GfZI+LGqSv0YtNa54T9D1AWJy08ZKkWvfGGIXN9UFAPMJ6OLLH/UUEgFa+7KlrEvMUupDFGnnR06
+aDJAwtycb8yXtILj+TvfhLFhafxroXrflspavejQkEiHjNjtHnwbZ+o43g0/yxjwnarGI3kgcak7
+nnI9/8Lqpq79tLHYwLajotwLiGTB71AGN5xK+tzB+D4eN9lXayrjcszgbOv2ZCgzExQUAIt98mre
+8EggKs9mwtEuKAhYBIP/0K6WsoMnQCcCAwEAAaOCAVwwggFYMBIGA1UdEwEB/wQIMAYBAf8CAQAw
+HQYDVR0OBBYEFIlICOogTndrhuWByNfhjWSEf/xwMB8GA1UdIwQYMBaAFEXroq/0ksuCMS1Ri6en
+IZ3zbcgPMA4GA1UdDwEB/wQEAwIBhjAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIweQYI
+KwYBBQUHAQEEbTBrMCQGCCsGAQUFBzABhhhodHRwOi8vb2NzcC5kaWdpY2VydC5jb20wQwYIKwYB
+BQUHMAKGN2h0dHA6Ly9jYWNlcnRzLmRpZ2ljZXJ0LmNvbS9EaWdpQ2VydEFzc3VyZWRJRFJvb3RD
+QS5jcnQwRQYDVR0fBD4wPDA6oDigNoY0aHR0cDovL2NybDMuZGlnaWNlcnQuY29tL0RpZ2lDZXJ0
+QXNzdXJlZElEUm9vdENBLmNybDARBgNVHSAECjAIMAYGBFUdIAAwDQYJKoZIhvcNAQELBQADggEB
+ACiagCqvNVxOfSd0uYfJMiZsOEBXAKIR/kpqRp2YCfrP4Tz7fJogYN4fxNAw7iy/bPZcvpVCfe/H
+/CCcp3alXL0I8M/rnEnRlv8ItY4MEF+2T/MkdXI3u1vHy3ua8SxBM8eT9LBQokHZxGUX51cE0kwa
+uEOZ+PonVIOnMjuLp29kcNOVnzf8DGKiek+cT51FvGRjV6LbaxXOm2P47/aiaXrDD5O0RF5SiPo6
+xD1/ClkCETyyEAE5LRJlXtx288R598koyFcwCSXijeVcRvBB1cNOLEbg7RMSw1AGq14fNe2cH1HG
+W7xyduY/ydQt6gv5r21mDOQ5SaZSWC/ZRfLDuEYwggWbMIIEg6ADAgECAhAH5JEPagNRXYDiRPdl
+c1vgMA0GCSqGSIb3DQEBCwUAMEExCzAJBgNVBAYTAkFVMRAwDgYDVQQKEwdWZXJva2V5MSAwHgYD
+VQQDExdWZXJva2V5IFNlY3VyZSBFbWFpbCBHMjAeFw0yNDEyMzAwMDAwMDBaFw0yODAxMDQyMzU5
+NTlaMB4xHDAaBgNVBAMME2R3bXcyQGluZnJhZGVhZC5vcmcwggIiMA0GCSqGSIb3DQEBAQUAA4IC
+DwAwggIKAoICAQDali7HveR1thexYXx/W7oMk/3Wpyppl62zJ8+RmTQH4yZeYAS/SRV6zmfXlXaZ
+sNOE6emg8WXLRS6BA70liot+u0O0oPnIvnx+CsMH0PD4tCKSCsdp+XphIJ2zkC9S7/yHDYnqegqt
+w4smkqUqf0WX/ggH1Dckh0vHlpoS1OoxqUg+ocU6WCsnuz5q5rzFsHxhD1qGpgFdZEk2/c//ZvUN
+i12vPWipk8TcJwHw9zoZ/ZrVNybpMCC0THsJ/UEVyuyszPtNYeYZAhOJ41vav1RhZJzYan4a1gU0
+kKBPQklcpQEhq48woEu15isvwWh9/+5jjh0L+YNaN0I//nHSp6U9COUG9Z0cvnO8FM6PTqsnSbcc
+0j+GchwOHRC7aP2t5v2stVx3KbptaYEzi4MQHxm/0+HQpMEVLLUiizJqS4PWPU6zfQTOMZ9uLQRR
+ci+c5xhtMEBszlQDOvEQcyEG+hc++fH47K+MmZz21bFNfoBxLP6bjR6xtPXtREF5lLXxp+CJ6KKS
+blPKeVRg/UtyJHeFKAZXO8Zeco7TZUMVHmK0ZZ1EpnZbnAhKE19Z+FJrQPQrlR0gO3lBzuyPPArV
+hvWxjlO7S4DmaEhLzarWi/ze7EGwWSuI2eEa/8zU0INUsGI4ywe7vepQz7IqaAovAX0d+f1YjbmC
+VsAwjhLmveFjNwIDAQABo4IBsDCCAawwHwYDVR0jBBgwFoAUiUgI6iBOd2uG5YHI1+GNZIR//HAw
+HQYDVR0OBBYEFFxiGptwbOfWOtMk5loHw7uqWUOnMDAGA1UdEQQpMCeBE2R3bXcyQGluZnJhZGVh
+ZC5vcmeBEGRhdmlkQHdvb2Rob3Uuc2UwFAYDVR0gBA0wCzAJBgdngQwBBQEBMA4GA1UdDwEB/wQE
+AwIF4DAdBgNVHSUEFjAUBggrBgEFBQcDAgYIKwYBBQUHAwQwewYDVR0fBHQwcjA3oDWgM4YxaHR0
+cDovL2NybDMuZGlnaWNlcnQuY29tL1Zlcm9rZXlTZWN1cmVFbWFpbEcyLmNybDA3oDWgM4YxaHR0
+cDovL2NybDQuZGlnaWNlcnQuY29tL1Zlcm9rZXlTZWN1cmVFbWFpbEcyLmNybDB2BggrBgEFBQcB
+AQRqMGgwJAYIKwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmRpZ2ljZXJ0LmNvbTBABggrBgEFBQcwAoY0
+aHR0cDovL2NhY2VydHMuZGlnaWNlcnQuY29tL1Zlcm9rZXlTZWN1cmVFbWFpbEcyLmNydDANBgkq
+hkiG9w0BAQsFAAOCAQEAQXc4FPiPLRnTDvmOABEzkIumojfZAe5SlnuQoeFUfi+LsWCKiB8Uextv
+iBAvboKhLuN6eG/NC6WOzOCppn4mkQxRkOdLNThwMHW0d19jrZFEKtEG/epZ/hw/DdScTuZ2m7im
+8ppItAT6GXD3aPhXkXnJpC/zTs85uNSQR64cEcBFjjoQDuSsTeJ5DAWf8EMyhMuD8pcbqx5kRvyt
+JPsWBQzv1Dsdv2LDPLNd/JUKhHSgr7nbUr4+aAP2PHTXGcEBh8lTeYea9p4d5k969pe0OHYMV5aL
+xERqTagmSetuIwolkAuBCzA9vulg8Y49Nz2zrpUGfKGOD0FMqenYxdJHgDCCBZswggSDoAMCAQIC
+EAfkkQ9qA1FdgOJE92VzW+AwDQYJKoZIhvcNAQELBQAwQTELMAkGA1UEBhMCQVUxEDAOBgNVBAoT
+B1Zlcm9rZXkxIDAeBgNVBAMTF1Zlcm9rZXkgU2VjdXJlIEVtYWlsIEcyMB4XDTI0MTIzMDAwMDAw
+MFoXDTI4MDEwNDIzNTk1OVowHjEcMBoGA1UEAwwTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJ
+KoZIhvcNAQEBBQADggIPADCCAgoCggIBANqWLse95HW2F7FhfH9bugyT/danKmmXrbMnz5GZNAfj
+Jl5gBL9JFXrOZ9eVdpmw04Tp6aDxZctFLoEDvSWKi367Q7Sg+ci+fH4KwwfQ8Pi0IpIKx2n5emEg
+nbOQL1Lv/IcNiep6Cq3DiyaSpSp/RZf+CAfUNySHS8eWmhLU6jGpSD6hxTpYKye7PmrmvMWwfGEP
+WoamAV1kSTb9z/9m9Q2LXa89aKmTxNwnAfD3Ohn9mtU3JukwILRMewn9QRXK7KzM+01h5hkCE4nj
+W9q/VGFknNhqfhrWBTSQoE9CSVylASGrjzCgS7XmKy/BaH3/7mOOHQv5g1o3Qj/+cdKnpT0I5Qb1
+nRy+c7wUzo9OqydJtxzSP4ZyHA4dELto/a3m/ay1XHcpum1pgTOLgxAfGb/T4dCkwRUstSKLMmpL
+g9Y9TrN9BM4xn24tBFFyL5znGG0wQGzOVAM68RBzIQb6Fz758fjsr4yZnPbVsU1+gHEs/puNHrG0
+9e1EQXmUtfGn4InoopJuU8p5VGD9S3Ikd4UoBlc7xl5yjtNlQxUeYrRlnUSmdlucCEoTX1n4UmtA
+9CuVHSA7eUHO7I88CtWG9bGOU7tLgOZoSEvNqtaL/N7sQbBZK4jZ4Rr/zNTQg1SwYjjLB7u96lDP
+sipoCi8BfR35/ViNuYJWwDCOEua94WM3AgMBAAGjggGwMIIBrDAfBgNVHSMEGDAWgBSJSAjqIE53
+a4blgcjX4Y1khH/8cDAdBgNVHQ4EFgQUXGIam3Bs59Y60yTmWgfDu6pZQ6cwMAYDVR0RBCkwJ4ET
+ZHdtdzJAaW5mcmFkZWFkLm9yZ4EQZGF2aWRAd29vZGhvdS5zZTAUBgNVHSAEDTALMAkGB2eBDAEF
+AQEwDgYDVR0PAQH/BAQDAgXgMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEFBQcDBDB7BgNVHR8E
+dDByMDegNaAzhjFodHRwOi8vY3JsMy5kaWdpY2VydC5jb20vVmVyb2tleVNlY3VyZUVtYWlsRzIu
+Y3JsMDegNaAzhjFodHRwOi8vY3JsNC5kaWdpY2VydC5jb20vVmVyb2tleVNlY3VyZUVtYWlsRzIu
+Y3JsMHYGCCsGAQUFBwEBBGowaDAkBggrBgEFBQcwAYYYaHR0cDovL29jc3AuZGlnaWNlcnQuY29t
+MEAGCCsGAQUFBzAChjRodHRwOi8vY2FjZXJ0cy5kaWdpY2VydC5jb20vVmVyb2tleVNlY3VyZUVt
+YWlsRzIuY3J0MA0GCSqGSIb3DQEBCwUAA4IBAQBBdzgU+I8tGdMO+Y4AETOQi6aiN9kB7lKWe5Ch
+4VR+L4uxYIqIHxR7G2+IEC9ugqEu43p4b80LpY7M4KmmfiaRDFGQ50s1OHAwdbR3X2OtkUQq0Qb9
+6ln+HD8N1JxO5nabuKbymki0BPoZcPdo+FeRecmkL/NOzzm41JBHrhwRwEWOOhAO5KxN4nkMBZ/w
+QzKEy4PylxurHmRG/K0k+xYFDO/UOx2/YsM8s138lQqEdKCvudtSvj5oA/Y8dNcZwQGHyVN5h5r2
+nh3mT3r2l7Q4dgxXlovERGpNqCZJ624jCiWQC4ELMD2+6WDxjj03PbOulQZ8oY4PQUyp6djF0keA
+MYIDuzCCA7cCAQEwVTBBMQswCQYDVQQGEwJBVTEQMA4GA1UEChMHVmVyb2tleTEgMB4GA1UEAxMX
+VmVyb2tleSBTZWN1cmUgRW1haWwgRzICEAfkkQ9qA1FdgOJE92VzW+AwDQYJYIZIAWUDBAIBBQCg
+ggE3MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI2MDUxOTA3NTQ1
+M1owLwYJKoZIhvcNAQkEMSIEIFjBawHgTxxMoNA8G5On3H8btH5yalszT/cXuFQ1QRfyMGQGCSsG
+AQQBgjcQBDFXMFUwQTELMAkGA1UEBhMCQVUxEDAOBgNVBAoTB1Zlcm9rZXkxIDAeBgNVBAMTF1Zl
+cm9rZXkgU2VjdXJlIEVtYWlsIEcyAhAH5JEPagNRXYDiRPdlc1vgMGYGCyqGSIb3DQEJEAILMVeg
+VTBBMQswCQYDVQQGEwJBVTEQMA4GA1UEChMHVmVyb2tleTEgMB4GA1UEAxMXVmVyb2tleSBTZWN1
+cmUgRW1haWwgRzICEAfkkQ9qA1FdgOJE92VzW+AwDQYJKoZIhvcNAQEBBQAEggIAoTylpGEan1Eb
+RzrHGC6MGv9bsV8TMMRQz7uk1duVRywTxsTgF9F/8DlAJ0H20CoIGijaJmxPpsTRMe0xUueIGIGI
+F5W5rnWQIbtsFVW3foiEHpgligRz5MhK1Y5GmaOujy+3mJqE3XlmPQjo3XhYM5N0M4MpLENdxuOv
+ZZYHA36AwfQAYRnohdjZBhWKrIYT0ZLgFfyhgCDc0MfWMb4xxWhvY58h71OBP4xW6DYt7nL0wxkF
+9RAb5mn/E4fseQs8+1MC8kiQwr5URO5DAcdkYVFiCFIFPZpHKCV2/TtGITmjVvcoRXgEW3gKR2hh
+nV0OL1wUi6zTjdp3NHIh61RDMZREsueGZE8QLcqjI0uKtX/FgAW81MJ3qN/epzXp7EwnKVjVqvsA
+xVbM+OEhXARn0eIKmMMD2hnso+D1PbUuxmxVhtklpKuFXB5av82eEd5+cVagNlr6JB8u7pIG6Wu7
+AqX33Z1WhCfFWdRXBUBXcYFvv00PpQ1OGeSPKja0Lk92wQxkuCDNMnC2HiQEhsg1zVbeALLH7mlJ
+0TzjOVSGXp+4HelIY9E8y/peyumIkwWpzrmwSyimnPgvnXJsYPgchggSe/cN9o5WhyfC1mM/TMoc
+o/yelqMLGv6vhg37fAggVevF1KgasAOjdVOvi/FEQIs5JP/pfXzih/tfvxktBQsAAAAAAAA=
 
-Yeah extending the uAPI to pass in the pid on allocation time is not much of a problem, but you also need to modify the whole stack above it and that is a bit more trickier.
 
-> - Scenario 3 can be handled by the charge transfer function without
-> changes to SurfaceFlinger. The app or dequeueBuffer claims the charge
-> for itself or the app, respectively (depending on whether we include a
-> pid_fd field in the transfer ioctl). It also covers non-heap
-> exporters. The con in both variants is the transient charge window on
-> the daemon.
-
-It should be trivial for the deamon to charge the buffer to an application before handing it out.
-
-> Both approaches shift the responsibility for correct charging
-> attribution to userspace: first, 'charge_pid_fd` on the allocator's
-> side, and the transfer charge on the consumer's side.
-
-Yeah that's why I said it would be better if we do that without any uAPI change, but with all the uAPI we have to transfer file descriptors (dup(), fork(), passing FDs over sockets etc...) it could be really tricky to implement that.
-
-> Deciding on one, the other or both depends on how much we value
-> avoiding transient attribution, and how much we need a non-heap
-> generic solution. With the XFER_CHARGE we can cover both. Thus, the
-> `charge_pid_fd` approach in this RFC can be seen as a
-> performance/strictness optimisation, eliminating transient charges to
-> the daemon at the cost of a permanent uAPI addition to the heap ioctl
-> struct, but not strictly required for correctness.
-
-Well all we need is a uAPI which says charge this buffer (file descriptor) to that cgroup (pidfd).
-
-With this at hand we should be able to handle all use cases at the same time.
-
-> On the other hand,
-> if we agree on the end goal of migrating other exporters to use
-> dma-buf heaps
-
-That won't work. DMA-buf heaps is actually only a rather small and Anroid specific use case.
-
-We have tons of other interfaces to allocate DMA-bufs which need to stay around because of HW restrictions and we do need a solution for them as well.
-
-Regards,
-Christian.
-
->, and scenario 3 is addressed by adding the app's pid_fd
-> to SurfaceFlinger, then `charge_pid_fd` alone is a coherent/sufficient
-> approach despite the uAPI change.
-> 
->>
->> Regards,
->> Christian.
->>
->>>
->>> Thanks
->>> Barry
->>
-> 
-
+--=-fhzFy9YA8yde6QYEuqnv--
