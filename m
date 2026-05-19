@@ -1,156 +1,129 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 679E73B895A
-	for <linux-kselftest@vger.kernel.org>; Tue, 19 May 2026 07:25:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 533F73DA5B8
+	for <linux-kselftest@vger.kernel.org>; Tue, 19 May 2026 07:34:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779175597; cv=none; b=HeX1Q8w+zLWuc5RlaSvXfaWHfbpduq2sS77DOT0+mL9jePvtWEPCcbBs0i0DLlY2WMNVDRXUsMcY4Is+ooAyl3o6qLQI/gAnYSGegT60cYYqgirvXIGiySDfYNGDWRN4d7GVvEW7cxIdw+I8GXWAryOBq/+BjsVotappPBzx2vw=
+	t=1779176044; cv=none; b=dkDQb0Y9GavUiNydwLCe6zpCZfsJGLC8PyDgSSaGKia0LtpKonaKxjD9uNxn2WlyEWDVXEj9QSpNxixtqhnUTI/3GrppkHLbh751GL2kUp1/EpaMBwRY1mEngJ+JbOn6GWs/VIRLMnqe+nQ9EYPyxMFrehC3VlZxCvBoR3/U3JE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779175597; c=relaxed/simple;
-	bh=566wJyoQNaZppcgHsn0XB16I7fjmZC3Gy2nMiD9Q2YY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ISdED/2Wig+1c8noP9+HmPPRfOVPhtTRmg8ZAhbXg5w8iitVgaynsf9Sm7DsT/vOOhLJmqWkr+nSsHlola8OmPhfMDLQ9+9vbjh4smG1k6RPLVIDdyTOd2QuyBffk/21zLNlbIo+194mFA0+BPgjO1pWKv77jX6lW7LHnXrS1IE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=JIr3DL/o; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=s5YB0rRy; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=JIr3DL/o; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=s5YB0rRy; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	s=arc-20240116; t=1779176044; c=relaxed/simple;
+	bh=Q8sRbbzeaOIcO4WgX9w/sPLDmiN17iIPXjvqTnre0mc=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=mVGZ4QX3JwiCbWpnGsR3ptBIMj1JPL1+Dj76yZS+rfackLDev8AdGHr2A9PxXOF6P+6YwGVHtWYPkDaklqtejl6lco2ltZt2cAWWxap9WgYg64FDSGWS3AYB0y0zePqt68Id6xDshjoezNdwqfJNswIKAxgHHuMoO50qGnenZ5U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Bihoaq/Z; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="JIr3DL/o";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="s5YB0rRy";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="JIr3DL/o";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="s5YB0rRy"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id F31DE5D9A3;
-	Tue, 19 May 2026 07:24:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1779175459; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=867OvcOyeRotwEwrhB4wKBsZTy+9UT/N4Yew+an6ItQ=;
-	b=JIr3DL/ozA7IttpQDlrztsls1d6KULVZmtJ+FW6sVa2m84XrHdVcdFzhosmmvB4eZvit9I
-	mPazrBl4d+MZWsVwLkitoDfkheKEJYSFrJsn/BS/MRr1Geghb6G8Phq7FsJXSjdE1e3YkW
-	fDoxrf28LAo8sz1qtdvoOTEO6Fy6Qf4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1779175459;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=867OvcOyeRotwEwrhB4wKBsZTy+9UT/N4Yew+an6ItQ=;
-	b=s5YB0rRyDyt1ZfncccSF8CYZVrFdaY/UbovX3NX4S8dXOehwNTzO5i22F0zZ3nkcc4WR5S
-	z8/TOkFX2i6a8gDg==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1779175459; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=867OvcOyeRotwEwrhB4wKBsZTy+9UT/N4Yew+an6ItQ=;
-	b=JIr3DL/ozA7IttpQDlrztsls1d6KULVZmtJ+FW6sVa2m84XrHdVcdFzhosmmvB4eZvit9I
-	mPazrBl4d+MZWsVwLkitoDfkheKEJYSFrJsn/BS/MRr1Geghb6G8Phq7FsJXSjdE1e3YkW
-	fDoxrf28LAo8sz1qtdvoOTEO6Fy6Qf4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1779175459;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=867OvcOyeRotwEwrhB4wKBsZTy+9UT/N4Yew+an6ItQ=;
-	b=s5YB0rRyDyt1ZfncccSF8CYZVrFdaY/UbovX3NX4S8dXOehwNTzO5i22F0zZ3nkcc4WR5S
-	z8/TOkFX2i6a8gDg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id D24A6593A8;
-	Tue, 19 May 2026 07:24:18 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id qjKvMiIQDGq2SwAAD6G6ig
-	(envelope-from <fmancera@suse.de>); Tue, 19 May 2026 07:24:18 +0000
-Message-ID: <6539e000-2bb5-4cda-a8b7-b09e5e0d66a9@suse.de>
-Date: Tue, 19 May 2026 09:24:02 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bihoaq/Z"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-488b3f8fa2bso32772765e9.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 May 2026 00:34:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779176040; x=1779780840; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nQEb3SnKmUgEZvX6aq8UF98SecrpTH59w1+qmzmaGdE=;
+        b=Bihoaq/ZHArooQC3y5pEH4c5ffjtBSl4jlazy4BEGUtWxcPGeEWx6bzkWHXBcMqAZ0
+         qmWc6rvhJMdqewjXmHr0m7O1EhHpv/9zyOokLVuHHC5Q6Q03DYbynITxcn+YhbZ9vHxw
+         cMG9EaiYeWWRISpmJGN1b0rsT96GejkY1TcaMNwdSMXnID3IKi0jhw+OXDBxDDYGLCOZ
+         2+bX2NfCgmo3Bql5dPMafe5Ml3ixRXGTg8hVlOQAd3mkitmNxgWB7zfo3J9oh1zksUKE
+         jMDzUHnFAEDL11GVJoM3vxCaUzZXNp1E0fNUGoxYcaH3K+aIDoussof33j1DIhLIpORz
+         t5Sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779176040; x=1779780840;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=nQEb3SnKmUgEZvX6aq8UF98SecrpTH59w1+qmzmaGdE=;
+        b=ieU+kpLuGb/7UjtBRUcoGSc0ZROsLBS/o96s6KMvkUCu/+9u8C19K0CBwQ5hyWRrXl
+         cePFgvzcqdBbU3lRXOOKDfkmumxhZLYCRisLsQW8lXAuDUHc1j3izEc51gwIjG2msWcJ
+         y7/Nvdkaa+dXlm+wkHsOKeUKMKFLURQL+fQFfyzncUOkjNxyCIWLutXqLKP30hN3MANU
+         u3rrXHLXzlLKl1otcnDP2/yB0NjT/e+HTC+ZJGwBXX6j799hicSpIjUdA95ZVZVX8iqc
+         Kp9IrRzpRyZ//+VV0q+EvnDda5UH8E0ZOqcLdJ5I/sJMWrQwq44Yr7I1ceEy7YGGDHbL
+         x+5g==
+X-Forwarded-Encrypted: i=1; AFNElJ/bjJhWMo4omQcFsazPk2DLSSdEcfBOEuWrmPEqYEHf4g/Fa3m4RNe4w74rXNfzu2E5ikCCvkrq7Z/JgpYA4FM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxP0YOl4yd43Uy9BeEsiefFuXXV0hkm59RK+tHku6YfNlV5rxub
+	wAsfAfLC/j5ZjA+OfclF7ORC8g1W1P1n4Vp0RUn6aolTqPPdOTRnHgbY
+X-Gm-Gg: Acq92OHgEY28ToIiu29LY1ekqFOWZXxut9p4B9kIpcxQl9ziGyJw+CdtVMjjEPeomjp
+	nZAmBL5AlRVMgtGcsYc0mkxmsqRYAPuDFHZ7T6l/mlsOi8wcRobAGs6ai8mRqSbSYpIJdZyntFs
+	qrT3QKkJSIfdEtShWwSZFqZTSZvjU8FOHWk9EoDeg2SCGb/8kQtSllBIHrZIdssBLGbv/gf+JOt
+	WHOnNzZN6/myq9O0aFg2L1Fiwl3aTpGVmjdx/TGAdLKLt9djjxHMIB43TlItQNs1103Wdq5aRNF
+	vCHjAziZcfVWFPiUfMIC8NSRq+nF5Qj2+dPdwlLxoiiLZ9R2Ih8viBNpgEEzsQxqbb0zd4P6A0a
+	LgRwTXPJv1gMR9Gz+6Vtdl5+GBaXfkUd2Pcx+8XnA3gpz9CzPQDd4xpUic8JoAI9l6S/CJLPbbO
+	jIzv6TeGNPsKK5dbXo0crDVZiJo6Rhvhj9ObbQ6GqGlprzU1+e0Mg=
+X-Received: by 2002:a05:600c:1d09:b0:48d:50a:6ef4 with SMTP id 5b1f17b1804b1-48fe537fb44mr240677305e9.11.1779176039621;
+        Tue, 19 May 2026 00:33:59 -0700 (PDT)
+Received: from mshcherba-RedmiBook-16.. ([188.163.115.207])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48ff43f8799sm191476755e9.2.2026.05.19.00.33.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 May 2026 00:33:59 -0700 (PDT)
+From: Maksym Shcherba <mshcherba2000@gmail.com>
+X-Google-Original-From: Maksym Shcherba <maksym.shcherba@lnu.edu.ua>
+To: SeongJae Park <sj@kernel.org>
+Cc: Maksym Shcherba <maksym.shcherba@lnu.edu.ua>,
+	Maksym Shcherba <mshcherba2000@gmail.com>,
+	akpm@linux-foundation.org,
+	david@kernel.org,
+	ljs@kernel.org,
+	liam@infradead.org,
+	vbabka@kernel.org,
+	rppt@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	corbet@lwn.net,
+	skhan@linuxfoundation.org,
+	damon@lists.linux.dev,
+	linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 2/6] mm/damon/sysfs: implement update_schemes_quota_goals command
+Date: Tue, 19 May 2026 10:33:52 +0300
+Message-Id: <20260519073352.16587-1-maksym.shcherba@lnu.edu.ua>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20260519001703.99264-1-sj@kernel.org>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3 net-next v4] selftests: net: add test for IPv4 devconf
- netlink notifications
-To: Paolo Abeni <pabeni@redhat.com>, Jakub Kicinski <kuba@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- horms@kernel.org, edumazet@google.com, dsahern@kernel.org,
- davem@davemloft.net
-References: <20260510081528.5257-1-fmancera@suse.de>
- <20260510081528.5257-3-fmancera@suse.de> <20260513193544.47970cb8@kernel.org>
- <bd560c89-c71f-4ef5-a0fd-5ea096a0f767@suse.de>
- <20260514162429.366b94c9@kernel.org>
- <f528360c-18b3-46e5-8ba8-88f921203716@suse.de>
- <20260515181623.5a44140e@kernel.org>
- <f5cae72f-93c7-41d7-b7db-2b60281afb72@suse.de>
- <20260518142346.4c0903de@kernel.org>
- <54f7f213-9783-42c0-8ae8-51a6b65b7b5d@redhat.com>
-Content-Language: en-US
-From: Fernando Fernandez Mancera <fmancera@suse.de>
-In-Reply-To: <54f7f213-9783-42c0-8ae8-51a6b65b7b5d@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Level: 
-X-Spamd-Result: default: False [-4.30 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid,imap1.dmz-prg2.suse.org:helo]
-X-Spam-Flag: NO
-X-Spam-Score: -4.30
+Content-Transfer-Encoding: 8bit
 
-On 5/19/26 9:17 AM, Paolo Abeni wrote:
-> On 5/18/26 11:23 PM, Jakub Kicinski wrote:
->> On Sat, 16 May 2026 09:02:27 +0200 Fernando Fernandez Mancera wrote:
->>>>> Oh sorry, I should have clarified it. ip netconf only shows/query them
->>>>> but it cannot set them AFAICS.
->>>>>
->>>>> Usage: ip netconf show [ dev STRING ]
->>>>
->>>> Oh, fun. anyway, you gotta find a better way. Or just give up on the
->>>> selftest, the YNL hack is too ugly to live
->>>>    
->>>
->>> Fair, let me see what I can do. Otherwise, Paolo as you requested the
->>> selftest, would it be acceptable for you to drop it given the situation?
->>> I looking for alternatives anyway :-)
->>
->> Maybe extend iproute2 ?
-> 
-> Ideally I think extending iproute2 would be the better solution.
-> @Fernando: perhaps you could update the self-test accordingly, adding an
-> explicit check for the iproute subcommand. If `ip netconf set` is not
-> available skip the test, so that iproute2 patches could land later.
-> 
-> Does the above look feasible?
-> 
+On Mon, 18 May 2026 17:17:02 -0700 SeongJae Park <sj@kernel.org> wrote:
 
-Yep. I agree. Okay, let's do that :-)
+> On Mon, 18 May 2026 22:09:28 +0300 Maksym Shcherba <mshcherba2000@gmail.com> wrote:
+> 
+> > Add the logic to copy the current_value from the internal
+> > damos_quota_goal structure to the damos_sysfs_quota_goal sysfs structure.
+> > Introduce the DAMON_SYSFS_CMD_UPDATE_SCHEMES_QUOTA_GOALS command
+> > and integrate it with the sysfs interface via the 'state' file.
+> 
+> Could you please further elaborate why you think this change is needed?  What
+> is the expected use case and benefit?
+>
 
-Thanks a lot!
+Hi SJ,
+
+The documentation (`Documentation/admin-guide/mm/damon/usage.rst`)
+states that users can read the `current_value` file. However, the
+kernel currently never updates this value in sysfs, preventing users
+from reading the actual metrics.
+
+This patch series implements the missing logic to align the code
+with the documentation.
+
+If the design intent was to intentionally keep `current_value`
+internal and not expose it via sysfs, then the documentation is
+incorrect. Let me know if that's the case, and I will send a v2
+that drops the code changes and only fixes the documentation.
+
+(Apologies for missing the cover letter where this should have
+been explained, this is my first patch submission).
+
+Thanks,
+Maksym Shcherba
+
+[...]
