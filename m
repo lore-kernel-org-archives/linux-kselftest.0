@@ -1,764 +1,189 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 211D94C77CA;
-	Tue, 19 May 2026 12:05:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D411A492502;
+	Tue, 19 May 2026 12:13:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779192339; cv=none; b=To1qZhdOlBUN+DxlkLROQ0JYNPbE7khkvDCx1Ez8jxmgFoq2fEZP3tVOuagOOKELpOYwyPTtvEmWxMJ5vSDK+KjERMgXtIUT5UikRlaI/02dNmU1Cjaw68eeYKo51cLokzqTun1LQFqtRNF5XRtlKqYCUsnX0FKJeOxlXNB6zNg=
+	t=1779192835; cv=none; b=EyDjcW1Xq9b6ql+uqp4gAgP7D3t5KEtXvvdcPdlVJJHCBk5e0J+R3RG/MF5zHG7ckY2U3Fdz08BpW3qErMu1k7BtzFZYzm2fXfnjT8qtN21ECdNzV41+NAQUgIfcv6u+lxKTEreVQ2peJ9mMz49UboI7zgWXZ6EAhUAOCfon8Og=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779192339; c=relaxed/simple;
-	bh=yzDH1fe6pPEveZCHQQ7TQ4gFssEnayPY5KiUXGNb6qw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=iedtILGV43BXyKTJZo9Rpssa6w3sq5SoLUd6EdjHX//PgcipgAqR0QB4Ox/6yz676XPh0Dv4lWAdR9blX4BwdZzQWjmz0sf9TPOULuu4VB45Vjs2vamA272KsXJuHr/DdmdklR//Rkvg0aAi6mEuvGNDWPjlOaKPQkqrXe3yLFk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=VhpmnhQ0; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1779192835; c=relaxed/simple;
+	bh=qGkWukyg7BRJ3BYm19QN2I31E/gz6jl12f4LD2DpBVU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=UOVCJv6QGfRPc/Kbroie6SkXcyr1cUv/Ssuq7pkSCVoMiUGCKRqjhaC3+xhhiZ5OPsemYAKc8Je4L1yRfBv91oi62AyqxnF3laa0J3sRxl/8udt2w5aU77qVQTUHLuQlYbb9JVh8Gv2+kZ1QuM4jjttvmBCW9fMVbjQMqCYmCzQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=hQ5wDWvP; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="VhpmnhQ0"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 57A5A22FA;
-	Tue, 19 May 2026 05:05:31 -0700 (PDT)
-Received: from a081061.blr.arm.com (a081061.arm.com [10.164.19.82])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 8D6653F85F;
-	Tue, 19 May 2026 05:05:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1779192336; bh=yzDH1fe6pPEveZCHQQ7TQ4gFssEnayPY5KiUXGNb6qw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=VhpmnhQ0GRfyKMGVvfArpYPMi0SzXF78+iEt3YorseGqcwYxa/sLAW3vFhaw3ZeDq
-	 QgEGeZqEul4UCzdPf23qqtwhKMgQYlQdX+93EaTIf5fqDvTFbejSmEm2at0UomFQ8s
-	 e7+tPkqa7hWo8GYdgFDoom0rJ82oG3T00h9z7wQE=
-From: Sarthak Sharma <sarthak.sharma@arm.com>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>
-Cc: Jonathan Corbet <corbet@lwn.net>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	John Hubbard <jhubbard@nvidia.com>,
-	Peter Xu <peterx@redhat.com>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	Sarthak Sharma <sarthak.sharma@arm.com>
-Subject: [PATCH v2 2/2] selftests/mm: rewrite gup_test as a standalone harness-based selftest
-Date: Tue, 19 May 2026 17:35:06 +0530
-Message-ID: <20260519120506.184512-3-sarthak.sharma@arm.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260519120506.184512-1-sarthak.sharma@arm.com>
-References: <20260519120506.184512-1-sarthak.sharma@arm.com>
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="hQ5wDWvP"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=lQBojDY84EYZekKZoulFlCOXOf8H914FBQk+2ZSsF6M=; b=hQ5wDWvPkargrg/9FISN9vF9o0
+	/ylJJiY7sUlG2YI4i2GCxTghR1XNzejpmh9PcOm98xRpzCGj//eI3HFVSWWbvYxfSWKEMW3g+dgRf
+	whaeMaFjn4cLGcGgSwW2KSCeunu8/f3xDZaQRpxY0K1vkU+Hp5zJ5ye0/cuaySKntHGW6WGu0HisE
+	+PLes7xgZlsGFJ8zhRNYHimhWOL+XY5paB/dZg7PA40Xhcv5Im98ikFt7dcl6jYnLIHzQMzLIr8Rz
+	GCcs43CrZbNNrzNEHY+NX46jtI9EpG3yfdjUlySgCShr2CVxWQenhRy04k5k2K+3ydMwQ0lQiieto
+	oBpIkAoQ==;
+Received: from sslproxy06.your-server.de ([78.46.172.3])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1wPJKC-0008pA-0P;
+	Tue, 19 May 2026 14:13:28 +0200
+Received: from localhost ([127.0.0.1])
+	by sslproxy06.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1wPJKB-0008ua-0C;
+	Tue, 19 May 2026 14:13:27 +0200
+Message-ID: <b342c38b-7323-4b72-a239-8a574d6bc36b@iogearbox.net>
+Date: Tue, 19 May 2026 14:13:26 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] killswitch: add per-function short-circuit mitigation
+ primitive
+To: Song Liu <song@kernel.org>, Sasha Levin <sashal@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+ live-patching@vger.kernel.org,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Andrew Morton <akpm@linux-foundation.org>, Jonathan Corbet <corbet@lwn.net>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Joshua Peisach <jpeisach@ubuntu.com>, Florian Weimer <fw@deneb.enyo.de>,
+ Breno Leitao <leitao@debian.org>, Anthony Iliopoulos <ailiop@suse.com>,
+ Michal Hocko <mhocko@suse.com>, Jiri Olsa <jolsa@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Christian Brauner <brauner@kernel.org>
+References: <20260508195749.1885522-1-sashal@kernel.org>
+ <20260517134858.146569-1-sashal@kernel.org>
+ <CAPhsuW4x8shWon8Moi5VgCq2n4E2EzaaauZ2HHpy42Rp1Y-J-g@mail.gmail.com>
+ <agsVDqdALBoHEHlv@laps>
+ <CAPhsuW44UX663Au=WwHz8MVwnQgLkjxOqpJSCKxNiv3=RpZvqw@mail.gmail.com>
+Content-Language: en-US
+From: Daniel Borkmann <daniel@iogearbox.net>
+Autocrypt: addr=daniel@iogearbox.net; keydata=
+ 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
+In-Reply-To: <CAPhsuW44UX663Au=WwHz8MVwnQgLkjxOqpJSCKxNiv3=RpZvqw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/28005/Tue May 19 08:25:42 2026)
 
-Rewrite gup_test.c using kselftest_harness.h. The new test covers 12
-mapping configurations: THP on, THP off and hugetlb, each across
-private/shared and read/write variants. It runs seven test cases per
-variant: get_user_pages, get_user_pages_fast, pin_user_pages,
-pin_user_pages_fast, pin_user_pages_longterm, and DUMP_USER_PAGES_TEST
-via both get and pin.
+On 5/19/26 1:59 AM, Song Liu wrote:
+> On Mon, May 18, 2026 at 6:33 AM Sasha Levin <sashal@kernel.org> wrote:
+>> On Sun, May 17, 2026 at 11:37:36PM -0700, Song Liu wrote:
+>>> On Sun, May 17, 2026 at 6:49 AM Sasha Levin <sashal@kernel.org> wrote:
+>>>> * fail_function (CONFIG_FUNCTION_ERROR_INJECTION) is disabled in
+>>>>    most production kernels. Even where enabled, it only works on
+>>>>    functions pre-annotated with ALLOW_ERROR_INJECTION() in source -
+>>>>    no help for a freshly-disclosed CVE. The debugfs UI is blocked by
+>>>>    lockdown=integrity and the override is probabilistic.
+>>>>
+>>>> * BPF override (bpf_override_return) honors the same
+>>>>    ALLOW_ERROR_INJECTION() whitelist, and BPF itself is off in many
+>>>>    production kernels. Even where on, the operator interface is
+>>>>    "load a verified BPF program," not a one-line write.
+>>>
+>>> If it is OK for killswitch to attach to any kernel functions, do we still
+>>> need ALLOW_ERROR_INJECTION() for fail_function and BPF
+>>> override? Shall we instead also allow fail_function and BPF override
+>>> to attach to any kernel functions?
+>>
+>> I don't think so. ALLOW_ERROR_INJECTION is not a security mechanism, it's an
+>> integrity/safety mechanism for both bpf and fault injection.
+>>
+>> It protects against a "developer or CI script doing legitimate fault injection
+>> accidentally panics the box" scenario, not an "attacker gets in" one.
+> 
+> There really isn't a clear boundary between "security mechanism" and
+> "non-security mechanism". As we are making killswitch available
+> everywhere under root, users will soon learn to use it to do fault injection,
+> and potentially much more scary things. (Think about agents with sudo
+> access).
 
-Each test case sweeps four nr_pages_per_call values: 1, 512, 123, and
-all pages. This preserves the old run_gup_matrix() sweep: 12 mapping
-combinations x 5 GUP/PUP operations x 4 batch sizes = 240 ioctl sweeps.
-It also expands DUMP_USER_PAGES_TEST coverage from one standalone
-invocation to 12 variants x 2 dump modes x 4 batch sizes = 96
-additional sweeps, for 336 total ioctl sweeps and 84 TAP-reported cases.
+Fully agree with Song here that there is no clear boundary, and that the
+killswitch could lead to arbitrary, hard to debug breakage if applied to
+the wrong function.. introducing worse bugs than the one being mitigated
+or even /short-circuit LSM enforcement/ (engage security_file_open 0,
+engage cap_capable 0, engage apparmor_* etc).
 
-On a Radxa Orion O6 board, ./gup_test completes in 5.07s on average
-over 10 runs (range: 4.94s - 5.18s).
+The ALLOW_ERROR_INJECTION() provides a curated white-list where you may
+return with an error without causing more severe damage (assuming the
+error handling code is right). The right thing would be to more widely
+apply ALLOW_ERROR_INJECTION() or to figure out a better way to safely
+enable the latter without explicit function annotation.
 
-Update run_vmtests.sh: remove run_gup_matrix() and the multiple flagged
-invocations of gup_test, replacing them with a single unconditional
-invocation. Benchmark functionality is handled by tools/mm/gup_bench
-introduced in the previous patch.
+Wrt BPF:
 
-Update Documentation/core-api/pin_user_pages.rst to reflect the new
-harness-based gup_test interface rather than command-line flag
-invocations.
+>>>> * BPF override (bpf_override_return) honors the same
+>>>>    ALLOW_ERROR_INJECTION() whitelist, and BPF itself is off in many
+>>>>    production kernels. Even where on, the operator interface is
+>>>>    "load a verified BPF program," not a one-line write.
 
-Suggested-by: David Hildenbrand (Arm) <david@kernel.org>
-Signed-off-by: Sarthak Sharma <sarthak.sharma@arm.com>
----
- Documentation/core-api/pin_user_pages.rst |  12 +-
- tools/testing/selftests/mm/gup_test.c     | 536 +++++++++++++---------
- tools/testing/selftests/mm/run_vmtests.sh |  37 +-
- 3 files changed, 325 insertions(+), 260 deletions(-)
+The claim that BPF itself is off in many production kernels is not really
+true, where did you get that from? All the major distros and cloud providers
+have BPF enabled these days, and even systemd ships BPF programs for
+custom service firewalling etc.
 
-diff --git a/Documentation/core-api/pin_user_pages.rst b/Documentation/core-api/pin_user_pages.rst
-index c16ca163b55e..ea722adf22cc 100644
---- a/Documentation/core-api/pin_user_pages.rst
-+++ b/Documentation/core-api/pin_user_pages.rst
-@@ -230,10 +230,16 @@ This file::
- 
-  tools/testing/selftests/mm/gup_test.c
- 
--has the following new calls to exercise the new pin*() wrapper functions:
-+contains the following test cases to exercise pin_user_pages*():
- 
--* PIN_FAST_BENCHMARK (./gup_test -a)
--* PIN_BASIC_TEST (./gup_test -b)
-+* pin_user_pages via PIN_BASIC_TEST
-+* pin_user_pages_fast via PIN_FAST_BENCHMARK
-+* pin_user_pages_longterm via PIN_LONGTERM_BENCHMARK
-+
-+Run with::
-+
-+  make -C tools/testing/selftests/mm
-+  ./tools/testing/selftests/mm/gup_test
- 
- You can monitor how many total dma-pinned pages have been acquired and released
- since the system was booted, via two new /proc/vmstat entries: ::
-diff --git a/tools/testing/selftests/mm/gup_test.c b/tools/testing/selftests/mm/gup_test.c
-index 3f841a96f870..d60d48bb9126 100644
---- a/tools/testing/selftests/mm/gup_test.c
-+++ b/tools/testing/selftests/mm/gup_test.c
-@@ -9,267 +9,361 @@
- #include <sys/mman.h>
- #include <sys/stat.h>
- #include <sys/types.h>
--#include <pthread.h>
--#include <assert.h>
- #include <mm/gup_test.h>
- #include "kselftest.h"
- #include "vm_util.h"
- #include "hugepage_settings.h"
-+#include "kselftest_harness.h"
- 
- #define MB (1UL << 20)
- 
-+#ifndef ARRAY_SIZE
-+#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
-+#endif
-+
- /* Just the flags we need, copied from the kernel internals. */
- #define FOLL_WRITE	0x01	/* check pte is writable */
- 
-+/* Page counts exercising single, THP-batch, partial, and full-mapping GUP. */
-+static const int nr_pages_list[] = { 1, 512, 123, -1 };
-+
- #define GUP_TEST_FILE "/sys/kernel/debug/gup_test"
- 
--static unsigned long cmd = GUP_FAST_BENCHMARK;
--static int gup_fd, repeats = 1;
--static unsigned long size = 128 * MB;
--/* Serialize prints */
--static pthread_mutex_t print_mutex = PTHREAD_MUTEX_INITIALIZER;
-+FIXTURE(gup_test) {
-+	int gup_fd;
-+	char *addr;
-+	unsigned long size;
-+};
-+
-+FIXTURE_VARIANT(gup_test) {
-+	bool thp;
-+	bool hugetlb;
-+	bool write;
-+	bool shared;
-+};
-+
-+FIXTURE_VARIANT_ADD(gup_test, private_write)
-+{
-+	.thp = false,
-+	.hugetlb = false,
-+	.write = true,
-+	.shared = false,
-+};
-+
-+FIXTURE_VARIANT_ADD(gup_test, private_readonly)
-+{
-+	.thp = false,
-+	.hugetlb = false,
-+	.write = false,
-+	.shared = false,
-+};
-+
-+FIXTURE_VARIANT_ADD(gup_test, private_write_thp)
-+{
-+	.thp = true,
-+	.hugetlb = false,
-+	.write = true,
-+	.shared = false,
-+};
-+
-+FIXTURE_VARIANT_ADD(gup_test, private_readonly_thp)
-+{
-+	.thp = true,
-+	.hugetlb = false,
-+	.write = false,
-+	.shared = false,
-+};
-+
-+FIXTURE_VARIANT_ADD(gup_test, private_write_hugetlb)
-+{
-+	.thp = false,
-+	.hugetlb = true,
-+	.write = true,
-+	.shared = false,
-+};
-+
-+FIXTURE_VARIANT_ADD(gup_test, private_readonly_hugetlb)
-+{
-+	.thp = false,
-+	.hugetlb = true,
-+	.write = false,
-+	.shared = false,
-+};
-+
-+FIXTURE_VARIANT_ADD(gup_test, shared_write)
-+{
-+	.thp = false,
-+	.hugetlb = false,
-+	.write = true,
-+	.shared = true,
-+};
-+
-+FIXTURE_VARIANT_ADD(gup_test, shared_readonly)
-+{
-+	.thp = false,
-+	.hugetlb = false,
-+	.write = false,
-+	.shared = true,
-+};
-+
-+FIXTURE_VARIANT_ADD(gup_test, shared_write_thp)
-+{
-+	.thp = true,
-+	.hugetlb = false,
-+	.write = true,
-+	.shared = true,
-+};
-+
-+FIXTURE_VARIANT_ADD(gup_test, shared_readonly_thp)
-+{
-+	.thp = true,
-+	.hugetlb = false,
-+	.write = false,
-+	.shared = true,
-+};
-+
-+FIXTURE_VARIANT_ADD(gup_test, shared_write_hugetlb)
-+{
-+	.thp = false,
-+	.hugetlb = true,
-+	.write = true,
-+	.shared = true,
-+};
- 
--static char *cmd_to_str(unsigned long cmd)
-+FIXTURE_VARIANT_ADD(gup_test, shared_readonly_hugetlb)
- {
--	switch (cmd) {
--	case GUP_FAST_BENCHMARK:
--		return "GUP_FAST_BENCHMARK";
--	case PIN_FAST_BENCHMARK:
--		return "PIN_FAST_BENCHMARK";
--	case PIN_LONGTERM_BENCHMARK:
--		return "PIN_LONGTERM_BENCHMARK";
--	case GUP_BASIC_TEST:
--		return "GUP_BASIC_TEST";
--	case PIN_BASIC_TEST:
--		return "PIN_BASIC_TEST";
--	case DUMP_USER_PAGES_TEST:
--		return "DUMP_USER_PAGES_TEST";
-+	.thp = false,
-+	.hugetlb = true,
-+	.write = false,
-+	.shared = true,
-+};
-+
-+FIXTURE_SETUP(gup_test) {
-+	int mmap_flags = MAP_PRIVATE;
-+	int zero_fd;
-+	char *p;
-+
-+	self->size = variant->hugetlb ? 256 * MB : 128 * MB;
-+
-+	/* Check for hugetlb */
-+	if (variant->hugetlb) {
-+		unsigned long hp_size = default_huge_page_size();
-+
-+		if (!hp_size)
-+			SKIP(return, "HugeTLB not available\n");
-+
-+		self->size = (self->size + hp_size - 1) & ~(hp_size - 1);
-+		if (!hugetlb_setup_default(self->size / hp_size))
-+			SKIP(return, "Not enough huge pages\n");
-+
-+		mmap_flags |= (MAP_HUGETLB | MAP_ANONYMOUS);
- 	}
--	return "Unknown command";
-+
-+	/* zero_fd has to be >= 0. Already checked in main() */
-+	zero_fd = open("/dev/zero", O_RDWR);
-+	ASSERT_GE(zero_fd, 0);
-+
-+	/* gup_fd has to be >= 0. Already checked in main() */
-+	self->gup_fd = open(GUP_TEST_FILE, O_RDWR);
-+	ASSERT_GE(self->gup_fd, 0);
-+
-+	if (variant->shared)
-+		mmap_flags = (mmap_flags & ~MAP_PRIVATE) | MAP_SHARED;
-+
-+	self->addr = mmap(NULL, self->size, PROT_READ | PROT_WRITE,
-+					mmap_flags, zero_fd, 0);
-+	close(zero_fd);
-+	ASSERT_NE(self->addr, MAP_FAILED);
-+
-+	if (variant->thp)
-+		madvise(self->addr, self->size, MADV_HUGEPAGE);
-+	else
-+		madvise(self->addr, self->size, MADV_NOHUGEPAGE);
-+
-+	for (p = self->addr; (unsigned long)p < (unsigned long)self->addr
-+			+ self->size; p += psize())
-+		p[0] = 0;
- }
- 
--void *gup_thread(void *data)
--{
--	struct gup_test gup = *(struct gup_test *)data;
--	int i, status;
--
--	/* Only report timing information on the *_BENCHMARK commands: */
--	if ((cmd == PIN_FAST_BENCHMARK) || (cmd == GUP_FAST_BENCHMARK) ||
--	     (cmd == PIN_LONGTERM_BENCHMARK)) {
--		for (i = 0; i < repeats; i++) {
--			gup.size = size;
--			status = ioctl(gup_fd, cmd, &gup);
--			if (status)
--				break;
--
--			pthread_mutex_lock(&print_mutex);
--			ksft_print_msg("%s: Time: get:%lld put:%lld us",
--				       cmd_to_str(cmd), gup.get_delta_usec,
--				       gup.put_delta_usec);
--			if (gup.size != size)
--				ksft_print_msg(", truncated (size: %lld)", gup.size);
--			ksft_print_msg("\n");
--			pthread_mutex_unlock(&print_mutex);
--		}
--	} else {
--		gup.size = size;
--		status = ioctl(gup_fd, cmd, &gup);
--		if (status)
--			goto return_;
--
--		pthread_mutex_lock(&print_mutex);
--		ksft_print_msg("%s: done\n", cmd_to_str(cmd));
--		if (gup.size != size)
--			ksft_print_msg("Truncated (size: %lld)\n", gup.size);
--		pthread_mutex_unlock(&print_mutex);
-+FIXTURE_TEARDOWN(gup_test) {
-+	munmap(self->addr, self->size);
-+	close(self->gup_fd);
-+
-+	if (variant->hugetlb)
-+		hugetlb_restore_settings();
-+}
-+
-+TEST_F(gup_test, get_user_pages) {
-+	/* Tests the get_user_pages path */
-+	int i;
-+
-+	for (i = 0; i < (int)ARRAY_SIZE(nr_pages_list); i++) {
-+		struct gup_test gup = { 0 };
-+
-+		gup.addr = (unsigned long)self->addr;
-+		gup.size = self->size;
-+		gup.nr_pages_per_call = nr_pages_list[i] < 0 ?
-+			self->size / psize() : nr_pages_list[i];
-+
-+		if (variant->write)
-+			gup.gup_flags |= FOLL_WRITE;
-+
-+		TH_LOG("nr_pages_per_call=%u", gup.nr_pages_per_call);
-+		ASSERT_EQ(ioctl(self->gup_fd, GUP_BASIC_TEST, &gup), 0);
- 	}
-+}
-+
-+TEST_F(gup_test, pin_user_pages) {
-+	/* Tests the pin_user_pages path */
-+	int i;
-+
-+	for (i = 0; i < (int)ARRAY_SIZE(nr_pages_list); i++) {
-+		struct gup_test gup = { 0 };
-+
-+		gup.addr = (unsigned long)self->addr;
-+		gup.size = self->size;
-+		gup.nr_pages_per_call = nr_pages_list[i] < 0 ?
-+			self->size / psize() : nr_pages_list[i];
- 
--return_:
--	ksft_test_result(!status, "ioctl status %d\n", status);
--	return NULL;
-+		if (variant->write)
-+			gup.gup_flags |= FOLL_WRITE;
-+
-+		TH_LOG("nr_pages_per_call=%u", gup.nr_pages_per_call);
-+		ASSERT_EQ(ioctl(self->gup_fd, PIN_BASIC_TEST, &gup), 0);
-+	}
- }
- 
--int main(int argc, char **argv)
--{
--	struct gup_test gup = { 0 };
--	int filed, i, opt, nr_pages = 1, thp = -1, write = 1, nthreads = 1, ret;
--	int flags = MAP_PRIVATE;
--	char *file = "/dev/zero";
--	bool hugetlb = false;
--	pthread_t *tid;
--	char *p;
-+TEST_F(gup_test, dump_user_pages_with_get) {
-+	/* Tests DUMP_USER_PAGES_TEST using get_user_pages */
-+	int i;
- 
--	while ((opt = getopt(argc, argv, "m:r:n:F:f:abcj:tTLUuwWSHpz")) != -1) {
--		switch (opt) {
--		case 'a':
--			cmd = PIN_FAST_BENCHMARK;
--			break;
--		case 'b':
--			cmd = PIN_BASIC_TEST;
--			break;
--		case 'L':
--			cmd = PIN_LONGTERM_BENCHMARK;
--			break;
--		case 'c':
--			cmd = DUMP_USER_PAGES_TEST;
--			/*
--			 * Dump page 0 (index 1). May be overridden later, by
--			 * user's non-option arguments.
--			 *
--			 * .which_pages is zero-based, so that zero can mean "do
--			 * nothing".
--			 */
--			gup.which_pages[0] = 1;
--			break;
--		case 'p':
--			/* works only with DUMP_USER_PAGES_TEST */
--			gup.test_flags |= GUP_TEST_FLAG_DUMP_PAGES_USE_PIN;
--			break;
--		case 'F':
--			/* strtol, so you can pass flags in hex form */
--			gup.gup_flags = strtol(optarg, 0, 0);
--			break;
--		case 'j':
--			nthreads = atoi(optarg);
--			break;
--		case 'm':
--			size = atoi(optarg) * MB;
--			break;
--		case 'r':
--			repeats = atoi(optarg);
--			break;
--		case 'n':
--			nr_pages = atoi(optarg);
--			if (nr_pages < 0)
--				nr_pages = size / psize();
--			break;
--		case 't':
--			thp = 1;
--			break;
--		case 'T':
--			thp = 0;
--			break;
--		case 'U':
--			cmd = GUP_BASIC_TEST;
--			break;
--		case 'u':
--			cmd = GUP_FAST_BENCHMARK;
--			break;
--		case 'w':
--			write = 1;
--			break;
--		case 'W':
--			write = 0;
--			break;
--		case 'f':
--			file = optarg;
--			break;
--		case 'S':
--			flags &= ~MAP_PRIVATE;
--			flags |= MAP_SHARED;
--			break;
--		case 'H':
--			flags |= (MAP_HUGETLB | MAP_ANONYMOUS);
--			hugetlb = true;
--			break;
--		default:
--			ksft_exit_fail_msg("Wrong argument\n");
--		}
-+	for (i = 0; i < (int)ARRAY_SIZE(nr_pages_list); i++) {
-+		struct gup_test gup = { 0 };
-+
-+		gup.addr = (unsigned long)self->addr;
-+		gup.size = self->size;
-+		gup.nr_pages_per_call = nr_pages_list[i] < 0 ?
-+			self->size / psize() : nr_pages_list[i];
-+
-+		if (variant->write)
-+			gup.gup_flags |= FOLL_WRITE;
-+
-+		gup.which_pages[0] = 1;
-+
-+		TH_LOG("nr_pages_per_call=%u", gup.nr_pages_per_call);
-+		ASSERT_EQ(ioctl(self->gup_fd, DUMP_USER_PAGES_TEST, &gup), 0);
- 	}
-+}
- 
--	if (optind < argc) {
--		int extra_arg_count = 0;
--		/*
--		 * For example:
--		 *
--		 *   ./gup_test -c 0 1 0x1001
--		 *
--		 * ...to dump pages 0, 1, and 4097
--		 */
--
--		while ((optind < argc) &&
--		       (extra_arg_count < GUP_TEST_MAX_PAGES_TO_DUMP)) {
--			/*
--			 * Do the 1-based indexing here, so that the user can
--			 * use normal 0-based indexing on the command line.
--			 */
--			long page_index = strtol(argv[optind], 0, 0) + 1;
--
--			gup.which_pages[extra_arg_count] = page_index;
--			extra_arg_count++;
--			optind++;
--		}
-+TEST_F(gup_test, dump_user_pages_with_pin) {
-+	/* Tests DUMP_USER_PAGES_TEST using pin_user_pages */
-+	int i;
-+
-+	for (i = 0; i < (int)ARRAY_SIZE(nr_pages_list); i++) {
-+		struct gup_test gup = { 0 };
-+
-+		gup.addr = (unsigned long)self->addr;
-+		gup.size = self->size;
-+		gup.nr_pages_per_call = nr_pages_list[i] < 0 ?
-+			self->size / psize() : nr_pages_list[i];
-+
-+		if (variant->write)
-+			gup.gup_flags |= FOLL_WRITE;
-+
-+		gup.which_pages[0] = 1;
-+		gup.test_flags |= GUP_TEST_FLAG_DUMP_PAGES_USE_PIN;
-+
-+		TH_LOG("nr_pages_per_call=%u", gup.nr_pages_per_call);
-+		ASSERT_EQ(ioctl(self->gup_fd, DUMP_USER_PAGES_TEST, &gup), 0);
- 	}
-+}
- 
--	ksft_print_header();
-+TEST_F(gup_test, get_user_pages_fast) {
-+	/* Tests the lockless get_user_pages_fast() path */
-+	int i;
- 
--	if (hugetlb) {
--		unsigned long hp_size = default_huge_page_size();
-+	for (i = 0; i < (int)ARRAY_SIZE(nr_pages_list); i++) {
-+		struct gup_test gup = { 0 };
- 
--		if (!hp_size)
--			ksft_exit_skip("HugeTLB is unavailable\n");
-+		gup.addr = (unsigned long)self->addr;
-+		gup.size = self->size;
-+		gup.nr_pages_per_call = nr_pages_list[i] < 0 ?
-+			self->size / psize() : nr_pages_list[i];
- 
--		size = (size + hp_size - 1) & ~(hp_size - 1);
--		if (!hugetlb_setup_default(size / hp_size))
--			ksft_exit_skip("Not enough huge pages\n");
-+		if (variant->write)
-+			gup.gup_flags |= FOLL_WRITE;
-+
-+		TH_LOG("nr_pages_per_call=%u", gup.nr_pages_per_call);
-+		ASSERT_EQ(ioctl(self->gup_fd, GUP_FAST_BENCHMARK, &gup), 0);
- 	}
-+}
- 
--	ksft_set_plan(nthreads);
-+TEST_F(gup_test, pin_user_pages_fast) {
-+	/* Tests the lockless pin_user_pages_fast() path */
-+	int i;
- 
--	filed = open(file, O_RDWR|O_CREAT, 0664);
--	if (filed < 0)
--		ksft_exit_fail_msg("Unable to open %s: %s\n", file, strerror(errno));
-+	for (i = 0; i < (int)ARRAY_SIZE(nr_pages_list); i++) {
-+		struct gup_test gup = { 0 };
- 
--	gup.nr_pages_per_call = nr_pages;
--	if (write)
--		gup.gup_flags |= FOLL_WRITE;
--
--	gup_fd = open(GUP_TEST_FILE, O_RDWR);
--	if (gup_fd == -1) {
--		switch (errno) {
--		case EACCES:
--			if (getuid())
--				ksft_print_msg("Please run this test as root\n");
--			break;
--		case ENOENT:
--			if (opendir("/sys/kernel/debug") == NULL)
--				ksft_print_msg("mount debugfs at /sys/kernel/debug\n");
--			ksft_print_msg("check if CONFIG_GUP_TEST is enabled in kernel config\n");
--			break;
--		default:
--			ksft_print_msg("failed to open %s: %s\n", GUP_TEST_FILE, strerror(errno));
--			break;
--		}
--		ksft_test_result_skip("Please run this test as root\n");
--		ksft_exit_pass();
-+		gup.addr = (unsigned long)self->addr;
-+		gup.size = self->size;
-+		gup.nr_pages_per_call = nr_pages_list[i] < 0 ?
-+			self->size / psize() : nr_pages_list[i];
-+
-+		if (variant->write)
-+			gup.gup_flags |= FOLL_WRITE;
-+
-+		TH_LOG("nr_pages_per_call=%u", gup.nr_pages_per_call);
-+		ASSERT_EQ(ioctl(self->gup_fd, PIN_FAST_BENCHMARK, &gup), 0);
- 	}
-+}
- 
--	p = mmap(NULL, size, PROT_READ | PROT_WRITE, flags, filed, 0);
--	if (p == MAP_FAILED)
--		ksft_exit_fail_msg("mmap: %s\n", strerror(errno));
--	gup.addr = (unsigned long)p;
-+TEST_F(gup_test, pin_user_pages_longterm) {
-+	/* Tests pin_user_pages() with FOLL_LONGTERM */
-+	int i;
- 
--	if (thp == 1)
--		madvise(p, size, MADV_HUGEPAGE);
--	else if (thp == 0)
--		madvise(p, size, MADV_NOHUGEPAGE);
-+	for (i = 0; i < (int)ARRAY_SIZE(nr_pages_list); i++) {
-+		struct gup_test gup = { 0 };
- 
--	/* Fault them in here, from user space. */
--	for (; (unsigned long)p < gup.addr + size; p += psize())
--		p[0] = 0;
-+		gup.addr = (unsigned long)self->addr;
-+		gup.size = self->size;
-+		gup.nr_pages_per_call = nr_pages_list[i] < 0 ?
-+			self->size / psize() : nr_pages_list[i];
- 
--	tid = malloc(sizeof(pthread_t) * nthreads);
--	assert(tid);
--	for (i = 0; i < nthreads; i++) {
--		ret = pthread_create(&tid[i], NULL, gup_thread, &gup);
--		assert(ret == 0);
-+		if (variant->write)
-+			gup.gup_flags |= FOLL_WRITE;
-+
-+		TH_LOG("nr_pages_per_call=%u", gup.nr_pages_per_call);
-+		ASSERT_EQ(ioctl(self->gup_fd, PIN_LONGTERM_BENCHMARK, &gup), 0);
- 	}
--	for (i = 0; i < nthreads; i++) {
--		ret = pthread_join(tid[i], NULL);
--		assert(ret == 0);
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	int fd;
-+	char *file = "/dev/zero";
-+
-+	fd = open(file, O_RDWR);
-+	if (fd < 0) {
-+		ksft_print_header();
-+		ksft_exit_fail_msg("Unable to open %s: %s\n", file, strerror(errno));
- 	}
-+	close(fd);
- 
--	free(tid);
-+	fd = open(GUP_TEST_FILE, O_RDWR);
-+	if (fd == -1) {
-+		ksft_print_header();
-+		if (errno == EACCES)
-+			ksft_exit_skip("Please run this test as root\n");
-+		if (errno == ENOENT) {
-+			if (opendir("/sys/kernel/debug") == NULL)
-+				ksft_exit_skip("Mount debugfs at /sys/kernel/debug\n");
-+			else
-+				ksft_exit_skip("Check CONFIG_GUP_TEST in kernel config\n");
-+		}
-+		ksft_exit_skip("failed to open %s: %s\n", GUP_TEST_FILE, strerror(errno));
-+	}
-+	close(fd);
- 
--	ksft_exit_pass();
-+	return test_harness_run(argc, argv);
- }
-diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-index 043aa3ed2596..65a4ef0f3748 100755
---- a/tools/testing/selftests/mm/run_vmtests.sh
-+++ b/tools/testing/selftests/mm/run_vmtests.sh
-@@ -130,30 +130,6 @@ test_selected() {
- 	fi
- }
- 
--run_gup_matrix() {
--    # -t: thp=on, -T: thp=off, -H: hugetlb=on
--    local hugetlb_mb=256
--
--    for huge in -t -T "-H -m $hugetlb_mb"; do
--        # -u: gup-fast, -U: gup-basic, -a: pin-fast, -b: pin-basic, -L: pin-longterm
--        for test_cmd in -u -U -a -b -L; do
--            # -w: write=1, -W: write=0
--            for write in -w -W; do
--                # -S: shared
--                for share in -S " "; do
--                    # -n: How many pages to fetch together?  512 is special
--                    # because it's default thp size (or 2M on x86), 123 to
--                    # just test partial gup when hit a huge in whatever form
--                    for num in "-n 1" "-n 512" "-n 123" "-n -1"; do
--                        CATEGORY="gup_test" run_test ./gup_test \
--                                $huge $test_cmd $write $share $num
--                    done
--                done
--            done
--        done
--    done
--}
--
- # filter 64bit architectures
- ARCH64STR="arm64 mips64 parisc64 ppc64 ppc64le riscv64 s390x sparc64 x86_64"
- if [ -z "$ARCH" ]; then
-@@ -239,18 +215,7 @@ fi
- 
- CATEGORY="mmap" run_test ./map_fixed_noreplace
- 
--if $RUN_ALL; then
--    run_gup_matrix
--else
--    # get_user_pages_fast() benchmark
--    CATEGORY="gup_test" run_test ./gup_test -u -n 1
--    CATEGORY="gup_test" run_test ./gup_test -u -n -1
--    # pin_user_pages_fast() benchmark
--    CATEGORY="gup_test" run_test ./gup_test -a -n 1
--    CATEGORY="gup_test" run_test ./gup_test -a -n -1
--fi
--# Dump pages 0, 19, and 4096, using pin_user_pages:
--CATEGORY="gup_test" run_test ./gup_test -ct -F 0x1 0 19 0x1000
-+CATEGORY="gup_test" run_test ./gup_test
- CATEGORY="gup_test" run_test ./gup_longterm
- 
- CATEGORY="userfaultfd" run_test ./uffd-unit-tests
--- 
-2.39.5
+The operator interface is to load a program vs. one-line write.. so we're
+disregarding existing infra where you can already achieve the same for a
+less safe one-liner convenience? (similarly for the livepatch infra..)
 
+If you need a one-liner: bpftrace -e 'kprobe:FUNC { override(RETVAL); }'
+Alternatively, add an extension to systemd where you can just deploy a
+list of functions, and it does the necessary work in the background and
+persistently.
+
+Also, what about other classes of bugs, like OOB access, UAFs, locking
+issues, etc which then could be used as a means for privilege escalations?
+It feels like this proposal is a quick'n'dirty prototype via Claude as a
+reaction to copy fail bug, but the right solution would be to improve
+the user space tooling as mentioned and existing infra we have in kernel.
