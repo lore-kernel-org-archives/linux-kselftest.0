@@ -1,226 +1,137 @@
-Received: from SJ2PR03CU001.outbound.protection.outlook.com (mail-westusazon11012025.outbound.protection.outlook.com [52.101.43.25])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C945B305E3B;
-	Tue, 19 May 2026 07:10:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.43.25
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779174602; cv=fail; b=sJ2nCAojM3yqibghG+PpJSukReKYytigvJbYURkDT05CCPde46QXlxiS1z2AYApGsma+44JXcPg3GhFSSHsgfOBUPmhEKp1jDdMBh3qJlwGoUoCYSY/JDrvlEUluLJ5o/JtJoisndr8Mx4OgkrkYoI9DO+K8xuAUNJ55BN1pmr0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779174602; c=relaxed/simple;
-	bh=VkVQPqLCk3O5ODQdCMZHroFWdopgNmZC3kj7PS+E8cI=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=ADr2zvyUhFIyHJV6ivrdtJM6jTEwoobGKm/dIrFOHFQYUW7tHttoSoo/xHmFN2JjC27qw3Q1VhwQ4C9nW0A6+x/FYrV8c/hxJfuswQD5tlRqUQALjHRsKSwI6NZ57LNhG6erRN3BoiorW8XGMMMfJXVpiICxlEHUK+b1T+mSYN0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=NQ6YQVTf; arc=fail smtp.client-ip=52.101.43.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03B5D3BD63B
+	for <linux-kselftest@vger.kernel.org>; Tue, 19 May 2026 07:17:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779175060; cv=none; b=JavmKJyvva+sIGU7cpp2DBOhJE7bneiAJllw+5PLB9KO6zLaKaDVvBhCLRcTZQqxSSRzFYnNdP9RIf0xoMVo9WK1tuT9iDpHwA8cj/J+G7Ao6RIKWVKGWCisjuwDaPGMiOI3OeGAxGTaGNM3jzQ8NqmFvWdWRoO1sNHETCvs6tI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779175060; c=relaxed/simple;
+	bh=dzETsDdbYK0x8/pCg24n3n56p4YbaBRDF0Bik7m8yRU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=W5CzhHi6STnA9Hd5yICkw6s+OX9svY6euWyka7L6Z0dxubojaA1b7rRuvjfD2J83HHOJj1pFoHJywuOQJsm61R5X0U8F0tFW+UomzzLixTMptoc7o4R1ybZHhbdrEIe8UBe1+OICC40WH8T0iddIcIjFlUXPuUcDt2e8SMdxG0s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ImaZBUzj; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=qwS3BExu; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="NQ6YQVTf"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=VESfoGjqVsylJhPLkZucjg3PL/p9xwpG9oNT0/nxlHO6zMSMH+qEa1dkiYuKP/BFvwvLVNPvVSDss2cDL6yWye3z3Il0QSpSn2pOAtN7/jDjmAWgPPFMZQIVaoNVxpXO2hCfBIHwr2y0iA5fUIu6MHa5a+uC/T7/E+bgamUupfrTizRM9zAmakwlivdvYnih+7O8xG3+lwVwX4+s6XrKNvbuvB4H0UOxgJUaRSsQxaqHTk0pL+K/wHkUMsoUpCnZW0iu6HdWfRvK/xTXsoO321Egtf45zw1Bx0N3NdJBdNI8w5P19kf+QHO5Lc6wwy8k5idliiFSd/wr1FnErCgIzg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KDby89GDFbE2WlCNFDnN5bITqJ0cJDi+MZpwXASlNGw=;
- b=bX++wGp4czlwfL1byR7lCEzA3EQ/o8ypDZD0hZA6ZTeMb93kUxD0JPUKpRws25qC2P/Qrg1UIQ/Z+Yrjgf/Yq11QnqttJHtXOOWZMUTrlWJB6qAMtv1Qig9elXbGoWDIHR0uLbxlShnheOHAE4FhJpXgDJqBWD7bsJBgOOjTlGLSnyuQlmzAtmUpB3CXzD5LCqX1HLag5JYpyaqGnaqG4CM0uNyT6AAgCxx6+lW2TIxEpVQvInQ1E8kQPBC9E+9nc2JdZQqpGWfZ0LidMuRqioilqTMNOz/85svBPxetUwXoZawN86Lt+UvzJnh2kyHLjuKV3sy+acbyPvK2JlMasQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KDby89GDFbE2WlCNFDnN5bITqJ0cJDi+MZpwXASlNGw=;
- b=NQ6YQVTfXtVDhmneMG3j2JS8cH21liLeDjrSSBIZynaMbfnaP/mqLNFLDl4tB+c1GCRoJT/H3eAUc8NMc4dbiIuejGHv85Hz09l0PxaIDS6gbmgdtOhjZNKPkKXfBdLA5//qdoeZoWRSIUA0POKrawd5uamIU+8UbLNm8cq9RUE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from PH7PR12MB5685.namprd12.prod.outlook.com (2603:10b6:510:13c::22)
- by BY5PR12MB4115.namprd12.prod.outlook.com (2603:10b6:a03:20f::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.25.21; Tue, 19 May
- 2026 07:09:57 +0000
-Received: from PH7PR12MB5685.namprd12.prod.outlook.com
- ([fe80::ce69:cfae:774d:a65c]) by PH7PR12MB5685.namprd12.prod.outlook.com
- ([fe80::ce69:cfae:774d:a65c%5]) with mapi id 15.21.0025.022; Tue, 19 May 2026
- 07:09:56 +0000
-Message-ID: <8a13b1ad-f1be-4ef4-905e-0d9828ae8cb5@amd.com>
-Date: Tue, 19 May 2026 09:09:47 +0200
-User-Agent: Mozilla Thunderbird
-Subject: Re: [Linaro-mm-sig] Re: [PATCH RFC 2/5] dma-heap: charge dma-buf
- memory via explicit memcg
-To: Barry Song <baohua@kernel.org>
-Cc: "T.J. Mercier" <tjmercier@google.com>, Albert Esteve
- <aesteve@redhat.com>, Tejun Heo <tj@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>,
- Sumit Semwal <sumit.semwal@linaro.org>, Michal Hocko <mhocko@kernel.org>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>,
- Andrew Morton <akpm@linux-foundation.org>,
- Benjamin Gaignard <benjamin.gaignard@collabora.com>,
- Brian Starkey <Brian.Starkey@arm.com>, John Stultz <jstultz@google.com>,
- Christian Brauner <brauner@kernel.org>, Paul Moore <paul@paul-moore.com>,
- James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>,
- Stephen Smalley <stephen.smalley.work@gmail.com>,
- Ondrej Mosnacek <omosnace@redhat.com>, Shuah Khan <shuah@kernel.org>,
- cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
- dri- <devel@lists.freedesktop.org>, linaro-mm-sig@lists.linaro.org,
- linux-mm@kvack.org, linux-security-module@vger.kernel.org,
- selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
- mripard@kernel.org, echanude@redhat.com
-References: <20260512-v2_20230123_tjmercier_google_com-v1-0-6326701c3691@redhat.com>
- <20260512-v2_20230123_tjmercier_google_com-v1-2-6326701c3691@redhat.com>
- <8ef38815-6ae9-4359-86d4-042554357639@amd.com>
- <CABdmKX2uwZ12kYJYPJGfWxuMBOJS=64b1GRj72tfB5D=NKM22w@mail.gmail.com>
- <CADSE00Jq_uvNgvxgPze0mEdUd+hF4-DPZkHy0KroWHZzygf4WA@mail.gmail.com>
- <CABdmKX3DhejYBis9htLDnzPrG7vuF3R3URLVNEbnyd61SSsx=g@mail.gmail.com>
- <CAGsJ_4zyecY6E-=Tm4_couT7uoM9LMcFdTMUPkZAjj4zUKE-dQ@mail.gmail.com>
- <cb84c2ee-9de1-4565-b2e0-60984721228f@amd.com>
- <CAGsJ_4z121v4tK_3+j-hkD7HH0gH3w8tWD8nk0CwRhFE5T+4Og@mail.gmail.com>
-Content-Language: en-US
-From: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-In-Reply-To: <CAGsJ_4z121v4tK_3+j-hkD7HH0gH3w8tWD8nk0CwRhFE5T+4Og@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR4P281CA0420.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:d0::17) To PH7PR12MB5685.namprd12.prod.outlook.com
- (2603:10b6:510:13c::22)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ImaZBUzj";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="qwS3BExu"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1779175058;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=r0K4PXGRihbgM0Q1lccy8tXCU1A0cnyGkfzj/MtoSdE=;
+	b=ImaZBUzjPqg1F3eMQokfMuuAeRT7znLpcnQpTCOWy9Gm4ghS0YwDvnHn3YeXLeI4MiVD8s
+	/t124svvf+Jd55HTmu8MVMnkvQixzTZ/nMCJdrYmWf2Pjd8sC4Xp3YIZHGV18ifx+yIfre
+	ESkRiIkEiUaqJzOb3PxlSFNSxaCLWDI=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-553-1EYR0XX5P_OPT_hYTU20rw-1; Tue, 19 May 2026 03:17:36 -0400
+X-MC-Unique: 1EYR0XX5P_OPT_hYTU20rw-1
+X-Mimecast-MFC-AGG-ID: 1EYR0XX5P_OPT_hYTU20rw_1779175055
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-48feb029961so18660345e9.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 May 2026 00:17:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1779175055; x=1779779855; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=r0K4PXGRihbgM0Q1lccy8tXCU1A0cnyGkfzj/MtoSdE=;
+        b=qwS3BExuyjGVYbGNzgYrD0di28iuOMJcO7Hncaaiwo2/qX+g6Su/QfR0Tqwymmv7qV
+         ggugejE+gdmN/t77lMZnbgmUNd01J1zT4tgY23sS/aTQzs2zj1ZAli1MG3nSOGUxGwOO
+         XPy7gwljBor4yhqAAN/8o0b72Yu2WmAwdq3yFy1u/nbawbAlRaJY9KKcWLN9EMxBf+7l
+         1alWMjIz2y/y76gCPKQOQX2Xw/rKtomntECnPyc+YeVd/vdI3oG+gWpo4rVpKp3zsSzD
+         zXp6GqvZcPDZmd38vFIg29AtLcumPYVyMWELnSg0j9N1awRsr4ZdQeVUuYkCen/pjSB4
+         xfxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779175055; x=1779779855;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=r0K4PXGRihbgM0Q1lccy8tXCU1A0cnyGkfzj/MtoSdE=;
+        b=K13kk4zSyCWOnQUoz1g75juJnXnm6eWE8Tu83W5LR0hXaYTiKN02KXBpRo3hkLUBFj
+         WnwDS9Zojllhxn5xIG1FluYxZd2vooSIw67LZnwnIWaYMNKH3KwBIRnOPL0LyeoQbGaZ
+         jYitUBNsy4zOVNb//GP9f03zDSEiHMpRpR9qKTl/DQxz64W2yAzUMC2Q0auHd48z/LNy
+         v2zf9M41Nst6tzedgbjmXwRpJV8WoQejqQDwchlYIxc3iDkbYEp7kjBJ/H0E6DJL6kGJ
+         O4I8RB1/EmBuK2Aih9kRIG/9zS7OiKD0Buldb0hUH0ltoYn30MRQgafpKq5albVl5XpZ
+         wlJw==
+X-Forwarded-Encrypted: i=1; AFNElJ/1h81VheysbIUSRB87df8V3TnzBj/75DaB9sRZdsmJG1v+juIggaDF2vKgm104JINR06sAVg/+0Ndr8dSB3Mk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyof6IqvTdWdzMIXJylKRz9OX3P/z7grC3nrMFMlzBc9MXv+xNa
+	Ewx/6mlFnIXATD8lJdC+LtsINkooRzcIoa00ChRy0At9sZpFil7/0yc/v76HQtURreVo2dNAMSp
+	Fyeo4YLrwm3TrPW16f+9da8UJttYcNGVODB+PFtfEyvAPEQwI+hxJUKRPJh1lI1jYhKJI5g==
+X-Gm-Gg: Acq92OEqKKtZd0UiZOmUF2L86gNebgh/nNmgX2rOWfC5Q+twp9J1ugARjU7QocukZhd
+	DKruQusph1doqXRDFz06xOjYpIUv+Wt2eWK2N6S63vMk1MUAjH2S4uoCxDJq4WxBB1zq0P0DNhT
+	U4OXkVcPjRcgpBKGwAA4XUqmdU9YhZEvqCbsSJFBnNkL9zUOaMBFkoFIshiCUHdfwIKE0r2C0dV
+	wlYzikcYMCu54T+PvJ9d0sfPqc3Hzu787zNF4QqVTRIxcOSb6ar9UaiwC/wtpvaSdVSwcdWpp61
+	KfkCSZGpFcimvSbXddD/9yrVrq5o1nqIzhkvFfiFg99BqlPzp6tSrtLLOL0p76395qGaUnjYX3n
+	IOwJkyxq0rV+L+9f3C6ymvIDrvClcl//A6B3hyl14pz9h3AvhwgKUO5Y=
+X-Received: by 2002:a05:600c:8b6e:b0:48a:6fd4:d3d3 with SMTP id 5b1f17b1804b1-48fe61ed21amr298884435e9.20.1779175055224;
+        Tue, 19 May 2026 00:17:35 -0700 (PDT)
+X-Received: by 2002:a05:600c:8b6e:b0:48a:6fd4:d3d3 with SMTP id 5b1f17b1804b1-48fe61ed21amr298884015e9.20.1779175054759;
+        Tue, 19 May 2026 00:17:34 -0700 (PDT)
+Received: from [192.168.88.32] ([150.228.25.33])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48fe57944c1sm335599635e9.7.2026.05.19.00.17.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 May 2026 00:17:34 -0700 (PDT)
+Message-ID: <54f7f213-9783-42c0-8ae8-51a6b65b7b5d@redhat.com>
+Date: Tue, 19 May 2026 09:17:33 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH7PR12MB5685:EE_|BY5PR12MB4115:EE_
-X-MS-Office365-Filtering-Correlation-Id: 16b26d90-c393-4ec2-7819-08deb575a1f8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|376014|7416014|1800799024|56012099003|22082099003|18002099003|4143699003|11063799003;
-X-Microsoft-Antispam-Message-Info:
-	Z9i1JUP7T+NrdAaxJm32m2qm0GXls+gvyn2fH+HCuRApRWYZZiQmjf7P45wCPXf7JfBhMfuKP8M6R3+dAC0pwDAk6YGDmIPUPlzpNaJswORqhtjMY5c17JGnbxdyUWYztcJYyCnYNijqXDfqM0GYVVOMyCUJltJquNlScMDBx0s5nvbIQN0m+QuDNrjyb9I7EmtGxbUu1lS/ZZo1Trt5rQ88NVb+74cNBehZ1V19Uk+MgE5wtvXFBcQWS087BGN51MPD8pMEbJZg4Zakmwd1KsGtDjPIs/p9FGQtRs4hkqct3Ox1thkPG/c6AmdEXnkA26WNze7C3zn9HAJbWlcYMnhFvktQ4KM2GglQVbJwzFtDBl2Iib1PsDHALfUekrKoTCS7cnGZ3pFtdsKi8qxHJIY6YIJpLj6mmc+Hd/MTn3ZvoeUqo69msFe5wf5RBBTUc3kmspC5dg/dx8QLkH2Yf6LRcofiD00r+GMEXObmczSetfa9mE1qQkRAy+fHcqa2nKPbNjACVZy6sNfQK2BBrXdEFj3lgxoPapP1N4Eu76WWjrsApW7s3tS5CnM7TIwIPgphHKFXH3PRLXXy5sw4mA0KywNPhiXrfyQhkSBCcpYRn9A45h4S3+jLU0aS3fpdtO7bmbL7EEcaHcUZpwyeSMqwHVzWp78z8FMJbLZJh2MVYwL8tTiH6gSj/XJlIjC6
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5685.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024)(56012099003)(22082099003)(18002099003)(4143699003)(11063799003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?dks3UVNwYkVHa2pZOGp3ajFwT0pwakpUbmJXS2tQQ3hOT0ExRXNxb2NxUTFP?=
- =?utf-8?B?d0luekY2NkNRQWU1R28xbzI1VklyLzNSK0tHMVFFV2FLY0VwREZOK0ZOeHB5?=
- =?utf-8?B?dzAvNUFFbXNhTm45UUJWSTJuM3FmUVB5VG9xQ0U0R2dwMjIzbjJmQ1VSSU9V?=
- =?utf-8?B?OStrMlE2OVQzYXVueHZSemNHMVlTb3JKcUNpUXZtUmJ6R3l0RmpZVHdMTEpU?=
- =?utf-8?B?SVZBWWQzRjMyTmNDSCsxeDYwdHZPalU2S1dPczZUY1RheHRhRGhIajB2bnJk?=
- =?utf-8?B?YXRNS2dBRk1tU3R6OFZKQ0N0RWg2dU8xbkxMbnRvOUJEcFF3WXNaQVhpTWty?=
- =?utf-8?B?bDMxYUViYmE3YkdyVHZRcGJiMC9FNmxsYjZRcDBsbG9nRzdDL1UyWVhiVyt0?=
- =?utf-8?B?clFad05mdTFMNlYxamdGem9UcjdLdlp6c3V3V3U4cFhEQkJ1b2RIalQ0M3dj?=
- =?utf-8?B?cUJBNkY4bElMbVNhTEkzdnVtN1BScHF3Y2FhbEorTXR4ZEthcVJ0VTA4TVFi?=
- =?utf-8?B?c3BaQXdFOG0wSTBDU096SGY3dzZTNk9uUG16UnhMTGtkaXE3TE1FSG5hMGpV?=
- =?utf-8?B?NTRMMENEMlRHSzE0aEFESFlPdWVTNVBscURSVEZ1dU1sT0JkT04xcG5vd2RS?=
- =?utf-8?B?aktVcnJtOFQ3OWh2Rzh1dHYrOVBIaUZKSXowNCtWamI3emxINWF3dGNERERO?=
- =?utf-8?B?RDdzb0plN0h5OTM0MTRTbDdKRks4L1liREU1UDJxNEtSLzMrKzRtVmpXaW1J?=
- =?utf-8?B?WkoxV0tyU0R0cHhyYU1tbFU5dVo3enRYL0VYbTJwUHZJdkxXVHBRSGtCbDZE?=
- =?utf-8?B?OEpxbldSMkFiVnpKZ1ljNmh3UEF0MDV1VmdPaS9EcWNDY01NR2VDRkVGdWtG?=
- =?utf-8?B?bnJQZHE1NVBOMjFzZnZTYUQ4bHh3VUd4K29rT3VMZTFsVWNkQ3l3eEJ5ZWEx?=
- =?utf-8?B?cmJpMU0zbUwwd2pOUVJJTURyZzczK2FLL3M5azZhZFZ2L2lZZUhuM2M5WGMv?=
- =?utf-8?B?UUtaOVhWZlhROE52K2FIZStwREVzcVo4MzE2SWg5RlhkcXdoV3dkQjBXZjZC?=
- =?utf-8?B?empraXk0enhabjQzZFMrYkg3K2QzQXNWV2FrelFlNk53NzRpUkh2SGV2U0VI?=
- =?utf-8?B?WGcvRzl6ekQ3RmpDeTdITzNLZ0ZuLy9MTVpjM0Z6Qkg1QW5hOEl1UHg5SXRu?=
- =?utf-8?B?cnpYVERGQXNaelgrclVrNDE4WG9NY016cDRQbUdGMUpsQWhOQUFDSDcwUGJQ?=
- =?utf-8?B?dFFITVllVGZxaWx5MXZrNExMN3BudmEzUnJVcEZHazZPREJMQ2pWMjZSNllq?=
- =?utf-8?B?bmVDekkrWU9lMWgyY2ZVUDBIQlV4dHBLTit6aE1nWDNGMVcyQWJMdjV0cTFp?=
- =?utf-8?B?WjhjRjYrbmlBNUhzZ3lrYWowOFJxOTlYWDB3ekkrODE1bE5SMGg0TGZ3STVz?=
- =?utf-8?B?L3VFZW0xRkJTeEF0N2c5TEZCQjZWcVFEeU4zeFZOeUZsSTdrQlVsbzdkdFZR?=
- =?utf-8?B?Q1dHeFNmWHM5czR3Q0J0TThIV3REclk4bmdKVkkxN3Yzd1piaGE4Q0hucEEw?=
- =?utf-8?B?MzVSdy8wd0NPU2Nqb3NZclRwNkl3Nk4zNWg4M0t4UUovTDRnTndUK28zU0xt?=
- =?utf-8?B?SzkvZVVJTWdQajVJTWhQcEJhOVg5ZXhUay8vQ2NlV2g1S1hYK1FwRU4wVGhK?=
- =?utf-8?B?Z0ZnNTh5ZFBSMG1zcjRJZUJ1dzEvNFQzR0JxOW1RMnlpYmt5M25lOFhYUUw4?=
- =?utf-8?B?OVl0ZHZzTHQzdk56ZHB0Z09ZdDJPTms3MWhqNWc4VzZhaEg1NTVxeFBGck50?=
- =?utf-8?B?TkEvUVgxZmJQSnR2YlFZcXNYV2d2eTUzTlJYSTRROWFpamFmNGNOK2VHZWpB?=
- =?utf-8?B?NnFKZ08vNW1xdXJSUE9qNlQzaExBckN3ak9MTkk4TGZrRVQzaGR6R2lQQmdj?=
- =?utf-8?B?cmgzMUJJN3VKRmlQUUVhczZJSVI3N01YdGJBcStPVUE2eUpsTVF1SGpzSDJS?=
- =?utf-8?B?d1QvVTM3d2RkMFlSTC9ocjRvaDRlSnh6NXZERU9wdUpsQmV2UURPTldiV3NY?=
- =?utf-8?B?ckpwUGtUMHVnUU1aVVk0cFNpU29OZEVCTVpPcmpnaURiRWVWNXNvMHFVRkpK?=
- =?utf-8?B?Q3J4cXp2am5hVnVjVkFiVUZsNWNRaFJHWStQdkt4RFFqcHh6ZS83Njd5M3FF?=
- =?utf-8?B?blo2ZUptUDN5bFRVcWtGM3QxNDJtSjZBd2dtbnd6QVIyUUR3UEt0KzJ6dzl2?=
- =?utf-8?B?N3hRd3lPajNhelc0UVduN3FuckZuYlo5WG5kdHBJK1o5YjJDN0FSUTEvalE0?=
- =?utf-8?Q?+aHqYm9l2vxAg0i2cl?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 16b26d90-c393-4ec2-7819-08deb575a1f8
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5685.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2026 07:09:56.7940
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 88mu8R2ynre5LClCmoXXIPU27rEcIQmhD4NxaLne/k50dawo2qKFfZnyN2BgAJq6
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4115
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/3 net-next v4] selftests: net: add test for IPv4 devconf
+ netlink notifications
+To: Jakub Kicinski <kuba@kernel.org>,
+ Fernando Fernandez Mancera <fmancera@suse.de>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ horms@kernel.org, edumazet@google.com, dsahern@kernel.org,
+ davem@davemloft.net
+References: <20260510081528.5257-1-fmancera@suse.de>
+ <20260510081528.5257-3-fmancera@suse.de> <20260513193544.47970cb8@kernel.org>
+ <bd560c89-c71f-4ef5-a0fd-5ea096a0f767@suse.de>
+ <20260514162429.366b94c9@kernel.org>
+ <f528360c-18b3-46e5-8ba8-88f921203716@suse.de>
+ <20260515181623.5a44140e@kernel.org>
+ <f5cae72f-93c7-41d7-b7db-2b60281afb72@suse.de>
+ <20260518142346.4c0903de@kernel.org>
+From: Paolo Abeni <pabeni@redhat.com>
+Content-Language: en-US
+In-Reply-To: <20260518142346.4c0903de@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 5/19/26 01:00, Barry Song wrote:
-> On Mon, May 18, 2026 at 3:34 PM Christian König
-> <christian.koenig@amd.com> wrote:
->>
->> On 5/16/26 11:19, Barry Song wrote:
->>> On Thu, May 14, 2026 at 12:35 AM T.J. Mercier <tjmercier@google.com> wrote:
->>> [...]
->>>>>> I have a question about this part. Albert I guess you are interested
->>>>>> only in accounting dmabuf-heap allocations, or do you expect to add
->>>>>> __GFP_ACCOUNT or mem_cgroup_charge_dmabuf calls to other
->>>>>> non-dmabuf-heap exporters?
->>>>>
->>>>> We're scoping this to dma-buf heaps for now. CMA heaps and the dmem
->>>>> controller are on the radar for follow-up/parallel work (there will be
->>>>> dragons and will surely need discussion). For DRM and V4L2 the
->>>>> long-term intent is migration to heaps, which would make direct
->>>>> accounting on those paths unnecessary.
+On 5/18/26 11:23 PM, Jakub Kicinski wrote:
+> On Sat, 16 May 2026 09:02:27 +0200 Fernando Fernandez Mancera wrote:
+>>>> Oh sorry, I should have clarified it. ip netconf only shows/query them
+>>>> but it cannot set them AFAICS.
 >>>>
->>>> Ah I see. GEM buffers exported to dmabufs are what I had in mind. I
->>>> guess this would only leave the odd non-DRM driver with the need to
->>>> add their own accounting calls, which I don't expect would be a big
->>>> problem.
->>>>
+>>>> Usage: ip netconf show [ dev STRING ]  
 >>>
->>> sounds like we still have a long way to go to correctly account for
->>> various v4l2, drm, GEM, CMA, etc. In patch 1, the charging is done in
->>> dma_buf_export(), so I guess it covers all dma-buf types except
->>> dma_heap, but the problem is that it has no remote charging support at
->>> all?
+>>> Oh, fun. anyway, you gotta find a better way. Or just give up on the
+>>> selftest, the YNL hack is too ugly to live
+>>>   
 >>
->> No, just the other way around
->>
->> DMA-buf heaps can be handled here because we know that it is pure system memory and nothing special so memcg always applies.
->>
->> dma_buf_export() on the other hand handles tons of different use cases, ranging from buffer accounted to dmem, over special resources which aren't even memory all the way to buffers which can migrate from dmem to memcg and back during their lifetime.
->>
+>> Fair, let me see what I can do. Otherwise, Paolo as you requested the 
+>> selftest, would it be acceptable for you to drop it given the situation? 
+>> I looking for alternatives anyway :-)
 > 
-> Hi Christian,
-> 
-> Thanks very much for your explanation. So basically it seems that
-> dma_buf_export() is not the proper place to charge, since it may end up
-> mixing in non-system-memory accounting?
+> Maybe extend iproute2 ?
 
-Yes, exactly that.
+Ideally I think extending iproute2 would be the better solution.
+@Fernando: perhaps you could update the self-test accordingly, adding an
+explicit check for the iproute subcommand. If `ip netconf set` is not
+available skip the test, so that iproute2 patches could land later.
 
-> My question is also about the global view for both heap and non-heap cases.
-> After reading the discussion, I’ve tried to summarize it—please let me know
-> if my understanding is correct.
-> 
-> for dma_heap, we have the ioctl DMA_HEAP_IOCTL_ALLOC, where users can pass a
-> remote pidfd or similar information to indicate where the dma-buf should be
-> charged, as in Albert's patchset.
+Does the above look feasible?
 
-Well that's the current proposal, but I think we need to come up with something more general.
+/P
 
-> For non-dma_heap dma-bufs, we don’t have an obvious userspace entry point that
-> triggers the allocation. So we likely need other approaches. We could either
-> move more drivers over to dma-heap, or introduce something like
-> DMA_BUF_IOCTL_XFER_CHARGE, as you are discussing, to let userspace explicitly
-> declare a charge.
-
-Yeah but that's not only for DMA-buf, we need that for file descriptors returned by memfd_create() as well.
-
-Regards,
-Christian.
-
-> Best Regards
-> Barry
 
