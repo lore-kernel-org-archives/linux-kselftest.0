@@ -1,56 +1,47 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D25F3B3899;
-	Tue, 19 May 2026 19:57:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05A013B6C13;
+	Tue, 19 May 2026 20:00:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779220677; cv=none; b=oAcCSquhmUbCPaLZLwy4Z+LqH6r1cQ6m4sscjBfhUgSHXk302ouNTdTb/vWpb+a5JA4bAbYCj2ThAyBTKUHlgPE/sNPk9UNoEUDUMtT+xByXDAvgq/HRvkQQ1QXW55znCKDbDWpLX76SHkWAR1ebqXFpg3w/A0AexT7V/2io+SI=
+	t=1779220858; cv=none; b=sUip8OH51m1u6Sycv/9axrrfRGG08uOnRv8pNhtqeITsUj5B5CbWksBEUB/T2tWRsh4rtA83JN7pNyFEXM3KAPcnx+aDxWhe0ZckGoLWDhE0j/D6lwf3ABaCHGQkfey18ELoLPcmfLvKU2O9DwDckai7GxgxKfL8jOtXTJqOek0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779220677; c=relaxed/simple;
-	bh=HJa7LTlB7rUz0py6A8HhHWbQBqnXH+vvLhZdOPi4+UQ=;
+	s=arc-20240116; t=1779220858; c=relaxed/simple;
+	bh=EV//t36Qewy54DotybfRxWzNFmRS5Z8tPXSiAf9UDM8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=i4z4Ia8bDL+PoD1v+qrba1qK0J9d0nyMY5/RI6lR6Hw3Iut8Em5ZKRoKv3ie5TIhDFwOgFESNCw8WVgtOTMzyzdRdzrXEOX66vEG5JzHZYFmikpj75KDkXMOnPVyCiaTo8y5Z7ySUATm05Zs2cFa6QsTIZLJEXRikDUdpjiJi9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MIDo0oZ3; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=k3MBug6hAM1ZR6nOGUk43tbtuiVPBFJH8JheftIk032bzZmCyIvq4h73xGlGPbmqO83xTf38LaOtkD90t93KcB5YWjB5eGpOy1invC2R1PWEnVomxu2WY4XK1PMrR4VSQMJbxsu/Ouk/95kIgfv4S6MlkI9neG6w30DixlOSHtY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DPVB+E0W; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MIDo0oZ3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 876D81F000E9;
-	Tue, 19 May 2026 19:57:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DPVB+E0W"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7204A1F00897;
+	Tue, 19 May 2026 20:00:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779220675;
-	bh=1Tamg3Hf9ko+bZLZl3xbxvWbVEJhbX7dm5Vi5ngVEyA=;
+	s=k20260515; t=1779220856;
+	bh=l6u4GkLF989nvdhrsR+1+7/Gmo+JF6wLCkLmsTT5XP4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=MIDo0oZ3rO3gBAI4EqRlMprpx3hMXyMnW5nC6bKsdblVLHZLT0gDBnRbUR29fDMms
-	 Xy0TroVpr9Flole9DLbqOqt/DaAr+T5+OPs34A5cJoRdDF7clifWYpig0oyIuUWV3J
-	 FM9P3Yb3Dogn8KGhOgTMme6FNcK94KrGPV5uUMK0Dd7OxnJn/aAQ0QfneK89iXeV2L
-	 8UYlcPERZbtTrGXhki01jG+pbEo0VXAWIcLIzoeMiPJhXhUEpgeW3Q6jT6hLV+ZLNG
-	 p5hiShgr65NLt6tw2u5kG4gMIxML2YLhh8/TBSMpi6pXD7SSyTRLqk7k1FJfVgpiuS
-	 D5YClChAyz4hw==
-Date: Tue, 19 May 2026 15:57:54 -0400
+	b=DPVB+E0WDwr5+uGKB1CfTqFPBStYFBnXxYAU/m0Z2ohgOpNQkbBUpjik2WoaWlIXa
+	 5B+7CQsN5GH9AQe+OTkKBq2ks0YGnnUABv/Z/XInGy4yy7M72nzGmDd1Ff5iizVU/9
+	 1qWzD3tzTbGD+qG101alr40LU0VLbaAJzXgvOhw/utVc9/yXTOoddVDN9OI/YX3Y0h
+	 ro/W3eYeRV692ZxUr/o8sBXxpbgeOCYlmL13cSboQEW8U40uNaNCeUKPZOwVAGzlmk
+	 7zEsLbL1Og3O9A2iX8CQqOGCTAcbbvC2l7Idq3M+hlos90ycL3yEnMU1XjLGzrvPns
+	 DgRr/nxLmigTg==
+Date: Tue, 19 May 2026 16:00:55 -0400
 From: Sasha Levin <sashal@kernel.org>
-To: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Song Liu <song@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	bpf@vger.kernel.org, live-patching@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Joshua Peisach <jpeisach@ubuntu.com>,
-	Florian Weimer <fw@deneb.enyo.de>, Breno Leitao <leitao@debian.org>,
-	Anthony Iliopoulos <ailiop@suse.com>,
-	Michal Hocko <mhocko@suse.com>, Jiri Olsa <jolsa@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Christian Brauner <brauner@kernel.org>
-Subject: Re: [PATCH v3] killswitch: add per-function short-circuit mitigation
+To: Paul Moore <paul@paul-moore.com>
+Cc: Song Liu <song@kernel.org>, corbet@lwn.net, akpm@linux-foundation.org,
+	skhan@linuxfoundation.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	gregkh@linuxfoundation.org, linux-security-module@vger.kernel.org
+Subject: Re: [PATCH] killswitch: add per-function short-circuit mitigation
  primitive
-Message-ID: <agzAwjKhOhuANz_P@laps>
-References: <20260508195749.1885522-1-sashal@kernel.org>
- <20260517134858.146569-1-sashal@kernel.org>
- <CAPhsuW4x8shWon8Moi5VgCq2n4E2EzaaauZ2HHpy42Rp1Y-J-g@mail.gmail.com>
- <agsVDqdALBoHEHlv@laps>
- <CAPhsuW44UX663Au=WwHz8MVwnQgLkjxOqpJSCKxNiv3=RpZvqw@mail.gmail.com>
- <b342c38b-7323-4b72-a239-8a574d6bc36b@iogearbox.net>
+Message-ID: <agzBd9mMt3Zf7j1j@laps>
+References: <20260507070547.2268452-1-sashal@kernel.org>
+ <CAHC9VhTwDt2Bx8n0io9Qge_fUEnrHsxrFAQY+KaemKWqJqBQxw@mail.gmail.com>
+ <CAPhsuW4TJRqQKXgcBYog8YgFLU2h2Zq9ReahxTYp_zpDyvO8AA@mail.gmail.com>
+ <CAHC9VhS1DJNs9gDB6gD9WKhL08giSVajBskZ+=mY0AWRCAsw7Q@mail.gmail.com>
+ <aguvV8QCxK28ZHct@laps>
+ <CAHC9VhTEs7rCaoPG7cWAzyVkN3ztdadHAq0g8mEy_MgCiCe=0g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -60,77 +51,76 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <b342c38b-7323-4b72-a239-8a574d6bc36b@iogearbox.net>
+In-Reply-To: <CAHC9VhTEs7rCaoPG7cWAzyVkN3ztdadHAq0g8mEy_MgCiCe=0g@mail.gmail.com>
 
-On Tue, May 19, 2026 at 02:13:26PM +0200, Daniel Borkmann wrote:
->On 5/19/26 1:59 AM, Song Liu wrote:
->>On Mon, May 18, 2026 at 6:33 AM Sasha Levin <sashal@kernel.org> wrote:
->>>On Sun, May 17, 2026 at 11:37:36PM -0700, Song Liu wrote:
->>>>On Sun, May 17, 2026 at 6:49 AM Sasha Levin <sashal@kernel.org> wrote:
->>>>>* fail_function (CONFIG_FUNCTION_ERROR_INJECTION) is disabled in
->>>>>   most production kernels. Even where enabled, it only works on
->>>>>   functions pre-annotated with ALLOW_ERROR_INJECTION() in source -
->>>>>   no help for a freshly-disclosed CVE. The debugfs UI is blocked by
->>>>>   lockdown=integrity and the override is probabilistic.
->>>>>
->>>>>* BPF override (bpf_override_return) honors the same
->>>>>   ALLOW_ERROR_INJECTION() whitelist, and BPF itself is off in many
->>>>>   production kernels. Even where on, the operator interface is
->>>>>   "load a verified BPF program," not a one-line write.
->>>>
->>>>If it is OK for killswitch to attach to any kernel functions, do we still
->>>>need ALLOW_ERROR_INJECTION() for fail_function and BPF
->>>>override? Shall we instead also allow fail_function and BPF override
->>>>to attach to any kernel functions?
->>>
->>>I don't think so. ALLOW_ERROR_INJECTION is not a security mechanism, it's an
->>>integrity/safety mechanism for both bpf and fault injection.
->>>
->>>It protects against a "developer or CI script doing legitimate fault injection
->>>accidentally panics the box" scenario, not an "attacker gets in" one.
+On Mon, May 18, 2026 at 11:08:38PM -0400, Paul Moore wrote:
+>On Mon, May 18, 2026 at 8:31 PM Sasha Levin <sashal@kernel.org> wrote:
+>> On Mon, May 18, 2026 at 05:29:32PM -0400, Paul Moore wrote:
+>> >From my perspective there are two different issues here: should
+>> >killswitch be a LSM, and should killswitch leverage kprobes to be able
+>> >to "kill" security related symbols.  After all, are we okay with
+>> >killswitch killing capable() and friends?
 >>
->>There really isn't a clear boundary between "security mechanism" and
->>"non-security mechanism". As we are making killswitch available
->>everywhere under root, users will soon learn to use it to do fault injection,
->>and potentially much more scary things. (Think about agents with sudo
->>access).
+>> killswitch doesn't do it on it's own. It may be instructed by root to do that,
+>> at which point that is root's problem.
 >
->Fully agree with Song here that there is no clear boundary, and that the
->killswitch could lead to arbitrary, hard to debug breakage if applied to
->the wrong function.. introducing worse bugs than the one being mitigated
->or even /short-circuit LSM enforcement/ (engage security_file_open 0,
->engage cap_capable 0, engage apparmor_* etc).
+>As I mentioned previously, there are cases where we can restrict
+>root's privileges today, but a functional killswitch would allow that
+>restriction to be bypassed.  My last email to Song has an example with
+>SELinux.
 
-This is similar to livepatch, right? Do we need guardrails there too?
+This would be handled by just disabling killswitch in those scenarios like how
+we do with lockdown, no?
 
-Or do we just trust root to do the right thing for it's systems without needing
-to be it's babysitter?
-
->The ALLOW_ERROR_INJECTION() provides a curated white-list where you may
->return with an error without causing more severe damage (assuming the
->error handling code is right). The right thing would be to more widely
->apply ALLOW_ERROR_INJECTION() or to figure out a better way to safely
->enable the latter without explicit function annotation.
-
-Sure, this would also work. How do you see this happening? Can we let a certain
-user/pid/etc disable the allowlist if they choose to?
-
->Wrt BPF:
+>> >In my opinion, making killswitch an LSM is more of a procedural item
+>> >that deals with how we view a capability like killswitch.  I
+>> >personally view killswitch as somewhat similar to Lockdown, which is
+>> >why I made the suggestion.
+>>
+>> Maybe I'm not all that familiar with LSMs, but we would need to be able to stop
+>> "random" code paths from executing, and I don't think we can create LSM hooks
+>> at that granularity, no?
 >
->>>>>* BPF override (bpf_override_return) honors the same
->>>>>   ALLOW_ERROR_INJECTION() whitelist, and BPF itself is off in many
->>>>>   production kernels. Even where on, the operator interface is
->>>>>   "load a verified BPF program," not a one-line write.
+>I don't see any LSM hooks in this revision of killswitch, and as long
+>as it is based on a kprobes I can't imagine it would ever use any.  As
+>I mentioned above, my killswitch-as-a-LSM comment is primarily about
+>killswitch filling a role very similar to Lockdown.
+
+My question was more about how to structure killswitch as an LSM. I want to be
+able to poke at pretty much any function in the kernel, rather than restrict
+access to a known list of functions.
+
+>> >The use of kprobes, while an interesting idea, presents problems as
+>> >allowing any kernel symbol to be killed introduces the potential for
+>> >security regressions.  As a reminder, some LSMs, as well as other
+>> >kernel subsystems, have mechanisms in place to restrict root and/or
+>> >enforce one-way configuration locks; while many people equate "root"
+>> >with full control, in many cases today that is not strictly correct.
+>>
+>> killswitch "complies" with lockdown. Is there a different scenario which we
+>> should be blocking?
 >
->The claim that BPF itself is off in many production kernels is not really
->true, where did you get that from? All the major distros and cloud providers
->have BPF enabled these days, and even systemd ships BPF programs for
->custom service firewalling etc.
+>See the SELinux example I mentioned in my email to Song.
+>
+>> >Yes, kprobes have been around for some time, this is not a new
+>> >problem, but killswitch makes it far more convenient and accessible to
+>> >do dangerous things with kprobes.  If killswitch makes it past the RFC
+>> >stage without any significant changes to its kill mechanism, we may
+>> >need to start considering more liberal usage of NOKPROBE_SYMBOL()
+>> >which I think would be an unfortunate casualty.
+>>
+>> Why? If I don't really mind the security impact, I want to be able to have a
+>> killswitch-like interface on my systems. If an attacker is in my systems,
+>> killswitch is the least of my concerns I think.
+>>
+>> If you are security concious, just don't enable CONFIG_KILLSWITCH?
+>
+>Isn't the whole point of killswitch to have it enabled everywhere
+>because you never know when you might want/need it?
 
-The world is a bit bigger than home distros and cloud providers, but sure - bpf
-is enabled widely enough at this point.
-
-How do you see this working with the allowlist?
+Right. We have different usecases. If you want selinux/lockdown/etc and a
+really crippled root, that should be an option. If you choose to allow
+something like killswitch, it should be an option too.
 
 -- 
 Thanks,
