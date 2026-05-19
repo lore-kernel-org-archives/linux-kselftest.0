@@ -1,183 +1,293 @@
-Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazon11011064.outbound.protection.outlook.com [52.101.70.64])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A154033F5BE;
-	Tue, 19 May 2026 08:25:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.70.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E5513E5573
+	for <linux-kselftest@vger.kernel.org>; Tue, 19 May 2026 08:25:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=170.10.133.124
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779179114; cv=fail; b=FRHrgPxTAm+ZQhdihZg0KjHZ4rWxSr9UMyPs91QCDiLuBVYbHaPOztxa378Fh4lVc9z8DoyracZudc3YH4hZjDTXwE57ys6S/cSd+VsPjHabLFJBwYS3p7Hn6D21VMyNYzigNrTwWJKEp6na5mMsyBC6LwryM7Lb1PCHXLxLyfQ=
+	t=1779179124; cv=pass; b=KvIdRC/d0mPq0A8h0u1aldPmPmBwiHu9OydgxZvFqpIqfQNfg+KAADmY2wZK9A/STlreiP+ToRzwYCAmbJz+r+VJZL8O2+i9nM9vjPTJMnuJILYhAkX5Qof/016YQs3BPJZt32hzNs4dfIXQUtLTfpe7GrMNqapG8WzywPkwg+M=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779179114; c=relaxed/simple;
-	bh=k5l41gVlKk64lUt3ABG1Xi7P4L/BRcZBKRFOY+WKGOI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=cr6tF+OcPPyRoZHa5iB4wlHXHRmltF3Jv5XuWJD5b9u5JYZTilA7CvZwUu4zkgHd6CUKbgLSh8WeuS+dX5tkV40OmYeC7M8fjXnhfgSKGeWAhEe/DnPvvmrrQG4vxiqi6byP9YHdCHcXIin9Yqe720dIaOUo1JuttmoB7b5zRgY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=est.tech; spf=pass smtp.mailfrom=est.tech; dkim=pass (2048-bit key) header.d=est.tech header.i=@est.tech header.b=ZCqiRZS3; arc=fail smtp.client-ip=52.101.70.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=est.tech
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=est.tech
+	s=arc-20240116; t=1779179124; c=relaxed/simple;
+	bh=Zmlcsxs7JMP5bdHZ5kThghYTTdo51TjoA70ut3zJssU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fmNbaQycAtgJcPRnr6zTmUVSRWeXb0Hayh0vkAbZij99b7D/VGoUlVI1jtSs/v/E26eFFkvFXUqn/WIbgC5d5Xi3Aq4z8PAowsMkVx5nfO9AS/yvlHK7hE9jeLJBTcdO119DJiYQupTOKFmVnmRYY1xKFOjnG8f7OWbvgKkzWNk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KK+efXO4; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=PTM7iW8X; arc=pass smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=est.tech header.i=@est.tech header.b="ZCqiRZS3"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Vy1/HGRBXsZpXaipDMHpPRR5wA0ZF1GfadATLsCQUxdLl+PJuas4f2L36fkwJmn9xmjszYz+L+xy3Hi75w1lkwTQMG867nubywN6/QsoRn+7WO9sFiMNnV9HlmX5Nnw6xMFpCkbUuSvqVeF88QSTyM/enbNSimnvbr0AJkLVdbVUcNDreBjauTq56tiEOjdlnnH2YBlV8D7QsGWuM7FeDZOJWawYRYyBfSZXCEe1wuaulfahCbr16Kss3ryQz/ijgEmHkF8U9ln7j6OJQ7Ebjl03bZJu5M6/0afmDkTtcHsmdya6aQGSAG96aYxm3c+CHKcUddclPdH144pY/7FBgw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tUKQYHsN7UA4UaKAVZCB9R0jrZ9LJ3tLbf2FOEnxsh8=;
- b=vlLnhAueI78BdvaUcKxUdxpBpBknpUaHFcYzmN9flBGHuK4lpnHcRhH8B//Tu6NrZl03vOvIPXjfEiHnDHA963ofpJTeAZUqe4Yqflurn8pcnOTYS+dxGZsJv6SQvwnCsjEX/Gl2O2GQasKmvY0fAWcHGWgTQh5+lvxPtAFRFTqYi0LirFnmpVrKpTfShGIWIW6/S+XawhME28pLfIKsK5hAMNKLtt/7w8c/jXoP5UiRU+YCS8skgNhNvxS+F4inaYl35iimwZ6SCnL4y7NeZd4p4Pe6kyc2fN2EP9oc6uwUERiKfJvLO7i+wj6YVRsUilb7Hpy7spu2hfJpDKWohg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=est.tech; dmarc=pass action=none header.from=est.tech;
- dkim=pass header.d=est.tech; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=est.tech; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tUKQYHsN7UA4UaKAVZCB9R0jrZ9LJ3tLbf2FOEnxsh8=;
- b=ZCqiRZS3rBqcQD4o31EYDzGTrzozNLv0b3xS3x3ZXPM7MBDKwx4a1ffvhvSDh/hdpHRk0IzqLJz5taPLGKpQNyKql6XxTYbb0e0OmuNaF2XRYyEztRMx5e28Dc2qOAuXfUMO2sURyh32RSemjhlI1UqMTzGx90ln7gt3mnsUqEcxq8tbqdYHKUjy/X7d66iWH6xxwjnAyfrbLh2YRWle9D15I1R85et5Y6bn3oHzsaH9ZVaNysz4ZufOjWkNxOq9qh4kNjvcGLgK9DkULvnnCaQ88lIdA5QzHvy0Vb2PdWLEyxcdhuYmAyjYrl2GL0BnWkJuv2L2TKgUeD4lncxkNw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=est.tech;
-Received: from PAWP189MB2611.EURP189.PROD.OUTLOOK.COM (2603:10a6:102:336::8)
- by GV1P189MB3028.EURP189.PROD.OUTLOOK.COM (2603:10a6:150:25f::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.48.14; Tue, 19 May
- 2026 08:25:07 +0000
-Received: from PAWP189MB2611.EURP189.PROD.OUTLOOK.COM
- ([fe80::b400:cf4f:b2e1:d884]) by PAWP189MB2611.EURP189.PROD.OUTLOOK.COM
- ([fe80::b400:cf4f:b2e1:d884%6]) with mapi id 15.21.0025.022; Tue, 19 May 2026
- 08:25:06 +0000
-Date: Tue, 19 May 2026 10:25:04 +0200
-From: Fredrik Markstrom <fredrik.markstrom@est.tech>
-To: Will Deacon <will@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	James Clark <james.clark@linaro.org>,
-	Santosh Shilimkar <santosh.shilimkar@ti.com>,
-	Olof Johansson <olof@lixom.net>, Tony Lindgren <tony@atomide.com>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-perf-users@vger.kernel.org,
-	Nicolas Pitre <nico@fluxnic.net>,
-	Ivar Holmqvist <ivar.holmqvist@est.tech>,
-	Malin Jonsson <malin.jonsson@est.tech>
-Subject: Re: [PATCH v2 0/3] arm64: perf: Skip device memory during user
- callchain unwinding
-Message-ID: <agweYAbxRWOs41BE@elx-5cg6022w5t>
-References: <20260430-master-with-pfix-v3-v2-0-bd526ec04a75@est.tech>
- <agsq4wZMGth-T3BG@willie-the-truck>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <agsq4wZMGth-T3BG@willie-the-truck>
-X-ClientProxiedBy: GVX0EPF0005F6BB.SWEP280.PROD.OUTLOOK.COM
- (2603:10a6:158:401::645) To PAWP189MB2611.EURP189.PROD.OUTLOOK.COM
- (2603:10a6:102:336::8)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KK+efXO4";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="PTM7iW8X"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1779179121;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Zmlcsxs7JMP5bdHZ5kThghYTTdo51TjoA70ut3zJssU=;
+	b=KK+efXO4ylYctwcp8LVfDh7CXaZpMeiSf7hoe5yOC3Cv26P7X3ftYv2irWzJ01Dv9/1b58
+	/AkcC/zUV1PomlQM/wgknTrbwXhCQYNhGwCvosULkEj2VIf0q6TpyH1cfqZcJrzy2KdA4i
+	txlagmXGKw0OU7pXySF3EaXHgUqwu9g=
+Received: from mail-yw1-f199.google.com (mail-yw1-f199.google.com
+ [209.85.128.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-148-5StqrGVDORiOAXycRuwJgQ-1; Tue, 19 May 2026 04:25:20 -0400
+X-MC-Unique: 5StqrGVDORiOAXycRuwJgQ-1
+X-Mimecast-MFC-AGG-ID: 5StqrGVDORiOAXycRuwJgQ_1779179119
+Received: by mail-yw1-f199.google.com with SMTP id 00721157ae682-7bd5c9e2e4aso8128497b3.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 May 2026 01:25:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779179119; cv=none;
+        d=google.com; s=arc-20240605;
+        b=UgGgxoqG7xpnB73aGiKhGlNZUNVOSWZkHFMRQjPJw0Gkz2Z/10v10yBbsF/MazbPs/
+         YaBcsMAE3FZD+RFCSfQWNfSWVNl7ZIWJx2NW2JLR6t7x0wnSrce3TMJeU5se5qtCeKNy
+         h3qoWe8TfQxpabMl5vhZOFDJPFx2t+T6T9xpRmFgR1WgUrCswDo6uUC56srlxboRpsV6
+         VpCr0vd9QBpEtFzR/IYCZOukGKTOh5kFnPxPivhnmppeiWFJjif4DyeyvVCuMM8ZjRRE
+         4ZNsCHQT10zjdZObO+9zuj458nEXFBP3HAsLtFDKoBAOPoTR0Y0l+1878PDS5e/TwWSG
+         NL2Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Zmlcsxs7JMP5bdHZ5kThghYTTdo51TjoA70ut3zJssU=;
+        fh=a1KGFaPZtbJp8cB6MnCfRxNDjj3NXaX4kOKLJdmPGRw=;
+        b=DX1o3WVsd/AIQ9WQhMHrGfDnnp9bx7tY2JYm3dL18w0qXwnRzWqoqPtQ762E7jBSCU
+         5vNxtUAv/N14AnFXUdaQUXuZ6OJPGjnff0A8XD2xhRFy6m2iEVfObPbCvaZzL2b/VpwX
+         Hg+3Mji1gOqLumhhF+SHgOVnj3/CefPApQL3eW6BREchR2gWKTD3OYIn4XAc1rt7Dzyi
+         v45CwKiGVK57XLq3LK9oxdaR0TcNSn3z9RE3WeZORnRUDgE9F4qvOnCheOhnWD31XrrQ
+         mpOqSij+eGgebaBzT96gD8fjHessfjvLcmlAD4jgPM2ew0clkr1kEu3m/a+YxgVOuO3V
+         V9tQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1779179119; x=1779783919; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Zmlcsxs7JMP5bdHZ5kThghYTTdo51TjoA70ut3zJssU=;
+        b=PTM7iW8XX7Fc+svTNvQEPyrabuPKevYgU4wwNa0E2GH8kYNmCTP076uluaszhaEraK
+         v/CYuBcnqj0wOzxgH7z1HHOr6Wa9fIE/4W5rKBG0UW/t69AbbsSzrRlZ+tpCYksa1jyb
+         ly/65qoT2WsmO/uRyZm4CoZxr+3IjVuIa8dazFTmDVs+YwG4skJU54pbMzwUjZtIEgkl
+         j9HrbNhe1ZDSSgEV1+zP3CDzfLrH/a3gdTDNbhpOR09W8o/DsT383zAysKPGV6RnqBmY
+         Q7tDkwuSEgOTUbmEdCyswSIz4kSFHRgVMVyG2cHf/lMXFdxONybSi0MZANYMekQRnSGz
+         I7ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779179119; x=1779783919;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Zmlcsxs7JMP5bdHZ5kThghYTTdo51TjoA70ut3zJssU=;
+        b=oueEkCSMAPxySyrqaIV837UmAPgttrCjRHBY4fCZmI4XXuA/LPezB5mMfd64cltpfJ
+         VAU55M3xpfChJcX6xKcOsIQgarCp95e21jJze/iZs0/ZvsXOIlwSkOCqHaueR1Pq0A00
+         bTvxp97h0BpMF0prL8Gydw9iOOKosR3I27T7zJZhEpU7LG2ItcpjehnauZHujh16gfet
+         jQhDd/I3mEuWgE8BLEVN49pDgAsSOkr6Imr/OsAeXBiQMgZMXvCqa/C6jDxn8KW/qJrm
+         5hdEg9founRgtA/M1nQwHTNiXKc2V8XCHJMtOJWWHW/VxmI5eKC10+wg/v1ANHNdbTQj
+         dINA==
+X-Forwarded-Encrypted: i=1; AFNElJ8mFq3lVyw7EmixDxga0WjqQRTVgdUSadt6tSYQmneqehn+9y5Zx8l7FZvO81j8dXFi0OJisCWjJcuOof1evsU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx5V93FQ5tUk7e1JTRq4zfTVe1dFJwMDBueaE3UChhcCx6u9sDs
+	up9zgDCkZhZI4JuvrRklGm2zB1H1eUHXn9prfWWiecDj+Q2n0q/xpjNYO2zz1jzEhAIIuPaw7WG
+	MU4laRhpesDeypIo0BryaD9DsP6NSCWvWdeJsILz4R3r6OVbYXPbCHta4YUvp3q4npoK5a8XH2/
+	8HAzaqa/Esi6eL9i4FhOpJeBsLAjDZkpA4FR1d4MTrS8Ix
+X-Gm-Gg: Acq92OGTHkQvJ1cIuYSRSVuTcAhYgPKtlqZNEIb4HWCzZzgsALKzy8HAPI8JkyrUwfB
+	2rqcQOdbcP0J81uTOEgwkGOiKqzLjJ8jBB1cHlAxomNYNLx8kY2FUlpcdQElihsGB0J/OUbQ630
+	KATxrkB/MhwDaJYw6kmvl4BvvV83xiiH6jlgBASfXt4083HH7is46sZlFXvLovuazqBUN7iJWWt
+	F0TvQ==
+X-Received: by 2002:a05:690c:e041:b0:7b3:edc7:9bb8 with SMTP id 00721157ae682-7c955b970femr172557007b3.0.1779179119388;
+        Tue, 19 May 2026 01:25:19 -0700 (PDT)
+X-Received: by 2002:a05:690c:e041:b0:7b3:edc7:9bb8 with SMTP id
+ 00721157ae682-7c955b970femr172556607b3.0.1779179118837; Tue, 19 May 2026
+ 01:25:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAWP189MB2611:EE_|GV1P189MB3028:EE_
-X-MS-Office365-Filtering-Correlation-Id: faa2b958-6c22-4d17-e0e2-08deb58021e8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|7416014|366016|4143699003|11063799005|22082099003|18002099003|56012099003;
-X-Microsoft-Antispam-Message-Info:
-	WoSTB1VHJOXttLpVWO2QZfd0eEQBFQhl1b2GowHeE6YW/ovUcP0e5rDC6LJpGCb2a1e6WjBHA1mP9yGST+FpoLWpINQpG8B5CEnJH8Du7OyM3F3Q7LtKbgfz9LgMBV5wf2oux56qza0WtvEykmjCNmWBUNZ3qzFpXOs1+Zpe0OPntlfJsQ7iLRPNkm1H1kTz1rx5XJssMzkgJOGR//pksIpq7UPuz2wOIUDj51CJnVM5H2CJC9wHBW7+/4ldGVoaH0CvRqVK7I11ussI0eBzsp721peNTiXltWBmF+DiZUHwZhRf/5e5e0bihl+OmaTRY8yMAsSK8dzwp7CUOJu3IrLRlNkev2PGkJeRMDff8knzESl9AwXOA8S4Ai9J8rHimF6YvHXWn5A8DXiI1acJO5RDc79PdT7Cwo0xMlaWkorsVzV4ixvh4bT+iVZRRccH/pMdVZ1Iq999ndYzMqWoeUf3uFhaYB20nN5DTbjj4cht8AZMnLslDZrgtotUxU3l/MOR/9L1q+E847WwcQHBMeMXf4KpivGcsasIdD6DVWBz4/KLBoOFDanR6vKlPVjM4fDfluOt0Poacq1KDOAda3qVWdPmMljzmAkXpm2FbnyciW4D9B8eQwht9lQhGASlIxxLXZLTR35H3PEM5symH0HnVd68KtLnUK9ytNjIm0BxPXwmJdOUB93Ek19DT6bF
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAWP189MB2611.EURP189.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016)(4143699003)(11063799005)(22082099003)(18002099003)(56012099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?aHFmTUlndnUvVFRLRWl5K1E1UkhISm5pczJybGZ4cG9aUU02R1hzSlR5cmc1?=
- =?utf-8?B?a29TczVIM0dTNStEeHNWNHhzcldCc01jTFZaeGJxUTljQzlnNEZGM0Z0anpq?=
- =?utf-8?B?QjBLQVZmU2M4aWdPc3VlT3ZxbDdDMURWcldUei9kVzM4R2NYUzNLQTNwMmF5?=
- =?utf-8?B?em5kMFhPRmhxbk83L3BMc2dmZnd6Z24xcU5Lc1NEYVJyLzlGUEN6b0RpNTd3?=
- =?utf-8?B?aHBwbHRqcmRwWXFFSzB2NmpwZVlSU1JlRGYvL0V4YVZtNXlVVy82aEc4UWhV?=
- =?utf-8?B?SndEUFhMWjdCcXdGZ1BUSm9PSCtPcU1Qa05DblU5MldzWFlVSkdOblFBcHgv?=
- =?utf-8?B?OVpjbjJKZ0pwT1VOZkZHLzFaS3ZLWldCUUFBQithN0xiL3l1T3lQYzh6RFRy?=
- =?utf-8?B?b1hCOFJOMm13Y3p4ZCtFcGhvN3VBdHAvVHlXUzlKYk1SejlYdXNUN0Jua1NV?=
- =?utf-8?B?bm10MWpEeW9FQ3YzR3JjTWQrV3lsN2YzcGM4ZEtqaFdiSklPejg1cDNtTzk4?=
- =?utf-8?B?UXFIMkIvM25sN2RsOTZWU01oVzhDZEY4VU9GQUNWYXpjeUZIMFJ6UkdZSjdP?=
- =?utf-8?B?djdCeFFwbGxRbGpvVjZCdTh1UHFTWDFlMjEwL1dVa09RRUpsR05SYXBTYk5J?=
- =?utf-8?B?Y3VtUytUaHJRakU0TDN2MmQrUlhtRUp6M1AzOStkeFlMMzZTMHdsSWdGY3B4?=
- =?utf-8?B?MlcvWWZyRjVTUzVCR1dwbzN0WGR3enpodXdGWWVzOVZ6YlIwUWpNSi84NnNl?=
- =?utf-8?B?SmxUMEdsMHYwdUdPL3J1dzgvSEpZYkNKUkhBcG5yOU1RY2xEZnhGNjhyNC9S?=
- =?utf-8?B?SWYxL3lGa3g2L2t0UTdPV1FGa3o3OGJiU0FPTXRhRHprYnZKclVMN1ZGYW9C?=
- =?utf-8?B?MHNyT1FHbFF2dGhHNW9jSmdwV2UwYlJXKzBqb2E1Um1GU29TMGxzbmVKd3VL?=
- =?utf-8?B?WG5QWUltTS8zY3gvNXRoSTRuNTRrUTI1bVVKcExpYlh0QVJKM2Y0NUxiTVlT?=
- =?utf-8?B?K2ZROEYraTdSNGx5cXh4S24wVW9MSGpoSmpGclJnTEtNTGFGT2ljb0NCczJ4?=
- =?utf-8?B?V0p4OTM0d0tjeUVKUXZwZ1NWZzJSUHp0UVdLd3FaUEJUN0p4T3d4dVJNWG1W?=
- =?utf-8?B?clVlSHNDWmd5SzdmWEIzUEh1R1VjQ1Q3b054bW5PZmdFd2tibFVWWCs4UU5t?=
- =?utf-8?B?U091TEN4eTUvMU5IemJUSGdnVnd4d1V6M1k4TmxuVDh0V1RqZy9nSjE4VzJV?=
- =?utf-8?B?MkhHcTVIZEt1M0lxdFFxY3orU0NoQUcyMHloWjUraDRWUVBlZmsxTXBYQ1d2?=
- =?utf-8?B?cmZHZlZDVVdENG9zaCtVbmRZa25WZTBxT3NacllnMk9oMGV4blFXMERTV1Bx?=
- =?utf-8?B?bTRTTEh0VXZyMU1XdGpXQXQ2d0R6KzZ4OUdVMHV5d1JtNm9rRnRVYUE3RlVP?=
- =?utf-8?B?RE0zL3FPNmE4SzBsdU1LM3ZNRnRiSXlKY2tlSFlGNG53QnNYMVVyOW8wZXlH?=
- =?utf-8?B?QWFMWkRjbVFUV0xzNVB6VFQzaVlzNUxSbHIzZ25QYnZIOG5mNWwyakRUcU03?=
- =?utf-8?B?RktTK0tjUkpSU0pGOEZDWWN5RnBOTWMvbXBaOUszVjRQQnA0QkpERHBHMC90?=
- =?utf-8?B?M3ZXS2dFMHllcU94UmE4cmZ1NC9lN1BoMzJLa01XOUNkSk5qUW1PR3REMEc5?=
- =?utf-8?B?QTNRaVZURDU0VVoxVHl0WjUvT2hsQVdjVUYrSnhTUW5WTVlaV0NRN3NSS0Zw?=
- =?utf-8?B?cXpEbEtFU1NId2hJeWhTdEwrRDloNHNDMUNMRWVmR0dOWno3TlVnR0xFT05s?=
- =?utf-8?B?S3BjNHRXRTF0RStqdmV0akdXUTRkMWNiVU92VDJ2WlIrYXdac1BqdXFrLzVH?=
- =?utf-8?B?NTVFSnhPTVAvZVRKZ0JKQ2N0ZjF0YTlYMU9raGNPTnAvVGZiTVNYcXBZa25E?=
- =?utf-8?B?YUQzOVZoRWNXanRZY1NwMHYrQ09Lc1YySEI5bUpBYUJ6dmg2eVlGMmk4SVFl?=
- =?utf-8?B?eW9OSUtJOUFaQVoxODY2YzhtWXY1NkdyNU4wdFZjb0t1SHF6c1BBV2dRcHYv?=
- =?utf-8?B?YWNwUzJjc0tSVEJ6SSs2UEgxbERlbTd2Ty9vaDBaSk5BL3d3blBPdDFiMU51?=
- =?utf-8?B?Y2dSSzJPSTdHekJwcjljeThyUXgrZXo5ZE8rNHNyVHpQRlJLLzlwOXdjOTFv?=
- =?utf-8?B?MnNqUDJYK3RuL2doYjgvc1h2S0pJMTZOYlNhWUg5bHlZQWtGUzYxRDIyTHpD?=
- =?utf-8?B?UStkdzR0MzErV2RWSjZGVGZHSERPYUFjQyttay9EWHphOXdxTVJsZmZ4N2Fp?=
- =?utf-8?B?QmlXT3g2dm0vVGwreUdldTZRckJxc09sZjJ1U0RHWkRtTXpqUDNoV0U2RUh0?=
- =?utf-8?Q?awvuXZRNpMidQbBU=3D?=
-X-OriginatorOrg: est.tech
-X-MS-Exchange-CrossTenant-Network-Message-Id: faa2b958-6c22-4d17-e0e2-08deb58021e8
-X-MS-Exchange-CrossTenant-AuthSource: PAWP189MB2611.EURP189.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2026 08:25:06.5161
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: d2585e63-66b9-44b6-a76e-4f4b217d97fd
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BTfOEw2vGzT5PDplDlpHn4yUnJ4Yi4412seGhBLyzEW4lfP2s91E0bukIJ3ERdgLU7juZP04yhckVBvVaYtCpfA1wqwb673lUGulawZHzvQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1P189MB3028
+References: <20260512-v2_20230123_tjmercier_google_com-v1-0-6326701c3691@redhat.com>
+ <20260512-v2_20230123_tjmercier_google_com-v1-2-6326701c3691@redhat.com>
+ <20260515-hinschauen-effizient-9e3a05a94f2e@brauner> <CABdmKX0d6Zsg+_TxXjB80UZR23ZvXzxYoWzORgwmx=ZiuE+Nzw@mail.gmail.com>
+ <208fb820-d8eb-4832-a343-ef8b360e8120@amd.com> <CADSE00Lh95ygoXGKJGsYvQGEsFV8sVmwEC3uvh8M6r3ERzaJwg@mail.gmail.com>
+ <88efe10a-8b93-4a81-8279-4a5559d0f17c@amd.com> <CABdmKX3yZubjDKbVqwrjHAiKyj_ioHzOoxd0wzFbJK=PAGOqcQ@mail.gmail.com>
+ <01b6eefc-c107-4f8c-9d7c-3b86f54cabaa@amd.com>
+In-Reply-To: <01b6eefc-c107-4f8c-9d7c-3b86f54cabaa@amd.com>
+From: Albert Esteve <aesteve@redhat.com>
+Date: Tue, 19 May 2026 10:25:07 +0200
+X-Gm-Features: AVHnY4K5LncaNoVhZCnb-g1Oej_4CFtS9sUy70LBQyTJDD76MUlJZifB3Hgf-cg
+Message-ID: <CADSE00KCpCHOu2GMJ++ozXXbwF13fd2ZfmC3CnZBdLM_0p+ZMg@mail.gmail.com>
+Subject: Re: [PATCH RFC 2/5] dma-heap: charge dma-buf memory via explicit memcg
+To: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Cc: "T.J. Mercier" <tjmercier@google.com>, Christian Brauner <brauner@kernel.org>, Tejun Heo <tj@kernel.org>, 
+	Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, Michal Hocko <mhocko@kernel.org>, 
+	Roman Gushchin <roman.gushchin@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Muchun Song <muchun.song@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, 
+	Benjamin Gaignard <benjamin.gaignard@collabora.com>, Brian Starkey <Brian.Starkey@arm.com>, 
+	John Stultz <jstultz@google.com>, Paul Moore <paul@paul-moore.com>, 
+	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
+	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
+	Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org, 
+	linux-mm@kvack.org, linux-security-module@vger.kernel.org, 
+	selinux@vger.kernel.org, linux-kselftest@vger.kernel.org, mripard@kernel.org, 
+	echanude@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, May 18, 2026 at 04:06:11PM +0100, Will Deacon wrote:
-> On Thu, Apr 30, 2026 at 12:55:12PM +0200, Fredrik Markstrom wrote:
-> > Perf callchain unwinding follows userspace frame pointers via
-> > copy_from_user. A corrupted or malicious frame pointer can point
-> > into device I/O memory mapped into the process (e.g. via UIO or
-> > /dev/mem), causing the kernel to read from MMIO regions in PMU
-> > interrupt context. Such reads can have side effects on hardware
-> > (clearing status registers, advancing FIFOs, triggering DMA) and
-> > on arm64 can produce a synchronous external abort that panics the
-> > kernel.
-> 
-> Hmm, but why is unwinding special in this case? If userspace has access
-> to sensitive MMIO/device mappings, it can presumably pass them to
-> syscalls and trigger crashes all over the place?
+On Tue, May 19, 2026 at 9:20=E2=80=AFAM Christian K=C3=B6nig
+<christian.koenig@amd.com> wrote:
+>
+> On 5/19/26 01:39, T.J. Mercier wrote:
+> > On Mon, May 18, 2026 at 7:07=E2=80=AFAM Christian K=C3=B6nig
+> > <christian.koenig@amd.com> wrote:
+> >>
+> >> On 5/18/26 14:50, Albert Esteve wrote:
+> >>> On Mon, May 18, 2026 at 9:20=E2=80=AFAM Christian K=C3=B6nig
+> >>> <christian.koenig@amd.com> wrote:
+> >>>>
+> >>>> On 5/15/26 19:06, T.J. Mercier wrote:
+> >>>>> On Fri, May 15, 2026 at 6:53=E2=80=AFAM Christian Brauner <brauner@=
+kernel.org> wrote:
+> >>>>>>
+> >>>>>> On Tue, May 12, 2026 at 11:10:44AM +0200, Albert Esteve wrote:
+> >>>>>>> On embedded platforms a central process often allocates dma-buf
+> >>>>>>> memory on behalf of client applications. Without a way to
+> >>>>>>> attribute the charge to the requesting client's cgroup, the
+> >>>>>>> cost lands on the allocator, making per-cgroup memory limits
+> >>>>>>> ineffective for the actual consumers.
+> >>>>>>>
+> >>>>>>> Add charge_pid_fd to struct dma_heap_allocation_data. When set to
+> >>>>>>
+> >>>>>> Please be aware that pidfds come in two flavors:
+> >>>>>>
+> >>>>>> thread-group pidfds and thread-specific pidfds. Make sure that you=
+r API
+> >>>>>> doesn't implicitly depend on this distinction not existing.
+> >>>>>
+> >>>>> Hi Christian,
+> >>>>>
+> >>>>> Memcg is not a controller that supports "thread mode" so all thread=
+s
+> >>>>> in a group should belong to the same memcg.
+> >>>>
+> >>>> BTW: Exactly that is the requirement automotive has with their nativ=
+e context use case.
+> >>>>
+> >>>> The use case is that you have a deamon which has multiple threads we=
+re each one is acting on behalve of some other process.
+> >>>>
+> >>>> At the moment we basically say they are simply not using cgroups for=
+ that use case, but it would be really nice if we could handle that as well=
+.
+> >>>>
+> >>>> Summarizing the requirement of that use case: You need a different c=
+group for each thread of a process.
+> >>>
+> >>> Hi Christian,
+> >>>
+> >>> Thanks for sharing this atuomotive usecase. If I understand correctly=
+,
+> >>> the actual requirement is attributing dma-buf charges to the right
+> >>> client, not putting each daemon thread in a different cgroup?
+> >>
+> >> Nope, exactly that's the difference.
+> >>
+> >> The thread acts as a filtering agent for both memory allocation and co=
+mmand submission for somebody else, the process on which behalve the daemon=
+ does things can even be in a client VM, completely remote over some networ=
+k or even something like a microcontroller.
+> >>
+> >> Everything the thread does regarding CPU time, GPU driver memory alloc=
+ation as well as resources like GPU processing and I/O time etc.. needs to =
+be accounted to one client which can be different for each thread of the pr=
+ocess.
+> >>
+> >> The only thing which is shared with the main process thread is CPU mem=
+ory resources, e.g. malloc() because that is basically just needed for hous=
+ekeeping and pretty much irrelevant for this kind of use case.
+> >>
+> >> The problem is now you can't do that with cgroups at the moment but un=
+fortunately only the kernel has the information you need to know to do this=
+.
+> >>
+> >> So what you end up with is to define tons of interfaces just to get th=
+e necessary information from the kernel into userspace and then essentially=
+ duplicate the same infrastructure cgroup provides in the kernel in userspa=
+ce again.
+> >>
+> >>> If so,
+> >>> the `charge_pid_fd` approach achieves this directly by passing the
+> >>> client's `pid_fd`, without needing to add per-thread cgroup
+> >>> infrastructure.
+> >>
+> >> Well it's already a massive improvemt, we could basically stop doing t=
+he whole duplication part for the GPU driver stack and just use cgroups for=
+ this part.
+> >>
+> >> Doing that automatically for CPU and I/O time would just be nice to ha=
+ve additionally.
+> >>
+> >> Regards,
+> >> Christian.
+> >
+> > Hopefully I'm following correctly here.... So you are duplicating the
+> > GPU driver stack to achieve remote accounting on a per-thread basis?
+>
+> Not quite, we are duplicating the handling cgroup provides in the kernel =
+in userspace.
+>
+> For this memory usage information as well as execution times of the GPU k=
+ernel driver is exposed in fdinfo for example.
+>
+> > Does this mean for GPU allocations you currently have some GFP_ACCOUNT
+> > magic in your driver to attribute GPU memory to the correct remote
+> > client?
+>
+> No, we just expose what the kernel driver has allocated for itself. E.g. =
+page tables, buffers etc...
+>
+> When userspace allocates something using memfd_create() for example we ju=
+st ignore that.
 
-You’re totally right, a broken app with access to hardware like this can
-already cause chaos by passing bad pointers to syscalls etc. But the big
-difference here is who is to blame when things crash.
- 
-If an app passes a bad pointer to a syscall, it’s self-inflicted.
 
-Unwinding here is asynchronous and unrelated to the application.
-Perf interrupts a perfectly healthy app at a random moment. If that app
-is using the frame pointer as a normal register (totally legal in
-optimized code), it might hold a junk value that points to MMIO memory.
- 
-If the kernel blindly follows that junk pointer during an unwind, perf
-causes the crash. I think it's acceptable that an app (with hardware
-access) causes a crash if buggy, but I don't think it's acceptable that
-a profiling tool is causing a crash just by looking at it.
+>
+> > So this series would close the gap for dma-buf allocations,
+> > but what about private GPU driver memory allocated on behalf of a
+> > client?
+>
+> Well we would need a cgroup which isn't associated with any process were =
+we could charge the GPU driver allocations against.
 
-Fredrik
+I think I better understand your framing for this now. Thanks again
+for taking the time to explain.
 
+I was looking for a way to pass cgroup around to do the charge. I
+found that `struct cgroup *cgroup_get_from_fd(int fd)` already exists
+in cgroups available symbols to handle cgroup directories.
 
-> 
-> Will
+So here's an idea...
+
+Rename the charge_pid_fd to charge_fd:
+- If it is a pidfd (`!IS_ERR(pidfd_pid(fget(charge_fd)))`) then we do
+what we're already doing here.
+- If it is a cgroup_fd (`!IS_ERR(cgroup_get_from_fd(charge_fd))`) then
+we charge to that cgroup.
+
+Also we could add add an ioctl for the generic fd path similar to what
+we have for dma-buf heaps. Or have a new flavour for memfd_create:
+```
+memfd_create2(name, flags, charge_fd);
+```
+
+The transfer ioctl could also be made generic to accept both pidfds
+and cgroup_fds.
+
+For this series we could move forward as is, and make the generic
+solution a follow-up series, knowing that the field can be reused for
+cgroup fds.
+
+>
+> But good point, charging against a pid wouldn't work in this use case.
+>
+> Regards,
+> Christian.
+>
+
