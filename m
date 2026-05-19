@@ -1,50 +1,50 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71A10492190
-	for <linux-kselftest@vger.kernel.org>; Tue, 19 May 2026 11:03:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C898492189
+	for <linux-kselftest@vger.kernel.org>; Tue, 19 May 2026 11:03:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779188628; cv=none; b=FDQA4Av7zctZTd3usxdpHSflwU9TJgadMRbFO6y9N2gdO7thboZQiy2gnTdXQH3XHqYDgtv46SkL5pyd1i5vmVJvHa0fhKHGJdYD+2uXBgc+IZLwxmuPAoWICx0bQHriusIWOYTRRd+TAjQiFo5CConRHZIj0knNSt1o8OovLh8=
+	t=1779188630; cv=none; b=RRj2kDT2A7ik9H2x1iQ/xSN0RsMZxotF1cE0v/MdimEOAMgX+RGY7waZTeS2ef0Ntx1936PziDdEM15utakr+Xfyojkd+q0SatrVxd7BSreqrFf1RODGVCG0IKprqMmYQJPih7k4DWM4iXLOxr34luf89ooVioQs1cWrHWkHHlA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779188628; c=relaxed/simple;
-	bh=6uWaCheGmLgukNolf3HipU9NOA5Fe1HK6CjH1nEq/eQ=;
+	s=arc-20240116; t=1779188630; c=relaxed/simple;
+	bh=Mpcye3kRhq+WMdLbalrx78CMcPUnzAqavHvmwN1CRiE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ClHvDftaUPjO/B/aVJCdnOerkQqLsuHgbfiQJiX9tPSuUhd2h/hDwVv0OqHnKb2TLIqW2nAZUzl6c9EdlqcikQS6MOJ12Fh8HrbUHJT21QtCMJWwpXh4Iv32WYnTE6j0fFx9iBvf3FGPiXCr69Xln4F43jPpzxqLtnUGQfonNbc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SKcb/OiK; arc=none smtp.client-ip=170.10.133.124
+	 In-Reply-To:To:Cc; b=h4NTiQ6UxGomr1m/ck5kkhTI2qUG5D+DUcm0xj7zVL6Jj8m64i0ZjXBFHsFg8sJF0GWJQfW+I/GZJTLB5fLghkPgq/74YKEP0RsHl7bvkZIamRKTPuFCGCAiAoAo8QceXwoIa5vU/hVaa39HvHx7GBYN9OP60WSDgc1ajW/vRLk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JYlCogF/; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SKcb/OiK"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JYlCogF/"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1779188625;
+	s=mimecast20190719; t=1779188627;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=p9LU2kvm8WmZLGE0Hzo3NSZzBLUUNYvesoYfRDXEHVk=;
-	b=SKcb/OiKTNZ3F7xCrXB9P+1RqRHML9+L7249abQZzW19gkiKR1a6XIYvZoisf9w2YuOOnh
-	Pvwgso0PLzkDY5LIpKwFPOqDKvtDW0MMOium2a/zo9XYL8XgMowXL3KNZObSxLtseHE1rq
-	7F1lgPhulO2gUiEC92yWvUYj0716Urg=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+	bh=b+nv1tub1dRAw9uatvTRVsJrEgTvrLTIAT2v4860xNk=;
+	b=JYlCogF/MVOY8g0ZRq4eCSQ27/w3oiBVY+it4cLPG0PhMlwONr6mR1ExhjAgul3gFuzdwJ
+	mvY0G3SBkqLg1vN4/4gvQ4lk4+gKO4ezYKIe0SvpaS1IG2XigKXjGTi6Vm3I4oetlY9iCB
+	PYKa7y01dtBKSJkVOZ8OqODM9RYGRms=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-312-S7AKy_XpN2aIH9GctoGP2w-1; Tue,
- 19 May 2026 07:03:41 -0400
-X-MC-Unique: S7AKy_XpN2aIH9GctoGP2w-1
-X-Mimecast-MFC-AGG-ID: S7AKy_XpN2aIH9GctoGP2w_1779188619
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-540-2LJwBOu4MgKs3FJuIs4QDQ-1; Tue,
+ 19 May 2026 07:03:43 -0400
+X-MC-Unique: 2LJwBOu4MgKs3FJuIs4QDQ-1
+X-Mimecast-MFC-AGG-ID: 2LJwBOu4MgKs3FJuIs4QDQ_1779188622
 Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CE5EF18002EA;
-	Tue, 19 May 2026 11:03:39 +0000 (UTC)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4D720195609E;
+	Tue, 19 May 2026 11:03:42 +0000 (UTC)
 Received: from [192.168.1.153] (headnet01.pony-001.prod.iad2.dc.redhat.com [10.2.32.101])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4D1AB30001A2;
-	Tue, 19 May 2026 11:03:37 +0000 (UTC)
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1CED530001A2;
+	Tue, 19 May 2026 11:03:39 +0000 (UTC)
 From: Albert Esteve <aesteve@redhat.com>
-Date: Tue, 19 May 2026 13:03:12 +0200
-Subject: [PATCH v4 2/4] selftests: cgroup: Add dmem selftest coverage
+Date: Tue, 19 May 2026 13:03:13 +0200
+Subject: [PATCH v4 3/4] selftests: cgroup: Add vmtest-dmem runner script
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260519-kunit_cgroups-v4-2-f6c2f498fae4@redhat.com>
+Message-Id: <20260519-kunit_cgroups-v4-3-f6c2f498fae4@redhat.com>
 References: <20260519-kunit_cgroups-v4-0-f6c2f498fae4@redhat.com>
 In-Reply-To: <20260519-kunit_cgroups-v4-0-f6c2f498fae4@redhat.com>
 To: Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
@@ -62,591 +62,216 @@ To: Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
 Cc: linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, Albert Esteve <aesteve@redhat.com>, 
  mripard@kernel.org, echanude@redhat.com
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1779188611; l=15431;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1779188611; l=5973;
  i=aesteve@redhat.com; s=20260303; h=from:subject:message-id;
- bh=6uWaCheGmLgukNolf3HipU9NOA5Fe1HK6CjH1nEq/eQ=;
- b=SjN0OI5D/Gkv50jWenBvlYlNEjru81fwj54dVl9aW2Fu7QVPjfcYMB3bruHxsVA/D4Nh3BVJn
- 5FAjtRn7pVpAuUjcTRK1W9jB+qPlbBiIqzxVDF97HvDwuQUkzO2siVO
+ bh=Mpcye3kRhq+WMdLbalrx78CMcPUnzAqavHvmwN1CRiE=;
+ b=O+xEp6IaYYDJ9/wfyTRUh33qAvPvCjW6tVn0eFsQl4ne4wsJ170HmtHr384pfzCovV0tGLhE1
+ YPe9aIwLD3dCetL0PaPksTtRr8KdHeeaTc3Wo5i0A5jcRgcB8vlZZiS
 X-Developer-Key: i=aesteve@redhat.com; a=ed25519;
  pk=YSFz6sOHd2L45+Fr8DIvHTi6lSIjhLZ5T+rkxspJt1s=
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-Currently, tools/testing/selftests/cgroup/ does not include
-a dmem-specific test binary. This leaves dmem charge and
-limit behavior largely unvalidated in kselftest coverage.
+Currently, test_dmem relies on the dmem_selftest helper module
+and a VM setup that may not have the helper preinstalled.
+This makes automated coverage of dmem charge paths harder in
+virtme-based runs.
 
-Add test_dmem and wire it into the cgroup selftests Makefile.
-The new test exercises dmem controller behavior through the
-dmem_selftest debugfs interface for the dmem_selftest region.
+Add tools/testing/selftests/cgroup/vmtest-dmem.sh to provide a
+repeatable VM workflow for dmem tests. The script uses vng --exec
+to run the test directly inside a virtme-ng guest with minimal
+setup.
 
-The test adds three complementary checks:
-- test_dmem_max creates a nested hierarchy with per-leaf
-  dmem.max values and verifies that over-limit charges
-  fail while in-limit charges succeed with bounded rounding
-  in dmem.current.
-- test_dmem_min and test_dmem_low verify that charging
-  from a cgroup with the corresponding protection knob
-  set updates dmem.current as expected.
-- test_dmem_charge_byte_granularity validates accounting
-  bounds for non-page-aligned charge sizes and
-  uncharge-to-zero behavior.
+The script boots a virtme-ng guest, validates dmem controller
+availability, ensures the dmem helper path is present, and runs
+tools/testing/selftests/cgroup/test_dmem. If the helper is not
+available as a loaded module, it attempts module build/load for
+the running guest kernel before executing the test binary.
 
-This provides deterministic userspace coverage for dmem
-accounting and hard-limit enforcement using a test helper
-module, without requiring subsystem-specific production
-drivers.
+The runner also supports interactive shell mode (-s) and reuses
+the verbosity and KTAP exit-code conventions used by other vmtest
+scripts, so it integrates with existing kselftest workflows.
 
 Signed-off-by: Albert Esteve <aesteve@redhat.com>
 ---
- tools/testing/selftests/cgroup/.gitignore  |   1 +
- tools/testing/selftests/cgroup/Makefile    |   2 +
- tools/testing/selftests/cgroup/config      |   2 +
- tools/testing/selftests/cgroup/test_dmem.c | 492 +++++++++++++++++++++++++++++
- 4 files changed, 497 insertions(+)
+ tools/testing/selftests/cgroup/Makefile       |   2 +-
+ tools/testing/selftests/cgroup/vmtest-dmem.sh | 156 ++++++++++++++++++++++++++
+ 2 files changed, 157 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/cgroup/.gitignore b/tools/testing/selftests/cgroup/.gitignore
-index 952e4448bf070..ea2322598217d 100644
---- a/tools/testing/selftests/cgroup/.gitignore
-+++ b/tools/testing/selftests/cgroup/.gitignore
-@@ -2,6 +2,7 @@
- test_core
- test_cpu
- test_cpuset
-+test_dmem
- test_freezer
- test_hugetlb_memcg
- test_kill
 diff --git a/tools/testing/selftests/cgroup/Makefile b/tools/testing/selftests/cgroup/Makefile
-index e01584c2189ac..e1a5e9316620e 100644
+index e1a5e9316620e..2c407710c6e3b 100644
 --- a/tools/testing/selftests/cgroup/Makefile
 +++ b/tools/testing/selftests/cgroup/Makefile
-@@ -10,6 +10,7 @@ TEST_GEN_FILES := wait_inotify
- TEST_GEN_PROGS  = test_core
- TEST_GEN_PROGS += test_cpu
- TEST_GEN_PROGS += test_cpuset
-+TEST_GEN_PROGS += test_dmem
- TEST_GEN_PROGS += test_freezer
- TEST_GEN_PROGS += test_hugetlb_memcg
- TEST_GEN_PROGS += test_kill
-@@ -26,6 +27,7 @@ include lib/libcgroup.mk
- $(OUTPUT)/test_core: $(LIBCGROUP_O)
- $(OUTPUT)/test_cpu: $(LIBCGROUP_O)
- $(OUTPUT)/test_cpuset: $(LIBCGROUP_O)
-+$(OUTPUT)/test_dmem: $(LIBCGROUP_O)
- $(OUTPUT)/test_freezer: $(LIBCGROUP_O)
- $(OUTPUT)/test_hugetlb_memcg: $(LIBCGROUP_O)
- $(OUTPUT)/test_kill: $(LIBCGROUP_O)
-diff --git a/tools/testing/selftests/cgroup/config b/tools/testing/selftests/cgroup/config
-index 39f979690dd3b..5728278310a31 100644
---- a/tools/testing/selftests/cgroup/config
-+++ b/tools/testing/selftests/cgroup/config
-@@ -1,6 +1,8 @@
- CONFIG_CGROUPS=y
- CONFIG_CGROUP_CPUACCT=y
-+CONFIG_CGROUP_DMEM=y
- CONFIG_CGROUP_FREEZER=y
- CONFIG_CGROUP_SCHED=y
-+CONFIG_DMEM_SELFTEST=m
- CONFIG_MEMCG=y
- CONFIG_PAGE_COUNTER=y
-diff --git a/tools/testing/selftests/cgroup/test_dmem.c b/tools/testing/selftests/cgroup/test_dmem.c
-new file mode 100644
-index 0000000000000..0a1b9561a1b9e
+@@ -3,7 +3,7 @@ CFLAGS += -Wall -pthread
+ 
+ all: ${HELPER_PROGS}
+ 
+-TEST_FILES     := with_stress.sh
++TEST_FILES     := with_stress.sh vmtest-dmem.sh
+ TEST_PROGS     := test_stress.sh test_cpuset_prs.sh test_cpuset_v1_hp.sh
+ TEST_GEN_FILES := wait_inotify
+ # Keep the lists lexicographically sorted
+diff --git a/tools/testing/selftests/cgroup/vmtest-dmem.sh b/tools/testing/selftests/cgroup/vmtest-dmem.sh
+new file mode 100755
+index 0000000000000..b395b7153f635
 --- /dev/null
-+++ b/tools/testing/selftests/cgroup/test_dmem.c
-@@ -0,0 +1,492 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Test the dmem (device memory) cgroup controller.
-+ *
-+ * Depends on dmem_selftest kernel module.
-+ */
++++ b/tools/testing/selftests/cgroup/vmtest-dmem.sh
+@@ -0,0 +1,156 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++#
++# Copyright (c) 2026 Red Hat, Inc.
++#
++# Run cgroup test_dmem inside a virtme-ng VM.
++# Dependencies:
++#		* virtme-ng
++#		* qemu	(used by virtme-ng)
 +
-+#define _GNU_SOURCE
++set -euo pipefail
 +
-+#include <linux/limits.h>
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/stat.h>
-+#include <sys/types.h>
-+#include <unistd.h>
++readonly SCRIPT_DIR="$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
++readonly KERNEL_CHECKOUT="$(realpath "${SCRIPT_DIR}"/../../../../)"
 +
-+#include "kselftest.h"
-+#include "cgroup_util.h"
++source "${SCRIPT_DIR}"/../kselftest/ktap_helpers.sh
 +
-+/* kernel/cgroup/dmem_selftest.c */
-+#define DM_SELFTEST_REGION	"dmem_selftest"
-+#define DM_SELFTEST_CHARGE	"/sys/kernel/debug/dmem_selftest/charge"
-+#define DM_SELFTEST_UNCHARGE	"/sys/kernel/debug/dmem_selftest/uncharge"
++QEMU="qemu-system-$(uname -m)"
++VERBOSE=0
++SHELL_MODE=0
++GUEST_TREE="${GUEST_TREE:-$KERNEL_CHECKOUT}"
 +
-+/*
-+ * Parse the first line of dmem.capacity (root):
-+ *   "<name> <size_in_bytes>"
-+ * Returns 1 if a region was found, 0 if capacity is empty, -1 on read error.
-+ */
-+static int parse_first_region(const char *root, char *name, size_t name_len,
-+			      unsigned long long *size_out)
-+{
-+	char buf[4096];
-+	char nm[256];
-+	unsigned long long sz;
++VM_SCRIPT=""
 +
-+	if (cg_read(root, "dmem.capacity", buf, sizeof(buf)) < 0)
-+		return -1;
-+
-+	if (sscanf(buf, "%255s %llu", nm, &sz) < 2)
-+		return 0;
-+
-+	if (name_len <= strlen(nm))
-+		return -1;
-+
-+	strcpy(name, nm);
-+	*size_out = sz;
-+	return 1;
++function usage() {
++	cat <<EOF
++$0 [OPTIONS]
++Options:
++	-q	QEMU binary/path (default: ${QEMU})
++	-s	Start interactive shell in VM instead of running tests
++	-v	Verbose output (vng boot logs on stdout)
++	-h	Display this help
++EOF
 +}
 +
-+/*
-+ * Read the numeric limit for @region_name from a multiline
-+ * dmem.{min,low,max} file. Returns bytes,
-+ * or -1 if the line is "<name> max", or -2 if missing/err.
-+ */
-+static long long dmem_read_limit_for_region(const char *cgroup, const char *ctrl,
-+					    const char *region_name)
-+{
-+	char buf[4096];
-+	char *line, *saveptr = NULL;
-+	char fname[256];
-+	char fval[64];
++function cleanup() {
++	rm -f "${VM_SCRIPT}"
++}
++trap cleanup EXIT
 +
-+	if (cg_read(cgroup, ctrl, buf, sizeof(buf)) < 0)
-+		return -2;
++function skip() {
++	local msg=${1:-""}
 +
-+	for (line = strtok_r(buf, "\n", &saveptr); line;
-+	     line = strtok_r(NULL, "\n", &saveptr)) {
-+		if (!line[0])
-+			continue;
-+		if (sscanf(line, "%255s %63s", fname, fval) != 2)
-+			continue;
-+		if (strcmp(fname, region_name))
-+			continue;
-+		if (!strcmp(fval, "max"))
-+			return -1;
-+		return strtoll(fval, NULL, 0);
-+	}
-+	return -2;
++	ktap_test_skip "${msg}"
++	exit "${KSFT_SKIP}"
 +}
 +
-+static long long dmem_read_limit(const char *cgroup, const char *ctrl)
-+{
-+	return dmem_read_limit_for_region(cgroup, ctrl, DM_SELFTEST_REGION);
++function fail() {
++	local msg=${1:-""}
++
++	ktap_test_fail "${msg}"
++	exit "${KSFT_FAIL}"
 +}
 +
-+static int dmem_write_limit(const char *cgroup, const char *ctrl,
-+			    const char *val)
-+{
-+	char wr[512];
-+
-+	snprintf(wr, sizeof(wr), "%s %s", DM_SELFTEST_REGION, val);
-+	return cg_write(cgroup, ctrl, wr);
++function check_deps() {
++	for dep in vng "${QEMU}"; do
++		if ! command -v "${dep}" >/dev/null 2>&1; then
++			skip "dependency ${dep} not found"
++		fi
++	done
 +}
 +
-+static int dmem_selftest_charge_bytes(unsigned long long bytes)
-+{
-+	char wr[32];
++# Run vng with common flags. Extra arguments are appended by the caller:
++#   --exec <script>  for automated test runs
++#   (nothing)        for interactive shell mode
++function run_vm() {
++	local verbose_opt=""
 +
-+	snprintf(wr, sizeof(wr), "%llu", bytes);
-+	return write_text(DM_SELFTEST_CHARGE, wr, strlen(wr));
++	[[ "${VERBOSE}" -eq 1 ]] && verbose_opt="--verbose"
++
++	vng \
++		--run \
++		${verbose_opt:+"${verbose_opt}"} \
++		--qemu="$(command -v "${QEMU}")" \
++		--user root \
++		--rw \
++		"$@"
 +}
 +
-+static int dmem_selftest_uncharge(void)
-+{
-+	return write_text(DM_SELFTEST_UNCHARGE, "\n", 1);
++function main() {
++	while getopts ':hvq:s' opt; do
++		case "${opt}" in
++		v) VERBOSE=1 ;;
++		q) QEMU="${OPTARG}" ;;
++		s) SHELL_MODE=1 ;;
++		h) usage; exit 0 ;;
++		*) usage; exit 1 ;;
++		esac
++	done
++
++	check_deps
++
++	if [[ "${SHELL_MODE}" -eq 1 ]]; then
++		echo "Starting interactive shell in VM. Exit to stop VM."
++		run_vm
++		exit 0
++	fi
++
++	ktap_print_header
++	ktap_set_plan 1
++
++	# Write the VM-side script to a tempfile. Because vng mounts the host
++	# filesystem read-write via --rw, the guest can read it at the same path.
++	VM_SCRIPT="$(mktemp --suffix=.sh /tmp/dmem_vmtest_XXXX)"
++
++	cat > "${VM_SCRIPT}" << EOF
++#!/bin/bash
++set -euo pipefail
++
++mountpoint -q /sys/kernel/debug || mount -t debugfs none /sys/kernel/debug
++
++# Verify cgroup controllers are available.
++if ! grep -q dmem /sys/fs/cgroup/cgroup.controllers || \
++   ! grep -q memory /sys/fs/cgroup/cgroup.controllers; then
++	echo "guest kernel missing CONFIG_CGROUP_DMEM or CONFIG_MEMCG" >&2
++	exit 1
++fi
++
++# Load dmem_selftest: try built-in, then modprobe, then build + insmod.
++if [[ -e /sys/kernel/debug/dmem_selftest/charge ]]; then
++	echo "dmem_selftest ready (built-in or already loaded)"
++elif modprobe -q dmem_selftest 2>/dev/null && \
++     [[ -e /sys/kernel/debug/dmem_selftest/charge ]]; then
++	echo "dmem_selftest ready (modprobe)"
++else
++	kdir="/lib/modules/\$(uname -r)/build"
++	if [[ -d "\$kdir" ]]; then
++		echo "Building dmem_selftest.ko against running guest kernel..."
++		if make -C "\$kdir" M="${GUEST_TREE}/kernel/cgroup" \
++				CONFIG_DMEM_SELFTEST=m modules; then
++			insmod "${GUEST_TREE}/kernel/cgroup/dmem_selftest.ko" \
++				2>/dev/null || modprobe -q dmem_selftest 2>/dev/null || true
++		fi
++	fi
++	if [[ ! -e /sys/kernel/debug/dmem_selftest/charge ]]; then
++		echo "dmem_selftest unavailable (modprobe/build+insmod failed)" >&2
++		exit 1
++	fi
++	echo "dmem_selftest ready (built + insmod)"
++fi
++
++echo "Running cgroup/test_dmem in VM..."
++cd "${GUEST_TREE}"
++make -C tools/testing/selftests TARGETS=cgroup
++./tools/testing/selftests/cgroup/test_dmem
++EOF
++
++	echo "Booting virtme-ng VM..."
++	if run_vm --exec "bash ${VM_SCRIPT}"; then
++		ktap_test_pass "test_dmem"
++	else
++		fail "test_dmem"
++	fi
 +}
 +
-+/*
-+ * First, this test creates the following hierarchy:
-+ * A
-+ * A/B     dmem.max=1M
-+ * A/B/C   dmem.max=75K
-+ * A/B/D   dmem.max=25K
-+ * A/B/E   dmem.max=8K
-+ * A/B/F   dmem.max=0
-+ *
-+ * Then for each leaf cgroup it tries to charge above dmem.max
-+ * and expects the charge request to fail and dmem.current to
-+ * remain unchanged.
-+ *
-+ * For leaves with non-zero dmem.max, it additionally charges a
-+ * smaller amount and verifies accounting grows within one PAGE_SIZE
-+ * rounding bound, then uncharges and verifies dmem.current returns
-+ * to the previous value.
-+ *
-+ */
-+static int test_dmem_max(const char *root)
-+{
-+	static const char * const leaf_max[] = { "75K", "25K", "8K", "0" };
-+	static const unsigned long long fail_sz[] = {
-+		(75ULL * 1024ULL) + 1ULL,
-+		(25ULL * 1024ULL) + 1ULL,
-+		(8ULL * 1024ULL) + 1ULL,
-+		1ULL
-+	};
-+	static const unsigned long long pass_sz[] = {
-+		4096ULL, 4096ULL, 4096ULL, 0ULL
-+	};
-+	char *parent[2] = {NULL};
-+	char *children[4] = {NULL};
-+	unsigned long long cap;
-+	char region[256];
-+	long long page_size;
-+	long long cur_before, cur_after;
-+	int ret = KSFT_FAIL;
-+	int charged = 0;
-+	int in_child = 0;
-+	long long v;
-+	int i;
-+
-+	if (access(DM_SELFTEST_CHARGE, W_OK) != 0)
-+		return KSFT_SKIP;
-+
-+	if (parse_first_region(root, region, sizeof(region), &cap) != 1)
-+		return KSFT_SKIP;
-+	if (strcmp(region, DM_SELFTEST_REGION) != 0)
-+		return KSFT_SKIP;
-+
-+	page_size = sysconf(_SC_PAGESIZE);
-+	if (page_size <= 0)
-+		goto cleanup;
-+
-+	parent[0] = cg_name(root, "dmem_prot_0");
-+	if (!parent[0])
-+		goto cleanup;
-+
-+	parent[1] = cg_name(parent[0], "dmem_prot_1");
-+	if (!parent[1])
-+		goto cleanup;
-+
-+	if (cg_create(parent[0]))
-+		goto cleanup;
-+
-+	if (cg_write(parent[0], "cgroup.subtree_control", "+dmem"))
-+		goto cleanup;
-+
-+	if (cg_create(parent[1]))
-+		goto cleanup;
-+
-+	if (cg_write(parent[1], "cgroup.subtree_control", "+dmem"))
-+		goto cleanup;
-+
-+	for (i = 0; i < 4; i++) {
-+		children[i] = cg_name_indexed(parent[1], "dmem_child", i);
-+		if (!children[i])
-+			goto cleanup;
-+		if (cg_create(children[i]))
-+			goto cleanup;
-+	}
-+
-+	if (dmem_write_limit(parent[1], "dmem.max", "1M"))
-+		goto cleanup;
-+	for (i = 0; i < 4; i++)
-+		if (dmem_write_limit(children[i], "dmem.max", leaf_max[i]))
-+			goto cleanup;
-+
-+	v = dmem_read_limit(parent[1], "dmem.max");
-+	if (!values_close(v, 1024LL * 1024LL, 3))
-+		goto cleanup;
-+	v = dmem_read_limit(children[0], "dmem.max");
-+	if (!values_close(v, 75LL * 1024LL, 3))
-+		goto cleanup;
-+	v = dmem_read_limit(children[1], "dmem.max");
-+	if (!values_close(v, 25LL * 1024LL, 3))
-+		goto cleanup;
-+	v = dmem_read_limit(children[2], "dmem.max");
-+	if (!values_close(v, 8LL * 1024LL, 3))
-+		goto cleanup;
-+	v = dmem_read_limit(children[3], "dmem.max");
-+	if (v != 0)
-+		goto cleanup;
-+
-+	for (i = 0; i < 4; i++) {
-+		if (cg_enter_current(children[i]))
-+			goto cleanup;
-+		in_child = 1;
-+
-+		cur_before = dmem_read_limit(children[i], "dmem.current");
-+		if (cur_before < 0)
-+			goto cleanup;
-+
-+		if (dmem_selftest_charge_bytes(fail_sz[i]) >= 0) {
-+			charged = 1;
-+			goto cleanup;
-+		}
-+
-+		cur_after = dmem_read_limit(children[i], "dmem.current");
-+		if (cur_after != cur_before)
-+			goto cleanup;
-+
-+		if (pass_sz[i] > 0) {
-+			if (dmem_selftest_charge_bytes(pass_sz[i]) < 0)
-+				goto cleanup;
-+			charged = 1;
-+
-+			cur_after = dmem_read_limit(children[i], "dmem.current");
-+			if (cur_after < cur_before + (long long)pass_sz[i])
-+				goto cleanup;
-+			if (cur_after > cur_before + (long long)pass_sz[i] + page_size)
-+				goto cleanup;
-+
-+			if (dmem_selftest_uncharge() < 0)
-+				goto cleanup;
-+			charged = 0;
-+
-+			cur_after = dmem_read_limit(children[i], "dmem.current");
-+			if (cur_after != cur_before)
-+				goto cleanup;
-+		}
-+
-+		if (cg_enter_current(root))
-+			goto cleanup;
-+		in_child = 0;
-+	}
-+
-+	ret = KSFT_PASS;
-+
-+cleanup:
-+	if (charged)
-+		dmem_selftest_uncharge();
-+	if (in_child)
-+		cg_enter_current(root);
-+	for (i = 3; i >= 0; i--) {
-+		if (!children[i])
-+			continue;
-+		cg_destroy(children[i]);
-+		free(children[i]);
-+	}
-+	for (i = 1; i >= 0; i--) {
-+		if (!parent[i])
-+			continue;
-+		cg_destroy(parent[i]);
-+		free(parent[i]);
-+	}
-+	return ret;
-+}
-+
-+/*
-+ * This test sets dmem.min and dmem.low on a child cgroup, then charge
-+ * from that context and verify dmem.current tracks the charged bytes
-+ * (within one page rounding).
-+ */
-+static int test_dmem_charge_with_attr(const char *root, bool min)
-+{
-+	char region[256];
-+	unsigned long long cap;
-+	const unsigned long long charge_sz = 12345ULL;
-+	const char *attribute = min ? "dmem.min" : "dmem.low";
-+	int ret = KSFT_FAIL;
-+	char *cg = NULL;
-+	long long cur;
-+	long long page_size;
-+	int charged = 0;
-+	int in_child = 0;
-+
-+	if (access(DM_SELFTEST_CHARGE, W_OK) != 0)
-+		return KSFT_SKIP;
-+
-+	if (parse_first_region(root, region, sizeof(region), &cap) != 1)
-+		return KSFT_SKIP;
-+	if (strcmp(region, DM_SELFTEST_REGION) != 0)
-+		return KSFT_SKIP;
-+
-+	page_size = sysconf(_SC_PAGESIZE);
-+	if (page_size <= 0)
-+		goto cleanup;
-+
-+	cg = cg_name(root, "test_dmem_attr");
-+	if (!cg)
-+		goto cleanup;
-+
-+	if (cg_create(cg))
-+		goto cleanup;
-+
-+	if (cg_enter_current(cg))
-+		goto cleanup;
-+	in_child = 1;
-+
-+	if (dmem_write_limit(cg, attribute, "16K"))
-+		goto cleanup;
-+
-+	if (dmem_selftest_charge_bytes(charge_sz) < 0)
-+		goto cleanup;
-+	charged = 1;
-+
-+	cur = dmem_read_limit(cg, "dmem.current");
-+	if (cur < (long long)charge_sz)
-+		goto cleanup;
-+	if (cur > (long long)charge_sz + page_size)
-+		goto cleanup;
-+
-+	if (dmem_selftest_uncharge() < 0)
-+		goto cleanup;
-+	charged = 0;
-+
-+	cur = dmem_read_limit(cg, "dmem.current");
-+	if (cur != 0)
-+		goto cleanup;
-+
-+	ret = KSFT_PASS;
-+
-+cleanup:
-+	if (charged)
-+		dmem_selftest_uncharge();
-+	if (in_child)
-+		cg_enter_current(root);
-+	cg_destroy(cg);
-+	free(cg);
-+	return ret;
-+}
-+
-+static int test_dmem_min(const char *root)
-+{
-+	return test_dmem_charge_with_attr(root, true);
-+}
-+
-+static int test_dmem_low(const char *root)
-+{
-+	return test_dmem_charge_with_attr(root, false);
-+}
-+
-+/*
-+ * This test charges non-page-aligned byte sizes and verify dmem.current
-+ * stays consistent: it must account at least the requested bytes and
-+ * never exceed one kernel page of rounding overhead. Then uncharge must
-+ * return usage to 0.
-+ */
-+static int test_dmem_charge_byte_granularity(const char *root)
-+{
-+	static const unsigned long long sizes[] = { 1ULL, 4095ULL, 4097ULL, 12345ULL };
-+	char *cg = NULL;
-+	unsigned long long cap;
-+	char region[256];
-+	long long cur;
-+	long long page_size;
-+	int ret = KSFT_FAIL;
-+	int charged = 0;
-+	int in_child = 0;
-+	size_t i;
-+
-+	if (access(DM_SELFTEST_CHARGE, W_OK) != 0)
-+		return KSFT_SKIP;
-+
-+	if (parse_first_region(root, region, sizeof(region), &cap) != 1)
-+		return KSFT_SKIP;
-+	if (strcmp(region, DM_SELFTEST_REGION) != 0)
-+		return KSFT_SKIP;
-+
-+	page_size = sysconf(_SC_PAGESIZE);
-+	if (page_size <= 0)
-+		goto cleanup;
-+
-+	cg = cg_name(root, "dmem_dbg_byte_gran");
-+	if (!cg)
-+		goto cleanup;
-+
-+	if (cg_create(cg))
-+		goto cleanup;
-+
-+	if (dmem_write_limit(cg, "dmem.max", "8M"))
-+		goto cleanup;
-+
-+	if (cg_enter_current(cg))
-+		goto cleanup;
-+	in_child = 1;
-+
-+	for (i = 0; i < ARRAY_SIZE(sizes); i++) {
-+		if (dmem_selftest_charge_bytes(sizes[i]) < 0)
-+			goto cleanup;
-+		charged = 1;
-+
-+		cur = dmem_read_limit(cg, "dmem.current");
-+		if (cur < (long long)sizes[i])
-+			goto cleanup;
-+		if (cur > (long long)sizes[i] + page_size)
-+			goto cleanup;
-+
-+		if (dmem_selftest_uncharge() < 0)
-+			goto cleanup;
-+		charged = 0;
-+
-+		cur = dmem_read_limit(cg, "dmem.current");
-+		if (cur != 0)
-+			goto cleanup;
-+	}
-+
-+	ret = KSFT_PASS;
-+
-+cleanup:
-+	if (charged)
-+		dmem_selftest_uncharge();
-+	if (in_child)
-+		cg_enter_current(root);
-+	if (cg) {
-+		cg_destroy(cg);
-+		free(cg);
-+	}
-+	return ret;
-+}
-+
-+#define T(x) { x, #x }
-+struct dmem_test {
-+	int (*fn)(const char *root);
-+	const char *name;
-+} tests[] = {
-+	T(test_dmem_max),
-+	T(test_dmem_min),
-+	T(test_dmem_low),
-+	T(test_dmem_charge_byte_granularity),
-+};
-+#undef T
-+
-+int main(int argc, char **argv)
-+{
-+	char root[PATH_MAX];
-+	int i;
-+
-+	ksft_print_header();
-+	ksft_set_plan(ARRAY_SIZE(tests));
-+
-+	if (cg_find_unified_root(root, sizeof(root), NULL))
-+		ksft_exit_skip("cgroup v2 isn't mounted\n");
-+
-+	if (cg_read_strstr(root, "cgroup.controllers", "dmem"))
-+		ksft_exit_skip("dmem controller isn't available (CONFIG_CGROUP_DMEM?)\n");
-+
-+	if (cg_read_strstr(root, "cgroup.subtree_control", "dmem"))
-+		if (cg_write(root, "cgroup.subtree_control", "+dmem"))
-+			ksft_exit_skip("Failed to enable dmem controller\n");
-+
-+	for (i = 0; i < ARRAY_SIZE(tests); i++) {
-+		switch (tests[i].fn(root)) {
-+		case KSFT_PASS:
-+			ksft_test_result_pass("%s\n", tests[i].name);
-+			break;
-+		case KSFT_SKIP:
-+			ksft_test_result_skip(
-+				"%s (need CONFIG_DMEM_SELFTEST, modprobe dmem_selftest)\n",
-+				tests[i].name);
-+			break;
-+		default:
-+			ksft_test_result_fail("%s\n", tests[i].name);
-+			break;
-+		}
-+	}
-+
-+	ksft_finished();
-+}
++main "$@"
 
 -- 
 2.53.0
