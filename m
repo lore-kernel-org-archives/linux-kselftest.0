@@ -1,155 +1,181 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9562B315D3B
-	for <linux-kselftest@vger.kernel.org>; Tue, 19 May 2026 15:12:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FEF0403E85
+	for <linux-kselftest@vger.kernel.org>; Tue, 19 May 2026 15:15:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779203574; cv=none; b=Rnh+AnnsR74urEVn5MRsJo4VM9Od+V+CZzeAmUY83TzWrXZJ9oEYViHJb1KWw+Z/XAL52zynUJVRZNQBaYuTEigTE0VKwdQWURHyhIKJSmrFKl8/HnbCRwRnvAcAcOVfW0YcJalsB64jy65MQJUW2IE2OYpqlHOTLvYeva88Ajk=
+	t=1779203749; cv=none; b=fT8VDzOuMlQu1tFVy3H+Xxv+/wC1J4rrSFOu0EFTfm/s2JNv8lpqi3tuGb/rQcasfFjK0ieX5Zrn0Bp4Zv+pdm8cHVOJOJ6AoE3dUfcKwPByRuvcybK7GIkX/xnPRguPtbiI31o9t6l5o9MVcYjX20FVRoSa8hxT1LXiAUe9vhc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779203574; c=relaxed/simple;
-	bh=k2Gys1WSXj9cUNZuoppth6MBxRzei5WQ8ljX2QfZ/sw=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=WsZgkTRSfl0oTUHLZZzqQ3pDIa12WzQ3CwO5Vp4tvgHSwL/B2UWNUAhVF+Xil6vthalocUKkl1G9eRy8kxv8hyFu8frzBhyLWVO70U448BzhaeKG6dCupvPIu0HeflJu28QcWG8eFhnYu0WvJa2dBP/2ddu1eU7VJYCSFginlI0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dXSK3/2W; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1779203749; c=relaxed/simple;
+	bh=SNNvpQQuPVQMvp44GkMMtPNiqpHye4xFnZSe12UszYw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TNBYuHJsVBOkPivR5eUMABas834/MNnw+1gnQtyykoJ97nxEMbKNTfqDoqWQm7B6AVxo2c0IeuJRuuXvqDZrc32FSqkqWB9rEYPbPcz8PeLsv+N72+T7d0TFXJG93j7y/6ff1mYgwh87aqKJhDBd7dPM2XCYTTjd4ytZ8HFsr3Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=szuAxYan; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dXSK3/2W"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1779203570;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=NlRK7WHE5X+HRUb6MZqDZLmc/NWUl9fce+uDFFEwApM=;
-	b=dXSK3/2WgHwKicVmN1Iv536ztArUEYww/0Fy+hA6X/Ib5+yWjaF4hFtCnCLz42pDqReBNy
-	Gsk3ZiEaoSE0EaDGP9eiDp5YhhlnUS1hGZ2MgAKzv39KaOrFLrgWSLzaY0D+DlFuw3/RJJ
-	Ao14e/KDLAD31d7RjBtGj5U9oOuHPII=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-573-VmvgSFy9N6m4u2ZaC8bb4Q-1; Tue,
- 19 May 2026 11:12:46 -0400
-X-MC-Unique: VmvgSFy9N6m4u2ZaC8bb4Q-1
-X-Mimecast-MFC-AGG-ID: VmvgSFy9N6m4u2ZaC8bb4Q_1779203563
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 754D318002C7;
-	Tue, 19 May 2026 15:12:43 +0000 (UTC)
-Received: from RHTRH0061144 (unknown [10.22.89.15])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0D5E030001A2;
-	Tue, 19 May 2026 15:12:38 +0000 (UTC)
-From: Aaron Conole <aconole@redhat.com>
-To: Ilya Maximets <i.maximets@ovn.org>
-Cc: netdev@vger.kernel.org,  Andrew Lunn <andrew+netdev@lunn.ch>,  "David S.
- Miller" <davem@davemloft.net>,  Eric Dumazet <edumazet@google.com>,  Jakub
- Kicinski <kuba@kernel.org>,  Paolo Abeni <pabeni@redhat.com>,  Simon
- Horman <horms@kernel.org>,  Eelco Chaudron <echaudro@redhat.com>,  David
- Ahern <dsahern@kernel.org>,  Ido Schimmel <idosch@nvidia.com>,  Shuah Khan
- <shuah@kernel.org>,  Nikolay Aleksandrov <razor@blackwall.org>,  Kuniyuki
- Iwashima <kuniyu@google.com>,  Petr Machata <petrm@nvidia.com>,  Fernando
- Fernandez Mancera <fmancera@suse.de>,  Antoine Tenart
- <atenart@kernel.org>,  Stanislav Fomichev <sdf@fomichev.me>,
-  linux-kernel@vger.kernel.org,  dev@openvswitch.org,
-  linux-kselftest@vger.kernel.org
-Subject: Re: [RFC net-next 0/6] openvswitch: remove support for legacy
- tunnel ports
-In-Reply-To: <20260513183559.2141010-1-i.maximets@ovn.org> (Ilya Maximets's
-	message of "Wed, 13 May 2026 20:35:20 +0200")
-References: <20260513183559.2141010-1-i.maximets@ovn.org>
-Date: Tue, 19 May 2026 11:12:37 -0400
-Message-ID: <f7tse7n8mca.fsf@redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="szuAxYan"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-45297094718so2874703f8f.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 May 2026 08:15:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779203746; x=1779808546; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BdiflLEoOIW6130918XzLUR22FM/UxzpgmqRMxrhy/I=;
+        b=szuAxYanJnRbJP7a+0A3VbyKLZhktq0QsWpb/pPSV/mefNbBU5UXjjjKABMfRdeMPY
+         CirvF4RxlYYYh7AWiWspkr1ZCWc49zfqmTsxg5FHwkvxRgKVapFXlNKrF7eayWH0LKEy
+         EqbhjC1e0F28K1xWyRoyPg0fqtF11iLN+g1P8TvX7QMpFIohkQAsoJuea4cFvOA2THFo
+         IUYrk/eZo7nybZCl1wPCW8Xf90J4SZd7MiasJKGZvH9vO0mc1Li5TZyhFboOmCJatUWS
+         3urWG8r1baH8ToqNVgliwBmhE7ipiG7SNSO4W5CU9EJKzeV/J2yvZ/fgNEeLQjRHDVmI
+         H6kg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779203746; x=1779808546;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BdiflLEoOIW6130918XzLUR22FM/UxzpgmqRMxrhy/I=;
+        b=kCAGyOJWp5hlPocHrkieT+sJ8mnxt+5Q/rRz/phmUUZ1R6+FEqI9z5TKfBJVYtmxUU
+         6BTnD0DWnPXaPasrmuZWncWcynq1DKm6ywuogCyyB9SJhhTObpJ0VXA+ju9vhBv+8w3/
+         FZsW3kRm8AWEB8XRG7V42/eUPdixeOAmQutPiRYTXAL6XouWDTvBQNi8DVCYZcmyCvCq
+         payXRXJPTskVCLQvsQ6dkydn4erfoIWyoQCEzLE9RkwkaG0OmNGZE9OAOyMT/GBmDQbZ
+         XUGcI4svBHmDYPUG21sNQHOUtFLKiWuhnzkxmEnQenhZqEC0Dg0oTHxdq4r6GMBq5QWn
+         eRPg==
+X-Forwarded-Encrypted: i=1; AFNElJ/bUFYlCSOmQPOGCtIMpmw8gb7ltHbem+qAIhWzU8GeGW/mPl4RRCsIrA9iqz5mIt/NCydCK670yHKopYJ7MWw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyIzMkFCtk610aeklOAIGfon3co8fbUm1SlbUMCZVaWQ2fBOFVW
+	DzOJmA6LcX+kxESWJz4gsn74eCnMeq/O2LVbXFw53nbA4/tTDHCDLv8T
+X-Gm-Gg: Acq92OGdV/lgT7x+h41kmm8tg9ZnCIPdKmx4VyKi0Vdp1X25FDLRU15vG9xF4pTTmfB
+	B/sSqQ2sYcPbAi3m8sFPZetDJO3qsd6PEtsBXoM2nvNegLpYAP7bDOnEUNAMwlkOs23wIWdlNLu
+	gSIg+ES+Yb1unjq242CM95lefWO7YEMD9ZtFEYN1ZgHWoRnNBdyY5JeZ0VE4O1Gj5dRd8BS5A60
+	pVZZxPHFLPJhvPBKbGHpB0zDlI6FSwOUacywUqhy/Mhjtlv7mI2HAgt7rVWaCX6+TZHUSWZiwWC
+	fJM71JLdvnsBG9Zy0U8bffOIe5WC2WaMnjBt78585v8xokKcg/4cqLznoi9hOCknZD0RLd39Ens
+	Q7PXjQp6pd891JH2QPj7Q8B95Cx7XRgO0P2eGLIl3Anr7m/j1sO9o3rBWH3g1ZaZFIXi1BSbFKb
+	XsbjU9Ksl0CUKSoPhZzPa+2Z8mdQdHjfhEhQBEQb6joEWR4/WCn6DPNzuAbkW/stjJNYE+NCXS7
+	/EWVM0oZs8=
+X-Received: by 2002:a05:600c:6098:b0:48f:d1b8:9ab1 with SMTP id 5b1f17b1804b1-48fe60ecc51mr346949665e9.9.1779203746282;
+        Tue, 19 May 2026 08:15:46 -0700 (PDT)
+Received: from ?IPV6:2a01:4b00:bd1f:f500:f867:fc8a:5174:5755? ([2a01:4b00:bd1f:f500:f867:fc8a:5174:5755])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48fe5ab3977sm363119485e9.9.2026.05.19.08.15.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 May 2026 08:15:45 -0700 (PDT)
+Message-ID: <c0fb85f0-38f2-4f31-81a1-6650359752e9@gmail.com>
+Date: Tue, 19 May 2026 16:15:44 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 2/5] bpf: Fix concurrent regression in
+ map_create()
+To: Leon Hwang <leon.hwang@linux.dev>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kernel-patches-bot@fb.com
+References: <20260518145446.6794-1-leon.hwang@linux.dev>
+ <20260518145446.6794-3-leon.hwang@linux.dev>
+ <261a47f4-a92b-4a61-86ca-c1de362be105@gmail.com>
+ <5660e657-f2a5-4866-9881-c705bff0c970@linux.dev>
+Content-Language: en-US
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+In-Reply-To: <5660e657-f2a5-4866-9881-c705bff0c970@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Ilya Maximets <i.maximets@ovn.org> writes:
 
-> ovs-vswitchd doesn't use OVS_VPORT_TYPE_GRE/VXLAN/GENEVE with upstream
-> Linux kernel module since adding support for standard tunnel devices
-> with COLLECT_METADATA back in 2017.  The code to use them is still
-> present, but it is only activated as a fallback for old kernels, so
-> not used in practice.  And it is marked for removal in the next OVS
-> release this summer.  Modern way to use tunnels with OVS is to create
-> standard tunnel ports with RTM_NEWLINK + COLLECT_METADATA and add them
-> as OVS_VPORT_TYPE_NETDEV.
->
-> Device reference management and the netlink options parsing for these
-> legacy port types is complicated and was a CVE magnet recently.  Since
-> there are no actual users for these port types for a very long time,
-> let's just remove the support entirely.
->
->
-> There are 3 parts to this set:
->
-> 1. The first patch does the tunnel port removal, which is the primary
->    goal here.
->
-> 2. Patches 2 and 3 remove extra infrastructure that is no longer in
->    use by anything inside the openvswitch module.  It may technically
->    be used by some out-of-tree module, but it is unlikely, so the
->    proposal here is to also just remove it.  Or we can consider
->    deprecation.  It's not really a user API, it's an API for modules.
->    Which can be considered as users, I guess.  Not sure.
->
-> 3. Patches 4-6 remove functions from gre/vxlan/geneve modules that
->    were added for openvswitch in the past to support the tunnel types.
->    And openvswitch is the only in-tree consumer of these functions,
->    so we could remove them.  But they are also exported symbols, so
->    can in theory be used by some out-of-tree modules, though I doubt
->    that.  Not sure what the process should be here.  Removal seems
->    reasonable, but we may consider deprecation first.
->
-> Thoughts?
 
-I guess the only question is whether we would consider this some kind of
-userspacce ABI break.  BUT, I'm not sure that it is.  After all, users
-could still create some kind of tunnel ports (but they would no long get
-to do INADDR_ANY type ports) and add them as regular netdev ports.  This
-only changes how they would have to do this.  And as you note, there
-aren't any known users for a long time.
+On 5/19/26 3:47 AM, Leon Hwang wrote:
+> On 19/5/26 00:43, Mykyta Yatsenko wrote:
+>>
+>>
+>> On 5/18/26 3:54 PM, Leon Hwang wrote:
+> [...]
+>>>  	/* preserve original error even if log finalization is successful */
+>>>  	ret = bpf_log_attr_finalize(&attr_log, log);
+>>> -	if (ret) {
+>>> -		if (err >= 0)
+>>> -			close_fd(err);
+>>> +	if (ret && err < 0)
+>>> +		/*
+>>> +		 * Failed to finalize the log.
+>>> +		 * Should not close_fd(err) here. Since the bpf_map_new_fd()
+>>
+>> nit: you can't close_fd(err) here, because err < 0? The comment overall appears to
+>> explain why we are making this change right now, rather than why this works this way.
+>>
+> 
+> Will update the comment to
+> 
+> 		/*
+> 		 * Failed to finalize the log.
+> 		 *
+> 		 * Should not close_fd(err) here by
+> 		 *
+> 		 *  if (ret) {
+> 		 *      if (err >= 0)
+> 		 *              close_fd(err);
+> 		 *      err = ret;
+> 		 *  }
+> 		 *
+> 		 * Since the bpf_map_new_fd() has published the map fd,
+> 		 * if a concurrent thread closes the fd, then opens new,
+> 		 * unrelated file that receives the exact same fd
+> 		 * number, close_fd(err) might inadvertently close the
+> 		 * unrelated file.
+> 		 *
+> 		 * As a trade-off, override the err only when failed to
+> 		 * finalize the log and failed to create map.
+> 		 */
+> 
+> The comment is to explain the reason for overriding err.
+> 
+>> If map_crate() failed with error code and then log finalization failed, do we really
+>> want to override error code? It sounds like map_create error is more important.
+>>
+> 
+> In that case, there are two error codes that should be returned to user
+> space. How to achieve it?
+> 
+> Since we should not ignore any error code of them, can we report the
+> error code of __map_create() failure by adding an error attr to struct
+> bpf_common_attr? Hmm, seems not a good idea.
+> 
+> Any idea?
 
-I think it's nice to remove them since they create confusion for anyone
-trying to debug what is going on.
+I think we should do what Alexei suggests.
 
-> Ilya Maximets (6):
->   openvswitch: remove support for legacy tunnel types
->   openvswitch: vport: remove infrastructure for vport options
->   openvswitch: vport: remove infrastructure for separate modules
->   net: geneve: remove unused geneve_dev_create_fb
->   net: gre: remove unused gretap_fb_dev_create
->   net: vxlan: remove unused vxlan_dev_create
->
->  drivers/net/geneve.c                          |  48 -----
->  drivers/net/vxlan/vxlan_core.c                |  42 +----
->  include/net/geneve.h                          |   5 -
->  include/net/gre.h                             |   2 -
->  include/net/vxlan.h                           |   3 -
->  include/uapi/linux/openvswitch.h              |  31 +++-
->  net/ipv4/ip_gre.c                             |  47 -----
->  net/openvswitch/Kconfig                       |  35 ----
->  net/openvswitch/Makefile                      |   4 -
->  net/openvswitch/datapath.c                    |  22 +--
->  net/openvswitch/vport-geneve.c                | 143 ---------------
->  net/openvswitch/vport-gre.c                   | 106 -----------
->  net/openvswitch/vport-netdev.c                |  28 +--
->  net/openvswitch/vport-netdev.h                |   3 +-
->  net/openvswitch/vport-vxlan.c                 | 172 ------------------
->  net/openvswitch/vport.c                       |  76 +-------
->  net/openvswitch/vport.h                       |  23 +--
->  tools/testing/selftests/net/config            |   3 -
->  .../selftests/net/openvswitch/openvswitch.sh  |  37 ----
->  .../selftests/net/openvswitch/ovs-dpctl.py    |  93 +++-------
->  20 files changed, 59 insertions(+), 864 deletions(-)
->  delete mode 100644 net/openvswitch/vport-geneve.c
->  delete mode 100644 net/openvswitch/vport-gre.c
->  delete mode 100644 net/openvswitch/vport-vxlan.c
+For example: we return ENOSPC when log is too short, regardless
+of the status of the operation for BPF_PROG_LOAD (see bpf_object_load_prog()
+in libbpf.c), it makes sense to do it consistently for map_create as well.
+
+log_finalize() error always overrides map_create() error.
+
+A precedent: We are safe from this race in bpf_prog_load(): bpf_prog_alloc_id() makes
+prog exposed, only after bpf_check() succeeds, which finalizes log.
+We should do similar for map_create().
+
+> 
+> Thanks,
+> Leon
+> 
+>>> +		 * has published the map fd, if a concurrent thread closes the
+>>> +		 * fd, then opens new, unrelated file that receives the exact
+>>> +		 * same fd number, close_fd(err) might inadvertently close the
+>>> +		 * unrelated file.
+>>> +		 * As a trade-off, override the err only when failed to finalize
+>>> +		 * the log and failed to create map.
+>>> +		 */
+>>>  		err = ret;
+>>> -	}
+>>>  
+>>>  	kfree(log);
+>>>  	return err;
+>>
+> 
 
