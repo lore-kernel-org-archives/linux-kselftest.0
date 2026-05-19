@@ -1,100 +1,128 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D938213E9C
-	for <linux-kselftest@vger.kernel.org>; Tue, 19 May 2026 05:29:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E673B1C5D59;
+	Tue, 19 May 2026 05:32:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779168564; cv=none; b=mk5k5ocljFO1CXvoTewUgGNNVTaBX4nEkpxPndmSqYBN4FK7w3iRk6995cRjn3Dj4pwprWl8UPCJR6lExluLrbTO7eseQarFpdPdIV53cNngYo/6oZs3ykFIjPxrfj7nSvJEjF0uzBrVU4YIyRqyJUprlKbJshfe6yG1bTPBJNo=
+	t=1779168768; cv=none; b=l0Qx21BX8Zar84RVme5GxIBRIYWt3Dm1DNrHDF1/IoombgJozIpzJ0EHwpsM7qmz0vNihDTfSOE04GNJQiysfFIEOJVnfUBnat0JPhCYEkYhLCBPhn3B22HJgEJyPZC9vP40ROEehW0O7MyT+Ik1d+3+CletxjGyJAlwa9Zy5CI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779168564; c=relaxed/simple;
-	bh=lkuBTO3YZPdx1wJngOh0Wh056PFEMNOF88jASYdooG4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=W7fYrTh1f+noC620TK+oNlyScaygY5KHHRKYriIrtgEYD/CP1FbzyUEyDexRmevrcySyYNZOxWSU8K+Xbn+P1ASkq4iiuQSQwqx9v0DuLR6wZyN1mBERNddfr8F3aVfbDC/CTO3SM05kN4U1lQrYicTY5/qb9Vkl9UbxRgMT23c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ij0vOqod; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1779168768; c=relaxed/simple;
+	bh=WvBKiUWG9h8oFoxTeF3GCTCSuFI5S+EmS7RSHBjqT8U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PJWh/VK9uMm6a8YKtjsUjrCG/ZNy5Ebqp4qHwLE5542VXRygUbAYkGH1Vt1Pd5dMlMhAdC7wUoHZFLy15Ay5j/CraEeA1rSXpg3mg3xHEMowxPCWl5sDqMRLo2IB6DJL7zGT8YgQEiTymsuoaiXberK+2xaf79hBj/0vyXeAbM0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E3KeOfwz; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ij0vOqod"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09071C2BCFB
-	for <linux-kselftest@vger.kernel.org>; Tue, 19 May 2026 05:29:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E3KeOfwz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4012AC2BCB3;
+	Tue, 19 May 2026 05:32:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779168564;
-	bh=lkuBTO3YZPdx1wJngOh0Wh056PFEMNOF88jASYdooG4=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=ij0vOqodupvYNgrvgcZib5DNmG6Vn/OSEfy6Pe666b6VFfWAuN9vNMl3OcITCtFjA
-	 +mjifYrwiPbPw8MrGsI/bemUGlpVpDwIaAUl0AqokGwh6s+wHexIafHGVXUiv4ysMa
-	 Vk+8tooJSC1yI4vZx5TFtPwaxEv57+uz9jVseQA7aCSHbTWxb04Mw9+ZaunSBTR2xK
-	 nKrucYO8nwIvaHJFRPlbTupRiNhF38QVDRFZhdjdIRH1npN/KpJ8wnfDzi124n0juE
-	 Zftm8Y65FygCOgOaQgKDlpT9oYOQxWB6tNuHxZzy8NlHkP/HvrNB5rLUFNXdFryaJq
-	 BSJdvBSnDzAZQ==
-Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-8c9166b26b4so40682496d6.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 22:29:23 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AFNElJ+G+jZjsrUeJdfqQN8MuJS6VLnTq5ugdzDotnTekBzXIjPfc7jP3xMPqsvnI116SrbsnI56N5imP7MEC1wKhFs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxGuoEEzyl39ZuceNb5JV8zV7vqxa0to+uwAXVbqkRqB/PaYE9B
-	1ZXrcT0EurNXPT79F7DwHFWNBlCHapoiMU5/3uKZlW0DrLgMCwltto0Yaz1XVwHN669tQOv7Cii
-	1H7bJpd2lrp0rS1IwxS16U+7NyHLlkUE=
-X-Received: by 2002:a05:6214:2e46:b0:8ba:ad10:97b with SMTP id
- 6a1803df08f44-8ca0fc06e26mr306508916d6.41.1779168563238; Mon, 18 May 2026
- 22:29:23 -0700 (PDT)
+	s=k20201202; t=1779168767;
+	bh=WvBKiUWG9h8oFoxTeF3GCTCSuFI5S+EmS7RSHBjqT8U=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=E3KeOfwzCNzPoFtcEjhfVixt+ZIpGVayyUY2pWGxfZPyMfm1xn7wH2VkDY/kVMtVr
+	 vsDfF7hpLYseIrWgHOzrZzSJfFqkFy5p76FrAQT54dnUANdtcnI4ctg2H4M2d9EeAb
+	 1WBW4PZgZZHHvf2acp/8p2FwZMtg658BYbC4njgozISgq7C2nfDsP2dqMwHSSnsQLN
+	 JuLxDy3CPoKie69H1Di2IO5RUvwk+CnQdMNyqqSAMmc41ukqWsG8AwXkHT/LstbTS3
+	 63fofk30OTWUK1oXHE1U5WH2qXMHphKvR4PhKfh7rsv1Gh6i/kNMRGGXdG9ThlkLH+
+	 PD8WRhU0+okjA==
+Date: Tue, 19 May 2026 08:32:38 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: ackerleytng@google.com
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
+	muchun.song@linux.dev, osalvador@suse.de, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC 0/5] Test readback from fd on hugetlbfs mount
+Message-ID: <agv19uVH0pQztjdP@kernel.org>
+References: <20260518-port-hugetlb-selftests-v1-0-d64ba3a785fe@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260507070547.2268452-1-sashal@kernel.org> <CAHC9VhTwDt2Bx8n0io9Qge_fUEnrHsxrFAQY+KaemKWqJqBQxw@mail.gmail.com>
- <CAPhsuW4TJRqQKXgcBYog8YgFLU2h2Zq9ReahxTYp_zpDyvO8AA@mail.gmail.com>
- <CAHC9VhS1DJNs9gDB6gD9WKhL08giSVajBskZ+=mY0AWRCAsw7Q@mail.gmail.com> <aguvV8QCxK28ZHct@laps>
-In-Reply-To: <aguvV8QCxK28ZHct@laps>
-From: Song Liu <song@kernel.org>
-Date: Mon, 18 May 2026 22:29:11 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW7Rhdh62AoceQpsfm0+kVsvz8zq97fupm4mtBEyVTkkcg@mail.gmail.com>
-X-Gm-Features: AVHnY4Ik8E3QIuzgnAJ_6FBbQ2O6x7lnNpGu0VbQC3UuP_GggCDqJwpkFYs-zH8
-Message-ID: <CAPhsuW7Rhdh62AoceQpsfm0+kVsvz8zq97fupm4mtBEyVTkkcg@mail.gmail.com>
-Subject: Re: [PATCH] killswitch: add per-function short-circuit mitigation primitive
-To: Sasha Levin <sashal@kernel.org>
-Cc: Paul Moore <paul@paul-moore.com>, corbet@lwn.net, akpm@linux-foundation.org, 
-	skhan@linuxfoundation.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	gregkh@linuxfoundation.org, linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260518-port-hugetlb-selftests-v1-0-d64ba3a785fe@google.com>
 
-On Mon, May 18, 2026 at 5:31=E2=80=AFPM Sasha Levin <sashal@kernel.org> wro=
-te:
->
-> On Mon, May 18, 2026 at 05:29:32PM -0400, Paul Moore wrote:
-> >From my perspective there are two different issues here: should
-> >killswitch be a LSM, and should killswitch leverage kprobes to be able
-> >to "kill" security related symbols.  After all, are we okay with
-> >killswitch killing capable() and friends?
->
-> killswitch doesn't do it on it's own. It may be instructed by root to do =
-that,
-> at which point that is root's problem.
->
-> >In my opinion, making killswitch an LSM is more of a procedural item
-> >that deals with how we view a capability like killswitch.  I
-> >personally view killswitch as somewhat similar to Lockdown, which is
-> >why I made the suggestion.
->
-> Maybe I'm not all that familiar with LSMs, but we would need to be able t=
-o stop
-> "random" code paths from executing, and I don't think we can create LSM h=
-ooks
-> at that granularity, no?
+Hi,
 
-There are much fewer LSM hooks than ftrace-able (killswitch-able)
-functions. In this sense, killswitch is more granular. However, LSM
-hooks allow LSM policies to make different decisions for different
-arguments. In this sense, LSM hooks are more granular than
-killswitch, as killswitch can only set a fixed return value for each
-engaged function.
+On Mon, May 18, 2026 at 11:17:32AM -0700, Ackerley Tng via B4 Relay wrote:
+> Hi,
+> 
+> I'm thinking of consolidating the tests for libhugetlbfs as kernel
+> selftests, and to start that off, I picked the simplest test:
+> tests/readback.c
+> 
+> I refactored hugepage-mmap.c to use the kselftest harness, and then used
 
-With current LSM solutions, we can mitigate issues like Copy Fail
-without breaking other features of the system. In [1], Cloudflare
-shared how they mitigate Copy Fail with BPF LSM.
+I made a lot of changes to mm selftests recently:
+https://lore.kernel.org/all/20260511162840.375890-1-rppt@kernel.org/
 
-Thanks,
-Song
+This work is currently in mm.git, please take a look to avoid effort
+duplication.
 
-[1] https://blog.cloudflare.com/copy-fail-linux-vulnerability-mitigation/
+> FIXTURE_VARIANT from the harness to port in testing readback from an fd on
+> a hugetlbfs mount.
+
+I didn't look into the patches, but in general I'm not sure that
+FIXTURE_VARIANT is such a win for simple tests.
+ 
+> This output shows that the original test behavior was retained for the
+> memfd part:
+> 
+>   # ./hugepage-mmap
+>   TAP version 13
+>   1..1
+>   # Returned address is 0x7f312f200000
+>   # First hex is 0
+>   # First hex is 3020100
+>   ok 1 Read same data
+>   # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
+> 
+>   # ./hugepage-mmap
+>   TAP version 13
+>   1..1
+>   # Starting 1 tests from 1 test cases.
+>   #  RUN           hugepage_mmap.read_write ...
+>   # hugepage-mmap.c:41:read_write:Returned address is 0x7f19f3a00000
+>   # hugepage-mmap.c:54:read_write:First hex is 0
+>   # hugepage-mmap.c:59:read_write:First hex is 3020100
+>   #            OK  hugepage_mmap.read_write
+>   ok 1 hugepage_mmap.read_write
+>   # PASSED: 1 / 1 tests passed.
+>   # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
+> 
+> Let me know what you think before I genericize the 2M hugepage size to
+> other sizes!
+> 
+> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+> ---
+> Ackerley Tng (5):
+>       mm: selftests: Inline check_bytes() function into caller
+>       mm: selftests: Inline {read,write}_bytes functions
+>       mm: selftests: Refactor hugepage-mmap to use kselftest harness
+>       mm: selftests: Update hugepage-mmap to support hugetlbfs mount
+>       mm: selftests: Port readback test logic from libhugetlbfs
+> 
+>  tools/testing/selftests/mm/hugepage-mmap.c | 143 +++++++++++++++++++++--------
+>  1 file changed, 105 insertions(+), 38 deletions(-)
+> ---
+> base-commit: 66edb901bf874d9e0787326ba12d3548b2da8700
+> change-id: 20260503-port-hugetlb-selftests-9bc63bde5116
+> 
+> Best regards,
+> --
+> Ackerley Tng <ackerleytng@google.com>
+> 
+> 
+
+-- 
+Sincerely yours,
+Mike.
