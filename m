@@ -1,81 +1,169 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f172.google.com (mail-vk1-f172.google.com [209.85.221.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DA92365A0B;
-	Tue, 19 May 2026 18:20:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779214851; cv=none; b=jOmLvEvQE7F+xyBnEX+x1ukcPyMCSFhX1qIireemV15iZyu0ZuZAJypbIAWI8nSQ9kjaAUTB5mfVstUCsUOL/4G9gSqR+boEY7eL2YHWglz1AdCRwBxABxwAHKS/NSLWXh2WAGyPWDP5UXnWrGtSATVSGla7dC/EWZtFqEiu71o=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779214851; c=relaxed/simple;
-	bh=pqzU8mXuzzhrRUfzmQOzq8JDrmun2MmKpWrEicP9ns8=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=X2kxZ1VCWyWXJ1Beis5oOb3O4TAjLGOj2MXBwloIo3/h+AuVUz6M0EuVUrFWZ0rdPNVdcrUF9BcbXBqtykZJRprqcjOVWWmojsobDwkpYusIxVUMYy4GoznJAXxtMK0IlUe64LD/Zf6SSC5pVpASTZAGRa3thXbjcX07xsR5sfY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=OPRFuf0A; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE73F328243
+	for <linux-kselftest@vger.kernel.org>; Tue, 19 May 2026 18:35:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.172
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779215706; cv=pass; b=j+eoVKxwGFmCNFTKnvWhC/wElKbl92Y7Avxa6TQ7Qf3rN83aVQO3c9vXhjmYDwjfpednlrlDzq2jx5G9Mkks1Q3uC58TTT4cSjsM9vYCKvXpENR8KgkaduEnqMmAaH/aoGI7fds8Y65lCYlL+wRBMGsXPm1mjtLx9m/heTCr4oA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779215706; c=relaxed/simple;
+	bh=KGwOof5+ZrWk7fQk8HZziiUwEIlVuaXd+B/75nP5r7o=;
+	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=RSzRkekzSWQvg7mQfbVCFv665xCD3O3YIwJhDLrKvy9evUdVapxrwJhwOWxoiU4t0sDfFUKhhJ/IJB/DIjaalMXYCP2MqxIMV1BpRRvAyHDwwp0DhQsXf/E7yVkjmqdWgzB5nNpO+7xJqZ2pgGTjSPQz+L8vjqPaGwkrPsW3gNU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gGAELiIj; arc=pass smtp.client-ip=209.85.221.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="OPRFuf0A"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05EFCC2BCB3;
-	Tue, 19 May 2026 18:20:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1779214850;
-	bh=pqzU8mXuzzhrRUfzmQOzq8JDrmun2MmKpWrEicP9ns8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=OPRFuf0AXpK/r6UWnzz8bUMh0BLWYOZzeANHLn78a9/BEaRC8ddDghRtg4wAS8Bmz
-	 s2CS34wuni31S0Q/cX2xCxKfxdA7vJwD6Kgcuj4dLFUs8cU9ijnJTC5EtSFYVQ1MlZ
-	 oKmrFjPVXaMG+4UIgAuVZBWg7tvbd/7EfeOs87mA=
-Date: Tue, 19 May 2026 11:20:49 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Sarthak Sharma <sarthak.sharma@arm.com>
-Cc: David Hildenbrand <david@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>, Peter
- Xu <peterx@redhat.com>, Lorenzo Stoakes <ljs@kernel.org>,
- "Liam R . Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka
- <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan
- <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Shuah Khan
- <shuah@kernel.org>, linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] selftests/mm: separate GUP microbenchmarking
- from functional testing
-Message-Id: <20260519112049.a85f34eb5f2af83e11ffc777@linux-foundation.org>
-In-Reply-To: <20260519120506.184512-1-sarthak.sharma@arm.com>
-References: <20260519120506.184512-1-sarthak.sharma@arm.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gGAELiIj"
+Received: by mail-vk1-f172.google.com with SMTP id 71dfb90a1353d-575267e3398so3216159e0c.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 May 2026 11:35:03 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779215703; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Aaxm1ob8FQN6kO5hbwYHtnSSSEJA3qafuOqzNRbyd0V43LkrONTplhrrcZf5Bo8HF2
+         FAM8x6Vq04JUfaz82qCWDu2kMWQ55MhskmMFJJW5w4DjNWjKBMb4Y4Kndtuz9Py1/j76
+         AIoY8KoNircJlns35UBsaSa3jD9LXY6c3cl8vMX9RFyrQi5sCA2OWFdOsChNJ1UC/KGs
+         7Tc6QcqsMecL4uMYEWmy3oLpEVyepusFQNwGZTDX9niTTneIHenvhwXYmYkNFUcZjC4L
+         eMCYzNfnSpDCfgSBz/CPOGh2m00tZH+cF6qg6Hea8mtAu24aB1jtyIVz+4AZ3a9F7FLq
+         TFWg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:dkim-signature;
+        bh=g5YZm4UgAbGxYabjQSgq96Npr2NETq5PmOxXIUp4roA=;
+        fh=bCvO+R6eXkc4CafKz4kb4nD3IqleYE1u/zZCG+vWw1M=;
+        b=dYK6ld059WoV7ZE82pSQ/L3lsxrz8gYgASJGl77wSWtq899QH4pSpEln+ZDqVPSvzr
+         aTCGfv1OZHm3rFKMqdYuBcvxg8w3RLfUv2unbPHb/QU97Br1guhjypzDU85Q3rUziXZr
+         2daN6i3KLICTbYte54OkXb12ARrBprkS7nl9TAfEr62aFpRB8VlDRih569C4uRjYSW2o
+         OrpnU7WOE+BNhzcJU85bqSMQl6NQt9Cb6fj9vkQMb/ugldzcGqDVq8Ja4DLk1XjwtBUl
+         L/iQcudTNjBLvWkkckF/CDJRZvom6H+QnJHmy13AEiAJosfhN2pM1UTXOzDWalfSQPfi
+         Iq9w==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1779215703; x=1779820503; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=g5YZm4UgAbGxYabjQSgq96Npr2NETq5PmOxXIUp4roA=;
+        b=gGAELiIjllEN2fO5gAg1oWXeDYJshtsvffzgK1Px5SGpE9SJIt5ufCwK3CHTtdnF8D
+         wCyP2UeuOnlJu5f5bNS6wCYxJDbuAg6Dl0Z+3chkVT9KJvQJ1bCF+ikRTxM7lUwobhd/
+         pMjtf8aGrSTwmfUOzZXrDxvIlA4ZMZQfgqtsarl7w9uciW6OmIBP6nM0Ovsng6okSutE
+         3iuKJSZnSerFt9wqKESxm2LjUbNW5maq/Q5JgXw6Z67HWocs6pNxCdkhfzzmPUu3HLKj
+         xDnEbIQTOG4uNqmn2+giEzxWysm0hE53qjRGxSH3Y6u6OIB0wNCwiT70YqUOAL37BMwK
+         qyYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779215703; x=1779820503;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=g5YZm4UgAbGxYabjQSgq96Npr2NETq5PmOxXIUp4roA=;
+        b=DQSLDh4jUGKud7a7X6NOQhWViKF4ZRkf38JfYZVNA70+2ksU3FUxcwdcFtxKiUbGqq
+         fwpt90VUcdqvGaROjHTdzV2CbP/DbRR0NVTBFftRQAKen+zhoqgpP9tA6LqVyrh5L0wG
+         suwi66hzdXzvM9C7D4QvodEi6oahLcQ+PHOpLzxbTNVjJby/bP8bxVNXA/h36jJCIiHk
+         6uY5KDECmYHRhq1hORzG9BGX74U1W9QUqLUyw/1Kbkcl+BPYkaFu9fLmTWFfSsn7dwpy
+         Qwxu0OxgkSr00lRnAdw9VnDIy8VmTEA3hrgx/QxHoEyLbYTcMHq/eCtyy7CkBXeBJ4RV
+         ahQQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+MTDOr78SKj/WYtNAkpbqWqN2OEB90rwAuUexPRasK8TSkvhRPJe5HPyRvk1Fqef818kEPuQdl02KSjKBDjn0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx59nJVHigC2ENmZeJH6gBh+B3rvQHVi9Tv0E+miEi511h/SqXg
+	mpRw9SQg28ISjR+u/Awho2IksvchyfGnEKIHGvdlI1TEEaG0rzEVZYfMF2ScwjZPOgyjeZNviFP
+	KPkm7dan6v73vvvUseVqZZiWF2HeHdbbZtXng/5TH
+X-Gm-Gg: Acq92OEpPbFF4LD0K9IC+Mnyn85N7d7RPYxJG1M+wp+NDsNt38OJ3nDEzWFkEcR/uPL
+	CDpidBYAmU6vgKeLc7j1uoy5FuIMpGQB3qDZb/0eV6iQkbY4bVxSkHJ7HKrzHog2JDK4LfW2XYC
+	s9ViFlVuTHJabosDYkmjUStuM0rOKCWraSaIEgrBMBplOutS1qPpBMDIEQm3UuvP+eE88O7od5M
+	7cZmq+CnkCF4e5VDHHCMEd2ykkMX/qK5vb2xN9ooyC+EloXbJvE9gbO7cFtR2Ie8ugNAJmHZoWc
+	UiHxsFlDi56DXw98GYNEN0el6JeVqZZ0jeMxHgdYMg752QMjLTE1G64mXwDRgNcVMxcdh+0y+GM
+	tKM0X
+X-Received: by 2002:a67:e70b:0:b0:62f:46be:8318 with SMTP id
+ ada2fe7eead31-63a3cc0e937mr11563105137.6.1779215702359; Tue, 19 May 2026
+ 11:35:02 -0700 (PDT)
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 19 May 2026 11:35:01 -0700
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 19 May 2026 11:35:01 -0700
+From: Ackerley Tng <ackerleytng@google.com>
+In-Reply-To: <agt5A90k9lS9JPWp@google.com>
+References: <20260518070943.2091287-1-ZongYao.Chen@linux.alibaba.com>
+ <20260518070943.2091287-3-ZongYao.Chen@linux.alibaba.com> <CAEvNRgFgobnW+O=t32gu-0YDy0n7ZqvmdCtg+DzLT3uf0+BDeg@mail.gmail.com>
+ <agt5A90k9lS9JPWp@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Date: Tue, 19 May 2026 11:35:01 -0700
+X-Gm-Features: AVHnY4JMb8xTVN3PiZl5iQlu_-bUy05sR1IlC9x-XipUxw6zHkFMz5hIRfmkZZo
+Message-ID: <CAEvNRgE4o6C8P2jW_MGn=1BHxgmp183UTk_h5YkM+U_MCTMdzA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] KVM: selftests: Test guest_memfd binding overlap
+ without GPA overlap
+To: Sean Christopherson <seanjc@google.com>
+Cc: ZongYao.Chen@linux.alibaba.com, Paolo Bonzini <pbonzini@redhat.com>, 
+	kvm@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
+	"Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>, Chao Peng <chao.p.peng@linux.intel.com>, 
+	Xiaoyao Li <xiaoyao.li@intel.com>, Tianjia Zhang <tianjia.zhang@linux.alibaba.com>, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, 19 May 2026 17:35:04 +0530 Sarthak Sharma <sarthak.sharma@arm.com> wrote:
+Sean Christopherson <seanjc@google.com> writes:
 
-> gup_test.c currently serves two distinct purposes: microbenchmarking
-> (GUP_FAST_BENCHMARK, PIN_FAST_BENCHMARK, PIN_LONGTERM_BENCHMARK) and
-> functional correctness testing (GUP_BASIC_TEST, PIN_BASIC_TEST,
-> DUMP_USER_PAGES_TEST). Mixing these in a single binary means functional
-> tests cannot be run or reported individually, and run_vmtests.sh must
-> invoke the binary multiple times with different flag combinations to
-> cover all configurations. This patch series separates the two concerns:
-> tools/mm/gup_bench for benchmarking and tools/testing/selftests/mm/gup_test
-> for functional testing.
-> 
-> Patch 1 adds tools/mm/gup_bench.c, a standalone microbenchmark for
-> GUP_FAST, PIN_FAST and PIN_LONGTERM via the CONFIG_GUP_TEST debugfs
-> interface. It runs the same matrix of configurations as the old
-> run_gup_matrix() shell function (all three commands, read/write,
-> private/shared, four page counts, THP on/off, hugetlb), but as a
-> standalone C program under tools/mm with no dependency on kselftest.
-> 
-> Patch 2 rewrites gup_test.c as a kselftest harness-based selftest. It
-> covers all five GUP kernel functions (get_user_pages, get_user_pages_fast,
-> pin_user_pages, pin_user_pages_fast, pin_user_pages with FOLL_LONGTERM)
-> plus DUMP_USER_PAGES_TEST, across 12 mapping configurations (THP on,
-> THP off and hugetlb, each across private/shared and read/write variants)
-> and four batch sizes (1, 512, 123, all pages). Results are reported as
-> standard TAP output with no command-line arguments required.
+>
+> [...snip...]
+>
+>>
+>> Since this test program is meant to test set_memory_region, should we be
+>> retaining the original test? The original test is wrong in that it
+>> doesn't test guest_memfd's binding, but it does test that
+>> set_memory_region returns -EEXIST on overlapping GPAs.
+>>
+>> Perhaps to just test overlapping GPAs we can use anonymous memory
+>> instead of guest_memfd.
+>
+> Eh, I see no harm in having both.  E.g. if we do this, then we don't have to
+> explain why we're not testing the other case :-)
+>
 
-Thanks.  AI review asked a few things which seem fairly minor to me,
-but probably legitimate:
-	https://sashiko.dev/#/patchset/20260519120506.184512-1-sarthak.sharma@arm.com
+Makes sense to have both :)
+
+> diff --git a/tools/testing/selftests/kvm/set_memory_region_test.c b/tools/testing/selftests/kvm/set_memory_region_test.c
+> index 9b919a231c93..283392bcc3a0 100644
+> --- a/tools/testing/selftests/kvm/set_memory_region_test.c
+> +++ b/tools/testing/selftests/kvm/set_memory_region_test.c
+> @@ -510,7 +510,7 @@ static void test_add_overlapping_private_memory_regions(void)
+>
+>         vm = vm_create_barebones_type(KVM_X86_SW_PROTECTED_VM);
+>
+> -       memfd = vm_create_guest_memfd(vm, MEM_REGION_SIZE * 4, 0);
+> +       memfd = vm_create_guest_memfd(vm, MEM_REGION_SIZE * 5, 0);
+>
+>         vm_set_user_memory_region2(vm, MEM_REGION_SLOT, KVM_MEM_GUEST_MEMFD,
+>                                    MEM_REGION_GPA, MEM_REGION_SIZE * 2, 0, memfd, 0);
+> @@ -542,6 +542,26 @@ static void test_add_overlapping_private_memory_regions(void)
+>         TEST_ASSERT(r == -1 && errno == EEXIST, "%s",
+>                     "Overlapping guest_memfd() bindings should fail with EEXIST");
+>
+> +       /*
+> +        * Repeat the overlap tests, but so that there is overlap in the
+> +        * guest_memfd bindings (i.e. in guest_memfd file offsets), but _not_
+> +        * in the GPA space.  Regardless of where there's overlap, KVM should
+> +        * return -EEXIST.
+> +        */
+> +       r = __vm_set_user_memory_region2(vm, MEM_REGION_SLOT, KVM_MEM_GUEST_MEMFD,
+> +                                        MEM_REGION_GPA,
+> +                                        MEM_REGION_SIZE * 2,
+> +                                        0, memfd, MEM_REGION_SIZE);
+> +       TEST_ASSERT(r == -1 && errno == EEXIST, "%s",
+> +                   "Overlapping guest_memfd() bindings should fail with EEXIST");
+> +
+> +       /* And now the back half of the other slot's guest_memfd binding. */
+> +       r = __vm_set_user_memory_region2(vm, MEM_REGION_SLOT, KVM_MEM_GUEST_MEMFD,
+> +                                        MEM_REGION_GPA,
+> +                                        MEM_REGION_SIZE * 2,
+> +                                        0, memfd, MEM_REGION_SIZE * 3);
+> +       TEST_ASSERT(r == -1 && errno == EEXIST, "%s",
+> +                   "Overlapping guest_memfd() bindings should fail with EEXIST");
+
+I just noticed this is kind of odd, what is the purpose of "%s" and then
+filling the string in with a hardcoded string?
+
+>         close(memfd);
+>         kvm_vm_free(vm);
+>  }
