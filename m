@@ -1,104 +1,94 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D88A12DF68;
-	Tue, 19 May 2026 02:10:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 400B33264E5
+	for <linux-kselftest@vger.kernel.org>; Tue, 19 May 2026 02:45:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779156630; cv=none; b=NbOlby+jMDRn1VYGxrrkhDtbAqejOa/p0vY5+A7RVbB767OQ1idAiyZcYVRAG+mmmtcWABl3e764rfxq53LtR5piVNTe43xWBafzC98Vu29hIi6Kor/Cn8I8iAW7vqeFXcd+tLvgoREkPAxikuuHcVNryQhfVKxHhGKWY9xs2O8=
+	t=1779158761; cv=none; b=WD4pa8hDdR2kPJ0LuLfti3WU0XaFFAlpuc826wHK8Dvmff2qGGNPW+hT6VuEfH9FQqzcdiUQUTFUH+5EOP31opAtbf/HAWQ/vJudBKGO+iROKh/KAcINjHYD/HiB0gxVAMlftZ3N1MeYMJsRijtdatX8c7WMPgJ+PjVQroZVHUs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779156630; c=relaxed/simple;
-	bh=tztf4Nw5ut0/6DpoJ41Cp6mb7XeZ6UqH/1hSjhNFz7Q=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=BJd/XgpYjBb4jAFUrwbshPVlnRpZ9LD04sZMh0zb8Ph7v1Q46AXHuBfd4ohxKPhtegPuNJvIsT9c2gnmAb3YZdY48GirWXckYIJiUSjxfSSUS2a4ysHNxQES3lLHUgMp6+wi3HrBcbWnJUG7sRrrxJELjh8UxqoYlBWjVGTSIaY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WWplNKEx; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1779158761; c=relaxed/simple;
+	bh=92NybR2OyFgFMwFLDLpOZS+tu8JOIDRJBDOB5IJwnGw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=B/FWSr2Bt3YuaZ+vzR327ExZvYEj2ffH2WWXXckxY1Y4aolGwRmI2pmjWskoZyaSNIU25uVmeSjWXf3Vfj0u2RdAxt+Tz5JAorghmBZEeG/iFmieES7IacuR6Lku/EwFuRncdWyFN2/e3NiUPHa30/iHz1ncQsEqXRDwcc9e0cQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=dyS5dsBL; arc=none smtp.client-ip=91.218.175.186
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WWplNKEx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91C8EC2BCB7;
-	Tue, 19 May 2026 02:10:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779156630;
-	bh=tztf4Nw5ut0/6DpoJ41Cp6mb7XeZ6UqH/1hSjhNFz7Q=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=WWplNKExtQuHDHTw8UbUhu2fO1NKnQ2AVH94j1ajgcn25WbgB2ljKdWg2SX9zbw7n
-	 LhhSdjHhIFvE9F0HfoqDxxeVSd6fPJPfaE+ZDZU5c70F+LlypOp0Jc73yzH8nfPmJz
-	 OwnIHSAFYWlwkkzlmzQkMjqA3saqd36t7YzJLHMC43lhCSKLEXxUBWbBkDxn2/S+qA
-	 1rGyeaRH+U9gz63DJZKka+sSEEIMMZy2I3rPW/iKcklQKZawCf/gFEjTEOA7t7hsDS
-	 Hh6Oc0iC/BY07nhLrQqYBHaJeYT+9LTwRSqzR1BezX8FXybyNOrz30JK2yi56NWc9t
-	 VEa7IkVlcoNgg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 198D93930D10;
-	Tue, 19 May 2026 02:10:43 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="dyS5dsBL"
+Message-ID: <51259935-dc50-4a77-99ff-4b0dc8992b3a@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1779158757;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=JHbmIBC02BCR+H4DhynnSzevoRTO77Y3/7fIqNwMI4w=;
+	b=dyS5dsBL4iJYJMOTSaCNWOyztmStsUyfYyblK68DBr3evJATjSW3wCycG6fXOdfhFLVSal
+	ee81rNhpi31WC/eKcBsBcMwK57Q74ErGRsFRXGcoLDI0uN8/8MY+V3ikrtC4oDV1d5Eq9A
+	JkT/W4FluZXG0MI4j3l1cDkai7kjpLQ=
+Date: Tue, 19 May 2026 10:45:44 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v5 0/8] net: devmem: support devmem with netkit
- devices
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177915664163.2054007.6384747943531037676.git-patchwork-notify@kernel.org>
-Date: Tue, 19 May 2026 02:10:41 +0000
-References: <20260514-tcp-dm-netkit-v5-0-408c59b91e66@meta.com>
-In-Reply-To: <20260514-tcp-dm-netkit-v5-0-408c59b91e66@meta.com>
-To: Bobby Eshleman <bobbyeshleman@gmail.com>
-Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, corbet@lwn.net,
- skhan@linuxfoundation.org, alexs@kernel.org, si.yanteng@linux.dev,
- dzm91@hust.edu.cn, michael.chan@broadcom.com, pavan.chebbi@broadcom.com,
- joshwash@google.com, hramamurthy@google.com, saeedm@nvidia.com,
- tariqt@nvidia.com, mbloch@nvidia.com, leon@kernel.org, alexanderduyck@fb.com,
- kernel-team@meta.com, daniel@iogearbox.net, razor@blackwall.org,
- shuah@kernel.org, dw@davidwei.uk, sdf.kernel@gmail.com,
- mohsin.bashr@gmail.com, willemb@google.com, jiang.kun2@zte.com.cn,
- xu.xin16@zte.com.cn, wang.yaxin@zte.com.cn, netdev@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-rdma@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, sdf@fomichev.me, almasrymina@google.com,
- bobbyeshleman@meta.com
+Subject: Re: [PATCH bpf-next 1/5] bpf: Check tail zero of bpf_common_attr
+ using offsetofend
+Content-Language: en-US
+To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kernel-patches-bot@fb.com
+References: <20260518145446.6794-1-leon.hwang@linux.dev>
+ <20260518145446.6794-2-leon.hwang@linux.dev>
+ <e86e1075-f62c-4167-86df-158841952940@gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <e86e1075-f62c-4167-86df-158841952940@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Hello:
-
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Thu, 14 May 2026 10:22:27 -0700 you wrote:
-> This series enables TCP devmem TX through netkit devices.
+On 19/5/26 00:14, Mykyta Yatsenko wrote:
 > 
-> Netkit now supports queue leasing. A physical NIC's RX queue can be
-> leased to a netkit guest interface inside a container namespace. This
-> gives the container a devmem-capable data path on the RX side (bind-rx,
-> etc...). On the TX side, the container process binds to its netkit guest
-> interface and sends traffic that netkit redirects (via BPF or ip
-> forwarding) to the physical NIC for DMA.
 > 
-> [...]
+> On 5/18/26 3:54 PM, Leon Hwang wrote:
+[...]
+>> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+>> index 6600e126fbfb..83de8fb9b9aa 100644
+>> --- a/kernel/bpf/syscall.c
+>> +++ b/kernel/bpf/syscall.c
+>> @@ -6278,7 +6278,9 @@ static int __sys_bpf(enum bpf_cmd cmd, bpfptr_t uattr, unsigned int size,
+>>  
+>>  	memset(&attr_common, 0, sizeof(attr_common));
+>>  	if (cmd & BPF_COMMON_ATTRS) {
+>> -		err = bpf_check_uarg_tail_zero(uattr_common, sizeof(attr_common), size_common);
+>> +		err = bpf_check_uarg_tail_zero(uattr_common,
+>> +					       offsetofend(struct bpf_common_attr, log_true_size),
+>> +					       size_common);
+> 
+> The change looks correct.
+> 
+> It looks like similar behavior exists in 2 other places of this file:
+> bpf_map_get_info_by_fd()
+> bpf_prog_get_info_by_fd()
+> 
 
-Here is the summary with links:
-  - [net-next,v5,1/8] net: convert netmem_tx flag to enum
-    https://git.kernel.org/netdev/net-next/c/7d3ab852dcd8
-  - [net-next,v5,2/8] net: netkit: declare NETMEM_TX_NO_DMA mode
-    https://git.kernel.org/netdev/net-next/c/6ce2bb048055
-  - [net-next,v5,3/8] net: devmem: support TX over NETMEM_TX_NO_DMA devices
-    https://git.kernel.org/netdev/net-next/c/1abe839b34ae
-  - [net-next,v5,4/8] selftests: drv-net: ncdevmem: add -n flag to skip NIC configuration
-    https://git.kernel.org/netdev/net-next/c/ecbdf3da7813
-  - [net-next,v5,5/8] selftests: drv-net: make attr _nk_guest_ifname public
-    https://git.kernel.org/netdev/net-next/c/28357ac667d4
-  - [net-next,v5,6/8] selftests: drv-net: refactor devmem command builders into lib module
-    https://git.kernel.org/netdev/net-next/c/6cac32fc3f1f
-  - [net-next,v5,7/8] selftests: drv-net: add primary_rx_redirect support to NetDrvContEnv
-    https://git.kernel.org/netdev/net-next/c/886a790b59f9
-  - [net-next,v5,8/8] selftests: drv-net: add netkit devmem tests
-    https://git.kernel.org/netdev/net-next/c/28c1cc999fbb
+Verify by 'pahole -C bpf_map_info/bpf_prog_info'.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Yes, there are 4 bytes padding at the end of these two structs.
 
+> Does it make sense to fix those too, just to make sure agents follow the
+> pattern correctly next time?
+> 
+
+Will post separate patches to fix them.
+
+Thanks,
+Leon
 
