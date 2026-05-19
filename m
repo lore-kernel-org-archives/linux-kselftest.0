@@ -1,162 +1,286 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C883403EB7
-	for <linux-kselftest@vger.kernel.org>; Tue, 19 May 2026 15:18:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779203896; cv=none; b=PpZ6UI7R1J4LzxNkU1u7JfsS6+EeISqZmiYzbK5tqAtiNdniVNYGQWneKTpVYJTak0vf7uCzknRu9A8fsLHd+FgNmItB2jGuqMojulX2sSpWwByp3ed2nQCXOqwvuV1sLrlpkVsYd+Anej2QVPKqS7Vcz0gQK9d/KoFZZfdVj5E=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779203896; c=relaxed/simple;
-	bh=4RTPehjCFlvtgU6uh7JhsSqvif2rRRuppKLugeOaSPs=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=jGjn6nDJkU4qNtdL4dZTwZgrIAPbpSPTzVMpNrFpEwens62EeTdOUhLBxRpY36qo1pn4Be1fkywHGrHN+C1NWj/9l9uoDDXwZAEAVtFZ606BB3QxSb1W1AOKViH7Wl8y6phoV4Qx5Agwdv95dCRLcQnJgX0m8mj+9DDBtQNzRck=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Vg089zLB; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8B604028C8
+	for <linux-kselftest@vger.kernel.org>; Tue, 19 May 2026 15:19:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=67.231.153.30
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779203966; cv=pass; b=CUBrYqb8nI6kAxc8Y/YXgDe6XXGkwVK3NQXmRnRv6JUpsxFM+pSzet+II9hLXu4EITA2fJqwjiKJUI27KW1NcgeLEQcCFoFdZ8gVxxW0Czp704J0wX78fKXlMSxp3rtaBjVRssnabMwbxPj/bPxsM6iq5pc8aIz5UfXuTyYBuz8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779203966; c=relaxed/simple;
+	bh=siQVO2sQxemf4Uiqc4EspBf0wzllhMQs3CzU+GJb51Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dDSccZiyIX/w8To7iy+oijGg4ZUH/am9Zo0iGg3P9ajoX6h4hKUlu8hSoocsHnTSD1choU8kb+UiCcI91eUEhkiUQg30T9MQkTHk4Obe2VLDppnLoIuk9LwyT4vu1M42VJWDbhizmfHjbVu21xA4Sd3z4G1jWIp6xKSdlu16Av0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=cM7SmRZC; arc=pass smtp.client-ip=67.231.153.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Vg089zLB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1779203892;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=FQZ+RP6K2x79z/nt8Ck0Ogs2qHEqVQNPlYSy8b8wSyA=;
-	b=Vg089zLB+JnZ7kFCHkKb3vChiAipU2i74oLNWfDL/nTt8V/rOJ/R50fY+QX1YGoffM6bu0
-	2qFBoPZvdNYEe3QXkurZuFmeO4v25b3J8zduc9aWdqyoOVHmuVXH+2z/1QlvDBoc0FbYtX
-	2TyzD9xbj5XN0MfLg7v/Bj6ZqZYtjeA=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-67-vzCW5LwqN4KHumqtEmWvNw-1; Tue,
- 19 May 2026 11:18:09 -0400
-X-MC-Unique: vzCW5LwqN4KHumqtEmWvNw-1
-X-Mimecast-MFC-AGG-ID: vzCW5LwqN4KHumqtEmWvNw_1779203887
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2B0D7195605A;
-	Tue, 19 May 2026 15:18:07 +0000 (UTC)
-Received: from RHTRH0061144 (unknown [10.22.89.15])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id DD2AD19560A2;
-	Tue, 19 May 2026 15:18:03 +0000 (UTC)
-From: Aaron Conole <aconole@redhat.com>
-To: =?utf-8?B?5L6v5pWP54aZ?= <houminxi@gmail.com>
-Cc: netdev@vger.kernel.org,  dev@openvswitch.org,
-  linux-kselftest@vger.kernel.org,  linux-kernel@vger.kernel.org,
-  echaudro@redhat.com,  i.maximets@ovn.org,  i.maximets@redhat.com,
-  davem@davemloft.net,  edumazet@google.com,  kuba@kernel.org,
-  pabeni@redhat.com,  horms@kernel.org,  shuah@kernel.org
-Subject: Re: [PATCH net-next 0/5] selftests: openvswitch: pylint cleanup for
- ovs-dpctl.py
-In-Reply-To: <CAJ0BgHcq9Qs__f53kcNzG1+qYXvHP2_q1+mk8=z1Fo3TNY9W8g@mail.gmail.com>
-	(=?utf-8?B?IuS+r+aVj+eGmSIncw==?= message of "Fri, 15 May 2026 16:47:47
- +0800")
-References: <20260513121240.2590767-1-houminxi@gmail.com>
-	<f7tzf21noy8.fsf@redhat.com>
-	<CAJ0BgHcq9Qs__f53kcNzG1+qYXvHP2_q1+mk8=z1Fo3TNY9W8g@mail.gmail.com>
-Date: Tue, 19 May 2026 11:18:02 -0400
-Message-ID: <f7to6ib8m39.fsf@redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="cM7SmRZC"
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64JDZl212072111
+	for <linux-kselftest@vger.kernel.org>; Tue, 19 May 2026 08:19:22 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=s2048-2025-q2;
+	 bh=cvhqFdFEaw6myv9osLkAkBoObyxXccXadGAoubACWjo=; b=cM7SmRZCYmul
+	dE/iM0Q6jt9wxNUlA0u5d5+XuAUSMLKPILSBjs1Wtk2pWJq4q/uB7iE5KyZu/Tzk
+	+FFx2mQdg/WXv8G1MKEBFzaOJr4dFKrUmoEFTyMKJnD3jfE3N+bP4p1KmF6yI+Mi
+	x1XaLRtcehHvlTfBsngbltXdiEQIEV7rGw6tcsJcDSBenZPoZrAkQZNvE+DeP9WD
+	qzCz90CS7DJglwWwBRXo2+A+o38R5pzmVY4ZqNda2DNc9z+db0ClKdSOFj9+cZBj
+	f37BVjxBekdYFio13WhziXTKwLkkPVpqiJA3F05rk2z93cL8GaJAS2LC0g6icyP+
+	3Acjc7fgeg==
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4e8rvv8pdu-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-kselftest@vger.kernel.org>; Tue, 19 May 2026 08:19:22 -0700 (PDT)
+Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-bd9a6aae530so68077766b.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 May 2026 08:19:22 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779203960; cv=none;
+        d=google.com; s=arc-20240605;
+        b=EFqDW02JZQA7cZ8paJQ/XtW0VvrBggdrvK9aPRTfquPvwhNQDMP0gCzn/xuGTKC2s1
+         UuKed6FGyMHDabr/xqduD7l8wU03BGwzDYwO31E7idgoixI4YeQ6M+rlW+bMUTf/NdwW
+         Se2ANjmF45Qgg3uK3SdHkgaUfdzPd7dqZAwL3jtVVehyzEmFn05e+1lGQ/fER5LTpgml
+         +YpScGsFwgRvHDgu+ABpCuljL+kH5GmoHPFQ2oxXobeJTlLTF2vgx139aXpw2BG5YNnT
+         VditYJNJnhpnsnhDSPKO7wY0vExh95t0PC1e78BS3jOI3qAPJ0/MIvOPEUBHK2eG1HoT
+         3ejQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version;
+        bh=cvhqFdFEaw6myv9osLkAkBoObyxXccXadGAoubACWjo=;
+        fh=oAlOF5CBILOcYo9eslmtcLXiBBAw8zQDSN2Fzk24m38=;
+        b=W5I2Qs7lwOmZLfCDCd5vhQheMbtLjIFsQ9LvhQI20wYGLX8orN8LhHO4nugmIui6Bf
+         X1tM0WlBO81ubOXgpGwtLvhJX9JeW+Oa8LkQiwBV6jIfCHbGEr5MVv8lJ06/CgZMld8m
+         TYS7uYuL7sYZwHMy6xIfWgaUxPdLcdUBOaY30VyKFrZtZT/q8a6PBTzVIlOdKcW+joAc
+         peAZFjIzJrJdhWYGmr6wqlrZfuwmdmNd6NBQpI3G8VWWLLX5Wn9YniRIQ7GCE3X9Nt7x
+         q4fxbLsj4mcjoHfCNBm5brbZQygoJdup55BYKddD63xg9pcYBe5HJsEXjtNRPbSzclTA
+         mx/Q==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779203960; x=1779808760;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=cvhqFdFEaw6myv9osLkAkBoObyxXccXadGAoubACWjo=;
+        b=XQc9xiWHPTbDBZJp+lGA+8jsuzaP5CIHzNPhv0v/VC7dbk0UtNgILi0lzcHL2UW+R8
+         SmKt3/z0UsLHt4zYsgJQpIinNPl5UHGUd6vRxOmiaRy4l7oUVcWgMUxl387QSnjwx2x3
+         f8b+rEkIDqVQGPMmxgR8jpzZJKcOVq0PXbCjUPoMJ1ZIfBvGnoxgZc8xwoD34yC7YAOQ
+         5mvIVqR4MHa8reOF0fe9jU9QCB9ke9udUd2TeL2oUuiBRgCqJuZ/XMax8bqrnzg1EvDT
+         jp2sfTEqOKGugaDzIuNiNBbQiWBofrXKpsdwnNb8twd74SA2REnzlaj4nw2PTJASeEbJ
+         XGrg==
+X-Forwarded-Encrypted: i=1; AFNElJ82ShQhGP1fHFJXdFP94lfE02YNv3NlKMCbYp4QBk6t+S4r1fsDJAZv9bWYAZ0FnCsS3U2n8r0VbPWmPfMoJ6U=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyKjBiYcPcdt1BvDaR3VHNIuCV7SeOrhVIPxs5lJlid+G7DXGLd
+	IZ6LBxDR3HMKlKu5pKSk536kVKI+NkEi94Cmsv9NDC+w9WZXkQsuUFb7HMJTRcBEjgb7HWd7qNh
+	1chtty1TDpDRXxUkU8gSqWQA95vccffZLMwy8iTYwOH1iaBi5hUigRB3Q2DSak/dNnlxL/K2KSe
+	Ofqjyi+CEt9+1/XCyBFUoaJZKyM785AelhtzhdEJoPczZ7ViEO+5YWKw==
+X-Gm-Gg: Acq92OEu99sctSAsC26mrGkUxfwb7xVp2CpyQckBqE+FT9DBmPJ5jUmK45ugcCjlouN
+	ddtWl1Pe05J4XcAh2/gBsg2YmTpBtydoUZaqyVKl2Mudf037ZbMBSYii9WjpbexAYizmjyBfMFM
+	W5cwwBUbPTdiK+sDUBVg+IaWZmqrnlHISLjyguK06sCa5NVPhsV012Kr6rvXSrpMW/LULJRkX/G
+	pyi1X3V6Psy8EPoIZEpgpjz/CXcyj86urg=
+X-Received: by 2002:a17:907:c714:b0:bd0:7949:a931 with SMTP id a640c23a62f3a-bd517960723mr1182044066b.27.1779203960372;
+        Tue, 19 May 2026 08:19:20 -0700 (PDT)
+X-Received: by 2002:a17:907:c714:b0:bd0:7949:a931 with SMTP id
+ a640c23a62f3a-bd517960723mr1182039866b.27.1779203959924; Tue, 19 May 2026
+ 08:19:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+References: <20260518153532.2835502-1-cleger@meta.com> <20260518153532.2835502-2-cleger@meta.com>
+In-Reply-To: <20260518153532.2835502-2-cleger@meta.com>
+From: Vishwanath Seshagiri <vishs@meta.com>
+Date: Tue, 19 May 2026 08:19:07 -0700
+X-Gm-Features: AVHnY4ISeSj-tWX2tmLsxva9JeDwShAViFq_TymQ9K5usF1cuLqmkszdGAaeUro
+Message-ID: <CAJEWsO0hprYmXoGmkR1+yv+hM53dGVh5O=7M+xFAdqoQjKrA8w@mail.gmail.com>
+Subject: Re: [PATCH v2 1/6] io_uring/zcrx: add ctx pointer to zcrx
+To: =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@meta.com>
+Cc: io-uring@vger.kernel.org, Pavel Begunkov <asml.silence@gmail.com>,
+        Jens Axboe <axboe@kernel.dk>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTE5MDE1MiBTYWx0ZWRfX3FZIemljl7kP
+ MQDgCM+qEbD1Vja1bWhFMZ+uzLq4WfZ1ZwCOuFYw/LhhSrE/N9E8YWPYAoR9rgX9A9CE4Osfz2o
+ IKjCUpzTlc1zE+9OizyHz7eZsltUaMRl/YYchNvsduh/WI5sEuCix4hNah8QyRuMJxFD8wVxlcK
+ n+8mpgu7OOCAcPlZa0HFjeuSsWYXOLhSgM4VnUYhFmMrdez3kjEhxvBUAseSxdZBWSdIuqlq6ak
+ GpEfp2fYcRoUXFPgPGNCMcEQhgc7xcVx7lQWakRsnwTO6cq1GZiEooKNsalRTzoHBJ+dgeodOCX
+ UdeZ3t/GcdvnUGLO1udotjaSa9yYqZW/A57YhV7dREnFpei2zCggXr4JfsLslvxXl6bu9WLEK01
+ k0cxjJsTVoSqdYzu4iiKPD3/9V9jZcHiYXF7pl/KF9GpJX9xgzLq+N/e5aHIsuFMRehHBFFBxjo
+ ziO3lu/0nebomadCuXA==
+X-Authority-Analysis: v=2.4 cv=KfHidwYD c=1 sm=1 tr=0 ts=6a0c7f7a cx=c_pps
+ a=edIAN7ErZTGbxav20d8A7Q==:117 a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=7x6HtfJdh03M6CCDgxCd:22 a=wpfVPzegXHpEFt3DAXn9:22
+ a=VabnemYjAAAA:8 a=pGLkceISAAAA:8 a=DNv30csI2qpO98t81IsA:9 a=QEXdDO2ut3YA:10
+ a=nIuFr-8touD1a-RngYHT:22 a=gKebqoRLp9LExxC7YDUY:22
+X-Proofpoint-ORIG-GUID: QPGtU5UliAjzaDlRMk-q10TpM_ac1KtB
+X-Proofpoint-GUID: QPGtU5UliAjzaDlRMk-q10TpM_ac1KtB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-05-19_04,2026-05-18_01,2025-10-01_01
 
-=E4=BE=AF=E6=95=8F=E7=86=99 <houminxi@gmail.com> writes:
-
-> Hello Aaron
+On Mon, May 18, 2026 at 8:36=E2=80=AFAM Cl=C3=A9ment L=C3=A9ger <cleger@met=
+a.com> wrote:
 >
-> Thanks for the suggestion, Aaron.  I dug into this a bit and I think
-> it's worth doing.
+> From: Pavel Begunkov <asml.silence@gmail.com>
 >
-> The good news is that 3 of 4 OVS families already have ynl specs
-> in-tree (ovs_datapath, ovs_flow, ovs_vport).  The flow spec is pretty
-> thorough -- covers all the key/action/tunnel nested attrs.  pyynl
-> handles genetlink, dump, and nested encode/decode, so the library side
-> looks solid.  There's even an OVS C sample under tools/net/ynl/samples/.
+> zcrx will need to have a pointer to an owning ctx to communicate
+> different events. Reference the ctx while it's attached to zcrx, and
+> rely on zcrx termination to drop the ctx to avoid circular ref deps.
 >
-> Gaps I found:
+> Co-developed-by: Vishwanath Seshagiri <vishs@meta.com>
+> Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+Signed-off-by: Vishwanath Seshagiri <vishs@meta.com>
+> ---
+>  io_uring/zcrx.c | 39 +++++++++++++++++++++++++++++++--------
+>  io_uring/zcrx.h |  3 +++
+>  2 files changed, 34 insertions(+), 8 deletions(-)
 >
->   - No ovs_packet.yaml spec.  We'd need to write one for upcall
->     handling (MISS/ACTION/EXECUTE).  Shouldn't be too bad, maybe
->     100 lines based on the other specs.
+> diff --git a/io_uring/zcrx.c b/io_uring/zcrx.c
+> index 3f9632e7790a..34faf90423f4 100644
+> --- a/io_uring/zcrx.c
+> +++ b/io_uring/zcrx.c
+> @@ -44,6 +44,17 @@ static inline struct io_zcrx_area *io_zcrx_iov_to_area=
+(const struct net_iov *nio
+>         return container_of(owner, struct io_zcrx_area, nia);
+>  }
 >
->   - The existing specs are missing a few operation defs (flow DEL/SET,
->     vport SET, datapath SET).  Small additions.
+> +static bool zcrx_set_ring_ctx(struct io_zcrx_ifq *zcrx,
+> +                             struct io_ring_ctx *ctx)
+> +{
+> +       guard(spinlock_bh)(&zcrx->ctx_lock);
+> +       if (zcrx->master_ctx)
+> +               return false;
+> +       percpu_ref_get(&ctx->refs);
+> +       zcrx->master_ctx =3D ctx;
+> +       return true;
+> +}
+> +
+>  static inline struct page *io_zcrx_iov_page(const struct net_iov *niov)
+>  {
+>         struct io_zcrx_area *area =3D io_zcrx_iov_to_area(niov);
+> @@ -531,6 +542,7 @@ static struct io_zcrx_ifq *io_zcrx_ifq_alloc(struct i=
+o_ring_ctx *ctx)
+>                 return NULL;
 >
->   - ovs-dpctl.py also uses pyroute2.iproute for tunnel interface
->     creation and NDB for interface lookup.  Those aren't OVS netlink,
->     so we'd either keep a minimal pyroute2 dep for just that or
->     shell out to `ip`.
-
-We could also add support for using just a direct netlink socket to
-query for interfaces.  This means we would not need to shell out to
-iproute2 binary.  But I think if iproute2 isn't available then the
-selftests would also not pass, so subprocess is probably okay.
-
->   - The ODP string parser (~1500 lines for flow key/action encoding)
->     is orthogonal to the netlink wire format, so that stays regardless.
+>         ifq->if_rxq =3D -1;
+> +       spin_lock_init(&ifq->ctx_lock);
+>         spin_lock_init(&ifq->rq.lock);
+>         mutex_init(&ifq->pp_lock);
+>         refcount_set(&ifq->refs, 1);
+> @@ -580,6 +592,8 @@ static void io_zcrx_ifq_free(struct io_zcrx_ifq *ifq)
+>                 return;
+>         if (WARN_ON_ONCE(ifq->netdev !=3D NULL))
+>                 return;
+> +       if (WARN_ON_ONCE(ifq->master_ctx))
+> +               return;
 >
-> I think the natural order would be: start with datapath ops (simplest,
-> spec already complete), then vport, then flow (bulk of the work), then
-> packet/upcall after writing the spec.  The f-string fixes from my
-> current series still apply.
+>         if (ifq->area)
+>                 io_zcrx_free_area(ifq, ifq->area);
+> @@ -656,17 +670,24 @@ static void io_zcrx_scrub(struct io_zcrx_ifq *ifq)
+>         }
+>  }
 >
-> Minxi
+> -static void zcrx_unregister_user(struct io_zcrx_ifq *ifq)
+> +static void zcrx_unregister_user(struct io_zcrx_ifq *ifq, struct io_ring=
+_ctx *ctx)
+>  {
+> +       scoped_guard(spinlock_bh, &ifq->ctx_lock) {
+> +               if (ctx && ifq->master_ctx =3D=3D ctx) {
+> +                       ifq->master_ctx =3D NULL;
+> +                       percpu_ref_put(&ctx->refs);
+> +               }
+> +       }
+> +
+>         if (refcount_dec_and_test(&ifq->user_refs)) {
+>                 io_close_queue(ifq);
+>                 io_zcrx_scrub(ifq);
+>         }
+>  }
 >
-> Aaron Conole <aconole@redhat.com> =E4=BA=8E2026=E5=B9=B45=E6=9C=8815=E6=
-=97=A5=E5=91=A8=E4=BA=94 14:53=E5=86=99=E9=81=93=EF=BC=9A
->>
->> Minxi Hou <houminxi@gmail.com> writes:
->>
->> > This series cleans up all pylint warnings in ovs-dpctl.py,
->> > bringing the score from 7.62/10 to 10.00/10.
->> >
->> > This series applies on top of:
->> >   [PATCH net-next v10 1/2] selftests: openvswitch: add vlan() and
->> >   encap() flow string parsing
->> >   https://lore.kernel.org/netdev/20260512070841.1183581-2-houminxi@gma=
-il.com/
->> >
->> > Patch 1 converts 86 %-format strings to f-strings.
->> > Patch 2 fixes misc warnings (unused import, bare except, unused
->> > variables, redundant expressions).
->> > Patch 3 renames classes to PascalCase and variables to snake_case.
->> > Patch 4 adds one-line docstrings to all definitions.
->> > Patch 5 suppresses complexity warnings from pyroute2 constraints.
->> >
->> > Tested with vng on x86_64, all OVS selftests pass.
->> >
->> > Minxi Hou (5):
->> >   selftests: openvswitch: convert %-formatting to f-strings
->> >   selftests: openvswitch: fix misc pylint warnings in ovs-dpctl.py
->> >   selftests: openvswitch: rename classes and variables in ovs-dpctl.py
->> >   selftests: openvswitch: add missing docstrings in ovs-dpctl.py
->> >   selftests: openvswitch: suppress pylint complexity warnings
->> >
->> >  .../selftests/net/openvswitch/ovs-dpctl.py    | 794 ++++++++++--------
->> >  1 file changed, 428 insertions(+), 366 deletions(-)
->>
->> Thinking about this series, it might be better to go a bit further and
->> just drop the pyroute2 in favor of using ynl to generate the netlink
->> encode/decode.  The value that ovs-dpctl.py brings is the ability to
->> interoperate with the ovs-vswitchd odp encoding.  That we are using
->> pyroute2 to do the actual 'wire' format of netlink is incidental.
->>
->> Some of the work would still be needed (I think some of the f-string
->> adjustments) but that would allow trimming a good chunk of the code and
->> let us just rely on the in-tree ynl rather than pyroute2 dependency.
->>
->> WDYT?  Ilya and I can work with you offline if you are interested in
->> pursuing this approach.  I think it should make the overall code much
->> better to work with, too.
->>
-
+> -static void zcrx_unregister(struct io_zcrx_ifq *ifq)
+> +static void zcrx_unregister(struct io_zcrx_ifq *ifq, struct io_ring_ctx =
+*ctx)
+>  {
+> -       zcrx_unregister_user(ifq);
+> +       zcrx_unregister_user(ifq, ctx);
+>         io_put_zcrx_ifq(ifq);
+>  }
+>
+> @@ -686,7 +707,7 @@ static int zcrx_box_release(struct inode *inode, stru=
+ct file *file)
+>
+>         if (WARN_ON_ONCE(!ifq))
+>                 return -EFAULT;
+> -       zcrx_unregister(ifq);
+> +       zcrx_unregister(ifq, NULL);
+>         return 0;
+>  }
+>
+> @@ -711,7 +732,7 @@ static int zcrx_export(struct io_ring_ctx *ctx, struc=
+t io_zcrx_ifq *ifq,
+>         file =3D anon_inode_create_getfile("[zcrx]", &zcrx_box_fops,
+>                                          ifq, O_CLOEXEC, NULL);
+>         if (IS_ERR(file)) {
+> -               zcrx_unregister(ifq);
+> +               zcrx_unregister(ifq, NULL);
+>                 return PTR_ERR(file);
+>         }
+>
+> @@ -787,7 +808,7 @@ static int import_zcrx(struct io_ring_ctx *ctx,
+>         scoped_guard(mutex, &ctx->mmap_lock)
+>                 xa_erase(&ctx->zcrx_ctxs, id);
+>  err:
+> -       zcrx_unregister(ifq);
+> +       zcrx_unregister(ifq, ctx);
+>         return ret;
+>  }
+>
+> @@ -932,12 +953,14 @@ int io_register_zcrx(struct io_ring_ctx *ctx,
+>                 ret =3D -EFAULT;
+>                 goto err;
+>         }
+> +
+> +       zcrx_set_ring_ctx(ifq, ctx);
+>         return 0;
+>  err:
+>         scoped_guard(mutex, &ctx->mmap_lock)
+>                 xa_erase(&ctx->zcrx_ctxs, id);
+>  ifq_free:
+> -       zcrx_unregister(ifq);
+> +       zcrx_unregister(ifq, ctx);
+>         return ret;
+>  }
+>
+> @@ -967,7 +990,7 @@ void io_terminate_zcrx(struct io_ring_ctx *ctx)
+>                         break;
+>                 set_zcrx_entry_mark(ctx, id);
+>                 id++;
+> -               zcrx_unregister_user(ifq);
+> +               zcrx_unregister_user(ifq, ctx);
+>         }
+>  }
+>
+> diff --git a/io_uring/zcrx.h b/io_uring/zcrx.h
+> index 9e1a6a1b11e8..6b565d0bf6da 100644
+> --- a/io_uring/zcrx.h
+> +++ b/io_uring/zcrx.h
+> @@ -73,6 +73,9 @@ struct io_zcrx_ifq {
+>          */
+>         struct mutex                    pp_lock;
+>         struct io_mapped_region         rq_region;
+> +
+> +       spinlock_t                      ctx_lock;
+> +       struct io_ring_ctx              *master_ctx;
+>  };
+>
+>  #if defined(CONFIG_IO_URING_ZCRX)
+> --
+> 2.53.0-Meta
+>
