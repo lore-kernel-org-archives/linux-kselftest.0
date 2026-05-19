@@ -1,173 +1,103 @@
-Received: from mail-vk1-f175.google.com (mail-vk1-f175.google.com [209.85.221.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77F10371873
-	for <linux-kselftest@vger.kernel.org>; Tue, 19 May 2026 20:18:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.175
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779221933; cv=pass; b=mYNEIrqULHpBsnu8EGW/7h+DbYMM9pPzoAFBnYPXULoUorASeA7IlG5njBHq5/wbFnQ+97g3jxqO26iqZpp+h5OY4SVVNbYaJTHAu6JKcdFgwhFn6Zu4H57BelelSEufXdzABEOp+/w8ed3Ojsi/7V216z8F+5ua/OxXXgGR6O0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779221933; c=relaxed/simple;
-	bh=qIwGtbbIYOUjCYL0DiEfUhZ2+eW3Zw2GTvfO7SWH0AY=;
-	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FXCuGUJG+obvNT4MuIyb+Rn4ZX948cWDzAVggqDcwWIBWhzLfbMw1ddbTRd1ee7pd25viWV6mByJMgP1nYm+8ecvwZF3/BiW30YbIXXEGpr8vZ7uhcyE/QeGGlO1IwbeShniljkIBjmV+jJke1YE/Jo9/i0RGiUtRPtNG9NA+Hg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BIQXhuUL; arc=pass smtp.client-ip=209.85.221.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3BC42874E3;
+	Tue, 19 May 2026 20:26:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779222419; cv=none; b=ZZJpLKlxYptR0PgihAA/s0rmL4MMLFYR7NyQjsQ+GjB4NnJdQEKq9h3gqWotnSTAsqCyfpet9NQyg91aYy44bSWOqIFu5p3ql9YqL/GwO30p89LEq0+xA3OiY03oAwU3BSOpDRHyUaRVE8XlFPPTbtNCnDzoHMpcLyzTuThoyqE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779222419; c=relaxed/simple;
+	bh=W87Ncg5sK70elKtoSJlUPVxgaIjggXxk1gFUJsVeK1U=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=ECuk1uAYMFZ7GrxlbOau96mMWeHfp+4Mvpiy31wDZ8lg4hESEmYkbmfoNQKtG0OQV6bhzenHvNXnC6NygzIBJVxVFWf7QiLZQzsfCMmgm13E2RpXvo64jmIUaqE8NFXRkiP+vzfqPbB8Gmw5kY3Dm+zUoQ6u305y1VAMRE8SOYM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZSCezyE6; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BIQXhuUL"
-Received: by mail-vk1-f175.google.com with SMTP id 71dfb90a1353d-573a81abef0so3050460e0c.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 May 2026 13:18:52 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779221931; cv=none;
-        d=google.com; s=arc-20240605;
-        b=EX+tqHAYCt9WdiG/0Z1qk4kOetwghlTBiKqm2rrnaeakZISYAOCZLOWF7ns8YRNxEY
-         MBV9ub579Az3KxPpTU/5P2kkfIazo8yBsjbmBcqRCVG3IUbL+HbQ2yxFlIICTMYdOGZz
-         GMjZa5k/gCKuxmNIP9E34BubHbafMnKBqjjX7YajiovONnFT8FBOv5KL4OvPXDxc0kH8
-         FEnUiV4PjJ8NSZeBHo6gD+rU2BXqWTr8GPSQsrEGmX91WhdO5LgBaU07b0jBT56ITfZ8
-         ZdG/nGpzYzVQ5PCmsk8vdyv5aZ0ImRTO59kMzIccpt1Xp/5PYyK3OhSmuMQGvJAdv1Ke
-         akag==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:dkim-signature;
-        bh=aR0ZMyUG0ozy7DkHe3z0/p/wjZOWH9x6XEkI9PUqxBQ=;
-        fh=2vl/WQsRl7G3IyUy55A99xy9z4DsyPRNe6b4iVskUNE=;
-        b=fU2eHi5KWHlFQjmrkWUAs1+cOc1rzOV9BKxWV9Qdv9j92tk97shBraXBeKoG/WhX57
-         UyOKDjMw91Gs6nCLI8xJXPuJC9qJ2HGPSZhz9yRGM4OXK62wcVKDkadIoNFALDCkAHQp
-         weR3ViHjX1vZEOFkHgZMl7/dpPlZnRmlLQ+OTzRmdzP+QVedTPZiPV69L/tRsrwqHTgf
-         eDhGlDv5vkDbrJSUONcUWsDOT0N3V1LPnzCYIh0xexzQBqBY2XtMx+05L0FrkMp7gzp2
-         9Xsi4gbdRyh+JpcVVEoZuqvG45VdGQrG5PzqGtt3Q3YdHoAiHQIN5CauFWuAdnML3kGl
-         3Ujw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1779221931; x=1779826731; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=aR0ZMyUG0ozy7DkHe3z0/p/wjZOWH9x6XEkI9PUqxBQ=;
-        b=BIQXhuULMNWYjAVkHUVU6ySKL7TXZ96TBcXdDbXCb8dJ1c87V4oPyigq50MrGLqXBM
-         HpPF++ne5ZQl9LWNnuooZvI14vcBX2U4+5qwf7/HX3m2c4eXe9l1unwWFebjubNYd7Z+
-         u/l4uY6Z8ddLmpkrMd4i3xBaNElHMLhc6Enhk1uE69pg7Y8Pm4q7stOyYUgsMpfTAytK
-         33v0nPjSc+UvJN7Itgip/3jEc5GDPNBULvIJ1GP9aND8PJDK7kr9ZVdo775W9DSLWfx9
-         LHgdV4COxxbRaJhgyt7sU6y2Y1ImwYSkDV8Mb8B7b2jWB8/iLm7Ww54JJo058phJit8J
-         BbBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779221931; x=1779826731;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aR0ZMyUG0ozy7DkHe3z0/p/wjZOWH9x6XEkI9PUqxBQ=;
-        b=Y+PT+tfSfxFKaZKjFzChL+dTj/hQe2N/2eJyTVSSSnthd4JXHs91ZvTUiHHMszc57t
-         t/hAChVfugAjetcyx+r3KWi52Bgkhe2mg36qJoCJqRdVgaEryC3JAgUxz716BqSDREHA
-         qKXrnw5VeWNCizxETLx77MHaUqBj+p2P5TpFisA53ke5/Y1Tc7cnlIRwEZ1b2ttRQIH2
-         Khd1c776CMULT7LUSiqNuFZ4UpZNaRSvAwwfJUbbhIR3Pi3SABJvRn0Xf8WWTvG+HVEC
-         JJhDioz2aAsuPZsb6gg+vYLTSpn4wQUBHkqIvFn3mtJvvj4cwBb5DhGsLVxLDJ4CCyJi
-         tLxQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9brtBro8PcOvEUhERwuwTKwO+spRcfM9RA78O1UL369aOrB6HDbngtS6GWSqt03VVSTvSyFD9pY/0QScdyLBA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy27zS11Fmosqswa7M3v3JhrRyVdYy6kCgLpsDrRDRFI6GeQUJZ
-	gJhx1XxZ3W4+C9ncHtz9Oe6dRWwNU8E/KC9nEfxZD66LZopv+U3Lh94L7HfYFNo46YuCFoM5p5q
-	VRM3B07dtECleljh6+u9r09dCxoTHyWo5D2WkWuJa
-X-Gm-Gg: Acq92OElw4nd06cnjqcaJxkFDYit2qqxF9LvBi7u1GKYy8dbiFdAz5vydFDk+DHwQrD
-	V8WyZh4nUK9nPhkS01nXxr9p1I1TH7iLQ5R8CrdJrvNGbU6w8gBpKvINIEZ1ERCCRKjC0sovUqk
-	NYZZMz3MPf3Mc9e7/1gE/uh0+mPZ2Ns0Sgp2sYK3o2yMir4pXKI90fbfEp6o4WPl/98qxP8WMw5
-	kRa3elyBD7SFNn6njFo3oa1RoFTu1jDX4Hs8so0z0F8OBLkgyItRakTzKYbn4KWMArcxpr9mMW+
-	1zJuZ2SD1Qkka7+agS1gkgjbdvgLeY5x9K4XnZxD2uS90nsP46x38BXkf7suegr/C+GOodigG5b
-	sPBPR
-X-Received: by 2002:a05:6122:3b87:b0:56d:9f2a:d6b1 with SMTP id
- 71dfb90a1353d-5760c094366mr12403209e0c.12.1779221930921; Tue, 19 May 2026
- 13:18:50 -0700 (PDT)
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 19 May 2026 13:18:50 -0700
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 19 May 2026 13:18:50 -0700
-From: Ackerley Tng <ackerleytng@google.com>
-In-Reply-To: <agOMfpW2Xxpzk-D5@google.com>
-References: <20260414-selftest-global-metadata-v1-0-fd223922bc57@google.com> <agOMfpW2Xxpzk-D5@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZSCezyE6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 427231F000E9;
+	Tue, 19 May 2026 20:26:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779222418;
+	bh=12aBSvojo05afpnBg6VM7sWoJBKuZQ5iYoXpWWaZoTw=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=ZSCezyE6OE5QP9x1+Mrz//sLQUIRHpRMeoSCruEB2NB+dygaVzEjm6gMSZcA4QjZ7
+	 pZeOhxu87Z46oi4MJMIiwY9ZVEdHw9Z29iG1/fy14DVTkukKsaiRAYZAzawUqysAlL
+	 ngJipQtN0jVENoG65wMyi/uM0N/pIiZ9Hkdyc9NBDUxKVi7BR87omtGJ0YUd0KqPcw
+	 Q3cFXLa8AjPqA2R+nX37kTTo3Xfb582dM0AynrWfQdmVt9GpAKABrqsasmrr92AHLc
+	 2NOMHcrqmQfW51ZSXC6v1a2maJG1HcjR57zekGYXx9nTb7K3Y8iKHkdrqmI9p6Jd1n
+	 7epqQHlY2C7XQ==
+Content-Type: multipart/mixed; boundary="===============1006306579911665399=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Tue, 19 May 2026 13:18:50 -0700
-X-Gm-Features: AVHnY4IUGrkVyn5ZtSAcdF_mZPpnt14rYBEsp_-8E5dO-1OBvH16aNRh83QJgZ0
-Message-ID: <CAEvNRgEpy+d=KTSVcO9svAS9asHCDcwctGo=9PAaFVMUCd-Wrw@mail.gmail.com>
-Subject: Re: [PATCH RFC 0/4] selftests: harness: Provide global metadata
- pointer to allow clean teardown from selftest libraries
-To: Sean Christopherson <seanjc@google.com>
-Cc: Kees Cook <kees@kernel.org>, Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>, 
-	Shuah Khan <shuah@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, thomas.weissschuh@linutronix.de, 
-	linux@weissschuh.net, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Message-Id: <8038d2d4d6cbe44e018d1d2201fc10bc550994d05be6aeee83f6baed0964bac8@mail.kernel.org>
+In-Reply-To: <20260519233812.18787-3-adubey@linux.ibm.com>
+References: <20260519233812.18787-3-adubey@linux.ibm.com>
+Subject: Re: [PATCH v5 2/6] powerpc/bpf: Move out dummy_tramp_addr after Long branch stub
+From: bot+bpf-ci@kernel.org
+To: adubey@linux.ibm.com,bpf@vger.kernel.org
+Cc: hbathini@linux.ibm.com,linuxppc-dev@lists.ozlabs.org,maddy@linux.ibm.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,shuah@kernel.org,linux-kselftest@vger.kernel.org,stable@vger.kernel.org,adubey@linux.ibm.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue, 19 May 2026 20:26:58 +0000 (UTC)
 
-Sean Christopherson <seanjc@google.com> writes:
+--===============1006306579911665399==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-> On Tue, Apr 14, 2026, Ackerley Tng wrote:
->> Sean suggested using setjmp and longjmp [1] to back to the top level
->> TEST_F(). I looked at [1] and found myself wishing to use TEST_F() the from
->> kselftest harness directly.
+>     powerpc/bpf: Move out dummy_tramp_addr after Long branch stub
 >
-> Can you elaborate?  If you have a need for direct TEST_F() in KVM selftests, odds
-> are good someone/something else will have a similar need, sooner or later.
+>     Move the long branch address space to the bottom of the long
+>     branch stub. This allows uninterrupted disassembly until the
+>     last 8 bytes. Exclude these last bytes from the overall
+>     program length to prevent failure in assembly generation.
+>     Also, align dummy_tramp_addr field with 8-byte boundary.
 >
-
-I guess I like the consistency of working with TEST_F(), there's also
-TEST_F_TIMEOUT() and friends and all the usefulness of the rest of the
-kselftest_harness as you described, all of which will probably need
-re-wrapping if we proceed with the approach of wrapping.
-
->> Also, setjmp/longjmp felt like it was introducing state that could be messed
->> up easily.
+>     Following is disassembler output for test program with moved down
+>     dummy_tramp_addr field:
+>     .....
+>     .....
+>     pc:68    left:44     a6 03 08 7c  :  mtlr 0
+>     pc:72    left:40     bc ff ff 4b  :  b .-68
+>     pc:76    left:36     a6 02 68 7d  :  mflr 11
+>     pc:80    left:32     05 00 9f 42  :  bcl 20, 31, .+4
+>     pc:84    left:28     a6 02 88 7d  :  mflr 12
+>     pc:88    left:24     14 00 8c e9  :  ld 12, 20(12)
+>     pc:92    left:20     a6 03 89 7d  :  mtctr 12
+>     pc:96    left:16     a6 03 68 7d  :  mtlr 11
+>     pc:100   left:12     20 04 80 4e  :  bctr
+>     pc:104   left:8      c0 34 1d 00  :
 >
-> Meh, same goes for the kselftests_harness.h.  I can point you at a half dozen
-> bugs where enhancements to the core framework wreaked havoc for unsuspecting
-> subsystems.  I'm not trying to throw shade at the harness; there's a _lot_ of
-> goodness in there.  My point is that doing complex things that impact a huge
-> variety of downstream users is going to have many sharp edges, regardless of
-> where the complexity resides.
+>     Failure log:
+>     Can't disasm instruction at offset 104: c0 34 1d 00 00 00 00 c0
+>     Disassembly logic can truncate at 104, ignoring last 8 bytes.
 >
-> I'm not wedded to setjmp/longjmp by any means, but for me this isn't a compelling
-> argument against the approach.
+>     Update the dummy_tramp_addr field offset calculation from the end
+>     of the program to reflect its new location, for bpf_arch_text_poke()
+>     to update the actual trampoline's address in this field.
 >
->> I also found recent work that removed setjmp/longjmp from kselftest harness
->> [2].
+>     All BPF trampoline selftests continue to pass with this patch applied.
 >
-> KVM selftests don't support building with nolibc.
->
+>     Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
 
-Not particularly against setting it up with setjmp/longjmp either, I
-think the discussion here is mostly between
+This looks like a bug fix for the bpf trampoline implementation on
+powerpc64. Should this include a Fixes tag?
 
-1. Wrap kselftest_harness for KVM
-2. Improving kselftest_harness so KVM can benefit from it
+The bug was introduced in commit d243b62b7bd3 which added support for bpf
+trampolines on powerpc64. That commit placed the dummy_tramp_addr field at
+the beginning of the long branch stub, causing the disassembly failures and
+incorrect offset calculations that this patch fixes.
 
-setjmp/longjmp has already been removed from kselftest_harness so that
-option doesn't make sense if we go with (2).
+Suggested:
 
-If we go with (1), I could (a) store the _metadata pointer in a global
-variable within KVM or (b) go with setjmp/longjmp (c) some other
-suggestion.
+  Fixes: d243b62b7bd3 ("powerpc64/bpf: Add support for bpf trampolines")
 
->> The kselftests harness is running tests sequentially anyway, and the
->> function pointers in _metadata wouldn't be changing all that often in most
->> selftests.
->>
->> Would maintainers be open to having the kselftest harness expose a pointer
->> to the metadata globally?
->>
->> Another option would be to expose the current teardown function pointer
->> globally instead of the pointer to the entire metadata struct.
->
-> I'm strongly opposed to any idea effectively requires special casing KVM selftests
-> in the common harness.  In my experience, the common harness is already quite
-> brittle, in large part because there is no singular maintainer(s) that is responsible
-> for ensuring changes work for all downstream users.  Adding odd bits of code that
-> is only ever used by a handful of KVM selftests is only going to increase the
-> probability that that code is broken.
 
-If Kees likes the idea of exposing a pointer to the metadata globally,
-does that make KVM selftests less "special"?
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-If the community likes the global metadata pointer, I could update the
-harness to adopt the global metadata pointer and then KVM wouldn't be
-special at all.
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26121409898
+--===============1006306579911665399==--
