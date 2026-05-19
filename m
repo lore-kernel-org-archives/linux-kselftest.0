@@ -1,48 +1,51 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84908400E0B;
-	Tue, 19 May 2026 15:23:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17E9331A7E2;
+	Tue, 19 May 2026 15:23:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779204221; cv=none; b=XAd/OXUMgmwsOQRwV5OM6IrSwVTemAuIcLKOd+9sWtFrhpaMInYr+arWUALQyu+IA0QnbNvWoKxYhAZmDbEJvsJYrw5yn1Eo1/ngNvwdggCJNFpkBa68BXUdERmCReNhbdQAILhFV7TXBARu7y/cNj8GY2iD9WK/PNVQYXKFs2U=
+	t=1779204238; cv=none; b=jea6fSBEWqqRp/D6vDJWrS7rjt5OFgM/GgefLvLgxpJmErktd+FmZ1RAhahfkbz1fhAn/sG82/FMafSkK/ui0DQl3CfjQB1jh8PErX2OR5jgEhfzxtlaNJuoBl4ACNYB5A61uMdpEaqJN83pAJGHTvLFwLlv+8KMkxfy5VVlgzA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779204221; c=relaxed/simple;
-	bh=Yn9anD6S2sdeviR6DobfIVvn2ZavCIs6s3fiL/K+EFE=;
+	s=arc-20240116; t=1779204238; c=relaxed/simple;
+	bh=I+IjMYlDv1l4GPKm44lgcCi3BwfRmTlX+eKtPHhhqsw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=CF2ceu5j+ajwUBbkI0GYSCwbCMaaIM6GYZOki9wGbkvLNw/FgNMZ2Jz9FFMLMJVOoIkEEpYG2quqGqTUaqRcm/VXGTr8yygk28S2nMtbAKMDqlFVglj0dD28O8RX7sGK4rMV1xjmJ8SJ1T0k7IcPOrVGcFxuBxQ/lW/Apf9bPcU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Qyb/zaDk; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=d3Dd595XDXzPDjEdSQFZu3aSqdXFyxMR4XxmAUD0t6nLFNt75ZMXbl1fpjx7xC5r7euysmkUiIQN1OzGr+YUIWhqVuzRx86FXZnpQrUmF59gprSUSp/x7fcQOV5U0q5X2F1rO3WLoPsAa3AVkDt/o9+oaGR8juVh4vjdCM5JFsc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KYZnYUNq; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Qyb/zaDk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 158B3C2BCB8;
-	Tue, 19 May 2026 15:23:38 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KYZnYUNq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39324C2BCB3;
+	Tue, 19 May 2026 15:23:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779204221;
-	bh=Yn9anD6S2sdeviR6DobfIVvn2ZavCIs6s3fiL/K+EFE=;
+	s=k20201202; t=1779204237;
+	bh=I+IjMYlDv1l4GPKm44lgcCi3BwfRmTlX+eKtPHhhqsw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Qyb/zaDkk0Kxc8Y+fiFGDHHWFnP4tzKZmSMEDXArE7dhcX8sAtLaT8yW9ehnS9ppJ
-	 AC1keOftP127xOq9iN139McgXqqOTEx0e8Ey00jaBiCQ0+FyaCbliWv6WN8ewFEIux
-	 WfwWP0M3ARPhI/z1SQt6RC+7WpIO2/WmsI5pTGmCKO3VWrGnh9J7jck6sk2U97MDmu
-	 fXuAjdvZXhM0/ekE3DwDi+dyF/tPLLPgdg7AU8mH32oF0mku5GJ+MWos2zpJphD8FM
-	 o1nuPu6Tza+gJnLxCDEmB8S2HPlv059UxhZ1hm+bdJ0i4yozSMCmB/0pwwA18Y1DD/
-	 0lt2lWbaV0Zmg==
+	b=KYZnYUNq9Tu1sJ42jVFYrVmNjc4OMw6j4rHkWc8RCHgSKRCcftXwoeNUIWSz9+OS0
+	 r0c02nrsnqNc6/JQjsTHsaeU37UrpfA8nClHDw5XOtuH5Kvf56lKMLFliBfQlkLWRY
+	 rOnOly7/E/NAF2d3srHRek71+aoEYVHDdMQWp6krJsvzXg66vIfvRxx5RA6asbk2CJ
+	 cGHQ0O/3wJY3ev9zpJ5G2P4UdLdtdWLML8qCUsnXmR/PIxXpQ740UUg7yaVjVlgxjm
+	 OEkCYc8tl/MiNQl1JgFj77G3Ko+KFlK1zIH03Olc8YqjhtuFhozw9FJ7ZutA73ebha
+	 sEYUKk1vNmAWQ==
 From: Will Deacon <will@kernel.org>
-To: Catalin Marinas <catalin.marinas@arm.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <shuah@kernel.org>,
-	Mark Brown <broonie@kernel.org>
-Cc: kernel-team@android.com,
+To: linux-arm-kernel@lists.infradead.org,
+	Kevin Brodsky <kevin.brodsky@arm.com>
+Cc: catalin.marinas@arm.com,
+	kernel-team@android.com,
 	Will Deacon <will@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] arm64: Implement support for 2025 dpISA extensions
-Date: Tue, 19 May 2026 16:22:55 +0100
-Message-ID: <177919551472.843780.18117053245871054269.b4-ty@kernel.org>
+	Andrew Morton <akpm@linux-foundation.org>,
+	"David Hildenbrand (Arm)" <david@kernel.org>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Mark Brown <broonie@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/5] POE sigreturn fix and extra tests
+Date: Tue, 19 May 2026 16:23:00 +0100
+Message-ID: <177918804505.746149.6023931077901684027.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260518-arm64-dpisa-2025-v2-0-b3367b73bd00@kernel.org>
-References: <20260518-arm64-dpisa-2025-v2-0-b3367b73bd00@kernel.org>
+In-Reply-To: <20260427-poe_signal-v2-0-2bd9d6f16ab4@arm.com>
+References: <20260427-poe_signal-v2-0-2bd9d6f16ab4@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,17 +55,27 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-On Mon, 18 May 2026 16:07:28 +0100, Mark Brown wrote:
-> The 2025 dpISA extensions introduce a number of architecture features
-> all of which are fairly straightforward from a kernel point of view
-> since they only introduce new instructions, not any architecture state.
+On Mon, 27 Apr 2026 13:03:32 +0100, Kevin Brodsky wrote:
+> Commit 2e8a1acea859 ("arm64: signal: Improve POR_EL0 handling to
+> avoid uaccess failures") introduced special handling for EL0 registers
+> that impact uaccess. This did not however handle the case where a signal
+> handler removes the relevant record (poe_context for POE) from the
+> signal frame; this is clearly not typical behaviour but it is legal.
+> That commit resulted in arbitrary data from the kernel stack being
+> written to POR_EL0 in that case.
 > 
-> 
+> [...]
 
-Applied selftest update to arm64 (for-next/selftests), thanks!
+Applied selftest updates to arm64 (for-next/selftests), thanks!
 
-[2/2] kselftest/arm64: Add 2025 dpISA coverage to hwcaps
-      https://git.kernel.org/arm64/c/7da70f41da81
+[2/5] selftests/mm: Fix resv_sz when parsing arm64 signal frame
+      https://git.kernel.org/arm64/c/c364aa56d673
+[3/5] kselftest/arm64: Add POE as a feature in the signal tests
+      https://git.kernel.org/arm64/c/42c21954063e
+[4/5] kselftest/arm64: Move/add POE helpers to test_signals_utils.h
+      https://git.kernel.org/arm64/c/925a082ec2a0
+[5/5] kselftest/arm64: Add tests for POR_EL0 save/reset/restore
+      https://git.kernel.org/arm64/c/f2db075234c8
 
 Cheers,
 -- 
