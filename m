@@ -1,80 +1,80 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C90A03438BA
-	for <linux-kselftest@vger.kernel.org>; Tue, 19 May 2026 18:07:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9680D328631
+	for <linux-kselftest@vger.kernel.org>; Tue, 19 May 2026 18:07:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.46
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779214030; cv=pass; b=PdX+uIDSMbo0yRYY6hSq3v9zpBEEixl4X9GUfVDmjRaWDHiqLXIOryOIts2iDFs3QpKs/0KmatfSuZOXTB21O0sq7GApTe5Y8CShmxZDpv9jcFdsj8WbGS6IQf6PH1OLMQi7VQRDduqTDNhYWfh6gBvqb7/c7fdmb3Ubp9EZNfo=
+	t=1779214072; cv=pass; b=tG0ROx7EFIqbj0QoHtk2PdyBp7wbHy7ro5yPJM5JatlmLCmXZLgY8ltpusN8UjJZJRlbndAQC5QX123awU6dQdRRejWb+DCB3Cwx3wj2uQKepkxSiqEiD1LODnJ7DdIUBVYU4JnWu/0Smb+51lArfGIi5qxhpmxI6+Z0OIpteR0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779214030; c=relaxed/simple;
-	bh=xWuRtr4K/5gUdgYtvuhsDbR4Td/jrXMBs73+p4Eyg4o=;
+	s=arc-20240116; t=1779214072; c=relaxed/simple;
+	bh=xssGkiKE0NLLgIm8hq0sx4z1JVWvwtNlxiDz+CYQuyY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Kd/w98KmiCDPslH+MiPGbworInHewCnfS4DUB6LihZ9yJ6smZKHSunjMFsRwxCsjRxHTVfe3DmYG1vwlvdDdLdnS0/8gxKSuyQMGJedYhv4dlNh/fy3IKq3K+0vpLgQooOFzCrMIB8kYLPW1xDfk4iZsmAjY9+LApu6HXWr8nP0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VyNnfYft; arc=pass smtp.client-ip=209.85.128.51
+	 To:Cc:Content-Type; b=rL9SEJkjvg0lO5K54g9IFf/MkcPKAS/vmzOvFlfmY5ji/shFznQcKFutiOxLggeyDTtD/EW5FGDFkkvqoEmKSkHJU6L2fOE+4HdBOnQVn09sAe/I9gzuRu+qDqZ4cEnlqi14ZrFRP9/lcvX6p0xamBBjZlgI6NovXNdTiAh/H6g=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=eWeWeIWF; arc=pass smtp.client-ip=209.85.128.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VyNnfYft"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-48d1c670255so295e9.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 May 2026 11:07:08 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779214027; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eWeWeIWF"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4891ca4ce02so535e9.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 May 2026 11:07:50 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779214069; cv=none;
         d=google.com; s=arc-20240605;
-        b=NBJmPUmvayTmiEZOVXry6YMhQN9FwIBVV5yXODtnirfaCZAT0IGn6eoy2uR3tuiTi9
-         auf4+E+4tpj0HAC5tdLbePpvWCv7L7QagmDsYDygYV6UkHfGtqDq/3FDGD+i94bdx/WZ
-         NYmd2XeMsClQkptui0VBnDMBom3tM1ZUzH3urCFy/EF0Zr5QSSAhVnI3qXswM4B3+FH/
-         b7QaIxJn88bXGp9CMaY8Q/L0RBTBKmh2JIpoizhoiLD0gsY1RyuGJ48xOME713wk1Web
-         Pdq3ONYCegcA3OH+BpzVq7lE4/UDYDy/S+RJ+9xCOy8DbH9jwcOOdFVXao7Vr6mfunS5
-         wKIg==
+        b=eF01PLF5G3mE+Yugr+zlA3ZJLrTTJCroyscbRzNPj+0kk/vcqC7pJCHhkeBG3jL5cY
+         EMNT/yiMRi+kmTbSFuOqMu945uvfZjkhZqStPeKdP5zbOoErD6aPkj6ujl2E05JLK0MN
+         VpAh3OsO4DOwClGrKeP3sCU7MQ4pEKoNCLgj8Cujte1/9uiKPqwSN4ENvO3Pk/jt+QXS
+         98X9CF15RiezNnANvT1i8Cima59+X6x/jObcpUxrOP2SryegsE5NsUbvYZcIWpjC6pfi
+         WguZhhaT5wxjHpwy6YwAdzaM09n59rCTAfWz5LkpLXJUmC6EhtDNgG5tlZsvi4Ti341f
+         CC1Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=xWuRtr4K/5gUdgYtvuhsDbR4Td/jrXMBs73+p4Eyg4o=;
-        fh=wMqNwGFzDYtlqF/leSGjEt7jyK2etJ3M43UW67ItFjc=;
-        b=HIg2pT+cA33gvUbaJTIPWcM7m868wRFS1AoupQqWdyAySBjW3yVkUOWlqzuWm2jFIE
-         zhzU0e0r/w6sshpftt3QYEVcvtXQALK8ejU3R7Mg1npTo3Qh44rcbPsXIVx5sQNlir2o
-         oSaOSzOijWJujU3zwGLF2U5hTqfXftOVIhuRC1lCoRmbaM+Fe36SCZ+B3Ms7H6ej5B9P
-         yjNx3fuq9U3tv9NBzi+M3i9SUX/r+IU83TZp4tYdaF6pdllQi2zpAIxdv9eM/bvFAvKC
-         Czn7/Y4IIVeFbio2qsMtdL28Er4zIx7rZ9lUL1st+v3LRaklGKTMJ3yubGj3lBUHUkGZ
-         rKUQ==;
+        bh=xssGkiKE0NLLgIm8hq0sx4z1JVWvwtNlxiDz+CYQuyY=;
+        fh=tfa5ju2c8YGP/5DjK/Rwv3AzHj4lk22IEBn+0iy5csY=;
+        b=Gumht3iUWaLklsCcNtSGvDX8mkkRyAl+7rmS/tSf4bd4cW7GWRE7kSSlD/mAy82uDP
+         InQoVuZdq3aMtarpndxUxv3rKO3Mq0bALgwajDqhKDcX3ZG1HGaLy/4abqhkfSk9WgVr
+         n7BUKJA8YekzlpY5XutPU6zpZkOa/+8JMaRK4h/Hg06WomZOW03WVscCpo/ndz67ZiHd
+         H+kpz2c0chq+RyLN92043E8ltwh2PzhgKZQIe6cMPQvoMBtMNkqBjmD6kKrCH0j47Ygr
+         gh/nBEGntF9o8CM2fYh70ie03CPaCjPIUQ+EG1cyK/rzdz0BiceQXb2BQMfO5QczsT3P
+         p3PA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1779214027; x=1779818827; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1779214069; x=1779818869; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xWuRtr4K/5gUdgYtvuhsDbR4Td/jrXMBs73+p4Eyg4o=;
-        b=VyNnfYftN5Zm7O1g2zyDlanIBedjkc47HlTLcNZ8DlZPYbkSWMxSMsRf/CSz/2X/qd
-         tkFfv1f0AYulKDrFrLqicAKcw20yqGpc2OkOBAEpUtwyIzNd1kxo64awQjdv3IrxYX1t
-         Oh+W9sZAKcEkARL23u68EYToymkAIudI8ZmkttSx9pxJS/AqQ1pWHFuufcC7lDArQGOi
-         0NRrUBPaWOWepg197ofEZXkMKb85xn4S3yqEm78eNuhF88mLGEM2VqYLO4A2nCiyhX+7
-         0r8nJ5g0e60NJsAhHU7/NimQjv7wvNc6d/BhMwDku/SKQrdBipRznT+XwjDJFvO2rL8f
-         GU+Q==
+        bh=xssGkiKE0NLLgIm8hq0sx4z1JVWvwtNlxiDz+CYQuyY=;
+        b=eWeWeIWFQkhgJUMtdPmPfch1gHn6y0RMODHat6KPHaMDF1OFqbY09x0XUxRQFve3Tw
+         GKjCah7Z65qJy9VtD0Xk6PUxhM5gbnnmPIGPlCEpuxQohywyZ9YAuoDmCOa+72a1xeKs
+         S5qZzMKHV2zKB0B9JpYcPsctQUH8Gb9XlVy0HShMsnSXwU9pIA+pP9rjSi9x+ZD9Bs3Y
+         xBy3CLTe7d2Swwrnwd+u7NE7MUJinmvcZbLWYQOcJWO1eQ/orFirzO/2qg5Fq/nAfiyC
+         1yInXJBRFkQP2HD67p/H19TSSyUE2k1fRPB2hpYAyVhjvkSF0KrJKlfI3BtcNnVD4Hai
+         iiQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779214027; x=1779818827;
+        d=1e100.net; s=20251104; t=1779214069; x=1779818869;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=xWuRtr4K/5gUdgYtvuhsDbR4Td/jrXMBs73+p4Eyg4o=;
-        b=R/NcMvbIwKEJrKmfVxnGsB/jENh1wcuxL6WSLq+M/VIwhQqoHs7CGFk74cJKgRoDxv
-         l9yRxpQJ96EqDYsWZ6+F6KIRuM5xXo40arq4H2VrfllWRInCY5U+Tqu5HsJA6W+qKh2e
-         HNKmCkP1+3IYyC78dv9B195S6GrEeZ0ey7c8m13lwjmVsXRQoD011LZj1QVmrze9i3V6
-         icar9b1QG2B8FnpKvFi0W5QG1oPTgRLxJ81iaS7X04ywFGAAj1Jk4juHbB6QrYnTjXii
-         LJjhekFbaNl1unAtTdzNiokXQ1UI2sLTQ406uwHgIsB0b7wD8o7Bxdgp14vIFmT06u6D
-         +rBw==
-X-Forwarded-Encrypted: i=1; AFNElJ/tiwp0GzYz0P3AsTbIziKoAFwqejlaj3azgMKueLczJ6PqZXoWNDMJrZi5euX/YCwhA/SHhkq52yqhG9BZS6c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwivZ5pK1JfBNlzUOYt9TQQzFBA9swvc5F6HlgA+z+KG39J0q7v
-	QuP/c+DXVm59661MOxChn9XRHvYdarofLaZvl63x8P3d3OEkzAo7dis2JV6+sbj20FmFqCDgqX4
-	PJmDpM1SM8710Hm7gERNM+U29M2xyPbxvWjY5HmY4
-X-Gm-Gg: Acq92OEIrgdXrEwao+6fXVfj65VXhY24OCiCG2yCClAumLzrETxxR+I2WY+qKz2vjyl
-	VZZWkZDwEe+38ktCIxXXmH0hROqMaU7TFsCyMz4TSi2f/fp1Tvvm15qlCDr3okQPKXC6uc2t0hq
-	hyh9AW0KFdgM7KfRNXzKYcmk5HkfCxxC5GIwscmN5/a1t34Qj6FVhZu6MKyemDnOQPS2sRc0eN1
-	Rk7CskWMeLQ7s3IATVW5loUVVeiAN7t9eTl+UJCHAl20bKSiW9PyaTI6RgcBbdwJ7CXPKcw5Sxa
-	YA1iiG9QGwgNhJm5drd9i9eO7v93QgkNoThuC/ucUs7k+vIl542UXuo7BnY=
-X-Received: by 2002:a05:600c:828f:b0:485:1a54:9407 with SMTP id
- 5b1f17b1804b1-48ffa06d607mr4555145e9.0.1779214026686; Tue, 19 May 2026
- 11:07:06 -0700 (PDT)
+        bh=xssGkiKE0NLLgIm8hq0sx4z1JVWvwtNlxiDz+CYQuyY=;
+        b=V4tVzcO20afx3XOxYdxxhN78DMSU6K/MxK4Sk/5JYOLNdmGH+clhwAD0BecchcprTT
+         jWTEIwphUfUVLxkXraDJRuoXVgM4P0F0rPmWl8GrBIAJylw1Hm35IcPbONx2USRx+9Ql
+         Rsc55V/2eD4wDGq0UjugVyTB8r2U9KhuHYJCDbSsVH6OOn3hlF/U8ormm+EFgev3Bg36
+         YtMlxL7M7mTTHxHwJL9RY5VWu66wMLAwKpx8x3HaYVAb7i3htWR5NF6p8Dkz3FW4gdW/
+         HHb68L+CFD/FBIv1mKALpgYHX9MZNDTpk3ReMweVSdieRYb8TTASOh1tXfHaD5MovM4C
+         ZbbQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+OiGStEmWIceF6o01LnISboAuyOOPZaDn16QxG/X3H6Jw/2zMmOYWh6cDLUSAbM/EGh42T4Vmt+kiyEHTtUJ4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzmKwZmHnAFqcRgxsWA182Mj0VSXjlXbenb9UZVzAd30qSmi5op
+	ulh0AyIadEK1UrUkujEoSdYxErNvdA4+t35LD/nXq8prMGXgbus30hkpeugX2aCl878DzWEi1MC
+	DrxhA0jO7ZXNsdvUw7NPiqi9eZp5GDXLQL4G9qfsm
+X-Gm-Gg: Acq92OFCqh1HS+zGDxAudXWE5PcYwHyr6MeDmsXZXqlt4bDENbdjlNP1GJ03tEuWCan
+	eCttBQrl+bhMhs27bGaAs81RH/KCpuVnEtO0s/Vq7fDaWWO4qy2aRcx65P1RCcoX96cOuytRagD
+	llqdDGNolEu6Z4QbLlPkcIKXrjvWKV+ugMnLKUBh9ou19DVvvkkDbN/hzZDEaWh30jvEfQExr1Z
+	e/10nrEFO3Cz5P4QLSldX5EsN0VGAk7wnp/0Z5Xtjo7V9AlkGytVFrVuSo8YEIaZiZB+cDYitrB
+	KAKJAeLFFo1Re/OUrU+2+BJ8lrQKd+xWHUFAPXKxWSDgnBUR
+X-Received: by 2002:a7b:cc8b:0:b0:48f:de33:777a with SMTP id
+ 5b1f17b1804b1-48ffd857abfmr3637845e9.11.1779214068422; Tue, 19 May 2026
+ 11:07:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -83,129 +83,165 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20260512-v2_20230123_tjmercier_google_com-v1-0-6326701c3691@redhat.com>
  <20260512-v2_20230123_tjmercier_google_com-v1-2-6326701c3691@redhat.com>
- <8ef38815-6ae9-4359-86d4-042554357639@amd.com> <CABdmKX2uwZ12kYJYPJGfWxuMBOJS=64b1GRj72tfB5D=NKM22w@mail.gmail.com>
- <CADSE00Jq_uvNgvxgPze0mEdUd+hF4-DPZkHy0KroWHZzygf4WA@mail.gmail.com>
- <CABdmKX3DhejYBis9htLDnzPrG7vuF3R3URLVNEbnyd61SSsx=g@mail.gmail.com>
- <CAGsJ_4zyecY6E-=Tm4_couT7uoM9LMcFdTMUPkZAjj4zUKE-dQ@mail.gmail.com>
- <cb84c2ee-9de1-4565-b2e0-60984721228f@amd.com> <CAGsJ_4z121v4tK_3+j-hkD7HH0gH3w8tWD8nk0CwRhFE5T+4Og@mail.gmail.com>
- <8a13b1ad-f1be-4ef4-905e-0d9828ae8cb5@amd.com>
-In-Reply-To: <8a13b1ad-f1be-4ef4-905e-0d9828ae8cb5@amd.com>
+ <20260515-hinschauen-effizient-9e3a05a94f2e@brauner> <CABdmKX0d6Zsg+_TxXjB80UZR23ZvXzxYoWzORgwmx=ZiuE+Nzw@mail.gmail.com>
+ <208fb820-d8eb-4832-a343-ef8b360e8120@amd.com> <CADSE00Lh95ygoXGKJGsYvQGEsFV8sVmwEC3uvh8M6r3ERzaJwg@mail.gmail.com>
+ <88efe10a-8b93-4a81-8279-4a5559d0f17c@amd.com> <CABdmKX3yZubjDKbVqwrjHAiKyj_ioHzOoxd0wzFbJK=PAGOqcQ@mail.gmail.com>
+ <01b6eefc-c107-4f8c-9d7c-3b86f54cabaa@amd.com>
+In-Reply-To: <01b6eefc-c107-4f8c-9d7c-3b86f54cabaa@amd.com>
 From: "T.J. Mercier" <tjmercier@google.com>
-Date: Tue, 19 May 2026 11:06:53 -0700
-X-Gm-Features: AVHnY4ILqt3aAhuKzQVtfjO_TWAUc-lBkfBsfy8pZGOgOTZtrN6Xce9TENH_RxE
-Message-ID: <CABdmKX1o5FeR697DGdExhSDAzdLBN=y4ijpA2SZyisC6ThYKbQ@mail.gmail.com>
-Subject: Re: [Linaro-mm-sig] Re: [PATCH RFC 2/5] dma-heap: charge dma-buf
- memory via explicit memcg
+Date: Tue, 19 May 2026 11:07:36 -0700
+X-Gm-Features: AVHnY4JsuFzXOj8AzAQ7jEDe53JgzbJyOG548qhgZV3zTdsbu0QldI49eMqYz9w
+Message-ID: <CABdmKX1wLoLuWPUEY3D7afQhO0AUnOE7c3iE-VkPuKdeQixBxA@mail.gmail.com>
+Subject: Re: [PATCH RFC 2/5] dma-heap: charge dma-buf memory via explicit memcg
 To: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc: Barry Song <baohua@kernel.org>, Albert Esteve <aesteve@redhat.com>, Tejun Heo <tj@kernel.org>, 
+Cc: Albert Esteve <aesteve@redhat.com>, Christian Brauner <brauner@kernel.org>, Tejun Heo <tj@kernel.org>, 
 	Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
 	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
 	Sumit Semwal <sumit.semwal@linaro.org>, Michal Hocko <mhocko@kernel.org>, 
 	Roman Gushchin <roman.gushchin@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
 	Muchun Song <muchun.song@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, 
 	Benjamin Gaignard <benjamin.gaignard@collabora.com>, Brian Starkey <Brian.Starkey@arm.com>, 
-	John Stultz <jstultz@google.com>, Christian Brauner <brauner@kernel.org>, 
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
-	"Serge E. Hallyn" <serge@hallyn.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
-	Ondrej Mosnacek <omosnace@redhat.com>, Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-media@vger.kernel.org, dri- <devel@lists.freedesktop.org>, 
-	linaro-mm-sig@lists.linaro.org, linux-mm@kvack.org, 
-	linux-security-module@vger.kernel.org, selinux@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, mripard@kernel.org, echanude@redhat.com
+	John Stultz <jstultz@google.com>, Paul Moore <paul@paul-moore.com>, 
+	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
+	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
+	Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org, 
+	linux-mm@kvack.org, linux-security-module@vger.kernel.org, 
+	selinux@vger.kernel.org, linux-kselftest@vger.kernel.org, mripard@kernel.org, 
+	echanude@redhat.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 19, 2026 at 12:10=E2=80=AFAM Christian K=C3=B6nig
+On Tue, May 19, 2026 at 12:19=E2=80=AFAM Christian K=C3=B6nig
 <christian.koenig@amd.com> wrote:
 >
-> On 5/19/26 01:00, Barry Song wrote:
-> > On Mon, May 18, 2026 at 3:34=E2=80=AFPM Christian K=C3=B6nig
+> On 5/19/26 01:39, T.J. Mercier wrote:
+> > On Mon, May 18, 2026 at 7:07=E2=80=AFAM Christian K=C3=B6nig
 > > <christian.koenig@amd.com> wrote:
 > >>
-> >> On 5/16/26 11:19, Barry Song wrote:
-> >>> On Thu, May 14, 2026 at 12:35=E2=80=AFAM T.J. Mercier <tjmercier@goog=
-le.com> wrote:
-> >>> [...]
-> >>>>>> I have a question about this part. Albert I guess you are interest=
-ed
-> >>>>>> only in accounting dmabuf-heap allocations, or do you expect to ad=
-d
-> >>>>>> __GFP_ACCOUNT or mem_cgroup_charge_dmabuf calls to other
-> >>>>>> non-dmabuf-heap exporters?
+> >> On 5/18/26 14:50, Albert Esteve wrote:
+> >>> On Mon, May 18, 2026 at 9:20=E2=80=AFAM Christian K=C3=B6nig
+> >>> <christian.koenig@amd.com> wrote:
+> >>>>
+> >>>> On 5/15/26 19:06, T.J. Mercier wrote:
+> >>>>> On Fri, May 15, 2026 at 6:53=E2=80=AFAM Christian Brauner <brauner@=
+kernel.org> wrote:
+> >>>>>>
+> >>>>>> On Tue, May 12, 2026 at 11:10:44AM +0200, Albert Esteve wrote:
+> >>>>>>> On embedded platforms a central process often allocates dma-buf
+> >>>>>>> memory on behalf of client applications. Without a way to
+> >>>>>>> attribute the charge to the requesting client's cgroup, the
+> >>>>>>> cost lands on the allocator, making per-cgroup memory limits
+> >>>>>>> ineffective for the actual consumers.
+> >>>>>>>
+> >>>>>>> Add charge_pid_fd to struct dma_heap_allocation_data. When set to
+> >>>>>>
+> >>>>>> Please be aware that pidfds come in two flavors:
+> >>>>>>
+> >>>>>> thread-group pidfds and thread-specific pidfds. Make sure that you=
+r API
+> >>>>>> doesn't implicitly depend on this distinction not existing.
 > >>>>>
-> >>>>> We're scoping this to dma-buf heaps for now. CMA heaps and the dmem
-> >>>>> controller are on the radar for follow-up/parallel work (there will=
- be
-> >>>>> dragons and will surely need discussion). For DRM and V4L2 the
-> >>>>> long-term intent is migration to heaps, which would make direct
-> >>>>> accounting on those paths unnecessary.
+> >>>>> Hi Christian,
+> >>>>>
+> >>>>> Memcg is not a controller that supports "thread mode" so all thread=
+s
+> >>>>> in a group should belong to the same memcg.
 > >>>>
-> >>>> Ah I see. GEM buffers exported to dmabufs are what I had in mind. I
-> >>>> guess this would only leave the odd non-DRM driver with the need to
-> >>>> add their own accounting calls, which I don't expect would be a big
-> >>>> problem.
+> >>>> BTW: Exactly that is the requirement automotive has with their nativ=
+e context use case.
 > >>>>
+> >>>> The use case is that you have a deamon which has multiple threads we=
+re each one is acting on behalve of some other process.
+> >>>>
+> >>>> At the moment we basically say they are simply not using cgroups for=
+ that use case, but it would be really nice if we could handle that as well=
+.
+> >>>>
+> >>>> Summarizing the requirement of that use case: You need a different c=
+group for each thread of a process.
 > >>>
-> >>> sounds like we still have a long way to go to correctly account for
-> >>> various v4l2, drm, GEM, CMA, etc. In patch 1, the charging is done in
-> >>> dma_buf_export(), so I guess it covers all dma-buf types except
-> >>> dma_heap, but the problem is that it has no remote charging support a=
-t
-> >>> all?
+> >>> Hi Christian,
+> >>>
+> >>> Thanks for sharing this atuomotive usecase. If I understand correctly=
+,
+> >>> the actual requirement is attributing dma-buf charges to the right
+> >>> client, not putting each daemon thread in a different cgroup?
 > >>
-> >> No, just the other way around
+> >> Nope, exactly that's the difference.
 > >>
-> >> DMA-buf heaps can be handled here because we know that it is pure syst=
-em memory and nothing special so memcg always applies.
+> >> The thread acts as a filtering agent for both memory allocation and co=
+mmand submission for somebody else, the process on which behalve the daemon=
+ does things can even be in a client VM, completely remote over some networ=
+k or even something like a microcontroller.
 > >>
-> >> dma_buf_export() on the other hand handles tons of different use cases=
-, ranging from buffer accounted to dmem, over special resources which aren'=
-t even memory all the way to buffers which can migrate from dmem to memcg a=
-nd back during their lifetime.
+> >> Everything the thread does regarding CPU time, GPU driver memory alloc=
+ation as well as resources like GPU processing and I/O time etc.. needs to =
+be accounted to one client which can be different for each thread of the pr=
+ocess.
 > >>
+> >> The only thing which is shared with the main process thread is CPU mem=
+ory resources, e.g. malloc() because that is basically just needed for hous=
+ekeeping and pretty much irrelevant for this kind of use case.
+> >>
+> >> The problem is now you can't do that with cgroups at the moment but un=
+fortunately only the kernel has the information you need to know to do this=
+.
+> >>
+> >> So what you end up with is to define tons of interfaces just to get th=
+e necessary information from the kernel into userspace and then essentially=
+ duplicate the same infrastructure cgroup provides in the kernel in userspa=
+ce again.
+> >>
+> >>> If so,
+> >>> the `charge_pid_fd` approach achieves this directly by passing the
+> >>> client's `pid_fd`, without needing to add per-thread cgroup
+> >>> infrastructure.
+> >>
+> >> Well it's already a massive improvemt, we could basically stop doing t=
+he whole duplication part for the GPU driver stack and just use cgroups for=
+ this part.
+> >>
+> >> Doing that automatically for CPU and I/O time would just be nice to ha=
+ve additionally.
+> >>
+> >> Regards,
+> >> Christian.
 > >
-> > Hi Christian,
-> >
-> > Thanks very much for your explanation. So basically it seems that
-> > dma_buf_export() is not the proper place to charge, since it may end up
-> > mixing in non-system-memory accounting?
+> > Hopefully I'm following correctly here.... So you are duplicating the
+> > GPU driver stack to achieve remote accounting on a per-thread basis?
 >
-> Yes, exactly that.
+> Not quite, we are duplicating the handling cgroup provides in the kernel =
+in userspace.
 >
-> > My question is also about the global view for both heap and non-heap ca=
-ses.
-> > After reading the discussion, I=E2=80=99ve tried to summarize it=E2=80=
-=94please let me know
-> > if my understanding is correct.
-> >
-> > for dma_heap, we have the ioctl DMA_HEAP_IOCTL_ALLOC, where users can p=
-ass a
-> > remote pidfd or similar information to indicate where the dma-buf shoul=
-d be
-> > charged, as in Albert's patchset.
->
-> Well that's the current proposal, but I think we need to come up with som=
-ething more general.
->
-> > For non-dma_heap dma-bufs, we don=E2=80=99t have an obvious userspace e=
-ntry point that
-> > triggers the allocation. So we likely need other approaches. We could e=
-ither
-> > move more drivers over to dma-heap, or introduce something like
-> > DMA_BUF_IOCTL_XFER_CHARGE, as you are discussing, to let userspace expl=
-icitly
-> > declare a charge.
->
-> Yeah but that's not only for DMA-buf, we need that for file descriptors r=
-eturned by memfd_create() as well.
+> For this memory usage information as well as execution times of the GPU k=
+ernel driver is exposed in fdinfo for example.
 
-memfds get charged on fault, so an allocator shouldn't currently be
-charged just for creating the fd. Unlike system/CMA heap buffers, the
-shmem backing a memfd / udmabuf is LRU memory, and swapping the memcg
-owner of those pages is a more-involved process which is not supported
-by memcg v2. There used to be some support in memcg v1, but it was
-removed. Commit e548ad4a7cbf ("mm: memcg: move charge migration code
-to memcontrol-v1.c ") said, "It's a fairly large and complicated code
-which created a number of problems in the past." So I'm not sure how
-much appetite there would be to support it in v2 for this.
+Oh I see, thanks.
+
+> > Does this mean for GPU allocations you currently have some GFP_ACCOUNT
+> > magic in your driver to attribute GPU memory to the correct remote
+> > client?
+>
+> No, we just expose what the kernel driver has allocated for itself. E.g. =
+page tables, buffers etc...
+>
+> When userspace allocates something using memfd_create() for example we ju=
+st ignore that.
+>
+> > So this series would close the gap for dma-buf allocations,
+> > but what about private GPU driver memory allocated on behalf of a
+> > client?
+>
+> Well we would need a cgroup which isn't associated with any process were =
+we could charge the GPU driver allocations against.
+>
+> But good point, charging against a pid wouldn't work in this use case.
+
+It would be pretty low overhead to put a process doing while(1)
+pause(); in a separate cgroup for this purpose, but I guess a fd for
+the actual cgroup would be a little cleaner in this case.
+
+> Regards,
+> Christian.
