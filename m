@@ -1,169 +1,233 @@
-Received: from mail-vk1-f172.google.com (mail-vk1-f172.google.com [209.85.221.172])
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE73F328243
-	for <linux-kselftest@vger.kernel.org>; Tue, 19 May 2026 18:35:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51A7D36B042
+	for <linux-kselftest@vger.kernel.org>; Tue, 19 May 2026 18:43:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.177
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779215706; cv=pass; b=j+eoVKxwGFmCNFTKnvWhC/wElKbl92Y7Avxa6TQ7Qf3rN83aVQO3c9vXhjmYDwjfpednlrlDzq2jx5G9Mkks1Q3uC58TTT4cSjsM9vYCKvXpENR8KgkaduEnqMmAaH/aoGI7fds8Y65lCYlL+wRBMGsXPm1mjtLx9m/heTCr4oA=
+	t=1779216184; cv=pass; b=nhkryEfGsLAUSRul89cvrUWjFo0KRER3v2f8jCD83fHkqHPOSomLrpdtW5qZI4cJWHDc2h42KauURUysBEgFzBnKhj3kHf8nIqJDRsQh+uIHjh4eCv4ysKQrULRhOf8KFJN7hSvFrstmTOKeD44AfmPn6w/ovC10Ockutr1vK3c=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779215706; c=relaxed/simple;
-	bh=KGwOof5+ZrWk7fQk8HZziiUwEIlVuaXd+B/75nP5r7o=;
-	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RSzRkekzSWQvg7mQfbVCFv665xCD3O3YIwJhDLrKvy9evUdVapxrwJhwOWxoiU4t0sDfFUKhhJ/IJB/DIjaalMXYCP2MqxIMV1BpRRvAyHDwwp0DhQsXf/E7yVkjmqdWgzB5nNpO+7xJqZ2pgGTjSPQz+L8vjqPaGwkrPsW3gNU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gGAELiIj; arc=pass smtp.client-ip=209.85.221.172
+	s=arc-20240116; t=1779216184; c=relaxed/simple;
+	bh=jyHZ/08tvcyFQsPqYGKjfC/6QDyS1u1QbpIxGFQeg9g=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nv+alVJ43EB6CmPlRY8dFvjyH6zpfD9toUxW3P9p+0r6xMYXyYT7DJv74Y2hGBfr7uabLVdB0p+fGavd5sbSSlZuEyQVc+75Qq6+djyywKfKEQy8ayHcjxsXhPj9fWoyKenr52yAcnSqvNC03dZyMvD7xd8m0+oROBLo0Bkh1+I=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=TrQlHwVs; arc=pass smtp.client-ip=209.85.160.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gGAELiIj"
-Received: by mail-vk1-f172.google.com with SMTP id 71dfb90a1353d-575267e3398so3216159e0c.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 May 2026 11:35:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779215703; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TrQlHwVs"
+Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-50e61648f10so10681cf.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 May 2026 11:43:03 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779216182; cv=none;
         d=google.com; s=arc-20240605;
-        b=Aaxm1ob8FQN6kO5hbwYHtnSSSEJA3qafuOqzNRbyd0V43LkrONTplhrrcZf5Bo8HF2
-         FAM8x6Vq04JUfaz82qCWDu2kMWQ55MhskmMFJJW5w4DjNWjKBMb4Y4Kndtuz9Py1/j76
-         AIoY8KoNircJlns35UBsaSa3jD9LXY6c3cl8vMX9RFyrQi5sCA2OWFdOsChNJ1UC/KGs
-         7Tc6QcqsMecL4uMYEWmy3oLpEVyepusFQNwGZTDX9niTTneIHenvhwXYmYkNFUcZjC4L
-         eMCYzNfnSpDCfgSBz/CPOGh2m00tZH+cF6qg6Hea8mtAu24aB1jtyIVz+4AZ3a9F7FLq
-         TFWg==
+        b=droHPQTg9zqR22ptLXTfZNGjKFxL5GKx3eZCc5IZ2mOM7dGBvj1z2cuME/GiTkH9Nh
+         4V+WzsyfVyFsqxMldNnLNUylN7RXxB68ugG2y3/LDv0KI/9krIQCn0mMvQK6YM3c2b2Z
+         Pl9dcv/SGh7W2hd811XTykhooTY6hKNd6XqgQy0+PjmJUnrJy3aln56hnswgEoEI1DmB
+         xDrxkRXS/e6Hw8mNR+Z1kjBaotLyWTa/Jt7gxtbD89tLxDTUlnR6oB9g+xp8ZzDPjHt3
+         2KzeJJ4vGF8g7cKo38fDMgoRenmziZhvoAeiglQ3J0629fhYUvSryy/ug6xIgtHwSjce
+         r3Dg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:dkim-signature;
-        bh=g5YZm4UgAbGxYabjQSgq96Npr2NETq5PmOxXIUp4roA=;
-        fh=bCvO+R6eXkc4CafKz4kb4nD3IqleYE1u/zZCG+vWw1M=;
-        b=dYK6ld059WoV7ZE82pSQ/L3lsxrz8gYgASJGl77wSWtq899QH4pSpEln+ZDqVPSvzr
-         aTCGfv1OZHm3rFKMqdYuBcvxg8w3RLfUv2unbPHb/QU97Br1guhjypzDU85Q3rUziXZr
-         2daN6i3KLICTbYte54OkXb12ARrBprkS7nl9TAfEr62aFpRB8VlDRih569C4uRjYSW2o
-         OrpnU7WOE+BNhzcJU85bqSMQl6NQt9Cb6fj9vkQMb/ugldzcGqDVq8Ja4DLk1XjwtBUl
-         L/iQcudTNjBLvWkkckF/CDJRZvom6H+QnJHmy13AEiAJosfhN2pM1UTXOzDWalfSQPfi
-         Iq9w==;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=i16+FFvfRzBkoRR3FfnvsjYKLz//qSHJsdGGTw8nQ+c=;
+        fh=CIfhPUVnDKwT/DDwZr9A2Fwy3xyKgrLW78c0n1J5Pv8=;
+        b=YZK0M1sTTpEyuW15T/i6yGzqmHYHbApYCJ9YdCXVGk3MPZ83SeTN0PSK/LYDhSYAzu
+         KUaCS2XeqTYLDq+KCivC9FP3kanhaELwkLAF2dkrFxl5tECHCK/L94OAfnEzih0Ix8pU
+         /piYaa8qaNYyen2pEMRpWrVg7TBXrf63waGwM7Y4z1PpRk2HV+U5hxmzmi6VQuiJP5Bq
+         wzCVGC6KPjM04WOttdN9l+desD+RzSmr9uRJS49eR11Yc+s0ExqNWNtIPtycEekxy+oP
+         AS7LrYbIgSYYhZnDTPCDhPkEItf2x3J03KyZD59rSBPCefOw33sZI6V0grPITho90xeM
+         bePA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1779215703; x=1779820503; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=g5YZm4UgAbGxYabjQSgq96Npr2NETq5PmOxXIUp4roA=;
-        b=gGAELiIjllEN2fO5gAg1oWXeDYJshtsvffzgK1Px5SGpE9SJIt5ufCwK3CHTtdnF8D
-         wCyP2UeuOnlJu5f5bNS6wCYxJDbuAg6Dl0Z+3chkVT9KJvQJ1bCF+ikRTxM7lUwobhd/
-         pMjtf8aGrSTwmfUOzZXrDxvIlA4ZMZQfgqtsarl7w9uciW6OmIBP6nM0Ovsng6okSutE
-         3iuKJSZnSerFt9wqKESxm2LjUbNW5maq/Q5JgXw6Z67HWocs6pNxCdkhfzzmPUu3HLKj
-         xDnEbIQTOG4uNqmn2+giEzxWysm0hE53qjRGxSH3Y6u6OIB0wNCwiT70YqUOAL37BMwK
-         qyYg==
+        d=google.com; s=20251104; t=1779216182; x=1779820982; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=i16+FFvfRzBkoRR3FfnvsjYKLz//qSHJsdGGTw8nQ+c=;
+        b=TrQlHwVstY6h/+9d08qDcMlrUXqpD/dz/oBE7sDTDTWycWY3h7XePO3FbNKSZYlYZg
+         lKvt4j81W6ydM7fr12MVwWXWk9qA+buG0Scoj2vcLQmUCFNM2BcAk2vc4q4bysl6re+N
+         PFKvU/AQRcXqos1FReFeDz10uTjOeNwd/Rpmi0oanLoM+0AQr4BoYPHLG7tplOkzSiez
+         1AHjPzUDaJ/ruiDAeQSEq8WNA9IrU/UOI319EPlYw29zARWWVFrltsNEaNhMukVAn/Hp
+         CuL3KTzfxOav0D59YK0qOj7NS8AtxT8Id+hiZconZ6ryUWe02CeXfTFoN3bVjmJVLDBD
+         7nnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779215703; x=1779820503;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=g5YZm4UgAbGxYabjQSgq96Npr2NETq5PmOxXIUp4roA=;
-        b=DQSLDh4jUGKud7a7X6NOQhWViKF4ZRkf38JfYZVNA70+2ksU3FUxcwdcFtxKiUbGqq
-         fwpt90VUcdqvGaROjHTdzV2CbP/DbRR0NVTBFftRQAKen+zhoqgpP9tA6LqVyrh5L0wG
-         suwi66hzdXzvM9C7D4QvodEi6oahLcQ+PHOpLzxbTNVjJby/bP8bxVNXA/h36jJCIiHk
-         6uY5KDECmYHRhq1hORzG9BGX74U1W9QUqLUyw/1Kbkcl+BPYkaFu9fLmTWFfSsn7dwpy
-         Qwxu0OxgkSr00lRnAdw9VnDIy8VmTEA3hrgx/QxHoEyLbYTcMHq/eCtyy7CkBXeBJ4RV
-         ahQQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+MTDOr78SKj/WYtNAkpbqWqN2OEB90rwAuUexPRasK8TSkvhRPJe5HPyRvk1Fqef818kEPuQdl02KSjKBDjn0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx59nJVHigC2ENmZeJH6gBh+B3rvQHVi9Tv0E+miEi511h/SqXg
-	mpRw9SQg28ISjR+u/Awho2IksvchyfGnEKIHGvdlI1TEEaG0rzEVZYfMF2ScwjZPOgyjeZNviFP
-	KPkm7dan6v73vvvUseVqZZiWF2HeHdbbZtXng/5TH
-X-Gm-Gg: Acq92OEpPbFF4LD0K9IC+Mnyn85N7d7RPYxJG1M+wp+NDsNt38OJ3nDEzWFkEcR/uPL
-	CDpidBYAmU6vgKeLc7j1uoy5FuIMpGQB3qDZb/0eV6iQkbY4bVxSkHJ7HKrzHog2JDK4LfW2XYC
-	s9ViFlVuTHJabosDYkmjUStuM0rOKCWraSaIEgrBMBplOutS1qPpBMDIEQm3UuvP+eE88O7od5M
-	7cZmq+CnkCF4e5VDHHCMEd2ykkMX/qK5vb2xN9ooyC+EloXbJvE9gbO7cFtR2Ie8ugNAJmHZoWc
-	UiHxsFlDi56DXw98GYNEN0el6JeVqZZ0jeMxHgdYMg752QMjLTE1G64mXwDRgNcVMxcdh+0y+GM
-	tKM0X
-X-Received: by 2002:a67:e70b:0:b0:62f:46be:8318 with SMTP id
- ada2fe7eead31-63a3cc0e937mr11563105137.6.1779215702359; Tue, 19 May 2026
- 11:35:02 -0700 (PDT)
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 19 May 2026 11:35:01 -0700
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 19 May 2026 11:35:01 -0700
-From: Ackerley Tng <ackerleytng@google.com>
-In-Reply-To: <agt5A90k9lS9JPWp@google.com>
-References: <20260518070943.2091287-1-ZongYao.Chen@linux.alibaba.com>
- <20260518070943.2091287-3-ZongYao.Chen@linux.alibaba.com> <CAEvNRgFgobnW+O=t32gu-0YDy0n7ZqvmdCtg+DzLT3uf0+BDeg@mail.gmail.com>
- <agt5A90k9lS9JPWp@google.com>
+        d=1e100.net; s=20251104; t=1779216182; x=1779820982;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=i16+FFvfRzBkoRR3FfnvsjYKLz//qSHJsdGGTw8nQ+c=;
+        b=R3bfiBU2c5WOKaY8QAP8x7RNFGTPWvL+5Cxc2/WommqhIIjDpFre0VcWmkL5O6Cq5y
+         V8lzWKd6XBs8lF+pkdRxGJ7oSb8AZpsYvTX0byeuR/bFIrLpDlfI4fvMOHtrxnZI/CXZ
+         +usToQ5ama915YBKXwCnPlkBhhgfkoTOMr/8oDlKjtVls8iTLU83wzILnTYfoEKoRNwI
+         fAP3h0tHSL9r9UHBNdgQ7ODtH0XpPHRXl+LumaL5hPylbYFzl13Z12yl1dEPObshOG07
+         1DAxqCH7Lf80t3tvP7VDa3FrMSML0/mKmWgQ7B7NZeVH8Iz//oPomvbZ7Qq5uIPwbDGu
+         nBuA==
+X-Forwarded-Encrypted: i=1; AFNElJ+/biOVrmtQe/xX0Y++z/ix6NpuQe8twcInFYkN5QbjXjl90aCPGay12Q2oke4of81k0o38PL0KSi9PCKIavJc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyI6yyYJLt2IEpuJJErPG84cMBLmVQOy31mlZh8caABQ3pMnPG9
+	jDlUdWJzQhEFm9SS3l7ZBr6GdhirFq0EvL1rQaiTyQ4+NOS3ASHaOVSlQSw1zEhPIu/DnP5dE4C
+	ghRMCnDgs1iECoDM+CyCWlzDwaO4gmEIwf0V3DF4U
+X-Gm-Gg: Acq92OG80YWNWoRcbFifxcwRYl2oFxaPv1FMa/28HxexzQuwauPMm86ozEd+UAZJfz0
+	lA/jlEz0ffodmscBkCUwd27e3xh/suzS3ZPH4s+XAgaND94AlbI1wT79G6/abv2vgIe1RSevqiL
+	oKMTymQbGeISHV1VmNWEKchngYbzw6oXieNH0FoK/ZOBDIhXU+y21RKPEDT2yIyr+aU317lJmKm
+	3QAQGZd7cz+pVsWKBMWojJT6UOT0ur60jIsAr0a1qdqqlcb7lvx7NZT/lfQEPN0BgdxcjQws9D2
+	DIC5C2VW3P/SPkulhw==
+X-Received: by 2002:ac8:5f91:0:b0:50e:41f3:6467 with SMTP id
+ d75a77b69052e-5167943f41fmr9837631cf.12.1779216181555; Tue, 19 May 2026
+ 11:43:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Tue, 19 May 2026 11:35:01 -0700
-X-Gm-Features: AVHnY4JMb8xTVN3PiZl5iQlu_-bUy05sR1IlC9x-XipUxw6zHkFMz5hIRfmkZZo
-Message-ID: <CAEvNRgE4o6C8P2jW_MGn=1BHxgmp183UTk_h5YkM+U_MCTMdzA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] KVM: selftests: Test guest_memfd binding overlap
- without GPA overlap
-To: Sean Christopherson <seanjc@google.com>
-Cc: ZongYao.Chen@linux.alibaba.com, Paolo Bonzini <pbonzini@redhat.com>, 
-	kvm@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
-	"Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>, Chao Peng <chao.p.peng@linux.intel.com>, 
-	Xiaoyao Li <xiaoyao.li@intel.com>, Tianjia Zhang <tianjia.zhang@linux.alibaba.com>, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260517184158.2757505-1-sbrivio@redhat.com> <20260517184158.2757505-2-sbrivio@redhat.com>
+ <CAAVpQUCiHA=z62udnWLVyv0LeGsAHr+A=_o-8fomHZfJZJO2aQ@mail.gmail.com>
+ <20260517215307.13cda56a@elisabeth> <CANn89iKLfBmh3_t4xJz3dDJ8VkMsEtHRifg0mRV1PPAryNY1-g@mail.gmail.com>
+ <20260518132831.5b9eb0a8@elisabeth> <CAEWA0a5AG6JmeybHcxU+EL_Ohi0uVnSaVCiz7Bp_oDVuEdtO=g@mail.gmail.com>
+ <20260519181157.1b0605f8@elisabeth>
+In-Reply-To: <20260519181157.1b0605f8@elisabeth>
+From: Andrei Vagin <avagin@google.com>
+Date: Tue, 19 May 2026 11:42:50 -0700
+X-Gm-Features: AVHnY4IEKu_LjVK5cbfuKENBvnGAkj0ktHC3a1qrMUHOlR6-1UX7It_8tvvetmA
+Message-ID: <CAEWA0a4d-PpWpVexYGP5SLRuzj8hs1W1_Ww6qA4BBrkzSs4umQ@mail.gmail.com>
+Subject: Re: [PATCH net 1/2] tcp: Don't accept data when socket is in repair mode
+To: Stefano Brivio <sbrivio@redhat.com>
+Cc: Eric Dumazet <edumazet@google.com>, Kuniyuki Iwashima <kuniyu@google.com>, 
+	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Pavel Emelyanov <xemul@scylladb.com>, Laurent Vivier <lvivier@redhat.com>, Jon Maloy <jmaloy@redhat.com>, 
+	Dmitry Safonov <dima@arista.com>, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Neal Cardwell <ncardwell@google.com>, 
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	David Gibson <david@gibson.dropbear.id.au>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Sean Christopherson <seanjc@google.com> writes:
+On Tue, May 19, 2026 at 9:12=E2=80=AFAM Stefano Brivio <sbrivio@redhat.com>=
+ wrote:
+>
+> On Tue, 19 May 2026 08:36:27 -0700
+> Andrei Vagin <avagin@google.com> wrote:
+>
+> > On Mon, May 18, 2026 at 4:34=E2=80=AFAM Stefano Brivio <sbrivio@redhat.=
+com> wrote:
+> > >
+> > > On Mon, 18 May 2026 00:57:16 -0700
+> > > Eric Dumazet <edumazet@google.com> wrote:
+> > >
+> > > > On Sun, May 17, 2026 at 12:53=E2=80=AFPM Stefano Brivio <sbrivio@re=
+dhat.com> wrote:
+> > > > >
+> > > > > On Sun, 17 May 2026 12:05:45 -0700
+> > > > > Kuniyuki Iwashima <kuniyu@google.com> wrote:
+> > > > >
+> > > > > > On Sun, May 17, 2026 at 11:41=E2=80=AFAM Stefano Brivio <sbrivi=
+o@redhat.com> wrote:
+> > > > > > >
+> > > > > > > Once a socket enters repair mode (TCP_REPAIR socket option wi=
+th
+> > > > > > > TCP_REPAIR_ON value), it's possible to dump the receive seque=
+nce
+> > > > > > > number (TCP_QUEUE_SEQ) and the contents of the receive queue =
+itself
+> > > > > > > (using TCP_REPAIR_QUEUE to select it).
+> > > > > > >
+> > > > > > > If we receive data after the application fetched the sequence=
+ number
+> > > > > > > or saved the contents of the queue, though, the application w=
+ill now
+> > > > > > > have outdated information, which defeats the whole functional=
+ity,
+> > > > > > > because this leads to gaps in sequence and data once they're =
+restored
+> > > > > > > by the target instance of the application, resulting in a han=
+ging or
+> > > > > > > otherwise non-functional TCP connection.
+> > > > > > >
+> > > > > > > This type of race condition was discovered in the KubeVirt in=
+tegration
+> > > > > > > of passt(1), using a remote iperf3 client connected to an ipe=
+rf3
+> > > > > > > server running in the guest which is being migrated. The setu=
+p allows
+> > > > > > > traffic to reach the origin node hosting the guest during the
+> > > > > > > migration.
+> > > > > > >
+> > > > > > > If passt dumps sequence number and contents of the queue *bef=
+ore*
+> > > > > > > further data is received and acknowledged to the peer by the =
+kernel,
+> > > > > > > once the TCP data connection is migrated to the target node, =
+the
+> > > > > > > remote client becomes unable to continue sending, because a p=
+ortion
+> > > > > > > of the data it sent *and received an acknowledgement for* is =
+now lost.
+> > > > > > >
+> > > > > > > Schematically:
+> > > > > > >
+> > > > > > > 1. client --seq 1:100--> origin host --> passt --> guest --> =
+server
+> > > > > > >
+> > > > > > > 2. client <--ACK: 100-- origin host
+> > > > > > >
+> > > > > > > 3. migration starts,
+> > > > > >
+> > > > > > Here, a netfilter rule or bpf prog must be installed to
+> > > > > > drop packets temporarily until migration completes.
+> > > > >
+> > > > > Thanks for the review.
+> > > > >
+> > > > > I have to say it's rather unexpected to have to work around obvio=
+us
+> > > > > kernel issues in userspace: TCP_REPAIR implies that queues are fr=
+ozen,
+> > > > > and this is handled correctly on the sending side (see
+> > > > > tcp_write_xmit()), but was clearly forgotten on the receiving sid=
+e.
+> > > >
+> > > > Have you contacted TCP repair authors for best practices?
+> > >
+> > > I Cc'ed them here, Pavel is the author (but as far as I understand no=
+t
+> > > active in kernel development anymore), and I know that Andrei did som=
+e
+> > > substantial work on it in the past, so he's Cc'ed here as well.
+> > >
+> > > But we are following what CRIU (the userspace reference implementatio=
+n)
+> > > does, and CRIU would be affected by this issue as well (depending on
+> > > usage).
+> >
+> > Before extracting the socket state, CRIU uses netfilter (iptables or
+> > nftables) to block all traffic associated with the specific TCP
+> > connection or, in the case of a container, the entire network namespace=
+.
+>
+> ...by default, yes, by "depending on usage" I actually meant
+> '--network-lock skip', but I have to admit I'm not sure how commonly
+> that is used.
+>
+> > This approach provides two main benefits:
+> >
+> > During the dump, we don't need to leave all sockets in repair mode for
+> > the entire duration of the dump.  We enable and disable repair mode jus=
+t
+> > to grab the state. It's simplify a roll back if something goes wrong.
+>
+> Thanks for clarifying this aspect, I wasn't sure whether it was done to
+> make rollback easier.
 
->
-> [...snip...]
->
->>
->> Since this test program is meant to test set_memory_region, should we be
->> retaining the original test? The original test is wrong in that it
->> doesn't test guest_memfd's binding, but it does test that
->> set_memory_region returns -EEXIST on overlapping GPAs.
->>
->> Perhaps to just test overlapping GPAs we can use anonymous memory
->> instead of guest_memfd.
->
-> Eh, I see no harm in having both.  E.g. if we do this, then we don't have to
-> explain why we're not testing the other case :-)
->
+I would rephrase that: it likely wasn't implemented originally because
+Pavel may not have considered it necessary. When checkpointing a
+container with a separate network namespace, blocking all traffic within
+that namespace is straightforward. If CRIU crashes or is killed during a
+dump, we simply unblock the traffic, and everything continues to
+function without needing to manage individual connections.
 
-Makes sense to have both :)
+As I mentioned before, I have no objections to the idea itself, moreover
+it looks quite rational and will make the code safer regarding undesired
+side effects/race conditions. Thanks for working on that.
 
-> diff --git a/tools/testing/selftests/kvm/set_memory_region_test.c b/tools/testing/selftests/kvm/set_memory_region_test.c
-> index 9b919a231c93..283392bcc3a0 100644
-> --- a/tools/testing/selftests/kvm/set_memory_region_test.c
-> +++ b/tools/testing/selftests/kvm/set_memory_region_test.c
-> @@ -510,7 +510,7 @@ static void test_add_overlapping_private_memory_regions(void)
->
->         vm = vm_create_barebones_type(KVM_X86_SW_PROTECTED_VM);
->
-> -       memfd = vm_create_guest_memfd(vm, MEM_REGION_SIZE * 4, 0);
-> +       memfd = vm_create_guest_memfd(vm, MEM_REGION_SIZE * 5, 0);
->
->         vm_set_user_memory_region2(vm, MEM_REGION_SLOT, KVM_MEM_GUEST_MEMFD,
->                                    MEM_REGION_GPA, MEM_REGION_SIZE * 2, 0, memfd, 0);
-> @@ -542,6 +542,26 @@ static void test_add_overlapping_private_memory_regions(void)
->         TEST_ASSERT(r == -1 && errno == EEXIST, "%s",
->                     "Overlapping guest_memfd() bindings should fail with EEXIST");
->
-> +       /*
-> +        * Repeat the overlap tests, but so that there is overlap in the
-> +        * guest_memfd bindings (i.e. in guest_memfd file offsets), but _not_
-> +        * in the GPA space.  Regardless of where there's overlap, KVM should
-> +        * return -EEXIST.
-> +        */
-> +       r = __vm_set_user_memory_region2(vm, MEM_REGION_SLOT, KVM_MEM_GUEST_MEMFD,
-> +                                        MEM_REGION_GPA,
-> +                                        MEM_REGION_SIZE * 2,
-> +                                        0, memfd, MEM_REGION_SIZE);
-> +       TEST_ASSERT(r == -1 && errno == EEXIST, "%s",
-> +                   "Overlapping guest_memfd() bindings should fail with EEXIST");
-> +
-> +       /* And now the back half of the other slot's guest_memfd binding. */
-> +       r = __vm_set_user_memory_region2(vm, MEM_REGION_SLOT, KVM_MEM_GUEST_MEMFD,
-> +                                        MEM_REGION_GPA,
-> +                                        MEM_REGION_SIZE * 2,
-> +                                        0, memfd, MEM_REGION_SIZE * 3);
-> +       TEST_ASSERT(r == -1 && errno == EEXIST, "%s",
-> +                   "Overlapping guest_memfd() bindings should fail with EEXIST");
-
-I just noticed this is kind of odd, what is the purpose of "%s" and then
-filling the string in with a hardcoded string?
-
->         close(memfd);
->         kvm_vm_free(vm);
->  }
+Thanks,
+Andrei
