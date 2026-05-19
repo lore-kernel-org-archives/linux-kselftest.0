@@ -1,56 +1,61 @@
-Received: from mail-108-mta224.mxroute.com (mail-108-mta224.mxroute.com [136.175.108.224])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CEB83ED3AB
-	for <linux-kselftest@vger.kernel.org>; Tue, 19 May 2026 13:19:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=136.175.108.224
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03733409603;
+	Tue, 19 May 2026 13:22:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779196801; cv=none; b=MoDafv88KQGN2hbK3+gmZfN++bT8HamloWi3MkV8yBYHZmjvgo79s6qFBDVmx9cJ18xwtKKbFJHUwfrHN1dDMsxySA2VlwyH86xEht7JOptPHqXMuqA32UoJOHlCMJwFH+3nggqMDyMFgbO0sLxcPCgxRFhsJDU//uGcw109PoI=
+	t=1779196930; cv=none; b=puxuofdHMdkTPVIe7Ua+1NpZGUUVbX0kELbTUtIOBizJANaqicTkZ2s4I999suWT1LCOYDuYnxjavwHFfozeJoLpVgMOsErqwE/jQZJt3jnzXythkHpMF06KhJVzbjOzP/+7y7qk/w517MevXzoAMlSdAe9C7Y0Or6TgBaEF6U8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779196801; c=relaxed/simple;
-	bh=7agi6H0+Rwc3XPoRG2oJXlm/cXh7VkrCvKUxNMYowGA=;
+	s=arc-20240116; t=1779196930; c=relaxed/simple;
+	bh=0DOGHmbTiOxaq5Lkyi3/3tBJC65Prc4+RQK6ZRBWl2g=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FzjRi4jW9m/bSfclorfCAkBN9d8jGrPxdCEyV7nKsZuvswS2R5iCvUWbUaYu6loSFWWoSXFrkomWsHOayKACQMGEe/3hJAxbotRF3B9SVq5Mt4yBUWwA8caR5cWRpFfz8gGRHflD4TWt936Pz0/OhXJp4+h+P/TmQ3mf2xEHAVo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wii.dev; spf=pass smtp.mailfrom=wii.dev; dkim=pass (2048-bit key) header.d=wii.dev header.i=@wii.dev header.b=OTFXNPuP; arc=none smtp.client-ip=136.175.108.224
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wii.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wii.dev
+	 Content-Type:Content-Disposition:In-Reply-To; b=FbDNvkkzgsTAyzOIZFQfEyKCHvqDSPbaWODnUVPkHoIYEDZMWtvOeP2OwQL+2lzXvzf4eLvhYt9IC2Xt9rd4UQiP02w5eLqp6XOAxdZ6FMWh2JTVTjWbQ8DRseMWI/QqeqShsmzWSrc6L77JlIL0WCKqysA0UNx3o66cCjPtUWY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Fo0KAlSO; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wii.dev header.i=@wii.dev header.b="OTFXNPuP"
-Received: from filter006.mxroute.com ([136.175.111.3] filter006.mxroute.com)
- (Authenticated sender: mN4UYu2MZsgR)
- by mail-108-mta224.mxroute.com (ZoneMTA) with ESMTPSA id 19e405fda1600067f7.00e
- for <linux-kselftest@vger.kernel.org>
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Tue, 19 May 2026 13:14:44 +0000
-X-Zone-Loop: defba1baa79b0ffa0ad2a22b0a998fd770cf04c07160
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=wii.dev;
-	s=x; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:Cc
-	:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=wJgkN/kB4QKRM+t/h307nbO9m47Uz4y5IRxBD/CeA+Q=; b=OTFXNPuPKsWEXT3mv1lZIP7dzY
-	GzofJXI6VzueLQZksqg2HgZAxmUwRL+HoCPNgYDOQjQ6/BFi255DRoHKNfa3RhMwWEl1b5Aqr17iS
-	l0nR7MQ6D3FkxTnUz4/RUHkvgY9Z+CWhzY/bXRZaVsjhMpqgrZ+WOPLIagR/rPWlYeJPT/E3L7pz8
-	FgWQ8QuPkLxeqpe5jhJ9FErFBkVhpnPpiTCadMfJXIypYQ79cDLXsDmDHebblPLKO2EqnutiLajVv
-	k5nuo1sKMe9BENhYtYw4auylf4YusKw1/whUozpgT3fKcXrFuwX2Ad6gGlWQsPZeJi20FScoYffEq
-	wakkLrlw==;
-Date: Tue, 19 May 2026 13:14:33 +0000
-From: Richard Patel <ripatel@wii.dev>
-To: David Laight <david.laight.linux@gmail.com>
-Cc: x86@kernel.org, Rick Edgecombe <rick.p.edgecombe@intel.com>,
-	Yu-cheng Yu <yu-cheng.yu@intel.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>, "H. Peter Anvin" <hpa@zytor.com>,
-	Andy Lutomirski <luto@kernel.org>, Kees Cook <kees@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/7] Usermode Indirect Branch Tracking
-Message-ID: <agxiORpLBErOxLin@wii.dev>
-References: <20260517183024.16292-1-ripatel@wii.dev>
- <20260519103345.49e52ceb@pumpkin>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Fo0KAlSO"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1779196929; x=1810732929;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0DOGHmbTiOxaq5Lkyi3/3tBJC65Prc4+RQK6ZRBWl2g=;
+  b=Fo0KAlSOkJFqtjUOR5MRLZL19zWYV/kUCYvvoaDPADb8RoFs3c+kDBtg
+   kSegIP5WbPrM70VGIZg5X4U5+UH3ukDKL8Oy1CEsraU03Q+k/UeD3L2YL
+   syiD5AVtTzoLme+WsZrvG6JHv5bSf4Coq6NwtGg4wWtZS82O25EfDA+TN
+   Ivvamf118ffJZhGjuJsiTrBSjQg6zD3O3cTnafeS8ieM5KYyQn+8JUk+K
+   33Dukze4AP+HskSjpLncyywnvZFAo9S9wNsJq7j5v3eRxg+5AaYk7YHgi
+   ndouqCpYXZCWPdSCZ1QGZrKk2/pYztgA9s5vgpux1h0ef5I+vROjZzSxV
+   g==;
+X-CSE-ConnectionGUID: 4WaX3oIySJW5xn7SyeXWBQ==
+X-CSE-MsgGUID: aLDvI1+BTxCB4kY0lp2Z4A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11791"; a="80124479"
+X-IronPort-AV: E=Sophos;i="6.23,243,1770624000"; 
+   d="scan'208";a="80124479"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2026 06:22:08 -0700
+X-CSE-ConnectionGUID: NQnuvB9YTmeMay4v4oPFZQ==
+X-CSE-MsgGUID: Vb8Iha8+SWe058qVUl/3PA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,243,1770624000"; 
+   d="scan'208";a="239628326"
+Received: from lkp-server02.sh.intel.com (HELO 30e86e9c1927) ([10.239.97.151])
+  by orviesa008.jf.intel.com with ESMTP; 19 May 2026 06:22:08 -0700
+Received: from kbuild by 30e86e9c1927 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wPKNv-0000000016L-3Pbt;
+	Tue, 19 May 2026 13:21:30 +0000
+Date: Tue, 19 May 2026 21:18:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: Disha Goel <disgoel@linux.ibm.com>, shuah@kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Disha Goel <disgoel@linux.ibm.com>
+Subject: Re: [PATCH] selftests/filesystems: Move file_stressor to dedicated
+ subdirectory
+Message-ID: <202605192100.DvRgEGZ3-lkp@intel.com>
+References: <20260519104210.11836-1-disgoel@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -59,49 +64,38 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260519103345.49e52ceb@pumpkin>
-X-Authenticated-Id: ripatel@wii.dev
+In-Reply-To: <20260519104210.11836-1-disgoel@linux.ibm.com>
 
-On Tue, May 19, 2026 at 10:33:45AM +0100, David Laight wrote:
-> Isn't using 'notrack jmp *reg' for jump tables actually more secure?
-> If an attacker can write code it doesn't matter.
-> The jump table in is RO memory so can't be written.
-> But if there are ENDBR on all the jump table targets they become
-> possibly useful code addresses to arrange to write into some RW
-> function pointer table - which might be useful.
+Hi Disha,
 
-You're right. I was worried about an invalid jump table index at first.
-Clang 22 happily optimizes away jump table index bounds checks. GCC 16
-seems to be more careful. We should probably patch LLVM to never
-optimize it away, e.g.:
+kernel test robot noticed the following build warnings:
 
-	// funny.c
-	// clang -c -fcf-protection=branch -O2 -o funny.o funny.c
-	// objdump -d funny.o -M intel
-	int t0(void), t1(void), t2(void), t3(void);
-	int funny(unsigned long target) {
-		__builtin_assume(target < 4);
-		switch (target) {
-		case 0: return t0();
-		case 1: return t1();
-		case 2: return t2();
-		case 3: return t3();
-		}
-	}
+[auto build test WARNING on shuah-kselftest/next]
+[also build test WARNING on shuah-kselftest/fixes linus/master v7.1-rc4 next-20260518]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-	// Clang 22
-	0000000000000000 <funny>:
-	       0: f3 0f 1e fa                  endbr64
-	       4: 55                           push rbp
-	       5: 48 89 e5                     mov rbp, rsp
-	       8: 3e ff 24 fd 00 00 00 00      notrack jmp qword ptr [rdi*8+0x0] // vulnerable
-	      10: 5d                           pop rbp
-	      11: e9 00 00 00 00               jmp 0x16 <funny+0x16>
-	      16: 5d                           pop rbp
-	      17: e9 00 00 00 00               jmp 0x1c <funny+0x1c>
-	      1c: 5d                           pop rbp
-	      1d: e9 00 00 00 00               jmp 0x22 <funny+0x22>
-	      22: 5d                           pop rbp
-	      23: e9 00 00 00 00               jmp 0x28 <funny+0x28>
+url:    https://github.com/intel-lab-lkp/linux/commits/Disha-Goel/selftests-filesystems-Move-file_stressor-to-dedicated-subdirectory/20260519-185602
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git next
+patch link:    https://lore.kernel.org/r/20260519104210.11836-1-disgoel%40linux.ibm.com
+patch subject: [PATCH] selftests/filesystems: Move file_stressor to dedicated subdirectory
+config: m68k-allnoconfig (https://download.01.org/0day-ci/archive/20260519/202605192100.DvRgEGZ3-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 15.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260519/202605192100.DvRgEGZ3-lkp@intel.com/reproduce)
 
--Richard
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202605192100.DvRgEGZ3-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   Documentation/.renames.txt: warning: ignored by one of the .gitignore files
+>> tools/testing/selftests/filesystems/file_stressor/Makefile: warning: ignored by one of the .gitignore files
+>> tools/testing/selftests/filesystems/file_stressor/file_stressor.c: warning: ignored by one of the .gitignore files
+>> tools/testing/selftests/filesystems/file_stressor/settings: warning: ignored by one of the .gitignore files
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
