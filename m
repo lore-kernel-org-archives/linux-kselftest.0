@@ -1,156 +1,166 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F22723B4E8F
-	for <linux-kselftest@vger.kernel.org>; Tue, 19 May 2026 22:56:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 211BE372EF6;
+	Tue, 19 May 2026 22:57:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779231395; cv=none; b=hyDGo8OMIBCMFDlX+OJS0p9difIDN8pg2QwHfIOyoP3ZHk2BAYT+2D83Nz0LOF18YE+zCvvi0zT+2F+kZNXarL5/3FRxTEkSGSgpsrIMzJcpiZK9z7V98RrfmvOtX6IsbYeXLQqRcZPrvZYmX6EpuFfejQvERqSvgNQHIMRtTJE=
+	t=1779231465; cv=none; b=iJOhzKc4D3F79Vj7iCi9Wl0WJ6IcLczX4QmM2Pb1XhfY3iNj1zETuOFbHJZoqvvuq7MsYf9pgqJdxrtpxmcNMCDOC7xvXLhy8vylwG8yAHE9N7XeIAVP9IKZeb/oFkIPh1dT1CmQwicMrhBxN4VAGEIEO6Mr+fLFuUqyhGNRhzw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779231395; c=relaxed/simple;
-	bh=DQ41CRAl1OeIQBnFeFdAojurEqVWILdT4FLVGVcMOpw=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Dc6tDwy7I1gG02HDlA5+7EHyyi+cik2rnBWgHnEIuI/g+5rscFuVuQqo5aSaNagtA4AX8mmH1bLBm3dVvmxQ0RTKo7gIp6gEc8W/wnWPAkHUwwJcKVAFiUXMh+HX1meo/8p0KCZ2SBXo6mFn13ohCKuPWFo1lRXdya1b44sHq9A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OR0WvzPI; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1779231465; c=relaxed/simple;
+	bh=Xu0Wzsuqb3UJUFiMu/NhOeqe0Fl6d7jfePXfdrq4gGE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bsFA2aWWYyhf/Ek5ndPaZaxqecwiwi9nkjNMLSJ5ES9iFE4Y66q/Vmy27knxVT/D2z//I0Tm5m6xeZOWonezsuRTwctH1AkLxuK6eFn2Isch8/XOoGJ4z8ttNitc65tdLybbL3fhImbpoly4vS1n83tTeprZPSRPFSkzNFi9dTQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EZvlZuw1; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OR0WvzPI"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-82748257f5fso3253471b3a.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 May 2026 15:56:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779231392; x=1779836192; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=1WsJ7iE9Th2TeW99X/1315mg/TeHiumpmbaJfuandy0=;
-        b=OR0WvzPIal12u0k45KAs6VmyjO4w3ayUPWhOgtvkx98hnmcndiW0z9/4sca3lW22vX
-         elWvcb89s13gmZVBndweCOoiPZhN5sffMhbBvVEKFuG2b3IZQ/NvqdJm/w9gMrTwHr4u
-         v7Bz5oPjSUg3NWASoO2U+hB/SZdr80Nh0AVAVJzCdZhS0ZRqUB0H/iryz3FNWXMIDklF
-         J+Nj1Dz9fc1zLnW1GWUxXIQH3dWBGK9C1eGCsjDy0TecoyWH+FuM4vTvH48O5lnVKhUn
-         y5JGEnErhfR3Fc0mAaGZiWNrDCEDmrEChWi2NkgNKaa1oFDtdPvpk2PzxKQ99/Td2g6G
-         37cg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779231392; x=1779836192;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1WsJ7iE9Th2TeW99X/1315mg/TeHiumpmbaJfuandy0=;
-        b=Uy2m1X91kcnNFfKDXZuV4maLjpEx55knaS6ko8PIhPQj/yVkOoXOtC+TRgBlE9cw+N
-         gyf5no7PsRx8iFIWqVjic69lyYSF5DMdB4Q9+yEr09De2gGcLhPWX3e74IdJhHNbVunY
-         OAroXbvFef+PDFccxb9yU7UeMz7nwskhpcDlIAfOytUmMQ2TTAKMXnLrSj61qtRHB/od
-         j9vJSURvttO2rPFm3EBagcoy9CxTfV6O4zuIir6sBJSyafxI4MUxWpUsoAnsOd/8knqz
-         Cq21/+nWTd5clFgD+KaooMgF87p+kSnUQHW+frBFTpjuf/29br5bkWOp1FNhBun7ufqw
-         WEiw==
-X-Forwarded-Encrypted: i=1; AFNElJ+OH4T1l0SrUkLuwl4XlpxiRQkB0T8dRhU1V0ZzGCtY2aFI8FxQeVKE+aPTJ4bu9z0hTaOX877exx7rVtqetPY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzuQVGygx5oDEUEzbIoR2HAD3YAU/Bz2LCuk5yqZ6yyu4mQrzd9
-	Ur+8Msfgbh+hDV9+16dC8dUDxkNXjPllb2SZ+ftCEP7tdI7Z+nL4cMzP
-X-Gm-Gg: Acq92OHhbipVEfnCweng1YAehEXseBhiXu8sEkIqeNdCOWiER5qCLYV5/dK83m55wlE
-	p4EfnHN+fK7bXu0FbX5aFh03L/EBtNz6y6ks5UTrkwn63ecVxZieFzmKnxIESDPSJEPGPcBuPKh
-	SQRaO1hiZBG82+g4k/O9zIzrVOJb4FCs1Sn1S9CeRFjztVxMMaDH7Eyjq96GuE+Pgmape3kEoiV
-	3OUpPwFd9smULkw6xGwvoRWukEwJymtCq1jl0vbqJ2jndG5iQJsSd5KY+io0jOZabQFKCjqs5Ss
-	R8JSscMYW+LiLSKcp59RwCD41sgBZxX1oZyenwZlW/xc1Lb1B2b5OThsTouSmMNTMK+3YTc9ot4
-	RLtNNJJuJh2kBHdmNkc2uSo206sRj4jEPMGAyhA9+zfoMvGBUn7H3KezLW70pfhoy/rs/Y5IGcz
-	BmYikxjlVWrG42CBEzN8AlfyE93z3IJKuacv77Wlg7MumldW7H2ZRY74QTmsFLx7HdnOjqPzYui
-	8DKxfKNIPneQO6gXOc445GXXRc=
-X-Received: by 2002:a05:6a00:e09:b0:82f:51e8:b38e with SMTP id d2e1a72fcca58-83f18e9f782mr22108263b3a.24.1779231391791;
-        Tue, 19 May 2026 15:56:31 -0700 (PDT)
-Received: from ?IPv6:2605:8d80:324:220f:2a58:15b7:a6c0:c426? ([2605:8d80:324:220f:2a58:15b7:a6c0:c426])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-83f1966471dsm19428314b3a.6.2026.05.19.15.56.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 May 2026 15:56:31 -0700 (PDT)
-Message-ID: <782833db5da77e4aa9761fc410827e7abe8583c8.camel@gmail.com>
-Subject: Re: [PATCH RESEND bpf-next v10 2/8] bpf: clear list node owner and
- unlink before drop
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Kaitao Cheng <kaitao.cheng@linux.dev>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <alexei.starovoitov@gmail.com>, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, ast@kernel.org, 
-	memxor@gmail.com, corbet@lwn.net, martin.lau@linux.dev,
- daniel@iogearbox.net, 	andrii@kernel.org, song@kernel.org,
- yonghong.song@linux.dev, 	john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, 	jolsa@kernel.org, shuah@kernel.org,
- chengkaitao@kylinos.cn, 	skhan@linuxfoundation.org, vmalik@redhat.com,
- linux-kselftest@vger.kernel.org, 	martin.lau@kernel.org, clm@meta.com,
- ihor.solodrai@linux.dev, 	bot+bpf-ci@kernel.org
-Date: Tue, 19 May 2026 15:56:23 -0700
-In-Reply-To: <d5961282-d41c-4e54-8ba2-cd08823a8c77@linux.dev>
-References: <20260512055919.95716-3-kaitao.cheng@linux.dev>
-	 <da95f45b43d94d17796b19abc4c555e35daafab7d5e1cdca3714fe0f54ab8cce@mail.kernel.org>
-	 <e141699dab70282d811ec30bbf2aa8279706817b.camel@gmail.com>
-	 <DII0TT9LXYCX.2GMM6QA4Q9BPZ@gmail.com>
-	 <0fb2d99b-b122-44fa-a8bc-9befe6e350bc@linux.dev>
-	 <7fa6794161a8bd4fdbc21dad68e86e9770c873cc.camel@gmail.com>
-	 <0171629c-bdd3-4661-a4e6-2698dd623c3a@linux.dev>
-	 <d5961282-d41c-4e54-8ba2-cd08823a8c77@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EZvlZuw1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 632361F000E9;
+	Tue, 19 May 2026 22:57:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779231463;
+	bh=vlczZf+tmGw8IPcdnoLC+JUsg1rmEL1pieN0hKrWjbE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=EZvlZuw1VED308JyJcnm+ZCcWB9qCZjmAvJ0kifEyyoENrG12qn0dvsSCjLGcaRa6
+	 QcpLh15vokgNbSpAALR7q8uSWiio5M9ti1gFHiz0gF2lBln9RtdIG6ES0hc6o1MfOQ
+	 Bc7+ntO82BL4025y/pvTUtNewTuw//ZKvtzZMLals6YA11Lupm8hJPZUynvBjaAb16
+	 q5L5a9lU1Ab4LrGB2MQQnmEmPnPEVaKMRjwFDQK6Km22EJFcaLJBBThmstxmkc5pXO
+	 ifrMf1nhQi8+e3YEI1/6m6TJQtX+8VbC32BGlXU9vAdOqZrwvy/abxLr3B7uvHRmWa
+	 ktaMwGUF4h8+A==
+Date: Tue, 19 May 2026 15:57:42 -0700
+From: Oliver Upton <oupton@kernel.org>
+To: David Woodhouse <dwmw2@infradead.org>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+	Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>, kvm <kvm@vger.kernel.org>,
+	Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+	"Kernel Mailing List, Linux" <linux-kernel@vger.kernel.org>,
+	Sean Christopherson <seanjc@google.com>,
+	Jim Mattson <jmattson@google.com>, Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Raghavendra Rao Ananta <rananta@google.com>,
+	Eric Auger <eric.auger@redhat.com>, Kees Cook <kees@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+	kvmarm@lists.linux.dev,
+	linux-kselftest <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH] Documentation: KVM: Document guest-visible compatibility
+ expectations
+Message-ID: <agzq5kwzuJvd7Mh5@kernel.org>
+References: <3f9d731c3d26b0367600f1069e6425099bc34eac.camel@infradead.org>
+ <agxFbniU_6eQ98t2@willie-the-truck>
+ <cf429f2082e863571595f74d1d3dedc3e6a82964.camel@infradead.org>
+ <CABgObfacAYexR25SMi1kSZMRnHx3EDGj8=E84V1DumER66ibnQ@mail.gmail.com>
+ <86qzn7wp3y.wl-maz@kernel.org>
+ <593a782c50f3c8656e13b36dfb975a67d43a908e.camel@infradead.org>
+ <CABgObfbS-z3OphDna5W_JQPvw+OK=yXJurVMHp1ANZ5uGEgVhQ@mail.gmail.com>
+ <9d0429ddbe4d8c6993e74237c4395697f80092d6.camel@infradead.org>
+ <agzR2kaJsNa8X9lF@kernel.org>
+ <1243d375846c4f4e20c229a6f09300126188fc8b.camel@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1243d375846c4f4e20c229a6f09300126188fc8b.camel@infradead.org>
 
-On Mon, 2026-05-18 at 11:02 +0800, Kaitao Cheng wrote:
+On Tue, May 19, 2026 at 10:58:05PM +0100, David Woodhouse wrote:
+> On Tue, 2026-05-19 at 14:10 -0700, Oliver Upton wrote:
+> > And in the absence of clear evidence of a guest depending on the broken
+> > IGROUPR behavior, I don't see how the guest-side changes of Christoffer's
+> > series are any different from the multitude of bug fixes that we take
+> > every single release cycle. It is an unfortunate bug and I concur with
+> > Marc that it doesn't seem like the sort of thing a guest could rely
+> > upon.
+> 
+> I find this concerning, because I've already explained this.
+> 
+> There is a very real possibility of guests simply not *noticing* that
+> they had bugs in this area, as it didn't *matter* what they wrote to
+> these registers since it never worked.
+> 
+> There is an even larger possibility of guests having worked around the
+> original issue by *detecting* whether the registers were actually
+> writable before choosing to use the alternative groups. And if such a
+> guest launches on a new kernel and then needs to be rolled back to an
+> older kernel, that will also break.
 
-[...]
+The onus is on you to substantiate this claim. I would imagine after
+carrying the revert for so long that there must be at least one example
+of such a guest?
 
-> > > > The patch does have a bug, however. To fix the issues we are seeing=
- now,
-> > > > I propose the additional changes below and would appreciate feedbac=
-k.
-> > > >=20
-> > > > --- a/kernel/bpf/helpers.c
-> > > > +++ b/kernel/bpf/helpers.c
-> > > > @@ -2263,8 +2263,10 @@ void bpf_list_head_free(const struct btf_fie=
-ld *field, void *list_head,
-> > > >         if (!head->next || list_empty(head))
-> > > >                 goto unlock;
-> > > >         list_for_each_safe(pos, n, head) {
-> > > > -               WRITE_ONCE(container_of(pos,
-> > > > -                       struct bpf_list_node_kern, list_head)->owne=
-r, NULL);
-> > > > +               struct bpf_list_node_kern *node;
-> > > > +
-> > > > +               node =3D container_of(pos, struct bpf_list_node_ker=
-n, list_head);
-> > > > +               WRITE_ONCE(node->owner, BPF_PTR_POISON);
-> > > >                 list_move_tail(pos, &drain);
-> > > >         }
-> > > >  unlock:
-> > > > @@ -2272,8 +2274,12 @@ void bpf_list_head_free(const struct btf_fie=
-ld *field, void *list_head,
-> > > >         __bpf_spin_unlock_irqrestore(spin_lock);
-> > > >=20
-> > > >         while (!list_empty(&drain)) {
-> > > > +               struct bpf_list_node_kern *node;
-> > > > +
-> > > >                 pos =3D drain.next;
-> > > > +               node =3D container_of(pos, struct bpf_list_node_ker=
-n, list_head);
-> > > >                 list_del_init(pos);
-> > > > +               WRITE_ONCE(node->owner, NULL);
+What ifs and maybes do not meet the bar, in my opinion, for preserving
+bug emulation in KVM. Of course there could be a little flexibility with
+that but we need to have some way of discriminating between bug fixes
+and genuine guest expectations around the behavior of virtual hardware.
 
-Is CPU allowed to reorder the stores in list_del_init() and WRITE_ONCE()?
-If it is, I think there is a race here.
+> > Wrong or not, this behavior is documented unambiguously. From the VGICv2
+> > UAPI documentation:
+> > 
+> > """
+> > Userspace should set GICD_IIDR before setting any other registers (both
+> > KVM_DEV_ARM_VGIC_GRP_DIST_REGS and KVM_DEV_ARM_VGIC_GRP_CPU_REGS) to ensure
+> > the expected behavior. Unless GICD_IIDR has been set from userspace, writes
+> > to the interrupt group registers (GICD_IGROUPR) are ignored.
+> > """
+> > 
+> > I'm not inclined to change that.
+> 
+> That'll all very well... but as far as I can tell, QEMU *doesn't* set
+> GICD_IIDR, so it still gets the bizarre behaviour where the *guest* can
+> write the registers, but userspace can't. So it looks like it'll work
+> except migration will fail. Am I missing something?
 
-Thread #1:
-  enter bpf_list_head_free()
-  acquire H1 lock
-  list_move_tail(pos, &drain);             // reordered
-  <-- ip here -->
-  WRITE_ONCE(node->owner, BPF_PTR_POISON); // reordered
+That's exactly it, and why I said tying up UAPI opt-in with
+guest-visible registers is a really bad idea.
 
-Thread #2:
+> But honestly, I don't care one iota about GICv2; I was only trying to
+> do the cleanup while I was there. Feel free to drop that part entirely.
+> 
+> >  As a way out of this whole mess, can we
+> > instead:
+> > 
+> >  - Allow userspace to set IIDR.Revision to 1
+> > 
+> >  - Drop any bug emulation from the handling of IGROUPR registers
+> 
+> It doesn't make sense to allow setting IIDR.Revision to 1 *without* the
+> one-liner that actually implements the corresponding behaviour change
+> in the IGROUPR registers.
 
-  acquire H1 lock
-  n =3D bpf_refcount_acquire()
-  release H1 lock
-  acquire H2 lock
-  enter __bpf_list_add()
-  <-- ip here -->
-  cmpxchg(&node->owner, NULL, BPF_PTR_POISON)
+As I described earlier, this whole IIDR crap inarguably broke UAPI and
+obviously normal guest behavior (i.e. reading the register). At minimum
+we need to permit previously-valid values for IIDR, even if they carry
+no implied behaviors.
 
-[...]
+> And as explained at least twice now, it's the
+> behaviour change that's *important* here.
+> 
+> The fact that it's a long-standing bug in KVM which downstream has been
+> working around for a long time doesn't matter. The unconditional
+> behavioural change *is* a bug and we should fix it.
+
+That is the nature of a bug fix. If you can provide some concrete
+evidence of a guest depending on the RAZ/WI behavior then I agree we
+need to preserve the old behavior.
+
+Otherwise I see this as a matter of principle in how we do bug fixes to
+KVM. Even if upstream took the strictest possible stance towards behavior
+changes we will invariably fail to account for some minutia.
+
+> >  - Special-case the stupid GICv2 UAPI where IGROUPR are only writable if
+> >    the VMM has written to IIDR and the revision >= 2
+> 
+> That already *is* a special case, right? And you'd rather leave it as it is?
+
+Left as documented, yes. With the exception that revision == 1 writes
+not be considered opt-in to restorable IGROUPR.
+
+Thanks,
+Oliver
