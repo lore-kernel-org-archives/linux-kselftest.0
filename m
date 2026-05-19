@@ -1,58 +1,56 @@
-Received: from mail-108-mta47.mxroute.com (mail-108-mta47.mxroute.com [136.175.108.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7639B2ED846
-	for <linux-kselftest@vger.kernel.org>; Tue, 19 May 2026 14:23:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=136.175.108.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D79AA4DC540;
+	Tue, 19 May 2026 14:42:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779200613; cv=none; b=pfWmjFxmMB1Fw7BQcreY0A3IxEhKgtANrV2hMBL8PStbPz3XoTY4K0Mp6N8ze9YqlKMbw2/d7KwLVUKUcJ5M8a+8QJIZaHiwA05Fk5xbHrVwyD531kfiP9yiHH5uuaoMrqa204c4eMOhseQOqXG3osy5wSm8f2yLecKVVXkXg0c=
+	t=1779201757; cv=none; b=lIUMcIu6X+O2zxHDHZJASun4WToYsjmI43iqaZSGottBszqrWYcLoiC7YnuTwv8eeUPLJ3v2fSLx3eToYfy0PHZW6s9hxmbq6pgaJZvTSzNk0cybKrNTsqKowv8IElwED9mG1ZY7LQvezerF/jJWsB1fS1C1qZ2vUes4XkFY4yo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779200613; c=relaxed/simple;
-	bh=ZVYr+L8paqs9c953GL6EJNwjQkpDO6sihFb1UwgsY4I=;
+	s=arc-20240116; t=1779201757; c=relaxed/simple;
+	bh=gZUPn0thWWcRLq+hL7RRcuZ8J7xKYMtWj50oTxxnZMw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=P9wYyRpQLMtr4YLvh8er9LIFdJKe7TXM9W3jUdio09ogu798eNqCXQ2+0MJkZxkllB/n6kdTK3GzP6mcWjjoCkD+68n/uQKJyFa0fqwe9IbusQO8/YXhZydipDV/3HRgeOMpZ/90UpSKZTQgU+oXc6h5IQpvHA+QF/XITlpRFw4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wii.dev; spf=pass smtp.mailfrom=wii.dev; dkim=pass (2048-bit key) header.d=wii.dev header.i=@wii.dev header.b=wVPqjYDG; arc=none smtp.client-ip=136.175.108.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wii.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wii.dev
+	 Content-Type:Content-Disposition:In-Reply-To; b=qDWDZeLiJ+XJSWuqmr0VzsWAaEZMS8bY68lDjC+UUwd9CfGbGF5ELZkVbEuiwbXAx5T2xdL7X9BaTRE9+61U85Rt8HlvQRS3nOxXNqrUSsZlz63bcTgMLx1Ejlcnc1YQteBQ8S7MI4kWnjoJ1XmztFMagJ0riY77m27jMKnDnp4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=YHIwKCT6; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wii.dev header.i=@wii.dev header.b="wVPqjYDG"
-Received: from filter006.mxroute.com ([136.175.111.3] filter006.mxroute.com)
- (Authenticated sender: mN4UYu2MZsgR)
- by mail-108-mta47.mxroute.com (ZoneMTA) with ESMTPSA id 19e409a0dd100067f7.00e
- for <linux-kselftest@vger.kernel.org>
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Tue, 19 May 2026 14:18:18 +0000
-X-Zone-Loop: a8e5328ac99530bf4a3f22d953540e2507c0fd76af81
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=wii.dev;
-	s=x; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:Cc
-	:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=AXRW8uiwwRtEJhbIMVCv/AlLddaze23R80p31AXeYVU=; b=wVPqjYDGs/pu3Jj05eHfDyz9eB
-	2Jyu9XTUBW2KhlRsOg3Cq/K9SzRTgd5GukLwYPq7t79dU2rAg1ldmDGP79onY1VCQGmULzPjv4M7P
-	I2uRODkCeR6I/IrAXQUkOWHskJKxpkaawtjd8niXw8RC//w7h4nOrlfcULS+TMBVzYDkFCJTHqEPa
-	VX0mlKWjp9Wf5Ols+Sr9FLwMP8tPdi/gU+QeMPhof1l55ukh5kn5p9iK88yLkJRBls+EQH3NZ8ha8
-	DBp+Xfk04DYLnle6DKldyN0CWEuTGvlD/82ukUh45+M9FqrB1fCkQYvE/z6Veu71iMNJn3JYfDCmQ
-	f6IfMDEA==;
-Date: Tue, 19 May 2026 14:18:04 +0000
-From: Richard Patel <ripatel@wii.dev>
-To: David Laight <david.laight.linux@gmail.com>
-Cc: x86@kernel.org, Rick Edgecombe <rick.p.edgecombe@intel.com>,
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="YHIwKCT6"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=xggIsu9IlsJApfE/AIZbC1aUcvuXbiwqdJlVuWjlH4k=; b=YHIwKCT6mhmrkQKAVlR1c2lLw+
+	8NY3VqUQJx78CwxYpWmyHHQYwdlj5tbvTk5DDDuXG/HO8dGOZ0WsnEAVlBpsR1amkWBU6TmFC3vun
+	mpqr+WPHceVH6GQW22C9dARBlI2OCdquB+Nv71SjVKmF3i+OvgkSJgUX1C0bLG0qiZn18SuopdAEB
+	iDC0ScgJiUvSyz+mP3JWYoCrun1I8Fsmoj+YAmO3zUj3qVK5xfsijH8F79l4QOwxJE70H4a+/uoMY
+	pUiVwzC5AKKnniidDgshuDBOurv/DwFrIzOKxpGO/6XLb5krwHQOfRZdVWEm0jaVe+obiD+OnRoOI
+	wDA3p+QQ==;
+Received: from 2001-1c00-8d85-4b00-266e-96ff-fe07-7dcc.cable.dynamic.v6.ziggo.nl ([2001:1c00:8d85:4b00:266e:96ff:fe07:7dcc] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
+	id 1wPLeL-0000000EXa9-2iii;
+	Tue, 19 May 2026 14:42:26 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id ECF50300B8A; Tue, 19 May 2026 16:42:24 +0200 (CEST)
+Date: Tue, 19 May 2026 16:42:24 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Richard Patel <ripatel@wii.dev>
+Cc: David Laight <david.laight.linux@gmail.com>, x86@kernel.org,
+	Rick Edgecombe <rick.p.edgecombe@intel.com>,
 	Yu-cheng Yu <yu-cheng.yu@intel.com>,
 	Dave Hansen <dave.hansen@linux.intel.com>,
 	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
 	Borislav Petkov <bp@alien8.de>, "H. Peter Anvin" <hpa@zytor.com>,
 	Andy Lutomirski <luto@kernel.org>, Kees Cook <kees@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
 	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Subject: Re: [PATCH 0/7] Usermode Indirect Branch Tracking
-Message-ID: <agxxHHKCOh3TpWHv@wii.dev>
+Message-ID: <20260519144224.GB3067227@noisy.programming.kicks-ass.net>
 References: <20260517183024.16292-1-ripatel@wii.dev>
  <20260519103345.49e52ceb@pumpkin>
  <agxiORpLBErOxLin@wii.dev>
  <20260519142808.0d3605ab@pumpkin>
+ <agxxHHKCOh3TpWHv@wii.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -61,57 +59,19 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260519142808.0d3605ab@pumpkin>
-X-Authenticated-Id: ripatel@wii.dev
+In-Reply-To: <agxxHHKCOh3TpWHv@wii.dev>
 
-On Tue, May 19, 2026 at 02:28:08PM +0100, David Laight wrote:
-> On Tue, 19 May 2026 13:14:33 +0000
-> Richard Patel <ripatel@wii.dev> wrote:
+On Tue, May 19, 2026 at 02:18:04PM +0000, Richard Patel wrote:
+
+> > I don't know if userspace ever cares about speculative array access.
+> > If it does you need one of the mitigration - eg using cmp+cmov
+> > to generate a jump table index that references the 'default'.
 > 
-> > On Tue, May 19, 2026 at 10:33:45AM +0100, David Laight wrote:
-> > > Isn't using 'notrack jmp *reg' for jump tables actually more secure?
-> > > If an attacker can write code it doesn't matter.
-> > > The jump table in is RO memory so can't be written.
-> > > But if there are ENDBR on all the jump table targets they become
-> > > possibly useful code addresses to arrange to write into some RW
-> > > function pointer table - which might be useful.  
-> > 
-> > You're right. I was worried about an invalid jump table index at first.
-> > Clang 22 happily optimizes away jump table index bounds checks. GCC 16
-> > seems to be more careful. We should probably patch LLVM to never
-> > optimize it away, e.g.:
-> > 
-> > 	// funny.c
-> > 	// clang -c -fcf-protection=branch -O2 -o funny.o funny.c
-> > 	// objdump -d funny.o -M intel
-> > 	int t0(void), t1(void), t2(void), t3(void);
-> > 	int funny(unsigned long target) {
-> > 		__builtin_assume(target < 4);
+> Intel docs say that "CET-IBT limits speculative execution at indirect
+> branch targets that do not start with ENDBRANCH", with heavy emphasis
+> on "limits" not "prevents" ... Is it too unreliable in practice?
 > 
-> If you use __builtin_assume() you get to clear up the mess.
+> https://www.intel.com/content/www/us/en/developer/articles/technical/software-security-guidance/technical-documentation/branch-history-injection.html#inpage-nav-4-3
 
-I'm pretty sure you'd get the same result with cross-function
-optimization across a bunch of static functions or LTO. Compiler goes
-"oh, this internal function is only reachable from these 3 callers in
-the same unit, which all already bound their input params. Guess I will
-skip the bounds check".
-
-It is a compiler bug that Clang is at all able to generate unbounded
-'notrack jmp' with -fcf-protection=branch, it blows a gap in IBT.
-
-Anyways, I don't think we need kernel support for banning notrack in
-userland? There is no ABI (GNU note) standard for 'notrack-free'
-binaries AFAIK, and as you point out notrack is a secure way to do
-jump tables (if done properly).
-
-> I don't know if userspace ever cares about speculative array access.
-> If it does you need one of the mitigration - eg using cmp+cmov
-> to generate a jump table index that references the 'default'.
-
-Intel docs say that "CET-IBT limits speculative execution at indirect
-branch targets that do not start with ENDBRANCH", with heavy emphasis
-on "limits" not "prevents" ... Is it too unreliable in practice?
-
-https://www.intel.com/content/www/us/en/developer/articles/technical/software-security-guidance/technical-documentation/branch-history-injection.html#inpage-nav-4-3
-
--- Richard
+You might find the commit log of: d8122c428076 ("x86/ibt: Implement
+FineIBT-BHI mitigation") instructive.
