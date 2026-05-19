@@ -1,35 +1,53 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FAC93F1AC9;
-	Tue, 19 May 2026 11:59:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC28A3F4DF5;
+	Tue, 19 May 2026 12:05:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779192000; cv=none; b=m9PH+BH1ogD4kg9+GI9zLM91F7asd8O5syZCGkG+OtWFJOooKIfU26TiUjkJ5Zm0J79AWQrs2cUC9rWk6qUMgWljnMqRgpfetFQKGv24NPKU8DsyigsFRyCMXbEvsJCaaoGnstnh/xqeUHJh8PDScdKx7B+iCEjZyA7sxTvZSV4=
+	t=1779192326; cv=none; b=JVSo4g8YuBSn+XClCu/Qxp3OgH6zfBb8GWkzbnOJb6nq9UvHwp0e2LoycZx6mMtRozlwtgWVODlqtEG+TiN53mGxNWW1oJLd2UrWAmbM7icVn6IA1On7CbO/oIOjcopojOQkuFuUZGRGMFfTtKdYzmByTuc2d2sH3v4v8S840N4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779192000; c=relaxed/simple;
-	bh=BQYO2E0fCS6BfmWFZ53yCqwLNUJKTRPaHcDO54bhAEs=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=ZW9WMurWSIVnyBAQt7yY6j5cvdxrKePhB1WWp4uee0b+bhT6CWYPh8BptnMoRBVV+n4U/c5ZPOI9zCreCkplUlKSV4uzg8nQEB/QLbf6AZbEmUnlIHqc1Im5Zr5COcD+jsJJidSqTPLT/OYxfk0bxKzZmmIu3eId+QlZ2bTvWT0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QnGuhiUy; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1779192326; c=relaxed/simple;
+	bh=WfBGYRVm/z3p9e1wUlYW7mzI99DfsJJPI49IxgMxP10=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RBgqBDPQ2WGp7S8kEh3wmDkrGDfeRAAzl4/NkF+rxL4oTP0Chii1rEILN2f1UjPZ6oyiFLFlpd3ClAgJkmtzF4hPamV0p1ik8EQU2HOWhZJyGUmgTo4yHJlqyrV558tO+qXacQPzMkA+d+YFtZSV+PQzEJcf/v/jbSwLRGs1r6k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=mp1ND4Y1; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QnGuhiUy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C11CEC2BCB8;
-	Tue, 19 May 2026 11:59:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779191999;
-	bh=BQYO2E0fCS6BfmWFZ53yCqwLNUJKTRPaHcDO54bhAEs=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=QnGuhiUy27lcqwgLo6qLrKYYEr6uXxZihSBxno90wr94A+08dTjKEIief6gVIezX+
-	 bUVwNfqJyPgmrGyoH4nGrjuEkBiDw8UF9li9WJ9xnGLPqkGRmoKqEbCzriCOspux4j
-	 yO7z4Gpt9toK07e3vAKEHXJkdr01+Lltx/hytLS5BM/MKwCjHh4vHvpinnpwV1HB48
-	 YxEp1gCfIwA1j80G0PuxIC/r2D+ZRWnHeSuP0Vi0GIAFkpZ0I5yTbT2EbvvvtJZN2s
-	 faIQx12RvxQpg9OPr0lc9ovXxMzLuFosTIPs0rZ2OhyWB9mfSJJ2ElIcR6HagJUckD
-	 O9Q8D9IushXeg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 19A753930E0C;
-	Tue, 19 May 2026 12:00:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="mp1ND4Y1"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7F89D22FA;
+	Tue, 19 May 2026 05:05:18 -0700 (PDT)
+Received: from a081061.blr.arm.com (a081061.arm.com [10.164.19.82])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 06F413F85F;
+	Tue, 19 May 2026 05:05:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1779192323; bh=WfBGYRVm/z3p9e1wUlYW7mzI99DfsJJPI49IxgMxP10=;
+	h=From:To:Cc:Subject:Date:From;
+	b=mp1ND4Y1yhUyvt5HG6APJj/I/FYv2OVGOjyTHl5y4LSITFe1kDmHylSRKIfqpHykT
+	 kxzxmyOqv+GdKQTkN4879TV2cGAZ27Blx2f/Uajy7Pc02Id1YeOQptviuSdWiZMybo
+	 BGTBlcOVSTd/BJoNBG10MnfBBIgYmq6YdgLaOB4k=
+From: Sarthak Sharma <sarthak.sharma@arm.com>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>
+Cc: Jonathan Corbet <corbet@lwn.net>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	John Hubbard <jhubbard@nvidia.com>,
+	Peter Xu <peterx@redhat.com>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	Sarthak Sharma <sarthak.sharma@arm.com>
+Subject: [PATCH v2 0/2] selftests/mm: separate GUP microbenchmarking from functional testing
+Date: Tue, 19 May 2026 17:35:04 +0530
+Message-ID: <20260519120506.184512-1-sarthak.sharma@arm.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -37,52 +55,60 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net 1/5] selftests: ovpn: reduce remaining ping flood
- counts
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177919201064.2269262.14959859828316127571.git-patchwork-notify@kernel.org>
-Date: Tue, 19 May 2026 12:00:10 +0000
-References: <20260514231544.795993-2-antonio@openvpn.net>
-In-Reply-To: <20260514231544.795993-2-antonio@openvpn.net>
-To: Antonio Quartulli <antonio@openvpn.net>
-Cc: netdev@vger.kernel.org, sd@queasysnail.net, kuba@kernel.org,
- pabeni@redhat.com, davem@davemloft.net, edumazet@google.com,
- andrew+netdev@lunn.ch, ralf@mandelbit.com, linux-kselftest@vger.kernel.org,
- horms@kernel.org, shuah@kernel.org
 
-Hello:
+gup_test.c currently serves two distinct purposes: microbenchmarking
+(GUP_FAST_BENCHMARK, PIN_FAST_BENCHMARK, PIN_LONGTERM_BENCHMARK) and
+functional correctness testing (GUP_BASIC_TEST, PIN_BASIC_TEST,
+DUMP_USER_PAGES_TEST). Mixing these in a single binary means functional
+tests cannot be run or reported individually, and run_vmtests.sh must
+invoke the binary multiple times with different flag combinations to
+cover all configurations. This patch series separates the two concerns:
+tools/mm/gup_bench for benchmarking and tools/testing/selftests/mm/gup_test
+for functional testing.
 
-This series was applied to netdev/net.git (main)
-by Antonio Quartulli <antonio@openvpn.net>:
+Patch 1 adds tools/mm/gup_bench.c, a standalone microbenchmark for
+GUP_FAST, PIN_FAST and PIN_LONGTERM via the CONFIG_GUP_TEST debugfs
+interface. It runs the same matrix of configurations as the old
+run_gup_matrix() shell function (all three commands, read/write,
+private/shared, four page counts, THP on/off, hugetlb), but as a
+standalone C program under tools/mm with no dependency on kselftest.
 
-On Fri, 15 May 2026 01:15:40 +0200 you wrote:
-> From: Ralf Lici <ralf@mandelbit.com>
-> 
-> Commit 201ba706318d ("selftests: ovpn: reduce ping count in test.sh")
-> lowered the baseline traffic flood ping count to avoid flakes on slower
-> CI instances, however some instances were left out.
-> 
-> Apply the same limit to the remaining ovpn selftest flood pings that
-> still request 500 packets.
-> 
-> [...]
+Patch 2 rewrites gup_test.c as a kselftest harness-based selftest. It
+covers all five GUP kernel functions (get_user_pages, get_user_pages_fast,
+pin_user_pages, pin_user_pages_fast, pin_user_pages with FOLL_LONGTERM)
+plus DUMP_USER_PAGES_TEST, across 12 mapping configurations (THP on,
+THP off and hugetlb, each across private/shared and read/write variants)
+and four batch sizes (1, 512, 123, all pages). Results are reported as
+standard TAP output with no command-line arguments required.
 
-Here is the summary with links:
-  - [net,1/5] selftests: ovpn: reduce remaining ping flood counts
-    https://git.kernel.org/netdev/net/c/7f1144977846
-  - [net,2/5] ovpn: tcp - use cached peer pointer in ovpn_tcp_close()
-    https://git.kernel.org/netdev/net/c/775d8d7ad02a
-  - [net,3/5] ovpn: respect peer refcount in CMD_NEW_PEER error path
-    https://git.kernel.org/netdev/net/c/1fef6614673f
-  - [net,4/5] ovpn: fix race between deleting interface and adding new peer
-    https://git.kernel.org/netdev/net/c/982422b11e6f
-  - [net,5/5] ovpn: disable BHs when updating device stats
-    https://git.kernel.org/netdev/net/c/0c0dddc07d27
+---
+These patches apply on top of mm/mm-new.
 
-You are awesome, thank you!
+Changes in v2:
+- Address v1 feedback from Sashiko
+- Add fast and longterm GUP/PUP coverage
+- Sweep nr_pages_per_call over 1, 512, 123, and all pages
+- Call madvise(MADV_NOHUGEPAGE) in non-THP variants
+- Use 256 MB for hugetlb fixtures
+- Use hugetlb_restore_settings() in FIXTURE_TEARDOWN instead of atexit()
+- Add TH_LOG to report nr_pages_per_call for each iteration
+- Update Documentation/core-api/pin_user_pages.rst unit testing section
+
+Sarthak Sharma (2):
+  tools/mm: add a standalone GUP microbenchmark
+  selftests/mm: rewrite gup_test as a standalone harness-based selftest
+
+ Documentation/core-api/pin_user_pages.rst |  12 +-
+ MAINTAINERS                               |   1 +
+ tools/mm/.gitignore                       |   2 +
+ tools/mm/Makefile                         |   6 +-
+ tools/mm/gup_bench.c                      | 491 ++++++++++++++++++++
+ tools/testing/selftests/mm/gup_test.c     | 536 +++++++++++++---------
+ tools/testing/selftests/mm/run_vmtests.sh |  37 +-
+ 7 files changed, 822 insertions(+), 263 deletions(-)
+ create mode 100644 tools/mm/gup_bench.c
+
+
+base-commit: 2c3f468717231305523ddcd94d91c0d5e4a72419
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+2.39.5
