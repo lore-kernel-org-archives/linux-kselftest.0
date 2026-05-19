@@ -1,428 +1,270 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from MW6PR02CU001.outbound.protection.outlook.com (mail-westus2azon11012000.outbound.protection.outlook.com [52.101.48.0])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F86E312834;
-	Tue, 19 May 2026 07:50:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779177051; cv=none; b=Q0LAmh4mlZxxM5DdI1T71YZgoX4AFIk2CiWD0GAuXhq4g5WL137QBc/1IHaUq8krEgts4eSyH7w+g3M34jGMFI9poRRiz3nDrIHsm9Q2WdT0xDWw9n+91mDOlw3NbrDcTTIwSSwLs+AwqSAZU27Zu1OSOp3VdVQGv+MWghIIKS0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779177051; c=relaxed/simple;
-	bh=2I20zy7pvCfvCrda6zbAyknDlpOfiA0ggmXaaJwhbRE=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=WL2zuBZ89GHTNly22bdtsrpKE88H7o4veaNHMVHhJIXk6ek3TMjW5dIOMSusIIDjMcOb0f4dZGEPl6OP/XekCiAQ8db3QR6HGEWJEad5yJSYXE8P940On60Z7RdU/izDKlG0MKEllDZ0N9kwCZm4XdvLM+VsAUpGQ/Gnpi1P458=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=jYbCwqTS; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5AF62459C5;
+	Tue, 19 May 2026 07:53:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.48.0
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779177219; cv=fail; b=ON9qpGaZl84+sx6QiLmFlNUnw7mjdVkCVMPd4zyZN5Rg+Mz7hFVQzUrNgxFHmtsKxMZ1wy4wAQec6Qdql+iv58vZQVIItj4lE2T6jGUNU5ytnTOFBoEBdJevBe7X6B0h4RgX+A2Y41qUq8t6PCDOqPO5SAxy8xMK7sefTKWhkVQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779177219; c=relaxed/simple;
+	bh=P1y9SX2S4lDsS0/lWb9jBKd2pcf7L9gBUmcHZvl2YnQ=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=q15KD9QD8RbwbhtsecbLXS93Kp2l2Mft1DmNikqhBDKDpIEWPbexXDn/PHrbdXIdK0KVhrU1BSVLfnGFcfMJZpsnDMDrew/4sgIy5adwWiQh7VNOqP1eE2JMNapDbblSSvkdI8BruZ3ITXU0aR5KEa2cINNt411tJMnk66/YM9U=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=aXBYR2TS; arc=fail smtp.client-ip=52.101.48.0
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="jYbCwqTS"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
-	In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=2I20zy7pvCfvCrda6zbAyknDlpOfiA0ggmXaaJwhbRE=; b=jYbCwqTSVywpKDxG1FmH+Adqcw
-	w6GggxLY7YanY4TEBm+Mt2T5jofi8uAT6c/QiFEUhFTx5WmWVieLRrSkByHHxgXoMvQZhJUvQcDsT
-	jcpH9HKlG5fEM84xv6ESE14tZmaIutcWzIQzdkHebkfzsOpq7itycL43tvT31y/jjLwExK2/76GsU
-	6+vD23HY1HYOnL36nmVxMRB0C7sOTU/UQercN4uAfZS4OFLhugLw2VxKLfVV1zH22Zr4PN4RLFQk8
-	3dqSAFuGkZgs0KHIMNz3sEIkO3XlyRFupIo0FQajd4g+cYdZne+LOpbR8rtF1lK/FMwO6dvrbRV/v
-	/1QQEAYQ==;
-Received: from 54-240-197-233.amazon.com ([54.240.197.233] helo=u09cd745991455d.ant.amazon.com)
-	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1wPFDt-00000005dE2-2vSi;
-	Tue, 19 May 2026 07:50:42 +0000
-Message-ID: <b9980333f3a310bf05e170e79c40cb2f46485caf.camel@infradead.org>
-Subject: Re: [PATCH v4 04/30] KVM: x86: Add KVM_[GS]ET_CLOCK_GUEST for
- accurate KVM clock migration
-From: David Woodhouse <dwmw2@infradead.org>
-To: Dongli Zhang <dongli.zhang@oracle.com>, kvm@vger.kernel.org
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <skhan@linuxfoundation.org>, Thomas Gleixner <tglx@kernel.org>,
- Sean Christopherson <seanjc@google.com>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, "H. Peter Anvin" <hpa@zytor.com>, Dave
- Hansen <dave.hansen@linux.intel.com>, Vitaly Kuznetsov
- <vkuznets@redhat.com>,  x86@kernel.org, Marc Zyngier <maz@kernel.org>,
- Juergen Gross <jgross@suse.com>,  Boris Ostrovsky
- <boris.ostrovsky@oracle.com>, Paul Durrant <paul@xen.org>, Jonathan Cameron
- <jic23@kernel.org>,  Sascha Bischoff <Sascha.Bischoff@arm.com>, Jack
- Allister <jalliste@amazon.com>, Joey Gouly <joey.gouly@arm.com>, 
- joe.jin@oracle.com, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org,  xen-devel@lists.xenproject.org,
- linux-kselftest@vger.kernel.org
-Date: Tue, 19 May 2026 08:50:39 +0100
-In-Reply-To: <935312be-9a86-49fd-8bb4-2c998a68e2df@oracle.com>
-References: <20260509224824.3264567-1-dwmw2@infradead.org>
-	 <20260509224824.3264567-5-dwmw2@infradead.org>
-	 <0ae8e471-db7a-4842-aca4-8ef643acde8b@oracle.com>
-	 <d3c461415e05345a9b82e6f995828c1ae64a4e61.camel@infradead.org>
-	 <935312be-9a86-49fd-8bb4-2c998a68e2df@oracle.com>
-Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-	boundary="=-boRirr429Da0AX+mV+GN"
-User-Agent: Evolution 3.52.3-0ubuntu1.1 
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="aXBYR2TS"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=C47NOUgzALBfz0G8PfzauSOb/yWfHD4bI+kRvS4ogba7hwJF2nibpnz/PRctzgr4ZyoXdeHsPS9Yg4q2K9CQlP6tXyziWcxQOoxcUP4Q1n9GUESoiXHUSyxy+hPVgRS8yGe3oYWpxiWD3s8b3F8xLzkz5pqxuTLGSYveIBDZ/LONtlt0MvU/JjBM7rPmy3XGExY+W2jteKch//adhrwhGa0KS2ufiQycm70lWnIujBMlrHDijYStO5P1dHgg1GHR9tDuYwfSVcCMZvu9ptvrkosVxCl2np7DfIYGmhnuDiTH+dFqTH+OOq/dXmvu89MmJXRyTtHHLOB1d5HHsx9reg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QcTGYPJyddA/87hdIBe9DbOLClP63BESwxE1z6U6qqM=;
+ b=NFAVMv826SgnPgqwrkZqcIvU9fcSqYXwvzGfm4GkfdiDFUbxNWbTYvNRahfUluh4MfdTe2nC/Et5ECAUZBQeYbfE0/ZRXwTgp+t5/bdFPi7oH0aOXwHUgIDb7hQ9sJ6YqHdbw1/VIqG0+ZAtr8+F7b9cooTmpELjR4Ld/OZuaIYu+5jvkvaq6DmhEqpI7PNAaWPKNq56+IghnWo9c+jOHxc14BxxzeGMFXbH88UkqcuYevRNOxUip1VH4uZZWM8PDFG7W97Vyz0ww+MjZCM/fo6MN2VDGFajql6ZWnSYlQ4VhP/cdVanEb1RW6vU5ukPolPGZQQycucl9m+dDQvKhA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QcTGYPJyddA/87hdIBe9DbOLClP63BESwxE1z6U6qqM=;
+ b=aXBYR2TS1RROtj2D0au1VJy5cKdeYY7yPq6ta49MvxDFoW2isVh7OPtvZKALEonjsit7IWW4jxToy5DeUwb/lqwwo2+fGTRe8zxqa33eje/356qXv+1EibXyWJAk1x7mzvKCmK2849V/zDvqa7ebl+DvHWvzQRcdEQndVuk6yEc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from PH7PR12MB5685.namprd12.prod.outlook.com (2603:10b6:510:13c::22)
+ by SJ0PR12MB7067.namprd12.prod.outlook.com (2603:10b6:a03:4ae::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.48.14; Tue, 19 May
+ 2026 07:53:29 +0000
+Received: from PH7PR12MB5685.namprd12.prod.outlook.com
+ ([fe80::ce69:cfae:774d:a65c]) by PH7PR12MB5685.namprd12.prod.outlook.com
+ ([fe80::ce69:cfae:774d:a65c%5]) with mapi id 15.21.0025.022; Tue, 19 May 2026
+ 07:53:29 +0000
+Message-ID: <9cc79977-9a42-40eb-bfa7-460881c1e10f@amd.com>
+Date: Tue, 19 May 2026 09:53:19 +0200
+User-Agent: Mozilla Thunderbird
+Subject: Re: [Linaro-mm-sig] Re: [PATCH RFC 2/5] dma-heap: charge dma-buf
+ memory via explicit memcg
+To: Albert Esteve <aesteve@redhat.com>
+Cc: Barry Song <baohua@kernel.org>, "T.J. Mercier" <tjmercier@google.com>,
+ Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
+ =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Sumit Semwal <sumit.semwal@linaro.org>, Michal Hocko <mhocko@kernel.org>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+ Brian Starkey <Brian.Starkey@arm.com>, John Stultz <jstultz@google.com>,
+ Christian Brauner <brauner@kernel.org>, Paul Moore <paul@paul-moore.com>,
+ James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>,
+ Stephen Smalley <stephen.smalley.work@gmail.com>,
+ Ondrej Mosnacek <omosnace@redhat.com>, Shuah Khan <shuah@kernel.org>,
+ cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+ dri- <devel@lists.freedesktop.org>, linaro-mm-sig@lists.linaro.org,
+ linux-mm@kvack.org, linux-security-module@vger.kernel.org,
+ selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ mripard@kernel.org, echanude@redhat.com
+References: <20260512-v2_20230123_tjmercier_google_com-v1-0-6326701c3691@redhat.com>
+ <20260512-v2_20230123_tjmercier_google_com-v1-2-6326701c3691@redhat.com>
+ <8ef38815-6ae9-4359-86d4-042554357639@amd.com>
+ <CABdmKX2uwZ12kYJYPJGfWxuMBOJS=64b1GRj72tfB5D=NKM22w@mail.gmail.com>
+ <CADSE00Jq_uvNgvxgPze0mEdUd+hF4-DPZkHy0KroWHZzygf4WA@mail.gmail.com>
+ <CABdmKX3DhejYBis9htLDnzPrG7vuF3R3URLVNEbnyd61SSsx=g@mail.gmail.com>
+ <CAGsJ_4zyecY6E-=Tm4_couT7uoM9LMcFdTMUPkZAjj4zUKE-dQ@mail.gmail.com>
+ <cb84c2ee-9de1-4565-b2e0-60984721228f@amd.com>
+ <CADSE00Lc42s2bzXzV5D7t1Enf56u4BVj-yXLp3Yxhm0=qMPvuw@mail.gmail.com>
+Content-Language: en-US
+From: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+In-Reply-To: <CADSE00Lc42s2bzXzV5D7t1Enf56u4BVj-yXLp3Yxhm0=qMPvuw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR4P281CA0309.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:f6::6) To PH7PR12MB5685.namprd12.prod.outlook.com
+ (2603:10b6:510:13c::22)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH7PR12MB5685:EE_|SJ0PR12MB7067:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2afa463c-406f-4c66-c463-08deb57bb6d1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|376014|7416014|366016|3023799003|56012099003|22082099003|18002099003|4143699003|11063799003;
+X-Microsoft-Antispam-Message-Info:
+	IOe1jomYCeJ1l4P9ZTKYM8vM7bZTWJKmIBdDvTmJLW+TGJjEjFIa40HVPgcohH8GT9HsxsAZcBBJaThIElUM8C4nkRnhUtwOLmicloq55YiUWm6sQ73ro94k/3I5YnzW/MN53WRjp9pX87aJHqgZqfZ84mKHJmgMAhg7Swoo7OXq0Wud/leHc7ROMaUKt5VkH5+QwPmBVvXAWG9BC+ldN0MwHooR9yeQ8K/gIXZnZc/q9xK7BPWTUrMjuRbbwNcTQeKaTx/UgOP7cNNoWXD5+l6skntTbDUajGVfAjLPIFSw3GMp9F2K6MkgVbvv7FrQWbUZ0cUznVmRqEUwLI1PlDbHRFMfbOUX0avg/h2x9U2pWdZlMVTmjnxnSzMeySdXe0g+XvyZccNfccZ70zIAgj10jvZy9eVJFefw+hhcBzBrZBgN67oZ1bP15x0mzubl1tWAz0u/BDDp9c1r0bJgD33Cz0/E33eDmf7l/BLLJubHphtWo8SExM5Mk1nQAfpT3kl4YpczlY/Ri3pdjVFx0dz/sxecehDAZwk2bXMJEqJhZccGbRpJaKwU47xJtwiaMHTaxG/yiDBtL4DMCgVO8+gGRQKBgMeeyRIbXKhKdlBK90cBZPyRJfgyxjnSzL9osDXUg7qfwMBF7DLdy0cZGElalh7TQO9qcO0sKgyPRIx21EQhGd0sZd8yY3gvx8rn+4HjhuA2M2Pc84iiArDTgg==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5685.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016)(3023799003)(56012099003)(22082099003)(18002099003)(4143699003)(11063799003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?N0ZoaHhlbjhCYWF4RUxJWDV6dGY3VVRXSStXc1NzY1ZXdVI2L2NBSlIwZVRJ?=
+ =?utf-8?B?NlJ1bVRoNWlzVkxiUkJVZ0xxa3BXa1ZvS1hTTUM1WEtobmhSa04vQ1F5VzM5?=
+ =?utf-8?B?VU02MzRCc21BSGkyY3dWc1dBUjRqdjlNZGUrRFJQMEZwV211Y2ltN0RsL3Yy?=
+ =?utf-8?B?U2tQa21JQ1BWbjNxejdRKzEySm84dDk0N0h4TXk1ZHR6Y3pkK3JVcjN6RHhE?=
+ =?utf-8?B?MFFaVkJUVmgxWDQvV2F0emFHTGVRVmp2VmlmY2ZtNDRaclpoV3VnTkVzRFBr?=
+ =?utf-8?B?REhBRkZZK1Rrc2FsSDc0VkJhS3JGWjdqS1lRYlBtdEVKR0RtV3ZJNUU4b1dX?=
+ =?utf-8?B?bWQyRVgzcGJlR0lEMHl1b05IUzZ4bTNCVmxBQWFlVzlwYTZKRTdVS1ZzZEJo?=
+ =?utf-8?B?eWxvaWs1dEtwKytIRmRISFR4SnhhbGdQSVRwNHRBUmlWbmFhVnhkbmdaN0RH?=
+ =?utf-8?B?NklUNjlRMnFRM0xTb0ptcU9IY01iSWltVHVLMEduMmdubkd0aUMvN2NkeUtE?=
+ =?utf-8?B?ZFZzSCtqRDlmdVFxTk00ZnAvR2xBYlBxM21hUUN6UDlUT2E3UkUzamtFTkEr?=
+ =?utf-8?B?enZoeEg0UlJHdU5MR050cm9odTlNQkNwdGtzNnZDU3RISmsyZ0pITWpWa2V4?=
+ =?utf-8?B?d1N5R2NoTXhvb25uemRCRkNwWCs5M0plUkhhdVU0aEhxQy9YU1JYc1ZPYjJh?=
+ =?utf-8?B?Rk41Y0JLN2ZSTU93RFFrOGhQb3d0R2dVKy9PZko3enk5aU1wTFVaN0QrVkJ3?=
+ =?utf-8?B?TnRuNWdSejU4V0JSWjBnbGpBZGkrUTk4WWFWak5sTnpMbmdzTTlOWWRjZnpO?=
+ =?utf-8?B?TzhIdTcwSUpOL1gyMFFlTGpIV3FGdndGTTZJTHJzd2trcHhneWRZbFBLaHpp?=
+ =?utf-8?B?ZlU1dkpmSFc4VGZiMHg4OUtNemtTbzgyWHZ6RzdjRG9MTHJiRlZMWFRGbDhi?=
+ =?utf-8?B?VUdpODc1MDRUbFhUMHBob2Q2QWRDTytRTEE5bHVEeENpVkQrTFFrK282SGhX?=
+ =?utf-8?B?R0VQTHl0S2J4YVYrdjUzSnd5MFNKOWxsa1FucUl4aDhxY1ZmMFJWVFZQeVdz?=
+ =?utf-8?B?ZzloVkFBZWtIY29NYWxJM21ZVnlSMG9vM0hOcFlKeFJrZk1uSnE1elkzYm1O?=
+ =?utf-8?B?Y2I4VWtFeTFEeWFxMitrY3FZRnFMbGJlMTdmWnB6SzRrMHFPY3hqUHFsSkhj?=
+ =?utf-8?B?aUltYzZSUFgzdUNzcVJIa1NvUFlJSldHM3RYUUpZU2FYNGtHK2RGcWRmeGF4?=
+ =?utf-8?B?RUsvdE9jQ2JzdHBnWUpvb3gwTVlJakNKSDhkSldVek1GSGUvYnVaaTROOHov?=
+ =?utf-8?B?UElOSGpHYWRyaUxkN0NBYWNaM09FZGhvQVVBR2N5L0RBU3crUHh3bDFxN1M5?=
+ =?utf-8?B?NDdqU2hBT3JYNkpvMEVDRzVQVmlZNC8rMC9RNlcrQzd0cWNBOXhKMnZBMDVj?=
+ =?utf-8?B?NkFwaEl3SEhMNTlPQUJCVXF0NkJKODZ1UnNtWG1sYys0UWhwR1VlSVlsQ2dH?=
+ =?utf-8?B?b1NsdGtIS2czR1NHTmowRGI4MjdldHIzb0R6RThtVmhXRU9CSXlMSlRWdVhu?=
+ =?utf-8?B?eW5UZVF3RXY4V0lzNU5xM29yenIxYXpoUG9PWjgySU5XeHh1bGYyZy9HNzVh?=
+ =?utf-8?B?WW1zSng3cEgyL2ljMzI1SDJuc3dXNU1zWlU4Tm1RdEY2RlVaaEMzc0tsSHZN?=
+ =?utf-8?B?dlA1VE9qbG1hSzNFeTNxV3NmS01neTJyY3FzbWpNelpTak9QVzZ5VEp1VEp1?=
+ =?utf-8?B?eVpDSWNoYXlFcUJHclA0V0tSVmtnR1BuMHZyUXBkVzgwSFBRT0IwY1RZNXMw?=
+ =?utf-8?B?Mm5Ka0FVSEV1cHVhZU5hbzNYQUYzaU9heHFaejNaVTFwd2M2cnhjdDg2b0xo?=
+ =?utf-8?B?dysrZHZtbXljSmVPQ2FGWTFNSEtJcUx3L3g3Rlp4Vm9nazRtR0puVFRWVFRy?=
+ =?utf-8?B?LzBsVVhBcUd1OU1pNGg5Yk5RbmtJZ2NjSkJyVVg0bTBpRTQ5SXpiaEdzT2RE?=
+ =?utf-8?B?dXNwWUtGRndiMThmVlR3bzc4RGJEb2gvV1hBK05xQ3RLNkpSenNad1MwZDBx?=
+ =?utf-8?B?c25haU9hK0lqcGVOU3cvaHdkeXRMYzhwajJWTzhtZnRLMWxTSW80YWhacDFm?=
+ =?utf-8?B?d09LZEw0a00vM2Nyak9rSUVoc2tvN0sxRzk3MkVSYVpkNTE0UVhOMmtDUllS?=
+ =?utf-8?B?RTN3RlN4dmNIcFN3eHFyUnFPbVNUZ0h5SUV0M2twMmFvQ2d3TkFjazJKUzdP?=
+ =?utf-8?B?MzZhdnppQnE5KzJ1U3d2TnRmdFBXWWJOZzRmSE1zOVh1bUQ3RWp5Mkp4dFNh?=
+ =?utf-8?Q?GEFllYyeNyi5uR292C?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2afa463c-406f-4c66-c463-08deb57bb6d1
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5685.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2026 07:53:28.9599
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: lHKflGocT50PZGGGXfuV9j2328lwMnecTmWPNTA9XZje1JVfcupepggejSGFNoqF
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB7067
 
+On 5/18/26 14:06, Albert Esteve wrote:
+>>>>> udmabufs are already
+>>>>> memcg-charged, so adding a separate MEMCG_DMABUF would double count.
+>>>>> Are there any other exporters you had in mind that would benefit from
+>>>>> this approach?
+>>
+>> Well apart from DMA-buf memfd_create() is one of the things which as broken our neck in the past a couple of times.
+>>
+>> But thinking more about it what if instead of making this DMA-buf heaps specific what if we have a general cgroups function which allows to change accounting of a buffer referenced by a file descriptor to a different process?
+>>
+>> That would cover not only the DMA-buf heaps use case, but also all other DMA-buf with dmem and whatever we come up in the future as well.
+> 
+> I removed a draft adding an ioctl for charge transfer from the series
+> before sending because I wanted to focus on the charge_pid_fd approach
+> and keep things simple, deferring the recharge path to a follow-up
+> depending on feedback.
+> 
+> The main difference between my removed draft and what you're
+> describing, iiuc, is scope and layer: my draft was an explicit ioctl
+> on the dma-buf fd that the consumer calls to claim the charge (see
+> below), while you seem to be suggesting a more general kernel-internal
+> function that could work across buffer types and cgroup controllers,
+> so not necessarily userspace-initiated? A kernel-internal function
+> will need a way to identify the target process, which sounds similar
+> to the binder-backed approach from TJ [1]. For everything else, the
+> receiver still needs to declare itself, which the ioctl accomplishes.
+> 
+> ```
+> # When an app imports a daemon-allocated buffer, it can transfer the
+> charge to itself:
+> int buf_fd = receive_dmabuf_from_daemon();
+> ioctl(buf_fd, DMA_BUF_IOCTL_XFER_CHARGE); /* charge now attributed to
+> apps's cgroup */
 
---=-boRirr429Da0AX+mV+GN
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Well that thinking goes into the right direction, but the requirements are still not completely covered as far as I can see.
 
-On Mon, 2026-05-18 at 17:57 -0700, Dongli Zhang wrote:
-> On 2026-05-18 1:48 AM, David Woodhouse wrote:
-> > ...
->=20
-> I have fixed the Thunderbird configuration. Does it look better to you?
+Let me explain below a bit more.
 
-The date is certainly better, thank you. But although I *was* up late
-that night frowning at clocks, I didn't think I was up *quite* as late
-(almost 2am) as it suggests.
+> 
+> [1] https://lore.kernel.org/cgroups/20230109213809.418135-1-tjmercier@google.com/
+> 
+>>
+>> The only drawback I can see is that DMA-buf heap allocations would be temporarily accounted to the memory allocation daemon, but I don't think that this would be a problem.
+> 
+> The main reasons we moved away from TJ's transfer-based approach
+> toward `charge_pid_fd` are: avoid the transient charge window on the
+> daemon's cgroup; and to decouple from Binder, allowing any allocator
+> to use it.
 
-But I suspect that getting *that* right is beyond the limit of
-Thunderbird's configurability.
+Yeah those concerns are completely correct.
 
-Thanks :)
+The application should not volunteering says 'Charge that buffer to me.', but rather that the daemon says force charge that buffer to this application and tell me when the application is over its limit.
 
-> I really appreciate guidelines like the ones below.
->=20
-> https://lore.kernel.org/all/20240522001817.619072-8-dwmw2@infradead.org
->=20
-> Assuming I am a user of the new API, I feel confused about whether the go=
-al is
-> to replace KVM_SET_CLOCK with KVM_SET_CLOCK_GUEST, or whether the latter =
-is
-> meant to supplement the former.
+> 
+> Technically, both approaches could coexist, though. Of the three
+> scenarios TJ described:
+> - Scenario 2 is directly addressed by charge_pid_fd approach without
+> any transient charge on the daemon at the cost of one extra field in
+> the heap ioctl uAPI struct.
 
-The issue is that KVM_SET_CLOCK_GUEST can only be used in 'masterclock'
-mode, when the TSC is reliable and the guest TSCs are all in sync.
+Yeah extending the uAPI to pass in the pid on allocation time is not much of a problem, but you also need to modify the whole stack above it and that is a bit more trickier.
 
-Which ought to be *all* of the time, on modern hardware and sane
-configurations. And in this series, I don't even let the *guest* screw
-that over by setting different TSC offsets on different vCPUs any more
-(we stay in masterclock mode in that case now). But the VMM can cause
-its guest to come out of masterclock mode, by setting different TSC
-*speeds* on different vCPUs.
+> - Scenario 3 can be handled by the charge transfer function without
+> changes to SurfaceFlinger. The app or dequeueBuffer claims the charge
+> for itself or the app, respectively (depending on whether we include a
+> pid_fd field in the transfer ioctl). It also covers non-heap
+> exporters. The con in both variants is the transient charge window on
+> the daemon.
 
-So there remain some pathological cases where the kvmclock actually
-still has a justification to exist, and those are the cases where it
-needs to be set in its own right as a function of host time
-(KVM_SET_CLOCK), not purely as a function of the guest TSC
-(KVM_SET_CLOCK_GUEST).
+It should be trivial for the deamon to charge the buffer to an application before handing it out.
 
+> Both approaches shift the responsibility for correct charging
+> attribution to userspace: first, 'charge_pid_fd` on the allocator's
+> side, and the transfer charge on the consumer's side.
 
->=20
-> If we are going to use KVM_SET_CLOCK_GUEST when KVM_SET_CLOCK is not need=
-ed, I
-> would appreciate it if the API could carry more data in addition to struc=
-t
-> pvclock_vcpu_time_info.
->=20
-> +#define KVM_SET_CLOCK_GUEST=C2=A0=C2=A0=C2=A0 _IOW(KVMIO, 0xd6, struct p=
-vclock_vcpu_time_info)
-> +#define KVM_GET_CLOCK_GUEST=C2=A0=C2=A0=C2=A0 _IOR(KVMIO, 0xd7, struct p=
-vclock_vcpu_time_info)
->=20
->=20
-> In the future, if we need to carry additional data, we could simply reuse=
- the
-> padding fields instead of introducing another KVM_SET_CLOCK_GUEST2.
->=20
-> The following is an example of how additional data could be carried.
->=20
-> KVM: x86: Report host tsc and realtime values in KVM_GET_CLOCK
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit=
-/?id=3Dc68dc1b577eabd5605c6c7c08f3e07ae18d30d5d
+Yeah that's why I said it would be better if we do that without any uAPI change, but with all the uAPI we have to transfer file descriptors (dup(), fork(), passing FDs over sockets etc...) it could be really tricky to implement that.
 
-I'm not very keen on the way that KVM_[GS]ET_CLOCK threw extra time
-references in over the years without any of them ever actually making
-*sense*, which makes me reluctant.=C2=A0
+> Deciding on one, the other or both depends on how much we value
+> avoiding transient attribution, and how much we need a non-heap
+> generic solution. With the XFER_CHARGE we can cover both. Thus, the
+> `charge_pid_fd` approach in this RFC can be seen as a
+> performance/strictness optimisation, eliminating transient charges to
+> the daemon at the cost of a permanent uAPI addition to the heap ioctl
+> struct, but not strictly required for correctness.
 
-KVM_[GS]ET_CLOCK_GUEST on the other hand does *one* thing: it exports
-the relationship between the guest TSC and kvmclock. We don't *need* to
-litter it with time values from other clocks willy-nilly.
+Well all we need is a uAPI which says charge this buffer (file descriptor) to that cgroup (pidfd).
 
-But yes, you are right in principle.
+With this at hand we should be able to handle all use cases at the same time.
 
-And in fact, the other part of this conversation has really drawn my
-attention to the ugliness of the "try KVM_SET_CLOCK_GUEST and if that
-doesn't take then fall back to KVM_SET_CLOCK" which we are pushing onto
-userspace.
+> On the other hand,
+> if we agree on the end goal of migrating other exporters to use
+> dma-buf heaps
 
-Yes, I covered it in the guidelines: but we should always abide by the
-mantra, "if it *needs* documenting, fix it first".
+That won't work. DMA-buf heaps is actually only a rather small and Anroid specific use case.
 
-So perhaps we could build a variant which does both at once. It
-provides the guest clock as a function of guest TSC for the sane
-masterclock case, but *also* includes CLOCK_TAI at the same moment, in
-case it needs to fall back to that.
+We have tons of other interfaces to allocate DMA-bufs which need to stay around because of HW restrictions and we do need a solution for them as well.
 
-Although... the actual reference time part of the existing pvclock
-might be significantly in the past, especially with all the
-MASTERCLOCK_UPDATE elimination that we've been doing. And we'd have to
-regenerate it to get a simultaneous realtime reading, wouldn't we?
-> >=20
+Regards,
+Christian.
 
-> > > Do we need a KVM_CHECK_EXTENSION capability for this? If userspace wa=
-nts to
-> > > support the new API, should it detect availability via KVM_CHECK_EXTE=
-NSION, or
-> > > simply try the ioctl and handle failure?
-> >=20
-> > That might be conventional, I suppose. But I suspect Jack's thinking
-> > was that userspace is going to have to *try* it anyway, and still might
-> > have to fall back to what KVM_SET_CLOCK can manage, so userspace
-> > probably wouldn't even bother to check that capability; it doesn't
-> > matter.
-> >=20
-> > Since then, we've added some more attributes in this series though, and
-> > it probably is worth adding a cap which advertises them *all*?
-> > Something like KVM_CAP_CLOCK_PRECISION_API?
->=20
-> From an API user's perspective, userspace may need to distinguish between=
- an API
-> failure and the API not being available.
+>, and scenario 3 is addressed by adding the app's pid_fd
+> to SurfaceFlinger, then `charge_pid_fd` alone is a coherent/sufficient
+> approach despite the uAPI change.
+> 
+>>
+>> Regards,
+>> Christian.
+>>
+>>>
+>>> Thanks
+>>> Barry
+>>
+> 
 
-That's -ENOTTY vs. -EINVAL for the ioctl, isn't it? And isn't there
-something similarly unambiguous for the attributes?
-
-But I have no objection to adding a capability. The lack of it was more
-oversight than intent.
-
-
-> > >=20
-> > > From my perspective, I am also curious how we should reason about thi=
-s in other
-> > > scenarios in the future. Specifically, when do we need to process
-> > > KVM_REQ_MASTERCLOCK_UPDATE before KVM_REQ_CLOCK_UPDATE, and when is i=
-t
-> > > acceptable not to? I noticed that kvm_cpuid() already processes only
-> > > KVM_REQ_CLOCK_UPDATE.
-> >=20
-> > The way I've been thinking about it =E2=80=94 and I'm only two cups of =
-coffee
-> > into Monday so take those words literally and don't think of them as
-> > British understatement of something I believe is absolute truth =E2=80=
-=94 is
-> > that MASTERCLOCK_UPDATE is updating the actual clock for the whole VM,
-> > while CLOCK_UPDATE is about *putting* that information into the per-
-> > vCPU pvclock structures.
-> >=20
-> > So after a MASTERCLOCK_UPDATE, we need to do a CLOCK_UPDATE on all
-> > vCPUs to disseminate the result. Which means that if CLOCK_UPDATE is
-> > already pending before a MASTERCLOCK_UPDATE, it's probably redundant
-> > and might as well be cleared because it's only going to get set *again*
-> > in kvm_end_pvclock_update()?=20
->=20
-> Another scenario is when only MASTERCLOCK_UPDATE is pending and there is =
-no
-> pending CLOCK_UPDATE.
->=20
-> In this scenario, is it fine to skip processing MASTERCLOCK_UPDATE before=
- saving
-> pvclock_vcpu_time_info?
->=20
-
-I'm not sure I understand that scenario.=20
-
-MASTERCLOCK_UPDATE means we have to actually recalculate the master
-clock (which really *should* be rare, now!). And then any time we do
-that, we also have to do a CLOCK_UPDATE on every vCPU to disseminate
-the new information. Which is why kvm_end_pvclock_update() does exactly
-that.
-
-So your "MASTERCLOCK_UPDATE is pending and there is no pending
-CLOCK_UPDATE" doesn't make much sense to me. If MASTERCLOCK_UPDATE is
-pending, then there *will* be a CLOCK_UPDATE pending.
-
-
-> > >=20
-> > > Would it be helpful to validate that the delta is within a reasonable=
- range,
-> > > e.g. that the drift can never be more than five minutes (forward or b=
-ackward)?
-> >=20
-> > If a guest has been running for months on a previous host and is
-> > migrated to a new host, don't we expect that the KVM clock of the new
-> > VM on the new host is tweaked from its default near-zero after
-> > creation, to some large amount?
-> >=20
->=20
-> Regarding live migration, my own investigation does not show a proportion=
-al
-> relationship between VM uptime and the amount of drift.
-
-You're comparing the VM on the source host, with the VM on the
-destination post-migration.
-
-Perhaps I misunderstood, but I thought your suggested validation of a
-'reasonable range' would also apply when adjusting the kvmclock of the
-nascent VM on the destination host, from "newly created" to "has been
-running for months" while migrating the state of the actual guest onto
-a clean new slate.
-
-> Just taking QEMU + KVM as an example: suppose TSC scaling is inactive, th=
-e
-> amount of drift does not depend on how long the VM has been running befor=
-e live
-> migration.
->=20
-> Instead, it depends on the delta between when we call MSR_IA32_TSC and
-> KVM_GET_CLOCK, and between MSR_IA32_TSC and KVM_SET_CLOCK.
->=20
-> The guest TSC stops at P1 and resumes at P3.
-> The kvmclock stops at P2 and resumes at P4.
->=20
-> We expect P1 =3D=3D P2 and P3 =3D=3D P4.
->=20
-> On source host.
->=20
-> - kvm_get_msr_common(MSR_IA32_TSC) for vCPU=3D0 =3D=3D=3D> P1
-
-Here's where it all starts going wrong. Line 1.
-
-Any API which lets you get a single time value in isolation, and thus
-which is already out of date by the time the system call even returns,
-is fundamentally unsuitable for migration.
-
-> - kvm_get_msr_common(MSR_IA32_TSC) for vCPU=3D1
-> - kvm_get_msr_common(MSR_IA32_TSC) for vCPU=3D2
-> - kvm_get_msr_common(MSR_IA32_TSC) for vCPU=3D3
-> - kvm_get_msr_common(MSR_IA32_TSC) for vCPU=3D4
-> ... ...
-> - kvm_get_msr_common(MSR_IA32_TSC) for vCPU=3DN
-> - KVM_GET_CLOCK=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =3D=3D=3D> P2
->=20
-> On target host.
->=20
-> - kvm_set_msr_common(MSR_IA32_TSC) for vCPU=3D1 =3D=3D=3D> P3
-> - kvm_set_msr_common(MSR_IA32_TSC) for vCPU=3D2
-
-At this point, the nasty hack in the kernel steps in, realises that the
-value you're setting on vCPU 2 is within a second or so of the value
-you had previously set on vCPU 1, and snaps it back to be precisely the
-same. To work around the fundamental brokenness of this method.
-
-> - kvm_set_msr_common(MSR_IA32_TSC) for vCPU=3D3
-> - kvm_set_msr_common(MSR_IA32_TSC) for vCPU=3D4
-> - kvm_set_msr_common(MSR_IA32_TSC) for vCPU=3D5
-> ... ...
-> - kvm_set_msr_common(MSR_IA32_TSC) for vCPU=3DN
-> - KVM_SET_CLOCK=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =3D=3D=3D=3D> P4
->=20
->=20
-> Here is my equiation to predict the drift.
-
-I'm sure you're right, but I didn't get that far when looking at this.
-I'd already thrown up in my mouth a little bit by line one.
-
-Here's my equation to predict the drift of a live update done correctly
-on the same host using the method I've now put in the documentation:
-
-0.
-
-:)
-
---=-boRirr429Da0AX+mV+GN
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Transfer-Encoding: base64
-
-MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCD9Aw
-ggSOMIIDdqADAgECAhAOmiw0ECVD4cWj5DqVrT9PMA0GCSqGSIb3DQEBCwUAMGUxCzAJBgNVBAYT
-AlVTMRUwEwYDVQQKEwxEaWdpQ2VydCBJbmMxGTAXBgNVBAsTEHd3dy5kaWdpY2VydC5jb20xJDAi
-BgNVBAMTG0RpZ2lDZXJ0IEFzc3VyZWQgSUQgUm9vdCBDQTAeFw0yNDAxMzAwMDAwMDBaFw0zMTEx
-MDkyMzU5NTlaMEExCzAJBgNVBAYTAkFVMRAwDgYDVQQKEwdWZXJva2V5MSAwHgYDVQQDExdWZXJv
-a2V5IFNlY3VyZSBFbWFpbCBHMjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMjvgLKj
-jfhCFqxYyRiW8g3cNFAvltDbK5AzcOaR7yVzVGadr4YcCVxjKrEJOgi7WEOH8rUgCNB5cTD8N/Et
-GfZI+LGqSv0YtNa54T9D1AWJy08ZKkWvfGGIXN9UFAPMJ6OLLH/UUEgFa+7KlrEvMUupDFGnnR06
-aDJAwtycb8yXtILj+TvfhLFhafxroXrflspavejQkEiHjNjtHnwbZ+o43g0/yxjwnarGI3kgcak7
-nnI9/8Lqpq79tLHYwLajotwLiGTB71AGN5xK+tzB+D4eN9lXayrjcszgbOv2ZCgzExQUAIt98mre
-8EggKs9mwtEuKAhYBIP/0K6WsoMnQCcCAwEAAaOCAVwwggFYMBIGA1UdEwEB/wQIMAYBAf8CAQAw
-HQYDVR0OBBYEFIlICOogTndrhuWByNfhjWSEf/xwMB8GA1UdIwQYMBaAFEXroq/0ksuCMS1Ri6en
-IZ3zbcgPMA4GA1UdDwEB/wQEAwIBhjAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIweQYI
-KwYBBQUHAQEEbTBrMCQGCCsGAQUFBzABhhhodHRwOi8vb2NzcC5kaWdpY2VydC5jb20wQwYIKwYB
-BQUHMAKGN2h0dHA6Ly9jYWNlcnRzLmRpZ2ljZXJ0LmNvbS9EaWdpQ2VydEFzc3VyZWRJRFJvb3RD
-QS5jcnQwRQYDVR0fBD4wPDA6oDigNoY0aHR0cDovL2NybDMuZGlnaWNlcnQuY29tL0RpZ2lDZXJ0
-QXNzdXJlZElEUm9vdENBLmNybDARBgNVHSAECjAIMAYGBFUdIAAwDQYJKoZIhvcNAQELBQADggEB
-ACiagCqvNVxOfSd0uYfJMiZsOEBXAKIR/kpqRp2YCfrP4Tz7fJogYN4fxNAw7iy/bPZcvpVCfe/H
-/CCcp3alXL0I8M/rnEnRlv8ItY4MEF+2T/MkdXI3u1vHy3ua8SxBM8eT9LBQokHZxGUX51cE0kwa
-uEOZ+PonVIOnMjuLp29kcNOVnzf8DGKiek+cT51FvGRjV6LbaxXOm2P47/aiaXrDD5O0RF5SiPo6
-xD1/ClkCETyyEAE5LRJlXtx288R598koyFcwCSXijeVcRvBB1cNOLEbg7RMSw1AGq14fNe2cH1HG
-W7xyduY/ydQt6gv5r21mDOQ5SaZSWC/ZRfLDuEYwggWbMIIEg6ADAgECAhAH5JEPagNRXYDiRPdl
-c1vgMA0GCSqGSIb3DQEBCwUAMEExCzAJBgNVBAYTAkFVMRAwDgYDVQQKEwdWZXJva2V5MSAwHgYD
-VQQDExdWZXJva2V5IFNlY3VyZSBFbWFpbCBHMjAeFw0yNDEyMzAwMDAwMDBaFw0yODAxMDQyMzU5
-NTlaMB4xHDAaBgNVBAMME2R3bXcyQGluZnJhZGVhZC5vcmcwggIiMA0GCSqGSIb3DQEBAQUAA4IC
-DwAwggIKAoICAQDali7HveR1thexYXx/W7oMk/3Wpyppl62zJ8+RmTQH4yZeYAS/SRV6zmfXlXaZ
-sNOE6emg8WXLRS6BA70liot+u0O0oPnIvnx+CsMH0PD4tCKSCsdp+XphIJ2zkC9S7/yHDYnqegqt
-w4smkqUqf0WX/ggH1Dckh0vHlpoS1OoxqUg+ocU6WCsnuz5q5rzFsHxhD1qGpgFdZEk2/c//ZvUN
-i12vPWipk8TcJwHw9zoZ/ZrVNybpMCC0THsJ/UEVyuyszPtNYeYZAhOJ41vav1RhZJzYan4a1gU0
-kKBPQklcpQEhq48woEu15isvwWh9/+5jjh0L+YNaN0I//nHSp6U9COUG9Z0cvnO8FM6PTqsnSbcc
-0j+GchwOHRC7aP2t5v2stVx3KbptaYEzi4MQHxm/0+HQpMEVLLUiizJqS4PWPU6zfQTOMZ9uLQRR
-ci+c5xhtMEBszlQDOvEQcyEG+hc++fH47K+MmZz21bFNfoBxLP6bjR6xtPXtREF5lLXxp+CJ6KKS
-blPKeVRg/UtyJHeFKAZXO8Zeco7TZUMVHmK0ZZ1EpnZbnAhKE19Z+FJrQPQrlR0gO3lBzuyPPArV
-hvWxjlO7S4DmaEhLzarWi/ze7EGwWSuI2eEa/8zU0INUsGI4ywe7vepQz7IqaAovAX0d+f1YjbmC
-VsAwjhLmveFjNwIDAQABo4IBsDCCAawwHwYDVR0jBBgwFoAUiUgI6iBOd2uG5YHI1+GNZIR//HAw
-HQYDVR0OBBYEFFxiGptwbOfWOtMk5loHw7uqWUOnMDAGA1UdEQQpMCeBE2R3bXcyQGluZnJhZGVh
-ZC5vcmeBEGRhdmlkQHdvb2Rob3Uuc2UwFAYDVR0gBA0wCzAJBgdngQwBBQEBMA4GA1UdDwEB/wQE
-AwIF4DAdBgNVHSUEFjAUBggrBgEFBQcDAgYIKwYBBQUHAwQwewYDVR0fBHQwcjA3oDWgM4YxaHR0
-cDovL2NybDMuZGlnaWNlcnQuY29tL1Zlcm9rZXlTZWN1cmVFbWFpbEcyLmNybDA3oDWgM4YxaHR0
-cDovL2NybDQuZGlnaWNlcnQuY29tL1Zlcm9rZXlTZWN1cmVFbWFpbEcyLmNybDB2BggrBgEFBQcB
-AQRqMGgwJAYIKwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmRpZ2ljZXJ0LmNvbTBABggrBgEFBQcwAoY0
-aHR0cDovL2NhY2VydHMuZGlnaWNlcnQuY29tL1Zlcm9rZXlTZWN1cmVFbWFpbEcyLmNydDANBgkq
-hkiG9w0BAQsFAAOCAQEAQXc4FPiPLRnTDvmOABEzkIumojfZAe5SlnuQoeFUfi+LsWCKiB8Uextv
-iBAvboKhLuN6eG/NC6WOzOCppn4mkQxRkOdLNThwMHW0d19jrZFEKtEG/epZ/hw/DdScTuZ2m7im
-8ppItAT6GXD3aPhXkXnJpC/zTs85uNSQR64cEcBFjjoQDuSsTeJ5DAWf8EMyhMuD8pcbqx5kRvyt
-JPsWBQzv1Dsdv2LDPLNd/JUKhHSgr7nbUr4+aAP2PHTXGcEBh8lTeYea9p4d5k969pe0OHYMV5aL
-xERqTagmSetuIwolkAuBCzA9vulg8Y49Nz2zrpUGfKGOD0FMqenYxdJHgDCCBZswggSDoAMCAQIC
-EAfkkQ9qA1FdgOJE92VzW+AwDQYJKoZIhvcNAQELBQAwQTELMAkGA1UEBhMCQVUxEDAOBgNVBAoT
-B1Zlcm9rZXkxIDAeBgNVBAMTF1Zlcm9rZXkgU2VjdXJlIEVtYWlsIEcyMB4XDTI0MTIzMDAwMDAw
-MFoXDTI4MDEwNDIzNTk1OVowHjEcMBoGA1UEAwwTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJ
-KoZIhvcNAQEBBQADggIPADCCAgoCggIBANqWLse95HW2F7FhfH9bugyT/danKmmXrbMnz5GZNAfj
-Jl5gBL9JFXrOZ9eVdpmw04Tp6aDxZctFLoEDvSWKi367Q7Sg+ci+fH4KwwfQ8Pi0IpIKx2n5emEg
-nbOQL1Lv/IcNiep6Cq3DiyaSpSp/RZf+CAfUNySHS8eWmhLU6jGpSD6hxTpYKye7PmrmvMWwfGEP
-WoamAV1kSTb9z/9m9Q2LXa89aKmTxNwnAfD3Ohn9mtU3JukwILRMewn9QRXK7KzM+01h5hkCE4nj
-W9q/VGFknNhqfhrWBTSQoE9CSVylASGrjzCgS7XmKy/BaH3/7mOOHQv5g1o3Qj/+cdKnpT0I5Qb1
-nRy+c7wUzo9OqydJtxzSP4ZyHA4dELto/a3m/ay1XHcpum1pgTOLgxAfGb/T4dCkwRUstSKLMmpL
-g9Y9TrN9BM4xn24tBFFyL5znGG0wQGzOVAM68RBzIQb6Fz758fjsr4yZnPbVsU1+gHEs/puNHrG0
-9e1EQXmUtfGn4InoopJuU8p5VGD9S3Ikd4UoBlc7xl5yjtNlQxUeYrRlnUSmdlucCEoTX1n4UmtA
-9CuVHSA7eUHO7I88CtWG9bGOU7tLgOZoSEvNqtaL/N7sQbBZK4jZ4Rr/zNTQg1SwYjjLB7u96lDP
-sipoCi8BfR35/ViNuYJWwDCOEua94WM3AgMBAAGjggGwMIIBrDAfBgNVHSMEGDAWgBSJSAjqIE53
-a4blgcjX4Y1khH/8cDAdBgNVHQ4EFgQUXGIam3Bs59Y60yTmWgfDu6pZQ6cwMAYDVR0RBCkwJ4ET
-ZHdtdzJAaW5mcmFkZWFkLm9yZ4EQZGF2aWRAd29vZGhvdS5zZTAUBgNVHSAEDTALMAkGB2eBDAEF
-AQEwDgYDVR0PAQH/BAQDAgXgMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEFBQcDBDB7BgNVHR8E
-dDByMDegNaAzhjFodHRwOi8vY3JsMy5kaWdpY2VydC5jb20vVmVyb2tleVNlY3VyZUVtYWlsRzIu
-Y3JsMDegNaAzhjFodHRwOi8vY3JsNC5kaWdpY2VydC5jb20vVmVyb2tleVNlY3VyZUVtYWlsRzIu
-Y3JsMHYGCCsGAQUFBwEBBGowaDAkBggrBgEFBQcwAYYYaHR0cDovL29jc3AuZGlnaWNlcnQuY29t
-MEAGCCsGAQUFBzAChjRodHRwOi8vY2FjZXJ0cy5kaWdpY2VydC5jb20vVmVyb2tleVNlY3VyZUVt
-YWlsRzIuY3J0MA0GCSqGSIb3DQEBCwUAA4IBAQBBdzgU+I8tGdMO+Y4AETOQi6aiN9kB7lKWe5Ch
-4VR+L4uxYIqIHxR7G2+IEC9ugqEu43p4b80LpY7M4KmmfiaRDFGQ50s1OHAwdbR3X2OtkUQq0Qb9
-6ln+HD8N1JxO5nabuKbymki0BPoZcPdo+FeRecmkL/NOzzm41JBHrhwRwEWOOhAO5KxN4nkMBZ/w
-QzKEy4PylxurHmRG/K0k+xYFDO/UOx2/YsM8s138lQqEdKCvudtSvj5oA/Y8dNcZwQGHyVN5h5r2
-nh3mT3r2l7Q4dgxXlovERGpNqCZJ624jCiWQC4ELMD2+6WDxjj03PbOulQZ8oY4PQUyp6djF0keA
-MYIDuzCCA7cCAQEwVTBBMQswCQYDVQQGEwJBVTEQMA4GA1UEChMHVmVyb2tleTEgMB4GA1UEAxMX
-VmVyb2tleSBTZWN1cmUgRW1haWwgRzICEAfkkQ9qA1FdgOJE92VzW+AwDQYJYIZIAWUDBAIBBQCg
-ggE3MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI2MDUxOTA3NTAz
-OVowLwYJKoZIhvcNAQkEMSIEID4VyOau5HDbTuenIzpyAYYNdwfCXft9bKPuz9k0Xjn2MGQGCSsG
-AQQBgjcQBDFXMFUwQTELMAkGA1UEBhMCQVUxEDAOBgNVBAoTB1Zlcm9rZXkxIDAeBgNVBAMTF1Zl
-cm9rZXkgU2VjdXJlIEVtYWlsIEcyAhAH5JEPagNRXYDiRPdlc1vgMGYGCyqGSIb3DQEJEAILMVeg
-VTBBMQswCQYDVQQGEwJBVTEQMA4GA1UEChMHVmVyb2tleTEgMB4GA1UEAxMXVmVyb2tleSBTZWN1
-cmUgRW1haWwgRzICEAfkkQ9qA1FdgOJE92VzW+AwDQYJKoZIhvcNAQEBBQAEggIAS1JbDhNwweIc
-QuYqwRAR/yS3GsFNwrGARwzxspR3bF3bmAUiOaCXA3/sfTImbngl22ObTT9hBrzX04xEO1F/kWLu
-jk0gL1TgngSCBZyQLrwahUBNUjauE3SvCPY6Hj2dsL3Me9qbi9s3aGCmB46zEZhWdYDZ4HUMHPKQ
-3TISGmbnsKoW4pEXXGjHEaTXiOU+253QfWEzAo5ftaXKCG0KUIbDPTapzXmiv9do6m8xULhFqLRT
-dYfwAelKWA95DmxdS3Etek4fwUH1DOtrYvoMOPdxl+yOB81a5PZ07YvbDXF3oWN4wOBTqII6tJ/2
-qerAIlNL3DvUsaSvyq7D+seztNNzZAZCpZmBQCFd/n77JS7C2SMqgcBoh0QxBGg8m/GlI75PdNPf
-rXuTxUprfyKPRoWsbQ60WTX0yBKuTxdM31tSCL3VJ1mD49L3nGQFdBqljHmluTFAAZnje2bsDYYb
-brqKFb/YL9AIYtWGlyYHXja9jGLK/h1xa6vEVpbhMH8t6MB9GZ90n1mJTt86Oh/s/o+/BHQW2NBB
-mnxknQoFRTzV1MLWNt5LcT/G99QT8L7UEBpHsxlA5KtmWub93cFUbN/TJaKLU4wr/ggKq0qwHMAf
-xcRJU3086EBsZPLghhtuP/7D5/CkU9W8dvobyuHsQfxlk5u+K312Seym8N2j+jMAAAAAAAA=
-
-
---=-boRirr429Da0AX+mV+GN--
