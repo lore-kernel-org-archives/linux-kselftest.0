@@ -1,293 +1,152 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E5513E5573
-	for <linux-kselftest@vger.kernel.org>; Tue, 19 May 2026 08:25:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=170.10.133.124
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779179124; cv=pass; b=KvIdRC/d0mPq0A8h0u1aldPmPmBwiHu9OydgxZvFqpIqfQNfg+KAADmY2wZK9A/STlreiP+ToRzwYCAmbJz+r+VJZL8O2+i9nM9vjPTJMnuJILYhAkX5Qof/016YQs3BPJZt32hzNs4dfIXQUtLTfpe7GrMNqapG8WzywPkwg+M=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779179124; c=relaxed/simple;
-	bh=Zmlcsxs7JMP5bdHZ5kThghYTTdo51TjoA70ut3zJssU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fmNbaQycAtgJcPRnr6zTmUVSRWeXb0Hayh0vkAbZij99b7D/VGoUlVI1jtSs/v/E26eFFkvFXUqn/WIbgC5d5Xi3Aq4z8PAowsMkVx5nfO9AS/yvlHK7hE9jeLJBTcdO119DJiYQupTOKFmVnmRYY1xKFOjnG8f7OWbvgKkzWNk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KK+efXO4; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=PTM7iW8X; arc=pass smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KK+efXO4";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="PTM7iW8X"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1779179121;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Zmlcsxs7JMP5bdHZ5kThghYTTdo51TjoA70ut3zJssU=;
-	b=KK+efXO4ylYctwcp8LVfDh7CXaZpMeiSf7hoe5yOC3Cv26P7X3ftYv2irWzJ01Dv9/1b58
-	/AkcC/zUV1PomlQM/wgknTrbwXhCQYNhGwCvosULkEj2VIf0q6TpyH1cfqZcJrzy2KdA4i
-	txlagmXGKw0OU7pXySF3EaXHgUqwu9g=
-Received: from mail-yw1-f199.google.com (mail-yw1-f199.google.com
- [209.85.128.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-148-5StqrGVDORiOAXycRuwJgQ-1; Tue, 19 May 2026 04:25:20 -0400
-X-MC-Unique: 5StqrGVDORiOAXycRuwJgQ-1
-X-Mimecast-MFC-AGG-ID: 5StqrGVDORiOAXycRuwJgQ_1779179119
-Received: by mail-yw1-f199.google.com with SMTP id 00721157ae682-7bd5c9e2e4aso8128497b3.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 May 2026 01:25:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779179119; cv=none;
-        d=google.com; s=arc-20240605;
-        b=UgGgxoqG7xpnB73aGiKhGlNZUNVOSWZkHFMRQjPJw0Gkz2Z/10v10yBbsF/MazbPs/
-         YaBcsMAE3FZD+RFCSfQWNfSWVNl7ZIWJx2NW2JLR6t7x0wnSrce3TMJeU5se5qtCeKNy
-         h3qoWe8TfQxpabMl5vhZOFDJPFx2t+T6T9xpRmFgR1WgUrCswDo6uUC56srlxboRpsV6
-         VpCr0vd9QBpEtFzR/IYCZOukGKTOh5kFnPxPivhnmppeiWFJjif4DyeyvVCuMM8ZjRRE
-         4ZNsCHQT10zjdZObO+9zuj458nEXFBP3HAsLtFDKoBAOPoTR0Y0l+1878PDS5e/TwWSG
-         NL2Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Zmlcsxs7JMP5bdHZ5kThghYTTdo51TjoA70ut3zJssU=;
-        fh=a1KGFaPZtbJp8cB6MnCfRxNDjj3NXaX4kOKLJdmPGRw=;
-        b=DX1o3WVsd/AIQ9WQhMHrGfDnnp9bx7tY2JYm3dL18w0qXwnRzWqoqPtQ762E7jBSCU
-         5vNxtUAv/N14AnFXUdaQUXuZ6OJPGjnff0A8XD2xhRFy6m2iEVfObPbCvaZzL2b/VpwX
-         Hg+3Mji1gOqLumhhF+SHgOVnj3/CefPApQL3eW6BREchR2gWKTD3OYIn4XAc1rt7Dzyi
-         v45CwKiGVK57XLq3LK9oxdaR0TcNSn3z9RE3WeZORnRUDgE9F4qvOnCheOhnWD31XrrQ
-         mpOqSij+eGgebaBzT96gD8fjHessfjvLcmlAD4jgPM2ew0clkr1kEu3m/a+YxgVOuO3V
-         V9tQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1779179119; x=1779783919; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Zmlcsxs7JMP5bdHZ5kThghYTTdo51TjoA70ut3zJssU=;
-        b=PTM7iW8XX7Fc+svTNvQEPyrabuPKevYgU4wwNa0E2GH8kYNmCTP076uluaszhaEraK
-         v/CYuBcnqj0wOzxgH7z1HHOr6Wa9fIE/4W5rKBG0UW/t69AbbsSzrRlZ+tpCYksa1jyb
-         ly/65qoT2WsmO/uRyZm4CoZxr+3IjVuIa8dazFTmDVs+YwG4skJU54pbMzwUjZtIEgkl
-         j9HrbNhe1ZDSSgEV1+zP3CDzfLrH/a3gdTDNbhpOR09W8o/DsT383zAysKPGV6RnqBmY
-         Q7tDkwuSEgOTUbmEdCyswSIz4kSFHRgVMVyG2cHf/lMXFdxONybSi0MZANYMekQRnSGz
-         I7ug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779179119; x=1779783919;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Zmlcsxs7JMP5bdHZ5kThghYTTdo51TjoA70ut3zJssU=;
-        b=oueEkCSMAPxySyrqaIV837UmAPgttrCjRHBY4fCZmI4XXuA/LPezB5mMfd64cltpfJ
-         VAU55M3xpfChJcX6xKcOsIQgarCp95e21jJze/iZs0/ZvsXOIlwSkOCqHaueR1Pq0A00
-         bTvxp97h0BpMF0prL8Gydw9iOOKosR3I27T7zJZhEpU7LG2ItcpjehnauZHujh16gfet
-         jQhDd/I3mEuWgE8BLEVN49pDgAsSOkr6Imr/OsAeXBiQMgZMXvCqa/C6jDxn8KW/qJrm
-         5hdEg9founRgtA/M1nQwHTNiXKc2V8XCHJMtOJWWHW/VxmI5eKC10+wg/v1ANHNdbTQj
-         dINA==
-X-Forwarded-Encrypted: i=1; AFNElJ8mFq3lVyw7EmixDxga0WjqQRTVgdUSadt6tSYQmneqehn+9y5Zx8l7FZvO81j8dXFi0OJisCWjJcuOof1evsU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx5V93FQ5tUk7e1JTRq4zfTVe1dFJwMDBueaE3UChhcCx6u9sDs
-	up9zgDCkZhZI4JuvrRklGm2zB1H1eUHXn9prfWWiecDj+Q2n0q/xpjNYO2zz1jzEhAIIuPaw7WG
-	MU4laRhpesDeypIo0BryaD9DsP6NSCWvWdeJsILz4R3r6OVbYXPbCHta4YUvp3q4npoK5a8XH2/
-	8HAzaqa/Esi6eL9i4FhOpJeBsLAjDZkpA4FR1d4MTrS8Ix
-X-Gm-Gg: Acq92OGTHkQvJ1cIuYSRSVuTcAhYgPKtlqZNEIb4HWCzZzgsALKzy8HAPI8JkyrUwfB
-	2rqcQOdbcP0J81uTOEgwkGOiKqzLjJ8jBB1cHlAxomNYNLx8kY2FUlpcdQElihsGB0J/OUbQ630
-	KATxrkB/MhwDaJYw6kmvl4BvvV83xiiH6jlgBASfXt4083HH7is46sZlFXvLovuazqBUN7iJWWt
-	F0TvQ==
-X-Received: by 2002:a05:690c:e041:b0:7b3:edc7:9bb8 with SMTP id 00721157ae682-7c955b970femr172557007b3.0.1779179119388;
-        Tue, 19 May 2026 01:25:19 -0700 (PDT)
-X-Received: by 2002:a05:690c:e041:b0:7b3:edc7:9bb8 with SMTP id
- 00721157ae682-7c955b970femr172556607b3.0.1779179118837; Tue, 19 May 2026
- 01:25:18 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF9383F44FF;
+	Tue, 19 May 2026 09:16:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779182190; cv=none; b=iWaT/KMNCOC8IhwFmcHUCPKmf1FfysKU6a8xUkz4DedGn7xnDPe62gOJJieTNmtVxicm96kRa4Qw1DFuMVs1P9ruTR5WwhPBDSDe1YgqU9ozFLHe/UfYhSC3M3/P5EVsNFgB+PjadgQMRlPuGo+bpu15XOfV3pySG1L4WCkzhmI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779182190; c=relaxed/simple;
+	bh=FoBE0nSiaVzk2xaASMId03qAuSJIPVnnw0Bgr2KhKWs=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=Kd8Bho0nvXGu2hsCtNp2qZtpem80AQgEnHLckbFcyMPUefm7iDGXVYikXfKzLUtfMNsAe+CSIFpFL0U46+RS0Vpz4WGpx8tKT1MyNQuCAiszhs78IJXzav7gwgCB0h6ogrk6cZ8h+n7jfh67Edjo6cudbq4KrKbIORdcx7bYBIg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 657c10b4536311f1aa26b74ffac11d73-20260519
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B, HR_CTT_MISS
+	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME, HR_SJ_LANG
+	HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE, HR_SJ_PHRASE_LEN
+	HR_SJ_PRE_RE, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME
+	IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_TRUSTED, SA_EXISTED
+	SN_TRUSTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS
+	CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS, GTI_C_CI, GTI_FG_IT
+	GTI_RG_INFO, GTI_C_BU, AMN_GOOD, ABX_MISS_RDNS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.12,REQID:4252f72c-b1ac-4e28-b87e-78c2d2341d81,IP:10,
+	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:10
+X-CID-INFO: VERSION:1.3.12,REQID:4252f72c-b1ac-4e28-b87e-78c2d2341d81,IP:10,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+	elease,TS:10
+X-CID-META: VersionHash:e7bac3a,CLOUDID:4dc14c1a2be4675df48136712318458a,BulkI
+	D:2605181845419VVZWHTH,BulkQuantity:2,Recheck:0,SF:17|19|64|66|78|80|81|82
+	|83|102|127|841|850|865|898,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:99|1,F
+	ile:nil,RT:nil,Bulk:40,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,
+	DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_ULS
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 657c10b4536311f1aa26b74ffac11d73-20260519
+X-User: lihongfu@kylinos.cn
+Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
+	(envelope-from <lihongfu@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 1493652913; Tue, 19 May 2026 17:16:19 +0800
+From: Hongfu Li <lihongfu@kylinos.cn>
+To: ljs@kernel.org
+Cc: akpm@linux-foundation.org,
+	david@kernel.org,
+	liam@infradead.org,
+	lihongfu@kylinos.cn,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org,
+	mhocko@suse.com,
+	rppt@kernel.org,
+	shuah@kernel.org,
+	surenb@google.com,
+	vbabka@kernel.org
+Subject: Re: [PATCH] selftests/mm: add missing mmap() return checks in pkey tests
+Date: Tue, 19 May 2026 17:16:26 +0800
+Message-Id: <20260519091626.371028-1-lihongfu@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <agrrp5fRWWuMSoYB@lucifer>
+References: <agrrp5fRWWuMSoYB@lucifer>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260512-v2_20230123_tjmercier_google_com-v1-0-6326701c3691@redhat.com>
- <20260512-v2_20230123_tjmercier_google_com-v1-2-6326701c3691@redhat.com>
- <20260515-hinschauen-effizient-9e3a05a94f2e@brauner> <CABdmKX0d6Zsg+_TxXjB80UZR23ZvXzxYoWzORgwmx=ZiuE+Nzw@mail.gmail.com>
- <208fb820-d8eb-4832-a343-ef8b360e8120@amd.com> <CADSE00Lh95ygoXGKJGsYvQGEsFV8sVmwEC3uvh8M6r3ERzaJwg@mail.gmail.com>
- <88efe10a-8b93-4a81-8279-4a5559d0f17c@amd.com> <CABdmKX3yZubjDKbVqwrjHAiKyj_ioHzOoxd0wzFbJK=PAGOqcQ@mail.gmail.com>
- <01b6eefc-c107-4f8c-9d7c-3b86f54cabaa@amd.com>
-In-Reply-To: <01b6eefc-c107-4f8c-9d7c-3b86f54cabaa@amd.com>
-From: Albert Esteve <aesteve@redhat.com>
-Date: Tue, 19 May 2026 10:25:07 +0200
-X-Gm-Features: AVHnY4K5LncaNoVhZCnb-g1Oej_4CFtS9sUy70LBQyTJDD76MUlJZifB3Hgf-cg
-Message-ID: <CADSE00KCpCHOu2GMJ++ozXXbwF13fd2ZfmC3CnZBdLM_0p+ZMg@mail.gmail.com>
-Subject: Re: [PATCH RFC 2/5] dma-heap: charge dma-buf memory via explicit memcg
-To: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc: "T.J. Mercier" <tjmercier@google.com>, Christian Brauner <brauner@kernel.org>, Tejun Heo <tj@kernel.org>, 
-	Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, Michal Hocko <mhocko@kernel.org>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Muchun Song <muchun.song@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, 
-	Benjamin Gaignard <benjamin.gaignard@collabora.com>, Brian Starkey <Brian.Starkey@arm.com>, 
-	John Stultz <jstultz@google.com>, Paul Moore <paul@paul-moore.com>, 
-	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
-	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
-	Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org, 
-	linux-mm@kvack.org, linux-security-module@vger.kernel.org, 
-	selinux@vger.kernel.org, linux-kselftest@vger.kernel.org, mripard@kernel.org, 
-	echanude@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, May 19, 2026 at 9:20=E2=80=AFAM Christian K=C3=B6nig
-<christian.koenig@amd.com> wrote:
->
-> On 5/19/26 01:39, T.J. Mercier wrote:
-> > On Mon, May 18, 2026 at 7:07=E2=80=AFAM Christian K=C3=B6nig
-> > <christian.koenig@amd.com> wrote:
-> >>
-> >> On 5/18/26 14:50, Albert Esteve wrote:
-> >>> On Mon, May 18, 2026 at 9:20=E2=80=AFAM Christian K=C3=B6nig
-> >>> <christian.koenig@amd.com> wrote:
-> >>>>
-> >>>> On 5/15/26 19:06, T.J. Mercier wrote:
-> >>>>> On Fri, May 15, 2026 at 6:53=E2=80=AFAM Christian Brauner <brauner@=
-kernel.org> wrote:
-> >>>>>>
-> >>>>>> On Tue, May 12, 2026 at 11:10:44AM +0200, Albert Esteve wrote:
-> >>>>>>> On embedded platforms a central process often allocates dma-buf
-> >>>>>>> memory on behalf of client applications. Without a way to
-> >>>>>>> attribute the charge to the requesting client's cgroup, the
-> >>>>>>> cost lands on the allocator, making per-cgroup memory limits
-> >>>>>>> ineffective for the actual consumers.
-> >>>>>>>
-> >>>>>>> Add charge_pid_fd to struct dma_heap_allocation_data. When set to
-> >>>>>>
-> >>>>>> Please be aware that pidfds come in two flavors:
-> >>>>>>
-> >>>>>> thread-group pidfds and thread-specific pidfds. Make sure that you=
-r API
-> >>>>>> doesn't implicitly depend on this distinction not existing.
-> >>>>>
-> >>>>> Hi Christian,
-> >>>>>
-> >>>>> Memcg is not a controller that supports "thread mode" so all thread=
-s
-> >>>>> in a group should belong to the same memcg.
-> >>>>
-> >>>> BTW: Exactly that is the requirement automotive has with their nativ=
-e context use case.
-> >>>>
-> >>>> The use case is that you have a deamon which has multiple threads we=
-re each one is acting on behalve of some other process.
-> >>>>
-> >>>> At the moment we basically say they are simply not using cgroups for=
- that use case, but it would be really nice if we could handle that as well=
-.
-> >>>>
-> >>>> Summarizing the requirement of that use case: You need a different c=
-group for each thread of a process.
-> >>>
-> >>> Hi Christian,
-> >>>
-> >>> Thanks for sharing this atuomotive usecase. If I understand correctly=
-,
-> >>> the actual requirement is attributing dma-buf charges to the right
-> >>> client, not putting each daemon thread in a different cgroup?
-> >>
-> >> Nope, exactly that's the difference.
-> >>
-> >> The thread acts as a filtering agent for both memory allocation and co=
-mmand submission for somebody else, the process on which behalve the daemon=
- does things can even be in a client VM, completely remote over some networ=
-k or even something like a microcontroller.
-> >>
-> >> Everything the thread does regarding CPU time, GPU driver memory alloc=
-ation as well as resources like GPU processing and I/O time etc.. needs to =
-be accounted to one client which can be different for each thread of the pr=
-ocess.
-> >>
-> >> The only thing which is shared with the main process thread is CPU mem=
-ory resources, e.g. malloc() because that is basically just needed for hous=
-ekeeping and pretty much irrelevant for this kind of use case.
-> >>
-> >> The problem is now you can't do that with cgroups at the moment but un=
-fortunately only the kernel has the information you need to know to do this=
-.
-> >>
-> >> So what you end up with is to define tons of interfaces just to get th=
-e necessary information from the kernel into userspace and then essentially=
- duplicate the same infrastructure cgroup provides in the kernel in userspa=
-ce again.
-> >>
-> >>> If so,
-> >>> the `charge_pid_fd` approach achieves this directly by passing the
-> >>> client's `pid_fd`, without needing to add per-thread cgroup
-> >>> infrastructure.
-> >>
-> >> Well it's already a massive improvemt, we could basically stop doing t=
-he whole duplication part for the GPU driver stack and just use cgroups for=
- this part.
-> >>
-> >> Doing that automatically for CPU and I/O time would just be nice to ha=
-ve additionally.
-> >>
-> >> Regards,
-> >> Christian.
+Hi Lorenzo, 
+Thanks for the review comments.
+
+> Hmm you're sending this separete from the other MAP_FAILED checks, and not
+> referencing that in any way? (original patch at [0]).
+> 
+> Please just send this as a 2 patch series _with a cover letter_ and both patches
+> in-reply-to the cover letter.
+> 
+> Also make sure to propagate tags correctly.
+> 
+> [0]:https://lore.kernel.org/all/20260513095609.789935-1-lihongfu@kylinos.cn/
+
+The first patch has already been merged into the mm-new branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git/commit/?h=mm-new&id=ffe64def0071989cff47b5525d38f5e558c637c3
+
+For this reason, I split this one out separately to avoid confusion.
+
+> On Mon, May 18, 2026 at 04:21:20PM +0800, Hongfu Li wrote:
+> > Several mmap() calls lack error checks and would crash on failure.
+> > Add the missing checks. Also replace bare (void *)-1 with the
+> 
+> Well you're assert()'ing so you're causing a crash on failure anyway?
+> 
+> I'd just say that you are adding missing checks against the mmap() return value,
+> as well as improving readability and consistency by replacing (void *)-1 with
+> MAP_FAILED in instances where that was used rather than MAP_FAILED.
+
+Thanks for pointing this out, I will correct it in v2.
+
+> > diff --git a/tools/testing/selftests/mm/pkey_sighandler_tests.c b/tools/testing/selftests/mm/pkey_sighandler_tests.c
+> > index 302fef54049c..4637809192f9 100644
+> > --- a/tools/testing/selftests/mm/pkey_sighandler_tests.c
+> > +++ b/tools/testing/selftests/mm/pkey_sighandler_tests.c
+> > @@ -317,6 +317,7 @@ static void test_sigsegv_handler_with_different_pkey_for_stack(void)
+> >  	/* Set up alternate signal stack that will use the default MPK */
+> >  	sigstack.ss_sp = mmap(0, STACK_SIZE, PROT_READ | PROT_WRITE,
+> >  			      MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+> > +	assert(sigstack.ss_sp != MAP_FAILED);
+> 
+> Why not pkey_assert()?
+> 
+> >  	sigstack.ss_flags = 0;
+> >  	sigstack.ss_size = STACK_SIZE;
 > >
-> > Hopefully I'm following correctly here.... So you are duplicating the
-> > GPU driver stack to achieve remote accounting on a per-thread basis?
->
-> Not quite, we are duplicating the handling cgroup provides in the kernel =
-in userspace.
->
-> For this memory usage information as well as execution times of the GPU k=
-ernel driver is exposed in fdinfo for example.
->
-> > Does this mean for GPU allocations you currently have some GFP_ACCOUNT
-> > magic in your driver to attribute GPU memory to the correct remote
-> > client?
->
-> No, we just expose what the kernel driver has allocated for itself. E.g. =
-page tables, buffers etc...
->
-> When userspace allocates something using memfd_create() for example we ju=
-st ignore that.
+> > @@ -490,6 +491,7 @@ static void test_pkru_sigreturn(void)
+> >  	/* Set up alternate signal stack that will use the default MPK */
+> >  	sigstack.ss_sp = mmap(0, STACK_SIZE, PROT_READ | PROT_WRITE,
+> >  			      MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+> > +	assert(sigstack.ss_sp != MAP_FAILED);
+> 
+> Why not pkey_assert()?
 
+protection_keys.c executes numerous tests in loops across multiple iterations, 
+so the test_nr and iteration_nr printed by pkey_assert help easily locate the 
+exact failed test case and iteration.
+In contrast, pkey_sighandler_tests.c consists of only a few standalone test 
+functions invoked once each, so plain assert providing file and line information
+should suffice to locate failures.
 
->
-> > So this series would close the gap for dma-buf allocations,
-> > but what about private GPU driver memory allocated on behalf of a
-> > client?
->
-> Well we would need a cgroup which isn't associated with any process were =
-we could charge the GPU driver allocations against.
+> > @@ -1775,7 +1776,7 @@ int main(void)
+> >  		printf("running PKEY tests for unsupported CPU/OS\n");
+> >
+> >  		ptr  = mmap(NULL, size, PROT_NONE, MAP_ANONYMOUS|MAP_PRIVATE, -1, 0);
+> > -		assert(ptr != (void *)-1);
+> > +		assert(ptr != MAP_FAILED);
+> 
+> Probably best to convert to pkey_assert() at the same time?
 
-I think I better understand your framing for this now. Thanks again
-for taking the time to explain.
+This is a pre-test initialization path that runs before the test
+loop, so test_nr and iteration_nr (used in pkey_assert for diagnostic
+output) are not yet set up at this point.  
+Would using plain assert() here be more appropriate?
 
-I was looking for a way to pass cgroup around to do the charge. I
-found that `struct cgroup *cgroup_get_from_fd(int fd)` already exists
-in cgroups available symbols to handle cgroup directories.
-
-So here's an idea...
-
-Rename the charge_pid_fd to charge_fd:
-- If it is a pidfd (`!IS_ERR(pidfd_pid(fget(charge_fd)))`) then we do
-what we're already doing here.
-- If it is a cgroup_fd (`!IS_ERR(cgroup_get_from_fd(charge_fd))`) then
-we charge to that cgroup.
-
-Also we could add add an ioctl for the generic fd path similar to what
-we have for dma-buf heaps. Or have a new flavour for memfd_create:
-```
-memfd_create2(name, flags, charge_fd);
-```
-
-The transfer ioctl could also be made generic to accept both pidfds
-and cgroup_fds.
-
-For this series we could move forward as is, and make the generic
-solution a follow-up series, knowing that the field can be reused for
-cgroup fds.
-
->
-> But good point, charging against a pid wouldn't work in this use case.
->
-> Regards,
-> Christian.
->
-
+Best regards,
+Hongfu
