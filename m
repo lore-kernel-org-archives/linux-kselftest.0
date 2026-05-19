@@ -1,84 +1,116 @@
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2E2C1F4C8E
-	for <linux-kselftest@vger.kernel.org>; Tue, 19 May 2026 00:43:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 250E02264B0;
+	Tue, 19 May 2026 00:45:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779151419; cv=none; b=d+lF3dvBQNCOsWW4zpo3A+Xyj+ypeP6rCnajL/9HjphxUpeZUaUgW2COO6QPYSuCWoWmHUZOkl8CwMEOkabAb4flGBnhvitKItDOQtRqgnNS/qY4YfmmNZPkJvLiz+bSSyfzB6+kXiqweKes8IxoGaTP4jahcTA4OdF0RyE5pgg=
+	t=1779151545; cv=none; b=AmXJaLHlDSOCKH3ahopyIUp2xqjXdMsfKwVRuUlTdSlI8H3d5S2IehOkfeMPCgIzOBU5Zu3+4L2R0HWN/abmNxMHH4Lg77AL+/5hJhSBov/hO0uvqio76uH9FU0Rm3sFxcWGq73o5ifzw1kOL8bXhtwgKjc1jLHRPd9IOwWLC+k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779151419; c=relaxed/simple;
-	bh=nzMxY8+UnJdBw3CvpnvLTddYG+/Acq9tPNOa+ulvV9w=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=CfKLhA0I8gRwfmjOLuJd/ZTpTHbU7ZVbpGF8vNCvGsPoDr/VPG7XbfZ3ScsTiYZbpvQ1pqIjBsHv2g2n+Y2t4/GR9qx8crcUdiLDtBhz4ygpgXjRG9RBWivpoO1FiMnTz5ElwQ9IgyGyBcJxj+hwYCs/mK1HC6NkasIauWXMhkU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=g4GqQCHp; arc=none smtp.client-ip=209.85.214.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1779151545; c=relaxed/simple;
+	bh=ki8yhdn7llRk4g0Kq6LtI5PPviYPxDkGQNJRCkKty0g=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=Tbsrh0/QXRHQA8MYEOs5usVzGRmVxxF/QZOH64AJgrpmvdJ7Wx9FFK3BRCRZHH+djVuL0uBIUEYJnPImEXoxOtihdLIetlMarPPPYTlsODBaTbFbQ69ETVsz79Sos5RfsSbG1Pq5cYUq6xGULSHg/gExnOUcCS6Pv9a9ERVA8vs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=EL01RY3P; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="g4GqQCHp"
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2ba268cb5e6so29637825ad.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 18 May 2026 17:43:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1779151418; x=1779756218; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pW+SZ4DiHEbAMVxFiDO/o07/N3cCEF7bkyUCt/9G1kY=;
-        b=g4GqQCHpVRILL+3L21l/0nPBlT2QwhztIwNWT6vDXj0iXNuyexvlUCYj0TRHp92qaR
-         RWCmXS3ecGrk4ZSHFKLcnXUVkZNEq93UkbZZlxAlKrh0mRnmqMiYRq2XARg9trE5tQaZ
-         N3W0W957FcrwUV6XHUy3Ln/6ZacCmtJEwZfRsppucD4JW++qyb9101FfbIiJ4E612HvI
-         v+NRxKnWNq3Ky5e0n1mqIPR3g4ZvFunRiA/HREdHJ96j4VsEmDMd8OVmS8HGJn2n5utS
-         YywAthg69cdJXhuvzHNSPvc5txWYWo9qmz4aFyn53qP6+OqWuAdIuSUNrunGEHoUiZZD
-         TIhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779151418; x=1779756218;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pW+SZ4DiHEbAMVxFiDO/o07/N3cCEF7bkyUCt/9G1kY=;
-        b=b5NFd5RhPY2kgWe6IilU7BbBWxby9qY9ddzueBEgfXqLxTqqmPcJO0DpCe0ELSHNht
-         KI/z8+6oofeEccUPZmvNeGDeeMnwCS9jMK8fTVVex4H9i3IHUYQ9D4sT0/Y4oz6a75DT
-         EIkSM5qY2Gtn2oWw2tC/3Wmx9hPgy8cCsX7NETcidbIInB1dTKYctwf/KVenYSLBsRiw
-         28IKaGJGek6+K6Ptpu1jROabH4+gWqSfqSI1F32o/wSosaTRnU2UT2hpj2P7xPxCw7Sw
-         aaqySTIh7YSXG2LNtVVHFDewTK3nSKQ3HJ+QQHfvat9kNvrMjszyfmaVpI6yKBs2qlmO
-         OVnw==
-X-Forwarded-Encrypted: i=1; AFNElJ8QEXjCQ3Q/dLFeQADP8XEv1tp5GYkVIUv3dDk7wKLALJkuGcNLfnKbk8thvn+oKc3I/gsdApFMCS9RtUhyzfE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzHNvTkRgLqjyXjh7M7BqtimhesskCP9JNfnBgZ7UJxX7vSOKx/
-	HkMNZcXZsCxCa2W3wj8InFFbYy6VtSdjeRx8Yk8ruBJ9gmwnO72S9o8caIaU1dzBPEIKcKUDQyE
-	i5wUXBg==
-X-Received: from plfn12.prod.google.com ([2002:a17:902:e54c:b0:2b0:c9c5:109b])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:22d0:b0:2b4:61cc:37a8
- with SMTP id d9443c01a7336-2bd7e82bb9cmr183810785ad.17.1779151417754; Mon, 18
- May 2026 17:43:37 -0700 (PDT)
-Date: Mon, 18 May 2026 17:41:00 -0700
-In-Reply-To: <20260422130307.1171808-1-piotr.zarycki@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="EL01RY3P"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 954B7C2BCB7;
+	Tue, 19 May 2026 00:45:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1779151544;
+	bh=ki8yhdn7llRk4g0Kq6LtI5PPviYPxDkGQNJRCkKty0g=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=EL01RY3PGeBxGh5imSgwpAxABdUA+2lJwWo6MKl4VmmJ+isKIVk6cukTnjduCoAMz
+	 qnFiF/oOE8BhagrtdJkkBTyc5ahNVbb+jDFiXloI0WvHQO1S2FntkqSQFXEwI0Exuk
+	 IMvtshuNmQ+q2ew9u04tLdC65yNvaMPDaWUOSFZY=
+Date: Mon, 18 May 2026 17:45:43 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Zi Yan <ziy@nvidia.com>
+Cc: David Hildenbrand <david@kernel.org>, "Matthew Wilcox (Oracle)"
+ <willy@infradead.org>, Song Liu <songliubraving@fb.com>, Chris Mason
+ <clm@fb.com>, David Sterba <dsterba@suse.com>, Alexander Viro
+ <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara
+ <jack@suse.cz>, Lorenzo Stoakes <ljs@kernel.org>, Baolin Wang
+ <baolin.wang@linux.alibaba.com>, "Liam R. Howlett"
+ <Liam.Howlett@oracle.com>, Nico Pache <npache@redhat.com>, Ryan Roberts
+ <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song
+ <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>, Vlastimil Babka
+ <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan
+ <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Shuah Khan
+ <shuah@kernel.org>, linux-btrfs@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org, Luiz Capitulino
+ <luizcap@redhat.com>, Donet Tom <donettom@linux.ibm.com>, Jason Gunthorpe
+ <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>, Leon Romanovsky
+ <leon@kernel.org>, Liam Howlett <liam@infradead.org>, Mark Brown
+ <broonie@kernel.org>, Peter Xu <peterx@redhat.com>, Li Wang
+ <li.wang@linux.dev>, Sarthak Sharma <sarthak.sharma@arm.com>
+Subject: Re: [PATCH v6 00/14] Remove CONFIG_READ_ONLY_THP_FOR_FS and enable
+ file THP for writable files
+Message-Id: <20260518174543.eb80758a66e87631b3a4dd14@linux-foundation.org>
+In-Reply-To: <0FB04D3E-489A-4ABF-BD04-EE735EAD6F25@nvidia.com>
+References: <20260517135416.1434539-1-ziy@nvidia.com>
+	<20260518152116.840e926e9992d47c9b3e33c3@linux-foundation.org>
+	<0FB04D3E-489A-4ABF-BD04-EE735EAD6F25@nvidia.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <87v7djgoji.fsf@redhat.com> <20260422130307.1171808-1-piotr.zarycki@gmail.com>
-X-Mailer: git-send-email 2.54.0.563.g4f69b47b94-goog
-Message-ID: <177915101375.2229640.7454102060975937754.b4-ty@google.com>
-Subject: Re: [PATCH v2] KVM: selftests: hyperv_tlb_flush: replace NOP loop
- with udelay()
-From: Sean Christopherson <seanjc@google.com>
-To: Sean Christopherson <seanjc@google.com>, vkuznets@redhat.com, 
-	Piotr Zarycki <piotr.zarycki@gmail.com>
-Cc: kvm@vger.kernel.org, pbonzini@redhat.com, shuah@kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	kernel-janitors@vger.kernel.org
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Wed, 22 Apr 2026 15:03:07 +0200, Piotr Zarycki wrote:
-> Replace the open-coded NOP loop with udelay() which was added to KVM
-> selftests in commit 6b878cbb87bf ("KVM: selftests: Add guest udelay()
-> utility for x86"). The NOP loop is CPU speed dependent while udelay()
-> provides a deterministic delay regardless of host CPU frequency.
+On Tue, 19 May 2026 07:39:07 +0800 Zi Yan <ziy@nvidia.com> wrote:
 
-Applied to kvm-x86 selftests, thanks!
+> On 19 May 2026, at 6:21, Andrew Morton wrote:
+> 
+> > On Sun, 17 May 2026 09:54:02 -0400 Zi Yan <ziy@nvidia.com> wrote:
+> >
+> >> Hi all,
+> >>
+> >> This patchset removes READ_ONLY_THP_FOR_FS Kconfig and enables creating
+> >> file-backed THPs for FSes with large folio support (the supported orders
+> >> need to include PMD_ORDER) by default, including for writable files.
+> >
+> > Cool.  Sashiko wasn't able to apply this (presumably because of Mike's
+> > CI-friendly series).  I take it that the AI review from v5
+> > (https://sashiko.dev/#/patchset/20260429152924.727124-1-ziy@nvidia.com)
+> > was considered?
+> >
+> > Also, please check that the below were considered:
+> >
+> > https://lore.kernel.org/e9e61132-902a-445f-9c4c-4d405d164e70@kernel.org
+> > https://lore.kernel.org/22831162-abe7-4498-9e81-7f5aa3526d00@kernel.org
+> > https://lore.kernel.org/959238dd-2493-4d9c-ac35-6d04460a8239@kernel.org
+> > https://lore.kernel.org/1895A67C-BB1F-49EA-ADC3-AA4F51A6ED57@nvidia.com
+> >
+> > https://lore.kernel.org/20260508074643.55548-1-lance.yang@linux.dev
+> > https://lore.kernel.org/b8a3c3eb-f241-40fe-9121-4ae5a1097807@kernel.org
+> >
+> 
+> I addressed all of them, except the second one and I will reply to the
+> second one soon.
 
-[1/1] KVM: selftests: hyperv_tlb_flush: replace NOP loop with udelay()
-      https://github.com/kvm-x86/linux/commit/749fbf2bdcd7
+Great.
 
---
-https://github.com/kvm-x86/linux/tree/next
+> >
+> >> is an in-place replacement of V5 in mm-new. It affects Mike Rapoport's
+> >> "make MM selftests more CI friendly", since "selftests/mm: khugepaged:
+> >> use kselftest framework" needs to be updated. I updated it and put it at
+> >> the end of this cover letter.
+> >
+> > Helpful, thanks.  It was a little complicated because your email client
+> > messes with whitespace (it always has!), but I figured it out.
+> 
+> You mean tabs become whitespace? And does all my patches have the whitespace
+> issue or the one I put at the bottom? I am trying to figure out the issue.
+> BTW, All patches are sent via git send-email using mstmp and
+> I copied the bottom one from git format-patch. I wonder which part went
+> wrong.
+
+Your regular patches are OK - but when you informally paste a patch
+into the message body the tabs turn into whitespace.
+
+You aren't the only one ;)   I usually don't comment...
