@@ -1,66 +1,86 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD2BC36F901
-	for <linux-kselftest@vger.kernel.org>; Wed, 20 May 2026 07:22:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88881366051
+	for <linux-kselftest@vger.kernel.org>; Wed, 20 May 2026 07:24:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779261780; cv=none; b=na+fc8zk0czI9HEIE1vGW7hfusrJpCZfRFTrGKl6LGpuYLQszvFdZ5vTghsOrqI+zMdHRvJRaZIzPsAk+mN2s7g2p9kjn4bBk6L8cSEcf2mFpEgA1q6SXRG97Hg16gXDUF+18pYaLy9t88lotXbm9CR82Os2KH5xJmr4PNO09Vs=
+	t=1779261865; cv=none; b=HgQMNyQXzq6/jS3hqlRK/x+omkA/xDPhBoU5zWYKYdbp/6KZutV7inpHubZ/rFM2A8UT6cGG7Dlunz0/yU2znSSILjWiOCUU7UPCbn27bYm/I312cNqXybovBfn3PtKX7C+hbNrTnvm7d/geuDTfVg2lQ6fftHKNZUAKHG7UZZs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779261780; c=relaxed/simple;
-	bh=y0jcLSwtJI2Japs52LRtCy+PtQOeLK5jVUJPsCYdyTQ=;
+	s=arc-20240116; t=1779261865; c=relaxed/simple;
+	bh=et5n/jVgSeC7CA3DhRH3wMYvqFbDTZKATIwL6wl4Hkw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sjDuZIQpo8TBf0ShETFCr2GXwXJz1b75oVCJ4Qj0G9IrImVKaR/2i5HAXTxvoNGHnRrmh4yFRkqt4F9Uv1/nrjnGwDxcm7TYjmYAIj7ycqd1/RKQpBzTJzi2KJ2gtMpgBpi2poe4ugETjI/DMMN1GMoGPZmkUWQxjhCSuxuLlLY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=6wind.com; spf=pass smtp.mailfrom=6wind.com; dkim=pass (2048-bit key) header.d=6wind.com header.i=@6wind.com header.b=gYAL9/80; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=6wind.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=6wind.com
+	 In-Reply-To:Content-Type; b=FPp77c95wzh9AkgMl+4G8cdCcndSz0b8hQR+yeOwGnMUX/kY73lvJ7z92Nfq8JZthZJoGGW7b0Zw92KhCcDyGxofSY513iRhxiS+kSt+sT/V2VaPvk+AsvJcZEhfSNorZPa3FvrvxGEsDsnHcKC4u5PvuVcvLJOLHywqEbFuiqg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=D5OT29gg; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=sSDPT7+2; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=6wind.com header.i=@6wind.com header.b="gYAL9/80"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-48d10c981e4so5960875e9.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 May 2026 00:22:58 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="D5OT29gg";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="sSDPT7+2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1779261863;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=nIN5hOtVWer3WDHGGjocFJPku991/m9aF85eLbVhj2c=;
+	b=D5OT29gglTmJn+0Vib8xKrE5vLx9u5s/wagViXqL236RceT0rH7/C//Zx5zqTYH5N0Dcxj
+	/XlPqcJpwkIM7Rdtb77jiR5d/2Imivf6wEqCPk3g4N59yN2WNPfgoaHPUZ/fcuqRC7fMyM
+	4jm3Xjdnoz3Z9A2+dAhjUnRJ2bRF2Lc=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-388-4psizEy6MoCvXhXH5cOAIA-1; Wed, 20 May 2026 03:24:22 -0400
+X-MC-Unique: 4psizEy6MoCvXhXH5cOAIA-1
+X-Mimecast-MFC-AGG-ID: 4psizEy6MoCvXhXH5cOAIA_1779261861
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-447f2ce5556so3679709f8f.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 20 May 2026 00:24:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=6wind.com; s=google; t=1779261777; x=1779866577; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:content-language
-         :from:references:cc:to:subject:reply-to:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=zuRDqarJdWS7JEf2bJHF7uFUerb4dfY2s042IFgbB1c=;
-        b=gYAL9/803BPT1wDlYJkSJuW4e4galuYRriDWX+rdxP9zAtqMpZPb4R0+IWFnQU0DpN
-         cuGviGQYKgcbFZlNuyZcnxhm//bgg7ouFzU5ypuSYQWCeoV3obdf6tKcXlWkRt09k6MD
-         MuqDELsLJpMFUlTuU62nm6j8n0K7NKSpPwkkFGEVe1vbpblk0WIG7y/wdGL+/SVFRnpD
-         YXREJD/SGknpEdsCygerK66RmOQkUaT/KW+zXo1lHHmXL4gt1H/PPchscQSCsr+O56f2
-         1hoimUtJEDZdcaFQxQTWeYlxhs6TYDgCdBDk0QH80LWQKohsa9deHfBriA952afp5TsA
-         bkdg==
+        d=redhat.com; s=google; t=1779261861; x=1779866661; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=nIN5hOtVWer3WDHGGjocFJPku991/m9aF85eLbVhj2c=;
+        b=sSDPT7+2FtdTDVXfDbN1dAdUbqfw++PiwMluZuB0ZcT5HdsZtKS98etl0n63Moz+oP
+         /mqyfNiF94IvuFMlMA1gNZqA5dTgiHet9JK6xSZlXqPOKHOyTBzEy3IDAw/HJhQw+ETY
+         7m8mY54vXjQZA8Sc5SK5ZWKzwnmIOwx3LmJvkVPPqNcm9s7hUTvZB4tj44Wz/OQN34iC
+         mosvWIdhY4/B2o1WTqbX99e6qUeKUvA1LT5CKjuxoQXy1skBi+yAHBGRTnQJjdWUv72m
+         mCznHGMUz/QbfrTXg9HMyBFr7E54+etbtFu6kRIrIi7EE38tMv8x1v2lQJJVDnPogvcV
+         O92w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779261777; x=1779866577;
-        h=content-transfer-encoding:in-reply-to:organization:content-language
-         :from:references:cc:to:subject:reply-to:user-agent:mime-version:date
-         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20251104; t=1779261861; x=1779866661;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zuRDqarJdWS7JEf2bJHF7uFUerb4dfY2s042IFgbB1c=;
-        b=q9/zKhyMekYKsDKnEO/dlSUkNk7M8PoAtqiFUqJ5vq9CgH2d3+ofC9ryztr1X9+erK
-         huew9WFjEBHi0+HgMjxmQ6kOWqj9aHDXp4ic8GQT8re4fEH+IPVnEEFIqzlB1pXbwpnH
-         9h5v/H3qZD3jWpPu2FtDnsFMzSOM9hbHu+tHj/c4XccuRz52b1+jjGRnydndMpmw4Ew4
-         zmTVybdT6hKGPBe/H/5Tg3vAQIPYqJidunFqqE6Z6rGa8ntmIZIAFGhAIRB17SqyBlUk
-         7alY6jNF6FZ6RwcXtraq3zmLOSOks82/L3s8UaPmWCteDBAWf2K8YGNtxokfH9THHhPY
-         YLYA==
-X-Forwarded-Encrypted: i=1; AFNElJ9pmnSxI3L0DROB3DhqF6vfVLlsiI3hTHARkw2IMunpc4H08U8ITlZDfbvldc1iFYytKvcwMQ1kVNeccgzoVAw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxjNq2YDVBjvkmd/XhunkqAvNNID6i/BuaRpJDVKXCVPfmY2yZ5
-	LUJQEq98F3yLNjk34kcmphl10ZhdvXT4GwHRh78GwBhqyz48NSkvVzWAqhomWW1t3rU=
-X-Gm-Gg: Acq92OFh6zaS3ilRjI0BHYI9t5meX+N5OcjnlkvEtxsHez4a1S5z8/zjfxUii7CoqOW
-	ZcsT+gMs6PmtZ2q+juhChQzJsh5VQah6SqCqCgYpg3wuWI3xnPf0XhSTk6Jj6o/q5mUwJS9Xr/v
-	xSsXU2W19hpI59rS44YOXxVziPKPraPRfI0nSXr39YYfzH8zoF+SMtKfKj/mrpq94fUAzbG4vmf
-	ZIYhhkZikV+jDu8R/Nc19fgftpv54zpbR1eOVe3nsAqItqXa8gDXT4TlsxYRkz4mi+B3n6yH3Gr
-	uht6PmEaJWQnNA3NbYvNGKmc7IWSQz01ydhSPKieHdYihoxDfRdq76rjdWs+Xb47l3ozUPCsK07
-	MsZ3xTiQrFoz6DcugkC4GIIntPD6I/HVhZRpPbmQM4h7ciSOrllacI9plPdFbD6zl+xQzyQx2h+
-	gcSU9Nsd4hjPC/jzHZp6vDCuM7ezGmM8CwqHqqmPczCis4dPUYzrih0tMuLAZV09Q=
-X-Received: by 2002:a05:600c:4513:b0:48a:5501:799a with SMTP id 5b1f17b1804b1-48fe664c27cmr173624035e9.5.1779261777104;
-        Wed, 20 May 2026 00:22:57 -0700 (PDT)
-Received: from [172.31.99.185] ([185.13.181.2])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48fe57944c1sm412983955e9.7.2026.05.20.00.22.56
+        bh=nIN5hOtVWer3WDHGGjocFJPku991/m9aF85eLbVhj2c=;
+        b=BcFk8T55h85OIu57nBj5Y5Ton9Lq5N76ikMvZeId4T8FYmK2jwqLQ0NIzMkzNtpsO6
+         EbUyjgj6S8m7FH4fmphWam2q6s4xmQzo5LkqffMmQugDkv4P548/3oVzEOmR4ckmqL2B
+         letr+u/h/aoCrwpnfn3Zlia9snilAUHYB9IHMCLnM9IxynWXqjZLGp2IbD35JG175rb+
+         WYvRJeR82KrGvUxrU3ojz5PjoTENv0ES1iAzyxnQq7WF9LYUfHk8MHjPafpt07PJ9DYn
+         qgkpeLScROg+mgnK+JZ4m1pL1Q9kHx2Xy9yS2NUonWDoQ2aZhA6eTrF40m6aUUmWi2UZ
+         CHBA==
+X-Forwarded-Encrypted: i=1; AFNElJ8xMoTqp6d9AIbB4qgGacb8zG7zegWyzTS5g2Xaiqg5/8l+1YGYmFkC0wryzSIuLVarxvKOXHSTABlTkmmfdVs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyGMN34HPbSYZ5+61ESS34U9E4lSyc0iiqEJENCyKVVO3VrJPav
+	759VNGm1I9dst3LmCCiPL5B4ldDX3dqYZBg/FvVwevhmLgB51V/t8QIKMXafNdwLmT4l1h8YRmJ
+	B96FMdLQ9z0mNL3yxJBNY89c1bb3FHqpBi2GZpBq9d2bFUJVXYBH32sJi0U6h5N0a+W/3BJIDFG
+	uWSBuU
+X-Gm-Gg: Acq92OFgxx9iueLW2l/M1IOidRn1RG/4ZAYo8UWVhhxuVD5W6cLHJjGVIQDPqS/XRnV
+	rzYevSKnocvIzKv8/FotnB5Ad/wOTYJpyRW8wdaPnNceC+XRAMvgfr1V6up13BNkbyxeD34Wcpz
+	W6aGhZKVQGYVzSpBfkPUonJAsM3HnQENeHxF6lYNQ4UqBP38zjlREvlr3q11SFonxr8dQqjJ5Fo
+	LODUrDhquoy5Y/OHU+gBAC3XEoklEa15zjH/ojSo3dGoJOFaMdnGD3vXssiiH+23uQPjxi+Q3nK
+	q6bSykD8mISAhiJekivk8P9cj+BqpdTeqA0y5Pw0CORhkeCOWNAEFPTeNx90urGgEFriVi4n9e6
+	5ZAwJfKycdAHR+LKRLeABvt9srA==
+X-Received: by 2002:a05:600c:4e55:b0:488:ac01:72de with SMTP id 5b1f17b1804b1-48fe60e510bmr342909505e9.5.1779261860858;
+        Wed, 20 May 2026 00:24:20 -0700 (PDT)
+X-Received: by 2002:a05:600c:4e55:b0:488:ac01:72de with SMTP id 5b1f17b1804b1-48fe60e510bmr342909115e9.5.1779261860393;
+        Wed, 20 May 2026 00:24:20 -0700 (PDT)
+Received: from [192.168.100.100] ([82.64.211.94])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48fe4dac000sm385877715e9.0.2026.05.20.00.24.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 May 2026 00:22:56 -0700 (PDT)
-Message-ID: <c53e7ba3-d3c1-43a0-b38a-25b42091f9b8@6wind.com>
-Date: Wed, 20 May 2026 09:22:56 +0200
+        Wed, 20 May 2026 00:24:19 -0700 (PDT)
+Message-ID: <5c1de7cb-42c2-473f-8d67-0523a3c86464@redhat.com>
+Date: Wed, 20 May 2026 09:24:16 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -68,80 +88,108 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Reply-To: nicolas.dichtel@6wind.com
-Subject: Re: [PATCH 3/3 net-next v4] selftests: net: add test for IPv4 devconf
- netlink notifications
-To: Fernando Fernandez Mancera <fmancera@suse.de>,
- Paolo Abeni <pabeni@redhat.com>, Jakub Kicinski <kuba@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- horms@kernel.org, edumazet@google.com, dsahern@kernel.org,
- davem@davemloft.net
-References: <20260510081528.5257-1-fmancera@suse.de>
- <20260510081528.5257-3-fmancera@suse.de> <20260513193544.47970cb8@kernel.org>
- <bd560c89-c71f-4ef5-a0fd-5ea096a0f767@suse.de>
- <20260514162429.366b94c9@kernel.org>
- <f528360c-18b3-46e5-8ba8-88f921203716@suse.de>
- <20260515181623.5a44140e@kernel.org>
- <f5cae72f-93c7-41d7-b7db-2b60281afb72@suse.de>
- <20260518142346.4c0903de@kernel.org>
- <54f7f213-9783-42c0-8ae8-51a6b65b7b5d@redhat.com>
- <b8b89071-6f17-4f6a-8a06-101056f780fd@6wind.com>
- <f2cd87f0-e173-4af7-9bc8-3a1f38c58c06@suse.de>
-From: Nicolas Dichtel <nicolas.dichtel@6wind.com>
+Subject: Re: [PATCH net v2 0/2] Fix race condition between TCP_REPAIR dump and
+ data receive
+To: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>
+Cc: Stefano Brivio <sbrivio@redhat.com>, "David S. Miller"
+ <davem@davemloft.net>, Paolo Abeni <pabeni@redhat.com>,
+ Pavel Emelyanov <xemul@scylladb.com>,
+ David Gibson <david@gibson.dropbear.id.au>, Jon Maloy <jmaloy@redhat.com>,
+ Dmitry Safonov <dima@arista.com>, Andrei Vagin <avagin@google.com>,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Neal Cardwell <ncardwell@google.com>,
+ Kuniyuki Iwashima <kuniyu@google.com>, Simon Horman <horms@kernel.org>,
+ Shuah Khan <shuah@kernel.org>
+References: <20260518183424.3144867-1-sbrivio@redhat.com>
+ <20260519190352.45c8478e@kernel.org>
+ <CANn89i+DknqarcKuZxku-XvoioqkXrd3sQd3PXW5fdFZBpPxjg@mail.gmail.com>
 Content-Language: en-US
-Organization: 6WIND
-In-Reply-To: <f2cd87f0-e173-4af7-9bc8-3a1f38c58c06@suse.de>
-Content-Type: text/plain; charset=UTF-8
+From: Laurent Vivier <lvivier@redhat.com>
+Autocrypt: addr=lvivier@redhat.com; keydata=
+ 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
+In-Reply-To: <CANn89i+DknqarcKuZxku-XvoioqkXrd3sQd3PXW5fdFZBpPxjg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Le 19/05/2026 à 23:27, Fernando Fernandez Mancera a écrit :
-> On 5/19/26 3:45 PM, Nicolas Dichtel wrote:
->> Le 19/05/2026 à 09:17, Paolo Abeni a écrit :
->>> On 5/18/26 11:23 PM, Jakub Kicinski wrote:
->>>> On Sat, 16 May 2026 09:02:27 +0200 Fernando Fernandez Mancera wrote:
->>>>>>> Oh sorry, I should have clarified it. ip netconf only shows/query them
->>>>>>> but it cannot set them AFAICS.
->>>>>>>
->>>>>>> Usage: ip netconf show [ dev STRING ]
->>>>>>
->>>>>> Oh, fun. anyway, you gotta find a better way. Or just give up on the
->>>>>> selftest, the YNL hack is too ugly to live
->>>>>>    
->>>>>
->>>>> Fair, let me see what I can do. Otherwise, Paolo as you requested the
->>>>> selftest, would it be acceptable for you to drop it given the situation?
->>>>> I looking for alternatives anyway :-)
->>>>
->>>> Maybe extend iproute2 ?
->>>
->>> Ideally I think extending iproute2 would be the better solution.
->>> @Fernando: perhaps you could update the self-test accordingly, adding an
->>> explicit check for the iproute subcommand. If `ip netconf set` is not
->>> available skip the test, so that iproute2 patches could land later.
->>>
->>> Does the above look feasible?
->> FWIW, netconf != devconf.
+On 5/20/26 06:39, Eric Dumazet wrote:
+> On Tue, May 19, 2026 at 7:03 PM Jakub Kicinski <kuba@kernel.org> wrote:
 >>
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/
->> include/uapi/linux/ip.h#n156
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/
->> include/uapi/linux/netconf.h
+>> On Mon, 18 May 2026 20:34:22 +0200 Stefano Brivio wrote:
+>>> Stefano Brivio (2):
+>>>    tcp: Don't accept data when socket is in repair mode
 >>
->> The devconf API exposes all sysctl of an interface via RTM_NEWLINK /
->> IFLA_AF_SPEC / IFLA_INET_CONF. There is no event when a sysctl changes.
->> These sysctl can be set via RTM_SETLINK.
->>
->> The netconf API (RTM_NEWNETCONF) is a notification mechanism used to notify
->> users when a sysctl changes. It handles sysctl from interfaces but also from the
->> 'all' and the 'default' entries. RTM_GETNETCONF is also supported, but not
->> RTM_SETNETCONF.
->>
->> 'ip netconf' uses the netconf API.
->>
+>> Not sure Eric is on board with this patch in the first place.
+>> Sound like it's not the intended use case for REPAIR so IMO
+>> it's up to TCP maintainers whether we want to support this.
+>> And it's definitely not a Fix.
+> 
+> I am not on board. Only net-next material for sure.
+> 
+> While v2 is slightly better, we have the fundamental problem of adding
+> stuff to TCP receive path for features that almost nobody use.
+> (It took more than 13 years to finally complain about the race)
+> 
+> This consumes Gigawats of power on our planet (and tons of CO2), given
+> the trillions of packets processed every second.
+> 
+> Please at least add a static key as we did in:
+> 
+> commit 020e71a3cf7f50c0f2c54cf2444067b76fe6d785
+> Author: Eric Dumazet <edumazet@google.com>
+> Date:   Mon Oct 25 09:48:24 2021 -0700
+> 
+>      ipv4: guard IP_MINTTL with a static key
+> 
+>      RFC 5082 IP_MINTTL option is rarely used on hosts.
 > 
 > 
-> I think we can reword this to.. "extend iproute2 to support setting devconf
-> values"? If the naming or implementation on iproute2 is not clear now, we can
-Yes.
+> But in my original feedback I pointed that we TCP_REPAIR should
+> probably only insert a TCP socket into TPC established hash table
+> only when it is ready to process incoming packets.
 
-Nicolas
+The problem is on the source side of the migration and I think removing the socket from 
+the ehash table would trigger RSTs, closing the connection on the remote side.
+
+Thanks,
+Laurent
+
