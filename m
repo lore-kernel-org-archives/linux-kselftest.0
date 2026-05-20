@@ -1,123 +1,237 @@
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F14C7370AE8
-	for <linux-kselftest@vger.kernel.org>; Wed, 20 May 2026 20:34:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779309254; cv=none; b=TJiejJgnXgiVxAFQ0+0dB+zrMd3JBCj44A4WH/m3a2uiFbw0M0oPhboxWjiuR+fILYkQaZcR2CaPoWUT0g/6uHmgyxPbWN90r7T3LTNmT+zj4q8zZGKJZHGcE4nuxyKNGFKWf0xspJjbd5aju4wihZ/2H6IbE+cwu3IXDLF5iSU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779309254; c=relaxed/simple;
-	bh=dy3591KAoddrcRCeSj7NDuxGxv74bfjtV5WlTzlf7Y8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AwwyZ1fGPgCKx759gSEr1F/xHMYbK095oIpTTueln7tBiysT5xGq506Q26+UNlepr3GgvfWzto4OJBXX/iX0EraYFnejMz46sPzKYMOPtBNSxpLKJLR6nLwH+70ZOYcjmpYAH31CYVe+0e9MhZrvjiRERuensyjnoJL2ZpXr9yE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OZNZEdXq; arc=none smtp.client-ip=209.85.210.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B044370D6E
+	for <linux-kselftest@vger.kernel.org>; Wed, 20 May 2026 20:35:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.178
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779309335; cv=pass; b=rOFPAZ48+DMSV3jjc/UyRXj5GsUBIj4ESJq/Y21+Db0pBP//NlOrg0ce52gCOh6VYntdB7SduFs4nvjTaK+OIVMDtt0yRA3EOPh9N6cTXDgUeiUVRVQQxFwDiBO1YXDKQYPsA2A/ZVO2pMmOyOfLw82mYrxb8FYD5YOF5a9ydEg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779309335; c=relaxed/simple;
+	bh=UfnbwtuocpefoEJwGQVdq2On9IxQDWbOXLMcN0R2rQ4=;
+	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BvvbTFBYSK7w2a3MqBKVA7JlD15OuHrnomsmXOfxwIpOGPctNn5Xi2sspjPKW6mz1HO3J/RhWQd+xEfJDgXjLKzwQGiO7AXQejTDmh5laegnn0+tfx40HeCIzwZTOfpKWPMY3Kk/thWGLgSq2bPP93wydREu3BheSNYS6n87BH8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BF4ldaZy; arc=pass smtp.client-ip=209.85.208.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OZNZEdXq"
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-83945063f70so3035846b3a.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 May 2026 13:34:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BF4ldaZy"
+Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-393d6025f99so59635911fa.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 20 May 2026 13:35:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779309332; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Qw8d5rtUG+10mlR0/O766OduHnrwIL2j89DE+d9hfl6/MkIWKCUqsDX1Rh4WK2Sn54
+         KBABhXPwfxonk5cVPbnwBNxBZ687aVbkOONcOULzsQ5NuRvpncYT5ZKN2B2TEVPqGLn3
+         0E+txBEHPvR2rZWusRUDR23QNd2CBrgbZlIYC+BUqBYQp5EiSUtNy9l7NODw4N+iw2H2
+         R5dsM4SS5QoXRwRsjDI6pMqJbu8UyYNYYeM9JML04pbfdVSgFrWq8+VjlDrDC6FuNC8S
+         e0s7hNs76+xcPN+X7/dD6+1aQi1vwcEao1odUQbrDWj8NhfLt13WDVAqRZ5qYIRsQCTr
+         UuEA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:dkim-signature;
+        bh=y7Uhb594XOL1gZOtZrSL5VavWJB1z/5+87hhs5G/QCo=;
+        fh=QvBVgCSVYNXQkfIyucF9zVBq3jT6IOr5U2OneR/68NE=;
+        b=aZTs9Mn5mqLLw56QFFbrilFXM+fl+d7TlQUkPNcV09bmylOemNBrEEQ7Jh4ocnLFCN
+         oMsRWqGbQe1YMEw/VqG7oIdJ2mpC5R2/84N3Y8y9iTdSX5JyYxg/e9X2TgKWX2PESYQM
+         OkGN/sBl002+UdIwvJUOnnueeWZ1EUs9G0tnsQnKcpwtMmlGyEi85aWG31Z3ddCTp2Gn
+         KGB8AIf569BdJbUCUzZeM5DdQeBfF3ooJz3OR5hFu5HsNH8LMuW4IfRI19Bs0wVp+Ysd
+         vUp5PfTIblHtW4Comh7ONxy5fv4BV8bi41ebGv7n9B+sxApVQeYJew/2ux1/TcCObrA5
+         RQcw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779309252; x=1779914052; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=iChxZzWfiNaD+hAkHjNeNDXclaERmNaIr1r1RbO6iYg=;
-        b=OZNZEdXq3IrdEdKNUYm5Pi7eD567cvE6JYSdjW365WXUL/vz1h5B6fMVwxUC6azPzA
-         dOfi6PXjQQZwl1d/z6aPinziKVXjRxDW2bzWiQeT4TGi/bmjEB887TETT2dbQQ9+k0Yz
-         r/bMqn4I+blpP9SIXRoGX7ZaEPR3BS/V2lr0dbhVy2F45onGx3jUwlh/ede8qls3SK/u
-         JzHGdc8ykVWfLQb2jPRzjiJZynpN1PRoKVyYUFQdqw+chyNMNhSl8CkDGViIThIrtZWY
-         e8wstjsbR/VzFzkMHvQmNSaLFItloJ0SYOdsQekytBe1BFMlZQ3C2Ex0SBJjLom03dk2
-         IDzQ==
+        d=google.com; s=20251104; t=1779309332; x=1779914132; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=y7Uhb594XOL1gZOtZrSL5VavWJB1z/5+87hhs5G/QCo=;
+        b=BF4ldaZyC+lHxU44sHFQ0CFw+weOZpGOVHFOcMM8Li4CKJThd7CRHo5MjaVFKYUCaz
+         X8XvyHppDRJuvc//6aWB12le06EFlb2lPcMYGwsb/SY5XPiGKJaOgjg+D8zfv9nvsSk2
+         MSLN2cMKSy7+LW4QZCwjkQ3vHegMSX2QZBTb28MyT/huzKl0D0NjzK7wt0g0kpyrhAmu
+         s0Wo8tk3XhbxA/bcSehc88QF4QdeHJW0Ieqc5V/y3kpeKHzCytHezB8cD9PsmFvftPU0
+         0l2Me10+xDIVCKjhaAYOVRE8lvPY/zel/blgAizg7rb6n5JODmq4wrLhTAC384dhYArp
+         n2TA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779309252; x=1779914052;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iChxZzWfiNaD+hAkHjNeNDXclaERmNaIr1r1RbO6iYg=;
-        b=V7Ha9IQqu3EENceFWosjdx3OLjlyPYZekFTNhURU2FN6/F1YLwi43aaFXPw99/Pa8a
-         6LWy5yU/qMyRa8PCxjIWVxd9gCnwlgku3Oc/ckhpr8Ow3gyvvsBTbyk0pc82T/kuC3L8
-         nH8Ea1pK97puo309QjOc+ttouzTaGihdIoyAsIMRMhfK8T4Q2Tuwjin3yRtIZ3PUBzOU
-         54vfC5eRugHDCAgYsGQFggLIxh61o7zZwCBiP2554zy/R0VTYwePO9KdUiRvQKsOmlPF
-         FfHHsGdJqOIk3XqiUWwkf6lcEf/Hf80a7bIseTlVazVExPCt0viaAKTKa2yZkSDdaU5N
-         fkfw==
-X-Forwarded-Encrypted: i=1; AFNElJ8LfILPRyKrico6SNYFtefuMJeMsKi3UV2+l+5Sr0BwfnTJvX2+ZKsG7/p4pPXL9pi5Jvk4vF9iHXxwfbzLWvk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy+1swI3RavIbA1QM/OeK7dOUE/xZgsrl+9xkaUX0Q2UD8FOhdQ
-	UUBVaOXKb8YlTkrK6eTyo/eJambpb82X1s+kyJK7Md5NXfe6QNyi0syy
-X-Gm-Gg: Acq92OGq5psNELToRw95p32i+6ShaScyb3AkRu+YWB7QaUnXLe9t8hmZ+J3PcVkpKwj
-	RK38MRosshHIsiE+LzKU4AjAjSngZFc2wYMMk/6piBnO9b81K2UOGUtdyLROsV/1sTCA+0jHTeJ
-	5qlLqdmhw1ZSZK25jXQvAgqzl2Sm2KEbViBV3kcIGj7qYgzyIwh3RTagV8TXANEHJG0+xoEoTmx
-	ITkVHcJSvulkEQqKbkDDNp3l07LaRijWOdLN7k9WIExIfX9APruIw7IsAeit2rgah0fDsIteZSh
-	C220OGxAu2gYvi5agZ7jmK3s/O5+X48OtJnddcCcEmzfqWB2nqpQC3QgGVNIesP99kwUE1WVZYo
-	uz800VZCi86KMaG6i6AfV9C73wOGr/lkUuXj5gZg93z/Nw7Y1zXZo8Mp2U9i5cqsNqbfsUoZeqO
-	TtJ+OaA6m7sZsxucCgTjbxbTdSY0ImxbVaLS2fRlcMeannmKsRFDVC/1DRXxi5kImMj+n/hY/56
-	1Op7be8vdXHoeNxGOeWNexnV8zinddDgRvxW8H9jLVcltuZWUP+lQF+fHNQX82G1SMQ9QkvykPt
-	nXkmOkVICaNCP+vukqobWLBd5kPD2bsJR97W
-X-Received: by 2002:a05:6a20:7355:b0:3a0:b65a:5df5 with SMTP id adf61e73a8af0-3b307f88262mr14502637.30.1779309252204;
-        Wed, 20 May 2026 13:34:12 -0700 (PDT)
-Received: from codespaces-78f0a7.2t4prynt4dlezbzls5ze3dxsqg.rx.internal.cloudapp.net ([4.240.18.226])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c82bb121ccasm20172328a12.29.2026.05.20.13.34.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 May 2026 13:34:11 -0700 (PDT)
-From: Muhammad Bilal <meatuni001@gmail.com>
-To: bpf@vger.kernel.org
-Cc: puranjay@kernel.org,
-	puranjay12@gmail.com,
-	ast@kernel.org,
-	andrii@kernel.org,
-	daniel@iogearbox.net,
-	martin.lau@kernel.org,
-	eddyz87@gmail.com,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Muhammad Bilal <meatuni001@gmail.com>
-Subject: [PATCH bpf-next] selftests/bpf: Fix zero batch_hash on CPU 0 after batch_gen wraparound
-Date: Wed, 20 May 2026 20:33:18 +0000
-Message-ID: <20260520203318.31939-1-meatuni001@gmail.com>
-X-Mailer: git-send-email 2.53.0
+        d=1e100.net; s=20251104; t=1779309332; x=1779914132;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=y7Uhb594XOL1gZOtZrSL5VavWJB1z/5+87hhs5G/QCo=;
+        b=sDKTm2NBRCTmSKmOAB1xEVsV0WkUfo0e7lSOf6iwYHumZD8bpOajMuBdiCY0wTqXS8
+         dxoGnGI2fqfYx97QeHHY/mTJzGAo+KMRqZtWApgeTwwaJv4W/qAXsV1utUOQzLDvWO3u
+         qeSIv1YbbWJRsC994LHIX/pHC8nS4lRnGJDmZTdnuD3FKfP4fAujeoVjXCXVdw913NoX
+         B2tFaPm7HY7yXMS5N4TmRn+OzfzfCrFmszG0Av7TGShB5gI/Kq+DNIDtL1+OrlFXvRAg
+         nYGK5UweO7XGCzaPDAAeJIZcxQ6wV9ARc6XTIOayZ5K4Be2n8KDFzBT68W5cYT5iVu+h
+         11vA==
+X-Forwarded-Encrypted: i=1; AFNElJ91HaVhcM0FSJppSr1C7IGaUjjABUrHRcG+RyeLPaBvA4gRnaecV6Z0FHYlNQdAIr9R2dEGB2wZ70lXT++UfW0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz6MqYUUKCFlAvp+/xOBPYPOXydDiHCPdUidIOgvixHbH1SzbGM
+	hIL2Ddj6E9WMeVnrph8nMNpfbSCk69cFYMG208pJkV5Bk3xY8ivnhF+txxoyhgKyZeefDAxmmCu
+	+4VGBgqcrFgOdG7mgetCy+eblUNZPcW+PqJ81Hcmz
+X-Gm-Gg: Acq92OFEtPeKPAyTiX6plxoOeo/uOYbizsHAZ2ZZanpDMoawWceHJ1ObhKPIk4z59UK
+	buCVbmlYJYnEFkNZSsfav/Y2Ty8TdSlHLWcy4UwbmIjaPtVVOrMktGnbouaXsq4Ow9MKtsewms5
+	a6JouUSJAe6X7g+tbbNszL1JZRQMcWP2GmWi/vVSH6rxY/cpQsrRXj4Az1/5B4vCdP7GjPlQt1W
+	M6Sx9iTkBXrl0H3D+qj6l/1K/CAcqN32m4wk0b6pHGGl9GYe1XLX+b8tO8eH6xzaKe3WSKW18H1
+	YEYEfnQzGvgyVD1jP0dD6+XuHP3YEncfBaPKO8JODMctbjWc4KHLQWnLlmAkH9Fii2ain31UGH8
+	Ky4nn
+X-Received: by 2002:ac2:5b03:0:b0:5a8:8818:819c with SMTP id
+ 2adb3069b0e04-5aa2ba8d0a4mr6125e87.16.1779309331108; Wed, 20 May 2026
+ 13:35:31 -0700 (PDT)
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 20 May 2026 13:35:27 -0700
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 20 May 2026 13:35:27 -0700
+From: Ackerley Tng <ackerleytng@google.com>
+In-Reply-To: <CA+EHjTwOfJ=nCRoX3m5uDt=CcF_zrqGsZVBBmo4MscmPqrBxOA@mail.gmail.com>
+References: <20260507-gmem-inplace-conversion-v6-0-91ab5a8b19a4@google.com>
+ <20260507-gmem-inplace-conversion-v6-12-91ab5a8b19a4@google.com> <CA+EHjTwOfJ=nCRoX3m5uDt=CcF_zrqGsZVBBmo4MscmPqrBxOA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Date: Wed, 20 May 2026 13:35:27 -0700
+X-Gm-Features: AVHnY4JCI2WxkpGpEfiZH45uIXCVj4Nb0JRb9mme96xXqvKAS-EEsMTVSDBkz1s
+Message-ID: <CAEvNRgFqPSLKKKb9etgfqdt0y81Agu5RwRipuGw=j2y7W2Y0-w@mail.gmail.com>
+Subject: Re: [PATCH v6 12/43] KVM: guest_memfd: Call arch invalidate hooks on conversion
+To: Fuad Tabba <tabba@google.com>
+Cc: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com, 
+	brauner@kernel.org, chao.p.peng@linux.intel.com, david@kernel.org, 
+	ira.weiny@intel.com, jmattson@google.com, jthoughton@google.com, 
+	michael.roth@amd.com, oupton@kernel.org, pankaj.gupta@amd.com, 
+	qperret@google.com, rick.p.edgecombe@intel.com, rientjes@google.com, 
+	shivankg@amd.com, steven.price@arm.com, willy@infradead.org, 
+	wyihan@google.com, yan.y.zhao@intel.com, forkloop@google.com, 
+	pratyush@kernel.org, suzuki.poulose@arm.com, aneesh.kumar@kernel.org, 
+	liam@infradead.org, Paolo Bonzini <pbonzini@redhat.com>, 
+	Sean Christopherson <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
+	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+	Nhat Pham <nphamcs@gmail.com>, Baoquan He <bhe@redhat.com>, Barry Song <baohua@kernel.org>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
+	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
+	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Kiryl Shutsemau <kas@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>, Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-mm@kvack.org, linux-coco@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-commit fa747e9f843b ("selftests/bpf: Fix cold_lru producing zero
-batch_hash in XDP LB benchmark") claims the addition ensures the
-multiplier input is "always >= 1". This invariant does not hold after
-wraparound.
+Fuad Tabba <tabba@google.com> writes:
 
-batch_gen is __u32. After 2^32 increments it wraps to 0. On CPU 0,
-bpf_get_smp_processor_id() returns 0:
+> On Thu, 7 May 2026 at 21:22, Ackerley Tng via B4 Relay
+> <devnull+ackerleytng.google.com@kernel.org> wrote:
+>>
+>> From: Ackerley Tng <ackerleytng@google.com>
+>>
+>> When memory in guest_memfd is converted from private to shared, the
+>> platform-specific state associated with the guest-private pages must be
+>> invalidated or cleaned up.
+>>
+>> Iterate over the folios in the affected range and call the
+>> kvm_arch_gmem_invalidate() hook for each PFN range. This allows
+>> architectures to perform necessary teardown, such as updating hardware
+>> metadata or encryption states, before the pages are transitioned to the
+>> shared state.
+>>
+>> Invoke this helper after indicating to KVM's mmu code that an invalidation
+>> is in progress to stop in-flight page faults from succeeding.
+>>
+>> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+>
+> Minor nit below, but lgtm.
+>
+> Reviewed-by: Fuad Tabba <tabba@google.com>
+>
+> Cheers,
+> /fuad
+>
+>> ---
+>>  virt/kvm/guest_memfd.c | 41 +++++++++++++++++++++++++++++++++++++++++
+>>  1 file changed, 41 insertions(+)
+>>
+>> diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
+>> index 9d82642a025e9..baf4b88dead1f 100644
+>> --- a/virt/kvm/guest_memfd.c
+>> +++ b/virt/kvm/guest_memfd.c
+>> @@ -603,6 +603,42 @@ static bool kvm_gmem_is_safe_for_conversion(struct inode *inode, pgoff_t start,
+>>         return safe;
+>>  }
+>>
+>> +#ifdef CONFIG_HAVE_KVM_ARCH_GMEM_INVALIDATE
+>> +static void kvm_gmem_invalidate(struct inode *inode, pgoff_t start, pgoff_t end)
+>> +{
+>> +       struct folio_batch fbatch;
+>> +       pgoff_t next = start;
+>> +       int i;
+>> +
+>> +       folio_batch_init(&fbatch);
+>> +       while (filemap_get_folios(inode->i_mapping, &next, end - 1, &fbatch)) {
+>> +               for (i = 0; i < folio_batch_count(&fbatch); ++i) {
+>> +                       struct folio *folio = fbatch.folios[i];
+>> +                       pgoff_t start_index, end_index;
+>> +                       kvm_pfn_t start_pfn, end_pfn;
+>> +
+>> +                       start_index = max(start, folio->index);
+>> +                       end_index = min(end, folio_next_index(folio));
+>> +                       /*
+>> +                        * end_index is either in folio or points to
+>> +                        * the first page of the next folio. Hence,
+>> +                        * all pages in range [start_index, end_index)
+>> +                        * are contiguous.
+>> +                        */
+>> +                       start_pfn = folio_file_pfn(folio, start_index);
+>> +                       end_pfn = start_pfn + end_index - start_index;
+>> +
+>> +                       kvm_arch_gmem_invalidate(start_pfn, end_pfn);
+>> +               }
+>> +
+>> +               folio_batch_release(&fbatch);
+>> +               cond_resched();
+>> +       }
+>> +}
+>> +#else
+>> +static void kvm_gmem_invalidate(struct inode *inode, pgoff_t start, pgoff_t end) {}
+>> +#endif
+>> +
+>>  static int __kvm_gmem_set_attributes(struct inode *inode, pgoff_t start,
+>>                                      size_t nr_pages, uint64_t attrs,
+>>                                      pgoff_t *err_index)
+>> @@ -643,7 +679,12 @@ static int __kvm_gmem_set_attributes(struct inode *inode, pgoff_t start,
+>>          */
+>>
+>>         kvm_gmem_invalidate_begin(inode, start, end);
+>> +
+>> +       if (!to_private)
+>> +               kvm_gmem_invalidate(inode, start, end);
+>> +
+>>         mas_store_prealloc(&mas, xa_mk_value(attrs));
+>> +
+>
+> Why the unrelated extra space?
+>
 
-    batch_gen = 0  (after u32 wraparound)
-    batch_hash = (0 + 0) * KNUTH_HASH_MULT = 0
-    *saddr ^= 0  ->  no-op, cold_lru miss counter stays 0
+Hmm this space provides vertical space between invalidate_{begin,end}
+and the STUFF it wraps, like
 
-Setting bit 0 before multiplying guarantees a non-zero odd result for
-all possible values of batch_gen and cpu_id, including after wraparound:
+  invalidate_begin
 
-    (any_value | 1) >= 1  always, since bit 0 is always set
+  STUFF
 
-Fixes: fa747e9f843b ("selftests/bpf: Fix cold_lru producing zero batch_hash in XDP LB benchmark")
-Signed-off-by: Muhammad Bilal <meatuni001@gmail.com>
----
- tools/testing/selftests/bpf/progs/xdp_lb_bench.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+  invalidate_end
 
-diff --git a/tools/testing/selftests/bpf/progs/xdp_lb_bench.c b/tools/testing/selftests/bpf/progs/xdp_lb_bench.c
-index 13777b3dcac8..816880c1cd5e 100644
---- a/tools/testing/selftests/bpf/progs/xdp_lb_bench.c
-+++ b/tools/testing/selftests/bpf/progs/xdp_lb_bench.c
-@@ -618,7 +618,7 @@ int xdp_lb_bench(struct xdp_md *xdp)
- 		__u32 *saddr = data + saddr_off;
- 
- 		batch_gen++;
--		batch_hash = (batch_gen + bpf_get_smp_processor_id()) * KNUTH_HASH_MULT;
-+		batch_hash = ((batch_gen + bpf_get_smp_processor_id()) | 1) * KNUTH_HASH_MULT;
- 		if ((void *)(saddr + 1) <= data_end)
- 			*saddr ^= batch_hash;
- 	}
--- 
-2.53.0
+More STUFF is going to go here in future patch series, such as splitting
+private pages in TDX.
 
+>>         kvm_gmem_invalidate_end(inode, start, end);
+>>  out:
+>>         filemap_invalidate_unlock(mapping);
+>>
+>> --
+>> 2.54.0.563.g4f69b47b94-goog
+>>
+>>
