@@ -1,97 +1,185 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5B831ADC7E
-	for <linux-kselftest@vger.kernel.org>; Wed, 20 May 2026 03:51:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE82D2E285C;
+	Wed, 20 May 2026 04:16:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779249121; cv=none; b=ECHozTC24akWX3crLv1rhZ56/rmUFLGgkJdEOyihtk78aJSnbPK6JA4YEE/f2CqILlhvg4fA+K0VYHm/noGz3KzGzV5WtZWbjppeq/CwekQ4WvepMXvsFMA45JRb3vR+z20rpo1HqnqSBVC4wnzZyPn4Zx+2Id10YyVqatBGVko=
+	t=1779250609; cv=none; b=JLVlPCh/IsZv7jJa7OVBFOltgi0S1Siqnh57tJTdqDYdhMRmM/JpB9tDHsrOAXskekXI9fYKKcIlRKKXNMPORjh9maSMAklWMB9d95px/pPnUF6fbFEPduB3FRsPj1uS152GxJzB4ObNtab4JWdeCF9NiVAWUCfguF/kz7sMPvk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779249121; c=relaxed/simple;
-	bh=yEbIQ9nxo7JieyUNEu66PQIHHUZxcpqB7kKk/0SWI7k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=e1D7ehW20Wn9dj4UEt5PiRNfvNjWI/ynPqb3w+WzSk5ltqGd/IWvDc0Yn5eDjIdIf/xo5qaV/G78FP48ezUGXG1w3sfj3Zje+7E8elepXPbu5tyydJ4caij0MDsPlGaJBpFLmtsi6ze2V9fkgREZNoZTXplbp2YPxDTjknvZ36Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=hlNRoVp5; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="hlNRoVp5"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id ACB5B355B;
-	Tue, 19 May 2026 20:51:49 -0700 (PDT)
-Received: from [10.164.148.41] (MacBook-Pro.blr.arm.com [10.164.148.41])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A28B63F632;
-	Tue, 19 May 2026 20:51:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1779249114; bh=yEbIQ9nxo7JieyUNEu66PQIHHUZxcpqB7kKk/0SWI7k=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=hlNRoVp5NYQgmkQYXQZO45ye6Ka3/z/qUpMLTyclSLGvip0xjeTgt/hW/2yPXVbKa
-	 rgazoQan+iiP28XFyP14qz+Rj9Dm/W1ariN0JG6jPhp/xSy2X2P2FVxX3p0/OC8zYU
-	 IKAvfkEQ2u+JyVugakiXQsMXeDF0k8/ptCAS6vZ0=
-Message-ID: <20518530-12e3-4731-9b4a-54cc950239e2@arm.com>
-Date: Wed, 20 May 2026 09:21:48 +0530
+	s=arc-20240116; t=1779250609; c=relaxed/simple;
+	bh=3q2swpQutXOvHLosAM/vVg0m34sksWu1sTEz43YbwAE=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=TrKzEkXj0d10oOzZys1TIxi4ry2tv+XBoyZCkvR84/72Ln//xI5BfBa1qdHZVAlzGrR/JWFChUtikNXAdsH2HYf3zTGl8Wvlr6gRRsRT5XxVtlh0vUu1XTPthTQElQas27lWFvLuwf9Z2y5BLI2QF8UqAkB+8HCptyj7UiMZOGk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: b2d68494540211f1aa26b74ffac11d73-20260520
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B, HR_CTT_MISS
+	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME, HR_SJ_LANG
+	HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE, HR_SJ_PHRASE_LEN
+	HR_SJ_PRE_RE, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME
+	IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_TRUSTED, SA_EXISTED
+	SN_TRUSTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS
+	CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS, GTI_C_CI, GTI_FG_IT
+	GTI_RG_INFO, GTI_C_BU, AMN_GOOD, ABX_MISS_RDNS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.12,REQID:80552c14-c673-486f-b9f5-1666631c09a2,IP:10,
+	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:10
+X-CID-INFO: VERSION:1.3.12,REQID:80552c14-c673-486f-b9f5-1666631c09a2,IP:10,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+	elease,TS:10
+X-CID-META: VersionHash:e7bac3a,CLOUDID:10efe0c6901569e13e43ff5ec646dd9f,BulkI
+	D:2605181845419VVZWHTH,BulkQuantity:6,Recheck:0,SF:17|19|64|66|78|80|81|82
+	|83|102|127|841|850|865|898,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:99|1,F
+	ile:nil,RT:nil,Bulk:40,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,
+	DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_ULS
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: b2d68494540211f1aa26b74ffac11d73-20260520
+X-User: lihongfu@kylinos.cn
+Received: from localhost.localdomain [(183.242.174.22)] by mailgw.kylinos.cn
+	(envelope-from <lihongfu@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 1743845547; Wed, 20 May 2026 12:16:39 +0800
+From: Hongfu Li <lihongfu@kylinos.cn>
+To: ljs@kernel.org
+Cc: akpm@linux-foundation.org,
+	david@kernel.org,
+	liam@infradead.org,
+	lihongfu@kylinos.cn,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org,
+	mhocko@suse.com,
+	rppt@kernel.org,
+	shuah@kernel.org,
+	surenb@google.com,
+	vbabka@kernel.org
+Subject: Re: [PATCH] selftests/mm: add missing mmap() return checks in pkey tests
+Date: Wed, 20 May 2026 12:16:27 +0800
+Message-Id: <20260520041627.912766-1-lihongfu@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <agwvkyXSlZ-Suz7j@lucifer>
+References: <agwvkyXSlZ-Suz7j@lucifer>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/mm: close fd on write error
-To: Wei Yang <richard.weiyang@gmail.com>, akpm@linux-foundation.org,
- david@kernel.org, ljs@kernel.org
-Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-References: <20260520020336.28914-1-richard.weiyang@gmail.com>
-Content-Language: en-US
-From: Dev Jain <dev.jain@arm.com>
-In-Reply-To: <20260520020336.28914-1-richard.weiyang@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+Hi Lorenzo,
+Thanks for the review comments.
 
-
-On 20/05/26 7:33 am, Wei Yang wrote:
-> When create_pagecache_thp_and_fd() write returns error on
-> /proc/sys/vm/dropcache, it just "goto err_out_unlink", which left fd
-> still open.
+> > > Hmm you're sending this separete from the other MAP_FAILED checks, and not
+> > > referencing that in any way? (original patch at [0]).
+> > >
+> > > Please just send this as a 2 patch series _with a cover letter_ and both patches
+> > > in-reply-to the cover letter.
+> > >
+> > > Also make sure to propagate tags correctly.
+> > >
+> > > [0]:https://lore.kernel.org/all/20260513095609.789935-1-lihongfu@kylinos.cn/
+> >
+> > The first patch has already been merged into the mm-new branch:
+> > https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git/commit/?h=mm-new&id=ffe64def0071989cff47b5525d38f5e558c637c3
+> >
+> > For this reason, I split this one out separately to avoid confusion.
 > 
-> Use "goto err_out_close" to close the fd.
+> Hmm ok so you sent a v2 that was rejected [1], you were given feedback for a
+> respin but the v1 has been taken + not updated?... That's really not how the
+> process is supposed to work :/
 > 
-> Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
-> ---
->  tools/testing/selftests/mm/split_huge_page_test.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Bit of a mess, Andrew - maybe best to keep the v1 then, and Hongfu - you can
+> respin this as requested?
 > 
-> diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
-> index 460fa1f606fd..f30402ece608 100644
-> --- a/tools/testing/selftests/mm/split_huge_page_test.c
-> +++ b/tools/testing/selftests/mm/split_huge_page_test.c
-> @@ -469,7 +469,7 @@ static int create_pagecache_thp_and_fd(const char *testfile, size_t fd_size,
->  	}
->  	if (write(*fd, "3", 1) != 1) {
->  		ksft_perror("write to drop_caches");
-> -		goto err_out_unlink;
-> +		goto err_out_close;
->  	}
->  	close(*fd);
+> [1]: https://lore.kernel.org/all/20260513095609.789935-1-lihongfu@kylinos.cn/
 
-LGTM
+Sorry for the messy patch arrangement before, I'll respin this patch strictly
+following your requirements.
 
-Reviewed-by: Dev Jain <dev.jain@arm.com>
+> >
+> > > On Mon, May 18, 2026 at 04:21:20PM +0800, Hongfu Li wrote:
+> > > > Several mmap() calls lack error checks and would crash on failure.
+> > > > Add the missing checks. Also replace bare (void *)-1 with the
+> > >
+> > > Well you're assert()'ing so you're causing a crash on failure anyway?
+> > >
+> > > I'd just say that you are adding missing checks against the mmap() return value,
+> > > as well as improving readability and consistency by replacing (void *)-1 with
+> > > MAP_FAILED in instances where that was used rather than MAP_FAILED.
+> >
+> > Thanks for pointing this out, I will correct it in v2.
+> >
+> > > > diff --git a/tools/testing/selftests/mm/pkey_sighandler_tests.c b/tools/testing/selftests/mm/pkey_sighandler_tests.c
+> > > > index 302fef54049c..4637809192f9 100644
+> > > > --- a/tools/testing/selftests/mm/pkey_sighandler_tests.c
+> > > > +++ b/tools/testing/selftests/mm/pkey_sighandler_tests.c
+> > > > @@ -317,6 +317,7 @@ static void test_sigsegv_handler_with_different_pkey_for_stack(void)
+> > > >  	/* Set up alternate signal stack that will use the default MPK */
+> > > >  	sigstack.ss_sp = mmap(0, STACK_SIZE, PROT_READ | PROT_WRITE,
+> > > >  			      MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+> > > > +	assert(sigstack.ss_sp != MAP_FAILED);
+> > >
+> > > Why not pkey_assert()?
+> > >
+> > > >  	sigstack.ss_flags = 0;
+> > > >  	sigstack.ss_size = STACK_SIZE;
+> > > >
+> > > > @@ -490,6 +491,7 @@ static void test_pkru_sigreturn(void)
+> > > >  	/* Set up alternate signal stack that will use the default MPK */
+> > > >  	sigstack.ss_sp = mmap(0, STACK_SIZE, PROT_READ | PROT_WRITE,
+> > > >  			      MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+> > > > +	assert(sigstack.ss_sp != MAP_FAILED);
+> > >
+> > > Why not pkey_assert()?
+> >
+> > protection_keys.c executes numerous tests in loops across multiple iterations,
+> > so the test_nr and iteration_nr printed by pkey_assert help easily locate the
+> > exact failed test case and iteration.
+> > In contrast, pkey_sighandler_tests.c consists of only a few standalone test
+> > functions invoked once each, so plain assert providing file and line information
+> > should suffice to locate failures.
+> 
+> Why would we not want more information here? This argument doesn't hold any
+> water, please use pkey_assert().
 
+Sure, I will use pkey_assert() and adjust it in the next revision.
 
-I asked AI and it points to another problem:
+> > (BTW This reads like an AI generated sentence. We're fine with you using AI to
+> > assist with English for instance, but please make sure it's your own thoughts!)
+ 
+ Sorry for that! I only use AI to polish my English expressions, and all the ideas
+ are totally my own.
+ 
+> >
+> > > > @@ -1775,7 +1776,7 @@ int main(void)
+> > > >  		printf("running PKEY tests for unsupported CPU/OS\n");
+> > > >
+> > > >  		ptr  = mmap(NULL, size, PROT_NONE, MAP_ANONYMOUS|MAP_PRIVATE, -1, 0);
+> > > > -		assert(ptr != (void *)-1);
+> > > > +		assert(ptr != MAP_FAILED);
+> > >
+> > > Probably best to convert to pkey_assert() at the same time?
+> >
+> > This is a pre-test initialization path that runs before the test
+> > loop, so test_nr and iteration_nr (used in pkey_assert for diagnostic
+> > output) are not yet set up at this point.
+> > Would using plain assert() here be more appropriate?
+> 
+> OK that's gross, please just replace it with a test failure kmsg_xxx() whatever
+> it is, and a return EXIT_FAILURE; or something since you're in main().
 
-for (i = 0; i < nr_thps; i++) {
-	if (is_backed_by_folio(page_area + i * pagesize, 0,
-			       pagemap_fd, kpageflags_fd))
-		continue;
-	ksft_test_result_fail("THP %zu not split\n", i);
-}
+Got it. I will remove the assert here completely, add standard error reporting
+and return EXIT_FAILURE directly on failure.
 
-ksft_test_result_pass("Split PTE-mapped huge pages successful\n");
+Thanks again for your patient guidance and rigorous review!
 
-"If one THP is not split, it prints FAIL, but then falls through and also prints PASS.
-
-It should probably jump to out after the failure".
-
->  
-
+Best regards,
+Hongfu
