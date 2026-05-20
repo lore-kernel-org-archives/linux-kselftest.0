@@ -1,128 +1,174 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 299D23E8C5B
-	for <linux-kselftest@vger.kernel.org>; Wed, 20 May 2026 14:12:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09B643E172E
+	for <linux-kselftest@vger.kernel.org>; Wed, 20 May 2026 14:21:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779286331; cv=none; b=BcbS5oO4JQ+JFdXBD3TqPOoWlMSUzrYc49NYYAmzM6n9yFjXwCwqcnj2Ah87q7o6beY3V/AX6LKRrCwKOsGLtZ+11gcevQmJ0ZtoH28dZ/hcl2IvPVBaTMnp9ufQugD5nK2HQgiUzdOgF/Ioxi5IY7rPe6938OPJHY/dAXpzAzE=
+	t=1779286895; cv=none; b=qiIxxp4y9uk6WPzTFMAywW+3/a9xeOI0OGmZyqPOHZxtP/3lN2Nxd/YcWREP44TKRyk5MBPLDRphgVqETMQoIIJg5PVkGh2u9uV3+7Kq92CIUqOS+smJCY3OMJTa5ZE6fmexAIxm83Q4agk9VsSoLqbo5l78cOG9jnarSVT5hzE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779286331; c=relaxed/simple;
-	bh=2N1sMKTzNJnEbxKXP67LDZnmahmTf3OBuRzLjC/o+Z4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EAKYCCTE2aqGtM4QYkjBrXFc1VeBlM4yogrIQADsiNYNDiVfpLIx4uWJIkrcB5x0bLfnkqPnJm8IQ4zMVkHdvTzxQ1MytTFFeTvQwT5wYaDZiERedPxhmqzm0VxUNZH+X6D/AsMJ7MzYQDhlpQY+n55OUxRVuWtbhhH65tyelGU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DaqOJAE1; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1779286895; c=relaxed/simple;
+	bh=FDEy+sBoWj2hNwWR6bbG5FHmYcnImhBaSmFUYukAAec=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=oNZDy5NtOzKxaRsxnT05N8gK/mESPj7l55z5FIchKNAJBXtkGtOeqTe4+/mRFaGtTze5rR8INydcEoLwOrqUzK+g32jVFetfTyq1MVyEKV9K912DDxRnRsevVqa+ZUBZCF21YcQuQrqcPGgn/ujZiE3u17wRtXl2wQ2oZ3wEFP8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lbqtltqb; arc=none smtp.client-ip=209.85.215.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DaqOJAE1"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2ba0714574fso26702365ad.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 May 2026 07:12:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lbqtltqb"
+Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-c827bda3052so7728051a12.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 20 May 2026 07:21:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779286329; x=1779891129; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=zGS4g7trviZuWuV8kj9ji3KsBnr4BymorUPX2qH0oeg=;
-        b=DaqOJAE167OL0IAiIBHFqqHTEbsb/qSLd3RCutK56IIKSnd05WXKORoFNLt8qJWquY
-         ad9z+eUuBn4NUw3OCQU+x0drVRaXywhBMD+1XE8JRCSqgtLJw06fRZ9Ma8VUYlOc1dkA
-         a65Po2Jzqs3M77W+ZqBkPNzFrQeF6v1bwB9CQUiFkbHX10riOyotWgz0uxtJWtsKbvQS
-         RBFVAeSabl/QK+rBfCvkfHHeXPtTST30niyTtd4h2gh/xQ+uubU1/7X7Fs7aaiPEomKO
-         bRHoo79tu+fev0SdMm453y9d0JyBzIQD5mbBV010qZ3/H1mxsfDT4K59b0J/DqRk8GAX
-         h/4A==
+        d=google.com; s=20251104; t=1779286893; x=1779891693; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=FGduY4ljPx9wbBVEnZWZe0lo89Kip5G/xMJZhZdI+Us=;
+        b=lbqtltqb+9UdNCEzURki/5DYghvNraWl8f2UHMKBex6QGzzZj7CP5H0RNAZVeAY00S
+         FwOCvad/2XtAIv2sSDTKBJdSGXDwgzUV+oWsR3R0SD6i/9/9+I3JCraCBUHqYgfqJ9PC
+         wh2J2tBWQv/wjpLTSpGvgazGr7dVbm3ZqjRCwAb3biobWo/v8oijgM4CSKlhKMB5B9UZ
+         z/2BQBaVuL5pdS8mMiudurD2Cg6sLNbosvl4MMKM8rP57kB4ke04az4n8Iuo99TZmcvZ
+         6G/IdhIui/ANV2PdlqQawvCtBfiOz7TjmtlaS2CKPcuSJ7VCbBpyAvcH7bBKEQ7GefFQ
+         2C8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779286329; x=1779891129;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zGS4g7trviZuWuV8kj9ji3KsBnr4BymorUPX2qH0oeg=;
-        b=SS6Y9czkKDcRD9h4C930yeH040Cyc/HKS7XhxWAWXYFSKyFO5vS9XY415HpEvsYqaJ
-         bCH5hZoDEB1zfFLtUPlXxm4bo01QMCQ1Y8wFMOAN8j71RZH/HvNAjhfvOG2TMSONKA3V
-         fqck6EE8PJRs+WhsseWz14c8YiSGExUWfZhpli+aV4glVJucAlDItnBzJDbE8bNlUa84
-         oW6V1KXCLzjwY+Be+rjBzMEz0XjPYe8Uyu1U+PZZf5D+ZdRpqEK/xBZ80Wdrk58lZKMM
-         6eboVkPdYW8U/N5cV595UBhC9mtYYnmKSM/dsh753za7zVCqveWx7wSkFLRpU+tSnMbj
-         FT7A==
-X-Forwarded-Encrypted: i=1; AFNElJ9nuThKWr8Eux7TmZUmpGyzfWztndGRk18GYOzosIPNhX6pRCod8wKxp5oqX8CywQdP/Rye/F9MqZm/laJWeFw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzLZM+h6ORQDTqtZ0o5/wdivQEWR9crWzm18THGchqTrzdOxmRK
-	p3otJIbL4L/1uygheqbvxhimbyI/JRwa6J4UpDmTdzUbuEBP1w/pLMZ3qOERFw==
-X-Gm-Gg: Acq92OHC41s+GJ4D12o0sj5ZLaYqjFiNNoXnpWfKqcizxidTG6vwsZ/HyNwWcY4h/vI
-	N/QR3ruL4HtuNrML9g1UM97ToUXyYIRC1p7ZZ4iBEgv4n+D5+NhipA9ZQCDV+tKJctDNY1f9ehb
-	k/Q9iUx6FXdI7+qUvLjjuqjoGgr0hhiZLwZTYf8wi76Qx/yWRiiTJCB93n+jrIh9OgJVYXPg0kk
-	gD53vP1ekQBIp6iK+mCNTeF9U/97R1l+zaL4X1T7sVWACsXaqAYmpPk/UWX3kKMa7JmJFW+wHpg
-	oSZgBKUiOR7hZtQrW0eX53Dx1DJBfXLyE5lutHmAF8ioyX/cZGOayUVv35ddsvHEn34PlUbj4GZ
-	DLJeXMXxgkolaChh4xCJlsb9AdJI5PjcUTzDogDF+fmQpMsbAnZBCjG5ySFKa4PqP2mv3qYHh+G
-	t51TULvkv70B3enjIhw+AdEpPEMZVDnusaD1JQIRBGn4kEET6uuFPg5oe37WJf+cMqKQ==
-X-Received: by 2002:a17:903:2907:b0:2b7:a350:463f with SMTP id d9443c01a7336-2bd7e8883d8mr164318035ad.10.1779286329405;
-        Wed, 20 May 2026 07:12:09 -0700 (PDT)
-Received: from skinsburskii (c-98-225-44-182.hsd1.wa.comcast.net. [98.225.44.182])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bd5d11ce67sm227565595ad.74.2026.05.20.07.12.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 May 2026 07:12:08 -0700 (PDT)
-Date: Wed, 20 May 2026 07:12:06 -0700
-From: Stanislav Kinsburskii <skinsburskii@gmail.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>,
-	kys@microsoft.com, Liam.Howlett@oracle.com, david@kernel.org,
-	jgg@ziepe.ca, corbet@lwn.net, leon@kernel.org, ljs@kernel.org,
-	mhocko@suse.com, rppt@kernel.org, shuah@kernel.org,
-	skhan@linuxfoundation.org, surenb@google.com, vbabka@kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v2 0/3] mm/hmm: Add mmap lock-drop support for
- userfaultfd-backed mappings
-Message-ID: <ag3BNjx2zJz31NTr@skinsburskii>
-References: <177863991557.82528.15288076059759579141.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
- <20260518104808.ba773348f8564303c4330a33@linux-foundation.org>
+        d=1e100.net; s=20251104; t=1779286893; x=1779891693;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FGduY4ljPx9wbBVEnZWZe0lo89Kip5G/xMJZhZdI+Us=;
+        b=iOgXGE8KlbM6CAYtY4uZ+YXMLyHLtpqOpFLQtYxtCiaWqYXlS+f2pixdSVXV2fP0Z0
+         aCSi4rF1nLRw6+kOwhDdukwx2AYQQqdQnWbiSxCSekdwviwG4usGYt8JbsfgAfayoLo+
+         A/fzbqG9MNDDCC0CjbmMMuR5GprMm2enaWbR9ydOkF3f1xBcZ060CNgNbueNz77RBfW5
+         se0Dz38Iygu/nXZfAi6CP0n4Ht2Jee4aDfQOqXPRJed9QhA0S9uCehblQQLtlUyNhiEK
+         FDSHdw55ztedqS8cwXwtJIDzY1gc8hJCSI/A/PmZOz8/vV7G55wx/OcjeoXsE+gei/gj
+         576g==
+X-Forwarded-Encrypted: i=1; AFNElJ++UpIkXuZLGVd8W6JRgtuzSkzIi2EeFITe3NKG0F6AZn8VKa2WmTCVmIEkTkrrnh1dwokKoYZ2tKReTvp4O1I=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyd64cz9U1sNRBCCWdLcrZQjnUkA9cjxGCaG/f7Y4md10kdyb7z
+	p8wQy4ed3nZyp0jpiarNwOunSfxjnWle7VlP8GJ1U4tEyjFSBDRvOGO3c9rFHTFl5ghQ7TOWUgA
+	mW6VHBg==
+X-Received: from pgdn22.prod.google.com ([2002:a63:8f16:0:b0:c82:2d14:39c8])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:430b:b0:3a3:3d95:508e
+ with SMTP id adf61e73a8af0-3b22ec9a748mr25179838637.32.1779286891879; Wed, 20
+ May 2026 07:21:31 -0700 (PDT)
+Date: Wed, 20 May 2026 07:21:31 -0700
+In-Reply-To: <CA+EHjTxvLU4XDPXDXYXXWJES1OFQgN8VTRLMgCCNMwBE6Hk8tQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260518104808.ba773348f8564303c4330a33@linux-foundation.org>
+Mime-Version: 1.0
+References: <20260507-gmem-inplace-conversion-v6-0-91ab5a8b19a4@google.com>
+ <20260507-gmem-inplace-conversion-v6-6-91ab5a8b19a4@google.com> <CA+EHjTxvLU4XDPXDXYXXWJES1OFQgN8VTRLMgCCNMwBE6Hk8tQ@mail.gmail.com>
+Message-ID: <ag3DawWCcrpCkD0e@google.com>
+Subject: Re: [PATCH v6 06/43] KVM: x86/mmu: Bug the VM if gmem attributes are
+ queried to determine max mapping level
+From: Sean Christopherson <seanjc@google.com>
+To: Fuad Tabba <tabba@google.com>
+Cc: ackerleytng@google.com, aik@amd.com, andrew.jones@linux.dev, 
+	binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com, 
+	david@kernel.org, ira.weiny@intel.com, jmattson@google.com, 
+	jthoughton@google.com, michael.roth@amd.com, oupton@kernel.org, 
+	pankaj.gupta@amd.com, qperret@google.com, rick.p.edgecombe@intel.com, 
+	rientjes@google.com, shivankg@amd.com, steven.price@arm.com, 
+	willy@infradead.org, wyihan@google.com, yan.y.zhao@intel.com, 
+	forkloop@google.com, pratyush@kernel.org, suzuki.poulose@arm.com, 
+	aneesh.kumar@kernel.org, liam@infradead.org, 
+	Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
+	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+	Nhat Pham <nphamcs@gmail.com>, Baoquan He <bhe@redhat.com>, Barry Song <baohua@kernel.org>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
+	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
+	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Kiryl Shutsemau <kas@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>, Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-mm@kvack.org, linux-coco@lists.linux.dev
+Content-Type: text/plain; charset="us-ascii"
 
-On Mon, May 18, 2026 at 10:48:08AM -0700, Andrew Morton wrote:
-> On Wed, 13 May 2026 02:40:11 +0000 Stanislav Kinsburskii <skinsburskii@linux.microsoft.com> wrote:
+On Wed, May 20, 2026, Fuad Tabba wrote:
+> On Thu, 7 May 2026 at 21:22, Ackerley Tng via B4 Relay
+> <devnull+ackerleytng.google.com@kernel.org> wrote:
+> >
+> > From: Ackerley Tng <ackerleytng@google.com>
+> >
+> > When the maximum mapping level is queried, KVM's MMU lock is held, and
+> > while the MMU lock is held, guest_memfd cannot take the
+> > filemap_invalidate_lock() to look up the current shared/private state of
+> > the gfn, for these reasons:
+> >
+> > + The MMU lock is a spinlock or rwlock and cannot be held while taking a
+> >   lock that can sleep.
+> > + In guest_memfd's code paths (such as truncate), the
+> >   filemap_invalidate_lock() is held while taking the MMU lock, and taking
+> >   the locks in reverse order would introduce a AB-BA deadlock.
+> >
+> > Currently, the maximum mapping level is only queried from guest_memfd in
+> > the process of recovering huge pages, if dirty logging is disabled on a
+> > memslot. Dirty logging is not currently supported for guest_memfd, and
+> > guest_memfd memslots also cannot be updated.
+> >
+> > For now, bug the VM if guest_memfd needs to be queried to determine the
+> > maximum mapping level. This guard can be removed if/when support is added.
+> >
+> > Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+> > ---
+> >  arch/x86/kvm/mmu/mmu.c | 9 +++++++++
+> >  1 file changed, 9 insertions(+)
+> >
+> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > index a80a876ab4ad6..153bcc5369985 100644
+> > --- a/arch/x86/kvm/mmu/mmu.c
+> > +++ b/arch/x86/kvm/mmu/mmu.c
+> > @@ -3357,6 +3357,15 @@ int kvm_mmu_max_mapping_level(struct kvm *kvm, struct kvm_page_fault *fault,
+> >                 max_level = fault->max_level;
+> >                 is_private = fault->is_private;
+> >         } else {
+> > +               /*
+> > +                * Memory attributes cannot be obtained from guest_memfd while
+> > +                * the MMU lock is held.
+> > +                */
+> > +               if (KVM_BUG_ON(static_call_query(__kvm_get_memory_attributes) ==
+> > +                              kvm_gmem_get_memory_attributes, kvm)) {
+> > +                       return 0;
+> > +               }
+> > +
 > 
-> > This series extends the HMM framework to support userfaultfd-backed memory
-> > by allowing the mmap read lock to be dropped during hmm_range_fault().
-> > 
-> > Some page fault handlers — most notably userfaultfd — require the mmap lock
-> > to be released so that userspace can resolve the fault. The current HMM
-> > interface never sets FAULT_FLAG_ALLOW_RETRY, making it impossible to fault
-> > in pages from userfaultfd-registered regions.
-> > 
-> > This series follows the established int *locked pattern from
-> > get_user_pages_remote() in mm/gup.c. A new entry point,
-> > hmm_range_fault_unlockable(), accepts an int *locked parameter. When the
-> > mmap lock is dropped during fault resolution (VM_FAULT_RETRY or
-> > VM_FAULT_COMPLETED), the function returns 0 with *locked = 0, signalling
-> > the caller to restart its walk. The existing hmm_range_fault() is
-> > refactored into a thin wrapper that passes NULL, preserving current
-> > behavior for all existing callers.
-> > 
-> > Faulting hugetlb pages on the unlockable path is not supported because
-> > walk_hugetlb_range() unconditionally holds and releases
-> > hugetlb_vma_lock_read across the callback; if the mmap lock is dropped
-> > inside the callback, the VMA may be freed before the walk framework's
-> > unlock. Hugetlb pages already present in page tables are handled normally.
-> > Possible approaches to lift this limitation are documented in
-> > Documentation/mm/hmm.rst.
-> 
-> Thanks.  AI review asked some questions:
-> 	https://sashiko.dev/#/patchset/177863991557.82528.15288076059759579141.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net
-> 
-> I'd ignore the fist one: don't write buggy fault handlers!
-> 
-> 
+> This directly takes the address of kvm_gmem_get_memory_attributes,
+> which is only compiled if CONFIG_KVM_GUEST_MEMFD=y. This breaks
+> ARCH=i386.
 
-Thank you for the review.
-I addressed the issues found in the new self test in v3 of this series.
-Please, take a look.
+And this bleeds guest_memfd implementation details into places they don't belong.
+The right way to deal with this is to use lockdep_assert_not_held() in whatever
+code mustn't run with mmu_lock held.  E.g.
 
-Thanks,
-Stanislav
+diff --git virt/kvm/guest_memfd.c virt/kvm/guest_memfd.c
+index c9f155c2dc5c..3bea9c1137ef 100644
+--- virt/kvm/guest_memfd.c
++++ virt/kvm/guest_memfd.c
+@@ -547,6 +547,9 @@ unsigned long kvm_gmem_get_memory_attributes(struct kvm *kvm, gfn_t gfn)
+        struct kvm_memory_slot *slot = gfn_to_memslot(kvm, gfn);
+        struct inode *inode;
+ 
++       /* Comment goes here. */
++       lockdep_assert_not_held(&kvm->mmu_lock);
++
+        /*
+         * If this gfn has no associated memslot, there's no chance of the gfn
+         * being backed by private memory, since guest_memfd must be used for
 
+But I'm confused, because kvm_gmem_get_memory_attributes() doesn't actually take
+filemap_invalidate_lock(), so what exactly is the problem?
+
+> >                 max_level = PG_LEVEL_NUM;
+> >                 is_private = kvm_mem_is_private(kvm, gfn);
+> >         }
+> >
+> > --
+> > 2.54.0.563.g4f69b47b94-goog
+> >
+> >
