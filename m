@@ -1,67 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A79DE2F90E0;
-	Wed, 20 May 2026 02:03:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 494DB2D97B5
+	for <linux-kselftest@vger.kernel.org>; Wed, 20 May 2026 02:03:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779242636; cv=none; b=RF0vWM87au29OXPmqaGvbbZWt4R/4zfWC5O4Xx3cvugBTFQsZlAp0tcxiuXGPsm0BIWYEd6EkWXi5Mmd9KZN01AIoWJB5CLtlCbi8dDwjSMSHK7BqIK07NGKimWy0iqzpPC5ntzWkzcnsJIChvOLWn9W5iPkOESC563zpBogoeo=
+	t=1779242636; cv=none; b=EoSIaV6sHOMCZeymPpzIAuBqs0apWn7Z8zvffApgBMLIp+g/d51qwAcHacUm9kDXRKw+SDVljGRkMqejAuog95V/WjPhJ1f5O30UX9BA0iPBYWDpJqZVNMBpjjPymYqa4IT7Hd782CSaAkBILqPOfDW8ulNq5vvRVXIyj9DVGfc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1779242636; c=relaxed/simple;
-	bh=PHSFUb2xWIygaB8BdJR82vxTInMPaKs6a6u2JDU/0lw=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LP8HY78iLMh7yte93JcikYQ9hCQxnixyZNWcjHTMiY303eQmKr3Gb9dF5eZNakcJx3ZffgKt5YO/FKUX7466Jkp2bPFYSf3xaf8+m1LE6/wteFfiStYC1ZGaD9jjYLQHSQfPkF1Fw+RWwCeTfXyrrrdXv2DupgQ/5dWYVvHuXOs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HMJV9gD3; arc=none smtp.client-ip=100.103.45.18
+	bh=vfzyde6ewQJTbLa2Go3tut+aVQmJwQmGpqL8IGTVFM8=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=qwIfIatA+QlJmUGyLaIO2sySAcKKGXZspn/2FzGSdgSi5ftr/N+1tzE0Z7uxhxsXyZXPqgK1dKv9iAX4sblDty48QSno0yQsEt41LsIoswS23ml9okhBw/NaCfwmVo4+OP4y12/sOmNHfDaLmpas1BXFJP8pnVmuRMZdFBbnbk4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Vm8RW0u4; arc=none smtp.client-ip=209.85.208.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HMJV9gD3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 063CC1F000E9;
-	Wed, 20 May 2026 02:03:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779242633;
-	bh=ocQsq1+vFFGeT8pSDWvbVmrW9r1vRZSSi+UTV8IUDNc=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=HMJV9gD3J/8FSm3yRMprBfuOceeStGwP5AhKcy1Ib3GU+WgYPnGZTMTW9Jt+xjNSj
-	 GcXSRbJaBaDyj0hnOTZQEB9oLr7AVmQfameeSa5rJApEjdCeV0tjVO7Zs1tt0scDYD
-	 YonV5zcGWv/RKm2FFo9zbOWDW63jO0/Ev3eJUDMJn9VVO84ik8olQheaMD+7cMEsNP
-	 Iw3+BfVApUtvoerjG5/derKvpN0PzGhde6C1qWf+iyFpf/L1vUGpX3PABGiRjHS+jX
-	 i+QgaqBmyYKbwtQQXekTx2U/ebURKMuWobBBnxrrSWV/p7DiKc8qFpXhZqqdalij2r
-	 HnIZRyNlj75rg==
-Date: Tue, 19 May 2026 19:03:52 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Stefano Brivio <sbrivio@redhat.com>
-Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Pavel Emelyanov
- <xemul@scylladb.com>, Laurent Vivier <lvivier@redhat.com>, David Gibson
- <david@gibson.dropbear.id.au>, Jon Maloy <jmaloy@redhat.com>, Dmitry
- Safonov <dima@arista.com>, Andrei Vagin <avagin@google.com>,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, Neal Cardwell <ncardwell@google.com>,
- Kuniyuki Iwashima <kuniyu@google.com>, Simon Horman <horms@kernel.org>,
- Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH net v2 0/2] Fix race condition between TCP_REPAIR dump
- and data receive
-Message-ID: <20260519190352.45c8478e@kernel.org>
-In-Reply-To: <20260518183424.3144867-1-sbrivio@redhat.com>
-References: <20260518183424.3144867-1-sbrivio@redhat.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Vm8RW0u4"
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-6746d0b2b4aso7636884a12.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 May 2026 19:03:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779242632; x=1779847432; darn=vger.kernel.org;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yR0/f+KzLBdnQPqPTpQPmi8cxShP2a0wD6YDyJC6LqU=;
+        b=Vm8RW0u4to7i5WU8kZJtKIsYQyY55t3JQBn4EHhldG+qSUn1n2zsdWu0d6yN1pibek
+         UGtPK0D5C3xBcez1h5YNN9KwgqrVsBkDOXk6thqJBzmaDlzwBc+AUv8pqI+PTYmgyZES
+         pWzC+pgF6AYlR+o4huipWvMU5+BlPjknML97wYfNyayCm+xy1JS310MOtHRX7WTagcZu
+         iUNNdAT9JiYv+U+h7QqixlImaj8GOeADvMGDsCNxA4M/ybw62pXHZ8uMn7jnoRMXoPnI
+         j44uITagTWocWF5GMAbJYeegu2/ApMQ8gKB2wkgRsYdHrZGlZ7J5xt+kTdHQylKB7i50
+         Z0Fw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779242632; x=1779847432;
+        h=message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=yR0/f+KzLBdnQPqPTpQPmi8cxShP2a0wD6YDyJC6LqU=;
+        b=tR6dF0cQEdEia0l6jzRI599eJIROwgYfwLG5JxTNhAVoNQ9WYB5KFcuPKpvbr318GY
+         na1uxl6nv1nPfI6487tJ+RKMWNe5tjxocy61HV+/fYZ14uusT03bDiul6trVZYIjqOHV
+         1d/uOOPXtLftdU9WxmERHrN1cULY307mUtLc4MAqUJxkHrgAoDK6fiSgBTqSIscjv6Yk
+         GBSsk2zFR/SBzKpgAKLItBXQwv9l1pjyYBoKhNo+kvIeMeDhZnU7M57oAFYXF118HJ6i
+         xXxFrdto84HwEMVzDCA+3oAzayKCTU3P1m63Mkgsyp3st67srAZximJnEkqxG0HGOGVl
+         wTPQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+FXuAhC1vEeiHuVM8rBtlPdbLw9qri1JpKju882nTP7BBercv3vRqntLiXB8xoANUDIzCsDWQIq5kpAU9/NWw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw6VJVLbT3eQnKumNWro9eGi9hr2DdBLAcmQJ9jrJAr1+H/qfRC
+	xe9SL311B5LuoPxiQSlhxyrE8JPu3gkW6aI/KjneF/VF0E8Me7HtFkE0
+X-Gm-Gg: Acq92OEhSL5p+XD9DkcUkGi+wHaB40pjLXDjkagcAPRGRvMtAn3nXedcfxu0dVko3zB
+	vhQNxAlpqI1pd641wjAUT7lGnq6bgyi70Pk6+enlVaYbZvSEf9MHIX/jObi8jNyN9GN8Bqbr5wD
+	wu4irZMk3E1OXZ64Gm/AdIhPkNsy1KiRd1P/mbGHryuIVUbNt/RyFL+7G9L7buNxX1h+h6wVi4L
+	Re09WSEWA30E3rUXTq4m9JEhpPabIs4Zu7yTbtzvdf9tNY7TsyCjpUO+MrspjLcai8GtPKX3zJ0
+	SV8hL20eWTlNvjQm7W6TMF/QS/Xb8VMYv5h2x6k/pufstE0j38tshifcsav2C0nJfXwEXVvFgDy
+	MlNx47m3Lf8ve6Iq24eQIST7mI9sCehLDJmHsl4D2AeWUNRU1KH7Q6fIIeQjvA9IWtggDfcc1gJ
+	EZOWL51iZEdUdP3di+8dzNvCH5LNTn12h+
+X-Received: by 2002:a05:6402:4347:b0:684:32ec:2332 with SMTP id 4fb4d7f45d1cf-68432ec299fmr9688144a12.2.1779242632059;
+        Tue, 19 May 2026 19:03:52 -0700 (PDT)
+Received: from localhost ([185.92.221.13])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-68705a68375sm577452a12.25.2026.05.19.19.03.50
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 19 May 2026 19:03:50 -0700 (PDT)
+From: Wei Yang <richard.weiyang@gmail.com>
+To: akpm@linux-foundation.org,
+	david@kernel.org,
+	ljs@kernel.org
+Cc: linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	Wei Yang <richard.weiyang@gmail.com>
+Subject: [PATCH] selftests/mm: close fd on write error
+Date: Wed, 20 May 2026 02:03:36 +0000
+Message-Id: <20260520020336.28914-1-richard.weiyang@gmail.com>
+X-Mailer: git-send-email 2.11.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
 
-On Mon, 18 May 2026 20:34:22 +0200 Stefano Brivio wrote:
-> Stefano Brivio (2):
->   tcp: Don't accept data when socket is in repair mode
+When create_pagecache_thp_and_fd() write returns error on
+/proc/sys/vm/dropcache, it just "goto err_out_unlink", which left fd
+still open.
 
-Not sure Eric is on board with this patch in the first place.
-Sound like it's not the intended use case for REPAIR so IMO
-it's up to TCP maintainers whether we want to support this.
-And it's definitely not a Fix.
+Use "goto err_out_close" to close the fd.
 
->   selftests: Add data path tests for TCP_REPAIR mode
+Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
+---
+ tools/testing/selftests/mm/split_huge_page_test.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Please don't add a new target, fold it under net.
-Targets are a PITA to deal with in kselftests.
+diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
+index 460fa1f606fd..f30402ece608 100644
+--- a/tools/testing/selftests/mm/split_huge_page_test.c
++++ b/tools/testing/selftests/mm/split_huge_page_test.c
+@@ -469,7 +469,7 @@ static int create_pagecache_thp_and_fd(const char *testfile, size_t fd_size,
+ 	}
+ 	if (write(*fd, "3", 1) != 1) {
+ 		ksft_perror("write to drop_caches");
+-		goto err_out_unlink;
++		goto err_out_close;
+ 	}
+ 	close(*fd);
+ 
+-- 
+2.34.1
+
