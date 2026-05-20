@@ -1,98 +1,151 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from fout-b1-smtp.messagingengine.com (fout-b1-smtp.messagingengine.com [202.12.124.144])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 861363AC00;
-	Wed, 20 May 2026 21:06:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04FC835B65D;
+	Wed, 20 May 2026 21:12:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.144
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779311217; cv=none; b=Zi1p/JPQk/gKP8kiRQIi9IKQEgn1llYFZpQF/Uo+waDtitMCVGxEmuezmZFPBBXeEReDd2SzTGum03+OMp4RbhMkIj/lqd4xvtAmNn0XBCcmCdCk3MH7TfLbga5jAf1HpkWws+DgpjzAE8Ca3awqiH/nQTIX9DXysjw2fFxIVr4=
+	t=1779311542; cv=none; b=I7zqB0ESqbUleU+CV/2fW910efzcKFKMNxT+4MxZ7XU8eeQoDGRN+TBNRnxFUZchiHF/XvBA1IFytsJmCNWJLxd7N7ADAIV/W/pDYuMZq+b7qCqveuO0RTAPcGi1yJff4JYzjVDhmw1pHs1cnSZdGiFbgO595Z80v26N+SSslw4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779311217; c=relaxed/simple;
-	bh=uKm5s5kMt9Mfwf1RMP9Sx3TkBYcz8atw92kZLg8oxak=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=LfAoaXty2DOF+o/3FShonP29ucJcB4q30pRJqz5JZGAe8UCUHD+cVa2WLuMmI5qYhrkWk/caMFJ03NsMEobdUJnOGoVBSC/ePYNEB2m0GjYIGW8cTVWTgyEnWOJVDbtBRXYp2IhUz4iZZU3vdxQ/8w+NqAY5JUN0E3tipF8MLY0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NXpRUuRG; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779311542; c=relaxed/simple;
+	bh=kEDNMiQgY6MI079QkoJSX6k0r05opPiu8etWh76s5k0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=JneAHHeBt8QoVgp+HPTqOcDUBHh5S/pLnMXugEYC1DBFQMFrICnh+p0rhZ0iIQ8tWyjAeuDR0Q12p7DV15i8MgtGC6XbGIHL0xmiZhROemtfft6CyproHEKgaZ/7BvhdgoOv3mlwP/6vIZOyfqsNLBSSMUF2ifOyxXS8q8uszx4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org; spf=pass smtp.mailfrom=shazbot.org; dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b=mpTYUm5E; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=da/ngVPt; arc=none smtp.client-ip=202.12.124.144
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shazbot.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NXpRUuRG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 036531F000E9;
-	Wed, 20 May 2026 21:06:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779311216;
-	bh=E54m0vPKwml/JCeVyk46PYZjEMAFgp/2ycATfjyhhV4=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=NXpRUuRGE4hFboclbq160ixefJUJCweZwpwlb4HBiJPA5WUcyBBnDvcX2R+ROrgsm
-	 FLVvyageiQVnmNZYuTeXNtBU+1XLhp3bBNYT20hx+YSmtd+n2ODf+CIoXFz5A3/wvY
-	 qD7pdP2fEJMF+ekQHxs+hvVFtFNyFh6I08hSJMJZqqpi4J847pESUCkDOHvzwIirQb
-	 7mRWaO8xhEXYJKm0n7307B0wxN4Zr4i8zh3hMDC8vt9a2ilOUHzR1td/2MkLb6/cl8
-	 ZF8S6YF9jtuzV/POw6exg9Tr1Qf7U8hhWCZMJYPwJ9Y1OfCd1+stoCcGVFfm5IaA/3
-	 ynq7p5ZfGGjcg==
-Content-Type: multipart/mixed; boundary="===============4961839549319086560=="
+	dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b="mpTYUm5E";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="da/ngVPt"
+Received: from phl-compute-03.internal (phl-compute-03.internal [10.202.2.43])
+	by mailfout.stl.internal (Postfix) with ESMTP id C008B1D0007F;
+	Wed, 20 May 2026 17:12:17 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-03.internal (MEProxy); Wed, 20 May 2026 17:12:18 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shazbot.org; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1779311537;
+	 x=1779397937; bh=+g+lL+U36Qr4BDxd87KODJtgq0o+prLW5jMcZVYy0UQ=; b=
+	mpTYUm5Eeg/hyFwjmm3oKz5Irewvk7UbyTp38/OjgjgWpXt0Gfgzl9m8P5PM0gQa
+	uZTGuVaN7Uf9u0tzh5GlpvChY056FsMXSwA0qcja+dx5sUUgqxDOs9iia4OAC8E4
+	YGrc+C3d/ZisNqwHNQihjRMFJERyJRc3sInDaWCr9S6W5FsYKF5keDlD5yBRhC1x
+	pb0hQ0CdD7cOYQa64J+qv44geiS1G2ogYSsPkNPrkp7qTV56braPLtwP6lsvp0fj
+	C+g6JzPvWiESviU6Ozbaw/22mXulTU2eT+pZfPTBFcaI32VBDmLIFEfGGAIGKGEY
+	zn9rreZ1mC2OgFuZSgqg6A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1779311537; x=
+	1779397937; bh=+g+lL+U36Qr4BDxd87KODJtgq0o+prLW5jMcZVYy0UQ=; b=d
+	a/ngVPtIQeQf1vFdSoV71FGu0iw8aauD7UV+xlq6vyFUNHz//ol31NyB/kxQyet0
+	5Xi3dJfpql/RsyCaAegDFqrPvGRI/qH5tGYNK52w4MuKV3ff/h3wbqsToWJ1LW2Q
+	ezEEHUP513w2IWGNNQ7a7gjym8WF6JEcX1UruY8iNJpowpTHVNXH3tIO9wc5wC5+
+	a7Pzbu1TF6trAz5mePZeEow1UjHoozQSPAPG4FDhbifPtEJJsyrKUeLfYQc4Fzyc
+	8awnyHPAlutWo5aBUPx40MvZNU87TVuV2tXG4nE+IPuyEYbwyWNXLBy9WnXtLX4F
+	IoLQs/SWAC5wQVf0Qs+hg==
+X-ME-Sender: <xms:sSMOanwpb9A7P2hmYbCvtZavwOW2J__qaYPtDa0rdKO3ccAeKHyxmQ>
+    <xme:sSMOavvHi3ZsP3-Qd6D9TjcwSw6SKNmq56ZBpPl7irQDLk-QV8xxTCyJ0jazgoNy_
+    5npKNIWuL4Mvpv2ECX4Mwji7ZqE_6JAVRzNVD2wO5WPctD6XN6KTg>
+X-ME-Received: <xmr:sSMOaiCkmt2tqT8KsxMYdPpL_u6pxexb9m8kJmxKPxqILVoTFRc6kVC1zNk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgddugeehieekucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepfffhvfevuffkjghfofggtgfgsehtjeertdertddvnecuhfhrohhmpeetlhgvgicu
+    hghilhhlihgrmhhsohhnuceorghlvgigsehshhgriigsohhtrdhorhhgqeenucggtffrrg
+    htthgvrhhnpedvkeefjeekvdduhfduhfetkedugfduieettedvueekvdehtedvkefgudeg
+    veeuueenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grlhgvgiesshhhrgiisghothdrohhrghdpnhgspghrtghpthhtohepledpmhhouggvpehs
+    mhhtphhouhhtpdhrtghpthhtohepjhhgghesnhhvihguihgrrdgtohhmpdhrtghpthhtoh
+    epkhhvmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhk
+    shgvlhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhhuh
+    grhheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghlvgigrdifihhllhhirghmshho
+    nhesrhgvughhrghtrdgtohhmpdhrtghpthhtohepughmrghtlhgrtghksehgohhoghhlvg
+    drtghomhdprhgtphhtthhopehprghttghhvghssehlihhsthhsrdhlihhnuhigrdguvghv
+    pdhrtghpthhtohepshhkhhgrnheslhhinhhugihfohhunhgurghtihhonhdrohhrghdprh
+    gtphhtthhopegrlhgvgiesshhhrgiisghothdrohhrgh
+X-ME-Proxy: <xmx:sSMOapGImM9r2qpqsTBXibAhzBicX-7wFHLlwInM7NkDfmwmpLkkgg>
+    <xmx:sSMOaqCk9oWlBAHne7UYyM0J7TfA-bf14DZ1EsZa91UE_RQIJb2nig>
+    <xmx:sSMOannZ4FWpdHOTOzbf_1Is7BcfBBmFf5kZDAxC357xH1W4KnNivA>
+    <xmx:sSMOaoMmyVnicoFPH9Ko7g0YDtX4uVQmYqFLQYTlSLojAbHbRT8u6w>
+    <xmx:sSMOareKvCyOULaL5IYVgOcSJOOzodfJUuaQNT3xmLdJP1sEDzdkmwb9>
+Feedback-ID: i03f14258:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 20 May 2026 17:12:16 -0400 (EDT)
+Date: Wed, 20 May 2026 15:11:59 -0600
+From: Alex Williamson <alex@shazbot.org>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, Shuah Khan
+ <shuah@kernel.org>, Alex Williamson <alex.williamson@redhat.com>, David
+ Matlack <dmatlack@google.com>, patches@lists.linux.dev, Shuah Khan
+ <skhan@linuxfoundation.org>, alex@shazbot.org
+Subject: Re: [PATCH v2] vfio: selftests: Fix out-of-tree build with make O=
+Message-ID: <20260520151159.5bbda153@shazbot.org>
+In-Reply-To: <0-v2-4ccc247e6aff+1d93-vfio_st_make_o_jgg@nvidia.com>
+References: <0-v2-4ccc247e6aff+1d93-vfio_st_make_o_jgg@nvidia.com>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <32eaaf708c092e71f7848f2e55d09050fc3bd05f9da2aedb7adefab64648e6ce@mail.kernel.org>
-In-Reply-To: <20260520203318.31939-1-meatuni001@gmail.com>
-References: <20260520203318.31939-1-meatuni001@gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix zero batch_hash on CPU 0 after batch_gen wraparound
-From: bot+bpf-ci@kernel.org
-To: meatuni001@gmail.com,bpf@vger.kernel.org
-Cc: puranjay@kernel.org,puranjay12@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,shuah@kernel.org,linux-kselftest@vger.kernel.org,meatuni001@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed, 20 May 2026 21:06:56 +0000 (UTC)
-
---===============4961839549319086560==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/tools/testing/selftests/bpf/progs/xdp_lb_bench.c b/tools/testing/selftests/bpf/progs/xdp_lb_bench.c
-> index 13777b3dcac8..816880c1cd5e 100644
-> --- a/tools/testing/selftests/bpf/progs/xdp_lb_bench.c
-> +++ b/tools/testing/selftests/bpf/progs/xdp_lb_bench.c
-> @@ -618,7 +618,7 @@ int xdp_lb_bench(struct xdp_md *xdp)
->  		__u32 *saddr = data + saddr_off;
->
->  		batch_gen++;
-> -		batch_hash = (batch_gen + bpf_get_smp_processor_id()) * KNUTH_HASH_MULT;
-> +		batch_hash = ((batch_gen + bpf_get_smp_processor_id()) | 1) * KNUTH_HASH_MULT;
-                         ^^^^
+On Thu, 14 May 2026 13:04:44 -0300
+Jason Gunthorpe <jgg@nvidia.com> wrote:
 
-Does forcing the LSB to 1 with '| 1' inadvertently destroy the lowest
-bit of entropy from the batch generator?
+> The test programs are compiled via a static pattern rule that requires
+> intermediate .o files:
+> 
+>   $(TEST_GEN_PROGS): %: %.o $(LIBVFIO_O)
+> 
+> After lib.mk prefixes TEST_GEN_PROGS with $(OUTPUT), this creates
+> dependencies on .o files in the output directory (e.g.
+> $(OUTPUT)/vfio_dma_mapping_test.o). However, there is no rule to compile
+> these .o files from the source directory .c files when OUTPUT differs
+> from the source directory.
+> 
+> Add an explicit chain of pattern rules:
+>   $(OUTPUT)/% -> $(OUTPUT)/%.o -> %.c
+> 
+> Following the same pattern already used in libvfio.mk for the library
+> objects.
+> 
+> Fixes: 19faf6fd969c ("vfio: selftests: Add a helper library for VFIO selftests")
+> Reviewed-by: David Matlack <dmatlack@google.com>
+> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+> ---
+>  tools/testing/selftests/vfio/Makefile | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> v2: Fix the typo
+> 
+> diff --git a/tools/testing/selftests/vfio/Makefile b/tools/testing/selftests/vfio/Makefile
+> index 40165d087a0bc4..0a4cfd1a6c7ed6 100644
+> --- a/tools/testing/selftests/vfio/Makefile
+> +++ b/tools/testing/selftests/vfio/Makefile
+> @@ -27,10 +27,13 @@ CFLAGS += $(EXTRA_CFLAGS)
+>  
+>  LDFLAGS += -pthread
+>  
+> -$(TEST_GEN_PROGS): %: %.o $(LIBVFIO_O)
+> +$(TEST_GEN_PROGS): $(OUTPUT)/%: $(OUTPUT)/%.o $(LIBVFIO_O)
+>  	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $< $(LIBVFIO_O) $(LDLIBS) -o $@
+>  
+>  TEST_GEN_PROGS_O = $(patsubst %, %.o, $(TEST_GEN_PROGS))
+> +$(TEST_GEN_PROGS_O): $(OUTPUT)/%.o: %.c
+> +	$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
+> +
+>  TEST_DEP_FILES = $(patsubst %.o, %.d, $(TEST_GEN_PROGS_O) $(LIBVFIO_O))
+>  -include $(TEST_DEP_FILES)
+>  
+> 
+> base-commit: b5953f774781f0b489ae1f34d49eb08fefe176a6
 
-Since batch_gen increments sequentially by 1 per batch execution,
-forcing the least significant bit to 1 maps pairs of adjacent values
-to the same number.
+Applied to vfio next branch for v7.2.  Thanks,
 
-For example, if the CPU ID evaluates to 0, both batch_gen = 2 and
-batch_gen = 3 will yield 3 before the multiplication:
-
-    batch_gen = 2, CPU = 0: (2 + 0) | 1 = 3
-    batch_gen = 3, CPU = 0: (3 + 0) | 1 = 3
-
-Could this cause 50% of consecutive batches to generate the exact same
-batch_hash as the previous batch, causing those iterations to hit the
-warm LRU cache entries that were just populated and defeating the
-purpose of the cold_lru benchmark?
-
-This concern was raised in Puranjay's v1 patch where he used XOR instead
-of addition, and he acknowledged the issue and switched to plain addition
-in v2. This patch reintroduces the same '| 1' approach with addition, but
-the entropy-loss problem remains.
-
-Referenced discussion:
-https://lore.kernel.org/bpf/2afdea40f0c5a11c2337efafe6f460899d85bc28650e04d5e0b9ceb35f3ad9fc@mail.kernel.org/
-
->  		if ((void *)(saddr + 1) <= data_end)
->  			*saddr ^= batch_hash;
->  	}
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26188863722
---===============4961839549319086560==--
+Alex
