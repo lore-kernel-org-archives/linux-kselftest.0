@@ -1,266 +1,185 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2A9F332EBD;
-	Wed, 20 May 2026 18:29:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DB66347515
+	for <linux-kselftest@vger.kernel.org>; Wed, 20 May 2026 18:59:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779301803; cv=none; b=OchB0hKW5R3zQOngNefTdeZDwlumx5qKv6+VrZ6v7awxsq8fY6h+cCSJDOk6v6G7pPJzQcp/EZ+VMJhq31h0rZvjb/w5aygKGJSDRfPRB/AHKlBN3S6GsFixNDRlHrD84pbPZSKmHgi9RKCwze/1dLk7PiNvPvjKTjC8C3FuKE0=
+	t=1779303547; cv=none; b=mKlPN+8QNRNbMrqLCu2qeUIGFIvF3QO4IL+bAeHmXXu4hKMwmT2WMP8GFDkH7HMgOJp0qD6O23+LFMe2gHPAWhl1v6mofSFUrNh/Xge2ENjF2y4VNkry51cMpfqk+kEbMFDr0hRKO+RuBknlvAUEqFnJq1vsAGWvUrtFaLf1A6w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779301803; c=relaxed/simple;
-	bh=w9Ikq54kyZZocqmozWL/YZIYuqcADz6X/bu5InIvuAA=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=HKjonKxJbK0Njq3k4JUseB9Xv2hl8G16mZxnK4MXEL77RJvG4DVlcnrapeXhVY9RBpw31c838F5fIHE5Oq9oveRM/6gPf8OCiCcMLTWezn9TJJl2jGXWmSak/B0UTx51Guiw45NJeFXrGFBXcLDNmbgPn6QDHxkPgqkZ1hifTFM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=ny8eIzPz; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
+	s=arc-20240116; t=1779303547; c=relaxed/simple;
+	bh=CAg8fHi2CXutX4k3jIaYo/3dkMGuQ6K17aloqCRhD8Q=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=ltM9YC73uY51VlJ+YY3aBzeiG9Cs60T1wmsveLdjiThl8oAOwSmYe4XEpr9c9icQ9XjiqYVexcwkb0NtuEypH/fqKMVJZprKrUX5xHAgOmciALy/NI7XKBXmenKJsX79wKL6lV0jn/j3Qcl+ud5TZIdn4GIvBYj0r6Jhbce1Bak=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=m8YyDR7A; arc=none smtp.client-ip=209.85.216.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ny8eIzPz"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
-	In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=w9Ikq54kyZZocqmozWL/YZIYuqcADz6X/bu5InIvuAA=; b=ny8eIzPzOV0oK6bJ6yx4O5Z29r
-	RmhEbXuORgsPdjCGa2pxr1NOKGaKvptiBzlwFWsflGtZtzhou+s4OaGi1zbV/dQD/vI9RJOPK9zi0
-	60hga+HpYUv1QjvpznsRBULjZtbWOT7BFWeeGOMMh4+e1JfgUxm/ZH6hBPjpG4TgsALAQrYQ08Fjp
-	A6Osl3KFWx332Xk24jV8Tz8k9FWmwLK2aE7hAPZTMawEnNNYTKdV0cG5aoHOUSWk4hmfNaBAMQmAR
-	gnnzUCl/9Fln4u0dl2tZG1RRIRJfqevUmcxBRhhtW/pPvj6YAT4e+0mWNWu164OZo01UAgNNemPHK
-	hxT58iyw==;
-Received: from 54-240-197-235.amazon.com ([54.240.197.235] helo=freeip.amazon.com)
-	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1wPlfz-00000007TDN-0U1h;
-	Wed, 20 May 2026 18:29:51 +0000
-Message-ID: <849307f7dcc7fd408321ce9be6d405e642014117.camel@infradead.org>
-Subject: Re: [PATCH] Documentation: KVM: Document guest-visible
- compatibility expectations
-From: David Woodhouse <dwmw2@infradead.org>
-To: Oliver Upton <oupton@kernel.org>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>, Will
- Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
- <skhan@linuxfoundation.org>,  kvm <kvm@vger.kernel.org>, Linux Doc Mailing
- List <linux-doc@vger.kernel.org>, "Kernel Mailing List, Linux"
- <linux-kernel@vger.kernel.org>, Sean Christopherson <seanjc@google.com>,
- Jim Mattson <jmattson@google.com>, Joey Gouly <joey.gouly@arm.com>, Suzuki
- K Poulose <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Raghavendra Rao Ananta
- <rananta@google.com>, Eric Auger <eric.auger@redhat.com>, Kees Cook
- <kees@kernel.org>, Arnd Bergmann <arnd@arndb.de>,  Nathan Chancellor
- <nathan@kernel.org>, linux-arm-kernel
- <linux-arm-kernel@lists.infradead.org>,  kvmarm@lists.linux.dev,
- linux-kselftest <linux-kselftest@vger.kernel.org>
-Date: Wed, 20 May 2026 19:29:49 +0100
-In-Reply-To: <ag3zr7-11FO3k-Wv@kernel.org>
-References: <cf429f2082e863571595f74d1d3dedc3e6a82964.camel@infradead.org>
-	 <CABgObfacAYexR25SMi1kSZMRnHx3EDGj8=E84V1DumER66ibnQ@mail.gmail.com>
-	 <86qzn7wp3y.wl-maz@kernel.org>
-	 <593a782c50f3c8656e13b36dfb975a67d43a908e.camel@infradead.org>
-	 <CABgObfbS-z3OphDna5W_JQPvw+OK=yXJurVMHp1ANZ5uGEgVhQ@mail.gmail.com>
-	 <9d0429ddbe4d8c6993e74237c4395697f80092d6.camel@infradead.org>
-	 <agzR2kaJsNa8X9lF@kernel.org>
-	 <1243d375846c4f4e20c229a6f09300126188fc8b.camel@infradead.org>
-	 <agzq5kwzuJvd7Mh5@kernel.org>
-	 <add71b6f61edc6357e1fddad83273b2cba697d10.camel@infradead.org>
-	 <ag3zr7-11FO3k-Wv@kernel.org>
-Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-	boundary="=-rM3SP4T0Vb419/7oTOIv"
-User-Agent: Evolution 3.52.3-0ubuntu1.1 
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="m8YyDR7A"
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-367cb6de61aso9317633a91.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 20 May 2026 11:59:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1779303546; x=1779908346; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xc+eqLu2deOuDSSfxTvMnxL/tYv4gr65bHOPW09jR0U=;
+        b=m8YyDR7Ac0n8UQMMBIbd7CSv6c3u4vMwy0xx8SEkjRLz+1GpfvaL654mwKwzw/+oAv
+         7Dy25m6z9syVWyXs5G74o++Xl27DuE9cmbU7beL252WqAt1Kwox7lje7K3XMOt+N17cu
+         wyx/wUhO5qpsJoAkNYBfCqDL6YBSOcdZk0rCEdkhyahWvT0Z1jC/EkfUOuNVew3E5qld
+         3rN+MnX6GsHBuJqCRtylxtCh8JP9vGKpNkLD/nKvK7h5GOUEBMh7sYDX5Rwdz9ae9T+H
+         FUpibkNOM66WNqqGruMvSyIjTpQnBGoHS9As0e5+12SHuOKeWOKUieZVPuwMt/a4DtqI
+         cwrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779303546; x=1779908346;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xc+eqLu2deOuDSSfxTvMnxL/tYv4gr65bHOPW09jR0U=;
+        b=hQhwlC9xpChgMha8LZ/j5w6n563BxhyTpTV2g3Q0sgIAqr8SAi0V8emk7H7EUr7lk1
+         o+VarPyQhN/Y6NsqHkWPQT++caNOncfDC+GkEppxoXRrTygylktbSBHeIBE1g+f7hhVI
+         RYXRTng8PoGowl4zDHAGMtTFO/GEAnEUvieLGGyajux/K2G5+tpFg/jhCd+YPPIX0hI2
+         Lqj4zMTCM3Img1iFB5EJ4bYdzFpkPxnRkuPWUVNOJ8Lvgpy9Sl3TqBigKaGJ/EXlT3US
+         zMiNh8Q4GP53pwSuHqBc67RYDES7F0glX7g+QkZGHvjCkk1W7CNUAmam6ZG6zW8XjSN4
+         2qqQ==
+X-Forwarded-Encrypted: i=1; AFNElJ8SPK7+huOy6NlmkNXgcOXMzWwpYuyBVEk045mXVyUoGG+5imky9maBX7q6fHiJHuD46bGtZIpqm2C5nQbXUXM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwMBayYtdpuxO8ku0Z1jDNySZz8433Oeih1unYU1X0eYdDrOLlO
+	WC0MSKI8EoRNXLsuf0qckHN+UziBzgbe4fBZX88BpA3DVCxdo5W3sm1w4bj4PhEPeVCrCS+Ildg
+	aYBjLVg==
+X-Received: from pgbcz6.prod.google.com ([2002:a05:6a02:2306:b0:c79:8756:1a98])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:734a:b0:3aa:f9cb:d43a
+ with SMTP id adf61e73a8af0-3b22e67fe5emr29278600637.5.1779303545036; Wed, 20
+ May 2026 11:59:05 -0700 (PDT)
+Date: Wed, 20 May 2026 11:59:04 -0700
+In-Reply-To: <CA+EHjTw-cUM=FrJevtSDtR7K6MwUfGfOx21LMFDn7DAy5bFzYw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+Mime-Version: 1.0
+References: <20260507-gmem-inplace-conversion-v6-0-91ab5a8b19a4@google.com>
+ <20260507-gmem-inplace-conversion-v6-5-91ab5a8b19a4@google.com> <CA+EHjTw-cUM=FrJevtSDtR7K6MwUfGfOx21LMFDn7DAy5bFzYw@mail.gmail.com>
+Message-ID: <ag4EeByDV-OtGhlk@google.com>
+Subject: Re: [PATCH v6 05/43] KVM: guest_memfd: Wire up kvm_get_memory_attributes()
+ to per-gmem attributes
+From: Sean Christopherson <seanjc@google.com>
+To: Fuad Tabba <tabba@google.com>
+Cc: ackerleytng@google.com, aik@amd.com, andrew.jones@linux.dev, 
+	binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com, 
+	david@kernel.org, ira.weiny@intel.com, jmattson@google.com, 
+	jthoughton@google.com, michael.roth@amd.com, oupton@kernel.org, 
+	pankaj.gupta@amd.com, qperret@google.com, rick.p.edgecombe@intel.com, 
+	rientjes@google.com, shivankg@amd.com, steven.price@arm.com, 
+	willy@infradead.org, wyihan@google.com, yan.y.zhao@intel.com, 
+	forkloop@google.com, pratyush@kernel.org, suzuki.poulose@arm.com, 
+	aneesh.kumar@kernel.org, liam@infradead.org, 
+	Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
+	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+	Nhat Pham <nphamcs@gmail.com>, Baoquan He <bhe@redhat.com>, Barry Song <baohua@kernel.org>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
+	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
+	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Kiryl Shutsemau <kas@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>, Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-mm@kvack.org, linux-coco@lists.linux.dev
+Content-Type: text/plain; charset="us-ascii"
 
+On Wed, May 20, 2026, Fuad Tabba wrote:
+> On Thu, 7 May 2026 at 21:22, Ackerley Tng via B4 Relay
+> <devnull+ackerleytng.google.com@kernel.org> wrote:
+> >
+> > From: Sean Christopherson <seanjc@google.com>
+> >
+> > Implement kvm_gmem_get_memory_attributes() for guest_memfd to allow the KVM
+> > core and architecture code to query per-GFN memory attributes.
+> >
+> > kvm_gmem_get_memory_attributes() finds the memory slot for a given GFN and
+> > queries the guest_memfd file's to determine if the page is marked as
+> > private.
+> >
+> > If vm_memory_attributes is not enabled, there is no shared/private tracking
+> > at the VM level. Install the guest_memfd implementation as long as
+> > guest_memfd is enabled to give guest_memfd a chance to respond on
+> > attributes.
+> >
+> > guest_memfd should look up attributes regardless of whether this memslot is
+> > gmem-only since attributes are now tracked by gmem regardless of whether
+> > mmap() is enabled.
+> >
+> > Signed-off-by: Sean Christopherson <seanjc@google.com>
+> > Co-developed-by: Ackerley Tng <ackerleytng@google.com>
+> > Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+> > ---
+> >  include/linux/kvm_host.h |  2 ++
+> >  virt/kvm/guest_memfd.c   | 31 +++++++++++++++++++++++++++++++
+> >  virt/kvm/kvm_main.c      |  3 +++
+> >  3 files changed, 36 insertions(+)
+> >
+> > diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> > index c5ba2cb34e45c..28a54298d27db 100644
+> > --- a/include/linux/kvm_host.h
+> > +++ b/include/linux/kvm_host.h
+> > @@ -2557,6 +2557,8 @@ bool kvm_arch_post_set_memory_attributes(struct kvm *kvm,
+> >                                          struct kvm_gfn_range *range);
+> >  #endif /* CONFIG_KVM_VM_MEMORY_ATTRIBUTES */
+> >
+> > +unsigned long kvm_gmem_get_memory_attributes(struct kvm *kvm, gfn_t gfn);
+> > +
+> >  #ifdef CONFIG_KVM_GUEST_MEMFD
+> >  int kvm_gmem_get_pfn(struct kvm *kvm, struct kvm_memory_slot *slot,
+> >                      gfn_t gfn, kvm_pfn_t *pfn, struct page **page,
+> > diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
+> > index 5011d38820d0d..f055e058a3f28 100644
+> > --- a/virt/kvm/guest_memfd.c
+> > +++ b/virt/kvm/guest_memfd.c
+> > @@ -509,6 +509,37 @@ static int kvm_gmem_mmap(struct file *file, struct vm_area_struct *vma)
+> >         return 0;
+> >  }
+> >
+> > +unsigned long kvm_gmem_get_memory_attributes(struct kvm *kvm, gfn_t gfn)
+> > +{
+> > +       struct kvm_memory_slot *slot = gfn_to_memslot(kvm, gfn);
+> > +       struct inode *inode;
+> > +
+> > +       /*
+> > +        * If this gfn has no associated memslot, there's no chance of the gfn
+> > +        * being backed by private memory, since guest_memfd must be used for
+> > +        * private memory, and guest_memfd must be associated with some memslot.
+> > +        */
+> > +       if (!slot)
+> > +               return 0;
+> > +
+> > +       CLASS(gmem_get_file, file)(slot);
+> > +       if (!file)
+> > +               return 0;
+> > +
+> > +       inode = file_inode(file);
+> > +
+> > +       /*
+> > +        * Rely on the maple tree's internal RCU lock to ensure a
+> > +        * stable result. This result can become stale as soon as the
+> > +        * lock is dropped, so the caller _must_ still protect
+> > +        * consumption of private vs. shared by checking
+> > +        * mmu_invalidate_retry_gfn() under mmu_lock to serialize
+> > +        * against ongoing attribute updates.
+> > +        */
+> > +       return kvm_gmem_get_attributes(inode, kvm_gmem_get_index(slot, gfn));
+> > +}
+> 
+> Doesn't this imply that all consumers of kvm_mem_is_private() should
+> validate the result using mmu_lock and the invalidation sequence?
+> sev_handle_rmp_fault() calls kvm_mem_is_private() without holding
+> mmu_lock and without any retry mechanism. Is that a problem?
 
---=-rM3SP4T0Vb419/7oTOIv
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Yes, but my understanding is that sev_handle_rmp_fault() can tolerate false
+positives and false negatives.  It's not optimal, but it's "fine", and already
+KVM's existing behavior, e.g. KVM gets the PFN and then smashes the RMP, without
+ensuring the PFN is fresh.
 
-On Wed, 2026-05-20 at 10:47 -0700, Oliver Upton wrote:
-> On Wed, May 20, 2026 at 12:33:52AM +0100, David Woodhouse wrote:
-> > On Tue, 2026-05-19 at 15:57 -0700, Oliver Upton wrote:
-> > > What ifs and maybes do not meet the bar, in my opinion, for preservin=
-g
-> > > bug emulation in KVM. Of course there could be a little flexibility w=
-ith
-> > > that but we need to have some way of discriminating between bug fixes
-> > > and genuine guest expectations around the behavior of virtual hardwar=
-e.
-> >=20
-> > I believe you have this completely backwards.
->=20
-> No, I really don't.
->=20
-> Leaving every bugfix that could _possibly_ have a guest-visible impact
-> subject to drive-by scrutiny many years after the dust has settled is
-> not an acceptable working dynamic. Especially since it would appear
-> that the rest of the ecosystem has long since moved on from this
-> particular issue.
-
-That's reductio ad absurdum.
-
-I can continue to work around this one internally, sure.
-
-But I'm also concerned about the general case because not only did you
-refuse it, but you *also* said that this change in guest-visible
-behaviour "should've happened without a change to the revision number".
-
-Which seems to indicate that not only are you being randomly
-obstructive about a one-line fix, you *also* don't actually understand
-the general concept of what is expected of KVM, which this
-Documentation patch is intending to clarify.
-
-It was *right* to bump the IIDR from 1 to 2 when this guest visible
-behaviour was changed. The only problem was not letting userspace
-select the old revision. I'm really concerned that we now appear to
-have a regression of understanding of even the part we previously *did*
-get right.
-
-> If this matters to you so deeply then please, be part of the solution
-> instead. You may find that reviewing patches leads to better outcomes
-> than getting belligerent with the arm64 folks every time you guys
-> decide to rebase your kernel. Hell, hypotheticals actually have a lot
-> more weight in the context of a review. And if your testing is extensive
-> enough to catch these sort of subtleties, don't you think it's better
-> done against mainline?
-
-Yes. Definitely. That's why my series with the fixes is more *test*
-than actual fix, giving a nice simple framework for any such changes in
-future. It checks that GICR_CTLR_IR|GICR_CTLR_CES are visible only with
-IIDR.rev=3D3 for example.
-
-And we're making progress on the amount of downstream crap, but it
-doesn't help when we seem to have an impedance mismatch on the very
-question of what it means to support customers on KVM at scale. This
-thread is not exactly encouraging my engineers to poke their heads
-above the parapet.
-
-> Maybe it's just me but I am left feeling disappointed that we all
-> haven't found a productive way of working together. I've tried to bridge
-> the gap here; we obviously need to do something that at least fixes the
-> UAPI breakage. Although apparently we don't even care to meet that low
-> of bar.
->=20
-> > A stable and mature platform doesn't get to play in its ivory tower and
-> > randomly inflict breakage on guests because they "deserve it".
->=20
-> Really? Aren't you asking for us to emulate something completely broken
-> for you?
-
-No. I'm asking for a path to be able to *fix* it.
-
-As things stand, if I just drop these patches and launch guests on a
-new kernel, those guests will see writable IGROUPR registers and may
-try to use them. And then if I have to roll *back* a kernel deployment,
-those guests may lose interrupts.
-
-The *only* time a guest-visible feature (or bugfix, nobody cares about
-the difference outside the ivory tower) can be enabled is when the
-kernel deployment is finished and stable and *won't* be rolled back.
-And *then* new launches (and reboots) can get it.
-
-And one day, when the last guest which was launched *without* it is
-finally rebooted and sees the new model, *then* maybe we no longer need
-that one line if() statement to support IIDR version 1.
-
-2018 was basically *yesterday*. And I'm kind of scared that I even have
-to explain it.
-
---=-rM3SP4T0Vb419/7oTOIv
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Transfer-Encoding: base64
-
-MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCD9Aw
-ggSOMIIDdqADAgECAhAOmiw0ECVD4cWj5DqVrT9PMA0GCSqGSIb3DQEBCwUAMGUxCzAJBgNVBAYT
-AlVTMRUwEwYDVQQKEwxEaWdpQ2VydCBJbmMxGTAXBgNVBAsTEHd3dy5kaWdpY2VydC5jb20xJDAi
-BgNVBAMTG0RpZ2lDZXJ0IEFzc3VyZWQgSUQgUm9vdCBDQTAeFw0yNDAxMzAwMDAwMDBaFw0zMTEx
-MDkyMzU5NTlaMEExCzAJBgNVBAYTAkFVMRAwDgYDVQQKEwdWZXJva2V5MSAwHgYDVQQDExdWZXJv
-a2V5IFNlY3VyZSBFbWFpbCBHMjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMjvgLKj
-jfhCFqxYyRiW8g3cNFAvltDbK5AzcOaR7yVzVGadr4YcCVxjKrEJOgi7WEOH8rUgCNB5cTD8N/Et
-GfZI+LGqSv0YtNa54T9D1AWJy08ZKkWvfGGIXN9UFAPMJ6OLLH/UUEgFa+7KlrEvMUupDFGnnR06
-aDJAwtycb8yXtILj+TvfhLFhafxroXrflspavejQkEiHjNjtHnwbZ+o43g0/yxjwnarGI3kgcak7
-nnI9/8Lqpq79tLHYwLajotwLiGTB71AGN5xK+tzB+D4eN9lXayrjcszgbOv2ZCgzExQUAIt98mre
-8EggKs9mwtEuKAhYBIP/0K6WsoMnQCcCAwEAAaOCAVwwggFYMBIGA1UdEwEB/wQIMAYBAf8CAQAw
-HQYDVR0OBBYEFIlICOogTndrhuWByNfhjWSEf/xwMB8GA1UdIwQYMBaAFEXroq/0ksuCMS1Ri6en
-IZ3zbcgPMA4GA1UdDwEB/wQEAwIBhjAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIweQYI
-KwYBBQUHAQEEbTBrMCQGCCsGAQUFBzABhhhodHRwOi8vb2NzcC5kaWdpY2VydC5jb20wQwYIKwYB
-BQUHMAKGN2h0dHA6Ly9jYWNlcnRzLmRpZ2ljZXJ0LmNvbS9EaWdpQ2VydEFzc3VyZWRJRFJvb3RD
-QS5jcnQwRQYDVR0fBD4wPDA6oDigNoY0aHR0cDovL2NybDMuZGlnaWNlcnQuY29tL0RpZ2lDZXJ0
-QXNzdXJlZElEUm9vdENBLmNybDARBgNVHSAECjAIMAYGBFUdIAAwDQYJKoZIhvcNAQELBQADggEB
-ACiagCqvNVxOfSd0uYfJMiZsOEBXAKIR/kpqRp2YCfrP4Tz7fJogYN4fxNAw7iy/bPZcvpVCfe/H
-/CCcp3alXL0I8M/rnEnRlv8ItY4MEF+2T/MkdXI3u1vHy3ua8SxBM8eT9LBQokHZxGUX51cE0kwa
-uEOZ+PonVIOnMjuLp29kcNOVnzf8DGKiek+cT51FvGRjV6LbaxXOm2P47/aiaXrDD5O0RF5SiPo6
-xD1/ClkCETyyEAE5LRJlXtx288R598koyFcwCSXijeVcRvBB1cNOLEbg7RMSw1AGq14fNe2cH1HG
-W7xyduY/ydQt6gv5r21mDOQ5SaZSWC/ZRfLDuEYwggWbMIIEg6ADAgECAhAH5JEPagNRXYDiRPdl
-c1vgMA0GCSqGSIb3DQEBCwUAMEExCzAJBgNVBAYTAkFVMRAwDgYDVQQKEwdWZXJva2V5MSAwHgYD
-VQQDExdWZXJva2V5IFNlY3VyZSBFbWFpbCBHMjAeFw0yNDEyMzAwMDAwMDBaFw0yODAxMDQyMzU5
-NTlaMB4xHDAaBgNVBAMME2R3bXcyQGluZnJhZGVhZC5vcmcwggIiMA0GCSqGSIb3DQEBAQUAA4IC
-DwAwggIKAoICAQDali7HveR1thexYXx/W7oMk/3Wpyppl62zJ8+RmTQH4yZeYAS/SRV6zmfXlXaZ
-sNOE6emg8WXLRS6BA70liot+u0O0oPnIvnx+CsMH0PD4tCKSCsdp+XphIJ2zkC9S7/yHDYnqegqt
-w4smkqUqf0WX/ggH1Dckh0vHlpoS1OoxqUg+ocU6WCsnuz5q5rzFsHxhD1qGpgFdZEk2/c//ZvUN
-i12vPWipk8TcJwHw9zoZ/ZrVNybpMCC0THsJ/UEVyuyszPtNYeYZAhOJ41vav1RhZJzYan4a1gU0
-kKBPQklcpQEhq48woEu15isvwWh9/+5jjh0L+YNaN0I//nHSp6U9COUG9Z0cvnO8FM6PTqsnSbcc
-0j+GchwOHRC7aP2t5v2stVx3KbptaYEzi4MQHxm/0+HQpMEVLLUiizJqS4PWPU6zfQTOMZ9uLQRR
-ci+c5xhtMEBszlQDOvEQcyEG+hc++fH47K+MmZz21bFNfoBxLP6bjR6xtPXtREF5lLXxp+CJ6KKS
-blPKeVRg/UtyJHeFKAZXO8Zeco7TZUMVHmK0ZZ1EpnZbnAhKE19Z+FJrQPQrlR0gO3lBzuyPPArV
-hvWxjlO7S4DmaEhLzarWi/ze7EGwWSuI2eEa/8zU0INUsGI4ywe7vepQz7IqaAovAX0d+f1YjbmC
-VsAwjhLmveFjNwIDAQABo4IBsDCCAawwHwYDVR0jBBgwFoAUiUgI6iBOd2uG5YHI1+GNZIR//HAw
-HQYDVR0OBBYEFFxiGptwbOfWOtMk5loHw7uqWUOnMDAGA1UdEQQpMCeBE2R3bXcyQGluZnJhZGVh
-ZC5vcmeBEGRhdmlkQHdvb2Rob3Uuc2UwFAYDVR0gBA0wCzAJBgdngQwBBQEBMA4GA1UdDwEB/wQE
-AwIF4DAdBgNVHSUEFjAUBggrBgEFBQcDAgYIKwYBBQUHAwQwewYDVR0fBHQwcjA3oDWgM4YxaHR0
-cDovL2NybDMuZGlnaWNlcnQuY29tL1Zlcm9rZXlTZWN1cmVFbWFpbEcyLmNybDA3oDWgM4YxaHR0
-cDovL2NybDQuZGlnaWNlcnQuY29tL1Zlcm9rZXlTZWN1cmVFbWFpbEcyLmNybDB2BggrBgEFBQcB
-AQRqMGgwJAYIKwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmRpZ2ljZXJ0LmNvbTBABggrBgEFBQcwAoY0
-aHR0cDovL2NhY2VydHMuZGlnaWNlcnQuY29tL1Zlcm9rZXlTZWN1cmVFbWFpbEcyLmNydDANBgkq
-hkiG9w0BAQsFAAOCAQEAQXc4FPiPLRnTDvmOABEzkIumojfZAe5SlnuQoeFUfi+LsWCKiB8Uextv
-iBAvboKhLuN6eG/NC6WOzOCppn4mkQxRkOdLNThwMHW0d19jrZFEKtEG/epZ/hw/DdScTuZ2m7im
-8ppItAT6GXD3aPhXkXnJpC/zTs85uNSQR64cEcBFjjoQDuSsTeJ5DAWf8EMyhMuD8pcbqx5kRvyt
-JPsWBQzv1Dsdv2LDPLNd/JUKhHSgr7nbUr4+aAP2PHTXGcEBh8lTeYea9p4d5k969pe0OHYMV5aL
-xERqTagmSetuIwolkAuBCzA9vulg8Y49Nz2zrpUGfKGOD0FMqenYxdJHgDCCBZswggSDoAMCAQIC
-EAfkkQ9qA1FdgOJE92VzW+AwDQYJKoZIhvcNAQELBQAwQTELMAkGA1UEBhMCQVUxEDAOBgNVBAoT
-B1Zlcm9rZXkxIDAeBgNVBAMTF1Zlcm9rZXkgU2VjdXJlIEVtYWlsIEcyMB4XDTI0MTIzMDAwMDAw
-MFoXDTI4MDEwNDIzNTk1OVowHjEcMBoGA1UEAwwTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJ
-KoZIhvcNAQEBBQADggIPADCCAgoCggIBANqWLse95HW2F7FhfH9bugyT/danKmmXrbMnz5GZNAfj
-Jl5gBL9JFXrOZ9eVdpmw04Tp6aDxZctFLoEDvSWKi367Q7Sg+ci+fH4KwwfQ8Pi0IpIKx2n5emEg
-nbOQL1Lv/IcNiep6Cq3DiyaSpSp/RZf+CAfUNySHS8eWmhLU6jGpSD6hxTpYKye7PmrmvMWwfGEP
-WoamAV1kSTb9z/9m9Q2LXa89aKmTxNwnAfD3Ohn9mtU3JukwILRMewn9QRXK7KzM+01h5hkCE4nj
-W9q/VGFknNhqfhrWBTSQoE9CSVylASGrjzCgS7XmKy/BaH3/7mOOHQv5g1o3Qj/+cdKnpT0I5Qb1
-nRy+c7wUzo9OqydJtxzSP4ZyHA4dELto/a3m/ay1XHcpum1pgTOLgxAfGb/T4dCkwRUstSKLMmpL
-g9Y9TrN9BM4xn24tBFFyL5znGG0wQGzOVAM68RBzIQb6Fz758fjsr4yZnPbVsU1+gHEs/puNHrG0
-9e1EQXmUtfGn4InoopJuU8p5VGD9S3Ikd4UoBlc7xl5yjtNlQxUeYrRlnUSmdlucCEoTX1n4UmtA
-9CuVHSA7eUHO7I88CtWG9bGOU7tLgOZoSEvNqtaL/N7sQbBZK4jZ4Rr/zNTQg1SwYjjLB7u96lDP
-sipoCi8BfR35/ViNuYJWwDCOEua94WM3AgMBAAGjggGwMIIBrDAfBgNVHSMEGDAWgBSJSAjqIE53
-a4blgcjX4Y1khH/8cDAdBgNVHQ4EFgQUXGIam3Bs59Y60yTmWgfDu6pZQ6cwMAYDVR0RBCkwJ4ET
-ZHdtdzJAaW5mcmFkZWFkLm9yZ4EQZGF2aWRAd29vZGhvdS5zZTAUBgNVHSAEDTALMAkGB2eBDAEF
-AQEwDgYDVR0PAQH/BAQDAgXgMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEFBQcDBDB7BgNVHR8E
-dDByMDegNaAzhjFodHRwOi8vY3JsMy5kaWdpY2VydC5jb20vVmVyb2tleVNlY3VyZUVtYWlsRzIu
-Y3JsMDegNaAzhjFodHRwOi8vY3JsNC5kaWdpY2VydC5jb20vVmVyb2tleVNlY3VyZUVtYWlsRzIu
-Y3JsMHYGCCsGAQUFBwEBBGowaDAkBggrBgEFBQcwAYYYaHR0cDovL29jc3AuZGlnaWNlcnQuY29t
-MEAGCCsGAQUFBzAChjRodHRwOi8vY2FjZXJ0cy5kaWdpY2VydC5jb20vVmVyb2tleVNlY3VyZUVt
-YWlsRzIuY3J0MA0GCSqGSIb3DQEBCwUAA4IBAQBBdzgU+I8tGdMO+Y4AETOQi6aiN9kB7lKWe5Ch
-4VR+L4uxYIqIHxR7G2+IEC9ugqEu43p4b80LpY7M4KmmfiaRDFGQ50s1OHAwdbR3X2OtkUQq0Qb9
-6ln+HD8N1JxO5nabuKbymki0BPoZcPdo+FeRecmkL/NOzzm41JBHrhwRwEWOOhAO5KxN4nkMBZ/w
-QzKEy4PylxurHmRG/K0k+xYFDO/UOx2/YsM8s138lQqEdKCvudtSvj5oA/Y8dNcZwQGHyVN5h5r2
-nh3mT3r2l7Q4dgxXlovERGpNqCZJ624jCiWQC4ELMD2+6WDxjj03PbOulQZ8oY4PQUyp6djF0keA
-MYIDuzCCA7cCAQEwVTBBMQswCQYDVQQGEwJBVTEQMA4GA1UEChMHVmVyb2tleTEgMB4GA1UEAxMX
-VmVyb2tleSBTZWN1cmUgRW1haWwgRzICEAfkkQ9qA1FdgOJE92VzW+AwDQYJYIZIAWUDBAIBBQCg
-ggE3MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI2MDUyMDE4Mjk0
-OVowLwYJKoZIhvcNAQkEMSIEIFW+7T+6iiPD2LAbe3y2ZX+vzE+UM9UwX4ZqelKG8g3pMGQGCSsG
-AQQBgjcQBDFXMFUwQTELMAkGA1UEBhMCQVUxEDAOBgNVBAoTB1Zlcm9rZXkxIDAeBgNVBAMTF1Zl
-cm9rZXkgU2VjdXJlIEVtYWlsIEcyAhAH5JEPagNRXYDiRPdlc1vgMGYGCyqGSIb3DQEJEAILMVeg
-VTBBMQswCQYDVQQGEwJBVTEQMA4GA1UEChMHVmVyb2tleTEgMB4GA1UEAxMXVmVyb2tleSBTZWN1
-cmUgRW1haWwgRzICEAfkkQ9qA1FdgOJE92VzW+AwDQYJKoZIhvcNAQEBBQAEggIAX/tcF36rLZnU
-vDg5JmF+f32E/QtpW8faTuvxgIDe3js8ftVO4+U0n5zmXM4mjqaeZQsuTWA2+7aABf0Ab8PQ/jwb
-syiNDbfjSkPM4lWedZbaPq1fs9/k0CHCYK1PafmDsjuLx6JUGz6rK7iCapPXWV9KOGIh8lCKX/ZB
-iI8YkrNttFYp2IbQuFF+WIyg9+VWOwEkzegGPpGvUI6toAjEkVmEMbAe4WjUqniw6EsrJYXC/KQh
-nj2OWgJWKcV1/4gc4PXQPtaEPglBKczlL8JN0hXlERgzRHjeiQpa84MzlDMao2JE55ce0imFGKqO
-UnxZUze8ZxaOkzMk/SdMY4WzNxahKOz3pjT+uM0PglZlWt+kk6rClEdLnO10RgNm9FXiBSoOzODF
-gmzGTIrl9TuPJbK3ZzOzBbZLnUAPOKfM9rhujmOqwwsgIYxXbW4tc6JyXTMIVQClG3eWSYvZQoB8
-c+hdFRoQ2bZIOacWZ8ZfibwIQ54vQM4tyXvMkowHTFsBauBF1Jqlp6iYd/9YFIIJY3FdbZdjt4Nz
-2A8ZodyDHZizyDfI6OZtxXdbWZgt4nOJSTe3bqRMgxlm60p5goo6ftFAEXO1wUa70U8pshjJWDw6
-HFixchLud6w6LHBOBbAelcMFNhzCC5e1F/+EclvOuDrqZGTCKazZwak9xV569jQAAAAAAAA=
-
-
---=-rM3SP4T0Vb419/7oTOIv--
+Mike, is that all correct?
