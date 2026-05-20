@@ -1,101 +1,117 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11BF9165F1A;
-	Wed, 20 May 2026 01:35:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89F3B1A316E
+	for <linux-kselftest@vger.kernel.org>; Wed, 20 May 2026 01:49:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779240907; cv=none; b=tcTCS7GnCz+TxuCDr5hkmR0su6Kj9a0WeAdGOHTXw4hOu5G60My7nRtWxzsiCTR6iXhioatjMVV/N/GqUU/PNdl+LOOwVK0dbN4xxSP46SA0fGo9Fe7NMj0orUSqcsxsUoFrR7kcvuBUCzHMjWzfKOaXgJrsplURsjYHwwq5x7U=
+	t=1779241769; cv=none; b=tifTA5B69R21WGhxgjBr6G+rBFi/uluktdDIPYW6gxlsEdV/ufthHcrDIx/LQc/oq8itX/Hw3XtYKkKSWyNup7snxkmPZtadaFyf3JfX2hTm5HxzSHiSeUKfuw3j4PIJmeJsnnBV1ajKY0JWfjwSdo+TtgDb7mLQHtT0ExUkQgM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779240907; c=relaxed/simple;
-	bh=VlF106n3KI77nNqIHl5zCL5S+iUjsagCmF4QnDDQbUs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=sGPTnBveeGuIZePeey5iktNYvAbU5/OliwAUEmlvfj2Tn1Jq2c4zIBLvyoWDFM5VBfD+dFSkzC96BigATbtLOmrPRWkjpciNzChu4gw6An3NQHhpWGfwmFSmxaIF9fcRGSoc4bTEdzqN1DzwfsErolDGq+Pd4PWdgorRb4ES02o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j+cT/oAG; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779241769; c=relaxed/simple;
+	bh=7EM+JfkwMRjx4vKgzSPCXPtP8Hs4LizMJhdeXnEWxgs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jKPKONh5ngOxNJZpvOQQyjGvax4E0cqMuHMWOTa1jbecnbw6GRPa5w5UA9FR8I94+pUASv0XPK6w30pXuh5rv5JPj2nXlGsjP78IXcovBwJqeKbq+aYZb4X8o5irpza59NCIvq8TfaOy7b4tYYazDQAJTge8WsUm4aaUrDAercc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kusVFY8P; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j+cT/oAG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 918A41F000E9;
-	Wed, 20 May 2026 01:35:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779240905;
-	bh=B0F19t3trMZWR71OsB5KaKjV93HVmCtzo2gfr6+e4uI=;
-	h=From:Date:Subject:To:Cc;
-	b=j+cT/oAGm85+UI+Y+awbCu0lQ3eVa4Ae5VcT8lfV+tKtXtZvOSHEftRtVc2kXPrwQ
-	 2TDtJte7WA+YuncaIE11kLRQR+7M+8AMUm1C07mUZKaymYl/uW9tlocD+u5dXQfNMJ
-	 oVCGLucl07oZaEgOyqI5BKX1q1PNQrXI+cKfQ1fkK3zddlw7nBEI9hrtthQnRdb9Jo
-	 dg9deoDp429A5aKqq55NNsgrYjT111zwRr+sZz/FfBIIndvCSEoIjZUyJvfFRcJbrr
-	 q7fbQz9fVceo1tbH/XPTx1irJK1JzFTl1kwFZB/1g0EK3DRD3C5BJHF5429somWVP4
-	 W/sB2fBfj2qjQ==
-From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Wed, 20 May 2026 11:34:43 +1000
-Subject: [PATCH net] selftests: rds: config: disable modules
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kusVFY8P"
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-67c9616b4feso7720014a12.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 May 2026 18:49:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779241766; x=1779846566; darn=vger.kernel.org;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GbAWmpIeWrmIKRd0AiWx+CX2tvOghhIGhH7OVpuTfyA=;
+        b=kusVFY8PKQLvTB+KtmwXcmVcvfP+4Fe81ZMcHgpevoSvG0kRoNwibFUVwE1xIul09X
+         1IlbCu35Ubtx7eNA8d9Ql26vvl+SRefZRSCN7pX2i3gLdB+nVpWcsBVBxTYGCgcbViL8
+         cqDS7Vi21fuzkHVc8MRMh3ymFoGeULI9hetGfMAd5mtUt73AVvzAvXOvmruiv0x1vWkp
+         xsrOOCJz86IqeVngqILyWlAAUWmLrV9Yq2lEqyPZuALcAbIRdYpTu4FkGLid0If2aK01
+         iyHFHZEn/mTOO7LbbUo4YCv0upaLswCR0O6nbl36aGll8Tjlea2Q91kJPjRO/qJtfbAG
+         41XA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779241766; x=1779846566;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :reply-to:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GbAWmpIeWrmIKRd0AiWx+CX2tvOghhIGhH7OVpuTfyA=;
+        b=Rea9Nst2JaXp6+96oWZd5REZgXy9HHy2BdJJHMtZRImQR3GDjvePOkuodA+QyZZWFz
+         husaxJWnjj6jWM0edz8RjwgHKnz+B04C3cYpmxsXJr0utoc8dSeFd4Y3G3KmexYUaEUX
+         q3XvZEV2bIaXlndz/tNTbHKud6meDXbkwm46/c2Y1dOTontXU9p8yQ/xKHc5tfIdNyPT
+         1bfn+Caf7DTkCmQok0m/QfgNd18wVPUfPuExA+m8o53/3pKf9utH34MafoBQ+zI3OrOc
+         x9w11k1x6VQpT+7rjwDI58I1b7ncLZRzfJ2hkbmgGwBYHco2GWb/84K9K7YbwuA9IT9P
+         uDgQ==
+X-Forwarded-Encrypted: i=1; AFNElJ8eSAT1In4CzfXD4JJA5rXnBUokPXteQFFH5yFo8RBEp6AYzFC0AzEZcy+iiMYRq0Ts3Zqh7noDY/o7zBEggaE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwS+DMWfQ9xo0BqyRAzXhCH4K0JaVRWd885cUzDfGg9Suc6GiCl
+	1ad9snkuEKZRt/GYYS+vzwNcGr35oAKBNOEXoDl/SYDk1moj3TrStLa1TbPztg==
+X-Gm-Gg: Acq92OGAGbAqh/1raviMBa+eNt5dmLwAZH6AHMFphXWDn5//Lgqu2dbn7lkq20BHYZZ
+	NUmRi5UJHGCfSq2x9TRs7ZJHLIKWv4ZMjieXvltRzh3nohvFKHUSE/fC/IaBjcP97Spau9lQM0h
+	zGig2jxB286zKvoO/atvclkeaPbLNQ7qRnJK6HQgqWdRJDEcK50wTot/NMV2iYRLg2HnOZA8ZjZ
+	wGMbja2EnaazAcf/fDN+xcxO5JibB7JpgN5bKcJsphsylJxAazOej29eVOexLXToTzrgLFNQi+U
+	AIKFxtLdG66mk67MzMrWF4ZEOHIK+hR+b0oBJUrf0OAoEG3z07BFI+b0v/eIjHqYGDFjoS1E/iz
+	Wbfx86vbJUj/Hep1OuwcXx1y8UZMXMYYmwvWPREBy/GLpW3/egRYngBCkrxBNXJBvSxKwlRfR4i
+	RpSKK2BCvtyvgcWNgL/TVIcyh8NefxiCTz
+X-Received: by 2002:a17:907:8dcf:b0:bd1:2c29:a6ac with SMTP id a640c23a62f3a-bd517992f0emr1317114866b.44.1779241765510;
+        Tue, 19 May 2026 18:49:25 -0700 (PDT)
+Received: from localhost ([185.92.221.13])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-bd4f4ded99dsm770246766b.30.2026.05.19.18.49.23
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 19 May 2026 18:49:24 -0700 (PDT)
+Date: Wed, 20 May 2026 01:49:23 +0000
+From: Wei Yang <richard.weiyang@gmail.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Wei Yang <richard.weiyang@gmail.com>,
+	Vineet Agarwal <agarwal.vineet2006@gmail.com>, david@kernel.org,
+	ljs@kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/mm: check file initialization writes in
+ split_huge_page_test
+Message-ID: <20260520014923.zowt3fimptgzgju2@master>
+Reply-To: Wei Yang <richard.weiyang@gmail.com>
+References: <20260512074924.27721-1-agarwal.vineet2006@gmail.com>
+ <20260515092211.qkmaxcofxwfdexld@master>
+ <20260518163553.447a45c54a3d419b9bb916ca@linux-foundation.org>
+ <20260519025141.lguv7mrtvqgqpltc@master>
+ <20260519121813.4b188b21f7280d6e1d9a55e1@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260520-net-rds-config-modules-v1-1-2100df02fe9a@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yWM0QrCMAwAf2Xk2UANrKC/Ij7UJpsRbaXZRBj79
- 2X6eAd3C5g0FYNzt0CTj5rW4nA8dJDvqYyCys5AgWLoKWCRCRsb5loGHfFVeX6KY+J0osi5pwg
- ev5sM+v2NL+ANXP/S5ttD8rQvYV03KCFjBX8AAAA=
-X-Change-ID: 20260520-net-rds-config-modules-cada926dc526
-To: Allison Henderson <achender@kernel.org>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-rdma@vger.kernel.org, 
- rds-devel@oss.oracle.com, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1103; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=VlF106n3KI77nNqIHl5zCL5S+iUjsagCmF4QnDDQbUs=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBqDQ/FZv+ANFO1mdlB9G5PQA9p8tRaj2OEx/t0X
- SSwkI60tkuJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCag0PxQAKCRD2t4JPQmmg
- c0bHEACZAQgBnP1kX0SQ7NBPXwGMhwH2SMna/P37YREjvsl6wK4cH8DGBPzITjN7PpXPsSGF+B3
- 5y8DOuc8o70QmWZ52dFcJICluijtbEEZu+5UKo0pYez2TWMB/PoIfXSu2EAhSM1+fEx3hALoyKM
- wgjU8bg/O+hG9j8ETe+XOq49lBl+Ht3dXc8OloEl+AsBzr8zXK5zzwR5XQhziVftNhp+5eQ6qfT
- /oy+METGft6ytG26csBSV5+2L5lsFqBiy1147kI466Zi4nYmxM9egfykeY4dX+WzbSR44lLONJ4
- CDKtKewkC0j+QKuWJi2GYgDnG4ImFhJoLfuUhcqoXF8lBa/IXSDI0XWMxI6vRLpU52fHkE30N2J
- HZ+2cE0Uif11MyDmFsC8ogSs2B/1RMbeTVbJTaI6Wi9qN3b+sMYgGDKnIpNg2wC+7qpvbwkL+Ej
- 7ql6H/VSNiMD36KC0PBNowXoj2lTneN9GgW4SdoXJ0S8W4OspyrGtwLfd1iK81/JhHSUEmidXdz
- uC+ToxDY4gKUL2d7fnevp6NiT9NmUzKBMFITQI+JeDyFSMKUxSyXzTV5dP/IcXJT9kZ2x/F5qZW
- yxCeJ599WCW4j9iqL3Tw1eyk8krBFp3Qr7v1Jht7y69lzxq7Q08nXTQrCws8h3iE0d3e1KSjHLM
- 1V3kO/485UQMehQ==
-X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
- fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260519121813.4b188b21f7280d6e1d9a55e1@linux-foundation.org>
+User-Agent: NeoMutt/20170113 (1.7.2)
 
-The run.sh script explicitly checks that CONFIG_MODULES is disabled.
+On Tue, May 19, 2026 at 12:18:13PM -0700, Andrew Morton wrote:
+>On Tue, 19 May 2026 02:51:41 +0000 Wei Yang <richard.weiyang@gmail.com> wrote:
+>
+>> >Not understanding - cab you please describe more completely?
+>> >
+>> 
+>> I mean do this below.
+>> 
+>> diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
+>> index 460fa1f606fd..f30402ece608 100644
+>> --- a/tools/testing/selftests/mm/split_huge_page_test.c
+>> +++ b/tools/testing/selftests/mm/split_huge_page_test.c
+>> @@ -469,7 +469,7 @@ static int create_pagecache_thp_and_fd(const char *testfile, size_t fd_size,
+>>         }
+>>         if (write(*fd, "3", 1) != 1) {
+>>                 ksft_perror("write to drop_caches");
+>> -               goto err_out_unlink;
+>> +               goto err_out_close;
+>>         }
+>>         close(*fd);
+>> 
+>> On error writing this fd, /proc/sys/vm/drop_caches, we forget to close it.
+>
+>Oh, OK, that's a buglet.  Please send a formal fix sometime?
 
-By default, this config option is enabled. Explicitly disable it to be
-able to run the RDS tests.
+Sure, I am glad to.
 
-Note that writing '# CONFIG_(...) is not set' is usually recommended to
-disable an option in the .config, but it looks like selftests usually
-set 'CONFIG_(...)=n', which looks clearer.
-
-Fixes: 0f5d68004780 ("selftests: rds: add tools/testing/selftests/net/rds/config")
-Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
----
- tools/testing/selftests/net/rds/config | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/tools/testing/selftests/net/rds/config b/tools/testing/selftests/net/rds/config
-index 97db7ecb892a..3d62d0c750a8 100644
---- a/tools/testing/selftests/net/rds/config
-+++ b/tools/testing/selftests/net/rds/config
-@@ -1,3 +1,4 @@
-+CONFIG_MODULES=n
- CONFIG_NET_NS=y
- CONFIG_NET_SCH_NETEM=y
- CONFIG_RDS=y
-
----
-base-commit: 90fc1a393736063b2b4077115e215a2e2eebb797
-change-id: 20260520-net-rds-config-modules-cada926dc526
-
-Best regards,
---  
-Matthieu Baerts (NGI0) <matttbe@kernel.org>
-
+-- 
+Wei Yang
+Help you, Help me
