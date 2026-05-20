@@ -1,138 +1,122 @@
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B8A93C9EEF
-	for <linux-kselftest@vger.kernel.org>; Wed, 20 May 2026 09:38:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 564993C9EF0;
+	Wed, 20 May 2026 09:40:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779269910; cv=none; b=h3O+1psP7NHRgnW8TiwQvA9nKUGW5pABsbcRjFoLVvXJ0At4pdQR6k9kwMAkLXa22FGZrnk0sccQGfEJk0hpP2Ztb7lXlZZnAvKtZmIYhhFHGf4kJ+xv+9xNsClx/0MR/8SZa6bICM67VY72uNmUzO3DUmPFqz6BUq50gjB5Cwc=
+	t=1779270036; cv=none; b=VSSNWWZfPhUn88vQrS2M/BDqZsqFKreCS00qGR0sbCp9Z5gdrjTlMz0emxmXQiFA1JC4qPlK62SDVJcmcX48ZvkzjCrOk3gnvW2iFgbKGOIKTYQDcco9Zqich0JawGDSXTkTcJ/068jAQBCbYJVgNEKsf4QvDwUvUUm92kN9d0Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779269910; c=relaxed/simple;
-	bh=ee4l0aOGqFxFUGDSrtNnbR9tcK9dlPFdi7ukZJVzNFU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hlB5H3V/hAoiS1nGLYYOrg34gzKo3FTImNLntFhFUZ6CbaMLk+bQ7pInGTl+gYwjG3Qs9o0+AaAezzKku+19oGRVZ/bwTyK+zZveGK99yFlgebF192/SAUiR6diZUSKlLj7gbqtpegO6Ezgg23ofTy4nvwRxbnwSpk31YBKWQL0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hGQ1dvJi; arc=none smtp.client-ip=209.85.208.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1779270036; c=relaxed/simple;
+	bh=VRZ71Huu8qSFEboEe06ikz+mahJiBdAa//EOmsH9Cuc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=aTCRjc/xBT/RMvMg2CjW/96zn9WORfV1FaA1N4TojaNoYkKmZkT/Jkqun+QH/wryTD0Ge3+vGoVBjaF0s7aH4lIW2KMz0dcvG3WYSCvMEzNaeDnWurZx4F3XuGs9fs6n1hc01t6+J+YQwsVTw4cJHH4L8B05D1L/IRK8vWHv+v4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I8IFs78V; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hGQ1dvJi"
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-67c2b4809baso10459406a12.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 May 2026 02:38:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779269906; x=1779874706; darn=vger.kernel.org;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BVTQmbrETv5mK3lzRRB7IS3srcOG1eF8+E4fWkWcGbg=;
-        b=hGQ1dvJioRf5Gl1fgXt5kWURz1Z8y+4mgIBIPpVU2Qfw9VC2SJynUaGKgovp4plGQ5
-         PqyqF/23Br0aLNCQEIG6dhqFc0J9t/ZrPY1x/lkszoYyLybKWUgrgOR6oXVSd3Y6aIOZ
-         kwRxpOB7bKMVzstL3wWR+nFuQ2aucdASQyflqXaxpw4eV/Rb8Pv8447+uNa1lbbLNn9w
-         aNkXFKIn96A1uAtmKBpNLBpoyNQy3I715vwEtYupDwfhxKJhj12pzjC1qHo/uYdYNztz
-         hzLxig6PRPAiUcyK+q7nQXzTA5R5N04Aa3xTjlhoTejdQfPBG4ViRafkK9Ut4sCYdT8q
-         0VlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779269906; x=1779874706;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :reply-to:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BVTQmbrETv5mK3lzRRB7IS3srcOG1eF8+E4fWkWcGbg=;
-        b=Bl5BMXnlP1CJZqRPIp+3L7tgvy5t/tsmc2avez/XAQ9KK7203NSA6jjz3uy6Z6Halx
-         FJsLBvIOYgjco28iP8MrRvNNqInDlL3febpaECi1gwNGvauwxuzxgidpK2dnneCX+fcf
-         USBlgimzYT/o6szIbUcRSGGTtR+nciW/Jbaa7VDo1Wxfnk7Vz8sDmyhMRF3vtffk2Rwh
-         8txeC8982Wy/EFFcPoSSblAJNYW5vcnRfs78ipxhNkxJZyP1jP2RE4kK231MOoeyy2d1
-         LLPcZkNS88G35LQK/hkcLEolb884dZcPnt/jQH5Ntp9RIaO93dcaRI78j0Mvt7V4lp/a
-         CtzA==
-X-Forwarded-Encrypted: i=1; AFNElJ+ZCAN0E+EzI9YhJegYDpII4+axi2gW9A1chAN5Bq8Ks72UJPTRVpVKh0oIEphXDFUcwpIQcHTww70AYGa8m6k=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxBfoimRd+yNlcKcGHB/5zVhTrywkvtdsZwPTPPAt7HCtsLcCS6
-	3dvy7dxb3l5kzcXpJ7SodoC0yTzbL1RbHOygAMiCJJdeJ93BdGzeU/C6
-X-Gm-Gg: Acq92OFiEsmSRwjHs4mQk0qEwjtgvaBOxP7fiRp9wG+W3sP3UFbOhciOO4AIxTeLgxO
-	PQvd9Bc+LfYA9SVt/vpMEm9284HAzfJ28SzqyUwICM4BYRqaiVRwPTb4I03En6RNxq86dQERXzf
-	nFM/8gQkiCY+zqNVBGqkmKrpljV2t2UnN0/AtRIxBUDfqK7Lpt3PqECSKu3lkUMZGo8W4Nomawe
-	5bAYnOlIXEBqGmpCheLwOmeFKlIDmvJn+ZlK89aTdOAC0rLXVppYQfro6wj7e09bHeV8NscJnTw
-	uXKpaKA2sPW1RvPN2YYiQKuPa1AiPiCv00Q2vmkKqIbieFBom2SHlTDR/BFuzAZZkuO2meNQtrB
-	FwXSG8SdE1lNudKp4Fs9M3EW66WN0rVbWAbaBkqo6CXv+aWVeR6TzDq8AjfVUqvVaQ2Kwu6U5ek
-	s/F4dIplcRq8MISStStsiq3N92nuJjQn8N
-X-Received: by 2002:a17:907:8d8f:b0:bce:267f:19cf with SMTP id a640c23a62f3a-bd5177bfe13mr1418541666b.12.1779269905399;
-        Wed, 20 May 2026 02:38:25 -0700 (PDT)
-Received: from localhost ([185.92.221.13])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-bd4f4c28c0asm848870666b.17.2026.05.20.02.38.24
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 20 May 2026 02:38:25 -0700 (PDT)
-Date: Wed, 20 May 2026 09:38:24 +0000
-From: Wei Yang <richard.weiyang@gmail.com>
-To: Dev Jain <dev.jain@arm.com>
-Cc: Wei Yang <richard.weiyang@gmail.com>, akpm@linux-foundation.org,
-	david@kernel.org, ljs@kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] selftests/mm: close fd on write error
-Message-ID: <20260520093824.eannlavh64fpxyrz@master>
-Reply-To: Wei Yang <richard.weiyang@gmail.com>
-References: <20260520020336.28914-1-richard.weiyang@gmail.com>
- <20518530-12e3-4731-9b4a-54cc950239e2@arm.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I8IFs78V"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2AA91F000E9;
+	Wed, 20 May 2026 09:40:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779270033;
+	bh=bmSSRx9MxDeEMTFENIR1UVxoLD5eJs49UhDqZFiJazI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=I8IFs78VJpQKZu0Yyyiq2TGAJy3gG6KZGQYaEvZwSjHt21DXQbWtalRrwkmb9YYjz
+	 Zw95zfFN8wIrw6qkLWeqcLr03DX9gtFzgaR0rfqXnnZYLHXGJLuV6aE3FB5Yp0tadb
+	 2lPGEztfqWIdoLjqXZfbRfsnMQU5CmvAVTISvQDIpVnjf0owc92aRsIEIAd6ynZnxo
+	 Tw/I9qpx3VPlQK17Eoa9lVE797eSDEAkooJ7fh659m5JvWp8wnCRLqX6XE9I3ZQJxm
+	 BR/5zSCwV0XTMjFWUqeiMHJx6Yo/haUDU+4+9+TneC8vrjp0Ld/gbxzFC+ZsXrkMqF
+	 qhp3uVGEbfZow==
+Message-ID: <6edd89b0-68f8-4e28-ba7c-7a5df7f47c01@kernel.org>
+Date: Wed, 20 May 2026 19:40:24 +1000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20518530-12e3-4731-9b4a-54cc950239e2@arm.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH net] selftests: rds: config: disable modules
+Content-Language: fr
+To: Allison Henderson <achender@kernel.org>
+Cc: netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
+ rds-devel@oss.oracle.com, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Shuah Khan <shuah@kernel.org>
+References: <20260520-net-rds-config-modules-v1-1-2100df02fe9a@kernel.org>
+ <8a10cffb9bdde6f90f0fd7b00679755a593f2d6e.camel@kernel.org>
+From: Matthieu Baerts <matttbe@kernel.org>
+Autocrypt: addr=matttbe@kernel.org; keydata=
+ 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
+ lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
+Organization: NGI0 Core
+In-Reply-To: <8a10cffb9bdde6f90f0fd7b00679755a593f2d6e.camel@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, May 20, 2026 at 09:21:48AM +0530, Dev Jain wrote:
->
->
->On 20/05/26 7:33 am, Wei Yang wrote:
->> When create_pagecache_thp_and_fd() write returns error on
->> /proc/sys/vm/dropcache, it just "goto err_out_unlink", which left fd
->> still open.
->> 
->> Use "goto err_out_close" to close the fd.
->> 
->> Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
->> ---
->>  tools/testing/selftests/mm/split_huge_page_test.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->> 
->> diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
->> index 460fa1f606fd..f30402ece608 100644
->> --- a/tools/testing/selftests/mm/split_huge_page_test.c
->> +++ b/tools/testing/selftests/mm/split_huge_page_test.c
->> @@ -469,7 +469,7 @@ static int create_pagecache_thp_and_fd(const char *testfile, size_t fd_size,
->>  	}
->>  	if (write(*fd, "3", 1) != 1) {
->>  		ksft_perror("write to drop_caches");
->> -		goto err_out_unlink;
->> +		goto err_out_close;
->>  	}
->>  	close(*fd);
->
->LGTM
->
->Reviewed-by: Dev Jain <dev.jain@arm.com>
->
->
->I asked AI and it points to another problem:
->
->for (i = 0; i < nr_thps; i++) {
->	if (is_backed_by_folio(page_area + i * pagesize, 0,
->			       pagemap_fd, kpageflags_fd))
->		continue;
->	ksft_test_result_fail("THP %zu not split\n", i);
->}
->
->ksft_test_result_pass("Split PTE-mapped huge pages successful\n");
->
->"If one THP is not split, it prints FAIL, but then falls through and also prints PASS.
->
->It should probably jump to out after the failure".
->
+Hi Allison,
 
-Thanks for AI.
+On 20/05/2026 14:22, Allison Henderson wrote:
+> On Wed, 2026-05-20 at 11:34 +1000, Matthieu Baerts (NGI0) wrote:
+>> The run.sh script explicitly checks that CONFIG_MODULES is disabled.
+>>
+>> By default, this config option is enabled. Explicitly disable it to be
+>> able to run the RDS tests.
+>>
+>> Note that writing '# CONFIG_(...) is not set' is usually recommended to
+>> disable an option in the .config, but it looks like selftests usually
+>> set 'CONFIG_(...)=n', which looks clearer.
 
-It looks we should "goto out" after ksft_test_result_fail().
+(...)
+> The fix looks fine to me.  Thanks for catching this.
+Thank you for the review. Note that NIPA is now validating these tests:
 
--- 
-Wei Yang
-Help you, Help me
+  https://netdev.bots.linux.dev/contest.html?test=run-sh
+  https://netdev.bots.linux.dev/flakes.html?min-flip=0&tn-needle=run-sh
+
+Note that it might be good to rename the script name, "run.sh" is a bit
+too generic :)
+
+Cheers,
+Matt
