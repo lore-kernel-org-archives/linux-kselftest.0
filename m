@@ -1,99 +1,118 @@
-Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F337D308F15
-	for <linux-kselftest@vger.kernel.org>; Wed, 20 May 2026 14:51:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FF403F23D1
+	for <linux-kselftest@vger.kernel.org>; Wed, 20 May 2026 14:55:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779288683; cv=none; b=s8Ebk/T4gZzsx18/whQdcpOw8cT4RFtzENlFjbWcNxkyMvJnwcJ1tuxBApKfEW3U/i0SLoTcGYjnqdX9qu055MXJdd1XwJ3E3Lr65elt/LaATiFO1YZYPO91suAlgY1hlrZa2ReS6DB8A+SNetf5NdNKR6BIUb6q2KFfNZHAvqY=
+	t=1779288934; cv=none; b=JdEUHM2qaRVkGZX+axPnkTTKl7MSRKg5NPK5CW7/k3tw4GqHiVFIeeXJjBJh84Gc8XZ8CaS4muiNvLUcFBC/ew5SSfdM6rpQUM5V5vBR50GNwNGtgo8hX4IIRSI3fRgjedzl15HnL07SoJnB7FXAdfhgFKtLNY3G0ZhrR2B2ct8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779288683; c=relaxed/simple;
-	bh=xA8nl3WIvelT4GgHPutJiU5tZzAJ5oSb/5Ox9J6M5uU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uKw0mEiPmcEE8oPZt7y1Q9Tx0NVDsNwCksfbhO776AnMaTf5tHakDSR6LWEbj18IM24Vm4Nn3u7qEfxzz+jg0MHcEWckPEp0lvOqfhR6QQf7sCzVr05DutVfcJEjJS+9FPchZwJ+elJtNNEoIe6Fw/Zte0UaHNLGGp+bVWoCJZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=CBPCQ3E2; arc=none smtp.client-ip=91.218.175.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1779288934; c=relaxed/simple;
+	bh=QW5qPW7dzYtjck6xcN0O6jTZoURNlGd5NXAWQONp6CI=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=PIxoJbkV2U9prWDzYhUNotRIObpvy0a1kMbqyR9cYnh15hBBqqfu/bHLYLvyISJia6gtpVnqZSiG4rq0gtHxxcehL8JjVebWa75D+zXHzHtD4nXnscZ/EY37bVbtuhhXG1ErlQOsly4oY79NYxYhoDYADrWSe+mxi/6omM8f894=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZhWfJejT; arc=none smtp.client-ip=209.85.215.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="CBPCQ3E2"
-Message-ID: <a07b3d7f-7fda-4c9a-831d-447e4696ddfe@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1779288670;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=q9CLDhbm9oDeWEsa8Ha8dA9Z3pyAwxFTicIZRmk7Wj4=;
-	b=CBPCQ3E2rxga4gdXkZ3NugK2zzoyhEu4plNALcs1TIKV3ObYIYmH5Sv+WTvQ9bXIsCXU86
-	h5ZVoHCTNOFgUxPlzqBedwjYEVJeo4sj9sj/01Fkg+8jU4kNvYUybYgjF+FgXDJsvwVcMF
-	HUjJJXHYibBSQ1X6TT/OlJ+KEV/2QlE=
-Date: Wed, 20 May 2026 22:51:01 +0800
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZhWfJejT"
+Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-c828659ecd4so2160203a12.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 20 May 2026 07:55:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1779288933; x=1779893733; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ynnq9GIIBHXQ3JX3S9ez7AsM5wkn35zymp6B5wZspNY=;
+        b=ZhWfJejTBBz6ucAohCbVjHnXm43CSIvy5f3x07fiknEpCRQ8Dli62jbMI954F32LZZ
+         yo5pQkNWKb0fk9ez1fCjuzAfSYO0QYYCSszZ3p84N1D7MihbnafwoqyekGOOpvgm7Ko2
+         PrED3pFbL0d6pIuAb6m6LGUfvKmvguuYzjYhOhjxYTt7gsxPjtPtwggefW5gjKOi5B94
+         ORndQxThHWBJYzv6kYYbNncy69mebCHN9F+86Phy/HGYWAKCLPHF1q/0yhCK/Gry3f9u
+         qpwZkcphfDsnrXbSkLYeJRwApCCCHys6wlmpluimmATkQ5Ar0deDhOJyzrO0qgRT4/FR
+         JC3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779288933; x=1779893733;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ynnq9GIIBHXQ3JX3S9ez7AsM5wkn35zymp6B5wZspNY=;
+        b=Ama4ZnI5GYwjFjc+L788JtpmT0mFqTBTDosQNTb/cHRvna1gonAnxrYu0Pz48bASp7
+         nzsMrwU53HybJMYmFfXatfL42Z1+C2lgNJVzSBuqbyWRCwGlpg7ii0CuSOufM2mi8G/6
+         +3waqNiSY49uWSo0qNzQpv3iQH97xKuLjPtiSeKjoK75eSd43lHZgJIV+YRvZ2q/h5va
+         RAYC96s0cPTC3rOKTBWFWU4/1EjCqI+qOuTVFlZ8aRGGxja7yHZXx9GmG7ct1v+oamc+
+         ETIS5/5srT/TiL9XELunmcexEcvBQSNnSQlWi2kwzcRAOdv9rtmEb2/A5JkOR+u+DthZ
+         9KZQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9uhLet9GCGEI4F5D3hP9JmJCQmrjnXkTA1zlv5BtnJlrF6Td09/OLmm8EYJxndh7WyuHtLVsa0UNp09UbUslY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxOF2xUZ21e9M4xkT2n/CxI/ZR96LA2AJIMqGRCOvBJRO2SmgmH
+	SI6cVXUFF+10R5Gt/KDgWKg7vES/Lzk32+aHRRK+6TgHJnf0+smK3mrE6OfaV9lrYWDxjnEUupC
+	m6jJWwg==
+X-Received: from pgcc21.prod.google.com ([2002:a63:1c15:0:b0:c79:87d6:650a])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:e097:b0:3a2:f402:50e0
+ with SMTP id adf61e73a8af0-3b22ecea893mr27169931637.52.1779288932320; Wed, 20
+ May 2026 07:55:32 -0700 (PDT)
+Date: Wed, 20 May 2026 07:55:31 -0700
+In-Reply-To: <CAEvNRgEpy+d=KTSVcO9svAS9asHCDcwctGo=9PAaFVMUCd-Wrw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next 2/5] bpf: Fix concurrent regression in
- map_create()
-To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, kernel-patches-bot@fb.com
-References: <20260518145446.6794-1-leon.hwang@linux.dev>
- <20260518145446.6794-3-leon.hwang@linux.dev>
- <261a47f4-a92b-4a61-86ca-c1de362be105@gmail.com>
- <5660e657-f2a5-4866-9881-c705bff0c970@linux.dev>
- <c0fb85f0-38f2-4f31-81a1-6650359752e9@gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <c0fb85f0-38f2-4f31-81a1-6650359752e9@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Mime-Version: 1.0
+References: <20260414-selftest-global-metadata-v1-0-fd223922bc57@google.com>
+ <agOMfpW2Xxpzk-D5@google.com> <CAEvNRgEpy+d=KTSVcO9svAS9asHCDcwctGo=9PAaFVMUCd-Wrw@mail.gmail.com>
+Message-ID: <ag3LYxmbqD3EWfrJ@google.com>
+Subject: Re: [PATCH RFC 0/4] selftests: harness: Provide global metadata
+ pointer to allow clean teardown from selftest libraries
+From: Sean Christopherson <seanjc@google.com>
+To: Ackerley Tng <ackerleytng@google.com>
+Cc: Kees Cook <kees@kernel.org>, Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>, 
+	Shuah Khan <shuah@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, thomas.weissschuh@linutronix.de, 
+	linux@weissschuh.net, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, kvm@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-On 2026/5/19 23:15, Mykyta Yatsenko wrote:
+On Tue, May 19, 2026, Ackerley Tng wrote:
+> Sean Christopherson <seanjc@google.com> writes:
 > 
+> > On Tue, Apr 14, 2026, Ackerley Tng wrote:
+> >> Sean suggested using setjmp and longjmp [1] to back to the top level
+> >> TEST_F(). I looked at [1] and found myself wishing to use TEST_F() the from
+> >> kselftest harness directly.
+> >
+> > Can you elaborate?  If you have a need for direct TEST_F() in KVM selftests, odds
+> > are good someone/something else will have a similar need, sooner or later.
+> >
 > 
-> On 5/19/26 3:47 AM, Leon Hwang wrote:
->> On 19/5/26 00:43, Mykyta Yatsenko wrote:
->>>
->>>
->>> On 5/18/26 3:54 PM, Leon Hwang wrote:
->>
->>> If map_crate() failed with error code and then log finalization failed, do we really
->>> want to override error code? It sounds like map_create error is more important.
->>>
->>
->> In that case, there are two error codes that should be returned to user
->> space. How to achieve it?
->>
->> Since we should not ignore any error code of them, can we report the
->> error code of __map_create() failure by adding an error attr to struct
->> bpf_common_attr? Hmm, seems not a good idea.
->>
->> Any idea?
-> 
-> I think we should do what Alexei suggests.
-> 
-> For example: we return ENOSPC when log is too short, regardless
-> of the status of the operation for BPF_PROG_LOAD (see bpf_object_load_prog()
-> in libbpf.c), it makes sense to do it consistently for map_create as well.
-> 
-> log_finalize() error always overrides map_create() error.
-> 
-> A precedent: We are safe from this race in bpf_prog_load(): bpf_prog_alloc_id() makes
-> prog exposed, only after bpf_check() succeeds, which finalizes log.
-> We should do similar for map_create().
-> 
-Thanks for your explanation.
+> I guess I like the consistency of working with TEST_F(), there's also
+> TEST_F_TIMEOUT() and friends and all the usefulness of the rest of the
+> kselftest_harness as you described, all of which will probably need
+> re-wrapping if we proceed with the approach of wrapping.
 
-Will send v2 that follows Alexei's suggestion.
+FWIW, utilizing the TIMEOUT functionality could get tricky.  KVM tests often have
+highly variable runtimes based on the underlying environment.  E.g. as an extreme
+case, see the never ending game of whack-a-mole we've been playing with flavors
+of KVM-Unit-Tests' access test[*].
 
-Thanks,
-Leon
+I can definitely see it being useful, e.g. for tests where we *know* the runtime
+is O(ms), just want to call out that this is yet another case where KVM tests tend
+to have more annoying requirements than other selftests.
 
+[*] https://lore.kernel.org/all/20260317225327.4068448-1-yosry@kernel.org
+
+> >> Another option would be to expose the current teardown function pointer
+> >> globally instead of the pointer to the entire metadata struct.
+> >
+> > I'm strongly opposed to any idea effectively requires special casing KVM selftests
+> > in the common harness.  In my experience, the common harness is already quite
+> > brittle, in large part because there is no singular maintainer(s) that is responsible
+> > for ensuring changes work for all downstream users.  Adding odd bits of code that
+> > is only ever used by a handful of KVM selftests is only going to increase the
+> > probability that that code is broken.
+> 
+> If Kees likes the idea of exposing a pointer to the metadata globally,
+> does that make KVM selftests less "special"?
+
+Yes.  I don't particuarly care about the code, I just don't want to be in a
+situation where KVM is doing something "weird" relative to the rest of the world.
+
+> If the community likes the global metadata pointer, I could update the
+> harness to adopt the global metadata pointer and then KVM wouldn't be
+> special at all.
