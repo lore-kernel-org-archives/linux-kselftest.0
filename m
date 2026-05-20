@@ -1,119 +1,138 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AA8B3C65E0;
-	Wed, 20 May 2026 09:32:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B8A93C9EEF
+	for <linux-kselftest@vger.kernel.org>; Wed, 20 May 2026 09:38:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779269537; cv=none; b=sGoEubO5mRsPpA3PMflNfAp1NegfwlNH+ytOQrTyu85efo4EZzxifE/uDrmJXEp8c1GxvbMuqOXyCVx81QLPM5n7Iv6GFzUFGI79vfewAlqHxsWvJmoj1Mwj3wqddvhn+FmuZ1nBq7Nvt9tmbI5ICubCpcFb/F8N58AyOMR/ZR4=
+	t=1779269910; cv=none; b=h3O+1psP7NHRgnW8TiwQvA9nKUGW5pABsbcRjFoLVvXJ0At4pdQR6k9kwMAkLXa22FGZrnk0sccQGfEJk0hpP2Ztb7lXlZZnAvKtZmIYhhFHGf4kJ+xv+9xNsClx/0MR/8SZa6bICM67VY72uNmUzO3DUmPFqz6BUq50gjB5Cwc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779269537; c=relaxed/simple;
-	bh=8YfbGTb5qD2kWjjJr6kJPWp9Ff0N5ji9lmV/cl0fe7Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PmRIi9YZzV661yNAW7o3QY0VgyHbhR0VCCjD+56sSn9dnXjxzI3YkmBv0Q7nBBQvDu2JEUnGKiepxqAWssx0CZc0Ee9OOSbGynOxDS9JNnE+h0oDoGUJIPzsisgVcH0r8uZyd3GWX3IqGrWGnXB4MCijwxOgw4UeKUABVtO6TIo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: bcdc7526542e11f1aa26b74ffac11d73-20260520
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CHARSET
-	HR_CHARSET_NUM, HR_CTE_8B, HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD
-	HR_DATE_ZONE, HR_FROM_NAME, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER
-	HR_SJ_NOR_SYM, HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_CHARSET
-	HR_TO_CHARSET_NUM, HR_TO_COUNT, HR_TO_DOMAIN_COUNT, HR_TO_NAME, IP_TRUSTED
-	SRC_TRUSTED, DN_TRUSTED, SA_TRUSTED, SA_EXISTED, SN_TRUSTED
-	SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS, CIE_GOOD
-	CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO, GTI_C_BU, AMN_GOOD
-	ABX_MISS_RDNS
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:8ea1c0e1-8084-4f84-8587-b02fe67b2cdc,IP:10,
-	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:10
-X-CID-INFO: VERSION:1.3.12,REQID:8ea1c0e1-8084-4f84-8587-b02fe67b2cdc,IP:10,UR
-	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-	elease,TS:10
-X-CID-META: VersionHash:e7bac3a,CLOUDID:a38dba02c14bbe1690276f6c3af2da88,BulkI
-	D:260520173155BISL4B5P,BulkQuantity:0,Recheck:0,SF:17|19|38|66|78|102|127|
-	865|898,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk:nil
-	,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:
-	0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: bcdc7526542e11f1aa26b74ffac11d73-20260520
-X-User: zhangguopeng@kylinos.cn
-Received: from yan.. [(183.242.174.22)] by mailgw.kylinos.cn
-	(envelope-from <zhangguopeng@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 1577218; Wed, 20 May 2026 17:31:53 +0800
-From: Guopeng Zhang <zhangguopeng@kylinos.cn>
-To: Shuah Khan <shuah@kernel.org>,
-	Tejun Heo <tj@kernel.org>,
-	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>
-Cc: Johannes Weiner <hannes@cmpxchg.org>,
-	Michal Hocko <mhocko@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Muchun Song <muchun.song@linux.dev>,
-	Oscar Salvador <osalvador@suse.de>,
-	David Hildenbrand <david@kernel.org>,
-	cgroups@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Guopeng Zhang <zhangguopeng@kylinos.cn>
-Subject: [PATCH] selftests/cgroup: enable memory controller in hugetlb memcg test
-Date: Wed, 20 May 2026 17:31:30 +0800
-Message-ID: <20260520093130.490020-1-zhangguopeng@kylinos.cn>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1779269910; c=relaxed/simple;
+	bh=ee4l0aOGqFxFUGDSrtNnbR9tcK9dlPFdi7ukZJVzNFU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hlB5H3V/hAoiS1nGLYYOrg34gzKo3FTImNLntFhFUZ6CbaMLk+bQ7pInGTl+gYwjG3Qs9o0+AaAezzKku+19oGRVZ/bwTyK+zZveGK99yFlgebF192/SAUiR6diZUSKlLj7gbqtpegO6Ezgg23ofTy4nvwRxbnwSpk31YBKWQL0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hGQ1dvJi; arc=none smtp.client-ip=209.85.208.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hGQ1dvJi"
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-67c2b4809baso10459406a12.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 20 May 2026 02:38:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779269906; x=1779874706; darn=vger.kernel.org;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BVTQmbrETv5mK3lzRRB7IS3srcOG1eF8+E4fWkWcGbg=;
+        b=hGQ1dvJioRf5Gl1fgXt5kWURz1Z8y+4mgIBIPpVU2Qfw9VC2SJynUaGKgovp4plGQ5
+         PqyqF/23Br0aLNCQEIG6dhqFc0J9t/ZrPY1x/lkszoYyLybKWUgrgOR6oXVSd3Y6aIOZ
+         kwRxpOB7bKMVzstL3wWR+nFuQ2aucdASQyflqXaxpw4eV/Rb8Pv8447+uNa1lbbLNn9w
+         aNkXFKIn96A1uAtmKBpNLBpoyNQy3I715vwEtYupDwfhxKJhj12pzjC1qHo/uYdYNztz
+         hzLxig6PRPAiUcyK+q7nQXzTA5R5N04Aa3xTjlhoTejdQfPBG4ViRafkK9Ut4sCYdT8q
+         0VlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779269906; x=1779874706;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :reply-to:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BVTQmbrETv5mK3lzRRB7IS3srcOG1eF8+E4fWkWcGbg=;
+        b=Bl5BMXnlP1CJZqRPIp+3L7tgvy5t/tsmc2avez/XAQ9KK7203NSA6jjz3uy6Z6Halx
+         FJsLBvIOYgjco28iP8MrRvNNqInDlL3febpaECi1gwNGvauwxuzxgidpK2dnneCX+fcf
+         USBlgimzYT/o6szIbUcRSGGTtR+nciW/Jbaa7VDo1Wxfnk7Vz8sDmyhMRF3vtffk2Rwh
+         8txeC8982Wy/EFFcPoSSblAJNYW5vcnRfs78ipxhNkxJZyP1jP2RE4kK231MOoeyy2d1
+         LLPcZkNS88G35LQK/hkcLEolb884dZcPnt/jQH5Ntp9RIaO93dcaRI78j0Mvt7V4lp/a
+         CtzA==
+X-Forwarded-Encrypted: i=1; AFNElJ+ZCAN0E+EzI9YhJegYDpII4+axi2gW9A1chAN5Bq8Ks72UJPTRVpVKh0oIEphXDFUcwpIQcHTww70AYGa8m6k=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxBfoimRd+yNlcKcGHB/5zVhTrywkvtdsZwPTPPAt7HCtsLcCS6
+	3dvy7dxb3l5kzcXpJ7SodoC0yTzbL1RbHOygAMiCJJdeJ93BdGzeU/C6
+X-Gm-Gg: Acq92OFiEsmSRwjHs4mQk0qEwjtgvaBOxP7fiRp9wG+W3sP3UFbOhciOO4AIxTeLgxO
+	PQvd9Bc+LfYA9SVt/vpMEm9284HAzfJ28SzqyUwICM4BYRqaiVRwPTb4I03En6RNxq86dQERXzf
+	nFM/8gQkiCY+zqNVBGqkmKrpljV2t2UnN0/AtRIxBUDfqK7Lpt3PqECSKu3lkUMZGo8W4Nomawe
+	5bAYnOlIXEBqGmpCheLwOmeFKlIDmvJn+ZlK89aTdOAC0rLXVppYQfro6wj7e09bHeV8NscJnTw
+	uXKpaKA2sPW1RvPN2YYiQKuPa1AiPiCv00Q2vmkKqIbieFBom2SHlTDR/BFuzAZZkuO2meNQtrB
+	FwXSG8SdE1lNudKp4Fs9M3EW66WN0rVbWAbaBkqo6CXv+aWVeR6TzDq8AjfVUqvVaQ2Kwu6U5ek
+	s/F4dIplcRq8MISStStsiq3N92nuJjQn8N
+X-Received: by 2002:a17:907:8d8f:b0:bce:267f:19cf with SMTP id a640c23a62f3a-bd5177bfe13mr1418541666b.12.1779269905399;
+        Wed, 20 May 2026 02:38:25 -0700 (PDT)
+Received: from localhost ([185.92.221.13])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-bd4f4c28c0asm848870666b.17.2026.05.20.02.38.24
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 20 May 2026 02:38:25 -0700 (PDT)
+Date: Wed, 20 May 2026 09:38:24 +0000
+From: Wei Yang <richard.weiyang@gmail.com>
+To: Dev Jain <dev.jain@arm.com>
+Cc: Wei Yang <richard.weiyang@gmail.com>, akpm@linux-foundation.org,
+	david@kernel.org, ljs@kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] selftests/mm: close fd on write error
+Message-ID: <20260520093824.eannlavh64fpxyrz@master>
+Reply-To: Wei Yang <richard.weiyang@gmail.com>
+References: <20260520020336.28914-1-richard.weiyang@gmail.com>
+ <20518530-12e3-4731-9b4a-54cc950239e2@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20518530-12e3-4731-9b4a-54cc950239e2@arm.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
 
-test_hugetlb_memcg creates a child cgroup and then writes memory.max and
-memory.swap.max. When the test is run standalone, the memory controller
-may not be enabled in the test root cgroup's subtree_control.
+On Wed, May 20, 2026 at 09:21:48AM +0530, Dev Jain wrote:
+>
+>
+>On 20/05/26 7:33 am, Wei Yang wrote:
+>> When create_pagecache_thp_and_fd() write returns error on
+>> /proc/sys/vm/dropcache, it just "goto err_out_unlink", which left fd
+>> still open.
+>> 
+>> Use "goto err_out_close" to close the fd.
+>> 
+>> Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
+>> ---
+>>  tools/testing/selftests/mm/split_huge_page_test.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>> 
+>> diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
+>> index 460fa1f606fd..f30402ece608 100644
+>> --- a/tools/testing/selftests/mm/split_huge_page_test.c
+>> +++ b/tools/testing/selftests/mm/split_huge_page_test.c
+>> @@ -469,7 +469,7 @@ static int create_pagecache_thp_and_fd(const char *testfile, size_t fd_size,
+>>  	}
+>>  	if (write(*fd, "3", 1) != 1) {
+>>  		ksft_perror("write to drop_caches");
+>> -		goto err_out_unlink;
+>> +		goto err_out_close;
+>>  	}
+>>  	close(*fd);
+>
+>LGTM
+>
+>Reviewed-by: Dev Jain <dev.jain@arm.com>
+>
+>
+>I asked AI and it points to another problem:
+>
+>for (i = 0; i < nr_thps; i++) {
+>	if (is_backed_by_folio(page_area + i * pagesize, 0,
+>			       pagemap_fd, kpageflags_fd))
+>		continue;
+>	ksft_test_result_fail("THP %zu not split\n", i);
+>}
+>
+>ksft_test_result_pass("Split PTE-mapped huge pages successful\n");
+>
+>"If one THP is not split, it prints FAIL, but then falls through and also prints PASS.
+>
+>It should probably jump to out after the failure".
+>
 
-In that case, the child cgroup is created without the memory control
-files, and the test fails during setup before reaching the hugetlb memcg
-accounting checks.
+Thanks for AI.
 
-Skip the test when the memory controller is unavailable. Otherwise, enable
-it in subtree_control before creating the test cgroup.
+It looks we should "goto out" after ksft_test_result_fail().
 
-Signed-off-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
----
-Tested with a cgroup namespace where memory is available in
-cgroup.controllers but not enabled in cgroup.subtree_control:
-
-  before: test_hugetlb_memcg failed with "fail to set cgroup memory limit"
-  after:  test_hugetlb_memcg passed and cgroup.subtree_control contained memory
-
- tools/testing/selftests/cgroup/test_hugetlb_memcg.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/tools/testing/selftests/cgroup/test_hugetlb_memcg.c b/tools/testing/selftests/cgroup/test_hugetlb_memcg.c
-index f451aa449be6..b627d84358b1 100644
---- a/tools/testing/selftests/cgroup/test_hugetlb_memcg.c
-+++ b/tools/testing/selftests/cgroup/test_hugetlb_memcg.c
-@@ -217,6 +217,14 @@ int main(int argc, char **argv)
- 	if (cg_find_unified_root(root, sizeof(root), NULL))
- 		ksft_exit_skip("cgroup v2 isn't mounted\n");
- 
-+	if (cg_read_strstr(root, "cgroup.controllers", "memory"))
-+		ksft_exit_skip("memory controller isn't available\n");
-+
-+	if (cg_read_strstr(root, "cgroup.subtree_control", "memory")) {
-+		if (cg_write(root, "cgroup.subtree_control", "+memory"))
-+			ksft_exit_skip("Failed to set memory controller\n");
-+	}
-+
- 	switch (test_hugetlb_memcg(root)) {
- 	case KSFT_PASS:
- 		ksft_test_result_pass("test_hugetlb_memcg\n");
 -- 
-2.43.0
+Wei Yang
+Help you, Help me
