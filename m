@@ -1,48 +1,64 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF0C436F421;
-	Wed, 20 May 2026 17:27:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8282F349AFF;
+	Wed, 20 May 2026 17:47:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779298045; cv=none; b=Tf/2fzsyJC0XoASIXfppjUs5yI6sWk3sRxjCOr2AhB7UxWPFmLJUsD0htq0cm/wkp3TL/gDOp8Ufhqq1sl7ccmOlqFGW0p5q+gKL43IcLMOS8x45XezY/wVFdJ0s3gyXgsjn05pIw8SFZydECLFdGlO0gZZq3uE7qMN8tMhGFj8=
+	t=1779299250; cv=none; b=tgRmMn0FBWBvoYvqsahmp5G87StIP44JP/7qVzLSVIKksjBt3d5ELF155Sof+A35m3dc+1HbNYqyuW4nKvj9ueps/DltMs04wwru5GiYapiLkfV7LCRtk8Uzb2A4qtMSUrps0WsnI25K7Z8+y963necESgRzcQCw0OL099DweRM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779298045; c=relaxed/simple;
-	bh=X0txdFwz2nSY7i3sfY0DqlglxtMhA/Cxtg/abAKCOAU=;
+	s=arc-20240116; t=1779299250; c=relaxed/simple;
+	bh=azrcSc5fBS9EAkI43k4N+bdBeogc36tuyCa1/SG/oas=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cIgqovrdXYAUMRf/fH6h4+VEmIMp5DBZ16OIc6ugLSmtxvFlI4T06st2uN/7tpWTawIzSxYDOFxwC2K/WluXnFjkM1wxeGmjRuFt8aJ++zcs6YFvOZPxHxnvwROVZbGAgjVbXJbQxhWspgv/Hm0QT/mDGDGwH+/3hzX4dY43X2o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=CBIJabsi; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=uIDZrbMD5tzdTo/hXSEaEa8gvA1aRnBGY1iBBaeZnI1SBNP6FMsKiH73kWfZlA0E6AShtK7V0tjESA8EIiUE7WQ3yw3QOvPLVcX+fSP/+uyXO6HIFT+jBbpLfkqYcV061byCxKoNDmsfEn8R5kBy9NFvMqaaQ/nJb/94pjgy1iU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E+KqHORQ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="CBIJabsi"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=ye4EgwQSw5kqIQb5WLTWB7hJ2bBb4HasauCnq34yJXA=; b=CBIJabsiTPY6sA3ESjOy9LxNKo
-	sT9jNkexZOR4ZqVA0uk//TZRXhWWlOLQhX9MvQlP9BPW4Xj5m0oyDvnt3W4ziWiGEMNmUIOGzEb5p
-	EBWN3M+AJkSc0lurihhu9MAxcS4zyv6k8OAzOK/XNAppezu+JTXjCGnOI/iHUy5CvgqCCm2kCDlN4
-	AhUuE3JVdH8nJuAPN6xHyuoFR3qXpgKsTimoZOSPshlRs+rfFdpkPn4xSWTov6SB3Fqc87WfTSMtF
-	3t85Po12709EI1tWHVMD5Muw0ngvRGOIiNb+u6Od1ZCbTKqedkPcyrSWUT5/5IQQdV4GjbtmhHhrN
-	MkX3sIqg==;
-Received: from authenticated user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wPkhL-003GVU-0z;
-	Wed, 20 May 2026 17:27:11 +0000
-Date: Wed, 20 May 2026 10:27:06 -0700
-From: Breno Leitao <leitao@debian.org>
-To: Simon Horman <horms@kernel.org>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, shuah@kernel.org, david+nfc@ixit.cz, sameo@linux.intel.com, 
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	oe-linux-nfc@lists.linux.dev, kernel-team@meta.com
-Subject: Re: [PATCH net] nfc: llcp: avoid userspace overflow on invalid optlen
-Message-ID: <ag3uNJZ8uyn5jPry@gmail.com>
-References: <20260513-fix_llc-v1-1-33c76f931ff6@debian.org>
- <20260518091103.427351-2-horms@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E+KqHORQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F8F31F000E9;
+	Wed, 20 May 2026 17:47:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779299249;
+	bh=ViRW9Nz3r6hXUk4I8QEt3nB7VpqxM71bV390oMtx5Ug=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=E+KqHORQPEi2v/ovg1wnEqFr8oDWY997yhhY4R1PG1PuSPUJYkhb8VagSOppZB+Rr
+	 A0FKrrZGSqhwUfPDPtXnkAmbqErhn1IZufP64ETA4qqpXvH0pe86apDIE60MBNjwEw
+	 RUfd9pOaiDymD8/T/FWXj7CZcBRvZOPScWM1lK0JYwdnAeWm7tQE1Tsmsl9tTiCRFI
+	 3siFught71zBG4B2SLyJfjVwSEg4UUGfukHiuNBzw5P/8kKwSKZ4x2cHIxbPEaZHgh
+	 C1XP0RZ0Sepvw0ts72eLscxXwx0QJPfuGnmsqMkMRKBDOTHd1f1hMZbWHQJHylmkgs
+	 J70Laujzm+ZXA==
+Date: Wed, 20 May 2026 10:47:27 -0700
+From: Oliver Upton <oupton@kernel.org>
+To: David Woodhouse <dwmw2@infradead.org>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+	Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>, kvm <kvm@vger.kernel.org>,
+	Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+	"Kernel Mailing List, Linux" <linux-kernel@vger.kernel.org>,
+	Sean Christopherson <seanjc@google.com>,
+	Jim Mattson <jmattson@google.com>, Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Raghavendra Rao Ananta <rananta@google.com>,
+	Eric Auger <eric.auger@redhat.com>, Kees Cook <kees@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+	kvmarm@lists.linux.dev,
+	linux-kselftest <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH] Documentation: KVM: Document guest-visible compatibility
+ expectations
+Message-ID: <ag3zr7-11FO3k-Wv@kernel.org>
+References: <cf429f2082e863571595f74d1d3dedc3e6a82964.camel@infradead.org>
+ <CABgObfacAYexR25SMi1kSZMRnHx3EDGj8=E84V1DumER66ibnQ@mail.gmail.com>
+ <86qzn7wp3y.wl-maz@kernel.org>
+ <593a782c50f3c8656e13b36dfb975a67d43a908e.camel@infradead.org>
+ <CABgObfbS-z3OphDna5W_JQPvw+OK=yXJurVMHp1ANZ5uGEgVhQ@mail.gmail.com>
+ <9d0429ddbe4d8c6993e74237c4395697f80092d6.camel@infradead.org>
+ <agzR2kaJsNa8X9lF@kernel.org>
+ <1243d375846c4f4e20c229a6f09300126188fc8b.camel@infradead.org>
+ <agzq5kwzuJvd7Mh5@kernel.org>
+ <add71b6f61edc6357e1fddad83273b2cba697d10.camel@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -51,27 +67,44 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260518091103.427351-2-horms@kernel.org>
-X-Debian-User: leitao
+In-Reply-To: <add71b6f61edc6357e1fddad83273b2cba697d10.camel@infradead.org>
 
-On Mon, May 18, 2026 at 10:11:04AM +0100, Simon Horman wrote:
-
-> > @@ -319,6 +319,9 @@ static int nfc_llcp_getsockopt(struct socket *sock, int level, int optname,
-> >  	if (get_user(len, optlen))
-> >  		return -EFAULT;
-> >  
-> > +	if (len < sizeof(u32))
-> > +		return -EINVAL;
+On Wed, May 20, 2026 at 12:33:52AM +0100, David Woodhouse wrote:
+> On Tue, 2026-05-19 at 15:57 -0700, Oliver Upton wrote:
+> > What ifs and maybes do not meet the bar, in my opinion, for preserving
+> > bug emulation in KVM. Of course there could be a little flexibility with
+> > that but we need to have some way of discriminating between bug fixes
+> > and genuine guest expectations around the behavior of virtual hardware.
 > 
-> Since len is a signed int and sizeof(u32) is an unsigned size_t, does C
-> integer promotion cause negative lengths to bypass this check?
+> I believe you have this completely backwards.
 
-Good catch, you're right. `len` is `int` and might get promoted to unsigned in the
-comparison, so optlen = -1 becomes a huge value and slips past the check, then
-min_t(u32, ...) clamps it back to 4 and the overflow happens anyway.
+No, I really don't.
 
-I'll fix this in v2 by casting:
+Leaving every bugfix that could _possibly_ have a guest-visible impact
+subject to drive-by scrutiny many years after the dust has settled is
+not an acceptable working dynamic. Especially since it would appear
+that the rest of the ecosystem has long since moved on from this
+particular issue.
 
-        if (len < (int)sizeof(u32))
-                return -EINVAL;
+If this matters to you so deeply then please, be part of the solution
+instead. You may find that reviewing patches leads to better outcomes
+than getting belligerent with the arm64 folks every time you guys
+decide to rebase your kernel. Hell, hypotheticals actually have a lot
+more weight in the context of a review. And if your testing is extensive
+enough to catch these sort of subtleties, don't you think it's better
+done against mainline?
 
+Maybe it's just me but I am left feeling disappointed that we all
+haven't found a productive way of working together. I've tried to bridge
+the gap here; we obviously need to do something that at least fixes the
+UAPI breakage. Although apparently we don't even care to meet that low
+of bar.
+
+> A stable and mature platform doesn't get to play in its ivory tower and
+> randomly inflict breakage on guests because they "deserve it".
+
+Really? Aren't you asking for us to emulate something completely broken
+for you?
+
+Thanks,
+Oliver
