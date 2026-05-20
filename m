@@ -1,270 +1,235 @@
-Received: from SN4PR2101CU001.outbound.protection.outlook.com (mail-southcentralusazon11012058.outbound.protection.outlook.com [40.93.195.58])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C3AC3EEACD;
-	Wed, 20 May 2026 15:40:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.195.58
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779291608; cv=fail; b=Qd+SS2884i9BmBMYDJ7FgisXy6RAOy3jBEQ5lhHd9NM/KJxvbwk0+gDAJrNSEhSMB6XamxgcSV6fZMQqSjZmtTW6cyFDpwh2871VD9tv9qZ2rm7yQqZnv/TSFpz7K128LI0ikk5uQcc/weA8HDNE+H4y6wYXBjnW5iUs2FHQwX8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779291608; c=relaxed/simple;
-	bh=GXHdUEvy3rr545quD4uLFsRyqEZ9fWWYoBK2LTJTzZw=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ZHcgA8ygQurYFAVFNrMp79bTzWnOBHT+NHw28Ha7aKf7Ih2dnyt24IdK9lckLJLs1kFwC49Z7gUdqgrJkzOGZ3OcWaZZSuVaiu1gDb+tkUV2zxC0E18w3R2hzkak+phkGrTJT8xkrjdUBdGeBBRfb/bUoKI6EzfVpFhijijUZdI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=sSztpdf/; arc=fail smtp.client-ip=40.93.195.58
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D1F93F4DF4
+	for <linux-kselftest@vger.kernel.org>; Wed, 20 May 2026 16:28:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779294493; cv=none; b=KdGOOGmnEMnG7zLMFzCX2gK3F3Gu6FO/AjOOS/M4H41S52rVTyHOMSpx4LNMp+KfHlT9l0iCH6S5SuUSZtCp53Hi1BsrAiggv5JjEws8Wa4rN7k6fRnxwqbUUJXwM5C9y7rg2tKyDdbCvshbP1vcjaV7HhodKL/WNVkuCpFoiEo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779294493; c=relaxed/simple;
+	bh=ES7YxmPnDFzUUbbeuT/pFvekD4p0hCCj++N15Dr+Ljc=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=rgErrkskUlx/IeWK8G3vEzEiGGei16Tp9e8A842SAzNZj+Dg1xVETIoTpl8xGDXCAJdPbZZd3NTrZp22L/X5gKD3tBvMyGNIl3v1chmpYK0uIJah9forxGRjqjyF1gLOZR6z6nuDIk7bpPbqKhiSnZZyNr22dRPpZnzxpizQvf8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=egYmVf9H; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="sSztpdf/"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=MHULhf1U6OqerJzGsy6tZb15rKOzhBQ4kp0yCvWjjY6Sn77zSNUBt6yPYtTpEamigC3oP2BWhN2i+B1PJxxBKSzOS5PCS7vk7bHPlOm/x+bEN7NJWqsO8lBEtCRSmA/qfvUH30s4dcOJpDOKNXYDwKYLK3Vw8DYOGa07DSma8RQIY7vLyQARPkVCZL+zydDwhq3jNeRotqwIRNdZ4lg4lmQacP0DwkL4mo13YJDG529XbMjk0YbB2f4h7qnZSq25y/ix9pq3DZSiflP5fusmavholLEDSW3YJzP5amkcbKlYoXy++ogcQi+JZq66f0LMQtCY9+vel3givAx7eaHlKQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/hl6g9RtIVt9le9IWnvRegPX4lhndQLh5sP8w5QCfIs=;
- b=INEB6FQUDmSyJAkDzxniVWEcWcV7XD+4vyKgYo8iUgIru7eojkO6TuH4pvkRNPyzBBAONBoWU4k+2hqI3YroegNWa3K1CuXHXHKaWyoD85L+/+BInTritkC0bN21ybHdoSMtpnbLzW3KaaqXn8S0ZVS8yK1D41hBWf2xNL5637/B1j7Bh6MaP532o2hBfomYoykG9cd1DI/JWgWLxwJkB+5SvgBGYCXdUn8ctxR/CTwJCUHRD698JUolmYJmqWlM7jJv4d1/9103uxJCFY5iXq1/zjysFlIS2iMkDER+ikVupgaNZDHgB1znrB7jBOEhjvtTqTGWopjn4sTgm+T8qg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/hl6g9RtIVt9le9IWnvRegPX4lhndQLh5sP8w5QCfIs=;
- b=sSztpdf/yOSpEWdGyM8vBhZtvS3EZEld+amjaE/iDUVp3K/dIKiN6v5teJp4m2XiI7jneo7Do4wGnNFYMAbWTJPRDpESsrcO2Qp7780uN8ErmPxv49zlF9IWtay+XMBfWlXHbJKS4OaVAo3xhk1XPigOHftVyV8hRxDjZkCfYbM/66f9VASiIVYchzeMBGzFws5UEXCHXssl8essulEVEWjYEXw4qSMK8ak+g7S5srqJYM0yVTkcxcgsyc0VwNMlIqrZaTbiH8a6SSf/+UA8kqOcIf/3Xe65h2oNndXP3mV5DEuUoDgf+O6KmjU0X+a+c9axXFmkyD4p0lDKdP1bnA==
-Received: from CY5P221CA0060.NAMP221.PROD.OUTLOOK.COM (2603:10b6:930:4::12) by
- CH3PR12MB9249.namprd12.prod.outlook.com (2603:10b6:610:1bc::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.25.24; Wed, 20 May 2026 15:39:44 +0000
-Received: from CH3PEPF0000000F.namprd04.prod.outlook.com
- (2603:10b6:930:4:cafe::64) by CY5P221CA0060.outlook.office365.com
- (2603:10b6:930:4::12) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.48.16 via Frontend Transport; Wed, 20
- May 2026 15:39:42 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- CH3PEPF0000000F.mail.protection.outlook.com (10.167.244.40) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.48.11 via Frontend Transport; Wed, 20 May 2026 15:39:41 +0000
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 20 May
- 2026 08:39:23 -0700
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail202.nvidia.com
- (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 20 May
- 2026 08:39:23 -0700
-Received: from vdi.nvidia.com (10.127.8.14) by mail.nvidia.com (10.129.68.6)
- with Microsoft SMTP Server id 15.2.2562.20 via Frontend Transport; Wed, 20
- May 2026 08:39:17 -0700
-From: Nimrod Oren <noren@nvidia.com>
-To: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
-	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Shuah Khan
-	<shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
-	<daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, "John
- Fastabend" <john.fastabend@gmail.com>
-CC: Stanislav Fomichev <sdf@fomichev.me>, Mohsin Bashir
-	<mohsin.bashr@gmail.com>, Amery Hung <ameryhung@gmail.com>, Martin KaFai Lau
-	<martin.lau@kernel.org>, Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>,
-	Nimrod Oren <noren@nvidia.com>, <netdev@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<bpf@vger.kernel.org>, Carolina Jubran <cjubran@nvidia.com>, Dragos Tatulea
-	<dtatulea@nvidia.com>
-Subject: [PATCH net v2] selftests: net: Fix checksums in xdp_native
-Date: Wed, 20 May 2026 18:39:28 +0300
-Message-ID: <20260520153928.3371765-1-noren@nvidia.com>
-X-Mailer: git-send-email 2.45.0
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="egYmVf9H"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2baca4df358so29727425ad.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 20 May 2026 09:28:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779294491; x=1779899291; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=S/2ozl9sGqUSrHRxDaydNsPYPMwiguh1yPS1e/2sQKI=;
+        b=egYmVf9HIvMeT6ih0BgUBj3UIGk+Bvu7b9en7dQAZbMmiCFZzDpgPBwD4sPySGGJcn
+         dyf4zRVNpKP4PYG/n08eWnk4rMyWaGxdqiKSGgMwd27ExjykACiWReCizUkvY4ZGeN1J
+         8edAozeUpDl7wkXIUqQ2QHB9TEI+9LYT4EQV4WlFwFDvkhTaPc60+Do8YiXtw6cZ2FhH
+         Txk63pJoomM7qJ7I37p7PzJEzKugNqnsFi+Jp2imtfeclpJvI3q6zN6yhzUTQ/eLFPfg
+         BD4+J2eRWZrpNz2w0OEe8fAsjY8UXsRajU8PBRoEmnhKnAOXjh30zjpMBOutZjGXGX+B
+         RyJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779294491; x=1779899291;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=S/2ozl9sGqUSrHRxDaydNsPYPMwiguh1yPS1e/2sQKI=;
+        b=pUjIKP81iCQr9JJXYapoFI9pmj4cF64Hpyq4v5HZy5QzbYcwvWNJ1jCSt1PXyKURxM
+         PskzBUUl5uK7yVshfGxtKrmH6L7UMEn92ac72b/uOHsaNnA10peEFzCZ/HrMm12T8zpx
+         E4tvn3yatYwJa1ktOWTQyx/hk97/DNLZ0uWbhK+SFUKJB2EzfNV1vwBHYLT8/lWaoOUv
+         QK8XWzrriXM9tNLZQ9BlwV94qxL+2Vn/qezLDZS7eQyZJ+WPDRYT5AwrxBhMdcaF1nl8
+         nny5yEqch+X3afbcptEy1dE9p+jOSPu+COeBi65DuqEyHRppGFG2QJiL0RiFYzEFfDUF
+         +5wQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/+5+DKPjFfg0vbh+HrgFPF7wl8LZETRH5fvqGaFyzkKzGYP6DH+7mTcbFfOGiuYf6/aXqXyvFSup/0m8+aIDY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzQ9AeN082qtPrJfgXoZ9FLUE8hGP9cetVU7QKIAcMaBTHgC83r
+	cV/Op/b9z2//UEY0PrM0K0CIqL9R/pPkTvlDCDwVrbR10c1X9QA3QW2B
+X-Gm-Gg: Acq92OGwO/O2Fr+hp6YhZyymTlFV5YcPxswB2baJaQ+URTY23Loj6fj5pFCZr/F/ZrB
+	YkocWMWSb7DL42YqA3F4nxUkiK0/JoKEFkMfYRzoJ+B9wvZs85dGZSQACPzzL9H++oLW6EnEnXd
+	9hTRXQvLudLUwstW2k4+k2S2o8njL/N4dS3K6dKKi5+9MMffypf8wsg2sghCY2vl2pSKMOBbOqO
+	aFxyfwKR5LiJCZuDMuaAhjpKgrZiReZvawNQ8USOYzyCIBZdfqstWUwQM3PYy1nvnLzirRXCkPh
+	pvuTTSK0owjFIDsK6dbT5+TOdsTl7KTUWYLX4fLkZhiX2RT+I1gmUCqSHe56ifnEasHtkexRXSf
+	ON7IcB0Pqx8KrWOWQ+VPQbtkqVTFUrNupinBf2S2P23VvWAb3xWjfFZZqp10W3Lw568GD5uxwb4
+	8X8r3sBITGaYW9R9dA/RaU9Kss5LwbmVsLZTFm3GqgMakfISdDy/Dmo+fnFiLHmas=
+X-Received: by 2002:a17:903:907:b0:2b0:5ae9:ee4 with SMTP id d9443c01a7336-2bd7e8ae548mr266212465ad.5.1779294490473;
+        Wed, 20 May 2026 09:28:10 -0700 (PDT)
+Received: from [192.168.0.226] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bd5d0f94c6sm228572925ad.56.2026.05.20.09.28.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 May 2026 09:28:10 -0700 (PDT)
+Message-ID: <c7d7e50f458fd11c9a9172d01714cec1d80eb435.camel@gmail.com>
+Subject: Re: [PATCH RESEND bpf-next v10 2/8] bpf: clear list node owner and
+ unlink before drop
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Kaitao Cheng <kaitao.cheng@linux.dev>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <alexei.starovoitov@gmail.com>, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, ast@kernel.org, 
+	memxor@gmail.com, corbet@lwn.net, martin.lau@linux.dev,
+ daniel@iogearbox.net, 	andrii@kernel.org, song@kernel.org,
+ yonghong.song@linux.dev, 	john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@fomichev.me, haoluo@google.com, 	jolsa@kernel.org, shuah@kernel.org,
+ chengkaitao@kylinos.cn, 	skhan@linuxfoundation.org, vmalik@redhat.com,
+ linux-kselftest@vger.kernel.org, 	martin.lau@kernel.org, clm@meta.com,
+ ihor.solodrai@linux.dev, 	bot+bpf-ci@kernel.org
+Date: Wed, 20 May 2026 09:28:02 -0700
+In-Reply-To: <47b928ac-25d9-481c-8764-8f840c2dcafa@linux.dev>
+References: <20260512055919.95716-3-kaitao.cheng@linux.dev>
+	 <da95f45b43d94d17796b19abc4c555e35daafab7d5e1cdca3714fe0f54ab8cce@mail.kernel.org>
+	 <e141699dab70282d811ec30bbf2aa8279706817b.camel@gmail.com>
+	 <DII0TT9LXYCX.2GMM6QA4Q9BPZ@gmail.com>
+	 <0fb2d99b-b122-44fa-a8bc-9befe6e350bc@linux.dev>
+	 <7fa6794161a8bd4fdbc21dad68e86e9770c873cc.camel@gmail.com>
+	 <0171629c-bdd3-4661-a4e6-2698dd623c3a@linux.dev>
+	 <d5961282-d41c-4e54-8ba2-cd08823a8c77@linux.dev>
+	 <782833db5da77e4aa9761fc410827e7abe8583c8.camel@gmail.com>
+	 <47b928ac-25d9-481c-8764-8f840c2dcafa@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PEPF0000000F:EE_|CH3PR12MB9249:EE_
-X-MS-Office365-Filtering-Correlation-Id: 157f1beb-20aa-4612-2799-08deb686027b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|1800799024|376014|7416014|36860700016|13003099007|921020|11063799006|56012099003|18002099003|6133799003;
-X-Microsoft-Antispam-Message-Info:
-	NnHArd6CswQguIiOetF+eAPExgL6LPTW0pElCWnqigmDNmb3oPPTsWA73JZw2XIypTQQcdgIvTJYfZ+fMme7XE7L20YwEtxwVYKtkBaZTK/vwi+ppHSYzAQAw9cw57HxUqKnBTlN2xpEvMCIlznH21el1MAMfs9Mfe6Ye8nI8x2WB4B47/hVLaBMhoNWqmVErK6FqcM+TvLdD9L3aMsaWOTPdbwzFr3gtuIt8TDI+7ok4nN4JlwdCWMUmV8CChnfic54lz9HIdfyWf4LatvkHvBJmEJIr8e5dbZQWmhhKHu2biEZGtLEpAv8VFtnXdzCZVSLW9ES6QKlujub52y2FHMYQZAykKiDh/NnjV+r+WQ9eLLJkUtWwOxIctGLvsC+q0MmNYgLtOMmNecBfFXylwuc/wUXrXI3Ep0/yP6ABAv/Kf5ZATsWFIoWT/jwAwShPG51MvT1ZxAVoXEqFLcPFwZ5/IIOENjpSdxLr90ywkpaxg80YH4zWYA2Y7bWnWHJxzObGQci/uZm542kr2tHuBGyNfJvw7dNmkU4aVtiq/FyfcNYJjzmrUOBuuXCbEH/yBql/JvOlZ3omgMUtl7FWZ3gMKsB+IsFSaqeCLPu7HkFam6XJglGf/pkTCrQix5WkCaASu1HZXdS0JkNVz3bhq0+6ZSo73z1CzaQqEi7FrVX/SS5yAGYndyjQMVBDavEqafSq1I3bhkPOGEUzmlQ/owy72mz1vOEj7mjcAcb2B8MhWx3H1DZgf5KIS0tImg4H2bEL/OfC0VB2k3bfL3r9A==
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(376014)(7416014)(36860700016)(13003099007)(921020)(11063799006)(56012099003)(18002099003)(6133799003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	e6yfZnxtxHIhdzA0KCa5kq4FFPAtuOY7ak9GKioXNVUOaj/l9nmMKwMIjMtgkmL+T1yAsaxyBkiTfcCvWO8xDTImuNANdO0+DwTJtg6uQGIvtTVtGeEZl7MDytxQFqUnPNRpgifo2lfTVBWtixXxJqqLVNxhPCy8Fa2MmPaA/MBECY4KASm75OrYXsKsEfR3dkVZDEC5IaKuA61f2k4F/n8ENLMd1gR1MaAmttkQfH3oqDaW8SjXAALRADDWw8YVAY6ac7KOu7WrJ8f6t6KgNmPzYgEmSH0wxt9COt557g7qsEuX15azlbKWGqMem0Wep8EoNRcI5u9YLtIMtV+9uvfV41oBj+4EdS7JQGl6OkYOS/4PW7GB83ZB0EpcNpfmTzGZ29JG0P1X4ZbY8R6r7vGIUplDI+Q3nPl6ojAjhcn25/M1DAIkvrY7sO2Vftpl
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 May 2026 15:39:41.5055
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 157f1beb-20aa-4612-2799-08deb686027b
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CH3PEPF0000000F.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB9249
 
-Data adjustment cases failed with "Data exchange failed" when using IPv4
-because the program did not update the IP and UDP checksums in the IPv4
-branch. The issue was masked when both IPv4 and IPv6 were configured,
-since the test harness prefers IPv6.
+On Wed, 2026-05-20 at 17:55 +0800, Kaitao Cheng wrote:
+> =E5=9C=A8 2026/5/20 06:56, Eduard Zingerman =E5=86=99=E9=81=93:
+> > On Mon, 2026-05-18 at 11:02 +0800, Kaitao Cheng wrote:
+> >=20
+> > [...]
+> >=20
+> > > > > > The patch does have a bug, however. To fix the issues we are se=
+eing now,
+> > > > > > I propose the additional changes below and would appreciate fee=
+dback.
+> > > > > >=20
+> > > > > > --- a/kernel/bpf/helpers.c
+> > > > > > +++ b/kernel/bpf/helpers.c
+> > > > > > @@ -2263,8 +2263,10 @@ void bpf_list_head_free(const struct btf=
+_field *field, void *list_head,
+> > > > > >         if (!head->next || list_empty(head))
+> > > > > >                 goto unlock;
+> > > > > >         list_for_each_safe(pos, n, head) {
+> > > > > > -               WRITE_ONCE(container_of(pos,
+> > > > > > -                       struct bpf_list_node_kern, list_head)->=
+owner, NULL);
+> > > > > > +               struct bpf_list_node_kern *node;
+> > > > > > +
+> > > > > > +               node =3D container_of(pos, struct bpf_list_node=
+_kern, list_head);
+> > > > > > +               WRITE_ONCE(node->owner, BPF_PTR_POISON);
+> > > > > >                 list_move_tail(pos, &drain);
+> > > > > >         }
+> > > > > >  unlock:
+> > > > > > @@ -2272,8 +2274,12 @@ void bpf_list_head_free(const struct btf=
+_field *field, void *list_head,
+> > > > > >         __bpf_spin_unlock_irqrestore(spin_lock);
+> > > > > >=20
+> > > > > >         while (!list_empty(&drain)) {
+> > > > > > +               struct bpf_list_node_kern *node;
+> > > > > > +
+> > > > > >                 pos =3D drain.next;
+> > > > > > +               node =3D container_of(pos, struct bpf_list_node=
+_kern, list_head);
+> > > > > >                 list_del_init(pos);
+> > > > > > +               WRITE_ONCE(node->owner, NULL);
+> >=20
+> > Is CPU allowed to reorder the stores in list_del_init() and WRITE_ONCE(=
+)?
+> > If it is, I think there is a race here.
+>=20
+> Thanks for taking a close look at this. You are right that there is an
+> ordering issue here, but I don't think the specific sequence illustrated
+> by the example below is problematic.
+>=20
+> > Thread #1:
+> >   enter bpf_list_head_free()
+> >   acquire H1 lock
+> >   list_move_tail(pos, &drain);             // reordered
+> >   <-- ip here -->
+> >   WRITE_ONCE(node->owner, BPF_PTR_POISON); // reordered
+> >=20
+> > Thread #2:
+> >=20
+> >   acquire H1 lock
+> >   n =3D bpf_refcount_acquire()
+> >   release H1 lock
+> >   acquire H2 lock
+> >   enter __bpf_list_add()
+> >   <-- ip here -->
+> >   cmpxchg(&node->owner, NULL, BPF_PTR_POISON)
+>=20
+> Even if the stores from list_move_tail(pos, &drain) become visible before
+> WRITE_ONCE(node->owner, BPF_PTR_POISON), node->owner is not NULL in that
+> window. Before the WRITE_ONCE(), it still points to H1. After the WRITE_O=
+NCE(),
+> it is BPF_PTR_POISON. In both cases, __bpf_list_add() will fail:
+>=20
+> 	cmpxchg(&node->owner, NULL, BPF_PTR_POISON)
+>=20
+> because the old value is neither NULL nor expected to become NULL from th=
+is
+> part of bpf_list_head_free().
+>=20
+>=20
+> However, I agree that your original concern about the ordering between
+> list_del_init() and WRITE_ONCE(node->owner, NULL) is valid for the later
+> drain loop:
+>=20
+> 	list_del_init(pos);
+> 	WRITE_ONCE(node->owner, NULL);
+>=20
+> Here owner =3D=3D NULL is the signal that the node can be inserted into a=
+nother
+> list. Since WRITE_ONCE() does not provide release ordering, another CPU m=
+ay
+> observe owner =3D=3D NULL and successfully acquire the node in __bpf_list=
+_add()
+> before the list_del_init() stores are visible. In that case __bpf_list_ad=
+d()
+> can link the node into H2, and the delayed stores from list_del_init() ma=
+y
+> then overwrite the node's list pointers and corrupt the H2 list.
+>=20
+> So the fix should be to publish owner =3D=3D NULL with release ordering a=
+fter the
+> node has been fully unlinked, for example:
+>=20
+> ```
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -2279,7 +2279,8 @@ void bpf_list_head_free(const struct btf_field *fie=
+ld, void *list_head,
+>                 pos =3D drain.next;
+>                 node =3D container_of(pos, struct bpf_list_node_kern, lis=
+t_head);
+>                 list_del_init(pos);
+> -               WRITE_ONCE(node->owner, NULL);
+> +               /* Ensure __bpf_list_add() sees the node as unlinked. */
+> +               smp_store_release(&node->owner, NULL);
+>                 /* The contained type can also have resources, including =
+a
+>                  * bpf_list_head which needs to be freed.
+>                  */
+> @@ -2607,7 +2608,8 @@ static struct bpf_list_node *__bpf_list_del(struct =
+bpf_list_head *head,
+>                 return NULL;
+>=20
+>         list_del_init(n);
+> -       WRITE_ONCE(node->owner, NULL);
+> +       /* Ensure __bpf_list_add() sees the node as unlinked. */
+> +       smp_store_release(&node->owner, NULL);
+>         return (struct bpf_list_node *)n;
+>  }
+> ```
+>=20
+> The existing cmpxchg() in __bpf_list_add() is a successful RMW with retur=
+n
+> value, so it is fully ordered and is sufficient on the acquire side.
 
-While here, generalize csum_fold_helper() to fold twice so it works for
-any 32-bit input.
+Hi Kaitao,
 
-Fixes: 0b65cfcef9c5 ("selftests: drv-net: Test tail-adjustment support")
-Reviewed-by: Carolina Jubran <cjubran@nvidia.com>
-Reviewed-by: Dragos Tatulea <dtatulea@nvidia.com>
-Signed-off-by: Nimrod Oren <noren@nvidia.com>
----
-v2:
- - generalize csum_fold_helper() to fold twice.
-v1: https://lore.kernel.org/20260513072355.1083381-1-noren@nvidia.com
----
- .../selftests/net/lib/xdp_native.bpf.c        | 55 ++++++++++---------
- 1 file changed, 30 insertions(+), 25 deletions(-)
-
-diff --git a/tools/testing/selftests/net/lib/xdp_native.bpf.c b/tools/testing/selftests/net/lib/xdp_native.bpf.c
-index 64f05229ab24..ded3f896e622 100644
---- a/tools/testing/selftests/net/lib/xdp_native.bpf.c
-+++ b/tools/testing/selftests/net/lib/xdp_native.bpf.c
-@@ -268,6 +268,17 @@ static int xdp_mode_tx_handler(struct xdp_md *ctx, __u16 port)
- 	return XDP_PASS;
- }
- 
-+static __always_inline __u16 csum_fold_helper(__u32 csum)
-+{
-+	csum = (csum & 0xffff) + (csum >> 16);
-+	return ~((csum & 0xffff) + (csum >> 16));
-+}
-+
-+static __always_inline __u16 csum_fold_udp_helper(__u32 csum)
-+{
-+	return csum_fold_helper(csum) ? : 0xffff;
-+}
-+
- static void *update_pkt(struct xdp_md *ctx, __s16 offset, __u32 *udp_csum)
- {
- 	void *data_end = (void *)(long)ctx->data_end;
-@@ -281,21 +292,22 @@ static void *update_pkt(struct xdp_md *ctx, __s16 offset, __u32 *udp_csum)
- 
- 	if (eth->h_proto == bpf_htons(ETH_P_IP)) {
- 		struct iphdr *iph = data + sizeof(*eth);
--		__u16 total_len;
- 
- 		if (iph + 1 > (struct iphdr *)data_end)
- 			return NULL;
- 
--		iph->tot_len = bpf_htons(bpf_ntohs(iph->tot_len) + offset);
--
- 		udph = (void *)eth + sizeof(*iph) + sizeof(*eth);
- 		if (!udph || udph + 1 > (struct udphdr *)data_end)
- 			return NULL;
- 
--		len_new = bpf_htons(bpf_ntohs(udph->len) + offset);
-+		len = iph->tot_len;
-+		len_new = bpf_htons(bpf_ntohs(len) + offset);
-+		iph->tot_len = len_new;
-+		iph->check = csum_fold_helper(
-+			bpf_csum_diff(&len, sizeof(len), &len_new,
-+				      sizeof(len_new), ~((__u32)iph->check)));
- 	} else if (eth->h_proto  == bpf_htons(ETH_P_IPV6)) {
- 		struct ipv6hdr *ipv6h = data + sizeof(*eth);
--		__u16 payload_len;
- 
- 		if (ipv6h + 1 > (struct ipv6hdr *)data_end)
- 			return NULL;
-@@ -304,33 +316,27 @@ static void *update_pkt(struct xdp_md *ctx, __s16 offset, __u32 *udp_csum)
- 		if (!udph || udph + 1 > (struct udphdr *)data_end)
- 			return NULL;
- 
--		*udp_csum = ~((__u32)udph->check);
--
- 		len = ipv6h->payload_len;
- 		len_new = bpf_htons(bpf_ntohs(len) + offset);
- 		ipv6h->payload_len = len_new;
--
--		*udp_csum = bpf_csum_diff(&len, sizeof(len), &len_new,
--					  sizeof(len_new), *udp_csum);
--
--		len = udph->len;
--		len_new = bpf_htons(bpf_ntohs(udph->len) + offset);
--		*udp_csum = bpf_csum_diff(&len, sizeof(len), &len_new,
--					  sizeof(len_new), *udp_csum);
- 	} else {
- 		return NULL;
- 	}
- 
-+	len = udph->len;
-+	len_new = bpf_htons(bpf_ntohs(len) + offset);
-+
-+	*udp_csum = ~((__u32)udph->check);
-+	*udp_csum = bpf_csum_diff(&len, sizeof(len), &len_new,
-+				  sizeof(len_new), *udp_csum);
-+	*udp_csum = bpf_csum_diff(&len, sizeof(len), &len_new,
-+				  sizeof(len_new), *udp_csum);
-+
- 	udph->len = len_new;
- 
- 	return udph;
- }
- 
--static __u16 csum_fold_helper(__u32 csum)
--{
--	return ~((csum & 0xffff) + (csum >> 16)) ? : 0xffff;
--}
--
- static int xdp_adjst_tail_shrnk_data(struct xdp_md *ctx, __u16 offset,
- 				     unsigned long hdr_len)
- {
-@@ -359,7 +365,7 @@ static int xdp_adjst_tail_shrnk_data(struct xdp_md *ctx, __u16 offset,
- 		return -1;
- 
- 	udp_csum = bpf_csum_diff((__be32 *)tmp_buff, offset, 0, 0, udp_csum);
--	udph->check = (__u16)csum_fold_helper(udp_csum);
-+	udph->check = (__u16)csum_fold_udp_helper(udp_csum);
- 
- 	if (bpf_xdp_adjust_tail(ctx, 0 - offset) < 0)
- 		return -1;
-@@ -403,7 +409,7 @@ static int xdp_adjst_tail_grow_data(struct xdp_md *ctx, __u16 offset)
- 		return -1;
- 
- 	udp_csum = bpf_csum_diff(0, 0, (__be32 *)tmp_buff, offset, udp_csum);
--	udph->check = (__u16)csum_fold_helper(udp_csum);
-+	udph->check = (__u16)csum_fold_udp_helper(udp_csum);
- 
- 	buff_len = bpf_xdp_get_buff_len(ctx);
- 
-@@ -484,8 +490,7 @@ static int xdp_adjst_head_shrnk_data(struct xdp_md *ctx, __u64 hdr_len,
- 		return -1;
- 
- 	udp_csum = bpf_csum_diff((__be32 *)tmp_buff, offset, 0, 0, udp_csum);
--
--	udph->check = (__u16)csum_fold_helper(udp_csum);
-+	udph->check = (__u16)csum_fold_udp_helper(udp_csum);
- 
- 	if (bpf_xdp_load_bytes(ctx, 0, tmp_buff, MAX_ADJST_OFFSET) < 0)
- 		return -1;
-@@ -542,7 +547,7 @@ static int xdp_adjst_head_grow_data(struct xdp_md *ctx, __u64 hdr_len,
- 		return -1;
- 
- 	udp_csum = bpf_csum_diff(0, 0, (__be32 *)data_buff, offset, udp_csum);
--	udph->check = (__u16)csum_fold_helper(udp_csum);
-+	udph->check = (__u16)csum_fold_udp_helper(udp_csum);
- 
- 	if (hdr_len > MAX_ADJST_OFFSET || hdr_len == 0)
- 		return -1;
--- 
-2.45.0
-
+Thank you for the analysis. I agree with the smp_store_release()
+approach, could you please respin the series?
