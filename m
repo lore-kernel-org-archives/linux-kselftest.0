@@ -1,235 +1,206 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D1F93F4DF4
-	for <linux-kselftest@vger.kernel.org>; Wed, 20 May 2026 16:28:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E53C364EB0;
+	Wed, 20 May 2026 17:09:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779294493; cv=none; b=KdGOOGmnEMnG7zLMFzCX2gK3F3Gu6FO/AjOOS/M4H41S52rVTyHOMSpx4LNMp+KfHlT9l0iCH6S5SuUSZtCp53Hi1BsrAiggv5JjEws8Wa4rN7k6fRnxwqbUUJXwM5C9y7rg2tKyDdbCvshbP1vcjaV7HhodKL/WNVkuCpFoiEo=
+	t=1779296957; cv=none; b=XrUeXMAnFFaPbVfU0xn0F+Rl1Pg5SrLmQtPBTLUb4tkxOOSCg2Z05vavQkaMnV889wbsH7P2r++HR+M899aUE6hsr1qvdP/OECI1FATwRmE6zHDpeTTWxPk8bBcvNARTt09xT9lYEc768iDPwFSdq2w3eQwBjBXgo8+FBPRaExM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779294493; c=relaxed/simple;
-	bh=ES7YxmPnDFzUUbbeuT/pFvekD4p0hCCj++N15Dr+Ljc=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=rgErrkskUlx/IeWK8G3vEzEiGGei16Tp9e8A842SAzNZj+Dg1xVETIoTpl8xGDXCAJdPbZZd3NTrZp22L/X5gKD3tBvMyGNIl3v1chmpYK0uIJah9forxGRjqjyF1gLOZR6z6nuDIk7bpPbqKhiSnZZyNr22dRPpZnzxpizQvf8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=egYmVf9H; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1779296957; c=relaxed/simple;
+	bh=gtls1X2Rs9kKonLOXi9NdQFIdY9my6iOmOGcZmJtvA4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RKgevMn+8DZVV/Sf/ehdro2yyj4s7FcyTNyq+v59GfA0DuxZmskZHm/XK4jJ0U88Dk1c8jcwfR43l2S7nhWrEVVLn9b0ajBSVwHRXAZFJd26QuHq/oexLD5rGhKM9NCwbOohK40e5Nq1UXuSVkHrDI+uZS3k2Eul2KV3qh24Bcw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=gu/wDQDQ; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="egYmVf9H"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2baca4df358so29727425ad.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 May 2026 09:28:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779294491; x=1779899291; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=S/2ozl9sGqUSrHRxDaydNsPYPMwiguh1yPS1e/2sQKI=;
-        b=egYmVf9HIvMeT6ih0BgUBj3UIGk+Bvu7b9en7dQAZbMmiCFZzDpgPBwD4sPySGGJcn
-         dyf4zRVNpKP4PYG/n08eWnk4rMyWaGxdqiKSGgMwd27ExjykACiWReCizUkvY4ZGeN1J
-         8edAozeUpDl7wkXIUqQ2QHB9TEI+9LYT4EQV4WlFwFDvkhTaPc60+Do8YiXtw6cZ2FhH
-         Txk63pJoomM7qJ7I37p7PzJEzKugNqnsFi+Jp2imtfeclpJvI3q6zN6yhzUTQ/eLFPfg
-         BD4+J2eRWZrpNz2w0OEe8fAsjY8UXsRajU8PBRoEmnhKnAOXjh30zjpMBOutZjGXGX+B
-         RyJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779294491; x=1779899291;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=S/2ozl9sGqUSrHRxDaydNsPYPMwiguh1yPS1e/2sQKI=;
-        b=pUjIKP81iCQr9JJXYapoFI9pmj4cF64Hpyq4v5HZy5QzbYcwvWNJ1jCSt1PXyKURxM
-         PskzBUUl5uK7yVshfGxtKrmH6L7UMEn92ac72b/uOHsaNnA10peEFzCZ/HrMm12T8zpx
-         E4tvn3yatYwJa1ktOWTQyx/hk97/DNLZ0uWbhK+SFUKJB2EzfNV1vwBHYLT8/lWaoOUv
-         QK8XWzrriXM9tNLZQ9BlwV94qxL+2Vn/qezLDZS7eQyZJ+WPDRYT5AwrxBhMdcaF1nl8
-         nny5yEqch+X3afbcptEy1dE9p+jOSPu+COeBi65DuqEyHRppGFG2QJiL0RiFYzEFfDUF
-         +5wQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/+5+DKPjFfg0vbh+HrgFPF7wl8LZETRH5fvqGaFyzkKzGYP6DH+7mTcbFfOGiuYf6/aXqXyvFSup/0m8+aIDY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzQ9AeN082qtPrJfgXoZ9FLUE8hGP9cetVU7QKIAcMaBTHgC83r
-	cV/Op/b9z2//UEY0PrM0K0CIqL9R/pPkTvlDCDwVrbR10c1X9QA3QW2B
-X-Gm-Gg: Acq92OGwO/O2Fr+hp6YhZyymTlFV5YcPxswB2baJaQ+URTY23Loj6fj5pFCZr/F/ZrB
-	YkocWMWSb7DL42YqA3F4nxUkiK0/JoKEFkMfYRzoJ+B9wvZs85dGZSQACPzzL9H++oLW6EnEnXd
-	9hTRXQvLudLUwstW2k4+k2S2o8njL/N4dS3K6dKKi5+9MMffypf8wsg2sghCY2vl2pSKMOBbOqO
-	aFxyfwKR5LiJCZuDMuaAhjpKgrZiReZvawNQ8USOYzyCIBZdfqstWUwQM3PYy1nvnLzirRXCkPh
-	pvuTTSK0owjFIDsK6dbT5+TOdsTl7KTUWYLX4fLkZhiX2RT+I1gmUCqSHe56ifnEasHtkexRXSf
-	ON7IcB0Pqx8KrWOWQ+VPQbtkqVTFUrNupinBf2S2P23VvWAb3xWjfFZZqp10W3Lw568GD5uxwb4
-	8X8r3sBITGaYW9R9dA/RaU9Kss5LwbmVsLZTFm3GqgMakfISdDy/Dmo+fnFiLHmas=
-X-Received: by 2002:a17:903:907:b0:2b0:5ae9:ee4 with SMTP id d9443c01a7336-2bd7e8ae548mr266212465ad.5.1779294490473;
-        Wed, 20 May 2026 09:28:10 -0700 (PDT)
-Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2bd5d0f94c6sm228572925ad.56.2026.05.20.09.28.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 May 2026 09:28:10 -0700 (PDT)
-Message-ID: <c7d7e50f458fd11c9a9172d01714cec1d80eb435.camel@gmail.com>
-Subject: Re: [PATCH RESEND bpf-next v10 2/8] bpf: clear list node owner and
- unlink before drop
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Kaitao Cheng <kaitao.cheng@linux.dev>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <alexei.starovoitov@gmail.com>, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, ast@kernel.org, 
-	memxor@gmail.com, corbet@lwn.net, martin.lau@linux.dev,
- daniel@iogearbox.net, 	andrii@kernel.org, song@kernel.org,
- yonghong.song@linux.dev, 	john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, 	jolsa@kernel.org, shuah@kernel.org,
- chengkaitao@kylinos.cn, 	skhan@linuxfoundation.org, vmalik@redhat.com,
- linux-kselftest@vger.kernel.org, 	martin.lau@kernel.org, clm@meta.com,
- ihor.solodrai@linux.dev, 	bot+bpf-ci@kernel.org
-Date: Wed, 20 May 2026 09:28:02 -0700
-In-Reply-To: <47b928ac-25d9-481c-8764-8f840c2dcafa@linux.dev>
-References: <20260512055919.95716-3-kaitao.cheng@linux.dev>
-	 <da95f45b43d94d17796b19abc4c555e35daafab7d5e1cdca3714fe0f54ab8cce@mail.kernel.org>
-	 <e141699dab70282d811ec30bbf2aa8279706817b.camel@gmail.com>
-	 <DII0TT9LXYCX.2GMM6QA4Q9BPZ@gmail.com>
-	 <0fb2d99b-b122-44fa-a8bc-9befe6e350bc@linux.dev>
-	 <7fa6794161a8bd4fdbc21dad68e86e9770c873cc.camel@gmail.com>
-	 <0171629c-bdd3-4661-a4e6-2698dd623c3a@linux.dev>
-	 <d5961282-d41c-4e54-8ba2-cd08823a8c77@linux.dev>
-	 <782833db5da77e4aa9761fc410827e7abe8583c8.camel@gmail.com>
-	 <47b928ac-25d9-481c-8764-8f840c2dcafa@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="gu/wDQDQ"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=nMieEGrEA39u1aFDAtD9lpPrEieW9TGT3AQb5KNw4rs=; b=gu/wDQDQVoTSB4Xvxdhbs9Du75
+	6Q4uxTURqnnkanXxB6hxBKxdAMu0dbpYUy6AHl43/ZDtGEA8VocNMFeFhRwZu151GWN1oqYoOnGiV
+	dzcPTAVwbFnytYyMhzdyMC40ZTcn37sUcbyWPxg1vfzVVlJidbneZl0J6DDZ21fzB0cBp+tg1hjLt
+	smEqvpu1B4VMXXuGqccBOPLfPrTknzcFeNXpN1VRwsf2laGjZNKz0CuY6QO4PwL3eY5ir2q7WnM1d
+	aysNaxUZaDzpRaw3Kap4hZOaJRmWTFL3JLdCg6Js9xa4riwcprZARAgn0vHaHiMiT8tYiCwq2enRd
+	qExNKXWw==;
+Received: from authenticated user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1wPkPo-003FzR-1k;
+	Wed, 20 May 2026 17:09:04 +0000
+Date: Wed, 20 May 2026 10:09:00 -0700
+From: Breno Leitao <leitao@debian.org>
+To: Mateusz Guzik <mjguzik@gmail.com>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Shuah Khan <shuah@kernel.org>, 
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	usama.arif@linux.dev, kernel-team@meta.com
+Subject: Re: [PATCH 1/2] fs/pipe: bulk pre-allocate pages outside pipe->mutex
+ in anon_pipe_write
+Message-ID: <ag3Ty3T24wjn1aFw@gmail.com>
+References: <20260515-fix_pipe-v1-0-b14c840c7555@debian.org>
+ <20260515-fix_pipe-v1-1-b14c840c7555@debian.org>
+ <q37bmptbjr2gysl2g67bqo5axxqor4lsrrnf7ajixxjdrumbup@tgu3kz6kien5>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <q37bmptbjr2gysl2g67bqo5axxqor4lsrrnf7ajixxjdrumbup@tgu3kz6kien5>
+X-Debian-User: leitao
 
-On Wed, 2026-05-20 at 17:55 +0800, Kaitao Cheng wrote:
-> =E5=9C=A8 2026/5/20 06:56, Eduard Zingerman =E5=86=99=E9=81=93:
-> > On Mon, 2026-05-18 at 11:02 +0800, Kaitao Cheng wrote:
-> >=20
-> > [...]
-> >=20
-> > > > > > The patch does have a bug, however. To fix the issues we are se=
-eing now,
-> > > > > > I propose the additional changes below and would appreciate fee=
-dback.
-> > > > > >=20
-> > > > > > --- a/kernel/bpf/helpers.c
-> > > > > > +++ b/kernel/bpf/helpers.c
-> > > > > > @@ -2263,8 +2263,10 @@ void bpf_list_head_free(const struct btf=
-_field *field, void *list_head,
-> > > > > >         if (!head->next || list_empty(head))
-> > > > > >                 goto unlock;
-> > > > > >         list_for_each_safe(pos, n, head) {
-> > > > > > -               WRITE_ONCE(container_of(pos,
-> > > > > > -                       struct bpf_list_node_kern, list_head)->=
-owner, NULL);
-> > > > > > +               struct bpf_list_node_kern *node;
-> > > > > > +
-> > > > > > +               node =3D container_of(pos, struct bpf_list_node=
-_kern, list_head);
-> > > > > > +               WRITE_ONCE(node->owner, BPF_PTR_POISON);
-> > > > > >                 list_move_tail(pos, &drain);
-> > > > > >         }
-> > > > > >  unlock:
-> > > > > > @@ -2272,8 +2274,12 @@ void bpf_list_head_free(const struct btf=
-_field *field, void *list_head,
-> > > > > >         __bpf_spin_unlock_irqrestore(spin_lock);
-> > > > > >=20
-> > > > > >         while (!list_empty(&drain)) {
-> > > > > > +               struct bpf_list_node_kern *node;
-> > > > > > +
-> > > > > >                 pos =3D drain.next;
-> > > > > > +               node =3D container_of(pos, struct bpf_list_node=
-_kern, list_head);
-> > > > > >                 list_del_init(pos);
-> > > > > > +               WRITE_ONCE(node->owner, NULL);
-> >=20
-> > Is CPU allowed to reorder the stores in list_del_init() and WRITE_ONCE(=
-)?
-> > If it is, I think there is a race here.
->=20
-> Thanks for taking a close look at this. You are right that there is an
-> ordering issue here, but I don't think the specific sequence illustrated
-> by the example below is problematic.
->=20
-> > Thread #1:
-> >   enter bpf_list_head_free()
-> >   acquire H1 lock
-> >   list_move_tail(pos, &drain);             // reordered
-> >   <-- ip here -->
-> >   WRITE_ONCE(node->owner, BPF_PTR_POISON); // reordered
-> >=20
-> > Thread #2:
-> >=20
-> >   acquire H1 lock
-> >   n =3D bpf_refcount_acquire()
-> >   release H1 lock
-> >   acquire H2 lock
-> >   enter __bpf_list_add()
-> >   <-- ip here -->
-> >   cmpxchg(&node->owner, NULL, BPF_PTR_POISON)
->=20
-> Even if the stores from list_move_tail(pos, &drain) become visible before
-> WRITE_ONCE(node->owner, BPF_PTR_POISON), node->owner is not NULL in that
-> window. Before the WRITE_ONCE(), it still points to H1. After the WRITE_O=
-NCE(),
-> it is BPF_PTR_POISON. In both cases, __bpf_list_add() will fail:
->=20
-> 	cmpxchg(&node->owner, NULL, BPF_PTR_POISON)
->=20
-> because the old value is neither NULL nor expected to become NULL from th=
-is
-> part of bpf_list_head_free().
->=20
->=20
-> However, I agree that your original concern about the ordering between
-> list_del_init() and WRITE_ONCE(node->owner, NULL) is valid for the later
-> drain loop:
->=20
-> 	list_del_init(pos);
-> 	WRITE_ONCE(node->owner, NULL);
->=20
-> Here owner =3D=3D NULL is the signal that the node can be inserted into a=
-nother
-> list. Since WRITE_ONCE() does not provide release ordering, another CPU m=
-ay
-> observe owner =3D=3D NULL and successfully acquire the node in __bpf_list=
-_add()
-> before the list_del_init() stores are visible. In that case __bpf_list_ad=
-d()
-> can link the node into H2, and the delayed stores from list_del_init() ma=
-y
-> then overwrite the node's list pointers and corrupt the H2 list.
->=20
-> So the fix should be to publish owner =3D=3D NULL with release ordering a=
-fter the
-> node has been fully unlinked, for example:
->=20
-> ```
-> --- a/kernel/bpf/helpers.c
-> +++ b/kernel/bpf/helpers.c
-> @@ -2279,7 +2279,8 @@ void bpf_list_head_free(const struct btf_field *fie=
-ld, void *list_head,
->                 pos =3D drain.next;
->                 node =3D container_of(pos, struct bpf_list_node_kern, lis=
-t_head);
->                 list_del_init(pos);
-> -               WRITE_ONCE(node->owner, NULL);
-> +               /* Ensure __bpf_list_add() sees the node as unlinked. */
-> +               smp_store_release(&node->owner, NULL);
->                 /* The contained type can also have resources, including =
-a
->                  * bpf_list_head which needs to be freed.
->                  */
-> @@ -2607,7 +2608,8 @@ static struct bpf_list_node *__bpf_list_del(struct =
-bpf_list_head *head,
->                 return NULL;
->=20
->         list_del_init(n);
-> -       WRITE_ONCE(node->owner, NULL);
-> +       /* Ensure __bpf_list_add() sees the node as unlinked. */
-> +       smp_store_release(&node->owner, NULL);
->         return (struct bpf_list_node *)n;
->  }
-> ```
->=20
-> The existing cmpxchg() in __bpf_list_add() is a successful RMW with retur=
-n
-> value, so it is fully ordered and is sufficient on the acquire side.
 
-Hi Kaitao,
+Hello Mateusz,
 
-Thank you for the analysis. I agree with the smp_store_release()
-approach, could you please respin the series?
+Thanks for the careful review. Let me address the points inline,
+with data I collected on three Meta production hosts: two aarch64 NVIDIA Grace
+and one x86_64 Bergamo / EPYC 9D64, using bpftrace and perf lock contention.
+
+On Fri, May 15, 2026 at 10:18:19PM +0200, Mateusz Guzik wrote:
+> This change is quite a hammer.
+
+Are you seeing any downside/trade-off with this current approach?
+
+>
+> Do you have a real workload where there are multiple processes issuing
+> large ops to the same pipe on both reader and writer side?
+>
+> The only workload I'm aware of sharing the pipe between more than just
+> one reader and one writer is anything with make, but that is mostly
+> operating on 1-byte ops.
+
+You're right -- most pipe writes really are tiny. On Bergamo, 120s sample of
+anon_pipe_write, 299629 calls bucketed by iov_iter_count(from):
+
+    size                writes      %
+    <128 B              293602    98.0    (merge path, no alloc)
+    128 B - 4 KB          1108     0.4
+    4 - 8 KB              2149     0.72   <-- patch start helps from here
+    8 - 16 KB                3
+    16 - 32 KB               0
+    32 - 64 KB               5
+    64 - 128 KB              2            <-- up to 72KB writes
+
+So only ~0.72% of writes are >= PAGE_SIZE. The dominant comm by
+contention count is a Meta fleet workload spraying sub-128-byte
+metric strings -- it does *zero* writes >= PAGE_SIZE itself; it
+just hits the mutex very often.
+
+But the writers that *do* take the alloc-under-mutex path are
+real. Lock-wait data confirms it shows up:
+
+  perf lock contention -ab (30s, anon_pipe_* only):
+
+                                contentions  total wait  max wait
+    arm64 (NVIDIA Grace)
+      anon_pipe_write                 7660    4.39 ms     50 us
+      anon_pipe_read                     7   55.78 us     17 us
+    x86_64 (Bergamo)
+      anon_pipe_write                 3154    4.53 ms     79 us
+      anon_pipe_read                   817    1.72 ms     82 us
+
+The reader side stands out on x86 (817 vs ~7 on arm64) -- that's
+the symptom the patch targets: a multi-page writer holding
+pipe->mutex across alloc_page() stalls the concurrent reader on
+the same mutex.
+
+  bpftrace, mutex_lock duration inside anon_pipe_write, 300s:
+
+                  Grace-A  Grace-B  Bergamo
+    [4K,  8K)      1090     2799      980
+    [8K, 16K)      1785     1353      953
+    [16K,32K)       755      623      530
+    [32K,64K)       153      172      184
+    [64K,128K)       13        8       59
+    [128K,256K)      -         -        4
+    [256K,512K)      -         -        1    <-- ~500us blocked
+
+So the patch's value is shortening the long critical sections that
+the 99% of small writers are blocked on -- the contention everyone
+sees drops because the few multi-page writers do their alloc work
+outside the lock.
+
+>= 64KB, which are not common but existent.
+
+> I'm asking because this would be better implemented taking into account
+> how many pages are hanging out in the tmp_page array. With only one
+> writer and one reader there is no concern someone will steal the pages.
+>
+> Preferably the tmp_page array would grow to accomodate more memory, but
+> admittedly this runs into a problem where a pipe can linger unused
+> indefinitely while hoarding several pages. As in, some shrinking
+> mechanism would be needed so that's probably a no-go and preallocation
+> is the way to go for now.
+>
+> Even then, this can definitely be integrated much better instead of
+> being open-coded.
+
+> This is some nasty golfing.
+>
+> Instead, you could have something like:
+> struct tmp_page_prealloc {
+> 	struct page *pages;
+> 	unsigned int count;
+> };
+
+Agreed -- v2 will wrap the array+counter in
+struct tmp_page_prealloc and drop the open-coded indexing.
+
+> 	struct tmp_page_prealloc tpp = {};
+> [...]
+> This should move to a dedicated routine, perhaps:
+> 	anon_get_page_prealloc(pipe, &tmp_page_prealloc);
+>
+> then it can also easily decide how much to prealloc based on existing
+> state
+
+Yes. v2 will have anon_get_page_prealloc(pipe, &tpp) doing both:
+top up to PIPE_PREALLOC_MAX based on tmp_page[] occupancy, and
+keep the policy in one place.
+
+> > +	while (prealloc_n)
+> > +		anon_pipe_put_page(pipe, prealloc[--prealloc_n]);
+>
+> this results in put_page() calls under the mutex, still extending the hold time
+>
+> you could split this into 2 ops, for example:
+> +	anon_pipe_cache_pages(pipe, &tmp_page_prealloc);
+>   	if (pipe_is_full(pipe))
+>   		wake_next_writer = false;
+>   	mutex_unlock(&pipe->mutex);
+> +	anon_pipe_free_pages(pipe, &tmp_page_prealloc);
+
+Well spotted!
+
+
+> All that aside, I have no idea about performance impact on arm64, but
+> there is *definitely* some throughput lost based on the fact that memory
+> copy is restarted per page. I presume arm64 has an equivalent of amd64's
+> SMAP which again will not be free and is paid for every time as well.
+
+Can you say a bit more about what you'd want to see here? I want to make sure
+I'm reading the suggestion the same way you are.
+
+My understanding: anon_pipe_write loops once per page calling
+copy_page_from_iter(), and each call re-enters the iov_iter
+machinery and pays a STAC/CLAC pair on x86 (PAN toggle on arm64).
+
+So an N-page write pays the user-access bracket N times instead of
+once, on top of resetting the per-page memcpy and losing the
+hardware prefetch streak.
+
+The way I see it, is opening a single user_read_access_begin() region around
+the page loop and use unsafe_copy_from_user() inside, with a labeled
+fault-fallback path that closes the region and finishes via the slow path.
+
+Is this what you meant?
+
+Really thanks for your review,
+--breno
