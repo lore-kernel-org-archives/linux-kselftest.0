@@ -1,122 +1,181 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 564993C9EF0;
-	Wed, 20 May 2026 09:40:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A9F03D3331
+	for <linux-kselftest@vger.kernel.org>; Wed, 20 May 2026 09:56:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779270036; cv=none; b=VSSNWWZfPhUn88vQrS2M/BDqZsqFKreCS00qGR0sbCp9Z5gdrjTlMz0emxmXQiFA1JC4qPlK62SDVJcmcX48ZvkzjCrOk3gnvW2iFgbKGOIKTYQDcco9Zqich0JawGDSXTkTcJ/068jAQBCbYJVgNEKsf4QvDwUvUUm92kN9d0Q=
+	t=1779270992; cv=none; b=KQTlG/HmF1qDqftyu1T5VwnZsFZijIcmsH2SPGgPUakHuSRnmBFuqbVc6yKXMGHHO24veAw0qxSM/MrjVER+l+O09IZFf5OUhX6JFIwu7r+3YtAI3QbqaFIU4Pz5ZZ1PlNX/3V4g4lPRTht9OGDtkDUcWY4/QZMWwInhg6iKmDk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779270036; c=relaxed/simple;
-	bh=VRZ71Huu8qSFEboEe06ikz+mahJiBdAa//EOmsH9Cuc=;
+	s=arc-20240116; t=1779270992; c=relaxed/simple;
+	bh=lPVKnxeYZcOQBIW6ypz3E7ZufIXvKyUkwx8YZr2smpY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aTCRjc/xBT/RMvMg2CjW/96zn9WORfV1FaA1N4TojaNoYkKmZkT/Jkqun+QH/wryTD0Ge3+vGoVBjaF0s7aH4lIW2KMz0dcvG3WYSCvMEzNaeDnWurZx4F3XuGs9fs6n1hc01t6+J+YQwsVTw4cJHH4L8B05D1L/IRK8vWHv+v4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I8IFs78V; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=k/Q3uggmPdRvXwzGlqA7ua12SvUXcOUzSnCaMnnqEXMyWiyLpnXq/33tV/R7cuGN9EkrWC9IcJxEmRXved8swW7TiyPgljJis0FkAg32UIz0MenUmm9+kUbCvonEjWdMnJ5HDK8F+8y42QyCymYXceGMioYKKWM6BSheHa5xcEk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=eKUfxmBE; arc=none smtp.client-ip=95.215.58.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I8IFs78V"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2AA91F000E9;
-	Wed, 20 May 2026 09:40:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779270033;
-	bh=bmSSRx9MxDeEMTFENIR1UVxoLD5eJs49UhDqZFiJazI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=I8IFs78VJpQKZu0Yyyiq2TGAJy3gG6KZGQYaEvZwSjHt21DXQbWtalRrwkmb9YYjz
-	 Zw95zfFN8wIrw6qkLWeqcLr03DX9gtFzgaR0rfqXnnZYLHXGJLuV6aE3FB5Yp0tadb
-	 2lPGEztfqWIdoLjqXZfbRfsnMQU5CmvAVTISvQDIpVnjf0owc92aRsIEIAd6ynZnxo
-	 Tw/I9qpx3VPlQK17Eoa9lVE797eSDEAkooJ7fh659m5JvWp8wnCRLqX6XE9I3ZQJxm
-	 BR/5zSCwV0XTMjFWUqeiMHJx6Yo/haUDU+4+9+TneC8vrjp0Ld/gbxzFC+ZsXrkMqF
-	 qhp3uVGEbfZow==
-Message-ID: <6edd89b0-68f8-4e28-ba7c-7a5df7f47c01@kernel.org>
-Date: Wed, 20 May 2026 19:40:24 +1000
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="eKUfxmBE"
+Message-ID: <47b928ac-25d9-481c-8764-8f840c2dcafa@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1779270978;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Mk2SEnfE8DoCb6Y73J9sMWTvnR47QajM1Ro5oBOMNpQ=;
+	b=eKUfxmBERs0yEGH1Boa4hUveRBD4XIziHjY6VFVb5ACA/mS4KFqQSVUGedsOBpYCXeL7zN
+	XlPrnFrsEBu5XUD702HkvgpMVIlOF4t7v6dwJBXfm2Rq48EIsLYcr2qxayCF9iAb2YS2RO
+	E3l0cqQOctyOT5kDrmXZqETJFvxwA60=
+Date: Wed, 20 May 2026 17:55:08 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH net] selftests: rds: config: disable modules
-Content-Language: fr
-To: Allison Henderson <achender@kernel.org>
-Cc: netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
- rds-devel@oss.oracle.com, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Shuah Khan <shuah@kernel.org>
-References: <20260520-net-rds-config-modules-v1-1-2100df02fe9a@kernel.org>
- <8a10cffb9bdde6f90f0fd7b00679755a593f2d6e.camel@kernel.org>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- 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
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <8a10cffb9bdde6f90f0fd7b00679755a593f2d6e.camel@kernel.org>
+Subject: Re: [PATCH RESEND bpf-next v10 2/8] bpf: clear list node owner and
+ unlink before drop
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, ast@kernel.org,
+ memxor@gmail.com, corbet@lwn.net, martin.lau@linux.dev,
+ daniel@iogearbox.net, andrii@kernel.org, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
+ chengkaitao@kylinos.cn, skhan@linuxfoundation.org, vmalik@redhat.com,
+ linux-kselftest@vger.kernel.org, martin.lau@kernel.org, clm@meta.com,
+ ihor.solodrai@linux.dev, bot+bpf-ci@kernel.org
+References: <20260512055919.95716-3-kaitao.cheng@linux.dev>
+ <da95f45b43d94d17796b19abc4c555e35daafab7d5e1cdca3714fe0f54ab8cce@mail.kernel.org>
+ <e141699dab70282d811ec30bbf2aa8279706817b.camel@gmail.com>
+ <DII0TT9LXYCX.2GMM6QA4Q9BPZ@gmail.com>
+ <0fb2d99b-b122-44fa-a8bc-9befe6e350bc@linux.dev>
+ <7fa6794161a8bd4fdbc21dad68e86e9770c873cc.camel@gmail.com>
+ <0171629c-bdd3-4661-a4e6-2698dd623c3a@linux.dev>
+ <d5961282-d41c-4e54-8ba2-cd08823a8c77@linux.dev>
+ <782833db5da77e4aa9761fc410827e7abe8583c8.camel@gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Kaitao Cheng <kaitao.cheng@linux.dev>
+In-Reply-To: <782833db5da77e4aa9761fc410827e7abe8583c8.camel@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Hi Allison,
+在 2026/5/20 06:56, Eduard Zingerman 写道:
+> On Mon, 2026-05-18 at 11:02 +0800, Kaitao Cheng wrote:
+> 
+> [...]
+> 
+>>>>> The patch does have a bug, however. To fix the issues we are seeing now,
+>>>>> I propose the additional changes below and would appreciate feedback.
+>>>>>
+>>>>> --- a/kernel/bpf/helpers.c
+>>>>> +++ b/kernel/bpf/helpers.c
+>>>>> @@ -2263,8 +2263,10 @@ void bpf_list_head_free(const struct btf_field *field, void *list_head,
+>>>>>         if (!head->next || list_empty(head))
+>>>>>                 goto unlock;
+>>>>>         list_for_each_safe(pos, n, head) {
+>>>>> -               WRITE_ONCE(container_of(pos,
+>>>>> -                       struct bpf_list_node_kern, list_head)->owner, NULL);
+>>>>> +               struct bpf_list_node_kern *node;
+>>>>> +
+>>>>> +               node = container_of(pos, struct bpf_list_node_kern, list_head);
+>>>>> +               WRITE_ONCE(node->owner, BPF_PTR_POISON);
+>>>>>                 list_move_tail(pos, &drain);
+>>>>>         }
+>>>>>  unlock:
+>>>>> @@ -2272,8 +2274,12 @@ void bpf_list_head_free(const struct btf_field *field, void *list_head,
+>>>>>         __bpf_spin_unlock_irqrestore(spin_lock);
+>>>>>
+>>>>>         while (!list_empty(&drain)) {
+>>>>> +               struct bpf_list_node_kern *node;
+>>>>> +
+>>>>>                 pos = drain.next;
+>>>>> +               node = container_of(pos, struct bpf_list_node_kern, list_head);
+>>>>>                 list_del_init(pos);
+>>>>> +               WRITE_ONCE(node->owner, NULL);
+> 
+> Is CPU allowed to reorder the stores in list_del_init() and WRITE_ONCE()?
+> If it is, I think there is a race here.
 
-On 20/05/2026 14:22, Allison Henderson wrote:
-> On Wed, 2026-05-20 at 11:34 +1000, Matthieu Baerts (NGI0) wrote:
->> The run.sh script explicitly checks that CONFIG_MODULES is disabled.
->>
->> By default, this config option is enabled. Explicitly disable it to be
->> able to run the RDS tests.
->>
->> Note that writing '# CONFIG_(...) is not set' is usually recommended to
->> disable an option in the .config, but it looks like selftests usually
->> set 'CONFIG_(...)=n', which looks clearer.
+Thanks for taking a close look at this. You are right that there is an
+ordering issue here, but I don't think the specific sequence illustrated
+by the example below is problematic.
 
-(...)
-> The fix looks fine to me.  Thanks for catching this.
-Thank you for the review. Note that NIPA is now validating these tests:
+> Thread #1:
+>   enter bpf_list_head_free()
+>   acquire H1 lock
+>   list_move_tail(pos, &drain);             // reordered
+>   <-- ip here -->
+>   WRITE_ONCE(node->owner, BPF_PTR_POISON); // reordered
+> 
+> Thread #2:
+> 
+>   acquire H1 lock
+>   n = bpf_refcount_acquire()
+>   release H1 lock
+>   acquire H2 lock
+>   enter __bpf_list_add()
+>   <-- ip here -->
+>   cmpxchg(&node->owner, NULL, BPF_PTR_POISON)
 
-  https://netdev.bots.linux.dev/contest.html?test=run-sh
-  https://netdev.bots.linux.dev/flakes.html?min-flip=0&tn-needle=run-sh
+Even if the stores from list_move_tail(pos, &drain) become visible before
+WRITE_ONCE(node->owner, BPF_PTR_POISON), node->owner is not NULL in that
+window. Before the WRITE_ONCE(), it still points to H1. After the WRITE_ONCE(),
+it is BPF_PTR_POISON. In both cases, __bpf_list_add() will fail:
 
-Note that it might be good to rename the script name, "run.sh" is a bit
-too generic :)
+	cmpxchg(&node->owner, NULL, BPF_PTR_POISON)
 
-Cheers,
-Matt
+because the old value is neither NULL nor expected to become NULL from this
+part of bpf_list_head_free().
+
+
+However, I agree that your original concern about the ordering between
+list_del_init() and WRITE_ONCE(node->owner, NULL) is valid for the later
+drain loop:
+
+	list_del_init(pos);
+	WRITE_ONCE(node->owner, NULL);
+
+Here owner == NULL is the signal that the node can be inserted into another
+list. Since WRITE_ONCE() does not provide release ordering, another CPU may
+observe owner == NULL and successfully acquire the node in __bpf_list_add()
+before the list_del_init() stores are visible. In that case __bpf_list_add()
+can link the node into H2, and the delayed stores from list_del_init() may
+then overwrite the node's list pointers and corrupt the H2 list.
+
+So the fix should be to publish owner == NULL with release ordering after the
+node has been fully unlinked, for example:
+
+```
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -2279,7 +2279,8 @@ void bpf_list_head_free(const struct btf_field *field, void *list_head,
+                pos = drain.next;
+                node = container_of(pos, struct bpf_list_node_kern, list_head);
+                list_del_init(pos);
+-               WRITE_ONCE(node->owner, NULL);
++               /* Ensure __bpf_list_add() sees the node as unlinked. */
++               smp_store_release(&node->owner, NULL);
+                /* The contained type can also have resources, including a
+                 * bpf_list_head which needs to be freed.
+                 */
+@@ -2607,7 +2608,8 @@ static struct bpf_list_node *__bpf_list_del(struct bpf_list_head *head,
+                return NULL;
+
+        list_del_init(n);
+-       WRITE_ONCE(node->owner, NULL);
++       /* Ensure __bpf_list_add() sees the node as unlinked. */
++       smp_store_release(&node->owner, NULL);
+        return (struct bpf_list_node *)n;
+ }
+```
+
+The existing cmpxchg() in __bpf_list_add() is a successful RMW with return
+value, so it is fully ordered and is sufficient on the acquire side.
+
+-- 
+Thanks
+Kaitao Cheng
+
