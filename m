@@ -1,220 +1,101 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13983233946;
-	Tue, 19 May 2026 23:45:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2BF81799F;
+	Wed, 20 May 2026 00:11:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779234322; cv=none; b=XQO1GVbrSs6N0Io2ZYxzFg7QTnCpAs21ujnXH2FWWtGHw65D2MX8/9g0aqP2OhdGS0lsNfSjW+3CuVlVbmZ7GMoa1W167PgruzgKP972v2xe6GQKDZpo2z6dZI5NbohPNtNFn2E3VYfDT03JIUB0tIsyzSIyTpy1v+jMt80k78I=
+	t=1779235878; cv=none; b=TFb2gcN2NcxDfs1THlC3WP+xlZLRmceGqsIhwX6p02dv2/43ATRDgS1m22USHOLK7WtZMCttwGWMiy1rDO8HnhaX6bagcWRRaqBHQV4pIYMvMNwf7hwGqujJ54ioeAQjkLkYMg6ag7nTN6X0y87YSctdC9vP0tvTsqm9qoN7Uyo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779234322; c=relaxed/simple;
-	bh=pejzsyelfw4YPmJszrxyLUpGLAXPmm1twYLbN3j1v4g=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Wkqow3anm7XWHUZJj5bs572VvNjFD20OaU2OtD4BLZG12KuIkOs6wmnEClbgrPTh3d/TEgazj5+cPyEb1t0yyK3CBjOfYmryJzi9YA2MW3GZ9y22u7hLs0rKPQOKqDE/UFD0yLQD6peUz21KVy/T5Hn+l6wLCst1GI6db/6ieWQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=kB60je+F; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
+	s=arc-20240116; t=1779235878; c=relaxed/simple;
+	bh=0yllbxrTlrh80TDt+gArw2uBnfAS5bYiWbbBfmVWJqM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=TwIiySSoI9DlDQW6DAmK1Uci7XH2j/mzo3IDyGwfER3ouyeKDfPEXQkAy6jKrNc8hJxXM17Z2DwFJUHjBEbk8Umqe73JVYlYe1qidO3edF+/4chVi8De/o4l25YzaYgvKVlSe6BG6QME7pxqqjg6yu2LsKCbrS7TTOrRbjLVfz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R1GoE4PQ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="kB60je+F"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
-	In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=pejzsyelfw4YPmJszrxyLUpGLAXPmm1twYLbN3j1v4g=; b=kB60je+Fm1WhYuRCacOBBa6WQT
-	oMyjmcqBjgNw264WgCRELj9GSftet0fXmnnN3wAqI4YU1mK7bt3pdGM6wN8s6+57ERETaoTBEOLFN
-	UG5zasTD/KcYUKjM58V/fcWR8q4qXIrvk8K2JV51F07TO41IfEkhyQKKM6HYN9x4wVRP5QHzlUFkx
-	t/CaOdjM0iRwVjMuL/h+nMoPxWY/+jAPGWR0ZxfRh8Xxp3CYfbRI3+t1LKKhJy6JSfgZ6FuVe6I/p
-	GhKQcA56mw2X6+hNaar/2LOtKfl9RRtAmY1UzvrEhisT4M5cCxPLEr9rHdGzFkJvPN2OqtiEthSX2
-	gRM+ku6A==;
-Received: from 54-240-197-233.amazon.com ([54.240.197.233] helo=u09cd745991455d.ant.amazon.com)
-	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1wPU7a-00000006TDK-2aR6;
-	Tue, 19 May 2026 23:45:11 +0000
-Message-ID: <3685358a639c27a0f0b0ccfe2969c0cfa34cc392.camel@infradead.org>
-Subject: Re: [PATCH v3 net-next 0/7] ptp: Add PHC timestamp quality
- attributes
-From: David Woodhouse <dwmw2@infradead.org>
-To: Jakub Kicinski <kuba@kernel.org>, Arthur Kiyanovski
- <akiyano@amazon.com>,  Harshitha Ramamurthy <hramamurthy@google.com>
-Cc: David Miller <davem@davemloft.net>, netdev@vger.kernel.org, Richard
- Cochran <richardcochran@gmail.com>, Eric Dumazet <edumazet@google.com>,
- Paolo Abeni <pabeni@redhat.com>, Thomas Gleixner <tglx@linutronix.de>,
- Miroslav Lichvar <mlichvar@redhat.com>, Andrew Lunn
- <andrew+netdev@lunn.ch>, Wen Gu <guwen@linux.alibaba.com>, Xuan Zhuo
- <xuanzhuo@linux.alibaba.com>, David Woodhouse <dwmw@amazon.com>, Yonatan
- Sarna <ysarna@amazon.com>, Zorik Machulsky <zorik@amazon.com>,  Alexander
- Matushevsky <matua@amazon.com>, Saeed Bshara <saeedb@amazon.com>, Matt
- Wilson <msw@amazon.com>,  Anthony Liguori <aliguori@amazon.com>, Nafea
- Bshara <nafea@amazon.com>, Evgeny Schmeilin <evgenys@amazon.com>,  Netanel
- Belgazal <netanel@amazon.com>, Ali Saidi <alisaidi@amazon.com>, Benjamin
- Herrenschmidt <benh@amazon.com>,  Noam Dagan <ndagan@amazon.com>, David
- Arinzon <darinzon@amazon.com>, Evgeny Ostrovsky <evostrov@amazon.com>, Ofir
- Tabachnik <ofirt@amazon.com>, Amit Bernstein <amitbern@amazon.com>,
- linux-kselftest@vger.kernel.org, shuah@kernel.org, 
- vadim.fedorenko@linux.dev
-Date: Wed, 20 May 2026 00:45:09 +0100
-In-Reply-To: <20260519163351.61b746d0@kernel.org>
-References: <20260515164033.6403-1-akiyano@amazon.com>
-	 <20260518182646.2d1337d4@kernel.org>
-	 <177921463623.22936.15326822041328476600.b4-reply@b4>
-	 <20260519163351.61b746d0@kernel.org>
-Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-	boundary="=-NBv116Y22KIvgWZJhCJD"
-User-Agent: Evolution 3.52.3-0ubuntu1.1 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R1GoE4PQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A08C91F000E9;
+	Wed, 20 May 2026 00:11:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779235877;
+	bh=6uQf65YPF0MhdxqyCDs+R/XpQCKP8zOjKHxPY/KRBJQ=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=R1GoE4PQdboMv+8Hx5gi9tUQ2rh95YkK//jTZ9b8ltIOssjJCdUmOZ/PPBR7MnHPe
+	 1Evd7kWXbzLgxu9do2arnnawhg1O7U41fiAR/W2gpEIiD9APj3bx6l4t74RZyby/Zv
+	 dGW/9XUHrWWwG/OyhCPiQRRgTIv5yWP6FZZp1oZ117a1Gm2/T1Z3uMSzf4saakWUIC
+	 neVvFdtaRLORaSOAlFXUSXS0CMI0uXgy20l6ybXdR8/ODoN4E9WSaIBqB7X0c2Bbw1
+	 rrN8FEMnbueQeD2+G5Zg8z30N7BKBfrVo/JLArBRdD0ODQ1jbKJDCwg34WHQ8lMY/c
+	 5cSX6SRDaEHEw==
+Date: Tue, 19 May 2026 17:11:15 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Ilya Maximets <i.maximets@ovn.org>
+Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, Eric
+ Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon
+ Horman <horms@kernel.org>, Donald Hunter <donald.hunter@gmail.com>, Shuah
+ Khan <shuah@kernel.org>, Adrian Moreno <amorenoz@redhat.com>, Jiri Benc
+ <jbenc@redhat.com>, Nicolas Dichtel <nicolas.dichtel@6wind.com>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, Matteo Perin
+ <matteo.perin@canonical.com>
+Subject: Re: [PATCH net 4/5] tools: ynl: support listening on all nsids
+Message-ID: <20260519171115.60aceb71@kernel.org>
+In-Reply-To: <20260515201937.2813983-5-i.maximets@ovn.org>
+References: <20260515201937.2813983-1-i.maximets@ovn.org>
+	<20260515201937.2813983-5-i.maximets@ovn.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
+On Fri, 15 May 2026 22:19:23 +0200 Ilya Maximets wrote:
+> +    def ntf_listen_all_nsid(self):
 
---=-NBv116Y22KIvgWZJhCJD
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+doc-string needed
 
-On Tue, 2026-05-19 at 16:33 -0700, Jakub Kicinski wrote:
-> On Tue, 19 May 2026 18:17:16 +0000 Arthur Kiyanovski wrote:
-> > On 2026-05-18 18:26:46-07:00, Jakub Kicinski wrote:
-> > > On Fri, 15 May 2026 16:40:20 +0000 Arthur Kiyanovski wrote:
-> > > =C2=A0=20
-> > > > This series adds quality attributes to PTP Hardware Clock (PHC)
-> > > > timestamps, allowing userspace to obtain error bound, clock status,
-> > > > timescale, and raw counter values alongside timestamps in a single
-> > > > call.=C2=A0=20
-> > >=20
-> > > How does this proposal relate to:
-> > >=20
-> > > https://lore.kernel.org/all/20260517220326.4625-9-dwmw2@infradead.org=
-/
-> > >=20
-> > > ?=C2=A0=20
-> > The two series are independent and complementary. This patchset adds a
-> > generic PTP subsystem interface for reporting quality attributes (error
-> > bounds, clock status) alongside PHC timestamps =E2=80=94 it's a userspa=
-ce-facing
-> > API extension. The RFC is about kernel-internal feed-forward clock
-> > discipline, letting the timekeeping subsystem lock directly to a vmcloc=
-k
-> > reference.
-> >=20
-> > Both touch ptp_vmclock.c but in different code paths: this series adds =
-a
-> > gettimexattrs64 callback for PTP chardev ioctls, the RFC adds
-> > timekeeping_set_reference() for kernel-internal clock steering. No
-> > functional dependency or overlap.
->=20
-> I suspect David will agree, but it'd nonetheless be good to see his
-> review tag on these patches.
+> +        self.sock.setsockopt(Netlink.SOL_NETLINK,
+> +                             Netlink.NETLINK_LISTEN_ALL_NSID, 1)
+> +
+> +    @staticmethod
+> +    def _decode_nsid(ancdata):
+> +        for cmsg_level, cmsg_type, cmsg_data in ancdata:
+> +            if (cmsg_level == Netlink.SOL_NETLINK and
+> +                    cmsg_type == Netlink.NETLINK_LISTEN_ALL_NSID):
+> +                nsid = struct.unpack('i', cmsg_data)[0]
+> +                if nsid >= 0:
+> +                    return nsid
+> +                return None
+> +        return None
+> +
+>      def set_recv_dbg(self, enabled):
+>          self._recv_dbg = enabled
+>  
+> @@ -1235,7 +1251,7 @@ class YnlFamily(SpecFamily):
+>                              f" when parsing '{attr_spec['name']}'")
+>          return raw
+>  
+> -    def handle_ntf(self, decoded):
+> +    def handle_ntf(self, decoded, nsid=None):
+>          msg = {}
+>          if self.include_raw:
+>              msg['raw'] = decoded
+> @@ -1246,15 +1262,20 @@ class YnlFamily(SpecFamily):
+>  
+>          msg['name'] = op['name']
+>          msg['msg'] = attrs
+> +        if nsid is not None:
+> +            msg['nsid'] = nsid
+>          self.async_msg_queue.put(msg)
+>  
+>      def check_ntf(self):
+>          while True:
+>              try:
+> -                reply = self.sock.recv(self._recv_size, socket.MSG_DONTWAIT)
+> +                reply, ancdata, _, _ = self.sock.recvmsg(self._recv_size,
+> +                                                         4096,
+> +                                                         socket.MSG_DONTWAIT)
 
-Yeah, I'm generally happy (I'd done a round of review internally, but
-it's considered bad form to include my Reviewed-by: unless I give it
-publicly on the list).
-
-My series is basically orthogonal, as Arthur says. What I do want to
-check, though, is the intersection between this one and
-https://lore.kernel.org/all/20260511231812.1801984-1-hramamurthy@google.com=
-/
-which also appears to be giving the sandwiched timestamps as raw cycle
-counts =E2=80=94 which is what I'd asked Arthur to expose to userspace.
-
-
-
---=-NBv116Y22KIvgWZJhCJD
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Transfer-Encoding: base64
-
-MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCD9Aw
-ggSOMIIDdqADAgECAhAOmiw0ECVD4cWj5DqVrT9PMA0GCSqGSIb3DQEBCwUAMGUxCzAJBgNVBAYT
-AlVTMRUwEwYDVQQKEwxEaWdpQ2VydCBJbmMxGTAXBgNVBAsTEHd3dy5kaWdpY2VydC5jb20xJDAi
-BgNVBAMTG0RpZ2lDZXJ0IEFzc3VyZWQgSUQgUm9vdCBDQTAeFw0yNDAxMzAwMDAwMDBaFw0zMTEx
-MDkyMzU5NTlaMEExCzAJBgNVBAYTAkFVMRAwDgYDVQQKEwdWZXJva2V5MSAwHgYDVQQDExdWZXJv
-a2V5IFNlY3VyZSBFbWFpbCBHMjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMjvgLKj
-jfhCFqxYyRiW8g3cNFAvltDbK5AzcOaR7yVzVGadr4YcCVxjKrEJOgi7WEOH8rUgCNB5cTD8N/Et
-GfZI+LGqSv0YtNa54T9D1AWJy08ZKkWvfGGIXN9UFAPMJ6OLLH/UUEgFa+7KlrEvMUupDFGnnR06
-aDJAwtycb8yXtILj+TvfhLFhafxroXrflspavejQkEiHjNjtHnwbZ+o43g0/yxjwnarGI3kgcak7
-nnI9/8Lqpq79tLHYwLajotwLiGTB71AGN5xK+tzB+D4eN9lXayrjcszgbOv2ZCgzExQUAIt98mre
-8EggKs9mwtEuKAhYBIP/0K6WsoMnQCcCAwEAAaOCAVwwggFYMBIGA1UdEwEB/wQIMAYBAf8CAQAw
-HQYDVR0OBBYEFIlICOogTndrhuWByNfhjWSEf/xwMB8GA1UdIwQYMBaAFEXroq/0ksuCMS1Ri6en
-IZ3zbcgPMA4GA1UdDwEB/wQEAwIBhjAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIweQYI
-KwYBBQUHAQEEbTBrMCQGCCsGAQUFBzABhhhodHRwOi8vb2NzcC5kaWdpY2VydC5jb20wQwYIKwYB
-BQUHMAKGN2h0dHA6Ly9jYWNlcnRzLmRpZ2ljZXJ0LmNvbS9EaWdpQ2VydEFzc3VyZWRJRFJvb3RD
-QS5jcnQwRQYDVR0fBD4wPDA6oDigNoY0aHR0cDovL2NybDMuZGlnaWNlcnQuY29tL0RpZ2lDZXJ0
-QXNzdXJlZElEUm9vdENBLmNybDARBgNVHSAECjAIMAYGBFUdIAAwDQYJKoZIhvcNAQELBQADggEB
-ACiagCqvNVxOfSd0uYfJMiZsOEBXAKIR/kpqRp2YCfrP4Tz7fJogYN4fxNAw7iy/bPZcvpVCfe/H
-/CCcp3alXL0I8M/rnEnRlv8ItY4MEF+2T/MkdXI3u1vHy3ua8SxBM8eT9LBQokHZxGUX51cE0kwa
-uEOZ+PonVIOnMjuLp29kcNOVnzf8DGKiek+cT51FvGRjV6LbaxXOm2P47/aiaXrDD5O0RF5SiPo6
-xD1/ClkCETyyEAE5LRJlXtx288R598koyFcwCSXijeVcRvBB1cNOLEbg7RMSw1AGq14fNe2cH1HG
-W7xyduY/ydQt6gv5r21mDOQ5SaZSWC/ZRfLDuEYwggWbMIIEg6ADAgECAhAH5JEPagNRXYDiRPdl
-c1vgMA0GCSqGSIb3DQEBCwUAMEExCzAJBgNVBAYTAkFVMRAwDgYDVQQKEwdWZXJva2V5MSAwHgYD
-VQQDExdWZXJva2V5IFNlY3VyZSBFbWFpbCBHMjAeFw0yNDEyMzAwMDAwMDBaFw0yODAxMDQyMzU5
-NTlaMB4xHDAaBgNVBAMME2R3bXcyQGluZnJhZGVhZC5vcmcwggIiMA0GCSqGSIb3DQEBAQUAA4IC
-DwAwggIKAoICAQDali7HveR1thexYXx/W7oMk/3Wpyppl62zJ8+RmTQH4yZeYAS/SRV6zmfXlXaZ
-sNOE6emg8WXLRS6BA70liot+u0O0oPnIvnx+CsMH0PD4tCKSCsdp+XphIJ2zkC9S7/yHDYnqegqt
-w4smkqUqf0WX/ggH1Dckh0vHlpoS1OoxqUg+ocU6WCsnuz5q5rzFsHxhD1qGpgFdZEk2/c//ZvUN
-i12vPWipk8TcJwHw9zoZ/ZrVNybpMCC0THsJ/UEVyuyszPtNYeYZAhOJ41vav1RhZJzYan4a1gU0
-kKBPQklcpQEhq48woEu15isvwWh9/+5jjh0L+YNaN0I//nHSp6U9COUG9Z0cvnO8FM6PTqsnSbcc
-0j+GchwOHRC7aP2t5v2stVx3KbptaYEzi4MQHxm/0+HQpMEVLLUiizJqS4PWPU6zfQTOMZ9uLQRR
-ci+c5xhtMEBszlQDOvEQcyEG+hc++fH47K+MmZz21bFNfoBxLP6bjR6xtPXtREF5lLXxp+CJ6KKS
-blPKeVRg/UtyJHeFKAZXO8Zeco7TZUMVHmK0ZZ1EpnZbnAhKE19Z+FJrQPQrlR0gO3lBzuyPPArV
-hvWxjlO7S4DmaEhLzarWi/ze7EGwWSuI2eEa/8zU0INUsGI4ywe7vepQz7IqaAovAX0d+f1YjbmC
-VsAwjhLmveFjNwIDAQABo4IBsDCCAawwHwYDVR0jBBgwFoAUiUgI6iBOd2uG5YHI1+GNZIR//HAw
-HQYDVR0OBBYEFFxiGptwbOfWOtMk5loHw7uqWUOnMDAGA1UdEQQpMCeBE2R3bXcyQGluZnJhZGVh
-ZC5vcmeBEGRhdmlkQHdvb2Rob3Uuc2UwFAYDVR0gBA0wCzAJBgdngQwBBQEBMA4GA1UdDwEB/wQE
-AwIF4DAdBgNVHSUEFjAUBggrBgEFBQcDAgYIKwYBBQUHAwQwewYDVR0fBHQwcjA3oDWgM4YxaHR0
-cDovL2NybDMuZGlnaWNlcnQuY29tL1Zlcm9rZXlTZWN1cmVFbWFpbEcyLmNybDA3oDWgM4YxaHR0
-cDovL2NybDQuZGlnaWNlcnQuY29tL1Zlcm9rZXlTZWN1cmVFbWFpbEcyLmNybDB2BggrBgEFBQcB
-AQRqMGgwJAYIKwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmRpZ2ljZXJ0LmNvbTBABggrBgEFBQcwAoY0
-aHR0cDovL2NhY2VydHMuZGlnaWNlcnQuY29tL1Zlcm9rZXlTZWN1cmVFbWFpbEcyLmNydDANBgkq
-hkiG9w0BAQsFAAOCAQEAQXc4FPiPLRnTDvmOABEzkIumojfZAe5SlnuQoeFUfi+LsWCKiB8Uextv
-iBAvboKhLuN6eG/NC6WOzOCppn4mkQxRkOdLNThwMHW0d19jrZFEKtEG/epZ/hw/DdScTuZ2m7im
-8ppItAT6GXD3aPhXkXnJpC/zTs85uNSQR64cEcBFjjoQDuSsTeJ5DAWf8EMyhMuD8pcbqx5kRvyt
-JPsWBQzv1Dsdv2LDPLNd/JUKhHSgr7nbUr4+aAP2PHTXGcEBh8lTeYea9p4d5k969pe0OHYMV5aL
-xERqTagmSetuIwolkAuBCzA9vulg8Y49Nz2zrpUGfKGOD0FMqenYxdJHgDCCBZswggSDoAMCAQIC
-EAfkkQ9qA1FdgOJE92VzW+AwDQYJKoZIhvcNAQELBQAwQTELMAkGA1UEBhMCQVUxEDAOBgNVBAoT
-B1Zlcm9rZXkxIDAeBgNVBAMTF1Zlcm9rZXkgU2VjdXJlIEVtYWlsIEcyMB4XDTI0MTIzMDAwMDAw
-MFoXDTI4MDEwNDIzNTk1OVowHjEcMBoGA1UEAwwTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJ
-KoZIhvcNAQEBBQADggIPADCCAgoCggIBANqWLse95HW2F7FhfH9bugyT/danKmmXrbMnz5GZNAfj
-Jl5gBL9JFXrOZ9eVdpmw04Tp6aDxZctFLoEDvSWKi367Q7Sg+ci+fH4KwwfQ8Pi0IpIKx2n5emEg
-nbOQL1Lv/IcNiep6Cq3DiyaSpSp/RZf+CAfUNySHS8eWmhLU6jGpSD6hxTpYKye7PmrmvMWwfGEP
-WoamAV1kSTb9z/9m9Q2LXa89aKmTxNwnAfD3Ohn9mtU3JukwILRMewn9QRXK7KzM+01h5hkCE4nj
-W9q/VGFknNhqfhrWBTSQoE9CSVylASGrjzCgS7XmKy/BaH3/7mOOHQv5g1o3Qj/+cdKnpT0I5Qb1
-nRy+c7wUzo9OqydJtxzSP4ZyHA4dELto/a3m/ay1XHcpum1pgTOLgxAfGb/T4dCkwRUstSKLMmpL
-g9Y9TrN9BM4xn24tBFFyL5znGG0wQGzOVAM68RBzIQb6Fz758fjsr4yZnPbVsU1+gHEs/puNHrG0
-9e1EQXmUtfGn4InoopJuU8p5VGD9S3Ikd4UoBlc7xl5yjtNlQxUeYrRlnUSmdlucCEoTX1n4UmtA
-9CuVHSA7eUHO7I88CtWG9bGOU7tLgOZoSEvNqtaL/N7sQbBZK4jZ4Rr/zNTQg1SwYjjLB7u96lDP
-sipoCi8BfR35/ViNuYJWwDCOEua94WM3AgMBAAGjggGwMIIBrDAfBgNVHSMEGDAWgBSJSAjqIE53
-a4blgcjX4Y1khH/8cDAdBgNVHQ4EFgQUXGIam3Bs59Y60yTmWgfDu6pZQ6cwMAYDVR0RBCkwJ4ET
-ZHdtdzJAaW5mcmFkZWFkLm9yZ4EQZGF2aWRAd29vZGhvdS5zZTAUBgNVHSAEDTALMAkGB2eBDAEF
-AQEwDgYDVR0PAQH/BAQDAgXgMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEFBQcDBDB7BgNVHR8E
-dDByMDegNaAzhjFodHRwOi8vY3JsMy5kaWdpY2VydC5jb20vVmVyb2tleVNlY3VyZUVtYWlsRzIu
-Y3JsMDegNaAzhjFodHRwOi8vY3JsNC5kaWdpY2VydC5jb20vVmVyb2tleVNlY3VyZUVtYWlsRzIu
-Y3JsMHYGCCsGAQUFBwEBBGowaDAkBggrBgEFBQcwAYYYaHR0cDovL29jc3AuZGlnaWNlcnQuY29t
-MEAGCCsGAQUFBzAChjRodHRwOi8vY2FjZXJ0cy5kaWdpY2VydC5jb20vVmVyb2tleVNlY3VyZUVt
-YWlsRzIuY3J0MA0GCSqGSIb3DQEBCwUAA4IBAQBBdzgU+I8tGdMO+Y4AETOQi6aiN9kB7lKWe5Ch
-4VR+L4uxYIqIHxR7G2+IEC9ugqEu43p4b80LpY7M4KmmfiaRDFGQ50s1OHAwdbR3X2OtkUQq0Qb9
-6ln+HD8N1JxO5nabuKbymki0BPoZcPdo+FeRecmkL/NOzzm41JBHrhwRwEWOOhAO5KxN4nkMBZ/w
-QzKEy4PylxurHmRG/K0k+xYFDO/UOx2/YsM8s138lQqEdKCvudtSvj5oA/Y8dNcZwQGHyVN5h5r2
-nh3mT3r2l7Q4dgxXlovERGpNqCZJ624jCiWQC4ELMD2+6WDxjj03PbOulQZ8oY4PQUyp6djF0keA
-MYIDuzCCA7cCAQEwVTBBMQswCQYDVQQGEwJBVTEQMA4GA1UEChMHVmVyb2tleTEgMB4GA1UEAxMX
-VmVyb2tleSBTZWN1cmUgRW1haWwgRzICEAfkkQ9qA1FdgOJE92VzW+AwDQYJYIZIAWUDBAIBBQCg
-ggE3MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI2MDUxOTIzNDUw
-OVowLwYJKoZIhvcNAQkEMSIEIDPsKiqbWzEngV28hbHjZ1Wttp1KtZB0rCUCwowltPBDMGQGCSsG
-AQQBgjcQBDFXMFUwQTELMAkGA1UEBhMCQVUxEDAOBgNVBAoTB1Zlcm9rZXkxIDAeBgNVBAMTF1Zl
-cm9rZXkgU2VjdXJlIEVtYWlsIEcyAhAH5JEPagNRXYDiRPdlc1vgMGYGCyqGSIb3DQEJEAILMVeg
-VTBBMQswCQYDVQQGEwJBVTEQMA4GA1UEChMHVmVyb2tleTEgMB4GA1UEAxMXVmVyb2tleSBTZWN1
-cmUgRW1haWwgRzICEAfkkQ9qA1FdgOJE92VzW+AwDQYJKoZIhvcNAQEBBQAEggIAIOyJ6uc1HmAy
-vTAef0/UZQyk/+Gc3M6gcoV3SHuTwptx4kkrIjy3yjOqYV/FY2ZGLvnXucZkGmYThV9Xptg1bMfI
-Xm5KrpzgExVWkmXnCAJfJtRgjDtKKIRHCjuFv+VB0f61FCS+BiuTfKWgAzG5Irktmcb0eAOzLatQ
-pWnTEmx69rOnPWTwFpqs8GKiMocXIpafJbj9+ZlbKEv76UfTHBmdUrjQPduoKad4oK8I/YuwZj24
-BsHZ9DpjzWn1582dNqXWbkNjohDG5EWeXc+F6wThpGy+u2M4iJu4zo5Hxcn8AHOhPYouwxMTX7sA
-NCTs96rCi+FR7+7NoiMT121V7CDgKMHYGYmBziROKQ+mR4X92LPuDz/gUt+7568NDT8zTzkdqLuI
-89uoUJuRMv7xDxFYb8VFmbbTkzN1Dp3/jgbto0a8q/Uf4aR7EbWGi8W1BudwgpZghGMi7j6KjzA5
-g/XYgw/XLWurXwZQ0pvJDFZuMY3py5ehTf139WHJ/Ob9n2qMsbFyGNNkG9Q9Wfw19oJu6o3JC4Ux
-8P6bRITHCmGxYVYUWzfoT3MX2AFev1Sz0VSbcTjGtxhtTrx1y/pa4marJaWuMx1kp9r1LQV6cXku
-b/dbZWvVis8ogoXtqvroCqX1f0Bo0tfo6kc3h+oilGihiJ+9E8yFTLYijdOoMvEAAAAAAAA=
-
-
---=-NBv116Y22KIvgWZJhCJD--
+please add a helper method (_recvmsg()?) that only takes flags
+and doesn't return flags or addr since neither caller cares
