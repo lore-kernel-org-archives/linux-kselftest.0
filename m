@@ -1,270 +1,213 @@
-Received: from DM1PR04CU001.outbound.protection.outlook.com (mail-centralusazon11010011.outbound.protection.outlook.com [52.101.61.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF7E62D7DC8;
-	Thu, 21 May 2026 13:15:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.61.11
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779369305; cv=fail; b=jkGfA4FihL0WcBRj1wb8hVotA3dtrRqv9Mx6pgIlHkwcGYUb8ZwZlkH+KPkgCAfsBKmRxNyNuOWfZS0m2NaYDoFECuNJPTdgoswPkXbPDnFviuTUVisaYx3PCO73esrNQUbZ4afVuy5/+7UUzdF40Mwn4otvjgDeCxmxv02Tu8w=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779369305; c=relaxed/simple;
-	bh=sch0nJwjvZt8qkdfz9mkSwYtvb8yvli5rZC76DUd+Ko=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=CInyTCLxBM2J7FCHHLQ6aY5Ba3F7sjQRWeLoLTXPbsCbYvhoJ8wpGzY+DBB9+lbjhy/3BewOCvoAfebvjUzcU6vlLAcphWGJTv7gYPwDt3qO7DLyBAH2k6O9X3motgPGn5PxlrGAWVJ4nZMn05NknyCXUq4yxBHRUID88rQromo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=4m0jxaQI; arc=fail smtp.client-ip=52.101.61.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EF003DB97A
+	for <linux-kselftest@vger.kernel.org>; Thu, 21 May 2026 13:21:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779369713; cv=none; b=jZIJaayKw6Tw4Niej2dJIbYtWKEdresrJN8FjoG1yyZpzR/1ry47NfS5Nt24YrokxKIdG5PUH+l2yCS8iJN7rQYy2Hmf7fwRPTAQetei1vIzFEjCJGh9RHErVfpC2G+pgigFIloX86ZmcimnoPJclhpTiyumxB4BRLU7OjOnxjg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779369713; c=relaxed/simple;
+	bh=GR5EzgovptfxCzgfSgkwiZJkZXAcFVBl5/RrfGUEW8E=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=Pwdo+ctWOomlGPe9wkb7HGk36zqv+WeAfW3RX6qT2kFeolmnavd09n1ZJx6c4VLmTKdVXEqdfIuEDESCRcDQjQsaI6ogJ2b+sIhQ90Db9cEiEiY8xiUXbp7IAQ9/YQDMXBs9wBgf7vAp7AAMSvvV7Yaxd4vXBVqLHUKrg0cmZRs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=RYEG3oq2; arc=none smtp.client-ip=209.85.210.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="4m0jxaQI"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=VEFhM1U6htEYqlf/4N8kLEupZ86XIZ8A+w/7VWkLPQvMcfk8fR5aAM4raZ7jpWHXLCECeFZuE5doWRfc0gexR2bi+YbtlSy/iiYeoHzqatKosn/eisDnsGFROCVdlB0/j03azi0nf5X46LFAXpwdLiCT1s/gs221wi7nev/bm2GmlmBFF/rtU4goKilOu07+zXwxebanUIk9g2d+05mmwe4zHp4ZQKJsDDLeDtzUNtR2GjMbpIhHC8KJHDl/ZZC/utt4+1VCnzmgcUUmRFojfg/ddr/lCQQek8S1rV38LnuAuob99OfmETYMrHNf5cnQFtdanoY0ZXcKc4kvYiMIqw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Y0eUWRO1OC1fxvLh1MsspTmWYN3L2CPXYktb1HDGFbw=;
- b=L1Bhvg2e8cE6e/RK1XVdBMH14SBao15xhbzzRrfyCkItCmQgSLuLdXc0+GYOYtMfpfUH5tVIWg2tBHj6y5KeszAXcCw7mmmeT/02nQr/FnGiAYSySnwl0BS9nDYxb42hhxKtchAxVdb7pAPjEkzK+B3gGPyYr9nSRWZ0+p4TX/v5WdoZUHdBb+vdXAGYZHj/oGNc1z3P9G83AlkG9mqXqkDj954Egedl/QVl71tto2f6/gWDPV1cttzWGS5Cpz6nI8i+9TgdY6hnqLeC8LCjIwRwWw2/pbUN8IVchKHBC9nfyIXkWS57JOfombuscZiKD2cB0WaYwCqmfDJ4wJTrkA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Y0eUWRO1OC1fxvLh1MsspTmWYN3L2CPXYktb1HDGFbw=;
- b=4m0jxaQI8QivcNu2g+nTOkJGOAM8/7Jtj/0CvTSFd1Q/VoqIfyjclxohlqQ+dNxPnh2jf6h22cGAR2pk2VOr8hhANYBtFM9GVktj8ZYhJ2WVwBef5Itjf1Ocmiu8ywpBP6UBbLW25gODIB3X+Rx+hDRd/C/eEHsxWbF9p+6OeKE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from PH7PR12MB5685.namprd12.prod.outlook.com (2603:10b6:510:13c::22)
- by SJ2PR12MB8884.namprd12.prod.outlook.com (2603:10b6:a03:547::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.48.17; Thu, 21 May
- 2026 13:14:58 +0000
-Received: from PH7PR12MB5685.namprd12.prod.outlook.com
- ([fe80::ce69:cfae:774d:a65c]) by PH7PR12MB5685.namprd12.prod.outlook.com
- ([fe80::ce69:cfae:774d:a65c%5]) with mapi id 15.21.0025.022; Thu, 21 May 2026
- 13:14:58 +0000
-Message-ID: <e4fe1485-3b66-4f99-ae8d-18db140d3fa6@amd.com>
-Date: Thu, 21 May 2026 15:14:51 +0200
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/2] dma-buf: add DMA_BUF_IOCTL_DERIVE for
- reduced-permission aliases
-To: Albert Esteve <aesteve@redhat.com>
-Cc: Sumit Semwal <sumit.semwal@linaro.org>,
- Benjamin Gaignard <benjamin.gaignard@collabora.com>,
- Brian Starkey <Brian.Starkey@arm.com>, John Stultz <jstultz@google.com>,
- "T.J. Mercier" <tjmercier@google.com>, Shuah Khan <shuah@kernel.org>,
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
- linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, mripard@kernel.org
-References: <20260521-dmabuf-limit-access-v1-0-26c01e27365a@redhat.com>
- <7b662fcd-3bcd-40a2-b014-d9ce36f6425b@amd.com>
- <CADSE00J1+V4=qFZPOL8Cr8hYw6d=hf_XcDPezjYGkcxAwLYGyw@mail.gmail.com>
-Content-Language: en-US
-From: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-In-Reply-To: <CADSE00J1+V4=qFZPOL8Cr8hYw6d=hf_XcDPezjYGkcxAwLYGyw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: MN0PR03CA0004.namprd03.prod.outlook.com
- (2603:10b6:208:52f::10) To PH7PR12MB5685.namprd12.prod.outlook.com
- (2603:10b6:510:13c::22)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RYEG3oq2"
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-82fa7c6699fso9677139b3a.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 May 2026 06:21:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1779369710; x=1779974510; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=iIrwVyrI6nQx/ALkh7jG2SEyqSQ/V8q8plyAwbOOpCU=;
+        b=RYEG3oq2ZTrSTV0TH1vtNNxSBDtD4K1xxalLEcrDej4hdaOhsKBHGGGC4EnHOwbQyj
+         MvmiJwYop8WRlkRyjeOyFwTeyLhOLE7wNNYKAEIQdy9gDbcnrLrI4MMZyOrz0laO9Qvi
+         6h/i6dRSm7shO7Is+86v8dlJVIxxbfRn3WZAEGTWg/8EQ0DRjyIwWFnx94d7lq/MCE+O
+         XoVeXRv/WgEL810+3/iYtwQJHIeBr8qDhWb8jsJ4FDFsW06vu+UI1Uj/UNRPDilb1A3x
+         xU6XuX/bH9e07NDqGinypBZT05jgSk6etbPND9k2Kkqo3FoVgj/+ItyVAi7tW6sW8FaN
+         LG3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779369710; x=1779974510;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iIrwVyrI6nQx/ALkh7jG2SEyqSQ/V8q8plyAwbOOpCU=;
+        b=MluEUg0/vRnWjw7gancGv5QRH1bglGDU2Ym92b/iH9UBBjZnc7Uk8LHjo/NI7clcyZ
+         tTf6Ff7mJO7ZlgVdnx33PftURU/wAGh66jiwOhM9HC6UM9O5M4usqJcJTBjFrQIkhQ3K
+         KFcqSX+BQFP8PCVtM02PPRrBHGNjBGJ0R9ZmMr1on4f6cLhBYM4cu3Ein3j2dVUe592n
+         5ZURswa4jYkAJ6ncC5fj/CrUvLeuSkDqsDOjENmAHX20fG4z6QtoLfmuzWhYej7uTQuQ
+         QW19R0U4yK3/d0Gev2GLBUqdJRjyKqmr6K+r0rE3mqbOSOxE34EByzBYs0CsBUyz9GS8
+         SjLQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/Hkf5/Q43c70D8fExVvBDwI4yP9SW7zweWsqHWkcbD+2y/Pm3W6epAPo2kfdzGNlFb4ZUy8yOSQ4w009ED4Kw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzGkgKEIQkMIHxiQgkC7u6hWQC/EXZFnHn6igzlI9jqpRvgiTYm
+	1gwHmsXy2F88qRY6ll7MzSg7WtdlZMOKs7kfyx4koDqqXAMSZ3QQTBJngSFotqUIVIOnonI8DX5
+	G1HxBZQ==
+X-Received: from pfbmb13.prod.google.com ([2002:a05:6a00:760d:b0:82f:4abd:a354])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:2793:b0:835:cc47:6fe7
+ with SMTP id d2e1a72fcca58-8414adf7c0emr2878031b3a.30.1779369710072; Thu, 21
+ May 2026 06:21:50 -0700 (PDT)
+Date: Thu, 21 May 2026 06:21:49 -0700
+In-Reply-To: <CA+EHjTwrygfMrZZSw4y7-ry8fidW2x0C7iuF2Q=dnPNHUmNtUg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH7PR12MB5685:EE_|SJ2PR12MB8884:EE_
-X-MS-Office365-Filtering-Correlation-Id: b38c75c3-73f7-49cf-9089-08deb73af4db
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|7416014|376014|366016|6133799003|18002099003|22082099003|56012099003|3023799007|11063799006|5023799004|4143699003;
-X-Microsoft-Antispam-Message-Info:
-	cg7RC4wL3qS3mp0K5O8yCrJ7m2TmCy0fWakN77RaDswniE9GOUg9PaMzCeoa5CY6TSlXZWwwiUiAzgOvDbgXZW6P80KzsbQ1aIDjygPpLh+3EzoOFA713nlobrCYHOeuegvduRsqCJtwMtVUD4ZdCLWh+r9cCvvcxjeHdA9R7isJxHMOW2ksVZV3q0MuwDsX4psYPTEUy8+s3oJ7EscgVFgLOLNTq46aW8KuCyCEEmCOuB7+I3CxziSqPB6wSVYFRIhkgpD1bzyYafizxXJHFFgBPHRBQgLghZujBrepVqHijxHxB9FdcXb3XidBm1GBH7GvD7TE9bgYOq4bFhv0N5FQcnX58yiLQJoRKmhtKjMYYkRJLeSZHfqNYChwyOd19qT5V8kXwla/a6tuhczGARi5Bb8ePuJ5tpwsChDyGLTL4DRc2YJaLl3n6/3MKHHBGoUzDBi4EBR6qavaftYNN/WGvxjktLK7opppl1MWQbIqRA708cixJqvSTz1oEhQt4gVcdMutTmBqzZ+ov59n6+8aS0cZtaf1pQchTX1g4zLsV2wTg0B/SuzD3Mt6At7RXQbBOSQn4YsbRgfTKYJyIEqWSMhYxkmhv85M+K2f1alMxWv2Hq+j8H+p+B8urXm931EvaGAOQQ3O7MEpTRv2eVeclAS5/Jh1/O97mvi4LjFB1j2upi+XQvrsutjGJ/X5
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5685.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(366016)(6133799003)(18002099003)(22082099003)(56012099003)(3023799007)(11063799006)(5023799004)(4143699003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?UzRRTXFqVDd3dE9NY25qRUl5cWtnK1ZVSWdZZ1E3WXpsc0xKT2xJU0tDRldn?=
- =?utf-8?B?K0ZGVkRaQ0doNHJqYTVOTGlDbnRXdEh5NDNpM2V0UEpnS1V1Y1J2eEpadXJS?=
- =?utf-8?B?VFc4VjNsbElyTnJUb3VybjFYYzliVkJUL05mZjhXcXREbHU1a3FtNlc5QXRh?=
- =?utf-8?B?YXNPWWpBSEJhWUNkN1VuR1RxN3puUnFldjl5ZmZzZzQzL2d2NG54aVRFTDNy?=
- =?utf-8?B?ZzFHbGszd2Y5VmY2MEkweHp2TjVSb3VmUUhONDI1ZzNETTZ5ekQ0MVlVVks2?=
- =?utf-8?B?MzBoejNnbmM4aHoyNXdySGlZQjQ5amRyZkxMcWVGZU5oNHdUWUdXRkZUYzNq?=
- =?utf-8?B?Y0pjUTlQblhDemF4VGptbmpyQklnNkI4d20yaUdQNFIrYkZ5S2ZvcDNDL1Jo?=
- =?utf-8?B?NWc4Njc3eDhMclI3dzVDRW05U1R4Vm12d3ZmZ29DTE9qTTllRzFtTS9UWlkw?=
- =?utf-8?B?VC8wUFJpUzdzSFJ5TGljRy82bFBIdTFsRnFSOG5uOVVaY1Ivb2xzSVlzcXpo?=
- =?utf-8?B?QWZWNkpWK0FEU1AzZDNuS21yTUVBZnlzcEEvbk1CYk4vNEpLcTNHbUwvajl5?=
- =?utf-8?B?STlVcVorMGVRYitkaHpPZXpMV1Z1KzVJUjJLcThBVytKckxnRjBSamVIS0hY?=
- =?utf-8?B?dFplblp0QjBKY2JsVll0SXRwWVY3cFpwMkF2YkltaUFYVm1MbTh3dTlaZ0ZP?=
- =?utf-8?B?UUdmay9PbXdOUzQzWnE1bGpySnhJNk5jeGFBSWxFNnpMbHprZkN1SENnMWow?=
- =?utf-8?B?akMxSlhLMzc3SjlFTjVPSGFOUisvZER1ZG5MSnRPdDEwa3dtOXU5UHoxa2lm?=
- =?utf-8?B?TTdRR0poSU51eXpCVWRLci90SHNvWWNSYlpPQW5NZVJsZmw2U0dHVFltN3gy?=
- =?utf-8?B?d1lRVGFPS2JCOVcxejVjRHN3Tk13QzhZMDNDM2g0ZU9ONlVvMmVTUGFjOFRz?=
- =?utf-8?B?c25uM3pzY1lKZkVlL2tnY0ZjeHJSOTcrZFlhc0w5SGdxUlJhejFocnBNellC?=
- =?utf-8?B?ODhTNWxDbFNiVHFoUDRlSlVsYzh3VDduNnZDNE1sOHRWc3J3VktzZ214NW9i?=
- =?utf-8?B?a0w0Znc3eXZkUlJQaGZUNzZIaXBlMlQyL0M4Q3ZjZ0dDSmhBOFRhdXZrZ3kz?=
- =?utf-8?B?dnlsMElycC9VTVlRcmlobmttQ1A0VkpFY24wTjEzT20wVnE0OUdOUVlybkZa?=
- =?utf-8?B?V09KWE40aThzbUhwNDZLOFUvWkZia0dDcXIvODEyQWZma0xYUWtMVkVTNEJl?=
- =?utf-8?B?WW05UmdhdWgzSFBSajY0NFROa1RWQXd4TFZkSVFGM2NMdnY5VSs1VXVjMG13?=
- =?utf-8?B?QWpmQ292K2FtRjNML0hOdTFPZnEzTnk3VmpsV0RCaU9UbGhDQ2ZZRjBJNkpC?=
- =?utf-8?B?Y1FHdWFlZXdSK2NvTkR5VWFhZ3QvZ2ozWGY3eEpmWk1iSnR5dGhtVXU2eWlI?=
- =?utf-8?B?MnRoMzdUVGdMeGFIMjVJRUlPNUhhRVJmM2VXY0RtUC9vWElBQThXaDVwRXFX?=
- =?utf-8?B?aTVDMnBQZjQ4NEFMTXkzL01UOE1xMTlaRVhVNVBnL3ovMmJOY0g2aHBIU2Nq?=
- =?utf-8?B?UE9BeTFUTHJ1OXExZ1NXYTdETGdUaHFhYTJRUk0zV1VHaFcyWkpnNEw1dHkz?=
- =?utf-8?B?QjlJcndBT0NVcE01QXdLK2NwWlBidFhQR1ZJa21DK2dGVkZrOXlGRU0xNVlX?=
- =?utf-8?B?NUF5MFZtQ3hwS25iVG5qeVkveVROYVJkYWtyODF6WFZZcVlSZnIvK1orVlFW?=
- =?utf-8?B?eUNuTkdvMU5yMXBhdHlwSnpoN09oNWR1TEU4MW5pZFhIbUJyc3Fic3hDVlE4?=
- =?utf-8?B?V2Nmc1lBV3JvWjhtcDZzeUNySVdaaGVvN2l5L01uYzl2elI2NWpLb2Y4YnJH?=
- =?utf-8?B?bHdHNTV6Ukc3aDNHOUhGcXQwbWdoYnYra0lybUJRa2NjZnJZcU1LQ3E5SnhL?=
- =?utf-8?B?VWVMK0V6MTFUMjczaDVIaVYycW9rYXVXdGRka0Y0Qzl1enEyR1d4bUp6ZXJX?=
- =?utf-8?B?VVJzZDVmb21qa3BWTTJ6N2t2MUIxN1NnYTRjczhJRFNqcTZEU0JGQjNCaFVn?=
- =?utf-8?B?S3J5NTFpamljMTA2V3pRREZhc2JVVmpHNXVDQ0VkWXlyY3BVUnZOeVhCWWJK?=
- =?utf-8?B?ZFF2WXNCdEVLdEsxZkwzMFJQNjNIRmw2KzFPNEMxYkQ2bkZOcTgwclhoeGtJ?=
- =?utf-8?B?RU9pZGZjWFZ6T2xjZE9tR0pVTXBHQ1ZZZUtRLzBvVWZhU0Y3K2hNb01jZFAr?=
- =?utf-8?B?b0xiMTYwTSsyZzMyaTlvOFBqc1M0dWRFak1za00xNTBXZGtXWi9wdExZYzF1?=
- =?utf-8?Q?WLoY2Pc4locIDoc8o1?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b38c75c3-73f7-49cf-9089-08deb73af4db
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5685.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 May 2026 13:14:57.9852
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qRVK0i5/+7meDousmD2jW5Z1hyyIK0k1XH9+QIrTuDUXpGxDaQbNqozPKgNZayyv
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8884
+Mime-Version: 1.0
+References: <20260507-gmem-inplace-conversion-v6-0-91ab5a8b19a4@google.com>
+ <20260507-gmem-inplace-conversion-v6-21-91ab5a8b19a4@google.com> <CA+EHjTwrygfMrZZSw4y7-ry8fidW2x0C7iuF2Q=dnPNHUmNtUg@mail.gmail.com>
+Message-ID: <ag8G7Wq5PbEdKloG@google.com>
+Subject: Re: [PATCH v6 21/43] KVM: SEV: Make 'uaddr' parameter optional for KVM_SEV_SNP_LAUNCH_UPDATE
+From: Sean Christopherson <seanjc@google.com>
+To: Fuad Tabba <tabba@google.com>
+Cc: ackerleytng@google.com, aik@amd.com, andrew.jones@linux.dev, 
+	binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com, 
+	david@kernel.org, ira.weiny@intel.com, jmattson@google.com, 
+	jthoughton@google.com, michael.roth@amd.com, oupton@kernel.org, 
+	pankaj.gupta@amd.com, qperret@google.com, rick.p.edgecombe@intel.com, 
+	rientjes@google.com, shivankg@amd.com, steven.price@arm.com, 
+	willy@infradead.org, wyihan@google.com, yan.y.zhao@intel.com, 
+	forkloop@google.com, pratyush@kernel.org, suzuki.poulose@arm.com, 
+	aneesh.kumar@kernel.org, liam@infradead.org, 
+	Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
+	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+	Nhat Pham <nphamcs@gmail.com>, Baoquan He <bhe@redhat.com>, Barry Song <baohua@kernel.org>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
+	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
+	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Kiryl Shutsemau <kas@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>, Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-mm@kvack.org, linux-coco@lists.linux.dev
+Content-Type: text/plain; charset="us-ascii"
 
-On 5/21/26 15:01, Albert Esteve wrote:
-> Hi Christian,
+On Thu, May 21, 2026, Fuad Tabba wrote:
+> Hi,
 > 
-> On Thu, May 21, 2026 at 2:28 PM Christian König
-> <christian.koenig@amd.com> wrote:
->>
->> On 5/21/26 11:10, Albert Esteve wrote:
->>> When sharing a dma-buf between components of different trust levels, the
->>> allocator may need to hand a consumer a read-only view of a buffer it
->>> holds with read-write access. An example is a camera pipeline where the
->>> capture component writes frames into a buffer and needs to pass a
->>> read-only handle to a downstream processing component that should not be
->>> able to modify the data.
->>>
->>> However, no such mechanism exists today. The access mode of a dma-buf
->>> file descriptor is fixed at export time, and the standard POSIX
->>> interfaces for duplicating or changing file descriptors (i.e., dup(2),
->>> dup3(2), and fcntl(F_SETFL)) cannot alter the read/write access mode of
->>> the copy.
->>>
->>> One natural candidate would be reopening via /proc/self/fd/<N> with
->>> O_RDONLY, which works for regular files. For dma-buf this would fail
->>> (that is, if we were to add a new handler for open f_op) with ENXIO
->>> because the dmabuf pseudo-filesystem carries SB_NOUSER, which prevents
->>> the VFS from opening its files through path-based resolution from
->>> userspace.
->>
->> OH MY GOD! This is the like the sixth time I had to clarify that in the last few weeks, I'm really wondering where that is suddenly coming from.
+> On Thu, 7 May 2026 at 21:22, Ackerley Tng via B4 Relay
+> <devnull+ackerleytng.google.com@kernel.org> wrote:
+> >
+> > From: Michael Roth <michael.roth@amd.com>
+> >
+> > For vm_memory_attributes=1, in-place conversion/population is not
+> > supported, so the initial contents necessarily must need to come
+> > from a separate src address, which is enforced by the current
+> > implementation. However, for vm_memory_attributes=0, it is possible for
+> > guest memory to be initialized directly from userspace by mmap()'ing the
+> > guest_memfd and writing to it while the corresponding GPA ranges are in
+> > a 'shared' state before converting them to the 'private' state expected
+> > by KVM_SEV_SNP_LAUNCH_UPDATE.
+> >
+> > Update the handling/documentation for KVM_SEV_SNP_LAUNCH_UPDATE to allow
+> > for 'uaddr' to be set to NULL when vm_memory_attributes=0, which
+> > SNP_LAUNCH_UPDATE will then use to determine when it should/shouldn't
+> > copy in data from a separate memory location. Continue to enforce
+> > non-NULL for the original vm_memory_attributes=1 case.
+> >
+> > Signed-off-by: Michael Roth <michael.roth@amd.com>
+> > [Added src_page check in error handling path when the firmware command fails]
+> > [Dropped ifdef CONFIG_KVM_VM_MEMORY_ATTRIBUTES]
+> > Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 > 
-> Sorry! I do not know where others came from. But my interest comes
-> from automotive, safety, and mixed criticality scenarios. I kind of
-> hinted at that in the opening when referring to "different trust
-> levels".
-
-AH! Yeah, automotive is most likely the common topic in all those requests.
-
->>
->> Creating the DMA-buf with O_RDONLY does *NOT* make the DMA-buf itself read only!
->>
->> That's a really common misconception. The flag only controls if mmap() can be done read/write or read-only to handle cache coherency issues.
->>
->> It is still perfectly possible for a device to write into a DMA-buf created with O_RDONLY with DMA!
->>
->> So long story short there is not such feature as a read only DMA-buf, and putting read-only pages into a DMA-buf and then expecting that nobody can write to them is an absolutely clear No-Go.
->>
->> If we would want to implement a read-only DMA-buf feature we would need to go over all the different DMA-buf importers in the kernel and add security checks.
+> I'm not very familiar with the SEV-SNP populate flows, but it looks
+> like Sashiko is on to something:
+> https://sashiko.dev/#/patchset/20260507-gmem-inplace-conversion-v6-0-91ab5a8b19a4%40google.com?part=21
 > 
-> This clarifies a lot. Too bad, but it makes sense. I will abandon the
-> series then.
-> 
-> Thanks for the review and the explanation!
+> - a potential read-only page overwrite, because src_page is acquired
+> via get_user_pages_fast() without the FOLL_WRITE flag, but is then
+> overwritten via memcpy
 
-No problem, I was just really surprised that this came up once more.
+Oof, yeah, that's bad.  Adding FOLL_WRITE to kvm_gmem_populate() feels wrong, and
+could break uABI, but doing gup() in SNP code would reintroduce the AB-BA issue
+with filemap_invalidate_lock().
 
-Just for completeness: What some exporters do is to reject read/write mmap calls with O_RDONLY and map_dma_buf() callbacks with DMA_BIDIRECTIONAL or DMA_TO_DEVICE.
+Aha!  Not if we use get_user_page_fast_only().  Ugh, but then we'd have to plumb
+the userspace address into the post-populated callback.
 
-But as I said this is just to catch cache coherency issues and not access control.
+Hrm.  Given that no one has yelled about overwriting their CPUID page, and given
+that the CPUID page is likely dynamically created and thus is unlikely to be a
+read-only mapping (e.g. versus the initial image), maybe this?
 
-If I'm not completely mistaken some HW actually can't even guarantee read only mappings, in other words even if you say don't write to that buffer in the kernel you could submit shader or DMA commands from userspace which does exactly that and it works.
+diff --git arch/x86/kvm/svm/sev.c arch/x86/kvm/svm/sev.c
+index 37d4cfa5d980..c73c028d72c1 100644
+--- arch/x86/kvm/svm/sev.c
++++ arch/x86/kvm/svm/sev.c
+@@ -2456,6 +2456,7 @@ static int snp_launch_update(struct kvm *kvm, struct kvm_sev_cmd *argp)
+        sev_populate_args.type = params.type;
+ 
+        count = kvm_gmem_populate(kvm, params.gfn_start, src, npages,
++                                 params.type == KVM_SEV_SNP_PAGE_TYPE_CPUID,
+                                  sev_gmem_post_populate, &sev_populate_args);
+        if (count < 0) {
+                argp->error = sev_populate_args.fw_error;
+diff --git arch/x86/kvm/vmx/tdx.c arch/x86/kvm/vmx/tdx.c
+index f97bcf580e6d..33f35be4455b 100644
+--- arch/x86/kvm/vmx/tdx.c
++++ arch/x86/kvm/vmx/tdx.c
+@@ -3188,7 +3188,7 @@ static int tdx_vcpu_init_mem_region(struct kvm_vcpu *vcpu, struct kvm_tdx_cmd *c
+                };
+                gmem_ret = kvm_gmem_populate(kvm, gpa_to_gfn(region.gpa),
+                                             u64_to_user_ptr(region.source_addr),
+-                                            1, tdx_gmem_post_populate, &arg);
++                                            1, false, tdx_gmem_post_populate, &arg);
+                if (gmem_ret < 0) {
+                        ret = gmem_ret;
+                        break;
+diff --git include/linux/kvm_host.h include/linux/kvm_host.h
+index 61a3430957f2..b83cda2870ba 100644
+--- include/linux/kvm_host.h
++++ include/linux/kvm_host.h
+@@ -2596,7 +2596,8 @@ int kvm_arch_gmem_prepare(struct kvm *kvm, gfn_t gfn, kvm_pfn_t pfn, int max_ord
+ typedef int (*kvm_gmem_populate_cb)(struct kvm *kvm, gfn_t gfn, kvm_pfn_t pfn,
+                                    struct page *page, void *opaque);
+ 
+-long kvm_gmem_populate(struct kvm *kvm, gfn_t gfn, void __user *src, long npages,
++long kvm_gmem_populate(struct kvm *kvm, gfn_t start_gfn, void __user *src,
++                      long npages, bool writable,
+                       kvm_gmem_populate_cb post_populate, void *opaque);
+ #endif
+ 
+diff --git virt/kvm/guest_memfd.c virt/kvm/guest_memfd.c
+index a35a55571a2d..6553d4e032ce 100644
+--- virt/kvm/guest_memfd.c
++++ virt/kvm/guest_memfd.c
+@@ -858,7 +858,8 @@ static long __kvm_gmem_populate(struct kvm *kvm, struct kvm_memory_slot *slot,
+        return ret;
+ }
+ 
+-long kvm_gmem_populate(struct kvm *kvm, gfn_t start_gfn, void __user *src, long npages,
++long kvm_gmem_populate(struct kvm *kvm, gfn_t start_gfn, void __user *src,
++                      long npages, bool writable,
+                       kvm_gmem_populate_cb post_populate, void *opaque)
+ {
+        struct kvm_memory_slot *slot;
+@@ -892,8 +893,9 @@ long kvm_gmem_populate(struct kvm *kvm, gfn_t start_gfn, void __user *src, long
+ 
+                if (src) {
+                        unsigned long uaddr = (unsigned long)src + i * PAGE_SIZE;
++                       unsigned int flags = writable ? FOLL_WRITE : 0;
+ 
+-                       ret = get_user_pages_fast(uaddr, 1, 0, &src_page);
++                       ret = get_user_pages_fast(uaddr, 1, flags, &src_page);
+                        if (ret < 0)
+                                break;
+                        if (ret != 1) {
 
-So I don't really see a chance for that feature to fly as general DMA-buf thing. Maybe between two specific exporters/importers could work, but yeah...
+> - an ordering violation with the kunmap_local() calls
 
-Regards,
-Christian.
+Yeesh, that's a new one for me.  Thankfully this is 64-bit only, so it's not an
+issue.
 
+> These predate this patch series and are just being touched by the
+> 'src_page' addition, but if Sashiko's right, these should probably be
+> fixed sooner rather than later.
 
-> 
-> BR,
-> Albert
-> 
->>
->> Regards,
->> Christian.
->>
->>
->>>
->>> Alternatively, exporting the buffer twice would produce two independent
->>> dma_buf instances, which breaks fence synchronization.
->>>
->>> Therefore we add a new DMA_BUF_IOCTL_DERIVE ioctl, which produces a new
->>> file descriptor for an existing dma-buf with a caller-specified subset
->>> of the original permissions:
->>>
->>> ```
->>>   struct dma_buf_derive { __u32 flags; __s32 fd; };
->>>
->>>   struct dma_buf_derive req = { .flags = O_RDONLY | O_CLOEXEC };
->>>   ioctl(rw_fd, DMA_BUF_IOCTL_DERIVE, &req);
->>>   /* req.fd is now a read-only alias of the same buffer */
->>> ```
->>>
->>> Permission escalation is rejected with -EACCES. The new fd aliases the
->>> same struct dma_buf as the original, same dma_resv, same exporter ops,
->>> same underlying memory; so importers attaching to either fd see the same
->>> fence timeline and operate on the same object. Access control for which
->>> components may receive or pass on restricted descriptors can be layered on
->>> top via SELinux file:read and file:write permissions.
->>>
->>> A shared writable mapping (PROT_WRITE | MAP_SHARED) on the read-only fd is
->>> rejected with -EACCES in dma_buf_mmap_internal().
->>>
->>> Two small internal adjustments accompany the ioctl:
->>> - __dma_buf_list_del() is moved to dma_buf_release() so it fires exactly
->>>   once on dentry destruction rather than on every file close.
->>> - dma_buf_file_release() is updated to call dma_buf_put() only for
->>>   files that are not the primary dma-buf file.
->>>
->>> This may not be the best approach, but after considering different
->>> options and alternatives (as described above), we decided to raise the
->>> discussion upstream. Thus, we welcome any alternative proposal or ideas.
->>>
->>> The series is structured as:
->>> - Patch 1 adds the new ioctl implementation.
->>> - Patch 2 adds selftests covering the new ioctl.
->>>
->>> Signed-off-by: Albert Esteve <aesteve@redhat.com>
->>> ---
->>> Albert Esteve (2):
->>>       dma-buf: add DMA_BUF_IOCTL_DERIVE for reduced-permission aliases
->>>       selftests: dma-buf: add DERIVE ioctl tests
->>>
->>>  drivers/dma-buf/dma-buf.c                          |  58 ++++++++++-
->>>  include/uapi/linux/dma-buf.h                       |  28 +++++
->>>  tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c | 114 ++++++++++++++++++++-
->>>  3 files changed, 198 insertions(+), 2 deletions(-)
->>> ---
->>> base-commit: ab5fce87a778cb780a05984a2ca448f2b41aafbf
->>> change-id: 20260520-dmabuf-limit-access-73261353841a
->>>
->>> Best regards,
->>
-> 
-
+Yeah, ditto with the offset wrapping case.
