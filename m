@@ -1,118 +1,204 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f43.google.com (mail-yx1-f43.google.com [74.125.224.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D01D625B0B3;
-	Thu, 21 May 2026 02:24:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ABA737DE92
+	for <linux-kselftest@vger.kernel.org>; Thu, 21 May 2026 02:59:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779330269; cv=none; b=bR+Wft4zcJmAk7uF5jPfWghaRMv4In0qNZ0h1LJ39hZGmEYqJBIWzMh2O6xkHhpsouSvnUXzfLnrOYTOqWGCNETCnfDmMt0yYgopRsIaMCHXILmIc8iDJgsisP10+K4DG/CIywAKMiaE8pEVI/pERl4PVz3W5ye3MH7ArLNx6lQ=
+	t=1779332372; cv=none; b=EkHozJ/v0dzBqQpk+bddoUawt7ar9vaK8uB9vt46UWUCrCUDL/Cg7yw1AC8KblyWPqk3HRRSdp3p/vyme7pssgoA4TA7qsqR6Vmw3+DaaWKud7ia1fIZC/PjcITTBBc/HeX9QjeE1Zx+6CnymqZr9YGDMihgh0JDRvvGgyGsgeY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779330269; c=relaxed/simple;
-	bh=FNg1PSgXE2tA9eVOh4PEavjFhohOEuldf2sWmUuG54I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:Cc:
-	 In-Reply-To:Content-Type; b=eEZL6T29PzfT5y0VNpC1O4I7XpP2CJQmWGTen85nRx97HElC2s6FT3Qnhm9U/xQgbxCe7HJhRja6iGBtrcHRlDorsLAaBUK0Hj7e1M2XC70rGfSkimHbqM8k5FPdj+1+mArcqnf9cHU8+kvp3lcbRvIzx9pr6O/uD98V2lSc8+o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SZ/DdOCA; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779332372; c=relaxed/simple;
+	bh=oHsfccn7DDbOn6VBM/zSWqYwTq+d7qUjU4CoIduHDQw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ZBPpO+pq+Dn50FF57BOMfivDg/0p+sNldb/fWLz3XkC3NxQ+TS+j1g1gshx0ZsOFqocLqWRze+mTZzNZ50lPqm/sGfl+qsvVs+d9RPt6v/5y9nQeaw1zZIdm0tBioLamjba+Rdx6hTCPWRG/miLn5MqlLgO0ncqjZvlgS1lwZoM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=northecho.dev; spf=none smtp.mailfrom=northecho.dev; dkim=pass (2048-bit key) header.d=northecho-dev.20251104.gappssmtp.com header.i=@northecho-dev.20251104.gappssmtp.com header.b=I/ycwK4T; arc=none smtp.client-ip=74.125.224.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=northecho.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=northecho.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SZ/DdOCA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 845611F000E9;
-	Thu, 21 May 2026 02:24:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779330259;
-	bh=x9tqlivhc7BnNnoNl0c/vQYDQas6kZF0US0sSaXJR1o=;
-	h=Date:Subject:To:References:From:Cc:In-Reply-To;
-	b=SZ/DdOCAv1zrbW68uvyeK4i+0+/C5Jk5hKOnlmLEV3Mu8V8ThcM3ZPy7I79Sd6XHT
-	 VuOfCGucbKot9DiRWOIAJ60pm5f2eDVWGT9trozOeWjZ0Pi8uFPiRdYe4cYBn0DBp8
-	 2dyyPapv+CuEY+I/sjlE/R8D4bryFQJp3QkYBH2p7+RS9rE4pKYfAwqgLuHJAidk1O
-	 0vpRCA6stlr4csNSxx/YavGUuaBCxJCVStQMYM1eE5ly1D98aiZIGvL3fNFvjT+aeJ
-	 i2knJuZwE5EBllX1jj7J4fMmGjlIPEoSv8yO6amBzgkz71xGaMeqZga9ZeCcs055ns
-	 0o1tJ8m7CtCKA==
-Message-ID: <92da057f-7e97-405c-877f-ad6a64e3553e@kernel.org>
-Date: Thu, 21 May 2026 12:24:10 +1000
+	dkim=pass (2048-bit key) header.d=northecho-dev.20251104.gappssmtp.com header.i=@northecho-dev.20251104.gappssmtp.com header.b="I/ycwK4T"
+Received: by mail-yx1-f43.google.com with SMTP id 956f58d0204a3-651c7118b74so322116d50.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 20 May 2026 19:59:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=northecho-dev.20251104.gappssmtp.com; s=20251104; t=1779332370; x=1779937170; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+XKb2Lqr4W3lw4U2X+TN89zQnTM+iU4ox03eiLP8Puw=;
+        b=I/ycwK4TMG9SWoBWs7GGWmpyy/zMgqVJjV8Od4XM4lPIgfZjaXoP77LJx6QdLBYdWt
+         jspYHPHHiWy175XjS0m0NYSroj62j1DADFlesGkVd87rJ8+iffHe7cJ4MCPE0dfNWitH
+         EMtrDVqOXk3YS90Pc2S0isRAXcb8tXf8wE8bPRqQcmqqKTE5BkQFBAYsmYBjlRUPMeuJ
+         BmnT1Z1BA2vYfJuBjG4HJNfaxJXfN7JoBYXN/3hxTaF6U3cEEzJZgSgYri2tydgCF0bR
+         +lMbiSVinixoE6mCPLf0n2QtakJQ79NWeMWlFbs62ZWDCptG1gvHAz25ZLk/lcZvRCnK
+         KGbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779332370; x=1779937170;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=+XKb2Lqr4W3lw4U2X+TN89zQnTM+iU4ox03eiLP8Puw=;
+        b=RU5VQqVdaB9lWbs61VinG4WDFj5wT5puMhGBsM1AX1g4m63+Oho+zufq2wAGmuKs2a
+         gInO7zK18B0IVxQHemYZpxFRzN11UahsoXCmvfEyEPeTgoQJuZC9Inkzvgs+X19QSVZf
+         CVgtI5XIac/PdchaI7aXmUf7GHSQwu+oUvJXAZLWcz6zWoU22bs1TtTOLQMUEF/i8Iqp
+         21mqwmFxbQeFecfL2MXEkTP08SGfZgZZQnj2WgLdt+PlA12+ap0lurh2KxtKKg4cytH6
+         hmH8Sy4i1oggPCjHFUqJyjeXlvxYjXRN9KqaXOrJMNWABILzqVFbNlO2FvOgkmR4Wkrv
+         n9XQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9UkhzVF1BLFOIht6KnjwmmmfSLUADbR7VX8wqf73tl0yylVhYAeOyADRy+zuqaB1s7Xd5FiQ17irYdwunjdLA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxGS5qxNP+mD4yrfJwkUagQRf/N55A0NNzC660CgKP4xJgiq5gZ
+	fcfEPPhGkUwXv2rLYbre00qlhk5Wo37sRLyrTp24BKXuCxutWvup9lry/SxhnAsIaG6x
+X-Gm-Gg: Acq92OEKxxLKUfDgnCMZHhV1n8hHbucmBhyfaqSe5qGOo6X2E+NVSfgk+heL3jnXHyo
+	05MdaT2jhiZK6CQWoRZ9IuNw8CrKtV9iVQt12fM/L9bFgOVD74bncBDGkbEjQzB8LD+RBVJRaRi
+	FVzwa0jd20A9pFAZdKGcDqMM7q1d0MmOqDftRHW2gGudBk4NQGPmpsjUnGKcCnE1PVbZI2QyinR
+	vGxaIfqjdJFJX87nVW3jVUBUzrOmMAPeqlugkNp8xXOEG93MTLchMwlJbaefqygNA+5UO68Gz2K
+	94LCsbey4hI8dw+mrQKHNx0D5Nh2iq6MkGA4B9XQ+xUajZirwtIX5pyjsaEE5cEE+EDtZTVvkbZ
+	vUzFzH4qKw2OLYjXNeSnLP8wqdWdxMiIl/siIP16LFzKk5N3GpJMbY6zo2dSI0R8NGKKNC2M50S
+	luRdWEcjPtn+kpB+BX8Ha9ywCma+VEbP2+5H/IkEW24+Ym4QAqnsaJQCT5aYb65yLF5WpzYEnId
+	waHaZn57etOmI3X0DdUF7H2nw==
+X-Received: by 2002:a05:690e:140d:b0:65c:6ffb:303a with SMTP id 956f58d0204a3-65eae2fdc85mr521328d50.8.1779332369665;
+        Wed, 20 May 2026 19:59:29 -0700 (PDT)
+Received: from kelso.tail8e61da.ts.net (99-10-92-174.lightspeed.rlghnc.sbcglobal.net. [99.10.92.174])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-65e0d86c850sm10092743d50.1.2026.05.20.19.59.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 May 2026 19:59:29 -0700 (PDT)
+From: Christopher Lusk <clusk@northecho.dev>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: John Fastabend <john.fastabend@gmail.com>,
+	Sabrina Dubroca <sd@queasysnail.net>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: [PATCH net v2 1/2] net: tls: preserve split open record on async encrypt
+Date: Wed, 20 May 2026 22:58:39 -0400
+Message-ID: <20260521025840.976378-2-clusk@northecho.dev>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260521025840.976378-1-clusk@northecho.dev>
+References: <20260521025840.976378-1-clusk@northecho.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH net-next v2] selftests: net: add tests for PPPoL2TP
-Content-Language: fr
-To: Qingfang Deng <qingfang.deng@linux.dev>
-References: <20260514015743.37869-1-qingfang.deng@linux.dev>
-From: Matthieu Baerts <matttbe@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Felix Maurer <fmaurer@redhat.com>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- Petr Machata <petrm@nvidia.com>, linux-kernel@vger.kernel.org,
- linux-ppp@vger.kernel.org, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Autocrypt: addr=matttbe@kernel.org; keydata=
- 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
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <20260514015743.37869-1-qingfang.deng@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi Qingfang,
+When the BPF sk_msg verdict sets apply_bytes smaller than the current
+open record, tls_push_record() splits ctx->open_rec into the record
+being encrypted and a remainder record. The synchronous path reattaches
+the remainder to ctx->open_rec before continuing.
 
-On 14/05/2026 11:57, Qingfang Deng wrote:
-> Add ping, iperf3, and recursion tests for PPPoL2TP.
+If the selected AEAD provider completes asynchronously,
+tls_do_encryption() returns -EINPROGRESS after unhooking ctx->open_rec.
+tls_push_record() currently returns immediately in that case, before
+the split remainder is reattached. The remainder is no longer reachable
+through ctx->open_rec or ctx->tx_list, which can silently drop
+transmitted data and leak the unreachable tls_rec.
 
-Thank you for the new test!
+Keep the split remainder rooted even when encryption of the first record
+is pending asynchronously, and continue the BPF verdict drain loop after
+an async record has been queued. If that loop then hits a later verdict
+error, wait for the pending async encryption before returning the error
+so zerocopy user pages cannot be released while cryptd still reads them.
 
-I recently modified NIPA to be able to execute this test by adding
-xl2tpd 1.3.20, but it looks like this test is flaky:
+Fixes: d3b18ad31f93 ("tls: add bpf support to sk_msg handling")
+Cc: stable@vger.kernel.org # 4.20+
+Signed-off-by: Christopher Lusk <clusk@northecho.dev>
+Assisted-by: Codex:gpt-5.5
+Assisted-by: Claude:claude-opus-4-7
+---
+ net/tls/tls_sw.c | 40 ++++++++++++++++++++++++++++++++--------
+ 1 file changed, 32 insertions(+), 8 deletions(-)
 
-  https://netdev.bots.linux.dev/contest.html?skip=0&test=pppol2tp-sh
-
-The results are now ignored.
-
-Do you mind fixing that, please?
-
-Cheers,
-Matt
+diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
+index 964ebc268..5b20be5b4 100644
+--- a/net/tls/tls_sw.c
++++ b/net/tls/tls_sw.c
+@@ -840,16 +840,19 @@ static int tls_push_record(struct sock *sk, int flags,
+ 	rc = tls_do_encryption(sk, tls_ctx, ctx, req,
+ 			       msg_pl->sg.size + prot->tail_size, i);
+ 	if (rc < 0) {
+-		if (rc != -EINPROGRESS) {
+-			tls_err_abort(sk, -EBADMSG);
+-			if (split) {
+-				tls_ctx->pending_open_record_frags = true;
+-				tls_merge_open_record(sk, rec, tmp, orig_end);
+-			}
++		if (rc == -EINPROGRESS)
++			goto split_done;
++
++		tls_err_abort(sk, -EBADMSG);
++		if (split) {
++			tls_ctx->pending_open_record_frags = true;
++			tls_merge_open_record(sk, rec, tmp, orig_end);
+ 		}
+ 		ctx->async_capable = 1;
+ 		return rc;
+-	} else if (split) {
++	}
++split_done:
++	if (split) {
+ 		msg_pl = &tmp->msg_plaintext;
+ 		msg_en = &tmp->msg_encrypted;
+ 		sk_msg_trim(sk, msg_en, msg_pl->sg.size + prot->overhead_size);
+@@ -857,6 +860,11 @@ static int tls_push_record(struct sock *sk, int flags,
+ 		ctx->open_rec = tmp;
+ 	}
+ 
++	if (rc < 0) {
++		ctx->async_capable = 1;
++		return rc;
++	}
++
+ 	return tls_tx_records(sk, flags);
+ }
+ 
+@@ -871,6 +879,8 @@ static int bpf_exec_tx_verdict(struct sk_msg *msg, struct sock *sk,
+ 	struct sock *sk_redir;
+ 	struct tls_rec *rec;
+ 	bool enospc, policy, redir_ingress;
++	bool async = false;
++	int async_err = 0;
+ 	int err = 0, send;
+ 	u32 delta = 0;
+ 
+@@ -920,6 +930,10 @@ static int bpf_exec_tx_verdict(struct sk_msg *msg, struct sock *sk,
+ 	switch (psock->eval) {
+ 	case __SK_PASS:
+ 		err = tls_push_record(sk, flags, record_type);
++		if (err == -EINPROGRESS) {
++			async = true;
++			err = 0;
++		}
+ 		if (err && err != -EINPROGRESS && sk->sk_err == EBADMSG) {
+ 			*copied -= sk_msg_free(sk, msg);
+ 			tls_free_open_rec(sk);
+@@ -988,8 +1002,18 @@ static int bpf_exec_tx_verdict(struct sk_msg *msg, struct sock *sk,
+ 			goto more_data;
+ 	}
+  out_err:
++	if (async && err && err != -EINPROGRESS) {
++		async_err = tls_encrypt_async_wait(ctx);
++		if (test_and_clear_bit(BIT_TX_SCHEDULED, &ctx->tx_bitmask)) {
++			/* tx_lock is held; the worker will reschedule if needed. */
++			cancel_delayed_work(&ctx->tx_work.work);
++			tls_tx_records(sk, flags);
++		}
++		if (async_err)
++			err = async_err;
++	}
+ 	sk_psock_put(sk, psock);
+-	return err;
++	return err ?: (async ? -EINPROGRESS : 0);
+ }
+ 
+ static int tls_sw_push_pending_record(struct sock *sk, int flags)
 -- 
-NIPA assistant.
+2.54.0
+
