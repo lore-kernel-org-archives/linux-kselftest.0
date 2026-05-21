@@ -1,125 +1,204 @@
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64D2825B086
-	for <linux-kselftest@vger.kernel.org>; Thu, 21 May 2026 14:25:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2DBE3EE1EE
+	for <linux-kselftest@vger.kernel.org>; Thu, 21 May 2026 14:29:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779373542; cv=none; b=RiVkmO+QzKUyfCSXMIY4e+61nzHQs4aHlUW+l7abWbCKufa+28AQI3KN15zIxAPKVz0cwYNM4AMISPbshOPM2dNNuFHcGUS1ZT4pv2oT69C/EgkT5rGTqUcscUjLNN/GaeKC/vKsTgmdvPFQx+OT/LQ1Jw0xzzBABlrA+5M0NVU=
+	t=1779373780; cv=none; b=GaAjgRNspFZc0+rqk/ZOAc4lhJSZuqpp4IJ7+Td6LF9DRAQsiJSGjWfZEwzVxvrbOLTLCq9eHjQBmR63dOdoLDXEbemKCB9cdW3uZXp1DAa9bLowR1HyQH191D0+LsGALyKYn+hj2yvqRmYRUvYO/5gYvIGod7uXr0BVBQzdGqk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779373542; c=relaxed/simple;
-	bh=+C3fO9EHQqC8yb9Ea8YRyF+2U4PtwzeiyV4Jx0pc3HA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MT0s/aNEIgKp36eSkSIUqTx9Zo+gtOqV3ARAzPMxqAFY3sAVsr8ECLgs9r03ciurtSjFBCWRyeALR9SUmHIFEDhmpj3GKbaP4iL2oebAC4LBWuhPo2ZD/5U5YeYeCTmOqbAX03VHO53Eht/mk8mzDQ2IkmCE895MkCpDhwEhByk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=6wind.com; spf=pass smtp.mailfrom=6wind.com; dkim=pass (2048-bit key) header.d=6wind.com header.i=@6wind.com header.b=IyXo3MfR; arc=none smtp.client-ip=209.85.218.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=6wind.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=6wind.com
+	s=arc-20240116; t=1779373780; c=relaxed/simple;
+	bh=L8X/Vtnahfr1UKdViXhLKWhf9qHUBPeIKLu97RI+aL8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=arMDUNFK6wN7ynnRIoh1T1mevDjhS7CFw3QafIN0XtKBF+2+0EeDbbFowsJSZkaLw9ckdoYJjcPtB9YifJ4vln0uBus2gxMIFqHhcQwEtrycnJ0qOHFiYkBiFh4if9F75uGPJ5y5JM72M3injEZ3aBSXLCMFEwjShFKfh6LgHBk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=pWkyhPoa; arc=none smtp.client-ip=91.218.175.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=6wind.com header.i=@6wind.com header.b="IyXo3MfR"
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-bce3350fe3eso86159966b.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 May 2026 07:25:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=6wind.com; s=google; t=1779373539; x=1779978339; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:content-language
-         :from:references:cc:to:subject:reply-to:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=8fIErPlRSj4fk2dY+zUS744qFronKsaelvf6iKyKFKQ=;
-        b=IyXo3MfRPtLzvEM7I5Bch8BNUC1qogTTnjTAL64Ar7313l6eEXzn35z8h7uvybRlrA
-         mb1bXOkqNru2qu49NvwAzN+W3JC+4RsZ2JSgEBqZ9gbXrBg4ya2lr5/0tr/DcSgEL6/a
-         Z1FdAMlqSCbksJMSweiV7CJ/H+47wPPtbNjU2fBX7sAd63dLbmBxuZqBU+NV+0hGpI6p
-         IdcbA36EUy5O3sotzGGKohA0jcGT/O92j1Iuz8BjCBNC4ls6DVVHUFSZRNUK6ncQKsw8
-         r8cEtqMRkVcKYlcZGmZTlB2qFQXjK1yZbB2Mtx0c6N9FqMLoSLeOujuhCEJJPQ3OCSCN
-         byxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779373539; x=1779978339;
-        h=content-transfer-encoding:in-reply-to:organization:content-language
-         :from:references:cc:to:subject:reply-to:user-agent:mime-version:date
-         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8fIErPlRSj4fk2dY+zUS744qFronKsaelvf6iKyKFKQ=;
-        b=IdQYXfn/EKbJyHws9odRS7TvXcQLQF1T9As+WeKEGOkVm7Q/9fpvBu89t+CiK8z+/G
-         yBQpQvU6x8QpH+sSvmgnktr3OjTxsFdAYnJjyzi+xyiFU9rFIKS91NWaMAJ3tAoNWEKs
-         h4FGAvlfohhTOzJZm3vjyy6oJofwQskUrB7zslcTUhtcokcTn+22jtNmckJZpGSnb4Md
-         pZDspMVZ7WUqGayySu3FYg++o5AvhmufyCDEWPf6UBBG6+ZuX+MDUlTIWzru0G+SWg4X
-         6rcE6CTH/LcZcpCUfKJ7/Tf9h4Y6khJECa/z5BAKFMq3pnnKub2DJb1KnJ+rjII7c78e
-         eeMg==
-X-Forwarded-Encrypted: i=1; AFNElJ/rn38Y7i1iwunjwVjh3IM4jwTIQlNRGI8R1GFC6klQLmttF7TotEawQjVBuUDfdrzxnrcC46F4rBs9lpHB+ms=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwXq0f6NBrUIq9X/8RmhnCr3fXYrpGHHSj2WnAIzzqsMq2YhtBs
-	ynAC4FHLXTImnshLrCCSvG2coabFtYYG5VyRk30aqgbZnRcgqotSTawbvYYZHnPuexc=
-X-Gm-Gg: Acq92OE+Tsr1+MdUN/Eu2o6uXgfuEW2Eul62IU0+wyTvAQHBEYADTNZH9dJugAE42ut
-	sDncklMj2BWLaa+r652Hw7cUSRZZh5D0ZG/NUopuQuTlZDi3yZYUmCf5wezsvwnd2ebBrVfOuWG
-	6QO4LfxQImWoYwupTUVXplk/o2xYvJOWEODJi6IyjCI2Ip1gBzhDfmmfWOuqU77kKQVUvfcBWay
-	mVMeuNxCSIgqlD5QwDzo62rzjDhAniLNmJp5FpC5CxDDAKjfay4sShVSf/WDAeOs8Avc3JbFsCk
-	hwYnGlKcdsVhkEedCRVFczWqg73LSMqa8ECaAUzovj36YbQpXvXGnSBdoVfNSVgi3H7uukf6/Au
-	4pxiY6JrpTLOPRSBvBYSl39AiF4orBV+thNzsyXGJfmihIrznZcoQC/5vJ2uRgmHUAdk0C0wySt
-	FMYi8uY9hEMvmH4EQTNIKeVvOAcfnfLEu0Pntrdd1V8uQkqbXxtRjik5tLHS8M0EMpY6E+9qMFI
-	bOYZPh7djvGjkY=
-X-Received: by 2002:a17:907:961c:b0:bd2:a2a4:fd3a with SMTP id a640c23a62f3a-bdc1437aeddmr66262566b.7.1779373538588;
-        Thu, 21 May 2026 07:25:38 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:ab7:2110:6a1d:efff:fe52:1959? ([2a01:e0a:ab7:2110:6a1d:efff:fe52:1959])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-bdc8aa03d4asm57107166b.47.2026.05.21.07.25.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 May 2026 07:25:38 -0700 (PDT)
-Message-ID: <9e7b7aab-dad4-4b72-87cd-822e67b27afe@6wind.com>
-Date: Thu, 21 May 2026 16:25:37 +0200
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="pWkyhPoa"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1779373775;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Hw2iSi5nOOVvlhwvxYfHRrDn76QQRLFbRQOPEaOi5gE=;
+	b=pWkyhPoa58XOqB8Oismhu3yUX3jShmcFhalKAS/TS+Citaz/A1tJ+73T+8S/tJuoAbqs8N
+	q9zI0SN6YFaVcx4J4m3dhRl9wpOZI3VDd4w/a6ZoCRe+pMzxbbd8qQsjTd9b9C++2T/Na4
+	1hly5Lsh2FI7jTKFVK1jwW+enKsbRdg=
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	kernel-patches-bot@fb.com
+Subject: [PATCH bpf-next v2] bpf: Fix concurrent regression in map_create()
+Date: Thu, 21 May 2026 22:29:09 +0800
+Message-ID: <20260521142909.95818-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Reply-To: nicolas.dichtel@6wind.com
-Subject: Re: [PATCH net v2 2/4] net: netlink: don't set nsid on local
- notifications
-To: Jiri Benc <jbenc@redhat.com>
-Cc: Ilya Maximets <i.maximets@ovn.org>, netdev@vger.kernel.org,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Donald Hunter <donald.hunter@gmail.com>,
- Shuah Khan <shuah@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>,
- Kees Cook <kees@kernel.org>, Adrian Moreno <amorenoz@redhat.com>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Matteo Perin <matteo.perin@canonical.com>
-References: <20260520172317.175168-1-i.maximets@ovn.org>
- <20260520172317.175168-3-i.maximets@ovn.org>
- <bd9c0751-55ea-459e-8b22-8bd24abf235c@6wind.com>
- <20260521160036.413771e9@griffin>
-From: Nicolas Dichtel <nicolas.dichtel@6wind.com>
-Content-Language: en-US
-Organization: 6WIND
-In-Reply-To: <20260521160036.413771e9@griffin>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Le 21/05/2026 à 16:00, Jiri Benc a écrit :
-> On Thu, 21 May 2026 14:36:12 +0200, Nicolas Dichtel wrote:
->> I still don't think that this is the right "fix". The app is broken. Even after
->> this patch, the bug could be easily triggered again by a third party.
->> There is nothing wrong with assigning a self-nsid. It would be a lot more robust
->> for the app to assign itself a self-nsid when it starts.
-> 
-> On the other hand, does the patch break anything in practice (as
-> opposed to in theory)? It makes live of several apps simpler, which is
-> not a bad goal.
-I'm not against the patch, it just look like a workaround.
-I'm trying to understand how NETLINK_LISTEN_ALL_NSID is used (in fact, why it is
-used if the app doesn't "understand" NSIDs).
+Because there is time gap between bpf_map_new_fd() and close_fd(), a
+concurrent thread is able to close the new fd and opens a new, unrelated
+file with the exact same fd number. Thereafter, this close_fd() might
+inadvertently close the unrelated file.
 
-> 
-> The only scenario where this would introduce incompatible behavior is
-> an app that self-assigns a self-nsid and expects to see it. That looks
-Yes, I thought about this.
+To avoid such regression, do finalize log before security_bpf_map_create().
 
-> quite stretched, doesn't it?
-It does.
+However, in order to achieve it, move bpf_get_file_flag(),
+security_bpf_map_create(), bpf_map_alloc_id(), and bpf_map_new_fd() from
+__map_create() to map_create(). And, rename __map_create() to
+map_create_alloc() meanwhile.
 
-Regards,
-Nicolas.
+Then, in order to reuse the map and token when all checks pass in
+map_create_alloc(), pass "struct bpf_map **" and "struct bpf_token **" to
+map_create_alloc().
 
-> 
-> Not that I have a strong opinion about this, though.
-> 
->  Jiri
-> 
+Fixes: 49f9b2b2a18c ("bpf: Add syscall common attributes support for map_create")
+Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+---
+v1 -> v2:
+* Finalize log before security_bpf_map_create() (per Alexei).
+* v1: https://lore.kernel.org/bpf/20260518145446.6794-3-leon.hwang@linux.dev/
+---
+ kernel/bpf/syscall.c | 80 ++++++++++++++++++++++++++------------------
+ 1 file changed, 47 insertions(+), 33 deletions(-)
+
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 83de8fb9b9aa..28489e2fea04 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -1359,7 +1359,8 @@ static int map_check_btf(struct bpf_map *map, struct bpf_token *token,
+ 
+ #define BPF_MAP_CREATE_LAST_FIELD excl_prog_hash_size
+ /* called via syscall */
+-static int __map_create(union bpf_attr *attr, bpfptr_t uattr, struct bpf_verifier_log *log)
++static int map_create_alloc(union bpf_attr *attr, bpfptr_t uattr, struct bpf_verifier_log *log,
++			    struct bpf_map **mapp, struct bpf_token **tokenp)
+ {
+ 	const struct bpf_map_ops *ops;
+ 	struct bpf_token *token = NULL;
+@@ -1367,7 +1368,6 @@ static int __map_create(union bpf_attr *attr, bpfptr_t uattr, struct bpf_verifie
+ 	u32 map_type = attr->map_type;
+ 	struct bpf_map *map;
+ 	bool token_flag;
+-	int f_flags;
+ 	int err;
+ 
+ 	err = CHECK_ATTR(BPF_MAP_CREATE);
+@@ -1403,10 +1403,6 @@ static int __map_create(union bpf_attr *attr, bpfptr_t uattr, struct bpf_verifie
+ 		return -EINVAL;
+ 	}
+ 
+-	f_flags = bpf_get_file_flag(attr->map_flags);
+-	if (f_flags < 0)
+-		return f_flags;
+-
+ 	if (numa_node != NUMA_NO_NODE &&
+ 	    ((unsigned int)numa_node >= nr_node_ids ||
+ 	     !node_online(numa_node))) {
+@@ -1598,6 +1594,49 @@ static int __map_create(union bpf_attr *attr, bpfptr_t uattr, struct bpf_verifie
+ 		goto free_map;
+ 	}
+ 
++	*mapp = map;
++	*tokenp = token;
++	return 0;
++
++free_map:
++	bpf_map_free(map);
++put_token:
++	bpf_token_put(token);
++	return err;
++}
++
++static int map_create(union bpf_attr *attr, bpfptr_t uattr, struct bpf_common_attr *attr_common,
++		      bpfptr_t uattr_common, u32 size_common)
++{
++	struct bpf_token *token = NULL;
++	struct bpf_verifier_log *log;
++	struct bpf_log_attr attr_log;
++	struct bpf_map *map = NULL;
++	int err, ret;
++	int f_flags;
++
++	log = bpf_log_attr_create_vlog(&attr_log, attr_common, uattr_common, size_common);
++	if (IS_ERR(log))
++		return PTR_ERR(log);
++
++	err = map_create_alloc(attr, uattr, log, &map, &token);
++
++	/* preserve original error even if log finalization is successful */
++	ret = bpf_log_attr_finalize(&attr_log, log);
++	if (ret)
++		err = ret;
++
++	kfree(log);
++
++	if (err)
++		goto free_map;
++
++	f_flags = bpf_get_file_flag(attr->map_flags);
++	if (f_flags < 0) {
++		err = f_flags;
++		goto free_map;
++	}
++
+ 	err = security_bpf_map_create(map, attr, token, uattr.is_kernel);
+ 	if (err)
+ 		goto free_map_sec;
+@@ -1626,37 +1665,12 @@ static int __map_create(union bpf_attr *attr, bpfptr_t uattr, struct bpf_verifie
+ free_map_sec:
+ 	security_bpf_map_free(map);
+ free_map:
+-	bpf_map_free(map);
+-put_token:
++	if (map)
++		bpf_map_free(map);
+ 	bpf_token_put(token);
+ 	return err;
+ }
+ 
+-static int map_create(union bpf_attr *attr, bpfptr_t uattr, struct bpf_common_attr *attr_common,
+-		      bpfptr_t uattr_common, u32 size_common)
+-{
+-	struct bpf_verifier_log *log;
+-	struct bpf_log_attr attr_log;
+-	int err, ret;
+-
+-	log = bpf_log_attr_create_vlog(&attr_log, attr_common, uattr_common, size_common);
+-	if (IS_ERR(log))
+-		return PTR_ERR(log);
+-
+-	err = __map_create(attr, uattr, log);
+-
+-	/* preserve original error even if log finalization is successful */
+-	ret = bpf_log_attr_finalize(&attr_log, log);
+-	if (ret) {
+-		if (err >= 0)
+-			close_fd(err);
+-		err = ret;
+-	}
+-
+-	kfree(log);
+-	return err;
+-}
+-
+ void bpf_map_inc(struct bpf_map *map)
+ {
+ 	atomic64_inc(&map->refcnt);
+-- 
+2.54.0
 
