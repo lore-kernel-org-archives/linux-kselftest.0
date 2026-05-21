@@ -1,149 +1,105 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D95223955DC;
-	Thu, 21 May 2026 06:57:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3D13395AE8
+	for <linux-kselftest@vger.kernel.org>; Thu, 21 May 2026 07:00:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779346634; cv=none; b=b8PGkbotOzWZALACN/g9h9sLwGM6NSRLrc/UWu1mG1Qyscix3axJdZ4Y4dxL4fbEs+v/++KZhSgjlDyftNORFHj4S6KuC3c5dCI35Zze75t1Ge/L6h28cw1PK861FMkg8phmuXMLy7/4x0qY54tLnfiDLBS6FnaudIDTPItBEM4=
+	t=1779346856; cv=none; b=KRuSMwSzWJMev6bJ3dgVowNi8n/dPNyZMzE1Inx3Dcn2avzSSt/SQK9a5cH1pQv/snKVTcYL2ecT0fTtg3wxscOSNcP28NCcnZxw3L/92amp4f/6RTOxbAYsnjYbZ5kpt9XDFSsha9rWG24B+3TIiZm19QpXZFEwcHLZC7OfMf8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779346634; c=relaxed/simple;
-	bh=7IJwGV9znx3XEDptkR1uEqG+xZjAAVexOo1+orQefiU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=E4wiqGevMdENNZQkWa49tcFCzNqbG3d/SR7Bqs3CoFGPiBjJdWvwnlFAYu9hmvl2V+aeu5veLuXCRsdwMBZPqELqw5cYqy3cnJawv3YKDpmQShN1UpfnUHN9RNIxvATq9RM0pPt2OjQnaSarHKZ5czYCZj+Op9jLWhxdmRcpbZE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ubVz3HKM; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1779346856; c=relaxed/simple;
+	bh=BS0fGzXbKfEg3NPGeP858gXyAzpXGJF5jn+eF6WbGdg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RQ2Qb9HHvszNZ2BTvoZGazH8rLJW7r48KAZxqltKOnqcCzeW3zwFUnWtXPmp5kgLGJL5BytoxC714uRuSDxbV7Ue86H5c8SkgRQ8yBnQHQjjYAQ2pUBVHMbMfQQ6jtvhslaI8mxUZdzkKe07nZ/G9Hg/qk5pZVLGEvdcczz9eCY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=uksaI4hM; arc=none smtp.client-ip=95.215.58.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ubVz3HKM"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9BB7DC2BCF5;
-	Thu, 21 May 2026 06:57:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux.dev; s=korg;
-	t=1779346633; bh=7IJwGV9znx3XEDptkR1uEqG+xZjAAVexOo1+orQefiU=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=ubVz3HKMwCRZmtvS6q+G0vdfbMsGQCY4+pZUmVreY4sLt+7Bs+4XeMn784H2G15i3
-	 2onIHUuOoWImogbyQLJlYXZs81blWA+jMR57LnhUG++fS1ac74mrLz3Ly7DGmfl3fV
-	 uP1WVh1bMV14ZY3XRqQ8QuekdPUlhvY0CqGBoL0g=
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9258CCD343F;
-	Thu, 21 May 2026 06:57:13 +0000 (UTC)
-From: Alvin Sun <alvin.sun@linux.dev>
-Date: Thu, 21 May 2026 14:57:12 +0800
-Subject: [PATCH v3 6/7] rust: block: rnull: use vertical import style
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="uksaI4hM"
+Message-ID: <9e300669-8793-41a2-84a1-98fb8195e263@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1779346837;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=k4jVmpmnD2ykAokas/X3lk9Wju6nk7/v9FrN61iDdtk=;
+	b=uksaI4hMnPFVdDq4c5Bb3ZjpEiYNcHN/F+CjLaJToiS+RJV2UtylKqYjKBZPMcwGZmZGI5
+	4ZqE0DUVMaXXSb5rBgEp3kWuETBIVsskg4oWfnCrMmxQunwFe/5RowftvQpZwq9cOYh7Wu
+	0sBsmINv8JZnSO8aLY4iYcPlD6TaqDA=
+Date: Thu, 21 May 2026 14:59:32 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260521-miscdev-use-format-v3-6-56240ca70d0c@linux.dev>
-References: <20260521-miscdev-use-format-v3-0-56240ca70d0c@linux.dev>
-In-Reply-To: <20260521-miscdev-use-format-v3-0-56240ca70d0c@linux.dev>
-To: Arnd Bergmann <arnd@arndb.de>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
- Gary Guo <gary@garyguo.net>, 
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
- Danilo Krummrich <dakr@kernel.org>, Jens Axboe <axboe@kernel.dk>, 
- Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, 
- Rae Moar <raemoar63@gmail.com>
-Cc: rust-for-linux@vger.kernel.org, linux-block@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
- Alvin Sun <alvin.sun@linux.dev>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1779346631; l=2062;
- i=alvin.sun@linux.dev; s=20260317; h=from:subject:message-id;
- bh=7IJwGV9znx3XEDptkR1uEqG+xZjAAVexOo1+orQefiU=;
- b=VW4g3lvXiWyowuFivxU7IbLLajYd8o8BAFgWb7crAeUbtjkflvdMs9T7Rc/VkqIKiWQUuaXgs
- egrACrudZVDAi1NhecV2jnSq+RmavkXPjQswL1lyDeawend7OCrYqll
-X-Developer-Key: i=alvin.sun@linux.dev; a=ed25519;
- pk=CHcwQp8GSoj25V/L1ZWNSQjWp9eSIb0s9LKr0Nm3WuE=
-X-Endpoint-Received: by B4 Relay for alvin.sun@linux.dev/20260317 with
- auth_id=684
+Subject: Re: [PATCH bpf-next v11 4/8] bpf: Introduce the bpf_list_del kfunc.
+To: bot+bpf-ci@kernel.org
+Cc: bpf@vger.kernel.org, ast@kernel.org, corbet@lwn.net,
+ martin.lau@linux.dev, daniel@iogearbox.net, andrii@kernel.org,
+ eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
+ john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
+ haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
+ chengkaitao@kylinos.cn, skhan@linuxfoundation.org, memxor@gmail.com,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, vmalik@redhat.com,
+ linux-kselftest@vger.kernel.org, martin.lau@kernel.org, clm@meta.com,
+ ihor.solodrai@linux.dev
+References: <20260521032306.97118-5-kaitao.cheng@linux.dev>
+ <d1fb9e986434b92188b3b37514336794c49a807c0378badceda45c3c14bb9739@mail.kernel.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Kaitao Cheng <kaitao.cheng@linux.dev>
+In-Reply-To: <d1fb9e986434b92188b3b37514336794c49a807c0378badceda45c3c14bb9739@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Convert `use` imports to vertical layout for better readability and
-maintainability.
 
-Signed-off-by: Alvin Sun <alvin.sun@linux.dev>
----
- drivers/block/rnull/configfs.rs | 27 +++++++++++++++++++++------
- drivers/block/rnull/rnull.rs    | 15 +++++++++++----
- 2 files changed, 32 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/block/rnull/configfs.rs b/drivers/block/rnull/configfs.rs
-index 7c2eb5c0b7228..c10a55fc58948 100644
---- a/drivers/block/rnull/configfs.rs
-+++ b/drivers/block/rnull/configfs.rs
-@@ -1,16 +1,31 @@
- // SPDX-License-Identifier: GPL-2.0
- 
--use super::{NullBlkDevice, THIS_MODULE};
-+use super::{
-+    NullBlkDevice,
-+    THIS_MODULE, //
-+};
- use kernel::{
--    block::mq::gen_disk::{GenDisk, GenDiskBuilder},
--    configfs::{self, AttributeOperations},
-+    block::mq::gen_disk::{
-+        GenDisk,
-+        GenDiskBuilder, //
-+    },
-+    configfs::{
-+        self,
-+        AttributeOperations, //
-+    },
-     configfs_attrs,
--    fmt::{self, Write as _},
-+    fmt::{
-+        self,
-+        Write as _, //
-+    },
-     new_mutex,
-     page::PAGE_SIZE,
-     prelude::*,
--    str::{kstrtobool_bytes, CString},
--    sync::Mutex,
-+    str::{
-+        kstrtobool_bytes,
-+        CString, //
-+    },
-+    sync::Mutex, //
- };
- 
- pub(crate) fn subsystem() -> impl PinInit<kernel::configfs::Subsystem<Config>, Error> {
-diff --git a/drivers/block/rnull/rnull.rs b/drivers/block/rnull/rnull.rs
-index 0ca8715febe83..13048cea8bb0d 100644
---- a/drivers/block/rnull/rnull.rs
-+++ b/drivers/block/rnull/rnull.rs
-@@ -10,12 +10,19 @@
-         self,
-         mq::{
-             self,
--            gen_disk::{self, GenDisk},
--            Operations, TagSet,
--        },
-+            gen_disk::{
-+                self,
-+                GenDisk, //
-+            },
-+            Operations,
-+            TagSet, //
-+        }, //
-     },
-     prelude::*,
--    sync::{aref::ARef, Arc},
-+    sync::{
-+        aref::ARef,
-+        Arc, //
-+    }, //
- };
- 
- module! {
+在 2026/5/21 12:08, bot+bpf-ci@kernel.org 写道:
+>> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+>> index 59855b434f0b..804c201c28f3 100644
+>> --- a/kernel/bpf/helpers.c
+>> +++ b/kernel/bpf/helpers.c
+> 
+> [ ... ]
+> 
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index f3cf8d85bea0..35eebb5e7769 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+> 
+> [ ... ]
+> 
+>> @@ -11671,7 +11674,8 @@ static bool check_kfunc_is_graph_node_api(struct bpf_verifier_env *env,
+>>
+>>  	switch (node_field_type) {
+>>  	case BPF_LIST_NODE:
+>> -		ret = is_bpf_list_push_kfunc(kfunc_btf_id);
+>> +		ret = is_bpf_list_push_kfunc(kfunc_btf_id) ||
+>> +		      kfunc_btf_id == special_kfunc_list[KF_bpf_list_del];
+> 
+> This isn't a bug, but Eduard Zingerman suggested in v10 adding a
+> is_bpf_list_del_kfunc() helper for consistency with the existing code style
+> (similar to is_bpf_list_push_kfunc()). This would maintain the pattern used
+> throughout the codebase for checking kfunc types.
+> 
+> Reference: https://lore.kernel.org/bpf/ca14a6fd8a1f3ce1e64c70b6d9ea2baf8df913ae.camel@gmail.com/
+
+The reason for using is_bpf_list_push_kfunc() is that it groups multiple parallel
+"kfunc_btf_id == special_kfunc_list[*]" checks into one helper, making the code
+easier to reuse. If we added is_bpf_list_del_kfunc() here, it would only wrap a
+single KF_bpf_list_del check, which is unnecessary. Also, more helpers such as
+is_bpf_list_first/last may be added later, and overusing is_bpf_list_* helpers
+would make the code more redundant.
+
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> 
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26204125015
 
 -- 
-2.43.0
-
+Thanks
+Kaitao Cheng
 
