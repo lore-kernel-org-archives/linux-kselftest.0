@@ -1,217 +1,145 @@
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12EFF3D7D91
-	for <linux-kselftest@vger.kernel.org>; Thu, 21 May 2026 12:39:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.44
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779367143; cv=pass; b=uuLSwWYOoW2JK5pR4Eco1GuW2L0qEsAEmyP3OOrAVNcAts/Xuez/DSPctbhPebuoJobAZ7Z10/lSoL9AJPPwTp19MtsSwkE39VrIxG9Q4l4rNrmAjXjCbeMhSh8HTtCRImqottACOfji8rKSOtRYFKaT5wbKDuZu34dVsXIoKhc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779367143; c=relaxed/simple;
-	bh=RiahDbEJAc+a6SEUc46bDIXeBBSM67xZIAhPJO19bM4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FIXxeBYjTaJs1QgJ+292nI25g0+swRuN00dZU3Eb0iBdM9EO5mLNqv5n32Uwf4AWZqCrLtZSs/yYGzXY/HE85rRxsR7zvREmGDLAtq00wmfW+wm2mxksd+Ag0aPb6JpInodQQnKqi0x0UABZMw/sbM9Qt78tu7L+eAMrA5GtFNM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G6t7CYjH; arc=pass smtp.client-ip=209.85.208.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91C6B3DD532;
+	Thu, 21 May 2026 12:50:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779367834; cv=none; b=nwbivx72IAVXpfx8QxBa/ChCH1qiaX9sMO0/35bL0ubhx4pbNlRDgSimxP1ZRSX+uzppaqWho1BspIkh7WSXN8vkJWM0Km7q3hQZsBiGLRviK0S6utQEOQipYGw6kWZVyOSYTwu69MugL3oC5OTM5qxMye0RZPNn+zYYaOjlXpI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779367834; c=relaxed/simple;
+	bh=cQ+8vKRBCwxZgVfUo+dkYcspnC9qqt3zeu55Qw9FmGo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Vv5md6fSTKi1c7ABCBr7uc3GhiRbl5LckmP94H0bRpbh/0EbhXkWwZyB2Cm0HwK5rthAe0c0jzVenwgezfPYCpqdIMNlHMkINTMskmVp+aorn53AI8+mtkUBk/tIQhzh3MqspEb0jeRiRMsq3fX5NkgOaCadMzMk3AgNXxRRirE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=AtOom/F4; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G6t7CYjH"
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-67c4aaf76ecso10014925a12.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 May 2026 05:39:01 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779367140; cv=none;
-        d=google.com; s=arc-20240605;
-        b=LMXAQ6KxJkSjZsquSXNdn4Y49p0dbO6Gqi+cnaYr3R18VIrotna2exyv6ad/fjT9WR
-         YslZOfygA7sOgcmXQVtDU7IxKFhCi5a5bcGMuzKfY15rT4Mr6A85wW6mrjNiUhhiVHRF
-         YxS8Dfo/LXeoZYnBFNsYXHJF2KEX9ercPrexXS2tS/ciibYO6HjEW69q72SJJnkBfPKw
-         ZPHyLGLgtPUlGXB7Ipq/YUQbsWIM2f8Hq9mecMtOb5HvD7RuakobwnAA2axlvdxw/TNH
-         /ktaz5psilw6XU9vfNQ7mretBh0Bg7tsw0MGUugEc+I38dJdi5Q2kgDzGPiKqf87wMPw
-         T8oA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=dopi5lqgBCxQSuAudmyQPmhNkwArDVQ9G92RMimBsT4=;
-        fh=5oq2YryHEkgdH6R/sa7PGnSoYtWl5HEUFdU8YpBM65o=;
-        b=Gd16ZZNxaJac7VmD8CxPIfyKUJdT4uiPqegLrsE8c9j+w6o4nY5Tj+m88wTpRRbCdA
-         G2VWo85zoyRVY4hBK0cf2ZQ7qvLg2QDBd0EQlHAOHFt8mUJSnpVlEDOFTo6367UyJCDI
-         aDU2QUZVrNSQ9Y+kM1JVAHW96NSAdrH7ldpcU+zehmCwyAMzQl4tmi0Vg277whek2SVE
-         iLJ7wWbEcgNvYta8dEK3W6+BaIvGaL9mTvGX8vKIDHeN1AAY5aoFCadlAPe00+8fC0uh
-         tmpb3krd2AKKFz2JUkdRFnpm2KbCYjxzvYBakqdJLiRk99Uh5BXq9HGJHDe0ur5dolWB
-         wSGg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779367140; x=1779971940; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dopi5lqgBCxQSuAudmyQPmhNkwArDVQ9G92RMimBsT4=;
-        b=G6t7CYjHbyGZ7gGKlWqvPx9K0P/fFJ1Yqfdyz4G0HNiGlffzFndo64mp63NwSqJTBs
-         5/EgLXZKHLt5OuPTzoEAPq/uRKMBsnEMzi10+Klv7VPdMV1p8B+iu6Zsi2Kf6LcjXMaO
-         8Vn975La2iMumihnbYDIMZMktwezlaw3Wf1lIQHwBGv/KqG6He1OCCqm2DCbL+ggDEih
-         U6rU9CJi2kMMRWX2nl4t1kz/1UuKerQ2BbVyvl4HOIoITmEqIPFWA3DO/sdDAefa70+E
-         OSg/pK1DEnvCQ0hixSsoZC4H3OwbT+apMMiy70vnUEaHoINx4fHGb+XztwlbqhUmreKG
-         dIDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779367140; x=1779971940;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=dopi5lqgBCxQSuAudmyQPmhNkwArDVQ9G92RMimBsT4=;
-        b=Bjoe4l6cxTw/6jCbHk8owITkcIQUprjAmxi8gR4ncukYi1u8QV6hSHLA0Izsz/FIbM
-         AZOTHdvmla6naGgaQ8/gUZ+5V6jbcKFbM+pAakFZrpeDXziUSIKevL0VtGblQySVbmLY
-         sAu9TTi0BT3gbeVBxNN1ISZFGOtVuFx6C4B7DDrqpPFOCvQb2WrE0YvSY+AiItFaqTL6
-         +OWi44HOT/azVW1XRIxH0u9/Z94N8PkJPQxN6Q/DDxASLQHbBcqv4x/EqInu70aPx6yP
-         q+CnRGOJoWzVcR3EvV1bfYyQX9CZhFov+h4v080DpTZO9MitL5uvfqeizh3NFerok7fG
-         Zhuw==
-X-Forwarded-Encrypted: i=1; AFNElJ+15/bQ602u/dpi3gsJ1dTCm/lhwaK4IK4Z3HfaZxcXFINX69dUZaVlXIHYyw+AdI/TeDn63Pq205RAaSN+DKY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyaVFujHB/O5bCSvP3W1DTWgqX2HIKPSVRrZQkIo3RPukTjGcuI
-	Y87aSErT2ehw6D/mjNoBL9FylRLTUJb9L71XH1qWlVC6OXZgR0ttsa6TbQ0m6aSt+v1C2K42yU+
-	HAtL0w59Bh5xiIKL05L+KHcSOuRSRkuU=
-X-Gm-Gg: Acq92OFGOziJoWL6y68auKkk0u+lTountgrfMUEfUbt4NlNgiWJbD4tfB4WSEsMVCbI
-	bUSEyUzTNefRW3U+9qkrc4UTO4FqKPNDizofCWnup+AFqJhN22XnesT5RTTtDFyFX2QLIv8x/h2
-	D+LEFeNigiNlyLBv6mhnDDWfeD2DrLUKugluyLjkEVKJzC4kNp6/+gw+7CKVo6sCWmcLil6cKGT
-	0JNOMcp4UD1R/pBoYWi6ZRfO7r2lthU4crF72c5ChDat6ASyrFtiQdto1TUrPw6KwfU9HqppcTQ
-	icMAKQ3KpUgnSXlPWxsxGU6BNLke5etx59sLfKsNsrzIgLC+0Q==
-X-Received: by 2002:a05:6402:34c4:b0:683:1cc8:84ae with SMTP id
- 4fb4d7f45d1cf-688356291damr1244493a12.7.1779367140215; Thu, 21 May 2026
- 05:39:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="AtOom/F4"
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64L7dqDB394602;
+	Thu, 21 May 2026 12:50:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=Nb8HcH
+	ohl6ZMAOWhdPfbNsQPZkLpIUnnAWIDe04J6FA=; b=AtOom/F40sO3teBktgKVgw
+	xe7Aycy+4hlqhH9zp32Obfz8ubAOcrMwyP/2bMh24Hi+dkYXKCzkosX45SjmQeK9
+	dcy6OCnHoY5y3CKl2t4MypMTEMHzGYzdaUp37J40esYaSccL33Is6kIZhd7kbgoA
+	jNgcAh5fEe1hoNMEL2L+Iqgr5QfFC3HURI9gAQ05YipvzVY8KrMH5GDDN/9on6Mx
+	Aa/UrF99KDFroZ4KjchWkHCk53rjRoPB6rGJLmbIlExjOMUDUNRvs5Iay93uVpW1
+	xoiYBNw1LWIrFZYVe/biWvHKrUqRDj2Slm4esuSfNl345Eosd/kvHON13S61OF7Q
+	==
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4e6h9y7025-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 21 May 2026 12:50:30 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64LCd3Fh007405;
+	Thu, 21 May 2026 12:50:30 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4e72wqcb0x-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 21 May 2026 12:50:29 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 64LCoSwA45875528
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 21 May 2026 12:50:28 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 5CF002004B;
+	Thu, 21 May 2026 12:50:28 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 31E6020043;
+	Thu, 21 May 2026 12:50:27 +0000 (GMT)
+Received: from [9.39.17.57] (unknown [9.39.17.57])
+	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Thu, 21 May 2026 12:50:26 +0000 (GMT)
+Message-ID: <b9bda4cb-8125-4612-b6ba-9694361e7509@linux.ibm.com>
+Date: Thu, 21 May 2026 18:20:25 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1752824628.git.namcao@linutronix.de> <43d64ad765e2c47e958f01246320359b11379466.1752824628.git.namcao@linutronix.de>
- <CACSApvZT5F4F36jLWEc5v_AbqZVQpmH1W7UK21tB9nPu=OtmBA@mail.gmail.com>
- <20250718085948.3xXGcxeQ@linutronix.de> <20260429-november-speisen-3084d769d316@brauner>
- <87340exm2o.fsf@yellow.woof> <xbotidrmois5ygxtqtwqzczkt76wcc7uw5cz5lptda53coaavj@pzvxcpe534cu>
- <87cxzc62yp.fsf@yellow.woof>
-In-Reply-To: <87cxzc62yp.fsf@yellow.woof>
-From: Mateusz Guzik <mjguzik@gmail.com>
-Date: Thu, 21 May 2026 14:38:47 +0200
-X-Gm-Features: AVHnY4L3kuzvNft9YsihiRD6AmCZerhnkTxoTD2mo1YBA8rn2fL0bTYmJkGq3-c
-Message-ID: <CAGudoHFGHsuGUXmefSrGfOkdcoPJnC5a1qbjc9_G4guC4LvJgQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] eventpoll: Fix epoll_wait() report false negative
-To: Nam Cao <namcao@linutronix.de>
-Cc: Christian Brauner <brauner@kernel.org>, Soheil Hassas Yeganeh <soheil@google.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, Shuah Khan <shuah@kernel.org>, 
-	Davidlohr Bueso <dave@stgolabs.net>, Khazhismel Kumykov <khazhy@google.com>, 
-	Willem de Bruijn <willemb@google.com>, Eric Dumazet <edumazet@google.com>, Jens Axboe <axboe@kernel.dk>, 
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/filesystems: Move file_stressor to dedicated
+ subdirectory
+To: kernel test robot <lkp@intel.com>, shuah@kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20260519104210.11836-1-disgoel@linux.ibm.com>
+ <202605192100.DvRgEGZ3-lkp@intel.com>
+Content-Language: en-GB
+From: Disha Goel <disgoel@linux.ibm.com>
+In-Reply-To: <202605192100.DvRgEGZ3-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTIxMDEyNiBTYWx0ZWRfX4qySvzHASD8e
+ 4UlzgqVYoc4pU0nhBhEe5+mGHR1DwGOqp3kNMtg3vLseq8IeIXw1YKxAq7NO2nJS56F9UggRRcf
+ rHfip+9sAC7EcSTJNJnPQiec6aCgOiJtChiVGkXyGKdg2pr1SbrWWDto+guCADD10GQR6XwlnrS
+ nKNt6I0sHPIg9IL7/LL3HTE63BJGliBVOe4Foqhsay1JTHrMQ8hOl2MX0CVlZFN7r1NEizeKcSk
+ e1nKJhaCGi1c+34590j7hgmpx4qSn0onT3D+z3kuVZIukhZAib2/KY0jK/7yBx3YraB82155TW+
+ lwR17R9R7l0uEfWhs59+Mn6JQsE85hORJSFUAs/yFojz8dvATgQ7Kdwn+HdQD4+D/5zpWQQQ6tN
+ /HiXiVl/MPenQHrypiyWgo+1OXOIbseOOtPkYJoHVjAJPz8anCagjEjk2HTw9rE9DF06N52Wv5c
+ zLY2JeB+osiblQuO6aQ==
+X-Authority-Analysis: v=2.4 cv=BNuDalQG c=1 sm=1 tr=0 ts=6a0eff97 cx=c_pps
+ a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
+ a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=iQ6ETzBq9ecOQQE5vZCe:22 a=anyJmfQTAAAA:8
+ a=NEAV23lmAAAA:8 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8 a=i3X5FwGiAAAA:8
+ a=QyXUC8HyAAAA:8 a=S1w3OjsLY70aBQMZpDsA:9 a=QEXdDO2ut3YA:10
+ a=mmqRlSCDY2ywfjPLJ4af:22
+X-Proofpoint-ORIG-GUID: 7-rHGWq7GS084NPTuCCsZaSKxd0lrJze
+X-Proofpoint-GUID: 7-rHGWq7GS084NPTuCCsZaSKxd0lrJze
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-05-21_02,2026-05-18_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ adultscore=0 priorityscore=1501 malwarescore=0 impostorscore=0 suspectscore=0
+ lowpriorityscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2605130000 definitions=main-2605210126
 
-On Sun, May 3, 2026 at 3:24=E2=80=AFPM Nam Cao <namcao@linutronix.de> wrote=
-:
->
-> Mateusz Guzik <mjguzik@gmail.com> writes:
-> > Strictly speaking more error prone than the seq approach, but should be
-> > faster on weaker-ordered archs thanks to avoided fences.
-> >
-> > I'm definitely not going to protest the seqc route.
->
-> Linus probably wouldn't be thrilled if I break epoll again, so let's
-> stay with the simpler seqcount route.
->
-> Nam
->
-> diff --git a/fs/eventpoll.c b/fs/eventpoll.c
-> index a3090b446af1..22c3f0186476 100644
-> --- a/fs/eventpoll.c
-> +++ b/fs/eventpoll.c
-> @@ -38,6 +38,7 @@
->  #include <linux/compat.h>
->  #include <linux/rculist.h>
->  #include <linux/capability.h>
-> +#include <linux/seqlock.h>
->  #include <net/busy_poll.h>
->
->  /*
-> @@ -190,6 +191,9 @@ struct eventpoll {
->         /* Lock which protects rdllist and ovflist */
->         spinlock_t lock;
->
-> +       /* Protect switching between rdllist and ovflist */
-> +       seqcount_spinlock_t seq;
-> +
->         /* RB tree root used to store monitored fd structs */
->         struct rb_root_cached rbr;
->
-> @@ -382,8 +386,17 @@ static inline struct epitem *ep_item_from_wait(wait_=
-queue_entry_t *p)
->   */
->  static inline int ep_events_available(struct eventpoll *ep)
->  {
-> -       return !list_empty_careful(&ep->rdllist) ||
-> -               READ_ONCE(ep->ovflist) !=3D EP_UNACTIVE_PTR;
-> +       bool events_available;
-> +       unsigned int seq;
-> +
-> +       do {
-> +               seq =3D read_seqcount_begin(&ep->seq);
-> +
-> +               events_available =3D !list_empty_careful(&ep->rdllist) ||
-> +                                  READ_ONCE(ep->ovflist) !=3D EP_UNACTIV=
-E_PTR;
-> +       } while (read_seqcount_retry(&ep->seq, seq));
-> +
-> +       return events_available;
->  }
->
->  #ifdef CONFIG_NET_RX_BUSY_POLL
-> @@ -735,8 +748,12 @@ static void ep_start_scan(struct eventpoll *ep, stru=
-ct list_head *txlist)
->          */
->         lockdep_assert_irqs_enabled();
->         spin_lock_irq(&ep->lock);
-> +       write_seqcount_begin(&ep->seq);
-> +
->         list_splice_init(&ep->rdllist, txlist);
->         WRITE_ONCE(ep->ovflist, NULL);
-> +
-> +       write_seqcount_end(&ep->seq);
->         spin_unlock_irq(&ep->lock);
->  }
->
-> @@ -768,6 +785,9 @@ static void ep_done_scan(struct eventpoll *ep,
->                         ep_pm_stay_awake(epi);
->                 }
->         }
-> +
-> +       write_seqcount_begin(&ep->seq);
-> +
->         /*
->          * We need to set back ep->ovflist to EP_UNACTIVE_PTR, so that af=
-ter
->          * releasing the lock, events will be queued in the normal way in=
-side
-> @@ -779,6 +799,9 @@ static void ep_done_scan(struct eventpoll *ep,
->          * Quickly re-inject items left on "txlist".
->          */
->         list_splice(txlist, &ep->rdllist);
-> +
-> +       write_seqcount_end(&ep->seq);
-> +
->         __pm_relax(ep->ws);
->
->         if (!list_empty(&ep->rdllist)) {
-> @@ -1155,6 +1178,7 @@ static int ep_alloc(struct eventpoll **pep)
->
->         mutex_init(&ep->mtx);
->         spin_lock_init(&ep->lock);
-> +       seqcount_spinlock_init(&ep->seq, &ep->lock);
->         init_waitqueue_head(&ep->wq);
->         init_waitqueue_head(&ep->poll_wait);
->         INIT_LIST_HEAD(&ep->rdllist);
+On 19/05/26 6:48 pm, kernel test robot wrote:
+> Hi Disha,
+> 
+> kernel test robot noticed the following build warnings:
+> 
+> [auto build test WARNING on shuah-kselftest/next]
+> [also build test WARNING on shuah-kselftest/fixes linus/master v7.1-rc4 next-20260518]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Disha-Goel/selftests-filesystems-Move-file_stressor-to-dedicated-subdirectory/20260519-185602
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git next
+> patch link:    https://lore.kernel.org/r/20260519104210.11836-1-disgoel%40linux.ibm.com
+> patch subject: [PATCH] selftests/filesystems: Move file_stressor to dedicated subdirectory
+> config: m68k-allnoconfig (https://download.01.org/0day-ci/archive/20260519/202605192100.DvRgEGZ3-lkp@intel.com/config)
+> compiler: m68k-linux-gcc (GCC) 15.2.0
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260519/202605192100.DvRgEGZ3-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202605192100.DvRgEGZ3-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>     Documentation/.renames.txt: warning: ignored by one of the .gitignore files
+>>> tools/testing/selftests/filesystems/file_stressor/Makefile: warning: ignored by one of the .gitignore files
+>>> tools/testing/selftests/filesystems/file_stressor/file_stressor.c: warning: ignored by one of the .gitignore files
+>>> tools/testing/selftests/filesystems/file_stressor/settings: warning: ignored by one of the .gitignore files
 
-Apologies for late reply.
+Thanks for the report. This has been fixed in v2.
 
-The diff reads ok to me, but I would consider not looping in case of
-seq mismatch.
+> 
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
 
-So does it solve the problem?
+-- 
+Regards,
+Disha
 
-I think a somewhat of a blocker here would be to bench the thing -- I
-would expect some slowdown compared to stock kernel, but should be
-still be faster than the previously proposed patch.
