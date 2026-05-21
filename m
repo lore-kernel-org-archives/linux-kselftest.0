@@ -1,264 +1,155 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f48.google.com (mail-vs1-f48.google.com [209.85.217.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B27D013A3F7;
-	Thu, 21 May 2026 15:38:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779377909; cv=none; b=KqWu3g5ntBiPCp0QoYvCCntBwtA3G0S7seSyVsSWThS9Lne0tbfoHmRLAu5aFPaUMAy+6qy2rV0VmibH7Ej8lZyN6uIsg3NMa886o53RYo/IwMvjJpcyCO7QnPKzWYRQr7idGJPz/sJvCGfjpiydTMQ8XvOlEQXmSXpbTLgH9Pw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779377909; c=relaxed/simple;
-	bh=4wgrl3D8nD9c1Q470J+khwWsDcgO3aS8CNOgqX2uAzE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Sq7zBl9VoUwSk2mcaJHfwB27lw4iCXC/QpyyAI3hgPWNdr3ENzUFS8qZwV/tf3uBeXIOpHOWfdjbaBJGAByOE0u+CvA5akAwkBrboHjuSc84KuIbG6CdlIRFyUU7ijwjmhmi9TP9It5xmbM8wOps9bAhWkDhf2kvGNpOFxKJN3Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=ZKIX/r5D; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F61033B6F6
+	for <linux-kselftest@vger.kernel.org>; Thu, 21 May 2026 15:49:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.217.48
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779378577; cv=pass; b=ghG1m5n6u0ZlL1WDAfZ+BJA6QLYzmdakamtNRt/H8ez/l9CRZ087VengBe4ct10zNFuq4bpKaJ1qRRRF9rGPYx9KFYNlRDbwf7CYaCgiecn+a/HVbU8KyF78VpOr32Oo+esvTQw+N8CuKi2dO2snB0CWVsCkeyc+RrGzxs/QzCo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779378577; c=relaxed/simple;
+	bh=oTJGeDYTACLQP4b7lcnYS7MF/F8SkeHi472hQfd2CPw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MByxQT02CCJdEt592B/zHHaB116tHoA4CRIlq6n9x3Iif5Qzitepuo/ZFfckhqps0hLHMnl3RzSFLc1XJFz+7SKXmtdwQlfxd/UD5FacZFWFoo3jIlVyUsVCB0F7WVwbCz+dTo0PRmJPNbiOvKZwyL7S3gsCNbtWt1O6i3ma52M=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lL1NHx9I; arc=pass smtp.client-ip=209.85.217.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="ZKIX/r5D"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-	Reply-To:Content-ID:Content-Description;
-	bh=BiwGXBDleJnRB76Cc4aUQ3VNDGdC6PSI6jdz2j7NAqU=; b=ZKIX/r5DVwOwU4kv5X03pnBVJr
-	+8KKLbccKE98AcjKOajbZi5y1JJyHz8MrRuF4PaKUsJfUkzAMHrKWjJ5DOw4tBWJYdGq1iSPLBeb+
-	KNuE3ImhUmmYZSoCIv80tIquz8xC8+rrTDpVzxiVvtjgk+h+fMy0f8ABLfgW6baZXbcWfcEWBo7MX
-	0DFCxvjV0H30nZdKi8CprXEzYmTskg8CX/N/oHsiSauqzqdMBzgiHQtgB1OByBZjuireqG7r2Wber
-	enbRJOBsIGIf4ICmId+9BrBQpYgzEKsV4OvC2YKW9F7W7YbphYYH5pIVD7wfspeug/a0MvvfcgEUP
-	62P5eheQ==;
-Received: from authenticated user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wQ5TV-003z9E-0i;
-	Thu, 21 May 2026 15:38:17 +0000
-Date: Thu, 21 May 2026 08:38:12 -0700
-From: Breno Leitao <leitao@debian.org>
-To: Mateusz Guzik <mjguzik@gmail.com>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Shuah Khan <shuah@kernel.org>, 
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	usama.arif@linux.dev, kernel-team@meta.com
-Subject: Re: [PATCH 1/2] fs/pipe: bulk pre-allocate pages outside pipe->mutex
- in anon_pipe_write
-Message-ID: <ag8lIqhAmJtW4Rtv@gmail.com>
-References: <20260515-fix_pipe-v1-0-b14c840c7555@debian.org>
- <20260515-fix_pipe-v1-1-b14c840c7555@debian.org>
- <q37bmptbjr2gysl2g67bqo5axxqor4lsrrnf7ajixxjdrumbup@tgu3kz6kien5>
- <ag3Ty3T24wjn1aFw@gmail.com>
- <CAGudoHGT+8FW9HsN+ymQ2QECVjmwkx=xNQ9=WnjYWirXcA6u4w@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lL1NHx9I"
+Received: by mail-vs1-f48.google.com with SMTP id ada2fe7eead31-631a7868228so4345360137.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 May 2026 08:49:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779378575; cv=none;
+        d=google.com; s=arc-20240605;
+        b=NAuw/WIKx0xxxh1XmapuXo8/Mgpv5b6nV6VfN+uG40kajuCP3CybyUhMWI2q7J28Pu
+         Tjm+1It5Juw8+H+iu72d4GSM9/zSQ5vEbUp+FXHCmXSM6wLLCbDrkYqSHd6TQbNbyuCq
+         VaDCEFbkHiPDJBAkUuORn7Q2jSOH1BpNdqe7hcAv9NjJm0XtDNOa+YbtZetkCHUV3tOu
+         ve8Afrd4/b7aZhOY0xJj08Ho2qSeO3LNtR1N238YAAkoqXqmbm1JRpae2P8Hwdmk/zDn
+         pPKAedSQd6c1ZnjxErmrdITkDFNnX1Z7a/yU13hGO2FYFGpr98n19Ks79P1+/kff50iT
+         nEfg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=BTiKHHtH6isAoh5+/ntoHPqjIgkFbjjbM7Qgllx7bcY=;
+        fh=1n4Y2ckllJsozXP41Jqng8KC7jCAU1G9YZn5rowSaac=;
+        b=H6uKI0rq7e+wBLTMOpVdS7tdL2ITJdoD67RwInVdBHwyeAxZBdg5X8sClqcCw3/FNv
+         a/jySIBmOe6EQamrJxN9BnGpu56YksbS+qK/rRJRJAia+HPHkdRxkEVkkudXgDTEQHX2
+         Ha0lrVSLziOae/K2a1NC5pqEzw0vKZuiBSLan4NwnU51oKVioVU5p/kWy7jqYsNNPilP
+         PxdWOFDA0Sr16r/EG7hqj/A3uN+XQ126j1VNJ/yjfE2V/piU8pDoHK/6Q3pFm/I79IH4
+         f1ymaQoj++u3GbGOtp1WBg74Vb2V+R8Ve4Ck76UdLHBHWaVziswPYm0hKHuths7mN8qT
+         7YQA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779378575; x=1779983375; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BTiKHHtH6isAoh5+/ntoHPqjIgkFbjjbM7Qgllx7bcY=;
+        b=lL1NHx9IIKtcx4n399OipzLHTG7xOmxIhzXqniZ5H/PlWZnBHPquJmbnT+WXpW8VGl
+         gD5K7nwalvqc4Jt0om+M7KYYupeksRrANY4jRunce7CrRXOXxqnPI7tkmKyFagBaXwF0
+         8hbAFX6ZrBAhSIQxY+fV56hM0QhsKH/3w0jYikbW8LAIDNiMade6YzJVU1Efx90sVY3x
+         4RhbDvS072Slf7nSGxLx08t5GZTGyaCT39m+CpTwAhqunSH3Y9mmA6I+HSghd2xMwMha
+         PQ0O8KzBHHVN1VIStAFdCi0DV3GfXQMWyTqCZkVW0qbXHgDdJtycc4DpHzSHcGvAFvB1
+         f1xg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779378575; x=1779983375;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=BTiKHHtH6isAoh5+/ntoHPqjIgkFbjjbM7Qgllx7bcY=;
+        b=B/wQpJQt8YgehDbozlxzGpAb3C45xKF1zrKG3MilaP8N6JrynIFZQC/g1hJOE99GlM
+         ROaRwe38nhWOs/r2UdIpNzS2a7pt2AbPrd4gxqCr2bQmdvaXMjzzPhY7rlM9meIwq8Dj
+         WQHbmXKwDH3NG4gfZ26KXwuYJOu+ZESuOlzD0lhOQUlFdAshpzZmyHHnvbsbFKFzgfv5
+         6WBa0JyIWL4sC7BM8SNlwqwugq01MxVKmqf8VF++l8ZpF12wtFftQjc1ay9zPzPgzEdd
+         dw8tNLHneIs7F2hlLROrhxrGTMyNpHAfiPwR/cPzbExyNhzRH/lMUgXS4Cb72K8Av+Sm
+         STRw==
+X-Forwarded-Encrypted: i=1; AFNElJ9dgp3hpimA4hc2TIjHBY1w/HJkmbH624d9V+yedWgdM9JRshTx9YR1PujB34WH5JIzv6HWP059arkD9dScgp8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx/Qx0CPOVmu9Vx5xPsfXlwXgkmZmeLXcGfOR/sRMwERKliaYJi
+	oU03WBTRl8v4uW+Or2aLJIXyrBMRT4AsW0xPbYIyFkfcBGfReWrsJs05jYwT1e3bwpz93JYB4sG
+	lJkWdmUkSxJuNR2Xm0Nr5NO32TLkKkrc=
+X-Gm-Gg: Acq92OF4arIW7o2nEvofnxXD+eGJOxERPvRTyiPJlPDkCMIDujguy0RDpF06L4Xt6C1
+	Y3sqGfjlkpq49giG11kJ8CNHaxrFPSB7LQo5HdAMsRi3+rUOXDinpSBrjUAFHJULxHyhF7UuN6b
+	00tGvkd0PD+8e4I5OHovHwfZrlBBIrKe1EbVO2RfCmmB+KvqPfqQUGstpNFDWpsg56TeAzpNxxF
+	VRvR7VUrZEcI14lGEuHPaXQzvFO1xOgSbdQsnYIhM/QBluxTRyAracCToBqVp+osvnU5rLWfu+q
+	vLyLTER98i0KWB2O4xgp91bRQC1wG8+j1HA888GyzgL8cp8DK6HeBU8=
+X-Received: by 2002:a05:6102:1591:b0:650:a9f6:4d29 with SMTP id
+ ada2fe7eead31-67390b66b29mr2592164137.13.1779378575543; Thu, 21 May 2026
+ 08:49:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAGudoHGT+8FW9HsN+ymQ2QECVjmwkx=xNQ9=WnjYWirXcA6u4w@mail.gmail.com>
-X-Debian-User: leitao
+References: <20260328172314.45807-1-dorjoychy111@gmail.com>
+ <20260416-abgraben-seeweg-a44ce660957f@brauner> <20260521-grube-leitfaden-0e5420c9bedc@brauner>
+In-Reply-To: <20260521-grube-leitfaden-0e5420c9bedc@brauner>
+From: Dorjoy Chowdhury <dorjoychy111@gmail.com>
+Date: Thu, 21 May 2026 21:49:23 +0600
+X-Gm-Features: AVHnY4JMLUcx8yOSfS2Q9vtP8tvb48vFjP_vPMN644Wd5G5CD5CLlCbq3u4DVJI
+Message-ID: <CAFfO_h4Em26Hfbv-DWF+9dNS8TBuGpfWjWFBUhLr7jYCKzj3_Q@mail.gmail.com>
+Subject: Re: [PATCH v6 0/4] OPENAT2_REGULAR flag support for openat2
+To: Christian Brauner <brauner@kernel.org>
+Cc: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-api@vger.kernel.org, ceph-devel@vger.kernel.org, gfs2@lists.linux.dev, 
+	linux-nfs@vger.kernel.org, linux-cifs@vger.kernel.org, v9fs@lists.linux.dev, 
+	linux-kselftest@vger.kernel.org, viro@zeniv.linux.org.uk, jack@suse.cz, 
+	jlayton@kernel.org, chuck.lever@oracle.com, alex.aring@gmail.com, 
+	arnd@arndb.de, adilger@dilger.ca, mjguzik@gmail.com, smfrench@gmail.com, 
+	richard.henderson@linaro.org, mattst88@gmail.com, linmag7@gmail.com, 
+	tsbogend@alpha.franken.de, James.Bottomley@hansenpartnership.com, 
+	deller@gmx.de, davem@davemloft.net, andreas@gaisler.com, idryomov@gmail.com, 
+	amarkuze@redhat.com, slava@dubeyko.com, agruenba@redhat.com, 
+	trondmy@kernel.org, anna@kernel.org, sfrench@samba.org, pc@manguebit.org, 
+	ronniesahlberg@gmail.com, sprasad@microsoft.com, tom@talpey.com, 
+	bharathsm@microsoft.com, shuah@kernel.org, miklos@szeredi.hu, 
+	hansg@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 21, 2026 at 02:58:48PM +0200, Mateusz Guzik wrote:
-> On Wed, May 20, 2026 at 7:09 PM Breno Leitao <leitao@debian.org> wrote:
-> > On Fri, May 15, 2026 at 10:18:19PM +0200, Mateusz Guzik wrote:
-> > > This change is quite a hammer.
+On Thu, May 21, 2026 at 4:54=E2=80=AFPM Christian Brauner <brauner@kernel.o=
+rg> wrote:
+>
+> On Thu, Apr 16, 2026 at 03:07:12PM +0200, Christian Brauner wrote:
+> > On Sat, 28 Mar 2026 23:22:21 +0600, Dorjoy Chowdhury wrote:
+> > > I came upon this "Ability to only open regular files" uapi feature su=
+ggestion
+> > > from https://uapi-group.org/kernel-features/#ability-to-only-open-reg=
+ular-files
+> > > and thought it would be something I could do as a first patch and get=
+ to
+> > > know the kernel code a bit better.
+> > >
+> > > The following filesystems have been tested by building and booting th=
+e kernel
+> > > x86 bzImage in a Fedora 43 VM in QEMU. I have tested with OPENAT2_REG=
+ULAR that
+> > > regular files can be successfully opened and non-regular files (direc=
+tory, fifo etc)
+> > > return -EFTYPE.
+> > > - btrfs
+> > > - NFS (loopback)
+> > > - SMB (loopback)
+> > >
+> > > [...]
 > >
-> > Are you seeing any downside/trade-off with this current approach?
+> > - I've added an explanation why OPENAT2_REGULAR is only needed for some
+> >   ->atomic_open() implementers but not others. What I don't like is tha=
+t
+> >   we need all that custom handling in there but it's managable.
 > >
-> 
-> Well there is a lot to say about the current code to begin with, I'm
-> going to refrain from writing long rants here as that's of no use in
-> this thread.
-> 
-> The idea behind the patch has a lot of merit and I'm definitely not
-> protesting it or denying there is a problem.
-
-Ack, thanks for the support.
-
-> > Yes. v2 will have anon_get_page_prealloc(pipe, &tpp) doing both:
-> > top up to PIPE_PREALLOC_MAX based on tmp_page[] occupancy, and
-> > keep the policy in one place.
+> > - I dropped the topmost style conversions. They really don't belong
+> >   there and if we switch to something better we should use (1 << <nr>).
 > >
-> 
-> Note I lost the 'pipe' word. This definitely needs to be anon_pipe_-prefixed.
+> > - I split the EFTYPE errno introduction into a separate patch.
+>
+> So I've massaged this series a bit in that I moved OPENAT2_REGULAR into
+> the upper 64-bit and internally use a __O_REGULAR bit. After having
+> thought about it makes a lot more sense to move the openat2() only
+> features into the upper 32-bit for the uapi space. I also ported the
+> selftests to the TEST* framework to fit with Aleksa's recent rework.
 
-Ack!
+Thanks for fixing up!
 
-> As a nit you could sprinkle some predicts in a separate commit,  for
-> example "if (!pipe->readers) {" definitely warrants an unlikely().
-> 
-> The real deal is the following: the wakeup policy is to *always*
-> wakeup *all* readers if any data is available and *all* writers if any
-> space is available. In case of heavily shared usage this leads to the
-> thundering herd problem (and it is causing performance issues with the
-> BSD and GNU makes). While this cannot be changed by default, I was
-> thinking about an opt-in fcntl which changes to policy to only wake up
-> one waiter.
-
-Happy to look at it as a follow-up series once this one lands.
-
-Also, I am not reusing the leftover pages back to pipe->tmp_page, given
-I really don't expect to have much leftovers, but, I am happy to do so,
-in case you think this would be useful.
-
-Anyway, my reading of the discussion above changed my approach to the
-following patch. Is it any better?
-
-Thanks for you suggestions so far,
---breno
-
-commit 2394068de8ee0ab9e582ce9776990ed695397553
-Author: Breno Leitao <leitao@debian.org>
-Date:   Fri May 15 01:35:13 2026 -0700
-
-    fs/pipe: bulk pre-allocate pages outside pipe->mutex in anon_pipe_write
-    
-    anon_pipe_write() takes pipe->mutex and then, from the per-iteration
-    anon_pipe_get_page() helper, used to call alloc_page(GFP_HIGHUSER |
-    __GFP_ACCOUNT) once per page while still holding it. That allocation
-    can sleep doing direct reclaim and/or runs memcg charging, which extends
-    the critical section and stalls a concurrent reader on the very same
-    mutex.
-    
-    For writes that span more than one full page, bulk pre-allocate up to
-    PIPE_PREALLOC_MAX (8) pages with alloc_pages_bulk() before taking
-    pipe->mutex. anon_pipe_get_page() consumes from pipe->tmp_page[] first,
-    then from the prealloc array, and only falls back to alloc_page() under
-    the mutex for writes larger than PIPE_PREALLOC_MAX pages (rare) or for
-    single-page writes. Sub-PAGE_SIZE writes are unchanged: the merge path
-    handles them without needing a fresh page.
-    
-    The prealloc array, its count, and the helpers operating on it live in
-    struct anon_pipe_prealloc:
-    
-      - anon_pipe_get_page_prealloc() issues a single alloc_pages_bulk()
-        call before the mutex is taken.
-      - anon_pipe_free_pages() runs after mutex_unlock() and put_page()s
-        any leftover prealloc pages, keeping put_page() off the critical
-        section. Leftovers happen when the per-pipe tmp_page[] cache or the
-        merge path covered some of what we preallocated, or when the write
-        exits early.
-    
-    This can improve the pipe throughput up to 48% and reduce the latency in
-    33%.
-    
-    Suggested-by: Mateusz Guzik <mjguzik@gmail.com>
-    Signed-off-by: Breno Leitao <leitao@debian.org>
-
-diff --git a/fs/pipe.c b/fs/pipe.c
-index 9841648c9cf3e..a6441c44f1e3f 100644
---- a/fs/pipe.c
-+++ b/fs/pipe.c
-@@ -111,7 +111,32 @@ void pipe_double_lock(struct pipe_inode_info *pipe1,
- 	pipe_lock(pipe2);
- }
- 
--static struct page *anon_pipe_get_page(struct pipe_inode_info *pipe)
-+#define PIPE_PREALLOC_MAX 8
-+
-+struct anon_pipe_prealloc {
-+	struct page *pages[PIPE_PREALLOC_MAX];
-+	unsigned int count;
-+};
-+
-+/*
-+ * Bulk pre-allocate pages outside pipe->mutex. Callers must gate on
-+ * total_len > PAGE_SIZE; single-page writes are handled by the in-lock
-+ * alloc_page() fallback. Any pages not consumed by the write loop are
-+ * freed by anon_pipe_free_pages() after the mutex is dropped.
-+ */
-+static void anon_pipe_get_page_prealloc(struct anon_pipe_prealloc *prealloc,
-+					size_t total_len)
-+{
-+	unsigned int want = min_t(unsigned int,
-+				  DIV_ROUND_UP(total_len, PAGE_SIZE),
-+				  PIPE_PREALLOC_MAX);
-+
-+	prealloc->count = alloc_pages_bulk(GFP_HIGHUSER | __GFP_ACCOUNT,
-+					   want, prealloc->pages);
-+}
-+
-+static struct page *anon_pipe_get_page(struct pipe_inode_info *pipe,
-+				       struct anon_pipe_prealloc *prealloc)
- {
- 	for (int i = 0; i < ARRAY_SIZE(pipe->tmp_page); i++) {
- 		if (pipe->tmp_page[i]) {
-@@ -121,6 +146,15 @@ static struct page *anon_pipe_get_page(struct pipe_inode_info *pipe)
- 		}
- 	}
- 
-+	if (prealloc->count) {
-+		unsigned int idx = prealloc->count - 1;
-+		struct page *page = prealloc->pages[idx];
-+
-+		prealloc->pages[idx] = NULL;
-+		prealloc->count = idx;
-+		return page;
-+	}
-+
- 	return alloc_page(GFP_HIGHUSER | __GFP_ACCOUNT);
- }
- 
-@@ -139,6 +173,17 @@ static void anon_pipe_put_page(struct pipe_inode_info *pipe,
- 	put_page(page);
- }
- 
-+/* Called after pipe->mutex is dropped, to keep put_page() off the critical section. */
-+static void anon_pipe_free_pages(struct anon_pipe_prealloc *prealloc)
-+{
-+	while (prealloc->count) {
-+		unsigned int idx = prealloc->count - 1;
-+
-+		put_page(prealloc->pages[idx]);
-+		prealloc->count = idx;
-+	}
-+}
-+
- static void anon_pipe_buf_release(struct pipe_inode_info *pipe,
- 				  struct pipe_buffer *buf)
- {
-@@ -438,6 +483,7 @@ anon_pipe_write(struct kiocb *iocb, struct iov_iter *from)
- 	ssize_t chars;
- 	bool was_empty = false;
- 	bool wake_next_writer = false;
-+	struct anon_pipe_prealloc prealloc = {};
- 
- 	/*
- 	 * Reject writing to watch queue pipes before the point where we lock
-@@ -455,6 +501,18 @@ anon_pipe_write(struct kiocb *iocb, struct iov_iter *from)
- 	if (unlikely(total_len == 0))
- 		return 0;
- 
-+	/*
-+	 * Bulk pre-allocate pages outside pipe->mutex for writes that span more
-+	 * than one full page. alloc_page() with GFP_HIGHUSER may sleep doing
-+	 * reclaim and runs memcg charging, so doing it under the mutex
-+	 * extends the critical section and stalls the reader. The merge path
-+	 * handles sub-PAGE_SIZE writes without a fresh page; single-page and
-+	 * >PIPE_PREALLOC_MAX-page writes fall back to alloc_page() under the
-+	 * mutex for the remainder.
-+	 */
-+	if (total_len > PAGE_SIZE)
-+		anon_pipe_get_page_prealloc(&prealloc, total_len);
-+
- 	mutex_lock(&pipe->mutex);
- 
- 	if (!pipe->readers) {
-@@ -512,7 +570,7 @@ anon_pipe_write(struct kiocb *iocb, struct iov_iter *from)
- 			struct page *page;
- 			int copied;
- 
--			page = anon_pipe_get_page(pipe);
-+			page = anon_pipe_get_page(pipe, &prealloc);
- 			if (unlikely(!page)) {
- 				if (!ret)
- 					ret = -ENOMEM;
-@@ -579,6 +637,7 @@ anon_pipe_write(struct kiocb *iocb, struct iov_iter *from)
- 	if (pipe_is_full(pipe))
- 		wake_next_writer = false;
- 	mutex_unlock(&pipe->mutex);
-+	anon_pipe_free_pages(&prealloc);
- 
- 	/*
- 	 * If we do do a wakeup event, we do a 'sync' wakeup, because we
+Regards,
+Dorjoy
