@@ -1,76 +1,70 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9DC63C3BFF;
-	Thu, 21 May 2026 11:44:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F23FF3C7DEB;
+	Thu, 21 May 2026 12:01:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779363880; cv=none; b=lMXvMXmw0/tVCjq/3/hoFq0p4Y9kvLFrgbO+3jryhqcCzCPuz4EfnmnDlhLaQ7KIgM9uPcf+m7ahG1p2OU/R3CoAYimdaYHFhceWvdARdDToNK9hQq/Y7FNY0oPr2aAeiheeNtUfShnboVufO7pqVqFdii7ycOD5Vf/eI1PAA7o=
+	t=1779364883; cv=none; b=YdE2tbme7RxcOAdLjpwckqfxEw4u3He5Foof3lEgYFdANZHI+zrpEglqnr0e6xn/QgnjU/2CvvjN7P29YusHBbt+YGqRSPyfRYEzmZ99kuUl/1w6ckh+W1R773Tly/kL2QvEbUpdNuqobjhIM7UvbB+KS7/Q9YvJGfcJne94hgA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779363880; c=relaxed/simple;
-	bh=hK0OLe1zddJ0BvIptcnAa4HJXke4ZAh26NCR2X5uQGo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OmBuYD/mTAwY876l/pKsdfImYJBK+bjU0ganKkm/f1+Un4SiqlZx51ziem1ym+2Yc6ktfQ+Qpgz6XZLr2kbEmC2OnKo3UHBAMDgalQRIZmBeQxOZSkF6Cl+Uo/Wrssas5UCIRNpqvBcQEQ+uF5X2oKVmtCtkXA1eQrd4ZDYe5UA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bIjXS8hf; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779364883; c=relaxed/simple;
+	bh=AKox+I3lfcI7F4Zd1m11OMejg4p8pbjFloWjUNceEro=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=UoGHaDIY3xZbX3O4RLOry6BaTqq1MeXQQWbICMIYgxfeQ21oJf16yVNAxxup8th7XRue+9N6Y46Xehh+yzxxxJvgNLFN44XA9twXfm6aizAv1+eaW+U7Chahj9oXMKYnGi5/3OmIAj/A0gCVY5/NLcaFpiATJ4rImGk9DmWXJNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=inUFKYNu; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bIjXS8hf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F2241F000E9;
-	Thu, 21 May 2026 11:44:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779363879;
-	bh=TiqcdHFX0yDMrBD60DT4cQ7gt/Ic0YOEFSbvRDBHO7g=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=bIjXS8hfVSHOAevw1TTlBno/poe3j1jLXhvmbzzf3W6bZksyh2LYBmjtZjqnx0dp8
-	 jrsK5Zm48AhZgDQcOFFCxD1czwPytiv5FTvl2oDknc6eZyKh+KESfCPch5rpKTef4C
-	 U41dB2Vdrlh2F47b1rl2f02kyJ5nKnqgBqdgXQczHKWlEoaXulH9Xz1iWiM4Aqazfy
-	 bZmx1nvMrzTjSGU/3a1YgozUUgvWpPz59LpQUUYcme4Rvn3Yd95d1f/vrMA3lTk1jB
-	 pkKfylxWk63SHsPwLad0Wv8bPIYFebGCYUjtIs1ol5Ayl2vVHJ6oKqPXnYyrER4lfL
-	 Twqk8rcjw1xng==
-From: Christian Brauner <brauner@kernel.org>
-To: Kees Cook <kees@kernel.org>,
-	Andy Lutomirski <luto@amacapital.net>,
-	Will Drewry <wad@chromium.org>,
-	Shuah Khan <shuah@kernel.org>,
-	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
-	Geliang Tang <geliang@kernel.org>
-Cc: Christian Brauner <brauner@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	mptcp@lists.linux.dev
-Subject: Re: [PATCH v2] selftests: harness: fix pidfd leak in __wait_for_test
-Date: Thu, 21 May 2026 13:44:30 +0200
-Message-ID: <20260521-brauen-situation-171ecf2a273f@brauner>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <a82e275ccfb2609a1984d90ab559fa3af78f1e81.1776678050.git.tanggeliang@kylinos.cn>
-References: <a82e275ccfb2609a1984d90ab559fa3af78f1e81.1776678050.git.tanggeliang@kylinos.cn>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="inUFKYNu"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 336DD35FA;
+	Thu, 21 May 2026 05:01:16 -0700 (PDT)
+Received: from [10.57.91.210] (unknown [10.57.91.210])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7FF063F7B4;
+	Thu, 21 May 2026 05:01:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1779364881; bh=AKox+I3lfcI7F4Zd1m11OMejg4p8pbjFloWjUNceEro=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=inUFKYNuwBXm2ITxleIMuYo8OlLrBV5ZX56ZvsglK23uoBnzOYxGy9jglFtf9Xwj6
+	 iaasWDrS0c/gjMrHsajAiSmp3i935puDPddekm5/K2wexEFlnAwtnKpkMjmDCKW98I
+	 lha84eQI3hGwv9GYba3f81qwwMQ6qV5LX6zUEQZA=
+Message-ID: <c140c0da-4ad7-48ed-ad83-663ada282b14@arm.com>
+Date: Thu, 21 May 2026 14:01:17 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=962; i=brauner@kernel.org; h=from:subject:message-id; bh=hK0OLe1zddJ0BvIptcnAa4HJXke4ZAh26NCR2X5uQGo=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWTxfVBax7JrW/cXlVPP2ubeYlT9dfRJec7Bc7a5l2bu6 joRKdKS2FHKwiDGxSArpsji0G4SLrecp2KzUaYGzBxWJpAhDFycAjCRZ5MY/nCdL/n5q+DNZnbZ 0xc/fz8jtG/1ZrY5stv/cAeFt2iVbFrE8Ff2t0La/58zryyxZGOx57E6+OXcJGOWW9t53S9KLeZ 0TGMEAA==
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] kselftest/arm64: Add test for atomic futex uaccess
+ with POE
+To: Mark Brown <broonie@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org,
+ Catalin Marinas <catalin.marinas@arm.com>, Joey Gouly <joey.gouly@arm.com>,
+ Shuah Khan <shuah@kernel.org>, Will Deacon <will@kernel.org>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260521-poe_futex-v1-0-1da286b8f9b2@arm.com>
+ <20260521-poe_futex-v1-2-1da286b8f9b2@arm.com>
+ <8fc7713d-6451-4f05-86cd-df833cedd94b@sirena.org.uk>
+From: Kevin Brodsky <kevin.brodsky@arm.com>
+Content-Language: en-GB
+In-Reply-To: <8fc7713d-6451-4f05-86cd-df833cedd94b@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, 20 Apr 2026 17:45:28 +0800, Geliang Tang wrote:
-> Fix the pidfd leak in kselftest_harness.h's __wait_for_test() where
-> childfd = syscall(__NR_pidfd_open, t->pid, 0) is never closed.
+On 21/05/2026 13:22, Mark Brown wrote:
+> On Thu, May 21, 2026 at 10:42:31AM +0100, Kevin Brodsky wrote:
+>
+>> Add a new test to ensure that atomic futex uaccess succeeds on
+>> memory mapped with a non-default POIndex/pkey.
+>> +	ptr = mmap(NULL, size, PROT_READ | PROT_WRITE,
+>> +		   MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+>> +	ASSERT_NE(ptr, MAP_FAILED);
+> Doesn't matter while there's only one test but we should probably
+> munmap() this when we're done.
 
-Applied to the vfs.fixes branch of the vfs/vfs.git tree.
-Patches in the vfs.fixes branch should appear in linux-next soon.
+Fair enough, I was being lazy :) A pkey_free() is also in order to be
+comprehensive, another wrapper to add. I considered using
+../../mm/pkey-helpers.h but helpers there aren't implemented inline...
+Maybe refactoring for later.
 
-Please report any outstanding bugs that were missed during review in a
-new review to the original patch series allowing us to drop it.
-
-It's encouraged to provide Acked-bys and Reviewed-bys even though the
-patch has now been applied. If possible patch trailers will be updated.
-
-Note that commit hashes shown below are subject to change due to rebase,
-trailer updates or similar. If in doubt, please check the listed branch.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
-branch: vfs.fixes
-
-[1/1] selftests: harness: fix pidfd leak in __wait_for_test
-      https://git.kernel.org/vfs/vfs/c/0eb307d61317
+- Kevin
