@@ -1,154 +1,102 @@
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D5F533BBAF
-	for <linux-kselftest@vger.kernel.org>; Thu, 21 May 2026 15:16:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.179
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779376576; cv=pass; b=jch5Kn+szKSqZ//gl+C8tZkLuIl7+dtj1Cmk6Kk/GZ97QFRs/lPpTsdNvWc4qIfolh0ss+tFp8LumxZb6hCFP/Q7qhZEeOoLsWGxQSr1yBOEBnX2PuoUBa74V2goVg716hcZdBeHgL6BAubqKkBE6EjtpOOelg1TuCCRSUxpPXI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779376576; c=relaxed/simple;
-	bh=J01o1RM4DhFoqzfk/jOeARRHWP65H1t/fZlj1q1mraw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=X2s4emYmXqNkijsgjPuk2cT0iDirLSlq1NyAZDmYeuDmRfvwlHXJHENQPrLBDbh8cfAC2bICZuOagYpouztQt1nntw77lR8M6qjpQ2m9TqAotBPKgJPU9kjP6kFY0NwoJ3+bIfG6jLteWAMi81cTWnss4JqTXxFUcL99K5k8590=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=azLFHh4f; arc=pass smtp.client-ip=209.85.160.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8200633A9CB;
+	Thu, 21 May 2026 15:17:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779376635; cv=none; b=NPvdACOIfPR02WdhSM1Uc1wMxjIbbYVh+81Knx87nLBU467tUi68BSgcSsTtCof+r9jO0PjRfKAetPCz2M+uaqDwtDzUUatVC3T8Rv+daEZPf2K+ApLI7Klqba9Eou2xmMJd87Ovxcif7outdoTlNXv5nfQrxFq7cJqahcuQ6UU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779376635; c=relaxed/simple;
+	bh=dRQ7wbvAkJirWmzRur/hlCx4EftiDaoSDUHVW/tWMjE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=d6ts+tPC+5awc/TJUTwox9KCPeoms/5M/sBGRrBRoXRsz7outpPOVa2m5yUiO9mTgj5kQ7wdgpXRS/CpmpR7NbG88EnhaeRVQsxx71ikGGJnYsWhKk8Leh+pCcyF/H3+yWsT8rs3Hc5uQJmpVIbF88ulOG4Xm1CBT5NopbqquwU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ggBnNLig; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="azLFHh4f"
-Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-50d864c23bdso5421cf.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 May 2026 08:16:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779376573; cv=none;
-        d=google.com; s=arc-20240605;
-        b=CVfCON4b3XVUCNPS7GGj2ZcXkwMglRYpeT+kWzrys6YaEjUj3IIfljEHkEjmwFLPms
-         InG3ZGfZvPljKS/Xrc8xvt8UFvnulH6jcIVeyz/62QinWjOs5BHuudW6Y25npPRKHoEt
-         vWAetsqPQBXq10lb3x7KAm1InC16x9ThRH8qOAU7yYz4yCRIbXSQdO7LHfzRqsN5IhUi
-         ts9N3z5fBoJSgyh/yolx/QCYrNWrO1GVeQcIdX3nSkydYqqAG+yBcKYtj2jMRf5X7Xab
-         Sq+QmRVUksGIt1t8m3y1EzQg608Sha0iPQFrptcfmC1W2ZLbWiuz2pPY0wEbgFhWIdw6
-         xkFQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=J01o1RM4DhFoqzfk/jOeARRHWP65H1t/fZlj1q1mraw=;
-        fh=r3mYxPL38XORXgJ/6LH7jnj1rhh1LdQAxis1Cws3MX0=;
-        b=Xu5ksmwpfQBOaHa+iI++6Fx2slye1IxeBRNoCWo2RQ3vu/Q8I1NlQ0rG0GjmZn/EjV
-         KkEGHhme5m9U1QrsS3hVe7E9nadTSJDKn8RFEBM6PxXdMejLX/D5+OnGy7PCFcIEXv52
-         KfydVhfW8+yusnk/peYPmP2PyjSRTvloLqF7dohEpcA8aN54byI+uXGdeVJ0t5ZNPptt
-         3xJbPGU4rftlDlMP+MBRSYbgDToV4LhnyrKdRTSu6+6UL2n6nI1t/Kph3+PBMTvam9Ho
-         ES1exGQoRKtCUxOQw7Th+q87/M6s74gz8nRrLQo9wcPUHY+oVqCTZ7s+PdwVxFDYKPG+
-         1ijg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1779376573; x=1779981373; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=J01o1RM4DhFoqzfk/jOeARRHWP65H1t/fZlj1q1mraw=;
-        b=azLFHh4fWZwSc67JwU1+TLxpYF2u2GY9GVmMsNnPOrDroAsoSS5QXBrcGDAn24QCnW
-         0jhnVyc8WgLBAMf0bChlQlFHJuWSb2tnwO1I4ryeKTtY85ts2MgZiIsVR7UyzVnO0ouk
-         cPQ6U34S8ealZ4vOJ4qaBz+r+vMjPHfm9PK7DPcWTkpWz3sSlRKVPjLweKlD2N1eEmm4
-         uYVxXN6Rm18+OUNJFxAJFqvFQZkseQehYYQ/vO2JK3VSdycl/a4RdDTnyjCO2n6mEGeK
-         d1zMRceLJCTHc39QrTo6QNAu7SX+H1sZXrurpZ04d3BIHEPICd+HNeTlTIt4GjV396Io
-         sy2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779376573; x=1779981373;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=J01o1RM4DhFoqzfk/jOeARRHWP65H1t/fZlj1q1mraw=;
-        b=VNSJF1uUrkTMVwz2stN1Ce8oadsj7xMn3EyiySUDzEHQuWx7/4E7lq6DONPh9HGQ7X
-         2hdx2jIMEz4VqemnKqF/zJe/78n7qQXnmhTyg4HrpfQwUElM43+KvOOBvkY0PUgc3GXe
-         mV5wPO6aMJyE8Illjs0GSX9o7tq7b39ZKpHa19SNWwhfLT50dP2JIWvVCiUOSZmI+Mcz
-         W2mx917E43mxsSNfIFIzLb5JqnSZe92GSsz6NXyFhQqrQCGktOa8dfDnlNGpvdVtl1NO
-         PT8k4ATcuAyVVLbfXk0DIyRCJ16zzPoyB3aAYPOiOBg2xdr//rrCcWhadB3loPLU4fVo
-         p16w==
-X-Forwarded-Encrypted: i=1; AFNElJ9auDqop4Y6lA8nVutv8vtN9mRH7RG+Kd1goXHf45AItvGMWndfZnxRhJBqDHcNOy0b7FVZrxH7C7u7kjh8qyc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YykaQcvC77YWgr8kgJcekuOOPzBnXpnoLxuPNwZ0ZySnZxbzQFa
-	r2ViAoIks9FKNCBAK9rOOkxDYH6bM589+v7ZPH2wpdHA/PQSOYogXMw1yUxe/jtJoAispekWGm9
-	2d7XlnK5eu3pyDG5b7Vvfzjdc2MlkWndc4/tU4I+zdM0ElFD9Q+ixkSiGsuk=
-X-Gm-Gg: Acq92OGqvvxq6CNNc+ITKMuoFK9H87H8gaHvvyEhmI1MrY/RfV1PVLzVFEfYjU0d+M7
-	krWT1DZHVjhJw5LY1wNB4GaPBjqgf6sDZfyLfw93lLn/VIOB4Aaz/g/treRfa2cAJj16RgNzMTI
-	ZQiLekUNCOGUeAu4yPzTPvzzcWKzxRX2BOcng7Y78fWx02TRgBTN3eVP5A60qxpuVggTVHoxdT9
-	2/GMsCxgqsh/5hb2SUmDzbb6c5vwdwpA5c52Vkor+bnNzzposIcaksr34Mc2zU+ZeLhzbyCGtdE
-	qC0xuuupA1DvMSPG1Ks+ujru5oVrhsh7+uFAk5bv0fymx26/
-X-Received: by 2002:a05:622a:8c09:b0:510:fa1:73c5 with SMTP id
- d75a77b69052e-516c549f8a7mr9981991cf.16.1779376572049; Thu, 21 May 2026
- 08:16:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ggBnNLig"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DFB51F000E9;
+	Thu, 21 May 2026 15:17:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779376634;
+	bh=MJiYGSKR2Xooa6md+cNozvBYHksgw4v8W3oMC6Zadps=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=ggBnNLigs+MYrxcu3lkCl0NI75vfveOsqe4q67/PhDS1RaXR4+2Zv3GULwDgmR7pb
+	 BdTOtrlx5wp0bS3CRX3bydNnTPl01m16gQ8/vQsgCZ3+XJjvcgD+4fVOe6s+DBeF9y
+	 ZWhgzPOy5g0VUrJJzGemtXk5IKlKEX/1y8Il2sa/6vVpK+oskajCWBR6/v0Y67RHmo
+	 jGBZdODmOBVw4hszRgTDNBL9jHeO27Qs39KrV9s/+JFnsnDWld9FBZqi03a1LxBEtO
+	 kEdRmpypvICqFDlrqvVzlwF9Q0InHB5D14eiorpUW1ivnacAuMd21zXtvg/rNjtET8
+	 qYjid3+pNnDNw==
+Date: Thu, 21 May 2026 16:17:07 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Mark Rutland <mark.rutland@arm.com>
+Cc: Oliver Upton <oupton@kernel.org>, Marc Zyngier <maz@kernel.org>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	Dave Martin <Dave.Martin@arm.com>, Fuad Tabba <tabba@google.com>,
+	Ben Horgan <ben.horgan@arm.com>,
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Peter Maydell <peter.maydell@linaro.org>,
+	Eric Auger <eric.auger@redhat.com>
+Subject: Re: [PATCH v10 19/30] KVM: arm64: Provide assembly for SME register
+ access
+Message-ID: <a5226b77-636d-4e6d-acb6-b26f6276f6bd@sirena.org.uk>
+References: <20260306-kvm-arm64-sme-v10-0-43f7683a0fb7@kernel.org>
+ <20260306-kvm-arm64-sme-v10-19-43f7683a0fb7@kernel.org>
+ <ag8b7oq4SFpdmlP_@J2N7QTR9R3>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260426062718.1238437-1-surenb@google.com> <a27344e1-6f0c-4686-99ac-fc2cfcc5bb06@kernel.org>
- <CAJuCfpG3xZhL94E=yR1KsWs6fVwcdoAECoOaV3UOeB10TXmOeg@mail.gmail.com> <0ce6071b-0c99-4119-9ab4-a2d9c00b99a8@kernel.org>
-In-Reply-To: <0ce6071b-0c99-4119-9ab4-a2d9c00b99a8@kernel.org>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Thu, 21 May 2026 08:16:01 -0700
-X-Gm-Features: AVHnY4LLZAgoRouVjFmHuQ-Myz6Ah8QkFGgjPSrwBF-4h2eNKhs2Piibqid79-A
-Message-ID: <CAJuCfpHPs54_hc_U9DCxtv=xikKHJMtqCEDN_4Y5aDqKhoBDnA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/3] use vma locks for proc/pid/{smaps|numa_maps} reads
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: akpm@linux-foundation.org, liam@infradead.org, ljs@kernel.org, 
-	vbabka@kernel.org, willy@infradead.org, jannh@google.com, paulmck@kernel.org, 
-	pfalcato@suse.de, shuah@kernel.org, hsukrut3@gmail.com, 
-	richard.weiyang@gmail.com, reddybalavignesh9979@gmail.com, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="XnCLFiWrG4EBMfBq"
+Content-Disposition: inline
+In-Reply-To: <ag8b7oq4SFpdmlP_@J2N7QTR9R3>
+X-Cookie: No shirt, no shoes, no service.
 
-On Wed, May 13, 2026 at 12:39=E2=80=AFAM David Hildenbrand (Arm)
-<david@kernel.org> wrote:
->
-> On 5/13/26 05:58, Suren Baghdasaryan wrote:
-> > On Tue, May 12, 2026 at 2:28=E2=80=AFAM David Hildenbrand (Arm)
-> > <david@kernel.org> wrote:
-> >>
-> >> On 4/26/26 08:27, Suren Baghdasaryan wrote:
-> >>> Use per-vma locks when reading /proc/pid/smaps and /proc/pid/numa_map=
-s
-> >>> similar to /proc/pid/maps to reduce contention on central mmap_lock. =
-One
-> >>> major difference between maps and smaps/numa_maps reading is that the
-> >>> latter executes page table walk which can't be done under RCU due to =
-a
-> >>> possibility of sleeping. Therefore we drop RCU read lock before this =
-walk
-> >>> while keeping the VMA locked. After the walk we retake RCU read lock,
-> >>> reset VMA iterator and proceed with the next VMA.
-> >>
-> >> With many small VMAs, is that overhead noticable?
-> >
-> > It might be but the point of this patchset (and the previous one that
-> > made a similar change for /proc/pid/maps) is to reduce mmap_lock
-> > contention, not to speed up the read operation, which is not a
-> > performance critical part.
->
-> Well, this interface has been around .. forever, so if there is a noticea=
-ble
-> change in performance it should be called out.
 
-Sorry, I missed your reply. I'll see if I can adopt Paul's test for
-/proc/pid/maps [1] for benchmarking smaps but I would expect similar
-results as was reported in [2].
+--XnCLFiWrG4EBMfBq
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-[1] https://github.com/paulmckrcu/proc-mmap_sem-test
-[2] https://lore.kernel.org/all/20250719182854.3166724-1-surenb@google.com/
+On Thu, May 21, 2026 at 03:51:26PM +0100, Mark Rutland wrote:
 
->
-> > The original problem that Paul McKenney
-> > described and which kicked these series of changes is that a
-> > low-priority monitoring process reading /proc/pid/{maps|smaps|...} can
-> > block a high-priority updates by holding the mmap_lock. You can see
-> > details about this problem and the numbers Paul obtained with the
-> > previous change in here:
-> > https://lore.kernel.org/all/20250719182854.3166724-1-surenb@google.com/
->
-> Yes, I know. A problem that has been around ... forever as well :)
->
-> --
-> Cheers,
->
-> David
+> While this specific instance is simple enough, I don't think we should
+> continue to duplicate the low level save/restore routines between the
+> main kernel and KVM hyp code.
+
+> I've sent a series that avoids the need for this, and cleans up some
+> other bits):
+
+>   https://lore.kernel.org/linux-arm-kernel/20260521132556.584676-1-mark.rutland@arm.com/
+
+> Assuming Marc and Oliver are on board, I'd prefer that we do that
+> cleanup first, and build the KVM SME support atop.
+
+Yeah, I've got a laundry list of things that I want to improve with both
+the main kernel and KVM but the latency on getting anything reviewed
+with both sides and sometimes obscure implementation decisions means
+I've been waiting until this is landed first.
+
+--XnCLFiWrG4EBMfBq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmoPIfIACgkQJNaLcl1U
+h9CJpwf+PVTKcbGobSIt2V1nPmtForFYSfILfE++Ovngx/OIzlSmVFC52be0sVWq
+kOnhNIA8nT6/F4EXTWuc1tbEkCuxa2iPJ7VTwNvtKU35QL7roJNU4Cap+A3yHPkL
+0C/+LQIXheQka+i6fCoqMXIWTz625keaedSH5XBMS2ktxjK+Oyka5XiUJqPmyVeQ
+YSbd87c6rzpbn+C7p4RPZX+FwVm05w/yUoAloztHmd5GqsAr8NgEJoe8uOFd4Fe4
+hoGcpIgfvhM/oqMQAXtLvCEmyPSKuDc70RM7Y3KDnvyiWQfnXh/ftNYqspba9Oic
+Ii8HVtxvR6JE450ekIq13Rx4A9d0Ug==
+=JOnr
+-----END PGP SIGNATURE-----
+
+--XnCLFiWrG4EBMfBq--
