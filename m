@@ -1,249 +1,228 @@
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from CY7PR03CU001.outbound.protection.outlook.com (mail-westcentralusazon11010002.outbound.protection.outlook.com [40.93.198.2])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0D6134A3C4
-	for <linux-kselftest@vger.kernel.org>; Thu, 21 May 2026 12:13:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 918653D1A83;
+	Thu, 21 May 2026 12:28:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.198.2
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779365640; cv=pass; b=f22BDZu04rfYDXrWUeQwUCgeereRcpwfBOg3/c9ZMAYgQEE1exXk+GcfcwBLQlwQZZWh1z2jA9PpwsOgtP89L4YaB0V5PFf8eN0ytIj1ipXbT41jWrI6RlO6SSw2Swdhd3jsJ6KRenhrbRXy7r5NCikVm40DowLTVRoSJoHx8lA=
+	t=1779366508; cv=fail; b=s+S9mtkAxLS9UzP5Oxn2qv3yf6feLa8xr/CV6vhns6Tu5aReD+706CmtgP14SZMPTqyDGckMMJB45RGLsM+tn4GBVDe+nYBOenwf8MoaCZIH46YKnv1Bu/F9rcXOAPARbjzIsLC9+5Qd5h9pAsTcTjZlhxcI7UfqRtIM9O32tRU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779365640; c=relaxed/simple;
-	bh=LYJgALBMb92rrgNb+Wzk0+WAd9qpquSCRXx7gbDTCrE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pjb52SwC1HJkvP8tTiTzLOF+txxgyvJd9uBbyBNNdlxd8H4dZj7fYcJdhMDeGen0WkxbQzy5i7JD80WoAqcP98KN4dBCfbM1JiI6iYxsi0ifzT/BH2K7zgOIm25OYiNetca2VhF6imCvQNBtRSIZXae0kpFT+a6IKI4JI7Iz6OM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ai2mvyeS; arc=pass smtp.client-ip=209.85.160.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1779366508; c=relaxed/simple;
+	bh=qzbLutj0IWydVatkLgnZtki7KUWFYp3FfJ6iwyB4IwM=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=j9io16k88nwh3/o9x0idLsmzHOlsvHqGCt2fz/rrsLZlCWqRdMoZVMoj32H/phP+tXb93BV+T24DqLSMGtA3YgEAvXkBK5EvdmKJTnMFHlqe9XeQrmJwkB9/8Ej2672eekSXOuBl1nrDgK8qzr4EPlSSppGDcDPp6xf7a7uCX/U=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=ed4Z80cl; arc=fail smtp.client-ip=40.93.198.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ai2mvyeS"
-Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-515548f390fso5871cf.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 May 2026 05:13:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779365638; cv=none;
-        d=google.com; s=arc-20240605;
-        b=lO73AjreewJtElipGOZrY3IY3MG2ZLcTNMPQlNbCR3EIDGiAb81iBzbbp33MACjPyR
-         d5aukfhE0nKaiqHwILui+F8/2pW4Cp2ywQp6YicUSpwgkqNelqfNsIDextgMXmkA5I7F
-         j1ctrTkcgo0E0Zd0H+9/hMl2Jds4m+6yik2ILxbfH16UUuFonh0fJBNafY0uTPp7F1md
-         m21+bYTey4s6PjZsxUJq1idCdDfUbZr47f/3fzL1IuRLjyeMwoFpbp4AX9qoXxnXRz/6
-         zS7i8PGcuCYXWSO8gPl8mgOoBUAr12/pm+SPkU2YAJnmiY0wq/IQrmVdISw6cZ5/6HB+
-         /jAQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=GJBi6kqgS/T+2nzhRr9ooN0dsVaPQuEMdq7fBLHxWNg=;
-        fh=tBdsPKYJLbQU9sZJY4XodjvcYD1D0EAHmgBHVrOrxnU=;
-        b=ANJS/19VnqjH31GM4MaJvTnxV9xQUSygSCcDZh9gG5mvzYLzoHgj60A5mCxXH92B4h
-         +ZCfmSgOuauHO3iLUuMdBFb7W5YZ9Degqw+hquhDuf1BBr69gr/1KoqNYG0GHly2unwX
-         NIu/7nQpmOi6ryHFas8i38Ve1CUqcYCROBP/tjTpgOLSMhJpJR71GjLm24wtAsiqJ9K0
-         tQqlP8HiyFDz/9L9ic8LSMGE9CezHHGFlAdee3RrsxslmtN7G8yZ32N57tz68uqLXQtr
-         2MrD4Ad2iTm1XW0CimKWeBUmF4iyli3caLLY/rWepacxtlAYoKr/BmcaYpdb7Bwj+lgo
-         58WQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1779365638; x=1779970438; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=GJBi6kqgS/T+2nzhRr9ooN0dsVaPQuEMdq7fBLHxWNg=;
-        b=ai2mvyeSqWfWYz+Q7nLQxEDw82SQKcefiFjkOFabOHaNT+f6TCUGYxXfomzgDp+JNu
-         ohkpNy3Fy/WFE7DL7qvCx2z3H1jAdqxSaEMmQ8Ykl4qZ13yKFlk64YeYaVx7Kw3j1nkL
-         DZ5uw2U9mhZEMC758YycLMhPvjypav/ZxLgy3MoW4C++5YdcGYNw8Jr9yxZ393pHpUYS
-         6HRtHVsnHFo6VxTVZ2NRbpOsdgeRv1LSVYP9EJzG9olzg7w45wS34vkddA/l/ON5Ae45
-         E2F17SHzigYMl40bTRjcpdggWbs/BBCwj2eFlRtW0eYSofuwzNEK9ZpIMpCXwjLSqIST
-         5MeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779365638; x=1779970438;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GJBi6kqgS/T+2nzhRr9ooN0dsVaPQuEMdq7fBLHxWNg=;
-        b=BWiruiXK0xn5QcbcOqLAI9/Bv5I9C711/y05svJGLLjVchfZSmwnVoqAjCHuTEiBqF
-         b0/W/7QwwjvUPU70Q4riJA1zbUHFpK5DJp6KIZduN2EdwI34Cr9vHIpoapU6vvwF7jAD
-         dQMu3GOwGsiv11+c0p5v6HOT8u4oEf4t2xPMIacmVY0JXc1KiQo6aiOEBQHi81BQiqFn
-         HrV6LBg4gbF8yJ06IahT72HYya/t3Qdn+7LoG30hXMc9VXyXVN7QL2xmW0pCz8/5PBSr
-         FwVwkj9KNJ+X8ckOBQ9zmEZknVRd1B7l+b2Bejejf44cIvu2+F95x4IDq5j1qilx6cr+
-         tG6w==
-X-Forwarded-Encrypted: i=1; AFNElJ+MpUVW1B9vdlx4/CL1wBYyNi1CNqRb7v2BUmZHqTnG4pQ9YFPl3s03YlILGAXmNWs3Q9Rjx5l3kRmR+Qpx9iM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz/yKEEjAUuI9R1XepM9i+wwbOCIDBuNTjsVViNn0lkcabHlqlv
-	MSEoqsnQhbyCa+Pxyq4zLrfRCIZNZ6rzgzYmZfuNn7UZHGUbnPvoQCcpfFk5wUzyPP7sCIvlh4z
-	5hUORfuf6xXdt+DUdf03ra6EECzIgru65t6xbL8/8
-X-Gm-Gg: Acq92OEjhV+mbcNcuMvFPOj5RITFVKEXmEAHWenDrcjcrWG9VffK/gkxmxcdDBrvQPw
-	npsW0Ub3lQSOc1XlQ2MrVbPI8K5w6ZOysoTy+/IXtiJi/S24pjAnsDKNFQE4Oes81LGnVqXiTsb
-	NqZmMcIqJQX5i7wXI2L+JPgfC0/SpWArLdsJn0DMUR/zUj+NAisLYeAtmek9IAPnWzey4obYNnM
-	YN4brDv2YVPyIYVVMDqZg5YfDcEi1XBRIw82WmkMGyYFLYcqnKcJ0+tRskENNMo2e5LMqyHQDuK
-	jsBeVR2pp/E2ls2W9u0=
-X-Received: by 2002:a05:622a:a94e:b0:516:4f62:85f1 with SMTP id
- d75a77b69052e-516c552fa38mr6885881cf.22.1779365636942; Thu, 21 May 2026
- 05:13:56 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="ed4Z80cl"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=dhW/jRE3sh0w1M+2Qfsha97IR38fo+xWylxgYH+L3Q5UKMVqo5CFnuQSvufRJ9iZevbnB0UcVkN5rRx8+85omm07uY0cPSIj4xg7VFEq8blUUXfo0l2KS4GZfB9mCUYJZugZpykJ89t4uEY3ZxcVPQm8PbzHwVn0xgIi4Cx+ziRYJNgsgJDdZxol8JiGp0MGC+FpFwKPjRROoUJK7f2jwMQF25yMtYetPpn3XTGAcTKo4Y6/YlQLpLffWdm1ELZQvKpOZS04p8FNRm2WMEi8GrqGxaVBRnf9/xlv4pLNaEZeWxAUj1UFyiYjwTuKuytk5Tp9Cb1e9USBncKWAq8s7w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JQ3P1JU7gPxNE6tmfvhoojCYlaX8q1B127RCLIlF4XU=;
+ b=jMeK1RJqABPN2utw0guodp8q0oHXpG/BdSzXqa3bDhWsQo7Kp/AWzUv3SNbNo7+Xty56x7wcq7KJ4WhmUqcKw8MF11CTTE5vKJzgmqPVfZcpk8r1uwY9QHDQtVVd9DyqW90/lqohLwecuy/5Jy4pwmA/WdcCZXoNKGgbr+MF8cX7FHKxLmsjZ6uq7pTwj56Zb5gf3W7IHCzyAo67eEkId1AyRgVnVcPJSgunISK3bdVCM8FNnDGzvcy9xTvuasSjH11fBgewdFMD5lSgH8IXJi7i6b8XE38BGXUVxIEe3KMN3TzNIQOj1rgwyEMjP8raxFWjuu1KTnb1dVnEP90vtw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JQ3P1JU7gPxNE6tmfvhoojCYlaX8q1B127RCLIlF4XU=;
+ b=ed4Z80cl2oCXKRYW4MZFRrsUcsp4wrzpuC6Z3GX5a7mTesiyx1DCKCbTOzVLRx8GqulWx6tO5zuIKbNMr5vUw9Bt0xvObD8gexzuLzA1lXnul5b5K39xfNr72vbZ7y5xTrBpr0B7MkGS+tHzjXLK5v8fI5aESX/K6Z4yXlQvX6o=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from PH7PR12MB5685.namprd12.prod.outlook.com (2603:10b6:510:13c::22)
+ by SA3PR12MB8811.namprd12.prod.outlook.com (2603:10b6:806:312::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.48.14; Thu, 21 May
+ 2026 12:28:22 +0000
+Received: from PH7PR12MB5685.namprd12.prod.outlook.com
+ ([fe80::ce69:cfae:774d:a65c]) by PH7PR12MB5685.namprd12.prod.outlook.com
+ ([fe80::ce69:cfae:774d:a65c%5]) with mapi id 15.21.0025.022; Thu, 21 May 2026
+ 12:28:21 +0000
+Message-ID: <7b662fcd-3bcd-40a2-b014-d9ce36f6425b@amd.com>
+Date: Thu, 21 May 2026 14:28:02 +0200
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/2] dma-buf: add DMA_BUF_IOCTL_DERIVE for
+ reduced-permission aliases
+To: Albert Esteve <aesteve@redhat.com>, Sumit Semwal
+ <sumit.semwal@linaro.org>,
+ Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+ Brian Starkey <Brian.Starkey@arm.com>, John Stultz <jstultz@google.com>,
+ "T.J. Mercier" <tjmercier@google.com>, Shuah Khan <shuah@kernel.org>
+Cc: linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, mripard@kernel.org
+References: <20260521-dmabuf-limit-access-v1-0-26c01e27365a@redhat.com>
+Content-Language: en-US
+From: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20260521-dmabuf-limit-access-v1-0-26c01e27365a@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR4P281CA0410.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:d0::15) To PH7PR12MB5685.namprd12.prod.outlook.com
+ (2603:10b6:510:13c::22)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260507-gmem-inplace-conversion-v6-0-91ab5a8b19a4@google.com> <20260507-gmem-inplace-conversion-v6-24-91ab5a8b19a4@google.com>
-In-Reply-To: <20260507-gmem-inplace-conversion-v6-24-91ab5a8b19a4@google.com>
-From: Fuad Tabba <tabba@google.com>
-Date: Thu, 21 May 2026 13:13:19 +0100
-X-Gm-Features: AVHnY4KHC9HIiDmjKgEge5iH3VKNmS75Hv9JyZN2WMHPkcnLceuX40X-36gd_Tk
-Message-ID: <CA+EHjTzfo0_uxHbrcntLdHLaLGB3uO41+JzcyW+vHr+u=VB5=g@mail.gmail.com>
-Subject: Re: [PATCH v6 24/43] KVM: selftests: Rename guest_memfd{,_offset} to gmem_{fd,offset}
-To: ackerleytng@google.com
-Cc: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com, 
-	brauner@kernel.org, chao.p.peng@linux.intel.com, david@kernel.org, 
-	ira.weiny@intel.com, jmattson@google.com, jthoughton@google.com, 
-	michael.roth@amd.com, oupton@kernel.org, pankaj.gupta@amd.com, 
-	qperret@google.com, rick.p.edgecombe@intel.com, rientjes@google.com, 
-	shivankg@amd.com, steven.price@arm.com, willy@infradead.org, 
-	wyihan@google.com, yan.y.zhao@intel.com, forkloop@google.com, 
-	pratyush@kernel.org, suzuki.poulose@arm.com, aneesh.kumar@kernel.org, 
-	liam@infradead.org, Paolo Bonzini <pbonzini@redhat.com>, 
-	Sean Christopherson <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
-	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
-	Nhat Pham <nphamcs@gmail.com>, Baoquan He <bhe@redhat.com>, Barry Song <baohua@kernel.org>, 
-	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
-	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
-	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Kiryl Shutsemau <kas@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>, Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-mm@kvack.org, linux-coco@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH7PR12MB5685:EE_|SA3PR12MB8811:EE_
+X-MS-Office365-Filtering-Correlation-Id: 87abbc02-3fe4-4fac-de82-08deb7347255
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|1800799024|366016|18002099003|22082099003|56012099003|3023799007|11063799006|6133799003;
+X-Microsoft-Antispam-Message-Info:
+	0KiGsXu49oQkCLBhvUa0sm2/4+TlhVdev+yzycX4xY014ZqXzrNdIxPpxzwIODICBQcgaXE3SG6eMNMAtTXSSkKDuRDQdDaxoxVyjENrxlktKrEBr4x+5O2xnE2YismJ71MpcvFIjyrCSrEKE+MIY+XlS2X4z9SHbn0lfSHsCVHdX5s4lZuFg70ukxq0Ig7T8t9ErfMu0EK7PxxQ/p5y9iUNUSzc9SDyaliinyDONrO58kQ8idJXrhMx0BBHQW2OgUtsfGbXh7IyAcfOEc6PZPUx6SjcxiO+/MF/b1zNsOCfaHIlkokl02S++GzH6fScu3j7pX/UEKw0oBPbO1FwhlM/1xoE0eK7QBCXmu3xguE894cI35MDnIMXDWt1Mtmv74SNTATFgdP+gtnExkdFLio+aMRq0wseHjjYr5vwCwCPkQBgPnxYhhcMsCdnGTR0C/leH5UMhZYOeHpe+0qnkl25CFSh8e/3yC+1xWDRS4zJdniHsd1AtCa8A6y+ZdioTucS9MRi4zig+I2HGngC/FXBHemYiXVaYzFelrVI0oOvSa4zwf2Z6M5b/vOC2GIt1JwbBjBjG1jM4cDUhs2teKZnBNhtZGwPHqgRy1A2N69Rfr3qKNgxcKR0i/IgtYZsmiQQxMyzijBOFSqhXDrGD+RUK9JT+I9t78G2766n+bM3KNwr2hCTN3fpI4/Bui6u
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5685.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016)(18002099003)(22082099003)(56012099003)(3023799007)(11063799006)(6133799003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?bHdYMkFoQkZ0MStqQThuc3Z2RFNDYjJTSVoxaEhQZm5kV21JT2c5YlpXdExo?=
+ =?utf-8?B?cGdPOG01SDl3MmhFNm5BaFFkVE51QTFOUmF5Q1VsS2Vra0RxUTIwUVJPRnY5?=
+ =?utf-8?B?R2c1dnU4RUZ0cktudXVweElTbk41bnQzR3ozOE45aGhKYUhOZ0drUTJubXVM?=
+ =?utf-8?B?SmtEUGRTUkpOWDBONE9QZjM1UHBDMFZadWtqYWpNOWNoMEU3aitidS9ST3VB?=
+ =?utf-8?B?bnRBcERxaUxQMnp1a0lsSURubjBEVWs5N3VqM0VUa0NOZ0pJeDFQZ2EzYjgr?=
+ =?utf-8?B?TUJ4T3AvSUdMODZrQTJlWmFhd0lmZzI0aXpGMDViVyt6bzAxQ1Zmc3FxWkVO?=
+ =?utf-8?B?RkNURGE3cmNNVDJnREo2VzNDVGRJTSs5bWI1dU8wVnpWNVZIcmgwSEZlZitQ?=
+ =?utf-8?B?bGFBYUxaV0loamk4c0xram9STlNVSXVxNVBUNWM2Y1R6SmltUGRTai9wVGJ0?=
+ =?utf-8?B?b0hIWHZyRlBtb0VjeVdsdFA2L0piUDlNTmUxM3FhaGFMaEVpMEFXRVZUSW00?=
+ =?utf-8?B?VTVvTlBjUjNieVZrcDEzUW9jS200eENYTHhPT0ZiME9kVUpGZ3VpVDVpbnN4?=
+ =?utf-8?B?YWRDZHRyTW41L3BWMzFES3oyeXQ4aTUyYWJGaXd6SkpWb056U20xQk9ydzl4?=
+ =?utf-8?B?MktOU2h6dFVKeDVTUFpXVUwyWlVzb0ZwNVlXUTByRmtFS2pDeDF6TThVVGs1?=
+ =?utf-8?B?KzhJMFRLZEVDQTd6MDgvSWg3S1lvb3M1Ni95QjZKSERYZUg2dGVJMmxFZ25j?=
+ =?utf-8?B?dE0wSk4yVTkvOXNvUzJEZUdZSFd2WXhpQUkvN0Vidnh1eFhYNXhDWXgyaTkw?=
+ =?utf-8?B?K21CeXh5SWF3Z2hqSFVzMDhwOWxyVlpjU01CaXcwbVc0VytUVEppaDk4dURV?=
+ =?utf-8?B?WDcwYVVtMFhmaUk4YXk4K3FMUE1jMFMxQXVEOGlDU1M1clJHZ1o5UHI1T3VR?=
+ =?utf-8?B?WTEyTXFWMkYvbFhHaDhobVNGbDNETy9oaUdxc2Z0RzN6ZzE5NTJqRjBGSExB?=
+ =?utf-8?B?OUFzYzhlQStUdXVvc0M1L096cGJ1T2RUdk1rbnIrSmd5T0hpK1I1RTAwZVd6?=
+ =?utf-8?B?b2VjZkFIOFZXNEIxZS96WXFhM1YyZlhvY0NIb2JvV3piS01yYjZKZDJWR0l2?=
+ =?utf-8?B?dlh4bVA4YVhNVHlBSTJNWmtoYXp5YitTaWQrRCtkb2RYZE9XUW93by9XVFBR?=
+ =?utf-8?B?YVovSUdIVFhUZytuWmZEMllsNVgvWmV6ZkozdEs1VkY1Q2NpN2NvZlU5ZGdQ?=
+ =?utf-8?B?VFdFY2JseGdsMytCZGo0LzlnRmNrZWdyUWhMWjVqWTZvZzk0RG5YY2o1dEtY?=
+ =?utf-8?B?NElsRDI5alBJZEkvNHlPeDVMaUsxcmhNMXZSTzR1cWtPeWVGU3hQUWV5YnJO?=
+ =?utf-8?B?U3ZlVW9QN0tJWjczTFVrc3hDdXJlc29DNkUrdmZJUzYyaDgzbTB6cG5lZWpo?=
+ =?utf-8?B?WVBKMWRUUE5RME1ORTJyQVlCZVZDZEYyOEFZYW8yQnYrVHNUTEx0TnpydTQ2?=
+ =?utf-8?B?NnRHcEdhanlUdklTa2Z0NzZSNzhGM0lma2ptM013S3lEQWNUdVJaYmZjWDl1?=
+ =?utf-8?B?aktHWEJuMDQ1TUM1aXZQcjJFU1QxMVlKTkIwWmo1QmpFTjk1clUySVRCV0FB?=
+ =?utf-8?B?TDdGQTVkRnBodi9oRFJId2tvWk53Y1BNb1VucFZlcFZLWWhHMUsvckMyd1pE?=
+ =?utf-8?B?VkZicHhkeEZrd0NiTmtPSFRuUTdHNmNZZ3lHeW8yenlsWXNETWVLc1dQSWpF?=
+ =?utf-8?B?WWsxQkdUSVJadjR2Rm84SU1hOEI5d09LWlUrdVZ5THVDN1hsWVR1NUZIYWdB?=
+ =?utf-8?B?TXpMb25jOVBaRndpeTRZSXBvZXdvY2VaQkE5VmZCK0lranVwN2tpM0ptbWpt?=
+ =?utf-8?B?T2F3aGJUTnh2bEFhNVU5enVFYk9LcGdqQ1RUK3dPVjBWdVJ4REh0VTlxUHYw?=
+ =?utf-8?B?Q1hkVXBOVzBrOXpDUmtETXhlMWlxdUdUdWNCQTJvL2EwakdUNm9JUlZua3NZ?=
+ =?utf-8?B?SUlCOFdnaTVLMFVaNEtFSmpmNXAvVFkxbTZIREZsa0sxL1R2RkdveGM1RENJ?=
+ =?utf-8?B?dHh6eHNrVkVXb0VmWXlWMldLK01OMVdKNWJkMUFYY3M1My9GdVBzT2FNMGVE?=
+ =?utf-8?B?dHpSUkUzQWxaU1UzNVhuMS9LUzJPTzhNanVjeDE1bzJhWkJuUHJqTkNUTjBB?=
+ =?utf-8?B?RUdiKy85WXh0OWNlTEZSdmEvNTR0V1NxbW1uQUVKQWNncGVSd0V1Wk5HVytr?=
+ =?utf-8?B?Tm11QUpiYTRWVzNiM1VqZG9WZ1pKSHRKekhqWU9qbzN6eWFFaVV2d2hIYllP?=
+ =?utf-8?Q?OACEhQB8WzVDBhjMdT?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 87abbc02-3fe4-4fac-de82-08deb7347255
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5685.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 May 2026 12:28:21.8877
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: UbypUtKrJKweMp9k0C+qqEue3j2vyYzHyW6hNHrxf969E8NigDVkRDkzOM7HivII
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR12MB8811
 
-On Thu, 7 May 2026 at 21:23, Ackerley Tng via B4 Relay
-<devnull+ackerleytng.google.com@kernel.org> wrote:
->
-> From: Sean Christopherson <seanjc@google.com>
->
-> Rename local variables and function parameters for the guest memory file
-> descriptor and its offset to use a "gmem_" prefix instead of
-> "guest_memfd_".
->
-> No functional change intended.
->
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+On 5/21/26 11:10, Albert Esteve wrote:
+> When sharing a dma-buf between components of different trust levels, the
+> allocator may need to hand a consumer a read-only view of a buffer it
+> holds with read-write access. An example is a camera pipeline where the
+> capture component writes frames into a buffer and needs to pass a
+> read-only handle to a downstream processing component that should not be
+> able to modify the data.
+> 
+> However, no such mechanism exists today. The access mode of a dma-buf
+> file descriptor is fixed at export time, and the standard POSIX
+> interfaces for duplicating or changing file descriptors (i.e., dup(2),
+> dup3(2), and fcntl(F_SETFL)) cannot alter the read/write access mode of
+> the copy.
+> 
+> One natural candidate would be reopening via /proc/self/fd/<N> with
+> O_RDONLY, which works for regular files. For dma-buf this would fail
+> (that is, if we were to add a new handler for open f_op) with ENXIO
+> because the dmabuf pseudo-filesystem carries SB_NOUSER, which prevents
+> the VFS from opening its files through path-based resolution from
+> userspace.
 
-Reviewed-by: Fuad Tabba <tabba@google.com>
+OH MY GOD! This is the like the sixth time I had to clarify that in the last few weeks, I'm really wondering where that is suddenly coming from.
 
-Cheers,
-/fuad
+Creating the DMA-buf with O_RDONLY does *NOT* make the DMA-buf itself read only!
 
+That's a really common misconception. The flag only controls if mmap() can be done read/write or read-only to handle cache coherency issues.
+
+It is still perfectly possible for a device to write into a DMA-buf created with O_RDONLY with DMA!
+
+So long story short there is not such feature as a read only DMA-buf, and putting read-only pages into a DMA-buf and then expecting that nobody can write to them is an absolutely clear No-Go.
+
+If we would want to implement a read-only DMA-buf feature we would need to go over all the different DMA-buf importers in the kernel and add security checks.
+
+Regards,
+Christian.
+
+
+> 
+> Alternatively, exporting the buffer twice would produce two independent
+> dma_buf instances, which breaks fence synchronization.
+> 
+> Therefore we add a new DMA_BUF_IOCTL_DERIVE ioctl, which produces a new
+> file descriptor for an existing dma-buf with a caller-specified subset
+> of the original permissions:
+> 
+> ```
+>   struct dma_buf_derive { __u32 flags; __s32 fd; };
+> 
+>   struct dma_buf_derive req = { .flags = O_RDONLY | O_CLOEXEC };
+>   ioctl(rw_fd, DMA_BUF_IOCTL_DERIVE, &req);
+>   /* req.fd is now a read-only alias of the same buffer */
+> ```
+> 
+> Permission escalation is rejected with -EACCES. The new fd aliases the
+> same struct dma_buf as the original, same dma_resv, same exporter ops,
+> same underlying memory; so importers attaching to either fd see the same
+> fence timeline and operate on the same object. Access control for which
+> components may receive or pass on restricted descriptors can be layered on
+> top via SELinux file:read and file:write permissions.
+> 
+> A shared writable mapping (PROT_WRITE | MAP_SHARED) on the read-only fd is
+> rejected with -EACCES in dma_buf_mmap_internal().
+> 
+> Two small internal adjustments accompany the ioctl:
+> - __dma_buf_list_del() is moved to dma_buf_release() so it fires exactly
+>   once on dentry destruction rather than on every file close.
+> - dma_buf_file_release() is updated to call dma_buf_put() only for
+>   files that are not the primary dma-buf file.
+> 
+> This may not be the best approach, but after considering different
+> options and alternatives (as described above), we decided to raise the
+> discussion upstream. Thus, we welcome any alternative proposal or ideas.
+> 
+> The series is structured as:
+> - Patch 1 adds the new ioctl implementation.
+> - Patch 2 adds selftests covering the new ioctl.
+> 
+> Signed-off-by: Albert Esteve <aesteve@redhat.com>
 > ---
->  tools/testing/selftests/kvm/include/kvm_util.h |  6 +++---
->  tools/testing/selftests/kvm/lib/kvm_util.c     | 26 +++++++++++++-------------
->  2 files changed, 16 insertions(+), 16 deletions(-)
->
-> diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
-> index 2ecaaa0e99654..f19383376ee8e 100644
-> --- a/tools/testing/selftests/kvm/include/kvm_util.h
-> +++ b/tools/testing/selftests/kvm/include/kvm_util.h
-> @@ -690,17 +690,17 @@ int __vm_set_user_memory_region(struct kvm_vm *vm, u32 slot, u32 flags,
->                                 gpa_t gpa, u64 size, void *hva);
->  void vm_set_user_memory_region2(struct kvm_vm *vm, u32 slot, u32 flags,
->                                 gpa_t gpa, u64 size, void *hva,
-> -                               u32 guest_memfd, u64 guest_memfd_offset);
-> +                               u32 gmem_fd, u64 gmem_offset);
->  int __vm_set_user_memory_region2(struct kvm_vm *vm, u32 slot, u32 flags,
->                                  gpa_t gpa, u64 size, void *hva,
-> -                                u32 guest_memfd, u64 guest_memfd_offset);
-> +                                u32 gmem_fd, u64 gmem_offset);
->
->  void vm_userspace_mem_region_add(struct kvm_vm *vm,
->                                  enum vm_mem_backing_src_type src_type,
->                                  gpa_t gpa, u32 slot, u64 npages, u32 flags);
->  void vm_mem_add(struct kvm_vm *vm, enum vm_mem_backing_src_type src_type,
->                 gpa_t gpa, u32 slot, u64 npages, u32 flags,
-> -               int guest_memfd_fd, u64 guest_memfd_offset);
-> +               int gmem_fd, u64 gmem_offset);
->
->  #ifndef vm_arch_has_protected_memory
->  static inline bool vm_arch_has_protected_memory(struct kvm_vm *vm)
-> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-> index df73b23a4c66a..11da9b7546d03 100644
-> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
-> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-> @@ -947,7 +947,7 @@ void vm_set_user_memory_region(struct kvm_vm *vm, u32 slot, u32 flags,
->
->  int __vm_set_user_memory_region2(struct kvm_vm *vm, u32 slot, u32 flags,
->                                  gpa_t gpa, u64 size, void *hva,
-> -                                u32 guest_memfd, u64 guest_memfd_offset)
-> +                                u32 gmem_fd, u64 gmem_offset)
->  {
->         struct kvm_userspace_memory_region2 region = {
->                 .slot = slot,
-> @@ -955,8 +955,8 @@ int __vm_set_user_memory_region2(struct kvm_vm *vm, u32 slot, u32 flags,
->                 .guest_phys_addr = gpa,
->                 .memory_size = size,
->                 .userspace_addr = (uintptr_t)hva,
-> -               .guest_memfd = guest_memfd,
-> -               .guest_memfd_offset = guest_memfd_offset,
-> +               .guest_memfd = gmem_fd,
-> +               .guest_memfd_offset = gmem_offset,
->         };
->
->         TEST_REQUIRE_SET_USER_MEMORY_REGION2();
-> @@ -966,10 +966,10 @@ int __vm_set_user_memory_region2(struct kvm_vm *vm, u32 slot, u32 flags,
->
->  void vm_set_user_memory_region2(struct kvm_vm *vm, u32 slot, u32 flags,
->                                 gpa_t gpa, u64 size, void *hva,
-> -                               u32 guest_memfd, u64 guest_memfd_offset)
-> +                               u32 gmem_fd, u64 gmem_offset)
->  {
->         int ret = __vm_set_user_memory_region2(vm, slot, flags, gpa, size, hva,
-> -                                              guest_memfd, guest_memfd_offset);
-> +                                              gmem_fd, gmem_offset);
->
->         TEST_ASSERT(!ret, "KVM_SET_USER_MEMORY_REGION2 failed, errno = %d (%s)",
->                     errno, strerror(errno));
-> @@ -979,7 +979,7 @@ void vm_set_user_memory_region2(struct kvm_vm *vm, u32 slot, u32 flags,
->  /* FIXME: This thing needs to be ripped apart and rewritten. */
->  void vm_mem_add(struct kvm_vm *vm, enum vm_mem_backing_src_type src_type,
->                 gpa_t gpa, u32 slot, u64 npages, u32 flags,
-> -               int guest_memfd, u64 guest_memfd_offset)
-> +               int gmem_fd, u64 gmem_offset)
->  {
->         int ret;
->         struct userspace_mem_region *region;
-> @@ -1055,12 +1055,12 @@ void vm_mem_add(struct kvm_vm *vm, enum vm_mem_backing_src_type src_type,
->                 region->mmap_size += alignment;
->
->         if (flags & KVM_MEM_GUEST_MEMFD) {
-> -               if (guest_memfd < 0) {
-> -                       u32 guest_memfd_flags = 0;
-> +               if (gmem_fd < 0) {
-> +                       u32 gmem_flags = 0;
->
-> -                       TEST_ASSERT(!guest_memfd_offset,
-> +                       TEST_ASSERT(!gmem_offset,
->                                     "Offset must be zero when creating new guest_memfd");
-> -                       guest_memfd = vm_create_guest_memfd(vm, mem_size, guest_memfd_flags);
-> +                       gmem_fd = vm_create_guest_memfd(vm, mem_size, gmem_flags);
->                 } else {
->                         /*
->                          * Install a unique fd for each memslot so that the fd
-> @@ -1068,11 +1068,11 @@ void vm_mem_add(struct kvm_vm *vm, enum vm_mem_backing_src_type src_type,
->                          * needing to track if the fd is owned by the framework
->                          * or by the caller.
->                          */
-> -                       guest_memfd = kvm_dup(guest_memfd);
-> +                       gmem_fd = kvm_dup(gmem_fd);
->                 }
->
-> -               region->region.guest_memfd = guest_memfd;
-> -               region->region.guest_memfd_offset = guest_memfd_offset;
-> +               region->region.guest_memfd = gmem_fd;
-> +               region->region.guest_memfd_offset = gmem_offset;
->         } else {
->                 region->region.guest_memfd = -1;
->         }
->
-> --
-> 2.54.0.563.g4f69b47b94-goog
->
->
+> Albert Esteve (2):
+>       dma-buf: add DMA_BUF_IOCTL_DERIVE for reduced-permission aliases
+>       selftests: dma-buf: add DERIVE ioctl tests
+> 
+>  drivers/dma-buf/dma-buf.c                          |  58 ++++++++++-
+>  include/uapi/linux/dma-buf.h                       |  28 +++++
+>  tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c | 114 ++++++++++++++++++++-
+>  3 files changed, 198 insertions(+), 2 deletions(-)
+> ---
+> base-commit: ab5fce87a778cb780a05984a2ca448f2b41aafbf
+> change-id: 20260520-dmabuf-limit-access-73261353841a
+> 
+> Best regards,
+
