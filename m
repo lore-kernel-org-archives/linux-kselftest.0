@@ -1,136 +1,125 @@
-Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 215CA3CF956
-	for <linux-kselftest@vger.kernel.org>; Thu, 21 May 2026 14:21:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64D2825B086
+	for <linux-kselftest@vger.kernel.org>; Thu, 21 May 2026 14:25:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779373305; cv=none; b=L+1z8NRfmeyyenBGqAnqT/pxSEXeaGlLQImJtEURmVuCDg8XWkPZ2SoYw+PTjECXAaS8nDpg1hZRYnygZzcW1DEFJCVMBGTUnX07774H5u9T8jKz9U0TSSpLuTsecyZttfpF1wlLaFOgi90Mhb3Z7at+cH/BPqYBqMdWYAz4U+4=
+	t=1779373542; cv=none; b=RiVkmO+QzKUyfCSXMIY4e+61nzHQs4aHlUW+l7abWbCKufa+28AQI3KN15zIxAPKVz0cwYNM4AMISPbshOPM2dNNuFHcGUS1ZT4pv2oT69C/EgkT5rGTqUcscUjLNN/GaeKC/vKsTgmdvPFQx+OT/LQ1Jw0xzzBABlrA+5M0NVU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779373305; c=relaxed/simple;
-	bh=+pL+rZ5hYnakVp3eViVhhlNGbB7Zs5h4PZn9WwK7upU=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=rvU9WBRo5Cb/tbZtFAEhFjoeTUDeXVfBa0nqPxwKGTmr97Zpbdm3jbxFcBRFNLpir7q4GTMxkNeEnc/fm1evbEnHpug/MWUqH2QrXO/hx1Yhhtd8DjQVMhAXY4ApyzPZRGa5CaqxzrS6K2Q8QmeIiqIoFd95AdYTg44OpRhHbe8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=SqitMEY1; arc=none smtp.client-ip=209.85.216.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1779373542; c=relaxed/simple;
+	bh=+C3fO9EHQqC8yb9Ea8YRyF+2U4PtwzeiyV4Jx0pc3HA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MT0s/aNEIgKp36eSkSIUqTx9Zo+gtOqV3ARAzPMxqAFY3sAVsr8ECLgs9r03ciurtSjFBCWRyeALR9SUmHIFEDhmpj3GKbaP4iL2oebAC4LBWuhPo2ZD/5U5YeYeCTmOqbAX03VHO53Eht/mk8mzDQ2IkmCE895MkCpDhwEhByk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=6wind.com; spf=pass smtp.mailfrom=6wind.com; dkim=pass (2048-bit key) header.d=6wind.com header.i=@6wind.com header.b=IyXo3MfR; arc=none smtp.client-ip=209.85.218.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=6wind.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=6wind.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SqitMEY1"
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-368edd5fec4so6876703a91.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 May 2026 07:21:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=6wind.com header.i=@6wind.com header.b="IyXo3MfR"
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-bce3350fe3eso86159966b.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 May 2026 07:25:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1779373303; x=1779978103; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8Q5oVYYRVy83rEvyTZBhLaKBIsxHN0wptJNVngW/2MQ=;
-        b=SqitMEY1JJoz/yFscBsnP6NOrJ50V22ksAYo3FayvTgFLjyqE+IZ7DK7t2atC29yeO
-         3+kNIlP1m08q7kOhc6+vvbT9LYBFlZidNQVfZftYs+XCS3tTsmgxbx5fsBHVPoFLb55f
-         qJHlmkh5Tn6mUgmXo/GoSAZ8pV+yFVtEeFJfsFFXM6323DjGULV9HF61o2wEZbutgqNB
-         5xQA2gINrn6hVS/FffuJL4M/NJkV3RJuNFYHYBjyi+V0uLLPJ+v7bTNa1xDhJzYnjCrR
-         gDHneTTt9q1maUrTeRREPGtrnQ/cG8FtWtFuVWr889bPevi4CfjoyvynKE0uJHDGpVvv
-         ypug==
+        d=6wind.com; s=google; t=1779373539; x=1779978339; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:content-language
+         :from:references:cc:to:subject:reply-to:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=8fIErPlRSj4fk2dY+zUS744qFronKsaelvf6iKyKFKQ=;
+        b=IyXo3MfRPtLzvEM7I5Bch8BNUC1qogTTnjTAL64Ar7313l6eEXzn35z8h7uvybRlrA
+         mb1bXOkqNru2qu49NvwAzN+W3JC+4RsZ2JSgEBqZ9gbXrBg4ya2lr5/0tr/DcSgEL6/a
+         Z1FdAMlqSCbksJMSweiV7CJ/H+47wPPtbNjU2fBX7sAd63dLbmBxuZqBU+NV+0hGpI6p
+         IdcbA36EUy5O3sotzGGKohA0jcGT/O92j1Iuz8BjCBNC4ls6DVVHUFSZRNUK6ncQKsw8
+         r8cEtqMRkVcKYlcZGmZTlB2qFQXjK1yZbB2Mtx0c6N9FqMLoSLeOujuhCEJJPQ3OCSCN
+         byxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779373303; x=1779978103;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8Q5oVYYRVy83rEvyTZBhLaKBIsxHN0wptJNVngW/2MQ=;
-        b=dUCs64KHe6uwseeDo5b3ia41qDRi4/laFwurLvGtl95GXkgtsUy0Aqt8AxtAKjwTRp
-         w6VXvbuIjE0dhPwSZE3Mi4vFo/dYLhlEXv4RSqZrjCTTnTe93tnC8P9EMYRO03RxTpeB
-         bVoFKjgwxTY2JCO9gwWEFjk4cFBwQ+WtQtHBE9oMzAoJs2K68jNGbK4VLmV87iKpjsHU
-         zEDQHIfB5Do1XmYfAhmV2BJ4E8J85g8036k21bVZZCJhRfU1nBc3/ECcPgXtBOCBu7kL
-         IidB0Txd/ZFR/Jw2URzPxLBP2kMSVnr8uVD4c3UBI4gnJJ8sR+nM6VEbuALONrJpWHNi
-         raCg==
-X-Forwarded-Encrypted: i=1; AFNElJ8X9GWbmCLN4NOFnmzX7uH0eClcQpIXLot7HulIbwaL/1tSQv902QRjySyJE99PnC96qxGwnOLFg434VBrMELo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxc1r1Tc0j0a9dhkglEiHssiH1gJrUyOAVL9ei9hEcZs8KoAD26
-	0wIArHZ6sMvId1512ZJqQHLc43jqiJG96zPB00vxqUZBbYaXl2LbhxLU+4a9MTRdqC8rKrC1xu2
-	DidvCJA==
-X-Received: from pjjj1.prod.google.com ([2002:a17:90a:601:b0:368:adeb:4994])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:2548:b0:35f:b5df:453
- with SMTP id 98e67ed59e1d1-36a45630166mr2922293a91.22.1779373302968; Thu, 21
- May 2026 07:21:42 -0700 (PDT)
-Date: Thu, 21 May 2026 07:21:42 -0700
-In-Reply-To: <CA+EHjTzu=28Sr3=9A9LmJEGz0tBEDbU9taznVV5kdL7s8Nw=Jg@mail.gmail.com>
+        d=1e100.net; s=20251104; t=1779373539; x=1779978339;
+        h=content-transfer-encoding:in-reply-to:organization:content-language
+         :from:references:cc:to:subject:reply-to:user-agent:mime-version:date
+         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8fIErPlRSj4fk2dY+zUS744qFronKsaelvf6iKyKFKQ=;
+        b=IdQYXfn/EKbJyHws9odRS7TvXcQLQF1T9As+WeKEGOkVm7Q/9fpvBu89t+CiK8z+/G
+         yBQpQvU6x8QpH+sSvmgnktr3OjTxsFdAYnJjyzi+xyiFU9rFIKS91NWaMAJ3tAoNWEKs
+         h4FGAvlfohhTOzJZm3vjyy6oJofwQskUrB7zslcTUhtcokcTn+22jtNmckJZpGSnb4Md
+         pZDspMVZ7WUqGayySu3FYg++o5AvhmufyCDEWPf6UBBG6+ZuX+MDUlTIWzru0G+SWg4X
+         6rcE6CTH/LcZcpCUfKJ7/Tf9h4Y6khJECa/z5BAKFMq3pnnKub2DJb1KnJ+rjII7c78e
+         eeMg==
+X-Forwarded-Encrypted: i=1; AFNElJ/rn38Y7i1iwunjwVjh3IM4jwTIQlNRGI8R1GFC6klQLmttF7TotEawQjVBuUDfdrzxnrcC46F4rBs9lpHB+ms=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwXq0f6NBrUIq9X/8RmhnCr3fXYrpGHHSj2WnAIzzqsMq2YhtBs
+	ynAC4FHLXTImnshLrCCSvG2coabFtYYG5VyRk30aqgbZnRcgqotSTawbvYYZHnPuexc=
+X-Gm-Gg: Acq92OE+Tsr1+MdUN/Eu2o6uXgfuEW2Eul62IU0+wyTvAQHBEYADTNZH9dJugAE42ut
+	sDncklMj2BWLaa+r652Hw7cUSRZZh5D0ZG/NUopuQuTlZDi3yZYUmCf5wezsvwnd2ebBrVfOuWG
+	6QO4LfxQImWoYwupTUVXplk/o2xYvJOWEODJi6IyjCI2Ip1gBzhDfmmfWOuqU77kKQVUvfcBWay
+	mVMeuNxCSIgqlD5QwDzo62rzjDhAniLNmJp5FpC5CxDDAKjfay4sShVSf/WDAeOs8Avc3JbFsCk
+	hwYnGlKcdsVhkEedCRVFczWqg73LSMqa8ECaAUzovj36YbQpXvXGnSBdoVfNSVgi3H7uukf6/Au
+	4pxiY6JrpTLOPRSBvBYSl39AiF4orBV+thNzsyXGJfmihIrznZcoQC/5vJ2uRgmHUAdk0C0wySt
+	FMYi8uY9hEMvmH4EQTNIKeVvOAcfnfLEu0Pntrdd1V8uQkqbXxtRjik5tLHS8M0EMpY6E+9qMFI
+	bOYZPh7djvGjkY=
+X-Received: by 2002:a17:907:961c:b0:bd2:a2a4:fd3a with SMTP id a640c23a62f3a-bdc1437aeddmr66262566b.7.1779373538588;
+        Thu, 21 May 2026 07:25:38 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:ab7:2110:6a1d:efff:fe52:1959? ([2a01:e0a:ab7:2110:6a1d:efff:fe52:1959])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-bdc8aa03d4asm57107166b.47.2026.05.21.07.25.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 May 2026 07:25:38 -0700 (PDT)
+Message-ID: <9e7b7aab-dad4-4b72-87cd-822e67b27afe@6wind.com>
+Date: Thu, 21 May 2026 16:25:37 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260507-gmem-inplace-conversion-v6-0-91ab5a8b19a4@google.com>
- <20260507-gmem-inplace-conversion-v6-19-91ab5a8b19a4@google.com> <CA+EHjTzu=28Sr3=9A9LmJEGz0tBEDbU9taznVV5kdL7s8Nw=Jg@mail.gmail.com>
-Message-ID: <ag8U9qIcTd_GykHE@google.com>
-Subject: Re: [PATCH v6 19/43] KVM: Let userspace disable per-VM mem
- attributes, enable per-gmem attributes
-From: Sean Christopherson <seanjc@google.com>
-To: Fuad Tabba <tabba@google.com>
-Cc: ackerleytng@google.com, aik@amd.com, andrew.jones@linux.dev, 
-	binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com, 
-	david@kernel.org, ira.weiny@intel.com, jmattson@google.com, 
-	jthoughton@google.com, michael.roth@amd.com, oupton@kernel.org, 
-	pankaj.gupta@amd.com, qperret@google.com, rick.p.edgecombe@intel.com, 
-	rientjes@google.com, shivankg@amd.com, steven.price@arm.com, 
-	willy@infradead.org, wyihan@google.com, yan.y.zhao@intel.com, 
-	forkloop@google.com, pratyush@kernel.org, suzuki.poulose@arm.com, 
-	aneesh.kumar@kernel.org, liam@infradead.org, 
-	Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
-	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
-	Nhat Pham <nphamcs@gmail.com>, Baoquan He <bhe@redhat.com>, Barry Song <baohua@kernel.org>, 
-	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
-	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
-	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Kiryl Shutsemau <kas@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>, Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-mm@kvack.org, linux-coco@lists.linux.dev
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Reply-To: nicolas.dichtel@6wind.com
+Subject: Re: [PATCH net v2 2/4] net: netlink: don't set nsid on local
+ notifications
+To: Jiri Benc <jbenc@redhat.com>
+Cc: Ilya Maximets <i.maximets@ovn.org>, netdev@vger.kernel.org,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, Donald Hunter <donald.hunter@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>,
+ Kees Cook <kees@kernel.org>, Adrian Moreno <amorenoz@redhat.com>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Matteo Perin <matteo.perin@canonical.com>
+References: <20260520172317.175168-1-i.maximets@ovn.org>
+ <20260520172317.175168-3-i.maximets@ovn.org>
+ <bd9c0751-55ea-459e-8b22-8bd24abf235c@6wind.com>
+ <20260521160036.413771e9@griffin>
+From: Nicolas Dichtel <nicolas.dichtel@6wind.com>
+Content-Language: en-US
+Organization: 6WIND
+In-Reply-To: <20260521160036.413771e9@griffin>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Thu, May 21, 2026, Fuad Tabba wrote:
-> Hi Ackerley,
+Le 21/05/2026 à 16:00, Jiri Benc a écrit :
+> On Thu, 21 May 2026 14:36:12 +0200, Nicolas Dichtel wrote:
+>> I still don't think that this is the right "fix". The app is broken. Even after
+>> this patch, the bug could be easily triggered again by a third party.
+>> There is nothing wrong with assigning a self-nsid. It would be a lot more robust
+>> for the app to assign itself a self-nsid when it starts.
 > 
-> On Thu, 7 May 2026 at 21:22, Ackerley Tng via B4 Relay
-> <devnull+ackerleytng.google.com@kernel.org> wrote:
-> >
-> > From: Sean Christopherson <seanjc@google.com>
-> >
-> > Make vm_memory_attributes a module parameter so that userspace can disable
-> > the use of memory attributes on the VM level.
-> >
-> > To avoid inconsistencies in the way memory attributes are tracked in KVM
-> > and guest_memfd, the vm_memory_attributes module_param is made
-> > read-only (0444).
-> >
-> > Make CONFIG_KVM_VM_MEMORY_ATTRIBUTES selectable, only for (CoCo) VM types
-> > that might use vm_memory_attributes.
-> >
-> > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> > Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+> On the other hand, does the patch break anything in practice (as
+> opposed to in theory)? It makes live of several apps simpler, which is
+> not a bad goal.
+I'm not against the patch, it just look like a workaround.
+I'm trying to understand how NETLINK_LISTEN_ALL_NSID is used (in fact, why it is
+used if the app doesn't "understand" NSIDs).
+
 > 
-> Config files always confuse me, but Sashiko might be onto something:
+> The only scenario where this would introduce incompatible behavior is
+> an app that self-assigns a self-nsid and expects to see it. That looks
+Yes, I thought about this.
+
+> quite stretched, doesn't it?
+It does.
+
+Regards,
+Nicolas.
+
 > 
-> https://sashiko.dev/#/patchset/20260507-gmem-inplace-conversion-v6-0-91ab5a8b19a4%40google.com?part=19
+> Not that I have a strong opinion about this, though.
+> 
+>  Jiri
+> 
 
-: Since this prompt does not have a default value, will it default to N
-: and silently drop KVM_VM_MEMORY_ATTRIBUTES during configuration updates
-: like make olddefconfig?
-: 
-: Existing userspace VMMs that rely on the KVM_SET_MEMORY_ATTRIBUTES ioctl
-: for TDX or SEV VMs might fail to boot if the feature is unexpectedly
-: compiled out. Could a default y be used to preserve backwards
-: compatibility for existing configurations?
-
-> I think this partially goes back to commit 6, the one I flagged
-> yesterday. But also adding "default y" to KVM_VM_MEMORY_ATTRIBUTES?
-> The default value should at least fix this issue, but I'm not sure if
-> it would cause other problems...
-
-Hrm.  As much as I want per-gmem attributes to be the default going forward,
-silently breaking existing setups isn't great.  On the other hand, I'm *very*
-skeptical there are any SNP or TDX deployments using a distro kernel, so I'm
-still leaning towards forcing the issue and turning per-VM attributes off by
-default.
