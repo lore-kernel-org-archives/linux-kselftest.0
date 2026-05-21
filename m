@@ -1,34 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1F7F385D93;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A208D386C13;
 	Thu, 21 May 2026 06:57:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779346633; cv=none; b=K2XsW1yvECvWBgXkshuR0WbNxohUk9hXad7Kpsdt1GpUnVl60CoAR8wmTiSE8uFyPwoHszCiXEfggmmyiLYKoMtbfFDkShptm4ZhbE8NvbYz5Wy2P2CC110SiiWqtb5cyEiIfBK2Wuf5RYMn03IZv71jHhBWyf4QF5SQToGuRIs=
+	t=1779346633; cv=none; b=X33RPQpqSzVS1/v3bTquejo/ljcMw3RX2p/wlW5t81PhMbcR+YTfpMIrBiFfJFATijUL9lfbt++iGmKxUXz/K8XVRZ8G41F/8J4tjJA5QN1EDVvZ4rOme78Rc4iuUHSb3VK0Csd8p4bzcy0oih8GYQKR9MnUL4bptUdhWO0yWl4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1779346633; c=relaxed/simple;
-	bh=GpYuZvdDKSuZ1FkselZsxzc4wSkWmWm7XFBxDLF6Dfo=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=dUJ4i/6xegBZpP6pzV32CU5DK3IoMql++8YZI9Xkn+GGWDvadZBvMgabXf93LBCetQVTn8O9PxK1umT5JpV+oTcwucfx91NtGg+R+BU+rEbBc8pNjLEyltMDfhZAzRCpqC9jWSpXvUX1VcxmH8+0Az/8FbTx4SbDC90m/K5RVVQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hLMjqvYn; arc=none smtp.client-ip=10.30.226.201
+	bh=m1EAr4ayyi4PZbyexLDSnvqug8qI7CL7WNOpMU9eF+A=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=GD+3EbZL8c9ztPMd6rwDzoOcL+IJb9UuAEVJtTJkDz6wrFI5LLNOvUea1LPgg0TghBmgajOeZkoSaDLZyHxUhHgacHWX8HQE1n4r+3P5ZMo8HXEIekFJaSzJqxeygbyjjTmY2kLRlZWtjOT5IFHSBGd2NReEAwsaYQ7MQTHksDQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=YCfU4Elt; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hLMjqvYn"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4ADABC2BCB4;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="YCfU4Elt"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 55BBEC2BCB9;
 	Thu, 21 May 2026 06:57:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux.dev; s=korg;
-	t=1779346633; bh=GpYuZvdDKSuZ1FkselZsxzc4wSkWmWm7XFBxDLF6Dfo=;
-	h=From:Subject:Date:To:Cc:From;
-	b=hLMjqvYnQWOz8cctvuijoJ4Mx4x8ZG9jdUaupVfEVNEJMxTIIkhSfgivIE71jIwSG
-	 BhqwJlxem1laR+31rwhGzmrltCz44aecosZdZNlWYUvKKFBnNBdsCs9r80RI3jwhxu
-	 CMB8TUBuTK6jJRuVaijhjhJD4PDHJfKBRHKNX4/4=
+	t=1779346633; bh=m1EAr4ayyi4PZbyexLDSnvqug8qI7CL7WNOpMU9eF+A=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=YCfU4EltUvfqUCDL8fbQ4IOVXjV6OB9aQo1hX9J0Ok3E/CGTlygSx4MPEZ9elAI8G
+	 oIp025a/8yATSONu/zVMc7K+FyIcYerv7szSrR4YDLWqTGBqrgy5Xj1Z6ZX11Cv/pz
+	 p2XMXrw44W2I+EHV81clQbIL4BzENlrmRkqc6zjs=
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FEF4CD4F3C;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 414C2CD343F;
 	Thu, 21 May 2026 06:57:13 +0000 (UTC)
 From: Alvin Sun <alvin.sun@linux.dev>
-Subject: [PATCH v3 0/7] rust: use vertical import style and remove
- redundant imports
-Date: Thu, 21 May 2026 14:57:06 +0800
-Message-Id: <20260521-miscdev-use-format-v3-0-56240ca70d0c@linux.dev>
+Date: Thu, 21 May 2026 14:57:07 +0800
+Subject: [PATCH v3 1/7] rust: miscdevice: use vertical import style
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -36,12 +35,10 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAMKsDmoC/33NzQ6CMAzA8VchO1uzjg/Bk+9hPIytSBMBs8GCI
- by7gxMH4/HftL8uwpNj8uKaLMJRYM9DHyM9JcK0un8SsI0tlFSFzLGCjr2xFGDyBM3gOj1Cpes
- LlWmNBlHEw7ejhucdvT9it+zHwX32HwG36V8uIEhAtLkqai3JmtuL+2k+xzWxcUEdCCV/EioSR
- WZNVjYG0yw/Euu6fgGytJ6W9wAAAA==
-X-Change-ID: 20260519-miscdev-use-format-9ab7e83b1c11
+Content-Transfer-Encoding: 8bit
+Message-Id: <20260521-miscdev-use-format-v3-1-56240ca70d0c@linux.dev>
+References: <20260521-miscdev-use-format-v3-0-56240ca70d0c@linux.dev>
+In-Reply-To: <20260521-miscdev-use-format-v3-0-56240ca70d0c@linux.dev>
 To: Arnd Bergmann <arnd@arndb.de>, 
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
  Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
@@ -57,64 +54,76 @@ Cc: rust-for-linux@vger.kernel.org, linux-block@vger.kernel.org,
  Alvin Sun <alvin.sun@linux.dev>, 
  =?utf-8?q?Onur_=C3=96zkan?= <work@onurozkan.dev>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1779346631; l=2046;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1779346631; l=1454;
  i=alvin.sun@linux.dev; s=20260317; h=from:subject:message-id;
- bh=GpYuZvdDKSuZ1FkselZsxzc4wSkWmWm7XFBxDLF6Dfo=;
- b=9TEu8Yc9XNqL9wX0FvAYfA0lvscmTHZs2twn+GcDzJhNe5UnPm8lthdGPe11tTpP2XTfpTgo3
- JcXbyTOrc1gDOUZSajW+eZGDIefXk0kBSHzEZIvvVqnOjic1rkaxH4B
+ bh=m1EAr4ayyi4PZbyexLDSnvqug8qI7CL7WNOpMU9eF+A=;
+ b=8T1vx1s1VmH35F1FrgNNRC6xE9XlmnV7pJAOkySzqQ2GoLAZ37pb3nRmBzuA26PUPfYJlTJCp
+ Re7cVT6TddCAgHDS2FQK2dj/2OHnIREGXSsbh3u+/0l0S3Y9HXXxPpd
 X-Developer-Key: i=alvin.sun@linux.dev; a=ed25519;
  pk=CHcwQp8GSoj25V/L1ZWNSQjWp9eSIb0s9LKr0Nm3WuE=
 X-Endpoint-Received: by B4 Relay for alvin.sun@linux.dev/20260317 with
  auth_id=684
 
-Adopt the vertical import style and drop redundant imports already
-re-exported via `kernel::prelude`.
+Convert `use` imports to vertical layout for better readability and
+maintainability.
 
-Changes include:
-- Convert use statements to vertical import style in miscdevice,
-  samples, doctest, and block/mq
-- Remove imports covered by prelude and apply minor formatting
-
+Reviewed-by: Onur Özkan <work@onurozkan.dev>
 Signed-off-by: Alvin Sun <alvin.sun@linux.dev>
 ---
-Changes in v3:
-- Add trailing // to last items and closing braces in block/mq imports
-- Add rnull vertical import style
-- Add doctest vertical import style
-- Link to v2: https://lore.kernel.org/r/20260520-miscdev-use-format-v2-0-64dc48fc1345@linux.dev
+ rust/kernel/miscdevice.rs | 34 ++++++++++++++++++++++++++++------
+ 1 file changed, 28 insertions(+), 6 deletions(-)
 
-Changes in v2:
-- Reformat use statements and drop redundant imports in
-  rust/kernel/block/mq
-- Drop redundant imports in rust/kernel/miscdevice
-- Link to v1: https://lore.kernel.org/r/20260519-miscdev-use-format-v1-0-11d526ba0edc@linux.dev
+diff --git a/rust/kernel/miscdevice.rs b/rust/kernel/miscdevice.rs
+index c3c2052c92069..05a6b6b9770f2 100644
+--- a/rust/kernel/miscdevice.rs
++++ b/rust/kernel/miscdevice.rs
+@@ -11,16 +11,38 @@
+ use crate::{
+     bindings,
+     device::Device,
+-    error::{to_result, Error, Result, VTABLE_DEFAULT_ERROR},
+-    ffi::{c_int, c_long, c_uint, c_ulong},
+-    fs::{File, Kiocb},
+-    iov::{IovIterDest, IovIterSource},
++    error::{
++        to_result,
++        Error,
++        Result,
++        VTABLE_DEFAULT_ERROR, //
++    },
++    ffi::{
++        c_int,
++        c_long,
++        c_uint,
++        c_ulong, //
++    },
++    fs::{
++        File,
++        Kiocb, //
++    },
++    iov::{
++        IovIterDest,
++        IovIterSource, //
++    },
+     mm::virt::VmaNew,
+     prelude::*,
+     seq_file::SeqFile,
+-    types::{ForeignOwnable, Opaque},
++    types::{
++        ForeignOwnable,
++        Opaque, //
++    },
++};
++use core::{
++    marker::PhantomData,
++    pin::Pin, //
+ };
+-use core::{marker::PhantomData, pin::Pin};
+ 
+ /// Options for creating a misc device.
+ #[derive(Copy, Clone)]
 
----
-Alvin Sun (7):
-      rust: miscdevice: use vertical import style
-      samples: rust_misc_device: use vertical import style
-      rust: miscdevice: remove redundant imports
-      rust: block: mq: use vertical import style
-      rust: block: mq: remove redundant imports and format
-      rust: block: rnull: use vertical import style
-      rust: doctest: use vertical import style
-
- drivers/block/rnull/configfs.rs    | 27 +++++++++++++++++++++------
- drivers/block/rnull/rnull.rs       | 15 +++++++++++----
- rust/kernel/block/mq/gen_disk.rs   | 24 ++++++++++++++++++------
- rust/kernel/block/mq/operations.rs | 14 ++++++++++----
- rust/kernel/block/mq/request.rs    | 16 +++++++++++-----
- rust/kernel/block/mq/tag_set.rs    | 28 ++++++++++++++--------------
- rust/kernel/miscdevice.rs          | 23 +++++++++++++++++------
- samples/rust/rust_misc_device.rs   | 34 ++++++++++++++++++++++++++++------
- scripts/rustdoc_test_gen.rs        | 11 +++++++++--
- 9 files changed, 139 insertions(+), 53 deletions(-)
----
-base-commit: 5200f5f493f79f14bbdc349e402a40dfb32f23c8
-change-id: 20260519-miscdev-use-format-9ab7e83b1c11
-
-Best regards,
 -- 
-Alvin Sun <alvin.sun@linux.dev>
+2.43.0
 
 
