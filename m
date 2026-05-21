@@ -1,97 +1,208 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 288B4220F2A;
-	Thu, 21 May 2026 12:06:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779365207; cv=none; b=dZn35HT0GqX35FqP7qBQ6mTcfifib4trklHtujKeq+ZYyg94vjhlkEa/dFsHNgrCiZPmRGXyxQ5r9zPA34ekCql1Uq+DppW6gkISTrrPv3+w2zRLUryG5SkdDzhb1xcWipp/gMTr8n+pNwVaSBydbjkee5Oi51svXob4PirjRrY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779365207; c=relaxed/simple;
-	bh=6zULtrGopCFhNZ6Tb2Rz3K1BwIBpUuqnOsGReXyiJCE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TFHDdqYlLUD52EfoMA6+Co4nwUGXYS5yO+jUXjns+ZPvnOl2vWhqlFzk32O0R4yip8q/HdK8QTreaQ/kZuEgWkTmlQukWYb46C86zENSAviCto9i0zMpwKb27NT1JHawA8YPYYU/NYFpdBr8VFqcUqzwPKb5qYyFg0BJ5Cm9e0o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LPKz2fOg; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 798CA3CBE97
+	for <linux-kselftest@vger.kernel.org>; Thu, 21 May 2026 12:12:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.176
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779365550; cv=pass; b=CKxYWX+dqZpj0F7Du1Id0ovpU7xmrXwju4bb+LtovgSvUD1/X1LSq/z44FTSwbPAsOjwRYzrcoi1Tj1w9Vd94gcZhB1val5BOJIq+czQisa2+ewE9QveG/YVSSCSDxAsKTYDfHUa2krXf1MBmN7xOfBs8+uGWWLnIBjdjcHepLo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779365550; c=relaxed/simple;
+	bh=mUWTvSyqIoqkETcgZuIds2FYkJwuokmb9q2VYy+exYk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hzu6NFgBMTMAI6/+POrPOUByNUzEh8+TkeYp4N5/e9RsTHQ7giqLfV+tNJLG9bgIHzR4RD2xvHeRy4UacN8ZdftXI97DdtK31f2HYVEBoh4PDAiCMENCFLVlcmcruPyaVjWD/nTKpTbqRRAEiXfIlwHgeDIZ1uBOtKCRYONW8Bc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=eSxUwN2U; arc=pass smtp.client-ip=209.85.160.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LPKz2fOg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C5721F00A3B;
-	Thu, 21 May 2026 12:06:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779365205;
-	bh=DdPSMqplxokFnI6BOtK6gRL8vbCdTn2h+eaPI1K/I8c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=LPKz2fOgRpN7SmzEI+Q/lEAb5AJepMtwdqvrAhd8tU5MDe2UFcWE1dGEr35MKA3MT
-	 DasgHPG4RdYWBiekLwO4JX9RUvR0zZ/OYKnfbCQNgnjqhv7em/9Ja9dobQgQw2EhGx
-	 6K8VahFi3ciOltwV+QtN1O3Il7kqdBRh4d95AcXgzItAIcAawWM06/oKmKJfeJoXE0
-	 Q4FQcDGxW8jAhdH4+VQImjIzx2CHjhSR/OlrXL9DIrTHN8jGa/EB406iDrKHiT6Z4M
-	 m+JbUAaIVFB9qBLRCYNT3XO/OcxxZ4D8HjASxH6Fpy3zUrfoFRRScxijvMlyrcBhLt
-	 7VZNmvagiNy8A==
-Date: Thu, 21 May 2026 13:06:41 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Kevin Brodsky <kevin.brodsky@arm.com>
-Cc: linux-arm-kernel@lists.infradead.org,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Joey Gouly <joey.gouly@arm.com>, Shuah Khan <shuah@kernel.org>,
-	Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 2/2] kselftest/arm64: Add test for atomic futex uaccess
- with POE
-Message-ID: <eeb367a8-23f8-45ba-ac20-624d83ddcf43@sirena.org.uk>
-References: <20260521-poe_futex-v1-0-1da286b8f9b2@arm.com>
- <20260521-poe_futex-v1-2-1da286b8f9b2@arm.com>
- <8fc7713d-6451-4f05-86cd-df833cedd94b@sirena.org.uk>
- <c140c0da-4ad7-48ed-ad83-663ada282b14@arm.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eSxUwN2U"
+Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-515548f390fso5061cf.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 May 2026 05:12:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779365547; cv=none;
+        d=google.com; s=arc-20240605;
+        b=KJdMd+nVlGky+8oLKbTMNfevbc/pO1aDzqchaEHaJMNWtb2R26eN/7N5o1t1PSVFcV
+         UPQOHGd6YT9oh3G17byhwyEntm4KFEmk2+Kia9Ote7o13YUZFt5/c440wxrF/j5Gv4ht
+         Ex3Uz1/HFTq89tkpr3HFfOvP8VOFeUif/vD/E7amBdlVVVySE7etFg6SEjafGw8VyTbP
+         wt1fYTd0a5K/68WoWdoskr20D3Isqe16mAFR/6oRPx/ZgGaZ2BRKOg75jEPw78jY50sR
+         AlncaU2d53c0WVbP+Y7tg0sHjNvNY7NqewDSDnPqx0CadL98zLBHCqdeugD3ne8tZuTi
+         kYHw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=F1wmmG0cNegB4E+dlRzmEOWoIo3QXb0mRCuTWAZdGJs=;
+        fh=AtXWE8K7n0d4SBEX86Yol7S2/nu3GMbcO+MMf/NXYvo=;
+        b=VoHShoynDa+N6Gp1BMLrFR6yXw9HaWAWOiss+MEch74PPw3dU+7RKbL9FLOnuc90vB
+         YXxi2aQdMamt87GVldlUA3LcY/cWY0RASNzNqW1ESNIDFg5gfXQh33Z6Xyjrj6edWPVL
+         OlPYJNtyd0Fjl9JAPS0eLYKzp5JOxhhs4uFyT3I3D71HKzg8zVt0a1w/9R/FFMuPz9HM
+         fIrmwRdDgcufxB+vw6WOjYZExk302RFcA8KcdfVb3DLj9ntftF4q1MJwz7bnIB6bnw1e
+         FyokIJTIW9psy5xgerzLHGlAEN7pGtp31OXPU+gEfT7vLBUexh01WQbTaUKk2nzmdVGN
+         Q9zg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1779365547; x=1779970347; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=F1wmmG0cNegB4E+dlRzmEOWoIo3QXb0mRCuTWAZdGJs=;
+        b=eSxUwN2UUN0gARyiwlHRhjFeTgTwoYSX6HnwV3HJBMWWPGKbRBBm8GoVr5jIuqOxxT
+         KLvP6ZUdR4xTql4y8w669ChBS76GV5GjN6JhPBx4/0Y/Gm4pdN64oH5Nbk5V3iAqmZ26
+         CSmQP/S/dnUovh/Mt3TredUArYrIjoVsofJhWHXfP9ECgMjtCvUNRAN+aaLzfWVFk19I
+         ObfdSkGwq5zPKDUOlnkfNi5cyGa5akLiCDtta8BKEhh0SCgkqPMvDL5EcjZBkjetHE/x
+         iWvwetxUqdI8bYADuRlHhVdXqTAXPP5D4yZ0BPu3qE/FWSAdee6DWPWbrnSXdnJEWZoO
+         kOnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779365547; x=1779970347;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=F1wmmG0cNegB4E+dlRzmEOWoIo3QXb0mRCuTWAZdGJs=;
+        b=sfJ7gaJtTwHTqYy/m+zw4bXI7SJFipS401R03pP6TGbPltdKjJPTvTNUOW2uXwkLxR
+         +5rJOr6gbuo27VzjIM160ofPwCsBghkAneVBFPOw4L4fF2T9FHLSlnSi+zSxQfNvqPNa
+         YZ/CxfYam9TKy7llTv4TN1Xj/RdXHvFcXNlwI13hVCZ7xfTcBLAl1wlSV72vRVRMlZrp
+         P+Yb4yCXYEZ7wL5R0BDDhniM5m7dYxIkloOcxEnu0eIRHWE4770Xgjr2ybWwsdq3gH01
+         cZNwEUqWCkfvlt3qqpiFNvaapxzr+58E883gT+mxRPbdvYGfoiqj+0bRnWTmGt4OoSCA
+         zmsQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/XbxkK72Ql5TV/7NruWxTtsR1lkF58Gul/L33KtbhvURJfzB5WZ6MDnMG/CKV/fQlnKbAK26Lugpm2fbpR0cA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwL7YI4HRVa1g7HelXlrXyBgfcMAPizTSZcF47EX18cZEIzZ/JC
+	mECCXd3aUEl7LM72v0BbLQ0kETIJPK9h5x8ov4Fe6elA0kwXRic1rPvvQd/jaSe8DOCeFehbkm6
+	dAsLFHE1oM+jvShMWHX8hZQoZvOdI+zJG+7MMHU7Y
+X-Gm-Gg: Acq92OGn8XFRTBEuy9c7lAM4LRfNp9f8aOiYY1OIRRfEAl03XfcgoeYqbrlFlR02hh7
+	NFueIPkE9ATSFLTb08ut8WHaqLlyD0vSkaaBf/MUelB8Oq1v58w8kWTr5bv9J1u2FFsqEZJvOds
+	06CtrE0CfAu2KMtBUIKUsdLUv90ktHiI4gywzoeW6uBIfhAPggB/8tp/0f9/7ZYV/vWJUs9YPva
+	+D0+HfZ2NZXm4ugIcQnla+xJcCHu7QEX92e9Q0kke3NOZ7nAhlghiQBFekKpDniqfva3jO2ZnQn
+	/soZjNqdyT43YjkKb+1nRHDgDE854Q==
+X-Received: by 2002:a05:622a:995:b0:514:c25e:c164 with SMTP id
+ d75a77b69052e-516c545d403mr10074811cf.10.1779365546829; Thu, 21 May 2026
+ 05:12:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="Uts9jJP3d9TWK+YD"
-Content-Disposition: inline
-In-Reply-To: <c140c0da-4ad7-48ed-ad83-663ada282b14@arm.com>
-X-Cookie: No shirt, no shoes, no service.
+References: <20260507-gmem-inplace-conversion-v6-0-91ab5a8b19a4@google.com> <20260507-gmem-inplace-conversion-v6-23-91ab5a8b19a4@google.com>
+In-Reply-To: <20260507-gmem-inplace-conversion-v6-23-91ab5a8b19a4@google.com>
+From: Fuad Tabba <tabba@google.com>
+Date: Thu, 21 May 2026 13:11:49 +0100
+X-Gm-Features: AVHnY4I9MwIePcJowBi5yVnmSFDQMJen-Uv4dVyPJ1sLPspDsU0lqTAnhNGKza0
+Message-ID: <CA+EHjTyftaGzz5-NgZGHZvgvuKDCBVSuhSsWSQ=niP_giotk7w@mail.gmail.com>
+Subject: Re: [PATCH v6 23/43] KVM: selftests: Create gmem fd before "regular"
+ fd when adding memslot
+To: ackerleytng@google.com
+Cc: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com, 
+	brauner@kernel.org, chao.p.peng@linux.intel.com, david@kernel.org, 
+	ira.weiny@intel.com, jmattson@google.com, jthoughton@google.com, 
+	michael.roth@amd.com, oupton@kernel.org, pankaj.gupta@amd.com, 
+	qperret@google.com, rick.p.edgecombe@intel.com, rientjes@google.com, 
+	shivankg@amd.com, steven.price@arm.com, willy@infradead.org, 
+	wyihan@google.com, yan.y.zhao@intel.com, forkloop@google.com, 
+	pratyush@kernel.org, suzuki.poulose@arm.com, aneesh.kumar@kernel.org, 
+	liam@infradead.org, Paolo Bonzini <pbonzini@redhat.com>, 
+	Sean Christopherson <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
+	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+	Nhat Pham <nphamcs@gmail.com>, Baoquan He <bhe@redhat.com>, Barry Song <baohua@kernel.org>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
+	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
+	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Kiryl Shutsemau <kas@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>, Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-mm@kvack.org, linux-coco@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
+On Thu, 7 May 2026 at 21:23, Ackerley Tng via B4 Relay
+<devnull+ackerleytng.google.com@kernel.org> wrote:
+>
+> From: Sean Christopherson <seanjc@google.com>
+>
+> When adding a memslot associated a guest_memfd instance, create/dup the
+> guest_memfd before creating the "normal" backing file.  This will allow
+> dup'ing the gmem fd as the normal fd when guest_memfd supports mmap(),
+> i.e. to make guest_memfd the _only_ backing source for the memslot.
+>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 
---Uts9jJP3d9TWK+YD
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Reviewed-by: Fuad Tabba <tabba@google.com>
 
-On Thu, May 21, 2026 at 02:01:17PM +0200, Kevin Brodsky wrote:
-> On 21/05/2026 13:22, Mark Brown wrote:
+Cheers,
+/fuad
 
-> > Doesn't matter while there's only one test but we should probably
-> > munmap() this when we're done.
-
-> Fair enough, I was being lazy :) A pkey_free() is also in order to be
-> comprehensive, another wrapper to add. I considered using
-> ../../mm/pkey-helpers.h but helpers there aren't implemented inline...
-> Maybe refactoring for later.
-
-There was another thread librifying the GUP helpers which might be a
-good model:
-
-   https://lore.kernel.org/linux-mm/20260521111801.173019-1-sarthak.sharma@arm.com/T/#t
-
-I'm always a bit nervous about peering inside other selftest
-directories, it can work well but some instances of it are relatively
-frequent sources of regressions as people working in the main directory
-don't think about users in other directories when doing updates.
-
---Uts9jJP3d9TWK+YD
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmoO9VAACgkQJNaLcl1U
-h9DVSAf/VAEkyQTsz/fLRx3YtFCj2VfHVAXIHbu+ljIHKMHbozKj/jWZQkPp4Lc1
-4q/Xbn27fq0GMD6GKlJybosoVFijN3S4tb+9VJ7b2d07bmLtnIkx68Wer4xAAt7C
-Jw9ksVjgrDJUbPYrQcPF+Qv58VYdd9xu3j+lS4ihKPs3IiK9/77cWVORHm7+ldMx
-XqtStOA8JNatXwm/skkV+5BOhMuVo5aFmd0HnVEV1FjyScujJMtS5jqlLoX1Cxqo
-KwcpZby0wuFoSM3tub2e+uhm6KVBiL4Dhiz1eS20tSAQhgjSLwGbdo6cbigEp1X/
-rz/RyJwqG3CoS2ixyAhqGOgZFjH5uA==
-=0VOZ
------END PGP SIGNATURE-----
-
---Uts9jJP3d9TWK+YD--
+> ---
+>  tools/testing/selftests/kvm/lib/kvm_util.c | 45 +++++++++++++++---------------
+>  1 file changed, 23 insertions(+), 22 deletions(-)
+>
+> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> index 2a76eca7029d3..df73b23a4c66a 100644
+> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> @@ -1054,6 +1054,29 @@ void vm_mem_add(struct kvm_vm *vm, enum vm_mem_backing_src_type src_type,
+>         if (alignment > 1)
+>                 region->mmap_size += alignment;
+>
+> +       if (flags & KVM_MEM_GUEST_MEMFD) {
+> +               if (guest_memfd < 0) {
+> +                       u32 guest_memfd_flags = 0;
+> +
+> +                       TEST_ASSERT(!guest_memfd_offset,
+> +                                   "Offset must be zero when creating new guest_memfd");
+> +                       guest_memfd = vm_create_guest_memfd(vm, mem_size, guest_memfd_flags);
+> +               } else {
+> +                       /*
+> +                        * Install a unique fd for each memslot so that the fd
+> +                        * can be closed when the region is deleted without
+> +                        * needing to track if the fd is owned by the framework
+> +                        * or by the caller.
+> +                        */
+> +                       guest_memfd = kvm_dup(guest_memfd);
+> +               }
+> +
+> +               region->region.guest_memfd = guest_memfd;
+> +               region->region.guest_memfd_offset = guest_memfd_offset;
+> +       } else {
+> +               region->region.guest_memfd = -1;
+> +       }
+> +
+>         region->fd = -1;
+>         if (backing_src_is_shared(src_type))
+>                 region->fd = kvm_memfd_alloc(region->mmap_size,
+> @@ -1083,28 +1106,6 @@ void vm_mem_add(struct kvm_vm *vm, enum vm_mem_backing_src_type src_type,
+>
+>         region->backing_src_type = src_type;
+>
+> -       if (flags & KVM_MEM_GUEST_MEMFD) {
+> -               if (guest_memfd < 0) {
+> -                       u32 guest_memfd_flags = 0;
+> -                       TEST_ASSERT(!guest_memfd_offset,
+> -                                   "Offset must be zero when creating new guest_memfd");
+> -                       guest_memfd = vm_create_guest_memfd(vm, mem_size, guest_memfd_flags);
+> -               } else {
+> -                       /*
+> -                        * Install a unique fd for each memslot so that the fd
+> -                        * can be closed when the region is deleted without
+> -                        * needing to track if the fd is owned by the framework
+> -                        * or by the caller.
+> -                        */
+> -                       guest_memfd = kvm_dup(guest_memfd);
+> -               }
+> -
+> -               region->region.guest_memfd = guest_memfd;
+> -               region->region.guest_memfd_offset = guest_memfd_offset;
+> -       } else {
+> -               region->region.guest_memfd = -1;
+> -       }
+> -
+>         region->unused_phy_pages = sparsebit_alloc();
+>         if (vm_arch_has_protected_memory(vm))
+>                 region->protected_phy_pages = sparsebit_alloc();
+>
+> --
+> 2.54.0.563.g4f69b47b94-goog
+>
+>
