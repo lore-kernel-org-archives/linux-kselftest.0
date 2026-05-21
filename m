@@ -1,151 +1,127 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F776384CF7;
-	Thu, 21 May 2026 04:08:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0875F3019D6
+	for <linux-kselftest@vger.kernel.org>; Thu, 21 May 2026 06:30:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779336494; cv=none; b=STsQjqI/jKUVCeV4P7IKoODjldEIpOAWYRC1sJW6MP8RrXKJg3JMJwLkriIEYcPExcVNUwWgh13/ionuJTDDevS5YlMTun54u31MD2LJ0jvbPXmPn4zO9jDJUacHniEhFUh8Po7fa0qk9DIDCcb61YEQoO32uUjhRKJqZ750C4M=
+	t=1779345052; cv=none; b=omEJIBBqKxLsA/yCATHEmG/qWWWPMX/+bdnfg8mDHMxlt+eXpoMbYWdqcmRXluDe4KxW/4d4Mio/Xvw4nPAm9q3pjHEcnc9LyGYENNuA/2KsCDguiHylSxCgAJffp/fnAzWTs1PS8sOpD+dBu6JwsM9o9mWpe9MZh8fcOFXJpUs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779336494; c=relaxed/simple;
-	bh=frUW20WnGgMuDfJc2ScOYEyKat+/Sx/KLi7IauRb7cQ=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=FxrOMyu+74jTmytOPiMLXI6qEoCUYz9UGS51quKyP3BHILZuYyZDYkfqtw0cEgLLGuXlk7/9MN+vnPfWpU4P6ZIU5KIGsKoBwB322iFYvOuHYIds86bN0GGB9vcytN+tggmwKChbw+KIiqIPFbSFNaez2CySb9UQbNKBuD0GFy4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N69TSK8T; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779345052; c=relaxed/simple;
+	bh=8R0vctU7z4EQZbfy1owVGxzrU5Y0GCb3Axo7exyTG6o=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ePoOowX1KicHsXjAEvbdD97/8lyAs3dnMMoqaaBCEdIUrT7DPd5xPAZgh4pT0Ivc02i3xiaDItVMtCq0GhPwBm0E1/nGD51CxrjZISozdcj3Zb5SQjs6xiKaRyYJUOPm+q9zXA1ElFpkW9dZPRy7Cah/mqzf9XGhMuDDDYSQT/g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=wN8a4GRa; arc=none smtp.client-ip=91.218.175.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N69TSK8T"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3173B1F000E9;
-	Thu, 21 May 2026 04:08:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779336492;
-	bh=Kw+VykLIyNoaSGIQROpIUwlv6U4ieWywxI0afM+yals=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=N69TSK8TTuaGO5MsVWTQmgTck1g20eufPe09YMJtSILq/8PVCpKYNRli0ol+lGqpu
-	 uf8LQx1iXh2KKODhwM7c0VIqDCFn6J5LVGTG9Ih4drb7+8o/5PvBzxQ5a5xbSmdGdc
-	 yST92inml/LVSP6z+7cEEx1ABOgzx6TA4ththlZiL4K6rBdt1S4U7BfBbxcG4m+sYH
-	 4+HEOz33SuRtxL8EC07IhTirHu3ZS6yP9OJ3RYC/BjTQtFWs9Bzzxbxtny7bE3QcvM
-	 3CPctnI5eV3CujOHAwSwxDJrYEITeAa2867gfgrIpTtXDGj39c5NYvQZfAbIeEH0sm
-	 /zmi1DTSDRzFQ==
-Content-Type: multipart/mixed; boundary="===============7048703539607253613=="
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="wN8a4GRa"
+Message-ID: <e3161bcf-92e6-4d85-9e80-a6b081d44f62@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1779345038;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=oWXMI+artQUT3BERACb5g1lLwEqc2ryF+PiR5qEMqIQ=;
+	b=wN8a4GRavA48KI1TPyKp/odiEc3L06Z02eFOccaPR+FcudhtLR1xmwJ6dR/g/753lGtriz
+	abDZOh8HHhgbPWyqye/vaVBo30K0NgdrPIH3vXX1MKXLnEcpJvbBaKirDzxkHUMwGbuHr6
+	iYwWzSlpsaJawH4uKlMFeFOplUOeh/I=
+Date: Thu, 21 May 2026 14:29:38 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <61871735d9151729b3092d42209dad08b1e38fa930bc1c9e452645240efbc40e@mail.kernel.org>
-In-Reply-To: <20260521032306.97118-7-kaitao.cheng@linux.dev>
-References: <20260521032306.97118-7-kaitao.cheng@linux.dev>
-Subject: Re: [PATCH bpf-next v11 6/8] bpf: Add bpf_list_add to insert node after a given list node
-From: bot+bpf-ci@kernel.org
-To: kaitao.cheng@linux.dev,ast@kernel.org,corbet@lwn.net,martin.lau@linux.dev,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,chengkaitao@kylinos.cn,skhan@linuxfoundation.org,memxor@gmail.com
-Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-doc@vger.kernel.org,vmalik@redhat.com,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 21 May 2026 04:08:12 +0000 (UTC)
-
---===============7048703539607253613==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> index 1c69476c8a09..89579165ef4d 100644
-> --- a/kernel/bpf/helpers.c
-> +++ b/kernel/bpf/helpers.c
-> @@ -2577,6 +2577,16 @@ __bpf_kfunc int bpf_list_push_back_impl(struct bpf_list_head *head,
->  	return bpf_list_push_back(head, node, meta__ign, off);
->  }
->
-> +__bpf_kfunc int bpf_list_add(struct bpf_list_head *head, struct bpf_list_node *new,
-> +			     struct bpf_list_node *prev__nonown_allowed,
-> +			     struct btf_struct_meta *meta, u64 off)
-> +{
-> +	struct bpf_list_node_kern *n = (void *)new, *p = (void *)prev__nonown_allowed;
-> +	struct list_head *prev_ptr = &p->list_head;
-> +
-> +	return __bpf_list_add(n, head, &prev_ptr, meta ? meta->record : NULL, off);
-> +}
-
-If __bpf_list_add() fails at runtime (e.g., because prev is not in the
-list indicated by head), it drops the 'new' node via __bpf_obj_drop_impl
-in the fail path.
-
-However, the verifier unconditionally converts 'new' into a non-owning
-reference during check_kfunc_call(). If __bpf_list_add() fails, the BPF
-program retains this non-owning reference to a freed node.
-
-Could this allow the program to trigger a use-after-free within the lock
-critical section?
-
-(sashiko-bot@kernel.org, v10 RESEND)
-https://lore.kernel.org/bpf/20260513204420.2BB22C19425@smtp.kernel.org/
-
->
->  static struct bpf_list_node *__bpf_list_del(struct bpf_list_head *head,
->  					    struct list_head *n)
-
-[ ... ]
-
-> @@ -4756,6 +4766,7 @@ BTF_ID_FLAGS(func, bpf_list_push_front, KF_IMPLICIT_ARGS)
->  BTF_ID_FLAGS(func, bpf_list_push_front_impl)
->  BTF_ID_FLAGS(func, bpf_list_push_back, KF_IMPLICIT_ARGS)
->  BTF_ID_FLAGS(func, bpf_list_push_back_impl)
-> +BTF_ID_FLAGS(func, bpf_list_add, KF_IMPLICIT_ARGS)
-
-Since bpf_list_add is marked with KF_IMPLICIT_ARGS, won't the verifier
-look for a bpf_list_add_impl counterpart during program load?
-
-Without defining and registering a bpf_list_add_impl function,
-find_kfunc_impl_proto() will fail to find the required _impl suffix in
-the vmlinux BTF.
-
-Will this cause the verifier to unconditionally reject the kfunc?
-
-(sashiko-bot@kernel.org, v10 RESEND)
-https://lore.kernel.org/bpf/20260513204420.2BB22C19425@smtp.kernel.org/
-
->  BTF_ID_FLAGS(func, bpf_list_pop_front, KF_ACQUIRE | KF_RET_NULL)
->  BTF_ID_FLAGS(func, bpf_list_pop_back, KF_ACQUIRE | KF_RET_NULL)
->  BTF_ID_FLAGS(func, bpf_list_del, KF_ACQUIRE | KF_RET_NULL)
-
-[ ... ]
-
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 35eebb5e7769..662ad7312697 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-
-[ ... ]
-
-> @@ -19524,8 +19527,11 @@ int bpf_fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
->  		int struct_meta_reg = BPF_REG_3;
->  		int node_offset_reg = BPF_REG_4;
->
-> -		/* rbtree_add has extra 'less' arg, so args-to-fixup are in diff regs */
-> -		if (is_bpf_rbtree_add_kfunc(desc->func_id)) {
-> +		/* list_add/rbtree_add have an extra arg (prev/less),
-> +		 * so args-to-fixup are in diff regs.
-> +		 */
-
-This isn't a bug, but the multi-line comment format doesn't follow the
-BPF subsystem style. The preferred form in kernel/bpf/ has the opening
-/* on its own line.
-
-Additionally, consider adding an is_bpf_list_add_kfunc() helper instead
-of direct comparison with special_kfunc_list[KF_bpf_list_add].
-
-(bot+bpf-ci@kernel.org and Eduard Zingerman, v10 RESEND)
-https://lore.kernel.org/bpf/f573f7e0a5140fe6254d2ddfd3f69add455fa25c67c020c0312e2c2ceeca7c69@mail.kernel.org/
-
-> +		if (desc->func_id == special_kfunc_list[KF_bpf_list_add] ||
-> +		    is_bpf_rbtree_add_kfunc(desc->func_id)) {
->  			struct_meta_reg = BPF_REG_4;
->  			node_offset_reg = BPF_REG_5;
->  		}
+Subject: Re: [PATCH bpf-next v11 3/8] bpf: allow non-owning list-node args via
+ __nonown_allowed
+To: bot+bpf-ci@kernel.org
+Cc: bpf@vger.kernel.org, ast@kernel.org, corbet@lwn.net,
+ martin.lau@linux.dev, daniel@iogearbox.net, andrii@kernel.org,
+ eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
+ john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
+ haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
+ chengkaitao@kylinos.cn, skhan@linuxfoundation.org, memxor@gmail.com,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, vmalik@redhat.com,
+ linux-kselftest@vger.kernel.org, martin.lau@kernel.org, clm@meta.com,
+ ihor.solodrai@linux.dev
+References: <20260521032306.97118-4-kaitao.cheng@linux.dev>
+ <96cd744d0a5a8756cb0c1e31e95fbe682956b97226e2159120785feb01013e53@mail.kernel.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Kaitao Cheng <kaitao.cheng@linux.dev>
+In-Reply-To: <96cd744d0a5a8756cb0c1e31e95fbe682956b97226e2159120785feb01013e53@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26204125015
---===============7048703539607253613==--
+在 2026/5/21 12:08, bot+bpf-ci@kernel.org 写道:
+>> diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
+>> index 75e6c078e0e7..3a9db1108b95 100644
+>> --- a/Documentation/bpf/kfuncs.rst
+>> +++ b/Documentation/bpf/kfuncs.rst
+> 
+> [ ... ]
+> 
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index 8dd79b735a69..f3cf8d85bea0 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+> 
+> [ ... ]
+> 
+>> @@ -12244,6 +12249,13 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
+>>  			return ret;
+>>  		break;
+>>  	case KF_ARG_PTR_TO_LIST_NODE:
+>> +		if (is_kfunc_arg_nonown_allowed(btf, &args[i]) &&
+>> +		    type_is_non_owning_ref(reg->type) && !reg->ref_obj_id) {
+>> +			/* Allow bpf_list_front/back return value for
+>> +			 * __nonown_allowed list-node arguments.
+>> +			 */
+>> +			goto check_ok;
+>> +		}
+>>  		if (reg->type != (PTR_TO_BTF_ID | MEM_ALLOC)) {
+>>  			verbose(env, "%s expected pointer to allocated object\n",
+>>  				reg_arg_name(env, argno));
+>>  @@ -12253,6 +12265,7 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
+>>  			verbose(env, "allocated object must be referenced\n");
+>>  			return -EINVAL;
+>>  		}
+>> +check_ok:
+>>  		ret = process_kf_arg_ptr_to_list_node(env, reg, argno, meta);
+>>  		if (ret < 0)
+>>  			return ret;
+> 
+> This isn't a bug, but the multi-line comment doesn't match the BPF
+> subsystem style. The BPF guide requires multi-line comments to have the
+> opening /* on its own line for files under kernel/bpf/. Should this be:
+> 
+>   /*
+>    * Allow bpf_list_front/back return value for
+>    * __nonown_allowed list-node arguments.
+>    */
+
+This file uses this comment style extensively, so I followed the
+existing convention here.
+
+> Eduard Zingerman raised a related nit in v10 RESEND: the check
+> '!reg->ref_obj_id' appears redundant. Would type_is_non_owning_ref() be
+> sufficient here?
+> 
+> Reference: https://lore.kernel.org/bpf/0419643c9a04bf0824066742e52e3f197b43909b.camel@gmail.com/
+> 
+
+Sorry, I missed that. If needed, I can fix it in the next version.
+
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> 
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26204125015
+
+-- 
+Thanks
+Kaitao Cheng
+
