@@ -1,129 +1,108 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B8EA3DA5D9;
-	Thu, 21 May 2026 14:33:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D56D33EDE7E;
+	Thu, 21 May 2026 14:34:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779374029; cv=none; b=vBXVTEcQRk9T8egzQdP1gKzYS3MHQMNIpP64y4F/HfFV6btpi2EZsDBM01PMwWmvI1hhcXn9WntYd1B6DQGZXOL5DtwUhmrZDAkGgAD2XUx2BZsvRF6uIBieS309yE4gHQwW9JARqJaIdC2UnOjIYsr0/5UTbqqSVKV+KjmbRKM=
+	t=1779374079; cv=none; b=PQPNYDZLQP5SF+4uhcxKyueunERSqvCc5/1g4L6UDsBDRAQx4DcdtMP5cqZ1k/X+IBCn3y3/pFPxVefn3KMbbRpffg3D5PBjRzEmuRiFUhUNi55yCWNAxYgXxDh0VLDznGaCWRA33XE0o2YT0YpPMZK3yoaKeQbcm8wNLGY4Nro=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779374029; c=relaxed/simple;
-	bh=0f0JcxPSMeZgDLB8kRDPnqGxviBR5km7oxybzD3GN9g=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=gWIKdycTfBHlyDN7v9mL7ow+QM3oExHjSbjl2K5Dkns5gvwYnWZ+LadVu8rO81yNGl/h0BDKbyEIbO5NEWt9t9PAr6cwTfauUA6+3O0ANsyy8BVquLGkYmhfHApF2F+en8A7XzDduuxvL1/C/Gg9xJr9FZg6ICIAT+WJDIqk27Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=qiN4WNsM; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	s=arc-20240116; t=1779374079; c=relaxed/simple;
+	bh=8tM1Ip+kL/INzmucmor8I4MTEb43F8KCuLBYXYE96QI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=If20yjuPZMWR5zxkONX2ANkKt1CD+HYeRzEi3s1cpdzbWszFsclqEBw+ZH7UPeeVQ1ZJGyaqahcIcfSEITQdmIlJzaIxzKGnZvq0WdPzXlNetESo+7DsnOW/vjIgQdccXq3bS0LeZ/XWd6lqH7N6SOkf5Z1EjLyzKwUhT8d7SFw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jWEiFSk5; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="qiN4WNsM"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:Message-Id:Date:Subject:From:Reply-To:Content-ID:
-	Content-Description:In-Reply-To:References;
-	bh=XtLHiW1Hy34yQSEJx/APJIZCCKJAzzXN1hrjcEjhY2I=; b=qiN4WNsMBjHyc0h9nLuTe/WusE
-	xFB2dcNQeGuYBD/4Tu+g3ao2VQSZjyt2wcpeKus6HrjcEjy0zhUVDWQyhJ6c7CXwuoLCYnK1l0q38
-	epWhfczn7J/VT0BYM27jf3JmIHXVaXnbriiBH4NF/vReuX2mkArTve8Bl1CbiueiGCMm6zNO0PVh2
-	+EpynK8sjfvAgIEQ+7/hCaiaf4HBXRUyKYd8o5PTdJhuOeCTT727wpTECKzquOc1DwXU9hQadZLkl
-	zFXBv3epLtpAbtQzqOd16lmsx+Wyi06FGxR0lBYvKEou8tPwQBRL+JEZkwKH2N7zmvGe4ni0IqUQI
-	DlcImYqA==;
-Received: from authenticated user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wQ4Sj-003wwy-2e;
-	Thu, 21 May 2026 14:33:26 +0000
-From: Breno Leitao <leitao@debian.org>
-Subject: [PATCH net v2 0/2] nfc: llcp: two fixes for nfc_llcp_getsockopt()
-Date: Thu, 21 May 2026 07:32:08 -0700
-Message-Id: <20260521-fix_llc-v2-0-ab44cc09179c@debian.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jWEiFSk5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 349ED1F000E9;
+	Thu, 21 May 2026 14:34:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779374077;
+	bh=oDpHqdp2/FfG8W6otjqNlnOFXaYu8wH7zUOP/guV6po=;
+	h=From:To:Cc:Subject:Date;
+	b=jWEiFSk53GduYLLCUcNwNsnavil23yX3zXvfJ2cxVG+reQXF35lvztNJ6uNseFk16
+	 MvWA7k/XHMtEkdJloi/jQyycdC0GfEdaZPOd86TcUFcsxpZVc6gjUIjZI1FQVZALdS
+	 ezDdvqO151RFHncBqVl+pljPYy0D5oc6WhLhwSIUSLRVwIe1+n5OgonZ4z42zkOgpe
+	 heUNBdL9AKfTE8OG8a4dAPIQCHLDHLtkk2iADsiLAzVF3beAt2l/EIaYOuZbPyu6LV
+	 58x1F6+2i7xYNeetZtVI7XcNyZWpekxX5YHCIE/xxtYkv2+DgJ3Cvk+3BHQh3NQmLr
+	 oVII3c3q1GNwg==
+From: SeongJae Park <sj@kernel.org>
+To: 
+Cc: SeongJae Park <sj@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@davidgow.net>,
+	Shuah Khan <shuah@kernel.org>,
+	damon@lists.linux.dev,
+	kunit-dev@googlegroups.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: [RFC PATCH v1.2 00/14] mm/damon: minor improvements for code readability and tests
+Date: Thu, 21 May 2026 07:34:10 -0700
+Message-ID: <20260521143428.83157-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAGgXD2oC/2XNQQqDMBCF4auEWZtikiZaV71HkaJxolMkSmLFI
- t69mC67ffx8b4eIgTBCxXYIuFKkyUPFZMbADo3vkVMHFQOZS5Nrobij7TmOlsvCXUulTSmUhoz
- BHNDRlqQHeFyg/o3x3b7QLqdxZgPFZQqf9LeKFP/Rq+CCK2UL425KOGfuHbbU+MsUeqiP4/gCJ
- rkU37YAAAA=
-X-Change-ID: 20260513-fix_llc-27f483568135
-To: "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, David Heidelberg <david+nfc@ixit.cz>, 
- Samuel Ortiz <sameo@linux.intel.com>
-Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, oe-linux-nfc@lists.linux.dev, 
- Breno Leitao <leitao@debian.org>, kernel-team@meta.com
-X-Mailer: b4 0.16-dev-d5d98
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2065; i=leitao@debian.org;
- h=from:subject:message-id; bh=0f0JcxPSMeZgDLB8kRDPnqGxviBR5km7oxybzD3GN9g=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqDxex3+o5dACgpZfaTA1duJ7LARDnjXI3wTfza
- x/DgZ+u01CJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCag8XsQAKCRA1o5Of/Hh3
- bbC9D/90dmmzwrhVUlBQUjsTiCfv78Tn6nJ3evWXaQaYB7Y7mGQoSy/NKmmakXachDOaGd3rkwK
- H6hpyVJ2wHF2HWkk5M+ZFqvjbDGGGWn28ETJgThjqpFdHnHAMHAvM+SYQgVYMNPmzPMHDNqj7GP
- ET3IcbPa7fUksNxaD1MXBq0bwtQjsJ7XtUTTgPFXUmCOxCd9qQuJLzWLJy7ilYEmWcATe1rrDL2
- p4+NISh68mF6Ze4bRLDhpT2guix/jJrw0rmDGRqM/9TDVEVkwoA430MiNANoy1w7L/JxQAaCoEZ
- ovrgyz7IsytTCOUtNVZdtTCWGMO1Zb/ByJCjhhpgQqelJUCo+PO3okxdbEyTc6Ct/BHZ8rPJg6T
- w4hyE1wwHHvZc+dUj/NkmbsexENqG6kt3WvX6aMC8KkIdUIRkggFFUPwsvKTNQLbhGEGflzFynr
- U/jZzxNhFqepT9LC3eVE4E0Z50GVPU+aC33zGXn3ARcUWlP1S3LU183Wl1NDKPAnv0cu+x2BwLb
- l/U/rejB/JuBaIiLah71rSVYeoIS2nUliMH+SbBTayj6FrJ78f0NfADX2l/VeVZ/HGdlrQLqqaf
- E4lP3/tepZKGFTX02cCvCerZKJpGczX7Ryj61cMOttficTwMipuqfTGgK346IguqUbU2Xw4/qK9
- F0CUiEjK2gGDrpw==
-X-Developer-Key: i=leitao@debian.org; a=openpgp;
- fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
-X-Debian-User: leitao
+Content-Transfer-Encoding: 8bit
 
-While converting the NFC LLCP socket layer to the new getsockopt_iter()
-API, I noticed that nfc_llcp_getsockopt() unconditionally stores four
-bytes through a (u32 __user *) cast regardless of the caller-supplied
-optlen, overflowing the user buffer when optlen < 4. Patch 1 adds an
-explicit length check (with a signed-int guard so a negative optlen
-cannot slip past it) and is what I originally sent as v1.
+Implement minor improvements on code readability and tests for DAMON.
 
-While reviewing v1, Simon/sashiko[1] pointed out that llcp_sock->local
-is read outside lock_sock(sk) and can be freed by a concurrent
-llcp_sock_bind() error path before getsockopt() dereferences it. Patch
-2 moves the load and the NULL check inside the lock. Both fixes target
-the same original commit, so they are now sent together as a two-patch
-series.
+First seven patches are for DAMON code readability and resulting
+maintenance.  Patches 1 and 2 make damon_set_regions() safer and easier
+to read.  Patches 3 and 4 remove fragmented DAMON API use cases. Patches
+5-7 hides unused core functions that are unnecessarily exposed to API
+callers.
 
-Note: These fixes were compile-tested.
+The following seven patches are for DAMON tests improvement.  Patches 8
+and 9 adds and removes DAMON_DEBUG_SANITY verifications to ensure
+reasonable test coverage without too high overhead.  Patch 10 adds a new
+kunit test for damon_set_regions().  Patch 11 makes sysfs.py selftest
+more gracefully finishes under test failures.  Patches 12-13 adds simple
+sysfs.sh test cases for the monitoring intervals goal directory, the
+addr_unit file and the pause file.
 
-[1] https://lore.kernel.org/all/20260513-fix_llc-v1-1-33c76f931ff6@debian.org/
+Changes from RFC v1.1
+- RFC v1.1: https://lore.kernel.org/20260521035349.87565-1-sj@kernel.org
+- Free DAMON target in vaddr unit test fail-out path.
+Changes from RFC v1
+- RFC v1: https://lore.kernel.org/20260520062858.167011-1-sj@kernel.org
+- Handle damon_set_regions() failure in vaddr unit test.
+- Free ranges array in vaddr unit test.
+- Fix wrong region address verification.
+- Fix typos in selftest: s/exit/exist/
 
-Signed-off-by: Breno Leitao <leitao@debian.org>
----
-Changes in v2:
-- Guard the length check against negative optlen (Simon Horman / sashiko).
-- Add patch 2: move llcp_sock->local read inside lock_sock(sk) to close
-  a UAF race with llcp_sock_bind() (Simon Horman / sashiko).
-- Link to v1: https://patch.msgid.link/20260513-fix_llc-v1-1-33c76f931ff6@debian.org
+SeongJae Park (14):
+  mm/damon/core: safely handle no region case in damon_set_regions()
+  mm/damon/core: do not use region out of a loop in damon_set_regions()
+  samples/damon/mtier: replace damon_add_region() with
+    damon_set_regions()
+  mm/damon/tests/vaddr-kunit: replace damon_add_region() with
+    damon_set_regions()
+  mm/damon/core: hide damon_add_region()
+  mm/damon/core: hide damon_insert_region()
+  mm/damon/core: hide damon_destroy_region()
+  mm/damon/core: add kdamond_call() debug_sanity check
+  mm/damon/core: remove damon_verify_nr_regions()
+  mm/damon/tests/core-kunit: add damon_set_regions() test cases
+  selftests/damon/sysfs.py: stop kdamonds before failing
+  selftests/damon/sysfs.sh: test monitoring intervals goal dir
+  selftests/damon/sysfs.sh: test addr_unit file existence
+  selftests/damon/sysfs.sh: test pause file existence
 
-To: David Heidelberg <david+nfc@ixit.cz>
-To: "David S. Miller" <davem@davemloft.net>
-To: Eric Dumazet <edumazet@google.com>
-To: Jakub Kicinski <kuba@kernel.org>
-To: Paolo Abeni <pabeni@redhat.com>
-To: Simon Horman <horms@kernel.org>
-To: Samuel Ortiz <sameo@linux.intel.com>
-Cc: oe-linux-nfc@lists.linux.dev
-Cc: netdev@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
+ include/linux/damon.h                  |  13 ---
+ mm/damon/core.c                        |  92 ++++++++++++----
+ mm/damon/tests/core-kunit.h            | 142 +++++++++++++++++++++----
+ mm/damon/tests/vaddr-kunit.h           |  27 +++--
+ samples/damon/mtier.c                  |  10 +-
+ tools/testing/selftests/damon/sysfs.py |   4 +
+ tools/testing/selftests/damon/sysfs.sh |  14 +++
+ 7 files changed, 233 insertions(+), 69 deletions(-)
 
----
-Breno Leitao (2):
-      nfc: llcp: avoid userspace overflow on invalid optlen
-      nfc: llcp: read llcp_sock->local under the socket lock in getsockopt
 
- net/nfc/llcp_sock.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
----
-base-commit: 1d5dcaa3bd65f2e8c9baa14a393d3a2dc5db7524
-change-id: 20260513-fix_llc-27f483568135
-
-Best regards,
---  
-Breno Leitao <leitao@debian.org>
-
+base-commit: ac6b83c7bf3671e8ff0d541cf03e6eaeed00a79e
+-- 
+2.47.3
