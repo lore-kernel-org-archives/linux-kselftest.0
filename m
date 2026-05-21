@@ -1,183 +1,226 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F6653D75C5;
-	Thu, 21 May 2026 13:42:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779370955; cv=none; b=RC7ezRjs1zjSqYLk+jqpKPXWj59Kedp3cqRlDu5wt4rheZAeczcI5kVvy7r2aekH+avdmXHSSvvRVWuQ+sV4Ybpn9UPa62ptBrrwQjzCb5FZv1F7sL6wc9epMJKgbrQVSL5schbntoJCyozr97vTv/4EtXv5QzMnw2hhv8sGBQ0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779370955; c=relaxed/simple;
-	bh=FJlcHXOIAvspjJ/wxS20SyLd+gbmkRd06loKZ9OX9no=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=KeGLWs+oD9PoJtMwKh916DmEct41rCZsH9m6C84KBMrytddNlwVQ2S3IsISoo+UZV2BHOohf/L2iw5NLffMtECnOGEGkUTLFIGQ5jqlvqhcksWEx7tYUa0bHldwRrleE6umnaJ0/+OYdW1N4qU3fWx/S1YSL2/l6EgGm59eWqxc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=MXXL5HUD; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 360383E2777
+	for <linux-kselftest@vger.kernel.org>; Thu, 21 May 2026 13:48:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.172
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779371288; cv=pass; b=dj3gE94S/i6VrgQ389dEOGCFz6c5oPbWYTim1ytaA9gUO8O+D0o9DMzgZbBflQCgEq9+o64eAX4fonpWKJtMdFlwtLQWxGRRF5sUQV6pwlzj4DY1IDIL5HA5p2K5GWYgz5GsXA789mcHVPSq/76ji1XeuSBswT3UjgvC7dxItgs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779371288; c=relaxed/simple;
+	bh=SchiGOmf2MVWPKiRNrNhUxoPmvVzWaDRWZ8BJ0appKw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=HlLnI4dfF2FQQZKTA/sfP5A3INmmJz94PVP02aR/R+YbQDCNZ5Qv95sbjUznKxuLdIb5qmE0Mx+Sl/FH+ILATza9wb2CTyF5xAfSILBk98Kn7Bxsr8djA6xuc9ylLqTxWOWAT6OJYKberaEXF2tXfUjwBmEx0/KQwymDvVOKD5I=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=UTsJMzuu; arc=pass smtp.client-ip=209.85.160.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="MXXL5HUD"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
-	In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=FJlcHXOIAvspjJ/wxS20SyLd+gbmkRd06loKZ9OX9no=; b=MXXL5HUD27i7iCQgkwccMjbH9s
-	7CNXuSdGIQnchP+DXXvgbtgJJ2Cwl6qReJLCQtuCu/6zC8pvZ/fCvC5wz/kLS73Ha2xwZU7zbLaTk
-	d5XxPb1aozwACpoTy7gT6TteXLnXsKiCB1KDsxWhVAGnaJtXCCeXP3hoVtvIVB4mkveCOkwB7r4Uk
-	BxMF68xwyiKva7fgpwSzYMTJN12wlHpjo9FXZNT8BJ9Kusk20HfIe82Rsfwz8+RbNTJIg8TeFvT0l
-	WTOs9DCfvK7zajw5Kbg8oAcYiBCHJVE4hcWoJ9k8mJvP+18dEUW4D6urSy8JMWjvbwdJ5wWuDieH4
-	vkF9AKAA==;
-Received: from 54-240-197-239.amazon.com ([54.240.197.239] helo=u09cd745991455d.ant.amazon.com)
-	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1wQ3fT-00000008XmX-3bMj;
-	Thu, 21 May 2026 13:42:32 +0000
-Message-ID: <0f7050e30eb143bc3118fee02c0422f4aa1144c5.camel@infradead.org>
-Subject: Re: [PATCH v3 net-next 2/7] selftests/ptp: Extract
- print_system_timestamp helper in testptp
-From: David Woodhouse <dwmw2@infradead.org>
-To: Arthur Kiyanovski <akiyano@amazon.com>, David Miller
- <davem@davemloft.net>,  Jakub Kicinski <kuba@kernel.org>,
- netdev@vger.kernel.org
-Cc: Richard Cochran <richardcochran@gmail.com>, Eric Dumazet
- <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Thomas Gleixner
- <tglx@linutronix.de>, Miroslav Lichvar <mlichvar@redhat.com>, Andrew Lunn
- <andrew+netdev@lunn.ch>, Wen Gu <guwen@linux.alibaba.com>, Xuan Zhuo
- <xuanzhuo@linux.alibaba.com>, David Woodhouse <dwmw@amazon.com>, Yonatan
- Sarna <ysarna@amazon.com>, Zorik Machulsky <zorik@amazon.com>, Alexander
- Matushevsky <matua@amazon.com>, Saeed Bshara <saeedb@amazon.com>, Matt
- Wilson <msw@amazon.com>,  Anthony Liguori <aliguori@amazon.com>, Nafea
- Bshara <nafea@amazon.com>, Evgeny Schmeilin <evgenys@amazon.com>,  Netanel
- Belgazal <netanel@amazon.com>, Ali Saidi <alisaidi@amazon.com>, Benjamin
- Herrenschmidt <benh@amazon.com>,  Noam Dagan <ndagan@amazon.com>, David
- Arinzon <darinzon@amazon.com>, Evgeny Ostrovsky <evostrov@amazon.com>, Ofir
- Tabachnik <ofirt@amazon.com>, Amit Bernstein <amitbern@amazon.com>,
- linux-kselftest@vger.kernel.org, shuah@kernel.org, 
- vadim.fedorenko@linux.dev
-Date: Thu, 21 May 2026 14:42:30 +0100
-In-Reply-To: <20260515164033.6403-3-akiyano@amazon.com>
-References: <20260515164033.6403-1-akiyano@amazon.com>
-	 <20260515164033.6403-3-akiyano@amazon.com>
-Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-	boundary="=-iV1+hB1Zswyju3e7RuOf"
-User-Agent: Evolution 3.52.3-0ubuntu1.1 
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UTsJMzuu"
+Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-50d864c23bdso7171cf.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 May 2026 06:48:07 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779371286; cv=none;
+        d=google.com; s=arc-20240605;
+        b=bsVbuy+EebVhp4HDjxRcuOI7hl6Fm0sHeNoSgBFm+QvIVTSqnzbIsMhYASoszcGWzo
+         2+zJNsBQ1fetwezQ1JHPn1bjoyun3NSjFVDL3ul9JkEmbgX+K0wlijkSEUSZppJxNbYx
+         v3g7vREuR0L338O7tKVw7HwLNb3tMOUNECthX4pIHsW2dvBBVMNJHy5gSV7VGrXjBcxD
+         dCfyXy0SrqdETyFmWjcJE6zjgE6plLEonqX7DsDxFlnPy3Cgm2edcuGQr9jEfTSXvX+0
+         zcON4R9oPngdpouJoaOtUpm3Cjjg2INrpGPw+HySvActqyWuaZ+zhh2ju+E6epbxFgW6
+         4zxQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=x8ZLZpFna8QE3sntZWYFYWQfy/d2E0NvjrGgGfpza44=;
+        fh=T13FdPCdoapSoQw5qX3FQv2xPuPe5y+4GKPiKNGQeUo=;
+        b=a7QTRJXKM+z7xEQXy0pDWgrpE5onuLJDQBZfA6UPYp98SHHvQrLi5A/Ht1OpfXKW5z
+         2hSghX+iIJ6887Lxp+Zvbu+gUK1inHyTSBmjhCSrM4+iCZTBbUpBmnPnWhGoC6kLhSK7
+         J1bOaiSWR+c58Htl5IDsusdnJhFPG1Azrp43FUt+x1x9rywS7eyo5mTaR1vnOArj/Jbn
+         vqSrKue0ZrWLHqrMsoaZ8OsS//Mqc/8OxBrGv6FkharN9w23w8SoXFtvOv3BSeP0trrx
+         pCsTBASjrkP1JGG7I9ES0CvSs0ZclXwNI8jTwAdW8Bzzemdr8+q/1dGfCkmEgAu7HTYC
+         wXnw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1779371286; x=1779976086; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=x8ZLZpFna8QE3sntZWYFYWQfy/d2E0NvjrGgGfpza44=;
+        b=UTsJMzuuHQAqtOdq93EIUbXnw+JhRe8m1vhFuoOsBToOUX6nVXAS+E4mUdvspMZmvZ
+         v2IUecR8Ff72x7kIEd3f1N9oRZc1OU6wiUnSc2M/r0UlLVWIyCs6SlJPVvacNa/DPYlp
+         zur6ES0u5kPlCA/+V3eeGpxaV9ufHXL9x+2rqpfX+PTd6ZC6qGYI2Ah+7MztTQtkP+9r
+         MhDnssl/F0HHZrAwFFu28ie/T5HNAaNupoUw9neYgsxmyvfQyCaxzcPhx4KkyJBoID1s
+         U3zIoTAmCu6hO4BkzrsnUYKmExrgd+apa9X+hXWVXehX3Nzb3gKFl5AAmWZjfhIlleGk
+         sDgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779371286; x=1779976086;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=x8ZLZpFna8QE3sntZWYFYWQfy/d2E0NvjrGgGfpza44=;
+        b=g7mu9+c+pHPSmWzFRvI9+0F/d1rD+zIL9qlZayFl8zqtrD/7OhW/+P6VKS764UGqZD
+         fwnt/KeP4A/soTvKjVaaOqV4c/LdYF0jFV7TDyv1hi67T5fuD0k/SQHal0C1GRJ/PeQE
+         6IQ0FfuLQs4hjzJkujfwEf19klcIv2vuMuKiqdT4U2ORtPZAoEGpJRFVpKp2h5wRc6Kv
+         SzPxrFlLWQifvwlczGhU6Wf9V4r+SZOXlkoqGi+JyVRRbKS4ZqweuIB8V5YyYBF6o6d+
+         Di4TXpw2RwY/ZCrs0/Ds+zMWfxJ2U7bw5CAJ7E6UFissKTI/sIGFkanRwrZjJZl/3/e1
+         fkBA==
+X-Forwarded-Encrypted: i=1; AFNElJ8UCYnRvzVnSSHYZnq7to0VwsDo7GQ5/4kEjv4gtAuQpMxpkdh8s0GOyrgFH3ItWyrTlVACLqn0BgA/GJwsxFE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxs0VpRyAfTot3/8QyDfNeNvWNPImz+vnXESxATr0g6WasXoOXM
+	mR15jbsdAJTnu9hSospJyc14q/6JP37Lnay7z2kYT9+mfcUFBoe7rnxGtjXf9cpf1Jz+S56bWEG
+	aNYEG9VmfZyP4RCi2uMEO/HOvyBWcwAW8iBetJI+j
+X-Gm-Gg: Acq92OEMhhS4xvRJ+eZtuAhOzfi623z19tjKp7UnrKvkiVov0D7JBVW/w70gDl8VqdL
+	So+dYuwNMDvEcS54J7uDPO28RWYzqB7fgw3joHlKZXxjNPpeY/55lKQk14V9Djqwkh2wn4qZ1ld
+	VCqDiifpCU9db6dDLapiQUDpHjY/IlEbl2h7+awlkp/4dfZH4XRtx6IvOD7wpNr7wjo2pbO6CzV
+	fWu3HPyS1RWJ5KhS9O+SEYQhkML7qxTedSmf2gLLJrdu1FbQsZWrSOwM2iCDXwmS3jPOCIjhl8R
+	PZUDhkXgiJjEgguyeCY=
+X-Received: by 2002:a05:622a:9005:b0:50f:af60:3496 with SMTP id
+ d75a77b69052e-516c53118ecmr8206941cf.1.1779371285395; Thu, 21 May 2026
+ 06:48:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
-
-
---=-iV1+hB1Zswyju3e7RuOf
+References: <20260507-gmem-inplace-conversion-v6-0-91ab5a8b19a4@google.com>
+ <20260507-gmem-inplace-conversion-v6-5-91ab5a8b19a4@google.com>
+ <CA+EHjTw-cUM=FrJevtSDtR7K6MwUfGfOx21LMFDn7DAy5bFzYw@mail.gmail.com>
+ <CAEvNRgGQvMdDmVfbk42EY_PGN0ybTp-x21Zj+pg_X1mk9iCRtA@mail.gmail.com>
+ <CA+EHjTzLCD-dU-euZKgzwyEr2ecPqFDNutcaHm2fCDGA+MHVXA@mail.gmail.com> <ag8JIlHjohAOC3-g@google.com>
+In-Reply-To: <ag8JIlHjohAOC3-g@google.com>
+From: Fuad Tabba <tabba@google.com>
+Date: Thu, 21 May 2026 14:48:00 +0100
+X-Gm-Features: AVHnY4IjTx7kpi4F7EdVLun66lc7vUTNuuJ9Vgrkm1t1onCQ9N7OW44CxOISbbA
+Message-ID: <CA+EHjTyF19FPod10EEm3pMaPvsAR6HUXOhtC83qSSqxQ2g1s2Q@mail.gmail.com>
+Subject: Re: [PATCH v6 05/43] KVM: guest_memfd: Wire up kvm_get_memory_attributes()
+ to per-gmem attributes
+To: Sean Christopherson <seanjc@google.com>
+Cc: Ackerley Tng <ackerleytng@google.com>, aik@amd.com, andrew.jones@linux.dev, 
+	binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com, 
+	david@kernel.org, ira.weiny@intel.com, jmattson@google.com, 
+	jthoughton@google.com, michael.roth@amd.com, oupton@kernel.org, 
+	pankaj.gupta@amd.com, qperret@google.com, rick.p.edgecombe@intel.com, 
+	rientjes@google.com, shivankg@amd.com, steven.price@arm.com, 
+	willy@infradead.org, wyihan@google.com, yan.y.zhao@intel.com, 
+	forkloop@google.com, pratyush@kernel.org, suzuki.poulose@arm.com, 
+	aneesh.kumar@kernel.org, liam@infradead.org, 
+	Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
+	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+	Nhat Pham <nphamcs@gmail.com>, Baoquan He <bhe@redhat.com>, Barry Song <baohua@kernel.org>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
+	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
+	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Kiryl Shutsemau <kas@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>, Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-mm@kvack.org, linux-coco@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, 2026-05-15 at 16:40 +0000, Arthur Kiyanovski wrote:
-> Extract the repeated switch-on-clockid pattern used for printing
-> system timestamps into a reusable helper function. This removes
-> code duplication in the -x (PTP_SYS_OFFSET_EXTENDED) output path
-> and prepares for additional callers.
->=20
-> No functional change.
->=20
-> Signed-off-by: Arthur Kiyanovski <akiyano@amazon.com>
+On Thu, 21 May 2026 at 14:31, Sean Christopherson <seanjc@google.com> wrote:
+>
+> On Thu, May 21, 2026, Fuad Tabba wrote:
+> > On Wed, 20 May 2026 at 22:44, Ackerley Tng <ackerleytng@google.com> wrote:
+> > >
+> > > Fuad Tabba <tabba@google.com> writes:
+> > >
+> > > >
+> > > > [...snip...]
+> > > >
+> > > >> +unsigned long kvm_gmem_get_memory_attributes(struct kvm *kvm, gfn_t gfn)
+> > > >> +{
+> > > >> +       struct kvm_memory_slot *slot = gfn_to_memslot(kvm, gfn);
+> > > >> +       struct inode *inode;
+> > > >> +
+> > > >> +       /*
+> > > >> +        * If this gfn has no associated memslot, there's no chance of the gfn
+> > > >> +        * being backed by private memory, since guest_memfd must be used for
+> > > >> +        * private memory, and guest_memfd must be associated with some memslot.
+> > > >> +        */
+> > > >> +       if (!slot)
+> > > >> +               return 0;
+> > > >> +
+> > > >> +       CLASS(gmem_get_file, file)(slot);
+> > > >> +       if (!file)
+> > > >> +               return 0;
+> > > >> +
+> > > >> +       inode = file_inode(file);
+> > > >> +
+> > > >> +       /*
+> > > >> +        * Rely on the maple tree's internal RCU lock to ensure a
+> > > >> +        * stable result. This result can become stale as soon as the
+> > > >> +        * lock is dropped, so the caller _must_ still protect
+> > > >> +        * consumption of private vs. shared by checking
+> > > >> +        * mmu_invalidate_retry_gfn() under mmu_lock to serialize
+> > > >> +        * against ongoing attribute updates.
+> > > >> +        */
+> > > >> +       return kvm_gmem_get_attributes(inode, kvm_gmem_get_index(slot, gfn));
+> > > >> +}
+> > > >
+> > > > Doesn't this imply that all consumers of kvm_mem_is_private() should
+> > > > validate the result using mmu_lock and the invalidation sequence?
+> > >
+> > > Let me know how I can improve the comment.
+> >
+> > Given Sean's context, the comment is good I think. I would quibble
+> > with the the "_must_ still protect" phrasing being a bit too strict.
+> >
+> > Maybe just soften it slightly to acknowledge the exception? Something like:
+> >
+> >   * lock is dropped, so callers that require a strict result _must_ protect
+> >   * consumption of private vs. shared by checking mmu_invalidate_retry_gfn()
+> >   * under mmu_lock to serialize against ongoing attribute updates. Callers
+> >   * doing lockless reads must be able to tolerate a stale result.
+> >
+> > That aligns the comment with how KVM is actually using it today. That
+> > said, this is nitpicking. Feel free to use or ignore.
+>
+> Hmm, I wonder if we can figure out a way to consolidate some documentation,
+> because this is _exactly_ the same pattern that x86's host_pfn_mapping_level()
+> deals with (see its big comment below).
+>
+> There's also the stale comment in kvm_invalidate_memslot(), which, stating the
+> obvious, speaks to the memslot+SRCU side of things.
+>
+> Maybe it makes sense to to find a central location for one giant comment about
+> how how MMU notifier events and memslot+SRCU protections work?  And then refer
+> to that in paths where some asset needs to be tied into MMU notifiers and/or
+> memslots+SRCU?
+>
+> [*] https://lore.kernel.org/all/agcbWe8s9lmPuJwG@google.com
 
-Reviewed-by: David Woodhouse <dwmw@amazon.co.uk>
-
---=-iV1+hB1Zswyju3e7RuOf
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Transfer-Encoding: base64
-
-MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCD9Aw
-ggSOMIIDdqADAgECAhAOmiw0ECVD4cWj5DqVrT9PMA0GCSqGSIb3DQEBCwUAMGUxCzAJBgNVBAYT
-AlVTMRUwEwYDVQQKEwxEaWdpQ2VydCBJbmMxGTAXBgNVBAsTEHd3dy5kaWdpY2VydC5jb20xJDAi
-BgNVBAMTG0RpZ2lDZXJ0IEFzc3VyZWQgSUQgUm9vdCBDQTAeFw0yNDAxMzAwMDAwMDBaFw0zMTEx
-MDkyMzU5NTlaMEExCzAJBgNVBAYTAkFVMRAwDgYDVQQKEwdWZXJva2V5MSAwHgYDVQQDExdWZXJv
-a2V5IFNlY3VyZSBFbWFpbCBHMjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMjvgLKj
-jfhCFqxYyRiW8g3cNFAvltDbK5AzcOaR7yVzVGadr4YcCVxjKrEJOgi7WEOH8rUgCNB5cTD8N/Et
-GfZI+LGqSv0YtNa54T9D1AWJy08ZKkWvfGGIXN9UFAPMJ6OLLH/UUEgFa+7KlrEvMUupDFGnnR06
-aDJAwtycb8yXtILj+TvfhLFhafxroXrflspavejQkEiHjNjtHnwbZ+o43g0/yxjwnarGI3kgcak7
-nnI9/8Lqpq79tLHYwLajotwLiGTB71AGN5xK+tzB+D4eN9lXayrjcszgbOv2ZCgzExQUAIt98mre
-8EggKs9mwtEuKAhYBIP/0K6WsoMnQCcCAwEAAaOCAVwwggFYMBIGA1UdEwEB/wQIMAYBAf8CAQAw
-HQYDVR0OBBYEFIlICOogTndrhuWByNfhjWSEf/xwMB8GA1UdIwQYMBaAFEXroq/0ksuCMS1Ri6en
-IZ3zbcgPMA4GA1UdDwEB/wQEAwIBhjAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIweQYI
-KwYBBQUHAQEEbTBrMCQGCCsGAQUFBzABhhhodHRwOi8vb2NzcC5kaWdpY2VydC5jb20wQwYIKwYB
-BQUHMAKGN2h0dHA6Ly9jYWNlcnRzLmRpZ2ljZXJ0LmNvbS9EaWdpQ2VydEFzc3VyZWRJRFJvb3RD
-QS5jcnQwRQYDVR0fBD4wPDA6oDigNoY0aHR0cDovL2NybDMuZGlnaWNlcnQuY29tL0RpZ2lDZXJ0
-QXNzdXJlZElEUm9vdENBLmNybDARBgNVHSAECjAIMAYGBFUdIAAwDQYJKoZIhvcNAQELBQADggEB
-ACiagCqvNVxOfSd0uYfJMiZsOEBXAKIR/kpqRp2YCfrP4Tz7fJogYN4fxNAw7iy/bPZcvpVCfe/H
-/CCcp3alXL0I8M/rnEnRlv8ItY4MEF+2T/MkdXI3u1vHy3ua8SxBM8eT9LBQokHZxGUX51cE0kwa
-uEOZ+PonVIOnMjuLp29kcNOVnzf8DGKiek+cT51FvGRjV6LbaxXOm2P47/aiaXrDD5O0RF5SiPo6
-xD1/ClkCETyyEAE5LRJlXtx288R598koyFcwCSXijeVcRvBB1cNOLEbg7RMSw1AGq14fNe2cH1HG
-W7xyduY/ydQt6gv5r21mDOQ5SaZSWC/ZRfLDuEYwggWbMIIEg6ADAgECAhAH5JEPagNRXYDiRPdl
-c1vgMA0GCSqGSIb3DQEBCwUAMEExCzAJBgNVBAYTAkFVMRAwDgYDVQQKEwdWZXJva2V5MSAwHgYD
-VQQDExdWZXJva2V5IFNlY3VyZSBFbWFpbCBHMjAeFw0yNDEyMzAwMDAwMDBaFw0yODAxMDQyMzU5
-NTlaMB4xHDAaBgNVBAMME2R3bXcyQGluZnJhZGVhZC5vcmcwggIiMA0GCSqGSIb3DQEBAQUAA4IC
-DwAwggIKAoICAQDali7HveR1thexYXx/W7oMk/3Wpyppl62zJ8+RmTQH4yZeYAS/SRV6zmfXlXaZ
-sNOE6emg8WXLRS6BA70liot+u0O0oPnIvnx+CsMH0PD4tCKSCsdp+XphIJ2zkC9S7/yHDYnqegqt
-w4smkqUqf0WX/ggH1Dckh0vHlpoS1OoxqUg+ocU6WCsnuz5q5rzFsHxhD1qGpgFdZEk2/c//ZvUN
-i12vPWipk8TcJwHw9zoZ/ZrVNybpMCC0THsJ/UEVyuyszPtNYeYZAhOJ41vav1RhZJzYan4a1gU0
-kKBPQklcpQEhq48woEu15isvwWh9/+5jjh0L+YNaN0I//nHSp6U9COUG9Z0cvnO8FM6PTqsnSbcc
-0j+GchwOHRC7aP2t5v2stVx3KbptaYEzi4MQHxm/0+HQpMEVLLUiizJqS4PWPU6zfQTOMZ9uLQRR
-ci+c5xhtMEBszlQDOvEQcyEG+hc++fH47K+MmZz21bFNfoBxLP6bjR6xtPXtREF5lLXxp+CJ6KKS
-blPKeVRg/UtyJHeFKAZXO8Zeco7TZUMVHmK0ZZ1EpnZbnAhKE19Z+FJrQPQrlR0gO3lBzuyPPArV
-hvWxjlO7S4DmaEhLzarWi/ze7EGwWSuI2eEa/8zU0INUsGI4ywe7vepQz7IqaAovAX0d+f1YjbmC
-VsAwjhLmveFjNwIDAQABo4IBsDCCAawwHwYDVR0jBBgwFoAUiUgI6iBOd2uG5YHI1+GNZIR//HAw
-HQYDVR0OBBYEFFxiGptwbOfWOtMk5loHw7uqWUOnMDAGA1UdEQQpMCeBE2R3bXcyQGluZnJhZGVh
-ZC5vcmeBEGRhdmlkQHdvb2Rob3Uuc2UwFAYDVR0gBA0wCzAJBgdngQwBBQEBMA4GA1UdDwEB/wQE
-AwIF4DAdBgNVHSUEFjAUBggrBgEFBQcDAgYIKwYBBQUHAwQwewYDVR0fBHQwcjA3oDWgM4YxaHR0
-cDovL2NybDMuZGlnaWNlcnQuY29tL1Zlcm9rZXlTZWN1cmVFbWFpbEcyLmNybDA3oDWgM4YxaHR0
-cDovL2NybDQuZGlnaWNlcnQuY29tL1Zlcm9rZXlTZWN1cmVFbWFpbEcyLmNybDB2BggrBgEFBQcB
-AQRqMGgwJAYIKwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmRpZ2ljZXJ0LmNvbTBABggrBgEFBQcwAoY0
-aHR0cDovL2NhY2VydHMuZGlnaWNlcnQuY29tL1Zlcm9rZXlTZWN1cmVFbWFpbEcyLmNydDANBgkq
-hkiG9w0BAQsFAAOCAQEAQXc4FPiPLRnTDvmOABEzkIumojfZAe5SlnuQoeFUfi+LsWCKiB8Uextv
-iBAvboKhLuN6eG/NC6WOzOCppn4mkQxRkOdLNThwMHW0d19jrZFEKtEG/epZ/hw/DdScTuZ2m7im
-8ppItAT6GXD3aPhXkXnJpC/zTs85uNSQR64cEcBFjjoQDuSsTeJ5DAWf8EMyhMuD8pcbqx5kRvyt
-JPsWBQzv1Dsdv2LDPLNd/JUKhHSgr7nbUr4+aAP2PHTXGcEBh8lTeYea9p4d5k969pe0OHYMV5aL
-xERqTagmSetuIwolkAuBCzA9vulg8Y49Nz2zrpUGfKGOD0FMqenYxdJHgDCCBZswggSDoAMCAQIC
-EAfkkQ9qA1FdgOJE92VzW+AwDQYJKoZIhvcNAQELBQAwQTELMAkGA1UEBhMCQVUxEDAOBgNVBAoT
-B1Zlcm9rZXkxIDAeBgNVBAMTF1Zlcm9rZXkgU2VjdXJlIEVtYWlsIEcyMB4XDTI0MTIzMDAwMDAw
-MFoXDTI4MDEwNDIzNTk1OVowHjEcMBoGA1UEAwwTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJ
-KoZIhvcNAQEBBQADggIPADCCAgoCggIBANqWLse95HW2F7FhfH9bugyT/danKmmXrbMnz5GZNAfj
-Jl5gBL9JFXrOZ9eVdpmw04Tp6aDxZctFLoEDvSWKi367Q7Sg+ci+fH4KwwfQ8Pi0IpIKx2n5emEg
-nbOQL1Lv/IcNiep6Cq3DiyaSpSp/RZf+CAfUNySHS8eWmhLU6jGpSD6hxTpYKye7PmrmvMWwfGEP
-WoamAV1kSTb9z/9m9Q2LXa89aKmTxNwnAfD3Ohn9mtU3JukwILRMewn9QRXK7KzM+01h5hkCE4nj
-W9q/VGFknNhqfhrWBTSQoE9CSVylASGrjzCgS7XmKy/BaH3/7mOOHQv5g1o3Qj/+cdKnpT0I5Qb1
-nRy+c7wUzo9OqydJtxzSP4ZyHA4dELto/a3m/ay1XHcpum1pgTOLgxAfGb/T4dCkwRUstSKLMmpL
-g9Y9TrN9BM4xn24tBFFyL5znGG0wQGzOVAM68RBzIQb6Fz758fjsr4yZnPbVsU1+gHEs/puNHrG0
-9e1EQXmUtfGn4InoopJuU8p5VGD9S3Ikd4UoBlc7xl5yjtNlQxUeYrRlnUSmdlucCEoTX1n4UmtA
-9CuVHSA7eUHO7I88CtWG9bGOU7tLgOZoSEvNqtaL/N7sQbBZK4jZ4Rr/zNTQg1SwYjjLB7u96lDP
-sipoCi8BfR35/ViNuYJWwDCOEua94WM3AgMBAAGjggGwMIIBrDAfBgNVHSMEGDAWgBSJSAjqIE53
-a4blgcjX4Y1khH/8cDAdBgNVHQ4EFgQUXGIam3Bs59Y60yTmWgfDu6pZQ6cwMAYDVR0RBCkwJ4ET
-ZHdtdzJAaW5mcmFkZWFkLm9yZ4EQZGF2aWRAd29vZGhvdS5zZTAUBgNVHSAEDTALMAkGB2eBDAEF
-AQEwDgYDVR0PAQH/BAQDAgXgMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEFBQcDBDB7BgNVHR8E
-dDByMDegNaAzhjFodHRwOi8vY3JsMy5kaWdpY2VydC5jb20vVmVyb2tleVNlY3VyZUVtYWlsRzIu
-Y3JsMDegNaAzhjFodHRwOi8vY3JsNC5kaWdpY2VydC5jb20vVmVyb2tleVNlY3VyZUVtYWlsRzIu
-Y3JsMHYGCCsGAQUFBwEBBGowaDAkBggrBgEFBQcwAYYYaHR0cDovL29jc3AuZGlnaWNlcnQuY29t
-MEAGCCsGAQUFBzAChjRodHRwOi8vY2FjZXJ0cy5kaWdpY2VydC5jb20vVmVyb2tleVNlY3VyZUVt
-YWlsRzIuY3J0MA0GCSqGSIb3DQEBCwUAA4IBAQBBdzgU+I8tGdMO+Y4AETOQi6aiN9kB7lKWe5Ch
-4VR+L4uxYIqIHxR7G2+IEC9ugqEu43p4b80LpY7M4KmmfiaRDFGQ50s1OHAwdbR3X2OtkUQq0Qb9
-6ln+HD8N1JxO5nabuKbymki0BPoZcPdo+FeRecmkL/NOzzm41JBHrhwRwEWOOhAO5KxN4nkMBZ/w
-QzKEy4PylxurHmRG/K0k+xYFDO/UOx2/YsM8s138lQqEdKCvudtSvj5oA/Y8dNcZwQGHyVN5h5r2
-nh3mT3r2l7Q4dgxXlovERGpNqCZJ624jCiWQC4ELMD2+6WDxjj03PbOulQZ8oY4PQUyp6djF0keA
-MYIDuzCCA7cCAQEwVTBBMQswCQYDVQQGEwJBVTEQMA4GA1UEChMHVmVyb2tleTEgMB4GA1UEAxMX
-VmVyb2tleSBTZWN1cmUgRW1haWwgRzICEAfkkQ9qA1FdgOJE92VzW+AwDQYJYIZIAWUDBAIBBQCg
-ggE3MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI2MDUyMTEzNDIz
-MFowLwYJKoZIhvcNAQkEMSIEIDxRm3/SsaOQEDCUAzzYPG3Nf87BhLzuN0a0zSV8UiqsMGQGCSsG
-AQQBgjcQBDFXMFUwQTELMAkGA1UEBhMCQVUxEDAOBgNVBAoTB1Zlcm9rZXkxIDAeBgNVBAMTF1Zl
-cm9rZXkgU2VjdXJlIEVtYWlsIEcyAhAH5JEPagNRXYDiRPdlc1vgMGYGCyqGSIb3DQEJEAILMVeg
-VTBBMQswCQYDVQQGEwJBVTEQMA4GA1UEChMHVmVyb2tleTEgMB4GA1UEAxMXVmVyb2tleSBTZWN1
-cmUgRW1haWwgRzICEAfkkQ9qA1FdgOJE92VzW+AwDQYJKoZIhvcNAQEBBQAEggIAnFSUU524nBfk
-/9SeIOp8K+Q/zgw6my2lGd9JY3LLzOASZNSHDTd2YAvLaNr92zEU2CxnQG7LqrftnmA5ayuCMp/U
-nxYOzyd1XzeqY0hWNbPb4/LMto4PGwcp/oQ9Hx1rJTg7uLm4fUbnQp9Rpk5XKGcSsE2nwF42scC5
-hvOXihHF00BOeurIPw/8R4U81PxZmlYkenl8N8PTzME02Abih/az2lYT9niVegpCWak2GCLWaJhh
-gqJSHQIJz+3gZIvZtlky2LszQi9yVbcl9RyIq1dyTV4WKRyYAAZoOAx5scuIeoAs0jK7IQCJ+Ps2
-VRth0kOOJgjcx671X0V3jeGdZf/+HhDLTkYepp1eLgm3RM43Aga1MWkeKIiyGb4HLRezlZlA8zhr
-pEYLHq2iDW1aUdn4oqvesZU1+Fp3Xj+Ezvcqd+YMMx5oIwE8tDUAxdPu65GOPleW1CbesasxKGqZ
-DLGRH0RiWMMhVlTuc9zGtLiRcOKyAeYwd7rJFqOkJO81Aib2qW/tUQ8GdKrJbFPRxjhuxtcwxHaV
-QUn6LlOOxUdWvcdwsGucZcHeK1rxpSQG94j/YxbNB6hobVJyX+y4IWOnMhQq2UV62F8GRmNkOOht
-gTejbXAHlRckPw3tRcwOkU/tZmtimz+AH8xfqhPTdhMDV6syMeSIHkl4YJbgclIAAAAAAAA=
+This would fix a few related issues at once. sgtm
+/fuad
 
 
---=-iV1+hB1Zswyju3e7RuOf--
+/fuad
+
+>
+> /*
+>  * Lookup the mapping level for @gfn in the current mm.
+>  *
+>  * WARNING!  Use of host_pfn_mapping_level() requires the caller and the end
+>  * consumer to be tied into KVM's handlers for MMU notifier events!
+>  *
+>  * There are several ways to safely use this helper:
+>  *
+>  * - Check mmu_invalidate_retry_gfn() after grabbing the mapping level, before
+>  *   consuming it.  In this case, mmu_lock doesn't need to be held during the
+>  *   lookup, but it does need to be held while checking the MMU notifier.
+>  *
+>  * - Hold mmu_lock AND ensure there is no in-progress MMU notifier invalidation
+>  *   event for the hva.  This can be done by explicit checking the MMU notifier
+>  *   or by ensuring that KVM already has a valid mapping that covers the hva.
+>  *
+>  * - Do not use the result to install new mappings, e.g. use the host mapping
+>  *   level only to decide whether or not to zap an entry.  In this case, it's
+>  *   not required to hold mmu_lock (though it's highly likely the caller will
+>  *   want to hold mmu_lock anyways, e.g. to modify SPTEs).
+>  *
+>  * Note!  The lookup can still race with modifications to host page tables, but
+>  * the above "rules" ensure KVM will not _consume_ the result of the walk if a
+>  * race with the primary MMU occurs.
+>  */
