@@ -1,197 +1,188 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 479F4316190;
-	Thu, 21 May 2026 09:14:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FB8E36C9EE
+	for <linux-kselftest@vger.kernel.org>; Thu, 21 May 2026 09:17:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779354845; cv=none; b=joHoT2xmytvwmtE8T8+IZAH6UptU/hQq1WhkpaiCqAaqyZ8M451kpldjzIAf/PrhQCKSBXiqroTf0ZzWsLdDqXgtqpQizl0uGL+51PhbDDW74tnOlLp8wLysAkw9q9sXyUO9QLE94CLcsjmawYJM4q89EYZA+omI8jcHiK1wUlg=
+	t=1779355028; cv=none; b=Muwk84PheFzbzrvhMmtvHA5G2qdAjMCQWNVin/8D0ksGn/EkLpdz+PkommQ1l3hbGSQSPwXqA/+yxFsR4fvrYmHml/Zm5PmNwkJcwM5OcbuAildAZdQHJ4632KWsU353xdY4UqzRX9eivTIBK/KZ6uRWKjn1MPM1nacd80YRBLI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779354845; c=relaxed/simple;
-	bh=vVVpBi2uuiv/TLBCRr7q2WlEbDwpdia57BBdVTHgOY0=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=mgFtJoaSISIE4GREAYs1PCn7j2R4sIk6rbzTRw7ICqqBLaVoqC8p2/wU0UTH19tv1BnV6iJ9aVC1fKRcBCeVxZrVC6zhiwPr9975x72eefaJrfqmOQRlIuEFGXJOo9BhHKN25PlfQGGMBoDu9PZzfD3Luh5hyV8b6Xz1G72k8kc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=OKqUzPnh; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1779355028; c=relaxed/simple;
+	bh=e4E9ApxuKnHL6gEt0l9i18QERzbyiDlwx9esv+XQqcY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=QcKt8QokvMXupkAIgvIb8W9WxYZ/a2IKyxDVQi5Z54ywMW3/aEvhcgJp1zSbaikz2R5vUfKuOTG/en5Yt6WAF4fq9sB3r3tUwjJBzShktQOb04VpVzWgoHaxrzaLyGvKDvoofBtMiMvCcOvwue5J4jvPhozbv6nx4/wsWTLGmp0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MQ+2l+Iy; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="OKqUzPnh"
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64KJ8bo31588176;
-	Thu, 21 May 2026 09:13:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=OevyjT
-	u9FiHf2CLX090f6Fl/3bswf0qDQG/sp+fQ7zg=; b=OKqUzPnhznUoDQSmPi9Vma
-	m/Jt/P0O62RFr6XuEAeTto1ilU+XOVRHbiFPT60g6GgTFUiucBoPCXvpedr5+nr7
-	aE/VoYW+fekw9XWuXJ6H3kvKa2n6TCxjuNHeXp6f6mxiRjgqkmAyESwqlN9vHd4N
-	PyV1sfYvRDzUoqe+8Joa47JNkAtFoKdpS4km7yssIP59/NgO/jQkcXyDG7URxVui
-	8qSsbGGgTQHYuxol1rlhsWDnA/1TOxtn8aAviD+PyJbWE24seN9e61silVElBVSf
-	Y+UDcGMp/9rx9CR2YQ4smnuqQDs2wqAIH++/7Gm/OHJdGY5MAHGwkaF2OIEHsrLg
-	==
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4e6hb8mvq6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 21 May 2026 09:13:43 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64L998Nj001114;
-	Thu, 21 May 2026 09:13:42 GMT
-Received: from smtprelay06.wdc07v.mail.ibm.com ([172.16.1.73])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4e754gk403-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 21 May 2026 09:13:42 +0000 (GMT)
-Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
-	by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 64L9DgLZ48496976
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 21 May 2026 09:13:42 GMT
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 13F9658054;
-	Thu, 21 May 2026 09:13:42 +0000 (GMT)
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B81FB58050;
-	Thu, 21 May 2026 09:13:36 +0000 (GMT)
-Received: from [9.123.3.209] (unknown [9.123.3.209])
-	by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 21 May 2026 09:13:36 +0000 (GMT)
-Message-ID: <88202b56-1dc5-43e2-9d1f-a0823a9531f0@linux.ibm.com>
-Date: Thu, 21 May 2026 14:43:35 +0530
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MQ+2l+Iy"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1779355025;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=dZC77d7mSmvyQZQpaB0KYORR6eKaPrKgUruY5Qci0Z8=;
+	b=MQ+2l+IyNG0z8jSrDo9ThxjlphZ543ZGriwKVXFE9p8e42JuodRU6iZvoJbZeCe5yL8JVD
+	Vg5synv5lEslbgu4Sfp7yylPVYOfdfGwjIwa0r9+sM9BhOhJM71J2haONABru/PmZZ63hZ
+	g2robIn9QQUkQjtD9ZxnrXFojKiE6Lc=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-665-Rzjuf-hSPqeW_WHY5-Q7hg-1; Thu,
+ 21 May 2026 05:17:01 -0400
+X-MC-Unique: Rzjuf-hSPqeW_WHY5-Q7hg-1
+X-Mimecast-MFC-AGG-ID: Rzjuf-hSPqeW_WHY5-Q7hg_1779355018
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id EC2FD1956096;
+	Thu, 21 May 2026 09:16:57 +0000 (UTC)
+Received: from gerbillo.redhat.com (unknown [10.44.32.233])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 840DD1800347;
+	Thu, 21 May 2026 09:16:48 +0000 (UTC)
+From: Paolo Abeni <pabeni@redhat.com>
+To: akiyano@amazon.com
+Cc: davem@davemloft.net,
+	kuba@kernel.org,
+	netdev@vger.kernel.org,
+	richardcochran@gmail.com,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	dwmw2@infradead.org,
+	tglx@linutronix.de,
+	mlichvar@redhat.com,
+	andrew+netdev@lunn.ch,
+	guwen@linux.alibaba.com,
+	xuanzhuo@linux.alibaba.com,
+	dwmw@amazon.com,
+	ysarna@amazon.com,
+	zorik@amazon.com,
+	matua@amazon.com,
+	saeedb@amazon.com,
+	msw@amazon.com,
+	aliguori@amazon.com,
+	nafea@amazon.com,
+	evgenys@amazon.com,
+	netanel@amazon.com,
+	alisaidi@amazon.com,
+	benh@amazon.com,
+	ndagan@amazon.com,
+	darinzon@amazon.com,
+	evostrov@amazon.com,
+	ofirt@amazon.com,
+	amitbern@amazon.com,
+	linux-kselftest@vger.kernel.org,
+	shuah@kernel.org,
+	vadim.fedorenko@linux.dev
+Subject: Re: [PATCH v3 net-next 6/7] net: ena: Add error bound to PHC communication layer
+Date: Thu, 21 May 2026 11:16:32 +0200
+Message-ID: <20260521091644.84928-1-pabeni@redhat.com>
+In-Reply-To: <20260515164033.6403-7-akiyano@amazon.com>
+References: <20260515164033.6403-7-akiyano@amazon.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Sayali Patil <sayalip@linux.ibm.com>
-Subject: Re: [PATCH v7 11/13] selftests/mm: skip uffd-stress test when
- nr_pages_per_cpu is zero
-To: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Ritesh Harjani <ritesh.list@gmail.com>
-Cc: David Hildenbrand <david@kernel.org>, Zi Yan <ziy@nvidia.com>,
-        Michal Hocko <mhocko@kernel.org>, Oscar Salvador <osalvador@suse.de>,
-        Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-        Dev Jain <dev.jain@arm.com>, Liam.Howlett@oracle.com,
-        linuxppc-dev@lists.ozlabs.org, Miaohe Lin <linmiaohe@huawei.com>,
-        Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-References: <cover.1779296493.git.sayalip@linux.ibm.com>
- <0707e9a0f1b3dd904c4a069b91db317f9c160faa.1779296493.git.sayalip@linux.ibm.com>
-Content-Language: en-IN
-In-Reply-To: <0707e9a0f1b3dd904c4a069b91db317f9c160faa.1779296493.git.sayalip@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTIxMDA4OSBTYWx0ZWRfX0NfPxMuPQdl8
- ZQEW9qTenAPbDx/m/wMEMbT71aF8Nrx90/1QHthXxmzys/O8PX+PZJa8c8Km+aCHWlnfl94BhRO
- p4dj+pxgQqaXY8c3+luxPdjK/DJ4hyP0JQ+upF4txAE4bKzFoLvWHXr0Bor94MaVoaIoLKEiPO/
- Vz4MNDmKfa3/GbRbB1+0aSTN+a1+cQAXxruJTAWjTxsrOTPR0kzih/YzKr0fYpWPLsDIoZ3ZugT
- OLYUjmYp2NM6cQxl6zvqvE6fGZw40XLIAuUesPFIMhfXcgo1cyOrLNAnjj7/zIXljBK5qPt91JG
- l5OlqmEzh7rymHqn5WGMxYOV0CGiWfW4726bau2MCrgwdZWq8Ug14SUbeuuF8pcQ5nkoZC52A+a
- 34rEq4PYDPtGZPJ9SgQwPzllQEOwP/gjiwiQ1ciXoXZp2C6/EeuiXjhdZHJ/f8VH/R/l7mWH+40
- dE/HuLCtEjs6PD5BNJw==
-X-Proofpoint-GUID: YBD6R_YN9_Ss56w9WvlauW_CAYGbIE73
-X-Proofpoint-ORIG-GUID: nSLeMh-JvVOwp7mGCId-w65f2VJDqkvX
-X-Authority-Analysis: v=2.4 cv=aYBRWxot c=1 sm=1 tr=0 ts=6a0eccc8 cx=c_pps
- a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
- a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=Y2IxJ9c9Rs8Kov3niI8_:22 a=Ikd4Dj_1AAAA:8
- a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8 a=Bj7DDXi5LvTWgAAjYWoA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-05-21_01,2026-05-18_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 adultscore=0 bulkscore=0 suspectscore=0 lowpriorityscore=0
- clxscore=1015 spamscore=0 phishscore=0 priorityscore=1501 malwarescore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2605130000 definitions=main-2605210089
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
+From: AI Reviewer <ai@example.com>
 
-
-On 21/05/26 12:17, Sayali Patil wrote:
-> uffd-stress currently fails when the computed nr_pages_per_cpu
-> evaluates to zero:
-> 
-> nr_pages_per_cpu = bytes / page_size / nr_parallel
-> 
-> This can occur on systems with large hugepage sizes (e.g. 1GB) and a
-> high number of CPUs, where the total allocated memory is sufficient
-> overall but not enough to provide at least one page per cpu.
-> 
-> In such cases, the failure is due to insufficient test resources
-> rather than incorrect kernel behaviour. Update the test
-> to treat this condition as a test skip instead of reporting an error.
-> 
-> Fixes: db0f1c138f18 ("selftests/mm: print some details when uffd-stress gets bad params")
-> Acked-by: Zi Yan <ziy@nvidia.com>
-> Acked-by: David Hildenbrand (Arm) <david@kernel.org>
-> Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-> Signed-off-by: Sayali Patil <sayalip@linux.ibm.com>
-> ---
->   tools/testing/selftests/mm/uffd-stress.c | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/mm/uffd-stress.c b/tools/testing/selftests/mm/uffd-stress.c
-> index 43cc79590136..39e13e2078a9 100644
-> --- a/tools/testing/selftests/mm/uffd-stress.c
-> +++ b/tools/testing/selftests/mm/uffd-stress.c
-> @@ -489,9 +489,9 @@ int main(int argc, char **argv)
->   
->   	gopts->nr_pages_per_cpu = bytes / gopts->page_size / gopts->nr_parallel;
->   	if (!gopts->nr_pages_per_cpu) {
-> -		_err("pages_per_cpu = 0, cannot test (%lu / %lu / %lu)",
-> -			bytes, gopts->page_size, gopts->nr_parallel);
-> -		usage();
-> +		ksft_print_msg("pages_per_cpu = 0, cannot test (%zu / %lu / %lu)\n",
-> +			       bytes, gopts->page_size, gopts->nr_parallel);
-> +		return KSFT_SKIP;
->   	}
->   
->   	bounces = atoi(argv[3]);
-
-
-Hi Andrew,
-Can you please apply the below fixlet on top of this patch as suggested 
-by Sashiko.
-
- From aa8f2eea63defd9b9c1342b83838f48e93e1b918 Mon Sep 17 00:00:00 2001
-From: Sayali Patil <sayalip@linux.ibm.com>
-Date: Thu, 21 May 2026 13:32:51 +0530
-Subject: [PATCH] [fixlet] selftests/mm: use ksft_exit_skip() instead of
-  KSFT_SKIP in uffd-stress
-
-When nr_pages_per_cpu evaluates to zero, the test is skipped by
-printing a message and returning KSFT_SKIP manually.
-
-Replace this with ksft_exit_skip(), which prints the skip message
-and exits with the correct skip status in a single helper, making
-the code consistent with other selftests.
-
-Signed-off-by: Sayali Patil <sayalip@linux.ibm.com>
+This is an AI-generated review of your patch. The human sending this
+email has considered the AI review valid, or at least plausible.
+Full review at: https://netdev-ai.bots.linux.dev/sashiko/
 ---
-  tools/testing/selftests/mm/uffd-stress.c | 3 +--
-  1 file changed, 1 insertion(+), 2 deletions(-)
+net: ena: Add error bound to PHC communication layer
 
-diff --git a/tools/testing/selftests/mm/uffd-stress.c 
-b/tools/testing/selftests/mm/uffd-stress.c
-index 39e13e2078a9..3401dd6028f0 100644
---- a/tools/testing/selftests/mm/uffd-stress.c
-+++ b/tools/testing/selftests/mm/uffd-stress.c
-@@ -489,9 +489,8 @@ int main(int argc, char **argv)
+This commit extends the ENA PHC communication layer to retrieve an
+error_bound value from the device alongside the timestamp, and adds a
+phc_err_eb statistic to count error_bound retrieval failures.
 
-  	gopts->nr_pages_per_cpu = bytes / gopts->page_size / gopts->nr_parallel;
-  	if (!gopts->nr_pages_per_cpu) {
--		ksft_print_msg("pages_per_cpu = 0, cannot test (%zu / %lu / %lu)\n",
-+		ksft_exit_skip("pages_per_cpu = 0, cannot test (%zu / %lu / %lu)\n",
-  			       bytes, gopts->page_size, gopts->nr_parallel);
--		return KSFT_SKIP;
-  	}
+> diff --git a/drivers/net/ethernet/amazon/ena/ena_com.c b/drivers/net/ethernet/amazon/ena/ena_com.c
+> index 257910460bd8..832c4c1d0e5e 100644
+> --- a/drivers/net/ethernet/amazon/ena/ena_com.c
+> +++ b/drivers/net/ethernet/amazon/ena/ena_com.c
 
-  	bounces = atoi(argv[3]);
+[ ... ]
+
+> @@ -1882,14 +1888,15 @@ int ena_com_phc_get_timestamp(struct ena_com_dev *ena_dev, u64 *timestamp)
+>  		}
+>  
+>  		/* req_id was updated by the device which indicates that
+> -		 * PHC timestamp and error_flags are updated too,
+> -		 * checking errors before retrieving timestamp
+> +		 * PHC timestamp, error_bound and error_flags are updated too,
+> +		 * checking error flags before retrieving timestamp and
+> +		 * error_bound values
+>  		 */
+>  		if (unlikely(resp->error_flags & ENA_PHC_ERROR_FLAGS)) {
+
+[High]
+
+Once req_id is observed equal to phc->req_id, the function reads
+resp->error_flags, resp->timestamp and (now) resp->error_bound from the
+device-shared DMA buffer. The updated comment explicitly states that once
+req_id is observed updated, "PHC timestamp, error_bound and error_flags
+are updated too" — which is the producer/consumer pattern that normally
+requires a read barrier between the index check and the dependent data
+loads.
+
+The buffer is declared volatile and the req_id check uses READ_ONCE(),
+but on weakly-ordered architectures such as arm64 (which includes AWS
+Graviton, a primary ENA deployment target) neither volatile nor
+READ_ONCE() orders dependent loads against DMA writes from the device.
+Without a dma_rmb() the CPU may observe the new req_id while still
+returning stale or torn values for the 64-bit timestamp, the error_bound,
+or the error_flags.
+
+Could a dma_rmb() be added between the req_id check and the subsequent
+reads of resp->error_flags / resp->timestamp / resp->error_bound, similar
+to the pattern already used elsewhere in the same driver?
+
+For example, ena_com_handle_admin_completion() in the same file does:
+
+	/* Do not read the rest of the completion entry before the
+	 * phase bit was validated
+	 */
+	dma_rmb();
+
+and ena_com_aenq_intr_handler() has:
+
+	/* Make sure the phase bit (ownership) is as expected before
+	 * reading the rest of the descriptor.
+	 */
+	dma_rmb();
+
+The same shape applies here: device writes data fields, then writes
+req_id last; driver checks req_id, then reads data fields.
+
+This ordering issue is not introduced by this patch — the timestamp and
+error_flags reads after the req_id check existed before — but the patch
+extends the same unsynchronized read pattern to a third field
+(error_bound) and the new comment now documents the assumed ordering
+that is not actually enforced. Would it make sense to address the missing
+dma_rmb() while touching this code?
+
+>  			/* Retrieved invalid PHC timestamp, PHC enters into
+
+[ ... ]
+
+> @@ -1897,12 +1904,15 @@ int ena_com_phc_get_timestamp(struct ena_com_dev *ena_dev, u64 *timestamp)
+>  
+>  		/* PHC timestamp value is returned to the caller */
+>  		*timestamp = resp->timestamp;
+> +		if (error_bound)
+> +			*error_bound = resp->error_bound;
+>  
+>  		/* Update statistic on valid PHC timestamp retrieval */
+>  		phc->stats.phc_cnt++;
+
+[ ... ]
 -- 
-2.52.0
+This is an AI-generated review.
 
-
-Thanks,
-Sayali
