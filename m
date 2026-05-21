@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53B0135675C;
-	Thu, 21 May 2026 14:50:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC88336DA08;
+	Thu, 21 May 2026 14:50:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779375006; cv=none; b=bZRO4DbvKkB8voNInCCWd7ZIKjwGcYPnvT2pCoRbQRnnkraMhEzWckFJXCIj93FumBx9l2wT6UbIMcDfUsMYBUNvW63cdFR3dCb4X9FCYTfEL4HfLvaDt1fH2Xi/hd629nl8Da+ZaxxT0Um6OqlK87IRCAuI9PKy1lJPukQgybA=
+	t=1779375013; cv=none; b=SDc+Wlx6/+3Up9tVev+J7hRdiNwx8CqAjjXrug2RFwMmp91zMGv5/v+hENQ1f+yi6JGczLkLIASE+7a1bq1EfybL8bKaRljTYZAoZ83oSAhR7Chi/vxZhbT2qpwexjmKoXeqtL9yAnvK5QSvKCvr7X3P0xFL7x6eVWQ8dPHYlZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779375006; c=relaxed/simple;
-	bh=6ZXrLRQJaVUkk4RLvHu/IuNp63JzBiutBMedmCXCipw=;
+	s=arc-20240116; t=1779375013; c=relaxed/simple;
+	bh=ACxOLhgOy0RwtqoNe4ttLJWQ2yRPrIuoz3oJPSrSK10=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=jMsvy25mHhwaYDVpIKgRPvZdeE+gvsuNFV2VhYE8NlaPjMmoELJtDRjPmMe8l/r8gUO6fZazzzsR3u5rQMXz136WeG7TjfDZYCkgrFELyHrPnaxx9V2Jv4HyqqQxBB67LvDdIHRjVwVOThyYPjwLmuPMB3RRKTjkKt/WavgoYCo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rwux+s+P; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=jINdtBpVnqVAtryNwq7N81qLhLG63rVabv5n4hj61Ev4v7hTQ3bN282lKIhdBICqJfGC1f91bpsOVC5+03iW2acmDcw9+auhOQ3tRHxWvfz/SSceLSm0dwu1y0sNkHggBArhdYk30qHAc14JuflM42S81FEjsydvEIZTl7ULTZI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LxwKCgZj; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rwux+s+P"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA9E91F000E9;
-	Thu, 21 May 2026 14:50:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LxwKCgZj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B85141F00A3B;
+	Thu, 21 May 2026 14:50:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779375004;
-	bh=Y5/Yk2ZnXM1T3ZsKaelmlrfmKvHwGGyAGp4YK4SZkGM=;
+	s=k20260515; t=1779375011;
+	bh=PVVBxWQCUJefak/DxtwQ/miZmqOX2+wR3VVcsD2FSVk=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=Rwux+s+PrmTcHuAQvSRUDh6xWYNHUXfdGOwTbHfR/MhJNRlH212YEh8EBzicJQ5nd
-	 03tT460tutB8+vCLH6ZHn8qLItlXDOn9VPK4Vn6KuWnvqBZENeilvZg/EbWXOPP6HV
-	 BKygrNvqJaKYvtbPn5BexURIOoX0YeUiP42KyMsg68MFpAtGT/DzKMo2fk5FIFzv6z
-	 6hR87ztq90EhfWpOllcqDbanPrr2EvTuVu7ia4pdJHEhS8KsAtl2iHlA5FH9HWK3GN
-	 b60KJ60Pe12PiCVtod2lGAcWLbKGEjAMFygHjbWKPrUI3x5wQJCY3nGY/jC3iNsOBs
-	 AfLZHj0BMfXdQ==
+	b=LxwKCgZjeh/MGnpRXHwIkHtxLUjaZy1LgYqcijN41qqc59gmUYdK1zuNYK3f1nPA/
+	 rzApBvtYyZNp1nXr3sitwP1OJd7bb3aRNEyorWlgjddBo5ffl9PoDpmn8tgM9hk+PL
+	 qyKenLYWFwqUhkJRgSrygGliZeyRgFtSaV3VsD8ZXegnCS2LjQFz7rSXg9LcvEDjQf
+	 qtWXHl/M6qF8GD3e4/vYAj7yKJta4oKabYHlKk6nkrILLN2s/DQXYdQxKPxtTyj4br
+	 aHIBgdjUjssHl/eFQ5Vxvds9keJA200EaEIQX5eOuNq43HdmHjxrpENXem8A6YhAXT
+	 /9p2MC6ZpRj2Q==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D0A853930DF1;
-	Thu, 21 May 2026 14:50:15 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D0A7A3930DF1;
+	Thu, 21 May 2026 14:50:22 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -37,41 +37,39 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v2] selftests: net: Fix checksums in xdp_native
+Subject: Re: [PATCH net] selftests: rds: config: disable modules
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <177937501442.361786.10654244140459827358.git-patchwork-notify@kernel.org>
-Date: Thu, 21 May 2026 14:50:14 +0000
-References: <20260520153928.3371765-1-noren@nvidia.com>
-In-Reply-To: <20260520153928.3371765-1-noren@nvidia.com>
-To: Nimrod Oren <noren@nvidia.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, ast@kernel.org,
- daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
- sdf@fomichev.me, mohsin.bashr@gmail.com, ameryhung@gmail.com,
- martin.lau@kernel.org, dimitri.daskalakis1@gmail.com, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, cjubran@nvidia.com, dtatulea@nvidia.com
+ <177937502163.361786.132829360372655612.git-patchwork-notify@kernel.org>
+Date: Thu, 21 May 2026 14:50:21 +0000
+References: <20260520-net-rds-config-modules-v1-1-2100df02fe9a@kernel.org>
+In-Reply-To: <20260520-net-rds-config-modules-v1-1-2100df02fe9a@kernel.org>
+To: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+Cc: achender@kernel.org, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
+ netdev@vger.kernel.org, linux-rdma@vger.kernel.org, rds-devel@oss.oracle.com,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 
 Hello:
 
 This patch was applied to netdev/net.git (main)
 by Jakub Kicinski <kuba@kernel.org>:
 
-On Wed, 20 May 2026 18:39:28 +0300 you wrote:
-> Data adjustment cases failed with "Data exchange failed" when using IPv4
-> because the program did not update the IP and UDP checksums in the IPv4
-> branch. The issue was masked when both IPv4 and IPv6 were configured,
-> since the test harness prefers IPv6.
+On Wed, 20 May 2026 11:34:43 +1000 you wrote:
+> The run.sh script explicitly checks that CONFIG_MODULES is disabled.
 > 
-> While here, generalize csum_fold_helper() to fold twice so it works for
-> any 32-bit input.
+> By default, this config option is enabled. Explicitly disable it to be
+> able to run the RDS tests.
+> 
+> Note that writing '# CONFIG_(...) is not set' is usually recommended to
+> disable an option in the .config, but it looks like selftests usually
+> set 'CONFIG_(...)=n', which looks clearer.
 > 
 > [...]
 
 Here is the summary with links:
-  - [net,v2] selftests: net: Fix checksums in xdp_native
-    https://git.kernel.org/netdev/net/c/dfc077043351
+  - [net] selftests: rds: config: disable modules
+    https://git.kernel.org/netdev/net/c/92cc6708f4a2
 
 You are awesome, thank you!
 -- 
