@@ -1,175 +1,123 @@
-Received: from BL0PR03CU003.outbound.protection.outlook.com (mail-eastusazon11012007.outbound.protection.outlook.com [52.101.53.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4768235F16C;
-	Thu, 21 May 2026 18:02:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.53.7
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779386535; cv=fail; b=CW15CqeUnogYAaIVxxm+BP7kEDqP4LeytPpL/pxwVCDPXrEs2W2+aT37sig8UGwPsWxmV8RDbHwFkgZ51F4TZ068Fccg2i5tX8s4uEXCrj5PzMHW3cOc/s0wwk4/4McgA0Ji4cFCOuHHY7W9zFI2wgmxPPFmP90JrGRdXCxQvwc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779386535; c=relaxed/simple;
-	bh=3zsvXeN6ZJYU+BdwDapbOJCZp2/F2Esr4Cjx+PxgQks=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GcdHdopT6m0NjlKfH3c++8aL4UPkFaEn1Um6C/oz6XOUe6n6VrlXB1ScjLLNgqWDaGvsc3CTNfYVrnsQqNNPkfTfyvLWDrFTszoXDgSrSuD5eHgU9nAHa3Qsjdchkuwph/x8GGogP5vZ9v0Y1lNVux/8sl/Vaj7WaeUlEW9mXSk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=eitYcYEc; arc=fail smtp.client-ip=52.101.53.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A73F39098C
+	for <linux-kselftest@vger.kernel.org>; Thu, 21 May 2026 18:17:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779387423; cv=none; b=foqqTyq4j8gbq1759WwngWfvoCseyQUQZ+G0DCX/U8aWgyVP4Zdbml8n0+fifyoKkOibQhji40POCQfX+eCEPRtcE1l30BhTPX0zyMIciHkGOT1QLWXD9fMFwPjkAP5zzT4QL/oX0/s3+guv5w1WlEBhCqgcCcg+zSsb6o9JjFI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779387423; c=relaxed/simple;
+	bh=+VWCLDENbyTrufBDf5/wO7Oma9uH1Q8L65+rax8aTO4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=i2r+BP0DGf6RsOw3bISYd0nHdgRbGzwmNLnLJyrnx0tLaOO6WbXMdHerH655uNlUN1zZkdL0+LOuGwLHMOgZcAjhMZ33KGOXtrHkEmr5XZUi039u27v3nva37ZP6NiS8aNQCEZcZG5+gw8TJlRHHOKwNBH6jQFGxdBqdAXv6NZ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VuyXq1tq; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="eitYcYEc"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=XRgopNh/YaIZ48oGICpP+Z0vqpYuhxXXdO0BuiBmojJLsJu+avDHbdAmjLwjEbsT8E+rnWOBTnq9/dLMYWPu84lvMMlX9B2g+rFnY/ac0P1+pDmKPXJN9HKAyFD84oDhSd8c7tkte358LR5TaF0mlOfVznvYNmlMAtByAhob5oH918+jpQw0U+59p7UPTtVWB+O5PR/iAyzlWsy9eJo2GcRCoIrlunIPFJDETMyKL4lIqZFOgyeajpLiGBHTrp31dVzCXXeAC7ax+Y+bY+jyEW4EscM1Z/05ye9WASZ8iZzkT6MESDaztUEn37Vvxmy9djJVyCtHnf7AGe/ir/W20A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2Bu9RvxjpoSQ69xilvJsfPcnkGpiW8M3oke9QoPxaUM=;
- b=Es0yxNtlXedXxY4DF9VyieRjoAdHE9piDfhJbQfuumTcCZUPI/eEC+sExUTJo+VzZsUgr+Yfa7VaswBztdAA/g4mCOD1Te5u0yJ9/fIn5JYyHy2scTPsYHXJpIoj5UbWVw+ZiBpnGl6+D8MDN5k5Kud+VFHrsPTtladyFmTnIuwU692okcDohBUAojPAeYW1MlE4/+/e+Oy8h+auEMmmRtUYRDoegcgLeES9smiPGE9ryGnnlo9lK7nYSptR9DGAqc7bPpJ8iNKNoCE0So1kcRgqRnkYKFB2ZuMc+pdV8CYVwQHIGWox98GGfhUOXcU4rzPIoTAJlOf/8XgN7ikh5g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.232) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2Bu9RvxjpoSQ69xilvJsfPcnkGpiW8M3oke9QoPxaUM=;
- b=eitYcYEcHARUjni3qmTxWG05A8y1z5nPofpGu5ps5Ny6lL36nJJjyjuQ177XRycqelXDEC2gi/WluqhSF+mhy7zBAXyO/x9T81ad/ETP9GfE8WeyNlkhfgrYyiAJqzpv1KF+NN7cBpl5bTbeyjWaFZkvbejopdONxs2Mp3/5fOcop3BlX3VOGChMojYDkIi3dWriuq5BVzx0QtIvhicdDXf1dgjmfnfklvk5uyzoJrSxN3XZ+BBO7fEmKAmAtNFLh8o/1wp/DK05YStGb8dRCBwkskHjb35Sd9ZnOTpUNTl45SdVW/4jxEa0ja+jPVCwB3L8p0a8oLYp92pKz/gjoA==
-Received: from BY1P220CA0017.NAMP220.PROD.OUTLOOK.COM (2603:10b6:a03:5c3::6)
- by DM4PR12MB5865.namprd12.prod.outlook.com (2603:10b6:8:64::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.25.23; Thu, 21 May
- 2026 18:02:09 +0000
-Received: from SJ5PEPF000001CF.namprd05.prod.outlook.com
- (2603:10b6:a03:5c3:cafe::1c) by BY1P220CA0017.outlook.office365.com
- (2603:10b6:a03:5c3::6) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.48.17 via Frontend Transport; Thu, 21
- May 2026 18:02:09 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.232) by
- SJ5PEPF000001CF.mail.protection.outlook.com (10.167.242.43) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.71.7 via Frontend Transport; Thu, 21 May 2026 18:02:09 +0000
-Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
- (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Thu, 21 May
- 2026 11:01:51 -0700
-Received: from drhqmail203.nvidia.com (10.126.190.182) by
- drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.20; Thu, 21 May 2026 11:01:50 -0700
-Received: from Asurada-Nvidia (10.127.8.9) by mail.nvidia.com (10.126.190.182)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
- Transport; Thu, 21 May 2026 11:01:50 -0700
-Date: Thu, 21 May 2026 11:01:48 -0700
-From: Nicolin Chen <nicolinc@nvidia.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-CC: <kevin.tian@intel.com>, <iommu@lists.linux.dev>,
-	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH rc v1 0/4] iommufd: Fix veventq_depth boundary
-Message-ID: <ag9IjD98g2pHiGlE@Asurada-Nvidia>
-References: <cover.1779070992.git.nicolinc@nvidia.com>
- <20260521143004.GJ3602937@nvidia.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VuyXq1tq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 717281F0155F
+	for <linux-kselftest@vger.kernel.org>; Thu, 21 May 2026 18:17:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779387420;
+	bh=+VWCLDENbyTrufBDf5/wO7Oma9uH1Q8L65+rax8aTO4=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=VuyXq1tqiHVI2YZ3Blv3BD2WCJdC9/dUivuyWddy+wydX2ooJe2bkg9Gm9++B3oEo
+	 sh0UdIEN9umrNBhjufrQIqRV3lx0D0GA8Sb7poWd0s8udQW6ciJHHeZHcCK3RrRCoQ
+	 bGWOb0NZbLBqj12BfjSZwfav5msDWT0Qq2t7Gmh4n2mSLQTSilf1F8j/1uecoi0PwC
+	 ncOg8TwZYbC16t5C2LBE0N1MO/fsA442mc1wd4TmR96Jef0gJGQbZWXmNtulPenO/u
+	 aQc0Km8pCckySifBInQIQvxQgvVAFm6CPvp2h04FbPQVgYDV+qLBCdJy5FkQDlrlXV
+	 Lr+UDPJcnr6hQ==
+Received: by mail-vs1-f48.google.com with SMTP id ada2fe7eead31-63169437ac7so4902085137.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 May 2026 11:17:00 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AFNElJ+chfKMvIqtpSCQsB4PfFXwMm+zldRZ0CwaoRBU6FuU3uXinyPM/zpONSk35MClTE6S5OId4mWtZIFVFuI4UUQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx0L9SfBxJoWWRIXrwahjIvbIcMvQPUHJbXaoEtl+/CIaKiqrp0
+	SMiOzIhxVpYJDyojny0dIJh2eOvQiuA8w3OazJKcvTBjUc6rLTyXeo2UYPqap2ZPLz5aJKJ8rTI
+	8s1GWGDc+zim394MOPqba3x3BDQ2XWcY=
+X-Received: by 2002:a05:6102:5a9a:b0:631:28c1:154e with SMTP id
+ ada2fe7eead31-6739772de2emr3100077137.16.1779387419475; Thu, 21 May 2026
+ 11:16:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20260521143004.GJ3602937@nvidia.com>
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ5PEPF000001CF:EE_|DM4PR12MB5865:EE_
-X-MS-Office365-Filtering-Correlation-Id: 84f7c2da-7e0a-4649-7edd-08deb76313aa
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700016|82310400026|1800799024|376014|11063799006|5023799004|4143699003|56012099003|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	CDuQewjXScSeTpJCeR8qwogl5uzpSH7s7cmwa1FiTCcOrtMAE4E+qUuN9i9fZMtOrSnQB0/i6XARflG6cmy/UFNRe7yqBryCncQBrL/uT12k3Gs5+GnIuT7LZJPzUxGGd7z68157rNhhj0rSwIB4l8o45GEtqOqiT+nwQRGcoREjKG+koxb01fSpqDWFfPgWQC+wfaQIGJvd+EAhQM/ipSlzpmtJ8YpJsJRJpdpqD/Dwo5tEpLo2s5SGT1ChPB53tQ+vfiFJ8Pv2j1YeKDRKz3BDsE3F4VUXOblW4h/Uhx5VVp1uAbrVOtJo7CcGvQcW4R2+FjhbhDj5Lgxls2oJ7N3CiTN4lwh6sgNDI9AVk/9abXIp6tMe7rm+XI+8NC64Nm5Ktfaty5cQiiG8wjw2SYpS/2xK1Jxb2AaQPG/miLrYJtjOtEEZER+tS/c0ik5tLB1TNAJknUtYVOt84H9B4/lFnkQ67tqxxFd9TbcbE/cYEWTvJUxMWgCDp3dmjwdXZ6UCV3miszp4MDmW3xHn8IfnNdq83PgghgsYqSIFZuLDVbAn01D/JgxrAwP/O9n/J/zSYDQcpcCZn4Z2GfjksqX5nCA18Lr48JFD15B5xIMOfR9+ogl8GSLBNBf5NGINLohsESRwF/4SJbmwRwgea0y+9tJGGGdeAwuRXNQXAZNLN7aYdtvh52OXsf4Ey9NRGvnltfKD9pGoDmZFQrI7vCLQ9kAbKerX5P1pBe0OUMs=
-X-Forefront-Antispam-Report:
-	CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230040)(36860700016)(82310400026)(1800799024)(376014)(11063799006)(5023799004)(4143699003)(56012099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	TIUK7RqAAkV5ZVORrXekUFrqHZyZ4PE3M2iEqY0E31lUfQNLMuIWuHCWFzeWVgt4zX87wmUFy8efelzgVimnzqVGgfa8f0GxqZRkEFrsXjOS0x6fxsPA+rp0knNYKyzPxwg2ztshNdR7m2Nad3CCfSLAhSWKV4AhfH1e6dDExv1bvGAUkwbT4yX++ykQ97XQHWJFSDmtD/AnuH0t9d6/N3wumYGEYjjcdwwQbvnQNt29cp4o85w+jpOSu7DHHt1kq8k/JrEszVWobw3DHihS/g9MzG5HaDc8TWgvW4pvVHaMkCCn3SIRCGTdc3GGT1ApoPX64JvO89ODxjpD66KMpb70uTXfGh/pX9RSaqDfXqlmsnszqrGtAw4kkdaXZ36oE/mL9J6H3Tu5MUSbk9aAQrxw1RTFWEir1v2qW6ZIgz+G1GxMDheqyjJ5UdBUGIVj
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 May 2026 18:02:09.2541
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 84f7c2da-7e0a-4649-7edd-08deb76313aa
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SJ5PEPF000001CF.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5865
+References: <20260508195749.1885522-1-sashal@kernel.org> <20260517134858.146569-1-sashal@kernel.org>
+ <CAPhsuW4x8shWon8Moi5VgCq2n4E2EzaaauZ2HHpy42Rp1Y-J-g@mail.gmail.com>
+ <agsVDqdALBoHEHlv@laps> <CAPhsuW44UX663Au=WwHz8MVwnQgLkjxOqpJSCKxNiv3=RpZvqw@mail.gmail.com>
+ <b342c38b-7323-4b72-a239-8a574d6bc36b@iogearbox.net> <agzAwjKhOhuANz_P@laps>
+ <3dd6d852-18fb-4c64-a1ae-0d79ef7c061f@iogearbox.net> <ag8lOe6dAOgnWmsQ@laps>
+In-Reply-To: <ag8lOe6dAOgnWmsQ@laps>
+From: Song Liu <song@kernel.org>
+Date: Thu, 21 May 2026 11:16:46 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW7sbt5B+ZeGW8O2JMJ0ELPU-vhZFNvbB+0Q8XhZg6pKYw@mail.gmail.com>
+X-Gm-Features: AVHnY4Ihdl75axpqRxaDxb23j1ycahjc8W-Yta5RRqXxUzFNMBCHqx-JtojbAKM
+Message-ID: <CAPhsuW7sbt5B+ZeGW8O2JMJ0ELPU-vhZFNvbB+0Q8XhZg6pKYw@mail.gmail.com>
+Subject: Re: [PATCH v3] killswitch: add per-function short-circuit mitigation primitive
+To: Sasha Levin <sashal@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	bpf@vger.kernel.org, live-patching@vger.kernel.org, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Joshua Peisach <jpeisach@ubuntu.com>, Florian Weimer <fw@deneb.enyo.de>, Breno Leitao <leitao@debian.org>, 
+	Anthony Iliopoulos <ailiop@suse.com>, Michal Hocko <mhocko@suse.com>, Jiri Olsa <jolsa@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Christian Brauner <brauner@kernel.org>, 
+	KP Singh <kpsingh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 21, 2026 at 11:30:04AM -0300, Jason Gunthorpe wrote:
-> 1) Put "iommufd: Fix data_len byte-count vs element-count mismatch"
->    first
+On Thu, May 21, 2026 at 8:31=E2=80=AFAM Sasha Levin <sashal@kernel.org> wro=
+te:
+>
+> On Thu, May 21, 2026 at 11:11:16AM +0200, Daniel Borkmann wrote:
+> >On 5/19/26 9:57 PM, Sasha Levin wrote:
+> >>Sure, this would also work. How do you see this happening? Can we let a=
+ certain
+> >>user/pid/etc disable the allowlist if they choose to?
+> >
+> >I don't think we should, given then we're back to square one where root
+> >or some other user would be able to just override/bypass an LSM.
+>
+> killswitch already disables itself when lockdown is active. We can easily
+> disable it too when one of the LSMs that cares about this is active.
+>
+> >[...]
+> >>How do you see this working with the allowlist?
+> >
+> >We should look at the underlying areas where most of the CVE-like fixes
+> >took place (these days should be more easily doable given Claude and fri=
+ends)
+> >and based on that either extend ALLOW_ERROR_INJECTION() or (better) crea=
+te
+> >new hooks which BPF LSM can consume where you can then have a policy to =
+reject
+> >requests and tighten the attack surface. For example, the AF_ALG stuff y=
+ou
+>
+> So we could grow the LSM tentacles deeper into the kernel, and we can see=
+ where
+> current CVEs are happening, which I suspect is the darker corners of the =
+kernel
+> (old unmaintained, rarely used code), but this definitely won't stay the =
+case,
+> right? Newer and better LLMs will discover issues elsewhere, and once the=
+ low
+> hanging fruits are picked off of the current target subsystems, researche=
+rs
+> will move elsewhere. We will be dooming ourselves to an endless cat and m=
+ouse
+> game where we go add LSM hooks after some big security issue goes public.
 
-OK.
+Do we really need to add new LSM hooks for recent CVEs?
 
-> 2) This "Returning -ENOMEM for allocation failures but 0 for queue overflows treats
->    the conditions differently, which seems to contradict the stated
->    intent." Seems bogus, I think adjust the commit message. We do want
->    0 for queue full conditions.
+The LSM hooks are designed to cover all the user-kernel interfaces. Then
+with properly designed policies, we should have coverage for potential CVEs=
+.
+Existing LSM hooks may not be perfect, but we can improve the hooks,
+potentially with the help of smart LLMs, so that these hooks can cover
+future security issues. In some cases, we will need new policies, but I don=
+'t
+think new hooks will be needed for most of these CVEs.
 
-Ack.
-
-> 3) Let's fix the "Will this lockless read concurrent with a plain write cause a
->    data race?" by removing the optimization, just pre-allocate and
->    fail. We don't expect this to be a normal condition worth
->    optimizing
-
-I can drop it.
-
-FWIW, it was added to address a Sashiko review also:
-
-  By moving the allocation outside the spinlock, the precondition check that
-  skipped the allocation when the queue was full is bypassed.
-
-  When the queue is full, which can be common during a hardware fault storm
-  if userspace cannot keep up, the code now unconditionally allocates memory,
-  copies data, acquires the lock, and then immediately frees the memory and
-  drops the event.
-
-  Can this tight loop of wasteful slab allocations, memory copies, and
-  deallocations exacerbate IOMMU fault storms by adding unnecessary CPU
-  overhead?
-
-  Would it be possible to add an optimistic lockless check, such as
-  READ_ONCE(veventq->num_events) < veventq->depth, to bypass the allocation
-  when the queue appears full?
-
-> 4) I'm OK with ENOMEM here, leave it, EAGAIN should mean it is
->    pollable and it won't become pollable..
-
-Yea. Sashiko would complain about an EAGAIN as well :-)
-
-> 5) The sizeof(hdr) has been fixed in my rc branch. You can rebase on
->    top of that and also ensure to send a base-commit trailer to help
->    Sashiko apply the patches properly
-
-Oh, I forgot to add base commit ID. Will use your for-rc branch.
-
-> 6) What do you think about the "but done has
->    already been incremented by sizeof(*hdr)" ? unrelated issue? If it
->    is simple lets add a patch here to fix it
-
-I added a patch but didn't include in the series -- Sashiko would
-raise more questions against that patch...
-
-I think it's a separate bug; Sashiko pointed out another in fault
-queue as well. Both bugs are at failure (corner cases?) path.
-
-I'd like to address them separately.
-
-Thanks
-Nicolin
+Thanks,
+Song
