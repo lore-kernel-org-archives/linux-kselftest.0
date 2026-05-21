@@ -1,30 +1,31 @@
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F5FB3B9D80;
-	Thu, 21 May 2026 11:19:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE0C63BCD26;
+	Thu, 21 May 2026 11:20:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779362402; cv=none; b=CYrVd+Sr0ACR7iU0jZvRSYAGaI7N99IlR2zWrMnZq3Pw4n74zJPV7NQMatFNVLCnKXtTvWDc3sfbILeXELT8x7S4mjmjlNKCLyWoRTYce8ug4ssIYpB6pwe4Ih7h2dND/PnyjkxeTu0C87Wtn/Noxs/vMe03Cqo6INF5RZCL1Fw=
+	t=1779362410; cv=none; b=BC/nq3x5ycL9aneA+HuFaj5y56Ayv52rTHUcKnXsQeC+YlLcw3KrJY5MaMNX4ZrkZ/3uwNURGbT4iQHeIFKKrTml+Srzfe8LxmTk9f3rCCz5snCm6FUT/uj1VvVWfI/FgoNAiuIpECUXMyEPKATxAxn+hIXI3R+znnBE4pGBcAE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779362402; c=relaxed/simple;
-	bh=cwzzxnOYQD32jsPaPOvx8u4LjDvQ6YeghLlaggpSiF4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Rixbw0qpAoqJ+brY1Mj4IMVmYtVu0M1hpAM89l7GdTHCoZivYXXISgu0/zeWQJDR5Z8WBCoXI7xbnF2fxNjGqEhodEohvhLaH6pdkXsd5NVL7l0jtwX5tWdOtATTkpUaxOFoT47Sk500cjoyefjOzS0vT3zLwQO4piWKLwaacts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=Ub3DXMYL; arc=none smtp.client-ip=217.140.110.172
+	s=arc-20240116; t=1779362410; c=relaxed/simple;
+	bh=R4TXY7ofugRmB5Qu307mZbDEqHIIyQvOO7RJJMPiTSY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=VrxZpTGXPLPmKudw3z+EbaH89AQ1ocSCHmswqOffU4KjCfQRJho9+Tyho9lIueC+M91SXafe7Kz7BwQ3dA1WJxMRuL5h4/SOJJq7YO92GttJPRQ6uEB8OGyO4ZT1yq7MbxVKSMGzTluUGNh0bgKzHpkOSls+ttelnIo28OLM0Sw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=HRDBtL8A; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="Ub3DXMYL"
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="HRDBtL8A"
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CB12F35FA;
-	Thu, 21 May 2026 04:19:52 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EFA7D3D6A;
+	Thu, 21 May 2026 04:20:01 -0700 (PDT)
 Received: from a081061.blr.arm.com (a081061.arm.com [10.164.19.82])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 75E0F3F7B4;
-	Thu, 21 May 2026 04:19:49 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 8FC963F7B4;
+	Thu, 21 May 2026 04:19:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1779362397; bh=cwzzxnOYQD32jsPaPOvx8u4LjDvQ6YeghLlaggpSiF4=;
-	h=From:To:Cc:Subject:Date:From;
-	b=Ub3DXMYLTy8J3/jUc8yEx/8U0b7ywRBwVRYajMBy9Q8jF6C9QrlYgiWfxkNhw+mJf
-	 56iJZw9CYBOsm2sTdnNyf6HFr60S+OSnzNb91btBTuP9h3SE4IgqMonsAqtKwZJk+7
-	 CC3L8Lwc6eq4OZtxt1KS2yYGn8VV5Ml4rvUCOQJE=
+	t=1779362407; bh=R4TXY7ofugRmB5Qu307mZbDEqHIIyQvOO7RJJMPiTSY=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=HRDBtL8AFefQ0JgqYJ/Pqsa0kuJKBfB/GI6JL028A8uGzgONZ8D9gyjy8me5M13du
+	 hTT5YMoCw6IvJS5Z3vKv/F+kb4t1x/RvHWTjdxTPbbWsU6wkW40OPEW0fxkt9aYGuK
+	 ozHWXnh0wgJnAi/97pc603Uu6tTr0mNgIzvNhmDs=
 From: Sarthak Sharma <sarthak.sharma@arm.com>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	David Hildenbrand <david@kernel.org>
@@ -54,10 +55,12 @@ Cc: Jonathan Corbet <corbet@lwn.net>,
 	linux-kselftest@vger.kernel.org,
 	linux-doc@vger.kernel.org,
 	Sarthak Sharma <sarthak.sharma@arm.com>
-Subject: [PATCH v3 0/4] selftests/mm: separate GUP microbenchmarking from functional testing
-Date: Thu, 21 May 2026 16:47:57 +0530
-Message-ID: <20260521111801.173019-1-sarthak.sharma@arm.com>
+Subject: [PATCH v3 1/4] tools/lib/mm: add shared file helpers
+Date: Thu, 21 May 2026 16:47:58 +0530
+Message-ID: <20260521111801.173019-2-sarthak.sharma@arm.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260521111801.173019-1-sarthak.sharma@arm.com>
+References: <20260521111801.173019-1-sarthak.sharma@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -66,132 +69,317 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-gup_test.c currently serves two distinct purposes: microbenchmarking
-(GUP_FAST_BENCHMARK, PIN_FAST_BENCHMARK, PIN_LONGTERM_BENCHMARK) and
-functional correctness testing (GUP_BASIC_TEST, PIN_BASIC_TEST,
-DUMP_USER_PAGES_TEST). Mixing these in a single binary means functional
-tests cannot be run or reported individually and run_vmtests.sh must
-invoke the binary multiple times with different flag combinations to
-cover all configurations.
+Move read_file(), write_file(), read_num(), and write_num() out of
+tools/testing/selftests/mm/vm_util.c into a new shared helper under
+tools/lib/mm/.
 
-This patch series separates the two concerns: tools/mm/gup_bench for
-benchmarking and tools/testing/selftests/mm/gup_test for functional
-testing. To avoid duplicating HugeTLB and related file helpers, the
-series first moves the common helper code to tools/lib/mm/ so it can be
-shared by both selftests and tools/mm.
+These helpers are used by mm selftests today and will also be needed by
+shared hugepage helpers in subsequent patches. Move them to a generic
+location and drop the kselftest-specific dependency from their
+implementation so they can be reused outside selftests as well.
 
-Patch 1 adds tools/lib/mm/file_utils.[ch], moving read_file(),
-write_file(), read_num() and write_num() out of vm_util.c into a shared
-helper without a kselftest dependency. It also adds tools/lib/mm/ to the
-MEMORY MANAGEMENT - MISC entry in MAINTAINERS.
+Update the current mm selftest users to include the new header directly,
+and link the new helper into the selftests/mm build.
 
-Patch 2 moves hugepage_settings.[ch] from selftests/mm to tools/lib/mm/,
-updates the selftests/mm users to include it from there and removes the
-remaining kselftest dependency from the implementation while dropping
-non-fatal hugetlb informational prints from the shared helper.
+Add tools/lib/mm/ to the MEMORY MANAGEMENT - MISC entry in MAINTAINERS.
 
-Patch 3 adds tools/mm/gup_bench.c, a standalone microbenchmark for
-GUP_FAST, PIN_FAST and PIN_LONGTERM via the CONFIG_GUP_TEST debugfs
-interface. It runs the same matrix of configurations as the old
-run_gup_matrix() shell function (all three commands, read/write,
-private/shared, four page counts, THP on/off, hugetlb), but as a
-standalone C program under tools/mm using the shared tools/lib/mm
-helpers.
-
-Patch 4 rewrites gup_test.c as a kselftest harness-based selftest. It
-covers all five GUP kernel functions (get_user_pages, get_user_pages_fast,
-pin_user_pages, pin_user_pages_fast, pin_user_pages with FOLL_LONGTERM)
-plus DUMP_USER_PAGES_TEST, across 12 mapping configurations (THP on,
-THP off and hugetlb, each across private/shared and read/write variants)
-and four batch sizes (1, 512, 123, all pages). It also preserves the old
-sparse dump coverage for pages 0, 19 and 0x1000. Results are reported as
-standard TAP output with no command-line arguments required.
-
+Signed-off-by: Sarthak Sharma <sarthak.sharma@arm.com>
 ---
-These patches apply on top of mm/mm-new.
-
-Changes in v3:
-- Address v2 feedback from Sashiko
-- Add shared file_utils helpers under tools/lib/mm
-- Move hugepage_settings out of selftests and into tools/lib/mm
-- Convert gup_bench to use the shared tools/lib/mm helpers
-- Guard against invalid thread counts in gup_bench
-- Handle thread-array allocation failure cleanly in gup_bench
-- Restore hugetlb settings on setup failure in gup_test
-- Add sparse DUMP_USER_PAGES_TEST coverage for pages 0, 19 and 0x1000 in gup_test
-
-Changes in v2:
-- Address v1 feedback from Sashiko
-- Add fast and longterm GUP/PUP coverage
-- Sweep nr_pages_per_call over 1, 512, 123 and all pages
-- Call madvise(MADV_NOHUGEPAGE) in non-THP variants
-- Use 256 MB for hugetlb fixtures
-- Use hugetlb_restore_settings() in FIXTURE_TEARDOWN instead of atexit()
-- Add TH_LOG to report nr_pages_per_call for each iteration
-- Update Documentation/core-api/pin_user_pages.rst unit testing section
-
-Previous versions:
-v2: https://lore.kernel.org/all/20260519120506.184512-1-sarthak.sharma@arm.com/
-v1: https://lore.kernel.org/all/20260515084840.174652-1-sarthak.sharma@arm.com/
-
----
-Sarthak Sharma (4):
-  tools/lib/mm: add shared file helpers
-  tools/lib/mm: move hugepage_settings out of selftests
-  tools/mm: add a standalone GUP microbenchmark
-  selftests/mm: rewrite gup_test as a standalone harness-based selftest
-
- Documentation/core-api/pin_user_pages.rst     |  12 +-
- MAINTAINERS                                   |   2 +
- tools/lib/mm/file_utils.c                     |  83 +++
- tools/lib/mm/file_utils.h                     |  12 +
- .../selftests => lib}/mm/hugepage_settings.c  |  14 +-
- .../selftests => lib}/mm/hugepage_settings.h  |   0
- tools/mm/.gitignore                           |   2 +
- tools/mm/Makefile                             |  10 +-
- tools/mm/gup_bench.c                          | 390 ++++++++++++
- tools/testing/selftests/mm/Makefile           |   8 +-
- tools/testing/selftests/mm/compaction_test.c  |   2 +-
- tools/testing/selftests/mm/cow.c              |   2 +-
- .../selftests/mm/folio_split_race_test.c      |   3 +-
- tools/testing/selftests/mm/guard-regions.c    |   3 +-
- tools/testing/selftests/mm/gup_longterm.c     |   2 +-
- tools/testing/selftests/mm/gup_test.c         | 587 +++++++++++-------
- tools/testing/selftests/mm/hmm-tests.c        |   6 +-
- tools/testing/selftests/mm/hugetlb-madvise.c  |   3 +-
- tools/testing/selftests/mm/hugetlb-mmap.c     |   3 +-
- tools/testing/selftests/mm/hugetlb-mremap.c   |   3 +-
- tools/testing/selftests/mm/hugetlb-shm.c      |   2 +-
- .../selftests/mm/hugetlb-soft-offline.c       |   2 +-
- tools/testing/selftests/mm/hugetlb-vmemmap.c  |   3 +-
- tools/testing/selftests/mm/hugetlb_dio.c      |   3 +-
- .../selftests/mm/hugetlb_fault_after_madv.c   |   2 +-
- .../selftests/mm/hugetlb_madv_vs_map.c        |   2 +-
- tools/testing/selftests/mm/khugepaged.c       |   3 +-
- tools/testing/selftests/mm/ksm_tests.c        |   2 +-
- tools/testing/selftests/mm/migration.c        |   6 +-
- tools/testing/selftests/mm/pagemap_ioctl.c    |   2 +-
- .../testing/selftests/mm/prctl_thp_disable.c  |   2 +-
- tools/testing/selftests/mm/protection_keys.c  |   2 +-
- tools/testing/selftests/mm/run_vmtests.sh     |  37 +-
- tools/testing/selftests/mm/soft-dirty.c       |   2 +-
- .../selftests/mm/split_huge_page_test.c       |   4 +-
- tools/testing/selftests/mm/thuge-gen.c        |   3 +-
- tools/testing/selftests/mm/transhuge-stress.c |   3 +-
- tools/testing/selftests/mm/uffd-common.h      |   2 +-
- tools/testing/selftests/mm/uffd-wp-mremap.c   |   3 +-
- .../selftests/mm/va_high_addr_switch.c        |   2 +-
- tools/testing/selftests/mm/vm_util.c          |  65 +-
- tools/testing/selftests/mm/vm_util.h          |   5 -
- 42 files changed, 935 insertions(+), 369 deletions(-)
+ MAINTAINERS                                   |  1 +
+ tools/lib/mm/file_utils.c                     | 83 +++++++++++++++++++
+ tools/lib/mm/file_utils.h                     | 12 +++
+ tools/testing/selftests/mm/Makefile           |  6 +-
+ .../testing/selftests/mm/hugepage_settings.c  |  3 +-
+ tools/testing/selftests/mm/khugepaged.c       |  1 +
+ .../selftests/mm/split_huge_page_test.c       |  2 +
+ tools/testing/selftests/mm/vm_util.c          | 65 +--------------
+ tools/testing/selftests/mm/vm_util.h          |  5 --
+ 9 files changed, 106 insertions(+), 72 deletions(-)
  create mode 100644 tools/lib/mm/file_utils.c
  create mode 100644 tools/lib/mm/file_utils.h
- rename tools/{testing/selftests => lib}/mm/hugepage_settings.c (98%)
- rename tools/{testing/selftests => lib}/mm/hugepage_settings.h (100%)
- create mode 100644 tools/mm/gup_bench.c
 
-
-base-commit: 4c6512d033e5e9469cc76d07512c24a0ee0ac207
---
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 46ed0f0e76d8..7887a3263373 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -16936,6 +16936,7 @@ F:	mm/memory-tiers.c
+ F:	mm/page_idle.c
+ F:	mm/pgalloc-track.h
+ F:	mm/process_vm_access.c
++F:	tools/lib/mm/
+ F:	tools/testing/selftests/mm/
+ 
+ MEMORY MANAGEMENT - NUMA MEMBLOCKS AND NUMA EMULATION
+diff --git a/tools/lib/mm/file_utils.c b/tools/lib/mm/file_utils.c
+new file mode 100644
+index 000000000000..0f9322f2cf41
+--- /dev/null
++++ b/tools/lib/mm/file_utils.c
+@@ -0,0 +1,83 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <errno.h>
++#include <fcntl.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <unistd.h>
++
++#include "file_utils.h"
++
++int read_file(const char *path, char *buf, size_t buflen)
++{
++	int fd;
++	ssize_t numread;
++
++	fd = open(path, O_RDONLY);
++	if (fd == -1)
++		return 0;
++
++	numread = read(fd, buf, buflen - 1);
++	if (numread < 1) {
++		close(fd);
++		return 0;
++	}
++
++	buf[numread] = '\0';
++	close(fd);
++
++	return (unsigned int)numread;
++}
++
++void write_file(const char *path, const char *buf, size_t buflen)
++{
++	int fd, saved_errno;
++	ssize_t numwritten;
++
++	if (buflen < 2) {
++		fprintf(stderr, "Incorrect buffer len: %zu\n", buflen);
++		exit(EXIT_FAILURE);
++	}
++
++	fd = open(path, O_WRONLY);
++	if (fd == -1) {
++		fprintf(stderr, "%s open failed: %s\n", path, strerror(errno));
++		exit(EXIT_FAILURE);
++	}
++
++	numwritten = write(fd, buf, buflen - 1);
++	saved_errno = errno;
++	close(fd);
++	errno = saved_errno;
++	if (numwritten < 0) {
++		fprintf(stderr, "%s write(%.*s) failed: %s\n",
++			path, (int)(buflen - 1), buf, strerror(errno));
++		exit(EXIT_FAILURE);
++	}
++	if (numwritten != (ssize_t)(buflen - 1)) {
++		fprintf(stderr,
++			"%s write(%.*s) is truncated, expected %zu bytes, got %zd bytes\n",
++			path, (int)(buflen - 1), buf, buflen - 1, numwritten);
++		exit(EXIT_FAILURE);
++	}
++}
++
++unsigned long read_num(const char *path)
++{
++	char buf[21];
++
++	if (read_file(path, buf, sizeof(buf)) < 0) {
++		perror("read_file()");
++		exit(EXIT_FAILURE);
++	}
++
++	return strtoul(buf, NULL, 10);
++}
++
++void write_num(const char *path, unsigned long num)
++{
++	char buf[21];
++
++	snprintf(buf, sizeof(buf), "%lu", num);
++	write_file(path, buf, strlen(buf) + 1);
++}
+diff --git a/tools/lib/mm/file_utils.h b/tools/lib/mm/file_utils.h
+new file mode 100644
+index 000000000000..060a84725c9d
+--- /dev/null
++++ b/tools/lib/mm/file_utils.h
+@@ -0,0 +1,12 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef __MM_FILE_UTILS_H__
++#define __MM_FILE_UTILS_H__
++
++#include <stddef.h>
++
++int read_file(const char *path, char *buf, size_t buflen);
++void write_file(const char *path, const char *buf, size_t buflen);
++unsigned long read_num(const char *path);
++void write_num(const char *path, unsigned long num);
++
++#endif
+diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+index e6df968f0971..b5fb4b6ab31b 100644
+--- a/tools/testing/selftests/mm/Makefile
++++ b/tools/testing/selftests/mm/Makefile
+@@ -37,7 +37,7 @@ endif
+ # LDLIBS.
+ MAKEFLAGS += --no-builtin-rules
+ 
+-CFLAGS = -Wall -O2 -I $(top_srcdir) $(EXTRA_CFLAGS) $(KHDR_INCLUDES) $(TOOLS_INCLUDES)
++CFLAGS = -Wall -O2 -I $(top_srcdir) -I $(top_srcdir)/tools/lib $(EXTRA_CFLAGS) $(KHDR_INCLUDES) $(TOOLS_INCLUDES)
+ CFLAGS += -Wunreachable-code
+ LDLIBS = -lrt -lpthread -lm
+ 
+@@ -187,8 +187,8 @@ TEST_FILES += write_hugetlb_memory.sh
+ 
+ include ../lib.mk
+ 
+-$(TEST_GEN_PROGS): vm_util.c hugepage_settings.c
+-$(TEST_GEN_FILES): vm_util.c hugepage_settings.c
++$(TEST_GEN_PROGS): vm_util.c hugepage_settings.c $(top_srcdir)/tools/lib/mm/file_utils.c
++$(TEST_GEN_FILES): vm_util.c hugepage_settings.c $(top_srcdir)/tools/lib/mm/file_utils.c
+ 
+ $(OUTPUT)/uffd-stress: uffd-common.c
+ $(OUTPUT)/uffd-unit-tests: uffd-common.c
+diff --git a/tools/testing/selftests/mm/hugepage_settings.c b/tools/testing/selftests/mm/hugepage_settings.c
+index 2eab2110ac6a..5e947abb7425 100644
+--- a/tools/testing/selftests/mm/hugepage_settings.c
++++ b/tools/testing/selftests/mm/hugepage_settings.c
+@@ -8,8 +8,9 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <unistd.h>
++#include <mm/file_utils.h>
+ 
+-#include "vm_util.h"
++#include "kselftest.h"
+ #include "hugepage_settings.h"
+ 
+ #define THP_SYSFS "/sys/kernel/mm/transparent_hugepage/"
+diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
+index 10e8dedcb087..ae5945e2bfac 100644
+--- a/tools/testing/selftests/mm/khugepaged.c
++++ b/tools/testing/selftests/mm/khugepaged.c
+@@ -18,6 +18,7 @@
+ #include <sys/stat.h>
+ #include <sys/sysmacros.h>
+ #include <sys/vfs.h>
++#include <mm/file_utils.h>
+ 
+ #include "linux/magic.h"
+ 
+diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
+index 50c80ceb4988..4a2ccc055c8b 100644
+--- a/tools/testing/selftests/mm/split_huge_page_test.c
++++ b/tools/testing/selftests/mm/split_huge_page_test.c
+@@ -19,6 +19,8 @@
+ #include <malloc.h>
+ #include <stdbool.h>
+ #include <time.h>
++#include <mm/file_utils.h>
++
+ #include "vm_util.h"
+ #include "kselftest.h"
+ #include "hugepage_settings.h"
+diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
+index 311fc5b4513e..631dc2baff97 100644
+--- a/tools/testing/selftests/mm/vm_util.c
++++ b/tools/testing/selftests/mm/vm_util.c
+@@ -8,6 +8,8 @@
+ #include <linux/fs.h>
+ #include <sys/syscall.h>
+ #include <unistd.h>
++#include <mm/file_utils.h>
++
+ #include "kselftest.h"
+ #include "vm_util.h"
+ 
+@@ -698,69 +700,6 @@ int unpoison_memory(unsigned long pfn)
+ 	return ret > 0 ? 0 : -errno;
+ }
+ 
+-int read_file(const char *path, char *buf, size_t buflen)
+-{
+-	int fd;
+-	ssize_t numread;
+-
+-	fd = open(path, O_RDONLY);
+-	if (fd == -1)
+-		return 0;
+-
+-	numread = read(fd, buf, buflen - 1);
+-	if (numread < 1) {
+-		close(fd);
+-		return 0;
+-	}
+-
+-	buf[numread] = '\0';
+-	close(fd);
+-
+-	return (unsigned int) numread;
+-}
+-
+-void write_file(const char *path, const char *buf, size_t buflen)
+-{
+-	int fd, saved_errno;
+-	ssize_t numwritten;
+-
+-	if (buflen < 2)
+-		ksft_exit_fail_msg("Incorrect buffer len: %zu\n", buflen);
+-
+-	fd = open(path, O_WRONLY);
+-	if (fd == -1)
+-		ksft_exit_fail_msg("%s open failed: %s\n", path, strerror(errno));
+-
+-	numwritten = write(fd, buf, buflen - 1);
+-	saved_errno = errno;
+-	close(fd);
+-	errno = saved_errno;
+-	if (numwritten < 0)
+-		ksft_exit_fail_msg("%s write(%.*s) failed: %s\n", path, (int)(buflen - 1),
+-				buf, strerror(errno));
+-	if (numwritten != buflen - 1)
+-		ksft_exit_fail_msg("%s write(%.*s) is truncated, expected %zu bytes, got %zd bytes\n",
+-				path, (int)(buflen - 1), buf, buflen - 1, numwritten);
+-}
+-
+-unsigned long read_num(const char *path)
+-{
+-	char buf[21];
+-
+-	if (read_file(path, buf, sizeof(buf)) < 0)
+-		ksft_exit_fail_perror("read_file()");
+-
+-	return strtoul(buf, NULL, 10);
+-}
+-
+-void write_num(const char *path, unsigned long num)
+-{
+-	char buf[21];
+-
+-	sprintf(buf, "%lu", num);
+-	write_file(path, buf, strlen(buf) + 1);
+-}
+-
+ static unsigned long shmall, shmmax;
+ 
+ void __shm_limits_restore(void)
+diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
+index ea8fc8fdf0eb..d0932cdd9a34 100644
+--- a/tools/testing/selftests/mm/vm_util.h
++++ b/tools/testing/selftests/mm/vm_util.h
+@@ -164,11 +164,6 @@ int unpoison_memory(unsigned long pfn);
+ #define PAGEMAP_PRESENT(ent)	(((ent) & (1ull << 63)) != 0)
+ #define PAGEMAP_PFN(ent)	((ent) & ((1ull << 55) - 1))
+ 
+-void write_file(const char *path, const char *buf, size_t buflen);
+-int read_file(const char *path, char *buf, size_t buflen);
+-unsigned long read_num(const char *path);
+-void write_num(const char *path, unsigned long num);
+-
+ void shm_limits_prepare(unsigned long length);
+ void __shm_limits_restore(void);
+ 
+-- 
 2.39.5
 
