@@ -1,170 +1,164 @@
-Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A4FE39D3C1
-	for <linux-kselftest@vger.kernel.org>; Thu, 21 May 2026 07:37:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35DBA397B1C;
+	Thu, 21 May 2026 07:52:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779349032; cv=none; b=jGO3qdt5yMk/CtGfDuUEjSl4Fr2ZmcD2Y+73XjNaS74AUs+Qb8n5fSUsDyEGS3rj6/pf062dBSDfPNi5C9J/D3RRy3zb99dCR0uriUMPqqcOnLmgcgJFyda/vkZ3IsAEkRJgCK4HK6rAPXLsJ2WcDlGX+3kOfoguyDwG2vZPVzE=
+	t=1779349978; cv=none; b=QI/CgUQjNJQEzMhtNUld79MuVd1t9QwBc6T/QoYTOjt6QlhX42H8UiQJhbC2b048q4OTZ0tc+naCKb1rdaiyfvs4v+BTpqW1OSYWhHlNhuiCMiIvoZhDlMhjUXFTRrndlA0+tAJqaCOsLWA07sQyDeJttnYev4y5+YoXow7e7fY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779349032; c=relaxed/simple;
-	bh=R8pP1d8ekCrIzeVrljMRYUBnWOGmUkz6ksI2SX7JeBs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KHAALRicmRIPEvECNkRb9kEj1PU7lUWGBbMk2t2Wkx7xtKS57aDPB5qrZd/84IJtwC4jgd+xGztxkP51j8IxaM7kSFRQ1/R7oEJeQ1OulKTEKhr8w1Kn5eIa1cQvvXrgv1ce+9Vy4ysGDEYPiptXtOI4ieOjIgOl5MjrOpdkUf0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=iRpekRVh; arc=none smtp.client-ip=91.218.175.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1779349978; c=relaxed/simple;
+	bh=g5lNOWZdFZ078Eg8FihJThI93jDxzsjGBAigjw8fo38=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=gdeTBoBFWKN+wagATxPZjwLGzFdIi6wt36WopyhGBx2r2hewUOXxTp3f1FLcNhOaLtolPk1xN/cBvY1sDXirOy8KSH08s9p+Yrt86uhuSl0iNqMo1+WIuXZfpu6D+Y+KNIO1CO8k0i2P3e+49JhCxSdS8PoozV/9mKVjPzGqfzs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xhTIw633; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="iRpekRVh"
-Message-ID: <db0be5c8-13cb-4007-be06-bee3e1cbafbf@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1779349022;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=M14ZvRYGbbDChleEwMkrlZeua+SBBNOi/r7kAJG70c4=;
-	b=iRpekRVh0ABAaNsYeytGvVAJzme6ykXDAKtDQU/Su+oZ4UrsAVvvjxLYYC0VmKW96eDF6p
-	qFnQ21/Jar59VsHhrpKgp8J//prkhveEhiyZazjVin9D9FRH2LJ1nByaQAOHnPKb4J2Wmv
-	EiK2cm3aPnDbHwp3/xcdCxlvt0n+GRY=
-Date: Thu, 21 May 2026 15:35:52 +0800
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xhTIw633"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7A06FC2BCB9;
+	Thu, 21 May 2026 07:52:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux.dev; s=korg;
+	t=1779349977; bh=g5lNOWZdFZ078Eg8FihJThI93jDxzsjGBAigjw8fo38=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=xhTIw633sN19LCBdjB1HTf9dSgzdyM88djd03g3BpnZHdUyCCkbcKfy36L1S7zUB3
+	 hwfBhn5IG72NrMEjIvZwX/q0t4z3l9jlJ/GykCpm20eLuBbUblip4QWbimYlbDI7JB
+	 b+IP+0hfTs0YUy63TXNSrCWCoc6HEQ7tal7tCB6o=
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 59F92CD4F5E;
+	Thu, 21 May 2026 07:52:57 +0000 (UTC)
+From: Alvin Sun <alvin.sun@linux.dev>
+Date: Thu, 21 May 2026 15:52:53 +0800
+Subject: [PATCH v2 1/7] rust: module: add `THIS_MODULE` const to
+ `ModuleMetadata` trait
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v11 6/8] bpf: Add bpf_list_add to insert node
- after a given list node
-To: bot+bpf-ci@kernel.org
-Cc: bpf@vger.kernel.org, ast@kernel.org, corbet@lwn.net,
- martin.lau@linux.dev, daniel@iogearbox.net, andrii@kernel.org,
- eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
- john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
- chengkaitao@kylinos.cn, skhan@linuxfoundation.org, memxor@gmail.com,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, vmalik@redhat.com,
- linux-kselftest@vger.kernel.org, martin.lau@kernel.org, clm@meta.com,
- ihor.solodrai@linux.dev
-References: <20260521032306.97118-7-kaitao.cheng@linux.dev>
- <61871735d9151729b3092d42209dad08b1e38fa930bc1c9e452645240efbc40e@mail.kernel.org>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Kaitao Cheng <kaitao.cheng@linux.dev>
-In-Reply-To: <61871735d9151729b3092d42209dad08b1e38fa930bc1c9e452645240efbc40e@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260521-fix-fops-owner-v2-1-fd99079c5a04@linux.dev>
+References: <20260521-fix-fops-owner-v2-0-fd99079c5a04@linux.dev>
+In-Reply-To: <20260521-fix-fops-owner-v2-0-fd99079c5a04@linux.dev>
+To: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
+ Gary Guo <gary@garyguo.net>, 
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+ Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+ Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+ Danilo Krummrich <dakr@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
+ Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
+ Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, David Airlie <airlied@gmail.com>, 
+ Simona Vetter <simona@ffwll.ch>, 
+ Daniel Almeida <daniel.almeida@collabora.com>, 
+ Arnd Bergmann <arnd@arndb.de>, Brendan Higgins <brendan.higgins@linux.dev>, 
+ David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>, 
+ Breno Leitao <leitao@debian.org>, Jens Axboe <axboe@kernel.dk>
+Cc: rust-for-linux@vger.kernel.org, linux-modules@vger.kernel.org, 
+ driver-core@lists.linux.dev, dri-devel@lists.freedesktop.org, 
+ nova-gpu@lists.linux.dev, linux-kselftest@vger.kernel.org, 
+ kunit-dev@googlegroups.com, linux-block@vger.kernel.org, 
+ Alvin Sun <alvin.sun@linux.dev>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1779349975; l=3841;
+ i=alvin.sun@linux.dev; s=20260317; h=from:subject:message-id;
+ bh=g5lNOWZdFZ078Eg8FihJThI93jDxzsjGBAigjw8fo38=;
+ b=FhGtAlbF3396Z+dQAsyxXzU2I9Oz+YJMiNSCAigLuceECR4JjS9R0/Tvaps4sBC+ytD60pqQZ
+ Arr+EzySJNWBLxRc55m2GilIMFF4U2MTiMxCo80BR4hrhjbfpnj+i/w
+X-Developer-Key: i=alvin.sun@linux.dev; a=ed25519;
+ pk=CHcwQp8GSoj25V/L1ZWNSQjWp9eSIb0s9LKr0Nm3WuE=
+X-Endpoint-Received: by B4 Relay for alvin.sun@linux.dev/20260317 with
+ auth_id=684
 
-在 2026/5/21 12:08, bot+bpf-ci@kernel.org 写道:
->> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
->> index 1c69476c8a09..89579165ef4d 100644
->> --- a/kernel/bpf/helpers.c
->> +++ b/kernel/bpf/helpers.c
->> @@ -2577,6 +2577,16 @@ __bpf_kfunc int bpf_list_push_back_impl(struct bpf_list_head *head,
->>  	return bpf_list_push_back(head, node, meta__ign, off);
->>  }
->>
->> +__bpf_kfunc int bpf_list_add(struct bpf_list_head *head, struct bpf_list_node *new,
->> +			     struct bpf_list_node *prev__nonown_allowed,
->> +			     struct btf_struct_meta *meta, u64 off)
->> +{
->> +	struct bpf_list_node_kern *n = (void *)new, *p = (void *)prev__nonown_allowed;
->> +	struct list_head *prev_ptr = &p->list_head;
->> +
->> +	return __bpf_list_add(n, head, &prev_ptr, meta ? meta->record : NULL, off);
->> +}
-> 
-> If __bpf_list_add() fails at runtime (e.g., because prev is not in the
-> list indicated by head), it drops the 'new' node via __bpf_obj_drop_impl
-> in the fail path.
-> 
-> However, the verifier unconditionally converts 'new' into a non-owning
-> reference during check_kfunc_call(). If __bpf_list_add() fails, the BPF
-> program retains this non-owning reference to a freed node.
-> 
-> Could this allow the program to trigger a use-after-free within the lock
-> critical section?
-> 
-> (sashiko-bot@kernel.org, v10 RESEND)
-> https://lore.kernel.org/bpf/20260513204420.2BB22C19425@smtp.kernel.org/
+Add a `THIS_MODULE` const to the `ModuleMetadata` trait so that
+modules can provide their `ThisModule` pointer usable in const
+contexts such as static file_operations.
 
-This should be an acceptable case within the current design framework.
+Move the `THIS_MODULE` static from the `module!` macro into the
+`ModuleMetadata` impl, and update `__init` to use
+`LocalModule::THIS_MODULE` instead.
 
->>  static struct bpf_list_node *__bpf_list_del(struct bpf_list_head *head,
->>  					    struct list_head *n)
-> 
-> [ ... ]
-> 
->> @@ -4756,6 +4766,7 @@ BTF_ID_FLAGS(func, bpf_list_push_front, KF_IMPLICIT_ARGS)
->>  BTF_ID_FLAGS(func, bpf_list_push_front_impl)
->>  BTF_ID_FLAGS(func, bpf_list_push_back, KF_IMPLICIT_ARGS)
->>  BTF_ID_FLAGS(func, bpf_list_push_back_impl)
->> +BTF_ID_FLAGS(func, bpf_list_add, KF_IMPLICIT_ARGS)
-> 
-> Since bpf_list_add is marked with KF_IMPLICIT_ARGS, won't the verifier
-> look for a bpf_list_add_impl counterpart during program load?
-> 
-> Without defining and registering a bpf_list_add_impl function,
-> find_kfunc_impl_proto() will fail to find the required _impl suffix in
-> the vmlinux BTF.
-> 
-> Will this cause the verifier to unconditionally reject the kfunc?
-> 
-> (sashiko-bot@kernel.org, v10 RESEND)
-> https://lore.kernel.org/bpf/20260513204420.2BB22C19425@smtp.kernel.org/
+Signed-off-by: Alvin Sun <alvin.sun@linux.dev>
+---
+ rust/kernel/lib.rs    |  3 +++
+ rust/macros/module.rs | 34 +++++++++++++++++-----------------
+ 2 files changed, 20 insertions(+), 17 deletions(-)
 
-The target prototype with the _impl suffix has already been deprecated.
-
->>  BTF_ID_FLAGS(func, bpf_list_pop_front, KF_ACQUIRE | KF_RET_NULL)
->>  BTF_ID_FLAGS(func, bpf_list_pop_back, KF_ACQUIRE | KF_RET_NULL)
->>  BTF_ID_FLAGS(func, bpf_list_del, KF_ACQUIRE | KF_RET_NULL)
-> 
-> [ ... ]
-> 
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index 35eebb5e7769..662ad7312697 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
-> 
-> [ ... ]
-> 
->> @@ -19524,8 +19527,11 @@ int bpf_fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
->>  		int struct_meta_reg = BPF_REG_3;
->>  		int node_offset_reg = BPF_REG_4;
->>
->> -		/* rbtree_add has extra 'less' arg, so args-to-fixup are in diff regs */
->> -		if (is_bpf_rbtree_add_kfunc(desc->func_id)) {
->> +		/* list_add/rbtree_add have an extra arg (prev/less),
->> +		 * so args-to-fixup are in diff regs.
->> +		 */
-> 
-> This isn't a bug, but the multi-line comment format doesn't follow the
-> BPF subsystem style. The preferred form in kernel/bpf/ has the opening
-> /* on its own line.
-> 
-> Additionally, consider adding an is_bpf_list_add_kfunc() helper instead
-> of direct comparison with special_kfunc_list[KF_bpf_list_add].
-> 
-> (bot+bpf-ci@kernel.org and Eduard Zingerman, v10 RESEND)
-> https://lore.kernel.org/bpf/f573f7e0a5140fe6254d2ddfd3f69add455fa25c67c020c0312e2c2ceeca7c69@mail.kernel.org/
-
-I provided a more detailed explanation in the link below.
-https://lore.kernel.org/all/9e300669-8793-41a2-84a1-98fb8195e263@linux.dev/
-
->> +		if (desc->func_id == special_kfunc_list[KF_bpf_list_add] ||
->> +		    is_bpf_rbtree_add_kfunc(desc->func_id)) {
->>  			struct_meta_reg = BPF_REG_4;
->>  			node_offset_reg = BPF_REG_5;
->>  		}
-> 
-> 
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26204125015
+diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+index b72b2fbe046d6..f0cf0705d9697 100644
+--- a/rust/kernel/lib.rs
++++ b/rust/kernel/lib.rs
+@@ -184,6 +184,9 @@ fn init(module: &'static ThisModule) -> impl pin_init::PinInit<Self, error::Erro
+ pub trait ModuleMetadata {
+     /// The name of the module as specified in the `module!` macro.
+     const NAME: &'static crate::str::CStr;
++
++    /// The module's `THIS_MODULE` pointer.
++    const THIS_MODULE: ThisModule;
+ }
+ 
+ /// Equivalent to `THIS_MODULE` in the C API.
+diff --git a/rust/macros/module.rs b/rust/macros/module.rs
+index 06c18e2075083..b6d7b3299fbf9 100644
+--- a/rust/macros/module.rs
++++ b/rust/macros/module.rs
+@@ -497,28 +497,28 @@ pub(crate) fn module(info: ModuleInfo) -> Result<TokenStream> {
+         /// Used by the printing macros, e.g. [`info!`].
+         const __LOG_PREFIX: &[u8] = #name_cstr.to_bytes_with_nul();
+ 
+-        // SAFETY: `__this_module` is constructed by the kernel at load time and will not be
+-        // freed until the module is unloaded.
+-        #[cfg(MODULE)]
+-        static THIS_MODULE: ::kernel::ThisModule = unsafe {
+-            extern "C" {
+-                static __this_module: ::kernel::types::Opaque<::kernel::bindings::module>;
+-            };
+-
+-            ::kernel::ThisModule::from_ptr(__this_module.get())
+-        };
+-
+-        #[cfg(not(MODULE))]
+-        static THIS_MODULE: ::kernel::ThisModule = unsafe {
+-            ::kernel::ThisModule::from_ptr(::core::ptr::null_mut())
+-        };
+-
+         /// The `LocalModule` type is the type of the module created by `module!`,
+         /// `module_pci_driver!`, `module_platform_driver!`, etc.
+         type LocalModule = #type_;
+ 
+         impl ::kernel::ModuleMetadata for #type_ {
+             const NAME: &'static ::kernel::str::CStr = #name_cstr;
++
++            #[cfg(MODULE)]
++            const THIS_MODULE: ::kernel::ThisModule = {
++                extern "C" {
++                    static __this_module: ::kernel::types::Opaque<::kernel::bindings::module>;
++                }
++
++                // SAFETY: `__this_module` is constructed by the kernel at load time
++                // and lives until the module is unloaded.
++                unsafe { ::kernel::ThisModule::from_ptr(__this_module.get()) }
++            };
++
++            #[cfg(not(MODULE))]
++            const THIS_MODULE: ::kernel::ThisModule = unsafe {
++                ::kernel::ThisModule::from_ptr(::core::ptr::null_mut())
++            };
+         }
+ 
+         // Double nested modules, since then nobody can access the public items inside.
+@@ -616,7 +616,7 @@ pub extern "C" fn #ident_exit() {
+                 /// This function must only be called once.
+                 unsafe fn __init() -> ::kernel::ffi::c_int {
+                     let initer = <super::super::LocalModule as ::kernel::InPlaceModule>::init(
+-                        &super::super::THIS_MODULE
++                        &<super::super::LocalModule as ::kernel::ModuleMetadata>::THIS_MODULE
+                     );
+                     // SAFETY: No data race, since `__MOD` can only be accessed by this module
+                     // and there only `__init` and `__exit` access it. These functions are only
 
 -- 
-Thanks
-Kaitao Cheng
+2.43.0
+
 
