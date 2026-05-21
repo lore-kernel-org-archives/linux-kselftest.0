@@ -1,85 +1,57 @@
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A70E4381B00
-	for <linux-kselftest@vger.kernel.org>; Thu, 21 May 2026 02:59:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF7C8349CF6
+	for <linux-kselftest@vger.kernel.org>; Thu, 21 May 2026 03:24:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779332373; cv=none; b=udJQXOYxqNWKVHn/3UD+lW4D7KT+2PHPwJmtNI7lGjER3SvfRv6S1B0RNK1+LnXblV7+vrasH7SADNvPN/Z7D6OlCGUU74TACah8FycuU0XOL9usGcXXlVf6tbh9kkwsvpotTBGC4KgEuPGlll5zfcHU9T95z6po+fAjZlx/JRk=
+	t=1779333852; cv=none; b=DEMCygtEuRgg3BAMfLIcSYo1SIM5yWrT+nlaITfNPrSd1NtfQQ0IrG3+aiirpXUXKmSh2XaHGivvnjvKiaJImYU6R9Xn+Klpw7nPtjdEbD3ieG86T7SEvYOdLi3V/1WIXQ+7bLtFSFyqp4+jOa2UGpWE4mRjtKisZOSpPzO5YY8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779332373; c=relaxed/simple;
-	bh=QXGk+N7UKdb5UEa/p2m6D1TJ82lDDhUIOB4+GhpmpN8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=K6rx6TxTyImnSd3FNCls09EBg+3ZA11KccZAImuzI9Qj1O5Qf7Ru6j1tsY17sHvF8C88dWgIYAlbChyg9qE2r08k7dYqnhS/Nm9LKdsKMhBzqxAbfmWY+UEilIDPL1y24nX7mrVNod+4P1VGESP1UzG2f9aH/oC7IBo+gt+7CDw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=northecho.dev; spf=none smtp.mailfrom=northecho.dev; dkim=pass (2048-bit key) header.d=northecho-dev.20251104.gappssmtp.com header.i=@northecho-dev.20251104.gappssmtp.com header.b=afIBeJOe; arc=none smtp.client-ip=209.85.128.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=northecho.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=northecho.dev
+	s=arc-20240116; t=1779333852; c=relaxed/simple;
+	bh=q4c8WXnB8lxHVxUfr2qVebsdsB0bkjj3uGw3W6FzsV4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IEESBLEVHjUpPq5hmFOHx/LrZXiUiArl+9I5FAkw+gwqsLXnMsoo05k17rrfPCF8YyzU0S51AYSY0KKW+Bcs+2UiXmeVvH/6WhpPPtTr+/ualq6+eRUSkhKzeOtoUApgjvjOtKdPHQz5IZrg/T9RLxefU/jq2OtBmRlJZzGFmFw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=CL5Hzuhe; arc=none smtp.client-ip=95.215.58.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=northecho-dev.20251104.gappssmtp.com header.i=@northecho-dev.20251104.gappssmtp.com header.b="afIBeJOe"
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-7bd92ed4f08so5586887b3.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 May 2026 19:59:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=northecho-dev.20251104.gappssmtp.com; s=20251104; t=1779332371; x=1779937171; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mKA+nc2M+9i0cbABiaxwn8cSkvOwNM/DV9gdI4m3CAA=;
-        b=afIBeJOeskmJecIQ3YRoY3doQjgi9DV7RLSyaUKCL2fPbZ5ZtCDp8PVq666VPvyHH6
-         Yv+c7lRf7I0iXS8YFqKuEFWVVlvYKDycRSUwu+y5gBMz3PnScobQg2kVx1SRebRB2fnl
-         lah57OWk/tw59HE96/3pz+Orr8bX9kXDmBjl8UhWq2LVk1/GunPB4qXhzsYF/QIC9Lp3
-         sEsOFD/JoPOYgZWsF+hYNLuQdOKw+IXzs8nFW1T/cent859Iec2MyGMfd8NfWzwk04a9
-         GSqiwOOQYXX7IXirTRhzuJMp8rq16XqTYnWkocXuLacDSwNLJCc9Di06b/hGBehvAa8l
-         Dh6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779332371; x=1779937171;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=mKA+nc2M+9i0cbABiaxwn8cSkvOwNM/DV9gdI4m3CAA=;
-        b=Uo/3p6DuDzDzP2+3ZA/J2MQlUspRtAibWm9/fLSOzjG/P1rIcC+O1ppqKJ1s4F7UPg
-         xkNMcUQUqYf927dZjkZ7bmSPwePSVZeL13YTTB6jqU3H/x+P84AvSfo4GJS8HfU9v658
-         wH+TeKSxYts02jSrSnTg0vjei8XUzUz8/ETwyCAIzfWILr6moERyhpvXg4rKr7ydqu5c
-         IYfQgc89Y0WBCjmb487eiOiS9foC+aMp2kxGKl1rB7d2doK6TOFqvwWROTtkDGDTO844
-         ZcBkT5Q8ONZ/9S3/hq0Hb8OgZ/9vIXts8/IPjtSy3Gyb0G5OU1HLUlrN7zCMh32cfE4/
-         ynrQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9f6lp65ibAn6b6RuHwK9t9HS8xLcpqT8mJ2jb431yACON3yspPJTuNPRN+9ayB1pklOTy3YryDhffWJ3RJaTM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwzBdS/La+mq0XAg4bur3CnpAZJReSAmLOTHIWljVXgfKjY+GCv
-	o4SiLDaAKywCQs7FujShXqeUxn/LHNn61walhfMV1s/FTvKZWratQt231qkmUp8Xq0ic
-X-Gm-Gg: Acq92OFpwtXlqv8xqG+P3HzvaIuMltQcsjsuukpdhfwPN/+XcvYSRytXj/LBu0cgIWw
-	ffrwP+JOKn1u+udHJpJPRf6K5zepydUOf3pawmNfKwXAiXUZzQA3h1R7u8F8P9+XcDffLQmj0Bp
-	QdELcheQ9506uIsWbaSYP9vh/kXl1RI/yKKsg0c6mQxuofnPd3u0SWTH/xOtkbu44IKdGQuBp2w
-	PXl/orcocJYYHEXphbR/QHpG518F31b30dwvdyTswVAQ4//EIhq6AmS2xOjeluyKEhE6rubio6I
-	tAkY73Bc9rAxhhN7NvVOoexkqR08nIUJAd5AV6tgrbhZlXZJh6muxeJnuXAYE015B5VBAaOK+jC
-	FNDEVFhkVSjogBwQKkha7RF61jS9+D+/wTg3V7sjAUhKvP9mp3KuwjFadX3CzjjImUKoEDs5vTp
-	ghkY9zSQ01MDJLCnB472BUblPqf7Rdn2rig8kVVBPsCWYCU+uBlLYtQ3KPjQ1pMEVTZs1TVKvjy
-	/EE5Y8cG9A4yM0=
-X-Received: by 2002:a05:690e:bca:b0:650:20d6:7098 with SMTP id 956f58d0204a3-65eae3c0194mr463771d50.4.1779332370609;
-        Wed, 20 May 2026 19:59:30 -0700 (PDT)
-Received: from kelso.tail8e61da.ts.net (99-10-92-174.lightspeed.rlghnc.sbcglobal.net. [99.10.92.174])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-65e0d86c850sm10092743d50.1.2026.05.20.19.59.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 May 2026 19:59:30 -0700 (PDT)
-From: Christopher Lusk <clusk@northecho.dev>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: John Fastabend <john.fastabend@gmail.com>,
-	Sabrina Dubroca <sd@queasysnail.net>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	netdev@vger.kernel.org,
-	bpf@vger.kernel.org,
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="CL5Hzuhe"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1779333848;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=KA35Xk2FG3OvOEapaqyj7NKCdRj4dTxzL2++7MtOpnI=;
+	b=CL5HzuhegMJtpkL/u51K7oeHg/sHn9M+nEMbNPv9xUGr7MxcgDHS0rnZbXuKxCVWqhSB8A
+	QyCYyWFlhiGrKtspbHky047D4ObKIN+YbzofSKuq/4ckerlOIixt9jXuLokSSB0bDbTpVG
+	6cezUimBL0mBul7zKbcsANXs7rtJLuc=
+From: Kaitao Cheng <kaitao.cheng@linux.dev>
+To: ast@kernel.org,
+	corbet@lwn.net,
+	martin.lau@linux.dev,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	shuah@kernel.org,
+	chengkaitao@kylinos.cn,
+	skhan@linuxfoundation.org,
+	memxor@gmail.com
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	vmalik@redhat.com,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH net v2 2/2] selftests: net: add kTLS async split record regression
-Date: Wed, 20 May 2026 22:58:40 -0400
-Message-ID: <20260521025840.976378-3-clusk@northecho.dev>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260521025840.976378-1-clusk@northecho.dev>
-References: <20260521025840.976378-1-clusk@northecho.dev>
+	Kaitao Cheng <kaitao.cheng@linux.dev>
+Subject: [PATCH bpf-next v11 0/8] bpf: Extend the bpf_list family of APIs
+Date: Thu, 21 May 2026 11:22:58 +0800
+Message-ID: <20260521032306.97118-1-kaitao.cheng@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -87,480 +59,121 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Add a kTLS TX regression test for the BPF sk_msg apply_bytes
-split-record path. The test sends four 4096-byte writes through
-a sockmap verdict program that applies 512-byte verdict windows,
-then verifies that the peer receives the full TLS-protected stream.
+In BPF, a list can only be used to implement a stack structure.
+Due to an incomplete API set, only FIFO or LIFO operations are
+supported. The patches enhance the BPF list API, making it more
+list-like.
 
-Run the case once with the synchronous provider and once after
-instantiating an async pcrypt gcm(aes) provider. Vulnerable kernels
-silently truncate the async run because the split open-record remainder
-is lost when encryption returns -EINPROGRESS.
+Five new kfuncs have been added:
+bpf_list_del: remove a node from the list
+bpf_list_add_impl: insert a node after a given list node
+bpf_list_is_first: check if a node is the first in the list
+bpf_list_is_last: check if a node is the last in the list
+bpf_list_empty: check if the list is empty
 
-Validate the loaded BPF program fd before attaching it so setup failures
-are reported directly instead of being passed to bpf_prog_attach().
+And add test cases for the aforementioned kfuncs.
 
-Signed-off-by: Christopher Lusk <clusk@northecho.dev>
-Assisted-by: Codex:gpt-5.5
-Assisted-by: Claude:claude-opus-4-7
----
- tools/testing/selftests/net/Makefile          |   5 +
- .../selftests/net/ktls_async_split.bpf.c      |  24 ++
- .../testing/selftests/net/ktls_async_split.c  | 393 ++++++++++++++++++
- 3 files changed, 422 insertions(+)
- create mode 100644 tools/testing/selftests/net/ktls_async_split.bpf.c
- create mode 100644 tools/testing/selftests/net/ktls_async_split.c
+Changes in v11:
+- Move [PATCH v10 7/8] earlier (Eduard Zingerman)
+- Fix the synchronization issue in [PATCH v10 2/8] (Eduard Zingerman,
+  Alexei Starovoitov)
 
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index f3da38c54..0435327e9 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -179,6 +179,7 @@ TEST_GEN_PROGS := \
- 	epoll_busy_poll \
- 	icmp_rfc4884 \
- 	ipv6_fragmentation \
-+	ktls_async_split \
- 	proc_net_pktgen \
- 	reuseaddr_conflict \
- 	reuseport_bpf \
-@@ -236,3 +237,7 @@ $(OUTPUT)/bind_bhash: LDLIBS += -lpthread
- $(OUTPUT)/io_uring_zerocopy_tx: CFLAGS += -I../../../include/
- 
- include bpf.mk
-+
-+$(OUTPUT)/ktls_async_split: CFLAGS += -I../../../lib
-+$(OUTPUT)/ktls_async_split: LDLIBS += $(BPFOBJ) -lelf -lz
-+$(OUTPUT)/ktls_async_split: $(BPFOBJ)
-diff --git a/tools/testing/selftests/net/ktls_async_split.bpf.c b/tools/testing/selftests/net/ktls_async_split.bpf.c
-new file mode 100644
-index 000000000..c7caafb73
---- /dev/null
-+++ b/tools/testing/selftests/net/ktls_async_split.bpf.c
-@@ -0,0 +1,24 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+
-+#ifndef SK_PASS
-+#define SK_PASS 1
-+#endif
-+
-+char LICENSE[] SEC("license") = "GPL";
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_SOCKMAP);
-+	__uint(max_entries, 4);
-+	__type(key, __u32);
-+	__type(value, int);
-+} sock_map SEC(".maps");
-+
-+SEC("sk_msg")
-+int apply_bytes_verdict(struct sk_msg_md *msg)
-+{
-+	bpf_msg_apply_bytes(msg, 512);
-+	return SK_PASS;
-+}
-diff --git a/tools/testing/selftests/net/ktls_async_split.c b/tools/testing/selftests/net/ktls_async_split.c
-new file mode 100644
-index 000000000..5601ce4b5
---- /dev/null
-+++ b/tools/testing/selftests/net/ktls_async_split.c
-@@ -0,0 +1,393 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#define _GNU_SOURCE
-+
-+#include <arpa/inet.h>
-+#include <bpf/bpf.h>
-+#include <bpf/libbpf.h>
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <linux/if_alg.h>
-+#include <linux/bpf.h>
-+#include <linux/tls.h>
-+#include <netinet/in.h>
-+#include <netinet/tcp.h>
-+#include <signal.h>
-+#include <stdbool.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/resource.h>
-+#include <sys/socket.h>
-+#include <sys/types.h>
-+#include <sys/wait.h>
-+#include <unistd.h>
-+
-+#include "kselftest.h"
-+
-+#ifndef SOL_TLS
-+#define SOL_TLS 282
-+#endif
-+
-+#define EXPECTED_BYTES 17312
-+
-+static void fill_seq(unsigned char *p, size_t n, unsigned char seed)
-+{
-+	size_t i;
-+
-+	for (i = 0; i < n; i++)
-+		p[i] = (unsigned char)(seed + i);
-+}
-+
-+static void bump_memlock(void)
-+{
-+	struct rlimit r = { RLIM_INFINITY, RLIM_INFINITY };
-+
-+	setrlimit(RLIMIT_MEMLOCK, &r);
-+}
-+
-+static int run_cmd(const char *cmd)
-+{
-+	int ret = system(cmd);
-+
-+	if (ret == -1)
-+		return -1;
-+	if (WIFEXITED(ret))
-+		return WEXITSTATUS(ret);
-+	return 1;
-+}
-+
-+static int instantiate_aead(const char *name)
-+{
-+	struct sockaddr_alg sa = {
-+		.salg_family = AF_ALG,
-+	};
-+	int fd, ret;
-+
-+	strncpy((char *)sa.salg_type, "aead", sizeof(sa.salg_type) - 1);
-+	strncpy((char *)sa.salg_name, name, sizeof(sa.salg_name) - 1);
-+
-+	fd = socket(AF_ALG, SOCK_SEQPACKET, 0);
-+	if (fd < 0)
-+		return -errno;
-+
-+	ret = bind(fd, (struct sockaddr *)&sa, sizeof(sa));
-+	if (ret < 0)
-+		ret = -errno;
-+
-+	close(fd);
-+	return ret;
-+}
-+
-+static bool have_async_pcrypt(void)
-+{
-+	FILE *f = fopen("/proc/crypto", "r");
-+	char line[256];
-+	bool in_driver = false;
-+	bool async = false;
-+
-+	if (!f)
-+		return false;
-+
-+	while (fgets(line, sizeof(line), f)) {
-+		if (!strncmp(line, "driver", 6)) {
-+			in_driver = strstr(line, "pcrypt(") &&
-+				    strstr(line, "gcm");
-+			async = false;
-+			continue;
-+		}
-+		if (in_driver && !strncmp(line, "async", 5)) {
-+			async = strstr(line, "yes");
-+			if (async) {
-+				fclose(f);
-+				return true;
-+			}
-+		}
-+	}
-+
-+	fclose(f);
-+	return false;
-+}
-+
-+static bool module_loaded(const char *name)
-+{
-+	FILE *f = fopen("/proc/modules", "r");
-+	char line[256], mod[128];
-+
-+	if (!f)
-+		return false;
-+
-+	while (fgets(line, sizeof(line), f)) {
-+		if (sscanf(line, "%127s", mod) == 1 && !strcmp(mod, name)) {
-+			fclose(f);
-+			return true;
-+		}
-+	}
-+
-+	fclose(f);
-+	return false;
-+}
-+
-+static int make_listener(unsigned short *port)
-+{
-+	struct sockaddr_in addr = {
-+		.sin_family = AF_INET,
-+		.sin_addr.s_addr = htonl(INADDR_LOOPBACK),
-+		.sin_port = 0,
-+	};
-+	socklen_t len = sizeof(addr);
-+	int fd, one = 1;
-+
-+	fd = socket(AF_INET, SOCK_STREAM, 0);
-+	if (fd < 0)
-+		return -errno;
-+
-+	if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(one)) < 0)
-+		goto err;
-+	if (bind(fd, (struct sockaddr *)&addr, sizeof(addr)) < 0)
-+		goto err;
-+	if (listen(fd, 1) < 0)
-+		goto err;
-+	if (getsockname(fd, (struct sockaddr *)&addr, &len) < 0)
-+		goto err;
-+
-+	*port = ntohs(addr.sin_port);
-+	return fd;
-+
-+err:
-+	close(fd);
-+	return -errno;
-+}
-+
-+static int connect_client(unsigned short port)
-+{
-+	struct sockaddr_in addr = {
-+		.sin_family = AF_INET,
-+		.sin_addr.s_addr = htonl(INADDR_LOOPBACK),
-+		.sin_port = htons(port),
-+	};
-+	int fd;
-+
-+	fd = socket(AF_INET, SOCK_STREAM, 0);
-+	if (fd < 0)
-+		return -errno;
-+	if (connect(fd, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
-+		close(fd);
-+		return -errno;
-+	}
-+
-+	return fd;
-+}
-+
-+static int make_tcp_pair(int *client_fd, int *peer_fd)
-+{
-+	unsigned short port = 0;
-+	int listen_fd, c, p;
-+
-+	listen_fd = make_listener(&port);
-+	if (listen_fd < 0)
-+		return listen_fd;
-+
-+	c = connect_client(port);
-+	if (c < 0) {
-+		close(listen_fd);
-+		return c;
-+	}
-+
-+	p = accept(listen_fd, NULL, NULL);
-+	close(listen_fd);
-+	if (p < 0) {
-+		close(c);
-+		return -errno;
-+	}
-+
-+	*client_fd = c;
-+	*peer_fd = p;
-+	return 0;
-+}
-+
-+static int enable_ktls_tx(int fd)
-+{
-+	struct tls12_crypto_info_aes_gcm_128 info;
-+	static const char ulp[] = "tls";
-+
-+	if (setsockopt(fd, IPPROTO_TCP, TCP_ULP, ulp, sizeof(ulp)) < 0)
-+		return -errno;
-+
-+	memset(&info, 0, sizeof(info));
-+	info.info.version = TLS_1_2_VERSION;
-+	info.info.cipher_type = TLS_CIPHER_AES_GCM_128;
-+	fill_seq(info.iv, sizeof(info.iv), 0x11);
-+	fill_seq(info.key, sizeof(info.key), 0x22);
-+	fill_seq(info.salt, sizeof(info.salt), 0x33);
-+	fill_seq(info.rec_seq, sizeof(info.rec_seq), 0x44);
-+
-+	if (setsockopt(fd, SOL_TLS, TLS_TX, &info, sizeof(info)) < 0)
-+		return -errno;
-+
-+	return 0;
-+}
-+
-+static int attach_bpf(const char *obj_path, int sock_fd, struct bpf_object **obj_out)
-+{
-+	struct bpf_object *obj;
-+	struct bpf_program *prog;
-+	int map_fd, prog_fd;
-+	__u32 key = 0;
-+
-+	obj = bpf_object__open_file(obj_path, NULL);
-+	if (libbpf_get_error(obj))
-+		return -EINVAL;
-+	if (bpf_object__load(obj))
-+		return -EINVAL;
-+
-+	prog = bpf_object__find_program_by_name(obj, "apply_bytes_verdict");
-+	if (!prog)
-+		return -ENOENT;
-+	prog_fd = bpf_program__fd(prog);
-+	if (prog_fd < 0)
-+		return prog_fd;
-+
-+	map_fd = bpf_object__find_map_fd_by_name(obj, "sock_map");
-+	if (map_fd < 0)
-+		return -ENOENT;
-+
-+	if (bpf_prog_attach(prog_fd, map_fd, BPF_SK_MSG_VERDICT, 0))
-+		return -errno;
-+	if (bpf_map_update_elem(map_fd, &key, &sock_fd, BPF_ANY))
-+		return -errno;
-+
-+	*obj_out = obj;
-+	return 0;
-+}
-+
-+static void server_loop(int fd, int out_fd)
-+{
-+	unsigned char buf[16384];
-+	int total = 0;
-+
-+	for (;;) {
-+		ssize_t n = read(fd, buf, sizeof(buf));
-+
-+		if (n < 0) {
-+			if (errno == EINTR)
-+				continue;
-+			_exit(1);
-+		}
-+		if (!n)
-+			break;
-+		total += (int)n;
-+	}
-+
-+	(void)write(out_fd, &total, sizeof(total));
-+	close(fd);
-+	close(out_fd);
-+	_exit(0);
-+}
-+
-+static int run_case(const char *obj_path, int *server_read)
-+{
-+	struct bpf_object *obj = NULL;
-+	unsigned char buf[4096];
-+	int client_fd = -1, peer_fd = -1, pipefd[2] = { -1, -1 };
-+	pid_t pid;
-+	int status, ret, i;
-+	ssize_t n, got;
-+
-+	ret = make_tcp_pair(&client_fd, &peer_fd);
-+	if (ret)
-+		return ret;
-+	if (pipe(pipefd)) {
-+		close(client_fd);
-+		close(peer_fd);
-+		return -errno;
-+	}
-+
-+	pid = fork();
-+	if (pid < 0) {
-+		close(client_fd);
-+		close(peer_fd);
-+		close(pipefd[0]);
-+		close(pipefd[1]);
-+		return -errno;
-+	}
-+	if (!pid) {
-+		close(pipefd[0]);
-+		server_loop(peer_fd, pipefd[1]);
-+	}
-+
-+	close(peer_fd);
-+	close(pipefd[1]);
-+
-+	ret = attach_bpf(obj_path, client_fd, &obj);
-+	if (ret)
-+		goto out;
-+	ret = enable_ktls_tx(client_fd);
-+	if (ret)
-+		goto out;
-+
-+	fill_seq(buf, sizeof(buf), 0x80);
-+	for (i = 0; i < 4; i++) {
-+		n = send(client_fd, buf, sizeof(buf), 0);
-+		if (n != sizeof(buf)) {
-+			ret = n < 0 ? -errno : -EIO;
-+			goto out;
-+		}
-+	}
-+
-+	shutdown(client_fd, SHUT_WR);
-+	got = read(pipefd[0], server_read, sizeof(*server_read));
-+	if (got != sizeof(*server_read))
-+		ret = -EIO;
-+
-+out:
-+	close(client_fd);
-+	close(pipefd[0]);
-+	if (obj)
-+		bpf_object__close(obj);
-+	if (waitpid(pid, &status, 0) < 0)
-+		return -errno;
-+	if (!ret && (!WIFEXITED(status) || WEXITSTATUS(status)))
-+		ret = -EIO;
-+	return ret;
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	const char *obj_path = argc > 1 ? argv[1] : "./ktls_async_split.bpf.o";
-+	int sync_read = 0, async_read = 0, ret;
-+
-+	ksft_print_header();
-+	ksft_set_plan(2);
-+	bump_memlock();
-+
-+	if (run_cmd("modprobe tls >/dev/null 2>&1") && !module_loaded("tls"))
-+		ksft_exit_skip("missing tls module\n");
-+
-+	/* Keep the first run on the synchronous provider. */
-+	run_cmd("modprobe -r pcrypt >/dev/null 2>&1");
-+	ret = run_case(obj_path, &sync_read);
-+	if (ret)
-+		ksft_exit_fail_msg("sync case failed: %s\n", strerror(-ret));
-+	if (sync_read != EXPECTED_BYTES)
-+		ksft_exit_fail_msg("sync case read %d, expected %d\n",
-+				   sync_read, EXPECTED_BYTES);
-+	ksft_test_result_pass("sync provider transmits split record\n");
-+
-+	run_cmd("modprobe af_alg algif_aead pcrypt >/dev/null 2>&1");
-+	ret = instantiate_aead("pcrypt(generic-gcm-vaes-avx2)");
-+	if (ret)
-+		ret = instantiate_aead("pcrypt(gcm(aes))");
-+	if (ret || !have_async_pcrypt())
-+		ksft_exit_skip("missing async pcrypt gcm(aes) provider\n");
-+
-+	ret = run_case(obj_path, &async_read);
-+	if (ret)
-+		ksft_exit_fail_msg("async case failed: %s\n", strerror(-ret));
-+	if (async_read != EXPECTED_BYTES)
-+		ksft_exit_fail_msg("async case read %d, expected %d\n",
-+				   async_read, EXPECTED_BYTES);
-+	ksft_test_result_pass("async provider transmits split record\n");
-+
-+	ksft_finished();
-+}
+Changes in v10:
+- Remove the table-driven approach (Ihor Solodrai)
+- Use the __nonown_allowed suffix for bpf_list_del/front/back
+- Add test cases for __nonown_allowed
+
+Changes in v9:
+- Expand table-driven approach coverage (Emil Tsalapatis)
+- Clear list node owner and unlink before drop (Emil Tsalapatis)
+- Remove warnings caused by WARN_ON_ONCE() (Emil Tsalapatis)
+- Introduce the __nonown_allowed suffix (Alexei Starovoitov)
+
+Changes in v8:
+- Use [patch v7 5/5] as the start of the patch series (Leon Hwang)
+- Introduce double pointer prev_ptr in __bpf_list_del
+  (Kumar Kartikeya Dwivedi)
+- Extract refactored __bpf_list_del/add into separate patches (Leon Hwang)
+- Allow bpf_list_front/back result as the prev argument of bpf_list_add
+- Split test cases (Leon Hwang)
+
+Changes in v7:
+- Replace bpf_list_node_is_edge with bpf_list_is_first/is_last
+- Reimplement __bpf_list_del and __bpf_list_add (Kumar Kartikeya Dwivedi)
+- Simplify test cases (Mykyta Yatsenko)
+
+Changes in v6:
+- Merge [patch v5 (2,4,6)/6] into [patch v6 4/5] (Leon Hwang)
+- If list_head was 0-initialized, init it
+- refactor kfunc checks to table-driven approach (Leon Hwang)
+
+Changes in v5:
+- Fix bpf_obj leak on bpf_list_add_impl error
+
+Changes in v4:
+- [patch v3 1/6] Revert to version v1 (Alexei Starovoitov)
+- Change the parameters of bpf_list_add_impl to (head, new, prev, ...)
+
+Changes in v3:
+- Add a new lock_rec member to struct bpf_reference_state for lock
+  holding detection.
+- Add test cases to verify that the verifier correctly restricts calls
+  to bpf_list_del when the spin_lock is not held.
+
+Changes in v2:
+- Remove the head parameter from bpf_list_del (Alexei Starovoitov)
+- Add bpf_list_add/is_first/is_last/empty to API and test cases
+  (Alexei Starovoitov)
+
+Link to v10:
+https://lore.kernel.org/all/20260512055919.95716-1-kaitao.cheng@linux.dev/
+
+Link to v9:
+https://lore.kernel.org/all/20260329140506.9595-1-pilgrimtao@gmail.com/
+
+Link to v8:
+https://lore.kernel.org/all/20260316112843.78657-1-pilgrimtao@gmail.com/
+
+Link to v7:
+https://lore.kernel.org/all/20260308134614.29711-1-pilgrimtao@gmail.com/
+
+Link to v6:
+https://lore.kernel.org/all/20260304143459.78059-1-pilgrimtao@gmail.com/
+
+Link to v5:
+https://lore.kernel.org/all/20260304031606.43884-1-pilgrimtao@gmail.com/
+
+Link to v4:
+https://lore.kernel.org/all/20260303135219.33726-1-pilgrimtao@gmail.com/
+
+Link to v3:
+https://lore.kernel.org/all/20260302124028.82420-1-pilgrimtao@gmail.com/
+
+Link to v2:
+https://lore.kernel.org/all/20260225092651.94689-1-pilgrimtao@gmail.com/
+
+Link to v1:
+https://lore.kernel.org/all/20260209025250.55750-1-pilgrimtao@gmail.com/
+
+Kaitao Cheng (8):
+  bpf: refactor __bpf_list_del to take list node pointer
+  bpf: clear list node owner and unlink before drop
+  bpf: allow non-owning list-node args via __nonown_allowed
+  bpf: Introduce the bpf_list_del kfunc.
+  bpf: refactor __bpf_list_add to take insertion point via **prev_ptr
+  bpf: Add bpf_list_add to insert node after a given list node
+  bpf: add bpf_list_is_first/last/empty kfuncs
+  selftests/bpf: Add test cases for
+    bpf_list_del/add/is_first/is_last/empty
+
+ Documentation/bpf/kfuncs.rst                  |  22 +-
+ kernel/bpf/helpers.c                          | 147 ++++--
+ kernel/bpf/verifier.c                         |  44 +-
+ .../selftests/bpf/progs/refcounted_kptr.c     | 421 ++++++++++++++++++
+ 4 files changed, 601 insertions(+), 33 deletions(-)
+
 -- 
-2.54.0
+2.50.1 (Apple Git-155)
 
