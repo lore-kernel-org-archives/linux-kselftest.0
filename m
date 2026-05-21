@@ -1,46 +1,48 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D56D33EDE7E;
-	Thu, 21 May 2026 14:34:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A4D03F0A9F;
+	Thu, 21 May 2026 14:34:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779374079; cv=none; b=PQPNYDZLQP5SF+4uhcxKyueunERSqvCc5/1g4L6UDsBDRAQx4DcdtMP5cqZ1k/X+IBCn3y3/pFPxVefn3KMbbRpffg3D5PBjRzEmuRiFUhUNi55yCWNAxYgXxDh0VLDznGaCWRA33XE0o2YT0YpPMZK3yoaKeQbcm8wNLGY4Nro=
+	t=1779374081; cv=none; b=Q+jEPpae6oyGzfbsI0NUFZUS/zM8MLf8U7qxmxI7IoeUCVXIfLMdxA466IInbT45XjhePjbFdwa2lZCHU8EsSza0ciJhOcVU1Wp/TSyYguaCV55aVje2Pz/XxONAuQlv9+Gx6DTQj2JjXm6ooxL0DD/3Fp45u684vx8AC5/rjGI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779374079; c=relaxed/simple;
-	bh=8tM1Ip+kL/INzmucmor8I4MTEb43F8KCuLBYXYE96QI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=If20yjuPZMWR5zxkONX2ANkKt1CD+HYeRzEi3s1cpdzbWszFsclqEBw+ZH7UPeeVQ1ZJGyaqahcIcfSEITQdmIlJzaIxzKGnZvq0WdPzXlNetESo+7DsnOW/vjIgQdccXq3bS0LeZ/XWd6lqH7N6SOkf5Z1EjLyzKwUhT8d7SFw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jWEiFSk5; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779374081; c=relaxed/simple;
+	bh=mNfg97l0DT5bsgZWe32uZCMNCLcD17spo4z+2wU6rn4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=P2Rfekk8qPHZEoSKZ9/CM20tjfMKYRTJmM3G3w7RLmS1MRb4+oK1hvHSarQuZgq0wKEfasuVYI1iw5RwE/qSsVmgHy1fWrt4ZqVerkJZqkW0OeksgoBRNgz5RJoj4S4bOKuqdzUcTChvV8ZlyEZ9R8NBX0ldAkBQoh03FLzmkkM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ln2jHlAr; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jWEiFSk5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 349ED1F000E9;
-	Thu, 21 May 2026 14:34:37 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ln2jHlAr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D8981F00A3F;
+	Thu, 21 May 2026 14:34:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779374077;
-	bh=oDpHqdp2/FfG8W6otjqNlnOFXaYu8wH7zUOP/guV6po=;
-	h=From:To:Cc:Subject:Date;
-	b=jWEiFSk53GduYLLCUcNwNsnavil23yX3zXvfJ2cxVG+reQXF35lvztNJ6uNseFk16
-	 MvWA7k/XHMtEkdJloi/jQyycdC0GfEdaZPOd86TcUFcsxpZVc6gjUIjZI1FQVZALdS
-	 ezDdvqO151RFHncBqVl+pljPYy0D5oc6WhLhwSIUSLRVwIe1+n5OgonZ4z42zkOgpe
-	 heUNBdL9AKfTE8OG8a4dAPIQCHLDHLtkk2iADsiLAzVF3beAt2l/EIaYOuZbPyu6LV
-	 58x1F6+2i7xYNeetZtVI7XcNyZWpekxX5YHCIE/xxtYkv2+DgJ3Cvk+3BHQh3NQmLr
-	 oVII3c3q1GNwg==
+	s=k20260515; t=1779374078;
+	bh=7YG6GjDiTDF7+hhcDJxfKB/57kZkbDeh0ESzV1mlaFU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=ln2jHlAr4jbvgui7gZ1N521h/uXjENEZDiuJzweT8xNGaj/u8J8BQMiQcDOiNCDyz
+	 KEBnafI/4+P6m+qldnu7G2ah71+fkRmLzz2A3/PPDNSAJ6JwcLjd/MpfDMoY9AwMyi
+	 ngtmvFOlAZ+b4lnGDaPp5R9eU/FJQmm5aUvuyDHKkGN2+p/+3a9SHmIbl1/spRvL4k
+	 BfUgZ6JPZZpAe+1Q7chPmvULUqca4KDkYnWCsl38aLBG4z3qhgkXwcGKfKoI99m1si
+	 Me0m9R6UJueK0iK/77Zwu8v2AKhrjrbFSkJCSOMVIhcVlPcLEuHFWtpp5m/+dkuans
+	 s4FVf/cu4lCzQ==
 From: SeongJae Park <sj@kernel.org>
 To: 
 Cc: SeongJae Park <sj@kernel.org>,
 	Andrew Morton <akpm@linux-foundation.org>,
 	Brendan Higgins <brendan.higgins@linux.dev>,
 	David Gow <davidgow@davidgow.net>,
-	Shuah Khan <shuah@kernel.org>,
 	damon@lists.linux.dev,
 	kunit-dev@googlegroups.com,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-mm@kvack.org
-Subject: [RFC PATCH v1.2 00/14] mm/damon: minor improvements for code readability and tests
-Date: Thu, 21 May 2026 07:34:10 -0700
-Message-ID: <20260521143428.83157-1-sj@kernel.org>
+Subject: [RFC PATCH v1.2 04/14] mm/damon/tests/vaddr-kunit: replace damon_add_region() with damon_set_regions()
+Date: Thu, 21 May 2026 07:34:14 -0700
+Message-ID: <20260521143428.83157-5-sj@kernel.org>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260521143428.83157-1-sj@kernel.org>
+References: <20260521143428.83157-1-sj@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -49,60 +51,65 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Implement minor improvements on code readability and tests for DAMON.
+DAMON virtual address operation set (vaddr) unit tests is using
+damon_add_region() for setup of DAMON monitoring target region
+boundaries setup.  But, damon_set_regions() is designed for exactly the
+purpose.  All other DAMON API callers use the function for the purpose.
+Replace damon_add_region() usage in the unit tests with
+damon_set_regions(), for unifying the use case and reducing the
+maintenance cost.
 
-First seven patches are for DAMON code readability and resulting
-maintenance.  Patches 1 and 2 make damon_set_regions() safer and easier
-to read.  Patches 3 and 4 remove fragmented DAMON API use cases. Patches
-5-7 hides unused core functions that are unnecessarily exposed to API
-callers.
+Signed-off-by: SeongJae Park <sj@kernel.org>
+---
+ mm/damon/tests/vaddr-kunit.h | 27 ++++++++++++++++++++-------
+ 1 file changed, 20 insertions(+), 7 deletions(-)
 
-The following seven patches are for DAMON tests improvement.  Patches 8
-and 9 adds and removes DAMON_DEBUG_SANITY verifications to ensure
-reasonable test coverage without too high overhead.  Patch 10 adds a new
-kunit test for damon_set_regions().  Patch 11 makes sysfs.py selftest
-more gracefully finishes under test failures.  Patches 12-13 adds simple
-sysfs.sh test cases for the monitoring intervals goal directory, the
-addr_unit file and the pause file.
-
-Changes from RFC v1.1
-- RFC v1.1: https://lore.kernel.org/20260521035349.87565-1-sj@kernel.org
-- Free DAMON target in vaddr unit test fail-out path.
-Changes from RFC v1
-- RFC v1: https://lore.kernel.org/20260520062858.167011-1-sj@kernel.org
-- Handle damon_set_regions() failure in vaddr unit test.
-- Free ranges array in vaddr unit test.
-- Fix wrong region address verification.
-- Fix typos in selftest: s/exit/exist/
-
-SeongJae Park (14):
-  mm/damon/core: safely handle no region case in damon_set_regions()
-  mm/damon/core: do not use region out of a loop in damon_set_regions()
-  samples/damon/mtier: replace damon_add_region() with
-    damon_set_regions()
-  mm/damon/tests/vaddr-kunit: replace damon_add_region() with
-    damon_set_regions()
-  mm/damon/core: hide damon_add_region()
-  mm/damon/core: hide damon_insert_region()
-  mm/damon/core: hide damon_destroy_region()
-  mm/damon/core: add kdamond_call() debug_sanity check
-  mm/damon/core: remove damon_verify_nr_regions()
-  mm/damon/tests/core-kunit: add damon_set_regions() test cases
-  selftests/damon/sysfs.py: stop kdamonds before failing
-  selftests/damon/sysfs.sh: test monitoring intervals goal dir
-  selftests/damon/sysfs.sh: test addr_unit file existence
-  selftests/damon/sysfs.sh: test pause file existence
-
- include/linux/damon.h                  |  13 ---
- mm/damon/core.c                        |  92 ++++++++++++----
- mm/damon/tests/core-kunit.h            | 142 +++++++++++++++++++++----
- mm/damon/tests/vaddr-kunit.h           |  27 +++--
- samples/damon/mtier.c                  |  10 +-
- tools/testing/selftests/damon/sysfs.py |   4 +
- tools/testing/selftests/damon/sysfs.sh |  14 +++
- 7 files changed, 233 insertions(+), 69 deletions(-)
-
-
-base-commit: ac6b83c7bf3671e8ff0d541cf03e6eaeed00a79e
+diff --git a/mm/damon/tests/vaddr-kunit.h b/mm/damon/tests/vaddr-kunit.h
+index 98e734d77d517..563fbc7e3f448 100644
+--- a/mm/damon/tests/vaddr-kunit.h
++++ b/mm/damon/tests/vaddr-kunit.h
+@@ -132,22 +132,35 @@ static void damon_do_test_apply_three_regions(struct kunit *test,
+ 				unsigned long *expected, int nr_expected)
+ {
+ 	struct damon_target *t;
++	struct damon_addr_range *ranges;
+ 	struct damon_region *r;
+ 	int i;
+ 
+ 	t = damon_new_target();
+ 	if (!t)
+ 		kunit_skip(test, "target alloc fail");
++
++	ranges = kmalloc_array(nr_regions / 2, sizeof(*ranges), GFP_KERNEL);
++	if (!ranges) {
++		damon_destroy_target(t, NULL);
++		kunit_skip(test, "ranges alloc fail");
++	}
+ 	for (i = 0; i < nr_regions / 2; i++) {
+-		r = damon_new_region(regions[i * 2], regions[i * 2 + 1]);
+-		if (!r) {
+-			damon_destroy_target(t, NULL);
+-			kunit_skip(test, "region alloc fail");
+-		}
+-		damon_add_region(r, t);
++		ranges[i].start = regions[i * 2];
++		ranges[i].end = regions[i * 2 + 1];
+ 	}
++	if (damon_set_regions(t, ranges, nr_regions / 2,
++				DAMON_MIN_REGION_SZ)) {
++		kfree(ranges);
++		damon_destroy_target(t, NULL);
++		kunit_skip(test, "damon_set_regions() fail");
++	}
++	kfree(ranges);
+ 
+-	damon_set_regions(t, three_regions, 3, DAMON_MIN_REGION_SZ);
++	if (damon_set_regions(t, three_regions, 3, DAMON_MIN_REGION_SZ)) {
++		damon_destroy_target(t, NULL);
++		kunit_skip(test, "second damon_set_regions() fail");
++	}
+ 
+ 	for (i = 0; i < nr_expected / 2; i++) {
+ 		r = __nth_region_of(t, i);
 -- 
 2.47.3
