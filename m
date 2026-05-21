@@ -1,165 +1,334 @@
-Received: from mail-wm1-f66.google.com (mail-wm1-f66.google.com [209.85.128.66])
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 930BB36A36B
-	for <linux-kselftest@vger.kernel.org>; Thu, 21 May 2026 16:01:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9642C37C0E3
+	for <linux-kselftest@vger.kernel.org>; Thu, 21 May 2026 16:26:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779379306; cv=none; b=gCDpCMxQB1eC5jhHQg7AuUVl04txowb9qbNoTIlEW2LJysVtu/642q/Qt74eAjvRqlwBJDKIhwJHq1c3UFc5EwJZqukt7D1iPBpffBg0p1aQESSYz7nyxJwYVmvqrouFH1SyApI7HDK9GojVxivhvalreugJmF9YQjJbIBgd+lQ=
+	t=1779380778; cv=none; b=EwUF8T0AuoChZt5ug1eaFCIV5QGisY8zlU4GM3F9LgZp9TYWXCy7LS6MvCIOpYUAexAGv/KPdsyiCQ+0xOqiHNp/VY3SPZwkrRabDp+r6RlfEkkuJO0+i0dUdpbt29XBDBa0oL82xxbdPYFaYW9QYY5a7rAnHq/MQG8KUqUJVuA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779379306; c=relaxed/simple;
-	bh=4zM1ugNCLmNapDX1aXtA0pmcHFvT7iOMdAhWydF0hF8=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=CrDexUW4FD1aQuLwFvHqeNBi9YAlWOx2Px1zzRZEcqeeluZTeHYQIVLgJstsjtiZnsCZPLnML4MvLjTQ8hBudHqvSynoL1E1MjA7XqVkJeGucHN5GV7lJui7eqJrrN+ZYznAhzCOMbsvbUKsVifr8ko1BFBktAyRmZES8vBXMhk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f66.google.com with SMTP id 5b1f17b1804b1-48e6db3ff7eso33073895e9.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 May 2026 09:01:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779379303; x=1779984103;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:to:subject:cc:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+	s=arc-20240116; t=1779380778; c=relaxed/simple;
+	bh=DHXW2vxPeh0rbI5oFBZWIWB2Z4TndodVPBY1uRpcX8U=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=snpWpjd3dBv4jwMoWUsXaJ93yuVkmOcwvgxzy0hj3P0MJnuMk9QbDpeDRTL3QnFKmujHOF/FE2YsnXmmv1KY05eOF477EIx4wmoHLo8C693na9r4A8p3AYkCFc4GbJmsboc5HlaH65ht1hWmEpls78hVOMtRccVOpNmHERajrLs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=tenstorrent.com; spf=pass smtp.mailfrom=tenstorrent.com; dkim=pass (2048-bit key) header.d=tenstorrent.com header.i=@tenstorrent.com header.b=HzCsKtt0; arc=none smtp.client-ip=209.85.128.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=tenstorrent.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tenstorrent.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=tenstorrent.com header.i=@tenstorrent.com header.b="HzCsKtt0"
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-7c23248f3a3so67804957b3.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 May 2026 09:26:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tenstorrent.com; s=google; t=1779380775; x=1779985575; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Hb7NHOCqWYUK919ibqoR4LSTe+C7bYY+lOLvabZfEs8=;
-        b=O1ISsk/1J/MN84og0l8eDWH05M0M6sSp4I9ojr60JzHmAqSWJYfEsmxgvA4h2IWaaA
-         qFYROted2f4SU2oJlY88YKaW/ecOX58myp7m56uBn1lVwj0y8y8V8zUmL0HpLkbzwegP
-         c7+CzuMZtSWTd44VuMQJptX+6QcLUeqJjjmvh2sEFp+IA/uufVpF4fGo1x6aD9M3h8gm
-         e3l2sMofEBmkLotLQkypecaRhSPAIulvaI66w53eh0uL/XX33mEhKzdmKirSeMTaOik9
-         Xpdhyj0HP53Jfjl9A+dByFjjseOpc2ULaTH0sT/GlPqvXlhJkMGkRj4U7PboDh4Ei+o8
-         Fu5A==
-X-Forwarded-Encrypted: i=1; AFNElJ/UuZ71aOkuTva196P3fQIhvB0HOj2MQO6jRmHxQ8yta6gz8PJZ7Je6S0rOjE1mj/S30ZqSMVOpP+TQ73ghTAA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwUiah6kHNsWKDk8JmmLLPllWG7qnVFxxL9yo7Y0XSAy4OvqXg5
-	e3wcdbJq7TSsEl1TR6hn3W4JUF9z+w9Ho5zjKlMj8u/r35tHKnLtTCpc
-X-Gm-Gg: Acq92OF654la8eNQPpFivjNFRvmGf7v4jgJXmJ8PlgZIEPSy74gkT7JaKlT0LrbTotQ
-	5KbPhgrOC2onlyxvfzYH6O6FifkxdAC26eZXicJW7UKO+luY/QEmhaHmZRPMRVUT6YMTbkA/wnY
-	ssW63oIf9PYKn9SY0FKfN57vyh+g4b4yNeB1ZYLjiG2+k3Tb7Vl3ZiBbrXFJ3PRM1XQlI5AI1Zs
-	7MFM4KwdX3yMMYFvD+RTgE71+hi9nGjf6nFasewf3ifbBoG1YFohGg8CMqx6C3HZ7o0X7nGQJaq
-	bm9GgCbIEimgymWxGZjrBUJEEYZyKUNghZS1v5s/I9YrIfC/9B/1sYfswBArDXm/CReLfe1TPtY
-	pzSqOM37VeMlJ54i5jDkbTs48Ev6wsSWLdTMz5V895imPE9r1TPePmSyafgSWlsR6M6f/a37yvC
-	a7lNK/Duoh3/lbWxxL6rfgO+dV58I45tMRLDKP5qBQ81LJDbgILp9L5ArTnT9TLo+z531h5C89g
-	ctJ
-X-Received: by 2002:a05:600c:4818:b0:488:904b:f31 with SMTP id 5b1f17b1804b1-490360bac01mr35583275e9.22.1779379302644;
-        Thu, 21 May 2026 09:01:42 -0700 (PDT)
-Received: from [192.168.88.241] (89-24-33-222.nat.epc.tmcz.cz. [89.24.33.222])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49033cdcc01sm82691195e9.0.2026.05.21.09.01.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 May 2026 09:01:42 -0700 (PDT)
-Message-ID: <b8183167-9e8d-4c75-b340-bc3437a14ea0@ovn.org>
-Date: Thu, 21 May 2026 18:01:40 +0200
+        bh=J9FDf4DlWCdet9ejsQPRXtBBttAImyKEU2oe9Q8ZuQA=;
+        b=HzCsKtt0xhoHxNSm2hbHindVUton1kxlQWjBxl9drb5LZg29GlSNPwa97CRRqofDAT
+         ZcfV3/Rci6wWM0Wbv8eqo3TNO5OSD2tvhrJHUMlXu7J7exbT0RawfyR5x4z8oc1Hrquu
+         oV1DahQ9qr9IfkAHmL3U0XUcSFKY0g3AkgTN0RqUKAM5Xnl/dgh8zXnDOzKW8fvvB3+B
+         6/+eU250AG7wkwYaZA7nHj6Y8W69YiUw1VYaPhq4sopcn0EeH2StRzMsZskeqVU8CAyV
+         ExcIiMH9m5v/wta9yPR4AtlDvOQMPZb0T6JKpSC+CKKtEJDTy3EQghFhaCEzLWkYu+mD
+         zFmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779380775; x=1779985575;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=J9FDf4DlWCdet9ejsQPRXtBBttAImyKEU2oe9Q8ZuQA=;
+        b=rs9FtsYqiR4DuOrNf5S3xmRXguoukEYCdYsmgqWo2XZ4gD6P3kre6SQjBLTBjmqvCC
+         WkHV1pdvmzF4yWZUM9BGFkU7AViswX0uH08Viou46DDunKFnI0g1k7SehZF6DDuPuQ9k
+         s61lT3VY2PD9sfRwrEHySp9vwnZOwJQjFV+dtda4kDFQRGIXTAJ8HQs63kydAPAqYXeE
+         XehyNtLxp6Dy14o76EFhRFtBaj0BqlTVCy/KukScvLdTIpYZyPZR0x5bMwh3Cvve8X4z
+         aVSC3sNmJS9GS7OQqTwWnSFtYjd4Lp3jMOxIU7z2+D6i824M01UmKNUQixuZFQ16YA58
+         zfjA==
+X-Forwarded-Encrypted: i=1; AFNElJ/eFaAhNuA2NURm73l8pTF7877psytGrMCXZIUBVWpyS0XfsUVcKD/Roe0quiuiApLCUXbpvRVbAF0v9FCQ4mY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwLt5o3DcETa1S3ZMrjv3nD2dLN3fxucz5YhHVKe2/f0rgSHUef
+	TdouKnWuo0/nJr4+yLN6epNV9/8VAdVjONuJWMvovXV7ttjJQxdZeWwlYr+ZDOSXUzw=
+X-Gm-Gg: Acq92OHYkcefTRfwGSNP012BrvTYXfSRFY+rQ7vGoHwwf3OyOWqR1FOHtz6leyaSr4e
+	z1qdHvCMlNW54+hcSt+RAQPp+X78uNVDlAl4nDZC9uIi6eUdbqLeYCquOl4v0JumEdnnoECoz0Y
+	bNOET8bzQjWp8qQzJHwRTU4zQ7ofRqbqCXUmtoEUxP77s5R8g03zC/uUQBu1gmBn9M+isWSD4j9
+	Pw6PWps35CoXuZScHKE16FuBupZUEU4JXRc0HuqLmVICyBB70bHnsk3PDAHx+RPWPwfyAWx4XVN
+	x2OWAjJ9FFa9I7/JOkAbFfHWTfrK49Gc0BE3HNimICX9I93DKCLVlQDrXopz33/Inr8FkN6YxCy
+	85IRwhe2RxjlM50+Aws3tsRcYC9vao1bAXmnDhH5FL/wrkfulz2jFPM1j1uZxDrTKJeQbi9AgEp
+	aY7Enj5lPYE47zvE5hrSQPGOMyxQSEWA504ozkoQE5FXcfHurzEaUFq82qJxY9pesYsks=
+X-Received: by 2002:a05:690c:7346:b0:7a2:842a:db7e with SMTP id 00721157ae682-7d20d020fdamr39734727b3.35.1779380774903;
+        Thu, 21 May 2026 09:26:14 -0700 (PDT)
+Received: from lima-default.tail89d63.ts.net ([12.55.13.134])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-7d2ca76a8cbsm4822007b3.32.2026.05.21.09.26.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 May 2026 09:26:14 -0700 (PDT)
+From: Andy Chiu <tchiu@tenstorrent.com>
+To: Shuah Khan <shuah@kernel.org>,
+	Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	linux-kselftest@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Cc: Andy Chiu <tchiu@tenstorrent.com>,
+	dfustini@oss.tenstorrent.com,
+	bjorn@kernel.org,
+	greentime.hu@sifive.com,
+	vincent.chen@sifive.com
+Subject: [PATCH v3 4/4] selftests: riscv: extend vector tests for sigreturn and ptrace
+Date: Thu, 21 May 2026 11:25:20 -0500
+Message-ID: <20260521162521.188629-5-tchiu@tenstorrent.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260521162521.188629-1-tchiu@tenstorrent.com>
+References: <20260521162521.188629-1-tchiu@tenstorrent.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: i.maximets@ovn.org, netdev@vger.kernel.org,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Donald Hunter <donald.hunter@gmail.com>,
- Shuah Khan <shuah@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>,
- Kees Cook <kees@kernel.org>, Adrian Moreno <amorenoz@redhat.com>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Matteo Perin <matteo.perin@canonical.com>
-Subject: Re: [PATCH net v2 2/4] net: netlink: don't set nsid on local
- notifications
-To: nicolas.dichtel@6wind.com, Jiri Benc <jbenc@redhat.com>
-References: <20260520172317.175168-1-i.maximets@ovn.org>
- <20260520172317.175168-3-i.maximets@ovn.org>
- <bd9c0751-55ea-459e-8b22-8bd24abf235c@6wind.com>
- <20260521160036.413771e9@griffin>
- <9e7b7aab-dad4-4b72-87cd-822e67b27afe@6wind.com>
-Content-Language: en-US
-From: Ilya Maximets <i.maximets@ovn.org>
-Autocrypt: addr=i.maximets@ovn.org; keydata=
- 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
-In-Reply-To: <9e7b7aab-dad4-4b72-87cd-822e67b27afe@6wind.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 5/21/26 4:25 PM, Nicolas Dichtel wrote:
-> Le 21/05/2026 à 16:00, Jiri Benc a écrit :
->> On Thu, 21 May 2026 14:36:12 +0200, Nicolas Dichtel wrote:
->>> I still don't think that this is the right "fix". The app is broken. Even after
->>> this patch, the bug could be easily triggered again by a third party.
->>> There is nothing wrong with assigning a self-nsid. It would be a lot more robust
->>> for the app to assign itself a self-nsid when it starts.
->>
->> On the other hand, does the patch break anything in practice (as
->> opposed to in theory)? It makes live of several apps simpler, which is
->> not a bad goal.
-> I'm not against the patch, it just look like a workaround.
-> I'm trying to understand how NETLINK_LISTEN_ALL_NSID is used (in fact, why it is
-> used if the app doesn't "understand" NSIDs).
+Add new test cases to verify the vector state restorations at syscall
+stops for ptrace and signal interfaces. Specifically:
+1. Signal handler should read all ones at syscall stop and modifying
+   context should success.
+2. Ptrace should read all ones but any modification to NT_RISCV_VECTOR
+   is silently dropped.
 
-ovs-vswitchd works with NSIDs of remote ports.  So it does understand them, it
-just doesn't expect the self-referential ones for the local namespace.
+Signed-off-by: Andy Chiu <tchiu@tenstorrent.com>
+---
+Changelog v3:
+ - new patch since v3
+---
+ .../selftests/riscv/sigreturn/sigreturn.c     |  78 ++++++++++++++
+ .../selftests/riscv/vector/vstate_ptrace.c    | 100 +++++++++++++++++-
+ 2 files changed, 177 insertions(+), 1 deletion(-)
 
-openvswitch module has a minimal support for cross-namespace operation.  Ports can
-be added to the openvswitch datapath and then moved to a different namespace (it's
-a little weird use case, but that's beyond the point here).  ovs-vswitchd learns
-new NSIDs of those ports from the openvswitch module and then it can perform a
-limited set of cross-namespace operations on them and monitor their status changes
-through notifications on an all-nsid socket.  It never learns the NSID of the
-current local namespace, because all the local ports can be directly accessed and
-openvswitch module doesn't report an NSID for them, as it's not needed for anything.
+diff --git a/tools/testing/selftests/riscv/sigreturn/sigreturn.c b/tools/testing/selftests/riscv/sigreturn/sigreturn.c
+index e10873d95fed..c7d8cac80efb 100644
+--- a/tools/testing/selftests/riscv/sigreturn/sigreturn.c
++++ b/tools/testing/selftests/riscv/sigreturn/sigreturn.c
+@@ -3,10 +3,12 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <ucontext.h>
++#include <sys/time.h>
+ #include <linux/ptrace.h>
+ #include "kselftest_harness.h"
+ 
+ #define RISCV_V_MAGIC		0x53465457
++#define END_MAGIC		0
+ #define DEFAULT_VALUE		2
+ #define SIGNAL_HANDLER_OVERRIDE	3
+ 
+@@ -61,6 +63,82 @@ static int vector_sigreturn(int data, void (*handler)(int, siginfo_t *, void *))
+ 	return after_sigreturn;
+ }
+ 
++#define V_TEST_PATTERN_SIGNAL 0x98
++int nulled_val;
++static void sigalrm_handler(int sig, siginfo_t *info, void *vcontext)
++{
++	ucontext_t *context = vcontext;
++	struct __riscv_extra_ext_header *ext;
++	struct __riscv_ctx_hdr *hdr;
++	uint8_t *ext_ptr;
++
++	/* Find the vector context */
++	ext = (void *)(&context->uc_mcontext.__fpregs);
++	ext_ptr = (uint8_t *)ext;
++	hdr = &ext->hdr;
++
++	while (hdr->magic != END_MAGIC) {
++		if (hdr->magic == RISCV_V_MAGIC) {
++			struct __riscv_v_ext_state *v_state = (struct __riscv_v_ext_state *)(hdr + 1);
++			/* Assume a valid datap */
++			nulled_val = *(int *)v_state->datap;
++			/* Fill all vector registers with magic pattern */
++			memset(v_state->datap, V_TEST_PATTERN_SIGNAL, v_state->vlenb * 32);
++			/*
++			 * We must also set the vector configuration so that when
++			 * userspace reads v0, it uses a valid element width (e8).
++			 */
++			v_state->vl = v_state->vlenb;
++			v_state->vtype = 0; /* e8, m1, tu, mu */
++			break;
++		}
++		/* Move to the next extension header */
++		ext_ptr += hdr->size;
++		hdr = (struct __riscv_ctx_hdr *)ext_ptr;
++	}
++}
++
++TEST(test_signal_syscall_ucontext) {
++	struct sigaction sa;
++
++	/* Make sure we get V in ucontext by executing vsetvli */
++	asm volatile (
++	    ".option push\n\t"
++	    ".option		arch, +v\n\t"
++	    "vsetivli	x0, 1, e32, m1, ta, ma\n\t"
++	    ".option pop\n\t" : : :);
++
++	sa.sa_flags = SA_SIGINFO;
++	sa.sa_sigaction = sigalrm_handler;
++	sigemptyset(&sa.sa_mask);
++	if (sigaction(SIGALRM, &sa, NULL) == -1)
++		ksft_exit_fail_msg("Failed to register signal handler\n");
++
++	/* Setup a 10ms timer to unblock us from pause() */
++	struct itimerval itv = {{0, 0}, {0, 10000}};
++
++	setitimer(ITIMER_REAL, &itv, NULL);
++
++	pause();
++
++	/*
++	 * If the kernel successfully parsed and restored our modified ucontext,
++	 * v0 will contain V_TEST_PATTERN_SIGNAL.
++	 */
++	unsigned char v0_val;
++
++	asm volatile(
++			".option push\n\t"
++			".option arch, +zve32x\n\t"
++			"vmv.x.s %0, v0\n\t"
++			".option pop\n\t"
++			: "=r" (v0_val)
++		    );
++
++	EXPECT_EQ(v0_val, V_TEST_PATTERN_SIGNAL);
++	EXPECT_EQ(nulled_val, -1);
++}
++
+ TEST(vector_restore)
+ {
+ 	int result;
+diff --git a/tools/testing/selftests/riscv/vector/vstate_ptrace.c b/tools/testing/selftests/riscv/vector/vstate_ptrace.c
+index 1479abc0c9cb..7952885a04c7 100644
+--- a/tools/testing/selftests/riscv/vector/vstate_ptrace.c
++++ b/tools/testing/selftests/riscv/vector/vstate_ptrace.c
+@@ -21,6 +21,41 @@ static long do_ptrace(enum __ptrace_request op, pid_t pid, long type, size_t siz
+ 	return ptrace(op, pid, type, &v_iovec);
+ }
+ 
++static int do_child_syscall_stop(void)
++{
++	int out;
++
++	if (ptrace(PTRACE_TRACEME, -1, NULL, NULL)) {
++		ksft_perror("PTRACE_TRACEME failed\n");
++		return EXIT_FAILURE;
++	}
++
++	raise(SIGSTOP);
++
++	asm volatile (".option push\n\t"
++		".option	arch, +v\n\t"
++		"vsetivli	x0, 1, e32, m1, ta, ma\n\t"
++		"vmv.s.x	v31, %[in]\n\t"
++		".option pop\n\t"
++		:
++		: [in] "r" (child_set_val));
++
++	getpid();
++
++	asm volatile (".option push\n\t"
++		".option	arch, +v\n\t"
++		"vsetivli	x0, 1, e32, m1, ta, ma\n\t"
++		"vmv.x.s	%[out], v31\n\t"
++		".option pop\n\t"
++		: [out] "=r" (out)
++		:);
++
++	if (out != -1)
++		return EXIT_FAILURE;
++
++	return EXIT_SUCCESS;
++}
++
+ static int do_child(void)
+ {
+ 	int out;
+@@ -109,11 +144,62 @@ static void do_parent(pid_t child)
+ 	free(data);
+ }
+ 
++static void do_parent_syscall_stop(pid_t child)
++{
++	int status;
++	void *data = NULL;
++
++	while (waitpid(child, &status, 0)) {
++		if (WIFEXITED(status)) {
++			ksft_test_result(WEXITSTATUS(status) == 0,
++					 "SETREGSET vector at syscall stop\n");
++			goto out;
++		} else if (WIFSTOPPED(status) && (WSTOPSIG(status) == SIGSTOP)) {
++			/* Attach to the child at syscall stop */
++			ptrace(PTRACE_SYSCALL, child, NULL, NULL);
++		} else if (WIFSTOPPED(status) && (WSTOPSIG(status) == SIGTRAP)) {
++			size_t size;
++			void *data, *v31;
++			struct __riscv_v_regset_state *v_regset_hdr;
++
++			size = sizeof(*v_regset_hdr);
++			data = malloc(size);
++			if (!data)
++				goto out;
++			v_regset_hdr = (struct __riscv_v_regset_state *)data;
++
++			if (do_ptrace(PTRACE_GETREGSET, child, NT_RISCV_VECTOR, size, data))
++				goto out;
++
++			ksft_print_msg("vlenb %ld\n", v_regset_hdr->vlenb);
++			data = realloc(data, size + v_regset_hdr->vlenb * 32);
++			if (!data)
++				goto out;
++			v_regset_hdr = (struct __riscv_v_regset_state *)data;
++			v31 = (void *)(data + size + v_regset_hdr->vlenb * 31);
++			size += v_regset_hdr->vlenb * 32;
++
++			if (do_ptrace(PTRACE_GETREGSET, child, NT_RISCV_VECTOR, size, data))
++				goto out;
++
++			ksft_test_result(*(int *)v31 == -1, "GETREGSET vector at syscall stop\n");
++
++			*(int *)v31 = parent_set_val;
++			if (do_ptrace(PTRACE_SETREGSET, child, NT_RISCV_VECTOR, size, data))
++				goto out;
++		}
++		ptrace(PTRACE_CONT, child, NULL, NULL);
++	}
++
++out:
++	free(data);
++}
++
+ int main(void)
+ {
+ 	pid_t child;
+ 
+-	ksft_set_plan(2);
++	ksft_set_plan(4);
+ 	if (!is_vector_supported() && !is_xtheadvector_supported())
+ 		ksft_exit_skip("Vector not supported\n");
+ 
+@@ -130,5 +216,17 @@ int main(void)
+ 
+ 	do_parent(child);
+ 
++	parent_set_val = 0x53355457;
++	child_set_val = 0x49504F21;
++
++	child = fork();
++	if (child < 0)
++		ksft_exit_fail_msg("Fork failed %d\n", child);
++
++	if (!child)
++		return do_child_syscall_stop();
++
++	do_parent_syscall_stop(child);
++
+ 	ksft_finished();
+ }
+-- 
+2.43.0
 
-In the end, ovs-vswitchd knows all the remote NSIDs it needs to know and can
-recognize them in notifications.  But it doesn't know the NSID of it's own local
-namespace, as the openvswitch module never reports that for local ports and
-ovs-vswitchd doesn't explicitly check its own NSID.  So, local notifications with
-NSID set get treatment of a notification from some remote namespace that we do not
-care about.
-
-We will be putting changes into ovs-vswitch to work around this issue, simply
-because it will take time for the kernel patch to propagate to distros.  But this
-code will not be useful for anything except for working around this one specific
-case and so it would be nice to get rid of it eventually.  And it would be nice
-if future applications didn't need to care about this behavior as well.  Having
-the fix in stable will speed up the process significantly.
-
-HTH,
-Best regards, Ilya Maximets.
