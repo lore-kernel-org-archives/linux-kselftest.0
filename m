@@ -1,203 +1,125 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC1CA38228B;
-	Fri, 22 May 2026 12:37:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD2EC381AF7
+	for <linux-kselftest@vger.kernel.org>; Fri, 22 May 2026 12:49:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779453476; cv=none; b=qMqIrLyNk1jKCH6VDTsoaJDZF8XHgfccrMhtREVEnrlx/gLgOTz8zXSyVpiicCcT0vgGfD9gO/HUI7iYedVxzn+taV/1G6JIGTLUjixBiwjkoLKrisKNd82fuP/NsU5gCnp9J9mZs8dsKgX8uGEDc1wmJ28OcU586hHXqlEE9kU=
+	t=1779454193; cv=none; b=a+EBhDqTcEBfLbhZ2WplX8XAtsIz+bCNVnoylJF9Rwh1MUydLPDb0x28RohHejh2L9aKwXoDNSR9OyE8DhbsT2AkkkyqDBTtzEWr+EymaE1zlGCZ6qWiadNPuq/5Ja0DZGzTYnqt438dgjBaqYmykgLpRsH1tWX6t+76DBeVXs8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779453476; c=relaxed/simple;
-	bh=1dYX8tbLLyGkhDsYQMCL1WiRzG/6nIwJxxVuUr18V3Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=t7AhG7zadOifVKtWcncxi8eumzz970ntnn9xELqoun2+cbfAphzgwGj/kxIvS73986uXxT9YAUs8oN5jjnQOenxiM9DbRHPHdxnnLLV4TodRuWoxk9b1DChzRkbjFGvOIDdZnmz+zjRI8c67PlVRY+DcY3ZWDVAIeujN7LFGPp0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WJA7Ko6M; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779454193; c=relaxed/simple;
+	bh=RbHOtVV6OeY+ZEk+4bAtnYf6cI1SHn8hUw08eOY8EZM=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=Q9gWG2GEebT3+9PmC5TKJNUkZ4cIlLxfX3Tt8TudpBr6JPdJImH6ZOv0vw0BAx1yLuso+3IBoLhk7uFadVnXGTuNUcDaSyWJ4Pj7MeXz0JYRjGIEpW36jbxUsIh291gUoWw0RKRyIT4PaDedfgfcXviCodVFZaasOYVlWmHKUiQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=czYTJFew; arc=none smtp.client-ip=209.85.214.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WJA7Ko6M"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8FAD1F00A3D;
-	Fri, 22 May 2026 12:37:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779453474;
-	bh=oiJv/a8IQvKH3BGEIllrwFReWEQqkFFSGDh6mgtKt0s=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=WJA7Ko6MEnn/NoFQ65dN1/M8ZExiJ8RoGFC656Dd+5KAHsEI9+U9A6OZLTONMFbsw
-	 tIcZw2dbzydgoAb2nNDFzgAnIa9WHQL5usPWgbDf7hjEdGHPcoMKBeFoEirX5A8pmJ
-	 ++dqGyVU3992xYuBmJbB3lUCrzfbX3bv3mkb2QxRAVM8D+a6eIp4cSjeD1LYSFLVbt
-	 7Uc9z8L9JX2JVczmO8z4BsgP9yfQISz6JGBbf8QnqX41pbtp5WwAfQJI5qDHSGy7ql
-	 Vs2g5fwJx5y42SZbgMFgjrI+t04zWsIc670pSnjHrsiQNuvYtirMevCR5OFH2pzEcC
-	 S6U+pyJ7WJDJA==
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 3CE66F40089;
-	Fri, 22 May 2026 08:37:53 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-04.internal (MEProxy); Fri, 22 May 2026 08:37:53 -0400
-X-ME-Sender: <xms:IU4QaphcTgCOcXPDNUt_nU2yvQjDK1DSI5aLupDUWdyiUIP4dQU-4A>
-    <xme:IU4QarqHY9EXT-cMd_Yb4B8Z6Vfh07DrBKfo76qpyv_lguSTG4xL0TwSiGFRTwUSW
-    a6_wpWSM2V9fUugVLQiNr5mJzi1JGNfIva61MQGnPywtXp6IFeIn_uH>
-X-ME-Received: <xmr:IU4QauqrQFYvgB7RUMJQ9bvgzYGn68sFNbAuV1EfSfCLLEk3QTrEMLpE6fbjhA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgdduhedtudelucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucenucfjughrpeffhffvvefukfhfgggtugfgjgesthekre
-    dttddtjeenucfhrhhomhepmfhirhihlhcuufhhuhhtshgvmhgruhcuoehkrghssehkvghr
-    nhgvlhdrohhrgheqnecuggftrfgrthhtvghrnhepiefgvddtkeevjefhhedtudeuueeike
-    ejkedvgffgtdekgeeiveejvdegtedvhefgnecuvehluhhsthgvrhfuihiivgeptdenucfr
-    rghrrghmpehmrghilhhfrhhomhepkhhirhhilhhlodhmvghsmhhtphgruhhthhhpvghrsh
-    honhgrlhhithihqdduieduudeivdeiheehqddvkeeggeegjedvkedqkhgrsheppehkvghr
-    nhgvlhdrohhrghesshhhuhhtvghmohhvrdhnrghmvgdpnhgspghrtghpthhtohepgeeipd
-    hmohguvgepshhmthhpohhuthdprhgtphhtthhopehrphhptheskhgvrhhnvghlrdhorhhg
-    pdhrtghpthhtoheprghkphhmsehlihhnuhigqdhfohhunhgurghtihhonhdrohhrghdprh
-    gtphhtthhopehpvghtvghrgiesrhgvughhrghtrdgtohhmpdhrtghpthhtohepuggrvhhi
-    ugeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhjsheskhgvrhhnvghlrdhorhhgpd
-    hrtghpthhtohepshhurhgvnhgssehgohhoghhlvgdrtghomhdprhgtphhtthhopehvsggr
-    sghkrgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhirghmrdhhohiflhgvthhtse
-    horhgrtghlvgdrtghomhdprhgtphhtthhopeiiihihsehnvhhiughirgdrtghomh
-X-ME-Proxy: <xmx:IU4Qah6CkvLPQpsYe3YHk8keE6O6mSJBIUzG29b5c9n-vbt1f0DrUQ>
-    <xmx:IU4Qal2qPAW53qP3BFrBIcKEsvbumY4Ft0Fv0lpYzmEbtWoFHk0z9Q>
-    <xmx:IU4QatkzZzFw_sbV_Vq6K-aF99ZCGWjQNWu0Wmkva9773VHZfhqIsw>
-    <xmx:IU4QauiXqnAnp1CnDIsvgg4CDgPdcglFJ35pWva-S2styYPJYqXDLQ>
-    <xmx:IU4Qak0wVrxnos-gIhB6hx6oacQXSfR35IiG2bd6-lIRpSHDEvwgQrKj>
-Feedback-ID: i10464835:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 22 May 2026 08:37:52 -0400 (EDT)
-Date: Fri, 22 May 2026 13:37:51 +0100
-From: Kiryl Shutsemau <kas@kernel.org>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: akpm@linux-foundation.org, peterx@redhat.com, david@kernel.org, 
-	ljs@kernel.org, surenb@google.com, vbabka@kernel.org, Liam.Howlett@oracle.com, 
-	ziy@nvidia.com, corbet@lwn.net, skhan@linuxfoundation.org, seanjc@google.com, 
-	pbonzini@redhat.com, jthoughton@google.com, aarcange@redhat.com, sj@kernel.org, 
-	usama.arif@linux.dev, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, kvm@vger.kernel.org, 
-	kernel-team@meta.com
-Subject: Re: [PATCH v2 14/14] Documentation/userfaultfd: document RWP working
- set tracking
-Message-ID: <ahBMtyua-5v8GyxS@thinkstation>
-References: <cover.1778254670.git.kas@kernel.org>
- <0b6f87fd4809245f9eebee73f34e2fb14230330c.1778254670.git.kas@kernel.org>
- <agQZiTUQNviaGIim@kernel.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="czYTJFew"
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2baedd2fd43so50356045ad.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 22 May 2026 05:49:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1779454191; x=1780058991; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DQXBtYOgD26OY0sxOaH3yIHE1h+TPqKS3BQiU+AvFJA=;
+        b=czYTJFewNgQdudNdgwZ55E1+qPLX/eGbyT9zSr6Vfh27zIYrh5JeIpUkdT4qKbIJAn
+         SCQfKHCc79A2ralZCRnqE7xqd/+WAkYl9RpZulbZ+8OWnhpXZXJjAT/6MOb+3nygBqCY
+         /yXMpXT0iQ4TwXVvqcqgyW8SJsw3esyWj2mbVO16EIX1fNci1PWWE6w2nTxY2oSJPKNH
+         uigKHszq9m4nhoT5+6B9imaZ6HHu+PEOpPb+/5774Bti5CH+EdiEvn7TOEnafnnOK4I8
+         9uMj+980rBC2uvn5pgF7QSBmfXmeQFqOZYjETtuhWevuB7i0Zafn+fxtJYH8ixEXlLHB
+         soYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779454191; x=1780058991;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=DQXBtYOgD26OY0sxOaH3yIHE1h+TPqKS3BQiU+AvFJA=;
+        b=roujN/2kOw+uyXqfipDwEzZVrcCd4/09kH/5MhI4prHL9kXdQ6lpIn4PqJJjs9xa+t
+         LbrwLt5M5ZsYeboDU488Y96fjx7cRF1NS1vLoJ435rhcRHF9asyLI04hEw7I/fnpEpSj
+         pKjKGf37az3gpbogE9zLcf2lw54mD6divGenTJ1myG6M2ZDQOGG8GJg+BtiPf5j6erMW
+         AMmLgxlAM+X5NfcmpZMRe7UHgvZoZs/qG5e/hYAduKRBrCjIxuFtdaPkb/isLYW29xDW
+         zbhM6g4EyhhvhZNTuPg4c9S/uWIazBVfiosFB0DIytBLrcQEVBLuXmA8yTLYJhoG+Pvw
+         jylg==
+X-Forwarded-Encrypted: i=1; AFNElJ9sEgWFazJl1LlHLDjvpXXHZbAilwhjbLqlnLeL8IZpEVhHUKCjqZB3TUpeBzpps3Bl4EQs2ck/UPjZdbJNn0Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy42kVKYchbbMIx0Z56cvArYTRNec6n0TLBqYuBYYvjx/6C0Usn
+	Skyzkvrv8QUAFT/C/hTQdABXwnUlVTtGEc0/NRAYoMDr4P+CuHxPdGdaq3xZX34DWHFgwKiJvMd
+	igBpjxA==
+X-Received: from plpf11.prod.google.com ([2002:a17:903:3c4b:b0:2b0:51f0:272d])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:c94d:b0:2b4:63bf:5535
+ with SMTP id d9443c01a7336-2beb073d568mr36887635ad.41.1779454190670; Fri, 22
+ May 2026 05:49:50 -0700 (PDT)
+Date: Fri, 22 May 2026 05:49:50 -0700
+In-Reply-To: <ab84153e33fbe7c25667f595c56b310d4d5a93ef.camel@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <agQZiTUQNviaGIim@kernel.org>
+Mime-Version: 1.0
+References: <20260509224824.3264567-1-dwmw2@infradead.org> <20260509224824.3264567-28-dwmw2@infradead.org>
+ <3ad6cd109480772ade3c11f23b9c1d7a9855d67e.camel@infradead.org>
+ <ag-Hf2liLSX9q0rS@google.com> <ab84153e33fbe7c25667f595c56b310d4d5a93ef.camel@infradead.org>
+Message-ID: <ahBQ7mXNaTtouT3C@google.com>
+Subject: Re: [PATCH v4 27/30] KVM: x86: Add KVM_VCPU_TSC_EFFECTIVE_FREQ attribute
+From: Sean Christopherson <seanjc@google.com>
+To: David Woodhouse <dwmw2@infradead.org>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, Juergen Gross <jgross@suse.com>, 
+	Boris Ostrovsky <boris.ostrovsky@oracle.com>, Paul Durrant <paul@xen.org>, 
+	Jonathan Cameron <jic23@kernel.org>, Sascha Bischoff <Sascha.Bischoff@arm.com>, 
+	Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>, Jack Allister <jalliste@amazon.com>, 
+	Dongli Zhang <dongli.zhang@oracle.com>, joe.jin@oracle.com, kvm@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	xen-devel@lists.xenproject.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, May 13, 2026 at 09:26:17AM +0300, Mike Rapoport wrote:
-> On Fri, May 08, 2026 at 04:55:26PM +0100, Kiryl Shutsemau (Meta) wrote:
-> > Add an admin-guide section covering UFFDIO_REGISTER_MODE_RWP:
-> > 
-> >   - sync and async fault models;
-> >   - UFFDIO_RWPROTECT semantics;
-> >   - UFFD_FEATURE_RWP_ASYNC;
-> >   - UFFDIO_SET_MODE runtime mode flips.
-> > 
-> > It also covers typical VMM working-set-tracking workflow from detection
-> > loop through sync-mode eviction and back to async.
-> 
-> We'd also need man page update at some point :)
+On Thu, May 21, 2026, David Woodhouse wrote:
+> On Thu, 2026-05-21 at 15:30 -0700, Sean Christopherson wrote:
+> > On Thu, May 21, 2026, David Woodhouse wrote:
+> > > On Sat, 2026-05-09 at 23:46 +0100, David Woodhouse wrote:
+> > > > From: David Woodhouse <dwmw@amazon.co.uk>
+> > > That does leave userspace still needing a way to get the APIC bus
+> > > frequency, to populate CPUID. So maybe I'll just make an attribute
+> > > which returns that as a single value.
+> >=20
+> > Already exists, KVM_CAP_X86_APIC_BUS_CYCLES_NS.=C2=A0 The TDX architect=
+ure decided
+> > that unconditionally telling guests the virtual APIC bus runs at 400Mhz=
+ was a
+> > brilliant idea.
+>=20
+> Ah, thanks.
+>=20
+> So KVM always exposes 1GHz by default regardless of the actual host?
+> Which is why there's no *get* method?
+>=20
+> (Well... getting KVM_CAP_APIC_BUS_CYCLES_NS returns
+> APIC_BUS_CYCLE_NS_DEFAULT which is 1, so it's basically just returning
+> 1 like a lot of cap queries do, and *not* returning what the period is
+> actually set to)
 
-Will add a patch for man-pages in v3.
+Oh, that's just an oversight, definitely not intentional.  Easy enough to f=
+ix:
 
-> > Signed-off-by: Kiryl Shutsemau <kas@kernel.org>
-> > Assisted-by: Claude:claude-opus-4-6
-> > ---
-> >  Documentation/admin-guide/mm/userfaultfd.rst | 226 ++++++++++++++++++-
-> >  1 file changed, 220 insertions(+), 6 deletions(-)
-> > 
-> > diff --git a/Documentation/admin-guide/mm/userfaultfd.rst b/Documentation/admin-guide/mm/userfaultfd.rst
-> > index 1e533639fd50..5ac4ae3dff1b 100644
-> > --- a/Documentation/admin-guide/mm/userfaultfd.rst
-> > +++ b/Documentation/admin-guide/mm/userfaultfd.rst
-> > @@ -275,16 +275,16 @@ tracking and it can be different in a few ways:
-> >    - Dirty information will not get lost if the pte was zapped due to
-> >      various reasons (e.g. during split of a shmem transparent huge page).
-> >  
-> > -  - Due to a reverted meaning of soft-dirty (page clean when uffd-wp bit
-> > -    set; dirty when uffd-wp bit cleared), it has different semantics on
-> > -    some of the memory operations.  For example: ``MADV_DONTNEED`` on
-> > +  - Due to a reverted meaning of soft-dirty (page clean when the uffd bit
-> > +    is set; dirty when the uffd bit is cleared), it has different semantics
-> > +    on some of the memory operations.  For example: ``MADV_DONTNEED`` on
-> >      anonymous (or ``MADV_REMOVE`` on a file mapping) will be treated as
-> > -    dirtying of memory by dropping uffd-wp bit during the procedure.
-> > +    dirtying of memory by dropping the uffd bit during the procedure.
-> >  
-> >  The user app can collect the "written/dirty" status by looking up the
-> > -uffd-wp bit for the pages being interested in /proc/pagemap.
-> > +uffd bit for the pages being interested in /proc/pagemap.
-> >  
-> > -The page will not be under track of uffd-wp async mode until the page is
-> > +The page will not be under track of userfaultfd-wp async mode until the page is
-> >  explicitly write-protected by ``ioctl(UFFDIO_WRITEPROTECT)`` with the mode
-> >  flag ``UFFDIO_WRITEPROTECT_MODE_WP`` set.  Trying to resolve a page fault
-> >  that was tracked by async mode userfaultfd-wp is invalid.
-> > @@ -307,6 +307,220 @@ transparent to the guest, we want that same address range to act as if it was
-> >  still poisoned, even though it's on a new physical host which ostensibly
-> >  doesn't have a memory error in the exact same spot.
-> >  
-> > +Read-Write Protection
-> > +---------------------
-> > +
-> > +``UFFDIO_REGISTER_MODE_RWP`` enables read-write protection tracking on a
-> > +memory range. It is similar to (but faster than) ``mprotect(PROT_NONE)``
-> > +combined with a signal handler; unlike ``mprotect(PROT_NONE)``, RWP only
-> > +traps accesses to *present* PTEs, so accesses to unpopulated addresses in a
-> > +protected range fall through to the normal missing-page path. It uses the
-> > +PROT_NONE hinting mechanism (same as NUMA balancing) to make pages
-> > +inaccessible while keeping them resident in memory. Works on anonymous,
-> > +shmem, and hugetlbfs memory.
-> > +
-> > +This is designed for VM memory managers that need to track the working set
-> 
-> This feature? Or RWP mode?
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 1616b2eec6e7..cd4a244ca0c5 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -2235,7 +2235,7 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, lon=
+g ext)
+                r =3D tdp_enabled;
+                break;
+        case KVM_CAP_X86_APIC_BUS_CYCLES_NS:
+-               r =3D APIC_BUS_CYCLE_NS_DEFAULT;
++               r =3D kvm ? kvm->arch.apic_bus_cycle_ns : APIC_BUS_CYCLE_NS=
+_DEFAULT;
+                break;
+        case KVM_CAP_EXIT_HYPERCALL:
+                r =3D KVM_EXIT_HYPERCALL_VALID_MASK;
 
-RWP.
-
-> > +of guest memory for cold page eviction to tiered or remote storage.
-> > +
-> > +**Setup:**
-> > +
-> > +1. Open a userfaultfd and enable ``UFFD_FEATURE_RWP`` via ``UFFDIO_API``.
-> > +   Optionally request ``UFFD_FEATURE_RWP_ASYNC`` as well — it requires
-> > +   ``UFFD_FEATURE_RWP`` to be set in the same ``UFFDIO_API`` call.
-> > +
-> > +2. Register the guest memory range with ``UFFDIO_REGISTER_MODE_RWP``
-> > +   (and ``UFFDIO_REGISTER_MODE_MISSING`` if evicted pages will need to be
-> > +   fetched back from storage).
-> > +
-> > +**Feature availability:**
-> > +
-> > +RWP is built on top of two kernel primitives: a spare PTE bit owned by
-> > +userfaultfd (``CONFIG_HAVE_ARCH_USERFAULTFD_WP``) and arch support for
-> 
-> Please spell out architecture.
-
-Ack.
-
-> > +present-but-inaccessible PTEs (``CONFIG_ARCH_HAS_PTE_PROTNONE``). When both
-> > +are available on a 64-bit kernel, the build selects
-> > +``CONFIG_USERFAULTFD_RWP=y`` and the ``VM_UFFD_RWP`` VMA flag becomes
-> > +available.
-> > +
-> > +``UFFD_FEATURE_RWP`` and ``UFFD_FEATURE_RWP_ASYNC`` are masked out of the
-> > +features returned by ``UFFDIO_API`` when the running kernel or architecture
-> > +cannot support them — for example 32-bit kernels (where ``VM_UFFD_RWP`` is
-> > +unavailable), kernels built without ``CONFIG_USERFAULTFD_RWP``, and
-> > +architectures whose ptes cannot carry the uffd bit at runtime (e.g. riscv
-> > +without the ``SVRSW60T59B`` extension). ``UFFDIO_API`` does not fail;
-> > +unsupported bits are simply absent from ``uffdio_api.features`` on return.
-> > +VMMs should inspect the returned ``features`` after ``UFFDIO_API`` and fall
-> 
-> Lets s/VMM/Callers/.
-> Although RWP is designed for VMMs, it's not limited to them and I expect
-> other use-cases will be coming along.
-
-Okay.
-
-
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
