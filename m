@@ -1,181 +1,145 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f51.google.com (mail-ua1-f51.google.com [209.85.222.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F284A3176FD;
-	Fri, 22 May 2026 17:48:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779472106; cv=none; b=f4i+JedPnLsrfRqYZlG0SWU5AWN6jSdq3kTdYDz9NJzHnRMhys6uNFHhuWe3v1zjAs4qGKHcXfHdeX3AIOxeyuRo/iok1G/BIbzUKyMWz8Ws25/WsC2Tf7jKpv6xEzRUp3MIrmU16JvqCA69IzCR6I21+eC2MjX9rPMt6bcm680=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779472106; c=relaxed/simple;
-	bh=YAQoKoOwWPW3Ak+kECiU/OfUOBm+LsGB0e6nKpQwUrQ=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=fM5adW9txNWzWAPmRru7aZHXniv5djJsgTQ9QorKDvAGRzhX1wZj7OVoo2UdLZcKB/WyGgBRGFVf9aAU2X5PNda3E4VQ3hPLUQOgaS0SiveJAzINSd8qD6VD3WDdG8evGr3Jd37YRalyGu/Gz4mLh5EzZTLiHmZfDSfX9usMv4E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=qs3+8WTI; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8784369D67
+	for <linux-kselftest@vger.kernel.org>; Fri, 22 May 2026 17:49:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.222.51
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779472186; cv=pass; b=ONKrZJBQ7tUxJLKOCL+PxBDbx56oTPKeLbUX0/swlQZLq2dtv7bpOMBuV1oe02nrIXCF7V01s5Kv8TICcwZxqwfqqyWHqnOL/vvg2dCGU/IKefYgd2RF8CtEM0dL4YP5919Gf92Iph1Nutpaq2+aGD0p3Pl+H0AnCZqqkqaI+Mg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779472186; c=relaxed/simple;
+	bh=9GcYQllOiOXdCXYyDijNgD+Nq8QRy6N8WRrmbHFTS6g=;
+	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ay3FBs/vGWAk+e2/Ehv1FaMQ9iHn+wxvZ4e4sKqE/U8kKNcQQrp4gYCeGaTzppW4se9knkbjFBR8nZFJ+lRHqq9Z/U342prd/FaGkyYq3n5vQioIcW/Z+ykuq7j+SZvXczo/uY7wX2nA4bZcCwnnz8ml0v0j3CxBp3QB4JIFT0s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=EDwb0hbz; arc=pass smtp.client-ip=209.85.222.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="qs3+8WTI"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
-	In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=YAQoKoOwWPW3Ak+kECiU/OfUOBm+LsGB0e6nKpQwUrQ=; b=qs3+8WTIScj2GuMSok2qYe/51T
-	Es3SyEeuALPxrfXQfv0lJpq9p4zAZC1Orm0IrT6fOVURjfSEkTeRsTP4/pJ/5hlnTxj1VNNSsbH9f
-	4RdiaQ5RVEZR/zdpm962XMlJIMn8GVkTlxvnY24QYWy2udJECluNpzjrtObaB4kPQiqjMwDnM7h+c
-	AvK3xMyjpw3HXO00IvmvkeTb7sTbfuzjPYX6QPze6hoodNxdG6uRkYK6kkEvzOPn+kZphuDlphArh
-	j7M+xvHrheUvY3yszEGwomNWLPI93KZUpI2Zym3PY3b+z8Qt5Nxndl0Cd69DrjL880WQzvszegoVq
-	BC/IZCyA==;
-Received: from 54-240-197-238.amazon.com ([54.240.197.238] helo=freeip.amazon.com)
-	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1wQTyi-0000000APGq-2qF8;
-	Fri, 22 May 2026 17:48:08 +0000
-Message-ID: <99356a588677e9ff31c1747db1705d9250a2728d.camel@infradead.org>
-Subject: Re: [PATCH v4 27/30] KVM: x86: Add KVM_VCPU_TSC_EFFECTIVE_FREQ
- attribute
-From: David Woodhouse <dwmw2@infradead.org>
-To: Sean Christopherson <seanjc@google.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <skhan@linuxfoundation.org>, Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>,  Borislav Petkov <bp@alien8.de>, Dave
- Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin"
- <hpa@zytor.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, Juergen Gross
- <jgross@suse.com>, Boris Ostrovsky <boris.ostrovsky@oracle.com>, Paul
- Durrant <paul@xen.org>, Jonathan Cameron <jic23@kernel.org>, Sascha
- Bischoff <Sascha.Bischoff@arm.com>, Marc Zyngier <maz@kernel.org>, Joey
- Gouly <joey.gouly@arm.com>, Jack Allister <jalliste@amazon.com>, Dongli
- Zhang <dongli.zhang@oracle.com>, joe.jin@oracle.com, kvm@vger.kernel.org, 
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
- xen-devel@lists.xenproject.org, linux-kselftest@vger.kernel.org
-Date: Fri, 22 May 2026 18:48:07 +0100
-In-Reply-To: <ahCQluJj59uWlDAF@google.com>
-References: <20260509224824.3264567-1-dwmw2@infradead.org>
-	 <20260509224824.3264567-28-dwmw2@infradead.org>
-	 <3ad6cd109480772ade3c11f23b9c1d7a9855d67e.camel@infradead.org>
-	 <ag-Hf2liLSX9q0rS@google.com>
-	 <ab84153e33fbe7c25667f595c56b310d4d5a93ef.camel@infradead.org>
-	 <ahBQ7mXNaTtouT3C@google.com>
-	 <c4b498c401287477402ddd60a0120b0c5a9bf8d3.camel@infradead.org>
-	 <ahCQluJj59uWlDAF@google.com>
-Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-	boundary="=-FXtb7qac/xWXftlRSmGM"
-User-Agent: Evolution 3.52.3-0ubuntu1.1 
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EDwb0hbz"
+Received: by mail-ua1-f51.google.com with SMTP id a1e0cc1a2514c-956995b5bb6so2350056241.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 22 May 2026 10:49:43 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779472182; cv=none;
+        d=google.com; s=arc-20240605;
+        b=IK0sMzY2ZxQYEZ/haQjN/r6ir65Gi6KrMywa/CYOzf3U2Ecjx9FUnSSaTtbMGqgn2Y
+         vMCwnQu9Mtryil+mhbUrH4Ucc4UTvZWU/dBrLNf9ls9PGWo+mVyNvJtc6UtbOzT9yXfF
+         Y8LIw/Da3qAnw3k3nt8uywIJ3qNPVdlhp4CoxZccox0iGXzfC8175t6No41mmIlcheEU
+         AYp4FuZzX71CG36PPiZ5FODa4vUK3bqSt6TCCVzCUHKHCnLrLk3IjZyCNnqUd5k4VNMX
+         1OVZj7a6DWdqx+AoFPEzvDXZN69owKknu9fLsyPetTNgrZ4BSyFXjdm9V9knf8fkqkKC
+         r6yw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:dkim-signature;
+        bh=FVdH+GINBIrgjBx6PgyXtUorNJPxdnp5KA8JCKORs1o=;
+        fh=ZmwuxnZTAtb38qu37MC5t7AkTHlGfNxqdOZqvwzFxLs=;
+        b=G0PPPu8w/qJs6I8DKf5UadKZKifVYEqEM69cw2VaDOtHxBu87VF0HradOZfJqwcGO0
+         sJGa60Ppz5laSEi4ccF0mp3+ttgltKiTUDVhgIRIYkwLV+aFi18SaJOcfACd7ygUPJGv
+         1snOZGO+z4x5FBt5T3sv0sFtbJjUDGrQORs8jp5vp2waZ46rE1np3XCDVv6SSYrCjlr0
+         4vJyTImGqhay1FFbJQ2+dgvfZC9Hx8yNeQUqQ1JMb5pEEFgNj6WauvAh9LUgs6tCYVRT
+         OlozqVnlkFNdnziGBTCTMMucFrVAt63VZ/wVzkUE/lRuCvDh+PtiabyvPb4EqtA3g4H4
+         8SYQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1779472182; x=1780076982; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=FVdH+GINBIrgjBx6PgyXtUorNJPxdnp5KA8JCKORs1o=;
+        b=EDwb0hbz5ojN9+wvr3Kw1OIzXGyguQqEg6KQaHde5S1fmnPS9iO1SBwotxPgSD5ZQ+
+         rXfJ5QVddocKEf+1zObHdJZ+VBgcr6ZhTVyGn+nnKBV7sB3AAxRi0BfY3npY5r1nTiEi
+         2wwPP2UjDcppVIDcxqraRg481En1C++vm2KCOf7Z3LedeImOUyjRhCtSP8DsjtkgySzH
+         DXF4HGJkwtgUfUbfVbjWiCX2iJbbdTdf6uYAJelYhTcB2dvsAivJk7n3WjE9lB29WCb5
+         8GwV3/fPKphvbXQgbv9vv22Z9NBJJUFPKPoTjLWc0E1uIB9g5k+m8gEVmNv6ZkUam38g
+         rnAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779472182; x=1780076982;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FVdH+GINBIrgjBx6PgyXtUorNJPxdnp5KA8JCKORs1o=;
+        b=Z7iHiw7V7cLgCZpA1PeyYXq2cyhPDgZn9cjbKjknAD9b0mwGtTylAVRbojcJs2V5tY
+         d6qOVfkpFgVzPhZ0S8vZXOml6PZOQjS+dXuPpBLc4KlvghKV6bDf+0y5h/NJ0QJENLFo
+         7G7p66wC1EwR0mOfKEaPmuI6OdfwIhLedxh8LqjlgN7+kz9X9GzKoncsVOtneDLcmnXn
+         1Ww2SYqF0ciDU9FX+MblRDH6IcMixGak312zGNJZb6j5Z6dLRMjsprfWU1LBxX73LNyd
+         Ri6vAXiYgXRSa8QgLebnpaH8V6URdeXWlAVFMk2v/WhUCMeCPrFs8eH1S4rWQHD53TJn
+         68AQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9ywprGPQyqnIgGLiEn/HEw3OmB//xBLwLOlt0e1X7bd8UO689huw/VSh9kokVYUUncCKZPXqh855tf/ag6xxw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyXjDm8D2L0ufg01MsDnUaTjEHe9yacOMPGizB769PpDt5//ICi
+	cb8s4bVc4kIRhTWgPHKmE3sj0o5uQxKiyy3kYmIidRLjN1jco4Q1dtnfXgEkK3Xd18bpyaVCPd0
+	dFqSXwU74f3aJkVC7/IcngNqH5ckL6leqXEcoPlY9
+X-Gm-Gg: Acq92OGWlsX2HRRy04pr7/xQQoZf/C1JInlfKM2+F0SzRBqGX/tLKkhmpns24DvFasz
+	Sdqd9PYkGlKQmJ5eAb0b7v5A+ELxFIBkE3Na5nUws1dEKVrNJlq/9/liW7P6FeLbJ7J0aCq0w8L
+	w/TSwK2SKil++xF32jkOju5J85/Kgu+4FQ9jN2IdvY/a6xoVlSDeJviFMGUiOAdfduyvK2ecd4M
+	e/tSegTLfLYWFgkSrWxWoYkMlEnPqXjdFIDMw7erUhEF+k8guqm5VhfSAwWxYaBZ7CDYEODa0dO
+	mpyvmF7jpJ2HcqcwQis2xov1mdqko8NLFKlNPyg9xXudShChH4x2LG47NIlUFLTz+N8V/uDyFHU
+	0SF6lyTC8oFKfo0c=
+X-Received: by 2002:a05:6102:304d:b0:639:4bb7:c922 with SMTP id
+ ada2fe7eead31-67c8a075a9bmr2660069137.15.1779472181171; Fri, 22 May 2026
+ 10:49:41 -0700 (PDT)
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 22 May 2026 10:49:40 -0700
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 22 May 2026 10:49:40 -0700
+From: Ackerley Tng <ackerleytng@google.com>
+In-Reply-To: <20260522171535.3525890-2-seanjc@google.com>
+References: <20260522171535.3525890-1-seanjc@google.com> <20260522171535.3525890-2-seanjc@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
-
-
---=-FXtb7qac/xWXftlRSmGM
+Date: Fri, 22 May 2026 10:49:40 -0700
+X-Gm-Features: AVHnY4LuZYRAS0FDuOxAwzv68OZS0CdPGN-j3m1-yuSIDvGSzm6OlLlXqCbSqho
+Message-ID: <CAEvNRgH6Hud+T0OWO3EfDXSjE2H8j=KiJ9sUCHtbzf3fW7jtkw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] KVM: selftests: Cast guest_memfd fd to a signed int
+ when checking for >= 0
+To: Sean Christopherson <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Shuah Khan <shuah@kernel.org>
+Cc: kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Bibo Mao <maobibo@loongson.cn>, 
+	Fuad Tabba <tabba@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, 2026-05-22 at 10:21 -0700, Sean Christopherson wrote:
->=20
-> I'll send a standalone patch, along with a selftest tweak to verify the f=
-ix.
-> It's technically a fix and won't generate any conflicts, no reason to del=
-ay it.
+Sean Christopherson <seanjc@google.com> writes:
 
-Are you suggesting the other 30 should be delayed? :P
+> When conditionally closing a memory region's guest_memfd file descriptor,
+> cast the field to a signed it so that negative values are correctly
+> detected.  Because selftests reuse "struct kvm_userspace_memory_region2"
+> instead of providing custom storage, they pick up the kernel uAPI's __u32
+> definition of the file descriptor, not the more common "int" definition,
+> e.g. that's used for userspace_mem_region.fd.
+>
 
---=-FXtb7qac/xWXftlRSmGM
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Transfer-Encoding: base64
+I wonder if the better way to handle this would be to have a clearer
+userspace_mem_region vs memslot separation, where only the final
+function actually making the SET_MEMORY_ATTRIBUTES ioctl builds the
+struct and passes it to the ioctl. userspace_mem_region should store
+userspace-facing or userspace-specific parameters.
 
-MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCD9Aw
-ggSOMIIDdqADAgECAhAOmiw0ECVD4cWj5DqVrT9PMA0GCSqGSIb3DQEBCwUAMGUxCzAJBgNVBAYT
-AlVTMRUwEwYDVQQKEwxEaWdpQ2VydCBJbmMxGTAXBgNVBAsTEHd3dy5kaWdpY2VydC5jb20xJDAi
-BgNVBAMTG0RpZ2lDZXJ0IEFzc3VyZWQgSUQgUm9vdCBDQTAeFw0yNDAxMzAwMDAwMDBaFw0zMTEx
-MDkyMzU5NTlaMEExCzAJBgNVBAYTAkFVMRAwDgYDVQQKEwdWZXJva2V5MSAwHgYDVQQDExdWZXJv
-a2V5IFNlY3VyZSBFbWFpbCBHMjCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMjvgLKj
-jfhCFqxYyRiW8g3cNFAvltDbK5AzcOaR7yVzVGadr4YcCVxjKrEJOgi7WEOH8rUgCNB5cTD8N/Et
-GfZI+LGqSv0YtNa54T9D1AWJy08ZKkWvfGGIXN9UFAPMJ6OLLH/UUEgFa+7KlrEvMUupDFGnnR06
-aDJAwtycb8yXtILj+TvfhLFhafxroXrflspavejQkEiHjNjtHnwbZ+o43g0/yxjwnarGI3kgcak7
-nnI9/8Lqpq79tLHYwLajotwLiGTB71AGN5xK+tzB+D4eN9lXayrjcszgbOv2ZCgzExQUAIt98mre
-8EggKs9mwtEuKAhYBIP/0K6WsoMnQCcCAwEAAaOCAVwwggFYMBIGA1UdEwEB/wQIMAYBAf8CAQAw
-HQYDVR0OBBYEFIlICOogTndrhuWByNfhjWSEf/xwMB8GA1UdIwQYMBaAFEXroq/0ksuCMS1Ri6en
-IZ3zbcgPMA4GA1UdDwEB/wQEAwIBhjAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIweQYI
-KwYBBQUHAQEEbTBrMCQGCCsGAQUFBzABhhhodHRwOi8vb2NzcC5kaWdpY2VydC5jb20wQwYIKwYB
-BQUHMAKGN2h0dHA6Ly9jYWNlcnRzLmRpZ2ljZXJ0LmNvbS9EaWdpQ2VydEFzc3VyZWRJRFJvb3RD
-QS5jcnQwRQYDVR0fBD4wPDA6oDigNoY0aHR0cDovL2NybDMuZGlnaWNlcnQuY29tL0RpZ2lDZXJ0
-QXNzdXJlZElEUm9vdENBLmNybDARBgNVHSAECjAIMAYGBFUdIAAwDQYJKoZIhvcNAQELBQADggEB
-ACiagCqvNVxOfSd0uYfJMiZsOEBXAKIR/kpqRp2YCfrP4Tz7fJogYN4fxNAw7iy/bPZcvpVCfe/H
-/CCcp3alXL0I8M/rnEnRlv8ItY4MEF+2T/MkdXI3u1vHy3ua8SxBM8eT9LBQokHZxGUX51cE0kwa
-uEOZ+PonVIOnMjuLp29kcNOVnzf8DGKiek+cT51FvGRjV6LbaxXOm2P47/aiaXrDD5O0RF5SiPo6
-xD1/ClkCETyyEAE5LRJlXtx288R598koyFcwCSXijeVcRvBB1cNOLEbg7RMSw1AGq14fNe2cH1HG
-W7xyduY/ydQt6gv5r21mDOQ5SaZSWC/ZRfLDuEYwggWbMIIEg6ADAgECAhAH5JEPagNRXYDiRPdl
-c1vgMA0GCSqGSIb3DQEBCwUAMEExCzAJBgNVBAYTAkFVMRAwDgYDVQQKEwdWZXJva2V5MSAwHgYD
-VQQDExdWZXJva2V5IFNlY3VyZSBFbWFpbCBHMjAeFw0yNDEyMzAwMDAwMDBaFw0yODAxMDQyMzU5
-NTlaMB4xHDAaBgNVBAMME2R3bXcyQGluZnJhZGVhZC5vcmcwggIiMA0GCSqGSIb3DQEBAQUAA4IC
-DwAwggIKAoICAQDali7HveR1thexYXx/W7oMk/3Wpyppl62zJ8+RmTQH4yZeYAS/SRV6zmfXlXaZ
-sNOE6emg8WXLRS6BA70liot+u0O0oPnIvnx+CsMH0PD4tCKSCsdp+XphIJ2zkC9S7/yHDYnqegqt
-w4smkqUqf0WX/ggH1Dckh0vHlpoS1OoxqUg+ocU6WCsnuz5q5rzFsHxhD1qGpgFdZEk2/c//ZvUN
-i12vPWipk8TcJwHw9zoZ/ZrVNybpMCC0THsJ/UEVyuyszPtNYeYZAhOJ41vav1RhZJzYan4a1gU0
-kKBPQklcpQEhq48woEu15isvwWh9/+5jjh0L+YNaN0I//nHSp6U9COUG9Z0cvnO8FM6PTqsnSbcc
-0j+GchwOHRC7aP2t5v2stVx3KbptaYEzi4MQHxm/0+HQpMEVLLUiizJqS4PWPU6zfQTOMZ9uLQRR
-ci+c5xhtMEBszlQDOvEQcyEG+hc++fH47K+MmZz21bFNfoBxLP6bjR6xtPXtREF5lLXxp+CJ6KKS
-blPKeVRg/UtyJHeFKAZXO8Zeco7TZUMVHmK0ZZ1EpnZbnAhKE19Z+FJrQPQrlR0gO3lBzuyPPArV
-hvWxjlO7S4DmaEhLzarWi/ze7EGwWSuI2eEa/8zU0INUsGI4ywe7vepQz7IqaAovAX0d+f1YjbmC
-VsAwjhLmveFjNwIDAQABo4IBsDCCAawwHwYDVR0jBBgwFoAUiUgI6iBOd2uG5YHI1+GNZIR//HAw
-HQYDVR0OBBYEFFxiGptwbOfWOtMk5loHw7uqWUOnMDAGA1UdEQQpMCeBE2R3bXcyQGluZnJhZGVh
-ZC5vcmeBEGRhdmlkQHdvb2Rob3Uuc2UwFAYDVR0gBA0wCzAJBgdngQwBBQEBMA4GA1UdDwEB/wQE
-AwIF4DAdBgNVHSUEFjAUBggrBgEFBQcDAgYIKwYBBQUHAwQwewYDVR0fBHQwcjA3oDWgM4YxaHR0
-cDovL2NybDMuZGlnaWNlcnQuY29tL1Zlcm9rZXlTZWN1cmVFbWFpbEcyLmNybDA3oDWgM4YxaHR0
-cDovL2NybDQuZGlnaWNlcnQuY29tL1Zlcm9rZXlTZWN1cmVFbWFpbEcyLmNybDB2BggrBgEFBQcB
-AQRqMGgwJAYIKwYBBQUHMAGGGGh0dHA6Ly9vY3NwLmRpZ2ljZXJ0LmNvbTBABggrBgEFBQcwAoY0
-aHR0cDovL2NhY2VydHMuZGlnaWNlcnQuY29tL1Zlcm9rZXlTZWN1cmVFbWFpbEcyLmNydDANBgkq
-hkiG9w0BAQsFAAOCAQEAQXc4FPiPLRnTDvmOABEzkIumojfZAe5SlnuQoeFUfi+LsWCKiB8Uextv
-iBAvboKhLuN6eG/NC6WOzOCppn4mkQxRkOdLNThwMHW0d19jrZFEKtEG/epZ/hw/DdScTuZ2m7im
-8ppItAT6GXD3aPhXkXnJpC/zTs85uNSQR64cEcBFjjoQDuSsTeJ5DAWf8EMyhMuD8pcbqx5kRvyt
-JPsWBQzv1Dsdv2LDPLNd/JUKhHSgr7nbUr4+aAP2PHTXGcEBh8lTeYea9p4d5k969pe0OHYMV5aL
-xERqTagmSetuIwolkAuBCzA9vulg8Y49Nz2zrpUGfKGOD0FMqenYxdJHgDCCBZswggSDoAMCAQIC
-EAfkkQ9qA1FdgOJE92VzW+AwDQYJKoZIhvcNAQELBQAwQTELMAkGA1UEBhMCQVUxEDAOBgNVBAoT
-B1Zlcm9rZXkxIDAeBgNVBAMTF1Zlcm9rZXkgU2VjdXJlIEVtYWlsIEcyMB4XDTI0MTIzMDAwMDAw
-MFoXDTI4MDEwNDIzNTk1OVowHjEcMBoGA1UEAwwTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJ
-KoZIhvcNAQEBBQADggIPADCCAgoCggIBANqWLse95HW2F7FhfH9bugyT/danKmmXrbMnz5GZNAfj
-Jl5gBL9JFXrOZ9eVdpmw04Tp6aDxZctFLoEDvSWKi367Q7Sg+ci+fH4KwwfQ8Pi0IpIKx2n5emEg
-nbOQL1Lv/IcNiep6Cq3DiyaSpSp/RZf+CAfUNySHS8eWmhLU6jGpSD6hxTpYKye7PmrmvMWwfGEP
-WoamAV1kSTb9z/9m9Q2LXa89aKmTxNwnAfD3Ohn9mtU3JukwILRMewn9QRXK7KzM+01h5hkCE4nj
-W9q/VGFknNhqfhrWBTSQoE9CSVylASGrjzCgS7XmKy/BaH3/7mOOHQv5g1o3Qj/+cdKnpT0I5Qb1
-nRy+c7wUzo9OqydJtxzSP4ZyHA4dELto/a3m/ay1XHcpum1pgTOLgxAfGb/T4dCkwRUstSKLMmpL
-g9Y9TrN9BM4xn24tBFFyL5znGG0wQGzOVAM68RBzIQb6Fz758fjsr4yZnPbVsU1+gHEs/puNHrG0
-9e1EQXmUtfGn4InoopJuU8p5VGD9S3Ikd4UoBlc7xl5yjtNlQxUeYrRlnUSmdlucCEoTX1n4UmtA
-9CuVHSA7eUHO7I88CtWG9bGOU7tLgOZoSEvNqtaL/N7sQbBZK4jZ4Rr/zNTQg1SwYjjLB7u96lDP
-sipoCi8BfR35/ViNuYJWwDCOEua94WM3AgMBAAGjggGwMIIBrDAfBgNVHSMEGDAWgBSJSAjqIE53
-a4blgcjX4Y1khH/8cDAdBgNVHQ4EFgQUXGIam3Bs59Y60yTmWgfDu6pZQ6cwMAYDVR0RBCkwJ4ET
-ZHdtdzJAaW5mcmFkZWFkLm9yZ4EQZGF2aWRAd29vZGhvdS5zZTAUBgNVHSAEDTALMAkGB2eBDAEF
-AQEwDgYDVR0PAQH/BAQDAgXgMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEFBQcDBDB7BgNVHR8E
-dDByMDegNaAzhjFodHRwOi8vY3JsMy5kaWdpY2VydC5jb20vVmVyb2tleVNlY3VyZUVtYWlsRzIu
-Y3JsMDegNaAzhjFodHRwOi8vY3JsNC5kaWdpY2VydC5jb20vVmVyb2tleVNlY3VyZUVtYWlsRzIu
-Y3JsMHYGCCsGAQUFBwEBBGowaDAkBggrBgEFBQcwAYYYaHR0cDovL29jc3AuZGlnaWNlcnQuY29t
-MEAGCCsGAQUFBzAChjRodHRwOi8vY2FjZXJ0cy5kaWdpY2VydC5jb20vVmVyb2tleVNlY3VyZUVt
-YWlsRzIuY3J0MA0GCSqGSIb3DQEBCwUAA4IBAQBBdzgU+I8tGdMO+Y4AETOQi6aiN9kB7lKWe5Ch
-4VR+L4uxYIqIHxR7G2+IEC9ugqEu43p4b80LpY7M4KmmfiaRDFGQ50s1OHAwdbR3X2OtkUQq0Qb9
-6ln+HD8N1JxO5nabuKbymki0BPoZcPdo+FeRecmkL/NOzzm41JBHrhwRwEWOOhAO5KxN4nkMBZ/w
-QzKEy4PylxurHmRG/K0k+xYFDO/UOx2/YsM8s138lQqEdKCvudtSvj5oA/Y8dNcZwQGHyVN5h5r2
-nh3mT3r2l7Q4dgxXlovERGpNqCZJ624jCiWQC4ELMD2+6WDxjj03PbOulQZ8oY4PQUyp6djF0keA
-MYIDuzCCA7cCAQEwVTBBMQswCQYDVQQGEwJBVTEQMA4GA1UEChMHVmVyb2tleTEgMB4GA1UEAxMX
-VmVyb2tleSBTZWN1cmUgRW1haWwgRzICEAfkkQ9qA1FdgOJE92VzW+AwDQYJYIZIAWUDBAIBBQCg
-ggE3MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI2MDUyMjE3NDgw
-N1owLwYJKoZIhvcNAQkEMSIEIHWCQf6H2vEPWYuBwCloSTuyO7AX3zsI3J6vj4CtEZeOMGQGCSsG
-AQQBgjcQBDFXMFUwQTELMAkGA1UEBhMCQVUxEDAOBgNVBAoTB1Zlcm9rZXkxIDAeBgNVBAMTF1Zl
-cm9rZXkgU2VjdXJlIEVtYWlsIEcyAhAH5JEPagNRXYDiRPdlc1vgMGYGCyqGSIb3DQEJEAILMVeg
-VTBBMQswCQYDVQQGEwJBVTEQMA4GA1UEChMHVmVyb2tleTEgMB4GA1UEAxMXVmVyb2tleSBTZWN1
-cmUgRW1haWwgRzICEAfkkQ9qA1FdgOJE92VzW+AwDQYJKoZIhvcNAQEBBQAEggIAGPBf5ghet1ia
-gwDUGX/8VKP9auTGhaiXI6TYWUTaZT3tFx5/9lBkJRXM/nzLjMflyL44rQAmLz4JLzYR6F/ZdhnL
-rRmqpGwRTcEHwMoXw5YFdYrcUbfvzb2Ar48ve9qIRlWtomOjyL7gN9MotsKuO9t8ueex61WaO+LZ
-l65gWgcinXxS2C48EM3oqlTp4zeLmoiU9vPGAL0+2/MhVsSs9cu795y82aKTXZbTIxz4Dh5UerX0
-BZ+/YpFDF68QW6T1Jgo8M3v6XCw13Io9lGD5p6M608QxOL0EIO04XH5zQ9CirJWMwZno/KGXVjNR
-bEEqn/oZSUCtF7la3aYCB3ZGK70w2QgRXFTfpeJNt32Z1fyhN1+Ef8HCJW0sgTfcwE2+c0RWGq4A
-jne/9N6qoz5mIwRYvgFP+6K8quNHCGaf9fdlK7YnX/8h9YkpTwwsVHx5fFP7U2TpbTXrThvggxcU
-6vi/eikT29yjpQKL1kU4OrSnJt36OA4oKr23jKjDuA05Sdn3YlK5MzXzyoWPUHMk0TP08n8/MBvn
-aRxxgCPLbI1L/7YPGE+ADPKvI9nVGHD4PZvBuJ1KcsqDA/EBNJK3MLMTQDUwNPMXTbnANjFBJFyd
-mwJBMxYg/vp7ZFR0y/QPfM6XrDsCut88XXmcZP/Jyq10sfcHogU94Kb9GjhQyegAAAAAAAA=
+Anyway this is the faster fix :)
 
+Reviewed-by: Ackerley Tng <ackerleytng@google.com>
 
---=-FXtb7qac/xWXftlRSmGM--
+> Fixes: bb2968ad6c33 ("KVM: selftests: Add support for creating private memslots")
+> Reported-by: Bibo Mao <maobibo@loongson.cn>
+> Closes: https://lore.kernel.org/all/20260508015013.4108345-1-maobibo@loongson.cn
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  tools/testing/selftests/kvm/lib/kvm_util.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> index e08967ef7b7b..4ad015c6c44f 100644
+> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> @@ -817,7 +817,7 @@ static void __vm_mem_region_delete(struct kvm_vm *vm,
+>  		kvm_munmap(region->mmap_alias, region->mmap_size);
+>  		close(region->fd);
+>  	}
+> -	if (region->region.guest_memfd >= 0)
+> +	if ((int)region->region.guest_memfd >= 0)
+>  		close(region->region.guest_memfd);
+>
+>  	free(region);
+> --
+> 2.54.0.794.g4f17f83d09-goog
