@@ -1,96 +1,117 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6E9527A12F;
-	Fri, 22 May 2026 04:39:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8092C35674E;
+	Fri, 22 May 2026 05:49:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779424782; cv=none; b=M3zB0Gq6Okn+ea1qpSz5+xlPkY7eNZt7c2/G7BD0J6jBj/h97/sZfu0eXqJLFpjhhUAOv875kghtncNHWO2mKGp2lYqMKAcNWKBi7XOWRZ7r2T6UBXi21/lI8eN4NHozPFMr9q5rBs2NgRVC3JghoKc7FqCA3hebXRhHEeHof0g=
+	t=1779428975; cv=none; b=cG+Vof4tGzfhASgCZ7z1obsT8OHk/d0xZonQebbov/0oyQ9PcJ18Od8CixoT0EdiX/cIuNR8yR8v2/wTeD6vZoAYj5HZvB/azeXS3+PkpL0cbTDtQEjNJxxP2EqdyEaJQnUXgC8WKpaLaG4eIvh6yhl4sxR9QuTPvQ3bXBqGR04=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779424782; c=relaxed/simple;
-	bh=C7+YzVYtsz/EZFWqgdGMLr2EyKYkV7ac23n7pAyctBE=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=TGrGRApYT9BfzRrFGuqiiS/SARKM/yWTj6kyvQileaEWKtczducC60rvex3SEgIfyTy30ZLvaOOad5TVZ1Qh0fI6WoVk88pNu14hDzaRLTXGbfF1IzXK0CbtbkWSaejB4NIHXm1+9smPyBGOKrgB+IZrXRQGM9tRpx5+5H114Vc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cz+h84c4; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779428975; c=relaxed/simple;
+	bh=aqxmJYVgnYnTy7ATYKVKzwjKYdEPS8ByUDPImULyrGc=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=t1Cf+dDrfmm7nI/m8DNl4D0dT27Luxm4apyreTJvr0jywk6g+gUSya5NCYGtJ2natJnIFOlzcQ0IaG+cShmd8BTHWXWM19Y1d0kemwQm2MU0ldwg4ZQug59PQpB45nn6Ub6TOiw+TBOEDMc3XrStFywW+LHFZt8abitodkDpN+4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jk4Ks+BI; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cz+h84c4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB78F1F00A3D;
-	Fri, 22 May 2026 04:39:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jk4Ks+BI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AA9F1F000E9;
+	Fri, 22 May 2026 05:49:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779424781;
-	bh=5LgnvYKTPbZg7JogF97PcfSYs8oii2zGLF8FAHnz2ys=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=Cz+h84c4ZapqclyCiNsbvntPZ4t/NTEe88Kp67BZP4kdPes3UFrl6ApY12biAVQZs
-	 a/uLaNTBJlTstmKWv64EYe1dZ7kc9JxLh0nLmPID7tKPfTRx8nVIrLTnf+07/tKqqX
-	 D/PYvnM5nDXCwLMMg7E/fmST4JmORgpESjG5wUockS1rVQG/s6a90GziX+O7H0jnC9
-	 5n14J26n12t8xHUd4NmrDhlWWeGokROvQxmlUnNDVO64Bu8a7Gr49hWQXRkOQeNCtp
-	 olUxqY1YDaNZ1YuKW7vNOj62nJwJGpuNjWgMLRjLW2s7Y5Az5zcVPLHdcfMijWl7JD
-	 azqc59E4naqUw==
-Message-ID: <732da40e8718513c0f4799fcb93dd8148951a7d7.camel@kernel.org>
-Subject: Re: [PATCH net] selftests: rds: config: disable modules
-From: Allison Henderson <achender@kernel.org>
-To: Jakub Kicinski <kuba@kernel.org>, "Matthieu Baerts (NGI0)"
-	 <matttbe@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>,  Paolo Abeni <pabeni@redhat.com>, Simon Horman
- <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,  netdev@vger.kernel.org,
- linux-rdma@vger.kernel.org, rds-devel@oss.oracle.com, 
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Thu, 21 May 2026 21:39:40 -0700
-In-Reply-To: <20260521074212.66205e90@kernel.org>
-References: <20260520-net-rds-config-modules-v1-1-2100df02fe9a@kernel.org>
-	 <20260521074212.66205e90@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.3-0ubuntu1.1 
+	s=k20260515; t=1779428974;
+	bh=E5sM9AUvuYdbGB4g9k8H+Hv5ClFSOJXofYXrX9huibQ=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=Jk4Ks+BI5b0v7Yq8P3JkHDjP1tsuruhcAbMdrFykwvGKU9wIHCcA0ppRRW9rWFErC
+	 N313Qt4P9HfEHxJJ+iTL9iZCqTUKUNtfMqFXScwk6BQw6X72h4Py/ZGeLRI5DRzTpH
+	 xncgim7ZoYUFgXoLFuTyL+bw78Ka7/SiliBzPLoGFY/d2tGK/zz24hEU1gouQzxbPI
+	 /lfYgnfpWcPZMPPtcj3IrPVtcPURdw5oet2RYP+QKt56i/JbnN7kBmnmIifRiVzmhJ
+	 HEhskgWEfhGs8Equp0nlEkkrzubybTUeRaB2L8Tn95VxTukZhsjz6TCOWDGqIq7pNK
+	 /+8Eo1uwZpKKg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=lobster-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <maz@kernel.org>)
+	id 1wQIlH-000000056jh-2DhW;
+	Fri, 22 May 2026 05:49:31 +0000
+Date: Fri, 22 May 2026 06:52:48 +0100
+Message-ID: <87lddc9ej3.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Mark Rutland <mark.rutland@arm.com>
+Cc: Mark Brown <broonie@kernel.org>,
+	Oliver Upton <oupton@kernel.org>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <shuah@kernel.org>,
+	Dave Martin <Dave.Martin@arm.com>,
+	Fuad Tabba <tabba@google.com>,
+	Ben Horgan <ben.horgan@arm.com>,
+	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Peter Maydell <peter.maydell@linaro.org>,
+	Eric Auger <eric.auger@redhat.com>
+Subject: Re: [PATCH v10 19/30] KVM: arm64: Provide assembly for SME register access
+In-Reply-To: <ag8b7oq4SFpdmlP_@J2N7QTR9R3>
+References: <20260306-kvm-arm64-sme-v10-0-43f7683a0fb7@kernel.org>
+	<20260306-kvm-arm64-sme-v10-19-43f7683a0fb7@kernel.org>
+	<ag8b7oq4SFpdmlP_@J2N7QTR9R3>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: mark.rutland@arm.com, broonie@kernel.org, oupton@kernel.org, joey.gouly@arm.com, catalin.marinas@arm.com, suzuki.poulose@arm.com, will@kernel.org, pbonzini@redhat.com, corbet@lwn.net, shuah@kernel.org, Dave.Martin@arm.com, tabba@google.com, ben.horgan@arm.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, peter.maydell@linaro.org, eric.auger@redhat.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Thu, 2026-05-21 at 07:42 -0700, Jakub Kicinski wrote:
-> On Wed, 20 May 2026 11:34:43 +1000 Matthieu Baerts (NGI0) wrote:
-> > The run.sh script explicitly checks that CONFIG_MODULES is disabled.
-> >=20
-> > By default, this config option is enabled. Explicitly disable it to be
-> > able to run the RDS tests.
-> >=20
-> > Note that writing '# CONFIG_(...) is not set' is usually recommended to
-> > disable an option in the .config, but it looks like selftests usually
-> > set 'CONFIG_(...)=3Dn', which looks clearer.
-> >=20
-> > Fixes: 0f5d68004780 ("selftests: rds: add tools/testing/selftests/net/r=
-ds/config")
-> > Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+On Thu, 21 May 2026 15:51:26 +0100,
+Mark Rutland <mark.rutland@arm.com> wrote:
+> 
+> On Fri, Mar 06, 2026 at 05:01:11PM +0000, Mark Brown wrote:
+> > Provide versions of the SME state save and restore functions for the
+> > hypervisor to allow it to restore ZA and ZT for guests.
+> > 
+> > Signed-off-by: Mark Brown <broonie@kernel.org>
 > > ---
-> >  tools/testing/selftests/net/rds/config | 1 +
-> >  1 file changed, 1 insertion(+)
-> >=20
-> > diff --git a/tools/testing/selftests/net/rds/config b/tools/testing/sel=
-ftests/net/rds/config
-> > index 97db7ecb892a..3d62d0c750a8 100644
-> > --- a/tools/testing/selftests/net/rds/config
-> > +++ b/tools/testing/selftests/net/rds/config
-> > @@ -1,3 +1,4 @@
-> > +CONFIG_MODULES=3Dn
-> >  CONFIG_NET_NS=3Dy
-> >  CONFIG_NET_SCH_NETEM=3Dy
-> >  CONFIG_RDS=3Dy
->=20
-> Hm, okay, if it works it works, but IIUC disabling modules turns all =3Dm
-> from the default config into =3Dn (not =3Dy as one would naively hope?) s=
-o
-> this may come back to bite us. Unless there's a strong reason to not use
-> modules it may be good to follow up in net-next and life this
-> requirement.
+> >  arch/arm64/include/asm/kvm_hyp.h |  2 ++
+> >  arch/arm64/kvm/hyp/fpsimd.S      | 23 +++++++++++++++++++++++
+> >  2 files changed, 25 insertions(+)
+> 
+> While this specific instance is simple enough, I don't think we should
+> continue to duplicate the low level save/restore routines between the
+> main kernel and KVM hyp code.
+> 
+> I've sent a series that avoids the need for this, and cleans up some
+> other bits):
+> 
+>   https://lore.kernel.org/linux-arm-kernel/20260521132556.584676-1-mark.rutland@arm.com/
+> 
+> Assuming Marc and Oliver are on board, I'd prefer that we do that
+> cleanup first, and build the KVM SME support atop.
 
-Ok, thanks for the feedback. I will work on a follow up set to rework the m=
-odule configs as well as rename the scripts.
-I think the initial motivation for CONFIG_MODULES=3Dn was to simplify gcov =
-collection, but it should work either way.  I
-will try to get a patch set out later this week.  Thank you!
+Absolutely. The whole FP/SVE is still way too complicated, full of
+esoteric constructs, hard to audit, and I would really like to see it
+cleaned-up before stacking another layer on top.
 
-Allison
+I've quickly eyeballed the KVM-specific patches yesterday, and nothing
+seem outlandish, so there is a good chance some of that could make it
+into 7.2. I plan to look at it again shortly.
 
+Thanks,
+
+	M.
+
+-- 
+Jazz isn't dead. It just smells funny.
