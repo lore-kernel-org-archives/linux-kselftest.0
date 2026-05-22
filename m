@@ -1,78 +1,48 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from devnull.danielhodges.dev (vps-2f6e086e.vps.ovh.us [135.148.138.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DD432D0C89;
-	Fri, 22 May 2026 10:54:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0076C18B0A;
+	Fri, 22 May 2026 11:00:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=135.148.138.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779447287; cv=none; b=naNVj1uxrRkp8+5L2Rrc/mm81sFhd06f3HK/7RyspPsEyobtkFhilC0+MYroHYtVlklwmfimQMNj9VtKC0rpublFoGXfPEguSYNITxIvvgvq1ORxNHBuEBwczv7cQRB0QfoqtopK7iLnLyNbUKceshdNTA364o5W6vk5DKDnzEk=
+	t=1779447605; cv=none; b=KKY5kVRfC5IlESpEmyn5bggaP+weW8cCuS2I6HY8gfA6kLsDkJrOXtr43T/HNwdFIS+tdr8/Qi8rwzRitZ9aVaslUcsefZWZz0wzhgjYbpMEvkiKdEqiEA0oUU+8usI0cQJamuNdAYontyOcjc7MIFI/4dq02YWO2eyW+CYBdTo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779447287; c=relaxed/simple;
-	bh=b3P2hBjSQh19IUuIUM2fF0JGVEHnP7/F+/Pk0IYDPiE=;
+	s=arc-20240116; t=1779447605; c=relaxed/simple;
+	bh=La4ldckeJ1DEkTYBEqbb8ZnKY0L5q2JI0gPRNMToICc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rLbw9phdb18zyiRNKpD8iMztnowjAnjTvQ0+yWgPnQ5iS/FNUEwk7UfLHnfxPOuI/iAdNmFajG7sB9OeTxC5YFgk3iUkYgWg4aACFHbLlz6K+1cKxnuQdEBYApexCNWhXfGk9O9UVzHT0H+OnE+m5hRyjctdtkJ6NcUBmdPghlY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k2Btgv02; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=klud6EJCDgXvBYkxyCYOp091A0c7UNcuIv1DdxdvVCp0EtjS6zKVHjEKIrU9j+RKKKMwQk1qQGYUaIi9a6ni9APjNa4YR2/DEM/pwoa2x7tGsftkFf95B340yfX4qTT7ON9QoF61av/bo2d3LIYPQU2Lau+rghlMPAYIDFhqN6M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=danielhodges.dev; spf=pass smtp.mailfrom=danielhodges.dev; dkim=pass (2048-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b=nTCNub3q; dkim=permerror (0-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b=xmSQM/FS; arc=none smtp.client-ip=135.148.138.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=danielhodges.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=danielhodges.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k2Btgv02"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63DE71F000E9;
-	Fri, 22 May 2026 10:54:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779447285;
-	bh=I485ulN9sXiuaxr3hxPza2zN7Bv6l4bsoi/xIZYLS2w=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=k2Btgv02Ssad7yxOLqwOuzAGd9Nm6n+f33MO8sLqWzk5wtpxP99zdw5uuTHGJGcjY
-	 OQ2sKvX+N6i5jd7gSlLhEpMsg/oKuVv76xq26CBjs36q+PYBZ8sTTHwkpxT1mEwuHG
-	 lDaYJyZQem2KZOWp/GaXpSjMlXkKDe/TLfmmk0t/Q2yfJQsdmqAEtDdUWgLltsJTER
-	 zqZz5Ltkn3HqZyLnMjhGLvCgFKSr0SxBVReF8DvkmkNDYXiqvNyKUcgqqs+X6fFyeJ
-	 ddRyIRFpaCEdRdKwlmNVez+1bJ7X3jjfhpaL943Pzg5Yl+RzWaqVfCKPlBUEM8lIrc
-	 7OPw8j9/NVAAQ==
-Received: from phl-compute-03.internal (phl-compute-03.internal [10.202.2.43])
-	by mailfauth.phl.internal (Postfix) with ESMTP id BAAF0F4007C;
-	Fri, 22 May 2026 06:54:44 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-03.internal (MEProxy); Fri, 22 May 2026 06:54:44 -0400
-X-ME-Sender: <xms:9DUQatKIw8pHtuL_uqOaivYUQcb6w8lDWDXW4u2T4qRJnm98l2gfiQ>
-    <xme:9DUQaiKzPJe6e9bA5ywcoJ5ZRy-ppHZ2O5X-CHMV23TgVx94H6cZSLVahiyeltw2R
-    IhajtMUfA0Hs3m8RqK1WuIusqANdavHKiMZPeSLe8TzWkcoazhAIw>
-X-ME-Received: <xmr:9DUQavbk_UOPlqFSDOiCbSnF83Zth4S2PpnwOncelc7CbcknO2le0z71kCk3CA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgddugeelleekucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucenucfjughrpeffhffvvefukfhfgggtuggjsehttdertd
-    dttddvnecuhfhrohhmpefmihhrhihlucfuhhhuthhsvghmrghuuceokhgrsheskhgvrhhn
-    vghlrdhorhhgqeenucggtffrrghtthgvrhhnpeeuieejieffkeehfeffffdtkeelfeelhe
-    fhfefhudehjeehvdffleeuvddufefgkeenucevlhhushhtvghrufhiiigvpedtnecurfgr
-    rhgrmhepmhgrihhlfhhrohhmpehkihhrihhllhdomhgvshhmthhprghuthhhphgvrhhsoh
-    hnrghlihhthidqudeiudduiedvieehhedqvdekgeeggeejvdekqdhkrghspeepkhgvrhhn
-    vghlrdhorhhgsehshhhuthgvmhhovhdrnhgrmhgvpdhnsggprhgtphhtthhopeegiedpmh
-    houggvpehsmhhtphhouhhtpdhrtghpthhtohepshhjsehkvghrnhgvlhdrohhrghdprhgt
-    phhtthhopegrkhhpmheslhhinhhugidqfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpth
-    htoheprhhpphhtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehpvghtvghrgiesrhgv
-    ughhrghtrdgtohhmpdhrtghpthhtohepuggrvhhiugeskhgvrhhnvghlrdhorhhgpdhrtg
-    hpthhtoheplhhjsheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhurhgvnhgssehg
-    ohhoghhlvgdrtghomhdprhgtphhtthhopehvsggrsghkrgeskhgvrhhnvghlrdhorhhgpd
-    hrtghpthhtoheplhhirghmrdhhohiflhgvthhtsehorhgrtghlvgdrtghomh
-X-ME-Proxy: <xmx:9DUQalXQ45nNeLCORY2mKnQqw6SnE982YJ4qYQ2t6SoOeMI2y0BbBg>
-    <xmx:9DUQanEuT7mr9cBWathBzxbeRi39QSnTdc0DqsHOhyvnzvLZtl0uyA>
-    <xmx:9DUQaqDatI1DSjaKH9-vRnSfjvKFSWa1lGXfYaszChiPPIrjcIbqnQ>
-    <xmx:9DUQaqXoRWOs6Pe2jV5X2u3ECEO_XG2VZUU8UrJ5LBmWlfWPZQSSHg>
-    <xmx:9DUQai6GZOnuhag9McN737qpIDRxxOugkk-glWd-hou_D78sncHzieP5>
-Feedback-ID: i10464835:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 22 May 2026 06:54:43 -0400 (EDT)
-Date: Fri, 22 May 2026 11:54:41 +0100
-From: Kiryl Shutsemau <kas@kernel.org>
-To: SeongJae Park <sj@kernel.org>
-Cc: akpm@linux-foundation.org, rppt@kernel.org, peterx@redhat.com, 
-	david@kernel.org, ljs@kernel.org, surenb@google.com, vbabka@kernel.org, 
-	Liam.Howlett@oracle.com, ziy@nvidia.com, corbet@lwn.net, skhan@linuxfoundation.org, 
-	seanjc@google.com, pbonzini@redhat.com, jthoughton@google.com, aarcange@redhat.com, 
-	usama.arif@linux.dev, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, kvm@vger.kernel.org, 
-	kernel-team@meta.com
-Subject: Re: [PATCH v2 04/14] mm: add VM_UFFD_RWP VMA flag
-Message-ID: <ahAzY0CKNzE-SOd2@thinkstation>
-References: <b47d8d5681fd8730f6090ebfdb72f219a8edef1e.1778254670.git.kas@kernel.org>
- <20260515002932.124892-1-sj@kernel.org>
+	dkim=pass (2048-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b="nTCNub3q";
+	dkim=permerror (0-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b="xmSQM/FS"
+DKIM-Signature: v=1; a=rsa-sha256; s=202510r; d=danielhodges.dev; c=relaxed/relaxed;
+	h=Message-ID:Subject:To:From:Date; t=1779447438; bh=mnoTLsgIKH+ds8HEwODUsUa
+	009Zv/bcrsjFzbvmtvqY=; b=nTCNub3qdX54BdLioh7xz31yGeRXK2taqcvjvit+rdUe51zr+/
+	Mn4T2CIDBagu7nMXgqew8rgEZooAXYPjGFjEHqj6InDk3wIvLzLd4huv5lSr/F3AhVotP3Jin6x
+	4IUOFeutJjbHXdGIoBp3g6rQdapNEkRW5xp1l9KMfUJ0CbcZccfo6a6l7u9ZpE8eMo5f9GlaehH
+	uGXGf4dG9l9lmGA3IugOCwJPAQDTK2sANtNJbtA5mRCb/GT9Y7b6HP/0Gv/do+r/TrG7UD6tP6V
+	DE0lTodRttIQAf1FrG0ooBGMNUylbyAld37z8qt2a6pyk/Ax77/vCnc8k++OIS+P0Ug==;
+DKIM-Signature: v=1; a=ed25519-sha256; s=202510e; d=danielhodges.dev; c=relaxed/relaxed;
+	h=Message-ID:Subject:To:From:Date; t=1779447438; bh=mnoTLsgIKH+ds8HEwODUsUa
+	009Zv/bcrsjFzbvmtvqY=; b=xmSQM/FSpmhUZAdvpxO/ahWkMzZ4hkx+cxqjJb/yR/T5tgocCE
+	sjrHlWzONcfbIGAsyQ9gA8gEo5aPtEody1Ag==;
+Date: Fri, 22 May 2026 06:57:17 -0400
+From: Daniel Hodges <daniel@danielhodges.dev>
+To: Felix Maurer <fmaurer@redhat.com>
+Cc: Daniel Hodges <git@danielhodges.dev>, bpf@vger.kernel.org, 
+	linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net, 
+	vadim.fedorenko@linux.dev, song@kernel.org, yatsenko@meta.com, martin.lau@linux.dev, 
+	eddyz87@gmail.com, haoluo@google.com, jolsa@kernel.org, john.fastabend@gmail.com, 
+	kpsingh@kernel.org, sdf@fomichev.me, yonghong.song@linux.dev, 
+	herbert@gondor.apana.org.au, davem@davemloft.net
+Subject: Re: [PATCH bpf-next v8 0/4] Add cryptographic hash and signature
+ verification kfuncs to BPF
+Message-ID: <fm43bx7min3olvz4ok46emxvyvbczw4weq5dkwitzwmq6h4jzg@a56b3irxynks>
+References: <20260225202935.31986-1-git@danielhodges.dev>
+ <ag8zGP5azt743BWc@thinkpad>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -81,100 +51,44 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260515002932.124892-1-sj@kernel.org>
+In-Reply-To: <ag8zGP5azt743BWc@thinkpad>
 
-On Thu, May 14, 2026 at 05:29:31PM -0700, SeongJae Park wrote:
-> On Fri,  8 May 2026 16:55:16 +0100 "Kiryl Shutsemau (Meta)" <kas@kernel.org> wrote:
+On Thu, May 21, 2026 at 06:30:16PM +0200, Felix Maurer wrote:
+> Hi Daniel,
 > 
-> > Preparatory patch for userfaultfd read-write protection (RWP). RWP
-> > extends userfaultfd protection from plain write-protection (WP) to
-> > full read-write protection: accesses to an RWP-protected range --
-> > reads as well as writes -- trap through userfaultfd.
-> > 
-> > RWP marks ranges by combining PAGE_NONE with the uffd PTE bit, so
-> > the flag is only meaningful when both primitives exist. A new
-> > CONFIG_USERFAULTFD_RWP Kconfig symbol auto-selects when CONFIG_64BIT,
-> > CONFIG_ARCH_HAS_PTE_PROTNONE, and CONFIG_HAVE_ARCH_USERFAULTFD_WP
-> > are all set; call sites that gate on the flag depend on the symbol.
-> > Elsewhere VM_UFFD_RWP aliases VM_NONE and every downstream check
-> > folds to dead code.
-> > 
-> > Nothing sets the flag yet.
-> > 
-> > Signed-off-by: Kiryl Shutsemau <kas@kernel.org>
-> > Assisted-by: Claude:claude-opus-4-6
+> I found your series because I was about to implement something similar
+> like your hashing implementation. In other words, I'd be very happy to
+> see this patchset move forward.
 > 
-> A silly but loud thought.  Would it make more sense to put Signed-off-by: after
-> Assisted-by: ?
+> Taking an initial look at your hashing patches, I'm wondering: the usual
+> interface to hash/digest algorithms is to have three functions: an
+> init() function to set up state
 
-I am not sure. I see it both ways in git log. And I don't have strong
-opinion on the order here. Keeping as is.
+Doesn't bpf_crypto_ctx_create already provide the initialization? I was
+trying to make that pattern work by adding the bpf_crypto_type_id to
+make the code a little more maintainable.
 
-> > ---
-> >  Documentation/filesystems/proc.rst |  1 +
-> >  fs/proc/task_mmu.c                 |  3 +++
-> >  include/linux/mm.h                 | 28 +++++++++++++++++----------
-> >  include/linux/userfaultfd_k.h      | 31 +++++++++++++++++++++++++-----
-> >  include/trace/events/mmflags.h     |  7 +++++++
-> >  mm/Kconfig                         |  9 +++++++++
-> >  6 files changed, 64 insertions(+), 15 deletions(-)
-> > 
-> > diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
-> > index db6167befb7b..db28207c5290 100644
-> > --- a/Documentation/filesystems/proc.rst
-> > +++ b/Documentation/filesystems/proc.rst
-> > @@ -607,6 +607,7 @@ encoded manner. The codes are the following:
-> >      um    userfaultfd missing tracking
-> >      uw    userfaultfd wr-protect tracking
-> >      ui    userfaultfd minor fault
-> > +    ur    userfaultfd read-write-protect tracking
-> 
-> Yet another silly but loud thought.  My first feeling on this was that this
-> reads like 'u'serfaultfd 'r'ead-protect.  And was further thinking 'uf' for
-> just 'u'seffaultfd 'f'ault or 'up' for 'u'serfault-'p'rotect might make sense.
-> But ended up thinking this is too trivial and ain't really matter.
+> an update() function that can be called  multiple times to hash new
+> bytes, and a finalize() function that creates the actual hash.
+> Depending on the algorithm, some of them (esp.  finalize) may be
+> no-ops. Often, a fourth function, like hash(), is provided
 
-I will keep it. It's "u" + the first distinguishing letter of the mode
-name. r distinguishes RWP from WP cleanly.
+I think the bpf_crypto_encrypt should cover that along with the
+bpf_crypto_hash in the first patch.
 
-> [...]
-> > diff --git a/mm/Kconfig b/mm/Kconfig
-> > index e8bf1e9e6ad9..ccf534a8cbc9 100644
-> > --- a/mm/Kconfig
-> > +++ b/mm/Kconfig
-> > @@ -1347,6 +1347,15 @@ config HAVE_ARCH_USERFAULTFD_MINOR
-> >  	help
-> >  	  Arch has userfaultfd minor fault support
-> >  
-> > +config USERFAULTFD_RWP
-> > +	def_bool y
-> > +	depends on 64BIT && ARCH_HAS_PTE_PROTNONE && HAVE_ARCH_USERFAULTFD_WP
-> > +	help
-> > +	  Userfaultfd read-write protection (UFFDIO_RWPROTECT) delivers a
-> 
-> Seems UFFDIO_RWPROTECT will be introduced later.  Would it make more sense to
-> add this config together with the patch?
+> I think we should provide the same init/update/finalize interface in bpf
+> as well to make the API more flexible. That would require splitting out
+> the shash_desc from the (mostly static) context. But doing so would also
+> address the review comment from bpf-ci bot to patch 1. WDYT?
 
+I was trying to make things work with the existing bpf_crypto_ctx
+lifecycle. IIRC in the V1/V2 of the series there was a separate struct
+but it was suggested to integrate the changes into bpf_crypto_ctx.
+Regarding the bpf-ci bot I think it's somewhat valid, but you could
+solve that by putting the bpf_crypto_ctx in a per CPU map or protecting
+it with a bpf spinlock. I didn't hear back from the crypto folks so I
+sort of left things as is. If you want to give it a go feel free. It
+would also be helpful to hear about what your use case is. Thanks for
+taking a look!
 
-Okay, I will move later in the patchset.
-
-> > +	  userfaultfd notification on every access -- read or write -- to a
-> > +	  protected range, letting userspace observe the working set of a
-> > +	  process.
-> > +
-> >  menuconfig USERFAULTFD
-> >  	bool "Enable userfaultfd() system call"
-> >  	depends on MMU
-> > -- 
-> > 2.51.2
-> > 
-> > 
-> 
-> None of my comments is a blocker.
-> 
-> Reviewed-by: SeongJae Park <sj@kernel.org>
-
-Thanks!
-
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+-Daniel
