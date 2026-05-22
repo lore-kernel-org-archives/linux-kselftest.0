@@ -1,118 +1,84 @@
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 382D0362137
-	for <linux-kselftest@vger.kernel.org>; Fri, 22 May 2026 23:05:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22BD625A359;
+	Fri, 22 May 2026 23:30:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779491139; cv=none; b=b5+tr8Zp0GVBGx3+QTxL0Shi7dpvq/2G0dIjIKoBL23XMZ3ghvBz87esbflQqHFDuopbZdcH9f3HJcA/cCiOg1pwGvNA3yTaRr17nlF11eI3cZtw8eDcvMxCH0D/g/rDbFhWh/aoQ2HM3LcCmkzdgZUxS2ujeU3f2keLcjvUeO8=
+	t=1779492657; cv=none; b=tyrYzqknCtBZB8E34gZ1O4z9D0CV5MLIcdV4GlGBRBEB/uIDstACvKVHkR+//jygjDZhFAA5tnwKVWOh9LyxB3LiI/bLhFQ7NBA53vejefsd0XUCrgGdP9e2h2klBg3o1beTEOccoWjTkJBr4maJDYTK2dQr05/vTRYwFu6HN3Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779491139; c=relaxed/simple;
-	bh=8vLtsz7ZKDtp2UNuNvqYFVPILl8UflYPbV55sojcBjs=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=r95NVp245aajIlOJ1CRow/qZzmi0nXL7+EWTyIcnZfPmaaAq3GXkuaiA0qOKVNvr4OIa2AghPUSuiIrCrTu8ND1OGMo6gCbCZeKybIroPxHUym2luTo2O+WcFSqKg7LWaB8wcAj68okrPo2d+9rFTi619FJdnswXYJAUVY6A9vU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Q1omRqF7; arc=none smtp.client-ip=209.85.214.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1779492657; c=relaxed/simple;
+	bh=i6vHdQ5oldCpZlhFDjFmxL304IdV4wnWfln87BM7NM0=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=Bv3956/aryiIYFmQrMjQ7L6ynX6VmT5OM9/3421pSGsD6GQf77k5ItzQJXcYBmKmWi1UD0D3GV69Lu297OPLqC0QquoEIdPTejBL6ZmLe92IlwvZt/mi8rI/W051ZbRovfJiR8e1NuILD1no0uMOC7IIiX1BrY/NOu7MMbD/U00=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=desiato.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=OUorWJ8t; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=desiato.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Q1omRqF7"
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2b458add85aso84815375ad.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 22 May 2026 16:05:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1779491137; x=1780095937; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=L9YbEtCfOkOpVPBvBwRE/wDUhUbdeL8GFXWIWh+htCc=;
-        b=Q1omRqF7GS+r+lObqpsye11fwGR0yKpERorPgGM2HXjOz1ZE/0Ru6hjz2Ujvv11Ijz
-         YsHwL21TMEaqqRKU9uFYSjf/EhPDN2F09Pa1A7JlXdBkrCX4wiyXQO2RZfVBcXRUrfNa
-         rOI7LHhik7z78t/e98ciQjoFcBhtesS7/HMTKg+lPbHdKipHbit13lt2CfzsJWOax+cV
-         L42VsFtWU8pa/+9sps5991TpH5atmHItZNdXVrvhNn4OS7bxIZ1vxSAOSHGAyeSCiRSG
-         CHMnlsltXGmMOZKNSki2X3Qk0hzjOrVJqp5dWnEjvv70om6z3NZoixsuFVBXkUGnbJL5
-         JD+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779491137; x=1780095937;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=L9YbEtCfOkOpVPBvBwRE/wDUhUbdeL8GFXWIWh+htCc=;
-        b=ExjauK9fMHbs78b6OocOdFPUIoWzr5mflkkswJfw3YMDJfkxi11zKnfh3Lv8lxbZlF
-         Ib0ITJbg6Y3zsSB6T5tXXFtvVLj03vFvOTW6yvHw9dPSofcWOrI7TiCVVFlPjluBnFBQ
-         juYp9C+ziIO9Z/ud7cXQ2Qef7p2Gj3jXqA5UNyq+4tDCGKSSZ8LSRWRnvWdd6U5J+u+o
-         qLPOBnGgOWpr+ESqWXDOuEMiLg0ARJCVsBD0dsO0qh7Twhd8xxpYOGjjNIldJbiGZTKJ
-         +/upz5GNbPqCkVuEXv1IkLn9mcP1IiCH0DYH8/qYR06YZz4OKS2i12a4mHe8UKI1kKQd
-         54Pg==
-X-Forwarded-Encrypted: i=1; AFNElJ9YHLzkfUnLVPAV5p6hj43EM6ovGku+4jS9UDkQmK/YPNE1uztThNMmHOpwNt7VMllcqT04kBKjl8eSP6bxMLE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz7I3CGg+zLAcfRELpB3/0xfdzoGDYucShv2bmXG6ie8RWOA5mp
-	NkFP6V5YXh+NuSbrPiHrwh3O794/b64URd0n0lFs3mWRuSXLsORvRYLXLniZkEA8NOJSWU3WlwX
-	Ko+AZXw==
-X-Received: from plbjh21.prod.google.com ([2002:a17:903:3295:b0:2be:1727:6821])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:e88e:b0:2bd:9803:9308
- with SMTP id d9443c01a7336-2beb070261bmr61986275ad.36.1779491137176; Fri, 22
- May 2026 16:05:37 -0700 (PDT)
-Date: Fri, 22 May 2026 16:05:36 -0700
-In-Reply-To: <CAO9r8zMY6i+TWoZPWzj8zB+Xw3rONbK-Nee1kSFwDkT3hy66zg@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="OUorWJ8t"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+	:MIME-Version:Message-ID:References:In-Reply-To:Subject:CC:To:From:Date:
+	Sender:Reply-To:Content-ID:Content-Description;
+	bh=i6vHdQ5oldCpZlhFDjFmxL304IdV4wnWfln87BM7NM0=; b=OUorWJ8tXcW09mDeCVBA/b8LZW
+	hpfXFu+EBYP9IjRj2PiIkEVGfSyH9LRxmdtygDflODeVVijCU7fk7dVBnp1ZLjSeCRFp5cIz2lYZ5
+	i0K5bRWjlXK8pJGE+1wWAdEN7ptP8dQ/E7wnmXXsU5b4IldjDJg1OuxzNRa5Dv1ECgoPWc1bQZrYB
+	7Qqsy8e6x1CWJOdocrh1neuN+vKOiZ9WJRS268HMjqh6pNxc4N1jCsaKs1K/il0+geGYobFEr/J9E
+	zno9xHOsMAknlHjYnXKJQo/D+frfDBzhKu8XKZ8zdUrzZO9dHhegJdo6KdiPhByzmwkvgRjFtEeM+
+	BfqIJBCA==;
+Received: from [2001:8b0:10b:5:5975:12af:289:68ce] (helo=ehlo.thunderbird.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
+	id 1wQZK5-00000005akR-0Dzw;
+	Fri, 22 May 2026 23:30:33 +0000
+Date: Sat, 23 May 2026 00:30:33 +0100
+From: David Woodhouse <dwmw2@infradead.org>
+To: Sean Christopherson <seanjc@google.com>
+CC: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>, Thomas Gleixner <tglx@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, Vitaly Kuznetsov <vkuznets@redhat.com>,
+ Juergen Gross <jgross@suse.com>,
+ Boris Ostrovsky <boris.ostrovsky@oracle.com>, Paul Durrant <paul@xen.org>,
+ Jonathan Cameron <jic23@kernel.org>,
+ Sascha Bischoff <Sascha.Bischoff@arm.com>, Marc Zyngier <maz@kernel.org>,
+ Joey Gouly <joey.gouly@arm.com>, Jack Allister <jalliste@amazon.com>,
+ Dongli Zhang <dongli.zhang@oracle.com>, joe.jin@oracle.com,
+ kvm@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ xen-devel@lists.xenproject.org, linux-kselftest@vger.kernel.org
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v4_27/30=5D_KVM=3A_x86=3A_Add_K?=
+ =?US-ASCII?Q?VM=5FVCPU=5FTSC=5FEFFECTIVE=5FFREQ_attribute?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <ahDO58dKuPt-lj_J@google.com>
+References: <20260509224824.3264567-1-dwmw2@infradead.org> <20260509224824.3264567-28-dwmw2@infradead.org> <3ad6cd109480772ade3c11f23b9c1d7a9855d67e.camel@infradead.org> <ag-Hf2liLSX9q0rS@google.com> <ab84153e33fbe7c25667f595c56b310d4d5a93ef.camel@infradead.org> <ahBQ7mXNaTtouT3C@google.com> <c4b498c401287477402ddd60a0120b0c5a9bf8d3.camel@infradead.org> <ahCQluJj59uWlDAF@google.com> <99356a588677e9ff31c1747db1705d9250a2728d.camel@infradead.org> <ahDO58dKuPt-lj_J@google.com>
+Message-ID: <277F54CD-9F17-4B67-B575-3A8DDEA09796@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260521-tdx-selftests-v13-v13-0-6983ae4c3a4d@google.com>
- <20260521-tdx-selftests-v13-v13-7-6983ae4c3a4d@google.com> <CAO9r8zMY6i+TWoZPWzj8zB+Xw3rONbK-Nee1kSFwDkT3hy66zg@mail.gmail.com>
-Message-ID: <ahDhQJI7xBOQpnjg@google.com>
-Subject: Re: [PATCH v13 07/22] KVM: selftests: Introduce structures for TDX
- guest boot parameters
-From: Sean Christopherson <seanjc@google.com>
-To: Yosry Ahmed <yosry@kernel.org>
-Cc: Lisa Wang <wyihan@google.com>, Andrew Jones <ajones@ventanamicro.com>, 
-	Ackerley Tng <ackerleytng@google.com>, Binbin Wu <binbin.wu@linux.intel.com>, 
-	Chao Gao <chao.gao@intel.com>, Chenyi Qiang <chenyi.qiang@intel.com>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, Erdem Aktas <erdemaktas@google.com>, 
-	Ira Weiny <ira.weiny@intel.com>, Isaku Yamahata <isaku.yamahata@intel.com>, 
-	Kiryl Shutsemau <kas@kernel.org>, linux-kselftest@vger.kernel.org, 
-	Paolo Bonzini <pbonzini@redhat.com>, "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>, 
-	Reinette Chatre <reinette.chatre@intel.com>, Rick Edgecombe <rick.p.edgecombe@intel.com>, 
-	Roger Wang <runanwang@google.com>, Ryan Afranji <afranji@google.com>, 
-	Sagi Shahar <sagis@google.com>, Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>, 
-	Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org, linux-coco@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, x86@kernel.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato.infradead.org. See http://www.infradead.org/rpr.html
 
-On Fri, May 22, 2026, Yosry Ahmed wrote:
-> > +static void __attribute__((used)) common(void)
-> > +{
-> > +       OFFSET(TD_BOOT_PARAMETERS_CR0, td_boot_parameters, cr0);
-> > +       OFFSET(TD_BOOT_PARAMETERS_CR3, td_boot_parameters, cr3);
-> > +       OFFSET(TD_BOOT_PARAMETERS_CR4, td_boot_parameters, cr4);
-> > +       OFFSET(TD_BOOT_PARAMETERS_GDT, td_boot_parameters, gdtr);
-> > +       OFFSET(TD_BOOT_PARAMETERS_IDT, td_boot_parameters, idtr);
-> > +       OFFSET(TD_BOOT_PARAMETERS_PER_VCPU, td_boot_parameters, per_vcpu);
-> > +       OFFSET(TD_PER_VCPU_PARAMETERS_ESP_GVA, td_per_vcpu_parameters, esp_gva);
-> > +       OFFSET(TD_PER_VCPU_PARAMETERS_GUEST_CODE, td_per_vcpu_parameters,
-> > +              guest_code);
-> > +       DEFINE(SIZEOF_TD_PER_VCPU_PARAMETERS,
-> > +              sizeof(struct td_per_vcpu_parameters));
-> > +}
-> 
-> This is neat.
-> 
-> Sean, is this the preferred way to expose offsets to asm files (or asm
-> code blocks) -- as opposed to say using .equ [*]?
+On 22 May 2026 22:47:19 BST, Sean Christopherson <seanjc@google=2Ecom> wrot=
+e:
+>On Fri, May 22, 2026, David Woodhouse wrote:
+>> On Fri, 2026-05-22 at 10:21 -0700, Sean Christopherson wrote:
+>> >=20
+>> > I'll send a standalone patch, along with a selftest tweak to verify t=
+he fix=2E
+>> > It's technically a fix and won't generate any conflicts, no reason to=
+ delay it=2E
+>>=20
+>> Are you suggesting the other 30 should be delayed? :P
+>
+>LOL, just acknowledging that it'll take me a minute to page all of that c=
+ode in=2E
 
-For actual .S assembly, yes.  For inline asm, maybe?  If it looks prettier, go
-for it.  
+Hey, it took me more than a year to page it back in :)
 
-> If yes, I can rework my nVMX GPR fixes to use the same approach for
-> register offsets. I wonder if the non-TDX part of this patch (i.e.
-> Makefile stuff) can be split, then patch 6 and the Makefile stuff can
-> land independently and allow development on top.
-> 
-> I can also split them out and include them in the next version of my
-> series, then whichever series lands first will land the offsets
-> support.
-> 
-> WDYT?
-
-Hmm, I'd say keep your series as-is for now.  The OFFSET() infrastructure really
-shines for proper assembly.  For what you're doing, AFAICT it's only marginally
-better.  So I don't think it's worth juggling dependencies to use it right away,
-we can always convert if/when the TDX series lands the fancy stuff.
+I am only teasing; no rush=2E And I will post v5 with some accumulated twe=
+aks (from my kvmclock5 branch) soon=2E
