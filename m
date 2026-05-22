@@ -1,72 +1,65 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEF4D481666;
-	Fri, 22 May 2026 15:40:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 047DE346E7F;
+	Fri, 22 May 2026 16:24:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779464441; cv=none; b=SUoKg3jfYOdOyw9t63dUMhWs2kX9t2IfcuOJCbeQosdsQZbJQM4p9hib2vYwgxTbiDfCaEXo+FcUWaDgbKnVccrnUFlnlun7v4rvXh/neFPwvLESCSGjOnRWOqfRhFL7tQmI+BKL3G/v+e48vrlXL1itBCjWAT0tmSjLiM8slBs=
+	t=1779467079; cv=none; b=kLOwP5uPqTncQAB9ydVn/5WGftlm2u35UxUL2MSV+14gOYRpRSL6iu/sLGQu7FHwxfIjZ+GYnBMBoVXZieI/TEyjd4VqP9jL70phKouyWFmSnUMqJQzxg8sgRwS/DkZY1k0gHwPPviYQGctOZxmO537w2ysD5DssaHE8/JPPY0w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779464441; c=relaxed/simple;
-	bh=vlSxJq/mZG/PC7FG4BVhxJBrns4C2X+9/1QoBF2tbHI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=u0nO/4OHjMeAQghvsri/LF65fQivBWShRyaT+poS9173ZZq0r52rW8aXa1LOrCld4WvaNS0G1zHoqZaiPHX7v4GclAOorI+4DqjQyNiGCdz4T8K419ti1Lmfq2h6vm3WX3dq3EY18KD7uU2hFn3y963HBVxIrrE4C9wmodWuuNo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ChsT2Yfn; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779467079; c=relaxed/simple;
+	bh=/EBK9Za3dzKeST6xzL+uhXsqga85E68iUDnkuLoGL9Q=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=WFuO8N7s1GjxJdZ7oXns0rt1RDWwmmXZRqmK7vBOCJwIoPDOl4BwrcGvo9pGVGSA341ZeEMph/cvPYbLGmFQetwybiR5/bSCIxYw1BMIs3KidJ/9N6fL2Kr4LPBOt1L2yF0Xv5zna9hpYLA4QDBCUwq2GAtDcZZAlul+rq4E+rQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XIebCu8w; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ChsT2Yfn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E08C1F00ADE;
-	Fri, 22 May 2026 15:40:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XIebCu8w"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66CD81F000E9;
+	Fri, 22 May 2026 16:24:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779464439;
-	bh=9Q+fxjZuCnosHblIbwlECkpSubPFTTaxfUpkwZ9ZxQM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=ChsT2Yfn+ODS1uaG7sqj7mrAPStXFayQ79napPt+xO0tW+zLvsgSOBUwpIi9dSC4l
-	 KdkNjot3hGrhxAtESWs35/ke5dM/Zw3b9SHzBaIiG7b94KPU1UXLs+v9iEUORIEKO9
-	 7dJIZLQcxpcv7Dq2FM2gPN7uddIh+DwTOjBWD0Evly4/Jzixw7aZo31yVa9Pz1xlee
-	 MP2c1H5qXU6f8SaoGA8JLF2QUVqIY5KUdSrvVxUnyQEoMw9qBd4ugJ2wT0PREtXHqj
-	 hWb2IjDFgy+4JkXrUctEAN/nYP53mrdjK1aek9SaAAq7IPlaDdUKQcNZhT3OA7K1vj
-	 Bu7oZNHwAKSvg==
-From: SeongJae Park <sj@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: SeongJae Park <sj@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	damon@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
+	s=k20260515; t=1779467078;
+	bh=/EBK9Za3dzKeST6xzL+uhXsqga85E68iUDnkuLoGL9Q=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=XIebCu8w/5EIsnTAkusMssIT/oJ++zXZHLC1bxea4xQ8RIVifoo61GRKbJnWBCT11
+	 px8/BWJ1FsE6P8UM0bHpDrBhDalyvGrHouJBfM0NCg7hDMzjwSUfPPT9zA2+3EdUaA
+	 6W8O3aSeK+6T2YmpeLi6rdxg1Kc4iOCZm+ZiZEvu4sQruxZ9wZQOccShdL+d4mVRaA
+	 pVnBCTP6bm54v77PyYTnxkhFgNFA8R9pAizBvIj1HroEMZj52iF9qj1hs62LL9/Dih
+	 C5+J7RB9P5cPL2SgUWFq3MnK5PFOKbQnxQhuCkIZevGpwBVrtK0cDtVC5Pum/iKjRX
+	 YjpkbyS2oy+qQ==
+Date: Fri, 22 May 2026 06:24:37 -1000
+Message-ID: <1644404988c5e2d333a9d09399533dcd@kernel.org>
+From: Tejun Heo <tj@kernel.org>
+To: Guopeng Zhang <zhangguopeng@kylinos.cn>
+Cc: Shuah Khan <shuah@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>,
+	Oscar Salvador <osalvador@suse.de>,
+	David Hildenbrand <david@kernel.org>,
+	=?utf-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+	cgroups@vger.kernel.org,
+	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: [PATCH 14/14] selftests/damon/sysfs.sh: test pause file existence
-Date: Fri, 22 May 2026 08:40:25 -0700
-Message-ID: <20260522154026.80546-15-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260522154026.80546-1-sj@kernel.org>
-References: <20260522154026.80546-1-sj@kernel.org>
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/cgroup: enable memory controller in hugetlb memcg test
+In-Reply-To: <20260520093130.490020-1-zhangguopeng@kylinos.cn>
+References: <20260520093130.490020-1-zhangguopeng@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-sysfs.sh DAMON selftest is not testing the existence of the 'pause'
-sysfs file.  Add the test.
+Hello,
 
-Signed-off-by: SeongJae Park <sj@kernel.org>
----
- tools/testing/selftests/damon/sysfs.sh | 1 +
- 1 file changed, 1 insertion(+)
+Applied to cgroup/for-7.2.
 
-diff --git a/tools/testing/selftests/damon/sysfs.sh b/tools/testing/selftests/damon/sysfs.sh
-index 92b44c86818af..78f4badb5bebb 100755
---- a/tools/testing/selftests/damon/sysfs.sh
-+++ b/tools/testing/selftests/damon/sysfs.sh
-@@ -366,6 +366,7 @@ test_context()
- 	ensure_file "$context_dir/avail_operations" "exit" 400
- 	ensure_file "$context_dir/operations" "exist" 600
- 	ensure_file "$context_dir/addr_unit" "exist" 600
-+	ensure_file "$context_dir/pause" "exist" 600
- 	test_monitoring_attrs "$context_dir/monitoring_attrs"
- 	test_targets "$context_dir/targets"
- 	test_schemes "$context_dir/schemes"
--- 
-2.47.3
+Thanks.
+
+--
+tejun
