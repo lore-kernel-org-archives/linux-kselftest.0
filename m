@@ -1,94 +1,176 @@
-Received: from devnull.danielhodges.dev (vps-2f6e086e.vps.ovh.us [135.148.138.8])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0076C18B0A;
-	Fri, 22 May 2026 11:00:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=135.148.138.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 674D63E5A14;
+	Fri, 22 May 2026 11:32:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779447605; cv=none; b=KKY5kVRfC5IlESpEmyn5bggaP+weW8cCuS2I6HY8gfA6kLsDkJrOXtr43T/HNwdFIS+tdr8/Qi8rwzRitZ9aVaslUcsefZWZz0wzhgjYbpMEvkiKdEqiEA0oUU+8usI0cQJamuNdAYontyOcjc7MIFI/4dq02YWO2eyW+CYBdTo=
+	t=1779449561; cv=none; b=AxY6QXeUPGGV7Mpb+JK7Hir6W4RgYV2W2oWSudJvroxmZ9FMG2ofZkyqVyKAfnEdbIsvnzGL3q16lL3MJOfoOIy7+8awSpmvL/k7msm7M5eJYHNd+CUhfNi+hhLBVa2LYdecr26d84QsS62qZXz0xxZXIOvWE9KCZLjAI9o1+hY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779447605; c=relaxed/simple;
-	bh=La4ldckeJ1DEkTYBEqbb8ZnKY0L5q2JI0gPRNMToICc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=klud6EJCDgXvBYkxyCYOp091A0c7UNcuIv1DdxdvVCp0EtjS6zKVHjEKIrU9j+RKKKMwQk1qQGYUaIi9a6ni9APjNa4YR2/DEM/pwoa2x7tGsftkFf95B340yfX4qTT7ON9QoF61av/bo2d3LIYPQU2Lau+rghlMPAYIDFhqN6M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=danielhodges.dev; spf=pass smtp.mailfrom=danielhodges.dev; dkim=pass (2048-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b=nTCNub3q; dkim=permerror (0-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b=xmSQM/FS; arc=none smtp.client-ip=135.148.138.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=danielhodges.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=danielhodges.dev
+	s=arc-20240116; t=1779449561; c=relaxed/simple;
+	bh=jYzbxjrZthWt73Beqahfgf2Sbh7MkL70Bkt+TMyCwZU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=AOz5B/+icrQhv8+q65fCF7zWGIevLwYoMtf9gSvXisxOs7rxiwhvZ3EHQxZcHN3PJ6wlcWc9p+fRUKTcwzZexJq25Zga9OHAxT8oYG281+kwkPTYCwIUWSoo/ndAT0OZAN3IgAkHtrg/FbO4lCJfeslEKqQFgsy3pkQ5AzbCePw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Yh7/dP8M; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b="nTCNub3q";
-	dkim=permerror (0-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b="xmSQM/FS"
-DKIM-Signature: v=1; a=rsa-sha256; s=202510r; d=danielhodges.dev; c=relaxed/relaxed;
-	h=Message-ID:Subject:To:From:Date; t=1779447438; bh=mnoTLsgIKH+ds8HEwODUsUa
-	009Zv/bcrsjFzbvmtvqY=; b=nTCNub3qdX54BdLioh7xz31yGeRXK2taqcvjvit+rdUe51zr+/
-	Mn4T2CIDBagu7nMXgqew8rgEZooAXYPjGFjEHqj6InDk3wIvLzLd4huv5lSr/F3AhVotP3Jin6x
-	4IUOFeutJjbHXdGIoBp3g6rQdapNEkRW5xp1l9KMfUJ0CbcZccfo6a6l7u9ZpE8eMo5f9GlaehH
-	uGXGf4dG9l9lmGA3IugOCwJPAQDTK2sANtNJbtA5mRCb/GT9Y7b6HP/0Gv/do+r/TrG7UD6tP6V
-	DE0lTodRttIQAf1FrG0ooBGMNUylbyAld37z8qt2a6pyk/Ax77/vCnc8k++OIS+P0Ug==;
-DKIM-Signature: v=1; a=ed25519-sha256; s=202510e; d=danielhodges.dev; c=relaxed/relaxed;
-	h=Message-ID:Subject:To:From:Date; t=1779447438; bh=mnoTLsgIKH+ds8HEwODUsUa
-	009Zv/bcrsjFzbvmtvqY=; b=xmSQM/FSpmhUZAdvpxO/ahWkMzZ4hkx+cxqjJb/yR/T5tgocCE
-	sjrHlWzONcfbIGAsyQ9gA8gEo5aPtEody1Ag==;
-Date: Fri, 22 May 2026 06:57:17 -0400
-From: Daniel Hodges <daniel@danielhodges.dev>
-To: Felix Maurer <fmaurer@redhat.com>
-Cc: Daniel Hodges <git@danielhodges.dev>, bpf@vger.kernel.org, 
-	linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net, 
-	vadim.fedorenko@linux.dev, song@kernel.org, yatsenko@meta.com, martin.lau@linux.dev, 
-	eddyz87@gmail.com, haoluo@google.com, jolsa@kernel.org, john.fastabend@gmail.com, 
-	kpsingh@kernel.org, sdf@fomichev.me, yonghong.song@linux.dev, 
-	herbert@gondor.apana.org.au, davem@davemloft.net
-Subject: Re: [PATCH bpf-next v8 0/4] Add cryptographic hash and signature
- verification kfuncs to BPF
-Message-ID: <fm43bx7min3olvz4ok46emxvyvbczw4weq5dkwitzwmq6h4jzg@a56b3irxynks>
-References: <20260225202935.31986-1-git@danielhodges.dev>
- <ag8zGP5azt743BWc@thinkpad>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yh7/dP8M"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 849121F000E9;
+	Fri, 22 May 2026 11:32:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779449555;
+	bh=Da/LUoEp/2+SUk5O0pH1Ab+4zQ0ZfMfGzwCZOrKrw50=;
+	h=From:To:Cc:Subject:Date;
+	b=Yh7/dP8MVpGmXEnnUrGwNWcFN4E56xX4fKr6q3+Lfe8cl//PkW7whJOswPXiak9oL
+	 CJAtfu4HPL1xwMuSfcYahLkBNwLg6PRlKoo2udbCZymQh4OEwXunlXqabzlQlTzfkZ
+	 ttK6ldvd2HPoGY66vHbpLYmCtdvqurWNUVEJRLNQHkdCB2glR+iXniPerr83qieuCI
+	 cbf1OUtPmCv3EnGKif9DDUwiR3vp8CeaBCIP+lE/kEKPGT6W52XDmQq+sLMt4jlceO
+	 53ybZ1T7Q/ofsyc6+q8cGy3CVzsi7XmEa94hYzE15kOWsRcmEHE4Ar3v9WNj51Igmv
+	 Tmw8Rm2gIKMMg==
+From: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
+To: Alexander Duyck <alexanderduyck@fb.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	kernel-team@meta.com,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	netdev@vger.kernel.org
+Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+	Jacob Keller <jacob.e.keller@intel.com>,
+	Mohsin Bashir <mohsin.bashr@gmail.com>,
+	"Mike Marciniszyn (Meta)" <mike.marciniszyn@gmail.com>,
+	Pavel Begunkov <asml.silence@gmail.com>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next 0/3] fbnic: Support larger io_uring zcrx buffers
+Date: Fri, 22 May 2026 13:32:19 +0200
+Message-ID: <20260522113225.241337-1-bjorn@kernel.org>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ag8zGP5azt743BWc@thinkpad>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Thu, May 21, 2026 at 06:30:16PM +0200, Felix Maurer wrote:
-> Hi Daniel,
-> 
-> I found your series because I was about to implement something similar
-> like your hashing implementation. In other words, I'd be very happy to
-> see this patchset move forward.
-> 
-> Taking an initial look at your hashing patches, I'm wondering: the usual
-> interface to hash/digest algorithms is to have three functions: an
-> init() function to set up state
+Hi!
 
-Doesn't bpf_crypto_ctx_create already provide the initialization? I was
-trying to make that pattern work by adding the bpf_crypto_type_id to
-make the code a little more maintainable.
+Fbnic programs receive buffers through BDQs. The hardware consumes
+BDQs as 4 KiB fragments, and receive completions report the consumed
+buffer by returning the BDQ buffer ID in the RCD.
 
-> an update() function that can be called  multiple times to hash new
-> bytes, and a finalize() function that creates the actual hash.
-> Depending on the algorithm, some of them (esp.  finalize) may be
-> no-ops. Often, a fourth function, like hash(), is provided
+The driver currently derives the BDQ fragment layout from PAGE_SIZE.
+That works while HPQ and PPQ use the same allocation size, but
+io_uring zcrx can provide larger receive buffers through rx_buf_len.
+For zcrx, the PPQ page pool allocation size and the PPQ BDQ fragment
+geometry need to match the requested buffer size, without changing
+HPQ.
+                                                                                                                                                                                                                                                                                                                                                  
+Make the BDQ fragment geometry per ring, then use the rendered RX
+queue rx_page_size when creating the PPQ page pool. The NIC still
+consumes the PPQ as 4 KiB fragments; a larger zcrx buffer is
+represented as multiple BDQ fragments belonging to one net_iov.
 
-I think the bpf_crypto_encrypt should cover that along with the
-bpf_crypto_hash in the first patch.
+Fbnic also validates rx_page_size against its own queue geometry. The
+core validates the zcrx request and checks that the imported memory
+can be represented as rx_buf_len-sized DMA chunks, but fbnic still
+needs to make sure the PPQ retains usable depth after expanding one
+software buffer into multiple 4 KiB hardware fragments.
 
-> I think we should provide the same init/update/finalize interface in bpf
-> as well to make the API more flexible. That would require splitting out
-> the shash_desc from the (mostly static) context. But doing so would also
-> address the review comment from bpf-ci bot to patch 1. WDYT?
+The normal open path uses the rendered per-queue rx_page_size as well.
+This preserves a memory-provider binding made while the netdev is
+down, instead of falling back to the default PPQ geometry on open.
 
-I was trying to make things work with the existing bpf_crypto_ctx
-lifecycle. IIRC in the V1/V2 of the series there was a separate struct
-but it was suggested to integrate the changes into bpf_crypto_ctx.
-Regarding the bpf-ci bot I think it's somewhat valid, but you could
-solve that by putting the bpf_crypto_ctx in a per CPU map or protecting
-it with a bpf spinlock. I didn't hear back from the crypto folks so I
-sort of left things as is. If you want to give it a go feel free. It
-would also be helpful to hear about what your use case is. Thanks for
-taking a look!
+The selftest change adds an optional iou-zcrx helper check for manual
+driver testing. It is not wired into the generic large-chunk test
+because different drivers may legitimately return different CQE
+boundaries.
 
--Daniel
+Manual testing
+==============
+
+The fbnic QEMU model and firmware setup are described here:
+
+  https://lore.kernel.org/netdev/20260309113852.2c654de5@kernel.org/
+
+I use something like:
+
+  KERNEL=/path/to/linux                                                                                                                                                                                                                                                                                                                           
+  DISK=/path/to/fedora-qemu.raw                                                                                                                                                                                                                                                                                                                   
+  OVMF_CODE=/path/to/OVMF_CODE.fd                                                                                                                                                                                                                                                                                                                 
+  OVMF_VARS=/path/to/OVMF_VARS.fd                                                                                                                                                                                                                                                                                                                 
+  MODS=/tmp/fbnic-modules                                                                                                                                                                                                                                                                                                                         
+  QEMU=/path/to/fbnic-qemu/build/qemu-system-x86_64                                                                                                                                                                                                                                                                                               
+                                                                                                                                                                                                                                                                                                                                                  
+  $QEMU \                                                                                                                                                                                                                                                                                                                                         
+    -machine type=q35,accel=kvm \                                                                                                                                                                                                                                                                                                                 
+    -drive if=pflash,format=raw,unit=0,file=$OVMF_CODE,readonly=on \                                                                                                                                                                                                                                                                              
+    -drive if=pflash,format=raw,unit=1,file=$OVMF_VARS \                                                                                                                                                                                                                                                                                          
+    -smp 16 -m 16G \                                                                                                                                                                                                                                                                                                                              
+    -object memory-backend-memfd,id=mem,size=16G,share=on \                                                                                                                                                                                                                                                                                       
+    -numa node,memdev=mem \                                                                                                                                                                                                                                                                                                                       
+    -kernel $KERNEL/arch/x86/boot/bzImage \                                                                                                                                                                                                                                                                                                       
+    -append "root=/dev/vda2 rw console=ttyS0 earlycon" \                                                                                                                                                                                                                                                                                          
+    -drive file=$DISK,format=raw,if=none,id=drive0 \                                                                                                                                                                                                                                                                                              
+    -device virtio-blk-pci,drive=drive0 \                                                                                                                                                                                                                                                                                                         
+    -no-user-config -nodefaults -nographic \                                                                                                                                                                                                                                                                                                      
+    -virtfs local,path=$MODS/lib/modules,mount_tag=modules,security_model=none,readonly=on \                                                                                                                                                                                                                                                      
+    -virtfs local,path=$KERNEL,mount_tag=hostshare,security_model=none,readonly=on \                                                                                                                                                                                                                                                              
+    -netdev user,id=hostnet0,hostfwd=tcp::9999-:9999 \                                                                                                                                                                                                                                                                                            
+    -netdev hubport,id=hub_uplink,hubid=0,netdev=hostnet0 \                                                                                                                                                                                                                                                                                       
+    -device virtio-net-pci,netdev=n1 \                                                                                                                                                                                                                                                                                                            
+    -netdev hubport,id=n1,hubid=0 \                                                                                                                                                                                                                                                                                                               
+    -device pcie-root-port,id=pcie.1,bus=pcie.0,chassis=1 \                                                                                                                                                                                                                                                                                       
+    -device fbnic,bus=pcie.1,id=fbnic.1,mac=00:de:ad:be:ef:01,netdev=n2,rbt=skt.0,bar4=ctrl.1 \                                                                                                                                                                                                                                                   
+    -netdev hubport,id=n2,hubid=0 \                                                                                                                                                                                                                                                                                                               
+    -chardev socket,id=ctrl.1,path=/tmp/fbnic-ctrl-skt \                                                                                                                                                                                                                                                                                          
+    -netdev socket,id=skt.0,connect=localhost:9000 \                                                                                                                                                                                                                                                                                              
+    -serial mon:stdio                                                                                                                                                                                                                                                                                                                             
+
+Here you'll get a fbnic device, host port forwarding for TCP port
+9999, and a 9p mount for the kernel tree and modules.
+
+Inside the guest:
+
+  mount -t 9p -o trans=virtio,version=9p2000.L hostshare /host
+
+  cd /host/tools/testing/selftests/drivers/net/hw
+
+  ethtool -L enp1s0 combined 2
+  ethtool -G enp1s0 tcp-data-split on hds-thresh 0 rx 64
+  ethtool -X enp1s0 equal 1
+  ethtool -N enp1s0 flow-type tcp4 dst-ip 10.0.2.15 dst-port 9999 action 1
+
+  echo 64 > /proc/sys/vm/nr_hugepages
+  ./iou-zcrx -s -i enp1s0 -p 9999 -q 1 -x 2
+
+On the host:
+
+  cd /path/to/linux/tools/testing/selftests/drivers/net/hw
+  ./iou-zcrx -c -h 127.0.0.1 -p 9999 -l 12840
+
+For fbnic-specific manual checking that traffic reaches the second 4
+KiB fragment of an 8 KiB zcrx buffer, run the receiver with:
+
+  ./iou-zcrx -s -i enp1s0 -p 9999 -q 1 -x 2 -F 4096
+
+
+Björn Töpel (3):
+  fbnic: Track BDQ fragment geometry per ring
+  fbnic: Support larger zcrx receive buffers
+  selftests: drv-net: Add zcrx payload offset check
+
+ drivers/net/ethernet/meta/fbnic/fbnic_csr.h   |  29 +--
+ .../net/ethernet/meta/fbnic/fbnic_debugfs.c   |   5 +-
+ drivers/net/ethernet/meta/fbnic/fbnic_txrx.c  | 168 ++++++++++++++----
+ drivers/net/ethernet/meta/fbnic/fbnic_txrx.h  |   6 +
+ .../selftests/drivers/net/hw/iou-zcrx.c       |  28 ++-
+ 5 files changed, 176 insertions(+), 60 deletions(-)
+
+
+base-commit: 1a1f055318d82e64485a6ff8420e5f70b4267998
+--
+2.53.0
+
