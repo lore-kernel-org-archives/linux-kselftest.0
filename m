@@ -1,168 +1,118 @@
-Received: from mail-vk1-f176.google.com (mail-vk1-f176.google.com [209.85.221.176])
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1B4F37E2E6
-	for <linux-kselftest@vger.kernel.org>; Fri, 22 May 2026 23:02:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.176
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779490961; cv=pass; b=H/2+VIrnup4jaOeGzUpoWQtU4RE+DUiRROZra1DvdSbsF4r/JVfJkcXonVbplbthcwc5xRj7vCGQHZ0YrvGYJ6GAF9fVJM4UYNEgl2YRtbiqy9/loxy71k9HFBy/BxbJxRS5mRHQAtvkVH1PQKAuyqYwGhHU9hA5VNNqGZHG/lM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779490961; c=relaxed/simple;
-	bh=ibZMSZEwhsHjGnLBrHCL/QtGJncXCz0nJYgEJjvO8KA=;
-	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=e/VY7NyyQ1PoZGqbxs/Ows7AcHtKO+iUE+sUkKBHt910xlR6Zxhh6jeedMFLeC8+BCTVRtAFZZnvP1nuSLrexqiGXTC61YmbGmmAJYxC+sTf7Xq400jpaCjkNz4+vBlRrE1t+GawlQMkh9UUdKSu4ARLYBqSACCMktzMH5pMOFw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YQgAgxjd; arc=pass smtp.client-ip=209.85.221.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 382D0362137
+	for <linux-kselftest@vger.kernel.org>; Fri, 22 May 2026 23:05:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779491139; cv=none; b=b5+tr8Zp0GVBGx3+QTxL0Shi7dpvq/2G0dIjIKoBL23XMZ3ghvBz87esbflQqHFDuopbZdcH9f3HJcA/cCiOg1pwGvNA3yTaRr17nlF11eI3cZtw8eDcvMxCH0D/g/rDbFhWh/aoQ2HM3LcCmkzdgZUxS2ujeU3f2keLcjvUeO8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779491139; c=relaxed/simple;
+	bh=8vLtsz7ZKDtp2UNuNvqYFVPILl8UflYPbV55sojcBjs=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=r95NVp245aajIlOJ1CRow/qZzmi0nXL7+EWTyIcnZfPmaaAq3GXkuaiA0qOKVNvr4OIa2AghPUSuiIrCrTu8ND1OGMo6gCbCZeKybIroPxHUym2luTo2O+WcFSqKg7LWaB8wcAj68okrPo2d+9rFTi619FJdnswXYJAUVY6A9vU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Q1omRqF7; arc=none smtp.client-ip=209.85.214.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YQgAgxjd"
-Received: by mail-vk1-f176.google.com with SMTP id 71dfb90a1353d-575171b1ce7so2575652e0c.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 22 May 2026 16:02:39 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779490959; cv=none;
-        d=google.com; s=arc-20240605;
-        b=E8bQHXQ98FpLxraPLtExsjK6WJvIY0qxgIp2WkOTadJXcRl8GsF9InCK1RsQWkspk+
-         D5o3aGU3qyxa99V0eSRYsqFFkXxx6eKmZx9O0wCXFwE9V6zGFVLAvkao+z0ZXN3qRiBK
-         jT7+7nzmWB2wPJBe5Vb2bhbyRoo3ObrYoZwvzNewmstzY5c+POCA8y6dBO4BMaYnzAyK
-         wtEUvo/SQ+RNsemFQ/Zouad3b8TFW6j3tVi2jjgL62riptFtM8kOBb6SqoZhv5WeoiKm
-         Y8Rq07LI6biqA/PTDdemuSU66OGUARTuDbqPTevGg+FyR5ZFnAWdJp+A7mGjEZEmsmgU
-         eb0Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:dkim-signature;
-        bh=+lqWW5xTN76UwAfrRbxGlO2NBxcf8RIbZZTDif3+3JY=;
-        fh=iG3C+F5M+u0/G051tesoA14nXlaUSCrQZcT8FpmtshY=;
-        b=YOyAF62GDuEdqODS1c1z01C6gfnKvCZWyqS9ycM5vfGokMie2/fkiTVF/e1EYVK1an
-         n7khrGQTmLKlmLCjzLiShpIP7c7C4pdQBeyeA+eDE6EGPwloZn1wV6sOXu8EQtHzNdSk
-         uzYrOSi2cy9H5pISs0XJwD9NbqIOA5Ue20ab25If86dhdai/ZY5sRTrD0e5gCJ6QyJZ2
-         95QU+V9hOMmTJ1S2aRynYmwKWElSXwhDG4pM3OjroP5x3Sph3ZQ+FcvwEBmaA/kx2WfR
-         dhuI9IyB0cvIZkh1waVePBnzzPt6uH+We5NhlmKtY2FODyq0R8nLxobxwFKRIrAeCzk8
-         yIFA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Q1omRqF7"
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2b458add85aso84815375ad.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 22 May 2026 16:05:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1779490959; x=1780095759; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+lqWW5xTN76UwAfrRbxGlO2NBxcf8RIbZZTDif3+3JY=;
-        b=YQgAgxjdzx/T0WCj/Bi/gjx8L4ZI2/BWximtpzkBrT5ik/C70mWPd2OkJgjGGvhPdH
-         zmxB5xtR6GHvDmU+EHbkRJNBh6TLKkNVzDeX+d29UjiSbIK3QGcFPNXW/GVTho3tFmhF
-         ZTbgBSEyC1XQIo05GzG2xYS58Su6qOFsJQGaW9a+IQZhPSpOMkeCqH1uViErKDZBd2SU
-         H7KcDoFVM0GQagKSWqtwDaXMefIeyNl6ugj6siiOKuIFhaTWenYXrnQrDOkvisFzc/ab
-         mGL7evVPn00TMqeLeJyZtuGamzUUGWNLGtJhV6HlOGJen2br9ouv7p3beAG0xX6ph38p
-         ymRw==
+        d=google.com; s=20251104; t=1779491137; x=1780095937; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=L9YbEtCfOkOpVPBvBwRE/wDUhUbdeL8GFXWIWh+htCc=;
+        b=Q1omRqF7GS+r+lObqpsye11fwGR0yKpERorPgGM2HXjOz1ZE/0Ru6hjz2Ujvv11Ijz
+         YsHwL21TMEaqqRKU9uFYSjf/EhPDN2F09Pa1A7JlXdBkrCX4wiyXQO2RZfVBcXRUrfNa
+         rOI7LHhik7z78t/e98ciQjoFcBhtesS7/HMTKg+lPbHdKipHbit13lt2CfzsJWOax+cV
+         L42VsFtWU8pa/+9sps5991TpH5atmHItZNdXVrvhNn4OS7bxIZ1vxSAOSHGAyeSCiRSG
+         CHMnlsltXGmMOZKNSki2X3Qk0hzjOrVJqp5dWnEjvv70om6z3NZoixsuFVBXkUGnbJL5
+         JD+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779490959; x=1780095759;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+lqWW5xTN76UwAfrRbxGlO2NBxcf8RIbZZTDif3+3JY=;
-        b=MVLbK0I9MaRd7LoaKLaU7ZOnqGOLw/hTLMnIRPVgsLTXP1yNrHzaZtCFOUXXrRFsW0
-         jHbhuNdDd9K9+3iN9WgHz1ApfVllNmTIHIxFMORCZOgOStGuHHh4UuuoghxImT/xxFVQ
-         mOf6yy5Bmi9Fn9u80TScy3wYy4Harr8vJQF9rtOIWYYArlk1eaPfrPKncTA/2dD8cmlW
-         83AfwPeNscIOcSiUDJe8T3Sq72y7wDuhULT6uS6lTtp7huP8jtJBBjzFFhJ6THWda6Mm
-         G5nv3rjbLjpw54N4ZPa6nCEGBAkuWhu3j+zzJfg3gpXHflrsMBqTRxSmiqZlsVvsvFyS
-         B3iw==
-X-Forwarded-Encrypted: i=1; AFNElJ9bqIrkSy3wFu9NYq2rD6jKyovDfx5jorYL67he1hUZoHhOGxdJFA3OJzlvW7lQTgIuUKNzIDqbpmcuvIIHMGM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx2fcvIE1C/B7WA74uFqIQ6ZF+nDMK9TJqkpAVFBCxMA/LAvO/5
-	Y0+pSvQLnw2RT8V4O1kMAlvTh/AvjwLnAy++nL1kBF5ToVTxf1PeTcdZvd0W/q2sXywz1GJ68oH
-	C3zUQGZYVtt5VM+tWvI/C1XwukOoQGNxX/TVdyhqq
-X-Gm-Gg: Acq92OH4oqVICQbsIj8GHSEwVjtUMqtt+DYcV33FAVLDuYeAYYW8Ordrf94lXFzX7m5
-	5KC/XyNM8swCgaGQrAX94Pnw2iAFQlH4dze8QpiHSGL4k2yRlIPp8XFOcrRn0LTUvk0gP39x9Fb
-	2s+UTgTyilCHKhCNpMs2OHiz7xTLl2i1wqyQVlvOXurr8MIodX2B7fc0d91sx6k7n+wBjg6cJMV
-	9wBfGwgmGfZd5meGeS4FNsFz0M02ZdADjOJfY409U1FsXVC67cSFrSRyBuP4Vl4+WNoZyudNmzS
-	HtkqjupCwELeawr/e/72YenOAmD5CDtZ3y7+nTyJuMwYV/DsK/ESG7ipSG4VVJEAnj1DBcYYqA8
-	guo/v
-X-Received: by 2002:a05:6122:1796:b0:56c:db8b:504e with SMTP id
- 71dfb90a1353d-58663966692mr3461861e0c.13.1779490953839; Fri, 22 May 2026
- 16:02:33 -0700 (PDT)
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 22 May 2026 16:02:33 -0700
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 22 May 2026 16:02:33 -0700
-From: Ackerley Tng <ackerleytng@google.com>
-In-Reply-To: <20260507-gmem-inplace-conversion-v6-25-91ab5a8b19a4@google.com>
-References: <20260507-gmem-inplace-conversion-v6-0-91ab5a8b19a4@google.com> <20260507-gmem-inplace-conversion-v6-25-91ab5a8b19a4@google.com>
+        d=1e100.net; s=20251104; t=1779491137; x=1780095937;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=L9YbEtCfOkOpVPBvBwRE/wDUhUbdeL8GFXWIWh+htCc=;
+        b=ExjauK9fMHbs78b6OocOdFPUIoWzr5mflkkswJfw3YMDJfkxi11zKnfh3Lv8lxbZlF
+         Ib0ITJbg6Y3zsSB6T5tXXFtvVLj03vFvOTW6yvHw9dPSofcWOrI7TiCVVFlPjluBnFBQ
+         juYp9C+ziIO9Z/ud7cXQ2Qef7p2Gj3jXqA5UNyq+4tDCGKSSZ8LSRWRnvWdd6U5J+u+o
+         qLPOBnGgOWpr+ESqWXDOuEMiLg0ARJCVsBD0dsO0qh7Twhd8xxpYOGjjNIldJbiGZTKJ
+         +/upz5GNbPqCkVuEXv1IkLn9mcP1IiCH0DYH8/qYR06YZz4OKS2i12a4mHe8UKI1kKQd
+         54Pg==
+X-Forwarded-Encrypted: i=1; AFNElJ9YHLzkfUnLVPAV5p6hj43EM6ovGku+4jS9UDkQmK/YPNE1uztThNMmHOpwNt7VMllcqT04kBKjl8eSP6bxMLE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz7I3CGg+zLAcfRELpB3/0xfdzoGDYucShv2bmXG6ie8RWOA5mp
+	NkFP6V5YXh+NuSbrPiHrwh3O794/b64URd0n0lFs3mWRuSXLsORvRYLXLniZkEA8NOJSWU3WlwX
+	Ko+AZXw==
+X-Received: from plbjh21.prod.google.com ([2002:a17:903:3295:b0:2be:1727:6821])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:e88e:b0:2bd:9803:9308
+ with SMTP id d9443c01a7336-2beb070261bmr61986275ad.36.1779491137176; Fri, 22
+ May 2026 16:05:37 -0700 (PDT)
+Date: Fri, 22 May 2026 16:05:36 -0700
+In-Reply-To: <CAO9r8zMY6i+TWoZPWzj8zB+Xw3rONbK-Nee1kSFwDkT3hy66zg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Date: Fri, 22 May 2026 16:02:33 -0700
-X-Gm-Features: AVHnY4KLpjLWXQlawB-gZxOwicuZUmspmndJ5b1mQf8zRUUhG2Ao-NrVmxpOgcg
-Message-ID: <CAEvNRgEHf67kpLtNyET7cvE5hWfXHqNrwv9cP9bRUgk_NKb+0A@mail.gmail.com>
-Subject: Re: [PATCH v6 25/43] KVM: selftests: Add support for mmap() on
- guest_memfd in core library
-To: Ackerley Tng via B4 Relay <devnull+ackerleytng.google.com@kernel.org>, aik@amd.com, 
-	andrew.jones@linux.dev, binbin.wu@linux.intel.com, brauner@kernel.org, 
-	chao.p.peng@linux.intel.com, david@kernel.org, ira.weiny@intel.com, 
-	jmattson@google.com, jthoughton@google.com, michael.roth@amd.com, 
-	oupton@kernel.org, pankaj.gupta@amd.com, qperret@google.com, 
-	rick.p.edgecombe@intel.com, rientjes@google.com, shivankg@amd.com, 
-	steven.price@arm.com, tabba@google.com, willy@infradead.org, 
-	wyihan@google.com, yan.y.zhao@intel.com, forkloop@google.com, 
-	pratyush@kernel.org, suzuki.poulose@arm.com, aneesh.kumar@kernel.org, 
-	liam@infradead.org, Paolo Bonzini <pbonzini@redhat.com>, 
-	Sean Christopherson <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
-	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
-	Nhat Pham <nphamcs@gmail.com>, Baoquan He <bhe@redhat.com>, Barry Song <baohua@kernel.org>, 
-	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
-	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
-	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Kiryl Shutsemau <kas@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>, Vlastimil Babka <vbabka@kernel.org>
-Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
-	linux-coco@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+References: <20260521-tdx-selftests-v13-v13-0-6983ae4c3a4d@google.com>
+ <20260521-tdx-selftests-v13-v13-7-6983ae4c3a4d@google.com> <CAO9r8zMY6i+TWoZPWzj8zB+Xw3rONbK-Nee1kSFwDkT3hy66zg@mail.gmail.com>
+Message-ID: <ahDhQJI7xBOQpnjg@google.com>
+Subject: Re: [PATCH v13 07/22] KVM: selftests: Introduce structures for TDX
+ guest boot parameters
+From: Sean Christopherson <seanjc@google.com>
+To: Yosry Ahmed <yosry@kernel.org>
+Cc: Lisa Wang <wyihan@google.com>, Andrew Jones <ajones@ventanamicro.com>, 
+	Ackerley Tng <ackerleytng@google.com>, Binbin Wu <binbin.wu@linux.intel.com>, 
+	Chao Gao <chao.gao@intel.com>, Chenyi Qiang <chenyi.qiang@intel.com>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, Erdem Aktas <erdemaktas@google.com>, 
+	Ira Weiny <ira.weiny@intel.com>, Isaku Yamahata <isaku.yamahata@intel.com>, 
+	Kiryl Shutsemau <kas@kernel.org>, linux-kselftest@vger.kernel.org, 
+	Paolo Bonzini <pbonzini@redhat.com>, "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>, 
+	Reinette Chatre <reinette.chatre@intel.com>, Rick Edgecombe <rick.p.edgecombe@intel.com>, 
+	Roger Wang <runanwang@google.com>, Ryan Afranji <afranji@google.com>, 
+	Sagi Shahar <sagis@google.com>, Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>, 
+	Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org, linux-coco@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, x86@kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-Ackerley Tng via B4 Relay <devnull+ackerleytng.google.com@kernel.org>
-writes:
+On Fri, May 22, 2026, Yosry Ahmed wrote:
+> > +static void __attribute__((used)) common(void)
+> > +{
+> > +       OFFSET(TD_BOOT_PARAMETERS_CR0, td_boot_parameters, cr0);
+> > +       OFFSET(TD_BOOT_PARAMETERS_CR3, td_boot_parameters, cr3);
+> > +       OFFSET(TD_BOOT_PARAMETERS_CR4, td_boot_parameters, cr4);
+> > +       OFFSET(TD_BOOT_PARAMETERS_GDT, td_boot_parameters, gdtr);
+> > +       OFFSET(TD_BOOT_PARAMETERS_IDT, td_boot_parameters, idtr);
+> > +       OFFSET(TD_BOOT_PARAMETERS_PER_VCPU, td_boot_parameters, per_vcpu);
+> > +       OFFSET(TD_PER_VCPU_PARAMETERS_ESP_GVA, td_per_vcpu_parameters, esp_gva);
+> > +       OFFSET(TD_PER_VCPU_PARAMETERS_GUEST_CODE, td_per_vcpu_parameters,
+> > +              guest_code);
+> > +       DEFINE(SIZEOF_TD_PER_VCPU_PARAMETERS,
+> > +              sizeof(struct td_per_vcpu_parameters));
+> > +}
+> 
+> This is neat.
+> 
+> Sean, is this the preferred way to expose offsets to asm files (or asm
+> code blocks) -- as opposed to say using .equ [*]?
 
->
-> [...snip...]
->
-> @@ -1078,13 +1077,17 @@ void vm_mem_add(struct kvm_vm *vm, enum vm_mem_backing_src_type src_type,
->  	}
->
->  	region->fd = -1;
-> -	if (backing_src_is_shared(src_type))
-> +	if (flags & KVM_MEM_GUEST_MEMFD && gmem_flags & GUEST_MEMFD_FLAG_MMAP) {
-> +		region->fd = kvm_dup(gmem_fd);
-> +		mmap_offset = gmem_offset;
-> +	} else if (backing_src_is_shared(src_type)) {
->  		region->fd = kvm_memfd_alloc(region->mmap_size,
->  					     src_type == VM_MEM_SRC_SHARED_HUGETLB);
-> +	}
->
-> -	region->mmap_start = kvm_mmap(region->mmap_size, PROT_READ | PROT_WRITE,
-> -				      vm_mem_backing_src_alias(src_type)->flag,
-> -				      region->fd);
-> +	region->mmap_start = __kvm_mmap(region->mmap_size, PROT_READ | PROT_WRITE,
-> +					vm_mem_backing_src_alias(src_type)->flag,
-> +					region->fd, mmap_offset);
+For actual .S assembly, yes.  For inline asm, maybe?  If it looks prettier, go
+for it.  
 
-Sashiko pointed out these:
+> If yes, I can rework my nVMX GPR fixes to use the same approach for
+> register offsets. I wonder if the non-TDX part of this patch (i.e.
+> Makefile stuff) can be split, then patch 6 and the Makefile stuff can
+> land independently and allow development on top.
+> 
+> I can also split them out and include them in the next version of my
+> series, then whichever series lands first will land the offsets
+> support.
+> 
+> WDYT?
 
-1. When mmap() is done for region->mmap_alias, it doesn't use
-   mmap_offset. I'll fix that in the next revision.
-
-2. mmap() may map past the end of the guest_memfd if, due to alignment,
-   the mmap_size is increased. That is true, but I feel that that fix
-   should go with a bigger clean up for vm_mem_add().
-
-3. vm_mem_backing_src_alias(src_type)->flag may contain incompatible
-   mmap flags. This is true. For now, when guest_memfd is used with
-   vm_mem_add, the src_type passed has to be VM_MEM_SRC_SHMEM. I think
-   this also falls in the category of doing a bigger clean up for
-   vm_mem_add().
-
->
-> [...snip...]
->
+Hmm, I'd say keep your series as-is for now.  The OFFSET() infrastructure really
+shines for proper assembly.  For what you're doing, AFAICT it's only marginally
+better.  So I don't think it's worth juggling dependencies to use it right away,
+we can always convert if/when the TDX series lands the fancy stuff.
