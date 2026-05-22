@@ -1,67 +1,67 @@
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15D73382F1E
-	for <linux-kselftest@vger.kernel.org>; Fri, 22 May 2026 07:25:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D57A382F1E
+	for <linux-kselftest@vger.kernel.org>; Fri, 22 May 2026 07:25:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779434708; cv=none; b=L82srF0M4UsIK1Q7FLrsW1JUZfZLNRqtnaB087qUk5oYTOyaNkkiAxAF9IbNVJDNpjKcnVTufytJoQaWXqwcqvh677EPN4K5tqTH8K6HMdmXIVMOLR8qWkSO+Xqcs4uwTgzPeCeLwRrQaUDTY6mYb8aPuOwFUgjcpkow68cXNL0=
+	t=1779434720; cv=none; b=nw2f+RQ14r3ZOsRxoXMQfhOcfUKh6u5bO8gsp3mQ3LjC6CuKPk54rffV84SGRDgsvkKX1rQKTpRVllnkQw2mAQiToPuxUDcrMVcYlOW7WjiSzWeeVOwq3CpGB8XdrGI+dKh++LiOOQlyg6smI9kR4IopRb3X/jw7KcTFfo2CPSo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779434708; c=relaxed/simple;
-	bh=iQ3tetTMi+a2kZrr5h4gIqji7vNEElI8JHrIlnprQaY=;
+	s=arc-20240116; t=1779434720; c=relaxed/simple;
+	bh=DR1AkpCg19vmza3y1XhaOoXFEA45xJVCNkq6eE85JyM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XG/Ffx5Em4AGAnRc7LVAJFA33LFypgeohP1BCEx2CJrlz9Oa1FpR7STN/ck6STOwfgqQ0CxWh1god0T/5VvRAJWa+0/3k7v7+K0LslAyNgbwcRblY9JfIsev4RCTXx9Egjpd2iclbyNZWX08s05sP8GpYClMamzxONeu4Bbojow=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=6wind.com; spf=pass smtp.mailfrom=6wind.com; dkim=pass (2048-bit key) header.d=6wind.com header.i=@6wind.com header.b=Zu3HrMPh; arc=none smtp.client-ip=209.85.221.49
+	 In-Reply-To:Content-Type; b=O/yQmYkYU54t9BQA1DzEybmIS94yQVYlb09GnoZzZE3Bb3ly3G+Wi6pTTy/6bePZ67d6T9GRZJjqxf+gCYclMzVU0QijbzZrQccwFIJTbcksS9aov6wkrSuS6KLY1eZuZlKl3WF0633bD+d3mJylg4ZM6/6nOL1GBUBFDXiDRDI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=6wind.com; spf=pass smtp.mailfrom=6wind.com; dkim=pass (2048-bit key) header.d=6wind.com header.i=@6wind.com header.b=F/wREpkW; arc=none smtp.client-ip=209.85.221.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=6wind.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=6wind.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=6wind.com header.i=@6wind.com header.b="Zu3HrMPh"
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-43d7dab87e1so910287f8f.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 22 May 2026 00:25:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=6wind.com header.i=@6wind.com header.b="F/wREpkW"
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-43fe5574cb9so506126f8f.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 22 May 2026 00:25:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=6wind.com; s=google; t=1779434705; x=1780039505; darn=vger.kernel.org;
+        d=6wind.com; s=google; t=1779434717; x=1780039517; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:organization:content-language
          :from:references:cc:to:subject:reply-to:user-agent:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=PihRExIv02FwK9YpxdWEvz/FAv5EgvHDNQzIFK5zFNI=;
-        b=Zu3HrMPheO80VdFc43+KsQxmqnK+0G3vjQBDSTyU4dai6eC3lgy4se/OA9phlDPOk+
-         VIh1FBhiuMTWtcB4iaQ42MjnY/n5fw3nN+u4O31rYc6hZY0rrj1YAgAC39Dsi4BOypHm
-         PBhHJ2FBP6NB1VFoP2zJeSgyO39yyeQrkS1tRxWRY8URoReYvD28h65LEpLDCYimchtG
-         QGb8yQch87JJP/mW68AE3aF3UZY/gXal5dif5AA0UHX1GkF2zPs2S0p6780cg3NOFJr+
-         ObMyK92Tgz+RYxzgUOsXDjdnbSkuCdBxOoQaZO8U5NiZVzE94ur50EwYcizhjyTyVUkl
-         6G/A==
+        bh=+sd+YQcPZ4Wvn7Tf8ziui+EYH4Lu3lY9BCWXszm0/a8=;
+        b=F/wREpkWGbxx9s/fyP+PbaJfHfeD6/GWtwCdsEtzDn8y3jvT6BqByijkYNejRW3Lj1
+         1N0wXy+xRDhEEiyoDc0I7FzacdIilbY8htE3JLcUROSZ9/vQ3RxRJpxYGeX04cBYm2bC
+         MCLPBrfw2N2cnOyCGowyjAli4Tt4B6x7jEc33BQNL9Fgw96MFDS0J7VSmQxJYiH6jUGw
+         s0CGTSGuTZrByLcHmC/2KdNclSgcsd9E/PW5rm0DabuDXQJHxanrD+dL7/YJJfvy34Eb
+         FcqyQAQr9yqgj3cHSnVHkvJ2kjG+cfzx/2j08gycv3xqs6zzLRGo3fczQh3uh2pMVk0K
+         RWpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779434705; x=1780039505;
+        d=1e100.net; s=20251104; t=1779434717; x=1780039517;
         h=content-transfer-encoding:in-reply-to:organization:content-language
          :from:references:cc:to:subject:reply-to:user-agent:mime-version:date
          :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=PihRExIv02FwK9YpxdWEvz/FAv5EgvHDNQzIFK5zFNI=;
-        b=XAEZwsSlwqWBcSaIb9GrakO6CBKdibnP6JDS4D+idSGvLHlOgbIoAtv7id/GcUv2nV
-         mkejt0JtJU/C3UqV9FiKjrkPqTp55RzNijst944krEpzdt9fShlTFXzKcyqtfAH+2jxK
-         bhIBsP/K7+NHJFTpplFoVbOu9tXV1UHdDQUs85le8h10kyZDUrpFg9Tj60ibJ75Sk8TW
-         2hn9eyk+hI7lTxNgITdeVO6gGJGZgHMpwWjcaKD8FLeBeo2OQA0uOpsa15qcDsJ0wHw6
-         mFjScBmaDk0uFZoE5l9wzCRy22+AdPggctxh176sy+WzE4Aw1QdOn4XBL1K+Xhl4Y9DQ
-         GR+A==
-X-Forwarded-Encrypted: i=1; AFNElJ/6AuuH45UZsj7PQS1lFojAjGI+vXiGSheky9wLGXpYm1J4e/YJBPMZrCl9awoy8J7eGYAXN/BYZ+vNThsf4g8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzx/tB9VXlP9+2bZP3QDWVd8b766qqK783+5X5wvLPgBXD2/7Ok
-	TaWzWVD3E/vIuCQbR2N+mTPQw6jBTMJSaxSnmNhI2/DZ7aySHVFuJCVHaAZjasHUXEc=
-X-Gm-Gg: Acq92OEikVmdziNA2NiYLQ79Sg1FhIRVHDHrFDRxHKvBxwtIkwYzJvxgYKq2BXkWoy9
-	Bbll0K4tFYHGpQMxIkWsTvd31sn+ifdyCsEDNvX7DujwHpAgMMwH3WYAEGUOf8/OQCkPiBhRzRL
-	owSenIS7lVbA9+FPTEwh211wiceXEy9wYtuuPTbjMrQ8HYb6gCgqS0R3FwLr3GWZLAfuQjJs5Qf
-	1swWuUfEgB2fvoV8gdher6g0mDlvEPEwRB2B/xo2ZqBUQaRqqeNWNSwWqIVO3QTzvW2vbvyR+Sb
-	EeRuZ9y/VR/aoq1nOyLBgQmT4bk1HOUPt6ejzEBrj5/ZFGUkg+evUj4L31PnMMr51S7rTseercV
-	3sBkUVpuMKxVSfKugtr+kBnuQFK5FVK/KNuJbJs95DVoRWjcbHVYxkceUBARNdqgGU8i9qcO1/g
-	e2FcYe/wIazeqI+PLNRCkSgRuiwfBJFMgh5fnSy6bJjOX0VcvoqAQKqJtXNDqT2awuyHh7NIlcL
-	hSvYbhTIxUSk+s=
-X-Received: by 2002:a05:6000:25e1:b0:45e:89e0:ae71 with SMTP id ffacd0b85a97d-45eb38a6244mr1310137f8f.2.1779434705412;
-        Fri, 22 May 2026 00:25:05 -0700 (PDT)
+        bh=+sd+YQcPZ4Wvn7Tf8ziui+EYH4Lu3lY9BCWXszm0/a8=;
+        b=C0yOg2gKZ25aQLBlL0aFCIXBAry/AH62OAjp9XjBnbIlicCQbURJW1dg2NsOTLDx7E
+         0gZ3mQ/ce7ZfgHJEkxGpBfS0cAhV0txPzcA3lHh+pdInGOt7Q0cmIoq6u4XBF6prfWW1
+         WfR6r2ISyS2E/QPBS1v7speEIn9fjxiO52rprdKuar2BUgaaRvuJV7kurUeo7R+Gtx/m
+         QKJoy0lsAKqFfjbY8w6u2/zzDWHxPHzjFR2WuE6DcBg+kMRiHL8173G0PwmLHt4sa/qA
+         dSQPfqi/ayLhUVkbsQJvu0r8MQ0eJNijLrsJ9/6fk5sO/QiT0ZqH167NNgwm541FJA8r
+         pMeg==
+X-Forwarded-Encrypted: i=1; AFNElJ9TV2j77vtphZuOpkyssIZB04KUAinT86V/jnMlfQE1soodDrtGGFm/2liS35jiEigOSWU4foPumk6v6n9O2MM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwAjathFnqMbWBvGJOuk1Y0a6Hed4u/XFMFwvQLNAFZffhduh04
+	1vc9QZqVzpQ636c+y1DIbYwDS3RKNurmvBt+ChO6FS7UNO8Ju8LVso0oSGwfqbfEOsM=
+X-Gm-Gg: Acq92OE4G2k3QmhftUySQ0pc8WgJ71Dv5ijzy/LAPBwpO4hjQj0L05YzfO29OKNDvpb
+	nTo2ymmhDlISRndIW9gSM+m5O6UNkLQr/UmTLbo1a8ZBhFLeJ+4HoyRzNRJgvmgN9su+WNrG6wl
+	nbGyjMdz9vzlOVXY2xdwSu1BtpaX83Xm5rVBokm/XbqhUXcr3uH1/nyM3egBYUGDz63AIvqAA0E
+	SyILharzbElNkNt3u/xtfef9CKIzv+AAvIET77AnhPM/L0SbSwuzaPxTP78Flc7HicybAaDBsyO
+	hzLt0BIXoqkAbCBSkxxsLhWioHqCgESfzhPXlNOtlS1l6Dp5UZWnsU5V9nFL3i/IaEw6CYl7fq4
+	Y3edEQVyLg+2p7JfwWF481EMV85YNWF6+S5S3ne1ksmET8SFdRuQeUx6bzzvT9RJroZ5Ct++BpB
+	OrZZqDYPpjkCc8MV6kvQGjOWQWJmD3kQM1DUw4wlYnzmZl5dPprMSrXgN6BfIHrmbA1NqEB4Thk
+	gcl
+X-Received: by 2002:a05:600c:c4a3:b0:485:c456:5e4f with SMTP id 5b1f17b1804b1-490422529aemr12940665e9.0.1779434716903;
+        Fri, 22 May 2026 00:25:16 -0700 (PDT)
 Received: from ?IPV6:2a01:e0a:ab7:2110:6a1d:efff:fe52:1959? ([2a01:e0a:ab7:2110:6a1d:efff:fe52:1959])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45eb6d5cb76sm1678678f8f.25.2026.05.22.00.25.04
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4904527f7f7sm41628455e9.7.2026.05.22.00.25.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 May 2026 00:25:04 -0700 (PDT)
-Message-ID: <76280397-a1e8-4194-b02b-76ccef2732c1@6wind.com>
-Date: Fri, 22 May 2026 09:25:04 +0200
+        Fri, 22 May 2026 00:25:16 -0700 (PDT)
+Message-ID: <c34e04b3-d807-4287-8c64-dfb3d7232802@6wind.com>
+Date: Fri, 22 May 2026 09:25:15 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -72,69 +72,63 @@ User-Agent: Mozilla Thunderbird
 Reply-To: nicolas.dichtel@6wind.com
 Subject: Re: [PATCH net v2 2/4] net: netlink: don't set nsid on local
  notifications
-To: Ilya Maximets <i.maximets@ovn.org>, Jiri Benc <jbenc@redhat.com>
-Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+To: Ilya Maximets <i.maximets@ovn.org>, netdev@vger.kernel.org
+Cc: "David S. Miller" <davem@davemloft.net>,
  Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
  Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
  Donald Hunter <donald.hunter@gmail.com>, Shuah Khan <shuah@kernel.org>,
  Kuniyuki Iwashima <kuniyu@google.com>, Kees Cook <kees@kernel.org>,
- Adrian Moreno <amorenoz@redhat.com>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Matteo Perin <matteo.perin@canonical.com>
+ Adrian Moreno <amorenoz@redhat.com>, Jiri Benc <jbenc@redhat.com>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Matteo Perin <matteo.perin@canonical.com>
 References: <20260520172317.175168-1-i.maximets@ovn.org>
  <20260520172317.175168-3-i.maximets@ovn.org>
- <bd9c0751-55ea-459e-8b22-8bd24abf235c@6wind.com>
- <20260521160036.413771e9@griffin>
- <9e7b7aab-dad4-4b72-87cd-822e67b27afe@6wind.com>
- <b8183167-9e8d-4c75-b340-bc3437a14ea0@ovn.org>
 From: Nicolas Dichtel <nicolas.dichtel@6wind.com>
 Content-Language: en-US
 Organization: 6WIND
-In-Reply-To: <b8183167-9e8d-4c75-b340-bc3437a14ea0@ovn.org>
+In-Reply-To: <20260520172317.175168-3-i.maximets@ovn.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Le 21/05/2026 à 18:01, Ilya Maximets a écrit :
-> On 5/21/26 4:25 PM, Nicolas Dichtel wrote:
->> Le 21/05/2026 à 16:00, Jiri Benc a écrit :
->>> On Thu, 21 May 2026 14:36:12 +0200, Nicolas Dichtel wrote:
->>>> I still don't think that this is the right "fix". The app is broken. Even after
->>>> this patch, the bug could be easily triggered again by a third party.
->>>> There is nothing wrong with assigning a self-nsid. It would be a lot more robust
->>>> for the app to assign itself a self-nsid when it starts.
->>>
->>> On the other hand, does the patch break anything in practice (as
->>> opposed to in theory)? It makes live of several apps simpler, which is
->>> not a bad goal.
->> I'm not against the patch, it just look like a workaround.
->> I'm trying to understand how NETLINK_LISTEN_ALL_NSID is used (in fact, why it is
->> used if the app doesn't "understand" NSIDs).
+Le 20/05/2026 à 19:22, Ilya Maximets a écrit :
+> In most cases, notifications on sockets with NETLINK_LISTEN_ALL_NSID
+> do not contain NSID in their ancillary data in case the event is local
+> to the listener.
 > 
-> ovs-vswitchd works with NSIDs of remote ports.  So it does understand them, it
-> just doesn't expect the self-referential ones for the local namespace.
+> However, when a self-referential NSID is allocated for a namespace,
+> every local notification starts sending this ID to the user space.
 > 
-> openvswitch module has a minimal support for cross-namespace operation.  Ports can
-> be added to the openvswitch datapath and then moved to a different namespace (it's
-> a little weird use case, but that's beyond the point here).  ovs-vswitchd learns
-> new NSIDs of those ports from the openvswitch module and then it can perform a
-> limited set of cross-namespace operations on them and monitor their status changes
-> through notifications on an all-nsid socket.  It never learns the NSID of the
-> current local namespace, because all the local ports can be directly accessed and
-> openvswitch module doesn't report an NSID for them, as it's not needed for anything.
+> This is problematic, because the listener cannot tell if those
+> notifications are local or not anymore without making extra requests
+> to figure out if the provided NSID is local or not.  The listener
+> can also not figure out the local NSID beforehand as it can be
+> allocated at any point in time by other processes, changing the
+> structure of the future notifications for everyone.
 > 
-> In the end, ovs-vswitchd knows all the remote NSIDs it needs to know and can
-> recognize them in notifications.  But it doesn't know the NSID of it's own local
-> namespace, as the openvswitch module never reports that for local ports and
-> ovs-vswitchd doesn't explicitly check its own NSID.  So, local notifications with
-> NSID set get treatment of a notification from some remote namespace that we do not
-> care about.
+> The value is practically not useful, since it's the namespace's own
+> ID that the application has to obtain from other sources in order to
+> figure out if it's the same or not.  So, for the application it's
+> just an extra busy work with no benefits.  Moreover, applications
+> that do not know about this quirk may be mishandling notifications
+> with NSID set as notifications from remote namespaces.  This is the
+> case for ovs-vswitchd and the iproute2's 'ip monitor' that stops
+> printing 'current' and starts printing the nsid number mid-session.
 > 
-> We will be putting changes into ovs-vswitch to work around this issue, simply
-> because it will take time for the kernel patch to propagate to distros.  But this
-> code will not be useful for anything except for working around this one specific
-> case and so it would be nice to get rid of it eventually.  And it would be nice
-> if future applications didn't need to care about this behavior as well.  Having
-> the fix in stable will speed up the process significantly.
-Ok, thanks for the details.
-
-Regards,
-Nicolas
+> Lack of clear documentation for this behavior is also not helping.
+> 
+> A search though open-source projects doesn't reveal any projects
+> that use NETNSA_NSID_NOT_ASSIGNED and rely on metadata to contain
+> self-referential NSIDs (expected, since the value is not useful).
+> Quite the opposite, as already mentioned, there are few applications
+> that rely on NSID to not be present in local events.
+> 
+> Since the value is not useful and actively harmful in some cases,
+> let's not report it for local events, making the notifications more
+> consistent.
+> 
+> Also adding some blank lines for readability.
+> 
+> Fixes: 59324cf35aba ("netlink: allow to listen "all" netns")
+> Reported-by: Matteo Perin <matteo.perin@canonical.com>
+> Signed-off-by: Ilya Maximets <i.maximets@ovn.org>
+Acked-by: Nicolas Dichtel <nicolas.dichtel@6wind.com>
