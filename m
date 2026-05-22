@@ -1,28 +1,28 @@
-Received: from SN4PR0501CU005.outbound.protection.outlook.com (mail-southcentralusazon11011070.outbound.protection.outlook.com [40.93.194.70])
+Received: from BN8PR05CU002.outbound.protection.outlook.com (mail-eastus2azon11011063.outbound.protection.outlook.com [52.101.57.63])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C7DD25B0A6;
-	Fri, 22 May 2026 00:37:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.194.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 888E81A6830;
+	Fri, 22 May 2026 00:37:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.57.63
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779410228; cv=fail; b=K9XTdxKfgVpi/YDeu4s4tYadgk9NRI3BP5Q2iiswkWZBdPzTRim0OzOh/TKyiVU78RriqH7kGb520+hvfCvrRnoUblshbeTSx7zfM++jTvjE75dCi/IEHME2U+iy4tkT1pM08EAc9TJQX4Yu2zzI9WzNWmU+ItMtHSTXqFHUJw8=
+	t=1779410229; cv=fail; b=KGWzo1lOG1bnLMP+xyRbPHYicmUU+HNkH34p7TFtWq6WRWqJKNhUNZKU+YoFSFqAb1IuGJbLk+dxFZxY2EmeCHCt+CWj0SQWgz/0EagMtE8Fsc+Hszo4lrTFTCisQTf2UUxWtxdih+e7mJHO82MPlKtAxcn8XDEkU9f89GHVqjU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779410228; c=relaxed/simple;
-	bh=lpIapICeCUAwsHL9Jok+DYYWiP1wgr/472BTetFhcHQ=;
+	s=arc-20240116; t=1779410229; c=relaxed/simple;
+	bh=f9zT6lHn4sZmk5SEPdO1em/IsDyjT0oVI+RnRAjN+qM=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=DAUPhbRLkRzoxxzVdgjI1bfUgfYd88A3+/TcBo5qRi1+R8XcKI7gIUUp2/tw54kWMaf9usIPMe+YPcLPIffKkj8OaAbww5ny3+tWyTBzBOvpYcIJoel+HIRIxlG6nWTFV52DDEIHGjItplDvDPkdC6dQNEPltQxQqZiLi8n1Wss=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=fAGRTU1j; arc=fail smtp.client-ip=40.93.194.70
+	 MIME-Version:Content-Type; b=hrXN2dfUY5N2kkcfA6KIskp9s2MqzwQ1okjhoMqagnefgq+NN473QytPbfl8ogOu9ViwAUtY5nJWNSabiOXKcKAWjmKnfC870QERt+D3SA/046xWAGTw0VyohFoLpeu+2+T51XRnWPJWdMYZBz4w1+OJ0LPNy6s4h5rOXCGRqv0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Zf/sBX5i; arc=fail smtp.client-ip=52.101.57.63
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="fAGRTU1j"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Zf/sBX5i"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=m/8fQLUmxzbZtMGSQ3b0CGlIWWG0eF2vIdWPL8wOOPeJv1yRh7cWBcrHjoxrJ0Bjm5EeshzYVSQJPjwy9Bw4UaABL86SypbLY9ifvryB5dN2KtF7J61eoZtBTPaK7Fzq6FbhTxyx2eH+3cqg2U8BYw/TpmyWnEggtVbZWNAM4SQmSR4ZBNFkk3u8VmhEZdvW24ofTDmUzMy2AeRcn/Zg0LDUzHydP3zGDEyhuMsyzFUaRl802KQxGGMFXnZV3Y0yEonB+ToilOd+Wn+U79Qq5GqFPD0ke9Y4VOUWf09yrYHx10RKUU/NVspj/jCBwAwo1faXFD/91wz8mLdFCgIqUg==
+ b=CuZfqqvSs+p7ORn0MNem+9oKbpHrZyccEP/iAoXurvJ86wpAIW3Jvp4nFyklS7VXVubucGqN1KRVncdaDqBcWxVfwuArjIGE7PJAnvKbfvIZ+5ubn+MK4EyOP19L+phasbnYJOCpwnkqQEjDQ739YPrr/TJNjbWSzbS45RDgHjrtdXQ66W889aXvkYdBLl2KdLo+dWaYG72ZTos46gIT440yiItdpUr7eq5WCNNIfmxKFoHsE49zzJle5mpuM4mzoypzD9dxhxImFQUqNeIM2iqDFL9UKfSlBuqdBkET+65knrVXKYh/3a5vZci6QBzObGqzxwdm08NOzetW0Ya3og==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZfUrXoe1NConvoBjdPyXyojNhByhj4h7V/o/E7LVQ38=;
- b=ZfgjhSz/DpfDxX8NDOYh9nn+MMJZL5j1PSbEep+uEd7jLYVAWXwDAEfZb3dFBRW0MAiO6AJIL5HC7sv/6hGg+lqnl1m/cDu7/iert/VAz0vON0xZ/mzR9Pj1AFw5ecnJ8OdQ+dynqi8YZh9YrECF6K3oMAF2sJ0rLCCCThmWVrMHuw+DQZv9liQJJBvoNppwr9lZ2YZXzroHc7vOxpKiSygYGNbd7se77cPFML9e0yJ0JV9Bq9Hyb1BpJHF/ACu3WO6/nvk/cMZwScjku0FGjZNgDbRQ7vWy2y7uIyi+VuGVJ57I1v3id0js2ZID2o/B7ro4TIIeqMTgRZ7om0scHw==
+ bh=0pXNcD8dqr177LjUHTJOoYQnuhsg+LCXEUqPcTXr6c0=;
+ b=d5JzRv26wfP+bWAfZ0rA20w3BxH5joXaDTZFrqtDbm810tMtRTDYrqVGG/1bMUn0wPuKe7elesCRxFFX9YJ6zGU5bHjXtdM7D3Ao2IGVqMCh2UNj8I6jzDBsHThuewQ4uT8aGro2e0aygDMTjrt3/qYGT0n4JYX8OY+pnBNlNfUTRAdkGVVeAWWNgclVklxrHCaUgfiiCRzU93O/GR7SBTliRXC6KaFvE9VXmsywcCgb02lfS0OIMovK6KuUd1yNWOiAkCKlbJ7uEIIIhdRn2rT347DQs03xBpYv5lWCit+2Qr8uZKsPkKiRXGGUxA75Q4895Qs7W56u++e733zfbw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  216.228.117.160) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
@@ -30,16 +30,16 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZfUrXoe1NConvoBjdPyXyojNhByhj4h7V/o/E7LVQ38=;
- b=fAGRTU1jMC0aBsnX8h5Dszj5kK4SIJRMLeM9nvtbDNOPgHjp6eMYhe+AkFYVfNIFS39NHmVlgbkprtJlN3CC9fRDNWZ48oODsgC5r2TaL3PvqUUoWgV4nJAzLGCRjyTSbpzJhDCF7aeK5wv60uHyKO0hHpXDNMSq7dYq4ekG1r5QE1moa75ZToESP2oCzC/eWb95kA8YrU8tnvsvBm46Ad5iY4cjmARLXCvDCPPfmdYubefFSaZWvegEuzPh4TYOxsu0hpOMqwI08GLq3+EzSZKNpDKT6luPD8KPHsJbrmE2o2bUQ1JBeSiJ7sOcejqFc9Wf+lQyLYXDBBOU8pPkTg==
-Received: from PH8PR22CA0016.namprd22.prod.outlook.com (2603:10b6:510:2d1::9)
- by CH0PR12MB8550.namprd12.prod.outlook.com (2603:10b6:610:192::11) with
+ bh=0pXNcD8dqr177LjUHTJOoYQnuhsg+LCXEUqPcTXr6c0=;
+ b=Zf/sBX5ir+qqjdDFOOarWL7BpzBPPQXmx8f9MfPZhuRepbYNAopcEeF6WAXyMHMjJ/T5qkOvMXWuxa+N330wAeyNSvBYYcHEGW/3BSxf2j3C2D+bg8SW418JzS7BTbu6kgAYpp2iMOVpQoV1+HQJ8qDoPGGrkHKEYavfuzhRur4QBtxCfcE6Rf+4zUFJVW9Q6ODBaCS/U9aoQr5BB8+gxwoZEzhmojgHIiiIpfIcsViKA1hiipKIF6JowEA0FOZz+vSXSQUgpcKL8xF+NHAuwnnbjTDKZHJwgpyIEYUrYFoOpszmSMk5nCkvE+HkEQFFQMumeWQ2xcPNyc9EtLA/Ug==
+Received: from PH8PR22CA0017.namprd22.prod.outlook.com (2603:10b6:510:2d1::13)
+ by MN2PR12MB4224.namprd12.prod.outlook.com (2603:10b6:208:1dd::8) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.25.22; Fri, 22 May
- 2026 00:37:01 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.48.14; Fri, 22 May
+ 2026 00:37:00 +0000
 Received: from CY4PEPF0000FCBE.namprd03.prod.outlook.com
- (2603:10b6:510:2d1:cafe::69) by PH8PR22CA0016.outlook.office365.com
- (2603:10b6:510:2d1::9) with Microsoft SMTP Server (version=TLS1_3,
+ (2603:10b6:510:2d1:cafe::95) by PH8PR22CA0017.outlook.office365.com
+ (2603:10b6:510:2d1::13) with Microsoft SMTP Server (version=TLS1_3,
  cipher=TLS_AES_256_GCM_SHA384) id 15.21.48.17 via Frontend Transport; Fri, 22
  May 2026 00:36:59 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
@@ -52,14 +52,14 @@ Received: from mail.nvidia.com (216.228.117.160) by
  CY4PEPF0000FCBE.mail.protection.outlook.com (10.167.242.100) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
  15.21.71.7 via Frontend Transport; Fri, 22 May 2026 00:36:59 +0000
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
  (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Thu, 21 May
  2026 17:36:42 -0700
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail205.nvidia.com
- (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Thu, 21 May
- 2026 17:36:41 -0700
+ 2026 17:36:42 -0700
 Received: from Asurada-Nvidia.nvidia.com (10.127.8.9) by mail.nvidia.com
  (10.129.68.9) with Microsoft SMTP Server id 15.2.2562.20 via Frontend
  Transport; Thu, 21 May 2026 17:36:41 -0700
@@ -67,9 +67,9 @@ From: Nicolin Chen <nicolinc@nvidia.com>
 To: <jgg@nvidia.com>, <kevin.tian@intel.com>
 CC: <iommu@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
 	<linux-kselftest@vger.kernel.org>
-Subject: [PATCH rc v2 2/4] iommufd: Move vevent memory allocation outside spinlock
-Date: Thu, 21 May 2026 17:36:33 -0700
-Message-ID: <5ff36b5d80f7f6299f851be532a5195c1d2f1dae.1779408671.git.nicolinc@nvidia.com>
+Subject: [PATCH rc v2 3/4] iommufd: Set veventq_depth upper bound
+Date: Thu, 21 May 2026 17:36:34 -0700
+Message-ID: <8426cbaa5e8294472ec7f076ef427cc473be5985.1779408671.git.nicolinc@nvidia.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1779408671.git.nicolinc@nvidia.com>
 References: <cover.1779408671.git.nicolinc@nvidia.com>
@@ -84,83 +84,71 @@ Content-Type: text/plain
 X-NV-OnPremToCloud: ExternallySecured
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000FCBE:EE_|CH0PR12MB8550:EE_
-X-MS-Office365-Filtering-Correlation-Id: cd687478-c3ab-4491-fdf5-08deb79a3bfb
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000FCBE:EE_|MN2PR12MB4224:EE_
+X-MS-Office365-Filtering-Correlation-Id: 62db34c7-d97d-4864-7708-08deb79a3c1f
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|376014|1800799024|36860700016|11063799006|56012099003|22082099003|18002099003;
+	BCL:0;ARA:13230040|36860700016|1800799024|376014|82310400026|11063799006|18002099003|22082099003|56012099003;
 X-Microsoft-Antispam-Message-Info:
-	KUtISB2XNC3JM70QwbR7PL4gLVbwtqYK+wMtI4+QjWENS2oaRJ5CYOFJvUgekhOfb4B4ynEadfiXW4e/JifIkHcNTH0zVtvP7kI99ESMhAR9Elctc+KBMaZ30P8M4828cap4WPMrIOruZl8grs0K4ISwEp3eUP5IVp85p5m5KD9eT2RlBmr+IIajfhrbXXA1MVwQoEuZIIsfVD+C25k9ayyizFJDt/FVrCJ+r2FbU2iIK6oJTxdeIGYKtaqah7WCu/XbhL0s9a7n8l+EA4aeL9NXfWQkyl4jV7jbyDsfshXtf67jNSiczLFhmvHzrKHa4eNnrZ5nRfG/G+bD4XU4osM7jSFlhftaUfvJ+erR6d6932xJ0NXRykAsrYzy3VSuLMh7XBKYin/MiOTmsFo/o6wJV4BiL4+PORqzBEEnJD+XxbzOfzrFD5wvS2SGGlg+t7pWCr3zchl8ZxI8RiCYAHNUBHg/b7TodnaXq58Yqn7wHne/1j2xsyP5MB+6UcKv5l0Mq5PosDpHI+nWqkdE1HXn880TlX1e1jg3GxUucmr1hSE9y6/0mLd/1xVhYFlhEZ6RkanjUY7ZxBUPOrKBsW53xNqxU5qJFhkxaaC/tuXPkSwGu0WtvgPlZ7l5oSIfUEsYRL6ctabLJzOR1jqXD71g8VNlWxTETGJu74GcdYf8AFtos85UokLoMfZFJNOYU9DpWXDDqkICnxbUew3ar3Ie9OgKtt/4jcYjbeneE0g=
+	LOmBjSDdrbJO5Z3DKBHKwoTuITOsidpWwvNv1nx18ctpQrNxPsSc1E2Vr9vrj0xfv1KsqcvYPfPJBQKemjw7Jf3nS8Qcb3v812THVRCH31beyRNdHpAlnU2rEhGJKfUCByX4H/7sujKhvIF9kPmcQGvCMH3CRxMOj8WXQxpxEzJRNDU8UcvuJrCXp8Tuv2wYebPqwT7gHhkNzFFYucf2/VZaTeRvBaf79oaezYqwcs7c8M0lSxNZK3xiWd86KJ/8RQTkZbBmX4LcX/qw0bzMkxJJxcQKmxan0LgJgB0623tZ0YM3MWLKwY8+kDB726xOqkRpPWuKiq3wHmJHmgKvYm1JiZG3eC6Ti5/hGaY8BNG3fZj5FCspo0/rStEwsbcSRYprQdT1r+cCd6bYfGQI8/cjPNZZqy8qI3QybSBfuIWp2/wXKVQyEyG57vssiyMFcpxg+HZp0KzWxROrjE7RsASffM/vD4zjrd7nw9T/mhcKaO2pgJNEWcfb1Jys/6eUh+Q6v/YLmETJwPMP+KYZqnjkrFKZCOQGixu8XvzhCBv6NGurzUeeLb4/J4vpNdN9Y86PVBMPmSfj7k0a4liP8wF6qyRYs3KCIW8NrpE+KRvjmBZsXf4VGUmgte+CPb5+KbpIgrh3L6EbOLJo0CvalZ9xAv61OvqJfkJR44yjIExRhSHhZ+MWeLb+fM+z9s/DsP9Zp7JoSynCaTnFxxXK30FWvQ5IHNuiM9qbZ5QfHsw=
 X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(376014)(1800799024)(36860700016)(11063799006)(56012099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(36860700016)(1800799024)(376014)(82310400026)(11063799006)(18002099003)(22082099003)(56012099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	ivKZD+5cKcuHOHeBB67edg4AO2n/4OnqQzgIVCzg95qnUi9KYwFPEquSoysbOG4Vq7UHTno7jXa8epN8Bg2jsQ3uWaZRCH1jFfBC0JwGP8WMnSnYcIuLFXPTDyifTmazxr6zbLrRiSEqs90VgL7xRKAhkGv6R5yAb/OZj0RRZnBCsIlAFwX0TCILYmQkUC9wku2l8M/gnz8iscIDReASRe5k5KXFT7ZnBRikDGUbwsR3Ze/rsK5piMGADLh5BJadhS6FaCx7BpwRXYHljwGV5VolK2sV5ys62ON4s8V4H8HVIxKmIm0HcHv12o4oXPy4UCeMKbPmZ/Y8Qr5DZ4JYgbsrhQbVk7F1fpqB10t4ijJwEf08AQVtBhm+IL1Vis3vzHk0HFEKzY7cy1g3onTx7/YV4rwIeyUBQZg6sfRqqXOHwe3y3ugFhGkzuiO3Zvc+
+	jqge+poNb4h8X8UO50DwyYVyl5zt9WTojKt+Z8AzrrkMVblVWP17NcScTzZhqDnVQyx8wsZIA+nrll/TEs9jRVadRduBv7DnRQQ+xdr8kwsM7tgU37eG4xkBggXk913xAXGZROCobB+iFBHgTqss9DER/fj46OEXwxtXM0EwQrktb6Spz+YopnVDz7A1FIdYsNTyaLYubFYo0CKDLauwtx1Eip3O9MjKFDbJMrqtTxQvpm29+Ge/L7pw1Xo2VAGXXc1YoYv5VCuFlG/XjD8WXZyeyQM7WhrGmQw+d3eRiGPvF+h8gA5qhrTHUYISXM6KOTPkecD4a6ZSi+B8PLzrR3YoATdM7++XINGsxknfTtwInJhA5lwEAiIsd6XEXhjsWnDFyUdqafiPwZSFqpkYaskeZV6ja8dYnBwK4hfy5M/Vq5elQswCcg1XaSNyUEJq
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 May 2026 00:36:59.1039
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 May 2026 00:36:59.3441
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: cd687478-c3ab-4491-fdf5-08deb79a3bfb
+X-MS-Exchange-CrossTenant-Network-Message-Id: 62db34c7-d97d-4864-7708-08deb79a3c1f
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
 X-MS-Exchange-CrossTenant-AuthSource:
 	CY4PEPF0000FCBE.namprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB8550
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4224
 
-The veventq memory allocation happens inside the spinlock. Given its depth
-is decided by the user space, this leaves a vulnerability, where userspace
-can allocate large queues to exhaust atomic memory reserves.
+iommufd_veventq_alloc() accepts any !0 veventq_depth from userspace, with
+an upper bound at U32_MAX.
 
-Move the allocation outside the spinlock and use GFP_NOWAIT, which can fail
-fast under memory pressure without dipping into the GFP_ATOMIC reserves or
-direct-reclaiming from the threaded IRQ handler. On allocation failure,
-queue the lost_events_header (so userspace learns of the drop) and return
--ENOMEM so the caller learns of the kernel-side memory pressure.
+This leaves a vulnerability where userspace can allocate excessively large
+queues to exhaust kernel memory reserves.
 
-This is intentionally distinct from the queue-overflow path, which also
-queues the lost_events_header but returns 0: a full queue is an expected
-userspace-pacing condition rather than a kernel error.
-
-A subsequent change will cap the upper bound of the veventq_depth.
+Cap the veventq_depth (maximum number of entries) to 1 << 19, matching the
+maximum number of entries in the SMMUv3 EVTQ (the largest use case today).
 
 Fixes: e36ba5ab808e ("iommufd: Add IOMMUFD_OBJ_VEVENTQ and IOMMUFD_CMD_VEVENTQ_ALLOC")
 Cc: stable@vger.kernel.org
 Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
 ---
- drivers/iommu/iommufd/driver.c | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+ drivers/iommu/iommufd/eventq.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/iommu/iommufd/driver.c b/drivers/iommu/iommufd/driver.c
-index 61e6b02601d1a..3b8067976eac0 100644
---- a/drivers/iommu/iommufd/driver.c
-+++ b/drivers/iommu/iommufd/driver.c
-@@ -149,15 +149,18 @@ int iommufd_viommu_report_event(struct iommufd_viommu *viommu,
- 		goto out_unlock_veventqs;
- 	}
+diff --git a/drivers/iommu/iommufd/eventq.c b/drivers/iommu/iommufd/eventq.c
+index 78689fb52d24c..1f1e415285b1a 100644
+--- a/drivers/iommu/iommufd/eventq.c
++++ b/drivers/iommu/iommufd/eventq.c
+@@ -473,6 +473,9 @@ int iommufd_fault_iopf_handler(struct iopf_group *group)
+ static const struct file_operations iommufd_veventq_fops =
+ 	INIT_EVENTQ_FOPS(iommufd_veventq_fops_read, NULL);
  
--	spin_lock(&veventq->common.lock);
--	if (veventq->num_events == veventq->depth) {
-+	/* Pre-allocate to avoid GFP_ATOMIC; use GFP_NOWAIT to avoid sleeping */
-+	vevent = kzalloc_flex(*vevent, event_data, data_len, GFP_NOWAIT);
-+	if (!vevent) {
-+		spin_lock(&veventq->common.lock);
- 		vevent = &veventq->lost_events_header;
-+		rc = -ENOMEM;
- 		goto out_set_header;
- 	}
++/* An arbitrary upper bound for veventq_depth that fits all existing HWs */
++#define VEVENTQ_MAX_DEPTH (1U << 19)
++
+ int iommufd_veventq_alloc(struct iommufd_ucmd *ucmd)
+ {
+ 	struct iommu_veventq_alloc *cmd = ucmd->cmd;
+@@ -484,7 +487,7 @@ int iommufd_veventq_alloc(struct iommufd_ucmd *ucmd)
+ 	if (cmd->flags || cmd->__reserved ||
+ 	    cmd->type == IOMMU_VEVENTQ_TYPE_DEFAULT)
+ 		return -EOPNOTSUPP;
+-	if (!cmd->veventq_depth)
++	if (!cmd->veventq_depth || cmd->veventq_depth > VEVENTQ_MAX_DEPTH)
+ 		return -EINVAL;
  
--	vevent = kzalloc_flex(*vevent, event_data, data_len, GFP_ATOMIC);
--	if (!vevent) {
--		rc = -ENOMEM;
-+	spin_lock(&veventq->common.lock);
-+	if (veventq->num_events == veventq->depth) {
-+		kfree(vevent);
- 		vevent = &veventq->lost_events_header;
- 		goto out_set_header;
- 	}
+ 	viommu = iommufd_get_viommu(ucmd, cmd->viommu_id);
 -- 
 2.43.0
 
