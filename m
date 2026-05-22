@@ -1,54 +1,80 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34603376A00;
-	Fri, 22 May 2026 12:10:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC1CA38228B;
+	Fri, 22 May 2026 12:37:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779451848; cv=none; b=A8qVr2xwp/9lIWiq0/Tl5SQNQTibDvHiyTjQc9MjzNW5aag1mg6/GPvN4RTRtjlYsX7EHqB0jCdABZ41BV+IiK+melBzEXS0bpuxKyNis92Erqqvh0giZDVVsabiU0EdLBnP0Y2Mr6uAf1xrDyc/X03ROQzkMUrX1QcqosYNkg8=
+	t=1779453476; cv=none; b=qMqIrLyNk1jKCH6VDTsoaJDZF8XHgfccrMhtREVEnrlx/gLgOTz8zXSyVpiicCcT0vgGfD9gO/HUI7iYedVxzn+taV/1G6JIGTLUjixBiwjkoLKrisKNd82fuP/NsU5gCnp9J9mZs8dsKgX8uGEDc1wmJ28OcU586hHXqlEE9kU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779451848; c=relaxed/simple;
-	bh=6P8Jlg4l2029b1V02C7uBOwgKbUtHLKhaiFg6hqUIUA=;
+	s=arc-20240116; t=1779453476; c=relaxed/simple;
+	bh=1dYX8tbLLyGkhDsYQMCL1WiRzG/6nIwJxxVuUr18V3Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UscZMDmIByoWVHY9Hp9Z2M4ge5WtcVGkI+ZVAnu+BqElaJL10vIYveR0PoYlPvACpFSuLPJhOmzv9fD/UAEs6RLDVxyG5HERDmF+iBq+wGTnJFA3cx1bhnUTNmuMaXeGzZw0YoLV7FsoRpKEV52OiVkiupRslAvBWlj5PksikGE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=wBZjr/d+; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=t7AhG7zadOifVKtWcncxi8eumzz970ntnn9xELqoun2+cbfAphzgwGj/kxIvS73986uXxT9YAUs8oN5jjnQOenxiM9DbRHPHdxnnLLV4TodRuWoxk9b1DChzRkbjFGvOIDdZnmz+zjRI8c67PlVRY+DcY3ZWDVAIeujN7LFGPp0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WJA7Ko6M; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="wBZjr/d+"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-	Reply-To:Content-ID:Content-Description;
-	bh=bjzkfHAR73gVyHESRaD3e1Go0DB+NgJ32dG4wk2RzRU=; b=wBZjr/d+oDy/t1Xt/t2ZuC6dHv
-	+1DoqcruMqlpft9jIatKplxQucQqMZCMNUt3ZUyyjkneZXoe45vKzJeQBMr3P1cUotLqCTT4UP46C
-	u74BuAwK+rpUfB9RtQKGh+gMTp4RulcfoTrPI3WZF3vXMSy/Ns+Z62TSjDJfGTwSuQZxWconA8zp5
-	EwFu8Z+xdfhNyhXo1qmdVly9zPYEef6jxlzHiBWCwsJzvZFKU/pdeoolSsiRdqxXwT5tOxjtwbvVw
-	95TTkfmhKu+ckdcx2DLMp4dcovoh7sq8oUwI6rtYHTSpXH6oZM+yswzch0z45sCchyQjcM74gQYKL
-	RYcpDNdg==;
-Received: from authenticated user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wQOi4-004eZK-1q;
-	Fri, 22 May 2026 12:10:36 +0000
-Date: Fri, 22 May 2026 05:10:31 -0700
-From: Breno Leitao <leitao@debian.org>
-To: Mateusz Guzik <mjguzik@gmail.com>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Shuah Khan <shuah@kernel.org>, 
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	usama.arif@linux.dev, kernel-team@meta.com
-Subject: Re: [PATCH 1/2] fs/pipe: bulk pre-allocate pages outside pipe->mutex
- in anon_pipe_write
-Message-ID: <ahBGd-VwsZN7BGYm@gmail.com>
-References: <20260515-fix_pipe-v1-0-b14c840c7555@debian.org>
- <20260515-fix_pipe-v1-1-b14c840c7555@debian.org>
- <q37bmptbjr2gysl2g67bqo5axxqor4lsrrnf7ajixxjdrumbup@tgu3kz6kien5>
- <ag3Ty3T24wjn1aFw@gmail.com>
- <CAGudoHGT+8FW9HsN+ymQ2QECVjmwkx=xNQ9=WnjYWirXcA6u4w@mail.gmail.com>
- <ag8lIqhAmJtW4Rtv@gmail.com>
- <CAGudoHGMVQTU-5bh5csvZDgXv_aXun5-eSSGRoONxgSZAcF6Rg@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WJA7Ko6M"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8FAD1F00A3D;
+	Fri, 22 May 2026 12:37:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779453474;
+	bh=oiJv/a8IQvKH3BGEIllrwFReWEQqkFFSGDh6mgtKt0s=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=WJA7Ko6MEnn/NoFQ65dN1/M8ZExiJ8RoGFC656Dd+5KAHsEI9+U9A6OZLTONMFbsw
+	 tIcZw2dbzydgoAb2nNDFzgAnIa9WHQL5usPWgbDf7hjEdGHPcoMKBeFoEirX5A8pmJ
+	 ++dqGyVU3992xYuBmJbB3lUCrzfbX3bv3mkb2QxRAVM8D+a6eIp4cSjeD1LYSFLVbt
+	 7Uc9z8L9JX2JVczmO8z4BsgP9yfQISz6JGBbf8QnqX41pbtp5WwAfQJI5qDHSGy7ql
+	 Vs2g5fwJx5y42SZbgMFgjrI+t04zWsIc670pSnjHrsiQNuvYtirMevCR5OFH2pzEcC
+	 S6U+pyJ7WJDJA==
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 3CE66F40089;
+	Fri, 22 May 2026 08:37:53 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-04.internal (MEProxy); Fri, 22 May 2026 08:37:53 -0400
+X-ME-Sender: <xms:IU4QaphcTgCOcXPDNUt_nU2yvQjDK1DSI5aLupDUWdyiUIP4dQU-4A>
+    <xme:IU4QarqHY9EXT-cMd_Yb4B8Z6Vfh07DrBKfo76qpyv_lguSTG4xL0TwSiGFRTwUSW
+    a6_wpWSM2V9fUugVLQiNr5mJzi1JGNfIva61MQGnPywtXp6IFeIn_uH>
+X-ME-Received: <xmr:IU4QauqrQFYvgB7RUMJQ9bvgzYGn68sFNbAuV1EfSfCLLEk3QTrEMLpE6fbjhA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgdduhedtudelucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucenucfjughrpeffhffvvefukfhfgggtugfgjgesthekre
+    dttddtjeenucfhrhhomhepmfhirhihlhcuufhhuhhtshgvmhgruhcuoehkrghssehkvghr
+    nhgvlhdrohhrgheqnecuggftrfgrthhtvghrnhepiefgvddtkeevjefhhedtudeuueeike
+    ejkedvgffgtdekgeeiveejvdegtedvhefgnecuvehluhhsthgvrhfuihiivgeptdenucfr
+    rghrrghmpehmrghilhhfrhhomhepkhhirhhilhhlodhmvghsmhhtphgruhhthhhpvghrsh
+    honhgrlhhithihqdduieduudeivdeiheehqddvkeeggeegjedvkedqkhgrsheppehkvghr
+    nhgvlhdrohhrghesshhhuhhtvghmohhvrdhnrghmvgdpnhgspghrtghpthhtohepgeeipd
+    hmohguvgepshhmthhpohhuthdprhgtphhtthhopehrphhptheskhgvrhhnvghlrdhorhhg
+    pdhrtghpthhtoheprghkphhmsehlihhnuhigqdhfohhunhgurghtihhonhdrohhrghdprh
+    gtphhtthhopehpvghtvghrgiesrhgvughhrghtrdgtohhmpdhrtghpthhtohepuggrvhhi
+    ugeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhjsheskhgvrhhnvghlrdhorhhgpd
+    hrtghpthhtohepshhurhgvnhgssehgohhoghhlvgdrtghomhdprhgtphhtthhopehvsggr
+    sghkrgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhirghmrdhhohiflhgvthhtse
+    horhgrtghlvgdrtghomhdprhgtphhtthhopeiiihihsehnvhhiughirgdrtghomh
+X-ME-Proxy: <xmx:IU4Qah6CkvLPQpsYe3YHk8keE6O6mSJBIUzG29b5c9n-vbt1f0DrUQ>
+    <xmx:IU4Qal2qPAW53qP3BFrBIcKEsvbumY4Ft0Fv0lpYzmEbtWoFHk0z9Q>
+    <xmx:IU4QatkzZzFw_sbV_Vq6K-aF99ZCGWjQNWu0Wmkva9773VHZfhqIsw>
+    <xmx:IU4QauiXqnAnp1CnDIsvgg4CDgPdcglFJ35pWva-S2styYPJYqXDLQ>
+    <xmx:IU4Qak0wVrxnos-gIhB6hx6oacQXSfR35IiG2bd6-lIRpSHDEvwgQrKj>
+Feedback-ID: i10464835:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 22 May 2026 08:37:52 -0400 (EDT)
+Date: Fri, 22 May 2026 13:37:51 +0100
+From: Kiryl Shutsemau <kas@kernel.org>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: akpm@linux-foundation.org, peterx@redhat.com, david@kernel.org, 
+	ljs@kernel.org, surenb@google.com, vbabka@kernel.org, Liam.Howlett@oracle.com, 
+	ziy@nvidia.com, corbet@lwn.net, skhan@linuxfoundation.org, seanjc@google.com, 
+	pbonzini@redhat.com, jthoughton@google.com, aarcange@redhat.com, sj@kernel.org, 
+	usama.arif@linux.dev, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, kvm@vger.kernel.org, 
+	kernel-team@meta.com
+Subject: Re: [PATCH v2 14/14] Documentation/userfaultfd: document RWP working
+ set tracking
+Message-ID: <ahBMtyua-5v8GyxS@thinkstation>
+References: <cover.1778254670.git.kas@kernel.org>
+ <0b6f87fd4809245f9eebee73f34e2fb14230330c.1778254670.git.kas@kernel.org>
+ <agQZiTUQNviaGIim@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -58,61 +84,120 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAGudoHGMVQTU-5bh5csvZDgXv_aXun5-eSSGRoONxgSZAcF6Rg@mail.gmail.com>
-X-Debian-User: leitao
+In-Reply-To: <agQZiTUQNviaGIim@kernel.org>
 
-On Thu, May 21, 2026 at 07:26:48PM +0200, Mateusz Guzik wrote:
-> On Thu, May 21, 2026 at 5:38 PM Breno Leitao <leitao@debian.org> wrote:
->
-> I do suspect the best way forward in the long run is repopulate the
-> tmp_page array if you have pages to do so.
-
-Ack!
-
-> > +       struct anon_pipe_prealloc prealloc = {};
-> >
+On Wed, May 13, 2026 at 09:26:17AM +0300, Mike Rapoport wrote:
+> On Fri, May 08, 2026 at 04:55:26PM +0100, Kiryl Shutsemau (Meta) wrote:
+> > Add an admin-guide section covering UFFDIO_REGISTER_MODE_RWP:
+> > 
+> >   - sync and async fault models;
+> >   - UFFDIO_RWPROTECT semantics;
+> >   - UFFD_FEATURE_RWP_ASYNC;
+> >   - UFFDIO_SET_MODE runtime mode flips.
+> > 
+> > It also covers typical VMM working-set-tracking workflow from detection
+> > loop through sync-mode eviction and back to async.
 > 
-> I forgot this bit is going to be a problem with gcc. I verified it
-> emits rep stosq in place, which is going to completely unnecessarily
-> slow things down especially on older uarchs. This is a known bug with
-> gcc doing terrible job optimizing this.
-> 
-> The problem will be avoided by merely initializing the count to 0.
-> which looks kind of ugly if done here, but see below.
+> We'd also need man page update at some point :)
 
-Ack, I can do it inside anon_pipe_get_page_prealloc()
+Will add a patch for man-pages in v3.
 
-	static void anon_pipe_get_page_prealloc(struct anon_pipe_prealloc *prealloc,
-						size_t total_len)
-	{
-		prealloc->count = 0;
-		if (total_len <= PAGE_SIZE)
-			return;
-			...
-	}
-
-> > +       /*
-> > +        * Bulk pre-allocate pages outside pipe->mutex for writes that span more
-> > +        * than one full page. alloc_page() with GFP_HIGHUSER may sleep doing
-> > +        * reclaim and runs memcg charging, so doing it under the mutex
-> > +        * extends the critical section and stalls the reader. The merge path
-> > +        * handles sub-PAGE_SIZE writes without a fresh page; single-page and
-> > +        * >PIPE_PREALLOC_MAX-page writes fall back to alloc_page() under the
-> > +        * mutex for the remainder.
-> > +        */
-> > +       if (total_len > PAGE_SIZE)
-> > +               anon_pipe_get_page_prealloc(&prealloc, total_len);
+> > Signed-off-by: Kiryl Shutsemau <kas@kernel.org>
+> > Assisted-by: Claude:claude-opus-4-6
+> > ---
+> >  Documentation/admin-guide/mm/userfaultfd.rst | 226 ++++++++++++++++++-
+> >  1 file changed, 220 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/Documentation/admin-guide/mm/userfaultfd.rst b/Documentation/admin-guide/mm/userfaultfd.rst
+> > index 1e533639fd50..5ac4ae3dff1b 100644
+> > --- a/Documentation/admin-guide/mm/userfaultfd.rst
+> > +++ b/Documentation/admin-guide/mm/userfaultfd.rst
+> > @@ -275,16 +275,16 @@ tracking and it can be different in a few ways:
+> >    - Dirty information will not get lost if the pte was zapped due to
+> >      various reasons (e.g. during split of a shmem transparent huge page).
+> >  
+> > -  - Due to a reverted meaning of soft-dirty (page clean when uffd-wp bit
+> > -    set; dirty when uffd-wp bit cleared), it has different semantics on
+> > -    some of the memory operations.  For example: ``MADV_DONTNEED`` on
+> > +  - Due to a reverted meaning of soft-dirty (page clean when the uffd bit
+> > +    is set; dirty when the uffd bit is cleared), it has different semantics
+> > +    on some of the memory operations.  For example: ``MADV_DONTNEED`` on
+> >      anonymous (or ``MADV_REMOVE`` on a file mapping) will be treated as
+> > -    dirtying of memory by dropping uffd-wp bit during the procedure.
+> > +    dirtying of memory by dropping the uffd bit during the procedure.
+> >  
+> >  The user app can collect the "written/dirty" status by looking up the
+> > -uffd-wp bit for the pages being interested in /proc/pagemap.
+> > +uffd bit for the pages being interested in /proc/pagemap.
+> >  
+> > -The page will not be under track of uffd-wp async mode until the page is
+> > +The page will not be under track of userfaultfd-wp async mode until the page is
+> >  explicitly write-protected by ``ioctl(UFFDIO_WRITEPROTECT)`` with the mode
+> >  flag ``UFFDIO_WRITEPROTECT_MODE_WP`` set.  Trying to resolve a page fault
+> >  that was tracked by async mode userfaultfd-wp is invalid.
+> > @@ -307,6 +307,220 @@ transparent to the guest, we want that same address range to act as if it was
+> >  still poisoned, even though it's on a new physical host which ostensibly
+> >  doesn't have a memory error in the exact same spot.
+> >  
+> > +Read-Write Protection
+> > +---------------------
 > > +
+> > +``UFFDIO_REGISTER_MODE_RWP`` enables read-write protection tracking on a
+> > +memory range. It is similar to (but faster than) ``mprotect(PROT_NONE)``
+> > +combined with a signal handler; unlike ``mprotect(PROT_NONE)``, RWP only
+> > +traps accesses to *present* PTEs, so accesses to unpopulated addresses in a
+> > +protected range fall through to the normal missing-page path. It uses the
+> > +PROT_NONE hinting mechanism (same as NUMA balancing) to make pages
+> > +inaccessible while keeping them resident in memory. Works on anonymous,
+> > +shmem, and hugetlbfs memory.
+> > +
+> > +This is designed for VM memory managers that need to track the working set
 > 
-> I don't think this comment belongs here, it should move above the
-> prealloc routine.
-> 
-> How about this: anon_pipe_get_page_prealloc gets called
-> unconditionally and expects an uninitialized prealloc struct. For
-> total_len > PAGE_SIZE you roll with the current code. Otherwise you
-> just set ->count to 0, which prevents the ->pages array from being
-> looked at. You can even pre-set to 0 on entry, just don't memset the
-> entire obj.
+> This feature? Or RWP mode?
 
-Thanks, let me respin a v2.
---breno
+RWP.
+
+> > +of guest memory for cold page eviction to tiered or remote storage.
+> > +
+> > +**Setup:**
+> > +
+> > +1. Open a userfaultfd and enable ``UFFD_FEATURE_RWP`` via ``UFFDIO_API``.
+> > +   Optionally request ``UFFD_FEATURE_RWP_ASYNC`` as well — it requires
+> > +   ``UFFD_FEATURE_RWP`` to be set in the same ``UFFDIO_API`` call.
+> > +
+> > +2. Register the guest memory range with ``UFFDIO_REGISTER_MODE_RWP``
+> > +   (and ``UFFDIO_REGISTER_MODE_MISSING`` if evicted pages will need to be
+> > +   fetched back from storage).
+> > +
+> > +**Feature availability:**
+> > +
+> > +RWP is built on top of two kernel primitives: a spare PTE bit owned by
+> > +userfaultfd (``CONFIG_HAVE_ARCH_USERFAULTFD_WP``) and arch support for
+> 
+> Please spell out architecture.
+
+Ack.
+
+> > +present-but-inaccessible PTEs (``CONFIG_ARCH_HAS_PTE_PROTNONE``). When both
+> > +are available on a 64-bit kernel, the build selects
+> > +``CONFIG_USERFAULTFD_RWP=y`` and the ``VM_UFFD_RWP`` VMA flag becomes
+> > +available.
+> > +
+> > +``UFFD_FEATURE_RWP`` and ``UFFD_FEATURE_RWP_ASYNC`` are masked out of the
+> > +features returned by ``UFFDIO_API`` when the running kernel or architecture
+> > +cannot support them — for example 32-bit kernels (where ``VM_UFFD_RWP`` is
+> > +unavailable), kernels built without ``CONFIG_USERFAULTFD_RWP``, and
+> > +architectures whose ptes cannot carry the uffd bit at runtime (e.g. riscv
+> > +without the ``SVRSW60T59B`` extension). ``UFFDIO_API`` does not fail;
+> > +unsupported bits are simply absent from ``uffdio_api.features`` on return.
+> > +VMMs should inspect the returned ``features`` after ``UFFDIO_API`` and fall
+> 
+> Lets s/VMM/Callers/.
+> Although RWP is designed for VMMs, it's not limited to them and I expect
+> other use-cases will be coming along.
+
+Okay.
+
+
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
