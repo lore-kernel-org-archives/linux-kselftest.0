@@ -1,89 +1,97 @@
-Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BD5138D6A9
-	for <linux-kselftest@vger.kernel.org>; Fri, 22 May 2026 21:47:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5842340281;
+	Fri, 22 May 2026 21:54:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779486442; cv=none; b=UPX/QbCT7UBBhl00mGxecVYssqq2LNmlfrEpyzqJqIYMmUrYMUJ6wteIh+UdtVippPQ4zFVX1YrbEEe2Ml8EGrG56zhTW/1kRQcPVq/76ib0oXcb+jXzI7J1f7Hr4fMpQ4zm5ZmoyuvQ3rHc9ah9xg+LJsfOdMQEWeM+tP2ICNk=
+	t=1779486872; cv=none; b=rsoQ4BRv6+RFUyX7PFZJhyj5tyiFCvXJoIpdvS0PxzTsHzfzRiXsZfCcVN66t8KG64xST3DZubVrLZO02XQHo9Iw5GnEKa05OdpRWYKJYx3FB4iNs/B/4sG5ggDhCBWgzqMmNjsgq2cUq+/DGf29saoZDV++oqybpo8Jpm074N0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779486442; c=relaxed/simple;
-	bh=CoghQin1KhXux0hst27Dy6jPuyHPo3tWKEEVC3sFXWk=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=nZAHfuC5rwNsZuLFsfFQXLTkqQ3fKuqWndTMcmkucxtTmaJmpo/1P54uLRdZNlhxm35lN85BcivJVsjdqJHotLw4XgmTNyRXEuyn3B3dPOVtvhnn6g87Mmg1r+L1F4HQyxqNkgYuAXkcGXtdw5gWMDAEejPaWHZhfuUfOroEoVU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=e/aAXRgY; arc=none smtp.client-ip=209.85.216.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1779486872; c=relaxed/simple;
+	bh=FXxvypeUhIvVVHiJ9zEADS1Fn7Ky0VJvLn9oDbd8JMo=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version; b=X1qH7xnrljWSBHHK3plpzgcR4UK38X1jHJl69juNhd6baU1tUYUb6sK73qlpE0chetlIiidwNtP9QTTcaIims5UKrXtb9OB5IzorRHtUi1PQkIM26WEh+eCOvgx3uxQY51NhmsMYcv1OakYNnCbYh2PdwE1NNum0BrJKXCZ7ht4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m/tbS2v0; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="e/aAXRgY"
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-36603ad6709so6462342a91.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 22 May 2026 14:47:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1779486440; x=1780091240; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=W3aVsVjXQJZTTHakYlHvO90VBaY9HPHtidD9aUCTMEA=;
-        b=e/aAXRgYPaKlPsD64HYfouTr0vGdw1aCFb/CLvE9sYdInVlULC37D0inMrTJ6LxdbH
-         T5MvwEbTcaseCiTNSOjLyVzYEu+NXp1v7RSjL1YDIRQuVeaGV3irMYWXOiia3LxJNkOh
-         7M1AKlxKsSuxMmyCaoiMslVA866NSj5+r5AP6zVJidDcnyYrx4pjcem8AF71mv46lbun
-         9Uit0ahfiechNWu9/pLk24QygtTq87YuTrs0K5pB32X5+Byx9AzeabVvMWApMAdXOSkp
-         1uMCUM4gBvBNqzAB4H1xUL6f3/9SARB19ic0+kAQqaf01ezRy2QTai8DNsnlKg7AZ2Yr
-         4mkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779486440; x=1780091240;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=W3aVsVjXQJZTTHakYlHvO90VBaY9HPHtidD9aUCTMEA=;
-        b=mVjX3EnuA1ez17V3iiV35IZD5MqHPh15B6YH0CKIIKnI2Ibw4NcscuTBQrwrcXMunH
-         8PDXJq+89f4sytS59DxRavCq9v5unkM03ggIdyx/veFtfDcl6b2d6gq2/CIrIxAj7/uu
-         i/FzDTuISHi1SY3OF6mSopG1eUSxbfwMuS/nf3debLFYmHJEPOTgb652nCMZ2vwutc2X
-         wgmoFuFDRUmwWYxlAkIVkG8E+gKUEgBayj1xau7+cxav+uwMR3sKIqX/JFxCcvn71uhL
-         6FGGxBEarve4sax3z+33Re11lwUscB8/5cmMubJfEjfe9JktbGC5zyRAKv8o3qXoP06V
-         ldYw==
-X-Forwarded-Encrypted: i=1; AFNElJ8T3U2sdoHX4FPsQfCxN8EXoGXbgZKavh9iytc5IWH5wmLXM5GV2Fyf8PY18luiDoIc1xv6BtPof3IjdICt3xo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxA4XQdYJjsb4rtKarl2TOXZODvT6UIOo3Aqk6QFpbvpRsnJO2O
-	L3H7+DNqWhzVf9xBAda5rm3U7D/OvLsnwjDPR2i1AKmX6apEp/YN8iza6JDkFSRVuBDh8kzSVri
-	OYGfVLg==
-X-Received: from pgkb12.prod.google.com ([2002:a63:eb4c:0:b0:c82:743c:ea8f])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:3887:b0:369:a359:b181
- with SMTP id 98e67ed59e1d1-36a6787b0dcmr5234805a91.23.1779486440140; Fri, 22
- May 2026 14:47:20 -0700 (PDT)
-Date: Fri, 22 May 2026 14:47:19 -0700
-In-Reply-To: <99356a588677e9ff31c1747db1705d9250a2728d.camel@infradead.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m/tbS2v0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA5A91F000E9;
+	Fri, 22 May 2026 21:54:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779486871;
+	bh=KxAu/FOwB7Rt33B2dM3eIygIo4s+mBKShRVjNFSpc+k=;
+	h=From:To:Subject:Date;
+	b=m/tbS2v0sAfVFcfNe43DILWhS6uVeDw5Sc74gcSRvJuROeDKiWrh9Dq9uY5IvMZ00
+	 4nQsOphZFkW0tKkhQ67hX5d39iKOxxwZaXMdZq1O3BAxsEuigWtGy28pgtPNmDCaCs
+	 NhxybsobxVivcwlGIdOi/Es/8lZyUTc12jGFcBHcebhNBuKqnmSuddLJ96M8ZIw1Y9
+	 wJVdsS3RyRNpNqof6lap7KnWOIpAN8SutrphV1T2JPS6NlPevgwqAilwxo8B82UNWB
+	 q75twfUasP7TF3bqc9q0+PtCDKhiCXj4src8KDYZ+KaaoAh4jMKBVj2TVoIKjUALcW
+	 OfBbz6Fx9XFRw==
+From: Allison Henderson <achender@kernel.org>
+To: netdev@vger.kernel.org,
+	pabeni@redhat.com,
+	edumazet@google.com,
+	kuba@kernel.org,
+	horms@kernel.org,
+	linux-rdma@vger.kernel.org,
+	achender@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	shuah@kernel.org
+Subject: [PATCH net-next v1 0/3] selftests: rds: ROCE support follow ups
+Date: Fri, 22 May 2026 14:54:27 -0700
+Message-Id: <20260522215430.3748226-1-achender@kernel.org>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260509224824.3264567-1-dwmw2@infradead.org> <20260509224824.3264567-28-dwmw2@infradead.org>
- <3ad6cd109480772ade3c11f23b9c1d7a9855d67e.camel@infradead.org>
- <ag-Hf2liLSX9q0rS@google.com> <ab84153e33fbe7c25667f595c56b310d4d5a93ef.camel@infradead.org>
- <ahBQ7mXNaTtouT3C@google.com> <c4b498c401287477402ddd60a0120b0c5a9bf8d3.camel@infradead.org>
- <ahCQluJj59uWlDAF@google.com> <99356a588677e9ff31c1747db1705d9250a2728d.camel@infradead.org>
-Message-ID: <ahDO58dKuPt-lj_J@google.com>
-Subject: Re: [PATCH v4 27/30] KVM: x86: Add KVM_VCPU_TSC_EFFECTIVE_FREQ attribute
-From: Sean Christopherson <seanjc@google.com>
-To: David Woodhouse <dwmw2@infradead.org>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Thomas Gleixner <tglx@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, Juergen Gross <jgross@suse.com>, 
-	Boris Ostrovsky <boris.ostrovsky@oracle.com>, Paul Durrant <paul@xen.org>, 
-	Jonathan Cameron <jic23@kernel.org>, Sascha Bischoff <Sascha.Bischoff@arm.com>, 
-	Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>, Jack Allister <jalliste@amazon.com>, 
-	Dongli Zhang <dongli.zhang@oracle.com>, joe.jin@oracle.com, kvm@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	xen-devel@lists.xenproject.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Fri, May 22, 2026, David Woodhouse wrote:
-> On Fri, 2026-05-22 at 10:21 -0700, Sean Christopherson wrote:
-> > 
-> > I'll send a standalone patch, along with a selftest tweak to verify the fix.
-> > It's technically a fix and won't generate any conflicts, no reason to delay it.
-> 
-> Are you suggesting the other 30 should be delayed? :P
+Hi all,
 
-LOL, just acknowledging that it'll take me a minute to page all of that code in.
+This is a follow up series to the "Add ROCE support to rds selftests"
+series.  The first patch renames run.sh to rds_run.sh, and also adds
+two wrappers to the TEST_PROGS target to run the same test over the
+rdma and tcp transports.  The wrappers rds_rdma_run.sh and
+rds_tcp_run.sh also provide self-describing names that appear on the
+netdev CI dashboard.
+
+The second patch addresses a sashiko complaint that I thought was worth
+circling back for.  In the patch "pin RDS sockets to their intended
+transport," sockets are pinned the specific transport they are meant to
+test. By default, socket transports are implicitly selected based on
+the network topology, but it is possible that they can fail back to
+other transports if the underlying connection could not be established.
+So the patch pins them to the intended transport to avoid false
+positives.
+
+Lastly the third patch "support RDS built as loadable module," lifts
+the CONFIG_MODULES=n requirement, and updates the check_*conf_enabled()
+to allow modules set to "=m" and further load the backing modules for
+any component set as such.
+
+Questions, comments and feedback appreciated!
+
+Thanks everyone!
+Allison
+
+Allison Henderson (3):
+  selftests: rds: add per-transport run wrappers
+  selftests: rds: pin RDS sockets to their intended transport
+  selftests: rds: support RDS built as loadable modules
+
+ tools/testing/selftests/net/rds/Makefile      |  6 +-
+ tools/testing/selftests/net/rds/README.txt    | 13 ++--
+ tools/testing/selftests/net/rds/config        |  1 -
+ .../testing/selftests/net/rds/rds_rdma_run.sh | 11 ++++
+ .../selftests/net/rds/{run.sh => rds_run.sh}  | 63 ++++++++++++-------
+ .../testing/selftests/net/rds/rds_tcp_run.sh  | 11 ++++
+ tools/testing/selftests/net/rds/test.py       | 18 ++++++
+ 7 files changed, 95 insertions(+), 28 deletions(-)
+ create mode 100755 tools/testing/selftests/net/rds/rds_rdma_run.sh
+ rename tools/testing/selftests/net/rds/{run.sh => rds_run.sh} (80%)
+ create mode 100755 tools/testing/selftests/net/rds/rds_tcp_run.sh
+
+-- 
+2.25.1
+
