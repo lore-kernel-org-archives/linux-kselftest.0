@@ -1,117 +1,140 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8092C35674E;
-	Fri, 22 May 2026 05:49:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15D73382F1E
+	for <linux-kselftest@vger.kernel.org>; Fri, 22 May 2026 07:25:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779428975; cv=none; b=cG+Vof4tGzfhASgCZ7z1obsT8OHk/d0xZonQebbov/0oyQ9PcJ18Od8CixoT0EdiX/cIuNR8yR8v2/wTeD6vZoAYj5HZvB/azeXS3+PkpL0cbTDtQEjNJxxP2EqdyEaJQnUXgC8WKpaLaG4eIvh6yhl4sxR9QuTPvQ3bXBqGR04=
+	t=1779434708; cv=none; b=L82srF0M4UsIK1Q7FLrsW1JUZfZLNRqtnaB087qUk5oYTOyaNkkiAxAF9IbNVJDNpjKcnVTufytJoQaWXqwcqvh677EPN4K5tqTH8K6HMdmXIVMOLR8qWkSO+Xqcs4uwTgzPeCeLwRrQaUDTY6mYb8aPuOwFUgjcpkow68cXNL0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779428975; c=relaxed/simple;
-	bh=aqxmJYVgnYnTy7ATYKVKzwjKYdEPS8ByUDPImULyrGc=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=t1Cf+dDrfmm7nI/m8DNl4D0dT27Luxm4apyreTJvr0jywk6g+gUSya5NCYGtJ2natJnIFOlzcQ0IaG+cShmd8BTHWXWM19Y1d0kemwQm2MU0ldwg4ZQug59PQpB45nn6Ub6TOiw+TBOEDMc3XrStFywW+LHFZt8abitodkDpN+4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jk4Ks+BI; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779434708; c=relaxed/simple;
+	bh=iQ3tetTMi+a2kZrr5h4gIqji7vNEElI8JHrIlnprQaY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XG/Ffx5Em4AGAnRc7LVAJFA33LFypgeohP1BCEx2CJrlz9Oa1FpR7STN/ck6STOwfgqQ0CxWh1god0T/5VvRAJWa+0/3k7v7+K0LslAyNgbwcRblY9JfIsev4RCTXx9Egjpd2iclbyNZWX08s05sP8GpYClMamzxONeu4Bbojow=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=6wind.com; spf=pass smtp.mailfrom=6wind.com; dkim=pass (2048-bit key) header.d=6wind.com header.i=@6wind.com header.b=Zu3HrMPh; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=6wind.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=6wind.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jk4Ks+BI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AA9F1F000E9;
-	Fri, 22 May 2026 05:49:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779428974;
-	bh=E5sM9AUvuYdbGB4g9k8H+Hv5ClFSOJXofYXrX9huibQ=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=Jk4Ks+BI5b0v7Yq8P3JkHDjP1tsuruhcAbMdrFykwvGKU9wIHCcA0ppRRW9rWFErC
-	 N313Qt4P9HfEHxJJ+iTL9iZCqTUKUNtfMqFXScwk6BQw6X72h4Py/ZGeLRI5DRzTpH
-	 xncgim7ZoYUFgXoLFuTyL+bw78Ka7/SiliBzPLoGFY/d2tGK/zz24hEU1gouQzxbPI
-	 /lfYgnfpWcPZMPPtcj3IrPVtcPURdw5oet2RYP+QKt56i/JbnN7kBmnmIifRiVzmhJ
-	 HEhskgWEfhGs8Equp0nlEkkrzubybTUeRaB2L8Tn95VxTukZhsjz6TCOWDGqIq7pNK
-	 /+8Eo1uwZpKKg==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=lobster-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <maz@kernel.org>)
-	id 1wQIlH-000000056jh-2DhW;
-	Fri, 22 May 2026 05:49:31 +0000
-Date: Fri, 22 May 2026 06:52:48 +0100
-Message-ID: <87lddc9ej3.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Mark Rutland <mark.rutland@arm.com>
-Cc: Mark Brown <broonie@kernel.org>,
-	Oliver Upton <oupton@kernel.org>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <shuah@kernel.org>,
-	Dave Martin <Dave.Martin@arm.com>,
-	Fuad Tabba <tabba@google.com>,
-	Ben Horgan <ben.horgan@arm.com>,
-	linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Peter Maydell <peter.maydell@linaro.org>,
-	Eric Auger <eric.auger@redhat.com>
-Subject: Re: [PATCH v10 19/30] KVM: arm64: Provide assembly for SME register access
-In-Reply-To: <ag8b7oq4SFpdmlP_@J2N7QTR9R3>
-References: <20260306-kvm-arm64-sme-v10-0-43f7683a0fb7@kernel.org>
-	<20260306-kvm-arm64-sme-v10-19-43f7683a0fb7@kernel.org>
-	<ag8b7oq4SFpdmlP_@J2N7QTR9R3>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	dkim=pass (2048-bit key) header.d=6wind.com header.i=@6wind.com header.b="Zu3HrMPh"
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-43d7dab87e1so910287f8f.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 22 May 2026 00:25:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=6wind.com; s=google; t=1779434705; x=1780039505; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:content-language
+         :from:references:cc:to:subject:reply-to:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=PihRExIv02FwK9YpxdWEvz/FAv5EgvHDNQzIFK5zFNI=;
+        b=Zu3HrMPheO80VdFc43+KsQxmqnK+0G3vjQBDSTyU4dai6eC3lgy4se/OA9phlDPOk+
+         VIh1FBhiuMTWtcB4iaQ42MjnY/n5fw3nN+u4O31rYc6hZY0rrj1YAgAC39Dsi4BOypHm
+         PBhHJ2FBP6NB1VFoP2zJeSgyO39yyeQrkS1tRxWRY8URoReYvD28h65LEpLDCYimchtG
+         QGb8yQch87JJP/mW68AE3aF3UZY/gXal5dif5AA0UHX1GkF2zPs2S0p6780cg3NOFJr+
+         ObMyK92Tgz+RYxzgUOsXDjdnbSkuCdBxOoQaZO8U5NiZVzE94ur50EwYcizhjyTyVUkl
+         6G/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779434705; x=1780039505;
+        h=content-transfer-encoding:in-reply-to:organization:content-language
+         :from:references:cc:to:subject:reply-to:user-agent:mime-version:date
+         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PihRExIv02FwK9YpxdWEvz/FAv5EgvHDNQzIFK5zFNI=;
+        b=XAEZwsSlwqWBcSaIb9GrakO6CBKdibnP6JDS4D+idSGvLHlOgbIoAtv7id/GcUv2nV
+         mkejt0JtJU/C3UqV9FiKjrkPqTp55RzNijst944krEpzdt9fShlTFXzKcyqtfAH+2jxK
+         bhIBsP/K7+NHJFTpplFoVbOu9tXV1UHdDQUs85le8h10kyZDUrpFg9Tj60ibJ75Sk8TW
+         2hn9eyk+hI7lTxNgITdeVO6gGJGZgHMpwWjcaKD8FLeBeo2OQA0uOpsa15qcDsJ0wHw6
+         mFjScBmaDk0uFZoE5l9wzCRy22+AdPggctxh176sy+WzE4Aw1QdOn4XBL1K+Xhl4Y9DQ
+         GR+A==
+X-Forwarded-Encrypted: i=1; AFNElJ/6AuuH45UZsj7PQS1lFojAjGI+vXiGSheky9wLGXpYm1J4e/YJBPMZrCl9awoy8J7eGYAXN/BYZ+vNThsf4g8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzx/tB9VXlP9+2bZP3QDWVd8b766qqK783+5X5wvLPgBXD2/7Ok
+	TaWzWVD3E/vIuCQbR2N+mTPQw6jBTMJSaxSnmNhI2/DZ7aySHVFuJCVHaAZjasHUXEc=
+X-Gm-Gg: Acq92OEikVmdziNA2NiYLQ79Sg1FhIRVHDHrFDRxHKvBxwtIkwYzJvxgYKq2BXkWoy9
+	Bbll0K4tFYHGpQMxIkWsTvd31sn+ifdyCsEDNvX7DujwHpAgMMwH3WYAEGUOf8/OQCkPiBhRzRL
+	owSenIS7lVbA9+FPTEwh211wiceXEy9wYtuuPTbjMrQ8HYb6gCgqS0R3FwLr3GWZLAfuQjJs5Qf
+	1swWuUfEgB2fvoV8gdher6g0mDlvEPEwRB2B/xo2ZqBUQaRqqeNWNSwWqIVO3QTzvW2vbvyR+Sb
+	EeRuZ9y/VR/aoq1nOyLBgQmT4bk1HOUPt6ejzEBrj5/ZFGUkg+evUj4L31PnMMr51S7rTseercV
+	3sBkUVpuMKxVSfKugtr+kBnuQFK5FVK/KNuJbJs95DVoRWjcbHVYxkceUBARNdqgGU8i9qcO1/g
+	e2FcYe/wIazeqI+PLNRCkSgRuiwfBJFMgh5fnSy6bJjOX0VcvoqAQKqJtXNDqT2awuyHh7NIlcL
+	hSvYbhTIxUSk+s=
+X-Received: by 2002:a05:6000:25e1:b0:45e:89e0:ae71 with SMTP id ffacd0b85a97d-45eb38a6244mr1310137f8f.2.1779434705412;
+        Fri, 22 May 2026 00:25:05 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:ab7:2110:6a1d:efff:fe52:1959? ([2a01:e0a:ab7:2110:6a1d:efff:fe52:1959])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45eb6d5cb76sm1678678f8f.25.2026.05.22.00.25.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 May 2026 00:25:04 -0700 (PDT)
+Message-ID: <76280397-a1e8-4194-b02b-76ccef2732c1@6wind.com>
+Date: Fri, 22 May 2026 09:25:04 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: mark.rutland@arm.com, broonie@kernel.org, oupton@kernel.org, joey.gouly@arm.com, catalin.marinas@arm.com, suzuki.poulose@arm.com, will@kernel.org, pbonzini@redhat.com, corbet@lwn.net, shuah@kernel.org, Dave.Martin@arm.com, tabba@google.com, ben.horgan@arm.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, peter.maydell@linaro.org, eric.auger@redhat.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Reply-To: nicolas.dichtel@6wind.com
+Subject: Re: [PATCH net v2 2/4] net: netlink: don't set nsid on local
+ notifications
+To: Ilya Maximets <i.maximets@ovn.org>, Jiri Benc <jbenc@redhat.com>
+Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Donald Hunter <donald.hunter@gmail.com>, Shuah Khan <shuah@kernel.org>,
+ Kuniyuki Iwashima <kuniyu@google.com>, Kees Cook <kees@kernel.org>,
+ Adrian Moreno <amorenoz@redhat.com>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Matteo Perin <matteo.perin@canonical.com>
+References: <20260520172317.175168-1-i.maximets@ovn.org>
+ <20260520172317.175168-3-i.maximets@ovn.org>
+ <bd9c0751-55ea-459e-8b22-8bd24abf235c@6wind.com>
+ <20260521160036.413771e9@griffin>
+ <9e7b7aab-dad4-4b72-87cd-822e67b27afe@6wind.com>
+ <b8183167-9e8d-4c75-b340-bc3437a14ea0@ovn.org>
+From: Nicolas Dichtel <nicolas.dichtel@6wind.com>
+Content-Language: en-US
+Organization: 6WIND
+In-Reply-To: <b8183167-9e8d-4c75-b340-bc3437a14ea0@ovn.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Thu, 21 May 2026 15:51:26 +0100,
-Mark Rutland <mark.rutland@arm.com> wrote:
+Le 21/05/2026 à 18:01, Ilya Maximets a écrit :
+> On 5/21/26 4:25 PM, Nicolas Dichtel wrote:
+>> Le 21/05/2026 à 16:00, Jiri Benc a écrit :
+>>> On Thu, 21 May 2026 14:36:12 +0200, Nicolas Dichtel wrote:
+>>>> I still don't think that this is the right "fix". The app is broken. Even after
+>>>> this patch, the bug could be easily triggered again by a third party.
+>>>> There is nothing wrong with assigning a self-nsid. It would be a lot more robust
+>>>> for the app to assign itself a self-nsid when it starts.
+>>>
+>>> On the other hand, does the patch break anything in practice (as
+>>> opposed to in theory)? It makes live of several apps simpler, which is
+>>> not a bad goal.
+>> I'm not against the patch, it just look like a workaround.
+>> I'm trying to understand how NETLINK_LISTEN_ALL_NSID is used (in fact, why it is
+>> used if the app doesn't "understand" NSIDs).
 > 
-> On Fri, Mar 06, 2026 at 05:01:11PM +0000, Mark Brown wrote:
-> > Provide versions of the SME state save and restore functions for the
-> > hypervisor to allow it to restore ZA and ZT for guests.
-> > 
-> > Signed-off-by: Mark Brown <broonie@kernel.org>
-> > ---
-> >  arch/arm64/include/asm/kvm_hyp.h |  2 ++
-> >  arch/arm64/kvm/hyp/fpsimd.S      | 23 +++++++++++++++++++++++
-> >  2 files changed, 25 insertions(+)
+> ovs-vswitchd works with NSIDs of remote ports.  So it does understand them, it
+> just doesn't expect the self-referential ones for the local namespace.
 > 
-> While this specific instance is simple enough, I don't think we should
-> continue to duplicate the low level save/restore routines between the
-> main kernel and KVM hyp code.
+> openvswitch module has a minimal support for cross-namespace operation.  Ports can
+> be added to the openvswitch datapath and then moved to a different namespace (it's
+> a little weird use case, but that's beyond the point here).  ovs-vswitchd learns
+> new NSIDs of those ports from the openvswitch module and then it can perform a
+> limited set of cross-namespace operations on them and monitor their status changes
+> through notifications on an all-nsid socket.  It never learns the NSID of the
+> current local namespace, because all the local ports can be directly accessed and
+> openvswitch module doesn't report an NSID for them, as it's not needed for anything.
 > 
-> I've sent a series that avoids the need for this, and cleans up some
-> other bits):
+> In the end, ovs-vswitchd knows all the remote NSIDs it needs to know and can
+> recognize them in notifications.  But it doesn't know the NSID of it's own local
+> namespace, as the openvswitch module never reports that for local ports and
+> ovs-vswitchd doesn't explicitly check its own NSID.  So, local notifications with
+> NSID set get treatment of a notification from some remote namespace that we do not
+> care about.
 > 
->   https://lore.kernel.org/linux-arm-kernel/20260521132556.584676-1-mark.rutland@arm.com/
-> 
-> Assuming Marc and Oliver are on board, I'd prefer that we do that
-> cleanup first, and build the KVM SME support atop.
+> We will be putting changes into ovs-vswitch to work around this issue, simply
+> because it will take time for the kernel patch to propagate to distros.  But this
+> code will not be useful for anything except for working around this one specific
+> case and so it would be nice to get rid of it eventually.  And it would be nice
+> if future applications didn't need to care about this behavior as well.  Having
+> the fix in stable will speed up the process significantly.
+Ok, thanks for the details.
 
-Absolutely. The whole FP/SVE is still way too complicated, full of
-esoteric constructs, hard to audit, and I would really like to see it
-cleaned-up before stacking another layer on top.
-
-I've quickly eyeballed the KVM-specific patches yesterday, and nothing
-seem outlandish, so there is a good chance some of that could make it
-into 7.2. I plan to look at it again shortly.
-
-Thanks,
-
-	M.
-
--- 
-Jazz isn't dead. It just smells funny.
+Regards,
+Nicolas
