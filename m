@@ -1,158 +1,283 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 161D43E5EDA;
-	Fri, 22 May 2026 11:32:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1887E3E9C3F;
+	Fri, 22 May 2026 11:44:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779449567; cv=none; b=J7lpTzXVaqLOwkPaywwdZ9ghbeOFWyVDqrV/oE4xMtv+jSZfi/wgfCKqnwtYdFhTdPOhhba56vG665pK4y9nvcPKlsonnb90ZE0Rpu73qZhjxYvNf5JQ8O7sAb5o0Z8Y86xLOUGGcH7kx2B/dhtbNVxXFDnpjS/PDoo4Mqffntw=
+	t=1779450278; cv=none; b=KcF32TsYadkFIn3Bc9NmYycnHCw67hE4A6p8z+SBI19tx/Kcue19lpkX3CA9eXqz5K/UmqHkR3R5onm8ZPlBUIEk7Iij2qm/6t5shOwmanYF1WYqrUzWVYdh672HLLmZ4iuQiZ6I3G444Ye/X42/DMRKzz/19Qvzcz6v6kg8Lus=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779449567; c=relaxed/simple;
-	bh=R1KMAI23+7i1Wc6O1oXgl53R9JvNI3FJ8hKBnXBkFx0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tW8RzPOL9TLkYczXM+48GiHYUvlBqUD0LfxnQHott4OPzKjjWlKk1R4Gv5936BSPIKdaKwSKlTuL3rL97ZpE0IlzG/rMzrGtNyYUahGqTzIEgMK+VOKahJ6JO6wEmGlPgHOax6r4LtyidjROb5RbhMHXFat2/YJrg6WRz2Zq5KE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xstujc3T; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779450278; c=relaxed/simple;
+	bh=HbRSjpP6pq1GX7FNbHSwbMJ77qs/NEnjH+zX7DSg0tg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fptQjMEQZof/YxI1Ck3eT27B7NPp4aEpooGR7R19nIVSo6lVdfVpAec48mouHFed+qRQ2/xq6j14Ia06pq94p2IKFDpHpl8K4+LQ1jviC4qcn+C12eerSE/Nz/1m3nShWOL/9cowfD14rtaRm5QvpIofd8HKzh6+EiJyLjm4xHM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Qt841VlS; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xstujc3T"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B74451F000E9;
-	Fri, 22 May 2026 11:32:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Qt841VlS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 629B11F00A3D;
+	Fri, 22 May 2026 11:44:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779449565;
-	bh=FA0JT2MU1cjq+IOgE1QiCa+xKqbwI7TFJcp+fEW0hS0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=Xstujc3TsCHLHgbRC/WvNwHYPcgN/PSk36AA87VL0Rsvsp4wx4sJ55AaVTr29sb4T
-	 8KduXT1yFtgS2ysVH+wgWqYzPRPA/1wvpi+eXpMu6oxOPLLvoLJ+gFWEJHDdoK83YE
-	 gO4/HHM/L2ZYYhBrPG4qkbEUUCcaUx77UKPKZ1aoY0cr/QvGNesNDS7lXDvUCyb5ah
-	 v3SldAS8hyB8M/3IGNbbUtnmPiaBjDjkn5PZR+jMSbjxRQhEBkNBzs/wVMzAUzPxUI
-	 a+U3zqpSFFUmv+4h6aXuJ9F9V/zIG9AVGsZ9B/O7yrgHnphGjAcxRKbtwkGh7zH51X
-	 vjYHZ2vioPCkQ==
-From: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
-To: Alexander Duyck <alexanderduyck@fb.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	kernel-team@meta.com,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	netdev@vger.kernel.org
-Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-	Jacob Keller <jacob.e.keller@intel.com>,
-	Mohsin Bashir <mohsin.bashr@gmail.com>,
-	"Mike Marciniszyn (Meta)" <mike.marciniszyn@gmail.com>,
-	Pavel Begunkov <asml.silence@gmail.com>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next 3/3] selftests: drv-net: Add zcrx payload offset check
-Date: Fri, 22 May 2026 13:32:22 +0200
-Message-ID: <20260522113225.241337-4-bjorn@kernel.org>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260522113225.241337-1-bjorn@kernel.org>
-References: <20260522113225.241337-1-bjorn@kernel.org>
+	s=k20260515; t=1779450273;
+	bh=7R5NDp5rIQEKgmx6ff9T0EAO9NIuV9zvssCRGuN2Nxg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=Qt841VlSj3QS3Bxsc4RBFCcw1ZwOuFFG/ekVzzSD2g06cK7CnOAsRnliahxM3J0Fj
+	 2gOPmEAmhXXTRWp6Fr1vIl1h3ne1i78pqR/tKSykwptOt9q86CnD+dUhzWR7WT/uVr
+	 LoZgJ1gkqVQhiSl1oZ/Whr3T3yXe+jni+tbBuCPAUTRFvht5T39oCd1ejnq1b/ltpP
+	 UA2SddoVQc/JL62WZTWLWfKIPPXSKjzIJW8p/m538JGt3022rApPm3IPElJyr5kEMz
+	 Pft75V3aTWFsYeoNE+aHTW5nX0aEQASkT0Xp0WFmNOASbvkCsmhgGdZ19hnhfgEChE
+	 c8/68j9Z5uNfg==
+Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 94B66F40069;
+	Fri, 22 May 2026 07:44:31 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-02.internal (MEProxy); Fri, 22 May 2026 07:44:31 -0400
+X-ME-Sender: <xms:n0EQajzaWUAL9foVl3iSXLRppyszmKHlcbKTz09aNBDzWda9abzdIQ>
+    <xme:n0EQao5eWXQxAc48kc28joC7NhC70-iZIgZZMD5N4dFWaBAHcfHEnmrcj_6Av666R
+    fI_7XdS2f_fMSJERkvvdEGk3OLU2fRi7Zq80Q10QApSbteW73137A>
+X-ME-Received: <xmr:n0EQai6cX3uF_gHjNw4yHL8-AiiXt58FoNSXQFsrEwMygLFEdtb141KYHBxPBA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgdduhedttdekucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucenucfjughrpeffhffvvefukfhfgggtuggjsehttdertd
+    dttddvnecuhfhrohhmpefmihhrhihlucfuhhhuthhsvghmrghuuceokhgrsheskhgvrhhn
+    vghlrdhorhhgqeenucggtffrrghtthgvrhhnpeeuieejieffkeehfeffffdtkeelfeelhe
+    fhfefhudehjeehvdffleeuvddufefgkeenucevlhhushhtvghrufhiiigvpedtnecurfgr
+    rhgrmhepmhgrihhlfhhrohhmpehkihhrihhllhdomhgvshhmthhprghuthhhphgvrhhsoh
+    hnrghlihhthidqudeiudduiedvieehhedqvdekgeeggeejvdekqdhkrghspeepkhgvrhhn
+    vghlrdhorhhgsehshhhuthgvmhhovhdrnhgrmhgvpdhnsggprhgtphhtthhopeegiedpmh
+    houggvpehsmhhtphhouhhtpdhrtghpthhtoheprhhpphhtsehkvghrnhgvlhdrohhrghdp
+    rhgtphhtthhopegrkhhpmheslhhinhhugidqfhhouhhnuggrthhiohhnrdhorhhgpdhrtg
+    hpthhtohepphgvthgvrhigsehrvgguhhgrthdrtghomhdprhgtphhtthhopegurghvihgu
+    sehkvghrnhgvlhdrohhrghdprhgtphhtthhopehljhhssehkvghrnhgvlhdrohhrghdprh
+    gtphhtthhopehsuhhrvghnsgesghhoohhglhgvrdgtohhmpdhrtghpthhtohepvhgsrggs
+    khgrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihgrmhdrhhhofihlvghtthesoh
+    hrrggtlhgvrdgtohhmpdhrtghpthhtohepiihihiesnhhvihguihgrrdgtohhm
+X-ME-Proxy: <xmx:n0EQahLnSwNCQtzwgiyBDyXM6QXTIzHcpKJRL_cw5-UfKWI_ZtGPiA>
+    <xmx:n0EQakHez12dNbwMmUO0uVj63cxI2c1kiERawUYVAtNB9Hoqj8ZlOQ>
+    <xmx:n0EQau0j47Y2kYXSFKvkmNASmGHslIn1RQnBuGHsbGerJDymGXmi8w>
+    <xmx:n0EQamzIkUog0A3bQiC44FAMQf1ZKLmSZ2mXYsJouisWgBpHyQv9hA>
+    <xmx:n0EQaoFwDGvWKyiuxNInuwchtGw0QVDFOFHNPlTYuyd4gM6cWXlxSGh_>
+Feedback-ID: i10464835:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 22 May 2026 07:44:29 -0400 (EDT)
+Date: Fri, 22 May 2026 12:44:25 +0100
+From: Kiryl Shutsemau <kas@kernel.org>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: akpm@linux-foundation.org, peterx@redhat.com, david@kernel.org, 
+	ljs@kernel.org, surenb@google.com, vbabka@kernel.org, Liam.Howlett@oracle.com, 
+	ziy@nvidia.com, corbet@lwn.net, skhan@linuxfoundation.org, seanjc@google.com, 
+	pbonzini@redhat.com, jthoughton@google.com, aarcange@redhat.com, sj@kernel.org, 
+	usama.arif@linux.dev, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, kvm@vger.kernel.org, 
+	kernel-team@meta.com
+Subject: Re: [PATCH v2 05/14] mm: add MM_CP_UFFD_RWP change_protection() flag
+Message-ID: <ahA2Oy0NVaB8I8GR@thinkstation>
+References: <cover.1778254670.git.kas@kernel.org>
+ <ff3420fdd75f58d56827ff3d2eaffc0d74154627.1778254670.git.kas@kernel.org>
+ <agNZE49m8Pkn8CeW@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <agNZE49m8Pkn8CeW@kernel.org>
 
-Add an optional iou-zcrx receiver check for payload CQE offsets. With
--F, the receiver fails if no zero-copy receive CQE lands at or beyond
-the requested offset within an rx_buf_len-sized buffer.
+On Tue, May 12, 2026 at 07:45:07PM +0300, Mike Rapoport wrote:
+> On Fri, May 08, 2026 at 04:55:17PM +0100, Kiryl Shutsemau (Meta) wrote:
+> > Preparatory patch. Add the change_protection() primitive that
+> > userfaultfd RWP will use.
+> > 
+> > An RWP-protected PTE is PAGE_NONE with the uffd PTE bit set. The
+> > PROT_NONE half makes the CPU fault on any access; the uffd bit
+> > distinguishes an RWP fault from a plain mprotect(PROT_NONE) or NUMA
+> > hinting fault. MM_CP_UFFD_WP and MM_CP_UFFD_RWP share the same PTE
+> > bit, so the two cannot be used together on the same range.
+> > 
+> > Two new change_protection() flags:
+> > 
+> >   MM_CP_UFFD_RWP            install PAGE_NONE and set the uffd bit
+> >   MM_CP_UFFD_RWP_RESOLVE    restore vma->vm_page_prot, clear the uffd bit
+> > 
+> > Both are wired through change_pte_range(), change_huge_pmd(), and
+> > hugetlb_change_protection() so anon, shmem, THP, and hugetlb all
+> > share the same semantics.
+> > 
+> > Signed-off-by: Kiryl Shutsemau <kas@kernel.org>
+> > Assisted-by: Claude:claude-opus-4-6
+> > ---
+> >  include/linux/mm.h            |  5 +++++
+> >  include/linux/userfaultfd_k.h |  1 -
+> >  mm/huge_memory.c              | 20 ++++++++++++------
+> >  mm/hugetlb.c                  | 25 ++++++++++++++++------
+> >  mm/mprotect.c                 | 40 +++++++++++++++++++++++++++++------
+> >  5 files changed, 71 insertions(+), 20 deletions(-)
+> > 
+> > diff --git a/include/linux/mm.h b/include/linux/mm.h
+> > index 3f53d1e978c0..2b65416bb760 100644
+> > --- a/include/linux/mm.h
+> > +++ b/include/linux/mm.h
+> > @@ -3291,6 +3291,11 @@ int get_cmdline(struct task_struct *task, char *buffer, int buflen);
+> >  #define  MM_CP_UFFD_WP_RESOLVE             (1UL << 3) /* Resolve wp */
+> >  #define  MM_CP_UFFD_WP_ALL                 (MM_CP_UFFD_WP | \
+> >  					    MM_CP_UFFD_WP_RESOLVE)
+> > +/* Whether this change is for uffd RWP */
+> > +#define  MM_CP_UFFD_RWP                    (1UL << 4) /* do rwp */
+> > +#define  MM_CP_UFFD_RWP_RESOLVE            (1UL << 5) /* Resolve rwp */
+> 
+> Nit: any reason except copy/paset to use different case in "do rwp" and
+> "Resolve rwp"? ;-)
 
-This is useful for manual driver testing where the driver is expected
-to split a larger zcrx buffer into smaller hardware receive fragments.
-Do not wire it into the generic large-chunk test, since different
-drivers may legitimately return different CQE boundaries.
+copy/paste it is. Will use "resolve rwp"
 
-Signed-off-by: Björn Töpel <bjorn@kernel.org>
----
- .../selftests/drivers/net/hw/iou-zcrx.c       | 28 +++++++++++++++++--
- 1 file changed, 25 insertions(+), 3 deletions(-)
+> > +#define  MM_CP_UFFD_RWP_ALL                (MM_CP_UFFD_RWP | \
+> > +					    MM_CP_UFFD_RWP_RESOLVE)
+> >  
+> >  bool can_change_pte_writable(struct vm_area_struct *vma, unsigned long addr,
+> >  			     pte_t pte);
+> > diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.h
+> > index fcf308dba311..3725e61a7041 100644
+> > --- a/include/linux/userfaultfd_k.h
+> > +++ b/include/linux/userfaultfd_k.h
+> > @@ -397,7 +397,6 @@ static inline bool userfaultfd_huge_pmd_wp(struct vm_area_struct *vma,
+> >  	return false;
+> >  }
+> >  
+> > -
+> >  static inline bool userfaultfd_armed(struct vm_area_struct *vma)
+> >  {
+> >  	return false;
+> > diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+> > index d88fcccd386d..2537dca63c6c 100644
+> > --- a/mm/huge_memory.c
+> > +++ b/mm/huge_memory.c
+> > @@ -2665,6 +2665,8 @@ int change_huge_pmd(struct mmu_gather *tlb, struct vm_area_struct *vma,
+> >  	spinlock_t *ptl;
+> >  	pmd_t oldpmd, entry;
+> >  	bool prot_numa = cp_flags & MM_CP_PROT_NUMA;
+> > +	bool uffd_rwp = cp_flags & MM_CP_UFFD_RWP;
+> > +	bool uffd_rwp_resolve = cp_flags & MM_CP_UFFD_RWP_RESOLVE;
+> >  	bool uffd_wp = cp_flags & MM_CP_UFFD_WP;
+> >  	bool uffd_wp_resolve = cp_flags & MM_CP_UFFD_WP_RESOLVE;
+> 
+> It looks like uffd_wp* are always ORed with uffd_rwp, we could fold this to
+> e.g.
+> 
+> 	bool uffd_prot = cp_flags & (MM_CP_UFFD_WP | MM_CP_UFFD_RWP);
 
-diff --git a/tools/testing/selftests/drivers/net/hw/iou-zcrx.c b/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
-index 240d13dbc54e..0fb0410aaada 100644
---- a/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
-+++ b/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
-@@ -85,6 +85,8 @@ static int cfg_send_size = SEND_SIZE;
- static struct sockaddr_in6 cfg_addr;
- static unsigned int cfg_rx_buf_len;
- static bool cfg_dry_run;
-+static bool cfg_check_payload_offset, cfg_seen_payload_offset;
-+static unsigned int cfg_min_payload_offset;
- 
- static char *payload;
- static void *area_ptr;
-@@ -298,6 +300,13 @@ static void process_recvzc(struct io_uring *ring, struct io_uring_cqe *cqe)
- 	mask = (1ULL << IORING_ZCRX_AREA_SHIFT) - 1;
- 	data = (char *)area_ptr + (rcqe->off & mask);
- 
-+	if (cfg_check_payload_offset) {
-+		unsigned int rx_buf_len = cfg_rx_buf_len ?: page_size;
-+
-+		if ((rcqe->off & mask) % rx_buf_len >= cfg_min_payload_offset)
-+			cfg_seen_payload_offset = true;
-+	}
-+
- 	for (i = 0; i < n; i++) {
- 		if (*(data + i) != payload[(received + i)])
- 			error(1, 0, "payload mismatch at %d", i);
-@@ -374,6 +383,9 @@ static void run_server(void)
- 
- 	if (!stop)
- 		error(1, 0, "test failed\n");
-+	if (cfg_check_payload_offset && !cfg_seen_payload_offset)
-+		error(1, 0, "no payload CQE at offset >= %u\n",
-+		      cfg_min_payload_offset);
- }
- 
- static void run_client(void)
-@@ -406,8 +418,11 @@ static void run_client(void)
- 
- static void usage(const char *filepath)
- {
--	error(1, 0, "Usage: %s (-4|-6) (-s|-c) -h<server_ip> -p<port> "
--		    "-l<payload_size> -i<ifname> -q<rxq_id>", filepath);
-+	error(1, 0,
-+	      "Usage: %s (-4|-6) (-s|-c) -h<server_ip> -p<port>\n"
-+	      "\t-l<payload_size> -i<ifname> -q<rxq_id>\n"
-+	      "\t[-x<rx_buf_pages>] [-F<min_payload_offset>] [-d]\n",
-+	      filepath);
- }
- 
- static void parse_opts(int argc, char **argv)
-@@ -425,7 +440,7 @@ static void parse_opts(int argc, char **argv)
- 		usage(argv[0]);
- 	cfg_payload_len = max_payload_len;
- 
--	while ((c = getopt(argc, argv, "sch:p:l:i:q:o:z:x:d")) != -1) {
-+	while ((c = getopt(argc, argv, "sch:p:l:i:q:o:z:x:F:d")) != -1) {
- 		switch (c) {
- 		case 's':
- 			if (cfg_client)
-@@ -463,6 +478,10 @@ static void parse_opts(int argc, char **argv)
- 		case 'x':
- 			cfg_rx_buf_len = page_size * strtoul(optarg, NULL, 0);
- 			break;
-+		case 'F':
-+			cfg_check_payload_offset = true;
-+			cfg_min_payload_offset = strtoul(optarg, NULL, 0);
-+			break;
- 		case 'd':
- 			cfg_dry_run = true;
- 			break;
-@@ -484,6 +503,9 @@ static void parse_opts(int argc, char **argv)
- 
- 	if (cfg_payload_len > max_payload_len)
- 		error(1, 0, "-l: payload exceeds max (%d)", max_payload_len);
-+	if (cfg_check_payload_offset &&
-+	    cfg_min_payload_offset >= (cfg_rx_buf_len ?: page_size))
-+		error(1, 0, "-F: offset outside rx_buf_len");
- }
- 
- int main(int argc, char **argv)
+Makes sense.
+
+> >  	int ret = 1;
+> > @@ -2679,11 +2681,18 @@ int change_huge_pmd(struct mmu_gather *tlb, struct vm_area_struct *vma,
+> >  		return 0;
+> >  
+> >  	if (thp_migration_supported() && pmd_is_valid_softleaf(*pmd)) {
+> > -		change_non_present_huge_pmd(mm, addr, pmd, uffd_wp,
+> > -					    uffd_wp_resolve);
+> > +		change_non_present_huge_pmd(mm, addr, pmd,
+> > +					    uffd_wp || uffd_rwp,
+> > +					    uffd_wp_resolve || uffd_rwp_resolve);
+> >  		goto unlock;
+> >  	}
+> >  
+> > +	/* Already in the desired state */
+> > +	if (prot_numa && pmd_protnone(*pmd))
+> > +		goto unlock;
+> > +	if (uffd_rwp && pmd_protnone(*pmd) && pmd_uffd(*pmd))
+> > +		goto unlock;
+> > +
+> >  	if (prot_numa) {
+> >  
+> >  		/*
+> > @@ -2694,9 +2703,6 @@ int change_huge_pmd(struct mmu_gather *tlb, struct vm_area_struct *vma,
+> >  		if (is_huge_zero_pmd(*pmd))
+> >  			goto unlock;
+> >  
+> > -		if (pmd_protnone(*pmd))
+> > -			goto unlock;
+> > -
+> >  		if (!folio_can_map_prot_numa(pmd_folio(*pmd), vma,
+> >  					     vma_is_single_threaded_private(vma)))
+> >  			goto unlock;
+> > @@ -2725,9 +2731,9 @@ int change_huge_pmd(struct mmu_gather *tlb, struct vm_area_struct *vma,
+> >  	oldpmd = pmdp_invalidate_ad(vma, addr, pmd);
+> >  
+> >  	entry = pmd_modify(oldpmd, newprot);
+> > -	if (uffd_wp)
+> > +	if (uffd_wp || uffd_rwp)
+> >  		entry = pmd_mkuffd(entry);
+> > -	else if (uffd_wp_resolve)
+> > +	else if (uffd_wp_resolve || uffd_rwp_resolve)
+> >  		/*
+> >  		 * Leave the write bit to be handled by PF interrupt
+> >  		 * handler, then things like COW could be properly
+> > diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> > index 61cda9992043..63f6b19418b9 100644
+> > --- a/mm/hugetlb.c
+> > +++ b/mm/hugetlb.c
+> > @@ -6434,6 +6436,11 @@ long hugetlb_change_protection(struct vm_area_struct *vma,
+> >  
+> >  		ptep = hugetlb_walk(vma, address, psize);
+> >  		if (!ptep) {
+> > +			/*
+> > +			 * uffd_wp installs a pte marker on the unpopulated
+> > +			 * entry; RWP does not install markers so the
+> 
+> Nit:                              uffd_rwp
+
+Ack.
+
+> 
+> > +			 * allocation is unnecessary for it.
+> > +			 */
+> >  			if (!uffd_wp) {
+> >  				address |= last_addr_mask;
+> >  				continue;
+> > diff --git a/mm/mprotect.c b/mm/mprotect.c
+> > index 8340c8b228c6..23e71f68cf7a 100644
+> > --- a/mm/mprotect.c
+> > +++ b/mm/mprotect.c
+> > @@ -216,6 +216,8 @@ static long change_softleaf_pte(struct vm_area_struct *vma,
+> >  {
+> >  	const bool uffd_wp = cp_flags & MM_CP_UFFD_WP;
+> >  	const bool uffd_wp_resolve = cp_flags & MM_CP_UFFD_WP_RESOLVE;
+> > +	const bool uffd_rwp = cp_flags & MM_CP_UFFD_RWP;
+> > +	const bool uffd_rwp_resolve = cp_flags & MM_CP_UFFD_RWP_RESOLVE;
+> 
+> And here a single pair of bools should be enough I think.
+
+Yep.
+
+> 
+> >  	softleaf_t entry = softleaf_from_pte(oldpte);
+> >  	pte_t newpte;
+> >  
+> > @@ -256,7 +258,7 @@ static long change_softleaf_pte(struct vm_area_struct *vma,
+> >  		 * to unprotect it, drop it; the next page
+> >  		 * fault will trigger without uffd trapping.
+> >  		 */
+> > -		if (uffd_wp_resolve) {
+> > +		if (uffd_wp_resolve || uffd_rwp_resolve) {
+> >  			pte_clear(vma->vm_mm, addr, pte);
+> >  			return 1;
+> >  		}
+> > @@ -265,9 +267,9 @@ static long change_softleaf_pte(struct vm_area_struct *vma,
+> >  		newpte = oldpte;
+> >  	}
+> >  
+> > -	if (uffd_wp)
+> > +	if (uffd_wp || uffd_rwp)
+> >  		newpte = pte_swp_mkuffd(newpte);
+> > -	else if (uffd_wp_resolve)
+> > +	else if (uffd_wp_resolve || uffd_rwp_resolve)
+> >  		newpte = pte_swp_clear_uffd(newpte);
+> >  
+> >  	if (!pte_same(oldpte, newpte)) {
+> 
+> -- 
+> Sincerely yours,
+> Mike.
+
 -- 
-2.53.0
-
+  Kiryl Shutsemau / Kirill A. Shutemov
