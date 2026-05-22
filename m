@@ -1,385 +1,188 @@
-Received: from fout-b2-smtp.messagingengine.com (fout-b2-smtp.messagingengine.com [202.12.124.145])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BE0C426EA6;
-	Fri, 22 May 2026 13:39:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.145
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2860C407CC5
+	for <linux-kselftest@vger.kernel.org>; Fri, 22 May 2026 13:42:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779457203; cv=none; b=LWTapVe+LiaMcXi78y7k22e5LS2cVPLzCTORM8qLNJdyXvhotOXPgnT64ZFZPUrSDZ66AGh8n6rx5shPrHcpvenOwGPHRxGxOWTfTj4ThBmAkBG/Gz6NJR3x5hTxvfGOQ0yYnnQ5ul0XT3QM+1xYFi5WZxz1hUbPhXSWzj83o40=
+	t=1779457350; cv=none; b=sW2FPXGFqd4eIALDuG+arXzABPO9PbSVv05abga1MbDEWRV7UvkLwSGII66jmzjXFpmpihU5auo+ylx4trzbSNhNDuYx9mYoRmk8D/l0fUICenWyIoSWX1bujrE21GHaPog6dGHJHHEkB/GiSy36uW63i6KGIqq23yYeFDEYS3s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779457203; c=relaxed/simple;
-	bh=39e8fnpTUC46kSuw6XMbkKUnGDMgz+PEMYBez5ZsnoM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FBGOZfBVT7pGcDiMF8WljZEdL4ic2CSzMKA9ODHyVbxPyJ5EirdNNdPXTK+bi1lR2+UBl7wzyPyNAZcTO3fct0YdqEbPKA+8E7ao3m3fGNF21dZfX8Kx5K+fv6S0SbYkiSsbMsj+4J7AFQrsMFOPPzkkurvB7L7IxlCg9f3ZV3Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=06PiO8pj; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=EPJyAb55; arc=none smtp.client-ip=202.12.124.145
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
+	s=arc-20240116; t=1779457350; c=relaxed/simple;
+	bh=GJU+HeIPDrKpMoJwTBqmdjN1+wHbQmMQ1tafJVO0q+o=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=pxaCKxgfPP2yJXZNgUTD/fI9O9GdmObSr8w/BQPp697jqU1AUj4AQumR1KAbujlLk8mhNBXDjk2+2WhFWzz5QfAcr1EMQhXgJFDx85ibh0KBMjEtukEdQpipKzEQOBQj8wiBPV42wfKLe80QLFhJdhl+cCN4+mVVWCoSt9OobJY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=ZMQhW5hL; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=jZ4Y5RcN; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="06PiO8pj";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="EPJyAb55"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfout.stl.internal (Postfix) with ESMTP id BB5291D00121;
-	Fri, 22 May 2026 09:39:54 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-04.internal (MEProxy); Fri, 22 May 2026 09:39:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-	 h=cc:cc:content-transfer-encoding:content-type:date:date:from
-	:from:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm2; t=1779457194; x=
-	1779543594; bh=7kgK2B7CSrKKlV7MAxGh/B0N2F/JYv53qwBfZJ+EZP0=; b=0
-	6PiO8pjoX+s75ZiHT4qw7ynCfBAjDhdjyUKwJsfr7BZ0gE8NoFBsAnbjHdzFdlzb
-	ZMyrOFE4yR6XKstdv9fcpUtUbHwYqdl1C9yq510gXBJAULoTrVZrGleEL2aXV9z/
-	3IOFF9X98wQCb+xxh68/DzIWouZyrT6LKRJyJHniNUQm5EamBiy+2nYtiNxEFB+y
-	g4HfCf/N6bK7R93iadLzUQ0+kDwbjwJeCDGqRjFSyMrFw1T0JSxQAhof8T1+vyDq
-	OerulQQvls5bQdM1Dbhy4G7+rl3+vd8L6jcwmqBCVeto97J3IgGGa6sAWM1pmIn8
-	z228SWGpnB6cPHhQyeRKg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm3; t=1779457194; x=1779543594; bh=7
-	kgK2B7CSrKKlV7MAxGh/B0N2F/JYv53qwBfZJ+EZP0=; b=EPJyAb55jbrqUpgHF
-	VjM2SUqz+yHoRy0qmFHa3mWQfnINHDJV2LKa4/Y+sSdwW+3GpDrtoA3tmIOxUi24
-	LUnDrx8JDg24H9sgaLWGNBBTuix8Q27mMFRybJsOds5Xor4sC1S1lC1+tq4vGSP+
-	vJ0PM+X2obTz7CE1cNeHjmNM+lZ19ZqgbOlpgP8Pk0M/4Q6DL9uY+NHQQjrGkyhl
-	MGqFFOOsFMOhJ6ug9JwgvQRxdFvbtVOKAtLeSG3vPYeOm4gzwymMxfURJCVGEIhO
-	/m5n8pkNywjMclMmalDlJgvEj9OkZsDWE1AeTTjnWcRPKNF0EB5ofjEDQP+fMgYG
-	N1OcA==
-X-ME-Sender: <xms:qlwQak0NWdRdzMMRRhBcLctEC-UwSXMnplLDesFGAqJAAnv5A_ZD9Q>
-    <xme:qlwQagKPilxv-Y8vENSqGgJxDmYomUnWBYjhbmpGsAkBPKoo-ptNyE-G-2MJka2NP
-    mdA-qQBlHOEpSXOmM_scTU6Hzw_d4b9KjmOgmxgLhUlQ4hXFhA_mFc>
-X-ME-Received: <xmr:qlwQav2E2quj6ShYPo2Ggyn91TfgO8Xrpl8ovXTmHdMjWwyP43yZmW-HqA0mkg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgdduhedtfeduucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffojghfggfgsedtkeertd
-    ertddtnecuhfhrohhmpefmihhrhihlucfuhhhuthhsvghmrghuuceokhhirhhilhhlsehs
-    hhhuthgvmhhovhdrnhgrmhgvqeenucggtffrrghtthgvrhhnpeegveehtdfgvdfhudegff
-    euuddvgeevjefhveevgefhvdevieevteeivdehjefhjeenucevlhhushhtvghrufhiiigv
-    pedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrd
-    hnrghmvgdpnhgspghrtghpthhtohepvdeipdhmohguvgepshhmthhpohhuthdprhgtphht
-    thhopegrkhhpmheslhhinhhugidqfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtoh
-    eprhhpphhtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehpvghtvghrgiesrhgvughh
-    rghtrdgtohhmpdhrtghpthhtohepuggrvhhiugeskhgvrhhnvghlrdhorhhgpdhrtghpth
-    htoheplhhjsheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhurhgvnhgssehgohho
-    ghhlvgdrtghomhdprhgtphhtthhopehvsggrsghkrgeskhgvrhhnvghlrdhorhhgpdhrtg
-    hpthhtoheplhhirghmrdhhohiflhgvthhtsehorhgrtghlvgdrtghomhdprhgtphhtthho
-    peiiihihsehnvhhiughirgdrtghomh
-X-ME-Proxy: <xmx:qlwQargznNHXXEFSIkuyq_USe5H0wAPhBVJSQ3wQGvrW4C84--XX4g>
-    <xmx:qlwQav0Q6vGaOaQu97ctfou2QxG2ad7owUQcAHzVx2yBqAvSKUXiXQ>
-    <xmx:qlwQamcibcUSyR4rL0Kq1iCbCA-YAZBWEbE90Va-f5wRkbr1_mUL4Q>
-    <xmx:qlwQaiGIGFAb7FTMrwdj44FhyhR9gcsYiOWrFXt7qdeCyChTCJjCbQ>
-    <xmx:qlwQakpTcmTUhwg5-1AFaemuUZptVOLso8tO0fFLIxmOXJjOzxXGTCfX>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 22 May 2026 09:39:53 -0400 (EDT)
-From: Kiryl Shutsemau <kirill@shutemov.name>
-To: akpm@linux-foundation.org,
-	rppt@kernel.org,
-	peterx@redhat.com,
-	david@kernel.org
-Cc: ljs@kernel.org,
-	surenb@google.com,
-	vbabka@kernel.org,
-	Liam.Howlett@oracle.com,
-	ziy@nvidia.com,
-	corbet@lwn.net,
-	skhan@linuxfoundation.org,
-	seanjc@google.com,
-	pbonzini@redhat.com,
-	jthoughton@google.com,
-	aarcange@redhat.com,
-	sj@kernel.org,
-	usama.arif@linux.dev,
-	linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kvm@vger.kernel.org,
-	kernel-team@meta.com,
-	linux-man@vger.kernel.org,
-	alx@kernel.org,
-	"Kiryl Shutsemau (Meta)" <kas@kernel.org>
-Subject: [PATCH v3 16/16] ioctl_userfaultfd.2: Add read-write protect mode docs
-Date: Fri, 22 May 2026 14:38:57 +0100
-Message-ID: <20260522133857.552279-17-kirill@shutemov.name>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260522133857.552279-1-kirill@shutemov.name>
-References: <20260522133857.552279-1-kirill@shutemov.name>
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="ZMQhW5hL";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="jZ4Y5RcN"
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64M8iZqM399145
+	for <linux-kselftest@vger.kernel.org>; Fri, 22 May 2026 13:42:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=6BVsDs/rDFNbuNfHuhEQst
+	hfmm4qGh0YCf3lMG5UxzA=; b=ZMQhW5hLIeKGkKZnrVEolAx9EprSDSJBO4CKRb
+	MIhB1zcE5jTzQtbFBuiyS+CJIVZsvLgyirrl7J0qC7ZxGPvrAR178oPPZ/XloBa8
+	u0+aZif0coNeY3Pak4PI8fpLEob2CYKiHaF59c6IjxqJNUL8gQN0O5b5S9b0GrBx
+	G6G4IWDx/0Gj3PGK3iT+CHLPHK6ccKYuHPCUxrfwRSAX6Rj6t1EvlF+heO5pcIBD
+	gNnWvxptvOuoI/JqeC1ngBkPIKRIvohg4BTEllFf7AldmT3CB0Kl4Q2roYyEnW/3
+	jaizR7Ps8wf3KFJ5OtS+d2wPRd7o41YElQ4/FcfDURXsz5yA==
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com [209.85.160.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4ea5p9vh5a-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-kselftest@vger.kernel.org>; Fri, 22 May 2026 13:42:27 +0000 (GMT)
+Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-516dd6e4ed4so6066861cf.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 22 May 2026 06:42:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1779457346; x=1780062146; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6BVsDs/rDFNbuNfHuhEQsthfmm4qGh0YCf3lMG5UxzA=;
+        b=jZ4Y5RcNdJguDG3tbHPl4hfowQec04Wo/2AfRz+5JL04VkavM+pliR4JREaoX04ez/
+         GGhTTRu3wifIcLdkTAQ4uK8xKJvdEaDmYzGg0s6Rb67zQUJILKEp5ydCAUJ7zgbX5FEX
+         Q6hIMreCnbNk7WuuOd5eMRJn+YFh5VcsQXl8Cc7RH+jHTTDB3oqMBRiMzOWKCSDX6e3S
+         +aq4ng8ZAXscbBXG9Lo+DHC22/Y7QqRvGZmGzNekUkBijCo7h0d01dMvaZmoF7ha5JV7
+         DurKm4Rv4LquTvYOX13qdO99cHxYJEpCf1NskG1IutotlzVt6QO9v2ztU3aJj4j3fMGd
+         PEYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779457346; x=1780062146;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6BVsDs/rDFNbuNfHuhEQsthfmm4qGh0YCf3lMG5UxzA=;
+        b=cPMR/72h3dswONdXXJ5FJrAjmpKHRNAEdcarKiQQdwbWCa+hqF/6suuVc6YpTxup4r
+         G74YAFtpwPKsPTNpL2UuHrlNI9AF+Wc8FZvA6QW9FgYF4p3iv9OIvEblaNx1vI9FTFNV
+         i7PqRtp7UELXqIIL1IUx0klD+MYIakWbWFyUa69iexj7j7XzhP3pFZymq9BILAFutmHo
+         30CsFXTNjxf9UpSPv04J6UaDmIV1oeveuAoC0yEjalcxWRglK37uRz8pDoLnvmnOe80p
+         eceH3TQ//NySgTOqFPVrCbbAhhOkocKvnDKjfr8LyOSMeatrTI0qnkbDQtK60zrFK7bK
+         5rsw==
+X-Gm-Message-State: AOJu0YxpSesErcBJOXHx+AW8s8tI2SweBzb/yAShzQNoKw1RjveeBkPa
+	A+5g6OMV9vRAchsh90ZVkRZ7H1AAWZEGxOW2k5PojEQMcT4v0vlpYkxCZ7Bi2fiIxl6PEbDsGUK
+	ydKsjEUKZBaIXTk+mjCoYtBe+KSKgFCHto0NSoXqjO8DMUxbjnY1dvqdYxtSc+k7FDyj3UMU=
+X-Gm-Gg: Acq92OFw9oXFdlXqnMElwJd+lPrJTKI+Hn34uh2JsSmh7nSN/gWRaOnwlDYQgFmbit6
+	HwVYao8FbXzvkfheCpzLrK2guEgKi+qaLrLXImfdsX4ULNfsELWyF/uvs6XMOVK1kjYFUqOayLw
+	tCUwW9uHlDwO68Nc249tWZ9W0HXTLYCrfDgnXCm0k37SmXISJdXdxpHG9cZttbLv545ViDj5wLz
+	gLQHmwyC1K1E0SUeXfnpkC9fUIv5/tyksbLMqq967B7hIvTPqH1UIMDlnqvnanZAjfwrFgYsF8N
+	JT9vtC1LWZTfNcT0yTp7FCOtJIzZfOSsgdjyHDZaXt3mS9NWqZWcockjMuOIwWNwH0LxvumLi5A
+	3JQr8/CXxJK2pn+WIEmriaLdFLvi8EE3AUw3wGVGYxItjiFhiCXJEbsYbPR+y
+X-Received: by 2002:a05:622a:30b:b0:516:da7e:e0be with SMTP id d75a77b69052e-516da7ee325mr20880251cf.57.1779457346245;
+        Fri, 22 May 2026 06:42:26 -0700 (PDT)
+X-Received: by 2002:a05:622a:30b:b0:516:da7e:e0be with SMTP id d75a77b69052e-516da7ee325mr20879741cf.57.1779457345776;
+        Fri, 22 May 2026 06:42:25 -0700 (PDT)
+Received: from brgl-qcom.local ([2a01:cb1d:dc:7e00:2fa:6280:a48f:fb37])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45eb6c9f548sm4886546f8f.2.2026.05.22.06.42.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 May 2026 06:42:25 -0700 (PDT)
+From: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+Subject: [PATCH v3 0/3] gpio: add kunit tests for GPIO core
+Date: Fri, 22 May 2026 15:42:15 +0200
+Message-Id: <20260522-gpiolib-kunit-v3-0-b15fe6987430@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIADddEGoC/23MTQ6CMBCG4auQri2hLVRw5T2Mi9IfmAgUW2g0h
+ LtbcGOIm0neSb5nQV470B5dkgU5HcCDHWKwU4JkK4ZGY1CxEc0ozxjluBnBdlDjxzzAhNXZkLo
+ ocmKMQHEzOm3gtXu3e+wW/GTde+cD2b5fqSDlQQoEZ5gwoiXPucyVuVrv0+csOmn7Po0HbWCgP
+ wjNjgiNiJSVqllVlkSJP8i6rh+ILNPs9gAAAA==
+X-Change-ID: 20260326-gpiolib-kunit-d7f1b5541ffa
+To: Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>,
+        Linus Walleij <linusw@kernel.org>,
+        Bartosz Golaszewski <brgl@kernel.org>
+Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1730;
+ i=bartosz.golaszewski@oss.qualcomm.com; h=from:subject:message-id;
+ bh=GJU+HeIPDrKpMoJwTBqmdjN1+wHbQmMQ1tafJVO0q+o=;
+ b=owEBbQKS/ZANAwAKAQWdLsv/NoTDAcsmYgBqEF07NEtgtg9a0iGyecnOGM2OLAg9BTY8vI63i
+ 5VwZXE2hDiJAjMEAAEKAB0WIQSR5RMt5bVGHXuiZfwFnS7L/zaEwwUCahBdOwAKCRAFnS7L/zaE
+ w94KD/90y+wuYTqq90pcL4tuOTLdrQhZjxf1SSCtmgDScecQWuu/i4vCqkXldRHS05WAXr96AjY
+ 2x4WLD+sgeE+XCIXOlkXg9zDbNs5Uv1DQtqHAVyMqlwk+xGk1RsG4SRsfYOB4YCtj/lYWA/LvAM
+ Uc8YnC2LxhAb29W4dY0/sSBFZ/aLt4IWLk4AWwRnCFPrKrCFzpf6c+wOFifulv6mMLsD6a4PxKk
+ TLQ4EqBUz8BMifQ1wcFZE7n14qCVbH8ydJ/kEPb8Fsdn2lxRAo72b3ogCOOQnYvVLTriIg28JWo
+ hbkFnP0/7gLQ7Y5xhLqapypfzLwhsLg8zK2sCPwoVQfpKE3SRlyeAJKQno5bOozb51eWvaomoQ6
+ GxAi+4NtjL723OwQGSrIBCuLs5c3Tt8bgKLNg88y5PwgS0GOehQFuWdV2QJc3fVsxpskrWyhw9m
+ w/5cbI/bMmHqeUo+PqNbW59N5mb0n+4uXgeivETNuZ/Q9eehrNVRCVurHG9rqwSJaN20r6ODsQY
+ 5LJC/YW+vioEjoAsS7W5KMUQN3266JbfEzWIonGJD6A5dgGPO4wBpOcuEfQ5drRgqc+Rhbf2GsC
+ 6/vWKnDh1pNJ7jL1GsV4m+QmoNJ4TyjlZppguXbH3VPtCdvOOmHOHxBr0HvdyJXyPlEaGd8uK6r
+ HgEHU5nMAVjHhYA==
+X-Developer-Key: i=bartosz.golaszewski@oss.qualcomm.com; a=openpgp;
+ fpr=169DEB6C0BC3C46013D2C79F11A72EA01471D772
+X-Authority-Analysis: v=2.4 cv=DKm/JSNb c=1 sm=1 tr=0 ts=6a105d43 cx=c_pps
+ a=mPf7EqFMSY9/WdsSgAYMbA==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=NGcC8JguVDcA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=u7WPNUs3qKkmUXheDGA7:22 a=eoimf2acIAo5FJnRuUoq:22 a=bC-a23v3AAAA:8
+ a=EUspDBNiAAAA:8 a=MtzmdRDdlofpVA7LM9AA:9 a=QEXdDO2ut3YA:10
+ a=dawVfQjAaf238kedN5IG:22 a=FO4_E8m0qiDe52t0p3_H:22
+X-Proofpoint-GUID: UCWXHdfKXu2LWV-xQrqkaz_E9a_GgiXv
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTIyMDEzNiBTYWx0ZWRfXzyMxNB5yq6ZS
+ hHi9rI83IS8wQvQvz4BjgjeFTXzsA0hDvps5bSO0aiY6RfKK7T4ink27eXocWXhp2gWlK55ykhD
+ DZRh+fEhij/08Z8K3vw7LjQrXNu1w86rURkDT2JubLyuCIeBwdd06bcIQTm2GcjLLfm7yRj0PiA
+ 5bcQlG/nT3zfi2Ni0FqF4LgKxRYdJNozjlYXz496iMS78sctRWeyKpKWImHYAipAOzv5MKNLOpg
+ j8zLmH9TXb7/JfRXBPFTnkjtmlu2x+N9K/QOc9aVrFDCcX1N/aFNfNF8tBc2RjGBIbZJ4jP7OVO
+ dYR0FHuBioWQz2GRvvtl6vYb4SRAkqAPP0eIezvQNUZ8VIUVw6KVy5Bo+eng0MqgbYzvsqrtHHL
+ 9TYsGk+r5K6OYHdmsloGgEePu2BITTgezk+9lOsRgRyJLU44thOO/Xcq0zzCChEeP7JW2HJtuXZ
+ in++jB5qV7lo+1jl4Uw==
+X-Proofpoint-ORIG-GUID: UCWXHdfKXu2LWV-xQrqkaz_E9a_GgiXv
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-05-22_03,2026-05-18_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ bulkscore=0 malwarescore=0 spamscore=0 phishscore=0 suspectscore=0
+ priorityscore=1501 clxscore=1015 impostorscore=0 adultscore=0
+ lowpriorityscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2605130000
+ definitions=main-2605220136
 
-From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
+This series adds a first batch of kunit tests for GPIO core. I intend to
+gradually add more coverage for functionalities that can't really be
+tested from user-space with the existing kernel selftests or libgpiod
+tests.
 
-Userfaultfd read-write protection (UFFDIO_REGISTER_MODE_RWP) is
-supported starting from Linux 7.2. It traps every access -- read or
-write -- to a present page within a registered range. The new UAPI
-documented here:
+Merging strategy: with an Ack from kunit maintainers, this can go
+through the GPIO tree for v7.2.
 
-  - UFFD_FEATURE_RWP / UFFD_FEATURE_RWP_ASYNC  capability bits
-  - UFFDIO_REGISTER_MODE_RWP                   registration-mode bit
-  - 1 << _UFFDIO_RWPROTECT / _UFFDIO_SET_MODE  available-ioctls bits
-  - UFFDIO_RWPROTECT                           install / remove RWP
-  - UFFDIO_SET_MODE                            runtime sync/async toggle
-
-Signed-off-by: Kiryl Shutsemau <kas@kernel.org>
+Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
 ---
- man2/ioctl_userfaultfd.2 | 209 ++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 208 insertions(+), 1 deletion(-)
+Changes in v3:
+- Make kunit_platform_device_unregister() handle both cases of platform
+  devices created with kunit_platform_device_alloc() +
+  kunit_platform_device_add() and kunit_platform_device_register_full()
+  (sashiko)
+- Link to v2: https://patch.msgid.link/20260520-gpiolib-kunit-v2-0-cc9db39881da@oss.qualcomm.com
 
-diff --git a/man2/ioctl_userfaultfd.2 b/man2/ioctl_userfaultfd.2
-index 504f61d4b0cd..0a24a77ca32b 100644
---- a/man2/ioctl_userfaultfd.2
-+++ b/man2/ioctl_userfaultfd.2
-@@ -25,7 +25,7 @@
- .\" %%%LICENSE_END
- .\"
- .\"
--.TH IOCTL_USERFAULTFD 2 2021-03-22 "Linux" "Linux Programmer's Manual"
-+.TH IOCTL_USERFAULTFD 2 2026-05-22 "Linux" "Linux Programmer's Manual"
- .SH NAME
- ioctl_userfaultfd \- create a file descriptor for handling page faults in user
- space
-@@ -214,6 +214,33 @@ memory accesses to the regions registered with userfaultfd.
- If this feature bit is set,
- .I uffd_msg.pagefault.feat.ptid
- will be set to the faulted thread ID for each page-fault message.
-+.TP
-+.BR UFFD_FEATURE_RWP " (since Linux 7.2)"
-+If this feature bit is set,
-+the kernel supports read-write protection tracking, and the
-+.B UFFDIO_REGISTER_MODE_RWP
-+registration mode and the
-+.B UFFDIO_RWPROTECT
-+ioctl described below become available.
-+On kernels or architectures that cannot support this mode, the bit is
-+masked out from
-+.I uffdio_api.features
-+on return; callers should inspect the returned features and fall back
-+to another tracking mechanism when the bit is absent.
-+.TP
-+.BR UFFD_FEATURE_RWP_ASYNC " (since Linux 7.2)"
-+If this feature bit is set,
-+the kernel will resolve read-write protect faults in place without
-+delivering a notification, automatically restoring page permissions and
-+letting the faulted thread continue.
-+This bit requires
-+.B UFFD_FEATURE_RWP
-+to be set in the same
-+.B UFFDIO_API
-+call.
-+The async mode can also be toggled at runtime using the
-+.B UFFDIO_SET_MODE
-+ioctl described below.
- .PP
- The returned
- .I ioctls
-@@ -240,6 +267,21 @@ operation is supported.
- The
- .B UFFDIO_WRITEPROTECT
- operation is supported.
-+.TP
-+.BR "1 << _UFFDIO_RWPROTECT" " (since Linux 7.2)"
-+The
-+.B UFFDIO_RWPROTECT
-+operation is supported.
-+This bit is reported only when
-+.B UFFD_FEATURE_RWP
-+was negotiated successfully.
-+.TP
-+.BR "1 << _UFFDIO_SET_MODE" " (since Linux 7.2)"
-+The
-+.B UFFDIO_SET_MODE
-+operation is supported.
-+This is a file-descriptor-level ioctl and is reported once per
-+userfaultfd, independent of any registered range.
- .PP
- This
- .BR ioctl (2)
-@@ -327,6 +369,16 @@ Track page faults on missing pages.
- .TP
- .B UFFDIO_REGISTER_MODE_WP
- Track page faults on write-protected pages.
-+.TP
-+.BR UFFDIO_REGISTER_MODE_RWP " (since Linux 7.2)"
-+Track page faults on read-write-protected pages.
-+Every access (read or write) to a present page within the registered
-+range generates a notification once the range has been protected with
-+.BR UFFDIO_RWPROTECT .
-+This mode cannot be combined with
-+.BR UFFDIO_REGISTER_MODE_WP ;
-+attempting to do so returns
-+.BR EINVAL .
- .PP
- If the operation is successful, the kernel modifies the
- .I ioctls
-@@ -735,6 +787,161 @@ or not registered with userfaultfd write-protect mode.
- .TP
- .B EFAULT
- Encountered a generic fault during processing.
-+.SS UFFDIO_RWPROTECT (Since Linux 7.2)
-+Read-write-protect or un-protect a userfaultfd-registered memory range
-+registered with mode
-+.BR UFFDIO_REGISTER_MODE_RWP .
-+.PP
-+The
-+.I argp
-+argument is a pointer to a
-+.I uffdio_rwprotect
-+structure as shown below:
-+.PP
-+.in +4n
-+.EX
-+struct uffdio_rwprotect {
-+    struct uffdio_range range; /* Range to change RWP on */
-+    __u64 mode;                /* Mode flags */
-+};
-+.EE
-+.in
-+.PP
-+The following mode bits are supported:
-+.TP
-+.B UFFDIO_RWPROTECT_MODE_RWP
-+When this mode bit is set,
-+the ioctl installs read-write protection on every present page in the
-+range specified by
-+.IR range .
-+Otherwise the ioctl removes read-write protection from the range, which
-+is also how a faulted handler resolves an
-+.B UFFD_PAGEFAULT_FLAG_RWP
-+notification.
-+.TP
-+.B UFFDIO_RWPROTECT_MODE_DONTWAKE
-+When this mode bit is set,
-+do not wake up any thread that waits for page-fault resolution after
-+the operation.
-+This can be specified only if
-+.B UFFDIO_RWPROTECT_MODE_RWP
-+is not specified.
-+.PP
-+Read-write protection only affects pages that are currently populated
-+in the range; unmapped addresses are left untouched.
-+Protection is preserved across page reclaim and migration; callers must
-+re-arm a range with
-+.B UFFDIO_RWPROTECT
-+after any operation that drops the underlying page
-+.RB ( "MADV_DONTNEED " "on anonymous memory, hole-punch on shmem,"
-+truncation of a file mapping).
-+.PP
-+This
-+.BR ioctl (2)
-+operation returns 0 on success.
-+On error, \-1 is returned and
-+.I errno
-+is set to indicate the error.
-+Possible errors include:
-+.TP
-+.B EINVAL
-+The
-+.I start
-+or the
-+.I len
-+field of the
-+.I uffdio_range
-+structure was not a multiple of the system page size; or
-+.I len
-+was zero; or the specified range was otherwise invalid; or an invalid
-+mode bit was specified; or
-+.B UFFDIO_RWPROTECT_MODE_DONTWAKE
-+was specified together with
-+.BR UFFDIO_RWPROTECT_MODE_RWP .
-+.TP
-+.B EAGAIN
-+The process was interrupted; retry this call.
-+.TP
-+.B ENOENT
-+The range specified in
-+.I range
-+is not valid.
-+For example, the virtual address does not exist,
-+or part of the range is not registered with
-+.BR UFFDIO_REGISTER_MODE_RWP .
-+.TP
-+.B EFAULT
-+Encountered a generic fault during processing.
-+.\"
-+.SS UFFDIO_SET_MODE (Since Linux 7.2)
-+Toggle userfaultfd features that may be flipped at runtime.
-+.PP
-+The
-+.I argp
-+argument is a pointer to a
-+.I uffdio_set_mode
-+structure as shown below:
-+.PP
-+.in +4n
-+.EX
-+struct uffdio_set_mode {
-+    __u64 enable;     /* Feature bits to set */
-+    __u64 disable;    /* Feature bits to clear */
-+};
-+.EE
-+.in
-+.PP
-+Bits set in
-+.I enable
-+turn the named features on; bits set in
-+.I disable
-+turn them off.
-+The two fields must not overlap.
-+Today only
-+.B UFFD_FEATURE_RWP_ASYNC
-+is a valid bit in either field; any other bit causes the ioctl to
-+return
-+.BR EINVAL .
-+Enabling
-+.B UFFD_FEATURE_RWP_ASYNC
-+also requires
-+.B UFFD_FEATURE_RWP
-+to have been negotiated at
-+.B UFFDIO_API
-+time.
-+.PP
-+The toggle takes the per-process
-+.I mmap_lock
-+in write mode, ensuring that all in-flight fault handlers complete
-+before the new mode takes effect.
-+This allows a single userfaultfd to switch between lightweight async
-+detection and synchronous eviction without re-registering its ranges.
-+.PP
-+This
-+.BR ioctl (2)
-+operation returns 0 on success.
-+On error, \-1 is returned and
-+.I errno
-+is set to indicate the error.
-+Possible errors include:
-+.TP
-+.B EINVAL
-+A bit other than
-+.B UFFD_FEATURE_RWP_ASYNC
-+was specified in
-+.I enable
-+or
-+.IR disable ;
-+the two fields overlap; or
-+.B UFFD_FEATURE_RWP_ASYNC
-+was requested without
-+.B UFFD_FEATURE_RWP
-+having been negotiated.
-+.TP
-+.B EFAULT
-+.I argp
-+refers to an address that is outside the calling process's accessible
-+address space.
- .SH RETURN VALUE
- See descriptions of the individual operations, above.
- .SH ERRORS
+Changes in v2:
+- Remove cases of kunit killing a thread on test failure with device lock
+  taken
+- Fix a platform device leak on test failure
+- New patch: provide kunit_platform_device_unregister()
+- Link to v1: https://patch.msgid.link/20260518-gpiolib-kunit-v1-0-131ec646c4df@oss.qualcomm.com
+
+---
+Bartosz Golaszewski (3):
+      kunit: provide kunit_platform_device_register_full()
+      kunit: provide kunit_platform_device_unregister()
+      gpio: add kunit test cases for the GPIO subsystem
+
+ drivers/gpio/Kconfig            |   8 +
+ drivers/gpio/Makefile           |   1 +
+ drivers/gpio/gpiolib-kunit.c    | 358 ++++++++++++++++++++++++++++++++++++++++
+ include/kunit/platform_device.h |   6 +
+ lib/kunit/platform.c            |  64 +++++++
+ 5 files changed, 437 insertions(+)
+---
+base-commit: 80dd246accce631c328ea43294e53b2b2dd2aa32
+change-id: 20260326-gpiolib-kunit-d7f1b5541ffa
+
+Best regards,
 -- 
-2.51.2
+Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
 
