@@ -1,88 +1,59 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D57441D9A66;
-	Sat, 23 May 2026 00:30:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A6DB232395;
+	Sat, 23 May 2026 00:46:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779496203; cv=none; b=d4M5mx9PfkdmCwiwSpeN5VtY/jTnZ/GVDKO16QScOPY8W/++OU+PpPzKt3Q/8cglZbmVrCOv39znxcapy/WUEf3v3YUY/AovFibZ+gbA2A7MCGdLquF/zYzYGXi8qH9A3XiZc3Fz33IklyrKhiZA3K9LnuvJnbRf/dhTagbQ7f8=
+	t=1779497175; cv=none; b=Ts5fd+Egz2vT84HYhxXs0ZKzyHRwN13+jmSTrGgBtFUBTF4wGzFDiklIscfMOSlbwNDHmxI/fpkX+yp9tV88G8RI35cyRSORW6jFNziimCD/6jvUupLPW3lDgSr1lZUO4dYUJrQdT7dkTWKKm+IZeCTb4e/MSP7qCFbELEp1Mhw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779496203; c=relaxed/simple;
-	bh=RUeae9J3CvYI2yHeKr4blx3wYaw/zDcw8YPUdJdQzH8=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=aEFeInnAb78IiEmmiORBG2yZrXOv027eIisDC+oj5XB1CTrZwiJHstNqFhpuPrURWG1T+Cp1i2NwQ1jc3jWAjdckKz8EiuWtCX8wSAu/xWK1qDtnWZjJlxh2P/IrW46lJQ89hUaxUtYJKQfd6MBAdgLZB3RjORag/jIJq4K5zqY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PQPaIpQi; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779497175; c=relaxed/simple;
+	bh=Bleb7k56b+4cMT7uKTpy+AKd66w5NzGY2kkD3byUJUc=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=kV8jZ9AGoJ9hoabbFQ9an5x++6vUECRbYkQ9RYpKGmO5j1WKoo57TysurvhcBaOsZdYrt6ACKUdWWWTAwZ5YiaZzkvvbWAN84KiE0nDXXKimOvrqq6CGJ80h+s+OMIzpQWDx0kzuaeR3B0pG4elfp2t00VUtmoMPSp6E8nDbnPY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xun0RiVp; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PQPaIpQi"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AB561F000E9;
-	Sat, 23 May 2026 00:30:01 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xun0RiVp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA2DA1F000E9;
+	Sat, 23 May 2026 00:46:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779496201;
-	bh=v0TA6DHL5VyiCPnG/LRNQe+vuPDHhPpx2aotbl+ON7s=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=PQPaIpQibhjB3SfNBM/hvSYf88UMt/i2JyvVXfJEPbi5sgEhP1zAUVMTKpCqpskCr
-	 Ki/9ujClZjnxEfGqgCZVFZiacr+aWOclGmIQgJFT8I9l6rVurZJVetjg/NlYbPZAxk
-	 /x+pavV4qFxZMlghHBrDtd6UxcwXVrYPPtvZMVCRPS8g/fBcckGfyxEXR2Eb9uRBLe
-	 SCbbHKqv3yhoH2oXs5Xb6Og8MNJvi+1udVgY44lQw6rJbNYfVfRGPswEruK8DN4nfd
-	 VHcpSNN61CKLgiPolzOoicWnZ7Z4v/vrsWTx1ctz00xYGIDGExja5Mg81LWJZhL9EC
-	 m6WZMkYl3a6mA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 19918393100F;
-	Sat, 23 May 2026 00:30:11 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20260515; t=1779497162;
+	bh=+0zxxmj97DeONwxwO9NqvLg1+7+0bBK+fcVh/Ly0R8c=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=Xun0RiVpKi8STCl2CzsPXL5xAre7C60eBE4mWImCc6JUdgHd+CFqk/J3IJPscFQz3
+	 ZgLHn3WrpQNRxoGVYPFk/nrDTM+59cmlpGMiK0C/rKJkaBZ7Kf0xqjH6lnO26zzH80
+	 qXQbfZldOHGjZxd/+KQD1t+3WyFvpggNvDVaJrLUsyXIi6WKqKl0Bijq+AmGHk+2QM
+	 odwZWJucibSlIPZM+pz4jS1UsYB0JGFkJ9LwQCz8c3BfzH50xjBvxBq3V9JSPg3IMb
+	 xKtQ9gQ6xnLZmJfweyXnQ6HxAp6Zdek+xrWMw0a5PZmDuKjMZOeRiW+oD6TEghPnEp
+	 NBtUMiAxsnP3w==
+Date: Fri, 22 May 2026 17:46:01 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Allison Henderson <achender@kernel.org>
+Cc: netdev@vger.kernel.org, pabeni@redhat.com, edumazet@google.com,
+ horms@kernel.org, linux-kselftest@vger.kernel.org, shuah@kernel.org
+Subject: Re: [PATCH net-next v1 0/3] selftests: rds: ROCE support follow ups
+Message-ID: <20260522174601.3c2c2b46@kernel.org>
+In-Reply-To: <20260522215430.3748226-1-achender@kernel.org>
+References: <20260522215430.3748226-1-achender@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v2 0/4] netlink: fixes for cross-namespace nsid
- reporting
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177949620964.1423514.6539424966524103680.git-patchwork-notify@kernel.org>
-Date: Sat, 23 May 2026 00:30:09 +0000
-References: <20260520172317.175168-1-i.maximets@ovn.org>
-In-Reply-To: <20260520172317.175168-1-i.maximets@ovn.org>
-To: Ilya Maximets <i.maximets@ovn.org>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- donald.hunter@gmail.com, shuah@kernel.org, kuniyu@google.com,
- kees@kernel.org, amorenoz@redhat.com, jbenc@redhat.com,
- nicolas.dichtel@6wind.com, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, matteo.perin@canonical.com
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hello:
+On Fri, 22 May 2026 14:54:27 -0700 Allison Henderson wrote:
+> This is a follow up series to the "Add ROCE support to rds selftests"
+> series.  The first patch renames run.sh to rds_run.sh, and also adds
+> two wrappers to the TEST_PROGS target to run the same test over the
+> rdma and tcp transports.  The wrappers rds_rdma_run.sh and
+> rds_tcp_run.sh also provide self-describing names that appear on the
+> netdev CI dashboard.
 
-This series was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Wed, 20 May 2026 19:22:34 +0200 you wrote:
-> While working on some new features for OVS and OVN we discovered that
-> self-referential NSIDs get unintentionally allocated in the system as
-> well as unexpectedly reported for local events on all-nsid listeners.
-> 
-> More details in the patches.  They change user-visible behavior, but
-> the current behavior is arguably a bug, as it makes it hard to use
-> all-nsid sockets without a decent amount of extra unrelated work of
-> tracking when new NSIDs are allocated for your local namespace.
-> 
-> [...]
-
-Here is the summary with links:
-  - [net,v2,1/4] net: netlink: fix sending unassigned nsid after assigned one
-    https://git.kernel.org/netdev/net/c/70f8592ee905
-  - [net,v2,2/4] net: netlink: don't set nsid on local notifications
-    https://git.kernel.org/netdev/net/c/88b126b39f97
-  - [net,v2,3/4] tools: ynl: support listening on all nsids
-    (no matching commit)
-  - [net,v2,4/4] selftests: net: add a test case for nsid in all nsid notifications
-    https://git.kernel.org/netdev/net/c/2e43b6424890
-
-You are awesome, thank you!
+Could you make the RDMA test return XFAIL rather than skip when RXE
+is not available? We try to use SKIP for cases which are easy to
+fix, like a tool missing. We won't be running RDMA tests in netdev..
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+pw-bot: cr
