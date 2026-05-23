@@ -1,98 +1,98 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9264133121E;
-	Sat, 23 May 2026 10:07:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC596383C9E;
+	Sat, 23 May 2026 10:26:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779530866; cv=none; b=kSYZkAlVqU5yDmODk8f7wY9UQlPVkUIn8Wb+1YxrpmRX//nNZSd5PnwwAg106wo89TnwNFD/q/yv2sOAdRVw979cvBm5dodplQgG5lyWXMCYTwpwHA9mZDc+dA4TP1rA1Oh/JbExDwEvqKkKrUdKnaf6dJo+CjPDFbCJ9vshOdc=
+	t=1779531990; cv=none; b=dj/dkTwiRT6/sxyKIjxwEUKVASnYBEuTFdVA5g1Ntz9UEkz/TvxMzAAKSIG7TBc2pHzw96OduM79EsgY/M/kFuccZH9bwiYk4BdY8vl5fCkHMQEMJ83N1i47A2ojMrVh4VfK66KjdSBKn7Y87yZVLAOuQ1qsFzarCzjQOkAirKA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779530866; c=relaxed/simple;
-	bh=D6nSXEYo+MpnMypr6RgL8yPZAFyIVpwonG2E7ic9SbM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mkfKhEdtcNU5FoRCxNduyk0S6p5cme+5wnmrcoZbXYQwgAYuB+kQ5wFl4g5kphwAakwDn2s/xlRmBjSSB6potK1KeUhc+v9o3fYaWt1ke6bdiWVdutXYaiAt507O7PRbl7y4/zylwckKL1SRYr3Ptl8o75gkKmkLMhRfVWAeLMM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ee3Xfjg3; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779531990; c=relaxed/simple;
+	bh=BzHefG7rr33yy6nquqfF6P+UyfN2CHmgpf9L5I7QVGI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=d4n5WFGrFEvJkk4g15deuldo5wDlid/IX8Qd7CgTGuUaQPZEfqOObFDynjI19frsc/IlsEYXKQVCeTrHmOCPTA1yu/DUdx5z8gCa/sKBB/IjU1QjY5ZYFNzSYTAuUmjD8xdSXRjobqD4G5b0M+43JBA2BvKH9lPfKqFXVWvOFsc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Wvwp6GW9; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ee3Xfjg3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F9761F000E9;
-	Sat, 23 May 2026 10:07:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779530865;
-	bh=rlp1W5vNBlur1QwehE++yDLWhSdLhgpE4g2TYJr/Zrs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=Ee3Xfjg3pkY/QBkGfqwUl/vlMPnivycAtzymBvtjnZlKjBwxVCWthpEyBYipSSzTT
-	 7Hb3ZNH2kOFCKNE3qtCT+9Nr7uZYAGjCHz6ZJfQUi7JyzveC6qdztm0snhCDnnwNs7
-	 JCbpv3KNt8AjX+bk84DtiNth6Rg2BdxiP255GajZCvs1fUmt5wjkw34YEykxmjF2mV
-	 KcNcTpDapcXZJUh5tth7qD6xH1H5TIORh7sCj9pBmJqolBHW4xuMlHJFSh0CYr24NF
-	 aCoObYVnef10OiEUycg02dD9SYvFNY7wMVyYEERHahhqBOpYbYVV9y77qAu1rHLjzC
-	 ATNQLHXLaQDGQ==
-Date: Sat, 23 May 2026 13:07:33 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: Kiryl Shutsemau <kirill@shutemov.name>
-Cc: akpm@linux-foundation.org, peterx@redhat.com, david@kernel.org,
-	ljs@kernel.org, surenb@google.com, vbabka@kernel.org,
-	Liam.Howlett@oracle.com, ziy@nvidia.com, corbet@lwn.net,
-	skhan@linuxfoundation.org, seanjc@google.com, pbonzini@redhat.com,
-	jthoughton@google.com, aarcange@redhat.com, sj@kernel.org,
-	usama.arif@linux.dev, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, kvm@vger.kernel.org,
-	kernel-team@meta.com, linux-man@vger.kernel.org, alx@kernel.org,
-	"Kiryl Shutsemau (Meta)" <kas@kernel.org>
-Subject: Re: [PATCH v3 13/16] selftests/mm: add userfaultfd RWP tests
-Message-ID: <ahF8ZeErzcEp57Pw@kernel.org>
-References: <20260522133857.552279-1-kirill@shutemov.name>
- <20260522133857.552279-14-kirill@shutemov.name>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Wvwp6GW9"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1779531986; x=1811067986;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=BzHefG7rr33yy6nquqfF6P+UyfN2CHmgpf9L5I7QVGI=;
+  b=Wvwp6GW9zhQcMI8suJDspn9i9tFzT1t3Ji9kSNvVPjm+oHL0pmKIeNd7
+   sk8gNkiB0x2Qi2x6OU2mYpqJTcpwksFDBwqYLyPp8kFdwRXUHVVzHajln
+   S4pV9mCGsj/zU+NSoqzbYUNEyoxqgj0hVhFctQQkU1xqa7MQR8/FnF6Ix
+   NynGCci6SAZ/R+mlxE1Y9r443FowGZ9104QwvXKab1xLvrNMRWkq+yfyW
+   NXweiBzFEeN+MvrPRhHS7JYcxvdVuxiapyo91IpdepjWOuhFOODdiNb/d
+   l4WuYwv3310XQpteSzxgj/TELDnCRHx5gCXJClbOpvUGp4y06BbIrwPCT
+   Q==;
+X-CSE-ConnectionGUID: wWR+IwEDT4SVWygqIzK1Qw==
+X-CSE-MsgGUID: pr8QRdjaRZ+N7voxRix4gw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11794"; a="80410331"
+X-IronPort-AV: E=Sophos;i="6.24,164,1774335600"; 
+   d="scan'208";a="80410331"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2026 03:26:26 -0700
+X-CSE-ConnectionGUID: +1cy6XeURPGdMViGu+nzLA==
+X-CSE-MsgGUID: bUwKubthQzyoNmRpJ1mysA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,164,1774335600"; 
+   d="scan'208";a="245425647"
+Received: from chenyu-dev.sh.intel.com ([10.239.62.107])
+  by orviesa004.jf.intel.com with ESMTP; 23 May 2026 03:26:24 -0700
+From: Chen Yu <yu.c.chen@intel.com>
+To: Tony Luck <tony.luck@intel.com>,
+	Reinette Chatre <reinette.chatre@intel.com>
+Cc: x86@kernel.org,
+	Dave Martin <Dave.Martin@arm.com>,
+	James Morse <james.morse@arm.com>,
+	Babu Moger <babu.moger@amd.com>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Chen Yu <yu.c.chen@intel.com>,
+	Hongyu Ning <hongyu.ning@linux.intel.com>
+Subject: [PATCH] selftests/resctrl: Allow CAT testing when no exclusive cache exists
+Date: Sat, 23 May 2026 18:17:15 +0800
+Message-Id: <20260523101715.3964456-1-yu.c.chen@intel.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260522133857.552279-14-kirill@shutemov.name>
 
-On Fri, May 22, 2026 at 02:38:54PM +0100, Kiryl Shutsemau wrote:
-> From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
-> 
-> Coverage for UFFDIO_REGISTER_MODE_RWP and UFFDIO_RWPROTECT:
-> 
->   rwp-async          async mode — touch pages, verify permissions are
->                      auto-restored without a message
->   rwp-sync           sync mode — access blocks, handler resolves via
->                      UFFDIO_RWPROTECT
->   rwp-pagemap        PAGEMAP_SCAN reports still-cold pages via
->                      inverted PAGE_IS_ACCESSED
->   rwp-mprotect       RWP survives mprotect(PROT_NONE) ->
->                      mprotect(PROT_READ|PROT_WRITE) round-trip
->   rwp-gup            GUP walks through a protnone RWP PTE (pipe
->                      write/read drives the GUP path)
->   rwp-async-toggle   UFFDIO_SET_MODE flips between sync and async
->                      without re-registering
->   rwp-close          closing the uffd restores page permissions
->   rwp-fork           RWP survives fork() with EVENT_FORK; child's
->                      PTEs keep the uffd bit
->   rwp-fork-pin       RWP survives fork() on an RO-longterm-pinned
->                      anon page (forces copy_present_page()); child
->                      read auto-resolves and clears the bit, proving
->                      PAGE_NONE was in place
->   rwp-wp-exclusive   register with MODE_WP|MODE_RWP returns -EINVAL
-> 
-> All tests run against anon, shmem, shmem-private, hugetlb, and
-> hugetlb-private memory, except rwp-fork-pin which is anon-only —
-> copy_present_page() is the private-anon pinned-exclusive fork path.
-> 
-> Signed-off-by: Kiryl Shutsemau <kas@kernel.org>
-> Assisted-by: Claude:claude-opus-4-6
+The shareable_bits indicates which cache portions might be shared with
+other agents (e.g., GPU, other I/O devices). On some platforms, all L3
+cache ways are marked as potentially shared.
 
-Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+The L3_CAT test should fall back to using the full CBM mask when no
+exclusive portion exists, since the test logic (writing different
+schemata and measuring cache misses) still works. The shareable mask
+is a hint about potential interference, not a hard exclusion.
 
-> ---
->  tools/testing/selftests/mm/uffd-unit-tests.c | 766 +++++++++++++++++++
->  1 file changed, 766 insertions(+)
+Reported-by: Hongyu Ning <hongyu.ning@linux.intel.com>
+Signed-off-by: Chen Yu <yu.c.chen@intel.com>
+---
+ tools/testing/selftests/resctrl/cat_test.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
+index f00b622c1460..b6994ba4504b 100644
+--- a/tools/testing/selftests/resctrl/cat_test.c
++++ b/tools/testing/selftests/resctrl/cat_test.c
+@@ -248,7 +248,7 @@ static int cat_run_test(const struct resctrl_test *test, const struct user_param
+ 	/* Get the largest contiguous exclusive portion of the cache */
+ 	ret = get_mask_no_shareable(test->resource, &long_mask);
+ 	if (ret)
+-		return ret;
++		long_mask = full_cache_mask;
+ 
+ 	/* Get L3/L2 cache size */
+ 	ret = get_cache_size(uparams->cpu, test->resource, &cache_total_size);
 -- 
-Sincerely yours,
-Mike.
+2.25.1
+
