@@ -1,98 +1,133 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC596383C9E;
-	Sat, 23 May 2026 10:26:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D359029B77C;
+	Sat, 23 May 2026 10:31:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779531990; cv=none; b=dj/dkTwiRT6/sxyKIjxwEUKVASnYBEuTFdVA5g1Ntz9UEkz/TvxMzAAKSIG7TBc2pHzw96OduM79EsgY/M/kFuccZH9bwiYk4BdY8vl5fCkHMQEMJ83N1i47A2ojMrVh4VfK66KjdSBKn7Y87yZVLAOuQ1qsFzarCzjQOkAirKA=
+	t=1779532265; cv=none; b=OyLez0vtbbhPasrSWpJpih8olorl9Us+YAYRDgV2ap3KZeGB+MhQt7anX9kX+EL+eugY0zXWsHUxMzIo6BrjPSi5q/lQQrYa4YNH5Wm9bVcemAwJPQr8niWYYomXhOZY/rXoU9IdLZeF29zpFeBjGQIp0viWQc7vv2hbkqD1McI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779531990; c=relaxed/simple;
-	bh=BzHefG7rr33yy6nquqfF6P+UyfN2CHmgpf9L5I7QVGI=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=d4n5WFGrFEvJkk4g15deuldo5wDlid/IX8Qd7CgTGuUaQPZEfqOObFDynjI19frsc/IlsEYXKQVCeTrHmOCPTA1yu/DUdx5z8gCa/sKBB/IjU1QjY5ZYFNzSYTAuUmjD8xdSXRjobqD4G5b0M+43JBA2BvKH9lPfKqFXVWvOFsc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Wvwp6GW9; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1779532265; c=relaxed/simple;
+	bh=arbMLnszhPRTp7FTZdYvejGv6GONUKk0Y5Oa/IRQaps=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Lb4jk/3FkzVrFFCQLX3w6YypjwDygVHpXgXv/8qLHCHKovO4CNnS+s7QRHw1zO7t/4WQTEXctnt/hSey1UmpxKtWGxUgErV9hGKO1C15/T4GpW9WfGj0p1vvIwqKEDyFd64oY2j1EZYfDJcgAfOCQdBL6oltX8ZKb9HfVZWX4Rg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OFDM7ade; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Wvwp6GW9"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1779531986; x=1811067986;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=BzHefG7rr33yy6nquqfF6P+UyfN2CHmgpf9L5I7QVGI=;
-  b=Wvwp6GW9zhQcMI8suJDspn9i9tFzT1t3Ji9kSNvVPjm+oHL0pmKIeNd7
-   sk8gNkiB0x2Qi2x6OU2mYpqJTcpwksFDBwqYLyPp8kFdwRXUHVVzHajln
-   S4pV9mCGsj/zU+NSoqzbYUNEyoxqgj0hVhFctQQkU1xqa7MQR8/FnF6Ix
-   NynGCci6SAZ/R+mlxE1Y9r443FowGZ9104QwvXKab1xLvrNMRWkq+yfyW
-   NXweiBzFEeN+MvrPRhHS7JYcxvdVuxiapyo91IpdepjWOuhFOODdiNb/d
-   l4WuYwv3310XQpteSzxgj/TELDnCRHx5gCXJClbOpvUGp4y06BbIrwPCT
-   Q==;
-X-CSE-ConnectionGUID: wWR+IwEDT4SVWygqIzK1Qw==
-X-CSE-MsgGUID: pr8QRdjaRZ+N7voxRix4gw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11794"; a="80410331"
-X-IronPort-AV: E=Sophos;i="6.24,164,1774335600"; 
-   d="scan'208";a="80410331"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 May 2026 03:26:26 -0700
-X-CSE-ConnectionGUID: +1cy6XeURPGdMViGu+nzLA==
-X-CSE-MsgGUID: bUwKubthQzyoNmRpJ1mysA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,164,1774335600"; 
-   d="scan'208";a="245425647"
-Received: from chenyu-dev.sh.intel.com ([10.239.62.107])
-  by orviesa004.jf.intel.com with ESMTP; 23 May 2026 03:26:24 -0700
-From: Chen Yu <yu.c.chen@intel.com>
-To: Tony Luck <tony.luck@intel.com>,
-	Reinette Chatre <reinette.chatre@intel.com>
-Cc: x86@kernel.org,
-	Dave Martin <Dave.Martin@arm.com>,
-	James Morse <james.morse@arm.com>,
-	Babu Moger <babu.moger@amd.com>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Chen Yu <yu.c.chen@intel.com>,
-	Hongyu Ning <hongyu.ning@linux.intel.com>
-Subject: [PATCH] selftests/resctrl: Allow CAT testing when no exclusive cache exists
-Date: Sat, 23 May 2026 18:17:15 +0800
-Message-Id: <20260523101715.3964456-1-yu.c.chen@intel.com>
-X-Mailer: git-send-email 2.25.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OFDM7ade"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E40931F000E9;
+	Sat, 23 May 2026 10:30:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779532263;
+	bh=32zkblvEReRXKUqpzQ/oX4QqJ1BPdQrr6JwVi3qqyLM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=OFDM7ade+kWvBD8c820tptMVqfza8ug42HGmqHNNFQr967U9YDve3fEBj0Xa3o9AA
+	 Q5lQLs3LC5cmyq9wb/f4TakGS2jVBLROdrqspiV7AQYVCgHjfNvl2ynDrPxatzFrhT
+	 Gph4q9Uxg5SUFllxRpiENqTPg1t1PbsCf7XRsuvuPxbuy3+mahWZtysxhMZ/DQ+ASI
+	 VbmSq6qU5AcvbtbI4Ebryzfw1clWVvvYpNvVzzo07bLdFutZ3gfqN2wCJteQxHbKFP
+	 I6WNkn3q+jtPgbHX62z7ejMEQl4WZkt/pCmo8j1vgH3X5bSFtTeEkws6K/+8GOlGIu
+	 /DnmZqUpv0ZtA==
+Date: Sat, 23 May 2026 13:30:51 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Kiryl Shutsemau <kirill@shutemov.name>
+Cc: akpm@linux-foundation.org, peterx@redhat.com, david@kernel.org,
+	ljs@kernel.org, surenb@google.com, vbabka@kernel.org,
+	Liam.Howlett@oracle.com, ziy@nvidia.com, corbet@lwn.net,
+	skhan@linuxfoundation.org, seanjc@google.com, pbonzini@redhat.com,
+	jthoughton@google.com, aarcange@redhat.com, sj@kernel.org,
+	usama.arif@linux.dev, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, kvm@vger.kernel.org,
+	kernel-team@meta.com, linux-man@vger.kernel.org, alx@kernel.org,
+	"Kiryl Shutsemau (Meta)" <kas@kernel.org>
+Subject: Re: [PATCH v3 14/16] Documentation/userfaultfd: document RWP working
+ set tracking
+Message-ID: <ahGB2yVi_fmtNuAd@kernel.org>
+References: <20260522133857.552279-1-kirill@shutemov.name>
+ <20260522133857.552279-15-kirill@shutemov.name>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260522133857.552279-15-kirill@shutemov.name>
 
-The shareable_bits indicates which cache portions might be shared with
-other agents (e.g., GPU, other I/O devices). On some platforms, all L3
-cache ways are marked as potentially shared.
+On Fri, May 22, 2026 at 02:38:55PM +0100, Kiryl Shutsemau wrote:
+> From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
+> 
+> Add an admin-guide section covering UFFDIO_REGISTER_MODE_RWP:
+> 
+>   - sync and async fault models;
+>   - UFFDIO_RWPROTECT semantics;
+>   - UFFD_FEATURE_RWP_ASYNC;
+>   - UFFDIO_SET_MODE runtime mode flips.
+> 
+> It also covers typical VMM working-set-tracking workflow from detection
+> loop through sync-mode eviction and back to async.
+> 
+> Signed-off-by: Kiryl Shutsemau <kas@kernel.org>
+> Assisted-by: Claude:claude-opus-4-6
 
-The L3_CAT test should fall back to using the full CBM mask when no
-exclusive portion exists, since the test logic (writing different
-schemata and measuring cache misses) still works. The shareable mask
-is a hint about potential interference, not a hard exclusion.
+Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 
-Reported-by: Hongyu Ning <hongyu.ning@linux.intel.com>
-Signed-off-by: Chen Yu <yu.c.chen@intel.com>
----
- tools/testing/selftests/resctrl/cat_test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+with some nits below
 
-diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
-index f00b622c1460..b6994ba4504b 100644
---- a/tools/testing/selftests/resctrl/cat_test.c
-+++ b/tools/testing/selftests/resctrl/cat_test.c
-@@ -248,7 +248,7 @@ static int cat_run_test(const struct resctrl_test *test, const struct user_param
- 	/* Get the largest contiguous exclusive portion of the cache */
- 	ret = get_mask_no_shareable(test->resource, &long_mask);
- 	if (ret)
--		return ret;
-+		long_mask = full_cache_mask;
- 
- 	/* Get L3/L2 cache size */
- 	ret = get_cache_size(uparams->cpu, test->resource, &cache_total_size);
+> ---
+>  Documentation/admin-guide/mm/userfaultfd.rst | 226 ++++++++++++++++++-
+>  1 file changed, 220 insertions(+), 6 deletions(-)
+> 
+> diff --git a/Documentation/admin-guide/mm/userfaultfd.rst b/Documentation/admin-guide/mm/userfaultfd.rst
+> index 1e533639fd50..cb5d0e0c9fff 100644
+> --- a/Documentation/admin-guide/mm/userfaultfd.rst
+> +++ b/Documentation/admin-guide/mm/userfaultfd.rst
+
+...
+
+>  The user app can collect the "written/dirty" status by looking up the
+> -uffd-wp bit for the pages being interested in /proc/pagemap.
+> +uffd bit for the pages being interested in /proc/pagemap.
+
+It's pre-existing, but "being interested" sounds weird to me
+Maybe let's change "being interested" to "of interest" or "the app is
+interested in".
+
+> -The page will not be under track of uffd-wp async mode until the page is
+> +The page will not be under track of userfaultfd-wp async mode until the page is
+
+Here as well I'd s/will not be under track of/will not be tracked by/
+
+>  explicitly write-protected by ``ioctl(UFFDIO_WRITEPROTECT)`` with the mode
+>  flag ``UFFDIO_WRITEPROTECT_MODE_WP`` set.  Trying to resolve a page fault
+>  that was tracked by async mode userfaultfd-wp is invalid.
+> @@ -307,6 +307,220 @@ transparent to the guest, we want that same address range to act as if it was
+>  still poisoned, even though it's on a new physical host which ostensibly
+>  doesn't have a memory error in the exact same spot.
+>  
+> +Read-Write Protection
+> +---------------------
+
+...
+
+> +**Setup:**
+> +
+> +1. Open a userfaultfd and enable ``UFFD_FEATURE_RWP`` via ``UFFDIO_API``.
+> +   Optionally request ``UFFD_FEATURE_RWP_ASYNC`` as well — it requires
+> +   ``UFFD_FEATURE_RWP`` to be set in the same ``UFFDIO_API`` call.
+> +
+> +2. Register the guest memory range with ``UFFDIO_REGISTER_MODE_RWP``
+> +   (and ``UFFDIO_REGISTER_MODE_MISSING`` if evicted pages will need to be
+> +   fetched back from storage).
+
+I'd make it
+
+  2. Register the guest memory range with ``UFFDIO_REGISTER_MODE_RWP``.
+     Add ``UFFDIO_REGISTER_MODE_MISSING`` if evicted pages will need to be
+     fetched back from storage.
+
+
 -- 
-2.25.1
-
+Sincerely yours,
+Mike.
