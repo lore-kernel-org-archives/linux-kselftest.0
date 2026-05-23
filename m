@@ -1,107 +1,92 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 605903002DD
-	for <linux-kselftest@vger.kernel.org>; Sat, 23 May 2026 08:05:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FA0D356767;
+	Sat, 23 May 2026 10:03:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779523546; cv=none; b=k1ppQR6fdXKvGtFeA3YvRRyfnrZMkHKOq41WUH6G8JLdaIWZqREJbhZxj0Qru4ejdqI59n//Izakf9/V1WGh71rzU2qp6YOEsWUUfyj1m4lzN60XDT7eIQqWwcs8JtKotBvVZAaQTGKot+VYdPPp+k+yf6Y2RP7RfeF+Qn/5ElY=
+	t=1779530625; cv=none; b=n1irgif3mM8dpiUF0aUBB7Z/qc5KAZjOEZl5g9zOhun+gCHRlachR3NToqiJJBlbDcmO/5g1yxWPYdwMmkOiPg/KxAGZn7ldreC70kjqpj2gRd9Ygzh4M01r3in8d99vE2BKBxMno7T+Cf1JWh53zX3P5/Mh91s1zlD0Z81FX0o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779523546; c=relaxed/simple;
-	bh=cyh9GNwkSeiWX8VVWJet6cmrStrv1Y1BhHYKMAKCy08=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LQ8M4w+LLmiCYpxiXf/peYsTl5i5BtOqI1I9Yf3t1Qk9nzp4Wdkzz+hrgifsFOs9LQwAw8msbQ8Q7Fu4i1eSK74V04Hf1jzLjqWPJ+frBfKB8iE6z2SWeFrIejFHP32XWVYgKzjzj8c92CRegI0Fzb1XtlwwK7xRnEQgrEoPHqk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cAi0Z1yz; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=iuFKCKXQ; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1779530625; c=relaxed/simple;
+	bh=Z8yfeiblCz/3Sd95IRWg5G2c2TXrpu+XnyizFFWl7ws=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QnM4Al8p+rpTry3Kc1jkqVd6vws/RMfDvhd2dGynYEumb8kh2ul0ZxaH1JO8vepspn72lo+WaMkewa2UlCzpyi3HP0NB8x2bDkr+Bn1Dl+ATrdQ0O8BRpg7DLs29XHZs4Qro+RCnsRv4HldB14HrmDU7Z2c6ZbLMpomRAtuevqo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b2v/Ws4X; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cAi0Z1yz";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="iuFKCKXQ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1779523544;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=cyh9GNwkSeiWX8VVWJet6cmrStrv1Y1BhHYKMAKCy08=;
-	b=cAi0Z1yzLXhDQAP6o8Qyut9ThhcXXM593qJ/byx1MMoACS6iILqskdPgcodrT75Otml6mv
-	4bwKk3Z4/daOJX8RQDHk0lADbrVUXxaG41UN+ANPnDMijMBNKLcbCXcMD38UYMRXhhXLoK
-	yoLZ0NcaVLdTJcGjQ4uEERBBmpOo9yo=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-189-PK4lVntMMOGCs0INXt4xNA-1; Sat, 23 May 2026 04:05:42 -0400
-X-MC-Unique: PK4lVntMMOGCs0INXt4xNA-1
-X-Mimecast-MFC-AGG-ID: PK4lVntMMOGCs0INXt4xNA_1779523541
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-bd09ec46507so183311866b.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 23 May 2026 01:05:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1779523541; x=1780128341; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cyh9GNwkSeiWX8VVWJet6cmrStrv1Y1BhHYKMAKCy08=;
-        b=iuFKCKXQIJMGxcRkoR4rCrXaIqevkqf5au0Bw90ZmbQggC58BU0y8g8qtoE6gA3AUI
-         esvSUsL3T0iQIWWawN++DqASPKLm/KNi3URLFEbyv6U0p3UqX2aYqIypn+UPjbTv2e5E
-         xaLRQ7cZ37eAVIaCNaZ/9QTNEkh3Vo6CfW/6iTlHxbgEpVJ9R490dJ2evesGY2hYscmI
-         NF72ATboAhBMyB50LAnIulYEnFitiF1cO8h7BaTA5oXjOtAK5jDcjnOggLajDHzOgDui
-         dUMUSpwbsvtWZTJVxWZrrtFZtIP3IdDEoT5p66cA/Qe2E+yGkHKEiLt/wqms4r0mGFhO
-         YnnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779523541; x=1780128341;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=cyh9GNwkSeiWX8VVWJet6cmrStrv1Y1BhHYKMAKCy08=;
-        b=nxH7TYYcHftTIZClRzxRlOgvoFV7/7A9G61jsiBqCVzBMogGql9OcMQ5jWqbKchnIR
-         IDTaHoLY35dGZWNifibztLha3RcCZi86OILYep4LMClueyheU43VN1c/tpC8vG77+srn
-         MfZfEj0qTAYHEPeOCz1REOq1qyUjP031KVQD85ekDdP6To4dybxZZj94ILdUOlInQOm7
-         2XRskij31daGTcsLVXt7FRTxvt2QeLJpRAio1U7Jjlwj3npoYvV2X9Qoo3quMOFDQ+x0
-         Fs1SYfkz8p2gQOwt94SAtFL18rMKRsimJYIdXM716Krp047fH4ht+76D0Ve5VSRBrVHk
-         wWbg==
-X-Forwarded-Encrypted: i=1; AFNElJ/XzbzPhuYUGhU6CO97hqq6H0OQs301GU00vEwzwtxllJVLiZR5b/tuQwikd5ISsoVpOAretWxt+cndfE5LiUw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz4i7+HMlsjLdRxnvP4Ob3pAr/ofgtZCGG3MQqoMhGX/nurY2hl
-	B8GkHsj3v+BTFcp3uDVpiNLrz4nBrkXmhtPZRTXROi3aFEZiwUdevAgFLVV0LnoBy5YPtnq2jRB
-	yo+puutcMw7vdjkwxwxqiExPtJ5UteouRwBY6SaDN/0CzusXpYGwY9kB6HluXaRIJLQ7SRz+bxf
-	c7ybKN
-X-Gm-Gg: Acq92OE79YMe+ZthEPVU0owmjttSRihyGke0Idam60XHtYK6OiN5zJUJMFAMspVHiGr
-	jXAOAQ84D9ZOpynAxxvwoOoKTkCJ0mByfUCWUl/cLDyjaKTmq/Vk6/vpTvprpRC9XdHHs/h11jd
-	+ejH4HKNByKt5PsVLFXb68rc5DBdyEyWL/WnKYTJjmeRHW4xxYghu0ZWXwxp12W71w2gIM4E/RX
-	/6OdKveXdWXrFkv5Hrossva+DBG1Pm0R4SFlguzXghCUSvucSTl2c7D4bHQ2oEWyne8Wl9UWxJH
-	h7zrlOoW2PM3rcua5esBHUPbV3gaq1weHj11L+Zb4mB+YLVDj6+QAdhTY867IjRQiza+7WJ6AUQ
-	fJ+V5kYnhhsF493UTHEgBYihaK3RoEV1fC2cqv/Fl+2nMYF7YnUriHOjQaNWP0L4dWPzshchR8N
-	qkxgtqXzkIjGgnfyIApXoitElHkw==
-X-Received: by 2002:a17:907:a789:b0:bd2:bd3:1ef8 with SMTP id a640c23a62f3a-bdd272cfb68mr441494966b.35.1779523540767;
-        Sat, 23 May 2026 01:05:40 -0700 (PDT)
-X-Received: by 2002:a17:907:a789:b0:bd2:bd3:1ef8 with SMTP id a640c23a62f3a-bdd272cfb68mr441493266b.35.1779523540381;
-        Sat, 23 May 2026 01:05:40 -0700 (PDT)
-Received: from [172.101.1.88] ([185.48.102.178])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-688bb13312fsm1606544a12.22.2026.05.23.01.05.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 May 2026 01:05:39 -0700 (PDT)
-From: Paolo Bonzini <pbonzini@redhat.com>
-To: Hisam Mehboob <hisamshar@gmail.com>
-Cc: Sean Christopherson <seanjc@google.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Brigham Campbell <me@brighamcampbell.com>,
-	kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: selftests: elf: Include <endian.h> instead of <bits/endian.h>
-Date: Sat, 23 May 2026 10:05:35 +0200
-Message-ID: <20260523080535.154440-1-pbonzini@redhat.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260409164020.1575176-4-hisamshar@gmail.com>
-References: 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b2v/Ws4X"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AA061F000E9;
+	Sat, 23 May 2026 10:03:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779530624;
+	bh=tHmN2BHFAqmkx4+yIKAwc/rhqe6iOFn48NmkgaH2AR4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=b2v/Ws4X/OrJeoVd2MADb1/OzwlF6mfWpHskl0n53AtfrSWsGgexN3Yaa2xwr+Tgb
+	 NxYvlMdRrDNzJNcemlWPWIZafZlAJ+IbO2Ay2XBX5cKlRzDab8WGSMMtKIdylDbLPH
+	 joRzNAZdmyWyHGAzrW5zkWygvSxFheziGrqE4vs0cldK2Jz7LgE7peYrq7dPzjGpsZ
+	 MdFNSGR6VDJSvQ1tnOQNvcAgH6LWWf8fCUvCYtWzKfh4MpqTCf0r8FubYVyZWrcYUk
+	 Yk+89/7C5VZvHVkv453mbcpMostz4UddeknfAJnvcP/RyMnEpCuP9//GXhJ8CnT7Na
+	 eLq5UlIcIHnug==
+Date: Sat, 23 May 2026 13:03:32 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Kiryl Shutsemau <kirill@shutemov.name>
+Cc: akpm@linux-foundation.org, peterx@redhat.com, david@kernel.org,
+	ljs@kernel.org, surenb@google.com, vbabka@kernel.org,
+	Liam.Howlett@oracle.com, ziy@nvidia.com, corbet@lwn.net,
+	skhan@linuxfoundation.org, seanjc@google.com, pbonzini@redhat.com,
+	jthoughton@google.com, aarcange@redhat.com, sj@kernel.org,
+	usama.arif@linux.dev, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, kvm@vger.kernel.org,
+	kernel-team@meta.com, linux-man@vger.kernel.org, alx@kernel.org,
+	"Kiryl Shutsemau (Meta)" <kas@kernel.org>
+Subject: Re: [PATCH v3 05/16] mm: add MM_CP_UFFD_RWP change_protection() flag
+Message-ID: <ahF7dNveFezH5bEy@kernel.org>
+References: <20260522133857.552279-1-kirill@shutemov.name>
+ <20260522133857.552279-6-kirill@shutemov.name>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260522133857.552279-6-kirill@shutemov.name>
 
-Queued, thanks.
+On Fri, May 22, 2026 at 02:38:46PM +0100, Kiryl Shutsemau wrote:
+> From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
+> 
+> Preparatory patch. Add the change_protection() primitive that
+> userfaultfd RWP will use.
+> 
+> An RWP-protected PTE is PAGE_NONE with the uffd PTE bit set. The
+> PROT_NONE half makes the CPU fault on any access; the uffd bit
+> distinguishes an RWP fault from a plain mprotect(PROT_NONE) or NUMA
+> hinting fault. MM_CP_UFFD_WP and MM_CP_UFFD_RWP share the same PTE
+> bit, so the two cannot be used together on the same range.
+> 
+> Two new change_protection() flags:
+> 
+>   MM_CP_UFFD_RWP            install PAGE_NONE and set the uffd bit
+>   MM_CP_UFFD_RWP_RESOLVE    restore vma->vm_page_prot, clear the uffd bit
+> 
+> Both are wired through change_pte_range(), change_huge_pmd(), and
+> hugetlb_change_protection() so anon, shmem, THP, and hugetlb all
+> share the same semantics.
+> 
+> Signed-off-by: Kiryl Shutsemau <kas@kernel.org>
+> Assisted-by: Claude:claude-opus-4-6
 
-Paolo
+Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 
+> ---
+>  include/linux/mm.h            |  5 ++++
+>  include/linux/userfaultfd_k.h |  1 -
+>  mm/huge_memory.c              | 30 +++++++++++++----------
+>  mm/hugetlb.c                  | 25 ++++++++++++++-----
+>  mm/mprotect.c                 | 46 +++++++++++++++++++++++++++--------
+>  5 files changed, 77 insertions(+), 30 deletions(-)
+
+-- 
+Sincerely yours,
+Mike.
