@@ -1,66 +1,67 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7405B345740
-	for <linux-kselftest@vger.kernel.org>; Sat, 23 May 2026 07:14:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A3CC3451AF
+	for <linux-kselftest@vger.kernel.org>; Sat, 23 May 2026 07:14:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779520496; cv=none; b=AqQxE6AmtSI6BIp0sSkvxXhVyehVSNHgRYwdb0B8NQLhBF58T+05yoxYCP7s3VUfLPkJavsgA4tjg8vB+YssIi4EDKXwF0qYbqWYJ8vjIAb9P57xE1w7z6N385JB1LUQxlY4JxIsQVlTq+5Nm4dbc7e6AMkBPjRBohUXnElamUA=
+	t=1779520498; cv=none; b=ZgLvE1xxpr8JkKoQcEaS+X973NJXONxTo7JMrtgjzbEFOY+hcIbhLADEMBY9bu00FPDqpOPfV8lczR9Ys3dCtf2Dm0J5F2Ae9GMY1vwofoklRbzGUhoEu8KzulI3lehvFtcVJ1X/0G/3qTYFlmjtRSDqkFW/iy+6TD9KGO6yEhw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779520496; c=relaxed/simple;
-	bh=Ybb0kJKNd2BJDDcZYbhZbCACFsLVAC7m/M+jXCdbe+s=;
+	s=arc-20240116; t=1779520498; c=relaxed/simple;
+	bh=pg9cpl0bo1AtFElQETrwEKQ1mUnu0drU6Mzj79jx4XY=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=NJvbVSue3SQkp9oqLs4whPXVDxrqOf+7KBLaRTaWpofko6yzkIocwtQbYGAty6n0P10sIBw9d5wn+1HoHAfxOlMID7JDxznQd3MolYqdApFUpfVUvMpIn1C0eF8xvUIXgSrxqHSFTgWxX77r4AhNo7aSefmky7S+gdj8Gl3sTFc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qY20ayf8; arc=none smtp.client-ip=209.85.128.50
+	 In-Reply-To:To:Cc; b=jZfY6slKbflEs5Q/AVDsXoaZr9SUDdq1IeeAzD5vosZ/Gtg1O+naNtcntgsOjGZ1DNk4YQ/X8yd+1dBPvEQ5XL/gPn/q905ralYBjpjl2n9ruYvoOK3IYTjflfeopCYPqcHiN14tVfPWW6E5xC8we2rTxlsOflYCXahR+6yth2w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LQ70nyeE; arc=none smtp.client-ip=209.85.221.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qY20ayf8"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4903d730b1fso20666545e9.2
-        for <linux-kselftest@vger.kernel.org>; Sat, 23 May 2026 00:14:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LQ70nyeE"
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-43fe62837baso4780178f8f.3
+        for <linux-kselftest@vger.kernel.org>; Sat, 23 May 2026 00:14:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779520493; x=1780125293; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1779520494; x=1780125294; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=T5zD1QygmB8fWogN5M5u4F28IFz6bLgLGYRTXYqao/U=;
-        b=qY20ayf8XTd1/FaYC9R0/8Eup7n61+/B1DOOeWoXOo8DSN3avAnR2HUgnpY+TQq31e
-         myfV0xZWbwbc08aNSIWszbQrqb0+/VDzx7x4DPZym43WDVTT/AYPxQwya68S+jl1Px0P
-         BHq0t8KrfZLx/QtAHg/Zn64SNT/KF2puRIzSa5EIEziHZCErQA/m/HMUz/JHRx/MD+a4
-         g1koDtszSupJGveiZbRYUUX/CPfWHRu6PMlaGa4v6RC12dNDMXdL4y4bYq1QGOCWEFUt
-         17LQTBE6RZrD0xr/T4U3zNnZ6UO1dT84eswvsgaJ+TCEbS9Bux2YufupNgG4rQQWfzOl
-         vYIw==
+        bh=AgjU2Qt2uFal6066puOiKcG/bH5c3F/sQ7Yrgz0f2yo=;
+        b=LQ70nyeEQ9O9F82G1YgfUf9f5MUMyZpCheu50vPLj6PxAsCr8NVFw0g4yZBpyEUmtg
+         qP7TwIjl+ayxSyCMUKKpX0BW/hIzXqjOI+bvYmcqRD+YwyTJwzVP9MJ2ZHT+sMqfaVgK
+         wyxujpfFLlhnYeYAEkJftsEAiLUgmMJ9DH+n3+u0t8wBYf9cwzlxEkAMOihoLIOIfYtV
+         Zy0m2o03SmS3ICfW0wcNfTOcKvG8b80A6Vs2Q9rhgSeT247bkHvvH6zBK6+HLQjf1ORr
+         O960bbSjVmT5Oi4d/GeI29jZFJO8GbqBKli0rXFJzHfOEbfLUoKHPTXEEcr8WbclTb6Z
+         MHlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779520493; x=1780125293;
+        d=1e100.net; s=20251104; t=1779520494; x=1780125294;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=T5zD1QygmB8fWogN5M5u4F28IFz6bLgLGYRTXYqao/U=;
-        b=lKc505s9KeOU2D79a59EsNgfSAqgon4Sf7Q8zp4QgtZwWOnPT3kHO5ypnxx3e9kAVi
-         TlPiBluk2vVWY4Vf1ewywUD6f7/zEVoWAxAmXH2eIwDH95Uu+DpNCEAVD9sOzmGeo3wc
-         7yx75tUlAbKpKHaQrVRO2/fOcr52vec9c7svofL5L0a3Oasdsmxl/xT5ySv/L9XjPyfR
-         6nk08wJMSSo3uSKuQ3UerTU0wMwNpqiJgzQJIH873VOVlreI+pv5qGbvXCkrd14Dp1lZ
-         /wiUNet0WJ2WJv6O+F1So7LZBx+PXXc+reFO4E036j2GgSDutgkP/72Wqg9osZ6i1VIb
-         SKTA==
-X-Forwarded-Encrypted: i=1; AFNElJ/uibMKqQTDeUt+3UIOL/PbHHSWfS7DTA1QCh9KMyjTB/29Jcf+r5CDss5i68+WTkSJehvt5uWT6N0Ri/7HaFE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyBe9nHQxhCJlNKexfHTxRiAn68vJ+V6ggUl+Xc2ltPTst5eXRm
-	YZa6RH103bP6j5LbivmJ69IP7noJSSQb+CGwHpkcvZwj3T0uyz+DJGUx
-X-Gm-Gg: Acq92OFB93fwaokHNCVpMzNfinUJeLxzDZOczlcOwQu41hwEeA9AvyuXKiSBmrH3ojY
-	fJTaLvauaSqdLZUp2Fkq202aKfpT7/91fwRvJDsn6ynIiWjG/XEMmbUEgo2I6J1RypOaXwFswYf
-	FkrfuCTVZMmhmTfsNI9eM0Qjg2VITMXb/1nCszWcAkr+iMic5uV1qtw0gWNEg0Kjx5cj9XNC9B9
-	tNotHyCzVJZFxkFWa9/OrESoSfzmjgSO25up24i51d/VT0x/1kZV2CyhmHcqXiVp/m6mI91PDMu
-	YTVunvrSIxyt12LFMLOCgquQGF/xASfzGvpfd9QAMp3zdiCrk2wV4LVD/Zd9miOO71HBQnNVch1
-	rV7kAeySnEHvY1w+eiFmDjY8ZMPkXXoNm2sfRkR2CcnbbMu12RkIbw/lpESBr5g1ATvHyxO+EMw
-	JZbvZiNQ4ApiV19JZr50LF5o/GfonTidlobY3ZAJA=
-X-Received: by 2002:a05:600c:1393:b0:490:3890:605b with SMTP id 5b1f17b1804b1-490428e0bf3mr95702355e9.31.1779520492801;
-        Sat, 23 May 2026 00:14:52 -0700 (PDT)
+        bh=AgjU2Qt2uFal6066puOiKcG/bH5c3F/sQ7Yrgz0f2yo=;
+        b=kTk/c8f33W93/YuEx/rXAiGSZfxdCwg6bnhLN9QlSNMCpdUuYqCQelgSNkVYi8jSKu
+         vHh6H/XxdEr0ippQFT3k6nNB9WG9S6UAQ0/uc1u9J3WjEOZsPaHqTmvW/gNFwqaL/K4r
+         2eZbowG1fQUZfpX28X4TxdR+v0uqA92OtTnJOcvrR8jrkgGvuyqbxljm1tf9v3k0zqc7
+         jt07zgJmEizZAdtvCnizi94/H3LHMZzF9Q82MFOqjNZgJFE93m2OcnQyeyZAo/3eRWIJ
+         a52hHvte2JxU0aB7wh/zg29h1e3MjGpUNFoxUVwmYV3x0K1WmHkqNXzwNPy0xismnF/j
+         xm0g==
+X-Forwarded-Encrypted: i=1; AFNElJ9V3t7IaDNRF8a2D3EpOiUYZmmPREAZOVvilNCSFPVTyy8CXRoYUhYZkFaVtEzjgbfPG/p1oP5gejY039MvI0k=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx+n/HfWSOLqC6WRo33OKD8VMNtZY9SxdUOjQ2Pjwd06Rd0Xniw
+	+z/2ACSrLVdKZfkXtFZYKYkdBJI+z5ao8XLxFOoV7zYFaVLrtgWUvNLT
+X-Gm-Gg: Acq92OGKRiede+lYjnn1YBIPe4n5A6IxUY0KZKafCTmGJxnMwzG/rRVAWWw3lEhBDVq
+	nay1ZBMwOpFrzrSysjHqCQiVX7Nn5j/SLEGTzwRvgaNODtFuBUsEaz9kF29dF1TyIbbp0M+5lo4
+	a5JWX9+2Z6VhZce+9VBXrkGgyjMMTeB2XJmz2FQ4tS0UdfmtzKCsMT9zQ6Dko6JfsLK+wcXV+hG
+	FDuVHGf8esCNHVPo0fs81m64T311l9HoXoOzdnTfSN869DWyuOR9IS5q0aT0VGHb3zGbsBxeXJi
+	901W636uM1EdJlD8+RW5UUpmLmLfta+DP+t2YJD0DD9Wqb5/WeBBGb6PKzEN23XCZZAyYyfy/Eb
+	UXqgrJcwqiYxkXcL/9wAf7LD5n3PRwgxQ+aYDGm6QkEB+eaC5wYkV83NFRpGuSYsgiYU0y2T3Rk
+	InmUybNt351bq9hinDVISMMc+qmYRxSdUCz7ayqK8=
+X-Received: by 2002:a05:6000:1acb:b0:45d:b14b:2409 with SMTP id ffacd0b85a97d-45eb38a798dmr11656676f8f.2.1779520494334;
+        Sat, 23 May 2026 00:14:54 -0700 (PDT)
 Received: from [192.168.0.174] ([31.96.183.250])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-45eb6d5cb76sm8639838f8f.25.2026.05.23.00.14.50
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-45eb6d5cb76sm8639838f8f.25.2026.05.23.00.14.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 May 2026 00:14:51 -0700 (PDT)
+        Sat, 23 May 2026 00:14:53 -0700 (PDT)
 From: Jim Cromie <jim.cromie@gmail.com>
-Date: Sat, 23 May 2026 01:14:35 -0600
-Subject: [PATCH v2 02/24] docs/dyndbg: explain flags parse 1st
+Date: Sat, 23 May 2026 01:14:36 -0600
+Subject: [PATCH v2 03/24] vmlinux.lds.h: refactor BOUNDED_SECTION_* macros
+ into bounded_sections.lds.h
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -69,7 +70,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260523-dd-maint-2-v2-2-b937312aa083@gmail.com>
+Message-Id: <20260523-dd-maint-2-v2-3-b937312aa083@gmail.com>
 References: <20260523-dd-maint-2-v2-0-b937312aa083@gmail.com>
 In-Reply-To: <20260523-dd-maint-2-v2-0-b937312aa083@gmail.com>
 To: Jonathan Corbet <corbet@lwn.net>, 
@@ -80,58 +81,132 @@ To: Jonathan Corbet <corbet@lwn.net>,
  Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>
 Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-arch@vger.kernel.org, linux-modules@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Jim Cromie <jim.cromie@gmail.com>, 
- Louis Chauvet <louis.chauvet@bootlin.com>
+ linux-kselftest@vger.kernel.org, Jim Cromie <jim.cromie@gmail.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1779520485; l=1814;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1779520485; l=4249;
  i=jim.cromie@gmail.com; s=20260203; h=from:subject:message-id;
- bh=Ybb0kJKNd2BJDDcZYbhZbCACFsLVAC7m/M+jXCdbe+s=;
- b=LDyIcN1thUtutyJAzsuSaLyDVoxR6fToU6bjihGjPO/ev9h0D9jBnvwywJk9EE3SFg1w7W3In
- LY27uL7o3wYAABSy+dtsNqblN6gjr6Y+4iVRe4Jf8b6l7r5euO2kJXS
+ bh=pg9cpl0bo1AtFElQETrwEKQ1mUnu0drU6Mzj79jx4XY=;
+ b=WH0AntNe0OhurMiZGrWISX5Fi7F6HIZcFImYCZSWocR9Qe6r0AlL6iFIRm3OL+X7tRT5goYjE
+ MWDUptwuglbBoUvOh8OP12aNyTgi93qwFSo+z6wgggVg7aRGBQ5Wo4b
 X-Developer-Key: i=jim.cromie@gmail.com; a=ed25519;
  pk=C6E5ODlPQo7ZBynATXH9wg7K6HxP0pIXyf4s38Qw0XE=
 
-When writing queries to >control, flags are parsed 1st, since they are
-the only required field, and they require specific compositions.  So
-if the flags draw an error (on those specifics), then keyword errors
-aren't reported.  This can be mildly confusing/annoying, so explain it
-instead.
+Move BOUNDED_SECTION_* macros to a new helper file:
+include/asm-generic/bounded_sections.lds.h and include it back into
+vmlinux.lds.h.  This allows its reuse later to fix a failure to keep
+dyndbg sections in some circumstances.
 
-cc: linux-doc@vger.kernel.org
-Reviewed-by: Louis Chauvet <louis.chauvet@bootlin.com>
+NOTES:
+
+These macros are only for use in vmlinux.lds.h, where the _start &
+_end symbols are needed.  Modules keep sections separate in ELF
+sections, with their boundaries known, so the _start and _end are not
+useful, and may confuse tools not expecting them.
+
+This patch ignores a checkpatch warning, because new file is covered
+by "GENERIC INCLUDE/ASM HEADER FILES" in MAINTAINERS
+
+CC: Arnd Bergmann <arnd@arndb.de>
+CC: linux-arch@vger.kernel.org
 Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
 ---
- Documentation/admin-guide/dynamic-debug-howto.rst | 17 +++++++++++++----
- 1 file changed, 13 insertions(+), 4 deletions(-)
+v3: move include to top
+---
+ include/asm-generic/bounded_sections.lds.h | 36 ++++++++++++++++++++++++++++++
+ include/asm-generic/vmlinux.lds.h          | 31 +------------------------
+ 2 files changed, 37 insertions(+), 30 deletions(-)
 
-diff --git a/Documentation/admin-guide/dynamic-debug-howto.rst b/Documentation/admin-guide/dynamic-debug-howto.rst
-index 4b14d9fd0300..9c2f096ed1d8 100644
---- a/Documentation/admin-guide/dynamic-debug-howto.rst
-+++ b/Documentation/admin-guide/dynamic-debug-howto.rst
-@@ -109,10 +109,19 @@ The match-spec's select *prdbgs* from the catalog, upon which to apply
- the flags-spec, all constraints are ANDed together.  An absent keyword
- is the same as keyword "*".
+diff --git a/include/asm-generic/bounded_sections.lds.h b/include/asm-generic/bounded_sections.lds.h
+new file mode 100644
+index 000000000000..8c29293ca7fb
+--- /dev/null
++++ b/include/asm-generic/bounded_sections.lds.h
+@@ -0,0 +1,36 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later */
++
++#ifndef _ASM_GENERIC_BOUNDED_SECTIONS_H
++#define _ASM_GENERIC_BOUNDED_SECTIONS_H
++
++#define BOUNDED_SECTION_PRE_LABEL(_sec_, _label_, _BEGIN_, _END_)	\
++	_BEGIN_##_label_ = .;						\
++	KEEP(*(_sec_))							\
++	_END_##_label_ = .;
++
++#define BOUNDED_SECTION_POST_LABEL(_sec_, _label_, _BEGIN_, _END_)	\
++	_label_##_BEGIN_ = .;						\
++	KEEP(*(_sec_))							\
++	_label_##_END_ = .;
++
++#define BOUNDED_SECTION_BY(_sec_, _label_)				\
++	BOUNDED_SECTION_PRE_LABEL(_sec_, _label_, __start, __stop)
++
++#define BOUNDED_SECTION(_sec)	 BOUNDED_SECTION_BY(_sec, _sec)
++
++#define HEADERED_SECTION_PRE_LABEL(_sec_, _label_, _BEGIN_, _END_, _HDR_) \
++	_HDR_##_label_	= .;						\
++	KEEP(*(.gnu.linkonce.##_sec_))					\
++	BOUNDED_SECTION_PRE_LABEL(_sec_, _label_, _BEGIN_, _END_)
++
++#define HEADERED_SECTION_POST_LABEL(_sec_, _label_, _BEGIN_, _END_, _HDR_) \
++	_label_##_HDR_ = .;						\
++	KEEP(*(.gnu.linkonce.##_sec_))					\
++	BOUNDED_SECTION_POST_LABEL(_sec_, _label_, _BEGIN_, _END_)
++
++#define HEADERED_SECTION_BY(_sec_, _label_)				\
++	HEADERED_SECTION_PRE_LABEL(_sec_, _label_, __start, __stop)
++
++#define HEADERED_SECTION(_sec)	 HEADERED_SECTION_BY(_sec, _sec)
++
++#endif /* _ASM_GENERIC_BOUNDED_SECTIONS_H */
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index 60c8c22fd3e4..9c61dd083f26 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -50,6 +50,7 @@
+  *               [__nosave_begin, __nosave_end] for the nosave data
+  */
  
++#include <asm-generic/bounded_sections.lds.h>
+ #include <asm-generic/codetag.lds.h>
+ 
+ #ifndef LOAD_OFFSET
+@@ -211,36 +212,6 @@
+ # endif
+ #endif
+ 
+-#define BOUNDED_SECTION_PRE_LABEL(_sec_, _label_, _BEGIN_, _END_)	\
+-	_BEGIN_##_label_ = .;						\
+-	KEEP(*(_sec_))							\
+-	_END_##_label_ = .;
 -
--A match specification is a keyword, which selects the attribute of
--the callsite to be compared, and a value to compare against.  Possible
--keywords are:::
-+Note that since the match-spec can be empty, the flags are checked 1st,
-+then the pairs of keyword and value.  Flag errs will hide keyword errs::
-+
-+  bash-5.2# ddcmd mod bar +foo
-+  dyndbg: read 13 bytes from userspace
-+  dyndbg: query 0: "mod bar +foo" mod:*
-+  dyndbg: unknown flag 'o'
-+  dyndbg: flags parse failed
-+  dyndbg: processed 1 queries, with 0 matches, 1 errs
-+
-+So a match-spec is a keyword, which selects the attribute of the
-+callsite to be compared, and a value to compare against.  Possible
-+keywords are::
- 
-   match-spec ::= 'func' string |
- 		 'file' string |
+-#define BOUNDED_SECTION_POST_LABEL(_sec_, _label_, _BEGIN_, _END_)	\
+-	_label_##_BEGIN_ = .;						\
+-	KEEP(*(_sec_))							\
+-	_label_##_END_ = .;
+-
+-#define BOUNDED_SECTION_BY(_sec_, _label_)				\
+-	BOUNDED_SECTION_PRE_LABEL(_sec_, _label_, __start, __stop)
+-
+-#define BOUNDED_SECTION(_sec)	 BOUNDED_SECTION_BY(_sec, _sec)
+-
+-#define HEADERED_SECTION_PRE_LABEL(_sec_, _label_, _BEGIN_, _END_, _HDR_) \
+-	_HDR_##_label_	= .;						\
+-	KEEP(*(.gnu.linkonce.##_sec_))					\
+-	BOUNDED_SECTION_PRE_LABEL(_sec_, _label_, _BEGIN_, _END_)
+-
+-#define HEADERED_SECTION_POST_LABEL(_sec_, _label_, _BEGIN_, _END_, _HDR_) \
+-	_label_##_HDR_ = .;						\
+-	KEEP(*(.gnu.linkonce.##_sec_))					\
+-	BOUNDED_SECTION_POST_LABEL(_sec_, _label_, _BEGIN_, _END_)
+-
+-#define HEADERED_SECTION_BY(_sec_, _label_)				\
+-	HEADERED_SECTION_PRE_LABEL(_sec_, _label_, __start, __stop)
+-
+-#define HEADERED_SECTION(_sec)	 HEADERED_SECTION_BY(_sec, _sec)
+-
+ #ifdef CONFIG_TRACE_BRANCH_PROFILING
+ #define LIKELY_PROFILE()						\
+ 	BOUNDED_SECTION_BY(_ftrace_annotated_branch, _annotated_branch_profile)
 
 -- 
 2.54.0
