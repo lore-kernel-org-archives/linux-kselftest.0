@@ -1,92 +1,83 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF5F7352F87
-	for <linux-kselftest@vger.kernel.org>; Fri, 22 May 2026 23:50:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61ACF25C6EE;
+	Sat, 23 May 2026 00:00:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779493821; cv=none; b=XnqZKQhXyjqXmYkGG3cgMoU+FuC6tut/A/oabI1RkUzqoAnQK1TO9x3HZQruxjEqNOI+g/Egsc0VpX6Uh62wRPuo7R64ySTot1uDHpNZVz03A9MnyROAXVwx/DcGCB9rDH/lhBXK3gXHyaXUYWPUUaJmYgwZ4zbM4KviLY8UHyU=
+	t=1779494407; cv=none; b=ZmV4HdI7Vh/gCejMGFccBcqlxjrMhjiWPfmxSSaJt5Kfr2b59M0s+f/sc7EhHVJpEwMCLBd0UaoI/TnI80mtO25Men4jlzEJs3vaqaYOvuZ/wQgGoyNl2HKWoibIM0P7ClA3W0+bTqnKGkI93CsumjkuxUEIb9eKNCrKrmC1KDA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779493821; c=relaxed/simple;
-	bh=70juYxIUdAmmDC/kCtJdEbKBZyXEA5lwVJTQ2r2IwhU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=r/M+IaludxnHv36L6jazouqXU4jU5+rX48vne/2j4m6aMoqvAVPvlstiSDBusr0AQO9CbxzQly5ccz58qgdUyudA23e3TeTjQlMqLS5nYz+Wws1ZvHI68yiHiHnonAsB3cI6FZ/PLDIn128tL3GLXmcZ5Kc0lDXHseIWgQduPNQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e4Ufb0Vb; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779494407; c=relaxed/simple;
+	bh=+3d6NnHf+JDzPKoTTk/N+qRiVqTG8EzBQD+nzDwP/+Y=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=mpAurWZyvdat48RF0S3X2apEVxcBCDWjCqiAgfzn/uqZDuIXv4Ok6dBJopJCvBfOL8hpuXY+ydA8NXRdXYwLlFUwdDhKFQx5QtNuLmD/NxutaYL/Fo6NBisTrK+q+HDKo6ko7Tvu6WlRNVySe30+jW0FIld9HzBgMLrp5fJMIJE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hb3vHgy6; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e4Ufb0Vb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB5231F01563
-	for <linux-kselftest@vger.kernel.org>; Fri, 22 May 2026 23:50:20 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hb3vHgy6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0B441F000E9;
+	Sat, 23 May 2026 00:00:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779493820;
-	bh=+7/LJADrQKRf5I/52L0O6RFJgB3HraO8VhuLuOw9b6U=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=e4Ufb0VbOB50pWlk82zWq2rcyoj4m7/xri8WkpRatYCCQIi0ZcK8QB6KnxGa5we7n
-	 AIoi6Ux7IT7munRnrV9ihBf4NHf92K2mTZb4xByehV/jqVcw43nGuZALDbl/2ty7WE
-	 h02AQp+o0Q/mwZN/XP9Ea6SEflzfUYOq9V6FW3iOjRlBrJEvRev+p1u5q5haSx9Coc
-	 orveHdx0/ak/u8VPjzGdEqTlw/yqq3NJOfdTTBPOxVZR5a3kRGbJlPu32R0kOqHwK0
-	 ZNap9JE0KZP8lPVDCpBbqMUJNeZs5K83n8nEZ1lhhwsNyWb54ONPwT5RD+crHChUTf
-	 U2Al/Rmg5kS3w==
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-bdb3fd39045so477440066b.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 22 May 2026 16:50:20 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AFNElJ/bs31A+tmLJw6df4GWqk0Lbl846VAVDVvJG+5pkNkH28J7Ykn7QxRf0DB7EiKtW5P8RQZmgwjPDT3xlJT+Pqg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyOCNI+cUGDxHh02QreyXziwEoxe8YOUdyF2c7R37MkZxSmdlNO
-	PK0UdsYxo1/23LwrCrU9zVyWQqNSwOQFNmEFxR3GrXL5fD4ok3PzwG/b3QlaHt8YBS7o1CPbIPV
-	0tMEeGWBUfOe6AKMjQWbI+U8P2qJuLGo=
-X-Received: by 2002:a17:907:a789:b0:baf:19a8:b44b with SMTP id
- a640c23a62f3a-bdd276ccf77mr393705466b.25.1779493819560; Fri, 22 May 2026
- 16:50:19 -0700 (PDT)
+	s=k20260515; t=1779494406;
+	bh=bpmpAYczKBe9hq5fAkkEH6ceIN/fAUQBXb4meLPIXWw=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=hb3vHgy6/0TpVEWO4fVhROLlZriM8hrglohvolibM1Sk9hx0OGc+Mq+FN222PeE9N
+	 arOcktpkAiTkExuu6oS0UCcWTxbYJfXQRpvnAzPOBoiNPiLUdE/HOytq996m6MT2v+
+	 K+l8ECldenMkGGCSXKRzagp/8zBQyFuksUM96+wIK/XA+lxEwVaWyfrWexJR0r3Lkh
+	 vwMYr1TowfRcxzhrpPzpUhm69P4bIrgqL2hyJEgbUlB6Eeu5iLsMrPLhz6o8tbQf1c
+	 RGRUwehUxp3CyefSB/N0NEcNDnKBAa6u1hJsH43lffwjSsBYvr13WXcOeKBF3T2nXc
+	 tO2kXFw+HrzCA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 1973E393100F;
+	Sat, 23 May 2026 00:00:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260521-tdx-selftests-v13-v13-0-6983ae4c3a4d@google.com>
- <20260521-tdx-selftests-v13-v13-7-6983ae4c3a4d@google.com>
- <CAO9r8zMY6i+TWoZPWzj8zB+Xw3rONbK-Nee1kSFwDkT3hy66zg@mail.gmail.com> <ahDhQJI7xBOQpnjg@google.com>
-In-Reply-To: <ahDhQJI7xBOQpnjg@google.com>
-From: Yosry Ahmed <yosry@kernel.org>
-Date: Fri, 22 May 2026 16:50:07 -0700
-X-Gmail-Original-Message-ID: <CAO9r8zMaiGL8v=f72EAwWbwofoUHOkH8r6Se22k2TVxnUCQLOQ@mail.gmail.com>
-X-Gm-Features: AVHnY4JqeJTUpgCJK6wBsGYftwqfsgN8XZ_oucWG29bLRQoRun4zGBsAHuwrKNA
-Message-ID: <CAO9r8zMaiGL8v=f72EAwWbwofoUHOkH8r6Se22k2TVxnUCQLOQ@mail.gmail.com>
-Subject: Re: [PATCH v13 07/22] KVM: selftests: Introduce structures for TDX
- guest boot parameters
-To: Sean Christopherson <seanjc@google.com>
-Cc: Lisa Wang <wyihan@google.com>, Andrew Jones <ajones@ventanamicro.com>, 
-	Ackerley Tng <ackerleytng@google.com>, Binbin Wu <binbin.wu@linux.intel.com>, 
-	Chao Gao <chao.gao@intel.com>, Chenyi Qiang <chenyi.qiang@intel.com>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, Erdem Aktas <erdemaktas@google.com>, 
-	Ira Weiny <ira.weiny@intel.com>, Isaku Yamahata <isaku.yamahata@intel.com>, 
-	Kiryl Shutsemau <kas@kernel.org>, linux-kselftest@vger.kernel.org, 
-	Paolo Bonzini <pbonzini@redhat.com>, "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>, 
-	Reinette Chatre <reinette.chatre@intel.com>, Rick Edgecombe <rick.p.edgecombe@intel.com>, 
-	Roger Wang <runanwang@google.com>, Ryan Afranji <afranji@google.com>, 
-	Sagi Shahar <sagis@google.com>, Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>, 
-	Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org, linux-coco@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next] selftests: tls: use ASSERT_GE in test_mutliproc
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177949441473.1413978.6684869738388512890.git-patchwork-notify@kernel.org>
+Date: Sat, 23 May 2026 00:00:14 +0000
+References: 
+ <0ee9f412b6bd1a260a547d19f979f73b396746ac.1779354585.git.tanggeliang@kylinos.cn>
+In-Reply-To: 
+ <0ee9f412b6bd1a260a547d19f979f73b396746ac.1779354585.git.tanggeliang@kylinos.cn>
+To: Geliang Tang <geliang@kernel.org>
+Cc: john.fastabend@gmail.com, kuba@kernel.org, sd@queasysnail.net,
+ davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+ horms@kernel.org, shuah@kernel.org, tanggeliang@kylinos.cn,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
 
-> > Sean, is this the preferred way to expose offsets to asm files (or asm
-> > code blocks) -- as opposed to say using .equ [*]?
->
-> For actual .S assembly, yes.  For inline asm, maybe?  If it looks prettier, go
-> for it.
->
-> > If yes, I can rework my nVMX GPR fixes to use the same approach for
-> > register offsets. I wonder if the non-TDX part of this patch (i.e.
-> > Makefile stuff) can be split, then patch 6 and the Makefile stuff can
-> > land independently and allow development on top.
-> >
-> > I can also split them out and include them in the next version of my
-> > series, then whichever series lands first will land the offsets
-> > support.
-> >
-> > WDYT?
->
-> Hmm, I'd say keep your series as-is for now.  The OFFSET() infrastructure really
-> shines for proper assembly.  For what you're doing, AFAICT it's only marginally
-> better.  So I don't think it's worth juggling dependencies to use it right away,
-> we can always convert if/when the TDX series lands the fancy stuff.
+Hello:
 
-Ack. We can do the switch later like you say.
+This patch was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Thu, 21 May 2026 17:11:53 +0800 you wrote:
+> From: Geliang Tang <tanggeliang@kylinos.cn>
+> 
+> In test_mutliproc(), when send() or recv() returns an error (e.g.,
+> -1), the test continues to execute the remaining code and fails
+> repeatedly due to using EXPECT_GE.
+> 
+> For example, if a TLS connection is broken and recv() returns -1,
+> EXPECT_GE(res, 0) records a failure but does not stop the test.
+> The test then proceeds with left -= res (where res = -1), causing
+> left to increase unexpectedly, and the loop continues indefinitely.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next] selftests: tls: use ASSERT_GE in test_mutliproc
+    https://git.kernel.org/netdev/net-next/c/6ec863c18481
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
