@@ -1,87 +1,115 @@
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB48D30FC12
-	for <linux-kselftest@vger.kernel.org>; Sat, 23 May 2026 11:30:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1793023815B;
+	Sat, 23 May 2026 13:41:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779535815; cv=none; b=A0Y/+LAOIZPgDOGloI6vfpI5lq/4xT4E9HQx7NGogPaW1qypipaRzWZaAmBzngsu8HNfFA7JXSX+MO2h0im6BrgyUi2A6g/vrwAFSHu87TWJ0jjU6C/NRW3XT/OreJWyjzx4/tDBY/RMytO95q6e08SMAjD1gmKzh/pPFvzX2kA=
+	t=1779543681; cv=none; b=V9kg3UF9ofeTsLrLw3vya4dgv8TmPIiOmUtgpDqCJi/F6RsZPUK/EIm5oNENXYQs8Hc6IzaPI48y9+R2VJBmGB2EEVNxhwlQjDT7ySRzQfaeC7Qbtn+CpCW4rOpJzRKEmPZPnM3KX64YJTcLoHGOcWCEmVxmd52XJRBElZhCCDU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779535815; c=relaxed/simple;
-	bh=JMI44/ouLWGh9v3cwRXboxes8Ebe6Yq5Nc7HqOw+anI=;
+	s=arc-20240116; t=1779543681; c=relaxed/simple;
+	bh=sk2rS2Lv1PF2RRNe9kOwphlVomY+tXK7570KQSHZK3M=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nodyTGVATVUKn3tzvmaFJ357S3CiomAv1AGT+Q1L3Mu/VajQOkYSH5oAEG/Hxx4Lh7iTHF7B769ij513qVEuWAnSmuLV2fKTc44PM07JevJoqWBczPMod02IcFqY9CYB4+3vmcowoj6T7fcHi1GK07oYWxMqF3PgLD5FBRPfmHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ybw8ACPE; arc=none smtp.client-ip=209.85.218.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=dGiUsbd+neXg9CDh28+Fyl/gVdP+Nh4uMM33v1kWYfspOodr2N4a6Ivrna4bMILIvjpSQMy++VWb2lNRchty4+HN4mrayMnxOofn/w2yWViZyA2juCskGGDeMtt05smMjEaPiLqOtcQu5BxY21OtHs9WQzTZ9Xk/QbBLPu0lVQ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IRcsv9km; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ybw8ACPE"
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-bd0209f25c1so1316693666b.2
-        for <linux-kselftest@vger.kernel.org>; Sat, 23 May 2026 04:30:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779535812; x=1780140612; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JMI44/ouLWGh9v3cwRXboxes8Ebe6Yq5Nc7HqOw+anI=;
-        b=Ybw8ACPE4O+XhvcRXrDJyvODHQ0XC519EcisfoVwi7aDBZF0f8QBK5o9wtLHcI7+er
-         fTW6cdrnPbS0+Rs8nev15Ge1qloUIB1wEzdoYnhh13A6beuqddmCSsejfBSnaQFuy9F9
-         e1ZGeSGsh76mZnqgaEtNT27qtWZdAUU2p5Ev87dxbx6qdbD4r6EK2T/Klb4KEalU9FRr
-         N7gEzk5jIr/H11MejWFBs0rTV/+gEJ0m7ldQmQuwRKJ4Olmix+JETv8cm97f644ylB35
-         hwkvN6YRX0gdDL1xhVDeXbNoED6SvSSvO6XB2xTeacgnzYJzNAzppsIq7vcc9fNUssgo
-         /NSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779535812; x=1780140612;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JMI44/ouLWGh9v3cwRXboxes8Ebe6Yq5Nc7HqOw+anI=;
-        b=VMZh/jHZPKae+E/Uz0F2Qvz+Yr2bNAh40awEKIS83K4TPKJj+cbt+G0H0x629Vkrav
-         FtoSwC0nxyMsK1FJWGfezq5f4mLSdmjBAd7llEj2RqaZlS0yOGBkzq2LGe143bt/8JsA
-         Z6zsYw3Iqeggf1Ti1ioX7phssQeox9AZ+TvVpzAhUQDTn5+8bB8uh5iRW0uADBD8vCqC
-         upnLFSHQuxvJpYVQmem6IWMmUWbDu4YRcmBhD+zwNlsuiPmw1V6WWRu6H/Chab2oPKz2
-         ZVDQmXVzy8/9+c4dIp72swfFzUOlWHqIykIOYvj139Y5OSyvQJiQoqXSE9tCBnN7iSiY
-         q7PA==
-X-Forwarded-Encrypted: i=1; AFNElJ9cV1/hfSdK8lfcF6EmfhxGVD2xsSMTQdYhMb9Rqou4AETeF+AO9KA8Tk1eld2JPYtxmJJpdXsySJp+3Cv6MZw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywd8F49MMHXSSdLEJti1MnfTivSicVRzGncdRFNBk6+v8AsfpLx
-	4M3SA7Lw3qckD5jjhTxq+c5AEHmx4V82FE5K2aHB95jNFaJltDIc4GC2nluLjvvNrD4=
-X-Gm-Gg: Acq92OFMN+9QNikdkA/i52C671CkVtUbdERrtgSyaOMxOFkpHCaZFTsk3jkHbVVYGFA
-	QeekQKrX1tOFDOLRRLvG5wyE7yjR37Hit43szXfC/zJN0Z5tyKM6/W9gvvcPRIcg+/isXeTwQJ2
-	+G6tWL2wb56n7gvOlZ/K+PSMRqq2EuAjAmaQiRYzZpK0wl5deeOnbyO5X6IzGRYHt3LeiPhdMDy
-	XqkzBPn69MGL1Ztwo+hLMu+gAC9pefpkITJvtDXo6+MS6813MFHOqxHjbdHHveJ6GUzRaaGiwML
-	NgGD1qbQVTiChX6AtY+gVAAH1Iz7Hs3wHdHTHPBGmhABSyONiI6+dsjQrZeHWUTzRO3UlQFWP7F
-	5TZRhS4YT6CXnI6YCgEQrUlN3Xv8KjGuFj3zer8HG5FxGSw1LeTwCJrYancwEZSqN3LXSy3HmXd
-	noJCDGSPoImkUxCNJqZ773+1aVGxJo8eq/FcsBpAv58kxggSiudq3U/T8Zh8RXHkVMNZyuLLQCG
-	2Ws0pKeovbw
-X-Received: by 2002:a17:907:b5a6:b0:bdd:87c:5bd0 with SMTP id a640c23a62f3a-bdd28a79cd4mr339609266b.11.1779535811817;
-        Sat, 23 May 2026 04:30:11 -0700 (PDT)
-Received: from localhost (226.55.classcom.pl. [195.150.55.226])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-bddc264dea6sm171918966b.7.2026.05.23.04.30.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 May 2026 04:30:11 -0700 (PDT)
-Date: Sat, 23 May 2026 13:30:19 +0200
-From: Piotr Zarycki <piotr.zarycki@gmail.com>
-To: seanjc@google.com, pbonzini@redhat.com
-Cc: vkuznets@redhat.com, shuah@kernel.org, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: selftests: hyperv_features: test write of 1 to
- HV_X64_MSR_RESET
-Message-ID: <ahGPQDJCT1aW7vVY@arch-piotr>
-References: <20260523111857.195396-1-piotr.zarycki@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IRcsv9km"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF1F31F000E9;
+	Sat, 23 May 2026 13:41:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779543679;
+	bh=70OTpdEyi7pV8VNKRGAyBkGpAuAMNqdiEhHF5NzVZa8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=IRcsv9kmml5qrOea+8Afo+4d6ynsz1beiGJDPW5RaXoiThn80vI34Ex1hcfIUXtJj
+	 56Z/wD1+LEr1iXtbpSnli5TTxn2A7wThX1ogitv1szuNvZugJtsLUn9c5WQIXQ4uu8
+	 oxVyTnaruy9idnikXYMjuY3hLqvax02WUelT6ngXljQsF0+j2kQXKe3yN7PoqEhLLd
+	 JZlGGccINLyEV9hEyKFa2sweWhfOiEQsxvgp/TfMnQqmZplcxJdo+/OhxW4Rb5SnfO
+	 xVAtExQLn6vMqcFbd+P0tel78f6WY6SDSvLPup8rCOnjUbw3XcniCJ1/l+l25FtBE+
+	 yjIO3Tn6ku8Gw==
+Date: Sat, 23 May 2026 09:41:18 -0400
+From: Sasha Levin <sashal@kernel.org>
+To: Song Liu <song@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	bpf@vger.kernel.org, live-patching@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Joshua Peisach <jpeisach@ubuntu.com>,
+	Florian Weimer <fw@deneb.enyo.de>, Breno Leitao <leitao@debian.org>,
+	Anthony Iliopoulos <ailiop@suse.com>,
+	Michal Hocko <mhocko@suse.com>, Jiri Olsa <jolsa@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Christian Brauner <brauner@kernel.org>,
+	KP Singh <kpsingh@kernel.org>
+Subject: Re: [PATCH v3] killswitch: add per-function short-circuit mitigation
+ primitive
+Message-ID: <ahGufsGqmLZZQL4M@laps>
+References: <20260508195749.1885522-1-sashal@kernel.org>
+ <20260517134858.146569-1-sashal@kernel.org>
+ <CAPhsuW4x8shWon8Moi5VgCq2n4E2EzaaauZ2HHpy42Rp1Y-J-g@mail.gmail.com>
+ <agsVDqdALBoHEHlv@laps>
+ <CAPhsuW44UX663Au=WwHz8MVwnQgLkjxOqpJSCKxNiv3=RpZvqw@mail.gmail.com>
+ <b342c38b-7323-4b72-a239-8a574d6bc36b@iogearbox.net>
+ <agzAwjKhOhuANz_P@laps>
+ <3dd6d852-18fb-4c64-a1ae-0d79ef7c061f@iogearbox.net>
+ <ag8lOe6dAOgnWmsQ@laps>
+ <CAPhsuW7sbt5B+ZeGW8O2JMJ0ELPU-vhZFNvbB+0Q8XhZg6pKYw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20260523111857.195396-1-piotr.zarycki@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAPhsuW7sbt5B+ZeGW8O2JMJ0ELPU-vhZFNvbB+0Q8XhZg6pKYw@mail.gmail.com>
 
-Hi,
+On Thu, May 21, 2026 at 11:16:46AM -0700, Song Liu wrote:
+>On Thu, May 21, 2026 at 8:31 AM Sasha Levin <sashal@kernel.org> wrote:
+>>
+>> On Thu, May 21, 2026 at 11:11:16AM +0200, Daniel Borkmann wrote:
+>> >On 5/19/26 9:57 PM, Sasha Levin wrote:
+>> >>Sure, this would also work. How do you see this happening? Can we let a certain
+>> >>user/pid/etc disable the allowlist if they choose to?
+>> >
+>> >I don't think we should, given then we're back to square one where root
+>> >or some other user would be able to just override/bypass an LSM.
+>>
+>> killswitch already disables itself when lockdown is active. We can easily
+>> disable it too when one of the LSMs that cares about this is active.
+>>
+>> >[...]
+>> >>How do you see this working with the allowlist?
+>> >
+>> >We should look at the underlying areas where most of the CVE-like fixes
+>> >took place (these days should be more easily doable given Claude and friends)
+>> >and based on that either extend ALLOW_ERROR_INJECTION() or (better) create
+>> >new hooks which BPF LSM can consume where you can then have a policy to reject
+>> >requests and tighten the attack surface. For example, the AF_ALG stuff you
+>>
+>> So we could grow the LSM tentacles deeper into the kernel, and we can see where
+>> current CVEs are happening, which I suspect is the darker corners of the kernel
+>> (old unmaintained, rarely used code), but this definitely won't stay the case,
+>> right? Newer and better LLMs will discover issues elsewhere, and once the low
+>> hanging fruits are picked off of the current target subsystems, researchers
+>> will move elsewhere. We will be dooming ourselves to an endless cat and mouse
+>> game where we go add LSM hooks after some big security issue goes public.
+>
+>Do we really need to add new LSM hooks for recent CVEs?
+>
+>The LSM hooks are designed to cover all the user-kernel interfaces. Then
+>with properly designed policies, we should have coverage for potential CVEs.
+>Existing LSM hooks may not be perfect, but we can improve the hooks,
+>potentially with the help of smart LLMs, so that these hooks can cover
+>future security issues. In some cases, we will need new policies, but I don't
+>think new hooks will be needed for most of these CVEs.
 
-After receiving KVM_SYSTEM_EVENT_RESET the test simply advances to the
-next stage without resetting the vCPU. Is verifying
-KVM_SYSTEM_EVENT_RESET is delivered sufficient?
+Running a quick LLM evaluation on the last ~70 severe CVEs, it seems that about
+40% is doable with the current hooks.
 
+-- 
 Thanks,
-Piotr
+Sasha
