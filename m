@@ -1,87 +1,194 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67C0D30E84B;
-	Sat, 23 May 2026 10:37:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5312230E84B
+	for <linux-kselftest@vger.kernel.org>; Sat, 23 May 2026 10:38:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779532665; cv=none; b=Ii9ZmtgWfzaH3k0DNUMQBPFpLPKk7DOCCJrHFaEfjyHUTXNFMqHvy98Ca+BxUpkAv4LaxJssQkjfRttLJXKlXlnq4GZMWz2RJRsORVWQAsZDbgPaN6UAI4BWqm5Yw70jbBcqtCUQOFntrwIGMz2FemKVqAng0i9R39dC9kawljQ=
+	t=1779532717; cv=none; b=uyYaVtBpM6K9ul8urvSAPI/6nIPHrlB4sav2ctXPBA0FHtPOJCgrIL7n6YTntNo09B32tsi4AZzr/J7ZgemHivGwjJ3cMtuXw9AEMBmC66FNCutHCuJge7NAjlqYZDRsapf1F9cR1QpwC9NYHr2lVoBJf1MVVPDJrU4mf8qFIAM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779532665; c=relaxed/simple;
-	bh=g3+TkRRALb7IhqgZxnCIVq3fxis7ltyRAflGA13FOwk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KVlUGqVRfVMwGdIsMSpYSjIpP0Yxdk+yusf54JaKM2WdQW32RGcPAbWBWicQT35PgnZ79u9XUa8jtdHcWP9pgiH5XTv4ygtDhsz06saTJlvmCWBL623UISJkccaeR+gbLh0jEbBk6G2Y4posi+ZjfBSG7wUffNXNvM37aaQd3uw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h0DTuPMg; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779532717; c=relaxed/simple;
+	bh=r96JOp9R34HEUV22PZQUHKH7n3Vz+9m3zkZvWSSQcK4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=sZIcVzLBoiDet9OCnwiom2sd4LWrkTGOLwFyVJ6MfhexEjWLFs5OJzQ80OQ+uNeHEEQFshhheGvqIZnvuh8znfC5wjOO1pmY6fwSnH9OEDjdme8KY9aQHmCUqjBu7L6rdETJU7EGz7YV2OAB2NWxIRx33F41LMqOkkEShP3cUk4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=xnlGqQUf; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=GRMhNQ1j; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=xnlGqQUf; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=GRMhNQ1j; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h0DTuPMg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 528391F000E9;
-	Sat, 23 May 2026 10:37:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779532663;
-	bh=snoJupCrLvennL6uXOgnTKfm9IRgKoBXu8jeUzQitF4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=h0DTuPMgVw6ksHlRqsKdtZnAHmn75iWnceRWOcNotrmKw4hDEFmI2/KnVEeRPdQ6c
-	 KcKkk6IvsHktG1+/3vB3xCzYnAD7ZWefqvPi+fdJQwylvxcvYJVzyhKNEPTnNqSxcc
-	 uvTNe4fRermhbk1PE1RFRFEsDZi7BhO2RJS0gxhvKtaUo5Mu/ePY5INY860CkxoD1I
-	 TBz6tBohMupfZFlw2TiQ5cWvD2hLGUrdc/2aj7PfKm3glTII1Mgq3X0jdw+fKnfHF9
-	 NwXKA8cPubvWH38wPXJmN4IBhYFriKrmq+PWseVlMhu7GWnwTdbqpjMpx/opGXhcYB
-	 xir9qwzGvHf1Q==
-Date: Sat, 23 May 2026 13:37:32 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: Kiryl Shutsemau <kirill@shutemov.name>
-Cc: akpm@linux-foundation.org, peterx@redhat.com, david@kernel.org,
-	ljs@kernel.org, surenb@google.com, vbabka@kernel.org,
-	Liam.Howlett@oracle.com, ziy@nvidia.com, corbet@lwn.net,
-	skhan@linuxfoundation.org, seanjc@google.com, pbonzini@redhat.com,
-	jthoughton@google.com, aarcange@redhat.com, sj@kernel.org,
-	usama.arif@linux.dev, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, kvm@vger.kernel.org,
-	kernel-team@meta.com, linux-man@vger.kernel.org, alx@kernel.org,
-	"Kiryl Shutsemau (Meta)" <kas@kernel.org>
-Subject: Re: [PATCH v3 15/16] userfaultfd.2: Add read-write protect mode
-Message-ID: <ahGDbKr2u6sqoc3f@kernel.org>
-References: <20260522133857.552279-1-kirill@shutemov.name>
- <20260522133857.552279-16-kirill@shutemov.name>
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="xnlGqQUf";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="GRMhNQ1j";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="xnlGqQUf";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="GRMhNQ1j"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 121296C4FC;
+	Sat, 23 May 2026 10:38:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1779532709; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=INOb8p2qQ2j6UV7dIOHrRtti/e52Y7oFE/NTKHENeNU=;
+	b=xnlGqQUfb0kpFq1Qrg/oyL5VxlmnRUC9UQhGQz+ghsiycJln1lYN1+K0CuXcS8M5Drhc3+
+	CLXPtE8vQkish/z8OuwOjXN6Jr9GDCsMIWVsmQLEFcAcPOpcsAJwWHid8SMvVi+MT3zoT6
+	Hx3F/fKFSd5osVdCfoV4y90UR2KCT+k=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1779532709;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=INOb8p2qQ2j6UV7dIOHrRtti/e52Y7oFE/NTKHENeNU=;
+	b=GRMhNQ1jM9BRHBOLpmACbJNBwMlBlx0cl15bsERag1V2cKpIv5xe379fSYG7TU8TUBZ40o
+	KrZAhnZkQ/JfoDAg==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1779532709; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=INOb8p2qQ2j6UV7dIOHrRtti/e52Y7oFE/NTKHENeNU=;
+	b=xnlGqQUfb0kpFq1Qrg/oyL5VxlmnRUC9UQhGQz+ghsiycJln1lYN1+K0CuXcS8M5Drhc3+
+	CLXPtE8vQkish/z8OuwOjXN6Jr9GDCsMIWVsmQLEFcAcPOpcsAJwWHid8SMvVi+MT3zoT6
+	Hx3F/fKFSd5osVdCfoV4y90UR2KCT+k=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1779532709;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=INOb8p2qQ2j6UV7dIOHrRtti/e52Y7oFE/NTKHENeNU=;
+	b=GRMhNQ1jM9BRHBOLpmACbJNBwMlBlx0cl15bsERag1V2cKpIv5xe379fSYG7TU8TUBZ40o
+	KrZAhnZkQ/JfoDAg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 69E9E593A8;
+	Sat, 23 May 2026 10:38:28 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id mKNjFqSDEWpGXAAAD6G6ig
+	(envelope-from <fmancera@suse.de>); Sat, 23 May 2026 10:38:28 +0000
+From: Fernando Fernandez Mancera <fmancera@suse.de>
+To: netdev@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org,
+	horms@kernel.org,
+	pabeni@redhat.com,
+	edumazet@google.com,
+	davem@davemloft.net,
+	idosch@nvidia.com,
+	dsahern@kernel.org,
+	Fernando Fernandez Mancera <fmancera@suse.de>,
+	=?UTF-8?q?=C5=81ukasz=20Stelmach?= <steelman@post.pl>
+Subject: [PATCH 1/2 net-next v5] ipv6: addrconf: fix temp address generation after prefix deprecation
+Date: Sat, 23 May 2026 12:38:10 +0200
+Message-ID: <20260523103811.3790-1-fmancera@suse.de>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260522133857.552279-16-kirill@shutemov.name>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Score: -3.30
+X-Spam-Level: 
+X-Spamd-Result: default: False [-3.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-0.999];
+	MIME_GOOD(-0.10)[text/plain];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	internal_greylist_whitelist(0.00)[10.150.64.97];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:email,suse.de:mid]
+X-Spam-Flag: NO
 
-On Fri, May 22, 2026 at 02:38:56PM +0100, Kiryl Shutsemau wrote:
-> From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
-> 
-> Read-write protect mode (UFFDIO_REGISTER_MODE_RWP) is supported starting
-> from Linux 7.2. It traps every access -- read or write -- to a present
-> page within a registered range. The matching UAPI consists of:
-> 
->   - UFFDIO_REGISTER_MODE_RWP   registration-mode bit
->   - UFFD_FEATURE_RWP           capability bit
->   - UFFD_FEATURE_RWP_ASYNC     async (in-kernel) fault resolution
->   - UFFDIO_RWPROTECT           install / remove RWP on a range
->   - UFFDIO_SET_MODE            runtime sync/async toggle
->   - UFFD_PAGEFAULT_FLAG_RWP    new pagefault.flags bit
-> 
-> Document the new registration-mode entry, the "Userfaultfd read-write
-> protect mode" section, the new pagefault flag, and a VERSIONS line.
-> 
-> Signed-off-by: Kiryl Shutsemau <kas@kernel.org>
-> ---
->  man2/userfaultfd.2 | 147 ++++++++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 146 insertions(+), 1 deletion(-)
+When a router temporarily deprecates an IPv6 prefix (either by sending a
+Router Advertisement with Preferred Lifetime = 0 or by letting the
+lifetime expire) and later restores it, the kernel permanently loses its
+ability to generate temporary privacy addresses (RFC 8981) for that
+prefix.
 
-This doesn't apply to the current man-pages tree
-https://git.kernel.org/pub/scm/docs/man-pages/man-pages.git
+This happens because the address worker attempts to generate a
+replacement temporary address when the current one nears expiration. As
+the base prefix is deprecated already, the generation fails after
+marking the temporary address as already having spawned a replacement
+(ifp->regen_count++).
 
-and reading raw groff hurts eyes too much.
+When the router eventually restores the prefix, the temporary address
+becomes active again. However, once it naturally expires, the address
+worker sees this temporary address already tried to generate one and
+skips the regeneration.
 
-What linux-man tree did you use to generate those?
+Fix the issue by resetting the regen_count check of the latest temp
+address generated for the prefix updated by the incoming RA.
 
+Reported-by: Łukasz Stelmach <steelman@post.pl>
+Closes: https://lore.kernel.org/netdev/87340td30q.fsf%25steelman@post.pl/
+Suggested-by: Ido Schimmel <idosch@nvidia.com>
+Signed-off-by: Fernando Fernandez Mancera <fmancera@suse.de>
+---
+v2: adjusted commit message, adjusted the implementation to cover all
+race conditions
+v3: regen now if ipv6_create_tempaddr failed due to timer to avoid an
+infinite loop as we restart the loop and we need to check now against
+prefered_lft again.
+v4: change the proposed fix completely, now we address the problem when
+doing manage_tempaddrs().
+v5: reset regen_count for the most recent temp address when a non
+0-lft RA arrives.
+---
+ net/ipv6/addrconf.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
+index da0f07e21e3f..d7b03196725f 100644
+--- a/net/ipv6/addrconf.c
++++ b/net/ipv6/addrconf.c
+@@ -1174,6 +1174,7 @@ ipv6_add_addr(struct inet6_dev *idev, struct ifa6_config *cfg,
+ 	ipv6_link_dev_addr(idev, ifa);
+ 
+ 	if (ifa->flags&IFA_F_TEMPORARY) {
++		/* manage_tempaddrs() relies on addresses being added to the head */
+ 		list_add(&ifa->tmp_list, &idev->tempaddr_list);
+ 		in6_ifa_hold(ifa);
+ 	}
+@@ -2602,8 +2603,10 @@ static void manage_tempaddrs(struct inet6_dev *idev,
+ 			     __u32 valid_lft, __u32 prefered_lft,
+ 			     bool create, unsigned long now)
+ {
+-	u32 flags;
++	u32 orig_prefered_lft = prefered_lft;
+ 	struct inet6_ifaddr *ift;
++	bool reset_done = false;
++	u32 flags;
+ 
+ 	read_lock_bh(&idev->lock);
+ 	/* update all temporary addresses in the list */
+@@ -2638,6 +2641,11 @@ static void manage_tempaddrs(struct inet6_dev *idev,
+ 			prefered_lft = max_prefered;
+ 
+ 		spin_lock(&ift->lock);
++		/* the first match is the most recent temp address */
++		if (!reset_done && orig_prefered_lft > 0) {
++			ift->regen_count = 0;
++			reset_done = true;
++		}
+ 		flags = ift->flags;
+ 		ift->valid_lft = valid_lft;
+ 		ift->prefered_lft = prefered_lft;
 -- 
-Sincerely yours,
-Mike.
+2.53.0
+
