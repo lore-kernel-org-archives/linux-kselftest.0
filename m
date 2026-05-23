@@ -1,38 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCA082DD60E;
-	Sat, 23 May 2026 00:18:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 109772F3600;
+	Sat, 23 May 2026 00:18:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779495485; cv=none; b=E99xEnPZhok5amCBwy2kDb2MnbCXw1YyPrcctNXber4m/aNKAQakNY8Dg4yMJs8dv+1nvqbiT1VzmrrrxwKJizS8NNGnGqSfNNqeNXSISbPcrwhODDsn8O43mQWOFtdsd349HF1PLnO+sAzSi4PiUhQ3PUfxQ4mly8MrNi0NciA=
+	t=1779495486; cv=none; b=RwvjLjrxhQjPpIydPS6fc+lPJWpI2qDcQ3Dh7Fvi5PIIguKyu7Zv0lLRdv/qa8K0DW8rUeHM/fGwypimzGoiSKWp5AcdtZaGAWzPqBG8y47/apA77RuBVO4/TOrFyrkCbteeADgr83keo0c/VaXeGkCNZjkLSr4Nhji7EZnWOFU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779495485; c=relaxed/simple;
-	bh=ogWoFJG1xqOVuNn5At8aLCzY3s9x+4aiDZLPoOXtj54=;
+	s=arc-20240116; t=1779495486; c=relaxed/simple;
+	bh=ANakWQaknMXXsAq6xM/DVcFwZND6TYcVasm1Hl8cgcQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=hE2//kqffeUCPI2FF3YvUrZNug1vGfy3tIXTDs8/b25MOsICYpYRAgqj5QOjABX/FEPd843NTid9VYWQBWmY8Iv/ulNOhEyHnLh+BAKwL53Fjmm2wromRBWIdMEmipVOJKefPyP8tMyovwAxDhyBZBu/8zCgOvdjhSq+lRvFpWQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V986EZEQ; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=iPVp26HyKc1U3kEskzSMcDwXJidjk55ZZhJERNeTvB2zSl85U8wx6Vea9Srok6kzcTurgOPg+GebqlSqG8B5gwZW/4c75E0PcvtDAMzK6SND/uR3gfQ7imUNh6cTLDPnFgAyKDbCefYWagEgQkPcFMp5RUYZ0+cqwh1eCnLa8kg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rM8hJfP+; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V986EZEQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 18048C4AF0B;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rM8hJfP+"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6B977C4E693;
 	Sat, 23 May 2026 00:18:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1779495485;
-	bh=ogWoFJG1xqOVuNn5At8aLCzY3s9x+4aiDZLPoOXtj54=;
+	bh=ANakWQaknMXXsAq6xM/DVcFwZND6TYcVasm1Hl8cgcQ=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=V986EZEQYXm3rx8tOFs0dfC7rSmpTd2pAR8MwjiyGZYa3Jlh3D9cEkI4v4SQNe21+
-	 k4nmxgS71+chx2X/iVBPR7OX67wrJ0LiAKMgDxtNcdEhcli8xKllZl//si3YeqbnOy
-	 c+a0uzSGFmoZs26tFYYGYbpcMn9xlJ0g/XCXJe5CJo+i/GMMGpL+J0/3YjwfAPqP14
-	 MHsuq+/5T2CjiiJUK7iAxsmfP7DojHFX6vHtv9eggnCryVPxbVFhm3nTm79xQ6PisA
-	 qEoRJMDyKX5SvhN4AONTl2s2OnG9QfyF3hq/JlRfVsA5Ei9aP1IdV6wrYcG9iGyZgD
-	 Ux7HJNSk2OMuw==
+	b=rM8hJfP+or/uDUXfrI4P7cBLZ5CWNFhqYHTstjSgwAzegqWr4Wl3H2S+UEIsGS9Dp
+	 NPBpS6ZzHy6BoS46OoazIJ6eq/Tzz0Uvf8RIloKeteFpYICqs9t1U4wOxmlXLaczZp
+	 dUaGnJJZ1SnTW8l7F/IvQZvOUf5/k8tP02wXu8Mb/u/OJLsdQMeNpwuT1/ZLg17Hqn
+	 g0VLzaubS+jHibaSplpSAZu2G3vWUmknLmdRV4s9HzvE4VKqtSikqQzq1g5GwFl9/T
+	 JF3QLFSGahtz8dr/V2Z4vDTzIxbCIl8HjesKWeesS88mLpW/LqGyLiaIMrcrjIVJnl
+	 rpOQtPE8cs+lg==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0349ACD5BBF;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5668FCD5BB0;
 	Sat, 23 May 2026 00:18:05 +0000 (UTC)
 From: Ackerley Tng via B4 Relay <devnull+ackerleytng.google.com@kernel.org>
-Date: Fri, 22 May 2026 17:18:03 -0700
-Subject: [PATCH v7 21/42] KVM: TDX: Make source page optional for
- KVM_TDX_INIT_MEM_REGION
+Date: Fri, 22 May 2026 17:18:07 -0700
+Subject: [PATCH v7 25/42] KVM: selftests: Add selftests global for guest
+ memory attributes capability
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -41,7 +41,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260522-gmem-inplace-conversion-v7-21-2f0fae496530@google.com>
+Message-Id: <20260522-gmem-inplace-conversion-v7-25-2f0fae496530@google.com>
 References: <20260522-gmem-inplace-conversion-v7-0-2f0fae496530@google.com>
 In-Reply-To: <20260522-gmem-inplace-conversion-v7-0-2f0fae496530@google.com>
 To: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com, 
@@ -75,11 +75,11 @@ Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
  linux-coco@lists.linux.dev, Ackerley Tng <ackerleytng@google.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1779495480; l=2365;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1779495480; l=2393;
  i=ackerleytng@google.com; s=20260225; h=from:subject:message-id;
- bh=qEh0ecCMb3AtWBwHsBoDwlnjw7N0xSkCrtG8wLVz2oM=;
- b=wxVMOV4LQFR6IuShk6BvYMeA+aIOjFgxfoyY1Bj9fMQrdswrooNt3z4OVuWOY1PuEjk9DhYnC
- Eo89wKHhcY0CTMuHtS5FDVWu9cx9a+bkJKhR/bMgAEqQmn0JjLXWUfS
+ bh=enbUgkpN5h/kbke93UGvFu3sgIUAtIDKKDJ2JxjAPS4=;
+ b=cq43NauVbSuTkfNQxrY6AxxrRbsYkVnxUiU7zsR/kcjwwvKFnwaFPQdYFFkTWltwYeNv+hxww
+ exhTnvT5zWtC9GsLEnK6/trmWqLRuO5b+scP3403jP2D8BlK9lODSIM
 X-Developer-Key: i=ackerleytng@google.com; a=ed25519;
  pk=sAZDYXdm6Iz8FHitpHeFlCMXwabodTm7p8/3/8xUxuU=
 X-Endpoint-Received: by B4 Relay for ackerleytng@google.com/20260225 with
@@ -87,65 +87,66 @@ X-Endpoint-Received: by B4 Relay for ackerleytng@google.com/20260225 with
 X-Original-From: Ackerley Tng <ackerleytng@google.com>
 Reply-To: ackerleytng@google.com
 
-From: Ackerley Tng <ackerleytng@google.com>
+From: Sean Christopherson <seanjc@google.com>
 
-Update tdx_gmem_post_populate() to handle cases where a source page is
-not explicitly provided. Instead of returning -EOPNOTSUPP when src_page
-is NULL, default to using the page associated with the destination PFN.
+Add a global variable, kvm_has_gmem_attributes, to make the result of
+checking for KVM_CAP_GUEST_MEMFD_MEMORY_ATTRIBUTES available to all tests.
 
-This change allows for in-place memory conversion where the data is
-already present in the target PFN, ensuring the TDX module has a valid
-source page reference for the TDH.MEM.PAGE.ADD operation.
+kvm_has_gmem_attributes is true if guest_memfd tracks memory attributes, as
+opposed to VM-level tracking.
 
+This global variable is synced to the guest for testing convenience, to
+avoid introducing subtle bugs when host/guest state is desynced.
+
+Signed-off-by: Sean Christopherson <seanjc@google.com>
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 ---
- Documentation/virt/kvm/x86/intel-tdx.rst |  4 ++++
- arch/x86/kvm/vmx/tdx.c                   | 11 ++++++++---
- 2 files changed, 12 insertions(+), 3 deletions(-)
+ tools/testing/selftests/kvm/include/test_util.h | 2 ++
+ tools/testing/selftests/kvm/lib/kvm_util.c      | 5 +++++
+ 2 files changed, 7 insertions(+)
 
-diff --git a/Documentation/virt/kvm/x86/intel-tdx.rst b/Documentation/virt/kvm/x86/intel-tdx.rst
-index 6a222e9d09541..fbc0f179dc750 100644
---- a/Documentation/virt/kvm/x86/intel-tdx.rst
-+++ b/Documentation/virt/kvm/x86/intel-tdx.rst
-@@ -158,6 +158,10 @@ KVM_TDX_INIT_MEM_REGION
- Initialize @nr_pages TDX guest private memory starting from @gpa with userspace
- provided data from @source_addr. @source_addr must be PAGE_SIZE-aligned.
+diff --git a/tools/testing/selftests/kvm/include/test_util.h b/tools/testing/selftests/kvm/include/test_util.h
+index d9b433b834f1b..c280c3233f502 100644
+--- a/tools/testing/selftests/kvm/include/test_util.h
++++ b/tools/testing/selftests/kvm/include/test_util.h
+@@ -115,6 +115,8 @@ struct guest_random_state {
+ extern u32 guest_random_seed;
+ extern struct guest_random_state guest_rng;
  
-+If memory attributes are tracked in guest_memfd, pass NULL for
-+@source_addr to initialize the memory region using memory contents
-+already populated in guest_memfd memory.
++extern bool kvm_has_gmem_attributes;
 +
- Note, before calling this sub command, memory attribute of the range
- [gpa, gpa + nr_pages] needs to be private.  Userspace can use
- KVM_SET_MEMORY_ATTRIBUTES to set the attribute.
-diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
-index 00dcfcbc47f68..63c6ba30f05b2 100644
---- a/arch/x86/kvm/vmx/tdx.c
-+++ b/arch/x86/kvm/vmx/tdx.c
-@@ -3116,8 +3116,12 @@ static int tdx_gmem_post_populate(struct kvm *kvm, gfn_t gfn, kvm_pfn_t pfn,
- 	if (KVM_BUG_ON(kvm_tdx->page_add_src, kvm))
- 		return -EIO;
+ struct guest_random_state new_guest_random_state(u32 seed);
+ u32 guest_random_u32(struct guest_random_state *state);
  
--	if (!src_page)
--		return -EOPNOTSUPP;
-+	if (!src_page) {
-+		if (vm_memory_attributes)
-+			return -EOPNOTSUPP;
+diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+index 4eaf553fbab11..daa0c1e835a71 100644
+--- a/tools/testing/selftests/kvm/lib/kvm_util.c
++++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+@@ -24,6 +24,8 @@ u32 guest_random_seed;
+ struct guest_random_state guest_rng;
+ static u32 last_guest_seed;
+ 
++bool kvm_has_gmem_attributes;
 +
-+		src_page = pfn_to_page(pfn);
-+	}
+ static size_t vcpu_mmap_sz(void);
  
- 	kvm_tdx->page_add_src = src_page;
- 	ret = kvm_tdp_mmu_map_private_pfn(arg->vcpu, gfn, pfn);
-@@ -3196,7 +3200,8 @@ static int tdx_vcpu_init_mem_region(struct kvm_vcpu *vcpu, struct kvm_tdx_cmd *c
- 			break;
- 		}
+ int __open_path_or_exit(const char *path, int flags, const char *enoent_help)
+@@ -521,6 +523,7 @@ struct kvm_vm *__vm_create(struct vm_shape shape, u32 nr_runnable_vcpus,
+ 	}
+ 	guest_rng = new_guest_random_state(guest_random_seed);
+ 	sync_global_to_guest(vm, guest_rng);
++	sync_global_to_guest(vm, kvm_has_gmem_attributes);
  
--		region.source_addr += PAGE_SIZE;
-+		if (region.source_addr)
-+			region.source_addr += PAGE_SIZE;
- 		region.gpa += PAGE_SIZE;
- 		region.nr_pages--;
+ 	kvm_arch_vm_post_create(vm, nr_runnable_vcpus);
+ 
+@@ -2287,6 +2290,8 @@ void __attribute((constructor)) kvm_selftest_init(void)
+ 	guest_random_seed = last_guest_seed = random();
+ 	pr_info("Random seed: 0x%x\n", guest_random_seed);
+ 
++	kvm_has_gmem_attributes = kvm_has_cap(KVM_CAP_GUEST_MEMFD_MEMORY_ATTRIBUTES);
++
+ 	kvm_selftest_arch_init();
+ }
  
 
 -- 
