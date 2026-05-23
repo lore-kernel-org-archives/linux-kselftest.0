@@ -1,238 +1,107 @@
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8029D368977
-	for <linux-kselftest@vger.kernel.org>; Sat, 23 May 2026 07:15:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 605903002DD
+	for <linux-kselftest@vger.kernel.org>; Sat, 23 May 2026 08:05:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779520546; cv=none; b=FGJ/UW6kIxiVbQ0oUC5vcyRt0/bx761UzNK6EmUFzTQ8AkfUKA58gSbCsazGyVp2jjRtwfXtbqQggGNKch+JeLLAPftrqATmgENUU9x5ZscsiNOwDpS7N7oDFijuX+MhHhScWpxC1Ovo2KnrAqXWlEzvVcYIBGToRzOeDlZ5DGI=
+	t=1779523546; cv=none; b=k1ppQR6fdXKvGtFeA3YvRRyfnrZMkHKOq41WUH6G8JLdaIWZqREJbhZxj0Qru4ejdqI59n//Izakf9/V1WGh71rzU2qp6YOEsWUUfyj1m4lzN60XDT7eIQqWwcs8JtKotBvVZAaQTGKot+VYdPPp+k+yf6Y2RP7RfeF+Qn/5ElY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779520546; c=relaxed/simple;
-	bh=M80+fNO6OBurAzoDghArAT2ZgkzXj59Sg4wMHAAZH/c=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=tw13WkCp2yQg/2YtFTgWzDDHh46jNaxfBo4MYBUUX2PAjxS9DqT/CGcjLXCRBisYfeKoYYxYA5rh4Yi7bdljWPHW4JeNJWCKvMqPRGFyzvFbVAYpmop8mreFXxZtPwRQFXB+s96xUDiiUE5HvRsEfEAUGQoQM1/IgSFrc1MmElo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ok/XYjGG; arc=none smtp.client-ip=209.85.221.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1779523546; c=relaxed/simple;
+	bh=cyh9GNwkSeiWX8VVWJet6cmrStrv1Y1BhHYKMAKCy08=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=LQ8M4w+LLmiCYpxiXf/peYsTl5i5BtOqI1I9Yf3t1Qk9nzp4Wdkzz+hrgifsFOs9LQwAw8msbQ8Q7Fu4i1eSK74V04Hf1jzLjqWPJ+frBfKB8iE6z2SWeFrIejFHP32XWVYgKzjzj8c92CRegI0Fzb1XtlwwK7xRnEQgrEoPHqk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cAi0Z1yz; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=iuFKCKXQ; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ok/XYjGG"
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-43eb05b1875so4419151f8f.3
-        for <linux-kselftest@vger.kernel.org>; Sat, 23 May 2026 00:15:44 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cAi0Z1yz";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="iuFKCKXQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1779523544;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=cyh9GNwkSeiWX8VVWJet6cmrStrv1Y1BhHYKMAKCy08=;
+	b=cAi0Z1yzLXhDQAP6o8Qyut9ThhcXXM593qJ/byx1MMoACS6iILqskdPgcodrT75Otml6mv
+	4bwKk3Z4/daOJX8RQDHk0lADbrVUXxaG41UN+ANPnDMijMBNKLcbCXcMD38UYMRXhhXLoK
+	yoLZ0NcaVLdTJcGjQ4uEERBBmpOo9yo=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-189-PK4lVntMMOGCs0INXt4xNA-1; Sat, 23 May 2026 04:05:42 -0400
+X-MC-Unique: PK4lVntMMOGCs0INXt4xNA-1
+X-Mimecast-MFC-AGG-ID: PK4lVntMMOGCs0INXt4xNA_1779523541
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-bd09ec46507so183311866b.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 23 May 2026 01:05:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779520543; x=1780125343; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wCBDtFYH6irn68vEcfgObGsGHdxoBTw2InqF805Jo2w=;
-        b=ok/XYjGGYqAhEicSNuybCnnfsy8bqOXgCc06ot6kit+8FPh4pLs0Avlh2sk0BnDsX+
-         MzL8mRgOhcH9AwrMrX1SlHBOQPg6o1LJ9dQeytRgccg4LV9IimeJOgVSUEm7Ag4XjZoM
-         PXiUt9MPkO7k5cFzHIuRJVfa67B4exvMhBgWex1g4nhTEC1RoK9uZdyXtTLrcsG9PTY3
-         8jmaoepoKpk6ilkAndTRjTenhHt54uNbgEPXedLZJ+e2DcI8eqNSTOYC3ZnNN6vab+8G
-         V+bWn3h4CeY088xxYi+rkLnco8ruh3yRDqWa9uX4MLNqZ45muvMlP09oYIAknGwSxxm4
-         x81Q==
+        d=redhat.com; s=google; t=1779523541; x=1780128341; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cyh9GNwkSeiWX8VVWJet6cmrStrv1Y1BhHYKMAKCy08=;
+        b=iuFKCKXQIJMGxcRkoR4rCrXaIqevkqf5au0Bw90ZmbQggC58BU0y8g8qtoE6gA3AUI
+         esvSUsL3T0iQIWWawN++DqASPKLm/KNi3URLFEbyv6U0p3UqX2aYqIypn+UPjbTv2e5E
+         xaLRQ7cZ37eAVIaCNaZ/9QTNEkh3Vo6CfW/6iTlHxbgEpVJ9R490dJ2evesGY2hYscmI
+         NF72ATboAhBMyB50LAnIulYEnFitiF1cO8h7BaTA5oXjOtAK5jDcjnOggLajDHzOgDui
+         dUMUSpwbsvtWZTJVxWZrrtFZtIP3IdDEoT5p66cA/Qe2E+yGkHKEiLt/wqms4r0mGFhO
+         YnnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779520543; x=1780125343;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=wCBDtFYH6irn68vEcfgObGsGHdxoBTw2InqF805Jo2w=;
-        b=gZYmykM2DLB858hHcLVM0vDAkkBV8ZWosQF1dP5ckXmHe4bAusYl9wKHo/FeLJF7ht
-         v/GSNDKXWX5wu/Z+LQYKzzeD6rK9V8B4XYJNMFodGoh00JSBeI6CtSOD4ZPgl2VCx42Q
-         QKUvzlAhAZkSTzRVd3t+SohitqEHew2hx6oxfTT0NaU9Bn87hprOLtI73nPTY9VhvKG5
-         DLICdPoFo2lr13j6bgtXSnCsu3Zkfx697UPbXEPT4OjOadBXgWXXsyKTD+5d1iN1CuuF
-         +2/6jffnVqbxZK8leCLw38L3vfzlI2LVt2zlW0o+67hyTqqOvoXOzDIfjAJOzj87RaVw
-         qRxw==
-X-Forwarded-Encrypted: i=1; AFNElJ+tuST3VIamG6pouk6BojuSg/8byP/586h7Z9ORWXjcUgPVBo+CP0Ye9sQBk3CZKVr1jpVC/mK78CRMPpdDNRA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwwRsgvyuzC3Vc3UcUE4hOOXcOGOJpzMwBTaPMNg9iUlivATFdn
-	DNjCp8YVFnijcap45cy9+IeLOAlu4wALEWHstz0dClVp/VqTz02p6h9f
-X-Gm-Gg: Acq92OECiI16Y6bNxO98QeCtFhodk8abhB+mNmaeNjakFnY/TVe2gf8wLzVgY2zg/zg
-	H6ZqIkY2r563XcL00Hc4OasLgqFj21FmNI8sPD1csC9EKTIvlJ1Dsm6Vh0IOlBEJSrNuBTyzNqR
-	GiciQJl0Xzwh92xKsX8faljVZD+htTRXhiBshUGBA1ApO23sdLBsU/o33KdHin00W7iiAZGzT0s
-	w3o4uz6R3Daanpj1MljZQMQddD8fnU5MloTWpt02VXfxSrN3vMAODNai4jX+8IB4WNLIETiI4nK
-	0dpZFHf8H0wGP5jMSzAQiJWS0n4jyCb9Jmys15wmfou5y4bL7l4Bmd1/d0+3ofywTg6qyfKFX8L
-	MSMYW9sSl5mCnKKCa8f8SiVYju6Y/h4GXj3KWATlqRoufkSsRQUZpGOnRIB323CLmbPqxJu9V2T
-	Nq1VAOgflQpo1JTt48IDSmLR/ac6wv
-X-Received: by 2002:a05:6000:25e3:b0:43d:68ad:3b7f with SMTP id ffacd0b85a97d-45eb38af5c7mr10081766f8f.21.1779520543058;
-        Sat, 23 May 2026 00:15:43 -0700 (PDT)
-Received: from [192.168.0.174] ([31.96.183.250])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-45eb6d5cb76sm8639838f8f.25.2026.05.23.00.15.40
+        d=1e100.net; s=20251104; t=1779523541; x=1780128341;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=cyh9GNwkSeiWX8VVWJet6cmrStrv1Y1BhHYKMAKCy08=;
+        b=nxH7TYYcHftTIZClRzxRlOgvoFV7/7A9G61jsiBqCVzBMogGql9OcMQ5jWqbKchnIR
+         IDTaHoLY35dGZWNifibztLha3RcCZi86OILYep4LMClueyheU43VN1c/tpC8vG77+srn
+         MfZfEj0qTAYHEPeOCz1REOq1qyUjP031KVQD85ekDdP6To4dybxZZj94ILdUOlInQOm7
+         2XRskij31daGTcsLVXt7FRTxvt2QeLJpRAio1U7Jjlwj3npoYvV2X9Qoo3quMOFDQ+x0
+         Fs1SYfkz8p2gQOwt94SAtFL18rMKRsimJYIdXM716Krp047fH4ht+76D0Ve5VSRBrVHk
+         wWbg==
+X-Forwarded-Encrypted: i=1; AFNElJ/XzbzPhuYUGhU6CO97hqq6H0OQs301GU00vEwzwtxllJVLiZR5b/tuQwikd5ISsoVpOAretWxt+cndfE5LiUw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz4i7+HMlsjLdRxnvP4Ob3pAr/ofgtZCGG3MQqoMhGX/nurY2hl
+	B8GkHsj3v+BTFcp3uDVpiNLrz4nBrkXmhtPZRTXROi3aFEZiwUdevAgFLVV0LnoBy5YPtnq2jRB
+	yo+puutcMw7vdjkwxwxqiExPtJ5UteouRwBY6SaDN/0CzusXpYGwY9kB6HluXaRIJLQ7SRz+bxf
+	c7ybKN
+X-Gm-Gg: Acq92OE79YMe+ZthEPVU0owmjttSRihyGke0Idam60XHtYK6OiN5zJUJMFAMspVHiGr
+	jXAOAQ84D9ZOpynAxxvwoOoKTkCJ0mByfUCWUl/cLDyjaKTmq/Vk6/vpTvprpRC9XdHHs/h11jd
+	+ejH4HKNByKt5PsVLFXb68rc5DBdyEyWL/WnKYTJjmeRHW4xxYghu0ZWXwxp12W71w2gIM4E/RX
+	/6OdKveXdWXrFkv5Hrossva+DBG1Pm0R4SFlguzXghCUSvucSTl2c7D4bHQ2oEWyne8Wl9UWxJH
+	h7zrlOoW2PM3rcua5esBHUPbV3gaq1weHj11L+Zb4mB+YLVDj6+QAdhTY867IjRQiza+7WJ6AUQ
+	fJ+V5kYnhhsF493UTHEgBYihaK3RoEV1fC2cqv/Fl+2nMYF7YnUriHOjQaNWP0L4dWPzshchR8N
+	qkxgtqXzkIjGgnfyIApXoitElHkw==
+X-Received: by 2002:a17:907:a789:b0:bd2:bd3:1ef8 with SMTP id a640c23a62f3a-bdd272cfb68mr441494966b.35.1779523540767;
+        Sat, 23 May 2026 01:05:40 -0700 (PDT)
+X-Received: by 2002:a17:907:a789:b0:bd2:bd3:1ef8 with SMTP id a640c23a62f3a-bdd272cfb68mr441493266b.35.1779523540381;
+        Sat, 23 May 2026 01:05:40 -0700 (PDT)
+Received: from [172.101.1.88] ([185.48.102.178])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-688bb13312fsm1606544a12.22.2026.05.23.01.05.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 May 2026 00:15:41 -0700 (PDT)
-From: Jim Cromie <jim.cromie@gmail.com>
-Date: Sat, 23 May 2026 01:14:57 -0600
-Subject: [PATCH v2 24/24] dyndbg: improve section names
+        Sat, 23 May 2026 01:05:39 -0700 (PDT)
+From: Paolo Bonzini <pbonzini@redhat.com>
+To: Hisam Mehboob <hisamshar@gmail.com>
+Cc: Sean Christopherson <seanjc@google.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Brigham Campbell <me@brighamcampbell.com>,
+	kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: selftests: elf: Include <endian.h> instead of <bits/endian.h>
+Date: Sat, 23 May 2026 10:05:35 +0200
+Message-ID: <20260523080535.154440-1-pbonzini@redhat.com>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260409164020.1575176-4-hisamshar@gmail.com>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260523-dd-maint-2-v2-24-b937312aa083@gmail.com>
-References: <20260523-dd-maint-2-v2-0-b937312aa083@gmail.com>
-In-Reply-To: <20260523-dd-maint-2-v2-0-b937312aa083@gmail.com>
-To: Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <skhan@linuxfoundation.org>, Arnd Bergmann <arnd@arndb.de>, 
- Jason Baron <jbaron@akamai.com>, Luis Chamberlain <mcgrof@kernel.org>, 
- Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
- Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
- Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>
-Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-arch@vger.kernel.org, linux-modules@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Jim Cromie <jim.cromie@gmail.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1779520485; l=5623;
- i=jim.cromie@gmail.com; s=20260203; h=from:subject:message-id;
- bh=M80+fNO6OBurAzoDghArAT2ZgkzXj59Sg4wMHAAZH/c=;
- b=IPLjgcIxtWsAYl+aBjchTE9EychEIqrxQak1IFTHfNKzY4NcwzKCPKwEW2llTS3/AdszaVr7i
- N1vE4tjKZfgDbjInXaxKzrJqaN4Ut9tfGi7eVcksJB+R0JuwRT+4HCD
-X-Developer-Key: i=jim.cromie@gmail.com; a=ed25519;
- pk=C6E5ODlPQo7ZBynATXH9wg7K6HxP0pIXyf4s38Qw0XE=
+Content-Transfer-Encoding: 8bit
 
-change __dyndbg to __dyndbg_descs
-change __dyndbg_classes to __dyndbg_class_maps
+Queued, thanks.
 
-this sets up for adding __dyndbg_class_users
-
-Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
----
- include/asm-generic/dyndbg.lds.h | 14 +++++++-------
- include/linux/dynamic_debug.h    |  4 ++--
- kernel/module/main.c             |  2 +-
- lib/dynamic_debug.c              | 24 ++++++++++++------------
- 4 files changed, 22 insertions(+), 22 deletions(-)
-
-diff --git a/include/asm-generic/dyndbg.lds.h b/include/asm-generic/dyndbg.lds.h
-index 9d8951bef688..ec661f9f3793 100644
---- a/include/asm-generic/dyndbg.lds.h
-+++ b/include/asm-generic/dyndbg.lds.h
-@@ -3,16 +3,16 @@
- #define __ASM_GENERIC_DYNDBG_LDS_H
- 
- #include <asm-generic/bounded_sections.lds.h>
--#define DYNDBG_SECTIONS()					\
--	BOUNDED_SECTION_BY(__dyndbg, ___dyndbg)			\
--	BOUNDED_SECTION_BY(__dyndbg_classes, ___dyndbg_classes)
-+#define DYNDBG_SECTIONS()						\
-+	BOUNDED_SECTION_BY(__dyndbg_descs, ___dyndbg_descs)		\
-+	BOUNDED_SECTION_BY(__dyndbg_class_maps, ___dyndbg_class_maps)
- 
- #define MOD_DYNDBG_SECTIONS()						\
--	__dyndbg 0 : ALIGN(8) {						\
--		KEEP(*(__dyndbg))					\
-+	__dyndbg_descs 0 : ALIGN(8) {					\
-+		KEEP(*(__dyndbg_descs))					\
- 	}								\
--	__dyndbg_classes 0 : ALIGN(8) {					\
--		KEEP(*(__dyndbg_classes))				\
-+	__dyndbg_class_maps 0 : ALIGN(8) {				\
-+		KEEP(*(__dyndbg_class_maps))				\
- 	}
- 
- #endif /* __ASM_GENERIC_DYNDBG_LDS_H */
-diff --git a/include/linux/dynamic_debug.h b/include/linux/dynamic_debug.h
-index fe73aa27b350..206337af71e9 100644
---- a/include/linux/dynamic_debug.h
-+++ b/include/linux/dynamic_debug.h
-@@ -128,7 +128,7 @@ struct _ddebug_class_param {
- #define DECLARE_DYNDBG_CLASSMAP(_var, _maptype, _base, ...)		\
- 	static const char *_var##_classnames[] = { __VA_ARGS__ };	\
- 	static struct _ddebug_class_map __aligned(8) __used		\
--		__section("__dyndbg_classes") _var = {			\
-+		__section("__dyndbg_class_maps") _var = {			\
- 		.mod = THIS_MODULE,					\
- 		.mod_name = KBUILD_MODNAME,				\
- 		.base = _base,						\
-@@ -168,7 +168,7 @@ void __dynamic_ibdev_dbg(struct _ddebug *descriptor,
- 
- #define DEFINE_DYNAMIC_DEBUG_METADATA_CLS(name, cls, fmt)	\
- 	static struct _ddebug  __aligned(8)			\
--	__section("__dyndbg") name = {				\
-+	__section("__dyndbg_descs") name = {			\
- 		.modname = KBUILD_MODNAME,			\
- 		.function = __func__,				\
- 		.filename = __FILE__,				\
-diff --git a/kernel/module/main.c b/kernel/module/main.c
-index c2b6e70f2e77..bd7899a91755 100644
---- a/kernel/module/main.c
-+++ b/kernel/module/main.c
-@@ -2774,7 +2774,7 @@ static int find_module_sections(struct module *mod, struct load_info *info)
- 		pr_warn("%s: Ignoring obsolete parameters\n", mod->name);
- 
- #ifdef CONFIG_DYNAMIC_DEBUG_CORE
--	mod->dyndbg_info.descs.start = section_objs(info, "__dyndbg_descriptors",
-+	mod->dyndbg_info.descs.start = section_objs(info, "__dyndbg_descs",
- 						    sizeof(*mod->dyndbg_info.descs.start),
- 						    &mod->dyndbg_info.descs.len);
- 	mod->dyndbg_info.maps.start = section_objs(info, "__dyndbg_class_maps",
-diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
-index b877f4c6d778..ce70cfee50c5 100644
---- a/lib/dynamic_debug.c
-+++ b/lib/dynamic_debug.c
-@@ -40,10 +40,10 @@
- 
- #include <rdma/ib_verbs.h>
- 
--extern struct _ddebug __start___dyndbg[];
--extern struct _ddebug __stop___dyndbg[];
--extern struct _ddebug_class_map __start___dyndbg_classes[];
--extern struct _ddebug_class_map __stop___dyndbg_classes[];
-+extern struct _ddebug __start___dyndbg_descs[];
-+extern struct _ddebug __stop___dyndbg_descs[];
-+extern struct _ddebug_class_map __start___dyndbg_class_maps[];
-+extern struct _ddebug_class_map __stop___dyndbg_class_maps[];
- 
- struct ddebug_table {
- 	struct list_head link;
-@@ -1379,10 +1379,10 @@ static int __init dynamic_debug_init(void)
- 	char *cmdline;
- 
- 	struct _ddebug_info di = {
--		.descs.start = __start___dyndbg,
--		.maps.start  = __start___dyndbg_classes,
--		.descs.len = __stop___dyndbg - __start___dyndbg,
--		.maps.len  = __stop___dyndbg_classes - __start___dyndbg_classes,
-+		.descs.start = __start___dyndbg_descs,
-+		.maps.start  = __start___dyndbg_class_maps,
-+		.descs.len = __stop___dyndbg_descs - __start___dyndbg_descs,
-+		.maps.len  = __stop___dyndbg_class_maps - __start___dyndbg_class_maps,
- 	};
- 
- #ifdef CONFIG_MODULES
-@@ -1393,7 +1393,7 @@ static int __init dynamic_debug_init(void)
- 	}
- #endif /* CONFIG_MODULES */
- 
--	if (&__start___dyndbg == &__stop___dyndbg) {
-+	if (&__start___dyndbg_descs == &__stop___dyndbg_descs) {
- 		if (IS_ENABLED(CONFIG_DYNAMIC_DEBUG)) {
- 			pr_warn("_ddebug table is empty in a CONFIG_DYNAMIC_DEBUG build\n");
- 			return 1;
-@@ -1403,11 +1403,11 @@ static int __init dynamic_debug_init(void)
- 		return 0;
- 	}
- 
--	iter = iter_mod_start = __start___dyndbg;
-+	iter = iter_mod_start = __start___dyndbg_descs;
- 	modname = iter->modname;
- 	i = mod_sites = mod_ct = 0;
- 
--	for (; iter < __stop___dyndbg; iter++, i++, mod_sites++) {
-+	for (; iter < __stop___dyndbg_descs; iter++, i++, mod_sites++) {
- 
- 		if (strcmp(modname, iter->modname)) {
- 			mod_ct++;
-@@ -1431,7 +1431,7 @@ static int __init dynamic_debug_init(void)
- 		goto out_err;
- 
- 	ddebug_init_success = 1;
--	vpr_info("%d prdebugs in %d modules, %d KiB in ddebug tables, %d kiB in __dyndbg section\n",
-+	vpr_info("%d prdebugs in %d modules, %d KiB in ddebug tables, %d kiB in __dyndbg_descs section\n",
- 		 i, mod_ct, (int)((mod_ct * sizeof(struct ddebug_table)) >> 10),
- 		 (int)((i * sizeof(struct _ddebug)) >> 10));
- 
-
--- 
-2.54.0
+Paolo
 
