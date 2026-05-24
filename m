@@ -1,86 +1,133 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from flow-b8-smtp.messagingengine.com (flow-b8-smtp.messagingengine.com [202.12.124.143])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B90512E63C;
-	Sat, 23 May 2026 19:20:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 083EEE555;
+	Sun, 24 May 2026 00:08:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.143
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779564035; cv=none; b=NrEpEZe06ttRJ30tY5IEag4VPtP7O7kG4pJZ0dtI0wou68c9rdd9X9LO1TMoiEmg0n1U0vw32k/CnVPwn7XLUFBzhTh3Bnss5JWVEbGEwEi6G3EBStNIfTL8VjznFAEA9UX8xfWRILvajHP1mP2UVZoYVk220YzT5fdL4rS6RXk=
+	t=1779581298; cv=none; b=S4hBtfvxIZvi+qPzaORzzz5Dkjf1is6iJlBhFL1NiOHzULD5h8QHXVMMmQUstX2ghaz6hw39fGQVx6wT5poZLlojqPx5yMaNZkuVvF9Ht/O6NI1qBuTwjg94WlAqJ+orsdwwWBtsPbKEEt+U3gkkPpbMH0+soBi/NbM70WGA3Ww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779564035; c=relaxed/simple;
-	bh=L5wijmXiW6AEupe1xQBJEFZgUgfFFRvGFSxfq55Sid0=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=dgKNwG8TKFqhJ/Ugu+0uauASwS/RMjq8v8rHKhOTKBcmmLtDZPb35CX1HoqGhYTAkeo+bvwm4HmT6BGsNyj+GZEgSG/hFIr3cjuWoMOhsBhuntxADpWQJuMGqJv07hgAHQGHUb08eyUZdWiblT6qcuakH+JEAyXaiMdz6BD3NB0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hn3DjKCa; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779581298; c=relaxed/simple;
+	bh=ibOXMmyPy1OAlADs6YJhAT6SpQm5cY3R9sMM7pbe7A0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eMe6+63QAEl5gT5goUS+HWTQwYoBC+Cd6yUf6kCSvacIZgifG4GPLUKVeT69W+GZkhhdLyleD3Njk/P4z6UVXKKn1u6WDWp2xmX2xUDDmPrcsSb6HGYab/lzwnsXlrCgxTEMlWKmxKWfLT/0ynaSQIAFX63xHgnX72DUClYcfJQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=Gz2Mjnyy; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=P66W112j; arc=none smtp.client-ip=202.12.124.143
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hn3DjKCa"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 399501F000E9;
-	Sat, 23 May 2026 19:20:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779564034;
-	bh=RFgoPUnzYG3oVGx9TixcDLafMi4cDJnuWYqgJMh9cDM=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=hn3DjKCa/8Z2SIPcZ5S7W3oj1a9kbijqgdm9h8T5sCedGogdLHT2a4lyuYQIKrPwJ
-	 iXMa4zOarmEvV67oZqye/0xLF8AfP8KkdtV9UlMo2YE9uZz+M12pML61CIOB5cb7Su
-	 AwE9BJypYVfN9FkorfUUP+4ZW6ALLz1elJIckV57mWc/kpqNc6DBmTWQUA3Cprh9Gs
-	 Mp6FmGF7QNpO2GrlM6NDelmmcGrO0h5bDk3LDjtxR/srOqyuSKvpBmHtjHsSBVt4zS
-	 s+U9k9dIz3UodDgTbVKvhRIpjYjmPX/PrKsK9IO6HFmN+krwfuXMBq2C/WCASFH85U
-	 OLQo/6y3giHGg==
-Content-Type: multipart/mixed; boundary="===============3388178999859968608=="
+	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="Gz2Mjnyy";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="P66W112j"
+Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
+	by mailflow.stl.internal (Postfix) with ESMTP id 932CD130006C;
+	Sat, 23 May 2026 20:08:13 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-01.internal (MEProxy); Sat, 23 May 2026 20:08:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm2; t=1779581293; x=
+	1779588493; bh=bOW3L8R72QTY5Nd5WS70HCXZ0iclOnm9lq7EioHVhjE=; b=G
+	z2Mjnyy3ZUQAyP+kZpFy4wEXbtv0zxxnMI6FV69F+8GKCYhtKaiDlsMJG7jY9awP
+	odBNaWeImYySll7F/C1d34/zqHhu+qsMrTtmOfbsxdZk+hayWEt6AoBrYTPQH26d
+	aeHldZrblVRhSCJu147s35HSgt7FXr6ofwCOTH0r5Sd2fWvcBSYwbC5sKbZZpowV
+	ekwysBPN/34GBSaXKCFJDSkLrv3Iierrpn8VldIcS5bRmtl85SmCKBI2RG6vbs4O
+	Vn1Y2uSKbdFZ3VIv7kmp/puc9kRBTQZLpCg0x969TJJr/DdmwZ0AAF8EoW2zo3jv
+	ILqCxHY2SrYJbagitsVgw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+	1779581293; x=1779588493; bh=bOW3L8R72QTY5Nd5WS70HCXZ0iclOnm9lq7
+	EioHVhjE=; b=P66W112jOXxtTt1/jIy4NYcASQN652h2lmLJHJxnzyIkd6LSDHS
+	q+9rbiNxvG0zVVExqVdFthlE4GioU4qqIFcKXHiaR/ZevjEkAZruUCSxUTLx9nUS
+	cg7LdRV0lxscEx2CiIFFFjre5ByxgXPsrviUlnoNTeMR35vDjoblNmgyNMoiGl48
+	CLN2lJbQq+P+WvI0Y6u6pKkkvK/W3dOm4rc81VUKX2ExdlVi/+M0r6LBJZRvTzq/
+	PLlHafce62O8Ae7clkqIbWNoHKA6fOdUzOnzQj85aZPxpbVOdw4X1svwMWxcCetE
+	S57k0MBOGDhp7iwPkzeynimC1BgTWRIXdpg==
+X-ME-Sender: <xms:bEESaughE1L8wNAw6-Tboi_OTEbrkiBPfWphC1gVg1RQ0KrCDmoFUw>
+    <xme:bEESatfw7OYcKZuldoKZDe_ZkA6LtlHFpKmNTkcclHawnla2-c5qAYXlfJUrW4bl2
+    DH3PD5U6wdkFSy4Vq9eVmGtMo2rnyzUuOfqrBnmoc4fvupH3E7v704>
+X-ME-Received: <xmr:bEESatM85Kp8Ys-ayUtcBSyAEHje2dFDj7owp50PnBRNkrl7PRqsbpsYMjNjZw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefhedrtddtgdduheeggeeiucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucenucfjughrpeffhffvvefukfhfgggtuggjsehttdertd
+    dttddvnecuhfhrohhmpefmihhrhihlucfuhhhuthhsvghmrghuuceokhhirhhilhhlsehs
+    hhhuthgvmhhovhdrnhgrmhgvqeenucggtffrrghtthgvrhhnpeeiveekgedugeetjefgue
+    egjeejkeetvdeuvdeifffftdfhvedvffeuieegleegvdenucffohhmrghinhepkhgvrhhn
+    vghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgvpdhnsggprhgtphhtthhopeeh
+    tddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheprhhpphhtsehkvghrnhgvlhdroh
+    hrghdprhgtphhtthhopegrkhhpmheslhhinhhugidqfhhouhhnuggrthhiohhnrdhorhhg
+    pdhrtghpthhtohepphgvthgvrhigsehrvgguhhgrthdrtghomhdprhgtphhtthhopegurg
+    hvihgusehkvghrnhgvlhdrohhrghdprhgtphhtthhopehljhhssehkvghrnhgvlhdrohhr
+    ghdprhgtphhtthhopehsuhhrvghnsgesghhoohhglhgvrdgtohhmpdhrtghpthhtohepvh
+    gsrggskhgrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihgrmhdrhhhofihlvght
+    thesohhrrggtlhgvrdgtohhmpdhrtghpthhtohepiihihiesnhhvihguihgrrdgtohhm
+X-ME-Proxy: <xmx:bEESaq0skpAwg1PDaGi8DjW_QLmZtPVZCUawJOQjS0k8IqvCgw_WBA>
+    <xmx:bEESavKPwDlFOe7kGEZEbtj_Uc_XsLeXS-q16eVt-Aw1hmkTnjbnZQ>
+    <xmx:bEESajZrCvLqVpD38kQ94zW1JHxmFlUZkVDJOddnEjnU-6y2pADqmQ>
+    <xmx:bEESagnduI5E4gsBSx_8kraDKWUi1jSseknqfEBu3ikHn6oihztVYw>
+    <xmx:bUESahUyLmGaTkuebIyTdGRJozup0-YDPiaBE8kJpo5RZGkYcDDzF81d>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 23 May 2026 20:08:12 -0400 (EDT)
+Date: Sun, 24 May 2026 01:08:11 +0100
+From: Kiryl Shutsemau <kirill@shutemov.name>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: akpm@linux-foundation.org, peterx@redhat.com, david@kernel.org, 
+	ljs@kernel.org, surenb@google.com, vbabka@kernel.org, Liam.Howlett@oracle.com, 
+	ziy@nvidia.com, corbet@lwn.net, skhan@linuxfoundation.org, seanjc@google.com, 
+	pbonzini@redhat.com, jthoughton@google.com, aarcange@redhat.com, sj@kernel.org, 
+	usama.arif@linux.dev, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, kvm@vger.kernel.org, 
+	kernel-team@meta.com, linux-man@vger.kernel.org, alx@kernel.org
+Subject: Re: [PATCH v3 15/16] userfaultfd.2: Add read-write protect mode
+Message-ID: <ahJBTaobKD9XdT33@thinkstation>
+References: <20260522133857.552279-1-kirill@shutemov.name>
+ <20260522133857.552279-16-kirill@shutemov.name>
+ <ahGDbKr2u6sqoc3f@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <6d68aa2d0611358e17f9c5a01f8b27a1ad0a420a8205c4a4ffded3a15eb92a03@mail.kernel.org>
-In-Reply-To: <20260523183422.124105-1-suchitkarunakaran@gmail.com>
-References: <20260523183422.124105-1-suchitkarunakaran@gmail.com>
-Subject: Re: [PATCH] bpf: replace pop/push emptiness check with bpf_list_empty()
-From: bot+bpf-ci@kernel.org
-To: suchitkarunakaran@gmail.com,andrii@kernel.org,eddyz87@gmail.com,ast@kernel.org,daniel@iogearbox.net,martin.lau@linux.dev,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,shuah@kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,suchitkarunakaran@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Sat, 23 May 2026 19:20:34 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ahGDbKr2u6sqoc3f@kernel.org>
 
---===============3388178999859968608==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Sat, May 23, 2026 at 01:37:32PM +0300, Mike Rapoport wrote:
+> On Fri, May 22, 2026 at 02:38:56PM +0100, Kiryl Shutsemau wrote:
+> > From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
+> > 
+> > Read-write protect mode (UFFDIO_REGISTER_MODE_RWP) is supported starting
+> > from Linux 7.2. It traps every access -- read or write -- to a present
+> > page within a registered range. The matching UAPI consists of:
+> > 
+> >   - UFFDIO_REGISTER_MODE_RWP   registration-mode bit
+> >   - UFFD_FEATURE_RWP           capability bit
+> >   - UFFD_FEATURE_RWP_ASYNC     async (in-kernel) fault resolution
+> >   - UFFDIO_RWPROTECT           install / remove RWP on a range
+> >   - UFFDIO_SET_MODE            runtime sync/async toggle
+> >   - UFFD_PAGEFAULT_FLAG_RWP    new pagefault.flags bit
+> > 
+> > Document the new registration-mode entry, the "Userfaultfd read-write
+> > protect mode" section, the new pagefault flag, and a VERSIONS line.
+> > 
+> > Signed-off-by: Kiryl Shutsemau <kas@kernel.org>
+> > ---
+> >  man2/userfaultfd.2 | 147 ++++++++++++++++++++++++++++++++++++++++++++-
+> >  1 file changed, 146 insertions(+), 1 deletion(-)
+> 
+> This doesn't apply to the current man-pages tree
+> https://git.kernel.org/pub/scm/docs/man-pages/man-pages.git
+> 
+> and reading raw groff hurts eyes too much.
+> 
+> What linux-man tree did you use to generate those?
 
-> diff --git a/tools/testing/selftests/bpf/progs/bpf_qdisc_fq.c b/tools/testing/selftests/bpf/progs/bpf_qdisc_fq.c
-> index 1a3233a275c7..3b05ac1d7c77 100644
-> --- a/tools/testing/selftests/bpf/progs/bpf_qdisc_fq.c
-> +++ b/tools/testing/selftests/bpf/progs/bpf_qdisc_fq.c
-> @@ -197,17 +197,13 @@ static bool
->  fq_flows_is_empty(struct bpf_list_head *head, struct bpf_spin_lock *lock)
->  {
->  	struct bpf_list_node *node;
-                              ^^^^
+Ughh.. Used old github mirror. Will rebase.
 
-The variable 'node' is no longer used after removing the pop/push logic.
-Will this trigger an unused-variable compiler warning and break the selftests
-build?
-
->  +	bool empty;
->
->  	bpf_spin_lock(lock);
-> -	node = bpf_list_pop_front(head);
-> -	if (node) {
-> -		bpf_list_push_front(head, node);
-> -		bpf_spin_unlock(lock);
-> -		return false;
-> -	}
-> +	empty = bpf_list_empty(head);
->  	bpf_spin_unlock(lock);
->
-> -	return true;
-> +	return empty;
->  }
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26340856238
---===============3388178999859968608==--
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
