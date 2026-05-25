@@ -1,74 +1,74 @@
 Received: from flow-b8-smtp.messagingengine.com (flow-b8-smtp.messagingengine.com [202.12.124.143])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65B993ED3B9;
-	Mon, 25 May 2026 15:07:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8C5C384CCA;
+	Mon, 25 May 2026 15:18:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.143
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779721636; cv=none; b=fSJ9zg5e0j0faMptmboWmbYry/z3dgUiAMk3ZOcTYzS0hsG+TUXeUfG/685oZkoiNYFrKFvskNIBdj672so/Z958l3feGZYoTFrq5ziapdD8o53nnv+dKHyygzw8sMasae1T7rKawOp+ThJDKU8qUlbGclZQEBTZpESFJDRp4VE=
+	t=1779722292; cv=none; b=d2F/X5f6LreODMmtLX0Uz3uqattdHve+2Tq94USediHJ4YyRaejf/iRjpP8v/mACJqGx07pjE66dWaqggtwJef+2d8Wlr/YmnyMbDKzu80zt32ipAH8JtxD2SvmMWOx3S5dqwo4tOVryb598EYhl/UFxKI88VuixmM1GFz4RfFw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779721636; c=relaxed/simple;
-	bh=tbxxoWBfySzcaBkJQQCvHMBKjn5kIPlr+f82cl6fm/U=;
+	s=arc-20240116; t=1779722292; c=relaxed/simple;
+	bh=4QkRt+iKr11Jp/pucEfsueGPTjgQKpWewnCGgXJfwGE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RZ8JhQ8eiUAoh77KbwpInRf8sz13MGQhCzcvPHk1Ek2SOgj3Hpq/Lsalht1o2r7nJ5GVwEnbYQZ5ojIPu+oVDkPkn3MUUq/eJWaHpDd2O+ewrY6HWvsTXF/QTW6Oyh9XnIPWL4PtwaDkvgIZg9Ihl17JSq6K2hAEg//czCDsazA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=WpI2EQqD; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=BXxFzs2z; arc=none smtp.client-ip=202.12.124.143
+	 Content-Type:Content-Disposition:In-Reply-To; b=R/LcfckSnr2VroLW12r3vASgQf8MwafrQ/qP8zbKx7VXJo1qr0ZtgDOb0LgnvUZ/0vFdWaxOe2jr2w62BbwYD/D3vUOfDf4jc4fU9K4FazmHBMVt1zgktC/IlZ2UYgVw4pOOi8daxq6AeTkvRyOQhVOEbeyuT4pECAGMDVppZVM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=ZgwucYs3; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=pe7X97JB; arc=none smtp.client-ip=202.12.124.143
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="WpI2EQqD";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="BXxFzs2z"
-Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
-	by mailflow.stl.internal (Postfix) with ESMTP id 9CBC7130008E;
-	Mon, 25 May 2026 11:07:13 -0400 (EDT)
+	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="ZgwucYs3";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="pe7X97JB"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailflow.stl.internal (Postfix) with ESMTP id C4F2D130008E;
+	Mon, 25 May 2026 11:18:08 -0400 (EDT)
 Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-05.internal (MEProxy); Mon, 25 May 2026 11:07:14 -0400
+  by phl-compute-04.internal (MEProxy); Mon, 25 May 2026 11:18:10 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
 	 h=cc:cc:content-transfer-encoding:content-type:content-type
 	:date:date:from:from:in-reply-to:in-reply-to:message-id
 	:mime-version:references:reply-to:subject:subject:to:to; s=fm2;
-	 t=1779721633; x=1779728833; bh=uAidWM6Doq45YyDIJ9vNykdRKZ6pZRCu
-	WvsWl5/kGY0=; b=WpI2EQqD3KdHEhNORbaivt4Q+1uoPK3Ptik61wbnki/TNXgk
-	DPsueiRGhrIrrTohPXSGRvR+9ljCVGqcuKveph4iozn63Z9pVkUprdRrx4VsbTJN
-	sD0h9rWO0MbzaejG8F3JE/HJTQsLE4/7hhEnOI2d+NuKKfvqZqzlz2+ny/IIoHN7
-	x1HMCoXMW8SXnaa5KObbhLpRAIbry6PwLIUSsq613F2hHQ/LWL45PuC5NFKuCgim
-	iV/XNVZsm6uDAIZqdXifBthHagdNTLoS9yL4jFjXZT7Kj5H9tygGiXyGCMZ/DujR
-	KwsT9h+O8nrJifDDxrD5xlwjFEUAHOcYp//Pgw==
+	 t=1779722288; x=1779729488; bh=XNbeMvEzyPh7sPx47CH3WFhZNyDg4LG8
+	isuSFxUw54Y=; b=ZgwucYs3+R/6nBszPKkbyaaLOw1OxtR1O2hV7axbTFh568Sz
+	yqsraJGeP9Mh55L1umBu45pVfGjtQ/yY2072ude/j+VUiLp0wKnBKnBzffmQTJjW
+	/o6y8NhmakYY7QpVtA3+0UuERBM+v3/1jaJZBBFSMC1KzrWelj74dRlwGcnhe+2Q
+	GN2vBFdJcoZAEObvxQ0cpPwUMtznPUF15RUOW6bBsvNRbXOw3NWrGeu1rUdtfPCP
+	KRtZ7RMKVOisgrU2X5VinS6AX0Bw9rksA6Pq35tp4IqGtwAUEZ8SXNVzxRdItopa
+	fE1xING4NpeXknYeXNIL73nPKFDhfUVaaBm1PA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1779721633; x=
-	1779728833; bh=uAidWM6Doq45YyDIJ9vNykdRKZ6pZRCuWvsWl5/kGY0=; b=B
-	XxFzs2zLaoaWnVdwDc5fsZINnBlxl9Kc1W9cjcuydSQHHCYnY8i02gLLEw/mDIVO
-	gwGVCvGT/Z1AtMc2l+ivcyFNoaVaqRYlK9WuuvdcpotFxAW4aK4EYGUcp18QQ9yY
-	PIMHcALFgGmOutJW2Ik5DY0NKpvu6LtUEglSRq2L86+1yu8F1E0XwMomXdC77nid
-	Zw/3JJvZ88D1u6jK/DcC5A2fTU/19CEV9utQBsRxCTTUIvXZDoOrU0vAR90WUuXs
-	2nGlcPUYsiFnJNJijxDUPu5V3er1y/9GGvtovctQkkv3JHDcmxpcSPZXZKVuhwld
-	s8VRtHnzUJm5SqOWXB19Q==
-X-ME-Sender: <xms:oWUUaiiJg3wedLIBJXxAg8dtSyayUwOUW_8zr4lc-MuxTXwLniymLA>
-    <xme:oWUUas-bUvNQlkfGct1kYO5OibY67aMblHq_t3LUn6SV5Uoh0oOoSSGcm2l9UIoxd
-    vCgrAU_RhpmRxFN62J0kem0NvYBThGyjXBkutCx-8FE0nRN-wPofQ>
-X-ME-Received: <xmr:oWUUar9a2w79LoCtksjcgi9ffwFzqqLtBqEeWKkc_IClW0Ss1J6XdYQZQclbDA>
-X-ME-Proxy-Cause: dmFkZTGnpAt4CiHCyPTK6atUDW6Ap5BN6576PdSsNRxIfR9OLkTNxdWc/36L65rTm4FQQi
-    AlsasK3LZv8na3UgGW8gg+TKNFQHq5YhdDER8acTyNZhfVi13mzWReyF+yKJtF52wOwlcm
-    1OaIHPF6Vc8i/O8qHpyiq9/tiViU2krgg16edKKT1FifhzD7dn1Ea6FZ/NcGPXgZH4hK2s
-    LcU0EVoGSrwDAXL/qTsfsDrj1g3mG8lUZWNVzcAFv90d+1/Dqcy21YzJvJbC2EQ8/5uMXW
-    CaM0y6ulu+VhZhvFdbYag20GIGuRYzZYwoqZ1kNudYxpTbjZkExfOtGaMgWuOmTuduAUZ1
-    8Q9cWcnq/uMqXiPXUZNZtjnKDGHkyXgwEov6X/j58Qldv0ZjGZB/6StaUxJZNYMA+32uMg
-    LEYUeK5ONOQvE5PcPpNclWQuLC3uX0oesJoek11zME/1yNV+7cADt94x5zQAxNZS7VQXrh
-    iyyI8F5aaIJEYnzHQCOp3Ps9vdTnKrmRNd5A3G9dyO0AUHDud8lgs4mOcJmOCHRFoWK0AK
-    dvxRUgktYCOUK/AUc9dvFnuGx5Xx6srvn5ho9JpG2k7GwIkPYZlPBLahxnOH46AxT9hw1o
-    mDx1bLFoFkKkl3EWDmKqocV+P5M8/vNePvuUNUJdZGTiTKvvCCK3ruGT0OKQ
-X-ME-Proxy: <xmx:oWUUamu8CIfKsjHUZhft3KQ1DObnoH6vUzLm7d4AMZmQg8PBDPjT6g>
-    <xmx:oWUUapI7AH6rPVndOZ3BKhirUp4AP-_QTJDU2IxJIj9KR77g7ieh4Q>
-    <xmx:oWUUap1wxdD8oqLriycEAnz3rkbxxjCeIgqw4KLhZ_T_OHBWgBBlSA>
-    <xmx:oWUUapnjankROHxLh3VsyKE53JR30E7C0_TwA-QReq2AXlWARDr-qw>
-    <xmx:oWUUao2Q0gF820oz_MoBAJZByMlpe7MmUDblNIPfiXqgwaf_5NKuotSU>
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1779722288; x=
+	1779729488; bh=XNbeMvEzyPh7sPx47CH3WFhZNyDg4LG8isuSFxUw54Y=; b=p
+	e7X97JBh31Sh07ScqRqkEf2YOrHHOUgWC5br+p5O05641zAF/bw1oOiSl51scTkL
+	TTBmGNhHqGdy1A4ZQphhKCWRfADUQ+t/4v2R/7gCyxE8VyFGZqB0BFfxYiMZECt5
+	GrrCcw+pm3XCSta6tGdeiTs3s9gf3/hHzzWt+SNV6NpvKTfyuiGTduzK9uFAXt3U
+	b4qeVuqbEhqzu1xePnxNMt8BNrrh90Z5XxK7fgL1BZ1WU0+Hni8lr9GeW3viOxc1
+	33a5yXoApOcudml5GCuNo7lCtONMBZT5XBC8Ium0/KFoFE6btbuQ20GO+4kbrrMD
+	ncG4YKOPipnNo3bmpJtjA==
+X-ME-Sender: <xms:MGgUajFAUiJsfhbMD8cHUarZn4-DaghF1cg8HubDqerjMlMmmi53vA>
+    <xme:MGgUaovjOjPg9H37IzVGtvI4xGytU93RUdUMWdKYS2mPACUQWau6wj9cV7-ZDTeZI
+    AJkFJg2Yw9BVgjFiCOO2xbNDWiiCX9AFjI0jxlnxjn67DMoSi92tQ>
+X-ME-Received: <xmr:MGgUavYJ3acQQt61YkqqwotH0qSNFWkOLpKjD2k7SjiKN9gyPnPRBQWuhJJJoA>
+X-ME-Proxy-Cause: dmFkZTEQSsA+CxVWFlgQbg+iDCxnTUddRJf1SNUTKP4UbEAr+U7uFdm1L5+NkcBqlGZsgL
+    pWKCoEhxBJTNaYSbHSylQV/0lm3jZelxuBNryUEz7SwVEtnBFzslpWQY8GJQqg2vsw0Zz0
+    QbZjSZzpKFySn6GqmOLPPlHhCcbMIJ4g8t5wjZhUIw3xERy2MPRsEDG+tKN/NHyTPLO7qG
+    MNuhuxsRfncOHiTNXvffzzZm0c3vhnS8L84qdlFXa8gN4MF4U+SuBZ8q2TZuKc3/FG/FpB
+    PVSHHPoh/Er5NdABQbI2y8OVtNjciY+F6ctFbe2E3mJ1Jli9xJbNK2RTsh9eF1N7wmLMer
+    +EdWIphgvjcbs5d2AJ59P1kblBevKKM+MdC/ufRfH/YKB+uf3079AfvZnMPv9gPK+9Ntfn
+    PpICwq40BKLb/d8mAa73XLYvg6gtbWHshle5RMxYTC8df9j0imwSTBIiiZNqtI+TjNBtKT
+    ZQIQqfOSRANa7gCD8G8tiOC6+LZ7tar2QHfd/1bAJDIQ5U/MJrqJP2t9drRITdX5TOGnp0
+    moO9d+bPUiX8QPtzfu+FHjuFZlLwUePpENrh+Up+d4tRLtnf7kdtSthSxLCCd1z+swEhAZ
+    ZOGkGRExuVavjoQAIPsmxZtMQE+r1r2JvHWnywL01pE1anfn209CZp5q3vKw
+X-ME-Proxy: <xmx:MGgUalpLt6qUWtQKAom-JJcSBYEe2hkrM3mIBsKUp29hEwzNSK0J6A>
+    <xmx:MGgUampwvba2qMEc1z2qQ2iA9ZydNO8pumW3dVf9aCb-ZN0PGE_usw>
+    <xmx:MGgUaiX5uzhzrMtUHH5JFosvi4v9Lml4r-i00G28693pIcTmAs2S-g>
+    <xmx:MGgUajQ6izxbSlGL9PDntG4Qj4XsHDLOT-cm5F5mV6PSR5rDB5YKig>
+    <xmx:MGgUamW0W6QRvvpVR2BPEw06UwSETR2oy1kuoY2zLWaGSnhCceUiuVyP>
 Feedback-ID: ie3994620:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 25 May 2026 11:07:12 -0400 (EDT)
-Date: Mon, 25 May 2026 16:07:11 +0100
+ 25 May 2026 11:18:07 -0400 (EDT)
+Date: Mon, 25 May 2026 16:18:06 +0100
 From: Kiryl Shutsemau <kirill@shutemov.name>
 To: sashiko-reviews@lists.linux.dev
 Cc: kvm@vger.kernel.org, akpm@linux-foundation.org, rppt@kernel.org, 
@@ -78,10 +78,11 @@ Cc: kvm@vger.kernel.org, akpm@linux-foundation.org, rppt@kernel.org,
 	aarcange@redhat.com, sj@kernel.org, usama.arif@linux.dev, linux-mm@kvack.org, 
 	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
 	kernel-team@meta.com
-Subject: Re: [PATCH v4 06/14] mm: preserve RWP marker across PTE rewrites
-Message-ID: <ahRk5tphnTx_CVnA@thinkstation>
-References: <20260525113737.1942478-7-kas@kernel.org>
- <20260525120819.C18561F000E9@smtp.kernel.org>
+Subject: Re: [PATCH v4 07/14] mm: handle VM_UFFD_RWP in khugepaged, rmap, and
+ GUP
+Message-ID: <ahRmty2nebDOvgpt@thinkstation>
+References: <20260525113737.1942478-8-kas@kernel.org>
+ <20260525131923.11A1B1F000E9@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -91,51 +92,23 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260525120819.C18561F000E9@smtp.kernel.org>
+In-Reply-To: <20260525131923.11A1B1F000E9@smtp.kernel.org>
 
-On Mon, May 25, 2026 at 12:08:19PM +0000, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 3 potential issue(s) to consider:
-> 
-> New issues:
-> - [Critical] Unconditional normalization of all PTEs to
-> vma->vm_page_prot destroys granular protections and creates invalid
-> clean+writable PTEs for shared mappings.
+On Mon, May 25, 2026 at 01:19:22PM +0000, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [High] GUP enters an infinite loop when using FOLL_FORCE on an
+> inaccessible (PROT_NONE) VMA that has VM_UFFD_RWP enabled.
 
-Confirmed for the NUMA-balancing PROT_NONE case: a non-RWP PROT_NONE PTE
-in the src VMA gets its hint stripped on the fork-disarm rewrite. Will
-fix in v5 by gating on pte_uffd(pte), so only RWP-armed entries (the
-ones that actually carry the marker) get the protection restored:
+Confirmed. RWP resolution restores vm_page_prot, which is PAGE_NONE on
+a PROT_NONE VMA -- the page never becomes accessible and FOLL_FORCE
+loops. Will fix in v5 by rejecting the registration up front in
+vma_can_userfault():
 
-      -       if (userfaultfd_rwp(src_vma))
-      +       if (userfaultfd_rwp(src_vma) && pte_uffd(pte))
-                      pte = pte_modify(pte, dst_vma->vm_page_prot);
-
-Same gate for the sibling sites in copy_huge_pmd(), move_ptes() and
-copy_hugetlb_page_range().
-
-The MAP_SHARED writenotify subclaim doesn't materialise: writenotify
-is baked into vm_page_prot via vma_set_page_prot(), so pte_modify(pte,
-vm_page_prot) preserves the read-only bit when needed.
-
-> - [High] Applying pte_mkwrite() to a PAGE_NONE PTE breaks UFFD RWP
-> trap semantics and creates accessible Write-Only PTEs.
-
-After pte_modify(pte, PAGE_NONE), can_change_pte_writable() calls
-maybe_change_pte_writable() which checks pte_protnone() and returns
-false, skipping pte_mkwrite().
-
-> Pre-existing issues:
-> - [High] Failure to write-protect the destination PTE in
-> copy_present_page() completely bypasses UFFD_WP tracking for pinned
-> pages.
-
-Confirmed and pre-existing -- copy_present_page() builds the dest PTE
-with maybe_mkwrite(pte_mkdirty(pte), dst_vma) and only adds the UFFD
-bit, never wrprotects. Will address in a separate fix after this
-series.
+      +       if ((vm_flags & VM_UFFD_RWP) && !vma_is_accessible(vma))
+      +               return false;
 
 > -- 
-> Sashiko AI review · https://sashiko.dev/#/patchset/20260525113737.1942478-1-kas@kernel.org?part=6
+> Sashiko AI review · https://sashiko.dev/#/patchset/20260525113737.1942478-1-kas@kernel.org?part=7
 
 -- 
   Kiryl Shutsemau / Kirill A. Shutemov
