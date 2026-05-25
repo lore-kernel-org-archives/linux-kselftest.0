@@ -1,183 +1,66 @@
-Received: from mail-dl1-f53.google.com (mail-dl1-f53.google.com [74.125.82.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D08FA2DEA64
-	for <linux-kselftest@vger.kernel.org>; Mon, 25 May 2026 18:01:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CEB833A9C3;
+	Mon, 25 May 2026 18:06:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779732106; cv=none; b=kgN1+SMD6dTK0teOYLqj+p2nUxkamzV26ojDG3aWgurDCpUlk5bASuRleVp1mb/EsXJACUXfetmYtik1PojLL22/+G6nehuRfLw7wFD0SRGydSobg33Oke5UiSx28VUGryLOaClR2J/kdEY6sDhIS4PcVxeUpvAaDO9ouHm1ifE=
+	t=1779732376; cv=none; b=qt14K9VQzAPMKDGS1x8UcFvnNvQ5DG0GC+TsOQBTrqNzSlhtyNxvLq97p3AhW4DK60jBlLqT+JiF2Rpole8pQOCY363aPBVzKqUgkGUMxaRBCmBI2gIWRN8Lx0IOg1dhi5eFlEEh0ivTyraBuA+tKaenydJq6NNd3iqeg2RnLps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779732106; c=relaxed/simple;
-	bh=uQDtGl1GZehCkeUJvy50GOF0qMnGqzE+lOEJiutJFMI=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=Bta2tjJ1B3ud/yHlb4BnqC2KRmrlhk9oRPmVfgLt3kYdZXzpw7/Nfz1uK197BybO7tayVUHwihT2EgSefCiAjwGgQ6uoSTAh28xVGI+Hr/rTR06F96mTsDWG5KiAs38j6MkGYjjkp/gEoBl/uuTsnU9hw9CZGCZPsQtOGyeuVAs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=E5UBQEQA; arc=none smtp.client-ip=74.125.82.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1779732376; c=relaxed/simple;
+	bh=VbZtE92DEJPaUYzv2cVoHkrnhRBWIh/74nXctkLSO7w=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=YnpEN9Ovz5Qkl5QbfXDxbQTbcCUKvM7n4ZcasMLRrFgXnmbUJHb3LZg3WFGOs/68WDIf97gQHRjszoXT3cglMdvYoS8702jsU49iEKvktEHsCVTa9PHkgbR1Z5yWKwb2B+c4gwfObGq75WOaDve3DJqwGPHe0k36+fBrcrgxHEA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AAgI907/; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="E5UBQEQA"
-Received: by mail-dl1-f53.google.com with SMTP id a92af1059eb24-1329fc4bf77so7608123c88.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 25 May 2026 11:01:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1779732104; x=1780336904; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fzor4pOAcoXrq0r/dQWN3ieh5O1PmvSJQr5rj+ToVL8=;
-        b=E5UBQEQAnOUrlMiUQguDe1X4CPzHyqtORL9Him/enfTHhgntKUJq8sb++nZzg5UVH8
-         Cs6koqmuY+OjrtnYp5zwe5qPrGNPJX6OHnGK/ovag6PakFRACMjqo8mqAhmXbxJCGE8p
-         9cGsPqMxKL5NApvUdNIV1jd92SLxwOpCz/W32Wc4iy6ncJL2JZQTe+D9m7boXFV/GABY
-         7+Q0sR28LVPOmFt2TxxPQnUFeWJ1oyhOmKi92Z3joVWWmrXp256ZGgaNsUPixq3gVnmT
-         mUxC8KU93bv3Tz2H3/7gM5rt4tTpbkBDbChuqf+bB4R0ZKqJofgD473Z8m5tvID/Las6
-         2FqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779732104; x=1780336904;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fzor4pOAcoXrq0r/dQWN3ieh5O1PmvSJQr5rj+ToVL8=;
-        b=e0uYor882C2ISOCsgVsiHOB+YqFngCnbxmu6It0e+H1PFQ/hRg74qhDwBa2f6o9WKb
-         zeXyw/BcrRANmSpSAlrLiiq9VNhFSE/tklDXdF0W0OC1diMGGbBm9tCl5K2SX5ZnofV6
-         mgAwV1fI+VOz3GPKxNHFCcsQw9v1x7JjFAx98s+bIr3DlkQFxQRWIvS0ChTISHEbshlx
-         ssL0CDnpvT4HjUTtbf64YXoEsscVbek76prE4whX85Sxoo1AauX1DRbmGlpbYfev11mY
-         W10/W7qVbtwiSm0nrqGkNXwxU8waBHCJZlhhp+maIFo/7QZfRqpywAW9A1AR2uaYV6d1
-         /G3Q==
-X-Forwarded-Encrypted: i=1; AFNElJ+Er5EISthus24r93r8g1wm2qFAcavZDOEZ64vRfx5BNwIrKhRz0CYwjzcdemefTMdcWaNbo0+QRySoITqgyGI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwoD5O3k9D5ZwwygITH+2dRbO8SbO9wgSzoP2rygxjNCUDllFPM
-	zSrUUL1z6cXj9UsAf1H3UBa9FmdAcxgAf5tyjyBLkXLlVn24x4tGH+AZV/YVried7aE=
-X-Gm-Gg: Acq92OEwp+C7TNNoVJGbpxgiLuU8+2TJP8Uoxe6anHr/C/x0uMqys2DtfX/k25AwNqG
-	E+NwtaSIzAQ7TpRuoncQwnlDPpYORST+oowWEYiyhJImyX5+DPmZXJsM1lebnUdK1vbMHcWWULg
-	+EvOepWzsdHPeMUVdEnyZcIou8NR2NAblNfD0U5x2yP4HDRIICgx8CsIUfiVQ0yIYpm6VrpWcg7
-	70Y4eyHFwXPAbIFZpDgQQMUQk/JHUjKhgKssHqSvmcxEDSK5/EumSP17O2YX2yBTPa1nKyGwVUD
-	5heqHF1BEiIRDymsVrKnI8yHcfnHF3f9w/KBaBgp1n27phSP+bzQuzotVHEMogYyiKnFYm18YED
-	jL9XTKWbhe8Qyj9r7C67No+3Hq7jEoNOZbhoX/tElbl1Fj1SceWGjQzGSEeqATIrPSSNRtAOxV5
-	R6xr8=
-X-Received: by 2002:a05:7022:ef01:b0:12c:8f92:c6ba with SMTP id a92af1059eb24-1365fc7b48cmr5378838c88.34.1779732103455;
-        Mon, 25 May 2026 11:01:43 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:600::cc2])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1366a2e634csm7642048c88.2.2026.05.25.11.01.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 May 2026 11:01:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AAgI907/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7586C1F000E9;
+	Mon, 25 May 2026 18:06:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779732375;
+	bh=VbZtE92DEJPaUYzv2cVoHkrnhRBWIh/74nXctkLSO7w=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=AAgI907/ix46+f/o+rYSUASNl8Yo8MzXYWgMHOPxVQjSOz/9rNLLJAMGiSsZRy9kR
+	 24OkeO/nW7oiHdYKn9CKwPVryjJZPiCbXB9uj46v8sPOIJcH0o4USw1R4bcQr3SMb2
+	 qRsI8szcQeqKDxz12lDgwHcp/Sx1ai2OIteUhNaDJ9EwOVOZ3Ub8KR/kOZ2qPxujJs
+	 TuBA3gQvTjWdMif4+gt+B8Gef+ExtXfg9DUinsd0gwRyk+Z+ooifQywadijwrh1aqM
+	 +9Gich1xLUVPf5UeKH82KDuYcvP11RtvdzBd5yE18jMt6JkAcwkenpmwiNVUQKcNSc
+	 Oyp1w5SFyzYNA==
+Date: Mon, 25 May 2026 11:06:13 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+Cc: Alexander Duyck <alexanderduyck@fb.com>, kernel-team@meta.com, Andrew
+ Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Eric
+ Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan
+ <shuah@kernel.org>, netdev@vger.kernel.org, Jacob Keller
+ <jacob.e.keller@intel.com>, Mohsin Bashir <mohsin.bashr@gmail.com>, "Mike
+ Marciniszyn (Meta)" <mike.marciniszyn@gmail.com>, Pavel Begunkov
+ <asml.silence@gmail.com>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next 0/3] fbnic: Support larger io_uring zcrx
+ buffers
+Message-ID: <20260525110613.4a1641e8@kernel.org>
+In-Reply-To: <CAJ+HfNjE8e1Lj1yDEPYXk_KPspjN166rDbHon+zwiJb1rPqSrA@mail.gmail.com>
+References: <20260522113225.241337-1-bjorn@kernel.org>
+	<20260522070515.044d7d97@kernel.org>
+	<CAJ+HfNjE8e1Lj1yDEPYXk_KPspjN166rDbHon+zwiJb1rPqSrA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date: Mon, 25 May 2026 14:01:33 -0400
-Message-Id: <DIRYDGLWJJWI.1PACVYJDRYBJ2@etsalapatis.com>
-Subject: Re: [PATCH RFC bpf-next 3/8] bpf: add BPF_JIT_KASAN for KASAN
- instrumentation of JITed programs
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Alexei Starovoitov"
- <alexei.starovoitov@gmail.com>
-Cc: "Andrey Konovalov" <andreyknvl@gmail.com>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
- Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>,
- "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "John Fastabend"
- <john.fastabend@gmail.com>, "David S. Miller" <davem@davemloft.net>, "David
- Ahern" <dsahern@kernel.org>, "Thomas Gleixner" <tglx@kernel.org>, "Ingo
- Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>, "Dave Hansen"
- <dave.hansen@linux.intel.com>, "X86 ML" <x86@kernel.org>, "H. Peter Anvin"
- <hpa@zytor.com>, "Shuah Khan" <shuah@kernel.org>, "Maxime Coquelin"
- <mcoquelin.stm32@gmail.com>, "Alexandre Torgue"
- <alexandre.torgue@foss.st.com>, "Andrey Ryabinin" <ryabinin.a.a@gmail.com>,
- "Alexander Potapenko" <glider@google.com>, "Dmitry Vyukov"
- <dvyukov@google.com>, "Vincenzo Frascino" <vincenzo.frascino@arm.com>,
- "Andrew Morton" <akpm@linux-foundation.org>, <ebpf@linuxfoundation.org>,
- "Bastien Curutchet" <bastien.curutchet@bootlin.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, "Xu Kuohai" <xukuohai@huawei.com>, "bpf"
- <bpf@vger.kernel.org>, "LKML" <linux-kernel@vger.kernel.org>, "Network
- Development" <netdev@vger.kernel.org>, "open list:KERNEL SELFTEST
- FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- <linux-stm32@st-md-mailman.stormreply.com>, "linux-arm-kernel"
- <linux-arm-kernel@lists.infradead.org>, "kasan-dev"
- <kasan-dev@googlegroups.com>, "linux-mm" <linux-mm@kvack.org>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260413-kasan-v1-0-1a5831230821@bootlin.com>
- <20260413-kasan-v1-3-1a5831230821@bootlin.com>
- <CA+fCnZf-o8tiv_tX9YB5eBUGx17OpztKZsEB6Awjw3WAqBAiUw@mail.gmail.com>
- <DHSWSSYRPUVC.2W3G3OU27L3HG@bootlin.com>
- <CAADnVQLj=UosnsC-4V2+mN92Fe0-kW++U+m-O9c93kk6BwiXgw@mail.gmail.com>
- <DIP9O3BEWG3C.2BAHKYUIA4H4E@bootlin.com>
- <DIPDH3PCUDDG.EGYL0SYSG1IO@etsalapatis.com>
- <DIRMYUXFYOVY.1LQV9E3OHGGBK@bootlin.com>
-In-Reply-To: <DIRMYUXFYOVY.1LQV9E3OHGGBK@bootlin.com>
+Content-Transfer-Encoding: quoted-printable
 
-On Mon May 25, 2026 at 5:05 AM EDT, Alexis Lothor=C3=A9 wrote:
-> On Fri May 22, 2026 at 7:13 PM CEST, Emil Tsalapatis wrote:
->> On Fri May 22, 2026 at 10:14 AM EDT, Alexis Lothor=C3=A9 wrote:
->>> On Tue Apr 14, 2026 at 4:38 PM CEST, Alexei Starovoitov wrote:
->>>> On Tue, Apr 14, 2026 at 6:24=E2=80=AFAM Alexis Lothor=C3=A9
->>>> <alexis.lothore@bootlin.com> wrote:
->>>>>
->>>>> On Tue Apr 14, 2026 at 12:20 AM CEST, Andrey Konovalov wrote:
->>>>> > On Mon, Apr 13, 2026 at 8:29=E2=80=AFPM Alexis Lothor=C3=A9 (eBPF F=
-oundation)
->>>>> > <alexis.lothore@bootlin.com> wrote:
->>>
->>> [...]
->>>
->>>>> >> +config BPF_JIT_KASAN
->>>>> >> +       bool
->>>>> >> +       depends on HAVE_EBPF_JIT_KASAN
->>>>> >> +       default y if BPF_JIT && KASAN_GENERIC
->>>>> >
->>>>> > Should this be "depends on KASAN && KASAN_GENERIC"?
->>>>>
->>>>> Meaning, making it an explicit user-selectable option ?
->>>>>
->>>>> If so, the current design choice is voluntary and based on the feedba=
-ck
->>>>> received on the original RFC, where I have been suggested to
->>>>> automatically enable the KASAN instrumentation in BPF programs if KAS=
-AN
->>>>> support is enabled in the kernel ([1]). But if a user-selectable togg=
-le
->>>>> is eventually a better solution, I'm fine with changing it.
->>>>
->>>> Let's not add more config knobs.
->>>> Even this patch looks redundant.
->>>> Inside JIT do instrumentation when KASAN_GENERIC is set.
->>>
->>> (with quite some delay) I think it would be better to keep this new
->>> BPF_JIT_KASAN, because aside from the possibility to use it in
->>> bpf_jit_comp.c, it allows to update tests affected by KASAN
->>> instrumentation in a nicer way. For example, the test_loader subtests
->>> that monitor JITted instructions are confused by KASAN. I can either
->>> skip them or make them smarter when KASAN is enabled for BPF, but in
->>> both cases, it would be nicer to just adapt the behavior based on a
->>> generic CONFIG_BPF_JIT_KASAN, rather than sprinkling some "if
->>> jit_enabled AND CONFIG_KASAN_GENERIC AND ARCH_X86" in selftests. That
->>> still does not make it a config knob, that just creates an internal
->>> Kconfig option that is automatically turned on when KASAN and JIT are
->>> enabled at build time.
->>
->> Having a togglable config knob gives us the option to set up KASAN for
->> the kernel but not for BPF, and I don't see why we'd want that. Imo we a=
-re
->> already paying the cost of KASAN for the rest of the kernel, there is no
->> incentive to not run it for the BPF JIT. Having to eat the complexity co=
-st
->> in the selftests seems reasonable if the alternative means a cleaner
->> interface for the user (preventing them from choosing an unreasonable
->> combination of options).
->
-> Again, this does not expose a togglable knob, this is a purely internal
-> kconfig, automatically enabled if CONFIG_KASAN_GENERIC is set and if the
-> architecture-specific Kconfig defines HAVE_EBPF_JIT_KASAN (since we want
-> it for x86 only), and there would be no way to enable KASAN for kernel
-> only and not for BPF, or the other way around. What I am proposing is
-> just an internal, architecture-agnostice kconfig to avoid conditioning
-> some selftests to any architecture.=20
+On Mon, 25 May 2026 13:08:59 +0200 Bj=C3=B6rn T=C3=B6pel wrote:
+> The driver relies on the generic XDP frag coalescing
+> (xdp_buff_add_frag()). So, adjacent 4K completions are extended into
+> the same frag. IOW, GRO should see coalesced skb frab, rather than one
+> graf per HW BDQ frag
 
-Makes sense, in this case this seems reasonable.
-
->
-> Alexis
-
+=F0=9F=99=82=E2=80=8D=E2=86=94=EF=B8=8F=EF=B8=8F I'm taking about coalescin=
+g across packets.
+You should enable RSS-hash gated payload packing, and then we should be
+able to combine frags from multiple packets. But only GRO can do that
+safely.
