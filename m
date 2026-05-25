@@ -1,151 +1,122 @@
-Received: from DM5PR21CU001.outbound.protection.outlook.com (mail-centralusazon11011004.outbound.protection.outlook.com [52.101.62.4])
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13EB0305684;
-	Mon, 25 May 2026 18:42:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.62.4
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779734525; cv=fail; b=TsLS/sY+AYrsumeMhzK9kRKiKlOxf6bVUpmvtaJJmxbJ2YYzNOk7Hf+TKnM5r0mxzY5sb/NfYL2dDtNFBAoY/XOhwKlBOso5mH817NC7vLyE/n6VwdbEOV0iT9bHJ5IllCh3OulDLTkhke8npulgLBAFMF4qrF0f2JNHhpH1u3s=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779734525; c=relaxed/simple;
-	bh=SYgLljsI6VtewSy+JTKvg9O0FDCZYbWkv8UQrW9LqgI=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mnEtOd3JpnqckbxnfRXKoTujTXeancVK5IyWy4wXvW7RyUnU/l0NkMsbCWpMTocEsZUzIXMrlCZcwU6QnePApK8oKHzgGJ5sds1zooPXfzYBjezGCnAfq+rrEVQxHC8fwZ9E0NCsGeESaLTsz0q9DwfDRuPOM37/Y7PyDBah2L8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Ub+9MFZ0; arc=fail smtp.client-ip=52.101.62.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F81E38229C;
+	Mon, 25 May 2026 18:51:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779735085; cv=none; b=PZAYhTqmMyhVnbhusV7mXLCGni/bnW/Z9nmR9Kmc3fx9/H2t8x9U2NI2f5VZ9MBVd5sKZbEJqnyg9jHHpC4u12NpWJERJx1D8YwNlZhTUpinN3n/I4sS9HOjoWE1no4RFYX174El0/tIkt66SipE6QWQVhmCaiF/OwUECmqT9hw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779735085; c=relaxed/simple;
+	bh=uFCFP6D9UvnulftDxE4NPjGFoDUN6dqmh0dCMtRMozU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=k8d5gHy/zNSAvJDubZ/Wp6kQkRr9cnn02VcjmRcaD2ac9Qy4xb/IXD/SSBd8buqsM8KOCVTFOwIdHdvezLc9+A6v3UMSzttqMYWUbxPsvvcZ0WDfo+NjPzuHbrYjSgqteC9J5RMWTyQTq0VM0zDZi0xIfq3vFITXeAfrn+d/lZM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=XCl4/gba; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Ub+9MFZ0"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=VmSAoAgBTmaSdHFmpFDgBgV4dlsbHJOq2VTgETxWjSkseJtO8EmtYMrDIrB2OCozeLAME4LZ0HFD0Bm5JRDcGPMVXprEcJDPHB7vGxv6Nncm3am1Nto3MouNJVdzIuM9L0RB+iX7WJ1QfObkIt2sAqhSC+FKuzeY4rnG9UDmNtPZlVs+3Evv9f8pa0uzu5S0R/Z34ThuuPcgSY5tN0NMP8Yw2hEESIG6PMkohyManscOA4HG3kU+zTJIZYMF19ecQC+mw6HzLdZtWPI0kI8yDWYP0sct4DCVSWyrhVanbEaH4UO/GLBRcz5bGgNw9tXKcb3HczA1i5PeSFOkATSZkg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=f2760895k/rWidM0nLjXN/lZu+dzeGw1b9tk7A+9Pu0=;
- b=A87wNynpnOwlp4xkiWO02fTyb2YZNheMsxulCLpb40tu0y3BudzuBa+ZPtAI9e4QRQJQTwePv2TZSmhirrqN73G6gByu/zT9AYj9weE79XduzzlHi/YXvNoarh6i7nCF2m1HfhgIFJz9GfCY2GurTcBGronKWJNwGfG/uMyiMbek78VH0Y1LwEI8+WF5DcyGZVBB6uM9hEtc9ci8kZ4vsXYAYbWaM5kvDMY28fkG9qWd/D2pzIywDt7HT/bUIDJZTpE3GaEa6eQ7fSIQsgPx2lqffO/7MHfm9Tt+SlA+Kb3yss+6cEvUr0GuL/4m1qljmvyrRa4m9iIiAHpP6yTmYA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=f2760895k/rWidM0nLjXN/lZu+dzeGw1b9tk7A+9Pu0=;
- b=Ub+9MFZ09h4MGzXT9WJR1/ML+SbLpP3Lm7afyzXSQmjpe6SFfH1WF9SjhoRv3VcQpkvb26A161S8z68TLOtwASq4rTsC3siEulVRSCr7X0gPJjvarE8aRQyCLRkv1nqA2gH/ELVGCAoVPfY8E5pVjLbrfNZo/UAP3MDCydBNKUv+YC4uVyAtL+zhV2cziCrF8K/Ser3jQ9CzBUfo+mmfIhwqFUZH253wHL40s93FnhHlKYZ+tLlFGK34dZtutmnC34/y2glGZPJi2ZjD039sdtkDAoIV6c4lf+et9fW4+Jd1jzKfk1xTKvPFR2IBNgSMQXLC3aReIW4kl7A6OwOGLQ==
-Received: from BL1P222CA0002.NAMP222.PROD.OUTLOOK.COM (2603:10b6:208:2c7::7)
- by SA1PR12MB6679.namprd12.prod.outlook.com (2603:10b6:806:252::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.48.20; Mon, 25 May
- 2026 18:41:59 +0000
-Received: from BL02EPF0001A103.namprd05.prod.outlook.com
- (2603:10b6:208:2c7:cafe::89) by BL1P222CA0002.outlook.office365.com
- (2603:10b6:208:2c7::7) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.48.20 via Frontend Transport; Mon, 25
- May 2026 18:41:59 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BL02EPF0001A103.mail.protection.outlook.com (10.167.241.133) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.71.7 via Frontend Transport; Mon, 25 May 2026 18:41:59 +0000
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 25 May
- 2026 11:41:43 -0700
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail205.nvidia.com
- (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 25 May
- 2026 11:41:43 -0700
-Received: from Asurada-Nvidia (10.127.8.9) by mail.nvidia.com (10.129.68.7)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
- Transport; Mon, 25 May 2026 11:41:42 -0700
-Date: Mon, 25 May 2026 11:41:40 -0700
-From: Nicolin Chen <nicolinc@nvidia.com>
-To: "Tian, Kevin" <kevin.tian@intel.com>
-CC: "jgg@nvidia.com" <jgg@nvidia.com>, "iommu@lists.linux.dev"
-	<iommu@lists.linux.dev>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-kselftest@vger.kernel.org"
-	<linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH rc v2 3/4] iommufd: Set veventq_depth upper bound
-Message-ID: <ahSX5BJOP86MG22M@Asurada-Nvidia>
-References: <cover.1779408671.git.nicolinc@nvidia.com>
- <8426cbaa5e8294472ec7f076ef427cc473be5985.1779408671.git.nicolinc@nvidia.com>
- <BN9PR11MB5276B7CEF4820392B53BD4308C0A2@BN9PR11MB5276.namprd11.prod.outlook.com>
+	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="XCl4/gba"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+	References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=SzvjpocKn+Bw0W1auvOZf4J3c/SOniG1j3Yx5uS5URU=; b=XCl4/gba9UqCiciWGg6tFqPC4L
+	77EZD1lyAKivZntMovFtr5CIjf5T79ipp5JOoYJLyL/zQG1nE1KokCemsgiEVfQ/59ENnu0eD/vED
+	dkzMU3psiJ47u1uLvFooS63vU71b/5otVcpcV6y1zGEd94NHDm/EB7SS+uEWZ7CQMlKeXTvpmcgiH
+	SE/6FYkzVEYyltHS3gzAvCduugAHtCJib+QsW/qnRgMcxLgdKja4Jx6LBiYQUyxl2lX1xq5SX98l8
+	XzyRW3myHxb2KE6kJLJh/FuefgVPGY7jVRj4IlVg8z2LedDoGv/IEeScBuTjgvklm7DcgfPZ+cSdl
+	l777ubpg==;
+Received: from [179.118.191.12] (helo=[192.168.15.100])
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+	id 1wRaOR-0087qK-C0; Mon, 25 May 2026 20:51:15 +0200
+Message-ID: <5ae41797-83ef-4896-b67f-0ec6f957de67@igalia.com>
+Date: Mon, 25 May 2026 15:51:09 -0300
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <BN9PR11MB5276B7CEF4820392B53BD4308C0A2@BN9PR11MB5276.namprd11.prod.outlook.com>
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF0001A103:EE_|SA1PR12MB6679:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6c87dea3-1a8d-4685-d728-08deba8d4de2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|1800799024|36860700016|82310400026|56012099003|11063799006|4143699003|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	ZDc47FloXFy6Mwe2uU/pdsEbqdc/GPUa4Tgm+W8yymXP7uml0OnPRnd0kCAOM/NXBw3MYDqVqVGbB8y0Hf/HZqEwzSPlY0A1HhIqoASSpBn8l/VDo2t9hpNX3NT0xFhTGj9a5pVicr+D/Q4ZfAlgfM3CB6MSNhm7wngbrUKVR8M+z88boOnbHPY9mZxV2acnnO6TYwJK2cS4siMYJ75cqDgJxg/A1BJVEEb6Z6txd6ZCUxRuK1ut3US0G6QZheFynYfsyMA1lZ32nUYREtVZPmigSbq8L8BJw9EOkyfbaFkiTNiwHDhxKSQIxAviANPCiwgYmt7fb4lBXw1xLFxPyt15KFhD+sBuF42ZMOPCE3Zzl2LgER0nyr6saylOco67gk4qM+4JX7bW5dpUdEZKaSdud9dbZeoN8HeNEO6uoTANGV+LmGB8UNf5mx6KBP3REbdwreZ2MN9H1h6Vl8lVLWfc+7mvth+2deDQfQ7GZyntosiKIWbh3UTue3GesCcZEn1OOGAUZaqwYF7EVrqbwQ/b5VmYX75N5NyO2SsIM8fz8iTYrX/0Bf0zS/By+V6e5GpXPb6hxIJdiJD8hbuaxV4DCtNec0iZZv4IcFXq2iby/rBUnfozYBlcLNKfcAxpUvMF8pmxVTsLoNp83+U5CTLCmhPLD1rvMYDHVT2Ww1CvOEaPBPyioUpG3frP4s0XaqqY4O5kFxBr2vCbFu711eHtq4rltSkcVmWqxVas+AU=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(376014)(1800799024)(36860700016)(82310400026)(56012099003)(11063799006)(4143699003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	/CJtkRnq7nS5a7omWXxGZlP82NhIYC4Gfbzn2Pz5ThiOpTKxyjvWwsQAdcaZoUtpfdhtK5wVAvS4F7cY6smUNf5d57vnM51FQ/DpE5xxrxoa9rQgtN+RxfZ4lIQkZRD3SCm92sJe/Wt1CFKUR+YBGtgYUcjqLd2uQDOPmPvaTbGIiFrZIRHhj52uHZFJBnEY4Zbrd7idomH+4K+toRuVRpaTuY2moh9Ok+CK7cgqlFzdK5bcnNczit3rxlDh+rZj+Domqooyn6flWI40p/FOQyff5kXSZOiX5tog3PyJFlyma8+bFTRRO+02JkEHsD+c+QjGYRXxvOjGl7k552YVIRxfO4V0qWH2MKYDUDx9dpaEViE/P84UKvTFuX62p3I759/sfg9W+NBsImvm9rV54lggSt7in3ItzW+d7F3EjG0vWYpljDvOHljyVs+w5n5u
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 May 2026 18:41:59.1267
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6c87dea3-1a8d-4685-d728-08deba8d4de2
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BL02EPF0001A103.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB6679
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/3] selftests/futex: Migrate futex_wait to harness
+To: Wake Liu <wakel@google.com>
+Cc: Shuah Khan <shuah@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>, Darren Hart <dvhart@infradead.org>,
+ linux-kselftest@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+ Davidlohr Bueso <dave@stgolabs.net>, Carlos Llamas <cmllamas@google.com>,
+ linux-kernel@vger.kernel.org, kernel-dev@igalia.com
+References: <20260525092002.3762888-1-wakel@google.com>
+ <20260525092002.3762888-2-wakel@google.com>
+Content-Language: en-US
+From: =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
+In-Reply-To: <20260525092002.3762888-2-wakel@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, May 25, 2026 at 06:52:38AM +0000, Tian, Kevin wrote:
-> > From: Nicolin Chen <nicolinc@nvidia.com>
-> > Sent: Friday, May 22, 2026 8:37 AM
-> > 
-> > iommufd_veventq_alloc() accepts any !0 veventq_depth from userspace,
-> > with
-> > an upper bound at U32_MAX.
-> > 
-> > This leaves a vulnerability where userspace can allocate excessively large
-> > queues to exhaust kernel memory reserves.
-> > 
-> > Cap the veventq_depth (maximum number of entries) to 1 << 19, matching
-> > the
-> > maximum number of entries in the SMMUv3 EVTQ (the largest use case
-> > today).
+Em 25/05/2026 06:20, Wake Liu escreveu:
+> Migrate futex_wait test to the kselftest harness framework,
+> removing mixed legacy ksft_* API usages and ensuring proper thread joining.
 > 
-> probably add a comment to uapi header that the maximum number of
-> supported veventq depth is implementation specific hence user may
-> expect -EINVAL returned if the specified value is too large?
 
-Sure.
+Why is this patchset not part of the same series that you just sent?
 
-@@ -1267,7 +1267,9 @@ struct iommu_vevent_tegra241_cmdqv {
-  * can have multiple FDs for different types, but is confined to one per @type.
-  * User space should open the @out_veventq_fd to read vEVENTs out of a vEVENTQ,
-  * if there are vEVENTs available. A vEVENTQ will lose events due to overflow,
-- * if the number of the vEVENTs hits @veventq_depth.
-+ * if the number of the vEVENTs hits @veventq_depth. The maximum @veventq_depth
-+ * is implementation-specific; -EINVAL will be returned if the requested value
-+ * exceeds it.
-  *
-  * Each vEVENT in a vEVENTQ encloses a struct iommufd_vevent_header followed by
-  * a type-specific data structure, in a normal case:
+> Signed-off-by: Wake Liu <wakel@google.com>
+> ---
+>   .../selftests/futex/functional/futex_wait.c   | 125 +++++++++++-------
+>   1 file changed, 77 insertions(+), 48 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/futex/functional/futex_wait.c b/tools/testing/selftests/futex/functional/futex_wait.c
+> index 7b8879409007..ed4b040600b8 100644
+> --- a/tools/testing/selftests/futex/functional/futex_wait.c
+> +++ b/tools/testing/selftests/futex/functional/futex_wait.c
+> @@ -9,6 +9,7 @@
+>   #include <sys/shm.h>
+>   #include <sys/mman.h>
+>   #include <fcntl.h>
+> +#include <stdlib.h>
+>   
+>   #include "futextest.h"
+>   #include "kselftest_harness.h"
+> @@ -19,125 +20,153 @@
+>   
+>   void *futex;
+>   
+> +struct waiter_args {
+> +	struct __test_metadata *_metadata;
+> +	unsigned int flags;
+> +};
+> +
+>   static void *waiterfn(void *arg)
+>   {
+> +	struct waiter_args *args = (struct waiter_args *)arg;
+> +	struct __test_metadata *_metadata = args->_metadata;
 
-Thanks
-Nicolin
+As much as I like the benefits of being able to properly use the harness 
+macros in threads, I fell like we are touching private structs here. Are 
+they safe to be used concurrently? If a child thread an the main thread 
+fails, does that counts as two fails?
+
+Perhaps we should have a look to create a kselftest wrapper for 
+pthread_create().
+
+>   	struct timespec to;
+> -	unsigned int flags = 0;
+> -
+> -	if (arg)
+> -		flags = *((unsigned int *) arg);
+> +	int res;
+>   
+>   	to.tv_sec = 0;
+>   	to.tv_nsec = timeout_ns;
+>   
+> -	if (futex_wait(futex, 0, &to, flags))
+> -		printf("waiter failed errno %d\n", errno);
+> +	res = futex_wait(futex, 0, &to, args->flags);
+> +	if (res) {
+> +		EXPECT_EQ(res, 0)
+
+I have changed it to ASSERT_EQ(res, -1) just to see what happens when a 
+child thread fails, but the test still reported PASSED: 3 / 3
