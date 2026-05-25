@@ -1,60 +1,64 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B167A285066;
-	Mon, 25 May 2026 20:02:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6141A3955D5;
+	Mon, 25 May 2026 20:30:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779739322; cv=none; b=KlgS/ImBdARLcfQN02qUKDz7GiDaoP2Q/jxltHuFsefG75DroHKf5LaaAnhy2p1rmOwaZc5xaLVc8Ehlasj6EGPifB8gRDwQoYyjtkXR9kPYSXow242d0mV0hzspY+DS/LefjWmTn2nqKAtKu1HuX23M9r8Cq4RKrqzVYLFVUyE=
+	t=1779741030; cv=none; b=UcdxFXsDx5z0kTqaeUdMcIO0g49EQ4I5Ik2DBg5a+2XEaLKcO9XzzDp5M5bXcp8LoXdkapqK3xPYbGd/biQO0xbOyFyeHoZHVoPnj5prVjEE9vVIRjEjgpkpq8R5ORTnXkI9aI3poz4f3ADQbN7ddPVMtmNWsaRY2Knbak8M/tw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779739322; c=relaxed/simple;
-	bh=pAQ/1a9bUwyZY7vxZ0yW0kj9FFkFwXnH/gwoyg/dPfI=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=CnrP9EcxF7oybuyCM0ncOsq3i2VuFMt9GhwJ23Ccl1n3F7UsKkdHENaJEZQ60cU/ImbOd0+GZ4y4FclUpIBPF4T724wFQ34NGfTBQBabNM4LlmAAJlsoSaa2h2I1LNFTGVo78iQdlaMFSs6gTB58XThEvMju3mkpssnGr+K84rY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=uXq8BWDy; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779741030; c=relaxed/simple;
+	bh=0WaWRxHBFl1JaQtnfdsveWSUkhyLcusZa4kO1gdJjtI=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=XZVf2V3Q2eSWbibOWtdTeeT2ayW/M8Z7R3x6PNDW9KntKL2fuXzcis6DQtrE1dyxBkeBE1kYQX4Duj/X5rkUpyVKOABf5gKKjbhqRJd9t9o/p9wffQmIh+kJDWXoPDbzaiGa5sBWrM9l0KjgWba0gLAZHrFrqN8dRIA9DXFZscs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Nc/02I2X; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="uXq8BWDy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED19F1F00A3A;
-	Mon, 25 May 2026 20:02:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux-foundation.org; s=korg; t=1779739321;
-	bh=V6/YknKdEA4x8G6R+IgJTIdlwuQ8G6+RHz4gavhL8N8=;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Nc/02I2X"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B35421F00A3D;
+	Mon, 25 May 2026 20:30:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779741029;
+	bh=0WaWRxHBFl1JaQtnfdsveWSUkhyLcusZa4kO1gdJjtI=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=uXq8BWDyNGvkOFFNnaYQbloQHEWzuG3IdaOULAj70Gb1uUARS1DOl1yeXusze+6Ir
-	 tnDmAOo7SrmrYQOZXJ7ny11Wnk5kf1wzP29s3okD3OuxDV35168eM1H3Kw2F+eecnB
-	 DbiK3inWCrfp3ZxkXfZpLR7Dp7wHYZkrHpShvocg=
-Date: Mon, 25 May 2026 13:02:00 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Hongfu Li <lihongfu@kylinos.cn>
-Cc: david@kernel.org, ljs@kernel.org, liam@infradead.org, vbabka@kernel.org,
- rppt@kernel.org, surenb@google.com, mhocko@suse.com, shuah@kernel.org,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] selftests/mm: refactor pkey helpers and fix mmap
- error handling
-Message-Id: <20260525130200.fa26a0456979d8f1045dc930@linux-foundation.org>
-In-Reply-To: <20260525073026.27594-1-lihongfu@kylinos.cn>
-References: <20260525073026.27594-1-lihongfu@kylinos.cn>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	b=Nc/02I2XFVJiatDMFP5VygLJJKycokachH1SOvzsgTl2PC1rHBRW7XgQqU1I8dBfM
+	 nT5lwCw42ktihGNOAquHqLTZ1+FtyQjsFM9aNlQMZO/356YkqmHxLfLTaAWxvg6MNl
+	 wqCKRzAPTH5p0f+LicOlOyY0nyiauKPqSeJlADAhX8a10Ya8n5vepIjLHPCCHv3w14
+	 KxK9pMZLScq3GrduBc4A2it9x8uW45M5+wKalZdWFED4XaZ7th2EVSG0NOHJgJ2Usr
+	 0UJVeig5KCOlcQHweYmUwjW/KbFD7htxsxn7Dzj4xRpr+raqknYLkEe/RUquE6OWe2
+	 WHQlYsncsZ2CQ==
+Date: Mon, 25 May 2026 13:30:28 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Christopher Lusk <clusk@northecho.dev>
+Cc: John Fastabend <john.fastabend@gmail.com>, Sabrina Dubroca
+ <sd@queasysnail.net>, "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
+ <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ netdev@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ stable@vger.kernel.org
+Subject: Re: [PATCH net v2 1/2] net: tls: preserve split open record on
+ async encrypt
+Message-ID: <20260525133028.58494274@kernel.org>
+In-Reply-To: <20260521025840.976378-2-clusk@northecho.dev>
+References: <20260521025840.976378-1-clusk@northecho.dev>
+	<20260521025840.976378-2-clusk@northecho.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Mon, 25 May 2026 15:30:24 +0800 Hongfu Li <lihongfu@kylinos.cn> wrote:
+On Wed, 20 May 2026 22:58:39 -0400 Christopher Lusk wrote:
+> When the BPF sk_msg verdict sets apply_bytes smaller than the current
+> open record, tls_push_record() splits ctx->open_rec into the record
+> being encrypted and a remainder record. The synchronous path reattaches
+> the remainder to ctx->open_rec before continuing.
 
-> This series is version 2 of the previous patch [0].  In v2, the changes are
-> split into two patches for easier review.
-> [0] https://lore.kernel.org/all/20260518082120.3890552-1-lihongfu@kylinos.cn/
-> 
-> The main changes in this series are to refactor shared tracing and assertion
-> helpers into a common file, unify both pkey selftests on pkey_assert() and 
-> per-test tracing for consistent diagnostics, and add missing mmap() return 
-> checks with MAP_FAILED used throughout for readability and consistency.
-
-Thanks.  AI review seems to have found a legitimate problem:
-	https://sashiko.dev/#/patchset/20260525073026.27594-1-lihongfu@kylinos.cn
+The current understanding is that this code has no real users.
+So let's try clear async_capable if BPF is attached and avoid
+all these bugs in record handling, please? The savings from
+zero copy are negligible.
