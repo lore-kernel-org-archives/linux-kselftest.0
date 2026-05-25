@@ -1,142 +1,121 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 764888462;
-	Mon, 25 May 2026 17:49:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779731373; cv=none; b=dVvjptoGxTWvlhRIyuHfgQ7E7QNSziH3Y0Bi8ZeAqopw+szLK5g4DdXWfp8fY5L+v+9toZKGQhJHx4SwDY0Fm+WZDhNyngl2MB+/7HSWthPtPxBxYzy7UH/fiof5fnkwDKmQGKZKwtF7gqmyjr3gxx6mVx8ns2QuJE3TBS9pSVA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779731373; c=relaxed/simple;
-	bh=gEsP+Gq6XxxpksEZqjc5xlVOq8ChQc72ScHgpfpQRH8=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=QfouOQE744OUKVrBcvj5aUzhilJaGvuI5saNTx1Xp71oAX+WsZn3YMYX3PXJ79d0FMCLq4gSj67tZ/XM/pS82E0xZWPcMEGgGkhbXWxj16AmfakGTFw1dZ9cvyI9TmZ+Vm6/Tk21P2s2QLOirswx2s7YZUL0trTXhHXReesJyu0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=itXByRbw; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E49722D6E44
+	for <linux-kselftest@vger.kernel.org>; Mon, 25 May 2026 17:49:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.175
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779731381; cv=pass; b=PoHs6grh8YUYfY7oVfSbE46puXCZAC7PER2wF1eJluMLqBRCBO6aK+8LKocvBSPSLsZOq+iUr2HkTaVi3oJHfd1VcrgNaJmuPKshoSd15I16IGS+mF0BheYjYStK2eAK4PIWgHjD12TPjMFfBGbR8Onyjr0wu2XBlFZLo6cdaj0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779731381; c=relaxed/simple;
+	bh=nPfNZiC1zD9OomRhDPiPn4VIi53lb5Y/DjjaFyfn8Lc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VvQlzlKyzlLGiLxNs9asblJmpcJ2TR7aWD7P2Fzw44NKSRUAjnGzMKvXgE1EpRdr8qUdWaaZ3tUo0TkVV+1tyzmoR0Rsbx8Zi/sTXWSgGMotL3ROvVqRGtlLbsx52hZ0wkf73SkGS/Ja9UV4mzhhRFOz9rEWGEs5rzn0bQkzdTU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bQO66wcL; arc=pass smtp.client-ip=74.125.82.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="itXByRbw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D24B01F000E9;
-	Mon, 25 May 2026 17:49:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779731372;
-	bh=34eaHJRXGUxn6aCaWNiWQiEzep2YC7iFCHhas4g5QaM=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=itXByRbw+mP3n0WYUFSgOvuNWwiQkJMyZndGej1Q+qst31PJZbH6hK5bKQPa8pye+
-	 8z8HSlCAtj0uObcAzFM41I0i1eME3B6Bi8ajwvxrJYfYLrghnHBDvJdiJzElpB6dgx
-	 6udxDWvfBe/N7Wnl4Rg3vu7KbiWdMEYlpoOK3B2DJ+t01suWb5DaAsMMK3B1krviAH
-	 GxhO/AdojFJgoYBSOPNzAhbQgIYy8pkvAB/sTodPhcLgM7fa7Xy/FT1idtC3pqgPAF
-	 zAo5rkvorkJD1JryB7ndb0kXfNlZDrLT21DM1MHfbYKs+V+EtGAisgsYyQwcWj+KKU
-	 ozSnoW+MLfQsA==
-From: Pratyush Yadav <pratyush@kernel.org>
-To: George Guo <dongtai.guo@linux.dev>
-Cc: chenhuacai@kernel.org,  rppt@kernel.org,  pasha.tatashin@soleen.com,
-  pratyush@kernel.org,  kernel@xen0n.name,  graf@amazon.com,
-  shuah@kernel.org,  loongarch@lists.linux.dev,  kexec@lists.infradead.org,
-  linux-mm@kvack.org,  linux-kselftest@vger.kernel.org,
-  linux-kernel@vger.kernel.org,  George Guo <guodongtai@kylinos.cn>
-Subject: Re: [PATCH 2/7] LoongArch: kho: strip stale kho_handover= from
- reused cmdline
-In-Reply-To: <20260525062810.103367-3-dongtai.guo@linux.dev> (George Guo's
-	message of "Mon, 25 May 2026 14:28:05 +0800")
-References: <20260525062810.103367-1-dongtai.guo@linux.dev>
-	<20260525062810.103367-3-dongtai.guo@linux.dev>
-Date: Mon, 25 May 2026 19:49:28 +0200
-Message-ID: <2vxzpl2j5qhj.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bQO66wcL"
+Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-2f6e6a0a215so816071eec.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 25 May 2026 10:49:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779731379; cv=none;
+        d=google.com; s=arc-20240605;
+        b=YbaoJO2wWBhswA22zLBwK4O4j7+MvNHgFXI0+M+pBBRUiiBqsD3mlPNrK1cWrSd3DK
+         Axj8ydWVunmCBiLTCZ1cRBUiw8TbX3PQEq89FA3jRtx1b8L5Jr+GS2fEAub7J8/5ezrr
+         bZxniEe1tK6XUffBpIKpR4FCcHTLz2y4NGUyCUI69sEFYtaZLLw6EuYwmKIpx4YGo2Wx
+         IMLLGJrIaNKKFKkyrB80B/+nhW+r+5pVsAf2VZjEQ12UQHuLvxW36KES8rZ9DohPNwra
+         5CeiL1BvJly0d3jwZRCB49W7ZEvYW+JCyi7O9TC0jQE5K23g9X77UbYLOnLLooyYbgnh
+         5mJg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=nPfNZiC1zD9OomRhDPiPn4VIi53lb5Y/DjjaFyfn8Lc=;
+        fh=ZK7XDQSw8jPj6d5dD13s4Dr5oWUxmSSXNWD1UKtvrIg=;
+        b=O5eSxvJshaH01BTRUUMposIC6/nh8bASzXE97z/2GjDUqzwTTFmAa/23fq5SlxK1WH
+         EfwrL7Y2majGwj5EW70oK0kgsO1KsPiWlKyXmhhhGDgBNbr04a0TodKs1wdpyIarnJCx
+         DVqkDKRAuNnpDqZ/mSLBBdiu4MnRGvpcWrGxACZDsuL3XRWqm0RfKVwX9RLZ6stYOxLN
+         a/EGoIxUcoBojvST99+siV1JrUI03Ptgb3phRXiicwSIAn5k9w7WhmwMnNz33cfclDee
+         0TBqa0xFNf3bbwsCEaWGKE8NEgcYp1uDIJrVwotJxT8n0rwljcxmV2KPzC0oBOhbxAHY
+         Zpaw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779731379; x=1780336179; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nPfNZiC1zD9OomRhDPiPn4VIi53lb5Y/DjjaFyfn8Lc=;
+        b=bQO66wcL0z5zIcTViNJ6I+iYlBR2dPiXphTnVWtmozZfsrcMcdzzAJMPyi/GvWzVz2
+         TpQ7owXGqOJp+jQn7YVo1gEZohNSSdN9ICna16a2FvH2O4cdNpYaSlBcmCzj40Xd+7dB
+         SkJQAFGd3EwiaELikkJ3gTg5uUf172Mdbr6WpGXfn3Kxdk2LA08LPtaYhkQ7Mtd+zwih
+         XE8hnA4xzaIWawMqGXGYggXeuCAD87RjZ6s4hkaVGcMkNF0fN+ch5BTic8gy4uR68WPA
+         x78IgDifhAvgfh8cDpIeYLrAr9idfp0UQLBKuB9eFAp/nztVgjLYzbBZCh377XUZ/UNu
+         +nWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779731379; x=1780336179;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=nPfNZiC1zD9OomRhDPiPn4VIi53lb5Y/DjjaFyfn8Lc=;
+        b=qqpzDYSQBHM/dsQJAeR4teXH3j4LLj2bLqT0RamxKD7rt57PIR2aTlz9+JASKWRZgI
+         ABMWO7ETUfO94a/YInJkIDbwt55AMNl1rPJj88FiBi1xKnj0YC6u/g0y9my8IMeBuVS7
+         OsifGAs9OZC2LsjYXGTZENaNfR8SGJQLISA0gJ6GGHN75Iop3ses8cYdgosWGz+yRRyg
+         YpQmwZdhgedcv7EzQnPU/2tF2JEjD9V2fJhfFcATuxeqTC4LzUnQf7BrsL1XK6iWb9l/
+         JQ0TLf1XdyDWU4oyL+9IH839ZibTuyqO7wdWz3umngB1NwI68mgO63ZGwa1IObAL5gYT
+         VonA==
+X-Forwarded-Encrypted: i=1; AFNElJ8YUHoklO6eIVfq1To5pjiXx2kwcnJxMIgSKS//nf+GT0aJq+55Yf4QeI51+LPZbWsKxom7qd5wr/+jLot+b1o=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyXS4XfIJkgECH1BcaX8hLlzoGdsXZQtHVHxdBqotyggwQi90hU
+	fx9wGLtxNqqCEo/TS8bSpsNuCach2CSdicGLjrnHLI/bGV/1fNHOArAdWvcyZoMVqyTlUCBeUrE
+	GcfauEDIuA2QorzpNFf9TVDl7R0VDRQ0=
+X-Gm-Gg: Acq92OGq/F7yEx63QIUzzCb/s6bkj/FGpFyjFiNnp7ZHcWjpwE4TaCUE7Qbgn3kYqwr
+	54vk3/sUROBa5J59RYOhxQoeEFzh4aVlOyOS1P9OzZlddLJWzrKsQ8GYIZQEIUMx7cRoqgac9x7
+	1kVcoTB9Eqj0KrnFK21Nz4tqv4P2owUaJlN8cHuH3Hs+rkponGs6UWuwaYv9l9n9HPUTMYzA8gK
+	1keEPxUHln2GeXCBgTstDPock17giA7GcK4hBPsmz2zX9TBlD5mu20NvBdAOCimOmCpiaE8H8al
+	O+BFPGZgZZ9pad1AXhCv6AQf5/sM/RWJNv49IMNzvgCC2B+F7lEtICHPQJjHWsJYOmZ1R3c0GJZ
+	f/OugQf+wVovf2hS8cXM9M3s=
+X-Received: by 2002:a05:7301:2b06:b0:304:2af3:5fef with SMTP id
+ 5a478bee46e88-3044921564fmr3206406eec.8.1779731379003; Mon, 25 May 2026
+ 10:49:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20260521-miscdev-use-format-v3-0-56240ca70d0c@linux.dev> <20260521-miscdev-use-format-v3-7-56240ca70d0c@linux.dev>
+In-Reply-To: <20260521-miscdev-use-format-v3-7-56240ca70d0c@linux.dev>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Mon, 25 May 2026 19:49:26 +0200
+X-Gm-Features: AVHnY4IGS4NWge_5oO5mtK6gWsE6gPd3PI1zRry3kpNJ_3QwcbAxHC9OP1Zg3x4
+Message-ID: <CANiq72k7p23yTLL2Mq5nVr74oWCCCNuxWSdscU3YgO+2sYCEhQ@mail.gmail.com>
+Subject: Re: [PATCH v3 7/7] rust: doctest: use vertical import style
+To: Alvin Sun <alvin.sun@linux.dev>
+Cc: Arnd Bergmann <arnd@arndb.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Jens Axboe <axboe@kernel.dk>, 
+	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, 
+	Rae Moar <raemoar63@gmail.com>, rust-for-linux@vger.kernel.org, 
+	linux-block@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, May 25 2026, George Guo wrote:
+On Thu, May 21, 2026 at 8:57=E2=80=AFAM Alvin Sun <alvin.sun@linux.dev> wro=
+te:
+>
+> Convert `use` imports to vertical layout for better readability and
+> maintainability.
+>
+> Signed-off-by: Alvin Sun <alvin.sun@linux.dev>
 
-> From: George Guo <guodongtai@kylinos.cn>
->
-> When kexec is invoked with --reuse-cmdline after a liveupdate boot, the
-> running kernel's command line already contains a kho_handover= parameter
-> from the previous kexec load.  load_other_segments() prepends a fresh
-> kho_handover= for the new handover FDT but then appends the original
-> cmdline verbatim, resulting in two kho_handover= entries:
->
->   kho_handover=0x4000@<new_fdt>,... kho_handover=0x4000@<stale_fdt>,...
->
-> early_param() calls early_parse_kho() for each occurrence in order, so
-> kho_populate() is invoked twice and the second call overwrites the first
-> with the stale FDT address.  The stale address no longer holds a valid
-> KHO FDT, causing __kho_radix_walk_tree() to dereference a garbage
-> pointer and panic early in mm_core_init().
->
-> Fix this by adding the new kho_handover= to the cmdline prefix first,
-> then stripping any stale kho_handover= tokens from the appended original
-> cmdline portion, so only the freshly generated entry survives.
->
-> Signed-off-by: George Guo <guodongtai@kylinos.cn>
-> ---
->  arch/loongarch/kernel/machine_kexec_file.c | 35 ++++++++++++++++++++++
->  1 file changed, 35 insertions(+)
->
-> diff --git a/arch/loongarch/kernel/machine_kexec_file.c b/arch/loongarch/kernel/machine_kexec_file.c
-> index ddf4d0e0e7fd..ffaedd055e62 100644
-> --- a/arch/loongarch/kernel/machine_kexec_file.c
-> +++ b/arch/loongarch/kernel/machine_kexec_file.c
-> @@ -71,6 +71,37 @@ static void cmdline_add_kho(struct kimage *image, unsigned long *cmdline_tmplen,
->  	    image->kho.scratch->bufsz,    (u64)image->kho.scratch->mem);
->  	*cmdline_tmplen += n;
->  }
-> +
-> +/*
-> + * Remove all "kho_handover=..." tokens from cmdline.  Needed when
-> + * --reuse-cmdline is used: the running kernel's cmdline already carries a
-> + * stale kho_handover= from the previous kexec load; without removal the new
-> + * kernel sees two entries and kho_populate() ends up using the wrong (stale)
-> + * FDT address.
-> + */
-> +static void cmdline_remove_kho(char *cmdline)
-> +{
-> +	const char *key = "kho_handover=";
-> +	size_t key_len = strlen(key);
-> +	char *p = cmdline;
-> +
-> +	while ((p = strstr(p, key)) != NULL) {
-> +		char *start = p;
-> +		char *end;
-> +
-> +		/* Only match at a token boundary */
-> +		if (start != cmdline && *(start - 1) != ' ') {
-> +			p += key_len;
-> +			continue;
-> +		}
-> +		end = start + key_len;
-> +		while (*end && *end != ' ')
-> +			end++;
-> +		while (*end == ' ')
-> +			end++;
-> +		memmove(start, end, strlen(end) + 1);
-> +	}
-> +}
+Please check the titles used by previous commits for files, e.g.
+"scripts: rust: " would probably be the prefix here. (No need to
+resend just for this, maintainers may fix it on the fly).
 
-Ugh, modifying the commandline supplied by userspace feels odd... Can
-you at all do this via device tree?
+The patch looks OK otherwise of course, thanks!
 
-If not, would it make more sense to reject kexec_load if command line
-has kho_handover= and teach kexec-tools to strip it on its side?
-
->  #endif
->  
->  #ifdef CONFIG_CRASH_DUMP
-> @@ -249,6 +280,10 @@ int load_other_segments(struct kimage *image,
->  	}
->  
->  	memcpy(modified_cmdline + cmdline_tmplen, cmdline, cmdline_len);
-> +#ifdef CONFIG_KEXEC_HANDOVER
-> +	/* Strip stale kho_handover= that --reuse-cmdline may have carried over */
-> +	cmdline_remove_kho(modified_cmdline + cmdline_tmplen);
-> +#endif
->  	cmdline = modified_cmdline;
->  	image->arch.cmdline_ptr = (unsigned long)cmdline;
-
--- 
-Regards,
-Pratyush Yadav
+Cheers,
+Miguel
