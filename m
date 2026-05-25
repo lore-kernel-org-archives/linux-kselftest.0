@@ -1,94 +1,99 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB8492853FD;
-	Mon, 25 May 2026 02:21:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E26BF19D8A8;
+	Mon, 25 May 2026 03:03:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779675679; cv=none; b=XPG3fIqhTpDi2isBs36zQT3r5U57omwXpQsghRmouYPiXES7Yuqp194AYEA+vKjICbR2r7SI9xGzVUb5vYJFpxtSo4UrabhVILs8wfeq5/6bkhLLTHXNG728sddc6Vgwc4NRNCZZW8RoKGC47xZgLTv2RcNfPwj8+fkvCzq/rfc=
+	t=1779678210; cv=none; b=BBkn8JBGH6y5EE945tk4FsVVeC6CCNDmoV4MkEGP7YWlpqlBpthDEbqCoczpDKqgbekiN+QW41yH5iv3SaT/G8XqEJ6sr1ADRmb/UAhzdMsOrICkJymv9X6FPE0Dao1r9uFLvGFpkuvWq/1cD3Kt99RGG92yArbU5hwHvZLZRA4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779675679; c=relaxed/simple;
-	bh=AwPzc6WQaEuKk15MZfiOHNLaEW8Iw4/2Iv59YwWJATg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=SGEG6CIoerR/ZZSyv2wHj7rI4cPK7t0rdQ1cDbRMRiaVb+S2qNfeMW7M7qNbxZADX5BsC7girPzwVgTqEQC2EKYRh4CwpalgtQhX/vIN263U0RtxtN8/NVt/+tYEoEpVA87vilsYVr02IdfMi5u+i7bmFhqBWhXy9dOG92qbohE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k0UbNc5H; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k0UbNc5H"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EFDE1F000E9;
-	Mon, 25 May 2026 02:21:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779675678;
-	bh=8H+/mwgTDWRz94P3YnfwQbYHhECkqRVHbHWby5SNq0g=;
-	h=From:To:Cc:Subject:Date;
-	b=k0UbNc5HoRaHuTfkHbZcmDwihZgedR8IAeDPzVi5X0bGmVtinUDEnlu6jaASW31PN
-	 na2zGTH8kTvX7pGgOlAcEpU2/gUE1IIbBaovVxBnB6nX4gyI0hWWFjm8VBbGc+Qvne
-	 BtKbAv/pXzrI2vOhnw4mxD6pUe4bSFjVHnfv7ldGzkDDvLxiwvE1VK31zJk9Zk9A7v
-	 f7lxbKlD+H4mIojp8whijalnn7sPeiE7q3vINCjD0oTf25iVkcaRdpvNQM6+TmuO0I
-	 qZ2tNhn+ST+kMls8PR8kEkXEF0aFZ2j6ZkJxA7YQRmCbzdLpQT+67qJEJYK2L5lK+a
-	 IrKXsQBqLyMew==
-From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-To: Steven Rostedt <rostedt@goodmis.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH] tracing/probes: Point the error offset correctly for eprobe argument error
-Date: Mon, 25 May 2026 11:21:14 +0900
-Message-ID: <177967567399.209006.1451571244515632097.stgit@devnote2>
-X-Mailer: git-send-email 2.43.0
-User-Agent: StGit/0.19
+	s=arc-20240116; t=1779678210; c=relaxed/simple;
+	bh=sA7O1lmBXjcix/Ebl8qjUgRhkkKS+17tBSoXyQrS/gE=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=TLSDyQGdjzvwl5ByuyTuHZxecIYftmV17v9gx3FoBfngU3OG5CBkeZxBOIWUR7PfSdmFh1JklhjpnCHa9CrsLiQ8Iiv/iSJOC6R2Bhqr+q5rVzXUHojAGr/LqLdWe3nk0UKHN3QHiuK0Pbeu86jGOIF2V/F2SjyLhYeVW/H8h1Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [10.20.42.62])
+	by gateway (Coremail) with SMTP id _____8Bxzen0uxNqXu4MAA--.35532S3;
+	Mon, 25 May 2026 11:03:16 +0800 (CST)
+Received: from [10.20.42.62] (unknown [10.20.42.62])
+	by front1 (Coremail) with SMTP id qMiowJCxHOHsuxNq0tqPAA--.10277S3;
+	Mon, 25 May 2026 11:03:08 +0800 (CST)
+Subject: Re: [PATCH 1/2] KVM: selftests: Cast guest_memfd fd to a signed int
+ when checking for >= 0
+To: Sean Christopherson <seanjc@google.com>,
+ Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>
+Cc: kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Fuad Tabba <tabba@google.com>,
+ Ackerley Tng <ackerleytng@google.com>
+References: <20260522171535.3525890-1-seanjc@google.com>
+ <20260522171535.3525890-2-seanjc@google.com>
+From: Bibo Mao <maobibo@loongson.cn>
+Message-ID: <9fb7d8ce-c694-b547-70f5-142e332772db@loongson.cn>
+Date: Mon, 25 May 2026 11:00:06 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <20260522171535.3525890-2-seanjc@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJCxHOHsuxNq0tqPAA--.10277S3
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBj93XoW7Zr4rCr4UKrW5CF43Gr47KFX_yoW8Xw13pa
+	y8A3WkKr1rKF1xZwn7Gw1kZryS9Fs5Gry8Cw17Jr13uws3tw1Iyr4xKayYkF9xZFWxtF15
+	ZF97KF93Xa18JrXCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I
+	8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AK
+	xVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzV
+	AYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E
+	14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIx
+	kGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAF
+	wI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r
+	4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8r9N3UU
+	UUU==
 
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-Fix to point the error offset correctly for eprobe argument error.
-In the cleanup commit 1b8b0cd754cd ("tracing/probes: Move event parameter
-fetching code to common parser"), due to incorrect backward compatibility
-aimed at conforming to the test specifications, the error location was set
-to 0 when a non-existent formal parameter was specified for Eprobe.
-However, this should be corrected in both the test and the implementation
-to point correct error position.
 
-Fixes: 1b8b0cd754cd ("tracing/probes: Move event parameter fetching code to common parser")
-Cc: stable@vger.kernel.org
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
----
- kernel/trace/trace_probe.c                         |    2 --
- .../test.d/dynevent/eprobes_syntax_errors.tc       |    2 +-
- 2 files changed, 1 insertion(+), 3 deletions(-)
+On 2026/5/23 上午1:15, Sean Christopherson wrote:
+> When conditionally closing a memory region's guest_memfd file descriptor,
+> cast the field to a signed it so that negative values are correctly
+> detected.  Because selftests reuse "struct kvm_userspace_memory_region2"
+> instead of providing custom storage, they pick up the kernel uAPI's __u32
+> definition of the file descriptor, not the more common "int" definition,
+> e.g. that's used for userspace_mem_region.fd.
+> 
+> Fixes: bb2968ad6c33 ("KVM: selftests: Add support for creating private memslots")
+> Reported-by: Bibo Mao <maobibo@loongson.cn>
+> Closes: https://lore.kernel.org/all/20260508015013.4108345-1-maobibo@loongson.cn
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>   tools/testing/selftests/kvm/lib/kvm_util.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> index e08967ef7b7b..4ad015c6c44f 100644
+> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> @@ -817,7 +817,7 @@ static void __vm_mem_region_delete(struct kvm_vm *vm,
+>   		kvm_munmap(region->mmap_alias, region->mmap_size);
+>   		close(region->fd);
+>   	}
+> -	if (region->region.guest_memfd >= 0)
+> +	if ((int)region->region.guest_memfd >= 0)
+>   		close(region->region.guest_memfd);
+>   
+>   	free(region);
+> 
 
-diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
-index 39f040c863e8..695310571b08 100644
---- a/kernel/trace/trace_probe.c
-+++ b/kernel/trace/trace_probe.c
-@@ -957,8 +957,6 @@ static int parse_probe_vars(char *orig_arg, const struct fetch_type *t,
- 			code->op = FETCH_OP_COMM;
- 			return 0;
- 		}
--		/* backward compatibility */
--		ctx->offset = 0;
- 		goto inval;
- 	}
- 
-diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/eprobes_syntax_errors.tc b/tools/testing/selftests/ftrace/test.d/dynevent/eprobes_syntax_errors.tc
-index 4f5e8c665156..2a680c086047 100644
---- a/tools/testing/selftests/ftrace/test.d/dynevent/eprobes_syntax_errors.tc
-+++ b/tools/testing/selftests/ftrace/test.d/dynevent/eprobes_syntax_errors.tc
-@@ -20,7 +20,7 @@ check_error 'e:foo/^123456789012345678901234567890123456789012345678901234567890
- check_error 'e:foo/^bar.1 syscalls/sys_enter_openat'	# BAD_EVENT_NAME
- 
- check_error 'e:foo/bar syscalls/sys_enter_openat arg=^dfd'	# BAD_FETCH_ARG
--check_error 'e:foo/bar syscalls/sys_enter_openat ^arg=$foo'	# BAD_ATTACH_ARG
-+check_error 'e:foo/bar syscalls/sys_enter_openat arg=^$foo'	# BAD_ATTACH_ARG
- 
- if grep -q '<attached-group>\.<attached-event>.*\[if <filter>\]' README; then
-   check_error 'e:foo/bar syscalls/sys_enter_openat if ^'	# NO_EP_FILTER
+Reviewed-by: Bibo Mao <maobibo@loongson.cn>
 
