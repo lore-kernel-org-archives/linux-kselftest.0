@@ -1,32 +1,32 @@
-Received: from out-187.mta1.migadu.com (out-187.mta1.migadu.com [95.215.58.187])
+Received: from out-186.mta1.migadu.com (out-186.mta1.migadu.com [95.215.58.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E37739B96A
-	for <linux-kselftest@vger.kernel.org>; Mon, 25 May 2026 06:28:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6514439C01E
+	for <linux-kselftest@vger.kernel.org>; Mon, 25 May 2026 06:28:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779690514; cv=none; b=OhUGVqreLRd/b8C6EkryJziMNjBHhQ4GQp0EdYI8ld4UkrVXdi7Kod9e3OFR4jCc2Kck8xKHiVvJ6sfPPc7gvMt4V+9j3Z6Lh5KIak+sWNuFcw+tT9iKuSK7a2tPB6bUZfAlASTXI1dsj0zvg/th9y+pC23vd91ajbSwo0iAQ9A=
+	t=1779690517; cv=none; b=rodOd6W95PCmCBbg2EBDD/Ing6dS1LJHJyUI0A9kYm82uUFiwJCfUN/9sAG6P57nTpc0vBwC7VpsX+ICC+psGx+y/3RkG1El2BK2eyJ3sZI+7hOv4i8dYcArIelIzftTy8q2lr1jOjkrfhHRb+yCgah4fm0yhSRwqK1+1YahJts=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779690514; c=relaxed/simple;
-	bh=l52I/z7XJH2APwRLqgnwRHl+vcigrCoeaI76EFL82KU=;
+	s=arc-20240116; t=1779690517; c=relaxed/simple;
+	bh=URHja9OauFJvc+Z+iRHVg/ypV51K/bFOEki6ac6/FY4=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=KGS4uMxqSW/VnOMrLV1aNljJ/Cb0xw7Z0kryzGVXVmdIp1ROCmtU7j5ABa9rWAyEX8gHuTjg4KAPXu8RlzZbyCkz4XLH08arTlj3GIu7BbMRccltPnyrMg1Vh+1Vb7jNHS3gcaJsW4ZUol3uweMuE5Fia2xZZlMgTok2QAeycNU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vUYWyZ1C; arc=none smtp.client-ip=95.215.58.187
+	 MIME-Version; b=jYq800hHNTe5B+czDLZZQLZOABic0h10LHPJ1igF1KLKXb0GSyoui9l8xBSifJkhts01fOU7lyIkZuxoQZauMJFV9Bk8r0HJhuiroMDIZPCqL0apnMbg252CHdhke7ut/yx+nIjhHP81Md2E99dLSnoW2HNmVVQC+mgZKgo5G74=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=wF4CAHMK; arc=none smtp.client-ip=95.215.58.186
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vUYWyZ1C"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="wF4CAHMK"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1779690510;
+	t=1779690514;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=RpXKe3wAdCVMwU6Llg7SIPesFhMG6uKuOmrHw+vv3aU=;
-	b=vUYWyZ1CdvfZMVBvkgDZVbpei57KgtJs9mNpdIt8reqlu40mKSoS6h5RB2R2LDIOZMvIA3
-	7wD1tTsQvzyaW5cW3fY+xdCoerMSlFATNZAzoiFX+PB+IxAQ6fG/swWTRU8fGQxzBcT63L
-	bQbqgORkRf7hUz3cU/du0doFMLefN78=
+	bh=mcgnzkCekxGDxlLfZgjscpscBgEbQ0p2mN6z74HWjig=;
+	b=wF4CAHMKnaTjqP7CgZmhq1gjjZcsaQDDnRTJ7BOOXGt2R4+eBKLdLu6nFi1Etz86WDKBUm
+	9eIv/D+TXkOgB43kU/9ITlfPggrXIbYYowsynT59if8vuDhnasmeCa25X6FhnqXoDxoTVg
+	kRRqpHBBSpRR8UA7tn4RIUkQmoAWafA=
 From: George Guo <dongtai.guo@linux.dev>
 To: chenhuacai@kernel.org,
 	rppt@kernel.org,
@@ -40,10 +40,11 @@ Cc: kernel@xen0n.name,
 	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	George Guo <guodongtai@kylinos.cn>
-Subject: [PATCH 4/7] LoongArch: kexec: avoid overwriting QEMU's machine FDT at 0x100000
-Date: Mon, 25 May 2026 14:28:07 +0800
-Message-Id: <20260525062810.103367-5-dongtai.guo@linux.dev>
+	George Guo <guodongtai@kylinos.cn>,
+	Kexin Liu <liukexin@kylinos.cn>
+Subject: [PATCH 5/7] selftests/kho: add LoongArch vmtest support
+Date: Mon, 25 May 2026 14:28:08 +0800
+Message-Id: <20260525062810.103367-6-dongtai.guo@linux.dev>
 In-Reply-To: <20260525062810.103367-1-dongtai.guo@linux.dev>
 References: <20260525062810.103367-1-dongtai.guo@linux.dev>
 Precedence: bulk
@@ -57,44 +58,61 @@ X-Migadu-Flow: FLOW_OUT
 
 From: George Guo <guodongtai@kylinos.cn>
 
-QEMU places its machine FDT at physical address 0x100000 when booting
-with '-kernel'.  KEXEC_CONTROL_CODE was defined at the same address, so
-machine_kexec_prepare() overwrites the FDT with the relocation trampoline
-before jumping to the new kernel.
+Add loongarch.conf to configure QEMU's LoongArch virt machine with a
+la464 CPU, enable the 8250 serial console, and set the kernel image
+to vmlinux.efi. Extend vmtest.sh to recognize loongarch64 as a
+supported target and map it to the 'loongarch' kernel arch name.
 
-The kexec'd kernel's fdt_setup() reads the FDT pointer from the EFI
-config table (FDTPTR = 0x100000) and finds trampoline code instead of a
-valid FDT, so earlycon auto-detection fails and the second kernel boots
-silently with no console output.
+QEMU's LoongArch virt machine provides no ACPI tables and relies on
+FDT to describe hardware. Without 'earlycon' on the kernel command
+line, the FDT is not scanned for a console UART, no output reaches
+the console, and vmtest.sh's console log stays empty causing the test
+to always fail. Add 'earlycon' to KERNEL_CMDLINE in loongarch.conf
+to fix this.
 
-Move KEXEC_CONTROL_CODE to 0x180000, which is still within the first 2MB
-reserved by memblock_init() and does not conflict with the QEMU FDT.
-
+Co-developed-by: Kexin Liu <liukexin@kylinos.cn>
+Signed-off-by: Kexin Liu <liukexin@kylinos.cn>
 Signed-off-by: George Guo <guodongtai@kylinos.cn>
 ---
- arch/loongarch/kernel/machine_kexec.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ tools/testing/selftests/kho/loongarch.conf | 7 +++++++
+ tools/testing/selftests/kho/vmtest.sh      | 3 ++-
+ 2 files changed, 9 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/kho/loongarch.conf
 
-diff --git a/arch/loongarch/kernel/machine_kexec.c b/arch/loongarch/kernel/machine_kexec.c
-index d7fafda1d541..44df7dbd3de5 100644
---- a/arch/loongarch/kernel/machine_kexec.c
-+++ b/arch/loongarch/kernel/machine_kexec.c
-@@ -21,8 +21,13 @@
- #include <asm/cacheflush.h>
- #include <asm/page.h>
- 
--/* 0x100000 ~ 0x200000 is safe */
--#define KEXEC_CONTROL_CODE	TO_CACHE(0x100000UL)
-+/*
-+ * Both addresses are within the first 2MB which is always reserved by
-+ * memblock_init().  Avoid 0x100000 because QEMU places its machine FDT
-+ * there when using '-kernel'; overwriting it silences earlycon in the
-+ * kexec'd kernel.
-+ */
-+#define KEXEC_CONTROL_CODE	TO_CACHE(0x180000UL)
- #define KEXEC_CMDLINE_ADDR	TO_CACHE(0x108000UL)
- 
- static unsigned long reboot_code_buffer;
+diff --git a/tools/testing/selftests/kho/loongarch.conf b/tools/testing/selftests/kho/loongarch.conf
+new file mode 100644
+index 000000000000..b0551e0c2d77
+--- /dev/null
++++ b/tools/testing/selftests/kho/loongarch.conf
+@@ -0,0 +1,7 @@
++QEMU_CMD="qemu-system-loongarch64 -M virt -cpu la464"
++QEMU_KCONFIG="
++CONFIG_SERIAL_8250=y
++CONFIG_SERIAL_8250_CONSOLE=y
++"
++KERNEL_IMAGE="vmlinux.efi"
++KERNEL_CMDLINE="console=ttyS0 earlycon"
+diff --git a/tools/testing/selftests/kho/vmtest.sh b/tools/testing/selftests/kho/vmtest.sh
+index 49fdac8e8b15..a6ae9ac09595 100755
+--- a/tools/testing/selftests/kho/vmtest.sh
++++ b/tools/testing/selftests/kho/vmtest.sh
+@@ -21,7 +21,7 @@ Options:
+ 	-d)	path to the kernel build directory
+ 	-j)	number of jobs for compilation, similar to -j in make
+ 	-t)	run test for target_arch, requires CROSS_COMPILE set
+-		supported targets: aarch64, x86_64
++		supported targets: aarch64, x86_64, loongarch64
+ 	-h)	display this help
+ EOF
+ }
+@@ -123,6 +123,7 @@ function target_to_arch() {
+ 	case $target in
+ 	     aarch64) echo "arm64" ;;
+ 	     x86_64) echo "x86" ;;
++	     loongarch64) echo "loongarch" ;;
+ 	     *) skip "architecture $target is not supported"
+ 	esac
+ }
 -- 
 2.25.1
 
