@@ -1,362 +1,162 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99ED738229F;
-	Mon, 25 May 2026 11:39:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8347531F9BD
+	for <linux-kselftest@vger.kernel.org>; Mon, 25 May 2026 11:49:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779709161; cv=none; b=XvC5ducnQmpxWfPhRo46e5a0810H8DIoHv1cd5oS8tGC6Ms6EBnNkv1WB4E3ox14UihHiM56yisIbwDQt7fIY97E2y7yW0gXmsh7WyPB3A/vBEqoHbFAIox8j7G/eWSAM92DVzEj+CxRP+DH3GYNsl++lcnTyCs5QLjP5IpXwTI=
+	t=1779709763; cv=none; b=dEuPaY21/bp5KH3FFzVzBv71kaUIFXFJ2qTtNbe833JHsLtDkFlg9iRCzNye6G/8owzRQ/U0kmoYj+X5HeyrZVAyRCFeqUZ/aOvcvAY9Nxhcc4g9XiOCb0Qbzn1UUetvPTye4O5snwih9qeQNDuQL1fDRWwp2DjhG0dUopL8giI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779709161; c=relaxed/simple;
-	bh=hc7/zb6iIKC/wUNS0C+7ujoKavF01OcggctcJTryLpg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=bJ5p+USv+89arc0z0Zw/sJ/T+vblbaySA0C5DjUkpbZnEKIbuvQl/e9N03ji2o/JKsMUDNjPKVoyQeB+bf2ql7O7dLd7TUDwsHuR/aSNu5GhIKZ1r3S51kkW0ioif83KYh11QhpG9FxwvBcfI25lliyz5KVphHsjE45RTwdZyD4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GzgP1Lhn; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779709763; c=relaxed/simple;
+	bh=KrxdAeLUhOdbTOeg6AjThXmoxH0Kuzb7+z3TySKZ5Ek=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=cM5EuAcrWYqCWSyj7eTK8SubxfPRVzwvR4cf2tBy26SnGE3YGK+Hmc2u9SCWW7NV8obWdCBH5c91oIS9IXXS9QUY/vuajKBNTfoOGxbkDypmh9zdRojC1ckAKDfKYf8PZIbs8oW5xot+0SU50id5tOJpW9V3RLdtSsvRUgMLxdY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=J7Vh3h8M; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GzgP1Lhn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4B171F00A3C;
-	Mon, 25 May 2026 11:39:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779709159;
-	bh=Hye5fxZW50CCDqJ7YyOB92+pBAmmJOZ9B6SG4ApV+6E=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=GzgP1Lhnu3O3HWiuWZMBAVRfKCjBecJEVeWgmUGTL8+Piu6qwFOvlRudwW26q59vX
-	 NAf49XSTGqp0y2ovf29vm7WQ6bm5m3XkB9WyqAqJclcl7H6GkSwQgRl/XboxGa4wLT
-	 zOpt3wCNAdcLEUdrRXLRDrwpQKmBFt+d4SQ8MTpzLRgVTEOW5KaEOZ+jAKJPzgDsnp
-	 nlgIducUAvNV4eKxURNLf+11t60uMh/n/6BQFwRjeqJnHH0zFJqo0Cc5YgCOq6TDlP
-	 rJ50pH7WAUiJcFd+PrNQPPHDwDXfCFg3IlNMz2eEwMJ3KByuqK5DvX02njU47nyXRq
-	 UvEKJcZVqQRCw==
-Received: from phl-compute-10.internal (phl-compute-10.internal [10.202.2.50])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 30278F40082;
-	Mon, 25 May 2026 07:39:18 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-10.internal (MEProxy); Mon, 25 May 2026 07:39:18 -0400
-X-ME-Sender: <xms:5jQUanLcj6vaFQSvVZHMK7QxkwC_C5NGiXOY4JbZB8vNzCbmCyPlzg>
-    <xme:5jQUanCIJKpHxbHN4DslGv4TmTcorNg3WHPAoB8agflElwZ3g4qtHRolfjGHHuQwn
-    blcrV3Wf6ZhLxA9zRtTVdGzv6QBYfSnmHBHpdXsKWEkL-pWaO784g>
-X-ME-Received: <xmr:5jQUaojIPp35bveYwTcnZsX_hZxVmBYoBoS7kVoKxBD6qr8KzljceZ1mU-Fkpw>
-X-ME-Proxy-Cause: dmFkZTEfoRdVBJYWBUADV7d9kIV+Nxm/pVUcgu2VEqiWnj8eQrxuVRmWJvpc9q3Oqv2JCI
-    in3fN4Zd8kb+AIzxXT1aE8XhYzXjllPczHZpsDuave1RqUEJt2aM8NK4F+1xGB1lHbYgSB
-    4+lR3LF0kMycZigQtO5w6VfLN0Aex+LApk+NDe4mN/AQtgEH82UY4yLdpanr1nUEhfYRPX
-    qXaeB8tr6YycPJO/GKcHBfWh4XfvSwFXkiL84UUAHkAJqW6Bc0LpWOIYef91VRiFvO85Cg
-    Xd8jmXx4jYBCkCANHtSsVLhpCbXIiIojLruOFr51QxylDrx8yfg2/g0kqIsUfNxsLFZyah
-    1WtxIfMz6ZJeAiukcR6qxW5tDZd9mgUWB1AYzbt8FmzNd+EULMeBTFxo3MJeE5u3XNcdz7
-    9fNnkSAm2foNSPwXtjawGXMPzu4aqtee6dQTx434U/aed7rDhTKhJccM6Na59r1bxSXJ8T
-    ZQqXqvcAceMCMygwQ9LJTTduSFpyXfd1GZsCMTS9dgOfy81em/bT8UPWe4B6E3QJbHl2+7
-    3/tofNLSdsio67XkIktCbDOaE/hQgFLvSTctuQb4Gnsh5pgiWiFAeXh/1m8qL1d0VxFIhQ
-    etLKKCAmFyJJs2NPy5ZXhaQ781Zidp3SKMrxniyfznYg7kcaR9mrsXXu3Ikw
-X-ME-Proxy: <xmx:5jQUapPkDfg8fSTzIioiXpMOlDwi4l5b14YdIrF_nrS60D8aM1bIGA>
-    <xmx:5jQUanZ2E0ps6kEx8M_WdADC19wexbc7IUIt82kaUq-szInQMGVFnQ>
-    <xmx:5jQUam-acN8p7pIKgkBk-qLGhP8kFQovTL-1pePfr2sPMBnDaACl7A>
-    <xmx:5jQUai2qp0ZVS3ws3uEgR66g2NGaxDpubGLp8hBaykitvEcQHZt2OQ>
-    <xmx:5jQUan0vDsixTwhRPUzoq-ZFPiEuvVjavpMX8lzAaFtisEAXzy1UNPkF>
-Feedback-ID: i10464835:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 25 May 2026 07:39:17 -0400 (EDT)
-From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
-To: akpm@linux-foundation.org,
-	rppt@kernel.org,
-	peterx@redhat.com,
-	david@kernel.org
-Cc: ljs@kernel.org,
-	surenb@google.com,
-	vbabka@kernel.org,
-	Liam.Howlett@oracle.com,
-	ziy@nvidia.com,
-	corbet@lwn.net,
-	skhan@linuxfoundation.org,
-	seanjc@google.com,
-	pbonzini@redhat.com,
-	jthoughton@google.com,
-	aarcange@redhat.com,
-	sj@kernel.org,
-	usama.arif@linux.dev,
-	linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kvm@vger.kernel.org,
-	kernel-team@meta.com,
-	"Kiryl Shutsemau (Meta)" <kas@kernel.org>
-Subject: [PATCH v4 14/14] Documentation/userfaultfd: document RWP working set tracking
-Date: Mon, 25 May 2026 12:37:28 +0100
-Message-ID: <20260525113737.1942478-15-kas@kernel.org>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260525113737.1942478-1-kas@kernel.org>
-References: <20260525113737.1942478-1-kas@kernel.org>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="J7Vh3h8M"
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4893940bb5eso51157045e9.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 25 May 2026 04:49:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1779709760; x=1780314560; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=kdsBBlxH/fBT0qTKbx/OGQlMNoMysgVbWBk3JCaqZ+U=;
+        b=J7Vh3h8MKk9Al5Rnl+JKHcLYApgCPEBlwf5UG8TV/UNVm9K+ntBRlng8nJ+sGAG0TP
+         oAUTN7a7EExRm6XsBmqj/go/JVYPwSE7mQ+zVeHMMSeWz0kGzCzqyYMAX62DZxKQznYt
+         zCVjJAFy4uSZ2TMHorHuzRbTji5tDLIj6ubSrSyaLWQOEkQByHURRVdVrKrnpzWFJicJ
+         LwN5+ByUO5zgs2YWNLla5MTTwCoHFW50FVBNiVGEwK4SZXUyI1FcCV684XIF+bxWxuRG
+         ueq1UEFDzF47pLQJuLCRUNpu4+FULATdqOIThXv10jmprUQ7XfsDWYoZzjs1B9TONoi3
+         u1xg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779709760; x=1780314560;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kdsBBlxH/fBT0qTKbx/OGQlMNoMysgVbWBk3JCaqZ+U=;
+        b=a6dkbB2Phv4qZpfJlR9gvwL4DK63GYA0cfRFGtVJAeIQUPoJ7+UsNFPaN1Vk/d4eOa
+         UtfuxgaHexWWik1cMIj9GTfEktwD/laADYoS/taMSydNxlxT2PnbX0vCcRAUnh4QWA+D
+         JCGbtKirQxbKt2dyGdPrWdQWVngZfwCqjwbDDQNOtcxEYGiJM7nGezNsA2/cwgyW6gkU
+         BkcYw0xwp8ZvrMEDU57tCCop4EzeLR3awVN+9ua0RGYwx3fs2uXg4GsVyVGsVRnwcZLM
+         q9/UibvlpoYUISGZyPtfckzPTuzI5VYel+ShL1m58ngN8eSSPV92p7pBBaVBoxjv8hac
+         dCuw==
+X-Forwarded-Encrypted: i=1; AFNElJ971cgbBcasGE4pIIyDfwxTnJBVVRclOiawD0VzTBwjI7elIINzFnMV6O6UT5yTnGc2gCqzVT9VzxdzOuOAReI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzBl6+Xx77sl7OQZopkpPL3JPIPu9uZnIGr6yQXIJebsAHKcmSB
+	fBsd5KHygk6HygbgC6cMb7G8N9F0jWJN5t/pid+6oj3oVcLO4hnLi0Jl2OCdiI59XUA=
+X-Gm-Gg: Acq92OEOMJOhduuNNsEMU0sLMX2E9rMr8B7TUPj24jlgXEJr+BVkqoUOhjEzURtby5L
+	ubbolReJ/uCO4ngfB0mv+E1wFe1QQcb9RA7I3RZqynjf3c4g5PflCluziq4LbUAc7gdK+rwnv6J
+	OTVbSeErUvjvj+QovEUndseFK4lPklhrAOQd4rwjNJdbobtJyb8q3klTst3K2G8y5PV9gtNseB4
+	K76AupCZFbziaZL+pOVXTAFrW4Z4+dpGVx/eu/RhuWXftNAXqOaBVhqHp/d6+EIfePHaWZwTv6j
+	EopvTZOEBz2wg/JwJiSHeDdExevTyga3aGgi+fVX/uefN0L9Zq2rSIQtSJvoErGH4Ja0z10JFEz
+	7j8HRba2QWPp0oBPBpsf3jdNjqh/A/7Xi5OvjxrYktavRgAw+1poDy8qaeGquwqD6LSar6j43yc
+	d22LSUCsRhYd90Nx+sRtx/FwRjE6b1cG5ibSLEvby85Uh0g94eMJNVyCnknIQogbhg1KE=
+X-Received: by 2002:a05:600c:1c21:b0:490:44eb:c1ea with SMTP id 5b1f17b1804b1-49044ebc2edmr234633755e9.24.1779709759832;
+        Mon, 25 May 2026 04:49:19 -0700 (PDT)
+Received: from ?IPv6:2804:1bc4:224:7800:585c:db3a:fcb:e21f? ([2804:1bc4:224:7800:585c:db3a:fcb:e21f])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49041781fc4sm120310185e9.1.2026.05.25.04.49.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 May 2026 04:49:19 -0700 (PDT)
+Message-ID: <d329f22e75fd01f2250490e4cba87f064a726f52.camel@suse.com>
+Subject: Re: [PATCH 1/4] selftests: livepatch: Introduce _remove_mod function
+From: Marcos Paulo de Souza <mpdesouza@suse.com>
+To: sashiko-reviews@lists.linux.dev, Jiri Kosina <jikos@kernel.org>, Petr
+ Mladek <pmladek@suse.com>, Joe Lawrence <joe.lawrence@redhat.com>, Shuah
+ Khan <shuah@kernel.org>,  Miroslav Benes	 <mbenes@suse.cz>, Josh Poimboeuf
+ <jpoimboe@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	live-patching@vger.kernel.org
+Date: Mon, 25 May 2026 08:49:10 -0300
+In-Reply-To: <20260524235906.267EF1F000E9@smtp.kernel.org>
+References: <20260524-livepatch-unload-on-fail-v1-1-7465de7f741d@suse.com>
+	 <20260524235906.267EF1F000E9@smtp.kernel.org>
+Autocrypt: addr=mpdesouza@suse.com; prefer-encrypt=mutual;
+ keydata=mDMEZ/0YqhYJKwYBBAHaRw8BAQdA4JZz0FED+JD5eKlhkNyjDrp6lAGmgR3LPTduPYGPT
+ Km0Kk1hcmNvcyBQYXVsbyBkZSBTb3V6YSA8bXBkZXNvdXphQHN1c2UuY29tPoiTBBMWCgA7FiEE2g
+ gC66iLbhUsCBoBemssEuRpLLUFAmf9GKoCGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgk
+ QemssEuRpLLWGxwD/S1I0bjp462FlKb81DikrOfWbeJ0FOJP44eRzmn20HmEBALBZIMrfIH2dJ5eM
+ GO8seNG8sYiP6JfRjl7Hyqca6YsE
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.1 (by Flathub.org) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
-Add an admin-guide section covering UFFDIO_REGISTER_MODE_RWP:
+On Sun, 2026-05-24 at 23:59 +0000, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential
+> issue(s) to consider:
+> - [Medium] `_remove_mod` uses `die()` which will terminate the script
+> during cleanup operations.
+> --
+>=20
+> commit 7b1591f4e5c3b351136e7fe2821eb2e15ae59ad0
+> Author: Marcos Paulo de Souza <mpdesouza@suse.com>
+>=20
+> selftests: livepatch: Introduce _remove_mod function
+>=20
+> This commit introduces the _remove_mod internal function to remove a
+> loaded
+> module, intended to be used during cleanup when a testcase fails. It
+> also
+> refactors unload_mod to use this new helper function.
+>=20
+> > diff --git a/tools/testing/selftests/livepatch/functions.sh
+> > b/tools/testing/selftests/livepatch/functions.sh
+> > index 2bc50271729c6..3ec0b7962fc5c 100644
+> > --- a/tools/testing/selftests/livepatch/functions.sh
+> > +++ b/tools/testing/selftests/livepatch/functions.sh
+>=20
+> [ ... ]
+>=20
+> > @@ -241,9 +241,10 @@ function load_failing_mod() {
+> > =C2=A0	log "$ret"
+> > =C2=A0}
+> > =C2=A0
+> > -# unload_mod(modname) - unload a kernel module
+> > +# _remove_mod(modname) - Internal function to remove a loaded
+> > module.
+> > +#=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Use u=
+nload_mod() instead, which also
+> > updates TEST_MODS tracking.
+> > =C2=A0#	modname - module name to unload
+> > -function unload_mod() {
+> > +function _remove_mod() {
+> > =C2=A0	local mod=3D"$1"
+> > =C2=A0
+> > =C2=A0	# Wait for module reference count to clear ...
+> > @@ -261,6 +262,14 @@ function unload_mod() {
+> > =C2=A0		die "failed to unload module $mod (/sys/module)"
+>=20
+> [Severity: Medium]
+> The commit message notes this function will be used to remove loaded
+> modules
+> when a testcase fails. If used in a cleanup path (such as a bash EXIT
+> trap),
+> will calling die() here terminate the script prematurely?
+>=20
+> If a module fails to unload (for example, if its refcount doesn't
+> drop),
+> die() executes exit 1. Inside a trap, this aborts the rest of the
+> cleanup process. This could skip unloading any remaining modules and
+> prevent final cleanup operations like pop_config() from running,
+> potentially
+> leaving kernel tracing persistently enabled and polluting the system
+> state
+> for subsequent tests.
 
-  - sync and async fault models;
-  - UFFDIO_RWPROTECT semantics;
-  - UFFD_FEATURE_RWP_ASYNC;
-  - UFFDIO_SET_MODE runtime mode flips.
+The system is already polluted when a testcase fails nowadays, since a
+module is kept loaded either way, making the next tests to fail if they
+also try to lead the same modules.
 
-It also covers typical VMM working-set-tracking workflow from detection
-loop through sync-mode eviction and back to async.
+The current approach is trying to make it more reliable.
 
-Signed-off-by: Kiryl Shutsemau <kas@kernel.org>
-Assisted-by: Claude:claude-opus-4-6
----
- Documentation/admin-guide/mm/userfaultfd.rst | 226 ++++++++++++++++++-
- 1 file changed, 220 insertions(+), 6 deletions(-)
-
-diff --git a/Documentation/admin-guide/mm/userfaultfd.rst b/Documentation/admin-guide/mm/userfaultfd.rst
-index 1e533639fd50..cb5d0e0c9fff 100644
---- a/Documentation/admin-guide/mm/userfaultfd.rst
-+++ b/Documentation/admin-guide/mm/userfaultfd.rst
-@@ -275,16 +275,16 @@ tracking and it can be different in a few ways:
-   - Dirty information will not get lost if the pte was zapped due to
-     various reasons (e.g. during split of a shmem transparent huge page).
- 
--  - Due to a reverted meaning of soft-dirty (page clean when uffd-wp bit
--    set; dirty when uffd-wp bit cleared), it has different semantics on
--    some of the memory operations.  For example: ``MADV_DONTNEED`` on
-+  - Due to a reverted meaning of soft-dirty (page clean when the uffd bit
-+    is set; dirty when the uffd bit is cleared), it has different semantics
-+    on some of the memory operations.  For example: ``MADV_DONTNEED`` on
-     anonymous (or ``MADV_REMOVE`` on a file mapping) will be treated as
--    dirtying of memory by dropping uffd-wp bit during the procedure.
-+    dirtying of memory by dropping the uffd bit during the procedure.
- 
- The user app can collect the "written/dirty" status by looking up the
--uffd-wp bit for the pages being interested in /proc/pagemap.
-+uffd bit for the pages being interested in /proc/pagemap.
- 
--The page will not be under track of uffd-wp async mode until the page is
-+The page will not be under track of userfaultfd-wp async mode until the page is
- explicitly write-protected by ``ioctl(UFFDIO_WRITEPROTECT)`` with the mode
- flag ``UFFDIO_WRITEPROTECT_MODE_WP`` set.  Trying to resolve a page fault
- that was tracked by async mode userfaultfd-wp is invalid.
-@@ -307,6 +307,220 @@ transparent to the guest, we want that same address range to act as if it was
- still poisoned, even though it's on a new physical host which ostensibly
- doesn't have a memory error in the exact same spot.
- 
-+Read-Write Protection
-+---------------------
-+
-+``UFFDIO_REGISTER_MODE_RWP`` enables read-write protection tracking on a
-+memory range. It is similar to (but faster than) ``mprotect(PROT_NONE)``
-+combined with a signal handler; unlike ``mprotect(PROT_NONE)``, RWP only
-+traps accesses to *present* PTEs, so accesses to unpopulated addresses in a
-+protected range fall through to the normal missing-page path. It uses the
-+PROT_NONE hinting mechanism (same as NUMA balancing) to make pages
-+inaccessible while keeping them resident in memory. Works on anonymous,
-+shmem, and hugetlbfs memory.
-+
-+RWP is designed for VM memory managers that need to track the working set
-+of guest memory for cold page eviction to tiered or remote storage.
-+
-+**Setup:**
-+
-+1. Open a userfaultfd and enable ``UFFD_FEATURE_RWP`` via ``UFFDIO_API``.
-+   Optionally request ``UFFD_FEATURE_RWP_ASYNC`` as well — it requires
-+   ``UFFD_FEATURE_RWP`` to be set in the same ``UFFDIO_API`` call.
-+
-+2. Register the guest memory range with ``UFFDIO_REGISTER_MODE_RWP``
-+   (and ``UFFDIO_REGISTER_MODE_MISSING`` if evicted pages will need to be
-+   fetched back from storage).
-+
-+**Feature availability:**
-+
-+RWP is built on top of two kernel primitives: a spare PTE bit owned by
-+userfaultfd (``CONFIG_HAVE_ARCH_USERFAULTFD_WP``) and architecture support
-+for present-but-inaccessible PTEs (``CONFIG_ARCH_HAS_PTE_PROTNONE``). When both
-+are available on a 64-bit kernel, the build selects
-+``CONFIG_USERFAULTFD_RWP=y`` and the ``VM_UFFD_RWP`` VMA flag becomes
-+available.
-+
-+``UFFD_FEATURE_RWP`` and ``UFFD_FEATURE_RWP_ASYNC`` are masked out of the
-+features returned by ``UFFDIO_API`` when the running kernel or architecture
-+cannot support them — for example 32-bit kernels (where ``VM_UFFD_RWP`` is
-+unavailable), kernels built without ``CONFIG_USERFAULTFD_RWP``, and
-+architectures whose ptes cannot carry the uffd bit at runtime (e.g. riscv
-+without the ``SVRSW60T59B`` extension). ``UFFDIO_API`` does not fail;
-+unsupported bits are simply absent from ``uffdio_api.features`` on return.
-+Callers should inspect the returned ``features`` after ``UFFDIO_API`` and
-+fall back to another tracking method when RWP is unavailable.
-+
-+**Protecting and Unprotecting:**
-+
-+Use ``UFFDIO_RWPROTECT`` to protect or unprotect a range, mirroring the
-+``UFFDIO_WRITEPROTECT`` interface::
-+
-+    struct uffdio_rwprotect rwp = {
-+        .range = { .start = addr, .len = len },
-+        .mode = UFFDIO_RWPROTECT_MODE_RWP,  /* protect */
-+    };
-+    ioctl(uffd, UFFDIO_RWPROTECT, &rwp);
-+
-+Setting ``UFFDIO_RWPROTECT_MODE_RWP`` sets PROT_NONE on present PTEs in the
-+range. Pages stay resident and their physical frames are preserved — only
-+access permissions are removed.
-+
-+Clearing ``UFFDIO_RWPROTECT_MODE_RWP`` restores normal VMA permissions and
-+wakes any faulting threads (unless ``UFFDIO_RWPROTECT_MODE_DONTWAKE`` is set).
-+
-+**Scope of protection:**
-+
-+RWP protection is a property of *present* PTEs. ``UFFDIO_RWPROTECT`` only
-+affects entries that are already populated. Unpopulated addresses within
-+the range remain unpopulated; when first accessed they fault through the
-+normal missing path (``do_anonymous_page()``, ``do_swap_page()``,
-+``finish_fault()``) and the resulting PTE is not RWP-protected. To observe
-+the population itself, co-register the range with
-+``UFFDIO_REGISTER_MODE_MISSING``.
-+
-+Protection is preserved across page reclaim: a page swapped out while
-+RWP-protected carries the marker on its swap entry, and swap-in restores
-+the PROT_NONE state so the first access after swap-in still faults. The
-+same applies to pages temporarily replaced by migration entries.
-+
-+Operations that drop the PTE entirely — ``MADV_DONTNEED`` on anonymous
-+memory, hole-punch on shmem, truncation of a file mapping — also drop the
-+RWP marker: the next access re-populates the range without protection.
-+Unlike WP (which persists via ``PTE_MARKER_UFFD_WP``), there is no
-+persistent RWP marker today. The user needs to re-arm the range with
-+``UFFDIO_RWPROTECT`` after any operation that explicitly frees PTEs.
-+
-+**Fault Handling:**
-+
-+When a protected page is accessed:
-+
-+- **Sync mode** (default): The faulting thread blocks and a
-+  ``UFFD_PAGEFAULT_FLAG_RWP`` message is delivered to the userfaultfd
-+  handler. The handler resolves the fault with ``UFFDIO_RWPROTECT``
-+  (clearing ``MODE_RWP``), which restores the PTE permissions and wakes
-+  the faulting thread.
-+
-+- **Async mode** (``UFFD_FEATURE_RWP_ASYNC``): The kernel automatically
-+  restores PTE permissions and the thread continues without blocking. No
-+  message is delivered to the handler.
-+
-+**Runtime Mode Switching:**
-+
-+``UFFDIO_SET_MODE`` toggles ``UFFD_FEATURE_RWP_ASYNC`` at runtime, allowing
-+the VMM to switch between lightweight async detection and safe sync
-+eviction without re-registering. The toggle takes ``mmap_write_lock()`` to
-+ensure all in-flight faults complete before the mode change takes effect.
-+
-+**Cold Page Detection with PAGEMAP_SCAN:**
-+
-+RWP-protected PTEs carry the uffd PTE bit; the fault-resolution path
-+clears it. ``PAGEMAP_SCAN`` reports ``PAGE_IS_ACCESSED`` once the bit is
-+clear on a ``VM_UFFD_RWP`` VMA, so inverting it efficiently reports the
-+still-protected (cold) pages::
-+
-+    struct pm_scan_arg arg = {
-+        .size = sizeof(arg),
-+        .start = guest_mem_start,
-+        .end = guest_mem_end,
-+        .vec = (uint64_t)regions,
-+        .vec_len = regions_len,
-+        .category_mask = PAGE_IS_ACCESSED,
-+        .category_inverted = PAGE_IS_ACCESSED,
-+        .return_mask = PAGE_IS_ACCESSED,
-+    };
-+    long n = ioctl(pagemap_fd, PAGEMAP_SCAN, &arg);
-+
-+The returned ``page_region`` array contains contiguous cold ranges that can
-+then be evicted.
-+
-+**Cleanup:**
-+
-+When the userfaultfd is closed or the range is unregistered, all PROT_NONE
-+PTEs are automatically restored to their normal VMA permissions. This
-+prevents pages from becoming permanently inaccessible.
-+
-+**VMM Working Set Tracking Workflow:**
-+
-+A typical VMM lifecycle for cold page eviction to tiered storage. Two
-+mappings of the same shmem (or hugetlbfs) file are used: ``guest_mem`` is
-+the RWP-registered mapping that vCPUs access through, and ``io_mem`` is a
-+private mapping for VMM-side I/O. Reading ``io_mem`` does not go through
-+the RWP-protected PTEs of ``guest_mem``, so the VMM's own ``pwrite()``
-+never traps on its own ::
-+
-+    /* One-time setup */
-+    fd = memfd_create("guest", MFD_CLOEXEC);
-+    ftruncate(fd, guest_size);
-+    guest_mem = mmap(NULL, guest_size, PROT_READ | PROT_WRITE,
-+                     MAP_SHARED, fd, 0);  /* vCPU view, RWP-registered */
-+    io_mem    = mmap(NULL, guest_size, PROT_READ | PROT_WRITE,
-+                     MAP_SHARED, fd, 0);  /* VMM I/O view, unprotected */
-+
-+    uffd = userfaultfd(O_CLOEXEC | O_NONBLOCK);
-+    ioctl(uffd, UFFDIO_API, &(struct uffdio_api){
-+        .api = UFFD_API,
-+        .features = UFFD_FEATURE_RWP | UFFD_FEATURE_RWP_ASYNC,
-+    });
-+    ioctl(uffd, UFFDIO_REGISTER, &(struct uffdio_register){
-+        .range = { guest_mem, guest_size },
-+        .mode = UFFDIO_REGISTER_MODE_RWP |
-+                UFFDIO_REGISTER_MODE_MISSING,
-+    });
-+
-+    /* Tracking loop */
-+    while (vm_running) {
-+        /* 1. Detection phase (async — no vCPU stalls) */
-+        ioctl(uffd, UFFDIO_RWPROTECT, &(struct uffdio_rwprotect){
-+            .range = full_range,
-+            .mode = UFFDIO_RWPROTECT_MODE_RWP });
-+        sleep(tracking_interval);
-+
-+        /* 2. Find cold pages (uffd bit still set) */
-+        ioctl(pagemap_fd, PAGEMAP_SCAN, &(struct pm_scan_arg){
-+            .category_mask = PAGE_IS_ACCESSED,
-+            .category_inverted = PAGE_IS_ACCESSED,
-+            .return_mask = PAGE_IS_ACCESSED,
-+            ...
-+        });
-+
-+        /* 3. Switch to sync for safe eviction */
-+        ioctl(uffd, UFFDIO_SET_MODE,
-+              &(struct uffdio_set_mode){
-+                  .disable = UFFD_FEATURE_RWP_ASYNC });
-+
-+        /* 4. Evict cold pages (vCPU faults block on guest_mem) */
-+        for each cold range:
-+            /* Read from io_mem -- bypasses RWP, no fault. */
-+            pwrite(storage_fd, io_mem + cold_offset, len, offset);
-+            /* Drop the page from the shared file. */
-+            fallocate(fd, FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE,
-+                      cold_offset, len);
-+            /*
-+             * Wake any vCPU blocked on the RWP fault for this range:
-+             * fallocate() does not iterate ctx->fault_pending_wqh.
-+             */
-+            ioctl(uffd, UFFDIO_WAKE, &(struct uffdio_range){
-+                .start = (uintptr_t)guest_mem + cold_offset,
-+                .len = len });
-+
-+        /* 5. Resume async tracking */
-+        ioctl(uffd, UFFDIO_SET_MODE,
-+              &(struct uffdio_set_mode){
-+                  .enable = UFFD_FEATURE_RWP_ASYNC });
-+    }
-+
-+During step 4, a vCPU that accesses ``guest_mem + cold_offset`` blocks
-+with a ``UFFD_PAGEFAULT_FLAG_RWP`` fault while the eviction is in
-+progress. After ``fallocate()`` punches the page out and ``UFFDIO_WAKE``
-+fires, the vCPU retries the access, faults as ``MISSING``, and the
-+handler resolves it with ``UFFDIO_COPY`` from storage.
-+
-+This workflow targets shmem and hugetlbfs (both support a private
-+``io_mem`` mapping over the same fd). Anonymous-memory backings need a
-+different inner-loop strategy because the VMM has no way to read the
-+page without going through the RWP-protected mapping.
-+
- QEMU/KVM
- ========
- 
--- 
-2.54.0
-
+>=20
+> > =C2=A0}
+>=20
+> [ ... ]
