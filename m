@@ -1,167 +1,302 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 036E63AB298;
-	Mon, 25 May 2026 06:52:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9520286AC
+	for <linux-kselftest@vger.kernel.org>; Mon, 25 May 2026 07:22:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.181
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779691990; cv=fail; b=J3kpZjj3uC+9kBYEPo5Gh6VHoZIagSZSReUT8h6awjB7TKnSHlujn8Ei/bmsDH6doWgX1QCBLNZ+FRTrMIwE6Gfs/l8mstaskYVgz64FBKhy3lPqP4b50g+XVTJWwuy8rJEmklN+AuACtZjRJJWMFWrOHH4h1tf91KGURusJZsk=
+	t=1779693740; cv=pass; b=KfqG6f+/DkPnIDk6qM7fsnf3t8OKW843uzPkVgUBGskoCwEiEaeQ42t/K2M6cp4ZGPverMxgiRp0E4zIdabfuZ5xvMKnFlRVYeu2HaF77BEBuuNANdKF5qSSgjnoZIT7JHWNS85W73aBP+MdU9bQ9SFZ4qfaGiZJxIEAm6DYiA0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779691990; c=relaxed/simple;
-	bh=Hrbo/5riu4kRyMu0BmU/TEYag0QuzXoyzx7QoHz8/uE=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=Zb/W/cy/hC4r3fzfVTrbkybSdDr8+hzZqLSENOVK9fDQ1BBWY5HRsE8ir5tErC78VA9fDJ3wbj946YG3yOFnosp2/ru8n9U93fnrgKzRy0DNs/IvYCXzi4xIotKuz2BfFwZzQo6dQYrbH/afrCxfMOntwv0Hd2xXxvUL5sOeITY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZFQpQkHS; arc=fail smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1779693740; c=relaxed/simple;
+	bh=X+7djYcP9GEagwqG8m/X7AI21c2H+orZX9PlTDd1uts=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=gkiBE6zPTLz12YXCgDqenO2G+mcw8CtOXv344wd1iCc/GXBIApRyD4dVT9J2QXXAqgXmWw+YGy41MrI4o49GQQjff6Uz5Dvq9d162JkSMNKACOONEdmpaV1luteqd2G+A6Kgv3ldKLpHUQM8RaGGF8dau7pSOcnNxOzTKjx6J3c=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=b4Xd/IrL; arc=pass smtp.client-ip=209.85.160.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZFQpQkHS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1779691978; x=1811227978;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=Hrbo/5riu4kRyMu0BmU/TEYag0QuzXoyzx7QoHz8/uE=;
-  b=ZFQpQkHS2MkJkevjdCiiHwoSSUtCFlJqGnzYvPDEO5xXiwcaieavgk5d
-   0d/U1uFoxlL/l0CSewFITR7ZVOP/xeKQnh851FD+PUwwN0laK+FWJsnus
-   +UlQ3ysT4rl+tpIkX3zOEr2+/RdRaKW5+eKhIuy9grQBonRr1if6qEitH
-   EbiumSGIlkVKA2XJSJXp0P9eVh3Yh10jPZHrsQKwtctF1nxxt7gvD45D/
-   w3ptrTSnojWEfNykoAErmRPAyzHiFPkYKjjDiT3dzHDdjLXjKp2IkvUwF
-   WbQIE5D2JYROzFMPBd7cbMpd+mb0VFrmyVGkvawy17e20K4pmxhcCSmmL
-   A==;
-X-CSE-ConnectionGUID: +/oEphehTn2wwgnZWcY0eQ==
-X-CSE-MsgGUID: fbJd/RcZT9KrC5J624IssQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11796"; a="80627866"
-X-IronPort-AV: E=Sophos;i="6.24,167,1774335600"; 
-   d="scan'208";a="80627866"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2026 23:52:54 -0700
-X-CSE-ConnectionGUID: fe9UW87sT2aeqGaty1+Ekg==
-X-CSE-MsgGUID: GeZI473KT96RV4640bf3xw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,167,1774335600"; 
-   d="scan'208";a="245796917"
-Received: from orsmsx901.amr.corp.intel.com ([10.22.229.23])
-  by orviesa004.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2026 23:52:54 -0700
-Received: from ORSMSX902.amr.corp.intel.com (10.22.229.24) by
- ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37; Sun, 24 May 2026 23:52:53 -0700
-Received: from ORSEDG902.ED.cps.intel.com (10.7.248.12) by
- ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37 via Frontend Transport; Sun, 24 May 2026 23:52:53 -0700
-Received: from CY3PR05CU001.outbound.protection.outlook.com (40.93.201.43) by
- edgegateway.intel.com (134.134.137.112) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.37; Sun, 24 May 2026 23:52:52 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=OrPdN3P4X4W01pNxg3p+X2M9dpkp8Npac210W1stFn2Ijbxhie06HSDIVM+03uRk1o6ITxmyKi4uwf0XCdqlSIDHfk4iu9mgTwbTduSaf5cFRdmznpszexOKF2d7cF2ZorgoGma5SQVnJ1aGObHeNeMSJc6qhvOmQiCAbTsgQGmQ2ZEA/GJDFyjzTu894c0k/NdlbtlOVcUKD2ZRYxJQpPGqBKsBQ/Tce0PlQ6gMIf9Rl6AwSPhS44ACR7Hee5vgYPuVD7lveUeuQeeH0OQUJaSHjoHTaT06CAx+/4R9JqLw/2YFLjGpetxnGFKd1lAt8ELAODlRNdp5SHMiVVzVZw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Hrbo/5riu4kRyMu0BmU/TEYag0QuzXoyzx7QoHz8/uE=;
- b=CTYCKjIOxbK6fzmriisJtudlXPPXivCyqnERPK+ogD5G/TcYbxtDTSrmfLxPgszA9jBTDxBhhp6vilSNbSXWgTaCCO0UDS4PsPxANiZjDeAcVqS3w8HQXP6Gpqv3ai7YQF/NyGyXv01j4VEyJwm3yaTj5jiRlpS4L+Dk/i6Mc4JH9UKOH9fencSutsa//AYrSneHsj+YYAl8ADjNvqDXtW77clpDNvSmxZx4C0Ye+0MiCIt2tdRtEbtOZQn3nji36ZB6B18tvMcMZUjlsHFyci8v5hQx0B5sYUlzOsoX3B4WobUllK9ZWlLzCPInpwv6mlf7+JGXhnqm5C8nKHyYvA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by DM3PR11MB8670.namprd11.prod.outlook.com (2603:10b6:0:3d::6) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.48.19; Mon, 25 May 2026 06:52:50 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::f997:762f:f079:134f]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::f997:762f:f079:134f%5]) with mapi id 15.21.0048.016; Mon, 25 May 2026
- 06:52:50 +0000
-From: "Tian, Kevin" <kevin.tian@intel.com>
-To: Nicolin Chen <nicolinc@nvidia.com>, "jgg@nvidia.com" <jgg@nvidia.com>
-CC: "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Subject: RE: [PATCH rc v2 4/4] iommufd/selftest: Add boundary tests for
- veventq_depth
-Thread-Topic: [PATCH rc v2 4/4] iommufd/selftest: Add boundary tests for
- veventq_depth
-Thread-Index: AQHc6YMsPAk5HwiFLkidGecO75YK2rYeUyBw
-Date: Mon, 25 May 2026 06:52:50 +0000
-Message-ID: <BN9PR11MB5276A871A844806BEAD9C9838C0A2@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <cover.1779408671.git.nicolinc@nvidia.com>
- <acfa370fa4e89e4626f71954bad7ad2bd64cf63b.1779408671.git.nicolinc@nvidia.com>
-In-Reply-To: <acfa370fa4e89e4626f71954bad7ad2bd64cf63b.1779408671.git.nicolinc@nvidia.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|DM3PR11MB8670:EE_
-x-ms-office365-filtering-correlation-id: 339f9bfd-2674-4bf4-5843-08deba2a3ca9
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|376014|366016|38070700021|11063799006|4143699003|18002099003|56012099003|22082099003;
-x-microsoft-antispam-message-info: dyrtXiAk0LZ6XMed6bpjJJqcTsiTTtg+nqgz847BrvrI78hzee/mEL2oyZE1Z+qtsfShmhPzMdwN5Y0tcwuSXHw0a7Kvz3BbpDhWHh8/wmlhhOPukp9WCt/9Z80J7G/bNSgilWsaVJFNe2BqmBumJLvuhjLeXIRbiFsWfSnKa/pQ63KJEjlgX1ljGEXKExrnvYef2IrxoCXVPr5/ZK59KRYS83HIdZnLxJzdZOGBLCY+O0BiS4ZTnjPyBNntlaB6lh1lXJU1D7CiQrI5xdTlglVLAVVkmLcx6p+OLuXJX4OKAn5Si17WIvAx0SEFM4/Ki19zUBT+48OhcidG6L3VAj8zLmULVrdbvS+DuYEHV+QA2IJHLANdEbmi/lWGz8niHlunN1r48Kv4Q1v6lbMSTIK3wWKhe2oPqR/HrB9eJctqU8Kf+U0zbGLH7O/iE3zZnQAtBufpLU6VaBDVJqmgj526Dk7o+M2uLo/8QAeVnzijZF+GVu41mw7Ks148+35xk1O9x9Kl4hJEwSyshfEkSprValiXtJ3x51KXvtRVWRLyhVH3UCc5AeJ6B9KMj0C8sM0kQgzv2KNGhrz/ngei2rftRlAO307Yn7DeLhqDCe5JoVgwAR1X3U3T2Ib4FwGKbETQhturu/mD/8sUMOjSSPx42NcDEpih/WbLXCAyEm4nuvWDrBg6wHO55xcjlWyNM9yRc77eg7ZEMnZBPBcRivmEffG2E3Pcn3nVrFCpKJdZg21RUyo28JjHNdsJwS+Y
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(38070700021)(11063799006)(4143699003)(18002099003)(56012099003)(22082099003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?WHu35RO1ASW034jjOkLtLwACKEODu5AcgXlFI1vR6x/r4wOsErn3Hzi5rtw9?=
- =?us-ascii?Q?KLpHj23Y4T/r375fm4DXQoUBEfhvHuj+oUlv1++CLphCevgquC8QZ2aNwepb?=
- =?us-ascii?Q?OrVwInsU9taECm3tX5pV2D+uqr5dWHq51vW4XNNiAAFI+P8Ltk0XB+AU4nkh?=
- =?us-ascii?Q?d/qlznD5MSMKe4pHVf8YwcljXKyESzRRz4tBN6oUmUfiBKGgVQ7Cpzcbz2Ph?=
- =?us-ascii?Q?Bw3o4gyB0UXR3L2X2KG4FsEfGLy8YxKniaH1rY19DGrY6LKSNO+j/YN6ZPAq?=
- =?us-ascii?Q?fRUMfqJ04kqGiZYE8FcZJfejUlnrdpJyaQIPamAUpP71k8kMyYqVEswWBZMv?=
- =?us-ascii?Q?RRkidnNhaRg3mKKexU4qFFro9l+aBeqZkegDvxaEpYWicEphQBz6bhabAcD7?=
- =?us-ascii?Q?SaHD6u1SZkK34t3Ol7QEVapy3KtvzsQklIeblLHTiNtGEgoatDH1VZoNR39B?=
- =?us-ascii?Q?i4qwKP5Z+CnSuPbBi2xCoX4r1hAk56JIZBUBncjJaAIRwwWxna90415YZoYz?=
- =?us-ascii?Q?zf7rBT/Im1fAEUGYh77c9Wg+zFxLiu/ZJ8CYyZhkYM0tNH+bQeT1878/y5J4?=
- =?us-ascii?Q?VsJGXkLuqvt1ZR6iKJYjPT9ToChi6UJi5Pyq4n/54Xp7fk7Slro4iKb0+ZMn?=
- =?us-ascii?Q?1YcOQPExxj6JUrb2eGKAtwnqW5uGjK7S14RrHyTecKD2HdsH+GN+BsSabOpZ?=
- =?us-ascii?Q?I05q/8VaTCT/G3HaB2AVK1TQ3mn8ZYPs73TPDi0Zj4vSBBxgqtcBYByYsfju?=
- =?us-ascii?Q?ZqbkGJBEZ+QNPIdHUG+7osFFA+bYQGq8OG0GeqTA8kf6myhNskiyOkMWHJ3u?=
- =?us-ascii?Q?MGkTscjYrxWTSqgwc2LaDih5OaYi7W8QpvGb+uv++9BoZSGPHawlJAFfOLfM?=
- =?us-ascii?Q?EYo+5HvzAYx4M21Gx9/4S8ELzoiA0Yi+G1mIQeGFEGrFf34guegEwPR9vcBM?=
- =?us-ascii?Q?Aj3cMPDJBtA+J0w8WknyRrtYC+mf1IiT7Kkc5LMDQGJ8LcX6Jk8WnSi9nMQy?=
- =?us-ascii?Q?faBbJJweT+YYJ02j/6TG7sfPmau3XiQH1cKenirp9MJUcrMte6qeOsJumMV3?=
- =?us-ascii?Q?W6iAQGTisvp0E1SzpYCRHpUCZzSTuYKSQEvnW8FYtITyQY9NUTpFph9hVjkj?=
- =?us-ascii?Q?tzvcm2e81hPdesWEGN8/hP8P2FVJWCozXm50zVETbQbPptifFq1DpaAfpqae?=
- =?us-ascii?Q?aKtxFwJ+f3jX2V92j4OP6SYg1Qb0PJVis0QN6iRNK18e6atZIEqWOZAl+hcs?=
- =?us-ascii?Q?arRzxSjjrmJDkUGRe3rLM58qciaiejFjRXUjO7JzEl3xRksHIHrD6OexkGNB?=
- =?us-ascii?Q?/li+WYUIDEKTv0uf9Qu0gNldLOJ2fBB37EkkTEyBd62Bs51MFVWJFL8/AoeA?=
- =?us-ascii?Q?vAGVqxPYX3SpvW26zDHo11lhUTGBr0/JnPg8tQDprEPApDwP32oRqvTY73+q?=
- =?us-ascii?Q?0OIoOVY3WA2B2K95+5t99/GRvAU9M2m1nggkiqRmtlbc2sDB1gc5KX0Qka58?=
- =?us-ascii?Q?w6Xd0eb1RL434xHYgbDSuYSfQnZnDTU/GVhs8kw6TLpijtlgcRtArPkPpLfe?=
- =?us-ascii?Q?6bgaSXXeAR74caB3dqlNoed8N4D3nQA6e17z6QfBXHbN6wA6MhYcfQ5wgmRl?=
- =?us-ascii?Q?J4WUzQQmYw8Srm2f0uzl6BQM7JvBzSxgpsjtGymkmPtjQiSk6h4P/PWrovMo?=
- =?us-ascii?Q?Stu2MuQzHarmvLSvD7doP8Vn0oqrXvKjEj3AdntdW0c4gcRxqGif77+f+xX6?=
- =?us-ascii?Q?3itRP36xsQ=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="b4Xd/IrL"
+Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-50e61648f10so1061cf.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 25 May 2026 00:22:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779693738; cv=none;
+        d=google.com; s=arc-20240605;
+        b=C3PZeM+c5RuUnRSPDbzWVMuBGxzWZgokEr8m75HyA8iBApm9TpDqrNNRvAZWEjnLCT
+         KjbKMNT9WclUWTtfBsjju/UZesVtlg+5+pjegCUZKa9GZQQCVSpbMeciI3NWfCkF1ehf
+         xM5R4jA0hq+64zggCE1nAW1YBCSuQveFckVFbDZOXNdZiBJWB4yxPNMmv2Zn2uDOxJZ6
+         0XeyGZfWoUSEKWkP8hE4YN6Jlotgqzt7fLEk1pctlwP0GYEZC7K8ysqHi2lCH9eaeHNs
+         bb7DPhUzzxq1p06C0x/44SyVh1hAAofDH3r5JnaVOE+efWPbpcFi4ZUd4BhapgA4LLYd
+         Zw5A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=y5njTe4srkYzXCM80V2lfRLC7p2SgEf5NieyXgBYSB0=;
+        fh=jw7NNdm/fUVA042RH3bQQcJyhtAebZ7aYjwEtf3uLKA=;
+        b=eooTdpLcOw52Y4vG34xaGiQZ+QwIxiu6Uxv9QnkmII6i5s/Hkv1kr8MKpl3EhFqLmI
+         KY4gT6+R77WRdw0EhG+9Ci4ZVu+zG8CndnyJrqyS0VKiY5hgMsMt+rGs+sO2pUK8tsEK
+         z6PPUtFoSz2xuaB7Z4nlMyC1AA0oYIpPU0kff82ekOmb4KTTk0wU0GmUFRGQLzw1qkZY
+         zkv7BfCl1lWoa6Nge9PtBSJ3wyMxwQNgLIDUJWHkci+qjo/2Eyu49E5EqblL7BCnhOQJ
+         cnNSuwZigsBmyPaaXN53E2ri/TdyLBLHmhYihBC7/0YcjaNvIfcqQTC7reu8rCijBzOs
+         Fppg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1779693738; x=1780298538; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=y5njTe4srkYzXCM80V2lfRLC7p2SgEf5NieyXgBYSB0=;
+        b=b4Xd/IrL+T87r+U2VbjRDAUuzMG7zz3EI/yzK9pbyJfpgbMR+GLEW0CAdcVnFJ7UDi
+         1IHrmhfzzTBAzfb/YUsjOPEd19qhEubDheoaRCmTyG6W6QXG5YQ1EC+dlDcgE9FryAtq
+         hSeoGGhXUvFYeWl6UyAgL39mlYCNNFPnEsKgIkvujjk7HJ3vKjlTUR0YRssRDJcPu5RC
+         AhzFpptixYNG8SX9fRQXpxpNtZ85rBdhX8JjzyLAl3RRR1gvdN8GCXrZwFJ3iB0tAqT6
+         H5KZjBWH3nNRiGmTitP9VJex3NtwZjqkFrp6izdFokwBglZx4cumcWyJWCgr2ObCfBPw
+         5rPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779693738; x=1780298538;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=y5njTe4srkYzXCM80V2lfRLC7p2SgEf5NieyXgBYSB0=;
+        b=HCc7surmy3lUEKjOItzBwhRmqLxknJYhp9PN8yBWkIF3SXmadrMxggfSvK9bSMzbPd
+         NeQ0KzkSM0kgBLKlQLGNRHRBADXlu7ADFX1OsaESM+ynYw88DPn0qYBgIyvRZo0N6Veq
+         0HRKD0P6c+d3CaqkIaSrt93WgPWOdthqvWlIx+WjbNqLQNWcLz6o013UaQ+buX8aaE2M
+         MSgIRFplzb7a/6M/QB/SRmjcJW60Q4+Gzi9NkFu3F4L97Xltn2Yp676IwhEsWN0L0Q9K
+         6muLm4lLTr4saDizoq7pXg3PH5ovTn7PsJ0pNAXjSE0HAjUa0yTiwzzOWRfC+hwrq0Ei
+         e/MQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9/224xYkLK48JPEwLcec9MWsr0UxZr3Jbw6MSQFpi7iuCr6TYzkaLFYAvox5zWL5jPyEdNrp+2zpIPlR6A+9Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx9DGj5/I0eoaF1GMNakU1E9v5LSCmH5vwV/36n+7GrvCbs/nx+
+	iRoRsODHh6hsiCILLBXLYSBVjkLxB33Rl8yy1XHAh+/e17xWlQvD5La80zuGkXKUCt5XFDGUdK7
+	CC3akPSQeZepY5dDT/+CaeO2iCkLKyoc7WrVkT5sT
+X-Gm-Gg: Acq92OGy7794KyUKRfHuHJ31wDc9GCW4eoZC5nDaKhXeMz+ezTiDMrRAKWu6sPIlHJf
+	cZPXP6empn/BeQIccb63bTzxnw8ftZvhyAHW0UhEaPlVV5BVo6f8a5IZEDl3wotXx1gyio1IRb+
+	2rby7E9Z84SWc6IUCi7oK2bbDy0RAicLAcPY723UQ0DY7wUeUq6t/k1jTmPmGSH/D/w3zUQt8Vt
+	Z7LsAQxH7Brh9hKMJ2Xxv4x7p+hiHZinXOax6PavG77ky7iEpK48AOt6cKrT1sto2Ux48HTO61t
+	TR0DDzzg3pcUN0G004tD3HlyV2pL2j7ocYSHxuF6juU/iZEFcgAK4VKzwNoNYw1WFTSKtNb/bCS
+	Kj1PCtQ==
+X-Received: by 2002:a05:622a:201:b0:50e:595d:164 with SMTP id
+ d75a77b69052e-516e0cf98d8mr18186391cf.8.1779693737022; Mon, 25 May 2026
+ 00:22:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Exchange-RoutingPolicyChecked: PjExdcLTbmSMdauQgIO81etkzWAOkp1a4SQCEUt3W+VM0LLNDDfE47Re2DhVIzIsvYiWaJZlxmCms0ouADn6HzGgpCCavjs4weUB0fJVNejYWoo9YWe3Y1plPX3fMmsg1I+QvrNU8Oigys/M5S7UlB9SpZL9O78U1C6h9fPvH+TMkPycrUIDbn6vxQDA9Mi2agThBVvogxWZThr+DJX+2O2sRz71zlEx/rb6vTI7PV3QwPBKpJ0XZFWDUEfmtQJadbEMLbgV2Kg0nagTgc/J/jkGk/lj8+/kn0fFHx7ww6dbW1JEAqlWyHmxzC9cC58n8ol21fBNHaqOnEtNHM5Kmg==
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 339f9bfd-2674-4bf4-5843-08deba2a3ca9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 May 2026 06:52:50.2222
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ckgfodMZw9lTQ9zl4d496hK1Cg1vh9g2fSrZrHs+BYS0TwTaat1hzvZtC5+NhwFkPEV4tBjxY2dJRuzkKLPPKQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM3PR11MB8670
-X-OriginatorOrg: intel.com
+References: <20260515071504.2054786-2-yuyanghuang@google.com>
+ <2e08eb1ca27a9a2f8ad29e1c24f779b579621b0a648589f7044799d91c5e00f5@mail.kernel.org>
+ <CADXeF1GVtFHNZJb8xwFh6aadR=H19S+kja8rF185XB5=fg0D0Q@mail.gmail.com> <CAADnVQ+42+Th6OFGq2KawzvyKUAykazb4fXh2_uqss-T+R8VCg@mail.gmail.com>
+In-Reply-To: <CAADnVQ+42+Th6OFGq2KawzvyKUAykazb4fXh2_uqss-T+R8VCg@mail.gmail.com>
+From: Yuyang Huang <yuyanghuang@google.com>
+Date: Mon, 25 May 2026 16:21:41 +0900
+X-Gm-Features: AVHnY4JA9Kqb5fOY7fSO1LmnGe3xgrK64F2oWnLs97m99yzTrV6-pG4BIKgY5OA
+Message-ID: <CADXeF1F=7RcxAsW38w_mpFeKCLxTAh5p_XYHd=x2Ru+oajoN3Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf: align syscall writeback behavior with
+ caller-declared size
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Daniel Borkmann <daniel@iogearbox.net>, bot+bpf-ci@kernel.org, 
+	Alexei Starovoitov <ast@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Nikolay Aleksandrov <razor@blackwall.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>, 
+	Song Liu <song@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Yonghong Song <yonghong.song@linux.dev>, bpf <bpf@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, 
+	Network Development <netdev@vger.kernel.org>, =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>, 
+	Lorenzo Colitti <lorenzo@google.com>, Martin KaFai Lau <martin.lau@kernel.org>, Chris Mason <clm@meta.com>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> From: Nicolin Chen <nicolinc@nvidia.com>
-> Sent: Friday, May 22, 2026 8:37 AM
->=20
-> Test veventq_depth to cover a memory exhaustion vulnerability.
->=20
-> Keep veventq_depth=3D2 for the existing callers.
->=20
-> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+Thanks for the review comment. To better explain the problem, please
+bear with me through this long email reply.
 
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+
+>AI is wrong.
+>The fixes tag should probably point to 053c8e1f235dc or a subsequent patch=
+?
+
+Thanks for pointing it out. I think the correct Fixes tags should be
+as follows, and I will split them individually in the v2 patches:
+
+Fixes: 053c8e1f235d ("bpf: Add generic attach/detach/query API for multi-pr=
+ogs")
+Fixes: 120933984460 ("bpf: Implement mprog API on top of existing cgroup pr=
+ogs")
+
+>Please provide more details.
+>I'm still not convinced that what you're saying... is a kernel bug.
+>Looks like user space is querying new attachment types with old structure.
+
+I created a small C program using BPF_PROG_QUERY to query
+BPF_CGROUP_INET_INGRESS (not the BPF_TCX_EGRESS) to demonstrate the
+full problem , hope it clarifies:
+
+```c
+#include <unistd.h>
+#include <sys/syscall.h>
+#include <stdio.h>
+#include <string.h>
+#include <fcntl.h>
+
+#define __NR_bpf 321
+#define BPF_PROG_QUERY 16
+#define BPF_CGROUP_INET_INGRESS 0
+int main() {
+    char buf[64];
+    memset(buf, 0xAA, 64); // Set 0xAA signature
+    memset(buf, 0, 40);    // Zero out legacy 40-byte struct
+    *(int*)(buf + 0) =3D open("/sys/fs/cgroup", O_RDONLY);
+    *(int*)(buf + 4) =3D BPF_CGROUP_INET_INGRESS; // Explicitly set attach_=
+type
+
+    // Call BPF_PROG_QUERY (16) with legacy size (40) on x86_64 (syscall 32=
+1)
+    long ret =3D syscall(__NR_bpf, BPF_PROG_QUERY, buf, 40);
+    printf("Syscall return value: %ld\n", ret);
+    printf("Revision (offsets 56-63): %016llx\n", *(unsigned long
+long*)(buf + 56));
+    close(*(int*)(buf + 0)); // Clean up cgroup FD
+    return 0;
+}
+```
+
+Before the patch:
+  Syscall return value: 0
+  Revision (offsets 56-63): 0000000000000001   <-- Stack/Heap Corruption!
+
+After the patch (Safe / revision writeback is gated):
+  Syscall return value: 0
+  Revision (offsets 56-63): aaaaaaaaaaaaaaaa   <-- Safe (Signature intact)
+
+For this example, the regression lies in legacy CGROUP queries:
+1. BPF_PROG_QUERY for cgroups is not a new feature; it has been in the
+kernel since 2017.
+2. There are existing legacy userspace applications and language
+wrappers (like our android net-tests) written years ago with older
+structure layouts (passing size =3D 40, ending at
+query.prog_attach_flags) that query cgroups.
+3. In June 2025, Commit 120933984460 backported "revision" support to
+cgroup queries, introducing an unconditional writeback in
+`__cgroup_bpf_query()` at offset 56:
+```c
+// In __cgroup_bpf_query() (kernel/bpf/cgroup.c) - Introduced in 1209339844=
+60:
+if (copy_to_user(&uattr->query.revision, &revision, sizeof(revision)))
+        return -EFAULT;
+```
+
+Now lets talk about BPF_TCX_EGRESS:
+
+> bpf_mprog_query() and tcx_prog_query() were only introduced there.
+> How come your userspace passes shorter uatter to query newer
+> BPF_TCX_EGRESS attachment?
+
+I understand your point, but two common cases exist where userspace
+will legitimately query BPF_TCX_EGRESS with a 40-byte structure:
+
+First, a generic BPF querying tool (assume it called `./bpf-query`)
+compiled in 2020 (when the query buffer size was 40 bytes) might
+accept the attach type dynamically from the command line:
+  ./bpf-query --type 47 --fd 3  # 47 is BPF_TCX_EGRESS
+
+The unmodified 2020 binary populates the struct dynamically and
+invokes the syscall with size =3D 40:
+```c
+   ....
+   attr.query.attach_type =3D 47; // BPF_TCX_EGRESS (passed dynamically
+at runtime)
+   syscall(__NR_bpf, BPF_PROG_QUERY, &attr, 40);
+```
+
+Without the size check, the unconditional writeback of revision at
+offset 56 would result in an out-of-bounds write on the stack.
+
+Second, in dynamic language environments (like Python), UAPI
+structures are often declared manually. The developer might only
+declare the subset of fields the application actually uses (40 bytes
+in this case) to optimize memory overhead. Even with this subset
+declaration, we believe the kernel should ideally respect the declared
+size limit to prevent accidental out-of-bounds writes into adjacent
+userspace memory.
+
+> Looks like user space is querying new attachment types
+> with old structure.
+> Potentially the check can only be around:
+>         case BPF_TCX_INGRESS:
+>         case BPF_TCX_EGRESS:
+>                 return tcx_prog_query(attr, uattr);
+>
+> to be nice to broken user space,
+> but, really, attr->query.attach_type shouldn't be equal to BPF_TCX_EGRESS
+> with a smaller uattr.
+
+Add gating to the TCX path, will not be able to fix the legacy cgroup
+query path. As shown above, the cgroup query path has the exact same
+OOB writeback regression affecting legacy userspace. Since we must
+plumb uattr_size to cgroup.c to resolve the cgroup regression safely,
+applying the same consistent size-gating in bpf_mprog_query() seemed
+like the most consistent and robust architectural path.
+
+Feel free to let us know your thoughts.
+
+Thanks,
+Yuyang
+
+On Sun, May 24, 2026 at 8:22=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Thu, May 21, 2026 at 1:41=E2=80=AFPM Yuyang Huang <yuyanghuang@google.=
+com> wrote:
+> >
+> > >This looks like a bug fix for an out-of-bounds write vulnerability.
+> > >Should this include a Fixes: tag to identify which commit introduced t=
+he
+> > >unconditional copy_to_user() calls for query.revision without checking
+> > >the user-provided buffer size?
+> >
+> >  > Fixes: 3fe213c040b3 ("adding ci files")
+> >
+> > I completely missed this checkpatch comment. I will add the Fixes tag
+> > in v2 if there is a consensus that this patch is the right approach to
+> > resolve the issue.
+>
+> AI is wrong.
+> The fixes tag should probably point to 053c8e1f235dc or a subsequent patc=
+h?
+>
+> bpf_mprog_query() and tcx_prog_query() were only introduced there.
+> How come your userspace passes shorter uatter to query newer
+> BPF_TCX_EGRESS attachment?
+>
+> Please provide more details.
+>
+> I'm still not convinced that what you're saying:
+> "
+> For example, our Android net_test  suite uses this legacy 40-byte
+> Python ctypes struct layout:
+>
+>   # legacy 40-byte layout (pre-revision field)
+>   BpfAttrProgQuery =3D cstruct.Struct(
+>     "bpf_attr_prog_query", "=3DIIIIQI4xQ",
+>     "target_fd attach_type query_flags attach_flags prog_ids_ptr
+> prog_cnt prog_attach_flags"
+>   )
+>   # Invoked via: syscall(__NR_bpf, BPF_PROG_QUERY, &attr, 40)
+> "
+> is a kernel bug.
+>
+> Looks like user space is querying new attachment types
+> with old structure.
+> Potentially the check can only be around:
+>         case BPF_TCX_INGRESS:
+>         case BPF_TCX_EGRESS:
+>                 return tcx_prog_query(attr, uattr);
+>
+> to be nice to broken user space,
+> but, really, attr->query.attach_type shouldn't be equal to BPF_TCX_EGRESS
+> with a smaller uattr.
+>
+> pw-bot: cr
