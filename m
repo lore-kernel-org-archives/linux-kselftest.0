@@ -1,122 +1,158 @@
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+Received: from DM5PR21CU001.outbound.protection.outlook.com (mail-centralusazon11011008.outbound.protection.outlook.com [52.101.62.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F81E38229C;
-	Mon, 25 May 2026 18:51:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779735085; cv=none; b=PZAYhTqmMyhVnbhusV7mXLCGni/bnW/Z9nmR9Kmc3fx9/H2t8x9U2NI2f5VZ9MBVd5sKZbEJqnyg9jHHpC4u12NpWJERJx1D8YwNlZhTUpinN3n/I4sS9HOjoWE1no4RFYX174El0/tIkt66SipE6QWQVhmCaiF/OwUECmqT9hw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779735085; c=relaxed/simple;
-	bh=uFCFP6D9UvnulftDxE4NPjGFoDUN6dqmh0dCMtRMozU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=k8d5gHy/zNSAvJDubZ/Wp6kQkRr9cnn02VcjmRcaD2ac9Qy4xb/IXD/SSBd8buqsM8KOCVTFOwIdHdvezLc9+A6v3UMSzttqMYWUbxPsvvcZ0WDfo+NjPzuHbrYjSgqteC9J5RMWTyQTq0VM0zDZi0xIfq3vFITXeAfrn+d/lZM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=XCl4/gba; arc=none smtp.client-ip=213.97.179.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3738137CD45;
+	Mon, 25 May 2026 18:51:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.62.8
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779735106; cv=fail; b=H5nrWsLO364vPxllAwQbKSfUBdMTm0oM8Zqs2jjjEE6a6i1hSu/YfPvaUceElN8ANXMonStOeP8+qRxzaT+IAATSgiwnhmPIjFdkhOfbV4JdzO04kAVfKeRqetU++/hKxDgBU0rUXIIRFnXoHQ2mwoWrs+Po9b/lpUvd7kuuLT0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779735106; c=relaxed/simple;
+	bh=mBaPRnX4T3XR4MhK2ltv1SnSxhzxBluyzqcLflfimM4=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=YyxPF7DnRj83dWaUSjPmiw0Bie5U18I1EwKQIm/TvONYv5qswXh8zdHy+IGjhYTvzZTJSbN6JmwG4qqsED9+uMWqos6DECdYiCYmGnOKTnZ/MAwVq+8wMaHP1W5rZud5zmDzMLFSzRg1e33+osQsFxV7g2/g8153kDewuboPprM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=jUokMhql; arc=fail smtp.client-ip=52.101.62.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="XCl4/gba"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-	References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=SzvjpocKn+Bw0W1auvOZf4J3c/SOniG1j3Yx5uS5URU=; b=XCl4/gba9UqCiciWGg6tFqPC4L
-	77EZD1lyAKivZntMovFtr5CIjf5T79ipp5JOoYJLyL/zQG1nE1KokCemsgiEVfQ/59ENnu0eD/vED
-	dkzMU3psiJ47u1uLvFooS63vU71b/5otVcpcV6y1zGEd94NHDm/EB7SS+uEWZ7CQMlKeXTvpmcgiH
-	SE/6FYkzVEYyltHS3gzAvCduugAHtCJib+QsW/qnRgMcxLgdKja4Jx6LBiYQUyxl2lX1xq5SX98l8
-	XzyRW3myHxb2KE6kJLJh/FuefgVPGY7jVRj4IlVg8z2LedDoGv/IEeScBuTjgvklm7DcgfPZ+cSdl
-	l777ubpg==;
-Received: from [179.118.191.12] (helo=[192.168.15.100])
-	by fanzine2.igalia.com with esmtpsa 
-	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-	id 1wRaOR-0087qK-C0; Mon, 25 May 2026 20:51:15 +0200
-Message-ID: <5ae41797-83ef-4896-b67f-0ec6f957de67@igalia.com>
-Date: Mon, 25 May 2026 15:51:09 -0300
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="jUokMhql"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=a5+wfeZ3g6Etws1vSup6gyc5X1fFUvI+2yylNZDMstKUkclHQdGIb+vJ72ESfPaYhCKlpFRkaYkig0SfalXNFshLi/g1KdicT6uF2mXtKtZOf7vwtjwMj4/ICbEG3xHnF6SRaIkbpWGqvEQTEYx/kLg0NLVzJCKRUCtB+7j4heHnC6nhiuDI0aI1zINuNki+eFDT634d02+WBOvx9yGItetNVRQ+qCtRnzZwoM//Dz5f3kvP1CWN8B7asRnq7P9sXCol/m97/6dnIm87XWwof+ZByC/8Sb9OyhLHEVLoLd3/9SZQIRKEMBSvvyBlRRUKeSDrx+ouTG+JzUYK2e1AhA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=XOSezI4CYxmhwR92s5p5XGQD3Q7NgeSfk/fW0HdxODE=;
+ b=aLGHhPa+WHpMOfVrCOaDQi861NDiz0i1G0ohtQmZ8OEN85FOtw4WPK44ZyLjacaKDouK9EPcBb3/kl8ri8aMDP95PGmItKFS64miP1xQ3iVZ7t1D/CVhXV8xtcXIx97dkn4JbA4GtHSz37peUQdOm3oqkLwH2Os6MHla/4A7ZcKKXMIPuPXrFytoQ1q0dNJuhI2yShJOQrnuBSw3rc90fxxKND9J6AMyRhCB+qcS5uNvsdua9bw8TVrgyrQuGJ6Tf9rh96GYE/Jp7Vdi2b3nFpa1J4+R4IvCmoIHBIbd1iF8I2rvgBZ7uP8ca+zviBiV3EdJsBchAlwBgeJ3PyV0jQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XOSezI4CYxmhwR92s5p5XGQD3Q7NgeSfk/fW0HdxODE=;
+ b=jUokMhqlCpQt7iv04ZE1y6LbANtHQw0k7RlybEcXsggIOAdo8o/VUTN9QpIfxwOlc+pXt61r7dPV22HqD5l9jpDHEidLTlq5CjOI+XcoS6jlDgzw3Bh5O4YaNHdlEwrQYxj7+PKNLRTpBPD6vymu+ZoZEfrSwJJUmXQGV8YUCWn4v/G/2haOoFMXZoJvr03ZctiMpraseNnqx3eCWCEL52iv468IaJUYQy8u+MpsXffn6pDdtv/xJoUE55h79SPExB1jXD/Qy8lX5hxAcBF3nV52vrnGAq9aKQ+UpXnD/GlJjpZ5eeUWtaCh+0qAYKz3tipFoiYxEqIxXLfseIqS0Q==
+Received: from CH2PR11CA0011.namprd11.prod.outlook.com (2603:10b6:610:54::21)
+ by BY5PR12MB4308.namprd12.prod.outlook.com (2603:10b6:a03:20a::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.48.20; Mon, 25 May
+ 2026 18:51:40 +0000
+Received: from CH1PEPF0000AD77.namprd04.prod.outlook.com
+ (2603:10b6:610:54:cafe::a8) by CH2PR11CA0011.outlook.office365.com
+ (2603:10b6:610:54::21) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.48.20 via Frontend Transport; Mon, 25
+ May 2026 18:51:40 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ CH1PEPF0000AD77.mail.protection.outlook.com (10.167.244.55) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.71.7 via Frontend Transport; Mon, 25 May 2026 18:51:40 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 25 May
+ 2026 11:51:28 -0700
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 25 May
+ 2026 11:51:27 -0700
+Received: from Asurada-Nvidia.nvidia.com (10.127.8.9) by mail.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server id 15.2.2562.20 via Frontend
+ Transport; Mon, 25 May 2026 11:51:27 -0700
+From: Nicolin Chen <nicolinc@nvidia.com>
+To: <jgg@nvidia.com>, <kevin.tian@intel.com>
+CC: <iommu@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>
+Subject: [PATCH rc v3 0/4] iommufd: Fix veventq_depth boundary
+Date: Mon, 25 May 2026 11:51:20 -0700
+Message-ID: <cover.1779734952.git.nicolinc@nvidia.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] selftests/futex: Migrate futex_wait to harness
-To: Wake Liu <wakel@google.com>
-Cc: Shuah Khan <shuah@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>, Darren Hart <dvhart@infradead.org>,
- linux-kselftest@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
- Davidlohr Bueso <dave@stgolabs.net>, Carlos Llamas <cmllamas@google.com>,
- linux-kernel@vger.kernel.org, kernel-dev@igalia.com
-References: <20260525092002.3762888-1-wakel@google.com>
- <20260525092002.3762888-2-wakel@google.com>
-Content-Language: en-US
-From: =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
-In-Reply-To: <20260525092002.3762888-2-wakel@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH1PEPF0000AD77:EE_|BY5PR12MB4308:EE_
+X-MS-Office365-Filtering-Correlation-Id: afae669e-781d-4734-c3ea-08deba8ea841
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|376014|36860700016|82310400026|13003099007|18002099003|56012099003|11063799006|6133799003;
+X-Microsoft-Antispam-Message-Info:
+	TF6EG1JaUluWhBnzqc6L5eMRPdSv/Gi2I5umk/rB2JDwegDOvHlLve/ZBq+E7jiXTAfgv4gaJltJkcZEHRGzuFuLl66oDa7Bc8Zu2d0f8iEDUI67awzyFUBqkPas2f5QpaZJX9hJiEcX4FB+7N3oHiNz6qipjfZJpfm1abqvksXtW+3HWYmtwUaAGNuW+dMc9bXj1579Y4/COXDAQtVB7+kV/h7b6S+i0vBW+JaYU1J/xtPoVxR9EFpGrSq08M32Z3a++KIKUUv/RgZHk+8HDsGpiO+QBqYvb5SDxVdo6rKIB70gqpUTeKJhfFGIgiWgzFIhXbO6TuKph1STmaQ0WPIfHIYUaav7eIWQxh1ewstwtmbTWsXEUf9OwVpU5X3fF/9E1pWeODPHjWrSDXdgAkrS6RqJ/W/icrX86eARmj7K28nDki9x1HuyixjJQbiHi4Syte7zD7ciFcE/AQChJCJHSv7fAY3oNmFbIwUZXgOQf+vr6ZRHV9u0bnYZEj6oaJxd5jM/BERK1MP+EdpTPCPoRv0drfCLnHwziYjrmZtXHfrFLyNUqegEyjRd5u4WiArqJI20eNZ8eeU8ln1mjeBCAQaw11jZT7j9g6Rd8uZ+I7R2rw1J9WRtnmgVp55h1pmDOnAKXIBYaAntjsVeSJuno+UzNPoDq3mVUfkjQeMmaHDyHqFkdepq0qu9fdeHEdZy5+XHcahrKdFU9bT8XsBCA1kBGeoSqdA4JXAq8E8=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(376014)(36860700016)(82310400026)(13003099007)(18002099003)(56012099003)(11063799006)(6133799003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	qRayyT5Bpr+uoD9f+AENqUiqGoUiFNt1AU4r1xUIAxC22okrhWevTEZN1txK5K7M+8CNZkMVH/sQ2c19TjVxhjY/FXqxHx3SVBF90UvfLu44caMTYu8vwnnGg2tsdCMt77vZzgIsvaB/8U/8GMW2L693bz++Pv8iVbI3Q6JFeCgFeOX71AP9IxUy2DICDobQf+1tNDDdneMOf8trIgANKctA6tl9+GG9JhSGzzmcIQk4UEgm+INYYtzdsWdOrFV5W52/Pey2AbdstkDZns+Opc7UpIWJTlmpwpqJDC3Uyrx/Z6o3f7DZtpjHcnfFxozF3rDpUpQ7RBOMjKIxFgZ7qVSDWq+ZwjGN4QiEEx2bNuNcq+c1tHlhgaOiSN3RKETv4wKl8yz3cS92giVzJm5MlDMoIlVq7GNYFBRlEyluESdvbl+ynHxY8s1/eRTdmJEN
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 May 2026 18:51:40.2568
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: afae669e-781d-4734-c3ea-08deba8ea841
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CH1PEPF0000AD77.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4308
 
-Em 25/05/2026 06:20, Wake Liu escreveu:
-> Migrate futex_wait test to the kselftest harness framework,
-> removing mixed legacy ksft_* API usages and ensuring proper thread joining.
-> 
+The upper bound of veventq_depth has been missing for veventq allocation,
+leaving a vulnerability where userspace could exhaust atomic memory pool.
 
-Why is this patchset not part of the same series that you just sent?
+Fix it properly:
+ - Allocate outside the spinlock to avoid GFP_ATOMIC
+ - Cap the veventq_depth upper bound
+ - Fix event_data byte-count
+ - Add selftest coverage
 
-> Signed-off-by: Wake Liu <wakel@google.com>
-> ---
->   .../selftests/futex/functional/futex_wait.c   | 125 +++++++++++-------
->   1 file changed, 77 insertions(+), 48 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/futex/functional/futex_wait.c b/tools/testing/selftests/futex/functional/futex_wait.c
-> index 7b8879409007..ed4b040600b8 100644
-> --- a/tools/testing/selftests/futex/functional/futex_wait.c
-> +++ b/tools/testing/selftests/futex/functional/futex_wait.c
-> @@ -9,6 +9,7 @@
->   #include <sys/shm.h>
->   #include <sys/mman.h>
->   #include <fcntl.h>
-> +#include <stdlib.h>
->   
->   #include "futextest.h"
->   #include "kselftest_harness.h"
-> @@ -19,125 +20,153 @@
->   
->   void *futex;
->   
-> +struct waiter_args {
-> +	struct __test_metadata *_metadata;
-> +	unsigned int flags;
-> +};
-> +
->   static void *waiterfn(void *arg)
->   {
-> +	struct waiter_args *args = (struct waiter_args *)arg;
-> +	struct __test_metadata *_metadata = args->_metadata;
+Note that QEMU's SMMU has been already allocating veventq using a "HW"
+EVTQ entry number. So, picking 19 as the known use case, for a minimal
+level of ABI consistency.
 
-As much as I like the benefits of being able to properly use the harness 
-macros in threads, I fell like we are touching private structs here. Are 
-they safe to be used concurrently? If a child thread an the main thread 
-fails, does that counts as two fails?
+This is on github:
+https://github.com/nicolinc/iommufd/commits/fix_veventq_depth-v3
 
-Perhaps we should have a look to create a kselftest wrapper for 
-pthread_create().
+Changelog:
+v3
+ * Add Reviewed-by from Kevin
+ * Update the uAPI header about @veventq_depth limit
+v2
+ https://lore.kernel.org/all/cover.1779408671.git.nicolinc@nvidia.com/
+ * Add Reviewed-by from Jason
+ * Rebase on Jason's for-rc tree
+ * Update commit message for clarification
+ * Move "data_len byte-count" to the first
+ * Drop optimistic read in the allocation path
+v1
+ https://lore.kernel.org/all/cover.1779070992.git.nicolinc@nvidia.com/
 
->   	struct timespec to;
-> -	unsigned int flags = 0;
-> -
-> -	if (arg)
-> -		flags = *((unsigned int *) arg);
-> +	int res;
->   
->   	to.tv_sec = 0;
->   	to.tv_nsec = timeout_ns;
->   
-> -	if (futex_wait(futex, 0, &to, flags))
-> -		printf("waiter failed errno %d\n", errno);
-> +	res = futex_wait(futex, 0, &to, args->flags);
-> +	if (res) {
-> +		EXPECT_EQ(res, 0)
+Nicolin Chen (4):
+  iommufd: Fix data_len byte-count vs element-count mismatch
+  iommufd: Move vevent memory allocation outside spinlock
+  iommufd: Set veventq_depth upper bound
+  iommufd/selftest: Add boundary tests for veventq_depth
 
-I have changed it to ASSERT_EQ(res, -1) just to see what happens when a 
-child thread fails, but the test still reported PASSED: 3 / 3
+ drivers/iommu/iommufd/iommufd_private.h       |  2 +-
+ include/uapi/linux/iommufd.h                  |  4 +++-
+ tools/testing/selftests/iommu/iommufd_utils.h | 17 +++++++++--------
+ drivers/iommu/iommufd/driver.c                | 13 ++++++++-----
+ drivers/iommu/iommufd/eventq.c                |  5 ++++-
+ tools/testing/selftests/iommu/iommufd.c       | 19 +++++++++++++++++--
+ .../selftests/iommu/iommufd_fail_nth.c        |  2 +-
+ 7 files changed, 43 insertions(+), 19 deletions(-)
+
+
+base-commit: be93d186ae88a92e7aa77e122d4e661fa57b1e39
+-- 
+2.43.0
+
