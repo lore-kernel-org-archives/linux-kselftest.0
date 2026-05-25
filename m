@@ -1,95 +1,230 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74B2164A9D;
-	Mon, 25 May 2026 00:29:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779668984; cv=none; b=j7FX2oTEUD6rEGGkHrw/bd81GzQn8R4P9zIT4JjMLFSgOYSQ66aSJS+bEpXDnGpOHD3iEATfiuBIIgGvCVzkZnx3VtCLsOjpb3N7dkDjtUJHUAo/Uq8WdrIr0P8aVUoioeg+Mt6ZbWwZqpjcWWeQplg1jj40yyFDz8nJ2I77ohk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779668984; c=relaxed/simple;
-	bh=Qoxj9vzxkk7qVf1ZYlS82Hr9skoAVvLaDZc5If5HiK0=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=kecOLPdzSxz5BvRHtLri3P7WpH8OqJKqRKnEGjQ37ktzvmCYy5rW8xV+/g/WHXIM4TJbMbRclqGr5bmOg3VWqtQk3fmx9yTzI35EjhNIcsmT6oR+CHJpPJ7QwYzPAobvzf68lT0n74k9Pxz4wJJ5IR3FO5cYxQKnsMlJvaqHs7I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eahBUstE; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6526225A321
+	for <linux-kselftest@vger.kernel.org>; Mon, 25 May 2026 01:44:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.51
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779673468; cv=pass; b=lqbUhiLhYRy2LhqKvxNowOfdeYiaMCFWkA+ZRN4BRTifJfivRiY6HP/oySTHv3nqH1sVlOkMgHmZLJD8Ogsd9wWnb9a8ET4gc8ZDHqSIOTFfwifvCL4MOfK8oScEY5DnSZz16prBPI0REcK3oZizz39ydvIyKpLketfs/JCxsO0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779673468; c=relaxed/simple;
+	bh=ncKtSpXu7pCHV+FYMgLpGNtvZ4E7dz2d54nRBRZMz6I=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=V4/Kn3i1YQU7v3845DE1Qokq0q4JpAXnGOd+NWxVWmvbUe5NNdGb7CIWJDyrP1fWlG46Y+rrhoMA9bwqKjYOaJEi2+IL29OugnwCDlLBZ/R3QJzdMmBV902444E0UPeaZfP3MG4BnvOnIxu/H8KWuSINVpLnS68EKDb5t/xoR9Q=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qo3hxI7k; arc=pass smtp.client-ip=209.85.208.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eahBUstE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D1581F000E9;
-	Mon, 25 May 2026 00:29:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779668983;
-	bh=+0la3+a1/SfXT05O5t+8D92DVzm5jvZ6Ee5NFqbA31g=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=eahBUstE7YWCRe5itSf6PKisDW58q2zaRelFaRX/Hdxq0WcLv0Dl0gPu9jtTCDtR+
-	 89jVTjUJwDm/yCTwCzlhcwCjO3Z1AGcBMRTSGxjnuLYzRkF864vXKmu6zRVo9lbQYJ
-	 okBgmT/XQyO4dRpybXn7k28gmZUqYVXDF8VZMUkuxBrn/r2W9Pod2DHTKA4I9HtuzC
-	 0xe4cEhAaUAJTa4fe7p80zKfb/0hd+zMT+fWiJc++vNJ1kpvbhgRFEbC/gs4Mwr+rQ
-	 1YPSdCGV36oA6nopNZx2kw/matboECHwSfEZMEtZkFh0VKeRdjqKPdMqlC2ipUE57u
-	 Sn2I5Gpqr/sZQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 4/4] selftests: livepatch: Add information about minimum
- kernel support
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Miroslav Benes" <mbenes@suse.cz>, "Jiri Kosina" <jikos@kernel.org>, "Shuah
- Khan" <shuah@kernel.org>, "Josh Poimboeuf" <jpoimboe@kernel.org>, "Petr
- Mladek" <pmladek@suse.com>, "Joe Lawrence" <joe.lawrence@redhat.com>
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, live-patching@vger.kernel.org, "Marcos
- Paulo de Souza" <mpdesouza@suse.com>, marcos@mpdesouza.com
-In-Reply-To: <20260524-livepatch-unload-on-fail-v1-4-7465de7f741d@suse.com>
-References: <20260524-livepatch-unload-on-fail-v1-4-7465de7f741d@suse.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 25 May 2026 00:29:42 +0000
-Message-Id: <20260525002942.9D1581F000E9@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qo3hxI7k"
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-67f94c078e8so14004080a12.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 24 May 2026 18:44:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779673465; cv=none;
+        d=google.com; s=arc-20240605;
+        b=WFQsmpstk7iK7X3SkkjDm6XbT0jhqzmpMI3aLFteo08LuYDqfmmpmkrzqcZ9P837EH
+         sX/ZcguQzUtLhrpaDXdYk+koT95QjtqdZrfZJ55Ssw1xcsigonuaTHOipiM7uF1Ev3Zn
+         peXFPJnjmkLREtQqS/M+nhrT+A1QRCVDGG5RxTz1EZwdo0AxFBuTd9sG2PiM07FrR2Ug
+         8Io2WG5e3EJA+bNX3RS64+dzN5euLWQIBLhwR0Z2oMn0XLr+FoNXDQCwojD3uKx//96c
+         MognU/P5Z5aUj1QHaqTm09VpfdoD0MEsJowDODYKhQ0PHRgW5mwlpLKirfRPNuD1mcue
+         GjCA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=ncKtSpXu7pCHV+FYMgLpGNtvZ4E7dz2d54nRBRZMz6I=;
+        fh=GcmS63rNIz4SErE4dX4r/xKs4IT/cRzmW/8wAP5cIzA=;
+        b=bD99zCencnY4BN5ATKjOrl+3UGdCPn8jQVpGKKenijRLojD0X6UG+RXqJZXxpmx/oL
+         ktXeb3fEZRP2RjtJRk49tc4EzA9Ql4nrfIvawvXOY2VQOsJ13gevpPuDbV8XHg0lh33m
+         HnuhB0BQAVO3pUi4NZrk9mQOC4V7aRlDUB0hJX3VomoaU1QLdaHxXTaP8k+gDDTMCscK
+         SfkK5Gm1LJ62+Ij0JLS2Uc4Yipa6aVhpI+soZYEiQOWiSpYDK5e08vT5IdH1AA5Bqh5J
+         xVzKmCVq4DrV9KfuR7s3KIG2/ec8tK1a650bi/pUpKCP+ySyHWYvAoaLoYX9+/SwN55j
+         X19Q==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779673465; x=1780278265; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ncKtSpXu7pCHV+FYMgLpGNtvZ4E7dz2d54nRBRZMz6I=;
+        b=qo3hxI7kIAHe5a62AcbYg8rwNyPCiVI4Gn0xso13TrfXAIrUEKseZRaUOK7lDCehn8
+         QYr5UGYILoUUzuOQF4lelENurTL77H+qTIXsvK07mJovCYPXMprYhqt36ugQx94ZWsAV
+         yd0c4iQyS5gxuy/EZXEk3rpsB41i6vUF8MgdSJEMCpfu4qgcfLZvREQ+jZyBom79fZHN
+         EUCNWwb3viaAvzARBsXwMgQMumYSG0F3zibzirFy5Uqz8XmdUarswnjoZtQY79SJlnwa
+         EZiShx9NpACCPMMLrjX+Y/NGn+KR183vDSnJLIiyDniv4hm5fYZIj6VgX/mbpUmCKhnH
+         YE/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779673465; x=1780278265;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=ncKtSpXu7pCHV+FYMgLpGNtvZ4E7dz2d54nRBRZMz6I=;
+        b=JP3wOXJKdn6QbLdnpbpYcnpgckOyqNjyV8P6vtyilhdQr378jLo3p+dKBf31cMJTG4
+         ckcGZ6vpkHZmSCcjjrSH8SmWB0sbjDuq8hybgt3UhI6yPMad8vXn8ZJfRg8FyHYgXzvB
+         2mk2zxWKkrA5X0cxq8dYAtNKiBpNwng+yaXpWH2NEpRn6qkAo+jyVE8VcZ1kssov7xJy
+         IIkwFhNn6GSWuhX0WNTMayHtUEK8apnz3Z6gthiBw1/U1LTxQGun7UOY1WOUQdDp1PJK
+         d+GLGximUE8TmCfo2HX//4okbrbne/Pu84t6mkt/svZXwyFEMkzHdkrZJSCCZepVet5q
+         oHkg==
+X-Forwarded-Encrypted: i=1; AFNElJ9cBeR7XlspXSi5znko7Nx2AGeIhap06u6Wmb+ovtT8MRttVb95wHBVD36X3QkP39ZD146mE7lsXblIbQj74Gc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzj/K/Gu1XVdgMKNSokZw75intt5ua2ub6wXKKesiyCURS8p5SU
+	TIRUd0H+JK5GIa/gYqMxcvpzx6RG6RcpkwEGxbiEfjr/Drp1N7m6o/bUvXKVgbUnfNERhdHzgzx
+	KtozHqfdqHDHrjZ87R4X8n9h7WZcDxy8=
+X-Gm-Gg: Acq92OEV42kyi5+kNPoosbKTuOXPOKjUBC7f3gxGBc9IQm5mGMX6gTNyB0lJzcchs3X
+	LdOuEJtIqWUTQ7zMnRi5e0EDzAhmLLlxpmen6VY6tnJ8cKitVG8RfC5VLjFsW41Oc7WtJEicYD9
+	TRds+oCr5Iy/VwLq+5TMLY1DjNqWr1dSLwwuH1oFBfhh3tveh49cHqZDis2LgFxGgrDmIMqhuy3
+	q3sLul4fyS4cbxMHT1oUNlWUlFNwotdx5bvHfh5sdmCfcdVH+o/I0HUOCJhIGN808KF5wydLnp4
+	cwKpVRmKueolECjFceoZ8urQJMSJp/iC3hobEw5M6g==
+X-Received: by 2002:a05:6402:370a:b0:670:6ff3:6d23 with SMTP id
+ 4fb4d7f45d1cf-6889c431257mr6615752a12.7.1779673464584; Sun, 24 May 2026
+ 18:44:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20260505-seg6-mobile-v2-0-9e8022bdfdb6@gmail.com>
+ <20260505-seg6-mobile-v2-1-9e8022bdfdb6@gmail.com> <20260519033151.b01e47a877b01d3b68931abc@uniroma2.it>
+In-Reply-To: <20260519033151.b01e47a877b01d3b68931abc@uniroma2.it>
+From: Yuya Kusakabe <yuya.kusakabe@gmail.com>
+Date: Mon, 25 May 2026 10:44:12 +0900
+X-Gm-Features: AVHnY4L_KWEVlSdlGhMUwX9iTXuQg6B8YX1-k5ekXIJ_K-F3-WVsht3luuuTJjE
+Message-ID: <CAGCJULO5HR0J7pD++_--epSEnzqO2p5Mn=UQ3LPbsYYPGydM7w@mail.gmail.com>
+Subject: Re: [PATCH v2 1/7] seg6: add End.MAP behavior
+To: Andrea Mayer <andrea.mayer@uniroma2.it>
+Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	David Ahern <dsahern@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Simon Horman <horms@kernel.org>, Justin Iurman <justin.iurman@gmail.com>, 
+	Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, linux-kernel@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-doc@vger.kernel.org, stefano.salsano@uniroma2.it, ahabdels@cisco.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] Mandating backward compatibility with an ancient kernel version =
-(4.12) for all new in-tree selftests violates established upstream kernel p=
-rinciples.
---
+On Tue, May 19, 2026 at 10:32=E2=80=AFAM Andrea Mayer <andrea.mayer@uniroma=
+2.it> wrote:
 
-commit 005a4d6b98d5e0ddf7ab7d595575364d010c4d3f
-Author: Marcos Paulo de Souza <mpdesouza@suse.com>
+> The commit message lists three drop reasons including
+> SEG6_MOBILE_HOP_LIMIT_EXCEEDED, but the code does not add that one.
+> The likely third reason (SEG6_MOBILE_MTU_EXCEEDED) appears in
+> patch 2. (Flagged by Sashiko, the Patchwork AI reviewer.)
 
-selftests: livepatch: Add information about minimum kernel support
+You and Sashiko are right. The new submission will only list the
+drop reasons that End.MAP actually adds.
 
-This commit adds a note to the livepatch selftests README. It documents that
-the current tests are compatible with kernel 4.12 and mandates that all new
-tests must maintain this backward compatibility.
+> Nit: As far as I can see, Link: tags in this tree usually point to mailin=
+g
+> list messages (patch.msgid.link, lore.kernel.org). Other commits that
+> reference RFCs typically cite them in the commit body instead. Same for
+> patches 2-7.
 
-> diff --git a/tools/testing/selftests/livepatch/README b/tools/testing/sel=
-ftests/livepatch/README
-> index d2035dd64a2be..293f4730b9277 100644
-> --- a/tools/testing/selftests/livepatch/README
-> +++ b/tools/testing/selftests/livepatch/README
-> @@ -54,3 +54,6 @@ check_result().  The latter function greps the kernel's=
- ring buffer for
->  those strings for result comparison.  Other utility functions include
->  general module loading and livepatch loading helpers (waiting for patch
->  transitions, sysfs entries, etc.)
-> +
-> +All new tests and test modules MUST be compatible with kernel version 4.=
-12 and
-> +later, including current upstream kernels.
+Will move the RFC references into the commit body and drop the Link:
+tags in the upcoming submissions.
 
-[Severity: Medium]
-Does mandating backward compatibility with kernel 4.12 for all new tests
-conflict with upstream kernel principles?
+> This single reason covers several distinct failure modes across the
+> patchset: wrong Segments Left, SRH absent, SRH structurally malformed, an=
+d
+> HMAC validation failure. An operator seeing this drop cannot tell which
+> check failed. Using separate SRv6-level drop reasons seems reasonable. Se=
+e
+> my cover letter reply for the broader discussion on drop reasons.
 
-Requiring tests to support an older kernel could block the introduction of
-tests for any livepatch features developed after 4.12, as the required
-internal APIs would not exist. This might also force developers to clutter
-the test module codebase with version checks for old kernels.
+Agreed. As discussed on the cover letter thread, the SRv6-level drop
+reasons (SEG6_INVALID_SRH, SEG6_HMAC, ...) would be introduced in a
+prep patchset that also converts the existing seg6_local and
+seg6_iptunnel call sites. Pending the resolution on the cover letter
+thread of who prepares the prep series, the End.MAP repost will
+depend on it and consume the new reasons.
 
-Should the burden of backporting tests to older enterprise kernels be left
-to downstream distributions rather than enforced on upstream contributors?
+> This overlaps with the existing generic SKB_DROP_REASON_NOMEM in
+> dropreason-core.h. Why not use the generic one?
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260524-livepatch-=
-unload-on-fail-v1-0-7465de7f741d@suse.com?part=3D4
+I'll drop SEG6_MOBILE_NOMEM and use the generic SKB_DROP_REASON_NOMEM.
+
+> seg6_get_srh() returns NULL both when the SRH is absent and when it is
+> malformed (seg6_validate_srh fails, e.g. type !=3D 4) or truncated.
+> seg6_mobile_get_validated_srh() sets *missing =3D true in all these cases=
+,
+> so input_action_end_map() treats a malformed SRH the same as an absent
+> one and continues processing. HMAC validation is also bypassed because
+> seg6_get_srh() returns NULL before HMAC is reached.
+>
+> seg6_mobile_get_validated_srh() needs to distinguish "absent" from
+> "malformed/truncated" so callers can drop on malformed instead of silentl=
+y
+> accepting the packet.
+
+The natural fix is to change seg6_get_srh() to expose the reason
+(absent / malformed / HMAC failure) to the caller, which fits into
+the drop-reason prep series and lets the dedicated helper go away.
+API shape deferred to whoever prepares the prep series.
+
+> Nit: the function comment says "decrement the Hop Limit" but the code doe=
+s not
+> do it explicitly. The forwarding path handles it (ip6_forward). Maybe
+> remove that part from the comment or add a note that the forwarding path
+> handles it?
+
+Will reword the comment to make it clear that Hop Limit handling is
+left to the forwarding path.
+
+> Because of the bug described above, the only path that reaches the
+> drop label with this reason is HMAC validation failure (when HMAC is
+> enabled). Same drop reason granularity point as above.
+
+Right, that's a symptom of the helper bug; both will be fixed
+together by the seg6_get_srh() refactor in the prep series.
+
+> See above: this only catches HMAC failure. A malformed SRH falls through =
+as
+> if the SRH were absent.
+
+This call site folds away with the helper rework above.
+
+> Sashiko flagged that for SRH-less packets this breaks the ICMPv6 checksum=
+,
+> because the pseudo-header includes the DA. The AI bot was right, but when=
+ I
+> ran the selftest it passed. Digging a bit further, I noticed why:
+> 2001:db8:f::1 and 2001:db8:2::e have the same 16-bit word sum
+> (0x000f+0x0001 =3D 0x0002+0x000e), so the checksum stays valid by
+> coincidence. Changing nh6 to 2001:db8:2::2 makes the ping fail with
+> Icmp6InCsumErrors.
+
+Thanks for reproducing this. I'll fix the L4 checksum on DA rewrite
+with an incremental update via inet_proto_csum_replace16().
+
+> seg6_lookup_nexthop() calls seg6_lookup_any_nexthop() which already calls
+> skb_dst_drop() internally. The explicit skb_dst_drop(skb) above is
+> redundant.
+
+Will drop the redundant call.
+
+> End.MAP reuses SEG6_LOCAL_NH6 to mean "replacement SID", not "next-hop"
+> as in End.X/End.DX6. This overloads the existing UAPI semantics of
+> the attribute. The cover letter reply discusses this attribute-semantics
+> question across the patchset.
+
+As discussed on the cover letter thread, End.MAP will move into the
+new seg6_mobile module under LWTUNNEL_ENCAP_SEG6_MOBILE and use a
+new SEG6_MOBILE_* attribute (SEG6_MOBILE_NH6 or similar) for the
+replacement SID, so SEG6_LOCAL_NH6 keeps its existing next-hop
+semantics. No SEG6_LOCAL_* attribute will be reused.
+
+> The selftest only covers the SRH-less path. End.MAP also accepts packets
+> with an SRH, and that case should be covered as well.
+>
+> To expose the ICMPv6 checksum issue noted above, the address pair should =
+be
+> chosen so that the daddr rewrite changes the checksum.
+
+Will cover SRH and no-SRH paths per the cover letter discussion, and
+pick addresses whose 16-bit word sums differ so the ICMPv6 checksum
+path is actually exercised.
+
+The next round will be a fresh standalone "[PATCH] seg6_mobile: add
+End.MAP behavior" series in the new seg6_mobile module, posted after
+(or as a dependency on) the seg6 drop-reason prep series, per the
+cover letter discussion.
+
+Thanks again for the careful review.
+Yuya
