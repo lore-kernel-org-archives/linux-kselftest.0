@@ -1,119 +1,183 @@
-Received: from mail-dy1-f178.google.com (mail-dy1-f178.google.com [74.125.82.178])
+Received: from mail-dl1-f53.google.com (mail-dl1-f53.google.com [74.125.82.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 267C5318B9D
-	for <linux-kselftest@vger.kernel.org>; Mon, 25 May 2026 17:52:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.178
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779731524; cv=pass; b=MFQYst4TaOLv7liG0LcY9DwtX34GGgwjdaDPJpgxU7SJAPSmxtn/ZZfyIwM6G34xzTEQ4WGBQeltbrUKtV0ylWaeUVx+l6tufrF6MKIpASFInx5PemjqHm3bwIlLOnBsovMFfIFi7ORlxaU8Ks/HmG259e85+gVVnnFOns8rpWs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779731524; c=relaxed/simple;
-	bh=kr6z8jUXJs76+Hb66TPj5wAIPCr19WpDG6Lp2ByKQGw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RFE7UXwRgwOJ8U4JAGCMC1jzyEo7ur82adGlY99SAc7t/GV62ouJB38xfbsDM3NKvKAYPv6C+KySj4EQSvfolYTAxvpCzgx/5fINWeg+clxz1XKSTqqalyx776hkaqnkLF/T80/Hydq0X3GospQtLMWK+C1Qn3htSrDV7bu2pJM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OppDLcB6; arc=pass smtp.client-ip=74.125.82.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D08FA2DEA64
+	for <linux-kselftest@vger.kernel.org>; Mon, 25 May 2026 18:01:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.53
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779732106; cv=none; b=kgN1+SMD6dTK0teOYLqj+p2nUxkamzV26ojDG3aWgurDCpUlk5bASuRleVp1mb/EsXJACUXfetmYtik1PojLL22/+G6nehuRfLw7wFD0SRGydSobg33Oke5UiSx28VUGryLOaClR2J/kdEY6sDhIS4PcVxeUpvAaDO9ouHm1ifE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779732106; c=relaxed/simple;
+	bh=uQDtGl1GZehCkeUJvy50GOF0qMnGqzE+lOEJiutJFMI=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=Bta2tjJ1B3ud/yHlb4BnqC2KRmrlhk9oRPmVfgLt3kYdZXzpw7/Nfz1uK197BybO7tayVUHwihT2EgSefCiAjwGgQ6uoSTAh28xVGI+Hr/rTR06F96mTsDWG5KiAs38j6MkGYjjkp/gEoBl/uuTsnU9hw9CZGCZPsQtOGyeuVAs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=E5UBQEQA; arc=none smtp.client-ip=74.125.82.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OppDLcB6"
-Received: by mail-dy1-f178.google.com with SMTP id 5a478bee46e88-304559733faso241786eec.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 25 May 2026 10:52:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779731522; cv=none;
-        d=google.com; s=arc-20240605;
-        b=c5VMn2n8/ZXNzCvkhsQ7xd9ie64ulvxTO3hqNjLAmn+DGPAUMb/mnN0A+zLh/vWK7/
-         9h7R4hsfX3huenDIkwDsR28XdNkUxGcmLRwOYQr9NSv+HcYI1g97DOP2md1l60OGYexi
-         MwUHhVgUA35iHJBy8UVhdqxpbn0dgG74hp58pBEoGHrllNXcqg+wvjQXorWENRpcKHY1
-         XEZL/sFeLHnsDaT4fn+JqaC9ifXR+eeY8om9nv4ZuONmCy65pWt7SlADr3nImtWVLOyN
-         OPOmM7GifXb+l+SssL98FQ/tTmoNzI4cQ1FCeeYNMUvuaf/CrZpoIb+FiQz9B7l0ZG2l
-         7OxA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=kr6z8jUXJs76+Hb66TPj5wAIPCr19WpDG6Lp2ByKQGw=;
-        fh=O8/NdHYYVziz1tmOMi6J7zKyoT0hSVydYF8Ks+99jZM=;
-        b=iPngk2nhfblo2HrKF3HiTJCcS0TYTPHHYB+4c8iPdCA4UsEUDxo0Y2bjsDtMMRhcTl
-         fnwxvgpes+B/H5PlkT9Hn2sROnDVXoIlJenE/pIA42ZjKjAaNHIoE4PyWaM82MgQ8POE
-         /mRjLEfWuA5wsGQoXQd85rtUJoRN90nMe1GG/sDNWm79+nY8Mhc/OmtAyaT3AieC44nN
-         U0Tu9j0gr8oTvv8b9fX6EuTCdS6+GDeJI5Y0EcS460Gq8Py74ZoC2MdiEtoGFmtikg2s
-         wQfJvHQEEOgOEdX9mA0xiYKv4Yh3Lq89QBAR7/Byh1246wWztVRgHy9V0PvnNxiEYFTs
-         WyLQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="E5UBQEQA"
+Received: by mail-dl1-f53.google.com with SMTP id a92af1059eb24-1329fc4bf77so7608123c88.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 25 May 2026 11:01:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779731522; x=1780336322; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1779732104; x=1780336904; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=kr6z8jUXJs76+Hb66TPj5wAIPCr19WpDG6Lp2ByKQGw=;
-        b=OppDLcB6u+4hVFF0nRgLbobmYXoTLVQJl+Z8xPBBHmHFhvYb8RJRiF9YS8rMNI5nCc
-         7Y8Mv0RdAOhQbay8yY1egS3iRvlzguBb1ZAA5/XLhVgteYSK+JiGxyk3//MN4458SRo9
-         RnPLdCXmz6BGOrsL8jz/xmx2khl/zkRtjFrmwzlRIX1cARxKH1ICKY/RTZN9zD9UCIY4
-         M0RsNpnlmJzXox6znyWLgimAjUEKTjik8ZAFNZ9+ZZRRE1MRZ555L/2pLG3E12eCKfoW
-         DO1NfH6+ROopBpWoGmUixJGU0ztsptJdzJY2XF17VDZnzj9mul7XxWDgSEvcG3nfxPpi
-         nZ9g==
+        bh=fzor4pOAcoXrq0r/dQWN3ieh5O1PmvSJQr5rj+ToVL8=;
+        b=E5UBQEQAnOUrlMiUQguDe1X4CPzHyqtORL9Him/enfTHhgntKUJq8sb++nZzg5UVH8
+         Cs6koqmuY+OjrtnYp5zwe5qPrGNPJX6OHnGK/ovag6PakFRACMjqo8mqAhmXbxJCGE8p
+         9cGsPqMxKL5NApvUdNIV1jd92SLxwOpCz/W32Wc4iy6ncJL2JZQTe+D9m7boXFV/GABY
+         7+Q0sR28LVPOmFt2TxxPQnUFeWJ1oyhOmKi92Z3joVWWmrXp256ZGgaNsUPixq3gVnmT
+         mUxC8KU93bv3Tz2H3/7gM5rt4tTpbkBDbChuqf+bB4R0ZKqJofgD473Z8m5tvID/Las6
+         2FqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779731522; x=1780336322;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=kr6z8jUXJs76+Hb66TPj5wAIPCr19WpDG6Lp2ByKQGw=;
-        b=HpfwTv3G55xNQTBfJK1to3b+5OKnGKzfVqByErKl95zTTQ1mjVb5FPu+9tZsIrZ7k3
-         JGimfwYpnGnxpDvRo56PmI3z06Kh1cBSJKtVw509mOYBrHOXEC3yxmOaSiRj4aIfpQi+
-         fyhQlT3E8LCJh6OFrPpDPR0snzC0tudaf/C8CGbQYlxVcPWtiFw1zbWjXRUjL/cTGtC8
-         8bJveDInak11jilczccQM7ggPQGV2U88tQ2YjTaNsNZgSxM7tCTy0fExkUQCqxqtla09
-         qaGm8PrPrAqGGFSG+PSpZbjwpmWDCCb7bBncQQAFL8XCDvuaJKGICSwVYTWhS4rY2tju
-         Gisw==
-X-Forwarded-Encrypted: i=1; AFNElJ8YbF66mPw6lDyWOVTK/Wz/nFjzeqNLsSx7SKQbWHEKb221YBV9i0tvtu0r0aqxdVKg1FwN9czvnqBfPn3c898=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzkr+nkr+6VPAGy7rEbLqHgbG50j/iPGRr4anTovlnTmLL/jAI0
-	DX0hyhcI78F+aksqNOIC7Y1fVCki+S9mA3n5ngl7NSj2x4vayBBgTvmcAuad8h7/xpCmxxy2lR8
-	VLQrQ4Ns0GTs04RU4304TZUheUWN6eS0=
-X-Gm-Gg: Acq92OFkhU+EL9QMDLEtwRZZIk8rn6Wq0vrXFbUl3PYvfyhvrxZbVKGh1RsSkiohkoD
-	o6rB7F63toefOSwGLFf3qNe7wK5u1HVeUr3T9b1vu56FDaVIhgOaPgCveNd0CvrjnvQiociBtEW
-	LZDL21YVMQNS1xrWqnHX12VaYEdCe7Dub3qSYYM0FOXDEbn2t40tiAzsEJ+0O7nnh4cqCBEPDu8
-	uXJGa7qPhEGqtfe6ZKItMrZe3byLamkR+qPo5amgs25D06eGEqHJfBTj2ZyHImDCWnnLggnZHbO
-	YxxbpGYpCieK9u0eCHjp4pxhq9NFZuPHwInZJXnHHpJZKnHJPclpacZN1KRu2icYg5SERBxQK8L
-	RN8L64qq4JB9CGp/X15JFS2o=
-X-Received: by 2002:a05:7300:df44:b0:2e6:b55a:76c9 with SMTP id
- 5a478bee46e88-30448cf0ceamr2954662eec.0.1779731522166; Mon, 25 May 2026
- 10:52:02 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1779732104; x=1780336904;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fzor4pOAcoXrq0r/dQWN3ieh5O1PmvSJQr5rj+ToVL8=;
+        b=e0uYor882C2ISOCsgVsiHOB+YqFngCnbxmu6It0e+H1PFQ/hRg74qhDwBa2f6o9WKb
+         zeXyw/BcrRANmSpSAlrLiiq9VNhFSE/tklDXdF0W0OC1diMGGbBm9tCl5K2SX5ZnofV6
+         mgAwV1fI+VOz3GPKxNHFCcsQw9v1x7JjFAx98s+bIr3DlkQFxQRWIvS0ChTISHEbshlx
+         ssL0CDnpvT4HjUTtbf64YXoEsscVbek76prE4whX85Sxoo1AauX1DRbmGlpbYfev11mY
+         W10/W7qVbtwiSm0nrqGkNXwxU8waBHCJZlhhp+maIFo/7QZfRqpywAW9A1AR2uaYV6d1
+         /G3Q==
+X-Forwarded-Encrypted: i=1; AFNElJ+Er5EISthus24r93r8g1wm2qFAcavZDOEZ64vRfx5BNwIrKhRz0CYwjzcdemefTMdcWaNbo0+QRySoITqgyGI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwoD5O3k9D5ZwwygITH+2dRbO8SbO9wgSzoP2rygxjNCUDllFPM
+	zSrUUL1z6cXj9UsAf1H3UBa9FmdAcxgAf5tyjyBLkXLlVn24x4tGH+AZV/YVried7aE=
+X-Gm-Gg: Acq92OEwp+C7TNNoVJGbpxgiLuU8+2TJP8Uoxe6anHr/C/x0uMqys2DtfX/k25AwNqG
+	E+NwtaSIzAQ7TpRuoncQwnlDPpYORST+oowWEYiyhJImyX5+DPmZXJsM1lebnUdK1vbMHcWWULg
+	+EvOepWzsdHPeMUVdEnyZcIou8NR2NAblNfD0U5x2yP4HDRIICgx8CsIUfiVQ0yIYpm6VrpWcg7
+	70Y4eyHFwXPAbIFZpDgQQMUQk/JHUjKhgKssHqSvmcxEDSK5/EumSP17O2YX2yBTPa1nKyGwVUD
+	5heqHF1BEiIRDymsVrKnI8yHcfnHF3f9w/KBaBgp1n27phSP+bzQuzotVHEMogYyiKnFYm18YED
+	jL9XTKWbhe8Qyj9r7C67No+3Hq7jEoNOZbhoX/tElbl1Fj1SceWGjQzGSEeqATIrPSSNRtAOxV5
+	R6xr8=
+X-Received: by 2002:a05:7022:ef01:b0:12c:8f92:c6ba with SMTP id a92af1059eb24-1365fc7b48cmr5378838c88.34.1779732103455;
+        Mon, 25 May 2026 11:01:43 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:600::cc2])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1366a2e634csm7642048c88.2.2026.05.25.11.01.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 May 2026 11:01:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260521-miscdev-use-format-v3-0-56240ca70d0c@linux.dev>
-In-Reply-To: <20260521-miscdev-use-format-v3-0-56240ca70d0c@linux.dev>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Mon, 25 May 2026 19:51:49 +0200
-X-Gm-Features: AVHnY4Lj-A7r4aYA8iAqKIKO_8AgbVe3NWs2TYf--zAM-mIaOF-qUbEBAdoXyqQ
-Message-ID: <CANiq72k3cjgHiimYqGfuQjPy+A3oOUEoMxUJCS-FgBm25D4MLA@mail.gmail.com>
-Subject: Re: [PATCH v3 0/7] rust: use vertical import style and remove
- redundant imports
-To: Alvin Sun <alvin.sun@linux.dev>
-Cc: Arnd Bergmann <arnd@arndb.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Jens Axboe <axboe@kernel.dk>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, 
-	Rae Moar <raemoar63@gmail.com>, rust-for-linux@vger.kernel.org, 
-	linux-block@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, =?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 25 May 2026 14:01:33 -0400
+Message-Id: <DIRYDGLWJJWI.1PACVYJDRYBJ2@etsalapatis.com>
+Subject: Re: [PATCH RFC bpf-next 3/8] bpf: add BPF_JIT_KASAN for KASAN
+ instrumentation of JITed programs
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "Alexei Starovoitov"
+ <alexei.starovoitov@gmail.com>
+Cc: "Andrey Konovalov" <andreyknvl@gmail.com>, "Alexei Starovoitov"
+ <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
+ Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>,
+ "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
+ <memxor@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
+ <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "John Fastabend"
+ <john.fastabend@gmail.com>, "David S. Miller" <davem@davemloft.net>, "David
+ Ahern" <dsahern@kernel.org>, "Thomas Gleixner" <tglx@kernel.org>, "Ingo
+ Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>, "Dave Hansen"
+ <dave.hansen@linux.intel.com>, "X86 ML" <x86@kernel.org>, "H. Peter Anvin"
+ <hpa@zytor.com>, "Shuah Khan" <shuah@kernel.org>, "Maxime Coquelin"
+ <mcoquelin.stm32@gmail.com>, "Alexandre Torgue"
+ <alexandre.torgue@foss.st.com>, "Andrey Ryabinin" <ryabinin.a.a@gmail.com>,
+ "Alexander Potapenko" <glider@google.com>, "Dmitry Vyukov"
+ <dvyukov@google.com>, "Vincenzo Frascino" <vincenzo.frascino@arm.com>,
+ "Andrew Morton" <akpm@linux-foundation.org>, <ebpf@linuxfoundation.org>,
+ "Bastien Curutchet" <bastien.curutchet@bootlin.com>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, "Xu Kuohai" <xukuohai@huawei.com>, "bpf"
+ <bpf@vger.kernel.org>, "LKML" <linux-kernel@vger.kernel.org>, "Network
+ Development" <netdev@vger.kernel.org>, "open list:KERNEL SELFTEST
+ FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+ <linux-stm32@st-md-mailman.stormreply.com>, "linux-arm-kernel"
+ <linux-arm-kernel@lists.infradead.org>, "kasan-dev"
+ <kasan-dev@googlegroups.com>, "linux-mm" <linux-mm@kvack.org>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260413-kasan-v1-0-1a5831230821@bootlin.com>
+ <20260413-kasan-v1-3-1a5831230821@bootlin.com>
+ <CA+fCnZf-o8tiv_tX9YB5eBUGx17OpztKZsEB6Awjw3WAqBAiUw@mail.gmail.com>
+ <DHSWSSYRPUVC.2W3G3OU27L3HG@bootlin.com>
+ <CAADnVQLj=UosnsC-4V2+mN92Fe0-kW++U+m-O9c93kk6BwiXgw@mail.gmail.com>
+ <DIP9O3BEWG3C.2BAHKYUIA4H4E@bootlin.com>
+ <DIPDH3PCUDDG.EGYL0SYSG1IO@etsalapatis.com>
+ <DIRMYUXFYOVY.1LQV9E3OHGGBK@bootlin.com>
+In-Reply-To: <DIRMYUXFYOVY.1LQV9E3OHGGBK@bootlin.com>
 
-On Thu, May 21, 2026 at 8:57=E2=80=AFAM Alvin Sun <alvin.sun@linux.dev> wro=
-te:
+On Mon May 25, 2026 at 5:05 AM EDT, Alexis Lothor=C3=A9 wrote:
+> On Fri May 22, 2026 at 7:13 PM CEST, Emil Tsalapatis wrote:
+>> On Fri May 22, 2026 at 10:14 AM EDT, Alexis Lothor=C3=A9 wrote:
+>>> On Tue Apr 14, 2026 at 4:38 PM CEST, Alexei Starovoitov wrote:
+>>>> On Tue, Apr 14, 2026 at 6:24=E2=80=AFAM Alexis Lothor=C3=A9
+>>>> <alexis.lothore@bootlin.com> wrote:
+>>>>>
+>>>>> On Tue Apr 14, 2026 at 12:20 AM CEST, Andrey Konovalov wrote:
+>>>>> > On Mon, Apr 13, 2026 at 8:29=E2=80=AFPM Alexis Lothor=C3=A9 (eBPF F=
+oundation)
+>>>>> > <alexis.lothore@bootlin.com> wrote:
+>>>
+>>> [...]
+>>>
+>>>>> >> +config BPF_JIT_KASAN
+>>>>> >> +       bool
+>>>>> >> +       depends on HAVE_EBPF_JIT_KASAN
+>>>>> >> +       default y if BPF_JIT && KASAN_GENERIC
+>>>>> >
+>>>>> > Should this be "depends on KASAN && KASAN_GENERIC"?
+>>>>>
+>>>>> Meaning, making it an explicit user-selectable option ?
+>>>>>
+>>>>> If so, the current design choice is voluntary and based on the feedba=
+ck
+>>>>> received on the original RFC, where I have been suggested to
+>>>>> automatically enable the KASAN instrumentation in BPF programs if KAS=
+AN
+>>>>> support is enabled in the kernel ([1]). But if a user-selectable togg=
+le
+>>>>> is eventually a better solution, I'm fine with changing it.
+>>>>
+>>>> Let's not add more config knobs.
+>>>> Even this patch looks redundant.
+>>>> Inside JIT do instrumentation when KASAN_GENERIC is set.
+>>>
+>>> (with quite some delay) I think it would be better to keep this new
+>>> BPF_JIT_KASAN, because aside from the possibility to use it in
+>>> bpf_jit_comp.c, it allows to update tests affected by KASAN
+>>> instrumentation in a nicer way. For example, the test_loader subtests
+>>> that monitor JITted instructions are confused by KASAN. I can either
+>>> skip them or make them smarter when KASAN is enabled for BPF, but in
+>>> both cases, it would be nicer to just adapt the behavior based on a
+>>> generic CONFIG_BPF_JIT_KASAN, rather than sprinkling some "if
+>>> jit_enabled AND CONFIG_KASAN_GENERIC AND ARCH_X86" in selftests. That
+>>> still does not make it a config knob, that just creates an internal
+>>> Kconfig option that is automatically turned on when KASAN and JIT are
+>>> enabled at build time.
+>>
+>> Having a togglable config knob gives us the option to set up KASAN for
+>> the kernel but not for BPF, and I don't see why we'd want that. Imo we a=
+re
+>> already paying the cost of KASAN for the rest of the kernel, there is no
+>> incentive to not run it for the BPF JIT. Having to eat the complexity co=
+st
+>> in the selftests seems reasonable if the alternative means a cleaner
+>> interface for the user (preventing them from choosing an unreasonable
+>> combination of options).
 >
-> Adopt the vertical import style and drop redundant imports already
-> re-exported via `kernel::prelude`.
+> Again, this does not expose a togglable knob, this is a purely internal
+> kconfig, automatically enabled if CONFIG_KASAN_GENERIC is set and if the
+> architecture-specific Kconfig defines HAVE_EBPF_JIT_KASAN (since we want
+> it for x86 only), and there would be no way to enable KASAN for kernel
+> only and not for BPF, or the other way around. What I am proposing is
+> just an internal, architecture-agnostice kconfig to avoid conditioning
+> some selftests to any architecture.=20
 
-I can take this if block and misc Ack. The changes are straightforward anyw=
-ay.
+Makes sense, in this case this seems reasonable.
 
-Thanks!
+>
+> Alexis
 
-Cheers,
-Miguel
