@@ -1,46 +1,46 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4953C28726E;
-	Mon, 25 May 2026 17:34:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 764888462;
+	Mon, 25 May 2026 17:49:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779730458; cv=none; b=VMm/lHyhFT4lEsDyQ3hkgjGpI5r0GgnuS950IGTCCmC85irCLeIDDkACmGCCovTTV1UX0PethDAZKt7IJN3Cc/SMAs6QqRKAqfpRLoehvUHbrtQou1oB+efa3DZOmMG145fHU4/5UuoGttgUqYKkzAX5WJCrzhczl6e+p10lHvo=
+	t=1779731373; cv=none; b=dVvjptoGxTWvlhRIyuHfgQ7E7QNSziH3Y0Bi8ZeAqopw+szLK5g4DdXWfp8fY5L+v+9toZKGQhJHx4SwDY0Fm+WZDhNyngl2MB+/7HSWthPtPxBxYzy7UH/fiof5fnkwDKmQGKZKwtF7gqmyjr3gxx6mVx8ns2QuJE3TBS9pSVA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779730458; c=relaxed/simple;
-	bh=sKl3qZJ6GX3XQjTIHccmP5Sdkb4JM31VmCxrSx/UGHw=;
+	s=arc-20240116; t=1779731373; c=relaxed/simple;
+	bh=gEsP+Gq6XxxpksEZqjc5xlVOq8ChQc72ScHgpfpQRH8=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=VgomgY13WuFEIBk3pJehy6JOKu4T33pBTSoHv+oSb6o36UZBqdVyONFTO9aIzXadiUAxXhnvVK2Kq+SQ6zlcMm1esMcQ066QFnAHeGHjn8v+0gjELM5WY5uD+alPoOBePcfGeJnXU1X7R+pbUFc+kXBSNMGEtSKErIIY6WKm7og=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BLRQc51x; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version:Content-Type; b=QfouOQE744OUKVrBcvj5aUzhilJaGvuI5saNTx1Xp71oAX+WsZn3YMYX3PXJ79d0FMCLq4gSj67tZ/XM/pS82E0xZWPcMEGgGkhbXWxj16AmfakGTFw1dZ9cvyI9TmZ+Vm6/Tk21P2s2QLOirswx2s7YZUL0trTXhHXReesJyu0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=itXByRbw; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BLRQc51x"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 793A91F000E9;
-	Mon, 25 May 2026 17:34:14 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="itXByRbw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D24B01F000E9;
+	Mon, 25 May 2026 17:49:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779730456;
-	bh=C+TFxqIXPU3VCPLnw7RW5OtUkFdNMFAF+NsqUfzupL4=;
+	s=k20260515; t=1779731372;
+	bh=34eaHJRXGUxn6aCaWNiWQiEzep2YC7iFCHhas4g5QaM=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=BLRQc51xnmjpgz7uLm3xMNEwcc1GYJVNNP7dDwDxorp/cxpwTcS5L9pSBA/55VMS2
-	 n7FFwqL0UekJmAS3JpvGt7HRhu0m1d/50P0JAx5ozgQx5rgfmmsAuQPHAlr20cQEee
-	 umscdxKjF/t31OQDGxK+wHqCFnZwvRueEx2gU01rnZo2wIgo+KqiVA7Vm4ywE+6yOy
-	 QhpULFvc7mtx7R/IOyoYCej9/9eZRaJVrRPB1KOZ/XBbpwuOCbbToRWNWR7DWhqaWc
-	 TGv6trHHWpX3PrJHUhdg+ObhA8ZLpHkZbwzc0quM8Mbb41lRlRhXX+iGNAGDathkVt
-	 Dww60ge05YMjw==
+	b=itXByRbw+mP3n0WYUFSgOvuNWwiQkJMyZndGej1Q+qst31PJZbH6hK5bKQPa8pye+
+	 8z8HSlCAtj0uObcAzFM41I0i1eME3B6Bi8ajwvxrJYfYLrghnHBDvJdiJzElpB6dgx
+	 6udxDWvfBe/N7Wnl4Rg3vu7KbiWdMEYlpoOK3B2DJ+t01suWb5DaAsMMK3B1krviAH
+	 GxhO/AdojFJgoYBSOPNzAhbQgIYy8pkvAB/sTodPhcLgM7fa7Xy/FT1idtC3pqgPAF
+	 zAo5rkvorkJD1JryB7ndb0kXfNlZDrLT21DM1MHfbYKs+V+EtGAisgsYyQwcWj+KKU
+	 ozSnoW+MLfQsA==
 From: Pratyush Yadav <pratyush@kernel.org>
 To: George Guo <dongtai.guo@linux.dev>
 Cc: chenhuacai@kernel.org,  rppt@kernel.org,  pasha.tatashin@soleen.com,
   pratyush@kernel.org,  kernel@xen0n.name,  graf@amazon.com,
   shuah@kernel.org,  loongarch@lists.linux.dev,  kexec@lists.infradead.org,
   linux-mm@kvack.org,  linux-kselftest@vger.kernel.org,
-  linux-kernel@vger.kernel.org,  George Guo <guodongtai@kylinos.cn>,  Kexin
- Liu <liukexin@kylinos.cn>
-Subject: Re: [PATCH 1/7] LoongArch: Add KHO basic support
-In-Reply-To: <20260525062810.103367-2-dongtai.guo@linux.dev> (George Guo's
-	message of "Mon, 25 May 2026 14:28:04 +0800")
+  linux-kernel@vger.kernel.org,  George Guo <guodongtai@kylinos.cn>
+Subject: Re: [PATCH 2/7] LoongArch: kho: strip stale kho_handover= from
+ reused cmdline
+In-Reply-To: <20260525062810.103367-3-dongtai.guo@linux.dev> (George Guo's
+	message of "Mon, 25 May 2026 14:28:05 +0800")
 References: <20260525062810.103367-1-dongtai.guo@linux.dev>
-	<20260525062810.103367-2-dongtai.guo@linux.dev>
-Date: Mon, 25 May 2026 19:34:13 +0200
-Message-ID: <2vxztsrv5r6y.fsf@kernel.org>
+	<20260525062810.103367-3-dongtai.guo@linux.dev>
+Date: Mon, 25 May 2026 19:49:28 +0200
+Message-ID: <2vxzpl2j5qhj.fsf@kernel.org>
 User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -54,123 +54,88 @@ On Mon, May 25 2026, George Guo wrote:
 
 > From: George Guo <guodongtai@kylinos.cn>
 >
-> Enable Kexec Handover on LoongArch64:
+> When kexec is invoked with --reuse-cmdline after a liveupdate boot, the
+> running kernel's command line already contains a kho_handover= parameter
+> from the previous kexec load.  load_other_segments() prepends a fresh
+> kho_handover= for the new handover FDT but then appends the original
+> cmdline verbatim, resulting in two kho_handover= entries:
 >
-> - Kconfig: select ARCH_SUPPORTS_KEXEC_HANDOVER for 64BIT
-> - machine_kexec_file: add cmdline_add_kho() to pass the KHO FDT and
->   scratch buffer addresses to the next kernel via the "kho_handover="
->   command-line parameter
-> - setup: parse "kho_handover=" early and call kho_populate() to hand
->   memory regions to the KHO core
+>   kho_handover=0x4000@<new_fdt>,... kho_handover=0x4000@<stale_fdt>,...
 >
-> Co-developed-by: Kexin Liu <liukexin@kylinos.cn>
-> Signed-off-by: Kexin Liu <liukexin@kylinos.cn>
+> early_param() calls early_parse_kho() for each occurrence in order, so
+> kho_populate() is invoked twice and the second call overwrites the first
+> with the stale FDT address.  The stale address no longer holds a valid
+> KHO FDT, causing __kho_radix_walk_tree() to dereference a garbage
+> pointer and panic early in mm_core_init().
+>
+> Fix this by adding the new kho_handover= to the cmdline prefix first,
+> then stripping any stale kho_handover= tokens from the appended original
+> cmdline portion, so only the freshly generated entry survives.
+>
 > Signed-off-by: George Guo <guodongtai@kylinos.cn>
 > ---
->  arch/loongarch/Kconfig                     |  3 +++
->  arch/loongarch/kernel/machine_kexec_file.c | 22 ++++++++++++++++++
->  arch/loongarch/kernel/setup.c              | 27 ++++++++++++++++++++++
->  3 files changed, 52 insertions(+)
+>  arch/loongarch/kernel/machine_kexec_file.c | 35 ++++++++++++++++++++++
+>  1 file changed, 35 insertions(+)
 >
-[...]
 > diff --git a/arch/loongarch/kernel/machine_kexec_file.c b/arch/loongarch/kernel/machine_kexec_file.c
-> index 5584b798ba46..ddf4d0e0e7fd 100644
+> index ddf4d0e0e7fd..ffaedd055e62 100644
 > --- a/arch/loongarch/kernel/machine_kexec_file.c
 > +++ b/arch/loongarch/kernel/machine_kexec_file.c
-> @@ -55,6 +55,24 @@ static void cmdline_add_initrd(struct kimage *image, unsigned long *cmdline_tmpl
->  	*cmdline_tmplen += initrd_strlen;
+> @@ -71,6 +71,37 @@ static void cmdline_add_kho(struct kimage *image, unsigned long *cmdline_tmplen,
+>  	    image->kho.scratch->bufsz,    (u64)image->kho.scratch->mem);
+>  	*cmdline_tmplen += n;
 >  }
->  
-> +#ifdef CONFIG_KEXEC_HANDOVER
-> +/* Add "kho_handover=<fdt_size>@<fdt_addr>,<scratch_size>@<scratch_addr>" to cmdline. */
-> +static void cmdline_add_kho(struct kimage *image, unsigned long *cmdline_tmplen,
-> +			    char *modified_cmdline)
+> +
+> +/*
+> + * Remove all "kho_handover=..." tokens from cmdline.  Needed when
+> + * --reuse-cmdline is used: the running kernel's cmdline already carries a
+> + * stale kho_handover= from the previous kexec load; without removal the new
+> + * kernel sees two entries and kho_populate() ends up using the wrong (stale)
+> + * FDT address.
+> + */
+> +static void cmdline_remove_kho(char *cmdline)
 > +{
-> +	int n;
+> +	const char *key = "kho_handover=";
+> +	size_t key_len = strlen(key);
+> +	char *p = cmdline;
 > +
-> +	if (!image->kho.fdt || !image->kho.scratch)
-> +		return;
+> +	while ((p = strstr(p, key)) != NULL) {
+> +		char *start = p;
+> +		char *end;
 > +
-> +	n = sprintf(modified_cmdline + *cmdline_tmplen,
-> +	    "kho_handover=0x%llx@0x%llx,0x%lx@0x%llx ",
-> +	    (u64)PAGE_SIZE,               image->kho.fdt,
-> +	    image->kho.scratch->bufsz,    (u64)image->kho.scratch->mem);
-> +	*cmdline_tmplen += n;
-
-Do you have nothing else for a bootloader to pass data to the kernel?
-Passing this via the command line seems crazy... All these addresses are
-now available directly to unprivileged userspace. Can't you use the
-device tree like we do on ARM64?
-
-Also, this commandline parameter isn't documented anywhere.
-
+> +		/* Only match at a token boundary */
+> +		if (start != cmdline && *(start - 1) != ' ') {
+> +			p += key_len;
+> +			continue;
+> +		}
+> +		end = start + key_len;
+> +		while (*end && *end != ' ')
+> +			end++;
+> +		while (*end == ' ')
+> +			end++;
+> +		memmove(start, end, strlen(end) + 1);
+> +	}
 > +}
-> +#endif
-> +
->  #ifdef CONFIG_CRASH_DUMP
+
+Ugh, modifying the commandline supplied by userspace feels odd... Can
+you at all do this via device tree?
+
+If not, would it make more sense to reject kexec_load if command line
+has kho_handover= and teach kexec-tools to strip it on its side?
+
+>  #endif
 >  
->  static int prepare_elf_headers(void **addr, unsigned long *sz)
-> @@ -220,6 +238,10 @@ int load_other_segments(struct kimage *image,
->  		cmdline_add_initrd(image, &cmdline_tmplen, modified_cmdline, initrd_load_addr);
+>  #ifdef CONFIG_CRASH_DUMP
+> @@ -249,6 +280,10 @@ int load_other_segments(struct kimage *image,
 >  	}
 >  
+>  	memcpy(modified_cmdline + cmdline_tmplen, cmdline, cmdline_len);
 > +#ifdef CONFIG_KEXEC_HANDOVER
-> +	cmdline_add_kho(image, &cmdline_tmplen, modified_cmdline);
+> +	/* Strip stale kho_handover= that --reuse-cmdline may have carried over */
+> +	cmdline_remove_kho(modified_cmdline + cmdline_tmplen);
 > +#endif
-> +
->  	if (cmdline_len + cmdline_tmplen > COMMAND_LINE_SIZE) {
->  		pr_err("Appending command line exceeds COMMAND_LINE_SIZE\n");
->  		ret = -EINVAL;
-> diff --git a/arch/loongarch/kernel/setup.c b/arch/loongarch/kernel/setup.c
-> index 839b23edee87..5934ba6f13e3 100644
-> --- a/arch/loongarch/kernel/setup.c
-> +++ b/arch/loongarch/kernel/setup.c
-> @@ -48,6 +48,7 @@
->  #include <asm/setup.h>
->  #include <asm/time.h>
->  #include <asm/unwind.h>
-> +#include <linux/kexec_handover.h>
->  
->  #define SMBIOS_BIOSSIZE_OFFSET		0x09
->  #define SMBIOS_BIOSEXTERN_OFFSET	0x13
-> @@ -227,6 +228,32 @@ static int __init early_parse_mem(char *p)
->  }
->  early_param("mem", early_parse_mem);
->  
-> +#ifdef CONFIG_KEXEC_HANDOVER
-> +static int __init early_parse_kho(char *p)
-> +{
-> +	phys_addr_t fdt_addr, scratch_addr;
-> +	u64 fdt_size, scratch_size;
-> +
-> +	if (!p)
-> +		return -EINVAL;
-> +
-> +	fdt_size = memparse(p, &p);
-> +	if (*p++ != '@')
-
-Can you please wrap these in parenthesis? I am too dumb to remember all
-the precedence rules and this immediately makes me question whether we
-are doing (*p)++ or *(p++).
-
-> +		return -EINVAL;
-> +	fdt_addr = memparse(p, &p);
-> +	if (*p++ != ',')
-> +		return -EINVAL;
-> +	scratch_size = memparse(p, &p);
-> +	if (*p++ != '@')
-> +		return -EINVAL;
-> +	scratch_addr = memparse(p, &p);
-> +
-> +	kho_populate(fdt_addr, fdt_size, scratch_addr, scratch_size);
-> +	return 0;
-> +}
-> +early_param("kho_handover", early_parse_kho);
-> +#endif
-> +
->  static void __init arch_reserve_vmcore(void)
->  {
->  #ifdef CONFIG_PROC_VMCORE
+>  	cmdline = modified_cmdline;
+>  	image->arch.cmdline_ptr = (unsigned long)cmdline;
 
 -- 
 Regards,
