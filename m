@@ -1,174 +1,88 @@
-Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64F913D5C1C
-	for <linux-kselftest@vger.kernel.org>; Mon, 25 May 2026 07:57:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5B293E3176
+	for <linux-kselftest@vger.kernel.org>; Mon, 25 May 2026 08:37:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.113
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779695881; cv=none; b=dUxz0cW7vfkhbL0dViU3u1SX3CMDG3uYrV/dOoVkZA2/mK3RtE8xiBHDGturSRgXecbt3Msct7NxwccrD670boEQnHh2bfj1F8JFUdNY/fi5/GjdgXIMF2H+Dr0Zky4q5zkIbGGDRd7VVHRACZLpDKYB3V8ebLX/8HYI8rsGBlk=
+	t=1779698261; cv=none; b=VUG7GnIDcNpmrug0P1eCaNLw5BJfafbFRbacql3gPUiRT2SdRS57TxRLsEnCBd9fTPqSI2k4mVnMyiGPa5R5qhjn2pbxg09pij1slBB8gnyKKoLESfKUOQn6yr/k9f3pTLgJStzLQF+uyh1/E6TY3MmUDAp/LvE/lgYsyGbZySk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779695881; c=relaxed/simple;
-	bh=fbvLfcz5OT2LfqTOnVqPrV1GxfwNPFKnYVcQ4s0lcrY=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=pKbUfmLkInypnMIAVpu4aQSBEoldfqTxe5enTrBsxSQG5l5nGgQeuiKHsZVGQnACUH8+jPVmfN0jb7InKCnncm844VdbZkA93ONecAx9rLgUaXorwiWEreZgAskbkuyGZzYfGvcTONN2yux24eVr8KYw0m0xDO6i4aGb6qyutyM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wakel.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=d57cTJPQ; arc=none smtp.client-ip=209.85.210.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wakel.bounces.google.com
+	s=arc-20240116; t=1779698261; c=relaxed/simple;
+	bh=nWhiqERXPNrEXNIjYTj2497195/HMW9Sl8fqITNlza8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VLqcXEHUoe7IE1dsGw+jdTIhW+5KqO+XAMKTu5xcdb+GGd7OzYdK2kQhw7Os7HhMFb5YKbVPJbGOfL5xzl+TfVzZFcamnkxaJ7BzZHUtS5b0SC2uFdIKUyYwNpT6X5d8V0vFK0q8KDetBnCAbLTbcF7u4wHnyDPi+mILYPp5Mg4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=YR5bRHDk; arc=none smtp.client-ip=115.124.30.113
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="d57cTJPQ"
-Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-837d43e9ff3so5991051b3a.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 25 May 2026 00:57:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1779695879; x=1780300679; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ffj7eFdWHqWW/R+dY3OxqwXEtgbaXV+LozfSiunZvv8=;
-        b=d57cTJPQDwUwQsKl6DVUvJcwPme/xC2D+/vn4ALKkv7BoRU18EsM7xI5M8nwwBOVQQ
-         uEk1xX88S5nGJYKyHxpy5EEeMzMPA83Q2UiXwCfszgT2Y/u5a1ihWmtDyJ8BR21IzaVO
-         FDZdLUrtR6CUh5M6aGfHyBp9hA+O14OewTSZVV7lVWPqI5/qfiMIN2opHLWxSdc/lW3l
-         OLBPXrp/RiuOK+J544Xt62Rx6Enl+Kz4KE49IO5kUfvrT0rwjXC8cUKDv3LjVgZAwcZP
-         /uron7g9AFRD49PLXU3fqNmNxzKZbKJ5ksL3Q3YRWtsR0XjUYU1Jp4NVw0gv/GciuLk1
-         TiqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779695879; x=1780300679;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ffj7eFdWHqWW/R+dY3OxqwXEtgbaXV+LozfSiunZvv8=;
-        b=hlewNXSRCY296F3xhAfNaRWtOhKgHszYrzCcXhOMheIR7y6WOmz5GZZQ5fjlW3+U84
-         wkJ2kBWhOKor1xVVB6gbqJ/bwt8ncrUGKzqkDrv+NfvpwspUXWmgcT1zFqMyY9UxX3Po
-         EaWgfKtCAONTANd+76ayKb8zZ7r5o2s2umyG2Se+oMelKsV/KIbSLR7i7eBn24A4HYoS
-         pkdNHAxNkerKubdwOpm0o/HO2bhWtnQOBRB55Aix3l/LV7EHEYyOpV6mOZWp0WtBh1pC
-         Of/4CpbuN7kxoejQh9AgeUtaVD1l+MUhYY/8E91q/g5Jn8ThTephBwNAgbi4BEyTQiTE
-         el4A==
-X-Forwarded-Encrypted: i=1; AFNElJ/6s5S/fIRLgjo33yvWqe8KfwChL8sOgtQqplebSPS58m22JDwPPEW/vhqTYxZ+UmmqypQDtg8xTw/rbiga8Y8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyy2tptwTkccVDdNUCzm6s5J+msiyunzPXhDREEkm8HIPz1OIa3
-	sQraetNBgBLmHSFU8k/SctIq16wZ1uh+vnGxxLsMQX1wuLSTl0WehgN+r53OaDwAfyFnS03Zo4l
-	chQ==
-X-Received: from pfbgg15.prod.google.com ([2002:a05:6a00:630f:b0:837:c7f5:5c27])
- (user=wakel job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:3d0d:b0:83f:250d:5ab
- with SMTP id d2e1a72fcca58-8415f3a79f7mr12477853b3a.7.1779695878171; Mon, 25
- May 2026 00:57:58 -0700 (PDT)
-Date: Mon, 25 May 2026 07:57:48 +0000
-In-Reply-To: <20260525075748.3720995-1-wakel@google.com>
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="YR5bRHDk"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1779698255; h=From:To:Subject:Date:Message-ID:MIME-Version;
+	bh=+bjKIj74kR89Lxc7k+LCpx2MlMI9LLUN9GdyDifl7t8=;
+	b=YR5bRHDksn5o38M5/lkeElaooaLWGdU43yBIC6aDQsGMV/+ZP3C/FGvf+GoldRJ4KR//AkjAnVKwMsfN4IaqI2Yf6xJ+RccOT3ZLxRVaXCU6eSg6uRiSODe5d5OEvGDjPKpfe4bI2czNhWTJbkDbSiwe6GlqjPpkZRGlFuL2cPs=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033045098064;MF=zelin.deng@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0X3WidsM_1779698254;
+Received: from localhost(mailfrom:zelin.deng@linux.alibaba.com fp:SMTPD_---0X3WidsM_1779698254 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Mon, 25 May 2026 16:37:35 +0800
+From: Zelin Deng <zelin.deng@linux.alibaba.com>
+To: mbenes@suse.cz,
+	shuah@kernel.org
+Cc: linux-kselftest@vger.kernel.org,
+	Zelin Deng <zelin.deng@linux.alibaba.com>
+Subject: [PATCH] selftests: livepatch: unset sub_make_done in case top level Makefile be overwritten
+Date: Mon, 25 May 2026 16:37:21 +0800
+Message-ID: <20260525083721.27857-1-zelin.deng@linux.alibaba.com>
+X-Mailer: git-send-email 2.43.7
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260525075748.3720995-1-wakel@google.com>
-X-Mailer: git-send-email 2.54.0.746.g67dd491aae-goog
-Message-ID: <20260525075748.3720995-3-wakel@google.com>
-Subject: [PATCH 2/2] selftests/futex: Correct validation logic in waitv
-From: Wake Liu <wakel@google.com>
-To: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	linux-kselftest@vger.kernel.org
-Cc: Peter Zijlstra <peterz@infradead.org>, Darren Hart <dvhart@infradead.org>, 
-	Davidlohr Bueso <dave@stgolabs.net>, 
-	"=?UTF-8?q?Andr=C3=A9=20Almeida?=" <andrealmeid@igalia.com>, Carlos Llamas <cmllamas@google.com>, 
-	Edward Liaw <edliaw@google.com>, linux-kernel@vger.kernel.org, wakel@google.com
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-In futex_waitv negative tests (invalid_flag, unaligned_address, etc.),
-test results were previously evaluated as:
-    if (res == EINVAL)
+After I did: make kselftest-all in top level of kernel source tree, top
+level Makefile was overwritten by auto generated contents by
+filechk_makefile:
+[root@emr: /home/shiyu.dzl/linux-next]$ cat Makefile
+export KBUILD_OUTPUT = .
+export KBUILD_EXTMOD = /home/shiyu.dzl/linux-next
+export KBUILD_EXTMOD_OUTPUT = /home/shiyu.dzl/linux-next
+include /home/shiyu.dzl/linux-next/Makefile
 
-Since sys_futex_waitv returns -1 on error and sets errno, direct positive
-comparisons against res are always false, causing tests to silently pass
-regardless of real errors.
+Top-level Makefile export sub_make_done=1, leaks into unrelated re-invocations
+of the top-level Makefile when recursive descent through selftests -
+building test_module of livepatch. That causes KBUILD_EXTMOD setup to be
+skipped, which leads to a relative/absolute path mismatch in srcroot vs
+CURDIR, falsely setting building_out_of_srctree, and ultimately overwriting
+the source tree's Makefile with a generated stub.
 
-Correct these validations to assert EXPECT_EQ(res, -1) and compare errno
-directly against expected constants.
+Clear sub_make_done before re-invoking the kernel Makefile.
 
-Signed-off-by: Wake Liu <wakel@google.com>
+Fixes: c4bbe83d27c2 ("livepatch: Move tests from lib/livepatch to selftests/livepatch")
+Signed-off-by: Zelin Deng <zelin.deng@linux.alibaba.com>
 ---
- .../selftests/futex/functional/futex_waitv.c  | 45 +++++++++----------
- 1 file changed, 20 insertions(+), 25 deletions(-)
+ tools/testing/selftests/livepatch/test_modules/Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/futex/functional/futex_waitv.c b/tools/testing/selftests/futex/functional/futex_waitv.c
-index 7bed76a1caed..9dc0f9c1f22a 100644
---- a/tools/testing/selftests/futex/functional/futex_waitv.c
-+++ b/tools/testing/selftests/futex/functional/futex_waitv.c
-@@ -139,11 +139,10 @@ TEST(invalid_flag)
- 	to.tv_sec++;
+diff --git a/tools/testing/selftests/livepatch/test_modules/Makefile b/tools/testing/selftests/livepatch/test_modules/Makefile
+index a13d398585dc..b78657089ab7 100644
+--- a/tools/testing/selftests/livepatch/test_modules/Makefile
++++ b/tools/testing/selftests/livepatch/test_modules/Makefile
+@@ -19,11 +19,11 @@ obj-m += test_klp_atomic_replace.o \
+ # Ensure that KDIR exists, otherwise skip the compilation
+ modules:
+ ifneq ("$(wildcard $(KDIR))", "")
+-	$(Q)$(MAKE) -C $(KDIR) modules KBUILD_EXTMOD=$(TESTMODS_DIR)
++	$(Q)unset sub_make_done && $(MAKE) -C $(KDIR) modules KBUILD_EXTMOD=$(TESTMODS_DIR)
+ endif
  
- 	res = futex_waitv(waitv, NR_FUTEXES, 0, &to, CLOCK_MONOTONIC);
--	if (res == EINVAL) {
--		EXPECT_TRUE(0) TH_LOG("futex_waitv private returned: %d %s",
--				      res ? errno : res,
--				      res ? strerror(errno) : "");
--	}
-+	EXPECT_EQ(res, -1) TH_LOG("futex_waitv returned unexpected result: %d", res);
-+	if (res == -1)
-+		EXPECT_EQ(errno, EINVAL)
-+			TH_LOG("futex_waitv returned unexpected errno: %d", errno);
- }
- 
- TEST(unaligned_address)
-@@ -163,11 +162,10 @@ TEST(unaligned_address)
- 	to.tv_sec++;
- 
- 	res = futex_waitv(waitv, NR_FUTEXES, 0, &to, CLOCK_MONOTONIC);
--	if (res == EINVAL) {
--		EXPECT_TRUE(0) TH_LOG("futex_wake private returned: %d %s",
--				      res ? errno : res,
--				      res ? strerror(errno) : "");
--	}
-+	EXPECT_EQ(res, -1) TH_LOG("futex_waitv returned unexpected result: %d", res);
-+	if (res == -1)
-+		EXPECT_EQ(errno, EINVAL)
-+			TH_LOG("futex_waitv returned unexpected errno: %d", errno);
- }
- 
- TEST(null_address)
-@@ -186,11 +184,10 @@ TEST(null_address)
- 	to.tv_sec++;
- 
- 	res = futex_waitv(waitv, NR_FUTEXES, 0, &to, CLOCK_MONOTONIC);
--	if (res == EINVAL) {
--		EXPECT_TRUE(0) TH_LOG("futex_waitv private returned: %d %s",
--				      res ? errno : res,
--				      res ? strerror(errno) : "");
--	}
-+	EXPECT_EQ(res, -1) TH_LOG("futex_waitv returned unexpected result: %d", res);
-+	if (res == -1)
-+		EXPECT_EQ(errno, EINVAL)
-+			TH_LOG("futex_waitv returned unexpected errno: %d", errno);
- 
- 	/* Testing a NULL address for *waiters */
- 	ASSERT_EQ(clock_gettime(CLOCK_MONOTONIC, &to), 0) TH_LOG("gettime64 failed");
-@@ -198,11 +195,10 @@ TEST(null_address)
- 	to.tv_sec++;
- 
- 	res = futex_waitv(NULL, NR_FUTEXES, 0, &to, CLOCK_MONOTONIC);
--	if (res == EINVAL) {
--		EXPECT_TRUE(0) TH_LOG("futex_waitv private returned: %d %s",
--				      res ? errno : res,
--				      res ? strerror(errno) : "");
--	}
-+	EXPECT_EQ(res, -1) TH_LOG("futex_waitv returned unexpected result: %d", res);
-+	if (res == -1)
-+		EXPECT_EQ(errno, EINVAL)
-+			TH_LOG("futex_waitv returned unexpected errno: %d", errno);
- }
- 
- TEST(invalid_clockid)
-@@ -219,11 +215,10 @@ TEST(invalid_clockid)
- 	to.tv_sec++;
- 
- 	res = futex_waitv(NULL, NR_FUTEXES, 0, &to, CLOCK_TAI);
--	if (res == EINVAL) {
--		EXPECT_TRUE(0) TH_LOG("futex_waitv private returned: %d %s",
--				      res ? errno : res,
--				      res ? strerror(errno) : "");
--	}
-+	EXPECT_EQ(res, -1) TH_LOG("futex_waitv returned unexpected result: %d", res);
-+	if (res == -1)
-+		EXPECT_EQ(errno, EINVAL)
-+			TH_LOG("futex_waitv returned unexpected errno: %d", errno);
- }
- 
- TEST_HARNESS_MAIN
+ # Ensure that KDIR exists, otherwise skip the clean target
+ clean:
+ ifneq ("$(wildcard $(KDIR))", "")
+-	$(Q)$(MAKE) -C $(KDIR) clean KBUILD_EXTMOD=$(TESTMODS_DIR)
++	$(Q)unset sub_make_done && $(MAKE) -C $(KDIR) clean KBUILD_EXTMOD=$(TESTMODS_DIR)
+ endif
 -- 
-2.54.0.746.g67dd491aae-goog
+2.43.7
 
