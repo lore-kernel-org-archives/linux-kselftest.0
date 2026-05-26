@@ -1,111 +1,166 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ECB7165F16;
-	Tue, 26 May 2026 09:02:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E0CC3D1CC5;
+	Tue, 26 May 2026 09:07:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.242.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779786126; cv=none; b=nSHFiuO0jJDZskRKbRXZsMuMY1PsmAFhcP8o7asHlHs3vODXpsRJWvQOotUz7CpW+gx+Rzu0TMuGTXmNsEu6F4h4uQoNMrriwiPWguFDhm8WI7AXVpxiNsZb/INnoYKIlnruUp/p7CcL1sGe0fiuLhpICDnwcnZylM018E9l0ZA=
+	t=1779786447; cv=none; b=phhL2SlTM/iny1gFsVA/F166rteWHFOhlzHLWjLde9T7v2mDmKmkGrouA054J6AcH0KQOh3zzTcGyab1x4aa5vquG+KMJpEMN8RrfLrgVjn+Rhd0GlKF+CdsANHvPEfAD+rc9D5P5+2QZcIeIhW9psR+dtwHUtWENHHX8hMhXDI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779786126; c=relaxed/simple;
-	bh=DFi/cRyCBqJ8Lu+MIcszq98L1mt6KhWwWqdGNno/Ut4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lJidkve3juf5dvT6boihlS8usNPoXynwqDP/NB3C6JbQ1zNnBLYbEih16bxXTwpoK+OO5gIC8MJQca/+9LMIpLpeTeTFgevRjJsZkRXD04ACXUvo/unUK/+HZlpB2E828W9zPvdXCtagpqErATmmqflrshr/YJsvDzJ5mFHKGD4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UNomKvyN; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779786447; c=relaxed/simple;
+	bh=y57EO1rsH4ucNWooWXT1hqzndfnlqSbet0Yr1W3BZdc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=eoLXAOHl/2V5tUKplN7w3WBPl3m8+GzQUb1TjtbpeVr5zOe1uLLL3MdwThq2AOyVuMq+jsR8nVUrpr/dPLHu+HXIaFgqurYpb7IUj/xWjvR/eh/1aX745HXqthGQ1xw7EOKamLLXr6KUbn0DcNJsaR/ZprPSSthhtDS05E/dJ4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net; spf=pass smtp.mailfrom=davidgow.net; dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b=gfVL8AOw; dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b=nY/9wepO; arc=none smtp.client-ip=203.29.242.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UNomKvyN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 588C21F000E9;
-	Tue, 26 May 2026 09:01:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779786125;
-	bh=wKXIQCwGOxQ2OgGY1VhstzsSDD6YrQoCwtJahftxT68=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=UNomKvyN6nChEG1NxIcLP+N+6IoiopMw+34CALCJS1jVueNSAZJcikxgGk727zWH7
-	 /O9hdPRmLXWLr8Ed/g5NPz49bC9TmUl+HlK7pC9ysMn99RGkLEGAFNNN4AGIutRkgj
-	 1gFbsnqhWoN5v+gZVG5laclAgI8gyuX64MD6KUdEhjrxGfmdFXM/MeaEYKLst8PS/x
-	 aV/64NGkYCAuFFlGutO5jVD5sYTlaFjP/x5AaTy/pBUWXzdo/58xMd6TC7lxShVQK3
-	 PqokTXpjbgijnmPHKlhp3IPbYH0iluKzjd38rqcGXg96LlAvdlj8mG/6OqhU1+bJBV
-	 1wmaetbFt8CRg==
-Date: Tue, 26 May 2026 12:01:53 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: Sarthak Sharma <sarthak.sharma@arm.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>, Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
-	Peter Xu <peterx@redhat.com>, Leon Romanovsky <leon@kernel.org>,
-	Zi Yan <ziy@nvidia.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Nico Pache <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
-	Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
-	Lance Yang <lance.yang@linux.dev>, Mark Brown <broonie@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v3 2/4] tools/lib/mm: move hugepage_settings out of
- selftests
-Message-ID: <ahVhgW4MdQLrtNa0@kernel.org>
-References: <20260521111801.173019-1-sarthak.sharma@arm.com>
- <20260521111801.173019-3-sarthak.sharma@arm.com>
- <177964236208.4000040.6637433432678119173.b4-review@b4>
- <8992b3c0-a2af-436e-a50f-3729cf589d09@arm.com>
+	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b="gfVL8AOw";
+	dkim=pass (4096-bit key) header.d=davidgow.net header.i=@davidgow.net header.b="nY/9wepO"
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
+	s=201606; t=1779785889;
+	bh=y57EO1rsH4ucNWooWXT1hqzndfnlqSbet0Yr1W3BZdc=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=gfVL8AOw4jtF4bzowSDSxB2Cb3qeMMw0CdWFQ50FSw/+U5gbegRjhvf4kGIQ91lx9
+	 Ve1anqEkViHp21tRSfwB/IY4SKsxIoLYIUcX8LejUJaalUemd4JuXObZPFs8ex0SNE
+	 jB39G+OQMDEJkT1wLees6iAhdokpRaGW2B76lk+SADyFduh4I2jFz04yQ958qrGNWa
+	 mZzsVwoDPCJve6ft/sjAvbdPuK1kxSe3LmDLZFtqce4n7agoWLOxm4Mjjp0u50ewYT
+	 tbwe5yYeMZvaHaeZHFbfYsinSyzqntghit5SvzAWWY50HwdILcPCJffGG1cgEhBQGc
+	 AdEszcf0TB1LYA8m4e4m/grmhVVeeVEPKVMfwLN2q0WoUYHorP60IrG9+uRD5r0AKA
+	 bhFberAauiiKWv9R3FVyoN1ct/09JWyKW9dSMaXlH3nmaPsDNGZAAKrTM7diZUMFFm
+	 4DHJAF3dTLvrnef+sylgi6hQYtq5yHbQtQwJcIgEHWIefHK9ibs2qvy1/txVMRS1jP
+	 4CYZq8fYp24iEeqItpig0lduke+2TGwqL0+lqHJMRfOJQrHBUg9DIDJTWSNtT4Ij8a
+	 XHUOESDbH/4f+VHgXAKf2Yy5c0v8af0wW2xzoemg6gVf7KOYhmUmeeNeQc1QvjHn0V
+	 zW5Sh7upL2mzNVqB7YgyYpoI=
+Received: by sphereful.davidgow.net (Postfix, from userid 119)
+	id 63DB21E9C65; Tue, 26 May 2026 16:58:09 +0800 (AWST)
+X-Spam-Level: 
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=davidgow.net;
+	s=201606; t=1779785888;
+	bh=y57EO1rsH4ucNWooWXT1hqzndfnlqSbet0Yr1W3BZdc=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=nY/9wepO5QFmQtpoRPQKtfiV9LebS224stq6qE6RLLBnIP0R+W5Lsb41kDNNGR/zi
+	 lg9rgKSCvb353z84KeOlM/5GUs40VYr8fF4CAUgx3+bzUZh6ummvVqruks2/U1b4kC
+	 c0SdIXnrAbrfZiUYb4asSzM+e9JsF4TQDSc5Vc9iJ0mLS209YqNR2LZSZkjQG2+dZk
+	 JMsgK81+nbglcQNZjRMEIWUoZOQq8eeVBQqD0JU+s4iEzLjUH7kEI2DbFs6KZsbMFT
+	 dR9kjAsQ+d+WQlBqkaQtlTL3y4XfxC7JyDxKv4fPg6pPsVL68gKwxCmwWkw0DVYJJa
+	 5HCcJVENWnHnYN4o/5wW0PUtpGtgP1jg0rJq2ZTzH5djYKQsd7Xkxgn+1y3fQOSkOI
+	 /TB1zTstwfgWXKBiSYz/OChXTDk3pfP4yzubs6PGK/oEpGqW39nbAV9fzjmK1sD8vR
+	 F1DXnze1dlPe52mvfUmfFVYyxy5GXppGkvANK/Lm8GgVeEVR3LKHuSTO1z1Kpo7Ll0
+	 ZrrE8UMWmbywkLMHI1x6a7vNuTDDq85Ek9rkqX7Wxl6ECiyh466jgVrfTFhkxsTru7
+	 1s+SyFBXOtDMDlUZ0C6GYjkLyT+EJaWHKBfJw5j0QQQNoxWMyJLgiyMoPN0rjnCmWU
+	 TYUhR7kWkOIx5SgVNgxdQjXk=
+Received: from [IPV6:2001:8003:8810:ea00:ed87:ca88:5326:e11d] (unknown [IPv6:2001:8003:8810:ea00:ed87:ca88:5326:e11d])
+	by sphereful.davidgow.net (Postfix) with ESMTPSA id F1E731E9C5C;
+	Tue, 26 May 2026 16:58:07 +0800 (AWST)
+Message-ID: <5ea00943-4979-48d5-9b7b-351a5e87f011@davidgow.net>
+Date: Tue, 26 May 2026 16:58:05 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8992b3c0-a2af-436e-a50f-3729cf589d09@arm.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/3] kunit: provide
+ kunit_platform_device_register_full()
+To: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>,
+ Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <raemoar63@gmail.com>,
+ Linus Walleij <linusw@kernel.org>, Bartosz Golaszewski <brgl@kernel.org>
+Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+ linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
+References: <20260522-gpiolib-kunit-v3-0-b15fe6987430@oss.qualcomm.com>
+ <20260522-gpiolib-kunit-v3-1-b15fe6987430@oss.qualcomm.com>
+From: David Gow <david@davidgow.net>
+Content-Language: fr
+In-Reply-To: <20260522-gpiolib-kunit-v3-1-b15fe6987430@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Mon, May 25, 2026 at 11:43:37AM +0530, Sarthak Sharma wrote:
-> Hi Mike!
+Le 22/05/2026 à 9:42 PM, Bartosz Golaszewski a écrit :
+> Provide a kunit-managed variant of platform_device_register_full().
 > 
-> On 5/24/26 10:36 PM, Mike Rapoport wrote:
-> > On Thu, 21 May 2026 16:47:59 +0530, Sarthak Sharma <sarthak.sharma@arm.com> wrote:
-> > 
-> > Hi Sarthak,
-> > 
-> >>
-> >> diff --git a/tools/testing/selftests/mm/hugepage_settings.c b/tools/lib/mm/hugepage_settings.c
-> >> similarity index 98%
-> >> rename from tools/testing/selftests/mm/hugepage_settings.c
-> >> rename to tools/lib/mm/hugepage_settings.c
-> >> index 5e947abb7425..b08b27776fc5 100644
-> >> --- a/tools/testing/selftests/mm/hugepage_settings.c
-> >> +++ b/tools/lib/mm/hugepage_settings.c
-> >> @@ -383,8 +387,6 @@ int detect_hugetlb_page_sizes(unsigned long sizes[], int max)
-> >>  		if (sscanf(entry->d_name, "hugepages-%zukB", &kb) != 1)
-> >>  			continue;
-> >>  		sizes[count++] = kb * 1024;
-> >> -		ksft_print_msg("[INFO] detected hugetlb page size: %zu KiB\n",
-> >> -			       kb);
-> > 
-> > I believe this message is useful for debugging.
-> 
-> I removed this because hugepage_settings.c is now moving out of
-> selftests, and converting the ksft_print_msg() calls to plain printf()
-> would break TAP output for selftests.
-> 
-> I can add these diagnostic lines back, but since this is now a shared
-> helper, in order to preserve TAP compatibility, I'll have to do a
-> fprintf(stderr, "# ..."). I feel this would look a bit odd from a
-> non-selftest invocation though.
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+> ---
 
-I think "# ... " is not that bad to begin with :)
- 
-> Another option is to add a logging hook so selftests can wire this to
-> ksft_print_msg() while non-selftest users can use normal stderr, but
-> that feels too much for 2 print statements and would extend the scope of
-> this series.
-> 
-> Please let me know if you have a preference here.
+Thanks! This looks good to me.
 
--- 
-Sincerely yours,
-Mike.
+Reviewed-by: David Gow <david@davidgow.net>
+
+Cheers,
+-- David
+
+>  include/kunit/platform_device.h |  4 ++++
+>  lib/kunit/platform.c            | 31 +++++++++++++++++++++++++++++++
+>  2 files changed, 35 insertions(+)
+> 
+> diff --git a/include/kunit/platform_device.h b/include/kunit/platform_device.h
+> index f8236a8536f7ebcee6b0e00a7bd799a14b345c1b..8cad6e1c3e7efba862862b579089f2f317784a73 100644
+> --- a/include/kunit/platform_device.h
+> +++ b/include/kunit/platform_device.h
+> @@ -6,10 +6,14 @@ struct completion;
+>  struct kunit;
+>  struct platform_device;
+>  struct platform_driver;
+> +struct platform_device_info;
+>  
+>  struct platform_device *
+>  kunit_platform_device_alloc(struct kunit *test, const char *name, int id);
+>  int kunit_platform_device_add(struct kunit *test, struct platform_device *pdev);
+> +struct platform_device *
+> +kunit_platform_device_register_full(struct kunit *test,
+> +				    const struct platform_device_info *pdevinfo);
+>  
+>  int kunit_platform_device_prepare_wait_for_probe(struct kunit *test,
+>  						 struct platform_device *pdev,
+> diff --git a/lib/kunit/platform.c b/lib/kunit/platform.c
+> index 0b518de26065d65dac3bd49dd94a4b3e7ea0634b..583b50b538c79599ebbf33e261fe2e9ced35efa9 100644
+> --- a/lib/kunit/platform.c
+> +++ b/lib/kunit/platform.c
+> @@ -6,6 +6,7 @@
+>  #include <linux/completion.h>
+>  #include <linux/device/bus.h>
+>  #include <linux/device/driver.h>
+> +#include <linux/err.h>
+>  #include <linux/platform_device.h>
+>  
+>  #include <kunit/platform_device.h>
+> @@ -130,6 +131,36 @@ int kunit_platform_device_add(struct kunit *test, struct platform_device *pdev)
+>  }
+>  EXPORT_SYMBOL_GPL(kunit_platform_device_add);
+>  
+> +/**
+> + * kunit_platform_device_register_full() - Register a KUnit test-managed platform
+> + *                                         device described by platform device info
+> + * @test: test context
+> + * @pdevinfo: platform device information describing the new device
+> + *
+> + * Register a test-managed platform device. The device is unregistered when the
+> + * test completes.
+> + *
+> + * Return: New platform device on success, IS_ERR() on error.
+> + */
+> +struct platform_device *
+> +kunit_platform_device_register_full(struct kunit *test,
+> +				    const struct platform_device_info *pdevinfo)
+> +{
+> +	struct platform_device *pdev;
+> +	int ret;
+> +
+> +	pdev = platform_device_register_full(pdevinfo);
+> +	if (IS_ERR(pdev))
+> +		return pdev;
+> +
+> +	ret = kunit_add_action_or_reset(test, platform_device_unregister_wrapper, pdev);
+> +	if (ret)
+> +		return ERR_PTR(ret);
+> +
+> +	return pdev;
+> +}
+> +EXPORT_SYMBOL_GPL(kunit_platform_device_register_full);
+> +
+>  struct kunit_platform_device_probe_nb {
+>  	struct completion *x;
+>  	struct device *dev;
+> 
+
