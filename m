@@ -1,115 +1,186 @@
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B2EC4219FE
-	for <linux-kselftest@vger.kernel.org>; Tue, 26 May 2026 18:39:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.43
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779820751; cv=pass; b=sKmVyMMj0synBKVm67/bFlsnBU8H3Rl0uruL0UUJj+kAZVYfhGTpJOL533F6Cng7YRSFoygXLMwwI8yWNzlSjMkbFQtDTTAKv+XH2EYIITGNXUA8i+faNcxpN2mQ188tzfOnBcv1SrPIKFrlB/1mLWyVjaPMaqgg6QbS4bwVqM8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779820751; c=relaxed/simple;
-	bh=TQ0YkjZ6DaYWwBevwDIkK78Ix7JVxyhaUN3xT4LANLY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VDJb8HrHYeqai3EcId1wIoMSDdwjJnOipfbcS08jdAS8puwYzyqR0ggFR/MPYjQkzhaGZzEIHj17QkzE1ohwhXmBCTbCl8eOAiQw5FvidS6EGnVK0T3LZ+793znX0cjaEYVVPpGv38787O7fRsFBNMHsNjLzB6IE6L5rFBYeHzQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MPIsIoVN; arc=pass smtp.client-ip=209.85.208.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A2363B47EE
+	for <linux-kselftest@vger.kernel.org>; Tue, 26 May 2026 19:43:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.181
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779824619; cv=none; b=m4QPxXIrKFW0Vtdfx4zqGFTFIlnFLn8dfShwRlXp1lHN3TFzGEVyh12QS225pODFNOI7Vu+DZWefOQxXK7uJ1JiuquUkVa1k6Io9kqRTpHnr+DeDYglhyXGhLNDh4Nif9jfN+BpEvSMVjlJzpIvzlhAUQg8KH9SI5YjN9vyCvo0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779824619; c=relaxed/simple;
+	bh=XuxZMWtfwaZOaPWFZW08FgT0dMzx46J//ZDhvW8EJN8=;
+	h=Content-Type:Message-ID:Date:MIME-Version:To:Cc:From:Subject; b=Dvs/IBVbliZwLiy0ZrvSMXUbnqpM4e8bnpCQPQ7e7rMKM8Cs7FT0/EUSGp6DV5VPA+flfufntcMXlr1wnoSmxG25RAzVMuH7F3JDOt53ml6P41ai9y7eGgoHJ++Q1ZsdQ4mzWreh0O8OoCIkRpEQCrQAl9/KgMSaLG3JUK6PBsE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=T4e98HMi; arc=none smtp.client-ip=209.85.167.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MPIsIoVN"
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-671f1a0d0c5so232a12.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 May 2026 11:39:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779820748; cv=none;
-        d=google.com; s=arc-20240605;
-        b=bvSV1BWOnKJzFsonbtAc5WJ4Czlhx6H8w+bhNhIn9GWyWgosAfFZTV2SAfW67/ZcX5
-         7ddcoG86xXdllvhz4q+E42FCMenFDv38O9+c8+NDfiwOLeoE+8mVcj6PTl7q9dRiQFvp
-         3JaeHfbfEkVSX9Pfoo8PPDrn/wmDOA3l1H2+j/eFkMK5qu6Mnup21rQ7VnIMoHnv9Y+s
-         KZlLLIlP6BVGBwfKDG8zJogzQzTE7SHOmvwN69qLFNzib1PkhR8H5EjSOP8EA8CrP/ID
-         O3R1hRAf7kJ3gsfvIMCAH1Hx0SMCkBZyw4tCOrJoBLw4Mi3sUQOSa3T4zeABWdqJWeGV
-         mrFg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=VZrclRlrLw1F8/3daiaKppXoN6r8/1TCSncdy3RzcBA=;
-        fh=atvcDggC4NbFz7GUS4YuIpdtUIvkNAiCIWJroBMVjjw=;
-        b=IKBsx1nV5G4xHyWvGas9qsufgM2Ue3w7jPc9HwCcs8H5c2hB7FvNMvaAl0UvNdNh9D
-         MYLatjRJYswpqsCvzWBOCNiCdCBlNNPzrmpT+BiG/xgCdzSEOEuCV70WEvkPd+qwlZSm
-         +fO2rtm/QPdLqpbvfl3kPWVRtl/N1KLTZmm09ln1tnIhFfh9YO0h15u+w1rhABBHBWhk
-         Yf5CawFnuHahbUWdwlsq5SAk0kPBfY3opetKB1Z6hJjcSA5juUeUhosx7ybM9S8DwZPO
-         MRNbY4zgD7T/6jBC2yI6VqqqmD0RNeSP4a+LnFVtSvbXpP7N2h4MfO3WAXYkWnPJLdF4
-         jmpg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="T4e98HMi"
+Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-4854b95c2efso1387568b6e.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 26 May 2026 12:43:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1779820748; x=1780425548; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VZrclRlrLw1F8/3daiaKppXoN6r8/1TCSncdy3RzcBA=;
-        b=MPIsIoVNsFdVMXJRJ4ZnH14jWU4ca8f7NkGCg6OAxzPUqUSAdfZZWDa+NI/ifUQwpf
-         tjJ6pel86DJ6t8+IbHotRq0rZeCPYIOYZgFkReIrfyzzQ4Y6RbAwG0H1hdEH7skxfJU1
-         JIyyf9GjoYxXIOiRD0ufFJjooc2+jvhT/gC/yPB35e+f+7yYf43YQ0RXbn2Pgi5M9ztJ
-         TO6Otmu2wriiUTSupJpwMGdF6F+I5AJWdiNp9F5qgQmHC3HReDq+V+hm74JqQ4kEduaB
-         VUpwR0QMHtHAFlT6elVpKDxw6bWpFFAeP3aEzEPYOGzN9IpsLIgZFF7WtAbFhK6veCUh
-         u4yA==
+        d=linuxfoundation.org; s=google; t=1779824615; x=1780429415; darn=vger.kernel.org;
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=CX4cElAHoE2nQxUTTT2mXDJk2DUAeZpBAOinXe2Xemc=;
+        b=T4e98HMi/7TdZZKmuAS4teQuYURt3d207QdG4U2ylkBK1JH8mcw33ky7DpdGXhDxqW
+         98M1ATovbsFoQOFL0YD6tOwEmN9R//+XC6cRT2xC6wzioVvhTrfC3xqcf4z66Vx5gHQo
+         e9B612uLD5igmR2SK6TWknmuX1I53/OuJNeh4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779820748; x=1780425548;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=VZrclRlrLw1F8/3daiaKppXoN6r8/1TCSncdy3RzcBA=;
-        b=UatXK2ZK1FrlpwXFCohqOxeGSEjzVIirwAbd3wbBBb+CG5mRmUDuQWuCe4hnoB9PHd
-         Xt2fydtazB6gvpn8q/FvG4nQKQeiYzwAKwwrlZkoP3NOxqomN4G0FJD33HrusP1yetUq
-         KYHzPzzrETU/0ptmnUs0FhvE00coFI7GYSGh9ih0nee7M+/YlQIqetDLpHx8tAeRzvLg
-         wzJJROvF6U4G7A/d1YGAV4Cf593+Yv1WE+gNgbgzD9FlrioSq9MgkObs+tKMyTqPTtXc
-         hi0p6HkvKwkPmZAWPn79s/OoQGMAQHIxNu3Y9C65z0oJpGOycQzgpcngmgUx8QKwtbnU
-         b/eg==
-X-Forwarded-Encrypted: i=1; AFNElJ/eGp94d8eoQwdhyXdEP0TjO7k8y51khOk08veuQ/X1GaJp0csig93wXNm/HBZfio2Jk8v+qINfAgL5cuZxmMI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz4NtrbuHTYFXY7Em4rthcP0PI8Z74PrTWSHLw++NVAFzGZ1fdF
-	pG/MPfnIkxGStM0RJIgjEVSJHRrAhOc70HeJ3gb3xTkiuNDywg7oRTtJ+l4dABW2kIIjubWyTTw
-	1OaO6t7hnoehFwAa1pcfNxSskHYktYAhis2I52yfU
-X-Gm-Gg: Acq92OEcwJcX2vEfCO5QqV9UxYN5XM9qvigEF/V65YY24Xm9nvNIES8CDNYIiyWz2CY
-	Hp7/Xb52ZICiaYSd/Y4RnpyU0GOXo7kOqqySzAME+7ZKRNhHUTx/2YMUJt+nMPDqvOVa1Cm6qoT
-	AZAxp4a287vVXF+zOEN1iROKJegWNvu10tTB59Xal8goPoeKnT6pqzXCVO/qjC0dotPF5aOshvv
-	oR5DwEE2y5JP6iqepueY3TH40y7IcU1dDWCk4JZrPaOozEgoK0TEdyESIEjUu+yCXoGPvFwT9YL
-	2R9jTzcQp8oKV63cDQ==
-X-Received: by 2002:a05:6402:5356:10b0:66e:e3f9:ebb6 with SMTP id
- 4fb4d7f45d1cf-688fd0d56f7mr134060a12.4.1779820748207; Tue, 26 May 2026
- 11:39:08 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1779824615; x=1780429415;
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CX4cElAHoE2nQxUTTT2mXDJk2DUAeZpBAOinXe2Xemc=;
+        b=OkCQPoWBFlES4CwaZZOtMCobXhtMGrpiA0LoCfAjczm9RIeuMv7UGsm2iP593K2jYZ
+         yl8H3pnBYXfEpIJvLQv5Dz0wMRHdxq0sON2dG1VlTQ/2ZDvwT2WqacUuYNngVHuZpdlA
+         LuZiBL10csT33h0B2jZxlTFKejmzBkDJECEO0SOQ7Q8idCxwmuGq0JSMUaru61MdbMx6
+         eFWjuhWGgzkiaD5LCxEQg1iQqF8Z6ycujHREO3qGRDOl0XY6G6wr99kpjPZY28XfvcJ7
+         u+ssd177rIamTOiNIOs6m1FRF2HR1HQDmEIRe/gDpLC4P/kM6W14kU54imoRVpQFfzZT
+         17vg==
+X-Forwarded-Encrypted: i=1; AFNElJ8zKl0E1iK6wmSl5cCrZHBvPDYktbCul1gNtNy2senfPTUwxDBeyA9e+z7j74vBrmKV4lkI51/xwKFkRFEAfEk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyp80ibfgFn8ibC7Uk51B8nrhQzLat+O7u9D7yBvVz+XCEnO68D
+	/kk01oh5q7tbTRySE3z6FuqNHMX9wC8Wi1HzVHZShK+DU0nHHMdZa6PNLxTd3LkIX/I=
+X-Gm-Gg: Acq92OH/AbshHbrJtVHnz0ZOFLGzL5ybQTraJ1CixKmgyTyxaZ1cMBHIZKqrPyAJyqP
+	+lO1b8+ab21f8taNKERPRTQfaVZ8GrI+BdeUpNCuFjLIv/JcVNAcvLJ6eO1jClhCzsqqWHcPb9f
+	pwQ0h9KVF+kQ8rDBm+b348yoyxAtLWwSz63KSED28KbaINOOm3IHTbfqzSpjnRrIAkeWG3/OJL4
+	LDlimCKQ1TuN0VBVhm7K4R1etaxhjvfjFsG3n4ONnywiPmrvnFim8gxH2P7/uHyD8p2qnEFGWU/
+	kmD9wf/Z5joVe4xaXWGGAtUccZB7oEX6eMdCvdaUfMrV5DyH1Y8ZahXoTjSDchgxUgzC7vS3LDI
+	4s2KamxO8b/KbA9paLzX9w3sMKw7NYoe3/617pjhNP3TJll/NYrJAct4m7tmiuq1P9zW/ryGZ9b
+	BCLGpyr4rPsD78Vyubstt9zkN50BDov3d884Kd3ATOZTNFB5n2+DpU
+X-Received: by 2002:a05:6808:2389:b0:484:d5a3:9969 with SMTP id 5614622812f47-48549ed0fefmr10870705b6e.12.1779824615322;
+        Tue, 26 May 2026 12:43:35 -0700 (PDT)
+Received: from [192.168.1.14] ([38.15.57.99])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-48554041ccasm6523908b6e.0.2026.05.26.12.43.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 May 2026 12:43:34 -0700 (PDT)
+Content-Type: multipart/mixed; boundary="------------ihOKNgVCaf9T85XvFwUpYVcg"
+Message-ID: <7f5acf69-9224-4d2d-b7f6-99114a232446@linuxfoundation.org>
+Date: Tue, 26 May 2026 13:43:32 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260513224608.1859737-1-jmattson@google.com> <20260513224608.1859737-4-jmattson@google.com>
- <CALMp9eS4s9tsOmvDUDeqS7oph0mSHyhxBiULQdwHVaG+7gXLSQ@mail.gmail.com>
- <agXcKDjnJc9DPcyr@google.com> <CALMp9eS831M153QmAgjzJcR2dFY_wCCCzDisd7_T6GyS3-gAFw@mail.gmail.com>
- <agX2SJF3rJSkIqDe@google.com> <CALMp9eQTSxFkVf4vV83yNYvv2AjseHYiD3M68mcc951L4U1Jxw@mail.gmail.com>
- <agX5v1utAfyMadPm@google.com> <CALMp9eQqbHrcV1_WM+5xUR16OpGk+unxoZGi+=t55cqVhFgAfQ@mail.gmail.com>
- <DS7PR12MB82016B1B310BD994C83B35D294072@DS7PR12MB8201.namprd12.prod.outlook.com>
-In-Reply-To: <DS7PR12MB82016B1B310BD994C83B35D294072@DS7PR12MB8201.namprd12.prod.outlook.com>
-From: Jim Mattson <jmattson@google.com>
-Date: Tue, 26 May 2026 11:38:56 -0700
-X-Gm-Features: AVHnY4KO9YpPS3F4eK2yFsOKV_kGxdvJkMqyQHd9reQ58QYwde_VG7jCuT3Sxr4
-Message-ID: <CALMp9eQ2SLq2bVngJ1RHEfkFe5yaTDrFxXT0KNTgBZY6WRMDbw@mail.gmail.com>
-Subject: Re: [PATCH v3 3/4] KVM: x86: Virtualize AMD CPUID faulting
-To: "Kaplan, David" <David.Kaplan@amd.com>
-Cc: Sean Christopherson <seanjc@google.com>, "pbonzini@redhat.com" <pbonzini@redhat.com>, 
-	"tglx@kernel.org" <tglx@kernel.org>, "mingo@redhat.com" <mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>, 
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>, "x86@kernel.org" <x86@kernel.org>, 
-	"hpa@zytor.com" <hpa@zytor.com>, "shuah@kernel.org" <shuah@kernel.org>, 
-	"kvm@vger.kernel.org" <kvm@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, "ctpence@google.com" <ctpence@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: shuah <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
+ David Gow <david@davidgow.net>, Brendan Higgins <brendan.higgins@linux.dev>,
+ Rae Moar <raemoar63@gmail.com>, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+From: Shuah Khan <skhan@linuxfoundation.org>
+Subject: [GIT PULL] kunit fixes update for Linux 7.1.-rc6
 
-On Thu, May 14, 2026 at 11:17=E2=80=AFAM Kaplan, David <David.Kaplan@amd.co=
-m> wrote:
->
-> This appears to be a bug, as most other instructions (e.g. INVPCID) that =
-have CPL checks do the CPL checks before the VMEXIT checks.  I'm following =
-up on this internally...
+This is a multi-part message in MIME format.
+--------------ihOKNgVCaf9T85XvFwUpYVcg
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Did you learn anything from the internal follow-up? The ellipsis
-suggests, "stay tuned..." :)
+Hi Linus,
+
+Please pull this kunit fixes update for Linux 7.1-rc6.
+
+Fixes use-after-free in kunit debugfs when using kunit.filter when
+the executor frees dynamically allocated resources after running
+boot-time tests. This resulted in fatal hardware exception due to
+invalidation of capability flags on the reclaimed memory on some
+architectures such as CHERI RISC-V that support the feature, and
+silent memory corruption on others.
+
+Fix for this UAF couples the coupling the lifetime of the filtered
+suite memory allocation to the lifetime of the kunit subsystem and its
+associated VFS nodes. Ownership of the boot-time suite_set is now
+transferred to a global tracker ('kunit_boot_suites'), and the memory
+is cleanly released in kunit_exit() during module teardown.
+
+diff is attached.
+
+thanks,
+-- Shuah
+
+----------------------------------------------------------------
+The following changes since commit 8f80b5b227ef9ea422080487715c841856339aed:
+
+   kunit: config: KUNIT_DEBUGFS should depend on DEBUG_FS (2026-05-04 12:10:40 -0600)
+
+are available in the Git repository at:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux_kselftest-kunit-fixes-7.1-rc6
+
+for you to fetch changes up to fb6988b83b4cafe8db63999c1ddff1b7c66d2ff5:
+
+   kunit: fix use-after-free in debugfs when using kunit.filter (2026-05-21 10:45:49 -0600)
+
+----------------------------------------------------------------
+linux_kselftest-kunit-fixes-7.1-rc6
+
+Fixes use-after-free in kunit debugfs when using kunit.filter when
+the executor frees dynamically allocated resources after running
+boot-time tests. This resulted in fatal hardware exception due to
+invalidation of capability flags on the reclaimed memory on some
+architectures such as CHERI RISC-V that support the feature, and
+silent memory corruption on others.
+
+Fix for this UAF couples the coupling the lifetime of the filtered
+suite memory allocation to the lifetime of the kunit subsystem and its
+associated VFS nodes. Ownership of the boot-time suite_set is now
+transferred to a global tracker ('kunit_boot_suites'), and the memory
+is cleanly released in kunit_exit() during module teardown.
+
+----------------------------------------------------------------
+Florian Schmaus (1):
+       kunit: fix use-after-free in debugfs when using kunit.filter
+
+  include/kunit/test.h |  1 +
+  lib/kunit/executor.c | 19 ++++++++++++++++---
+  lib/kunit/test.c     |  1 +
+  3 files changed, 18 insertions(+), 3 deletions(-)
+
+----------------------------------------------------------------
+--------------ihOKNgVCaf9T85XvFwUpYVcg
+Content-Type: text/x-patch; charset=UTF-8;
+ name="linux_kselftest-kunit-fixes-7.1-rc6.diff"
+Content-Disposition: attachment;
+ filename="linux_kselftest-kunit-fixes-7.1-rc6.diff"
+Content-Transfer-Encoding: base64
+
+ZGlmZiAtLWdpdCBhL2luY2x1ZGUva3VuaXQvdGVzdC5oIGIvaW5jbHVkZS9rdW5pdC90ZXN0
+LmgKaW5kZXggOWNkMTU5NGFiNjk3Li5jZTA1NzNlMTk2Y2UgMTAwNjQ0Ci0tLSBhL2luY2x1
+ZGUva3VuaXQvdGVzdC5oCisrKyBiL2luY2x1ZGUva3VuaXQvdGVzdC5oCkBAIC02MTMsNiAr
+NjEzLDcgQEAgdW5zaWduZWQgbG9uZyBrdW5pdF92bV9tbWFwKHN0cnVjdCBrdW5pdCAqdGVz
+dCwgc3RydWN0IGZpbGUgKmZpbGUsCiAJCQkgICAgdW5zaWduZWQgbG9uZyBvZmZzZXQpOwog
+CiB2b2lkIGt1bml0X2NsZWFudXAoc3RydWN0IGt1bml0ICp0ZXN0KTsKK3ZvaWQga3VuaXRf
+ZnJlZV9ib290X3N1aXRlcyh2b2lkKTsKIAogdm9pZCBfX3ByaW50ZigyLCAzKSBrdW5pdF9s
+b2dfYXBwZW5kKHN0cnVjdCBzdHJpbmdfc3RyZWFtICpsb2csIGNvbnN0IGNoYXIgKmZtdCwg
+Li4uKTsKIApkaWZmIC0tZ2l0IGEvbGliL2t1bml0L2V4ZWN1dG9yLmMgYi9saWIva3VuaXQv
+ZXhlY3V0b3IuYwppbmRleCAxZmVmMjE3ZGUxMWQuLmIwZjhhNDFkNjFkMyAxMDA2NDQKLS0t
+IGEvbGliL2t1bml0L2V4ZWN1dG9yLmMKKysrIGIvbGliL2t1bml0L2V4ZWN1dG9yLmMKQEAg
+LTE1LDYgKzE1LDE2IEBAIGV4dGVybiBzdHJ1Y3Qga3VuaXRfc3VpdGUgKiBjb25zdCBfX2t1
+bml0X3N1aXRlc19lbmRbXTsKIGV4dGVybiBzdHJ1Y3Qga3VuaXRfc3VpdGUgKiBjb25zdCBf
+X2t1bml0X2luaXRfc3VpdGVzX3N0YXJ0W107CiBleHRlcm4gc3RydWN0IGt1bml0X3N1aXRl
+ICogY29uc3QgX19rdW5pdF9pbml0X3N1aXRlc19lbmRbXTsKIAorc3RhdGljIHN0cnVjdCBr
+dW5pdF9zdWl0ZV9zZXQga3VuaXRfYm9vdF9zdWl0ZXM7CisKK3ZvaWQga3VuaXRfZnJlZV9i
+b290X3N1aXRlcyh2b2lkKQoreworCWlmIChrdW5pdF9ib290X3N1aXRlcy5zdGFydCkgewor
+CQlrdW5pdF9mcmVlX3N1aXRlX3NldChrdW5pdF9ib290X3N1aXRlcyk7CisJCWt1bml0X2Jv
+b3Rfc3VpdGVzID0gKHN0cnVjdCBrdW5pdF9zdWl0ZV9zZXQpeyBOVUxMLCBOVUxMIH07CisJ
+fQorfQorCiBzdGF0aWMgY2hhciAqYWN0aW9uX3BhcmFtOwogCiBtb2R1bGVfcGFyYW1fbmFt
+ZWQoYWN0aW9uLCBhY3Rpb25fcGFyYW0sIGNoYXJwLCAwNDAwKTsKQEAgLTQxMSw5ICs0MjEs
+MTIgQEAgaW50IGt1bml0X3J1bl9hbGxfdGVzdHModm9pZCkKIAkJcHJfZXJyKCJrdW5pdCBl
+eGVjdXRvcjogdW5rbm93biBhY3Rpb24gJyVzJ1xuIiwgYWN0aW9uX3BhcmFtKTsKIAogZnJl
+ZV9vdXQ6Ci0JaWYgKGZpbHRlcl9nbG9iX3BhcmFtIHx8IGZpbHRlcl9wYXJhbSkKLQkJa3Vu
+aXRfZnJlZV9zdWl0ZV9zZXQoc3VpdGVfc2V0KTsKLQllbHNlIGlmIChpbml0X251bV9zdWl0
+ZXMgPiAwKQorCWlmIChmaWx0ZXJfZ2xvYl9wYXJhbSB8fCBmaWx0ZXJfcGFyYW0pIHsKKwkJ
+aWYgKGVycikKKwkJCWt1bml0X2ZyZWVfc3VpdGVfc2V0KHN1aXRlX3NldCk7CisJCWVsc2UK
+KwkJCWt1bml0X2Jvb3Rfc3VpdGVzID0gc3VpdGVfc2V0OworCX0gZWxzZSBpZiAoaW5pdF9u
+dW1fc3VpdGVzID4gMCkKIAkJLyogRG9uJ3QgdXNlIGt1bml0X2ZyZWVfc3VpdGVfc2V0IGJl
+Y2F1c2Ugc3VpdGVzIGFyZW4ndCBpbmRpdmlkdWFsbHkgYWxsb2NhdGVkICovCiAJCWtmcmVl
+KHN1aXRlX3NldC5zdGFydCk7CiAKZGlmZiAtLWdpdCBhL2xpYi9rdW5pdC90ZXN0LmMgYi9s
+aWIva3VuaXQvdGVzdC5jCmluZGV4IDQxZTFjODk3OTliNi4uOTk3NzNlMDAwZTFiIDEwMDY0
+NAotLS0gYS9saWIva3VuaXQvdGVzdC5jCisrKyBiL2xpYi9rdW5pdC90ZXN0LmMKQEAgLTEw
+NzUsNiArMTA3NSw3IEBAIHN0YXRpYyB2b2lkIF9fZXhpdCBrdW5pdF9leGl0KHZvaWQpCiAJ
+a3VuaXRfYnVzX3NodXRkb3duKCk7CiAKIAlrdW5pdF9kZWJ1Z2ZzX2NsZWFudXAoKTsKKwlr
+dW5pdF9mcmVlX2Jvb3Rfc3VpdGVzKCk7CiB9CiBtb2R1bGVfZXhpdChrdW5pdF9leGl0KTsK
+IAo=
+
+--------------ihOKNgVCaf9T85XvFwUpYVcg--
