@@ -1,186 +1,261 @@
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A2363B47EE
-	for <linux-kselftest@vger.kernel.org>; Tue, 26 May 2026 19:43:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65F663ABD83
+	for <linux-kselftest@vger.kernel.org>; Tue, 26 May 2026 20:34:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.145.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779824619; cv=none; b=m4QPxXIrKFW0Vtdfx4zqGFTFIlnFLn8dfShwRlXp1lHN3TFzGEVyh12QS225pODFNOI7Vu+DZWefOQxXK7uJ1JiuquUkVa1k6Io9kqRTpHnr+DeDYglhyXGhLNDh4Nif9jfN+BpEvSMVjlJzpIvzlhAUQg8KH9SI5YjN9vyCvo0=
+	t=1779827649; cv=none; b=J9eQZiB6gQ0AZSYwJsXsD6ZvTfFVR7Df6kOGKfP0c1laY/dLdAk58ZOMq7dWFtuGX2XkLJ5Kr7qcAEzrYT4h9y1PPehKw734maF2PmNZ4RjSQiDgpTWnaAPDFqS8hrnE1g1T0Jug5/C11RQ1n2QZyc+rac9n7ME5cjMA5G2Fir4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779824619; c=relaxed/simple;
-	bh=XuxZMWtfwaZOaPWFZW08FgT0dMzx46J//ZDhvW8EJN8=;
-	h=Content-Type:Message-ID:Date:MIME-Version:To:Cc:From:Subject; b=Dvs/IBVbliZwLiy0ZrvSMXUbnqpM4e8bnpCQPQ7e7rMKM8Cs7FT0/EUSGp6DV5VPA+flfufntcMXlr1wnoSmxG25RAzVMuH7F3JDOt53ml6P41ai9y7eGgoHJ++Q1ZsdQ4mzWreh0O8OoCIkRpEQCrQAl9/KgMSaLG3JUK6PBsE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=T4e98HMi; arc=none smtp.client-ip=209.85.167.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1779827649; c=relaxed/simple;
+	bh=vTBSQgZ8hCwsfb4y9WyJZ2M75y/JklCLtRE+PpCTRjU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=j+CeEw28gIUB+O+M6k2xOBuZopmbdFwxOrcH49tZ7x8Xs+Cy5MKGiPOHjFyar1DclVWL62hcVThOQiOyT5oFUm6XlMMpK5qyg77mLXi8UK/xVyde9cHknez2hPaKkWLvq9xoam76HHk0PE43BrsE86g3s4oiGujBtQCLOAv7Z6c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=cevmrcb3; arc=none smtp.client-ip=67.231.145.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="T4e98HMi"
-Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-4854b95c2efso1387568b6e.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 May 2026 12:43:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1779824615; x=1780429415; darn=vger.kernel.org;
-        h=subject:from:cc:to:content-language:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=CX4cElAHoE2nQxUTTT2mXDJk2DUAeZpBAOinXe2Xemc=;
-        b=T4e98HMi/7TdZZKmuAS4teQuYURt3d207QdG4U2ylkBK1JH8mcw33ky7DpdGXhDxqW
-         98M1ATovbsFoQOFL0YD6tOwEmN9R//+XC6cRT2xC6wzioVvhTrfC3xqcf4z66Vx5gHQo
-         e9B612uLD5igmR2SK6TWknmuX1I53/OuJNeh4=
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="cevmrcb3"
+Received: from pps.filterd (m0528009.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64QHjZcL2271121
+	for <linux-kselftest@vger.kernel.org>; Tue, 26 May 2026 13:34:06 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=s2048-2025-q2; bh=e7b3B+5WN+mJZtHSXrSE3pwUAVi+r+A
+	lhwStrrNpJM4=; b=cevmrcb3M/bmlWddoLYRF3z4Lki6RiC2Cc0e5i3fXM/6MgF
+	TL7lJo2fn2oe5+vnEhmbQ6wmj/RspkaDDqJIs3DKAMO5ssfldV14t6xppdpDZALE
+	rIZNaeC7lVNyoJyzSwIvmyXj6a0xM7hEDdPMEo1lRwGBQZVD8iRUqE9U41iyQkDv
+	riaC2bc0ygGoRLRB07eGXlbb2OhYdMD1wvDZOL88Eo+tE4lPChn04UX80OX2W5X7
+	8R28kr/SmlQRzQGzX/IwPr63yLuos364jCYLnMLHKFc3OqSN1dkgNt0XcSme3ooL
+	3vYDnfZSe7Sp+prGKK08QbG2zOopVpXzo5GKDBg==
+Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com [209.85.161.69])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4ebx04w8vg-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-kselftest@vger.kernel.org>; Tue, 26 May 2026 13:34:06 -0700 (PDT)
+Received: by mail-oo1-f69.google.com with SMTP id 006d021491bc7-69de23f28d5so303722eaf.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 26 May 2026 13:34:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779824615; x=1780429415;
-        h=subject:from:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20251104; t=1779827646; x=1780432446;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=CX4cElAHoE2nQxUTTT2mXDJk2DUAeZpBAOinXe2Xemc=;
-        b=OkCQPoWBFlES4CwaZZOtMCobXhtMGrpiA0LoCfAjczm9RIeuMv7UGsm2iP593K2jYZ
-         yl8H3pnBYXfEpIJvLQv5Dz0wMRHdxq0sON2dG1VlTQ/2ZDvwT2WqacUuYNngVHuZpdlA
-         LuZiBL10csT33h0B2jZxlTFKejmzBkDJECEO0SOQ7Q8idCxwmuGq0JSMUaru61MdbMx6
-         eFWjuhWGgzkiaD5LCxEQg1iQqF8Z6ycujHREO3qGRDOl0XY6G6wr99kpjPZY28XfvcJ7
-         u+ssd177rIamTOiNIOs6m1FRF2HR1HQDmEIRe/gDpLC4P/kM6W14kU54imoRVpQFfzZT
-         17vg==
-X-Forwarded-Encrypted: i=1; AFNElJ8zKl0E1iK6wmSl5cCrZHBvPDYktbCul1gNtNy2senfPTUwxDBeyA9e+z7j74vBrmKV4lkI51/xwKFkRFEAfEk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyp80ibfgFn8ibC7Uk51B8nrhQzLat+O7u9D7yBvVz+XCEnO68D
-	/kk01oh5q7tbTRySE3z6FuqNHMX9wC8Wi1HzVHZShK+DU0nHHMdZa6PNLxTd3LkIX/I=
-X-Gm-Gg: Acq92OH/AbshHbrJtVHnz0ZOFLGzL5ybQTraJ1CixKmgyTyxaZ1cMBHIZKqrPyAJyqP
-	+lO1b8+ab21f8taNKERPRTQfaVZ8GrI+BdeUpNCuFjLIv/JcVNAcvLJ6eO1jClhCzsqqWHcPb9f
-	pwQ0h9KVF+kQ8rDBm+b348yoyxAtLWwSz63KSED28KbaINOOm3IHTbfqzSpjnRrIAkeWG3/OJL4
-	LDlimCKQ1TuN0VBVhm7K4R1etaxhjvfjFsG3n4ONnywiPmrvnFim8gxH2P7/uHyD8p2qnEFGWU/
-	kmD9wf/Z5joVe4xaXWGGAtUccZB7oEX6eMdCvdaUfMrV5DyH1Y8ZahXoTjSDchgxUgzC7vS3LDI
-	4s2KamxO8b/KbA9paLzX9w3sMKw7NYoe3/617pjhNP3TJll/NYrJAct4m7tmiuq1P9zW/ryGZ9b
-	BCLGpyr4rPsD78Vyubstt9zkN50BDov3d884Kd3ATOZTNFB5n2+DpU
-X-Received: by 2002:a05:6808:2389:b0:484:d5a3:9969 with SMTP id 5614622812f47-48549ed0fefmr10870705b6e.12.1779824615322;
-        Tue, 26 May 2026 12:43:35 -0700 (PDT)
-Received: from [192.168.1.14] ([38.15.57.99])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-48554041ccasm6523908b6e.0.2026.05.26.12.43.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 May 2026 12:43:34 -0700 (PDT)
-Content-Type: multipart/mixed; boundary="------------ihOKNgVCaf9T85XvFwUpYVcg"
-Message-ID: <7f5acf69-9224-4d2d-b7f6-99114a232446@linuxfoundation.org>
-Date: Tue, 26 May 2026 13:43:32 -0600
+        bh=e7b3B+5WN+mJZtHSXrSE3pwUAVi+r+AlhwStrrNpJM4=;
+        b=mHqNu/PNuEno+LD38dw0nV1NXi5uPcYoCjMd/wCeGHuzwjssTQVFEAVkObemJSbeZ7
+         EEg2Alr/ErD6F+T4u9XUoGW1aqn609X4vmn/qBiZMinvg1TylxRRrkkFzp5oyTdMRvMH
+         chf6wdCD+V4n3t3zuZ8V89sjBKZ042L3OgBxRapjzA+tPoF6qNk5TZQhmsR8z6JrYjRy
+         EkX4NnwyVZJHzxuT+iBz7DcLp0EdIBi73gNiNHNN7UTFxnjqD3QCRwd5k6q6oe61CBFF
+         MtVYfi+pAt5xIxtmLlDSV/KwkuV2JPrDLCQSNKoOeE5fHJ3IhTL/O7sKgI61Inj6f5zo
+         K10w==
+X-Forwarded-Encrypted: i=1; AFNElJ+oKYdxUX4UOLY7HmLgUkZm1BxTHERIu6inxgFbU8nnD1tiUt5KaRO1VTWPFAJn/RK0KA0cjrIs6C304vjZs+w=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw9gZ7yVzslKqoUWfLjNceay+pHvFVEsdVHLEmF5WqagwNcrOZ2
+	rjOmSzULo9GS5AT/4ddey32FvDS0pWvftpMKCdkGw+rvtGM/dAQpPSB/BsVuOIVM3mKUFkEXnve
+	h0Kz8OvuU7WjtAZabpTyDoeP5430V4bxkBzmBE0wMAWg1Wqc1FLQ9WV+XO4SNUfDIJGg=
+X-Gm-Gg: Acq92OF5HnHfxldLMTV2GN7CAJ6S2G7aIfK6wZkvTpqjU58PjrJB4Jgiz4zTUNug0jP
+	rcL65MNVJxP57W1YMX5ZagqUmoOJRyHlMdaotZVYhBSRCdIXy28V/t/h2AQJiZ2yhmhpoa5FfY2
+	2YT/5E7Ake8ZIBdQi6M8D61ufluiFkYm64z/3iEH7Ddu51LKgPO1R3mxtlpL0s2VcuZLgmIxayd
+	BFpNLaVDo0CuNVLhgHZR/giq1ceGnQ/9D4OeCnI2OeqvmY0E3jkI+ztYgz8eZr2qa6OgD7pXnIL
+	FnU2MtacZqCzRgzMhVSMBxOrNtdbT/Y3WxlThJIuQlRVUg6VzFEHHRPWSjJJF3YC07f17AYj9/T
+	q5X/W0+ZWT1I=
+X-Received: by 2002:a4a:e90c:0:b0:69d:82e6:69b7 with SMTP id 006d021491bc7-69d82e671b3mr9975519eaf.51.1779827645667;
+        Tue, 26 May 2026 13:34:05 -0700 (PDT)
+X-Received: by 2002:a4a:e90c:0:b0:69d:82e6:69b7 with SMTP id 006d021491bc7-69d82e671b3mr9975494eaf.51.1779827645190;
+        Tue, 26 May 2026 13:34:05 -0700 (PDT)
+Received: from localhost ([2a03:2880:12ff:70::])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-43b63a15569sm14264392fac.16.2026.05.26.13.34.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 May 2026 13:34:04 -0700 (PDT)
+From: Neil Spring <ntspring@meta.com>
+To: netdev@vger.kernel.org
+Cc: edumazet@google.com, ncardwell@google.com, kuniyu@google.com,
+        davem@davemloft.net, kuba@kernel.org, dsahern@kernel.org,
+        pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org, ntspring@meta.com,
+        bpf@vger.kernel.org, martin.lau@linux.dev, daniel@iogearbox.net
+Subject: [PATCH net-next v9 0/2] tcp: rehash onto different local ECMP path on retransmit timeout
+Date: Tue, 26 May 2026 13:34:01 -0700
+Message-ID: <20260526203403.3517607-1-ntspring@meta.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: shuah <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
- David Gow <david@davidgow.net>, Brendan Higgins <brendan.higgins@linux.dev>,
- Rae Moar <raemoar63@gmail.com>, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-From: Shuah Khan <skhan@linuxfoundation.org>
-Subject: [GIT PULL] kunit fixes update for Linux 7.1.-rc6
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTI2MDE4MiBTYWx0ZWRfXw/H4X0MHHWl0
+ CxGPED5NJrNSskXiQNzkINtz/peahH26+UApfyk0srUBIbDxD+Sps24K+6nK4E0DBK5uCuY0ypx
+ /MVfMn6EEVfEBH44mnESaxg8wfPv0FeEZwskuKfJYF5K5IYvfrRE9evjxXNki2H5jNwfrcNesCX
+ pHalOEPWtjb7t2G5Qtj2ZjvP1W2PmsQyO69bwknN3bcLxPrc9thCBBxbjrmokUpBtpeKPCbwq2A
+ buJHO3OSVbNvhnIMyNvFI6KZEv3uGsANRF9/ARTyxtMVz2A7+C50eNo+fIoe6wNXVAbA8jNgbqn
+ y2Wv+J05wILgQi6P5FLOIjjwqjwmXKqPa0XCj1yFLA03rxE8k6imMeNZzq96BCC1cSm1dQuU8Qn
+ S+qoBKEHPht6qV2e80RPaoRQvYezQL5gboWq/Fo1ZVPUxvRiUZqCdHGyCez4kmhzoTuaXRKZZGA
+ RENE9wyDMFIBDYnFr5g==
+X-Authority-Analysis: v=2.4 cv=Sa3HsPRu c=1 sm=1 tr=0 ts=6a1603be cx=c_pps
+ a=lVi5GcDxkcJcfCmEjVJoaw==:117 a=xqWC_Br6kY4A:10 a=NGcC8JguVDcA:10
+ a=f7IdgyKtn90A:10 a=VkNPw1HP01LnGYTKEx00:22 a=7x6HtfJdh03M6CCDgxCd:22
+ a=U_y8lYiYyhHBU5rMqhb2:22 a=VwQbUJbxAAAA:8 a=VabnemYjAAAA:8
+ a=djp0iyAdQ3A2I_T4MNwA:9 a=rBiNkAWo9uy_4UTK5NWh:22 a=gKebqoRLp9LExxC7YDUY:22
+X-Proofpoint-GUID: KvQhnZrZkMjETAwkgQnzt9lK0tHS0jgu
+X-Proofpoint-ORIG-GUID: KvQhnZrZkMjETAwkgQnzt9lK0tHS0jgu
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
+ definitions=2026-05-26_04,2026-05-26_03,2025-10-01_01
 
-This is a multi-part message in MIME format.
---------------ihOKNgVCaf9T85XvFwUpYVcg
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Currently sk_rethink_txhash() re-rolls the socket's txhash on RTO,
+PLB, and spurious-retransmission events, but the new hash is not
+propagated into the IPv6 ECMP path selection logic.  The cached
+route is reused and fib6_select_path() is never re-invoked, so
+so the connection uses the same local ECMP decision.
 
-Hi Linus,
+This series adds the two missing pieces:
 
-Please pull this kunit fixes update for Linux 7.1-rc6.
+1. __sk_dst_reset() alongside sk_rethink_txhash() so the cached dst
+   is invalidated and the next transmit triggers a fresh route lookup.
 
-Fixes use-after-free in kunit debugfs when using kunit.filter when
-the executor frees dynamically allocated resources after running
-boot-time tests. This resulted in fatal hardware exception due to
-invalidation of capability flags on the reclaimed memory on some
-architectures such as CHERI RISC-V that support the feature, and
-silent memory corruption on others.
+2. fl6->mp_hash set from sk_txhash before each route lookup so
+   fib6_select_path() picks a path based on the (potentially re-rolled)
+   hash.  This is conditioned on fib_multipath_hash_policy == 0 (L3)
+   because policies 1-3 compute a deterministic hash from the flow
+   keys which must not be overridden.
 
-Fix for this UAF couples the coupling the lifetime of the filtered
-suite memory allocation to the lifetime of the kunit subsystem and its
-associated VFS nodes. Ownership of the boot-time suite_set is now
-transferred to a global tracker ('kunit_boot_suites'), and the memory
-is cleanly released in kunit_exit() during module teardown.
+Patch 1 is the kernel change; patch 2 adds selftests covering SYN
+rehash, SYN/ACK rehash, midstream RTO rehash, midstream ACK rehash
+(spurious retransmission), PLB rehash, a policy 1 negative test,
+a flowlabel leak regression test, two dst rebuild consistency
+tests (normal and syncookie) verifying that natural route
+invalidation does not cause unintended path changes, and a
+syncookie server path consistency test verifying that the SYN-ACK
+and post-cookie ACKs use the same ECMP nexthop.
 
-diff is attached.
+I'd like guidance on whether to use the ISN as txhash when using
+syncookies; it keeps the SYN-ACK and subsequent data path consistent,
+but one could argue that this consistency doesn't matter because no
+reordering is possible.
 
-thanks,
--- Shuah
+Changes since v8: https://lore.kernel.org/netdev/20260522215733.929238-1-ntspring@meta.com/
+Patch 1:
+- Fix REPFLOW flowlabel reflection for syncookie SYN-ACKs: pass 0 as
+  tw_isn to route_req() so tcp_v6_init_req() saves ireq->pktopts
+Patch 2:
+- Give midstream and ACK rehash attempt helpers distinct failure
+  messages (no TX activity vs no data on alternate path vs counter
+  not incrementing) instead of a single generic error
+- Drop unused ns_server parameter from ecmp_dst_rebuild_check()
+- Clean up server socat before break on setup failure in the dst
+  rebuild loop
 
-----------------------------------------------------------------
-The following changes since commit 8f80b5b227ef9ea422080487715c841856339aed:
+Changes since v7: https://lore.kernel.org/netdev/20260520064310.4154268-1-ntspring@meta.com/
+Patch 1:
+- Remove #if IS_ENABLED(CONFIG_IPV6) guards around __sk_dst_reset()
+  in tcp_plb.c and tcp_timer.c (Eric Dumazet)
+- Guard mp_hash in inet6_csk_route_socket() on sk_protocol == IPPROTO_TCP
+  instead of txhash != 0, since non-TCP callers like L2TP set sk_txhash
+  in __ip6_datagram_connect() and should retain flow-key-based ECMP
+- Use the syncookie (ISN) as txhash for both the SYN-ACK route lookup
+  and cookie_v6_check() socket creation, so the server's ECMP selection is
+  consistent across the stateless SYN-ACK and the subsequent full socket.
+  Move cookie_init_sequence() before route_req() in tcp_conn_request()
+  so the SYN-ACK dst is computed with the cookie-derived txhash; derive
+  txhash from snt_isn in cookie_tcp_reqsk_init() to match
+Patch 2:
+- Invalidate dst via dummy route add/del instead of route replace to
+  avoid a transient single-nexthop state during multipath replacement
+- Add syncookie server path consistency test verifying the SYN-ACK and
+  post-cookie ACKs use the same ECMP path
+- Strengthen policy 1 negative test to wait for multiple rehash attempts
+  and verify SYNs landed on exactly one interface
 
-   kunit: config: KUNIT_DEBUGFS should depend on DEBUG_FS (2026-05-04 12:10:40 -0600)
+Changes since v6: https://lore.kernel.org/netdev/20260517174522.2232057-1-ntspring@meta.com/
+- Guard mp_hash assignment so that non-TCP callers of
+  inet6_csk_route_socket() fall through to rt6_multipath_hash()
+  (superseded in v8 by sk_protocol == IPPROTO_TCP guard)
+- Initialize txhash in bpf_sk_assign_tcp_reqsk() to avoid reading
+  uninitialized slab memory in inet6_csk_route_req()
+- Check post-rebuild busywait return status to avoid silent false pass
 
-are available in the Git repository at:
+Changes since v5: https://lore.kernel.org/netdev/20260513204048.2721843-1-ntspring@meta.com/
+- Improve selftest reliability: suppress __dst_negative_advice() via
+  tcp_retries1=255 in dst rebuild tests so a real RTO cannot trigger
+  an unintended rehash; add internal retry to midstream and ACK
+  rehash tests to tolerate probabilistic ECMP path selection; fix
+  midstream baseline capture to account for packets that bypass tc
+  filters during the prio qdisc's TCQ_F_CAN_BYPASS window
+- Increase ECMP_REBUILD_ROUNDS default to 10 for reliable regression
+  detection with 2-way ECMP; replace sleep with busywait
+- Use tcp_allowed_congestion_control instead of changing the host's
+  default congestion control for PLB test
+- Use (txhash >> 1) ?: 1 to guarantee non-zero mp_hash, since zero
+  falls back to rt6_multipath_hash()
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux_kselftest-kunit-fixes-7.1-rc6
+Changes since v4: https://lore.kernel.org/netdev/20260507171319.1259115-1-ntspring@meta.com/
+- Condition fl6->mp_hash on fib_multipath_hash_policy == 0 to preserve
+  deterministic hash policies 1-3 (e.g., symmetric 5-tuple for policy 1)
+- Set fl6->mp_hash in tcp_v6_connect() and cookie_v6_check() for
+  initial route lookup consistency; move sk_set_txhash() earlier
+  (Jakub Kicinski)
+- Add policy 1 negative test; improve sysctl save/restore
+- Add flowlabel leak test confirming mp_hash does not alter the
+  on-wire IPv6 flow label
+- Add dst rebuild consistency tests (normal and syncookie) verifying
+  that route table changes do not cause unintended ECMP path changes
 
-for you to fetch changes up to fb6988b83b4cafe8db63999c1ddff1b7c66d2ff5:
+Changes since v3: https://lore.kernel.org/netdev/20260505193824.2791642-1-ntspring@meta.com/
+- Use __sk_dst_reset() instead of sk_dst_reset() since the socket lock
+  is held in all three call sites (Eric Dumazet)
+- Guard __sk_dst_reset() with sk->sk_family == AF_INET6 since IPv4 ECMP
+  does not use sk_txhash for path selection
+- Guard __sk_dst_reset() in tcp_plb_check_rehash() with the return value
+  of sk_rethink_txhash()
+- Move tcp_rsk(req)->txhash initialization before route_req() in
+  tcp_conn_request() to avoid reading uninitialized memory
+- Add CONFIG_TCP_CONG_DCTCP=m to selftests/net/config for PLB test
+- Skip PLB test gracefully if DCTCP is not available
+- Save and restore original congestion control algorithm in PLB test
+- Default get_netstat_counter() to 0 when counter is not found
+- Skip all tests if tcp_syn_linear_timeouts is not available
+- Replace bash/pipe data sources with socat OPEN:/dev/zero for
+  cleaner process cleanup
+- Fix shellcheck warnings
 
-   kunit: fix use-after-free in debugfs when using kunit.filter (2026-05-21 10:45:49 -0600)
+Changes since v2: https://lore.kernel.org/netdev/20260408070514.1840227-1-ntspring@meta.com/
+- Retitle "ECMP" to "local ECMP" to distinguish from remote ECMP
+  (Neal Cardwell)
+- Add fl6->mp_hash propagation in inet6_sk_rebuild_header() (af_inet6.c),
+  covering the dst rebuild path used on established sockets
+- Remove incorrect ir_iif update from tcp_check_req() in tcp_minisocks.c;
+  the SYN/ACK rehash is already handled by tcp_rtx_synack() re-rolling
+  txhash which feeds into inet6_csk_route_req()'s mp_hash
+  (Eric Dumazet)
+- Add ACK rehash and PLB rehash selftests
+- Improve selftest reliability
 
-----------------------------------------------------------------
-linux_kselftest-kunit-fixes-7.1-rc6
+Changes since v1: https://lore.kernel.org/netdev/20260408002802.2448424-1-ntspring@meta.com/
+- Use tcp_rsk(req)->txhash instead of jhash_1word(req->num_retrans, ...)
+  for ECMP path selection in inet6_csk_route_req(), making the request
+  socket path consistent with the established socket path (Eric Dumazet)
+- Add comments explaining the >> 1 shift for 31-bit mp_hash range
+- Use socat -u (unidirectional) in selftest to avoid SIGPIPE race
+- Increase tcp_syn_retries and tcp_syn_linear_timeouts to 25 for
+  better rehash coverage
 
-Fixes use-after-free in kunit debugfs when using kunit.filter when
-the executor frees dynamically allocated resources after running
-boot-time tests. This resulted in fatal hardware exception due to
-invalidation of capability flags on the reclaimed memory on some
-architectures such as CHERI RISC-V that support the feature, and
-silent memory corruption on others.
+Neil Spring (2):
+  tcp: rehash onto different local ECMP path on retransmit timeout
+  selftests: net: add local ECMP rehash test
 
-Fix for this UAF couples the coupling the lifetime of the filtered
-suite memory allocation to the lifetime of the kunit subsystem and its
-associated VFS nodes. Ownership of the boot-time suite_set is now
-transferred to a global tracker ('kunit_boot_suites'), and the memory
-is cleanly released in kunit_exit() during module teardown.
+ net/core/filter.c                          |    1 +
+ net/ipv4/syncookies.c                      |    8 +-
+ net/ipv4/tcp_input.c                       |   20 +-
+ net/ipv4/tcp_plb.c                         |    5 +-
+ net/ipv4/tcp_timer.c                       |    2 +
+ net/ipv6/af_inet6.c                        |    3 +
+ net/ipv6/inet6_connection_sock.c           |    8 +
+ net/ipv6/syncookies.c                      |    4 +
+ net/ipv6/tcp_ipv6.c                        |   13 +-
+ tools/testing/selftests/net/Makefile       |    1 +
+ tools/testing/selftests/net/config         |    1 +
+ tools/testing/selftests/net/ecmp_rehash.sh | 1050 ++++++++++++++++++++
+ 12 files changed, 1104 insertions(+), 12 deletions(-)
+ create mode 100755 tools/testing/selftests/net/ecmp_rehash.sh
 
-----------------------------------------------------------------
-Florian Schmaus (1):
-       kunit: fix use-after-free in debugfs when using kunit.filter
+--
+2.53.0-Meta
 
-  include/kunit/test.h |  1 +
-  lib/kunit/executor.c | 19 ++++++++++++++++---
-  lib/kunit/test.c     |  1 +
-  3 files changed, 18 insertions(+), 3 deletions(-)
-
-----------------------------------------------------------------
---------------ihOKNgVCaf9T85XvFwUpYVcg
-Content-Type: text/x-patch; charset=UTF-8;
- name="linux_kselftest-kunit-fixes-7.1-rc6.diff"
-Content-Disposition: attachment;
- filename="linux_kselftest-kunit-fixes-7.1-rc6.diff"
-Content-Transfer-Encoding: base64
-
-ZGlmZiAtLWdpdCBhL2luY2x1ZGUva3VuaXQvdGVzdC5oIGIvaW5jbHVkZS9rdW5pdC90ZXN0
-LmgKaW5kZXggOWNkMTU5NGFiNjk3Li5jZTA1NzNlMTk2Y2UgMTAwNjQ0Ci0tLSBhL2luY2x1
-ZGUva3VuaXQvdGVzdC5oCisrKyBiL2luY2x1ZGUva3VuaXQvdGVzdC5oCkBAIC02MTMsNiAr
-NjEzLDcgQEAgdW5zaWduZWQgbG9uZyBrdW5pdF92bV9tbWFwKHN0cnVjdCBrdW5pdCAqdGVz
-dCwgc3RydWN0IGZpbGUgKmZpbGUsCiAJCQkgICAgdW5zaWduZWQgbG9uZyBvZmZzZXQpOwog
-CiB2b2lkIGt1bml0X2NsZWFudXAoc3RydWN0IGt1bml0ICp0ZXN0KTsKK3ZvaWQga3VuaXRf
-ZnJlZV9ib290X3N1aXRlcyh2b2lkKTsKIAogdm9pZCBfX3ByaW50ZigyLCAzKSBrdW5pdF9s
-b2dfYXBwZW5kKHN0cnVjdCBzdHJpbmdfc3RyZWFtICpsb2csIGNvbnN0IGNoYXIgKmZtdCwg
-Li4uKTsKIApkaWZmIC0tZ2l0IGEvbGliL2t1bml0L2V4ZWN1dG9yLmMgYi9saWIva3VuaXQv
-ZXhlY3V0b3IuYwppbmRleCAxZmVmMjE3ZGUxMWQuLmIwZjhhNDFkNjFkMyAxMDA2NDQKLS0t
-IGEvbGliL2t1bml0L2V4ZWN1dG9yLmMKKysrIGIvbGliL2t1bml0L2V4ZWN1dG9yLmMKQEAg
-LTE1LDYgKzE1LDE2IEBAIGV4dGVybiBzdHJ1Y3Qga3VuaXRfc3VpdGUgKiBjb25zdCBfX2t1
-bml0X3N1aXRlc19lbmRbXTsKIGV4dGVybiBzdHJ1Y3Qga3VuaXRfc3VpdGUgKiBjb25zdCBf
-X2t1bml0X2luaXRfc3VpdGVzX3N0YXJ0W107CiBleHRlcm4gc3RydWN0IGt1bml0X3N1aXRl
-ICogY29uc3QgX19rdW5pdF9pbml0X3N1aXRlc19lbmRbXTsKIAorc3RhdGljIHN0cnVjdCBr
-dW5pdF9zdWl0ZV9zZXQga3VuaXRfYm9vdF9zdWl0ZXM7CisKK3ZvaWQga3VuaXRfZnJlZV9i
-b290X3N1aXRlcyh2b2lkKQoreworCWlmIChrdW5pdF9ib290X3N1aXRlcy5zdGFydCkgewor
-CQlrdW5pdF9mcmVlX3N1aXRlX3NldChrdW5pdF9ib290X3N1aXRlcyk7CisJCWt1bml0X2Jv
-b3Rfc3VpdGVzID0gKHN0cnVjdCBrdW5pdF9zdWl0ZV9zZXQpeyBOVUxMLCBOVUxMIH07CisJ
-fQorfQorCiBzdGF0aWMgY2hhciAqYWN0aW9uX3BhcmFtOwogCiBtb2R1bGVfcGFyYW1fbmFt
-ZWQoYWN0aW9uLCBhY3Rpb25fcGFyYW0sIGNoYXJwLCAwNDAwKTsKQEAgLTQxMSw5ICs0MjEs
-MTIgQEAgaW50IGt1bml0X3J1bl9hbGxfdGVzdHModm9pZCkKIAkJcHJfZXJyKCJrdW5pdCBl
-eGVjdXRvcjogdW5rbm93biBhY3Rpb24gJyVzJ1xuIiwgYWN0aW9uX3BhcmFtKTsKIAogZnJl
-ZV9vdXQ6Ci0JaWYgKGZpbHRlcl9nbG9iX3BhcmFtIHx8IGZpbHRlcl9wYXJhbSkKLQkJa3Vu
-aXRfZnJlZV9zdWl0ZV9zZXQoc3VpdGVfc2V0KTsKLQllbHNlIGlmIChpbml0X251bV9zdWl0
-ZXMgPiAwKQorCWlmIChmaWx0ZXJfZ2xvYl9wYXJhbSB8fCBmaWx0ZXJfcGFyYW0pIHsKKwkJ
-aWYgKGVycikKKwkJCWt1bml0X2ZyZWVfc3VpdGVfc2V0KHN1aXRlX3NldCk7CisJCWVsc2UK
-KwkJCWt1bml0X2Jvb3Rfc3VpdGVzID0gc3VpdGVfc2V0OworCX0gZWxzZSBpZiAoaW5pdF9u
-dW1fc3VpdGVzID4gMCkKIAkJLyogRG9uJ3QgdXNlIGt1bml0X2ZyZWVfc3VpdGVfc2V0IGJl
-Y2F1c2Ugc3VpdGVzIGFyZW4ndCBpbmRpdmlkdWFsbHkgYWxsb2NhdGVkICovCiAJCWtmcmVl
-KHN1aXRlX3NldC5zdGFydCk7CiAKZGlmZiAtLWdpdCBhL2xpYi9rdW5pdC90ZXN0LmMgYi9s
-aWIva3VuaXQvdGVzdC5jCmluZGV4IDQxZTFjODk3OTliNi4uOTk3NzNlMDAwZTFiIDEwMDY0
-NAotLS0gYS9saWIva3VuaXQvdGVzdC5jCisrKyBiL2xpYi9rdW5pdC90ZXN0LmMKQEAgLTEw
-NzUsNiArMTA3NSw3IEBAIHN0YXRpYyB2b2lkIF9fZXhpdCBrdW5pdF9leGl0KHZvaWQpCiAJ
-a3VuaXRfYnVzX3NodXRkb3duKCk7CiAKIAlrdW5pdF9kZWJ1Z2ZzX2NsZWFudXAoKTsKKwlr
-dW5pdF9mcmVlX2Jvb3Rfc3VpdGVzKCk7CiB9CiBtb2R1bGVfZXhpdChrdW5pdF9leGl0KTsK
-IAo=
-
---------------ihOKNgVCaf9T85XvFwUpYVcg--
