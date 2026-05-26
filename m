@@ -1,94 +1,118 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BB9637E2E5;
-	Tue, 26 May 2026 07:04:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78D5C3CCFDB;
+	Tue, 26 May 2026 08:01:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779779100; cv=none; b=UKSmthgGYu5s2teKBSWPCX7RdM98gB3VsRqwVXQo+oygEROlwj2mj0kL29LstgjT7GHx+5InVP0k5SXOrAL3sbmbsKvCM8D1sToaBt1irSK1wsEfiepvw3DdAAazXdWfNw6weSUmgkIS31rS0LH+Blz+Xfr9zB9EkGbk64VDvOw=
+	t=1779782470; cv=none; b=C6ho6qabJET0a3OYhMdbXYYQzXfiSBEm6FXp+woRJ2gGM2duKqIYO+RyW/++gpszyUidN4DQFNMkocXtcpytvjo20h7aFU4Mop4uLXUsLt+ezuPUpg9axtP+hxSi4MuFHOQbzPAJktOsmFMk4X4mFv2wfw2dMZ7trf4JEG1Ig84=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779779100; c=relaxed/simple;
-	bh=tjjBZC6YHYB5BB3t4KQ/W6mnOq/sFAHnUjQ0oB+1ns0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=qfkQlMYBRH7ssI3+UaWOhM4U31sAjzUordib4VXk3B4YNyGSCgRIosTbszN8mU5i452xbEo/pEHweGExSi3X1IEtD1zDpmWuYaEt5nQ3g41vpf2laG+Tem3NO9EORh96PnBqPW+yG1t1m2alIVfU8gxMylk9da9arekPx2FEwQw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 30e0f0b858d111f1aa26b74ffac11d73-20260526
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B, HR_CTT_MISS
-	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME, HR_SJ_DIGIT_LEN
-	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
-	HR_SJ_PHRASE_LEN, HR_SJ_PRE_RE, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
-	HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_TRUSTED
-	SA_EXISTED, SN_TRUSTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS
-	DMARC_NOPASS, CIE_BAD, CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS
-	GTI_RG_INFO, GTI_C_BU, AMN_T1, AMN_GOOD, ABX_MISS_RDNS
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:42662379-1126-475a-a33e-126b52d8613b,IP:10,
-	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:10
-X-CID-INFO: VERSION:1.3.12,REQID:42662379-1126-475a-a33e-126b52d8613b,IP:10,UR
-	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-	elease,TS:10
-X-CID-META: VersionHash:e7bac3a,CLOUDID:58d5b093b27578273e84c3fac36e86a8,BulkI
-	D:260526040209ZS2AJ5N5,BulkQuantity:2,Recheck:0,SF:17|19|64|66|78|80|81|82
-	|83|102|127|817|841|850|865|898,TC:nil,Content:-10|-8|-5|14|50,EDM:-3,IP:-
-	2,URL:11|95|82|99|1,File:nil,RT:nil,Bulk:40,QS:nil,BEC:nil,COL:0,OSI:0,OSA
-	:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_ULN
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 30e0f0b858d111f1aa26b74ffac11d73-20260526
-X-User: lihongfu@kylinos.cn
-Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
-	(envelope-from <lihongfu@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 2029404424; Tue, 26 May 2026 15:04:51 +0800
-From: Hongfu Li <lihongfu@kylinos.cn>
-To: akpm@linux-foundation.org
-Cc: david@kernel.org,
-	liam@infradead.org,
-	lihongfu@kylinos.cn,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org,
-	ljs@kernel.org,
-	mhocko@suse.com,
-	rppt@kernel.org,
-	shuah@kernel.org,
-	surenb@google.com,
-	vbabka@kernel.org
-Subject: Re: [PATCH v2 0/2] selftests/mm: refactor pkey helpers and fix mmap error handling
-Date: Tue, 26 May 2026 15:05:18 +0800
-Message-Id: <20260526070518.630740-1-lihongfu@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20260525130200.fa26a0456979d8f1045dc930@linux-foundation.org>
-References: <20260525130200.fa26a0456979d8f1045dc930@linux-foundation.org>
+	s=arc-20240116; t=1779782470; c=relaxed/simple;
+	bh=nB2AHwGEae/tVCJJCfAeSQMXYlIwyrDZ9JSkIgeIap0=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=PN/F3qqSBhRE6sk6dYVxMB13qktClIG/IW413G3Qyujd7A5/85xBL6ab26NdsFZTN/UwdhW7TTRS4AxZR4Yc8zGTW37MsdAJ6SV5HqhqfkkBaD0dHqM3XEf+2Y7J1iC78ElMDsoBeZgHcqyx4kxBismOjiYTUcV9N4TnUcO6FyE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=keKI1plP; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="keKI1plP"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 06298C2BCB3;
+	Tue, 26 May 2026 08:01:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1779782470;
+	bh=nB2AHwGEae/tVCJJCfAeSQMXYlIwyrDZ9JSkIgeIap0=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=keKI1plPEUcj/zlUC2WLVuiu5Amz/z4I+KYI+QAAlyoeX6r1EF6ikpBRlGPlEjfQf
+	 7CGhzzVaZxPzEa1yEJW9ubIDNQyZhLg71VM4TARoI/FrBG2O4S4gzA5V2c4+Hm+OOp
+	 fEqCU+RRjVbQaZK1lwWrZ28L5KmqkY3BF9embci5YABkK9Y12/5UAyx4P1UYh6tTBT
+	 9SJinlFufySectZCHn+Rk1WiiS3ufEHnUfceTbuh1UZIY/5Q5eeiQ2tVj03q91gxiZ
+	 cPmomqRr3FgnfSABwa27WCgNERuB0V60lwYHvEA/X20CUskPjtmT25iAwo6kN7AzW2
+	 1vv2bdNXFZ/OQ==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF3ADCD5BC8;
+	Tue, 26 May 2026 08:01:09 +0000 (UTC)
+From: Florian Schmaus via B4 Relay <devnull+flo.geekplace.eu@kernel.org>
+Date: Tue, 26 May 2026 10:01:08 +0200
+Subject: [PATCH] selftests: Fix Makefile target for nsfs
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260526-kselftest-nsfs-v1-1-7b042ebe42d6@geekplace.eu>
+X-B4-Tracking: v=1; b=H4sIAENTFWoC/3XMSw7CIBSF4a00dywGqGjqyH2YDnhcWtKmbbhIN
+ A17Fzt3+J/kfDsQxoAE92aHiDlQWJca4tSAHfUyIAuuNkgur1yJlk2Es09IiS3kiRmjldfyYg2
+ /QT1tEX14H+Czrz0GSmv8HH4Wv/UvlQUTTKnOmI47J0X7GBCnbdYWz/iCvpTyBTGZdsyvAAAA
+X-Change-ID: 20260513-kselftest-nsfs-bba5fa24cb07
+To: Shuah Khan <shuah@kernel.org>, Jeff Layton <jlayton@kernel.org>, 
+ Christian Brauner <brauner@kernel.org>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Florian Schmaus <flo@geekplace.eu>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1450; i=flo@geekplace.eu;
+ h=from:subject:message-id;
+ bh=TUlHqQjYGKoBvaYsSZ35pR+AMu2KoxpwBqlSKvhoHdg=;
+ b=owGbwMvMwMWoZLn8xddWhSDG02pJDFmiwa49cvcr12gyP+9Iu7VejtXJ6fXFJ8ILtZMvBO0xv
+ /HKRCu/k3E9CwMjF8NMMUWW6aWs860U7zzMfvJ7HcwgViaQKdIiDQxAwMLAl5uYV2qkY6Rnqm2o
+ Zwhk6BjFQ+T0GDQyi4tLU4t00wqKHPLySxJLMvPzivXyC1LzCtIL9NIy00oyMvKLilOBRujlpZZ
+ YmpubGphauhk7Ghm6OLsamjm5mrg5OboaGRlbOpq7WriZWpgaGZgaMXBxCsBck1jD/t/dR57pxX
+ rmR+3PvndWtWxSE605/9aXq6LCl/cJw8ONUwQT3Wpe7ejyb7/nMHPhhjlnyr6ej2o8yXDEwESgX
+ dtfhL8s2r5RcNsOecnlHn3TWrx4L2SVMnBvvqdfY/jRpu9NVBBn6N6mT0LNzRqsrvZ3a3jubFHs
+ NljCr2psN/WaR5ztCe6qMkufuLUBL9Okv1yzlanKZH+5wJWLLbHyzC3d4LpORkPuYkmrTX0Fqw8
+ 9PDXn0ZcZMjbbQ2vV9N5vORLza/HOnM5Jt/rZrhakC3ydqnBa3/1+d3DpIdUfHrPSbb1rlftvP9
+ iUwr7hlVa1bVPCLvfIAIsuiyd/2Za7+6y8eKer8lEgQ+29P8cB
+X-Developer-Key: i=flo@geekplace.eu; a=openpgp;
+ fpr=1357B01865B2503C18453D208CAC2A9678548E35
+X-Endpoint-Received: by B4 Relay for flo@geekplace.eu/default with
+ auth_id=792
+X-Original-From: Florian Schmaus <flo@geekplace.eu>
+Reply-To: flo@geekplace.eu
 
-> > This series is version 2 of the previous patch [0].  In v2, the changes are
-> > split into two patches for easier review.
-> > [0] https://lore.kernel.org/all/20260518082120.3890552-1-lihongfu@kylinos.cn/
-> > 
-> > The main changes in this series are to refactor shared tracing and assertion
-> > helpers into a common file, unify both pkey selftests on pkey_assert() and 
-> > per-test tracing for consistent diagnostics, and add missing mmap() return 
-> > checks with MAP_FAILED used throughout for readability and consistency.
-> 
-> Thanks.  AI review seems to have found a legitimate problem:
-> 	https://sashiko.dev/#/patchset/20260525073026.27594-1-lihongfu@kylinos.cn
+From: Florian Schmaus <flo@geekplace.eu>
 
-Thanks. I'll go through the problem reported by the AI review and make
-corresponding fixes in v2.
+The kselftests for nsfs where moved under filesystem/ with
+commit cae73d3bdce5 ("seltests: move nsfs into filesystems
+subfolder"). However, the kselftest TARGETS declaration was not
+adjusted.
+
+Since the kselftest Makefile ignores errors unless no target builds,
+the invalid target declaration can easily be missed.
+
+Fix this by adjusting the TARGETS accordingly.
+
+Fixes: cae73d3bdce5 ("seltests: move nsfs into filesystems subfolder")
+Signed-off-by: Florian Schmaus <flo@geekplace.eu>
+---
+ tools/testing/selftests/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 6e59b8f63e41..641a180fb35f 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -37,6 +37,7 @@ TARGETS += filesystems/fat
+ TARGETS += filesystems/overlayfs
+ TARGETS += filesystems/statmount
+ TARGETS += filesystems/mount-notify
++TARGETS += filesystems/nsfs
+ TARGETS += filesystems/fuse
+ TARGETS += filesystems/move_mount
+ TARGETS += filesystems/empty_mntns
+@@ -85,7 +86,6 @@ TARGETS += net/ppp
+ TARGETS += net/rds
+ TARGETS += net/tcp_ao
+ TARGETS += nolibc
+-TARGETS += nsfs
+ TARGETS += pci_endpoint
+ TARGETS += pcie_bwctrl
+ TARGETS += perf_events
+
+---
+base-commit: 1d5dcaa3bd65f2e8c9baa14a393d3a2dc5db7524
+change-id: 20260513-kselftest-nsfs-bba5fa24cb07
 
 Best regards,
-Hongfu
+-- 
+Florian Schmaus <flo@geekplace.eu>
+
 
