@@ -1,1236 +1,181 @@
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+Received: from PH8PR06CU001.outbound.protection.outlook.com (mail-westus3azon11012018.outbound.protection.outlook.com [40.107.209.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6C243BB110
-	for <linux-kselftest@vger.kernel.org>; Tue, 26 May 2026 20:34:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779827654; cv=none; b=PzMypRbZh7wVNVLQe0+rCfnPuFOfnrAGfpKFgNXr/I43TOkzUMNf9hOIlepYYK22/zblo+xOE+RXd2c2frcxWMI1uJL6f31rOEqsWwmB1JzdhKK+e4N0f0RwydMtazJ+O6VYakvhug3MuEuli0iyHB3Hbhwcj11qiiuS7hrMzes=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779827654; c=relaxed/simple;
-	bh=HTMs/4Hwy5tqN6vHE24H6PwLKynXiTMmb+3NpPeftsA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cwD9sBvuoo0sVdb3iFcyN70uHei7vO+Ql6XxIQa24EzeOBEGbC/DVlIoOQo84JAjZMC9YmtoGz25//ijyYq4pVnnGEwfj7omOFvccvQV86Gjja4Oj0zn+BqI1UJZJ3sZYl+CzrZPXN5tXETsHI7zBoFbhJS1RD5F1svLCmCe5pc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=uU/3FY2w; arc=none smtp.client-ip=67.231.153.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CF8B1940B0;
+	Tue, 26 May 2026 21:30:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.209.18
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779831027; cv=fail; b=qPHRsSMBtQjaCd6EBgsdwM89kGMEm3OtfpO0p/vbWFKWEs8NcdLJnBuwy5gcab+1cJWKouBkPJnkOm+b9gb17TYVNAXug7NmpifEzmKcIPgAGSz5huLOIQQsLPIo7Nx9v2SQIHK5RbeDcJWNW2lvXdSPv9FGb4Gn2YXvK2sWbVk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779831027; c=relaxed/simple;
+	bh=xEHmp8qB4NSZlylj1hKSAWcRsHYFLHK3fGv0IdHkYTU=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=eoxRc98U/V85DlR0Uwoc82E1bkH+jDqkqRNAE/Pg77m3oJiabDBbS6Te1i6eXhLfKp0y3j4lNekZ3AuHS4v9AuS5pKM5ubbOfMaUJYc1vCpwCr0TnMrs7pDUb/1lB+iCO3IaShISaqRpj498d01fyMtaEtyHNLGv3NWahhmlW1o=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=BMEBPfcg; arc=fail smtp.client-ip=40.107.209.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="uU/3FY2w"
-Received: from pps.filterd (m0528006.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64QBWNCB232300
-	for <linux-kselftest@vger.kernel.org>; Tue, 26 May 2026 13:34:10 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=s2048-2025-q2; bh=MIJwXsv
-	/0laqfqTBAiiemVlRxYkDdprYcEoPdM55d14=; b=uU/3FY2wcLQkiDt5bxS47hf
-	LkOI9vVwi2B7PIIyBiNFU3z0setgrbqd27bNRC6ZwBcD7Pfb9Okc/eWWUnXlSJka
-	2r8+5zdh8BLKL6F7hJMItXSM2L+woo6bSI9YBYKTMY/ay9VuJkzQuO1CDF6RI8Cy
-	ihC73N6j1m9lCZsCLUnMYU1mw6/ML3N/kQOENhtz2F0zXFjnFI0U40AIFGD/cTcb
-	nu3zcJtY4rHUmR4DJsoHZrtXGrOtKQbMJV9qmsM/e7xmQbxrHsBinInu0lSoY714
-	3wqeIdF2XbD9xw58qlzBNs0isxAPCs4064R5ScEqswWfZaxpMveKCoiBhPW/aPA=
-	=
-Received: from mail-oa1-f72.google.com (mail-oa1-f72.google.com [209.85.160.72])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4ebvvhnfst-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-kselftest@vger.kernel.org>; Tue, 26 May 2026 13:34:10 -0700 (PDT)
-Received: by mail-oa1-f72.google.com with SMTP id 586e51a60fabf-43b5aed6fb9so5595402fac.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 May 2026 13:34:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779827650; x=1780432450;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=MIJwXsv/0laqfqTBAiiemVlRxYkDdprYcEoPdM55d14=;
-        b=UHqU+sbG8rZ4TjF72t0ll6uvO4VHhfjv23Pw+7R7hi9zIMKrygMJWA2F88eiznJIyK
-         ncCCDLiFY0xiRNeYpvUTSZ15vs5JLSqyDTw1krSHjsicYV1B2R/lVL1gUpqKACl3/GR3
-         nMXkifyk6XioJPSq+Z+/N2sdKXYIwUvh6x0DOrf5sxxJKAmeLMn9L0NY/lDM2DVfH4Xu
-         QjjN6ZmIzEFtnqC1EJLzCSthjOJU6A2Q+G5sdFPhCW51CRWaas1713PrwoHw4GuzUUJ8
-         hBz2IpMhZMocKNN6pp8BBBGHdFfujmPT3lqnRfIbwPEqDeDciHWTmXZ5JlfQBuPfaIC1
-         p3xg==
-X-Forwarded-Encrypted: i=1; AFNElJ/mS0W1dF8rvyae4qPTarISZD+BIotW15xi2Qxq4oHC0yKgXYYYoNEJL5OPV6wxbrMsZnYHjEwJyHPGxQLsrHA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzx3BuQI4ro3/sULyETkBHexLRlmuMMoVYJtQzi72C1OuxgEVWz
-	ULIRr5BmmQyRuey3fO2iydRsusN9DKQ3250v06dtBULDUMlhuzOwkMWiukTEZjODEILv85PqeqS
-	fB6DG1S/k8r+NdymKGsX6u4VDVTKtI05l1XWUqaISIe3BZHGSnLtSkIhK3xbXZy8nov0=
-X-Gm-Gg: Acq92OEtmCI5TcGn9DqSMl0EtDKetehIvPndEUdGZ/3h7a2S1UGV2ZiN9/LzNGmlcq2
-	M/4X7wCAAIEQHFRvmxTjD5fy/vB0USpDPR7AuMBiVl9vcX6y+jdkVk35G1Stdvocfsd1um13zeW
-	rnNZw1/EZZ57pJgo7nSx9Yd8guUux6DaANm/QCWlNn/c0oiUtasZpwfGr9XvOuJF1eKMID5q7ew
-	1dyEZz+/TKzwGiVImV3QDy5Fx6lSHzefn5ZrgizCxj6LtK548xR+yOn570/KTOSibi3omwoT92n
-	wEEpmWhZO0PBw0tJtZhYm3ELN1eXerAxh5cWJJNwUclmc35R7kkT1p4MhaL6KV+ZvLYL/PeEy7d
-	bw4AA2Zqsfg==
-X-Received: by 2002:a05:6870:2403:b0:41c:43bb:7f1f with SMTP id 586e51a60fabf-43b5a5e4071mr11806931fac.0.1779827649179;
-        Tue, 26 May 2026 13:34:09 -0700 (PDT)
-X-Received: by 2002:a05:6870:2403:b0:41c:43bb:7f1f with SMTP id 586e51a60fabf-43b5a5e4071mr11806870fac.0.1779827648245;
-        Tue, 26 May 2026 13:34:08 -0700 (PDT)
-Received: from localhost ([2a03:2880:12ff:9::])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-43b63a15569sm14264534fac.16.2026.05.26.13.34.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 May 2026 13:34:07 -0700 (PDT)
-From: Neil Spring <ntspring@meta.com>
-To: netdev@vger.kernel.org
-Cc: edumazet@google.com, ncardwell@google.com, kuniyu@google.com,
-        davem@davemloft.net, kuba@kernel.org, dsahern@kernel.org,
-        pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org, ntspring@meta.com,
-        bpf@vger.kernel.org, martin.lau@linux.dev, daniel@iogearbox.net
-Subject: [PATCH net-next v9 2/2] selftests: net: add local ECMP rehash test
-Date: Tue, 26 May 2026 13:34:03 -0700
-Message-ID: <20260526203403.3517607-3-ntspring@meta.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260526203403.3517607-1-ntspring@meta.com>
-References: <20260526203403.3517607-1-ntspring@meta.com>
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="BMEBPfcg"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=mKdCm5EW6VYvxQBf8G1mSYbXt/ooWfGW4TIpvrhDIYeB47VRZXzb9YYaWFI4anxEF1YNS21xL81Lbfgl99ERVQfXlPdm3jD5kNOJXHQ83uWW/FWu0V7kO7VRp4NDD1T31rekrWEQqC1DbITQIz9EMLNAvdp5SCtGBXBetU0NPKT41caaCySfh/cZf1iheUT+hNekogstrNPK6wrp762J/tqtrhem6LwWi9cI5CicAOYbmA3ykwEuvle+8Uny1/HwO1F2Qc+b6ECVe3idQtMP51lLFDsJXUPydXq/eiG4fK2MEXFCSDXhBfdmbS9fDV3JlPkEoh+2T3og7FXpDcCjkQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xEHmp8qB4NSZlylj1hKSAWcRsHYFLHK3fGv0IdHkYTU=;
+ b=R0xd8EUawnnZW43S7TeRMt201Zut+IkqMrrw46reHIQUYCzPgtul4bWeI7k03IWNV6E8UuBgGNL3J7VCPkKCY9L1D4ulHH+XUZkJjYXfiKT1Fv7KNH9Yit3uM8PNbv0LWhR+QfCang/ll7oa4ixt7Ezou4shAKtCeveLeJtb4AzpyexDf5I6CAwTeG+AZ4v+/lMLX+H1XhtPyyEKZPOQFCZFiwIMdAafP9I1gwRLieUozXbx4brc/JBxHOzxhAkjvxB9Q2BjvYkar1RpgiY4G8kuyL6v0tZmCERQ7xQdLHITm3z2Q5Av5kL1EIpDi+kbunimLc6DaMvgmjRG5UpoxQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xEHmp8qB4NSZlylj1hKSAWcRsHYFLHK3fGv0IdHkYTU=;
+ b=BMEBPfcgs9sz9v6F0tUegjq/DdFiQ1Q4PnBXkWLNq3rRyEwLiosrpqF/IoBKzRzIwtX3O0w/f4n6J8F/qCZa4HGrjdNdj2zz/VWWljWcPGl/eDc0nLgegEsgyo6RNPwQ9yd06OxoLveTKBYUm+eNeWcIgA5D1C7gHzUgKNqFqc8=
+Received: from DS7PR12MB8201.namprd12.prod.outlook.com (2603:10b6:8:ef::13) by
+ DS4PR12MB9586.namprd12.prod.outlook.com (2603:10b6:8:27e::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.48.18; Tue, 26 May 2026 21:30:23 +0000
+Received: from DS7PR12MB8201.namprd12.prod.outlook.com
+ ([fe80::e5d:5f41:954d:be38]) by DS7PR12MB8201.namprd12.prod.outlook.com
+ ([fe80::e5d:5f41:954d:be38%5]) with mapi id 15.21.0071.011; Tue, 26 May 2026
+ 21:30:23 +0000
+From: "Kaplan, David" <David.Kaplan@amd.com>
+To: Jim Mattson <jmattson@google.com>
+CC: Sean Christopherson <seanjc@google.com>, "pbonzini@redhat.com"
+	<pbonzini@redhat.com>, "tglx@kernel.org" <tglx@kernel.org>,
+	"mingo@redhat.com" <mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>,
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>, "x86@kernel.org"
+	<x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>, "shuah@kernel.org"
+	<shuah@kernel.org>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"ctpence@google.com" <ctpence@google.com>
+Subject: RE: [PATCH v3 3/4] KVM: x86: Virtualize AMD CPUID faulting
+Thread-Topic: [PATCH v3 3/4] KVM: x86: Virtualize AMD CPUID faulting
+Thread-Index: AQHc48u/ypunHfXv0E2Ct1Pgh072/rYN03IAgBLixwCAAC4RIA==
+Date: Tue, 26 May 2026 21:30:22 +0000
+Message-ID:
+ <DS7PR12MB82011943131DF5415365E19E940B2@DS7PR12MB8201.namprd12.prod.outlook.com>
+References: <20260513224608.1859737-1-jmattson@google.com>
+ <20260513224608.1859737-4-jmattson@google.com>
+ <CALMp9eS4s9tsOmvDUDeqS7oph0mSHyhxBiULQdwHVaG+7gXLSQ@mail.gmail.com>
+ <agXcKDjnJc9DPcyr@google.com>
+ <CALMp9eS831M153QmAgjzJcR2dFY_wCCCzDisd7_T6GyS3-gAFw@mail.gmail.com>
+ <agX2SJF3rJSkIqDe@google.com>
+ <CALMp9eQTSxFkVf4vV83yNYvv2AjseHYiD3M68mcc951L4U1Jxw@mail.gmail.com>
+ <agX5v1utAfyMadPm@google.com>
+ <CALMp9eQqbHrcV1_WM+5xUR16OpGk+unxoZGi+=t55cqVhFgAfQ@mail.gmail.com>
+ <DS7PR12MB82016B1B310BD994C83B35D294072@DS7PR12MB8201.namprd12.prod.outlook.com>
+ <CALMp9eQ2SLq2bVngJ1RHEfkFe5yaTDrFxXT0KNTgBZY6WRMDbw@mail.gmail.com>
+In-Reply-To:
+ <CALMp9eQ2SLq2bVngJ1RHEfkFe5yaTDrFxXT0KNTgBZY6WRMDbw@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+msip_labels:
+ MSIP_Label_198e8dea-a4f3-4850-b16a-fd6d2b1302b4_Enabled=True;MSIP_Label_198e8dea-a4f3-4850-b16a-fd6d2b1302b4_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;MSIP_Label_198e8dea-a4f3-4850-b16a-fd6d2b1302b4_SetDate=2026-05-26T21:23:48.0000000Z;MSIP_Label_198e8dea-a4f3-4850-b16a-fd6d2b1302b4_Name=AMD
+ General
+ v26;MSIP_Label_198e8dea-a4f3-4850-b16a-fd6d2b1302b4_ContentBits=3;MSIP_Label_198e8dea-a4f3-4850-b16a-fd6d2b1302b4_Method=Standard
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DS7PR12MB8201:EE_|DS4PR12MB9586:EE_
+x-ms-office365-filtering-correlation-id: bc8da0e3-27a4-4372-5ee8-08debb6dfe8c
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|1800799024|366016|376014|7416014|38070700021|4143699003|11063799006|22082099003|18002099003|3023799007|56012099006;
+x-microsoft-antispam-message-info:
+ tAIIQXqAwO/+Fo+0zRC45d/YHg6TS+Lfb1l68ucjv3YlzdUwcmYYolt8jXKNSr8DGbDZLFBM4sT0hN1aHLk8lDW5KuPr+IKM2g6JA5dxudn0S1XDc3cQHYlVak6SCgYd+etlIro6VAUNmCeehBzQwTiw+oydJGngFxlsrWs+DlpYy9vUhgYDLwtoLIvtkCiy9Y2C5yZr6XNJG8PST28kVzj6TmiZEALq/FKqj9QCyQcXMWc551433LZXESzFtBl5rFyHRgkfcyestWKIYNSmGJxkSj06yflJJsG85PSzLZwHHDiySX6HpXHmIZwj9eToztGk8hAYOYY7+oh69Fe3Cw71NJwseBdSEbm+ZtNZApIpmLpgPUTu9v+KhABGqgVkXdbOe3vS5rcmndIcZcWuMC5duUF8Du5Ty4Iob1f27TJfDqL57j2/qTFxh7Ml7m9d/ynXAODU7dbWQXlAhywINmJHsx6Kp6p/+ysFyEi0iXTdjLmez9iqlojMpQMKEAC1WQ6PejWxCtueeByEF8Y7Lyv78ssmDB5JPr9ujNR7gVfktVs8b7ZZrdQwZcxqEz55tbEpEllryuMWzBklAgeEifpAee1eD5pd+xIaHCTj6AouNNecOyS0IRcZx9tVp1/DuebRoRq+XGS/CzIyid2e3X2d+yV1mJKvc+YJALAYseOV6zfEJxvdnpMIxLoY/1XCs56IVSykcR55E2PgN4/ylBO1SXIFd8oShLEF9zo8F+evmJ3wwrnlXeENYNXUotjk
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB8201.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(38070700021)(4143699003)(11063799006)(22082099003)(18002099003)(3023799007)(56012099006);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?M0Q4S25URkJTRTIvaXEzWS9TeVY0SERxekhHeDM5ZzZyY3NoZDBVM3czWHE3?=
+ =?utf-8?B?OHFERjNKbGNMOEhQVG5QcExuYnVFSjZHTXFSSGRPRHd1dlhpRjM1aWZKNkdS?=
+ =?utf-8?B?aTdYTlhyS1ptSXRzVk5qNUQ5aGU1engzdkhZT3I5MUZlNlByY3FxWTl5NHV5?=
+ =?utf-8?B?RTVrc29PWThuYjQyOEtyZFRxOWVLbE9GcThSY1Q5cU1hNGxacU9nNlRFRXJG?=
+ =?utf-8?B?c1dsN2dCbUJUTmJmZ0ZLbGZjRHlzZ3hGRThJaVVJbkFvbitXZVhlellZNFBX?=
+ =?utf-8?B?ZTRnVy93Rmx6WllxQ0JMUGxrYlZSWnlXTjQ2cldoUHpRbWxUMExyS255NU5l?=
+ =?utf-8?B?cEt3VkVoWTBCMGJaK05BYVZucCt1UHhZNDNPUEVGTGlac3pHK2k4MTk2a0No?=
+ =?utf-8?B?TjdUZjFOOXQ2WXcyUXpscDhoalNBUmxOT1dVc1Z6VmNJemRHdHg2WXg0WWEw?=
+ =?utf-8?B?dFVDb3JvbUJXNWtVQ2UyUkVGc1lpSENKRzZkcWJOWUo3YjBpdXZEbXlXR1R5?=
+ =?utf-8?B?RFBQdDliRXNCWnhnQmJ1Qk5HL3JaNEMvUjNMNDdoQmZmQmU3dm1SY0FTQURT?=
+ =?utf-8?B?QjhjVkswM2VuMU5pMkdPK1BJTlAwemZpZlhJcmt0cHpGY0dVamU5eHN5R3pR?=
+ =?utf-8?B?UDZIRVZwNWdiSlNJYks3a2pMV3ZnRnh6aVNnV3NONXh3U1ZBdExORSthZDJU?=
+ =?utf-8?B?N2hFTHhKaEgzVUxxelpWSmEzdGwvZ3BKWU80dVRyMzhSaDJicXhpREovT1h4?=
+ =?utf-8?B?Q0lwNEtuV2VPVlNwaW4yRUFycGFsQ1hreEpHL3R6RlA5UUM4bjNNVy9vVkRa?=
+ =?utf-8?B?U2tseFdMaElZcWdxemdaaDlBUWZOcG1SdmR4QUJzSHhCRk9zWmJSdkoweUJt?=
+ =?utf-8?B?K2grN0pTM3QrRkllcFBhWFE4RllHNjNXdUFER0VWeHN0L0NLUW9kRTB5azlw?=
+ =?utf-8?B?bjh1cStpdUNiVWIxZ1FFSFI3SjhtbGlPWnQzallOZWk1bmtPbG9Uejg0UFBJ?=
+ =?utf-8?B?cnEwTy80cy9QNlhmVkRXQ25DRFRJRUU3cDA5QndMalBXU2phckxvSmpyK2Np?=
+ =?utf-8?B?MHl6Y3o5M0x6N1FjNDl2Q2FZelgvenhEWUFZazZCMWVuOWpPOFJZSWVlTllJ?=
+ =?utf-8?B?cWlEcE1qTjdleU10b0lmQUc2UG5OaG9JaC9EcDBPckNITDI4Sjcrb011WmlF?=
+ =?utf-8?B?YVBPOXAxYW9RcmxYT1hkQ2NHeWx6TlRxbVVmZW1Sc2hoaXpxWjhsM2V6QlJ6?=
+ =?utf-8?B?QnlhVzB1ckRDN1Y4VGdxcGlZaGZsV1hWV3RQYVdUN2V6cjBXTTh0cXJteDFp?=
+ =?utf-8?B?a0RReTc5WUpTVEtHWnd6NW1UZE0zMDgraURqS3lid0pIckUzYzlyYU1IdXBn?=
+ =?utf-8?B?disyZUtHRlRWcEl4Vis3VG9WNDRmakdscEsyVlE2T1NQL2NDYkI0RWljZVRs?=
+ =?utf-8?B?VVRSb0NqUmhjQVppZnVDMGtiQTlPYm9KVDdZaG9oMit4dkJHTGlMdUhFZXpH?=
+ =?utf-8?B?TGdJQlpMTk9rYmM0KzAyMldqWmNJSDlFS1NtUVdzM3JyNVc2RHRqWVFMempW?=
+ =?utf-8?B?Z2xKZU8rQ0d6L0FrR1Y5R0hodVJzT3pSL0xRRzFaYUJFaEs2bjg1T2NwMHZN?=
+ =?utf-8?B?OThkREZxSTdCRm9OYTIybys2YWNmNFA4Y0lJeVBwZUxtYUVzYlJESlZENUpu?=
+ =?utf-8?B?dlNDK1NFTDV4M3A3aVY1VkxIclhiSGx6Y2hiTTIyT0lvZnpJNjY4eng1QnhJ?=
+ =?utf-8?B?d2J1V0NkcW95U1JuTW5nVGR5UjdRelpFeng3YUJ1eU9CK01MT2w1bGlnL1Va?=
+ =?utf-8?B?N1d1RUtwdCtZRGFLMU9JTXdPZ2hzeVk4Z3ZpZFJtV1pNbG1YZ3ZrRTNEVFdP?=
+ =?utf-8?B?VEpOYml5aDR0ZjZrdS9EakpRaU10RGF1aERBRGFDdFd5WFZnY0FyRjh0UkdS?=
+ =?utf-8?B?ajJTdHUrbEVvb2VrMHBValorU1dtVSs4Z0NoN09TSUdpZWcvY3dBR1FCMjEv?=
+ =?utf-8?B?eXFYV0V4cGNzL2hlTzVHRlk5b3FsWFRoRkJPOGlOOVVQWGVmaVpUTUc3azN3?=
+ =?utf-8?B?ZmxhdXNXOVFxZXJ3MmtlMUx6eFV1UDl5a25IYk5ZYWpGZkFGWDF6RnZPdGpl?=
+ =?utf-8?B?Q2MxSGN2VURBWkppZ1ltYlFDbzhNZUFUamUzaHNEaVZEUUlNZlVoS1RPR1BG?=
+ =?utf-8?B?M3RNZldVZlFtTzBGejNxbzZWZExwNUsrZ0F5V2RiWlU5V1Z2enM0RGYyV2JV?=
+ =?utf-8?B?WmkrUWNDRzRJRGxtZVFBNkRheXhEYmsxRmJWbnFNanRCcVVFMFdLVVI2aWw0?=
+ =?utf-8?Q?ohZ7tPUKQMRz+t2s7e?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: rqe9HWOCyHpx9PSdV8LomanJcNhQjjTE
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTI2MDE4MiBTYWx0ZWRfXzoxK7v56/1TT
- bKUXP2EYhADLwIfA35+2j3aZSFtiDIe/7VaFDtLPEPEQYx/xoogycicEliXHCoP8n0EvGqfqhlV
- MQ65UVR9sinaZKyzlJXTHRoVZSJYYesEYqCXxLNVFCybxtlxpACXZZ/AzFMfZ9udqzvsVuhC26K
- MtDWzPXAXeAZDc5HHMCmvdKctWOgbRS/ia16ZUzB7xnKAgrzl44jjvR5aLUnjIxjJNUr+p3UHwc
- VShqgV3MeSZxacwOr3FLqgKutI2M6DHDoF8TpDYJ4rjvdi4Wp5DPfucKzCjDhwYrDAntba72qki
- 2R1DBug41k2bacd27V9oSplFN4WB2dliigWr0aDoIPCSt1NNCElF6NsILJiBO9Z88L0RLRqH3lg
- 7p4kKwFgiU1TyxktYUQK+hQmfVoy/uZIiqAEAPQqOd3JaF/l3vul5TTlCiifpqCT3haxhwaSaDO
- LPw+qG0WuFp5PbF8+WA==
-X-Authority-Analysis: v=2.4 cv=JsPBas4C c=1 sm=1 tr=0 ts=6a1603c2 cx=c_pps
- a=Z3eh007fzM5o9awBa1HkYQ==:117 a=xqWC_Br6kY4A:10 a=NGcC8JguVDcA:10
- a=f7IdgyKtn90A:10 a=VkNPw1HP01LnGYTKEx00:22 a=7x6HtfJdh03M6CCDgxCd:22
- a=kkcUborcUVj0H7zxAXTl:22 a=VabnemYjAAAA:8 a=TTkU_mty8rFlMtFDi8AA:9
- a=eBU8X_Hb5SQ8N-bgNfv4:22 a=gKebqoRLp9LExxC7YDUY:22
-X-Proofpoint-ORIG-GUID: rqe9HWOCyHpx9PSdV8LomanJcNhQjjTE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
- definitions=2026-05-26_04,2026-05-26_03,2025-10-01_01
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB8201.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bc8da0e3-27a4-4372-5ee8-08debb6dfe8c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 May 2026 21:30:22.8440
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: BRt108kSlQnr0LPAA2JIAywFvKD9Bm+fB6n2Z4Xs/jvtDW3zOJ1ki1cNkGZz4dPO
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS4PR12MB9586
 
-Add ecmp_rehash.sh with ten scenarios verifying that TCP rehash
-selects a different local ECMP path for IPv6:
-
-  - SYN retransmission (forward path blocked during setup)
-  - SYN/ACK retransmission (reverse path blocked during setup)
-  - Midstream RTO (forward path blocked on established connection)
-  - Midstream ACK rehash (reverse path blocked on established connection)
-  - PLB rehash (ECN-driven congestion on established connection)
-  - Hash policy 1 negative test (rehash attempted but path unchanged)
-  - No flowlabel leak (client mp_hash does not alter on-wire flowlabel)
-  - Dst rebuild consistency (dst invalidation does not change path)
-  - Dst rebuild consistency with syncookies (server socket created
-    via cookie_v6_check instead of the normal three-way handshake)
-  - Syncookie server path consistency (SYN-ACK and post-cookie ACKs
-    use the same ECMP path)
-
-The policy 1 test verifies that fib_multipath_hash_policy=1 computes
-a deterministic 5-tuple hash, so txhash re-rolls do not change the
-ECMP path while TcpTimeoutRehash still increments.
-
-The flowlabel leak test sets auto_flowlabels=0 on the client and
-installs tc filters on client egress that drop TCP packets with
-nonzero flowlabel, confirming that the client's fl6->mp_hash does
-not leak into the on-wire IPv6 flow label.
-
-The dst rebuild tests stream data, invalidate the cached dst by
-adding and removing a dummy route (bumping the fib6_node sernum),
-and verify that traffic stays on the same path.  The sernum change
-causes ip6_dst_check() to fail on the next transmit, triggering a
-fresh route lookup via inet6_csk_route_socket().
-ECMP_REBUILD_ROUNDS=10 repeats the check to reduce the probability
-of a buggy kernel passing by chance with 2-way ECMP.
-
-The syncookie server path consistency test verifies that the
-server's SYN-ACK and subsequent ACKs use the same ECMP path.
-With syncookies, the request socket is freed after the SYN-ACK,
-so cookie_tcp_reqsk_init() must derive the same txhash (from the
-cookie) that was used for the SYN-ACK's route lookup.
-
-Signed-off-by: Neil Spring <ntspring@meta.com>
----
- tools/testing/selftests/net/Makefile       |    1 +
- tools/testing/selftests/net/config         |    1 +
- tools/testing/selftests/net/ecmp_rehash.sh | 1050 ++++++++++++++++++++
- 3 files changed, 1052 insertions(+)
- create mode 100755 tools/testing/selftests/net/ecmp_rehash.sh
-
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index baa30287cf22..6ec1b24218ad 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -26,6 +26,7 @@ TEST_PROGS := \
- 	cmsg_time.sh \
- 	double_udp_encap.sh \
- 	drop_monitor_tests.sh \
-+	ecmp_rehash.sh \
- 	fcnal-ipv4.sh \
- 	fcnal-ipv6.sh \
- 	fcnal-other.sh \
-diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
-index 94d722770420..20fce6e4500b 100644
---- a/tools/testing/selftests/net/config
-+++ b/tools/testing/selftests/net/config
-@@ -122,6 +122,7 @@ CONFIG_PSAMPLE=m
- CONFIG_RPS=y
- CONFIG_SYSFS=y
- CONFIG_TAP=m
-+CONFIG_TCP_CONG_DCTCP=m
- CONFIG_TCP_MD5SIG=y
- CONFIG_TEST_BLACKHOLE_DEV=m
- CONFIG_TEST_BPF=m
-diff --git a/tools/testing/selftests/net/ecmp_rehash.sh b/tools/testing/selftests/net/ecmp_rehash.sh
-new file mode 100755
-index 000000000000..c2c1c14078e9
---- /dev/null
-+++ b/tools/testing/selftests/net/ecmp_rehash.sh
-@@ -0,0 +1,1050 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Test local ECMP path re-selection on TCP retransmission timeout and PLB.
-+#
-+# Two namespaces connected by two parallel veth pairs with a 2-way ECMP
-+# route.  When a TCP path is blocked (via tc drop) or congested (via
-+# netem ECN marking), the kernel rehashes the connection via
-+# sk_rethink_txhash() + __sk_dst_reset(), causing the next route lookup
-+# to select the other ECMP path.
-+#
-+# Expected runtime: ~15 seconds.  The large timeouts in individual tests
-+# (slowwait 30-60s, socat connect-timeout=60-120s) are worst-case bounds
-+# that are never reached on a correctly functioning kernel.
-+
-+source lib.sh
-+
-+SUBNETS=(a b)
-+PORT=9900
-+: "${ECMP_REBUILD_ROUNDS:=10}"
-+
-+ALL_TESTS="
-+	test_ecmp_syn_rehash
-+	test_ecmp_synack_rehash
-+	test_ecmp_midstream_rehash
-+	test_ecmp_midstream_ack_rehash
-+	test_ecmp_plb_rehash
-+	test_ecmp_hash_policy1_no_rehash
-+	test_ecmp_no_flowlabel_leak
-+	test_ecmp_dst_rebuild_consistency
-+	test_ecmp_dst_rebuild_syncookie_consistency
-+	test_ecmp_syncookie_path_consistency
-+"
-+
-+link_tx_packets_get()
-+{
-+	local ns=$1; shift
-+	local dev=$1; shift
-+
-+	ip netns exec "$ns" cat "/sys/class/net/$dev/statistics/tx_packets"
-+}
-+
-+# Return the number of packets matched by the tc filter action on a device.
-+# When tc drops packets via "action drop", the device's tx_packets is not
-+# incremented (packet never reaches veth_xmit), but the tc action maintains
-+# its own counter.
-+tc_filter_pkt_count()
-+{
-+	local ns=$1; shift
-+	local dev=$1; shift
-+
-+	ip netns exec "$ns" tc -s filter show dev "$dev" parent 1: 2>/dev/null |
-+		awk '/Sent .* pkt/ {
-+			for (i=1; i<=NF; i++)
-+				if ($i == "pkt") { print $(i-1); exit }
-+		}'
-+}
-+
-+# Read a TcpExt counter from /proc/net/netstat in a namespace.
-+# Returns 0 if the counter is not found.
-+get_netstat_counter()
-+{
-+	local ns=$1; shift
-+	local field=$1; shift
-+	local val
-+
-+	# shellcheck disable=SC2016
-+	val=$(ip netns exec "$ns" awk -v key="$field" '
-+		/^TcpExt:/ {
-+			if (!h) { split($0, n); h=1 }
-+			else {
-+				split($0, v)
-+				for (i in n)
-+					if (n[i] == key) print v[i]
-+			}
-+		}
-+	' /proc/net/netstat)
-+	echo "${val:-0}"
-+}
-+
-+# Apply netem ECN marking: CE-mark all ECT packets instead of dropping them.
-+mark_ecn()
-+{
-+	local ns=$1; shift
-+	local dev=$1; shift
-+
-+	ip netns exec "$ns" tc qdisc add dev "$dev" root netem loss 100% ecn
-+}
-+
-+# Block TCP (IPv6 next-header = 6) egress, allowing ICMPv6 through.
-+block_tcp()
-+{
-+	local ns=$1; shift
-+	local dev=$1; shift
-+
-+	ip netns exec "$ns" tc qdisc add dev "$dev" root handle 1: prio
-+	ip netns exec "$ns" tc filter add dev "$dev" parent 1: \
-+		protocol ipv6 prio 1 u32 match u8 0x06 0xff at 6 action drop
-+}
-+
-+unblock_tcp()
-+{
-+	local ns=$1; shift
-+	local dev=$1; shift
-+
-+	ip netns exec "$ns" tc qdisc del dev "$dev" root 2>/dev/null
-+}
-+
-+# Return success when a device's TX counter exceeds a baseline value.
-+dev_tx_packets_above()
-+{
-+	local ns=$1; shift
-+	local dev=$1; shift
-+	local baseline=$1; shift
-+
-+	local cur
-+	cur=$(link_tx_packets_get "$ns" "$dev")
-+	[ "$cur" -gt "$baseline" ]
-+}
-+
-+# Return success when both devices have dropped at least one TCP packet.
-+both_devs_attempted()
-+{
-+	local ns=$1; shift
-+	local dev0=$1; shift
-+	local dev1=$1; shift
-+
-+	local c0 c1
-+	c0=$(tc_filter_pkt_count "$ns" "$dev0")
-+	c1=$(tc_filter_pkt_count "$ns" "$dev1")
-+	[ "${c0:-0}" -ge 1 ] && [ "${c1:-0}" -ge 1 ]
-+}
-+
-+link_tx_packets_total()
-+{
-+	local ns=$1; shift
-+
-+	echo $(( $(link_tx_packets_get "$ns" veth0a) +
-+		 $(link_tx_packets_get "$ns" veth1a) ))
-+}
-+
-+setup()
-+{
-+	setup_ns NS1 NS2
-+
-+	local ns
-+	for ns in "$NS1" "$NS2"; do
-+		ip netns exec "$ns" sysctl -qw net.ipv6.conf.all.accept_dad=0
-+		ip netns exec "$ns" sysctl -qw net.ipv6.conf.default.accept_dad=0
-+		ip netns exec "$ns" sysctl -qw net.ipv6.conf.all.forwarding=1
-+		ip netns exec "$ns" sysctl -qw net.core.txrehash=1
-+	done
-+
-+	local i sub
-+	for i in 0 1; do
-+		sub=${SUBNETS[$i]}
-+		ip link add "veth${i}a" type veth peer name "veth${i}b"
-+		ip link set "veth${i}a" netns "$NS1"
-+		ip link set "veth${i}b" netns "$NS2"
-+		ip -n "$NS1" addr add "fd00:${sub}::1/64" dev "veth${i}a"
-+		ip -n "$NS2" addr add "fd00:${sub}::2/64" dev "veth${i}b"
-+		ip -n "$NS1" link set "veth${i}a" up
-+		ip -n "$NS2" link set "veth${i}b" up
-+	done
-+
-+	ip -n "$NS1" addr add fd00:ff::1/128 dev lo
-+	ip -n "$NS2" addr add fd00:ff::2/128 dev lo
-+
-+	# Allow many SYN retries at 1-second intervals (linear, no
-+	# exponential backoff) so the rehash test has enough attempts
-+	# to exercise both ECMP paths.
-+	if ! ip netns exec "$NS1" sysctl -qw \
-+	     net.ipv4.tcp_syn_linear_timeouts=25; then
-+		echo "SKIP: tcp_syn_linear_timeouts not supported"
-+		return "$ksft_skip"
-+	fi
-+	ip netns exec "$NS1" sysctl -qw net.ipv4.tcp_syn_retries=25
-+
-+	# Keep the server's request socket alive during the blocking
-+	# period so SYN/ACK retransmits continue.
-+	ip netns exec "$NS2" sysctl -qw net.ipv4.tcp_synack_retries=25
-+
-+	ip -n "$NS1" -6 route add fd00:ff::2/128 \
-+		nexthop via fd00:a::2 dev veth0a \
-+		nexthop via fd00:b::2 dev veth1a
-+
-+	ip -n "$NS2" -6 route add fd00:ff::1/128 \
-+		nexthop via fd00:a::1 dev veth0b \
-+		nexthop via fd00:b::1 dev veth1b
-+
-+	for i in 0 1; do
-+		sub=${SUBNETS[$i]}
-+		ip netns exec "$NS1" \
-+			ping -6 -c1 -W5 "fd00:${sub}::2" &>/dev/null
-+		ip netns exec "$NS2" \
-+			ping -6 -c1 -W5 "fd00:${sub}::1" &>/dev/null
-+	done
-+
-+	if ! ip netns exec "$NS1" ping -6 -c1 -W5 fd00:ff::2 &>/dev/null; then
-+		echo "Basic connectivity check failed"
-+		return "$ksft_skip"
-+	fi
-+}
-+
-+# Block ALL paths, start a connection, wait until SYNs have been dropped
-+# on both interfaces (proving rehash steered the SYN to a new path), then
-+# unblock so the connection completes.
-+test_ecmp_syn_rehash()
-+{
-+	RET=0
-+
-+	block_tcp "$NS1" veth0a
-+	defer unblock_tcp "$NS1" veth0a
-+	block_tcp "$NS1" veth1a
-+	defer unblock_tcp "$NS1" veth1a
-+
-+	ip netns exec "$NS2" socat \
-+		"TCP6-LISTEN:$PORT,bind=[fd00:ff::2],reuseaddr,fork" \
-+		EXEC:"echo ESTABLISH_OK" &
-+	defer kill_process $!
-+
-+	wait_local_port_listen "$NS2" "$PORT" tcp
-+
-+	local rehash_before
-+	rehash_before=$(get_netstat_counter "$NS1" TcpTimeoutRehash)
-+
-+	# Start the connection in the background; it will retry SYNs at
-+	# 1-second intervals until an unblocked path is found.
-+	# Use -u (unidirectional) to only receive from the server;
-+	# sending data back would risk SIGPIPE if the server's EXEC
-+	# child has already exited.
-+	local tmpfile
-+	tmpfile=$(mktemp)
-+	defer rm -f "$tmpfile"
-+
-+	ip netns exec "$NS1" socat -u \
-+		"TCP6:[fd00:ff::2]:$PORT,bind=[fd00:ff::1],connect-timeout=60" \
-+		STDOUT >"$tmpfile" 2>&1 &
-+	local client_pid=$!
-+	defer kill_process "$client_pid"
-+
-+	# Wait until both paths have seen at least one dropped SYN.
-+	# This proves sk_rethink_txhash() rehashed the connection from
-+	# one ECMP path to the other.
-+	slowwait 30 both_devs_attempted "$NS1" veth0a veth1a
-+	check_err $? "SYNs did not appear on both paths (rehash not working)"
-+	if [ "$RET" -ne 0 ]; then
-+		log_test "Local ECMP SYN rehash: establish with blocked paths"
-+		return
-+	fi
-+
-+	# Unblock both paths and let the next SYN retransmit succeed.
-+	unblock_tcp "$NS1" veth0a
-+	unblock_tcp "$NS1" veth1a
-+
-+	local rc=0
-+	wait "$client_pid" || rc=$?
-+
-+	local result
-+	result=$(cat "$tmpfile" 2>/dev/null)
-+
-+	if [[ "$result" != *"ESTABLISH_OK"* ]]; then
-+		check_err 1 "connection failed after unblocking (rc=$rc): $result"
-+	fi
-+
-+	local rehash_after
-+	rehash_after=$(get_netstat_counter "$NS1" TcpTimeoutRehash)
-+	if [ "$rehash_after" -le "$rehash_before" ]; then
-+		check_err 1 "TcpTimeoutRehash counter did not increment"
-+	fi
-+
-+	log_test "Local ECMP SYN rehash: establish with blocked paths"
-+}
-+
-+# Block the server's return paths so SYN/ACKs are dropped.  The client
-+# retransmits SYNs at 1-second intervals; each duplicate SYN arriving at
-+# the server triggers tcp_rtx_synack() which re-rolls txhash, so the
-+# retransmitted SYN/ACK selects a different ECMP return path.
-+test_ecmp_synack_rehash()
-+{
-+	RET=0
-+	local port=$((PORT + 2))
-+
-+	block_tcp "$NS2" veth0b
-+	defer unblock_tcp "$NS2" veth0b
-+	block_tcp "$NS2" veth1b
-+	defer unblock_tcp "$NS2" veth1b
-+
-+	ip netns exec "$NS2" socat \
-+		"TCP6-LISTEN:$port,bind=[fd00:ff::2],reuseaddr,fork" \
-+		EXEC:"echo SYNACK_OK" &
-+	defer kill_process $!
-+
-+	wait_local_port_listen "$NS2" "$port" tcp
-+
-+	# Start the connection; SYNs reach the server (client egress is
-+	# open) but SYN/ACKs are dropped on the server's return path.
-+	local tmpfile
-+	tmpfile=$(mktemp)
-+	defer rm -f "$tmpfile"
-+
-+	ip netns exec "$NS1" socat -u \
-+		"TCP6:[fd00:ff::2]:$port,bind=[fd00:ff::1],connect-timeout=60" \
-+		STDOUT >"$tmpfile" 2>&1 &
-+	local client_pid=$!
-+	defer kill_process "$client_pid"
-+
-+	# Wait until both server-side interfaces have dropped at least
-+	# one SYN/ACK, proving the server rehashed its return path.
-+	slowwait 30 both_devs_attempted "$NS2" veth0b veth1b
-+	check_err $? "SYN/ACKs did not appear on both return paths"
-+	if [ "$RET" -ne 0 ]; then
-+		log_test "Local ECMP SYN/ACK rehash: blocked return path"
-+		return
-+	fi
-+
-+	# Unblock and let the connection complete.
-+	unblock_tcp "$NS2" veth0b
-+	unblock_tcp "$NS2" veth1b
-+
-+	local rc=0
-+	wait "$client_pid" || rc=$?
-+
-+	local result
-+	result=$(cat "$tmpfile" 2>/dev/null)
-+
-+	if [[ "$result" != *"SYNACK_OK"* ]]; then
-+		check_err 1 "connection failed after unblocking (rc=$rc): $result"
-+	fi
-+
-+	log_test "Local ECMP SYN/ACK rehash: blocked return path"
-+}
-+
-+# Establish a data transfer with both paths open, then block the
-+# active path.  Verify that data appears on the previously inactive
-+# path (proving RTO triggered a rehash) and that TcpTimeoutRehash
-+# incremented.
-+#
-+# With 2-way ECMP each rehash may pick the same path, so a single
-+# attempt can occasionally fail.  Retry once for robustness.
-+
-+# Single attempt at the midstream rehash check.  Returns 0 on success.
-+ecmp_midstream_rehash_attempt()
-+{
-+	local port=$1; shift
-+	local reason=""
-+
-+	ip netns exec "$NS2" socat -u \
-+		"TCP6-LISTEN:$port,bind=[fd00:ff::2],reuseaddr" - >/dev/null &
-+	local server_pid=$!
-+
-+	wait_local_port_listen "$NS2" "$port" tcp
-+
-+	local base_tx0 base_tx1
-+	base_tx0=$(link_tx_packets_get "$NS1" veth0a)
-+	base_tx1=$(link_tx_packets_get "$NS1" veth1a)
-+
-+	# Continuous data source; timeout caps overall test duration and
-+	# must exceed the slowwait below so data keeps flowing.
-+	ip netns exec "$NS1" timeout 90 socat -u \
-+		OPEN:/dev/zero \
-+		"TCP6:[fd00:ff::2]:$port,bind=[fd00:ff::1]" &>/dev/null &
-+	local client_pid=$!
-+
-+	# Wait for enough packets to identify the active path.
-+	if ! busywait "$BUSYWAIT_TIMEOUT" until_counter_is \
-+			">= $((base_tx0 + base_tx1 + 10))" \
-+		link_tx_packets_total "$NS1" > /dev/null; then
-+		kill "$client_pid" "$server_pid" 2>/dev/null
-+		wait "$client_pid" "$server_pid" 2>/dev/null
-+		echo "no TX activity"
-+		return 1
-+	fi
-+
-+	# Find the active path and block it.
-+	local current_tx0 current_tx1 active_idx inactive_idx
-+	current_tx0=$(link_tx_packets_get "$NS1" veth0a)
-+	current_tx1=$(link_tx_packets_get "$NS1" veth1a)
-+	if [ $((current_tx0 - base_tx0)) -ge $((current_tx1 - base_tx1)) ]; then
-+		active_idx=0; inactive_idx=1
-+	else
-+		active_idx=1; inactive_idx=0
-+	fi
-+
-+	local rehash_before
-+	rehash_before=$(get_netstat_counter "$NS1" TcpTimeoutRehash)
-+	# Suppress __dst_negative_advice() in tcp_write_timeout() so
-+	# that __sk_dst_reset() is the only dst-invalidation mechanism
-+	# on the RTO path.
-+	local saved_retries1
-+	saved_retries1=$(ip netns exec "$NS1" sysctl -n net.ipv4.tcp_retries1)
-+	ip netns exec "$NS1" sysctl -qw net.ipv4.tcp_retries1=255
-+
-+	block_tcp "$NS1" "veth${active_idx}a"
-+
-+	# Capture baseline after block_tcp returns.  block_tcp adds a
-+	# prio qdisc then a tc filter; between those two steps the
-+	# qdisc's CAN_BYPASS fast-path lets packets through unfiltered.
-+	local inactive_before
-+	inactive_before=$(link_tx_packets_get "$NS1" "veth${inactive_idx}a")
-+
-+	# Wait for meaningful data on the previously inactive path,
-+	# proving RTO triggered a rehash and data actually moved.
-+	if ! slowwait 60 dev_tx_packets_above \
-+		"$NS1" "veth${inactive_idx}a" "$((inactive_before + 100))"; then
-+		reason="no data on alternate path"
-+	fi
-+
-+	local rehash_after
-+	rehash_after=$(get_netstat_counter "$NS1" TcpTimeoutRehash)
-+	if [ "$rehash_after" -le "$rehash_before" ]; then
-+		reason="${reason:+$reason; }TcpTimeoutRehash did not increment"
-+	fi
-+
-+	unblock_tcp "$NS1" "veth${active_idx}a"
-+	ip netns exec "$NS1" sysctl -qw \
-+		net.ipv4.tcp_retries1="$saved_retries1"
-+	kill "$client_pid" "$server_pid" 2>/dev/null
-+	wait "$client_pid" "$server_pid" 2>/dev/null
-+	if [ -n "$reason" ]; then
-+		echo "$reason"
-+		return 1
-+	fi
-+	return 0
-+}
-+
-+test_ecmp_midstream_rehash()
-+{
-+	RET=0
-+	local port=$((PORT + 1))
-+
-+	local fail_reason
-+	fail_reason=$(ecmp_midstream_rehash_attempt "$port")
-+	if [ $? -ne 0 ]; then
-+		fail_reason=$(ecmp_midstream_rehash_attempt "$((port + 1))")
-+		check_err $? "$fail_reason"
-+	fi
-+
-+	log_test "Local ECMP midstream rehash: block active path"
-+}
-+
-+# Single attempt at the ACK rehash check.  Returns 0 on success.
-+ecmp_ack_rehash_attempt()
-+{
-+	local port=$1; shift
-+	local reason=""
-+
-+	ip netns exec "$NS2" socat -u \
-+		"TCP6-LISTEN:$port,bind=[fd00:ff::2],reuseaddr" - >/dev/null &
-+	local server_pid=$!
-+
-+	wait_local_port_listen "$NS2" "$port" tcp
-+
-+	local base_total
-+	base_total=$(link_tx_packets_total "$NS1")
-+
-+	# Continuous data source from NS1 to NS2.
-+	ip netns exec "$NS1" timeout 120 socat -u \
-+		OPEN:/dev/zero \
-+		"TCP6:[fd00:ff::2]:$port,bind=[fd00:ff::1]" &>/dev/null &
-+	local client_pid=$!
-+
-+	# Wait for data to start flowing.
-+	if ! busywait "$BUSYWAIT_TIMEOUT" until_counter_is \
-+			">= $((base_total + 10))" \
-+		link_tx_packets_total "$NS1" > /dev/null; then
-+		kill "$client_pid" "$server_pid" 2>/dev/null
-+		wait "$client_pid" "$server_pid" 2>/dev/null
-+		echo "no TX activity"
-+		return 1
-+	fi
-+
-+	local rehash_before
-+	rehash_before=$(get_netstat_counter "$NS2" TcpDuplicateDataRehash)
-+
-+	# Block both return paths from NS2 so ACKs are dropped.
-+	# Data from NS1 still arrives (tc filter is on egress).
-+	block_tcp "$NS2" veth0b
-+	block_tcp "$NS2" veth1b
-+
-+	# NS1 will RTO (no ACKs), retransmit with new flowlabel.
-+	# NS2 detects the flowlabel change via tcp_rcv_spurious_retrans(),
-+	# rehashes, and NS2's ACKs try a different ECMP return path.
-+	# Wait until both NS2 interfaces have dropped at least one ACK.
-+	if ! slowwait 60 both_devs_attempted "$NS2" veth0b veth1b; then
-+		reason="ACKs did not appear on both return paths"
-+	fi
-+
-+	local rehash_after
-+	rehash_after=$(get_netstat_counter "$NS2" TcpDuplicateDataRehash)
-+	if [ "$rehash_after" -le "$rehash_before" ]; then
-+		reason="${reason:+$reason; }TcpDuplicateDataRehash did not increment"
-+	fi
-+
-+	unblock_tcp "$NS2" veth0b
-+	unblock_tcp "$NS2" veth1b
-+	kill "$client_pid" "$server_pid" 2>/dev/null
-+	wait "$client_pid" "$server_pid" 2>/dev/null
-+	if [ -n "$reason" ]; then
-+		echo "$reason"
-+		return 1
-+	fi
-+	return 0
-+}
-+
-+# Block the receiver's (NS2) ACK return paths while data flows from
-+# NS1 to NS2.  The sender (NS1) times out and retransmits with a new
-+# flowlabel; the receiver detects the changed flowlabel via
-+# tcp_rcv_spurious_retrans() and rehashes its own txhash so that its
-+# ACKs try a different ECMP return path.
-+#
-+# With 2-way ECMP each rehash may pick the same path, so a single
-+# attempt can occasionally fail.  Retry once for robustness.
-+test_ecmp_midstream_ack_rehash()
-+{
-+	RET=0
-+	local port=$((PORT + 3))
-+
-+	local fail_reason
-+	fail_reason=$(ecmp_ack_rehash_attempt "$port")
-+	if [ $? -ne 0 ]; then
-+		fail_reason=$(ecmp_ack_rehash_attempt "$((port + 1))")
-+		check_err $? "$fail_reason"
-+	fi
-+
-+	log_test "Local ECMP midstream ACK rehash: blocked return path"
-+}
-+
-+# Establish a DCTCP data transfer with PLB enabled, then ECN-mark both
-+# paths.  Sustained CE marking triggers PLB to call sk_rethink_txhash()
-+# + __sk_dst_reset(), bouncing the connection between ECMP paths.
-+# Verify data appears on both paths and that TCPPLBRehash incremented.
-+test_ecmp_plb_rehash()
-+{
-+	RET=0
-+	local port=$((PORT + 4))
-+
-+	# DCTCP is a restricted congestion control algorithm.  Add it to
-+	# tcp_allowed_congestion_control to mark it TCP_CONG_NON_RESTRICTED
-+	# so test namespaces can set it as their default.  This avoids
-+	# changing the host's default congestion control algorithm.
-+	# The write must be from the root namespace; writes from child
-+	# namespaces do not take effect.
-+	local saved_allowed
-+	saved_allowed=$(sysctl -n net.ipv4.tcp_allowed_congestion_control)
-+	if ! echo "$saved_allowed" | grep -qw dctcp; then
-+		local was_loaded
-+		was_loaded=$(grep -cw tcp_dctcp /proc/modules 2>/dev/null)
-+		modprobe tcp_dctcp 2>/dev/null
-+		# Unload only if we loaded it (absent before, present now).
-+		# Built-in modules never appear in /proc/modules.
-+		if [ "${was_loaded:-0}" -eq 0 ] &&
-+		   grep -qw tcp_dctcp /proc/modules 2>/dev/null; then
-+			defer modprobe -r tcp_dctcp 2>/dev/null
-+		fi
-+		if ! sysctl -qw net.ipv4.tcp_allowed_congestion_control="$saved_allowed dctcp"; then
-+			log_test_skip "Local ECMP PLB rehash: DCTCP not available"
-+			return "$ksft_skip"
-+		fi
-+		defer sysctl -qw \
-+			net.ipv4.tcp_allowed_congestion_control="$saved_allowed"
-+	fi
-+
-+	# Save NS1 sysctls before modifying them.
-+	local saved_ecn1 saved_cc1 saved_plb_enabled saved_plb_rounds
-+	local saved_plb_thresh saved_plb_suspend
-+	saved_ecn1=$(ip netns exec "$NS1" sysctl -n net.ipv4.tcp_ecn)
-+	saved_cc1=$(ip netns exec "$NS1" sysctl -n net.ipv4.tcp_congestion_control)
-+	saved_plb_enabled=$(ip netns exec "$NS1" sysctl -n net.ipv4.tcp_plb_enabled)
-+	saved_plb_rounds=$(ip netns exec "$NS1" sysctl -n net.ipv4.tcp_plb_rehash_rounds)
-+	saved_plb_thresh=$(ip netns exec "$NS1" sysctl -n net.ipv4.tcp_plb_cong_thresh)
-+	saved_plb_suspend=$(ip netns exec "$NS1" sysctl -n net.ipv4.tcp_plb_suspend_rto_sec)
-+
-+	# Enable ECN and DCTCP with PLB on the sender.
-+	ip netns exec "$NS1" sysctl -qw net.ipv4.tcp_ecn=1
-+	ip netns exec "$NS1" sysctl -qw net.ipv4.tcp_congestion_control=dctcp
-+	ip netns exec "$NS1" sysctl -qw net.ipv4.tcp_plb_enabled=1
-+	ip netns exec "$NS1" sysctl -qw net.ipv4.tcp_plb_rehash_rounds=3
-+	ip netns exec "$NS1" sysctl -qw net.ipv4.tcp_plb_cong_thresh=1
-+	ip netns exec "$NS1" sysctl -qw net.ipv4.tcp_plb_suspend_rto_sec=0
-+	defer ip netns exec "$NS1" sysctl -qw net.ipv4.tcp_ecn="$saved_ecn1"
-+	defer ip netns exec "$NS1" sysctl -qw net.ipv4.tcp_congestion_control="$saved_cc1"
-+	defer ip netns exec "$NS1" sysctl -qw net.ipv4.tcp_plb_enabled="$saved_plb_enabled"
-+	defer ip netns exec "$NS1" sysctl -qw net.ipv4.tcp_plb_rehash_rounds="$saved_plb_rounds"
-+	defer ip netns exec "$NS1" sysctl -qw net.ipv4.tcp_plb_cong_thresh="$saved_plb_thresh"
-+	defer ip netns exec "$NS1" sysctl -qw net.ipv4.tcp_plb_suspend_rto_sec="$saved_plb_suspend"
-+
-+	# DCTCP sets ECT on the SYN; the receiver must also use DCTCP
-+	# so that tcp_ca_needs_ecn(listen_sk) accepts the ECN
-+	# negotiation.
-+	local saved_ecn2 saved_cc2
-+	saved_ecn2=$(ip netns exec "$NS2" sysctl -n net.ipv4.tcp_ecn)
-+	saved_cc2=$(ip netns exec "$NS2" sysctl -n net.ipv4.tcp_congestion_control)
-+	ip netns exec "$NS2" sysctl -qw net.ipv4.tcp_ecn=1
-+	ip netns exec "$NS2" sysctl -qw net.ipv4.tcp_congestion_control=dctcp
-+	defer ip netns exec "$NS2" sysctl -qw net.ipv4.tcp_ecn="$saved_ecn2"
-+	defer ip netns exec "$NS2" sysctl -qw net.ipv4.tcp_congestion_control="$saved_cc2"
-+
-+	ip netns exec "$NS2" socat -u \
-+		"TCP6-LISTEN:$port,bind=[fd00:ff::2],reuseaddr" - >/dev/null &
-+	defer kill_process $!
-+
-+	wait_local_port_listen "$NS2" "$port" tcp
-+
-+	local base_tx0 base_tx1
-+	base_tx0=$(link_tx_packets_get "$NS1" veth0a)
-+	base_tx1=$(link_tx_packets_get "$NS1" veth1a)
-+
-+	ip netns exec "$NS1" timeout 90 socat -u \
-+		OPEN:/dev/zero \
-+		"TCP6:[fd00:ff::2]:$port,bind=[fd00:ff::1]" &>/dev/null &
-+	local client_pid=$!
-+	defer kill_process "$client_pid"
-+
-+	# Wait for data to start flowing before applying ECN marking.
-+	busywait "$BUSYWAIT_TIMEOUT" until_counter_is \
-+			">= $((base_tx0 + base_tx1 + 10))" \
-+		link_tx_packets_total "$NS1" > /dev/null
-+	check_err $? "no TX activity detected"
-+	if [ "$RET" -ne 0 ]; then
-+		log_test "Local ECMP PLB rehash: ECN-marked path"
-+		return
-+	fi
-+
-+	# Snapshot TX counters and rehash stats before ECN marking.
-+	local pre_ecn_tx0 pre_ecn_tx1
-+	pre_ecn_tx0=$(link_tx_packets_get "$NS1" veth0a)
-+	pre_ecn_tx1=$(link_tx_packets_get "$NS1" veth1a)
-+
-+	local plb_before rto_before
-+	plb_before=$(get_netstat_counter "$NS1" TCPPLBRehash)
-+	rto_before=$(get_netstat_counter "$NS1" TcpTimeoutRehash)
-+
-+	# CE-mark all data on both paths.  PLB detects sustained
-+	# congestion and rehashes, bouncing traffic between paths.
-+	mark_ecn "$NS1" veth0a
-+	defer unblock_tcp "$NS1" veth0a	# removes the marking rule
-+	mark_ecn "$NS1" veth1a
-+	defer unblock_tcp "$NS1" veth1a	# removes the marking rule
-+
-+	# Wait for meaningful data on both paths, proving PLB rehashed
-+	# the connection and traffic actually moved.  Require at least
-+	# 100 packets beyond the baseline to rule out stray control
-+	# packets (ND, etc.) satisfying the check.
-+	slowwait 60 dev_tx_packets_above \
-+		"$NS1" veth0a "$((pre_ecn_tx0 + 100))"
-+	check_err $? "no data on veth0a after ECN marking"
-+
-+	slowwait 60 dev_tx_packets_above \
-+		"$NS1" veth1a "$((pre_ecn_tx1 + 100))"
-+	check_err $? "no data on veth1a after ECN marking"
-+
-+	local plb_after rto_after
-+	plb_after=$(get_netstat_counter "$NS1" TCPPLBRehash)
-+	rto_after=$(get_netstat_counter "$NS1" TcpTimeoutRehash)
-+	if [ "$plb_after" -le "$plb_before" ]; then
-+		check_err 1 "TCPPLBRehash counter did not increment"
-+	fi
-+	if [ "$rto_after" -gt "$rto_before" ]; then
-+		check_err 1 "TcpTimeoutRehash incremented; rehash was RTO-driven, not PLB"
-+	fi
-+
-+	log_test "Local ECMP PLB rehash: ECN-marked path"
-+}
-+
-+# Verify that hash policy 1 (L3+L4 symmetric) preserves the ECMP path
-+# across rehash.  Policy 1 computes a deterministic hash from the
-+# 5-tuple, so mp_hash stays 0 and rt6_multipath_hash() always selects
-+# the same path regardless of txhash changes.
-+test_ecmp_hash_policy1_no_rehash()
-+{
-+	RET=0
-+	local port=$((PORT + 5))
-+
-+	local saved_policy
-+	saved_policy=$(ip netns exec "$NS1" sysctl -n \
-+		net.ipv6.fib_multipath_hash_policy)
-+	ip netns exec "$NS1" sysctl -qw net.ipv6.fib_multipath_hash_policy=1
-+	defer ip netns exec "$NS1" sysctl -qw \
-+		net.ipv6.fib_multipath_hash_policy="$saved_policy"
-+
-+	block_tcp "$NS1" veth0a
-+	defer unblock_tcp "$NS1" veth0a
-+	block_tcp "$NS1" veth1a
-+	defer unblock_tcp "$NS1" veth1a
-+
-+	ip netns exec "$NS2" socat \
-+		"TCP6-LISTEN:$port,bind=[fd00:ff::2],reuseaddr,fork" \
-+		EXEC:"echo POLICY1_OK" &
-+	defer kill_process $!
-+
-+	wait_local_port_listen "$NS2" "$port" tcp
-+
-+	local rehash_before
-+	rehash_before=$(get_netstat_counter "$NS1" TcpTimeoutRehash)
-+
-+	ip netns exec "$NS1" timeout 10 socat -u \
-+		"TCP6:[fd00:ff::2]:$port,bind=[fd00:ff::1],connect-timeout=8" \
-+		STDOUT >/dev/null 2>&1 &
-+	local client_pid=$!
-+	defer kill_process "$client_pid"
-+
-+	# With policy 1, the deterministic 5-tuple hash always selects
-+	# the same path.  Wait for multiple SYN retransmits (proving
-+	# rehash was attempted), then verify all SYNs landed on the
-+	# same interface.
-+	local rehash_after
-+	slowwait 8 until_counter_is ">= $((rehash_before + 3))" \
-+		get_netstat_counter "$NS1" TcpTimeoutRehash > /dev/null
-+	rehash_after=$(get_netstat_counter "$NS1" TcpTimeoutRehash)
-+	if [ "$rehash_after" -le "$rehash_before" ]; then
-+		check_err 1 "TcpTimeoutRehash counter did not increment"
-+	fi
-+
-+	local c0 c1
-+	c0=$(tc_filter_pkt_count "$NS1" veth0a)
-+	c1=$(tc_filter_pkt_count "$NS1" veth1a)
-+	if [ "${c0:-0}" -ge 1 ] && [ "${c1:-0}" -ge 1 ]; then
-+		check_err 1 "SYNs appeared on both paths despite policy 1"
-+	fi
-+	if [ "${c0:-0}" -eq 0 ] && [ "${c1:-0}" -eq 0 ]; then
-+		check_err 1 "no SYNs observed on either path"
-+	fi
-+
-+	log_test "Local ECMP policy 1: no path change on rehash"
-+}
-+
-+# Verify that mp_hash does not leak into the on-wire flowlabel.
-+# With auto_flowlabels=0, the wire flowlabel must be 0.  Install tc
-+# filters that pass TCP with flowlabel=0 but drop TCP with nonzero
-+# flowlabel, then establish a connection and transfer data.  If
-+# mp_hash leaked into fl6->flowlabel, the SYN or data packets would
-+# be dropped and the connection would fail.
-+test_ecmp_no_flowlabel_leak()
-+{
-+	RET=0
-+	local port=$((PORT + 6))
-+
-+	local saved_afl
-+	saved_afl=$(ip netns exec "$NS1" sysctl -n \
-+		net.ipv6.auto_flowlabels)
-+	ip netns exec "$NS1" sysctl -qw net.ipv6.auto_flowlabels=0
-+	defer ip netns exec "$NS1" sysctl -qw \
-+		net.ipv6.auto_flowlabels="$saved_afl"
-+
-+	# On both egress interfaces: pass TCP with flowlabel=0 (prio 1),
-+	# drop any remaining TCP (nonzero flowlabel, prio 2).  ICMPv6
-+	# matches neither filter and passes through normally.
-+	local dev
-+	for dev in veth0a veth1a; do
-+		ip netns exec "$NS1" tc qdisc add dev "$dev" \
-+			root handle 1: prio
-+		ip netns exec "$NS1" tc filter add dev "$dev" parent 1: \
-+			protocol ipv6 prio 1 u32 \
-+			match u32 0x00000000 0x000FFFFF at 0 \
-+			match u8 0x06 0xff at 6 \
-+			action ok
-+		ip netns exec "$NS1" tc filter add dev "$dev" parent 1: \
-+			protocol ipv6 prio 2 u32 \
-+			match u8 0x06 0xff at 6 \
-+			action drop
-+		defer unblock_tcp "$NS1" "$dev"
-+	done
-+
-+	ip netns exec "$NS2" socat \
-+		"TCP6-LISTEN:$port,bind=[fd00:ff::2],reuseaddr" \
-+		EXEC:"echo FLOWLABEL_OK" &
-+	defer kill_process $!
-+
-+	wait_local_port_listen "$NS2" "$port" tcp
-+
-+	local tmpfile
-+	tmpfile=$(mktemp)
-+	defer rm -f "$tmpfile"
-+
-+	ip netns exec "$NS1" socat -u \
-+		"TCP6:[fd00:ff::2]:$port,bind=[fd00:ff::1],connect-timeout=10" \
-+		STDOUT >"$tmpfile" 2>&1
-+
-+	local result
-+	result=$(cat "$tmpfile" 2>/dev/null)
-+	if [[ "$result" != *"FLOWLABEL_OK"* ]]; then
-+		check_err 1 "connection failed: mp_hash may have leaked into wire flowlabel"
-+	fi
-+
-+	log_test "No flowlabel leak with auto_flowlabels=0"
-+}
-+
-+# Helper: stream data, invalidate the cached dst by adding and
-+# removing a dummy route (bumps fib6_node sernum), then check that
-+# traffic stays on the same ECMP path.  Used by both the normal
-+# tcp_v6_connect and syncookie variants.
-+ecmp_dst_rebuild_check()
-+{
-+	local ns_client=$1; shift
-+	local port=$1; shift
-+	local rc=0
-+
-+	# Suppress __dst_negative_advice() during the test so that a
-+	# real TCP timeout cannot trigger an additional dst
-+	# invalidation via a different code path.
-+	local saved_retries1
-+	saved_retries1=$(ip netns exec "$ns_client" sysctl -n \
-+		net.ipv4.tcp_retries1)
-+	ip netns exec "$ns_client" sysctl -qw net.ipv4.tcp_retries1=255
-+
-+	local base0 base1
-+	base0=$(link_tx_packets_get "$ns_client" veth0a)
-+	base1=$(link_tx_packets_get "$ns_client" veth1a)
-+
-+	ip netns exec "$ns_client" timeout 15 socat -u \
-+		OPEN:/dev/zero \
-+		"TCP6:[fd00:ff::2]:$port,bind=[fd00:ff::1]" \
-+		&>/dev/null &
-+	local client_pid=$!
-+
-+	# Wait for enough packets to identify the active path.
-+	# Return 2 for setup failure (distinct from 1 = path changed).
-+	if ! busywait "$BUSYWAIT_TIMEOUT" until_counter_is \
-+			">= $((base0 + base1 + 50))" \
-+		link_tx_packets_total "$ns_client" > /dev/null; then
-+		ip netns exec "$ns_client" sysctl -qw \
-+			net.ipv4.tcp_retries1="$saved_retries1"
-+		kill "$client_pid" 2>/dev/null
-+		wait "$client_pid" 2>/dev/null
-+		return 2
-+	fi
-+
-+	local mid0 mid1 active_dev inactive_dev
-+	mid0=$(link_tx_packets_get "$ns_client" veth0a)
-+	mid1=$(link_tx_packets_get "$ns_client" veth1a)
-+	if [ $((mid0 - base0)) -ge $((mid1 - base1)) ]; then
-+		active_dev=veth0a; inactive_dev=veth1a
-+	else
-+		active_dev=veth1a; inactive_dev=veth0a
-+	fi
-+
-+	local active_before inactive_before
-+	active_before=$(link_tx_packets_get "$ns_client" "$active_dev")
-+	inactive_before=$(link_tx_packets_get "$ns_client" "$inactive_dev")
-+
-+	# Invalidate the cached dst by bumping the fib6_node sernum.
-+	# Adding and removing a high-metric dummy route achieves this
-+	# without touching the ECMP nexthops, avoiding a transient
-+	# single-nexthop state during multipath route replace.
-+	ip -n "$ns_client" -6 route add fd00:ff::2/128 dev lo metric 9999
-+	ip -n "$ns_client" -6 route del fd00:ff::2/128 dev lo metric 9999
-+
-+	# Wait for enough post-rebuild traffic to detect a path change.
-+	if ! busywait "$BUSYWAIT_TIMEOUT" until_counter_is \
-+			">= $((active_before + inactive_before + 50))" \
-+		link_tx_packets_total "$ns_client" > /dev/null; then
-+		ip netns exec "$ns_client" sysctl -qw \
-+			net.ipv4.tcp_retries1="$saved_retries1"
-+		kill "$client_pid" 2>/dev/null
-+		wait "$client_pid" 2>/dev/null
-+		return 2
-+	fi
-+
-+	local active_after inactive_after
-+	active_after=$(link_tx_packets_get "$ns_client" "$active_dev")
-+	inactive_after=$(link_tx_packets_get "$ns_client" "$inactive_dev")
-+
-+	local active_delta=$((active_after - active_before))
-+	local inactive_delta=$((inactive_after - inactive_before))
-+
-+	if [ "$inactive_delta" -gt "$active_delta" ]; then
-+		rc=1
-+	fi
-+
-+	ip netns exec "$ns_client" sysctl -qw \
-+		net.ipv4.tcp_retries1="$saved_retries1"
-+	kill "$client_pid" 2>/dev/null
-+	wait "$client_pid" 2>/dev/null
-+	return "$rc"
-+}
-+
-+# Run ecmp_dst_rebuild_check for ECMP_REBUILD_ROUNDS rounds, each with
-+# a fresh server and connection.  With a correct kernel the path is
-+# deterministic (same txhash always selects the same ECMP nexthop),
-+# so any path change is a bug.  Multiple rounds catch a buggy kernel
-+# that picks a random path: each round has 50% chance of accidentally
-+# matching, so 10 rounds gives < 0.1% false-pass probability.
-+ecmp_dst_rebuild_loop()
-+{
-+	local base_port=$1; shift
-+	local label=$1; shift
-+	local path_changes=0
-+	local r
-+
-+	for r in $(seq 1 "$ECMP_REBUILD_ROUNDS"); do
-+		local port=$((base_port + r))
-+
-+		ip netns exec "$NS2" socat -u \
-+			"TCP6-LISTEN:$port,bind=[fd00:ff::2],reuseaddr" \
-+			- >/dev/null &
-+		local server_pid=$!
-+
-+		wait_local_port_listen "$NS2" "$port" tcp
-+
-+		local check_rc=0
-+		ecmp_dst_rebuild_check "$NS1" "$port" || check_rc=$?
-+
-+		kill "$server_pid" 2>/dev/null
-+		wait "$server_pid" 2>/dev/null
-+
-+		if [ "$check_rc" -eq 2 ]; then
-+			check_err 1 "no TX activity in round $r"
-+			break
-+		elif [ "$check_rc" -eq 1 ]; then
-+			path_changes=$((path_changes + 1))
-+		fi
-+	done
-+
-+	if [ "$path_changes" -gt 0 ]; then
-+		check_err 1 "$path_changes/$ECMP_REBUILD_ROUNDS changed path"
-+	fi
-+
-+	log_test "$label"
-+}
-+
-+# Verify that a dst invalidation does not cause the connection to
-+# switch ECMP paths.  With the fix, both the initial route lookup
-+# (tcp_v6_connect) and subsequent rebuilds (inet6_csk_route_socket)
-+# use sk_txhash >> 1, so the path is stable.
-+test_ecmp_dst_rebuild_consistency()
-+{
-+	RET=0
-+
-+	ecmp_dst_rebuild_loop "$((PORT + 7))" \
-+		"ECMP path stable after dst invalidation"
-+}
-+
-+# Same as above but with syncookies forced (tcp_syncookies=2), so the
-+# server creates the full socket via cookie_v6_check() instead of the
-+# normal three-way handshake path.
-+test_ecmp_dst_rebuild_syncookie_consistency()
-+{
-+	RET=0
-+
-+	local saved_syncookies
-+	saved_syncookies=$(ip netns exec "$NS2" sysctl -n \
-+		net.ipv4.tcp_syncookies)
-+	ip netns exec "$NS2" sysctl -qw net.ipv4.tcp_syncookies=2
-+	defer ip netns exec "$NS2" sysctl -qw \
-+		net.ipv4.tcp_syncookies="$saved_syncookies"
-+
-+	ecmp_dst_rebuild_loop "$((PORT + 27))" \
-+		"ECMP path stable after dst invalidation (syncookies)"
-+}
-+
-+# Verify that the server's SYN-ACK (sent from the request socket) and
-+# subsequent ACKs (sent from the full socket created in cookie_v6_check)
-+# use the same ECMP path.  With syncookies the request socket is freed
-+# after the SYN-ACK and a new one is created during cookie validation;
-+# this test catches the case where the two request sockets pick
-+# different ECMP paths due to independent txhash values.
-+# Count TCP packets on server egress without blocking them.
-+# Uses tc filters with "action ok" so packets are counted and passed.
-+count_tcp()
-+{
-+	local ns=$1; shift
-+	local dev=$1; shift
-+
-+	ip netns exec "$ns" tc qdisc add dev "$dev" root handle 1: prio
-+	ip netns exec "$ns" tc filter add dev "$dev" parent 1: \
-+		protocol ipv6 prio 1 u32 match u8 0x06 0xff at 6 action ok
-+}
-+
-+test_ecmp_syncookie_path_consistency()
-+{
-+	RET=0
-+
-+	local saved_syncookies
-+	saved_syncookies=$(ip netns exec "$NS2" sysctl -n \
-+		net.ipv4.tcp_syncookies)
-+	ip netns exec "$NS2" sysctl -qw net.ipv4.tcp_syncookies=2
-+	defer ip netns exec "$NS2" sysctl -qw \
-+		net.ipv4.tcp_syncookies="$saved_syncookies"
-+
-+	count_tcp "$NS2" veth0b
-+	defer unblock_tcp "$NS2" veth0b
-+	count_tcp "$NS2" veth1b
-+	defer unblock_tcp "$NS2" veth1b
-+
-+	local path_splits=0
-+	local r
-+
-+	for r in $(seq 1 "$ECMP_REBUILD_ROUNDS"); do
-+		local port=$((PORT + 47 + r))
-+
-+		ip netns exec "$NS2" socat -u \
-+			"TCP6-LISTEN:$port,bind=[fd00:ff::2],reuseaddr" \
-+			- >/dev/null &
-+		local server_pid=$!
-+
-+		wait_local_port_listen "$NS2" "$port" tcp
-+
-+		local srv_base0 srv_base1
-+		srv_base0=$(tc_filter_pkt_count "$NS2" veth0b)
-+		srv_base1=$(tc_filter_pkt_count "$NS2" veth1b)
-+
-+		ip netns exec "$NS1" timeout 5 socat -u \
-+			OPEN:/dev/zero \
-+			"TCP6:[fd00:ff::2]:$port,bind=[fd00:ff::1]" \
-+			&>/dev/null &
-+		local client_pid=$!
-+
-+		local cli_base
-+		cli_base=$(link_tx_packets_total "$NS1")
-+		if ! busywait "$BUSYWAIT_TIMEOUT" until_counter_is \
-+				">= $((cli_base + 200))" \
-+			link_tx_packets_total "$NS1" > /dev/null; then
-+			check_err 1 "no TX activity in round $r"
-+			kill "$client_pid" 2>/dev/null
-+			wait "$client_pid" 2>/dev/null
-+			kill "$server_pid" 2>/dev/null
-+			wait "$server_pid" 2>/dev/null
-+			break
-+		fi
-+
-+		local srv_tcp0 srv_tcp1
-+		srv_tcp0=$(tc_filter_pkt_count "$NS2" veth0b)
-+		srv_tcp1=$(tc_filter_pkt_count "$NS2" veth1b)
-+		local srv_delta0=$(( ${srv_tcp0:-0} - ${srv_base0:-0} ))
-+		local srv_delta1=$(( ${srv_tcp1:-0} - ${srv_base1:-0} ))
-+
-+		if [ "$srv_delta0" -gt 0 ] && [ "$srv_delta1" -gt 0 ]; then
-+			path_splits=$((path_splits + 1))
-+		fi
-+
-+		kill "$client_pid" 2>/dev/null
-+		wait "$client_pid" 2>/dev/null
-+		kill "$server_pid" 2>/dev/null
-+		wait "$server_pid" 2>/dev/null
-+	done
-+
-+	if [ "$path_splits" -gt 0 ]; then
-+		check_err 1 "$path_splits/$ECMP_REBUILD_ROUNDS had split server path"
-+	fi
-+
-+	log_test "Syncookie server ECMP path consistent"
-+}
-+
-+require_command socat
-+
-+trap 'defer_scopes_cleanup; cleanup_all_ns' EXIT
-+setup || exit $?
-+tests_run
-+exit "$EXIT_STATUS"
--- 
-2.53.0-Meta
-
+QU1EIEdlbmVyYWwNCg0KPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBKaW0g
+TWF0dHNvbiA8am1hdHRzb25AZ29vZ2xlLmNvbT4NCj4gU2VudDogVHVlc2RheSwgTWF5IDI2LCAy
+MDI2IDE6MzkgUE0NCj4gVG86IEthcGxhbiwgRGF2aWQgPERhdmlkLkthcGxhbkBhbWQuY29tPg0K
+PiBDYzogU2VhbiBDaHJpc3RvcGhlcnNvbiA8c2VhbmpjQGdvb2dsZS5jb20+OyBwYm9uemluaUBy
+ZWRoYXQuY29tOw0KPiB0Z2x4QGtlcm5lbC5vcmc7IG1pbmdvQHJlZGhhdC5jb207IGJwQGFsaWVu
+OC5kZTsNCj4gZGF2ZS5oYW5zZW5AbGludXguaW50ZWwuY29tOyB4ODZAa2VybmVsLm9yZzsgaHBh
+QHp5dG9yLmNvbTsNCj4gc2h1YWhAa2VybmVsLm9yZzsga3ZtQHZnZXIua2VybmVsLm9yZzsgbGlu
+dXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsgbGludXgtDQo+IGtzZWxmdGVzdEB2Z2VyLmtlcm5l
+bC5vcmc7IGN0cGVuY2VAZ29vZ2xlLmNvbQ0KPiBTdWJqZWN0OiBSZTogW1BBVENIIHYzIDMvNF0g
+S1ZNOiB4ODY6IFZpcnR1YWxpemUgQU1EIENQVUlEIGZhdWx0aW5nDQo+DQo+IENhdXRpb246IFRo
+aXMgbWVzc2FnZSBvcmlnaW5hdGVkIGZyb20gYW4gRXh0ZXJuYWwgU291cmNlLiBVc2UgcHJvcGVy
+IGNhdXRpb24NCj4gd2hlbiBvcGVuaW5nIGF0dGFjaG1lbnRzLCBjbGlja2luZyBsaW5rcywgb3Ig
+cmVzcG9uZGluZy4NCj4NCj4NCj4gT24gVGh1LCBNYXkgMTQsIDIwMjYgYXQgMTE6MTfigK9BTSBL
+YXBsYW4sIERhdmlkIDxEYXZpZC5LYXBsYW5AYW1kLmNvbT4NCj4gd3JvdGU6DQo+ID4NCj4gPiBU
+aGlzIGFwcGVhcnMgdG8gYmUgYSBidWcsIGFzIG1vc3Qgb3RoZXIgaW5zdHJ1Y3Rpb25zIChlLmcu
+IElOVlBDSUQpIHRoYXQgaGF2ZQ0KPiBDUEwgY2hlY2tzIGRvIHRoZSBDUEwgY2hlY2tzIGJlZm9y
+ZSB0aGUgVk1FWElUIGNoZWNrcy4gIEknbSBmb2xsb3dpbmcgdXAgb24NCj4gdGhpcyBpbnRlcm5h
+bGx5Li4uDQo+DQo+IERpZCB5b3UgbGVhcm4gYW55dGhpbmcgZnJvbSB0aGUgaW50ZXJuYWwgZm9s
+bG93LXVwPyBUaGUgZWxsaXBzaXMNCj4gc3VnZ2VzdHMsICJzdGF5IHR1bmVkLi4uIiA6KQ0KDQpJ
+dCBhcHBlYXJzIGl0IHdhcyBhIGRlbGliZXJhdGUgZGVjaXNpb24sIGR1ZSBpbiBwYXJ0IHRvIHRo
+ZSBmYWN0IHRoYXQgdGhlIHRyYWRpdGlvbmFsIGZsb3cgb2YgY2hlY2tpbmcgQ1BMIGV4Y2VwdGlv
+bnMgYmVmb3JlIGludGVyY2VwdHMgdHlwaWNhbGx5IGFwcGxpZXMgdG8gdXNpbmcgaW5zdHJ1Y3Rp
+b25zIGluIGFuIGlsbGVnYWwgd2F5LCBidXQgdGhlIHVzZXIgaXMgbm90IGRvaW5nIGFueXRoaW5n
+IGlsbGVnYWwgaGVyZSBieSBleGVjdXRpbmcgQ1BVSUQgd2hpY2ggaXMgbm9ybWFsbHkgYSBsZWdh
+bCBpbnN0cnVjdGlvbiBhdCBDUEwzLg0KDQpUaGF0IHNhaWQsIGNsZWFybHkgdGhlIGJlaGF2aW9y
+IGlzIGRpZmZlcmVudCBub3cgYmV0d2VlbiB0aGUgdmVuZG9ycywgaG93ZXZlciBhdCB0aGlzIHBv
+aW50IHRoZSBmZWVkYmFjayBJIGdvdCBpcyB0aGF0IG91ciBhcmNoaXRlY3RzIHdhbnQgdG8gc3Rp
+Y2sgd2l0aCB0aGUgZXhpc3RpbmcgYmVoYXZpb3IgdW5sZXNzIHRoZXJlIGlzIGEgc3Ryb25nIHJl
+YXNvbiB0aGF0IGl0IGlzIGEgcHJvYmxlbSBmb3IgU1cuDQoNCi0tRGF2aWQgS2FwbGFuDQo=
