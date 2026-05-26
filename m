@@ -1,113 +1,114 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E08F93F58CE;
-	Tue, 26 May 2026 13:26:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A7813F5BF5;
+	Tue, 26 May 2026 13:33:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779801966; cv=none; b=eg5MljHaJpj4RD0a64ZX1SJ7gNMxTzTNuupA8Bl9boOyw13KHMLAlaBq8xcO35NPY+BV+7kiIPsVCmoXXE/lVVt3AVBvUxuQHoic9m/F3hFMFS5E1Gj6mXWzGVdD60l3jCD4StZdv2xwA+ZRXY38xUjzzPTyHRP8FMMC5FPPBnc=
+	t=1779802412; cv=none; b=SSm3WoS9whxST7kRU6NtYHkvhVex/Set8Oql8vnuJLW5DzYBmi9MNTtL019wASDk2qooGtg1LJOh8aVVUtTBeLp3QG5phFNyKvMyMf7xddMZVtn8pbHSwGaEAg6NKGOoH2pdOt9IwJ6vraKHiqlQ4n/YhBwaQbTE+VsabiuOrIY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779801966; c=relaxed/simple;
-	bh=42BQf5cb0aa7ANVrL7TApWSiKbz/Y4tfFfyXq/jCX7s=;
+	s=arc-20240116; t=1779802412; c=relaxed/simple;
+	bh=073jW0xhpCx4z9nV9ue6UOj6C+GTpbjBLZEW7NjzsCE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=THuiAoBO3FIL+8c3oD31BXojgWptORyWlFZhwsgP48c55GR0/QodHAm2vo1W/Ww2jQscEWHAFJj0NXOR+7mhac/HaR9t/1tyFy9lw4O2POlGbcHiE/U1i2Hg6/kFWqxzm4FBY0tJlESmcln5iebMXRGcq/0OWayKW54NacR8eRg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TITtatTj; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=V/3QDkQ3nx4H3OgEG1VMswAsrkpezpE+0WQsW+PwBOF42HMf0nGfTl+z2XrnLbJ3/v3vlQ6q6V4vaGHHawa2PUS7JO/RdeptWqTi9pe0jOXYYxAgAa4G+PjaD3PAdDYp990gv7VcXV8Geb7FVes+tcxY0MffCH2fnkHWnKA+eMU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IJdXqJ/O; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TITtatTj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 793F71F000E9;
-	Tue, 26 May 2026 13:25:59 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IJdXqJ/O"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C33F21F000E9;
+	Tue, 26 May 2026 13:33:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779801963;
-	bh=F1H6PxWdK7ElO8sXwbyLzjpAZlZnOUADTxmFnZZJISI=;
+	s=k20260515; t=1779802410;
+	bh=6jAOS0/EwvvAsAZOUxgHfwKPnBOOkFHmitJou6/DGm0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=TITtatTjeuXKHP3vxhkMEUcUKI7aQF+KQAkDyIgK0iTk1YtqaWlWAc/NduBPKYfWd
-	 BYW65ooqwULFumubeML0s9CcVKhQhpv2s8C7oUbhV8rJyac8kfYLoPiODnjdRE+lHp
-	 PKTeqF/mQc5XZ/bIJd/1eNRUWf6eqa9qn7kmpoCxlqOOg5QLSgqziQLKkPsHiFNyBZ
-	 +oHX5/MU89S30gtshdh+SRGe292Rl4cGaKO+xtSkF9ucMVDKcYaJW3Gy3pwh/oTJ8m
-	 c/FdR9OPiamccYfUrulbWfvS1VaYCglE8LB09DUrqfmsi4f8/Ie/o3sAE3TMiB4zoD
-	 rP31HXqWZpJmA==
-Date: Tue, 26 May 2026 14:25:56 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Mark Rutland <mark.rutland@arm.com>
-Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	Oliver Upton <oupton@kernel.org>, Dave Martin <Dave.Martin@arm.com>,
-	Fuad Tabba <tabba@google.com>, Ben Horgan <ben.horgan@arm.com>,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Peter Maydell <peter.maydell@linaro.org>,
-	Eric Auger <eric.auger@redhat.com>
-Subject: Re: [PATCH v10 02/30] arm64/fpsimd: Update FA64 and ZT0 enables when
- loading SME state
-Message-ID: <d8074c6b-9bc9-496e-8a74-94ac18ce9a55@sirena.org.uk>
-References: <20260306-kvm-arm64-sme-v10-0-43f7683a0fb7@kernel.org>
- <20260306-kvm-arm64-sme-v10-2-43f7683a0fb7@kernel.org>
- <ahWWqU51Zffmhlo5@J2N7QTR9R3>
+	b=IJdXqJ/OztdUKhdnt0gLGbIvLEpUPwej3tFhKIDpQw61hr3H1/peeCesxk8MmYrsp
+	 KqLVT/2wVO8En0vC5kHzx0QCBOXGNWInvzaxUyZwbHe8tkcM4oYB0MD45GTch5R+FE
+	 KUdNx2Gl9BQJE53dgCh9tNwv7kx6ABm8CNO8BcxX7dIViod50yPBIkMeZ9V4EOtoCV
+	 qoLPNPeK//aKaCNBCZo6zYeR/gTZILe07Ld0kSekYXnbhtto5tS8Y4S89gwd/W7ZSh
+	 qn5JBBj9WIrbT0Ut11YBtYuGisVtvBBRnHchDLrIF00eFQ4Ky3EPny0cj9f+kB4qSH
+	 bgnZLkwoHpAug==
+Date: Tue, 26 May 2026 14:33:24 +0100
+From: Lorenzo Stoakes <ljs@kernel.org>
+To: Chris Gellermann <christian.gellermann@codasip.com>
+Cc: brauner@kernel.org, shuah@kernel.org, akpm@linux-foundation.org, 
+	david@kernel.org, liam@infradead.org, vbabka@kernel.org, rppt@kernel.org, 
+	surenb@google.com, mhocko@suse.com, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH] selftest: Fix UB of getline due to missing var init
+Message-ID: <ahWNRKCzGykpYE0h@lucifer>
+References: <20260526113848.530105-1-christian.gellermann@codasip.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="H7xcdA+9c3FyZG2q"
-Content-Disposition: inline
-In-Reply-To: <ahWWqU51Zffmhlo5@J2N7QTR9R3>
-X-Cookie: You are fairminded, just and loving.
-
-
---H7xcdA+9c3FyZG2q
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20260526113848.530105-1-christian.gellermann@codasip.com>
 
-On Tue, May 26, 2026 at 01:48:41PM +0100, Mark Rutland wrote:
-> On Fri, Mar 06, 2026 at 05:00:54PM +0000, Mark Brown wrote:
+On Tue, May 26, 2026 at 01:38:48PM +0200, Chris Gellermann wrote:
+> Clone3_set_tid uses getline(&line, &len, f) in a loop to read the
+> child's process status. The code expects that getline allocates the
+> buffer for the line on the first loop iteration. For this, glibc[1]
+> requires char *line to be set to NULL:
+>
+> > ssize_t getline(char **restrict lineptr, ...)
+> > If *lineptr is set to NULL before the call, then getline() will
+> > allocate a buffer for storing the line.
+>
+> However, char *line is only declared, leading to an undefined
+> initialization value. Fix this by properly initializing it to NULL.
+>
+> Same issue fixed in mlock-random-test.
+>
+> [1] https://man7.org/linux/man-pages/man3/getline.3.html
+>
+> Fixes: 41585bbeeef9 ("selftests: add tests for clone3() with *set_tid")
+> Fixes: 26b4224d9961 ("selftests: expanding more mlock selftest")
 
-> > We provide a helper which does the configuration as part of a
-> > read/modify/write operation along with the configuration of the task VL,
-> > then update the floating point state load and SME access trap to use it.
+You'll need separate commits for each I think? That'd at least make life
+easier. You can send them as a series.
 
-> > +		if (fa64)					\
-> > +			__new |= SMCR_ELx_FA64;			\
-> > +		if (zt0)					\
-> > +			__new |= SMCR_ELx_EZT0;			\
+> Signed-off-by: Chris Gellermann <christian.gellermann@codasip.com>
 
-> I'd strongly prefer that we make it the caller's responsiblity to track
-> all the bits within SMCR, rather than requiring each caller to pass a
-> bag of booleans.
+> ---
+>  tools/testing/selftests/clone3/clone3_set_tid.c | 2 +-
+>  tools/testing/selftests/mm/mlock-random-test.c  | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/testing/selftests/clone3/clone3_set_tid.c b/tools/testing/selftests/clone3/clone3_set_tid.c
+> index 5c944aee6b41..485efa7c9eed 100644
+> --- a/tools/testing/selftests/clone3/clone3_set_tid.c
+> +++ b/tools/testing/selftests/clone3/clone3_set_tid.c
+> @@ -141,7 +141,7 @@ int main(int argc, char *argv[])
+>  {
+>  	FILE *f;
+>  	char buf;
+> -	char *line;
+> +	char *line = NULL;
 
-I was explicitly going for the opposite of that in order to make it
-harder for someone implementing a future extension to miss a place where
-an update is required, having the callers independently constructing the
-register values feels like it's asking for trouble.
+>  	int status;
+>  	int ret = -1;
+>  	size_t len = 0;
+> diff --git a/tools/testing/selftests/mm/mlock-random-test.c b/tools/testing/selftests/mm/mlock-random-test.c
+> index 9d349c151360..16294bc7dae6 100644
+> --- a/tools/testing/selftests/mm/mlock-random-test.c
+> +++ b/tools/testing/selftests/mm/mlock-random-test.c
+> @@ -84,7 +84,7 @@ int get_proc_locked_vm_size(void)
+>  int get_proc_page_size(unsigned long addr)
+>  {
+>  	FILE *smaps;
+> -	char *line;
+> +	char *line = NULL;
 
-> 	unsigned long __task_smcr(const struct task_struct *tsk)
-> 	{
-> 		unsigned long vq = sve_vq_from_vl(task_get_sme_vl(tsk));
-> 		unsigned long smcr = vq - 1;
+Strange this didn't result in noticeable bugs but maybe perceived as flakes
+or such?
 
-I agree that's a better pattern for the main kernel - we could also do
-something similar with a task_set_smcr() which wraps the explicitly
-specifed version.  That would I think avoid most of the issue you're
-seeing?
+>  	unsigned long mmupage_size = 0;
+>  	size_t size;
+>
+> --
+> 2.47.3
+>
 
---H7xcdA+9c3FyZG2q
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmoVn2QACgkQJNaLcl1U
-h9B0uAf9FsOQ191IjRxjDWRTIzKuXKL2RhEm/vJESCmoiliG05She/LfLMIqhDji
-Q/cC/kYbmSE3xPCIIztZVByWhLSAIjMP1qWJ8W3yjzVVb22SlVdR5LgX7Ul7v2hz
-VT9uQ1cHmCbdotaBfkRiVvlege2YZwhAYTA5zCvqN+4yL2CWGjB4260gU2yh+jXJ
-pwK0TpvHk5jC3X3JLLtW9B9YzzcmWKbkwe1wQCsRvG9K8HHdXJzLHn30t5o7NSsY
-nr3laBeKco7QBfqsrXfyQhpPahS34qLzpYrf41C3ZjLxt2nBIr/lGGN1Fs4owBdt
-Kh2RXpL5IcSeFr8jyQ2A4InBCsw8kw==
-=vL5s
------END PGP SIGNATURE-----
-
---H7xcdA+9c3FyZG2q--
+Cheers, Lorenzo
