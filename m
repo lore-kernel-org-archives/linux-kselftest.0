@@ -1,144 +1,141 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E8133FD14D;
-	Tue, 26 May 2026 14:20:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A05B3FF1AB;
+	Tue, 26 May 2026 14:29:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779805261; cv=none; b=nAugqjE+HqBQXnKKN+NfdOegq33p8OXQH06bgD7vorWREHRNfO8u7MZiqzT2flHgBQ8S4mvjGiZffLFjfT1GgX9/eFsaJ0NLTdNr0YsutrNDbcwWx5zyNJC9Ef0AQJy9sOh1r08SBfZGVWg/Xgz/UGfqeW+wAJxuea5AJ9ADYhE=
+	t=1779805787; cv=none; b=AUc5MNpjfYJLd9hFWghdGyk54Ry0pxtYN4CLMwfXQ56mLdFKOSrU81ME70q3qMDpc3R5RwvbJh3BTNo3iCIxb486dS3kJQtsuWKYQX24pIUocgxs0k2Kgij5ULalyfjHg1VI+P4azaIuZ9Q2FADLWEH9eduU3FU5Ih79+n1TcIw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779805261; c=relaxed/simple;
-	bh=oKeqOBlOW8Be2H98W+ENHlID/l7YbOJiPsGt4yqgS+M=;
+	s=arc-20240116; t=1779805787; c=relaxed/simple;
+	bh=01QZ3Oc+k3R391wthpsoqAJ4A4j9P7bKR8UG9T3xXXo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=losB1KSP1AmemhVCFZfQrtcEd1/QAuR3SMXdi1+OZsGN2o4CKE5xmz2Cep5jv/mYeqJg6AHT4ajXdjD57UOHeqPgQAfVvELWl5VdlvtknCre00+lgOpzEWKrpFq1D0esAFHwKdRiMz1GWJvG10WBICHq0tOj7B3Ncb988rCkG3M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=F14nbYYP; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=GKJewTHD96pW9neIFhdR92mobyLjNtcTYZSdmdGQSY4pAFXP+l6pBsQmpd+IrTIYWkFYWa7ivmjlQfpSYYArIvLuCz0VhDrYBERngxlUpUGDjDnGHMfBZSvHryFg6PXuS7RLoq0VXEfqQfrlCVtI1n3yuvcdOLkUbtfQXa4tymA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EzsWz/vl; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="F14nbYYP"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7A69B169C;
-	Tue, 26 May 2026 07:20:53 -0700 (PDT)
-Received: from J2N7QTR9R3 (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D58D33F7B4;
-	Tue, 26 May 2026 07:20:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1779805258; bh=oKeqOBlOW8Be2H98W+ENHlID/l7YbOJiPsGt4yqgS+M=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=F14nbYYPYB2LN8COACBdN+twjwuAYIeYGM2J8IXo78QE4ABzj31FapUzVEAbdR68/
-	 vp89J59Lbka/24fD+2rVIhuJpEKbpJxb6Or8JQDk7VkpomwibdibkkRcNe87C/CqSW
-	 6o4tvmW4yUVy510uaZnZh+LaHy1N+NcMfmkLyvic=
-Date: Tue, 26 May 2026 15:20:52 +0100
-From: Mark Rutland <mark.rutland@arm.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	Oliver Upton <oupton@kernel.org>, Dave Martin <Dave.Martin@arm.com>,
-	Fuad Tabba <tabba@google.com>, Ben Horgan <ben.horgan@arm.com>,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EzsWz/vl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76D741F000E9;
+	Tue, 26 May 2026 14:29:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779805785;
+	bh=GSX/o3tGKH8prhZQKAGSjMb4rUlV/Z55PxckME59z4U=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=EzsWz/vlNWJNW+NMA+grSpGmEAlzW1dMhzljG4DDGQOP42grQ3eEtdXE+yg/tu0nJ
+	 e2v3LjX3uBcVx2JXnnVCBQNmCVQI7uLKvZgmd7Nxrd6B+jZBk85BEhu6L9hr4AWOhN
+	 DmVXv8lzXWvF/wiKNTotwFW8EP7Ra+ZA35C0sV8SMVdKBC9j5ntx1+ijctMD6qQYF9
+	 3qUB2mKBtFBdFI85Oqtg3YjaU1gaQYfEjc1plhfWPXZUkEMZg3O4ZfPw+YIn8ZesD3
+	 5FkFfGfwX6V0F/bhrOcnpOSpiV6QT7FJQ6li+thvYCff9a1ujIZiIrS55YWerf7k2a
+	 Zd7p7PpJbHEkA==
+Date: Tue, 26 May 2026 10:29:44 -0400
+From: Sasha Levin <sashal@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Song Liu <song@kernel.org>, linux-kernel@vger.kernel.org,
 	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Peter Maydell <peter.maydell@linaro.org>,
-	Eric Auger <eric.auger@redhat.com>
-Subject: Re: [PATCH v10 02/30] arm64/fpsimd: Update FA64 and ZT0 enables when
- loading SME state
-Message-ID: <ahWsRNb9uZhf46hG@J2N7QTR9R3>
-References: <20260306-kvm-arm64-sme-v10-0-43f7683a0fb7@kernel.org>
- <20260306-kvm-arm64-sme-v10-2-43f7683a0fb7@kernel.org>
- <ahWWqU51Zffmhlo5@J2N7QTR9R3>
- <d8074c6b-9bc9-496e-8a74-94ac18ce9a55@sirena.org.uk>
+	bpf@vger.kernel.org, live-patching@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Joshua Peisach <jpeisach@ubuntu.com>,
+	Florian Weimer <fw@deneb.enyo.de>, Breno Leitao <leitao@debian.org>,
+	Anthony Iliopoulos <ailiop@suse.com>,
+	Michal Hocko <mhocko@suse.com>, Jiri Olsa <jolsa@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Christian Brauner <brauner@kernel.org>,
+	KP Singh <kpsingh@kernel.org>
+Subject: Re: [PATCH v3] killswitch: add per-function short-circuit mitigation
+ primitive
+Message-ID: <ahWuWBrZlFsAVZo2@laps>
+References: <CAPhsuW4x8shWon8Moi5VgCq2n4E2EzaaauZ2HHpy42Rp1Y-J-g@mail.gmail.com>
+ <agsVDqdALBoHEHlv@laps>
+ <CAPhsuW44UX663Au=WwHz8MVwnQgLkjxOqpJSCKxNiv3=RpZvqw@mail.gmail.com>
+ <b342c38b-7323-4b72-a239-8a574d6bc36b@iogearbox.net>
+ <agzAwjKhOhuANz_P@laps>
+ <3dd6d852-18fb-4c64-a1ae-0d79ef7c061f@iogearbox.net>
+ <ag8lOe6dAOgnWmsQ@laps>
+ <CAPhsuW7sbt5B+ZeGW8O2JMJ0ELPU-vhZFNvbB+0Q8XhZg6pKYw@mail.gmail.com>
+ <ahGufsGqmLZZQL4M@laps>
+ <e7464a71-7e97-44a9-a5eb-831306fb5019@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Disposition: inline
-In-Reply-To: <d8074c6b-9bc9-496e-8a74-94ac18ce9a55@sirena.org.uk>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <e7464a71-7e97-44a9-a5eb-831306fb5019@iogearbox.net>
 
-On Tue, May 26, 2026 at 02:25:56PM +0100, Mark Brown wrote:
-> On Tue, May 26, 2026 at 01:48:41PM +0100, Mark Rutland wrote:
-> > On Fri, Mar 06, 2026 at 05:00:54PM +0000, Mark Brown wrote:
-> 
-> > > We provide a helper which does the configuration as part of a
-> > > read/modify/write operation along with the configuration of the task VL,
-> > > then update the floating point state load and SME access trap to use it.
-> 
-> > > +		if (fa64)					\
-> > > +			__new |= SMCR_ELx_FA64;			\
-> > > +		if (zt0)					\
-> > > +			__new |= SMCR_ELx_EZT0;			\
-> 
-> > I'd strongly prefer that we make it the caller's responsiblity to track
-> > all the bits within SMCR, rather than requiring each caller to pass a
-> > bag of booleans.
-> 
-> I was explicitly going for the opposite of that in order to make it
-> harder for someone implementing a future extension to miss a place where
-> an update is required, having the callers independently constructing the
-> register values feels like it's asking for trouble.
+On Tue, May 26, 2026 at 03:10:45PM +0200, Daniel Borkmann wrote:
+>On 5/23/26 3:41 PM, Sasha Levin wrote:
+>>On Thu, May 21, 2026 at 11:16:46AM -0700, Song Liu wrote:
+>>>On Thu, May 21, 2026 at 8:31 AM Sasha Levin <sashal@kernel.org> wrote:
+>>>>On Thu, May 21, 2026 at 11:11:16AM +0200, Daniel Borkmann wrote:
+>>>>>On 5/19/26 9:57 PM, Sasha Levin wrote:
+>>>>>>Sure, this would also work. How do you see this happening? Can we let a certain
+>>>>>>user/pid/etc disable the allowlist if they choose to?
+>>>>>
+>>>>>I don't think we should, given then we're back to square one where root
+>>>>>or some other user would be able to just override/bypass an LSM.
+>>>>
+>>>>killswitch already disables itself when lockdown is active. We can easily
+>>>>disable it too when one of the LSMs that cares about this is active.
+>>>>
+>>>>>[...]
+>>>>>>How do you see this working with the allowlist?
+>>>>>
+>>>>>We should look at the underlying areas where most of the CVE-like fixes
+>>>>>took place (these days should be more easily doable given Claude and friends)
+>>>>>and based on that either extend ALLOW_ERROR_INJECTION() or (better) create
+>>>>>new hooks which BPF LSM can consume where you can then have a policy to reject
+>>>>>requests and tighten the attack surface. For example, the AF_ALG stuff you
+>>>>
+>>>>So we could grow the LSM tentacles deeper into the kernel, and we can see where
+>>>>current CVEs are happening, which I suspect is the darker corners of the kernel
+>>>>(old unmaintained, rarely used code), but this definitely won't stay the case,
+>>>>right? Newer and better LLMs will discover issues elsewhere, and once the low
+>>>>hanging fruits are picked off of the current target subsystems, researchers
+>>>>will move elsewhere. We will be dooming ourselves to an endless cat and mouse
+>>>>game where we go add LSM hooks after some big security issue goes public.
+>>>
+>>>Do we really need to add new LSM hooks for recent CVEs?
+>>>
+>>>The LSM hooks are designed to cover all the user-kernel interfaces. Then
+>>>with properly designed policies, we should have coverage for potential CVEs.
+>>>Existing LSM hooks may not be perfect, but we can improve the hooks,
+>>>potentially with the help of smart LLMs, so that these hooks can cover
+>>>future security issues. In some cases, we will need new policies, but I don't
+>>>think new hooks will be needed for most of these CVEs.
+>>
+>>Running a quick LLM evaluation on the last ~70 severe CVEs, it seems that about
+>>40% is doable with the current hooks.
+>
+>
+>Interesting, do you have some more details in which areas your eval sees new
+>lsm hooks missing?
 
-I didn't say callers should *construct* the value independently, and I
-showed how to centralize the construction in a __task_smcr() function.
+The recent ones I saw fall into about 5 buckets:
 
-I think callers should pass the entire value around rather than a
-collection of discrete booleans: constructing a collection of discrete
-booleans is functionally equivalent to construction the entire value,
-and we can more easily manage the construction and passing of the entire
-value.
+1. Kernel-thread / workqueue context: LSM hooks fire but current is a worker,
+not the actual attacker. Lots of ksmbd, ceph-msgr, and async cleanup races land
+here.
 
-> > 	unsigned long __task_smcr(const struct task_struct *tsk)
-> > 	{
-> > 		unsigned long vq = sve_vq_from_vl(task_get_sme_vl(tsk));
-> > 		unsigned long smcr = vq - 1;
-> 
-> I agree that's a better pattern for the main kernel - we could also do
-> something similar with a task_set_smcr() which wraps the explicitly
-> specifed version.
+2. Driver: pci_driver.probe, notifier_call_chain, ib_* RDMA callbacks, ndo_*,
+bus dispatch tables all sit below any LSM hook. Big chunk of mlx5, RDMA, USB,
+i3c, DRM bugs.
 
-I don't think a task_set_smcr() function would gain much vs
-using sysreg_cond_update_s(). I expect that we'd use the SMCR value as
-the source of truth (and hence that would need to be generated outside
-of task_set_smcr()), at which point either task_set_smcr() would be a
-thin wrapper that just hides the register name, or it would generate the
-value independently and obscure the connection.
+3. Per-packet softirq RX: security_sock_rcv_skb only fires inside
+sk_filter_trim_cap, which UDP encap_rcv bypasses and L2/bridge protocols never
+reach. Covers Bluetooth softirq, bond, IPv6 softirq, TCP-MD5/AO timing leaks,
+etc.
 
-I expect that what we should have eventually is something like:
+4. Netfilter: config path is well-gated via security_netlink_send, but
+per-match callbacks, set GC, and flowtable cleanup have nothing. That's where
+most of the recent netfilter CVEs actually fire.
 
-	unsigned long smcr = __task_smcr(task);
+5. Crypto subsystem + io_uring per-opcode: crypto/ has zero LSM hooks.
 
-	sysreg_cond_update_s(SYS_SMCR_EL1, smcr);
-
-	if (za) {
-		__sme load_za(sme_state);
-		if (smcr & SMCR_ELx_EZT0)
-			__sme_load_zt(sme_state);
-	}
-
-... or:
-
-	const unsigned long smcr = __task_smcr(task);
-	const bool zt0 = smcr & SMCR_ELx_EZT0;
-
-	sysreg_cond_update_s(SYS_SMCR_EL1, smcr);
-
-	if (za) {
-		__sme load_za(sme_state);
-		if (zt0)
-			__sme_load_zt(sme_state);
-	}
-
-... where in either case it's clear at the function level that the value
-programmed into SMCR matches what we're using for boolean decisions, and
-it's clear at a higher level that functions are consistent given
-consistent usage of __task_smcr().
-
-> That would I think avoid most of the issue you're seeing?
-
-I'm not sure what you mean here.
-
-I don't think we need task_set_smcr(), and I'd prefer what I suggested.
-
-Mark.
+-- 
+Thanks,
+Sasha
