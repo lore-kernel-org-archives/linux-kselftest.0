@@ -1,54 +1,54 @@
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34A833E7BA0
-	for <linux-kselftest@vger.kernel.org>; Tue, 26 May 2026 23:54:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF68A3DD50C
+	for <linux-kselftest@vger.kernel.org>; Tue, 26 May 2026 23:54:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779839705; cv=none; b=cXkbV0H5xhFc5Burv9RkvTXjKWEpjYQOeTwmS7iO6jq7S4d/4E4Vdtst1OcP6LrlFyk7YoJt8nM0kInWR6XrFKOLzxwVJmYi3YQD6UiVMuzFiindPS2jaRKEwU9mna861GCGY7rWHugeydz6OoODBOloO09lqJrBZqgj0v6spUU=
+	t=1779839710; cv=none; b=JcVvmsubqFb1yX+MMHTfEg3nvLMhLwWcDT+QE2nUSYbAccrdiJJ1QoIozhI8yPlv/g3mpTdc/GUG6bU47F/E9TAiGbX7VU8qekpVuCHCfVcr1mDwi4x2f6NMkT/yComShPCWBbNbL1pGrdWVkSDbSipjQLFiu7MP7uMs3gGm/1E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779839705; c=relaxed/simple;
-	bh=VQh9ycIq/sQw5zQ6MT1xTqUvZGeINgII+2poi1PGM74=;
+	s=arc-20240116; t=1779839710; c=relaxed/simple;
+	bh=Wj9df1szS9/kT1rzr/EtPxra8c14r7DuBU6rpuFO448=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=QXGc7+mzLqBzPGMDYFgehHBcuKpX5QAxqpMNXA//43PewVBC+7LMYvJirKeQXKnB4A2xCoiuAvhiHjcFbWz2a3k8zRJ/Qt6f/BJSMvRLK44wRJgPfZCyAN1nmZ7gi89ShsSByXyfhyMP3aIOEJDYlTB/3X4zg0zH0wlckwsWigM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jrhilke.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=h8UJUi0R; arc=none smtp.client-ip=209.85.214.201
+	 To:Cc:Content-Type; b=fxwDtDJsMElTgb7/Yql2+CTH4O32wQFx/Vx25o8FBMVSh1OYNRYMAOmzJoJjwnkIMSCH0xoeoGX+Yd+s9h+1q59Wt5MICwKGUejUjIn1M/gpyb+Iy02rvidppHP2p27AJKfXDQ53nVrvsumqS1AZh9xMmu3FbAQpkSxL5+4EKmI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jrhilke.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=d72+VKWo; arc=none smtp.client-ip=209.85.215.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jrhilke.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="h8UJUi0R"
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2b99eb06178so11931435ad.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 May 2026 16:54:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="d72+VKWo"
+Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-c82c935e048so6904875a12.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 26 May 2026 16:54:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1779839687; x=1780444487; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1779839693; x=1780444493; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YppsghfGH6D340aJjNneB6gAMUs9CtxpsUi5k9VDxXY=;
-        b=h8UJUi0Ru/muUsLXmZ+orfDCx2wEXYvLVgp5F4nH78rTraYscxeGuDc/LLYhMdeoQm
-         Zxz2cpxZx50XqqqJc53lEUTQFlUhrOFaAF/Vz/jdvAPVRZqRMocHkZroUOKTy0B5X2b4
-         xSZn7g2jniog3TAfTSy9/t4q+06yv7ZeA5DXfQPGgTFA/Hc9oP8hJjukCS0CtRTN68rp
-         o10anZL8TvMsvwvRYLwqoqaFjLxLguC8pnG7law1JtZZNep9MMzx7rAkC2ID/XPdXv3i
-         RgGQTAzRROugsP2wTY1A3F5I0pdTOpygImG2RuF8om63tZ6VQ4GewK/7Ngf5FSGDnhLF
-         8JUw==
+        bh=Q1NrFBJ11gsgCePhIlkwlcLBiFQeOIBZUOncUF8BLrg=;
+        b=d72+VKWoqqaTzjkFoeo5+yUz7k/YzQJp7M/WDRZf1IdrzWyaGXrBgRITY/oZ21/01L
+         9RgmRTWNJKLyEP09TWz0xDYoUWvibqHOadyE2WsTwWxULa0kjpHWMIWHnp3h84+x3qd4
+         9Ae+OMwBy9mmapo/odgbygdK8oc6Gb4C9QSP87bjpX5lxaiRVPs8FyQ7Rv1chnCYOW6o
+         2NPDP7Y04FBLEhgLvH1aBCGvn1Hplf69bblFGvn/oPHhmjwyEbb5JaLpHziQxeteo/fw
+         hQ6lUEHWWjqKW+mKyf4Ay8B4sv6KdXcULIf1hu1plLLFJPQL11mHxIWptpgltXoPJi+r
+         Tqgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779839687; x=1780444487;
+        d=1e100.net; s=20251104; t=1779839693; x=1780444493;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YppsghfGH6D340aJjNneB6gAMUs9CtxpsUi5k9VDxXY=;
-        b=JUSg8v7psqoAY5Jgv2UE67p4hrDvo3fmA1tbAFpNR6/NaMCVXeOUa2FsKjGQZf/jy6
-         OK+Vziwg/aBbSJaqhMKDlyAvtbRQZ7Khr+85wfdc9zCHJ8SR26TxDC1SOdT9Nb2oa69S
-         G8kQvVr3y3PIQzSlrCj9P0U/SpGe+FkWga9oMvTf7VIvUiXHrtm3ot/NwmoiDTiFJibI
-         +JDHbzuJvuk8TLAnMAuJv/tR7OOjAdk7i7NoWQzGOKThWcrPIJeuHQvxjVwQPfMk5bju
-         3JL6ReW1XqP29siC77kmZ4F4fJ+iq7O6+8M9t+8i6BGPcI96SnRhsqbcIAoGPulgSOwG
-         YMLQ==
-X-Forwarded-Encrypted: i=1; AFNElJ8zpZ49QBN2TviOjVYtiFhigh31OZ3Z9JSyYs4A+nY692LeLOpnIGAPdxJ0W6udHRUve3WAR46fKEu37zQWWL8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwgRPTGc1LVmTiPjXjezQtf+u56k1yhMLVMfSHPncI+qcan8uQS
-	cnlBuMnGoRVihMXqxGuUfD1/GwWdWnHSkiSF/zYDmCrK9Tz45lEnHZT07LIuEG1/fJu9xO8yGGn
-	/xU6sCV94
-X-Received: from pgbbk8.prod.google.com ([2002:a05:6a02:288:b0:c82:cd84:79d])
- (user=jrhilke job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:41c9:b0:2bd:5ab:af95
- with SMTP id d9443c01a7336-2beb023584amr217494565ad.0.1779839686876; Tue, 26
- May 2026 16:54:46 -0700 (PDT)
-Date: Tue, 26 May 2026 23:54:12 +0000
+        bh=Q1NrFBJ11gsgCePhIlkwlcLBiFQeOIBZUOncUF8BLrg=;
+        b=WkVBkGr1NuXdf1ExGz4oGzvBydnb2hTTK2Q39w3kFgTvkuE82pDh0iMXAAigL/dZWc
+         qCQfnYiqlD8JOPm0k7aJiGO9HDia83hF2XJ1/ThMDmaP6AP+NgdXZDzitxTcPB/UHS28
+         lPTx+xz1R1yKwIMiequzmSk8K6jR/809KYz2BR3J9oUCXTGcDZst0OL4SZamjIIaoWVT
+         /JvLXsZqfigosQEEuqcmtbsfstliW7T6VgO/GSCX10OHzBkyCO4WVGEtHxSD/iJfp+MR
+         6k3/nk5/ec9tbEHkOVIds9eCAyhrYsF3+y0rD3qj7hAI0465Nmvr4cnPm9C5iG+ClJqU
+         v6mg==
+X-Forwarded-Encrypted: i=1; AFNElJ+0fGS7BOjHNWSEOShH9egNVBYdy23q07JR5E4CupuTnJLBXc7lFAavqAlNF1VdzCf+GcIQIYGiZPZti3cNPYw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyV78L+guwg+Rn9ALKlBCVyh9vMPDeuIuNrEv8gZqSsbkbht91x
+	wFAkT+zBDRkqsg77iwbpfC4bnwI9gsMb2+p+SkYAqC2xN8p/fHNkiHagXRFaXmdGVjVW0NpgB8G
+	xnxokrPUU
+X-Received: from plpl14.prod.google.com ([2002:a17:903:3dce:b0:2bd:9574:2958])
+ (user=jrhilke job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:11c9:b0:2b0:506b:e6f8
+ with SMTP id d9443c01a7336-2bea20a2d54mr221168225ad.5.1779839692555; Tue, 26
+ May 2026 16:54:52 -0700 (PDT)
+Date: Tue, 26 May 2026 23:54:15 +0000
 In-Reply-To: <20260526235417.2058313-1-jrhilke@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -58,9 +58,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260526235417.2058313-1-jrhilke@google.com>
 X-Mailer: git-send-email 2.54.0.794.g4f17f83d09-goog
-Message-ID: <20260526235417.2058313-6-jrhilke@google.com>
-Subject: [PATCH v2 05/10] selftests/vfio: igb: Extend memcpy completion
- timeout for line-rate hardware
+Message-ID: <20260526235417.2058313-9-jrhilke@google.com>
+Subject: [PATCH v2 08/10] selftests/vfio: igb: Factor hardware programming
+ into igb_hw_init()
 From: Josh Hilke <jrhilke@google.com>
 To: Alex Williamson <alex@shazbot.org>, David Matlack <dmatlack@google.com>
 Cc: Vipin Sharma <vipinsh@google.com>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
@@ -70,59 +70,113 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: Alex Williamson <alex.williamson@nvidia.com>
 
-The submitted driver waits at most 1 ms (100 * 10 us) for the last RX
-descriptor to be written back.  QEMU's emulated loopback is synchronous:
-by the time igb_memcpy_wait() runs, the receive descriptors are already
-written back.  Real 82576 hardware processes the descriptor ring at
-line rate.
+Split the device register programming out of igb_init() into a new
+igb_hw_init() helper so that the same sequence can be re-run after a
+VFIO_DEVICE_RESET to restore the registers that CTRL.RST clears.  No
+functional change for the initial path.
 
-max_memcpy_size is (RING_SIZE - 1) * IGB_MAX_CHUNK_SIZE, approximately
-4 MB, split into 4095 1 KB frames.  At 1 Gb/s line rate (~125 MB/s),
-4 MB takes ~32 ms on the wire, plus per-frame preamble, SFD,
-inter-frame gap and FCS overhead (~3%) and descriptor fetch/writeback
-latency.  The 1 ms cap times out long before any valid transfer can
-complete.
+igb_init() now performs the one-shot setup: region size assertion, BAR
+mapping, CTRL.RST + IMC mask-all to put the device into a known state,
+and vfio_pci_msix_enable() to set up the kernel-side IRQ trigger.
+igb_hw_init() does the rest: ring pointer setup and IOVA calc,
+CTRL_EXT, PCI bus master, GCR, PHY loopback, descriptor rings, RCTL,
+TCTL, GPIE/EIAC/EIAM/EIMS/IVAR, and driver-state initialization.
 
-Wait up to ~200 ms (200 iterations * 1 ms) for descriptor writeback
-before returning -ETIMEDOUT.  ~6x the line-rate floor leaves comfortable
-headroom for host scheduling jitter while keeping the intentional
-invalid-DMA tests (mix_and_match) so they recover quickly on real faults.
+vfio_pci_msix_enable() moves from after RCTL/TCTL to before all
+device-side programming.  Its only side effects are the VFIO kernel
+IRQ trigger setup and the PCI MSI-X capability bits in config space;
+neither has any ordering dependency on the 82576 device register
+writes performed in igb_hw_init().  Performing it once in igb_init()
+keeps igb_hw_init() reusable from the reset recovery path (which uses
+vfio_pci_irq_reenable() to re-arm the existing trigger).
 
 Assisted-by: Claude:claude-opus-4-7
 Signed-off-by: Alex Williamson <alex.williamson@nvidia.com>
 ---
- .../testing/selftests/vfio/lib/drivers/igb/igb.c  | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+ .../selftests/vfio/lib/drivers/igb/igb.c      | 44 +++++++++++++------
+ 1 file changed, 31 insertions(+), 13 deletions(-)
 
 diff --git a/tools/testing/selftests/vfio/lib/drivers/igb/igb.c b/tools/testing/selftests/vfio/lib/drivers/igb/igb.c
-index a8f2072b6820..879c21780f5b 100644
+index 89537f8345d1..1ac0a32523ea 100644
 --- a/tools/testing/selftests/vfio/lib/drivers/igb/igb.c
 +++ b/tools/testing/selftests/vfio/lib/drivers/igb/igb.c
-@@ -403,11 +403,22 @@ static int igb_memcpy_wait(struct vfio_pci_device *device)
- 	prev_tail = (igb->rx_tail + RING_SIZE - 1) % RING_SIZE;
- 	rx = &igb->rx_ring[prev_tail];
+@@ -175,7 +175,13 @@ static int igb_probe(struct vfio_pci_device *device)
+ 	return 0;
+ }
  
--	retries = 100;
+-static void igb_init(struct vfio_pci_device *device)
++/*
++ * Program the device into a usable state.  Split out of igb_init() so it
++ * can be reused after a device reset to re-program the registers that
++ * CTRL.RST clears.  Expects bar0 to be mapped and MSI-X already enabled
++ * via VFIO.
++ */
++static void igb_hw_init(struct vfio_pci_device *device)
+ {
+ 	struct igb *igb = to_igb_state(device);
+ 	u64 iova_tx, iova_rx;
+@@ -183,19 +189,10 @@ static void igb_init(struct vfio_pci_device *device)
+ 	u16 cmd_reg;
+ 	int retries;
+ 
+-	VFIO_ASSERT_GE(device->driver.region.size, sizeof(struct igb));
+ 
+-	/* Set up rings and calculate IOVAs */
+-	igb->bar0 = device->bars[0].vaddr;
+ 
+ 	iova_tx = to_iova(device, igb->tx_ring);
+ 	iova_rx = to_iova(device, igb->rx_ring);
+-
+-	/* Reset device and disable all interrupts */
+-	igb_write32(igb, IGB_CTRL, igb_read32(igb, IGB_CTRL) | IGB_CTRL_RST);
+-	usleep(20000);
+-	igb_write32(igb, IGB_IMC, 0xFFFFFFFF);
+-
+ 	/* Signal that the driver is loaded */
+ 	ctrl = igb_read32(igb, IGB_CTRL_EXT);
+ 	ctrl |= IGB_CTRL_EXT_DRV_LOAD;
+@@ -280,9 +277,6 @@ static void igb_init(struct vfio_pci_device *device)
+ 	igb_write32(igb, IGB_RCTL, rctl);
+ 	igb_write32(igb, IGB_TCTL, IGB_TCTL_EN);
+ 
+-	/* Enable MSI-X with 1 vector for the test */
+-	vfio_pci_msix_enable(device, MSIX_VECTOR, 1);
+-
+ 	/*
+ 	 * Program MSI-X interrupt routing per 82576 datasheet:
+ 	 *
+@@ -322,7 +316,31 @@ static void igb_init(struct vfio_pci_device *device)
+ 	device->driver.msi = MSIX_VECTOR;
+ }
+ 
++static void igb_init(struct vfio_pci_device *device)
++{
++	struct igb *igb = to_igb_state(device);
++
++	VFIO_ASSERT_GE(device->driver.region.size, sizeof(struct igb));
++
++	igb->bar0 = device->bars[0].vaddr;
++
++	/* Reset device and disable all interrupts. */
++	igb_write32(igb, IGB_CTRL, igb_read32(igb, IGB_CTRL) | IGB_CTRL_RST);
++	usleep(20000);
++	igb_write32(igb, IGB_IMC, 0xFFFFFFFF);
++
 +	/*
-+	 * Real 82576 hardware processes the descriptor ring at line rate.
-+	 * max_memcpy_size = (RING_SIZE - 1) * IGB_MAX_CHUNK_SIZE ~= 4 MB,
-+	 * split into 4095 1 KB frames.  At 1 Gb/s (~125 MB/s) the worst
-+	 * valid memcpy takes ~32 ms on the wire, plus per-frame preamble,
-+	 * SFD, IFG and FCS overhead (~3%) and descriptor fetch/writeback
-+	 * latency.  Wait up to ~200 ms before declaring the device hung;
-+	 * ~6x the line-rate floor leaves comfortable headroom for host
-+	 * scheduling jitter while keeping the intentional invalid-DMA
-+	 * tests bounded.
++	 * Enable MSI-X via VFIO before device-side register programming.
++	 * vfio_pci_msix_enable() only touches the VFIO IRQ machinery and the
++	 * PCI MSI-X capability via config space; it has no ordering
++	 * dependency on the device-side writes performed by igb_hw_init().
++	 * Placing it here keeps igb_hw_init() reusable from the reset
++	 * recovery path (which calls vfio_pci_irq_reenable() instead).
 +	 */
-+	retries = 200;
- 	while (retries-- > 0) {
- 		if (rx->wb.status_error & 1)
- 			break;
--		usleep(10);
-+		usleep(1000);
- 	}
++	vfio_pci_msix_enable(device, MSIX_VECTOR, 1);
  
- 	igb_irq_clear(igb);
++	igb_hw_init(device);
++}
+ static void igb_remove(struct vfio_pci_device *device)
+ {
+ 	struct igb *igb = to_igb_state(device);
 -- 
 2.54.0.794.g4f17f83d09-goog
 
