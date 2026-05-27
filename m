@@ -1,174 +1,148 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-dy1-f171.google.com (mail-dy1-f171.google.com [74.125.82.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFAD92F1FFC
-	for <linux-kselftest@vger.kernel.org>; Wed, 27 May 2026 05:26:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5260526E6F3
+	for <linux-kselftest@vger.kernel.org>; Wed, 27 May 2026 05:53:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779859591; cv=none; b=TFp/wD9ZF2Fho93a5kQUI6jQ4fRRai3IQZqFmArzedIoMbj/xMlVSdpZEQyaa82VowOR/LLIJlRhSUcAWXoyRLygGMISxFJ47cBW/zVfF8ps9mbUoWiGirJy4V4tTi+xHYo9X72mmUDNap0NY79RdR2tWHS01scNvbSUMVRL1JU=
+	t=1779861182; cv=none; b=KagsQlH9FddytyTU4VViqHbU5R2f79xauU+xqDhoaaty6pAxmcqO2fsNqtZfczsgG0ydaUPiPz1WRlUduToa6HHrot2iDnBcFkMhpZnY/Wmeyesce+1kHvaTT0VJQybrGBUKe6bnmkYAKIZ9WvwkvbOmgvYUW/BFRTZ9RKllIqI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779859591; c=relaxed/simple;
-	bh=0PEmYmUKjjy+UjaIZHA18BYu7wgf2SlU3T4ccIn/5tM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PkNGQUj+bOxlpUk7KkM+WG/89HKdFVkttaySCzNw4MX4mICMT2mtZh5qGhWSsoYNrviGrhbb4JI6Wn/5cbQSon3HeZxIO3ka+AEMd50YKtsrmN9SIGfEQzx4LwwQ4iW0Omoy+VosnAXK1z+dfp4fobuZpb7U+dndhlEucYD11hM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JXfxSldS; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1779861182; c=relaxed/simple;
+	bh=XMtEi6pQMVKyTapHo789HRwMSCgn+nOLhMBYdeAM8y0=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=u3H/xUtjnKVF67+9j95hc5gn9KtzbS1iuCU9wxcNIG0BFVBxADReAas4j3Go7bQ+8Yms5P7Zc6atsKypYPijcAXsZfHTuS+nkgrkKNxguPlQs+deMtMoLGBEM/POqLYLetK06xM/RDtZP+UYEWXKk58cop1gasOF5sYRU7l9LnQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=VXAnVGsv; arc=none smtp.client-ip=74.125.82.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JXfxSldS"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2ba17c8cfacso118922405ad.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 May 2026 22:26:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="VXAnVGsv"
+Received: by mail-dy1-f171.google.com with SMTP id 5a478bee46e88-3045c195251so4690167eec.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 26 May 2026 22:53:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779859589; x=1780464389; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fBBzQO9B+rRmoWSlMXPb0NICXzc+ZzEXtJVCUCazNEY=;
-        b=JXfxSldSe+XRZ+/FxugXDjGuKun1YPRuizDBClEyd5DO5OppHFm/CFs+Dyj9n1niXt
-         2OdnEDH9eRKx6t7Sbmql0wRpL/1Df218S4NSRo3F7Xb28pTjNrla/8agXLkOBdR66P8D
-         fiT/iA+dKUw0YFCa9d9Ee4ninG8hiRYZlzsPUbFkreo7vEmZ7EIG0hLOZdAMOm8nzvM3
-         WXVeWT1fJIISzuQg5oHzP+arXwarspJTZM7UbV6BdtomGcT+gdoGuxCqBnR1Q6SROBon
-         mrWw9ga1fLOK7X7z91M8FNVgZFWMe+iHGLd693wyMZxCJ2LktMgGhyLfX1Tc4UPPCFVU
-         shIw==
+        d=sifive.com; s=google; t=1779861180; x=1780465980; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mv8BPWe9vjiV7eG5zhSWNmlAlLaLwUax0FP44WMjBLo=;
+        b=VXAnVGsvG8BUl0wEjzNSTEQRi6tNzlYVNIZEm3o/FF0/7j/O3+1p0C49KhZLkeQ2xr
+         hkZ+J5GgRNpEO1nDj5I7pkJ/j8xWVpXYqiPbSBlkjAzdz7+5tMDZLXY+6FQU5VhD23oG
+         0UCXA8sQ4tEgkAqfdjDELPU2kGLmFeij4EybLSyMKvHJNGic0JvnZENTEzURM4kIQiBl
+         xOraXGFXdS3FG2gH+qtFWoAwtegKXGwy/TISXzbRtmlKY2fnUxwoKbyTJO6uuhuR+9uT
+         k6aT1uENL3H8tftrsi0tR58FU9Je4Nd/xcn/zgvYafFvt2XffLns40DgOzJkzZmxx7QA
+         tCBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779859589; x=1780464389;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=fBBzQO9B+rRmoWSlMXPb0NICXzc+ZzEXtJVCUCazNEY=;
-        b=PaFGy9tdiXlhW/RGMdKwkN+m/7YorQSTp/lxiCdmAjSUCTZUtnV2bV8ll71wYaMWdh
-         bvszLN64HsJXnDI96BjSPzWIDO5vcEntD4aYUzdb7Er8pyqkrdrI6EekdRbvf/tM8Ncx
-         FBibBfuw8oAb8+c489wmIdS5s1oKNWeiW+mpg2C/hP/J3BE6Kh/OrVWRc8u8IEBBWvuA
-         hVlBeuyyQGwlEzPKrjiUeuLwwgKSx7FldHq4vHDxvD/k8dfwTkLzb10jbnMzYbpU6yLH
-         tj+rDbYvKB6LinQEuH1RQZY+PgPZb5BB3dfU7Jr7uvANbRuERqCeNPA9u9xt44PNLVBH
-         BaeQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/3t/b489U++m0TDL4q4S280N19ygazRGph7oH0kRY+rpvNSG+11wf9l/n3HwaEhbfRNZSgLf9poHmPB6xXFuM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/WqX8Llo9RkPcnRMT+ym7i0qAJAFGa3pBG3Q+D3qRJ0K3eGS7
-	y+8BFryazeu14BexwD9S8F7XlTht/PJqFEv3zfqpxbyM51Qeni73At9y
-X-Gm-Gg: Acq92OEtQDYd932MoKU0FcCMKWDiIsKjlkFxVXWhqDGE98nETN5fsXb3Ajixx9SQmXE
-	txtBGxGvQ9EmWJeUQYp2jQAZozGcg3nz6TqUU1lgWR7ZuSzozGgp0rdtnDuoeywnXWoGAp8+98L
-	9/wiTxs3e4u3n388Is2RJ6mNrIo8X1yuo75LGgpL1Py+ESGHZmq1g9LmaR+aAumoZdMjbJJ43Rp
-	4CdYtR3m2sfaPE1d6/X4VrWrJhYl7IUDuofCydZtmX0atoPoHRDbecPeXmmsyB46D5ToIyv+2Vk
-	hH9EhifI0SHFeRN/2L7HPcN/ixcv2XXVH88f32cSj6fJX1rokquukjnFmUOl/LUQfNPaiuHgU34
-	O676PtYKmX0j2mty28+l7RZtoZKOHzPZKDnumqiLwU6Me94srTUvCYW+vrUb8aKYOZuvNj/5rAv
-	gna2Rtd0yho2tfxrlr50S375NTA1OgSZhu+EAj
-X-Received: by 2002:a17:903:1a2f:b0:2ba:7749:f89a with SMTP id d9443c01a7336-2beb035c500mr227120585ad.11.1779859589210;
-        Tue, 26 May 2026 22:26:29 -0700 (PDT)
-Received: from localhost.localdomain ([220.83.29.221])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2beb58e4fcfsm144891465ad.71.2026.05.26.22.26.25
+        d=1e100.net; s=20251104; t=1779861180; x=1780465980;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mv8BPWe9vjiV7eG5zhSWNmlAlLaLwUax0FP44WMjBLo=;
+        b=HRRSuvnazG8lqSvSIcsiMGCI6aJ9lngNeBXz0yjOcyXm5Au+qlGSy1AHDTCcVmD7ku
+         ytS/+tJ8L+nncEjpuEsdD+R4rrCLtfknoSKcbNlRvOBCO3xo+AaKGfbJUeZ2r5fljtWy
+         TGP4X6agmZT/WWS1yL619Uj1mtg1t/Qk9VXfBVmqiXiQs7Ko2yvjI+Nye8JWrBfwreF2
+         zhvHAJBl91jnoretNEAh4gYt8kLqsswb0EPw5nrMpwKwXLZgPm85PXIbym9GRyy4owEf
+         5GE5g3m/lDAWKNQeAPBaVg4Dc3zDhU/KeQn6gUVnDlBdAdYZNLcjFajROzoYf7v78RfO
+         fIxg==
+X-Forwarded-Encrypted: i=1; AFNElJ9tNomPTzan+shqGsZtmAFwJ6bqFxW6G2hr02ZQv02ec/IycUBfcuO7bos1tb5eo7x3faP98vS1UZnV8Oz6x6E=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzTuFDWJGaK1NIWr4wtxtqW3KlbGyh1zgrKb+sHHc8wIl5/ywU+
+	OW5pKsfRkPowod98gyJ6vAjmyMI/kMROmVbDSWTwQzxGOBxvJi9g4gGiNXpj9gf1K/Y=
+X-Gm-Gg: Acq92OGYJPw8wlE+j2wT78w5AecDsptd4oDg1QpeGT2tnI06Co9RLKGD/Xk+ktaJiv3
+	9eMBYOMxLvuLsUPLptTSA2xChVYRUK+GPvI+xPRHZDSeNiEBxn+bkAMMOTbUS6N2ahGkV5xRuIM
+	gmTRGZ4H/x9I764JkiWmyeb+dnYfzIGcwsb90mvvmI/z5BxKhaX+0asNzCjb3xFgnJ9AZ9Gn3kz
+	l+UL4e+VHR0GsBKQJHM6JzVq6J2FgWJLj80+ogu0dhqruUPwVfsj0kNHwT7lrU4xLWU1Ick5yoi
+	n3ZYmGP66H1er4G6LPc3wANHlEZRnMdNZ6ZD704XxZx5qaqNNwYwHhLzWGG4FvDO5jTF5gX9U3X
+	kDpYmgsxg251h2HUciwb9yUPC5s4vIganaDtpleBlkcCZAPT3iIeFBHEbr/nhzXpmMiYPWEXrjx
+	DGrqE/L1Br/Vs9jK8RA46Uh4Uu+FMCVxaYlpXLuUJS7mrVX7A6/PrKo1jzx9LP42Gg
+X-Received: by 2002:a05:7300:ef82:b0:304:b93a:511a with SMTP id 5a478bee46e88-304b93a555emr669520eec.28.1779861180303;
+        Tue, 26 May 2026 22:53:00 -0700 (PDT)
+Received: from sw07.internal.sifive.com ([4.53.31.132])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-304be0851c9sm613202eec.23.2026.05.26.22.52.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 May 2026 22:26:27 -0700 (PDT)
-From: Taegu Ha <hataegu0826@gmail.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>
-Cc: Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Taegu Ha <hataegu0826@gmail.com>
-Subject: [PATCH bpf 1/1] bpf: reject overlarge global subprog argument sizes
-Date: Wed, 27 May 2026 14:25:39 +0900
-Message-ID: <20260527052539.3388700-2-hataegu0826@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260527052539.3388700-1-hataegu0826@gmail.com>
-References: <20260527052539.3388700-1-hataegu0826@gmail.com>
+        Tue, 26 May 2026 22:52:59 -0700 (PDT)
+From: Yong-Xuan Wang <yongxuan.wang@sifive.com>
+Subject: [PATCH v2 0/3] KVM: riscv: add check_supported_reg() into
+ get-reg-list test
+Date: Tue, 26 May 2026 22:52:37 -0700
+Message-Id: <20260526-kvm-get_reg_list-v2-v2-0-7940a401454a@sifive.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAKWGFmoC/yXM0QrCMAxA0V8ZeTYwIwvMXxEZs0u7TJ3S1CKM/
+ bt1ezwP9y5gElUMztUCUbKavuYCOlTgxn4OgjoUA9XEdUOM9/zEIKmLErqHWsJM6Ft/4paPvWM
+ HpXxH8frdrpfrbvvcJnHpv4J1/QGZJyUldwAAAA==
+X-Change-ID: 20260526-kvm-get_reg_list-v2-f9f36961ac6c
+To: Anup Patel <anup@brainfault.org>, Atish Patra <atish.patra@linux.dev>, 
+ Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
+ Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
+ =?utf-8?q?Cl=C3=A9ment_L=C3=A9ger?= <cleger@rivosinc.com>, 
+ Andrew Jones <ajones@ventanamicro.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: greentime.hu@sifive.com, vincent.chen@sifive.com, zong.li@sifive.com, 
+ kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, 
+ linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Yong-Xuan Wang <yongxuan.wang@sifive.com>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1779861178; l=2226;
+ i=yongxuan.wang@sifive.com; s=20260424; h=from:subject:message-id;
+ bh=XMtEi6pQMVKyTapHo789HRwMSCgn+nOLhMBYdeAM8y0=;
+ b=q9jHCAP+KqxybvqnOUcDDbHtKLZ/DyBnHqPDhCTTTHt2gInjOqDb2P9hcABX5fwKgdtCTdq6y
+ lOkHTWnkjR3D/UYR6VGzjLbXF8gXsDCK4xZKDIJx7fbtiqW5wHBuyAj
+X-Developer-Key: i=yongxuan.wang@sifive.com; a=ed25519;
+ pk=+8NCHB1ZJvZthQAmZspOAaqjo+/snaW8mFSiDx45HxY=
 
-Global subprogram argument checking derives generic pointer sizes from BTF
-and passes the resolved size to check_mem_reg() as a u32. The access-size
-validation path then uses a signed int, and stack pointers negate the value
-before calling check_helper_mem_access().
+This series addresses a bug in the SBI FWFT (Firmware Features) extension
+where features could remain exposed to guests after their dependent ISA
+extensions are disabled at runtime, and improves the related selftest
+infrastructure.
 
-A BTF type such as int[0x3fffffff] resolves to 0xfffffffc bytes. On a stack
-pointer, (int)mem_size becomes -4 and the negation validates only four
-bytes. A caller can therefore pass a four-byte stack slot while the callee
-is verified with a nearly 4GiB memory argument, allowing accesses outside
-the caller object.
+The bug (patch 1) occurred because FWFT feature support was cached at vCPU
+initialization time. When userspace subsequently disabled ISA extensions
+via KVM ONE_REG, the cached support status was not updated, leading to
+stale feature exposure.
 
-This was confirmed with a non-executing raw-BTF reproducer. On a
-vulnerable kernel, the verifier accepted a program where the caller passed
-a four-byte stack slot, while the callee argument was described by BTF as
-int[0x3fffffff]. The verifier log showed:
+The selftest improvements (patches 2-3) enhance the get-reg-list test by
+refactoring the extension sublist infrastructure and splitting FWFT
+feature testing into separate, properly-gated sublists.
 
-  R1=mem_or_null(id=1,sz=0xfffffffc)
-  r0 = *(u32 *)(r1 +4)
-
-The program was only loaded to prove verifier acceptance and was not
-attached or executed.
-
-Reject sizes that cannot be represented by the signed verifier access-size
-API before any conversion. Cast the non-stack case after the bound check to
-make the conversion explicit, and add a verifier regression test for the
-oversized BTF argument.
-
-Fixes: 2cb27158adb3 ("bpf: poison dead stack slots")
-Signed-off-by: Taegu Ha <hataegu0826@gmail.com>
 ---
- kernel/bpf/verifier.c                           |  7 ++++++-
- .../bpf/progs/verifier_global_subprogs.c        | 17 +++++++++++++++++
- 2 files changed, 23 insertions(+), 1 deletion(-)
+Changes in v2:
+- Fix FWFT stale feature exposure by removing static 'supported' field
+- Refactor get-reg-list test to use unified extension sublist macros
+- Split FWFT testing into per-feature sublists with runtime checks
+(Andrew)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 7fb88e1cd7c4..1007f204a1f5 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -7107,6 +7107,11 @@ static int check_mem_reg(struct bpf_verifier_env *env, struct bpf_reg_state *reg
- 	struct bpf_reg_state saved_reg;
- 	int err;
- 
-+	if (mem_size > S32_MAX) {
-+		verbose(env, "R%d memory size %u is too large\n", regno, mem_size);
-+		return -EACCES;
-+	}
-+
- 	if (bpf_register_is_null(reg))
- 		return 0;
- 
-@@ -7119,7 +7124,7 @@ static int check_mem_reg(struct bpf_verifier_env *env, struct bpf_reg_state *reg
- 		mark_ptr_not_null_reg(reg);
- 	}
- 
--	int size = base_type(reg->type) == PTR_TO_STACK ? -(int)mem_size : mem_size;
-+	int size = base_type(reg->type) == PTR_TO_STACK ? -(int)mem_size : (int)mem_size;
- 
- 	err = check_helper_mem_access(env, regno, size, BPF_READ, true, NULL);
- 	err = err ?: check_helper_mem_access(env, regno, size, BPF_WRITE, true, NULL);
-diff --git a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
-index 1e08aff7532e..0ff8f85b4d46 100644
---- a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
-@@ -151,6 +151,23 @@ int anon_user_mem_valid(void *ctx)
- 	return subprog_user_anon_mem(&t);
- }
- 
-+__noinline __weak int subprog_user_anon_mem_huge(int (*p)[0x3fffffff])
-+{
-+	return p ? (*p)[1] : 0;
-+}
-+
-+SEC("?tracepoint")
-+__failure __log_level(2)
-+__msg("R1 memory size 4294967292 is too large")
-+int anon_user_mem_huge_size_invalid(void *ctx)
-+{
-+	int (*p)[0x3fffffff];
-+	int tiny = 42;
-+
-+	p = (void *)&tiny;
-+	return subprog_user_anon_mem_huge(p) + tiny;
-+}
-+
- __noinline __weak int subprog_nonnull_ptr_good(int *p1 __arg_nonnull, int *p2 __arg_nonnull)
- {
- 	return (*p1) * (*p2); /* good, no need for NULL checks */
--- 
-2.43.0
+To: Anup Patel <anup@brainfault.org>
+To: Atish Patra <atish.patra@linux.dev>
+To: Paul Walmsley <pjw@kernel.org>
+To: Palmer Dabbelt <palmer@dabbelt.com>
+To: Albert Ou <aou@eecs.berkeley.edu>
+To: Alexandre Ghiti <alex@ghiti.fr>
+To: Clément Léger <cleger@rivosinc.com>
+To: Andrew Jones <ajones@ventanamicro.com>
+To: Paolo Bonzini <pbonzini@redhat.com>
+To: Shuah Khan <shuah@kernel.org>
+Cc: greentime.hu@sifive.com
+Cc: vincent.chen@sifive.com
+Cc: zong.li@sifive.com
+Cc: kvm@vger.kernel.org
+Cc: kvm-riscv@lists.infradead.org
+Cc: linux-riscv@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+
+---
+Yong-Xuan Wang (3):
+      KVM: RISC-V: SBI FWFT: Fix stale feature exposure after runtime extension changes
+      KVM: riscv: selftests: Refactor ISA and SBI extension sublist macros
+      KVM: riscv: selftests: Split SBI FWFT into separate feature-specific sublists
+
+ arch/riscv/include/asm/kvm_vcpu_sbi_fwft.h       |   1 -
+ arch/riscv/kvm/vcpu_sbi_fwft.c                   |  17 ++-
+ tools/testing/selftests/kvm/riscv/get-reg-list.c | 172 +++++++++++++++--------
+ 3 files changed, 119 insertions(+), 71 deletions(-)
+---
+base-commit: c7832534a8160276cccb9a8cc8cafb5614c579d0
+change-id: 20260526-kvm-get_reg_list-v2-f9f36961ac6c
+
