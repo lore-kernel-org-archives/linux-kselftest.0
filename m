@@ -1,82 +1,92 @@
-Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E88C47B42C
-	for <linux-kselftest@vger.kernel.org>; Wed, 27 May 2026 18:14:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A92FF47CC74
+	for <linux-kselftest@vger.kernel.org>; Wed, 27 May 2026 18:14:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779905681; cv=none; b=nBfdmtVgT7oC2l7GNRlAvQVkNSJrgJk8o/nF1yUUbk5jDBxcVtSBhzJse58MJMWuPUveokZmOdvobU1Qn4X0MPrjdxEYwE558kesFvqJ8GHcZkCDsS1l8OIVTAXWmWC1gg4X5j9hD8ialBVw9GmCgcVLw9TDlCLIlqUjAAru3N8=
+	t=1779905685; cv=none; b=krXr0LX4mq0/vtTg0CVyfnPE69DTxR/afSt3WRYfSM5fbO2VZxSQ0XaUrZmb1mOh5/doBAzrWfM8XaXRRMOBXIjRB0siYmO6lCgxONEoPT0jEwQazXTg901wnmXMZjg5F3lh19Ch95ErkXPUbsxfOEZIbk7hWlA/A216NQuS9UY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779905681; c=relaxed/simple;
-	bh=rLnY/r9Ruahq6JSCM4QZVx42p/ohIgGGx2zoK296gjk=;
+	s=arc-20240116; t=1779905685; c=relaxed/simple;
+	bh=OdkQYg9fKRcLy8CeKe0nSAB38xYFhj3xHHgAxKzfI/8=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=W6Sgl5tfes1RBS/9AS8JxUiu1ejidOkmjyhD/JGRjhbfmEiswvThAPvqtvy6zNDCW0wdHGJsTvkg/7zEG81egbvf9z9IAFgBybowmSdl2auslq2fga17SQVFtD9s0NhkR1w/cM2SaOxh4QRdWNw5AqgQzninRWtqcIGWlR1ulMU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=O2pSL1pv; arc=none smtp.client-ip=209.85.215.202
+	 To:Cc:Content-Type; b=Zmr6ITGUBzWPY1088ug6yS0kWHflXwKO1Q698Bw7D0BGE+JlT9NQJq+AbvcJwX9pBaL/0wXcFwRBFQX2Y+B8RQWrur0AvMvDfGpSI96C41sXw8SBq5dt9mdNgsy9MbPHU04sZpWu/Fkf4fps+CJt+8kJHNckUNmcKoSHJwgXmsU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bvmcZHM1; arc=none smtp.client-ip=209.85.216.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="O2pSL1pv"
-Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-c82bd90afbbso6121026a12.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 27 May 2026 11:14:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bvmcZHM1"
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-365fc4636bbso23534065a91.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 27 May 2026 11:14:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1779905678; x=1780510478; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1779905683; x=1780510483; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ae0JUYZnH6PDq++BeF1nOUuxoe4YC/dX1lDQosSPY5o=;
-        b=O2pSL1pvDX8thkRVNHwtx6tiCGHu46WFdXGzHz5pYVytNpdFmXhhiMNldwVvJV3QGp
-         AL5BIifeaTuu+oJ5+uHRAp2i1gvfBnlMSpBT1Tcuf/bz4kKcDxohNgjzGIoxOLQCgMsR
-         zC5d1HAH7/W6GHWfCQFWejWhVTgIdIA+L5uaHV3HAdLzB2pDG8BmIscKRk7yJ50Xu/kw
-         oE82qcnpdXsNA9ZrwQbQ2z40JxvaQKvVBdH6Y4k+DQXj88nDzhq4oVrbMTyqWT6S0BmE
-         /oWHnCN0eQuMl9uoZbDgyfGW7Enko+zfzo7KahgXcvVMBbDJdwet2ZqA6jINjDdoz/CG
-         a0ww==
+        bh=v08qm7HHU6Iqudc85UgZ/ZNchG+m9a7a7G8otExlR3M=;
+        b=bvmcZHM1L5UPK8Yg9yTnAASheCdWadRi3PyW+bUDXYGxRonwK/jl9HyNTFJCuuiuFg
+         FCYLT+Fed2g2uW9fQRFmzompk0zpQUijjl26vyMJ8ut5Sre0PzrBhW4tJjFOWMgPEuNJ
+         EdofH8kczZ9M5WkQd6NKgGB0QiEDcHy1UchWYwvsZnIMlvGHP9lF0VCuStzFAmcMFmKz
+         RUNUSX2h9NYG1TLKyAXyKIReTun7jo4KdPKnhncscyk52yCf3KOFEMNt0TS9JoMBLagq
+         sYnnLwparXhMQgN0/wmu/pDIyAK+SMvuGFbEPsUeFSiYySoXP1qoiXtu2Q9M5JI9VA87
+         T8pA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779905678; x=1780510478;
+        d=1e100.net; s=20251104; t=1779905683; x=1780510483;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ae0JUYZnH6PDq++BeF1nOUuxoe4YC/dX1lDQosSPY5o=;
-        b=FJtTMkksryEdWhR46ytFlGYNz9Rm+xBGwSbDpmEpW5FF3QgrMuGnVlAMO2g75GN4s/
-         hVu+ChcaDVgNroaAhmGLV5r8JSaDSSVoII4DzCOOFygfolCmKr2KB6h+k2R50e1Xz+5C
-         sKLRLgF2SaHDePR6PPZECoXRe2uRQ/TZSDBZbY8EuNwm4eXqim9EHX1Kv2WE8hbVTc9C
-         IdNkxp0OpFLs6apMd9C0nlROM+S963Zg8EXn520QK9Ee7SLRhaX4Z80euFlj7d55dm+w
-         /kI1J5Db4axTSkOPfyVcUFzhyGcZw81vfaa++W1YO2I4lLYuWmb7FEZdhdU7FcZU8cg1
-         x9BA==
-X-Forwarded-Encrypted: i=1; AFNElJ+s6Ys3C+COLYR6Zg+70QDtjyO4lda0JiSD6QnZRXk6CbY/YGaitKDXxq+ezPuxGLBxeaOfxZQRwemokg4bEfo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwaW+lSB0JGjXt9XW1QkoavXeqoz5E1WpnNRRdQtJfYE8UyMpRM
-	2PiwLeRFDhMrQIEgJLDUNUwC4ZvIxRpCOQyPRyK5ybwDFZble7Mh2cEeH51XOFQyP2P2H5aICzj
-	agyRZDg==
-X-Received: from pfbey25.prod.google.com ([2002:a05:6a00:38d9:b0:82f:4183:2832])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:9084:b0:83e:b443:965e
- with SMTP id d2e1a72fcca58-8415f2dd96amr22258784b3a.3.1779905677512; Wed, 27
- May 2026 11:14:37 -0700 (PDT)
-Date: Wed, 27 May 2026 11:10:14 -0700
-In-Reply-To: <20260523111857.195396-1-piotr.zarycki@gmail.com>
+        bh=v08qm7HHU6Iqudc85UgZ/ZNchG+m9a7a7G8otExlR3M=;
+        b=NVWDfdQsx+5JUc8QatgmZmCEANQQQcgrc/wHC8Eu4rEOXt6o4pwMi5RQOeR3Rbr1Mp
+         z2+A9OshaMf8sVOZWRLU4dbRNDr5qs26sJf45PIFpUFoFeUl4FW9sU7xV08im+csFquk
+         TPeIgZ9B6ISL+CBNT51rJa2G06NMVpoVdR0zzqwhz6BGsRKB0xEVxu3NrclKhwY9fGl0
+         0SQIdiS2GHjpICEc6GF0eKyUcgBJNL3EePQVS5gXtSshKkDBLbgJV2rP7mlvC7PwIhD9
+         nFew9WjbP8FWLKH1O+3xZBpTkDPQ/+Xy4zh+bfLo0PbgMKlD9ujAEiBj5c2ktNX7AmXq
+         UgCA==
+X-Forwarded-Encrypted: i=1; AFNElJ8rkRjNa+NyKpDRT6u8NOAMVHk+VYndrHa6BC98UWL8WGBVUwNOUjYecid0/N/PvvHSB9xrz/UCwy9cjkK49gQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzp0ANT/7+SzuRCpACG6kYlpX0SgYi8sHqkSxLrKHYeT8RPYMrM
+	Vf9BWKQawttXiW4Ajblr70yIfJQitnRqCFDVRAbCcw4GqTkEZjxkcB5UNq3o9tgV8JBukUl9oAb
+	Wjnm7+Q==
+X-Received: from pjbtd8.prod.google.com ([2002:a17:90b:5448:b0:368:b689:fb90])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:3505:b0:35c:30a8:330
+ with SMTP id 98e67ed59e1d1-36a671ddedcmr22896140a91.0.1779905682359; Wed, 27
+ May 2026 11:14:42 -0700 (PDT)
+Date: Wed, 27 May 2026 11:10:16 -0700
+In-Reply-To: <20260522171535.3525890-1-seanjc@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20260523111857.195396-1-piotr.zarycki@gmail.com>
+References: <20260522171535.3525890-1-seanjc@google.com>
 X-Mailer: git-send-email 2.54.0.794.g4f17f83d09-goog
-Message-ID: <177990517478.4120439.17004463221573645730.b4-ty@google.com>
-Subject: Re: [PATCH] KVM: selftests: hyperv_features: test write of 1 to HV_X64_MSR_RESET
+Message-ID: <177990525056.4121118.3430310763169481740.b4-ty@google.com>
+Subject: Re: [PATCH 0/2] KVM: selftests: guest_memfd close() fix and hardening
 From: Sean Christopherson <seanjc@google.com>
-To: Sean Christopherson <seanjc@google.com>, pbonzini@redhat.com, 
-	Piotr Zarycki <piotr.zarycki@gmail.com>
-Cc: vkuznets@redhat.com, shuah@kernel.org, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+To: Sean Christopherson <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Shuah Khan <shuah@kernel.org>
+Cc: kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Bibo Mao <maobibo@loongson.cn>, 
+	Fuad Tabba <tabba@google.com>, Ackerley Tng <ackerleytng@google.com>
 Content-Type: text/plain; charset="utf-8"
 
-On Sat, 23 May 2026 13:18:57 +0200, Piotr Zarycki wrote:
-> Writing 1 to HV_X64_MSR_RESET triggers a real vCPU reset; the test
-> was writing 0 because the host loop was not prepared to handle the
-> resulting KVM_EXIT_SYSTEM_EVENT. Add the missing handling and write
-> 1 to actually exercise the reset path.
+On Fri, 22 May 2026 10:15:33 -0700, Sean Christopherson wrote:
+> Fix a bug where freeing a VM attempts to close an invalid guest_memfd instance
+> due to checking if a u32 value is non-negative.  Then harden closing of fds in
+> kvm_util by invalidating fds after they are closed, e.g. so that freeing an fd
+> multiple times will fail instead of silently closing the wrong file.
+> 
+> Sean Christopherson (2):
+>   KVM: selftests: Cast guest_memfd fd to a signed int when checking for
+>     >= 0
+>   KVM: selftests: Add and use kvm_free_fd() to harden against fd goofs
+> 
+> [...]
 
 Applied to kvm-x86 selftests, thanks!
 
-[1/1] KVM: selftests: hyperv_features: test write of 1 to HV_X64_MSR_RESET
-      https://github.com/kvm-x86/linux/commit/5bd0387e3b56
+[1/2] KVM: selftests: Cast guest_memfd fd to a signed int when checking for >= 0
+      https://github.com/kvm-x86/linux/commit/849d65e27bd6
+[2/2] KVM: selftests: Add and use kvm_free_fd() to harden against fd goofs
+      https://github.com/kvm-x86/linux/commit/3e8a0b991223
 
 --
 https://github.com/kvm-x86/linux/tree/next
