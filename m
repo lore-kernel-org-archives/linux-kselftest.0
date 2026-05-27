@@ -1,81 +1,77 @@
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36CBF47D952
-	for <linux-kselftest@vger.kernel.org>; Wed, 27 May 2026 18:14:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D4B92F7F18;
+	Wed, 27 May 2026 18:47:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779905696; cv=none; b=FFeIG1PWB7FyICHIUoR1mpn4hI3IOaT3L9kXGHZJ8YOLs3HLgLd+V7P+07sFwbH5V2F7v0BFCP7vXiqFXRgr6LndrwVMeHBZCEDamF3wETXzNnOTUZRpfjB8jqC8206CQxRRJswcCzWTonmk8XahMEnuUNZrtnSQSIbL1J+LL5o=
+	t=1779907675; cv=none; b=SB/+LhIE0bS6OEvjNzXCKRNaFCgRfFM42p55zpp9PsIK/jBQ5vRncKtgLybnczDfPUghTe8uLobdk1Q6c2Q+alE7xU1WYRLbyZoNwQQmdAamg5zHDhoNlOWtSFCJBIe/1K8lttyEhZa26ScIZKBTQWxW5Lv85l3d1aXfWfsqDKo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779905696; c=relaxed/simple;
-	bh=Ov8QZgZnUCc7NB32UwdQmqtSQt0Xv+hbTNknT4Kr0QY=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=RikHQvA2aUcmBXsFNP7nS9/tm8SOnfRyTi9Yx1uX36q3SJWhGiE89MK+tPbwyvoz+Oqp2HMClOB1lSHPg3TrrCn3S3ZCwAlRxvwvM4+E13dVTBoQ9uhaUOvBeGZSUceTXP15S+MXFURVagonf+EOkDH9xueWCO5k9sOmKZA1tOw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Dtq4+Rpn; arc=none smtp.client-ip=209.85.214.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1779907675; c=relaxed/simple;
+	bh=FRNf0mOJK1bSkZLg+XsuNkDRMpgWAzZM4VUilgwMKa8=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=mGFu9Ghcbahn69pnDiMOz6cwX+PpnLCEgwKJCT1yBYmsKcJd3CJOQOkXX4WUduv210vgeE5SVuj+F3LsgcsxXuNZEoUF87ZMIXJcguEb2OvjQ/7Lqdd80a20ALxRD7hiSLXDkmj2ggi8o+/74kEu2vuGWTQCj82rCyrhj2vYx4A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=osFGT9HH; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Dtq4+Rpn"
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2bc7f9b2213so86865745ad.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 27 May 2026 11:14:55 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="osFGT9HH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F19271F000E9;
+	Wed, 27 May 2026 18:47:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1779905695; x=1780510495; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JeW9vSkTjKc1k+OCVdMPOWZMlOUToLyGE6RjxbEFUFk=;
-        b=Dtq4+RpnW74jwbnOha0QJUYGtunqDQkkuQ7ytf6tOskGn82e9No4rHtezSa4FINGWt
-         O4E96gA6UkR34kscQGltepHJa0MJR2PO8uVLK/9enMM8ucib4gQHKg2aK42kIrO+ZUYS
-         b0OYD9KI0jcHkR8miRjFYVw0lz4KnnmdVa60ks6xSzUMVarcKL7XX6QBkfPHOE37xjA9
-         y65vWlgfRz++QVNqjrkKvEA9A4MUTiqfXui5x58e68u+cH/DvxeJMUv2p8tI80Fkzan3
-         DIBVfUDc5xSOlT08Nx43Bw6Hl9U3Vl68KuR7IrKglXYg9VIkqr9aSshsC/GaF2JkBw0B
-         DYyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779905695; x=1780510495;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JeW9vSkTjKc1k+OCVdMPOWZMlOUToLyGE6RjxbEFUFk=;
-        b=kI+IZW8u2dgiyHW41oc11ioastYRllSwrd+j2RrI3LeiWeEuy5KFV97HZBWvoFzy0N
-         xP736ljyEvsEAgv/1cG6fGcE0TEQ5W6yadPOkMUmGNNjJguNGF0LPZaKAha7AQXNS1C5
-         wO43dXfVE5xXoJw3l9iKNnyRyvgAsx/GJ5M9t9MF3PIuqWg+olM1rv1j4mZZ8MKYs+lo
-         YaxydQ2XeEFtnbSwhyQxevN2rAW0z+HZtUYKmBQqebCfwkPne2x9zXfWLe3F7gBiXFFa
-         7t52PBqY/GgSg2asRU324szWkwf1EDrx5199FJhqSIm3gpKHmLNj1Yt8YZEEhTVBXh0L
-         oKAg==
-X-Forwarded-Encrypted: i=1; AFNElJ/F4P5lkYpGzXMEgGFeGOJmV6BQtbSy3Nw6b1gmqtPH0JdyH6dbg1lbyeacBfxTarLCeHFLtPG8KgKUy/qGQhk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwPJh3hP3VyRupv/ze/bdvxTR7aVCZl6oYHNEftE0U14HbTG/vH
-	nhrrU3Rnx3Ao8XZWkkL+UoeIPg6ydjI6PPBKYFWCza2gukNmwBComWWsrkKFaAtJPQmhQa9wCOK
-	1wGu/NA==
-X-Received: from pglv10.prod.google.com ([2002:a63:150a:0:b0:c80:15fa:8bd5])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:6113:b0:3a8:2339:24c4
- with SMTP id adf61e73a8af0-3b328ed61d9mr23386909637.26.1779905694394; Wed, 27
- May 2026 11:14:54 -0700 (PDT)
-Date: Wed, 27 May 2026 11:10:20 -0700
-In-Reply-To: <20260518071008.2091335-1-ZongYao.Chen@linux.alibaba.com>
+	d=linux-foundation.org; s=korg; t=1779907674;
+	bh=dGFyRpMilg5FBEZHsEq53XOAuqN0WdRnl6J8HSeVqnI=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=osFGT9HHpNBx5BsDMr4gbf+ec/zmEIYPT/ARb+QrHwGAbLmbmGnL/6MYSdmMNX5Xd
+	 tpeWdohoB3dc4jZgj5fxq+4jVmU0EhzuAt6Uj5tAFl8xqbV5pT9+QGX2dHBjn7Q5Is
+	 xmLXLTQ3U68fI4GZ2lA0mMRC99J5NG6JsqHxR/zs=
+Date: Wed, 27 May 2026 11:47:52 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Sarthak Sharma <sarthak.sharma@arm.com>
+Cc: David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ "Liam R . Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka
+ <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan
+ <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Shuah Khan
+ <shuah@kernel.org>, Zi Yan <ziy@nvidia.com>, Baolin Wang
+ <baolin.wang@linux.alibaba.com>, Nico Pache <npache@redhat.com>, Ryan
+ Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song
+ <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>, Jason Gunthorpe
+ <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>, Peter Xu
+ <peterx@redhat.com>, Leon Romanovsky <leon@kernel.org>, Jonathan Corbet
+ <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Mark Brown
+ <broonie@kernel.org>, linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 0/5] selftests/mm: separate GUP microbenchmarking
+ from functional testing
+Message-Id: <20260527114752.cf4dd3e1bda93fb8ebab5a76@linux-foundation.org>
+In-Reply-To: <20260527142432.230127-1-sarthak.sharma@arm.com>
+References: <20260527142432.230127-1-sarthak.sharma@arm.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20260518071008.2091335-1-ZongYao.Chen@linux.alibaba.com>
-X-Mailer: git-send-email 2.54.0.794.g4f17f83d09-goog
-Message-ID: <177990532788.4122200.1656663741093651330.b4-ty@google.com>
-Subject: Re: [PATCH] KVM: selftests: Fix vcpu_get_stats_fd() ioctl name
-From: Sean Christopherson <seanjc@google.com>
-To: Sean Christopherson <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org, 
-	ZongYao.Chen@linux.alibaba.com
-Cc: Shuah Khan <shuah@kernel.org>, Tianjia Zhang <tianjia.zhang@linux.alibaba.com>, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Mon, 18 May 2026 15:10:08 +0800, ZongYao.Chen@linux.alibaba.com wrote:
-> vcpu_get_stats_fd() invokes KVM_GET_STATS_FD, but its assertion reports
-> KVM_CHECK_EXTENSION if the ioctl fails.  Use KVM_GET_STATS_FD in the
-> assertion so failures point at the ioctl that actually failed.
+On Wed, 27 May 2026 19:54:27 +0530 Sarthak Sharma <sarthak.sharma@arm.com> wrote:
 
-Applied to kvm-x86 selftests, thanks!
+> gup_test.c currently serves two distinct purposes: microbenchmarking
+> (GUP_FAST_BENCHMARK, PIN_FAST_BENCHMARK, PIN_LONGTERM_BENCHMARK) and
+> functional correctness testing (GUP_BASIC_TEST, PIN_BASIC_TEST,
+> DUMP_USER_PAGES_TEST). Mixing these in a single binary means functional
+> tests cannot be run or reported individually and run_vmtests.sh must
+> invoke the binary multiple times with different flag combinations to
+> cover all configurations.
+> 
+> This patch series separates the two concerns: tools/mm/gup_bench for
+> benchmarking and tools/testing/selftests/mm/gup_test for functional
+> testing. To avoid duplicating HugeTLB and related file helpers, the
+> series first prepares the existing file helpers for sharing, then moves
+> the common helper code to tools/lib/mm/ so it can be shared by both
+> selftests and tools/mm.
 
-[1/1] KVM: selftests: Fix vcpu_get_stats_fd() ioctl name
-      https://github.com/kvm-x86/linux/commit/2a3987540cab
+Thanks.  I'll duck this for now, see what reviewers have to say.
 
---
-https://github.com/kvm-x86/linux/tree/next
+Sashiko still has a couple of nags.  Minor stuff, arguably ignorable.
+	https://sashiko.dev/#/patchset/20260527142432.230127-1-sarthak.sharma@arm.com
