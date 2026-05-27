@@ -1,175 +1,137 @@
-Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84E663D6CD5
-	for <linux-kselftest@vger.kernel.org>; Wed, 27 May 2026 16:59:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A45F23D3D0E
+	for <linux-kselftest@vger.kernel.org>; Wed, 27 May 2026 17:00:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779901180; cv=none; b=Tk8dKttW//K++gLAeTDw6TYVtYoQIHjRNzMhwsUN+uhwKnDOtj+ivufHNQsov559APf2BvQ8ZnLVGYWG+IuhjLpF8ke8RPXx93oCiA6vXkzz5iNGKv7gtpxeNetGrk/RCMcLgt8J44UYuKH9tTixlj0gIg/cs6dr3ca9FAxjnXw=
+	t=1779901261; cv=none; b=ic1IFDYUXUlMdj9qU1WOegEfj0L1ioQdVGYdAdrxfxZN8CIrV6snFFsWlX3acsui/ELS1pbXmOiuFm2T0ngwnf8PnmCnuZa718ceNUo/EDlo5jnEKkSmrbmmbQAfJ/kLliQ+WzCHfTBYH1HQiEwobGHLacerb29F2vEF++nRuOY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779901180; c=relaxed/simple;
-	bh=LU9L02kowGpNnB5MXU5rmt8ZMZk5riYW8QfW6X+Q904=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=amrTO70JsFes80JA125EEqkfWgzGYU/AiDSAXuokEWmMHPHtk2DYDmeYEz8XXhMvZTMYZW8nir9642TUZHD1nsQkA6sR0ikL0cVMf6fqcTMMhbsQsOvm6mqFlTyn6QeVpBnD0X5we1ZbWTUR47GBqGTLs/Is9k3AvIS7GIh5Ero=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Fa2/Vd3g; arc=none smtp.client-ip=91.218.175.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1779901261; c=relaxed/simple;
+	bh=IC03rV44yx8SbaDtxThdFCvVl5fVz1TnoYNrddEg7m8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rxuSmTNyDcSj+c7iSpkn92QOJRKdg1UdMQJJ4loakRdMcTfzXiOcTjpMieqZZGRtrq+E8Ec0Bcmlf0hnVnsARZVMTMx3Jcss18faU3fKtAtWCsbu+JGQHhMgfYxrhn/t7iPUMt2SJ++JV7OxbJhhowytfpCAoiVApN7cL0l//1I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GDxCEQSd; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Fa2/Vd3g"
-Message-ID: <549d58c6-05f0-4176-98ec-c88e96ee4375@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1779901166;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=y5Uv03Ujj428n5sCQ9PwAg+yJsQrd1cz70XxOo1jmLc=;
-	b=Fa2/Vd3gbi6YG8N2SewLk8TSArhbXjjruuc5wEBR7DpmJZi/2w0Wd3DgAYf7YoWnGYG7ER
-	Bb6lIk3acqxivK4o7CBx7lzZ8OjtAG9hiDxI+ywSURuSjaLa/y6T9gKRsq39l2ytutu+nP
-	V0mcUDp0Tiv/YG4XN1BWZ7oAPYYwqaM=
-Date: Wed, 27 May 2026 09:59:21 -0700
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GDxCEQSd"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2ba3b9bcf69so95ad.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 27 May 2026 10:00:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1779901259; x=1780506059; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=7Og5FR/9qWtaybmoKawxFptjk13+mvY5AZnqWPtKcDM=;
+        b=GDxCEQSdMC0hubLsATO5WComY3s4aOxIvo8zo5MBQcddD0s2rbrd8T/SRY42mlbEAX
+         mGAM/d47Lk34RE1vmQRvMbeyoTNLrlRloFv1yvixSD1FgwZUdLk9SS9RfNm9HZW7M5rk
+         xyAbZRM6JHq6pQvp5ZeOsNNIzTf4ieP0xceKeCD71HSF/ITKratMsvfj8eux72jnQcV7
+         yt0bf0D3eNGPijaVycsEfGqjkE1CqjMNgoKt2X52HQksuDw0b3PorZX4o7Lgv6zQEpFB
+         TmeZk2HHoBpqd+zUsuKdmyto6LCiYETfp3mjhGoMnONEFi2FdEzpA/T79bjAUhYWUD2R
+         DXZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779901259; x=1780506059;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7Og5FR/9qWtaybmoKawxFptjk13+mvY5AZnqWPtKcDM=;
+        b=SAMpmKQ5t/8cQF1rAUkz7l2pVf2RTeawu+H3C/hhOwsP/Ksjt9XMZvyogjdt/JyZ5Y
+         9nEVuG3unL6MSkjMWuYBpQLV8qQQN+cwNHnqEUsxrJmcpF3nmV4rW9UgLwUuQgKkm8Q7
+         /+Fp/wAO12eqGbvfdzsQNZFwaDnmoSQqhFM304rnYY5gmRA02BzWpUTpnsD/HLlkKGaF
+         E/68UO+Sr6HMkgvW0GErUn2kLcYyV/pRRgf1BJOYah4/KD+ZdtRyRF5VAoJM4DeK6dRc
+         RtLKakkfGkkjcVaP3pI4mgO+0I/JDondM/Tl20+KsmemKU6rkspMWvcaqkuBpiI1WAYN
+         wo8A==
+X-Forwarded-Encrypted: i=1; AFNElJ+5Hlp42/Fg2Pg/ChI9BBbYo7DU5qiH3ovhqL6N2LMyRHg4zCo6iWOIPqDDaPdAHXGcZMl75eBXLCrBquBjO5k=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyqu5YYJwJjXD6cXvKou4kps9QawiIpXsvH+SdtgvSvMoimSLkb
+	FEGEZyIFvZDV76SJVvIiz69P1rV3l6hhBpRnXsTUvN1IdA8FxB5uC5faCUWBcWFXIw==
+X-Gm-Gg: Acq92OE8v5XtFaiYlvv8sRsWImkU5JtnjhUP5X3zb9xiKWStt2yNZlcOKalNqRMnt/q
+	pvvNuqukQPK54zbRdj8C5V1KD+c9jrXzu5Pgv1Ne683lMfbbTlRcM9bR0/BXdXLNyvOXLJRSJ+k
+	CiL+uhJ3AIiz24MJgJFgUTAxvyM9cwnJaIsQ2Wd75743m/v1bO0c91cTN9JtAqt9cTdRaQJzdLK
+	GA08LSOd+r0/P+lOIbghiGz+e2vu31MBJNfVtASI9CGTwV+OmpOUznaNJi3W768+EyUk2YJ96I7
+	nUXxcyi75rQRrG9DLms5jmWW+ZJ0xAT7zlNy5qI4u4Azyh712e2oKwtI1JhGIm5os3sow576NTp
+	KwyGOzxUHFkv0WX4EWui6frd26DWpOmZi8FIWgJPDs5aL9IK08bOpCb8PZ6wtoywgnmTa5E7UhQ
+	GwveyMQ6Tu4bAjHxWLu1r8eMWujbqe4pe9eRaJH8HPczHfG+oZ5ipnJTQ5rOMEP82xg/M=
+X-Received: by 2002:a17:902:e551:b0:2bd:7e8e:ad56 with SMTP id d9443c01a7336-2bebe9feb6emr8862045ad.6.1779901258238;
+        Wed, 27 May 2026 10:00:58 -0700 (PDT)
+Received: from google.com (230.0.127.34.bc.googleusercontent.com. [34.127.0.230])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-36b7653c9ffsm334915a91.4.2026.05.27.10.00.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 May 2026 10:00:56 -0700 (PDT)
+Date: Wed, 27 May 2026 17:00:52 +0000
+From: Lisa Wang <wyihan@google.com>
+To: Miaohe Lin <linmiaohe@huawei.com>
+Cc: rientjes@google.com, seanjc@google.com, ackerleytng@google.com,
+	vannapurve@google.com, michael.roth@amd.com, jiaqiyan@google.com,
+	tabba@google.com, dave.hansen@linux.intel.com,
+	Naoya Horiguchi <nao.horiguchi@gmail.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+	Hugh Dickins <hughd@google.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	David Hildenbrand <david@kernel.org>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	linux-kselftest@vger.kernel.org,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH RFC v3 5/7] mm: selftests: Add shmem into memory failure
+ test
+Message-ID: <ahcjRGwLFEN2NH3b@google.com>
+References: <20260408-memory-failure-mf-delayed-fix-rfc-v3-v3-0-718f45eb7c75@google.com>
+ <20260408-memory-failure-mf-delayed-fix-rfc-v3-v3-5-718f45eb7c75@google.com>
+ <9effbeca-3453-f0fe-571f-85f8923e1385@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf 1/1] bpf: reject overlarge global subprog argument
- sizes
-Content-Language: en-GB
-To: Taegu Ha <hataegu0826@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>
-Cc: Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Shuah Khan <shuah@kernel.org>,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260527052539.3388700-1-hataegu0826@gmail.com>
- <20260527052539.3388700-2-hataegu0826@gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20260527052539.3388700-2-hataegu0826@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9effbeca-3453-f0fe-571f-85f8923e1385@huawei.com>
 
+> On Mon, Apr 13, 2026 at 07:57:55PM +0800, Miaohe Lin wrote:
+[...snip...]
+> > -
+> > +	case MADV_SOFT_DIRTY_SHMEM:
+> >  		/* The page content should remain unchanged. */
+> >  		ASSERT_TRUE(check_memory(vaddr, self->page_size));
+> 
+> Why we skip check_memory() for case MADV_SOFT_CLEAN_SHMEM?
 
+Because we did not write 0xce to clean_shmem.
+The difference between clean and dirty pagecache is whether we synced
+the dirty pages to disk. However, the difference between clean and dirty
+shmem is whether we initialized it with 0xce. Thus, we need to skip
+check_memory(), which checking 0xce,  for clean_shmem.
 
-On 5/26/26 10:25 PM, Taegu Ha wrote:
-> Global subprogram argument checking derives generic pointer sizes from BTF
-> and passes the resolved size to check_mem_reg() as a u32. The access-size
-> validation path then uses a signed int, and stack pointers negate the value
-> before calling check_helper_mem_access().
->
-> A BTF type such as int[0x3fffffff] resolves to 0xfffffffc bytes. On a stack
-> pointer, (int)mem_size becomes -4 and the negation validates only four
-> bytes. A caller can therefore pass a four-byte stack slot while the callee
-> is verified with a nearly 4GiB memory argument, allowing accesses outside
-> the caller object.
->
-> This was confirmed with a non-executing raw-BTF reproducer. On a
-> vulnerable kernel, the verifier accepted a program where the caller passed
-> a four-byte stack slot, while the callee argument was described by BTF as
-> int[0x3fffffff]. The verifier log showed:
->
->    R1=mem_or_null(id=1,sz=0xfffffffc)
->    r0 = *(u32 *)(r1 +4)
->
-> The program was only loaded to prove verifier acceptance and was not
-> attached or executed.
->
-> Reject sizes that cannot be represented by the signed verifier access-size
-> API before any conversion. Cast the non-stack case after the bound check to
-> make the conversion explicit, and add a verifier regression test for the
-> oversized BTF argument.
->
-> Fixes: 2cb27158adb3 ("bpf: poison dead stack slots")
-> Signed-off-by: Taegu Ha <hataegu0826@gmail.com>
-> ---
->   kernel/bpf/verifier.c                           |  7 ++++++-
->   .../bpf/progs/verifier_global_subprogs.c        | 17 +++++++++++++++++
->   2 files changed, 23 insertions(+), 1 deletion(-)
->
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 7fb88e1cd7c4..1007f204a1f5 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -7107,6 +7107,11 @@ static int check_mem_reg(struct bpf_verifier_env *env, struct bpf_reg_state *reg
->   	struct bpf_reg_state saved_reg;
->   	int err;
->   
-> +	if (mem_size > S32_MAX) {
-> +		verbose(env, "R%d memory size %u is too large\n", regno, mem_size);
-> +		return -EACCES;
-> +	}
-> +
->   	if (bpf_register_is_null(reg))
->   		return 0;
->   
-> @@ -7119,7 +7124,7 @@ static int check_mem_reg(struct bpf_verifier_env *env, struct bpf_reg_state *reg
->   		mark_ptr_not_null_reg(reg);
->   	}
->   
-> -	int size = base_type(reg->type) == PTR_TO_STACK ? -(int)mem_size : mem_size;
-> +	int size = base_type(reg->type) == PTR_TO_STACK ? -(int)mem_size : (int)mem_size;
->   
->   	err = check_helper_mem_access(env, regno, size, BPF_READ, true, NULL);
->   	err = err ?: check_helper_mem_access(env, regno, size, BPF_WRITE, true, NULL);
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
-> index 1e08aff7532e..0ff8f85b4d46 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
-> @@ -151,6 +151,23 @@ int anon_user_mem_valid(void *ctx)
->   	return subprog_user_anon_mem(&t);
->   }
->   
-> +__noinline __weak int subprog_user_anon_mem_huge(int (*p)[0x3fffffff])
-> +{
-> +	return p ? (*p)[1] : 0;
-> +}
-> +
-> +SEC("?tracepoint")
-> +__failure __log_level(2)
-> +__msg("R1 memory size 4294967292 is too large")
-> +int anon_user_mem_huge_size_invalid(void *ctx)
-> +{
-> +	int (*p)[0x3fffffff];
-> +	int tiny = 42;
-> +
-> +	p = (void *)&tiny;
-> +	return subprog_user_anon_mem_huge(p) + tiny;
-> +}
+> > +	case MADV_HARD_CLEAN_SHMEM:
+> > +	case MADV_SOFT_CLEAN_SHMEM:
+> > +		/* It is not expected to receive a SIGBUS signal. */
+> > +		ASSERT_EQ(setjmp, 0);
+[...snip...]
+> > +   if (variant->type == MADV_HARD) {
+> > +           check(_metadata, self, addr, MADV_HARD_DIRTY_SHMEM, ret);
+> > +		ret = sigsetjmp(signal_jmp_buf, 1);
+> > +		if (ret == 0)
+> > +			FORCE_READ(*addr);
+> > +		check(_metadata, self, addr, READ_ERROR, ret);
+> > +	} else {
+> 
+> Should we always add a FORCE_READ() just after variant->inject to verify the accessibility
+> to the addr for soft-offline case ?
+> 
+> Thanks.
 
-Without verifier.c change, verification is successful.
+In dirty_shmem, check() already verifies accessibility to the address
+through memcmp(). Thus, we only need FORCE_READ() in clean_shmem. Will
+add this in the next version. Thanks !
 
-The objdump:
+Lisa
 
-0000000000000160 <subprog_user_anon_mem_huge>:
-; {
-       44:       b4 00 00 00 00 00 00 00 w0 = 0x0
-;       return p ? (*p)[1] : 0;
-       45:       15 01 01 00 00 00 00 00 if r1 == 0x0 goto +0x1 <L0>
-       46:       61 10 04 00 00 00 00 00 w0 = *(u32 *)(r1 + 0x4)
-<L0>:
-       47:       95 00 00 00 00 00 00 00 exit
-
-0000000000000040 <anon_user_mem_huge_size_invalid>:
-;       int tiny = 42;
-        8:       b4 01 00 00 2a 00 00 00 w1 = 0x2a
-        9:       63 1a fc ff 00 00 00 00 *(u32 *)(r10 - 0x4) = w1
-       10:       bf a1 00 00 00 00 00 00 r1 = r10
-       11:       07 01 00 00 fc ff ff ff r1 += -0x4
-;       return subprog_user_anon_mem_huge(p) + tiny;
-       12:       85 10 00 00 ff ff ff ff call -0x1
-                 0000000000000060:  R_BPF_64_32  subprog_user_anon_mem_huge
-       13:       61 a1 fc ff 00 00 00 00 w1 = *(u32 *)(r10 - 0x4)
-       14:       0c 01 00 00 00 00 00 00 w1 += w0
-       15:       bc 10 00 00 00 00 00 00 w0 = w1
-       16:       95 00 00 00 00 00 00 00 exit
-
-The big 0x3fffffff does not really matter.
-
-> +
->   __noinline __weak int subprog_nonnull_ptr_good(int *p1 __arg_nonnull, int *p2 __arg_nonnull)
->   {
->   	return (*p1) * (*p2); /* good, no need for NULL checks */
+> > +		check(_metadata, self, addr, MADV_SOFT_DIRTY_SHMEM, ret);> +	}
+[...snip...]
 
