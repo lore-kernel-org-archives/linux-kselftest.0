@@ -1,96 +1,42 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7591B3DD531;
-	Wed, 27 May 2026 16:18:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFFF7236453;
+	Wed, 27 May 2026 16:23:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779898737; cv=none; b=HRtYHrudCKUbUvgb/XyjjzaipNFLEyFJAtlikFhJgENqXTM1Pf4XAGbzVFjCNNGPW9pS3dzUGLgaRDWW9sCuULtrCIHEpxO+gPeOfcS7cOo/r5RBGjPYx7HOr01eIgmOKIfGpzWPMA5AxwzIVeHvl1h7ozHd3TPzjz2jZOTu5R0=
+	t=1779899028; cv=none; b=oKz6+zz1KswL5qhC3n85W/61SAvn8dGWpbAD/T/DULc9s30cUgMWS2x2r6G5a7lnlTa6mi/n4kksn9gnW+iNj5nKSRmcVLqARimOR4sfoSQgU0KAl2XOw7+GlqVzwetYs4V0oa8YJ/oR6D7bFVNcGdNGYMVNWhxhqCfXnh7pSr0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779898737; c=relaxed/simple;
-	bh=4DAyd/GzqcemDK6zg4iwqVWuOPppTjZluFU8wqRNiKo=;
+	s=arc-20240116; t=1779899028; c=relaxed/simple;
+	bh=0XEngy+dyp8Nm47SaO1Ppr08ryWHkXCg/V8H9zrPtFo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kAR3ytot0AQ6QU2TMYuMFYNsKwT0loyIm+nC3KaL7GvCaf10jvicyDy0/FspqdALN4SUcwDUUe8AlB/vVX6Qj++/OcJxDCZjKjx6pCltJu85lmsx+B+mqvHijJCBvhD0ZKPiNqjVnXfEbrQaoBfdFflHjGmLxpuSnzXAFOD/CJo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Zq4W9XPv; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=OiyViVi/7A0UaFMYWYvFuQNepz6jxlfo3M60DGwVtvIxQJIFf37ttQaNWDQAA70QXoFqrEOWGgs0cKH2hC0XoAjYbX6niHidYm9iEGzkZXmhtsQTvJHI8kbhBS4Yrc35xbzRQF4r5qseZMo1w8eDcJMwcMOy0rOd6w9SHLCRmyI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ium4RJoh; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Zq4W9XPv"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=hYaRrphnaRA6o4Jy4ywiOltVwIEnnSPRCMUmgPOwnaE=; b=Zq4W9XPvSOJBWtRlh+QNr3t9Di
-	bScgKAb5GnQzy0TlNiwt/IkFao9VfbDcVrCTRrQWiLP71G3DRXumxGczrZPzZ4D8ufaFzKZYduEwc
-	0ucZgyPjl+9avElWP3K5JsMRj7DMznF4wN1yTI9KxYIBWwiA6L2bK9/OeyAy5AQYW77hbkp4fZJES
-	GAxIYttaGMqrp4dvPTMquyZCNjdgIEumWJBBMXgevMBGKPn+8LD8TmTTzScMPBHsuDRPpqZ0vStSa
-	zOnBI10pnmBIR3fn0AQSKpShM3JR3DwuaS6z/zaXi4A/9QMrqJPs+9SPDnjU3jIySuU9gUr7a2Nik
-	xHNYlgtA==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1wSGxx-00000002wLj-2aWJ;
-	Wed, 27 May 2026 16:18:45 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 82A90300CB5; Wed, 27 May 2026 18:18:44 +0200 (CEST)
-Date: Wed, 27 May 2026 18:18:44 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Boqun Feng <boqun@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Jonas Bonn <jonas@southpole.se>,
-	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-	Stafford Horne <shorne@gmail.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	Waiman Long <longman@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Miguel Ojeda <ojeda@kernel.org>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Jinjie Ruan <ruanjinjie@huawei.com>, Lyude Paul <lyude@redhat.com>,
-	Thomas Huth <thuth@redhat.com>, Sohil Mehta <sohil.mehta@intel.com>,
-	"Xin Li (Intel)" <xin@zytor.com>,
-	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-	Nikunj A Dadhania <nikunj@amd.com>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Yury Norov <ynorov@nvidia.com>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	linux-kernel@vger.kernel.org, linux-openrisc@vger.kernel.org,
-	linux-s390@vger.kernel.org, linux-arch@vger.kernel.org,
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	rust-for-linux@vger.kernel.org,
-	Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>,
-	Daniel Almeida <daniel.almeida@collabora.com>
-Subject: Re: [PATCH v2 00/12] Refcounted interrupt disable and SpinLockIrq
- for rust (Part 1)
-Message-ID: <20260527161844.GG3102624@noisy.programming.kicks-ass.net>
-References: <20260526152148.30514-1-boqun@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ium4RJoh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E394E1F000E9;
+	Wed, 27 May 2026 16:23:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779899020;
+	bh=2fjHk22xqi35uz8KDrNOCGFG2idycCs1iTRro0+9cA8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=Ium4RJohFQpVVzJBfFdSMT8am35jCMhIy8CaKvFwIEqV0X3F9REdbNHs5r8329kWW
+	 r7HTAMY47kROuwO+1w+9VuQNJ6b2/0fHQEnKhFLwGdA6KEC3t+1djDsdq6vy4+4EoC
+	 +ZmFXueXXmOk/PtV3xMFD6LpNsYprUhS+asr9+eIMWY8Ry8oz0YtMsx1yvF82xfDBs
+	 LkjYHh43Gl5k9hM96+RuygpWjpd8kXLrjIAeUDX556xNKM63M5SoBtB4pxuVKV4Q/x
+	 kCk4p8ciWvdL3s0oAzIJu0AUE8Vwa7lznlfNmYQlN4OFpfxVlIs7xnrKBWxo2j96M4
+	 ZEJ6N0yf402pw==
+Date: Wed, 27 May 2026 17:23:33 +0100
+From: Lorenzo Stoakes <ljs@kernel.org>
+To: Chris Gellermann <christian.gellermann@codasip.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, brauner@kernel.org, 
+	shuah@kernel.org, david@kernel.org, liam@infradead.org, vbabka@kernel.org, 
+	rppt@kernel.org, surenb@google.com, mhocko@suse.com, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH] selftest: Fix UB of getline due to missing var init
+Message-ID: <ahcaVoRh_Ona6EWm@lucifer>
+References: <20260526113848.530105-1-christian.gellermann@codasip.com>
+ <20260526113409.ea65314eb1da831de7c90ca6@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -99,40 +45,51 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260526152148.30514-1-boqun@kernel.org>
+In-Reply-To: <20260526113409.ea65314eb1da831de7c90ca6@linux-foundation.org>
 
-On Tue, May 26, 2026 at 08:21:36AM -0700, Boqun Feng wrote:
-> Hi Peter,
-> 
-> This is a follow-up for Lyude's work [1]. After learning the current
-> preempt_count() usage and how ARM64 handle this, I came up with this
-> series that could resolve your feedback [2]. The basic idea is based on:
-> 
-> 1) preempt_count() previously already masks our NEED_RESCHED bit, so the
->    effective bits is 31bits
-> 2) with a 64bit preempt count implementation (as in your PREEMPT_LONG
->    proposal), the effective bits that record "whether we CAN preempt or
->    not" still fit in 32bit (i.e. an int)
-> 
-> as a result, I don't think we need to change the existing
-> preempt_count() API, but rather keep "32bit vs 64bit" as an
-> implementation detail. This saves us the need to change the printk code
-> for preempt_count().
+On Tue, May 26, 2026 at 11:34:09AM -0700, Andrew Morton wrote:
+> On Tue, 26 May 2026 13:38:48 +0200 Chris Gellermann <christian.gellermann@codasip.com> wrote:
+>
+> > Subject: [PATCH] selftest: Fix UB of getline due to missing var init
+>
+> hm, what's "UB".  Please expand the acronym.
+>
+> > Clone3_set_tid uses getline(&line, &len, f) in a loop to read the
+> > child's process status. The code expects that getline allocates the
+> > buffer for the line on the first loop iteration. For this, glibc[1]
+> > requires char *line to be set to NULL:
+> >
+> > > ssize_t getline(char **restrict lineptr, ...)
+> > > If *lineptr is set to NULL before the call, then getline() will
+> > > allocate a buffer for storing the line.
+> >
+> > However, char *line is only declared, leading to an undefined
+> > initialization value. Fix this by properly initializing it to NULL.
+>
+> Does the test crash?  If not, how come?  Luck?
+>
+> > Same issue fixed in mlock-random-test.
+> >
+> > [1] https://man7.org/linux/man-pages/man3/getline.3.html
+>
+> The two affected files are testing significantly different parts of the
+> kernel.
+>
+> > Fixes: 41585bbeeef9 ("selftests: add tests for clone3() with *set_tid")
+> > Fixes: 26b4224d9961 ("selftests: expanding more mlock selftest")
+>
+> And these were separated by three years.
+>
+> So can you please split this into a two-patch series?  And I suggest
+> you add "Cc: <stable@vger.kernel.org>" to each one.  Please retain David's
+> ack on both.
 
-> 
-> v1: https://lore.kernel.org/rust-for-linux/20260508042111.24358-1-boqun@kernel.org/
-> 
-> Changes since v1:
-> 
-> * Rename PREEMPT_COUNT_64BIT to HAS_SEPARATE_PREEMPT_RESCHED_BITS per
->   Mark Rutland.
+Since this looks fine (I also wondered about the fixes too of course), feel free
+to add my tag to this too:
 
-Blergh, so I really don't like that new name. It isn't that
-PREEMPT_RESCHED is separate, it really is a 64bit preempt count.
+Reviewed-by: Lorenzo Stoakes <ljs@kernel.org>
 
-Shashiko has a few fits, but its mostly being stupid. Although I think
-it might be useful to perhaps put a WARN_ON_ONCE(in_nmi()) in
-local_interrupt_disable().
+>
+> Thanks.
 
-Anyway, I'll re-read things again tomorrow, but I suppose this will do.
-
+Cheers, Lorenzo
