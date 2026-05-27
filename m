@@ -1,294 +1,263 @@
-Received: from mail-dy1-f182.google.com (mail-dy1-f182.google.com [74.125.82.182])
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A9112F7F1B
-	for <linux-kselftest@vger.kernel.org>; Wed, 27 May 2026 05:53:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D2F33C4545
+	for <linux-kselftest@vger.kernel.org>; Wed, 27 May 2026 08:07:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779861191; cv=none; b=bzwA5tdoGwfL2h/G/PczE2dq5y8qrE6rJkeZZEmnY/8RBNxF8HTr5O1SvzzbOU2rBCX41upg392Yp9/W+Pk9PDzJ7NaepQG30egx/pGXtQAQ6gpRHbx1YZEx0d6oeCg2zDFNjXjTa8R8KHJwgp3PdASoGvfy2KO+ffsVLFIg0gc=
+	t=1779869237; cv=none; b=cPR343Ql6Dt4Q3Nz4//sUJHJWkRb+gzVM1NuuKgnloI9XcTBtCF65w8DQi21pC5IFqWYbId7CZUA/1hMT+oZgVWzK4Lq+uhqB+42d/l3I6zkrApPeSysRJcNnBLAdQVe0ZLnQfsFcnz2njtQsg2r1rWxR1BzsuKJJBhTy7SZcP4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779861191; c=relaxed/simple;
-	bh=PU3MvdV8tam4q1KMdiajihMJ3i8qhlgrfETzPE8HD/Y=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=WQ+YjbRq2UOQ09Zfp24vlSXlevpxWmdZuVnOK4Q0WamOpCdt1dj/SjE3f7pScYg7GwobDYBb0AdOQ+vOmHJNshWS0Fy0weo5PCoaQVY1Ax2R8FiLL3l4Xd26xLTnPN5EarJJNbJAFN3Eg3QvcFzoV/B/z3XGEA6PushoK9FKAwU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=eWKjppRq; arc=none smtp.client-ip=74.125.82.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
+	s=arc-20240116; t=1779869237; c=relaxed/simple;
+	bh=pf0LKLzwVWXDhWNsiU8NvDk5jh6olD3uksGabCLjYMM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hG0gdybAUvwPqUJoqJFlHZU2vq0uqrbleQ48HFL54ra6sxqQfNGOPHehd00FTH+iYoy4twIt0pyWF1carAL7rN62g6+0LBzNUnNoWnQfkLv3QTMhkjLlIL+80NzxLf6ev8oGicAOCcl0+VdHbPxWhiiUI1tG4DpakSE9b0Fq060=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SajTCLMV; arc=none smtp.client-ip=209.85.167.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="eWKjppRq"
-Received: by mail-dy1-f182.google.com with SMTP id 5a478bee46e88-2f0ad52830cso14446092eec.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 May 2026 22:53:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SajTCLMV"
+Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-485462d9290so3367819b6e.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 27 May 2026 01:07:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1779861184; x=1780465984; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Wp1oswXj3dj/ue+2mbG75NTENINWm5S4spwl9AqmaA8=;
-        b=eWKjppRqnDjef9kU0LFoDBClyA9DBq2K3AlJPnUFfxtxbTlQH6bmTsfp1Y93cMRiNY
-         TY6SdvpNsau9gqFWXZqVS/+L4k0u9zVs+6kkKKKzyvQ8rKmzO+hL235IjfvO0UY3mJ1G
-         bup40OubANgeFFZddcWyAs9G1QgW/qP6oFtISJ4YWr5x1CjS0UnEnCDZe5jmikII375S
-         XZoYflHfV/uUx0UBxsbc20aeqMbnRlV7OFvYQ6H3/J+EtWz9sdgLrjKaA6adnhCnP1pP
-         XTf7FoJ7a8d1cB0q5EOJoP22bnOzkfvGRrAAyvWO2mIhoe+ZxJujOPUlnFiuw/rXhfdR
-         vqmQ==
+        d=gmail.com; s=20251104; t=1779869234; x=1780474034; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ezb0aPRXiOggaGXZC6UVQiIgRgnViP2vjaDISs1PSDQ=;
+        b=SajTCLMV3cRArxdaPwDT1ki9eELzLOHcjNIn4P5cILFkXCbsQkq4+xVZS8e+yygNsY
+         t+bFIWjh8QaqjdTlqoWT7GprVygIsc0dEy2lW3zZtE7dvMnrcBGRfzg52S7ZNMNo4Wvp
+         QwCii/5WPEHI+TRWT7n3zieju5iPOWWtATYnH3Tn7Rk/bdd8EEiT6YSuQ3FUUC79Ivd0
+         VuzAL7czOPQ5+Dmz/D2cpF9fMNUxRhiF/XL/rmaHj+Jj1PMfN3tvryftZB54NzM/+rJu
+         M54bOKEEY+t04l23Vk332GXfpHT2WKOSLLoKD0hH8JnA+1E7Yr6xbXEylUMvKyRmO4l6
+         G3cA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779861184; x=1780465984;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Wp1oswXj3dj/ue+2mbG75NTENINWm5S4spwl9AqmaA8=;
-        b=BoKQe6+/DMWh5z7wEo7sNfsVzTWh+7ht5yiiEBry4CYaJRuhSHzn44ps4nDJ0r7gp5
-         PrWVkJjfXt/PVfeRyQDOx8arOWFVYmow9N7mxzM/TsA5KVxGjzKZ6h5JF57f+6DXsHu5
-         yxEVUCsBWHMT+uHrhJFfuylB7pu82N/RjhMcPhBXG4DF8jfiFrjfGO3WuAxbceJi/Jw3
-         GuKLikyPUtGouEWCSw7D91A8S9D78km0GLcjgPrv+L3aw8jHL+Hi7X3FCES2CRaes7j7
-         2u7joAjFjC3rbE+2ykRjBjtY0KyTNHTKEoiKDiDcoPy3m1ILuTeAaUBtVeFJmWPj6TGk
-         D5yA==
-X-Forwarded-Encrypted: i=1; AFNElJ/49U5rYkAYNgh3z5bKhkOmdNdjiq7+zE5CttwEaH7ecd2CTCzs5/4aruEVYqhGE6pXBAYnq1saoAul3kEN64o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxtYI8NzYreP9m3J8+otXIXQ8HL0yUX5LV2LInrVK2z7lEHRroc
-	V1k2LRQtaFylYqWK6BvIOhyunbdrxVc/PaF6GL4kzPnvHPYcJ+OXvNEytVfsosvvv4w=
-X-Gm-Gg: Acq92OFxloMGJBel7f7IhUNKM5eCraoP92hrPv37wywmFD1hQzDqv/+8cYdzo94e40e
-	vxAlnVn7UmpbG31ZBNQhUlqMciGLVgoKN0wxf+6cyqDqamWDSMgUBRB6TqDfKeOGbLd58cAjn/x
-	S5hnEBu2sUUxa66RuIRlaY+UOvcKNosLXTFA8UpiqPYvipJ/8tskhD7VhEgHqzGBLWeIX6CbtR0
-	/YNAN1fsXQ7uy6GsdAy7zCfOynXy1dr3iente2k75YTDBzHwpeY/l9F1KYYiU4Qdo2Wu6cflJaY
-	wN004mL4kA0aRba5OAcyLP4EjCW8gUvhLmJFmEqm5dNTwTSGp06aIjD9RAV/I2ox+qC4quYc0QG
-	sKTIlQixsAdTI76w+3UbU2+2OLOrxaca9OwEN0Px6k0k4n3sY9Ck9pMnW7ob2BUOIx1MoEY2UNa
-	l1mcYyxccytR7n559EgXlE+TlSdsYY8hTwTc86TJrwjBc/sMO83U9eVQ==
-X-Received: by 2002:a05:7300:e826:b0:304:8881:b82 with SMTP id 5a478bee46e88-30488810bd7mr4633718eec.1.1779861184313;
-        Tue, 26 May 2026 22:53:04 -0700 (PDT)
-Received: from sw07.internal.sifive.com ([4.53.31.132])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-304be0851c9sm613202eec.23.2026.05.26.22.53.03
+        d=1e100.net; s=20251104; t=1779869234; x=1780474034;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ezb0aPRXiOggaGXZC6UVQiIgRgnViP2vjaDISs1PSDQ=;
+        b=KC2F3Ln+wXejWEhdKieb++S/fGtnCrnXke/2s2ZrmqqUdSsAJ/uicef5jn1bJf0N6P
+         54WV321C66g62l+rD+6c8AfV7OZ23wQNwaGb2uNPeKFP0TXe7OMFXdtTxgShcwrXMG1b
+         1cmn8hq3WdK1BXbnTkBslvW83MAeKITY2YHECGzHbIKrd50tXjifusxxk4pehk2dExAK
+         3VL8a8jLZrJjgUsp1lyzwoI6QXgWJYqB+LPCAO9GueShAcxRrteFpSftxex5b6AxC1Fz
+         3dAHiqcUj21CsX22Tw5jCQilXjEtjue1q8P5UXdRk4Dal8G7mX5nfQ2hI5Pdyl3Bj52r
+         heKQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/V1s6ofoJqJkZDP6t1d6m/h9wsjdQ/2A2jel7Zv+xKbj4mAyyRWnPkgqxVcCSssq4CU43O46Iy2Lz3ki55GfU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxsu97GlfFgqwd2bXZJaeYTfDdforj7bh26xc1GB9qb8Dhc6MGg
+	0gn3ZOoreyu2+jxVphc+0x+sMcVZjysMb17qusa2mjtf4S72U8qRHEHSyeIoT8vT/48=
+X-Gm-Gg: Acq92OE427t5pntFfhmCHcBv1cAbEjIUB9dLv5O+SfCsLK6rAoP7wBB3rAt8Da3hiCL
+	+uKXgs55lJS6zdkkBA0458NSr5aeRKjwpQnAs13377JZ+6NyayEzwz8XshHTfyYCK8DKzW6Ldq/
+	Iu4T+0833L8s0/6YGkdCGS4B9GZydcOApr6H8BSLzzqjXsEjraeWr1J3UQ+8y7g3QcBN18n56Ez
+	8ZWVtcX5D+uA+7D7wbz0loC3VgDetafG6Ea30ESa+Sv2g6lqA+MW6NedR2eX/tdCckRKuoEkLes
+	jeltom4jrpMHqZBMFF5/L/0NFa+pCCFUCDGw2EZvbePh7SBquusTQE2DQ7UjcGdghPJUbC3PFeI
+	ZSLI5SgeaQMR2uy0hxtvUCa76ZCgWDyyI8+ciLOUFaFtJQLwHIvdUS2W9kubfFzdcQZNzpyRqPJ
+	uyKovuAOVggjTRnHY=
+X-Received: by 2002:a05:6808:190b:b0:485:4c7f:8f51 with SMTP id 5614622812f47-4854c7f9928mr10670285b6e.25.1779869234293;
+        Wed, 27 May 2026 01:07:14 -0700 (PDT)
+Received: from houminxi ([72.244.37.221])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-43b63976dacsm15476676fac.11.2026.05.27.01.06.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 May 2026 22:53:03 -0700 (PDT)
-From: Yong-Xuan Wang <yongxuan.wang@sifive.com>
-Date: Tue, 26 May 2026 22:52:40 -0700
-Subject: [PATCH v2 3/3] KVM: riscv: selftests: Split SBI FWFT into separate
- feature-specific sublists
+        Wed, 27 May 2026 01:07:13 -0700 (PDT)
+From: Minxi Hou <houminxi@gmail.com>
+To: netdev@vger.kernel.org
+Cc: aconole@redhat.com,
+	davem@davemloft.net,
+	echaudro@redhat.com,
+	edumazet@google.com,
+	horms@kernel.org,
+	i.maximets@ovn.org,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	shuah@kernel.org,
+	dev@openvswitch.org,
+	linux-kselftest@vger.kernel.org,
+	Minxi Hou <houminxi@gmail.com>
+Subject: [PATCH net-next v3] selftests: openvswitch: add dec_ttl action support and test
+Date: Wed, 27 May 2026 16:06:01 +0800
+Message-ID: <20260527080601.615607-1-houminxi@gmail.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260526-kvm-get_reg_list-v2-v2-3-7940a401454a@sifive.com>
-References: <20260526-kvm-get_reg_list-v2-v2-0-7940a401454a@sifive.com>
-In-Reply-To: <20260526-kvm-get_reg_list-v2-v2-0-7940a401454a@sifive.com>
-To: Anup Patel <anup@brainfault.org>, Atish Patra <atish.patra@linux.dev>, 
- Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
- Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
- =?utf-8?q?Cl=C3=A9ment_L=C3=A9ger?= <cleger@rivosinc.com>, 
- Andrew Jones <ajones@ventanamicro.com>, Paolo Bonzini <pbonzini@redhat.com>, 
- Shuah Khan <shuah@kernel.org>
-Cc: greentime.hu@sifive.com, vincent.chen@sifive.com, zong.li@sifive.com, 
- kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, 
- linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Yong-Xuan Wang <yongxuan.wang@sifive.com>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1779861178; l=7898;
- i=yongxuan.wang@sifive.com; s=20260424; h=from:subject:message-id;
- bh=PU3MvdV8tam4q1KMdiajihMJ3i8qhlgrfETzPE8HD/Y=;
- b=Rf/Bxb/Y6dVq19o6khyGvrIhnmWe6YPFVdkxBIChoeXeDEbJ5eD7cToZTzm/Vs3esy/8MC97k
- 1y2/g4v/RwICUXDg73dHFNGlE0YaXfV2hGe0iNJyWyk9lFzoRaXUW+j
-X-Developer-Key: i=yongxuan.wang@sifive.com; a=ed25519;
- pk=+8NCHB1ZJvZthQAmZspOAaqjo+/snaW8mFSiDx45HxY=
+Content-Transfer-Encoding: 8bit
 
-Divide the monolithic SBI FWFT (Firmware Features) register list into
-separate sublists, each testing a specific FWFT feature independently
-with proper dependency checking.
+Add dec_ttl action support to the OVS kernel datapath selftest
+framework:
 
-Previously, all FWFT features were tested together in a single sublist.
-This caused issues because:
-1. Not all FWFT features are available on all platforms
-2. Some features depend on specific ISA extensions (e.g., pointer_masking
-requires Smnpm)
-3. Tests would fail if any single feature was unavailable
+  - Add dec_ttl nested NLA class to ovs-dpctl.py with proper
+    OVS_DEC_TTL_ATTR_ACTION sub-attribute handling
+  - Add parse support for dec_ttl(le_1(<inner_actions>)) action
+    string, consistent with the odp-util.c format where le_1()
+    holds the actions taken when TTL reaches 1
+  - Add dpstr output formatting for dec_ttl actions
+  - Add test_dec_ttl() to openvswitch.sh that verifies:
+    * Normal TTL packets are forwarded after decrement
+    * TTL=1 packets are dropped (TTL expiry)
+    * Graceful skip via ksft_skip if kernel lacks dec_ttl support
 
-Add the feature-specific SBI FWFT sublists with the following
-improvements:
-- Add check_supported_reg() function to validate register availability
-  based on required ISA extensions
-- Add check_fwft_feature() helper to verify FWFT feature availability
-  at runtime
-- Update filter_reg() to handle per-feature FWFT register filtering
+The dec_ttl class uses late-binding type resolution to reference
+ovsactions for its inner action list, avoiding circular references
+at class definition time.
 
-Signed-off-by: Yong-Xuan Wang <yongxuan.wang@sifive.com>
+Signed-off-by: Minxi Hou <houminxi@gmail.com>
 ---
- tools/testing/selftests/kvm/riscv/get-reg-list.c | 92 +++++++++++++++++++++---
- 1 file changed, 82 insertions(+), 10 deletions(-)
+v3: rename NLA class from DecTtl to dec_ttl (snake_case), consistent
+    with psample, push_vlan, ctact and other nested nla classes in
+    ovs-dpctl.py
+v2: use dec_ttl(le_1(...)) format, consistent with odp-util.c
+    (suggested by Aaron Conole)
 
-diff --git a/tools/testing/selftests/kvm/riscv/get-reg-list.c b/tools/testing/selftests/kvm/riscv/get-reg-list.c
-index cb16c638ce1a..6a34320be78c 100644
---- a/tools/testing/selftests/kvm/riscv/get-reg-list.c
-+++ b/tools/testing/selftests/kvm/riscv/get-reg-list.c
-@@ -26,7 +26,21 @@ enum {
- 	KVM_RISC_V_REG_OFFSET_MAX,
- };
+ .../selftests/net/openvswitch/openvswitch.sh  | 55 +++++++++++++++++++
+ .../selftests/net/openvswitch/ovs-dpctl.py    | 37 ++++++++++++-
+ 2 files changed, 91 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh b/tools/testing/selftests/net/openvswitch/openvswitch.sh
+index 8cd5b3d894ab..3f0e437c34bb 100755
+--- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
++++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
+@@ -29,6 +29,7 @@ tests="
+ 	tunnel_refcount				ovs: test tunnel vport reference cleanup
+ 	drop_reason				drop: test drop reasons are emitted
+ 	pop_vlan				vlan: POP_VLAN action strips tag
++	dec_ttl					ttl: dec_ttl action decrements IP TTL
+ 	psample					psample: Sampling packets with psample"
  
--static bool isa_ext_cant_disable[KVM_RISCV_ISA_EXT_MAX];
-+static bool isa_ext_enabled[KVM_RISCV_ISA_EXT_MAX];
-+
-+bool check_supported_reg(struct kvm_vcpu *vcpu, __u64 reg)
-+{
-+	switch (reg & ~REG_MASK) {
-+	case KVM_REG_RISCV_SBI_STATE | KVM_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(pointer_masking.enable):
-+	case KVM_REG_RISCV_SBI_STATE | KVM_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(pointer_masking.flags):
-+	case KVM_REG_RISCV_SBI_STATE | KVM_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(pointer_masking.value):
-+		return isa_ext_enabled[KVM_RISCV_ISA_EXT_SMNPM];
-+	default:
-+		break;
-+	}
-+
-+	return true;
-+}
- 
- bool filter_reg(__u64 reg)
- {
-@@ -148,7 +162,12 @@ bool filter_reg(__u64 reg)
- 	case KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_AIA | KVM_REG_RISCV_CSR_AIA_REG(siph):
- 	case KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_AIA | KVM_REG_RISCV_CSR_AIA_REG(iprio1h):
- 	case KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_AIA | KVM_REG_RISCV_CSR_AIA_REG(iprio2h):
--		return isa_ext_cant_disable[KVM_RISCV_ISA_EXT_SSAIA];
-+		return isa_ext_enabled[KVM_RISCV_ISA_EXT_SSAIA];
-+	/* KVM misaligned delegation registers are always visible when the host supports it */
-+	case KVM_REG_RISCV_SBI_STATE | KVM_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(misaligned_deleg.enable):
-+	case KVM_REG_RISCV_SBI_STATE | KVM_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(misaligned_deleg.flags):
-+	case KVM_REG_RISCV_SBI_STATE | KVM_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(misaligned_deleg.value):
-+		return true;
- 	default:
- 		break;
- 	}
-@@ -193,15 +212,39 @@ static int override_vector_reg_size(struct kvm_vcpu *vcpu, struct vcpu_reg_subli
- 	return 0;
+ info() {
+@@ -245,6 +246,60 @@ usage() {
  }
  
-+void check_fwft_feature(struct kvm_vcpu *vcpu, struct vcpu_reg_sublist *s, u64 feature)
-+{
-+	unsigned long value;
-+	int rc;
+ 
++test_dec_ttl() {
++	sbx_add "test_dec_ttl" || return $?
++	ovs_add_dp "test_dec_ttl" decttl || return 1
 +
-+	/* Enable SBI FWFT extension so that we can check the supported register */
-+	rc = __vcpu_set_reg(vcpu, feature, 1);
-+	if (rc)
-+		return;
++	info "create namespaces"
++	for ns in client server; do
++		ovs_add_netns_and_veths "test_dec_ttl" "decttl" "$ns" \
++			"${ns:0:1}0" "${ns:0:1}1" || return 1
++	done
 +
-+	for (int i = 0; i < s->regs_n; i++) {
-+		if ((s->regs[i] & KVM_REG_RISCV_TYPE_MASK) == KVM_REG_RISCV_SBI_STATE) {
-+			rc = __vcpu_get_reg(vcpu, s->regs[i], &value);
-+			__TEST_REQUIRE(!rc, "%s not available, skipping tests", s->name);
-+		}
-+	}
++	ip netns exec client ip addr add 10.0.0.1/24 dev c1
++	ip netns exec client ip link set c1 up
++	ip netns exec server ip addr add 10.0.0.2/24 dev s1
++	ip netns exec server ip link set s1 up
 +
-+	/* We should assert if disabling failed here while enabling succeeded before */
-+	vcpu_set_reg(vcpu, feature, 0);
++	# Probe: check if kernel supports dec_ttl action.
++	ovs_add_flow "test_dec_ttl" decttl \
++		'in_port(1),eth(),eth_type(0x0800),ipv4()' \
++		'dec_ttl(le_1())' &>/dev/null
++	if [ $? -ne 0 ]; then
++		info "no support for dec_ttl - skipping"
++		ovs_exit_sig
++		return $ksft_skip
++	fi
++
++	ovs_del_flows "test_dec_ttl" decttl
++
++	# ARP flows (bidirectional)
++	ovs_add_flow "test_dec_ttl" decttl \
++		'in_port(1),eth(),eth_type(0x0806),arp()' '2' || return 1
++	ovs_add_flow "test_dec_ttl" decttl \
++		'in_port(2),eth(),eth_type(0x0806),arp()' '1' || return 1
++
++	# IP flows with dec_ttl action
++	ovs_add_flow "test_dec_ttl" decttl \
++		'in_port(1),eth(),eth_type(0x0800),ipv4()' \
++		'dec_ttl(le_1()),2' || return 1
++	ovs_add_flow "test_dec_ttl" decttl \
++		'in_port(2),eth(),eth_type(0x0800),ipv4()' \
++		'dec_ttl(le_1()),1' || return 1
++
++	info "verify connectivity with dec_ttl"
++	ovs_sbx "test_dec_ttl" ip netns exec client ping -c 1 -W 2 \
++		10.0.0.2 || return 1
++
++	info "verify TTL=1 is dropped by dec_ttl"
++	ovs_sbx "test_dec_ttl" ip netns exec client ping -c 1 -W 2 \
++		-t 1 10.0.0.2 >/dev/null 2>&1 \
++		&& { info "FAIL: ping should fail with TTL=1 and dec_ttl"
++		     return 1; }
++
++	return 0
 +}
 +
- void finalize_vcpu(struct kvm_vcpu *vcpu, struct vcpu_reg_list *c)
- {
--	unsigned long isa_ext_state[KVM_RISCV_ISA_EXT_MAX] = { 0 };
-+	unsigned long isa_ext_state;
- 	struct vcpu_reg_sublist *s;
- 	u64 feature;
- 	int rc;
+ # psample test
+ # - use psample to observe packets
+ test_psample() {
+diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
+index 3b6a26e265a4..be9e324be12a 100644
+--- a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
++++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
+@@ -388,11 +388,19 @@ class ovsactions(nla):
+         ("OVS_ACTION_ATTR_CLONE", "recursive"),
+         ("OVS_ACTION_ATTR_CHECK_PKT_LEN", "none"),
+         ("OVS_ACTION_ATTR_ADD_MPLS", "none"),
+-        ("OVS_ACTION_ATTR_DEC_TTL", "none"),
++        ("OVS_ACTION_ATTR_DEC_TTL", "dec_ttl"),
+         ("OVS_ACTION_ATTR_DROP", "uint32"),
+         ("OVS_ACTION_ATTR_PSAMPLE", "psample"),
+     )
  
--	for (int i = 0; i < KVM_RISCV_ISA_EXT_MAX; i++)
--		__vcpu_get_reg(vcpu, RISCV_ISA_EXT_REG(i), &isa_ext_state[i]);
-+	for (int i = 0; i < KVM_RISCV_ISA_EXT_MAX; i++) {
-+		rc = __vcpu_get_reg(vcpu, RISCV_ISA_EXT_REG(i), &isa_ext_state);
-+		if (!rc)
-+			isa_ext_enabled[i] = !!isa_ext_state;
-+	}
- 
- 	/*
- 	 * Disable all extensions which were enabled by default
-@@ -209,8 +252,10 @@ void finalize_vcpu(struct kvm_vcpu *vcpu, struct vcpu_reg_list *c)
- 	 */
- 	for (int i = 0; i < KVM_RISCV_ISA_EXT_MAX; i++) {
- 		rc = __vcpu_set_reg(vcpu, RISCV_ISA_EXT_REG(i), 0);
--		if (rc && isa_ext_state[i])
--			isa_ext_cant_disable[i] = true;
-+		if (rc && isa_ext_enabled[i])
-+			isa_ext_enabled[i] = true;
-+		else
-+			isa_ext_enabled[i] = false;
- 	}
- 
- 	for (int i = 0; i < KVM_RISCV_SBI_EXT_MAX; i++) {
-@@ -229,9 +274,15 @@ void finalize_vcpu(struct kvm_vcpu *vcpu, struct vcpu_reg_list *c)
- 				goto skip;
- 		}
- 
-+		if (s->feature == KVM_RISCV_SBI_EXT_FWFT) {
-+			feature = RISCV_SBI_EXT_REG(KVM_RISCV_SBI_EXT_FWFT);
-+			check_fwft_feature(vcpu, s, feature);
-+		}
++    class dec_ttl(nla):
++        nla_flags = NLA_F_NESTED
 +
- 		switch (s->feature_type) {
- 		case VCPU_FEATURE_ISA_EXT:
- 			feature = RISCV_ISA_EXT_REG(s->feature);
-+			isa_ext_enabled[s->feature] = true;
- 			break;
- 		case VCPU_FEATURE_SBI_EXT:
- 			feature = RISCV_SBI_EXT_REG(s->feature);
-@@ -897,11 +948,15 @@ static __u64 sbi_sta_regs[] = {
- 	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_STATE | KVM_REG_RISCV_SBI_STA | KVM_REG_RISCV_SBI_STA_REG(shmem_hi),
- };
- 
--static __u64 sbi_fwft_regs[] = {
-+static __u64 sbi_fwft_misaligned_deleg_regs[] = {
- 	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_EXT | KVM_REG_RISCV_SBI_SINGLE | KVM_RISCV_SBI_EXT_FWFT,
- 	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_STATE | KVM_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(misaligned_deleg.enable),
- 	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_STATE | KVM_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(misaligned_deleg.flags),
- 	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_STATE | KVM_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(misaligned_deleg.value),
-+};
++        nla_map = (
++            ("OVS_DEC_TTL_ATTR_UNSPEC", "none"),
++            ("OVS_DEC_TTL_ATTR_ACTION", "actions"),
++        )
 +
-+static __u64 sbi_fwft_pointer_masking_regs[] = {
-+	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_EXT | KVM_REG_RISCV_SBI_SINGLE | KVM_RISCV_SBI_EXT_FWFT,
- 	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_STATE | KVM_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(pointer_masking.enable),
- 	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_STATE | KVM_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(pointer_masking.flags),
- 	KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_STATE | KVM_REG_RISCV_SBI_FWFT | KVM_REG_RISCV_SBI_FWFT_REG(pointer_masking.value),
-@@ -1129,7 +1184,6 @@ KVM_SBI_EXT_SIMPLE_CONFIG(pmu, PMU);
- KVM_SBI_EXT_SIMPLE_CONFIG(dbcn, DBCN);
- KVM_SBI_EXT_SIMPLE_CONFIG(susp, SUSP);
- KVM_SBI_EXT_SIMPLE_CONFIG(mpxy, MPXY);
--KVM_SBI_EXT_SUBLIST_CONFIG(fwft, FWFT);
+     class psample(nla):
+         nla_flags = NLA_F_NESTED
  
- KVM_ISA_EXT_SUBLIST_CONFIG(aia, SSAIA);
- KVM_ISA_EXT_SUBLIST_CONFIG(fp_f, F);
-@@ -1206,6 +1260,23 @@ KVM_ISA_EXT_SIMPLE_CONFIG(zvksed, ZVKSED);
- KVM_ISA_EXT_SIMPLE_CONFIG(zvksh, ZVKSH);
- KVM_ISA_EXT_SIMPLE_CONFIG(zvkt, ZVKT);
+@@ -635,6 +643,13 @@ class ovsactions(nla):
+                 print_str += "ct_clear"
+             elif field[0] == "OVS_ACTION_ATTR_POP_VLAN":
+                 print_str += "pop_vlan"
++            elif field[0] == "OVS_ACTION_ATTR_DEC_TTL":
++                datum = self.get_attr(field[0])
++                print_str += "dec_ttl(le_1("
++                subacts = datum.get_attr("OVS_DEC_TTL_ATTR_ACTION")
++                if subacts and subacts.get("attrs"):
++                    print_str += subacts.dpstr(more)
++                print_str += "))"
+             elif field[0] == "OVS_ACTION_ATTR_PUSH_VLAN":
+                 datum = self.get_attr(field[0])
+                 tpid = datum["vlan_tpid"]
+@@ -786,6 +801,20 @@ class ovsactions(nla):
+                 actstr = actstr[paren + 1:]
+                 parsed = True
  
-+static struct vcpu_reg_list config_sbi_fwft_misaligned_deleg = {
-+	.sublists = {
-+		SUBLIST_BASE,
-+		SUBLIST_SBI(fwft_misaligned_deleg, FWFT),
-+		{0},
-+	},
-+};
++            elif parse_starts_block(actstr, "dec_ttl(le_1(", False):
++                parencount += 2
++                subacts = ovsactions()
++                actstr = actstr[len("dec_ttl(le_1("):]
++                parsedLen = subacts.parse(actstr)
++                decttl = ovsactions.dec_ttl()
++                decttl["attrs"].append(
++                    ("OVS_DEC_TTL_ATTR_ACTION", subacts)
++                )
++                self["attrs"].append(
++                    ("OVS_ACTION_ATTR_DEC_TTL", decttl)
++                )
++                actstr = actstr[parsedLen:]
++                parsed = True
+             elif parse_starts_block(actstr, "clone(", False):
+                 parencount += 1
+                 subacts = ovsactions()
+@@ -957,6 +986,12 @@ class ovsactions(nla):
+         return (totallen - len(actstr))
+ 
+ 
++# pyroute2 resolves nla_map types via getattr(self, name).
++# dec_ttl needs "actions" to resolve to ovsactions, but
++# ovsactions is not defined when dec_ttl class body runs.
++ovsactions.dec_ttl.actions = ovsactions
 +
-+static struct vcpu_reg_list config_sbi_fwft_pointer_masking = {
-+	.sublists = {
-+		SUBLIST_BASE,
-+		SUBLIST_ISA(smnpm, SMNPM),
-+		SUBLIST_SBI(fwft_pointer_masking, FWFT),
-+		{0},
-+	},
-+};
 +
- struct vcpu_reg_list *vcpu_configs[] = {
- 	&config_sbi_base,
- 	&config_sbi_sta,
-@@ -1213,7 +1284,8 @@ struct vcpu_reg_list *vcpu_configs[] = {
- 	&config_sbi_dbcn,
- 	&config_sbi_susp,
- 	&config_sbi_mpxy,
--	&config_sbi_fwft,
-+	&config_sbi_fwft_misaligned_deleg,
-+	&config_sbi_fwft_pointer_masking,
- 	&config_aia,
- 	&config_fp_f,
- 	&config_fp_d,
-
+ class ovskey(nla):
+     nla_flags = NLA_F_NESTED
+     nla_map = (
 -- 
-2.43.7
+2.54.0
 
