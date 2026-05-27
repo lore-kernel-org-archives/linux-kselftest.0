@@ -1,149 +1,145 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from smtpbg151.qq.com (smtpbg151.qq.com [18.169.211.239])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B01F406279;
-	Wed, 27 May 2026 13:01:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34E1729898F;
+	Wed, 27 May 2026 13:20:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.169.211.239
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779886862; cv=none; b=jLMz7HSuGKa5wleniXsSRWxJhCDnLgNv6Mik6imOgnBLk77DpQhdVYJ2Cwbo51W1bhLjgAKM94o+WtUEkIUs/kQg5gECpvsmASx6NrwccjlKsrYQgB8iv7yD/yWQ1uoApTION/wZzKrUBKSWgVzNb1LbcweLHAryQpUlLRE0lls=
+	t=1779888042; cv=none; b=bYGIGcBNArE4+THe394GB8/1G3mmNqs0t/AJn2h4aiB4OkZKtRw1zfmrgDhqKaLDW7zkWQcMBYb29Rw3V0rdcn+7OdsHUtamQDNOMYuHxanmcX41/RtN7z5qUQfPT/sbZls8GF0nBAZ8QcO1pXcG9jMdWPgHnPjJW1U0LKk+T00=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779886862; c=relaxed/simple;
-	bh=wteeOWqFtArRQCr5tPFdFfQRi6IavlrVpdHlVoTyP4o=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=A7PCOZtRjA0OGdDBZochpFD612XVrYmwK+WZ7fuZ+YTAx5ZRG+vpoUpj8jgKPBN7rNhgbtDemHukwGIQS+zgJN5ZV9P1G/VWkI+GT/CEtGwy9J7DzB5GKM5PitmFZhSHES0ezdhqgbUL5l9+wDZHYhrYCKGpZEnoFeD2efchwUo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P2259crJ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779888042; c=relaxed/simple;
+	bh=L9qKtLQtKkxrsNLnzUtoqvaUZmU05nXO5yp3LacOm6w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=auhX5m1yYMPXaN8iTr7TvXwg7S3TQm9h+HHO3UTFWvqvuG6wj/RNH2pMQka1IFP+70wGOahK+Sb1yL0Y9PT5yUqO7qR082r4tqIazutN/0epgYfaywpzBBpIJVVs+QTT7Z+j1YOtrQ59PWQzXPu/dcBz6mz+iC9JxOqyUQBioEk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=RUUX7tDA; arc=none smtp.client-ip=18.169.211.239
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P2259crJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 843B21F000E9;
-	Wed, 27 May 2026 13:01:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779886861;
-	bh=ewCZvotD2nMM/jjWYtZrGs+J8TAeFzVbz9UBT46h7c8=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=P2259crJ4T61qpz0XGUiJIV20jSRagZ6SL9jLMALgA7jNIhj1VMXA0CAG+YnMjFcp
-	 XiFwZXKGei55tEc7YwvkSYH0M74pt/BEG0dsEu2Q6PAQ1lJUpraElHGB9659Az7HUZ
-	 CGVuUCHkHfccVY5PZI2KhwSib5ObtiCTvYVfWJ+mFS+30s4KAs3c71aiU8DDXmDE4s
-	 ikdzKNbabZ4iD3dof0j8fc1/HPRQd6l5ByK2d1wq2RwCvQbC74o+OXTgxrzC3dOF68
-	 A7HrkvUH6me6YoyoqGpa2gcopCLboMCgMfiWr9bcLJQVyg/ga9GJtnvBVS4rJQLSpz
-	 y9jjvoUdPOc0Q==
-Content-Type: multipart/mixed; boundary="===============6680819981936320450=="
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="RUUX7tDA"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1779887988;
+	bh=5mzZEXyiO0JflCfdB6VaE2FEAlhQSEMBYpDcbwfZk+U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=RUUX7tDAf15M+wGnyF+7ZI5GP2lVbFp7/Ud2L5J87ui+kIODLpt1RBajhUVq6IDB7
+	 24GghFvXE/8MQ+qRDtpHWG+Cp+2xn5ffQpuJ+QnYgc5Z7dGxjVtktIISLWM4t+Gibt
+	 zh2vTGOIzmfSFfUPjIg+AEl9LpbS0GqTO1zg1oVE=
+X-QQ-mid: esmtpsz16t1779887978t793583f7
+X-QQ-Originating-IP: OniFXumbivWLGG94CJ6pX595nkxTKFJhoEuBCwMMLiQ=
+Received: from [192.168.31.204] ( [39.157.100.57])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Wed, 27 May 2026 21:19:36 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 10393737645420507870
+Message-ID: <C0D6799DFB309F26+b1597426-6523-47c7-8e22-713819e31f65@uniontech.com>
+Date: Wed, 27 May 2026 21:19:35 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <d020aa03b31a01086809801d91e1dd620b2fa26c375d7e7796bf59dee8af3cc0@mail.kernel.org>
-In-Reply-To: <20260527121207.2312181-4-puranjay@kernel.org>
-References: <20260527121207.2312181-4-puranjay@kernel.org>
-Subject: Re: [PATCH v4 3/4] perf/arm64: Add BRBE support for bpf_get_branch_snapshot()
-From: bot+bpf-ci@kernel.org
-To: puranjay@kernel.org,bpf@vger.kernel.org
-Cc: puranjay@kernel.org,puranjay12@gmail.com,ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,will@kernel.org,mark.rutland@arm.com,catalin.marinas@arm.com,leo.yan@arm.com,robh@kernel.org,peterz@infradead.org,mingo@redhat.com,acme@kernel.org,namhyung@kernel.org,james.clark@linaro.org,irogers@google.com,adrian.hunter@intel.com,shuah@kernel.org,leitao@debian.org,ravi.bangoria@amd.com,eranian@google.com,memxor@gmail.com,usama.arif@linux.dev,linux-arm-kernel@lists.infradead.org,linux-perf-users@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed, 27 May 2026 13:01:00 +0000 (UTC)
-
---===============6680819981936320450==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> diff --git a/drivers/perf/arm_brbe.c b/drivers/perf/arm_brbe.c
-> index ba554e0c846c..aede95e27784 100644
-> --- a/drivers/perf/arm_brbe.c
-> +++ b/drivers/perf/arm_brbe.c
-
-[ ... ]
-
-> @@ -774,32 +795,96 @@ void brbe_read_filtered_entries(struct perf_branch_stack *branch_stack,
-
-[ ... ]
-
-> +/*
-> + * Best-effort BRBE snapshot for BPF tracing. Pause BRBE to avoid
-> + * self-recording and return 0 if the snapshot state appears disturbed.
-> + */
-> +int arm_brbe_snapshot_branch_stack(struct perf_branch_entry *entries, unsigned int cnt)
-> +{
-> +	unsigned long flags;
-> +	int nr_hw, nr_copied = 0;
-> +	u64 brbfcr, brbcr;
-> +
-> +	if (!cnt)
-> +		return 0;
-> +
-> +	/* Guard against running on a CPU without BRBE (e.g. big.LITTLE). */
-> +	if (!cpu_has_brbe())
-> +		return 0;
-> +
-> +	/*
-> +	 * Pause BRBE first to avoid recording our own branches. The
-> +	 * sysreg read/write and ISB are branchless, so pausing before
-> +	 * checking BRBCR avoids polluting the buffer with our own
-> +	 * conditional branches.
-> +	 */
-> +	brbfcr = read_sysreg_s(SYS_BRBFCR_EL1);
-> +	brbcr = read_sysreg_s(SYS_BRBCR_EL1);
-> +	write_sysreg_s(brbfcr | BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
-> +	isb();
-> +
-> +	/* Bail out if BRBE is not enabled (BRBCR_EL1 == 0). */
-> +	if (!brbcr) {
-> +		write_sysreg_s(brbfcr, SYS_BRBFCR_EL1);
-> +		return 0;
-> +	}
-
-A subsystem pattern flags this as potentially concerning: when
-BRBCR_EL1 is not enabled, the function restores BRBFCR_EL1 and returns
-immediately. Should the write_sysreg_s that restores BRBFCR_EL1 be
-followed by an isb() before the return?
-
-Looking at other code paths in this function, both the success path and
-the PMU-overflow-detection path restore BRBFCR_EL1 followed by isb()
-before returning. The early-exit path here omits the barrier, meaning
-there is a function return (RET branch) right after the control register
-write without an intervening isb().
-
-ARM64 guidelines typically require an isb() after writes to control
-system registers to ensure the change takes effect before subsequent
-operations. While BRBE is disabled in this path, and eventual exception
-entry/exit will provide synchronization, the inconsistency with the
-other exit paths is worth checking.
-
-> +
-> +	/* Block local exception delivery while reading the buffer. */
-> +	flags = local_daif_save();
-> +
-> +	/*
-> +	 * A PMU overflow before local_daif_save() could have re-enabled
-> +	 * BRBE, clearing the PAUSED bit. The overflow handler already
-> +	 * restored BRBE to its correct state, so just bail out.
-> +	 */
-> +	if (!(read_sysreg_s(SYS_BRBFCR_EL1) & BRBFCR_EL1_PAUSED)) {
-> +		local_daif_restore(flags);
-> +		return 0;
-> +	}
-
-[ ... ]
-
-> +	brbe_invalidate();
-> +
-> +	/* Restore BRBCR before unpausing via BRBFCR, matching brbe_enable(). */
-> +	write_sysreg_s(brbcr, SYS_BRBCR_EL1);
-> +	isb();
-> +	write_sysreg_s(brbfcr, SYS_BRBFCR_EL1);
-> +	/* Ensure BRBE is unpaused before returning to the caller. */
-> +	isb();
-> +	local_daif_restore(flags);
-> +
-> +	return nr_copied;
-> +}
-
-[ ... ]
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests: livepatch: set LC_ALL=C to fix
+ locale-dependent test failure
+To: Marcos Paulo de Souza <mpdesouza@suse.com>, jpoimboe@kernel.org,
+ jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com, joe.lawrence@redhat.com,
+ shuah@kernel.org
+Cc: live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260527095929.1504032-1-maqianga@uniontech.com>
+ <cd470b3b399aa01dfa54a758eca77e58c672d314.camel@suse.com>
+From: Qiang Ma <maqianga@uniontech.com>
+In-Reply-To: <cd470b3b399aa01dfa54a758eca77e58c672d314.camel@suse.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: esmtpsz:uniontech.com:qybglogicsvrsz:qybglogicsvrsz3b-0
+X-QQ-XMAILINFO: Nkm5Fff6p/24clQ5Aah9GBRN5WGxnvVpdOB9yMzRJS3jIC5qJoBC9e3O
+	XWW8F9RdN6xwTfXPVjuSd2XvQeT7AtALHIlynllNXoU4+rBw3ewaB18pE5fP5y0pln4txqL
+	K0JzpOgZcUn4+T/U+SgnE+x6jbeJRxX3NOPvOXhUvb33nK93yvtLzVkmiLu1+eQCYz6YwdY
+	qK+A2b5kgmKn045qkniZ48RTwfjf0dlSsrjJ719aKTAohAv8KOFBZX5U+8RnYf0+JSymTKO
+	9GD3mOsi4Yx3gqBYBWwEYYdFgjCK/H0Eh2erp+xu4hylNrcdJ5x9k5JJ6m0yeQHsO4g+WHG
+	WUwSOUXO3wZMoW87pBY+tb0VXaheuDtzzPr7vsS2zxptSEmyyDndNDe1a+4RZdtcXSJmeru
+	EooGiigRrYJNMGc6rCAJ3UUEQP009rj+ekJHGyFY9QSntWOt8ApEnWvQT4xZXg1KQNuKLvh
+	MPcPbgJM7n4b4MUSRRkLzPdY4JISd7YDlqGbyGzYeAn0YuLDth7XRWwHtYQee6kjGz4cwMJ
+	nIDB9/AYysMXLqSDj/pxC+FEuMbNzBHxGfkwVAqWNs+Ztp53o77SPTVd/9x7enInWhoaqqS
+	7LgHHDWTM32nyXFi+j7WIel9nnObNUBNcEi4WGLgqYMbxHmJ7Ru6Rfdx7pmpKtfaL/VkNeo
+	6HWj15wKBUVolbq2tfnTGldbpYPsyBZlZKUbKaKP8TUVjI05Y9so7xg2ZRLDtfUc1p2grho
+	qaxQuSn4N5k+uR/INuII0CSRV3latBRinWGKyevgrNdVvCQvNjsOietM6+fAotgo4UeRC7i
+	noZeRW5Wb5BnLulyKB8y3HIgFfNXY/BDNtYdnMLpMg3ZRFOKYofpYuwEhvLjSMFJHinbIih
+	Uy4juyoCT1hE8R5SQmSe2IHQulcyiRi8lzSasDeEts74hbG1O6kAka3xUhRpUCILw71AIi/
+	qGT054gw2Zb3nSND0amA1KUobfELe8pHw4RP7WsoKdMEPgo//sik2QHuefgC75DRcunRP/S
+	HtMxdx1LPXAwxfZwrppNGJZb2FmkQW6CikkIAu/7VWRyRcnqY9
+X-QQ-XMRINFO: MPJ6Tf5t3I/y7LCPexh/uc8ZoikWzjFzYg==
+X-QQ-RECHKSPAM: 0
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+在 2026/5/27 20:09, Marcos Paulo de Souza 写道:
+> On Wed, 2026-05-27 at 17:59 +0800, Qiang Ma wrote:
+>> When executing the command
+>> "make -C tools/testing/selftests TARGETS=livepatch run_tests",
+>> the following error message was reported.
+>>
+>> TEST: livepatch interaction with ftrace_enabled sysctl ... not ok
+>> ...
+>> livepatch: sysctlo
+>> : setting key "kernel.ftrace_enabled": Device or resource busy
+>> livepatch: sysctl: setting key "kernel.ftrace_enabled": 设备或资源忙
+>> ...
+>> ERROR: livepatch kselftest(s) failed
+>> not ok 5 selftests: livepatch: test-ftrace.sh # exit=1
+>>
+>> To fix it, set LC_ALL=C.
+> Would you mind adding more context here? Can you point exactly why is
+> this failing inside test-ftrace.sh script?
+In the check_result(), the values of  result  and expect are compared.
+In the expect value, one part is
+"livepatch: sysctl: setting key \"kernel.ftrace_enabled\": Device or 
+resource busy".
+However, the actual value of result obtained from dmesg is
+"[  220.947876] livepatch: sysctl: 设置键 "kernel.ftrace_enabled": 
+设备或资源忙".
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/26510917353
---===============6680819981936320450==--
+The comparison is different, so it directly enters the final 'else' branch.
+Finally, the 'else' branch prints the difference between result and expect:
+
+# --- expected
+# +++ result
+# @@ -16,7 +16,7 @@ livepatch: 'test_klp_livepatch': initial # 
+livepatch: 'test_klp_livepatch': starting patching transition
+#  livepatch: 'test_klp_livepatch': completing patching transition
+#  livepatch: 'test_klp_livepatch': patching complete
+# -livepatch: sysctl: setting key "kernel.ftrace_enabled": Device or 
+resource busy
+# +livepatch: sysctl: Set key "kernel.ftrace_enabled": Device or 
+resource is busy #  % echo 0 > 
+/sys/kernel/livepatch/test_klp_livepatch/enabled
+#  livepatch: 'test_klp_livepatch': initializing unpatching transition
+#  livepatch: 'test_klp_livepatch': starting unpatching transition
+>
+> Have you double checked if you had any previous loaded livepatches why
+> trying to disable/enable livepatching?
+>
+> I'll test in my environment, but I'm pretty sure that it used to work
+> not so long ago.
+>
+>> Signed-off-by: Qiang Ma <maqianga@uniontech.com>
+>> ---
+>>   tools/testing/selftests/livepatch/functions.sh | 2 ++
+>>   1 file changed, 2 insertions(+)
+>>
+>> diff --git a/tools/testing/selftests/livepatch/functions.sh
+>> b/tools/testing/selftests/livepatch/functions.sh
+>> index 8ec0cb64ad94..ecf27c1120f1 100644
+>> --- a/tools/testing/selftests/livepatch/functions.sh
+>> +++ b/tools/testing/selftests/livepatch/functions.sh
+>> @@ -4,6 +4,8 @@
+>>   
+>>   # Shell functions for the rest of the scripts.
+>>   
+>> +export LC_ALL=C
+>> +
+>>   MAX_RETRIES=600
+>>   RETRY_INTERVAL=".1"	# seconds
+>>   SYSFS_KERNEL_DIR="/sys/kernel"
