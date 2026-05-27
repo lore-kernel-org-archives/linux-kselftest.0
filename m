@@ -1,322 +1,175 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C1AC4279F5
-	for <linux-kselftest@vger.kernel.org>; Wed, 27 May 2026 16:35:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84E663D6CD5
+	for <linux-kselftest@vger.kernel.org>; Wed, 27 May 2026 16:59:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779899716; cv=none; b=m6C58ZOpja8gf+5A42psMipPYLNHdiiVu6tPKtUrMzkcgrkAoBgiP5fAtyuD4SZdEScpqmzRx4Gjqe3XvHGjBNfyz9YDEme0CgZ7kWIoSQQmsEIhZdQnhb7snvq707oJxLoJv6wzt7IeE9Ad8YiRCTgaa31a4GB/WeTzHYvtxsI=
+	t=1779901180; cv=none; b=Tk8dKttW//K++gLAeTDw6TYVtYoQIHjRNzMhwsUN+uhwKnDOtj+ivufHNQsov559APf2BvQ8ZnLVGYWG+IuhjLpF8ke8RPXx93oCiA6vXkzz5iNGKv7gtpxeNetGrk/RCMcLgt8J44UYuKH9tTixlj0gIg/cs6dr3ca9FAxjnXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779899716; c=relaxed/simple;
-	bh=QDw8Jsuw+6AP8iu7lgfzYciOXYThi6tQVsbGIJHSjOE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eGB3kJjxlVblSL3qHMZ6ALe+VNulcw1kYyyeW22Vd9H7arUhqeFdTpXfNCOKd1Po8fg//Hi8AM9IMpTMAILY3fBdUcJdYPwqlL0cC3DamH+XzDduFu+tD5OmKnvWTDQr6Hl7s0OuPbwWlYUqtQ7cD/501CRzSqqeto+KVFk5pE8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=OljyIpPW; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=ffNUjPE9; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	s=arc-20240116; t=1779901180; c=relaxed/simple;
+	bh=LU9L02kowGpNnB5MXU5rmt8ZMZk5riYW8QfW6X+Q904=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=amrTO70JsFes80JA125EEqkfWgzGYU/AiDSAXuokEWmMHPHtk2DYDmeYEz8XXhMvZTMYZW8nir9642TUZHD1nsQkA6sR0ikL0cVMf6fqcTMMhbsQsOvm6mqFlTyn6QeVpBnD0X5we1ZbWTUR47GBqGTLs/Is9k3AvIS7GIh5Ero=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Fa2/Vd3g; arc=none smtp.client-ip=91.218.175.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="OljyIpPW";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="ffNUjPE9"
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64RGObjx195638
-	for <linux-kselftest@vger.kernel.org>; Wed, 27 May 2026 16:35:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=3o/qC8F03FVtWvVL+To0ZZ8G
-	ZQPvSZaDhCCbgVrIpSk=; b=OljyIpPW1Bpt0pM8Vh+sEa5MvLEqha4zmw6RCVwi
-	21zDtiVA67hiZVBT63mzSLd71m798KJCmzz7Cb31jIh2FIDkxXrBHMc+l5sB4RtO
-	UYUoKMTW1TJERhd310gbTIiI2uTZcazPB+oOedZ94Kl0yN3mjmPOXQEB0C2vw/zP
-	ThGhorK1HP6NZB7dpThJKIS2iW3vQ03ZPDC7smO/GG2cAKAmJWEv7QY7Rw2MZKqO
-	JA1vqLu7t+k6/9LibvGr+YjcCi92vj1FS/gHIbDNmIZfeJ9qUc/E8pwXycGG+sgH
-	TvEovUyhF434EdvWvxzbGJ/vrcaUENG6/J9vpRGIMb6NYQ==
-Received: from mail-dy1-f200.google.com (mail-dy1-f200.google.com [74.125.82.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4edxce9jcp-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-kselftest@vger.kernel.org>; Wed, 27 May 2026 16:35:11 +0000 (GMT)
-Received: by mail-dy1-f200.google.com with SMTP id 5a478bee46e88-2fe1cf409a1so1243980eec.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 27 May 2026 09:35:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1779899711; x=1780504511; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3o/qC8F03FVtWvVL+To0ZZ8GZQPvSZaDhCCbgVrIpSk=;
-        b=ffNUjPE9FhYa2qVY+gJUSEGVFWJYmdXpNGEYQFS6gUBsjeBwiD6GenczwtveRJEnHQ
-         3fnZnBPCvjvUCP4EOkBgwXt6j9mOMaDi5Oj5s+C2TVogehlAzx7DONsY3kCHOKpT+Z+T
-         QtX0Wn97EA0fnblwgKVbPqRUWLLIULaM9pJpJTlJ8LHqVPs+gL5ZmdYV48YqM1CAfmwj
-         BliJMi5PdYXTTtssWujaOajJN96rsZ82YjjqGukrpTUsBpdQZXj2wBPzki9GUz+E473Y
-         5H/v3TChGl+6aBSs4c6rTXk1Nd8KZLly62EwN9BoRJvWWUe3EfD7P/9G6MGUvyaHazxg
-         toCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779899711; x=1780504511;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3o/qC8F03FVtWvVL+To0ZZ8GZQPvSZaDhCCbgVrIpSk=;
-        b=HdNsZBGbUUziwGA7kDgudCwEm197trXZm5BE5AYrdqT4/fWBvQhP4XZnzdHSO7q9AO
-         aoeQ5i8Htf5NNp/7kXWs4kCdiwoYLHtwfhGFqJYMJXWSfqp7Otdvm7Ks6z7IR1G50+ax
-         ErUfHqSvJL/vjrHMgN/0XeBz5JGMGfItgf9BLNrwolNOgqbrJuGH6NJRisQKtciksOE/
-         TYYGnDQwuIX707iOdZO5cYoQN24R/rI0k6fDkoG8bSOgHpbv7Mt4cGwpnrTHsYVK+2Y7
-         UVPHXFdG7WnbbsikJTPNk3N8slIw1ocVlbKwRhfgN2LvajVZzz4gqV8iJyhpHEzvSFru
-         hfZg==
-X-Forwarded-Encrypted: i=1; AFNElJ/Hgg9qQd26Xb9Rrx2ij2CGQlpQRMm+BGzC1XSR0wMd5xnvZfWWoajz0nl1bxQXTbXVk18mKQOTO5CqcAfS+yM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzj/6Hqav7ji0ucXtSq8i9ZLhvmjPzywI4W5G6I2dVkzqI5HZ+v
-	0fapWCD0I8575+/uNbvdRl1kU3NsKUNMl7tH8X5z4FvwCB7bSsFlQGCig5QyRpNIf0auR+YI2xo
-	oxBtiCt2i5mbpM7ngzX32EzXMJQ1HmfMYFsaMlRHXv0+g7fMDVGtPHD/9gQH2sb/7BKjolFQ=
-X-Gm-Gg: Acq92OHdn1YJI7UmUOjWZlTH6WnzKGQjs83eIzp5X0UMon4O49RquLELV9ka8oqvGab
-	VwTVvUzO7gAHGIF16KzkA6ZhGZ/foMHd3tzym1rDOiUeHOP7pEam0qp082hVtCfQwfi8JY/3U6G
-	3ixkr6cmJzjLmAVI6WOhyzJ5qZl3gmZudpHUKJQD54RGEDYCGSLD94FowOw1sRmKOcixqSTZV1i
-	uoMObLg6Y1gUbe/ePOxElouQ14CGvRkODmHxDELpGreVjkE7KwFPF9xFK1Q4wxEbPMH/SAKQzwP
-	OLixxF8aTHETE7lSPLRAuzIwe/SFWXt9UMn6ovooiTCz83SVWC22HojIKcd+8b22LK0Y6C9tod/
-	53N2BVPtRu6+5+xTRB583TVwJwaDE864=
-X-Received: by 2002:a05:7022:fe09:b0:134:ff2e:a71c with SMTP id a92af1059eb24-1365f600b14mr8303626c88.9.1779899710834;
-        Wed, 27 May 2026 09:35:10 -0700 (PDT)
-X-Received: by 2002:a05:7022:fe09:b0:134:ff2e:a71c with SMTP id a92af1059eb24-1365f600b14mr8303599c88.9.1779899710070;
-        Wed, 27 May 2026 09:35:10 -0700 (PDT)
-Received: from localhost ([140.82.166.162])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1366aba2b9asm13381153c88.15.2026.05.27.09.35.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 May 2026 09:35:09 -0700 (PDT)
-Date: Wed, 27 May 2026 11:35:08 -0500
-From: Andrew Jones <andrew.jones@oss.qualcomm.com>
-To: Guodong Xu <guodong@riscstar.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, Paul Walmsley <pjw@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-        Shuah Khan <shuah@kernel.org>, Anup Patel <anup@brainfault.org>,
-        Atish Patra <atish.patra@linux.dev>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Deepak Gupta <debug@rivosinc.com>, Zong Li <zong.li@sifive.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Charlie Jenkins <charlie@rivosinc.com>,
-        Samuel Holland <samuel.holland@sifive.com>, linux-doc@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 08/10] riscv: cpufeature: Introduce ISA bases bitmap
- and rva23u64 detection
-Message-ID: <5tjmypgyxbhgxfjub5q6ne475uysse6yl473sxisjoammkdvbu@yebejqbiy6e3>
-References: <20260511-rva23u64-hwprobe-v2-v2-0-21c5a544f1dc@riscstar.com>
- <20260511-rva23u64-hwprobe-v2-v2-8-21c5a544f1dc@riscstar.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Fa2/Vd3g"
+Message-ID: <549d58c6-05f0-4176-98ec-c88e96ee4375@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1779901166;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=y5Uv03Ujj428n5sCQ9PwAg+yJsQrd1cz70XxOo1jmLc=;
+	b=Fa2/Vd3gbi6YG8N2SewLk8TSArhbXjjruuc5wEBR7DpmJZi/2w0Wd3DgAYf7YoWnGYG7ER
+	Bb6lIk3acqxivK4o7CBx7lzZ8OjtAG9hiDxI+ywSURuSjaLa/y6T9gKRsq39l2ytutu+nP
+	V0mcUDp0Tiv/YG4XN1BWZ7oAPYYwqaM=
+Date: Wed, 27 May 2026 09:59:21 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260511-rva23u64-hwprobe-v2-v2-8-21c5a544f1dc@riscstar.com>
-X-Proofpoint-ORIG-GUID: Rf7klpdfHhTS3YJa_-8iYKCM8ktxYRQR
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTI3MDE2NiBTYWx0ZWRfX+r1f2u49WZ9N
- z/pUCNDn6F6um7fsyi3mFO3WESnEhe4wSULZsc267y6jm+wxGb347p/FzAb4IdMZdbBJM4pKibf
- z3YmbfjY1cB+AzutPM7VOFPO6hY7P0RIa2xrqE0A/k6SkqWJZRmaJKTrzYq+C2Oiz/3+AWED5GF
- 5lapkjZH4nLIRO33byaMoq//p9ulzCuwlbcJRCbMUnmCbDV29pxdNV5dTCQeORsFAdwBb8xmUiR
- bYqNC3vmFo3i350ZZICz2QKDMWYLKvQZyjs6HLnRLqvbdQmo2U+nMKZI7DiiGmjPlz+dmY2jOyk
- 1+UAGqa4UmF2hi8TcFgn6yuEq6UfpA1ppkoxuMUFsZYB8izT9oLp38BIM0F8ObFBmHA43arEz5s
- uFOmeK+7FLNvpmFwOeN4CWIeN/ylJTxuHNZAxmEwyam8zvStN0Sd2AgV5GI0BACc1ZiRSaLidgR
- TsrlqigRUxcLo2qluvA==
-X-Proofpoint-GUID: Rf7klpdfHhTS3YJa_-8iYKCM8ktxYRQR
-X-Authority-Analysis: v=2.4 cv=SIpykuvH c=1 sm=1 tr=0 ts=6a171d3f cx=c_pps
- a=PfFC4Oe2JQzmKTvty2cRDw==:117 a=cvcws7F5//HeuvjG1O1erQ==:17
- a=kj9zAlcOel0A:10 a=NGcC8JguVDcA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=yOCtJkima9RkubShWh1s:22
- a=c92rfblmAAAA:8 a=ee_2aqc6AAAA:8 a=EUspDBNiAAAA:8 a=4F2392DG074ZRd-8RbwA:9
- a=CjuIK1q_8ugA:10 a=6Ab_bkdmUrQuMsNx7PHu:22 a=GvGzcOZaWPEFPQC_NcjD:22
- a=VOpmJXOdbJOWo2YY3GeN:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
- definitions=2026-05-27_03,2026-05-26_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 bulkscore=0 priorityscore=1501 clxscore=1015 adultscore=0
- lowpriorityscore=0 spamscore=0 impostorscore=0 malwarescore=0 suspectscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2605130000 definitions=main-2605270166
+Subject: Re: [PATCH bpf 1/1] bpf: reject overlarge global subprog argument
+ sizes
+Content-Language: en-GB
+To: Taegu Ha <hataegu0826@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>
+Cc: Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Shuah Khan <shuah@kernel.org>,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260527052539.3388700-1-hataegu0826@gmail.com>
+ <20260527052539.3388700-2-hataegu0826@gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20260527052539.3388700-2-hataegu0826@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Mon, May 11, 2026 at 09:34:53PM -0400, Guodong Xu wrote:
-> Introduce a per-hart and host-wide bitmap of conformant ISA "bases" --
-> named profile-class sets such as IMA and RVA23U64 -- and compute
-> both at init time.
-> 
-> This is the cache that subsequent consumers (hwprobe's
-> RVA23U64 base behavior bit, /proc/cpuinfo's "isa bases" lines, etc.)
-> read without recomputing.
-> 
-> riscv_init_isa_bases() iterates over all possible cpus to populate
-> each hart_isa[cpu].isa_bases, then computes the host-wide
-> riscv_isa_bases against the AND-across-harts riscv_isa bitmap.  It is
-> registered as a subsys_initcall so it executes after
-> core_initcall(tagged_addr_init), which probes senvcfg.PMM and
-> populates have_user_pmlen_*.  Without that ordering,
-> riscv_have_user_pmlen(7) would still return its default false and the
-> RVA23U64 detection path would always bail.
-> 
-> The detection itself is encapsulated in riscv_set_isa_bases(), which
-> takes an output bases bitmap and an input ISA bitmap.
-> 
-> Signed-off-by: Andrew Jones <andrew.jones@oss.qualcomm.com>
-> Signed-off-by: Guodong Xu <guodong@riscstar.com>
+
+
+On 5/26/26 10:25 PM, Taegu Ha wrote:
+> Global subprogram argument checking derives generic pointer sizes from BTF
+> and passes the resolved size to check_mem_reg() as a u32. The access-size
+> validation path then uses a signed int, and stack pointers negate the value
+> before calling check_helper_mem_access().
+>
+> A BTF type such as int[0x3fffffff] resolves to 0xfffffffc bytes. On a stack
+> pointer, (int)mem_size becomes -4 and the negation validates only four
+> bytes. A caller can therefore pass a four-byte stack slot while the callee
+> is verified with a nearly 4GiB memory argument, allowing accesses outside
+> the caller object.
+>
+> This was confirmed with a non-executing raw-BTF reproducer. On a
+> vulnerable kernel, the verifier accepted a program where the caller passed
+> a four-byte stack slot, while the callee argument was described by BTF as
+> int[0x3fffffff]. The verifier log showed:
+>
+>    R1=mem_or_null(id=1,sz=0xfffffffc)
+>    r0 = *(u32 *)(r1 +4)
+>
+> The program was only loaded to prove verifier acceptance and was not
+> attached or executed.
+>
+> Reject sizes that cannot be represented by the signed verifier access-size
+> API before any conversion. Cast the non-stack case after the bound check to
+> make the conversion explicit, and add a verifier regression test for the
+> oversized BTF argument.
+>
+> Fixes: 2cb27158adb3 ("bpf: poison dead stack slots")
+> Signed-off-by: Taegu Ha <hataegu0826@gmail.com>
 > ---
-> v2:
-> - Implement riscv_init_isa_bases() that runs at system init time,
->   after tagged_addr_init() populates have_user_pmlen_*.
-> - Split RVA23S64 placeholder into a future patch.
-> ---
->  arch/riscv/include/asm/cpufeature.h | 14 ++++++
->  arch/riscv/kernel/cpufeature.c      | 92 +++++++++++++++++++++++++++++++++++++
->  2 files changed, 106 insertions(+)
-
-Sashiko points out a few things about this patch which I think I
-agree with
-
-https://sashiko.dev/#/patchset/20260511-rva23u64-hwprobe-v2-v2-0-21c5a544f1dc%40riscstar.com?part=8
-
-Additional nit below.
-
-> 
-> diff --git a/arch/riscv/include/asm/cpufeature.h b/arch/riscv/include/asm/cpufeature.h
-> index 739fcc84bf7b2..facc31b2960c6 100644
-> --- a/arch/riscv/include/asm/cpufeature.h
-> +++ b/arch/riscv/include/asm/cpufeature.h
-> @@ -25,10 +25,24 @@ struct riscv_cpuinfo {
->  	unsigned long mimpid;
->  };
->  
-> +enum {
-> +	RISCV_ISA_BASE_IMA,
-> +	RISCV_ISA_BASE_RVA23U64,
-> +	RISCV_NR_ISA_BASES,
-> +};
+>   kernel/bpf/verifier.c                           |  7 ++++++-
+>   .../bpf/progs/verifier_global_subprogs.c        | 17 +++++++++++++++++
+>   2 files changed, 23 insertions(+), 1 deletion(-)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 7fb88e1cd7c4..1007f204a1f5 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -7107,6 +7107,11 @@ static int check_mem_reg(struct bpf_verifier_env *env, struct bpf_reg_state *reg
+>   	struct bpf_reg_state saved_reg;
+>   	int err;
+>   
+> +	if (mem_size > S32_MAX) {
+> +		verbose(env, "R%d memory size %u is too large\n", regno, mem_size);
+> +		return -EACCES;
+> +	}
 > +
-> +/**
-> + * struct riscv_isainfo - per-hart ISA state
-> + * @isa: bitmap of ISA extensions this hart implements
-> + * @isa_bases: bitmap of profile bases this hart conforms to
-> + */
->  struct riscv_isainfo {
->  	DECLARE_BITMAP(isa, RISCV_ISA_EXT_MAX);
-> +	DECLARE_BITMAP(isa_bases, RISCV_NR_ISA_BASES);
->  };
->  
-> +extern unsigned long riscv_isa_bases[BITS_TO_LONGS(RISCV_NR_ISA_BASES)];
-> +
->  DECLARE_PER_CPU(struct riscv_cpuinfo, riscv_cpuinfo);
->  
->  extern const struct seq_operations cpuinfo_op;
-> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-> index 81145621dc378..6e8dd33aa3888 100644
-> --- a/arch/riscv/kernel/cpufeature.c
-> +++ b/arch/riscv/kernel/cpufeature.c
-> @@ -41,6 +41,9 @@ unsigned long elf_hwcap __read_mostly;
->  /* Host ISA bitmap */
->  static DECLARE_BITMAP(riscv_isa, RISCV_ISA_EXT_MAX) __read_mostly;
->  
-> +/* Host ISA bases bitmap */
-> +DECLARE_BITMAP(riscv_isa_bases, RISCV_NR_ISA_BASES) __read_mostly;
-> +
->  /* Per-cpu ISA extensions. */
->  struct riscv_isainfo hart_isa[NR_CPUS];
->  
-> @@ -1305,3 +1308,92 @@ void __init_or_module riscv_cpufeature_patch_func(struct alt_entry *begin,
->  	}
->  }
->  #endif
-> +
-> +/*
-> + * Compute the set of profile bases (IMA, RVA23U64, ...) a hart
-> + * conforms to, given its resolved ISA bitmap.
-> + *
-> + * If @isa_bitmap is NULL, the host ISA bitmap (the AND across all harts) is
-> + * used.
-> + */
-> +static void riscv_set_isa_bases(unsigned long *bases, const unsigned long *isa_bitmap)
+>   	if (bpf_register_is_null(reg))
+>   		return 0;
+>   
+> @@ -7119,7 +7124,7 @@ static int check_mem_reg(struct bpf_verifier_env *env, struct bpf_reg_state *reg
+>   		mark_ptr_not_null_reg(reg);
+>   	}
+>   
+> -	int size = base_type(reg->type) == PTR_TO_STACK ? -(int)mem_size : mem_size;
+> +	int size = base_type(reg->type) == PTR_TO_STACK ? -(int)mem_size : (int)mem_size;
+>   
+>   	err = check_helper_mem_access(env, regno, size, BPF_READ, true, NULL);
+>   	err = err ?: check_helper_mem_access(env, regno, size, BPF_WRITE, true, NULL);
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
+> index 1e08aff7532e..0ff8f85b4d46 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
+> @@ -151,6 +151,23 @@ int anon_user_mem_valid(void *ctx)
+>   	return subprog_user_anon_mem(&t);
+>   }
+>   
+> +__noinline __weak int subprog_user_anon_mem_huge(int (*p)[0x3fffffff])
 > +{
-> +	const unsigned long *isa = isa_bitmap ? isa_bitmap : riscv_isa;
-> +	DECLARE_BITMAP(ext_mask, RISCV_ISA_EXT_MAX) = { 0 };
-> +	DECLARE_BITMAP(tmp, RISCV_ISA_EXT_MAX);
-> +
-> +	/* IMA */
-> +	set_bit(RISCV_ISA_EXT_I, ext_mask);
-> +	set_bit(RISCV_ISA_EXT_M, ext_mask);
-> +	set_bit(RISCV_ISA_EXT_A, ext_mask);
-> +
-> +	if (bitmap_andnot(tmp, ext_mask, isa, RISCV_ISA_EXT_MAX))
-> +		return;
-> +
-> +	set_bit(RISCV_ISA_BASE_IMA, bases);
-> +
-> +	/* RVA23U64 */
-> +
-> +	/* Zic64b and Supm with PMLEN=7 */
-> +	if (riscv_cbom_block_size != 64 ||
-> +	    riscv_cbop_block_size != 64 ||
-> +	    riscv_cboz_block_size != 64 ||
-> +	    !riscv_have_user_pmlen(7))
-> +		return;
-> +
-> +	set_bit(RISCV_ISA_EXT_F, ext_mask);
-> +	set_bit(RISCV_ISA_EXT_D, ext_mask);
-> +	set_bit(RISCV_ISA_EXT_C, ext_mask);
-> +	set_bit(RISCV_ISA_EXT_B, ext_mask);
-> +	set_bit(RISCV_ISA_EXT_ZICSR, ext_mask);
-> +	set_bit(RISCV_ISA_EXT_ZICNTR, ext_mask);
-> +	set_bit(RISCV_ISA_EXT_ZIHPM, ext_mask);
-> +	set_bit(RISCV_ISA_EXT_ZICCIF, ext_mask);
-> +	set_bit(RISCV_ISA_EXT_ZICCRSE, ext_mask);
-> +	set_bit(RISCV_ISA_EXT_ZICCAMOA, ext_mask);
-> +	set_bit(RISCV_ISA_EXT_ZICCLSM, ext_mask);
-> +	set_bit(RISCV_ISA_EXT_ZA64RS, ext_mask);
-> +	set_bit(RISCV_ISA_EXT_ZIHINTPAUSE, ext_mask);
-> +	set_bit(RISCV_ISA_EXT_ZICBOM, ext_mask);
-> +	set_bit(RISCV_ISA_EXT_ZICBOP, ext_mask);
-> +	set_bit(RISCV_ISA_EXT_ZICBOZ, ext_mask);
-> +	set_bit(RISCV_ISA_EXT_ZFHMIN, ext_mask);
-> +	set_bit(RISCV_ISA_EXT_ZKT, ext_mask);
-> +	set_bit(RISCV_ISA_EXT_V, ext_mask);
-> +	set_bit(RISCV_ISA_EXT_ZVFHMIN, ext_mask);
-> +	set_bit(RISCV_ISA_EXT_ZVBB, ext_mask);
-> +	set_bit(RISCV_ISA_EXT_ZVKT, ext_mask);
-> +	set_bit(RISCV_ISA_EXT_ZIHINTNTL, ext_mask);
-> +	set_bit(RISCV_ISA_EXT_ZICOND, ext_mask);
-> +	set_bit(RISCV_ISA_EXT_ZIMOP, ext_mask);
-> +	set_bit(RISCV_ISA_EXT_ZCMOP, ext_mask);
-> +	set_bit(RISCV_ISA_EXT_ZCB, ext_mask);
-> +	set_bit(RISCV_ISA_EXT_ZFA, ext_mask);
-> +	set_bit(RISCV_ISA_EXT_ZAWRS, ext_mask);
-> +	set_bit(RISCV_ISA_EXT_SUPM, ext_mask);
-> +
-> +	if (bitmap_andnot(tmp, ext_mask, isa, RISCV_ISA_EXT_MAX))
-> +		return;
-> +
-> +	set_bit(RISCV_ISA_BASE_RVA23U64, bases);
+> +	return p ? (*p)[1] : 0;
 > +}
 > +
-> +/*
-> + * Populate the host ISA bases bitmap (riscv_isa_bases) and each
-> + * hart's per-cpu isa_bases.
-> + */
-> +static int __init riscv_init_isa_bases(void)
+> +SEC("?tracepoint")
+> +__failure __log_level(2)
+> +__msg("R1 memory size 4294967292 is too large")
+> +int anon_user_mem_huge_size_invalid(void *ctx)
 > +{
-> +	int cpu;
+> +	int (*p)[0x3fffffff];
+> +	int tiny = 42;
 > +
-> +	for_each_possible_cpu(cpu)
-> +		riscv_set_isa_bases(hart_isa[cpu].isa_bases, hart_isa[cpu].isa);
-> +
-> +	riscv_set_isa_bases(riscv_isa_bases, NULL);
-> +	return 0;
+> +	p = (void *)&tiny;
+> +	return subprog_user_anon_mem_huge(p) + tiny;
 > +}
 
-Missing blank line here.
+Without verifier.c change, verification is successful.
 
-Thanks,
-drew
+The objdump:
 
-> +/*
-> + * Registered as subsys_initcall so it runs after
-> + * core_initcall(tagged_addr_init) populates have_user_pmlen_*.
-> + */
-> +subsys_initcall(riscv_init_isa_bases);
-> 
-> -- 
-> 2.43.0
-> 
+0000000000000160 <subprog_user_anon_mem_huge>:
+; {
+       44:       b4 00 00 00 00 00 00 00 w0 = 0x0
+;       return p ? (*p)[1] : 0;
+       45:       15 01 01 00 00 00 00 00 if r1 == 0x0 goto +0x1 <L0>
+       46:       61 10 04 00 00 00 00 00 w0 = *(u32 *)(r1 + 0x4)
+<L0>:
+       47:       95 00 00 00 00 00 00 00 exit
+
+0000000000000040 <anon_user_mem_huge_size_invalid>:
+;       int tiny = 42;
+        8:       b4 01 00 00 2a 00 00 00 w1 = 0x2a
+        9:       63 1a fc ff 00 00 00 00 *(u32 *)(r10 - 0x4) = w1
+       10:       bf a1 00 00 00 00 00 00 r1 = r10
+       11:       07 01 00 00 fc ff ff ff r1 += -0x4
+;       return subprog_user_anon_mem_huge(p) + tiny;
+       12:       85 10 00 00 ff ff ff ff call -0x1
+                 0000000000000060:  R_BPF_64_32  subprog_user_anon_mem_huge
+       13:       61 a1 fc ff 00 00 00 00 w1 = *(u32 *)(r10 - 0x4)
+       14:       0c 01 00 00 00 00 00 00 w1 += w0
+       15:       bc 10 00 00 00 00 00 00 w0 = w1
+       16:       95 00 00 00 00 00 00 00 exit
+
+The big 0x3fffffff does not really matter.
+
+> +
+>   __noinline __weak int subprog_nonnull_ptr_good(int *p1 __arg_nonnull, int *p2 __arg_nonnull)
+>   {
+>   	return (*p1) * (*p2); /* good, no need for NULL checks */
+
