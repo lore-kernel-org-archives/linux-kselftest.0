@@ -1,185 +1,108 @@
-Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCDE337AA7A
-	for <linux-kselftest@vger.kernel.org>; Wed, 27 May 2026 09:31:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A2C1396579;
+	Wed, 27 May 2026 09:50:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779874305; cv=none; b=pvQc+0F6QlSGP2Bnm4sDGK5o4WiJGRkm6C5cB/iZmsf30FXAqKGGnK3W2v0RD4g0IlieMlM6pyzl1V9uEpbD6WpB9gM2J7aVqPTayC6SzayMHYy8++4dLXsSmrzPMYnjHgK6lF8HpLSnrD1JFWnK1hZIvNFGJAjv0H9OY2AsPGg=
+	t=1779875409; cv=none; b=gMf6AYxx5zqM+t+jkKuPMrQAX9neI6zFRqJ1LYnO/GUduA0tH24iZWSR1fJ7u2R8q7woNze7Mo7bOAHHRn8MFoFIcFCtU5KGdk2NqrXvB4ltPEK75hBKfOdU5M4CY9iNmazgDIK2kjZjhpRIqZxycAN1+O+woip8xX3t276fv84=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779874305; c=relaxed/simple;
-	bh=Ucv7tb+rmrQP+8WizGjWiU6fScLBdmJqqU5mtPvlgP4=;
-	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
-	 In-Reply-To:References; b=i6x4WOJHKc+GCOsB6kiSyRn5PoKQ6A2MUx7OI6zyQ2E4QIIsFaeJtZ/ixlrmVBkKRK9ZAquofNf8ZvriDt7BonEHQ04z9KnwLWTC8fViStLWvrZtXaeIf7d7utb534pRRthAzag/2xsLtLl90GkiEyzXCWOKfTU2MDlfLcKSlpE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=fsjTDaB0; arc=none smtp.client-ip=91.218.175.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1779875409; c=relaxed/simple;
+	bh=3BJceVb1ACQ2xVwyIbgI+DY/F47c8S0oOvHxsICNQlw=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=Wg0fRM2Ugyni7RYP2Oj6PE0nz+rLfF8k2bdlmbiJkkCVFokS3peFGtsc25T8Chv9KF9u1uwHCBafQsWpdbkDL6bIMwveEA/n72/S+1Rl5LKQw3EwvkdPe90z3lapzwdIShVU1txNRkhig26XhfOIkgOvWP8bcd2Ujknes5hj/3g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iBj69lLR; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="fsjTDaB0"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iBj69lLR"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1779875408; x=1811411408;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=3BJceVb1ACQ2xVwyIbgI+DY/F47c8S0oOvHxsICNQlw=;
+  b=iBj69lLRcUfUuIlyWTQpkN7TuVvoiQkCJbM7iU5MTv9FixAetmf0GT5Y
+   K8AwT78zjtxg4PHOO0ZXbt+9E7OmOyYnkcsJq6bYZ6nQK0gi28syGJFxQ
+   mwQZsP47e5S2ECXZyYRi0ZyCF9GwK5ZscNO6qHiPgi9sevLjpURYfci5D
+   AeMd8Cu2TbL629DdOl0fwXuRue38qTvZ0KFhmymy9EvPliUF8LeEIoNJf
+   +0Y+1zsfINTjk3iv5dLsXNK7MWsia36PwywKUMOGxTTUTekPME4zdD+ml
+   XBaNyYVYmyAWwc8Mize+ouw5nxWOXZEdGloA0N8je1XvlBuLziQeselHX
+   g==;
+X-CSE-ConnectionGUID: DLP5JQtCTLOarfoatiOUdQ==
+X-CSE-MsgGUID: LmYB/Di+R/SIhZqroPPlJg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11798"; a="92087924"
+X-IronPort-AV: E=Sophos;i="6.24,171,1774335600"; 
+   d="scan'208";a="92087924"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2026 02:49:49 -0700
+X-CSE-ConnectionGUID: li0ZNRJQSJm8rl/t8OXyTw==
+X-CSE-MsgGUID: lb+y84kPRSqMeWicWy10/A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,171,1774335600"; 
+   d="scan'208";a="246452510"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.51])
+  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2026 02:49:45 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Wed, 27 May 2026 12:49:41 +0300 (EEST)
+To: Reinette Chatre <reinette.chatre@intel.com>
+cc: "Chen, Yu C" <yu.c.chen@intel.com>, Tony Luck <tony.luck@intel.com>, 
+    x86@kernel.org, Dave Martin <Dave.Martin@arm.com>, 
+    James Morse <james.morse@arm.com>, Babu Moger <babu.moger@amd.com>, 
+    LKML <linux-kernel@vger.kernel.org>, linux-kselftest@vger.kernel.org, 
+    Hongyu Ning <hongyu.ning@linux.intel.com>
+Subject: Re: [PATCH] selftests/resctrl: Allow CAT testing when no exclusive
+ cache exists
+In-Reply-To: <c1c9c019-81b2-4d6f-a2b6-30e63c99efb1@intel.com>
+Message-ID: <e3d02cda-4779-89b5-f55b-9411b85a6a6f@linux.intel.com>
+References: <20260523101715.3964456-1-yu.c.chen@intel.com> <db89b830-997f-8f74-012c-9aece7fa5c34@linux.intel.com> <09c77f99-0c8f-44c3-8971-aaec094053ca@intel.com> <3fbb001e-bc78-45d6-92fc-4a8dcf708c58@intel.com> <a5473762-fbd8-4aa9-85ae-8bc8108e1d3c@intel.com>
+ <c1c9c019-81b2-4d6f-a2b6-30e63c99efb1@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1779874291;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=cuHmtgVXBwRM6gWFejLSgCD1TBA09WsjOdpw2obbiq8=;
-	b=fsjTDaB0b5qte/WIAecQkAPIKuw6nVsSpbTIf+6BctJmOUjYfsumfoQYf78vDzLMK/tLkg
-	sYJMZhqLPfJv6F3AW/vyoB54xZhJCtm5zSdmguKpEea7cU/8I/fEoI2pbaMG2IUuW4Eml/
-	Q0UQQ2PfILGhwbSHJD8pIjDYJGnG6cI=
-Date: Wed, 27 May 2026 09:31:25 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: "teawater" <hui.zhu@linux.dev>
-Message-ID: <7f440116b23fba1e20fe70fda502ad66f7dbf158@linux.dev>
-TLS-Required: No
-Subject: Re: [RFC PATCH bpf-next v7 00/11] mm: BPF struct_ops for dynamic
- memory protection and async reclaim
-To: "Usama Arif" <usama.arif@linux.dev>
-Cc: "Usama Arif" <usama.arif@linux.dev>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "John Fastabend" <john.fastabend@gmail.com>,
- "Andrii Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau"
- <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar
- Kartikeya Dwivedi" <memxor@gmail.com>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
- <jolsa@kernel.org>, "Johannes Weiner" <hannes@cmpxchg.org>, "Michal
- Hocko" <mhocko@kernel.org>, "Roman Gushchin" <roman.gushchin@linux.dev>,
- "Shakeel Butt" <shakeel.butt@linux.dev>, "Muchun Song"
- <muchun.song@linux.dev>, "JP Kobryn" <inwardvessel@gmail.com>, "Andrew
- Morton" <akpm@linux-foundation.org>, "Shuah Khan" <shuah@kernel.org>,
- davem@davemloft.net, "Jakub Kicinski" <kuba@kernel.org>, "Jesper Dangaard
- Brouer" <hawk@kernel.org>, "Stanislav Fomichev" <sdf@fomichev.me>, "KP
- Singh" <kpsingh@kernel.org>, "Tao Chen" <chen.dylane@linux.dev>, "Mykyta
- Yatsenko" <yatsenko@meta.com>, "Leon Hwang" <leon.hwang@linux.dev>,
- "Anton Protopopov" <a.s.protopopov@gmail.com>, "Amery Hung"
- <ameryhung@gmail.com>, "Tobias Klauser" <tklauser@distanz.ch>, "Eyal
- Birger" <eyal.birger@gmail.com>, "Rong Tao" <rongtao@cestc.cn>, "Hao Luo"
- <haoluo@google.com>, "Peter Zijlstra" <peterz@infradead.org>, "Miguel
- Ojeda" <ojeda@kernel.org>, "Nathan Chancellor" <nathan@kernel.org>, "Kees
- Cook" <kees@kernel.org>, "Tejun Heo" <tj@kernel.org>, "Jeff Xu"
- <jeffxu@chromium.org>, mkoutny@suse.com, "Jan Hendrik Farr"
- <kernel@jfarr.cc>, "Christian Brauner" <brauner@kernel.org>, "Randy
- Dunlap" <rdunlap@infradead.org>, "Brian Gerst" <brgerst@gmail.com>,
- "Masahiro Yamada" <masahiroy@kernel.org>, "Willem de Bruijn"
- <willemb@google.com>, "Jason Xing" <kerneljasonxing@gmail.com>, "Paul
- Chaignon" <paul.chaignon@gmail.com>, "Chen Ridong"
- <chenridong@huaweicloud.com>, "Lance Yang" <lance.yang@linux.dev>,
- "Jiayuan Chen" <jiayuan.chen@linux.dev>, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, cgroups@vger.kernel.org, linux-mm@kvack.org,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- geliang@kernel.org, baohua@kernel.org, "Hui Zhu" <zhuhui@kylinos.cn>
-In-Reply-To: <20260526134115.816081-1-usama.arif@linux.dev>
-References: <20260526134115.816081-1-usama.arif@linux.dev>
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=US-ASCII
 
->=20
->=20On Tue, 26 May 2026 10:20:00 +0800 Hui Zhu <hui.zhu@linux.dev> wrote:
->=20
->=20>=20
->=20> From: Hui Zhu <zhuhui@kylinos.cn>
-> >=20=20
->=20>  Overview:
-> >  This series introduces BPF struct_ops support for the memory control=
-ler,
-> >  enabling userspace BPF programs to implement custom, dynamic memory
-> >  management policies per cgroup. The feature allows BPF programs to h=
-ook
-> >  into the core reclaim and charge paths without requiring kernel
-> >  modifications, providing a flexible alternative to static knobs such=
- as
-> >  memory.low and memory.min.
-> >=20=20
->=20>  The series enables two complementary use cases.
-> >=20=20
-...
-...
-...
->=20>=20=20
->=20>  Asynchronous proactive reclaim: the memcg_charged and memcg_unchar=
-ged
-> >  hooks, combined with the BPF workqueue mechanism and the new
-> >  bpf_try_to_free_mem_cgroup_pages() kfunc, enable BPF programs to per=
-form
-> >  proactive background reclaim without blocking the charge path. The
-> >  pattern works as follows: the memcg_charged callback tracks accumula=
-ted
-> >  memory usage; when usage crosses a configurable threshold, it enqueu=
-es an
-> >  asynchronous work item via bpf_wq_start() and returns immediately wi=
-thout
-> >  throttling the charging task. The workqueue callback then invokes
-> >  bpf_try_to_free_mem_cgroup_pages() to reclaim pages from the target
-> >  cgroup; if usage remains elevated after reclaim, the callback re-enq=
-ueues
-> >  itself to continue. This allows a BPF program to keep a cgroup's
-> >  footprint below its hard limit (memory.max) entirely in the backgrou=
-nd,
-> >  avoiding the OOM killer or direct-reclaim stalls that would otherwis=
-e
-> >  occur. The selftest for this feature (patch 10/11) validates the
-> >  mechanism concretely: a workload that writes and mmaps a 64 MB file =
-inside
-> >  a 32 MB cgroup reliably triggers memory.events "max" events without =
-BPF;
-> >  with the async reclaim program attached, the "max" counter does not
-> >  increase at all across the same workload.
-> >=20
->=20Hi Hui,
->=20
->=20Thanks for the series.
-> Would it not be simpler to just have another memcg knob, something like
-> memory.high_async.
-> When memory usage > memory.high_async, queue a per-memcg work item that=
- calls
-> try_to_free_mem_cgroup_pages() until usage drops back below some thresh=
-old.
-> I am not sure I see what programability aspect from bpf you need here.
->=20
->=20Thanks
-
-Hi Usama,
-
-That's a good question.
-
-By introducing a new BPF kfunc bpf_try_to_free_mem_cgroup_pages,
-a BPF program can flexibly control when to start and stop async
-reclaim, rather than being constrained to trigger and stop based
-solely on memcg usage or one or two fixed events, as with
-traditional proactive reclaim interfaces.
-
-For example, async reclaim could be triggered based on PSI, or
-on the number of page faults, or even on a combination of
-multiple events working together to decide both when to start
-and when to stop async reclaim.
-
-That is the motivation behind adding the BPF kfunc
-bpf_try_to_free_mem_cgroup_pages in this patch set.
-
-I admit the cover letter did not explain this well enough, and
-the example code does not demonstrate this use case either. I
-will address both in the next version.
-
-Best,
-Hui
-
->=20
->=20>=20
->=20> 08/11 selftests/bpf: Add tests for memcg_bpf_ops
-> >  Adds prog_tests/memcg_ops.c covering three scenarios:
-> >  memcg_charged-only throttling, below_low + memcg_charged
-> >  interaction, and below_min + memcg_charged interaction. A
-> >  tracepoint on memcg:count_memcg_events (PGFAULT) is used to
-> >  detect memory pressure and trigger hooks accordingly.
-...
-...
-...
-> >  --=20
->=20>  2.43.0
-> >
+On Tue, 26 May 2026, Reinette Chatre wrote:
+> On 5/26/26 6:57 PM, Chen, Yu C wrote:
+> > My thinking was that shareable_bits only describes portions that may
+> > be shared with non-CPU agents, and on an otherwise idle test system
+> > the CAT miss-rate trend can still be observed even if all ways are
+> > marked shareable. But I agree that this is not a good assumption for
+> > kselftest pass/fail.
+> > 
+> > So I agree that falling back to the full CBM is not the right fix for
+> > this test. I will change the patch to skip L3_CAT when no exclusive
+> > cache portion is available, with a message explaining that the performance
+> > test cannot run reliably because all cache portions are shareable.
+> 
+> Sounds like https://lore.kernel.org/lkml/20260526024251.7895-1-icheng@nvidia.com/
+> does what you need.
+> 
+> > 
+> > For platforms where all cache ways are marked shareable, do you think
+> > providing a extra parameter to ask cat_test to "ignore" the share
+> > restriction is acceptable?
+> 
+> While resctrl tests support command line arguments I do not know if they
+> are actually being used. During a previous rework we found that they were
+> not behaving as intended and we did not receive any complaints. Even if
+> somebody uses the hypothetical "ignore" parameter I do not see how the test
+> result can be trusted unless this is done as part of some hardware validation
+> that resctrl selftests do not aim to support. resctrl selftests are intended to
+> test the resctrl kernel subsystem.
+> 
+> I think effort is better spent on creating an actual CAT functional test.
 >
+> For reference: https://lore.kernel.org/lkml/20250616082453.3725-1-ilpo.jarvinen@linux.intel.com/
+
+Unfortunately I got stuck with that series as I couldn't figure out how 
+to bend the build system to get the msr code out of resctrl selftest 
+(I've tried it multiple times). Other than that challenge, I'd have the 
+other comments addressed in my local version.
+
+-- 
+ i.
+
