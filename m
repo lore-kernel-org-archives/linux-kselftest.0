@@ -1,113 +1,103 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A26D842B738;
-	Wed, 27 May 2026 16:33:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C1AC4279F5
+	for <linux-kselftest@vger.kernel.org>; Wed, 27 May 2026 16:35:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779899639; cv=none; b=SLbeXgOisBJ02xHT83RnPUirEEmrMulluBj/lZqLQuSnucJHr4acAM4XTxj26YBXspvfFteaACn2jVG26AT+k/xIEKBeq4+KSIlHWn7RvT+d5Nwtlua7WxzQZ55KsU1NrWOkUSw2EQTlNtCjRqujgsz5i2jbLZf3TPrHE5tzBHA=
+	t=1779899716; cv=none; b=m6C58ZOpja8gf+5A42psMipPYLNHdiiVu6tPKtUrMzkcgrkAoBgiP5fAtyuD4SZdEScpqmzRx4Gjqe3XvHGjBNfyz9YDEme0CgZ7kWIoSQQmsEIhZdQnhb7snvq707oJxLoJv6wzt7IeE9Ad8YiRCTgaa31a4GB/WeTzHYvtxsI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779899639; c=relaxed/simple;
-	bh=qyQZY8SQQakK1rScQtf2rXlg0CADamrWOX0ENN2fHgU=;
+	s=arc-20240116; t=1779899716; c=relaxed/simple;
+	bh=QDw8Jsuw+6AP8iu7lgfzYciOXYThi6tQVsbGIJHSjOE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Y+l4x/42mOKaixAUdC3biRI9X2K61/w42/QQBKecH4VmPsvmvu3+0MZZV5wGgN/LTVkOCkA17pxVH92AT2qwgk/T+qt1GWijFQCdBh3XlCCLX5IH7JNsEgXqMedwBGcA7M/RI9wqwNtENKUvEUQ1jMc4GugACLFrptYXfGy+QRY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gnunUOG6; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=eGB3kJjxlVblSL3qHMZ6ALe+VNulcw1kYyyeW22Vd9H7arUhqeFdTpXfNCOKd1Po8fg//Hi8AM9IMpTMAILY3fBdUcJdYPwqlL0cC3DamH+XzDduFu+tD5OmKnvWTDQr6Hl7s0OuPbwWlYUqtQ7cD/501CRzSqqeto+KVFk5pE8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=OljyIpPW; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=ffNUjPE9; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gnunUOG6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C56661F000E9;
-	Wed, 27 May 2026 16:33:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779899638;
-	bh=ny4zxAIapacb/F0Bfl3M7CTeOVF4rGsMsPQ88ReG9Ek=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=gnunUOG6fcXzOLP+gyxX2W+RYaumI6Smps5PRxsHC67sm+0gZQnuKGPI66/KuriG8
-	 1s1vAs0cxCndhN9dQEAosts6oBoSgl2RSJqeZYAuLdaIeL8HNID+u7pz4fVdpIoxpc
-	 QJpaQDM/9TMm8JmywXWlfbBXo5I2Po8f0j7O4AE0t8QhofQ2xeSH+fmhUW+BQTrEd3
-	 vKFLDDtGnWlECgRjsGIn7Wk9rcdhIgorNgctrmoK276UppPIEYE9JyckJyESV0IsAl
-	 S/6GCJyoKowUVpbix8CMQiiMFIGfbzDRC0LIhAF7Uz3xgkB6JP9u0UmCc1aqhaUE7/
-	 cardlv3bU/MHg==
-Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 09743F40090;
-	Wed, 27 May 2026 12:33:56 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-02.internal (MEProxy); Wed, 27 May 2026 12:33:56 -0400
-X-ME-Sender: <xms:8xwXamCgFw0ZKZ736J163z9iGdBrNjJ2tK5qo1axKEnKEAssI9TuTw>
-    <xme:8xwXalYYGJlnEsx0a9PUE30o0Rots_F4naiR1uA_WWpgaiTImaYZNK0nFN-qBQtW9
-    O7JJgKzltEe6HHwLsYS9QDzq-T5X-GjIoMB5NE7do_11cvm3kJ62oY>
-X-ME-Received: <xmr:8xwXavc2EVg5HkOGrxegia3GGXM8LAH45U35zEQhmSTeUmcMxMj9t597zCP4VNrK7wbPCGcl5E78VojbZ4LJ0Et3LlZVY6gO>
-X-ME-Proxy-Cause: dmFkZTGz1sE3TSHgPZWvADxdSlCyQIsRYRll5OVk6HOSZ0HDMtjjDQcx22t0e7Zo87zpJF
-    5dKOEz5BLUwMW0hAxQ5tH0DSbMfbPaOIIRW+eAQ7hECu37aAdhVkYQhnLU+kTI+/b+jmwa
-    W5vF88fmvhFDzhBvj0G8scNp9kzCE6SvBHtqwJNASVh2TLOo7MUhS2e9i/TTyrOOMTNcSY
-    /E9Emn93gORsxloK41GWNxuY/sH5AVW9Z03Me/E5GuZEHWGeNqe55C+pIwZbqxfslgvkM1
-    UuGq49m9ayY1i4vyQ4tRGADSxB7dc2cl92KGKL7FvNoVJtvP08EsbGAaNZfuW189aHZrDq
-    7/9yj0xTG9U7dpW2phMsbnQkSohyyTEWHg3TCrF8eS+biDHCD+kgjVszu+WeKsiDPbXYZS
-    tQa9mZin0vTqvxt+l50hN0EfrlSk+v7zgj8Fm2k6Yfwu5HBIvdsp9s6vyDsNWurlIp9N+v
-    IqiHnWVpP0e5Vmwt75CrkesefzdFUMV5pJP5iUly6e/b58gQXZ5CzORrBYcCylNmTggyOO
-    ELngs5fg/skBFnaB1mBz4jhuLrc8FTucnDdOV2yVGlEWooxWg28Zkd9XDCC2/x9abL6Pi1
-    FN5LMnxp+uCTUAyPVdEoNtTs/HmGy1ly0myKYAhkQO4wuTv7k/Qb0O+fhD1g
-X-ME-Proxy: <xmx:8xwXanMXB5gx1pQWrfjGVmI8HO_DE6S4HOSTeLDp39g9pzE-WK-CLA>
-    <xmx:8xwXahWlTjM1dHOOVngYyTO19pPjvISL8nqnNZi9xidvlF1ofjIoYg>
-    <xmx:8xwXao2UAqjRB9nbDSBEgNCC1rpt2o139oqtGiOfupjfRKoEWy73cg>
-    <xmx:8xwXas6y6z4zEDAT2YBkcvpKrDgInMuuBgAucBv4MRDKZFGlNISACg>
-    <xmx:9BwXate9SRPIOrXWP8cjBpX5VijoO_Qp7xuFBr_fVyprx0UEVUE7psDw>
-Feedback-ID: i8dbe485b:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 27 May 2026 12:33:55 -0400 (EDT)
-Date: Wed, 27 May 2026 09:33:53 -0700
-From: Boqun Feng <boqun@kernel.org>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,	Will Deacon <will@kernel.org>,
- Jonas Bonn <jonas@southpole.se>,
-	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-	Stafford Horne <shorne@gmail.com>,	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,	Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>,	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,	Ben Segall <bsegall@google.com>,
- Mel Gorman <mgorman@suse.de>,	Valentin Schneider <vschneid@redhat.com>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	Waiman Long <longman@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,	Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,	Jiri Olsa <jolsa@kernel.org>,
- Shuah Khan <shuah@kernel.org>,	Miguel Ojeda <ojeda@kernel.org>,
- Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,	Jinjie Ruan <ruanjinjie@huawei.com>,
- Lyude Paul <lyude@redhat.com>,	Thomas Huth <thuth@redhat.com>,
- Sohil Mehta <sohil.mehta@intel.com>,	"Xin Li (Intel)" <xin@zytor.com>,
-	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-	Nikunj A Dadhania <nikunj@amd.com>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Randy Dunlap <rdunlap@infradead.org>,	Yury Norov <ynorov@nvidia.com>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	linux-kernel@vger.kernel.org, linux-openrisc@vger.kernel.org,
-	linux-s390@vger.kernel.org, linux-arch@vger.kernel.org,
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	rust-for-linux@vger.kernel.org,
-	Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>,
-	Daniel Almeida <daniel.almeida@collabora.com>
-Subject: Re: [PATCH v2 00/12] Refcounted interrupt disable and SpinLockIrq
- for rust (Part 1)
-Message-ID: <ahcc8Tudh4TJI5UM@tardis.local>
-References: <20260526152148.30514-1-boqun@kernel.org>
- <20260527161844.GG3102624@noisy.programming.kicks-ass.net>
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="OljyIpPW";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="ffNUjPE9"
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64RGObjx195638
+	for <linux-kselftest@vger.kernel.org>; Wed, 27 May 2026 16:35:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=3o/qC8F03FVtWvVL+To0ZZ8G
+	ZQPvSZaDhCCbgVrIpSk=; b=OljyIpPW1Bpt0pM8Vh+sEa5MvLEqha4zmw6RCVwi
+	21zDtiVA67hiZVBT63mzSLd71m798KJCmzz7Cb31jIh2FIDkxXrBHMc+l5sB4RtO
+	UYUoKMTW1TJERhd310gbTIiI2uTZcazPB+oOedZ94Kl0yN3mjmPOXQEB0C2vw/zP
+	ThGhorK1HP6NZB7dpThJKIS2iW3vQ03ZPDC7smO/GG2cAKAmJWEv7QY7Rw2MZKqO
+	JA1vqLu7t+k6/9LibvGr+YjcCi92vj1FS/gHIbDNmIZfeJ9qUc/E8pwXycGG+sgH
+	TvEovUyhF434EdvWvxzbGJ/vrcaUENG6/J9vpRGIMb6NYQ==
+Received: from mail-dy1-f200.google.com (mail-dy1-f200.google.com [74.125.82.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4edxce9jcp-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-kselftest@vger.kernel.org>; Wed, 27 May 2026 16:35:11 +0000 (GMT)
+Received: by mail-dy1-f200.google.com with SMTP id 5a478bee46e88-2fe1cf409a1so1243980eec.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 27 May 2026 09:35:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1779899711; x=1780504511; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3o/qC8F03FVtWvVL+To0ZZ8GZQPvSZaDhCCbgVrIpSk=;
+        b=ffNUjPE9FhYa2qVY+gJUSEGVFWJYmdXpNGEYQFS6gUBsjeBwiD6GenczwtveRJEnHQ
+         3fnZnBPCvjvUCP4EOkBgwXt6j9mOMaDi5Oj5s+C2TVogehlAzx7DONsY3kCHOKpT+Z+T
+         QtX0Wn97EA0fnblwgKVbPqRUWLLIULaM9pJpJTlJ8LHqVPs+gL5ZmdYV48YqM1CAfmwj
+         BliJMi5PdYXTTtssWujaOajJN96rsZ82YjjqGukrpTUsBpdQZXj2wBPzki9GUz+E473Y
+         5H/v3TChGl+6aBSs4c6rTXk1Nd8KZLly62EwN9BoRJvWWUe3EfD7P/9G6MGUvyaHazxg
+         toCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779899711; x=1780504511;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3o/qC8F03FVtWvVL+To0ZZ8GZQPvSZaDhCCbgVrIpSk=;
+        b=HdNsZBGbUUziwGA7kDgudCwEm197trXZm5BE5AYrdqT4/fWBvQhP4XZnzdHSO7q9AO
+         aoeQ5i8Htf5NNp/7kXWs4kCdiwoYLHtwfhGFqJYMJXWSfqp7Otdvm7Ks6z7IR1G50+ax
+         ErUfHqSvJL/vjrHMgN/0XeBz5JGMGfItgf9BLNrwolNOgqbrJuGH6NJRisQKtciksOE/
+         TYYGnDQwuIX707iOdZO5cYoQN24R/rI0k6fDkoG8bSOgHpbv7Mt4cGwpnrTHsYVK+2Y7
+         UVPHXFdG7WnbbsikJTPNk3N8slIw1ocVlbKwRhfgN2LvajVZzz4gqV8iJyhpHEzvSFru
+         hfZg==
+X-Forwarded-Encrypted: i=1; AFNElJ/Hgg9qQd26Xb9Rrx2ij2CGQlpQRMm+BGzC1XSR0wMd5xnvZfWWoajz0nl1bxQXTbXVk18mKQOTO5CqcAfS+yM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzj/6Hqav7ji0ucXtSq8i9ZLhvmjPzywI4W5G6I2dVkzqI5HZ+v
+	0fapWCD0I8575+/uNbvdRl1kU3NsKUNMl7tH8X5z4FvwCB7bSsFlQGCig5QyRpNIf0auR+YI2xo
+	oxBtiCt2i5mbpM7ngzX32EzXMJQ1HmfMYFsaMlRHXv0+g7fMDVGtPHD/9gQH2sb/7BKjolFQ=
+X-Gm-Gg: Acq92OHdn1YJI7UmUOjWZlTH6WnzKGQjs83eIzp5X0UMon4O49RquLELV9ka8oqvGab
+	VwTVvUzO7gAHGIF16KzkA6ZhGZ/foMHd3tzym1rDOiUeHOP7pEam0qp082hVtCfQwfi8JY/3U6G
+	3ixkr6cmJzjLmAVI6WOhyzJ5qZl3gmZudpHUKJQD54RGEDYCGSLD94FowOw1sRmKOcixqSTZV1i
+	uoMObLg6Y1gUbe/ePOxElouQ14CGvRkODmHxDELpGreVjkE7KwFPF9xFK1Q4wxEbPMH/SAKQzwP
+	OLixxF8aTHETE7lSPLRAuzIwe/SFWXt9UMn6ovooiTCz83SVWC22HojIKcd+8b22LK0Y6C9tod/
+	53N2BVPtRu6+5+xTRB583TVwJwaDE864=
+X-Received: by 2002:a05:7022:fe09:b0:134:ff2e:a71c with SMTP id a92af1059eb24-1365f600b14mr8303626c88.9.1779899710834;
+        Wed, 27 May 2026 09:35:10 -0700 (PDT)
+X-Received: by 2002:a05:7022:fe09:b0:134:ff2e:a71c with SMTP id a92af1059eb24-1365f600b14mr8303599c88.9.1779899710070;
+        Wed, 27 May 2026 09:35:10 -0700 (PDT)
+Received: from localhost ([140.82.166.162])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1366aba2b9asm13381153c88.15.2026.05.27.09.35.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 May 2026 09:35:09 -0700 (PDT)
+Date: Wed, 27 May 2026 11:35:08 -0500
+From: Andrew Jones <andrew.jones@oss.qualcomm.com>
+To: Guodong Xu <guodong@riscstar.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, Paul Walmsley <pjw@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+        Shuah Khan <shuah@kernel.org>, Anup Patel <anup@brainfault.org>,
+        Atish Patra <atish.patra@linux.dev>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Deepak Gupta <debug@rivosinc.com>, Zong Li <zong.li@sifive.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Charlie Jenkins <charlie@rivosinc.com>,
+        Samuel Holland <samuel.holland@sifive.com>, linux-doc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org
+Subject: Re: [PATCH v2 08/10] riscv: cpufeature: Introduce ISA bases bitmap
+ and rva23u64 detection
+Message-ID: <5tjmypgyxbhgxfjub5q6ne475uysse6yl473sxisjoammkdvbu@yebejqbiy6e3>
+References: <20260511-rva23u64-hwprobe-v2-v2-0-21c5a544f1dc@riscstar.com>
+ <20260511-rva23u64-hwprobe-v2-v2-8-21c5a544f1dc@riscstar.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -116,52 +106,217 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260527161844.GG3102624@noisy.programming.kicks-ass.net>
+In-Reply-To: <20260511-rva23u64-hwprobe-v2-v2-8-21c5a544f1dc@riscstar.com>
+X-Proofpoint-ORIG-GUID: Rf7klpdfHhTS3YJa_-8iYKCM8ktxYRQR
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTI3MDE2NiBTYWx0ZWRfX+r1f2u49WZ9N
+ z/pUCNDn6F6um7fsyi3mFO3WESnEhe4wSULZsc267y6jm+wxGb347p/FzAb4IdMZdbBJM4pKibf
+ z3YmbfjY1cB+AzutPM7VOFPO6hY7P0RIa2xrqE0A/k6SkqWJZRmaJKTrzYq+C2Oiz/3+AWED5GF
+ 5lapkjZH4nLIRO33byaMoq//p9ulzCuwlbcJRCbMUnmCbDV29pxdNV5dTCQeORsFAdwBb8xmUiR
+ bYqNC3vmFo3i350ZZICz2QKDMWYLKvQZyjs6HLnRLqvbdQmo2U+nMKZI7DiiGmjPlz+dmY2jOyk
+ 1+UAGqa4UmF2hi8TcFgn6yuEq6UfpA1ppkoxuMUFsZYB8izT9oLp38BIM0F8ObFBmHA43arEz5s
+ uFOmeK+7FLNvpmFwOeN4CWIeN/ylJTxuHNZAxmEwyam8zvStN0Sd2AgV5GI0BACc1ZiRSaLidgR
+ TsrlqigRUxcLo2qluvA==
+X-Proofpoint-GUID: Rf7klpdfHhTS3YJa_-8iYKCM8ktxYRQR
+X-Authority-Analysis: v=2.4 cv=SIpykuvH c=1 sm=1 tr=0 ts=6a171d3f cx=c_pps
+ a=PfFC4Oe2JQzmKTvty2cRDw==:117 a=cvcws7F5//HeuvjG1O1erQ==:17
+ a=kj9zAlcOel0A:10 a=NGcC8JguVDcA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=yOCtJkima9RkubShWh1s:22
+ a=c92rfblmAAAA:8 a=ee_2aqc6AAAA:8 a=EUspDBNiAAAA:8 a=4F2392DG074ZRd-8RbwA:9
+ a=CjuIK1q_8ugA:10 a=6Ab_bkdmUrQuMsNx7PHu:22 a=GvGzcOZaWPEFPQC_NcjD:22
+ a=VOpmJXOdbJOWo2YY3GeN:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
+ definitions=2026-05-27_03,2026-05-26_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 bulkscore=0 priorityscore=1501 clxscore=1015 adultscore=0
+ lowpriorityscore=0 spamscore=0 impostorscore=0 malwarescore=0 suspectscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2605130000 definitions=main-2605270166
 
-On Wed, May 27, 2026 at 06:18:44PM +0200, Peter Zijlstra wrote:
-> On Tue, May 26, 2026 at 08:21:36AM -0700, Boqun Feng wrote:
-> > Hi Peter,
-> > 
-> > This is a follow-up for Lyude's work [1]. After learning the current
-> > preempt_count() usage and how ARM64 handle this, I came up with this
-> > series that could resolve your feedback [2]. The basic idea is based on:
-> > 
-> > 1) preempt_count() previously already masks our NEED_RESCHED bit, so the
-> >    effective bits is 31bits
-> > 2) with a 64bit preempt count implementation (as in your PREEMPT_LONG
-> >    proposal), the effective bits that record "whether we CAN preempt or
-> >    not" still fit in 32bit (i.e. an int)
-> > 
-> > as a result, I don't think we need to change the existing
-> > preempt_count() API, but rather keep "32bit vs 64bit" as an
-> > implementation detail. This saves us the need to change the printk code
-> > for preempt_count().
+On Mon, May 11, 2026 at 09:34:53PM -0400, Guodong Xu wrote:
+> Introduce a per-hart and host-wide bitmap of conformant ISA "bases" --
+> named profile-class sets such as IMA and RVA23U64 -- and compute
+> both at init time.
 > 
-> > 
-> > v1: https://lore.kernel.org/rust-for-linux/20260508042111.24358-1-boqun@kernel.org/
-> > 
-> > Changes since v1:
-> > 
-> > * Rename PREEMPT_COUNT_64BIT to HAS_SEPARATE_PREEMPT_RESCHED_BITS per
-> >   Mark Rutland.
+> This is the cache that subsequent consumers (hwprobe's
+> RVA23U64 base behavior bit, /proc/cpuinfo's "isa bases" lines, etc.)
+> read without recomputing.
 > 
-> Blergh, so I really don't like that new name. It isn't that
-> PREEMPT_RESCHED is separate, it really is a 64bit preempt count.
+> riscv_init_isa_bases() iterates over all possible cpus to populate
+> each hart_isa[cpu].isa_bases, then computes the host-wide
+> riscv_isa_bases against the AND-across-harts riscv_isa bitmap.  It is
+> registered as a subsys_initcall so it executes after
+> core_initcall(tagged_addr_init), which probes senvcfg.PMM and
+> populates have_user_pmlen_*.  Without that ordering,
+> riscv_have_user_pmlen(7) would still return its default false and the
+> RVA23U64 detection path would always bail.
 > 
-> Shashiko has a few fits, but its mostly being stupid. Although I think
-> it might be useful to perhaps put a WARN_ON_ONCE(in_nmi()) in
-> local_interrupt_disable().
+> The detection itself is encapsulated in riscv_set_isa_bases(), which
+> takes an output bases bitmap and an input ISA bitmap.
+> 
+> Signed-off-by: Andrew Jones <andrew.jones@oss.qualcomm.com>
+> Signed-off-by: Guodong Xu <guodong@riscstar.com>
+> ---
+> v2:
+> - Implement riscv_init_isa_bases() that runs at system init time,
+>   after tagged_addr_init() populates have_user_pmlen_*.
+> - Split RVA23S64 placeholder into a future patch.
+> ---
+>  arch/riscv/include/asm/cpufeature.h | 14 ++++++
+>  arch/riscv/kernel/cpufeature.c      | 92 +++++++++++++++++++++++++++++++++++++
+>  2 files changed, 106 insertions(+)
 
-Yes, that's also what I'm thinking of, and also we need to check
-local_softirq_pending() in local_interrupt_enable() I think, because now
-HARDIRQ_DISABLE bits being non-zero means deferring softirq. (Shashiko
-also reported this as well).
+Sashiko points out a few things about this patch which I think I
+agree with
+
+https://sashiko.dev/#/patchset/20260511-rva23u64-hwprobe-v2-v2-0-21c5a544f1dc%40riscstar.com?part=8
+
+Additional nit below.
 
 > 
-> Anyway, I'll re-read things again tomorrow, but I suppose this will do.
+> diff --git a/arch/riscv/include/asm/cpufeature.h b/arch/riscv/include/asm/cpufeature.h
+> index 739fcc84bf7b2..facc31b2960c6 100644
+> --- a/arch/riscv/include/asm/cpufeature.h
+> +++ b/arch/riscv/include/asm/cpufeature.h
+> @@ -25,10 +25,24 @@ struct riscv_cpuinfo {
+>  	unsigned long mimpid;
+>  };
+>  
+> +enum {
+> +	RISCV_ISA_BASE_IMA,
+> +	RISCV_ISA_BASE_RVA23U64,
+> +	RISCV_NR_ISA_BASES,
+> +};
+> +
+> +/**
+> + * struct riscv_isainfo - per-hart ISA state
+> + * @isa: bitmap of ISA extensions this hart implements
+> + * @isa_bases: bitmap of profile bases this hart conforms to
+> + */
+>  struct riscv_isainfo {
+>  	DECLARE_BITMAP(isa, RISCV_ISA_EXT_MAX);
+> +	DECLARE_BITMAP(isa_bases, RISCV_NR_ISA_BASES);
+>  };
+>  
+> +extern unsigned long riscv_isa_bases[BITS_TO_LONGS(RISCV_NR_ISA_BASES)];
+> +
+>  DECLARE_PER_CPU(struct riscv_cpuinfo, riscv_cpuinfo);
+>  
+>  extern const struct seq_operations cpuinfo_op;
+> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+> index 81145621dc378..6e8dd33aa3888 100644
+> --- a/arch/riscv/kernel/cpufeature.c
+> +++ b/arch/riscv/kernel/cpufeature.c
+> @@ -41,6 +41,9 @@ unsigned long elf_hwcap __read_mostly;
+>  /* Host ISA bitmap */
+>  static DECLARE_BITMAP(riscv_isa, RISCV_ISA_EXT_MAX) __read_mostly;
+>  
+> +/* Host ISA bases bitmap */
+> +DECLARE_BITMAP(riscv_isa_bases, RISCV_NR_ISA_BASES) __read_mostly;
+> +
+>  /* Per-cpu ISA extensions. */
+>  struct riscv_isainfo hart_isa[NR_CPUS];
+>  
+> @@ -1305,3 +1308,92 @@ void __init_or_module riscv_cpufeature_patch_func(struct alt_entry *begin,
+>  	}
+>  }
+>  #endif
+> +
+> +/*
+> + * Compute the set of profile bases (IMA, RVA23U64, ...) a hart
+> + * conforms to, given its resolved ISA bitmap.
+> + *
+> + * If @isa_bitmap is NULL, the host ISA bitmap (the AND across all harts) is
+> + * used.
+> + */
+> +static void riscv_set_isa_bases(unsigned long *bases, const unsigned long *isa_bitmap)
+> +{
+> +	const unsigned long *isa = isa_bitmap ? isa_bitmap : riscv_isa;
+> +	DECLARE_BITMAP(ext_mask, RISCV_ISA_EXT_MAX) = { 0 };
+> +	DECLARE_BITMAP(tmp, RISCV_ISA_EXT_MAX);
+> +
+> +	/* IMA */
+> +	set_bit(RISCV_ISA_EXT_I, ext_mask);
+> +	set_bit(RISCV_ISA_EXT_M, ext_mask);
+> +	set_bit(RISCV_ISA_EXT_A, ext_mask);
+> +
+> +	if (bitmap_andnot(tmp, ext_mask, isa, RISCV_ISA_EXT_MAX))
+> +		return;
+> +
+> +	set_bit(RISCV_ISA_BASE_IMA, bases);
+> +
+> +	/* RVA23U64 */
+> +
+> +	/* Zic64b and Supm with PMLEN=7 */
+> +	if (riscv_cbom_block_size != 64 ||
+> +	    riscv_cbop_block_size != 64 ||
+> +	    riscv_cboz_block_size != 64 ||
+> +	    !riscv_have_user_pmlen(7))
+> +		return;
+> +
+> +	set_bit(RISCV_ISA_EXT_F, ext_mask);
+> +	set_bit(RISCV_ISA_EXT_D, ext_mask);
+> +	set_bit(RISCV_ISA_EXT_C, ext_mask);
+> +	set_bit(RISCV_ISA_EXT_B, ext_mask);
+> +	set_bit(RISCV_ISA_EXT_ZICSR, ext_mask);
+> +	set_bit(RISCV_ISA_EXT_ZICNTR, ext_mask);
+> +	set_bit(RISCV_ISA_EXT_ZIHPM, ext_mask);
+> +	set_bit(RISCV_ISA_EXT_ZICCIF, ext_mask);
+> +	set_bit(RISCV_ISA_EXT_ZICCRSE, ext_mask);
+> +	set_bit(RISCV_ISA_EXT_ZICCAMOA, ext_mask);
+> +	set_bit(RISCV_ISA_EXT_ZICCLSM, ext_mask);
+> +	set_bit(RISCV_ISA_EXT_ZA64RS, ext_mask);
+> +	set_bit(RISCV_ISA_EXT_ZIHINTPAUSE, ext_mask);
+> +	set_bit(RISCV_ISA_EXT_ZICBOM, ext_mask);
+> +	set_bit(RISCV_ISA_EXT_ZICBOP, ext_mask);
+> +	set_bit(RISCV_ISA_EXT_ZICBOZ, ext_mask);
+> +	set_bit(RISCV_ISA_EXT_ZFHMIN, ext_mask);
+> +	set_bit(RISCV_ISA_EXT_ZKT, ext_mask);
+> +	set_bit(RISCV_ISA_EXT_V, ext_mask);
+> +	set_bit(RISCV_ISA_EXT_ZVFHMIN, ext_mask);
+> +	set_bit(RISCV_ISA_EXT_ZVBB, ext_mask);
+> +	set_bit(RISCV_ISA_EXT_ZVKT, ext_mask);
+> +	set_bit(RISCV_ISA_EXT_ZIHINTNTL, ext_mask);
+> +	set_bit(RISCV_ISA_EXT_ZICOND, ext_mask);
+> +	set_bit(RISCV_ISA_EXT_ZIMOP, ext_mask);
+> +	set_bit(RISCV_ISA_EXT_ZCMOP, ext_mask);
+> +	set_bit(RISCV_ISA_EXT_ZCB, ext_mask);
+> +	set_bit(RISCV_ISA_EXT_ZFA, ext_mask);
+> +	set_bit(RISCV_ISA_EXT_ZAWRS, ext_mask);
+> +	set_bit(RISCV_ISA_EXT_SUPM, ext_mask);
+> +
+> +	if (bitmap_andnot(tmp, ext_mask, isa, RISCV_ISA_EXT_MAX))
+> +		return;
+> +
+> +	set_bit(RISCV_ISA_BASE_RVA23U64, bases);
+> +}
+> +
+> +/*
+> + * Populate the host ISA bases bitmap (riscv_isa_bases) and each
+> + * hart's per-cpu isa_bases.
+> + */
+> +static int __init riscv_init_isa_bases(void)
+> +{
+> +	int cpu;
+> +
+> +	for_each_possible_cpu(cpu)
+> +		riscv_set_isa_bases(hart_isa[cpu].isa_bases, hart_isa[cpu].isa);
+> +
+> +	riscv_set_isa_bases(riscv_isa_bases, NULL);
+> +	return 0;
+> +}
+
+Missing blank line here.
+
+Thanks,
+drew
+
+> +/*
+> + * Registered as subsys_initcall so it runs after
+> + * core_initcall(tagged_addr_init) populates have_user_pmlen_*.
+> + */
+> +subsys_initcall(riscv_init_isa_bases);
 > 
-
-Thank you!
-
-Regards,
-Boqun
+> -- 
+> 2.43.0
+> 
