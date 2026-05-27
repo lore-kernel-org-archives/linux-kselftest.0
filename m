@@ -1,81 +1,113 @@
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+Received: from smtpbgeu1.qq.com (smtpbgeu1.qq.com [52.59.177.22])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CF7F3CD8BD;
-	Wed, 27 May 2026 09:54:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 755093ED131;
+	Wed, 27 May 2026 10:02:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.59.177.22
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779875692; cv=none; b=ZzlJIcDg5tk5BpL2IOh3K9t+MD8plMS8f7U+PuMRYF9bbsc1rTA9JrYy3lDGjhcB9N0ltGWLAJKYfoeUfPWjXPIFbnQs4jCM1NsP/V+Wg4TIOliuzNajK+Eq8fzVa6t3xNosFOFJuHdbcG5hqF7CHAT+8+ainfNIy/mC4ZfuQKU=
+	t=1779876150; cv=none; b=P0sOL3cinmJvJEwIC2XDfSu+0gbELHkL1RgrNvL6PLFOrSzAFuUavfEn4d40pQmcoWP/B4DOnOHtx67vobm2KYY5KYxkky7yx9e1nNPlaSD3vzt7doZEtIW9IqCOa9gUIioMCUfmDsiXusFNJgMZLv5oiOMwGZsnRVveWhoaeDY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779875692; c=relaxed/simple;
-	bh=7qXGcS/WGFWb8Y3lG9s/3v7JKA20Rxyu5PwKyGpGsJE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=f5/qP4NTktUFesCN2+N6I8ScjhC5WyengVRZK9gNtEKJEVcRZZaNC0mnjnUDCwTFC80xgBVJQzjlmpo2eT99jePsH0xNAoOtzKxG0Pe9jPDR1/wAxCNnq3r0fXjn2ojVtlLY4c4HemvYY04nvfkXwLzl+79hdTkHbuQhgNJh9Es=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=qv9wKLX8; arc=none smtp.client-ip=115.124.30.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1779876150; c=relaxed/simple;
+	bh=PYX1cxlUf8UVwKS1WwMEbVBP1z6XkprOaLUujII/8II=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=bOS9Z1z8WgvFhteMPb0rXj0bDn/smaPz85QQEPqvENTRYEAZT2ApW7T05LtT/BI8tBlaauvYR09OmZJda4fpS7aFhjqm1+z3NCrrUJdSFiC5RXQMrAD+bt2E9c5LfkKfiKmkA19vd6HE1oD3T/rEIWUlZq6MHAeb2ZBGKnc77OQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=IerDiUMX; arc=none smtp.client-ip=52.59.177.22
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="qv9wKLX8"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1779875686; h=From:To:Subject:Date:Message-Id:MIME-Version;
-	bh=DvdRFFhCgukKkTxPVdLh28AR1RcII91zSrhZrWjpXQs=;
-	b=qv9wKLX8gEoCBB920ZVNJ/+qnNVO61jqvtTAaqFutuq2LLtd1CiCRZDIGU2DPqW/NDEyj/o822Qp55DNV55IChJ2cedlQxwrKefa9tg3Pk9/9rrZRZNBiKVTafpgl2Qf0wKBOIeYlTV9cG9VQpoEAvOTS5p/xOM/8oN1RKTK+J0=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037033178;MF=dtcccc@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0X3jQQS-_1779875678;
-Received: from localhost.localdomain(mailfrom:dtcccc@linux.alibaba.com fp:SMTPD_---0X3jQQS-_1779875678 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Wed, 27 May 2026 17:54:45 +0800
-From: Tianchen Ding <dtcccc@linux.alibaba.com>
-To: Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH] selftests/ftrace: Fix trace_marker_raw test on 64K page kernels
-Date: Wed, 27 May 2026 17:54:37 +0800
-Message-Id: <20260527095438.1794905-1-dtcccc@linux.alibaba.com>
-X-Mailer: git-send-email 2.39.3
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="IerDiUMX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1779875996;
+	bh=Puxwd/zHsLT9Zqn15gB8jpymWS5iWgiQISfMu0Rxp1w=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version;
+	b=IerDiUMXMnpEl5WOLpK6focgFS7euzCv9009XGMFRPuf8GwQARZDhKYsgrg3Fazi0
+	 LZeIgiQyQnJYhpeErVPdfapiqn/uAH6UBqcVA7X+JU8OQFODqZqX6Une6zPnfo/P6F
+	 fTo4ZIyW+3LrTPBiZcqyZcXpqtPIYryojQYO9ZH4=
+X-QQ-mid: zesmtpgz4t1779875976tfbe5bfca
+X-QQ-Originating-IP: hlywEGLp0Eo33lqBLBl8hm2NvT8miW2C8iwGT27xDU0=
+Received: from localhost.localdomain ( [123.114.60.34])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Wed, 27 May 2026 17:59:34 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 3179466971943245431
+EX-QQ-RecipientCnt: 10
+From: Qiang Ma <maqianga@uniontech.com>
+To: jpoimboe@kernel.org,
+	jikos@kernel.org,
+	mbenes@suse.cz,
+	pmladek@suse.com,
+	joe.lawrence@redhat.com,
+	shuah@kernel.org
+Cc: live-patching@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Qiang Ma <maqianga@uniontech.com>
+Subject: [PATCH] selftests: livepatch: set LC_ALL=C to fix locale-dependent test failure
+Date: Wed, 27 May 2026 17:59:29 +0800
+Message-Id: <20260527095929.1504032-1-maqianga@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpgz:uniontech.com:qybglogicsvrsz:qybglogicsvrsz3b-0
+X-QQ-XMAILINFO: OTgf4KY4LuFySAaRqvY7BdfHCfnpBKMK2n1y2+osBAJ+po20aYNzNAoo
+	YNJbgnitzSpplrZzak44nkw4ASLmfc3JndzkHGGwfP3TXwvAsieYeDkg9n0TFjIfk8yL6JW
+	n+lAyq2ZM/E85lC9tcgNmca4+n+H2uNx/NGzu3SC0dqSTtn7wIe6sxD291nldffawZ0CYwT
+	VFX/xP5gJfoopPLZ+YfRCGn0G3vyDu3SXodaiWzz0s3imtODz8lVlFlrD1PhnNrBofxw7U8
+	GXu/T8HjWm9c3PY3DlexxfuxB5KQ53bBZmcn8o72+yxDZkyOfcLnJ7G+WY1eH8FqqDAbQz5
+	bpGLlnTwer7jLstt2Zni73bxBDPBngbIHEfevGxctkRrZVxPc5I1wvgfUYVniyesf7vVFl2
+	D5zw0iB/DPU/JYPP7gbkfSFGJkwWKHkxsngPw9C1zwYx/WmnnU+YXpJ6VBWCL362xktG1j1
+	INEMes5SiF0wds9OkL9HGqNek6LYpOPRBxV1MrQ7lF/1w65khx4zh0fh/+qarWmZEDIjwrJ
+	bR6b0WT1DAn8NYldr2+Lc0lGs4iD+Ko685d8iJdNR172hd5ZXRpzEQoW5K5kZ51eJOsypqj
+	tjPDDbVzvFwwUz0s/U4o3Byi5YfX2c9m9KXjjJQd2YbT/JeV3bmoomQK08K15SQgsRU+7ob
+	FK98yXKpMSK66tz8JiWvE0GCfvN7/k7Zx7/HZPzI2hR90ow7diytH5912b0l2HxXAwNik2i
+	KlRsjsUOaJYRf8tiLHopcn6t960AXtjDk4XovucI49p5Bv3a4fxq8h/WBHl2NtocippLZ3k
+	xzezDBir1czZAq+tgciDJZI+y2Z2PY2eNH+2+r2KEhQ5flc/vwg4FeVS2XsIII2Uu2Ktaap
+	bzo5dqErRgtEvZk3TyyAvBGSivONRrye72BQ9FgkAlMGwfyEyejiClRDk9u+ckspGg0Tt9s
+	qGv9mTfPZ/41wF5QJkBL0CUTw6zn1kyzUWSvUR1RB7b1Ifcs6KplH08AjmQo8igy38W7hB/
+	i8XB3nxpH6AB3xNuYGMX8m4AIvC6Q7rimZ0AzSHnkYNWRYDayj
+X-QQ-XMRINFO: MPJ6Tf5t3I/ylTmHUqvI8+Wpn+Gzalws3A==
+X-QQ-RECHKSPAM: 0
 
-On ARM64 kernels with 64K pages, the trace_marker_raw test fails because
-bash's printf builtin uses stdio buffering which splits output into
-multiple small write() calls to the tracefs file. Since each individual
-write is within TRACE_MARKER_MAX_SIZE (4096), they all succeed, causing
-the "too big" write test to incorrectly pass.
+When executing the command
+"make -C tools/testing/selftests TARGETS=livepatch run_tests",
+the following error message was reported.
 
-Fix by piping make_str output through dd with iflag=fullblock to
-guarantee a single atomic write() syscall to trace_marker_raw.
+TEST: livepatch interaction with ftrace_enabled sysctl ... not ok
+...
+livepatch: sysctlo
+: setting key "kernel.ftrace_enabled": Device or resource busy
+livepatch: sysctl: setting key "kernel.ftrace_enabled": 设备或资源忙
+...
+ERROR: livepatch kselftest(s) failed
+not ok 5 selftests: livepatch: test-ftrace.sh # exit=1
 
-Fixes: 37f46601383a ("selftests/tracing: Add basic test for trace_marker_raw file")
-Signed-off-by: Tianchen Ding <dtcccc@linux.alibaba.com>
+To fix it, set LC_ALL=C.
+
+Signed-off-by: Qiang Ma <maqianga@uniontech.com>
 ---
- .../selftests/ftrace/test.d/00basic/trace_marker_raw.tc     | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ tools/testing/selftests/livepatch/functions.sh | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc b/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc
-index 8e905d4fe6dd..efd8263e6087 100644
---- a/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc
-+++ b/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc
-@@ -43,8 +43,10 @@ write_buffer() {
- 	id=$1
- 	size=$2
+diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
+index 8ec0cb64ad94..ecf27c1120f1 100644
+--- a/tools/testing/selftests/livepatch/functions.sh
++++ b/tools/testing/selftests/livepatch/functions.sh
+@@ -4,6 +4,8 @@
  
--	# write the string into the raw marker
--	make_str $id $size > trace_marker_raw
-+	# Pipe through dd to ensure a single atomic write() syscall.
-+	# Shell's printf builtin uses stdio buffering which may split the
-+	# output into multiple writes.
-+	make_str $id $size | dd of=trace_marker_raw bs=`expr $size + 4` iflag=fullblock
- }
+ # Shell functions for the rest of the scripts.
  
- 
++export LC_ALL=C
++
+ MAX_RETRIES=600
+ RETRY_INTERVAL=".1"	# seconds
+ SYSFS_KERNEL_DIR="/sys/kernel"
 -- 
-2.39.3
+2.20.1
 
