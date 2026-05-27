@@ -1,113 +1,70 @@
-Received: from smtpbgeu1.qq.com (smtpbgeu1.qq.com [52.59.177.22])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 755093ED131;
-	Wed, 27 May 2026 10:02:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.59.177.22
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2063E3F871E;
+	Wed, 27 May 2026 11:33:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779876150; cv=none; b=P0sOL3cinmJvJEwIC2XDfSu+0gbELHkL1RgrNvL6PLFOrSzAFuUavfEn4d40pQmcoWP/B4DOnOHtx67vobm2KYY5KYxkky7yx9e1nNPlaSD3vzt7doZEtIW9IqCOa9gUIioMCUfmDsiXusFNJgMZLv5oiOMwGZsnRVveWhoaeDY=
+	t=1779881590; cv=none; b=krZTwiHNIrbENTsEzgVg5DecJPII3S8kv4Y8HV36xtMxboMIb8bp/xGqK9vg+9xQiN31vmLZXhCBHay3w6rvks3MZyooG50UQCMCEBitN7cGLaET0xFQzN6ZFzrh7BsncjuOdhRHAKid2pTtcET1qoar3RZ1NH8Mx48e3uAGx6g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779876150; c=relaxed/simple;
-	bh=PYX1cxlUf8UVwKS1WwMEbVBP1z6XkprOaLUujII/8II=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=bOS9Z1z8WgvFhteMPb0rXj0bDn/smaPz85QQEPqvENTRYEAZT2ApW7T05LtT/BI8tBlaauvYR09OmZJda4fpS7aFhjqm1+z3NCrrUJdSFiC5RXQMrAD+bt2E9c5LfkKfiKmkA19vd6HE1oD3T/rEIWUlZq6MHAeb2ZBGKnc77OQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=IerDiUMX; arc=none smtp.client-ip=52.59.177.22
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+	s=arc-20240116; t=1779881590; c=relaxed/simple;
+	bh=O8Cm+JFylGJrwhWvbIUGBbsA3glNEi8WENiLAA9eKf8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=U9CQ9+3ahQc1ZLTYvqFHuP0xTs4JFpD3rL2YtbYl7OvQpZkDUei8Z1Dp8X0mGv3wjikGjmMw9xrssf2mlg0xflIuchZWbfSASaiqsO7SD3dLFChJzuXlKUr5AdswXq63VWI/5Tz40RaME/rYapFc2FkVRGgNyoMG4xKI55XYzos=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gbZo5//S; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="IerDiUMX"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1779875996;
-	bh=Puxwd/zHsLT9Zqn15gB8jpymWS5iWgiQISfMu0Rxp1w=;
-	h=From:To:Subject:Date:Message-Id:MIME-Version;
-	b=IerDiUMXMnpEl5WOLpK6focgFS7euzCv9009XGMFRPuf8GwQARZDhKYsgrg3Fazi0
-	 LZeIgiQyQnJYhpeErVPdfapiqn/uAH6UBqcVA7X+JU8OQFODqZqX6Une6zPnfo/P6F
-	 fTo4ZIyW+3LrTPBiZcqyZcXpqtPIYryojQYO9ZH4=
-X-QQ-mid: zesmtpgz4t1779875976tfbe5bfca
-X-QQ-Originating-IP: hlywEGLp0Eo33lqBLBl8hm2NvT8miW2C8iwGT27xDU0=
-Received: from localhost.localdomain ( [123.114.60.34])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Wed, 27 May 2026 17:59:34 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 3179466971943245431
-EX-QQ-RecipientCnt: 10
-From: Qiang Ma <maqianga@uniontech.com>
-To: jpoimboe@kernel.org,
-	jikos@kernel.org,
-	mbenes@suse.cz,
-	pmladek@suse.com,
-	joe.lawrence@redhat.com,
-	shuah@kernel.org
-Cc: live-patching@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Qiang Ma <maqianga@uniontech.com>
-Subject: [PATCH] selftests: livepatch: set LC_ALL=C to fix locale-dependent test failure
-Date: Wed, 27 May 2026 17:59:29 +0800
-Message-Id: <20260527095929.1504032-1-maqianga@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gbZo5//S"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B98D1F000E9;
+	Wed, 27 May 2026 11:32:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779881579;
+	bh=7gJ26zK78eOdBOgt7O7AAaGauSQe0tx46erorLEnJdk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=gbZo5//SYSZ3Re7PzPSWAssnThka7UKS7VIuBMvgX3Y6legw7Yo0Sw8rL+MuaFZj4
+	 KYRE4watjleMRLfisx2wXId8cIT3doiDZN6LJG4NtXq7xvEmjUH/fPMMzJ3WEUmG0p
+	 xCjBJumTJIfwCzt3hN9lYhwE78VUVE3Z1EeCUsitw6IUfxh3HU3ZOlpHCUIQ+PqQx5
+	 RQNdD0oAbgh3TS50It08QsonlP0ibIPQhMC80HtHZeeU6ikWVqz00AydKAR4Kamkjq
+	 vXlFNihcBrWDlTDPWQUhh+aEo0dDvOgc/fv/PxGYhGSkyhYvWh2zevh6X27K7XhuMw
+	 /xXOZKyTveS0Q==
+Date: Wed, 27 May 2026 14:32:52 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Hongfu Li <lihongfu@kylinos.cn>
+Cc: akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org,
+	liam@infradead.org, vbabka@kernel.org, surenb@google.com,
+	mhocko@suse.com, shuah@kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] selftests/mm: refactor pkey test helpers and
+ unify assertions
+Message-ID: <ahbWZJ2BbR8mmDd_@kernel.org>
+References: <20260527013825.1134225-1-lihongfu@kylinos.cn>
+ <20260527013825.1134225-2-lihongfu@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpgz:uniontech.com:qybglogicsvrsz:qybglogicsvrsz3b-0
-X-QQ-XMAILINFO: OTgf4KY4LuFySAaRqvY7BdfHCfnpBKMK2n1y2+osBAJ+po20aYNzNAoo
-	YNJbgnitzSpplrZzak44nkw4ASLmfc3JndzkHGGwfP3TXwvAsieYeDkg9n0TFjIfk8yL6JW
-	n+lAyq2ZM/E85lC9tcgNmca4+n+H2uNx/NGzu3SC0dqSTtn7wIe6sxD291nldffawZ0CYwT
-	VFX/xP5gJfoopPLZ+YfRCGn0G3vyDu3SXodaiWzz0s3imtODz8lVlFlrD1PhnNrBofxw7U8
-	GXu/T8HjWm9c3PY3DlexxfuxB5KQ53bBZmcn8o72+yxDZkyOfcLnJ7G+WY1eH8FqqDAbQz5
-	bpGLlnTwer7jLstt2Zni73bxBDPBngbIHEfevGxctkRrZVxPc5I1wvgfUYVniyesf7vVFl2
-	D5zw0iB/DPU/JYPP7gbkfSFGJkwWKHkxsngPw9C1zwYx/WmnnU+YXpJ6VBWCL362xktG1j1
-	INEMes5SiF0wds9OkL9HGqNek6LYpOPRBxV1MrQ7lF/1w65khx4zh0fh/+qarWmZEDIjwrJ
-	bR6b0WT1DAn8NYldr2+Lc0lGs4iD+Ko685d8iJdNR172hd5ZXRpzEQoW5K5kZ51eJOsypqj
-	tjPDDbVzvFwwUz0s/U4o3Byi5YfX2c9m9KXjjJQd2YbT/JeV3bmoomQK08K15SQgsRU+7ob
-	FK98yXKpMSK66tz8JiWvE0GCfvN7/k7Zx7/HZPzI2hR90ow7diytH5912b0l2HxXAwNik2i
-	KlRsjsUOaJYRf8tiLHopcn6t960AXtjDk4XovucI49p5Bv3a4fxq8h/WBHl2NtocippLZ3k
-	xzezDBir1czZAq+tgciDJZI+y2Z2PY2eNH+2+r2KEhQ5flc/vwg4FeVS2XsIII2Uu2Ktaap
-	bzo5dqErRgtEvZk3TyyAvBGSivONRrye72BQ9FgkAlMGwfyEyejiClRDk9u+ckspGg0Tt9s
-	qGv9mTfPZ/41wF5QJkBL0CUTw6zn1kyzUWSvUR1RB7b1Ifcs6KplH08AjmQo8igy38W7hB/
-	i8XB3nxpH6AB3xNuYGMX8m4AIvC6Q7rimZ0AzSHnkYNWRYDayj
-X-QQ-XMRINFO: MPJ6Tf5t3I/ylTmHUqvI8+Wpn+Gzalws3A==
-X-QQ-RECHKSPAM: 0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260527013825.1134225-2-lihongfu@kylinos.cn>
 
-When executing the command
-"make -C tools/testing/selftests TARGETS=livepatch run_tests",
-the following error message was reported.
+Hi,
 
-TEST: livepatch interaction with ftrace_enabled sysctl ... not ok
-...
-livepatch: sysctlo
-: setting key "kernel.ftrace_enabled": Device or resource busy
-livepatch: sysctl: setting key "kernel.ftrace_enabled": 设备或资源忙
-...
-ERROR: livepatch kselftest(s) failed
-not ok 5 selftests: livepatch: test-ftrace.sh # exit=1
+On Wed, May 27, 2026 at 09:38:24AM +0800, Hongfu Li wrote:
+> Move shared tracing and assertion helpers to a common file, then
+> convert the sighandler test to use pkey_assert() for consistent
+> diagnostic output, and add per-test tracing around test execution.
 
-To fix it, set LC_ALL=C.
-
-Signed-off-by: Qiang Ma <maqianga@uniontech.com>
----
- tools/testing/selftests/livepatch/functions.sh | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
-index 8ec0cb64ad94..ecf27c1120f1 100644
---- a/tools/testing/selftests/livepatch/functions.sh
-+++ b/tools/testing/selftests/livepatch/functions.sh
-@@ -4,6 +4,8 @@
+This sounds like three patches to me.
  
- # Shell functions for the rest of the scripts.
- 
-+export LC_ALL=C
-+
- MAX_RETRIES=600
- RETRY_INTERVAL=".1"	# seconds
- SYSFS_KERNEL_DIR="/sys/kernel"
+> Signed-off-by: Hongfu Li <lihongfu@kylinos.cn>
+> ---
+>  tools/testing/selftests/mm/pkey-helpers.h     |   5 +-
+>  .../selftests/mm/pkey_sighandler_tests.c      | 108 +++++++++---------
+>  tools/testing/selftests/mm/pkey_util.c        |  81 +++++++++++++
+>  tools/testing/selftests/mm/protection_keys.c  |  82 -------------
+>  4 files changed, 137 insertions(+), 139 deletions(-)
+
 -- 
-2.20.1
-
+Sincerely yours,
+Mike.
