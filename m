@@ -1,89 +1,79 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E20D133D503;
-	Thu, 28 May 2026 09:12:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D908639F19C;
+	Thu, 28 May 2026 09:14:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779959567; cv=none; b=AXQx0RN/IxUgVNbbmOkw1S43ev42Yn/RyXla4hPucu0dTIuiX3PtQqLuSpKX4e3WHX+XB5PKMcMSBbbSlJHyh5FminwR0T0Y70VC+K+bHpEln3nSNCLMxhINpxKQybaEkLGTRSQRFNqthduwfId+pPP6/vzXvMVpnDLak1aANJM=
+	t=1779959652; cv=none; b=Ur50P9Zst8hqK+LmQo85VZyOkFxJiLh292EzJhztUvbNlTem+Mg2TKr7RmAxV1K+iNBRGV1v1wGvG6rjk9aEXvtIY8J7Xud6xqYuDPcOL/5Ef94vN9Y/3FnDA9Ce3E71X0FYrIX++nmH2AO3rnxdvFEW2eaZnM1vHmzYC1Ij4+g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779959567; c=relaxed/simple;
-	bh=aKiqz4PFm5v8KmCguR2pzVXs6A15+BOnCmOv4QqIwqE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=QFLljcpVcOrprr0dgwDPOZrBLM55vl3ptOIKa747YHFIE0Djt81XXOcmNZYC+Muv9YPaSLezJuvrHGFqP+3V6NdyUN1aWf0dCHroJntY4zQCzVoEN/d0gWAxZQBBt4K3XdY2cIyz2qNfm764o610kzL8K9wII+9auHVRlogfFuo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 5e51cb4e5a7511f1aa26b74ffac11d73-20260528
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B, HR_CTT_MISS
-	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME, HR_SJ_DIGIT_LEN
-	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
-	HR_SJ_PHRASE_LEN, HR_SJ_PRE_RE, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
-	HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_TRUSTED
-	SA_EXISTED, SN_TRUSTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS
-	DMARC_NOPASS, CIE_BAD, CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS
-	GTI_RG_INFO, GTI_C_BU, AMN_GOOD, ABX_MISS_RDNS
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:ff5cde3a-25ed-4618-b324-685c8a149aa1,IP:20,
-	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:20
-X-CID-INFO: VERSION:1.3.12,REQID:ff5cde3a-25ed-4618-b324-685c8a149aa1,IP:20,UR
-	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-	elease,TS:20
-X-CID-META: VersionHash:e7bac3a,CLOUDID:380fd8ac2ccc9666c92fdee4fbdf1c0d,BulkI
-	D:260527193311ER6VIRO3,BulkQuantity:1,Recheck:0,SF:17|19|64|66|78|80|81|82
-	|83|102|127|841|850|865|898,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:0,File
-	:nil,RT:nil,Bulk:40,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR
-	:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 5e51cb4e5a7511f1aa26b74ffac11d73-20260528
-X-User: lihongfu@kylinos.cn
-Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
-	(envelope-from <lihongfu@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 330964409; Thu, 28 May 2026 17:12:36 +0800
-From: Hongfu Li <lihongfu@kylinos.cn>
-To: rppt@kernel.org
-Cc: akpm@linux-foundation.org,
-	david@kernel.org,
-	liam@infradead.org,
-	lihongfu@kylinos.cn,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org,
-	ljs@kernel.org,
-	mhocko@suse.com,
-	shuah@kernel.org,
-	surenb@google.com,
-	vbabka@kernel.org
-Subject: Re: [PATCH v3 1/2] selftests/mm: refactor pkey test helpers and unify assertions
-Date: Thu, 28 May 2026 17:13:00 +0800
-Message-Id: <20260528091300.2082967-1-lihongfu@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <ahbWZJ2BbR8mmDd_@kernel.org>
-References: <ahbWZJ2BbR8mmDd_@kernel.org>
+	s=arc-20240116; t=1779959652; c=relaxed/simple;
+	bh=w28/NLSOinSMPP+1tvL9Dl5oRjwyEiLhpPelKf+xu+A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OiGioGFGDhWTHUSrmOg+rjmuImq47bIrOUrVgll3AqwdZiJpl4YLSapgOZWgn7ZYsB3uIxWP6YTYsZ/pSvWoQ1p/jq/nM7s1NNCFIpVANLUr2fWNTlG0vHNSERFJbPCQ7M/fLrk1THPZ2hnlHO2v46SYXEowViCVAER3RyKS4MI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=FN+ny1hK; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="FN+ny1hK"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=hGZwpCwXYSSUIy+25+lFmaLZVZeriPO/Fr8Ud8SrJCM=; b=FN+ny1hKdlDKUxYy+mqduuhAfZ
+	g1DdAU8U+PGpawqej/rSpEpQq6Cr3s9EyDsaMDorQCOH7VGdrLJIcRFadMGK/JXiPfkRzozdR1Pju
+	EXuuOuoKk4KRqtGA5gBN/F6Wc4r/ii7G/7YKhEv5Rx1Eeji1seny50A3Oj23CxBjgh6+xD6MY8NtQ
+	IjfO9LTkPJrclIhAFkpGlSWHWGhlKfWXXKrBVLl/O0797ODhQDT1VbE4hDsWWY3fQQ6wewRTOyJ6W
+	CeR2QTYPJ5kcnuudNd8PnsXrtDMF0TkeVIBRQHkXIUIuNXpN1oD1mmnwMeU5hnXj3ekPfXDldRYom
+	dk+EYW8A==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
+	id 1wSWoQ-0000000FxZM-1RPH;
+	Thu, 28 May 2026 09:13:58 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 56B26300CDE; Thu, 28 May 2026 11:13:57 +0200 (CEST)
+Date: Thu, 28 May 2026 11:13:57 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Jim Mattson <jmattson@google.com>
+Cc: seanjc@google.com, pbonzini@redhat.com, tglx@kernel.org,
+	mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+	x86@kernel.org, hpa@zytor.com, shuah@kernel.org,
+	kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, ctpence@google.com,
+	David.Kaplan@amd.com, binbin.wu@linux.intel.com
+Subject: Re: [PATCH v4 1/5] KVM: x86: Consolidate CPUID fault handling for
+ emulator and interception logic
+Message-ID: <20260528091357.GB343181@noisy.programming.kicks-ass.net>
+References: <20260527174347.2356165-1-jmattson@google.com>
+ <20260527174347.2356165-2-jmattson@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260527174347.2356165-2-jmattson@google.com>
 
-Hi Mike,
-Thanks for the review comments.
+On Wed, May 27, 2026 at 10:43:43AM -0700, Jim Mattson wrote:
 
-> > Move shared tracing and assertion helpers to a common file, then
-> > convert the sighandler test to use pkey_assert() for consistent
-> > diagnostic output, and add per-test tracing around test execution.
-> 
-> This sounds like three patches to me.
+> [jim: Add EXPORT_STATIC_CALL_GPL(kvm_x86_get_cpl) so that KVM vendor
+> modules can call kvm_is_cpuid_allowed(). Fix typo in commit message.]
 
-Got it, should I split this into three individual patches?
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 1578c0ecbbd1..72bd3cddb026 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -151,6 +151,7 @@ struct kvm_x86_ops kvm_x86_ops __read_mostly;
+>  #include <asm/kvm-x86-ops.h>
+>  EXPORT_STATIC_CALL_GPL(kvm_x86_get_cs_db_l_bits);
+>  EXPORT_STATIC_CALL_GPL(kvm_x86_cache_reg);
+> +EXPORT_STATIC_CALL_GPL(kvm_x86_get_cpl);
 
-Best regards,
-Hongfu
+Are you aware of the distinction between EXPORT_STATIC_CALL_GPL() and
+EXPORT_STATIC_CALL_TRAMP_GPL() ?
+
+Specifically, the former allows modules to do static_call_update(),
+while the latter does not. Whenever possible use the TRAMP thing, this
+allows modules to *call* the static_call, but not to redirect it.
