@@ -1,36 +1,36 @@
-Received: from smtpbgsg1.qq.com (smtpbgsg1.qq.com [54.254.200.92])
+Received: from smtpbgsg2.qq.com (smtpbgsg2.qq.com [54.254.200.128])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87D67366049;
-	Thu, 28 May 2026 08:11:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.254.200.92
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DFA535A93C;
+	Thu, 28 May 2026 08:11:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.254.200.128
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779955895; cv=none; b=aLHcAXjsAbaFtPKUG2jJEzkftQyzYZqccGHlHBO86xmQu4ufFjgdQgCZYWFsk3O+XNLxyV4Bw83CXkC+Mz2XqfDWwGSb+KflD/Mxrz/tU52HHLHHNKwRswSWYDAaTqQmct2umd432uXhidrtOuu5khhEfRV4ToDzvbXaoBgF3iA=
+	t=1779955897; cv=none; b=cysi7NJDm5bbI1iuFOZmk+ShsSipBhHt4EEevoqTjzsxuV28dvxfw7kl/4xd9MITaf9HfsW3g2saq0OmM6v9gP1FHTdYv+DwqYwV5SX6XjD0qCwLtDBWnxHw4xoIHuMwr49miwlTli+vGeTbZvV1jv+NNqihHb+5X6SzCyj4uHU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779955895; c=relaxed/simple;
-	bh=EOUTRAQwJbonB/dXnMs4Z7WGxMLzqQf+/o5B9/UPcR0=;
+	s=arc-20240116; t=1779955897; c=relaxed/simple;
+	bh=ae/NeZ3taNXKKvp9HnJVM1by6LAlTPlw0mB2UHLVhT4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=I8+9OyOfyVJQjUG3yGdMKlWtXMfklNB6C4/xRGmcpP+/44hs6hpHIE8PU5kFr50oFd/8ccUZqUVdgNlgKpSr4VKBXVNI/00ih1g+L1D10clFUcGCDV9IDgDlLOnYCuuaEQA56BRmTdFiDQc7id+FhWvoxkwrbswoNP0A0obqmPc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=jtCpSd8y; arc=none smtp.client-ip=54.254.200.92
+	 MIME-Version; b=TTMAXbPrQ03LwKkknWTQVh6/xO5X7AFb1n6BnzHizQ5VtmZPaFV1Fi4FOMEB/7JH5QGFj5KMEFvGgqEuU+ZCBsB4Dc5xA/epm26OF2M5U1qkfDFYsUcOb+TBllGlddCU3rdnlbUVVxJK/DiiqVP6ARPPj7bFIyRRAGK7nOb0azM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=Vzt2yiV2; arc=none smtp.client-ip=54.254.200.128
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="jtCpSd8y"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="Vzt2yiV2"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1779955865;
-	bh=OtizzlCEw0/53zw8NLPj1j97omDIHUW4gZwvkbZ+ZR0=;
+	s=onoh2408; t=1779955861;
+	bh=yJmNoPx3oaeA6PqMQ34pEZkGLLkXi0yOR8EY4hpMPHE=;
 	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=jtCpSd8yUgtgkbrH0WGkEe6oirzTbSwJ+bBxQBRJJRbApOVBJa7XX9xS6Vqqoq6Qk
-	 UVptZBVP5nHCpkef8cF3IqeLGL3mSGiob5hET6EZUhO7MVlngX3j9MXxWuHXz+fYHm
-	 k9Q05D7/iE5ljTaCtJkmpga9hmJI4m94CLnHDm0I=
-X-QQ-mid: esmtpsz17t1779955854t571d6731
-X-QQ-Originating-IP: w+8TIl4HFrhrX5MF7IR7jCKdH1MZYRedCQ+TRDM3QPg=
+	b=Vzt2yiV245oaZEy+00DqMKw2DFAUlWyO9X25zJbHDIpHAuDBZ5Cm9nZbNC+OJFQGW
+	 LIXGFie37/PztMztdDdD5PxWkwrQtjqx69+VawEYalp7iGHG3xHah0YHISRh/Xra+E
+	 JoVRvwaWW0yLiPK0T/b5hwyGRBwE3uLHX2IlCtBQ=
+X-QQ-mid: esmtpsz17t1779955849t1d49df90
+X-QQ-Originating-IP: nZ4UXvetsIyyKOSyybdUT3u/PhenXD2LCe9anBkoWec=
 Received: from PEN1097 ( [61.183.83.60])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Thu, 28 May 2026 16:10:52 +0800 (CST)
+	id ; Thu, 28 May 2026 16:10:46 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 4212579660610101544
+X-BIZMAIL-ID: 7792598639397190847
 EX-QQ-RecipientCnt: 8
 From: niecheng <niecheng1@uniontech.com>
 To: sj@kernel.org
@@ -41,9 +41,9 @@ Cc: shuah@kernel.org,
 	linux-kernel@vger.kernel.org,
 	kernel@uniontech.com,
 	niecheng1@uniontech.com
-Subject: [PATCH 2/2] selftests/damon: validate memcg filter sysfs readback
-Date: Thu, 28 May 2026 16:10:39 +0800
-Message-ID: <406BD1BA0F6AE326+20260528081039.1192194-3-niecheng1@uniontech.com>
+Subject: [PATCH 1/2] selftests/damon: fix DamosFilter memcg_path assignment
+Date: Thu, 28 May 2026 16:10:38 +0800
+Message-ID: <9B7A70233DF773F5+20260528081039.1192194-2-niecheng1@uniontech.com>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20260528081039.1192194-1-niecheng1@uniontech.com>
 References: <20260528081039.1192194-1-niecheng1@uniontech.com>
@@ -56,80 +56,52 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: esmtpsz:uniontech.com:qybglogicsvrsz:qybglogicsvrsz4b-0
-X-QQ-XMAILINFO: NlwPN3mHkzpj3UwhfU1CKWFXrqw1yA5fsK21L0/+1bkHnvM2JJsAa7da
-	EFRAMPDq/Yj4tIVVqjhE6ioWY8hthQp50Gx81VCmhkkw0h7q8LbwbtBg/uc+EtIHh2Xwjsm
-	nIhalH5WZswNzPZtYfyfh7dG5IHaC5Amc9A3fjcWDBJFeu7FH/pOyq+FoimS7OH0jraLJ8+
-	iGLHF6zqMyxQllPRSm+WiwGMgG3tdpfuC4LlJd6hCp51ILSYZLhvsuOFLAKP9s/ICr2XTJn
-	ULGHxQzVF//uLjaORVV0bIHE6Qw66EjkwvETzvQgWhSqF9feVe5HaLL5vLlSO+ElQLrln9D
-	30Z01Pmz90vnvJmywZaIK0XJlPh/stMzVAZ39gR4t/4yrw7ATgC9v4Pekl1JFypv8utkx1A
-	I5CUjN7R+gI4bF/kOn+gUs/LU4orvacNg5XkwwnuBwNiI0Qv6snw9Xnyz4xszIoQoFXSobZ
-	90Zd1fgv/KCJPv2aMGjlro0vlYty+g/u0hWlvSb1GnbvMt+64nd1AxQvnr61rbqBrQVkGlP
-	9oscdbJvtWO5bJbLm1QI3kEB1YYLnHziVtPIZb91Mns1bO/+5oBeQZaHc7U3gBVe+KjqepN
-	slNcwV6jftnup7OPXvwiHAEKwrwvirz/lYwNo+yPdALYqpYXu2MJP4qqPxDJMMBDGsmCXxS
-	/FQLMMg5WYfTJN2qbFUV8ANEKUGyArVCR0+MMb0t/yPR5pC1UU4u2eGCcE9AzlHcA8MVBIN
-	75sHkYjJvCqS+KsUOiaro7Jm5MPOptjEG5tG288qN/R/xCdlhfWJskQFuj9P7OW1WwYPKjc
-	Zouc3IzDQpapraYpfZP8Uku/+AVGKZ0MVD379Qms+okL8CJ6AvhvqjH7TcTyzLpCRqmZHXR
-	srAIU6SzeXukTPtGMlQinv/sKg9xOWiBBTwCWRWO86zM3iX+ONIcZmYP/oYqAW8ke6rpY7P
-	c6TDP4iZrdTVTcBJyo8S+vhmda9XVq6uz+TKcTZ5Fob6rtEhx9eKXiQ0sUw78EkUqP+Wzcq
-	2y07OEIx9cHujaDcJd+r/27uBMrOG+YCaWF84AJcpVu3oq+POPB1YJDVhnBF/6sY2j4Dsnj
-	MCOXhkcpuIBe7exHx5LkRhib4AkZp11WM1FTDo/uxUQ0t0lIFdTHx7ajJujb88FItmn6KPi
-	YJ/vWh0f88V5Ygo=
-X-QQ-XMRINFO: MSVp+SPm3vtSI1QTLgDHQqIV1w2oNKDqfg==
+X-QQ-XMAILINFO: MoAHuhB82TZgToQTVHt3NDbioWJedjP1nMSJAQ4NgqlJ9mz/3Pey+t8+
+	D+L3CU1X/u7ohkhKnb+ebFv5YD9ix3moFjRKVeeMYce2QDwZRifIaaCUL8vTuJqotW42M+J
+	dnl9yHbQBYHXORM2yNtGn6B3222ayVeh2AmOKpHFl2mLpI8fPFAkaAamwBSDV1ovnw55EXl
+	Z+7kYv5bDhwRjNEFdLvXpdSm4AImdcjbbvgDlPS0jVzR56Jzmx5RvxcqRjEKrxznKW+ZAvQ
+	ZZqnUiUm5Uk8l7OqmziSk4y1On3E7noRsY+y8H/v7qh8O0MImbiTloprMZaR06mVJumxpcW
+	JpOiwF+1HOpsGtXNvFtjdStRhbJn63fN1/JiCLJJjJGA0Z7QdsPNrzS2cH2Sp951nkxdjIo
+	R2g9tztasbqoqbnxrxPV+0tMBXZqs0mDoVwLIgRVvq239whqLo0RP7fxYx49/kEjk94MOOc
+	FFbyOo90LvfQpvTCiHUigr5w79xd8zqwV4j4vzVDY6m4y6g958BspPQNO07C6mSgE2TJ+Or
+	/7JhDlqJgrAYLYWeA18EkDLdZdk4EfS/rONH2aKBc694kX/hskXk4yr4kLsqhGKtLFQG6t/
+	2wDPzSsc1mAy1vJHv92I8AVmapR+zcm3MBXNxcQgAB+vmMaLjujIZOqrpHRkKcuy4IsDnWO
+	QCFlzcKLUpurtXPq14t3T0CGWq0nuH2E404J9y6VDFL3lILdCfK73I1p2ZVtx7By54k0BTM
+	M50GAhGT1GCoiWrM1ApHRPZW5OSRjRmQ5E0rg+WTeAJNP4zIkRQ4CvPBkyf1nc4zRu/en+l
+	lnIjztkCDB3Hs2O5AUNx86qXfGqvtZY/4+5tvZc7ttC04Jr3IJyvcITfURRDiehEkOdRDYO
+	/f/M/rf2PjyQckYSzvsAetHSQjVVG0e3F/JCcnCKJkbkgAnC9pUMgS2FFgzusOMHo7zfsuk
+	xRY0T6fAE403UAUU+OfIgzgwPcu7q312+t8mZi0BOnv56bKsUNHD2aehUB6cwPvDh1x21mp
+	K18elLMyB6AEbl3zUjLjRibyGq3IqI4GYSf/Vwd3VcZ102yvn8bwuh+QCSZ5BPh5u/OzkJS
+	nr8/FtqE0QMp+ttWFhq5ol6ynq4iXbRQTnpuXH+9GAbWaOrhhBN+nfzXPMd85bfrBrZJm7h
+	SEl09+yngOt7UHI=
+X-QQ-XMRINFO: OWPUhxQsoeAVwkVaQIEGSKwwgKCxK/fD5g==
 X-QQ-RECHKSPAM: 0
 
-Add memcg filter validation to the DAMON sysfs selftest by checking the
-memcg_path sysfs readback.
+DamosFilter stores memcg_path for sysfs staging, but the constructor
+assigns it with a trailing comma and therefore turns it into a tuple.
 
-Validate the readback path rather than a derived memcg_id so that the
-test stays focused on DAMON sysfs behavior and avoids depending on the
-local userspace cgroup mount layout.
-
-Also compare the readback path while stripping only the trailing
-newline.
+Fix the assignment so memcg_path is stored as the intended string.
+This makes memcg filter staging and follow-up validation use the
+written path correctly.
 
 Signed-off-by: niecheng <niecheng1@uniontech.com>
 ---
- tools/testing/selftests/damon/sysfs.py | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+ tools/testing/selftests/damon/_damon_sysfs.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/damon/sysfs.py b/tools/testing/selftests/damon/sysfs.py
-index 3aa5c91548a5..b595da24f698 100755
---- a/tools/testing/selftests/damon/sysfs.py
-+++ b/tools/testing/selftests/damon/sysfs.py
-@@ -33,6 +33,7 @@ def assert_true(condition, expectation, status):
-     if condition is not True:
-         fail(expectation, status)
- 
-+
- def assert_watermarks_committed(watermarks, dump):
-     wmark_metric_val = {
-             'none': 0,
-@@ -90,8 +91,14 @@ def assert_filter_committed(filter_, dump):
-     assert_true(filter_.type_ == dump['type'], 'type', dump)
-     assert_true(filter_.matching == dump['matching'], 'matching', dump)
-     assert_true(filter_.allow == dump['allow'], 'allow', dump)
--    # TODO: check memcg_path and memcg_id if type is memcg
--    if filter_.type_ == 'addr':
-+    if filter_.type_ == 'memcg':
-+        shown, rd_err = _damon_sysfs.read_file(
-+                os.path.join(filter_.sysfs_dir(), 'memcg_path'))
-+        if rd_err is not None:
-+            fail('memcg_path sysfs read', {'error': rd_err})
-+        assert_true(shown.rstrip('\n') == ('%s' % filter_.memcg_path),
-+                    'memcg_path_sysfs', dump)
-+    elif filter_.type_ == 'addr':
-         assert_true([filter_.addr_start, filter_.addr_end] ==
-                     dump['addr_range'], 'addr_range', dump)
-     elif filter_.type_ == 'target':
-@@ -258,6 +265,8 @@ def main():
-                 ops_filters=[
-                     _damon_sysfs.DamosFilter(type_='anon', matching=True,
-                                              allow=True),
-+                    _damon_sysfs.DamosFilter(type_='memcg', matching=True,
-+                                             allow=True, memcg_path='/'),
-                     ],
-                 )])
-     context.idx = 0
+diff --git a/tools/testing/selftests/damon/_damon_sysfs.py b/tools/testing/selftests/damon/_damon_sysfs.py
+index 2b4df655d9fd..022f0d392204 100644
+--- a/tools/testing/selftests/damon/_damon_sysfs.py
++++ b/tools/testing/selftests/damon/_damon_sysfs.py
+@@ -254,7 +254,7 @@ class DamosFilter:
+         self.type_ = type_
+         self.matching = matching
+         self.allow = allow
+-        self.memcg_path = memcg_path,
++        self.memcg_path = memcg_path
+         self.addr_start = addr_start
+         self.addr_end = addr_end
+         self.target_idx = target_idx
 -- 
 2.51.0
 
