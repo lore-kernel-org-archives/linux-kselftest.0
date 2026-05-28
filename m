@@ -1,122 +1,166 @@
-Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F1BC3ADB92;
-	Thu, 28 May 2026 13:22:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EAAA3EE1C7
+	for <linux-kselftest@vger.kernel.org>; Thu, 28 May 2026 13:27:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779974530; cv=none; b=tOnVgoUUr6W1mOMVjFoNpAImolqmM6U0fYVgBnDyhPvgI+jRgVGC5M1e4ljwbG2UgL3MMXK1ZDF2JrLKkBk29f7+IvR+aN6H59oCoZVsGVbFjloQd98H3eM6rjYp+DQPKTbKuIQs9/B/dMPUln4u/PJv9qmfJE/RzrO+KkMAZwY=
+	t=1779974855; cv=none; b=XQcn2TeMN08RGP0UpLzIySOKck9IQbCfxOv7Og6iGmAF4HRMG5bvyE9+LbZB3KzEH105x7s1OG09XoPO6pS9hRhEPLvLyEeucaVwlkZEnMjOo7ogUJoUjfi0wNwNBqVH+Xe6DlrlPif2vNf0yVwasB6syLZpkMPfZd2qm0UfR4I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779974530; c=relaxed/simple;
-	bh=2ekTIatk62sZzZ8tZUZ0otPWrQdfbtlkaUx67BltbuQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=EoQXgUUSU6UZhOqeNgGWto8rldqbrMJ5kj2dXcuLwbP/bniVZZ/hEeUH7Whz2TYzG1Ba3lGt8YeaT9r6Jg0WfCig1NYKu5nc6pSCEYAg9IODFh7pxPlwO1gGQ5uGmVTjnu+k6WKfTbh8su0N9Jl3NkIaP3KjuB8d6OwEUZgtwNo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf03.hostedemail.com (lb01a-stub [10.200.18.249])
-	by unirelay09.hostedemail.com (Postfix) with ESMTP id A6EB691291;
-	Thu, 28 May 2026 13:22:02 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf03.hostedemail.com (Postfix) with ESMTPA id 1DAA66000B;
-	Thu, 28 May 2026 13:21:55 +0000 (UTC)
-Date: Thu, 28 May 2026 09:21:53 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Wang Han <wanghan@linux.alibaba.com>
-Cc: Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
- Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, Masami
- Hiramatsu <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Chen Pei
- <cp0613@linux.alibaba.com>, Andy Chiu <andybnac@gmail.com>,
- =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>, Deepak Gupta
- <debug@rivosinc.com>, Puranjay Mohan <puranjay@kernel.org>, Conor Dooley
- <conor.dooley@microchip.com>, Josh Poimboeuf <jpoimboe@kernel.org>, Jiri
- Kosina <jikos@kernel.org>, Miroslav Benes <mbenes@suse.cz>, Petr Mladek
- <pmladek@suse.com>, Joe Lawrence <joe.lawrence@redhat.com>, Shuah Khan
- <shuah@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar
- <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung
- Kim <namhyung@kernel.org>, oliver.yang@linux.alibaba.com,
- xueshuai@linux.alibaba.com, zhuo.song@linux.alibaba.com,
- jkchen@linux.alibaba.com, linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH v2 1/8] scripts/sorttable: Handle RISC-V patchable
- ftrace entries
-Message-ID: <20260528092153.3dde1f75@fedora>
-In-Reply-To: <20260528082310.1994388-2-wanghan@linux.alibaba.com>
-References: <20260527123530.2593918-1-wanghan@linux.alibaba.com>
-	<20260528082310.1994388-2-wanghan@linux.alibaba.com>
-X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-redhat-linux-gnu)
+	s=arc-20240116; t=1779974855; c=relaxed/simple;
+	bh=ErEADfQOwDlWtt6JS5EWWVcHvzZmKepOIS+pG6dpPG4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=VzYiPhM46GJI+2iTRcOyPWuPr/9sT/5HOEPKiwi28FRbv60WH8v/3BL8TNsxPMbrRkLrN6NYzLpxXYtqJItqqbulD3VWdV9ntfDW7afQRw6EfgONxH+oIGUiyhUD9yfR0HPf2ptq3EBAQ2jLYQOGNU8iNf07dlRJUmj0B9CGpw0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=HJkD2tJQ; arc=none smtp.client-ip=185.171.202.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="HJkD2tJQ"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-04.galae.net (Postfix) with ESMTPS id A7F8FC62449;
+	Thu, 28 May 2026 13:27:27 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 5D5F460495;
+	Thu, 28 May 2026 13:27:27 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id CEA0E10888651;
+	Thu, 28 May 2026 15:27:23 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1779974846; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=bUCYTw5/XnfGzC1/mlK4v3TBgGjqIbE2kIxY+RaExGo=;
+	b=HJkD2tJQJs1+Na8iUH1RTqRtv55zWLu7gx2GXSuyGU18WvD2LUv9Gfca+RoURgDJ6CDb6J
+	GcUZfDMHarZDzV14TN6Mp/J3ACkLbWILQ2pQyGfB+Jdkyqaw2DNwWIA0mmRAR8JYCnkL6S
+	2RcVnbNxpihfzyAcx1jvRuevd4na82qoZ5FKrv2/8yFTh6rfJwvCPjykO3VfQl6zdxdMz6
+	mvtety8vujMgwqvlKomPJiXaGozqOd3hPOlC2kG2QoGw9GR+GIlQqYMloRhWV3SBf6pRhW
+	jqEUR9SN4QjY+4z67e6tjDjFvgFARc064vupKEae/l+DY0xlfuaSf9GF9RLAmg==
+From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+Date: Thu, 28 May 2026 15:27:14 +0200
+Subject: [PATCH bpf-next] selftests/bpf: ignore call depth accounting for
+ retbleed in verifier tests
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Stat-Signature: y5camjc9dq17akqc8a4ytz8k7nu8tn9j
-X-Rspamd-Server: rspamout04
-X-Rspamd-Queue-Id: 1DAA66000B
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX19+XNKwFj7vcD6hXiG6uERbHZyLuR0djpo=
-X-HE-Tag: 1779974515-628892
-X-HE-Meta: U2FsdGVkX18VcIqhm50kLxPOB3gcckHG8D9zxu9RUuDTpvurJwnwC9DCuK0bHlovUrLkBgtChRPAeWd3bSgQnEtThR0D/Y+waAep/t8lPMRwyO+WXzPPq17Wh6YJaGjsLM6y0veINnetKl4fkjCkPAtIP5NAtjGDlno1aGlBsZ1XocfwxMFxbNnxwLvBj/TYs3J9u+dRjYOR/Mg+3qQkdfqWqcV/JA0Q3B8kVrIgy6rpI0QjJD6j1H7nGkUO1dXkuBFGgWoLIBBWCcL+JQMRl9FjjT/mXMiBrd5KCj3i9qpzhY3eVbIlLsvxCueYZZJhSJMLb8LvBE6a/i1bpBnEyOnltGpzbhQaYrGEfJd+9Lb9WmYrUz2Jsf/lsWcxNF/A8q7o0A0p3mVSj017EaZnJ6TATI715U/1NyOfE6vaT0I=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20260528-fix_tests_for_retbleed_stuff-v1-1-c2022a1f3bee@bootlin.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXMUQrCMBCE4auUfTYQU2qjVxEJTTrRiKQlu5VC6
+ d2N+vgzw7cRoyQwXZqNCt6J05RrHA8NhceQ71BprE1Gm5PujFUxrU7Awi5OxRWIfwGjY1liVKE
+ N9uz71qLXVIm5oP5//JX8HFXGKnT7L7z4J4J8ddr3DyY30keKAAAA
+X-Change-ID: 20260528-fix_tests_for_retbleed_stuff-c3c89b738e70
+To: Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: ebpf@linuxfoundation.org, 
+ Bastien Curutchet <bastien.curutchet@bootlin.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+X-Mailer: b4 0.15.2
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Thu, 28 May 2026 16:23:03 +0800
-Wang Han <wanghan@linux.alibaba.com> wrote:
+When running the selftests on a retbleed-affected platform (eg:
+Skylake), with call depth accounting enabled
+(CONFIG_CALL_DEPTH_TRACKING=y) _and_ with retbleed=stuff, some verifier
+selftests fail to validate the jited instructions. For example:
 
-> RISC-V uses -fpatchable-function-entry=8,4 when the compressed ISA is
-> enabled and -fpatchable-function-entry=4,2 otherwise. In both cases, the
-> patchable NOP area starts 8 bytes before the function symbol address.
-> The __mcount_loc entries therefore point at the patchable NOP area
-> associated with a function, while nm reports the function symbol at the
-> entry address used for the function range check.
-> 
-> After RISC-V selected HAVE_BUILDTIME_MCOUNT_SORT, sorttable started
-> applying that range check at build time. Without allowing entries just
-> before the reported function address, the mcount sorter treats valid
-> RISC-V ftrace callsites as invalid weak-function entries and writes
-> them back as zero. The resulting kernel boots with no ftrace entries,
-> breaking dynamic ftrace and users such as livepatch.
-> 
-> The failure is silent during the final link because zeroing weak-function
-> entries is an expected sorttable operation. At boot, those zero entries
-> are skipped by ftrace_process_locs(), so the only obvious symptom is that
-> the vmlinux ftrace table has lost valid callsites and ftrace users cannot
-> attach to them.
-> 
-> CONFIG_FTRACE_SORT_STARTUP_TEST also reports the table as sorted in this
-> state: it only checks that the __mcount_loc entries are in ascending
-> order, which a fully zeroed table trivially satisfies. The original
-> commit relied on this check and did not see the regression.
-> 
-> On an affected RISC-V QEMU boot with both CONFIG_FTRACE_SORT_STARTUP_TEST
-> and CONFIG_FTRACE_STARTUP_TEST enabled, the sort check still passes
-> while ftrace reports zero usable entries and the early selftests fail:
-> 
->   [    0.000000] ftrace section at ffffffff8101da98 sorted properly
->   [    0.000000] ftrace: allocating 0 entries in 128 pages
->   [    0.054999] Testing tracer function: .. no entries found ..FAILED!
->   [    0.172407] tracer: function failed selftest, disabling
->   [    0.178186] Failed to init function_graph tracer, init returned -19
-> 
-> Handle RISC-V like arm64 for the function-range check and allow
-> patchable entries up to 8 bytes before the function address.
-> 
-> With this fix, a RISC-V QEMU smoke boot with ftrace startup tests shows
-> the vmlinux ftrace table is populated and dynamic ftrace still works:
-> 
->   [    0.000000] ftrace: allocating 46749 entries in 184 pages
->   [    0.051115] Testing tracer function: PASSED
->   [    1.283782] Testing dynamic ftrace: PASSED
->   [    6.275456] Testing tracer function_graph: PASSED
-> 
-> Fixes: 0ca1724b56af ("riscv: ftrace: select HAVE_BUILDTIME_MCOUNT_SORT")
-> Suggested-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> Link: https://lore.kernel.org/all/20260527113028.4b21a5de@fedora/
-> Signed-off-by: Wang Han <wanghan@linux.alibaba.com>
+  MATCHED    SUBSTR: '	endbr64'
+  MATCHED    SUBSTR: '	nopl	(%rax,%rax)'
+  MATCHED    SUBSTR: '	xorq	%rax, %rax'
+  MATCHED    SUBSTR: '	pushq	%rbp'
+  MATCHED    SUBSTR: '	movq	%rsp, %rbp'
+  MATCHED    SUBSTR: '	endbr64'
+  MATCHED    SUBSTR: '	cmpq	$0x21, %rax'
+  MATCHED    SUBSTR: '	ja	L0'
+  MATCHED    SUBSTR: '	pushq	%rax'
+  MATCHED    SUBSTR: '	movq	%rsp, %rax'
+  MATCHED    SUBSTR: '	jmp	L1'
+  MATCHED    SUBSTR: 'L0:	pushq	%rax'
+  MATCHED    SUBSTR: 'L1:	pushq	%rax'
+  MATCHED    SUBSTR: '	movq	-0x10(%rbp), %rax'
+  WRONG LINE  REGEX: '	callq	0x{{.*}}'
 
-Reviewed-by: Steven Rostedt <rostedt@goodmis.org>
+Those affected selftests allways fail on some call instruction: this
+failure is due to the JIT compiler emitting call depth accounting for
+retbleed mitigation (see x86_call_depth_emit_accounting calls in
+bpf_jit_comp.c), resulting in an additional instruction being inserted
+in front of every call instruction, similar to this one:
 
--- Steve
+  sarq    $0x5, %gs:-0x39882741(%rip)
+
+Fix those selftests by allowing them to ignore this possibly present
+call depth accounting instruction.
+
+Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+---
+ tools/testing/selftests/bpf/progs/verifier_private_stack.c | 5 +++++
+ tools/testing/selftests/bpf/progs/verifier_tailcall_jit.c  | 1 +
+ 2 files changed, 6 insertions(+)
+
+diff --git a/tools/testing/selftests/bpf/progs/verifier_private_stack.c b/tools/testing/selftests/bpf/progs/verifier_private_stack.c
+index 046f7445a458..bb8206e10880 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_private_stack.c
++++ b/tools/testing/selftests/bpf/progs/verifier_private_stack.c
+@@ -94,6 +94,7 @@ __jited("	addq	%gs:{{.*}}, %r9")
+ __jited("	movl	$0x2a, %edi")
+ __jited("	movq	%rdi, -0x200(%r9)")
+ __jited("	pushq	%r9")
++__jited("...")
+ __jited("	callq	0x{{.*}}")
+ __jited("	popq	%r9")
+ __jited("	xorl	%eax, %eax")
+@@ -153,11 +154,13 @@ __jited("	endbr64")
+ __jited("	movabsq	$0x{{.*}}, %r9")
+ __jited("	addq	%gs:{{.*}}, %r9")
+ __jited("	pushq	%r9")
++__jited("...")
+ __jited("	callq")
+ __jited("	popq	%r9")
+ __jited("	movl	$0x2a, %edi")
+ __jited("	movq	%rdi, -0x200(%r9)")
+ __jited("	pushq	%r9")
++__jited("...")
+ __jited("	callq")
+ __jited("	popq	%r9")
+ __arch_arm64
+@@ -199,6 +202,7 @@ __description("Private stack, exception in main prog")
+ __success __retval(0)
+ __arch_x86_64
+ __jited("	pushq	%r9")
++__jited("...")
+ __jited("	callq")
+ __jited("	popq	%r9")
+ __arch_arm64
+@@ -246,6 +250,7 @@ __success __retval(0)
+ __arch_x86_64
+ __jited("	movq	%rdi, -0x200(%r9)")
+ __jited("	pushq	%r9")
++__jited("...")
+ __jited("	callq")
+ __jited("	popq	%r9")
+ __arch_arm64
+diff --git a/tools/testing/selftests/bpf/progs/verifier_tailcall_jit.c b/tools/testing/selftests/bpf/progs/verifier_tailcall_jit.c
+index 8d60c634a114..48fa34d2959f 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_tailcall_jit.c
++++ b/tools/testing/selftests/bpf/progs/verifier_tailcall_jit.c
+@@ -56,6 +56,7 @@ __jited("L1:	pushq	%rax")			/* rbp[-16] = rax         */
+  * (cause original rax might be clobbered by this point)
+  */
+ __jited("	movq	-0x10(%rbp), %rax")
++__jited("...")
+ __jited("	callq	0x{{.*}}")		/* call to sub()          */
+ __jited("	xorl	%eax, %eax")
+ __jited("	leave")
+
+---
+base-commit: 4a8eaccfdd6f4ae4b0e8735664e9d3e5ce826329
+change-id: 20260528-fix_tests_for_retbleed_stuff-c3c89b738e70
+
+Best regards,
+--  
+Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+
