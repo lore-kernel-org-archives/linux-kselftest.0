@@ -1,51 +1,71 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3F7C377EC6;
-	Thu, 28 May 2026 08:19:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9925F1E1DE5;
+	Thu, 28 May 2026 08:23:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779956395; cv=none; b=jG8seQvchLLtTsbGhTwCI2K3sGDZiJQKmrQxCj3zubd+6CBvyFu35Jc71DNKacCgSS/VMRocbvGKRlNDyorlnZB/EiUz5+SILEXFwluZ0TdwUPMcSxd7JxTJRy7kZ6oqMbPGJhetLG4Aqo4yGPoV8eWJAAG/7tiGMC+v1yLsdOo=
+	t=1779956606; cv=none; b=Ck0kRlmym8D8UM2i9ixeF2oHVn+IBDDVkaxhccC1fl15040quPzg9oUyW8JUQsDWZ64DIB5Z2KpPBrp72XzAatcMDGHK9ZtlwGR9lBtrXqp38uortwzKs/2PXh0M0vVhqGHjgk67mZSeJtHyFyNHSo2YqQmES0EdybzXUyOziDw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779956395; c=relaxed/simple;
-	bh=Mf1aN3Zacoq+faK7m54zAYktA3WIIOyBi1siCpda6E0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IIru0XcVKxpRfDdpkuTvKm1s2cX8JuKj8rdzrge0QAK2NpVbCqr1c9wZxj4utdHoA6cBqOmbeXOgJH4VUwhUSaE+n1pNINVPAEUz17srMN4MRp9m4Fu7z7SbnHICS2DTk7+PQj/wk0FEMRVBRxIYGqlyWKyiJRxTu0/SwcPeOSU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: fc6074005a6d11f1aa26b74ffac11d73-20260528
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:36a78eb0-f564-41c6-887d-22655cf4fbb4,IP:0,U
-	RL:0,TC:0,Content:0,EDM:-20,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-	N:release,TS:-20
-X-CID-META: VersionHash:e7bac3a,CLOUDID:5aca2b057ea4ffb847db433b823f895a,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:102|850|865|898,TC:nil,Content:0|15|50,E
-	DM:1,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:
-	0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: fc6074005a6d11f1aa26b74ffac11d73-20260528
-X-User: yanlonglong@kylinos.cn
-Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <yanlonglong@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 1044439411; Thu, 28 May 2026 16:19:45 +0800
-From: Bob ynn <yanlonglong@kylinos.cn>
-To: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	kuniyu@google.com
-Cc: joannelkoong@gmail.com,
-	netdev@vger.kernel.org,
+	s=arc-20240116; t=1779956606; c=relaxed/simple;
+	bh=0ipr3u7R+h50SlpRpIJ4NdBA39UnMDickI/hWnKDQ/c=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=XkVpYWc923cUbZn0NOz/IIVJ+swmnVZIeO/IT4pSVvyqJxK9KIgRtRBIMMbhX4nKvJDRnjV/5Atd1Sia/PQLSwltns0R3uhyOoltofbF4RPy/cBGBnnONFMf8qV77UanXoQZfvcF0aLFwB2jgBHNAOWnumwgLQ+oD2tW7INUCgA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=PSoabz6Q; arc=none smtp.client-ip=115.124.30.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="PSoabz6Q"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1779956594; h=From:To:Subject:Date:Message-ID:MIME-Version;
+	bh=6TF2LS+nJnfzXkO5w/fIHj//VQJI7nyDrEDFLzrvD8s=;
+	b=PSoabz6QOS2pN4Efx40hu+AY/4DpefwMC8yOEdk2ajc1Y1FBNLqDTFpP7UmZlEyju1Bw+x42w4b33CjibshpsmfNpiCUmwX1CAhyvlFDwPNE8Y9wvMz18enozUonHuNoN3HhBDBxaSU78N7CsiHH2WAFCi2QHjjTotWbbSCRrlo=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037033178;MF=wanghan@linux.alibaba.com;NM=1;PH=DS;RN=34;SR=0;TI=SMTPD_---0X3lxQKx_1779956590;
+Received: from wanghan-Workstation..(mailfrom:wanghan@linux.alibaba.com fp:SMTPD_---0X3lxQKx_1779956590 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Thu, 28 May 2026 16:23:12 +0800
+From: Wang Han <wanghan@linux.alibaba.com>
+To: Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>
+Cc: Steven Rostedt <rostedt@goodmis.org>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Chen Pei <cp0613@linux.alibaba.com>,
+	Andy Chiu <andybnac@gmail.com>,
+	=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>,
+	Deepak Gupta <debug@rivosinc.com>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Jiri Kosina <jikos@kernel.org>,
+	Miroslav Benes <mbenes@suse.cz>,
+	Petr Mladek <pmladek@suse.com>,
+	Joe Lawrence <joe.lawrence@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	oliver.yang@linux.alibaba.com,
+	xueshuai@linux.alibaba.com,
+	zhuo.song@linux.alibaba.com,
+	jkchen@linux.alibaba.com,
+	linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	live-patching@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	bob ynn <yanlonglong@kylinos.cn>
-Subject: [PATCH] selftests/net: bind_bhash: fix memory leak in bind_socket
-Date: Thu, 28 May 2026 16:19:19 +0800
-Message-ID: <20260528081919.841-1-yanlonglong@kylinos.cn>
-X-Mailer: git-send-email 2.47.1.windows.2
+	linux-perf-users@vger.kernel.org
+Subject: [PATCH v2 0/8] riscv: Add reliable stack unwinding for livepatch
+Date: Thu, 28 May 2026 16:23:02 +0800
+Message-ID: <20260528082310.1994388-1-wanghan@linux.alibaba.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260527123530.2593918-1-wanghan@linux.alibaba.com>
+References: <20260527123530.2593918-1-wanghan@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -54,47 +74,208 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: bob ynn <yanlonglong@kylinos.cn>
+Changelog
+=========
 
-The getaddrinfo() call in bind_socket() dynamically allocates memory
-for the result linked list that must be freed with freeaddrinfo().
-However, none of the code paths after a successful getaddrinfo() call
-free this memory, causing a leak in every invocation of bind_socket().
+v2:
+  * Patch 1 (scripts/sorttable): refactor the switch in do_file() to
+    group EM_AARCH64 and EM_RISCV under a single MCOUNT_SORT_ENABLED
+    block sharing before_func = 8, per Steven Rostedt's suggestion [1].
+    Future architectures with patchable function entries can add their
+    own case to that group. No functional change.
+    Also fix a stray empty line between the Fixes: tag and the
+    Signed-off-by trailer (b4-checks "empty lines surround the Fixes
+    tag"), and add Suggested-by: Steven Rostedt with a Link: to the
+    review thread.
+  * No other patches changed.
 
-Fixes: c35ecb95c448 ("selftests/net: Add test for timing a bind request to a port with a populated bhash entry")
-Signed-off-by: bob ynn <yanlonglong@kylinos.cn>
----
- tools/testing/selftests/net/bind_bhash.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+[1] https://lore.kernel.org/all/20260527113028.4b21a5de@fedora/
 
-diff --git a/tools/testing/selftests/net/bind_bhash.c b/tools/testing/selftests/net/bind_bhash.c
-index da04b0b19b73..2bd100777448 100644
---- a/tools/testing/selftests/net/bind_bhash.c
-+++ b/tools/testing/selftests/net/bind_bhash.c
-@@ -52,18 +52,19 @@ static int bind_socket(int opt, const char *addr)
- 		err = setsockopt(sock_fd, SOL_SOCKET, opt, &reuse, sizeof(reuse));
- 		if (err) {
- 			perror("setsockopt failed");
--			goto cleanup;
-+			goto err_free_info;
- 		}
- 	}
- 
- 	err = bind(sock_fd, res->ai_addr, res->ai_addrlen);
- 	if (err) {
- 		perror("failed to bind to port");
--		goto cleanup;
-+		goto err_free_info;
- 	}
--
-+	freeaddrinfo(res);
- 	return sock_fd;
--
-+err_free_info:
-+	freeaddrinfo(res);
- cleanup:
- 	close(sock_fd);
- 	return err;
+v1: https://lore.kernel.org/all/20260527123530.2593918-1-wanghan@linux.alibaba.com/
+
+Problem
+=======
+
+Livepatch relies on HAVE_RELIABLE_STACKTRACE to decide whether a task
+can safely switch to a patched implementation. RISC-V has a
+frame-pointer stack walker, but it is not yet reliable enough for
+livepatch. Three pieces are missing:
+
+  * arch_stack_walk_reliable() itself, plus the strict stack-bound
+    checks and forward-progress invariants a reliable unwinder needs.
+  * Explicit unwind metadata at exception, task-entry and IRQ-stack
+    boundaries, so the unwinder can distinguish a final user-to-kernel
+    transition from a nested kernel pt_regs frame instead of guessing
+    from return addresses.
+  * Agreement between the ftrace function-graph, perf callchain and
+    mcount paths and the same frame-record assumptions used by the
+    reliable unwinder.
+
+There is also a prerequisite ftrace issue on the current riscv/for-next
+base. Commit 0ca1724b56af ("riscv: ftrace: select
+HAVE_BUILDTIME_MCOUNT_SORT") enabled build-time sorting of the mcount
+table. RISC-V uses patchable function entries, and the recorded patch
+site is placed before the function symbol. scripts/sorttable currently
+does not take that RISC-V layout into account, so valid ftrace sites
+can be filtered out before the kernel boots.
+
+Solution
+========
+
+Patch 1 fixes scripts/sorttable so the RISC-V build-time mcount sort
+path accepts patchable function entries which precede the function
+symbol. The fix carries a Fixes: tag for commit 0ca1724b56af ("riscv:
+ftrace: select HAVE_BUILDTIME_MCOUNT_SORT") and is otherwise
+independent; it can be picked into the RISC-V tree on its own if
+preferred.
+
+Patches 2-7 add the reliable unwinder in small, individually
+reviewable steps. The design follows the same FP + metadata model
+arm64 already uses for livepatch in production: the metadata frame
+record in pt_regs, the unwind-state stack-bound bookkeeping, the
+exception boundary handling, and the fgraph / kretprobe return-address
+recovery are direct adaptations of arch/arm64/kernel/stacktrace.c,
+retargeted to the RISC-V {fp, ra} frame record convention.
+
+  * Patch 2 adds frame-record metadata for the RISC-V stack walker.
+    Low-level entry and task setup code records whether a frame is a
+    normal frame, an exception frame, or a task-entry boundary, so the
+    reliable unwinder can validate what it is walking instead of
+    guessing from the return address.
+  * Patch 3 stops KASAN from instrumenting stacktrace.o, matching the
+    arm, arm64 and x86 treatment of their stack unwinding code.
+  * Patch 4 always preserves s0 in the dynamic ftrace register frame so
+    the unwinder can use the architectural frame pointer as the
+    function-graph return-address cookie regardless of FP_TEST.
+  * Patch 5 introduces stack_info / unwind_state and the
+    forward-progress-only stack-bound helpers that the reliable
+    unwinder is built on. No caller is wired up yet.
+  * Patch 6 switches arch_stack_walk() to the new frame-pointer based
+    unwinder, adds arch_stack_walk_reliable() (still without an
+    in-tree caller), routes perf callchains through arch_stack_walk(),
+    and updates the function-graph cookie to match.
+  * Patch 7 selects HAVE_RELIABLE_STACKTRACE and HAVE_LIVEPATCH under
+    FRAME_POINTER && 64BIT and exposes the livepatch menu, finally
+    enabling livepatch on RISC-V.
+
+Two alternative directions were considered and deferred:
+
+  * ORC, as used on x86, gives reliable unwinding without runtime FP
+    cost, but requires RISC-V objtool stack validation, ORC metadata
+    generation, and the runtime ORC unwinder. That is a much larger
+    dependency chain than what this series adds.
+
+  * SFrame is the more likely long-term replacement for FP-based
+    unwinding on architectures without ORC. Kernel SFrame support is
+    still under development and the currently documented SFrame ABI
+    set does not cover RISC-V, so making RISC-V livepatch depend on
+    SFrame would block it on toolchain and kernel infrastructure that
+    is not available yet. SFrame is a replacement rather than an
+    extension of the metadata frame record introduced here, so when it
+    lands the metadata can be retired together with the FP unwinder.
+    The interim cost (~24 bytes added to pt_regs and a handful of
+    instructions on exception entry, fork and early init) is bounded
+    and limited to FRAME_POINTER=y configurations, which is what the
+    RISC-V kernel already builds with for stack tracing today.
+    Selecting HAVE_RELIABLE_STACKTRACE under FRAME_POINTER && 64BIT
+    therefore does not introduce a new build-time dependency relative
+    to the status quo.
+
+This is useful now because livepatch is increasingly important for
+long-running server deployments where rebooting for critical fixes is
+expensive, and recent RISC-V work (dynamic ftrace and patchable
+function entries) has put the rest of the livepatch infrastructure in
+place.
+
+Module-side klp relocations rely on the existing RISC-V
+apply_relocate_add(); the syscall livepatch selftest exercises the
+full klp_apply_section_relocs() -> apply_relocate_add() path on RISC-V.
+
+Patch 8 adds the RISC-V syscall wrapper prefix used by the livepatch
+syscall selftest module. Without this, the syscall livepatch selftest
+cannot resolve the expected target symbol on RISC-V.
+
+Testing
+=======
+
+The series is based on riscv/for-next commit 0ca1724b56af ("riscv:
+ftrace: select HAVE_BUILDTIME_MCOUNT_SORT").
+
+Build and static checks:
+
+  * git diff --check riscv/for-next..HEAD
+  * scripts/checkpatch.pl --strict for each patch
+  * RISC-V Image and modules build clean with:
+      - gcc 15.2 (riscv64-unknown-linux-gnu-)
+      - LLVM=1 clang 18.1.3
+      - LLVM=1 clang 21.1.1
+  * Each intermediate commit (patches 1-7) was built individually on
+    riscv/for-next to confirm bisectability; all 7 intermediate trees
+    plus the final HEAD compile clean.
+  * livepatch selftest module build
+
+The unfixed build-time sort path was reproduced under QEMU:
+
+  ftrace: allocating 0 entries in 128 pages
+  Testing tracer function: .. no entries found ..FAILED!
+  Failed to init function_graph tracer, init returned -19
+
+With the sorttable fix applied, the same QEMU boot finds the expected
+ftrace entries and the ftrace startup tests pass:
+
+  ftrace: allocating 46749 entries in 184 pages
+  Testing tracer function: PASSED
+  Testing dynamic ftrace: PASSED
+  Testing tracer function_graph: PASSED
+
+With all eight patches applied, RISC-V QEMU virt boots with SMP=2,
+SMP=4, and SMP=8 completed the livepatch and tracing smoke tests. The
+livepatch selftest result was the same in all runs:
+
+  livepatch selftests: PASS: 7, SKIP: 1, FAIL: 0
+
+Across these boots, the kernel brought up the requested CPU count and
+the startup ftrace tests passed, including dynamic ftrace and
+function_graph. The function graph selftests reported passed: 3,
+failed: 0, unsupported: 3, and LKDTM WARNING_MESSAGE produced the
+expected Call Trace and powered off normally.
+
+The livepatch selftest skip is test-kprobe.sh. The test requires
+CONFIG_KPROBES_ON_FTRACE, which is not provided by the current RISC-V
+configuration.
+
+Wang Han (8):
+  scripts/sorttable: Handle RISC-V patchable ftrace entries
+  riscv: stacktrace: Add frame record metadata
+  riscv: stacktrace: disable KASAN instrumentation for stacktrace.o
+  riscv: ftrace: always preserve s0 in dynamic ftrace register frame
+  riscv: stacktrace: introduce stack-bound tracking helpers
+  riscv: stacktrace: switch to frame-pointer based unwinder
+  riscv: Kconfig: enable HAVE_RELIABLE_STACKTRACE and HAVE_LIVEPATCH
+  selftests/livepatch: Add RISC-V syscall wrapper prefix
+
+ arch/riscv/Kconfig                            |   4 +
+ arch/riscv/include/asm/ptrace.h               |   9 +
+ arch/riscv/include/asm/stacktrace.h           |  65 +-
+ arch/riscv/include/asm/stacktrace/common.h    | 159 +++++
+ arch/riscv/include/asm/stacktrace/frame.h     |  53 ++
+ arch/riscv/kernel/Makefile                    |   5 +
+ arch/riscv/kernel/asm-offsets.c               |   4 +
+ arch/riscv/kernel/entry.S                     |  30 +-
+ arch/riscv/kernel/ftrace.c                    |   6 +-
+ arch/riscv/kernel/head.S                      |  23 +
+ arch/riscv/kernel/mcount-dyn.S                |   4 -
+ arch/riscv/kernel/perf_callchain.c            |   2 +-
+ arch/riscv/kernel/process.c                   |  31 +-
+ arch/riscv/kernel/stacktrace.c                | 560 +++++++++++++++---
+ scripts/sorttable.c                           |  10 +-
+ .../livepatch/test_modules/test_klp_syscall.c |   2 +
+ 16 files changed, 856 insertions(+), 111 deletions(-)
+ create mode 100644 arch/riscv/include/asm/stacktrace/common.h
+ create mode 100644 arch/riscv/include/asm/stacktrace/frame.h
+
+
+base-commit: 0ca1724b56af054e304a9f3f60623b02a81aba3f
 -- 
 2.43.0
 
