@@ -1,152 +1,150 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53CEF3D0938;
-	Thu, 28 May 2026 10:53:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 779023C3C15;
+	Thu, 28 May 2026 11:01:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779965619; cv=none; b=tNe46Am+a/QfOhHEIq6k2+cNeuEG1Rh7cH9Dnh30+Z4VIja0G+MycP4XW+gDrAH3t6GBY1ml3x20c6bxanHvnvFP045aOV0oYdpS2QISaQR6ZzXYErdChhcw4CWLbq9Stjig8LmbKAth2xE/hsgQf6q6FyrpXe5q1iFe3jifHFQ=
+	t=1779966111; cv=none; b=WLE3ta0hx0q95eiL14vZ/lHC6+TYUwWS+gQP3Wtqqd7di2ECbCs/Gr8PQlj9W3MNQIb7Rg1rT5xHYp4rMfpPE+IUYuYH5Be7mfOQl3B+qU0avu+blbQl+9PUhCJYg4cQNQSFCPe8OKs5C6B9CAt9tLgJ//EMNt6Fqufeg2i6clA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779965619; c=relaxed/simple;
-	bh=sWeSNmVN+2nde1J+pCm611g/wKTC4MV5XvLgG0qca5s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cHUhTN6nHOHWctAQTejRpV3ld3A9ol4+Z+MFvJvwLtHKF9mjT9NxOZfUEPi+JXH89shy1/H3yzG/07Q022Asqv8Y2qHZOTatVC8SvkTyvsui+H4QAPMritSQHI6tpNe0THzA/laUpcvX0dp/Uru2ZQbf0D5ieUwwH/nRxgmKO/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=XgDMFSWB; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1779966111; c=relaxed/simple;
+	bh=Ed37Kf+lRqRnz5AV70Cq5GN8fdukOYfQP5/n3T4m3xo=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=B8On7XTEKM7ZXovg3v173pGyQYt35QzNIFGN2QPuJ56XWVI/WgBCTc19Dcr40FI58YOogS8j7FFNfTKW3u5mVFLUKm2Qt+j0j79uz/eJjStKOYp7DSw0paopxH83or9+YCZXpajbyC7rQekGpJjhd/s76PZyBdX7HO8TA1WqVbM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WLuXDdj3; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="XgDMFSWB"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=vmJ0MIxHcu6GywVP98RSuXzH8R1cz6RzvzYzBTXLcWQ=; b=XgDMFSWBz53xKzj7s3tmaiRWSn
-	mPrtjimriTrPvI0aWo+sBjxAFnTomEt3sVBc7bhPhi8TaUji6RC3/M/AxkitFgJnujUjKpbpOsXuV
-	JeLszzwWLeJTtc3rBqy3//WSZ5GZpQi2vGKpLaRjERAf1BSxkH0cv9Hh6IIfLX1k6ecieoVESsrLu
-	3rHb47LamIi2dG8Jz8aPVjJANgIrZlV810yb0CCjJwUmknuK9JiahNzNf384/aO4/o5b7RU6raFPo
-	Nc4Nxu5gCpANnSiqIpxHIB2X4HC5U8XqNGcy/PsnJLgQDcW1vphnTMIvfk0MBZ+XNavEAxckssrQ5
-	l0N2225g==;
-Received: from 2001-1c00-8d85-4b00-266e-96ff-fe07-7dcc.cable.dynamic.v6.ziggo.nl ([2001:1c00:8d85:4b00:266e:96ff:fe07:7dcc] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1wSYMf-0000000GDSi-2KFs;
-	Thu, 28 May 2026 10:53:32 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 556DB300673; Thu, 28 May 2026 12:53:25 +0200 (CEST)
-Date: Thu, 28 May 2026 12:53:25 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Boqun Feng <boqun@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Jonas Bonn <jonas@southpole.se>,
-	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-	Stafford Horne <shorne@gmail.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	Waiman Long <longman@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Miguel Ojeda <ojeda@kernel.org>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Jinjie Ruan <ruanjinjie@huawei.com>, Lyude Paul <lyude@redhat.com>,
-	Thomas Huth <thuth@redhat.com>, Sohil Mehta <sohil.mehta@intel.com>,
-	"Xin Li (Intel)" <xin@zytor.com>,
-	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-	Nikunj A Dadhania <nikunj@amd.com>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Yury Norov <ynorov@nvidia.com>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	linux-kernel@vger.kernel.org, linux-openrisc@vger.kernel.org,
-	linux-s390@vger.kernel.org, linux-arch@vger.kernel.org,
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	rust-for-linux@vger.kernel.org,
-	Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>,
-	Daniel Almeida <daniel.almeida@collabora.com>
-Subject: Re: [PATCH v2 12/12] s390/preempt: Enable
- HAS_SEPARATE_PREEMPT_RESCHED_BITS
-Message-ID: <20260528105325.GI343181@noisy.programming.kicks-ass.net>
-References: <20260526152148.30514-1-boqun@kernel.org>
- <20260526152148.30514-13-boqun@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WLuXDdj3"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1779966107; x=1811502107;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=Ed37Kf+lRqRnz5AV70Cq5GN8fdukOYfQP5/n3T4m3xo=;
+  b=WLuXDdj3WH7eRcq6S02AKnxam5e//KKZb1Vza2l6pUrAcepe64/J0jFj
+   dLm3NNoiBsNjKAYXX5WwJxvzLcxjS8pbPDcvSFUwZZ/h1+6QVRFoHUzzU
+   q4ZN3ib2wvywhkACV6+nTzS7+lobbw3wVhyTVzzr8jO7KBaZ+8X4n67Of
+   Bna1Fsm0qjkUV/5HaxkPRYhyNPiXr8E8rwXWldNU2Cy3A9mq3/sAmbDeG
+   bQQ4dRWoqK8h7vq5aiCWevl/s4pc81zvKitZWXEVI6OFRlsERyfCg9Vzy
+   FGUliFBewMsHh1ZMmcR8+duCoIBC1bkns9TxZnaxKG+pUMJpu4BwLCl20
+   w==;
+X-CSE-ConnectionGUID: XG7aPquFSqKUXbLmgSkbVQ==
+X-CSE-MsgGUID: 4TqU3TaITxiMsL1oXOkrgw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11799"; a="80919566"
+X-IronPort-AV: E=Sophos;i="6.24,173,1774335600"; 
+   d="scan'208";a="80919566"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2026 04:01:43 -0700
+X-CSE-ConnectionGUID: GdfHuIGcTdaYBmqtB2R4Lw==
+X-CSE-MsgGUID: rp25r7I5Qd+KAoBrQJLz0g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,173,1774335600"; 
+   d="scan'208";a="246551778"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.187])
+  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 May 2026 04:01:38 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Thu, 28 May 2026 14:01:34 +0300 (EEST)
+To: Richard Cheng <icheng@nvidia.com>
+cc: tony.luck@intel.com, Reinette Chatre <reinette.chatre@intel.com>, 
+    shuah@kernel.org, Dave.Martin@arm.com, james.morse@arm.com, 
+    babu.moger@amd.com, LKML <linux-kernel@vger.kernel.org>, 
+    linux-kselftest@vger.kernel.org, fenghuay@nvidia.com, newtonl@nvidia.com, 
+    kristinc@nvidia.com, kaihengf@nvidia.com, kobak@nvidia.com
+Subject: Re: [PATCH v2 3/3] selftests/resctrl: Recognise aarch64 as a vendor
+ for L3_NONCONT_CAT
+In-Reply-To: <20260528102956.33121-4-icheng@nvidia.com>
+Message-ID: <215fc6b6-9fc6-29a3-986e-f195c7c8da79@linux.intel.com>
+References: <20260528102956.33121-1-icheng@nvidia.com> <20260528102956.33121-4-icheng@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260526152148.30514-13-boqun@kernel.org>
+Content-Type: text/plain; charset=US-ASCII
 
-On Tue, May 26, 2026 at 08:21:48AM -0700, Boqun Feng wrote:
-> From: Heiko Carstens <hca@linux.ibm.com>
+On Thu, 28 May 2026, Richard Cheng wrote:
+
+> aarch64 has no vendor_id in /proc/cpuinfo, so detect_vendor() returns 0
+> and arch_supports_noncont_cat() falls through to "return false".
+> L3_NONCONT_CAT therefore spuriously fails on every ARM MPAM platform.
 > 
-> Convert s390's preempt_count to 64 bit, and change the preempt
-> primitives accordingly.
+> Define ARCH_ARM, short-circuit detect_vendor() to it on aarch64, and
+> add it to the AMD/Hygon always-supports early-out in
+> arch_supports_noncont_cat().
 > 
-> Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
-> Signed-off-by: Boqun Feng <boqun@kernel.org>
-> Link: https://patch.msgid.link/20260509181249.16281C67-hca@linux.ibm.com
+> aarch64 has many implementers (ARM 0x41, NVIDIA 0x43, etc.), but MPAM
+> mandates non-contiguous CPBM uniformly, so per-implementer handling is
+> not needed here.
+> 
+> Signed-off-by: Richard Cheng <icheng@nvidia.com>
 > ---
->  arch/s390/Kconfig               |  1 +
->  arch/s390/include/asm/lowcore.h | 13 +++++++----
->  arch/s390/include/asm/preempt.h | 41 +++++++++++++++------------------
->  3 files changed, 29 insertions(+), 26 deletions(-)
+>  tools/testing/selftests/resctrl/cat_test.c      |  9 +++++++--
+>  tools/testing/selftests/resctrl/resctrl.h       |  1 +
+>  tools/testing/selftests/resctrl/resctrl_tests.c | 11 +++++++++++
+>  3 files changed, 19 insertions(+), 2 deletions(-)
 > 
-> diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
-> index ecbcbb781e40..cbbca82f8443 100644
-> --- a/arch/s390/Kconfig
-> +++ b/arch/s390/Kconfig
-> @@ -276,6 +276,7 @@ config S390
->  	select PCI_MSI			if PCI
->  	select PCI_MSI_ARCH_FALLBACKS	if PCI_MSI
->  	select PCI_QUIRKS		if PCI
-> +	select HAS_SEPARATE_PREEMPT_RESCHED_BITS
->  	select SPARSE_IRQ
->  	select SWIOTLB
->  	select SYSCTL_EXCEPTION_TRACE
-> diff --git a/arch/s390/include/asm/lowcore.h b/arch/s390/include/asm/lowcore.h
-> index 50ffe75adeb4..0974ab278169 100644
-> --- a/arch/s390/include/asm/lowcore.h
-> +++ b/arch/s390/include/asm/lowcore.h
-> @@ -160,10 +160,15 @@ struct lowcore {
->  	/* SMP info area */
->  	__u32	cpu_nr;				/* 0x03a0 */
->  	__u32	softirq_pending;		/* 0x03a4 */
-> -	__s32	preempt_count;			/* 0x03a8 */
-> -	__u32	spinlock_lockval;		/* 0x03ac */
-> -	__u32	spinlock_index;			/* 0x03b0 */
-> -	__u8	pad_0x03b4[0x03b8-0x03b4];	/* 0x03b4 */
-> +	union {
-> +		struct {
-> +			__u32	need_resched;	/* 0x03a8 */
-> +			__u32	count;		/* 0x03ac */
-> +		} preempt;
-> +		__u64	preempt_count;		/* 0x03a8 */
-> +	};
+> diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
+> index dc414e55ae94..ce66016dbd88 100644
+> --- a/tools/testing/selftests/resctrl/cat_test.c
+> +++ b/tools/testing/selftests/resctrl/cat_test.c
+> @@ -292,8 +292,13 @@ static bool arch_supports_noncont_cat(const struct resctrl_test *test)
+>  {
+>  	unsigned int vendor_id = get_vendor();
+>  
+> -	/* AMD and Hygon always support non-contiguous CBM. */
+> -	if (vendor_id == ARCH_AMD || vendor_id == ARCH_HYGON)
+> +	/*
+> +	 * AMD and Hygon always support non-contiguous CBM. ARM/MPAM defines
+> +	 * MPAMCFG_CPBM as a bitmap with no contiguity constraint per ARM
+> +	 * DDI 0598.
+> +	 */
+> +	if (vendor_id == ARCH_AMD || vendor_id == ARCH_HYGON ||
+> +	    vendor_id == ARCH_ARM)
+>  		return true;
+>  
+>  #if defined(__i386__) || defined(__x86_64__) /* arch */
+> diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
+> index afe635b6e48d..670e5b128b4d 100644
+> --- a/tools/testing/selftests/resctrl/resctrl.h
+> +++ b/tools/testing/selftests/resctrl/resctrl.h
+> @@ -40,6 +40,7 @@
+>  #define ARCH_INTEL	BIT(0)
+>  #define ARCH_AMD	BIT(1)
+>  #define ARCH_HYGON	BIT(2)
+> +#define ARCH_ARM	BIT(3)
+>  
+>  #define END_OF_TESTS	1
+>  
+> diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
+> index dbcd5eea9fbc..b28dae83d0a4 100644
+> --- a/tools/testing/selftests/resctrl/resctrl_tests.c
+> +++ b/tools/testing/selftests/resctrl/resctrl_tests.c
+> @@ -34,6 +34,17 @@ static unsigned int detect_vendor(void)
+>  	if (initialized)
+>  		return vendor_id;
+>  
+> +#if defined(__aarch64__)
+> +	/*
+> +	 * aarch64 has no userspace vendor_id in /proc/cpuinfo. MPAM-capable
+> +	 * ARM implementations follow ARM DDI 0598; treat all aarch64 builds
+> +	 * as a single vendor for the purposes of resctrl selftests.
+> +	 */
+> +	vendor_id = ARCH_ARM;
+> +	initialized = true;
+> +	return vendor_id;
+> +#endif
 
-I'm a little confused by this union; afaict it isn't actually used.
+It would be better to create a detect_aarch64() function and put 
+the ifdeffery inside it so it returns either true or false here.
+
+> +
+>  	inf = fopen("/proc/cpuinfo", "r");
+>  	if (!inf) {
+>  		vendor_id = 0;
+> 
+
+-- 
+ i.
+
