@@ -1,396 +1,217 @@
-Received: from out199-2.us.a.mail.aliyun.com (out199-2.us.a.mail.aliyun.com [47.90.199.2])
+Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB977379C38;
-	Thu, 28 May 2026 08:23:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=47.90.199.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA599344D85
+	for <linux-kselftest@vger.kernel.org>; Thu, 28 May 2026 08:27:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779956620; cv=none; b=IV+AAHlT167bLJWN5lhwlKl3clkAPI9E8kcBe+gjQ1ETSySQY7G6X1HLwN4YSVbIwViFCcLP6B7Z2UtWUalX2I0D1I6JiQ/qIxv6V2q0mgPFdnzN7LJzbZMw/mPnWFoUpGIOrdxy+7wzEWxduVfjpNCDa/ZYQ4gZyMeJ8sVK/Yk=
+	t=1779956849; cv=none; b=QJOlRsyNRbvIizysA667fQdnknaueUf2U251/ZRYRKr24x7A98YZK3xYFkSBcH2yC5AhSJfm78UhnwOy8t0OdjqEGqep/UcMYgA6j4L1am4T0KS9GJEkb0xiwCCGvB7Wsn6gbzzMN5QlXBBZW9WFSIObkAkD7oAM0u7URdfl9Gg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779956620; c=relaxed/simple;
-	bh=VVNbF0XF1Ejg3Z49y1QxsWZNlmwh7nLClIeXaVzUiUc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=S1gdOivYWep+xhXVjG1ojjOVB2dEBsO+0plLn7jWGx+AJIYWR7Ap530yNMfsUB3L4ZnvoqrVlVK5JeH+1cv5t/hYyi2ZZ2tQ+NDU8pyDSG5mb+0OJiiBCCucfkA3k8xe14PDe6YKd9BFp2ZcwakdgE/cCqLuStCigZkf5U6K3uE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=g5irHJ8r; arc=none smtp.client-ip=47.90.199.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1779956849; c=relaxed/simple;
+	bh=R83Zk9MPwHlNVvAL1SqF6psKEEdQEoajydtBTiAfb5g=;
+	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
+	 In-Reply-To:References; b=fWT63J97rBuX8bAjmNhtJQ3iTlH3f34vBYmbo33aku8p8VKX8wpW4VWr3V6kOY8n5uREdVnrfqisFgBD+gi6gA/E3NqCnHecCzNUtBD0lbS6qzUTl/hGgFQZ+2hyssz2deKUd4tjX/+YkEn/kPF9HXf/qOQd3w3BrqMeb6vNh8M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ErYCF8Mx; arc=none smtp.client-ip=95.215.58.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="g5irHJ8r"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1779956598; h=From:To:Subject:Date:Message-ID:MIME-Version;
-	bh=vQ+GU8s4eZAPdsNZV1/pHZ0oMemt8kyZgDw3j3RBXjw=;
-	b=g5irHJ8r4+xVNbCmmnZRECqmBtWKk9zGVAqyAyVqvKh7Wpb/c2hz4Vhl92qtXvUrBqvHO45qoX6qerpqLAgZaW1DcaMyQzmyZNctkC8nktx73uRuhdOb1KcpN/DbsU9yH2IzPiny8m2ZJbTALkmEhgw50z0eg1V44vaQUZfUhks=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037026112;MF=wanghan@linux.alibaba.com;NM=1;PH=DS;RN=34;SR=0;TI=SMTPD_---0X3lxQMm_1779956594;
-Received: from wanghan-Workstation..(mailfrom:wanghan@linux.alibaba.com fp:SMTPD_---0X3lxQMm_1779956594 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Thu, 28 May 2026 16:23:16 +0800
-From: Wang Han <wanghan@linux.alibaba.com>
-To: Paul Walmsley <pjw@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>
-Cc: Steven Rostedt <rostedt@goodmis.org>,
-	Alexandre Ghiti <alex@ghiti.fr>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Chen Pei <cp0613@linux.alibaba.com>,
-	Andy Chiu <andybnac@gmail.com>,
-	=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>,
-	Deepak Gupta <debug@rivosinc.com>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	Conor Dooley <conor.dooley@microchip.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Jiri Kosina <jikos@kernel.org>,
-	Miroslav Benes <mbenes@suse.cz>,
-	Petr Mladek <pmladek@suse.com>,
-	Joe Lawrence <joe.lawrence@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	oliver.yang@linux.alibaba.com,
-	xueshuai@linux.alibaba.com,
-	zhuo.song@linux.alibaba.com,
-	jkchen@linux.alibaba.com,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	live-patching@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-perf-users@vger.kernel.org
-Subject: [PATCH v2 2/8] riscv: stacktrace: Add frame record metadata
-Date: Thu, 28 May 2026 16:23:04 +0800
-Message-ID: <20260528082310.1994388-3-wanghan@linux.alibaba.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260527123530.2593918-1-wanghan@linux.alibaba.com>
-References: <20260527123530.2593918-1-wanghan@linux.alibaba.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ErYCF8Mx"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1779956842;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=cE5vkgdKA1jGW+pTW446oAunyXUpwHm3Ex1DLaNXHJQ=;
+	b=ErYCF8MxdKKJgJ2bsChhRvd83CNLBlJQsWHOx+SWyZogRkcY9bH5Ny8445eDaQIhL/oUFl
+	8W8sKYUdESXAeK/TMvkxvlL5bS/4Tp66yE/RxcSSx2K35RuksXZ33YwXhFflH1sVFt+0sx
+	ngQJtc4bbMoa1pHEVEYyyAFAFjqk5YU=
+Date: Thu, 28 May 2026 08:27:16 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "teawater" <hui.zhu@linux.dev>
+Message-ID: <1b58d56976202f26818d31dbd0da2ecb2e2460f5@linux.dev>
+TLS-Required: No
+Subject: Re: [RFC PATCH bpf-next v7 00/11] mm: BPF struct_ops for dynamic
+ memory protection and async reclaim
+To: "Michal Hocko" <mhocko@suse.com>
+Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "John Fastabend" <john.fastabend@gmail.com>,
+ "Andrii Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau"
+ <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar
+ Kartikeya Dwivedi" <memxor@gmail.com>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
+ <jolsa@kernel.org>, "Johannes Weiner" <hannes@cmpxchg.org>, "Roman
+ Gushchin" <roman.gushchin@linux.dev>, "Shakeel Butt"
+ <shakeel.butt@linux.dev>, "Muchun Song" <muchun.song@linux.dev>, "JP
+ Kobryn" <inwardvessel@gmail.com>, "Andrew Morton"
+ <akpm@linux-foundation.org>, "Shuah Khan" <shuah@kernel.org>,
+ davem@davemloft.net, "Jakub Kicinski" <kuba@kernel.org>, "Jesper Dangaard
+ Brouer" <hawk@kernel.org>, "Stanislav Fomichev" <sdf@fomichev.me>, "KP
+ Singh" <kpsingh@kernel.org>, "Tao Chen" <chen.dylane@linux.dev>, "Mykyta
+ Yatsenko" <yatsenko@meta.com>, "Leon Hwang" <leon.hwang@linux.dev>,
+ "Anton Protopopov" <a.s.protopopov@gmail.com>, "Amery Hung"
+ <ameryhung@gmail.com>, "Tobias Klauser" <tklauser@distanz.ch>, "Eyal
+ Birger" <eyal.birger@gmail.com>, "Rong Tao" <rongtao@cestc.cn>, "Hao Luo"
+ <haoluo@google.com>, "Peter Zijlstra" <peterz@infradead.org>, "Miguel
+ Ojeda" <ojeda@kernel.org>, "Nathan Chancellor" <nathan@kernel.org>, "Kees
+ Cook" <kees@kernel.org>, "Tejun Heo" <tj@kernel.org>, "Jeff Xu"
+ <jeffxu@chromium.org>, mkoutny@suse.com, "Jan Hendrik Farr"
+ <kernel@jfarr.cc>, "Christian Brauner" <brauner@kernel.org>, "Randy
+ Dunlap" <rdunlap@infradead.org>, "Brian Gerst" <brgerst@gmail.com>,
+ "Masahiro Yamada" <masahiroy@kernel.org>, "Willem de Bruijn"
+ <willemb@google.com>, "Jason Xing" <kerneljasonxing@gmail.com>, "Paul
+ Chaignon" <paul.chaignon@gmail.com>, "Chen Ridong"
+ <chenridong@huaweicloud.com>, "Lance Yang" <lance.yang@linux.dev>,
+ "Jiayuan Chen" <jiayuan.chen@linux.dev>, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, cgroups@vger.kernel.org, linux-mm@kvack.org,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ geliang@kernel.org, baohua@kernel.org, "Hui Zhu" <zhuhui@kylinos.cn>
+In-Reply-To: <ahavmbcdXDX5gNup@tiehlicka>
+References: <cover.1779760876.git.zhuhui@kylinos.cn>
+ <ahavmbcdXDX5gNup@tiehlicka>
+X-Migadu-Flow: FLOW_OUT
 
-Reliable frame-pointer unwinding needs an explicit way to identify
-exception boundaries and the final entry frame. The existing unwinder
-infers those boundaries from return addresses, which is too loose for a
-future reliable unwinder.
+>=20
+>=20On Tue 26-05-26 10:20:00, Hui Zhu wrote:
+>=20
 
-Add a small metadata frame record to pt_regs and initialize it on
-exception entry, kernel thread fork, user fork, and early idle task
-setup. The record uses a zero {fp, ra} sentinel plus a type field so a
-later unwinder can distinguish a final user-to-kernel boundary from a
-nested kernel pt_regs boundary.
+Hi=20Michal,
 
-This follows the arm64 metadata frame-record model, adapted to the
-RISC-V {fp, ra} frame record convention.
+> >=20
+>=20> From: Hui Zhu <zhuhui@kylinos.cn>
+> >=20=20
+>=20>  Overview:
+> >  This series introduces BPF struct_ops support for the memory control=
+ler,
+> >  enabling userspace BPF programs to implement custom, dynamic memory
+> >  management policies per cgroup. The feature allows BPF programs to h=
+ook
+> >  into the core reclaim and charge paths without requiring kernel
+> >  modifications, providing a flexible alternative to static knobs such=
+ as
+> >  memory.low and memory.min.
+> >=20=20
+>=20>  The series enables two complementary use cases.
+> >=20=20
+>=20>  Dynamic memory protection: static memory protection thresholds
+> >  (memory.low, memory.min) are poor fits for workloads whose actual me=
+mory
+> >  activity varies over time. A high-priority cgroup holding a large wo=
+rking
+> >  set but temporarily idle will still suppress reclaim on its siblings=
+,
+> >  wasting available memory. A BPF-driven approach can observe real wor=
+kload
+> >  activity -- page faults, charge/uncharge events -- and activate or
+> >  withdraw protection dynamically.
+> >=20
+>=20Why the same cannot be achieved by dynamically changing protection?
 
-The metadata is established at the RISC-V entry boundaries that need an
-explicit unwind marker:
+Dynamically adjusting memory.low or memory.min is indeed an
+option, but it has a practical drawback: in many production
+environments these values are managed and pushed down by a
+cluster-level orchestrator (e.g. a container runtime or resource
+manager). Modifying them from a separate BPF-based agent risks
+conflicts with the orchestrator's own control loop and makes the
+system harder to reason about.
 
-  * exception entry clears the metadata {fp, ra} pair and uses SPP
-    (or MPP in M-mode) to record whether the pt_regs frame is the final
-    user-to-kernel boundary or a nested kernel boundary;
-  * _start_kernel builds the init task's final metadata record, while
-    the secondary CPU path sets up s0 before smp_callin() so idle-task
-    unwinding does not inherit an undefined caller frame;
-  * copy_thread creates matching final metadata records for new kernel
-    and user tasks, and keeps s0 available for the frame-pointer chain;
-  * call_on_irq_stack still reserves an aligned stack slot, but links the
-    saved {fp, ra} with the raw frame-record size so s0 points at the
-    RISC-V frame record rather than past the alignment padding.
+Beyond that, the intended use case requires rapid, short-lived
+adjustments -- reacting to bursts of page faults or PSI spikes
+and reverting just as quickly once the pressure subsides. Mutating
+the static knobs for that purpose feels like the wrong abstraction:
+the knobs express policy intent, while what we need is a transient
+override that sits on top of that policy.
 
-These changes keep s0 reserved for the frame-pointer chain at task and
-stack-switch boundaries.
+The hooks are therefore not meant to replace the existing limits,
+but to complement them: the orchestrator continues to own
+memory.low / memory.min, while a BPF program makes small, brief
+corrections in response to observed runtime behavior.
 
-Signed-off-by: Wang Han <wanghan@linux.alibaba.com>
----
- arch/riscv/include/asm/ptrace.h           |  9 ++++
- arch/riscv/include/asm/stacktrace/frame.h | 53 +++++++++++++++++++++++
- arch/riscv/kernel/asm-offsets.c           |  4 ++
- arch/riscv/kernel/entry.S                 | 30 +++++++++++--
- arch/riscv/kernel/head.S                  | 23 ++++++++++
- arch/riscv/kernel/process.c               | 31 ++++++++++++-
- 6 files changed, 144 insertions(+), 6 deletions(-)
- create mode 100644 arch/riscv/include/asm/stacktrace/frame.h
+>=20
+>=20>=20
+>=20> The test results at the end of this
+> >  letter quantify the difference: in a scenario where the high-priorit=
+y
+> >  cgroup is idle, the BPF-controlled low-priority cgroup achieves roug=
+hly
+> >  37x higher throughput than with static memory.low.
+> >=20=20
+>=20>  Asynchronous proactive reclaim: the memcg_charged and memcg_unchar=
+ged
+> >  hooks, combined with the BPF workqueue mechanism and the new
+> >  bpf_try_to_free_mem_cgroup_pages() kfunc, enable BPF programs to per=
+form
+> >  proactive background reclaim without blocking the charge path. The
+> >  pattern works as follows: the memcg_charged callback tracks accumula=
+ted
+> >  memory usage; when usage crosses a configurable threshold, it enqueu=
+es an
+> >  asynchronous work item via bpf_wq_start() and returns immediately wi=
+thout
+> >  throttling the charging task. The workqueue callback then invokes
+> >  bpf_try_to_free_mem_cgroup_pages() to reclaim pages from the target
+> >  cgroup; if usage remains elevated after reclaim, the callback re-enq=
+ueues
+> >  itself to continue. This allows a BPF program to keep a cgroup's
+> >  footprint below its hard limit (memory.max) entirely in the backgrou=
+nd,
+> >  avoiding the OOM killer or direct-reclaim stalls that would otherwis=
+e
+> >  occur.
+> >=20
+>=20How do you account the overall work done to the specific memcg as the
+> large part of the reclaim is done from WQ context?
 
-diff --git a/arch/riscv/include/asm/ptrace.h b/arch/riscv/include/asm/ptrace.h
-index addc8188152f..4b9b0f279214 100644
---- a/arch/riscv/include/asm/ptrace.h
-+++ b/arch/riscv/include/asm/ptrace.h
-@@ -8,6 +8,7 @@
- 
- #include <uapi/asm/ptrace.h>
- #include <asm/csr.h>
-+#include <asm/stacktrace/frame.h>
- #include <linux/compiler.h>
- 
- #ifndef __ASSEMBLER__
-@@ -53,6 +54,14 @@ struct pt_regs {
- 	unsigned long cause;
- 	/* a0 value before the syscall */
- 	unsigned long orig_a0;
-+
-+	/*
-+	 * This frame record is entirely zeroed on exception entry, allowing the
-+	 * unwinder to identify exception boundaries. The type field encodes
-+	 * whether the exception was taken from user (FINAL) or kernel (PT_REGS)
-+	 * mode.
-+	 */
-+	struct frame_record_meta stackframe;
- };
- 
- #define PTRACE_SYSEMU			0x1f
-diff --git a/arch/riscv/include/asm/stacktrace/frame.h b/arch/riscv/include/asm/stacktrace/frame.h
-new file mode 100644
-index 000000000000..5720a6c65fe8
---- /dev/null
-+++ b/arch/riscv/include/asm/stacktrace/frame.h
-@@ -0,0 +1,53 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+#ifndef __ASM_RISCV_STACKTRACE_FRAME_H
-+#define __ASM_RISCV_STACKTRACE_FRAME_H
-+
-+/*
-+ * See: arch/arm64/include/asm/stacktrace/frame.h for the reference
-+ * implementation.
-+ */
-+
-+/*
-+ * - FRAME_META_TYPE_NONE
-+ *
-+ *   This value is reserved.
-+ *
-+ * - FRAME_META_TYPE_FINAL
-+ *
-+ *   The record is the last entry on the stack.
-+ *   Unwinding should terminate successfully.
-+ *
-+ * - FRAME_META_TYPE_PT_REGS
-+ *
-+ *   The record is embedded within a struct pt_regs, recording the registers at
-+ *   an arbitrary point in time.
-+ *   Unwinding should consume pt_regs::epc, followed by pt_regs::ra.
-+ *
-+ * Note: all other values are reserved and should result in unwinding
-+ * terminating with an error.
-+ */
-+#define FRAME_META_TYPE_NONE		0
-+#define FRAME_META_TYPE_FINAL		1
-+#define FRAME_META_TYPE_PT_REGS		2
-+
-+#ifndef __ASSEMBLER__
-+/*
-+ * A standard RISC-V frame record.
-+ */
-+struct frame_record {
-+	unsigned long fp;
-+	unsigned long ra;
-+};
-+
-+/*
-+ * A metadata frame record indicating a special unwind.
-+ * The record::{fp,ra} fields must be zero to indicate the presence of
-+ * metadata.
-+ */
-+struct frame_record_meta {
-+	struct frame_record record;
-+	unsigned long type;
-+};
-+#endif /* __ASSEMBLER__ */
-+
-+#endif /* __ASM_RISCV_STACKTRACE_FRAME_H */
-diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offsets.c
-index af827448a609..8dfcb5a44bb8 100644
---- a/arch/riscv/kernel/asm-offsets.c
-+++ b/arch/riscv/kernel/asm-offsets.c
-@@ -131,6 +131,9 @@ void asm_offsets(void)
- 	OFFSET(PT_BADADDR, pt_regs, badaddr);
- 	OFFSET(PT_CAUSE, pt_regs, cause);
- 
-+	DEFINE(S_STACKFRAME,		offsetof(struct pt_regs, stackframe));
-+	DEFINE(S_STACKFRAME_TYPE,	offsetof(struct pt_regs, stackframe.type));
-+
- 	OFFSET(SUSPEND_CONTEXT_REGS, suspend_context, regs);
- 
- 	OFFSET(HIBERN_PBE_ADDR, pbe, address);
-@@ -501,6 +504,7 @@ void asm_offsets(void)
- 	OFFSET(SBI_HART_BOOT_STACK_PTR_OFFSET, sbi_hart_boot_data, stack_ptr);
- 
- 	DEFINE(STACKFRAME_SIZE_ON_STACK, ALIGN(sizeof(struct stackframe), STACK_ALIGN));
-+	DEFINE(STACKFRAME_RECORD_SIZE, sizeof(struct stackframe));
- 	OFFSET(STACKFRAME_FP, stackframe, fp);
- 	OFFSET(STACKFRAME_RA, stackframe, ra);
- #ifdef CONFIG_FUNCTION_TRACER
-diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-index d011fb51c59a..9cae0e1eba1c 100644
---- a/arch/riscv/kernel/entry.S
-+++ b/arch/riscv/kernel/entry.S
-@@ -11,6 +11,7 @@
- #include <asm/asm.h>
- #include <asm/csr.h>
- #include <asm/scs.h>
-+#include <asm/stacktrace/frame.h>
- #include <asm/unistd.h>
- #include <asm/page.h>
- #include <asm/thread_info.h>
-@@ -193,6 +194,27 @@ SYM_CODE_START(handle_exception)
- 	REG_S s4, PT_CAUSE(sp)
- 	REG_S s5, PT_TP(sp)
- 
-+	/*
-+	 * Create a metadata frame record. The unwinder will use this to
-+	 * identify and unwind exception boundaries.
-+	 */
-+	REG_S zero, (S_STACKFRAME + STACKFRAME_FP)(sp) /* stackframe.record.fp = 0 */
-+	REG_S zero, (S_STACKFRAME + STACKFRAME_RA)(sp) /* stackframe.record.ra = 0 */
-+#ifdef CONFIG_RISCV_M_MODE
-+	li t0, SR_MPP
-+	and t0, s1, t0
-+#else
-+	andi t0, s1, SR_SPP
-+#endif
-+	bnez t0, 1f
-+	li t0, FRAME_META_TYPE_FINAL
-+	j 2f
-+1:
-+	li t0, FRAME_META_TYPE_PT_REGS
-+2:
-+	REG_S t0, S_STACKFRAME_TYPE(sp)
-+	addi s0, sp, S_STACKFRAME + STACKFRAME_RECORD_SIZE
-+
- 	/*
- 	 * Set the scratch register to 0, so that if a recursive exception
- 	 * occurs, the exception vector knows it came from the kernel
-@@ -357,8 +379,8 @@ ASM_NOKPROBE(handle_kernel_stack_overflow)
- 
- SYM_CODE_START(ret_from_fork_kernel_asm)
- 	call schedule_tail
--	move a0, s1 /* fn_arg */
--	move a1, s0 /* fn */
-+	move a0, s3 /* fn_arg */
-+	move a1, s2 /* fn */
- 	move a2, sp /* pt_regs */
- 	call ret_from_fork_kernel
- 	j ret_from_exception
-@@ -383,7 +405,7 @@ SYM_FUNC_START(call_on_irq_stack)
- 	addi	sp, sp, -STACKFRAME_SIZE_ON_STACK
- 	REG_S	ra, STACKFRAME_RA(sp)
- 	REG_S	s0, STACKFRAME_FP(sp)
--	addi	s0, sp, STACKFRAME_SIZE_ON_STACK
-+	addi	s0, sp, STACKFRAME_RECORD_SIZE
- 
- 	/* Switch to the per-CPU shadow call stack */
- 	scs_save_current
-@@ -399,7 +421,7 @@ SYM_FUNC_START(call_on_irq_stack)
- 	scs_load_current
- 
- 	/* Switch back to the thread stack and restore ra and s0 */
--	addi	sp, s0, -STACKFRAME_SIZE_ON_STACK
-+	addi	sp, s0, -STACKFRAME_RECORD_SIZE
- 	REG_L	ra, STACKFRAME_RA(sp)
- 	REG_L	s0, STACKFRAME_FP(sp)
- 	addi	sp, sp, STACKFRAME_SIZE_ON_STACK
-diff --git a/arch/riscv/kernel/head.S b/arch/riscv/kernel/head.S
-index f6a8ca49e627..00e16a24f149 100644
---- a/arch/riscv/kernel/head.S
-+++ b/arch/riscv/kernel/head.S
-@@ -14,6 +14,7 @@
- #include <asm/hwcap.h>
- #include <asm/image.h>
- #include <asm/scs.h>
-+#include <asm/stacktrace/frame.h>
- #include <asm/usercfi.h>
- #include "efi-header.S"
- 
-@@ -177,6 +178,14 @@ secondary_start_sbi:
- 	REG_S a0, (a1)
- 1:
- #endif
-+
-+	/*
-+	 * Set up the frame pointer for the secondary idle task so reliable
-+	 * stack unwinding terminates at the metadata frame in task_pt_regs().
-+	 * Without this, the first frame records can inherit an undefined caller
-+	 * fp and unwind past smp_callin() into .Lsecondary_park.
-+	 */
-+	addi s0, sp, S_STACKFRAME + STACKFRAME_RECORD_SIZE
- 	scs_load_current
- 	call smp_callin
- #endif /* CONFIG_SMP */
-@@ -305,6 +314,20 @@ SYM_CODE_START(_start_kernel)
- 	la tp, init_task
- 	la sp, init_thread_union + THREAD_SIZE
- 	addi sp, sp, -PT_SIZE_ON_STACK
-+
-+	/*
-+	 * Set up a metadata frame record for the init task so that
-+	 * the unwinder can identify the outermost frame by its
-+	 * {fp, ra} = {0, 0} sentinel at the bottom of pt_regs.
-+	 * fp/s0 points above the metadata record (RISC-V
-+	 * convention).
-+	 */
-+	REG_S zero, (S_STACKFRAME + STACKFRAME_FP)(sp)
-+	REG_S zero, (S_STACKFRAME + STACKFRAME_RA)(sp)
-+	li t0, FRAME_META_TYPE_FINAL
-+	REG_S t0, S_STACKFRAME_TYPE(sp)
-+	addi s0, sp, S_STACKFRAME + STACKFRAME_RECORD_SIZE
-+
- #if defined(CONFIG_RISCV_SBI) && defined(CONFIG_RISCV_USER_CFI)
- 	li a7, SBI_EXT_FWFT
- 	li a6, SBI_EXT_FWFT_SET
-diff --git a/arch/riscv/kernel/process.c b/arch/riscv/kernel/process.c
-index b2df7f72241a..5212926b926b 100644
---- a/arch/riscv/kernel/process.c
-+++ b/arch/riscv/kernel/process.c
-@@ -258,8 +258,23 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
- 		/* Supervisor/Machine, irqs on: */
- 		childregs->status = SR_PP | SR_PIE;
- 
--		p->thread.s[0] = (unsigned long)args->fn;
--		p->thread.s[1] = (unsigned long)args->fn_arg;
-+		/*
-+		 * Set up a metadata frame record at the bottom of the
-+		 * stack for the unwinder. Use FRAME_META_TYPE_FINAL
-+		 * since this is the outermost kernel entry for the new
-+		 * task. The frame_record::{fp,ra} are already zero from
-+		 * memset().
-+		 *
-+		 * fp/s0 points above the metadata record (RISC-V
-+		 * convention). fn and fn_arg are passed via s2/s3,
-+		 * keeping s0 available for the frame pointer chain.
-+		 */
-+		childregs->stackframe.type = FRAME_META_TYPE_FINAL;
-+
-+		p->thread.s[0] = (unsigned long)(&childregs->stackframe)
-+				+ sizeof(struct frame_record);
-+		p->thread.s[2] = (unsigned long)args->fn;
-+		p->thread.s[3] = (unsigned long)args->fn_arg;
- 		p->thread.ra = (unsigned long)ret_from_fork_kernel_asm;
- 	} else {
- 		/* allocate new shadow stack if needed. In case of CLONE_VM we have to */
-@@ -278,6 +293,18 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
- 		if (clone_flags & CLONE_SETTLS)
- 			childregs->tp = tls;
- 		childregs->a0 = 0; /* Return value of fork() */
-+
-+		/*
-+		 * Set up the unwind boundary: ensure the metadata
-+		 * frame record has its {fp,ra} sentinel zeroed and
-+		 * point fp/s0 above the metadata record. The type
-+		 * field is inherited from the parent's pt_regs.
-+		 */
-+		childregs->stackframe.record.fp = 0;
-+		childregs->stackframe.record.ra = 0;
-+		p->thread.s[0] = (unsigned long)(&childregs->stackframe)
-+				+ sizeof(struct frame_record);
-+
- 		p->thread.ra = (unsigned long)ret_from_fork_user_asm;
- 	}
- 	p->thread.riscv_v_flags = 0;
--- 
-2.43.0
+One approach to attribute the reclaim work accurately to the target
+memcg would be to expose a kfunc that creates a kthread_worker and
+attaches it to a specific cgroup. Reclaim work enqueued to that
+worker would then run in a context already associated with the
+target memcg, so the accounting would naturally fall to the right
+cgroup without any extra bookkeeping.
 
+The tradeoff is additional complexity: creating a per-cgroup worker
+introduces resource overhead and lifecycle management concerns
+(e.g. when should the worker be torn down). Whether that cost is
+justified depends on how strictly the caller needs the reclaim to
+be attributed.
+
+That said, I am not certain this is the right direction yet and
+would welcome your thoughts on whether this is worth pursuing, or
+whether there is a simpler mechanism I am overlooking.
+
+
+> Also when introducing a BPF hook please focus on describing why existin=
+g
+> interfaces fail to achieve what you need. For the async reclaim why it
+> is not practical or feasible to use userspace driven memory reclaim.
+
+
+Noted, and thank you for both points. In the next revision I will
+add a dedicated section to each hook's description covering:
+
+Why existing interfaces are insufficient. For the async reclaim
+case specifically, I will explain why userspace-driven reclaim
+(e.g. memory.reclaim, cgroup-aware madvise, or a dedicated
+reclaim daemon) is not practical: userspace cannot react at the
+granularity or latency required, and the round-trip through a
+syscall or procfs write introduces overhead that defeats the
+purpose of proactive reclaim.
+What gap the new hook fills that cannot be closed by tuning
+existing knobs.
+
+Best,
+Hui
+
+
+> --=20
+>=20Michal Hocko
+> SUSE Labs
+>
