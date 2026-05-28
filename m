@@ -1,271 +1,452 @@
-Received: from mail-dy1-f173.google.com (mail-dy1-f173.google.com [74.125.82.173])
+Received: from mail-ej1-f73.google.com (mail-ej1-f73.google.com [209.85.218.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C49322F5468
-	for <linux-kselftest@vger.kernel.org>; Thu, 28 May 2026 16:23:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA92F3BE621
+	for <linux-kselftest@vger.kernel.org>; Thu, 28 May 2026 17:20:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779985417; cv=none; b=B2sR4RfjrG/poTyHXeH6JKezW084yy7pMK7H3PNBfcMEgdsdTxzLx7wzctUyNAxznbmOU00ta7BD15QeKLxXBlcLy7cnE+S4cTBAGAHVDWd7xOi/djnKl9fk/FsOa1yl1i0STnlpdFFI9Y+oeJQY8yePbIlDC6NvAPLyS7lQHcE=
+	t=1779988835; cv=none; b=F2t70aPeuEOWwfw+MHVXbK14XC3rIrpBcup5eLxmlLaRKwfS7Xy5w7ZRDb5JU1d+K+tEGlYk6nqjaNjLyyiV7WRybzEb4jukBHrU8DnMQzn/PdJT/MiYESriW1F8emtfREPXP2EIeQNTh/7Sy6Uic7dghWoG44f1peoLFvPrvdk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779985417; c=relaxed/simple;
-	bh=MIhgDp7K2Bx8ph7rfsCJg4mzM89NfsmfqsGKY+yk07E=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mqvYjWaxQ5Zz8BNN7AHB0HYI9JMRupHcEaUjb8aSrTnTZAAr0/vRne0hjcWevE5hOgGZnqxVx7GtjpiwyksMBInyZSq3o2yYfuEzum0kLqII2W3ZV7HWaG0XQJxZoNRCXMXy2CCFLfLfyD9JRKYvYKsOSLZMkD4iSw3316NntAQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TNd2R0SK; arc=none smtp.client-ip=74.125.82.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1779988835; c=relaxed/simple;
+	bh=QmEeApx2b9FwvDqoxuT24Hp4oGHCilZOlOx4wp26qMQ=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=NxQI7z8mJCSPTbb9hIhGwkz5EyazClIRY0Unm4pfnv8ju+D6GlelkHfo5AUCnazJaw8fgaQdHTM+cZP7JXa7hgNvb0tCJBCckMpOqc0QbP7vG/vMLbNGJ/mmnZLnzMGWaVVu2wgsrxXXgsJQvCK+LvMdrWLkEXchyFI5V2MyI8Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tarunsahu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pGf1oWMH; arc=none smtp.client-ip=209.85.218.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tarunsahu.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TNd2R0SK"
-Received: by mail-dy1-f173.google.com with SMTP id 5a478bee46e88-304d8e3bb72so1778622eec.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 28 May 2026 09:23:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pGf1oWMH"
+Received: by mail-ej1-f73.google.com with SMTP id a640c23a62f3a-bcd55c93265so1056123066b.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 28 May 2026 10:20:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779985415; x=1780590215; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=69Nx/roug+F3DFPV7LqBlxwAPIUI+gEB6ZueMkgnBcM=;
-        b=TNd2R0SKNONImXxxtR/nSSV217k5PC4CguwdTaYthcpNO/W0J974z2g3B6a7kJoePj
-         j/p1KYNXIxGnr2baaFoYl3rOXxdoKQfzwCMGjCTPdb5vup2Lq90JigGoFvrpp+fHafoY
-         L9HXlQqbF5vZ5MPOSJ/ibb1M2Kx/21Ns1bMX/U5UhQ7com3dWcPl3pyafHWPpmp/NBtj
-         BgcFmaq3H4B7/HaXQfxIwd7/0fG626YybeRiJ2uU/4n9kuszHn6CzBS0Tc5GrD2uL/JG
-         Vb5oyJnixmtf1A7Nwpd+IHVvr85dyaXp6c6iGbWCTE/rPgFQfUxSs2GG13GqpLk1yBgY
-         vP/w==
+        d=google.com; s=20251104; t=1779988832; x=1780593632; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=G1jqnliR98jneaD+lQwah17DldevvtYlAZzFvc5/oGg=;
+        b=pGf1oWMHt8DH9/vhKhR1rHUxDOB0zAwjJX00h3GrB72qoJZcajnqTleeRhznZj7hxG
+         ObmAhWnvWYduBJKSgU8BGuphmP7kS6PLawzSG5KuqqWz1JKH4XiHeVzE/mqjp1/cMjoc
+         mPqbHSExYAg3UVU7hmlF8qyLWIqnxLntKfKkdODe2mnae0ue2Xp3C4ezUoqEAYIu/IT4
+         HfSbyWVEpiQ1TKICJ2ywqnQirBqL0KHWvaDSrTQxVO9dlkfZonC9lEW75gPx+QxdHRin
+         NXwBIs+W0OJkcYLxDFl0tiAfhmkGXqNPbGBoNf7wWHTs91tQ6gVzUWW+WgzzioSDAgyC
+         1BZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779985415; x=1780590215;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=69Nx/roug+F3DFPV7LqBlxwAPIUI+gEB6ZueMkgnBcM=;
-        b=dCtUl57Ojo4NkFRXtME+fbkB30O+HwZOnRyX4y354vKd/M3lIeQ6Dh2zbT6zcrB4o/
-         kySj7qpp2/y+cHzbqD2vEPUb+4/ZJGiKqvTGp68BMm1NJOHYN8tcbTDVmztkIO03HgdP
-         9ietxE9Sn3hKdB8Ze+pb61OSVFF+8nhXpDi8On5p7z9C2dSzOr0G+Xl2hALs+ZQgRQ1X
-         ykK8JyjWsS6pQ1vd4fT7sx/ml91KmHWv5PcZx+6GvGMc1cF0iRYbUtHq8ZL8Cm2HcKgX
-         SU8mbGevXRd5r68lhIfVUu2HNrVZ1XonYKccG2GWvlxwmwBDLkwoXVkbwcsHckTTh8RJ
-         lWBw==
-X-Forwarded-Encrypted: i=1; AFNElJ+WaStIGtp4JEHDbrVZpOT23si2YdRkkzzREztNSLK0ZuP1pjMFvAiL5kuiz9Us9NRQrvWamuvFpd1E4HBCecA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzCfhbFOKOkA5y6tuxx52iNmx+TRwqeqf1hgbiIx7NWstXjHoIm
-	30OkCyO4CC7IKtraNoi3M0HoUuw6azFAzYP4oRqCidXtQwWoqKER0CqD
-X-Gm-Gg: Acq92OEFkBaDc/tBn2AT/xw3A1XnqQ2GSRWLRqaz3P1teK2RoY8+EArka2VUe6Tf5yq
-	vbcB+YTpDTM+k7aFsfyMdPldOdwLvwtR/UGGlgI7xd6HhxItOK7h2haXin1Jsnoamw4hhNCNsKe
-	8VD2CzJdu3jDhdCS04P6apG6lnovMa/KbvdOCvp6TQRltx/jUQSYaCZVhgGayWEseQRgkHyRt27
-	NUWYK66uaWkC+wsgmPge6hfOtHxSllYntLvbX1ZVvOdAAZEM0wwjHHdlRhyIPVwXUHVJcesaPyW
-	Wq0xvqKdUFqO5Qmjx3Z17qKgljEBIix0s9oXXjsWUZqr+xjK05Fvy2unUsegavAYd3MFb44uYyx
-	T9nlHxfKfc9zEIj03Fw0I9pIOycgEpbGkFbG6NAMJt3kustwwe6GUcXsp40l0vv6FRiLvMN8tS3
-	scSqC/Uzf1nlCsUCw4Xz0pA+XMVg==
-X-Received: by 2002:a05:7300:e424:b0:304:819f:502b with SMTP id 5a478bee46e88-304819f518emr8243260eec.9.1779985414550;
-        Thu, 28 May 2026 09:23:34 -0700 (PDT)
-Received: from houminxi ([166.0.188.190])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30452230f1bsm15396602eec.14.2026.05.28.09.23.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 May 2026 09:23:34 -0700 (PDT)
-From: Minxi Hou <houminxi@gmail.com>
-To: netdev@vger.kernel.org
-Cc: aconole@redhat.com,
-	davem@davemloft.net,
-	echaudro@redhat.com,
-	edumazet@google.com,
-	horms@kernel.org,
-	i.maximets@ovn.org,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	shuah@kernel.org,
-	dev@openvswitch.org,
-	linux-kselftest@vger.kernel.org,
-	Minxi Hou <houminxi@gmail.com>
-Subject: [PATCH net-next v4] selftests: openvswitch: add dec_ttl action support and test
-Date: Fri, 29 May 2026 00:23:22 +0800
-Message-ID: <20260528162322.58527-1-houminxi@gmail.com>
-X-Mailer: git-send-email 2.54.0
+        d=1e100.net; s=20251104; t=1779988832; x=1780593632;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=G1jqnliR98jneaD+lQwah17DldevvtYlAZzFvc5/oGg=;
+        b=m1CFG0uwrf2khoD0yacZK7XwgLc+VNNENoVLiikbeyOL5wfbP6ARlHxgGtkAj0Ukpj
+         y9WxJMcKAyHhfENoYQh3+9JkKrataNryISzNLoK/kksLyX7PgzGMTkqjUwj84jHhKZBd
+         U3csq3gkqX3INzAVZsfTGEb1/m4IYHgyeZpMNkriqVVHHyASBabbYacZnRjFsKXv6KmN
+         FjkQ6m8RPyYq19Uwti+EgV3TCDLvbXvRmBEAPtIXAYYn3xCTZLaKGIzqaysJtHk9rxv6
+         J2RfH9ZsoQCGOHVgFMnlXEdNMyc5Yeq8W7/iwUSaudF5+JE225BdeJaodPWd2LelVNe4
+         5U4A==
+X-Forwarded-Encrypted: i=1; AFNElJ9p5uCmlSQLqIeDfCgwWobGMI88+Nw667KxoVUPwZiBOyD3/wTcwZerctBmj0LujFtUlPjeRrsc6qlCF0QROJM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yys5AlMTKATNTlF76Tp2g7dCgMRIwNFmO4dL6IQw2BUe59n8Xt/
+	pPgOhKEQwtBVhcIbPjtBmrBxBdE+crE++lzoTLOZkKcssEvO+OV8qRGLeMTw9gb01vcOUtKuxlB
+	li6yJkJScYwG1qXh8LQ==
+X-Received: from edbay13.prod.google.com ([2002:a05:6402:202d:b0:67c:4a59:4f8d])
+ (user=tarunsahu job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:907:3d49:b0:bde:4dd2:6312 with SMTP id a640c23a62f3a-be974019025mr6289866b.37.1779988831481;
+ Thu, 28 May 2026 10:20:31 -0700 (PDT)
+Date: Thu, 28 May 2026 17:20:30 +0000
+In-Reply-To: <cover.1779080766.git.tarunsahu@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+References: <cover.1779080766.git.tarunsahu@google.com>
+Message-ID: <9huzwlwnbgdd.fsf@tarunix.c.googlers.com>
+Subject: Re: [RFC PATCH v1 0/8] liveupdate: kvm: Guest_memfd preservation
+From: tarunsahu@google.com
+To: axelrasmussen@google.com, mark.rutland@arm.com, skhawaja@google.com, 
+	Mike Rapoport <rppt@kernel.org>, sagis@google.com, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Shuah Khan <shuah@kernel.org>, ackerleytng@google.com, corbet@lwn.net, 
+	dmatlack@google.com, Paolo Bonzini <pbonzini@redhat.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, vannapurve@google.com, 
+	Pratyush Yadav <pratyush@kernel.org>, david@redhat.com, aneesh.kumar@kernel.org, 
+	vipinsh@google.com, Alexander Graf <graf@amazon.com>, David Hildenbrand <david@kernel.org>, 
+	Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc: linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	kexec@lists.infradead.org, linux-kselftest@vger.kernel.org, 
+	kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Add dec_ttl action support to the OVS kernel datapath selftest
-framework:
+Tarun Sahu <tarunsahu@google.com> writes:
 
-  - Add dec_ttl nested NLA class to ovs-dpctl.py with proper
-    OVS_DEC_TTL_ATTR_ACTION sub-attribute handling
-  - Add parse support for dec_ttl(le_1(<inner_actions>)) action
-    string, consistent with the odp-util.c format where le_1()
-    holds the actions taken when TTL reaches 1
-  - Add dpstr output formatting for dec_ttl actions
-  - Add test_dec_ttl() to openvswitch.sh that verifies:
-    * Normal TTL packets are forwarded after decrement
-    * TTL=1 packets are dropped (TTL expiry)
-    * Graceful skip via ksft_skip if kernel lacks dec_ttl support
 
-The dec_ttl class uses late-binding type resolution to reference
-ovsactions for its inner action list, avoiding circular references
-at class definition time.
+Hi,
 
-Signed-off-by: Minxi Hou <houminxi@gmail.com>
-Reviewed-by: Aaron Conole <aconole@redhat.com>
----
-v4: fix three new pylint warnings introduced in v3:
-    - add docstring to class dec_ttl (C0115)
-    - suppress invalid-name for class dec_ttl (C0103, snake_case
-      is consistent with other nested nla classes in this file)
-    - rename parsedLen to parsed_len in the new parser block (C0103)
-v3: rename NLA class from DecTtl to dec_ttl (snake_case), consistent
-    with psample, push_vlan, ctact and other nested nla classes in
-    ovs-dpctl.py
-v2: use dec_ttl(le_1(...)) format, consistent with odp-util.c
-    (suggested by Aaron Conole)
+Based on the discussion on Bi-weekly guest_memfd upstream call.
 
- .../selftests/net/openvswitch/openvswitch.sh  | 55 +++++++++++++++++++
- .../selftests/net/openvswitch/ovs-dpctl.py    | 39 ++++++++++++-
- 2 files changed, 93 insertions(+), 1 deletion(-)
+The following suggestions are made:
+1. Remove the prefaulted condition and During preservation, let the VMM
+   have the policy to either pause the VM or avoid any upcoming faults/conversion
+   (conversion is not part of this series, but design concept for future
+   extension) occurs. If new fault/conversion requests are originated,
+   Kernel will return error to notify VMM.
 
-diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-index 8cd5b3d894ab..3f0e437c34bb 100755
---- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
-+++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-@@ -29,6 +29,7 @@ tests="
- 	tunnel_refcount				ovs: test tunnel vport reference cleanup
- 	drop_reason				drop: test drop reasons are emitted
- 	pop_vlan				vlan: POP_VLAN action strips tag
-+	dec_ttl					ttl: dec_ttl action decrements IP TTL
- 	psample					psample: Sampling packets with psample"
- 
- info() {
-@@ -245,6 +246,60 @@ usage() {
- }
- 
- 
-+test_dec_ttl() {
-+	sbx_add "test_dec_ttl" || return $?
-+	ovs_add_dp "test_dec_ttl" decttl || return 1
-+
-+	info "create namespaces"
-+	for ns in client server; do
-+		ovs_add_netns_and_veths "test_dec_ttl" "decttl" "$ns" \
-+			"${ns:0:1}0" "${ns:0:1}1" || return 1
-+	done
-+
-+	ip netns exec client ip addr add 10.0.0.1/24 dev c1
-+	ip netns exec client ip link set c1 up
-+	ip netns exec server ip addr add 10.0.0.2/24 dev s1
-+	ip netns exec server ip link set s1 up
-+
-+	# Probe: check if kernel supports dec_ttl action.
-+	ovs_add_flow "test_dec_ttl" decttl \
-+		'in_port(1),eth(),eth_type(0x0800),ipv4()' \
-+		'dec_ttl(le_1())' &>/dev/null
-+	if [ $? -ne 0 ]; then
-+		info "no support for dec_ttl - skipping"
-+		ovs_exit_sig
-+		return $ksft_skip
-+	fi
-+
-+	ovs_del_flows "test_dec_ttl" decttl
-+
-+	# ARP flows (bidirectional)
-+	ovs_add_flow "test_dec_ttl" decttl \
-+		'in_port(1),eth(),eth_type(0x0806),arp()' '2' || return 1
-+	ovs_add_flow "test_dec_ttl" decttl \
-+		'in_port(2),eth(),eth_type(0x0806),arp()' '1' || return 1
-+
-+	# IP flows with dec_ttl action
-+	ovs_add_flow "test_dec_ttl" decttl \
-+		'in_port(1),eth(),eth_type(0x0800),ipv4()' \
-+		'dec_ttl(le_1()),2' || return 1
-+	ovs_add_flow "test_dec_ttl" decttl \
-+		'in_port(2),eth(),eth_type(0x0800),ipv4()' \
-+		'dec_ttl(le_1()),1' || return 1
-+
-+	info "verify connectivity with dec_ttl"
-+	ovs_sbx "test_dec_ttl" ip netns exec client ping -c 1 -W 2 \
-+		10.0.0.2 || return 1
-+
-+	info "verify TTL=1 is dropped by dec_ttl"
-+	ovs_sbx "test_dec_ttl" ip netns exec client ping -c 1 -W 2 \
-+		-t 1 10.0.0.2 >/dev/null 2>&1 \
-+		&& { info "FAIL: ping should fail with TTL=1 and dec_ttl"
-+		     return 1; }
-+
-+	return 0
-+}
-+
- # psample test
- # - use psample to observe packets
- test_psample() {
-diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-index 3b6a26e265a4..3342e295293d 100644
---- a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-+++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-@@ -388,11 +388,21 @@ class ovsactions(nla):
-         ("OVS_ACTION_ATTR_CLONE", "recursive"),
-         ("OVS_ACTION_ATTR_CHECK_PKT_LEN", "none"),
-         ("OVS_ACTION_ATTR_ADD_MPLS", "none"),
--        ("OVS_ACTION_ATTR_DEC_TTL", "none"),
-+        ("OVS_ACTION_ATTR_DEC_TTL", "dec_ttl"),
-         ("OVS_ACTION_ATTR_DROP", "uint32"),
-         ("OVS_ACTION_ATTR_PSAMPLE", "psample"),
-     )
- 
-+    class dec_ttl(nla):  # pylint: disable=invalid-name
-+        """Nested OVS_DEC_TTL_ATTR_* sub-attributes."""
-+
-+        nla_flags = NLA_F_NESTED
-+
-+        nla_map = (
-+            ("OVS_DEC_TTL_ATTR_UNSPEC", "none"),
-+            ("OVS_DEC_TTL_ATTR_ACTION", "actions"),
-+        )
-+
-     class psample(nla):
-         nla_flags = NLA_F_NESTED
- 
-@@ -635,6 +645,13 @@ class ovsactions(nla):
-                 print_str += "ct_clear"
-             elif field[0] == "OVS_ACTION_ATTR_POP_VLAN":
-                 print_str += "pop_vlan"
-+            elif field[0] == "OVS_ACTION_ATTR_DEC_TTL":
-+                datum = self.get_attr(field[0])
-+                print_str += "dec_ttl(le_1("
-+                subacts = datum.get_attr("OVS_DEC_TTL_ATTR_ACTION")
-+                if subacts and subacts.get("attrs"):
-+                    print_str += subacts.dpstr(more)
-+                print_str += "))"
-             elif field[0] == "OVS_ACTION_ATTR_PUSH_VLAN":
-                 datum = self.get_attr(field[0])
-                 tpid = datum["vlan_tpid"]
-@@ -786,6 +803,20 @@ class ovsactions(nla):
-                 actstr = actstr[paren + 1:]
-                 parsed = True
- 
-+            elif parse_starts_block(actstr, "dec_ttl(le_1(", False):
-+                parencount += 2
-+                subacts = ovsactions()
-+                actstr = actstr[len("dec_ttl(le_1("):]
-+                parsed_len = subacts.parse(actstr)
-+                decttl = ovsactions.dec_ttl()
-+                decttl["attrs"].append(
-+                    ("OVS_DEC_TTL_ATTR_ACTION", subacts)
-+                )
-+                self["attrs"].append(
-+                    ("OVS_ACTION_ATTR_DEC_TTL", decttl)
-+                )
-+                actstr = actstr[parsed_len:]
-+                parsed = True
-             elif parse_starts_block(actstr, "clone(", False):
-                 parencount += 1
-                 subacts = ovsactions()
-@@ -957,6 +988,12 @@ class ovsactions(nla):
-         return (totallen - len(actstr))
- 
- 
-+# pyroute2 resolves nla_map types via getattr(self, name).
-+# dec_ttl needs "actions" to resolve to ovsactions, but
-+# ovsactions is not defined when dec_ttl class body runs.
-+ovsactions.dec_ttl.actions = ovsactions
-+
-+
- class ovskey(nla):
-     nla_flags = NLA_F_NESTED
-     nla_map = (
--- 
-2.54.0
+   In future, We will revisit if this functionality can be extended
+   to handle post-preserve fault/conversion with having data on preservation
+   latency and complexity. Pratyush is already working on implementing
+   similar thing for memfd and hugetlb preservation.
 
+2. We are going with preserving the vm file along with guest_memfd file
+
+3. No need to preserve kvm->mem_attr_array, as this is on deprecating
+   path and For this series, where only fully shared guest_memfd is
+   supported for liveupdate, preservation of these attributes not
+   required.
+
+Due to time constraints:
+we have one open Question left:
+1. How to check guest_memfd is fully shared. Currently that is being
+   done by INIT_SHARED flag. But with in-place it is going to change
+   its meaning and it will mean only durng the creation of guest_memfd
+   it is shared whose folios can be converted to private.
+   So for this series, I am looking for suggestion, what is the best way
+   to find the sharedness of guest_memfd which will be compatible with
+   in-place series. OR we can go like this (my personnel recommendation):
+
+   if (guest_memfd_is_fully_shared())
+      return true; // support the preservation
+
+   // This series
+   int guest_memfd_is_fully_shared(void) {
+       if (guest_memfd->flags & GUEST_MEMFD_FLAG_INIT_SHARED)
+          return true;
+         return false;
+   }
+
+   TO::
+   // Once in-place conversion series lands.
+   int guest_memfd_is_fully_shared(void) {
+       if (No Private flags in (guest_memfd->attributes))
+          return true;
+         return false;
+   }
+
+~ Tarun
+
+
+> Hello,
+>
+> I am proposing this series as RFC, to initiate the discussion for
+> supporting the guest_memfd preservation. This will setup basic arhitecture
+> for VM preservation during liveupdate. This Cover letter has three
+> sections (please feel free to skip the on you already know):
+>
+> A. Guest_memfd introduction:
+> To make the audience familiar with guest_memfd
+> B. Liveupdate introduction:
+> To make the audience familiar with liveupdate
+> C. Actual Implementation Design and questions.
+>
+> **GUEST MEMFD INTRODUCTION**
+>
+> Initially, guest_memfd was created to support guest private memory in
+> confidential computing VMs (CoCo VMs). It was designed so that whenever
+> a guest wants to grant the host access to private memory, a series of
+> calls occurs: from the guest to KVM, KVM to the host userspace, host
+> userspace back to KVM, and finally a new page fault maps the memory into
+> a separate shared address space. Conversely, if the guest transitions the
+> memory back to private, the subsequent fault is handled by guest_memfd.
+> (Dual Mapping Architecture). In such a VM, all guest memory is initially
+> shared. On the fly, the guest may request to change pages to private; the
+> metadata indicating which parts of memory are private is stored in an
+> xarray inside struct kvm (mem_attr_array). This array serves as the source
+> of truth for the fault mechanism, determining whether a mapping should be
+> created from host-userspace-mapped pages or directly from the guest_memfd
+> file. For private memory, Fault also calls architecture-specific function
+> to set up private hardware access (e.g., on SEV-SNP or TDX). This type of
+> guest_memfd is fully-private where shared mapping comes from userspace
+> mapped address space.
+>
+> Subsequently, support was added to allow the entire guest memory to be
+> backed by guest_memfd. This led to the implementation of the MMAP and
+> INIT_SHARED flags for the guest_memfd inode. When KVM_CREATE_GUEST_MEMFD
+> is called with these flags, the guest_memfd becomes mmap-able by host
+> userspace. The INIT_SHARED flag is used to make the guest_memfd completely
+> shared between the host and the guest. Consequently, page faults from both
+> host userspace and the guest resolve to the same guest_memfd page cache.
+> However, under this configuration, marking a portion of this memory as
+> private is not possible. This type of guest_memfd is fully-shared.
+>
+> If guest_memfd is created with INIT_SHARED without MMAP, the host
+> can never access the guest_memfd. But the memory is still considered
+> shared.
+>
+> Hence, At this point, Only use-case of guest_memfd is either fully-shared
+> or fully-private.
+>
+> There is ongoing work to make shared and private mapping in-place backed
+> by guest_memfd. [1] There is also ongoing work to back guest_memfd by
+> hugetlb pages. [2]
+>
+> **LIVEUPDATE INTRODUCTION (LIVEUPDATE ORCHESTRATOR - LUO)**
+>
+> Livepdate support was added in kernel to update the host kernel by
+> minimizing the downtime to minimal. This is generally achieved by
+> preserving the current state of the system and retrieve after boot to
+> resume from where we left it.
+>
+> Any subsystem that wants to preserve themselves, register their handler
+> with liveupdate system. This handler includes calls to the following
+>
+> *can_preserve (file)*:
+> This tells the luo system about the eligibility of the file. When
+> preserve ioctl is called, it first loop through all the file handlers
+> and call can_preserve, the one which return true, luo uses this file
+> handler fh->preserve call to preserve the file.
+>
+> *preserve(file)*:
+> This actually preserves the file.
+>
+> *unpreserve(file)*:
+> This unpreserve the file incase userspace want to go back.
+>
+> *retrieve(file)*:
+> On new kernel boot, this function retrieves the file.
+>
+> *finish(file)*:
+> When userspace decides that all the files in the liveupdate session has
+> been retrieved, it can trigger this to do final work of cleaning up.
+>
+> LUO preserve its memory using KHO (kexec-handover). All these APIs will
+> be implemented using KHO calls.
+>
+> **GUEST MEMFD PRESERVATION**
+>
+> This patch sets up the basic infrastructure to preserve the guest_memfd.
+> Currently this supports only fully-shared, pre-faulted guest_memfd
+> (INIT_SHARED) backed by PAGE_SIZE pages.
+>
+> It registers a new LUO file handler for guest_memfd file to serialize
+> and deserialize guest memory. This allows preserving guest memory backed
+> by guest_memfd across updates, ensuring that guest instances can be
+> resumed seamlessly without losing their memory contents.
+>
+> The preservation call is straight forward. It walks through the page
+> cache, serialize the folios and preserve them.
+>
+> On the retrieval path:
+> Currently, creating a guest_memfd requires an associated struct kvm
+> (derived from vm_file / vm_fd). Since there is no direct way to pass a
+> VM file descriptor via the LUO API, we considered two main approaches:
+>
+> Approach (1)
+> Split the KVM_CREATE_GUEST_MEMFD ioctl into two separate ioctl: one
+> to create the guest_memfd without a VM file (without struct kvm)
+> descriptor, and another to attach a newly created VM file descriptor to
+> a retrieved guest_memfd.
+>
+> Introducing a new ioctl is in itself a problem (UAPI). Currently, a
+> guest_memfd file belongs to a single VM. Decoupling creation and
+> attachment could allow a guest_memfd to be attached to any VM, or shared
+> among multiple VMs when passed at different offsets. Fully supporting
+> this feature would require extensive work, and it is unclear if there
+> are any non-LUO use cases that justify this complexity.
+> There is related work going on here [4], but not exactly same. It still
+> does not allow guest_memfd to be created without vm_fd. But there be
+> other ways to use it, I would like to discuss the idea.
+>
+> Approach (2)
+> Leverage a companion patch [3] (Also added as part of this series
+> PATCH[1]) that allows one file to retrieve another file from the same LUO
+> session. This enables the guest_memfd retrieval path to obtain the
+> preserved KVM file, use it during guest_memfd file creation, and
+> subsequently populate its preserved memory.
+>
+> Preserving the KVM file allows us to preserve additional VM-specific
+> metadata, which will be crucial in the future for cleanly resuming the
+> VM. Currently, it preserves only the VM type and kvm->mem_attr_array.
+>
+> Though the ongoing in-place sharing series [1] transfers attributes to
+> the guest_memfd file, But preserving the kvm file opens the opportunity
+> to preserve other VM state in future like registers state, vCPU etc.
+>
+> Having the extensive usecases for preserving the kvm file, I went
+> ahead with Approach (2). In future, if approach (1) become possible, it
+> can easily be integrated with approach (2).
+>
+> Following the first approach (preserving vm_fd along with guest_memfd),
+>
+> ** VM FILE LIVEUPDATE ** PATCH[3] && [4]
+>
+> *PATCH[3]* has refactored few functions to support kvm preservation.
+> During retrieval, vm_file needs to be recreated which will require kvm
+> api. This patch exports those APIs. There is a new addition to struct
+> kvm, vm_file. Which will be used by guest_memfd. I will discuss about
+> this later.
+>
+> *PATCH[4]*
+> The preservation of the vm file is straightforward.
+>
+> On the retrieval path:
+> KVM normally requires a unique identifier (fdname) upon creation,
+> which KVM typically assigns based on the newly created file descriptor
+> number. However, in the LUO retrieval path, the retrieve call restores
+> the underlying file structure and delegates actual file descriptor
+> allocation to LUO (check luo_session_retrieve_fd). Currently, I used an
+> atomically incremented sequence number as the fdname. I would like to
+> discuss whether userspace services rely on specific naming conventions
+> here. Or if we can change underlying the retrieve call
+> (luo_retrieve_file) to pass fd?
+>
+> **GUEST_MEMFD FILE LIVEUPDATE** PATCH[5], [6] & [7]
+>
+> *PATCH[5]*
+> During retrieval of guest_memfd file, for its creation, this patch has
+> exported APIs from guest_memfd.c to be used for guest_memfd_luo.c
+>
+> *PATCH[6]*
+> This patch implements the API for gmem inode freeze, which freeze the
+> fallocate operation on this inode. Freeze check can be extended in
+> future to prevent new page faults as well, when liveupdate support
+> for non-pre-faulted guest_memfd will be implemented.
+>
+> *PATCH[7]*
+> Preservation Path:
+> We have discussed about this before,
+> I would like to add to that and discuss here a major design decision:
+> "Preservation order in between VM File and guest_memfd file"
+>
+> Preservation Ordering is required because guest_memfd needs to store
+> vm file token as one of its data, which it can use during retrieval to
+> get the vm file and use (file->private_data: struct kvm ) for its
+> creation using [3]. So KVM file must be preserved before guest_memfd
+> file, so that guest_memfd preserve call can find vm file token from the
+> same luo session.
+>
+> Currently My preservation implementation does not require any strict
+> ordering, they can be preserved in any sequence from userspace. I
+> achieved this by implementing the freeze call for guest_memfd which
+> gets run at the end just before kexec. This call freeze the luo session
+> and no further changes can be done to the session. Inside guest_memfd
+> luo_freeze handler, I update the token for vm_file. Which enable us to
+> preserve the vm file and guest_memfd file in any order.
+>
+> The drawback is, incase vm_file is not preserved, freeze will fail. And
+> in enforcing the preserving order fails the guest_memfd preservation
+> from the start. As with VM preservation will evolve in future, it will
+> keep getting complicated so avoiding the preservation order should be
+> the better choice to make the userspace simpler. I would be happy to
+> disucss on this further.
+>
+> To get the token, we need the vm_file and there is no way to get the
+> vm_file from the struct kvm, as guest_memfd file only store the
+> struct kvm. I have introduced a new member in struct kvm, vm_file.
+> But with weak circular dependency as it is just to get the pointer
+> for the file. we don't want to keep the reference of the file as vm_file
+> takes for the kvm to keep itself (vm_file) alive. So whenever there is a
+> need to use of kvm->vm_file, we take the reference and drop it suddenly.
+>
+> Retrieval Path:
+> During retrieval path, we just retrieve the data from kho and populate
+> into the newly created guest_memfd.
+> To create guest_memfd itself, it needs struct kvm, as we discussed
+> above, which will come from vm_file, hence retrieval order is needed
+> here. VM file needs to be retrieved first before guest_memfd.
+>
+> To handle this situation, I had three approaches in mind with their own
+> pros and cons:
+>
+> Approach (1):
+> Use [3], retrieve internally using liveupdate_get_file_incoming which
+> inherently retrieves the file incase it was not retrieved by the
+> userspace already. But this creates an scenerio, that userspace might
+> call luo_finish which will drop all the references of vm_file (and
+> userspace not holding any as it has not retrieved it yet explicitly).
+> And vm_file will get released. But this is a valid situation as when vm
+> is going to be put down. Userspace can close the vm_fd and have
+> guest_memfd yet opened and so other user of struct kvm like vCPUs etc.
+> Only thing, this makes retrieved guest_memfd unusable unless, there is
+> a mechanism to link to another VM (Nope).
+> This leaves us with following situation:
+> 	(A): As it is a valid situation, We can leave it as it, No
+> 	retrieval order enforcement.
+> 	(B): We can implement can_finish to check if userspace has
+> 	retrieved the vm_file, otherwise can stop luo_finish from
+> 	succeeding, but I did not find a way to implement such check.
+> Approach (2):
+> Enforce the strict order, by implementing a new call which will first
+> check whether the vm_file is retrieved or not, if not, it will not
+> retrieve it internally and retrurn err to the caller which is
+> guest_memfd retrieve function in this case. So guest_memfd can report
+> the userspace about this error.
+>
+> I have implemented Approach (1)(A), as it is a valid case, and does not
+> enforce any retrieve order on userspace, which relieves the burden from
+> the userspace when vm_file preservation will evolve. But userspace is
+> now expected to retrieve the vm_file before calling luo_finish or
+> guest_memfd will become unusable. As per LUO philosphy, It is userspace
+> error.
+>
+> **KERNEL SELFTEST FOR POC** PATCH[8] & [9]
+>
+> *PATCH[8]* refactor kvm selftest framework to expose some raw apis to
+> setup the VM.
+> *PATCH[9]* implements the basic test, where it spawn a VM with guest_memfd
+> or 16MB and fault it completely and write data to its 5MB portion. After
+> LUO preserve call, and kexec, On retrieve, a new VM is spawn with the
+> restored vm_file and restored guest_memfd and the data is verified.
+>
+> I will update this test in the next version to use the liveupdate
+> selftests library [5].
+>
+> Future Work:
+> 1. To support preservation for non-prefaulted guest_memfd to save memory
+> in KHO. (Already working on this, will post another series soon)
+> 2. Support private guest_memfd preservation.
+> 3. Extend the support for guest_memfd with in-place conversion of
+> shared/private.
+>
+> [1] https://lore.kernel.org/all/20260507-gmem-inplace-conversion-v6-0-91ab5a8b19a4@google.com/
+> [2] https://lore.kernel.org/all/cover.1747264138.git.ackerleytng@google.com/
+> [3] https://lore.kernel.org/all/20260427175633.1978233-2-skhawaja@google.com/
+> [4] https://lore.kernel.org/all/cover.1691446946.git.ackerleytng@google.com/
+> [5] https://lore.kernel.org/all/20260511201155.1488670-1-vipinsh@google.com/
+>
+> Pasha Tatashin (1):
+>   liveupdate: luo_file: Add internal APIs for file preservation
+>
+> Tarun Sahu (8):
+>   liveupdate: Add LIVEUPDATE_GUEST_MEMFD config option
+>   kvm: Prepare core VM structs and helpers for LUO support
+>   kvm: kvm_luo: Allow kvm preservation with LUO
+>   kvm: guest_memfd: Move internal definitions and helper to new header
+>   kvm: guest_memfd: Add support for freezing and unfreezing mappings
+>   kvm: guest_memfd_luo: add support for guest_memfd preservation
+>   selftests: kvm: Split ____vm_create() to expose init helpers
+>   selftests: kvm: Add guest_memfd_preservation_test
+>
+>  MAINTAINERS                                   |  13 +
+>  include/linux/kho/abi/kvm.h                   | 121 +++++
+>  include/linux/kvm_host.h                      |  14 +
+>  include/linux/liveupdate.h                    |  21 +
+>  kernel/liveupdate/Kconfig                     |  15 +
+>  kernel/liveupdate/luo_file.c                  |  69 +++
+>  kernel/liveupdate/luo_internal.h              |  17 +
+>  tools/testing/selftests/kvm/Makefile.kvm      |   2 +
+>  .../kvm/guest_memfd_preservation_test.c       | 285 ++++++++++
+>  .../testing/selftests/kvm/include/kvm_util.h  |   2 +
+>  tools/testing/selftests/kvm/lib/kvm_util.c    |  26 +-
+>  virt/kvm/Makefile.kvm                         |   1 +
+>  virt/kvm/guest_memfd.c                        | 180 +++++--
+>  virt/kvm/guest_memfd.h                        |  44 ++
+>  virt/kvm/guest_memfd_luo.c                    | 495 ++++++++++++++++++
+>  virt/kvm/kvm_luo.c                            | 346 ++++++++++++
+>  virt/kvm/kvm_main.c                           |  79 ++-
+>  virt/kvm/kvm_mm.h                             |   3 +
+>  18 files changed, 1653 insertions(+), 80 deletions(-)
+>  create mode 100644 include/linux/kho/abi/kvm.h
+>  create mode 100644 tools/testing/selftests/kvm/guest_memfd_preservation_test.c
+>  create mode 100644 virt/kvm/guest_memfd.h
+>  create mode 100644 virt/kvm/guest_memfd_luo.c
+>  create mode 100644 virt/kvm/kvm_luo.c
+>
+>
+> base-commit: 5200f5f493f79f14bbdc349e402a40dfb32f23c8
+> -- 
+> 2.54.0.563.g4f69b47b94-goog
