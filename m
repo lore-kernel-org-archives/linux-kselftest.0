@@ -1,52 +1,51 @@
-Received: from smtpbgsg2.qq.com (smtpbgsg2.qq.com [54.254.200.128])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DFA535A93C;
-	Thu, 28 May 2026 08:11:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.254.200.128
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3F7C377EC6;
+	Thu, 28 May 2026 08:19:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779955897; cv=none; b=cysi7NJDm5bbI1iuFOZmk+ShsSipBhHt4EEevoqTjzsxuV28dvxfw7kl/4xd9MITaf9HfsW3g2saq0OmM6v9gP1FHTdYv+DwqYwV5SX6XjD0qCwLtDBWnxHw4xoIHuMwr49miwlTli+vGeTbZvV1jv+NNqihHb+5X6SzCyj4uHU=
+	t=1779956395; cv=none; b=jG8seQvchLLtTsbGhTwCI2K3sGDZiJQKmrQxCj3zubd+6CBvyFu35Jc71DNKacCgSS/VMRocbvGKRlNDyorlnZB/EiUz5+SILEXFwluZ0TdwUPMcSxd7JxTJRy7kZ6oqMbPGJhetLG4Aqo4yGPoV8eWJAAG/7tiGMC+v1yLsdOo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779955897; c=relaxed/simple;
-	bh=ae/NeZ3taNXKKvp9HnJVM1by6LAlTPlw0mB2UHLVhT4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TTMAXbPrQ03LwKkknWTQVh6/xO5X7AFb1n6BnzHizQ5VtmZPaFV1Fi4FOMEB/7JH5QGFj5KMEFvGgqEuU+ZCBsB4Dc5xA/epm26OF2M5U1qkfDFYsUcOb+TBllGlddCU3rdnlbUVVxJK/DiiqVP6ARPPj7bFIyRRAGK7nOb0azM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=Vzt2yiV2; arc=none smtp.client-ip=54.254.200.128
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="Vzt2yiV2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1779955861;
-	bh=yJmNoPx3oaeA6PqMQ34pEZkGLLkXi0yOR8EY4hpMPHE=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=Vzt2yiV245oaZEy+00DqMKw2DFAUlWyO9X25zJbHDIpHAuDBZ5Cm9nZbNC+OJFQGW
-	 LIXGFie37/PztMztdDdD5PxWkwrQtjqx69+VawEYalp7iGHG3xHah0YHISRh/Xra+E
-	 JoVRvwaWW0yLiPK0T/b5hwyGRBwE3uLHX2IlCtBQ=
-X-QQ-mid: esmtpsz17t1779955849t1d49df90
-X-QQ-Originating-IP: nZ4UXvetsIyyKOSyybdUT3u/PhenXD2LCe9anBkoWec=
-Received: from PEN1097 ( [61.183.83.60])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Thu, 28 May 2026 16:10:46 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 7792598639397190847
-EX-QQ-RecipientCnt: 8
-From: niecheng <niecheng1@uniontech.com>
-To: sj@kernel.org
-Cc: shuah@kernel.org,
-	damon@lists.linux.dev,
-	linux-mm@kvack.org,
+	s=arc-20240116; t=1779956395; c=relaxed/simple;
+	bh=Mf1aN3Zacoq+faK7m54zAYktA3WIIOyBi1siCpda6E0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IIru0XcVKxpRfDdpkuTvKm1s2cX8JuKj8rdzrge0QAK2NpVbCqr1c9wZxj4utdHoA6cBqOmbeXOgJH4VUwhUSaE+n1pNINVPAEUz17srMN4MRp9m4Fu7z7SbnHICS2DTk7+PQj/wk0FEMRVBRxIYGqlyWKyiJRxTu0/SwcPeOSU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: fc6074005a6d11f1aa26b74ffac11d73-20260528
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.12,REQID:36a78eb0-f564-41c6-887d-22655cf4fbb4,IP:0,U
+	RL:0,TC:0,Content:0,EDM:-20,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+	N:release,TS:-20
+X-CID-META: VersionHash:e7bac3a,CLOUDID:5aca2b057ea4ffb847db433b823f895a,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:102|850|865|898,TC:nil,Content:0|15|50,E
+	DM:1,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:
+	0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: fc6074005a6d11f1aa26b74ffac11d73-20260528
+X-User: yanlonglong@kylinos.cn
+Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <yanlonglong@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 1044439411; Thu, 28 May 2026 16:19:45 +0800
+From: Bob ynn <yanlonglong@kylinos.cn>
+To: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	kuniyu@google.com
+Cc: joannelkoong@gmail.com,
+	netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	kernel@uniontech.com,
-	niecheng1@uniontech.com
-Subject: [PATCH 1/2] selftests/damon: fix DamosFilter memcg_path assignment
-Date: Thu, 28 May 2026 16:10:38 +0800
-Message-ID: <9B7A70233DF773F5+20260528081039.1192194-2-niecheng1@uniontech.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260528081039.1192194-1-niecheng1@uniontech.com>
-References: <20260528081039.1192194-1-niecheng1@uniontech.com>
+	bob ynn <yanlonglong@kylinos.cn>
+Subject: [PATCH] selftests/net: bind_bhash: fix memory leak in bind_socket
+Date: Thu, 28 May 2026 16:19:19 +0800
+Message-ID: <20260528081919.841-1-yanlonglong@kylinos.cn>
+X-Mailer: git-send-email 2.47.1.windows.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -54,54 +53,48 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: esmtpsz:uniontech.com:qybglogicsvrsz:qybglogicsvrsz4b-0
-X-QQ-XMAILINFO: MoAHuhB82TZgToQTVHt3NDbioWJedjP1nMSJAQ4NgqlJ9mz/3Pey+t8+
-	D+L3CU1X/u7ohkhKnb+ebFv5YD9ix3moFjRKVeeMYce2QDwZRifIaaCUL8vTuJqotW42M+J
-	dnl9yHbQBYHXORM2yNtGn6B3222ayVeh2AmOKpHFl2mLpI8fPFAkaAamwBSDV1ovnw55EXl
-	Z+7kYv5bDhwRjNEFdLvXpdSm4AImdcjbbvgDlPS0jVzR56Jzmx5RvxcqRjEKrxznKW+ZAvQ
-	ZZqnUiUm5Uk8l7OqmziSk4y1On3E7noRsY+y8H/v7qh8O0MImbiTloprMZaR06mVJumxpcW
-	JpOiwF+1HOpsGtXNvFtjdStRhbJn63fN1/JiCLJJjJGA0Z7QdsPNrzS2cH2Sp951nkxdjIo
-	R2g9tztasbqoqbnxrxPV+0tMBXZqs0mDoVwLIgRVvq239whqLo0RP7fxYx49/kEjk94MOOc
-	FFbyOo90LvfQpvTCiHUigr5w79xd8zqwV4j4vzVDY6m4y6g958BspPQNO07C6mSgE2TJ+Or
-	/7JhDlqJgrAYLYWeA18EkDLdZdk4EfS/rONH2aKBc694kX/hskXk4yr4kLsqhGKtLFQG6t/
-	2wDPzSsc1mAy1vJHv92I8AVmapR+zcm3MBXNxcQgAB+vmMaLjujIZOqrpHRkKcuy4IsDnWO
-	QCFlzcKLUpurtXPq14t3T0CGWq0nuH2E404J9y6VDFL3lILdCfK73I1p2ZVtx7By54k0BTM
-	M50GAhGT1GCoiWrM1ApHRPZW5OSRjRmQ5E0rg+WTeAJNP4zIkRQ4CvPBkyf1nc4zRu/en+l
-	lnIjztkCDB3Hs2O5AUNx86qXfGqvtZY/4+5tvZc7ttC04Jr3IJyvcITfURRDiehEkOdRDYO
-	/f/M/rf2PjyQckYSzvsAetHSQjVVG0e3F/JCcnCKJkbkgAnC9pUMgS2FFgzusOMHo7zfsuk
-	xRY0T6fAE403UAUU+OfIgzgwPcu7q312+t8mZi0BOnv56bKsUNHD2aehUB6cwPvDh1x21mp
-	K18elLMyB6AEbl3zUjLjRibyGq3IqI4GYSf/Vwd3VcZ102yvn8bwuh+QCSZ5BPh5u/OzkJS
-	nr8/FtqE0QMp+ttWFhq5ol6ynq4iXbRQTnpuXH+9GAbWaOrhhBN+nfzXPMd85bfrBrZJm7h
-	SEl09+yngOt7UHI=
-X-QQ-XMRINFO: OWPUhxQsoeAVwkVaQIEGSKwwgKCxK/fD5g==
-X-QQ-RECHKSPAM: 0
 
-DamosFilter stores memcg_path for sysfs staging, but the constructor
-assigns it with a trailing comma and therefore turns it into a tuple.
+From: bob ynn <yanlonglong@kylinos.cn>
 
-Fix the assignment so memcg_path is stored as the intended string.
-This makes memcg filter staging and follow-up validation use the
-written path correctly.
+The getaddrinfo() call in bind_socket() dynamically allocates memory
+for the result linked list that must be freed with freeaddrinfo().
+However, none of the code paths after a successful getaddrinfo() call
+free this memory, causing a leak in every invocation of bind_socket().
 
-Signed-off-by: niecheng <niecheng1@uniontech.com>
+Fixes: c35ecb95c448 ("selftests/net: Add test for timing a bind request to a port with a populated bhash entry")
+Signed-off-by: bob ynn <yanlonglong@kylinos.cn>
 ---
- tools/testing/selftests/damon/_damon_sysfs.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/net/bind_bhash.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/damon/_damon_sysfs.py b/tools/testing/selftests/damon/_damon_sysfs.py
-index 2b4df655d9fd..022f0d392204 100644
---- a/tools/testing/selftests/damon/_damon_sysfs.py
-+++ b/tools/testing/selftests/damon/_damon_sysfs.py
-@@ -254,7 +254,7 @@ class DamosFilter:
-         self.type_ = type_
-         self.matching = matching
-         self.allow = allow
--        self.memcg_path = memcg_path,
-+        self.memcg_path = memcg_path
-         self.addr_start = addr_start
-         self.addr_end = addr_end
-         self.target_idx = target_idx
+diff --git a/tools/testing/selftests/net/bind_bhash.c b/tools/testing/selftests/net/bind_bhash.c
+index da04b0b19b73..2bd100777448 100644
+--- a/tools/testing/selftests/net/bind_bhash.c
++++ b/tools/testing/selftests/net/bind_bhash.c
+@@ -52,18 +52,19 @@ static int bind_socket(int opt, const char *addr)
+ 		err = setsockopt(sock_fd, SOL_SOCKET, opt, &reuse, sizeof(reuse));
+ 		if (err) {
+ 			perror("setsockopt failed");
+-			goto cleanup;
++			goto err_free_info;
+ 		}
+ 	}
+ 
+ 	err = bind(sock_fd, res->ai_addr, res->ai_addrlen);
+ 	if (err) {
+ 		perror("failed to bind to port");
+-		goto cleanup;
++		goto err_free_info;
+ 	}
+-
++	freeaddrinfo(res);
+ 	return sock_fd;
+-
++err_free_info:
++	freeaddrinfo(res);
+ cleanup:
+ 	close(sock_fd);
+ 	return err;
 -- 
-2.51.0
+2.43.0
 
