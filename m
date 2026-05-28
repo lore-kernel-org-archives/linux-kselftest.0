@@ -1,75 +1,74 @@
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from esa9.hc1455-7.c3s2.iphmx.com (esa9.hc1455-7.c3s2.iphmx.com [139.138.36.223])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F6A9348C7C
-	for <linux-kselftest@vger.kernel.org>; Thu, 28 May 2026 22:02:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EE873346BE;
+	Thu, 28 May 2026 22:14:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=139.138.36.223
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780005761; cv=none; b=nzpygTmsx0QQM4Mwqujhs+dm8T0w1wQEXNkT/HqHqyTKeW2TvWnBCjJ8D1At0FAMG3p7mP3nLRNDnNJbRL22sI6mtIVQrGPJf2OEWgEDm1er8gtFczFCjTShbI18eJLMcnfZTHgwanLSjxqSvV2yCFmVsfWg9yXRXLdTVVd1Pv8=
+	t=1780006459; cv=none; b=k+FIuNl8SPsoTdOit2m/1duFEKYL10mUdz06eU8M49IsoHEo6w8Nz7xnHpDS+BHyfruVqg3lB9mtj9UFJ0vlOZSMVwE4vNzCjTyqpZHApNw0Gl1tYsWrDqYvDzH3AWS1aZkXq5Qph8v3n1Si6PdIjtnJU3+losVTDT7t/BCyCEw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780005761; c=relaxed/simple;
-	bh=LdY5w1w9JKQhpaZBSyVUr8rGqdk+R+saAIJWzDuNvjo=;
+	s=arc-20240116; t=1780006459; c=relaxed/simple;
+	bh=FWIBzXhLkf8QASpXt/e0kLaIXQ8j42MXyINrPuFKZF0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=T8qgJZUGsUAX/YsMJ3DgPMU4owvFiGjhzRUHtgUcucLgy7j1AMQxNDyGs25/JZqergLoSeg1PIgjdUHoCgmOdQ2/dguvLUVXY8vgw72G8Xrki6cz7vq3XglS0p2sHHEGDlooWXqJrDF1PWCjuyQuzpIuLJ5cei9kDRYMbxU+2IE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jZwU5P5p; arc=none smtp.client-ip=209.85.215.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=nS1BRXZkQmpVxUH9SzFQ2o6oodcTfUOSbce93by0jnoCQH434w39u1vxi+qGmNnjFobSlLk6o02wxWhn5eSppU3SVDTVcWUT8wsXxUskAnm7YFAVpH8yBzlHmlac+TH3LBsooBsxhyIVurpxVCJKh38prNORORk5dOO4/PhoEEU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=UbDmhZgv; arc=none smtp.client-ip=139.138.36.223
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jZwU5P5p"
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-c8173b2af32so10093225a12.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 28 May 2026 15:02:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1780005759; x=1780610559; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=a7lu1PeNcCkgTIxgc3W2FpjZdWenBKdIMuLJ/NcoWBc=;
-        b=jZwU5P5p3FTmdDG+AARv7m1FxkGzt/xkXiN6mu9dlBJJ+wYiJUBE4ZX4bILYM7+Rhj
-         gGdZ0fezVJqD7hPQGNyiGQc3C+z7jjK0/LB1Lxw/1fHUR6V9W7gzk1zTmmSswrZcVFmn
-         iFJDu5MAd61uo5ATATVm0eV2eojLn1fJ1RdQG9H5vFLvl/lcCcFlOz9XPAnIA0oAr0Op
-         Z56mScARGdAwb5wZDzrSNHofRBGuYMQETy/8TlQbOX+MkyimBIDptf7i36rSKCy2v31r
-         6A2xIrDD7GOt0/82jKQE/XCWEKMrqSMcdahg7erlbjTZO5UivapaP3wkzMDC2bsIoHAi
-         W3/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780005759; x=1780610559;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=a7lu1PeNcCkgTIxgc3W2FpjZdWenBKdIMuLJ/NcoWBc=;
-        b=i0om5Gy7AmrzYNGgBWp5ENNnDiSK1RiAZejGFEtyt5cpEzcPWxyUT9Lclp6ytoFrYp
-         QHzmnF1+a9l3QgM6F7a+eMFt6tE5uha/klbCTvgS0H0w9sMR6aiVd3YRNw1T46NEWXyC
-         0FzMBqbev0it0R/GdSPqi2bMIwjcmKDleJ+0r+aIW5/TdYHjVzSfiDDE/xIU7UYFNmb0
-         3hZDwe7XYr2/21VSAkd2mv7ezer0KHZvM0o1gNa2p4a3dIahFE5/1Jg3n86I2A0kNhYS
-         DgoY2Fgzsuvi+Zx6gXJRwIi11wZ4q8OnLImJwTGOWeq44r45FIGvZJ4ZPAD1vMhLQaMa
-         1eMA==
-X-Forwarded-Encrypted: i=1; AFNElJ8XdHJw4T9WEMcd7D9EkoiBb1wCjRA8Rg9b7So1fQYygjwUePBYj3SxU+dfhTMJvrJN5BrcVErYJ7L2hNm3Emw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxySSZN9PS7Gr97qJLWHYboy1cYxnSOxJx0Xb86ro9uWhQPufb3
-	LRQRNSX/KKhjMjxNU805SNOlskbNEWYdTIo4nnihzxoyQ2DWNUA0qAcesbZVfVxf2g==
-X-Gm-Gg: Acq92OGNyRChI9ige4MrY8YnlIC0weN0Rlitjf7iNMcCZM7QruxNqNouPvqOZMKPs29
-	RkCPkOHU1GgcMnRMNPKEMDy2gtEzPf2xRuVaAKMVyBwh/fb2CPZnoxlcRf6xjgfhX4UL5YgxPOm
-	l9zxKuPgMXNI8/ObVT4oIdXxWxg/dLRTzs3Bk07jSeN3pKZ8wJmM2z+zw8SlaM9+0ePiRLfAX0+
-	4eWLWbTs/sesn4UAJWbhMUr88In4vSXmqfkSkZPVw75Slq2Q2Dqjha1NDRBu4VjV12sWwXqsMAe
-	tfrqKdYKer9KU7nHzcaHZOLxQ3esabprvkNYPRHpY7P3aWeafXoO1KCne16kYBWruVhC7g+HiDA
-	jZDj5jau4SjV7Po+t/r8N6W89Fi1LN69i2bg54FNpAGPl7jgWVhf1WLAWxDQz5sd2RcZW/3MHem
-	5Dtz7fPlMP1ybHxbJEAyeddr+enWYzSPd7uw5z0BLqX3SMHDiYW1Z0nVvLQh/+3aHBOvHUI0Wf
-X-Received: by 2002:a05:6a21:648f:b0:39b:9644:6e94 with SMTP id adf61e73a8af0-3b40e32b279mr628896637.9.1780005758951;
-        Thu, 28 May 2026 15:02:38 -0700 (PDT)
-Received: from google.com (56.149.168.34.bc.googleusercontent.com. [34.168.149.56])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c85759af1f5sm31047a12.11.2026.05.28.15.02.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 May 2026 15:02:38 -0700 (PDT)
-Date: Thu, 28 May 2026 22:02:35 +0000
-From: David Matlack <dmatlack@google.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Alex Williamson <alex@shazbot.org>, kvm@vger.kernel.org,
-	Leon Romanovsky <leon@kernel.org>, linux-kselftest@vger.kernel.org,
-	linux-rdma@vger.kernel.org, Mark Bloch <mbloch@nvidia.com>,
-	netdev@vger.kernel.org, Saeed Mahameed <saeedm@nvidia.com>,
-	Shuah Khan <shuah@kernel.org>, Tariq Toukan <tariqt@nvidia.com>,
-	patches@lists.linux.dev
-Subject: Re: [PATCH v2 08/11] vfio: selftests: Add dev_dbg
-Message-ID: <ahi7e1MEoHwk-rtF@google.com>
-References: <0-v2-72e9640932fd+2c64-mlx5st_jgg@nvidia.com>
- <8-v2-72e9640932fd+2c64-mlx5st_jgg@nvidia.com>
+	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="UbDmhZgv"
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj2;
+  t=1780006457; x=1811542457;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FWIBzXhLkf8QASpXt/e0kLaIXQ8j42MXyINrPuFKZF0=;
+  b=UbDmhZgvL0O+JZB1wS+gBfvXh0pv41RQKw7qmlR0syFXz+EcuJQPmhzq
+   Kh5YYtyNF5c2nyrx74Kq08SpIcLq0SDkbUCi7HP0qo2VpD5svLGGdooLY
+   oMZWfjk9M+DQ2Tp61J6Auq27zIGulBCqCHGEiCY3t1qcxR+PvMiOPVZQu
+   g9I3WQaOmyC78trFvVY5RS3Ztz/XZRpSth8ROHqK317h7GGIK0lC3MENR
+   d4WW8gQLn6XhTIwMQNUrZIZohfaFQF3+0puKB8mBn5nyRNQqA1qVOK2h+
+   5xefAUrwU/zGsX/EAeFjQzDEylnVdpCw6uvxpNrunRSYu3j0hkwlvWI0d
+   Q==;
+X-CSE-ConnectionGUID: HsdRsbaiQbSrc9Om8Y1f4Q==
+X-CSE-MsgGUID: L9tAxflHTEasNOg6SR6oSw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11800"; a="229565395"
+X-IronPort-AV: E=Sophos;i="6.24,174,1774278000"; 
+   d="scan'208";a="229565395"
+Received: from gmgwnl01.global.fujitsu.com (HELO mgmgwnl01.global.fujitsu.com) ([52.143.17.124])
+  by esa9.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2026 07:14:15 +0900
+Received: from az2nlsmgm1.o.css.fujitsu.com (unknown [10.150.26.203])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mgmgwnl01.global.fujitsu.com (Postfix) with ESMTPS id 991912BB4;
+	Thu, 28 May 2026 22:14:15 +0000 (UTC)
+Received: from az2nlsmom1.o.css.fujitsu.com (unknown [10.150.26.198])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by az2nlsmgm1.o.css.fujitsu.com (Postfix) with ESMTPS id 4F35DC19F6B;
+	Thu, 28 May 2026 22:14:15 +0000 (UTC)
+Received: from sm-arm-grace07 (unknown [10.124.178.20])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by az2nlsmom1.o.css.fujitsu.com (Postfix) with ESMTPS id 1348B82C235;
+	Thu, 28 May 2026 22:14:09 +0000 (UTC)
+Date: Fri, 29 May 2026 07:14:07 +0900
+From: Itaru Kitayama <itaru.kitayama@fujitsu.com>
+To: Wei-Lin Chang <weilin.chang@arm.com>
+Cc: catalin.marinas@arm.com, joey.gouly@arm.com, kvm@vger.kernel.org,
+	kvmarm@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	maz@kernel.org, oupton@kernel.org, pbonzini@redhat.com,
+	shuah@kernel.org, suzuki.poulose@arm.com, will@kernel.org,
+	yuzenghui@huawei.com
+Subject: Re: [PATCH] KVM: selftest: arm64: Run shadow_stage2 varying guest
+ modes
+Message-ID: <ahi-L_HQXkxPuCYL@sm-arm-grace07>
+References: <20260516183003.799058-6-weilin.chang@arm.com>
+ <20260528045930.450339-1-itaru.kitayama@fujitsu.com>
+ <r2dui45c3mp2qzns6dplqj6pfima5tq7huhvbwus225xamuccn@aw753ihdimz5>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -78,14 +77,64 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8-v2-72e9640932fd+2c64-mlx5st_jgg@nvidia.com>
+In-Reply-To: <r2dui45c3mp2qzns6dplqj6pfima5tq7huhvbwus225xamuccn@aw753ihdimz5>
 
-On 2026-05-15 02:30 PM, Jason Gunthorpe wrote:
-> Enable it with a #define DEBUG at the top of the file. Allows leaving
-> behind debugging prints that are useful in case future changes are
-> required.
+On Thu, May 28, 2026 at 05:02:30PM +0100, Wei-Lin Chang wrote:
+> Hi Itaru,
 > 
-> Assisted-by: Claude:claude-opus-4.6
-> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+> On Thu, May 28, 2026 at 01:59:30PM +0900, Itaru Kitayama wrote:
+> > Refactor main() to use for_each_guest_mode() helper to create
+> > a single VCPU VM with a guest mode ID.
+> > 
+> > Signed-off-by: Itaru Kitayama <itaru.kitayama@fujitsu.com>
+> > ---
+> >  tools/testing/selftests/kvm/arm64/shadow_stage2.c | 9 +++++++--
+> >  1 file changed, 7 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/tools/testing/selftests/kvm/arm64/shadow_stage2.c b/tools/testing/selftests/kvm/arm64/shadow_stage2.c
+> > index 5bce55abdea7..05acca22eafe 100644
+> > --- a/tools/testing/selftests/kvm/arm64/shadow_stage2.c
+> > +++ b/tools/testing/selftests/kvm/arm64/shadow_stage2.c
+> > @@ -105,7 +105,7 @@ static void guest_code(void)
+> >  	GUEST_DONE();
+> >  }
+> >  
+> > -int main(void)
+> > +int run_test(enum vm_guest_mode mode, void *unused)
+> >  {
+> >  	struct kvm_vcpu_init init;
+> >  	struct kvm_vcpu *vcpu;
+> > @@ -114,7 +114,8 @@ int main(void)
+> >  	gpa_t gpa;
+> >  
+> >  	TEST_REQUIRE(kvm_check_cap(KVM_CAP_ARM_EL2));
+> > -	vm = vm_create(1);
+> > +	vm = __vm_create(VM_SHAPE(mode), 1, 0);
+> > +
+> >  
+> >  	kvm_get_default_vcpu_target(vm, &init);
+> >  	init.features[0] |= BIT(KVM_ARM_VCPU_HAS_EL2);
+> > @@ -163,3 +164,7 @@ int main(void)
+> >  	kvm_vm_free(vm);
+> >  	return 0;
+> >  }
+> > +
+> > +int main(void) {
+> > +	for_each_guest_mode(run_test, NULL);
+> > +}
+> > -- 
+> > 2.43.0
+> > 
+> 
+> Thanks! I think this is valuable.
+> I can add your patch into the next version if you don't mind?
 
-Reviewed-by: David Matlack <dmatlack@google.com>
+No, I would not, for the record your test rans with all the available guest
+modes without an issue (ie ended DONE!) on QEMU in tcg mode.
+
+Thanks,
+Itaru.
+
+> 
+> Thanks,
+> Wei-Lin Chang
