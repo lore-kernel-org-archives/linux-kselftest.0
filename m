@@ -1,158 +1,102 @@
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C705D42314A
-	for <linux-kselftest@vger.kernel.org>; Thu, 28 May 2026 16:01:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.178
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779984105; cv=pass; b=oDO2p0dOrdFI5dU7r3Cgb+4fopdjrtIiDX6LXD33xTIi+J0w/YVzZqxcToL3+Um0RoKU9YiH2G5Xfdpq1T9RYfBrOoBfE4rTMvRwUCfQ0homHqYPIYV/prwS1UR7VFhZDfL6zqd4pizHGhkVmHcSON+JJsYHc/INXLfckR8xPT0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779984105; c=relaxed/simple;
-	bh=HoRv3ITsVYotYbByUgMqXQNPFv0UOt3EzvZpSuUdf5g=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XBdcRgrG/m3ZJPa/cx+ysY4fRX1k4o1Z8ulRwQb9yosMSBri8BFt6ZQd3k6SRf4lt1BXWyZP9JpmjhQMtxo75pEIf12fde8H8ljypUA64EK1ugT43iYOoHqjXE/GhRIoAmeF09TAbtFJOAY98igYGdHplcXVL1kcOo8yaRts1o8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OubxF/dp; arc=pass smtp.client-ip=209.85.160.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 246FF3AF65B;
+	Thu, 28 May 2026 16:02:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1779984164; cv=none; b=O0aRhJ/HfVZrdivIciFhCX5WDzQtCw/CQKO4kwtc8pzzh6SPj+fc9Roo9pY+dKal5OTI+RMD5VW3O8P8f6l0tyKXN3f1Qq2iZVe/SBjfJwB+HaUHPYJY7CwdJJRkekCtaQYn1MqGbohxJOL2o5lyOUKmbmksvX1g8lKmbnlqKoY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1779984164; c=relaxed/simple;
+	bh=+3NZq5dyM0nlToai4ZJnLVK01+vkOLwJqQPh16PmDi8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IPnzOnPiLOnpMTvUaddt9n+1YD9JU3D+s4LDf/YO6qiMV9QYEU8M/nVoFU9q9OYFX0y98dQu7F+fGSZ/IAj2HuhcV2pm9aF/JnvZXuNFh/0zAUGiILyUAG2hvqA73Ntek2reOY7ewFg3LObbmYGS+BjEmy+f2pdo3shto/gsbQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=AdVSrkJg; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OubxF/dp"
-Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-50e61648f10so68511cf.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 28 May 2026 09:01:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1779984103; cv=none;
-        d=google.com; s=arc-20240605;
-        b=hwzyw5pDLIHnSg6CeqelrVha7S03DBPCa7uZ+gmaJsqXCTSELirxwXKLwIIk2efaz6
-         hbwFP/XocibMNdtgNgwZOGktSgQts6Md7q8wiiDJzZNGAl6EQZRCgBGRahvbI/4lsxjn
-         aNOuwAMhpsewo9mqiZpCmb3mwpCCK0UqtmZPoLjDmeBF4wjSqI5EdC6X4wJWxLp5MYtT
-         Ys1QxvV7ofRTiemwtuz2klbZd+1bQslw8LVwMDXYw5nmpEjW46cXPeG87hyEWEUesUhg
-         RgztGfSUskhmdEtCXbp/JuatF35MDdIrTrI6nPDgt3PZ+QlAO+Ok5fHjQWsDMwFIkQVl
-         AKBw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=BYsaex7hgpDTcxP9G0jUXkwS6mGFhA1uEqhqBMmQ8iA=;
-        fh=C+kTfdawevJQFPeWzvbCcpPCZQj2WQOnuZqzdF/46nE=;
-        b=TdmmemBTivXxLhLNC/Z4ZhBpXaUJa15jzj7IjjWWD8xahQQyrLfjMdB5PTH1zTrKwr
-         b+mTqJcnkJs0VJb4pTpge7uVIAGvYijKMlxhWGa9FuF8OkDzG9IJzI8x9NMxGguDWUzY
-         ZMK5Wzngm9fJTQCtYV8opE9mu718eheVljUT4lzqFGyYhNl3xC9kxug0tqZ1FlLni0+F
-         wE+d1r5eChQHhIVgbEerfrCUe/5f+xhzel9mp42sis3iWWnWLQ5NSmNJgg9W7w4/awYn
-         +QUyTBg2LSydsNwqai4DN27UrW3MEv5ONKPdMw+TPVDeW5/jeCDMXQIJ+h59uUZVjIDf
-         QIeQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1779984103; x=1780588903; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=BYsaex7hgpDTcxP9G0jUXkwS6mGFhA1uEqhqBMmQ8iA=;
-        b=OubxF/dpiSNIGtSl8u1p2BwCpbh97BVCkoEBTL/B2UhHE4j7iVpZGnLQrBIxxwnF3i
-         azRiJWKMMtRs6VWCnjFxERlj1judFovja7An4frexBsXWAmeQckbXCo9IxWb/8DCRFYc
-         phYl/IOr88ogXcvCtrJ1ZgmfdXHIrkOrQtqxhS9/SQYauiXiS5PYCbsbaBs2Gh0QkWFV
-         1qSVivEgbiiKqJvJSr0JnLdT2Yk1PCeKsFQScfG2aqTfKEbeJxFoXKY8dZzebrbTZhds
-         AJjjgP48mRAIATUGpYXmpCwGw2LtGUmzkREkU3hS4vJCidIa+7N7RIMCiZEXIRf7JPsb
-         qsjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779984103; x=1780588903;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BYsaex7hgpDTcxP9G0jUXkwS6mGFhA1uEqhqBMmQ8iA=;
-        b=n/Z1tOk7DcgZKZhZJsD8bXu1eIQPKdvQeEZWUPH/oBEygf9f1pIVZc+HmHOnzoe8I4
-         omGvuHFmYIUOH9MsUmY1bXRlvFOQTG8alGgE7srxQV2/Odb3ZISE5KD8FLcziB3+pnaL
-         FV8z+cJ+hCgbtbCu36EAFzb3b4EbtKLXh7vjQyCqQW2STkxV+IG95bkU4+QpuLC7RHkE
-         8TNw3eWUG+5gSL2B3IJWr3GMD0EtjziSy0QrkfLq4iwwanoSxXVfl6MGvaNbEc2WoLlW
-         EwM1LVopk4RUjpE5d90amcWoXNWS4YHBYGrfb9eIlWh//Kt9d28M3kCMN7sWuJJB4gmy
-         2hFA==
-X-Forwarded-Encrypted: i=1; AFNElJ+0k3DDdCCXbp+YH64kBMS+S/crMZK6of4fygNxT+N8lPPyX7WT4rdamlAAiAf5mte4+hO1gfDDAW8/cmUJong=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxp1/7wIv1MrhLdc5+93CRMm2D+Hgp5mXN1rypKfQ+y6yJW1zqV
-	GMIPxoamvZVWlOd0jHKsnsrf4kQ57wOqbmjZjerzhzLU/w4PlFyMZlz8wuGuWzIGoHR4X7UhYxI
-	RGOb+FGywlYyPKqyptt79lKfhn/21q8TY7ifT//We
-X-Gm-Gg: Acq92OF5B0oVUCFddSWs/QFIdc9eHSggr7ZC4NOD4ioS7vnM2wbf3wc9iL7TLR265ba
-	AigaDyY5La4dDADITFbvVisLvTjfpn89YTOdJG4wvvmr8ahe0a6gNXT2wSlfKdByQn5HRg7EFrY
-	jm/JBDIN85s0T0RNAeqN+Zjj6lIbs8lShG0EANHfYLoqa7Lr2dz5noyL23psmF2lT3rrl+eG7o1
-	YIF9mMW0bCy6u1iqSgjGLdESs4NJs1YmDi06m4WWr7PjbtivNUtfOCWDyz4bBPsdaC2KL44ExpM
-	q0XatlVZdCqBJQP5ENFesnxaVis5Gdho3Z3clVkdn6Hq368ABCe1d2CQSMsDbVj7
-X-Received: by 2002:a05:622a:8c02:b0:516:5709:45e5 with SMTP id
- d75a77b69052e-51720af90damr6978311cf.14.1779984101530; Thu, 28 May 2026
- 09:01:41 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="AdVSrkJg"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8B3E51516;
+	Thu, 28 May 2026 09:02:36 -0700 (PDT)
+Received: from thinkpad-e142931.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 65DB83F632;
+	Thu, 28 May 2026 09:02:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1779984161; bh=+3NZq5dyM0nlToai4ZJnLVK01+vkOLwJqQPh16PmDi8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=AdVSrkJgUSXeylTFkCIm0mQxisd9y46JeZF7B3NwfLleUGnxVsprAjTCoxNnqgGT1
+	 +GeybXY1oOSxQ1TFAo8hPvUlyb8DOi6eEaWL5XWPZI4PUT6E/cfrGXD7wvQvRkNjuf
+	 so/Uqn5S9Lzi/YdIgjvxWnfGmh91Dnm2B4EJPG+o=
+Date: Thu, 28 May 2026 17:02:30 +0100
+From: Wei-Lin Chang <weilin.chang@arm.com>
+To: Itaru Kitayama <itaru.kitayama@fujitsu.com>
+Cc: catalin.marinas@arm.com, joey.gouly@arm.com, kvm@vger.kernel.org, 
+	kvmarm@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, maz@kernel.org, 
+	oupton@kernel.org, pbonzini@redhat.com, shuah@kernel.org, suzuki.poulose@arm.com, 
+	will@kernel.org, yuzenghui@huawei.com
+Subject: Re: [PATCH] KVM: selftest: arm64: Run shadow_stage2 varying guest
+ modes
+Message-ID: <r2dui45c3mp2qzns6dplqj6pfima5tq7huhvbwus225xamuccn@aw753ihdimz5>
+References: <20260516183003.799058-6-weilin.chang@arm.com>
+ <20260528045930.450339-1-itaru.kitayama@fujitsu.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260515071504.2054786-2-yuyanghuang@google.com>
- <2e08eb1ca27a9a2f8ad29e1c24f779b579621b0a648589f7044799d91c5e00f5@mail.kernel.org>
- <CADXeF1GVtFHNZJb8xwFh6aadR=H19S+kja8rF185XB5=fg0D0Q@mail.gmail.com>
- <CAADnVQ+42+Th6OFGq2KawzvyKUAykazb4fXh2_uqss-T+R8VCg@mail.gmail.com>
- <CADXeF1F=7RcxAsW38w_mpFeKCLxTAh5p_XYHd=x2Ru+oajoN3Q@mail.gmail.com>
- <34b18a3e-50c0-4b0c-8ee6-d7a291619231@linux.dev> <CADXeF1HRe=U7aWx2yx6RFZ_uH-mMbdsxMheofr2tMD9wae46oQ@mail.gmail.com>
- <6083831a-dc6d-42e4-a1c8-8b7f6b966650@linux.dev> <CAKD1Yr32VMefwq7Bo6_hmhFrDVsttNFwZJZcaXS4P-ACOwWobw@mail.gmail.com>
-In-Reply-To: <CAKD1Yr32VMefwq7Bo6_hmhFrDVsttNFwZJZcaXS4P-ACOwWobw@mail.gmail.com>
-From: Yuyang Huang <yuyanghuang@google.com>
-Date: Fri, 29 May 2026 00:01:04 +0800
-X-Gm-Features: AVHnY4KYoAqz9rUtz8nGlc7zWjwvk4SuqM2I4D6DnfwQvY05GaYxUOEso4as720
-Message-ID: <CADXeF1EWY0=TyvhFap3iyKdpHNkk5pZuHD-RDnXuqMa5LrNJ2Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf: align syscall writeback behavior with
- caller-declared size
-To: Lorenzo Colitti <lorenzo@google.com>
-Cc: Leon Hwang <leon.hwang@linux.dev>, Alexei Starovoitov <alexei.starovoitov@gmail.com>, 
-	Daniel Borkmann <daniel@iogearbox.net>, bot+bpf-ci@kernel.org, 
-	Alexei Starovoitov <ast@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Nikolay Aleksandrov <razor@blackwall.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>, 
-	Song Liu <song@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Yonghong Song <yonghong.song@linux.dev>, bpf <bpf@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, 
-	Network Development <netdev@vger.kernel.org>, =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>, 
-	Martin KaFai Lau <martin.lau@kernel.org>, Chris Mason <clm@meta.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260528045930.450339-1-itaru.kitayama@fujitsu.com>
 
->It seems you haven't convinced Alexei in that thread.
->Attached below.
+Hi Itaru,
 
-Thanks for the test program. It proves my hypothesis: you had to
-manually unmap a page boundary to force that `-EFAULT`. The part that
-is still under discussion is whether there is a kernel bug or not. I
-think there is no question about the behavior of when the -EFAULT will
-be triggered.
+On Thu, May 28, 2026 at 01:59:30PM +0900, Itaru Kitayama wrote:
+> Refactor main() to use for_each_guest_mode() helper to create
+> a single VCPU VM with a guest mode ID.
+> 
+> Signed-off-by: Itaru Kitayama <itaru.kitayama@fujitsu.com>
+> ---
+>  tools/testing/selftests/kvm/arm64/shadow_stage2.c | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/arm64/shadow_stage2.c b/tools/testing/selftests/kvm/arm64/shadow_stage2.c
+> index 5bce55abdea7..05acca22eafe 100644
+> --- a/tools/testing/selftests/kvm/arm64/shadow_stage2.c
+> +++ b/tools/testing/selftests/kvm/arm64/shadow_stage2.c
+> @@ -105,7 +105,7 @@ static void guest_code(void)
+>  	GUEST_DONE();
+>  }
+>  
+> -int main(void)
+> +int run_test(enum vm_guest_mode mode, void *unused)
+>  {
+>  	struct kvm_vcpu_init init;
+>  	struct kvm_vcpu *vcpu;
+> @@ -114,7 +114,8 @@ int main(void)
+>  	gpa_t gpa;
+>  
+>  	TEST_REQUIRE(kvm_check_cap(KVM_CAP_ARM_EL2));
+> -	vm = vm_create(1);
+> +	vm = __vm_create(VM_SHAPE(mode), 1, 0);
+> +
+>  
+>  	kvm_get_default_vcpu_target(vm, &init);
+>  	init.features[0] |= BIT(KVM_ARM_VCPU_HAS_EL2);
+> @@ -163,3 +164,7 @@ int main(void)
+>  	kvm_vm_free(vm);
+>  	return 0;
+>  }
+> +
+> +int main(void) {
+> +	for_each_guest_mode(run_test, NULL);
+> +}
+> -- 
+> 2.43.0
+> 
 
-> To avoid such stack corruption, you should reserve enough space for the
-> query, e.g., by extracting union bpf_attr from kernel BTF vmlinux.
-
-I agree that your suggestion to extract the layout from BTF is good
-practice when writing a new program from scratch. However, our focus
-here is on maintaining backward compatibility for existing binaries.
-
-I think the core question is: **is a 40-byte query a valid request or not?**
-
-From my understanding, under the syscall ABI contract, passing a
-40-byte buffer (at least for query BPF_CGROUP_INET_INGRESS which has
-been stable and supported since 2017) is 100% valid and legal. **The
-kernel must never break existing userspace on a kernel upgrade**.
-
-One example of a syscall that maintains such backward compatibility is
-openat2. The documentation notes it as follows:
-
-EINVAL size was smaller than **any known version of struct open_how**.
-
-If this bpf() syscall want to follow the same way to maintain the ABI
-contract, your `mmap` test actually let kernel return -EINVAL to a
-userspace program that passes a 40-byte buffer (declaring `size =
-40`),  because the kernel unconditionally tries to write to offset 56,
-which happens to be unmapped.
-
-Are you arguing that the `bpf()` syscall does not need to follow the
-ABI contract to maintain backward compatibility, and that it is
-expected that newer kernels can break binaries compiled against older
-kernels? If you believe that all binaries must be recompiled or
-dynamically updated against the latest vmlinux BTF upon every kernel
-upgrade, please be explicit about it.
+Thanks! I think this is valuable.
+I can add your patch into the next version if you don't mind?
 
 Thanks,
-
-Yuyang
+Wei-Lin Chang
