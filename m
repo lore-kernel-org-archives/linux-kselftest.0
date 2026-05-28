@@ -1,89 +1,84 @@
-Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay.hostedemail.com (smtprelay0013.hostedemail.com [216.40.44.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EBE93EDADA
-	for <linux-kselftest@vger.kernel.org>; Thu, 28 May 2026 13:13:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B85AB3F0AAD;
+	Thu, 28 May 2026 13:13:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779973999; cv=none; b=biP4bVNnzurIqY7ythq9KwtexZC1fiYBZAtmFw/xN8k/Qk19MjGvAVCdnHGXIo3/gPJhHGTKe5xQT8vMZR8iuXwS4V+bb3K246ATz9wHaAz5tVLk5uSZaaQzJNlrg3L7Q5ISEpw+njxd9zX6LHH4/sZyc7leGBAwp4giQ7nTimI=
+	t=1779974040; cv=none; b=FNlnmr9yMj/WHG46x8qGwdxPrUjjcVy/tutiAaGrbSr94zB5m/go/7ZGcSz0FkN36vlLY+2/qPpamBxpHkWIpNJcrn1feSqM3fWtnJfYua9FjqNOCOXWTitCc6784Ha/xVjSZqPQVdpWNq3ySpOu6GjK7IuCnZo/MF2IjIxL40U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779973999; c=relaxed/simple;
-	bh=TZLmQ/KYY1udKoBKGzp70J/oplmxxcPGnNNgRx6uJ8s=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=TrSb9FVIOHl9bCxTgiKvwwEdelLZQc9I6cJXTS1xe25wWqwSP8x8S3hNHM6ZH7VWhjMM3duj125rNfC9HCJ2/KXKBiHiZF1pMnt8py5mYQyA0QJxP3ovAnc1alHCme/7kEUiFnzm9xF+D7FxEeia22ZFsvSXnkXbDVQNANKVx1U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=SdeiiZeU; arc=none smtp.client-ip=209.85.215.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SdeiiZeU"
-Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-c8281d4cef8so6071045a12.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 28 May 2026 06:13:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1779973998; x=1780578798; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=C0iI9c87twl9a+8/4I6jTFHT53Suni3Jvj4xWPyZqc8=;
-        b=SdeiiZeUSBKfvBWxEyDLQkTGT8MvwomAWsT8XFQ3dpj1QICxfLFjFHZYkZ7aDWjGcY
-         VCcYtVeqqyVgs2RgEJYc/LWklMhyCnB8FPME7nU8EHVE8tGfvDMZs4fhgnEDylbqXOJU
-         +dLpWV45ec3K3C4cRTO/2o5m4D6AznfZGRIDXVwxJudqD3MHOGPk9mtLOHBTxE/Mert/
-         rgXFs3a7y3xiAPHwTFuj/HMKIIE6UK1r5iYYsE17yIbBxaw531hbQjQTFyHVkMPHORnK
-         9Lwt0qXSRvL9zXlqmfw4Ra3F2fiYVo5wYfGPEXSt3sjwYX5cUP959IIus0nuGlsWm5rJ
-         qpiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779973998; x=1780578798;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=C0iI9c87twl9a+8/4I6jTFHT53Suni3Jvj4xWPyZqc8=;
-        b=M8kcB07yy1Y+EM1qBzTKapE/qoz8C/Y97BP+S94hqVzqLwcpEr4tzgdl60/2jZviEz
-         O8UIVVjuLfO4Z5Y3gst1rrMccmbFevP8cUeoj5sAueextcrshHYW9tVm/jssTwEH/pdA
-         NKNrVOftFmGQ8B4HGi4p4Vyvpypb2CWSdc8GF5kDCNivOssdDt5eP1QftEKS8vkVAzWA
-         0lCZxTSJ/iImcxHCnS6P6UbtLI9PiRjOMSyazsYbEBPlh8gQ25Cbvrrvf7/NTnlDkYsT
-         YTFR/hc4YsIFZsdKPnEtA9fiyZJ4sgDVBoNkSvoApjffdxx2qLNVSLjO4vdYaSvJs9Fq
-         CZ4A==
-X-Forwarded-Encrypted: i=1; AFNElJ8/bIB34PNEEC418RScTrCu9t0V8ZuK927ZDNMjcrROgX96TS++jC6NM95RGEoACT1T7Of9VDRC5jI0/W1F6UY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw+QRvZvlE5YSDlbgpYuew5VSWPkx9t8VPOoQDZRXVrE5JoY6Hf
-	Xw166ttjnD4iAP6iFY/LnUIZXZ1PPaDzBNA15wAFH/x3V3jOSRIoqqWLNkTw/pXfbzyKnczZxpO
-	aMLshGw==
-X-Received: from pgvt6.prod.google.com ([2002:a65:64c6:0:b0:c7f:cb0a:3b6b])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:a06:b0:3a3:90d8:fd7f
- with SMTP id adf61e73a8af0-3b328c3af24mr28729183637.8.1779973997582; Thu, 28
- May 2026 06:13:17 -0700 (PDT)
-Date: Thu, 28 May 2026 06:13:16 -0700
-In-Reply-To: <20260528094542.2529735-1-piotr.zarycki@gmail.com>
+	s=arc-20240116; t=1779974040; c=relaxed/simple;
+	bh=TNt4FZNUVXbUONxH6eLUa6thNygoQjXrmnVZ2euxCQM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=j+QPJKO69UytJxkZ4ZAGbthKPuye8Qa4ChhmDASirmZ2F2Ag58NSlJB86VvddPFyLk2Ut7qcRf+3hdNMw+6WiyudBWHkWtwRtaL9nALKc24rRh4QgV2Pf2ZvuVREtuYP8EERQY47JeofTWT11hejsKs9abQrLW5O9FhPRzopzXs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf11.hostedemail.com (lb01a-stub [10.200.18.249])
+	by unirelay05.hostedemail.com (Postfix) with ESMTP id BB1214080E;
+	Thu, 28 May 2026 13:13:51 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf11.hostedemail.com (Postfix) with ESMTPA id B74EC2002C;
+	Thu, 28 May 2026 13:13:49 +0000 (UTC)
+Date: Thu, 28 May 2026 09:13:48 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Tianchen Ding <dtcccc@linux.alibaba.com>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Shuah Khan <shuah@kernel.org>,
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2] selftests/ftrace: Fix trace_marker_raw test on 64K
+ page kernels
+Message-ID: <20260528091348.71ae3aa3@fedora>
+In-Reply-To: <20260528022417.1813745-1-dtcccc@linux.alibaba.com>
+References: <20260527095438.1794905-1-dtcccc@linux.alibaba.com>
+	<20260528022417.1813745-1-dtcccc@linux.alibaba.com>
+X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260528094542.2529735-1-piotr.zarycki@gmail.com>
-Message-ID: <ahg_bNoktd0XOKV8@google.com>
-Subject: Re: [PATCH] KVM: selftests: hyperv_tlb_flush: use swap() to swap PTEs
-From: Sean Christopherson <seanjc@google.com>
-To: Piotr Zarycki <piotr.zarycki@gmail.com>
-Cc: pbonzini@redhat.com, shuah@kernel.org, dmatlack@google.com, 
-	vkuznets@redhat.com, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Stat-Signature: 19hf81xh8jp4zxqph9uo3gmz4r1aocgx
+X-Rspamd-Server: rspamout08
+X-Rspamd-Queue-Id: B74EC2002C
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1/8mrO9fiLpeHdufBy60toekVMt5AHvoU0=
+X-HE-Tag: 1779974029-622999
+X-HE-Meta: U2FsdGVkX1+Wg9S6O66C7CEc8TiWRZ8DoImmg1Lf/RKCwYpsua4qiXpH5wKR9UprqgDNDtLcCAC54zlDkaa1vSoKiJfdYzn5Z35xW5rK85gW9Rvgv2c4ENjgZ+xhSR3iY4lHTv1VHI0w33gAAhYke/SOs38DRvGQOl5z+8b6/ckrdjG3bWNdwSafXDiPRUT4a5gP5QZwkhPzVuDueCQA+JUBbMK/s4YQyE1u6AFs/zK85VdKgStIfyohin84zTPhNYbSjXzkl3mB/lIjrlxTsM1baRG2lyO05i6YJiA8/m3fmd6gZZRXZXN5Eh7+IXIgoH4D/Yqk4h+gWmn5rl0LDJfQ65glQfkX
 
-On Thu, May 28, 2026, Piotr Zarycki wrote:
-> Replace the open-coded swap with the swap() macro.
-> 
-> Signed-off-by: Piotr Zarycki <piotr.zarycki@gmail.com>
-> ---
->  tools/testing/selftests/kvm/include/test_util.h    | 2 ++
->  tools/testing/selftests/kvm/x86/hyperv_tlb_flush.c | 6 +-----
->  2 files changed, 3 insertions(+), 5 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/include/test_util.h b/tools/testing/selftests/kvm/include/test_util.h
-> index d9b433b834f1..a66bc9ccba65 100644
-> --- a/tools/testing/selftests/kvm/include/test_util.h
-> +++ b/tools/testing/selftests/kvm/include/test_util.h
-> @@ -26,6 +26,8 @@
->  
->  #define msecs_to_usecs(msec)    ((msec) * 1000ULL)
->  
-> +#define swap(a, b)  do { typeof(a) __tmp = (a); (a) = (b); (b) = __tmp; } while (0)
+On Thu, 28 May 2026 10:24:17 +0800
+Tianchen Ding <dtcccc@linux.alibaba.com> wrote:
 
-This belongs in a common tools/ header, not in KVM's test_util.h.  I don't see
-an obvious place, maybe tools/include/linux/kernel.h?
+> 
+> diff --git a/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc b/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc
+> index 8e905d4fe6dd..f68f1901f65f 100644
+> --- a/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc
+> +++ b/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc
+> @@ -43,8 +43,11 @@ write_buffer() {
+>  	id=$1
+>  	size=$2
+>  
+> -	# write the string into the raw marker
+> -	make_str $id $size > trace_marker_raw
+> +	# Pipe through dd to ensure a single atomic write() syscall
+> +	# on architectures with 64K pages, where shell's printf builtin
+> +	# uses stdio buffering which may split the output into multiple
+> +	# writes.
+> +	make_str $id $size | dd of=trace_marker_raw bs=`expr $size + 4` iflag=fullblock
+
+I was looking at this more, and I'm not comfortable with the hard coded
+4 above. I rather use the length of the string. Something like:
+
+	str=`make_str $id $size`
+	len=${#str}
+	echo "$str" | dd of=trace_marker_raw bs=$len iflag=fullblock
+
+-- Steve
+
+>  }
+>  
+>  
+
