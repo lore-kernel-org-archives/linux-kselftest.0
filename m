@@ -1,174 +1,126 @@
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F569315D33
-	for <linux-kselftest@vger.kernel.org>; Thu, 28 May 2026 05:27:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 374A31A680F;
+	Thu, 28 May 2026 05:38:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.113
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779946024; cv=none; b=K2RcaUlzNFf6lVxJR9fgR6NPl3A0bq/TJRVHdV0s25p2fhg9IyWfd9pXV4U1hAgswkae0lYyFXi3ALAs/cpRzjyTHQDEjFFCPFy25Mm/NG/Ys4VFnB2Dt6tlxNjY74nLFIaGdF30a8yjUaY7oJy/Bgrg3d7pMtrvz+FDfFrdyuQ=
+	t=1779946698; cv=none; b=SJgVFGRKhTC8mUyPOq1Dsor/FQbTfWZ1vR1qghBngYFz6r36xWwR9lGm6SXKRpNrN74CBbjgTN8a1tkSNSmlYYHYvtNEX999HgOvj+3bpkigwYAxF4EbWFXA5rxOURmW9u5WziFJ6yYFSIx+wTl0KybRbuEXu/JPHnHS/+5lNqA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779946024; c=relaxed/simple;
-	bh=BME0mcse/2cL4aD8NNnE58IwHey6vdaf0KgJLaRCaLg=;
+	s=arc-20240116; t=1779946698; c=relaxed/simple;
+	bh=KzgnllfJFQ+v4lXzMi8bI9BcYh/VEPg5mHFqINwn6ik=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cCH1IphhnsD5fygkaluovs/Mi7/B064ngVIWbvN4D60hUJS0QP1irIcj6+mYa9fYDxyApL8TnHf7u/gjM462jmVqKCwHW3BkCVwKIPWsDEM+CzVKo8lrmj3D1+/8K7V+odedPONC1qGJGzjI5az0N0hVDQpfq4lUiYxYi+OiTbo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DDZe9qnK; arc=none smtp.client-ip=209.85.216.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 MIME-Version:Content-Type; b=ie0AwwDjSQkwDRVQwnuWydRUExkeifhA4NgkCfl4SQSL1yLfUPaHIAG4EP/z1uofJQDXwN8CBH2kgfNUW8aNAVK28Umci+RrHokvygdXhaAG0tg2WfyPkb4KISPZln9+qfTF/ulHhzH1+q55TkqLNtiFuwzBULiAggq6v8+zcBs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=EaSUVzRC; arc=none smtp.client-ip=115.124.30.113
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DDZe9qnK"
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-36ab8816a35so2609019a91.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 27 May 2026 22:27:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1779946020; x=1780550820; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LCcNiDXdQEqR3ER2Fj1mnGxx4mfjr4kOZtzyjsTx4OA=;
-        b=DDZe9qnK0GECMHdXkYoqi6a3ROOX0tSFkZjkUKNZGWE4qPqGsJ4unSJrXdubeb2o63
-         Us/AIm4SBea0XQFfEso3Jh8oBTnhKduIIKJlDvNcPK+oJonPh5PEWzaQezkes2k5u7MV
-         9cRkCXMCUgpcXAExSS5KK3G7ZruhwLi7N9lzZwToTLKswh/HG/CC3+MlPBo/AsItsJeI
-         kfHiT69G8BTEneoQCFfWTcjZ5+YImlVMYIjh0qWmyiWm4ZPjOxw41so3djP9jCbnjfjh
-         wmQqqAgNEhso91zC1YlDkoHc6cpj2C9wuhv0ftMA+lJPDOtnHbjvnQz1+cH6nh8rh/3u
-         TS/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779946020; x=1780550820;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=LCcNiDXdQEqR3ER2Fj1mnGxx4mfjr4kOZtzyjsTx4OA=;
-        b=P2PUFwnDVz6V+CBP1wuMEXl+oaNW7wSXjikcrRfhSOQyH0CUPFZrjvhddFbK9la4NL
-         lZZ0MagB8H5k09cW51VVNSTcfTHyNPHD/QdalFQ7OM4SBQzZKEgG34xvBxAwal7/r0qy
-         NCVXmUTAENV9UjBP5A15NMGCsdm7sFauBN8tpqIS7w+bgFYJOEZpgpQWDy+TJxL/C51F
-         XbUNFKRtRfdOL/qDz9xEnnnAI6aGQ8h1KCx6mdNAT15wYGJBrtsHibFmlNXOmlisKdE1
-         Ya020am+vZkv3GXAWNUzfrOL2alDJlsxUF+wwO6WFzL09bkKb3WeoM+5ekjXBzVVRxaE
-         5edw==
-X-Forwarded-Encrypted: i=1; AFNElJ/vPGEPMC5reccFeu0OJDkB0H5wQeJEru4P767ISL0o8t8+Dvwo2ls8yAXSsTGCXzSADMXr6sHgIIxx0pJtZR4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwPDD3lilF/SAPp1aQER+djbifuQcuu0JN6Xu7ulfAVFftRn7j7
-	JC5X5RXr+ub+xYKyKxFSWPsMNXhym+Agdzwr6DaS5etwH2Q3MaMe5hMM
-X-Gm-Gg: Acq92OFIeUd7yFrwLgL+onKBF3gODvTq8H24LIBQspa5WnVm8dj4itx23z0i7VGVfCp
-	mtV5aK6mvcDCQoIOh0uqx+0jLNsnbmuTZ+Uko93Rz88H3ywcZ6LkSSLvR+VeO4pkf0Cm0bZo0X2
-	+5BJHUU66HArZrpy6ArcI/RBGftsTi4rfj8op/B0+vr6b8MAsPM4u/43JiIO/0hL629xcbqAQQm
-	lTOOFFzb2QMmy92hwz0zrNixPvqaRUKnQ/UvLEYEzrJuV4Ju2U7UW6HZWZV1W8jzokNbZFugIQj
-	n9Hwl6XniOJ9iAD2sHMCf9byZsH+mrr95ziokeD9ep0cs4RkFvJDAvbw6lSMGMusp2catHY71C8
-	PDRD6YPD53LmapAOxCknyE8f8/zIYnCtGH+dtcm9c2eVJ/r1j3qX1fBxx86f8dOMljd24lxBQCB
-	someaFkcxnDlj7k5M+TpgcPdDuzb04Z13twBqArD7I8SkHw21dh4qAxw==
-X-Received: by 2002:a17:903:1b28:b0:2bd:606d:b342 with SMTP id d9443c01a7336-2beb05d366amr303009205ad.26.1779946020423;
-        Wed, 27 May 2026 22:27:00 -0700 (PDT)
-Received: from foxirain.tailf10b76.ts.net ([220.83.29.221])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2beb58c7046sm172642695ad.57.2026.05.27.22.26.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 May 2026 22:26:59 -0700 (PDT)
-From: Taegu Ha <hataegu0826@gmail.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>
-Cc: Yonghong Song <yonghong.song@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="EaSUVzRC"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1779946693; h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
+	bh=g9xXdOEeD6a9QCmlif50MRE5E3DhBPqmO64p4ySl0/c=;
+	b=EaSUVzRCf2pR9AZoP0ovS2qOpYU3tTTIDnnn80Xv4o0v9zgeZElevPZpqIlaWvmf4W1aMe2/pzx1qShphfRsMYF5H1u357heUzbkVTvQCPuVJOY5VSUNZ39M3JdX1pLXfCHJU/srK3Kb+4ir5/8aazFRdLaQgSvto7qT+JgDHUY=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R271e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam011083073210;MF=wanghan@linux.alibaba.com;NM=1;PH=DS;RN=30;SR=0;TI=SMTPD_---0X3lY9RP_1779946689;
+Received: from wanghan-Workstation..(mailfrom:wanghan@linux.alibaba.com fp:SMTPD_---0X3lY9RP_1779946689 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Thu, 28 May 2026 13:38:11 +0800
+From: Wang Han <wanghan@linux.alibaba.com>
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Chen Pei <cp0613@linux.alibaba.com>,
+	Andy Chiu <andybnac@gmail.com>,
+	=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>,
+	Deepak Gupta <debug@rivosinc.com>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Jiri Kosina <jikos@kernel.org>,
+	Miroslav Benes <mbenes@suse.cz>,
+	Petr Mladek <pmladek@suse.com>,
+	Joe Lawrence <joe.lawrence@redhat.com>,
 	Shuah Khan <shuah@kernel.org>,
-	bpf@vger.kernel.org,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	linux-riscv@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	live-patching@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	Taegu Ha <hataegu0826@gmail.com>
-Subject: [PATCH v2 1/1] bpf: reject overlarge global subprog argument sizes
-Date: Thu, 28 May 2026 14:25:33 +0900
-Message-ID: <20260528052533.3940181-2-hataegu0826@gmail.com>
+	linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH 1/8] scripts/sorttable: Handle RISC-V patchable ftrace entries
+Date: Thu, 28 May 2026 13:38:06 +0800
+Message-ID: <20260528053807.1511742-1-wanghan@linux.alibaba.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260528052533.3940181-1-hataegu0826@gmail.com>
-References: <20260527052539.3388700-1-hataegu0826@gmail.com>
- <20260528052533.3940181-1-hataegu0826@gmail.com>
+In-Reply-To: <20260527113028.4b21a5de@fedora>
+References: <20260527123530.2593918-1-wanghan@linux.alibaba.com> <20260527123530.2593918-2-wanghan@linux.alibaba.com> <20260527113028.4b21a5de@fedora>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Global subprogram argument checking derives generic pointer sizes from BTF
-and passes the resolved size to check_mem_reg() as a u32. The access-size
-validation path then uses a signed int, and stack pointers negate the value
-before calling check_helper_mem_access().
+[Resend: my first reply went out as a private message to Steve only,
+due to a local git send-email config quirk that dropped the Cc list.
+Re-sending now with the original cc list so the discussion is
+on-record. Sorry for the duplicate, Steve.]
 
-This creates a wrap when BTF describes a pointee size larger than S32_MAX.
-For example, a global subprogram argument of type:
+On Wed, 27 May 2026 11:30:28 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-  int (*p)[0x3fffffff]
+> So basically RISCV has the same problem as ARM64 with patchable
+> entries. As this may happen for other archs in the future, I would like
+> to group them together like this:
+[...]
+> does the above work for you? (Although I didn't even compile test it).
 
-has a BTF-resolved pointee size of 0xfffffffc bytes. At a call site the
-caller can pass a pointer to a 4-byte stack slot at fp-4. The current
-PTR_TO_STACK path computes:
+Yes, this is clearly better - a single grouped block makes future
+patchable-entry architectures trivial to add. I will fold it into v2
+with two small adjustments to keep it compiling cleanly:
 
-  size = -(int)mem_size
+  - s/case RISCV/case EM_RISCV/ (two places).
+  - Put the shared "before_func = 8" on its own line under
+    case EM_RISCV: with a standard /* fallthrough */ comment,
+    otherwise GCC -Wimplicit-fallthrough warns between EM_AARCH64
+    and EM_RISCV.
 
-so 0xfffffffc becomes -4 as a signed int and the negation validates only
-a 4-byte stack range. That range is covered by the caller's stack slot,
-so the call is accepted.
+Resulting switch:
 
-The callee is then verified independently with R1 as PTR_TO_MEM and
-mem_size 0xfffffffc. A small instruction such as:
+	switch (elf_map_machine(ehdr)) {
+	#ifdef MCOUNT_SORT_ENABLED
+	case EM_AARCH64:
+		sort_reloc = true;
+		rela_type = 0x403;
+		/* fallthrough */
+	case EM_RISCV:
+		/* arm64 and RISC-V place patchable entries before the function */
+		before_func = 8;
+	#else
+	case EM_AARCH64:
+	case EM_RISCV:
+	#endif
+		/* fallthrough */
+	case EM_386:
+	case EM_LOONGARCH:
+	case EM_S390:
+	case EM_X86_64:
+		custom_sort = sort_relative_table_with_data;
+		break;
 
-  r0 = *(u32 *)(r1 + 4)
+Built scripts/sorttable with the kernel host build (both with and
+without MCOUNT_SORT_ENABLED), no warnings. I'll add your Suggested-by
+and send v2 shortly.
 
-is accepted as being inside that BTF-described memory region. At run time,
-however, the actual argument value is still fp-4, so r1 + 4 addresses fp+0,
-outside the 4-byte object that the caller provided.
-
-Reject sizes that cannot be represented by the verifier's signed
-access-size API before the stack-specific negation. Add a verifier
-regression test for the oversized BTF argument.
-
-Fixes: 2cb27158adb3 ("bpf: poison dead stack slots")
-Signed-off-by: Taegu Ha <hataegu0826@gmail.com>
----
- kernel/bpf/verifier.c                           |  5 +++++
- .../bpf/progs/verifier_global_subprogs.c        | 17 +++++++++++++++++
- 2 files changed, 22 insertions(+)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 7fb88e1cd7c4..caa5a6323810 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -7107,6 +7107,11 @@ static int check_mem_reg(struct bpf_verifier_env *env, struct bpf_reg_state *reg
- 	struct bpf_reg_state saved_reg;
- 	int err;
- 
-+	if (mem_size > S32_MAX) {
-+		verbose(env, "R%d memory size %u is too large\n", regno, mem_size);
-+		return -EACCES;
-+	}
-+
- 	if (bpf_register_is_null(reg))
- 		return 0;
- 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
-index 1e08aff7532e..0ff8f85b4d46 100644
---- a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
-@@ -151,6 +151,23 @@ int anon_user_mem_valid(void *ctx)
- 	return subprog_user_anon_mem(&t);
- }
- 
-+__noinline __weak int subprog_user_anon_mem_huge(int (*p)[0x3fffffff])
-+{
-+	return p ? (*p)[1] : 0;
-+}
-+
-+SEC("?tracepoint")
-+__failure __log_level(2)
-+__msg("R1 memory size 4294967292 is too large")
-+int anon_user_mem_huge_size_invalid(void *ctx)
-+{
-+	int (*p)[0x3fffffff];
-+	int tiny = 42;
-+
-+	p = (void *)&tiny;
-+	return subprog_user_anon_mem_huge(p) + tiny;
-+}
-+
- __noinline __weak int subprog_nonnull_ptr_good(int *p1 __arg_nonnull, int *p2 __arg_nonnull)
- {
- 	return (*p1) * (*p2); /* good, no need for NULL checks */
--- 
-2.43.0
-
+Thanks!
+Wang Han
