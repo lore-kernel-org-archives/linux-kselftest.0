@@ -1,73 +1,247 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D118DDCD;
-	Thu, 28 May 2026 14:32:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C2A43D3CF9
+	for <linux-kselftest@vger.kernel.org>; Thu, 28 May 2026 14:37:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779978738; cv=none; b=mU32GLP3h+DqX6C86g1BQvd/aR81KVi94SUA4Y1f2FPUIOvkFGxtLDKZd5nq+OvWYT5IKVyLx4zzLv3Yfg7W/4+TVJFJIqxEpwDb+bSGVngg0O67uVAuagMPh2bfxKVigqnLi4/GEKXC1Wu3SBHeH/iuUgL1lDFEEdE1UX5rLnc=
+	t=1779979052; cv=none; b=eo1G7V9ZIEY4VytdD4w7B+73s/9EUr1Rgn5aNlJbKPnpHZO1tS6kxS/tQ052Co0FMmc4YVtjdM5PGg8N9Hh357QtYfD2/locC5mHLAehMh6dbf8Rz6zLRMyLFYkRgZ9h0x8KTULGj0TcsOKNbAqpYpUllBFScg/AZ27ZBmClrOk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779978738; c=relaxed/simple;
-	bh=lebyUECeIXunKzxGshyjC38qWAjOLQA3rhzAtnmSPYY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=I7pD9/Rlba8nTvlYgl0xZ8XJaE9/4HMUrGYR4FI+YdceEhOFKp2UksUKGO5IGR2aaNVDrvtAvdNQCj1o7wbOQKqvEA/82yC68oW0Mufi1ol3V8mS/a09RJqsx+sxQTcHZy021oN6bU33fAMrEcRVlfxwYcySzRMIZiA0l7lnphQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iUCKmi9r; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779979052; c=relaxed/simple;
+	bh=dZTxUiogj1aR3Uf/uHGWoQaxcjeR2QGtvyYDBQdUOac=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MKADxQezz8+eLilbtGXULER7iyjuz9Wc16ZSZCoLzf78c77Rlh/ufPyPUmuCTyMmd3Hba1Mfy6Dd6bAfV1I9M7BluG07pqGzpNkAIZYnlfek9UIkOv4KZrV5k0zkR6M3TdSRZj+YHHQdKB6nh/kVbNFjyJin8ga6fcuz84KvgVE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=n2Wr1sUO; arc=none smtp.client-ip=91.218.175.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iUCKmi9r"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61FFA1F000E9;
-	Thu, 28 May 2026 14:32:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779978737;
-	bh=L6Hoh14jwpBsk0F4PvvCTKLeaoeOEHn1zN3j2kuRmgA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=iUCKmi9rswbLLaQKV1pfqUD1CcXPyXEPmZYpdrdV8+ZvVgg3/B522kSKrIYWGO/ZA
-	 6OvDO/iGk185dYkGrH0V0/o5vPPArjiqayglj82BZ7DTGgODLYCFDqTUZx7k7xGedF
-	 IpP3htgfk29MzCkFqcLgl+Lc/Ss+v5wziT58Rd4ZISqmRyvN0EbfXG2yor4nmipke/
-	 /rpXuLdcZkDUaP780lwsCHF/Y1GKhZaQQbCTa6NjVoNCjouRgtprcOmq2/45/dTS1R
-	 n8fqCxXdwm3q3aj21ioe+tIvYHpVeMa4YNerudehoAiO3G8lV9W8KhjM+QVjgBkxMA
-	 GMYekX4H/wpuA==
-From: SeongJae Park <sj@kernel.org>
-To: niecheng <niecheng1@uniontech.com>
-Cc: SeongJae Park <sj@kernel.org>,
-	shuah@kernel.org,
-	damon@lists.linux.dev,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	kernel@uniontech.com
-Subject: Re: [PATCH 0/2] selftests/damon: fix and validate memcg filter memcg_path handling
-Date: Thu, 28 May 2026 07:32:03 -0700
-Message-ID: <20260528143204.153713-1-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <9479D47690DD7F07+20260528081039.1192194-1-niecheng1@uniontech.com>
-References: 
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="n2Wr1sUO"
+Message-ID: <6083831a-dc6d-42e4-a1c8-8b7f6b966650@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1779979038;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=BvpeIQqkHEsnrCmygdg5gmFmZfNCIRWaXmGR3V8Uu3s=;
+	b=n2Wr1sUO3Jaiyc/aAXsK2vEYjliWdOM9bOCPTPYFe9J8ZEkyTNy8hxJWitkq7tkxZd66iu
+	SJUfHJmPmDV/vU8EBTDfZ+c/yHx1QUnaL/4Am49NHyj+jqJemLRnp4eX76k6idgHnO9Y4r
+	XwMGqpIM2qTuFDl+sn9+sfrQdyhtFOQ=
+Date: Thu, 28 May 2026 22:36:57 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next 1/2] bpf: align syscall writeback behavior with
+ caller-declared size
+To: Yuyang Huang <yuyanghuang@google.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Daniel Borkmann <daniel@iogearbox.net>, bot+bpf-ci@kernel.org,
+ Alexei Starovoitov <ast@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Jiri Olsa <jolsa@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>,
+ Nikolay Aleksandrov <razor@blackwall.org>, Paolo Abeni <pabeni@redhat.com>,
+ Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>,
+ Song Liu <song@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+ Yonghong Song <yonghong.song@linux.dev>, bpf <bpf@vger.kernel.org>,
+ LKML <linux-kernel@vger.kernel.org>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+ Network Development <netdev@vger.kernel.org>,
+ =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>,
+ Lorenzo Colitti <lorenzo@google.com>,
+ Martin KaFai Lau <martin.lau@kernel.org>, Chris Mason <clm@meta.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>
+References: <20260515071504.2054786-2-yuyanghuang@google.com>
+ <2e08eb1ca27a9a2f8ad29e1c24f779b579621b0a648589f7044799d91c5e00f5@mail.kernel.org>
+ <CADXeF1GVtFHNZJb8xwFh6aadR=H19S+kja8rF185XB5=fg0D0Q@mail.gmail.com>
+ <CAADnVQ+42+Th6OFGq2KawzvyKUAykazb4fXh2_uqss-T+R8VCg@mail.gmail.com>
+ <CADXeF1F=7RcxAsW38w_mpFeKCLxTAh5p_XYHd=x2Ru+oajoN3Q@mail.gmail.com>
+ <34b18a3e-50c0-4b0c-8ee6-d7a291619231@linux.dev>
+ <CADXeF1HRe=U7aWx2yx6RFZ_uH-mMbdsxMheofr2tMD9wae46oQ@mail.gmail.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <CADXeF1HRe=U7aWx2yx6RFZ_uH-mMbdsxMheofr2tMD9wae46oQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Somehow the mails of this series don't have correct 'in-reply-to' field, and
-therefore not constructed as a single thread but three individual threads.
-Please check your setup for next time.
-
-On Thu, 28 May 2026 16:10:37 +0800 niecheng <niecheng1@uniontech.com> wrote:
-
-> This series fixes memcg_path handling in DamosFilter and adds memcg
-> filter validation to the DAMON sysfs selftest.
+On 2026/5/28 21:20, Yuyang Huang wrote:
+> On Thu, May 28, 2026 at 1:43 PM Leon Hwang <leon.hwang@linux.dev> wrote:
+>>
+>> On 25/5/26 15:21, Yuyang Huang wrote:
+>> [...]
+>>>
+>>> Feel free to let us know your thoughts.
+>>>
+>> I believe this is a user space issue instead of a kernel bug.
+>>
+>> I tried to use mmap() memory as uattr that got -EFAULT instead of crash.
+>>
+>> [................] /* mmap() memory */
+>>              ^ tail 40B as uattr
+>>                     ^ 56B offset for copy_to_user()
+>>
+>> Thanks,
+>> Leon
+>>
 > 
-> The first patch fixes DamosFilter so memcg_path is stored as a string
-> for sysfs staging.  The second patch adds memcg filter validation by
-> checking the memcg_path sysfs readback.
+> Thanks for testing this!
+> 
+> There are some discussion in the original thread:
+> https://lore.kernel.org/all/CANP3RGfZTXM_u=E_atoomPZXutoQJ02nOMkCCR-YBZbOm2suWA@mail.gmail.com/
+> as follows, which might answer your question
+> 
 
-Nice catches and improvements, thank you!
+It seems you haven't convinced Alexei in that thread.
 
-I left a few comments on individual pattches, though.
+>>>> If the uattr indeed has less than needed space, then for
+>>>>          if (copy_to_user(&uattr->query.revision, &revision, sizeof(revision)))
+>>>>                  return -EFAULT;
+>>>> the kernel will return -EFAULT to user space.
+>>>>
+>>>> Maybe userspace didn't handle the return code properly and causing
+>>>> user space corruption and segfaults. This shouldn't be a kernel issue.
+>>>> Maybe I missed something?
+>>>
+>>> That's not how that works at all.
+>>>
+>>> copy_to_user() will only fail and thus EFAULT will only be returned if
+>>> the memory area copy_to_user() is trying to copy into isn't
+>>> owned/mapped by the user (or perhaps is read-only protected, not sure
+>>> about this last one).
+>>>
+>>> Because memory is mapped in (at least) 4K pages, the memory after a
+>>> user buffer is almost always still valid memory.  It might be unused,
+>>> or it might be something on the stack - like a return address, or it
+>>> might be on the heap - metadata tracking, or a different memory
+>>> allocation perhaps entirely.
+> 
+> You might hit the same case as maze@ mentioned in the thread.
+> 
+> To trigger -EFAULT, you likely positioned `uattr` at the very end of a
+> mapped page immediately followed by a protected page
+> 
+> Could you share the test program you created so we can verify?
+> 
 
+Attached below.
+
+> Please check the test program I shared earlier in the thread (where
+> uattr is stored on the stack); the BPF syscall returned 0, but stack
+> corruption occurred.
+> 
+
+To avoid such stack corruption, you should reserve enough space for the
+query, e.g., by extracting union bpf_attr from kernel BTF vmlinux.
 
 Thanks,
-SJ
+Leon
 
-[...]
+> If you think my test program contains a bug, feel free to let me know.
+> 
+> Thanks,
+> 
+> Yuyang
+
+---
+
+Assisted-by: Copilot:gemini-3-1-pro-preview
+
+// SPDX-License-Identifier: GPL-2.0
+#include <uapi/linux/if_link.h>
+#include <sys/mman.h>
+#include <sys/syscall.h>
+#include <linux/bpf.h>
+#include <net/if.h>
+#include <test_progs.h>
+
+#define loopback 1
+
+#include "test_tc_link.skel.h"
+#include "tc_helpers.h"
+
+#define SHORT_QUERY_SIZE	offsetofend(union bpf_attr,
+query.prog_attach_flags)
+
+/*
+ * test_tail_uattr_out_of_mmap:
+ *
+ * Places uattr at the very tail of a 1-page anonymous mmap so that the
+ * mandatory fields (target_ifindex..prog_attach_flags, 40 bytes) fit
+inside the page
+ * but query.revision (+56) falls in the unmapped page immediately after.
+ *
+ *   mmap layout (1 page, e.g. 4096 bytes):
+ *
+ *     [0 ............ page_size - SHORT_QUERY_SIZE - 1]  unused
+ *     [page_size - 40 ................. page_size - 1 ]  uattr:
+target_ifindex..prog_cnt
+ *     [page_size ..................................   ]  UNMAPPED
+ *               ^
+ *               uattr + 56 (revision) lands here
+ */
+static void test_tail_uattr_out_of_mmap(void)
+{
+	long page_size = sysconf(_SC_PAGE_SIZE);
+	LIBBPF_OPTS(bpf_prog_attach_opts, opta);
+	LIBBPF_OPTS(bpf_prog_detach_opts, optd);
+	struct test_tc_link *skel;
+	union bpf_attr *attr;
+	void *mem, *tail;
+	int fd, err;
+
+	skel = test_tc_link__open_and_load();
+	if (!ASSERT_OK_PTR(skel, "skel_load"))
+		return;
+
+	fd = bpf_program__fd(skel->progs.tc1);
+
+	err = bpf_prog_attach_opts(fd, loopback, BPF_TCX_INGRESS, &opta);
+	if (!ASSERT_OK(err, "prog_attach"))
+		goto cleanup_skel;
+
+	/*
+	 * Allocate 2 contiguous pages then immediately unmap the second one.
+	 * This guarantees the page following the first is unmapped, regardless
+	 * of what the runtime placed there beforehand.
+	 * Place uattr at the tail: last SHORT_QUERY_SIZE (40) bytes of page 1.
+	 * uattr + 56 (revision) therefore lands 16 bytes past the page end,
+	 * in the unmapped region.
+	 */
+	mem = mmap(NULL, 2 * page_size, PROT_READ | PROT_WRITE,
+		   MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+	if (!ASSERT_OK_PTR(mem, "mmap"))
+		goto detach;
+	munmap((char *)mem + page_size, page_size);
+
+	tail = (char *)mem + page_size - SHORT_QUERY_SIZE;
+	memset(tail, 0, SHORT_QUERY_SIZE);
+
+	attr = (union bpf_attr *)tail;
+	attr->query.target_ifindex = loopback;
+	attr->query.attach_type = BPF_TCX_INGRESS;
+
+	err = syscall(__NR_bpf, BPF_PROG_QUERY, tail, SHORT_QUERY_SIZE);
+	ASSERT_OK(err, "syscall");
+	ASSERT_OK(errno, "errno");
+	ASSERT_EQ(attr->query.prog_cnt, 1, "prog_cnt_written");
+
+	munmap(mem, page_size);	/* second page already unmapped above */
+detach:
+	bpf_prog_detach_opts(fd, loopback, BPF_TCX_INGRESS, &optd);
+cleanup_skel:
+	test_tc_link__destroy(skel);
+}
+
+void test_mmap_uattr_corruption(void)
+{
+	if (test__start_subtest("tail_uattr_out_of_mmap"))
+		test_tail_uattr_out_of_mmap();
+}
+
