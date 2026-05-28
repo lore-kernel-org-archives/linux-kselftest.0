@@ -1,197 +1,113 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 638FE33F8B2;
-	Thu, 28 May 2026 21:59:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780005575; cv=none; b=L+/OqZh4+vCNFBx7vdCaI78lGfex9tydQVkW8Hm7QgykRx50BwXQSD+GlNsM0rkNYoCdnlXaFCnWzYFTCWyRoyD3zdLQIye66CX1/zlQIzneFKmlNRYG5Awjh7b8Io++WTkcAjX1UtCN322nlVX909vUBQID7NMffmNDB0ldieg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780005575; c=relaxed/simple;
-	bh=lPOO2MbYnbEWTpjWMan5sNtzyYWSfnV8BpJ/DPXay2g=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MOBs5XGXzdSrhX6fNr5l6+JRS+XxHvpDhJ+iuyTLkKWgqhgfUzOv39Ne2XH5Y/lnZ8S3Fr1Thb2keHuqsLhrnPGHp4DVwQkFGZm4l5rvaAcCNOY0IgHagHK8lnWOp5ieCX62IfcsY10HyGzkd0GXm+Ux0UCIS9ZznMB+Yct1gXc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=c8QMr2Rc; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3625E332612
+	for <linux-kselftest@vger.kernel.org>; Thu, 28 May 2026 22:01:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.49
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780005702; cv=pass; b=Kavx4s+qdgjnXxNHvVtSLvdZkqzQdPp1bGNqSGRtrCT1t4m8VCZgLKoAexDQpqb7T/iaZK0wpSfH+01L/hWVFWhGwyB76otG3iper7PPzz8mrDPHVgDbM+I1mbKK8xOUpMb57JuAiVqWBxf3FUy/kq/0RhImT6jU0WflS5Xk/Eg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780005702; c=relaxed/simple;
+	bh=KDUmXU6pA8170xUyOTNOJFlIuTnys+uoNUwB2I0VqRI=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=a/VbnPgazXwlnaP+Hth28nGc8hH2mGX/QhUcZGTLEd6oySAMVLxr1KBVkFoEnVDJHidxVB7r9nlku7v1EMGrPVFKGX08lVVGDUAsMOrUX06+MjBmN958dtxfDUk6rxT9n4rj3AUntRQkr3qgzCryU/9uqI6WrtXCpeDV7ouYRBY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D2O8SCg/; arc=pass smtp.client-ip=209.85.218.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="c8QMr2Rc"
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64SLm2q82419213;
-	Thu, 28 May 2026 21:59:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=BVdo1hcXqTWtroWAQ
-	ylAGQcmZAyMaYVpqdzbBWR48D0=; b=c8QMr2RczZEfQhbgmuF5BsPDHXbORCrv3
-	Z5kOy/hppte6Z/YQki3z1LZh25PHu1Lx68a5rHntNK65vUFjrIaEI4R++blBUFJn
-	jwPhcYYiCUOsARjg7eIOglS9KfsL2SHsbTIrlQBuRV7uJlWDCoReKV5n40nhbQnI
-	TRpB3/W/87Abg6B7kUgQGbIo7mdCDeutvx+RXwgksNP4FUXPFPU6C9W9Q32bF9qK
-	+qkBu1RKNv0F82jZtM4NAeqSCN18JGA54x5LYLo5VRixw+uxAU7MBvoVIFwte8y6
-	q+QQwWj1jUVYAQRCZ4Q+sKaDZ+sv5X71N2rm5FztJlGovEhpVCfxQ==
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4ee884nepq-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 28 May 2026 21:59:20 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64SLd4Ex002206;
-	Thu, 28 May 2026 21:59:19 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4edjrba8ka-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 28 May 2026 21:59:19 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 64SLxFQ435914186
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 28 May 2026 21:59:15 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 9DBDD20043;
-	Thu, 28 May 2026 21:59:15 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 45F3E20040;
-	Thu, 28 May 2026 21:59:13 +0000 (GMT)
-Received: from ltcrain4-lp15.ltc.tadn.ibm.com (unknown [9.5.7.39])
-	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 28 May 2026 21:59:13 +0000 (GMT)
-From: adubey@linux.ibm.com
-To: bpf@vger.kernel.org
-Cc: hbathini@linux.ibm.com, linuxppc-dev@lists.ozlabs.org, maddy@linux.ibm.com,
-        ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
-        shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        stable@vger.kernel.org, Abhishek Dubey <adubey@linux.ibm.com>
-Subject: [PATCH v6 6/6] selftest/bpf: Add tailcall verifier selftest for powerpc64
-Date: Thu, 28 May 2026 21:58:55 -0400
-Message-ID: <20260529015855.364704-7-adubey@linux.ibm.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260529015855.364704-1-adubey@linux.ibm.com>
-References: <20260529015855.364704-1-adubey@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D2O8SCg/"
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-bd4f7f05e90so2285486666b.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 28 May 2026 15:01:40 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1780005699; cv=none;
+        d=google.com; s=arc-20240605;
+        b=RkgPH4xACign26gY4ulNjlY33H6x1n/x9rRw8j5oNK2XL9UzUniUvaQydQSJ4XJ5zh
+         zaQn7Jy3x3eeUX0crjGX9JfkfnGDjLTwslrT9fG7pChAM67C9wHWRY8PQy5KK8xtOfn8
+         iGlpDfwmALAEXaDZ8BccNVdSte+t3Te8eeLB1l7Y6Ciavu60xyM7dNp2Atx1Fh/tvbHx
+         N3bn3BwO/hhijZ6aaB8MKuIWK//BehJENSpvz+dMf6E+68pbM6/VyT4UxDeZ2QGApBSJ
+         Qicct7KLyAVPWzTYto/+Pr+hTczMDeA5EBBx8Za/ZzD337ThNmEuyoLVpK2VTOTnvg2h
+         Z3Sg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :reply-to:mime-version:dkim-signature;
+        bh=KDUmXU6pA8170xUyOTNOJFlIuTnys+uoNUwB2I0VqRI=;
+        fh=1jkfELgQJkf5nvB7fo6C3Q7tZ+RURVEOtvsBzTLRITA=;
+        b=lMUXSBoaWl8my2w8kNWM5tclOkT5HYb7csf86LJrwhuaLps8wfVt+R2xCCMxMjxtOW
+         soY81Ui1Ttd6N2VdvQ9uKbC62EYebvOAQgvHz+NIlfHkIJgbC8Hbp9MpKQsfwH7QJi9b
+         udWr0vu0hsOhJfFcvsIfktWYXzH1rs7Xpa4Gkagl4pk1p2GgofmNQmBiW/hYKRAA3WNq
+         Deh7C8tosGzoTMXnJkE3pYNMAo2oA7bncYb1VWZ3XpOPkmpvas2vwkvhh8g1Fpsc5I4q
+         N8zeoAZA8NFWvl45IA/D7SpdE9Pwt+vONWQI87ydFPbDIi1s/V27kgIdR3FaW05/hoQy
+         Q5vA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1780005699; x=1780610499; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :reply-to:mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=KDUmXU6pA8170xUyOTNOJFlIuTnys+uoNUwB2I0VqRI=;
+        b=D2O8SCg/afd+owKuMNO/84ccoAnUpnvT8XHxuD2kBQ6uIlP1+6WPBhGQIbhDLlCNce
+         6inYUyBaSGlQrgK9c7v7y2ujQstTgDGWHcc+lLe73NL6qIIK1yCOdEUF13+b4YW/SIFz
+         HDT0LSkCVGr67CBdnaXNf2dUkM8RvTlmQCwIbv9OIoyDHYBk0xUEorrfi5dsoBQvLUhX
+         IeO86xgze8yiuE4qUVGYSpT9Cp72fhUThiqp1fobi6h7UM8WAN224kl+awDU/yLNuyAd
+         3JUqlZtspfkvakkSO9pO+NENVQe2Eu/PNiD+BApup5UkF6JfXqiHjab6GgP1Io2p+RUS
+         UXjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1780005699; x=1780610499;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :reply-to:mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=KDUmXU6pA8170xUyOTNOJFlIuTnys+uoNUwB2I0VqRI=;
+        b=f/MG329ONi/gS2odaGvQ95S0ViJ4RN+Nb+fz8j0wUeOgFW7B70/t9zsCT4ih+AHtYt
+         ogJDKffJuXeyrl1XckZsCqfx/v/B01vsIIt1G3dw4pz/IBFf5jeSBVofz+LvBnO/jbwK
+         COCFWCWkd4RbzY9DECVKzZ/uCPNFY0q/53E7xeIVSjOxR3XWn1n6NcvV6nVhrd18zFdE
+         TuYUEybygFnIyej05znUaWNmGBAomUcaz7XMXQLS51LJWbbalZdXuam9gBFRLj93mrse
+         XRH5FGjamFai03XU/YBcutUkUtcnTH6mFotpS7caR6hBHu7pXju1lT0ZnQQlad2BONTS
+         HGEQ==
+X-Forwarded-Encrypted: i=1; AFNElJ8XZLUp+qV+t9L1TADIzwexJjomeU8pocEEVWgAk7gjSEh3QR51TrMIuZmxmqBicWZ3ANFT9jlltArLbqZcblI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxbYCPgPmfMX0FBly/fT9loU7dUrmgZwGx+YR+b7rs932jevgWw
+	KGu8mUuQ/BcN+smcCCND3LYHO1ZFCEDujcRAKAi5GSsEB8VQhQuyadyY3NvFPqpMk+RVwRx24E/
+	whswIRrQ/Bhf6JU8gYaoD4dNt+k6y21E=
+X-Gm-Gg: Acq92OHSFaK3VGq2AYbArop6AeLnFShFaruaFgb4Ilo2xSND0S6U/MjtwhMu9UCo3O6
+	Sn1GTkGi5DmAkoxDxowmqpPBfCicSu0/MpoFKnC5dJseJLAlKQMfSkrmZKDD/JTSz1q66DV/sEn
+	0WMeJSP/R3BLsp4LEaYWSTA7hTOm+EfavSO3pepU78xXVmOt5+tApgm0gsAr4awiA+cQJ8UYOlq
+	Rqyoz1nhQ6u2OwtnQLIsD/xfRm8FgMmcAHXTMNn6EoU3+pm2PfshUUG1cbY88CjyGy2J5lWTMh4
+	VZLbqlMjoc6ckWcVF3m9Rz3XVXLDcIO/NAcXKT/hBUETNwOft6c=
+X-Received: by 2002:a17:907:3ea8:b0:be2:11d7:8b05 with SMTP id
+ a640c23a62f3a-be973d225cemr56376466b.24.1780005699259; Thu, 28 May 2026
+ 15:01:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Authority-Analysis: v=2.4 cv=L4MtheT8 c=1 sm=1 tr=0 ts=6a18bab8 cx=c_pps
- a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
- a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=iQ6ETzBq9ecOQQE5vZCe:22 a=VnNF1IyMAAAA:8 a=v_EuApQnFJK-j3Uko2UA:9
-X-Proofpoint-ORIG-GUID: IyuOet4M3dR86UB-TcbfKNtHbQ_JFpBR
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTI4MDIxOCBTYWx0ZWRfX/qEBW9jOsVob
- lUiqvaiEXmQT7t5mdi91KnTenEo9aWelqa8XtkIPIqO/c7tyq8DToDVLwfmcV1TfrDWmc3VvjDE
- nUa21DN1hJhlF+EGuk2gq9BEcT4xuOc9RETgsaBrqjSsaQkzDWZAKCUu5uLFdmMabkVCi1J2G7h
- 0GYkG7yD8n3vWYriPYIhXvsAOBUpz21SRpFrbYvqwKKILCdXHxvkAnxZ0rqwnTip0hlMTV430O5
- 3EzjQnMiuvm/wHvDL8mhM+Y2J+axn9RvbYYm9axjfiOo/Mqb3Utf4khXpBHvmN+jLpoRVrYSlT4
- HDl7YHViZ6Y6WhLzFmB1qo7xLUqAAuHspFl1msUPe1+ajiAbJHmlJRF8Ba138TQum1kl0LyKu8Z
- 0gL+2D/2n4j899DoIy9OWzLkGaZJVp3h2Z8W3Kr5ZSvJmBgndxlWvUmlonYtORs4Oz+Q00uI8Nk
- PJko3DnTiEJIh4ARM/Q==
-X-Proofpoint-GUID: IyuOet4M3dR86UB-TcbfKNtHbQ_JFpBR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
- definitions=2026-05-28_04,2026-05-28_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 lowpriorityscore=0 suspectscore=0 clxscore=1015 malwarescore=0
- bulkscore=0 impostorscore=0 adultscore=0 priorityscore=1501 spamscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2605210000 definitions=main-2605280218
+Reply-To: ludloff@gmail.com
+From: Christian Ludloff <ludloff@gmail.com>
+Date: Thu, 28 May 2026 15:01:27 -0700
+X-Gm-Features: AVHnY4I6cWDmc9HAi2Pkjt5rLH3sf-RhVkX5I81aJnp9nA7gfgMJKR79V69XtqQ
+Message-ID: <CAKSQd8VrNC5F_7c8SCsuJHe1oFMJBCZc97Ez3ZAUfabUay8ZzA@mail.gmail.com>
+Subject: Re: [PATCH v3 3/4] KVM: x86: Virtualize AMD CPUID faulting
+To: Jim Mattson <jmattson@google.com>, "Kaplan, David" <David.Kaplan@amd.com>
+Cc: Sean Christopherson <seanjc@google.com>, "pbonzini@redhat.com" <pbonzini@redhat.com>, 
+	"tglx@kernel.org" <tglx@kernel.org>, "mingo@redhat.com" <mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>, 
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>, "x86@kernel.org" <x86@kernel.org>, 
+	"hpa@zytor.com" <hpa@zytor.com>, "shuah@kernel.org" <shuah@kernel.org>, 
+	"kvm@vger.kernel.org" <kvm@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, linux-kselftest@vger.kernel.org, 
+	"ctpence@google.com" <ctpence@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Abhishek Dubey <adubey@linux.ibm.com>
+> It appears it was a deliberate decision, due in part to the fact that the=
+ traditional flow of checking CPL exceptions before intercepts typically ap=
+plies to using instructions in an illegal way, but the user is not doing an=
+ything illegal here by executing CPUID which is normally a legal instructio=
+n at CPL3.
+>
+> That said, clearly the behavior is different now between the vendors, how=
+ever at this point the feedback I got is that our architects want to stick =
+with the existing behavior unless there is a strong reason that it is a pro=
+blem for SW.
 
-Verifier testcase result for tailcalls:
+What is a HV expected to do for such a CPUID guest exit?
 
-# ./test_progs -t verifier_tailcall
-#618/1   verifier_tailcall/invalid map type for tail call:OK
-#618/2   verifier_tailcall/invalid map type for tail call @unpriv:OK
-#618     verifier_tailcall:OK
-#619/1   verifier_tailcall_jit/main:OK
-#619     verifier_tailcall_jit:OK
-Summary: 2/3 PASSED, 0 SKIPPED, 0 FAILED
-
-Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
----
- .../bpf/progs/verifier_tailcall_jit.c         | 69 +++++++++++++++++++
- 1 file changed, 69 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/progs/verifier_tailcall_jit.c b/tools/testing/selftests/bpf/progs/verifier_tailcall_jit.c
-index 8d60c634a114..b754b76420c9 100644
---- a/tools/testing/selftests/bpf/progs/verifier_tailcall_jit.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_tailcall_jit.c
-@@ -90,6 +90,75 @@ __jited("	popq	%rax")
- __jited("	jmp	{{.*}}")		/* jump to tail call tgt   */
- __jited("L0:	leave")
- __jited("	{{(retq|jmp	0x)}}")		/* return or jump to rethunk */
-+__arch_powerpc64
-+/* program entry for main(), regular function prologue */
-+__jited("	nop")
-+__jited("...")                          /* ld 2, 16(13) absent with CONFIG_PPC_KERNEL_PCREL */
-+__jited("	li 9, 0")
-+__jited("	std 9, -8(1)")
-+__jited("	mflr 0")
-+__jited("	std 0, 16(1)")
-+__jited("	stdu 1, {{.*}}(1)")
-+/* load address and call sub() via count register */
-+__jited("	lis 12, {{.*}}")
-+__jited("	sldi 12, 12, 32")
-+__jited("	oris 12, 12, {{.*}}")
-+__jited("	ori 12, 12, {{.*}}")
-+__jited("	mtctr 12")
-+__jited("	bctrl")
-+__jited("	mr	8, 3")
-+__jited("	li 8, 0")
-+__jited("	addi 1, 1, {{.*}}")
-+__jited("	ld 0, 16(1)")
-+__jited("	mtlr 0")
-+__jited("	mr	3, 8")
-+__jited("	blr")
-+__jited("...")
-+__jited("func #1")
-+/* subprogram entry for sub() */
-+__jited("	nop")
-+__jited("...")                          /* ld 2, 16(13) absent with CONFIG_PPC_KERNEL_PCREL */
-+/* tail call prologue for subprogram */
-+__jited("	ld 10, 0(1)")
-+__jited("	ld 9, -8(10)")
-+__jited("	cmpldi	9, 33")
-+__jited("	bt	{{.*}}, {{.*}}")
-+__jited("	addi 9, 10, -8")
-+__jited("	std 9, -8(1)")
-+__jited("	lis {{.*}}, {{.*}}")
-+__jited("	sldi {{.*}}, {{.*}}, 32")
-+__jited("	oris {{.*}}, {{.*}}, {{.*}}")
-+__jited("	ori {{.*}}, {{.*}}, {{.*}}")
-+__jited("	li {{.*}}, 0")
-+__jited("	lwz 9, {{.*}}({{.*}})")
-+__jited("	slwi {{.*}}, {{.*}}, 0")
-+__jited("	cmplw	{{.*}}, 9")
-+__jited("	bf	0, {{.*}}")
-+/* bpf_tail_call implementation */
-+__jited("	ld 9, -8(1)")
-+__jited("	cmpldi	9, 33")
-+__jited("	bf	{{.*}}, {{.*}}")
-+__jited("	ld 9, 0(9)")
-+__jited("	cmpldi	9, 33")
-+__jited("	bt	{{.*}}, {{.*}}")
-+__jited("	addi 9, 9, 1")
-+__jited("	mulli 10, {{.*}}, 8")
-+__jited("	add 10, 10, {{.*}}")
-+__jited("	ld 10, {{.*}}(10)")
-+__jited("	cmpldi	10, 0")
-+__jited("	bt	{{.*}}, {{.*}}")
-+__jited("	ld 10, {{.*}}(10)")
-+__jited("	addi 10, 10, {{.*}}")    /* offset depends on CONFIG_PPC_KERNEL_PCREL */
-+__jited("	mtctr 10")
-+__jited("	ld 10, -8(1)")
-+__jited("	cmpldi	10, 33")
-+__jited("	bt	{{.*}}, {{.*}}")
-+__jited("	addi 10, 1, -8")
-+__jited("	std 9, 0(10)")
-+__jited("	bctr")
-+__jited("	mr	3, 8")
-+__jited("	blr")
-+
- SEC("tc")
- __naked int main(void)
- {
--- 
-2.52.0
-
+--
+C.
