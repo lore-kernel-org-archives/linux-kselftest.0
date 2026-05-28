@@ -1,246 +1,356 @@
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0830233342C
-	for <linux-kselftest@vger.kernel.org>; Thu, 28 May 2026 18:59:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E26E343D8A
+	for <linux-kselftest@vger.kernel.org>; Thu, 28 May 2026 19:11:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779994785; cv=none; b=OUXpeQA24/WJnq4ZQvDHDoFzIgGOqmCZqLwSagkKjDGuLTbRwccTHNzsFgJst4Wj/+4V4rgr4blq/RZ/JGCcwiD8ByPxTyhgHM5ucp0vV2q1mDJRj1S3f6VvP8SL4zUA08HvgsKt/EqNgFLcnipwlUMwhA+HF5kw7Cw3/kFSa5I=
+	t=1779995483; cv=none; b=iw0MT2Jx0XhTiF9/F/o+vA4pur5VOIaFVXPm1Lr9dJhjtUKX23FvZud4BieZUFz2Ijc0mnpx0qpyCE98foBtEt6V8wMSlG27hP0aAqz/y1RT3/W3uPOV4mvrEH+V4D5Y+hgWilDxLzV/xauuTKvgAG+gmdxZ/HzZLkghzkCJcjU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779994785; c=relaxed/simple;
-	bh=K+u3BaAhGcvOwP6Hri5H/3Q3PATtfO+X6e86JxPROrE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VYSsCTklRtLc9Z0Knc6dtTVw0uUvKeyB/MnhEDNBkGT/Bvp3+ePMk7l+ZYPiM1CKbJaTJjTSY2H1VX6z5E2F4/BZf6HcnNB/xYTjuLZ/xzHsmdksjF+ZKPYXO98dlNB2Iry/obpwOnCSvvKmHqcx60PRLieCoawE5IBugwwYcV0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tPmEL+fV; arc=none smtp.client-ip=209.85.210.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1779995483; c=relaxed/simple;
+	bh=4obCzAmw0zrncbU1ubw6ygLwj60cV+pHfK4MmgYhFH4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=D2jqUMPfm+Aa/UeorexwSEQ180BxmU2WtVIlqMKx3DlapsQmaYM3XieKYJhefDma1V0WqPc9nDy568ERsq6KRLosqv3MG7pyNK4F3Izd8wmfPh47eO3WV94bl1NB5F8UBiL6mBqktRovIwNEwRzAXX9dRLiC39DOZpWGr7rVO6U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=tenstorrent.com; spf=pass smtp.mailfrom=tenstorrent.com; dkim=pass (2048-bit key) header.d=tenstorrent.com header.i=@tenstorrent.com header.b=d5r1PxwE; arc=none smtp.client-ip=209.85.210.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=tenstorrent.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tenstorrent.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tPmEL+fV"
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-83ec36a13e9so6727491b3a.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 28 May 2026 11:59:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=tenstorrent.com header.i=@tenstorrent.com header.b="d5r1PxwE"
+Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-7e4de538f83so7448740a34.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 28 May 2026 12:11:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1779994782; x=1780599582; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=C2ZUBuHYLFWaBCKcO06WPiLzxJQqwEviAmU64GiN9ok=;
-        b=tPmEL+fVHSrGRYBfCJcVg3KCj+ESdSPwsJ+dQSLrg/rIO2ss3m/6+ePSbybnXOxqs5
-         i9rkUFw+8+PvxNJqwZn/Jz1r0EtOa4EGZ5PmranxCn7LpN9Lx1lgqPMF5i9Pl4gIEJyp
-         tdacW7QZ9tIG2BM3SmfJ4y1RbXG2dReefH5XyHKS32tG62lo7jNDgIT/+ETT3eOBhOO0
-         oZWyoPH20vz/i7TTo7GcN0WUiHLOpZ0L7RiYr+dPLilrw0GhZlD0MfHihql+nS0N6V2z
-         QwGcofRsG1Z+fKDuuGyt7wBYw23r8bD1CahfGKDhF7Axr/dfA3jMJK5JAh3/HKu+IR5i
-         fE+g==
+        d=tenstorrent.com; s=google; t=1779995480; x=1780600280; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0CCar7U9xY/cuLeWShGMRY6FLa2CcPakhHg+oZkKygo=;
+        b=d5r1PxwEjDHGvPFgmBM9IT11BYrKSuEE8QyyB1fS0GNlwFuN8QAnkrIchB6Zzi5jYi
+         11OsniMZj8G37TNKqVRws26o8yEIeZf9kthdMEqOx0uGuKWrHMTeYUgUrz/dQYFaOlap
+         14ixRYtzfKYqsn+RQ5uM9jbEAjjstPiOj0aILd1mRlpac4i+ANI37nAVnybQAHmD9e45
+         XO0y7tWQ4IFKwZPjb8tMhKO9eVpw3p2bvjo9NHddfXofJmCp3P3WTEfqGQKNfY2hBsjR
+         a8qDvF1a9WTK29wh0lN1sH/dyW15llFy4GbUIW07ng+9khnE7a98SH+IHjKx3L+lF+SZ
+         WjUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779994782; x=1780599582;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=C2ZUBuHYLFWaBCKcO06WPiLzxJQqwEviAmU64GiN9ok=;
-        b=dnp2jo8xbNF8FVlySe3z5eaNX9ld2+KqT7+QWffoIyQ1x3mRUAhE4Wx5DQ8eHvvpLe
-         gXFDy1VPi3Wnx83NPca/u0XG48Zoxjz4odpO9ymx1HesI5FZ0RWP7d2nfzZDLmL61fHO
-         2bsY6F+ngRbFwZBN/45oIx0iNyCyRgPGwmZAkGgi5jfJ5GWZTTcHKVw3iN0purl0mmeN
-         u1qOFxJKKiBkdCjyvGIwF3fQsXpjiy9GisgFgkl+UL6XaL9yQ40kjr5YQ0n06MbqqUrM
-         RPLvYknkoyYcidQVzoD0CCW0foX9895zdWbzk81LVXKGYaGXKmUmxCSTIKM8PoA5XaV1
-         Y67w==
-X-Forwarded-Encrypted: i=1; AFNElJ/fhF+uU6kB6uMgoa8nxZa2Swr6l5ccnf4C971S5/d4goEOunJyAGuuAwfL/CSxZR/o2dwLXXcqizgT4E3EVhQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzJ8dEG5lKe7tcpXQQqR1DmYyWt0ZHVKQP7ZoLGJENxc67K5dqA
-	1H/60Bik3+uEhxcI8H5+G+HnPBcD708Vk723GdE1n7RDoWwFQVNZpE/S6vJ+NNIpVA==
-X-Gm-Gg: Acq92OFUqR5DsQJnkt1dv2/ybUgNkm0ZdsldkkvMONf4CLdjnAEfYPHO4maMx2LJTB3
-	pB0ifxsG7rdL32hY1dIUtjTtVTjjXOEXMW6/6p69iZXMblaPc/IM1HwNqwyIROAHkLkiv7vqDJb
-	NPpsh1pS5YGhV6YxgP+/o5HjanxsG6cjhM9xsyqmW9VmPQEemFEXfq9ApSDZjyNM+z1ihT+Dhy0
-	Ifq2bG/suAGqkzvcuNgm1lZN+S3Q4wUhOwjU+HHk0d7iAnyz7vswG1amTrDm5WsnOE8AqdhvxpN
-	F4j6c54K5CeS7Y6BmEy2pcfRXJBgKCP7bTd+zrbPzwOmh0jXWY7zgRjR2r6sHj0aqDk7Ho7rrOt
-	CL5w7rgusC18Zbf8i//4LQorFrd5beKG5GYbd/rGA09r3aisKjeI45kLQ9xpcpcTkhIRZ2hTB19
-	73H8qAi0ZskD/gRpY6/3DvQh4Gy1jpVftEggm1hOQI//PyDwnXKTLyLrZCdPoEQ9XA/rVGeae3
-X-Received: by 2002:a05:6a00:9099:b0:841:dc7d:306a with SMTP id d2e1a72fcca58-8420c4b6859mr239429b3a.25.1779994781790;
-        Thu, 28 May 2026 11:59:41 -0700 (PDT)
-Received: from google.com (56.149.168.34.bc.googleusercontent.com. [34.168.149.56])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-841d70bb654sm7090146b3a.29.2026.05.28.11.59.41
+        d=1e100.net; s=20251104; t=1779995480; x=1780600280;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=0CCar7U9xY/cuLeWShGMRY6FLa2CcPakhHg+oZkKygo=;
+        b=c+kT75lZZnKNbA1Hkm5kUScmeyo8ZKW1qjxTvysD1BBt4xlO2SHWoB3Ww3TKRmm1pP
+         gvS6PMMDVio0+Cdt0BkcQm6/nqgHJrZ+3Goya+EDbll7ia93GssYD66Y/tGBYUkWe4xP
+         yU6+xpT8zEWuYrKnTEC1Gxok+Ny5Z7iwmAGhxe7Q8I/CRDOwgTE2QCBT2wPhoAKJaA3f
+         FJH8DqcrvKd01GpE6Oqa4A8kUGpys0MqXU+zNOVPuHSMkEI3iYvHTo23lQJIQKEsiNbs
+         DqnXSKETfxE+nu+/CKKkDDog1yhBNjJOjk3pC1tFP0FUAjxZAryVIVeN2k5kwoWaqrg+
+         RZww==
+X-Forwarded-Encrypted: i=1; AFNElJ8UrCmA0nenH0w4viS1TRViA60fpgiWZXJNH3fKvdUE4qHM5cee7qdLFAa/74ngD0xTfjx4LTgdDsnxo6bx17U=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyMM8fvYAN4XJcVgdZ8jg2NCmoZb4ubR+6pHcTAX7ZTootZOidt
+	b8oHRVCjOkJF8r7bZJsGvwb6r8hI9l44alTWd/8sO6OQws/Vik+BParLBFXQui1hDGA=
+X-Gm-Gg: Acq92OGPDzsz+OniOZIti4w9QieyUlPoP4BE85JZJmTm2Has+qM1kHHXvKttVPlj5dj
+	cUmWaR5VHyKgw86tlnj8MCog9Uxr/yIV8VeIf7Lt7Tsh+lgoRLKdnHyE/cBQehL5w6CroJNeqL4
+	WxIxZCLEILFtlWMagLVCQg59ATTAyNt5zDJKB3N1P1L90xEwMUrqi5zl5go9zCQ7gBW/HavmFKL
+	oMPYIyrtPKk3t2+l0YIhJOVIHPa2nhxt6pX+gB4dA71YotqyATBYytkqwdhxYLxCAW26ydpMdDv
+	TgX6xHv906c4WeqBNJsEQJXPAP0SGAtfbcUL/QM8hrh2Fhp6oX4edxxJOIV2/JaiE3StmO59JYc
+	Z4I1kFyh6QiO9tuu2MMIxT4Q6XBbRWnWrY1hJX2P0rZ3VcDUwcRTMZ+0Sm6jEjBhTiVVR/7rRmX
+	SKBfhwHL2biqBihU/sH2Mzo9FF75snlBEgIhx4XL/wUu3twhAvsHOIAiqoL+Azq5/uePDRXd1Wx
+	+fC/Q==
+X-Received: by 2002:a05:6830:3808:b0:7dc:e6e8:62b with SMTP id 46e09a7af769-7e5fefcb98emr16751871a34.13.1779995480287;
+        Thu, 28 May 2026 12:11:20 -0700 (PDT)
+Received: from lima-default.tail89d63.ts.net ([12.55.13.134])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7e606482b65sm14849267a34.10.2026.05.28.12.11.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 May 2026 11:59:41 -0700 (PDT)
-Date: Thu, 28 May 2026 18:59:38 +0000
-From: David Matlack <dmatlack@google.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Alex Williamson <alex@shazbot.org>, kvm@vger.kernel.org,
-	Leon Romanovsky <leon@kernel.org>, linux-kselftest@vger.kernel.org,
-	linux-rdma@vger.kernel.org, Mark Bloch <mbloch@nvidia.com>,
-	netdev@vger.kernel.org, Saeed Mahameed <saeedm@nvidia.com>,
-	Shuah Khan <shuah@kernel.org>, Tariq Toukan <tariqt@nvidia.com>,
-	patches@lists.linux.dev
-Subject: Re: [PATCH v2 07/11] vfio: selftests: Allow drivers to specify
- required region size
-Message-ID: <ahiQmnWscsbWPqRo@google.com>
-References: <0-v2-72e9640932fd+2c64-mlx5st_jgg@nvidia.com>
- <7-v2-72e9640932fd+2c64-mlx5st_jgg@nvidia.com>
+        Thu, 28 May 2026 12:11:19 -0700 (PDT)
+From: Andy Chiu <tchiu@tenstorrent.com>
+To: Shuah Khan <shuah@kernel.org>,
+	Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	linux-kselftest@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Cc: Andy Chiu <tchiu@tenstorrent.com>,
+	dfustini@oss.tenstorrent.com,
+	greentime.hu@sifive.com,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Wei Yang <richard.weiyang@gmail.com>,
+	Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>,
+	Yong-Xuan Wang <yongxuan.wang@sifive.com>
+Subject: [[PATCH] v4 4/4] selftests: riscv: Extend vector tests for sigreturn and ptrace
+Date: Thu, 28 May 2026 14:09:15 -0500
+Message-ID: <20260528190927.886558-5-tchiu@tenstorrent.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260528190927.886558-1-tchiu@tenstorrent.com>
+References: <ag_N8H3e3YzjRb8j@chonkvm.lixom.net>
+ <20260528190927.886558-1-tchiu@tenstorrent.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7-v2-72e9640932fd+2c64-mlx5st_jgg@nvidia.com>
+Content-Transfer-Encoding: 8bit
 
-On 2026-05-15 02:30 PM, Jason Gunthorpe wrote:
-> Add a region_size field to struct vfio_pci_driver_ops so drivers can
-> declare how much DMA-mapped region they need. The mlx5 driver will need
-> ~18MB for firmware pages. Existing drivers pass in the sizeof their state
-> struct. The core code will round up and minimize it to SZ_2M so as not to
-> change any test behavior.
-> 
-> Assisted-by: Claude:claude-opus-4.6
-> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
-> ---
->  tools/testing/selftests/vfio/lib/drivers/dsa/dsa.c         | 1 +
->  tools/testing/selftests/vfio/lib/drivers/ioat/ioat.c       | 1 +
->  .../selftests/vfio/lib/include/libvfio/vfio_pci_driver.h   | 6 ++++++
->  tools/testing/selftests/vfio/vfio_pci_driver_test.c        | 7 ++++++-
->  4 files changed, 14 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/vfio/lib/drivers/dsa/dsa.c b/tools/testing/selftests/vfio/lib/drivers/dsa/dsa.c
-> index 19d9630b24c23f..40b8541b588eee 100644
-> --- a/tools/testing/selftests/vfio/lib/drivers/dsa/dsa.c
-> +++ b/tools/testing/selftests/vfio/lib/drivers/dsa/dsa.c
-> @@ -418,6 +418,7 @@ static void dsa_send_msi(struct vfio_pci_device *device)
->  
->  const struct vfio_pci_driver_ops dsa_ops = {
->  	.name = "dsa",
-> +	.region_size = sizeof(struct dsa_state),
->  	.probe = dsa_probe,
->  	.init = dsa_init,
->  	.remove = dsa_remove,
-> diff --git a/tools/testing/selftests/vfio/lib/drivers/ioat/ioat.c b/tools/testing/selftests/vfio/lib/drivers/ioat/ioat.c
-> index a871b935542bad..c9b28365c5eb6b 100644
-> --- a/tools/testing/selftests/vfio/lib/drivers/ioat/ioat.c
-> +++ b/tools/testing/selftests/vfio/lib/drivers/ioat/ioat.c
-> @@ -226,6 +226,7 @@ static void ioat_send_msi(struct vfio_pci_device *device)
->  
->  const struct vfio_pci_driver_ops ioat_ops = {
->  	.name = "ioat",
-> +	.region_size = sizeof(struct ioat_state),
->  	.probe = ioat_probe,
->  	.init = ioat_init,
->  	.remove = ioat_remove,
-> diff --git a/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_driver.h b/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_driver.h
-> index e5ada209b1d102..547369c5cff95a 100644
-> --- a/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_driver.h
-> +++ b/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_driver.h
-> @@ -9,6 +9,12 @@ struct vfio_pci_device;
->  struct vfio_pci_driver_ops {
->  	const char *name;
->  
-> +	/*
-> +	 * Size of the driver's state structure overlaid on
-> +	 * device->driver.region.vaddr
-> +	 */
-> +	u64 region_size;
-> +
->  	/**
->  	 * @probe() - Check if the driver supports the given device.
->  	 *
-> diff --git a/tools/testing/selftests/vfio/vfio_pci_driver_test.c b/tools/testing/selftests/vfio/vfio_pci_driver_test.c
-> index afa0480ddd9b2a..5a46800cde4c8d 100644
-> --- a/tools/testing/selftests/vfio/vfio_pci_driver_test.c
-> +++ b/tools/testing/selftests/vfio/vfio_pci_driver_test.c
-> @@ -2,6 +2,7 @@
->  #include <sys/ioctl.h>
->  #include <sys/mman.h>
->  
-> +#include <linux/log2.h>
->  #include <linux/sizes.h>
->  #include <linux/vfio.h>
->  
-> @@ -80,7 +81,11 @@ FIXTURE_SETUP(vfio_pci_driver_test)
->  	driver = &self->device->driver;
->  
->  	region_setup(self->iommu, self->iova_allocator, &self->memcpy_region, SZ_1G);
-> -	region_setup(self->iommu, self->iova_allocator, &driver->region, SZ_2M);
-> +
-> +	VFIO_ASSERT_NE(driver->ops->region_size, 0);
-> +	region_setup(self->iommu, self->iova_allocator, &driver->region,
-> +		     max_t(u64, roundup_pow_of_two(driver->ops->region_size),
-> +			   SZ_2M));
+Add new test cases to verify the vector state restorations at syscall
+stops for ptrace and signal interfaces. Specifically:
+1. Signal handler should read all ones at syscall stop and modifying
+   context should success.
+2. Ptrace should read all ones but any modification to NT_RISCV_VECTOR
+   is silently dropped.
 
-We have some other upcoming tests that want to set up the driver region, so it
-would be nice to move this into the library.
+Signed-off-by: Andy Chiu <tchiu@tenstorrent.com>
+---
+Changelog v4:
+ - remove timer dependency from the signal delivery (Sashiko)
+ - solve 2 memory leaks in ptrace (Sashiko)
+Changelog v3:
+ - new patch since v3
+---
+ .../selftests/riscv/sigreturn/sigreturn.c     |  71 +++++++++++
+ .../selftests/riscv/vector/vstate_ptrace.c    | 111 +++++++++++++++++-
+ 2 files changed, 178 insertions(+), 4 deletions(-)
 
-  * https://lore.kernel.org/kvm/20260511234802.2280368-17-vipinsh@google.com/
-  * https://lore.kernel.org/kvm/20260421231557.1254270-8-jrhilke@google.com/
-
-What about something like this?
-
-diff --git a/tools/testing/selftests/vfio/lib/drivers/dsa/dsa.c b/tools/testing/selftests/vfio/lib/drivers/dsa/dsa.c
-index 19d9630b24c2..40b8541b588e 100644
---- a/tools/testing/selftests/vfio/lib/drivers/dsa/dsa.c
-+++ b/tools/testing/selftests/vfio/lib/drivers/dsa/dsa.c
-@@ -418,6 +418,7 @@ static void dsa_send_msi(struct vfio_pci_device *device)
-
- const struct vfio_pci_driver_ops dsa_ops = {
-        .name = "dsa",
-+       .region_size = sizeof(struct dsa_state),
-        .probe = dsa_probe,
-        .init = dsa_init,
-        .remove = dsa_remove,
-diff --git a/tools/testing/selftests/vfio/lib/drivers/ioat/ioat.c b/tools/testing/selftests/vfio/lib/drivers/ioat/ioat.c
-index a871b935542b..c9b28365c5eb 100644
---- a/tools/testing/selftests/vfio/lib/drivers/ioat/ioat.c
-+++ b/tools/testing/selftests/vfio/lib/drivers/ioat/ioat.c
-@@ -226,6 +226,7 @@ static void ioat_send_msi(struct vfio_pci_device *device)
-
- const struct vfio_pci_driver_ops ioat_ops = {
-        .name = "ioat",
-+       .region_size = sizeof(struct ioat_state),
-        .probe = ioat_probe,
-        .init = ioat_init,
-        .remove = ioat_remove,
-diff --git a/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_driver.h b/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_driver.h
-index e5ada209b1d1..547369c5cff9 100644
---- a/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_driver.h
-+++ b/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_driver.h
-@@ -9,6 +9,12 @@ struct vfio_pci_device;
- struct vfio_pci_driver_ops {
-        const char *name;
-
-+       /*
-+        * Size of the driver's state structure overlaid on
-+        * device->driver.region.vaddr
-+        */
-+       u64 region_size;
-+
-        /**
-         * @probe() - Check if the driver supports the given device.
-         *
-diff --git a/tools/testing/selftests/vfio/lib/vfio_pci_driver.c b/tools/testing/selftests/vfio/lib/vfio_pci_driver.c
-index 6827f4a6febe..c70c22b1a86c 100644
---- a/tools/testing/selftests/vfio/lib/vfio_pci_driver.c
-+++ b/tools/testing/selftests/vfio/lib/vfio_pci_driver.c
-@@ -28,6 +28,9 @@ void vfio_pci_driver_probe(struct vfio_pci_device *device)
-                        continue;
-
-                device->driver.ops = ops;
-+
-+               VFIO_ASSERT_NE(ops->region_size, 0);
-+               device->driver.region.size = roundup(ops->region_size, getpagesize());
-        }
+diff --git a/tools/testing/selftests/riscv/sigreturn/sigreturn.c b/tools/testing/selftests/riscv/sigreturn/sigreturn.c
+index e10873d95fed..647249dbd7e6 100644
+--- a/tools/testing/selftests/riscv/sigreturn/sigreturn.c
++++ b/tools/testing/selftests/riscv/sigreturn/sigreturn.c
+@@ -7,6 +7,7 @@
+ #include "kselftest_harness.h"
+ 
+ #define RISCV_V_MAGIC		0x53465457
++#define END_MAGIC		0
+ #define DEFAULT_VALUE		2
+ #define SIGNAL_HANDLER_OVERRIDE	3
+ 
+@@ -61,6 +62,76 @@ static int vector_sigreturn(int data, void (*handler)(int, siginfo_t *, void *))
+ 	return after_sigreturn;
  }
+ 
++#define V_TEST_PATTERN_SIGNAL 0x98
++int nulled_val;
++static void sigalrm_handler(int sig, siginfo_t *info, void *vcontext)
++{
++	ucontext_t *context = vcontext;
++	struct __riscv_extra_ext_header *ext;
++	struct __riscv_ctx_hdr *hdr;
++	uint8_t *ext_ptr;
++
++	/* Find the vector context */
++	ext = (void *)(&context->uc_mcontext.__fpregs);
++	ext_ptr = (uint8_t *)ext;
++	hdr = &ext->hdr;
++
++	while (hdr->magic != END_MAGIC) {
++		if (hdr->magic == RISCV_V_MAGIC) {
++			struct __riscv_v_ext_state *v_state = (struct __riscv_v_ext_state *)(hdr + 1);
++			/* Assume a valid datap */
++			nulled_val = *(int *)v_state->datap;
++			/* Fill all vector registers with magic pattern */
++			memset(v_state->datap, V_TEST_PATTERN_SIGNAL, v_state->vlenb * 32);
++			/*
++			 * We must also set the vector configuration so that when
++			 * userspace reads v0, it uses a valid element width (e8).
++			 */
++			v_state->vl = v_state->vlenb;
++			v_state->vtype = 0; /* e8, m1, tu, mu */
++			break;
++		}
++		/* Move to the next extension header */
++		ext_ptr += hdr->size;
++		hdr = (struct __riscv_ctx_hdr *)ext_ptr;
++	}
++}
++
++TEST(test_signal_syscall_ucontext) {
++	struct sigaction sa;
++
++	/* Make sure we get V in ucontext by executing vsetvli */
++	asm volatile (
++	    ".option push\n\t"
++	    ".option		arch, +v\n\t"
++	    "vsetivli	x0, 1, e32, m1, ta, ma\n\t"
++	    ".option pop\n\t" : : :);
++
++	sa.sa_flags = SA_SIGINFO;
++	sa.sa_sigaction = sigalrm_handler;
++	sigemptyset(&sa.sa_mask);
++	if (sigaction(SIGALRM, &sa, NULL) == -1)
++		ksft_exit_fail_msg("Failed to register signal handler\n");
++
++	raise(SIGALRM);
++	/*
++	 * If the kernel successfully parsed and restored our modified ucontext,
++	 * v0 will contain V_TEST_PATTERN_SIGNAL.
++	 */
++	unsigned char v0_val;
++
++	asm volatile(
++			".option push\n\t"
++			".option arch, +zve32x\n\t"
++			"vmv.x.s %0, v0\n\t"
++			".option pop\n\t"
++			: "=r" (v0_val)
++		    );
++
++	EXPECT_EQ(v0_val, V_TEST_PATTERN_SIGNAL);
++	EXPECT_EQ(nulled_val, -1);
++}
++
+ TEST(vector_restore)
+ {
+ 	int result;
+diff --git a/tools/testing/selftests/riscv/vector/vstate_ptrace.c b/tools/testing/selftests/riscv/vector/vstate_ptrace.c
+index 1479abc0c9cb..863a16f6e1a3 100644
+--- a/tools/testing/selftests/riscv/vector/vstate_ptrace.c
++++ b/tools/testing/selftests/riscv/vector/vstate_ptrace.c
+@@ -21,6 +21,41 @@ static long do_ptrace(enum __ptrace_request op, pid_t pid, long type, size_t siz
+ 	return ptrace(op, pid, type, &v_iovec);
+ }
+ 
++static int do_child_syscall_stop(void)
++{
++	int out;
++
++	if (ptrace(PTRACE_TRACEME, -1, NULL, NULL)) {
++		ksft_perror("PTRACE_TRACEME failed\n");
++		return EXIT_FAILURE;
++	}
++
++	raise(SIGSTOP);
++
++	asm volatile (".option push\n\t"
++		".option	arch, +v\n\t"
++		"vsetivli	x0, 1, e32, m1, ta, ma\n\t"
++		"vmv.s.x	v31, %[in]\n\t"
++		".option pop\n\t"
++		:
++		: [in] "r" (child_set_val));
++
++	getpid();
++
++	asm volatile (".option push\n\t"
++		".option	arch, +v\n\t"
++		"vsetivli	x0, 1, e32, m1, ta, ma\n\t"
++		"vmv.x.s	%[out], v31\n\t"
++		".option pop\n\t"
++		: [out] "=r" (out)
++		:);
++
++	if (out != -1)
++		return EXIT_FAILURE;
++
++	return EXIT_SUCCESS;
++}
++
+ static int do_child(void)
+ {
+ 	int out;
+@@ -59,7 +94,7 @@ static void do_parent(pid_t child)
+ 			goto out;
+ 		} else if (WIFSTOPPED(status) && (WSTOPSIG(status) == SIGTRAP)) {
+ 			size_t size;
+-			void *data, *v31;
++			void *vctx, *v31;
+ 			struct __riscv_v_regset_state *v_regset_hdr;
+ 			struct user_regs_struct *gpreg;
+ 
+@@ -73,9 +108,11 @@ static void do_parent(pid_t child)
+ 				goto out;
+ 
+ 			ksft_print_msg("vlenb %ld\n", v_regset_hdr->vlenb);
+-			data = realloc(data, size + v_regset_hdr->vlenb * 32);
+-			if (!data)
++			vctx = realloc(data, size + v_regset_hdr->vlenb * 32);
++			if (!vctx)
+ 				goto out;
++			data = vctx;
++
+ 			v_regset_hdr = (struct __riscv_v_regset_state *)data;
+ 			v31 = (void *)(data + size + v_regset_hdr->vlenb * 31);
+ 			size += v_regset_hdr->vlenb * 32;
+@@ -109,11 +146,65 @@ static void do_parent(pid_t child)
+ 	free(data);
+ }
+ 
++static void do_parent_syscall_stop(pid_t child)
++{
++	int status;
++	void *data = NULL;
++
++	while (waitpid(child, &status, 0)) {
++		if (WIFEXITED(status)) {
++			ksft_test_result(WEXITSTATUS(status) == 0,
++					 "SETREGSET vector at syscall stop\n");
++			goto out;
++		} else if (WIFSTOPPED(status) && (WSTOPSIG(status) == SIGSTOP)) {
++			/* Attach to the child at syscall stop */
++			ptrace(PTRACE_SYSCALL, child, NULL, NULL);
++			continue;
++		} else if (WIFSTOPPED(status) && (WSTOPSIG(status) == SIGTRAP)) {
++			size_t size;
++			void *vctx, *v31;
++			struct __riscv_v_regset_state *v_regset_hdr;
++
++			size = sizeof(*v_regset_hdr);
++			data = malloc(size);
++			if (!data)
++				goto out;
++			v_regset_hdr = (struct __riscv_v_regset_state *)data;
++
++			if (do_ptrace(PTRACE_GETREGSET, child, NT_RISCV_VECTOR, size, data))
++				goto out;
++
++			ksft_print_msg("vlenb %ld\n", v_regset_hdr->vlenb);
++			vctx = realloc(data, size + v_regset_hdr->vlenb * 32);
++			if (!vctx)
++				goto out;
++			data = vctx;
++
++			v_regset_hdr = (struct __riscv_v_regset_state *)data;
++			v31 = (void *)(data + size + v_regset_hdr->vlenb * 31);
++			size += v_regset_hdr->vlenb * 32;
++
++			if (do_ptrace(PTRACE_GETREGSET, child, NT_RISCV_VECTOR, size, data))
++				goto out;
++
++			ksft_test_result(*(int *)v31 == -1, "GETREGSET vector at syscall stop\n");
++
++			*(int *)v31 = parent_set_val;
++			if (do_ptrace(PTRACE_SETREGSET, child, NT_RISCV_VECTOR, size, data))
++				goto out;
++		}
++		ptrace(PTRACE_CONT, child, NULL, NULL);
++	}
++
++out:
++	free(data);
++}
++
+ int main(void)
+ {
+ 	pid_t child;
+ 
+-	ksft_set_plan(2);
++	ksft_set_plan(4);
+ 	if (!is_vector_supported() && !is_xtheadvector_supported())
+ 		ksft_exit_skip("Vector not supported\n");
+ 
+@@ -130,5 +221,17 @@ int main(void)
+ 
+ 	do_parent(child);
+ 
++	parent_set_val = 0x53355457;
++	child_set_val = 0x49504F21;
++
++	child = fork();
++	if (child < 0)
++		ksft_exit_fail_msg("Fork failed %d\n", child);
++
++	if (!child)
++		return do_child_syscall_stop();
++
++	do_parent_syscall_stop(child);
++
+ 	ksft_finished();
+ }
+-- 
+2.43.0
 
-diff --git a/tools/testing/selftests/vfio/vfio_pci_driver_test.c b/tools/testing/selftests/vfio/vfio_pci_driver_test.c
-index afa0480ddd9b..36d977542274 100644
---- a/tools/testing/selftests/vfio/vfio_pci_driver_test.c
-+++ b/tools/testing/selftests/vfio/vfio_pci_driver_test.c
-@@ -80,7 +80,7 @@ FIXTURE_SETUP(vfio_pci_driver_test)
-        driver = &self->device->driver;
-
-        region_setup(self->iommu, self->iova_allocator, &self->memcpy_region, SZ_1G);
--       region_setup(self->iommu, self->iova_allocator, &driver->region, SZ_2M);
-+       region_setup(self->iommu, self->iova_allocator, &driver->region, driver->region.size);
-
-        /* Any IOVA that doesn't overlap memcpy_region and driver->region. */
-        self->unmapped_iova = iova_allocator_alloc(self->iova_allocator, SZ_1G);
-
->  
->  	/* Any IOVA that doesn't overlap memcpy_region and driver->region. */
->  	self->unmapped_iova = iova_allocator_alloc(self->iova_allocator, SZ_1G);
-> -- 
-> 2.43.0
-> 
